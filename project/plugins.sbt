@@ -16,7 +16,7 @@ addSbtPlugin("com.orrsella" % "sbt-stats" % "1.0.5")
 
 addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "0.6.0")
 
-addSbtPlugin("com.ambiata" % "promulgate" % "0.11.0-20150726223811-fae9f8c")
+addSbtPlugin("com.ambiata" % "promulgate" % "0.11.0-20150727222014-93879fa")
 
 resolvers += Resolver.url("ambiata-oss", new URL("https://ambiata-oss.s3.amazonaws.com"))(Resolver.ivyStylePatterns)
 
