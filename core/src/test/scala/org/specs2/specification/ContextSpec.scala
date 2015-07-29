@@ -94,7 +94,7 @@ class ContextSpec extends script.Spec with ResultMatchers with Groups { def is =
     e1  := executing(ex1Before).prints("before", "e1")
     e2  := executing(ex1_2Before).prints("before", "e1", "before", "e2")
     e3  := executing(ex1_beforeFail).prints()
-    e4  := executeBodies(ex1_beforeFail).map(_.message) must_== List("error")
+    e4  := executeBodies(ex1_beforeFail).map(_.message) must_== List("java.lang.RuntimeException: error")
     e5  := executing(ex1_beforeSkipped).prints()
     e6  := executeBodies(ex1_beforeSkipped).map(_.message) must_== List("skipped")
     e7  := executing(ex1_beforeSkippedThrown).prints()
@@ -110,7 +110,7 @@ class ContextSpec extends script.Spec with ResultMatchers with Groups { def is =
     e2  := executing(ex1_2After).prints("e1", "after", "e2", "after")
     e3  := executeBodies(ex1FailAfter).head must beFailing
     e4  := executing(ex1_afterFail).prints("e1")
-    e5  := executeBodies(ex1_beforeFail).map(_.message) must_== List("error")
+    e5  := executeBodies(ex1_beforeFail).map(_.message) must_== List("java.lang.RuntimeException: error")
     e6  := executing(ex1Around).prints("around", "e1")
   }
 
@@ -129,7 +129,7 @@ class ContextSpec extends script.Spec with ResultMatchers with Groups { def is =
   "other context" - new g4 with FragmentsExecution {
     e1 := executing(firstThenEx1).prints("first", "e1")
     e2 := executeBodies(silentFirstThenEx1).map(_.message) must_== List("", "success")
-    e3 := executeBodies(failingFirstThenEx1).map(_.message) must_== List("error", "success")
+    e3 := executeBodies(failingFirstThenEx1).map(_.message) must_== List("java.lang.RuntimeException: error", "success")
   }
 
   "mutable contexts" - new g6 with FragmentsExecution with MustThrownExpectations {

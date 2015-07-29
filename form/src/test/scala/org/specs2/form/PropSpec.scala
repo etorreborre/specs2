@@ -92,7 +92,7 @@ Execution
     e3  := expectedOnly.execute                         === Pending("No actual value")
     e4  := nameProp("eric").execute                     === Success("'eric' is equal to 'eric'")
     e5  := nameProp("eric2").execute.message            === "'eric' is not equal to 'eric2'"
-    e6  := nameProp.apply(error("bad")).execute.message === "bad"
+    e6  := nameProp.apply(error("bad")).execute.message === "java.lang.RuntimeException: bad"
     e7  := constrained("e").execute.isSuccess           === true
     e8  := constrained("a").execute.message             === "'eric' doesn't contain 'a'"
     e9  := withMatcher("e").execute.isSuccess           === true

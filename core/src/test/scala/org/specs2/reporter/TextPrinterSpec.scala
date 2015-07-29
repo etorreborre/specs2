@@ -40,8 +40,9 @@ class TextPrinterSpec extends Specification { def is = s2"""
    with detailed failure                                      $d3
 
  Error messages must be shown
-   with the exception message                                 $e1
-   with the stacktrace                                        $e2
+   with the exception class                                   $e1
+   with the exception message                                 $e2
+   with the stacktrace                                        $e3
 
  Expected values must be shown
    when they are non empty                                    $f1
@@ -150,9 +151,14 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
   def e1 = Arguments("fullstacktrace") ^
     s2"""e1 $error1""" contains
       """|[error] ! e1
-         |[error]  boom"""
+         |[error]  java.lang.RuntimeException: boom"""
 
-  def e2 = s2"""e1 $error1""" contains """|[error] org.specs2.report"""
+  def e2 = Arguments("fullstacktrace") ^
+    s2"""e1 $error1""" contains
+    """|[error] ! e1
+       |[error]  java.lang.RuntimeException: boom"""
+
+  def e3 = s2"""e1 $error1""" contains """|[error] org.specs2.report"""
 
   def f1 = s2"""e1 ${Success("ok", "expected")}""" contains
     """|[info] + e1

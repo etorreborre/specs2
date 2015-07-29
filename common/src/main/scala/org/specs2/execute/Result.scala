@@ -348,7 +348,7 @@ case object FromJUnitAssertionError extends Details
 /** 
  * This class represents an exception occurring during an execution.
  */
-case class Error(m: String, t: Throwable) extends Result(m) with ResultStackTrace { outer =>
+case class Error(m: String, t: Throwable) extends Result(s"${t.getClass.getName}: $m") with ResultStackTrace { outer =>
   type SelfType = Error
 
   /** @return an exception created from the message and the stackTraceElements */
