@@ -4,7 +4,7 @@ package process
 
 import scala.math._
 import specification.core._
-import scalaz._, Scalaz._
+
 /**
  * Fold function to compute the indentation of each fragment based
  * on the presence of Tabs fragments

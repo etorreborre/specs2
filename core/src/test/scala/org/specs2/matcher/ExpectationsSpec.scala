@@ -1,8 +1,6 @@
 package org.specs2
 package matcher
 
-import execute._
-
 class ExpectationsSpec extends Specification { def is = s2"""
 
  StoredExpectations can be sandboxed $e1

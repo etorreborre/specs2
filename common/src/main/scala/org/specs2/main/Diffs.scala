@@ -7,7 +7,6 @@ import execute.{AsResult, BestMatching}
 import control.Exceptions._
 import text._
 import NotNullStrings._
-import StringEditDistance._
 
 /**
  * Define and compute the differences between strings (used by the printers)

@@ -4,7 +4,6 @@ package reporter
 import control._
 import io._
 import specification.core.Env
-import scalaz.std.anyVal._
 
 /** Representation of the Pandoc executable */
 case class Pandoc(verbose: Boolean, executable: FilePath, inputFormat: String, outputFormat: String) {

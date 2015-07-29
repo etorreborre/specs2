@@ -4,12 +4,9 @@ package reporter
 import data.Fold
 import org.specs2.control.{Actions, Action}
 import org.specs2.execute.Details
-import scalaz.concurrent.Task
-import scalaz.stream._
 import sbt.testing._
 import Fold._
 import org.specs2.text.AnsiColors._
-import scalaz.stream.io._
 import main.Arguments
 import specification.core._
 import SbtPrinter._

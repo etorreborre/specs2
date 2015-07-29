@@ -15,8 +15,8 @@ trait BufferedLineLogger extends LineLogger {
   def infoLog(msg: String)   : Unit = { val rest = flushText(); add(rest+msg) }
   def errorLog(msg: String)  : Unit = { val rest = flushText(); errorLine(rest+msg)  }
   def failureLog(msg: String): Unit = { val rest = flushText(); failureLine(rest+msg) }
-  def newline                : Unit = { infoLine(buffer.toString); buffer.clear }
-  def close: Unit = flushText(force = true)
+  def newline()              : Unit = { infoLine(buffer.toString); buffer.clear }
+  def close()                : Unit = flushText(force = true)
 
   protected def infoLine(msg: String): Unit
   protected def errorLine(msg: String): Unit

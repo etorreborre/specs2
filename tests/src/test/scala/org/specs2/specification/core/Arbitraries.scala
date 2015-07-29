@@ -6,7 +6,6 @@ import org.scalacheck._, Gen._, Arbitrary._
 import create._
 import execute.StandardResults._
 import FormattingFragments._
-import scalaz._, Scalaz._
 import DefaultFragmentFactory._
 
 object Arbitraries {

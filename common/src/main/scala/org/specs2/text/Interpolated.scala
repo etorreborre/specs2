@@ -34,7 +34,7 @@ trait InterpolatedParsers extends JavaTokenParsers {
 
   def empty(p: Parser[String]) = p ^^ (_ => "")
 
-  lazy val noVariable: Parser[String] = ("[^${}]+".r).named("no variable")
+  lazy val noVariable: Parser[String] = s"[^$${}]+".r.named("no variable")
 
   lazy val interpolatedString: Parser[String] =
     interpolatedVariable |

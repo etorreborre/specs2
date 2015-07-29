@@ -9,7 +9,6 @@ import org.specs2.concurrent.ExecutionEnv
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 import scalaz.Show
-import scalaz.std.anyVal._
 import specification.process.Stats
 import time.SimpleTimer
 import control._

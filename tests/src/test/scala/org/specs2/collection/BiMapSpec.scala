@@ -3,7 +3,6 @@ package collection
 
 import BiMap._
 import specification._
-import matcher._
 
 class BiMapSpec extends script.Specification with Groups with ScalaCheck { def is = s2"""
 

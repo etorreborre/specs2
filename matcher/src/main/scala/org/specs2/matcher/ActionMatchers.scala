@@ -3,7 +3,6 @@ package matcher
 
 import execute._
 import control._
-import scalaz.std.anyVal._
 import MatchersCreation._
 import text.Regexes._
 

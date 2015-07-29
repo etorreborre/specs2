@@ -8,7 +8,6 @@ import specification.core._
 import scalaz.concurrent.Task
 import scalaz.stream._
 import scalaz.syntax.monoid._
-import scalaz.std.anyVal._
 
 /**
  * Compute the statistics for executed fragments

@@ -5,7 +5,6 @@ import java.io.File
 import execute.Result
 import text._
 import io._
-import scalaz.std.anyVal._
 import control._
 import MatchersImplicits._
 import ValueChecks._

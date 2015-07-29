@@ -7,7 +7,6 @@ import main._
 import reporter._
 import specification.core._
 import control._
-import scalaz.std.anyVal._
 
 /**
  * Runner for specs2 specifications

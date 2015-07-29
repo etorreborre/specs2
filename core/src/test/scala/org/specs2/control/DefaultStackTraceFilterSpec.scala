@@ -3,7 +3,6 @@ package control
 
 import matcher.{ValueChecks, ThrownExpectations}
 import user.specification.UserExpectations
-import ValueChecks._
 
 class DefaultStackTraceFilterSpec extends Spec with ThrownExpectations { def is =  s2"""
 

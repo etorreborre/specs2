@@ -175,21 +175,22 @@ object build extends Build {
     // https://gist.github.com/djspiewak/976cd8ac65e20e136f05
     unmanagedSourceDirectories in Compile ++=
       Seq((sourceDirectory in Compile).value / s"scala-${scalaBinaryVersion.value}",
-          (if (scalazVersion.value.startsWith("7.0")) (sourceDirectory in Compile).value / s"scala-scalaz-7.0.x"
-           else                                       (sourceDirectory in Compile).value / s"scala-scalaz-7.1.x"),
-          (if (scalazVersion.value.startsWith("7.0")) (sourceDirectory in (Test, test)).value / s"scala-scalaz-7.0.x"
-           else                                       (sourceDirectory in (Test, test)).value / s"scala-scalaz-7.1.x")),
+          if (scalazVersion.value.startsWith("7.0")) (sourceDirectory in Compile).value / s"scala-scalaz-7.0.x"
+          else (sourceDirectory in Compile).value / s"scala-scalaz-7.1.x",
+          if (scalazVersion.value.startsWith("7.0")) (sourceDirectory in(Test, test)).value / s"scala-scalaz-7.0.x"
+          else (sourceDirectory in(Test, test)).value / s"scala-scalaz-7.1.x"),
     javacOptions ++= Seq("-Xmx3G", "-Xms512m", "-Xss4m"),
     maxErrors := 20,
     incOptions := incOptions.value.withNameHashing(true),
     scalacOptions in GlobalScope ++=
-      (if (scalaVersion.value == "2.11") Seq("-Xfatal-warnings", "-Xlint", "-Ywarn-unused-import", "-Xcheckinit", "-Xlint", "-deprecation", "-unchecked", "-feature", "-language:_")
-       else                              Seq("-Xcheckinit", "-Xlint", "-deprecation", "-unchecked", "-feature", "-language:_")),
+      (if (scalaVersion.value startsWith "2.11")
+        Seq("-Xlint", "-Ywarn-unused-import", "-Xcheckinit", "-deprecation", "-unchecked", "-feature", "-language:_")
+       else
+        Seq("-Xcheckinit", "-Xlint", "-deprecation", "-unchecked", "-feature", "-language:_")),
     scalacOptions in Test ++= Seq("-Yrangepos"),
     scalacOptions in (Compile, console) ++= Seq("-Yrangepos", "-feature", "-language:_"),
     scalacOptions in (Test, console) ++= Seq("-Yrangepos", "-feature", "-language:_")
   )
-
 
   lazy val testingSettings: Seq[Settings] = Seq(
     initialCommands in console in test := "import org.specs2._",

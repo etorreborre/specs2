@@ -7,9 +7,6 @@ import Classes._
 import control._
 import matcher.MatchersImplicits._
 
-import scalaz.\&/
-import scalaz.\&/._
-
 class ClassesSpec extends Spec with Grouped { def is = s2"""
 
   it is possible to instantiate a Specification 

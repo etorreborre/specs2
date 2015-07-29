@@ -5,7 +5,6 @@ import org.scalacheck._
 import org.scalacheck.util.{FreqMap, Pretty}
 import org.scalacheck.util.Pretty._
 import execute._
-import matcher._
 import ScalaCheckProperty._
 import specification._
 import AsResultProp._

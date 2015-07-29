@@ -2,7 +2,6 @@ package org.specs2
 package data
 
 import data.TopologicalSort._
-import matcher._
 
 class TopologicalSortSpec extends Spec with ScalaCheck{ def is = s2"""
 

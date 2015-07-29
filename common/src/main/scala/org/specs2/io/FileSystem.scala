@@ -4,7 +4,6 @@ package io
 import control._
 import ActionT._
 import scalaz.{std, syntax, stream, concurrent}
-import std.anyVal._
 import std.list._
 import syntax.all._
 import stream._
@@ -16,8 +15,6 @@ import java.net.URL
 import java.util.zip._
 import java.util.regex.Pattern.compile
 import java.util.regex.Matcher.quoteReplacement
-import FileReader._
-import org.specs2.text.Regexes._
 
 /**
  * Interface for the FileSystem where effects are denoted with the "Action" type

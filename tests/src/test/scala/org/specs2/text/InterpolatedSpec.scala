@@ -74,7 +74,7 @@ class InterpolatedSpec extends Specification with ParserMatchers with Snippets {
   def e6 = parsers.interpolatedVariable(s"$${hello}") must beASuccess
   def e7 = parsers.interpolatedVariable(s"$${ exp { other } }") must beASuccess.withResult("\\Q exp { other } \\E")
   def e8 = parsers.interpolatedVariable(s"$${`hello world`}") must beASuccess.withResult("`hello world`")
-  def e9 = parsers.interpolatedVariable(s"$${ exp $${ o1 } $${ o2 } end}") must beASuccess.withResult("\\Q exp ${ o1 } ${ o2 } end\\E")
+  def e9 = parsers.interpolatedVariable(s"$${ exp $${ o1 } $${ o2 } end}") must beASuccess.withResult(s"\\Q exp $${ o1 } $${ o2 } end\\E")
   def e10 = {
     val snippet =
       s"""$${

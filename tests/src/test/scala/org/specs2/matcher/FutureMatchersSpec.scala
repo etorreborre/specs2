@@ -2,10 +2,7 @@ package org.specs2
 package matcher
 
 import org.specs2.execute.FailureException
-import specification.Environment
 import specification.core.Env
-
-import org.specs2.concurrent._
 import scala.concurrent._
 import duration._
 

@@ -4,15 +4,9 @@ package process
 
 import core._
 import data._
-import org.scalacheck.util.{FreqMap, Pretty}
-import org.scalacheck.{Shrink, Arbitrary}
-import org.specs2.execute.AsResult
-import org.specs2.scalacheck.Parameters
 import scalaz._, Scalaz._
-import control._
 import matcher._
 import Arbitraries._
-import Functions._
 import Fragment._
 
 class IndentationSpec extends Specification with ScalaCheck with TaskMatchers { def is = s2"""

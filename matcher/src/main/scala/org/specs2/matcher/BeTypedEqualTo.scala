@@ -13,8 +13,6 @@ import scala.collection.GenTraversableOnce
 class BeTypedEqualTo[T](t: =>T, equality: (T, T) => Boolean = (t1:T, t2:T) => t1 == t2) extends AdaptableMatcher[T] {
   outer =>
 
-  import AnyMatchers._
-
   protected val ok: String => String = identity
   protected val ko: String => String = identity
 

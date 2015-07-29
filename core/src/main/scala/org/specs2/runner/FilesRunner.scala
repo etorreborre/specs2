@@ -7,7 +7,6 @@ import io.DirectoryPath
 import org.specs2.reporter.LineLogger._
 import specification.core._
 import runner.Runner._
-import scalaz.std.anyVal._
 import scalaz.syntax.bind._
 import scalaz.syntax.traverse._
 import scalaz.std.list._

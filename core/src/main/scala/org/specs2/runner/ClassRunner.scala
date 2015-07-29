@@ -7,7 +7,6 @@ import io.StringOutput
 import specification.core._
 import reporter._
 import main.Arguments
-import reporter.Printer._
 import scalaz._, Scalaz._
 import Runner._
 import reporter.LineLogger._

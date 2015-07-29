@@ -8,7 +8,6 @@ import org.specs2.concurrent.ExecutionEnv
 import scalaz.concurrent.Future
 import sys._
 import execute._
-import MatchResultCombinators._
 
 class DataTablesSpec extends Specification with DataTables with ResultMatchers { def is = s2"""
 

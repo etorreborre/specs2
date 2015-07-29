@@ -7,7 +7,6 @@ import text.MD5
 import scala.io.Codec
 import scalaz.concurrent._
 import scalaz.stream._
-import scalaz.std.anyVal._
 import Paths._
 
 /**

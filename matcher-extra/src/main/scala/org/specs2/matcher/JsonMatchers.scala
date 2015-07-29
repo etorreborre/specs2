@@ -7,14 +7,9 @@ import org.specs2.execute._
 import org.specs2.json._
 import Json._
 import org.specs2.text.NotNullStrings._
-import control.Exceptions._
-import text.Quote._
 import text.NotNullStrings._
-import text.Regexes._
-import text.Trim._
 import json.Json._
 import util.matching.Regex
-import ValueChecks._
 import MatchersImplicits._
 import Results.negateWhen
 

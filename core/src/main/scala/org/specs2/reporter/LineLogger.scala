@@ -11,7 +11,7 @@ trait LineLogger {
   def infoLog(msg: String)
   def failureLog(msg: String)
   def errorLog(msg: String)
-  def newline
+  def newline()
   def close()
 }
 
@@ -30,7 +30,7 @@ object LineLogger {
     def failureLog(msg: String) = ()
     def errorLog(msg: String)   = ()
     def close()                 = ()
-    def newline                 = ()
+    def newline()               = ()
     override def toString = "NoLineLogger"
   }
 

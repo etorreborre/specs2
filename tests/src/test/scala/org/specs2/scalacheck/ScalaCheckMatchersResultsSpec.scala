@@ -8,10 +8,8 @@ import execute._
 import org.scalacheck.Prop.{forAll}
 import org.specs2.main.CommandLine
 import scalaz.{Tag, Order, @@, Equal, Id}
-import Id._
 import scalaz.std.anyVal.intInstance
 import BrokenEqualInstances._
-import ScalaCheckProperty._
 
 class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with ResultMatchers with ReturnsSyntax { def is = s2"""
 

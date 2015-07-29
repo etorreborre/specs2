@@ -1,7 +1,6 @@
 package org.specs2
 package runner
 
-import org.specs2.control.logThrowable
 import org.specs2.runner.Runner._
 import sbt.testing._
 import Fingerprints._
@@ -9,10 +8,8 @@ import main._
 import reporter._
 import control.{Logger => _, _}
 import Actions._
-import control.Throwablex
 import scalaz.\&/
 import scalaz.effect.IO
-import scalaz.std.anyVal._
 import scalaz.syntax.traverse._
 import scalaz.std.list._
 import reporter.SbtLineLogger

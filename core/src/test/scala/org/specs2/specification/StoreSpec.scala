@@ -4,7 +4,6 @@ package specification
 import control._
 import io._
 import scalaz.syntax.bind._
-import scalaz.std.anyVal._
 import execute.AsResult
 import process._
 

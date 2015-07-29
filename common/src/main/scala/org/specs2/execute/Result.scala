@@ -7,13 +7,10 @@ import text.NotNullStrings._
 import main.Arguments
 import scalaz.Scalaz._
 import scalaz.{Foldable, Monoid}
-import Foldable._
 import collection.Seqx._
 import text.Message.concat
 import text.Sentences._
 import text.NotNullStrings._
-import ResultExecution._
-import reflect.ClassName._
 import scalaz._
 /**
  * The result of an execution, either:

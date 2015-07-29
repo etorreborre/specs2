@@ -3,7 +3,6 @@ package text
 
 import java.util.regex.{Matcher, Pattern}
 import control._
-import scalaz.std.anyVal._
 import scalaz.syntax.bind._
 
 /**

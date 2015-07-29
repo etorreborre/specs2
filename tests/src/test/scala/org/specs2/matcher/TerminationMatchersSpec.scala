@@ -5,7 +5,6 @@ import io.StringOutput
 import java.util.concurrent._
 import org.specs2.concurrent.ExecutionEnv
 import specification._
-import core._
 import scala.concurrent.duration._
 
 class TerminationMatchersSpec extends script.Specification with TerminationMatchers with Grouped { def is = section("travis") ^ sequential ^ s2"""

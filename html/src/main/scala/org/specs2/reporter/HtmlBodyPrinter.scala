@@ -8,7 +8,6 @@ import specification.core._
 import specification.process._
 import execute._
 import text.NotNullStrings._
-import Levels._
 import scala.xml.NodeSeq
 
 /**

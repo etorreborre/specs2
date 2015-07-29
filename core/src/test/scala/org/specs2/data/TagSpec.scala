@@ -7,9 +7,6 @@ import org.specs2.main.Arguments
 import NamedTag._
 import NamedTagsAreMonoid._
 import matcher._
-import Expectations._
-import ValueChecks._
-import MatchersImplicits._
 
 class TagSpec extends Specification with DataTables { def is = s2"""
 

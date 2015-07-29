@@ -12,7 +12,6 @@ import syntax.all._
 import scalaz.std.vector._
 import scalaz.std.list._
 import scalaz.std.option._
-import scalaz.std.anyVal._
 import main.Arguments
 import reflect.Classes
 import reporter._, Printer._

@@ -8,7 +8,6 @@ import org.specs2.data.TopologicalSort
 import scalaz.concurrent.Task
 import scalaz.stream._
 import control._
-import scalaz.std.anyVal._
 import scalaz.syntax.traverse._
 import scalaz.std.list._
 

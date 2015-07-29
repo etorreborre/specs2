@@ -2,12 +2,10 @@ package org.specs2
 package specification
 
 import _root_.org.specs2.mutable.{Specification => Spec}
-import org.specs2.data.Fold
 import org.specs2.execute.Result
 import org.specs2.main.Arguments
 import org.specs2.specification.core.{Env, ContextualSpecificationStructure, SpecificationStructure}
 import org.specs2.specification.process.{DefaultSelector, Statistics, Stats, DefaultExecutor}
-import reporter._
 import user.specification._
 
 class AllExpectationsSpec extends Spec with AllExpectations {

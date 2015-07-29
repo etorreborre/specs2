@@ -6,7 +6,6 @@ import data.TopologicalSort
 import control._
 import reflect.Classes
 import Classes._
-import scalaz.std.anyVal._
 import scalaz.syntax.traverse._
 import scalaz.std.list._
 

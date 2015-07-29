@@ -2,12 +2,9 @@ package org.specs2
 package json
 
 import mutable.Specification
-import matcher._
-import util.parsing.json._
 import org.scalacheck._
 import JsonGen._
 import Json._
-import text.NotNullStrings._
 
 class JsonSpec extends Specification with ScalaCheck {
 

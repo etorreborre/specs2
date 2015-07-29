@@ -15,12 +15,8 @@ import scalaz._, Scalaz._
 import HtmlBodyPrinter._
 import Pandoc._
 import ActionT._
-import Actions._
 import html._
-import text.Trim._
 import execute._
-import text.NotNullStrings._
-import Seqx._
 import SearchPage._
 import html.TableOfContents._
 import SpecHtmlPage._

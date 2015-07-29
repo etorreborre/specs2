@@ -2,7 +2,7 @@ package org.specs2
 package matcher
 
 import execute._
-import org.scalacheck._, Arbitrary._, Gen._
+import org.scalacheck._, Arbitrary._
 import text.Sentences._
 
 class MatchResultSpec extends Specification with ScalaCheck { def is = s2"""

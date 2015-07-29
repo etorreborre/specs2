@@ -6,7 +6,6 @@ import execute.AsResult
 import io._
 import specification.BeforeAfterEach
 import control._
-import scalaz.std.anyVal._
 import scalaz.syntax.bind._
 
 class FilesContentMatchersSpec extends Spec

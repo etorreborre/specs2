@@ -5,7 +5,6 @@ import classycle._
 import reflect._
 import io._
 import control._
-import scalaz.std.anyVal._
 
 /**
  * Implementation of the dependency finder using the classycle library.

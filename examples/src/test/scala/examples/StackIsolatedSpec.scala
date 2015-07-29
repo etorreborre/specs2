@@ -1,7 +1,6 @@
 package examples
 
 import org.specs2._
-import specification._
 
 /**
  * This is another way to write the StackSpec, this time using auto-examples and

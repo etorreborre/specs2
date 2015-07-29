@@ -1,11 +1,8 @@
 package org.specs2
 package html
 
-import org.specs2.io.FileName
-
 import scala.util.parsing.combinator._
 import control._
-import scalaz.std.anyVal._
 
 /**
  * String template for HTML files using the Pandoc templating approach where variables to replace are enclosed with $$

@@ -5,8 +5,6 @@ import execute._
 import matcher._
 import org.specs2.concurrent.ExecutionEnv
 import specification.core._
-import time._
-
 import scala.concurrent.duration._
 import TerminationMatchers._
 

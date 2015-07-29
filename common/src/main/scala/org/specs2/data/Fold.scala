@@ -12,11 +12,9 @@ import scalaz.std.list._
 import scalaz.syntax.foldable._
 import scalaz.syntax.bind._
 import scalaz.stream._
-import io._
 import scalaz.stream.text._
 import Processes._
 import process1.lift
-import control.Functions._
 
 /**
  * A Fold[T] can be used to pass over a Process[Task, T].

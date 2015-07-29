@@ -9,7 +9,6 @@ import text.NotNullStrings._
 import text.Trim
 import Trim._
 import data.Fold
-import Fold._
 import execute._
 import main.Arguments
 import scalaz.stream._

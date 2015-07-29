@@ -4,11 +4,8 @@ package matcher
 import org.specs2.concurrent.ExecutionEnv
 import specification.Environment
 import specification.core.Env
-import execute._
-
 import scala.concurrent.duration._
 import scalaz.concurrent._
-import java.util.concurrent.ExecutorService
 
 class FuturezMatchersSpec extends Specification with ResultMatchers with Environment { def is (env: Env) = {
 val timeFactor = env.arguments.execute.timeFactor

@@ -4,7 +4,6 @@ package core
 
 import scalaz.Monoid
 import scalaz.concurrent.Task
-import Fragments._
 import scalaz.stream._
 import Process._
 import Fragment._

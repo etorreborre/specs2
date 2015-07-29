@@ -10,7 +10,6 @@ import collection.Iterablex._
 import io.DirectoryPath
 import control._
 import specification._
-import scalaz.std.anyVal._
 
 class LayersAnalysisSpec extends script.Specification with DataLayers with Grouped with ScalaCheck { def is = s2"""
 

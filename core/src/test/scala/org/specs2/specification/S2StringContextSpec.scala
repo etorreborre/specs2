@@ -8,7 +8,6 @@ import org.specs2.main.Arguments
 import org.specs2.specification.create._
 import org.specs2.specification.core._
 import org.specs2.specification.dsl.FragmentsDsl
-import text.Trim._
 
 class S2StringContextSpec extends Spec { def is = s2"""
 
@@ -76,8 +75,6 @@ object exs extends MustMatchers with StandardResults with S2StringContext with T
 }
 
 object desc extends MustMatchers with StandardResults with StandardMatchResults with S2StringContext {
-
-  import DefaultFragmentFactory._
 
   def e1 =
     s2"""this is

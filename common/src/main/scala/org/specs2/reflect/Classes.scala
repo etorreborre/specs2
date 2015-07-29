@@ -10,10 +10,8 @@ import control._
 import scala.util.control.NonFatal
 import scalaz.\&/._
 import scalaz.{\/-, -\/, \/}
-import scalaz.std.anyVal._
 import scalaz.syntax.std.option._
 import java.lang.reflect.Constructor
-import text.NotNullStrings._
 
 /**
  * This trait provides functions to instantiate classes

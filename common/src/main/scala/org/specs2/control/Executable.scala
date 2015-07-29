@@ -2,7 +2,6 @@ package org.specs2
 package control
 
 import io.FilePath
-import scalaz.std.anyVal._
 import scala.sys.process.ProcessLogger
 
 /**

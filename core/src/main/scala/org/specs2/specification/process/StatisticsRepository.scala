@@ -5,7 +5,6 @@ package process
 import control._
 import execute.Result
 import io._
-import scalaz.std.anyVal._
 import specification.core.Description
 import scala.collection.mutable.HashMap
 

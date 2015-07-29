@@ -4,8 +4,6 @@ package matcher
 import java.io._
 import execute._
 import specification._
-import SequenceMatchersCreation._
-import ResultImplicits._
 
 class AnyMatchersSpec extends script.Specification with Groups with ResultMatchers with AnyMatchers with ValueChecks with TypecheckMatchers { def is = s2"""
 

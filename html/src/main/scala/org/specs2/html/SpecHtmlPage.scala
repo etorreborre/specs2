@@ -4,16 +4,8 @@ package html
 import java.io._
 
 import io._
-import Htmlx._
 import specification.core._
-
-import scala.io._
 import scala.xml._
-import scalaz._, Scalaz._
-import Tree._
-import data.Trees._
-import xml.Nodex._
-import text.Trim._
 
 case class SpecHtmlPage(specification: SpecStructure, path: FilePath, outDir: DirectoryPath, content: String) {
 

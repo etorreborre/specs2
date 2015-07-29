@@ -2,10 +2,8 @@ package org.specs2
 package reporter
 
 import control._
-import Exceptions._
 import text.NotNullStrings._
 import execute.Result
-import specification._
 import data.Fold
 import scalaz.concurrent.Task
 import scalaz.stream._

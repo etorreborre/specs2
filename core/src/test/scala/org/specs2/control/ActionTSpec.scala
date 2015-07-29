@@ -1,13 +1,8 @@
 package org.specs2
 package control
 
-import Actions._
 import scalaz.\&/.This
 import scalaz._, Scalaz._
-import matcher._
-import MatchersImplicits._
-import ExpectationsDescription._
-import StatusT._
 
 class ActionTSpec extends Specification { def is = s2"""
 
