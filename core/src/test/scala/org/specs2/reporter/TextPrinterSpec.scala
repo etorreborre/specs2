@@ -43,6 +43,7 @@ class TextPrinterSpec extends Specification { def is = s2"""
    with the exception class                                   $e1
    with the exception message                                 $e2
    with the stacktrace                                        $e3
+   with the cause                                             $e4
 
  Expected values must be shown
    when they are non empty                                    $f1
@@ -159,6 +160,8 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
        |[error]  java.lang.RuntimeException: boom"""
 
   def e3 = s2"""e1 $error1""" contains """|[error] org.specs2.report"""
+
+  def e4 = s2"""e1 $error2""" contains """|[error] CAUSED BY"""
 
   def f1 = s2"""e1 ${Success("ok", "expected")}""" contains
     """|[info] + e1
@@ -293,6 +296,7 @@ table ${
    * TEST METHODS
    */
   def error1 = { sys.error("boom"); ok }
+  def error2 = { throw new Exception("wrong", new IllegalArgumentException("boom")); ok }
 }
 
 object TextPrinterSpecification extends MustMatchers with FragmentsDsl {

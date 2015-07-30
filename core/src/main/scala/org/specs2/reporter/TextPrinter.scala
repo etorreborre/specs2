@@ -145,10 +145,12 @@ trait TextPrinter extends Printer {
     } else emitNone
   }
 
-  def printError(show: String, err: execute.Error, args: Arguments) =
+  def printError(show: String, err: execute.Error, args: Arguments): Process[Task, LogLine] =
     emit(show).error fby
-      printMessage(args, show, ErrorLine.apply)(err)   fby
-      printStacktrace(args, print = true, ErrorLine.apply)(err)
+      printMessage(args, show, ErrorLine.apply)(err) fby
+      printStacktrace(args, print = true, ErrorLine.apply)(err) fby
+      (if (err.exception.getCause != null) printError("CAUSED BY", execute.Error(err.exception.getCause), args)
+       else emitNone)
 
   def printFailure(show: String, failure: execute.Failure, args: Arguments) =
     emit(show).failure fby
