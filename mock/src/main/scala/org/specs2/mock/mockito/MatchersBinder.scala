@@ -20,14 +20,11 @@ import org.mockito.internal.matchers.LocalizedMatcher
 class MatchersBinder extends Serializable {
   def bindMatchers(argumentMatcherStorage: ArgumentMatcherStorage, invocation: Invocation): InvocationMatcher = {
 
-    /** start of ugly hack */
-    /**
-     * invokes argumentsToMatcher, which in turns add matchers to the arguments matchers storage
-     *
-     * if this is not called then verification might fail, arguing that the number of matchers is not equal to the number of arguments
-     */
+    // start of ugly hack
+    // invokes argumentsToMatcher, which in turns add matchers to the arguments matchers storage
+    // if this is not called then verification might fail, arguing that the number of matchers is not equal to the number of arguments
     ArgumentsProcessor.argumentsToMatchers(invocation.getArguments)
-    /** end of ugly hack */
+    // end of ugly hack
 
     val lastMatchers = argumentMatcherStorage.pullLocalizedMatchers
     validateMatchers(invocation, lastMatchers)

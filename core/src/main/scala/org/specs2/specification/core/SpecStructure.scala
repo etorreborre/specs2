@@ -71,15 +71,15 @@ object SpecStructure {
   /**
    * sort the specifications in topological order where specification i doesn't depend on specification j if i > j
    *
-   * == dependents first!
+   * means "dependents first"!
    */
   def topologicalSort(specifications: Seq[SpecStructure]): Option[Vector[SpecStructure]] =
     TopologicalSort.sort(specifications, (s1: SpecStructure, s2: SpecStructure) => dependsOn(s2, s1))
 
   /**
-   * sort the specifications in topological order where specification i doesn't depend on specification j if i ><j
+   * sort the specifications in topological order where specification i doesn't depend on specification j if i > j
    *
-   * == dependents last!
+   * means "dependents last"!
    */
   def reverseTopologicalSort(specifications: Seq[SpecStructure]): Option[Vector[SpecStructure]] =
     TopologicalSort.sort(specifications, dependsOn)

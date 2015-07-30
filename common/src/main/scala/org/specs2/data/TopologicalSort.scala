@@ -29,7 +29,7 @@ object TopologicalSort {
    *          add n to head of L
    */
   def sort[T](elements: Seq[T], dependsOn: (T, T) => Boolean): Option[Vector[T]] = {
-    /** simple node structure to tag if a node has been visited or not */
+    // simple node structure to tag if a node has been visited or not
     class Node(val t: T, var permanent: Boolean = false, var temp: Boolean = false) {
       override def toString = t.toString+"-"+(if (unmarked) "u" else if (temp) "t" else "p")
       def unmarked     = !permanent && !temp

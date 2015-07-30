@@ -23,31 +23,31 @@ import scala.concurrent.duration.FiniteDuration
  *       to be shutdown at the end of the execution
  */
 case class Env(arguments: Arguments = Arguments(),
-          /** selector class */
+          // selector class
           selectorInstance: Arguments => Selector = (arguments: Arguments) =>
             Arguments.instance(arguments.select.selector).getOrElse(DefaultSelector),
 
-          /** executor instance */
+          // executor instance
           executorInstance: Arguments => Executor = (arguments: Arguments) =>
             Arguments.instance(arguments.execute.executor).getOrElse(DefaultExecutor),
 
-          /** default console logger */
+          // default console logger
           lineLogger: LineLogger = NoLineLogger,
 
-          /** default statistics repository */
+          // default statistics repository
           statsRepository: Arguments => StatisticsRepository = (arguments: Arguments) =>
              StatisticsRepository.file(arguments.commandLine.directoryOr("stats.outdir", "target" / "specs2-reports" / "stats")),
 
-          /** logger for issues */
+          // logger for issues
           systemLogger: Logger = noLogging,
 
-          /** random generator */
+          // random generator
           random: scala.util.Random = new scala.util.Random,
 
-          /** file system interface */
+          // file system interface
           fileSystem: FileSystem = FileSystem,
 
-          /** parameters for fragments execution */
+          // parameters for fragments execution
           executionParameters: ExecutionParameters = ExecutionParameters()) {
 
   lazy val statisticsRepository: StatisticsRepository =

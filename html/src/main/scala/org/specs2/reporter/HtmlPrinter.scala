@@ -16,7 +16,6 @@ import HtmlBodyPrinter._
 import Pandoc._
 import ActionT._
 import html._
-import execute._
 import SearchPage._
 import html.TableOfContents._
 import SpecHtmlPage._

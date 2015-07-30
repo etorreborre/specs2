@@ -88,9 +88,9 @@ trait DefaultSelector extends Selector {
    * This is because we want to visually include all of e2, e3, e4 in the following acceptance spec
    *
    * e1
-   * e2 ${section("x")}
+   * e2 \${section("x")}
    * e3
-   * e4 ${section("x")}
+   * e4 \${section("x")}
    * e5
    */
   def transformBeforeMarkersToAfterMarkers: Process1[Fragment, Fragment] = {

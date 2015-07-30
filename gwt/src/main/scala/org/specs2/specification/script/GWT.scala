@@ -146,7 +146,7 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
      */
     def fragments(text: String): Fragments = {
 
-      /** results of given and when steps, stored in the reverse order of definition */
+      // results of given and when steps, stored in the reverse order of definition
       var givenSteps: Seq[Fragment] = Seq()
       var whenSteps: Seq[Fragment]  = Seq()
 

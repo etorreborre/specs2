@@ -13,18 +13,18 @@ import specification.create._
  * This trait can be used to standardize names for groups of examples in an acceptance specification.
  *
  * class MySpecification extends Specification with Examples { def is = s2"""
- *   first example in first group                                       ${g1().e1}
- *   second example in first group                                      ${g1().e2}
+ *   first example in first group                                       \${g1().e1}
+ *   second example in first group                                      \${g1().e2}
  *
- *   first example in second group                                      ${g2().e1}
- *   second example in second group                                     ${g2().e2}
+ *   first example in second group                                      \${g2().e1}
+ *   second example in second group                                     \${g2().e2}
  *                                                                      """
  * }
  *
  * trait Examples extends Groups with Matchers {
  *   "first group of examples" - new g1 {
  *     e1 := ok
- *     e2 ;= ok
+ *     e2 := ok
  *   }
  *   "second group of examples" - new g2 {
  *     e1 := ok
@@ -175,11 +175,11 @@ trait Groups extends GroupsLike { outer: S2StringContextCreation =>
  * This trait can be used to standardize names for groups of examples in an acceptance specification.
  *
  * class MySpecification extends Specification with Examples { def is = s2"""
- *   first example in first group                                       ${g1.e1}
- *   second example in first group                                      ${g1.e2}
+ *   first example in first group                                       \${g1.e1}
+ *   second example in first group                                      \${g1.e2}
  *
- *   first example in second group                                      ${g2.e1}
- *   second example in second group                                     ${g2.e2}
+ *   first example in second group                                      \${g2.e1}
+ *   second example in second group                                     \${g2.e2}
  *                                                                      """
  * }
  *

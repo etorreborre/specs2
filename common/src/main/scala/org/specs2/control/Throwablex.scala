@@ -99,7 +99,6 @@ trait Throwablex {
 
   /** @return an exception with the given stacktrace */
   def exception(st: Seq[StackTraceElement]): Exception = exception("", st)
-  /** location information from a stackTrace element */
 }
 
 case class TraceLocation(path: String, fileName: String, className: String, methodName: String, lineNumber: Int) {
@@ -114,8 +113,8 @@ case class TraceLocation(path: String, fileName: String, className: String, meth
 
 object TraceLocation {
   def apply(t: StackTraceElement): TraceLocation = {
-    /** path corresponding to the class name. This is an approximation corresponding to the
-      *  simple case of a top-level class in a file having the same name */
+    // path corresponding to the class name. This is an approximation corresponding to the
+    // simple case of a top-level class in a file having the same name
     lazy val path = className.split("\\.").dropRight(1).mkString("", "/", "/"+fileName)
     lazy val fileName = t.getFileName
     lazy val className = t.getClassName.split('$')(0)

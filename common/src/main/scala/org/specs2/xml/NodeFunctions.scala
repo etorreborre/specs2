@@ -56,21 +56,21 @@ trait NodeFunctions {
       }
     }
     (node, n) match {
-      /** Groups must be removed from comparisons because they throw exception when getting 'attributes' or 'children' */
+      // Groups must be removed from comparisons because they throw exception when getting 'attributes' or 'children
       case (Group(node1), _)         => isEqualIgnoringSpace(node1, n)
       case (_, Group(n1))            => isEqualIgnoringSpace(node, n1)
 
-      /** checks for null */
+      // checks for null
       case (null, other)             => other == null
       case (other, null)             => other == null
 
-      /** checks for 'leaf' types */
+      // checks for 'leaf' types
       case (n1: Text, n2:Text)       => n1.text.trim == n2.text.trim
       case (n1: Text, n2:Atom[_])    => n1.text.trim == n2.text.trim
       case (n1: Atom[_], n2:Text)    => n1.text.trim == n2.text.trim
       case (n1: Atom[_], n2:Atom[_]) => n1.text.trim == n2.text.trim
 
-      /** general case */
+      // general case
       case (n1: Node, n2:Node) => (isSpaceNode(n1) && isSpaceNode(n2)) ||
         n1.prefix == n2.prefix &&
           attributesSet(n1) == attributesSet(n2) &&
@@ -126,7 +126,7 @@ trait NodeFunctions {
     def textMatch(n: Node) = textTest(n.text)
 
     (node, other) match {
-      /** Groups must be removed from comparisons because they throw exception when getting 'attributes' or 'children' */
+      // Groups must be removed from comparisons because they throw exception when getting 'attributes' or 'children'
       case (Group(node1), _)         => false
       case (_, Group(n1))            => false
       case _                         =>
