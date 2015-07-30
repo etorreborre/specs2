@@ -65,10 +65,6 @@ class MockitoSpec extends script.Spec with Mockito with ResultMatchers with Grou
      + as being anything
      + when the argument is not defined
 
-   it is possible to verify a function with implicit conversions
-     + with a single converted parameter
-     + with a single converted parameter, using a matcher
-
    + it is possible to verify a function with repeated parameters
    + it is possible to specify a timeout for the call
    + it doesn't match maps and functions as equal
@@ -252,15 +248,6 @@ STUBS
     eg := {
       partial.call { case (i:Int, d: Double) if i > 10 => (i + d).toString }
       (there was one(partial).call((1, 3.0) -> "4.0")).message must contain("a PartialFunction defined for (1,3.0)")
-    }
-
-    eg := {
-      converted.call("test")
-      there was one(converted).call("test")
-    }
-    eg := {
-      converted.call("test")
-      there was one(converted).call(startWith("t"))
     }
 
     eg := {
@@ -573,11 +560,6 @@ STUBS
 
     trait WithPartialFunction { def call(f: PartialFunction[(Int, Double), String]) = f.apply((1, 2.0)) }
     val partial = mock[WithPartialFunction]
-
-    case class WrappedString(s: String)
-    implicit def wrap(s: String): WrappedString = WrappedString(s)
-    trait WithImplicitConversion { def call[T <% WrappedString](s: T) = s.toString }
-    val converted = mock[WithImplicitConversion]
 
     trait WithRepeatedParams { def call[T](params: T*) = params.toString }
     val repeated = mock[WithRepeatedParams]
