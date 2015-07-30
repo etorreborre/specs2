@@ -44,13 +44,19 @@ case class StatisticsRepository(store: Store) {
 case class StatisticsMemoryStore(statistics: HashMap[String, Stats] = new HashMap[String, Stats],
                        results: HashMap[(String, Long), Result] = new HashMap[(String, Long), Result]) extends Store {
   def get[A](key: Key[A]): Action[Option[A]] = key match {
-    case SpecificationStatsKey(specClassName) => Actions.ok(statistics.get(specClassName))
-    case SpecificationResultKey(specClassName, description) => Actions.ok(results.get((specClassName, description.hashCode)))
+    case SpecificationStatsKey(specClassName) =>
+      Actions.ok(statistics.get(specClassName))
+
+    case SpecificationResultKey(specClassName, description) =>
+      Actions.ok(results.get((specClassName, description.hashCode.toLong)))
   }
   
   def set[A](key: Key[A], a: A): Action[Unit] = key match {
-    case SpecificationStatsKey(specClassName) => Actions.ok(statistics.put(specClassName, a))
-    case SpecificationResultKey(specClassName, description) => Actions.ok(results.put((specClassName, description.hashCode), a))
+    case SpecificationStatsKey(specClassName) =>
+      Actions.ok(statistics.put(specClassName, a)).map(_ => ())
+
+    case SpecificationResultKey(specClassName, description) =>
+      Actions.ok(results.put((specClassName, description.hashCode.toLong), a)).map(_ => ())
   }
 
   def reset: Action[Unit] = Actions.ok {

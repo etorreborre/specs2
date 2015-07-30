@@ -32,9 +32,10 @@ trait StringOutput extends Output {
       msgs.remove(msgs.size - 1)
       append(last + formatted)
     }
+    ()
   }
 
-  protected def append(msg: String) = msgs += msg
+  protected def append(msg: String)  { msgs += msg; () }
   
   def clear() { msgs.clear() }
 }

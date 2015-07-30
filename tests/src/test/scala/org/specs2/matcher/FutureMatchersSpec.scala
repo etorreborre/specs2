@@ -8,7 +8,7 @@ import duration._
 
 class FutureMatchersSpec(env: Env) extends Specification with ResultMatchers with Retries {
  val timeFactor = env.arguments.execute.timeFactor
- val sleepTime = 50 * timeFactor
+ val sleepTime = 50 * timeFactor.toLong
  implicit val ee = env.executionEnv
  implicit val ec = env.executionContext
 

@@ -209,8 +209,8 @@ class BeSignificantlyCloseTo[T : Numeric](target: T, sf: SignificantFigures) ext
       val o = order(num.toDouble(target))
       // Calculate both actual and target as ints of just their significant figures
       // e.g. 0.1234 to 2 sig figs as 12
-      val a = (num.toDouble(actual) * Math.pow(10, sf.number - o -1)).round.toInt
-      val t = (num.toDouble(target) * Math.pow(10, sf.number - o -1)).round.toInt
+      val a = (num.toDouble(actual) * Math.pow(10, (sf.number - o - 1).toDouble)).round.toInt
+      val t = (num.toDouble(target) * Math.pow(10, (sf.number - o - 1).toDouble)).round.toInt
       result(a == t,
         s"${description(x)} is close to $target with ${sf.number.qty("significant digit")}",
         s"${description(x)} is not close to $target with ${sf.number.qty("significant digit")}", x)

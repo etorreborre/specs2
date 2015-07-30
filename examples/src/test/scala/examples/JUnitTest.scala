@@ -9,22 +9,22 @@ class JUnitTest extends JUnitMustMatchers {
 
   @Test
   def test1() {
-    "Hello world" must haveSize(11)
+    "Hello world" must haveSize(11); ()
   }
 
   @Test
   def test2() {
-    "Hello world" must startWith("Hello")
+    "Hello world" must startWith("Hello"); ()
   }
 
   @Test
   def test3() {
-    "Hello world" must endWith("world")
+    "Hello world" must endWith("world"); ()
   }
 
   @Test
   def test4() {
-    "Hello world" must endWithWorld
+    "Hello world" must endWithWorld; ()
   }
 
   // custom matchers can be created by coercing a function T => (Boolean, String, String) to Matcher[T]

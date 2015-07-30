@@ -16,14 +16,14 @@ trait BufferedLineLogger extends LineLogger {
   def errorLog(msg: String)  : Unit = { val rest = flushText(); errorLine(rest+msg)  }
   def failureLog(msg: String): Unit = { val rest = flushText(); failureLine(rest+msg) }
   def newline()              : Unit = { infoLine(buffer.toString); buffer.clear }
-  def close()                : Unit = flushText(force = true)
+  def close()                : Unit = { flushText(force = true); () }
 
   protected def infoLine(msg: String): Unit
   protected def errorLine(msg: String): Unit
   protected def failureLine(msg: String): Unit
 
   private val buffer = new StringBuilder
-  private def add(msg: String) { buffer.append(msg) }
+  private def add(msg: String) { buffer.append(msg); () }
 
   private def flushText(force: Boolean = false): String = {
     if (force) {

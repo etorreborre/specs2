@@ -11,5 +11,5 @@ import matcher.Scope
  * thrown as exceptions 
  */
 trait After extends specification.After with DelayedInit with Scope {
-  override def delayedInit(x: => Unit): Unit = try x finally after
+  override def delayedInit(x: => Unit): Unit = try x finally { after; () }
 }

@@ -12,5 +12,8 @@ import matcher.Scope
  */
 trait Around extends specification.Around with DelayedInit with Scope {
   /** use effectively to re-throw FailureExceptions if x failed */
-  override def delayedInit(x: => Unit): Unit = ResultExecution.effectively(around { Result.resultOrSuccess(x) })
+  override def delayedInit(x: => Unit): Unit = {
+    ResultExecution.effectively(around { Result.resultOrSuccess(x) })
+    ()
+  }
 }

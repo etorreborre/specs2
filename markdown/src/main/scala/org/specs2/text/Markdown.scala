@@ -100,6 +100,7 @@ case class Specs2Visitor(text: String, options: MarkdownOptions = MarkdownOption
         print("""<code class="prettyprint">""").
         printEncoded(text).
         print("</code>")
+    ()
   }
 }
 

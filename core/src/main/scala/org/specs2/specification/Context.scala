@@ -77,7 +77,7 @@ trait After extends Context { outer =>
    */
   def apply[T : AsResult](a: =>T): Result = {
     try { AsResult(a) }
-    finally { after  }
+    finally { after; ()  }
   }
 
   /** compose the actions of 2 After traits */

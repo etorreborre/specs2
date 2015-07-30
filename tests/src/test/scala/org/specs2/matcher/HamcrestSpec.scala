@@ -19,9 +19,11 @@ class HamcrestSpec extends script.Spec with Grouped with Hamcrest with TypedEqua
   // a Hamcrest matcher for even numbers
   object beEven extends BaseMatcher[Int] {
     def matches(item: Object): Boolean = item.toString.toInt % 2 == 0
-    def describeTo(description: Description): Unit = { description.appendText("an even Int") }
+    def describeTo(description: Description): Unit = {
+      description.appendText("an even Int"); ()
+    }
     override def describeMismatch(item: Object, description: Description): Unit = {
-      description.appendValue(item).appendText(" is odd")
+      description.appendValue(item).appendText(" is odd"); ()
     }
   }
 

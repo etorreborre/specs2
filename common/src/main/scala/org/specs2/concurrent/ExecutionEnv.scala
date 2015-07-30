@@ -3,12 +3,10 @@ package concurrent
 
 import java.util.concurrent._
 
-import org.specs2.control
 import org.specs2.control._
 import org.specs2.main.Arguments
-
 import scala.concurrent.ExecutionContext
-import scalaz.\/
+import scalaz._, Scalaz._
 import scalaz.concurrent.Future
 
 /**
@@ -30,8 +28,8 @@ case class ExecutionEnv(executor:          () => ExecutorService,
   /** note: shutdown only shuts down the executor services */
   def shutdown(): Unit = {
     try     {
-      try executorService.shutdownNow
-      finally scheduledExecutorService.shutdownNow
+      try { executorService.shutdownNow; () }
+      finally { scheduledExecutorService.shutdownNow; () }
     }
     finally timeout.stop()
   }
@@ -64,7 +62,7 @@ object ExecutionEnv {
 
   def createExecutionContext(executorService: ExecutorService, verbose: Boolean, systemLogger: Logger) =
     ExecutionContext.fromExecutorService(executorService,
-      (t: Throwable) => control.logThrowable(t, verbose).execute(systemLogger).unsafePerformIO)
+      (t: Throwable) => control.logThrowable(t, verbose).execute(systemLogger).void.unsafePerformIO)
 
   /**
    * the number of executors is set from the arguments.threadsNb value which is

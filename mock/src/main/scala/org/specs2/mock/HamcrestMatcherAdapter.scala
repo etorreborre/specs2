@@ -31,6 +31,7 @@ case class HamcrestMatcherAdapter[T](m: Matcher[T]) extends BaseMatcher {
 
   def describeTo(description: Description) {
     description.appendText(message)
+    ()
   }
 }
 

@@ -49,6 +49,7 @@ class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterab
     } yield ()
 
     actions.execute(consoleLogging).unsafePerformIO
+    ()
   }
 
   /**

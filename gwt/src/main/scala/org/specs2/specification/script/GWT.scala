@@ -262,7 +262,7 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
     def append[LLub](list: H, b: mutable.Builder[LLub, List[LLub]], f: Lub => LLub): Unit = {
       def add[T <: HList](list: T): Unit =
         list match {
-          case head :: HNil => b.+=(f(head))
+          case head :: HNil => b.+=(f(head)); ()
           case head :: tail => b.+=(f(head)); add(tail)
           case _            => ()
         }

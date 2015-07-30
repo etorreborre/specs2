@@ -54,8 +54,8 @@ object Executable {
       messages.clear
       f
     }
-    def err(s: => String) { messages.append(s+"\n") }
-    def out(s: => String) { messages.append(s+"\n") }
+    def err(s: => String) { messages.append(s+"\n"); () }
+    def out(s: => String) { messages.append(s+"\n"); () }
   }
 
 

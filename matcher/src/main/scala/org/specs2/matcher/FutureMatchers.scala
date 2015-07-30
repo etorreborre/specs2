@@ -43,7 +43,7 @@ trait FutureBaseMatchers extends ExpectationsCreation {
 
     def await(retries: Int, timeout: FiniteDuration): Result = {
       val tf = ee.timeFactor
-      val appliedTimeout = timeout * tf
+      val appliedTimeout = timeout * tf.toLong
 
       def awaitFuture(remainingRetries: Int, totalDuration: FiniteDuration): Result = {
         try Await.result(f.map(value => AsResult(value))(ee.executionContext), appliedTimeout)

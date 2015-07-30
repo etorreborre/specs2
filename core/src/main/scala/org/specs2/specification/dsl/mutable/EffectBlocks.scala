@@ -91,6 +91,7 @@ class EffectBlocks {
   def addBlock[T](t: =>T) = effect {
     blocksTree = blocksTree.addChild(nextNodeNumber)
     t
+    ()
   }
 
   def effect(a: =>Unit) =

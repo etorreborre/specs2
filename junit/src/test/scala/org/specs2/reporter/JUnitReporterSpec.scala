@@ -7,8 +7,9 @@ import _root_.org.junit.runner.notification.{Failure, RunNotifier}
 import io._
 import main.Arguments
 import mock.Mockito
-import specification.core._
+import matcher.MustThrownMatchers
 import matcher.ActionMatchers._
+import specification.core._
 
 import scala.collection.mutable.ListBuffer
 
@@ -97,7 +98,7 @@ class JUnitReporterSpec extends Specification with Mockito with ForEachEnv {  de
   /**
    * TEST METHODS
    */
-  trait WithNotifier { outer =>
+  trait WithNotifier extends MustThrownMatchers { outer =>
     lazy val notifier = mock[RunNotifier]
 
     lazy val messagesNotifier = new RunNotifier with StringOutput {
@@ -120,6 +121,7 @@ class JUnitReporterSpec extends Specification with Mockito with ForEachEnv {  de
         def description = JUnitDescriptions.specDescription(spec)
       }
       reporter.report(env, List(junitPrinter))(spec) must beOk
+      ()
     }
   }
 

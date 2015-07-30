@@ -46,7 +46,7 @@ trait FuturezBaseMatchers extends ExpectationsCreation {
 
     def attempt(retries: Int, timeout: FiniteDuration): Result = {
       val tf = ee.timeFactor
-      val appliedTimeout = timeout * tf
+      val appliedTimeout = timeout * tf.toLong
 
       def attemptFuture(remainingRetries: Int, totalDuration: FiniteDuration): Result = {
         implicit val ses = ee.scheduledExecutorService

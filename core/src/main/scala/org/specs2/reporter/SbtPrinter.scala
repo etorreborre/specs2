@@ -59,7 +59,7 @@ object SbtPrinter {
     def specEnd(title: String, location: String): Unit = ()
 
     def contextStart(text: String, location: String): Unit =
-    { context.push(text); Unit }
+    { context.push(text); () }
 
     def contextEnd(text: String, location: String): Unit =
     { if (!context.isEmpty) context.pop; () }

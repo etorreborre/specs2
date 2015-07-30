@@ -9,7 +9,7 @@ import scalaz.concurrent._
 
 class FuturezMatchersSpec extends Specification with ResultMatchers with Environment { def is (env: Env) = {
 val timeFactor = env.arguments.execute.timeFactor
-val sleep = 50 * timeFactor
+val sleep = 50 * timeFactor.toLong
 
 section("travis") ^
 s2"""

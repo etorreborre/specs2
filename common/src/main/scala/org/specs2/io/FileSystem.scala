@@ -48,7 +48,7 @@ trait FileSystem extends FilePathReader {
 
   /** create a directory and its parent directories */
   def mkdirs(path: DirectoryPath): Action[Unit] =
-    Actions.safe(path.toFile.mkdirs)
+    Actions.safe(path.toFile.mkdirs).void
 
   /** create a the directory containing a file and its parent directories */
   def mkdirs(path: FilePath): Action[Unit] =
@@ -139,7 +139,7 @@ trait FileSystem extends FilePathReader {
       import java.nio.file._
       Files.copy(Paths.get(filePath.path),
                  Paths.get(dest.path).resolve(Paths.get(filePath.name.name)), StandardCopyOption.REPLACE_EXISTING)
-    }
+    }.void
 
   /** create a new file */
   def createFile(filePath: FilePath): Action[Boolean] =

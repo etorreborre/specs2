@@ -159,12 +159,12 @@ object Fold {
       def sink = fold1.sink.zipWith(fold2.sink) { (f1: ((T, fold1.S)) => Task[Unit], f2: ((T, fold2.S)) => Task[Unit]) =>
         (ts: (T, S)) => {
           val (t, (s1, s2)) = ts
-          (f1((t, s1)) |@| f2((t, s2)))((_,_))
+          (f1((t, s1)) |@| f2((t, s2)))((_,_)).void
         }
       }
 
       def fold = (t : T, s12: (fold1.S, fold2.S)) => (fold1.fold(t, s12._1), fold2.fold(t, s12._2))
-      def last(s12: (fold1.S, fold2.S)) = (fold1.last(s12._1) |@| fold2.last(s12._2))((_,_))
+      def last(s12: (fold1.S, fold2.S)) = (fold1.last(s12._1) |@| fold2.last(s12._2))((_,_)).void
       def init = (fold1.init, fold2.init)
     }
   }

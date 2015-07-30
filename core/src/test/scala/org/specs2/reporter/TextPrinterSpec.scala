@@ -220,7 +220,7 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
 
     val fragments = Fragments((1 to 100).flatMap(i => Seq(
       "ex"+i+"\n " ! {
-        Thread.sleep(scala.util.Random.nextInt(100))
+        Thread.sleep(scala.util.Random.nextInt(100).toLong)
         logger.infoLine("executed "+i)
         ok
       })):_*)
@@ -249,7 +249,7 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
 
     val fragments = Fragments((1 to 100).flatMap(i => Seq(
       "ex"+i+"\n " ! {
-        Thread.sleep(scala.util.Random.nextInt(100))
+        Thread.sleep(scala.util.Random.nextInt(100).toLong)
         logger.infoLine("executed "+i)
         ok
       })):_*)
