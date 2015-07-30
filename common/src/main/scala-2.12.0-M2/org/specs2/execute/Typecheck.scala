@@ -3,7 +3,6 @@ package execute
 
 import reflect.Macros
 import reflect.MacroContext._
-import Macros._
 import scala.reflect.macros.{ParseException, TypecheckException}
 
 /**

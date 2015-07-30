@@ -183,7 +183,7 @@ object build extends Build {
     maxErrors := 20,
     incOptions := incOptions.value.withNameHashing(true),
     scalacOptions in GlobalScope ++=
-      (if (scalaVersion.value startsWith "2.11" || scalaVersion.value startsWith "2.12")
+      (if (scalaVersion.value.startsWith("2.11") || scalaVersion.value.startsWith("2.12"))
         Seq("-Xfatal-warnings",
             "-Xlint",
             "-Ywarn-unused-import",
