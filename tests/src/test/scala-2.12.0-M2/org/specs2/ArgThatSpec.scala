@@ -1,9 +1,9 @@
 package org.specs2
-package mock
 
-import execute._
-import Typecheck._
-import matcher._
+import org.specs2.execute.Typecheck._
+import org.specs2.execute._
+import org.specs2.matcher._
+import org.specs2.mock.Mockito
 
 class ArgThatSpec extends Specification with TypecheckMatchers with Mockito { def is = s2"""
 

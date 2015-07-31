@@ -17,14 +17,13 @@ object depends {
       (if (scalazVersion.startsWith("7.1")) Seq("org.scalaz.stream" %% "scalaz-stream" % "0.7.2a")
        else                                 Seq("org.scalaz.stream" %% "scalaz-stream" % "0.7.2"))
 
-  lazy val scalacheck    = Seq("org.scalacheck" %% "scalacheck"   % "1.12.2")
+  lazy val scalacheck    = Seq("org.scalacheck" %% "scalacheck"   % "1.12.4")
   lazy val mockito       = Seq("org.mockito"    % "mockito-core"  % "1.9.5")
   lazy val junit         = Seq("junit"          % "junit"         % "4.12")
   lazy val hamcrest      = Seq("org.hamcrest"   % "hamcrest-core" % "1.3")
 
   def shapeless(scalaVersion: String) =
-    if (scalaVersion.contains("2.11")) Seq("com.chuusai" %% "shapeless" % "2.1.0")
-    else                               Seq("com.chuusai" % ("shapeless_"+scalaVersion) % "2.1.0")
+    Seq("com.chuusai" %% "shapeless" % "2.2.5")
 
   lazy val pegdown = Seq("org.pegdown" % "pegdown" % "1.2.1")
 
@@ -33,7 +32,7 @@ object depends {
   lazy val tagsoup = "org.ccil.cowan.tagsoup" % "tagsoup" % "1.2"
 
   def paradise(scalaVersion: String) =
-    if (scalaVersion.startsWith("2.11")) Nil
+    if (scalaVersion.startsWith("2.11") || scalaVersion.startsWith("2.12")) Nil
     else  Seq(compilerPlugin("org.scalamacros" %% "paradise"    % "2.0.1" cross CrossVersion.full),
                              "org.scalamacros" %% "quasiquotes" % "2.0.1")
 

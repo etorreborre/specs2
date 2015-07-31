@@ -30,3 +30,5 @@ case class ErrorException(f: Error) extends Exception {
 /** this class allows to throw a result that's decorated with additional information in an Exception */
 case class DecoratedResultException(result: DecoratedResult[_]) extends Exception
 
+
+case class MyClass(list: List[_])
