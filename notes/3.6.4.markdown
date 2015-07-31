@@ -3,12 +3,12 @@ Maintenance version.
 ## Improvements
 
  * drop scalaz bintray repo from quickstart page (by @dwijnand)
- * published for 2.12.0-M2 for 2.11 [#399](http://github.com/etorreborre/specs2/issues/399)
+ * published for 2.12.0-M2 [#399](http://github.com/etorreborre/specs2/issues/399)
  * re-introduced fatal warnings for 2.11 [#404](http://github.com/etorreborre/specs2/issues/404)
  
 ## Fixes 
 
- * display the cause of an exception when there is an error [#403](http://github.com/etorreborre/specs2/issues/403)
+ * display the cause of an exception in sbt when there is an Error [#403](http://github.com/etorreborre/specs2/issues/403)
  * display the exception class when displaying an Error [#402](http://github.com/etorreborre/specs2/issues/402)
  * don't use the steps methods in the Notifier when executing from Intellij [#398](http://github.com/etorreborre/specs2/issues/398)
  * updated promulgate to work when there's no git repo [#397](http://github.com/etorreborre/specs2/issues/397)
