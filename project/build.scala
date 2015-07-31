@@ -43,9 +43,9 @@ object build extends Build {
     organization := "org.specs2",
     specs2Version in GlobalScope <<= version,
     specs2ShellPrompt,
-    scalaVersion := "2.12.0-M2",
+    scalaVersion := "2.11.7",
     scalazVersion := "7.1.3",
-    crossScalaVersions := Seq(scalaVersion.value, "2.11.7", "2.10.5"))
+    crossScalaVersions := Seq(scalaVersion.value, "2.12.0-M2", "2.10.5"))
 
   lazy val specs2Version = settingKey[String]("defines the current specs2 version")
 
