@@ -4,7 +4,6 @@ package guide
 import java.util.concurrent.ExecutorService
 import org.specs2.matcher.TerminationMatchers
 import specification.ExecutionEnvironment
-import execute._
 import concurrent.ExecutionEnv
 import scala.concurrent._
 import duration._

@@ -2,7 +2,7 @@ package org.specs2
 package guide
 package matchers
 
-import scalaz._, Scalaz._
+import scalaz._
 import org.specs2.execute._, Typecheck._
 import specification.core._
 

@@ -2,8 +2,6 @@ package org.specs2
 package guide
 
 import info.guide.BuildInfo
-import control._
-import io._
 
 object Specs2Variables extends Specs2Variables
 

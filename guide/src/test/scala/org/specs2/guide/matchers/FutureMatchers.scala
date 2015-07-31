@@ -2,7 +2,6 @@ package org.specs2
 package guide
 package matchers
 
-import execute._
 import org.specs2.concurrent.ExecutionEnv
 import specification.core.Env
 import scala.concurrent._

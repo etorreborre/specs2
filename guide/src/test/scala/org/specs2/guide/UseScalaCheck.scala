@@ -81,7 +81,7 @@ ScalaCheck properties are sometimes used to test stateful applications rather th
 implicit val arbitraryFile: Arbitrary[File] = ???
 // 8<---
 def createFile(f: File): Unit = ???
-def deleteTmpDir: Unit = ???
+def deleteTmpDir(): Unit = ???
 
 prop { f: File =>
   createFile(f)

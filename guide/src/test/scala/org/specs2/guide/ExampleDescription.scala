@@ -3,8 +3,6 @@ package guide
 
 import matcher._
 import org.specs2.specification.script.{StandardDelimitedStepParsers, StepParsers}
-import StepParsers._
-import StandardDelimitedStepParsers._
 
 object ExampleDescription extends UserGuidePage { def is = s2"""
 

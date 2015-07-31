@@ -6,7 +6,6 @@ import specification.Tables
 import execute._
 import scala.concurrent.Future
 import matcher.DataTable
-import scala.concurrent.ExecutionContext.Implicits.global
 import scalaz._, Scalaz._
 
 object UseDatatables extends UserGuidePage with Tables { def is = "Datatables".title ^ s2"""
@@ -71,14 +70,14 @@ This returns a function `ExecutorService => Result` which can be used directly a
 More generally, you can use the "Applicative" operator `|@` to pass anything having a `scalaz.Applicative` instance, like a `scala.concurrent.Future`:${snippet {
   // this table uses the global execution context implicitly to create futures
   // scala.concurrent.ExecutionContext.Implicits.global
-  val result: scala.concurrent.Future[DecoratedResult[DataTable]] =
+  def result: scala.concurrent.Future[DecoratedResult[DataTable]] =
     "a" | "b" | "c" |>
      2  !  2  ! 4   |
      1  !  1  ! 2   |@ { (a, b, c) => Future(a + b must_== c) }
 
   // then you need to get an implicit execution environment and
   // await on the Future result
-  implicit val ee: ExecutionEnv = ???
+  implicit def ee: ExecutionEnv = ???
   result.await
 }}
 
