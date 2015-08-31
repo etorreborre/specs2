@@ -11,19 +11,19 @@
         <dependency>
             <groupId>org.scalaz</groupId>
             <artifactId>scalaz-core_2.10</artifactId>
-            <version>7.1.1</version>
+            <version>7.1.3</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.scalaz</groupId>
             <artifactId>scalaz-concurrent_2.10</artifactId>
-            <version>7.1.1</version>
+            <version>7.1.3</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.scalaz</groupId>
             <artifactId>scalaz-effect_2.10</artifactId>
-            <version>7.1.1</version>
+            <version>7.1.3</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
