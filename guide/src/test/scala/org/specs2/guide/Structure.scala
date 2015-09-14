@@ -122,6 +122,7 @@ $vid
 $AndIfYouWantToKnowMore
 
  - ${"skip" ~/ SkipExamples} examples
+ - use a ${"different syntax" ~ MutableSpecSyntax} for mutable specifications
  - collect ${"*all* expectations" ~/ GetAllExpectations}
  - mark examples as ${"pending until they are fixed" ~/ PendingUntilFixedExamples}
  - add ${"references to other specifications" ~/ ReferenceOtherSpecifications}
