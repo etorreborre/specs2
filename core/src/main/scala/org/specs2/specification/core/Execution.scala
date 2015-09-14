@@ -58,6 +58,7 @@ case class Execution(run:            Option[Env => Result],
   def setTimeout(timeout: FiniteDuration) = copy(timeout = Some(timeout))
 
   def updateRun(newRun: (Env => Result) => (Env => Result)) = copy(run = run.map(r => newRun(r)))
+  def updateResult(newResult: (=>Result) => Result) = updateRun(f => e => newResult(f(e)))
 
   /** force a result */
   def mapResult(f: Result => Result) = updateRun(run => (env: Env) => f(run(env)))
