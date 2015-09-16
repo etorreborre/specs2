@@ -69,8 +69,13 @@ object IncludeExcludeStackTraceFilter {
 object DefaultStackTraceFilter extends
   IncludeExcludeStackTraceFilter(Seq(),
     Seq("^org.specs2", "^scalaz\\.",
-      "^java\\.", "^scala\\.",
-      "^sbt\\.", "^com.intellij", "^org.junit", "^org.eclipse.jdt")) with ExecutionOrigin {
+        "^java\\.", "^scala\\.",
+        // this is a work-around for #415
+        // when SpecificationLike is used setStacktrace is
+        // originated from the user specification class
+        // and doesn't get filtered out
+        "setStacktrace\\(", "checkFailure\\(",
+        "^sbt\\.", "^com.intellij", "^org.junit", "^org.eclipse.jdt")) with ExecutionOrigin {
 
   override def apply(e: Seq[StackTraceElement]): Seq[StackTraceElement] = {
     val filtered =
