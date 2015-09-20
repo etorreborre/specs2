@@ -194,8 +194,8 @@ object build extends Build {
        else
         Seq("-Xcheckinit", "-Xlint", "-deprecation", "-unchecked", "-feature", "-language:_")),
     scalacOptions in Test ++= Seq("-Yrangepos"),
-    scalacOptions in (Compile, console) ++= Seq("-Yrangepos", "-feature", "-language:_"),
-    scalacOptions in (Test, console) ++= Seq("-Yrangepos", "-feature", "-language:_")
+    scalacOptions in (Compile, console) := Seq("-Yrangepos", "-feature", "-language:_"),
+    scalacOptions in (Test, console) := Seq("-Yrangepos", "-feature", "-language:_")
   )
 
   lazy val testingSettings: Seq[Settings] = Seq(
