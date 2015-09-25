@@ -137,10 +137,6 @@ trait TraversableBaseMatchersLowImplicits extends ValueChecksLowImplicits { this
   implicit def matcherSeqIsContainCheckSeq[T](seq: Seq[Matcher[T]]): Seq[ValueCheck[T]] =
     seq.map(matcherIsValueCheck[T])
 
-  /** this allows the contain(string) matcher for StringMatchers to be used with a Traversable */
-  implicit def stringMatcherIsTraversableMatcher(m: Matcher[String]): Matcher[GenTraversableOnce[String]] =
-    contain(matcherIsValueCheck(m))
-
 }
 
 private[specs2]

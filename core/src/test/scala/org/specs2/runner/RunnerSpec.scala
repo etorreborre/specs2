@@ -52,9 +52,9 @@ class RunnerSpec extends Specification with ActionMatchers { def is = s2"""
 
   def createPrintersAndExpectMessage(arguments: Arguments, message: String) = {
     val output = new StringOutput {}
-    val consoleLogger = (s: String) => scalaz.effect.IO(output.print(s))
+    val consoleLogger = (s: String) => scalaz.effect.IO(output.println(s))
     ClassRunner.createPrinters(arguments, loader).run(consoleLogger).unsafePerformIO
-    output.messages must contain(message)
+    output.messages must contain(contain(message))
   }
 
   val loader = getClass.getClassLoader
