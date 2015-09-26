@@ -48,10 +48,10 @@ trait FutureBaseMatchers extends ExpectationsCreation {
       def awaitFuture(remainingRetries: Int, totalDuration: FiniteDuration): Result = {
         try Await.result(f.map(value => AsResult(value))(ee.executionContext), appliedTimeout)
         catch {
-          case e: TimeoutException =>
+          case e if e.getClass == classOf[TimeoutException] =>
             if (remainingRetries <= 0) Failure(s"Timeout after ${totalDuration + appliedTimeout} (retries = $retries, timeout = $timeout)")
             else                       awaitFuture(remainingRetries - 1, totalDuration + appliedTimeout)
-          case other: Throwable    => throw other
+          case other: Throwable                             => throw other
         }
       }
       awaitFuture(retries, 0.second)

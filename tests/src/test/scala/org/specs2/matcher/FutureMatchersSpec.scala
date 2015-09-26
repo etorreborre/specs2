@@ -11,6 +11,7 @@ class FutureMatchersSpec(env: Env) extends Specification with ResultMatchers wit
  val sleepTime = 50 * timeFactor.toLong
  implicit val ee = env.executionEnv
  implicit val ec = env.executionContext
+ class MyTimeout extends TimeoutException
 
  def is = section("travis") ^ s2"""
 
@@ -28,6 +29,10 @@ class FutureMatchersSpec(env: Env) extends Specification with ResultMatchers wit
 
  with a timeout only
  ${ Future { Thread.sleep(sleepTime); 1 } must be_>(0).awaitFor(200.millis) }
+
+ timeout applies only to `TimeoutException` itself, not subclasses
+ ${ (Future { throw new TimeoutException } must throwA[TimeoutException].await) returns "Timeout" }
+ ${ Future { throw new MyTimeout } must throwA[MyTimeout].await }
 
  A `Future` returning a `Matcher[T]` can be transformed into a `Result`
  ${ Future(1 === 1).await }
