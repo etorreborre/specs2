@@ -89,7 +89,7 @@ trait DefaultExecutor extends Executor {
       } else {
         // if we need to wait, we do, and get the result
         val barrierResult =
-          if (fragment.execution.mustJoin) barrier.attemptRun.fold(t => -\/(FatalExecution(t)), r => r)
+          if (fragment.execution.mustJoin || arguments.sequential) barrier.attemptRun.fold(t => -\/(FatalExecution(t)), r => r)
           else \/-(Success("no barrier result"))
 
         // depending on the result we decide if we should go on executing fragments
@@ -119,13 +119,17 @@ trait DefaultExecutor extends Executor {
           emit(Task.now(executedFragment)) fby sequencedExecution(env, nextBarrier, barrierStop || stepStop)
 
         } else if (env.arguments.sequential) {
-          lazy val executedFragment = timedout(fragment, env)(Task.delay(executeFragment(env)(fragment)))(timeout).run
-          val nextBarrier = barrier.map {
+          // stop right away if the previous fragment created a failed barrier
+          if (barrierStop) emit(Task.now(fragment.skip)) fby sequencedExecution(env, barrier, barrierStop)
+          else {
+            lazy val executedFragment = timedout(fragment, env)(Task.delay(executeFragment(env)(fragment)))(timeout).run
+            val nextBarrier = barrier.map {
               case \/-(result) => executedFragment.executionFatalOrResult.fold(f => -\/(f), r => \/-(Result.ResultFailureMonoid.append(result, r)))
               case f => f
             }
 
-          emit(Task.delay(executedFragment)) fby sequencedExecution(env, nextBarrier, barrierStop)
+            emit(Task.delay(executedFragment)) fby sequencedExecution(env, nextBarrier, barrierStop)
+          }
         } else {
           val timeout = env.timeout.orElse(fragment.execution.timeout)
           val executingFragment = timedout(fragment, env)(start(executeFragment(env)(fragment))(env.executorService))(timeout)

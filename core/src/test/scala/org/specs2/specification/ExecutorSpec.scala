@@ -23,6 +23,7 @@ class ExecutorSpec extends script.Specification with Groups with ResultMatchers 
   + sequentially
   + with in-between steps
   + with a fatal execution error
+  + stopOnFail and sequential
 
   with a timeout $timeOut
 
@@ -119,7 +120,6 @@ class ExecutorSpec extends script.Specification with Groups with ResultMatchers 
     }
 
     eg := { env: Env =>
-      val tf = env.arguments.execute.timeFactor
 
       val fragments = Seq(
         example("fast1", ok("ok1")),
@@ -129,6 +129,18 @@ class ExecutorSpec extends script.Specification with Groups with ResultMatchers 
       execute(fragments, env)
 
       messages.toList must_== Seq("ok1", "fatal")
+    }
+
+    eg := { env: Env =>
+
+      val fragments = Seq(
+        example("e1", ko("ko1")),
+        example("e2", ok("ok2")))
+
+      val env1 = env.setArguments(Arguments.split("sequential stopOnFail"))
+      val results = execute(fragments, env1).map(_.status)
+
+      results must contain("x", "o")
     }
   }
 
@@ -154,8 +166,9 @@ class ExecutorSpec extends script.Specification with Groups with ResultMatchers 
     val messages = new ListBuffer[String]
 
     // this cannot be made lazy vals otherwise this will block on 'slow'
-    def ok(name: String)              = {                    messages.append(name); success }
-    def fast(timeFactor: Int)         = {                    messages.append("fast"); success }
+    def ok(name: String)              = { messages.append(name); success }
+    def ko(name: String)              = { messages.append(name); failure }
+    def fast(timeFactor: Int)         = { messages.append("fast"); success }
     def medium(timeFactor: Int)       = { Thread.sleep(10 * timeFactor.toLong);  messages.append("medium"); success }
     def ex(s: String)                 = { messages.append(s); success }
     def mediumFail(timeFactor: Int)   = { Thread.sleep(10 * timeFactor.toLong);  messages.append("medium"); failure }
