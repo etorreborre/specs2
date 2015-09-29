@@ -10,7 +10,6 @@ You need to download and install sbt. Then execute the following command:
 
 Then you can generate the User Guide with:
 
-sbt
-> testOnly org.specs2.guide.UserGuide -- html
+> sbt test-only org.specs2.guide.UserGuide -- html
 
 This should create html files in the target/specs2-reports directory. 
