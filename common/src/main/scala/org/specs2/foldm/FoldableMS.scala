@@ -2,7 +2,7 @@ package org.specs2
 package foldm
 
 import scala.io.BufferedSource
-import scalaz.{\/, \/-, -\/, Bind, ~>}
+import scalaz.{\/, \/-, -\/, Bind}
 import scalaz.syntax.bind._
 import java.io.InputStream
 import FoldId.Bytes

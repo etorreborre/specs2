@@ -1,7 +1,7 @@
 package org.specs2
 package reporter
 
-import foldm._, FoldM._, stream._, FoldProcessM._, FoldableProcessM._
+import foldm._, stream._, FoldProcessM._, FoldableProcessM._
 import scalaz.concurrent.Task
 import control._
 import specification.core._

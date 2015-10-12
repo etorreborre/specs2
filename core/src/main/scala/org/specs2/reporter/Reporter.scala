@@ -1,7 +1,7 @@
 package org.specs2
 package reporter
 
-import foldm._, FoldId._, FoldM._
+import foldm._, FoldM._
 import stream.FoldProcessM._
 import specification._
 import specification.process._

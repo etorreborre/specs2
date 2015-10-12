@@ -3,7 +3,7 @@ package reporter
 
 import matcher.DataTable
 import control._
-import foldm._, FoldM._, stream._, FoldProcessM._
+import foldm._, stream._, FoldProcessM._
 import specification.core._
 import specification.process._
 import text.NotNullStrings._
@@ -12,11 +12,9 @@ import Trim._
 import execute._
 import main.Arguments
 import scalaz.stream._
-import scalaz.stream.Process.{Env =>_,_}
 import scalaz.concurrent.Task
 import scalaz.concurrent.Task._
 import LogLine._
-import Functions._
 import scalaz._, Scalaz._
 
 /**

@@ -4,13 +4,8 @@ package reporter
 import data.Fold
 import control.{Actions, Action}
 import execute.Details
-import foldm._, FoldM._
-import Fold._
-import org.specs2.foldm.stream.FoldProcessM.SinkTask
-import scalaz._, Scalaz._
+import foldm.stream.FoldProcessM.SinkTask
 import scalaz.concurrent.Task
-import scalaz.stream._
-import scalaz.stream.io._
 import sbt.testing._
 import org.specs2.text.AnsiColors._
 import main.Arguments

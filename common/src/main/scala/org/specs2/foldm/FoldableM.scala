@@ -6,7 +6,6 @@ import scalaz.{EphemeralStream, Bind, ~>, Foldable, \/, \/-, -\/}
 import EphemeralStream._
 import scalaz.syntax.bind._
 import scalaz.syntax.foldable._
-import scalaz.std.list._
 
 /**
  * A structure delivering elements of type A (variable type, like a List) and which 

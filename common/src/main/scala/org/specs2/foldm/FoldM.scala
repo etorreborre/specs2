@@ -5,10 +5,7 @@ import scalaz.{Apply, Functor, Profunctor, Monoid, Compose, Monad, Category, Mon
 import scalaz.effect.IO
 import scalaz.Id._
 import scalaz._
-import scalaz.std.anyVal._
 import scalaz.syntax.monad._
-import scalaz.syntax.foldable._
-import scalaz.std.list._
 import java.security.MessageDigest
 import FoldM._
 

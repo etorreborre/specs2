@@ -1,20 +1,18 @@
 package org.specs2
 package reporter
 
+import foldm._, FoldM._, FoldableM._, stream._, FoldProcessM._
+import scalaz.{Failure => _, _}, Scalaz._
 import org.junit.runner.Description
 import java.net.InetAddress
 import main.Arguments
 import execute._
-import data.Fold
 import io.FileName
 import scalaz.concurrent.Task
 import control._
 import io._
 import scala.collection.JavaConversions._
 import Exceptions._
-import scalaz.Id, Id._
-import foldm._, FoldM._, FoldId._, FoldableM._, stream._, FoldProcessM._
-import scalaz.std.list._
 import specification.core._
 import specification.process._
 import text.NotNullStrings._

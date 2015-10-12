@@ -5,13 +5,9 @@ import control._
 import data.Fold
 import io._
 import execute._
-import foldm.FoldM
-import foldm.FoldM._
 import foldm.stream.FoldProcessM._
 import main.Arguments
 import specification.core._
-import scalaz.concurrent.Task
-import scalaz.stream._
 import scalaz.Show
 
 /**

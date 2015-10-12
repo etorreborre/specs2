@@ -5,10 +5,8 @@ package stream
 import FoldM._
 import data._, Processes._
 
-import scalaz.stream.Process.{Halt, Await, Emit, Step}
 import scalaz.stream._
-import scalaz.std.int._
-import scalaz.{Id, ~>, \/, \/-, -\/}, Id._
+import scalaz.{Id, ~>}, Id._
 import scalaz.concurrent.Task
 
 object FoldProcessM {

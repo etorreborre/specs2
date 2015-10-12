@@ -2,8 +2,8 @@ package org.specs2
 package reporter
 
 import junit.framework.AssertionFailedError
-import foldm._, FoldM._, stream._, FoldProcessM._
-import scalaz.stream.{Process, Sink}
+import foldm._, stream._, FoldProcessM._
+import scalaz.stream.{Sink}
 import text.NotNullStrings._
 import scalaz.concurrent.Task
 import org.junit.runner.Description
@@ -15,7 +15,6 @@ import org.junit.ComparisonFailure
 import main.Arguments
 import control.{Actions, Action, Throwablex}
 import scalaz.stream.io
-import data.Fold
 
 /**
  * The JUnitPrinter sends notifications to JUnit's RunNotifier

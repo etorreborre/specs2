@@ -6,7 +6,7 @@ import java.util.concurrent._
 import org.specs2.control._
 import org.specs2.main.Arguments
 import scala.concurrent.ExecutionContext
-import scalaz.\/
+import scalaz._, Scalaz._
 import scalaz.concurrent.{Strategy, Future}
 
 /**

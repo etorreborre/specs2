@@ -94,7 +94,8 @@ trait Processes {
         state = cont.continue
         OptionT(as.point[Task] map some)
 
-      case Step(Await(req: Task[_], rcv), cont) =>
+      // what should be done with the preempt parameter in scalaz-stream 0.8?
+      case Step(Await(req: Task[_], rcv, preempt), cont) =>
         for {
           tail <- (req.attempt map { r => rcv(EarlyCause fromTaskResult r).run +: cont }).liftM[OptionT]
           _ = state = tail          // purity ftw!

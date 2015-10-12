@@ -6,7 +6,7 @@ import main.Arguments
 import matcher._
 import execute._
 import LineLogger._
-import foldm._, FoldM._, stream._, FoldProcessM._
+import foldm._, stream._
 import specification.create.S2StringContext
 import specification.dsl.FragmentsDsl
 import specification.core._

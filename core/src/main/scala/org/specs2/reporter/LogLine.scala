@@ -1,8 +1,6 @@
 package org.specs2
 package reporter
 
-import scalaz.stream.Process
-
 /**
  * ADT for logging strings as info, warning or errors
  */

@@ -4,7 +4,6 @@ package process
 
 import scala.math._
 import specification.core._
-import scalaz._, Scalaz._
 import foldm._, FoldM._
 
 /**

@@ -7,8 +7,6 @@ import specification.core._
 import scalaz.Reducer
 import scalaz.concurrent.Task
 import scalaz.stream._
-import scalaz.syntax.monoid._
-import scalaz.std.anyVal._
 import foldm._, FoldM._
 import stream.FoldableProcessM._
 import stream.FoldProcessM._
@@ -44,7 +42,7 @@ trait Statistics {
   def fold: FoldState[Fragment, Stats] =
     FoldM.fromMonoidMap { fragment: Fragment =>
       fragment.execution.executedResult.fold(defaultStats(fragment)) { result =>
-        Stats(result).copy(timer = fragment.execution.executionTime)
+        defaultStats(fragment).withResult(result).copy(timer = fragment.execution.executionTime)
       }
     }
 }

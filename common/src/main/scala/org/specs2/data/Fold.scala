@@ -8,9 +8,7 @@ import scalaz.concurrent.Task
 import scalaz.stream._
 import scalaz.stream.text._
 import Process._
-import Processes._
 import Task._
-import io._
 
 /**
  * Utility functions for folds
