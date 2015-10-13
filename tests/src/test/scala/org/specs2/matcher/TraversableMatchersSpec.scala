@@ -27,7 +27,7 @@ class TraversableMatchersSpec extends Spec with ResultMatchers with Grouped with
    ${ Seq("hello", "world") must contain(matching(".*orld")) }
    ${ Seq("hello", "world") must contain((s: String) => s.size > 2) }
    ${ Seq("1", "2", "3") must contain("3") and contain("2":Any) }
-   ${ Seq("foobar") must not contain("foo") } see #416
+   ${ Seq("foobar").must(contain("foo")).not } see #416
    ${ Seq[Food](Pizza(), new Fruit()) must contain(Pizza()) }
    `not contain(1)` must work in a mutable Scope ${g1.e1}
    a string inclusion must work as well  ${ "abc" must contain('b') }
