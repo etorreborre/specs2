@@ -36,18 +36,24 @@ object NotifierPrinter {
 
     def start = Notified(context = "start", start = false, close = false, hide = true)
 
-    def fold = (s: S, f: Fragment) => f match {
-      // a block start. The next text is the "context" name
-      case Fragment(Start,_,_) => s.copy(start = true, close = false, hide = true)
-      // a block start. The "context" name is the current block name
-      case Fragment(End,_ ,_) => s.copy(start = false, close = true, hide = true)
-          
-      case f1 if Fragment.isText(f1) =>
-        if (s.start) s.copy(context = f1.description.shows, start = true, hide = false)
-        else         s.copy(context = f1.description.shows, start = false, hide = false)
+    def fold = (ps: S, f: Fragment) => {
+      // if the previous state was defining the closing of a block
+      // the new state must not define a close action
+      val s = if (ps.close) ps.copy(close = false) else ps
+      f match {
+        // a block start. The next text is the "context" name
+        case Fragment(Start,_,_) => s.copy(start = true, close = false, hide = true)
+        // a block start. The "context" name is the current block name
+        case Fragment(End,_ ,_) => s.copy(start = false, close = true, hide = true)
 
-      case f1 if Fragment.isExample(f1) => s.copy(start = false, hide = false)
-      case _                            => s.copy(hide = true)
+        case f1 if Fragment.isText(f1) =>
+          if (s.start) s.copy(context = f1.description.shows, start = true, hide = false)
+          else         s.copy(context = f1.description.shows, start = false, hide = false)
+
+        case f1 if Fragment.isExample(f1) => s.copy(start = false, hide = false)
+        case f1 if Fragment.isStep(f1)    => s.copy(start = false, hide = false)
+        case _                            => s.copy(hide = true)
+      }
     }
 
     def end(s: S) = s
