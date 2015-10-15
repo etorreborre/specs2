@@ -2,6 +2,7 @@ package org.specs2
 package specification
 
 import core._
+import org.specs2.data.AlwaysTag
 import org.specs2.specification.create.{InterpolatedFragment, S2StringContext, ContextualFragmentFactory, FragmentsFactory}
 import execute._
 import org.specs2.main.CommandLine
@@ -111,7 +112,8 @@ trait ForEachWithCommandLineArguments[T] extends FragmentsFactory { outer: S2Str
  */
 trait BeforeAll extends SpecificationStructure with FragmentsFactory {
   def beforeAll(): Unit
-  override def map(fs: =>core.Fragments) = super.map(fs).prepend(fragmentFactory.step(beforeAll))
+  override def map(fs: =>core.Fragments) = super.map(fs).prepend(
+    Seq(fragmentFactory.step(beforeAll), fragmentFactory.markAs(AlwaysTag)))
 }
 
 /**
@@ -119,7 +121,8 @@ trait BeforeAll extends SpecificationStructure with FragmentsFactory {
  */
 trait AfterAll extends SpecificationStructure with FragmentsFactory {
   def afterAll(): Unit
-  override def map(fs: =>core.Fragments) = super.map(fs).append(fragmentFactory.step(afterAll))
+  override def map(fs: =>core.Fragments) = super.map(fs).append(
+    Seq(fragmentFactory.step(afterAll), fragmentFactory.markAs(AlwaysTag)))
 }
 
 /**
@@ -128,7 +131,9 @@ trait AfterAll extends SpecificationStructure with FragmentsFactory {
 trait BeforeAfterAll extends SpecificationStructure with FragmentsFactory {
   def beforeAll(): Unit
   def afterAll(): Unit
-  override def map(fs: =>core.Fragments) = super.map(fs).prepend(fragmentFactory.step(beforeAll)).append(fragmentFactory.step(afterAll))
+  override def map(fs: =>core.Fragments) = super.map(fs).
+    prepend(Seq(fragmentFactory.step(beforeAll), fragmentFactory.markAs(AlwaysTag))).
+    append(Seq(fragmentFactory.step(afterAll), fragmentFactory.markAs(AlwaysTag)))
 }
 
 /**
