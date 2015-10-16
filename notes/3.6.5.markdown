@@ -1,0 +1,22 @@
+Maintenance version.
+
+## Improvements
+
+ * refactored the reporting internals using ["monadic folds"](http://github.com/ambiata/origami)
+ * upgraded scala to `2.11.7`
+ * upgraded scalaz dependency to `7.1.3` (thanks to @kflorence)
+ * upgraded scalaz-stream to `0.8`
+ * upgraded scalacheck to `1.12.5`
+ * added methods to use the description of an example in a mutable spec
+ 
+## Fixes 
+
+ * add fragments created with `s2` in mutable specs [#406](http://github.com/etorreborre/specs2/issues/406)
+ * added a guide page for the `should/in` syntax [#410](http://github.com/etorreborre/specs2/issues/410)
+ * removed some specs2 methods in the default stacktrace filter [#415](http://github.com/etorreborre/specs2/issues/415)
+ * removed the implicit allowing to reuse string matchers on sequences of strings [#416](http://github.com/etorreborre/specs2/issues/416)
+ * only fail on a future if `Await.result` [#417](http://github.com/etorreborre/specs2/issues/417)
+ * examples execution should stop with `sequential + stopOnFail` when one example fails[#418](http://github.com/etorreborre/specs2/issues/418)
+ * before/after all steps must be executed even with tags [#424](http://github.com/etorreborre/specs2/issues/424)
+ * fixed [#323](http://github.com/etorreborre/specs2/issues/323) (compilation error with `eventually`) for the `3.x` series
+
