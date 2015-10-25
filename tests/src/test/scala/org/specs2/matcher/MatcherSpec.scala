@@ -15,6 +15,7 @@ Adaptation
 
   + a matcher can be adapted with a function
     + the location of match results must be correct after adaptation (#168)
+    + the match result expectable must be set correctly
   + a matcher can be adapted with a function and a description function for the expectable
   + if the matcher is for equality, it has to be the typed equality matcher be_===
   + a matcher can be adapted with a function for both expected and actual values
@@ -53,6 +54,12 @@ Messages
   "adaptation" - new group {
     eg := new Exception("message")  must be_==("message") ^^ ((_:Exception).getMessage)
     eg := (new UserExpectations).failure1.location must endWith("UserExpectations.scala:11")
+
+    eg := {
+      val expectable: MustExpectable[Exception] = theValue(new Exception("message"))
+      val result = expectable.must(be_==("message") ^^ ((_:Exception).getMessage))
+      result.expectable === expectable
+    }
 
     eg := {
       val result = new Exception("message")  must be_>(2) ^^ ((e:Exception) => e.getMessage.size aka "the message size")

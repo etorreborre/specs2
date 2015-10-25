@@ -108,7 +108,7 @@ trait Matcher[-T] { outer =>
   def ^^[S](f: S => T) = new Matcher[S] {
     def apply[U <: S](a: Expectable[U]) = {
       val result = outer(a.map(f))
-      result.map(_ => a.value)
+      result.map(_ => a.value).setExpectable(a)
     }
   }
   /**
@@ -120,7 +120,7 @@ trait Matcher[-T] { outer =>
   def ^^[S](f: S => Expectable[T], dummy: Int = 0) = new Matcher[S] {
     def apply[U <: S](a: Expectable[U]) = {
       val result = outer(a.flatMap(f))
-      result.map(_ => a.value)
+      result.map(_ => a.value).setExpectable(a)
     }
   }
   /**

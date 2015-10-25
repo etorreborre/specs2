@@ -19,6 +19,7 @@ class MatchResultCombinatorsSpec extends mutable.Spec with ResultMatchers with M
     ((1 must_== 2) and (2 must_== 2)) must throwA[MatchFailureException[Int]]
     (1 must be_==(2) and be_==(1)) must throwA[MatchFailureException[Int]]
     (1 must be_==(1) and be_==(2)) must throwA[MatchFailureException[Int]]
+    (1 must be_>(1) ^^ ((i: Int) => i) and be_==(1)) must throwA[MatchFailureException[Int]]
     ((1 must_== 2) and (2 must_== 2)) must beFailing
     (1 must_== 1) and success
   }
