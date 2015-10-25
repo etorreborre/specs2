@@ -4,7 +4,6 @@ package matcher
 import execute._
 import scalaz._, Scalaz._
 import text.Quote._
-import Result.ResultFailureMonoid
 import scala.collection.{GenTraversable, GenTraversableOnce}
 import ResultLogicalCombinators._
 import text.Sentences._

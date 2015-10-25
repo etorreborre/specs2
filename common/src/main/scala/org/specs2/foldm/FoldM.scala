@@ -1,12 +1,11 @@
 package org.specs2
 package foldm
 
-import scalaz.{Apply, Functor, Profunctor, Monoid, Compose, Monad, Category, MonadPlus, ~>, Order, StateT}
+import scalaz.{Apply, Functor, Profunctor, Monoid, Compose, Monad, Category, MonadPlus, ~>}
 import scalaz.effect.IO
 import scalaz.Id._
 import scalaz._
 import scalaz.syntax.monad._
-import java.security.MessageDigest
 import FoldM._
 
 /**

@@ -2,7 +2,6 @@ package org.mockito.internal.progress
 
 import scala.collection.JavaConversions._
 import org.hamcrest.Matcher
-import org.mockito.internal.matchers.LocalizedMatcher
 
 /**
  * provide access to the locally stored matchers created by the `argThat` method when evaluating byname arguments

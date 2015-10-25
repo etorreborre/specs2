@@ -4,7 +4,7 @@ package specification
 import _root_.org.specs2.mutable.{Specification => Spec}
 import org.specs2.execute.Result
 import org.specs2.main.Arguments
-import org.specs2.specification.core.{Env, ContextualSpecificationStructure, SpecificationStructure}
+import org.specs2.specification.core.{Env, ContextualSpecificationStructure}
 import org.specs2.specification.process.{DefaultSelector, Statistics, Stats, DefaultExecutor}
 import user.specification._
 

@@ -4,7 +4,6 @@ package stream
 
 import scalaz.{\/, \/-, -\/, Monad, Catchable}
 import scalaz.syntax.bind._
-import scalaz.concurrent.Task
 import scalaz.stream.{Process1, Process}
 import scalaz.stream.Process._
 

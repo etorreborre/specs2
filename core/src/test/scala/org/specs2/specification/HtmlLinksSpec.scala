@@ -4,7 +4,6 @@ package specification
 import core._
 import matcher._
 import dsl.ReferenceDsl
-import org.specs2.control.Debug
 
 class HtmlLinksSpec extends Spec with TypedEqual with ReferenceDsl { def is = s2"""
 

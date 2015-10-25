@@ -5,8 +5,7 @@ import scalaz.\&/.That
 import scalaz.\&/.This
 import scalaz._
 import \&/._
-import scalaz.syntax
-import scalaz.syntax.monad._
+  import scalaz.syntax.monad._
 import scalaz.effect._
 import scalaz.concurrent.Task
 

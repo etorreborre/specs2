@@ -3,7 +3,6 @@ package specification
 package script
 
 import main.Arguments
-import org.specs2.specification.process.DefaultSelector
 import runner.TextRunner
 import specification.create.{S2StringContext, FragmentsFactory}
 import matcher.MatchersImplicits._

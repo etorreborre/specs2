@@ -4,7 +4,7 @@ package foldm
 import java.security.MessageDigest
 
 import FoldM._
-import scalaz.{\/, \/-, -\/, Equal, Order}
+import scalaz.{\/, \/-, -\/, Order}
 import scalaz.std.anyVal._
 import scalaz.std.list._
 import scalaz.syntax.foldable._

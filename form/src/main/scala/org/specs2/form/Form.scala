@@ -9,7 +9,6 @@ import main.Arguments
 import StandardResults._
 import matcher._
 import DecoratedProperties._
-import language.existentials
 import ResultLogicalCombinators._
 import control.ImplicitParameters._
 

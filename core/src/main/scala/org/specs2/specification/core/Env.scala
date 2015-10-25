@@ -10,7 +10,6 @@ import LineLogger._
 import io._
 import control._
 import process.{Executor, DefaultExecutor, StatisticsRepository, Selector, DefaultSelector}
-import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.FiniteDuration
 
 /**

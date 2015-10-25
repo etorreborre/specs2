@@ -6,7 +6,7 @@ import execute._
 import org.specs2.concurrent.ExecutionEnv
 import scala.concurrent.duration._
 import scala.concurrent.{Future =>_,_}
-import scalaz.concurrent.{Strategy, Future}
+import scalaz.concurrent.{Future}
 
 /**
  * This trait is for transforming matchers of values to matchers of scalaz.concurrent.Future

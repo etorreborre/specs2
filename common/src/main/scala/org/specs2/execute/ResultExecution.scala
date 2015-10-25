@@ -7,8 +7,6 @@ import reflect.ClassName._
 import text.NotNullStrings._
 import java.util.regex.Pattern
 
-import scala.util.control.NonFatal
-
 /**
 * This trait executes a Result and returns an appropriate value when a specs2 exception is thrown
 */

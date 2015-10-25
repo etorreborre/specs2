@@ -6,7 +6,6 @@ import org.specs2.text.FromString
 import reflect.Classes
 
 import scala.reflect.ClassTag
-import scalaz.Memo
 import scalaz.Memo._
 
 /**

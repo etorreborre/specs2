@@ -1,8 +1,7 @@
 package org.specs2
 package form
 
-import scalaz.{ NonEmptyList, Scalaz }
-import NonEmptyList._
+import scalaz.NonEmptyList, NonEmptyList._
 import execute._
 import StandardResults._
 import ResultLogicalCombinators._

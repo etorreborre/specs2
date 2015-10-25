@@ -1,8 +1,6 @@
 package org.specs2
 package matcher
 
-import org.specs2.execute.{Failure, Success}
-
 import scala.concurrent.duration._
 import scalaz.stream._
 import scalaz.concurrent._

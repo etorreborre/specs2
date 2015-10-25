@@ -3,7 +3,6 @@ package reporter
 
 import specification.core._
 import specification.process.{Stats, Statistics}
-import collection.Seqx
 import foldm._, FoldM._, stream._, FoldProcessM._
 import io._
 import main.Arguments

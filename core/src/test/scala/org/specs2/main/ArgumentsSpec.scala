@@ -3,8 +3,6 @@ package main
 
 import org.specs2.matcher.{TypedEqual, DataTables}
 import execute.Result
-import org.specs2.reporter.Notifier
-import org.specs2.runner.ClassRunner
 import org.specs2.text.MappedColors
 import specification._
 

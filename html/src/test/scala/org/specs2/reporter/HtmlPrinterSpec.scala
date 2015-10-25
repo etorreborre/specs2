@@ -3,7 +3,6 @@ package reporter
 
 import io._
 import main.Arguments
-import org.specs2.specification.BeforeAll
 import org.specs2.specification.core.{SpecificationStructure, Env}
 import matcher._
 import control._

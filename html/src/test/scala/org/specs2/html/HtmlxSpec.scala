@@ -2,7 +2,6 @@ package org.specs2
 package html
 
 import Htmlx._
-import scala.xml.NodeSeq
 import specification.Grouped
 import matcher._
 

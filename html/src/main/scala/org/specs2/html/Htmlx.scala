@@ -4,7 +4,7 @@ package html
 import io._
 import scala.xml._
 import transform.RewriteRule
-import scalaz.{ Tree, TreeLoc, Scalaz, Show }
+import scalaz.{ Tree, TreeLoc, Show }
 import Tree._
 import xml.Nodex._
 import java.net.URLDecoder

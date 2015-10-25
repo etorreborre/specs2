@@ -1,7 +1,6 @@
 package org.specs2
 package matcher
 
-import java.util.concurrent.ExecutorService
 import java.util.concurrent.atomic.AtomicBoolean
 import org.specs2.concurrent.ExecutionEnv
 

@@ -1,7 +1,6 @@
 package org.specs2
 package control
 
-import org.specs2.Specification
 import specification._
 import Stacktraces._
 

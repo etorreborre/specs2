@@ -1,10 +1,8 @@
 package org.specs2
 package matcher
 
-import java.util.concurrent.{Executors, ExecutorService}
-
+import java.util.concurrent.{ExecutorService}
 import org.specs2.concurrent.ExecutionEnv
-
 import scalaz.concurrent.Future
 import sys._
 import execute._

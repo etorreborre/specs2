@@ -4,7 +4,6 @@ package process
 
 import control._
 import specification.core._
-import scalaz.Reducer
 import scalaz.concurrent.Task
 import scalaz.stream._
 import foldm._, FoldM._

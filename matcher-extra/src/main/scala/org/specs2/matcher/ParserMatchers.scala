@@ -1,14 +1,13 @@
 package org.specs2
 package matcher
 
-import util.parsing.combinator.Parsers
-import util.parsing.input.{CharSequenceReader, Reader}
+import scala.util.parsing.combinator._
+import scala.util.parsing.input.{CharSequenceReader, Reader}
 import scalaz.Scalaz._
 import text.Plural._
 import text.Quote._
 import scala.reflect.ClassTag
 import MatchResultLogicalCombinators._
-import scala.collection.GenTraversableOnce
 import reflect.ClassName._
 
 /**
@@ -175,8 +174,10 @@ trait ParserBaseMatchers extends TraversableMatchers {
 
 private[specs2]
 trait ParserBeHaveMatchers extends BeHaveMatchers { outer: ParserBaseMatchers =>
-  import parsers.{Success => PSuccess, Failure => PFailure, Error => PError, _}
-  
+  // can't extend Parsers because Parser/Elem types would be different from ones we are testing
+  val parsers: Parsers
+  import parsers._
+
   implicit def toParsedResultMatcher[T](result: MatchResult[ParseResult[T]]) = new ParsedResultMatcher(result)
   class ParsedResultMatcher[T](result: MatchResult[ParseResult[T]]) {
     def aSuccess                           = result(beASuccess)

@@ -6,7 +6,7 @@ import java.util.concurrent.ExecutorService
 import scalaz.stream.Cause.EarlyCause
 import scalaz.stream._
 import Process._
-import scalaz.{Monad, Catchable, OptionT, Scalaz, \/}, Scalaz._, \/._
+import scalaz.{OptionT, Scalaz, \/}, Scalaz._, \/._
 import scalaz.concurrent.{Future, Task}
 import Task._
 import scalaz.Nondeterminism

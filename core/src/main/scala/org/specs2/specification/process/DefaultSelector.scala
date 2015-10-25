@@ -5,7 +5,7 @@ package process
 import text.Regexes._
 import scalaz.stream._
 import scalaz.stream.Process.{Env =>_,_}
-import process1.{zipWithNext, zipWithPreviousAndNext}
+import process1.{zipWithNext}
 import data._
 import scalaz.syntax.foldable._
 import scalaz.std.list._

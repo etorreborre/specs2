@@ -10,7 +10,7 @@ import specification.process.DefaultExecutor
 import sys._
 import execute._
 import matcher._
-import _root_.org.specs2.mutable.{Around => MAround, Before => MBefore, After => MAfter, Specification => Spec}
+import _root_.org.specs2.mutable.{Around => MAround, Before => MBefore, After => MAfter}
 
 class ContextSpec extends script.Spec with ResultMatchers with Groups { def is = s2"""
 

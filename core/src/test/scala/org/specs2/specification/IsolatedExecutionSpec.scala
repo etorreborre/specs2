@@ -3,7 +3,6 @@ package specification
 
 import execute._
 import matcher._
-import main.Arguments
 import core._
 import process._
 

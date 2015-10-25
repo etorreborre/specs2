@@ -4,7 +4,7 @@ package dsl
 package mutable
 
 import execute.AsResult
-import org.specs2.specification.core.{Fragments, Fragment}
+import org.specs2.specification.core.{Fragments}
 
 /**
  * Auto-example creation for mutable specifications

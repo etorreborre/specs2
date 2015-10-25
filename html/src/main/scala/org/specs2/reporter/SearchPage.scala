@@ -5,7 +5,7 @@ import control._
 import data.Fold
 import html.{HtmlTemplate, Indexing}
 import io._
-import specification.core.{SpecStructure, Env, SpecificationStructure}
+import specification.core.{SpecStructure, Env}
 
 import scalaz.stream.Process
 

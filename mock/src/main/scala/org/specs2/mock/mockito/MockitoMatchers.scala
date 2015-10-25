@@ -2,8 +2,6 @@ package org.specs2
 package mock
 package mockito
 
-import java.util
-
 import org.mockito.Matchers
 import org.hamcrest.core.IsAnything
 import scala.reflect.ClassTag

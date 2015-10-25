@@ -3,7 +3,7 @@ package specification
 package core
 
 import execute.Result
-import scala.concurrent.duration.{FiniteDuration, Duration}
+import scala.concurrent.duration.{FiniteDuration}
 import scalaz._
 import scalaz.Show
 import scalaz.syntax.show._

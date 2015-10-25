@@ -3,11 +3,7 @@ package specification
 package process
 
 import core._
-import org.scalacheck.util.{FreqMap, Pretty}
-import org.scalacheck.{Shrink, Arbitrary}
-import execute.AsResult
 import foldm._, stream._, FoldProcessM._, FoldableProcessM._
-import scalacheck.Parameters
 import scalaz._, Scalaz._
 import scalaz.concurrent.Task
 import matcher._

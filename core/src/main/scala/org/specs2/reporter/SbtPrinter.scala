@@ -1,11 +1,9 @@
 package org.specs2
 package reporter
 
-import data.Fold
 import control.{Actions, Action}
 import execute.Details
 import foldm.stream.FoldProcessM.SinkTask
-import scalaz.concurrent.Task
 import sbt.testing._
 import org.specs2.text.AnsiColors._
 import main.Arguments

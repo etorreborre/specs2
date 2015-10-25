@@ -1,14 +1,14 @@
 package org.specs2
 package reporter
 
-import matcher.{StandardMatchResults, MustMatchers}
+import matcher.{MustMatchers}
 import specification._
-import dsl.{AcceptanceDsl, FragmentsDsl}
-import specification.create.{S2StringContext, DefaultFragmentFactory}
+import dsl.{FragmentsDsl}
+import specification.create.{DefaultFragmentFactory}
 import control._
 import text.Trim._
 import execute._
-import org.specs2.main.{ArgumentsShortcuts, Arguments}
+import org.specs2.main.{Arguments}
 import LineLogger._
 import core._
 import process.{Stats, DefaultExecutor, StatisticsRepository}

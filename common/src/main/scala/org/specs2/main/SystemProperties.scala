@@ -1,9 +1,9 @@
 package org.specs2
 package main
+
 import scala.collection.JavaConversions._
 import text.NotNullStrings._
 import text.FromString
-import java.util.regex.Pattern
 
 /**
  * Get systems properties prefixed with specs2

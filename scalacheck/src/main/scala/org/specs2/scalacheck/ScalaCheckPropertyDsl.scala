@@ -2,7 +2,7 @@ package org.specs2
 package scalacheck
 
 import org.scalacheck.util._
-import org.scalacheck.{Test, Prop}
+import org.scalacheck.{Prop}
 
 trait ScalaCheckPropertyDsl {
   implicit def propToScalaCheckProperty(prop: Prop)(implicit parameters: Parameters, prettyFreqMap: FreqMap[Set[Any]] => Pretty): ScalaCheckProp =

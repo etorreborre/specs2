@@ -4,8 +4,6 @@ package text
 import collection._
 import Seqx._
 
-import scala.collection.{IndexedSeqOptimized, immutable}
-
 /**
  * This trait represents the difference between 2 "contents"
  */

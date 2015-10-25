@@ -1,7 +1,6 @@
 package examples
 
 import org.specs2.mutable._
-import org.specs2.specification.AllExpectations
 
 /**
  * This specification shows a way to re-write the StackSpec example, using:

@@ -2,7 +2,6 @@ package org.specs2
 package matcher
 
 import control.Exceptions._
-import org.specs2.execute.Result
 import scala.reflect.ClassTag
 import reflect.ClassName._
 import text.NotNullStrings._

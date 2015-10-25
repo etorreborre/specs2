@@ -7,7 +7,7 @@ import text.Regexes._
 import text.Plural._
 import text.NotNullStrings._
 import collection.Seqx._
-import scala.collection.{GenSeq, GenTraversableOnce, GenTraversable}
+import scala.collection.{GenTraversableOnce}
 import execute._
 import control.Times
 import execute.Failure

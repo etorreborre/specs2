@@ -2,7 +2,6 @@ package org.specs2
 package reporter
 
 import io._
-import org.specs2.specification.process.DefaultExecutor
 import specification.core._
 import scala.xml.NodeSeq
 import scalaz.concurrent.Task

@@ -6,7 +6,7 @@ import control._
 import execute._
 import io.StringOutput
 import org.specs2.specification.Tables
-import specification.core.{ForEachEnv, Env}
+import specification.core.{Env}
 import runner._
 
 class NotifierSpec(env: Env) extends Specification { def is = s2"""

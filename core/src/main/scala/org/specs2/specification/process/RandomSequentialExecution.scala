@@ -2,8 +2,6 @@ package org.specs2
 package specification
 package process
 
-import java.util.concurrent.atomic.AtomicReference
-
 import core._
 import collection.Seqx._
 import collection.Iterablex._

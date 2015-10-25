@@ -1,7 +1,7 @@
 package org.specs2
 package mock
 
-import org.hamcrest.{BaseMatcher, Description, TypeSafeMatcher}
+import org.hamcrest.{BaseMatcher, Description}
 import matcher._
 
 /** 

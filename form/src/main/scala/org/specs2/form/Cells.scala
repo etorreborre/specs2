@@ -8,7 +8,7 @@ import main.Arguments
 import execute._
 import StandardResults._
 import text.Markdown
-import language.existentials
+
 /**
  * A Cell is the Textual or Xml representation of a Form element: Field, Prop or Form.
  * A more general XmlCell is also available to be able to input any kind of Xml inside a Form

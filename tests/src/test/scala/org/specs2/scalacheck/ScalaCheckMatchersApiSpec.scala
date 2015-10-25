@@ -5,7 +5,6 @@ import org.scalacheck.Prop._
 import org.scalacheck.util.{FreqMap, Pretty}
 import org.scalacheck.{Arbitrary, Gen, Shrink}
 import org.specs2.Specification
-import org.specs2.main.CommandLine
 
 class ScalaCheckMatchersApiSpec extends Specification with ScalaCheck { def is = s2"""
  There are various ways to use a property in specs2
