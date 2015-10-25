@@ -47,7 +47,13 @@ trait DefaultExecutor extends Executor {
    *  - sequence the execution so that only parts in between steps are executed concurrently
    */
   def execute(env: Env): Process[Task, Fragment] => Process[Task, Fragment] = { contents: Process[Task, Fragment] =>
-     execute1(env)(contents).andFinally(Task.delay(env.shutdown))
+    val times: Int = env.arguments.times
+    val fragments: Process[Task, Fragment] = execute1(env)(contents)
+
+    val res: Process[Task, Fragment] =
+      Stream.continually(fragments).take(times - 1).foldLeft(fragments)(_ ++ _)
+
+    res.andFinally(Task.delay(env.shutdown))
   }
 
   /**

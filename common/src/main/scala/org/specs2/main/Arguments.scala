@@ -26,6 +26,7 @@ case class Arguments (
   commandLine:   CommandLine      = CommandLine()
  ) extends ShowArgs {
   def ex: String                      = select.ex
+  def times: Int                      = select.times
   def include: String                 = select.include
   def exclude: String                 = select.exclude
   def keep(tags: String*)             = select.keep(tags:_*)

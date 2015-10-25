@@ -8,6 +8,7 @@ import data.SeparatedTags
  */
 case class Select(
                    _ex:            Option[String]           = None,
+                   _times:         Option[String]           = None,
                    _include:       Option[String]           = None,
                    _exclude:       Option[String]           = None,
                    _was:           Option[String]           = None,
@@ -16,6 +17,18 @@ case class Select(
   import Arguments._
 
   def ex: String                    = _ex.getOrElse(".*")
+
+  def times: Int                    = {
+    val default: Int = 1
+
+    _times flatMap { t =>
+      scala.util.Try(t.toInt).toOption map {
+        case i if i > 0 => i
+        case _ => default  // non-positive value
+      }
+    } getOrElse default // non-numeric value, or value not provided
+  }
+
   def include: String               = _include.getOrElse("")
   def exclude: String               = _exclude.getOrElse("")
   def keep(tags: String*)           = SeparatedTags(include, exclude).keep(tags)
@@ -28,6 +41,7 @@ case class Select(
   def overrideWith(other: Select) = {
     new Select(
       other._ex              .orElse(_ex),
+      other._times           .orElse(_times),
       other._include         .orElse(_include),
       other._exclude         .orElse(_exclude),
       other._was             .orElse(_was),
@@ -37,6 +51,7 @@ case class Select(
 
   override def toString = List(
     "ex"             -> _ex         ,
+    "times"          -> _times      ,
     "include"        -> _include    ,
     "exclude"        -> _exclude    ,
     "was"            -> _was        ,
@@ -47,11 +62,12 @@ object Select extends Extract {
   def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): Select = {
     new Select (
       _ex            = value("ex", ".*"+(_:String)+".*"),
+      _times         = value("times"),
       _include       = value("include"),
       _exclude       = value("exclude"),
       _was           = value("was"),
       _selector      = value("selector")
     )
   }
-  val allValueNames = Seq("ex", "include", "exclude", "was", "selector")
+  val allValueNames = Seq("ex", "times", "include", "exclude", "was", "selector")
 }
