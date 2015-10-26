@@ -70,7 +70,7 @@ object build extends Build {
     settings = moduleSettings("common") ++
       Seq(conflictWarning ~= { _.copy(failOnConflict = false) }, // lame
           libraryDependencies ++=
-            depends.scalaz(scalazVersion.value) ++
+            depends.scalaz(scalazVersion.value, scalaVersion.value) ++
             depends.reflect(scalaVersion.value) ++
             depends.paradise(scalaVersion.value) ++
             depends.kindp ++

@@ -11,12 +11,17 @@ object depends {
 
   def reflect(scalaVersion: String) = Seq("org.scala-lang" % "scala-reflect" % scalaVersion)
 
-  def scalaz(scalazVersion: String) =
+  def scalaz(scalazVersion: String, scalaVersion: String) =
     Seq("org.scalaz"        %% "scalaz-core",
         "org.scalaz"        %% "scalaz-effect",
         "org.scalaz"        %% "scalaz-concurrent").map(_ % scalazVersion) ++
-      (if (scalazVersion.startsWith("7.1")) Seq("org.scalaz.stream" %% "scalaz-stream" % "0.8"   excludeAll(ExclusionRule(organization = "org.scalaz")))
-       else                                 Seq("org.scalaz.stream" %% "scalaz-stream" % "0.7.3" excludeAll(ExclusionRule(organization = "org.scalaz"))))
+      (if (scalaVersion.startsWith("2.12"))
+          (if (scalazVersion.startsWith("7.1")) Seq("org.scalaz.stream" % "scalaz-stream_2.12.0-M2" % "0.8"   excludeAll(ExclusionRule(organization = "org.scalaz")))
+           else                                 Seq("org.scalaz.stream" % "scalaz-stream_2.12.0-M2" % "0.7.3" excludeAll(ExclusionRule(organization = "org.scalaz"))))
+        else
+          (if (scalazVersion.startsWith("7.1")) Seq("org.scalaz.stream" %% "scalaz-stream" % "0.8"   excludeAll(ExclusionRule(organization = "org.scalaz")))
+           else                                 Seq("org.scalaz.stream" %% "scalaz-stream" % "0.7.3" excludeAll(ExclusionRule(organization = "org.scalaz"))))
+        )
 
   lazy val kindp = Seq("org.spire-math" % "kind-projector" % "0.7.1" cross CrossVersion.binary)
 
