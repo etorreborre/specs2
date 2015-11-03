@@ -59,6 +59,8 @@ object Runner {
           if (warnings.nonEmpty) print("Warnings:\n") >> print(warnings.mkString("", "\n", "\n")) else IO(()) >>
           message.traverseU(print).void
 
+        case _: InterruptedException => print("User cancellation. Bye")
+
         case other =>
           print("\n"+t.toString+"\n") >>
           logStack(t)

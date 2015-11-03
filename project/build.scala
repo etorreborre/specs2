@@ -202,7 +202,7 @@ object build extends Build {
   lazy val testingSettings: Seq[Settings] = Seq(
     initialCommands in console in test := "import org.specs2._",
     logBuffered := false,
-    cancelable := true,
+    cancelable in Global := true,
     testFrameworks := Seq(TestFramework("org.specs2.runner.Specs2Framework")),
     javaOptions ++= Seq("-Xmx3G", "-Xss4M"),
     fork in test := true,
