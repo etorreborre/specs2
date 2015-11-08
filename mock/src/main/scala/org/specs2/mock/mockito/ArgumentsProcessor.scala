@@ -49,20 +49,25 @@ object ArgumentsProcessor {
       if (arg != null && arg.getClass.isArray) matchers.add(new ArrayEquals(arg))
       else if (arg != null && arg.getClass.getName.startsWith("scala.collection.mutable.WrappedArray")) matchers.add(new Equals(arg))
       else if (arg.isInstanceOf[Function0[_]]) {
-        // evaluate the byname parameter to collect the argument matchers
-        // if an exception is thrown we keep the value to compare it with the actual one (see "with Any" in the MockitoSpec and issue 82)
-        val value = try { arg.asInstanceOf[Function0[_]].apply() } catch { case e: Throwable => e }
-        // during the evaluation of the value some matchers might have been created. pull them.
-        val argumentsMatchers = ThreadSafeMockingProgress2.pullLocalizedMatchers
-        // if there are no matchers at all being registered this means that
-        // we are invoking the method, not verifying it
-        // in that case add a new matcher corresponding to the argument (an equals matcher using the value)
-        if (argumentsMatchers.isEmpty) matchers.add(new EqualsFunction0(value))
-        else {
-          // otherwise we add all the existing arguments matchers +
-          // we reset the state of the argumentMatchersStorage
-          matchers.addAll(argumentsMatchers.map(_.getActualMatcher))
-          ThreadSafeMockingProgress2.reportMatchers(argumentsMatchers.map(_.getActualMatcher))
+        // matchers evaluation should not be done during a real call, which happens on spies
+        // because they might trigger additional mocks evaluations
+        // see #428
+        if (!isCallRealMethod) {
+          // evaluate the byname parameter to collect the argument matchers
+          // if an exception is thrown we keep the value to compare it with the actual one (see "with Any" in the MockitoSpec and issue 82)
+          val value = try { arg.asInstanceOf[Function0[_]].apply() } catch { case e: Throwable => e }
+          // during the evaluation of the value some matchers might have been created. pull them.
+          val argumentsMatchers = ThreadSafeMockingProgress2.pullLocalizedMatchers
+          // if there are no matchers at all being registered this means that
+          // we are invoking the method, not verifying it
+          // in that case add a new matcher corresponding to the argument (an equals matcher using the value)
+          if (argumentsMatchers.isEmpty) matchers.add(new EqualsFunction0(value))
+          else {
+            // otherwise we add all the existing arguments matchers +
+            // we reset the state of the argumentMatchersStorage
+            matchers.addAll(argumentsMatchers.map(_.getActualMatcher))
+            ThreadSafeMockingProgress2.reportMatchers(argumentsMatchers.map(_.getActualMatcher))
+          }
         }
       }
       else if (arg.isInstanceOf[org.specs2.matcher.Matcher[_]]) {
@@ -81,5 +86,7 @@ object ArgumentsProcessor {
     matchers
   }
 
+  def isCallRealMethod: Boolean =
+    (new Exception).getStackTrace.toList.exists(t => t.getClassName == "org.mockito.internal.invocation.InvocationImpl" && t.getMethodName == "callRealMethod")
 }
 

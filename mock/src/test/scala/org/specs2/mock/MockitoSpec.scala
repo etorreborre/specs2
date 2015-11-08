@@ -68,6 +68,7 @@ class MockitoSpec extends script.Spec with Mockito with ResultMatchers with Grou
    + it is possible to verify a function with repeated parameters
    + it is possible to specify a timeout for the call
    + it doesn't match maps and functions as equal
+   + spies must not be checked for matchers when called for real
 
 STUBS
 =====
@@ -265,6 +266,17 @@ STUBS
     eg := {
       functionInt.call((i: Int) => i + 2)
       (there was one(functionInt).call(Map(1 -> 2))).message must contain("Argument(s) are different")
+    }
+
+    eg := {
+      val foo = mock[FooComponent]
+      val controller = spy(new TestController(foo))
+
+      foo.getBar(1) returns 1
+      // controller is a spy. Calling 'test' for real must not re-evaluate
+      // the arguments, hence make a mock call, to register matchers
+      controller.test(1)
+      there were 1.times(foo).getBar(1)
     }
   }
   "stubs" - new group with list {
@@ -575,4 +587,13 @@ trait WithFunctionNothing { def call(f: Int => Nothing) = 1 }
 trait WithFunctionAny { def call(f: () => Any) = 1 }
 trait WithFunctionInt { def call(f: Int => Any) = 1 }
 
+// this example comes from #428
+class FooComponent {
+  def getBar(id: Int): Int = id
+}
+
+class TestController(foo: FooComponent) {
+  def async(f: =>Int): Int = f
+  def test(id: Int) = async { foo.getBar(id) }
+}
 
