@@ -49,9 +49,20 @@ ${ MatcherCards.toTabs }
 
 ### Optional
 
-Those matchers are optional. To use them, you need to add a new trait to your specification:
+Those matchers are optional. To use them, you need to add a new trait to your specification.
 
-${ OptionalMatcherCards.toTabs }
+Those are additional "data" matchers
+
+${ OptionalDataMatcherCards.toTabs }
+
+Those matchers can be used to check "content"
+
+${ OptionalContentMatcherCards.toTabs }
+
+And finally those matchers are Scala / Language related
+
+${ OptionalLanguageMatcherCards.toTabs }
+
 
 ### Derive matchers
 

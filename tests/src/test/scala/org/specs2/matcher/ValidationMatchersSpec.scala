@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-import scalaz.Validation.{ Failure, Success }
+import scalaz.{ Failure, Success }
 
 class ValidationMatchersSpec extends Spec with ValidationMatchers with ResultMatchers { def is = s2"""
 

@@ -19,7 +19,7 @@ ${ MatcherCards.toTabs }
 
 Those matchers are optional. To use them, you need to add a new trait to your specification:
 
-${ OptionalMatcherCards.toTabs }
+${ OptionalDataMatcherCards.toTabs }
 
 """
 }

@@ -5,7 +5,7 @@ package matchers
 import form._
 
 object MatcherCards extends Cards {
-  def title = "Specification Matchers"
+  def title = "Specification matchers"
   def cards = Seq(
     StringMatchers,
     TraversableMatchers,
