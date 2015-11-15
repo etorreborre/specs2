@@ -24,6 +24,7 @@ trait ArgumentsCreation extends org.specs2.main.ArgumentsCreation with MutableAr
   /** shorthand method to create an Arguments object */
   override def args(
                      ex:            ArgProperty[String]            = ArgProperty[String](),
+                     times:         ArgProperty[Int]               = ArgProperty[Int](),
                      include:       ArgProperty[String]            = ArgProperty[String](),
                      exclude:       ArgProperty[String]            = ArgProperty[String](),
                      was:           ArgProperty[String]            = ArgProperty[String](),
@@ -40,6 +41,7 @@ trait ArgumentsCreation extends org.specs2.main.ArgumentsCreation with MutableAr
 
     updateArguments(super.args(
       ex,
+      times,
       include,
       exclude,
       was,
@@ -59,11 +61,13 @@ trait ArgumentsCreation extends org.specs2.main.ArgumentsCreation with MutableAr
     /** shorthand method to create an Arguments object */
     override def select(
                          ex:            ArgProperty[String]            = ArgProperty[String](),
+                         times:         ArgProperty[Int]               = ArgProperty[Int](),
                          include:       ArgProperty[String]            = ArgProperty[String](),
                          exclude:       ArgProperty[String]            = ArgProperty[String](),
                          was:           ArgProperty[String]            = ArgProperty[String](),
                          selector:      ArgProperty[String]            = ArgProperty[String]()) = updateArguments(super.select(
       ex,
+      times,
       include,
       exclude,
       was,

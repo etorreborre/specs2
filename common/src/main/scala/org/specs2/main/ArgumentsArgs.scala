@@ -21,6 +21,7 @@ trait ArgumentsCreation {
   /** shorthand method to create an Arguments object */
   def args(
     ex:            ArgProperty[String]            = ArgProperty[String](),
+    times:         ArgProperty[Int]               = ArgProperty[Int](),
     include:       ArgProperty[String]            = ArgProperty[String](),
     exclude:       ArgProperty[String]            = ArgProperty[String](),
     was:           ArgProperty[String]            = ArgProperty[String](),
@@ -37,6 +38,7 @@ trait ArgumentsCreation {
 
      (new ArgumentsNamespace).select(
             ex         = ex,
+            times      = times,
             include    = include,
             exclude    = exclude,
             was        = was)       <|
@@ -58,6 +60,7 @@ trait ArgumentsCreation {
     /** shorthand method to create an Arguments object */
     def select(
       ex:            ArgProperty[String]            = ArgProperty[String](),
+      times:         ArgProperty[Int]               = ArgProperty[Int](),
       include:       ArgProperty[String]            = ArgProperty[String](),
       exclude:       ArgProperty[String]            = ArgProperty[String](),
       was:           ArgProperty[String]            = ArgProperty[String](),
