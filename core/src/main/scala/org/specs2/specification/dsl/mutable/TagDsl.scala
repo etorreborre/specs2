@@ -28,7 +28,7 @@ trait TagDsl extends org.specs2.specification.dsl.TagDsl with MutableFragmentBui
     def tag(tag: String)     = { outer.tag(tag); f }
     def section(tag: String) = { outer.section(tag); f }
     def tag(tag: NamedTag)     = { outer.tag(tag); f }
-    def section(tag: NamedTag) = { outer.tag(tag); f }
+    def section(tag: NamedTag) = { outer.section(tag); f }
   }
 
   /**
