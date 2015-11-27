@@ -68,22 +68,24 @@ class TaggedSpecification extends Specification {
   section("checkin")
 
   "and the last group of examples" >> {
-    "example 5" in success
+    "example 5" in success tag "integration"
     "example 6" in success
-  }
+  } section "slow"
 }
 }}
 
-For that specification above:
+For that specification above, tags can be applied to fragments following them:
 
  * when the `tag` call is inserted on a new line, the tagged fragment is the one just _after_ the tag method call: `example 1`
  is tagged with `feature1 and unit`,
 
- * when the `tag` is appended to an example, it applies to that example: `example 2` is tagged with `integration`
-
  * when the `section` call is inserted on a new line, this opens a section for all the following fragments. This should
  be closed by a corresponding `section` call on a new line. For example, `example 3` and `example 4` are part of the
  "checkin" section
+
+But they can also be applied to fragments preceding them:
+
+ * when the `tag` is appended to an example, it applies to that example: `example 5` is tagged with `integration`
 
  * when the `section` call is appended to a block of Fragments on the same line, all the fragments of that block are part of
  the section: `example 5` and `example 6` are tagged with `slow`
