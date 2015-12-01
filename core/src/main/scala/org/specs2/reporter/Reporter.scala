@@ -1,17 +1,20 @@
 package org.specs2
 package reporter
 
-import foldm._, FoldM._
-import stream.FoldProcessM._
+import foldm.stream.FoldProcessM.{SinkTask, ProcessTask, fromSink, IdTaskNaturalTransformation}
+import foldm.stream.FoldableProcessM.ProcessFoldableM
+import foldm.FoldM.{fromStart}
 import specification._
 import specification.process._
 import core._
 import scalaz.concurrent.Task
 import control._
-import scalaz.{Writer => _, _}, Scalaz._
-import scalaz.stream._
-import data._
-import Fold._
+import scalaz.{Writer => _}
+import scalaz.syntax.traverse.ToTraverseOpsUnapply
+import scalaz.syntax.functor.{ToFunctorOps, ToFunctorOpsUnapply}
+import scalaz.syntax.foldable.ToFoldableOps
+import scalaz.std.list._
+import scalaz.stream.{Process, Sink, channel}
 import Statistics._
 
 /**
@@ -36,7 +39,7 @@ trait Reporter {
    * report 1 spec structure with the given printers
    * first find and sort the referenced specifications and report them
    */
-  def report(env: Env, printers: List[Printer]): SpecStructure => Action[Unit] = { spec =>
+  def report(env: Env, printers: List[Printer]): SpecStructure => Action[Stats] = { spec =>
     val env1 = env.setArguments(env.arguments.overrideWith(spec.arguments))
     val executing = readStats(spec, env1) |> env1.selector.select(env1) |> env1.executor.execute(env1)
     
@@ -45,8 +48,10 @@ trait Reporter {
       if (env.arguments.execute.asap) Process.eval(executing.contents.runLog).flatMap(Process.emitAll)
       else                            executing.contents
 
-    val sinks = printers.map(_.sink(env1, spec)) :+ statsStoreSink(env1, spec)
-    Actions.fromTask(runSinks(contents, sinks))
+    val sinks = (printers.map(_.sink(env1, spec)) :+ statsStoreSink(env1, spec)).suml
+    val reportFold = Statistics.statisticsFold <* sinks
+
+    Actions.fromTask(reportFold.run[ProcessTask](contents))
   }
 
   /**

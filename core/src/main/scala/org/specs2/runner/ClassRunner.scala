@@ -4,6 +4,7 @@ package runner
 import control._
 import Actions._
 import io.StringOutput
+import org.specs2.specification.process.Stats
 import specification.core._
 import reporter._
 import main.Arguments
@@ -28,16 +29,20 @@ trait ClassRunner {
    * run the specification, the first argument is expected to be the specification name
    */
   def run(args: Array[String], exit: Boolean) {
-    val arguments = Arguments(args.drop(1):_*)
+    val arguments = Arguments(args.drop(1): _*)
     val env = Env(arguments = arguments, lineLogger = consoleLogger)
 
-    val actions: Action[Unit] = args.toList match {
+    val actions: Action[Stats] = args.toList match {
       case Nil =>
-        Actions.fail("there must be at least one argument, the fully qualified class name")
+        Actions.fail("there must be at least one argument, the fully qualified class name") >>
+        Actions.ok(Stats.empty)
 
       case className :: rest =>
-        createSpecification(className, Thread.currentThread.getContextClassLoader, Some(env)).flatMap[Unit](report(env)) >>
-        Actions.safe(env.shutdown)
+        for {
+          spec  <- createSpecification(className, Thread.currentThread.getContextClassLoader, Some(env))
+          stats <- report(env)(spec)
+          _     <- Actions.safe(env.shutdown)
+        } yield stats
     }
     execute(actions, arguments, exit)
   }
@@ -47,7 +52,7 @@ trait ClassRunner {
     SpecificationStructure.create(className, classLoader, env)
 
   /** report the specification */
-  def report(env: Env): SpecificationStructure => Action[Unit] = { spec: SpecificationStructure =>
+  def report(env: Env): SpecificationStructure => Action[Stats] = { spec: SpecificationStructure =>
     val loader = Thread.currentThread.getContextClassLoader
     if (env.arguments.isSet("all")) {
       for {
@@ -56,26 +61,26 @@ trait ClassRunner {
         ss       <- SpecStructure.linkedSpecifications(spec.structure(env), env, loader)
         sorted   <- safe(SpecStructure.topologicalSort(ss).getOrElse(ss))
         _        <- reporter.prepare(env, printers)(sorted.toList)
-        _        =  sorted.toList.map(Reporter.report(env, printers)).sequenceU.void
+        stats    <- sorted.toList.map(Reporter.report(env, printers)).sequenceU
         _        <- Reporter.finalize(env, printers)(sorted.toList)
-      } yield ()
+      } yield stats.foldMap(identity _)
 
     } else
-      createPrinters(env.arguments, loader).map(printers => Reporter.report(env, printers)(spec.structure(env))).void
+      createPrinters(env.arguments, loader).flatMap(printers => Reporter.report(env, printers)(spec.structure(env)))
   }
 
   /** accepted printers */
   def createPrinters(args: Arguments, loader: ClassLoader): Action[List[Printer]] =
     List(createTextPrinter(args, loader),
-         createJUnitXmlPrinter(args, loader),
-         createHtmlPrinter(args, loader),
-         createMarkdownPrinter(args, loader),
-         createPrinter(args, loader),
-         createNotifierPrinter(args, loader)).sequenceU.map(_.flatten)
+      createJUnitXmlPrinter(args, loader),
+      createHtmlPrinter(args, loader),
+      createMarkdownPrinter(args, loader),
+      createPrinter(args, loader),
+      createNotifierPrinter(args, loader)).sequenceU.map(_.flatten)
 
   /** custom or default reporter */
   def createReporter(args: Arguments, loader: ClassLoader): Action[Reporter] =
-    createCustomInstance[Reporter](args, loader, "reporter", (m: String) => "a custom reporter can not be instantiated "+m, "no custom reporter defined, using the default one")
+    createCustomInstance[Reporter](args, loader, "reporter", (m: String) => "a custom reporter can not be instantiated " + m, "no custom reporter defined, using the default one")
       .map(_.getOrElse(Reporter))
 
 }

@@ -23,17 +23,18 @@ class ReporterSpec extends Specification with ForEachEnv with ThrownExpectations
    - saving the specification state
 
  A specification is
-   filtered                       $$a1
-   executed                       $$a2
+   filtered                       $a1
+   executed                       $a2
 
  And at the end of the reporting
    the spec stats are saved       $a3
-   the example stats are saved    $$a4
+   the example stats are saved    $a4
+   the stats are returned         $a5
 
  Different printers can be used with the reporter
-   by default the text printer is used       $$b1
-   other printers (then printer is not used) $$b2
-   unless console is in the arguments        $$b3
+   by default the text printer is used       $b1
+   other printers (then printer is not used) $b2
+   unless console is in the arguments        $b3
 
 """
 
@@ -65,6 +66,10 @@ class ReporterSpec extends Specification with ForEachEnv with ThrownExpectations
     repository.previousResult(spec().specClassName, ex2.description) must beOk(beSome((_: Result).isFailure must beTrue))
   }
 
+  def a5 = { env: Env =>
+    reported(env).map(_.copy(timer = Stats.empty.timer)) must beSome(Stats(examples = 3, successes = 2, expectations = 3, failures= 1))
+  }
+
   def b1 = { env: Env =>
     val logger = stringLogger
     reported(env.setLineLogger(logger), logger)
@@ -85,7 +90,7 @@ class ReporterSpec extends Specification with ForEachEnv with ThrownExpectations
       printers = List(TextPrinter, new FakeJUnitPrinter(logger)))
 
     val messages = logger.messages
-    messages must contain("ex1")
+    messages must contain(beMatching(".*ex1.*"))
     messages must contain("[info] junit")
   }
 
@@ -111,7 +116,7 @@ object reporterSpecSupport extends MustMatchers with StandardMatchResults with S
  ex3 ${ex3(logger)}
  """
 
-  def ex1(logger: LineLogger) = { Thread.sleep(100); logger.infoLog(" e1\n "); ok}
+  def ex1(logger: LineLogger) = { Thread.sleep(200); logger.infoLog(" e1\n "); ok}
   def ex2(logger: LineLogger) = { logger.infoLog("e2\n "); ko }
   def ex3(logger: LineLogger) = { logger.infoLog("e3\n "); ok }
 
