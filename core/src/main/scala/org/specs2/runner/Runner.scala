@@ -1,17 +1,12 @@
 package org.specs2
 package runner
 
-import org.specs2.control.Throwablex._
-import org.specs2.control._
-import org.specs2.reporter.{NotifierPrinter, Notifier, TextPrinter}
+import control._, Throwablex._
+import specification.process.Stats
 
 import scala.reflect.ClassTag
 import scalaz.effect._, IO._
-import scalaz.{syntax, \/-, -\/}
-import syntax.all._
-import scalaz.std.vector._
-import scalaz.std.list._
-import scalaz.std.option._
+import scalaz._, Scalaz._
 import main.Arguments
 import reflect.Classes
 import reporter._, Printer._
@@ -24,13 +19,14 @@ object Runner {
   /**
    * Execute some actions and exit with the proper code if 'exist' is true
    */
-  def execute(actions: Action[Unit], arguments: Arguments, exit: Boolean) = {
+  def execute(actions: Action[Stats], arguments: Arguments, exit: Boolean) = {
     val (warnings, result) = actions.run(consoleLogging).unsafePerformIO
     result.fold(
-      ok => logUserWarnings(warnings)(consoleLogging) >> IO(exitSystem(0, exit)),
+      ok => logUserWarnings(warnings)(consoleLogging) >>
+        (if (ok.isSuccess) IO(exitSystem(0, exit)) else IO(exitSystem(1, exit))),
       error => error.fold(
-        m      => logUserWarnings(warnings)(consoleLogging) >> consoleLogging(m),
-        t      => logUserWarnings(warnings)(consoleLogging) >> logThrowable(t, arguments)(consoleLogging),
+        m => logUserWarnings(warnings)(consoleLogging) >> consoleLogging(m),
+        t => logUserWarnings(warnings)(consoleLogging) >> logThrowable(t, arguments)(consoleLogging),
         (m, t) => logUserWarnings(warnings)(consoleLogging) >> consoleLogging(m) >> logThrowable(t, arguments)(consoleLogging)
       ) >> IO(exitSystem(100, exit))
     ).unsafePerformIO
@@ -42,29 +38,30 @@ object Runner {
   def logThrowable(t: Throwable, arguments: Arguments)(print: String => IO[Unit]): IO[Unit] = {
     def logStack(exception: Throwable) =
       exception.chainedExceptions.traverse_(s => print("  caused by " + s.toString)) >>
-      print("\nSTACKTRACE") >>
-      exception.getStackTrace.toList.traverse_(e => print("  "+e.toString)) >>
-      exception.chainedExceptions.traverse_ { s =>
-        print("\n  CAUSED BY " + s.toString) >> s.getStackTrace.toList.traverse_(e => print("  "+e.toString))
-      }
+        print("\nSTACKTRACE") >>
+        exception.getStackTrace.toList.traverse_(e => print("  " + e.toString)) >>
+        exception.chainedExceptions.traverse_ { s =>
+          print("\n  CAUSED BY " + s.toString) >> s.getStackTrace.toList.traverse_(e => print("  " + e.toString))
+        }
 
     if (!arguments.commandLine.boolOr("silent", false)) {
       t match {
-        case UserException(m, throwable) =>
-          print("\n"+m+"\n") >>
+      case UserException(m, throwable) =>
+        print("\n" + m + "\n") >>
           logStack(throwable) >>
           print(" ")
 
-        case ActionException(warnings, message, _) =>
-          if (warnings.nonEmpty) print("Warnings:\n") >> print(warnings.mkString("", "\n", "\n")) else IO(()) >>
+      case ActionException(warnings, message, _) =>
+        if (warnings.nonEmpty) print("Warnings:\n") >> print(warnings.mkString("", "\n", "\n"))
+        else IO(()) >>
           message.traverseU(print).void
 
-        case _: InterruptedException => print("User cancellation. Bye")
+      case _: InterruptedException => print("User cancellation. Bye")
 
-        case other =>
-          print("\n"+t.toString+"\n") >>
+      case other =>
+        print("\n" + t.toString + "\n") >>
           logStack(t)
-          print("\n\nThis looks like a specs2 exception...\nPlease report it with the preceding stacktrace at http://github.com/etorreborre/specs2/issues") >>
+        print("\n\nThis looks like a specs2 exception...\nPlease report it with the preceding stacktrace at http://github.com/etorreborre/specs2/issues") >>
           print(" ")
 
       }
@@ -76,7 +73,7 @@ object Runner {
    */
   def logUserWarnings(warnings: Vector[String])(print: String => IO[Unit]): IO[Unit] = {
     (if (warnings.nonEmpty) print("Warnings:\n") else IO(())) >>
-    warnings.traverseU(print).void
+      warnings.traverseU(print).void
   }
 
   /**
@@ -128,41 +125,41 @@ object Runner {
     if (args.isSet(name.name))
       for {
         instance <- Classes.createInstanceEither[Printer](className, loader)
-        result   <-
+        result <-
         instance match {
-          case \/-(i) => Actions.ok(Some(i))
-          case -\/(t) => noInstance(failureMessage, t, verbose = true)
+        case \/-(i) => Actions.ok(Some(i))
+        case -\/(t) => noInstance(failureMessage, t, verbose = true)
         }
       } yield result
     else noInstance(noRequiredMessage, args.verbose)
 
   /** create a custom instance */
   def createCustomInstance[T <: AnyRef](args: Arguments, loader: ClassLoader,
-                                        name: String, failureMessage: String => String, noRequiredMessage: String)(implicit m: ClassTag[T]): Action[Option[T]] =
+    name: String, failureMessage: String => String, noRequiredMessage: String)(implicit m: ClassTag[T]): Action[Option[T]] =
     args.commandLine.value(name) match {
-      case Some(className) =>
-        for {
-          instance <- Classes.createInstanceEither[T](className, loader)(m)
-          result   <- instance match {
-            case \/-(i) => Actions.ok(Some(i))
-            case -\/(t) => noInstance(failureMessage(className), t, verbose = true)
-          }
-        } yield result
+    case Some(className) =>
+      for {
+        instance <- Classes.createInstanceEither[T](className, loader)(m)
+        result <- instance match {
+        case \/-(i) => Actions.ok(Some(i))
+        case -\/(t) => noInstance(failureMessage(className), t, verbose = true)
+        }
+      } yield result
 
-      case None => noInstance(noRequiredMessage, args.verbose)
+    case None => noInstance(noRequiredMessage, args.verbose)
     }
 
   /** print a message if a class can not be instantiated */
   def noInstance[T](message: String, t: Throwable, verbose: Boolean): Action[Option[T]] =
-    log("", verbose)                 >>
-    log(message, verbose)            >>
-    log("", verbose)                 >>
-    control.logThrowable(t, verbose) >>
-    Actions.ok(None)
+    log("", verbose) >>
+      log(message, verbose) >>
+      log("", verbose) >>
+      control.logThrowable(t, verbose) >>
+      Actions.ok(None)
 
   /** print a message if a class can not be instantiated */
   def noInstance[T](message: String): Action[Option[T]] =
-    log(message)      >>
+    log(message) >>
       Actions.ok(None)
 
   /** print a message if a class can not be instantiated */
