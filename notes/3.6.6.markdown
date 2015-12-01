@@ -1,0 +1,14 @@
+Maintenance version.
+
+## Improvements
+
+ * add matchers for `scalaz.Validation` (kudos @puffnfresh) [#432](http://github.com/etorreborre/specs2/issues/432)
+ 
+## Fixes 
+
+ * fixed the postfix tags on mutable specifications [#436](http://github.com/etorreborre/specs2/issues/436)
+ * User Guide: fixed broken environment link for futures [#433](http://github.com/etorreborre/specs2/issues/433)
+ * User Guide: update formatting of sbt commands to monospaced [#420](http://github.com/etorreborre/specs2/issues/420)
+ * Mockito: don't register matchers when a spy is called for real [#428](http://github.com/etorreborre/specs2/issues/428)
+ * Matchers: set the proper expectable when adapting a matcher [#426](http://github.com/etorreborre/specs2/issues/426)
+ 
