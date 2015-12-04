@@ -17,6 +17,8 @@ trait ExecutionOrigin extends Stacktraces {
   lazy val isExecutedFromIntellij = isExecutedFrom("com.intellij.rt")
   /** return true if the current test is executed from an IDE */
   lazy val isExecutedFromAnIDE = isExecutedFromIntellij || isExecutedFromEclipse
+  /** return true if the current test is executed with JUnitCore */
+  lazy val isExecutedFromJUnitCore = isExecutedFrom("org.junit.runner")
 
   /** try to approximate if a specification is a specs2 one or scalaz one by passing name = org.specs2 or name = scalaz */
   def isSpecificationFromSpecs2orScalaz(st: Seq[StackTraceElement]) = {

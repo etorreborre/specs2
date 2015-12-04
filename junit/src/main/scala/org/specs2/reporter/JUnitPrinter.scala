@@ -15,6 +15,7 @@ import org.junit.ComparisonFailure
 import main.Arguments
 import control.{Actions, Action, Throwablex}
 import scalaz.stream.io
+import control.ExecutionOrigin._
 
 /**
  * The JUnitPrinter sends notifications to JUnit's RunNotifier
@@ -36,8 +37,11 @@ trait JUnitPrinter extends Printer { outer =>
     fromSink(scalazSink(spec, env))
 
   def scalazSink(spec: SpecStructure, env: Env): Sink[Task, Fragment] = {
-    val acquire = Task.now { notifier.fireTestRunStarted(description); notifier }
-    val shutdown = (notifier: RunNotifier) => Task.now(notifier.fireTestRunFinished(new org.junit.runner.Result))
+    // test run start and finish must not be notified if we execute the test from
+    // the JUnitCore runner because it is already doing that.
+    // Otherwise this could lead to double reporting see #440
+    val acquire = Task.now { if (!isExecutedFromJUnitCore) notifier.fireTestRunStarted(description); notifier }
+    val shutdown = (notifier: RunNotifier) => Task.now(if (!isExecutedFromJUnitCore) notifier.fireTestRunFinished(new org.junit.runner.Result) else ())
     val step =     (notifier: RunNotifier) => Task.now(notifyJUnit(env.arguments))
 
     io.resource(acquire)(shutdown)(step)
