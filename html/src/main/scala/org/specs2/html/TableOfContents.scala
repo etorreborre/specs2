@@ -36,11 +36,11 @@ trait TableOfContents {
     } yield pages
 
   def createSpecPages(paths: List[FilePath], specifications: List[SpecStructure], outDir: DirectoryPath, fileSystem: FileSystem): Action[List[SpecHtmlPage]] = {
-    specifications.map { spec =>
+    specifications.flatMap { spec =>
       val path = SpecHtmlPage.outputPath(outDir, spec)
       if (paths contains path) Some(fileSystem.readFile(path).map(content => SpecHtmlPage(spec, path, outDir, content)))
       else None
-    }.flatten.sequenceU
+    }.sequenceU
   }
 
   def createToc(pages: List[SpecHtmlPage], outDir: DirectoryPath, entryMaxSize: Int): SpecHtmlPage => NodeSeq = {
