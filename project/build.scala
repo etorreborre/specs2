@@ -45,7 +45,7 @@ object build extends Build {
     specs2ShellPrompt,
     scalaVersion := "2.11.7",
     scalazVersion := "7.1.4",
-    crossScalaVersions := Seq(scalaVersion.value, "2.12.0-M3", "2.10.5"))
+    crossScalaVersions := Seq(scalaVersion.value, "2.12.0-M3", "2.10.6"))
 
   lazy val specs2Version = settingKey[String]("defines the current specs2 version")
 
