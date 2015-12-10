@@ -2,7 +2,6 @@ package org.specs2
 package matcher
 
 import execute._
-import scalaz._, Scalaz._
 import text.Quote._
 import scala.collection.{GenTraversable, GenTraversableOnce}
 import ResultLogicalCombinators._

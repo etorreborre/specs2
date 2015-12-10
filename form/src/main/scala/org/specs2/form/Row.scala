@@ -1,10 +1,11 @@
 package org.specs2
 package form
 
-import scalaz.NonEmptyList, NonEmptyList._
+import scalaz.{IList, NonEmptyList}, NonEmptyList._  
 import execute._
 import StandardResults._
 import ResultLogicalCombinators._
+
 /**
  * A Row is a non-empty list of Cells
  * 
@@ -12,7 +13,7 @@ import ResultLogicalCombinators._
  */
 case class Row(private val cellList: NonEmptyList[Cell]) extends Executable {
   /** @return all the cells */
-  def cells = cellList.list.toSeq
+  def cells = cellList.list.toList
   
   /** @return a Row where every cell is executed with a Success */
   def setSuccess = setResult(success)
@@ -53,10 +54,10 @@ case class Row(private val cellList: NonEmptyList[Cell]) extends Executable {
   }
 
   /** append a new Cell */
-  def add(cell: Cell) = copy(cellList = cellList :::> List(cell))
+  def add(cell: Cell) = copy(cellList = cellList :::> IList(cell))
 
   override def equals(a: Any) = a match {
-    case Row(c) => cells == c.list
+    case Row(c) => cells == c.list.toList  
     case other => false
   }
   override def hashCode = cells.map(_.hashCode).sum
@@ -68,9 +69,9 @@ case object Row {
   /**
    * create a row from cells
    */
-  def tr(c1: Cell, cs: Cell*) = Row(nel(c1, cs.toList))
+  def tr(c1: Cell, cs: Cell*) = Row(nel(c1, IList.fromList(cs.toList)))
   /**
    * create a row from cells
    */
-  def tr(cs: Seq[Cell]) = Row(nel(cs.head, cs.drop(1).toList))
+  def tr(cs: Seq[Cell]) = Row(nel(cs.head, IList.fromList(cs.drop(1).toList)))
 }
