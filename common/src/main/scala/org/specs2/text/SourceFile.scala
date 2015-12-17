@@ -3,6 +3,7 @@ package text
 
 import java.util.regex.{Matcher, Pattern}
 import control._
+import eff.ConsoleEffect.log
 import scalaz.syntax.bind._
 
 /**

@@ -7,6 +7,9 @@ import specification.core._
 import text.SourceFile._
 import io._
 import scalaz._, Scalaz._
+import eff._
+import ConsoleEffect._
+import WarningsEffect._
 
 /**
  * This trait loads specifications found on a given source directory based
@@ -48,11 +51,13 @@ trait SpecificationsFinder {
                      verbose: Boolean               = false,
                      classLoader: ClassLoader       = Thread.currentThread.getContextClassLoader,
                      filePathReader: FilePathReader = FileSystem): Seq[SpecificationStructure] =
-    findSpecifications(glob, pattern, filter, basePath, verbose, classLoader, filePathReader)
-      .execute(if (verbose) consoleLogging else noLogging)
-      .unsafePerformIO().toEither.fold(
-        e   => { if (verbose) println(e); Seq() },
-        seq => seq)
+    runAction(
+      findSpecifications(glob, pattern, filter, basePath, verbose, classLoader, filePathReader),
+      if (verbose) consoleLogging else noLogging).
+        fold(
+          e  => { if (verbose) e.fold(_.printStackTrace, println); Seq() },
+          seq => seq
+        )
 
   /**
    * @param pathGlob a path to a directory containing scala files (it can be a glob: i.e. "dir/**/*spec.scala")

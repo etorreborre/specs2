@@ -6,7 +6,6 @@ import specification.BeforeAfterEach
 import control._
 import text.LinesContent
 import java.io.File
-import ActionT._
 import scalaz.syntax.bind._
 
 class ContentMatchersSpec extends Spec with LinesContentMatchers with BeforeAfterEach with FileSystem with TestFileNames { def is = sequential ^ s2"""
@@ -21,7 +20,7 @@ class ContentMatchersSpec extends Spec with LinesContentMatchers with BeforeAfte
    we can compare against a Seq of lines instead                                                         ${comp().e7}
    it works with duplicated lines                                                                        ${comp().e8}
                                                                                                          """
-      
+
   lazy val dir = "target" / "test" / "contents"
 
   def before = {
@@ -35,10 +34,10 @@ class ContentMatchersSpec extends Spec with LinesContentMatchers with BeforeAfte
       writeFile(dir | f7, "good\nday\ncrazy\nworld")         >>
       writeFile(dir | f8, "good\nday\ncrazy\nworld\nworld")
 
-    action.execute(noLogging).unsafePerformIO
+    action.runOption
   }
 
-  def after = delete(dir).execute(noLogging).unsafePerformIO
+  def after = delete(dir).runOption
 
 }
 
@@ -47,7 +46,7 @@ case class comp() extends MustMatchers with TestFileNames with ContentMatchers w
 
   override implicit protected val fileContentForMatchers = new LinesContent[File] {
     def name(f: File) = f.getPath
-    def lines(f: File) = readLines(FilePath.unsafe(f)).execute(noLogging).unsafePerformIO.toOption.get
+    def lines(f: File) = readLines(FilePath.unsafe(f)).runOption.get
   }
 
   def e1 =  (dir | f1).toFile must haveSameLinesAs((dir | f2).toFile)

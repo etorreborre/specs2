@@ -1,65 +1,67 @@
 package org.specs2
 
 import scalaz._
-import scalaz.effect._
+import scalaz.effect.IO
 import org.specs2.execute.{AsResult, Result}
 import scalaz.concurrent.Task
 import scalaz.stream.Process
 import scalaz.syntax.bind._
+
+import control.eff._
+import ErrorEffect._
+import WarningsEffect._
+import ConsoleEffect._
+import Effects._
+import Eff.run
+import EvalEffect._
+import Member.{<=}
 
 package object control {
 
   /**
    * Actions logging
    */
-  type Logger = String => IO[Unit]
-  lazy val noLogging = (s: String) => IO(())
-  lazy val consoleLogging = (s: String) => IO(println(s))
+  type Logger = String => Unit
+  lazy val noLogging = (s: String) => ()
+  lazy val consoleLogging = (s: String) => println(s)
 
   /**
    * Action type, using a logger as a reader and no writer
    */
-  type Action[A] = ActionT[IO, Logs, Logger, A]
+  type ActionStack = ErrorOrOk |: Console |: Warnings |: Eval |: NoEffect
 
-  object Actions extends ActionTSupport[IO, Logs, Logger] {
-    def unit: Action[Unit] = empty(implicitly[Monad[IO]], implicitly[Monoid[Logs]])
-  }
+  implicit def EvalMember: Member[Name, ActionStack] =
+    Member.MemberNatIsMember
 
-  type Logs = Vector[String]
+  implicit def WarningsMember: Member[Warnings, ActionStack] =
+    Member.MemberNatIsMember
 
-  implicit def LogsMonoid: Monoid[Logs] = new Monoid[Logs] {
-    def zero: Logs = Vector[String]()
-    def append(f1: Logs, f2: =>Logs): Logs = f1 ++ f2
-  }
+  implicit def ConsoleMember: Member[Console, ActionStack] =
+    Member.MemberNatIsMember
 
-  /** warn the user about something that is probably wrong on his side, this is not a specs2 bug */
-  def warn(message: String): Action[Unit] =
-    ActionT.append(Vector(message))
+  implicit def ErrorMember: Member[ErrorOrOk, ActionStack] =
+    Member.MemberNatIsMember
+
+  type Action[A] = Eff[ActionStack, A]
 
   /**
    * warn the user about something that is probably wrong on his side,
    * this is not a specs2 bug, then fail to stop all further computations
    */
-  def warnAndFail[A](message: String, failureMessage: String): Action[A] =
-    warn(message) >> ActionT.fail[IO, Logs, Logger, A](failureMessage)
+  def warnAndFail[R <: Effects, A](message: String, failureMessage: String)(implicit m1: Warnings <= R, m2: ErrorOrOk<= R): Eff[R, A] =
+    warn(message)(m1) >>
+    fail(failureMessage)
 
-  /** log a value, using the logger coming from the Reader environment */
-  def log[R](r: R): Action[Unit] =
-    Actions.ask.flatMap(logger => Actions.fromIO(logger(r.toString)))
+  def executeAction[A](action: Eff[ActionStack, A], printer: String => Unit = s => ()): (Error \/ A, Vector[String]) =
+    run(runEval(runWarnings(runConsoleToPrinter(printer)(runError(action)))))
 
-  /** log a Throwable with its stacktrace and cause, using the logger coming from the Reader environment */
-  def logThrowable(t: Throwable, verbose: Boolean): Action[Unit] =
-    if (verbose) logThrowable(t) else Actions.unit
+  def runAction[A](action: Eff[ActionStack, A], printer: String => Unit = s => ()): Error \/ A =
+    attemptExecuteAction(action, printer).fold(
+      t => -\/(-\/(t)),
+      other => other._1)
 
-  def logThrowable(t: Throwable): Action[Unit] =
-    log(t.getMessage) >>
-    log(t.getStackTrace.mkString("\n")) >>
-      (if (t.getCause != null) logThrowable(t.getCause)
-       else                    Actions.unit)
-
-  /** log a value, using the logger coming from the Reader environment, only if verbose is true */
-  def log[R](r: R, verbose: Boolean): Action[Unit] =
-    if (verbose) log(r) else Actions.unit
+  def attemptExecuteAction[A](action: Eff[ActionStack, A], printer: String => Unit = s => ()): Throwable \/ (Error \/ A, Vector[String]) =
+    run(attemptEval(runWarnings(runConsoleToPrinter(printer)(runError(action)))))
 
   /**
    * This implicit allows any IO[Result] to be used inside an example:
@@ -73,35 +75,49 @@ package object control {
   }
 
   /**
-   * This implicit allows an IOAction[result] to be used inside an example.
+   * This implicit allows an Action[result] to be used inside an example.
    *
    * For example to read a database.
    */
-  implicit def ioActionResultAsResult[T : AsResult]: AsResult[Action[T]] = new AsResult[Action[T]] {
-    def asResult(ioAction: =>Action[T]): Result =
-      ioAction.execute(noLogging).unsafePerformIO.foldAll(
-        ok        => AsResult(ok),
-        fail      => org.specs2.execute.Failure(fail),
-        throwable => org.specs2.execute.Error(throwable),
-        (m, t)    => org.specs2.execute.Error(m, t)
+  implicit def actionAsResult[T : AsResult]: AsResult[Action[T]] = new AsResult[Action[T]] {
+    def asResult(action: =>Action[T]): Result =
+      runAction(action).fold(
+        err => err.fold(t => org.specs2.execute.Error(t), f => org.specs2.execute.Failure(f)),
+        ok => AsResult(ok)
       )
   }
 
   /**
    * An Action[T] can be converted to a Task[T]
    */
-  implicit class ioActionToTask[T](action: Action[T]) {
-    def toTask = Task.delay {
-      action.run(noLogging).unsafePerformIO
-     }.flatMap { case (warnings, result) =>
+  implicit class actionToTask[T](action: Action[T]) {
+    def toTask =
+      Task.delay(executeAction(action)).
+      flatMap { case (result, warnings) =>
         result.fold(
-          t => Task.now(t),
           error => error.fold(
-            s      => Task.fail(ActionException(warnings, Some(s), None)),
             t      => Task.fail(ActionException(warnings, None, Some(t))),
-            (s, t) => Task.fail(ActionException(warnings, Some(s), Some(t)))
-          ))
+            s      => Task.fail(ActionException(warnings, Some(s), None))),
+
+          t => Task.now(t))
     }
+  }
+
+  implicit class actionOps[T](action: Action[T]) {
+    def when(condition: Boolean): Action[Unit] =
+      if (condition) action.as(()) else Actions.ok(())
+
+    def unless(condition: Boolean): Action[Unit] =
+      action.when(!condition)
+
+    def whenFailed(error: Error => Action[T]): Action[T] =
+      Actions.whenFailed(action, error)
+
+    def |||(other: Action[T]): Action[T] =
+      Actions.orElse(action, other)
+
+    def orElse(other: Action[T]): Action[T] =
+      Actions.orElse(action, other)
   }
 
   /**
@@ -115,7 +131,7 @@ package object control {
    * execute an action with no logging and return an option
    */
   implicit class ioActionToOption[T](action: Action[T]) {
-    def runOption = action.toTask.attemptRun.toOption
+    def runOption = runAction(action).toOption
   }
 
   /**
@@ -123,9 +139,48 @@ package object control {
    * an Action[T]
    */
   implicit class taskToAction[T](task: Task[T]) {
-    def toAction = Actions.fromTask(task)
-    def runOption = task.get.run.toOption
+    def toAction: Action[T] =
+      task.attemptRun.fold(t => exception(t), a => ErrorEffect.ok(a))
+
+    def runOption: Option[T] =
+      task.get.run.toOption
   }
 
-}
 
+  object Actions {
+
+    def unit: Action[Unit] =
+      ok(())
+
+    def ok[A](a: A): Action[A] =
+      ErrorEffect.ok(a)
+
+    def safe[A](a: =>A): Action[A] =
+      ErrorEffect.ok(a)
+
+    def fail[A](message: String): Action[A] =
+      ErrorEffect.fail[ActionStack, A](message)
+
+    def exception[A](t: Throwable): Action[A] =
+      ErrorEffect.exception[ActionStack, A](t)
+
+    def checkThat[A](a: =>A, condition: Boolean, failureMessage: String): Action[A] =
+      safe(a).flatMap { value =>
+        if (condition) safe(value)
+        else           fail(failureMessage)
+      }
+
+    def fromTask[A](task: Task[A]): Action[A] =
+      task.toAction
+
+    def fromError[A](error: ErrorEffect.Error): Action[A] =
+      ErrorEffect.error(error)
+
+    def orElse[A](action1: Action[A], action2: Action[A]): Action[A] =
+      ErrorEffect.orElse(action1, action2)
+
+    def whenFailed[A](action: Action[A], onError: Error => Action[A]): Action[A] =
+      ErrorEffect.whenFailed(action, onError)
+
+  }
+}

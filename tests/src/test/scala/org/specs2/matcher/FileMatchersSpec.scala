@@ -122,9 +122,9 @@ trait TestFiles extends FileSystem with BeforeAfterEach {
   lazy val missingPath = "absent"
 
   def before =
-    writeFile(okFilePath, "").execute(noLogging).unsafePerformIO
+    writeFile(okFilePath, "").runOption
 
-  def after = delete(directoryPath).execute(noLogging).unsafePerformIO
+  def after = delete(directoryPath).runOption
 
   def setReadable(path: String, r: Boolean) = {
     new File(path).setReadable(r)

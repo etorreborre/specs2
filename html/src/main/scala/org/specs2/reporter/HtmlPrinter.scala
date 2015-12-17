@@ -13,11 +13,13 @@ import scalaz._, Scalaz._
 import scalaz.concurrent.Task
 import HtmlBodyPrinter._
 import Pandoc._
-import ActionT._
 import html._
 import SearchPage._
 import html.TableOfContents._
 import SpecHtmlPage._
+import eff._
+import WarningsEffect._
+import ErrorEffect._
 
 /**
  * Printer for html files
@@ -158,7 +160,7 @@ trait HtmlPrinter extends Printer {
            DirectoryPath("templates")).
            map(copySpecResourcesDir(env, "org" / "specs2" / "reporter", options.outDir, classOf[HtmlPrinter].getClassLoader))
         .sequenceU
-        .whenFailed((e: String \&/ Throwable) => warnAndFail("Cannot copy resources to "+options.outDir.path+"\n"+Status.asString(e), RunAborted))
+        .whenFailed((e: Error) => warnAndFail("Cannot copy resources to "+options.outDir.path+"\n"+e.fullMessage, RunAborted))
     }
 
   def copySpecResourcesDir(env: Env, base: DirectoryPath, outputDir: DirectoryPath, loader: ClassLoader)(src: DirectoryPath): Action[Unit] = {

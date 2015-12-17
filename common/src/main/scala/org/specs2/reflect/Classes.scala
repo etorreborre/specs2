@@ -1,17 +1,13 @@
 package org.specs2
 package reflect
 
-import control._
-import ClassName._
-
 import scala.reflect.ClassTag
 import ClassName._
 import control._
 import scala.util.control.NonFatal
-import scalaz.\&/._
-import scalaz.{\/-, -\/, \/}
-import scalaz.syntax.std.option._
+import scalaz._, Scalaz._
 import java.lang.reflect.Constructor
+import eff._
 
 /**
  * This trait provides functions to instantiate classes
@@ -25,71 +21,33 @@ trait Classes {
    * This is useful to instantiate nested classes which are referencing their outer class in their constructor
    */
   def createInstance[T <: AnyRef](className: String, loader: ClassLoader, defaultInstances: List[AnyRef] = Nil)(implicit m: ClassTag[T]): Action[T] =
-    Actions.reader { configuration  =>
-      loadClass(className, loader).map { klass: Class[T] =>
-        val constructors = klass.getDeclaredConstructors.toList.filter(_.getParameterTypes.size <= 1).sortBy(_.getParameterTypes.size)
+    loadClass(className, loader) >>= { klass: Class[T] =>
+      createInstanceFromClass(klass, loader, defaultInstances)
+    }
 
-        if (constructors.isEmpty)
-          Actions.fail[T]("Can't find a constructor for class "+klass.getName)
-        else {
-          // how to get the first successful action?
-          val results = constructors.map { constructor =>
-            createInstanceForConstructor(klass, constructor, loader, defaultInstances).execute(configuration).unsafePerformIO
-          }
-          val result: Action[T] = results.find(_.isOk).cata(Actions.fromStatus,
-            results.map(Actions.fromStatus).headOption.getOrElse(Actions.fail("no cause")))
-          result
-        }
-      }.flatMap[T](identity)
-    }.flatMap[T](identity)
-
-  /**
-   * create an instance from an existing class
-   */
   def createInstanceFromClass[T <: AnyRef](klass: Class[T], loader: ClassLoader, defaultInstances: List[AnyRef] = Nil)(implicit m: ClassTag[T]): Action[T] =
-    Actions.reader { configuration  =>
-      val constructors = klass.getDeclaredConstructors.toList.filter(_.getParameterTypes.size <= 1).sortBy(_.getParameterTypes.size)
+    findInstance[T](klass, loader, defaultInstances,
+      klass.getDeclaredConstructors.toList.filter(_.getParameterTypes.size <= 1).sortBy(_.getParameterTypes.size))
 
-      if (constructors.isEmpty)
-        Actions.fail[T]("Can't find a constructor for class "+klass.getName)
-      else {
-        // how to get the first successful action?
-        val results = constructors.map { constructor =>
-          createInstanceForConstructor(klass, constructor, loader, defaultInstances).execute(configuration).unsafePerformIO
-        }
-        val result: Action[T] = results.find(_.isOk).cata(Actions.fromStatus,
-          results.map(Actions.fromStatus).headOption.getOrElse(Actions.fail("no cause")))
-        result
-      }
-    }.flatMap[T](identity)
-
-  /**
-   * Try to create an instance of a given class by using whatever constructor is available
-   * and return either the instance or an exception
-   */
+  /** try to create an instance but return an exception if this is not possible */
   def createInstanceEither[T <: AnyRef](className: String, loader: ClassLoader, defaultInstances: List[AnyRef] = Nil)(implicit m: ClassTag[T]): Action[Throwable \/ T] =
-    Actions.reader { configuration  =>
-      loadClassEither[T](className, loader).map {
-        case -\/(t)     => Actions.ok[Throwable \/ T](-\/(t))
+    loadClassEither(className, loader) >>= { tc: Throwable \/ Class[T] =>
+      tc match {
+        case -\/(t) => Actions.ok(-\/(t))
         case \/-(klass) =>
-          val constructors = klass.getDeclaredConstructors.toList.filter(_.getParameterTypes.size <= 1).sortBy(_.getParameterTypes.size)
+          findInstance[T](klass, loader, defaultInstances,
+            klass.getDeclaredConstructors.toList.filter(_.getParameterTypes.size <= 1).sortBy(_.getParameterTypes.size)).map(\/-(_))
+      }
+    }
 
-          if (constructors.isEmpty)
-            Actions.ok[Throwable \/ T](-\/(new Exception("Can't find a constructor for class "+klass.getName)))
-          else {
-            // how to get the first successful action?
-            val results = constructors.map { constructor =>
-              createInstanceForConstructor(klass, constructor, loader, defaultInstances).execute(configuration).unsafePerformIO
-            }
-            val result: Action[Throwable \/ T] =
-              results
-                .find(_.isOk)
-                .cata(Actions.fromStatusAsDisjunction[T],
-                  results.map(Actions.fromStatusAsDisjunction).headOption.getOrElse(Actions.ok[Throwable \/ T](-\/(new Exception("no cause")))))
-            result
-          }
-      }.flatMap[Throwable \/ T](identity)
-    }.flatMap[Throwable \/ T](identity)
+  private def findInstance[T <: AnyRef : ClassTag](klass: Class[T], loader: ClassLoader, defaultInstances: List[AnyRef], cs: List[Constructor[_]], error: Option[ErrorEffect.Error] = None): Action[T] =
+    cs match {
+      case Nil => error.map(Actions.fromError[T]).getOrElse(Actions.fail[T]("Can't find a constructor for class "+klass.getName))
+      case c :: rest =>
+       runAction(createInstanceForConstructor[T](klass, c, loader, defaultInstances)).
+         fold(e => findInstance[T](klass, loader, defaultInstances, rest, Some(e)),
+              a => Actions.safe[T](a))
+    }
 
 
   /**
@@ -108,8 +66,8 @@ trait Classes {
           // it is a nested class
           // or it might have a parameter that has a 0 args constructor
           val constructorParameter =
-            createInstance[T](getOuterClassName(c), loader, defaultInstances)
-              .orElse(createInstance[T](constructor.getParameterTypes.toSeq(0).getName, loader, defaultInstances))
+            createInstance(constructor.getParameterTypes.toSeq(0).getName, loader, defaultInstances).
+              orElse(createInstance[T](getOuterClassName(c), loader, defaultInstances))
 
           constructorParameter.flatMap(p => newInstance(c)(constructor.newInstance(p).asInstanceOf[T]))
 
@@ -133,10 +91,9 @@ trait Classes {
 
   /** create a new instance for a given class and return a proper error if this fails */
   private def newInstance[T](klass: Class[_])(creation: =>T): Action[T] =
-    Actions.safe(creation).whenFailed {
-      case This(m)    => Actions.fail ("cannot create an instance for class " + klass.getName + ": " + m)
-      case That(e)    => Actions.error(UserException("cannot create an instance for class " + klass.getName, e))
-      case Both(m, e) => Actions.error(UserException("cannot create an instance for class " + klass.getName, e))
+    try Actions.ok(creation)
+    catch { case NonFatal(t) =>
+      Actions.exception(UserException("cannot create an instance for class " + klass.getName, t))
     }
 
   /**
@@ -148,7 +105,7 @@ trait Classes {
   }
 
   def loadClass[T <: AnyRef](className: String, loader: ClassLoader): Action[Class[T]] =
-    loadClassEither(className, loader).flatMap((_:Throwable\/Class[T]).fold((t: Throwable) => Actions.error(t), Actions.ok))
+    loadClassEither(className, loader).flatMap((tc: Throwable \/ Class[T]) => tc.fold(Actions.exception, Actions.ok))
 
 }
 /**

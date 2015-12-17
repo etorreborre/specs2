@@ -5,11 +5,12 @@ import org.specs2.matcher.Matcher
 import specification.Grouped
 import Classes._
 import control._
+import eff.ErrorEffect._
 import matcher.MatchersImplicits._
 
 class ClassesSpec extends Spec with Grouped { def is = s2"""
 
-  it is possible to instantiate a Specification 
+  it is possible to instantiate a Specification
     from a class name ${g1.e1}
     from a class having a parameter having at least a no-args constructor that's instantiable ${g1.e2}
     from a nested class ${g1.e3}
@@ -28,14 +29,14 @@ class ClassesSpec extends Spec with Grouped { def is = s2"""
 
   "exceptions" - new g2 {
     e1 := createInstance[Specification]("org.specs2.reflect.UserErrorSpecification", getClass.getClassLoader) must
-      failWith("cannot create an instance for class org.specs2.reflect.UserErrorSpecification")
+      failWith("org.specs2.control.UserException: cannot create an instance for class org.specs2.reflect.UserErrorSpecification")
   }
 
   def beOk[T]: Matcher[Action[T]] = (action: Action[T]) =>
-    action.execute(noLogging).unsafePerformIO.toOption must beSome
+    runAction(action).toOption must beSome
 
   def failWith[T](message: String): Matcher[Action[T]] = (action: Action[T]) =>
-    action.execute(noLogging).unsafePerformIO.toOptionErrorMessage must beSome((_: String) must startWith(message))
+    runAction(action).toErrorFullMessage must beSome((_: String) must contain(message))
 
   class FromNestedClass extends Specification  { def is = ok }
 }

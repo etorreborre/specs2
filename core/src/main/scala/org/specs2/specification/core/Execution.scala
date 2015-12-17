@@ -11,12 +11,11 @@ import scala.concurrent.duration._
 import scalaz.Show
 import specification.process.Stats
 import time.SimpleTimer
-import control._
 import text.NotNullStrings._
 
 /**
  * Execution of a Fragment
- * 
+ *
  *  - there can be none (for a piece of text)
  *  - the execution depends on the current Env
  *  - it can have its own timeout (default is infinite)

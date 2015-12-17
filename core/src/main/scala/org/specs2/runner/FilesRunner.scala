@@ -10,6 +10,7 @@ import specification.core._
 import runner.Runner._
 import scalaz._, Scalaz._
 import SpecificationsFinder._
+import eff._, ConsoleEffect._
 
 /**
  * This trait finds specifications in the source directory, instantiate them

@@ -15,6 +15,8 @@ import reporter.SbtLineLogger
 import reflect.Classes
 import reporter.Printer._
 import specification.core._
+import eff._
+import ErrorEffect._
 
 /**
  * Runner for Sbt
@@ -34,13 +36,13 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
         case f: SubclassFingerprint =>
           if (f.superclassName.endsWith("SpecificationStructure")) {
             val action = specificationRun(aTaskDef, loader, handler, loggers, isModule = f.isModule)
-            val (warnings, result) = action.run(consoleLogging).unsafePerformIO
+            val (result, warnings) = executeAction(action, consoleLogging)
             result.fold(
-              ok => handleRunWarnings(warnings, loggers, commandLineArguments),
               e => {
                 if (warnings.nonEmpty) handleRunWarnings(warnings, loggers, commandLineArguments)
                 else handleRunError(e, loggers, sbtEvents(taskDef, handler), commandLineArguments)
-              }
+              },
+              _ => handleRunWarnings(warnings, loggers, commandLineArguments)
             )
           }
           else ()
@@ -107,22 +109,15 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
   /**
    * Notify sbt of errors during the run
    */
-  private def handleRunError(e: String \&/ Throwable, loggers: Array[Logger], events: SbtEvents, arguments: Arguments) {
+  private def handleRunError(e: Throwable \/ String, loggers: Array[Logger], events: SbtEvents, arguments: Arguments) {
     val logger = SbtLineLogger(loggers)
 
     def logThrowable(t: Throwable) =
       Runner.logThrowable(t, arguments)(m => IO(logger.errorLine(m))).unsafePerformIO
 
     e.fold(
-      m => {
-        events.suiteError; logger.errorLine(m)
-      },
-      t => {
-        events.suiteError(t); logThrowable(t)
-      },
-      (m, t) => {
-        events.suiteError(t); logThrowable(t)
-      }
+      t => { events.suiteError(t); logThrowable(t) },
+      m => { events.suiteError; logger.errorLine(m) }
     )
 
     logger.close
@@ -157,7 +152,7 @@ object Fingerprints {
     override def toString = "specs2 Specification fingerprint"
   }
   val fp1m = new SpecificationFingerprint {
-    override def toString = "specs2 Specification fingerprint";
+    override def toString = "specs2 Specification fingerprint"
 
     override def isModule = false
   }
@@ -181,14 +176,14 @@ object sbtRun extends SbtRunner(Array(), Array(), Thread.currentThread.getContex
   }
 
   def exit(action: Action[Stats]) {
-    action.execute(consoleLogging).unsafePerformIO.fold(
-      ok  => if (ok.isSuccess) System.exit(0) else System.exit(1),
-      err => System.exit(100))
+    runAction(action).fold(
+      err => System.exit(100),
+      ok  => if (ok.isSuccess) System.exit(0) else System.exit(1))
   }
 
   def start(arguments: String*): Action[Stats] = {
     if (arguments.isEmpty)
-      control.log("The first argument should at least be the specification class name") >>
+      ConsoleEffect.log("The first argument should at least be the specification class name") >>
       Actions.ok(Stats.empty)
     else {
       val taskDef = new TaskDef(arguments(0), Fingerprints.fp1, true, Array())

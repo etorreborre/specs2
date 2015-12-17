@@ -41,7 +41,7 @@ class FilesContentMatchersSpec extends Spec
       createFile(targetDir / expected2 | f1)       >>
       createFile(targetDir / expected2 / sub | f3)
 
-    action.execute(noLogging).unsafePerformIO
+    action.runOption
 
     (targetDir / actual).toFile must haveSamePathsAs((targetDir / expected).toFile)
 
@@ -63,7 +63,7 @@ class FilesContentMatchersSpec extends Spec
       createFile(targetDir / expected2 / sub | f2) >>
       createFile(targetDir / expected2 / sub | f3)
 
-    action.execute(noLogging).unsafePerformIO
+    action.runOption
 
     val notF3 = (f: File) => !f.getPath.endsWith("f3")
 
@@ -79,7 +79,7 @@ class FilesContentMatchersSpec extends Spec
       writeFile(targetDir / expected2 | f1,         "text1")        >>
       writeFile(targetDir / expected2 / sub | f2, "text2\ntext4")
 
-    action.execute(noLogging).unsafePerformIO
+    action.runOption
 
     (targetDir / actual).toFile must haveSameFilesContentAs((targetDir / expected).toFile)
     ((targetDir / actual).toFile must haveSameFilesContentAs((targetDir / expected2).toFile)) returns
@@ -100,7 +100,7 @@ class FilesContentMatchersSpec extends Spec
       writeFile(targetDir / expected2 | f1,          "text1")        >>
       writeFile(targetDir / expected2 / sub | f2,  "text2\ntext4")
 
-    action.execute(noLogging).unsafePerformIO
+    action.runOption
 
     (targetDir | actual).toFile must haveSameFilesContentAs((targetDir | expected).toFile).withMatcher(haveSameMD5)
 
@@ -115,8 +115,8 @@ class FilesContentMatchersSpec extends Spec
 
   val targetDir = "target" / "test" / FileName.unsafe("fcm-"+hashCode)
 
-  def before = FileSystem.mkdirs(targetDir).execute(noLogging).unsafePerformIO
-  def after  = FileSystem.delete(targetDir).execute(noLogging).unsafePerformIO
+  def before = FileSystem.mkdirs(targetDir).runOption
+  def after  = FileSystem.delete(targetDir).runOption
 
 }
 

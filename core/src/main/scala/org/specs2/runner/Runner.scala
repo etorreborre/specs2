@@ -10,6 +10,8 @@ import scalaz._, Scalaz._
 import main.Arguments
 import reflect.Classes
 import reporter._, Printer._
+import eff._
+import ConsoleEffect._
 
 /**
  * reusable actions for Runners
@@ -17,18 +19,18 @@ import reporter._, Printer._
 object Runner {
 
   /**
-   * Execute some actions and exit with the proper code if 'exist' is true
+   * Execute some actions and exit with the proper code if 'exit' is true
    */
-  def execute(actions: Action[Stats], arguments: Arguments, exit: Boolean) = {
-    val (warnings, result) = actions.run(consoleLogging).unsafePerformIO
+  def execute(actions: Action[Stats], arguments: Arguments, exit: Boolean): Unit = {
+    val (result, warnings) = executeAction(actions, consoleLogging)
+    val logging = (s: String) => IO(consoleLogging(s))
     result.fold(
-      ok => logUserWarnings(warnings)(consoleLogging) >>
-        (if (ok.isSuccess) IO(exitSystem(0, exit)) else IO(exitSystem(1, exit))),
       error => error.fold(
-        m => logUserWarnings(warnings)(consoleLogging) >> consoleLogging(m),
-        t => logUserWarnings(warnings)(consoleLogging) >> logThrowable(t, arguments)(consoleLogging),
-        (m, t) => logUserWarnings(warnings)(consoleLogging) >> consoleLogging(m) >> logThrowable(t, arguments)(consoleLogging)
-      ) >> IO(exitSystem(100, exit))
+        t => logUserWarnings(warnings)(logging) >> logThrowable(t, arguments)(logging),
+        m => logUserWarnings(warnings)(logging) >> logging(m)
+      ) >> IO(exitSystem(100, exit)),
+      ok => logUserWarnings(warnings)(logging) >>
+        (if (ok.isSuccess) IO(exitSystem(0, exit)) else IO(exitSystem(1, exit)))
     ).unsafePerformIO
   }
 
@@ -126,10 +128,10 @@ object Runner {
       for {
         instance <- Classes.createInstanceEither[Printer](className, loader)
         result <-
-        instance match {
-        case \/-(i) => Actions.ok(Some(i))
-        case -\/(t) => noInstance(failureMessage, t, verbose = true)
-        }
+          instance match {
+            case \/-(i) => Actions.ok(Some(i))
+            case -\/(t) => noInstance(failureMessage, t, verbose = true)
+          }
       } yield result
     else noInstance(noRequiredMessage, args.verbose)
 
@@ -140,10 +142,11 @@ object Runner {
     case Some(className) =>
       for {
         instance <- Classes.createInstanceEither[T](className, loader)(m)
-        result <- instance match {
-        case \/-(i) => Actions.ok(Some(i))
-        case -\/(t) => noInstance(failureMessage(className), t, verbose = true)
-        }
+        result <-
+          instance match {
+            case \/-(i) => Actions.ok(Some(i))
+            case -\/(t) => noInstance(failureMessage(className), t, verbose = true)
+          }
       } yield result
 
     case None => noInstance(noRequiredMessage, args.verbose)
@@ -154,7 +157,7 @@ object Runner {
     log("", verbose) >>
       log(message, verbose) >>
       log("", verbose) >>
-      control.logThrowable(t, verbose) >>
+      ConsoleEffect.logThrowable(t, verbose) >>
       Actions.ok(None)
 
   /** print a message if a class can not be instantiated */

@@ -18,7 +18,7 @@ class FutureMatchersSpec(env: Env) extends Specification with ResultMatchers wit
  In this specification `Future` means `scala.concurrent.Future`
 
  Any `Matcher[T]` can be transformed into a `Matcher[Future[T]]` with the `await` method
- ${ Future.apply(1) must be_>(0).await }
+ test ${ Future.apply(1) must be_>(0).await }
 
  with a retries number and timeout
  ${ Future { Thread.sleep(sleepTime); 1 } must be_>(0).await(retries = 3, timeout = 100.millis) }

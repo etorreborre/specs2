@@ -2,7 +2,6 @@ package org.specs2
 package io
 
 import control._
-import ActionT._
 import scalaz.{std, syntax, stream, concurrent}
 import std.list._
 import syntax.all._
@@ -15,6 +14,7 @@ import java.net.URL
 import java.util.zip._
 import java.util.regex.Pattern.compile
 import java.util.regex.Matcher.quoteReplacement
+import eff.ErrorEffect._
 
 /**
  * Interface for the FileSystem where effects are denoted with the "Action" type

@@ -19,14 +19,14 @@ import scalaz._
  *  - an error: an exception occurred
  *  - a pending execution: the user has decided that execution must not be performed
  *  - a skipped execution: based on dynamic conditions (a database not available for instance)
- *    the execution is not performed 
- * 
+ *    the execution is not performed
+ *
  * A Result has:
  *  - a message describing the outcome
  *  - a message describing the expectation
  *  - possibly a number of expectations
  *    when it is the outcome of several checks (this is used for the reporting of ScalaCheck properties).
- * 
+ *
  */
 sealed abstract class Result(val message: String = "", val expected: String = "", val expectationsNb: Int = 1) {
   type SelfType <: Result
@@ -232,8 +232,11 @@ object Result {
     case _         => Success()
   }
 
-  implicit def theseToResult(these: String \&/ Throwable): Result =
+  def theseToResult(these: String \&/ Throwable): Result =
     these.fold(s => Error(s), t => Error(t), (s, t) => new Error(s, t))
+
+  def disjunctionErrorToResult(error: Throwable \/ String): Result =
+    error.fold(t => Error(t), m => Error(m))
 
   /** this allows the creation of expectations with a for loop */
   def foreach[T, R : AsResult](seq: Seq[T])(f: T => R): Result = {
@@ -286,7 +289,7 @@ case class Success(m: String = "", exp: String = "")  extends Result(m, exp) {
   override def hashCode = m.hashCode + exp.hashCode
 }
 /**
- * Companion object to the Success class providing 
+ * Companion object to the Success class providing
  * a method to set the expectations number
  */
 object Success {
@@ -297,7 +300,7 @@ object Success {
     override val expectationsNb = expNb
   }
 }
-/** 
+/**
  * This class represents the failure of an execution.
  * It has a message and a stacktrace
  */
@@ -323,7 +326,7 @@ case class Failure(m: String = "", e: String = "", stackTrace: List[StackTraceEl
   }
   override def hashCode = m.hashCode + e.hashCode
   override def isFailure: Boolean = true
-  override def isThrownFailure: Boolean = 
+  override def isThrownFailure: Boolean =
     Seq(FromNotImplementedError, FromJUnitAssertionError).contains(details)
 
   def skip: Skipped = Skipped(m, e)
@@ -342,7 +345,7 @@ case object NoDetails extends Details
 case object FromNotImplementedError extends Details
 case object FromJUnitAssertionError extends Details
 
-/** 
+/**
  * This class represents an exception occurring during an execution.
  */
 case class Error(m: String, t: Throwable) extends Result(s"${t.getClass.getName}: $m") with ResultStackTrace { outer =>
@@ -367,14 +370,14 @@ case class Error(m: String, t: Throwable) extends Result(s"${t.getClass.getName}
   override def hashCode = m.hashCode
   override def isError: Boolean = true
 }
-/** 
+/**
  * This object allows to create an Error from an exception
  */
 case object Error {
   def apply(t: Throwable) = new Error(t.getMessage.notNull, t)
   def apply(m: String = "") = new Error(m, new Exception(m))
 }
-/** 
+/**
  * Pending result
  * @see Result for description
  */
@@ -388,9 +391,9 @@ case class Pending(m: String = "")  extends Result(m) { outer =>
 
   override def isPending: Boolean = true
 }
-/** 
+/**
  * Skipped result
- * @see Result for description 
+ * @see Result for description
  */
 case class Skipped(m: String = "", e: String = "")  extends Result(m, e) { outer =>
   type SelfType = Skipped
@@ -415,7 +418,7 @@ case class DecoratedResult[+T](decorator: T, result: Result) extends Result(resu
   def setExpectationsNb(n: Int) = new DecoratedResult(decorator, result) {
     override val expectationsNb = n
   }
-    
+
   override def isSuccess: Boolean       = result.isSuccess
   override def isError: Boolean         = result.isError
   override def isSkipped: Boolean       = result.isSkipped

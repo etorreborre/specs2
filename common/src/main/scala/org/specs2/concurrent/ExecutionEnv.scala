@@ -3,11 +3,11 @@ package concurrent
 
 import java.util.concurrent._
 
-import org.specs2.control._
+import org.specs2.control._, eff._
 import org.specs2.main.Arguments
 import scala.concurrent.ExecutionContext
-import scalaz._, Scalaz._
-import scalaz.concurrent.{Strategy, Future}
+import scalaz._, concurrent.{Strategy, Future}
+import ConsoleEffect._, Effects._
 
 /**
  * Subset of the Env describing execution parameters
@@ -65,7 +65,7 @@ object ExecutionEnv {
 
   def createExecutionContext(executorService: ExecutorService, verbose: Boolean, systemLogger: Logger) =
     ExecutionContext.fromExecutorService(executorService,
-      (t: Throwable) => control.logThrowable(t, verbose).execute(systemLogger).void.unsafePerformIO)
+      (t: Throwable) => {runConsoleToPrinter(systemLogger)(logThrowable[Console |: NoEffect](t, verbose)); ()})
 
   /**
    * the number of executors is set from the arguments.threadsNb value which is

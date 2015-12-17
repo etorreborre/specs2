@@ -46,8 +46,8 @@ trait FilesContentMatchers extends FileMatchers with LinesContentMatchers with T
       val message = TextTable(header = Seq("file", "MD5"), lines = Seq(Seq(actual.getPath, md5_1), Seq(expected.getPath, md5_2))).show
       (md5_1 == md5_2, s"MD5 mismatch:\n$message")
     }
-    action.execute(noLogging).unsafePerformIO.toDisjunction.fold(
-      failure => (false, Result.theseToResult(failure).message),
+    runAction(action).fold(
+      error => (false, Result.disjunctionErrorToResult(error).message),
       identity)
   }
 

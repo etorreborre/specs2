@@ -7,8 +7,6 @@ import matcher.ActionMatchers._
 import org.specs2.html
 import org.specs2.html.{IndexEntry, IndexedPage, Indexing}
 import Indexing._
-
-import scalaz.Scalaz._
 import scalaz.stream._
 
 class IndexingSpec extends Specification { def is = s2"""

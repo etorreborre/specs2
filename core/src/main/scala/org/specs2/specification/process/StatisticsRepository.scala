@@ -50,7 +50,7 @@ case class StatisticsMemoryStore(statistics: HashMap[String, Stats] = new HashMa
     case SpecificationResultKey(specClassName, description) =>
       Actions.ok(results.get((specClassName, description.hashCode.toLong)))
   }
-  
+
   def set[A](key: Key[A], a: A): Action[Unit] = key match {
     case SpecificationStatsKey(specClassName) =>
       Actions.ok(statistics.put(specClassName, a)).map(_ => ())

@@ -2,7 +2,7 @@ package org.specs2
 package specification
 package core
 
-import control.Status
+import control._
 import reflect.Classes
 import execute._
 import ResultLogicalCombinators._
@@ -44,24 +44,24 @@ trait ImmutableSpecificationStructure extends SpecificationStructure {
   private def isolate(fs: Fragments, f: Fragment, position: Int, env: Env): Fragment = {
     val isolated =
       Execution.result {
-        val instance = Classes.createInstanceFromClass[ImmutableSpecificationStructure](
+        val instance = runAction(Classes.createInstanceFromClass[ImmutableSpecificationStructure](
           getClass.asInstanceOf[Class[ImmutableSpecificationStructure]],
           getClass.getClassLoader,
-          env.defaultInstances).execute(env.systemLogger).unsafePerformIO
+          env.defaultInstances), env.systemLogger)
 
-        instance.toDisjunction.fold(
-          e => org.specs2.execute.Error(Status.asException(e)),
-          { newSpec =>
+        instance.fold(
+          e => e.fold(t => org.specs2.execute.Error(t), m => org.specs2.execute.Error(m)),
+          newSpec => {
+            val newFragments = newSpec.fragments(env.setWithoutIsolation)
+            val previousSteps = newFragments.fragments.take(position).filter(f => Fragment.isStep(f) && f.execution.isolable)
+            val isolatedExecution = newFragments.fragments(position).execution
 
-           val newFragments = newSpec.fragments(env.setWithoutIsolation)
-           val previousSteps = newFragments.fragments.take(position).filter(f => Fragment.isStep(f) && f.execution.isolable)
-           val isolatedExecution = newFragments.fragments(position).execution
-
-           if (previousSteps.nonEmpty) {
-             val previousStepsExecution = previousSteps.foldLeft(Success(): Result) { _ and _.execution.execute(env).result }
-             previousStepsExecution and isolatedExecution.execute(env).result
-           } else isolatedExecution.execute(env).result
-          })
+            if (previousSteps.nonEmpty) {
+              val previousStepsExecution = previousSteps.foldLeft(Success(): Result) { _ and _.execution.execute(env).result }
+              previousStepsExecution and isolatedExecution.execute(env).result
+            } else isolatedExecution.execute(env).result
+          }
+        )
       }
     f.setExecution(isolated)
   }

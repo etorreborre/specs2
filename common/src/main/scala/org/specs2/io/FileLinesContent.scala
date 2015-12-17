@@ -14,9 +14,7 @@ object FileLinesContent extends LinesContent[File] {
   def lines(f: File): Seq[String] =
     if (f.isDirectory) Seq()
     else
-      FilePathReader
-        .readLines(FilePath.unsafe(f))
-        .execute(noLogging).unsafePerformIO
+      runAction(FilePathReader.readLines(FilePath.unsafe(f)))
         .toOption.getOrElse(Seq())
 
   def name(f: File) = f.getPath

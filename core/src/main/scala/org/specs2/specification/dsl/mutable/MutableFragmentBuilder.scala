@@ -4,7 +4,7 @@ package dsl
 package mutable
 
 import main.Arguments
-import control.Status
+import control._
 import execute.{Result, Success, ResultLogicalCombinators}
 import ResultLogicalCombinators._
 import reflect.Classes
@@ -98,16 +98,14 @@ trait MutableFragmentBuilder extends FragmentBuilder
   private def duplicateExecution(effectPath: EffectPath) = {
     Execution.withEnv { env: Env =>
 
-      def instance = {
-        Classes.createInstanceFromClass[MutableFragmentBuilder](getClass.asInstanceOf[Class[MutableFragmentBuilder]],
-          getClass.getClassLoader, env.defaultInstances)
-          .execute(env.systemLogger).unsafePerformIO
-      }
+      def instance =
+        runAction(Classes.createInstanceFromClass[MutableFragmentBuilder](getClass.asInstanceOf[Class[MutableFragmentBuilder]],
+          getClass.getClassLoader, env.defaultInstances),
+          env.systemLogger)
 
-      instance.toDisjunction.fold(
-        e => org.specs2.execute.Error(Status.asException(e)),
-        { newSpec =>
-
+      instance.fold(
+        e => e.fold(t => org.specs2.execute.Error(t), m => org.specs2.execute.Error(m)),
+        newSpec => {
           newSpec.targetPath = Some(effectPath)
           val pathFragments = newSpec.replayFragments(env)
           val previousSteps = pathFragments.filter(f => Fragment.isStep(f) && f.execution.isolable)
@@ -117,7 +115,8 @@ trait MutableFragmentBuilder extends FragmentBuilder
             val previousStepsExecution = previousSteps.foldLeft(Success(): Result) { _ and _.execution.execute(env).result }
             previousStepsExecution and isolatedExecution.execute(env).result
           } else isolatedExecution.execute(env).result
-        })
+        }
+      )
     }
   }
 

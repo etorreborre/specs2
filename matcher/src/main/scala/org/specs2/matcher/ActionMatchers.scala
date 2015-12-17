@@ -24,19 +24,16 @@ trait ActionMatchers extends ValueChecks {
     beOk(new BeEqualTo(t))
 
   def beKo[T]: Matcher[Action[T]] = (action: Action[T]) =>
-    action.execute(noLogging).unsafePerformIO.foldAll(
-      ok     => Failure("a failure was expected"),
-      m      => Success(),
-      t      => Success(),
-      (m, t) => Success()
+    runAction(action).fold(
+      e => Success(),
+      ok => Failure("a failure was expected")
     )
 
   def beKo[T](message: String): Matcher[Action[T]] = (action: Action[T]) =>
-    action.execute(noLogging).unsafePerformIO.foldAll(
-      ok        => Failure(s"a failure with message $message was expected"),
-      m         => if (m matchesSafely message) Success() else Failure(s"the action failed with message $m. Expected: $message"),
-      throwable => if (throwable.getMessage matchesSafely message) Success() else Failure(s"the action failed with message ${throwable.getMessage}. Expected: $message"),
-      (m, t)    => if (m matchesSafely message) Success() else Failure(s"the action failed with message $m. Expected: $message")
+    runAction(action).fold(
+      e => e.fold(throwable => if (throwable.getMessage matchesSafely message) Success() else Failure(s"the action failed with message ${throwable.getMessage}. Expected: $message"),
+                  m         => if (m matchesSafely message) Success() else Failure(s"the action failed with message $m. Expected: $message")),
+      ok => Failure(s"a failure with message $message was expected")
     )
 
 }
