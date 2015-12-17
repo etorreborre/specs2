@@ -169,7 +169,7 @@ object build extends Build {
 
   lazy val specs2ShellPrompt = shellPrompt in ThisBuild := { state =>
     val name = Project.extract(state).currentRef.project
-    (if (name == "specs2") "" else name) + "> " 
+    (if (name == "specs2") "" else name) + "> "
   }
 
   lazy val compilationSettings: Seq[Settings] = Seq(
@@ -183,6 +183,7 @@ object build extends Build {
     javacOptions ++= Seq("-Xmx3G", "-Xms512m", "-Xss4m"),
     maxErrors := 20,
     incOptions := incOptions.value.withNameHashing(true),
+    addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.7.1"),
     scalacOptions in GlobalScope ++=
       (if (scalaVersion.value.startsWith("2.11") || scalaVersion.value.startsWith("2.12"))
         Seq("-Xfatal-warnings",
