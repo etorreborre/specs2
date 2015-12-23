@@ -3,6 +3,9 @@ package specification
 package dsl
 package mutable
 
+import org.specs2.execute.ExecuteException
+
+import scala.util.control.NonFatal
 import scalaz.TreeLoc
 import scalaz.Tree._
 
@@ -90,7 +93,12 @@ class EffectBlocks {
 
   def addBlock[T](t: =>T) = effect {
     blocksTree = blocksTree.addChild(nextNodeNumber)
-    t
+    try {
+      t
+    } catch {
+      case e: ExecuteException => throw SpecificationCreationExpectationException(e)
+      case NonFatal(e)         => throw SpecificationCreationException(e)
+    }
     ()
   }
 
@@ -102,6 +110,62 @@ class EffectBlocks {
     def addChild(c: T) = t.insertDownLast(leaf(c)).getParent
     def insertDownLast(c: T) = t.insertDownLast(leaf(c))
   }
+}
+
+case class SpecificationCreationExpectationException(t: ExecuteException) extends Exception {
+  override def getMessage: String =
+    s"""|
+        |An expectation was executed during the creation of the specification: ${t.getMessage}.
+        |This means that you have some code which should be enclosed in an example. Instead of writing:
+        |
+        | "this is a block of examples" in {
+        |   // test something
+        |   1 must_== 2
+        |   "first example" in { 1 must_== 1 }
+        |   "second example" in { 1 must_== 1 }
+        | }
+        |
+        |You should write:
+        |
+        | "this is a block of examples" in {
+        |   "example zero" in {
+        |     // test something
+        |     1 must_== 2
+        |   }
+        |   "first example" in { 1 must_== 1 }
+        |   "second example" in { 1 must_== 1 }
+        | }
+        |""".stripMargin
+}
+
+case class SpecificationCreationException(t: Throwable) extends Exception {
+  override def getMessage: String =
+    s"""|
+        |An exception was raised during the creation of the specification: ${t.getMessage}.
+        |This means that you have some code which should be enclosed in an example. Instead of writing:
+        |
+        | "this is a block of examples" in {
+        |   // set-up something
+        |   createDatabase
+        |   "first example" in { 1 must_== 1 }
+        |   "second example" in { 1 must_== 1 }
+        | }
+        |
+        |You should write:
+        |
+        | "this is a block of examples" in {
+        |   "the setup must be ok" in {
+        |     createDatabase must not(throwAn[Exception])
+        |   }
+        |   "first example" in { 1 must_== 1 }
+        |   "second example" in { 1 must_== 1 }
+        | }
+        |
+        | Be careful because in the specification above the expectation might be that the
+        | database will be created before the "first" and "second" examples. This will NOT be the case
+        | unless you mark the specification as `sequential`. You can also have a look at the `BeforeEach/BeforeAll` traits
+        | to implement this kind of functionality.
+        |""".stripMargin
 }
 
 private[specs2]
