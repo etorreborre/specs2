@@ -24,12 +24,11 @@ class ReporterSpec extends Specification with ForEachEnv with ThrownExpectations
 
  A specification is
    filtered                       $a1
-   executed                       $a2
 
  And at the end of the reporting
-   the spec stats are saved       $a3
-   the example stats are saved    $a4
-   the stats are returned         $a5
+   the spec stats are saved       $a2
+   the example stats are saved    $a3
+   the stats are returned         $a4
 
  Different printers can be used with the reporter
    by default the text printer is used       $b1
@@ -48,25 +47,19 @@ class ReporterSpec extends Specification with ForEachEnv with ThrownExpectations
   }
 
   def a2 = { env: Env =>
-    val logger = stringLogger
-    reported(env.setLineLogger(logger), logger)
-    indexOf(logger.messages, " e3") must be_<(indexOf(logger.messages, " e1"))
-  }
-
-  def a3 = { env: Env =>
     val repository = StatisticsRepository.memory
     reported(env.setStatisticRepository(repository))
     repository.getStatistics(spec().specClassName) must beOk(beSome((_: Stats).examples must_== 3))
   }
 
-  def a4 = { env: Env =>
+  def a3 = { env: Env =>
     val repository = StatisticsRepository.memory
     reported(env.setStatisticRepository(repository))
     val ex2 = spec().fragments.fragments(3)
     repository.previousResult(spec().specClassName, ex2.description) must beOk(beSome((_: Result).isFailure must beTrue))
   }
 
-  def a5 = { env: Env =>
+  def a4 = { env: Env =>
     reported(env).map(_.copy(timer = Stats.empty.timer)) must beSome(Stats(examples = 3, successes = 2, expectations = 3, failures= 1))
   }
 
