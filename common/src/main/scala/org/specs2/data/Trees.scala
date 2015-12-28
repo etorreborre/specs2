@@ -38,19 +38,19 @@ trait Trees { outer =>
    */
   def bottomUp[A, B](t: Tree[A], f: ((A, Stream[B]) => B)): Tree[B] = {
     val tbs = t.subForest.map(t => bottomUp(t, f))
-    node(f(t.rootLabel, tbs.map(_.rootLabel)), tbs)
+    Node(f(t.rootLabel, tbs.map(_.rootLabel)), tbs)
   }
   /**
    * remove None nodes from a tree
    */
-  def clean[A](t: Tree[Option[A]])(implicit initial: A): Tree[A] = prune(t, (a: Option[A]) => a).getOrElse(leaf(initial))
+  def clean[A](t: Tree[Option[A]])(implicit initial: A): Tree[A] = prune(t, (a: Option[A]) => a).getOrElse(Leaf(initial))
   /**
    * remove nodes from a tree if they are None according to a function f
    */
   def prune[A, B](t: Tree[A], f: A => Option[B]): Option[Tree[B]] = {
     val tbs = t.subForest.flatMap(t => prune(t, f))
     f(t.rootLabel).map { root =>
-      node(root, tbs)
+      Node(root, tbs)
     }
   }
   /**
@@ -58,7 +58,7 @@ trait Trees { outer =>
    */
   def prune[A](t: Tree[A], f: Tree[A] => Option[A])(implicit initial: A): Tree[A] = t.cobind(f).clean
 
-  def flattenSubForests[A](tree: Tree[A]): Tree[A] = node(tree.rootLabel, tree.flattenLeft.drop(1).map(leaf(_)))
+  def flattenSubForests[A](tree: Tree[A]): Tree[A] = Node(tree.rootLabel, tree.flattenLeft.drop(1).map(Leaf(_)))
 
   /**
    * flatten the tree using a foldLeft to avoid SOF
@@ -77,9 +77,9 @@ trait Trees { outer =>
     def size = outer.size(t)
     def getParent = t.parent.getOrElse(t)
     def updateLabel(f: T => T) = t.setLabel(f(t.getLabel))
-    def addChild(c: T) = t.insertDownLast(leaf(c)).getParent
-    def addFirstChild(c: T) = t.insertDownFirst(leaf(c)).getParent
-    def insertDownLast(c: T) = t.insertDownLast(leaf(c))
+    def addChild(c: T) = t.insertDownLast(Leaf(c)).getParent
+    def addFirstChild(c: T) = t.insertDownFirst(Leaf(c)).getParent
+    def insertDownLast(c: T) = t.insertDownLast(Leaf(c))
   }
 
   /**
