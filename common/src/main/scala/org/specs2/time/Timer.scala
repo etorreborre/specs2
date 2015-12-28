@@ -36,7 +36,7 @@ trait HmsTimer[T <: HmsTimer[T]] {
     copy((elapsedTimes ++ t.elapsedTimes).filterNot(_ == 0), startedTimestamps ++ t.startedTimestamps)
 
   /** @return true if this timer has been started */
-  def isStarted = !startedTimestamps.isEmpty
+  def isStarted = startedTimestamps.nonEmpty
   /** @return true if this timer has never been started */
   def neverStarted = !isStarted && elapsedTimes.isEmpty
 
