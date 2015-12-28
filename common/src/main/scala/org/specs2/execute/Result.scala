@@ -3,7 +3,6 @@ package execute
 
 import control.Throwablex
 import control.Throwablex._
-import text.NotNullStrings._
 import main.Arguments
 import scalaz.Scalaz._
 import scalaz.Monoid

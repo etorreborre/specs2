@@ -1,8 +1,6 @@
 package org.specs2
 package main
 
-import control.Exceptions._
-import text._
 import execute.{AsResult, BestMatching}
 import control.Exceptions._
 import text._
