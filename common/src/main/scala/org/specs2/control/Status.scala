@@ -35,7 +35,7 @@ sealed trait Status[+A] {
                                fail: String => X,
                                exception: Throwable => X,
                                both: (String, Throwable) => X): X =
-    fold(ok, _ match {
+    fold(ok, {
       case This(m) => fail(m)
       case That(e) => exception(e)
       case Both(m, e) => both(m, e)

@@ -69,27 +69,25 @@ trait Classes {
    */
   def createInstanceEither[T <: AnyRef](className: String, loader: ClassLoader, defaultInstances: List[AnyRef] = Nil)(implicit m: ClassTag[T]): Action[Throwable \/ T] =
     Actions.reader { configuration  =>
-      loadClassEither(className, loader).map { throwableOrClass: Throwable \/ Class[T] =>
-        throwableOrClass match {
-         case -\/(t)     => Actions.ok[Throwable \/ T](-\/(t))
-         case \/-(klass) =>
-           val constructors = klass.getDeclaredConstructors.toList.filter(_.getParameterTypes.size <= 1).sortBy(_.getParameterTypes.size)
+      loadClassEither[T](className, loader).map {
+        case -\/(t)     => Actions.ok[Throwable \/ T](-\/(t))
+        case \/-(klass) =>
+          val constructors = klass.getDeclaredConstructors.toList.filter(_.getParameterTypes.size <= 1).sortBy(_.getParameterTypes.size)
 
-           if (constructors.isEmpty)
-             Actions.ok[Throwable \/ T](-\/(new Exception("Can't find a constructor for class "+klass.getName)))
-           else {
-             // how to get the first successful action?
-             val results = constructors.map { constructor =>
-               createInstanceForConstructor(klass, constructor, loader, defaultInstances).execute(configuration).unsafePerformIO
-             }
-             val result: Action[Throwable \/ T] =
-               results
-                 .find(_.isOk)
-                 .cata(Actions.fromStatusAsDisjunction[T],
-                   results.map(Actions.fromStatusAsDisjunction).headOption.getOrElse(Actions.ok[Throwable \/ T](-\/(new Exception("no cause")))))
-             result
-           }
-         }
+          if (constructors.isEmpty)
+            Actions.ok[Throwable \/ T](-\/(new Exception("Can't find a constructor for class "+klass.getName)))
+          else {
+            // how to get the first successful action?
+            val results = constructors.map { constructor =>
+              createInstanceForConstructor(klass, constructor, loader, defaultInstances).execute(configuration).unsafePerformIO
+            }
+            val result: Action[Throwable \/ T] =
+              results
+                .find(_.isOk)
+                .cata(Actions.fromStatusAsDisjunction[T],
+                  results.map(Actions.fromStatusAsDisjunction).headOption.getOrElse(Actions.ok[Throwable \/ T](-\/(new Exception("no cause")))))
+            result
+          }
       }.flatMap[Throwable \/ T](identity)
     }.flatMap[Throwable \/ T](identity)
 
