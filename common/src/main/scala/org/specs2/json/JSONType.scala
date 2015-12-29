@@ -50,7 +50,7 @@ object JSONFormat {
    * provide your own with the toString calls on
    * JSONObject and JSONArray instances.
    */
-  val defaultFormatter : ValueFormatter = (x : Any) => x match {
+  val defaultFormatter : ValueFormatter = {
     case s : String => "\"" + quoteString(s) + "\""
     case jo : JSONObject => jo.toString(defaultFormatter)
     case ja : JSONArray => ja.toString(defaultFormatter)

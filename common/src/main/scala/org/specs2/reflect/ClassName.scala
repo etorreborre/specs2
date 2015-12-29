@@ -1,7 +1,6 @@
 package org.specs2
 package reflect
 
-import control.Exceptions._
 import scala.reflect.NameTransformer
 import control.Exceptions._
 import text.CamelCase._

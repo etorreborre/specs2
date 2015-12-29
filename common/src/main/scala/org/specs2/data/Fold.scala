@@ -2,13 +2,12 @@ package org.specs2
 package data
 
 import io.FilePath
-import foldm._, FoldM._, stream._, FoldProcessM._, FoldableProcessM._
+import foldm._, stream._, FoldProcessM._, FoldableProcessM._
 import scalaz._, Scalaz._
 import scalaz.concurrent.Task
 import scalaz.stream._
 import scalaz.stream.text._
 import Process._
-import Task._
 
 /**
  * Utility functions for folds
@@ -32,5 +31,3 @@ object Fold {
     sinks.suml.run[ProcessTask](process)
 
 }
-
-

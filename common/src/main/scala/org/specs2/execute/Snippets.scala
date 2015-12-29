@@ -6,7 +6,6 @@ import text.NotNullStrings._
 import text.Trim._
 import scala.reflect.runtime.universe._
 import reflect._
-import MacroContext._
 import Snippet._
 
 /**

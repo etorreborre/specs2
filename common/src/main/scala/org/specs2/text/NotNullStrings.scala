@@ -116,11 +116,10 @@ trait NotNullStrings {
   }
 
   // display pairs nicely
-  val notNullPair: Any => String = (a: Any) =>
-    a match {
-      case (k, v) => s"$k -> $v"
-      case _      => a.notNull
-    }
+  val notNullPair: Any => String = {
+    case (k, v) => s"$k -> $v"
+    case a      => a.notNull
+  }
 }
 
 private[specs2]
