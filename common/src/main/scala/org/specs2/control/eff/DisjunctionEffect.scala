@@ -13,11 +13,11 @@ object DisjunctionEffect {
 
   /** create a failed value */
   def left[R, E, A](e: E)(implicit member: Member[(E \/ ?), R]): Eff[R, A] =
-    impure(member.inject(-\/(e)), Arrs.singleton((a: A) => EffMonad[R].point(a)))
+    send[E \/ ?, R, A](-\/(e))
 
   /** create a correct value */
   def right[R, E, A](a: A)(implicit member: Member[(E \/ ?), R]): Eff[R, A] =
-    impure(member.inject(\/-(a)), Arrs.singleton((a: A) => EffMonad[R].point(a)))
+    send[E \/ ?, R, A](\/-(a))
 
   /** run the disjunction effect, yielding E \/ A */
   def runDisjunction[R <: Effects, E, A](r: Eff[(E \/ ?) |: R, A]): Eff[R, E \/ A] = {

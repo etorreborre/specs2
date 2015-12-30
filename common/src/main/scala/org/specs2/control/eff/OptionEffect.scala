@@ -13,11 +13,11 @@ object OptionEffect {
 
   /** no value returned */
   def none[R, A](implicit member: Member[Option[?], R]): Eff[R, A] =
-    impure(member.inject(None), Arrs.singleton((a: A) => EffMonad[R].point(a)))
+    send[Option, R, A](None)
 
   /** a value is returned */
   def some[R, A](a: A)(implicit member: Member[Option[?], R]): Eff[R, A] =
-    impure(member.inject(Some(a)), Arrs.singleton((a: A) => EffMonad[R].point(a)))
+    send[Option, R, A](Some(a))
 
   /**
    * Interpret the Option effect

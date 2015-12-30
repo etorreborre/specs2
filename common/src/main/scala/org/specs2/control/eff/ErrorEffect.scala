@@ -30,11 +30,11 @@ trait ErrorEffect[F] { outer =>
 
   /** create an Eff value from a computation */
   def ok[R, A](a: =>A)(implicit m: ErrorOrOk <= R): Eff[R, A] =
-    impure(m.inject(\/-(Name(a))), Arrs.singleton((a: A) => EffMonad[R].point(a)))
+    send[ErrorOrOk, R, A](\/-(Name(a)))
 
   /** create an Eff value from an error */
   def error[R, A](error: Error)(implicit m: ErrorOrOk <= R): Eff[R, A] =
-    impure(m.inject(-\/(error)), Arrs.singleton((a: A) => EffMonad[R].point(a)))
+    send[ErrorOrOk, R, A](-\/(error))
 
   /** create an Eff value from a failure */
   def fail[R, A](failure: F)(implicit m: ErrorOrOk <= R): Eff[R, A] =

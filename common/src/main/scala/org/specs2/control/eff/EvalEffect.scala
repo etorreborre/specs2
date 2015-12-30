@@ -22,7 +22,7 @@ object EvalEffect {
     pure(a)
 
   def delay[R, A](a: =>A)(implicit m: Member[Eval, R]): Eff[R, A] =
-    impure(m.inject(Name(a)), Arrs.singleton((a: A) => EffMonad[R].point(a)))
+    send(Name(a))
 
   def evalIO[R, A](a: IO[A])(implicit m: Member[Eval, R]): Eff[R, A] =
     delay(a.unsafePerformIO)

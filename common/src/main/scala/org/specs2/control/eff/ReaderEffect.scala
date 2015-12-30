@@ -20,7 +20,7 @@ object ReaderEffect {
 
   /** get the environment */
   def ask[R, I](implicit member: Member[Reader[I, ?], R]): Eff[R, I] =
-    impure(member.inject(Reader(identity _)), Arrs.singleton((i: I) => EffMonad[R].point(i)))
+    send[Reader[I, ?], R, I](Reader(identity _))
 
   /** interpret the Reader effect by providing an environment when required */
   def runReader[R <: Effects, A, B](env: A)(r: Eff[Reader[A, ?] |: R, B]): Eff[R, B] = {

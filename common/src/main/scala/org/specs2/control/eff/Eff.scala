@@ -72,7 +72,7 @@ object Eff {
 
   /** create an Eff[R, A] value from an effectful value of type T[V] provided that T is one of the effects of R */
   def send[T[_], R, V](tv: T[V])(implicit member: Member[T, R]): Eff[R, V] =
-    impure(member.inject(tv), Arrs.singleton((v: V) => EffMonad[R].point(v)))
+    impure(member.inject(tv), Arrs.unit)
 
   /** create an Eff value for () */
   def unit[R]: Eff[R, Unit] =
@@ -227,6 +227,9 @@ case class Arrs[R, A, B](functions: Vector[Any => Eff[R, Any]]) {
     @tailrec
     def go(fs: Vector[Any => Eff[R, Any]], v: Any): Eff[R, B] = {
       fs match {
+        case Vector() =>
+          Eff.EffMonad[R].point(v).asInstanceOf[Eff[R, B]]
+
         case Vector(f) =>
           f(v).asInstanceOf[Eff[R, B]]
 
@@ -250,4 +253,8 @@ object Arrs {
   /** create an Arrs function from a single monadic function */
   def singleton[R, A, B](f: A => Eff[R, B]): Arrs[R, A, B] =
     Arrs(Vector(f.asInstanceOf[Any => Eff[R, Any]]))
+
+  /** create an Arrs function with no effect, which is similar to using an identity a => EffMonad[R].point(a) */
+  def unit[R, A]: Arrs[R, A, A] =
+    Arrs(Vector())
 }
