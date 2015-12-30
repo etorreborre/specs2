@@ -315,9 +315,9 @@ Scala 2.10 brings a new feature to the language: String interpolation. But the b
       This is a specification to check the 'Hello world' string
 
       The 'Hello world' string should
-        contain 11 characters              $e1
-        start with 'Hello'                 $e2
-        end with 'world'                   $e3
+        contain 11 characters              $$e1
+        start with 'Hello'                 $$e2
+        end with 'world'                   $$e3
                                            $triple
 
       def e1 = "Hello world" must have size(11)
@@ -335,8 +335,6 @@ Scala 2.10 brings a new feature to the language: String interpolation. But the b
   include(xonly, context)                                                                                                  ^
                                                                                                                            end
 
-
-  val (e1, e2, e3) = ("$e1", "$e2", "$e3")
 
   val chaining = new Specification { def is =  args(color=false) ^
     "my example on strings" ! e1             // will fail

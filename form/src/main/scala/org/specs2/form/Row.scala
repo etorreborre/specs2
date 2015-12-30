@@ -8,13 +8,13 @@ import StandardResults._
 import ResultLogicalCombinators._
 /**
  * A Row is a non-empty list of Cells
- * 
+ *
  * A Row can be executed by executing each Cell and collecting the results.
  */
 case class Row(private val cellList: NonEmptyList[Cell]) extends Executable {
   /** @return all the cells */
-  def cells = cellList.list.toSeq
-  
+  def cells = cellList.list.toList
+
   /** @return a Row where every cell is executed with a Success */
   def setSuccess = setResult(success)
   /** @return a Row where every cell is executed with a Failure */
@@ -26,7 +26,7 @@ case class Row(private val cellList: NonEmptyList[Cell]) extends Executable {
   /** @return a Row where every cell is executed with a specified Result */
   def setResult(r: Result) = new Row(cellList.map(_.setResult(r)))
 
-  /** 
+  /**
    * execute all cells
    * @return a logical `and` on all results
    */
@@ -54,7 +54,7 @@ case class Row(private val cellList: NonEmptyList[Cell]) extends Executable {
   }
 
   /** append a new Cell */
-  def add(cell: Cell) = copy(cellList = cellList :::> List(cell))
+  def add(cell: Cell) = copy(cellList = cellList.append(nels(cell, List():_*)))
 
   override def equals(a: Any) = a match {
     case Row(c) => cells == c.list
@@ -69,9 +69,9 @@ case object Row {
   /**
    * create a row from cells
    */
-  def tr(c1: Cell, cs: Cell*) = Row(nel(c1, cs.toList))
+  def tr(c1: Cell, cs: Cell*) = Row(nels(c1, cs.toList:_*))
   /**
    * create a row from cells
    */
-  def tr(cs: Seq[Cell]) = Row(nel(cs.head, cs.drop(1).toList))
+  def tr(cs: Seq[Cell]) = Row(nels(cs.head, cs.drop(1).toList:_*))
 }

@@ -29,13 +29,13 @@ import ScoverageKeys._
 object build extends Build {
   type Settings = Def.Setting[_]
 
-  lazy val SCALAZ_VERSION = "7.1.0"
+  lazy val SCALAZ_VERSION = "7.2.0"
 
   /** MAIN PROJECT */
   lazy val specs2 = Project(
     id = "specs2",
     base = file("."),
-    settings = 
+    settings =
       moduleSettings           ++
       siteSettings             ++
       releaseSettings          ++
@@ -43,20 +43,20 @@ object build extends Build {
       compatibilitySettings    ++
       Seq(name := "specs2")
   ).aggregate(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock, tests)
-  
+
   /** COMMON SETTINGS */
   lazy val specs2Settings: Seq[Settings] = Seq(
     organization := "org.specs2",
     specs2Version in GlobalScope <<= version,
     specs2ShellPrompt,
     scalazVersion := SCALAZ_VERSION,
-    scalaVersion := "2.11.5",
-    crossScalaVersions := Seq(scalaVersion.value, "2.10.4"))
+    scalaVersion := "2.11.7",
+    crossScalaVersions := Seq(scalaVersion.value, "2.10.6"))
 
   lazy val specs2Version = settingKey[String]("defines the current specs2 version")
   lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
-  lazy val paradisePlugin = Seq(compilerPlugin("org.scalamacros" %% "paradise"    % "2.0.0" cross CrossVersion.full),
-                                               "org.scalamacros" %% "quasiquotes" % "2.0.0")
+  lazy val paradisePlugin = Seq(compilerPlugin("org.scalamacros" %% "paradise"    % "2.0.1" cross CrossVersion.full),
+                                               "org.scalamacros" %% "quasiquotes" % "2.0.1")
 
   lazy val aggregateCompile = ScopeFilter(
              inProjects(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock),
@@ -66,8 +66,8 @@ object build extends Build {
              inProjects(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock, guide, examples),
              inConfigurations(Test))
 
-  lazy val resolversSettings = resolvers ++= 
-    Seq(Resolver.sonatypeRepo("releases"), 
+  lazy val resolversSettings = resolvers ++=
+    Seq(Resolver.sonatypeRepo("releases"),
         Resolver.sonatypeRepo("snapshots"),
         Resolver.typesafeRepo("releases"),
         "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases")
@@ -78,13 +78,20 @@ object build extends Build {
           buildInfoObject <<= name (n => n.replace("specs2-", "").replace("-", "").capitalize +"BuildInfo"),
           buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, "commit" -> commit, "datetime" -> datetime),
           buildInfoPackage := "org.specs2",
-          unmanagedSourceDirectories in Compile += (sourceDirectory in Compile).value / s"scala-scalaz-${scalazVersion.value}")
+          unmanagedSourceDirectories in Compile ++=
+      Seq((sourceDirectory in Compile).value / s"scala-${scalaBinaryVersion.value}",
+          if (scalazVersion.value.startsWith("7.1")) (sourceDirectory in Compile).value / s"scala-scalaz-7.1.x"
+          else                                       (sourceDirectory in Compile).value / s"scala-scalaz-7.2.x",
+          if (scalazVersion.value.startsWith("7.0")) (sourceDirectory in (Test, test)).value / s"scala-scalaz-7.1.x"
+          else                                       (sourceDirectory in (Test, test)).value / s"scala-scalaz-7.2.x"))
+
+
 
   def commit = Process(s"git log --pretty=format:%h -n 1").lines.head
 
   def datetime = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss Z").format(new Date)
 
-  lazy val moduleSettings: Seq[Settings] = 
+  lazy val moduleSettings: Seq[Settings] =
       buildSettings        ++
       specs2Settings       ++
       resolversSettings    ++
@@ -122,6 +129,18 @@ object build extends Build {
             "org.scalaz"     %% "scalaz-concurrent" % scalazVersion.value,
             "org.scala-lang" %  "scala-reflect"     % scalaVersion.value,
             scalacheckLib % "test")) ++
+      // from https://github.com/scala/scala-module-dependency-sample
+      Seq(libraryDependencies := {
+        CrossVersion.partialVersion(scalaVersion.value) match {
+          // if scala 2.11+ is used, add dependency on scala-xml module
+          case Some((2, scalaMajor)) if scalaMajor >= 11 =>
+            libraryDependencies.value ++ Seq(
+              "org.scala-lang.modules" %% "scala-xml" % "1.0.3",
+              "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.3"
+            )
+          case _ => libraryDependencies.value
+        }
+      }) ++
       Seq(name := "specs2-common")
   )
 
@@ -217,16 +236,16 @@ object build extends Build {
   ).dependsOn(core % "compile->compile;test->test", matcherExtra, junit % "test->test", examples % "test->test")
 
   /**
-   * Main libraries 
+   * Main libraries
    */
   lazy val scalacheckLib = "org.scalacheck" %% "scalacheck"   % "1.12.1"
   lazy val mockitoLib    = "org.mockito"    % "mockito-core"  % "1.9.5"
   lazy val junitLib      = "junit"          % "junit"         % "4.11"
   lazy val hamcrestLib   = "org.hamcrest"   % "hamcrest-core" % "1.3"
 
-  lazy val specs2ShellPrompt = shellPrompt in ThisBuild := { state => 
+  lazy val specs2ShellPrompt = shellPrompt in ThisBuild := { state =>
     val name = Project.extract(state).currentRef.project
-    (if (name == "specs2") "" else name) + "> " 
+    (if (name == "specs2") "" else name) + "> "
   }
 
   lazy val compilationSettings: Seq[Settings] = Seq(
