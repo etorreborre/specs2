@@ -1,0 +1,19 @@
+Scalaz 7.2.0 version.
+
+This version is now depending on Scalaz 7.2.0 and will not be binary compatible if you don't also upgrade your code to use Scalaz 7.2.0. If you want to stay on Scalaz 7.1.6 you can use the `specs2-xxx-3.7-scalaz-7.1.6` jars.
+
+## Improvements
+
+ * added an aggregator pom file for specs2 [#445](http://github.com/etorreborre/specs2/issues/445)
+ * created better exception messages when a mutable spec can't be instantiated fixes [#446](http://github.com/etorreborre/specs2/issues/446) 
+ * updated the sbt script to use `0.13.9`
+ * updated the Scala 2.10 version to `2.10.6`
+ * return `Stats` from the `Reporter` in order to properly set the exit code for the `FilesRunner` [#445](http://github.com/etorreborre/specs2/issues/437)
+ * using the `Eff` monad instead of monad transformers to deal with effects (see the [Eff project](http://github.com/etorreborre/eff))
+ 
+## Fixes 
+
+ * User Guide: fixed the ribbon headers in the toc [#441](http://github.com/etorreborre/specs2/issues/441)
+ * JUnit: don't report testRun start/finish when using the JUnitCore runner [#440](http://github.com/etorreborre/specs2/issues/440)
+ * removed the implicit conversion from `String` to `ResultMonoid` [#439](http://github.com/etorreborre/specs2/issues/439)
+ 
