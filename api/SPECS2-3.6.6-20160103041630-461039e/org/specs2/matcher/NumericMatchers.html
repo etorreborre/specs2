@@ -1,0 +1,1247 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>NumericMatchers - org.specs2.matcher.NumericMatchers</title>
+          <meta name="description" content="NumericMatchers - org.specs2.matcher.NumericMatchers" />
+          <meta name="keywords" content="NumericMatchers org.specs2.matcher.NumericMatchers" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../index.html';
+            var hash = 'org.specs2.matcher.NumericMatchers';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="type">
+      <div id="definition">
+        <a href="NumericMatchers$.html" title="See companion object"><img alt="Trait/Object" src="../../../lib/trait_to_object_big.png" /></a>
+        <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.specs2">specs2</a>.<a href="package.html" class="extype" name="org.specs2.matcher">matcher</a></p>
+        <h1><a href="NumericMatchers$.html" title="See companion object">NumericMatchers</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="NumericMatchers$.html" title="See companion object">object NumericMatchers</a>
+            | <a href="package.html" class="extype" name="org.specs2.matcher">package matcher</a>
+          </div></span></h3><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <span class="name">NumericMatchers</span><span class="result"> extends <span class="extype" name="org.specs2.matcher.NumericBaseMatchers">NumericBaseMatchers</span> with <span class="extype" name="org.specs2.matcher.NumericBeHaveMatchers">NumericBeHaveMatchers</span></span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Matchers for Numerical values
+</p></div><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="org.specs2.matcher.NumericBeHaveMatchers">NumericBeHaveMatchers</span>, <span class="extype" name="org.specs2.matcher.BeHaveMatchers">BeHaveMatchers</span>, <span class="extype" name="org.specs2.matcher.NumericBaseMatchers">NumericBaseMatchers</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div><div class="toggleContainer block">
+            <span class="toggle">Known Subclasses</span>
+            <div class="subClasses hiddenContent"><a href="../form/Card.html" class="extype" name="org.specs2.form.Card">Card</a>, <a href="JUnitMustMatchers.html" class="extype" name="org.specs2.matcher.JUnitMustMatchers">JUnitMustMatchers</a>, <a href="JUnitMustMatchers$.html" class="extype" name="org.specs2.matcher.JUnitMustMatchers">JUnitMustMatchers</a>, <a href="JUnitShouldMatchers.html" class="extype" name="org.specs2.matcher.JUnitShouldMatchers">JUnitShouldMatchers</a>, <a href="JUnitShouldMatchers$.html" class="extype" name="org.specs2.matcher.JUnitShouldMatchers">JUnitShouldMatchers</a>, <a href="Matchers$.html" class="extype" name="org.specs2.matcher.Matchers">Matchers</a>, <a href="Matchers.html" class="extype" name="org.specs2.matcher.Matchers">Matchers</a>, <a href="MustMatchers.html" class="extype" name="org.specs2.matcher.MustMatchers">MustMatchers</a>, <a href="MustMatchers$.html" class="extype" name="org.specs2.matcher.MustMatchers">MustMatchers</a>, <a href="MustThrownMatchers$.html" class="extype" name="org.specs2.matcher.MustThrownMatchers">MustThrownMatchers</a>, <a href="MustThrownMatchers.html" class="extype" name="org.specs2.matcher.MustThrownMatchers">MustThrownMatchers</a>, <a href="NumericMatchers$.html" class="extype" name="org.specs2.matcher.NumericMatchers">NumericMatchers</a>, <a href="ShouldMatchers.html" class="extype" name="org.specs2.matcher.ShouldMatchers">ShouldMatchers</a>, <a href="ShouldMatchers$.html" class="extype" name="org.specs2.matcher.ShouldMatchers">ShouldMatchers</a>, <a href="ShouldThrownMatchers.html" class="extype" name="org.specs2.matcher.ShouldThrownMatchers">ShouldThrownMatchers</a>, <a href="ShouldThrownMatchers$.html" class="extype" name="org.specs2.matcher.ShouldThrownMatchers">ShouldThrownMatchers</a>, <a href="../Specification.html" class="extype" name="org.specs2.Specification">Specification</a>, <a href="../mutable/Specification.html" class="extype" name="org.specs2.mutable.Specification">Specification</a>, <a href="../specification/script/Specification.html" class="extype" name="org.specs2.specification.script.Specification">Specification</a>, <a href="../mutable/script/Specification.html" class="extype" name="org.specs2.mutable.script.Specification">Specification</a>, <a href="../specification/mutable/SpecificationFeatures.html" class="extype" name="org.specs2.specification.mutable.SpecificationFeatures">SpecificationFeatures</a>, <a href="../specification/SpecificationFeatures.html" class="extype" name="org.specs2.specification.SpecificationFeatures">SpecificationFeatures</a>, <a href="../mutable/SpecificationLike.html" class="extype" name="org.specs2.mutable.SpecificationLike">SpecificationLike</a>, <a href="../specification/script/SpecificationLike.html" class="extype" name="org.specs2.specification.script.SpecificationLike">SpecificationLike</a>, <a href="../SpecificationLike.html" class="extype" name="org.specs2.SpecificationLike">SpecificationLike</a>, <a href="../mutable/script/SpecificationLike.html" class="extype" name="org.specs2.mutable.script.SpecificationLike">SpecificationLike</a>, <a href="../mutable/SpecificationWithJUnit.html" class="extype" name="org.specs2.mutable.SpecificationWithJUnit">SpecificationWithJUnit</a>, <a href="../SpecificationWithJUnit.html" class="extype" name="org.specs2.SpecificationWithJUnit">SpecificationWithJUnit</a></div>
+          </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="org.specs2.matcher.NumericMatchers"><span>NumericMatchers</span></li><li class="in" name="org.specs2.matcher.NumericBeHaveMatchers"><span>NumericBeHaveMatchers</span></li><li class="in" name="org.specs2.matcher.BeHaveMatchers"><span>BeHaveMatchers</span></li><li class="in" name="org.specs2.matcher.NumericBaseMatchers"><span>NumericBaseMatchers</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="org.specs2.matcher.NumericBeHaveMatchers.NeutralMatcherNumeric" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="NeutralMatcherNumericextendsAnyRef"></a>
+      <a id="NeutralMatcherNumeric:(NumericBeHaveMatchers.this)#NeutralMatcherNumeric"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">NeutralMatcherNumeric</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@NeutralMatcherNumericextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBeHaveMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericBeHaveMatchers.NeutralMatcherOrdered" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="NeutralMatcherOrderedextendsAnyRef"></a>
+      <a id="NeutralMatcherOrdered:(NumericBeHaveMatchers.this)#NeutralMatcherOrdered"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">NeutralMatcherOrdered</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@NeutralMatcherOrderedextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBeHaveMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericBeHaveMatchers.NumericResultMatcher" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="NumericResultMatcher[S]extendsAnyRef"></a>
+      <a id="NumericResultMatcher[S]:(NumericBeHaveMatchers.this)#NumericResultMatcher[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">NumericResultMatcher</span><span class="tparams">[<span name="S">S</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@NumericResultMatcher[S]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBeHaveMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericBeHaveMatchers.OrderedResultMatcher" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="OrderedResultMatcher[S]extendsAnyRef"></a>
+      <a id="OrderedResultMatcher[S]:(NumericBeHaveMatchers.this)#OrderedResultMatcher[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">OrderedResultMatcher</span><span class="tparams">[<span name="S">S</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@OrderedResultMatcher[S]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBeHaveMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericMatchers.SignificantFiguresSyntax" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SignificantFiguresSyntaxextendsAnyRef"></a>
+      <a id="SignificantFiguresSyntax:SignificantFiguresSyntax"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="NumericMatchers$SignificantFiguresSyntax.html"><span class="name">SignificantFiguresSyntax</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@SignificantFiguresSyntaxextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">implicit definition to create significant figures for the beCloseTo matcher</p>
+    </li><li name="org.specs2.matcher.NumericMatchers.SignificantSyntax" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SignificantSyntax[N]extendsAnyRef"></a>
+      <a id="SignificantSyntax[N]:SignificantSyntax[N]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="NumericMatchers$SignificantSyntax.html"><span class="name">SignificantSyntax</span></a><span class="tparams">[<span name="N">N</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@SignificantSyntax[N]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">implicit definition to create significant figures for the beCloseTo matcher</p>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@##():Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericBaseMatchers#&lt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;[S](n:S)(implicitevidence$10:S=&gt;Ordered[S]):org.specs2.matcher.BeLessThan[S]"></a>
+      <a id="&lt;[S](S)((S)⇒Ordered[S]):BeLessThan[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $less" class="name">&lt;</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="n">n: <span class="extype" name="org.specs2.matcher.NumericBaseMatchers.&lt;.S">S</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: (<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.&lt;.S">S</span>) ⇒ <span class="extype" name="scala.Ordered">Ordered</span>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.&lt;.S">S</span>]</span>)</span><span class="result">: <a href="BeLessThan.html" class="extype" name="org.specs2.matcher.BeLessThan">BeLessThan</a>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.&lt;.S">S</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@&lt;[S](n:S)(implicitevidence$10:S=&gt;Ordered[S]):org.specs2.matcher.BeLessThan[S]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">alias for beLessThan</p><div class="fullcomment"><div class="comment cmt"><p>alias for beLessThan</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBaseMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericBaseMatchers#&lt;=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;=[S](n:S)(implicitevidence$6:S=&gt;Ordered[S]):org.specs2.matcher.BeLessThanOrEqualTo[S]"></a>
+      <a id="&lt;=[S](S)((S)⇒Ordered[S]):BeLessThanOrEqualTo[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $less$eq" class="name">&lt;=</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="n">n: <span class="extype" name="org.specs2.matcher.NumericBaseMatchers.&lt;=.S">S</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: (<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.&lt;=.S">S</span>) ⇒ <span class="extype" name="scala.Ordered">Ordered</span>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.&lt;=.S">S</span>]</span>)</span><span class="result">: <a href="BeLessThanOrEqualTo.html" class="extype" name="org.specs2.matcher.BeLessThanOrEqualTo">BeLessThanOrEqualTo</a>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.&lt;=.S">S</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@&lt;=[S](n:S)(implicitevidence$6:S=&gt;Ordered[S]):org.specs2.matcher.BeLessThanOrEqualTo[S]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">alias for beLessThanOrEqualTo</p><div class="fullcomment"><div class="comment cmt"><p>alias for beLessThanOrEqualTo</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBaseMatchers</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericBaseMatchers#&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&gt;[S](n:S)(implicitevidence$18:S=&gt;Ordered[S]):org.specs2.matcher.Matcher[S]"></a>
+      <a id="&gt;[S](S)((S)⇒Ordered[S]):Matcher[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $greater" class="name">&gt;</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="n">n: <span class="extype" name="org.specs2.matcher.NumericBaseMatchers.&gt;.S">S</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: (<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.&gt;.S">S</span>) ⇒ <span class="extype" name="scala.Ordered">Ordered</span>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.&gt;.S">S</span>]</span>)</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.&gt;.S">S</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@&gt;[S](n:S)(implicitevidence$18:S=&gt;Ordered[S]):org.specs2.matcher.Matcher[S]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">alias for beGreaterThan</p><div class="fullcomment"><div class="comment cmt"><p>alias for beGreaterThan</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBaseMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericBaseMatchers#&gt;=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&gt;=[S](n:S)(implicitevidence$14:S=&gt;Ordered[S]):org.specs2.matcher.Matcher[S]"></a>
+      <a id="&gt;=[S](S)((S)⇒Ordered[S]):Matcher[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $greater$eq" class="name">&gt;=</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="n">n: <span class="extype" name="org.specs2.matcher.NumericBaseMatchers.&gt;=.S">S</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: (<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.&gt;=.S">S</span>) ⇒ <span class="extype" name="scala.Ordered">Ordered</span>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.&gt;=.S">S</span>]</span>)</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.&gt;=.S">S</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@&gt;=[S](n:S)(implicitevidence$14:S=&gt;Ordered[S]):org.specs2.matcher.Matcher[S]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">alias for beGreaterThanOrEqualTo</p><div class="fullcomment"><div class="comment cmt"><p>alias for beGreaterThanOrEqualTo</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBaseMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericMatchers#ToDelta" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ToDelta[S](n:S)(implicitevidence$1:Numeric[S]):org.specs2.matcher.CanHaveDelta[S]"></a>
+      <a id="ToDelta[S](S)(Numeric[S]):CanHaveDelta[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ToDelta</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="n">n: <span class="extype" name="org.specs2.matcher.NumericMatchers.ToDelta.S">S</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Numeric">Numeric</span>[<span class="extype" name="org.specs2.matcher.NumericMatchers.ToDelta.S">S</span>]</span>)</span><span class="result">: <a href="CanHaveDelta.html" class="extype" name="org.specs2.matcher.CanHaveDelta">CanHaveDelta</a>[<span class="extype" name="org.specs2.matcher.NumericMatchers.ToDelta.S">S</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@ToDelta[S](n:S)(implicitevidence$1:Numeric[S]):org.specs2.matcher.CanHaveDelta[S]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">implicit definition to create delta for the beCloseTo matcher</p>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="org.specs2.matcher.BeHaveMatchers#be" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="be:org.specs2.matcher.NeutralMatcher[Any]"></a>
+      <a id="be:NeutralMatcher[Any]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">be</span><span class="result">: <a href="NeutralMatcher.html" class="extype" name="org.specs2.matcher.NeutralMatcher">NeutralMatcher</a>[<span class="extype" name="scala.Any">Any</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@be:org.specs2.matcher.NeutralMatcher[Any]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>BeHaveMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericBaseMatchers#beBetween" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="beBetween[T](t1:T,t2:T)(implicitevidence$29:T=&gt;Ordered[T]):org.specs2.matcher.BetweenMatcher[T]"></a>
+      <a id="beBetween[T](T,T)((T)⇒Ordered[T]):BetweenMatcher[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">beBetween</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="t1">t1: <span class="extype" name="org.specs2.matcher.NumericBaseMatchers.beBetween.T">T</span></span>, <span name="t2">t2: <span class="extype" name="org.specs2.matcher.NumericBaseMatchers.beBetween.T">T</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: (<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.beBetween.T">T</span>) ⇒ <span class="extype" name="scala.Ordered">Ordered</span>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.beBetween.T">T</span>]</span>)</span><span class="result">: <a href="BetweenMatcher.html" class="extype" name="org.specs2.matcher.BetweenMatcher">BetweenMatcher</a>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.beBetween.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@beBetween[T](t1:T,t2:T)(implicitevidence$29:T=&gt;Ordered[T]):org.specs2.matcher.BetweenMatcher[T]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">matches if a value is between 2 others according to an Ordering</p><div class="fullcomment"><div class="comment cmt"><p>matches if a value is between 2 others according to an Ordering</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBaseMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericBaseMatchers#beCloseTo" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="beCloseTo[S](target:org.specs2.matcher.SignificantTarget[S])(implicitevidence$26:Numeric[S]):org.specs2.matcher.Matcher[S]"></a>
+      <a id="beCloseTo[S](SignificantTarget[S])(Numeric[S]):Matcher[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">beCloseTo</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="target">target: <a href="SignificantTarget.html" class="extype" name="org.specs2.matcher.SignificantTarget">SignificantTarget</a>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.beCloseTo.S">S</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Numeric">Numeric</span>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.beCloseTo.S">S</span>]</span>)</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.beCloseTo.S">S</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@beCloseTo[S](target:org.specs2.matcher.SignificantTarget[S])(implicitevidence$26:Numeric[S]):org.specs2.matcher.Matcher[S]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBaseMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericBaseMatchers#beCloseTo" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="beCloseTo[S](target:S,figures:org.specs2.matcher.SignificantFigures)(implicitevidence$25:Numeric[S]):org.specs2.matcher.Matcher[S]"></a>
+      <a id="beCloseTo[S](S,SignificantFigures)(Numeric[S]):Matcher[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">beCloseTo</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="org.specs2.matcher.NumericBaseMatchers.beCloseTo.S">S</span></span>, <span name="figures">figures: <a href="SignificantFigures.html" class="extype" name="org.specs2.matcher.SignificantFigures">SignificantFigures</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Numeric">Numeric</span>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.beCloseTo.S">S</span>]</span>)</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.beCloseTo.S">S</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@beCloseTo[S](target:S,figures:org.specs2.matcher.SignificantFigures)(implicitevidence$25:Numeric[S]):org.specs2.matcher.Matcher[S]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">matches if target - actual &lt; 10 pow (log x - significantDigits)</p><div class="fullcomment"><div class="comment cmt"><p>matches if target - actual &lt; 10 pow (log x - significantDigits)</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBaseMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericBaseMatchers#beCloseTo" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="beCloseTo[S](delta:org.specs2.matcher.PlusOrMinus[S])(implicitevidence$21:Numeric[S]):org.specs2.matcher.Matcher[S]"></a>
+      <a id="beCloseTo[S](PlusOrMinus[S])(Numeric[S]):Matcher[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">beCloseTo</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="delta">delta: <a href="PlusOrMinus.html" class="extype" name="org.specs2.matcher.PlusOrMinus">PlusOrMinus</a>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.beCloseTo.S">S</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Numeric">Numeric</span>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.beCloseTo.S">S</span>]</span>)</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.beCloseTo.S">S</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@beCloseTo[S](delta:org.specs2.matcher.PlusOrMinus[S])(implicitevidence$21:Numeric[S]):org.specs2.matcher.Matcher[S]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">matches if x = n +/- delta</p><div class="fullcomment"><div class="comment cmt"><p>matches if x = n +/- delta</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBaseMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericBaseMatchers#beCloseTo" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="beCloseTo[S](n:S,delta:S)(implicitevidence$19:Numeric[S]):org.specs2.matcher.Matcher[S]"></a>
+      <a id="beCloseTo[S](S,S)(Numeric[S]):Matcher[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">beCloseTo</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="n">n: <span class="extype" name="org.specs2.matcher.NumericBaseMatchers.beCloseTo.S">S</span></span>, <span name="delta">delta: <span class="extype" name="org.specs2.matcher.NumericBaseMatchers.beCloseTo.S">S</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Numeric">Numeric</span>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.beCloseTo.S">S</span>]</span>)</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.beCloseTo.S">S</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@beCloseTo[S](n:S,delta:S)(implicitevidence$19:Numeric[S]):org.specs2.matcher.Matcher[S]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">matches if x = n +/- delta</p><div class="fullcomment"><div class="comment cmt"><p>matches if x = n +/- delta</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBaseMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericBaseMatchers#beGreaterThan" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="beGreaterThan[S](n:S)(implicitevidence$15:S=&gt;Ordered[S]):org.specs2.matcher.Matcher[S]"></a>
+      <a id="beGreaterThan[S](S)((S)⇒Ordered[S]):Matcher[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">beGreaterThan</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="n">n: <span class="extype" name="org.specs2.matcher.NumericBaseMatchers.beGreaterThan.S">S</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: (<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.beGreaterThan.S">S</span>) ⇒ <span class="extype" name="scala.Ordered">Ordered</span>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.beGreaterThan.S">S</span>]</span>)</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.beGreaterThan.S">S</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@beGreaterThan[S](n:S)(implicitevidence$15:S=&gt;Ordered[S]):org.specs2.matcher.Matcher[S]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">matches if x &gt; n</p><div class="fullcomment"><div class="comment cmt"><p>matches if x &gt; n</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBaseMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericBaseMatchers#beGreaterThanOrEqualTo" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="beGreaterThanOrEqualTo[S](n:S)(implicitevidence$11:S=&gt;Ordered[S]):org.specs2.matcher.Matcher[S]"></a>
+      <a id="beGreaterThanOrEqualTo[S](S)((S)⇒Ordered[S]):Matcher[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">beGreaterThanOrEqualTo</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="n">n: <span class="extype" name="org.specs2.matcher.NumericBaseMatchers.beGreaterThanOrEqualTo.S">S</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: (<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.beGreaterThanOrEqualTo.S">S</span>) ⇒ <span class="extype" name="scala.Ordered">Ordered</span>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.beGreaterThanOrEqualTo.S">S</span>]</span>)</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.beGreaterThanOrEqualTo.S">S</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@beGreaterThanOrEqualTo[S](n:S)(implicitevidence$11:S=&gt;Ordered[S]):org.specs2.matcher.Matcher[S]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">matches if x &gt;= n</p><div class="fullcomment"><div class="comment cmt"><p>matches if x &gt;= n</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBaseMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericBaseMatchers#beLessThan" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="beLessThan[S](n:S)(implicitevidence$7:S=&gt;Ordered[S]):org.specs2.matcher.BeLessThan[S]"></a>
+      <a id="beLessThan[S](S)((S)⇒Ordered[S]):BeLessThan[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">beLessThan</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="n">n: <span class="extype" name="org.specs2.matcher.NumericBaseMatchers.beLessThan.S">S</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: (<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.beLessThan.S">S</span>) ⇒ <span class="extype" name="scala.Ordered">Ordered</span>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.beLessThan.S">S</span>]</span>)</span><span class="result">: <a href="BeLessThan.html" class="extype" name="org.specs2.matcher.BeLessThan">BeLessThan</a>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.beLessThan.S">S</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@beLessThan[S](n:S)(implicitevidence$7:S=&gt;Ordered[S]):org.specs2.matcher.BeLessThan[S]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">matches if x &lt; n</p><div class="fullcomment"><div class="comment cmt"><p>matches if x &lt; n</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBaseMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericBaseMatchers#beLessThanOrEqualTo" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="beLessThanOrEqualTo[S](n:S)(implicitevidence$3:S=&gt;Ordered[S]):org.specs2.matcher.BeLessThanOrEqualTo[S]"></a>
+      <a id="beLessThanOrEqualTo[S](S)((S)⇒Ordered[S]):BeLessThanOrEqualTo[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">beLessThanOrEqualTo</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="n">n: <span class="extype" name="org.specs2.matcher.NumericBaseMatchers.beLessThanOrEqualTo.S">S</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: (<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.beLessThanOrEqualTo.S">S</span>) ⇒ <span class="extype" name="scala.Ordered">Ordered</span>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.beLessThanOrEqualTo.S">S</span>]</span>)</span><span class="result">: <a href="BeLessThanOrEqualTo.html" class="extype" name="org.specs2.matcher.BeLessThanOrEqualTo">BeLessThanOrEqualTo</a>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.beLessThanOrEqualTo.S">S</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@beLessThanOrEqualTo[S](n:S)(implicitevidence$3:S=&gt;Ordered[S]):org.specs2.matcher.BeLessThanOrEqualTo[S]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">matches if x &lt;= n</p><div class="fullcomment"><div class="comment cmt"><p>matches if x &lt;= n</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBaseMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericBaseMatchers#be[" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="be[[T](t1:T,t2:T)(implicitevidence$31:T=&gt;Ordered[T]):org.specs2.matcher.BetweenMatcher[T]"></a>
+      <a id="be[[T](T,T)((T)⇒Ordered[T]):BetweenMatcher[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: be$u005B" class="name">be[</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="t1">t1: <span class="extype" name="org.specs2.matcher.NumericBaseMatchers.be[.T">T</span></span>, <span name="t2">t2: <span class="extype" name="org.specs2.matcher.NumericBaseMatchers.be[.T">T</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: (<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.be[.T">T</span>) ⇒ <span class="extype" name="scala.Ordered">Ordered</span>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.be[.T">T</span>]</span>)</span><span class="result">: <a href="BetweenMatcher.html" class="extype" name="org.specs2.matcher.BetweenMatcher">BetweenMatcher</a>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.be[.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@be[[T](t1:T,t2:T)(implicitevidence$31:T=&gt;Ordered[T]):org.specs2.matcher.BetweenMatcher[T]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">alias for the adventurous: 5 must (<code>be[(2, 7)</code>[<code>)</code></p><div class="fullcomment"><div class="comment cmt"><p>alias for the adventurous: 5 must (<code>be[(2, 7)</code>[<code>)</code></p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBaseMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericBaseMatchers#be]" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="be][T](t1:T,t2:T)(implicitevidence$32:T=&gt;Ordered[T]):org.specs2.matcher.BetweenMatcher[T]"></a>
+      <a id="be][T](T,T)((T)⇒Ordered[T]):BetweenMatcher[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: be$u005D" class="name">be]</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="t1">t1: <span class="extype" name="org.specs2.matcher.NumericBaseMatchers.be].T">T</span></span>, <span name="t2">t2: <span class="extype" name="org.specs2.matcher.NumericBaseMatchers.be].T">T</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: (<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.be].T">T</span>) ⇒ <span class="extype" name="scala.Ordered">Ordered</span>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.be].T">T</span>]</span>)</span><span class="result">: <a href="BetweenMatcher.html" class="extype" name="org.specs2.matcher.BetweenMatcher">BetweenMatcher</a>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.be].T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@be][T](t1:T,t2:T)(implicitevidence$32:T=&gt;Ordered[T]):org.specs2.matcher.BetweenMatcher[T]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">alias for the adventurous: 5 must (<code>be](2, 7)</code>[<code>)</code></p><div class="fullcomment"><div class="comment cmt"><p>alias for the adventurous: 5 must (<code>be](2, 7)</code>[<code>)</code></p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBaseMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericBaseMatchers#be_&lt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="be_&lt;[S](n:S)(implicitevidence$9:S=&gt;Ordered[S]):org.specs2.matcher.BeLessThan[S]"></a>
+      <a id="be_&lt;[S](S)((S)⇒Ordered[S]):BeLessThan[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: be_$less" class="name">be_&lt;</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="n">n: <span class="extype" name="org.specs2.matcher.NumericBaseMatchers.be_&lt;.S">S</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: (<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.be_&lt;.S">S</span>) ⇒ <span class="extype" name="scala.Ordered">Ordered</span>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.be_&lt;.S">S</span>]</span>)</span><span class="result">: <a href="BeLessThan.html" class="extype" name="org.specs2.matcher.BeLessThan">BeLessThan</a>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.be_&lt;.S">S</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@be_&lt;[S](n:S)(implicitevidence$9:S=&gt;Ordered[S]):org.specs2.matcher.BeLessThan[S]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">alias for beLessThan</p><div class="fullcomment"><div class="comment cmt"><p>alias for beLessThan</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBaseMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericBaseMatchers#be_&lt;=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="be_&lt;=[S](n:S)(implicitevidence$5:S=&gt;Ordered[S]):org.specs2.matcher.BeLessThanOrEqualTo[S]"></a>
+      <a id="be_&lt;=[S](S)((S)⇒Ordered[S]):BeLessThanOrEqualTo[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: be_$less$eq" class="name">be_&lt;=</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="n">n: <span class="extype" name="org.specs2.matcher.NumericBaseMatchers.be_&lt;=.S">S</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: (<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.be_&lt;=.S">S</span>) ⇒ <span class="extype" name="scala.Ordered">Ordered</span>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.be_&lt;=.S">S</span>]</span>)</span><span class="result">: <a href="BeLessThanOrEqualTo.html" class="extype" name="org.specs2.matcher.BeLessThanOrEqualTo">BeLessThanOrEqualTo</a>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.be_&lt;=.S">S</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@be_&lt;=[S](n:S)(implicitevidence$5:S=&gt;Ordered[S]):org.specs2.matcher.BeLessThanOrEqualTo[S]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">alias for beLessThanOrEqualTo</p><div class="fullcomment"><div class="comment cmt"><p>alias for beLessThanOrEqualTo</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBaseMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericBaseMatchers#be_&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="be_&gt;[S](n:S)(implicitevidence$17:S=&gt;Ordered[S]):org.specs2.matcher.Matcher[S]"></a>
+      <a id="be_&gt;[S](S)((S)⇒Ordered[S]):Matcher[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: be_$greater" class="name">be_&gt;</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="n">n: <span class="extype" name="org.specs2.matcher.NumericBaseMatchers.be_&gt;.S">S</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: (<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.be_&gt;.S">S</span>) ⇒ <span class="extype" name="scala.Ordered">Ordered</span>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.be_&gt;.S">S</span>]</span>)</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.be_&gt;.S">S</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@be_&gt;[S](n:S)(implicitevidence$17:S=&gt;Ordered[S]):org.specs2.matcher.Matcher[S]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">alias for beGreaterThan</p><div class="fullcomment"><div class="comment cmt"><p>alias for beGreaterThan</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBaseMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericBaseMatchers#be_&gt;=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="be_&gt;=[S](n:S)(implicitevidence$13:S=&gt;Ordered[S]):org.specs2.matcher.Matcher[S]"></a>
+      <a id="be_&gt;=[S](S)((S)⇒Ordered[S]):Matcher[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: be_$greater$eq" class="name">be_&gt;=</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="n">n: <span class="extype" name="org.specs2.matcher.NumericBaseMatchers.be_&gt;=.S">S</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: (<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.be_&gt;=.S">S</span>) ⇒ <span class="extype" name="scala.Ordered">Ordered</span>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.be_&gt;=.S">S</span>]</span>)</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.be_&gt;=.S">S</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@be_&gt;=[S](n:S)(implicitevidence$13:S=&gt;Ordered[S]):org.specs2.matcher.Matcher[S]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">alias for beGreaterThanOrEqualTo</p><div class="fullcomment"><div class="comment cmt"><p>alias for beGreaterThanOrEqualTo</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBaseMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericBaseMatchers#between" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="between[T](t1:T,t2:T)(implicitevidence$30:T=&gt;Ordered[T]):org.specs2.matcher.BetweenMatcher[T]"></a>
+      <a id="between[T](T,T)((T)⇒Ordered[T]):BetweenMatcher[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">between</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="t1">t1: <span class="extype" name="org.specs2.matcher.NumericBaseMatchers.between.T">T</span></span>, <span name="t2">t2: <span class="extype" name="org.specs2.matcher.NumericBaseMatchers.between.T">T</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: (<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.between.T">T</span>) ⇒ <span class="extype" name="scala.Ordered">Ordered</span>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.between.T">T</span>]</span>)</span><span class="result">: <a href="BetweenMatcher.html" class="extype" name="org.specs2.matcher.BetweenMatcher">BetweenMatcher</a>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.between.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@between[T](t1:T,t2:T)(implicitevidence$30:T=&gt;Ordered[T]):org.specs2.matcher.BetweenMatcher[T]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBaseMatchers</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@clone():Object" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericBaseMatchers#closeTo" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="closeTo[S](target:org.specs2.matcher.SignificantTarget[S])(implicitevidence$28:Numeric[S]):org.specs2.matcher.Matcher[S]"></a>
+      <a id="closeTo[S](SignificantTarget[S])(Numeric[S]):Matcher[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">closeTo</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="target">target: <a href="SignificantTarget.html" class="extype" name="org.specs2.matcher.SignificantTarget">SignificantTarget</a>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.closeTo.S">S</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Numeric">Numeric</span>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.closeTo.S">S</span>]</span>)</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.closeTo.S">S</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@closeTo[S](target:org.specs2.matcher.SignificantTarget[S])(implicitevidence$28:Numeric[S]):org.specs2.matcher.Matcher[S]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBaseMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericBaseMatchers#closeTo" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="closeTo[S](target:S,figures:org.specs2.matcher.SignificantFigures)(implicitevidence$27:Numeric[S]):org.specs2.matcher.Matcher[S]"></a>
+      <a id="closeTo[S](S,SignificantFigures)(Numeric[S]):Matcher[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">closeTo</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="target">target: <span class="extype" name="org.specs2.matcher.NumericBaseMatchers.closeTo.S">S</span></span>, <span name="figures">figures: <a href="SignificantFigures.html" class="extype" name="org.specs2.matcher.SignificantFigures">SignificantFigures</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Numeric">Numeric</span>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.closeTo.S">S</span>]</span>)</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.closeTo.S">S</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@closeTo[S](target:S,figures:org.specs2.matcher.SignificantFigures)(implicitevidence$27:Numeric[S]):org.specs2.matcher.Matcher[S]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBaseMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericBaseMatchers#closeTo" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="closeTo[S](delta:org.specs2.matcher.PlusOrMinus[S])(implicitevidence$22:Numeric[S]):org.specs2.matcher.Matcher[S]"></a>
+      <a id="closeTo[S](PlusOrMinus[S])(Numeric[S]):Matcher[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">closeTo</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="delta">delta: <a href="PlusOrMinus.html" class="extype" name="org.specs2.matcher.PlusOrMinus">PlusOrMinus</a>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.closeTo.S">S</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Numeric">Numeric</span>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.closeTo.S">S</span>]</span>)</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.closeTo.S">S</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@closeTo[S](delta:org.specs2.matcher.PlusOrMinus[S])(implicitevidence$22:Numeric[S]):org.specs2.matcher.Matcher[S]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBaseMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericBaseMatchers#closeTo" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="closeTo[S](n:S,delta:S)(implicitevidence$20:Numeric[S]):org.specs2.matcher.Matcher[S]"></a>
+      <a id="closeTo[S](S,S)(Numeric[S]):Matcher[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">closeTo</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="n">n: <span class="extype" name="org.specs2.matcher.NumericBaseMatchers.closeTo.S">S</span></span>, <span name="delta">delta: <span class="extype" name="org.specs2.matcher.NumericBaseMatchers.closeTo.S">S</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Numeric">Numeric</span>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.closeTo.S">S</span>]</span>)</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.closeTo.S">S</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@closeTo[S](n:S,delta:S)(implicitevidence$20:Numeric[S]):org.specs2.matcher.Matcher[S]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBaseMatchers</dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericBaseMatchers#greaterThan" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="greaterThan[S](n:S)(implicitevidence$16:S=&gt;Ordered[S]):org.specs2.matcher.Matcher[S]"></a>
+      <a id="greaterThan[S](S)((S)⇒Ordered[S]):Matcher[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">greaterThan</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="n">n: <span class="extype" name="org.specs2.matcher.NumericBaseMatchers.greaterThan.S">S</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: (<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.greaterThan.S">S</span>) ⇒ <span class="extype" name="scala.Ordered">Ordered</span>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.greaterThan.S">S</span>]</span>)</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.greaterThan.S">S</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@greaterThan[S](n:S)(implicitevidence$16:S=&gt;Ordered[S]):org.specs2.matcher.Matcher[S]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBaseMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericBaseMatchers#greaterThanOrEqualTo" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="greaterThanOrEqualTo[S](n:S)(implicitevidence$12:S=&gt;Ordered[S]):org.specs2.matcher.Matcher[S]"></a>
+      <a id="greaterThanOrEqualTo[S](S)((S)⇒Ordered[S]):Matcher[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">greaterThanOrEqualTo</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="n">n: <span class="extype" name="org.specs2.matcher.NumericBaseMatchers.greaterThanOrEqualTo.S">S</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: (<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.greaterThanOrEqualTo.S">S</span>) ⇒ <span class="extype" name="scala.Ordered">Ordered</span>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.greaterThanOrEqualTo.S">S</span>]</span>)</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.greaterThanOrEqualTo.S">S</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@greaterThanOrEqualTo[S](n:S)(implicitevidence$12:S=&gt;Ordered[S]):org.specs2.matcher.Matcher[S]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBaseMatchers</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.specs2.matcher.BeHaveMatchers#have" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="have:org.specs2.matcher.NeutralMatcher[Any]"></a>
+      <a id="have:NeutralMatcher[Any]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">have</span><span class="result">: <a href="NeutralMatcher.html" class="extype" name="org.specs2.matcher.NeutralMatcher">NeutralMatcher</a>[<span class="extype" name="scala.Any">Any</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@have:org.specs2.matcher.NeutralMatcher[Any]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>BeHaveMatchers</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericBaseMatchers#lessThan" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="lessThan[S](n:S)(implicitevidence$8:S=&gt;Ordered[S]):org.specs2.matcher.BeLessThan[S]"></a>
+      <a id="lessThan[S](S)((S)⇒Ordered[S]):BeLessThan[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">lessThan</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="n">n: <span class="extype" name="org.specs2.matcher.NumericBaseMatchers.lessThan.S">S</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: (<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.lessThan.S">S</span>) ⇒ <span class="extype" name="scala.Ordered">Ordered</span>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.lessThan.S">S</span>]</span>)</span><span class="result">: <a href="BeLessThan.html" class="extype" name="org.specs2.matcher.BeLessThan">BeLessThan</a>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.lessThan.S">S</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@lessThan[S](n:S)(implicitevidence$8:S=&gt;Ordered[S]):org.specs2.matcher.BeLessThan[S]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBaseMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericBaseMatchers#lessThanOrEqualTo" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="lessThanOrEqualTo[S](n:S)(implicitevidence$4:S=&gt;Ordered[S]):org.specs2.matcher.BeLessThanOrEqualTo[S]"></a>
+      <a id="lessThanOrEqualTo[S](S)((S)⇒Ordered[S]):BeLessThanOrEqualTo[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">lessThanOrEqualTo</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="n">n: <span class="extype" name="org.specs2.matcher.NumericBaseMatchers.lessThanOrEqualTo.S">S</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: (<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.lessThanOrEqualTo.S">S</span>) ⇒ <span class="extype" name="scala.Ordered">Ordered</span>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.lessThanOrEqualTo.S">S</span>]</span>)</span><span class="result">: <a href="BeLessThanOrEqualTo.html" class="extype" name="org.specs2.matcher.BeLessThanOrEqualTo">BeLessThanOrEqualTo</a>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.lessThanOrEqualTo.S">S</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@lessThanOrEqualTo[S](n:S)(implicitevidence$4:S=&gt;Ordered[S]):org.specs2.matcher.BeLessThanOrEqualTo[S]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">matches if x &lt;= n</p><div class="fullcomment"><div class="comment cmt"><p>matches if x &lt;= n</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBaseMatchers</dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.specs2.matcher.BeHaveMatchers#not" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="not:org.specs2.matcher.NotMatcher[Any]"></a>
+      <a id="not:NotMatcher[Any]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">not</span><span class="result">: <a href="NotMatcher.html" class="extype" name="org.specs2.matcher.NotMatcher">NotMatcher</a>[<span class="extype" name="scala.Any">Any</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@not:org.specs2.matcher.NotMatcher[Any]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>BeHaveMatchers</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@notify():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericBeHaveMatchers#toNeutralMatcherNumeric" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toNeutralMatcherNumeric(result:org.specs2.matcher.NeutralMatcher[Any]):NumericBeHaveMatchers.this.NeutralMatcherNumeric"></a>
+      <a id="toNeutralMatcherNumeric(NeutralMatcher[Any]):NeutralMatcherNumeric"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toNeutralMatcherNumeric</span><span class="params">(<span name="result">result: <a href="NeutralMatcher.html" class="extype" name="org.specs2.matcher.NeutralMatcher">NeutralMatcher</a>[<span class="extype" name="scala.Any">Any</span>]</span>)</span><span class="result">: <a href="#NeutralMatcherNumericextendsAnyRef" class="extmbr" name="org.specs2.matcher.NumericMatchers.NeutralMatcherNumeric">NeutralMatcherNumeric</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@toNeutralMatcherNumeric(result:org.specs2.matcher.NeutralMatcher[Any]):NumericBeHaveMatchers.this.NeutralMatcherNumeric" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBeHaveMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericBeHaveMatchers#toNeutralMatcherOrdered" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toNeutralMatcherOrdered(result:org.specs2.matcher.NeutralMatcher[Any]):NumericBeHaveMatchers.this.NeutralMatcherOrdered"></a>
+      <a id="toNeutralMatcherOrdered(NeutralMatcher[Any]):NeutralMatcherOrdered"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toNeutralMatcherOrdered</span><span class="params">(<span name="result">result: <a href="NeutralMatcher.html" class="extype" name="org.specs2.matcher.NeutralMatcher">NeutralMatcher</a>[<span class="extype" name="scala.Any">Any</span>]</span>)</span><span class="result">: <a href="#NeutralMatcherOrderedextendsAnyRef" class="extmbr" name="org.specs2.matcher.NumericMatchers.NeutralMatcherOrdered">NeutralMatcherOrdered</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@toNeutralMatcherOrdered(result:org.specs2.matcher.NeutralMatcher[Any]):NumericBeHaveMatchers.this.NeutralMatcherOrdered" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBeHaveMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericBeHaveMatchers#toNumericResultMatcher" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toNumericResultMatcher[S](result:org.specs2.matcher.MatchResult[S])(implicitevidence$36:Numeric[S]):NumericBeHaveMatchers.this.NumericResultMatcher[S]"></a>
+      <a id="toNumericResultMatcher[S](MatchResult[S])(Numeric[S]):NumericResultMatcher[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toNumericResultMatcher</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="result">result: <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>[<span class="extype" name="org.specs2.matcher.NumericBeHaveMatchers.toNumericResultMatcher.S">S</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Numeric">Numeric</span>[<span class="extype" name="org.specs2.matcher.NumericBeHaveMatchers.toNumericResultMatcher.S">S</span>]</span>)</span><span class="result">: <a href="#NumericResultMatcher[S]extendsAnyRef" class="extmbr" name="org.specs2.matcher.NumericMatchers.NumericResultMatcher">NumericResultMatcher</a>[<span class="extype" name="org.specs2.matcher.NumericBeHaveMatchers.toNumericResultMatcher.S">S</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@toNumericResultMatcher[S](result:org.specs2.matcher.MatchResult[S])(implicitevidence$36:Numeric[S]):NumericBeHaveMatchers.this.NumericResultMatcher[S]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBeHaveMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericBeHaveMatchers#toOrderedResultMatcher" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toOrderedResultMatcher[S](result:org.specs2.matcher.MatchResult[S])(implicitevidence$34:S=&gt;Ordered[S]):NumericBeHaveMatchers.this.OrderedResultMatcher[S]"></a>
+      <a id="toOrderedResultMatcher[S](MatchResult[S])((S)⇒Ordered[S]):OrderedResultMatcher[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toOrderedResultMatcher</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="result">result: <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>[<span class="extype" name="org.specs2.matcher.NumericBeHaveMatchers.toOrderedResultMatcher.S">S</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: (<span class="extype" name="org.specs2.matcher.NumericBeHaveMatchers.toOrderedResultMatcher.S">S</span>) ⇒ <span class="extype" name="scala.Ordered">Ordered</span>[<span class="extype" name="org.specs2.matcher.NumericBeHaveMatchers.toOrderedResultMatcher.S">S</span>]</span>)</span><span class="result">: <a href="#OrderedResultMatcher[S]extendsAnyRef" class="extmbr" name="org.specs2.matcher.NumericMatchers.OrderedResultMatcher">OrderedResultMatcher</a>[<span class="extype" name="org.specs2.matcher.NumericBeHaveMatchers.toOrderedResultMatcher.S">S</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@toOrderedResultMatcher[S](result:org.specs2.matcher.MatchResult[S])(implicitevidence$34:S=&gt;Ordered[S]):NumericBeHaveMatchers.this.OrderedResultMatcher[S]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">matcher aliases and implicits to use with be + matcher
+</p><div class="fullcomment"><div class="comment cmt"><p>matcher aliases and implicits to use with be + matcher
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBeHaveMatchers</dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@toString():String" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@wait():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericBaseMatchers#~" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="~[S](delta:org.specs2.matcher.PlusOrMinus[S])(implicitevidence$24:Numeric[S]):org.specs2.matcher.Matcher[S]"></a>
+      <a id="~[S](PlusOrMinus[S])(Numeric[S]):Matcher[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $tilde" class="name">~</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="delta">delta: <a href="PlusOrMinus.html" class="extype" name="org.specs2.matcher.PlusOrMinus">PlusOrMinus</a>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.~.S">S</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Numeric">Numeric</span>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.~.S">S</span>]</span>)</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.~.S">S</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@~[S](delta:org.specs2.matcher.PlusOrMinus[S])(implicitevidence$24:Numeric[S]):org.specs2.matcher.Matcher[S]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">alias for beCloseTo</p><div class="fullcomment"><div class="comment cmt"><p>alias for beCloseTo</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBaseMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.NumericBaseMatchers#~" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="~[S](n:S)(delta:S)(implicitevidence$23:Numeric[S]):org.specs2.matcher.Matcher[S]"></a>
+      <a id="~[S](S)(S)(Numeric[S]):Matcher[S]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $tilde" class="name">~</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="n">n: <span class="extype" name="org.specs2.matcher.NumericBaseMatchers.~.S">S</span></span>)</span><span class="params">(<span name="delta">delta: <span class="extype" name="org.specs2.matcher.NumericBaseMatchers.~.S">S</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Numeric">Numeric</span>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.~.S">S</span>]</span>)</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="org.specs2.matcher.NumericBaseMatchers.~.S">S</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.NumericMatchers@~[S](n:S)(delta:S)(implicitevidence$23:Numeric[S]):org.specs2.matcher.Matcher[S]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">alias for beCloseTo</p><div class="fullcomment"><div class="comment cmt"><p>alias for beCloseTo</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>NumericBaseMatchers</dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="org.specs2.matcher.NumericBeHaveMatchers">
+              <h3>Inherited from <span class="extype" name="org.specs2.matcher.NumericBeHaveMatchers">NumericBeHaveMatchers</span></h3>
+            </div><div class="parent" name="org.specs2.matcher.BeHaveMatchers">
+              <h3>Inherited from <span class="extype" name="org.specs2.matcher.BeHaveMatchers">BeHaveMatchers</span></h3>
+            </div><div class="parent" name="org.specs2.matcher.NumericBaseMatchers">
+              <h3>Inherited from <span class="extype" name="org.specs2.matcher.NumericBaseMatchers">NumericBaseMatchers</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
