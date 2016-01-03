@@ -4,7 +4,7 @@ package data
 import scalaz.{Tree, TreeLoc}
 import scalaz.syntax.foldable._
 import scalaz.std.stream._
-import Tree._
+import Tree.{node => Node, leaf => Leaf}
 
 /**
  * Utility methods for scalaz Trees
