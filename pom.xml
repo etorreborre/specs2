@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
+   <modelVersion>4.0.0</modelVersion>
    <properties>
      <specs2.version>3.6.6</specs2.version>
    </properties>
@@ -36,27 +37,27 @@
       </dependency>
       <dependency>
          <groupId>org.specs2</groupId>
-         <artifactId>specs2-analysis.11</artifactId>
+         <artifactId>specs2-analysis_2.11</artifactId>
          <version>${specs2.version}</version>
       </dependency>
       <dependency>
          <groupId>org.specs2</groupId>
-         <artifactId>specs2-gwt.11</artifactId>
+         <artifactId>specs2-gwt_2.11</artifactId>
          <version>${specs2.version}</version>
       </dependency>
       <dependency>
          <groupId>org.specs2</groupId>
-         <artifactId>specs2-html.11</artifactId>
+         <artifactId>specs2-html_2.11</artifactId>
          <version>${specs2.version}</version>
       </dependency>
       <dependency>
          <groupId>org.specs2</groupId>
-         <artifactId>specs2-form.11</artifactId>
+         <artifactId>specs2-form_2.11</artifactId>
          <version>${specs2.version}</version>
       </dependency>
       <dependency>
          <groupId>org.specs2</groupId>
-         <artifactId>specs2-markdown.11</artifactId>
+         <artifactId>specs2-markdown_2.11</artifactId>
          <version>${specs2.version}</version>
       </dependency>
    </dependencies>
