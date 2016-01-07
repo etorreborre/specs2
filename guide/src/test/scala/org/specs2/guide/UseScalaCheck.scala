@@ -4,7 +4,7 @@ package guide
 import java.io.File
 
 import org.scalacheck.util.Pretty
-import org.scalacheck.{Shrink, Prop, Gen, Arbitrary}
+import org.scalacheck._
 import scalacheck._
 import scalaz._, Scalaz._
 import execute.ResultImplicits
@@ -31,6 +31,38 @@ s2"addition and multiplication are related ${ prop { (a: Int) => (a > 0) ==> (a 
 Note that if you pass functions using `MatchResult`s you will get better failure messages than just using boolean expressions.
 
 By default the properties created with `prop` will be shrinking counter-examples. But as you will see below there lots of different ways to parameterize ScalaCheck properties in specs2, including declaring if shrinking must be done.
+
+### Prop and Properties
+
+You can also directly use the property types defined by ScalaCheck: `Prop` and `Properties` (a `Properties` object is a just a collection of named `Prop`s)${snippet{
+val p1: Prop = Prop.forAll { (a: Int) => a + a == 2 * a }
+
+s2"addition and multiplication are related $p1"
+
+val p2: Properties = new Properties("addition/multiplication") {
+  property("addition1") = Prop.forAll { (a: Int) => a + a == 2 * a }
+  property("addition2") = Prop.forAll { (a: Int) => a + a + a == 3 * a }
+}
+
+s2"addition and multiplication are related $p2"
+}}
+
+When using `Properties` only one example is created. This example will run each included property in turn and label the result with the property name if there is a failure. If, however, you want to create one example per included property you need to use the `properties` method: ${snippet{
+
+val p2: Properties = new Properties("addition/multiplication") {
+  property("addition1") = Prop.forAll { (a: Int) => a + a == 2 * a }
+  property("addition2") = Prop.forAll { (a: Int) => a + a + a == 3 * a }
+}
+
+s2"addition and multiplication are related ${properties(p2)}"
+}}
+
+*Note*: in a mutable specification the `properties` block of examples need to be added with `addFragments`:
+```
+"addition and multiplication are related" >> addFragments(properties(p2))
+```
+
+If you don't do that there will be no examples executed at all (the beauty of side-effects!).
 
 ### Arbitrary instances
 
