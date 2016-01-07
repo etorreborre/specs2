@@ -3,7 +3,7 @@ package scalacheck
 
 import org.scalacheck.util._
 import org.scalacheck.{Properties, Prop}
-import org.specs2.specification.core.{Br, Fragments}
+import org.specs2.specification.core.{Fragments}
 import org.specs2.specification.create.FragmentsFactory
 
 trait ScalaCheckPropertyDsl extends FragmentsFactory with AsResultProp {
