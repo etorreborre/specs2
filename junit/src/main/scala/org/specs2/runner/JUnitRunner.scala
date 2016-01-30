@@ -4,9 +4,14 @@ package runner
 import org.junit.runner.manipulation.{NoTestsRemainException, Filterable}
 import org.junit.runner.notification.RunNotifier
 import main._
+import control.eff.ErrorEffect._
+import specification.process.Stats
+import control.Actions._
 import reporter._
 import specification.core._
 import control._
+import scalaz._, Scalaz._
+
 
 /**
  * Runner for specs2 specifications
@@ -19,37 +24,57 @@ class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterab
       error => error.fold(t => throw t, m => throw new Exception(m)),
       ok => ok
     )
+
   /** command line arguments, extracted from the system properties */
   lazy val arguments: Arguments = Arguments("junit")
+
   /** specification environment */
   lazy val env: Env = Env(arguments = arguments, lineLogger = LineLogger.consoleLogger)
+
+  lazy val getDescription = JUnitDescriptions.createDescription(specStructure)
 
   /** specification structure for the environment */
   lazy val specStructure: SpecStructure = specification.structure(env)
 
-  /** junit descriptions */
-  lazy val descriptions = JUnitDescriptions.fragmentDescriptions(specStructure)
-
-  /** @return a Description for the TestSuite */
-  lazy val getDescription = JUnitDescriptions.createDescription(specStructure)
-
   /** run the specification with a Notifier */
-  def run(n: RunNotifier) {
-    val printer = new JUnitPrinter {
-      lazy val notifier = n
-      lazy val descriptions = outer.descriptions
-      lazy val description = outer.getDescription
-    }
-
-    val actions = for {
-      printers <- ClassRunner.createPrinters(env.arguments, Thread.currentThread.getContextClassLoader)
-      reporter <- ClassRunner.createReporter(env.arguments, Thread.currentThread.getContextClassLoader)
-      _        <- reporter.report(env, printer +: printers)(specStructure)
-      _        <- Actions.safe(env.shutdown)
-    } yield ()
-
-    actions.runOption
+  def run(n: RunNotifier): Unit = {
+    runWithEnv(n, env).runOption
     ()
+  }
+
+  /** run the specification with a Notifier and an environment */
+  def runWithEnv(n: RunNotifier, env: Env): Action[Stats] = {
+    val loader = Thread.currentThread.getContextClassLoader
+    val arguments = env.arguments
+
+    val report: Action[Stats] =
+      if (arguments.isSet("all")) {
+        for {
+          reporter <- ClassRunner.createReporter(arguments, loader)
+          printers <- ClassRunner.createPrinters(arguments, loader)
+          ss       <- SpecStructure.linkedSpecifications(specStructure, env, loader)
+          sorted   <- safe(SpecStructure.topologicalSort(ss).getOrElse(ss))
+          _        <- reporter.prepare(env, printers)(sorted.toList)
+          stats    <- sorted.toList.map(s => Reporter.report(env, createJUnitPrinter(s, n) +: printers)(s)).sequenceU
+          _        <- Reporter.finalize(env, printers)(sorted.toList)
+        } yield stats.foldMap(identity _)
+      } else
+        for {
+          printers <- ClassRunner.createPrinters(arguments, loader)
+          stats    <- Reporter.report(env, createJUnitPrinter(specStructure, n) +: printers)(specStructure)
+        } yield stats
+
+    report.andFinally(Actions.safe(env.shutdown))
+  }
+
+  /**
+   * create a printer for a specific specification structure
+   * The printer needs to know about all the example descriptions beforehand
+   */
+  def createJUnitPrinter(specStructure: SpecStructure, n: RunNotifier): JUnitPrinter = new JUnitPrinter {
+    lazy val notifier = n
+    lazy val descriptions = JUnitDescriptions.fragmentDescriptions(specStructure)
+    lazy val description = JUnitDescriptions.createDescription(specStructure)
   }
 
   /**

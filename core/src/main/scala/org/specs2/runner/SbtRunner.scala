@@ -8,7 +8,6 @@ import Fingerprints._
 import main._
 import reporter._
 import control.{Logger => _, _}
-import Actions._
 import scalaz._, Scalaz._
 import scalaz.effect.IO
 import reporter.SbtLineLogger
@@ -16,7 +15,6 @@ import reflect.Classes
 import reporter.Printer._
 import specification.core._
 import eff._
-import ErrorEffect._
 
 /**
  * Runner for Sbt
@@ -60,21 +58,10 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
   def specificationRun(taskDef: TaskDef, loader: ClassLoader, handler: EventHandler, loggers: Array[Logger], isModule: Boolean): Action[Stats] = {
     val env = Env(arguments = commandLineArguments)
     Classes.createInstance[SpecificationStructure](taskDef.fullyQualifiedName + (if (isModule) "$" else ""), loader, env.defaultInstances).flatMap { spec =>
-      val report: Action[Stats] =
-        if (commandLineArguments.isSet("all")) {
-          for {
-            printers <- createPrinters(taskDef, handler, loggers, commandLineArguments)
-            reporter <- ClassRunner.createReporter(commandLineArguments, loader)
-            ss       <- SpecStructure.linkedSpecifications(spec.structure(env), env, loader)
-            sorted   <- safe(SpecStructure.topologicalSort(ss).getOrElse(ss))
-            _        <- reporter.prepare(env, printers)(sorted.toList)
-            stats    <- sorted.toList.map(Reporter.report(env, printers)).sequenceU
-            _        <- Reporter.finalize(env, printers)(sorted.toList)
-          } yield stats.foldMap(identity _)
-
-        } else createPrinters(taskDef, handler, loggers, commandLineArguments).flatMap(printers => Reporter.report(env, printers)(spec.structure(env)))
-
-      report.andFinally(Actions.safe(env.shutdown))
+      for {
+        printers <- createPrinters(taskDef, handler, loggers, commandLineArguments)
+        stats    <- Runner.runSpecStructure(spec.structure(env), env, loader, printers)
+      } yield stats
     }
   }
 

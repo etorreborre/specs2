@@ -2,8 +2,9 @@ package org.specs2
 package runner
 
 import control._, Throwablex._
+import control.Actions._
+import specification.core._
 import specification.process.Stats
-
 import scala.reflect.ClassTag
 import scalaz.effect._, IO._
 import scalaz._, Scalaz._
@@ -12,6 +13,7 @@ import reflect.Classes
 import reporter._, Printer._
 import eff._
 import ConsoleEffect._
+import ErrorEffect._
 
 /**
  * reusable actions for Runners
@@ -76,6 +78,29 @@ object Runner {
   def logUserWarnings(warnings: Vector[String])(print: String => IO[Unit]): IO[Unit] = {
     (if (warnings.nonEmpty) print("Warnings:\n") else IO(())) >>
       warnings.traverseU(print).void
+  }
+
+  /**
+   * Run a spec structure and its linked specifications if "all" is set
+   * on the command line
+   */
+  def runSpecStructure(specStructure: SpecStructure, env: Env, loader: ClassLoader, printers: List[Printer]): Action[Stats] = {
+    val arguments = env.arguments
+
+    val report: Action[Stats] =
+      if (arguments.isSet("all")) {
+        for {
+          reporter <- ClassRunner.createReporter(arguments, loader)
+          ss       <- SpecStructure.linkedSpecifications(specStructure, env, loader)
+          sorted   <- safe(SpecStructure.topologicalSort(ss).getOrElse(ss))
+          _        <- reporter.prepare(env, printers)(sorted.toList)
+          stats    <- sorted.toList.map(Reporter.report(env, printers)).sequenceU
+          _        <- Reporter.finalize(env, printers)(sorted.toList)
+        } yield stats.foldMap(identity _)
+
+      } else Reporter.report(env, printers)(specStructure)
+
+    report.andFinally(Actions.safe(env.shutdown))
   }
 
   /**

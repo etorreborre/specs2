@@ -2,7 +2,6 @@ package org.specs2
 package runner
 
 import control._
-import Actions._
 import io.StringOutput
 import org.specs2.specification.process.Stats
 import specification.core._
@@ -54,19 +53,10 @@ trait ClassRunner {
   /** report the specification */
   def report(env: Env): SpecificationStructure => Action[Stats] = { spec: SpecificationStructure =>
     val loader = Thread.currentThread.getContextClassLoader
-    if (env.arguments.isSet("all")) {
-      for {
-        printers <- createPrinters(env.arguments, loader)
-        reporter <- createReporter(env.arguments, loader)
-        ss       <- SpecStructure.linkedSpecifications(spec.structure(env), env, loader)
-        sorted   <- safe(SpecStructure.topologicalSort(ss).getOrElse(ss))
-        _        <- reporter.prepare(env, printers)(sorted.toList)
-        stats    <- sorted.toList.map(Reporter.report(env, printers)).sequenceU
-        _        <- Reporter.finalize(env, printers)(sorted.toList)
-      } yield stats.foldMap(identity _)
-
-    } else
-      createPrinters(env.arguments, loader).flatMap(printers => Reporter.report(env, printers)(spec.structure(env)))
+    for {
+      printers <- createPrinters(env.arguments, loader)
+      stats    <- Runner.runSpecStructure(spec.structure(env), env, loader, printers)
+    } yield stats
   }
 
   /** accepted printers */
