@@ -10,22 +10,19 @@ import PrettyDetails._
 
 trait ScalaCheckPropertyCheck extends ExpectationsCreation {
 
+  def checkProperties(properties: Properties, parameters: Parameters, prettyFreqMap: FreqMap[Set[Any]] => Pretty): Result = {
+    val prop = Prop { params: Gen.Parameters =>
+      Prop.all(properties.properties.map { case (n, p) => p :| n }:_*)(params)
+    }
+    check(prop, parameters, prettyFreqMap)
+  }
+
   /**
    * checks if the property is true for each generated value, and with the specified
    * parameters
    */
   def check(prop: Prop, parameters: Parameters, prettyFreqMap: FreqMap[Set[Any]] => Pretty): Result = {
-    // check the property with ScalaCheck
-    // first add labels if this Prop is a composite one
-    val prop1 = prop match {
-      case ps: Properties =>
-        new Prop {
-          override def apply(params: Gen.Parameters): Prop.Result =
-            Prop.all(ps.properties.map { case (n, p) => p :| n }:_*)(params)
-        }
-      case _ => prop
-    }
-    val result = Test.check(parameters.testParameters, prop1)
+    val result = Test.check(parameters.testParameters, prop)
     val prettyTestResult = prettyResult(result, prettyFreqMap)(parameters.prettyParams)
     val testResult = if (parameters.prettyParams.verbosity == 0) "" else prettyTestResult
 

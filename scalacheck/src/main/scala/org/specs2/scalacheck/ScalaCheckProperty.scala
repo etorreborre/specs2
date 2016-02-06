@@ -32,7 +32,6 @@ trait ScalaCheckProperty {
           maxDiscardRatio: Float      = parameters.maxDiscardRatio,
           maxSize: Int                = parameters.maxSize,
           workers: Int                = parameters.workers,
-          rng: scala.util.Random      = parameters.rng,
           callback: Test.TestCallback = parameters.testCallback,
           loader: Option[ClassLoader] = parameters.loader
            ):SelfType =
@@ -43,7 +42,6 @@ trait ScalaCheckProperty {
         maxDiscardRatio = maxDiscardRatio,
         maxSize = maxSize,
         workers = workers,
-        rng = rng,
         testCallback = callback,
         loader = loader
       ))
@@ -53,7 +51,6 @@ trait ScalaCheckProperty {
                maxDiscardRatio: Float      = parameters.maxDiscardRatio,
                maxSize: Int                = parameters.maxSize,
                workers: Int                = parameters.workers,
-               rng: scala.util.Random      = parameters.rng,
                callback: Test.TestCallback = parameters.testCallback,
                loader: Option[ClassLoader] = parameters.loader
                 ):SelfType =
@@ -64,7 +61,6 @@ trait ScalaCheckProperty {
         maxDiscardRatio = maxDiscardRatio,
         maxSize = maxSize,
         workers = workers,
-        rng = rng,
         testCallback = callback,
         loader = loader
       ).setVerbosity(1))

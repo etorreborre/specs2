@@ -1,7 +1,7 @@
 package org.specs2
 package scalacheck
 
-import org.scalacheck.{Gen, Prop}
+import org.scalacheck.{Properties, Gen, Prop}
 import org.scalacheck.util._
 import execute._
 import org.specs2.main.{CommandLine, CommandLineAsResult}
@@ -15,28 +15,26 @@ trait AsResultProp extends ScalaCheckPropertyCheck with ScalaCheckParameters wit
     r match {
       case p: Prop => p
       case _ =>
-        new Prop {
-          def apply(params: Gen.Parameters) = {
-            lazy val result = ResultExecution.execute(AsResult(r))
+        Prop.apply { params: Gen.Parameters =>
+          lazy val result = ResultExecution.execute(AsResult(r))
 
-            val prop =
-              result match {
-                case f : execute.Failure => Prop.falsified :| (f.message+" ("+f.location+")")
-                case s : execute.Skipped => Prop.exception(new SkipException(s))
-                case p : execute.Pending => Prop.exception(new PendingException(p))
-                case e : execute.Error   => Prop.exception(e.exception)
-                case other               => Prop.passed
-              }
+          val prop =
             result match {
-              case f: execute.Failure if f.details != NoDetails =>
-                prop.apply(params).collect(f.details)
-
-              case _ =>
-                prop.apply(params)
+              case f : execute.Failure => Prop.falsified :| (f.message+" ("+f.location+")")
+              case s : execute.Skipped => Prop.exception(new SkipException(s))
+              case p : execute.Pending => Prop.exception(new PendingException(p))
+              case e : execute.Error   => Prop.exception(e.exception)
+              case other               => Prop.passed
             }
+          result match {
+            case f: execute.Failure if f.details != NoDetails =>
+              prop.apply(params).collect(f.details)
+
+            case _ =>
+              prop.apply(params)
           }
         }
-    }
+     }
   }
 
   implicit def scalaCheckPropertyCommandLineAsResult[S <: ScalaCheckProperty]: CommandLineAsResult[S] = new CommandLineAsResult[S] {
@@ -46,12 +44,17 @@ trait AsResultProp extends ScalaCheckPropertyCheck with ScalaCheckParameters wit
     }
   }
 
-  /** implicit typeclass instance to create examples from Props */
-  implicit def propAsResult[P <: Prop](implicit p: Parameters, pfq: FreqMap[Set[Any]] => Pretty): AsResult[P] = new AsResult[P] {
-    def asResult(prop: =>P): Result =
+  /** implicit typeclass instance to create examples from a Prop */
+  implicit def propAsResult(implicit p: Parameters, pfq: FreqMap[Set[Any]] => Pretty): AsResult[Prop] = new AsResult[Prop] {
+    def asResult(prop: =>Prop): Result =
       check(prop, p, pfq)
   }
 
+  /** implicit typeclass instance to create examples from Properties */
+  implicit def propertiesAsResult(implicit p: Parameters, pfq: FreqMap[Set[Any]] => Pretty): AsResult[Properties] = new AsResult[Properties] {
+    def asResult(properties: =>Properties): Result =
+      checkProperties(properties, p, pfq)
+  }
 }
 
 trait AsResultPropLowImplicits extends ScalaCheckPropertyCheck {

@@ -13,7 +13,6 @@ case class Parameters(minTestsOk: Int                 = Test.Parameters.default.
                       maxDiscardRatio: Float          = Test.Parameters.default.maxDiscardRatio,
                       maxSize: Int                    = Test.Parameters.default.maxSize,
                       workers: Int                    = Test.Parameters.default.workers,
-                      rng: scala.util.Random          = Test.Parameters.default.rng,
                       testCallback: Test.TestCallback = Test.Parameters.default.testCallback,
                       loader: Option[ClassLoader]     = Test.Parameters.default.customClassLoader,
                       prettyParams: Pretty.Params     = Pretty.defaultParams) { outer =>
@@ -25,16 +24,14 @@ case class Parameters(minTestsOk: Int                 = Test.Parameters.default.
     copy(prettyParams = prettyParams.copy(verbosity = v))
 
   def testParameters: Test.Parameters =
-    new Test.Parameters {
-      val minSuccessfulTests = outer.minTestsOk
-      val maxDiscardRatio    = outer.maxDiscardRatio
-      val maxSize            = outer.maxSize
-      val minSize            = outer.minSize
-      val workers            = outer.workers
-      val rng                = outer.rng
-      val testCallback       = outer.testCallback
-      val customClassLoader  = outer.loader
-    }
+    Test.Parameters.default.
+      withMinSuccessfulTests(outer.minTestsOk).
+      withMaxDiscardRatio(outer.maxDiscardRatio).
+      withMaxSize(outer.maxSize).
+      withMinSize(outer.minSize).
+      withWorkers(outer.workers).
+      withTestCallback(outer.testCallback).
+      withCustomClassLoader(outer.loader)
 
   def overrideWith(commandLine: CommandLine): Parameters = {
     val updated =

@@ -173,16 +173,6 @@ class ScalaCheckSpec extends mutable.Specification with ScalaCheck {
 }
 }}
 
-You can also set the random generator that is used in all the ScalaCheck generators: ${snippet{
-case class MyRandomGenerator() extends java.util.Random {
-  // implement a deterministic generator for example
-}
-
-"this is a specific property" ! prop { (a: Int, b: Int) =>
-  (a + b) must_== (b + a)
-}.set(rng = MyRandomGenerator(), minTestsOk = 200, workers = 3)
-}}
-
 #### Command-line
 
 Some properties can be overridden from the command line

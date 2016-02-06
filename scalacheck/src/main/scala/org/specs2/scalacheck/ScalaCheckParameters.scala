@@ -20,10 +20,9 @@ trait ScalaCheckParameters {
           maxDiscardRatio: Float                       = defaultParameters.maxDiscardRatio,
           maxSize: Int                                 = defaultParameters.maxSize,
           workers: Int                                 = defaultParameters.workers,
-          rng: scala.util.Random                       = defaultParameters.rng,
           callback: Test.TestCallback                  = defaultParameters.testCallback,
           loader: Option[ClassLoader]                  = defaultParameters.loader): Parameters =
-    new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader)
+    new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, callback, loader)
 
   /** create parameters with verbose = true */
   def display(minTestsOk: Int                              = defaultParameters.minTestsOk,
@@ -31,9 +30,8 @@ trait ScalaCheckParameters {
               maxDiscardRatio: Float                       = defaultParameters.maxDiscardRatio,
               maxSize: Int                                 = defaultParameters.maxSize,
               workers: Int                                 = defaultParameters.workers,
-              rng: scala.util.Random                       = defaultParameters.rng,
               callback: Test.TestCallback                  = defaultParameters.testCallback,
               loader: Option[ClassLoader]                  = defaultParameters.loader): Parameters =
-    new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, rng, callback, loader).verbose
+    new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, callback, loader).verbose
 }
 

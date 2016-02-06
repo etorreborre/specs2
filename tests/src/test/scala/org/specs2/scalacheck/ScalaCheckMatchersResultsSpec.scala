@@ -17,7 +17,7 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
 
  ${ check(Prop.passed) returns "OK, passed 100 tests." }
  ${ check(Prop.falsified) must beFailing(withMessage("Falsified after 0 passed tests.")) }
- ${ check(Prop.undecided) must beFailing(withMessage("Gave up after only 0 passed tests. 101 tests were discarded")) }
+ ${ check(Prop.undecided) must beFailing(withMessage("Gave up after only 0 passed tests. 501 tests were discarded")) }
  when there is a conversion exception
  ${ check(exceptionPropOnConversion) must beFailing(withMessage("failure")) }
 

@@ -29,7 +29,7 @@ object depends {
 
   lazy val kindp = Seq("org.spire-math" % "kind-projector" % "0.7.1" cross CrossVersion.binary)
 
-  lazy val scalacheck    = Seq("org.scalacheck" %% "scalacheck"   % "1.12.5")
+  lazy val scalacheck    = Seq("org.scalacheck" %% "scalacheck"   % "1.13.0")
   lazy val mockito       = Seq("org.mockito"    % "mockito-core"  % "1.9.5")
   lazy val junit         = Seq("junit"          % "junit"         % "4.12")
   lazy val hamcrest      = Seq("org.hamcrest"   % "hamcrest-core" % "1.3")
