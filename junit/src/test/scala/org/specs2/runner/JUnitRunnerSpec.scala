@@ -1,9 +1,6 @@
 package org.specs2
 package runner
 
-import java.io.{ByteArrayOutputStream, PrintStream}
-
-import org.junit.internal.TextListener
 import org.junit.runner.{Result, Description, RunWith}
 import org.junit.runner.notification._
 import main.Arguments
