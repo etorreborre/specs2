@@ -1,14 +1,8 @@
 ## Dependencies update
 
-This version updates dependencies for ScalaCheck and Scalaz-stream (for Scala `2.12.0-M3`).
+This version updates dependencies for ScalaCheck (`1.13.0`) and Scalaz-stream (version `0.8a` for Scala `2.12.0-M3`).
 
 ## Improvements
 
  * [scalacheck] added a `properties` method to create several examples for a `Properties` object
  * [html] added an tab icon on the generated html pages
- 
-## Fixes
-
- * User Guide: fixed the ribbon headers in the toc [#441](http://github.com/etorreborre/specs2/issues/441)
- * JUnit: don't report testRun start/finish when using the JUnitCore runner [#440](http://github.com/etorreborre/specs2/issues/440)
- * removed the implicit conversion from `String` to `ResultMonoid` [#439](http://github.com/etorreborre/specs2/issues/439) 
