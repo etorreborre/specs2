@@ -79,7 +79,7 @@ die() {
 }
 
 make_url () {
-  version="$1"
+  local version="$1"
 
   case "$version" in
         0.7.*) echo "http://simple-build-tool.googlecode.com/files/sbt-launch-0.7.7.jar" ;;
@@ -107,7 +107,7 @@ declare -r default_jvm_opts_common="-Xms512m -Xmx1536m -Xss2m $jit_opts $cms_opt
 declare -r noshare_opts="-Dsbt.global.base=project/.sbtboot -Dsbt.boot.directory=project/.boot -Dsbt.ivy.home=project/.ivy"
 declare -r latest_28="2.8.2"
 declare -r latest_29="2.9.3"
-declare -r latest_210="2.10.5"
+declare -r latest_210="2.10.6"
 declare -r latest_211="2.11.7"
 declare -r latest_212="2.12.0-M3"
 
@@ -118,6 +118,7 @@ declare -r script_name="${script_path##*/}"
 declare java_cmd="java"
 declare sbt_opts_file="$(init_default_option_file SBT_OPTS .sbtopts)"
 declare jvm_opts_file="$(init_default_option_file JVM_OPTS .jvmopts)"
+declare sbt_launch_dir="$HOME/.sbt/launchers"
 declare sbt_launch_repo="http://repo.typesafe.com/typesafe/ivy-releases"
 
 # pull -J and -D options to give to java.
@@ -163,7 +164,7 @@ setScalaVersion () {
 }
 setJavaHome () {
   java_cmd="$1/bin/java"
-  setThisBuild javaHome "Some(file(\"$1\"))"
+  setThisBuild javaHome "scala.Some(file(\"$1\"))"
   export JAVA_HOME="$1"
   export JDK_HOME="$1"
   export PATH="$JAVA_HOME/bin:$PATH"
@@ -182,7 +183,6 @@ elif [[ -e "$JAVA_HOME/bin/java" ]]; then
 fi
 
 # directory to store sbt launchers
-declare sbt_launch_dir="$HOME/.sbt/launchers"
 [[ -d "$sbt_launch_dir" ]] || mkdir -p "$sbt_launch_dir"
 [[ -w "$sbt_launch_dir" ]] || sbt_launch_dir="$(mktemp -d -t sbt_extras_launchers.XXXXXX)"
 
@@ -255,7 +255,7 @@ download_url () {
 }
 
 acquire_sbt_jar () {
-  sbt_url="$(jar_url "$sbt_version")"
+  local sbt_url="$(jar_url "$sbt_version")"
   sbt_jar="$(jar_file "$sbt_version")"
 
   [[ -r "$sbt_jar" ]] || download_url "$sbt_url" "$sbt_jar"
@@ -298,7 +298,7 @@ runner with the -x option.
   -sbt-version  <version>   use the specified version of sbt (default: $sbt_release_version)
   -sbt-dev                  use the latest pre-release version of sbt: $sbt_unreleased_version
   -sbt-jar      <path>      use the specified jar as the sbt launcher
-  -sbt-launch-dir <path>    directory to hold sbt launchers (default: ~/.sbt/launchers)
+  -sbt-launch-dir <path>    directory to hold sbt launchers (default: $sbt_launch_dir)
   -sbt-launch-repo <url>    repo url for downloading sbt launcher jar (default: $sbt_launch_repo)
 
   # scala version (default: as chosen by sbt)
@@ -333,8 +333,7 @@ runner with the -x option.
 EOM
 }
 
-process_args ()
-{
+process_args () {
   require_arg () {
     local type="$1"
     local opt="$2"
@@ -373,7 +372,7 @@ process_args ()
   -sbt-launch-repo) require_arg path "$1" "$2" && sbt_launch_repo="$2" && shift 2 ;;
     -scala-version) require_arg version "$1" "$2" && setScalaVersion "$2" && shift 2 ;;
    -binary-version) require_arg version "$1" "$2" && setThisBuild scalaBinaryVersion "\"$2\"" && shift 2 ;;
-       -scala-home) require_arg path "$1" "$2" && setThisBuild scalaHome "Some(file(\"$2\"))" && shift 2 ;;
+       -scala-home) require_arg path "$1" "$2" && setThisBuild scalaHome "scala.Some(file(\"$2\"))" && shift 2 ;;
         -java-home) require_arg path "$1" "$2" && setJavaHome "$2" && shift 2 ;;
          -sbt-opts) require_arg path "$1" "$2" && sbt_opts_file="$2" && shift 2 ;;
          -jvm-opts) require_arg path "$1" "$2" && jvm_opts_file="$2" && shift 2 ;;
@@ -400,8 +399,10 @@ process_args "$@"
 
 # skip #-styled comments and blank lines
 readConfigFile() {
-  while read line; do
-    [[ $line =~ ^# ]] || [[ -z $line ]] || echo "$line"
+  local end=false
+  until $end; do
+    read || end=true
+    [[ $REPLY =~ ^# ]] || [[ -z $REPLY ]] || echo "$REPLY"
   done < "$1"
 }
 
