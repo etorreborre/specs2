@@ -41,6 +41,9 @@ class FutureMatchersSpec(env: Env) extends Specification with ResultMatchers wit
  ${ Future.failed[Int](new RuntimeException) must throwA[RuntimeException].await }
  ${ { Future.failed[Int](new RuntimeException) must be_===(1).await } must throwA[RuntimeException] }
 
+ A Future expression throwing an exception must not be matched
+ ${ ({ throw new Exception("boom"); Future(1) } must throwAn[Exception].await) must throwAn[Exception] }
+
  In a mutable spec with a negated matcher $e1
 
 """
