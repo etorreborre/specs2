@@ -107,6 +107,12 @@ trait Classes {
   def loadClass[T <: AnyRef](className: String, loader: ClassLoader): Action[Class[T]] =
     loadClassEither(className, loader).flatMap((tc: Throwable \/ Class[T]) => tc.fold(Actions.exception, Actions.ok))
 
+  /** @return true if a class can be loaded */
+  def existsClass(className: String, loader: ClassLoader): Action[Boolean] = Actions.safe {
+    try   { loader.loadClass(className); true }
+    catch { case NonFatal(t) => false }
+  }
+
 }
 /**
  * This object provides simple functions to instantiate classes.

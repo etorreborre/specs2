@@ -29,12 +29,19 @@ trait SpecificationStructure extends ContextualSpecificationStructure {
 
 object SpecificationStructure {
 
+  /**
+   * create a SpecificationStructure from a class name
+   */
   def create(className: String, classLoader: ClassLoader = Thread.currentThread.getContextClassLoader, env: Option[Env] = None): Action[SpecificationStructure] = {
     val defaultInstances = env.toList.flatMap(_.defaultInstances)
-    // try to create the specification from a class name, without displaying possible errors
-    createInstance[SpecificationStructure](className, classLoader, defaultInstances)
-      // try to create the specification from an object class name
-      .orElse(createInstance[SpecificationStructure](className+"$", classLoader, defaultInstances))
+    existsClass(className+"$", classLoader) flatMap { e =>
+      if (e)
+        // try to create the specification from the object name
+        createInstance[SpecificationStructure](className+"$", classLoader, defaultInstances)
+      else
+        // try to create the specification from a class name
+        createInstance[SpecificationStructure](className, classLoader, defaultInstances)
+    }
   }
 
   /**

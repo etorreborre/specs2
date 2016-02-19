@@ -3,16 +3,21 @@ package specification
 package core
 
 import org.scalacheck._, Gen._, Arbitrary._
+import scala.IllegalArgumentException
 import scalaz._, Scalaz._
-import control._
+import control._, eff.ErrorEffect
 import matcher._
 
-class SpecificationStructureSpec extends Specification with ScalaCheck { def is = s2"""
+class SpecificationStructureSpec extends Specification with ScalaCheck with DisjunctionMatchers { def is = s2"""
 
  There can be links between specifications and it is possible to sort all the dependent specifications
  so that
    the first dependencies come first $sort
    the order of links in a given specification is preserved $linksOrder
+
+ A specification structure can be created from a class name
+   if there is an exception during the creation of the specification instance
+   it must be reported as the cause for the instantiation issue $report
 
 """
 
@@ -34,6 +39,12 @@ class SpecificationStructureSpec extends Specification with ScalaCheck { def is 
     sorted.dropRight(1).map(_.specClassName) must_== specification.structure(env).linkReferences.map(_.specClassName)
 
   }.setArbitrary(ArbitraryLinks).set(maxSize = 5)
+
+  def report = {
+    runAction(SpecificationStructure.create("org.specs2.specification.core.BrokenSpecification")) must be_-\/((e: ErrorEffect.Error) =>
+      e must be_-\/((e1: Throwable) => e1.getCause.getCause.getMessage === "boom")
+    )
+  }
 
   def dependOn(s2: SpecStructure): Matcher[SpecStructure] = (s1: SpecStructure) =>
     (s1 dependsOn s2, s"${s1.specClassName} doesn't depend on ${s2.specClassName}")
@@ -66,3 +77,11 @@ object SS2 extends Specification { def is = "" }
 object SS3 extends Specification { def is = "" }
 object SS4 extends Specification { def is = "" }
 object SS5 extends Specification { def is = "" }
+
+class BrokenSpecification extends Specification { def is = s2"""
+  test$ok
+"""
+
+  throw new IllegalArgumentException("boom")
+
+}
