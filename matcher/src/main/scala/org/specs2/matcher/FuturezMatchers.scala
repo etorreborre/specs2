@@ -1,11 +1,10 @@
 package org.specs2
 package matcher
 
-import java.util.concurrent._
 import execute._
-import org.specs2.concurrent.ExecutionEnv
+import org.specs2.concurrent._
+import FuturezAttempt._
 import scala.concurrent.duration._
-import scala.concurrent.{Future =>_,_}
 import scalaz.concurrent.{Future}
 
 /**
@@ -44,24 +43,12 @@ trait FuturezBaseMatchers extends ExpectationsCreation {
     def attemptFor(timeout: FiniteDuration): Result =
       attempt(retries = 0, timeout)
 
-    def attempt(retries: Int, timeout: FiniteDuration): Result = {
-      val tf = ee.timeFactor
-      val appliedTimeout = timeout * tf.toLong
+    def attempt(retries: Int, timeout: FiniteDuration): Result =
+      AttemptFuture(f).attempt(retries, timeout).fold(
+        timedout => Failure(s"Timeout after ${timedout.totalDuration + timedout.appliedTimeout} (retries = $retries, timeout = $timeout)"),
+        t => asResult.asResult(t)
+      )
 
-      def attemptFuture(remainingRetries: Int, totalDuration: FiniteDuration): Result = {
-        implicit val ses = ee.scheduledExecutorService
-        f.map(AsResult(_)).timed(appliedTimeout.toMillis).run.fold({
-            case e: TimeoutException =>
-              if (remainingRetries <= 0) Failure(s"Timeout after ${totalDuration + appliedTimeout} (retries = $retries, timeout = $timeout)")
-              else                       attemptFuture(remainingRetries - 1, totalDuration + appliedTimeout)
-
-            case other: Throwable => throw other
-          },
-          r => r
-        )
-      }
-      attemptFuture(retries, 0.second)
-    }
   }
 
   private[specs2] def attemptMatcher[T](m: Matcher[T])(retries: Int, timeout: FiniteDuration)(implicit ee: ExecutionEnv): Matcher[Future[T]] = new Matcher[Future[T]] {

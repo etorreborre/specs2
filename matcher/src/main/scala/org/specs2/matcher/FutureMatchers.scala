@@ -4,8 +4,8 @@ package matcher
 import org.specs2.concurrent.ExecutionEnv
 import scala.concurrent.duration._
 import scala.concurrent._
-import java.util.concurrent.TimeoutException
-import org.specs2.execute._
+import execute._
+import concurrent.FutureAwait._
 
 /**
  * This trait is for transforming matchers of values to matchers of Futures
@@ -37,25 +37,20 @@ trait FutureBaseMatchers extends ExpectationsCreation {
 
   private[specs2]
   class FutureAsResult[T](f: Future[T])(implicit ee: ExecutionEnv, asResult: AsResult[T]) {
-    def await: Result = await(retries = 0, timeout = 1.second)
-    def retry(retries: Int): Result = await(retries, timeout = 1.second)
-    def awaitFor(timeout: FiniteDuration): Result = await(retries = 0, timeout)
+    def await: Result =
+      await(retries = 0, timeout = 1.second)
 
-    def await(retries: Int, timeout: FiniteDuration): Result = {
-      val tf = ee.timeFactor
-      val appliedTimeout = timeout * tf.toLong
+    def retry(retries: Int): Result =
+      await(retries, timeout = 1.second)
 
-      def awaitFuture(remainingRetries: Int, totalDuration: FiniteDuration): Result = {
-        try Await.result(f.map(value => AsResult(value))(ee.executionContext), appliedTimeout)
-        catch {
-          case e if e.getClass == classOf[TimeoutException] =>
-            if (remainingRetries <= 0) Failure(s"Timeout after ${totalDuration + appliedTimeout} (retries = $retries, timeout = $timeout)")
-            else                       awaitFuture(remainingRetries - 1, totalDuration + appliedTimeout)
-          case other: Throwable                             => throw other
-        }
-      }
-      awaitFuture(retries, 0.second)
-    }
+    def awaitFor(timeout: FiniteDuration): Result =
+      await(retries = 0, timeout)
+
+    def await(retries: Int, timeout: FiniteDuration): Result =
+      AwaitFuture(f).await(retries, timeout).fold(
+        timedout => Failure(s"Timeout after ${timedout.totalDuration + timedout.appliedTimeout} (retries = $retries, timeout = $timeout)"),
+        t => asResult.asResult(t)
+      )
   }
 
   private[specs2] def awaitMatcher[T](m: Matcher[T])(retries: Int, timeout: FiniteDuration)(implicit ee: ExecutionEnv): Matcher[Future[T]] = new Matcher[Future[T]] {
