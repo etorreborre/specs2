@@ -3,8 +3,9 @@ package specification
 package dsl
 package mutable
 
+import org.specs2.control.{Throwablex, Throwables}
 import org.specs2.execute.ExecuteException
-
+import Throwablex._
 import scala.util.control.NonFatal
 import scalaz.TreeLoc
 import scalaz.Tree._
@@ -135,8 +136,18 @@ case class SpecificationCreationExpectationException(t: ExecuteException) extend
         |   "first example" in { 1 must_== 1 }
         |   "second example" in { 1 must_== 1 }
         | }
+        |
+        |EXCEPTION
+        |
+        |${Throwables.renderWithStack(t)}
+        |
+        |CAUSED BY
+        |
+        |${t.chainedExceptions.map(Throwables.renderWithStack).mkString("\n")}
+        |
         |""".stripMargin
 }
+
 
 case class SpecificationCreationException(t: Throwable) extends Exception {
   override def getMessage: String =
@@ -165,6 +176,15 @@ case class SpecificationCreationException(t: Throwable) extends Exception {
         | database will be created before the "first" and "second" examples. This will NOT be the case
         | unless you mark the specification as `sequential`. You can also have a look at the `BeforeEach/BeforeAll` traits
         | to implement this kind of functionality.
+        |
+        |EXCEPTION
+        |
+        |${Throwables.renderWithStack(t)}
+        |
+        |CAUSED BY
+        |
+        |${t.chainedExceptions.map(Throwables.renderWithStack).mkString("\n")}
+        |
         |""".stripMargin
 }
 
