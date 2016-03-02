@@ -15,7 +15,7 @@ case class FragmentsContinuation(continue: Result => Option[Fragments]) {
 object FragmentsContinuation {
   /** create a continuation */
   def continueWith[R : AsResult](result: =>R, fs: =>Fragments): Execution =
-    Execution(result, FragmentsContinuation((r: Result) => Some(fs)))
+    Execution(result, FragmentsContinuation((r: Result) => if (r.isSuccess) Some(fs) else None))
 }
 
 
