@@ -2,7 +2,8 @@ package org.specs2
 package specification
 package core
 
-import execute.{AsResult, Result}
+import org.specs2.execute.{Error, AsResult, Result}
+import control.Exceptions._
 
 /**
  * Function creating more fragments (to be added to the specification)
@@ -14,8 +15,17 @@ case class FragmentsContinuation(continue: Result => Option[Fragments]) {
 
 object FragmentsContinuation {
   /** create a continuation */
-  def continueWith[R : AsResult](result: =>R, fs: =>Fragments): Execution =
-    Execution(result, FragmentsContinuation((r: Result) => if (r.isSuccess) Some(fs) else None))
+  def continueWith[R : AsResult](result: =>R, fs: =>Fragments): Execution = {
+    def fragmentsCreationError(e: Throwable): Fragments =
+      Fragments(
+        Fragment(Text("Could not create fragments after the previous successful result"),
+                 Execution.result(Error(e))))
+
+    Execution(result, FragmentsContinuation { r: Result =>
+      if (r.isSuccess) Some(tryOr(fs)(fragmentsCreationError))
+      else None
+    })
+  }
 }
 
 
