@@ -64,7 +64,7 @@ object Runner {
 
       case other =>
         print("\n" + t.toString + "\n") >>
-          logStack(t)
+          logStack(t) >>
         print("\n\nThis looks like a specs2 exception...\nPlease report it with the preceding stacktrace at http://github.com/etorreborre/specs2/issues") >>
           print(" ")
 
