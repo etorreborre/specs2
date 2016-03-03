@@ -1,0 +1,1336 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>control - org.specs2.control</title>
+          <meta name="description" content="control - org.specs2.control" />
+          <meta name="keywords" content="control org.specs2.control" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../index.html';
+            var hash = 'org.specs2.control.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Package" src="../../../lib/package_big.png" />
+        <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.specs2">specs2</a></p>
+        <h1>control</h1><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">control</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="org.specs2.control"><span>control</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="org.specs2.control.Action" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Action[A]=org.specs2.control.eff.Eff[org.specs2.control.package.ActionStack,A]"></a>
+      <a id="Action[A]:Action[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Action</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <a href="eff/Eff.html" class="extype" name="org.specs2.control.eff.Eff">Eff</a>[<a href="#ActionStack=org.specs2.control.eff.Effects.|:[org.specs2.control.eff.ErrorEffect.ErrorOrOk,org.specs2.control.eff.Effects.|:[org.specs2.control.eff.ConsoleEffect.Console,org.specs2.control.eff.Effects.|:[org.specs2.control.eff.WarningsEffect.Warnings,org.specs2.control.eff.Effects.|:[org.specs2.control.eff.EvalEffect.Eval,org.specs2.control.eff.NoEffect]]]]" class="extmbr" name="org.specs2.control.ActionStack">ActionStack</a>, <span class="extype" name="org.specs2.control.Action.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@Action[A]=org.specs2.control.eff.Eff[org.specs2.control.package.ActionStack,A]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.control.ActionException" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ActionExceptionextendsExceptionwithProductwithSerializable"></a>
+      <a id="ActionException:ActionException"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ActionException.html"><span class="name">ActionException</span></a><span class="params">(<span name="warnings">warnings: <span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="message">message: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="throwable">throwable: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Throwable">Throwable</span>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@ActionExceptionextendsExceptionwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This exception class is used when an Action is transformed to a Task to avoid losing information
+</p>
+    </li><li name="org.specs2.control.ActionStack" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ActionStack=org.specs2.control.eff.Effects.|:[org.specs2.control.eff.ErrorEffect.ErrorOrOk,org.specs2.control.eff.Effects.|:[org.specs2.control.eff.ConsoleEffect.Console,org.specs2.control.eff.Effects.|:[org.specs2.control.eff.WarningsEffect.Warnings,org.specs2.control.eff.Effects.|:[org.specs2.control.eff.EvalEffect.Eval,org.specs2.control.eff.NoEffect]]]]"></a>
+      <a id="ActionStack:ActionStack"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ActionStack</span><span class="result"> = <a href="eff/EffectsCons.html" class="extype" name="org.specs2.control.eff.EffectsCons">EffectsCons</a>[<a href="eff/ErrorEffect$.html#ErrorOrOk[A]=scalaz.\/[ErrorEffect.this.Error,scalaz.Name[A]]" class="extmbr" name="org.specs2.control.eff.ErrorEffect.ErrorOrOk">control.eff.ErrorEffect.ErrorOrOk</a>, <a href="eff/Effects$.html#|:[H[_],T&lt;:org.specs2.control.eff.Effects]=org.specs2.control.eff.EffectsCons[H,T]" class="extmbr" name="org.specs2.control.eff.Effects.|:">|:</a>[<a href="eff/ConsoleEffect$.html#Console[A]=scalaz.@@[scalaz.Writer[String,A],org.specs2.control.eff.ConsoleEffect.ConsoleTag]" class="extmbr" name="org.specs2.control.eff.ConsoleEffect.Console">Console</a>, <a href="eff/Effects$.html#|:[H[_],T&lt;:org.specs2.control.eff.Effects]=org.specs2.control.eff.EffectsCons[H,T]" class="extmbr" name="org.specs2.control.eff.Effects.|:">|:</a>[<a href="eff/WarningsEffect$.html#Warnings[A]=scalaz.@@[scalaz.Writer[String,A],org.specs2.control.eff.WarningsEffect.WarningsTag]" class="extmbr" name="org.specs2.control.eff.WarningsEffect.Warnings">Warnings</a>, <a href="eff/Effects$.html#|:[H[_],T&lt;:org.specs2.control.eff.Effects]=org.specs2.control.eff.EffectsCons[H,T]" class="extmbr" name="org.specs2.control.eff.Effects.|:">|:</a>[<a href="eff/EvalEffect$.html#Eval[A]=scalaz.Name[A]" class="extmbr" name="org.specs2.control.eff.EvalEffect.Eval">Eval</a>, <a href="eff/NoEffect.html" class="extype" name="org.specs2.control.eff.NoEffect">NoEffect</a>]]]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@ActionStack=org.specs2.control.eff.Effects.|:[org.specs2.control.eff.ErrorEffect.ErrorOrOk,org.specs2.control.eff.Effects.|:[org.specs2.control.eff.ConsoleEffect.Console,org.specs2.control.eff.Effects.|:[org.specs2.control.eff.WarningsEffect.Warnings,org.specs2.control.eff.Effects.|:[org.specs2.control.eff.EvalEffect.Eval,org.specs2.control.eff.NoEffect]]]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Action type, using a logger as a reader and no writer
+</p>
+    </li><li name="org.specs2.control.Debug" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="DebugextendsImplicitParameters"></a>
+      <a id="Debug:Debug"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Debug.html"><span class="name">Debug</span></a><span class="result"> extends <a href="ImplicitParameters.html" class="extype" name="org.specs2.control.ImplicitParameters">ImplicitParameters</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@DebugextendsImplicitParameters" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This trait provides simple a way to print out any object to the console:</p><div class="fullcomment"><div class="comment cmt"><p>This trait provides simple a way to print out any object to the console:</p><p> &quot;this string&quot;.pp must_== &quot;this string&quot;</p><p> will print 'this string' and pass it to the rest of the expectation</p></div></div>
+    </li><li name="org.specs2.control.Exceptions" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="ExceptionsextendsAnyRef"></a>
+      <a id="Exceptions:Exceptions"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Exceptions.html"><span class="name">Exceptions</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@ExceptionsextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This trait provides methods to catch exceptions and transform them into values which can be passed to
+further computations.</p><div class="fullcomment"><div class="comment cmt"><p>This trait provides methods to catch exceptions and transform them into values which can be passed to
+further computations.</p><p>It uses the facilities found in the scala.util.control.Exception object while providing
+a more concise api on some use cases.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>org.specs2.control.ExceptionsSpec for examples</p></span></dd></dl></div>
+    </li><li name="org.specs2.control.ExecutionOrigin" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ExecutionOriginextendsStacktraces"></a>
+      <a id="ExecutionOrigin:ExecutionOrigin"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ExecutionOrigin.html"><span class="name">ExecutionOrigin</span></a><span class="result"> extends <a href="Stacktraces.html" class="extype" name="org.specs2.control.Stacktraces">Stacktraces</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@ExecutionOriginextendsStacktraces" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This trait is used primarily to change the junit behavior depending on the execution environment
+</p>
+    </li><li name="org.specs2.control.Functions" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="FunctionsextendsAnyRef"></a>
+      <a id="Functions:Functions"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Functions.html"><span class="name">Functions</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@FunctionsextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This trait provides utility methods for functions
+</p>
+    </li><li name="org.specs2.control.HasStackTrace" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="HasStackTraceextendsAnyRef"></a>
+      <a id="HasStackTrace:HasStackTrace"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="HasStackTrace.html"><span class="name">HasStackTrace</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@HasStackTraceextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This trait describes something which has a stackTrace with:</p><div class="fullcomment"><div class="comment cmt"><p>This trait describes something which has a stackTrace with:</p><ul><li>a list of stacktrace element</li></ul><p> This is used to provide a common interface to execute.Failure and execute.Error
+</p></div></div>
+    </li><li name="org.specs2.control.ImplicitParameters" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="ImplicitParametersextendsAnyRef"></a>
+      <a id="ImplicitParameters:ImplicitParameters"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ImplicitParameters.html"><span class="name">ImplicitParameters</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@ImplicitParametersextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This trait is used to abuse method overloading and allow some of the methods in specs2 DSL to
+be applicable to various parameters.</p><div class="fullcomment"><div class="comment cmt"><p>This trait is used to abuse method overloading and allow some of the methods in specs2 DSL to
+be applicable to various parameters.</p><p>For example in a mutable specification, the &gt;&gt; method is overloaded for lots of different arguments:</p><ul><li>result</li><li>function of the Environment</li><li>function of the Command line</li><li>...
+</li></ul></div></div>
+    </li><li name="org.specs2.control.IncludeExcludeStackTraceFilter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="IncludeExcludeStackTraceFilterextendsStackTraceFilterwithProductwithSerializable"></a>
+      <a id="IncludeExcludeStackTraceFilter:IncludeExcludeStackTraceFilter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="IncludeExcludeStackTraceFilter.html"><span class="name">IncludeExcludeStackTraceFilter</span></a><span class="params">(<span name="include">include: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="exclude">exclude: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <a href="StackTraceFilter.html" class="extype" name="org.specs2.control.StackTraceFilter">StackTraceFilter</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@IncludeExcludeStackTraceFilterextendsStackTraceFilterwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Implementation of the StackTraceFilter trait with a list of include/exclude patterns
+</p>
+    </li><li name="org.specs2.control.LanguageFeatures" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="LanguageFeaturesextendsAnyRef"></a>
+      <a id="LanguageFeatures:LanguageFeatures"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="LanguageFeatures.html"><span class="name">LanguageFeatures</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@LanguageFeaturesextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">implicits and postfix ops are automatically mixed in specs2 specifications
+for convenience.</p><div class="fullcomment"><div class="comment cmt"><p>implicits and postfix ops are automatically mixed in specs2 specifications
+for convenience. If you *really* don't want that you can override this behaviour by using the NoLanguageFeatures trait
+</p></div></div>
+    </li><li name="org.specs2.control.LazyParameter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LazyParameter[+T]extendsAnyRef"></a>
+      <a id="LazyParameter[+T]:LazyParameter[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="LazyParameter.html"><span class="name">LazyParameter</span></a><span class="tparams">[<span name="T">+T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@LazyParameter[+T]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">class holding a value to be evaluated lazily</p>
+    </li><li name="org.specs2.control.LazyParameters" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="LazyParametersextendsAnyRef"></a>
+      <a id="LazyParameters:LazyParameters"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="LazyParameters.html"><span class="name">LazyParameters</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@LazyParametersextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This trait can be used to allow some function to be called with varargs, with values being
+evaluated lazily:</p><div class="fullcomment"><div class="comment cmt"><p>This trait can be used to allow some function to be called with varargs, with values being
+evaluated lazily:</p><pre><span class="kw">def</span> method[T](values: LazyParameter[T]*) = {
+  values.toStream <span class="cmt">// use the toStream method to consume the values lazily</span>
+}
+<span class="cmt">// usage</span>
+method(exp1, exp2, exp3)</pre><p>Note that the values are really evaluated once, unlike a by-name parameter.
+</p></div></div>
+    </li><li name="org.specs2.control.LazyValue" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="LazyValue[T]extendsProductwithSerializable"></a>
+      <a id="LazyValue[T]:LazyValue[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="LazyValue.html"><span class="name">LazyValue</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="t">t: () ⇒ <span class="extype" name="org.specs2.control.LazyValue.T">T</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@LazyValue[T]extendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This class simply encapsulates a lazy value which will be only evaluated once</p><div class="fullcomment"><div class="comment cmt"><p>This class simply encapsulates a lazy value which will be only evaluated once</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>org.specs2.specification.process.RandomSequentialExecution for an example of use</p></span></dd></dl></div>
+    </li><li name="org.specs2.control.Logger" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Logger=String=&gt;Unit"></a>
+      <a id="Logger:Logger"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Logger</span><span class="result"> = (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@Logger=String=&gt;Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Actions logging
+</p>
+    </li><li name="org.specs2.control.NamedThreadFactory" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="NamedThreadFactoryextendsThreadFactorywithProductwithSerializable"></a>
+      <a id="NamedThreadFactory:NamedThreadFactory"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="NamedThreadFactory.html"><span class="name">NamedThreadFactory</span></a><span class="params">(<span name="namePrefix">namePrefix: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="group">group: <span class="extype" name="java.lang.ThreadGroup">ThreadGroup</span> = <span class="symbol">Thread.currentThread.getThreadGroup</span></span>, <span name="priority">priority: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">Thread.currentThread.getPriority</span></span>)</span><span class="result"> extends <span class="extype" name="java.util.concurrent.ThreadFactory">ThreadFactory</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@NamedThreadFactoryextendsThreadFactorywithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This factory creates named threads which can be prefixed by &quot;specs2&quot; to track the threads used by
+specs2 for the specification execution</p><div class="fullcomment"><div class="comment cmt"><p>This factory creates named threads which can be prefixed by &quot;specs2&quot; to track the threads used by
+specs2 for the specification execution</p><p>Contributed by @jedws
+</p></div></div>
+    </li><li name="org.specs2.control.NoDebug" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="NoDebugextendsDebug"></a>
+      <a id="NoDebug:NoDebug"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="NoDebug.html"><span class="name">NoDebug</span></a><span class="result"> extends <a href="Debug.html" class="extype" name="org.specs2.control.Debug">Debug</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@NoDebugextendsDebug" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Use this trait to disable the <code>pp</code> method on objects
+</p>
+    </li><li name="org.specs2.control.NoLanguageFeatures" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="NoLanguageFeaturesextendsLanguageFeatures"></a>
+      <a id="NoLanguageFeatures:NoLanguageFeatures"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="NoLanguageFeatures.html"><span class="name">NoLanguageFeatures</span></a><span class="result"> extends <a href="LanguageFeatures.html" class="extype" name="org.specs2.control.LanguageFeatures">LanguageFeatures</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@NoLanguageFeaturesextendsLanguageFeatures" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.control.NoNumberOfTimes" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="NoNumberOfTimesextendsNumberOfTimes"></a>
+      <a id="NoNumberOfTimes:NoNumberOfTimes"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="NoNumberOfTimes.html"><span class="name">NoNumberOfTimes</span></a><span class="result"> extends <a href="NumberOfTimes.html" class="extype" name="org.specs2.control.NumberOfTimes">NumberOfTimes</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@NoNumberOfTimesextendsNumberOfTimes" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.control.NumberOfTimes" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="NumberOfTimesextendsAnyRef"></a>
+      <a id="NumberOfTimes:NumberOfTimes"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="NumberOfTimes.html"><span class="name">NumberOfTimes</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@NumberOfTimesextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Syntactic sugar to execute an action a given number of times
+</p>
+    </li><li name="org.specs2.control.Properties" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="PropertiesextendsAnyRef"></a>
+      <a id="Properties:Properties"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Properties.html"><span class="name">Properties</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@PropertiesextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.control.Property" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Property[T]extendsProductwithSerializable"></a>
+      <a id="Property[T]:Property[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Property.html"><span class="name">Property</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="value">value: () ⇒ <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="org.specs2.control.Property.T">T</span>]</span>, <span name="evaluated">evaluated: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="evaluatedValue">evaluatedValue: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="org.specs2.control.Property.T">T</span>] = <span class="symbol">None</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@Property[T]extendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This class represents values which are evaluated lazily and which may even be missing.</p><div class="fullcomment"><div class="comment cmt"><p>This class represents values which are evaluated lazily and which may even be missing.</p><p>It has Option-like function and can be also converted to an Either object
+</p></div></div>
+    </li><li name="org.specs2.control.SomeTimeout" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SomeTimeoutextendsAnyRef"></a>
+      <a id="SomeTimeout:SomeTimeout"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="SomeTimeout.html"><span class="name">SomeTimeout</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@SomeTimeoutextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.control.StackTraceFilter" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="StackTraceFilterextendsAnyRef"></a>
+      <a id="StackTraceFilter:StackTraceFilter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="StackTraceFilter.html"><span class="name">StackTraceFilter</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@StackTraceFilterextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This trait filters an Exception stacktrace
+</p>
+    </li><li name="org.specs2.control.Stacktraces" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="StacktracesextendsAnyRef"></a>
+      <a id="Stacktraces:Stacktraces"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Stacktraces.html"><span class="name">Stacktraces</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@StacktracesextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Utility methods to determine the origin of the execution of the current code
+</p>
+    </li><li name="org.specs2.control.Throwablex" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ThrowablexextendsAnyRef"></a>
+      <a id="Throwablex:Throwablex"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Throwablex.html"><span class="name">Throwablex</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@ThrowablexextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This trait adds some utility methods to <code>Throwable</code> objects.</p>
+    </li><li name="org.specs2.control.Times" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TimesextendsProductwithSerializable"></a>
+      <a id="Times:Times"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Times.html"><span class="name">Times</span></a><span class="params">(<span name="n">n: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@TimesextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.control.TraceLocation" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TraceLocationextendsProductwithSerializable"></a>
+      <a id="TraceLocation:TraceLocation"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="TraceLocation.html"><span class="name">TraceLocation</span></a><span class="params">(<span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="fileName">fileName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="className">className: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="methodName">methodName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="lineNumber">lineNumber: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@TraceLocationextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.control.UserException" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="UserExceptionextendsExceptionwithProductwithSerializable"></a>
+      <a id="UserException:UserException"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="UserException.html"><span class="name">UserException</span></a><span class="params">(<span name="message">message: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="throwable">throwable: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@UserExceptionextendsExceptionwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This exception class is used to notify the user of instantiation errors
+</p>
+    </li><li name="org.specs2.control.actionOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="actionOps[T]extendsAnyRef"></a>
+      <a id="actionOps[T]:actionOps[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$actionOps.html"><span class="name">actionOps</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@actionOps[T]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.control.actionToTask" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="actionToTask[T]extendsAnyRef"></a>
+      <a id="actionToTask[T]:actionToTask[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$actionToTask.html"><span class="name">actionToTask</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@actionToTask[T]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An Action[T] can be converted to a Task[T]
+</p>
+    </li><li name="org.specs2.control.ioActionToOption" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ioActionToOption[T]extendsAnyRef"></a>
+      <a id="ioActionToOption[T]:ioActionToOption[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$ioActionToOption.html"><span class="name">ioActionToOption</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@ioActionToOption[T]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">execute an action with no logging and return an option
+</p>
+    </li><li name="org.specs2.control.ioActionToProcess" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ioActionToProcess[T]extendsAnyRef"></a>
+      <a id="ioActionToProcess[T]:ioActionToProcess[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$ioActionToProcess.html"><span class="name">ioActionToProcess</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@ioActionToProcess[T]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An Action[T] can be converted to a Task[T] then to a Process[T] returning just one element
+</p>
+    </li><li name="org.specs2.control.taskToAction" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="taskToAction[T]extendsAnyRef"></a>
+      <a id="taskToAction[T]:taskToAction[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$taskToAction.html"><span class="name">taskToAction</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@taskToAction[T]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A Task[T] (the result of running a Process[Task, T] for example) can be converted to
+an Action[T]
+</p>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="org.specs2.control.Actions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Actions"></a>
+      <a id="Actions:Actions"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$Actions$.html"><span class="name">Actions</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@Actions" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.control#ConsoleMember" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ConsoleMember:org.specs2.control.eff.Member[org.specs2.control.eff.ConsoleEffect.Console,org.specs2.control.package.ActionStack]"></a>
+      <a id="ConsoleMember:Member[Console,ActionStack]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ConsoleMember</span><span class="result">: <a href="eff/Member.html" class="extype" name="org.specs2.control.eff.Member">Member</a>[<a href="eff/ConsoleEffect$.html#Console[A]=scalaz.@@[scalaz.Writer[String,A],org.specs2.control.eff.ConsoleEffect.ConsoleTag]" class="extmbr" name="org.specs2.control.eff.ConsoleEffect.Console">Console</a>, <a href="#ActionStack=org.specs2.control.eff.Effects.|:[org.specs2.control.eff.ErrorEffect.ErrorOrOk,org.specs2.control.eff.Effects.|:[org.specs2.control.eff.ConsoleEffect.Console,org.specs2.control.eff.Effects.|:[org.specs2.control.eff.WarningsEffect.Warnings,org.specs2.control.eff.Effects.|:[org.specs2.control.eff.EvalEffect.Eval,org.specs2.control.eff.NoEffect]]]]" class="extmbr" name="org.specs2.control.ActionStack">ActionStack</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@ConsoleMember:org.specs2.control.eff.Member[org.specs2.control.eff.ConsoleEffect.Console,org.specs2.control.package.ActionStack]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.control.Debug" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Debug"></a>
+      <a id="Debug:Debug"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Debug$.html"><span class="name">Debug</span></a><span class="result"> extends <a href="Debug.html" class="extype" name="org.specs2.control.Debug">Debug</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@Debug" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.control.DefaultStackTraceFilter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DefaultStackTraceFilter"></a>
+      <a id="DefaultStackTraceFilter:DefaultStackTraceFilter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="DefaultStackTraceFilter$.html"><span class="name">DefaultStackTraceFilter</span></a><span class="result"> extends <a href="IncludeExcludeStackTraceFilter.html" class="extype" name="org.specs2.control.IncludeExcludeStackTraceFilter">IncludeExcludeStackTraceFilter</a> with <a href="ExecutionOrigin.html" class="extype" name="org.specs2.control.ExecutionOrigin">ExecutionOrigin</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@DefaultStackTraceFilter" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">default filter for specs2 runs
+</p>
+    </li><li name="org.specs2.control#ErrorMember" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ErrorMember:org.specs2.control.eff.Member[org.specs2.control.eff.ErrorEffect.ErrorOrOk,org.specs2.control.package.ActionStack]"></a>
+      <a id="ErrorMember:Member[control.eff.ErrorEffect.ErrorOrOk,ActionStack]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ErrorMember</span><span class="result">: <a href="eff/Member.html" class="extype" name="org.specs2.control.eff.Member">Member</a>[<a href="eff/ErrorEffect$.html#ErrorOrOk[A]=scalaz.\/[ErrorEffect.this.Error,scalaz.Name[A]]" class="extmbr" name="org.specs2.control.eff.ErrorEffect.ErrorOrOk">control.eff.ErrorEffect.ErrorOrOk</a>, <a href="#ActionStack=org.specs2.control.eff.Effects.|:[org.specs2.control.eff.ErrorEffect.ErrorOrOk,org.specs2.control.eff.Effects.|:[org.specs2.control.eff.ConsoleEffect.Console,org.specs2.control.eff.Effects.|:[org.specs2.control.eff.WarningsEffect.Warnings,org.specs2.control.eff.Effects.|:[org.specs2.control.eff.EvalEffect.Eval,org.specs2.control.eff.NoEffect]]]]" class="extmbr" name="org.specs2.control.ActionStack">ActionStack</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@ErrorMember:org.specs2.control.eff.Member[org.specs2.control.eff.ErrorEffect.ErrorOrOk,org.specs2.control.package.ActionStack]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.control#EvalMember" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="EvalMember:org.specs2.control.eff.Member[scalaz.Name,org.specs2.control.package.ActionStack]"></a>
+      <a id="EvalMember:Member[Name,ActionStack]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">EvalMember</span><span class="result">: <a href="eff/Member.html" class="extype" name="org.specs2.control.eff.Member">Member</a>[<span class="extype" name="scalaz.Name">Name</span>, <a href="#ActionStack=org.specs2.control.eff.Effects.|:[org.specs2.control.eff.ErrorEffect.ErrorOrOk,org.specs2.control.eff.Effects.|:[org.specs2.control.eff.ConsoleEffect.Console,org.specs2.control.eff.Effects.|:[org.specs2.control.eff.WarningsEffect.Warnings,org.specs2.control.eff.Effects.|:[org.specs2.control.eff.EvalEffect.Eval,org.specs2.control.eff.NoEffect]]]]" class="extmbr" name="org.specs2.control.ActionStack">ActionStack</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@EvalMember:org.specs2.control.eff.Member[scalaz.Name,org.specs2.control.package.ActionStack]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.control.Exceptions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Exceptions"></a>
+      <a id="Exceptions:Exceptions"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Exceptions$.html"><span class="name">Exceptions</span></a><span class="result"> extends <a href="Exceptions.html" class="extype" name="org.specs2.control.Exceptions">Exceptions</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@Exceptions" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.control.Executable" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Executable"></a>
+      <a id="Executable:Executable"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Executable$.html"><span class="name">Executable</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@Executable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Execute external commands
+</p>
+    </li><li name="org.specs2.control.ExecutionOrigin" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ExecutionOrigin"></a>
+      <a id="ExecutionOrigin:ExecutionOrigin"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ExecutionOrigin$.html"><span class="name">ExecutionOrigin</span></a><span class="result"> extends <a href="ExecutionOrigin.html" class="extype" name="org.specs2.control.ExecutionOrigin">ExecutionOrigin</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@ExecutionOrigin" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.control.Functions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Functions"></a>
+      <a id="Functions:Functions"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Functions$.html"><span class="name">Functions</span></a><span class="result"> extends <a href="Functions.html" class="extype" name="org.specs2.control.Functions">Functions</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@Functions" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.control.FutureInstances" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FutureInstances"></a>
+      <a id="FutureInstances:FutureInstances"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="FutureInstances$.html"><span class="name">FutureInstances</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@FutureInstances" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.control.ImplicitParameters" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ImplicitParameters"></a>
+      <a id="ImplicitParameters:ImplicitParameters"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ImplicitParameters$.html"><span class="name">ImplicitParameters</span></a><span class="result"> extends <a href="ImplicitParameters.html" class="extype" name="org.specs2.control.ImplicitParameters">ImplicitParameters</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@ImplicitParameters" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.control.IncludeExcludeStackTraceFilter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="IncludeExcludeStackTraceFilter"></a>
+      <a id="IncludeExcludeStackTraceFilter:IncludeExcludeStackTraceFilter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="IncludeExcludeStackTraceFilter$.html"><span class="name">IncludeExcludeStackTraceFilter</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@IncludeExcludeStackTraceFilter" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Factory object to build a stack trace filter from include/exclude expressions:</p><div class="fullcomment"><div class="comment cmt"><p>Factory object to build a stack trace filter from include/exclude expressions:</p><p>.*specs2                       ==&gt; include .*specs2 traces
+.*specs2/scala.*               ==&gt; include .*specs2 traces, exclude scala.* traces
+.*specs2,scala/scalaz,eclipse  ==&gt; include .*specs2,scala traces, exclude scalaz and eclipse traces</p></div></div>
+    </li><li name="org.specs2.control.LazyParameters" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LazyParameters"></a>
+      <a id="LazyParameters:LazyParameters"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="LazyParameters$.html"><span class="name">LazyParameters</span></a><span class="result"> extends <a href="LazyParameters.html" class="extype" name="org.specs2.control.LazyParameters">LazyParameters</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@LazyParameters" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.control.NoStackTraceFilter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NoStackTraceFilter"></a>
+      <a id="NoStackTraceFilter:NoStackTraceFilter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="NoStackTraceFilter$.html"><span class="name">NoStackTraceFilter</span></a><span class="result"> extends <a href="StackTraceFilter.html" class="extype" name="org.specs2.control.StackTraceFilter">StackTraceFilter</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@NoStackTraceFilter" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This filter doesn't do anything
+</p>
+    </li><li name="org.specs2.control.NumberOfTimes" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NumberOfTimes"></a>
+      <a id="NumberOfTimes:NumberOfTimes"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="NumberOfTimes$.html"><span class="name">NumberOfTimes</span></a><span class="result"> extends <a href="NumberOfTimes.html" class="extype" name="org.specs2.control.NumberOfTimes">NumberOfTimes</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@NumberOfTimes" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.control.Properties" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Properties"></a>
+      <a id="Properties:Properties"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Properties$.html"><span class="name">Properties</span></a><span class="result"> extends <a href="Properties.html" class="extype" name="org.specs2.control.Properties">Properties</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@Properties" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.control.Property" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Property"></a>
+      <a id="Property:Property"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Property$.html"><span class="name">Property</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@Property" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Companion object to create properties with possibly no initial value
+</p>
+    </li><li name="org.specs2.control.SomeTimeout" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SomeTimeout"></a>
+      <a id="SomeTimeout:SomeTimeout"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="SomeTimeout$.html"><span class="name">SomeTimeout</span></a><span class="result"> extends <a href="SomeTimeout.html" class="extype" name="org.specs2.control.SomeTimeout">SomeTimeout</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@SomeTimeout" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.control.StackTraceFilter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StackTraceFilter"></a>
+      <a id="StackTraceFilter:StackTraceFilter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="StackTraceFilter$.html"><span class="name">StackTraceFilter</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@StackTraceFilter" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.control.Stacktraces" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Stacktraces"></a>
+      <a id="Stacktraces:Stacktraces"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Stacktraces$.html"><span class="name">Stacktraces</span></a><span class="result"> extends <a href="Stacktraces.html" class="extype" name="org.specs2.control.Stacktraces">Stacktraces</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@Stacktraces" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.control.Throwables" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Throwables"></a>
+      <a id="Throwables:Throwables"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Throwables$.html"><span class="name">Throwables</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@Throwables" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.control.Throwablex" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Throwablex"></a>
+      <a id="Throwablex:Throwablex"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Throwablex$.html"><span class="name">Throwablex</span></a><span class="result"> extends <a href="Throwablex.html" class="extype" name="org.specs2.control.Throwablex">Throwablex</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@Throwablex" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.control.TraceLocation" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TraceLocation"></a>
+      <a id="TraceLocation:TraceLocation"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="TraceLocation$.html"><span class="name">TraceLocation</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@TraceLocation" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.control#WarningsMember" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="WarningsMember:org.specs2.control.eff.Member[org.specs2.control.eff.WarningsEffect.Warnings,org.specs2.control.package.ActionStack]"></a>
+      <a id="WarningsMember:Member[Warnings,ActionStack]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">WarningsMember</span><span class="result">: <a href="eff/Member.html" class="extype" name="org.specs2.control.eff.Member">Member</a>[<a href="eff/WarningsEffect$.html#Warnings[A]=scalaz.@@[scalaz.Writer[String,A],org.specs2.control.eff.WarningsEffect.WarningsTag]" class="extmbr" name="org.specs2.control.eff.WarningsEffect.Warnings">Warnings</a>, <a href="#ActionStack=org.specs2.control.eff.Effects.|:[org.specs2.control.eff.ErrorEffect.ErrorOrOk,org.specs2.control.eff.Effects.|:[org.specs2.control.eff.ConsoleEffect.Console,org.specs2.control.eff.Effects.|:[org.specs2.control.eff.WarningsEffect.Warnings,org.specs2.control.eff.Effects.|:[org.specs2.control.eff.EvalEffect.Eval,org.specs2.control.eff.NoEffect]]]]" class="extmbr" name="org.specs2.control.ActionStack">ActionStack</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@WarningsMember:org.specs2.control.eff.Member[org.specs2.control.eff.WarningsEffect.Warnings,org.specs2.control.package.ActionStack]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.control#actionAsResult" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="actionAsResult[T](implicitevidence$2:org.specs2.execute.AsResult[T]):org.specs2.execute.AsResult[org.specs2.control.package.Action[T]]"></a>
+      <a id="actionAsResult[T](AsResult[T]):AsResult[Action[T]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">actionAsResult</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../execute/AsResult.html" class="extype" name="org.specs2.execute.AsResult">AsResult</a>[<span class="extype" name="org.specs2.control.actionAsResult.T">T</span>]</span>)</span><span class="result">: <a href="../execute/AsResult.html" class="extype" name="org.specs2.execute.AsResult">AsResult</a>[<a href="#Action[A]=org.specs2.control.eff.Eff[org.specs2.control.package.ActionStack,A]" class="extmbr" name="org.specs2.control.Action">Action</a>[<span class="extype" name="org.specs2.control.actionAsResult.T">T</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@actionAsResult[T](implicitevidence$2:org.specs2.execute.AsResult[T]):org.specs2.execute.AsResult[org.specs2.control.package.Action[T]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This implicit allows an Action[result] to be used inside an example.</p><div class="fullcomment"><div class="comment cmt"><p>This implicit allows an Action[result] to be used inside an example.</p><p>For example to read a database.
+</p></div></div>
+    </li><li name="org.specs2.control#attemptExecuteAction" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="attemptExecuteAction[A](action:org.specs2.control.eff.Eff[org.specs2.control.package.ActionStack,A],printer:String=&gt;Unit):scalaz.\/[Throwable,(scalaz.\/[org.specs2.control.eff.ErrorEffect.Error,A],Vector[String])]"></a>
+      <a id="attemptExecuteAction[A](Eff[ActionStack,A],(String)⇒Unit):\/[Throwable,(\/[control.eff.ErrorEffect.Error,A],Vector[String])]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">attemptExecuteAction</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="action">action: <a href="eff/Eff.html" class="extype" name="org.specs2.control.eff.Eff">Eff</a>[<a href="#ActionStack=org.specs2.control.eff.Effects.|:[org.specs2.control.eff.ErrorEffect.ErrorOrOk,org.specs2.control.eff.Effects.|:[org.specs2.control.eff.ConsoleEffect.Console,org.specs2.control.eff.Effects.|:[org.specs2.control.eff.WarningsEffect.Warnings,org.specs2.control.eff.Effects.|:[org.specs2.control.eff.EvalEffect.Eval,org.specs2.control.eff.NoEffect]]]]" class="extmbr" name="org.specs2.control.ActionStack">ActionStack</a>, <span class="extype" name="org.specs2.control.attemptExecuteAction.A">A</span>]</span>, <span name="printer">printer: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Unit">Unit</span> = <span class="symbol">s =&gt; ()</span></span>)</span><span class="result">: <span class="extype" name="scalaz.\/">\/</span>[<span class="extype" name="scala.Throwable">Throwable</span>, (<span class="extype" name="scalaz.\/">\/</span>[<a href="eff/ErrorEffect$.html#Error=scalaz.\/[Throwable,F]" class="extmbr" name="org.specs2.control.eff.ErrorEffect.Error">control.eff.ErrorEffect.Error</a>, <span class="extype" name="org.specs2.control.attemptExecuteAction.A">A</span>], <span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="scala.Predef.String">String</span>])]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@attemptExecuteAction[A](action:org.specs2.control.eff.Eff[org.specs2.control.package.ActionStack,A],printer:String=&gt;Unit):scalaz.\/[Throwable,(scalaz.\/[org.specs2.control.eff.ErrorEffect.Error,A],Vector[String])]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.control#consoleLogging" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="consoleLogging:String=&gt;Unit"></a>
+      <a id="consoleLogging:(String)⇒Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">lazy val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">consoleLogging</span><span class="result">: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@consoleLogging:String=&gt;Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.control.eff" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="eff"></a>
+      <a id="eff:eff"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="eff/package.html"><span class="name">eff</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@eff" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.control#executeAction" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="executeAction[A](action:org.specs2.control.eff.Eff[org.specs2.control.package.ActionStack,A],printer:String=&gt;Unit):(scalaz.\/[org.specs2.control.eff.ErrorEffect.Error,A],Vector[String])"></a>
+      <a id="executeAction[A](Eff[ActionStack,A],(String)⇒Unit):(\/[control.eff.ErrorEffect.Error,A],Vector[String])"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">executeAction</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="action">action: <a href="eff/Eff.html" class="extype" name="org.specs2.control.eff.Eff">Eff</a>[<a href="#ActionStack=org.specs2.control.eff.Effects.|:[org.specs2.control.eff.ErrorEffect.ErrorOrOk,org.specs2.control.eff.Effects.|:[org.specs2.control.eff.ConsoleEffect.Console,org.specs2.control.eff.Effects.|:[org.specs2.control.eff.WarningsEffect.Warnings,org.specs2.control.eff.Effects.|:[org.specs2.control.eff.EvalEffect.Eval,org.specs2.control.eff.NoEffect]]]]" class="extmbr" name="org.specs2.control.ActionStack">ActionStack</a>, <span class="extype" name="org.specs2.control.executeAction.A">A</span>]</span>, <span name="printer">printer: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Unit">Unit</span> = <span class="symbol">s =&gt; ()</span></span>)</span><span class="result">: (<span class="extype" name="scalaz.\/">\/</span>[<a href="eff/ErrorEffect$.html#Error=scalaz.\/[Throwable,F]" class="extmbr" name="org.specs2.control.eff.ErrorEffect.Error">control.eff.ErrorEffect.Error</a>, <span class="extype" name="org.specs2.control.executeAction.A">A</span>], <span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="scala.Predef.String">String</span>])</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@executeAction[A](action:org.specs2.control.eff.Eff[org.specs2.control.package.ActionStack,A],printer:String=&gt;Unit):(scalaz.\/[org.specs2.control.eff.ErrorEffect.Error,A],Vector[String])" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.control#ioResultAsResult" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ioResultAsResult[T](implicitevidence$1:org.specs2.execute.AsResult[T]):org.specs2.execute.AsResult[scalaz.effect.IO[T]]"></a>
+      <a id="ioResultAsResult[T](AsResult[T]):AsResult[IO[T]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ioResultAsResult</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="../execute/AsResult.html" class="extype" name="org.specs2.execute.AsResult">AsResult</a>[<span class="extype" name="org.specs2.control.ioResultAsResult.T">T</span>]</span>)</span><span class="result">: <a href="../execute/AsResult.html" class="extype" name="org.specs2.execute.AsResult">AsResult</a>[<span class="extype" name="scalaz.effect.IO">IO</span>[<span class="extype" name="org.specs2.control.ioResultAsResult.T">T</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@ioResultAsResult[T](implicitevidence$1:org.specs2.execute.AsResult[T]):org.specs2.execute.AsResult[scalaz.effect.IO[T]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This implicit allows any IO[Result] to be used inside an example:</p><div class="fullcomment"><div class="comment cmt"><p>This implicit allows any IO[Result] to be used inside an example:</p><p>&quot;this should work&quot; in {
+  IO(success)
+}
+</p></div></div>
+    </li><li name="org.specs2.control#noLogging" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="noLogging:String=&gt;Unit"></a>
+      <a id="noLogging:(String)⇒Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">lazy val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">noLogging</span><span class="result">: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@noLogging:String=&gt;Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.control#runAction" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="runAction[A](action:org.specs2.control.eff.Eff[org.specs2.control.package.ActionStack,A],printer:String=&gt;Unit):scalaz.\/[org.specs2.control.eff.ErrorEffect.Error,A]"></a>
+      <a id="runAction[A](Eff[ActionStack,A],(String)⇒Unit):\/[control.eff.ErrorEffect.Error,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">runAction</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="action">action: <a href="eff/Eff.html" class="extype" name="org.specs2.control.eff.Eff">Eff</a>[<a href="#ActionStack=org.specs2.control.eff.Effects.|:[org.specs2.control.eff.ErrorEffect.ErrorOrOk,org.specs2.control.eff.Effects.|:[org.specs2.control.eff.ConsoleEffect.Console,org.specs2.control.eff.Effects.|:[org.specs2.control.eff.WarningsEffect.Warnings,org.specs2.control.eff.Effects.|:[org.specs2.control.eff.EvalEffect.Eval,org.specs2.control.eff.NoEffect]]]]" class="extmbr" name="org.specs2.control.ActionStack">ActionStack</a>, <span class="extype" name="org.specs2.control.runAction.A">A</span>]</span>, <span name="printer">printer: (<span class="extype" name="scala.Predef.String">String</span>) ⇒ <span class="extype" name="scala.Unit">Unit</span> = <span class="symbol">s =&gt; ()</span></span>)</span><span class="result">: <span class="extype" name="scalaz.\/">\/</span>[<a href="eff/ErrorEffect$.html#Error=scalaz.\/[Throwable,F]" class="extmbr" name="org.specs2.control.eff.ErrorEffect.Error">control.eff.ErrorEffect.Error</a>, <span class="extype" name="org.specs2.control.runAction.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@runAction[A](action:org.specs2.control.eff.Eff[org.specs2.control.package.ActionStack,A],printer:String=&gt;Unit):scalaz.\/[org.specs2.control.eff.ErrorEffect.Error,A]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.control#warnAndFail" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="warnAndFail[R&lt;:org.specs2.control.eff.Effects,A](message:String,failureMessage:String)(implicitm1:org.specs2.control.eff.Member.&lt;=[org.specs2.control.eff.WarningsEffect.Warnings,R],implicitm2:org.specs2.control.eff.Member.&lt;=[org.specs2.control.eff.ErrorEffect.ErrorOrOk,R]):org.specs2.control.eff.Eff[R,A]"></a>
+      <a id="warnAndFail[R&lt;:Effects,A](String,String)(&lt;=[Warnings,R],&lt;=[control.eff.ErrorEffect.ErrorOrOk,R]):Eff[R,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">warnAndFail</span><span class="tparams">[<span name="R">R &lt;: <a href="eff/Effects.html" class="extype" name="org.specs2.control.eff.Effects">Effects</a></span>, <span name="A">A</span>]</span><span class="params">(<span name="message">message: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="failureMessage">failureMessage: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="m1">m1: <a href="eff/Member$.html#&lt;=[M[_],R]=org.specs2.control.eff.Member[M,R]" class="extmbr" name="org.specs2.control.eff.Member.&lt;=">&lt;=</a>[<a href="eff/WarningsEffect$.html#Warnings[A]=scalaz.@@[scalaz.Writer[String,A],org.specs2.control.eff.WarningsEffect.WarningsTag]" class="extmbr" name="org.specs2.control.eff.WarningsEffect.Warnings">Warnings</a>, <span class="extype" name="org.specs2.control.warnAndFail.R">R</span>]</span>, <span name="m2">m2: <a href="eff/Member$.html#&lt;=[M[_],R]=org.specs2.control.eff.Member[M,R]" class="extmbr" name="org.specs2.control.eff.Member.&lt;=">&lt;=</a>[<a href="eff/ErrorEffect$.html#ErrorOrOk[A]=scalaz.\/[ErrorEffect.this.Error,scalaz.Name[A]]" class="extmbr" name="org.specs2.control.eff.ErrorEffect.ErrorOrOk">control.eff.ErrorEffect.ErrorOrOk</a>, <span class="extype" name="org.specs2.control.warnAndFail.R">R</span>]</span>)</span><span class="result">: <a href="eff/Eff.html" class="extype" name="org.specs2.control.eff.Eff">Eff</a>[<span class="extype" name="org.specs2.control.warnAndFail.R">R</span>, <span class="extype" name="org.specs2.control.warnAndFail.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.control.package@warnAndFail[R&lt;:org.specs2.control.eff.Effects,A](message:String,failureMessage:String)(implicitm1:org.specs2.control.eff.Member.&lt;=[org.specs2.control.eff.WarningsEffect.Warnings,R],implicitm2:org.specs2.control.eff.Member.&lt;=[org.specs2.control.eff.ErrorEffect.ErrorOrOk,R]):org.specs2.control.eff.Eff[R,A]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">warn the user about something that is probably wrong on his side,
+this is not a specs2 bug, then fail to stop all further computations
+</p>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
