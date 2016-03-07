@@ -209,7 +209,7 @@ trait StringBeHaveMatchers extends BeHaveMatchers { outer: StringBaseMatchers =>
 
 protected[specs2]
 class BeMatching(t: =>String) extends Matcher[String] {
-  lazy val pattern = Pattern.compile(t)
+  lazy val pattern = synchronized { Pattern.compile(t) }
 
   def apply[S <: String](b: Expectable[S]) = {
     val a = t
