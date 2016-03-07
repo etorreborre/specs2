@@ -9,6 +9,11 @@ class BeHaveMatchersSpec extends Specification { def is = s2"""
    ${ List(1) must not contain(2) }
    ${ !(List(1) must not contain(1)).isSuccess }
 
+   using not to negate match results
+   ${ not(List(0, 1) must contain(2)).isSuccess }
+   ${ !not(List(1, 2) must contain(2)).isSuccess }
+
+
    using be before using a matcher
    ${ (Nil:List[Int]) must be empty }
    ${ !(List(1) must be empty).isSuccess }
@@ -25,6 +30,7 @@ class BeHaveMatchersSpec extends Specification { def is = s2"""
    ${ (1 must be equalTo(1) and not be equalTo(2)).isSuccess }
    ${ (1 must not be equalTo(2) and be equalTo(1)).isSuccess }
    ${ !(1 must not be equalTo(1) and not be equalTo(2)).isSuccess }
+   ${ !(true must be.not).isSuccess} // #458
 
    using or, not and be in combination
    ${ (1 must be equalTo(1) or be equalTo(2)).isSuccess }

@@ -74,7 +74,7 @@ types and more generally with Ordered types.
   ${ 900 must not be closeTo(1000 within 2.significantFigures) }
   ${ 900 must be closeTo(1000 within 1.significantFigures) }
   ${ 0 must be closeTo(0 within 1.significantFigure) }
-  ${ 0.0 must be not closeTo(0.1 within 1.significantFigure) }
+  ${ 0.0 must not be closeTo(0.1 within 1.significantFigure) }
 
   beBetween tests if one value is between 2 other values                                                              
   ${ 5 must beBetween(3, 6) }

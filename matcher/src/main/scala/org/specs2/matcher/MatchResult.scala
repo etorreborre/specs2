@@ -194,7 +194,7 @@ case class MatchPending[T] private[specs2](override val message: String, expecta
 case class NotMatch[T] private[specs2](m: MatchResult[T]) extends MatchResult[T] {
   val expectable = m.expectable
   override def evaluate[S >: T] = m
-  def negate: MatchResult[T] = NeutralMatch(m)
+  def negate: MatchResult[T] = NeutralMatch(m.not)
   def apply(matcher: Matcher[T]): MatchResult[T] = m(matcher.not)
   def setExpectable[S >: T](e: Expectable[S]): MatchResult[S] =
     m.setExpectable(e)
@@ -202,7 +202,7 @@ case class NotMatch[T] private[specs2](m: MatchResult[T]) extends MatchResult[T]
 case class NeutralMatch[T] private[specs2](m: MatchResult[T]) extends MatchResult[T] {
   val expectable = m.expectable
   override def evaluate[S >: T] = m
-  def negate: MatchResult[T] = NotMatch(m)
+  def negate: MatchResult[T] = NeutralMatch(m.not)
   def apply(matcher: Matcher[T]): MatchResult[T] = m(matcher)
   def setExpectable[S >: T](e: Expectable[S]): MatchResult[S] =
     m.setExpectable(e)
