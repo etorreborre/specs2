@@ -57,8 +57,11 @@ object Typecheck {
           c.typecheck(parsed, withMacrosDisabled = true)
           // if that's ok parse with macros
           try {
+            println(c.compilerSettings)
             c.typecheck(parsed)
-            q"Typechecked($codeString, TypecheckSuccess)"
+            val warnings = c.hasWarnings
+            println("has warnings "+warnings)
+            q"Typechecked($codeString, TypecheckSuccess($warnings))"
           } catch {
             // got a typecheck exception with macros
             case TypecheckException(_, m) if ps.deferMacros =>

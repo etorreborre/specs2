@@ -13,6 +13,9 @@ class TypecheckMatcherSpec extends Specification with TypecheckMatchers with Res
  ${ typecheck("val a = b") must not succeed }
  ${ typecheck("val a: String = 1") must failWith("type mismatch") }
  ${ typecheck("val a = b").pendingUntilFixed }
+ ${ typecheck("Option(1) match { case Some(1) => 1 }") must succeed }
+ ${ typecheck("Option(1) match { case Some(1) => 1 }") must succeed.withWarnings }
+ ${ typecheck("Option(1) match { case Some(1) => 1; case None => 2 }") must not(succeed.withWarnings) }
 
  typechecking code with a quasiquote
  ${ tc" 1 must_== 1 " }
