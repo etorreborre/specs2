@@ -1,14 +1,14 @@
 package org.specs2
 package reporter
 
-import matcher.{MustMatchers}
+import matcher.MustMatchers
 import specification._
-import dsl.{FragmentsDsl}
-import specification.create.{DefaultFragmentFactory}
+import dsl.FragmentsDsl
+import specification.create.DefaultFragmentFactory
 import control._
 import text.Trim._
 import execute._
-import org.specs2.main.{Arguments}
+import org.specs2.main.{Arguments, Report}
 import LineLogger._
 import core._
 import process.{Stats, DefaultExecutor, StatisticsRepository}
@@ -84,8 +84,8 @@ class TextPrinterSpec extends Specification { def is = s2"""
       """|[info] title"""
 
   def a2 =
-    showOnly("#") ^ "title".title ^ "" doesntContain
-    """|[info] title"""
+    showOnly(Report.allFlags.filterNot(_ == '#')) ^ "title".title ^ "" doesntContain
+      """|[info] title"""
 
   def a3 = "title".title ^ s2"""
 presentation
