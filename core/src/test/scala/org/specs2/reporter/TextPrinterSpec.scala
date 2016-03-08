@@ -8,7 +8,7 @@ import specification.create.{DefaultFragmentFactory}
 import control._
 import text.Trim._
 import execute._
-import org.specs2.main.{Arguments}
+import main.{Report, Arguments}
 import LineLogger._
 import core._
 import process.{Stats, DefaultExecutor, StatisticsRepository}
@@ -84,7 +84,7 @@ class TextPrinterSpec extends Specification { def is = s2"""
       """|[info] title"""
 
   def a2 =
-    showOnly("!") ^ "title".title ^ "" doesntContain
+    showOnly(Report.allFlags.filterNot(_ == '#')) ^ "title".title ^ "" doesntContain
     """|[info] title"""
 
   def a3 = "title".title ^ s2"""
