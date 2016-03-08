@@ -84,7 +84,7 @@ class TextPrinterSpec extends Specification { def is = s2"""
       """|[info] title"""
 
   def a2 =
-    showOnly("#") ^ "title".title ^ "" doesntContain
+    showOnly("!") ^ "title".title ^ "" doesntContain
     """|[info] title"""
 
   def a3 = "title".title ^ s2"""
