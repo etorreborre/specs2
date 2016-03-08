@@ -20,7 +20,7 @@ cache:
     - $HOME/.sbt/boot/
 
 script: 
-  - sbt -sbt-version 0.13.9 -scala-version $TRAVIS_SCALA_VERSION 'testOnly -- xonly timefactor 3 exclude travis'
+  - sbt -sbt-version 0.13.11 -scala-version $TRAVIS_SCALA_VERSION 'testOnly -- xonly timefactor 3 exclude travis'
   - find $HOME/.sbt -name "*.lock" | xargs rm
   - find $HOME/.ivy2 -name "ivydata-*.properties" | xargs rm
 
