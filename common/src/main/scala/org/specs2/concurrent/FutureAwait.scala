@@ -29,7 +29,7 @@ trait FutureAwait {
         try Await.result(f, appliedTimeout).right
         catch {
           case e if e.getClass == classOf[TimeoutException] =>
-            if (remainingRetries <= 0) TimeoutFailure(appliedTimeout, totalDuration).left
+            if (remainingRetries <= 0) TimeoutFailure(appliedTimeout, totalDuration, tf).left
             else                       awaitFuture(remainingRetries - 1, totalDuration + appliedTimeout)
 
           case other: Throwable  => throw other
@@ -41,6 +41,6 @@ trait FutureAwait {
 
 }
 
-case class TimeoutFailure(appliedTimeout: FiniteDuration, totalDuration: FiniteDuration)
+case class TimeoutFailure(appliedTimeout: FiniteDuration, totalDuration: FiniteDuration, timeFactor: Int)
 
 object FutureAwait extends FutureAwait
