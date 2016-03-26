@@ -3,8 +3,10 @@ package execute
 
 import mutable.Specification
 import org.mockito.Mockito._
+import org.specs2.matcher.ResultMatchers
+import scala.concurrent._, duration._
 
-class EventuallyResultsSpec extends Specification {
+class EventuallyResultsSpec extends Specification with ResultMatchers {
   """
   `eventually` can be used to retry any result until a maximum number of times is reached
     or until it succeeds.
@@ -27,7 +29,14 @@ class EventuallyResultsSpec extends Specification {
   }
   "Any object convertible to a result can be used with eventually" in {
     val iterator = List(false, false, true).iterator
-    eventually(iterator.next) must beTrue
+    eventually(iterator.next) must beSuccessful
+  }
+  "Even if a result throws an exception it must be evaluated 'retries' times only" in {
+    var eval = 0
+    def r = { eval += 1; 1 must_== 2 }
+
+    eventually(retries = 3, sleep = 100.millis)(r) must beFailing
+    eval must_== 3
   }
   "eventually can be used for a Mockito result" in {
     trait ToMock {
@@ -35,6 +44,6 @@ class EventuallyResultsSpec extends Specification {
     }
     val m = mock(classOf[ToMock])
     (1 to 3).foreach(i => doReturn(i).when(m).next)
-    eventually(m.next == 3) must beTrue
+    eventually(m.next == 3) must beSuccessful
   }
 }

@@ -13,12 +13,12 @@ trait EventuallyResults {
   /**
    * @return a matcher that will retry the nested matcher a given number of times
    */
-  def eventually[T : AsResult](retries: Int, sleep: Duration)(result: =>T): T = {
-    def retry(retries: Int, sleep: Duration, r: =>T): T = {
+  def eventually[T : AsResult](retries: Int, sleep: Duration)(result: =>T): Result = {
+    def retry(retries: Int, sleep: Duration, r: =>T): Result = {
       lazy val t = r
       val result = ResultExecution.execute(t)(AsResult(_))
-      if (result.isSuccess || retries == 1)
-        t
+      if (result.isSuccess || retries <= 1)
+        result
       else {
         Thread.sleep(sleep.toMillis)
         retry(retries - 1, sleep, r)
@@ -28,6 +28,8 @@ trait EventuallyResults {
   }
 
   /** @return a result that is retried at least 40 times until it's ok */
-  def eventually[T : AsResult](result: =>T): T = eventually(40, 100.millis)(result)
+  def eventually[T : AsResult](result: =>T): Result =
+    eventually(40, 100.millis)(result)
 }
+
 object EventuallyResults extends EventuallyResults
