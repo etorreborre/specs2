@@ -164,7 +164,7 @@ setScalaVersion () {
 }
 setJavaHome () {
   java_cmd="$1/bin/java"
-  setThisBuild javaHome "scala.Some(file(\"$1\"))"
+  setThisBuild javaHome "_root_.scala.Some(file(\"$1\"))"
   export JAVA_HOME="$1"
   export JDK_HOME="$1"
   export PATH="$JAVA_HOME/bin:$PATH"
