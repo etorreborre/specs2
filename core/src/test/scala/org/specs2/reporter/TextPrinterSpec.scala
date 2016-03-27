@@ -38,6 +38,7 @@ class TextPrinterSpec extends Specification { def is = s2"""
    normal messages                                            $d1
    if failtrace then the stack trace must be shown            $d2
    with detailed failure                                      $d3
+   with no failure when string representations are the same   $d4
 
  Error messages must be shown
    with the exception class                                   $e1
@@ -148,6 +149,12 @@ s2"""e1 ${1 must_== 2}""" contains
 s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" contains
     """|[error] Actual:   a[b]cdea[b]cdea[b]cdea[b]cdea[b]cde
        |[error] Expected: a[d]cdea[d]cdea[d]cdea[d]cdea[d]cde"""
+
+  def d4 = {
+    case class A(s: String) { override def equals(a: Any) = false }
+    s2"""e1 ${A("a"*100) must_== A("a"*100)}""" doesntContain
+      """|[error] Actual"""
+  }
 
   def e1 = Arguments("fullstacktrace") ^
     s2"""e1 $error1""" contains
@@ -308,6 +315,9 @@ object TextPrinterSpecification extends MustMatchers with FragmentsDsl {
   implicit class fragmentsOutputContains(fragments: Fragments) {
     def contains(contained: String, f: String => String = identity) =
       SpecStructure.create(SpecHeader(classOf[TextPrinterSpec]), Arguments(), fragments).contains(contained, f)
+
+    def doesntContain(contained: String, f: String => String = identity) =
+      SpecStructure.create(SpecHeader(classOf[TextPrinterSpec]), Arguments(), fragments).contains(contained, f).not
   }
 
   implicit class outputContains(spec: SpecStructure) {

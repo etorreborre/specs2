@@ -211,14 +211,19 @@ trait TextPrinter extends Printer {
   def printFailureDetails(args: Arguments):  Details => List[LogLine] = {
     case FailureDetails(actual, expected) if args.diffs.show(actual, expected) =>
       val (actualDiff, expectedDiff) = args.diffs.showDiffs(actual, expected)
-      List(
-        ("Actual:   " + actualDiff).failure,
-        ("Expected: " + expectedDiff).failure) ++
-      (if (args.diffs.showFull)
-          List(
-            ("Actual (full):   " + actual).failure,
-            ("Expected (full): " + expected).failure)
-        else Nil) ++
+      val shortDiff =
+        if (actualDiff != expectedDiff)
+          List(("Actual:   " + actualDiff).failure,
+               ("Expected: " + expectedDiff).failure)
+        else List()
+
+      val fullDiff =
+        (if (args.diffs.showFull)
+          List(("Actual (full):   " + actual).failure,
+               ("Expected (full): " + expected).failure)
+        else Nil)
+
+      shortDiff ++ fullDiff ++
       List("".info)
 
     case details @ FailureSeqDetails(actual, expected) if args.diffs.showSeq(actual, expected, ordered = true) =>
