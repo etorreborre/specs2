@@ -11,6 +11,8 @@ import specification.process._
 import execute._
 import text.NotNullStrings._
 import scala.xml.NodeSeq
+import matcher._
+import form._
 
 /**
  * Create the body of an html file reporting a specification execution
@@ -76,6 +78,21 @@ trait HtmlBodyPrinter {
               <li class="example pending ok">{show(e)}<br/>
                 <message class="pending">{r.message}</message>
               </li>
+
+            // if it is a data table as an auto-example
+            case DecoratedResult(table: DataTable, res) if Description.isCode(fragment.description) =>
+              <div class={"example "+res.statusName(arguments)}>
+                {Form(table).toXml(arguments)}<br/>
+              </div>
+
+            // if it is a failed data table
+            case DecoratedResult(table: DataTable, res) if !res.isSuccess =>
+              <li class={"example "+res.statusName(arguments)}>{show(e)}
+                {Form(table).toXml(arguments)}<br/>
+              </li>
+
+            case DecoratedResult(table: DataTable, res) =>
+              <li class="example success ok">{show(e)}</li>
 
             case r =>
               <li class="example info ok">{show(e)}<br/>

@@ -136,6 +136,12 @@ object Description {
   def markSection(tag: NamedTag)   = Marker(tag, isSection = true)
   def markSectionAs(tag: NamedTag) = Marker(tag, isSection = true, appliesToNext = false)
 
+  def isCode(d: Description): Boolean =
+    d match {
+      case Code(_) => true
+      case _       => false
+    }
+
   implicit def showInstance: Show[Description] = new Show[Description] {
     override def shows(d: Description): String =
       d match {

@@ -87,16 +87,16 @@ trait TextPrinter extends Printer {
       fragment match {
         // only print steps and actions if there are issues
         case Fragment(NoText, e, l) if e.isExecutable && !e.result.isSuccess =>
-          printExecutable(NoText.show, e, args, indentation)
+          printExecutable(NoText, e, args, indentation)
 
         case Fragment(d @ SpecificationRef(_, _, _, _, hidden, muted), e, l)  =>
           if (!hidden)
-            if (e.isExecutable && !muted) printExecutable(d.show, e, args, indentation)
+            if (e.isExecutable && !muted) printExecutable(d, e, args, indentation)
             else                          List(d.show.info)
           else Nil
 
         case Fragment(d, e, l) if e.isExecutable && d != NoText =>
-          printExecutable(d.show, e, args, indentation)
+          printExecutable(d, e, args, indentation)
 
         case Fragment(Br, e, l) =>
           if (args.canShow("-")) printNewLine
@@ -113,24 +113,31 @@ trait TextPrinter extends Printer {
   }
 
   /** print an executed fragment: example, step, action */
-  def printExecutable(text: String, execution: Execution, args: Arguments, indentation: Int): List[LogLine] = {
+  def printExecutable(description: Description, execution: Execution, args: Arguments, indentation: Int): List[LogLine] = {
 
     if (args.canShow(execution.result.status)) {
+      val text = description.show
       val show = indentText(showTime(statusAndDescription(text, execution.result)(args), execution, args), indentation, indentationSize(args))
 
-      def printResult(r: Result) =
+      def printResult(desc: String, r: Result) =
         r match {
-          case err: execute.Error        => printError(show, err, args)
-          case failure: execute.Failure  => printFailure(show, failure, args)
-          case success: execute.Success  => printSuccess(show, success, args)
-          case pending: execute.Pending  => printPending(show, pending, args)
-          case skipped: execute.Skipped  => printSkipped(show, skipped, args)
-          case other                     => printOther(show, other, args)
+          case err: execute.Error        => printError(desc, err, args)
+          case failure: execute.Failure  => printFailure(desc, failure, args)
+          case success: execute.Success  => printSuccess(desc, success, args)
+          case pending: execute.Pending  => printPending(desc, pending, args)
+          case skipped: execute.Skipped  => printSkipped(desc, skipped, args)
+          case other                     => printOther(desc, other, args)
         }
 
       execution.result match {
-        case DecoratedResult(t: DataTable, r) => printResult(r)
-        case other                            => printResult(other)
+        case DecoratedResult(t: DataTable, r) =>
+          // display the full table if it is an auto-example
+          if (Description.isCode(description))
+            printResult(indentText(r.message, indentation, indentationSize(args)), r.updateMessage(""))
+          else
+            printResult(show, r)
+
+        case other => printResult(show, other)
       }
     } else Nil
   }
