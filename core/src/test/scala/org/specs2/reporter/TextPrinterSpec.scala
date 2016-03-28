@@ -362,4 +362,5 @@ class TestLogger extends BufferedLineLogger with StringOutput {
   def infoLine(msg: String)    = super.append(AnsiColors.removeColors(msg))
   def errorLine(msg: String)   = ()
   def failureLine(msg: String) = ()
+  def warnLine(msg: String) = ()
 }

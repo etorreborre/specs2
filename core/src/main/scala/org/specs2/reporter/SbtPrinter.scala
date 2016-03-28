@@ -138,4 +138,8 @@ case class SbtLineLogger(loggers: Array[Logger]) extends BufferedLineLogger {
     val msg1 = removeColors(msg, !logger.ansiCodesSupported)
     logger.error(msg1)
   }
+
+  def warnLine(msg: String) =  loggers.foreach { logger =>
+    logger.warn(removeColors(msg, !logger.ansiCodesSupported))
+  }
 }

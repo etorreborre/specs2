@@ -11,6 +11,7 @@ trait LineLogger {
   def infoLog(msg: String)
   def failureLog(msg: String)
   def errorLog(msg: String)
+  def warnLog(msg: String)
   def newline()
   def close()
 }
@@ -22,6 +23,7 @@ object LineLogger {
     protected def infoLine(msg: String)    = println("[info] " + msg)
     protected def errorLine(msg: String)   = println("[error] " + msg)
     protected def failureLine(msg: String) = println("[error] " + msg)
+    protected def warnLine(msg: String)    = println("[warn] " + msg)
     override def toString = "consoleLogger"
   }
 
@@ -29,6 +31,7 @@ object LineLogger {
     def infoLog(msg: String)    = ()
     def failureLog(msg: String) = ()
     def errorLog(msg: String)   = ()
+    def warnLog(msg: String)    = ()
     def close()                 = ()
     def newline()               = ()
     override def toString = "NoLineLogger"
@@ -39,6 +42,7 @@ object LineLogger {
     def infoLine(msg: String)    = msg.split("\n").foreach(m => append("[info] " + m))
     def errorLine(msg: String)   = msg.split("\n").foreach(m => append("[error] " + m))
     def failureLine(msg: String) = msg.split("\n").foreach(m => append("[error] " + m))
+    def warnLine(msg: String)    = msg.split("\n").foreach(m => append("[warn] " + m))
 
     override def append(m: String) = super.append(AnsiColors.removeColors(m))
     override def toString = "stringLogger"

@@ -15,12 +15,14 @@ trait BufferedLineLogger extends LineLogger {
   def infoLog(msg: String)   : Unit = { val rest = flushText(); add(rest+msg) }
   def errorLog(msg: String)  : Unit = { val rest = flushText(); errorLine(rest+msg)  }
   def failureLog(msg: String): Unit = { val rest = flushText(); failureLine(rest+msg) }
+  def warnLog(msg: String)   : Unit = { val rest = flushText(); warnLine(rest+msg) }
   def newline()              : Unit = { infoLine(buffer.toString); buffer.clear }
   def close()                : Unit = { flushText(force = true); () }
 
   protected def infoLine(msg: String): Unit
   protected def errorLine(msg: String): Unit
   protected def failureLine(msg: String): Unit
+  protected def warnLine(msg: String): Unit
 
   private val buffer = new StringBuilder
   private def add(msg: String) { buffer.append(msg); () }
