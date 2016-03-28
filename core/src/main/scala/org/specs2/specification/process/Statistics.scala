@@ -35,7 +35,7 @@ trait Statistics {
    * read the stats for one Fragment
    */
   def readStats(className: String, env: Env): Fragment => Process[Task, Fragment] = { f: Fragment =>
-    Process.eval(env.statisticsRepository.previousResult(className, f.description).map(r => f.setPreviousResult(r)).toTask)
+    Process.eval(env.statisticsRepository.previousResult(className, f.description).map(r => f.setPreviousResult(r)).toTask(env.systemLogger))
   }
 
   def fold: FoldState[Fragment, Stats] =

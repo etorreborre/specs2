@@ -64,16 +64,16 @@ trait Reporter {
     lazy val sink: Sink[Task, Fragment] =
       channel.lift {  case fragment =>
         if (neverStore) Task.delay(())
-        else            env.statisticsRepository.storeResult(spec.specClassName, fragment.description, fragment.executionResult).toTask
+        else            env.statisticsRepository.storeResult(spec.specClassName, fragment.description, fragment.executionResult).toTask(env.systemLogger)
       }
 
     val prepare: Task[Unit] =
-      if (resetStore) env.statisticsRepository.resetStatistics.toTask
+      if (resetStore) env.statisticsRepository.resetStatistics.toTask(env.systemLogger)
       else            Task.now(())
 
     val last = (stats: Stats) =>
       if (neverStore) Task.now(())
-      else            env.statisticsRepository.storeStatistics(spec.specClassName, stats).toTask
+      else            env.statisticsRepository.storeStatistics(spec.specClassName, stats).toTask(env.systemLogger)
 
     (Statistics.fold.into[Task] <* fromStart(prepare) <* fromSink(sink)).mapFlatten(last)
   }

@@ -4,7 +4,6 @@ import scalaz._
 import scalaz.effect.IO
 import org.specs2.execute.{AsResult, Result}
 import scalaz.concurrent.Task
-import scalaz.stream.Process
 import scalaz.syntax.bind._
 
 import control.eff._
@@ -91,7 +90,10 @@ package object control {
    * An Action[T] can be converted to a Task[T]
    */
   implicit class actionToTask[T](action: Action[T]) {
-    def toTask =
+    def toConsoleTask =
+      action.toTask(println)
+
+    def toTask(logger: String => Unit) =
       Task.delay(executeAction(action)).
       flatMap { case (result, warnings) =>
         result.fold(
@@ -99,7 +101,7 @@ package object control {
             t      => Task.fail(ActionException(warnings, None, Some(t))),
             s      => Task.fail(ActionException(warnings, Some(s), None))),
 
-          t => Task.now(t))
+          t => Task.delay(warnings.foreach(w => logger(w+"\n"))) >> Task.now(t))
     }
   }
 
@@ -118,13 +120,6 @@ package object control {
 
     def orElse(other: Action[T]): Action[T] =
       Actions.orElse(action, other)
-  }
-
-  /**
-   * An Action[T] can be converted to a Task[T] then to a Process[T] returning just one element
-   */
-  implicit class ioActionToProcess[T](action: Action[T]) {
-    def toProcess = Process(action.toTask).eval
   }
 
   /**

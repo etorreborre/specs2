@@ -39,12 +39,12 @@ trait HtmlPrinter extends Printer {
   /** @return a SinkTask for the Html output */
   def sink(env: Env, spec: SpecStructure): SinkTask[Fragment] = {
     ((Statistics.fold zip FoldId.list[Fragment]).into[Task] <*
-     fromStart((getHtmlOptions(env.arguments) >>= (options => copyResources(env, options))).toTask.void)).mapFlatten { case (stats, fragments) =>
+     fromStart((getHtmlOptions(env.arguments) >>= (options => copyResources(env, options))).toTask(env.systemLogger).void)).mapFlatten { case (stats, fragments) =>
       val expecutedSpec = spec.copy(lazyFragments = () => Fragments(fragments:_*))
       getPandoc(env).flatMap {
           case None         => printHtml(env, expecutedSpec, stats)
           case Some(pandoc) => printHtmlWithPandoc(env, expecutedSpec, stats, pandoc)
-      }.toTask
+      }.toTask(env.systemLogger)
     }
   }
 

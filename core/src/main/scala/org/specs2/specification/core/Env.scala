@@ -38,7 +38,7 @@ case class Env(arguments: Arguments = Arguments(),
              StatisticsRepository.file(arguments.commandLine.directoryOr("stats.outdir", "target" / "specs2-reports" / "stats")),
 
           // logger for issues
-          systemLogger: Logger = noLogging,
+          systemLogger: Logger = consoleLogging,
 
           // random generator
           random: scala.util.Random = new scala.util.Random,
@@ -87,6 +87,10 @@ case class Env(arguments: Arguments = Arguments(),
   /** set new LineLogger */
   def setLineLogger(logger: LineLogger) =
     copy(lineLogger = logger)
+
+  /** set new system logger */
+  def setSystemLogger(logger: String => Unit) =
+    copy(systemLogger = logger)
 
   /** set new arguments */
   def setArguments(args: Arguments) =
