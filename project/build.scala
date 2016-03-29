@@ -165,7 +165,7 @@ object build extends Build {
   lazy val tests = Project(id = "tests", base = file("tests"),
     settings = moduleSettings("tests") ++
       Seq(name := "specs2-tests")
-  ).dependsOn(core % "compile->compile;test->test", matcherExtra, junit % "test->test", examples % "test->test")
+  ).dependsOn(core % "compile->compile;test->test", matcherExtra, junit % "test->test", examples % "test->test", html)
 
   lazy val specs2ShellPrompt = shellPrompt in ThisBuild := { state =>
     val name = Project.extract(state).currentRef.project

@@ -32,7 +32,7 @@ trait SpecificationsFinder {
                          filePathReader: FilePathReader = FileSystem,
                          env: Env                       = Env()): Action[List[SpecificationStructure]] =
     specificationNames(glob, pattern, basePath, filePathReader, verbose).flatMap { names =>
-      names.toList.filter(filter).map { name =>
+      names.filter(filter).map { name =>
         SpecificationStructure.create(name, classLoader, Some(env)).map(s => Option(s)).
           orElse(warn("[warn] cannot create specification "+name).as(none[SpecificationStructure]))
       }.sequenceU.map(_.flatten)

@@ -23,7 +23,9 @@ trait SourceFile {
   def classNames(packageName: String, content: String, pattern: Pattern, suffix: String, verbose: Boolean): Action[Seq[String]] = {
     def result(m: Matcher): Stream[String] =
       if (m.find) {
-        val fullName = List(packageName, m.group(1).trim).mkString(".") + suffix
+        val fullName =
+          if (packageName.isEmpty) m.group(1).trim + suffix
+          else                     List(packageName, m.group(1).trim).mkString(".") + suffix
         Stream.cons(fullName, result(m))
       } else Stream.empty
 
