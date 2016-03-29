@@ -42,6 +42,7 @@ This reference guide for arguments is divided in several sections:
  `filesrunner.basepath`  | `src/test/scala`               | source directory for test files (see $RunInShell)
  `filesrunner.path`      | `**/*.scala`                   | glob pattern for the file paths (see $RunInShell)
  `filesrunner.pattern`   | `.*Spec`                       | regular expression for the specification class/object name (see $RunInShell)
+ `filesrunner.verbose`   | `false`                        | logs of searched paths and potential classes to instantiate (see $RunInShell)
  `html.outdir`           | `target/specs2-reports`        | output directory for html files (see $HtmlOutput)
 
 

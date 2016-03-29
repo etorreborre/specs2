@@ -64,6 +64,7 @@ Name                    | Default value       | Description
 `filesrunner.basepath`  | `src/test/scala`    | source directory for test files
 `filesrunner.path`      | `**/*.scala`        | glob pattern for the file paths
 `filesrunner.pattern`   | `.*Spec`            | regular expression for the specification class/object name
+`filesrunner.verbose`   | `false`             | logs of searched paths and potential classes to instantiate
 
 ### Outputs
 
