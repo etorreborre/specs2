@@ -20,9 +20,9 @@ class HtmlPrinterSpec extends Specification with TaskMatchers with ThrownExpecta
     val spec = new Specification { def is = s2""" one example $ok """}
     val env1 = env.setArguments(searchArguments)
 
-    printer.getHtmlOptions(env1.arguments).map(_.search).toTask must returnValue(true)
+    printer.getHtmlOptions(env1.arguments).map(_.search).toConsoleTask must returnValue(true)
 
-    finalize(env1, spec).toTask must returnOk
+    finalize(env1, spec).toConsoleTask must returnOk
     FilePathReader.exists(outDir / "javascript" / "tipuesearch" | "tipuesearch_contents.js")
   }
 
@@ -31,7 +31,7 @@ class HtmlPrinterSpec extends Specification with TaskMatchers with ThrownExpecta
     val spec = new Specification { def is = s2""" one example $ok """}
     val env1 = env.setArguments(searchArguments)
 
-    finalize(env1, spec).toTask must returnOk
+    finalize(env1, spec).toTask(env.systemLogger) must returnOk
     FilePathReader.exists(outDir | "search.html")
   }
 
