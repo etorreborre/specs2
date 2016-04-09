@@ -28,5 +28,5 @@ class FragmentsContinuationSpec(env: Env) extends Specification { def is = s2"""
   }
 
   def runContinuation[R : AsResult](r: =>R, fs: =>Fragments): IndexedSeq[Fragment] =
-    Fragments(DefaultExecutor.execute1(env)(Fragments("test" ! FragmentsContinuation.continueWith(r, fs)).contents)).fragments
+    Fragments(DefaultExecutor.execute1(env, env)(Fragments("test" ! FragmentsContinuation.continueWith(r, fs)).contents)).fragments
 }

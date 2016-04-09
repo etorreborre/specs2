@@ -160,7 +160,7 @@ class ExecutorSpec extends script.Specification with Groups with ResultMatchers 
   val factory = fragmentFactory
 
   def execute(fragments: Seq[Fragment], env: Env): IndexedSeq[Result] =
-    DefaultExecutor.execute1(env)(Fragments(fragments:_*).contents).runLog.run.map(_.executionResult)
+    DefaultExecutor.execute1(env, env)(Fragments(fragments:_*).contents).runLog.run.map(_.executionResult)
 
   trait results {
     val messages = new ListBuffer[String]
