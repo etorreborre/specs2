@@ -5,9 +5,9 @@ import org.scalacheck._
 import org.scalacheck.util.{FreqMap, Pretty}
 import org.scalacheck.util.Pretty._
 import execute._
-import ScalaCheckProperty._
 import specification._
 import AsResultProp._
+import ScalaCheckProperty._
 import scalaz.{Failure => _, Success => _}
 
 /**
@@ -116,7 +116,7 @@ trait ScalaCheckFunction extends ScalaCheckProperty {
 
 case class ScalaCheckFunction1[T, R](execute: T => R,
                                  arbitrary: Arbitrary[T], shrink: Option[Shrink[T]],
-                                 collector: Option[T => Any],
+                                 collectors: List[T => Any],
                                  pretty: T => Pretty, prettyFreqMap: FreqMap[Set[Any]] => Pretty,
                                  asResult: AsResult[R],
                                  context: Option[Context],
@@ -132,7 +132,7 @@ case class ScalaCheckFunction1[T, R](execute: T => R,
   lazy val propFunction = (t: T) => {
     lazy val executed = execute(t)
     executeInContext(executed)
-    collectValue(t, collector)(asResultToProp(executed))
+    collectors.foldLeft(asResultToProp(executed))((p, c) => Prop.collect(c(t))(p))
   }
 
   lazy val prop: Prop =
@@ -165,7 +165,7 @@ case class ScalaCheckFunction1[T, R](execute: T => R,
     collectArg(_.toString)
 
   def collectArg(f: T => Any): SelfType =
-    copy(collector = Some(f))
+    copy(collectors = collectors :+ f)
 
   def prepare(action: T => T): SelfType =
     copy(execute = (t: T) => execute(action(t)))
@@ -194,7 +194,7 @@ case class ScalaCheckFunction2[T1, T2, R](
   lazy val propFunction = (t1: T1, t2: T2) => {
     lazy val executed = execute(t1, t2)
     executeInContext(executed)
-    collectValue(t1, argInstances1.collector)(collectValue(t2, argInstances2.collector)(asResultToProp(executed)))
+    argInstances1.collect(t1, argInstances2.collect(t2, asResultToProp(executed)))
   }
 
   lazy val prop: Prop =
@@ -230,8 +230,8 @@ case class ScalaCheckFunction2[T1, T2, R](
   def setPrettyFreqMap(f: FreqMap[Set[Any]] => Pretty): SelfType =
     copy(prettyFreqMap = f)
 
-  def collectArg1(f: T1 => Any): SelfType = copy(argInstances1 = argInstances1.copy(collector = Some(f)))
-  def collectArg2(f: T2 => Any): SelfType = copy(argInstances2 = argInstances2.copy(collector = Some(f)))
+  def collectArg1(f: T1 => Any): SelfType = copy(argInstances1 = argInstances1.copy(collectors = argInstances1.collectors :+ f))
+  def collectArg2(f: T2 => Any): SelfType = copy(argInstances2 = argInstances2.copy(collectors = argInstances2.collectors :+ f))
   def collect1: SelfType = collectArg1(_.toString)
   def collect2: SelfType = collectArg2(_.toString)
   def collectAllArgs(f1: T1 => Any,f2: T2 => Any): SelfType =
@@ -267,7 +267,7 @@ case class ScalaCheckFunction3[T1, T2, T3, R](
   lazy val propFunction = (t1: T1, t2: T2, t3: T3) => {
     lazy val executed = execute(t1, t2, t3)
     executeInContext(executed)
-    collectValue(t1, argInstances1.collector)(collectValue(t2, argInstances2.collector)(collectValue(t3, argInstances3.collector)(asResultToProp(executed))))
+    argInstances1.collect(t1, argInstances2.collect(t2, argInstances3.collect(t3, asResultToProp(executed))))
   }
 
   lazy val prop: Prop =
@@ -308,9 +308,9 @@ case class ScalaCheckFunction3[T1, T2, T3, R](
   def setPrettyFreqMap(f: FreqMap[Set[Any]] => Pretty): SelfType =
     copy(prettyFreqMap = f)
 
-  def collectArg1(f: T1 => Any): SelfType = copy(argInstances1 = argInstances1.copy(collector = Some(f)))
-  def collectArg2(f: T2 => Any): SelfType = copy(argInstances2 = argInstances2.copy(collector = Some(f)))
-  def collectArg3(f: T3 => Any): SelfType = copy(argInstances3 = argInstances3.copy(collector = Some(f)))
+  def collectArg1(f: T1 => Any): SelfType = copy(argInstances1 = argInstances1.copy(collectors = argInstances1.collectors :+ f))
+  def collectArg2(f: T2 => Any): SelfType = copy(argInstances2 = argInstances2.copy(collectors = argInstances2.collectors :+ f))
+  def collectArg3(f: T3 => Any): SelfType = copy(argInstances3 = argInstances3.copy(collectors = argInstances3.collectors :+ f))
   def collect1: SelfType = collectArg1(_.toString)
   def collect2: SelfType = collectArg2(_.toString)
   def collect3: SelfType = collectArg3(_.toString)
@@ -347,7 +347,7 @@ case class ScalaCheckFunction4[T1, T2, T3, T4, R](
   lazy val propFunction = (t1: T1, t2: T2, t3: T3, t4: T4) => {
     lazy val executed = execute(t1, t2, t3, t4)
     executeInContext(executed)
-    collectValue(t1, argInstances1.collector)(collectValue(t2, argInstances2.collector)(collectValue(t3, argInstances3.collector)(collectValue(t4, argInstances4.collector)(asResultToProp(executed)))))
+    argInstances1.collect(t1, argInstances2.collect(t2, argInstances3.collect(t3, argInstances4.collect(t4, asResultToProp(executed)))))
   }
 
   lazy val prop: Prop =
@@ -393,10 +393,10 @@ case class ScalaCheckFunction4[T1, T2, T3, T4, R](
   def setPrettyFreqMap(f: FreqMap[Set[Any]] => Pretty): SelfType =
     copy(prettyFreqMap = f)
 
-  def collectArg1(f: T1 => Any): SelfType = copy(argInstances1 = argInstances1.copy(collector = Some(f)))
-  def collectArg2(f: T2 => Any): SelfType = copy(argInstances2 = argInstances2.copy(collector = Some(f)))
-  def collectArg3(f: T3 => Any): SelfType = copy(argInstances3 = argInstances3.copy(collector = Some(f)))
-  def collectArg4(f: T4 => Any): SelfType = copy(argInstances4 = argInstances4.copy(collector = Some(f)))
+  def collectArg1(f: T1 => Any): SelfType = copy(argInstances1 = argInstances1.copy(collectors = argInstances1.collectors :+ f))
+  def collectArg2(f: T2 => Any): SelfType = copy(argInstances2 = argInstances2.copy(collectors = argInstances2.collectors :+ f))
+  def collectArg3(f: T3 => Any): SelfType = copy(argInstances3 = argInstances3.copy(collectors = argInstances3.collectors :+ f))
+  def collectArg4(f: T4 => Any): SelfType = copy(argInstances4 = argInstances4.copy(collectors = argInstances4.collectors :+ f))
   def collect1: SelfType = collectArg1(_.toString)
   def collect2: SelfType = collectArg2(_.toString)
   def collect3: SelfType = collectArg3(_.toString)
@@ -434,7 +434,7 @@ case class ScalaCheckFunction5[T1, T2, T3, T4, T5, R](
   lazy val propFunction = (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5) => {
     lazy val executed = execute(t1, t2, t3, t4, t5)
     executeInContext(executed)
-    collectValue(t1, argInstances1.collector)(collectValue(t2, argInstances2.collector)(collectValue(t3, argInstances3.collector)(collectValue(t4, argInstances4.collector)(collectValue(t5, argInstances5.collector)(asResultToProp(executed))))))
+    argInstances1.collect(t1, argInstances2.collect(t2, argInstances3.collect(t3, argInstances4.collect(t4, argInstances5.collect(t5, asResultToProp(executed))))))
   }
 
   lazy val prop: Prop =
@@ -485,11 +485,11 @@ case class ScalaCheckFunction5[T1, T2, T3, T4, T5, R](
   def setPrettyFreqMap(f: FreqMap[Set[Any]] => Pretty): SelfType =
     copy(prettyFreqMap = f)
 
-  def collectArg1(f: T1 => Any): SelfType = copy(argInstances1 = argInstances1.copy(collector = Some(f)))
-  def collectArg2(f: T2 => Any): SelfType = copy(argInstances2 = argInstances2.copy(collector = Some(f)))
-  def collectArg3(f: T3 => Any): SelfType = copy(argInstances3 = argInstances3.copy(collector = Some(f)))
-  def collectArg4(f: T4 => Any): SelfType = copy(argInstances4 = argInstances4.copy(collector = Some(f)))
-  def collectArg5(f: T5 => Any): SelfType = copy(argInstances5 = argInstances5.copy(collector = Some(f)))
+  def collectArg1(f: T1 => Any): SelfType = copy(argInstances1 = argInstances1.copy(collectors = argInstances1.collectors :+ f))
+  def collectArg2(f: T2 => Any): SelfType = copy(argInstances2 = argInstances2.copy(collectors = argInstances2.collectors :+ f))
+  def collectArg3(f: T3 => Any): SelfType = copy(argInstances3 = argInstances3.copy(collectors = argInstances3.collectors :+ f))
+  def collectArg4(f: T4 => Any): SelfType = copy(argInstances4 = argInstances4.copy(collectors = argInstances4.collectors :+ f))
+  def collectArg5(f: T5 => Any): SelfType = copy(argInstances5 = argInstances5.copy(collectors = argInstances5.collectors :+ f))
   def collect1: SelfType = collectArg1(_.toString)
   def collect2: SelfType = collectArg2(_.toString)
   def collect3: SelfType = collectArg3(_.toString)
@@ -528,7 +528,7 @@ case class ScalaCheckFunction6[T1, T2, T3, T4, T5, T6, R](
   lazy val propFunction = (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6) => {
     lazy val executed = execute(t1, t2, t3, t4, t5, t6)
     executeInContext(executed)
-    collectValue(t1, argInstances1.collector)(collectValue(t2, argInstances2.collector)(collectValue(t3, argInstances3.collector)(collectValue(t4, argInstances4.collector)(collectValue(t5, argInstances5.collector)(collectValue(t6, argInstances6.collector)(asResultToProp(executed)))))))
+    argInstances1.collect(t1, argInstances2.collect(t2, argInstances3.collect(t3, argInstances4.collect(t4, argInstances5.collect(t5, argInstances6.collect(t6, asResultToProp(executed)))))))
   }
 
   lazy val prop: Prop =
@@ -584,12 +584,12 @@ case class ScalaCheckFunction6[T1, T2, T3, T4, T5, T6, R](
   def setPrettyFreqMap(f: FreqMap[Set[Any]] => Pretty): SelfType =
     copy(prettyFreqMap = f)
 
-  def collectArg1(f: T1 => Any): SelfType = copy(argInstances1 = argInstances1.copy(collector = Some(f)))
-  def collectArg2(f: T2 => Any): SelfType = copy(argInstances2 = argInstances2.copy(collector = Some(f)))
-  def collectArg3(f: T3 => Any): SelfType = copy(argInstances3 = argInstances3.copy(collector = Some(f)))
-  def collectArg4(f: T4 => Any): SelfType = copy(argInstances4 = argInstances4.copy(collector = Some(f)))
-  def collectArg5(f: T5 => Any): SelfType = copy(argInstances5 = argInstances5.copy(collector = Some(f)))
-  def collectArg6(f: T6 => Any): SelfType = copy(argInstances6 = argInstances6.copy(collector = Some(f)))
+  def collectArg1(f: T1 => Any): SelfType = copy(argInstances1 = argInstances1.copy(collectors = argInstances1.collectors :+ f))
+  def collectArg2(f: T2 => Any): SelfType = copy(argInstances2 = argInstances2.copy(collectors = argInstances2.collectors :+ f))
+  def collectArg3(f: T3 => Any): SelfType = copy(argInstances3 = argInstances3.copy(collectors = argInstances3.collectors :+ f))
+  def collectArg4(f: T4 => Any): SelfType = copy(argInstances4 = argInstances4.copy(collectors = argInstances4.collectors :+ f))
+  def collectArg5(f: T5 => Any): SelfType = copy(argInstances5 = argInstances5.copy(collectors = argInstances5.collectors :+ f))
+  def collectArg6(f: T6 => Any): SelfType = copy(argInstances6 = argInstances6.copy(collectors = argInstances6.collectors :+ f))
   def collect1: SelfType = collectArg1(_.toString)
   def collect2: SelfType = collectArg2(_.toString)
   def collect3: SelfType = collectArg3(_.toString)
@@ -629,7 +629,7 @@ case class ScalaCheckFunction7[T1, T2, T3, T4, T5, T6, T7, R](
   lazy val propFunction = (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7) => {
     lazy val executed = execute(t1, t2, t3, t4, t5, t6, t7)
     executeInContext(executed)
-    collectValue(t1, argInstances1.collector)(collectValue(t2, argInstances2.collector)(collectValue(t3, argInstances3.collector)(collectValue(t4, argInstances4.collector)(collectValue(t5, argInstances5.collector)(collectValue(t6, argInstances6.collector)(collectValue(t7, argInstances7.collector)(asResultToProp(executed))))))))
+    argInstances1.collect(t1, argInstances2.collect(t2, argInstances3.collect(t3, argInstances4.collect(t4, argInstances5.collect(t5, argInstances6.collect(t6, argInstances7.collect(t7, asResultToProp(executed))))))))
   }
 
   lazy val prop: Prop =
@@ -690,13 +690,13 @@ case class ScalaCheckFunction7[T1, T2, T3, T4, T5, T6, T7, R](
   def setPrettyFreqMap(f: FreqMap[Set[Any]] => Pretty): SelfType =
     copy(prettyFreqMap = f)
 
-  def collectArg1(f: T1 => Any): SelfType = copy(argInstances1 = argInstances1.copy(collector = Some(f)))
-  def collectArg2(f: T2 => Any): SelfType = copy(argInstances2 = argInstances2.copy(collector = Some(f)))
-  def collectArg3(f: T3 => Any): SelfType = copy(argInstances3 = argInstances3.copy(collector = Some(f)))
-  def collectArg4(f: T4 => Any): SelfType = copy(argInstances4 = argInstances4.copy(collector = Some(f)))
-  def collectArg5(f: T5 => Any): SelfType = copy(argInstances5 = argInstances5.copy(collector = Some(f)))
-  def collectArg6(f: T6 => Any): SelfType = copy(argInstances6 = argInstances6.copy(collector = Some(f)))
-  def collectArg7(f: T7 => Any): SelfType = copy(argInstances7 = argInstances7.copy(collector = Some(f)))
+  def collectArg1(f: T1 => Any): SelfType = copy(argInstances1 = argInstances1.copy(collectors = argInstances1.collectors :+ f))
+  def collectArg2(f: T2 => Any): SelfType = copy(argInstances2 = argInstances2.copy(collectors = argInstances2.collectors :+ f))
+  def collectArg3(f: T3 => Any): SelfType = copy(argInstances3 = argInstances3.copy(collectors = argInstances3.collectors :+ f))
+  def collectArg4(f: T4 => Any): SelfType = copy(argInstances4 = argInstances4.copy(collectors = argInstances4.collectors :+ f))
+  def collectArg5(f: T5 => Any): SelfType = copy(argInstances5 = argInstances5.copy(collectors = argInstances5.collectors :+ f))
+  def collectArg6(f: T6 => Any): SelfType = copy(argInstances6 = argInstances6.copy(collectors = argInstances6.collectors :+ f))
+  def collectArg7(f: T7 => Any): SelfType = copy(argInstances7 = argInstances7.copy(collectors = argInstances7.collectors :+ f))
   def collect1: SelfType = collectArg1(_.toString)
   def collect2: SelfType = collectArg2(_.toString)
   def collect3: SelfType = collectArg3(_.toString)
@@ -737,7 +737,7 @@ case class ScalaCheckFunction8[T1, T2, T3, T4, T5, T6, T7, T8, R](
   lazy val propFunction = (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8) => {
     lazy val executed = execute(t1, t2, t3, t4, t5, t6, t7, t8)
     executeInContext(executed)
-    collectValue(t1, argInstances1.collector)(collectValue(t2, argInstances2.collector)(collectValue(t3, argInstances3.collector)(collectValue(t4, argInstances4.collector)(collectValue(t5, argInstances5.collector)(collectValue(t6, argInstances6.collector)(collectValue(t7, argInstances7.collector)(collectValue(t8, argInstances8.collector)(asResultToProp(executed)))))))))
+    argInstances1.collect(t1, argInstances2.collect(t2, argInstances3.collect(t3, argInstances4.collect(t4, argInstances5.collect(t5, argInstances6.collect(t6, argInstances7.collect(t7, argInstances8.collect(t8, asResultToProp(executed)))))))))
   }
 
   lazy val prop: Prop =
@@ -803,14 +803,14 @@ case class ScalaCheckFunction8[T1, T2, T3, T4, T5, T6, T7, T8, R](
   def setPrettyFreqMap(f: FreqMap[Set[Any]] => Pretty): SelfType =
     copy(prettyFreqMap = f)
 
-  def collectArg1(f: T1 => Any): SelfType = copy(argInstances1 = argInstances1.copy(collector = Some(f)))
-  def collectArg2(f: T2 => Any): SelfType = copy(argInstances2 = argInstances2.copy(collector = Some(f)))
-  def collectArg3(f: T3 => Any): SelfType = copy(argInstances3 = argInstances3.copy(collector = Some(f)))
-  def collectArg4(f: T4 => Any): SelfType = copy(argInstances4 = argInstances4.copy(collector = Some(f)))
-  def collectArg5(f: T5 => Any): SelfType = copy(argInstances5 = argInstances5.copy(collector = Some(f)))
-  def collectArg6(f: T6 => Any): SelfType = copy(argInstances6 = argInstances6.copy(collector = Some(f)))
-  def collectArg7(f: T7 => Any): SelfType = copy(argInstances7 = argInstances7.copy(collector = Some(f)))
-  def collectArg8(f: T8 => Any): SelfType = copy(argInstances8 = argInstances8.copy(collector = Some(f)))
+  def collectArg1(f: T1 => Any): SelfType = copy(argInstances1 = argInstances1.copy(collectors = argInstances1.collectors :+ f))
+  def collectArg2(f: T2 => Any): SelfType = copy(argInstances2 = argInstances2.copy(collectors = argInstances2.collectors :+ f))
+  def collectArg3(f: T3 => Any): SelfType = copy(argInstances3 = argInstances3.copy(collectors = argInstances3.collectors :+ f))
+  def collectArg4(f: T4 => Any): SelfType = copy(argInstances4 = argInstances4.copy(collectors = argInstances4.collectors :+ f))
+  def collectArg5(f: T5 => Any): SelfType = copy(argInstances5 = argInstances5.copy(collectors = argInstances5.collectors :+ f))
+  def collectArg6(f: T6 => Any): SelfType = copy(argInstances6 = argInstances6.copy(collectors = argInstances6.collectors :+ f))
+  def collectArg7(f: T7 => Any): SelfType = copy(argInstances7 = argInstances7.copy(collectors = argInstances7.collectors :+ f))
+  def collectArg8(f: T8 => Any): SelfType = copy(argInstances8 = argInstances8.copy(collectors = argInstances8.collectors :+ f))
   def collect1: SelfType = collectArg1(_.toString)
   def collect2: SelfType = collectArg2(_.toString)
   def collect3: SelfType = collectArg3(_.toString)
@@ -832,12 +832,13 @@ case class ScalaCheckFunction8[T1, T2, T3, T4, T5, T6, T7, T8, R](
 
   def setParameters(ps: Parameters): SelfType = copy(parameters = ps)
 }
-case class ScalaCheckArgInstances[T](arbitrary: Arbitrary[T], shrink: Option[Shrink[T]], collector: Option[T => Any], pretty: T => Pretty)
+
+case class ScalaCheckArgInstances[T](arbitrary: Arbitrary[T], shrink: Option[Shrink[T]], collectors: List[T => Any], pretty: T => Pretty) {
+  def collect(t: T, p: Prop) =
+    collectors.foldLeft(p)((res, cur) => Prop.collect(t)(p))
+}
 
 object ScalaCheckProperty {
-  /** @return a Prop that will collect the value if a collector is defined */
-  def collectValue[T](t: T, collector: Option[T => Any]): Prop => Prop = (prop: Prop) =>
-    collector.fold(prop)(c => Prop.collect(c(t))(prop))
 
   def makeProp[T](f: T => Prop, shrink: Option[Shrink[T]])(implicit a: Arbitrary[T], p: T => Pretty): Prop =
     shrink.fold(Prop.forAllNoShrink(f))(s => Prop.forAll(f)(identity, a, s, p))
@@ -870,7 +871,7 @@ case class ScalaCheckFunction$n[${TNList(n)}, R](
   lazy val propFunction = (${TNParamList(n)}) => {
     lazy val executed = execute(${NParamList(n)})
     executeInContext(executed)
-    ${(1 to n).reverse.foldLeft("asResultToProp(executed)"){ (res, i) => s"collectValue(t$i, argInstances$i.collector)($res)"}}
+    ${(1 to n).reverse.foldLeft("asResultToProp(executed)"){ (res, i) => s"argInstances$i.collect(t$i, $res)"}}
   }
 
   lazy val prop: Prop =
@@ -903,7 +904,7 @@ case class ScalaCheckFunction$n[${TNList(n)}, R](
   def setPrettyFreqMap(f: FreqMap[Set[Any]] => Pretty): SelfType =
     copy(prettyFreqMap = f)
 
-  ${(1 to n).map(i => s"def collectArg$i(f: T$i => Any): SelfType = copy(argInstances$i = argInstances$i.copy(collector = Some(f)))").mkString("\n  ")}
+  ${(1 to n).map(i => s"def collectArg$i(f: T$i => Any): SelfType = copy(argInstances$i = argInstances$i.copy(collectors = argInstances$i.collectors :+ f))").mkString("\n  ")}
   ${(1 to n).map(i => s"def collect$i: SelfType = collectArg$i(_.toString)").mkString("\n  ")}
   def collectAllArgs(${(1 to n).map(i => s"f$i: T$i => Any").mkString(",")}): SelfType =
     ${(1 to n).map(i => s"collectArg$i(f$i)").mkString(".")}

@@ -12,7 +12,7 @@ trait ScalaCheckPropertyCreation {
   def prop[T, R](result: T => R)(
     implicit arbitrary: Arbitrary[T], shrink: Shrink[T], pretty: T => Pretty, prettyFreqMap: FreqMap[Set[Any]] => Pretty,
              asResult: AsResult[R], parameters: Parameters): ScalaCheckFunction1[T, R] =
-    ScalaCheckFunction1(result, arbitrary, Some(shrink), collector = None, pretty, prettyFreqMap, asResult, context = None, parameters)
+    ScalaCheckFunction1(result, arbitrary, Some(shrink), collectors = Nil, pretty, prettyFreqMap, asResult, context = None, parameters)
 
   /** create a ScalaCheck property from a function of 2 arguments */
   def prop[T1, T2, R](result: (T1, T2) => R)(implicit
@@ -20,7 +20,7 @@ trait ScalaCheckPropertyCreation {
                                              prettyFreqMap: FreqMap[Set[Any]] => Pretty,
                                              asResult: AsResult[R], parameters: Parameters): ScalaCheckFunction2[T1, T2, R] =
     ScalaCheckFunction2(result,
-      ScalaCheckArgInstances(arbitrary1, Some(shrink1), collector = None, pretty = pretty1),ScalaCheckArgInstances(arbitrary2, Some(shrink2), collector = None, pretty = pretty2),
+      ScalaCheckArgInstances(arbitrary1, Some(shrink1), collectors = Nil, pretty = pretty1),ScalaCheckArgInstances(arbitrary2, Some(shrink2), collectors = Nil, pretty = pretty2),
       prettyFreqMap = prettyFreqMap,
       asResult, context = None, parameters)
 
@@ -31,7 +31,7 @@ trait ScalaCheckPropertyCreation {
                                                      prettyFreqMap: FreqMap[Set[Any]] => Pretty,
                                                      asResult: AsResult[R], parameters: Parameters): ScalaCheckFunction3[T1, T2, T3, R] =
     ScalaCheckFunction3(result,
-      ScalaCheckArgInstances(arbitrary1, Some(shrink1), collector = None, pretty = pretty1),ScalaCheckArgInstances(arbitrary2, Some(shrink2), collector = None, pretty = pretty2),ScalaCheckArgInstances(arbitrary3, Some(shrink3), collector = None, pretty = pretty3),
+      ScalaCheckArgInstances(arbitrary1, Some(shrink1), collectors = Nil, pretty = pretty1),ScalaCheckArgInstances(arbitrary2, Some(shrink2), collectors = Nil, pretty = pretty2),ScalaCheckArgInstances(arbitrary3, Some(shrink3), collectors = Nil, pretty = pretty3),
       prettyFreqMap = prettyFreqMap,
       asResult, context = None, parameters)
 
@@ -42,7 +42,7 @@ trait ScalaCheckPropertyCreation {
                                                              prettyFreqMap: FreqMap[Set[Any]] => Pretty,
                                                              asResult: AsResult[R], parameters: Parameters): ScalaCheckFunction4[T1, T2, T3, T4, R] =
     ScalaCheckFunction4(result,
-      ScalaCheckArgInstances(arbitrary1, Some(shrink1), collector = None, pretty = pretty1),ScalaCheckArgInstances(arbitrary2, Some(shrink2), collector = None, pretty = pretty2),ScalaCheckArgInstances(arbitrary3, Some(shrink3), collector = None, pretty = pretty3),ScalaCheckArgInstances(arbitrary4, Some(shrink4), collector = None, pretty = pretty4),
+      ScalaCheckArgInstances(arbitrary1, Some(shrink1), collectors = Nil, pretty = pretty1),ScalaCheckArgInstances(arbitrary2, Some(shrink2), collectors = Nil, pretty = pretty2),ScalaCheckArgInstances(arbitrary3, Some(shrink3), collectors = Nil, pretty = pretty3),ScalaCheckArgInstances(arbitrary4, Some(shrink4), collectors = Nil, pretty = pretty4),
       prettyFreqMap = prettyFreqMap,
       asResult, context = None, parameters)
 
@@ -53,7 +53,7 @@ trait ScalaCheckPropertyCreation {
                                                                      prettyFreqMap: FreqMap[Set[Any]] => Pretty,
                                                                      asResult: AsResult[R], parameters: Parameters): ScalaCheckFunction5[T1, T2, T3, T4, T5, R] =
     ScalaCheckFunction5(result,
-      ScalaCheckArgInstances(arbitrary1, Some(shrink1), collector = None, pretty = pretty1),ScalaCheckArgInstances(arbitrary2, Some(shrink2), collector = None, pretty = pretty2),ScalaCheckArgInstances(arbitrary3, Some(shrink3), collector = None, pretty = pretty3),ScalaCheckArgInstances(arbitrary4, Some(shrink4), collector = None, pretty = pretty4),ScalaCheckArgInstances(arbitrary5, Some(shrink5), collector = None, pretty = pretty5),
+      ScalaCheckArgInstances(arbitrary1, Some(shrink1), collectors = Nil, pretty = pretty1),ScalaCheckArgInstances(arbitrary2, Some(shrink2), collectors = Nil, pretty = pretty2),ScalaCheckArgInstances(arbitrary3, Some(shrink3), collectors = Nil, pretty = pretty3),ScalaCheckArgInstances(arbitrary4, Some(shrink4), collectors = Nil, pretty = pretty4),ScalaCheckArgInstances(arbitrary5, Some(shrink5), collectors = Nil, pretty = pretty5),
       prettyFreqMap = prettyFreqMap,
       asResult, context = None, parameters)
 
@@ -64,7 +64,7 @@ trait ScalaCheckPropertyCreation {
                                                                              prettyFreqMap: FreqMap[Set[Any]] => Pretty,
                                                                              asResult: AsResult[R], parameters: Parameters): ScalaCheckFunction6[T1, T2, T3, T4, T5, T6, R] =
     ScalaCheckFunction6(result,
-      ScalaCheckArgInstances(arbitrary1, Some(shrink1), collector = None, pretty = pretty1),ScalaCheckArgInstances(arbitrary2, Some(shrink2), collector = None, pretty = pretty2),ScalaCheckArgInstances(arbitrary3, Some(shrink3), collector = None, pretty = pretty3),ScalaCheckArgInstances(arbitrary4, Some(shrink4), collector = None, pretty = pretty4),ScalaCheckArgInstances(arbitrary5, Some(shrink5), collector = None, pretty = pretty5),ScalaCheckArgInstances(arbitrary6, Some(shrink6), collector = None, pretty = pretty6),
+      ScalaCheckArgInstances(arbitrary1, Some(shrink1), collectors = Nil, pretty = pretty1),ScalaCheckArgInstances(arbitrary2, Some(shrink2), collectors = Nil, pretty = pretty2),ScalaCheckArgInstances(arbitrary3, Some(shrink3), collectors = Nil, pretty = pretty3),ScalaCheckArgInstances(arbitrary4, Some(shrink4), collectors = Nil, pretty = pretty4),ScalaCheckArgInstances(arbitrary5, Some(shrink5), collectors = Nil, pretty = pretty5),ScalaCheckArgInstances(arbitrary6, Some(shrink6), collectors = Nil, pretty = pretty6),
       prettyFreqMap = prettyFreqMap,
       asResult, context = None, parameters)
 
@@ -75,7 +75,7 @@ trait ScalaCheckPropertyCreation {
                                                                                      prettyFreqMap: FreqMap[Set[Any]] => Pretty,
                                                                                      asResult: AsResult[R], parameters: Parameters): ScalaCheckFunction7[T1, T2, T3, T4, T5, T6, T7, R] =
     ScalaCheckFunction7(result,
-      ScalaCheckArgInstances(arbitrary1, Some(shrink1), collector = None, pretty = pretty1),ScalaCheckArgInstances(arbitrary2, Some(shrink2), collector = None, pretty = pretty2),ScalaCheckArgInstances(arbitrary3, Some(shrink3), collector = None, pretty = pretty3),ScalaCheckArgInstances(arbitrary4, Some(shrink4), collector = None, pretty = pretty4),ScalaCheckArgInstances(arbitrary5, Some(shrink5), collector = None, pretty = pretty5),ScalaCheckArgInstances(arbitrary6, Some(shrink6), collector = None, pretty = pretty6),ScalaCheckArgInstances(arbitrary7, Some(shrink7), collector = None, pretty = pretty7),
+      ScalaCheckArgInstances(arbitrary1, Some(shrink1), collectors = Nil, pretty = pretty1),ScalaCheckArgInstances(arbitrary2, Some(shrink2), collectors = Nil, pretty = pretty2),ScalaCheckArgInstances(arbitrary3, Some(shrink3), collectors = Nil, pretty = pretty3),ScalaCheckArgInstances(arbitrary4, Some(shrink4), collectors = Nil, pretty = pretty4),ScalaCheckArgInstances(arbitrary5, Some(shrink5), collectors = Nil, pretty = pretty5),ScalaCheckArgInstances(arbitrary6, Some(shrink6), collectors = Nil, pretty = pretty6),ScalaCheckArgInstances(arbitrary7, Some(shrink7), collectors = Nil, pretty = pretty7),
       prettyFreqMap = prettyFreqMap,
       asResult, context = None, parameters)
 
@@ -86,9 +86,10 @@ trait ScalaCheckPropertyCreation {
                                                                                              prettyFreqMap: FreqMap[Set[Any]] => Pretty,
                                                                                              asResult: AsResult[R], parameters: Parameters): ScalaCheckFunction8[T1, T2, T3, T4, T5, T6, T7, T8, R] =
     ScalaCheckFunction8(result,
-      ScalaCheckArgInstances(arbitrary1, Some(shrink1), collector = None, pretty = pretty1),ScalaCheckArgInstances(arbitrary2, Some(shrink2), collector = None, pretty = pretty2),ScalaCheckArgInstances(arbitrary3, Some(shrink3), collector = None, pretty = pretty3),ScalaCheckArgInstances(arbitrary4, Some(shrink4), collector = None, pretty = pretty4),ScalaCheckArgInstances(arbitrary5, Some(shrink5), collector = None, pretty = pretty5),ScalaCheckArgInstances(arbitrary6, Some(shrink6), collector = None, pretty = pretty6),ScalaCheckArgInstances(arbitrary7, Some(shrink7), collector = None, pretty = pretty7),ScalaCheckArgInstances(arbitrary8, Some(shrink8), collector = None, pretty = pretty8),
+      ScalaCheckArgInstances(arbitrary1, Some(shrink1), collectors = Nil, pretty = pretty1),ScalaCheckArgInstances(arbitrary2, Some(shrink2), collectors = Nil, pretty = pretty2),ScalaCheckArgInstances(arbitrary3, Some(shrink3), collectors = Nil, pretty = pretty3),ScalaCheckArgInstances(arbitrary4, Some(shrink4), collectors = Nil, pretty = pretty4),ScalaCheckArgInstances(arbitrary5, Some(shrink5), collectors = Nil, pretty = pretty5),ScalaCheckArgInstances(arbitrary6, Some(shrink6), collectors = Nil, pretty = pretty6),ScalaCheckArgInstances(arbitrary7, Some(shrink7), collectors = Nil, pretty = pretty7),ScalaCheckArgInstances(arbitrary8, Some(shrink8), collectors = Nil, pretty = pretty8),
       prettyFreqMap = prettyFreqMap,
       asResult, context = None, parameters)
+  
 }
 
 object ScalaCheckPropertyCreation {
@@ -103,7 +104,7 @@ object ScalaCheckPropertyCreation {
     prettyFreqMap: FreqMap[Set[Any]] => Pretty,
     asResult: AsResult[R], parameters: Parameters): ScalaCheckFunction$n[${TNList(n)}, R] =
     ScalaCheckFunction$n(result,
-      ${(1 to n).map(i => s"ScalaCheckArgInstances(arbitrary$i, Some(shrink$i), collector = None, pretty = pretty$i)").mkString(",")},
+      ${(1 to n).map(i => s"ScalaCheckArgInstances(arbitrary$i, Some(shrink$i), collectors = Nil, pretty = pretty$i)").mkString(",")},
       prettyFreqMap = prettyFreqMap,
       asResult, context = None, parameters)
      """
