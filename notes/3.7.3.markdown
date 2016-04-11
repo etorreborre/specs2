@@ -1,0 +1,13 @@
+Maintenance version
+
+## Improvements
+
+ * show more exceptions and stacktraces when failing to create mutable specifications
+ * extracted `await/attempt` code from `FutureMatchers` so that it can be reused on any `Future[T]` (see `org.specs2.concurrent.FutureAwait`)
+
+## Fixes
+
+ * fixed a missing call to display root exceptions in `Runner` (adds more information to `This looks like a specs2 exception...`)
+ * fixed the behaviour of `FragmentsContinuation` in case of a failure (see the user guide on "Online testing")
+ * report the instantiation cause in all cases when a class fails to be instantiated [#455](http://github.com/etorreborre/specs2/issues/455)
+ * rethrow an exception for a Future expression matched with `await` [#456](http://github.com/etorreborre/specs2/issues/456)
