@@ -2,12 +2,18 @@ Maintenance version
 
 ## Improvements
 
- * show more exceptions and stacktraces when failing to create mutable specifications
- * extracted `await/attempt` code from `FutureMatchers` so that it can be reused on any `Future[T]` (see `org.specs2.concurrent.FutureAwait`)
+ * scalacheck: added the possibility to chain collectors to nest the collected data [example](https://gist.github.com/etorreborre/d53d379e92513c8d5d3d6a159a2fdeeb)
+ * core: don't display differences when actual/expected string representations are the same [#463](http://github.com/etorreborre/specs2/issues/463)
+ * core: display the time factor used for await/attempt timeouts when there is a timeout
+ * core: create an error fragment if a continuation fragment throws an exception  
+ * site: added a website link to the presentations on Slideshare
+ * console-runner: better implementation of a TextPrinter test thanks to @zaneli
 
 ## Fixes
 
- * fixed a missing call to display root exceptions in `Runner` (adds more information to `This looks like a specs2 exception...`)
- * fixed the behaviour of `FragmentsContinuation` in case of a failure (see the user guide on "Online testing")
- * report the instantiation cause in all cases when a class fails to be instantiated [#455](http://github.com/etorreborre/specs2/issues/455)
- * rethrow an exception for a Future expression matched with `await` [#456](http://github.com/etorreborre/specs2/issues/456)
+ * core: use a copy of the env with a specific execution context for user example [#452](http://github.com/etorreborre/specs2/issues/452)
+ * core: fixed the number of times an expression is evaluated with `EventuallyResults` [#462](http://github.com/etorreborre/specs2/issues/462)
+ * core: fixed some combinations of `be` and `not` with match results [#458](http://github.com/etorreborre/specs2/issues/458)
+ * files-runner: find top-level classes [#467](http://github.com/etorreborre/specs2/issues/467)
+ * html-runner: display datatables as html in html reports [#466](http://github.com/etorreborre/specs2/issues/466)
+ 
