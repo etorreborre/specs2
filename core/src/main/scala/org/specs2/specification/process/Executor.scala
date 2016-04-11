@@ -47,12 +47,7 @@ trait DefaultExecutor extends Executor {
    *  - sequence the execution so that only parts in between steps are executed concurrently
    */
   def execute(env: Env): Process[Task, Fragment] => Process[Task, Fragment] = { contents: Process[Task, Fragment] =>
-    // create a new execution environment which can be used inside the fragments
-    // when they are executed concurrently to avoid locking (see #452)
-    val userEnv = env.copy()
-    execute1(env, userEnv)(contents).
-      andFinally(Task.delay(userEnv.shutdown)).
-      andFinally(Task.delay(env.shutdown))
+    execute1(env)(contents).andFinally(Task.delay(env.shutdown))
   }
 
   /**
@@ -60,13 +55,13 @@ trait DefaultExecutor extends Executor {
    *
    * The difference with `execute` is that `execute` shuts down the environment when the process is finished
    */
-  def execute1(env: Env, userEnv: Env): Process[Task, Fragment] => Process[Task, Fragment] = { contents: Process[Task, Fragment] =>
-    (contents |> sequencedExecution(env, userEnv)).sequence(Runtime.getRuntime.availableProcessors).flatMap(executeOnline(env, userEnv))
+  def execute1(env: Env): Process[Task, Fragment] => Process[Task, Fragment] = { contents: Process[Task, Fragment] =>
+    (contents |> sequencedExecution(env)).sequence(Runtime.getRuntime.availableProcessors).flatMap(executeOnline(env))
   }
 
   /** a Process1 to execute fragments as tasks */
   def executeTasks(env: Env): Process1[Fragment, Task[Fragment]] =
-    sequencedExecution(env, env)
+    sequencedExecution(env)
 
   /**
    * execute fragments, making sure that:
@@ -79,7 +74,6 @@ trait DefaultExecutor extends Executor {
    *  - the execution stops if one fragment indicates that the result of the previous executions is not correct
    */
   def sequencedExecution(env: Env,
-                         userEnv: Env,
                          barrier: Task[FatalExecution \/ Result] = Task.now(\/-(Success("barrier"))),
                          mustStop: Boolean = false): Process1[Fragment, Task[Fragment]] = {
     receive1 { fragment: Fragment =>
@@ -90,7 +84,7 @@ trait DefaultExecutor extends Executor {
           if (fragment.isExecutable) emit(Task.now(fragment.skip))
           else emit(Task.now(fragment))
 
-        skipped fby sequencedExecution(env, userEnv, barrier, mustStop)
+        skipped fby sequencedExecution(env, barrier, mustStop)
       } else {
         // if we need to wait, we do, and get the result
         val barrierResult =
@@ -114,18 +108,18 @@ trait DefaultExecutor extends Executor {
         val timeout = env.timeout.orElse(fragment.execution.timeout)
 
         if (mustStop) {
-          emit(Task.now(fragment.skip)) fby sequencedExecution(env, userEnv, barrier, barrierStop)
+          emit(Task.now(fragment.skip)) fby sequencedExecution(env, barrier, barrierStop)
         } else if (fragment.execution.mustJoin) {
-          val executedFragment = timedout(fragment, env)(Task.delay(executeFragment(userEnv)(fragment)))(timeout).run
+          val executedFragment = timedout(fragment, env)(Task.delay(executeFragment(env.userEnv)(fragment)))(timeout).run
           val (nextBarrier, stepStop) = {
             val stepResult = executedFragment.executionFatalOrResult
             (Task.now(stepResult), stepResult.fold(_ => true, r => fragment.execution.nextMustStopIf(r)))
           }
-          emit(Task.now(executedFragment)) fby sequencedExecution(env, userEnv, nextBarrier, barrierStop || stepStop)
+          emit(Task.now(executedFragment)) fby sequencedExecution(env, nextBarrier, barrierStop || stepStop)
 
         } else if (env.arguments.sequential) {
           // stop right away if the previous fragment created a failed barrier
-          if (barrierStop) emit(Task.now(fragment.skip)) fby sequencedExecution(env, userEnv, barrier, barrierStop)
+          if (barrierStop) emit(Task.now(fragment.skip)) fby sequencedExecution(env, barrier, barrierStop)
           else {
             lazy val executedFragment = timedout(fragment, env)(Task.delay(executeFragment(env)(fragment)))(timeout).run
             val nextBarrier = barrier.map {
@@ -133,17 +127,17 @@ trait DefaultExecutor extends Executor {
               case f => f
             }
 
-            emit(Task.delay(executedFragment)) fby sequencedExecution(env, userEnv, nextBarrier, barrierStop)
+            emit(Task.delay(executedFragment)) fby sequencedExecution(env, nextBarrier, barrierStop)
           }
         } else {
           val timeout = env.timeout.orElse(fragment.execution.timeout)
-          val executingFragment = timedout(fragment, env)(start(executeFragment(userEnv)(fragment))(env.executorService))(timeout)
+          val executingFragment = timedout(fragment, env)(start(executeFragment(env.userEnv)(fragment))(env.executorService))(timeout)
           val nextBarrier = (barrier |@| executingFragment) { (b, ef) => b match {
               case \/-(result) => ef.executionFatalOrResult.fold(f => -\/(f), r => \/-(Result.ResultFailureMonoid.append(result, r)))
               case f => f
             }
           }
-          emit(executingFragment) fby sequencedExecution(env, userEnv, nextBarrier, barrierStop)
+          emit(executingFragment) fby sequencedExecution(env, nextBarrier, barrierStop)
         }
       }
     }
@@ -157,11 +151,11 @@ trait DefaultExecutor extends Executor {
     }
   }
 
-  def executeOnline(env: Env, userEnv: Env): Fragment => Process[Task, Fragment] = { fragment: Fragment =>
+  def executeOnline(env: Env): Fragment => Process[Task, Fragment] = { fragment: Fragment =>
     fragment.execution.continuation match {
       case Some(continue) =>
         continue(fragment.executionResult).cata(
-          fs => Process(fragment).toSource fby execute1(env, userEnv)(fs.contents),
+          fs => Process(fragment).toSource fby execute1(env)(fs.contents),
           Process(fragment).toSource)
 
       case None => Process(fragment).toSource
@@ -187,14 +181,11 @@ trait DefaultExecutor extends Executor {
 object DefaultExecutor extends DefaultExecutor {
 
   def executeSpecWithoutShutdown(spec: SpecStructure, env: Env): SpecStructure =
-    spec.|>((contents: Process[Task, Fragment]) => (contents |> sequencedExecution(env, env)).sequence(Runtime.getRuntime.availableProcessors))
+    spec.|>((contents: Process[Task, Fragment]) => (contents |> sequencedExecution(env)).sequence(Runtime.getRuntime.availableProcessors))
 
   def executeSpec(spec: SpecStructure, env: Env): SpecStructure = {
-    val userEnv = env.copy()
-    spec.|>((contents: Process[Task, Fragment]) => (contents |> sequencedExecution(env, userEnv)).
-      sequence(Runtime.getRuntime.availableProcessors).
-      andFinally(Task.delay(userEnv.shutdown)).
-      andFinally(Task.delay(env.shutdown)))
+    spec.|>((contents: Process[Task, Fragment]) => (contents |> sequencedExecution(env)).
+      sequence(Runtime.getRuntime.availableProcessors).andFinally(Task.delay(env.shutdown)))
   }
 
   def runSpec(spec: SpecStructure, env: Env): IndexedSeq[Fragment] =

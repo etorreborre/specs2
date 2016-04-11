@@ -49,6 +49,9 @@ case class Env(arguments: Arguments = Arguments(),
           // parameters for fragments execution
           executionParameters: ExecutionParameters = ExecutionParameters()) {
 
+  lazy val userEnv: Env =
+    copy()
+
   lazy val statisticsRepository: StatisticsRepository =
     statsRepository(arguments)
 
@@ -81,8 +84,10 @@ case class Env(arguments: Arguments = Arguments(),
   def setTimeout(duration: FiniteDuration): Env =
     copy(executionParameters = executionParameters.setTimeout(duration))
 
-  def shutdown(): Unit =
-    executionEnv.shutdown()
+  def shutdown(): Unit = {
+    try executionEnv.shutdown()
+    finally userEnv.executionEnv.shutdown()
+  }
 
   /** set new LineLogger */
   def setLineLogger(logger: LineLogger) =

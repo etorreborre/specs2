@@ -2,10 +2,13 @@ package org.specs2
 package specification
 
 import execute._
+
 import scala.collection.mutable.ListBuffer
-import matcher.{ThrownExpectations, ResultMatchers}
+import matcher.{ResultMatchers, ThrownExpectations}
+
 import scala.concurrent.duration._
 import main.Arguments
+import concurrent.ExecutionEnv
 import specification.core._
 import specification.process.DefaultExecutor
 
@@ -26,6 +29,7 @@ class ExecutorSpec extends script.Specification with Groups with ResultMatchers 
   + stopOnFail and sequential
 
   with a timeout $timeOut
+  with examples using an execution context $userEnv
 
 """
 
@@ -156,11 +160,20 @@ class ExecutorSpec extends script.Specification with Groups with ResultMatchers 
     execute(fragments, env1) must contain(beSkipped[Result]("timeout after "+100*timeFactor+" milliseconds"))
   }
 
+  def userEnv = { env: Env =>
+    val fragments =
+      Fragments.foreach(1 to 10) { i: Int =>
+        "test " + i ! Execution.withExecutionEnv { implicit ec: ExecutionEnv =>
+          scala.concurrent.Future(1) must be_==(1).await
+        }
+      }
+    execute(fragments.fragments, env) must contain(beSuccessful[Result]).forall
+  }
 
   val factory = fragmentFactory
 
   def execute(fragments: Seq[Fragment], env: Env): IndexedSeq[Result] =
-    DefaultExecutor.execute1(env, env)(Fragments(fragments:_*).contents).runLog.run.map(_.executionResult)
+    DefaultExecutor.execute1(env)(Fragments(fragments:_*).contents).runLog.run.map(_.executionResult)
 
   trait results {
     val messages = new ListBuffer[String]
@@ -178,7 +191,5 @@ class ExecutorSpec extends script.Specification with Groups with ResultMatchers 
     def step1                         = { messages.append("step");   success }
     def fatalStep                     = { messages.append("fatal");  if (true) throw new java.lang.Error("fatal error!"); success }
   }
-
-
 
 }
