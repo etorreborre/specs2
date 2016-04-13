@@ -46,11 +46,17 @@ case class Fragments(contents: Process[Task, Fragment]) {
   /** run the process to get all fragments */
   def fragments: IndexedSeq[Fragment] = contents.runLog.run
 
-  /** run the process to get all texts */
+  /** run the process to filter all texts */
   def texts = fragments.filter(isText)
 
-  /** run the process to get all examples */
+  /** run the process to filter all markers */
+  def markers = fragments.filter(isMarker)
+
+  /** run the process to filter all examples */
   def examples = fragments.filter(isExample)
+
+  /** run the process to collect all tags */
+  def tags = fragments.collect(marker).map(_.tag)
 
   /** run the process to get all specification references as Fragments */
   def referenced = fragments.filter(isSpecificationRef)

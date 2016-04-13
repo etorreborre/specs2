@@ -40,7 +40,8 @@ case class SpecStructure(header: SpecHeader, arguments: Arguments, lazyFragments
 
   def texts = fragments.texts
   def examples = fragments.examples
-  
+  def tags = fragments.tags
+
   def references = fragments.referenced
   def specificationRefs = fragments.specificationRefs
 
