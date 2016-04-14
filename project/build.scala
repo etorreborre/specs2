@@ -43,9 +43,9 @@ object build extends Build {
     organization := "org.specs2",
     specs2Version in GlobalScope <<= version,
     specs2ShellPrompt,
-    scalaVersion := "2.11.7",
-    scalazVersion := "7.2.0",
-    crossScalaVersions := Seq(scalaVersion.value, "2.12.0-M3", "2.10.6"))
+    scalaVersion := "2.11.8",
+    scalazVersion := "7.2.2",
+    crossScalaVersions := Seq(scalaVersion.value, "2.12.0-M4", "2.10.6"))
 
   lazy val specs2Version = settingKey[String]("defines the current specs2 version")
 
@@ -73,8 +73,8 @@ object build extends Build {
             depends.scalaz(scalazVersion.value, scalaVersion.value) ++
             depends.reflect(scalaVersion.value) ++
             depends.paradise(scalaVersion.value) ++
-            depends.kindp ++
-            depends.scalacheck.map(_ % "test"),
+            Seq(depends.kindp(scalaVersion.value)) ++
+            depends.scalacheck(scalaVersion.value).map(_ % "test"),
           name := "specs2-common")
   )
 
@@ -157,7 +157,7 @@ object build extends Build {
 
   lazy val scalacheck = Project(id = "scalacheck", base = file("scalacheck"),
     settings = Seq(
-      libraryDependencies ++= depends.scalacheck) ++
+      libraryDependencies ++= depends.scalacheck(scalaVersion.value)) ++
       moduleSettings("scalacheck") ++
       Seq(name := "specs2-scalacheck")
   ).dependsOn(core)
@@ -183,7 +183,7 @@ object build extends Build {
     javacOptions ++= Seq("-Xmx3G", "-Xms512m", "-Xss4m"),
     maxErrors := 20,
     incOptions := incOptions.value.withNameHashing(true),
-    addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.7.1"),
+    addCompilerPlugin(depends.kindp(scalaVersion.value)),
     scalacOptions in GlobalScope ++=
       (if (scalaVersion.value.startsWith("2.11") || scalaVersion.value.startsWith("2.12"))
         Seq("-Xfatal-warnings",

@@ -1,7 +1,6 @@
 package org.specs2
 package execute
 
-import reflect.Macros
 import reflect.MacroContext._
 import scala.reflect.macros.{ParseException, TypecheckException}
 
