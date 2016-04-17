@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-import org.specs2.execute.Result
+import org.specs2.execute.{Result, StandardResults}
 
 
 /**
@@ -46,7 +46,9 @@ object MustExpectations extends MustExpectations
  * This trait provides implicit definitions to transform any value into a MustExpectable, throwing exceptions when
  * a match fails
  */
-trait MustThrownExpectations extends MustExpectations with MustThrownExpectations1 {
+trait MustThrownExpectations extends MustThrownExpectables with StandardResults with StandardMatchResults
+
+trait MustThrownExpectables extends MustExpectations with MustThrownExpectations1 {
   override implicit def akaMust[T](tm: Expectable[T]): MustExpectable[T] = new MustExpectable(() => tm.valueDefinition()) {
     override private[specs2] val desc = tm.desc
     override private[specs2] val showValueAs = tm.showValueAs
@@ -56,8 +58,9 @@ trait MustThrownExpectations extends MustExpectations with MustThrownExpectation
   }
 }
 
+
 private[specs2]
-trait MustThrownExpectations1 extends MustExpectations1 with MustThrownExpectationsCreation
+trait MustThrownExpectations1 extends MustExpectations1 with MustThrownExpectationsCreation with StandardResults with StandardMatchResults
 
 trait MustThrownExpectationsCreation extends ThrownExpectationsCreation with MustExpectationsCreation {
   override protected def createMustExpectable[T](t: =>T) = new MustExpectable(() => t) {

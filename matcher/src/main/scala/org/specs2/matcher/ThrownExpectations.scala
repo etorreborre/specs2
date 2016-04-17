@@ -24,13 +24,16 @@ import execute.FailureException
  *     }
  *   }
  */
-trait ThrownExpectations extends ThrownExpectationsCreation
+trait ThrownExpectations extends ThrownExpectationsCreation with ThrownStandardResults with ThrownStandardMatchResults
 
 /**
  * Lightweight ThrownExpectations trait with less implicit methods
  */
-trait ThrownExpectationsCreation extends ExpectationsCreation with StandardResults with StandardMatchResults {
-  override def createExpectable[T](t: =>T, alias: Option[String => String]): Expectable[T] =
+trait ThrownExpectationsCreation extends ThrownExpectables
+
+trait ThrownExpectables extends ExpectationsCreation {
+
+  override def createExpectable[T](t: => T, alias: Option[String => String]): Expectable[T] =
     new Expectable(() => t) {
       // overriding this method is necessary to include the ThrownExpectation trait into the stacktrace of the created match result
       override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = super.applyMatcher(m)
@@ -38,6 +41,7 @@ trait ThrownExpectationsCreation extends ExpectationsCreation with StandardResul
       override val desc = alias
       override def map[S](f: T => S): Expectable[S] = createExpectable(f(value), desc)
       override def mapDescription(d: Option[String => String]): Expectable[T] = createExpectable(value, d)
+
       override def evaluateOnce = {
         val v = t
         createExpectable(t, desc)
@@ -47,11 +51,13 @@ trait ThrownExpectationsCreation extends ExpectationsCreation with StandardResul
   override def createExpectableWithShowAs[T](t: =>T, show: =>String): Expectable[T] =
     new Expectable(() => t) {
       override val showValueAs = Some(() => show)
+
       // overriding this method is necessary to include the ThrownExpectation trait into the stacktrace of the created match result
       override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = super.applyMatcher(m)
       override def check[S >: T](r: MatchResult[S]): MatchResult[S] = checkFailure(r)
       override def map[S](f: T => S): Expectable[S] = createExpectableWithShowAs(f(value), show)
       override def mapDescription(d: Option[String => String]): Expectable[T] = createExpectable(value, d)
+
       override def evaluateOnce = {
         val (v, s) = (value, show)
         createExpectableWithShowAs(v, s)
@@ -60,44 +66,50 @@ trait ThrownExpectationsCreation extends ExpectationsCreation with StandardResul
 
   override protected def checkResultFailure(result: =>Result) = {
     result match {
-      case f @ Failure(_,_,_,_)      => throw new FailureException(f)
-      case s @ Skipped(_,_)          => throw new SkipException(s)
-      case s @ Pending(_)            => throw new PendingException(s)
-      case e @ Error(_,_)            => throw new ErrorException(e)
-      case d @ DecoratedResult(_, r) => if (!r.isSuccess) throw new DecoratedResultException(d) else ()
-      case _                         => ()
+      case f@Failure(_, _, _, _) => throw new FailureException(f)
+      case s@Skipped(_, _) => throw new SkipException(s)
+      case s@Pending(_) => throw new PendingException(s)
+      case e@Error(_, _) => throw new ErrorException(e)
+      case d@DecoratedResult(_, r) => if (!r.isSuccess) throw new DecoratedResultException(d) else ()
+      case _ => ()
     }
     result
   }
+
   /** this method can be overriden to throw exceptions when checking the match result */
   override protected def checkMatchResultFailure[T](m: MatchResult[T]) = {
     m match {
-      case f @ MatchFailure(_,_,_,_,_) => throw new MatchFailureException(f)
-      case s @ MatchSkip(_,_)          => throw new MatchSkipException(s)
-      case p @ MatchPending(_,_)       => throw new MatchPendingException(p)
-      case _                           => ()
+      case f@MatchFailure(_, _, _, _, _) => throw new MatchFailureException(f)
+      case s@MatchSkip(_, _) => throw new MatchSkipException(s)
+      case p@MatchPending(_, _) => throw new MatchPendingException(p)
+      case _ => ()
     }
     m
   }
+}
 
+trait ThrownStandardResults extends StandardResults with ExpectationsCreation {
   override def failure: Failure = { checkResultFailure(throw new FailureException(super.failure)); super.failure }
-  override def todo: Pending    = { checkResultFailure(throw new PendingException(super.todo));    super.todo }
-  override def anError: Error   = { checkResultFailure(throw new ErrorException(super.anError));   super.anError }
+  override def todo: Pending = { checkResultFailure(throw new PendingException(super.todo)); super.todo }
+  override def anError: Error = { checkResultFailure(throw new ErrorException(super.anError)); super.anError }
 
   override lazy val success = Success("success")
-  protected def success(m: String): Success  = { checkResultFailure(Success(m)); Success(m) }
-  protected def failure(m: String): Failure  = failure(Failure(m))
+
+  protected def success(m: String): Success = { checkResultFailure(Success(m)); Success(m) }
+  protected def failure(m: String): Failure = failure(Failure(m))
+
   protected def failure(f: Failure): Failure = { checkResultFailure(throw new FailureException(f)); f }
 
   override def pending: Pending = pending("PENDING")
-  override def pending(m: String): Pending   = pending(Pending(m))
+  override def pending(m: String): Pending = pending(Pending(m))
   protected def pending(p: Pending): Pending = { checkResultFailure(throw new PendingException(p)); p }
 
   override def skipped: Skipped = skipped("skipped")
-  override def skipped(m: String): Skipped   = skipped(Skipped(m))
+  override def skipped(m: String): Skipped = skipped(Skipped(m))
   protected def skipped(s: Skipped): Skipped = { checkResultFailure(throw new SkipException(s)); s }
+}
 
-
+trait ThrownStandardMatchResults extends StandardMatchResults with ExpectationsCreation {
   override lazy val ko: MatchResult[Any] =
     checkMatchResultFailure(throw new MatchFailureException(MatchFailure("ok", "ko", createExpectable(None))))
 
@@ -105,14 +117,14 @@ trait ThrownExpectationsCreation extends ExpectationsCreation with StandardResul
   override def sandboxMatchResult[T](mr: =>MatchResult[T]): MatchResult[T] =
     try mr
     catch {
-      case MatchFailureException(e)    => e.asInstanceOf[MatchResult[T]]
-      case MatchSkipException(e)       => e.asInstanceOf[MatchResult[T]]
-      case MatchPendingException(e)    => e.asInstanceOf[MatchResult[T]]
-      case other: Throwable            => throw other
+      case MatchFailureException(e) => e.asInstanceOf[MatchResult[T]]
+      case MatchSkipException(e)    => e.asInstanceOf[MatchResult[T]]
+      case MatchPendingException(e) => e.asInstanceOf[MatchResult[T]]
+      case other: Throwable         => throw other
     }
 
 }
-private [specs2]
+
 object ThrownExpectations extends ThrownExpectations
 
 /**

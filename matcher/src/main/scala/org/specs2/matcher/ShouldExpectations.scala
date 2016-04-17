@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-import org.specs2.execute.Result
+import org.specs2.execute.{Result, StandardResults}
 
 
 /**
@@ -40,7 +40,9 @@ object ShouldExpectations extends ShouldExpectations
  * This trait provides implicit definitions to transform any value into a ShouldExpectable, throwing exceptions when
  * a match fails
  */
-trait ShouldThrownExpectations extends ThrownExpectations with ShouldExpectations {
+trait ShouldThrownExpectations extends ShouldThrownExpectables with StandardResults with StandardMatchResults
+
+trait ShouldThrownExpectables extends ThrownExpectations with ShouldExpectations {
   override implicit def akaShould[T](tm: Expectable[T]): ShouldExpectable[T] = new ShouldExpectable(() => tm.valueDefinition()) {
     override private[specs2] val desc = tm.desc
     override private[specs2] val showValueAs = tm.showValueAs
@@ -55,4 +57,5 @@ trait ShouldThrownExpectations extends ThrownExpectations with ShouldExpectation
     override def check[S >: T](r: MatchResult[S]): MatchResult[S] = checkFailure(r)
   }
 }
+
 object ShouldThrownExpectations extends ShouldThrownExpectations
