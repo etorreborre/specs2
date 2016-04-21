@@ -8,6 +8,7 @@ object OptionalDataMatcherCards extends Cards {
   def title = "Optional data matchers"
   def cards = Seq(
     DisjunctionMatchers,
+    XorMatchers,
     ValidationMatchers,
     CaseClassMatchers,
     ResultMatchers,
