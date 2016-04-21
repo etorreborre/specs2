@@ -10,7 +10,7 @@ import scala.collection.mutable.ArrayBuffer
 
 class BeforeAfterAllSpec extends Specification { def is = s2"""
 
- Before and after all steps can be executed with the BeforeAfterAll trait $beforeAfter
+ Before and after all steps can be executed with the BeforeAfterAll trait $beforeAfter ${tag("travis")}
  Before and after all steps can be executed even if tags are included     $withTags1
  Before and after all steps can be executed even if tags are excluded     $withTags2
 

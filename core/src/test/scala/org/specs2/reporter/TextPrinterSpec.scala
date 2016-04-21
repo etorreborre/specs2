@@ -29,10 +29,10 @@ class TextPrinterSpec extends Specification { def is = s2"""
    a skipped example must be displayed with a o               $b4
    a pending example must be displayed with a *               $b5
    a multi-line description must be indented ok               $b6
-   if showtimes is true, each individual time must be shown   $b7
+   if showtimes is true, each individual time must be shown   $b7 ${tag("travis")}
 
  Statistics must be displayed at the end   
-   stats                                                      $c1
+   stats                                                      $c1 ${tag("travis")}
 
  Failure messages must be shown
    normal messages                                            $d1
@@ -72,7 +72,7 @@ class TextPrinterSpec extends Specification { def is = s2"""
     stats are not displayed with xonly when successful        $k2
 
  Fragments must be displayed in their creation order
-    as soon as computed                                       $l1
+    as soon as computed                                       $l1 ${tag("travis")}
     as soon as computed, with sequential                      $l2
 
  Datatable must be properly indented                          $m1
