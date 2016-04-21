@@ -377,7 +377,7 @@ object build extends Build {
         </licenses>
         <scm>
           <url>http://github.com/etorreborre/specs2</url>
-          <connection>scm:http:http://etorreborre@github.com/etorreborre/specs2.git</connection>
+          <connection>scm:git:git@github.com:etorreborre/specs2.git</connection>
         </scm>
         <developers>
           <developer>
