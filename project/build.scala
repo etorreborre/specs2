@@ -148,7 +148,7 @@ object build extends Build {
 
   lazy val cats = Project(id = "cats", base = file("cats"),
     settings = moduleSettings("cats") ++
-      Seq(libraryDependencies ++= depends.cats) ++
+      Seq(libraryDependencies ++= (if (scalaVersion.value startsWith "2.12") Nil else depends.cats)) ++
       Seq(name := "specs2-cats") ++
       Seq((skip in compile) := !(scalaVersion.value startsWith "2.12"),
           publishArtifact := !(scalaVersion.value startsWith "2.12"))
