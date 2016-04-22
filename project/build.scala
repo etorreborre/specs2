@@ -150,7 +150,7 @@ object build extends Build {
     settings = moduleSettings("cats") ++
       Seq(libraryDependencies ++= (if (scalaVersion.value startsWith "2.12") Nil else depends.cats)) ++
       Seq(name := "specs2-cats") ++
-      Seq((skip in compile) := !(scalaVersion.value startsWith "2.12"),
+      Seq((skip in compile) := scalaVersion.value startsWith "2.12",
           publishArtifact := !(scalaVersion.value startsWith "2.12"))
   ).dependsOn(matcher, core % "test->test")
 
