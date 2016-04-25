@@ -12,7 +12,7 @@ import StringToElem._
 import collection.Seqx._
 import scalaz.std.string._
 /**
- * The XmlMatchers trait provides matchers which are applicable to xml nodes
+ * The XmlMatchers trait provides matchers which are applicaborderle to xml nodes
  */
 trait XmlMatchers extends XmlBaseMatchers with XmlBeHaveMatchers
 object XmlMatchers extends XmlMatchers

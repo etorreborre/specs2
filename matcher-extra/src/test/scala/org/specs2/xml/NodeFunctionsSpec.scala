@@ -25,6 +25,11 @@ class NodeFunctionsSpec extends Spec with Grouped with XmlMatchers { def is = s2
     ${ <a>{"a"}</a> must ==/(<a>{" a "}</a>) }
     return true if 2 nodes are in a Group"
     ${ <u>{scala.xml.Group(<a>{"a"}</a>)}</u> must ==/(<u><a>{" a "}</a></u>) }
+
+  The equalIgnoreSpaceOrdered function must
+    return false if 2 nodes are not in order
+  ${ NodeFunctions.isEqualIgnoringSpaceOrdered(<t><a></a><b></b></t>, <t><a></a><b></b></t>) }
+  ${ !NodeFunctions.isEqualIgnoringSpaceOrdered(<t><a></a><b></b></t>, <t><b></b><a></a></t>) }
                                                                                                       """
 
   "matchNode" - new g1 {

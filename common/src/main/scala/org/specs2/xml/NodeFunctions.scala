@@ -27,7 +27,7 @@ trait NodeFunctions {
    * @return true if two Nodes are equal without considering spaces but with ordered children
    */
   def isEqualIgnoringSpaceOrdered(node: NodeSeq, n: NodeSeq): Boolean = {
-    def sameOrder(nodes1: NodeSeq, nodes2: NodeSeq) = nodes1.isSimilar(nodes2, isEqualIgnoringSpace)
+    def sameOrder(nodes1: NodeSeq, nodes2: NodeSeq) = nodes1.isSimilar(nodes2, isEqualIgnoringSpaceOrdered)
     isEqualIgnoringSpace(node, n, sameOrder)
   }
   /**
@@ -48,17 +48,17 @@ trait NodeFunctions {
     def compareChildren(n1: List[Node], n2: List[Node]) = {
       (n1.takeWhile(isAtom), n2) match {
         case (Nil, _) => iterableComparison(NodeSeq.fromSeq(n1), NodeSeq.fromSeq(n2))
-        case (atoms, (n2: Text) :: rest2) => {
+        case (atoms, (n2: Text) :: rest2) =>
           atoms.mkString.trim == n2.toString.trim &&
             iterableComparison(NodeSeq.fromSeq(n1.dropWhile(isAtom)), NodeSeq.fromSeq(rest2))
-        }
+
         case _ => iterableComparison(NodeSeq.fromSeq(n1), NodeSeq.fromSeq(n2))
       }
     }
     (node, n) match {
       // Groups must be removed from comparisons because they throw exception when getting 'attributes' or 'children
-      case (Group(node1), _)         => isEqualIgnoringSpace(node1, n)
-      case (_, Group(n1))            => isEqualIgnoringSpace(node, n1)
+      case (Group(node1), _)         => isEqualIgnoringSpace(node1, n, iterableComparison)
+      case (_, Group(n1))            => isEqualIgnoringSpace(node, n1, iterableComparison)
 
       // checks for null
       case (null, other)             => other == null
