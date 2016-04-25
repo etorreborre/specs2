@@ -2,13 +2,15 @@ package org.specs2
 package specification
 package core
 
+import org.junit.runner.RunWith
 import org.scalacheck._, Gen._, Arbitrary._
+import org.specs2.runner.JUnitRunner
 import scala.IllegalArgumentException
 import scalaz._, Scalaz._
 import control._, eff.ErrorEffect
 import matcher._
 
-class SpecificationStructureSpec extends Specification with ScalaCheck with DisjunctionMatchers { def is = s2"""
+class SpecificationStructureSpec extends Specification with ScalaCheck with DisjunctionMatchers with ActionMatchers { def is = s2"""
 
  There can be links between specifications and it is possible to sort all the dependent specifications
  so that
@@ -18,6 +20,7 @@ class SpecificationStructureSpec extends Specification with ScalaCheck with Disj
  A specification structure can be created from a class name
    if there is an exception during the creation of the specification instance
    it must be reported as the cause for the instantiation issue $report
+   if the companion object is not a specification structure, try the normal class $companion
 
 """
 
@@ -45,6 +48,15 @@ class SpecificationStructureSpec extends Specification with ScalaCheck with Disj
       e must be_-\/((e1: Throwable) => e1.getCause.getCause.getMessage === "boom")
     )
   }
+
+  def companion = {
+    SpecificationStructure.create("org.specs2.specification.core.SpecWithCompanion", getClass.getClassLoader, None).
+      // the cast is necessary to really show that the right instance has been built
+      // see #477
+      map(_.asInstanceOf[SpecificationStructure]) must
+      beOk
+  }
+
 
   def dependOn(s2: SpecStructure): Matcher[SpecStructure] = (s1: SpecStructure) =>
     (s1 dependsOn s2, s"${s1.specClassName} doesn't depend on ${s2.specClassName}")
@@ -85,3 +97,7 @@ class BrokenSpecification extends Specification { def is = s2"""
   throw new IllegalArgumentException("boom")
 
 }
+
+@RunWith(classOf[JUnitRunner])
+class SpecWithCompanion extends Specification { def is = s2""" """ }
+object SpecWithCompanion

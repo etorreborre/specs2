@@ -37,7 +37,10 @@ object SpecificationStructure {
     existsClass(className+"$", classLoader) flatMap { e =>
       if (e)
         // try to create the specification from the object name
-        createInstance[SpecificationStructure](className+"$", classLoader, defaultInstances)
+        createInstance[SpecificationStructure](className+"$", classLoader, defaultInstances).orElse(
+          // fallback to the class if this is just a companion object
+          createInstance[SpecificationStructure](className, classLoader, defaultInstances)
+        )
       else
         // try to create the specification from a class name
         createInstance[SpecificationStructure](className, classLoader, defaultInstances)
