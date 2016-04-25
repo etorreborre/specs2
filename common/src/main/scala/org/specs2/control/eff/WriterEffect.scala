@@ -22,29 +22,29 @@ import scalaz._, Scalaz._
 object WriterEffect {
 
   /** write a give value */
-  def tell[R, O](o: O)(implicit member: Member[Writer[O, ?], R]): Eff[R, Unit] =
-    send[Writer[O, ?], R, Unit](Writer(o, ()))
+  def tell[R, O](o: O)(implicit member: Member[({type l[X]=Writer[O, X]})#l, R]): Eff[R, Unit] =
+    send[({type l[X]=Writer[O, X]})#l, R, Unit](Writer(o, ()))
 
   /**
    * run a writer effect and return the list of written values
    *
    * This uses a ListBuffer internally to append values
    */
-  def runWriter[R <: Effects, O, A, B](w: Eff[Writer[O, ?] |: R, A]): Eff[R, (A, List[O])] =
+  def runWriter[R <: Effects, O, A, B](w: Eff[({type l[X]=Writer[O, X]})#l |: R, A]): Eff[R, (A, List[O])] =
     runWriterFold(w)(ListFold)
 
   /**
    * More general fold of runWriter where we can use a fold to accumulate values in a mutable buffer
    */
-  def runWriterFold[R <: Effects, O, A, B](w: Eff[Writer[O, ?] |: R, A])(implicit fold: Fold[O, B]): Eff[R, (A, B)] = {
-    val recurse: StateRecurse[Writer[O, ?], A, (A, B)] = new StateRecurse[Writer[O, ?], A, (A, B)] {
+  def runWriterFold[R <: Effects, O, A, B](w: Eff[({type l[X]=Writer[O, X]})#l |: R, A])(implicit fold: Fold[O, B]): Eff[R, (A, B)] = {
+    val recurse: StateRecurse[({type l[X]=Writer[O, X]})#l, A, (A, B)] = new StateRecurse[({type l[X]=Writer[O, X]})#l, A, (A, B)] {
       type S = fold.S
       val init = fold.init
       def apply[X](x: Writer[O, X], s: S) = (x.run._2, fold.fold(x.run._1, s))
       def finalize(a: A, s: S) = (a, fold.finalize(s))
     }
 
-    interpretState1[R, Writer[O, ?], A, (A, B)]((a: A) => (a, fold.finalize(fold.init)))(recurse)(w)
+    interpretState1[R, ({type l[X]=Writer[O, X]})#l, A, (A, B)]((a: A) => (a, fold.finalize(fold.init)))(recurse)(w)
   }
 
   /**

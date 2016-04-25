@@ -12,11 +12,11 @@ import scalaz.{-\/, \/-}
 object OptionEffect {
 
   /** no value returned */
-  def none[R, A](implicit member: Member[Option[?], R]): Eff[R, A] =
+  def none[R, A](implicit member: Member[Option, R]): Eff[R, A] =
     send[Option, R, A](None)
 
   /** a value is returned */
-  def some[R, A](a: A)(implicit member: Member[Option[?], R]): Eff[R, A] =
+  def some[R, A](a: A)(implicit member: Member[Option, R]): Eff[R, A] =
     send[Option, R, A](Some(a))
 
   /**
@@ -24,7 +24,7 @@ object OptionEffect {
    *
    * Stop all computations if None is present once
    */
-  def runOption[R <: Effects, A](r: Eff[Option[?] |: R, A]): Eff[R, Option[A]] = {
+  def runOption[R <: Effects, A](r: Eff[Option |: R, A]): Eff[R, Option[A]] = {
     val recurse = new Recurse[Option, R, Option[A]] {
       def apply[X](m: Option[X]) =
         m match {

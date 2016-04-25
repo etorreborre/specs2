@@ -19,16 +19,16 @@ import scalaz._
 object ReaderEffect {
 
   /** get the environment */
-  def ask[R, I](implicit member: Member[Reader[I, ?], R]): Eff[R, I] =
-    send[Reader[I, ?], R, I](Reader(identity _))
+  def ask[R, I](implicit member: Member[({type l[X]=Reader[I, X]})#l, R]): Eff[R, I] =
+    send[({type l[X]=Reader[I, X]})#l, R, I](Reader(identity _))
 
   /** interpret the Reader effect by providing an environment when required */
-  def runReader[R <: Effects, A, B](env: A)(r: Eff[Reader[A, ?] |: R, B]): Eff[R, B] = {
-    val recurse = new Recurse[Reader[A, ?], R, B] {
+  def runReader[R <: Effects, A, B](env: A)(r: Eff[({type l[X]=Reader[A, X]})#l |: R, B]): Eff[R, B] = {
+    val recurse = new Recurse[({type l[X]=Reader[A, X]})#l, R, B] {
       def apply[X](m: Reader[A, X]) = -\/(env.asInstanceOf[X])
     }
 
-    interpret1[R, Reader[A, ?], B, B]((b: B) => b)(recurse)(r)
+    interpret1[R, ({type l[X]=Reader[A, X]})#l, B, B]((b: B) => b)(recurse)(r)
   }
 
   /** interpret a tagged Reader effect by providing an environment when required */

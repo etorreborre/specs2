@@ -27,7 +27,7 @@ object EvalEffect {
   def evalIO[R, A](a: IO[A])(implicit m: Member[Eval, R]): Eff[R, A] =
     delay(a.unsafePerformIO)
 
-  def runEval[R <: Effects, A](r: Eff[Eval[?] |: R, A]): Eff[R, A] = {
+  def runEval[R <: Effects, A](r: Eff[Eval |: R, A]): Eff[R, A] = {
     val recurse = new Recurse[Eval, R, A] {
       def apply[X](m: Eval[X]) = -\/(m.value)
     }
@@ -35,7 +35,7 @@ object EvalEffect {
     interpret1((a: A) => a)(recurse)(r)
   }
 
-  def attemptEval[R <: Effects, A](r: Eff[Eval[?] |: R, A]): Eff[R, Throwable \/ A] = {
+  def attemptEval[R <: Effects, A](r: Eff[Eval |: R, A]): Eff[R, Throwable \/ A] = {
     val recurse = new Recurse[Eval, R, Throwable \/ A] {
       def apply[X](m: Eval[X]) =
         try { -\/(m.value) }
