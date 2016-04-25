@@ -192,7 +192,6 @@ object build extends Build {
     javacOptions ++= Seq("-Xmx3G", "-Xms512m", "-Xss4m"),
     maxErrors := 20,
     incOptions := incOptions.value.withNameHashing(true),
-    addCompilerPlugin(depends.kindp(scalaVersion.value)),
     scalacOptions in GlobalScope ++=
       (if (scalaVersion.value.startsWith("2.11") || scalaVersion.value.startsWith("2.12"))
         Seq("-Xfatal-warnings",

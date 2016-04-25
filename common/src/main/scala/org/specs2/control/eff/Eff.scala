@@ -56,7 +56,7 @@ object Eff {
   /**
    * Monad implementation for the Eff[R, ?] type
    */
-  implicit def EffMonad[R]: Monad[Eff[R, ?]] = new Monad[Eff[R, ?]] {
+  implicit def EffMonad[R]: Monad[({type l[X]=Eff[R, X]})#l] = new Monad[({type l[X]=Eff[R, X]})#l] {
     def point[A](a: => A): Eff[R, A] =
       Pure(a)
 

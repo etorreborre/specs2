@@ -17,44 +17,44 @@ import scalaz._, Scalaz._
 object StateEffect {
 
   /** store a new state value */
-  def put[R, S](s: S)(implicit member: Member[State[S, ?], R]): Eff[R, Unit] =
-    send[State[S, ?], R, Unit](Scalaz.put(s))
+  def put[R, S](s: S)(implicit member: Member[({type l[X]=State[S, X]})#l, R]): Eff[R, Unit] =
+    send[({type l[X]=State[S, X]})#l, R, Unit](Scalaz.put(s))
 
   /** get the current state value */
-  def get[R, S](implicit member: Member[State[S, ?], R]): Eff[R, S] =
-    send[State[S, ?], R, S](Scalaz.get)
+  def get[R, S](implicit member: Member[({type l[X]=State[S, X]})#l, R]): Eff[R, S] =
+    send[({type l[X]=State[S, X]})#l, R, S](Scalaz.get)
 
   /** get the current state value and map it with a function f */
-  def gets[R, S, T](f: S => T)(implicit member: Member[State[S, ?], R]): Eff[R, T] =
-    send[State[S, ?], R, T](Scalaz.gets(f))
+  def gets[R, S, T](f: S => T)(implicit member: Member[({type l[X]=State[S, X]})#l, R]): Eff[R, T] =
+    send[({type l[X]=State[S, X]})#l, R, T](Scalaz.gets(f))
 
   /** modify the current state value */
-  def modify[R, S](f: S => S)(implicit member: Member[State[S, ?], R]): Eff[R, Unit] =
+  def modify[R, S](f: S => S)(implicit member: Member[({type l[X]=State[S, X]})#l, R]): Eff[R, Unit] =
     get >>= ((s: S) => put(f(s)))
 
   /** run a state effect, with a Monoidal state */
-  def evalZero[R <: Effects, S: Monoid, A](w: Eff[State[S, ?] |: R, A]): Eff[R, A] =
+  def evalZero[R <: Effects, S: Monoid, A](w: Eff[({type l[X]=State[S, X]})#l |: R, A]): Eff[R, A] =
     eval(Monoid[S].zero)(w)
 
   /** run a state effect, with an initial value, return only the value */
-  def eval[R <: Effects, S, A](initial: S)(w: Eff[State[S, ?] |: R, A]): Eff[R, A] =
+  def eval[R <: Effects, S, A](initial: S)(w: Eff[({type l[X]=State[S, X]})#l |: R, A]): Eff[R, A] =
     runState(initial)(w).map(_._1)
 
   /** run a state effect, with a monoidal state, return only the state */
-  def execZero[R <: Effects, S : Monoid, A](w: Eff[State[S, ?] |: R, A]): Eff[R, S] =
+  def execZero[R <: Effects, S : Monoid, A](w: Eff[({type l[X]=State[S, X]})#l |: R, A]): Eff[R, S] =
     exec(Monoid[S].zero)(w)
 
   /** run a state effect, with an initial value, return only the state */
-  def exec[R <: Effects, S, A](initial: S)(w: Eff[State[S, ?] |: R, A]): Eff[R, S] =
+  def exec[R <: Effects, S, A](initial: S)(w: Eff[({type l[X]=State[S, X]})#l |: R, A]): Eff[R, S] =
     runState(initial)(w).map(_._2)
 
   /** run a state effect, with an initial value */
-  def runStateZero[R <: Effects, S : Monoid, A](w: Eff[State[S, ?] |: R, A]): Eff[R, (A, S)] =
+  def runStateZero[R <: Effects, S : Monoid, A](w: Eff[({type l[X]=State[S, X]})#l |: R, A]): Eff[R, (A, S)] =
     runState(Monoid[S].zero)(w)
 
   /** run a state effect, with an initial value */
-  def runState[R <: Effects, S1, A](initial: S1)(w: Eff[State[S1, ?] |: R, A]): Eff[R, (A, S1)] = {
-    val recurse: StateRecurse[State[S1, ?], A, (A, S1)] = new StateRecurse[State[S1, ?], A, (A, S1)] {
+  def runState[R <: Effects, S1, A](initial: S1)(w: Eff[({type l[X]=State[S1, X]})#l |: R, A]): Eff[R, (A, S1)] = {
+    val recurse: StateRecurse[({type l[X]=State[S1, X]})#l, A, (A, S1)] = new StateRecurse[({type l[X]=State[S1, X]})#l, A, (A, S1)] {
       type S = S1
       val init = initial
 
@@ -65,7 +65,7 @@ object StateEffect {
 
     }
 
-    interpretState1[R, State[S1, ?], A, (A, S1)]((a: A) => (a, initial))(recurse)(w)
+    interpretState1[R, ({type l[X]=State[S1, X]})#l, A, (A, S1)]((a: A) => (a, initial))(recurse)(w)
   }
 
   /** run a tagged state effect, with an initial value */
