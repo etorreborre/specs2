@@ -73,7 +73,8 @@ object build extends Build {
             depends.scalaz(scalazVersion.value, scalaVersion.value) ++
             depends.reflect(scalaVersion.value) ++
             depends.paradise(scalaVersion.value) ++
-            depends.kindp ++
+            depends.scalaParser(scalaVersion.value) ++
+            depends.scalaXML(scalaVersion.value) ++
             depends.scalacheck.map(_ % "test"),
           name := "specs2-common")
   )

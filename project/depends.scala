@@ -33,7 +33,17 @@ object depends {
       else
         "org.scalaz.stream" %% "scalaz-stream" % "0.7.3"
 
-  lazy val kindp = Seq("org.spire-math" % "kind-projector" % "0.7.1" cross CrossVersion.binary)
+  def scalaParser(scalaVersion: String) =
+    PartialFunction.condOpt(CrossVersion.partialVersion(scalaVersion)){
+      case Some((2, scalaMajor)) if scalaMajor >= 11 =>
+        "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.4"
+    }.toList
+
+  def scalaXML(scalaVersion: String) =
+    PartialFunction.condOpt(CrossVersion.partialVersion(scalaVersion)){
+      case Some((2, scalaMajor)) if scalaMajor >= 11 =>
+        "org.scala-lang.modules" %% "scala-xml" % "1.0.5"
+    }.toList
 
   lazy val scalacheck    = Seq("org.scalacheck" %% "scalacheck"    % "1.13.0")
   lazy val mockito       = Seq("org.mockito"    %  "mockito-core"  % "1.9.5")
