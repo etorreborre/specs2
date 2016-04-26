@@ -37,7 +37,7 @@ trait Classes {
       case \/-(klass) =>
         findInstance[T](klass, loader, defaultInstances,
           klass.getDeclaredConstructors.toList.filter(_.getParameterTypes.size <= 1).sortBy(_.getParameterTypes.size)).map(\/-(_))
-    }
+      }
     }
 
   private def findInstance[T <: AnyRef : ClassTag](klass: Class[T], loader: ClassLoader, defaultInstances: List[AnyRef], cs: List[Constructor[_]], error: Option[ErrorEffect.Error] = None): Action[T] =
@@ -53,14 +53,12 @@ trait Classes {
   /**
    * Given a class, a zero or one-parameter constructor, return an instance of that class
    */
-  private def createInstanceForConstructor[T <: AnyRef : ClassTag](concreteClass: Class[_], constructor: Constructor[_],
+  private def createInstanceForConstructor[T <: AnyRef : ClassTag](klass: Class[_], constructor: Constructor[_],
                                                                    loader: ClassLoader, defaultInstances: List[AnyRef] = Nil): Action[T] = {
-
-    val abstractClass = implicitly[ClassTag[T]].runtimeClass
 
     constructor.setAccessible(true)
     if (constructor.getParameterTypes.isEmpty)
-      newInstance(abstractClass, concreteClass, constructor.newInstance())
+      newInstance(klass, constructor.newInstance())
 
     else if (constructor.getParameterTypes.size == 1) {
       defaultInstances.find(i => constructor.getParameterTypes.apply(0) isAssignableFrom i.getClass) match {
@@ -70,21 +68,21 @@ trait Classes {
           // or it might have a parameter that has a 0 args constructor
           val constructorParameter =
             createInstance(constructor.getParameterTypes.toSeq(0).getName, loader, defaultInstances).
-              orElse(createInstance[T](getOuterClassName(concreteClass), loader, defaultInstances))
+              orElse(createInstance[T](getOuterClassName(klass), loader, defaultInstances))
 
-          constructorParameter.flatMap(p => newInstance(abstractClass, concreteClass, constructor.newInstance(p)))
+          constructorParameter.flatMap(p => newInstance(klass, constructor.newInstance(p)))
 
         case Some(instance) =>
-          newInstance(abstractClass, concreteClass, constructor.newInstance(instance))
+          newInstance(klass, constructor.newInstance(instance))
       }
-    } else Actions.fail[T]("Can't find a suitable constructor for class "+concreteClass.getName)
+    } else Actions.fail[T]("Can't find a suitable constructor for class "+klass.getName)
   }
 
   /** create a new instance for a given class and return a proper error if this fails */
-  private def newInstance[T](abstractClass: Class[_], concreteClass: Class[_], instance: =>Any): Action[T] =
-    try Actions.ok(abstractClass.cast(instance).asInstanceOf[T])
+  private def newInstance[T](klass: Class[_], instance: =>Any): Action[T] =
+    try Actions.ok(instance.asInstanceOf[T])
     catch { case NonFatal(t) =>
-      Actions.exception(UserException("cannot create an instance for class " + concreteClass.getName, t))
+      Actions.exception(UserException("cannot create an instance for class " + klass.getName, t))
     }
 
   /**
