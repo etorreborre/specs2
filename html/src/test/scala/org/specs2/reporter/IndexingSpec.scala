@@ -7,7 +7,7 @@ import matcher.ActionMatchers._
 import org.specs2.html
 import org.specs2.html.{IndexEntry, IndexedPage, Indexing}
 import Indexing._
-import scalaz.stream._
+import org.specs2.codata._
 
 class IndexingSpec extends Specification { def is = s2"""
  From the set of all the generated html pages we can generate an index and convert it to the tipue search format.

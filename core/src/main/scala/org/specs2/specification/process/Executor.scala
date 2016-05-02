@@ -4,8 +4,8 @@ package process
 
 import data.Processes
 
-import scalaz.stream._
-import scalaz.stream.Process.{Env =>_,_}
+import org.specs2.codata._
+import org.specs2.codata.Process.{Env =>_,_}
 import execute._
 import scalaz.{Success=>_, Failure=>_,_}, Scalaz._
 import specification.core._

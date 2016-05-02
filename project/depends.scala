@@ -11,27 +11,10 @@ object depends {
 
   def reflect(scalaVersion: String) = Seq("org.scala-lang" % "scala-reflect" % scalaVersion)
 
-  def scalaz(scalazVersion: String, scalaVersion: String) =
+  def scalaz(scalazVersion: String) =
     Seq("org.scalaz"        %% "scalaz-core",
         "org.scalaz"        %% "scalaz-effect",
-        "org.scalaz"        %% "scalaz-concurrent").map(_ % scalazVersion) ++
-    Seq(scalazStream(scalazVersion, scalaVersion) excludeAll ExclusionRule(organization = "org.scalaz"))
-
-  def scalazStream(scalazVersion: String, scalaVersion: String) =
-    if (scalaVersion startsWith "2.12")
-      if (scalazVersion startsWith "7.2")
-        "org.scalaz.stream" % "scalaz-stream_2.12.0-M3" % "0.8a"
-      else if (scalazVersion startsWith "7.1")
-        "org.scalaz.stream" % "scalaz-stream_2.12.0-M2" % "0.8"
-      else
-        "org.scalaz.stream" % "scalaz-stream_2.12.0-M2" % "0.7.2"
-    else
-      if (scalazVersion startsWith "7.2")
-        "org.scalaz.stream" %% "scalaz-stream" % "0.8a"
-      else if (scalazVersion startsWith "7.1")
-        "org.scalaz.stream" %% "scalaz-stream" % "0.8"
-      else
-        "org.scalaz.stream" %% "scalaz-stream" % "0.7.3"
+        "org.scalaz"        %% "scalaz-concurrent").map(_ % scalazVersion)
 
   def scalaParser(scalaVersion: String) =
     PartialFunction.condOpt(CrossVersion.partialVersion(scalaVersion)){

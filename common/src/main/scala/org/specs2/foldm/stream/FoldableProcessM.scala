@@ -4,8 +4,8 @@ package stream
 
 import scalaz.{\/, \/-, -\/, Monad, Catchable}
 import scalaz.syntax.bind._
-import scalaz.stream.{Process1, Process}
-import scalaz.stream.Process._
+import org.specs2.codata.{Process1, Process}
+import org.specs2.codata.Process._
 
 /**
  * Foldable instance for Process[M, O]

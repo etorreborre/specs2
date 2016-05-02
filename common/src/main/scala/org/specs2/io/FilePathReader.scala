@@ -6,7 +6,7 @@ import control._
 import text.MD5
 import scala.io.Codec
 import scalaz.concurrent._
-import scalaz.stream._
+import org.specs2.codata._
 import Paths._
 
 /**
@@ -90,7 +90,7 @@ trait FilePathReader {
 
   /** @return the content of a file with a specific codec */
   def readLinesWithCodec(filePath: FilePath, codec: Codec): Action[IndexedSeq[String]] =
-    Actions.fromTask(io.linesR(filePath.path)(codec).runLog[Task, String])
+    Actions.safe(scala.io.Source.fromFile(filePath.path)(codec).getLines.toIndexedSeq)
 
   /** read the content of a file as an Array of Bytes */
   def readBytes(filePath: FilePath): Action[Array[Byte]] = exists(filePath).map { exists =>

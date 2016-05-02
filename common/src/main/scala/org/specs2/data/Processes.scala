@@ -3,8 +3,8 @@ package data
 
 import java.util.concurrent.ExecutorService
 
-import scalaz.stream.Cause.EarlyCause
-import scalaz.stream._
+import org.specs2.codata.Cause.EarlyCause
+import org.specs2.codata._
 import Process._
 import scalaz.{OptionT, Scalaz, \/}, Scalaz._, \/._
 import scalaz.concurrent.{Future, Task}
@@ -30,12 +30,18 @@ trait Processes {
   implicit class ProcessOps[T](ps: Process[Task, T]) {
     def andFinally(t: Task[Unit]): Process[Task, T] = {
       val sink: Sink[Task, T] =
-        io.resource(Task.now(()))(u => t)(
+        resource(Task.now(()))(u => t)(
           _ => Task.now(_ => Task.now(())))
 
       ps.observe(sink)
     }
   }
+
+  def resource[F[_],R,O](acquire: F[R])(
+    release: R => F[Unit])(step: R => F[O]): Process[F,O] =
+    bracket(acquire)(r => eval_(release(r))){
+      r => repeatEval(step(r))
+    } onHalt { _.asHalt }
 
   /**
    * additional operations for generic processes

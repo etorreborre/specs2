@@ -7,7 +7,7 @@ import html.{HtmlTemplate, Indexing}
 import io._
 import specification.core.{SpecStructure, Env}
 
-import scalaz.stream.Process
+import org.specs2.codata.Process
 
 /**
  * Functions used to create an index and a search page for the generated html pages

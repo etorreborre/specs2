@@ -2,7 +2,7 @@ package org.specs2
 package guide
 
 import scalaz.concurrent.Task
-import scalaz.stream._
+import org.specs2.codata._
 
 object CustomOutput extends UserGuidePage { def is = s2"""
 

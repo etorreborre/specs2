@@ -4,7 +4,7 @@ package matcher
 import java.util.concurrent._
 import scala.concurrent.duration._
 import scalaz.concurrent._
-import scalaz.stream._
+import org.specs2.codata._
 
 class ProcessMatchersSpec extends Specification with ProcessMatchers with ResultMatchers with Retries { def is = s2"""
 
@@ -33,7 +33,7 @@ class ProcessMatchersSpec extends Specification with ProcessMatchers with Result
     Process.eval(Task.delay(t))
 
   def oneElementAfter[T](t: =>T, duration: FiniteDuration) =
-    scalaz.stream.time.sleep(duration) fby oneElement(t)
+    org.specs2.codata.time.sleep(duration) fby oneElement(t)
 
   implicit val scheduledExecutorService: ScheduledExecutorService =
     Executors.newScheduledThreadPool(1)

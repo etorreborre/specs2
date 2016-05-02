@@ -5,7 +5,7 @@ package process
 import scalaz.{Tree, TreeLoc}
 import Tree._
 import data.Trees._
-import scalaz.stream._
+import org.specs2.codata._
 import specification.create._
 import DefaultFragmentFactory._
 import Process._

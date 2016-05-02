@@ -4,7 +4,7 @@ package core
 
 import scalaz.Monoid
 import scalaz.concurrent.Task
-import scalaz.stream._
+import org.specs2.codata._
 import Process._
 import Fragment._
 

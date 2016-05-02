@@ -1,6 +1,7 @@
 package org.specs2
 package reporter
 
+import org.specs2.data.Processes
 import text.NotNullStrings._
 import foldm._, FoldM._
 import stream.FoldProcessM._
@@ -9,7 +10,7 @@ import control._
 import execute.Result
 import scalaz.Id, Id._
 import scalaz.concurrent.Task
-import scalaz.stream._
+import org.specs2.codata._
 import scalaz.syntax.show._
 import specification.core._
 
@@ -60,7 +61,7 @@ object NotifierPrinter {
   }
 
   def notifySink(spec: SpecStructure, notifier: Notifier, args: Arguments): Sink[Task, (Notified, Fragment)] =
-    io.resource(Task.now(notifier))(
+    Processes.resource(Task.now(notifier))(
       (n: Notifier) => Task.now(()))(
       (n: Notifier) => Task.delay { case (block: Notified, f: Fragment) => Task.now(printFragment(n, f, block, args)) })
 

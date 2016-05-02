@@ -5,7 +5,7 @@ package process
 import control._
 import specification.core._
 import scalaz.concurrent.Task
-import scalaz.stream._
+import org.specs2.codata._
 import foldm._, FoldM._
 import stream.FoldableProcessM._
 import stream.FoldProcessM._

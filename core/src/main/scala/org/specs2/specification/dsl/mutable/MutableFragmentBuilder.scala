@@ -8,7 +8,7 @@ import control._
 import execute.{Result, Success, ResultLogicalCombinators}
 import ResultLogicalCombinators._
 import reflect.Classes
-import scalaz.stream._
+import org.specs2.codata._
 import specification.create.FragmentsFactory
 import specification.core._
 

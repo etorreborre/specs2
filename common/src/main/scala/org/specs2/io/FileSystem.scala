@@ -2,10 +2,9 @@ package org.specs2
 package io
 
 import control._
-import scalaz.{std, syntax, stream, concurrent}
+import scalaz.{std, syntax, concurrent}
 import std.list._
 import syntax.all._
-import stream._
 import concurrent.Task
 import java.io._
 import java.util.regex.Pattern._
@@ -40,7 +39,7 @@ trait FileSystem extends FilePathReader {
   /** write a string to a file as UTF-8 */
   def writeFileTask(filePath: FilePath, content: String): Task[Unit] =
     mkdirs(filePath).toConsoleTask >>
-    Process(content).toSource.pipe(text.utf8Encode).to(io.fileChunkW(filePath.path)).run
+    Task.delay { new PrintWriter(filePath.path) { try write(content) finally close }; () }
 
   /** execute an action with a File, then delete it */
   def withEphemeralFile(path: FilePath)(action: Action[Unit]): Action[Unit] =

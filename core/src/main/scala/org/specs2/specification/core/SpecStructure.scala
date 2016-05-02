@@ -6,7 +6,7 @@ import main.Arguments
 import org.specs2.control._
 import org.specs2.data.TopologicalSort
 import scalaz.concurrent.Task
-import scalaz.stream._
+import org.specs2.codata._
 import control._
 import scalaz.syntax.traverse._
 import scalaz.std.list._
