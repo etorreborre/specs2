@@ -1,0 +1,156 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>specs2.org</title>
+    <link href="https://etorreborre.github.io/specs2/website/SPECS2-3.8-20160502201250-14ffaa6/images/s2.ico"                                   type="image/x-icon" rel="specs2 icon"/>
+    <link href="https://etorreborre.github.io/specs2/website/SPECS2-3.8-20160502201250-14ffaa6/css/opensans-fonts.css"                          type="text/css"     rel="stylesheet" />
+    <link href="https://etorreborre.github.io/specs2/website/SPECS2-3.8-20160502201250-14ffaa6/css/bootstrap.css"                               type="text/css"     rel="stylesheet" />
+    <link href="https://etorreborre.github.io/specs2/website/SPECS2-3.8-20160502201250-14ffaa6/css/bootstrap-theme.css"                         type="text/css"     rel="stylesheet" />
+    <link href="https://etorreborre.github.io/specs2/website/SPECS2-3.8-20160502201250-14ffaa6/css/font-awesome.min.css"                        type="text/css"     rel="stylesheet" />
+    <link href="https://etorreborre.github.io/specs2/website/SPECS2-3.8-20160502201250-14ffaa6/css/prettify.css"                                type="text/css"     rel="stylesheet" />
+    <link href="https://etorreborre.github.io/specs2/website/SPECS2-3.8-20160502201250-14ffaa6/css/home.css"                                    type="text/css"     rel="stylesheet" />
+
+    <script src="https://etorreborre.github.io/specs2/website/SPECS2-3.8-20160502201250-14ffaa6/javascript/jquery.js"                           type="text/javascript"></script>
+    <script src="https://etorreborre.github.io/specs2/website/SPECS2-3.8-20160502201250-14ffaa6/javascript/jquery.jstree.js"                    type="text/javascript"></script>
+    <script src="https://etorreborre.github.io/specs2/website/SPECS2-3.8-20160502201250-14ffaa6/javascript/bootstrap.js"                        type="text/javascript"></script>
+    <script src="https://etorreborre.github.io/specs2/website/SPECS2-3.8-20160502201250-14ffaa6/javascript/prettify.js"                         type="text/javascript"></script>
+    <script src="https://etorreborre.github.io/specs2/website/SPECS2-3.8-20160502201250-14ffaa6/javascript/analytics.js"                        type="text/javascript"></script>
+</head>
+<body onload="prettyPrint()">
+
+<div class="container">
+  <div id="navigation"></div>
+
+  <div id="examples-carousel" class="carousel slide" data-ride="carousel" data-interval="7000">
+      <ol class="carousel-indicators">
+        <li data-target="#carousel-0" data-slide-to="0" class="active"></li>
+        <li data-target="#carousel-1" data-slide-to="1"></li>
+        <li data-target="#carousel-2" data-slide-to="2"></li>
+        <li data-target="#carousel-3" data-slide-to="3"></li>
+        <li data-target="#carousel-4" data-slide-to="4"></li>
+      </ol>
+
+      <div class="carousel-inner" role="listbox">
+        <div class="item active">
+          <div class="caption">Specify your software using both text and Scala code</div>
+          <pre><code class="prettyprint carousel-code">class HelloWorldSpec extends Specification { def is = s2"""
+
+  This is a specification for the 'Hello world' string
+
+  The 'Hello world' string should
+    contain 11 characters                             $e1
+    start with 'Hello'                                $e2
+    end with 'world'                                  $e3
+                                                      """
+  def e1 = "Hello world" must haveSize(11)
+  def e2 = "Hello world" must startWith("Hello")
+  def e3 = "Hello world" must endWith("world")
+
+}</code></pre>
+            </div>
+          <div class="item">
+              <div class="caption">Use different styles of specifications</div>
+<pre><code class="prettyprint carousel-code">/** This is the "Unit" style for specifications */
+class HelloWorldSpec extends Specification {
+  "This is a specification for the 'Hello world' string".txt
+
+  "The 'Hello world' string should" >> {
+    "contain 11 characters" >> {
+      "Hello world" must haveSize(11)
+    }
+    "start with 'Hello'" >> {
+      "Hello world" must startWith("Hello")
+    }
+    "end with 'world'" >> {
+      "Hello world" must endWith("world")
+    }
+  }
+}</code></pre>
+          </div>
+            <div class="item">
+                <div class="caption">Test your code with <a href="http://www.scalacheck.org">ScalaCheck</a></div>
+                <pre><code class="prettyprint carousel-code">class IntSumSpec extends Specification with ScalaCheck { def is = s2"""
+
+  The IntSum Monoid must respect Monoid laws
+    left identity                                     $leftid
+    right identity                                    $rightid
+    associativity                                     $associativity
+                                                      """
+  import scalaz._, Scalaz._
+  import IntSumMonoid._
+
+  def leftid  = prop { i: Int => 0 |+| i === i }
+  def rightid = prop { i: Int => i |+| 0 === i }
+
+  def associativity = prop { (a: Int, b: Int, c: Int) =>
+    ((a |+| b) |+| c) === (a |+| (b |+| c))
+  }
+
+}</code></pre>
+            </div>
+            <div class="item">
+                <div class="caption">Document your APIs with compiler-checked examples</div>
+                <pre><code class="prettyprint carousel-code">class PluralSpec extends Specification { def is = s2"""
+
+  Names can be pluralized depending on a quantity
+  ${ "apple".plural(1) === "apple"  }
+  ${ "apple".plural(2) === "apples" }
+  ${ "foot".plural(2)  === "feet"   }
+
+  ${ 1.qty("apple") === "1 apple"  }
+  ${ 2.qty("apple") === "2 apples" }
+  ${ 2.qty("foot")  === "2 feet"   }
+  """
+}</code></pre>
+            </div>
+            <div class="item">
+                <div class="caption">Manage contexts for integration testing</div>
+                <pre><code class="prettyprint carousel-code">class UsersSpec extends Specification with BeforeAll with Before {
+  def is = sequential ^ s2"""
+
+  We can create in the database
+    create a user                                    $create
+    list all users                                   $list
+                                                     """
+  import DB._
+
+  def create = {
+    val id = db.createUser("me")
+    db.getUser(id).name must_== "me"
+  }
+
+  def list = {
+    List("me", "you").foreach(db.createUser)
+    db.listAllUsers.map(_.name).toSet must_== Set("me", "you")
+  }
+
+  // create a database before running anything
+  def beforeAll = createDatabase(databaseUrl)
+  // remove all data before running an example
+  def before = cleanDatabase(databaseUrl)
+
+}</code></pre>
+            </div>
+
+    </div>
+
+    <!-- Controls -->
+    <a class="left carousel-control" href="#examples-carousel" role="button" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#examples-carousel" role="button" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+  </div>
+
+
+</div>
+
+</body>
+
+<script>
+    $("#navigation").load("https://etorreborre.github.io/specs2/website/SPECS2-3.8-20160502201250-14ffaa6/nav.html");
+</script>
+</html>

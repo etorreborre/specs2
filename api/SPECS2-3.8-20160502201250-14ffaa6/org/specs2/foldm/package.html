@@ -1,0 +1,266 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>foldm - org.specs2.foldm</title>
+          <meta name="description" content="foldm - org.specs2.foldm" />
+          <meta name="keywords" content="foldm org.specs2.foldm" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../index.html';
+            var hash = 'org.specs2.foldm.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Package" src="../../../lib/package_big.png" />
+        <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.specs2">specs2</a></p>
+        <h1>foldm</h1><span class="permalink">
+      <a href="../../../index.html#org.specs2.foldm.package" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">foldm</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="org.specs2.foldm.FoldM" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="FoldM[T,M[_],U]extendsAnyRef"></a>
+      <a id="FoldM[T,M[_],U]:FoldM[T,M,U]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="FoldM.html"><span class="name">FoldM</span></a><span class="tparams">[<span name="T">T</span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="U">U</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.foldm.package@FoldM[T,M[_],U]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A FoldM is a &quot;left fold&quot; over a data structure with:</p><div class="fullcomment"><div class="comment cmt"><p>A FoldM is a &quot;left fold&quot; over a data structure with:</p><ul><li>a 'start' value</li><li>a 'fold' method to accumulate state</li><li>an 'end' method to finalize the result</li></ul><p>Both 'start' and 'end' have an effect which allows the whole folding to take place inside a context M.</p><p>If 'M' has an 'Apply' instance then FoldM can be made Applicative to allow the folding of two values U and S at
+the same time.</p><p>If 'M' has a 'Monad' instance then FoldM can be made into a 'Compose' instance which allows to
+compose 2 folds into one, for example:</p><ul><li>'sum' computes the sum of some elements</li><li>'list' accumulates all the elements in a list</li><li>the 'sum compose list' will accumulate the list of all the sums over some elements (this is a 'scan')</li></ul><p>A FoldM can be used with a 'FoldableM' which produces the elements to fold over. Examples of FoldableM include</p><ul><li>a List</li><li>an Iterator</li><li>a scalaz Process</li></ul><p>Usage example:</p><p> sum.run(List(1, 2, 3)) == 6
+</p></div></div>
+    </li><li name="org.specs2.foldm.FoldableM" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="FoldableM[F[_],M[_]]extendsAnyRef"></a>
+      <a id="FoldableM[F[_],M[_]]:FoldableM[F,M]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="FoldableM.html"><span class="name">FoldableM</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.foldm.package@FoldableM[F[_],M[_]]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A structure delivering elements of type A (variable type, like a List) and which
+can be folded over
+</p>
+    </li><li name="org.specs2.foldm.FoldableMS" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="FoldableMS[A,F,M[_]]extendsAnyRef"></a>
+      <a id="FoldableMS[A,F,M[_]]:FoldableMS[A,F,M]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="FoldableMS.html"><span class="name">FoldableMS</span></a><span class="tparams">[<span name="A">A</span>, <span name="F">F</span>, <span name="M">M<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.foldm.package@FoldableMS[A,F,M[_]]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A structure delivering elements of type A (fixed type, like an InputStream) and which
+can be folded over
+</p>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="org.specs2.foldm.FoldId" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FoldId"></a>
+      <a id="FoldId:FoldId"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="FoldId$.html"><span class="name">FoldId</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.foldm.package@FoldId" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">List of predefined FoldIds
+</p>
+    </li><li name="org.specs2.foldm.FoldM" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FoldM"></a>
+      <a id="FoldM:FoldM"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="FoldM$.html"><span class="name">FoldM</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.foldm.package@FoldM" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Typeclass instances and creation methods for folds
+</p>
+    </li><li name="org.specs2.foldm.FoldableM" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FoldableM"></a>
+      <a id="FoldableM:FoldableM"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="FoldableM$.html"><span class="name">FoldableM</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.foldm.package@FoldableM" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.foldm.FoldableMS" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FoldableMS"></a>
+      <a id="FoldableMS:FoldableMS"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="FoldableMS$.html"><span class="name">FoldableMS</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.foldm.package@FoldableMS" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.foldm.effect" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="effect"></a>
+      <a id="effect:effect"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="effect/package.html"><span class="name">effect</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.foldm.package@effect" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.foldm.stream" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="stream"></a>
+      <a id="stream:stream"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="stream/package.html"><span class="name">stream</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.foldm.package@stream" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
