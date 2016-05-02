@@ -1,8 +1,8 @@
-package scalaz.stream
+package org.specs2.codata
 
 import scalaz.Functor
 import scalaz.concurrent.Task
-import scalaz.stream.Process.{Emit, Halt, Step}
+import org.specs2.codata.Process.{Emit, Halt, Step}
 import scalaz.syntax.functor._
 
 object sink {

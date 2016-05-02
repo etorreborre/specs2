@@ -3,7 +3,7 @@ package matcher
 
 import execute._
 import TaskMatchers._
-import scalaz.stream._
+import org.specs2.codata._
 import scalaz.concurrent._
 import matcher.ValueCheck._
 

@@ -6,7 +6,7 @@ import control._
 import text.MD5
 import scala.io.Codec
 import scalaz.concurrent._
-import scalaz.stream._
+import org.specs2.codata._
 import Paths._
 
 /**

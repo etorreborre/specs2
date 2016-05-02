@@ -1,7 +1,7 @@
-package scalaz.stream.async.mutable
+package org.specs2.codata.async.mutable
 
-import scalaz.stream.Cause._
-import scalaz.stream.{Sink,Process,Cause}
+import org.specs2.codata.Cause._
+import org.specs2.codata.{Sink,Process,Cause}
 import scalaz.concurrent.Task
 
 
@@ -72,7 +72,7 @@ trait Topic[A] {
   def fail(rsn: Throwable): Task[Unit] = failWithCause(Error(rsn))
 
 
-  private[stream] def failWithCause(c:Cause): Task[Unit]
+  private[codata] def failWithCause(c:Cause): Task[Unit]
 
 
 }

@@ -1,4 +1,4 @@
-package scalaz.stream
+package org.specs2.codata
 
 import scalaz.{Monoid, Applicative, Equal, Monad}
 

@@ -7,7 +7,7 @@ import io.FilePath
 import foldm._, stream._, FoldProcessM._, FoldableProcessM._
 import scalaz._, Scalaz._
 import scalaz.concurrent.Task
-import scalaz.stream._
+import org.specs2.codata._
 
 /**
  * Utility functions for folds

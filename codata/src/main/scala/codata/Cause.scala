@@ -1,7 +1,7 @@
-package scalaz.stream
+package org.specs2.codata
 
 import scalaz.\/
-import scalaz.stream.Process.Halt
+import org.specs2.codata.Process.Halt
 import Cause._
 
 /**

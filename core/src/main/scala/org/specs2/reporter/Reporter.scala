@@ -14,7 +14,7 @@ import scalaz.syntax.traverse.ToTraverseOpsUnapply
 import scalaz.syntax.functor.{ToFunctorOps, ToFunctorOpsUnapply}
 import scalaz.syntax.foldable.ToFoldableOps
 import scalaz.std.list._
-import scalaz.stream.{Process, Sink, channel}
+import org.specs2.codata.{Process, Sink, channel}
 import Statistics._
 
 /**

@@ -4,7 +4,7 @@ package process
 
 import execute._
 import matcher.ProcessMatchers
-import scalaz.stream.Process
+import org.specs2.codata.Process
 import DefaultExecutor._
 import Statistics._
 

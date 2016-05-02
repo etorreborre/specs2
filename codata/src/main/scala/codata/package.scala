@@ -1,9 +1,10 @@
-package scalaz
+package org.specs2
 
 import java.util.concurrent.{ThreadFactory, Executors}
-import scalaz.stream.Process.Env
+import org.specs2.codata.Process.Env
+import scalaz._
 
-package object stream {
+package object codata {
 
   type Process0[+O] = Process[Nothing,O]
 

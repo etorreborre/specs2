@@ -12,7 +12,6 @@ When you use a build tool you generally only need to specify the main dependenci
  -------------------------------------------------------------------------------------- | ---------------------------
  `"org.scalaz" %% "scalaz-core" % "7.1.1"`                                              | mandatory
  `"org.scalaz" %% "scalaz-concurrent" % "7.1.1"`                                        | mandatory
- `"org.scalaz.stream" %% "scalaz-stream" % "0.6a"`                                      | mandatory
  `"com.chuusai" %% "shapeless" % "2.0.0"`                                               | if you use the GWT trait
  `"org.scalacheck" %% "scalacheck" % "1.12.1"`                                          | if using ScalaCheck
  `"org.mockito" % "mockito-core" % "1.9.5"`                                             | if using Mockito. Note: specs2.jar must be placed before mockito.jar on the classpath

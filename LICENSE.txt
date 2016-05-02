@@ -1,4 +1,4 @@
-Copyright (c) 2007-2012 Eric Torreborre <etorreborre@yahoo.com>
+Copyright (c) 2007-2016 Eric Torreborre <etorreborre@yahoo.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
 documentation files (the "Software"), to deal in the Software without restriction, including without limitation
@@ -20,6 +20,7 @@ Other licenses:
 the maven-base.css, maven-theme.css, print.css files come from the Maven project with an Apache license (maven.apache.org/license.html)
 the tabber css and js files have a MIT license (see he www.barelyfitz.com/projects/tabber site)
 the collapsible sections on html pages are originally inspired from the ones in Fitnesse (fitnesse.org, GPL license)
+the scalaz-stream code is MIT license
 
 
 Credits:

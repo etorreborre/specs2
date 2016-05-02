@@ -1,10 +1,10 @@
-package scalaz.stream.async.mutable
+package org.specs2.codata.async.mutable
 
-import scalaz.stream.Cause._
+import org.specs2.codata.Cause._
 import scalaz.concurrent.{Actor, Strategy, Task}
-import scalaz.stream.Process.{Cont, Halt}
-import scalaz.stream._
-import scalaz.stream.async.immutable
+import org.specs2.codata.Process.{Cont, Halt}
+import org.specs2.codata._
+import org.specs2.codata.async.immutable
 import scalaz.{-\/, \/, \/-}
 
 /**
@@ -41,7 +41,7 @@ trait WriterTopic[W, I, O] {
   /**
    * Provides signal of `W` values as they were emitted by Writer1 of this Writer topic
    */
-  def signal: scalaz.stream.async.immutable.Signal[W]
+  def signal: org.specs2.codata.async.immutable.Signal[W]
 
 
   /**
@@ -71,16 +71,16 @@ trait WriterTopic[W, I, O] {
   def fail(err: Throwable): Task[Unit] = failWithCause(Error(err))
 
 
-  private[stream] def failWithCause(c:Cause): Task[Unit]
+  private[codata] def failWithCause(c:Cause): Task[Unit]
 
 }
 
 
-private[stream] object WriterTopic {
+private[codata] object WriterTopic {
 
 
   def apply[W, I, O](writer: Writer1[W, I, O])(source: Process[Task, I], haltOnSource: Boolean)(implicit S: Strategy): WriterTopic[W, I, O] = {
-    import scalaz.stream.Util._
+    import org.specs2.codata.Util._
     sealed trait M
 
     case class Subscribe(sub: Subscription, cb: (Throwable \/ Unit) => Unit) extends M

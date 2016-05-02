@@ -2,7 +2,7 @@ package org.specs2
 package matcher
 
 import scala.concurrent.duration._
-import scalaz.stream._
+import org.specs2.codata._
 import scalaz.concurrent._
 import TaskMatchers._
 import ValueCheck._

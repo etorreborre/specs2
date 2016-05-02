@@ -1,9 +1,9 @@
-package scalaz.stream
+package org.specs2.codata
 
 import scala.annotation.tailrec
 import java.util.concurrent.atomic.AtomicInteger
 
-private[stream] object Util {
+private[codata] object Util {
 
   implicit class AppendSyntax[A](val self: Vector[A]) extends AnyVal {
 
@@ -34,7 +34,7 @@ private[stream] object Util {
   /**
    * Helper to wrap evaluation of `p` that may cause side-effects by throwing exception.
    */
-  private[stream] def Try[F[_], A](p: => Process[F, A]): Process[F, A] =
+  private[codata] def Try[F[_], A](p: => Process[F, A]): Process[F, A] =
     try p
     catch {case e: Throwable => Process.fail(e)}
 

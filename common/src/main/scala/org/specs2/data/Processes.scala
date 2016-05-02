@@ -3,8 +3,8 @@ package data
 
 import java.util.concurrent.ExecutorService
 
-import scalaz.stream.Cause.EarlyCause
-import scalaz.stream._
+import org.specs2.codata.Cause.EarlyCause
+import org.specs2.codata._
 import Process._
 import scalaz.{OptionT, Scalaz, \/}, Scalaz._, \/._
 import scalaz.concurrent.{Future, Task}

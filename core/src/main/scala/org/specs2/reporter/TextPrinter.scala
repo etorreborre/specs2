@@ -12,7 +12,7 @@ import text.Trim
 import Trim._
 import execute._
 import main.Arguments
-import scalaz.stream._
+import org.specs2.codata._
 import scalaz.concurrent.Task
 import scalaz.concurrent.Task._
 import LogLine._

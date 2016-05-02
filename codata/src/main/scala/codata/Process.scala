@@ -1,4 +1,4 @@
-package scalaz.stream
+package org.specs2.codata
 
 import Cause._
 
@@ -9,11 +9,11 @@ import scala.collection.SortedMap
 import scala.concurrent.duration._
 import scala.Function.const
 
-import scalaz.stream.async.immutable.Signal
+import org.specs2.codata.async.immutable.Signal
 import scalaz.{\/-, Catchable, Functor, Monad, Monoid, Nondeterminism, \/, -\/, ~>}
 import scalaz.\/._
 import scalaz.concurrent.{Actor, Future, Strategy, Task}
-import scalaz.stream.process1.Await1
+import org.specs2.codata.process1.Await1
 import scalaz.syntax.monad._
 
 import scala.annotation.unchecked.uncheckedVariance
@@ -31,8 +31,8 @@ sealed trait Process[+F[_], +O]
   extends Process1Ops[F,O]
           with TeeOps[F,O] {
 
-  import scalaz.stream.Process._
-  import scalaz.stream.Util._
+  import org.specs2.codata.Process._
+  import org.specs2.codata.Util._
 
   /**
    * Generate a `Process` dynamically for each output of this `Process`, and
@@ -177,7 +177,7 @@ sealed trait Process[+F[_], +O]
    * the resulting `Process` terminates with `c`.
    */
   final def tee[F2[x] >: F[x], O2, O3](p2: Process[F2, O2])(t: Tee[O, O2, O3]): Process[F2, O3] = {
-    import scalaz.stream.tee.{AwaitL, AwaitR, disconnectL, disconnectR, feedL, feedR}
+    import org.specs2.codata.tee.{AwaitL, AwaitR, disconnectL, disconnectR, feedL, feedR}
     t.suspendStep flatMap { ts =>
       ts match {
         case s@Step(AwaitL(_), contT) => this.step match {
@@ -304,7 +304,7 @@ sealed trait Process[+F[_], +O]
    * Skip the first part of the process and pretend that it ended with `early`.
    * The first part is the first `Halt` or the first `Emit` or request from the first `Await`.
    */
-  private[stream] final def injectCause(early: EarlyCause): Process[F, O] = (this match {
+  private[codata] final def injectCause(early: EarlyCause): Process[F, O] = (this match {
     // Note: We cannot use `step` in the implementation since we want to inject `early` as soon as possible.
     // Eg. Let `q` be `halt ++ halt ++ ... ++ p`. `step` reduces `q` to `p` so if `injectCause` was implemented
     // by `step` then `q.injectCause` would be same as `p.injectCause`. But in our current implementation
@@ -536,7 +536,7 @@ sealed trait Process[+F[_], +O]
 object Process extends ProcessInstances {
 
 
-  import scalaz.stream.Util._
+  import org.specs2.codata.Util._
 
   //////////////////////////////////////////////////////////////////////////////////////
   //
@@ -848,7 +848,7 @@ object Process extends ProcessInstances {
     async.toSignal(p).continuous
 
   /** `halt` but with precise type. */
-  private[stream] val halt0: Halt = Halt(End)
+  private[codata] val halt0: Halt = Halt(End)
 
   /** The `Process` which emits no values and signals normal termination. */
   val halt: Process0[Nothing] = halt0
@@ -1037,7 +1037,7 @@ object Process extends ProcessInstances {
      * Feed this `Process` through the given effectful `Channel`, signaling
      * termination to `f` via `None`. Useful to allow `f` to flush any
      * buffered values to the output when it detects termination, see
-     * [[scalaz.stream.io.bufferedChannel]] combinator.
+     * [[org.specs2.codata.io.bufferedChannel]] combinator.
      */
     def throughOption[F2[x]>:F[x],O2](f: Channel[F2,Option[O],O2]): Process[F2,O2] =
       self.terminated.through(f)
@@ -1180,7 +1180,7 @@ object Process extends ProcessInstances {
      * @param S  Strategy to use when evaluating the process. Note that `Strategy.Sequential` may cause SOE.
      * @return   Function to interrupt the evaluation
      */
-    protected[stream] final def stepAsync(cb: Cause \/ (Seq[O], Cont[Task,O]) => Unit)(implicit S: Strategy): EarlyCause => Unit = {
+    protected[codata] final def stepAsync(cb: Cause \/ (Seq[O], Cont[Task,O]) => Unit)(implicit S: Strategy): EarlyCause => Unit = {
       val allSteps = Task delay {
         /*
          * Represents the running state of the computation.  If we're running, then the interrupt

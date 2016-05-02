@@ -1,16 +1,14 @@
-package scalaz.stream
+package org.specs2.codata
 
 import scalaz.concurrent.{Strategy, Task}
-import scalaz.stream.Process.halt
-import scalaz.stream.async.mutable._
-
-import scalaz.\/._
+import org.specs2.codata.async.mutable._
+import scalaz._, \/._
 
 package object async {
 
   /**
    * Creates a bounded queue that is bound by supplied max size bound.
-   * Please see [[scalaz.stream.async.mutable.Queue]] for more details.
+   * Please see [[org.specs2.codata.async.mutable.Queue]] for more details.
    * @param max The maximum size of the queue (must be > 0)
    * @param recover Flag controlling automatic dequeue error recovery semantics.  When
    * false (the default), data may be lost in the event of an error during dequeue.
@@ -25,7 +23,7 @@ package object async {
   }
 
   /**
-   * Creates an unbounded queue. see [[scalaz.stream.async.mutable.Queue]] for more
+   * Creates an unbounded queue. see [[specs2.codata.async.mutable.Queue]] for more
    */
   def unboundedQueue[A](implicit S: Strategy): Queue[A] = Queue[A](0)
 

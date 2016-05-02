@@ -1,9 +1,8 @@
-package  scalaz.stream
+package org.specs2.codata
 
-import scalaz.\/._
+import scalaz._, Scalaz._, \/._
 import scalaz.concurrent.Task
-import scalaz.stream.Process._
-import scalaz.{-\/, \/, \/-}
+import org.specs2.codata.Process._
 
 object writer {
 

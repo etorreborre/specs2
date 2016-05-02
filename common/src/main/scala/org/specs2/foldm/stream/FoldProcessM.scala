@@ -5,7 +5,7 @@ package stream
 import FoldM._
 import data._, Processes._
 
-import scalaz.stream._
+import org.specs2.codata._
 import scalaz.{Id, ~>}, Id._
 import scalaz.concurrent.Task
 

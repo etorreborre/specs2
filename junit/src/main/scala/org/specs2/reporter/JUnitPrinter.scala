@@ -3,7 +3,7 @@ package reporter
 
 import junit.framework.AssertionFailedError
 import foldm._, stream._, FoldProcessM._
-import scalaz.stream.{Sink}
+import org.specs2.codata.{Sink}
 import text.NotNullStrings._
 import scalaz.concurrent.Task
 import org.junit.runner.Description

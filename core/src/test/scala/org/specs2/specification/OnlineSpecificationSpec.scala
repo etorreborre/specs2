@@ -5,7 +5,7 @@ import execute._
 import core._
 import matcher.Matcher
 import specification.dsl.Online
-import scalaz.stream.Process
+import org.specs2.codata.Process
 import reporter.TextPrinterSpecification._
 
 class OnlineSpecificationSpec extends Specification { def is = s2"""

@@ -1,11 +1,11 @@
-package scalaz.stream
+package org.specs2.codata
 
 import Cause._
 import scala.annotation.tailrec
 import scalaz.{\/-, \/}
 import scalaz.\/._
-import scalaz.stream.Process._
-import scalaz.stream.Util._
+import org.specs2.codata.Process._
+import org.specs2.codata.Util._
 
 object tee {
 
@@ -261,21 +261,21 @@ object tee {
 /**
  * Operations on process that uses `tee`
  */
-private[stream] trait TeeOps[+F[_], +O] {
+private[codata] trait TeeOps[+F[_], +O] {
 
   self: Process[F, O] =>
 
   /** Alternate emitting elements from `this` and `p2`, starting with `this`. */
   def interleave[F2[x] >: F[x], O2 >: O](p2: Process[F2, O2]): Process[F2, O2] =
-    this.tee(p2)(scalaz.stream.tee.interleave[O2])
+    this.tee(p2)(org.specs2.codata.tee.interleave[O2])
 
   /** Call `tee` with the `zipWith` `Tee[O,O2,O3]` defined in `tee.scala`. */
   def zipWith[F2[x] >: F[x], O2, O3](p2: Process[F2, O2])(f: (O, O2) => O3): Process[F2, O3] =
-    this.tee(p2)(scalaz.stream.tee.zipWith(f))
+    this.tee(p2)(org.specs2.codata.tee.zipWith(f))
 
   /** Call `tee` with the `zip` `Tee[O,O2,O3]` defined in `tee.scala`. */
   def zip[F2[x] >: F[x], O2](p2: Process[F2, O2]): Process[F2, (O, O2)] =
-    this.tee(p2)(scalaz.stream.tee.zip)
+    this.tee(p2)(org.specs2.codata.tee.zip)
 
   /**
    * When `condition` is `true`, lets through any values in `this` process, otherwise blocks
@@ -286,7 +286,7 @@ private[stream] trait TeeOps[+F[_], +O] {
    * function.
    */
   def when[F2[x] >: F[x], O2 >: O](condition: Process[F2, Boolean]): Process[F2, O2] =
-    condition.tee(this)(scalaz.stream.tee.when)
+    condition.tee(this)(org.specs2.codata.tee.when)
 
 
   /** Delay running this `Process` until `awaken` becomes true for the first time. */
@@ -301,7 +301,7 @@ private[stream] trait TeeOps[+F[_], +O] {
    * continuous one for use with this function.
    */
   def until[F2[x] >: F[x], O2 >: O](condition: Process[F2, Boolean]): Process[F2, O2] =
-    condition.tee(this)(scalaz.stream.tee.until)
+    condition.tee(this)(org.specs2.codata.tee.until)
 
 }
 

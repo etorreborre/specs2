@@ -1,11 +1,11 @@
-package scalaz.stream.async.mutable
+package org.specs2.codata.async.mutable
 
-import scalaz.stream.Cause._
+import org.specs2.codata.Cause._
 import scalaz.\/
 import scalaz.concurrent._
-import scalaz.stream.Process._
-import scalaz.stream._
-import scalaz.stream.async.mutable
+import org.specs2.codata.Process._
+import org.specs2.codata._
+import org.specs2.codata.async.mutable
 import java.util.concurrent.atomic.AtomicReference
 
 
@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicReference
  * A signal whose value may be set asynchronously. Provides continuous
  * and discrete streams for responding to changes to this value.
  */
-trait Signal[A] extends scalaz.stream.async.immutable.Signal[A] {
+trait Signal[A] extends org.specs2.codata.async.immutable.Signal[A] {
 
 
   /**
@@ -90,7 +90,7 @@ trait Signal[A] extends scalaz.stream.async.immutable.Signal[A] {
 
 
 
-  private[stream] def failWithCause(c:Cause):Task[Unit]
+  private[codata] def failWithCause(c:Cause):Task[Unit]
 
 
 }
@@ -160,7 +160,7 @@ object Signal {
           }))
         } yield ref.get()
       }
-      private[stream] def failWithCause(c: Cause): Task[Unit] = topic.failWithCause(c)
+      private[codata] def failWithCause(c: Cause): Task[Unit] = topic.failWithCause(c)
     }
 
   }

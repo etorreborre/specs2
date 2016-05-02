@@ -2,7 +2,7 @@ package org.specs2
 package io
 
 import control._
-import scalaz.{std, syntax, stream, concurrent}
+import scalaz.{std, syntax, concurrent}
 import std.list._
 import syntax.all._
 import concurrent.Task

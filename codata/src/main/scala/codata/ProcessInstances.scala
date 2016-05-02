@@ -1,8 +1,8 @@
-package scalaz.stream
+package org.specs2.codata
 
 import scalaz._
 
-private[stream] trait ProcessInstances {
+private[codata] trait ProcessInstances {
 
   implicit val processHoist: Hoist[Process] = new ProcessHoist {}
 

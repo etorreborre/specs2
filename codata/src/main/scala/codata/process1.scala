@@ -1,4 +1,4 @@
-package scalaz.stream
+package org.specs2.codata
 
 import scala.annotation.tailrec
 import scalaz.\/._
@@ -882,7 +882,7 @@ final class Process1Syntax[I, O](val self: Process1[I, O]) extends AnyVal {
 
 }
 
-private[stream] trait Process1Ops[+F[_],+O] {
+private[codata] trait Process1Ops[+F[_],+O] {
   self: Process[F,O] =>
 
   /** Alias for `this |> [[process1.awaitOption]]`. */

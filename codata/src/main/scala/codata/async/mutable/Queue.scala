@@ -1,13 +1,13 @@
-package scalaz.stream.async.mutable
+package org.specs2.codata.async.mutable
 
 import java.util.concurrent.atomic.AtomicInteger
 
-import scalaz.stream.Cause._
+import org.specs2.codata.Cause._
 import scalaz.concurrent.{Actor, Strategy, Task}
-import scalaz.stream.Process.Halt
-import scalaz.stream.async
-import scalaz.stream.async.immutable
-import scalaz.stream.{Cause, Util, Process, Sink}
+import org.specs2.codata.Process.Halt
+import org.specs2.codata.async
+import org.specs2.codata.async.immutable
+import org.specs2.codata.{Cause, Util, Process, Sink}
 import scalaz.{Either3, -\/, \/, \/-}
 import scalaz.\/._
 
@@ -127,17 +127,17 @@ trait Queue[A] {
    */
   def fail(rsn: Throwable): Task[Unit] = failWithCause(Error(rsn))
 
-  private[stream] def failWithCause(c:Cause): Task[Unit]
+  private[codata] def failWithCause(c:Cause): Task[Unit]
 }
 
-private[stream] object CircularBuffer {
+private[codata] object CircularBuffer {
   def apply[A](bound: Int)(implicit S: Strategy): Queue[A] =
     Queue.mk(bound, false, (as, q) => if (as.size + q.size > bound) q.drop(as.size) else q)   // disable recovery for all circular buffers, for now
 }
 
-private[stream] object Queue {
+private[codata] object Queue {
 
-  import scalaz.stream.Util._
+  import org.specs2.codata.Util._
 
   /**
    * Builds a queue, potentially with `source` producing the streams that
@@ -366,7 +366,7 @@ private[stream] object Queue {
 
       def enqueueAll(xa: Seq[A]): Task[Unit] = Task.async(cb => actor ! Enqueue(xa,cb))
 
-      private[stream] def failWithCause(c: Cause): Task[Unit] = Task.async[Unit](cb => actor ! Fail(c,cb))
+      private[codata] def failWithCause(c: Cause): Task[Unit] = Task.async[Unit](cb => actor ! Fail(c,cb))
     }
   }
 }

@@ -1,10 +1,10 @@
-package scalaz.stream
+package org.specs2.codata
 
 
 import Cause._
 import scalaz.{Right3, Middle3, Left3, \/-, -\/, Either3, \/}
 import scalaz.concurrent.{Actor, Strategy, Task}
-import scalaz.stream.Process._
+import org.specs2.codata.Process._
 
 package object nondeterminism {
 

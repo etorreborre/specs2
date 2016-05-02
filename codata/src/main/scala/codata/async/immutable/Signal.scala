@@ -1,7 +1,7 @@
-package scalaz.stream.async.immutable
+package org.specs2.codata.async.immutable
 
 import scalaz.concurrent._
-import scalaz.stream.Process
+import org.specs2.codata.Process
 
 
 trait Signal[A] {

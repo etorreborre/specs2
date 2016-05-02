@@ -10,7 +10,7 @@ import control._
 import execute.Result
 import scalaz.Id, Id._
 import scalaz.concurrent.Task
-import scalaz.stream._
+import org.specs2.codata._
 import scalaz.syntax.show._
 import specification.core._
 
