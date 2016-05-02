@@ -70,7 +70,7 @@ object build extends Build {
     settings = moduleSettings("common") ++
       Seq(conflictWarning ~= { _.copy(failOnConflict = false) }, // lame
           libraryDependencies ++=
-            depends.scalaz(scalazVersion.value, scalaVersion.value) ++
+            depends.scalaz(scalazVersion.value) ++
             depends.reflect(scalaVersion.value) ++
             depends.paradise(scalaVersion.value) ++
             depends.scalaParser(scalaVersion.value) ++
@@ -195,7 +195,7 @@ object build extends Build {
     addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.7.1"),
     scalacOptions in GlobalScope ++=
       (if (scalaVersion.value.startsWith("2.11") || scalaVersion.value.startsWith("2.12"))
-        Seq("-Xfatal-warnings",
+        Seq(//"-Xfatal-warnings",
             "-Xlint",
             "-Ywarn-unused-import",
             "-Yno-adapted-args",

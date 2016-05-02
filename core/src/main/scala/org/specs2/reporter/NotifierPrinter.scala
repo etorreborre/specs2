@@ -1,6 +1,7 @@
 package org.specs2
 package reporter
 
+import org.specs2.data.Processes
 import text.NotNullStrings._
 import foldm._, FoldM._
 import stream.FoldProcessM._
@@ -60,7 +61,7 @@ object NotifierPrinter {
   }
 
   def notifySink(spec: SpecStructure, notifier: Notifier, args: Arguments): Sink[Task, (Notified, Fragment)] =
-    io.resource(Task.now(notifier))(
+    Processes.resource(Task.now(notifier))(
       (n: Notifier) => Task.now(()))(
       (n: Notifier) => Task.delay { case (block: Notified, f: Fragment) => Task.now(printFragment(n, f, block, args)) })
 

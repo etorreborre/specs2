@@ -14,7 +14,7 @@ import execute._
 import org.junit.ComparisonFailure
 import main.Arguments
 import control.{Actions, Action, Throwablex}
-import scalaz.stream.io
+import data.Processes
 import control.ExecutionOrigin._
 
 /**
@@ -44,7 +44,7 @@ trait JUnitPrinter extends Printer { outer =>
     val shutdown = (notifier: RunNotifier) => Task.now(if (!isExecutedFromJUnitCore) notifier.fireTestRunFinished(new org.junit.runner.Result) else ())
     val step =     (notifier: RunNotifier) => Task.now(notifyJUnit(env.arguments))
 
-    io.resource(acquire)(shutdown)(step)
+    Processes.resource(acquire)(shutdown)(step)
   }
 
   def notifyJUnit(args: Arguments): Fragment => Task[Unit] = { fragment =>

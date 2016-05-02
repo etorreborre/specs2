@@ -3,6 +3,7 @@ package reporter
 
 import matcher.DataTable
 import control._
+import data._
 import foldm._, stream._, FoldProcessM._
 import specification.core._
 import specification.process._
@@ -50,7 +51,7 @@ trait TextPrinter extends Printer {
   }
 
   def fragmentsSink(logger: LineLogger, header: SpecHeader, args: Arguments): Sink[Task, LogLine] =
-    io.resource(start(logger, header, args))(_ => Task.now(()))(logger =>
+    Processes.resource(start(logger, header, args))(_ => Task.now(()))(logger =>
       Task.delay((line: LogLine) => Task.now(line.log(logger)))
     )
 
