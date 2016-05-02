@@ -346,7 +346,7 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="org.specs2.data.Fold#runFold" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="runFold[T,S](process:scalaz.stream.Process[scalaz.concurrent.Task,T],fold:org.specs2.foldm.stream.FoldProcessM.FoldTask[T,S]):scalaz.concurrent.Task[S]"></a>
+      <a id="runFold[T,S](process:org.specs2.codata.Process[scalaz.concurrent.Task,T],fold:org.specs2.foldm.stream.FoldProcessM.FoldTask[T,S]):scalaz.concurrent.Task[S]"></a>
       <a id="runFold[T,S](Process[Task,T],FoldTask[T,S]):Task[S]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -354,10 +354,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">runFold</span><span class="tparams">[<span name="T">T</span>, <span name="S">S</span>]</span><span class="params">(<span name="process">process: <span class="extype" name="scalaz.stream.Process">Process</span>[<a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-concurrent_2.11/7.2.0/scalaz-concurrent_2.11-7.2.0-javadoc.jar/!/index.html#scalaz.concurrent.Task" class="extype" target="_top">Task</a>, <span class="extype" name="org.specs2.data.Fold.runFold.T">T</span>]</span>, <span name="fold">fold: <a href="../foldm/stream/FoldProcessM$.html#FoldTask[T,U]=org.specs2.foldm.FoldM[T,scalaz.concurrent.Task,U]" class="extmbr" name="org.specs2.foldm.stream.FoldProcessM.FoldTask">FoldTask</a>[<span class="extype" name="org.specs2.data.Fold.runFold.T">T</span>, <span class="extype" name="org.specs2.data.Fold.runFold.S">S</span>]</span>)</span><span class="result">: <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-concurrent_2.11/7.2.0/scalaz-concurrent_2.11-7.2.0-javadoc.jar/!/index.html#scalaz.concurrent.Task" class="extype" target="_top">Task</a>[<span class="extype" name="org.specs2.data.Fold.runFold.S">S</span>]</span>
+        <span class="name">runFold</span><span class="tparams">[<span name="T">T</span>, <span name="S">S</span>]</span><span class="params">(<span name="process">process: <a href="../codata/Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-concurrent_2.11/7.2.0/scalaz-concurrent_2.11-7.2.0-javadoc.jar/!/index.html#scalaz.concurrent.Task" class="extype" target="_top">Task</a>, <span class="extype" name="org.specs2.data.Fold.runFold.T">T</span>]</span>, <span name="fold">fold: <a href="../foldm/stream/FoldProcessM$.html#FoldTask[T,U]=org.specs2.foldm.FoldM[T,scalaz.concurrent.Task,U]" class="extmbr" name="org.specs2.foldm.stream.FoldProcessM.FoldTask">FoldTask</a>[<span class="extype" name="org.specs2.data.Fold.runFold.T">T</span>, <span class="extype" name="org.specs2.data.Fold.runFold.S">S</span>]</span>)</span><span class="result">: <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-concurrent_2.11/7.2.0/scalaz-concurrent_2.11-7.2.0-javadoc.jar/!/index.html#scalaz.concurrent.Task" class="extype" target="_top">Task</a>[<span class="extype" name="org.specs2.data.Fold.runFold.S">S</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.specs2.data.Fold$@runFold[T,S](process:scalaz.stream.Process[scalaz.concurrent.Task,T],fold:org.specs2.foldm.stream.FoldProcessM.FoldTask[T,S]):scalaz.concurrent.Task[S]" title="Permalink" target="_top">
+      <a href="../../../index.html#org.specs2.data.Fold$@runFold[T,S](process:org.specs2.codata.Process[scalaz.concurrent.Task,T],fold:org.specs2.foldm.stream.FoldProcessM.FoldTask[T,S]):scalaz.concurrent.Task[S]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -372,7 +372,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">runSinks</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="process">process: <a href="../foldm/stream/FoldProcessM$.html#ProcessTask[T]=scalaz.stream.Process[scalaz.concurrent.Task,T]" class="extmbr" name="org.specs2.foldm.stream.FoldProcessM.ProcessTask">ProcessTask</a>[<span class="extype" name="org.specs2.data.Fold.runSinks.T">T</span>]</span>, <span name="sinks">sinks: <span class="extype" name="scala.List">List</span>[<a href="../foldm/stream/FoldProcessM$.html#SinkTask[T]=org.specs2.foldm.FoldM.SinkM[T,scalaz.concurrent.Task]" class="extmbr" name="org.specs2.foldm.stream.FoldProcessM.SinkTask">SinkTask</a>[<span class="extype" name="org.specs2.data.Fold.runSinks.T">T</span>]]</span>)</span><span class="result">: <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-concurrent_2.11/7.2.0/scalaz-concurrent_2.11-7.2.0-javadoc.jar/!/index.html#scalaz.concurrent.Task" class="extype" target="_top">Task</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">runSinks</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="process">process: <a href="../foldm/stream/FoldProcessM$.html#ProcessTask[T]=org.specs2.codata.Process[scalaz.concurrent.Task,T]" class="extmbr" name="org.specs2.foldm.stream.FoldProcessM.ProcessTask">ProcessTask</a>[<span class="extype" name="org.specs2.data.Fold.runSinks.T">T</span>]</span>, <span name="sinks">sinks: <span class="extype" name="scala.List">List</span>[<a href="../foldm/stream/FoldProcessM$.html#SinkTask[T]=org.specs2.foldm.FoldM.SinkM[T,scalaz.concurrent.Task]" class="extmbr" name="org.specs2.foldm.stream.FoldProcessM.SinkTask">SinkTask</a>[<span class="extype" name="org.specs2.data.Fold.runSinks.T">T</span>]]</span>)</span><span class="result">: <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-concurrent_2.11/7.2.0/scalaz-concurrent_2.11-7.2.0-javadoc.jar/!/index.html#scalaz.concurrent.Task" class="extype" target="_top">Task</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#org.specs2.data.Fold$@runSinks[T](process:org.specs2.foldm.stream.FoldProcessM.ProcessTask[T],sinks:List[org.specs2.foldm.stream.FoldProcessM.SinkTask[T]]):scalaz.concurrent.Task[Unit]" title="Permalink" target="_top">
@@ -382,7 +382,7 @@
       <p class="shortcomment cmt">Run a list of SinkM, sequenced with the SinkM Monoid
 </p>
     </li><li name="org.specs2.data.Fold#showToFilePath" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="showToFilePath[T,S](path:org.specs2.io.FilePath)(implicitevidence$1:scalaz.Show[T]):scalaz.stream.Sink[scalaz.concurrent.Task,T]"></a>
+      <a id="showToFilePath[T,S](path:org.specs2.io.FilePath)(implicitevidence$1:scalaz.Show[T]):org.specs2.codata.Sink[scalaz.concurrent.Task,T]"></a>
       <a id="showToFilePath[T,S](FilePath)(Show[T]):Sink[Task,T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -390,10 +390,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">showToFilePath</span><span class="tparams">[<span name="T">T</span>, <span name="S">S</span>]</span><span class="params">(<span name="path">path: <a href="../io/FilePath.html" class="extype" name="org.specs2.io.FilePath">FilePath</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-core_2.11/7.2.0/scalaz-core_2.11-7.2.0-javadoc.jar/!/index.html#scalaz.Show" class="extype" target="_top">Show</a>[<span class="extype" name="org.specs2.data.Fold.showToFilePath.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scalaz.stream.Sink">Sink</span>[<a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-concurrent_2.11/7.2.0/scalaz-concurrent_2.11-7.2.0-javadoc.jar/!/index.html#scalaz.concurrent.Task" class="extype" target="_top">Task</a>, <span class="extype" name="org.specs2.data.Fold.showToFilePath.T">T</span>]</span>
+        <span class="name">showToFilePath</span><span class="tparams">[<span name="T">T</span>, <span name="S">S</span>]</span><span class="params">(<span name="path">path: <a href="../io/FilePath.html" class="extype" name="org.specs2.io.FilePath">FilePath</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-core_2.11/7.2.0/scalaz-core_2.11-7.2.0-javadoc.jar/!/index.html#scalaz.Show" class="extype" target="_top">Show</a>[<span class="extype" name="org.specs2.data.Fold.showToFilePath.T">T</span>]</span>)</span><span class="result">: <a href="../codata/package.html#Sink[+F[_],-O]=org.specs2.codata.Process[F,O=&gt;F[Unit]]" class="extmbr" name="org.specs2.codata.Sink">Sink</a>[<a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-concurrent_2.11/7.2.0/scalaz-concurrent_2.11-7.2.0-javadoc.jar/!/index.html#scalaz.concurrent.Task" class="extype" target="_top">Task</a>, <span class="extype" name="org.specs2.data.Fold.showToFilePath.T">T</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.specs2.data.Fold$@showToFilePath[T,S](path:org.specs2.io.FilePath)(implicitevidence$1:scalaz.Show[T]):scalaz.stream.Sink[scalaz.concurrent.Task,T]" title="Permalink" target="_top">
+      <a href="../../../index.html#org.specs2.data.Fold$@showToFilePath[T,S](path:org.specs2.io.FilePath)(implicitevidence$1:scalaz.Show[T]):org.specs2.codata.Sink[scalaz.concurrent.Task,T]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

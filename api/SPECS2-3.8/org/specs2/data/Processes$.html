@@ -324,7 +324,7 @@
               
         </dd></dl></div>
     </li><li name="org.specs2.data.Processes#foldState1" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="foldState1[S,T](action:(T,S)=&gt;S)(init:S):scalaz.stream.Process1[T,S]"></a>
+      <a id="foldState1[S,T](action:(T,S)=&gt;S)(init:S):org.specs2.codata.Process1[T,S]"></a>
       <a id="foldState1[S,T]((T,S)⇒S)(S):Process1[T,S]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -332,10 +332,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">foldState1</span><span class="tparams">[<span name="S">S</span>, <span name="T">T</span>]</span><span class="params">(<span name="action">action: (<span class="extype" name="org.specs2.data.Processes.foldState1.T">T</span>, <span class="extype" name="org.specs2.data.Processes.foldState1.S">S</span>) ⇒ <span class="extype" name="org.specs2.data.Processes.foldState1.S">S</span></span>)</span><span class="params">(<span name="init">init: <span class="extype" name="org.specs2.data.Processes.foldState1.S">S</span></span>)</span><span class="result">: <span class="extype" name="scalaz.stream.Process1">Process1</span>[<span class="extype" name="org.specs2.data.Processes.foldState1.T">T</span>, <span class="extype" name="org.specs2.data.Processes.foldState1.S">S</span>]</span>
+        <span class="name">foldState1</span><span class="tparams">[<span name="S">S</span>, <span name="T">T</span>]</span><span class="params">(<span name="action">action: (<span class="extype" name="org.specs2.data.Processes.foldState1.T">T</span>, <span class="extype" name="org.specs2.data.Processes.foldState1.S">S</span>) ⇒ <span class="extype" name="org.specs2.data.Processes.foldState1.S">S</span></span>)</span><span class="params">(<span name="init">init: <span class="extype" name="org.specs2.data.Processes.foldState1.S">S</span></span>)</span><span class="result">: <a href="../codata/package.html#Process1[-I,+O]=org.specs2.codata.Process[org.specs2.codata.Process.Env[I,Any]#Is,O]" class="extmbr" name="org.specs2.codata.Process1">Process1</a>[<span class="extype" name="org.specs2.data.Processes.foldState1.T">T</span>, <span class="extype" name="org.specs2.data.Processes.foldState1.S">S</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.specs2.data.Processes$@foldState1[S,T](action:(T,S)=&gt;S)(init:S):scalaz.stream.Process1[T,S]" title="Permalink" target="_top">
+      <a href="../../../index.html#org.specs2.data.Processes$@foldState1[S,T](action:(T,S)=&gt;S)(init:S):org.specs2.codata.Process1[T,S]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -345,7 +345,7 @@ an initial state
 an initial state
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Processes.html" class="extype" name="org.specs2.data.Processes">Processes</a></dd></dl></div>
     </li><li name="org.specs2.data.Processes#functiontoW" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="functiontoW[F[_],T,A](process:T=&gt;scalaz.stream.Process[F,A]):T=&gt;scalaz.stream.Writer[F,A,Nothing]"></a>
+      <a id="functiontoW[F[_],T,A](process:T=&gt;org.specs2.codata.Process[F,A]):T=&gt;org.specs2.codata.Writer[F,A,Nothing]"></a>
       <a id="functiontoW[F[_],T,A]((T)⇒Process[F,A]):(T)⇒Writer[F,A,Nothing]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -353,10 +353,10 @@ an initial state
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">functiontoW</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="T">T</span>, <span name="A">A</span>]</span><span class="params">(<span name="process">process: (<span class="extype" name="org.specs2.data.Processes.functiontoW.T">T</span>) ⇒ <span class="extype" name="scalaz.stream.Process">Process</span>[<span class="extype" name="org.specs2.data.Processes.functiontoW.F">F</span>, <span class="extype" name="org.specs2.data.Processes.functiontoW.A">A</span>]</span>)</span><span class="result">: (<span class="extype" name="org.specs2.data.Processes.functiontoW.T">T</span>) ⇒ <span class="extype" name="scalaz.stream.Writer">Writer</span>[<span class="extype" name="org.specs2.data.Processes.functiontoW.F">F</span>, <span class="extype" name="org.specs2.data.Processes.functiontoW.A">A</span>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Nothing" class="extype" target="_top">Nothing</a>]</span>
+        <span class="name">functiontoW</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="T">T</span>, <span name="A">A</span>]</span><span class="params">(<span name="process">process: (<span class="extype" name="org.specs2.data.Processes.functiontoW.T">T</span>) ⇒ <a href="../codata/Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<span class="extype" name="org.specs2.data.Processes.functiontoW.F">F</span>, <span class="extype" name="org.specs2.data.Processes.functiontoW.A">A</span>]</span>)</span><span class="result">: (<span class="extype" name="org.specs2.data.Processes.functiontoW.T">T</span>) ⇒ <a href="../codata/package.html#Writer[+F[_],+W,+O]=org.specs2.codata.Process[F,scalaz.\/[W,O]]" class="extmbr" name="org.specs2.codata.Writer">Writer</a>[<span class="extype" name="org.specs2.data.Processes.functiontoW.F">F</span>, <span class="extype" name="org.specs2.data.Processes.functiontoW.A">A</span>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Nothing" class="extype" target="_top">Nothing</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.specs2.data.Processes$@functiontoW[F[_],T,A](process:T=&gt;scalaz.stream.Process[F,A]):T=&gt;scalaz.stream.Writer[F,A,Nothing]" title="Permalink" target="_top">
+      <a href="../../../index.html#org.specs2.data.Processes$@functiontoW[F[_],T,A](process:T=&gt;org.specs2.codata.Process[F,A]):T=&gt;org.specs2.codata.Writer[F,A,Nothing]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -463,6 +463,23 @@ an initial state
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.specs2.data.Processes#resource" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="resource[F[_],R,O](acquire:F[R])(release:R=&gt;F[Unit])(step:R=&gt;F[O]):org.specs2.codata.Process[F,O]"></a>
+      <a id="resource[F[_],R,O](F[R])((R)⇒F[Unit])((R)⇒F[O]):Process[F,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">resource</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="R">R</span>, <span name="O">O</span>]</span><span class="params">(<span name="acquire">acquire: <span class="extype" name="org.specs2.data.Processes.resource.F">F</span>[<span class="extype" name="org.specs2.data.Processes.resource.R">R</span>]</span>)</span><span class="params">(<span name="release">release: (<span class="extype" name="org.specs2.data.Processes.resource.R">R</span>) ⇒ <span class="extype" name="org.specs2.data.Processes.resource.F">F</span>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>)</span><span class="params">(<span name="step">step: (<span class="extype" name="org.specs2.data.Processes.resource.R">R</span>) ⇒ <span class="extype" name="org.specs2.data.Processes.resource.F">F</span>[<span class="extype" name="org.specs2.data.Processes.resource.O">O</span>]</span>)</span><span class="result">: <a href="../codata/Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<span class="extype" name="org.specs2.data.Processes.resource.F">F</span>, <span class="extype" name="org.specs2.data.Processes.resource.O">O</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.data.Processes$@resource[F[_],R,O](acquire:F[R])(release:R=&gt;F[Unit])(step:R=&gt;F[O]):org.specs2.codata.Process[F,O]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Processes.html" class="extype" name="org.specs2.data.Processes">Processes</a></dd></dl></div>
     </li><li name="org.specs2.data.Processes#start" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="start[A](a:=&gt;A)(executorService:java.util.concurrent.ExecutorService):scalaz.concurrent.Task[A]"></a>
       <a id="start[A](⇒A)(ExecutorService):Task[A]"></a>
@@ -481,7 +498,7 @@ an initial state
     </span>
       <p class="shortcomment cmt">start an execution right away</p><div class="fullcomment"><div class="comment cmt"><p>start an execution right away</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Processes.html" class="extype" name="org.specs2.data.Processes">Processes</a></dd></dl></div>
     </li><li name="org.specs2.data.Processes#step" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="step[A](p:scalaz.stream.Process[scalaz.concurrent.Task,A]):org.specs2.data.Stepper[scalaz.concurrent.Task,A]"></a>
+      <a id="step[A](p:org.specs2.codata.Process[scalaz.concurrent.Task,A]):org.specs2.data.Stepper[scalaz.concurrent.Task,A]"></a>
       <a id="step[A](Process[Task,A]):Stepper[Task,A]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -489,10 +506,10 @@ an initial state
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">step</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="p">p: <span class="extype" name="scalaz.stream.Process">Process</span>[<a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-concurrent_2.11/7.2.0/scalaz-concurrent_2.11-7.2.0-javadoc.jar/!/index.html#scalaz.concurrent.Task" class="extype" target="_top">Task</a>, <span class="extype" name="org.specs2.data.Processes.step.A">A</span>]</span>)</span><span class="result">: <a href="Stepper.html" class="extype" name="org.specs2.data.Stepper">Stepper</a>[<a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-concurrent_2.11/7.2.0/scalaz-concurrent_2.11-7.2.0-javadoc.jar/!/index.html#scalaz.concurrent.Task" class="extype" target="_top">Task</a>, <span class="extype" name="org.specs2.data.Processes.step.A">A</span>]</span>
+        <span class="name">step</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="p">p: <a href="../codata/Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-concurrent_2.11/7.2.0/scalaz-concurrent_2.11-7.2.0-javadoc.jar/!/index.html#scalaz.concurrent.Task" class="extype" target="_top">Task</a>, <span class="extype" name="org.specs2.data.Processes.step.A">A</span>]</span>)</span><span class="result">: <a href="Stepper.html" class="extype" name="org.specs2.data.Stepper">Stepper</a>[<a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-concurrent_2.11/7.2.0/scalaz-concurrent_2.11-7.2.0-javadoc.jar/!/index.html#scalaz.concurrent.Task" class="extype" target="_top">Task</a>, <span class="extype" name="org.specs2.data.Processes.step.A">A</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.specs2.data.Processes$@step[A](p:scalaz.stream.Process[scalaz.concurrent.Task,A]):org.specs2.data.Stepper[scalaz.concurrent.Task,A]" title="Permalink" target="_top">
+      <a href="../../../index.html#org.specs2.data.Processes$@step[A](p:org.specs2.codata.Process[scalaz.concurrent.Task,A]):org.specs2.data.Stepper[scalaz.concurrent.Task,A]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -601,7 +618,7 @@ an initial state
               
         </dd></dl></div>
     </li><li name="org.specs2.data.Processes#zipWithState1" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="zipWithState1[S,T](action:(T,S)=&gt;S)(init:S):scalaz.stream.Process1[T,(T,S)]"></a>
+      <a id="zipWithState1[S,T](action:(T,S)=&gt;S)(init:S):org.specs2.codata.Process1[T,(T,S)]"></a>
       <a id="zipWithState1[S,T]((T,S)⇒S)(S):Process1[T,(T,S)]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -609,10 +626,10 @@ an initial state
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">zipWithState1</span><span class="tparams">[<span name="S">S</span>, <span name="T">T</span>]</span><span class="params">(<span name="action">action: (<span class="extype" name="org.specs2.data.Processes.zipWithState1.T">T</span>, <span class="extype" name="org.specs2.data.Processes.zipWithState1.S">S</span>) ⇒ <span class="extype" name="org.specs2.data.Processes.zipWithState1.S">S</span></span>)</span><span class="params">(<span name="init">init: <span class="extype" name="org.specs2.data.Processes.zipWithState1.S">S</span></span>)</span><span class="result">: <span class="extype" name="scalaz.stream.Process1">Process1</span>[<span class="extype" name="org.specs2.data.Processes.zipWithState1.T">T</span>, (<span class="extype" name="org.specs2.data.Processes.zipWithState1.T">T</span>, <span class="extype" name="org.specs2.data.Processes.zipWithState1.S">S</span>)]</span>
+        <span class="name">zipWithState1</span><span class="tparams">[<span name="S">S</span>, <span name="T">T</span>]</span><span class="params">(<span name="action">action: (<span class="extype" name="org.specs2.data.Processes.zipWithState1.T">T</span>, <span class="extype" name="org.specs2.data.Processes.zipWithState1.S">S</span>) ⇒ <span class="extype" name="org.specs2.data.Processes.zipWithState1.S">S</span></span>)</span><span class="params">(<span name="init">init: <span class="extype" name="org.specs2.data.Processes.zipWithState1.S">S</span></span>)</span><span class="result">: <a href="../codata/package.html#Process1[-I,+O]=org.specs2.codata.Process[org.specs2.codata.Process.Env[I,Any]#Is,O]" class="extmbr" name="org.specs2.codata.Process1">Process1</a>[<span class="extype" name="org.specs2.data.Processes.zipWithState1.T">T</span>, (<span class="extype" name="org.specs2.data.Processes.zipWithState1.T">T</span>, <span class="extype" name="org.specs2.data.Processes.zipWithState1.S">S</span>)]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.specs2.data.Processes$@zipWithState1[S,T](action:(T,S)=&gt;S)(init:S):scalaz.stream.Process1[T,(T,S)]" title="Permalink" target="_top">
+      <a href="../../../index.html#org.specs2.data.Processes$@zipWithState1[S,T](action:(T,S)=&gt;S)(init:S):org.specs2.codata.Process1[T,(T,S)]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
