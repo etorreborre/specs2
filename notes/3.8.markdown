@@ -1,0 +1,16 @@
+Less-dependent version!
+
+## Improvements
+
+ * removed the external dependency on Scalaz-stream
+ * new `specs2-cats` module: added `Xor` matchers for [cats](https://github.com/typelevel/cats)
+ * doc: configure external links in ScalaDoc (thanks to Yang Bo)
+ * core: extracted a `ThrownExpectable` trait to get thrown expectations with less possibility for clashes with `ScalaTest` methods  
+ * sbt: extract tags from the specification to pass them to sbt (see [here](http://stackoverflow.com/questions/36585241/use-sbt-tags-to-control-specs2-test-concurrency)).
+   this allows sbt to run some specifications sequentially at the class level.
+
+## Fixes
+
+ * core: fallback to the normal instance if building a companion object doesn't work [#477](http://github.com/etorreborre/specs2/issues/477)
+ * matcher: check the order of xml nodes when using `beEqualToIgnoringSpace.ordered` [#474](http://github.com/etorreborre/specs2/issues/474)
+ 
