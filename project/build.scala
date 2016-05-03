@@ -66,12 +66,12 @@ object build extends Build {
     Seq(name := "specs2-analysis")
   ).dependsOn(common % "test->test", core, matcher, scalacheck % "test")
 
-  lazy val codata = Project(id = "codata", base = file("codata"),
+  lazy val codata: Project = Project(id = "codata", base = file("codata"),
     settings = moduleSettings("codata") ++
       Seq(
         name := "specs2-codata",
         libraryDependencies ++= depends.scalaz(scalazVersion.value),
-        scalacOptions := Seq("-feature", "-language:_"),
+        scalacOptions in codata := Seq("-feature", "-language:_"),
         logLevel in compile := Level.Error
       )
   )
@@ -203,7 +203,7 @@ object build extends Build {
     maxErrors := 20,
     incOptions := incOptions.value.withNameHashing(true),
     addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.7.1"),
-    scalacOptions in GlobalScope ++=
+    scalacOptions ++=
       (if (scalaVersion.value.startsWith("2.11") || scalaVersion.value.startsWith("2.12"))
         Seq("-Xfatal-warnings",
             "-Xlint",
