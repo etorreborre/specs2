@@ -46,17 +46,20 @@ object Runner {
           print("\n  CAUSED BY " + s.toString) >> s.getStackTrace.toList.traverse_(e => print("  " + e.toString))
         }
 
+     def logException(m: String, throwable: Throwable) =
+       print("\n" + m + "\n") >>
+         logStack(throwable) >>
+         print(" ")
+
     if (!arguments.commandLine.boolOr("silent", false)) {
       t match {
-      case UserException(m, throwable) =>
-        print("\n" + m + "\n") >>
-          logStack(throwable) >>
-          print(" ")
+      case UserException(m, throwable) => logException(m, throwable)
 
-      case ActionException(warnings, message, _) =>
+      case ActionException(warnings, message, exception) =>
         if (warnings.nonEmpty) print("Warnings:\n") >> print(warnings.mkString("", "\n", "\n"))
         else IO(()) >>
-          message.traverseU(print).void
+          message.traverseU(print).void >>
+          exception.traverseU(e => logException(e.getMessage, e)).void
 
       case _: InterruptedException => print("User cancellation. Bye")
 
@@ -194,4 +197,3 @@ object Runner {
       Actions.ok(None)
 
 }
-
