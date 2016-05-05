@@ -88,7 +88,7 @@ trait SpecificationsFinder {
    * Read the content of the file at 'path' and return all names matching the object pattern
    * or the class pattern
    */
-  def readClassNames(path: FilePath, objectPattern: Pattern, classPattern: Pattern, filePathReader: FilePathReader, verbose: Boolean): Action[Seq[String]] = {
+  def readClassNames(path: FilePath, objectPattern: Pattern, classPattern: Pattern, filePathReader: FilePathReader, verbose: Boolean): Action[List[String]] = {
     for {
       fileContent <- filePathReader.readFile(path)
       packName    =  packageName(fileContent)

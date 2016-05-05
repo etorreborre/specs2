@@ -1,19 +1,12 @@
 package org.specs2
 
+import control.eff._, all._, syntax.all._
 import scalaz._
 import scalaz.effect.IO
 import org.specs2.execute.{AsResult, Result}
 import scalaz.concurrent.Task
 import scalaz.syntax.bind._
-
-import control.eff._
-import ErrorEffect._
-import WarningsEffect._
-import ConsoleEffect._
-import Effects._
-import Eff.run
-import EvalEffect._
-import Member.{<=}
+import ErrorEffect.{ErrorOrOk, Error, fail, exception}
 
 package object control {
 
@@ -29,17 +22,17 @@ package object control {
    */
   type ActionStack = ErrorOrOk |: Console |: Warnings |: Eval |: NoEffect
 
-  implicit def EvalMember: Member[Name, ActionStack] =
-    Member.MemberNatIsMember
+  implicit def EvalMember: Member.Aux[Eval, ActionStack, ErrorOrOk |: Console |: Warnings |: NoEffect] =
+    Member.successor
 
-  implicit def WarningsMember: Member[Warnings, ActionStack] =
-    Member.MemberNatIsMember
+  implicit def WarningsMember: Member.Aux[Warnings, ActionStack, ErrorOrOk |: Console |: Eval |: NoEffect] =
+    Member.successor
 
-  implicit def ConsoleMember: Member[Console, ActionStack] =
-    Member.MemberNatIsMember
+  implicit def ConsoleMember: Member.Aux[Console, ActionStack, ErrorOrOk |: Warnings |: Eval |: NoEffect] =
+    Member.successor
 
-  implicit def ErrorMember: Member[ErrorOrOk, ActionStack] =
-    Member.MemberNatIsMember
+  implicit def ErrorMember: Member.Aux[ErrorOrOk, ActionStack, Console |: Warnings |: Eval |: NoEffect] =
+    Member.first
 
   type Action[A] = Eff[ActionStack, A]
 
@@ -47,20 +40,20 @@ package object control {
    * warn the user about something that is probably wrong on his side,
    * this is not a specs2 bug, then fail to stop all further computations
    */
-  def warnAndFail[R <: Effects, A](message: String, failureMessage: String)(implicit m1: Warnings <= R, m2: ErrorOrOk<= R): Eff[R, A] =
+  def warnAndFail[R <: Effects, A](message: String, failureMessage: String)(implicit m1: Warnings <= R, m2: ErrorOrOk <= R): Eff[R, A] =
     warn(message)(m1) >>
     fail(failureMessage)
 
-  def executeAction[A](action: Eff[ActionStack, A], printer: String => Unit = s => ()): (Error \/ A, Vector[String]) =
-    run(runEval(runWarnings(runConsoleToPrinter(printer)(runError(action)))))
+  def executeAction[A](action: Eff[ActionStack, A], printer: String => Unit = s => ()): (Error \/ A, List[String]) =
+    action.runError.runConsoleToPrinter(printer).runWarnings.runEval.run
 
   def runAction[A](action: Eff[ActionStack, A], printer: String => Unit = s => ()): Error \/ A =
     attemptExecuteAction(action, printer).fold(
       t => -\/(-\/(t)),
       other => other._1)
 
-  def attemptExecuteAction[A](action: Eff[ActionStack, A], printer: String => Unit = s => ()): Throwable \/ (Error \/ A, Vector[String]) =
-    run(attemptEval(runWarnings(runConsoleToPrinter(printer)(runError(action)))))
+  def attemptExecuteAction[A](action: Eff[ActionStack, A], printer: String => Unit = s => ()): Throwable \/ (Error \/ A, List[String]) =
+    action.runError.runConsoleToPrinter(printer).runWarnings.attemptEval.run
 
   /**
    * This implicit allows any IO[Result] to be used inside an example:

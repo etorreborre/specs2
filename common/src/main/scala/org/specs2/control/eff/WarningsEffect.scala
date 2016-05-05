@@ -1,15 +1,10 @@
-package org.specs2.control
-package eff
+package org.specs2.control.eff
 
-import Effects._
+import org.specs2.control.eff.Effects._
+
 import scalaz._
-import Interpret._
 
-object WarningsEffect {
-
-  trait WarningsTag
-
-  type Warnings[A] = Writer[String, A] @@ WarningsTag
+trait WarningsEffect {
 
   /** warn the user about something that is probably wrong on his side, this is not a specs2 bug */
   def warn[R](message: String)(implicit m: Member[Warnings, R]): Eff[R, Unit] =
@@ -18,21 +13,33 @@ object WarningsEffect {
   /**
    * This interpreter cumulates warnings
    */
-  def runWarnings[R <: Effects, A](effects: Eff[Warnings |: R, A]): Eff[R, (A, Vector[String])] = {
-    val recurse = new StateRecurse[Warnings, A, (A, Vector[String])] {
-      type S = Vector[String]
-      val init = Vector()
-
-      def apply[X](x: Warnings[X], s: Vector[String]): (X, Vector[String]) =
-        Tag.unwrap(x) match {
-          case w => (w.run._2, s :+ w.run._1)
-        }
-
-      def finalize(a: A, s: Vector[String]): (A, Vector[String]) =
-        (a, s)
-    }
-
-    interpretState1[R, Warnings, A, (A, Vector[String])]((a: A) => (a, Vector()))(recurse)(effects)
-  }
+  def runWarnings[R <: Effects, U <: Effects, A](w: Eff[R, A])(implicit m: Member.Aux[Warnings, R, U]): Eff[U, (A, List[String])] =
+    WriterEffect.runWriterTagged[R, U, WarningsTag, String, A](w)
 
 }
+
+object WarningsEffect  extends WarningsEffect
+
+
+trait WarningsImplicits extends WarningsImplicits1 {
+  implicit def TaggedWarningsMemberZero[Tg]: Member.Aux[({type l[X] = Warnings[X] @@ Tg})#l, ({type l[X] = Warnings[X] @@ Tg})#l |: NoEffect, NoEffect] = {
+    type T[X] = Warnings[X] @@ Tg
+    Member.zero[T]
+  }
+
+  implicit def TaggedWarningsMemberFirst[R <: Effects, Tg]: Member.Aux[({type l[X] = Warnings[X] @@ Tg})#l, ({type l[X] = Warnings[X] @@ Tg})#l |: R, R] = {
+    type T[X] = Warnings[X] @@ Tg
+    Member.first[T, R]
+  }
+}
+
+trait WarningsImplicits1 {
+  implicit def TaggedWarningsMemberSuccessor[O[_], R <: Effects, U <: Effects, Tg](implicit m: Member.Aux[({type l[X] = Warnings[X] @@ Tg})#l, R, U]): Member.Aux[({type l[X] = Warnings[X] @@ Tg})#l, O |: R, O |: U] = {
+    type T[X] = Warnings[X] @@ Tg
+    Member.successor[T, O, R, U]
+  }
+}
+
+object WarningsImplicits extends WarningsImplicits
+
+trait WarningsTag

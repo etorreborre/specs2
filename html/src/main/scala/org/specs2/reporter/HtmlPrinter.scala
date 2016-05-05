@@ -17,9 +17,10 @@ import html._
 import SearchPage._
 import html.TableOfContents._
 import SpecHtmlPage._
-import eff._
-import WarningsEffect._
-import ErrorEffect._
+import eff.all._
+import eff.syntax.all._
+import scalaz._, Scalaz._
+import eff.ErrorEffect._
 
 /**
  * Printer for html files
@@ -63,7 +64,7 @@ trait HtmlPrinter extends Printer {
     import env.fileSystem._
     for {
       options  <- getHtmlOptions(env.arguments)
-      template <- readFile(options.template) ||| warnAndFail("No template file found at "+options.template.path, RunAborted)
+      template <- readFile(options.template) orElse warnAndFail("No template file found at "+options.template.path, RunAborted)
       content  <- makeHtml(template, spec, stats, options, env.arguments)
       _        <- writeFile(outputPath(options.outDir, spec), content)
     } yield ()

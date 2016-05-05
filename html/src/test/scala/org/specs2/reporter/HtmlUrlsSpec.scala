@@ -6,7 +6,7 @@ package reporter
 import mutable.Specification
 import matcher.ResultMatchers
 import scala.xml.NodeSeq
-class HtmlUrlsSpec extends Specification with ResultMatchers with HtmlUrls {
+class HtmlUrlsSpecification extends Specification with ResultMatchers with HtmlUrls {
   skipAllIf(isDead("http://www.google.com"))
 
   "it is possible to check the web links of an html document" >> {

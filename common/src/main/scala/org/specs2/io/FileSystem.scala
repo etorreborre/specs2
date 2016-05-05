@@ -13,7 +13,7 @@ import java.net.URL
 import java.util.zip._
 import java.util.regex.Pattern.compile
 import java.util.regex.Matcher.quoteReplacement
-import eff.ErrorEffect._
+import eff.syntax.all._
 
 /**
  * Interface for the FileSystem where effects are denoted with the "Action" type

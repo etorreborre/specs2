@@ -5,7 +5,7 @@ import org.specs2.matcher.Matcher
 import specification.Grouped
 import Classes._
 import control._
-import eff.ErrorEffect._
+import eff.syntax.error._
 import matcher.MatchersImplicits._
 
 class ClassesSpec extends Spec with Grouped { def is = s2"""

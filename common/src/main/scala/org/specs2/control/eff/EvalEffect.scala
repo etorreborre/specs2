@@ -1,42 +1,47 @@
 package org.specs2.control.eff
 
-import org.specs2.control.eff.Eff._
-import org.specs2.control.eff.Effects._
-import org.specs2.control.eff.Interpret._
-
 import scala.util.control.NonFatal
 import scalaz._
-import scalaz.effect.IO
+import Eff._
+import Interpret._
 
 /**
  * Effect for delayed computations
  *
- * uses scalaz.Name as a data structure
- *
+ * uses scalaz.Need as a supporting data structure
  */
-object EvalEffect {
+trait EvalEffect extends
+  EvalTypes with
+  EvalCreation with
+  EvalInterpretation
 
-   type Eval[A] = Name[A]
+object EvalEffect extends EvalEffect
 
+trait EvalTypes {
+  type Eval[A] = Need[A]
+}
+
+object EvalTypes extends EvalTypes
+
+trait EvalCreation extends EvalTypes {
   def now[R, A](a: A)(implicit m: Member[Eval, R]): Eff[R, A] =
     pure(a)
 
-  def delay[R, A](a: =>A)(implicit m: Member[Eval, R]): Eff[R, A] =
-    send(Name(a))
+  def delay[R, A](a: => A)(implicit m: Member[Eval, R]): Eff[R, A] =
+    send(Need(a))
+}
 
-  def evalIO[R, A](a: IO[A])(implicit m: Member[Eval, R]): Eff[R, A] =
-    delay(a.unsafePerformIO)
-
-  def runEval[R <: Effects, A](r: Eff[Eval[?] |: R, A]): Eff[R, A] = {
-    val recurse = new Recurse[Eval, R, A] {
+trait EvalInterpretation extends EvalTypes {
+  def runEval[R <: Effects, U <: Effects, A](r: Eff[R, A])(implicit m: Member.Aux[Eval, R, U]): Eff[U, A] = {
+    val recurse = new Recurse[Eval, U, A] {
       def apply[X](m: Eval[X]) = -\/(m.value)
     }
 
     interpret1((a: A) => a)(recurse)(r)
   }
 
-  def attemptEval[R <: Effects, A](r: Eff[Eval[?] |: R, A]): Eff[R, Throwable \/ A] = {
-    val recurse = new Recurse[Eval, R, Throwable \/ A] {
+  def attemptEval[R <: Effects, U <: Effects, A](r: Eff[R, A])(implicit m: Member.Aux[Eval, R, U]): Eff[U, Throwable \/ A] = {
+    val recurse = new Recurse[Eval, U, Throwable \/ A] {
       def apply[X](m: Eval[X]) =
         try { -\/(m.value) }
         catch { case NonFatal(t) => \/-(Eff.pure(-\/(t))) }
@@ -44,6 +49,7 @@ object EvalEffect {
 
     interpret1((a: A) => \/-(a): Throwable \/ A)(recurse)(r)
   }
-
 }
+
+object EvalInterpretation extends EvalInterpretation
 

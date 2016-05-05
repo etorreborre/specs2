@@ -3,6 +3,7 @@ package runner
 
 import control._, Throwablex._
 import control.Actions._
+import eff._, all._, syntax.all._
 import specification.core._
 import specification.process.Stats
 import scala.reflect.ClassTag
@@ -11,9 +12,6 @@ import scalaz._, Scalaz._
 import main.Arguments
 import reflect.Classes
 import reporter._, Printer._
-import eff._
-import ConsoleEffect._
-import ErrorEffect._
 
 /**
  * reusable actions for Runners
@@ -75,7 +73,7 @@ object Runner {
   /**
    * Log the issues which might have been caused by the user
    */
-  def logUserWarnings(warnings: Vector[String])(print: String => IO[Unit]): IO[Unit] = {
+  def logUserWarnings(warnings: List[String])(print: String => IO[Unit]): IO[Unit] = {
     (if (warnings.nonEmpty) print("Warnings:\n") else IO(())) >>
       warnings.traverseU(print).void
   }

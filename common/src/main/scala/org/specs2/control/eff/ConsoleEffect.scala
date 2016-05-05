@@ -1,41 +1,38 @@
 package org.specs2.control.eff
 
 import Eff._
-import Effects._
-import scalaz._, Scalaz._
 import Interpret._
+import scalaz.syntax.all._
+import scalaz._
+import Effects._
 
-object ConsoleEffect {
-
-  trait ConsoleTag
-
-  type Console[A] = Writer[String, A] @@ ConsoleTag
+trait ConsoleEffect {
 
   def log[R](message: String, doIt: Boolean = true)(implicit m: Member[Console, R]): Eff[R, Unit] =
     if (doIt) WriterEffect.tell(message)(Member.untagMember[Writer[String, ?], R, ConsoleTag](m))
-    else      EffMonad.point(())
+    else      EffMonad.pure(())
 
   def logThrowable[R](t: Throwable, doIt: Boolean = true)(implicit m: Member[Console, R]): Eff[R, Unit] =
     if (doIt) logThrowable(t)
-    else      EffMonad.point(())
+    else      EffMonad.pure(())
 
   def logThrowable[R](t: Throwable)(implicit m: Member[Console, R]): Eff[R, Unit] =
     log(t.getMessage, doIt = true)(m) >>
     log(t.getStackTrace.mkString("\n"), doIt = true) >>
       (if (t.getCause != null) logThrowable(t.getCause)
-       else                    EffMonad.point(()))
+       else                    EffMonad.pure(()))
 
 
   /**
    * This interpreter prints messages to the console
    */
-  def runConsole[R <: Effects, A](w: Eff[Console |: R, A]): Eff[R, A] =
+  def runConsole[R <: Effects, U <: Effects, A](w: Eff[R, A])(implicit m : Member.Aux[Console, R, U]): Eff[U, A] =
     runConsoleToPrinter(m => println(m))(w)
 
   /**
    * This interpreter prints messages to a printing function
    */
-  def runConsoleToPrinter[R <: Effects, A](printer: String => Unit): Eff[Console |: R, A] => Eff[R, A] = {
+  def runConsoleToPrinter[R <: Effects, U <: Effects, A](printer: String => Unit)(w: Eff[R, A])(implicit m : Member.Aux[Console, R, U]) = {
     val recurse = new StateRecurse[Console, A, A] {
       type S = Unit
       val init = ()
@@ -49,7 +46,32 @@ object ConsoleEffect {
         a
     }
 
-    interpretState1((a: A) => a)(recurse)
+    interpretState1((a: A) => a)(recurse)(w)
   }
 
 }
+
+object ConsoleEffect extends ConsoleEffect
+
+trait ConsoleImplicits extends ConsoleImplicits1 {
+  implicit def TaggedConsoleMemberZero[Tg]: Member.Aux[({type l[X] = Console[X] @@ Tg})#l, ({type l[X] = Console[X] @@ Tg})#l |: NoEffect, NoEffect] = {
+    type T[X] = Console[X] @@ Tg
+    Member.zero[T]
+  }
+
+  implicit def TaggedConsoleMemberFirst[R <: Effects, Tg]: Member.Aux[({type l[X] = Console[X] @@ Tg})#l, ({type l[X] = Console[X] @@ Tg})#l |: R, R] = {
+    type T[X] = Console[X] @@ Tg
+    Member.first[T, R]
+  }
+}
+
+trait ConsoleTag
+
+trait ConsoleImplicits1 {
+  implicit def TaggedConsoleMemberSuccessor[O[_], R <: Effects, U <: Effects, Tg](implicit m: Member.Aux[({type l[X] = Console[X] @@ Tg})#l, R, U]): Member.Aux[({type l[X] = Console[X] @@ Tg})#l, O |: R, O |: U] = {
+    type T[X] = Console[X] @@ Tg
+    Member.successor[T, O, R, U]
+  }
+}
+
+object ConsoleImplicits extends ConsoleImplicits

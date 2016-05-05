@@ -6,8 +6,7 @@ import data.TopologicalSort
 import control._
 import reflect.Classes
 import Classes._
-import scalaz.syntax.traverse._
-import scalaz.std.list._
+import scalaz._, Scalaz._
 
 trait ContextualSpecificationStructure {
   def structure: Env => SpecStructure

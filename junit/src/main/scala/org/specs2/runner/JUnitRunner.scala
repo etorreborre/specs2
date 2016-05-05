@@ -4,7 +4,7 @@ package runner
 import org.junit.runner.manipulation.{NoTestsRemainException, Filterable}
 import org.junit.runner.notification.RunNotifier
 import main._
-import control.eff.ErrorEffect._
+import control.eff._, all._, syntax.all._
 import specification.process.Stats
 import control.Actions._
 import reporter._
@@ -87,4 +87,3 @@ class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterab
     if (!filter.shouldRun(getDescription)) throw new NoTestsRemainException
   }
 }
-

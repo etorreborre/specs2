@@ -35,7 +35,7 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
       lazy val env = Env(arguments = commandLineArguments)
 
       // the specification to execute with error messages if it cannot be instantiated
-      lazy val specStructure: (Error \/ Option[SpecStructure], Vector[String]) = {
+      lazy val specStructure: (Error \/ Option[SpecStructure], List[String]) = {
         val action: Action[Option[SpecStructure]] =
           createSpecStructure(taskDef, loader, env)
         executeAction(action)
@@ -62,7 +62,7 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
       def taskDef = aTaskDef
 
       /** display errorrs and warnings */
-      def processResult[A](handler: EventHandler, loggers: Array[Logger])(result: Error \/ A, warnings: Vector[String]): Unit = {
+      def processResult[A](handler: EventHandler, loggers: Array[Logger])(result: Error \/ A, warnings: List[String]): Unit = {
         result.fold(
           e => {
             if (warnings.nonEmpty) handleRunWarnings(warnings, loggers, commandLineArguments)
@@ -144,7 +144,7 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
   /**
    * Notify sbt of warnings during the run
    */
-  private def handleRunWarnings(warnings: Vector[String], loggers: Array[Logger], arguments: Arguments) {
+  private def handleRunWarnings(warnings: List[String], loggers: Array[Logger], arguments: Arguments) {
     val logger = SbtLineLogger(loggers)
     Runner.logUserWarnings(warnings)(m => IO(logger.failureLine(m))).unsafePerformIO
     logger.close
