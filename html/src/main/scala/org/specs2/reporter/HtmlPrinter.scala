@@ -64,7 +64,7 @@ trait HtmlPrinter extends Printer {
     import env.fileSystem._
     for {
       options  <- getHtmlOptions(env.arguments)
-      template <- readFile(options.template) orElse warnAndFail("No template file found at "+options.template.path, RunAborted)
+      template <- readFile(options.template) ||| warnAndFail("No template file found at "+options.template.path, RunAborted)
       content  <- makeHtml(template, spec, stats, options, env.arguments)
       _        <- writeFile(outputPath(options.outDir, spec), content)
     } yield ()
@@ -123,7 +123,8 @@ trait HtmlPrinter extends Printer {
     for {
       options  <- getHtmlOptions(env.arguments)
       _        <- withEphemeralFile(options.outDir | options.template.name) {
-                    copyFile(options.outDir)(options.template) >>
+                    copyFile(options.outDir)(options.template) |||
+                    warnAndFail("No template file found at "+options.template.path, RunAborted) >>
                     makePandocHtml(spec, stats, pandoc, options, env)
                   }
     } yield ()
