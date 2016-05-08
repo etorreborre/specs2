@@ -5,7 +5,6 @@ import scalaz._
 import scalaz.syntax.semigroup._
 import Eff._
 import Interpret._
-import org.specs2.control.eff.Effects.|:
 
 /**
  * Effect for logging values alongside computations

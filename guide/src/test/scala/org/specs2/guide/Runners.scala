@@ -38,6 +38,9 @@ Various sbt options can apply to [test execution in sbt](http://www.scala-sbt.or
  - display results as soon as they've been executed
    `logBuffered := false`
 
+ - [custom tags](http://www.scala-sbt.org/0.13/docs/Parallel-Execution.html#Tagging+Tasks) to restrict the parallel execution of specifications.
+     *** if you want to use sbt tags you will also need to pass the `sbt.tags` argument on the command-line ***
+
 ### Output
 
 When you run a specification, whatever environment you are in: sbt, shell, IDE,... you can specify different outputs for the results. For example, when you execute a specification with sbt, the results appear in the console. If you want JUnit XML files to be produced instead you need to pass the `junitxml` argument. Adding any "output" argument will deactivate the console (you will see no output in the console) but you can enable it again by passing the `console` argument. You can of course specify several outputs like `html junitxml console`.

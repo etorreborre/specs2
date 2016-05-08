@@ -37,13 +37,17 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
       // the specification to execute with error messages if it cannot be instantiated
       lazy val specStructure: (Error \/ Option[SpecStructure], List[String]) = {
         val action: Action[Option[SpecStructure]] =
-          createSpecStructure(taskDef, loader, env)
+          createSpecStructure(taskDef, getClass.getClassLoader, env)
         executeAction(action)
       }
 
       /** @return the specification tags */
       def tags: Array[String] =
-        specStructure._1.toOption.flatten.map(_.tags.flatMap(_.names).toArray).getOrElse(Array())
+        if (commandLineArguments.commandLine.isSet("sbt.tags")) {
+          println(specStructure)
+          specStructure._1.toOption.flatten.map(_.tags.flatMap(_.names).toArray).getOrElse(Array())
+        }
+        else Array()
 
       def execute(handler: EventHandler, loggers: Array[Logger]) = {
         val (result, warnings) = specStructure
