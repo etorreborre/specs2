@@ -1,0 +1,13 @@
+Maintenance version.
+
+## Improvements
+
+ * use the latest eff
+
+## Fixes
+
+ * core: enable passing the specification tags to sbt only conditionally with `sbt.tags` [#478](http://github.com/etorreborre/specs2/issues/478)
+ * core: make sure `ActionExceptions` get entirely logged at the end of a run to avoid loosing some exceptions
+ * html: add a user message when a template is not being found with pandoc on
+ * matcher: make `EventuallyResults` consistent with `EventuallyMatchers` (thanks to @luismfonseca) [#479](http://github.com/etorreborre/specs2/issues/479)
+ 
