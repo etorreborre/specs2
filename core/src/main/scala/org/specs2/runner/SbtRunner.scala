@@ -37,7 +37,7 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
       // the specification to execute with error messages if it cannot be instantiated
       lazy val specStructure: (Error \/ Option[SpecStructure], List[String]) = {
         val action: Action[Option[SpecStructure]] =
-          createSpecStructure(taskDef, getClass.getClassLoader, env)
+          createSpecStructure(taskDef, loader, env)
         executeAction(action)
       }
 

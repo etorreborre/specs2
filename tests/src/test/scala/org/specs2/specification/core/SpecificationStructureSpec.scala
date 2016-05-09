@@ -21,6 +21,7 @@ class SpecificationStructureSpec extends Specification with ScalaCheck with Disj
    if there is an exception during the creation of the specification instance
    it must be reported as the cause for the instantiation issue $report
    if the companion object is not a specification structure, try the normal class $companion
+   if the companion object is a specification structure keep it $companionSpec
 
 """
 
@@ -57,6 +58,13 @@ class SpecificationStructureSpec extends Specification with ScalaCheck with Disj
       beOk
   }
 
+  def companionSpec = {
+    SpecificationStructure.create("org.specs2.specification.core.SpecObject", getClass.getClassLoader, None).
+      // the cast is necessary to really show that the right instance has been built
+      // see #477
+      map(_.asInstanceOf[SpecificationStructure]) must
+      beOk
+  }
 
   def dependOn(s2: SpecStructure): Matcher[SpecStructure] = (s1: SpecStructure) =>
     (s1 dependsOn s2, s"${s1.specClassName} doesn't depend on ${s2.specClassName}")
@@ -101,3 +109,5 @@ class BrokenSpecification extends Specification { def is = s2"""
 @RunWith(classOf[JUnitRunner])
 class SpecWithCompanion extends Specification { def is = s2""" """ }
 object SpecWithCompanion
+
+object SpecObject extends Specification { def is = s2""" """ }

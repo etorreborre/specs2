@@ -35,19 +35,19 @@ object SpecificationStructure {
     val defaultInstances = env.toList.flatMap(_.defaultInstances)
 
     // make sure the instantiated class is a Specification Structure (see #477)
-    def asSpecificationStructure(i: Any): SpecificationStructure =
-      classOf[SpecificationStructure].cast(i).asInstanceOf[SpecificationStructure]
+    def asSpecificationStructure(i: Any): Action[SpecificationStructure] =
+      Actions.safe(classOf[SpecificationStructure].cast(i).asInstanceOf[SpecificationStructure])
 
     existsClass(className+"$", classLoader) flatMap { e =>
       if (e)
         // try to create the specification from the object name
-        createInstance[SpecificationStructure](className+"$", classLoader, defaultInstances).map(asSpecificationStructure).orElse(
+        createInstance[SpecificationStructure](className+"$", classLoader, defaultInstances).flatMap(asSpecificationStructure).orElse(
           // fallback to the class if this is just a companion object
-          createInstance[SpecificationStructure](className, classLoader, defaultInstances).map(asSpecificationStructure)
+          createInstance[SpecificationStructure](className, classLoader, defaultInstances).flatMap(asSpecificationStructure)
         )
       else
         // try to create the specification from a class name
-        createInstance[SpecificationStructure](className, classLoader, defaultInstances).map(asSpecificationStructure)
+        createInstance[SpecificationStructure](className, classLoader, defaultInstances).flatMap(asSpecificationStructure)
     }
   }
 

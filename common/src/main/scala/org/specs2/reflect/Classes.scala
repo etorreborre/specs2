@@ -33,10 +33,10 @@ trait Classes {
   def createInstanceEither[T <: AnyRef](className: String, loader: ClassLoader, defaultInstances: List[AnyRef] = Nil)(implicit m: ClassTag[T]): Action[Throwable \/ T] =
     loadClassEither(className, loader) >>= { tc: Throwable \/ Class[T] =>
       tc match {
-      case -\/(t) => Actions.ok(-\/(t))
-      case \/-(klass) =>
-        findInstance[T](klass, loader, defaultInstances,
-          klass.getDeclaredConstructors.toList.filter(_.getParameterTypes.size <= 1).sortBy(_.getParameterTypes.size)).map(\/-(_))
+        case -\/(t) => Actions.ok(-\/(t))
+        case \/-(klass) =>
+          findInstance[T](klass, loader, defaultInstances,
+            klass.getDeclaredConstructors.toList.filter(_.getParameterTypes.size <= 1).sortBy(_.getParameterTypes.size)).map(\/-(_))
       }
     }
 
