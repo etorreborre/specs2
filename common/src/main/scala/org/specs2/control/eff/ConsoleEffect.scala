@@ -9,8 +9,8 @@ import Effects._
 trait ConsoleEffect {
 
   def log[R](message: String, doIt: Boolean = true)(implicit m: Member[Console, R]): Eff[R, Unit] =
-    if (doIt) WriterEffect.tell(message)(Member.untagMember[Writer[String, ?], R, ConsoleTag](m))
-    else      EffMonad.pure(())
+    if (doIt) WriterEffect.tell(message)(Member.untagMember[({type l[X]=Writer[String, X]})#l, R, ConsoleTag](m))
+    else      EffMonad.point(())
 
   def logThrowable[R](t: Throwable, doIt: Boolean = true)(implicit m: Member[Console, R]): Eff[R, Unit] =
     if (doIt) logThrowable(t)

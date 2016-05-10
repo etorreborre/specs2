@@ -60,8 +60,8 @@ trait EffImplicits {
   /**
    * Monad implementation for the Eff[R, ?] type
    */
-  implicit def EffMonad[R]: Monad[Eff[R, ?]] = new Monad[Eff[R, ?]] {
-    def point[A](a: =>A): Eff[R, A] =
+  implicit def EffMonad[R]: Monad[({type l[X]=Eff[R, X]})#l] = new Monad[({type l[X]=Eff[R, X]})#l] {
+    def point[A](a: => A): Eff[R, A] =
       Pure(a)
 
     def bind[A, B](fa: Eff[R, A])(f: A => Eff[R, B]): Eff[R, B] =

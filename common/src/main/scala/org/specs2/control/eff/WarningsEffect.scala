@@ -8,7 +8,7 @@ trait WarningsEffect {
 
   /** warn the user about something that is probably wrong on his side, this is not a specs2 bug */
   def warn[R](message: String)(implicit m: Member[Warnings, R]): Eff[R, Unit] =
-    WriterEffect.tell(message)(Member.untagMember[Writer[String, ?], R, WarningsTag](m))
+    WriterEffect.tell(message)(Member.untagMember[({type l[X]=Writer[String, X]})#l, R, WarningsTag](m))
 
   /**
    * This interpreter cumulates warnings

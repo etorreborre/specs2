@@ -24,7 +24,7 @@ object ReaderEffect extends ReaderEffect
 
 trait ReaderCreation {
   /** get the environment */
-  def ask[R, T](implicit member: Member[Reader[T, ?], R]): Eff[R, T] =
+  def ask[R, T](implicit member: Member[({type l[X]=Reader[T, X]})#l, R]): Eff[R, T] =
     local[R, T, T](identity)
 
   /** get the environment */
@@ -32,8 +32,8 @@ trait ReaderCreation {
     localTagged[R, Tg, T, T](identity)
 
   /** modify the environment */
-  def local[R, T, U](f: T => U)(implicit member: Member[Reader[T, ?], R]): Eff[R, U] =
-    send[Reader[T, ?], R, U](Reader(f))
+  def local[R, T, U](f: T => U)(implicit member: Member[({type l[X]=Reader[T, X]})#l, R]): Eff[R, U] =
+    send[({type l[X]=Reader[T, X]})#l, R, U](Reader(f))
 
   /** modify the environment */
   def localTagged[R, Tg, T, U](f: T => U)(implicit member: Member[({type l[X] = Reader[T, X] @@ Tg})#l, R]): Eff[R, U] =
@@ -44,12 +44,12 @@ object ReaderCreation extends ReaderCreation
 
 trait ReaderInterpretation {
   /** interpret the Reader effect by providing an environment when required */
-  def runReader[R <: Effects, U <: Effects, A, B](env: A)(r: Eff[R, B])(implicit m: Member.Aux[Reader[A, ?], R, U]): Eff[U, B] = {
-    val recurse = new Recurse[Reader[A, ?], U, B] {
+  def runReader[R <: Effects, U <: Effects, A, B](env: A)(r: Eff[R, B])(implicit m: Member.Aux[({type l[X]=Reader[A, X]})#l, R, U]): Eff[U, B] = {
+    val recurse = new Recurse[({type l[X]=Reader[A, X]})#l, U, B] {
       def apply[X](m: Reader[A, X]) = -\/(m.run(env))
     }
 
-    interpret1[R, U, Reader[A, ?], B, B]((b: B) => b)(recurse)(r)
+    interpret1[R, U, ({type l[X]=Reader[A, X]})#l, B, B]((b: B) => b)(recurse)(r)
   }
 
   /** interpret a tagged Reader effect by providing an environment when required */
@@ -68,8 +68,8 @@ trait ReaderInterpretation {
    * a computation over a "bigger" reader (for the full application)
    */
   def localReader[SR, BR, U, S, B, A](r: Eff[SR, A], getter: B => S)
-                                    (implicit sr: Member.Aux[Reader[S, ?], SR, U], br: Member.Aux[Reader[B, ?], BR, U]): Eff[BR, A] =
-    transform[SR, BR, U, Reader[S, ?], Reader[B, ?], A](r, new ~>[Reader[S, ?], Reader[B, ?]] {
+                                    (implicit sr: Member.Aux[({type l[X]=Reader[S, X]})#l, SR, U], br: Member.Aux[({type l[X]=Reader[B, X]})#l, BR, U]): Eff[BR, A] =
+    transform[SR, BR, U, ({type l[X]=Reader[S, X]})#l, ({type l[X]=Reader[B, X]})#l, A](r, new ~>[({type l[X]=Reader[S, X]})#l, ({type l[X]=Reader[B, X]})#l] {
       def apply[X](r: Reader[S, X]): Reader[B, X] =
         Reader((b: B) => r.run(getter(b)))
     })

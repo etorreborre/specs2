@@ -28,7 +28,18 @@ object depends {
         "org.scala-lang.modules" %% "scala-xml" % "1.0.5"
     }.toList
 
-  lazy val scalacheck    = Seq("org.scalacheck" %% "scalacheck"    % "1.13.0")
+  def kindp(scalaVersion: String) =
+    if (scalaVersion startsWith "2.12.0-M4")
+      "org.spire-math" % "kind-projector_2.12.0-M3" % "0.7.1"
+    else
+      "org.spire-math" % "kind-projector" % "0.7.1" cross CrossVersion.binary
+
+  def scalacheck(scalaVersion: String) =
+    if (scalaVersion startsWith "2.12")
+      Seq("org.scalacheck" % "scalacheck_2.12.0-M3"    % "1.13.0")
+    else
+      Seq("org.scalacheck" %% "scalacheck"    % "1.13.0")
+
   lazy val mockito       = Seq("org.mockito"    %  "mockito-core"  % "1.9.5")
   lazy val junit         = Seq("junit"          %  "junit"         % "4.12")
   lazy val hamcrest      = Seq("org.hamcrest"   %  "hamcrest-core" % "1.3")
