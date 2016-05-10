@@ -1,0 +1,682 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>sbtRun - org.specs2.runner.sbtRun</title>
+          <meta name="description" content="sbtRun - org.specs2.runner.sbtRun" />
+          <meta name="keywords" content="sbtRun org.specs2.runner.sbtRun" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../index.html';
+            var hash = 'org.specs2.runner.sbtRun$';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Object" src="../../../lib/object_big.png" />
+        <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.specs2">specs2</a>.<a href="package.html" class="extype" name="org.specs2.runner">runner</a></p>
+        <h1>sbtRun</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="package.html" class="extype" name="org.specs2.runner">package runner</a>
+          </div></span></h3><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.sbtRun$" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <span class="name">sbtRun</span><span class="result"> extends <a href="SbtRunner.html" class="extype" name="org.specs2.runner.SbtRunner">SbtRunner</a></span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>This object can be used to debug the behavior of the SbtRunner
+</p></div><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><a href="SbtRunner.html" class="extype" name="org.specs2.runner.SbtRunner">SbtRunner</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Product" class="extype" target="_top">Product</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Equals" class="extype" target="_top">Equals</a>, <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scala-sbt/test-interface/1.0/test-interface-1.0-javadoc.jar/!/index.html#sbt.testing.Runner" class="extype" target="_top">Runner</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="org.specs2.runner.sbtRun"><span>sbtRun</span></li><li class="in" name="org.specs2.runner.SbtRunner"><span>SbtRunner</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="sbt.testing.Runner"><span>Runner</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.sbtRun$@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.sbtRun$@##():Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.sbtRun$@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.specs2.runner.SbtRunner#args" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="args:Array[String]"></a>
+      <a id="args:Array[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">args</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Array" class="extype" target="_top">Array</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.sbtRun$@args:Array[String]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="SbtRunner.html" class="extype" name="org.specs2.runner.SbtRunner">SbtRunner</a> → Runner</dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.sbtRun$@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.sbtRun$@clone():Object" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="org.specs2.runner.SbtRunner#createPrinters" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="createPrinters(taskDef:sbt.testing.TaskDef,handler:sbt.testing.EventHandler,loggers:Array[sbt.testing.Logger],args:org.specs2.main.Arguments):org.specs2.control.Action[List[org.specs2.reporter.Printer]]"></a>
+      <a id="createPrinters(TaskDef,EventHandler,Array[Logger],Arguments):Action[List[Printer]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">createPrinters</span><span class="params">(<span name="taskDef">taskDef: <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scala-sbt/test-interface/1.0/test-interface-1.0-javadoc.jar/!/index.html#sbt.testing.TaskDef" class="extype" target="_top">TaskDef</a></span>, <span name="handler">handler: <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scala-sbt/test-interface/1.0/test-interface-1.0-javadoc.jar/!/index.html#sbt.testing.EventHandler" class="extype" target="_top">EventHandler</a></span>, <span name="loggers">loggers: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Array" class="extype" target="_top">Array</a>[<a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scala-sbt/test-interface/1.0/test-interface-1.0-javadoc.jar/!/index.html#sbt.testing.Logger" class="extype" target="_top">Logger</a>]</span>, <span name="args">args: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: <a href="../control/package.html#Action[A]=org.specs2.control.eff.Eff[org.specs2.control.package.ActionStack,A]" class="extmbr" name="org.specs2.control.Action">Action</a>[<span class="extype" name="scala.List">List</span>[<a href="../reporter/Printer.html" class="extype" name="org.specs2.reporter.Printer">Printer</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.sbtRun$@createPrinters(taskDef:sbt.testing.TaskDef,handler:sbt.testing.EventHandler,loggers:Array[sbt.testing.Logger],args:org.specs2.main.Arguments):org.specs2.control.Action[List[org.specs2.reporter.Printer]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">accepted printers</p><div class="fullcomment"><div class="comment cmt"><p>accepted printers</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="SbtRunner.html" class="extype" name="org.specs2.runner.SbtRunner">SbtRunner</a></dd></dl></div>
+    </li><li name="org.specs2.runner.SbtRunner#createSbtPrinter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="createSbtPrinter(h:sbt.testing.EventHandler,ls:Array[sbt.testing.Logger],e:org.specs2.reporter.SbtEvents):org.specs2.control.eff.Eff[org.specs2.control.eff.EffectsCons[[A]scalaz.\/[scalaz.\/[Throwable,String],scalaz.Need[A]],org.specs2.control.eff.EffectsCons[[A]Object{typeTag=org.specs2.control.eff.ConsoleTag;typeSelf=scalaz.WriterT[[+X]X,String,A]},org.specs2.control.eff.EffectsCons[[A]Object{typeTag=org.specs2.control.eff.WarningsTag;typeSelf=scalaz.WriterT[[+X]X,String,A]},org.specs2.control.eff.EffectsCons[[A]scalaz.Need[A],org.specs2.control.eff.NoEffect]]]],_&gt;:Some[org.specs2.reporter.SbtPrinter{lazyvalhandler:sbt.testing.EventHandler;lazyvalloggers:Array[sbt.testing.Logger];lazyvalevents:org.specs2.reporter.SbtEvents}]withOption[Nothing]&lt;:Option[org.specs2.reporter.SbtPrinter{lazyvalhandler:sbt.testing.EventHandler;lazyvalloggers:Array[sbt.testing.Logger];lazyvalevents:org.specs2.reporter.SbtEvents}]]"></a>
+      <a id="createSbtPrinter(EventHandler,Array[Logger],SbtEvents):Eff[EffectsCons[[A]\/[\/[Throwable,String],Need[A]],EffectsCons[[A]AnyRef{.../*2definitionsintyperefinement*/},EffectsCons[[A]AnyRef{.../*2definitionsintyperefinement*/},EffectsCons[[A]Need[A],NoEffect]]]],_&gt;:Some[SbtPrinter{.../*3definitionsintyperefinement*/}]withOption[Nothing]&lt;:Option[SbtPrinter{.../*3definitionsintyperefinement*/}]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">createSbtPrinter</span><span class="params">(<span name="h">h: <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scala-sbt/test-interface/1.0/test-interface-1.0-javadoc.jar/!/index.html#sbt.testing.EventHandler" class="extype" target="_top">EventHandler</a></span>, <span name="ls">ls: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Array" class="extype" target="_top">Array</a>[<a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scala-sbt/test-interface/1.0/test-interface-1.0-javadoc.jar/!/index.html#sbt.testing.Logger" class="extype" target="_top">Logger</a>]</span>, <span name="e">e: <a href="../reporter/SbtEvents.html" class="extype" name="org.specs2.reporter.SbtEvents">SbtEvents</a></span>)</span><span class="result">: <a href="../control/eff/Eff.html" class="extype" name="org.specs2.control.eff.Eff">Eff</a>[<a href="../control/eff/EffectsCons.html" class="extype" name="org.specs2.control.eff.EffectsCons">EffectsCons</a>[[A]<a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-core_2.11/7.2.0/scalaz-core_2.11-7.2.0-javadoc.jar/!/index.html#scalaz.\/" class="extype" target="_top">\/</a>[<a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-core_2.11/7.2.0/scalaz-core_2.11-7.2.0-javadoc.jar/!/index.html#scalaz.\/" class="extype" target="_top">\/</a>[<span class="extype" name="java.lang.Throwable">Throwable</span>, <span class="extype" name="java.lang.String">String</span>], <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-core_2.11/7.2.0/scalaz-core_2.11-7.2.0-javadoc.jar/!/index.html#scalaz.Need" class="extype" target="_top">Need</a>[<span class="extype" name="org.specs2.control.eff.ErrorTypes.ErrorOrOk.A">A</span>]], <a href="../control/eff/EffectsCons.html" class="extype" name="org.specs2.control.eff.EffectsCons">EffectsCons</a>[[A]<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a> { ... /* 2 definitions in type refinement */ }, <a href="../control/eff/EffectsCons.html" class="extype" name="org.specs2.control.eff.EffectsCons">EffectsCons</a>[[A]<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a> { ... /* 2 definitions in type refinement */ }, <a href="../control/eff/EffectsCons.html" class="extype" name="org.specs2.control.eff.EffectsCons">EffectsCons</a>[[A]<a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-core_2.11/7.2.0/scalaz-core_2.11-7.2.0-javadoc.jar/!/index.html#scalaz.Need" class="extype" target="_top">Need</a>[<span class="extype" name="org.specs2.control.eff.EvalTypes.Eval.A">A</span>], <a href="../control/eff/NoEffect.html" class="extype" name="org.specs2.control.eff.NoEffect">NoEffect</a>]]]], _ &gt;: <span class="extype" name="scala.Some">Some</span>[<a href="../reporter/SbtPrinter.html" class="extype" name="org.specs2.reporter.SbtPrinter">SbtPrinter</a> { ... /* 3 definitions in type refinement */ }] with <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Nothing" class="extype" target="_top">Nothing</a>] &lt;: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="../reporter/SbtPrinter.html" class="extype" name="org.specs2.reporter.SbtPrinter">SbtPrinter</a> { ... /* 3 definitions in type refinement */ }]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.sbtRun$@createSbtPrinter(h:sbt.testing.EventHandler,ls:Array[sbt.testing.Logger],e:org.specs2.reporter.SbtEvents):org.specs2.control.eff.Eff[org.specs2.control.eff.EffectsCons[[A]scalaz.\/[scalaz.\/[Throwable,String],scalaz.Need[A]],org.specs2.control.eff.EffectsCons[[A]Object{typeTag=org.specs2.control.eff.ConsoleTag;typeSelf=scalaz.WriterT[[+X]X,String,A]},org.specs2.control.eff.EffectsCons[[A]Object{typeTag=org.specs2.control.eff.WarningsTag;typeSelf=scalaz.WriterT[[+X]X,String,A]},org.specs2.control.eff.EffectsCons[[A]scalaz.Need[A],org.specs2.control.eff.NoEffect]]]],_&gt;:Some[org.specs2.reporter.SbtPrinter{lazyvalhandler:sbt.testing.EventHandler;lazyvalloggers:Array[sbt.testing.Logger];lazyvalevents:org.specs2.reporter.SbtEvents}]withOption[Nothing]&lt;:Option[org.specs2.reporter.SbtPrinter{lazyvalhandler:sbt.testing.EventHandler;lazyvalloggers:Array[sbt.testing.Logger];lazyvalevents:org.specs2.reporter.SbtEvents}]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="SbtRunner.html" class="extype" name="org.specs2.runner.SbtRunner">SbtRunner</a></dd></dl></div>
+    </li><li name="org.specs2.runner.SbtRunner#createSpecStructure" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="createSpecStructure(taskDef:sbt.testing.TaskDef,loader:ClassLoader,env:org.specs2.specification.core.Env):org.specs2.control.Action[Option[org.specs2.specification.core.SpecStructure]]"></a>
+      <a id="createSpecStructure(TaskDef,ClassLoader,Env):Action[Option[SpecStructure]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">createSpecStructure</span><span class="params">(<span name="taskDef">taskDef: <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scala-sbt/test-interface/1.0/test-interface-1.0-javadoc.jar/!/index.html#sbt.testing.TaskDef" class="extype" target="_top">TaskDef</a></span>, <span name="loader">loader: <span class="extype" name="java.lang.ClassLoader">ClassLoader</span></span>, <span name="env">env: <a href="../specification/core/Env.html" class="extype" name="org.specs2.specification.core.Env">Env</a></span>)</span><span class="result">: <a href="../control/package.html#Action[A]=org.specs2.control.eff.Eff[org.specs2.control.package.ActionStack,A]" class="extmbr" name="org.specs2.control.Action">Action</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="../specification/core/SpecStructure.html" class="extype" name="org.specs2.specification.core.SpecStructure">SpecStructure</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.sbtRun$@createSpecStructure(taskDef:sbt.testing.TaskDef,loader:ClassLoader,env:org.specs2.specification.core.Env):org.specs2.control.Action[Option[org.specs2.specification.core.SpecStructure]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">create a spec structure from the task definition containing the class name</p><div class="fullcomment"><div class="comment cmt"><p>create a spec structure from the task definition containing the class name</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="SbtRunner.html" class="extype" name="org.specs2.runner.SbtRunner">SbtRunner</a></dd></dl></div>
+    </li><li name="org.specs2.runner.SbtRunner#done" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="done():String"></a>
+      <a id="done():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">done</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.sbtRun$@done():String" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="SbtRunner.html" class="extype" name="org.specs2.runner.SbtRunner">SbtRunner</a> → Runner</dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.sbtRun$@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.specs2.runner.sbtRun#exit" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="exit(action:org.specs2.control.Action[org.specs2.specification.process.Stats]):Unit"></a>
+      <a id="exit(Action[Stats]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">exit</span><span class="params">(<span name="action">action: <a href="../control/package.html#Action[A]=org.specs2.control.eff.Eff[org.specs2.control.package.ActionStack,A]" class="extmbr" name="org.specs2.control.Action">Action</a>[<a href="../specification/process/Stats.html" class="extype" name="org.specs2.specification.process.Stats">Stats</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.sbtRun$@exit(action:org.specs2.control.Action[org.specs2.specification.process.Stats]):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.sbtRun$@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.sbtRun$@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.sbtRun$@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="org.specs2.runner.SbtRunner#loader" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="loader:ClassLoader"></a>
+      <a id="loader:ClassLoader"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">loader</span><span class="result">: <span class="extype" name="java.lang.ClassLoader">ClassLoader</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.sbtRun$@loader:ClassLoader" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="SbtRunner.html" class="extype" name="org.specs2.runner.SbtRunner">SbtRunner</a></dd></dl></div>
+    </li><li name="org.specs2.runner.sbtRun#main" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="main(arguments:Array[String]):Unit"></a>
+      <a id="main(Array[String]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">main</span><span class="params">(<span name="arguments">arguments: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Array" class="extype" target="_top">Array</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.sbtRun$@main(arguments:Array[String]):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.sbtRun$@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.specs2.runner.SbtRunner#newTask" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="newTask(aTaskDef:sbt.testing.TaskDef):sbt.testing.Task{lazyvalenv:org.specs2.specification.core.Env;lazyvalspecStructure:(scalaz.\/[org.specs2.control.eff.ErrorEffect.Error,Option[org.specs2.specification.core.SpecStructure]],List[String]);defprocessResult[A](handler:sbt.testing.EventHandler,loggers:Array[sbt.testing.Logger])(result:scalaz.\/[org.specs2.control.eff.ErrorEffect.Error,A],warnings:List[String]):Unit}"></a>
+      <a id="newTask(TaskDef):Task{.../*3definitionsintyperefinement*/}"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">newTask</span><span class="params">(<span name="aTaskDef">aTaskDef: <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scala-sbt/test-interface/1.0/test-interface-1.0-javadoc.jar/!/index.html#sbt.testing.TaskDef" class="extype" target="_top">TaskDef</a></span>)</span><span class="result">: <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scala-sbt/test-interface/1.0/test-interface-1.0-javadoc.jar/!/index.html#sbt.testing.Task" class="extype" target="_top">Task</a> { ... /* 3 definitions in type refinement */ }</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.sbtRun$@newTask(aTaskDef:sbt.testing.TaskDef):sbt.testing.Task{lazyvalenv:org.specs2.specification.core.Env;lazyvalspecStructure:(scalaz.\/[org.specs2.control.eff.ErrorEffect.Error,Option[org.specs2.specification.core.SpecStructure]],List[String]);defprocessResult[A](handler:sbt.testing.EventHandler,loggers:Array[sbt.testing.Logger])(result:scalaz.\/[org.specs2.control.eff.ErrorEffect.Error,A],warnings:List[String]):Unit}" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">create a new test task</p><div class="fullcomment"><div class="comment cmt"><p>create a new test task</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="SbtRunner.html" class="extype" name="org.specs2.runner.SbtRunner">SbtRunner</a></dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.sbtRun$@notify():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.sbtRun$@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.specs2.runner.SbtRunner#remoteArgs" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="remoteArgs:Array[String]"></a>
+      <a id="remoteArgs:Array[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">remoteArgs</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Array" class="extype" target="_top">Array</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.sbtRun$@remoteArgs:Array[String]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="SbtRunner.html" class="extype" name="org.specs2.runner.SbtRunner">SbtRunner</a> → Runner</dd></dl></div>
+    </li><li name="org.specs2.runner.SbtRunner#sbtEvents" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="sbtEvents(t:sbt.testing.TaskDef,h:sbt.testing.EventHandler):org.specs2.reporter.SbtEvents{lazyvaltaskDef:sbt.testing.TaskDef;lazyvalhandler:sbt.testing.EventHandler}"></a>
+      <a id="sbtEvents(TaskDef,EventHandler):SbtEvents{.../*2definitionsintyperefinement*/}"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">sbtEvents</span><span class="params">(<span name="t">t: <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scala-sbt/test-interface/1.0/test-interface-1.0-javadoc.jar/!/index.html#sbt.testing.TaskDef" class="extype" target="_top">TaskDef</a></span>, <span name="h">h: <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scala-sbt/test-interface/1.0/test-interface-1.0-javadoc.jar/!/index.html#sbt.testing.EventHandler" class="extype" target="_top">EventHandler</a></span>)</span><span class="result">: <a href="../reporter/SbtEvents.html" class="extype" name="org.specs2.reporter.SbtEvents">SbtEvents</a> { ... /* 2 definitions in type refinement */ }</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.sbtRun$@sbtEvents(t:sbt.testing.TaskDef,h:sbt.testing.EventHandler):org.specs2.reporter.SbtEvents{lazyvaltaskDef:sbt.testing.TaskDef;lazyvalhandler:sbt.testing.EventHandler}" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="SbtRunner.html" class="extype" name="org.specs2.runner.SbtRunner">SbtRunner</a></dd></dl></div>
+    </li><li name="org.specs2.runner.SbtRunner#specificationRun" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="specificationRun(taskDef:sbt.testing.TaskDef,spec:org.specs2.specification.core.SpecStructure,env:org.specs2.specification.core.Env,handler:sbt.testing.EventHandler,loggers:Array[sbt.testing.Logger]):org.specs2.control.Action[org.specs2.specification.process.Stats]"></a>
+      <a id="specificationRun(TaskDef,SpecStructure,Env,EventHandler,Array[Logger]):Action[Stats]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">specificationRun</span><span class="params">(<span name="taskDef">taskDef: <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scala-sbt/test-interface/1.0/test-interface-1.0-javadoc.jar/!/index.html#sbt.testing.TaskDef" class="extype" target="_top">TaskDef</a></span>, <span name="spec">spec: <a href="../specification/core/SpecStructure.html" class="extype" name="org.specs2.specification.core.SpecStructure">SpecStructure</a></span>, <span name="env">env: <a href="../specification/core/Env.html" class="extype" name="org.specs2.specification.core.Env">Env</a></span>, <span name="handler">handler: <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scala-sbt/test-interface/1.0/test-interface-1.0-javadoc.jar/!/index.html#sbt.testing.EventHandler" class="extype" target="_top">EventHandler</a></span>, <span name="loggers">loggers: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Array" class="extype" target="_top">Array</a>[<a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scala-sbt/test-interface/1.0/test-interface-1.0-javadoc.jar/!/index.html#sbt.testing.Logger" class="extype" target="_top">Logger</a>]</span>)</span><span class="result">: <a href="../control/package.html#Action[A]=org.specs2.control.eff.Eff[org.specs2.control.package.ActionStack,A]" class="extmbr" name="org.specs2.control.Action">Action</a>[<a href="../specification/process/Stats.html" class="extype" name="org.specs2.specification.process.Stats">Stats</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.sbtRun$@specificationRun(taskDef:sbt.testing.TaskDef,spec:org.specs2.specification.core.SpecStructure,env:org.specs2.specification.core.Env,handler:sbt.testing.EventHandler,loggers:Array[sbt.testing.Logger]):org.specs2.control.Action[org.specs2.specification.process.Stats]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">run a given spec structure</p><div class="fullcomment"><div class="comment cmt"><p>run a given spec structure</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="SbtRunner.html" class="extype" name="org.specs2.runner.SbtRunner">SbtRunner</a></dd></dl></div>
+    </li><li name="org.specs2.runner.sbtRun#start" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="start(arguments:String*):org.specs2.control.Action[org.specs2.specification.process.Stats]"></a>
+      <a id="start(String*):Action[Stats]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">start</span><span class="params">(<span name="arguments">arguments: <span class="extype" name="scala.Predef.String">String</span>*</span>)</span><span class="result">: <a href="../control/package.html#Action[A]=org.specs2.control.eff.Eff[org.specs2.control.package.ActionStack,A]" class="extmbr" name="org.specs2.control.Action">Action</a>[<a href="../specification/process/Stats.html" class="extype" name="org.specs2.specification.process.Stats">Stats</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.sbtRun$@start(arguments:String*):org.specs2.control.Action[org.specs2.specification.process.Stats]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.sbtRun$@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.specs2.runner.SbtRunner#tasks" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="tasks(taskDefs:Array[sbt.testing.TaskDef]):Array[sbt.testing.Task]"></a>
+      <a id="tasks(Array[TaskDef]):Array[Task]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tasks</span><span class="params">(<span name="taskDefs">taskDefs: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Array" class="extype" target="_top">Array</a>[<a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scala-sbt/test-interface/1.0/test-interface-1.0-javadoc.jar/!/index.html#sbt.testing.TaskDef" class="extype" target="_top">TaskDef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Array" class="extype" target="_top">Array</a>[<a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scala-sbt/test-interface/1.0/test-interface-1.0-javadoc.jar/!/index.html#sbt.testing.Task" class="extype" target="_top">Task</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.sbtRun$@tasks(taskDefs:Array[sbt.testing.TaskDef]):Array[sbt.testing.Task]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="SbtRunner.html" class="extype" name="org.specs2.runner.SbtRunner">SbtRunner</a> → Runner</dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.sbtRun$@wait():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.sbtRun$@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.sbtRun$@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="org.specs2.runner.SbtRunner">
+              <h3>Inherited from <a href="SbtRunner.html" class="extype" name="org.specs2.runner.SbtRunner">SbtRunner</a></h3>
+            </div><div class="parent" name="scala.Serializable">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="scala.Product">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Product" class="extype" target="_top">Product</a></h3>
+            </div><div class="parent" name="scala.Equals">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Equals" class="extype" target="_top">Equals</a></h3>
+            </div><div class="parent" name="sbt.testing.Runner">
+              <h3>Inherited from <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scala-sbt/test-interface/1.0/test-interface-1.0-javadoc.jar/!/index.html#sbt.testing.Runner" class="extype" target="_top">Runner</a></h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
