@@ -2,8 +2,6 @@ package org.specs2
 package guide
 package matchers
 
-import form.Card
-
 object XmlMatchers extends UserGuideCard {
   def title = "Xml"
   def text = """

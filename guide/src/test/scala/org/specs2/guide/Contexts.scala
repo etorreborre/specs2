@@ -3,10 +3,8 @@ package guide
 
 import io._
 import matcher._
-import org.specs2.matcher.Scope
 import org.specs2.mutable
 import org.specs2.specification._
-import specification.core.{Fragments}
 import execute._
 
 object Contexts extends UserGuidePage with FileMatchers with FileSystem { def is = s2"""

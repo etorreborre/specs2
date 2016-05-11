@@ -24,8 +24,6 @@ For example, specifying a Parser for numbers could look like this: ${snippet{
 
 import NumberParsers.{error, number}
 
-import scala.util.parsing.combinator.RegexParsers
-
 class ParserSpec extends Specification with matcher.ParserMatchers {  def is = s2"""
   Parsers for numbers
 

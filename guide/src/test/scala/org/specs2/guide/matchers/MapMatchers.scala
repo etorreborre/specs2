@@ -2,8 +2,6 @@ package org.specs2
 package guide
 package matchers
 
-import form.Card
-
 object MapMatchers extends UserGuideCard {
   def title = "Map"
   def text = s2"""

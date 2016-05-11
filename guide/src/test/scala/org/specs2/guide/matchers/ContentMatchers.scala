@@ -5,8 +5,6 @@ package matchers
 import java.io.File
 import text.LinesContent
 
-import form.Card
-
 object ContentMatchers extends UserGuideCard with matcher.ContentMatchers {
   def title = "Content"
   def text = s2"""

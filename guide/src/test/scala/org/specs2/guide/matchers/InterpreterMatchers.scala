@@ -2,7 +2,6 @@ package org.specs2
 package guide
 package matchers
 
-import form.Card
 import matcher.ScalaInterpreterMatchers
 
 object InterpreterMatchers extends UserGuideCard with matcher.ScalaInterpreterMatchers {

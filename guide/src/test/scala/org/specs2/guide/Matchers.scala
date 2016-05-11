@@ -2,13 +2,10 @@ package org.specs2
 package guide
 
 import java.io.File
-import java.util.concurrent.ExecutorService
-
 import matcher._
 import guide.matchers._
 import org.specs2.concurrent.ExecutionEnv
 import org.specs2.specification.Forms
-import org.specs2.specification.core.Env
 
 object Matchers extends UserGuidePage with Forms { def is = s2"""
 
