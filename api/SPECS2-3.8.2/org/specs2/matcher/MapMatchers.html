@@ -1,0 +1,956 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>MapMatchers - org.specs2.matcher.MapMatchers</title>
+          <meta name="description" content="MapMatchers - org.specs2.matcher.MapMatchers" />
+          <meta name="keywords" content="MapMatchers org.specs2.matcher.MapMatchers" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../index.html';
+            var hash = 'org.specs2.matcher.MapMatchers';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="type">
+      <div id="definition">
+        <a href="MapMatchers$.html" title="See companion object"><img alt="Trait/Object" src="../../../lib/trait_to_object_big.png" /></a>
+        <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.specs2">specs2</a>.<a href="package.html" class="extype" name="org.specs2.matcher">matcher</a></p>
+        <h1><a href="MapMatchers$.html" title="See companion object">MapMatchers</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="MapMatchers$.html" title="See companion object">object MapMatchers</a>
+            | <a href="package.html" class="extype" name="org.specs2.matcher">package matcher</a>
+          </div></span></h3><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <span class="name">MapMatchers</span><span class="result"> extends <span class="extype" name="org.specs2.matcher.MapBaseMatchers">MapBaseMatchers</span> with <span class="extype" name="org.specs2.matcher.MapBeHaveMatchers">MapBeHaveMatchers</span></span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Matchers for Maps
+</p></div><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="org.specs2.matcher.MapBeHaveMatchers">MapBeHaveMatchers</span>, <span class="extype" name="org.specs2.matcher.BeHaveMatchers">BeHaveMatchers</span>, <span class="extype" name="org.specs2.matcher.MapBaseMatchers">MapBaseMatchers</span>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+        </div><div class="toggleContainer block">
+            <span class="toggle">Known Subclasses</span>
+            <div class="subClasses hiddenContent"><a href="../form/Card.html" class="extype" name="org.specs2.form.Card">Card</a>, <a href="JUnitMustMatchers$.html" class="extype" name="org.specs2.matcher.JUnitMustMatchers">JUnitMustMatchers</a>, <a href="JUnitMustMatchers.html" class="extype" name="org.specs2.matcher.JUnitMustMatchers">JUnitMustMatchers</a>, <a href="JUnitShouldMatchers$.html" class="extype" name="org.specs2.matcher.JUnitShouldMatchers">JUnitShouldMatchers</a>, <a href="JUnitShouldMatchers.html" class="extype" name="org.specs2.matcher.JUnitShouldMatchers">JUnitShouldMatchers</a>, <a href="MapMatchers$.html" class="extype" name="org.specs2.matcher.MapMatchers">MapMatchers</a>, <a href="Matchers$.html" class="extype" name="org.specs2.matcher.Matchers">Matchers</a>, <a href="Matchers.html" class="extype" name="org.specs2.matcher.Matchers">Matchers</a>, <a href="MustMatchers.html" class="extype" name="org.specs2.matcher.MustMatchers">MustMatchers</a>, <a href="MustMatchers$.html" class="extype" name="org.specs2.matcher.MustMatchers">MustMatchers</a>, <a href="MustThrownMatchers.html" class="extype" name="org.specs2.matcher.MustThrownMatchers">MustThrownMatchers</a>, <a href="MustThrownMatchers$.html" class="extype" name="org.specs2.matcher.MustThrownMatchers">MustThrownMatchers</a>, <a href="ShouldMatchers.html" class="extype" name="org.specs2.matcher.ShouldMatchers">ShouldMatchers</a>, <a href="ShouldMatchers$.html" class="extype" name="org.specs2.matcher.ShouldMatchers">ShouldMatchers</a>, <a href="ShouldThrownMatchers.html" class="extype" name="org.specs2.matcher.ShouldThrownMatchers">ShouldThrownMatchers</a>, <a href="ShouldThrownMatchers$.html" class="extype" name="org.specs2.matcher.ShouldThrownMatchers">ShouldThrownMatchers</a>, <a href="../mutable/Specification.html" class="extype" name="org.specs2.mutable.Specification">Specification</a>, <a href="../mutable/script/Specification.html" class="extype" name="org.specs2.mutable.script.Specification">Specification</a>, <a href="../Specification.html" class="extype" name="org.specs2.Specification">Specification</a>, <a href="../specification/script/Specification.html" class="extype" name="org.specs2.specification.script.Specification">Specification</a>, <a href="../specification/SpecificationFeatures.html" class="extype" name="org.specs2.specification.SpecificationFeatures">SpecificationFeatures</a>, <a href="../specification/mutable/SpecificationFeatures.html" class="extype" name="org.specs2.specification.mutable.SpecificationFeatures">SpecificationFeatures</a>, <a href="../specification/script/SpecificationLike.html" class="extype" name="org.specs2.specification.script.SpecificationLike">SpecificationLike</a>, <a href="../SpecificationLike.html" class="extype" name="org.specs2.SpecificationLike">SpecificationLike</a>, <a href="../mutable/script/SpecificationLike.html" class="extype" name="org.specs2.mutable.script.SpecificationLike">SpecificationLike</a>, <a href="../mutable/SpecificationLike.html" class="extype" name="org.specs2.mutable.SpecificationLike">SpecificationLike</a>, <a href="../SpecificationWithJUnit.html" class="extype" name="org.specs2.SpecificationWithJUnit">SpecificationWithJUnit</a>, <a href="../mutable/SpecificationWithJUnit.html" class="extype" name="org.specs2.mutable.SpecificationWithJUnit">SpecificationWithJUnit</a></div>
+          </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="org.specs2.matcher.MapMatchers"><span>MapMatchers</span></li><li class="in" name="org.specs2.matcher.MapBeHaveMatchers"><span>MapBeHaveMatchers</span></li><li class="in" name="org.specs2.matcher.BeHaveMatchers"><span>BeHaveMatchers</span></li><li class="in" name="org.specs2.matcher.MapBaseMatchers"><span>MapBaseMatchers</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show All</span></li>
+            </ol>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="org.specs2.matcher.MapBeHaveMatchers.MapKeyResultMatcher" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="MapKeyResultMatcher[K]extendsAnyRef"></a>
+      <a id="MapKeyResultMatcher[K]:(MapBeHaveMatchers.this)#MapKeyResultMatcher[K]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">MapKeyResultMatcher</span><span class="tparams">[<span name="K">K</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@MapKeyResultMatcher[K]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBeHaveMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.MapBeHaveMatchers.MapResultMatcher" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="MapResultMatcher[K,V]extendsAnyRef"></a>
+      <a id="MapResultMatcher[K,V]:(MapBeHaveMatchers.this)#MapResultMatcher[K,V]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">MapResultMatcher</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@MapResultMatcher[K,V]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBeHaveMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.MapBeHaveMatchers.MapValueResultMatcher" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="MapValueResultMatcher[V]extendsAnyRef"></a>
+      <a id="MapValueResultMatcher[V]:(MapBeHaveMatchers.this)#MapValueResultMatcher[V]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">MapValueResultMatcher</span><span class="tparams">[<span name="V">V</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@MapValueResultMatcher[V]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBeHaveMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.MapBeHaveMatchers.PartialFunctionResultMatcher" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="PartialFunctionResultMatcher[K,V]extendsAnyRef"></a>
+      <a id="PartialFunctionResultMatcher[K,V]:(MapBeHaveMatchers.this)#PartialFunctionResultMatcher[K,V]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">PartialFunctionResultMatcher</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@PartialFunctionResultMatcher[K,V]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBeHaveMatchers</dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@##():Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="org.specs2.matcher.BeHaveMatchers#be" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="be:org.specs2.matcher.NeutralMatcher[Any]"></a>
+      <a id="be:NeutralMatcher[Any]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">be</span><span class="result">: <a href="NeutralMatcher.html" class="extype" name="org.specs2.matcher.NeutralMatcher">NeutralMatcher</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@be:org.specs2.matcher.NeutralMatcher[Any]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>BeHaveMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.MapBaseMatchers#beDefinedAt" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="beDefinedAt[K](values:K*):org.specs2.matcher.Matcher[PartialFunction[K,Any]]"></a>
+      <a id="beDefinedAt[K](K*):Matcher[PartialFunction[K,Any]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">beDefinedAt</span><span class="tparams">[<span name="K">K</span>]</span><span class="params">(<span name="values">values: <span class="extype" name="org.specs2.matcher.MapBaseMatchers.beDefinedAt.K">K</span>*</span>)</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.PartialFunction" class="extype" target="_top">PartialFunction</a>[<span class="extype" name="org.specs2.matcher.MapBaseMatchers.beDefinedAt.K">K</span>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@beDefinedAt[K](values:K*):org.specs2.matcher.Matcher[PartialFunction[K,Any]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">matches if the partial function is defined at those values</p><div class="fullcomment"><div class="comment cmt"><p>matches if the partial function is defined at those values</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBaseMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.MapBaseMatchers#beDefinedBy" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="beDefinedBy[K,V](values:(K,V)*):org.specs2.matcher.Matcher[PartialFunction[K,V]]"></a>
+      <a id="beDefinedBy[K,V]((K,V)*):Matcher[PartialFunction[K,V]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">beDefinedBy</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span name="values">values: (<span class="extype" name="org.specs2.matcher.MapBaseMatchers.beDefinedBy.K">K</span>, <span class="extype" name="org.specs2.matcher.MapBaseMatchers.beDefinedBy.V">V</span>)*</span>)</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.PartialFunction" class="extype" target="_top">PartialFunction</a>[<span class="extype" name="org.specs2.matcher.MapBaseMatchers.beDefinedBy.K">K</span>, <span class="extype" name="org.specs2.matcher.MapBaseMatchers.beDefinedBy.V">V</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@beDefinedBy[K,V](values:(K,V)*):org.specs2.matcher.Matcher[PartialFunction[K,V]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">matches if the partial function is defined at those values and return expected values</p><div class="fullcomment"><div class="comment cmt"><p>matches if the partial function is defined at those values and return expected values</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBaseMatchers</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@clone():Object" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="org.specs2.matcher.MapBeHaveMatchers#definedAt" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="definedAt[K](values:K*):org.specs2.matcher.Matcher[PartialFunction[K,Any]]"></a>
+      <a id="definedAt[K](K*):Matcher[PartialFunction[K,Any]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">definedAt</span><span class="tparams">[<span name="K">K</span>]</span><span class="params">(<span name="values">values: <span class="extype" name="org.specs2.matcher.MapBeHaveMatchers.definedAt.K">K</span>*</span>)</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.PartialFunction" class="extype" target="_top">PartialFunction</a>[<span class="extype" name="org.specs2.matcher.MapBeHaveMatchers.definedAt.K">K</span>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@definedAt[K](values:K*):org.specs2.matcher.Matcher[PartialFunction[K,Any]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBeHaveMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.MapBeHaveMatchers#definedBy" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="definedBy[K,V](values:(K,V)*):org.specs2.matcher.Matcher[PartialFunction[K,V]]"></a>
+      <a id="definedBy[K,V]((K,V)*):Matcher[PartialFunction[K,V]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">definedBy</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span name="values">values: (<span class="extype" name="org.specs2.matcher.MapBeHaveMatchers.definedBy.K">K</span>, <span class="extype" name="org.specs2.matcher.MapBeHaveMatchers.definedBy.V">V</span>)*</span>)</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.PartialFunction" class="extype" target="_top">PartialFunction</a>[<span class="extype" name="org.specs2.matcher.MapBeHaveMatchers.definedBy.K">K</span>, <span class="extype" name="org.specs2.matcher.MapBeHaveMatchers.definedBy.V">V</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@definedBy[K,V](values:(K,V)*):org.specs2.matcher.Matcher[PartialFunction[K,V]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBeHaveMatchers</dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.specs2.matcher.BeHaveMatchers#have" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="have:org.specs2.matcher.NeutralMatcher[Any]"></a>
+      <a id="have:NeutralMatcher[Any]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">have</span><span class="result">: <a href="NeutralMatcher.html" class="extype" name="org.specs2.matcher.NeutralMatcher">NeutralMatcher</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@have:org.specs2.matcher.NeutralMatcher[Any]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>BeHaveMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.MapBaseMatchers#haveKey" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="haveKey[K](k:K):org.specs2.matcher.Matcher[Iterable[(K,Any)]]"></a>
+      <a id="haveKey[K](K):Matcher[Iterable[(K,Any)]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">haveKey</span><span class="tparams">[<span name="K">K</span>]</span><span class="params">(<span name="k">k: <span class="extype" name="org.specs2.matcher.MapBaseMatchers.haveKey.K">K</span></span>)</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="scala.Iterable">Iterable</span>[(<span class="extype" name="org.specs2.matcher.MapBaseMatchers.haveKey.K">K</span>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a>)]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@haveKey[K](k:K):org.specs2.matcher.Matcher[Iterable[(K,Any)]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">matches if map.contains(k)</p><div class="fullcomment"><div class="comment cmt"><p>matches if map.contains(k)</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBaseMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.MapBaseMatchers#haveKeys" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="haveKeys[K](keys:K*):org.specs2.matcher.Matcher[Iterable[(K,Any)]]"></a>
+      <a id="haveKeys[K](K*):Matcher[Iterable[(K,Any)]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">haveKeys</span><span class="tparams">[<span name="K">K</span>]</span><span class="params">(<span name="keys">keys: <span class="extype" name="org.specs2.matcher.MapBaseMatchers.haveKeys.K">K</span>*</span>)</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="scala.Iterable">Iterable</span>[(<span class="extype" name="org.specs2.matcher.MapBaseMatchers.haveKeys.K">K</span>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a>)]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@haveKeys[K](keys:K*):org.specs2.matcher.Matcher[Iterable[(K,Any)]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">matches if map.contains(k) forall key k</p><div class="fullcomment"><div class="comment cmt"><p>matches if map.contains(k) forall key k</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBaseMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.MapBaseMatchers#havePair" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="havePair[K,V](p:(K,V)):org.specs2.matcher.Matcher[Iterable[(K,V)]]"></a>
+      <a id="havePair[K,V]((K,V)):Matcher[Iterable[(K,V)]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">havePair</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span name="p">p: (<span class="extype" name="org.specs2.matcher.MapBaseMatchers.havePair.K">K</span>, <span class="extype" name="org.specs2.matcher.MapBaseMatchers.havePair.V">V</span>)</span>)</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="scala.Iterable">Iterable</span>[(<span class="extype" name="org.specs2.matcher.MapBaseMatchers.havePair.K">K</span>, <span class="extype" name="org.specs2.matcher.MapBaseMatchers.havePair.V">V</span>)]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@havePair[K,V](p:(K,V)):org.specs2.matcher.Matcher[Iterable[(K,V)]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">matches if map contains a pair (key, value) == (k, v)</p><div class="fullcomment"><div class="comment cmt"><p>matches if map contains a pair (key, value) == (k, v)</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBaseMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.MapBaseMatchers#havePairs" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="havePairs[K,V](pairs:(K,V)*):org.specs2.matcher.Matcher[Iterable[(K,V)]]"></a>
+      <a id="havePairs[K,V]((K,V)*):Matcher[Iterable[(K,V)]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">havePairs</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span name="pairs">pairs: (<span class="extype" name="org.specs2.matcher.MapBaseMatchers.havePairs.K">K</span>, <span class="extype" name="org.specs2.matcher.MapBaseMatchers.havePairs.V">V</span>)*</span>)</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="scala.Iterable">Iterable</span>[(<span class="extype" name="org.specs2.matcher.MapBaseMatchers.havePairs.K">K</span>, <span class="extype" name="org.specs2.matcher.MapBaseMatchers.havePairs.V">V</span>)]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@havePairs[K,V](pairs:(K,V)*):org.specs2.matcher.Matcher[Iterable[(K,V)]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">matches if map contains all the specified pairs</p><div class="fullcomment"><div class="comment cmt"><p>matches if map contains all the specified pairs</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBaseMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.MapBaseMatchers#haveValue" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="haveValue[V](v:V):org.specs2.matcher.Matcher[Iterable[(Any,V)]]"></a>
+      <a id="haveValue[V](V):Matcher[Iterable[(Any,V)]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">haveValue</span><span class="tparams">[<span name="V">V</span>]</span><span class="params">(<span name="v">v: <span class="extype" name="org.specs2.matcher.MapBaseMatchers.haveValue.V">V</span></span>)</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="scala.Iterable">Iterable</span>[(<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a>, <span class="extype" name="org.specs2.matcher.MapBaseMatchers.haveValue.V">V</span>)]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@haveValue[V](v:V):org.specs2.matcher.Matcher[Iterable[(Any,V)]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">matches if map contains a pair (key, value) with value == v</p><div class="fullcomment"><div class="comment cmt"><p>matches if map contains a pair (key, value) with value == v</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBaseMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.MapBaseMatchers#haveValues" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="haveValues[V](values:V*):org.specs2.matcher.Matcher[Iterable[(Any,V)]]"></a>
+      <a id="haveValues[V](V*):Matcher[Iterable[(Any,V)]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">haveValues</span><span class="tparams">[<span name="V">V</span>]</span><span class="params">(<span name="values">values: <span class="extype" name="org.specs2.matcher.MapBaseMatchers.haveValues.V">V</span>*</span>)</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="scala.Iterable">Iterable</span>[(<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a>, <span class="extype" name="org.specs2.matcher.MapBaseMatchers.haveValues.V">V</span>)]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@haveValues[V](values:V*):org.specs2.matcher.Matcher[Iterable[(Any,V)]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">matches if map contains a pair (key, value) with value == v  for all value v</p><div class="fullcomment"><div class="comment cmt"><p>matches if map contains a pair (key, value) with value == v  for all value v</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBaseMatchers</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="org.specs2.matcher.MapBeHaveMatchers#key" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="key[K](k:K):org.specs2.matcher.Matcher[Iterable[(K,Any)]]"></a>
+      <a id="key[K](K):Matcher[Iterable[(K,Any)]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">key</span><span class="tparams">[<span name="K">K</span>]</span><span class="params">(<span name="k">k: <span class="extype" name="org.specs2.matcher.MapBeHaveMatchers.key.K">K</span></span>)</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="scala.Iterable">Iterable</span>[(<span class="extype" name="org.specs2.matcher.MapBeHaveMatchers.key.K">K</span>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a>)]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@key[K](k:K):org.specs2.matcher.Matcher[Iterable[(K,Any)]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBeHaveMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.MapBeHaveMatchers#keys" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="keys[K](ks:K*):org.specs2.matcher.Matcher[Iterable[(K,Any)]]"></a>
+      <a id="keys[K](K*):Matcher[Iterable[(K,Any)]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">keys</span><span class="tparams">[<span name="K">K</span>]</span><span class="params">(<span name="ks">ks: <span class="extype" name="org.specs2.matcher.MapBeHaveMatchers.keys.K">K</span>*</span>)</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="scala.Iterable">Iterable</span>[(<span class="extype" name="org.specs2.matcher.MapBeHaveMatchers.keys.K">K</span>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a>)]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@keys[K](ks:K*):org.specs2.matcher.Matcher[Iterable[(K,Any)]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBeHaveMatchers</dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.specs2.matcher.BeHaveMatchers#not" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="not:org.specs2.matcher.NotMatcher[Any]"></a>
+      <a id="not:NotMatcher[Any]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">not</span><span class="result">: <a href="NotMatcher.html" class="extype" name="org.specs2.matcher.NotMatcher">NotMatcher</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@not:org.specs2.matcher.NotMatcher[Any]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>BeHaveMatchers</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@notify():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.specs2.matcher.MapBeHaveMatchers#pair" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="pair[K,V](p:(K,V)):org.specs2.matcher.Matcher[Iterable[(K,V)]]"></a>
+      <a id="pair[K,V]((K,V)):Matcher[Iterable[(K,V)]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">pair</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span name="p">p: (<span class="extype" name="org.specs2.matcher.MapBeHaveMatchers.pair.K">K</span>, <span class="extype" name="org.specs2.matcher.MapBeHaveMatchers.pair.V">V</span>)</span>)</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="scala.Iterable">Iterable</span>[(<span class="extype" name="org.specs2.matcher.MapBeHaveMatchers.pair.K">K</span>, <span class="extype" name="org.specs2.matcher.MapBeHaveMatchers.pair.V">V</span>)]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@pair[K,V](p:(K,V)):org.specs2.matcher.Matcher[Iterable[(K,V)]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBeHaveMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.MapBeHaveMatchers#pairs" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="pairs[K,V](pairs:(K,V)*):org.specs2.matcher.Matcher[Iterable[(K,V)]]"></a>
+      <a id="pairs[K,V]((K,V)*):Matcher[Iterable[(K,V)]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">pairs</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span name="pairs">pairs: (<span class="extype" name="org.specs2.matcher.MapBeHaveMatchers.pairs.K">K</span>, <span class="extype" name="org.specs2.matcher.MapBeHaveMatchers.pairs.V">V</span>)*</span>)</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="scala.Iterable">Iterable</span>[(<span class="extype" name="org.specs2.matcher.MapBeHaveMatchers.pairs.K">K</span>, <span class="extype" name="org.specs2.matcher.MapBeHaveMatchers.pairs.V">V</span>)]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@pairs[K,V](pairs:(K,V)*):org.specs2.matcher.Matcher[Iterable[(K,V)]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBeHaveMatchers</dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.specs2.matcher.MapBeHaveMatchers#toMapKeyResultMatcher" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toMapKeyResultMatcher[K](result:org.specs2.matcher.MatchResult[Iterable[(K,Any)]]):MapBeHaveMatchers.this.MapKeyResultMatcher[K]"></a>
+      <a id="toMapKeyResultMatcher[K](MatchResult[Iterable[(K,Any)]]):MapKeyResultMatcher[K]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toMapKeyResultMatcher</span><span class="tparams">[<span name="K">K</span>]</span><span class="params">(<span name="result">result: <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>[<span class="extype" name="scala.Iterable">Iterable</span>[(<span class="extype" name="org.specs2.matcher.MapBeHaveMatchers.toMapKeyResultMatcher.K">K</span>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a>)]]</span>)</span><span class="result">: <a href="#MapKeyResultMatcher[K]extendsAnyRef" class="extmbr" name="org.specs2.matcher.MapMatchers.MapKeyResultMatcher">MapKeyResultMatcher</a>[<span class="extype" name="org.specs2.matcher.MapBeHaveMatchers.toMapKeyResultMatcher.K">K</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@toMapKeyResultMatcher[K](result:org.specs2.matcher.MatchResult[Iterable[(K,Any)]]):MapBeHaveMatchers.this.MapKeyResultMatcher[K]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBeHaveMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.MapBeHaveMatchers#toMapResultMatcher" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toMapResultMatcher[K,V](result:org.specs2.matcher.MatchResult[Iterable[(K,V)]]):MapBeHaveMatchers.this.MapResultMatcher[K,V]"></a>
+      <a id="toMapResultMatcher[K,V](MatchResult[Iterable[(K,V)]]):MapResultMatcher[K,V]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toMapResultMatcher</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span name="result">result: <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>[<span class="extype" name="scala.Iterable">Iterable</span>[(<span class="extype" name="org.specs2.matcher.MapBeHaveMatchers.toMapResultMatcher.K">K</span>, <span class="extype" name="org.specs2.matcher.MapBeHaveMatchers.toMapResultMatcher.V">V</span>)]]</span>)</span><span class="result">: <a href="#MapResultMatcher[K,V]extendsAnyRef" class="extmbr" name="org.specs2.matcher.MapMatchers.MapResultMatcher">MapResultMatcher</a>[<span class="extype" name="org.specs2.matcher.MapBeHaveMatchers.toMapResultMatcher.K">K</span>, <span class="extype" name="org.specs2.matcher.MapBeHaveMatchers.toMapResultMatcher.V">V</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@toMapResultMatcher[K,V](result:org.specs2.matcher.MatchResult[Iterable[(K,V)]]):MapBeHaveMatchers.this.MapResultMatcher[K,V]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBeHaveMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.MapBeHaveMatchers#toMapValueResultMatcher" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toMapValueResultMatcher[V](result:org.specs2.matcher.MatchResult[Iterable[(Any,V)]]):MapBeHaveMatchers.this.MapValueResultMatcher[V]"></a>
+      <a id="toMapValueResultMatcher[V](MatchResult[Iterable[(Any,V)]]):MapValueResultMatcher[V]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toMapValueResultMatcher</span><span class="tparams">[<span name="V">V</span>]</span><span class="params">(<span name="result">result: <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>[<span class="extype" name="scala.Iterable">Iterable</span>[(<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a>, <span class="extype" name="org.specs2.matcher.MapBeHaveMatchers.toMapValueResultMatcher.V">V</span>)]]</span>)</span><span class="result">: <a href="#MapValueResultMatcher[V]extendsAnyRef" class="extmbr" name="org.specs2.matcher.MapMatchers.MapValueResultMatcher">MapValueResultMatcher</a>[<span class="extype" name="org.specs2.matcher.MapBeHaveMatchers.toMapValueResultMatcher.V">V</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@toMapValueResultMatcher[V](result:org.specs2.matcher.MatchResult[Iterable[(Any,V)]]):MapBeHaveMatchers.this.MapValueResultMatcher[V]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBeHaveMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.MapBeHaveMatchers#toPartialFunctionResultMatcher" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toPartialFunctionResultMatcher[K,V](result:org.specs2.matcher.MatchResult[PartialFunction[K,V]]):MapBeHaveMatchers.this.PartialFunctionResultMatcher[K,V]"></a>
+      <a id="toPartialFunctionResultMatcher[K,V](MatchResult[PartialFunction[K,V]]):PartialFunctionResultMatcher[K,V]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toPartialFunctionResultMatcher</span><span class="tparams">[<span name="K">K</span>, <span name="V">V</span>]</span><span class="params">(<span name="result">result: <a href="MatchResult.html" class="extype" name="org.specs2.matcher.MatchResult">MatchResult</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.PartialFunction" class="extype" target="_top">PartialFunction</a>[<span class="extype" name="org.specs2.matcher.MapBeHaveMatchers.toPartialFunctionResultMatcher.K">K</span>, <span class="extype" name="org.specs2.matcher.MapBeHaveMatchers.toPartialFunctionResultMatcher.V">V</span>]]</span>)</span><span class="result">: <a href="#PartialFunctionResultMatcher[K,V]extendsAnyRef" class="extmbr" name="org.specs2.matcher.MapMatchers.PartialFunctionResultMatcher">PartialFunctionResultMatcher</a>[<span class="extype" name="org.specs2.matcher.MapBeHaveMatchers.toPartialFunctionResultMatcher.K">K</span>, <span class="extype" name="org.specs2.matcher.MapBeHaveMatchers.toPartialFunctionResultMatcher.V">V</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@toPartialFunctionResultMatcher[K,V](result:org.specs2.matcher.MatchResult[PartialFunction[K,V]]):MapBeHaveMatchers.this.PartialFunctionResultMatcher[K,V]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBeHaveMatchers</dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@toString():String" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.specs2.matcher.MapBeHaveMatchers#value" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="value[V](v:V):org.specs2.matcher.Matcher[Iterable[(Any,V)]]"></a>
+      <a id="value[V](V):Matcher[Iterable[(Any,V)]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">value</span><span class="tparams">[<span name="V">V</span>]</span><span class="params">(<span name="v">v: <span class="extype" name="org.specs2.matcher.MapBeHaveMatchers.value.V">V</span></span>)</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="scala.Iterable">Iterable</span>[(<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a>, <span class="extype" name="org.specs2.matcher.MapBeHaveMatchers.value.V">V</span>)]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@value[V](v:V):org.specs2.matcher.Matcher[Iterable[(Any,V)]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBeHaveMatchers</dd></dl></div>
+    </li><li name="org.specs2.matcher.MapBeHaveMatchers#values" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="values[V](vs:V*):org.specs2.matcher.Matcher[Iterable[(Any,V)]]"></a>
+      <a id="values[V](V*):Matcher[Iterable[(Any,V)]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">values</span><span class="tparams">[<span name="V">V</span>]</span><span class="params">(<span name="vs">vs: <span class="extype" name="org.specs2.matcher.MapBeHaveMatchers.values.V">V</span>*</span>)</span><span class="result">: <a href="Matcher.html" class="extype" name="org.specs2.matcher.Matcher">Matcher</a>[<span class="extype" name="scala.Iterable">Iterable</span>[(<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a>, <span class="extype" name="org.specs2.matcher.MapBeHaveMatchers.values.V">V</span>)]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@values[V](vs:V*):org.specs2.matcher.Matcher[Iterable[(Any,V)]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>MapBeHaveMatchers</dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@wait():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.matcher.MapMatchers@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="org.specs2.matcher.MapBeHaveMatchers">
+              <h3>Inherited from <span class="extype" name="org.specs2.matcher.MapBeHaveMatchers">MapBeHaveMatchers</span></h3>
+            </div><div class="parent" name="org.specs2.matcher.BeHaveMatchers">
+              <h3>Inherited from <span class="extype" name="org.specs2.matcher.BeHaveMatchers">BeHaveMatchers</span></h3>
+            </div><div class="parent" name="org.specs2.matcher.MapBaseMatchers">
+              <h3>Inherited from <span class="extype" name="org.specs2.matcher.MapBaseMatchers">MapBaseMatchers</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
