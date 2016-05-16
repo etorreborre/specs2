@@ -43,11 +43,10 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
 
       /** @return the specification tags */
       def tags: Array[String] =
-        if (commandLineArguments.commandLine.isSet("sbt.tags")) {
-          println(specStructure)
+        if (commandLineArguments.commandLine.isSet("sbt.tags"))
           specStructure._1.toOption.flatten.map(_.tags.flatMap(_.names).toArray).getOrElse(Array())
-        }
-        else Array()
+        else
+          Array()
 
       def execute(handler: EventHandler, loggers: Array[Logger]) = {
         val (result, warnings) = specStructure
