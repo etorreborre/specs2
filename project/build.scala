@@ -202,7 +202,7 @@ object build extends Build {
     javacOptions ++= Seq("-Xmx3G", "-Xms512m", "-Xss4m"),
     maxErrors := 20,
     incOptions := incOptions.value.withNameHashing(true),
-    scalacOptions in GlobalScope ++=
+    scalacOptions ++=
       (if (scalaVersion.value.startsWith("2.11") || scalaVersion.value.startsWith("2.12"))
         Seq("-Xfatal-warnings",
             "-Xlint",
@@ -214,6 +214,7 @@ object build extends Build {
        else
         Seq("-Xcheckinit", "-Xlint", "-deprecation", "-unchecked", "-feature", "-language:_")),
     scalacOptions in Test ++= Seq("-Yrangepos"),
+    scalacOptions in (Compile, doc) := Seq("-feature", "-language:_"),
     scalacOptions in (Compile, console) := Seq("-Yrangepos", "-feature", "-language:_"),
     scalacOptions in (Test, console) := Seq("-Yrangepos", "-feature", "-language:_")
   )
