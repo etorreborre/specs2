@@ -1,0 +1,6 @@
+Maintenance version.
+
+## Fixes
+
+ * html: fix the generation of html files which was failing when generating several specifications at once
+ 
