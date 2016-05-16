@@ -266,7 +266,14 @@ object build extends Build {
       notifyHerald,
       pushChanges
     ),
-    commands ++= Seq(releaseOfficialCommand, releaseJarsCommand)
+    releaseSiteProcess := Seq[ReleaseStep](
+      inquireVersions,
+      setReleaseVersion,
+      generateWebsite,
+      executeStepTask(makeSite, "make the site", Compile),
+      publishSite
+    ),
+    commands ++= Seq(releaseOfficialCommand, releaseJarsCommand, releaseSiteCommand)
     ) ++
   documentationSettings ++
   apiSettings               ++
@@ -329,6 +336,25 @@ object build extends Build {
     Function.chain(process)(startState)
   }
 
+  lazy val releaseSiteProcess = SettingKey[Seq[ReleaseStep]]("release-site")
+  private lazy val releaseSiteCommandKey = "release-site"
+  private val releaseSiteParser = (Space ~> WithDefaults | Space ~> CrossBuild).*
+
+  val releaseSiteCommand: Command = Command(releaseSiteCommandKey)(_ => releaseSiteParser) { (st, args) =>
+    val extracted = Project.extract(st)
+    val releaseParts = extracted.get(releaseSiteProcess)
+    val crossEnabled = extracted.get(crossBuild) || args.contains(CrossBuild)
+
+    val startState = st
+      .put(useDefaults, args.contains(WithDefaults))
+      .put(ReleaseKeys.cross, crossEnabled)
+
+    val initialChecks = releaseParts.map(_.check)
+    val process = releaseParts.map(_.action)
+
+    initialChecks.foreach(_(startState))
+    Function.chain(process)(startState)
+  }
   /**
    * DOCUMENTATION
    */

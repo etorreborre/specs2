@@ -119,12 +119,11 @@ trait HtmlPrinter extends Printer {
    */
   def printHtmlWithPandoc(env: Env, spec: SpecStructure, stats: Stats, pandoc: Pandoc): Action[Unit] = {
     import env.fileSystem._
-
     for {
       options  <- getHtmlOptions(env.arguments)
       _        <- withEphemeralFile(options.outDir | options.template.name) {
-                    copyFile(options.outDir)(options.template) |||
-                    warnAndFail("No template file found at "+options.template.path, RunAborted) >>
+                   (copyFile(options.outDir)(options.template) |||
+                      warnAndFail("No template file found at "+options.template.path, RunAborted)) >>
                     makePandocHtml(spec, stats, pandoc, options, env)
                   }
     } yield ()
