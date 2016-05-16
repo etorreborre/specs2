@@ -135,10 +135,18 @@ trait FileSystem extends FilePathReader {
   def copyFile(dest: DirectoryPath)(filePath: FilePath): Action[Unit] =
     mkdirs(dest) >>
     Actions.safe {
-      import java.nio.file._
-      Files.copy(Paths.get(filePath.path),
-                 Paths.get(dest.path).resolve(Paths.get(filePath.name.name)), StandardCopyOption.REPLACE_EXISTING)
+      copyLock.synchronized {
+        import java.nio.file._
+        Files.copy(Paths.get(filePath.path),
+          Paths.get(dest.path).resolve(Paths.get(filePath.name.name)), StandardCopyOption.REPLACE_EXISTING)
+      }
     }.void
+
+  /**
+   * the Files.copy operation is being called concurrently, sometimes to copy the same files when
+   * running the Html printer for example. Without a lock a FileAlreadyException can be thrown
+   */
+  private object copyLock
 
   /** create a new file */
   def createFile(filePath: FilePath): Action[Boolean] =
