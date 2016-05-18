@@ -66,6 +66,7 @@ class TextPrinterSpec extends Specification { def is = s2"""
    with a title                                               $j2
    with results                                               $j3
    not if hidden                                              $j4
+   with an alias                                              $j5
 
  Fragments can be hidden by changing args
     xonly only shows title and issues                         $k1
@@ -214,6 +215,9 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
 
   def j4 = s2"""the ${SpecificationRef(SpecHeader(classOf[String], Some("STRING")), Arguments(), hidden = true)} spec""" contains
     """|[info] the  spec"""
+
+  def j5 = s2"""the ${SpecificationRef(SpecHeader(classOf[String], Some("STRING")), Arguments(), alias = "beautiful")} spec""" contains
+    """|[info] the * beautiful spec"""
 
   def k1 = Arguments("xonly") ^ "title\n".title ^
     s2"""e1 $ok

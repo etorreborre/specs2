@@ -54,7 +54,7 @@ case class SpecificationRef(header: SpecHeader, arguments: Arguments, alias: Str
   def linkText =
     if (alias.nonEmpty) alias else header.showWords
 
-  def show = header.show
+  def show = linkText
 
   def hide: SpecificationRef =
     copy(hidden = true)
