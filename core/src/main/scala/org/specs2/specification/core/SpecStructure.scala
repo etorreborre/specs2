@@ -10,6 +10,7 @@ import org.specs2.codata._
 import control._
 import scalaz.syntax.traverse._
 import scalaz.std.list._
+import process._
 
 /**
  * Structure of a Specification:
@@ -96,15 +97,15 @@ object SpecStructure {
 
   /** @return all the referenced specifications */
   def referencedSpecStructures(spec: SpecStructure, env: Env, classLoader: ClassLoader): Action[Seq[SpecStructure]] =
-    specStructuresRefs(spec, env, classLoader)(referencedSpecStructuresRefs)
+    specStructuresRefs(spec, env, classLoader)(referencedSpecStructuresRefs(env))
 
   /** @return all the linked specifications */
   def linkedSpecifications(spec: SpecStructure, env: Env, classLoader: ClassLoader): Action[Seq[SpecStructure]] =
-    specStructuresRefs(spec, env, classLoader)(linkedSpecStructuresRefs)
+    specStructuresRefs(spec, env, classLoader)(linkedSpecStructuresRefs(env))
 
   /** @return all the see specifications */
   def seeSpecifications(spec: SpecStructure, env: Env, classLoader: ClassLoader): Action[Seq[SpecStructure]] =
-    specStructuresRefs(spec, env, classLoader)(seeSpecStructuresRefs)
+    specStructuresRefs(spec, env, classLoader)(seeSpecStructuresRefs(env))
 
   /** @return all the referenced spec structures */
   def specStructuresRefs(spec: SpecStructure, env: Env,
@@ -137,14 +138,19 @@ object SpecStructure {
   }
 
   /** @return the class names of all the referenced specifications */
-  def referencedSpecStructuresRefs(spec: SpecStructure): List[SpecificationRef] =
-    spec.fragments.fragments.collect(Fragment.specificationRef).toList
+  def referencedSpecStructuresRefs(env: Env)(spec: SpecStructure): List[SpecificationRef] =
+    select(env)(spec).fragments.fragments.collect(Fragment.specificationRef).toList
 
   /** @return the class names of all the linked specifications */
-  def linkedSpecStructuresRefs(spec: SpecStructure): List[SpecificationRef] =
-    spec.fragments.fragments.collect(Fragment.linkReference).toList
+  def linkedSpecStructuresRefs(env: Env)(spec: SpecStructure): List[SpecificationRef] =
+    select(env)(spec).fragments.fragments.collect(Fragment.linkReference).toList
 
   /** @return the class names of all the see specifications */
-  def seeSpecStructuresRefs(spec: SpecStructure): List[SpecificationRef] =
-    spec.fragments.fragments.collect(Fragment.seeReference).toList
+  def seeSpecStructuresRefs(env: Env)(spec: SpecStructure): List[SpecificationRef] =
+    select(env)(spec).fragments.fragments.collect(Fragment.seeReference).toList
+
+  /** @return select only the fragments according to the current arguments */
+  def select(env: Env)(spec: SpecStructure): SpecStructure =
+    spec.map(fs => fs |> DefaultSelector.select(env))
+
 }

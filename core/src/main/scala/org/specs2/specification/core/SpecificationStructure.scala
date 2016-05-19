@@ -112,14 +112,14 @@ object SpecificationStructure {
 
   /** @return the class names of all the referenced specifications */
   def referencedSpecificationsRefs(spec: SpecificationStructure, env: Env): List[SpecificationRef] =
-    SpecStructure.referencedSpecStructuresRefs(spec.structure(env))
+    SpecStructure.referencedSpecStructuresRefs(env)(spec.structure(env))
 
   /** @return the class names of all the linked specifications */
   def linkedSpecificationsRefs(spec: SpecificationStructure, env: Env): List[SpecificationRef] =
-    SpecStructure.linkedSpecStructuresRefs(spec.structure(env))
+    SpecStructure.linkedSpecStructuresRefs(env)(spec.structure(env))
 
   /** @return the class names of all the see specifications */
   def seeSpecificationsRefs(spec: SpecificationStructure, env: Env): List[SpecificationRef] =
-    SpecStructure.seeSpecStructuresRefs(spec.structure(env))
+    SpecStructure.seeSpecStructuresRefs(env)(spec.structure(env))
 }
 
