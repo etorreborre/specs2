@@ -23,7 +23,7 @@ trait Regexes {
     }
 
     /** @return a regular expression String matching 's' inside another string, possibly multi-string */
-    def regexPart = s"\\s*.*\\s*$s\\s*.*\\s*"
+    def regexPart = s"(?s).*$s.*"
   }
 
   implicit class RegexMatch(r: Regex) {

@@ -47,6 +47,7 @@ class ExceptionMatchersSpec extends script.Specification with ResultMatchers wit
  more simply the exception message can be specified with a regular expression
    + 'error(boom) must throwA[RuntimeException](message = 'boo')
    + for a multi-line string
+   + for match which is followed by multiple lines
 
  With a specific exception
  =========================
@@ -116,6 +117,9 @@ class ExceptionMatchersSpec extends script.Specification with ResultMatchers wit
 
     eg := (theBlock(error("boom\nbang\nbong")) must throwA[RuntimeException](message = "bang")).message must startWith(
       s"Got the exception java.lang.RuntimeException: boom\nbang\nbong and 'boom\nbang\nbong' matches '${"bang".regexPart}'")
+
+    eg := (theBlock(error("bang\nboom\nbong")) must throwA[RuntimeException](message = "bang")).message must startWith(
+      s"Got the exception java.lang.RuntimeException: bang\nboom\nbong and 'bang\nboom\nbong' matches '${"bang".regexPart}'")
   }
 
   "specific exception" - new group {
