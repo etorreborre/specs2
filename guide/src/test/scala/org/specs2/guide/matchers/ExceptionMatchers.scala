@@ -8,7 +8,8 @@ object ExceptionMatchers extends UserGuideCard {
  $specs2 offers very compact ways of checking that some exceptions are thrown:
 
  * `throwA[ExceptionType]` check if a block of code throws an exception of the given type
- * `throwA[ExceptionType](message = "boom")` additionally check if the exception message is as expected
+ * `throwA[ExceptionType](message = "boom")` additionally check if the exception message is as expected (`message` is
+    being interpreted as a regular expression)
  * `throwA(exception)` or `throwAn(exception)` check if a block of code throws an exception of the same type, with the
  same message
  * `throwA[ExceptionType].like { case e => e must matchSomething }` or
