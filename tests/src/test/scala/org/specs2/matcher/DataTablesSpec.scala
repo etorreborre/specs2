@@ -26,6 +26,10 @@ class DataTablesSpec extends Specification with DataTables with ResultMatchers {
   2 tables results can be and-ed together                                                                    $e12
   a cell can have null values                                                                                $e13
 
+  It is possible to format the cells
+    for an immutable spec                      $format1
+    for a  mutable spec                        $format2
+
  ${section("travis")}
 
  Applicative style
@@ -40,7 +44,6 @@ class DataTablesSpec extends Specification with DataTables with ResultMatchers {
 
  Even if the execution is concurrent you will get the errors corresponding to each row                       $applicative6
                                                                                                              """
-
   def boom = error("boom")
 
   def e1 =
@@ -84,11 +87,11 @@ class DataTablesSpec extends Specification with DataTables with ResultMatchers {
     List("a")   ! "List(a)" | { (a, b) =>  a.toString must_== b }
 
   def e9 = {
-    "a successful table must not throw an exception" ==> {
-      (new InAMutableContext).resultOk must not (throwA[DecoratedResultException])
+    "a successful table does not throw an exception" ==> {
+      (new InAMutableContext).resultOk must not (throwAn[Exception])
     } and
-    "a failed table must throw an exception" ==> {
-      (new InAMutableContext).resultKo must throwA[DecoratedResultException]
+    "a failed table throws an exception" ==> {
+      (new InAMutableContext).resultKo must throwAn[Exception]
     }
   }
 
@@ -130,7 +133,7 @@ class DataTablesSpec extends Specification with DataTables with ResultMatchers {
       "a"   | "b" | "c" |>
        2    !  2  !  5  | { (a, b, c) =>  a + b must_== c }
 
-    (t1 and t2).message ===
+    (AsResult(t1) and t2).message ===
       "  | a | b | c |                        "+"\n"+
       "x | 2 | 2 | 5 | '4' is not equal to '5'"
   }
@@ -139,6 +142,29 @@ class DataTablesSpec extends Specification with DataTables with ResultMatchers {
     "a"            || "b"    |>
     "a"            !! "b"    |
     (null: String) !! ""     | { (a, b) =>  ok }
+
+  def format1 = {
+    val showValue = (i: Int) => "the value "+i
+    val showResult = (s: String) => "the result "+s
+    val table =
+      "a"   | "b"   |>
+       2    !  "2"  |
+       1    !  "3"  | { (a, b) =>  a.toString must_== b } showAs (show1 = showValue, showResult)
+
+    table.message ===
+      "  | a           | b            |                        \n"+
+      "+ | the value 2 | the result 2 |                        \n"+
+      "x | the value 1 | the result 3 | '1' is not equal to '3'"
+  }
+
+  def format2 = {
+    val spec = new InAMutableContext
+    def table = spec.resultKo
+    import spec.DataTableResult2._
+
+    (table must throwAn[Exception]) and
+    (ResultExecution.execute(AsResult(table)).message === "xxx")
+  }.pendingUntilFixed
 
   def applicative1 = {
     "a" | "b" |>
@@ -186,6 +212,15 @@ class DataTablesSpec extends Specification with DataTables with ResultMatchers {
 
   }
 
+  implicit def DataTableResult1ToResult[T1](d: DataTableResult1[T1]): Result =
+    AsResult(d)
+
+  implicit def DataTableResult2ToResult[T1, T2](d: DataTableResult2[T1, T2]): Result =
+    AsResult(d)
+
+  implicit def DataTableResult3ToResult[T1, T2, T3](d: DataTableResult3[T1, T2, T3]): Result =
+    AsResult(d)
+
 }
 
 class InAMutableContext extends MustThrownMatchers with DataTables {
@@ -195,6 +230,6 @@ class InAMutableContext extends MustThrownMatchers with DataTables {
 
   lazy val resultKo =
     "a" | "b"    |>
-     1  ! 2      | { (a, b) =>  a must_== b }
+     1  ! 2      | { (a, b) =>  a must_== b } //showAs(show1 = (i:Int) => (i+1).toString)
 }
 

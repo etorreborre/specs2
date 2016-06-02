@@ -97,9 +97,9 @@ A form can be added to another
     eg := Form.tabs(Seq("name")) { (s: String) => Tabs().tab(s, Form("title")) }.rows.size must_== 1
     eg := Form.trs(Seq("a", "b")) { (s: String) => Row.tr(field(s)) }.rows.size must_== 2
 
-    eg := Form(okDataTable.decorator).text must startWith("| a | b |")
-    eg := Form(koDataTable.decorator).text must contain("| a | b | message")
-    eg := Form(okDataTable.decorator).text must contain("| 1 | 1 |")
+    eg := Form(okDataTable.result.decorator).text must startWith("| a | b |")
+    eg := Form(koDataTable.result.decorator).text must contain("| a | b | message")
+    eg := Form(okDataTable.result.decorator).text must contain("| 1 | 1 |")
   }
 
   val name = field("name", "eric")

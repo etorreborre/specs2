@@ -42,6 +42,9 @@ trait ExpectationsCreation extends MatchResultStackTrace {
   /** this method can be overridden to throw exceptions when checking the result */
   protected def checkResultFailure(r: =>Result): Result = r
 
+  /** this method can be overridden to indicate that exceptions can be thrown */
+  protected def checkCanThrowException: Boolean = false
+
   /** this method can be overridden to throw exceptions when checking the match result */
   protected def checkMatchResultFailure[T](m: MatchResult[T]): MatchResult[T] = m
 

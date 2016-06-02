@@ -76,6 +76,8 @@ trait ThrownExpectables extends ExpectationsCreation {
     result
   }
 
+  override protected def checkCanThrowException: Boolean = true
+
   /** this method can be overriden to throw exceptions when checking the match result */
   override protected def checkMatchResultFailure[T](m: MatchResult[T]) = {
     m match {
