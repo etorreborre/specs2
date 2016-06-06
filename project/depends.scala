@@ -54,8 +54,8 @@ object depends {
 
   def paradise(scalaVersion: String) =
     if (scalaVersion.startsWith("2.11") || scalaVersion.startsWith("2.12")) Nil
-    else  Seq(compilerPlugin("org.scalamacros" %% "paradise"    % "2.0.1" cross CrossVersion.full),
-                             "org.scalamacros" %% "quasiquotes" % "2.0.1")
+    else  Seq(compilerPlugin("org.scalamacros" %% "paradise"    % "2.1.0" cross CrossVersion.full),
+                             "org.scalamacros" %% "quasiquotes" % "2.1.0")
 
   lazy val resolvers =
     Seq(updateOptions := updateOptions.value.withCachedResolution(true)) ++ {

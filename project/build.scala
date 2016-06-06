@@ -44,7 +44,7 @@ object build extends Build {
     specs2Version in GlobalScope <<= version,
     specs2ShellPrompt,
     scalaVersion := "2.11.8",
-    scalazVersion := "7.2.2",
+    scalazVersion := "7.1.7",
     crossScalaVersions := Seq(scalaVersion.value, "2.12.0-M4", "2.10.6"))
 
   lazy val specs2Version = settingKey[String]("defines the current specs2 version")
@@ -278,7 +278,10 @@ object build extends Build {
     ) ++
   documentationSettings ++
   apiSettings               ++
-  Seq(scalacOptions in (Compile, doc) += "-Ymacro-no-expand")
+  Seq(scalacOptions in (Compile, doc) += "-Ymacro-no-expand") ++
+  Seq(sources in (Compile, doc) in common := (if (scalaVersion.value startsWith "2.10") List() else (sources in (Compile, doc)).value),
+    sources in (Compile, doc) in core := List(),
+    sources in (Compile, doc) in matcherExtra := List())
 
   lazy val apiSettings: Seq[Settings] = Seq(
     sources                      in (Compile, doc) := sources.all(aggregateCompile).value.flatten,
