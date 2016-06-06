@@ -113,9 +113,11 @@ factorial(3)
 
 #### Parameters
 
-All of the settings above: cuts, offset,... are coming from an implicit `SnippetParams` object that is changing the behavior of the created Snippets. You can choose, for a given scope, to replace these parameters with other ones and simply shadow the default parameters with your own, for example to always evaluate the snippets results:
+All of the settings above: cuts, offset,... are coming from an implicit `SnippetParams` object that is changing the
+behavior of the created Snippets. You can choose, for a given scope, to replace these parameters with other ones and
+simply shadow the default parameters with your own, for example to always evaluate the snippets results:
 ```
-implicit snippetParams = SnippetParams(eval = true)
+implicit def snippetParams[T]: SnippetParams[T] = SnippetParams(evalCode = true)
 ```
 The parameters you can set are:
 
@@ -125,7 +127,7 @@ name              | description
  `cutter`         | function to remove parts which must not be shown
  `asCode`         | function to render the resulting text (as Markdown for example)
  `prompt`         | function to display the evaluated result with a prompt
- `eval`           | boolean indicating if a snippet must be evaluated
+ `evalCode`       | boolean indicating if a snippet must be evaluated
  `verify`         | function checking the snippet value
 """
 }
