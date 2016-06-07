@@ -37,12 +37,12 @@ trait FilesRunner {
 
   def run(env: Env): Action[Stats] = {
     val args = env.arguments
-    val base = args.commandLine.valueOr("filesrunner.basepath", new java.io.File("src/test/scala").getAbsolutePath)
+    val base = args.commandLine.valueOr("filesrunner.basepath", new java.io.File(specificationsBasePath).getAbsolutePath)
     val specs = for {
       basePath <- Actions.checkThat(base, new java.io.File(base).isDirectory, s"$base must be a directory")
       ss <- findSpecifications(
-        glob = args.commandLine.valueOr("filesrunner.path", "**/*.scala"),
-        pattern = args.commandLine.valueOr("filesrunner.pattern", ".*Spec"),
+        glob = args.commandLine.valueOr("filesrunner.path", specificationsPath),
+        pattern = args.commandLine.valueOr("filesrunner.pattern", specificationsPattern),
         basePath = DirectoryPath.unsafe(basePath),
         verbose = isVerbose(args))
     } yield ss

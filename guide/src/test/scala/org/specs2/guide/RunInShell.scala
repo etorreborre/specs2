@@ -1,6 +1,8 @@
 package org.specs2
 package guide
 
+import org.specs2.runner.SpecificationsFinder._
+
 object RunInShell extends UserGuidePage { def is = s2"""
 It is not necessary to use a build tool to run a specification. You just need to have the right dependencies on the classpath and use of of $specs2 "runners".
 
@@ -58,12 +60,12 @@ scala> specs2.run(spec1)
 
 The `specs2.files` object will, by default, select and execute all Specifications found in the test source directory according to the following parameters:
 
-Name                    | Default value       | Description
------------------------ | ------------------- | -----------
-`filesrunner.basepath`  | `src/test/scala`    | source directory for test files
-`filesrunner.path`      | `**/*.scala`        | glob pattern for the file paths
-`filesrunner.pattern`   | `.*Spec`            | regular expression for the specification class/object name
-`filesrunner.verbose`   | `false`             | logs of searched paths and potential classes to instantiate
+Name                    | Default value              | Description
+----------------------- | -------------------------- | -----------
+`filesrunner.basepath`  | `$specificationsBasePath`  | source directory for test files
+`filesrunner.path`      | `$specificationsPath`      | glob pattern for the file paths
+`filesrunner.pattern`   | `$specificationsPattern`   | regular expression capturing the specification class/object name
+`filesrunner.verbose`   | `false`                    | logs of searched paths and potential classes to instantiate
 
 ### Outputs
 

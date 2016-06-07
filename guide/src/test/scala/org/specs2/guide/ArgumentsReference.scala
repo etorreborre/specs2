@@ -1,6 +1,8 @@
 package org.specs2
 package guide
 
+import org.specs2.runner.SpecificationsFinder._
+
 object ArgumentsReference extends UserGuidePage { def is = "Arguments reference".title ^ s2"""
 
 Arguments can be passed on the command line, or declared inside a specification, using the `args(name=value)` syntax:${snippet {
@@ -39,9 +41,9 @@ This reference guide for arguments is divided in several sections:
  ----------------------- | ------------------------------ | -------------------------------------------------------------------------------------------
  `stats.outdir`          | `target/specs2-reports/stats`  | output directory for run statistics (see $Selection)
  `junit.outdir`          | `target/test-reports/`         | output directory for JUnit XML files (see $JUnitXmlOutput)
- `filesrunner.basepath`  | `src/test/scala`               | source directory for test files (see $RunInShell)
- `filesrunner.path`      | `**/*.scala`                   | glob pattern for the file paths (see $RunInShell)
- `filesrunner.pattern`   | `.*Spec`                       | regular expression for the specification class/object name (see $RunInShell)
+ `filesrunner.basepath`  | `$specificationsBasePath`      | source directory for test files (see $RunInShell)
+ `filesrunner.path`      | `$specificationsPath`          | glob pattern for the file paths (see $RunInShell)
+ `filesrunner.pattern`   | `$specificationsPattern`       | regular expression capturing the specification class/object name (see $RunInShell)
  `filesrunner.verbose`   | `false`                        | logs of searched paths and potential classes to instantiate (see $RunInShell)
  `html.outdir`           | `target/specs2-reports`        | output directory for html files (see $HtmlOutput)
 

@@ -10,6 +10,7 @@ import scalaz._, Scalaz._
 import eff._
 import ConsoleEffect._
 import WarningsEffect._
+import SpecificationsFinder._
 
 /**
  * This trait loads specifications found on a given source directory based
@@ -23,10 +24,10 @@ trait SpecificationsFinder {
    * @param filter a function to filter out unwanted specifications
    * @return specifications created from specification names
    */
-  def findSpecifications(glob: String                   = "**/*.scala",
-                         pattern: String                = ".*Spec",
+  def findSpecifications(glob: String                   = specificationsPath,
+                         pattern: String                = specificationsPattern,
                          filter: String => Boolean      = { (name: String) => true },
-                         basePath: DirectoryPath        = DirectoryPath.unsafe(new java.io.File("src/test/scala").getAbsolutePath),
+                         basePath: DirectoryPath        = DirectoryPath.unsafe(new java.io.File(specificationsBasePath).getAbsolutePath),
                          verbose: Boolean               = false,
                          classLoader: ClassLoader       = Thread.currentThread.getContextClassLoader,
                          filePathReader: FilePathReader = FileSystem,
@@ -40,12 +41,12 @@ trait SpecificationsFinder {
 
   /**
    * @param glob a path to a directory containing scala files (it can be a glob: i.e. "dir/**/*spec.scala")
-   * @param pattern a regular expression which is supposed to match an object name extending a Specification
+   * @param pattern a regular expression which is supposed to match an object/class name extending a Specification
    * @param filter a function to filter out unwanted specifications
    * @return specifications created from specification names
    */
   def specifications(glob: String                   = "**/*.scala",
-                     pattern: String                = ".*Spec",
+                     pattern: String                = SpecificationsFinder.specificationsPattern,
                      filter: String => Boolean      = { (name: String) => true },
                      basePath: DirectoryPath        = DirectoryPath.unsafe(new java.io.File("src/test/scala").getAbsolutePath),
                      verbose: Boolean               = false,
@@ -99,8 +100,21 @@ trait SpecificationsFinder {
   /**
    * pattern to use to get specification names from file contents
    */
-  def specPattern(specType: String, pattern: String) = "\\s*"+specType+"\\s*(" + pattern + ")\\s*extends\\s*.*"
+  def specPattern(specType: String, pattern: String) = "\\s*"+specType+"\\s*" + pattern
 }
 
-object SpecificationsFinder extends SpecificationsFinder
+object SpecificationsFinder extends SpecificationsFinder {
+
+  /** base path for the specification files */
+  val specificationsBasePath: String =
+    "src/test/scala"
+
+  /** glob pattern for the file paths inside the base path */
+  val specificationsPath: String =
+    "**/*.scala"
+
+  /** Regex pattern used to capture a specification name in an object/class declaration */
+  val specificationsPattern: String =
+    "(.*Spec)\\s*extends\\s*.*"
+}
 
