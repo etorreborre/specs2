@@ -47,6 +47,23 @@ adding integers should just work in scala
    1 | 1 | 2 |
 ```
 
+### Format columns
+
+The display of elements can be modified by using an implicit `org.specs2.text.Showx` instance where `x` corresponds to
+the number of columns in the table. For example: ${snippet{
+import org.specs2.text._
+
+implicit val s3 =
+  Show3[Int, Double, String]().copy(show2 = (d: Double) => "x" * d.toInt)
+
+val table =
+"a" | "b"   | "c" |>
+ 1  ! 2.0   ! "3" |
+ 2  ! 4.0   ! "6" | { (a: Int, b: Double, c: String) => (a + b.toInt).toString ==== c}
+
+"table result\n"+table.message
+}.eval}
+
 ### Implicit `!`
 
 The datatable DSL uses the `!` operator to define columns. However this operator is also used by the examples DSL to create the body of an example: `"my example is" ! ok`, so if the first column of the datatable contains strings you will not be able to use both at the same time to mean different things ("create a table header" and "create an example").

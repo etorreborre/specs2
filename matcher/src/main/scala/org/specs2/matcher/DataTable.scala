@@ -3,7 +3,7 @@ package matcher
 
 import execute._
 import ResultExecution._
-import text.{Trim, TextTable, NotNullStrings}
+import text.{Trim, TextTable, NotNullStrings, Show1, Show2, Show3, Show4, Show5, Show6, Show7, Show8, Show9, Show10}
 import Trim._
 import NotNullStrings._
 import ResultLogicalCombinators._
@@ -102,13 +102,13 @@ trait DataTables extends ExpectationsCreation {
     def |>[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10](row: DataRow10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]) = new Table10(titles, List(row), execute = true)
   }
 
-  case class Table1[T1](override val titles: List[String], rows: List[DataRow1[T1]], override val execute: Boolean = false) extends Table(titles, execute) { outer =>
-    def |[S1 >: T1](row: DataRow1[S1]) = Table1(titles, outer.rows :+ row, execute)
+  case class Table1[T1](override val titles: List[String], rows: List[DataRow1[T1]], override val execute: Boolean = false, show1: Show1[T1] = Show1[T1]()) extends Table(titles, execute) { outer =>
+    def |[S1 >: T1](row: DataRow1[S1])(implicit s1: Show1[S1] = Show1[S1]()) = Table1(titles, outer.rows :+ row, execute, s1)
     def |[R : AsResult](f: (T1) => R) = executeRow(f, execute)
     def |>[R : AsResult](f: (T1) => R) = executeRow(f, true)
     def executeRow[R : AsResult](f: (T1) => R, exec: Boolean): DecoratedResult[DataTable] = {
       if (exec)
-        collect(rows map { (d: DataRow1[T1]) => (d.showCells, AsResult(f(d.t1)).execute) })
+        collect(rows map { (d: DataRow1[T1]) => (show1.showList(d.t1), AsResult(f(d.t1)).execute) })
       else DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok"))
     }
     def |@[M[_], R](f: (T1) => M[R])(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
@@ -121,19 +121,19 @@ trait DataTables extends ExpectationsCreation {
       executeRowApply((t1: T1) => Future.fork(Future.delay(f(t1)))(es), true)(asResult, control.FutureInstances.parallelApplicative).run
     def executeRowApply[R, M[_]](f: (T1) => M[R], exec: Boolean)(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] = {
       if (exec)
-        app.map(app.traverse(rows.toList) { d: DataRow1[T1] =>
-          app.map(f(d.t1))(r => (d.showCells, AsResult(r).execute))
+        app.map(app.traverse(rows) { d: DataRow1[T1] =>
+          app.map(f(d.t1))(r => (show1.showList(d.t1), AsResult(r).execute))
         })(rs => collect(rs))
       else app.pure(DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok")))
     }
   }
-  case class Table2[T1, T2](override val titles: List[String], rows: List[DataRow2[T1, T2]], override val execute: Boolean = false) extends Table(titles, execute) { outer =>
-    def |[S1 >: T1, S2 >: T2](row: DataRow2[S1, S2]) = Table2(titles, outer.rows :+ row, execute)
+  case class Table2[T1, T2](override val titles: List[String], rows: List[DataRow2[T1, T2]], override val execute: Boolean = false, show2: Show2[T1, T2] = Show2[T1, T2]()) extends Table(titles, execute) { outer =>
+    def |[S1 >: T1, S2 >: T2](row: DataRow2[S1, S2])(implicit s2: Show2[S1, S2] = Show2[S1, S2]()) = Table2(titles, outer.rows :+ row, execute, s2)
     def |[R : AsResult](f: (T1, T2) => R) = executeRow(f, execute)
     def |>[R : AsResult](f: (T1, T2) => R) = executeRow(f, true)
     def executeRow[R : AsResult](f: (T1, T2) => R, exec: Boolean): DecoratedResult[DataTable] = {
       if (exec)
-        collect(rows map { (d: DataRow2[T1, T2]) => (d.showCells, AsResult(f(d.t1,d.t2)).execute) })
+        collect(rows map { (d: DataRow2[T1, T2]) => (show2.showList(d.t1,d.t2), AsResult(f(d.t1,d.t2)).execute) })
       else DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok"))
     }
     def |@[M[_], R](f: (T1, T2) => M[R])(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
@@ -146,19 +146,19 @@ trait DataTables extends ExpectationsCreation {
       executeRowApply((t1: T1, t2: T2) => Future.fork(Future.delay(f(t1,t2)))(es), true)(asResult, control.FutureInstances.parallelApplicative).run
     def executeRowApply[R, M[_]](f: (T1, T2) => M[R], exec: Boolean)(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] = {
       if (exec)
-        app.map(app.traverse(rows.toList) { d: DataRow2[T1, T2] =>
-          app.map(f(d.t1,d.t2))(r => (d.showCells, AsResult(r).execute))
+        app.map(app.traverse(rows) { d: DataRow2[T1, T2] =>
+          app.map(f(d.t1,d.t2))(r => (show2.showList(d.t1,d.t2), AsResult(r).execute))
         })(rs => collect(rs))
       else app.pure(DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok")))
     }
   }
-  case class Table3[T1, T2, T3](override val titles: List[String], rows: List[DataRow3[T1, T2, T3]], override val execute: Boolean = false) extends Table(titles, execute) { outer =>
-    def |[S1 >: T1, S2 >: T2, S3 >: T3](row: DataRow3[S1, S2, S3]) = Table3(titles, outer.rows :+ row, execute)
+  case class Table3[T1, T2, T3](override val titles: List[String], rows: List[DataRow3[T1, T2, T3]], override val execute: Boolean = false, show3: Show3[T1, T2, T3] = Show3[T1, T2, T3]()) extends Table(titles, execute) { outer =>
+    def |[S1 >: T1, S2 >: T2, S3 >: T3](row: DataRow3[S1, S2, S3])(implicit s3: Show3[S1, S2, S3] = Show3[S1, S2, S3]()) = Table3(titles, outer.rows :+ row, execute, s3)
     def |[R : AsResult](f: (T1, T2, T3) => R) = executeRow(f, execute)
     def |>[R : AsResult](f: (T1, T2, T3) => R) = executeRow(f, true)
     def executeRow[R : AsResult](f: (T1, T2, T3) => R, exec: Boolean): DecoratedResult[DataTable] = {
       if (exec)
-        collect(rows map { (d: DataRow3[T1, T2, T3]) => (d.showCells, AsResult(f(d.t1,d.t2,d.t3)).execute) })
+        collect(rows map { (d: DataRow3[T1, T2, T3]) => (show3.showList(d.t1,d.t2,d.t3), AsResult(f(d.t1,d.t2,d.t3)).execute) })
       else DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok"))
     }
     def |@[M[_], R](f: (T1, T2, T3) => M[R])(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
@@ -171,19 +171,19 @@ trait DataTables extends ExpectationsCreation {
       executeRowApply((t1: T1, t2: T2, t3: T3) => Future.fork(Future.delay(f(t1,t2,t3)))(es), true)(asResult, control.FutureInstances.parallelApplicative).run
     def executeRowApply[R, M[_]](f: (T1, T2, T3) => M[R], exec: Boolean)(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] = {
       if (exec)
-        app.map(app.traverse(rows.toList) { d: DataRow3[T1, T2, T3] =>
-          app.map(f(d.t1,d.t2,d.t3))(r => (d.showCells, AsResult(r).execute))
+        app.map(app.traverse(rows) { d: DataRow3[T1, T2, T3] =>
+          app.map(f(d.t1,d.t2,d.t3))(r => (show3.showList(d.t1,d.t2,d.t3), AsResult(r).execute))
         })(rs => collect(rs))
       else app.pure(DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok")))
     }
   }
-  case class Table4[T1, T2, T3, T4](override val titles: List[String], rows: List[DataRow4[T1, T2, T3, T4]], override val execute: Boolean = false) extends Table(titles, execute) { outer =>
-    def |[S1 >: T1, S2 >: T2, S3 >: T3, S4 >: T4](row: DataRow4[S1, S2, S3, S4]) = Table4(titles, outer.rows :+ row, execute)
+  case class Table4[T1, T2, T3, T4](override val titles: List[String], rows: List[DataRow4[T1, T2, T3, T4]], override val execute: Boolean = false, show4: Show4[T1, T2, T3, T4] = Show4[T1, T2, T3, T4]()) extends Table(titles, execute) { outer =>
+    def |[S1 >: T1, S2 >: T2, S3 >: T3, S4 >: T4](row: DataRow4[S1, S2, S3, S4])(implicit s4: Show4[S1, S2, S3, S4] = Show4[S1, S2, S3, S4]()) = Table4(titles, outer.rows :+ row, execute, s4)
     def |[R : AsResult](f: (T1, T2, T3, T4) => R) = executeRow(f, execute)
     def |>[R : AsResult](f: (T1, T2, T3, T4) => R) = executeRow(f, true)
     def executeRow[R : AsResult](f: (T1, T2, T3, T4) => R, exec: Boolean): DecoratedResult[DataTable] = {
       if (exec)
-        collect(rows map { (d: DataRow4[T1, T2, T3, T4]) => (d.showCells, AsResult(f(d.t1,d.t2,d.t3,d.t4)).execute) })
+        collect(rows map { (d: DataRow4[T1, T2, T3, T4]) => (show4.showList(d.t1,d.t2,d.t3,d.t4), AsResult(f(d.t1,d.t2,d.t3,d.t4)).execute) })
       else DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok"))
     }
     def |@[M[_], R](f: (T1, T2, T3, T4) => M[R])(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
@@ -196,19 +196,19 @@ trait DataTables extends ExpectationsCreation {
       executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4) => Future.fork(Future.delay(f(t1,t2,t3,t4)))(es), true)(asResult, control.FutureInstances.parallelApplicative).run
     def executeRowApply[R, M[_]](f: (T1, T2, T3, T4) => M[R], exec: Boolean)(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] = {
       if (exec)
-        app.map(app.traverse(rows.toList) { d: DataRow4[T1, T2, T3, T4] =>
-          app.map(f(d.t1,d.t2,d.t3,d.t4))(r => (d.showCells, AsResult(r).execute))
+        app.map(app.traverse(rows) { d: DataRow4[T1, T2, T3, T4] =>
+          app.map(f(d.t1,d.t2,d.t3,d.t4))(r => (show4.showList(d.t1,d.t2,d.t3,d.t4), AsResult(r).execute))
         })(rs => collect(rs))
       else app.pure(DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok")))
     }
   }
-  case class Table5[T1, T2, T3, T4, T5](override val titles: List[String], rows: List[DataRow5[T1, T2, T3, T4, T5]], override val execute: Boolean = false) extends Table(titles, execute) { outer =>
-    def |[S1 >: T1, S2 >: T2, S3 >: T3, S4 >: T4, S5 >: T5](row: DataRow5[S1, S2, S3, S4, S5]) = Table5(titles, outer.rows :+ row, execute)
+  case class Table5[T1, T2, T3, T4, T5](override val titles: List[String], rows: List[DataRow5[T1, T2, T3, T4, T5]], override val execute: Boolean = false, show5: Show5[T1, T2, T3, T4, T5] = Show5[T1, T2, T3, T4, T5]()) extends Table(titles, execute) { outer =>
+    def |[S1 >: T1, S2 >: T2, S3 >: T3, S4 >: T4, S5 >: T5](row: DataRow5[S1, S2, S3, S4, S5])(implicit s5: Show5[S1, S2, S3, S4, S5] = Show5[S1, S2, S3, S4, S5]()) = Table5(titles, outer.rows :+ row, execute, s5)
     def |[R : AsResult](f: (T1, T2, T3, T4, T5) => R) = executeRow(f, execute)
     def |>[R : AsResult](f: (T1, T2, T3, T4, T5) => R) = executeRow(f, true)
     def executeRow[R : AsResult](f: (T1, T2, T3, T4, T5) => R, exec: Boolean): DecoratedResult[DataTable] = {
       if (exec)
-        collect(rows map { (d: DataRow5[T1, T2, T3, T4, T5]) => (d.showCells, AsResult(f(d.t1,d.t2,d.t3,d.t4,d.t5)).execute) })
+        collect(rows map { (d: DataRow5[T1, T2, T3, T4, T5]) => (show5.showList(d.t1,d.t2,d.t3,d.t4,d.t5), AsResult(f(d.t1,d.t2,d.t3,d.t4,d.t5)).execute) })
       else DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok"))
     }
     def |@[M[_], R](f: (T1, T2, T3, T4, T5) => M[R])(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
@@ -221,19 +221,19 @@ trait DataTables extends ExpectationsCreation {
       executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5) => Future.fork(Future.delay(f(t1,t2,t3,t4,t5)))(es), true)(asResult, control.FutureInstances.parallelApplicative).run
     def executeRowApply[R, M[_]](f: (T1, T2, T3, T4, T5) => M[R], exec: Boolean)(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] = {
       if (exec)
-        app.map(app.traverse(rows.toList) { d: DataRow5[T1, T2, T3, T4, T5] =>
-          app.map(f(d.t1,d.t2,d.t3,d.t4,d.t5))(r => (d.showCells, AsResult(r).execute))
+        app.map(app.traverse(rows) { d: DataRow5[T1, T2, T3, T4, T5] =>
+          app.map(f(d.t1,d.t2,d.t3,d.t4,d.t5))(r => (show5.showList(d.t1,d.t2,d.t3,d.t4,d.t5), AsResult(r).execute))
         })(rs => collect(rs))
       else app.pure(DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok")))
     }
   }
-  case class Table6[T1, T2, T3, T4, T5, T6](override val titles: List[String], rows: List[DataRow6[T1, T2, T3, T4, T5, T6]], override val execute: Boolean = false) extends Table(titles, execute) { outer =>
-    def |[S1 >: T1, S2 >: T2, S3 >: T3, S4 >: T4, S5 >: T5, S6 >: T6](row: DataRow6[S1, S2, S3, S4, S5, S6]) = Table6(titles, outer.rows :+ row, execute)
+  case class Table6[T1, T2, T3, T4, T5, T6](override val titles: List[String], rows: List[DataRow6[T1, T2, T3, T4, T5, T6]], override val execute: Boolean = false, show6: Show6[T1, T2, T3, T4, T5, T6] = Show6[T1, T2, T3, T4, T5, T6]()) extends Table(titles, execute) { outer =>
+    def |[S1 >: T1, S2 >: T2, S3 >: T3, S4 >: T4, S5 >: T5, S6 >: T6](row: DataRow6[S1, S2, S3, S4, S5, S6])(implicit s6: Show6[S1, S2, S3, S4, S5, S6] = Show6[S1, S2, S3, S4, S5, S6]()) = Table6(titles, outer.rows :+ row, execute, s6)
     def |[R : AsResult](f: (T1, T2, T3, T4, T5, T6) => R) = executeRow(f, execute)
     def |>[R : AsResult](f: (T1, T2, T3, T4, T5, T6) => R) = executeRow(f, true)
     def executeRow[R : AsResult](f: (T1, T2, T3, T4, T5, T6) => R, exec: Boolean): DecoratedResult[DataTable] = {
       if (exec)
-        collect(rows map { (d: DataRow6[T1, T2, T3, T4, T5, T6]) => (d.showCells, AsResult(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6)).execute) })
+        collect(rows map { (d: DataRow6[T1, T2, T3, T4, T5, T6]) => (show6.showList(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6), AsResult(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6)).execute) })
       else DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok"))
     }
     def |@[M[_], R](f: (T1, T2, T3, T4, T5, T6) => M[R])(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
@@ -246,19 +246,19 @@ trait DataTables extends ExpectationsCreation {
       executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6) => Future.fork(Future.delay(f(t1,t2,t3,t4,t5,t6)))(es), true)(asResult, control.FutureInstances.parallelApplicative).run
     def executeRowApply[R, M[_]](f: (T1, T2, T3, T4, T5, T6) => M[R], exec: Boolean)(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] = {
       if (exec)
-        app.map(app.traverse(rows.toList) { d: DataRow6[T1, T2, T3, T4, T5, T6] =>
-          app.map(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6))(r => (d.showCells, AsResult(r).execute))
+        app.map(app.traverse(rows) { d: DataRow6[T1, T2, T3, T4, T5, T6] =>
+          app.map(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6))(r => (show6.showList(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6), AsResult(r).execute))
         })(rs => collect(rs))
       else app.pure(DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok")))
     }
   }
-  case class Table7[T1, T2, T3, T4, T5, T6, T7](override val titles: List[String], rows: List[DataRow7[T1, T2, T3, T4, T5, T6, T7]], override val execute: Boolean = false) extends Table(titles, execute) { outer =>
-    def |[S1 >: T1, S2 >: T2, S3 >: T3, S4 >: T4, S5 >: T5, S6 >: T6, S7 >: T7](row: DataRow7[S1, S2, S3, S4, S5, S6, S7]) = Table7(titles, outer.rows :+ row, execute)
+  case class Table7[T1, T2, T3, T4, T5, T6, T7](override val titles: List[String], rows: List[DataRow7[T1, T2, T3, T4, T5, T6, T7]], override val execute: Boolean = false, show7: Show7[T1, T2, T3, T4, T5, T6, T7] = Show7[T1, T2, T3, T4, T5, T6, T7]()) extends Table(titles, execute) { outer =>
+    def |[S1 >: T1, S2 >: T2, S3 >: T3, S4 >: T4, S5 >: T5, S6 >: T6, S7 >: T7](row: DataRow7[S1, S2, S3, S4, S5, S6, S7])(implicit s7: Show7[S1, S2, S3, S4, S5, S6, S7] = Show7[S1, S2, S3, S4, S5, S6, S7]()) = Table7(titles, outer.rows :+ row, execute, s7)
     def |[R : AsResult](f: (T1, T2, T3, T4, T5, T6, T7) => R) = executeRow(f, execute)
     def |>[R : AsResult](f: (T1, T2, T3, T4, T5, T6, T7) => R) = executeRow(f, true)
     def executeRow[R : AsResult](f: (T1, T2, T3, T4, T5, T6, T7) => R, exec: Boolean): DecoratedResult[DataTable] = {
       if (exec)
-        collect(rows map { (d: DataRow7[T1, T2, T3, T4, T5, T6, T7]) => (d.showCells, AsResult(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7)).execute) })
+        collect(rows map { (d: DataRow7[T1, T2, T3, T4, T5, T6, T7]) => (show7.showList(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7), AsResult(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7)).execute) })
       else DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok"))
     }
     def |@[M[_], R](f: (T1, T2, T3, T4, T5, T6, T7) => M[R])(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
@@ -271,19 +271,19 @@ trait DataTables extends ExpectationsCreation {
       executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7) => Future.fork(Future.delay(f(t1,t2,t3,t4,t5,t6,t7)))(es), true)(asResult, control.FutureInstances.parallelApplicative).run
     def executeRowApply[R, M[_]](f: (T1, T2, T3, T4, T5, T6, T7) => M[R], exec: Boolean)(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] = {
       if (exec)
-        app.map(app.traverse(rows.toList) { d: DataRow7[T1, T2, T3, T4, T5, T6, T7] =>
-          app.map(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7))(r => (d.showCells, AsResult(r).execute))
+        app.map(app.traverse(rows) { d: DataRow7[T1, T2, T3, T4, T5, T6, T7] =>
+          app.map(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7))(r => (show7.showList(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7), AsResult(r).execute))
         })(rs => collect(rs))
       else app.pure(DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok")))
     }
   }
-  case class Table8[T1, T2, T3, T4, T5, T6, T7, T8](override val titles: List[String], rows: List[DataRow8[T1, T2, T3, T4, T5, T6, T7, T8]], override val execute: Boolean = false) extends Table(titles, execute) { outer =>
-    def |[S1 >: T1, S2 >: T2, S3 >: T3, S4 >: T4, S5 >: T5, S6 >: T6, S7 >: T7, S8 >: T8](row: DataRow8[S1, S2, S3, S4, S5, S6, S7, S8]) = Table8(titles, outer.rows :+ row, execute)
+  case class Table8[T1, T2, T3, T4, T5, T6, T7, T8](override val titles: List[String], rows: List[DataRow8[T1, T2, T3, T4, T5, T6, T7, T8]], override val execute: Boolean = false, show8: Show8[T1, T2, T3, T4, T5, T6, T7, T8] = Show8[T1, T2, T3, T4, T5, T6, T7, T8]()) extends Table(titles, execute) { outer =>
+    def |[S1 >: T1, S2 >: T2, S3 >: T3, S4 >: T4, S5 >: T5, S6 >: T6, S7 >: T7, S8 >: T8](row: DataRow8[S1, S2, S3, S4, S5, S6, S7, S8])(implicit s8: Show8[S1, S2, S3, S4, S5, S6, S7, S8] = Show8[S1, S2, S3, S4, S5, S6, S7, S8]()) = Table8(titles, outer.rows :+ row, execute, s8)
     def |[R : AsResult](f: (T1, T2, T3, T4, T5, T6, T7, T8) => R) = executeRow(f, execute)
     def |>[R : AsResult](f: (T1, T2, T3, T4, T5, T6, T7, T8) => R) = executeRow(f, true)
     def executeRow[R : AsResult](f: (T1, T2, T3, T4, T5, T6, T7, T8) => R, exec: Boolean): DecoratedResult[DataTable] = {
       if (exec)
-        collect(rows map { (d: DataRow8[T1, T2, T3, T4, T5, T6, T7, T8]) => (d.showCells, AsResult(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8)).execute) })
+        collect(rows map { (d: DataRow8[T1, T2, T3, T4, T5, T6, T7, T8]) => (show8.showList(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8), AsResult(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8)).execute) })
       else DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok"))
     }
     def |@[M[_], R](f: (T1, T2, T3, T4, T5, T6, T7, T8) => M[R])(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
@@ -296,19 +296,19 @@ trait DataTables extends ExpectationsCreation {
       executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8) => Future.fork(Future.delay(f(t1,t2,t3,t4,t5,t6,t7,t8)))(es), true)(asResult, control.FutureInstances.parallelApplicative).run
     def executeRowApply[R, M[_]](f: (T1, T2, T3, T4, T5, T6, T7, T8) => M[R], exec: Boolean)(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] = {
       if (exec)
-        app.map(app.traverse(rows.toList) { d: DataRow8[T1, T2, T3, T4, T5, T6, T7, T8] =>
-          app.map(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8))(r => (d.showCells, AsResult(r).execute))
+        app.map(app.traverse(rows) { d: DataRow8[T1, T2, T3, T4, T5, T6, T7, T8] =>
+          app.map(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8))(r => (show8.showList(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8), AsResult(r).execute))
         })(rs => collect(rs))
       else app.pure(DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok")))
     }
   }
-  case class Table9[T1, T2, T3, T4, T5, T6, T7, T8, T9](override val titles: List[String], rows: List[DataRow9[T1, T2, T3, T4, T5, T6, T7, T8, T9]], override val execute: Boolean = false) extends Table(titles, execute) { outer =>
-    def |[S1 >: T1, S2 >: T2, S3 >: T3, S4 >: T4, S5 >: T5, S6 >: T6, S7 >: T7, S8 >: T8, S9 >: T9](row: DataRow9[S1, S2, S3, S4, S5, S6, S7, S8, S9]) = Table9(titles, outer.rows :+ row, execute)
+  case class Table9[T1, T2, T3, T4, T5, T6, T7, T8, T9](override val titles: List[String], rows: List[DataRow9[T1, T2, T3, T4, T5, T6, T7, T8, T9]], override val execute: Boolean = false, show9: Show9[T1, T2, T3, T4, T5, T6, T7, T8, T9] = Show9[T1, T2, T3, T4, T5, T6, T7, T8, T9]()) extends Table(titles, execute) { outer =>
+    def |[S1 >: T1, S2 >: T2, S3 >: T3, S4 >: T4, S5 >: T5, S6 >: T6, S7 >: T7, S8 >: T8, S9 >: T9](row: DataRow9[S1, S2, S3, S4, S5, S6, S7, S8, S9])(implicit s9: Show9[S1, S2, S3, S4, S5, S6, S7, S8, S9] = Show9[S1, S2, S3, S4, S5, S6, S7, S8, S9]()) = Table9(titles, outer.rows :+ row, execute, s9)
     def |[R : AsResult](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9) => R) = executeRow(f, execute)
     def |>[R : AsResult](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9) => R) = executeRow(f, true)
     def executeRow[R : AsResult](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9) => R, exec: Boolean): DecoratedResult[DataTable] = {
       if (exec)
-        collect(rows map { (d: DataRow9[T1, T2, T3, T4, T5, T6, T7, T8, T9]) => (d.showCells, AsResult(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8,d.t9)).execute) })
+        collect(rows map { (d: DataRow9[T1, T2, T3, T4, T5, T6, T7, T8, T9]) => (show9.showList(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8,d.t9), AsResult(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8,d.t9)).execute) })
       else DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok"))
     }
     def |@[M[_], R](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9) => M[R])(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
@@ -321,19 +321,19 @@ trait DataTables extends ExpectationsCreation {
       executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8, t9: T9) => Future.fork(Future.delay(f(t1,t2,t3,t4,t5,t6,t7,t8,t9)))(es), true)(asResult, control.FutureInstances.parallelApplicative).run
     def executeRowApply[R, M[_]](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9) => M[R], exec: Boolean)(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] = {
       if (exec)
-        app.map(app.traverse(rows.toList) { d: DataRow9[T1, T2, T3, T4, T5, T6, T7, T8, T9] =>
-          app.map(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8,d.t9))(r => (d.showCells, AsResult(r).execute))
+        app.map(app.traverse(rows) { d: DataRow9[T1, T2, T3, T4, T5, T6, T7, T8, T9] =>
+          app.map(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8,d.t9))(r => (show9.showList(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8,d.t9), AsResult(r).execute))
         })(rs => collect(rs))
       else app.pure(DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok")))
     }
   }
-  case class Table10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10](override val titles: List[String], rows: List[DataRow10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]], override val execute: Boolean = false) extends Table(titles, execute) { outer =>
-    def |[S1 >: T1, S2 >: T2, S3 >: T3, S4 >: T4, S5 >: T5, S6 >: T6, S7 >: T7, S8 >: T8, S9 >: T9, S10 >: T10](row: DataRow10[S1, S2, S3, S4, S5, S6, S7, S8, S9, S10]) = Table10(titles, outer.rows :+ row, execute)
+  case class Table10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10](override val titles: List[String], rows: List[DataRow10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]], override val execute: Boolean = false, show10: Show10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10] = Show10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]()) extends Table(titles, execute) { outer =>
+    def |[S1 >: T1, S2 >: T2, S3 >: T3, S4 >: T4, S5 >: T5, S6 >: T6, S7 >: T7, S8 >: T8, S9 >: T9, S10 >: T10](row: DataRow10[S1, S2, S3, S4, S5, S6, S7, S8, S9, S10])(implicit s10: Show10[S1, S2, S3, S4, S5, S6, S7, S8, S9, S10] = Show10[S1, S2, S3, S4, S5, S6, S7, S8, S9, S10]()) = Table10(titles, outer.rows :+ row, execute, s10)
     def |[R : AsResult](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10) => R) = executeRow(f, execute)
     def |>[R : AsResult](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10) => R) = executeRow(f, true)
     def executeRow[R : AsResult](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10) => R, exec: Boolean): DecoratedResult[DataTable] = {
       if (exec)
-        collect(rows map { (d: DataRow10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]) => (d.showCells, AsResult(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8,d.t9,d.t10)).execute) })
+        collect(rows map { (d: DataRow10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]) => (show10.showList(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8,d.t9,d.t10), AsResult(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8,d.t9,d.t10)).execute) })
       else DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok"))
     }
     def |@[M[_], R](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10) => M[R])(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
@@ -346,8 +346,8 @@ trait DataTables extends ExpectationsCreation {
       executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8, t9: T9, t10: T10) => Future.fork(Future.delay(f(t1,t2,t3,t4,t5,t6,t7,t8,t9,t10)))(es), true)(asResult, control.FutureInstances.parallelApplicative).run
     def executeRowApply[R, M[_]](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10) => M[R], exec: Boolean)(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] = {
       if (exec)
-        app.map(app.traverse(rows.toList) { d: DataRow10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10] =>
-          app.map(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8,d.t9,d.t10))(r => (d.showCells, AsResult(r).execute))
+        app.map(app.traverse(rows) { d: DataRow10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10] =>
+          app.map(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8,d.t9,d.t10))(r => (show10.showList(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8,d.t9,d.t10), AsResult(r).execute))
         })(rs => collect(rs))
       else app.pure(DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok")))
     }
@@ -398,6 +398,7 @@ trait DataTables extends ExpectationsCreation {
 
 
   }
+
 }
 
 case class DataTable(titles: Seq[String], rows: Seq[DataTableRow]) {
@@ -417,7 +418,7 @@ object DataTableRow {
 private[specs2]
 object DataTables extends DataTables
 
-private object DataTablesGenerator {
+object DataTablesGenerator {
   def main(args: Array[String]) = {
     println(all(10))
   }
@@ -443,14 +444,14 @@ private object DataTablesGenerator {
 
   def tableClasses(n: Int) = {
     (1 to n).map { i =>
-      List("case class Table"+i+types(i)+"(override val titles: List[String], rows: List["+dataRow(i)+"], override val execute: Boolean = false) extends "+
+      List("case class Table"+i+types(i)+"(override val titles: List[String], rows: List["+dataRow(i)+"], override val execute: Boolean = false, "+s"show$i: Show$i${types(i)} = Show$i${types(i)}()"+") extends "+
         "Table(titles, execute) { outer =>",
-        "  def |"+st(i)+"(row: "+dataRow(i, letter="S")+") = "+table(i)+"(titles, outer.rows :+ row, execute)",
+        "  def |"+st(i)+"(row: "+dataRow(i, letter="S")+")(implicit s"+i+": Show"+i+types(i, letter = "S")+" = Show"+i+types(i, letter = "S")+"()) = "+table(i)+"(titles, outer.rows :+ row, execute, s"+i+")",
         "  def |[R : AsResult](f: "+typesTuple(i)+" => R) = executeRow(f, execute)",
         "  def |>[R : AsResult](f: "+typesTuple(i)+" => R) = executeRow(f, true)",
         "  def executeRow[R : AsResult](f: "+typesTuple(i)+" => R, exec: Boolean): DecoratedResult[DataTable] = {",
         "    if (exec)",
-        "      collect(rows map { (d: "+dataRow(i)+") => (d.showCells, AsResult(f("+(1 to i).map("d.t"+_).mkString(",")+")).execute) })",
+        "      collect(rows map { (d: "+dataRow(i)+") => (show"+i+".showList("+(1 to i).map("d.t"+_).mkString(",")+"), AsResult(f("+(1 to i).map("d.t"+_).mkString(",")+")).execute) })",
         "    else DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success(\"ok\"))",
         "  }",
         "  def |@[M[_], R](f: "+typesTuple(i)+" => M[R])(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =",
@@ -463,8 +464,8 @@ private object DataTablesGenerator {
         "    executeRowApply("+parametersList(i: Int)+" => Future.fork(Future.delay(f("+(1 to i).map("t"+_).mkString(",")+")))(es), true)(asResult, control.FutureInstances.parallelApplicative).run",
         "  def executeRowApply[R, M[_]](f: "+typesTuple(i)+" => M[R], exec: Boolean)(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] = {",
         "    if (exec)",
-        "      app.map(app.traverse(rows.toList) { d: DataRow"+i+types(i)+" =>",
-        "        app.map(f("+(1 to i).map("d.t"+_).mkString(",")+"))(r => (d.showCells, AsResult(r).execute))",
+        "      app.map(app.traverse(rows) { d: DataRow"+i+types(i)+" =>",
+        "        app.map(f("+(1 to i).map("d.t"+_).mkString(",")+"))(r => (show"+i+".showList("+(1 to i).map("d.t"+_).mkString(",")+"), AsResult(r).execute))",
         "      })(rs => collect(rs))",
         "    else app.pure(DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success(\"ok\")))",
         "  }",
@@ -490,7 +491,7 @@ private object DataTablesGenerator {
   def parameters(i: Int) = (1 to i).map("t"+_).mkString("(",", ", ")")
   def variantTypes(i: Int, letter: String = "T") = typesAsList(i, letter).map("+"+_).mkString("[",", ", "]")
   def st(i: Int) = (1 to i).map(j => "S"+j+" >: T"+j).mkString("[",", ", "]")
-  def types(i: Int) = typesAsList(i).mkString("[",", ", "]")
+  def types(i: Int, letter: String = "T") = typesAsList(i, letter).mkString("[",", ", "]")
   def typesAsList(i: Int, letter: String = "T"): Seq[String] =  (1 to i).map(letter+_)
   def typesList(i: Int): String = typesAsList(i).mkString(", ")
   def typesList(i: Int, n: Int): String =  (List(typesList(i)) ::: (i+1 to n).map(t => "Any").toList).mkString(", ")
