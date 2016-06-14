@@ -34,7 +34,7 @@ trait MutableFragmentBuilder extends FragmentBuilder
   def specificationFragments = (env: Env) => {
     val content = {
       Seq.fill(2)(fragmentFactory.break) ++ // add 2 line breaks just after the specification title
-      replayFragments(env).toSeq
+      replayFragments(env)
     }
     Fragments(Process.emitAll(content).toSource)
   }
@@ -44,7 +44,7 @@ trait MutableFragmentBuilder extends FragmentBuilder
 
   private def replayFragments(environment: Env) = {
     env = environment
-    effects.replay
+    targetPath.map(effects.replay).getOrElse(effects.record)
     specFragments
   }
 
@@ -56,24 +56,20 @@ trait MutableFragmentBuilder extends FragmentBuilder
   private[specs2] var env: Env = Env()
 
   def addFragmentBlock(f: =>Fragment) = {
-    effects.nestBlock(effects.addBlock(f))
+    effects.nestBlock(f)
     fragmentFactory.end
   }
 
   def addFragmentsBlock(fs: =>Fragments) = {
-    effects.nestBlock(effects.addBlock(fs))
+    effects.nestBlock(fs)
     Fragments()
   }
 
   def addFragment(fragment: Fragment): Fragment = {
-    effects.addBlock {
-      if (effects.isAt(targetPath)) {
-        effects.stopEffects
-        specFragments.append(fragment)
-      }
-      else
-        specFragments.append(isolate(fragment, effects.effectPath))
-    }
+    effects.addBlock
+
+    if (targetPath.isDefined) specFragments.append(fragment)
+    else                      specFragments.append(isolate(fragment, effects.effectPath))
     fragment
   }
 
@@ -83,7 +79,7 @@ trait MutableFragmentBuilder extends FragmentBuilder
   }
 
   private def isolate(fragment: Fragment, effectPath: EffectPath) =
-    if (!targetPath.isDefined && mustBeIsolated(fragment))
+    if (targetPath.isEmpty && mustBeIsolated(fragment))
       fragment.setExecution(duplicateExecution(effectPath))
     else
       fragment
@@ -109,7 +105,7 @@ trait MutableFragmentBuilder extends FragmentBuilder
           newSpec.targetPath = Some(effectPath)
           val pathFragments = newSpec.replayFragments(env)
           val previousSteps = pathFragments.filter(f => Fragment.isStep(f) && f.execution.isolable)
-          val isolatedExecution = pathFragments.last.execution
+          val isolatedExecution = pathFragments.lastOption.map(_.execution).getOrElse(Execution.NoExecution)
 
           if (previousSteps.nonEmpty) {
             val previousStepsExecution = previousSteps.foldLeft(Success(): Result) { _ and _.execution.execute(env).result }
