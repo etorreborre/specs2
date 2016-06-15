@@ -48,6 +48,10 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
  Collected data is reported
  ${ check(prop((i: Int) => true).collect.verbose).expected must haveMessage("Collected test data") }
 
+ Failing arguments are reported
+ ${ check(prop((i: Int, s: String) => i.toString == s).setGens(Gen.const(0), Gen.const("1"))).message must
+      (contain("ARG_0: 0") and contain("ARG_1: \"1\"")) }
+
  The freqmap instance is used to  report frequencies
  ${ check(prop((i: Int) => true).prettyFreqMap(_ => "histogram").collect.verbose).expected must haveMessage("histogram") }
 
@@ -56,10 +60,10 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
 
 
  Parameters can be passed from the command line
-   ${ check(prop { (i: Int, j: Int) =>  i === i }.setParameters(defaultParameters.overrideWith(CommandLine.create("scalacheck.mintestsok", "10")))) returns "OK, passed 10 tests" }
+ ${ check(prop { (i: Int, j: Int) =>  i === i }.setParameters(defaultParameters.overrideWith(CommandLine.create("scalacheck.mintestsok", "10")))) returns "OK, passed 10 tests" }
 
  PrettyProduct better render case classes to replay examples
-   ${ check(prop((i: MyInt) => false)) returns """MyInt(1, "hey")""" }
+ ${ check(prop((i: MyInt) => false)) returns """MyInt(1, "hey")""" }
 
 """
 

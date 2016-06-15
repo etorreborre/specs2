@@ -198,7 +198,7 @@ case class ScalaCheckFunction2[T1, T2, R](
   }
 
   lazy val prop: Prop =
-    makeProp((t2: T2) => makeProp((t1: T1) => propFunction(t1, t2), argInstances1.shrink), argInstances2.shrink)
+    makeProp((t1: T1) => makeProp((t2: T2) => propFunction(t1, t2), argInstances2.shrink), argInstances1.shrink)
 
   def noShrink: SelfType = copy(argInstances1 = argInstances1.copy(shrink = None), argInstances2 = argInstances2.copy(shrink = None))
 
@@ -271,7 +271,7 @@ case class ScalaCheckFunction3[T1, T2, T3, R](
   }
 
   lazy val prop: Prop =
-    makeProp((t3: T3) => makeProp((t2: T2) => makeProp((t1: T1) => propFunction(t1, t2, t3), argInstances1.shrink), argInstances2.shrink), argInstances3.shrink)
+    makeProp((t1: T1) => makeProp((t2: T2) => makeProp((t3: T3) => propFunction(t1, t2, t3), argInstances3.shrink), argInstances2.shrink), argInstances1.shrink)
 
   def noShrink: SelfType = copy(argInstances1 = argInstances1.copy(shrink = None), argInstances2 = argInstances2.copy(shrink = None), argInstances3 = argInstances3.copy(shrink = None))
 
@@ -351,7 +351,7 @@ case class ScalaCheckFunction4[T1, T2, T3, T4, R](
   }
 
   lazy val prop: Prop =
-    makeProp((t4: T4) => makeProp((t3: T3) => makeProp((t2: T2) => makeProp((t1: T1) => propFunction(t1, t2, t3, t4), argInstances1.shrink), argInstances2.shrink), argInstances3.shrink), argInstances4.shrink)
+    makeProp((t1: T1) => makeProp((t2: T2) => makeProp((t3: T3) => makeProp((t4: T4) => propFunction(t1, t2, t3, t4), argInstances4.shrink), argInstances3.shrink), argInstances2.shrink), argInstances1.shrink)
 
   def noShrink: SelfType = copy(argInstances1 = argInstances1.copy(shrink = None), argInstances2 = argInstances2.copy(shrink = None), argInstances3 = argInstances3.copy(shrink = None), argInstances4 = argInstances4.copy(shrink = None))
 
@@ -438,7 +438,7 @@ case class ScalaCheckFunction5[T1, T2, T3, T4, T5, R](
   }
 
   lazy val prop: Prop =
-    makeProp((t5: T5) => makeProp((t4: T4) => makeProp((t3: T3) => makeProp((t2: T2) => makeProp((t1: T1) => propFunction(t1, t2, t3, t4, t5), argInstances1.shrink), argInstances2.shrink), argInstances3.shrink), argInstances4.shrink), argInstances5.shrink)
+    makeProp((t1: T1) => makeProp((t2: T2) => makeProp((t3: T3) => makeProp((t4: T4) => makeProp((t5: T5) => propFunction(t1, t2, t3, t4, t5), argInstances5.shrink), argInstances4.shrink), argInstances3.shrink), argInstances2.shrink), argInstances1.shrink)
 
   def noShrink: SelfType = copy(argInstances1 = argInstances1.copy(shrink = None), argInstances2 = argInstances2.copy(shrink = None), argInstances3 = argInstances3.copy(shrink = None), argInstances4 = argInstances4.copy(shrink = None), argInstances5 = argInstances5.copy(shrink = None))
 
@@ -532,7 +532,7 @@ case class ScalaCheckFunction6[T1, T2, T3, T4, T5, T6, R](
   }
 
   lazy val prop: Prop =
-    makeProp((t6: T6) => makeProp((t5: T5) => makeProp((t4: T4) => makeProp((t3: T3) => makeProp((t2: T2) => makeProp((t1: T1) => propFunction(t1, t2, t3, t4, t5, t6), argInstances1.shrink), argInstances2.shrink), argInstances3.shrink), argInstances4.shrink), argInstances5.shrink), argInstances6.shrink)
+    makeProp((t1: T1) => makeProp((t2: T2) => makeProp((t3: T3) => makeProp((t4: T4) => makeProp((t5: T5) => makeProp((t6: T6) => propFunction(t1, t2, t3, t4, t5, t6), argInstances6.shrink), argInstances5.shrink), argInstances4.shrink), argInstances3.shrink), argInstances2.shrink), argInstances1.shrink)
 
   def noShrink: SelfType = copy(argInstances1 = argInstances1.copy(shrink = None), argInstances2 = argInstances2.copy(shrink = None), argInstances3 = argInstances3.copy(shrink = None), argInstances4 = argInstances4.copy(shrink = None), argInstances5 = argInstances5.copy(shrink = None), argInstances6 = argInstances6.copy(shrink = None))
 
@@ -633,7 +633,7 @@ case class ScalaCheckFunction7[T1, T2, T3, T4, T5, T6, T7, R](
   }
 
   lazy val prop: Prop =
-    makeProp((t7: T7) => makeProp((t6: T6) => makeProp((t5: T5) => makeProp((t4: T4) => makeProp((t3: T3) => makeProp((t2: T2) => makeProp((t1: T1) => propFunction(t1, t2, t3, t4, t5, t6, t7), argInstances1.shrink), argInstances2.shrink), argInstances3.shrink), argInstances4.shrink), argInstances5.shrink), argInstances6.shrink), argInstances7.shrink)
+    makeProp((t1: T1) => makeProp((t2: T2) => makeProp((t3: T3) => makeProp((t4: T4) => makeProp((t5: T5) => makeProp((t6: T6) => makeProp((t7: T7) => propFunction(t1, t2, t3, t4, t5, t6, t7), argInstances7.shrink), argInstances6.shrink), argInstances5.shrink), argInstances4.shrink), argInstances3.shrink), argInstances2.shrink), argInstances1.shrink)
 
   def noShrink: SelfType = copy(argInstances1 = argInstances1.copy(shrink = None), argInstances2 = argInstances2.copy(shrink = None), argInstances3 = argInstances3.copy(shrink = None), argInstances4 = argInstances4.copy(shrink = None), argInstances5 = argInstances5.copy(shrink = None), argInstances6 = argInstances6.copy(shrink = None), argInstances7 = argInstances7.copy(shrink = None))
 
@@ -741,7 +741,7 @@ case class ScalaCheckFunction8[T1, T2, T3, T4, T5, T6, T7, T8, R](
   }
 
   lazy val prop: Prop =
-    makeProp((t8: T8) => makeProp((t7: T7) => makeProp((t6: T6) => makeProp((t5: T5) => makeProp((t4: T4) => makeProp((t3: T3) => makeProp((t2: T2) => makeProp((t1: T1) => propFunction(t1, t2, t3, t4, t5, t6, t7, t8), argInstances1.shrink), argInstances2.shrink), argInstances3.shrink), argInstances4.shrink), argInstances5.shrink), argInstances6.shrink), argInstances7.shrink), argInstances8.shrink)
+    makeProp((t1: T1) => makeProp((t2: T2) => makeProp((t3: T3) => makeProp((t4: T4) => makeProp((t5: T5) => makeProp((t6: T6) => makeProp((t7: T7) => makeProp((t8: T8) => propFunction(t1, t2, t3, t4, t5, t6, t7, t8), argInstances8.shrink), argInstances7.shrink), argInstances6.shrink), argInstances5.shrink), argInstances4.shrink), argInstances3.shrink), argInstances2.shrink), argInstances1.shrink)
 
   def noShrink: SelfType = copy(argInstances1 = argInstances1.copy(shrink = None), argInstances2 = argInstances2.copy(shrink = None), argInstances3 = argInstances3.copy(shrink = None), argInstances4 = argInstances4.copy(shrink = None), argInstances5 = argInstances5.copy(shrink = None), argInstances6 = argInstances6.copy(shrink = None), argInstances7 = argInstances7.copy(shrink = None), argInstances8 = argInstances8.copy(shrink = None))
 
@@ -875,7 +875,7 @@ case class ScalaCheckFunction$n[${TNList(n)}, R](
   }
 
   lazy val prop: Prop =
-    ${(1 to n).foldLeft(s"propFunction(${NParamList(n)})") { (res, i) =>
+    ${(1 to n).reverse.foldLeft(s"propFunction(${NParamList(n)})") { (res, i) =>
        s"makeProp((t$i: T$i) => $res, argInstances$i.shrink)"
     }}
 
