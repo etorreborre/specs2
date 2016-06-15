@@ -218,11 +218,13 @@ object JsonType {
 
   implicit def JsonTypeMatcherGenTraversable(m: ContainWithResultSeq[String]): Matcher[JsonType] = (actual: JsonType) => actual match {
     case JsonArray(list) => m(Expectable(list.map(showJson)))
+    case JsonMap(map)    => m(Expectable(map.map(showJson)))
     case other           => Matcher.result(false, s"$other is not an array", Expectable(other))
   }
 
   implicit def JsonTypeMatcherGenTraversable(m: ContainWithResult[String]): Matcher[JsonType] = (actual: JsonType) => actual match {
     case JsonArray(list) => m(Expectable(list.map(showJson)))
+    case JsonMap(map)    => m(Expectable(map.map(showJson)))
     case other           => Matcher.result(false, s"$other is not an array", Expectable(other))
   }
 

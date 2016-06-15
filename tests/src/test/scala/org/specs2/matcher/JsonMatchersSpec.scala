@@ -68,13 +68,19 @@ class JsonMatchersSpec extends Specification with JsonMatchers { def is = s2"""
  ${ "{'person' : {'name': 'Joe', 'name2' : 'Moe'} }" must /("person") /#(1) /("name2" -> "Moe") }
  ${ "{'house' : {'person' : {'name': 'Joe', 'name2' : 'Moe'}}}" must */("person") /#(1) /("name2" -> "Moe") }
 
- withSize can be used to check the size of an element
+ have / andHave can be used to check the elements in an array
  ${ "['name', 'Joe']" must have(size(2)) }
  ${ "[{'name': 'Joe'}]" must /#(0).andHave(size(1)) }
  ${ "{'name' : ['Joe']}" must /("name").andHave(size(1)) }
  ${ "{'person' : [{'names':['e', 't']}]}" must /("person")./#(0)./("names").andHave(size(2)) }
  ${ "{'names': ['e', 't']}" must /("names").andHave(size(2)) }
  ${ "{'person' : ['names', ['e', 't']] }" must /("person")./#(1).andHave(size(2)) }
+
+ have / andHave can be used to check the elements in an object
+ ${ "{'person' : {'name':'Joe', 'age':'18' } }" must /("person").andHave(exactly(/("name" -> "Joe"), /("age" -> "18"))) }
+ ${ "{'person' : {'name':'Joe', 'age':'19' } }" must /("person").andHave(exactly(/("name" -> "Joe"), /("age" -> "18"))) returns
+     """{age:19} doesn't contain 'age':'18'"""
+  }
 
  String, Int, Boolean, Double and Traversable matchers can be used with the andHave method $andHave
 
