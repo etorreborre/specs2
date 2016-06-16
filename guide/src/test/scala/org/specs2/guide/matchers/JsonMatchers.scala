@@ -7,7 +7,8 @@ import matcher._
 object JsonMatchers extends UserGuideCard with matcher.JsonMatchers {
   def title = "Json"
   def text =  s2"""
- [Json](http://www.json.org) is a simple data format essentially modeling recursive key-values. There are 2 matchers which can be used to verify the presence of appropriate values in Strings representing Json documents:
+ [Json](http://www.json.org) is a simple data format essentially modeling recursive key-values.
+ You can use the following matchers provided by the `org.specs2.matcher.JsonMatchers` trait to check JSON strings:
 
  * `/(value)` checks if a value is present at the root of the document. This can only be the case if that document is an Array
 
