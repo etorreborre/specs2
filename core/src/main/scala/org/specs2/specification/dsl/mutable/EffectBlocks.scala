@@ -46,6 +46,12 @@ case class EffectBlocks(var mode: EffectBlocksMode = Record) {
   /** get the node number on the current branch and add 1 */
   private def nextNodeNumber = blocksTree.lastChild.map(_.getLabel + 1).getOrElse(0)
 
+  def clear = {
+    effects.clear
+    blocksTree = leaf(0).loc
+    this
+  }
+
   def record = {
     mode = Record
     val saved = effects.toList

@@ -45,6 +45,7 @@ trait MutableFragmentBuilder extends FragmentBuilder
   private def replayFragments(environment: Env) = {
     env = environment
     targetPath.map(effects.replay).getOrElse(effects.record)
+    effects.clear
     specFragments
   }
 
