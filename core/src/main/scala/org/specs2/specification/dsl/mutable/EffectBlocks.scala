@@ -9,6 +9,7 @@ import Throwablex._
 import scala.util.control.NonFatal
 import scalaz.TreeLoc
 import scalaz.Tree._
+import scalaz.std.anyVal._
 
 /**
  * This class tracks "nested" effects.
@@ -18,7 +19,7 @@ import scalaz.Tree._
  * of blocks
  */
 private[specs2]
-class EffectBlocks {
+case class EffectBlocks(var mode: EffectBlocksMode = Record) {
   /**
    * This tree loc contains the "path" of Examples and Actions when they are created in a block creating another fragment
    * For example:
@@ -35,75 +36,93 @@ class EffectBlocks {
   private[specs2] var blocksTree: TreeLoc[Int] = leaf(0).loc
 
   /** list of actions to create fragments */
-  private val effects: scala.collection.mutable.ListBuffer[() => Unit] = new scala.collection.mutable.ListBuffer()
-
-  /** stop evaluating effects */
-  private var stop = false
+  private val effects: scala.collection.mutable.ListBuffer[() => Unit] =
+    new scala.collection.mutable.ListBuffer()
 
   /** get the node number on the current branch and add 1 */
   private def nextNodeNumber = blocksTree.lastChild.map(_.getLabel + 1).getOrElse(0)
 
+  type Effect = () => Unit
+
   /**
-   * Play all effects.
-   *
-   * After each executed effect, new effects might have been created.
-   * Push them first at the beginning of the effects list so that they can be played first.
-   *
-   * This is in particular the case when the effects are
-   *
-   *  - open block
-   *  - spawn new effects
-   *  - close block
-   *
-   *  the effects will have to be executed before the block is closed
-   *
+   * Recording mode
+   * we execute effects as they arrive just to be able to compute effect paths for each block
    */
-  lazy val replay = {
+  def record = {
+    mode = Record
+    this
+  }
 
-    while (!effects.isEmpty && !stop) {
-      val (effect, rest) = (effects.head, effects.tail)
-      effects.clear
+  /**
+   * Replay mode, we only execute effects but which are on a given path
+   */
+  def replay(targetPath: EffectPath) = {
+    mode = Replay
+    // in replay mode don't update the blocksTree
+    blocksTree = leaf(0).loc
 
-      effect.apply()
-      effects.append(rest:_*)
+    def runPath(path: Seq[Int]): Unit = {
+      path.toList match {
+        case n :: remainingPath =>
+          val effect = effects.drop(n).headOption
+          effects.clear
+          effect.foreach(_())
+          runPath(remainingPath)
+
+        case Nil => ()
+      }
     }
+    // drop the root node which is just the root of the tree
+    // and does not correspond to any effect
+    runPath(targetPath.path.drop(1))
+    this
   }
 
   /** @return the current path to root */
-  def effectPath = EffectPath(blocksTree.lastChild.getOrElse(blocksTree).path.reverse.toIndexedSeq)
+  def effectPath: EffectPath =
+    EffectPath(blocksTree.lastChild.getOrElse(blocksTree).path.reverse:_*)
 
-  private def startBlock() = effect {
-    blocksTree = blocksTree.insertDownLast(nextNodeNumber)
-  }
+  /** @return a display of the current tree of effects */
+  def tree = blocksTree.toTree.drawTree
 
-  private def endBlock() = effect {
-    blocksTree = blocksTree.getParent
-  }
-
-  def isAt(path: Option[EffectPath]) = path.toList.contains(effectPath)
-
+  /**
+   * nest an effect. This effect can potentially add other effects
+   */
   def nestBlock(block: =>Any) = {
-    startBlock()
-    block
-    endBlock()
+    // store the effect
+    effect(tryBlock(block))
+
+    // in record mode run them right away
+    if (mode == Record) {
+      blocksTree = blocksTree.insertDownLast(nextNodeNumber)
+      tryBlock(block)
+      blocksTree = blocksTree.getParent
+    }
+    this
   }
 
-  /** stop creating fragments when the target is reached */
-  def stopEffects() = stop = true
+  /**
+   * add a new leaf to the tree
+   * if we are in record mode, we increment the blocksTree
+   */
+  def addBlock = {
+    if (mode == Record)
+      blocksTree = blocksTree.addChild(nextNodeNumber)
+    this
+  }
 
-
-  def addBlock[T](t: =>T) = effect {
-    blocksTree = blocksTree.addChild(nextNodeNumber)
-    try {
-      t
-    } catch {
+  /**
+   * try an effect and catch exceptions in order to report them properly when a block is failing
+   */
+  private def tryBlock(block: =>Any) =
+    try { block; () }
+    catch {
       case e: ExecuteException => throw SpecificationCreationExpectationException(e)
       case NonFatal(e)         => throw SpecificationCreationException(e)
     }
-    ()
-  }
 
-  def effect(a: =>Unit) =
+  /** store an effect */
+  private def effect(a: =>Unit) =
     effects.append(() => a)
 
   implicit class TreeLocx[T](t: TreeLoc[T]) {
@@ -189,8 +208,22 @@ case class SpecificationCreationException(t: Throwable) extends Exception {
 }
 
 private[specs2]
-case class EffectPath(path: Seq[Int] = Seq()) {
+case class EffectPath(path: Vector[Int] = Vector()) {
   def startsWith(other: EffectPath) = path.take(other.path.size) == other.path
+}
+private[specs2]
+object EffectPath {
+  def apply(path: Int*): EffectPath =
+    new EffectPath(Vector(path:_*))
 }
 
 
+
+private[specs2]
+sealed trait EffectBlocksMode
+
+private[specs2]
+object Record extends EffectBlocksMode
+
+private[specs2]
+object Replay extends EffectBlocksMode
