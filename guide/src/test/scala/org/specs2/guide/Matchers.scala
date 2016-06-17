@@ -179,28 +179,35 @@ The easiest way to create a new matcher is to create it from a function returnin
 
 // annotate the return type so that implicit conversions can transform your function into a Matcher object
 // here just return a boolean and a failure message
-def m1: Matcher[String] = { s: String =>
+def startWithHello: Matcher[String] = { s: String =>
   (s.startsWith("hello"), s+" doesn't start with hello")
 }
 
+"hello world" must startWithHello
+
 // with a success message and a failure message
-def m2: Matcher[String] = { s: String =>
-  (s.startsWith("hello"), s+" starts with hello", s+" doesn't start with hello")
+def endWithWorld: Matcher[String] = { s: String =>
+  (s.endsWith("world"), s+" ends with world", s+" doesn't end with world")
 }
 
+"hello world" must endWithWorld
+
 // with a function taking the actual value for the failure message
-def m3: Matcher[String] =
-  ((_: String).startsWith("hello"), (_:String)+" doesn't start with hello")
+def startWithHi: Matcher[String] =
+  ((_: String).startsWith("hi"), (_:String)+" doesn't start with hi")
+
+"hi universe" must startWithHi
 
 // with 2 functions for the success and failure messages
-def m4: Matcher[String] =
-  ((_: String).startsWith("hello"), (s:String) => s+ " starts with hello", (s:String) => s+ " doesn't start with hello")
+def endWithUniverse: Matcher[String] =
+  ((_: String).endsWith("universe"), (s:String) => s+ " ends with universe", (s:String) => s+ " doesn't end with universe")
 
+"hi universe" must endWithUniverse
 }}
 
 If you want absolute power over matching, you can define your own matcher extending `Matcher`: ${snippet{
 
-class MyOwn extends Matcher[String] {
+case class BeMyOwnEmpty() extends Matcher[String] {
   def apply[S <: String](s: Expectable[S]) = {
     result(s.value.isEmpty,
       s.description + " is empty",
@@ -208,6 +215,8 @@ class MyOwn extends Matcher[String] {
       s)
   }
 }
+
+"" must BeMyOwnEmpty()
 }}
 
 In the code above you have to:
