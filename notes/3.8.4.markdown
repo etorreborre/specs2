@@ -1,0 +1,21 @@
+Maintenance version.
+
+## Improvements
+
+ * project: added a `try-specs2` script
+ * core: use tags to filter out specification references
+ * core: display linked specifications aliases when running in sbt
+ * core: extended the `SpecificationFinder` pattern for specification names so it can match specifications extending classes other than `Specification`
+ * core: added implicit values to format datatables (use the `org.specs2.text.ShowText` classes) 
+ * core: added the possibility to match map values with `andHave` in json matchers 
+ * guide: specified the uses of `message` for an exception matcher
+ * guide: specify that the `JsonMatchers` trait must be used to match `JSON` values
+ * guide: added better examples for custom matchers
+ 
+## Fixes
+
+ * core: bug in regex matching with multiline strings [#483](http://github.com/etorreborre/specs2/issues/483)
+ * core: fixed the isolated specification so that variables at the root of the specification are also isolated
+ * guide: fixed the documentation for setting snippet parameters
+ * scalacheck: fixed the rendering of failed arguments for scalacheck properties (it was reversed when using `prop`)
+ 
