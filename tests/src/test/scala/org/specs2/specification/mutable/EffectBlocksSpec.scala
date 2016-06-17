@@ -1,144 +1,161 @@
 package org.specs2.specification.mutable
 
 import org.specs2.ScalaCheck
-import org.specs2.matcher.{Matcher, ThrownExpectations}
-import org.specs2.matcher.MatchersCreation._
-import scala.collection.mutable.ListBuffer
-import org.scalacheck.{Gen, Arbitrary}
-import org.specs2.specification.dsl.mutable.{EffectPath, EffectBlocks}
+import org.specs2.matcher._
+import org.scalacheck.{Arbitrary, Gen}
+import org.specs2.specification.dsl.mutable._
+import org.specs2.data.Trees._
 
-class EffectBlocksSpec extends org.specs2.Spec with ThrownExpectations with ScalaCheck { def is = s2"""
+class EffectBlocksSpec extends org.specs2.Specification with ThrownExpectations with ScalaCheck { def is = s2"""
 
-  addBlock + replay plays the effect                                      $e1
-  n * addBlock + replay plays all effects in order                        $e2
-  n nestings creates a path for root + n nodes + leaf node == n+2 nodes   $e3
-  opening a new block starts a new branch                                 $e4
-  nesting effects creates a tree of distinct effect paths                 $e5
-  stop effects will stop executing effects whenever it is called          $e6
-  isAt(effectPath) returns true if we are at the given path               $e7
+ EffectBlocks is used to track a "tree of effects" where it is
+ possible to have one effect creating several other ones.
 
+ The interface is:
+
+  - addBlock to add a "leaf". This just increments the current "effect path"
+  - nestBlock to add a "node" effect. When executed, this effect will potentially create more effects
+
+ There are 2 modes of operation:
+
+  - record: addBlock/nestBlock store the effects but after each addition update an "effect path" giving the
+    position of the current effect in the tree of effects
+
+  - replay(targetPath): addBlock/nestBlock store the effects and they are being executed only if
+    they are on the target path
+
+  example1   $e1
+  example2   $e2
+  for any nesting and any path in the effects tree only actions on the path are executed $e3
 """
 
   def e1 = {
-    val effects = new EffectBlocks
-    var i = 0
-    effects.addBlock(i = i + 1)
-    i must_== 0
-
-    effects.replay
-    i must_== 1
-  }
-
-  def e2 = { prop { n: Int =>
-    val effects = new EffectBlocks
-    var list = new ListBuffer[Int]
-
-    (1 to n) foreach (i => effects.addBlock(list.append(i)))
-
-    effects.replay
-    list.toList must_== (1 to n).toList
-
-  }}
-
-  def e3 = prop { n: Int =>
-    val effects = new EffectBlocks
-    var path: EffectPath = new EffectPath()
-
-    nest(n, effects, effects.addBlock(path = effects.effectPath))
-
-    effects.replay
-    path.path.toList must_== Seq.fill(n + 2)(0)
-  }
-
-  def e4 = {
-    val effects = new EffectBlocks
-    var lastPath: EffectPath = new EffectPath()
-
-    effects.nestBlock {
-      effects.addBlock { lastPath = effects.effectPath }
-    }
-    effects.nestBlock {
-      effects.addBlock { lastPath = effects.effectPath }
-    }
-
-    effects.replay
-    lastPath.path.toList must_== List(0, 1, 0)
-
-  }
-
-  def e5 = {
-    val effects = new EffectBlocks
+    val effects = EffectBlocks()
     val paths = new collection.mutable.ListBuffer[EffectPath]
+    val actions = new collection.mutable.ListBuffer[String]
 
-    effects.nestBlock {
-      effects.addBlock { paths.append(effects.effectPath) }
-      effects.addBlock { paths.append(effects.effectPath) }
-    }
-    effects.nestBlock {
-      effects.nestBlock {
-        effects.addBlock { paths.append(effects.effectPath) }
-        effects.addBlock { paths.append(effects.effectPath) }
-        effects.addBlock { paths.append(effects.effectPath) }
-      }
-      effects.addBlock { paths.append(effects.effectPath) }
-      effects.addBlock { paths.append(effects.effectPath) }
+    def addBlock = {
+      effects.addBlock
+      paths.append(effects.effectPath)
+      this
     }
 
-    effects.replay
-    paths.distinct must_== paths
+    effects.nestBlock {
+      actions.append("open block 0")
 
+      addBlock
+      addBlock
+    }
+
+    paths.toList must_==
+      List(
+        EffectPath(0, 0, 0),
+        EffectPath(0, 0, 1)
+      )
+
+    actions.clear
+    effects.replay(EffectPath(0, 0, 1))
+
+    actions.toList must_==
+      List(
+        "open block 0"
+      )
   }
 
-  def e6 = {
-    val effects = new EffectBlocks
+  def e2 = {
+    val effects = EffectBlocks()
     val paths = new collection.mutable.ListBuffer[EffectPath]
+    val actions = new collection.mutable.ListBuffer[String]
 
-    effects.nestBlock {
-      effects.addBlock { paths.append(effects.effectPath) }
-      effects.addBlock { paths.append(effects.effectPath) }
+    def addBlock = {
+      effects.addBlock
+      paths.append(effects.effectPath)
+      this
     }
-    effects.nestBlock {
+
+    def action =
       effects.nestBlock {
-        effects.addBlock { paths.append(effects.effectPath) }
-        effects.addBlock { effects.stopEffects }
-        effects.addBlock { paths.append(effects.effectPath) }
+        actions.append("open block 0")
+        effects.nestBlock {
+          actions.append("open block 0-0")
+          addBlock
+          addBlock
+        }
+        effects.nestBlock {
+          actions.append("open block 0-1")
+          addBlock
+          addBlock
+        }
       }
-      effects.addBlock { paths.append(effects.effectPath) }
-      effects.addBlock { paths.append(effects.effectPath) }
-    }
 
-    effects.replay
-    paths must haveSize(3)
+    action
+
+    paths.toList must_==
+      List(
+        EffectPath(0, 0, 0, 0),
+        EffectPath(0, 0, 0, 1),
+        EffectPath(0, 0, 1, 0),
+        EffectPath(0, 0, 1, 1)
+      )
+
+    actions.clear
+    effects.replay(EffectPath(0, 0, 1, 1))
+
+    actions.toList must_==
+      List(
+        "open block 0",
+        "open block 0-1"
+      )
   }
 
-  def e7 = {
-    val effects = new EffectBlocks
+  def e3 = prop { actions: Actions =>
 
-    effects.nestBlock {
-      effects.addBlock {}
-      effects.addBlock {}
-    }
-    effects.nestBlock {
-      effects.addBlock {}
-      effects.addBlock {}
-      effects.nestBlock {
-        effects.addBlock {}
-        effects.addBlock { effects.stopEffects } // we stop exactly here
-        effects.addBlock {}
-      }
-    }
+    val effectBlocks = EffectBlocks()
+    val results = new collection.mutable.ListBuffer[String]
 
-    effects.replay
-    effects must beAt(0, 1, 2, 1)
+    actions.run(effectBlocks, results)
+
+    val paths = effectBlocks.blocksTree.root.tree.allPaths
+    val path: EffectPath = Gen.oneOf(paths).sample.map(p => EffectPath(p:_*)).getOrElse(EffectPath())
+
+    results.clear
+    effectBlocks.replay(path)
+
+    results.toList must_==
+      actions.getActionsOnPath(path)
   }
-
-  def beAt(path: Int*): Matcher[EffectBlocks] = (effects: EffectBlocks) =>
-    (effects.isAt(Some(EffectPath(path))), s"effect path is ${effects.effectPath} but should be $path")
-
-  final def nest(n: Int, effects: EffectBlocks, content: =>Any): Any =
-    if (n == 0) content
-    else        effects.nestBlock(nest(n - 1, effects, content))
 
   implicit val tinyInt: Arbitrary[Int] = Arbitrary(Gen.choose(1, 5))
+}
+
+private[specs2]
+case class Actions(nested: List[Actions] = List(), name: String) {
+
+  def getActionsOnPath(path: EffectPath): List[String] =
+    path.path.drop(1).toList match {
+      case Nil => Nil
+      case n :: rest => nested(n).name :: getActionsOnPath(EffectPath(rest:_*))
+    }
+
+  def run(effects: EffectBlocks, actions: collection.mutable.ListBuffer[String]): Unit = {
+    if (nested.isEmpty) {
+      effects.addBlock
+      actions.append(name)
+    }
+    else
+      effects.nestBlock {
+        actions.append(name)
+        effects.addBlock
+      nested.foreach(_.run(effects, actions))
+    }
+    ()
+  }
+
+}
+
+object Actions {
+  implicit def ArbitraryActions: Arbitrary[Actions] = Arbitrary {
+    Gen.const(Actions(name = ""))
+  }
 }
 

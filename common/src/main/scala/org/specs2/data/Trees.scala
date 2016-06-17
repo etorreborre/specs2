@@ -21,6 +21,7 @@ trait Trees { outer =>
     def flattenSubForests = outer.flattenSubForests(t)
     def flattenLeft       = outer.flattenLeft(t)
     def size              = t.flatten.size
+    def allPaths          = outer.allPaths(t)
   }
 
   /**
@@ -29,6 +30,7 @@ trait Trees { outer =>
   implicit class CleanedTree[A](t: Tree[Option[A]]) {
     def clean(implicit initial: A): Tree[A] = outer.clean(t)(initial)
   }
+
   /**
    * map a Tree from leaves to root by replacing each node with the result of a function taking
    * that node and the mapping of all its children.
@@ -40,10 +42,13 @@ trait Trees { outer =>
     val tbs = t.subForest.map(t => bottomUp(t, f))
     Node(f(t.rootLabel, tbs.map(_.rootLabel)), tbs)
   }
+
   /**
    * remove None nodes from a tree
    */
-  def clean[A](t: Tree[Option[A]])(implicit initial: A): Tree[A] = prune(t, (a: Option[A]) => a).getOrElse(Leaf(initial))
+  def clean[A](t: Tree[Option[A]])(implicit initial: A): Tree[A] =
+    prune(t, (a: Option[A]) => a).getOrElse(Leaf(initial))
+
   /**
    * remove nodes from a tree if they are None according to a function f
    */
@@ -53,6 +58,7 @@ trait Trees { outer =>
       Node(root, tbs)
     }
   }
+
   /**
    * remove nodes from a tree if they are None according to a function f
    */
@@ -86,6 +92,12 @@ trait Trees { outer =>
    * @return the number of nodes in a TreeLoc
    */
   def size[A](t: TreeLoc[A]): Int = t.root.toTree.size
+
+  /**
+   * @return all the paths from root to leaves
+   */
+  def allPaths[A](tree: Tree[A]): List[List[A]] =
+    tree.subForest.toList.flatMap(t => allPaths(t).map(p => tree.rootLabel :: p))
 
   /**
    * @return the list of all parent locs from a given TreeLoc
