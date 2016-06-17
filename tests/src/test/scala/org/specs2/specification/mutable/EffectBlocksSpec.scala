@@ -31,23 +31,22 @@ class EffectBlocksSpec extends org.specs2.Specification with ThrownExpectations 
 
   def e1 = {
     val effects = EffectBlocks()
-    val paths = new collection.mutable.ListBuffer[EffectPath]
     val actions = new collection.mutable.ListBuffer[String]
 
     def addBlock = {
-      effects.addBlock
-      paths.append(effects.effectPath)
+      effects.addBlock("")
       this
     }
 
     effects.nestBlock {
       actions.append("open block 0")
-
       addBlock
       addBlock
     }
 
-    paths.toList must_==
+    effects.record
+
+    effects.paths must_==
       List(
         EffectPath(0, 0, 0),
         EffectPath(0, 0, 1)
@@ -64,12 +63,10 @@ class EffectBlocksSpec extends org.specs2.Specification with ThrownExpectations 
 
   def e2 = {
     val effects = EffectBlocks()
-    val paths = new collection.mutable.ListBuffer[EffectPath]
     val actions = new collection.mutable.ListBuffer[String]
 
     def addBlock = {
-      effects.addBlock
-      paths.append(effects.effectPath)
+      effects.addBlock("")
       this
     }
 
@@ -89,8 +86,9 @@ class EffectBlocksSpec extends org.specs2.Specification with ThrownExpectations 
       }
 
     action
+    effects.record
 
-    paths.toList must_==
+    effects.paths must_==
       List(
         EffectPath(0, 0, 0, 0),
         EffectPath(0, 0, 0, 1),
@@ -139,13 +137,13 @@ case class Actions(nested: List[Actions] = List(), name: String) {
 
   def run(effects: EffectBlocks, actions: collection.mutable.ListBuffer[String]): Unit = {
     if (nested.isEmpty) {
-      effects.addBlock
+      effects.addBlock(name)
       actions.append(name)
     }
     else
       effects.nestBlock {
         actions.append(name)
-        effects.addBlock
+        effects.addBlock(name)
       nested.foreach(_.run(effects, actions))
     }
     ()

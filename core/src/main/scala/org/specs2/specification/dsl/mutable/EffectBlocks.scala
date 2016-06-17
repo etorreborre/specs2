@@ -10,6 +10,7 @@ import scala.util.control.NonFatal
 import scalaz.TreeLoc
 import scalaz.Tree._
 import scalaz.std.anyVal._
+import org.specs2.data.Trees._
 
 /**
  * This class tracks "nested" effects.
@@ -35,21 +36,31 @@ case class EffectBlocks(var mode: EffectBlocksMode = Record) {
    */
   private[specs2] var blocksTree: TreeLoc[Int] = leaf(0).loc
 
+  private[specs2] def paths: List[EffectPath] =
+    blocksTree.toTree.allPaths.map(p => EffectPath(p:_*))
+
   /** list of actions to create fragments */
-  private val effects: scala.collection.mutable.ListBuffer[() => Unit] =
+  private val effects: scala.collection.mutable.ListBuffer[Effect] =
     new scala.collection.mutable.ListBuffer()
 
   /** get the node number on the current branch and add 1 */
   private def nextNodeNumber = blocksTree.lastChild.map(_.getLabel + 1).getOrElse(0)
 
-  type Effect = () => Unit
-
-  /**
-   * Recording mode
-   * we execute effects as they arrive just to be able to compute effect paths for each block
-   */
   def record = {
     mode = Record
+    val saved = effects.toList
+
+    while (effects.nonEmpty) {
+      val (effect, rest) = (effects.head, effects.tail)
+      effects.clear
+
+      effect.run()
+      effects.append(rest:_*)
+    }
+
+    // at the end of the recording we restore the effects
+    // but leave out the path effects
+    effects.append(saved.filter(_.replay):_*)
     this
   }
 
@@ -64,12 +75,13 @@ case class EffectBlocks(var mode: EffectBlocksMode = Record) {
     def runPath(path: Seq[Int]): Unit = {
       path.toList match {
         case n :: remainingPath =>
-          val effect = effects.drop(n).headOption
+          val effect = effects.filter(_.replay).drop(n).headOption
           effects.clear
-          effect.foreach(_())
+          effect.foreach(_.run())
           runPath(remainingPath)
 
-        case Nil => ()
+        case Nil =>
+          ()
       }
     }
     // drop the root node which is just the root of the tree
@@ -89,15 +101,11 @@ case class EffectBlocks(var mode: EffectBlocksMode = Record) {
    * nest an effect. This effect can potentially add other effects
    */
   def nestBlock(block: =>Any) = {
-    // store the effect
-    effect(tryBlock(block))
-
-    // in record mode run them right away
     if (mode == Record) {
-      blocksTree = blocksTree.insertDownLast(nextNodeNumber)
-      tryBlock(block)
-      blocksTree = blocksTree.getParent
-    }
+      pathEffect { blocksTree = blocksTree.insertDownLast(nextNodeNumber) }
+      effect {  tryBlock(block) }
+      pathEffect {  blocksTree = blocksTree.getParent }
+    } else effect(tryBlock(block))
     this
   }
 
@@ -105,9 +113,10 @@ case class EffectBlocks(var mode: EffectBlocksMode = Record) {
    * add a new leaf to the tree
    * if we are in record mode, we increment the blocksTree
    */
-  def addBlock = {
+  def addBlock(t: =>Any) = {
     if (mode == Record)
-      blocksTree = blocksTree.addChild(nextNodeNumber)
+      pathEffect { blocksTree = blocksTree.addChild(nextNodeNumber) }
+    effect { t; () }
     this
   }
 
@@ -121,15 +130,22 @@ case class EffectBlocks(var mode: EffectBlocksMode = Record) {
       case NonFatal(e)         => throw SpecificationCreationException(e)
     }
 
-  /** store an effect */
+  /** store a normal effect */
   private def effect(a: =>Unit) =
-    effects.append(() => a)
+    effects.append(Effect(() => a, replay = true))
+
+  /** store a path effect */
+  private def pathEffect(a: =>Unit) =
+    effects.append(Effect(() => a, replay = false))
+
+  case class Effect(run: () => Unit, replay: Boolean)
 
   implicit class TreeLocx[T](t: TreeLoc[T]) {
     def getParent = t.parent.getOrElse(t)
     def addChild(c: T) = t.insertDownLast(leaf(c)).getParent
     def insertDownLast(c: T) = t.insertDownLast(leaf(c))
   }
+
 }
 
 case class SpecificationCreationExpectationException(t: ExecuteException) extends Exception {

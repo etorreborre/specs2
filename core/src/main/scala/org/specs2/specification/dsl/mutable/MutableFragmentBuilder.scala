@@ -5,7 +5,7 @@ package mutable
 
 import main.Arguments
 import control._
-import execute.{Result, Success, ResultLogicalCombinators}
+import execute.{Pending, Result, ResultLogicalCombinators, Success}
 import ResultLogicalCombinators._
 import reflect.Classes
 import org.specs2.codata._
@@ -51,7 +51,7 @@ trait MutableFragmentBuilder extends FragmentBuilder
   /** when a target path is specified we might limit the creation of fragments to only the fragments on the desired path */
   private[specs2] var targetPath: Option[EffectPath] = None
 
-  private val effects = new EffectBlocks
+  private val effects = EffectBlocks()
 
   private[specs2] var env: Env = Env()
 
@@ -66,10 +66,11 @@ trait MutableFragmentBuilder extends FragmentBuilder
   }
 
   def addFragment(fragment: Fragment): Fragment = {
-    effects.addBlock
+    effects.addBlock {
+      if (targetPath.isDefined) specFragments.append(fragment)
+      else                      specFragments.append(isolate(fragment, effects.effectPath))
+    }
 
-    if (targetPath.isDefined) specFragments.append(fragment)
-    else                      specFragments.append(isolate(fragment, effects.effectPath))
     fragment
   }
 
@@ -105,7 +106,8 @@ trait MutableFragmentBuilder extends FragmentBuilder
           newSpec.targetPath = Some(effectPath)
           val pathFragments = newSpec.replayFragments(env)
           val previousSteps = pathFragments.filter(f => Fragment.isStep(f) && f.execution.isolable)
-          val isolatedExecution = pathFragments.lastOption.map(_.execution).getOrElse(Execution.NoExecution)
+          val isolatedExecution = pathFragments.lastOption.map(_.execution).
+            getOrElse(Execution.executed(Pending("isolation mode failure - could not find an isolated fragment to execute")))
 
           if (previousSteps.nonEmpty) {
             val previousStepsExecution = previousSteps.foldLeft(Success(): Result) { _ and _.execution.execute(env).result }

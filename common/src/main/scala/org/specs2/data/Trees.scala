@@ -97,7 +97,10 @@ trait Trees { outer =>
    * @return all the paths from root to leaves
    */
   def allPaths[A](tree: Tree[A]): List[List[A]] =
-    tree.subForest.toList.flatMap(t => allPaths(t).map(p => tree.rootLabel :: p))
+    tree.subForest.toList match {
+      case Nil => List(List(tree.rootLabel))
+      case subForests => subForests.flatMap(subTree => allPaths(subTree).map(p => tree.rootLabel :: p))
+    }
 
   /**
    * @return the list of all parent locs from a given TreeLoc

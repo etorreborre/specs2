@@ -42,15 +42,24 @@ class IsolatedExecutionSpec extends Spec with ForEachEnv { def is = s2"""
  * this isolated specification must have all its examples ok because they are properly isolated
  */
 class TestIsolatedSpec1 extends org.specs2.mutable.Specification with MustMatchers { isolated
+  var n = 0
   "this" should {
+    n += 1
     var i = 0
     "create example 1" >> {
       i += 1
-      if (i == 1) Success("example1") else Failure(s"example1: i is $i but should be 1")
+      if (i == 1) {
+        if (n == 1) Success("example1")
+        else Failure(s"example1: n is $n but should be 1")
+      } else Failure(s"example1: i is $i but should be 1")
     }
     "create example 2" >> {
       i += 1
-      if (i == 1) Success("example2") else Failure(s"example2: i is $i but should be 1") }
+      if (i == 1) {
+        if (n == 1) Success("example2")
+        else Failure(s"example2: n is $n but should be 1")
+      } else Failure(s"example2: i is $i but should be 1")
+    }
   }
 }
 
