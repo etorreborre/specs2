@@ -279,7 +279,7 @@ object build extends Build {
   documentationSettings ++
   apiSettings               ++
   Seq(scalacOptions in (Compile, doc) += "-Ymacro-no-expand") ++
-  Seq(sources in (Compile, doc) in common := (if (scalaVersion.value startsWith "2.10") List() else (sources in (Compile, doc)).value),
+  Seq(sources in (Compile, doc) in common := (if (scalaVersion.value startsWith "2.10") List() else (sources in (Compile, doc) in common).value),
     sources in (Compile, doc) in core := List(),
     sources in (Compile, doc) in matcherExtra := List())
 
