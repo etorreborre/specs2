@@ -1,0 +1,735 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>codata - org.specs2.codata</title>
+          <meta name="description" content="codata - org.specs2.codata" />
+          <meta name="keywords" content="codata org.specs2.codata" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../index.html';
+            var hash = 'org.specs2.codata.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Package" src="../../../lib/package_big.png" />
+        <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.specs2">specs2</a></p>
+        <h1>codata</h1><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.package" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">codata</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="org.specs2.codata"><span>codata</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show All</span></li>
+            </ol>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="org.specs2.codata.Cause" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="CauseextendsAnyRef"></a>
+      <a id="Cause:Cause"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Cause.html"><span class="name">Cause</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.package@CauseextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Defines termination cause for the process.</p><div class="fullcomment"><div class="comment cmt"><p>Defines termination cause for the process.
+Cause is always wrapped in <code>Halt</code> and controls process flow.
+</p></div></div>
+    </li><li name="org.specs2.codata.Channel" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Channel[+F[_],-I,O]=org.specs2.codata.Process[F,I=&gt;F[O]]"></a>
+      <a id="Channel[+F[_],-I,O]:Channel[F,I,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Channel</span><span class="tparams">[<span name="F">+F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="I">-I</span>, <span name="O">O</span>]</span><span class="result"> = <a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<span class="extype" name="org.specs2.codata.Channel.F">F</span>, (<span class="extype" name="org.specs2.codata.Channel.I">I</span>) ⇒ <span class="extype" name="org.specs2.codata.Channel.F">F</span>[<span class="extype" name="org.specs2.codata.Channel.O">O</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.package@Channel[+F[_],-I,O]=org.specs2.codata.Process[F,I=&gt;F[O]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An effectful channel, to which we can send values and
+get back responses.</p><div class="fullcomment"><div class="comment cmt"><p>An effectful channel, to which we can send values and
+get back responses. Modeled as a source of effectful
+functions.
+</p></div></div>
+    </li><li name="org.specs2.codata.ChannelSyntax" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ChannelSyntax[F[_],I,O]extendsAnyVal"></a>
+      <a id="ChannelSyntax[F[_],I,O]:ChannelSyntax[F,I,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ChannelSyntax.html"><span class="name">ChannelSyntax</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="I">I</span>, <span name="O">O</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyVal" class="extype" target="_top">AnyVal</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.package@ChannelSyntax[F[_],I,O]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.codata.Process" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="Process[+F[_],+O]extendsProcess1Ops[F,O]withTeeOps[F,O]"></a>
+      <a id="Process[+F[_],+O]:Process[F,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Process.html"><span class="name">Process</span></a><span class="tparams">[<span name="F">+F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="O">+O</span>]</span><span class="result"> extends <span class="extype" name="org.specs2.codata.Process1Ops">Process1Ops</span>[<span class="extype" name="org.specs2.codata.Process.F">F</span>, <span class="extype" name="org.specs2.codata.Process.O">O</span>] with <span class="extype" name="org.specs2.codata.TeeOps">TeeOps</span>[<span class="extype" name="org.specs2.codata.Process.F">F</span>, <span class="extype" name="org.specs2.codata.Process.O">O</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.package@Process[+F[_],+O]extendsProcess1Ops[F,O]withTeeOps[F,O]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An effectful stream of <code>O</code> values.</p><div class="fullcomment"><div class="comment cmt"><p>An effectful stream of <code>O</code> values. In between emitting values
+a <code>Process</code> may request evaluation of <code>F</code> effects.
+A <code>Process[Nothing,A]</code> is a pure <code>Process</code> with no effects.
+A <code>Process[Task,A]</code> may have <code>Task</code> effects. A <code>Process</code>
+halts due to some <code>Cause</code>, generally <code>End</code> (indicating normal
+termination) or <code>Error(t)</code> for some <code>t: Throwable</code> indicating
+abnormal termination due to some uncaught error.
+</p></div></div>
+    </li><li name="org.specs2.codata.Process0" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Process0[+O]=org.specs2.codata.Process[Nothing,O]"></a>
+      <a id="Process0[+O]:Process0[O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Process0</span><span class="tparams">[<span name="O">+O</span>]</span><span class="result"> = <a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Nothing" class="extype" target="_top">Nothing</a>, <span class="extype" name="org.specs2.codata.Process0.O">O</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.package@Process0[+O]=org.specs2.codata.Process[Nothing,O]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.codata.Process1" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Process1[-I,+O]=org.specs2.codata.Process[org.specs2.codata.Process.Env[I,Any]#Is,O]"></a>
+      <a id="Process1[-I,+O]:Process1[I,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Process1</span><span class="tparams">[<span name="I">-I</span>, <span name="O">+O</span>]</span><span class="result"> = <a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<a href="Process$$Env$Is.html" class="extype" name="org.specs2.codata.Process.Env.Is">Is</a>, <span class="extype" name="org.specs2.codata.Process1.O">O</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.package@Process1[-I,+O]=org.specs2.codata.Process[org.specs2.codata.Process.Env[I,Any]#Is,O]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A single input stream transducer.</p><div class="fullcomment"><div class="comment cmt"><p>A single input stream transducer. Accepts input of type <code>I</code>,
+and emits values of type <code>O</code>.
+</p></div></div>
+    </li><li name="org.specs2.codata.Process1Syntax" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Process1Syntax[I,O]extendsAnyVal"></a>
+      <a id="Process1Syntax[I,O]:Process1Syntax[I,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Process1Syntax.html"><span class="name">Process1Syntax</span></a><span class="tparams">[<span name="I">I</span>, <span name="O">O</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyVal" class="extype" target="_top">AnyVal</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.package@Process1Syntax[I,O]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.codata.ReceiveY" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ReceiveY[+A,+B]extendsAnyRef"></a>
+      <a id="ReceiveY[+A,+B]:ReceiveY[A,B]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ReceiveY.html"><span class="name">ReceiveY</span></a><span class="tparams">[<span name="A">+A</span>, <span name="B">+B</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.package@ReceiveY[+A,+B]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.codata.Sink" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Sink[+F[_],-O]=org.specs2.codata.Process[F,O=&gt;F[Unit]]"></a>
+      <a id="Sink[+F[_],-O]:Sink[F,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Sink</span><span class="tparams">[<span name="F">+F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="O">-O</span>]</span><span class="result"> = <a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<span class="extype" name="org.specs2.codata.Sink.F">F</span>, (<span class="extype" name="org.specs2.codata.Sink.O">O</span>) ⇒ <span class="extype" name="org.specs2.codata.Sink.F">F</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.package@Sink[+F[_],-O]=org.specs2.codata.Process[F,O=&gt;F[Unit]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An effectful sink, to which we can send values.</p><div class="fullcomment"><div class="comment cmt"><p>An effectful sink, to which we can send values. Modeled
+as a source of effectful functions.
+</p></div></div>
+    </li><li name="org.specs2.codata.SinkSyntax" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SinkSyntax[F[_],I]extendsAnyVal"></a>
+      <a id="SinkSyntax[F[_],I]:SinkSyntax[F,I]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SinkSyntax.html"><span class="name">SinkSyntax</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="I">I</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyVal" class="extype" target="_top">AnyVal</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.package@SinkSyntax[F[_],I]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.codata.SinkTaskSyntax" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SinkTaskSyntax[I]extendsAnyVal"></a>
+      <a id="SinkTaskSyntax[I]:SinkTaskSyntax[I]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SinkTaskSyntax.html"><span class="name">SinkTaskSyntax</span></a><span class="tparams">[<span name="I">I</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyVal" class="extype" target="_top">AnyVal</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.package@SinkTaskSyntax[I]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.codata.Tee" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Tee[-I,-I2,+O]=org.specs2.codata.Process[org.specs2.codata.Process.Env[I,I2]#T,O]"></a>
+      <a id="Tee[-I,-I2,+O]:Tee[I,I2,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Tee</span><span class="tparams">[<span name="I">-I</span>, <span name="I2">-I2</span>, <span name="O">+O</span>]</span><span class="result"> = <a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<a href="Process$$Env$T.html" class="extype" name="org.specs2.codata.Process.Env.T">T</a>, <span class="extype" name="org.specs2.codata.Tee.O">O</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.package@Tee[-I,-I2,+O]=org.specs2.codata.Process[org.specs2.codata.Process.Env[I,I2]#T,O]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A stream transducer that can read from one of two inputs,
+the 'left' (of type <code>I</code>) or the 'right' (of type <code>I2</code>).</p><div class="fullcomment"><div class="comment cmt"><p>A stream transducer that can read from one of two inputs,
+the 'left' (of type <code>I</code>) or the 'right' (of type <code>I2</code>).
+<code>Process1[I,O] &lt;: Tee[I,I2,O]</code>.
+</p></div></div>
+    </li><li name="org.specs2.codata.TeeSyntax" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="TeeSyntax[I,I2,O]extendsAnyVal"></a>
+      <a id="TeeSyntax[I,I2,O]:TeeSyntax[I,I2,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="TeeSyntax.html"><span class="name">TeeSyntax</span></a><span class="tparams">[<span name="I">I</span>, <span name="I2">I2</span>, <span name="O">O</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyVal" class="extype" target="_top">AnyVal</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.package@TeeSyntax[I,I2,O]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This class provides infix syntax specific to <code>Tee</code>.</p><div class="fullcomment"><div class="comment cmt"><p>This class provides infix syntax specific to <code>Tee</code>. We put these here
+rather than trying to cram them into <code>Process</code> itself using implicit
+equality witnesses. This doesn't work out so well due to variance
+issues.
+</p></div></div>
+    </li><li name="org.specs2.codata.TeeW" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TeeW[+W,-I,-I2,+O]=org.specs2.codata.package.Tee[I,I2,scalaz.\/[W,O]]"></a>
+      <a id="TeeW[+W,-I,-I2,+O]:TeeW[W,I,I2,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">TeeW</span><span class="tparams">[<span name="W">+W</span>, <span name="I">-I</span>, <span name="I2">-I2</span>, <span name="O">+O</span>]</span><span class="result"> = <a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<a href="Process$$Env$T.html" class="extype" name="org.specs2.codata.Process.Env.T">T</a>, <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-core_2.11/7.2.3/scalaz-core_2.11-7.2.3-javadoc.jar/!/index.html#scalaz.\/" class="extype" target="_top">\/</a>[<span class="extype" name="org.specs2.codata.TeeW.W">W</span>, <span class="extype" name="org.specs2.codata.TeeW.O">O</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.package@TeeW[+W,-I,-I2,+O]=org.specs2.codata.package.Tee[I,I2,scalaz.\/[W,O]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A <code>Tee</code> that writes values of type <code>W</code>.</p>
+    </li><li name="org.specs2.codata.Writer" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Writer[+F[_],+W,+O]=org.specs2.codata.Process[F,scalaz.\/[W,O]]"></a>
+      <a id="Writer[+F[_],+W,+O]:Writer[F,W,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Writer</span><span class="tparams">[<span name="F">+F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="W">+W</span>, <span name="O">+O</span>]</span><span class="result"> = <a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<span class="extype" name="org.specs2.codata.Writer.F">F</span>, <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-core_2.11/7.2.3/scalaz-core_2.11-7.2.3-javadoc.jar/!/index.html#scalaz.\/" class="extype" target="_top">\/</a>[<span class="extype" name="org.specs2.codata.Writer.W">W</span>, <span class="extype" name="org.specs2.codata.Writer.O">O</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.package@Writer[+F[_],+W,+O]=org.specs2.codata.Process[F,scalaz.\/[W,O]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A <code>Writer[F,W,O]</code> is a <code>Process[F, W \/ O]</code>.</p><div class="fullcomment"><div class="comment cmt"><p>A <code>Writer[F,W,O]</code> is a <code>Process[F, W \/ O]</code>. See
+<code>WriterSyntax</code> for convenience functions
+for working with either the written values (the <code>W</code>)
+or the output values (the <code>O</code>).</p><p>This is useful for logging or other situations where we
+want to emit some values 'on the side' while doing something
+else with the main output of a <code>Process</code>.
+</p></div></div>
+    </li><li name="org.specs2.codata.Writer1" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Writer1[+W,-I,+O]=org.specs2.codata.package.Process1[I,scalaz.\/[W,O]]"></a>
+      <a id="Writer1[+W,-I,+O]:Writer1[W,I,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Writer1</span><span class="tparams">[<span name="W">+W</span>, <span name="I">-I</span>, <span name="O">+O</span>]</span><span class="result"> = <a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<a href="Process$$Env$Is.html" class="extype" name="org.specs2.codata.Process.Env.Is">Is</a>, <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-core_2.11/7.2.3/scalaz-core_2.11-7.2.3-javadoc.jar/!/index.html#scalaz.\/" class="extype" target="_top">\/</a>[<span class="extype" name="org.specs2.codata.Writer1.W">W</span>, <span class="extype" name="org.specs2.codata.Writer1.O">O</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.package@Writer1[+W,-I,+O]=org.specs2.codata.package.Process1[I,scalaz.\/[W,O]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A <code>Process1</code> that writes values of type <code>W</code>.</p>
+    </li><li name="org.specs2.codata.WriterSyntax" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="WriterSyntax[F[_],W,O]extendsAnyVal"></a>
+      <a id="WriterSyntax[F[_],W,O]:WriterSyntax[F,W,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="WriterSyntax.html"><span class="name">WriterSyntax</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="W">W</span>, <span name="O">O</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyVal" class="extype" target="_top">AnyVal</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.package@WriterSyntax[F[_],W,O]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Infix syntax for working with <code>Writer[F,W,O]</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Infix syntax for working with <code>Writer[F,W,O]</code>. We call
+the <code>W</code> parameter the 'write' side of the <code>Writer</code> and
+<code>O</code> the 'output' side. Many method in this class end
+with either <code>W</code> or <code>O</code>, depending on what side they
+operate on.
+</p></div></div>
+    </li><li name="org.specs2.codata.WriterTaskSyntax" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="WriterTaskSyntax[W,O]extendsAnyVal"></a>
+      <a id="WriterTaskSyntax[W,O]:WriterTaskSyntax[W,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="WriterTaskSyntax.html"><span class="name">WriterTaskSyntax</span></a><span class="tparams">[<span name="W">W</span>, <span name="O">O</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyVal" class="extype" target="_top">AnyVal</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.package@WriterTaskSyntax[W,O]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.codata.Wye" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Wye[-I,-I2,+O]=org.specs2.codata.Process[org.specs2.codata.Process.Env[I,I2]#Y,O]"></a>
+      <a id="Wye[-I,-I2,+O]:Wye[I,I2,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Wye</span><span class="tparams">[<span name="I">-I</span>, <span name="I2">-I2</span>, <span name="O">+O</span>]</span><span class="result"> = <a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<a href="Process$$Env$Y.html" class="extype" name="org.specs2.codata.Process.Env.Y">Y</a>, <span class="extype" name="org.specs2.codata.Wye.O">O</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.package@Wye[-I,-I2,+O]=org.specs2.codata.Process[org.specs2.codata.Process.Env[I,I2]#Y,O]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A stream transducer that can read from one of two inputs,
+non-deterministically.</p>
+    </li><li name="org.specs2.codata.WyeOps" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="WyeOps[+O]extendsAnyRef"></a>
+      <a id="WyeOps[+O]:WyeOps[O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="WyeOps.html"><span class="name">WyeOps</span></a><span class="tparams">[<span name="O">+O</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.package@WyeOps[+O]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+    </li><li name="org.specs2.codata.WyeSyntax" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="WyeSyntax[I,I2,O]extendsAnyVal"></a>
+      <a id="WyeSyntax[I,I2,O]:WyeSyntax[I,I2,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="WyeSyntax.html"><span class="name">WyeSyntax</span></a><span class="tparams">[<span name="I">I</span>, <span name="I2">I2</span>, <span name="O">O</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyVal" class="extype" target="_top">AnyVal</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.package@WyeSyntax[I,I2,O]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This class provides infix syntax specific to <code>Wye</code>.</p><div class="fullcomment"><div class="comment cmt"><p>This class provides infix syntax specific to <code>Wye</code>. We put these here
+rather than trying to cram them into <code>Process</code> itself using implicit
+equality witnesses. This doesn't work out so well due to variance
+issues.
+</p></div></div>
+    </li><li name="org.specs2.codata.WyeW" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="WyeW[+W,-I,-I2,+O]=org.specs2.codata.package.Wye[I,I2,scalaz.\/[W,O]]"></a>
+      <a id="WyeW[+W,-I,-I2,+O]:WyeW[W,I,I2,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">WyeW</span><span class="tparams">[<span name="W">+W</span>, <span name="I">-I</span>, <span name="I2">-I2</span>, <span name="O">+O</span>]</span><span class="result"> = <a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<a href="Process$$Env$Y.html" class="extype" name="org.specs2.codata.Process.Env.Y">Y</a>, <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-core_2.11/7.2.3/scalaz-core_2.11-7.2.3-javadoc.jar/!/index.html#scalaz.\/" class="extype" target="_top">\/</a>[<span class="extype" name="org.specs2.codata.WyeW.W">W</span>, <span class="extype" name="org.specs2.codata.WyeW.O">O</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.package@WyeW[+W,-I,-I2,+O]=org.specs2.codata.package.Wye[I,I2,scalaz.\/[W,O]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A <code>Wye</code> that writes values of type <code>W</code>.</p>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="org.specs2.codata.Cause" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Cause"></a>
+      <a id="Cause:Cause"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Cause$.html"><span class="name">Cause</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.package@Cause" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.codata#DefaultScheduler" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="DefaultScheduler:java.util.concurrent.ScheduledExecutorService"></a>
+      <a id="DefaultScheduler:ScheduledExecutorService"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">DefaultScheduler</span><span class="result">: <span class="extype" name="java.util.concurrent.ScheduledExecutorService">ScheduledExecutorService</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.package@DefaultScheduler:java.util.concurrent.ScheduledExecutorService" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Scheduler used for timing processes.</p><div class="fullcomment"><div class="comment cmt"><p>Scheduler used for timing processes.
+This thread pool shall not be used
+for general purpose Process or Task execution
+</p></div></div>
+    </li><li name="org.specs2.codata.Process" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Process"></a>
+      <a id="Process:Process"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Process$.html"><span class="name">Process</span></a><span class="result"> extends <span class="extype" name="org.specs2.codata.ProcessInstances">ProcessInstances</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.package@Process" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.codata.ReceiveY" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ReceiveY"></a>
+      <a id="ReceiveY:ReceiveY"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ReceiveY$.html"><span class="name">ReceiveY</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.package@ReceiveY" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.codata.async" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="async"></a>
+      <a id="async:async"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="async/package.html"><span class="name">async</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.package@async" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.codata.channel" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="channel"></a>
+      <a id="channel:channel"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="channel$.html"><span class="name">channel</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.package@channel" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.codata.process1" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="process1"></a>
+      <a id="process1:process1"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="process1$.html"><span class="name">process1</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.package@process1" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.codata.sink" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="sink"></a>
+      <a id="sink:sink"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="sink$.html"><span class="name">sink</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.package@sink" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.codata.tee" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="tee"></a>
+      <a id="tee:tee"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="tee$.html"><span class="name">tee</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.package@tee" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.codata.writer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="writer"></a>
+      <a id="writer:writer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="writer$.html"><span class="name">writer</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.package@writer" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.codata.wye" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="wye"></a>
+      <a id="wye:wye"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="wye$.html"><span class="name">wye</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.package@wye" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
