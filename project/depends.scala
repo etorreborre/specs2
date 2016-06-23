@@ -3,8 +3,6 @@ import Keys._
 
 object depends {
 
-  lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
-
   lazy val classycle = Seq("org.specs2" % "classycle" % "1.4.3")
 
   def compiler(scalaVersion: String) = Seq("org.scala-lang" % "scala-compiler" % scalaVersion)

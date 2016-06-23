@@ -42,12 +42,13 @@ object build extends Build {
   lazy val specs2Settings: Seq[Settings] = Seq(
     organization := "org.specs2",
     specs2Version in GlobalScope <<= version,
+    scalazVersion in GlobalScope := "7.2.3",
     specs2ShellPrompt,
     scalaVersion := "2.11.8",
-    scalazVersion := "7.2.3",
     crossScalaVersions := Seq(scalaVersion.value, "2.12.0-M4", "2.10.6"))
 
   lazy val specs2Version = settingKey[String]("defines the current specs2 version")
+  lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
 
   def moduleSettings(name: String): Seq[Settings] =
       coreDefaultSettings  ++
