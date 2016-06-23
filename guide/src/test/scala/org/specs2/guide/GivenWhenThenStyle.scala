@@ -55,7 +55,7 @@ class GWTSpec extends mutable.Specification {
   step { number = 1 }
 
   "When I double it".br
-  step { number *= number }
+  step { number *= 2 }
 
   "Then I get twice that number" >> {
     number must_== 2
