@@ -18,14 +18,18 @@ trait AsResultProp extends ScalaCheckPropertyCheck with ScalaCheckParameters wit
         Prop.apply { params: Gen.Parameters =>
           lazy val result = ResultExecution.execute(AsResult(r))
 
-          val prop =
-            result match {
-              case f : execute.Failure => Prop.falsified :| (f.message+" ("+f.location+")")
-              case s : execute.Skipped => Prop.exception(new SkipException(s))
-              case p : execute.Pending => Prop.exception(new PendingException(p))
-              case e : execute.Error   => Prop.exception(e.exception)
-              case other               => Prop.passed
+          def resultToProp(r: execute.Result): Prop =
+            r match {
+              case f : execute.Failure            => Prop.falsified :| (f.message+" ("+f.location+")")
+              case s : execute.Skipped            => Prop.exception(new SkipException(s))
+              case p : execute.Pending            => Prop.exception(new PendingException(p))
+              case e : execute.Error              => Prop.exception(e.exception)
+              case execute.DecoratedResult(_, r1) => resultToProp(r1)
+              case other                          => Prop.passed
             }
+
+          val prop = resultToProp(result)
+
           result match {
             case f: execute.Failure if f.details != NoDetails =>
               prop.apply(params).collect(f.details)

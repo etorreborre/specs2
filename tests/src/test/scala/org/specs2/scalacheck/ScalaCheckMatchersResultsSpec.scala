@@ -28,6 +28,9 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
  A FailureException makes a Failure
  ${ check(failureExceptionProp) must beFailing(withMessage("failure")) }
 
+ A failure with a datatable must report the datatable
+ ${check(datatableFailureProp) must beFailing(withMessage("x \\| 1 \\| 2 \\| '1' is not equal to '2'"))}
+ 
  Other exceptions are reported as errors
 
  normal exception
@@ -78,6 +81,14 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
   def exceptionPropOnConversion: Prop = forAll { (b: Boolean) => {throw new execute.FailureException(failure); Prop.passed} }
 
   def failureExceptionProp = forAll((b: Boolean) => {throw new execute.FailureException(failure); true})
+
+  import DataTables._
+  def datatableFailureProp = forAll { b: Boolean =>
+    "a" | "b" |>
+     1  ! 1   |
+     1  ! 2   | { (a, b) => a must_== b }
+   }
+
   def pendingProp = forAll((b: Boolean) => b must beTrue.orPending)
   def skippedProp = forAll((b: Boolean) => b must beTrue.orSkip)
 
