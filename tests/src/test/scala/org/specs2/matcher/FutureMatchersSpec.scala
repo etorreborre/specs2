@@ -1,10 +1,12 @@
 package org.specs2
 package matcher
 
-import org.specs2.execute.FailureException
+import execute._
 import specification.core.Env
 import scala.concurrent._
 import duration._
+import runner._
+import control._
 
 class FutureMatchersSpec(env: Env) extends Specification with ResultMatchers with Retries {
  val timeFactor = env.arguments.execute.timeFactor
@@ -45,6 +47,7 @@ class FutureMatchersSpec(env: Env) extends Specification with ResultMatchers wit
  ${ ({ throw new Exception("boom"); Future(1) } must throwAn[Exception].await) must throwAn[Exception] }
 
  In a mutable spec with a negated matcher $e1
+ In a mutable spec with a scope $e2
 
 """
 
@@ -53,5 +56,18 @@ class FutureMatchersSpec(env: Env) extends Specification with ResultMatchers wit
       def result = Future(true) must beFalse.awaitFor(1 second)
     }
    thrown.result must throwA[FailureException]
+  }
+
+  def e2 = {
+    val thrown = new mutable.Specification with FutureMatchers {
+      "timeout ko" in new Scope {
+        Future {
+          Thread.sleep(100)
+          1 must_== 2
+        }.awaitFor(50.millis)
+      }
+    }
+
+    ClassRunner.report(env)(thrown).runOption.get.failures === 1
   }
 }
