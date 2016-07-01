@@ -47,7 +47,7 @@ object depends {
 
   lazy val cats = Seq("org.typelevel" %% "cats-core" % "0.6.0")
 
-  lazy val pegdown = Seq("org.pegdown" % "pegdown" % "1.2.1")
+  lazy val pegdown = Seq("org.pegdown" % "pegdown" % "1.6.0")
 
   lazy val testInterface = Seq("org.scala-sbt"  % "test-interface" % "1.0")
 
