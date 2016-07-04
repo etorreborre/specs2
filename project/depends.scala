@@ -43,7 +43,7 @@ object depends {
   lazy val hamcrest      = Seq("org.hamcrest"   %  "hamcrest-core" % "1.3")
 
   def shapeless(scalaVersion: String) =
-    Seq("com.chuusai" %% "shapeless" % "2.2.5")
+    Seq("com.chuusai" %% "shapeless" % "2.3.1")
 
   lazy val cats = Seq("org.typelevel" %% "cats-core" % "0.6.0")
 
