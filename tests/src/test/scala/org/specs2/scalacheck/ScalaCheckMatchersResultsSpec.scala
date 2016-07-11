@@ -28,6 +28,10 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
  A FailureException makes a Failure
  ${ check(failureExceptionProp) must beFailing(withMessage("failure")) }
 
+ The stacktrace of a Failure is accessible
+ ${ check(failureWithStacktraceProp) must beLike { case Failure(_,_,st,_) => st.map(_.getClassName) must
+    contain((s: String) => s must contain ("ScalaCheckMatchersResultsSpec")) } }
+
  A failure with a datatable must report the datatable
  ${check(datatableFailureProp) must beFailing(withMessage("x \\| 1 \\| 2 \\| '1' is not equal to '2'"))}
  
@@ -81,6 +85,8 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
   def exceptionPropOnConversion: Prop = forAll { (b: Boolean) => {throw new execute.FailureException(failure); Prop.passed} }
 
   def failureExceptionProp = forAll((b: Boolean) => {throw new execute.FailureException(failure); true})
+
+  def failureWithStacktraceProp = forAll((b: Boolean) => 1 must_== 2)
 
   import DataTables._
   def datatableFailureProp = forAll { b: Boolean =>

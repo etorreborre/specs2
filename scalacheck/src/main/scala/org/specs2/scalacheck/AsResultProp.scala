@@ -20,7 +20,7 @@ trait AsResultProp extends ScalaCheckPropertyCheck with ScalaCheckParameters wit
 
           def resultToProp(r: execute.Result): Prop =
             r match {
-              case f : execute.Failure            => Prop.falsified :| (f.message+" ("+f.location+")")
+              case f : execute.Failure            => Prop.exception(new FailureException(f))
               case s : execute.Skipped            => Prop.exception(new SkipException(s))
               case p : execute.Pending            => Prop.exception(new PendingException(p))
               case e : execute.Error              => Prop.exception(e.exception)

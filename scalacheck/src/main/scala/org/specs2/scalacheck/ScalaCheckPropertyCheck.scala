@@ -48,7 +48,7 @@ trait ScalaCheckPropertyCheck extends ExpectationsCreation {
             case FailureException(f) =>
               // in that case we want to represent a normal failure
               val failedResult = prettyResult(result.copy(status = Test.Failed(args, labels)), prettyFreqMap)(parameters.prettyParams)
-              new Failure(failedResult + "\n> " + f.message, details = f.details) { override def location = f.location }
+              new Failure(failedResult + "\n> " + f.message, details = f.details, stackTrace = f.stackTrace)
             case SkipException(s)    => s
             case PendingException(p) => p
             case e: java.lang.Exception      =>
