@@ -33,10 +33,7 @@ object depends {
       "org.spire-math" % "kind-projector" % "0.7.1" cross CrossVersion.binary
 
   def scalacheck(scalaVersion: String) =
-    if (scalaVersion == "2.12.0-M5")
-      Seq("org.scalacheck" % "scalacheck_2.12.0-M4" % "1.13.1")
-    else
-      Seq("org.scalacheck" %% "scalacheck" % "1.13.1")
+    Seq("org.scalacheck" %% "scalacheck" % "1.13.2")
 
   lazy val mockito       = Seq("org.mockito"    %  "mockito-core"  % "1.9.5")
   lazy val junit         = Seq("junit"          %  "junit"         % "4.12")
