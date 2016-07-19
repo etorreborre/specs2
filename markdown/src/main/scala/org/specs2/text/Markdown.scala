@@ -78,6 +78,7 @@ case class Specs2Visitor(text: String, options: MarkdownOptions = MarkdownOption
     }
   }
   override def visit(node: VerbatimNode) {
+    // render verbatim nodes as simple text if the verbatim option is false
     if (!options.verbatim && node.getType.isEmpty && node.getText.contains("\n")) {
       val indents = text.split("\n").filter(_.nonEmpty).map(line => line.takeWhile(_==' ').size)
       val verbatim = node.getText.split("\n").map(line => line.trim)

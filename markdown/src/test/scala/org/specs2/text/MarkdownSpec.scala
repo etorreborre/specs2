@@ -27,31 +27,13 @@ class MarkdownSpec extends Spec {
   "Inlined code must not have <pre> tags" >>
     { toHtmlNoPar("this is some `inlined` code") must contain("""this is some <code class="prettyprint">inlined</code> code""") }
 
-  "multiline triple-quoted code must have one less newline" >>
-    { toHtmlNoPar("this is some\n```\nmultiline\nline2\n```\ncode") must contain(
-      """|this is some<br/><pre><code class="prettyprint">multiline
-         |line2
-         |</code></pre><br/>code</p>""".stripMargin) }
-
-  "multiline code must have one less newline" >>
-    { toHtmlNoPar("this is some\n\n    multiline\n    line2\n\ncode") must contain(
-      """|this is some</p>
-         |<pre><code class="prettyprint">multiline
-         |line2
-         |</code></pre><p>code</p>""".stripMargin) }
-
   "the encoding must be ok with utf-8 characters" >>
   { toXhtml("⊛").toString must contain("⊛") }
 
   "the encoding must be ok with utf-8 characters" >>
   { toXhtml("⊛").toString must contain("⊛") }
 
-  "verbatim code blocks are activated by default" >> {
-    toHtml("""
-             |     this is some text
-           """.stripMargin, MarkdownOptions(verbatim = false)) must not(contain("code"))
-  }
-  "verbatim code blocks can alse be rendered as simple text" >> {
+  "verbatim code blocks can also be rendered as simple text" >> {
     toHtml("""
              |     this is some text
            """.stripMargin, MarkdownOptions(verbatim = false)) must not(contain("code"))
