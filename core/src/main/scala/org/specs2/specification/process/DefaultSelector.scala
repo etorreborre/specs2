@@ -64,10 +64,13 @@ trait DefaultSelector extends Selector {
         case Fragment(m @ Marker(t, _, _),_,_)  =>
           go(updateSections(sections, t))
 
-        case fragment =>
+        case fragment if !Fragment.isFormatting(fragment) && !Fragment.isEmptyText(fragment) =>
           val apply = sections.sumr
           val keep = apply.keep(arguments, apply.names)
           emit(fragment).filter(_ => keep) fby go(sections)
+
+        case fragment =>
+          emit(fragment) fby go(sections)
       }
     }
 

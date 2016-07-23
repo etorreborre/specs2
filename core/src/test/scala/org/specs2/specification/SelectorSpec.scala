@@ -27,6 +27,7 @@ class SelectorSpec extends script.Specification with Groups with ResultMatchers 
   + tagging a section of fragments, starting with the previous one and a blank text
   + with overlapping sections
   + with non-overlapping sections
+  + formatting fragments and empty text must not be filtered out
 
  Selection by previous
  =====================
@@ -146,6 +147,28 @@ class SelectorSpec extends script.Specification with Groups with ResultMatchers 
       checkSelection(fragments, "x&&y",        expected = Seq(),                       unexpected = Seq("e1", "e2", "e3", "e4", "e5", "e6")) and
       checkSelection(fragments, Seq("x", "y"), expected = Seq("e2", "e3", "e4", "e5"), unexpected = Seq("e1", "e6"))
     }
+
+    eg := {
+      val fragments = Fragments(
+        text("  "),
+        ex("e1"),
+        ff.tag("x"),
+        ex("e2"),
+        ex("e3"),
+        ff.break,
+        ff.tab,
+        ff.tag("x"),
+        ex("e4")
+      )
+      filterIncluded(fragments, Seq("x")) ==== Vector(
+        text("  "),
+        ex("e2"),
+        ff.break,
+        ff.tab,
+        ex("e4")
+      )
+    }
+
   }
 
   "by previous" - new group {
@@ -210,8 +233,7 @@ class SelectorSpec extends script.Specification with Groups with ResultMatchers 
     checkSelection(fragments, List(tag), expected, unexpected)
 
   def includeContains(fragments: Fragments, tags: Seq[String], expected: Seq[String], unexpected: Seq[String]): Result = {
-    val env = Env(arguments = Arguments.split(s"include ${tags.mkString(",")}"))
-    val executed = (fragments.contents |> DefaultSelector.filterByMarker(env)).runLog.run
+    val executed = filterIncluded(fragments, tags)
     val descriptions = executed.map(_.description.toString)
 
     s"${descriptions.mkString(",")} contains ${expected.mkString(",")} but not ${unexpected.mkString(",")} for tags ${tags.mkString(",")}" ==> {
@@ -221,14 +243,23 @@ class SelectorSpec extends script.Specification with Groups with ResultMatchers 
   }
 
   def excludeContains(fragments: Fragments, tags: Seq[String], unexpected: Seq[String], expected: Seq[String]): Result = {
-    val env = Env(arguments = Arguments.split(s"exclude ${tags.mkString(",")}"))
-    val executed = fragments |> DefaultSelector.filterByMarker(env)
+    val executed = filterExcluded(fragments, tags)
     val descriptions = executed.fragments.map(_.description.show)
 
     s"${descriptions.mkString(",")} does not contain ${unexpected.mkString(",")} but contains ${expected.mkString(",")} for tags ${tags.mkString(",")}" ==> {
       Result.foreach(expected)  (e => descriptions aka "expected for exclude" must contain(beMatching(".*"+e+".*"))) and
       Result.foreach(unexpected)(e => descriptions aka "unexpected for exclude"  must not(contain(beMatching(".*"+e+".*"))))
     }
+  }
+
+  def filterIncluded(fragments: Fragments, tags: Seq[String]) = {
+    val env = Env(arguments = Arguments.split(s"include ${tags.mkString(",")}"))
+    (fragments.contents |> DefaultSelector.filterByMarker(env)).runLog.run
+  }
+
+  def filterExcluded(fragments: Fragments, tags: Seq[String]) = {
+    val env = Env(arguments = Arguments.split(s"exclude ${tags.mkString(",")}"))
+    fragments |> DefaultSelector.filterByMarker(env)
   }
 
   def show(fs: Fragments): String =
