@@ -155,8 +155,9 @@ object Result {
    */
   val ResultMonoid: Monoid[Result] = new Monoid[Result] {
     val zero = Success()
-    def append(m1: Result, m2: =>Result) = {
-      (m1, m2) match {
+    def append(mr1: Result, mr2: =>Result) = {
+      val (m1, m2) = (mr1, mr2)
+      ((m1, m2) match {
         case (Success(msg1, e1),           Success(msg2, e2))          => Success(msg1+"; "+msg2, concat(e1, e2))
         case (Success(msg1, e1),           Skipped(msg2, e2))          => Success(msg1+"; "+msg2, e1)
         case (Skipped(msg1,  _),           Success(msg2, e2))          => Success(msg1+"; "+msg2, e2)
@@ -183,8 +184,8 @@ object Result {
         case (Error(msg1, st),          _)                             => m1
         case (_,                           Failure(msg1, e1, st, d))   => m2
         case (_,                           Error(msg1, st))            => m2
-      }
-    }.setExpectationsNb(m1.expectationsNb + m2.expectationsNb)
+      }).setExpectationsNb(m1.expectationsNb + m2.expectationsNb)
+    }
   }
 
   /**
@@ -195,8 +196,9 @@ object Result {
   def ResultFailuresMonoid(separator: String): Monoid[Result] = new Monoid[Result] {
     val zero = Success()
 
-    def append(m1: Result, m2: => Result) = {
-      (m1, m2) match {
+    def append(mr1: Result, mr2: =>Result) = {
+      val (m1, m2) = (mr1, mr2)
+      ((m1, m2) match {
         case (Success(msg1, e1), Success(msg2, e2)) => Success("", concat(e1, e2))
         case (Success(msg1, e1), other) => other
         case (other, Success(msg2, e2)) => other
@@ -215,8 +217,8 @@ object Result {
         case (Error(msg1, st), _) => m1
         case (_, Failure(msg1, e1, st, d)) => m2
         case (_, Error(msg1, st)) => m2
-      }
-    }.setExpectationsNb(m1.expectationsNb + m2.expectationsNb)
+      }).setExpectationsNb(m1.expectationsNb + m2.expectationsNb)
+    }
   }
 
   /** the result of a side-effecting block */

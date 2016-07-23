@@ -71,7 +71,11 @@ more precisely:
   ${ (skipped1 or failure1).expectationsNb must_== 1 }
   ${ (failure1 or failure2).expectationsNb must_== 2 }
   ${ (failure1 or error1)  .expectationsNb must_== 2 }
- results have methods to know their status: isSuccess, isPending, ... ${statuses}
+ results have methods to know their status: isSuccess, isPending, ... $statuses
+
+ The result monoid must only evaluate values once
+  with the result monoid  $monoidAppendOnce
+  with the failure monoid $failureMonoidAppendOnce
 
  A result message can be updated or mapped
  ${ success1.updateMessage("ok").message must_== "ok" }
@@ -110,6 +114,22 @@ more precisely:
     pending1 ! false       ! false       ! false     ! false       ! true        | { (r, s, f, e, sk, p) =>
       (r.isSuccess, r.isFailure, r.isError, r.isSkipped, r.isPending) must_== ((s, f, e, sk, p))
     }
+
+  def monoidAppendOnce = {
+    var count = 0
+    def a: Result = { count += 1; Success() }
+    def b: Result = { count += 1; Success() }
+    Result.ResultMonoid.append(a, b)
+    count must be_==(2)
+  }
+
+  def failureMonoidAppendOnce = {
+    var count = 0
+    def a: Result = { count += 1; Success() }
+    def b: Result = { count += 1; Success() }
+    Result.ResultFailureMonoid.append(a, b)
+    count must be_==(2)
+  }
 
   val success1: Result = Success("s1")
   val success2 = Success("s2")                                                                                          
