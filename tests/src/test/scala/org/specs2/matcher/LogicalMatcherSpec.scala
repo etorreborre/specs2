@@ -122,14 +122,14 @@ Custom
 
   "orSkip, orPending" - new group {
     eg := 1 must be_==(1).orSkip
-    eg := (1 must be_==(2).orSkip).toResult                                  must_== Skipped("'1' is not equal to '2'")
+    eg := (1 must be_==(2).orSkip).toResult                                  must_== Skipped("'1 != 2'")
     eg := (1 must be_==({sys.error("boom");2}).orSkip("skip this")).toResult must_== Skipped("skip this: boom")
-    eg := (1 must be_==(2).orSkip("precondition failed")).toResult           must_== Skipped("precondition failed: '1' is not equal to '2'")
+    eg := (1 must be_==(2).orSkip("precondition failed")).toResult           must_== Skipped("precondition failed: '1 != 2'")
 
     eg := 1 must be_==(1).orPending
-    eg := (1 must be_==(2).orPending).toResult                             must_== Pending("'1' is not equal to '2'")
+    eg := (1 must be_==(2).orPending).toResult                             must_== Pending("'1 != 2'")
     eg := (1 must be_==({sys.error("boom");2}).orPending("todo")).toResult must_== Pending("todo: boom")
-    eg := (1 must be_==(2).orPending("precondition failed")).toResult      must_== Pending("precondition failed: '1' is not equal to '2'")
+    eg := (1 must be_==(2).orPending("precondition failed")).toResult      must_== Pending("precondition failed: '1 != 2'")
   }
 
   "condition" - new group {

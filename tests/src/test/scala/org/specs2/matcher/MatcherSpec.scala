@@ -67,7 +67,7 @@ Messages
     }
     eg := {
       val result = new Exception("message")  must be_===(8) ^^ ((e:Exception) => e.getMessage.size aka "the message size")
-      result.message must_== "the message size '7' is not equal to '8'"
+      result.message must_=== "the message size '7 != 8'"
     }
     eg := {
       case class Human(age: Int, wealth: Int)
@@ -86,8 +86,13 @@ Messages
       new File("spec.scala") must haveExtension(".scala")
     }
     eg := {
+      def beThree: Matcher[Int] = be_===(3)
+      val beStringThree = beThree ^^ ( (_: String).toInt aka s"the value")
+      ("3" must beStringThree).message === "the value '3' == '3'"
+    }
+    eg := {
       def beThree: Matcher[Int] = be_==(3)
-      val beStringThree = beThree ^^ ((s:String) => s.toInt aka s"the value")
+      val beStringThree = beThree ^^ ( (_: String).toInt aka s"the value")
       ("3" must beStringThree).message === "the value '3' is equal to '3'"
     }
   }

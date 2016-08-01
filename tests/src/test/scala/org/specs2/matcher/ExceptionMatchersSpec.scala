@@ -97,10 +97,10 @@ class ExceptionMatchersSpec extends script.Specification with ResultMatchers wit
 
   "Partial function" - new group {
     eg := (theBlock(error("boom")) must throwA[RuntimeException].like { case NonFatal(e) => e.getMessage()(0) === 'b' }).message must startWith(
-      "Got the exception java.lang.RuntimeException: boom and 'b' is equal to 'b'")
+      "Got the exception java.lang.RuntimeException: boom and 'b' == 'b'")
 
     eg := (theBlock(error("boom")) must throwA[RuntimeException].like { case NonFatal(e) => e.getMessage()(0) === 'a' }).message must startWith(
-      "Expected: java.lang.RuntimeException. Got: java.lang.RuntimeException: boom and 'b' is not equal to 'a'")
+      "Expected: java.lang.RuntimeException. Got: java.lang.RuntimeException: boom and 'b != a'")
 
     eg := AsResult { {throw new NullPointerException; 1 } must not(throwAn[IAE].like { case _ => ok }) } must beError
 

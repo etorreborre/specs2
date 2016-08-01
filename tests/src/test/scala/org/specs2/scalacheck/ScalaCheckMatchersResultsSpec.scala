@@ -33,7 +33,7 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
     contain((s: String) => s must contain ("ScalaCheckMatchersResultsSpec")) } }
 
  A failure with a datatable must report the datatable
- ${check(datatableFailureProp) must beFailing(withMessage("x \\| 1 \\| 2 \\| '1' is not equal to '2'"))}
+ ${check(datatableFailureProp) must beFailing(withMessage("x \\| 1 \\| 2 \\| '1 != 2'"))}
  
  Other exceptions are reported as errors
 

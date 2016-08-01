@@ -3,9 +3,11 @@ package matcher
 
 import scala.concurrent.duration._
 import org.specs2.codata._
+
 import scalaz.concurrent._
 import TaskMatchers._
 import ValueCheck._
+import org.specs2.matcher.describe.Diffable
 
 /**
  * Matchers for Process[Task, T]
@@ -40,7 +42,7 @@ trait ProcessMatchers extends ExpectationsCreation {
     def before(d: Duration): ProcessMatcher[T] =
       copy(duration = Some(d))
 
-    def withValues(values: Seq[T]): ProcessMatcher[T] =
+    def withValues(values: Seq[T])(implicit di: Diffable[T]): ProcessMatcher[T] =
       withValues(ValueChecks.valueIsTypedValueCheck(values))
 
     def withValues(check: ValueCheck[Seq[T]]): ProcessMatcher[T] =

@@ -23,7 +23,7 @@ class TryMatchersSpec extends Spec with TryMatchers with ResultMatchers { def is
   ${ Failed[I](e) must not be successfulTry }
   ${ Failed[I](e) must not be successfulTry.withValue(2) }
   ${ (Failed[I](e) must beSuccessfulTry) returns "'Failure(boom)' is not a Success" }
-  ${ (Succeeded(1) must beSuccessfulTry.withValue(2)) returns "'Success(1)' is a Success but '1' is not equal to '2'" }
+  ${ (Succeeded(1) must beSuccessfulTry.withValue(2)) returns "'Success(1)' is a Success but '1 != 2'" }
 
   beAFailure checks if an element is Failure(_)
   ${ Failed[I](e) must beFailedTry(e) }

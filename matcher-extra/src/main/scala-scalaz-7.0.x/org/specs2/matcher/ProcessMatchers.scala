@@ -4,8 +4,10 @@ package matcher
 import execute._
 import TaskMatchers._
 import org.specs2.codata._
+
 import scalaz.concurrent._
 import matcher.ValueCheck._
+import org.specs2.matcher.describe.Diffable
 
 /**
  * Matchers for Process[Task, T]
@@ -34,7 +36,7 @@ trait ProcessMatchers extends Expectations {
       result(r, e)
     }
 
-    def withValues(values: Seq[T]): ProcessMatcher[T] =
+    def withValues(values: Seq[T])(implicit di: Diffable[T]): ProcessMatcher[T] =
       withValues(ValueChecks.valueIsTypedValueCheck(values))
 
     def withValues(check: ValueCheck[Seq[T]]): ProcessMatcher[T] =

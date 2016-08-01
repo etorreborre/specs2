@@ -4,6 +4,7 @@ package matcher
 import util._
 import scala.reflect.ClassTag
 import MatchersImplicits._
+import org.specs2.matcher.describe.Diffable
 import text.NotNullStrings._
 
 /**
@@ -25,8 +26,8 @@ trait TryBaseMatchers {
   def successfulTry[T]   (check: ValueCheck[T]) = beSuccessfulTry[T]         (check)
   def aSuccessfulTry[T]  (check: ValueCheck[T]) = beSuccessfulTry[T]         (check)
 
-  def successfulTry[T]   (t: T) = beSuccessfulTry[T](t)
-  def aSuccessfulTry[T]  (t: T) = beSuccessfulTry[T](t)
+  def successfulTry[T : Diffable](t: T) = beSuccessfulTry[T](t)
+  def aSuccessfulTry[T : Diffable](t: T) = beSuccessfulTry[T](t)
 
   def beFailedTry[T]  = new TryFailureMatcher[T]
   def beAFailedTry[T] = beFailedTry[T]

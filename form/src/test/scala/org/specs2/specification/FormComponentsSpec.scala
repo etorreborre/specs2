@@ -111,7 +111,7 @@ Fourth example: 1-n relationship
       line(OrderLine("PS", 2)).
       line(OrderLine("Beginning Scala", 3))
     
-    def e1 = address.fill("Rose Crescent", 5).execute.message must_== "'5' is not equal to '2'" 
+    def e1 = address.fill("Rose Crescent", 5).execute.message must_== "'5' is not equal to '2'"
     def e2 = customer.fill("Eric", 
                            customer.address.fill("Rose Crescent", 5)).execute.message must_== "'5' is not equal to '2'"
                              

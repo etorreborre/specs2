@@ -3,6 +3,7 @@ package matcher
 
 import execute._
 import ValueChecks._
+import org.specs2.matcher.describe.Diffable
 
 /**
  * Matchers for Options
@@ -15,7 +16,7 @@ private[specs2]
 trait OptionBaseMatchers {
 
   def beSome[T](check: ValueCheck[T]): SomeCheckedMatcher[T] = SomeCheckedMatcher(check)
-  def some[T](t: T): SomeCheckedMatcher[T] = beSome(t)
+  def some[T : Diffable](t: T): SomeCheckedMatcher[T] = beSome(ValueChecks.valueIsTypedValueCheck(t))
   def some[T](check: ValueCheck[T]): SomeCheckedMatcher[T] = beSome(check)
 
   def beSome[T]: SomeMatcher[T] = new SomeMatcher[T]

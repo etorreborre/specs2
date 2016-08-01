@@ -148,7 +148,8 @@ object build extends Build {
 
   lazy val matcher = Project(id = "matcher", base = file("matcher"),
     settings = moduleSettings("matcher") ++
-      Seq(name := "specs2-matcher")
+      Seq(name := "specs2-matcher",
+          libraryDependencies ++= depends.shapeless(scalaVersion.value))
   ).dependsOn(common)
 
   lazy val matcherExtra = Project(id = "matcher-extra", base = file("matcher-extra"),
