@@ -114,10 +114,10 @@ class DataTablesSpec(implicit ee: ExecutionEnv) extends Specification with DataT
       "y"     !! "h"     ! "y h"        | { (a, b, c) =>  a+" "+b must_== c }
 
     table.message ===
-      "  | a     | b     | c          |                                         "+"\n"+
-      "+ | hello | you   | hello you  |                                         "+"\n"+
-      "x | you   | hello | you hello2 | 'you hello' is not equal to 'you hello2'"+"\n"+
-      "+ | y     | h     | y h        |                                         "
+      "  | a     | b     | c          |                            "+"\n"+
+      "+ | hello | you   | hello you  |                            "+"\n"+
+      "x | you   | hello | you hello2 | 'you hello' != 'you hello2'"+"\n"+
+      "+ | y     | h     | y h        |                            "
   }
 
   def e12 = {
@@ -131,8 +131,8 @@ class DataTablesSpec(implicit ee: ExecutionEnv) extends Specification with DataT
        2    !  2  !  5  | { (a, b, c) =>  a + b must_== c }
 
     (t1 and t2).message ===
-      "  | a | b | c |                        "+"\n"+
-      "x | 2 | 2 | 5 | '4' is not equal to '5'"
+      "  | a | b | c |       "+"\n"+
+      "x | 2 | 2 | 5 | 4 != 5"
   }
 
   def e13 =
@@ -179,10 +179,10 @@ class DataTablesSpec(implicit ee: ExecutionEnv) extends Specification with DataT
       3   ! "3" |* { (a: Int, b: String) => a ==== b.toInt }
 
     table(ee.executionContext).message ===
-      "  | a | b |                        "+"\n"+
-      "+ | 1 | 1 |                        "+"\n"+
-      "x | 2 | 0 | '2' is not equal to '0'"+"\n"+
-      "+ | 3 | 3 |                        "
+      "  | a | b |       "+"\n"+
+      "+ | 1 | 1 |       "+"\n"+
+      "x | 2 | 0 | 2 != 0"+"\n"+
+      "+ | 3 | 3 |       "
 
   }
 

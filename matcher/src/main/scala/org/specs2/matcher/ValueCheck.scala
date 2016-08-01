@@ -1,9 +1,9 @@
 package org.specs2
 package matcher
 
-import execute._
-import text.Quote._
-import MatchResult._
+import org.specs2.execute._
+import org.specs2.matcher.describe.Diffable
+import org.specs2.text.Quote._
 
 /**
  * Common interface for checks of a value of type T:
@@ -23,7 +23,7 @@ trait ValueCheck[T] { outer =>
 }
 
 object ValueCheck {
-  implicit def typedValueCheck[T](expected: T): BeEqualTypedValueCheck[T] =
+  implicit def typedValueCheck[T : Diffable](expected: T): BeEqualTypedValueCheck[T] =
     new BeEqualTypedValueCheck[T](expected)
 
   def alwaysOk[T] = new ValueCheck[T] {
@@ -65,7 +65,7 @@ trait ValueChecksBase extends ValueChecksLowImplicits {
   }
 
   /** an expected value can be used to check another value */
-  def valueIsTypedValueCheck[T](expected: T): BeEqualTypedValueCheck[T] =
+  def valueIsTypedValueCheck[T](expected: T)(implicit di: Diffable[T]): BeEqualTypedValueCheck[T] =
     ValueCheck.typedValueCheck(expected)
 }
 
@@ -85,8 +85,8 @@ trait ValueChecksLowImplicits {
 object ValueChecks extends ValueChecks
 
 /** ValueCheck for a typed expected value. It uses the BeTypedEqualTo matcher */
-case class BeEqualTypedValueCheck[T](expected: T) extends ValueCheck[T] {
-  private lazy val matcher = new BeTypedEqualTo(expected)
+case class BeEqualTypedValueCheck[T : Diffable](expected: T) extends ValueCheck[T] {
+  private lazy val matcher = new EqualityMatcher(expected)
   def check    = (t: T) => AsResult(matcher(Expectable(t)))
   def checkNot = (t: T) => AsResult(matcher.not(Expectable(t)))
 

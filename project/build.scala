@@ -35,7 +35,9 @@ object build extends Build {
       releaseSettings          ++
       siteSettings             ++
       Seq(name := "specs2", packagedArtifacts := Map.empty)
-  ).aggregate(common, matcher, matcherExtra, core, cats, scalaz, html, analysis, form, markdown, gwt, junit, scalacheck, mock, tests)
+  ).aggregate(
+    common, matcher, matcherExtra, core, cats, scalaz, html, analysis,
+    shapeless, form, markdown, gwt, junit, scalacheck, mock, tests)
    .enablePlugins(GitBranchPrompt)
 
   /** COMMON SETTINGS */
@@ -150,6 +152,12 @@ object build extends Build {
     )
   ).dependsOn(analysis, matcher, core % "test->test")
 
+  lazy val shapeless = Project(id = "shapeless", base = file("shapeless"),
+    settings = moduleSettings("shapeless") ++
+      Seq(name := "specs2-shapeless",
+        libraryDependencies ++= depends.shapeless(scalaVersion.value))
+  ).dependsOn(matcher)
+
   lazy val cats = Project(id = "cats", base = file("cats"),
     settings = moduleSettings("cats") ++
       Seq(libraryDependencies ++= (
@@ -187,7 +195,10 @@ object build extends Build {
   lazy val tests = Project(id = "tests", base = file("tests"),
     settings = moduleSettings("tests") ++
       Seq(name := "specs2-tests")
-  ).dependsOn(core % "compile->compile;test->test", matcherExtra, junit % "test->test", examples % "test->test", html, scalaz)
+  ).dependsOn(
+    core % "compile->compile;test->test", shapeless % "compile->compile;test->test",
+    junit % "test->test", examples % "test->test",
+    matcherExtra, html, scalaz)
 
   lazy val specs2ShellPrompt = shellPrompt in ThisBuild := { state =>
     val name = Project.extract(state).currentRef.project

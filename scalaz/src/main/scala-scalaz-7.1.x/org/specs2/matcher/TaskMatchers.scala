@@ -6,6 +6,7 @@ import scala.concurrent.duration.Duration
 import scalaz.concurrent.Task
 import text.NotNullStrings._
 import ValueChecks._
+import org.specs2.matcher.describe.Diffable
 
 /**
  * Matchers for scalaz.concurrent.Task
@@ -38,7 +39,7 @@ trait TaskMatchers {
     def withValue(check: ValueCheck[T]): TaskMatcher[T] =
       copy(check = check)
 
-    def withValue(t: T): TaskMatcher[T] =
+    def withValue(t: T)(implicit di: Diffable[T]): TaskMatcher[T] =
       withValue(valueIsTypedValueCheck(t))
 
     private def failedAttemptWithTimeout[S <: Task[T]](e: Expectable[S], d: Duration)(t: Throwable): MatchResult[S] = {

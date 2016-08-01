@@ -1,7 +1,9 @@
 package org.specs2
 package matcher
 
-import text.Quote._
+import org.specs2.matcher.describe.Diffable
+import org.specs2.text.Quote._
+
 import scala.reflect.ClassTag
 
 /**
@@ -28,37 +30,39 @@ trait AnyBaseMatchers {
   /** matches if a != b */
   def be_!=[T](t: =>T) = be_==(t).not
   /** matches if a == b */
-  def be_===[T](t: =>T) = beTypedEqualTo(t)
+  def be_===[T : Diffable](t: =>T) = beTypedEqualTo(t)
   /** matches if a == b */
-  def ===[T](t: =>T) = be_===(t)
+  def ===[T : Diffable](t: =>T) = be_===(t)
   /** matches if a != b */
-  def be_!==[T](t: =>T) = be_===(t).not
+  def be_!==[T : Diffable](t: =>T) = be_===(t).not
   /** matches if a != b */
-  def !==[T](t: =>T) = be_!==(t)
+  def !==[T : Diffable](t: =>T) = be_!==(t)
   /** matches if a == b */
   def beEqualTo[T](t: =>T) = new BeEqualTo(t)
   /** matches if a == b */
   def equalTo[T](t: =>T) = beEqualTo(t)
   /** matches if a == b */
-  def beTypedEqualTo[T](t: =>T, equality: (T, T) => Boolean = (t1:T, t2:T) => t1 == t2) =
-    new BeTypedEqualTo(t, equality)
+  def beTypedEqualTo[T : Diffable](t: =>T, equality: (T, T) => Boolean = (t1:T, t2:T) => t1 == t2) =
+    new EqualityMatcher(t, equality)
+
   /** matches if a == b */
   def typedEqualTo[T](t: =>T, equality: (T, T) => Boolean = (t1:T, t2:T) => t1 == t2) =
     beTypedEqualTo(t, equality)
+
   /** matches if a == b after an implicit conversion */
-  def be_==~[T, S](s: =>S)(implicit convert: S => T): Matcher[T] = new BeTypedEqualTo(convert(s)).
+  def be_==~[T : Diffable, S](s: =>S)(implicit convert: S => T): Matcher[T] = new EqualityMatcher(convert(s)).
     adapt(identity, identity, identity)
   /** matches if a == b after an implicit conversion */
-  def ==~[T, S](s: =>S)(implicit convert: S => T): Matcher[T] = be_==~(s)(convert)
+  def ==~[T : Diffable, S](s: =>S)(implicit convert: S => T): Matcher[T] = be_==~(s)
 
   /** negate a matcher */
   def not[T](m: Matcher[T]) = m.not
-  
+
   /** matches if a.isEmpty */
   def beEmpty[T <% Any { def isEmpty: Boolean }] = new Matcher[T] {
     def apply[S <: T](iterable: Expectable[S]) = {
       result(iterable.value.isEmpty,
-             iterable.description + " is empty", 
+             iterable.description + " is empty",
              iterable.description + " is not empty", iterable)
     }
   }
@@ -72,8 +76,8 @@ trait AnyBaseMatchers {
       val x = a
       result(x == null && y.value == null || x != null && y.value != null,
              "both values are null",
-             if (x == null) y.description + " is not null" else q(x) + " is not null" + 
-             y.optionalDescription.map(" but " + _ + " is null").getOrElse(""), 
+             if (x == null) y.description + " is not null" else q(x) + " is not null" +
+             y.optionalDescription.map(" but " + _ + " is null").getOrElse(""),
              y)
     }
   }
@@ -132,9 +136,9 @@ trait AnyBaseMatchers {
   def beAssignableFrom[T : ClassTag] = new Matcher[Class[_]] {
     def apply[S <: Class[_]](x: Expectable[S]) = {
       val c = implicitly[ClassTag[T]].runtimeClass
-      result(x.value.isAssignableFrom(c), 
-             x.description + " is assignable from " + q(c.getName), 
-             x.description + " is not assignable from " + q(c.getName), 
+      result(x.value.isAssignableFrom(c),
+             x.description + " is assignable from " + q(c.getName),
+             x.description + " is not assignable from " + q(c.getName),
              x)
     }
   }
@@ -158,14 +162,14 @@ trait AnyBaseMatchers {
  */
 class BeTrueMatcher extends Matcher[Boolean] {
   def apply[S <: Boolean](v: Expectable[S]) = {
-    result(v.value, v.description + " is true", v.description + " is false", v) 
+    result(v.value, v.description + " is true", v.description + " is false", v)
   }
 }
 
 /**
  * Equality Matcher
  */
-class BeEqualTo(t: =>Any) extends BeTypedEqualTo(t)
+class BeEqualTo(t: =>Any) extends EqualityMatcher(t)
 /**
  * This matcher always matches any value of type T
  */
@@ -180,7 +184,7 @@ case class NeverMatcher[T]() extends Matcher[T] {
 }
 /**
  * This trait allows to write expressions like
- * 
+ *
  *  `1 must be equalTo(1)`
  */
 trait AnyBeHaveMatchers extends BeHaveMatchers { outer: AnyMatchers =>
@@ -188,9 +192,9 @@ trait AnyBeHaveMatchers extends BeHaveMatchers { outer: AnyMatchers =>
   class AnyBeHaveMatchers[T](result: MatchResult[T]) {
     def be_==(t: T) = result(outer.be_==(t))
     def be_!=(t: T) = result(outer.be_!=(t))
-    def be_===(t: T) = result(outer.be_===(t))
-    def be_!==(t: T) = result(outer.be_!==(t))
-    def be_==~[S](s: =>S)(implicit convert: S => T) = result(outer.be_==~[T, S](s))
+    def be_===(t: T)(implicit di: Diffable[T]) = result(outer.be_===(t))
+    def be_!==(t: T)(implicit di: Diffable[T]) = result(outer.be_!==(t))
+    def be_==~[S](s: =>S)(implicit convert: S => T, di: Diffable[T]) = result(outer.be_==~[T, S](s))
     def equalTo(t: T) = result(outer.be_==(t))
     def asNullAs(a: =>T) = result(outer.beAsNullAs(a))
     def beAnyOf(t: T*) = result(outer.beAnyOf(t:_*))
@@ -261,8 +265,8 @@ case class BeOneOf[T](t: Seq[T]) extends Matcher[T] {
   def apply[S <: T](y: Expectable[S]) = {
     val x = t
     result(x.contains(y.value),
-      y.description + s" is contained in " + q(x.mkString(", ")),
-      y.description + s" is not contained in " + q(x.mkString(", ")),
+      s"${q(y.description)} is contained in ${q(x.mkString(", "))}",
+      s"${q(y.description)} is not contained in ${q(x.mkString(", "))}",
       y)
   }
 }

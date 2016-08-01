@@ -215,7 +215,7 @@ STUBS
     eg := {
       function1.call((_:Int).toString)
       (there was one(function1).call(1 -> startWith("1"))) and
-      ((there was one(function1).call(1 -> startWith("2"))).message must contain("'1' doesn't start with '2'"))
+      ((there was one(function1).call(1 -> startWith("2"))).message must contain("1 doesn't start with '2'"))
     }
     eg := {
       function2.call((i:Int, d: Double) => (i + d).toString)

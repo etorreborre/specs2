@@ -71,7 +71,7 @@ Execution
     e2 := actualOnly.actual.toOption           === Some(18)
     e3 := nameProp.actual.toOption             === Some("eric")
     e4 := constrained.label                    === "name"
-    e5 := withMatcher("e").execute             === Success("'eric' contains 'e'")
+    e5 := withMatcher("e").execute             === Success("eric contains 'e'")
     e6 := Prop("", 1, be_>(0).mute).execute    === Success("")
     e7 := Prop("", 1, 2, be_>(0).mute).execute === Success("")
   }
@@ -90,12 +90,12 @@ Execution
     e1  := noValues.execute                             === Pending("No expected value")
     e2  := actualOnly.execute                           === Pending("No expected value")
     e3  := expectedOnly.execute                         === Pending("No actual value")
-    e4  := nameProp("eric").execute                     === Success("'eric' is equal to 'eric'")
-    e5  := nameProp("eric2").execute.message            === "'eric' is not equal to 'eric2'"
+    e4  := nameProp("eric").execute                     === Success("eric == 'eric'")
+    e5  := nameProp("eric2").execute.message            === "'eric' != 'eric2'"
     e6  := nameProp.apply(error("bad")).execute.message === "java.lang.RuntimeException: bad"
     e7  := constrained("e").execute.isSuccess           === true
-    e8  := constrained("a").execute.message             === "'eric' doesn't contain 'a'"
+    e8  := constrained("a").execute.message             === "eric doesn't contain 'a'"
     e9  := withMatcher("e").execute.isSuccess           === true
-    e10 := withMatcher("a").execute.message             === "'eric' doesn't contain 'a'"
+    e10 := withMatcher("a").execute.message             === "eric doesn't contain 'a'"
   }
 }    

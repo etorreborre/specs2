@@ -16,12 +16,12 @@ class AllExpectationsSpec extends Spec with AllExpectations {
       executed.expectations === 10
       executed.examples === 4
       executed.failures === 4
-      executedIssues.head.message === "'1' is not equal to '2' [AllExpectationsSpecification.scala:8]\n"+
-                                      "'1' is not equal to '3' [AllExpectationsSpecification.scala:9]"
+      executedIssues.head.message === "1 != 2 [AllExpectationsSpecification.scala:8]\n"+
+                                      "1 != 3 [AllExpectationsSpecification.scala:9]"
     }
     "short-circuit the rest of the example if an expectation fails and uses 'orThrow'" >> {
-      executedIssues.map(_.message).toList must containMatch("'51' is not equal to '52'")
-      executedIssues.map(_.message) must not containMatch("'13' is not equal to '14'")
+      executedIssues.map(_.message).toList must containMatch("51 != 52")
+      executedIssues.map(_.message) must not containMatch("13 != 14")
     }
     "short-circuit the rest of the example if an expectation fails and uses 'orSkip'" >> {
       executedSuspended.map(_.message).toList must not containMatch("'51' is not equal to '52'")
@@ -41,8 +41,8 @@ class AllExpectationsSpec extends Spec with AllExpectations {
       executedWithScope.hasIssues must beTrue
       executedWithScope.expectations === 3
       executedWithScope.failures === 1
-      executedWithScopeIssues.head.message === "'1' is not equal to '2' [AllExpectationsSpecification.scala:31]\n"+
-                                               "'1' is not equal to '3' [AllExpectationsSpecification.scala:32]"
+      executedWithScopeIssues.head.message === "1 != 2 [AllExpectationsSpecification.scala:31]\n"+
+                                               "1 != 3 [AllExpectationsSpecification.scala:32]"
     }
     "evaluate an exception" >> {
       executedException.hasIssues must beTrue

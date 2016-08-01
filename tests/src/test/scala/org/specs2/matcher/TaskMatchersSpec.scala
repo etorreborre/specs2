@@ -9,7 +9,7 @@ class TaskMatchersSpec extends mutable.Spec with TaskMatchers with ResultMatcher
   "It is possible to check the execution of tasks" >> {
     "check the return value" >> {
       { Task(1) must returnValue(1) }
-      { (Task(1) must returnValue(2)) returns "'1' is not equal to '2'" }
+      { (Task(1) must returnValue(2)) returns "1 != 2" }
     }
 
     "check that the task finishes before a given time" >> {
