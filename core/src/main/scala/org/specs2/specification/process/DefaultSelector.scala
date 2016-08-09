@@ -4,13 +4,15 @@ package process
 
 import text.Regexes._
 import org.specs2.codata._
-import org.specs2.codata.Process.{Env =>_,_}
-import process1.{zipWithNext}
+import org.specs2.codata.Process.{Env => _, _}
+import process1.zipWithNext
 import data._
+
 import scalaz.syntax.foldable._
 import scalaz.std.list._
 import specification.core._
 import Fragment._
+import org.specs2.specification.create.FormattingFragments
 
 /**
  * Selection function for Fragment processes
@@ -74,7 +76,7 @@ trait DefaultSelector extends Selector {
       }
     }
 
-    if ((arguments.include + arguments.exclude).nonEmpty) normalize |> go()
+    if ((arguments.include + arguments.exclude).nonEmpty) normalize |> go() |> removeAdditionalEmptyText
     else process1.id[Fragment]
   }
 
@@ -183,6 +185,17 @@ trait DefaultSelector extends Selector {
     go()
   }
 
+  def removeAdditionalEmptyText: Process1[Fragment, Fragment] = {
+    def go: Process1[Fragment, Fragment] = {
+      receive1 { f  =>
+        if (Fragment.isEmptyText(f) || Fragment.isFormatting(f))
+          go
+        else
+          emit(FormattingFragments.br) fby emit(f) fby go
+      }
+    }
+    emit(FormattingFragments.br) fby go
+  }
 
   /**
    * filter fragments by previous execution and required status
