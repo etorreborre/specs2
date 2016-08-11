@@ -110,7 +110,7 @@ $specs2 matchers can also be passed directly as arguments: ${snippet{
 m.get(===(123)) returns "one"
 }}
 
-*Note*: the call above works because there is an implicit method `argThat` which transforms a $specs2 `Matcher[T]` into a Hamcrest one and in turn call Mockito's `org.mockito.Matchers.argThat` method to register the Hamcrest matcher. However [sometimes](https://groups.google.com/forum/#!msg/specs2-users/_slOZQoICzU/DF-ZQCq_GmkJ) the implicit conversion is not called and you have to explicitly call the `argThat` method like so: ${snippet{
+*Note*: the call above works because there is an implicit method `argThat` which transforms a $specs2 `Matcher[T]` into a Hamcrest one and in turn call Mockito's `org.mockito.Matchers.argThat` method to register the Hamcrest matcher. However [sometimes](https://groups.google.com/d/forum/specs2-users/_slOZQoICzU/DF-ZQCq_GmkJ) the implicit conversion is not called and you have to explicitly call the `argThat` method like so: ${snippet{
 m.get(argThat(===(123))) returns "one"
 }}
 
