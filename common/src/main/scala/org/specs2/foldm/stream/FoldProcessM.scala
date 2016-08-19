@@ -6,7 +6,7 @@ import FoldM._
 import data._, Processes._
 
 import org.specs2.codata._
-import scalaz.{Id, ~>}, Id._
+import scalaz._, Scalaz._
 import scalaz.concurrent.Task
 
 object FoldProcessM {
@@ -31,7 +31,7 @@ object FoldProcessM {
     def start = Task.now(step(sink))
 
     def fold = (s: S, t: T) => {
-      s.next.run.flatMap(_.getOrElse(Nil).head(t)).run
+      s.next.run.flatMap(_.flatMap(_.headOption).traverse(_(t))).run
       s
     }
 
