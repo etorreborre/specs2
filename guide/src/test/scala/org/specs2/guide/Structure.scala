@@ -109,7 +109,7 @@ class MySpecification extends org.specs2.mutable.Specification {
 }
 }}
 
-It is also possible to use the "functional" expectation mode with a unit specification by mixing in the `org.specs2.execute.NoThrownExpectations` trait.
+It is also possible to use the "functional" expectation mode with a unit specification by mixing in the `org.specs2.matcher.NoThrownExpectations` trait.
 
 $NowLearnTo
  - use ${"matchers" ~/ Matchers} to specify the body of your examples
