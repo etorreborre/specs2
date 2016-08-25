@@ -65,7 +65,7 @@ trait JUnitDescriptions extends ExecutionOrigin {
 
   /** Map of each fragment to its description */
   def fragmentDescriptions(spec: SpecStructure): Map[Fragment, Description] =
-    createDescriptionTree(spec).root.toTree.flatten.toMap
+    createDescriptionTree(spec).root.toTree.flattenLeft.toMap
 
   /** filter out the fragments which don't need to be represented in the JUnit descriptions */
   def keep: Levels.Mapper = {
