@@ -40,7 +40,7 @@ trait ClassRunner {
         for {
           spec  <- createSpecification(className, Thread.currentThread.getContextClassLoader, Some(env))
           stats <- report(env)(spec)
-          _     <- Actions.safe(env.shutdown)
+          _     <- Actions.delayed(env.shutdown)
         } yield stats
     }
     execute(actions, arguments, exit)

@@ -16,9 +16,8 @@ import reporter.SbtLineLogger
 import reflect.Classes
 import reporter.Printer._
 import specification.core._
-import eff._
-import ErrorEffect._
-import Eff._
+import Actions._
+import eff.ErrorEffect._
 
 /**
  * Runner for Sbt
@@ -204,11 +203,11 @@ object sbtRun extends SbtRunner(Array(), Array(), Thread.currentThread.getContex
 
   def start(arguments: String*): Action[Stats] = {
     if (arguments.isEmpty)
-      ConsoleEffect.log("The first argument should at least be the specification class name") >>
+      log("The first argument should at least be the specification class name") >>
       Actions.unit
     else {
       val taskDef = new TaskDef(arguments(0), Fingerprints.fp1, true, Array())
-      Actions.safe(newTask(taskDef).execute(NoEventHandler, Array(ConsoleLogger))).as(())
+      Actions.delayed(newTask(taskDef).execute(NoEventHandler, Array(ConsoleLogger))).as(())
     }
   }.as(Stats.empty)
 

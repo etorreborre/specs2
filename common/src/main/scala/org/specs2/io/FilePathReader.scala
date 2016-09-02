@@ -54,7 +54,7 @@ trait FilePathReader {
    * @return the files directly accessible from a directory
    */
   def listDirectFilePaths(directory: DirectoryPath): Action[IndexedSeq[FilePath]] =
-    Actions.safe(Option(directory.toFile.listFiles)
+    Actions.delayed(Option(directory.toFile.listFiles)
       .map(_.toIndexedSeq).getOrElse(IndexedSeq())
       .filter(_.isFile)
       .map(FilePath.unsafe))
@@ -63,7 +63,7 @@ trait FilePathReader {
    * @return the files directly accessible from a directory
    */
   def listDirectDirectoryPaths(directory: DirectoryPath): Action[IndexedSeq[DirectoryPath]] =
-    Actions.safe(Option(directory.toFile.listFiles)
+    Actions.delayed(Option(directory.toFile.listFiles)
       .map(_.toIndexedSeq).getOrElse(IndexedSeq())
       .filter(_.isDirectory)
       .map(DirectoryPath.unsafe))
@@ -90,7 +90,7 @@ trait FilePathReader {
 
   /** @return the content of a file with a specific codec */
   def readLinesWithCodec(filePath: FilePath, codec: Codec): Action[IndexedSeq[String]] =
-    Actions.safe(scala.io.Source.fromFile(filePath.path)(codec).getLines.toIndexedSeq)
+    Actions.delayed(scala.io.Source.fromFile(filePath.path)(codec).getLines.toIndexedSeq)
 
   /** read the content of a file as an Array of Bytes */
   def readBytes(filePath: FilePath): Action[Array[Byte]] = exists(filePath).map { exists =>
@@ -105,37 +105,37 @@ trait FilePathReader {
 
   /** @return true if the file exists */
   def exists(filePath: FilePath): Action[Boolean] =
-    Actions.safe(filePath.toFile.exists)
+    Actions.delayed(filePath.toFile.exists)
 
   /** @return true if the file doesn't exist */
   def doesNotExist(filePath: FilePath): Action[Boolean] =
-    Actions.safe(!filePath.toFile.exists)
+    Actions.delayed(!filePath.toFile.exists)
 
   /** @return true if the directory exists */
   def exists(directoryPath: DirectoryPath): Action[Boolean] =
-    Actions.safe(directoryPath.toFile.exists)
+    Actions.delayed(directoryPath.toFile.exists)
 
   /** @return true if the directory doesn't exist */
   def doesNotExist(directoryPath: DirectoryPath): Action[Boolean] =
-    Actions.safe(!directoryPath.toFile.exists)
+    Actions.delayed(!directoryPath.toFile.exists)
 
   /** succeeds if the file exists */
   def mustExist(file: File): Action[Unit] =
-    Actions.safe(file.exists).flatMap { exists =>
+    Actions.delayed(file.exists).flatMap { exists =>
       if (exists) Actions.ok(())
       else        Actions.fail(s"$file does not exist")
     }
 
   /** succeeds if the file is a directory */
   def mustBeADirectory(file: File): Action[Unit] =
-    Actions.safe(file.isDirectory).flatMap { isDirectory =>
+    Actions.delayed(file.isDirectory).flatMap { isDirectory =>
       if (isDirectory) Actions.ok(())
       else             Actions.fail(s"$file is a directory")
     }
 
   /** succeeds if the file is not a directory */
   def mustNotBeADirectory(file: File): Action[Unit] =
-    Actions.safe(file.isDirectory).flatMap { isDirectory =>
+    Actions.delayed(file.isDirectory).flatMap { isDirectory =>
       if (isDirectory) Actions.fail(s"$file is a directory")
       else             Actions.ok(())
     }

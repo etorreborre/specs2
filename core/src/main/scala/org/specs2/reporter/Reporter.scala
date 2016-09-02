@@ -11,7 +11,7 @@ import scalaz.concurrent.Task
 import control._
 import scalaz.{Writer => _}
 import scalaz.syntax.traverse.ToTraverseOpsUnapply
-import scalaz.syntax.functor.{ToFunctorOps, ToFunctorOpsUnapply}
+import scalaz.syntax.functor.{ToFunctorOps}
 import scalaz.syntax.foldable.ToFoldableOps
 import scalaz.std.list._
 import org.specs2.codata.{Process, Sink, channel}

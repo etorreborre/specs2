@@ -28,7 +28,11 @@ import eff.syntax.all._
 import scalaz._
 import Scalaz._
 import eff.ErrorEffect._
+<<<<<<< f937264a00c9749e06a34b649dd3d663ea2cc643
 import org.specs2.time.SimpleTimer
+=======
+import Actions._
+>>>>>>> updated eff to the latest code
 
 /**
  * Printer for html files

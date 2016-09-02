@@ -7,7 +7,7 @@ import org.specs2.control._, eff._
 import org.specs2.main.Arguments
 import scala.concurrent.ExecutionContext
 import scalaz._, concurrent.{Strategy, Future}
-import ConsoleEffect._, Effects._
+import ConsoleEffect._
 
 /**
  * Subset of the Env describing execution parameters
@@ -65,7 +65,7 @@ object ExecutionEnv {
 
   def createExecutionContext(executorService: ExecutorService, verbose: Boolean, systemLogger: Logger) =
     ExecutionContext.fromExecutorService(executorService,
-      (t: Throwable) => {runConsoleToPrinter(systemLogger)(logThrowable[Console |: NoEffect](t, verbose)); ()})
+      (t: Throwable) => {runConsoleToPrinter(systemLogger)(logThrowable[Fx1[Console]](t, verbose)); ()})
 
   /**
    * the number of executors is set from the arguments.threadsNb value which is

@@ -17,7 +17,7 @@ trait SearchPage {
   /** create an index for all the specifications */
   def createIndex(env: Env, specifications: List[SpecStructure], options: HtmlOptions): Action[Unit] =
     for {
-      htmlPages <- Actions.safe(Indexing.createIndexedPages(env, specifications, options.outDir))
+      htmlPages <- Actions.delayed(Indexing.createIndexedPages(env, specifications, options.outDir))
       _         <- Fold.runFold(Process.emitAll(htmlPages), Indexing.indexFold(options.indexFile)).toAction
       _         <- createSearchPage(env, options)
     } yield ()

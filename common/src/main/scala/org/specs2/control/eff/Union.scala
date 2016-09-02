@@ -1,47 +1,33 @@
 package org.specs2.control.eff
 
-import scalaz._
-import Effects._
-
 /**
- * Open union of effects
+ * Union represents one effect T[_] embedded in a tree of possible effects R
  *
- * They are modelled as a list of
+ * Since the effect tree is represented with the following cases:
+ *   - Fx1[T]
+ *   - Fx2[T1, T2]
+ *   - Fx3[T1, T2, T3]
+ *   - FxAppend[L, R]
  *
- *  UnionNext(UnionNext(...(UnionNow(M[X])))
- *
- * where M[X] is an effect. The depth of the nesting in an Union value
- * corresponds to the place of the effect in a type E1 |: E2 |: E3 |: .. |: NoEffect
- *
+ * We have the corresponding Union cases. For example
+ *   T2 is in the "middle" of Fx3[T1, T2, T3] so creating a Union object for that effect uses Union3M
  */
 sealed trait Union[+R, A] {
   type X = A
 }
 
-case class UnionNow[T[_], R <: Effects, A](ta: T[A]) extends Union[T |: R, A]
+case class Union1[T[_], A](ta: T[A]) extends Union[Fx1[T], A]
 
-case class UnionNext[O[_], R <: Effects, A](u: Union[R, A]) extends Union[O |: R, A]
+sealed trait Union2[R, A] extends Union[R, A]
+case class Union2L[L[_], R[_], A](t: L[A]) extends Union2[Fx2[L, R], A]
+case class Union2R[L[_], R[_], A](t: R[A]) extends Union2[Fx2[L, R], A]
 
-/**
- * create union objects
- */
-object Union {
-  def now[T[_], R <: Effects, A](ta: T[A]): Union[T |: R, A] =
-    UnionNow(ta)
+sealed trait Union3[R, A] extends Union[R, A]
+case class Union3L[L[_], M[_], R[_], A](t: L[A]) extends Union3[Fx3[L, M, R], A]
+case class Union3M[L[_], M[_], R[_], A](t: M[A]) extends Union3[Fx3[L, M, R], A]
+case class Union3R[L[_], M[_], R[_], A](t: R[A]) extends Union3[Fx3[L, M, R], A]
 
-  def next[O[_], R <: Effects, A](u: Union[R, A]): Union[O |: R, A] =
-    UnionNext(u)
+sealed trait UnionAppend[R, A] extends Union[R, A]
+case class UnionAppendL[L, R, A](t: Union[L, A]) extends UnionAppend[FxAppend[L, R], A]
+case class UnionAppendR[L, R, A](t: Union[R, A]) extends UnionAppend[FxAppend[L, R], A]
 
-  /**
-   * decompose a union starting with a given effect into
-   *
-   *  - a value for that effect type if there is one
-   *  - the union with the remaining effects
-   */
-  def decompose[T[_], R <: Effects, V](u: Union[T |: R, V]): Union[R, V] \/ T[V] =
-    u match {
-      case UnionNow(tv)     => \/-(tv)
-      case UnionNext(union) => -\/(union)
-    }
-
-}

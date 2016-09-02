@@ -1,19 +1,20 @@
-package org.specs2.control.eff.syntax
+package org.specs2.control.eff
+package syntax
 
-import org.specs2.control.eff._
+import ConsoleEffect._
 
 object console extends console
 
 trait console {
 
-  implicit class ConsoleEffectOps[R <: Effects, A](e: Eff[R, A]) {
+  implicit class ConsoleEffectOps[R, A](action: Eff[R, A]) {
 
-    def runConsole[U <: Effects](implicit member: Member.Aux[Console, R, U]): Eff[U, A] =
-      ConsoleEffect.runConsole(e)
+    def runConsole[U](implicit m: Member.Aux[Console, R, U]): Eff[U, A] =
+      ConsoleEffect.runConsole(action)
 
-    def runConsoleToPrinter[U <: Effects](printer: String => Unit)(implicit m : Member.Aux[Console, R, U]) =
-      ConsoleEffect.runConsoleToPrinter(printer)(e)
-
+    def runConsoleToPrinter[U](printer: String => Unit)(implicit m : Member.Aux[Console, R, U]): Eff[U, A] =
+      ConsoleEffect.runConsoleToPrinter(printer)(action)
   }
 
 }
+

@@ -46,7 +46,7 @@ trait Classes {
       case c :: rest =>
         runAction(createInstanceForConstructor[T](klass, c, loader, defaultInstances)).
           fold(e => findInstance[T](klass, loader, defaultInstances, rest, Some(e)),
-            a => Actions.safe[T](a))
+            a => Actions.delayed[T](a))
     }
 
 
@@ -88,7 +88,7 @@ trait Classes {
   /**
    * Load a class, given the class name
    */
-  def loadClassEither[T <: AnyRef](className: String, loader: ClassLoader): Action[Throwable \/ Class[T]] = Actions.safe {
+  def loadClassEither[T <: AnyRef](className: String, loader: ClassLoader): Action[Throwable \/ Class[T]] = Actions.delayed {
     try \/-(loader.loadClass(className).asInstanceOf[Class[T]])
     catch { case NonFatal(t) => -\/(t) }
   }
@@ -97,7 +97,7 @@ trait Classes {
     loadClassEither(className, loader).flatMap((tc: Throwable \/ Class[T]) => tc.fold(Actions.exception, Actions.ok))
 
   /** @return true if a class can be loaded */
-  def existsClass(className: String, loader: ClassLoader): Action[Boolean] = Actions.safe {
+  def existsClass(className: String, loader: ClassLoader): Action[Boolean] = Actions.delayed {
     try   { loader.loadClass(className); true }
     catch { case NonFatal(t) => false }
   }

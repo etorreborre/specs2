@@ -7,6 +7,8 @@ import org.specs2.execute.{AsResult, Result}
 import scalaz.concurrent.Task
 import scalaz.syntax.bind._
 import ErrorEffect.{ErrorOrOk, Error, fail, exception}
+import ConsoleEffect._
+import WarningsEffect._
 
 package object control {
 
@@ -17,22 +19,7 @@ package object control {
   lazy val noLogging = (s: String) => ()
   lazy val consoleLogging = (s: String) => println(s)
 
-  /**
-   * Action type, using a logger as a reader and no writer
-   */
-  type ActionStack = ErrorOrOk |: Console |: Warnings |: Eval |: NoEffect
-
-  implicit def EvalMember: Member.Aux[Eval, ActionStack, ErrorOrOk |: Console |: Warnings |: NoEffect] =
-    Member.successor
-
-  implicit def WarningsMember: Member.Aux[Warnings, ActionStack, ErrorOrOk |: Console |: Eval |: NoEffect] =
-    Member.successor
-
-  implicit def ConsoleMember: Member.Aux[Console, ActionStack, ErrorOrOk |: Warnings |: Eval |: NoEffect] =
-    Member.successor
-
-  implicit def ErrorMember: Member.Aux[ErrorOrOk, ActionStack, Console |: Warnings |: Eval |: NoEffect] =
-    Member.first
+  type ActionStack = Fx.fx4[ErrorOrOk, Console, Warnings, Eval]
 
   type Action[A] = Eff[ActionStack, A]
 
@@ -40,7 +27,7 @@ package object control {
    * warn the user about something that is probably wrong on his side,
    * this is not a specs2 bug, then fail to stop all further computations
    */
-  def warnAndFail[R <: Effects, A](message: String, failureMessage: String)(implicit m1: Warnings <= R, m2: ErrorOrOk <= R): Eff[R, A] =
+  def warnAndFail[R, A](message: String, failureMessage: String)(implicit m1: Warnings <= R, m2: ErrorOrOk <= R): Eff[R, A] =
     warn(message)(m1) >>
     fail(failureMessage)
 
@@ -137,13 +124,25 @@ package object control {
 
   object Actions {
 
+    def log(m: String, doIt: Boolean = true): Action[Unit] =
+      ConsoleEffect.log(m, doIt)
+
+    def logThrowable[R :_console](t: Throwable, doIt: Boolean = true): Eff[R, Unit] =
+      ConsoleEffect.logThrowable(t, doIt)
+
+    def logThrowable[R :_console](t: Throwable): Eff[R, Unit] =
+      ConsoleEffect.logThrowable(t)
+
+    def warn(m: String): Action[Unit] =
+      WarningsEffect.warn(m)
+
     def unit: Action[Unit] =
       ok(())
 
     def ok[A](a: A): Action[A] =
       ErrorEffect.ok(a)
 
-    def safe[A](a: =>A): Action[A] =
+    def delayed[A](a: =>A): Action[A] =
       ErrorEffect.ok(a)
 
     def fail[A](message: String): Action[A] =
@@ -153,8 +152,8 @@ package object control {
       ErrorEffect.exception[ActionStack, A](t)
 
     def checkThat[A](a: =>A, condition: Boolean, failureMessage: String): Action[A] =
-      safe(a).flatMap { value =>
-        if (condition) safe(value)
+      delayed(a).flatMap { value =>
+        if (condition) delayed(value)
         else           fail(failureMessage)
       }
 

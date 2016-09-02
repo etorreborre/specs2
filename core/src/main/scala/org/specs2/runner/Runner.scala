@@ -93,7 +93,7 @@ object Runner {
         for {
           reporter <- ClassRunner.createReporter(arguments, loader)
           ss       <- SpecStructure.linkedSpecifications(specStructure, env, loader)
-          sorted   <- safe(SpecStructure.topologicalSort(ss).getOrElse(ss))
+          sorted   <- delayed(SpecStructure.topologicalSort(ss).getOrElse(ss))
           _        <- reporter.prepare(env, printers)(sorted.toList)
           stats    <- sorted.toList.map(Reporter.report(env, printers)).sequenceU
           _        <- Reporter.finalize(env, printers)(sorted.toList)
@@ -101,7 +101,7 @@ object Runner {
 
       } else Reporter.report(env, printers)(specStructure)
 
-    report.andFinally(Actions.safe(env.shutdown))
+    report.andFinally(Actions.delayed(env.shutdown))
   }
 
   /**

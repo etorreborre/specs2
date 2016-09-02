@@ -18,21 +18,23 @@ trait EvalEffect extends
 object EvalEffect extends EvalEffect
 
 trait EvalTypes {
-  type Eval[A] = Need[A]
+  type Eval[A] = scalaz.Name[A]
+  type _Eval[R] = Eval <= R
+  type _eval[R] = Eval |= R
 }
 
 object EvalTypes extends EvalTypes
 
 trait EvalCreation extends EvalTypes {
-  def now[R, A](a: A)(implicit m: Member[Eval, R]): Eff[R, A] =
+  def now[R :_eval, A](a: A): Eff[R, A] =
     pure(a)
 
-  def delay[R, A](a: => A)(implicit m: Member[Eval, R]): Eff[R, A] =
-    send(Need(a))
+  def delay[R :_eval, A](a: => A): Eff[R, A] =
+    send(Name(a))
 }
 
 trait EvalInterpretation extends EvalTypes {
-  def runEval[R <: Effects, U <: Effects, A](r: Eff[R, A])(implicit m: Member.Aux[Eval, R, U]): Eff[U, A] = {
+  def runEval[R, U, A](r: Eff[R, A])(implicit m: Member.Aux[Eval, R, U]): Eff[U, A] = {
     val recurse = new Recurse[Eval, U, A] {
       def apply[X](m: Eval[X]) = -\/(m.value)
     }
@@ -40,7 +42,7 @@ trait EvalInterpretation extends EvalTypes {
     interpret1((a: A) => a)(recurse)(r)
   }
 
-  def attemptEval[R <: Effects, U <: Effects, A](r: Eff[R, A])(implicit m: Member.Aux[Eval, R, U]): Eff[U, Throwable \/ A] = {
+  def attemptEval[R, U, A](r: Eff[R, A])(implicit m: Member.Aux[Eval, R, U]): Eff[U, Throwable \/ A] = {
     val recurse = new Recurse[Eval, U, Throwable \/ A] {
       def apply[X](m: Eval[X]) =
         try { -\/(m.value) }

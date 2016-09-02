@@ -1,11 +1,7 @@
 package org.specs2.control.eff
 
-import scalaz.NaturalTransformation
-
-import scala.annotation.tailrec
 import scalaz._
-import Union._
-import Effects._
+import scala.annotation.tailrec
 import Eff._
 
 /**
@@ -40,8 +36,15 @@ sealed trait Eff[R, A] {
   def map[B](f: A => B): Eff[R, B] =
     EffMonad[R].map(this)(f)
 
+  def ap[B](f: Eff[R, A => B]): Eff[R, B] =
+    EffApplicative[R].ap(this)(f)
+
   def flatMap[B](f: A => Eff[R, B]): Eff[R, B] =
     EffMonad[R].bind(this)(f)
+
+  def flatten[B](implicit ev: A =:= Eff[R, B]): Eff[R, B] =
+    EffMonad[R].bind(this)(a => a)
+
 }
 
 case class Pure[R, A](value: A) extends Eff[R, A]
@@ -50,6 +53,14 @@ case class Pure[R, A](value: A) extends Eff[R, A]
  * union is a disjoint union of effects returning a value of type X (not specified)
  */
 case class Impure[R, X, A](union: Union[R, X], continuation: Arrs[R, X, A]) extends Eff[R, A]
+
+/**
+ * union is a disjoint union of effects returning a value of type X (not specified)
+ */
+case class ImpureAp[R, X, A](union: Union[R, X], continuation: Apps[R, X, A]) extends Eff[R, A] {
+  def toMonadic: Eff[R, A] =
+    Impure[R, union.X, A](union, Arrs.singleton((x: union.X) => continuation(x)))
+}
 
 object Eff extends EffCreation with
   EffInterpretation with
@@ -60,8 +71,8 @@ trait EffImplicits {
   /**
    * Monad implementation for the Eff[R, ?] type
    */
-  implicit def EffMonad[R]: Monad[({type l[X]=Eff[R, X]})#l] = new Monad[({type l[X]=Eff[R, X]})#l] {
-    def point[A](a: => A): Eff[R, A] =
+  implicit def EffMonad[R]: Monad[Eff[R, ?]] = new Monad[Eff[R, ?]] {
+    def point[A](a: =>A): Eff[R, A] =
       Pure(a)
 
     def bind[A, B](fa: Eff[R, A])(f: A => Eff[R, B]): Eff[R, B] =
@@ -71,6 +82,27 @@ trait EffImplicits {
 
         case Impure(union, continuation) =>
           Impure(union, continuation.append(f))
+
+        case ap @ ImpureAp(_, _) =>
+          ap.toMonadic.flatMap(f)
+      }
+  }
+
+  def EffApplicative[R]: Applicative[Eff[R, ?]] = new Applicative[Eff[R, ?]] {
+    def point[A](a: =>A): Eff[R, A] =
+      Pure(a)
+
+    def ap[A, B](fa: =>Eff[R, A])(ff: =>Eff[R, A => B]): Eff[R, B] =
+      fa match {
+        case Pure(a) =>
+          ff.map(f => f(a))
+
+        case Impure(union, continuation) =>
+          fa.flatMap(a => ff.map(f => f(a)))
+
+        case ImpureAp(union, continuation) =>
+          ImpureAp(union, continuation.append(ff))
+
       }
   }
 
@@ -80,16 +112,16 @@ object EffImplicits extends EffImplicits
 
 trait EffCreation {
   /** create an Eff[R, A] value from an effectful value of type T[V] provided that T is one of the effects of R */
-  def send[T[_], R, V](tv: T[V])(implicit member: Member[T, R]): Eff[R, V] =
+  def send[T[_], R, V](tv: T[V])(implicit member: T |= R): Eff[R, V] =
     impure(member.inject(tv), Arrs.unit)
 
   /** use the internal effect as one of the stack effects */
-  def collapse[R, M[_], A](r: Eff[R, M[A]])(implicit m: Member[M, R]): Eff[R, A] =
+  def collapse[R, M[_], A](r: Eff[R, M[A]])(implicit m: M |= R): Eff[R, A] =
     EffMonad[R].bind(r)(mx => send(mx)(m))
 
   /** create an Eff value for () */
   def unit[R]: Eff[R, Unit] =
-    EffMonad.pure(())
+    EffMonad.point(())
 
   /** create a pure value */
   def pure[R, A](a: A): Eff[R, A] =
@@ -98,6 +130,18 @@ trait EffCreation {
   /** create a impure value from an union of effects and a continuation */
   def impure[R, X, A](union: Union[R, X], continuation: Arrs[R, X, A]): Eff[R, A] =
     Impure[R, X, A](union, continuation)
+
+  /** apply a function to an Eff value using the applicative instance */
+  def ap[R, A, B](a: =>Eff[R, A])(f: =>Eff[R, A => B]): Eff[R, B] =
+    EffImplicits.EffApplicative[R].ap(a)(f)
+
+  /** use the applicative instance of Eff to traverse a list of values */
+  def traverseA[R, F[_] : Traverse, A, B](fs: F[A])(f: A => Eff[R, B]): Eff[R, F[B]] =
+    Traverse[F].traverse(fs)(f)(EffImplicits.EffApplicative[R])
+
+  /** use the applicative instance of Eff to sequenc a list of values */
+  def sequenceA[R, F[_] : Traverse, A](fs: F[Eff[R, A]]): Eff[R, F[A]] =
+    Traverse[F].sequence(fs)(EffImplicits.EffApplicative[R])
 }
 
 object EffCreation extends EffCreation
@@ -109,7 +153,7 @@ trait EffInterpretation {
    * This runner can only return the value in Pure because it doesn't
    * known how to interpret the effects in Impure
    */
-  def run[A](eff: Eff[NoEffect, A]): A =
+  def run[A](eff: Eff[NoFx, A]): A =
     eff match {
       case Pure(a) => a
       case other   => sys.error("impossible: cannot run the effects in "+other)
@@ -118,88 +162,43 @@ trait EffInterpretation {
   /**
    * peel-off the only present effect
    */
-  def detach[M[_] : Monad, A](eff: Eff[M |: NoEffect, A]): M[A] = {
-    def go(eff: Eff[M |: NoEffect, A]): M[A] = {
-      eff match {
+  def detach[M[_] : Monad, A](eff: Eff[Fx1[M], A]): M[A] = {
+    def go(e: Eff[Fx1[M], A]): M[A] = {
+      e match {
         case Pure(a) => Monad[M].point(a)
 
-        case Impure(UnionNow(mx), continuation) =>
-          Monad[M].bind(mx)(x => go(continuation(x)))
+        case Impure(u, continuation) =>
+          u match {
+            case Union1(ta) => Monad[M].bind(ta)(x => go(continuation(x)))
+          }
 
-        case _ =>
-          sys.error("impossible")
+        case ImpureAp(u, continuation) =>
+          u match {
+            case Union1(ta) => Monad[M].bind(ta)(x => go(continuation(x)))
+          }
       }
     }
     go(eff)
   }
 
   /**
+   * get the pure value if there is no effect
+   */
+  def runPure[R, A](eff: Eff[R, A]): Option[A] =
+    eff match {
+      case Pure(a) => Option(a)
+      case _ => None
+    }
+
+  /**
    * An Eff[R, A] value can be transformed into an Eff[U, A]
    * value provided that all the effects in R are also in U
    */
-  def effInto[R <: Effects, U, A](e: Eff[R, A])(implicit f: IntoPoly[R, U, A]): Eff[U, A] =
+  def effInto[R, U, A](e: Eff[R, A])(implicit f: IntoPoly[R, U]): Eff[U, A] =
     f(e)
 }
 
 object EffInterpretation extends EffInterpretation
-
-/**
- * Trait for polymorphic recursion into Eff[?, A]
- *
- * The idea is to deal with one effect at the time:
- *
- *  - if the effect stack is M |: R and if U contains M
- *    we transform each "Union[R, X]" in the Impure case into a Union for U
- *    and we try to recurse on other effects present in R
- *
- *  - if the effect stack is M |: NoEffect and if U contains M we
- *    just "inject" the M[X] effect into Eff[U, A] using the Member typeclass
- *    if M is not present when we decompose we throw an exception. This case
- *    should never happen because if there is no other effect in the stack
- *    there should be at least something producing a value of type A
- *
- */
-trait IntoPoly[R <: Effects, U, A] {
-  def apply(e: Eff[R, A]): Eff[U, A]
-}
-
-object IntoPoly extends IntoPolyLower {
-
-  implicit def intoNoEff[M[_], U, A](implicit m: Member[M, M |: NoEffect], mu: Member[M, U]): IntoPoly[M |: NoEffect, U, A] =
-    new IntoPoly[M |: NoEffect, U, A] {
-      def apply(e: Eff[M |: NoEffect, A]): Eff[U, A] = {
-
-        e match {
-          case Pure(a) =>
-            EffMonad[U].point(a)
-
-          case Impure(u, c) =>
-            decompose(u) match {
-              case \/-(mx) => impure[U, u.X, A](mu.inject(mx), Arrs.singleton(x => effInto(c(x))))
-              case -\/(u1) => sys.error("impossible")
-            }
-        }
-      }
-    }
-}
-trait IntoPolyLower {
-  implicit def intoEff[M[_], R <: Effects, U, A](implicit m: Member[M, M |: R], mu: Member[M, U], recurse: IntoPoly[R, U, A]): IntoPoly[M |: R, U, A] =
-    new IntoPoly[M |: R, U, A] {
-      def apply(e: Eff[M |: R, A]): Eff[U, A] = {
-
-        e match {
-          case Pure(a) =>
-            EffMonad[U].point(a)
-
-          case Impure(u, c) =>
-            decompose(u) match {
-              case \/-(mx) => impure[U, u.X, A](mu.inject(mx), Arrs.singleton(x => effInto(c(x))))
-              case -\/(u1) => recurse(impure[R, u1.X, A](u1, c.asInstanceOf[Arrs[R, u1.X, A]]))
-            }
-        }
-      }
-    }
-}
 
 /**
  * Sequence of monadic functions from A to B: A => Eff[B]
@@ -244,8 +243,15 @@ case class Arrs[R, A, B](functions: Vector[Any => Eff[R, Any]]) {
 
         case f +: rest =>
           f(v) match {
-            case Pure(a1) => go(rest, a1)
-            case Impure(u, q) => Impure[R, u.X, B](u, q.copy(functions = q.functions ++ rest))
+            case Pure(a1) =>
+              go(rest, a1)
+
+            case Impure(u, q) =>
+              Impure[R, u.X, B](u, q.copy(functions = q.functions ++ rest))
+
+            case ap @ ImpureAp(u, continuation) =>
+              val monadicArrs = Arrs.singleton((x: u.X) => continuation(x))
+              Impure[R, u.X, B](u, monadicArrs.copy(functions = monadicArrs.functions ++ rest))
           }
       }
     }
@@ -269,4 +275,48 @@ object Arrs {
   /** create an Arrs function with no effect, which is similar to using an identity a => EffMonad[R].point(a) */
   def unit[R, A]: Arrs[R, A, A] =
     Arrs(Vector())
+}
+
+/**
+ * Sequence of applicative functions from A to B: Eff[R, A => B]
+ *
+ */
+case class Apps[R, A, B](functions: Vector[Eff[R, Any => Any]]) {
+
+  def append[C](f: Eff[R, B => C]): Apps[R, A, C] =
+    Apps(functions :+ f.asInstanceOf[Eff[R, Any => Any]])
+
+  /**
+   * execute this data structure as function
+   *
+   * This method is stack-safe
+   */
+  def apply(a: A): Eff[R, B] = {
+    @tailrec
+    def go(fs: Vector[Eff[R, Any => Any]], v: Eff[R, Any]): Eff[R, B] = {
+      fs match {
+        case Vector() =>
+          v.asInstanceOf[Eff[R, B]]
+
+        case Vector(ff) =>
+          ff.flatMap(f => v.map(f)).asInstanceOf[Eff[R, B]]
+
+        case ff +: rest =>
+          go(rest, ff.flatMap(f => v.map(f)))
+      }
+    }
+
+    go(functions, Eff.EffMonad[R].point(a).asInstanceOf[Eff[R, Any]])
+  }
+}
+
+object Apps {
+
+  /** create an Apps function from a single applicative function */
+  def singleton[R, A, B](f: Eff[R, A => B]): Apps[R, A, B] =
+    Apps(Vector(f.asInstanceOf[Eff[R, Any => Any]]))
+
+  /** create an Apps function with no effect */
+  def unit[R, A]: Apps[R, A, A] =
+    Apps(Vector())
 }

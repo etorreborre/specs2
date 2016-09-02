@@ -22,7 +22,7 @@ trait FileSystem extends FilePathReader {
 
   /** delete a file */
   def deleteFile(filePath: FilePath): Action[Boolean] =
-    Actions.safe(filePath.toFile.delete)
+    Actions.delayed(filePath.toFile.delete)
 
   /** write a string to a file as UTF-8 */
   def writeFile(filePath: FilePath, content: String): Action[Unit] =
@@ -47,7 +47,7 @@ trait FileSystem extends FilePathReader {
 
   /** create a directory and its parent directories */
   def mkdirs(path: DirectoryPath): Action[Unit] =
-    Actions.safe(path.toFile.mkdirs).void
+    Actions.delayed(path.toFile.mkdirs).void
 
   /** create a the directory containing a file and its parent directories */
   def mkdirs(path: FilePath): Action[Unit] =
@@ -90,7 +90,7 @@ trait FileSystem extends FilePathReader {
       }
     }
 
-    Actions.safe {
+    Actions.delayed {
       try     extractEntry(zis.getNextEntry)
       finally zis.close
     }
@@ -134,7 +134,7 @@ trait FileSystem extends FilePathReader {
    */
   def copyFile(dest: DirectoryPath)(filePath: FilePath): Action[Unit] =
     mkdirs(dest) >>
-    Actions.safe {
+    Actions.delayed {
       copyLock.synchronized {
         import java.nio.file._
         Files.copy(Paths.get(filePath.path),
@@ -151,11 +151,11 @@ trait FileSystem extends FilePathReader {
   /** create a new file */
   def createFile(filePath: FilePath): Action[Boolean] =
     mkdirs(filePath.dir) >>
-    Actions.safe(filePath.toFile.createNewFile)
+    Actions.delayed(filePath.toFile.createNewFile)
 
   /** delete files or directories */
   def delete(file: FilePath): Action[Unit] =
-    Actions.safe(file.toFile.delete).void
+    Actions.delayed(file.toFile.delete).void
 
   /** delete a directory */
   def delete(dir: DirectoryPath): Action[Unit] =

@@ -10,7 +10,7 @@ import specification.core._
 import runner.Runner._
 import scalaz._, Scalaz._
 import SpecificationsFinder._
-import eff._, ConsoleEffect._
+import Actions._
 
 /**
  * This trait finds specifications in the source directory, instantiate them
@@ -29,7 +29,7 @@ trait FilesRunner {
     val actions: Action[Stats] =
       for {
         stats <- run(env)
-        _     <- Actions.safe(env.shutdown)
+        _     <- Actions.delayed(env.shutdown)
       } yield stats
 
       execute(actions, env.arguments, exit)

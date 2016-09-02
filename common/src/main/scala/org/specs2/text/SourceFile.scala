@@ -31,7 +31,7 @@ trait SourceFile {
 
     val found = result(pattern.matcher(content)).toList
     log[ActionStack]("  found classes: "+found.mkString(", "), verbose && found.nonEmpty) >>
-      Actions.safe(found.filter(c => CLASSNAME_REGEX.pattern.matcher(c).matches))
+      Actions.delayed(found.filter(c => CLASSNAME_REGEX.pattern.matcher(c).matches))
   }
 
   /** @return the package name corresponding to the package declarations at the beginning of a file */

@@ -123,7 +123,7 @@ object SpecStructure {
       }.sequenceU.map(byName).runOption.getOrElse(Vector())
        .filterNot { case (n, _) => visited.map(_._1).contains(n) }
 
-    Actions.safe {
+    Actions.delayed {
       def getAll(seed: Vector[SpecStructure], visited: Vector[(String, SpecStructure)]): Vector[SpecStructure] = {
         if (seed.isEmpty) visited.map(_._2)
         else {

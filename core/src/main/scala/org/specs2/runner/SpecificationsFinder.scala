@@ -7,10 +7,8 @@ import specification.core._
 import text.SourceFile._
 import io._
 import scalaz._, Scalaz._
-import eff._
-import ConsoleEffect._
-import WarningsEffect._
 import SpecificationsFinder._
+import control.Actions._
 
 /**
  * This trait loads specifications found on a given source directory based
@@ -69,13 +67,13 @@ trait SpecificationsFinder {
     lazy val specClassPattern = {
       val p = specPattern("class", pattern)
       log("  the pattern used to match specification classes is: "+p, verbose) >>
-        Actions.safe(Pattern.compile(p))
+        Actions.delayed(Pattern.compile(p))
     }
 
     lazy val specObjectPattern = {
       val p = specPattern("object", pattern)
       log("  the pattern used to match specification objects is: "+p, verbose) >>
-        Actions.safe(Pattern.compile(p))
+        Actions.delayed(Pattern.compile(p))
     }
 
     for {

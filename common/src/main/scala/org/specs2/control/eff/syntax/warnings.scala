@@ -1,16 +1,18 @@
-package org.specs2.control.eff.syntax
+package org.specs2.control.eff
+package syntax
 
-import org.specs2.control.eff._
+import WarningsEffect._
 
 object warnings extends warnings
 
 trait warnings {
 
-  implicit class WarningsEffectOps[R <: Effects, A](e: Eff[R, A]) {
+  implicit class WarningsEffectOps[R, A](action: Eff[R, A]) {
 
-    def runWarnings[U <: Effects](implicit member: Member.Aux[Warnings, R, U]): Eff[U, (A, List[String])] =
-      WarningsEffect.runWarnings(e)
+    def runWarnings[U](implicit m: Member.Aux[Warnings, R, U]): Eff[U, (A, List[String])] =
+      WarningsEffect.runWarnings(action)
 
   }
 
 }
+
