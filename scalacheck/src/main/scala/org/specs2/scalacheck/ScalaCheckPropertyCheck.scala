@@ -3,10 +3,12 @@ package scalacheck
 
 import org.scalacheck.util.Pretty._
 import org.scalacheck.util.{FreqMap, Pretty}
-import org.scalacheck.{Gen, Properties, Prop, Test}
+import org.scalacheck.{Gen, Prop, Properties, Test}
 import execute._
 import matcher._
 import PrettyDetails._
+
+import scala.util.control.NonFatal
 
 trait ScalaCheckPropertyCheck extends ExpectationsCreation {
 
@@ -49,11 +51,13 @@ trait ScalaCheckPropertyCheck extends ExpectationsCreation {
               // in that case we want to represent a normal failure
               val failedResult = prettyResult(result.copy(status = Test.Failed(args, labels)), prettyFreqMap)(parameters.prettyParams)
               new Failure(failedResult + "\n> " + f.message, details = f.details, stackTrace = f.stackTrace)
+            case e: AssertionError =>
+              val failedResult = prettyResult(result.copy(status = Test.Failed(args, labels)), prettyFreqMap)(parameters.prettyParams)
+              new Failure(failedResult + "\n> " + e.getMessage, stackTrace = e.getStackTrace.toList)
+
             case SkipException(s)    => s
             case PendingException(p) => p
-            case e: java.lang.Exception      =>
-              Error(prettyTestResult + showCause(e), e)
-            case throwable    => throw ex
+            case NonFatal(t)         => Error(prettyTestResult + showCause(t), t)
           }
       }
 
@@ -61,8 +65,8 @@ trait ScalaCheckPropertyCheck extends ExpectationsCreation {
   }
 
   /** @return the cause of the exception as a String if there is one */
-  def showCause(e: java.lang.Exception) =
-    Option(e.getCause).map(s"\n> caused by "+_).getOrElse("")
+  def showCause(t: Throwable) =
+    Option(t.getCause).map(s"\n> caused by "+_).getOrElse("")
 
   def frequencies(fq: FreqMap[Set[Any]], parameters: Parameters, prettyFreqMap: FreqMap[Set[Any]] => Pretty) = {
     val noCollectedValues = parameters.prettyParams.verbosity <= 0 || fq.getRatios.map(_._1).forall(_.toSet == Set(()))
