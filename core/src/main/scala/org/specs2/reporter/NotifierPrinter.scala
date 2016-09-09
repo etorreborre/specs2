@@ -107,6 +107,7 @@ object NotifierPrinter {
             def notifyResult(result: Result): Unit =
               result match {
                 case r: execute.Success => n.stepSuccess(duration(f))
+                case r: execute.Failure => n.stepError(r.message, location, r.exception, duration(f))
                 case r: execute.Error   => n.stepError(r.message, location, r.exception, duration(f))
                 case _ => ()
               }

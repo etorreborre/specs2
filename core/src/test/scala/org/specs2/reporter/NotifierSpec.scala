@@ -5,8 +5,8 @@ import main._
 import control._
 import execute._
 import io.StringOutput
-import org.specs2.specification.Tables
-import specification.core.{Env}
+import org.specs2.specification.{AfterAll, Tables}
+import specification.core.Env
 import runner._
 
 class NotifierSpec(env: Env) extends Specification { def is = s2"""
@@ -15,6 +15,7 @@ class NotifierSpec(env: Env) extends Specification { def is = s2"""
  Run an acceptance spec with a Notifier                 $a2
  Run a specification with decorated results             $a3
  Blocks must only be closed once even when separated    $a4
+ A failure in a spec must fail the specification        $a5
 
 """
 
@@ -80,6 +81,23 @@ class NotifierSpec(env: Env) extends Specification { def is = s2"""
         "[end    ] NotifierSpec2").mkString("\n")
   }
 
+  def a5 = {
+    val spec = new NotifierSpec3
+    val env1 = env.setArguments(Arguments("notifier"))
+    val notifier = new TestNotifier
+    Reporter.report(env1, List(NotifierPrinter.printer(notifier)))(spec.structure(env)).runOption
+    notifier.messages.mkString("\n") must_==
+      List(
+        "[start  ] NotifierSpec3",
+        "[open   ] group1",
+        "[example] ex1",
+        "[success] ex1",
+        "[close  ] group1",
+        "[step   ]",
+        "[error  ] java.lang.RuntimeException: boom",
+        "[end    ] NotifierSpec3").mkString("\n")
+  }
+
 }
 
 class NotifierSpecWithTables extends Specification with Tables {def is = s2"""
@@ -111,6 +129,13 @@ class NotifierSpec2 extends org.specs2.mutable.Specification {
   }
 }
 
+class NotifierSpec3 extends org.specs2.mutable.Specification with AfterAll {
+  "group1" >> {
+    "ex1" >> ok
+  }
+  def afterAll = sys.error("boom")
+}
+
 class TestNotifier extends Notifier with StringOutput {
   def specStart(title: String, location: String) = append(s"[start  ] $title")
   def specEnd(title: String, location: String) = append(s"[end    ] $title")
@@ -125,7 +150,7 @@ class TestNotifier extends Notifier with StringOutput {
   def examplePending(name: String, message: String, location: String, duration: Long) = append(s"[pending] $name $message")
   def stepStarted(location: String) = append(s"[step   ]")
   def stepSuccess(duration: Long) = append(s"[success]")
-  def stepError(message: String, location: String, f: Throwable, duration: Long) = append(s"[error   ] $message")
+  def stepError(message: String, location: String, f: Throwable, duration: Long) = append(s"[error  ] $message")
 }
 
 class GlobalNotifier extends SilentNotifier {
