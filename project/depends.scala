@@ -38,7 +38,7 @@ object depends {
 
   def shapeless(scalaVersion: String) =
     if (scalaVersion startsWith "2.12")
-      Seq("com.chuusai" %% "shapeless" % "2.12.0-M5")
+      Seq("com.chuusai" % "shapeless_2.12.0-M5" % "2.3.2")
     else
       Seq("com.chuusai" %% "shapeless" % "2.3.2")
 
