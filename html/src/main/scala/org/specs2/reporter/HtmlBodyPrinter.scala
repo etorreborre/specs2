@@ -32,7 +32,8 @@ trait HtmlBodyPrinter {
 
     val (html, _) = Fold.runFold(spec.fragments.contents, htmlFold.into[Task]).run
     html +
-    s"""${printStatistics(title, stats, options)}"""
+    s"""|
+        |${printStatistics(title, stats, options)}""".stripMargin
   }
 
   /**
@@ -137,7 +138,7 @@ trait HtmlBodyPrinter {
 
   def show(f: Fragment) =
     f.description match {
-      case Code(text) => <code>{text}</code>
+      case Code(text) => <code class="prettyprint">{text}</code>
       case other =>
         val d = f.description.show
         <text>{if (Seq("*", "-").exists(d.trim.startsWith)) d.trim.drop(1) else d}</text>
