@@ -1,0 +1,31 @@
+Maintenance version.
+
+## Improvements
+
+ * **core** updated Scala `2.12.0-RC1`
+ * **core** update scalaz to `7.2.6`
+ * **cats** update cats to `0.7.2`
+ * **scalacheck** updated scalacheck to `0.13.2`
+ * **gwt** updated shapeless to `2.3.2`
+ * **core** remove all empty text and formatting fragments when filtering by tag and replace with a newline before each example
+ * **core** limit the scope of `ArgProperty` to limit the possible impact of the implicit conversions to `ArgProperty`
+ * **scalacheck** keep the stacktrace of a Failure created in a ScalaCheck property
+ * **matcher-extra** renamed a source directory for matcher-extras
+ * **markdown** removed the shapeless dependency on `markdown` and `specs2-form`
+ * **project** added a link to paypal.me
+
+## Fixes
+
+ * **core** re-throw Timeout failures in mutable specifications when using `FutureMatchers`
+ * **core** evaluate results only once in the `Result` Monoids [#496](https://github.com/etorreborre/specs2/issues/496)
+ * **core** use `flattenLeft` to flatten a tree instead of `flatten` to avoid stackoverflow exception with the JUnit notification on large specifications
+ * **core** fail a `sbt` run if there is an error in one of the steps (this includes the `afterAll` steps)
+ * **core** fixed a `NoSuchElementException` when folding with a `Sink` [#501](https://github.com/etorreborre/specs2/issues/501)
+ * **scalacheck** report an `AssertionError` as a `Failure` in ScalaCheck and display arguments on exceptions
+ * **scalacheck** fixed the use of datatables in ScalaCheck properties
+ * **gwt** fixed an error in the example of GWT style
+ * **project** fixed the google groups link
+ * **guide** fixed a package name in the user guide
+ * **guide** add missing imports to "Create Your Own" matchers section [#493](https://github.com/etorreborre/specs2/issues/493) (by Kris Nuttycombe)
+ * **markdown** fixed the markdown spec which was broken after using pegdown `1.6.0`. The post-processing of multilines in code blocks can not be easily done anymore so it was removed
+

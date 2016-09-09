@@ -27,10 +27,7 @@ object depends {
     }.toList
 
   def kindp(scalaVersion: String) =
-    if (scalaVersion startsWith "2.12.0-M5")
-      "org.spire-math" % "kind-projector_2.12.0-M3" % "0.7.1"
-    else
-      "org.spire-math" % "kind-projector" % "0.7.1" cross CrossVersion.binary
+    "org.spire-math" % "kind-projector" % "0.8.2" cross CrossVersion.binary
 
   def scalacheck(scalaVersion: String) =
     Seq("org.scalacheck" %% "scalacheck" % "1.13.2")
@@ -40,9 +37,12 @@ object depends {
   lazy val hamcrest      = Seq("org.hamcrest"   %  "hamcrest-core" % "1.3")
 
   def shapeless(scalaVersion: String) =
-    Seq("com.chuusai" %% "shapeless" % "2.3.1")
+    if (scalaVersion startsWith "2.12")
+      Seq("com.chuusai" %% "shapeless" % "2.12.0-M5")
+    else
+      Seq("com.chuusai" %% "shapeless" % "2.3.2")
 
-  lazy val cats = Seq("org.typelevel" %% "cats-core" % "0.6.0")
+  lazy val cats = Seq("org.typelevel" %% "cats-core" % "0.7.2")
 
   lazy val pegdown = Seq("org.pegdown" % "pegdown" % "1.6.0")
 
