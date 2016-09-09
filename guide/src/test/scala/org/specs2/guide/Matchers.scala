@@ -177,8 +177,8 @@ t1 must beMatching(t2)
 
 The easiest way to create a new matcher is to create it from a function returning a tuple with a boolean and one or more messages: ${snippet{
 
-// import the necessary implicit conversions
-import org.specs2.matcher.MatchersImplicits._
+// import the necessary implicit conversions if you are outside of a Specification
+// import org.specs2.matcher.MatchersImplicits._
 
 // annotate the return type so that implicit conversions can transform your function into a Matcher object
 // here just return a boolean and a failure message
