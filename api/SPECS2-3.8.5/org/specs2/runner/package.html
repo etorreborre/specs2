@@ -1,0 +1,424 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>runner - org.specs2.runner</title>
+          <meta name="description" content="runner - org.specs2.runner" />
+          <meta name="keywords" content="runner org.specs2.runner" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../index.html';
+            var hash = 'org.specs2.runner.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Package" src="../../../lib/package_big.png" />
+        <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.specs2">specs2</a></p>
+        <h1>runner</h1><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.package" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">runner</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="org.specs2.runner.ClassRunner" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ClassRunnerextendsAnyRef"></a>
+      <a id="ClassRunner:ClassRunner"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ClassRunner.html"><span class="name">ClassRunner</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.package@ClassRunnerextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The class runner expects the first command-line argument to be the class name of
+a specification to execute
+</p>
+    </li><li name="org.specs2.runner.FilesRunner" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="FilesRunnerextendsAnyRef"></a>
+      <a id="FilesRunner:FilesRunner"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="FilesRunner.html"><span class="name">FilesRunner</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.package@FilesRunnerextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This trait finds specifications in the source directory, instantiate them
+and report them using various printers as specified on the command line</p>
+    </li><li name="org.specs2.runner.JUnitRunner" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="JUnitRunnerextendsRunnerwithFilterable"></a>
+      <a id="JUnitRunner:JUnitRunner"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="JUnitRunner.html"><span class="name">JUnitRunner</span></a><span class="result"> extends <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/junit/junit/4.12/junit-4.12-javadoc.jar/!/index.html#org.junit.runner.Runner" class="extype" target="_top">Runner</a> with <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/junit/junit/4.12/junit-4.12-javadoc.jar/!/index.html#org.junit.runner.manipulation.Filterable" class="extype" target="_top">Filterable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.package@JUnitRunnerextendsRunnerwithFilterable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Runner for specs2 specifications
+</p>
+    </li><li name="org.specs2.runner.NotifierRunner" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NotifierRunnerextendsProductwithSerializable"></a>
+      <a id="NotifierRunner:NotifierRunner"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="NotifierRunner.html"><span class="name">NotifierRunner</span></a><span class="params">(<span name="notifier">notifier: <a href="../reporter/Notifier.html" class="extype" name="org.specs2.reporter.Notifier">Notifier</a></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.package@NotifierRunnerextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This runner can be used with any class implementing the Notifier trait
+</p>
+    </li><li name="org.specs2.runner.SbtRunner" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SbtRunnerextendsRunnerwithProductwithSerializable"></a>
+      <a id="SbtRunner:SbtRunner"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="SbtRunner.html"><span class="name">SbtRunner</span></a><span class="params">(<span name="args">args: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Array" class="extype" target="_top">Array</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="remoteArgs">remoteArgs: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Array" class="extype" target="_top">Array</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="loader">loader: <span class="extype" name="java.lang.ClassLoader">ClassLoader</span></span>)</span><span class="result"> extends <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scala-sbt/test-interface/1.0/test-interface-1.0-javadoc.jar/!/index.html#sbt.testing.Runner" class="extype" target="_top">Runner</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.package@SbtRunnerextendsRunnerwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Runner for Sbt
+</p>
+    </li><li name="org.specs2.runner.SpecificationFingerprint" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SpecificationFingerprintextendsSubclassFingerprint"></a>
+      <a id="SpecificationFingerprint:SpecificationFingerprint"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="SpecificationFingerprint.html"><span class="name">SpecificationFingerprint</span></a><span class="result"> extends <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scala-sbt/test-interface/1.0/test-interface-1.0-javadoc.jar/!/index.html#sbt.testing.SubclassFingerprint" class="extype" target="_top">SubclassFingerprint</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.package@SpecificationFingerprintextendsSubclassFingerprint" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.runner.SpecificationsFinder" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SpecificationsFinderextendsAnyRef"></a>
+      <a id="SpecificationsFinder:SpecificationsFinder"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="SpecificationsFinder.html"><span class="name">SpecificationsFinder</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.package@SpecificationsFinderextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This trait loads specifications found on a given source directory based
+on a regular expression representing the Specification name, usually .*Spec
+</p>
+    </li><li name="org.specs2.runner.Specs2Framework" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Specs2FrameworkextendsFramework"></a>
+      <a id="Specs2Framework:Specs2Framework"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Specs2Framework.html"><span class="name">Specs2Framework</span></a><span class="result"> extends <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scala-sbt/test-interface/1.0/test-interface-1.0-javadoc.jar/!/index.html#sbt.testing.Framework" class="extype" target="_top">Framework</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.package@Specs2FrameworkextendsFramework" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Implementation of the Framework interface for the sbt tool.</p><div class="fullcomment"><div class="comment cmt"><p>Implementation of the Framework interface for the sbt tool.
+It declares the classes which can be executed by the specs2 library.
+</p></div></div>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="org.specs2.runner.ClassRunner" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ClassRunner"></a>
+      <a id="ClassRunner:ClassRunner"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ClassRunner$.html"><span class="name">ClassRunner</span></a><span class="result"> extends <a href="ClassRunner.html" class="extype" name="org.specs2.runner.ClassRunner">ClassRunner</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.package@ClassRunner" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.runner.ConsoleLogger" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ConsoleLogger"></a>
+      <a id="ConsoleLogger:ConsoleLogger"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ConsoleLogger$.html"><span class="name">ConsoleLogger</span></a><span class="result"> extends <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scala-sbt/test-interface/1.0/test-interface-1.0-javadoc.jar/!/index.html#sbt.testing.Logger" class="extype" target="_top">Logger</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.package@ConsoleLogger" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.runner.Fingerprints" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Fingerprints"></a>
+      <a id="Fingerprints:Fingerprints"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Fingerprints$.html"><span class="name">Fingerprints</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.package@Fingerprints" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.runner.NoEventHandler" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NoEventHandler"></a>
+      <a id="NoEventHandler:NoEventHandler"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="NoEventHandler$.html"><span class="name">NoEventHandler</span></a><span class="result"> extends <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scala-sbt/test-interface/1.0/test-interface-1.0-javadoc.jar/!/index.html#sbt.testing.EventHandler" class="extype" target="_top">EventHandler</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.package@NoEventHandler" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.runner.Runner" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Runner"></a>
+      <a id="Runner:Runner"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Runner$.html"><span class="name">Runner</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.package@Runner" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">reusable actions for Runners
+</p>
+    </li><li name="org.specs2.runner.SpecificationsFinder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SpecificationsFinder"></a>
+      <a id="SpecificationsFinder:SpecificationsFinder"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="SpecificationsFinder$.html"><span class="name">SpecificationsFinder</span></a><span class="result"> extends <a href="SpecificationsFinder.html" class="extype" name="org.specs2.runner.SpecificationsFinder">SpecificationsFinder</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.package@SpecificationsFinder" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.runner.TextRunner" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TextRunner"></a>
+      <a id="TextRunner:TextRunner"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="TextRunner$.html"><span class="name">TextRunner</span></a><span class="result"> extends <a href="ClassRunner.html" class="extype" name="org.specs2.runner.ClassRunner">ClassRunner</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.package@TextRunner" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Test runner to simulate a console run
+</p>
+    </li><li name="org.specs2.runner.consoleRunner" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="consoleRunner"></a>
+      <a id="consoleRunner:consoleRunner"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="consoleRunner$.html"><span class="name">consoleRunner</span></a><span class="result"> extends <a href="ClassRunner.html" class="extype" name="org.specs2.runner.ClassRunner">ClassRunner</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.package@consoleRunner" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.runner.files" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="files"></a>
+      <a id="files:files"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="files$.html"><span class="name">files</span></a><span class="result"> extends <a href="FilesRunner.html" class="extype" name="org.specs2.runner.FilesRunner">FilesRunner</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.package@files" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Run specification files from the command line with specs2.files &lt;specification name&gt; &lt;arguments&gt;
+</p>
+    </li><li name="org.specs2.runner.sbtRun" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="sbtRun"></a>
+      <a id="sbtRun:sbtRun"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="sbtRun$.html"><span class="name">sbtRun</span></a><span class="result"> extends <a href="SbtRunner.html" class="extype" name="org.specs2.runner.SbtRunner">SbtRunner</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.runner.package@sbtRun" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This object can be used to debug the behavior of the SbtRunner
+</p>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

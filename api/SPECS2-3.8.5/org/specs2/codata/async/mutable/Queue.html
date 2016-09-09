@@ -1,0 +1,749 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>Queue - org.specs2.codata.async.mutable.Queue</title>
+          <meta name="description" content="Queue - org.specs2.codata.async.mutable.Queue" />
+          <meta name="keywords" content="Queue org.specs2.codata.async.mutable.Queue" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../index.html';
+            var hash = 'org.specs2.codata.async.mutable.Queue';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="type">
+      <div id="definition">
+        <img alt="Trait" src="../../../../../lib/trait_big.png" />
+        <p id="owner"><a href="../../../../package.html" class="extype" name="org">org</a>.<a href="../../../package.html" class="extype" name="org.specs2">specs2</a>.<a href="../../package.html" class="extype" name="org.specs2.codata">codata</a>.<a href="../package.html" class="extype" name="org.specs2.codata.async">async</a>.<a href="package.html" class="extype" name="org.specs2.codata.async.mutable">mutable</a></p>
+        <h1>Queue</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="package.html" class="extype" name="org.specs2.codata.async.mutable">package mutable</a>
+          </div></span></h3><span class="permalink">
+      <a href="../../../../../index.html#org.specs2.codata.async.mutable.Queue" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Queue</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Asynchronous queue interface. Operations are all nonblocking in their
+implementations, but may be 'semantically' blocking. For instance,
+a queue may have a bound on its size, in which case enqueuing may
+block until there is an offsetting dequeue.
+</p></div><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="org.specs2.codata.async.mutable.Queue"><span>Queue</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show All</span></li>
+            </ol>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        
+
+        <div id="values" class="values members">
+              <h3>Abstract Value Members</h3>
+              <ol><li name="org.specs2.codata.async.mutable.Queue#dequeue" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="dequeue:org.specs2.codata.Process[scalaz.concurrent.Task,A]"></a>
+      <a id="dequeue:Process[Task,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">dequeue</span><span class="result">: <a href="../../Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-concurrent_2.11/7.2.6/scalaz-concurrent_2.11-7.2.6-javadoc.jar/!/index.html#scalaz.concurrent.Task" class="extype" target="_top">Task</a>, <span class="extype" name="org.specs2.codata.async.mutable.Queue.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.specs2.codata.async.mutable.Queue@dequeue:org.specs2.codata.Process[scalaz.concurrent.Task,A]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Provides a process that dequeue from this queue.</p><div class="fullcomment"><div class="comment cmt"><p>Provides a process that dequeue from this queue.
+When multiple consumers dequeue from this queue,
+they dequeue in first-come, first-serve order.</p><p>Please use <code>Topic</code> instead of <code>Queue</code> when all subscribers
+need to see each value enqueued.</p><p>This process is equivalent to <code>dequeueBatch(1)</code>.
+</p></div></div>
+    </li><li name="org.specs2.codata.async.mutable.Queue#dequeueAvailable" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="dequeueAvailable:org.specs2.codata.Process[scalaz.concurrent.Task,Seq[A]]"></a>
+      <a id="dequeueAvailable:Process[Task,Seq[A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">dequeueAvailable</span><span class="result">: <a href="../../Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-concurrent_2.11/7.2.6/scalaz-concurrent_2.11-7.2.6-javadoc.jar/!/index.html#scalaz.concurrent.Task" class="extype" target="_top">Task</a>, <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="org.specs2.codata.async.mutable.Queue.A">A</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.specs2.codata.async.mutable.Queue@dequeueAvailable:org.specs2.codata.Process[scalaz.concurrent.Task,Seq[A]]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Equivalent to dequeueBatch with an infinite limit.</p><div class="fullcomment"><div class="comment cmt"><p>Equivalent to dequeueBatch with an infinite limit.  Only use this
+method if your underlying algebra (<code>A</code>) has some sort of constant
+time &quot;natural batching&quot;!  If processing a chunk of size n is linearly
+more expensive than processing a chunk of size 1, you should always
+use dequeueBatch with some small limit, otherwise you will disrupt
+fairness in the nondeterministic merge combinators.
+</p></div></div>
+    </li><li name="org.specs2.codata.async.mutable.Queue#dequeueBatch" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="dequeueBatch(limit:Int):org.specs2.codata.Process[scalaz.concurrent.Task,Seq[A]]"></a>
+      <a id="dequeueBatch(Int):Process[Task,Seq[A]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">dequeueBatch</span><span class="params">(<span name="limit">limit: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="../../Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-concurrent_2.11/7.2.6/scalaz-concurrent_2.11-7.2.6-javadoc.jar/!/index.html#scalaz.concurrent.Task" class="extype" target="_top">Task</a>, <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="org.specs2.codata.async.mutable.Queue.A">A</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.specs2.codata.async.mutable.Queue@dequeueBatch(limit:Int):org.specs2.codata.Process[scalaz.concurrent.Task,Seq[A]]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Provides a process that dequeues in chunks.</p><div class="fullcomment"><div class="comment cmt"><p>Provides a process that dequeues in chunks.  Whenever *n* elements
+are available in the queue, <code>min(n, limit)</code> elements will be dequeud
+and produced as a single <code>Seq</code>.  Note that this naturally does not
+*guarantee* that <code>limit</code> items are returned in every chunk.  If only
+one element is available, that one element will be returned in its own
+sequence.  This method basically just allows a consumer to &quot;catch up&quot;
+to a rapidly filling queue in the case where some sort of batching logic
+is applicable.
+</p></div></div>
+    </li><li name="org.specs2.codata.async.mutable.Queue#enqueue" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="enqueue:org.specs2.codata.Sink[scalaz.concurrent.Task,A]"></a>
+      <a id="enqueue:Sink[Task,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">enqueue</span><span class="result">: <a href="../../package.html#Sink[+F[_],-O]=org.specs2.codata.Process[F,O=&gt;F[Unit]]" class="extmbr" name="org.specs2.codata.Sink">Sink</a>[<a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-concurrent_2.11/7.2.6/scalaz-concurrent_2.11-7.2.6-javadoc.jar/!/index.html#scalaz.concurrent.Task" class="extype" target="_top">Task</a>, <span class="extype" name="org.specs2.codata.async.mutable.Queue.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.specs2.codata.async.mutable.Queue@enqueue:org.specs2.codata.Sink[scalaz.concurrent.Task,A]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A <code>Sink</code> for enqueueing values to this <code>Queue</code>.</p>
+    </li><li name="org.specs2.codata.async.mutable.Queue#enqueueAll" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="enqueueAll(xa:Seq[A]):scalaz.concurrent.Task[Unit]"></a>
+      <a id="enqueueAll(Seq[A]):Task[Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">enqueueAll</span><span class="params">(<span name="xa">xa: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="org.specs2.codata.async.mutable.Queue.A">A</span>]</span>)</span><span class="result">: <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-concurrent_2.11/7.2.6/scalaz-concurrent_2.11-7.2.6-javadoc.jar/!/index.html#scalaz.concurrent.Task" class="extype" target="_top">Task</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.specs2.codata.async.mutable.Queue@enqueueAll(xa:Seq[A]):scalaz.concurrent.Task[Unit]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Enqueue multiple <code>A</code> values in this queue.</p><div class="fullcomment"><div class="comment cmt"><p>Enqueue multiple <code>A</code> values in this queue. This has same semantics as sequencing
+repeated calls to <code>enqueueOne</code>.
+</p></div></div>
+    </li><li name="org.specs2.codata.async.mutable.Queue#enqueueOne" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="enqueueOne(a:A):scalaz.concurrent.Task[Unit]"></a>
+      <a id="enqueueOne(A):Task[Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">enqueueOne</span><span class="params">(<span name="a">a: <span class="extype" name="org.specs2.codata.async.mutable.Queue.A">A</span></span>)</span><span class="result">: <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-concurrent_2.11/7.2.6/scalaz-concurrent_2.11-7.2.6-javadoc.jar/!/index.html#scalaz.concurrent.Task" class="extype" target="_top">Task</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.specs2.codata.async.mutable.Queue@enqueueOne(a:A):scalaz.concurrent.Task[Unit]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Enqueue one element in this <code>Queue</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Enqueue one element in this <code>Queue</code>. Resulting task will
+terminate with failure if queue is closed or failed.
+Please note this will get completed _after_ <code>a</code> has been successfully enqueued.</p></div><dl class="paramcmts block"><dt class="param">a</dt><dd class="cmt"><p><code>A</code> to enqueue</p></dd></dl></div>
+    </li><li name="org.specs2.codata.async.mutable.Queue#size" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="size:org.specs2.codata.async.immutable.Signal[Int]"></a>
+      <a id="size:immutable.Signal[Int]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">size</span><span class="result">: <a href="../immutable/Signal.html" class="extype" name="org.specs2.codata.async.immutable.Signal">immutable.Signal</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.specs2.codata.async.mutable.Queue@size:org.specs2.codata.async.immutable.Signal[Int]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The time-varying size of this <code>Queue</code>.</p><div class="fullcomment"><div class="comment cmt"><p>The time-varying size of this <code>Queue</code>. This signal refreshes
+only when size changes. Offsetting enqueues and dequeues may
+not result in refreshes.
+</p></div></div>
+    </li><li name="org.specs2.codata.async.mutable.Queue#upperBound" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="upperBound:Option[Int]"></a>
+      <a id="upperBound:Option[Int]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">upperBound</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.specs2.codata.async.mutable.Queue@upperBound:Option[Int]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The size bound on the queue.</p><div class="fullcomment"><div class="comment cmt"><p>The size bound on the queue.
+Returns None if the queue is unbounded.
+</p></div></div>
+    </li></ol>
+            </div>
+
+        <div id="values" class="values members">
+              <h3>Concrete Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.specs2.codata.async.mutable.Queue@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.specs2.codata.async.mutable.Queue@##():Int" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.specs2.codata.async.mutable.Queue@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.specs2.codata.async.mutable.Queue@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="org.specs2.codata.async.mutable.Queue#available" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="available:org.specs2.codata.async.immutable.Signal[Int]"></a>
+      <a id="available:immutable.Signal[Int]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">available</span><span class="result">: <a href="../immutable/Signal.html" class="extype" name="org.specs2.codata.async.immutable.Signal">immutable.Signal</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.specs2.codata.async.mutable.Queue@available:org.specs2.codata.async.immutable.Signal[Int]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns the available number of entries in the queue.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the available number of entries in the queue.
+Always returns <code>Int.MaxValue</code> when the queue is unbounded.
+</p></div></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.specs2.codata.async.mutable.Queue@clone():Object" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="org.specs2.codata.async.mutable.Queue#close" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="close:scalaz.concurrent.Task[Unit]"></a>
+      <a id="close:Task[Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">close</span><span class="result">: <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-concurrent_2.11/7.2.6/scalaz-concurrent_2.11-7.2.6-javadoc.jar/!/index.html#scalaz.concurrent.Task" class="extype" target="_top">Task</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.specs2.codata.async.mutable.Queue@close:scalaz.concurrent.Task[Unit]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Closes this queue.</p><div class="fullcomment"><div class="comment cmt"><p>Closes this queue. This halts the <code>enqueue</code> <code>Sink</code> and
+<code>dequeue</code> <code>Process</code> after any already-queued elements are
+drained.</p><p>After this any enqueue will fail with <code>Terminated(End)</code>,
+and the enqueue <code>Sink</code> will terminate with <code>End</code>.
+</p></div></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.specs2.codata.async.mutable.Queue@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.specs2.codata.async.mutable.Queue@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.specs2.codata.async.mutable.Queue#fail" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="fail(rsn:Throwable):scalaz.concurrent.Task[Unit]"></a>
+      <a id="fail(Throwable):Task[Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fail</span><span class="params">(<span name="rsn">rsn: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-concurrent_2.11/7.2.6/scalaz-concurrent_2.11-7.2.6-javadoc.jar/!/index.html#scalaz.concurrent.Task" class="extype" target="_top">Task</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.specs2.codata.async.mutable.Queue@fail(rsn:Throwable):scalaz.concurrent.Task[Unit]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Like <code>kill</code>, except it terminates with supplied reason.</p>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.specs2.codata.async.mutable.Queue@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="org.specs2.codata.async.mutable.Queue#full" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="full:org.specs2.codata.async.immutable.Signal[Boolean]"></a>
+      <a id="full:immutable.Signal[Boolean]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">full</span><span class="result">: <a href="../immutable/Signal.html" class="extype" name="org.specs2.codata.async.immutable.Signal">immutable.Signal</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.specs2.codata.async.mutable.Queue@full:org.specs2.codata.async.immutable.Signal[Boolean]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Returns <code>true</code> when the queue has reached its upper size bound.</p><div class="fullcomment"><div class="comment cmt"><p>Returns <code>true</code> when the queue has reached its upper size bound.
+Always returns <code>false</code> when the queue is unbounded.
+</p></div></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.specs2.codata.async.mutable.Queue@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.specs2.codata.async.mutable.Queue@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.specs2.codata.async.mutable.Queue@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="org.specs2.codata.async.mutable.Queue#kill" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="kill:scalaz.concurrent.Task[Unit]"></a>
+      <a id="kill:Task[Unit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">kill</span><span class="result">: <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-concurrent_2.11/7.2.6/scalaz-concurrent_2.11-7.2.6-javadoc.jar/!/index.html#scalaz.concurrent.Task" class="extype" target="_top">Task</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.specs2.codata.async.mutable.Queue@kill:scalaz.concurrent.Task[Unit]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Kills the queue.</p><div class="fullcomment"><div class="comment cmt"><p>Kills the queue. Unlike <code>close</code>, this kills all dequeuers immediately.
+Any subsequent enqueues will fail with <code>Terminated(Kill)</code>.
+The returned <code>Task</code> will completed once all dequeuers and enqueuers
+have been signalled.
+</p></div></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.specs2.codata.async.mutable.Queue@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.specs2.codata.async.mutable.Queue@notify():Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.specs2.codata.async.mutable.Queue@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.specs2.codata.async.mutable.Queue@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.specs2.codata.async.mutable.Queue@toString():String" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.specs2.codata.async.mutable.Queue@wait():Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.specs2.codata.async.mutable.Queue@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.specs2.codata.async.mutable.Queue@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

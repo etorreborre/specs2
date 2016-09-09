@@ -1,0 +1,1820 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>Process - org.specs2.codata.Process</title>
+          <meta name="description" content="Process - org.specs2.codata.Process" />
+          <meta name="keywords" content="Process org.specs2.codata.Process" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../index.html';
+            var hash = 'org.specs2.codata.Process$';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <a href="Process.html" title="See companion trait"><img alt="Object/Trait" src="../../../lib/object_to_trait_big.png" /></a>
+        <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.specs2">specs2</a>.<a href="package.html" class="extype" name="org.specs2.codata">codata</a></p>
+        <h1><a href="Process.html" title="See companion trait">Process</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="Process.html" title="See companion trait">trait Process</a>
+            | <a href="package.html" class="extype" name="org.specs2.codata">package codata</a>
+          </div></span></h3><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Process</span><span class="result"> extends <span class="extype" name="org.specs2.codata.ProcessInstances">ProcessInstances</span></span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="org.specs2.codata.ProcessInstances">ProcessInstances</span>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="org.specs2.codata.Process"><span>Process</span></li><li class="in" name="org.specs2.codata.ProcessInstances"><span>ProcessInstances</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show All</span></li>
+            </ol>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="org.specs2.codata.Process.Append" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Append[+F[_],+O]extendsProcess[F,O]withProductwithSerializable"></a>
+      <a id="Append[+F[_],+O]:Append[F,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Process$$Append.html"><span class="name">Append</span></a><span class="tparams">[<span name="F">+F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="O">+O</span>]</span><span class="params">(<span name="head">head: <a href="Process$$HaltEmitOrAwait.html" class="extype" name="org.specs2.codata.Process.HaltEmitOrAwait">HaltEmitOrAwait</a>[<span class="extype" name="org.specs2.codata.Process.Append.F">F</span>, <span class="extype" name="org.specs2.codata.Process.Append.O">O</span>]</span>, <span name="stack">stack: <span class="extype" name="scala.Vector">Vector</span>[(<a href="Cause.html" class="extype" name="org.specs2.codata.Cause">Cause</a>) ⇒ <a href="#Trampoline[+A]=scalaz.Free.Trampoline[A]@scala.annotation.unchecked.uncheckedVariance" class="extmbr" name="org.specs2.codata.Process.Trampoline">Trampoline</a>[<a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<span class="extype" name="org.specs2.codata.Process.Append.F">F</span>, <span class="extype" name="org.specs2.codata.Process.Append.O">O</span>]]]</span>)</span><span class="result"> extends <a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<span class="extype" name="org.specs2.codata.Process.Append.F">F</span>, <span class="extype" name="org.specs2.codata.Process.Append.O">O</span>] with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@Append[+F[_],+O]extendsProcess[F,O]withProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>Append</code> constructor instructs the driver to continue with
+evaluation of first step found in tail Vector.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>Append</code> constructor instructs the driver to continue with
+evaluation of first step found in tail Vector.</p><p>Instead of this constructor please use:</p><p>Process.append
+</p></div></div>
+    </li><li name="org.specs2.codata.Process.Await" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Await[+F[_],A,+O]extendsProcess.HaltEmitOrAwait[F,O]withProcess.EmitOrAwait[F,O]withProductwithSerializable"></a>
+      <a id="Await[+F[_],A,+O]:Await[F,A,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Process$$Await.html"><span class="name">Await</span></a><span class="tparams">[<span name="F">+F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="O">+O</span>]</span><span class="params">(<span name="req">req: <span class="extype" name="org.specs2.codata.Process.Await.F">F</span>[<span class="extype" name="org.specs2.codata.Process.Await.A">A</span>]</span>, <span name="rcv">rcv: (<a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-core_2.11/7.2.6/scalaz-core_2.11-7.2.6-javadoc.jar/!/index.html#scalaz.\/" class="extype" target="_top">\/</a>[<a href="Cause$$EarlyCause.html" class="extype" name="org.specs2.codata.Cause.EarlyCause">EarlyCause</a>, <span class="extype" name="org.specs2.codata.Process.Await.A">A</span>]) ⇒ <a href="#Trampoline[+A]=scalaz.Free.Trampoline[A]@scala.annotation.unchecked.uncheckedVariance" class="extmbr" name="org.specs2.codata.Process.Trampoline">Trampoline</a>[<a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<span class="extype" name="org.specs2.codata.Process.Await.F">F</span>, <span class="extype" name="org.specs2.codata.Process.Await.O">O</span>]]</span>, <span name="preempt">preempt: (<span class="extype" name="org.specs2.codata.Process.Await.A">A</span>) ⇒ <a href="#Trampoline[+A]=scalaz.Free.Trampoline[A]@scala.annotation.unchecked.uncheckedVariance" class="extmbr" name="org.specs2.codata.Process.Trampoline">Trampoline</a>[<a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<span class="extype" name="org.specs2.codata.Process.Await.F">F</span>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Nothing" class="extype" target="_top">Nothing</a>]] = <span class="defval" name='<span class="name"><a href="#halt:org.specs2.codata.Process0[Nothing]">(_:A) =&gt; Trampoline.delay(halt:Process[F,Nothing])</a></span>'>...</span></span>)</span><span class="result"> extends <a href="Process$$HaltEmitOrAwait.html" class="extype" name="org.specs2.codata.Process.HaltEmitOrAwait">HaltEmitOrAwait</a>[<span class="extype" name="org.specs2.codata.Process.Await.F">F</span>, <span class="extype" name="org.specs2.codata.Process.Await.O">O</span>] with <a href="Process$$EmitOrAwait.html" class="extype" name="org.specs2.codata.Process.EmitOrAwait">EmitOrAwait</a>[<span class="extype" name="org.specs2.codata.Process.Await.F">F</span>, <span class="extype" name="org.specs2.codata.Process.Await.O">O</span>] with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@Await[+F[_],A,+O]extendsProcess.HaltEmitOrAwait[F,O]withProcess.EmitOrAwait[F,O]withProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>Await</code> constructor instructs the driver to evaluate
+<code>req</code>.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>Await</code> constructor instructs the driver to evaluate
+<code>req</code>. If it returns successfully, <code>recv</code> is called with result on right side
+to transition to the next state.</p><p>In case the req terminates with failure the <code>Error(failure)</code> is passed on left side
+giving chance for any fallback action.</p><p>In case the process was killed before the request is evaluated <code>Kill</code> is passed on left side.
+<code>Kill</code> is passed on left side as well as when the request is already in progress, but process was killed.</p><p>The <code>preempt</code> parameter is used when constructing resource and preemption safe cleanups.
+See <code>Process.bracket</code> for more.</p><p>Note that</p><p>Instead of this constructor directly, please use:</p><p>Process.await or Process.bracket</p></div></div>
+    </li><li name="org.specs2.codata.Process.Cont" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Cont[+F[_],+O]extendsProductwithSerializable"></a>
+      <a id="Cont[+F[_],+O]:Cont[F,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Process$$Cont.html"><span class="name">Cont</span></a><span class="tparams">[<span name="F">+F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="O">+O</span>]</span><span class="params">(<span name="stack">stack: <span class="extype" name="scala.Vector">Vector</span>[(<a href="Cause.html" class="extype" name="org.specs2.codata.Cause">Cause</a>) ⇒ <a href="#Trampoline[+A]=scalaz.Free.Trampoline[A]@scala.annotation.unchecked.uncheckedVariance" class="extmbr" name="org.specs2.codata.Process.Trampoline">Trampoline</a>[<a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<span class="extype" name="org.specs2.codata.Process.Cont.F">F</span>, <span class="extype" name="org.specs2.codata.Process.Cont.O">O</span>]]]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@Cont[+F[_],+O]extendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Continuation of the process.</p><div class="fullcomment"><div class="comment cmt"><p>Continuation of the process. Represents process _stack_. Used in conjunction with <code>Step</code>.
+</p></div></div>
+    </li><li name="org.specs2.codata.Process.Emit" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Emit[+O]extendsProcess.HaltEmitOrAwait[Nothing,O]withProcess.EmitOrAwait[Nothing,O]withProductwithSerializable"></a>
+      <a id="Emit[+O]:Emit[O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Process$$Emit.html"><span class="name">Emit</span></a><span class="tparams">[<span name="O">+O</span>]</span><span class="params">(<span name="seq">seq: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="org.specs2.codata.Process.Emit.O">O</span>]</span>)</span><span class="result"> extends <a href="Process$$HaltEmitOrAwait.html" class="extype" name="org.specs2.codata.Process.HaltEmitOrAwait">HaltEmitOrAwait</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Nothing" class="extype" target="_top">Nothing</a>, <span class="extype" name="org.specs2.codata.Process.Emit.O">O</span>] with <a href="Process$$EmitOrAwait.html" class="extype" name="org.specs2.codata.Process.EmitOrAwait">EmitOrAwait</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Nothing" class="extype" target="_top">Nothing</a>, <span class="extype" name="org.specs2.codata.Process.Emit.O">O</span>] with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@Emit[+O]extendsProcess.HaltEmitOrAwait[Nothing,O]withProcess.EmitOrAwait[Nothing,O]withProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>Emit</code> constructor instructs the driver to emit
+the given sequence of values to the output
+and then halt execution with supplied reason.</p><div class="fullcomment"><div class="comment cmt"><p>The <code>Emit</code> constructor instructs the driver to emit
+the given sequence of values to the output
+and then halt execution with supplied reason.</p><p>Instead calling this constructor directly, please use one
+of the following helpers:</p><p>Process.emit
+Process.emitAll
+</p></div></div>
+    </li><li name="org.specs2.codata.Process.EmitOrAwait" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="EmitOrAwait[+F[_],+O]extendsProcess[F,O]"></a>
+      <a id="EmitOrAwait[+F[_],+O]:EmitOrAwait[F,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Process$$EmitOrAwait.html"><span class="name">EmitOrAwait</span></a><span class="tparams">[<span name="F">+F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="O">+O</span>]</span><span class="result"> extends <a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<span class="extype" name="org.specs2.codata.Process.EmitOrAwait.F">F</span>, <span class="extype" name="org.specs2.codata.Process.EmitOrAwait.O">O</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@EmitOrAwait[+F[_],+O]extendsProcess[F,O]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Marker trait representing process in Emit or Await state.</p><div class="fullcomment"><div class="comment cmt"><p>Marker trait representing process in Emit or Await state.
+Is useful for more type safety.
+</p></div></div>
+    </li><li name="org.specs2.codata.Process.Env" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Env[-I,-I2]extendsProductwithSerializable"></a>
+      <a id="Env[-I,-I2]:Env[I,I2]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Process$$Env.html"><span class="name">Env</span></a><span class="tparams">[<span name="I">-I</span>, <span name="I2">-I2</span>]</span><span class="params">()</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@Env[-I,-I2]extendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.codata.Process.EvalProcess" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="EvalProcess[F[_],O]extendsAnyVal"></a>
+      <a id="EvalProcess[F[_],O]:EvalProcess[F,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Process$$EvalProcess.html"><span class="name">EvalProcess</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="O">O</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyVal" class="extype" target="_top">AnyVal</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@EvalProcess[F[_],O]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Provides infix syntax for <code>eval: Process[F,F[O]] =&gt; Process[F,O]</code>
+</p>
+    </li><li name="org.specs2.codata.Process.Halt" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="HaltextendsProcess.HaltEmitOrAwait[Nothing,Nothing]withProcess.HaltOrStep[Nothing,Nothing]withProductwithSerializable"></a>
+      <a id="Halt:Halt"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Process$$Halt.html"><span class="name">Halt</span></a><span class="params">(<span name="cause">cause: <a href="Cause.html" class="extype" name="org.specs2.codata.Cause">Cause</a></span>)</span><span class="result"> extends <a href="Process$$HaltEmitOrAwait.html" class="extype" name="org.specs2.codata.Process.HaltEmitOrAwait">HaltEmitOrAwait</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Nothing" class="extype" target="_top">Nothing</a>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Nothing" class="extype" target="_top">Nothing</a>] with <a href="Process$$HaltOrStep.html" class="extype" name="org.specs2.codata.Process.HaltOrStep">HaltOrStep</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Nothing" class="extype" target="_top">Nothing</a>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Nothing" class="extype" target="_top">Nothing</a>] with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@HaltextendsProcess.HaltEmitOrAwait[Nothing,Nothing]withProcess.HaltOrStep[Nothing,Nothing]withProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>Halt</code> constructor instructs the driver
+that the last evaluation of Process completed with
+supplied cause.</p>
+    </li><li name="org.specs2.codata.Process.HaltEmitOrAwait" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="HaltEmitOrAwait[+F[_],+O]extendsProcess[F,O]"></a>
+      <a id="HaltEmitOrAwait[+F[_],+O]:HaltEmitOrAwait[F,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Process$$HaltEmitOrAwait.html"><span class="name">HaltEmitOrAwait</span></a><span class="tparams">[<span name="F">+F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="O">+O</span>]</span><span class="result"> extends <a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<span class="extype" name="org.specs2.codata.Process.HaltEmitOrAwait.F">F</span>, <span class="extype" name="org.specs2.codata.Process.HaltEmitOrAwait.O">O</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@HaltEmitOrAwait[+F[_],+O]extendsProcess[F,O]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Tags a state of process that has no appended tail, tha means can be Halt, Emit or Await
+</p>
+    </li><li name="org.specs2.codata.Process.HaltOrStep" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="HaltOrStep[+F[_],+O]extendsAnyRef"></a>
+      <a id="HaltOrStep[+F[_],+O]:HaltOrStep[F,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed </span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Process$$HaltOrStep.html"><span class="name">HaltOrStep</span></a><span class="tparams">[<span name="F">+F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="O">+O</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@HaltOrStep[+F[_],+O]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Marker trait representing next step of process or terminated process in <code>Halt</code>
+</p>
+    </li><li name="org.specs2.codata.Process.Process0Syntax" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Process0Syntax[O]extendsAnyVal"></a>
+      <a id="Process0Syntax[O]:Process0Syntax[O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Process$$Process0Syntax.html"><span class="name">Process0Syntax</span></a><span class="tparams">[<span name="O">O</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyVal" class="extype" target="_top">AnyVal</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@Process0Syntax[O]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">This class provides infix syntax specific to <code>Process0</code>.</p>
+    </li><li name="org.specs2.codata.Process.ProcessSyntax" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ProcessSyntax[F[_],O]extendsAnyVal"></a>
+      <a id="ProcessSyntax[F[_],O]:ProcessSyntax[F,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Process$$ProcessSyntax.html"><span class="name">ProcessSyntax</span></a><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="O">O</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyVal" class="extype" target="_top">AnyVal</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@ProcessSyntax[F[_],O]extendsAnyVal" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.codata.Process.SourceSyntax" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SourceSyntax[O]extendsWyeOps[O]"></a>
+      <a id="SourceSyntax[O]:SourceSyntax[O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Process$$SourceSyntax.html"><span class="name">SourceSyntax</span></a><span class="tparams">[<span name="O">O</span>]</span><span class="result"> extends <a href="WyeOps.html" class="extype" name="org.specs2.codata.WyeOps">WyeOps</a>[<span class="extype" name="org.specs2.codata.Process.SourceSyntax.O">O</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@SourceSyntax[O]extendsWyeOps[O]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Syntax for processes that have its effects wrapped in Task
+</p>
+    </li><li name="org.specs2.codata.Process.Step" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Step[+F[_],+O]extendsProcess.HaltOrStep[F,O]withProductwithSerializable"></a>
+      <a id="Step[+F[_],+O]:Step[F,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Process$$Step.html"><span class="name">Step</span></a><span class="tparams">[<span name="F">+F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="O">+O</span>]</span><span class="params">(<span name="head">head: <a href="Process$$EmitOrAwait.html" class="extype" name="org.specs2.codata.Process.EmitOrAwait">EmitOrAwait</a>[<span class="extype" name="org.specs2.codata.Process.Step.F">F</span>, <span class="extype" name="org.specs2.codata.Process.Step.O">O</span>]</span>, <span name="next">next: <a href="Process$$Cont.html" class="extype" name="org.specs2.codata.Process.Cont">Cont</a>[<span class="extype" name="org.specs2.codata.Process.Step.F">F</span>, <span class="extype" name="org.specs2.codata.Process.Step.O">O</span>]</span>)</span><span class="result"> extends <a href="Process$$HaltOrStep.html" class="extype" name="org.specs2.codata.Process.HaltOrStep">HaltOrStep</a>[<span class="extype" name="org.specs2.codata.Process.Step.F">F</span>, <span class="extype" name="org.specs2.codata.Process.Step.O">O</span>] with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@Step[+F[_],+O]extendsProcess.HaltOrStep[F,O]withProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Intermediate step of process.</p><div class="fullcomment"><div class="comment cmt"><p>Intermediate step of process.
+Used to step within the process to define complex combinators.
+</p></div></div>
+    </li><li name="org.specs2.codata.Process.Trampoline" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Trampoline[+A]=scalaz.Free.Trampoline[A]@scala.annotation.unchecked.uncheckedVariance"></a>
+      <a id="Trampoline[+A]:Trampoline[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Trampoline</span><span class="tparams">[<span name="A">+A</span>]</span><span class="result"> = <span class="extype" name="scalaz.Free">Free</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Function0" class="extype" target="_top">Function0</a>, <span class="extype" name="org.specs2.codata.Process.Trampoline.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@Trampoline[+A]=scalaz.Free.Trampoline[A]@scala.annotation.unchecked.uncheckedVariance" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@##():Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.specs2.codata.Process#Both" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Both[I,I2]:org.specs2.codata.Process.Env[I,I2]#Y[org.specs2.codata.ReceiveY[I,I2]]"></a>
+      <a id="Both[I,I2]:Y[ReceiveY[I,I2]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Both</span><span class="tparams">[<span name="I">I</span>, <span name="I2">I2</span>]</span><span class="result">: <a href="Process$$Env$Y.html" class="extype" name="org.specs2.codata.Process.Env.Y">Y</a>[<a href="ReceiveY.html" class="extype" name="org.specs2.codata.ReceiveY">ReceiveY</a>[<span class="extype" name="org.specs2.codata.Process.Both.I">I</span>, <span class="extype" name="org.specs2.codata.Process.Both.I2">I2</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@Both[I,I2]:org.specs2.codata.Process.Env[I,I2]#Y[org.specs2.codata.ReceiveY[I,I2]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.codata.Process.Cont" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Cont"></a>
+      <a id="Cont:Cont"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Process$$Cont$.html"><span class="name">Cont</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@Cont" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.codata.Process#Get" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Get[I]:org.specs2.codata.Process.Env[I,Any]#Is[I]"></a>
+      <a id="Get[I]:Is[I]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Get</span><span class="tparams">[<span name="I">I</span>]</span><span class="result">: <a href="Process$$Env$Is.html" class="extype" name="org.specs2.codata.Process.Env.Is">Is</a>[<span class="extype" name="org.specs2.codata.Process.Get.I">I</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@Get[I]:org.specs2.codata.Process.Env[I,Any]#Is[I]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.codata.Process.HaltEmitOrAwait" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="HaltEmitOrAwait"></a>
+      <a id="HaltEmitOrAwait:HaltEmitOrAwait"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Process$$HaltEmitOrAwait$.html"><span class="name">HaltEmitOrAwait</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@HaltEmitOrAwait" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.codata.Process#L" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="L[I]:org.specs2.codata.Process.Env[I,Any]#Is[I]"></a>
+      <a id="L[I]:Is[I]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">L</span><span class="tparams">[<span name="I">I</span>]</span><span class="result">: <a href="Process$$Env$Is.html" class="extype" name="org.specs2.codata.Process.Env.Is">Is</a>[<span class="extype" name="org.specs2.codata.Process.L.I">I</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@L[I]:org.specs2.codata.Process.Env[I,Any]#Is[I]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.codata.Process#R" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="R[I2]:org.specs2.codata.Process.Env[Any,I2]#T[I2]"></a>
+      <a id="R[I2]:T[I2]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">R</span><span class="tparams">[<span name="I2">I2</span>]</span><span class="result">: <a href="Process$$Env$T.html" class="extype" name="org.specs2.codata.Process.Env.T">T</a>[<span class="extype" name="org.specs2.codata.Process.R.I2">I2</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@R[I2]:org.specs2.codata.Process.Env[Any,I2]#T[I2]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.codata.Process#Trampoline" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Trampoline:scalaz.Trampoline.type"></a>
+      <a id="Trampoline:scalaz.Trampoline.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Trampoline</span><span class="result">: <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-core_2.11/7.2.6/scalaz-core_2.11-7.2.6-javadoc.jar/!/index.html#scalaz.Trampoline" class="extype" target="_top">scalaz.Trampoline</a>.type</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@Trampoline:scalaz.Trampoline.type" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.specs2.codata.Process#apply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="apply[O](o:O*):org.specs2.codata.Process0[O]"></a>
+      <a id="apply[O](O*):Process0[O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="tparams">[<span name="O">O</span>]</span><span class="params">(<span name="o">o: <span class="extype" name="org.specs2.codata.Process.apply.O">O</span>*</span>)</span><span class="result">: <a href="package.html#Process0[+O]=org.specs2.codata.Process[Nothing,O]" class="extmbr" name="org.specs2.codata.Process0">Process0</a>[<span class="extype" name="org.specs2.codata.Process.apply.O">O</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@apply[O](o:O*):org.specs2.codata.Process0[O]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Alias for emitAll</p>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="org.specs2.codata.Process#await" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="await[F[_],A,O](req:F[A])(rcv:A=&gt;org.specs2.codata.Process[F,O]):org.specs2.codata.Process[F,O]"></a>
+      <a id="await[F[_],A,O](F[A])((A)⇒Process[F,O]):Process[F,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">await</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="O">O</span>]</span><span class="params">(<span name="req">req: <span class="extype" name="org.specs2.codata.Process.await.F">F</span>[<span class="extype" name="org.specs2.codata.Process.await.A">A</span>]</span>)</span><span class="params">(<span name="rcv">rcv: (<span class="extype" name="org.specs2.codata.Process.await.A">A</span>) ⇒ <a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<span class="extype" name="org.specs2.codata.Process.await.F">F</span>, <span class="extype" name="org.specs2.codata.Process.await.O">O</span>]</span>)</span><span class="result">: <a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<span class="extype" name="org.specs2.codata.Process.await.F">F</span>, <span class="extype" name="org.specs2.codata.Process.await.O">O</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@await[F[_],A,O](req:F[A])(rcv:A=&gt;org.specs2.codata.Process[F,O]):org.specs2.codata.Process[F,O]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Await the given <code>F</code> request and use its result.</p><div class="fullcomment"><div class="comment cmt"><p>Await the given <code>F</code> request and use its result.
+If you need to specify fallback, use <code>awaitOr</code>
+</p></div></div>
+    </li><li name="org.specs2.codata.Process#await1" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="await1[I]:org.specs2.codata.Process1[I,I]"></a>
+      <a id="await1[I]:Process1[I,I]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">await1</span><span class="tparams">[<span name="I">I</span>]</span><span class="result">: <a href="package.html#Process1[-I,+O]=org.specs2.codata.Process[org.specs2.codata.Process.Env[I,Any]#Is,O]" class="extmbr" name="org.specs2.codata.Process1">Process1</a>[<span class="extype" name="org.specs2.codata.Process.await1.I">I</span>, <span class="extype" name="org.specs2.codata.Process.await1.I">I</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@await1[I]:org.specs2.codata.Process1[I,I]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>Process1</code> which awaits a single input, emits it, then halts normally.</p>
+    </li><li name="org.specs2.codata.Process#await1Or" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="await1Or[I](fb:=&gt;org.specs2.codata.Process1[I,I]):org.specs2.codata.Process1[I,I]"></a>
+      <a id="await1Or[I](⇒Process1[I,I]):Process1[I,I]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">await1Or</span><span class="tparams">[<span name="I">I</span>]</span><span class="params">(<span name="fb">fb: ⇒ <a href="package.html#Process1[-I,+O]=org.specs2.codata.Process[org.specs2.codata.Process.Env[I,Any]#Is,O]" class="extmbr" name="org.specs2.codata.Process1">Process1</a>[<span class="extype" name="org.specs2.codata.Process.await1Or.I">I</span>, <span class="extype" name="org.specs2.codata.Process.await1Or.I">I</span>]</span>)</span><span class="result">: <a href="package.html#Process1[-I,+O]=org.specs2.codata.Process[org.specs2.codata.Process.Env[I,Any]#Is,O]" class="extmbr" name="org.specs2.codata.Process1">Process1</a>[<span class="extype" name="org.specs2.codata.Process.await1Or.I">I</span>, <span class="extype" name="org.specs2.codata.Process.await1Or.I">I</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@await1Or[I](fb:=&gt;org.specs2.codata.Process1[I,I]):org.specs2.codata.Process1[I,I]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Like <code>await1</code>, but consults <code>fb</code> when await fails to receive an <code>I</code></p>
+    </li><li name="org.specs2.codata.Process#await1W" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="await1W[A]:org.specs2.codata.Writer1[Nothing,A,A]"></a>
+      <a id="await1W[A]:Writer1[Nothing,A,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">await1W</span><span class="tparams">[<span name="A">A</span>]</span><span class="result">: <a href="package.html#Writer1[+W,-I,+O]=org.specs2.codata.package.Process1[I,scalaz.\/[W,O]]" class="extmbr" name="org.specs2.codata.Writer1">Writer1</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Nothing" class="extype" target="_top">Nothing</a>, <span class="extype" name="org.specs2.codata.Process.await1W.A">A</span>, <span class="extype" name="org.specs2.codata.Process.await1W.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@await1W[A]:org.specs2.codata.Writer1[Nothing,A,A]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"><code>Writer</code> based version of <code>await1</code>.</p>
+    </li><li name="org.specs2.codata.Process#awaitBoth" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="awaitBoth[I,I2]:org.specs2.codata.Wye[I,I2,org.specs2.codata.ReceiveY[I,I2]]"></a>
+      <a id="awaitBoth[I,I2]:Wye[I,I2,ReceiveY[I,I2]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">awaitBoth</span><span class="tparams">[<span name="I">I</span>, <span name="I2">I2</span>]</span><span class="result">: <a href="package.html#Wye[-I,-I2,+O]=org.specs2.codata.Process[org.specs2.codata.Process.Env[I,I2]#Y,O]" class="extmbr" name="org.specs2.codata.Wye">Wye</a>[<span class="extype" name="org.specs2.codata.Process.awaitBoth.I">I</span>, <span class="extype" name="org.specs2.codata.Process.awaitBoth.I2">I2</span>, <a href="ReceiveY.html" class="extype" name="org.specs2.codata.ReceiveY">ReceiveY</a>[<span class="extype" name="org.specs2.codata.Process.awaitBoth.I">I</span>, <span class="extype" name="org.specs2.codata.Process.awaitBoth.I2">I2</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@awaitBoth[I,I2]:org.specs2.codata.Wye[I,I2,org.specs2.codata.ReceiveY[I,I2]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>Wye</code> which request from both branches concurrently.</p>
+    </li><li name="org.specs2.codata.Process#awaitBothW" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="awaitBothW[I,I2]:org.specs2.codata.WyeW[Nothing,I,I2,org.specs2.codata.ReceiveY[I,I2]]"></a>
+      <a id="awaitBothW[I,I2]:WyeW[Nothing,I,I2,ReceiveY[I,I2]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">awaitBothW</span><span class="tparams">[<span name="I">I</span>, <span name="I2">I2</span>]</span><span class="result">: <a href="package.html#WyeW[+W,-I,-I2,+O]=org.specs2.codata.package.Wye[I,I2,scalaz.\/[W,O]]" class="extmbr" name="org.specs2.codata.WyeW">WyeW</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Nothing" class="extype" target="_top">Nothing</a>, <span class="extype" name="org.specs2.codata.Process.awaitBothW.I">I</span>, <span class="extype" name="org.specs2.codata.Process.awaitBothW.I2">I2</span>, <a href="ReceiveY.html" class="extype" name="org.specs2.codata.ReceiveY">ReceiveY</a>[<span class="extype" name="org.specs2.codata.Process.awaitBothW.I">I</span>, <span class="extype" name="org.specs2.codata.Process.awaitBothW.I2">I2</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@awaitBothW[I,I2]:org.specs2.codata.WyeW[Nothing,I,I2,org.specs2.codata.ReceiveY[I,I2]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"><code>Writer</code> based version of <code>awaitBoth</code>.</p>
+    </li><li name="org.specs2.codata.Process#awaitL" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="awaitL[I]:org.specs2.codata.Tee[I,Any,I]"></a>
+      <a id="awaitL[I]:Tee[I,Any,I]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">awaitL</span><span class="tparams">[<span name="I">I</span>]</span><span class="result">: <a href="package.html#Tee[-I,-I2,+O]=org.specs2.codata.Process[org.specs2.codata.Process.Env[I,I2]#T,O]" class="extmbr" name="org.specs2.codata.Tee">Tee</a>[<span class="extype" name="org.specs2.codata.Process.awaitL.I">I</span>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a>, <span class="extype" name="org.specs2.codata.Process.awaitL.I">I</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@awaitL[I]:org.specs2.codata.Tee[I,Any,I]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>Tee</code> which requests from the left branch, emits this value, then halts.</p>
+    </li><li name="org.specs2.codata.Process#awaitLW" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="awaitLW[I]:org.specs2.codata.TeeW[Nothing,I,Any,I]"></a>
+      <a id="awaitLW[I]:TeeW[Nothing,I,Any,I]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">awaitLW</span><span class="tparams">[<span name="I">I</span>]</span><span class="result">: <a href="package.html#TeeW[+W,-I,-I2,+O]=org.specs2.codata.package.Tee[I,I2,scalaz.\/[W,O]]" class="extmbr" name="org.specs2.codata.TeeW">TeeW</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Nothing" class="extype" target="_top">Nothing</a>, <span class="extype" name="org.specs2.codata.Process.awaitLW.I">I</span>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a>, <span class="extype" name="org.specs2.codata.Process.awaitLW.I">I</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@awaitLW[I]:org.specs2.codata.TeeW[Nothing,I,Any,I]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"><code>Writer</code> based version of <code>awaitL</code>.</p>
+    </li><li name="org.specs2.codata.Process#awaitOr" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="awaitOr[F[_],A,O](req:F[A])(fb:org.specs2.codata.Cause.EarlyCause=&gt;org.specs2.codata.Process[F,O])(rcv:A=&gt;org.specs2.codata.Process[F,O]):org.specs2.codata.Process[F,O]"></a>
+      <a id="awaitOr[F[_],A,O](F[A])((EarlyCause)⇒Process[F,O])((A)⇒Process[F,O]):Process[F,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">awaitOr</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="O">O</span>]</span><span class="params">(<span name="req">req: <span class="extype" name="org.specs2.codata.Process.awaitOr.F">F</span>[<span class="extype" name="org.specs2.codata.Process.awaitOr.A">A</span>]</span>)</span><span class="params">(<span name="fb">fb: (<a href="Cause$$EarlyCause.html" class="extype" name="org.specs2.codata.Cause.EarlyCause">EarlyCause</a>) ⇒ <a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<span class="extype" name="org.specs2.codata.Process.awaitOr.F">F</span>, <span class="extype" name="org.specs2.codata.Process.awaitOr.O">O</span>]</span>)</span><span class="params">(<span name="rcv">rcv: (<span class="extype" name="org.specs2.codata.Process.awaitOr.A">A</span>) ⇒ <a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<span class="extype" name="org.specs2.codata.Process.awaitOr.F">F</span>, <span class="extype" name="org.specs2.codata.Process.awaitOr.O">O</span>]</span>)</span><span class="result">: <a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<span class="extype" name="org.specs2.codata.Process.awaitOr.F">F</span>, <span class="extype" name="org.specs2.codata.Process.awaitOr.O">O</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@awaitOr[F[_],A,O](req:F[A])(fb:org.specs2.codata.Cause.EarlyCause=&gt;org.specs2.codata.Process[F,O])(rcv:A=&gt;org.specs2.codata.Process[F,O]):org.specs2.codata.Process[F,O]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Await a request, and if it fails, use <code>fb</code> to determine the next state.</p><div class="fullcomment"><div class="comment cmt"><p>Await a request, and if it fails, use <code>fb</code> to determine the next state.
+Otherwise, use <code>rcv</code> to determine the next state.
+</p></div></div>
+    </li><li name="org.specs2.codata.Process#awaitR" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="awaitR[I2]:org.specs2.codata.Tee[Any,I2,I2]"></a>
+      <a id="awaitR[I2]:Tee[Any,I2,I2]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">awaitR</span><span class="tparams">[<span name="I2">I2</span>]</span><span class="result">: <a href="package.html#Tee[-I,-I2,+O]=org.specs2.codata.Process[org.specs2.codata.Process.Env[I,I2]#T,O]" class="extmbr" name="org.specs2.codata.Tee">Tee</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a>, <span class="extype" name="org.specs2.codata.Process.awaitR.I2">I2</span>, <span class="extype" name="org.specs2.codata.Process.awaitR.I2">I2</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@awaitR[I2]:org.specs2.codata.Tee[Any,I2,I2]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>Tee</code> which requests from the right branch, emits this value, then halts.</p>
+    </li><li name="org.specs2.codata.Process#awaitRW" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="awaitRW[I2]:org.specs2.codata.TeeW[Nothing,Any,I2,I2]"></a>
+      <a id="awaitRW[I2]:TeeW[Nothing,Any,I2,I2]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">awaitRW</span><span class="tparams">[<span name="I2">I2</span>]</span><span class="result">: <a href="package.html#TeeW[+W,-I,-I2,+O]=org.specs2.codata.package.Tee[I,I2,scalaz.\/[W,O]]" class="extmbr" name="org.specs2.codata.TeeW">TeeW</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Nothing" class="extype" target="_top">Nothing</a>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a>, <span class="extype" name="org.specs2.codata.Process.awaitRW.I2">I2</span>, <span class="extype" name="org.specs2.codata.Process.awaitRW.I2">I2</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@awaitRW[I2]:org.specs2.codata.TeeW[Nothing,Any,I2,I2]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"><code>Writer</code> based version of <code>awaitR</code>.</p>
+    </li><li name="org.specs2.codata.Process#bracket" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="bracket[F[_],A,O](req:F[A])(release:A=&gt;org.specs2.codata.Process[F,Nothing])(rcv:A=&gt;org.specs2.codata.Process[F,O]):org.specs2.codata.Process[F,O]"></a>
+      <a id="bracket[F[_],A,O](F[A])((A)⇒Process[F,Nothing])((A)⇒Process[F,O]):Process[F,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">bracket</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>, <span name="O">O</span>]</span><span class="params">(<span name="req">req: <span class="extype" name="org.specs2.codata.Process.bracket.F">F</span>[<span class="extype" name="org.specs2.codata.Process.bracket.A">A</span>]</span>)</span><span class="params">(<span name="release">release: (<span class="extype" name="org.specs2.codata.Process.bracket.A">A</span>) ⇒ <a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<span class="extype" name="org.specs2.codata.Process.bracket.F">F</span>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Nothing" class="extype" target="_top">Nothing</a>]</span>)</span><span class="params">(<span name="rcv">rcv: (<span class="extype" name="org.specs2.codata.Process.bracket.A">A</span>) ⇒ <a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<span class="extype" name="org.specs2.codata.Process.bracket.F">F</span>, <span class="extype" name="org.specs2.codata.Process.bracket.O">O</span>]</span>)</span><span class="result">: <a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<span class="extype" name="org.specs2.codata.Process.bracket.F">F</span>, <span class="extype" name="org.specs2.codata.Process.bracket.O">O</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@bracket[F[_],A,O](req:F[A])(release:A=&gt;org.specs2.codata.Process[F,Nothing])(rcv:A=&gt;org.specs2.codata.Process[F,O]):org.specs2.codata.Process[F,O]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Resource and preemption safe <code>await</code> constructor.</p><div class="fullcomment"><div class="comment cmt"><p>Resource and preemption safe <code>await</code> constructor.</p><p>Use this combinator, when acquiring resources. This build a process that when run
+evaluates <code>req</code>, and then runs <code>rcv</code>. Once <code>rcv</code> is completed, fails, or is interrupted, it will run <code>release</code></p><p>When the acquisition (<code>req</code>) is interrupted, neither <code>release</code> or <code>rcv</code> is run, however when the req was interrupted after
+resource in <code>req</code> was acquired then, the <code>release</code> is run.</p><p>If,the acquisition fails, use <code>bracket(req)(onPreempt)(rcv).onFailure(err =&gt; ???)</code> code to recover from the
+failure eventually.</p></div></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@clone():Object" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="org.specs2.codata.Process#constant" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="constant[A](a:A,chunkSize:Int):org.specs2.codata.Process0[A]"></a>
+      <a id="constant[A](A,Int):Process0[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">constant</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="a">a: <span class="extype" name="org.specs2.codata.Process.constant.A">A</span></span>, <span name="chunkSize">chunkSize: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a> = <span class="symbol">1</span></span>)</span><span class="result">: <a href="package.html#Process0[+O]=org.specs2.codata.Process[Nothing,O]" class="extmbr" name="org.specs2.codata.Process0">Process0</a>[<span class="extype" name="org.specs2.codata.Process.constant.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@constant[A](a:A,chunkSize:Int):org.specs2.codata.Process0[A]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The infinite <code>Process</code>, always emits <code>a</code>.</p><div class="fullcomment"><div class="comment cmt"><p>The infinite <code>Process</code>, always emits <code>a</code>.
+If for performance reasons it is good to emit <code>a</code> in chunks,
+specify size of chunk by <code>chunkSize</code> parameter
+</p></div></div>
+    </li><li name="org.specs2.codata.Process#emit" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="emit[O](o:O):org.specs2.codata.Process0[O]"></a>
+      <a id="emit[O](O):Process0[O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">emit</span><span class="tparams">[<span name="O">O</span>]</span><span class="params">(<span name="o">o: <span class="extype" name="org.specs2.codata.Process.emit.O">O</span></span>)</span><span class="result">: <a href="package.html#Process0[+O]=org.specs2.codata.Process[Nothing,O]" class="extmbr" name="org.specs2.codata.Process0">Process0</a>[<span class="extype" name="org.specs2.codata.Process.emit.O">O</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@emit[O](o:O):org.specs2.codata.Process0[O]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>Process</code> which emits the single value given, then halts.</p>
+    </li><li name="org.specs2.codata.Process#emitAll" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="emitAll[O](os:Seq[O]):org.specs2.codata.Process0[O]"></a>
+      <a id="emitAll[O](Seq[O]):Process0[O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">emitAll</span><span class="tparams">[<span name="O">O</span>]</span><span class="params">(<span name="os">os: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="org.specs2.codata.Process.emitAll.O">O</span>]</span>)</span><span class="result">: <a href="package.html#Process0[+O]=org.specs2.codata.Process[Nothing,O]" class="extmbr" name="org.specs2.codata.Process0">Process0</a>[<span class="extype" name="org.specs2.codata.Process.emitAll.O">O</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@emitAll[O](os:Seq[O]):org.specs2.codata.Process0[O]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>Process</code> which emits the given sequence of values, then halts.</p>
+    </li><li name="org.specs2.codata.Process#emitO" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="emitO[O](o:O):org.specs2.codata.Process0[scalaz.\/[Nothing,O]]"></a>
+      <a id="emitO[O](O):Process0[\/[Nothing,O]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">emitO</span><span class="tparams">[<span name="O">O</span>]</span><span class="params">(<span name="o">o: <span class="extype" name="org.specs2.codata.Process.emitO.O">O</span></span>)</span><span class="result">: <a href="package.html#Process0[+O]=org.specs2.codata.Process[Nothing,O]" class="extmbr" name="org.specs2.codata.Process0">Process0</a>[<a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-core_2.11/7.2.6/scalaz-core_2.11-7.2.6-javadoc.jar/!/index.html#scalaz.\/" class="extype" target="_top">\/</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Nothing" class="extype" target="_top">Nothing</a>, <span class="extype" name="org.specs2.codata.Process.emitO.O">O</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@emitO[O](o:O):org.specs2.codata.Process0[scalaz.\/[Nothing,O]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A <code>Writer</code> which emits one value to the output.</p>
+    </li><li name="org.specs2.codata.Process#emitW" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="emitW[W](s:W):org.specs2.codata.Process0[scalaz.\/[W,Nothing]]"></a>
+      <a id="emitW[W](W):Process0[\/[W,Nothing]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">emitW</span><span class="tparams">[<span name="W">W</span>]</span><span class="params">(<span name="s">s: <span class="extype" name="org.specs2.codata.Process.emitW.W">W</span></span>)</span><span class="result">: <a href="package.html#Process0[+O]=org.specs2.codata.Process[Nothing,O]" class="extmbr" name="org.specs2.codata.Process0">Process0</a>[<a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-core_2.11/7.2.6/scalaz-core_2.11-7.2.6-javadoc.jar/!/index.html#scalaz.\/" class="extype" target="_top">\/</a>[<span class="extype" name="org.specs2.codata.Process.emitW.W">W</span>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Nothing" class="extype" target="_top">Nothing</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@emitW[W](s:W):org.specs2.codata.Process0[scalaz.\/[W,Nothing]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A <code>Writer</code> which writes the given value.</p>
+    </li><li name="org.specs2.codata.Process#empty" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="empty[F[_],O]:org.specs2.codata.Process[F,O]"></a>
+      <a id="empty[F[_],O]:Process[F,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">empty</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="O">O</span>]</span><span class="result">: <a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<span class="extype" name="org.specs2.codata.Process.empty.F">F</span>, <span class="extype" name="org.specs2.codata.Process.empty.O">O</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@empty[F[_],O]:org.specs2.codata.Process[F,O]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Alias for <code>halt</code>.</p>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.specs2.codata.Process#eval" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="eval[F[_],O](fo:F[O]):org.specs2.codata.Process[F,O]"></a>
+      <a id="eval[F[_],O](F[O]):Process[F,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eval</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="O">O</span>]</span><span class="params">(<span name="fo">fo: <span class="extype" name="org.specs2.codata.Process.eval.F">F</span>[<span class="extype" name="org.specs2.codata.Process.eval.O">O</span>]</span>)</span><span class="result">: <a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<span class="extype" name="org.specs2.codata.Process.eval.F">F</span>, <span class="extype" name="org.specs2.codata.Process.eval.O">O</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@eval[F[_],O](fo:F[O]):org.specs2.codata.Process[F,O]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Alias for await(fo)(emit)
+</p>
+    </li><li name="org.specs2.codata.Process#eval_" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eval_[F[_],O](f:F[O]):org.specs2.codata.Process[F,Nothing]"></a>
+      <a id="eval_[F[_],O](F[O]):Process[F,Nothing]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eval_</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="O">O</span>]</span><span class="params">(<span name="f">f: <span class="extype" name="org.specs2.codata.Process.eval_.F">F</span>[<span class="extype" name="org.specs2.codata.Process.eval_.O">O</span>]</span>)</span><span class="result">: <a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<span class="extype" name="org.specs2.codata.Process.eval_.F">F</span>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Nothing" class="extype" target="_top">Nothing</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@eval_[F[_],O](f:F[O]):org.specs2.codata.Process[F,Nothing]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Evaluate an arbitrary effect once, purely for its effects,
+ignoring its return value.</p><div class="fullcomment"><div class="comment cmt"><p>Evaluate an arbitrary effect once, purely for its effects,
+ignoring its return value. This <code>Process</code> emits no values.
+</p></div></div>
+    </li><li name="org.specs2.codata.Process#fail" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="fail(rsn:Throwable):org.specs2.codata.Process0[Nothing]"></a>
+      <a id="fail(Throwable):Process0[Nothing]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fail</span><span class="params">(<span name="rsn">rsn: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="package.html#Process0[+O]=org.specs2.codata.Process[Nothing,O]" class="extmbr" name="org.specs2.codata.Process0">Process0</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Nothing" class="extype" target="_top">Nothing</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@fail(rsn:Throwable):org.specs2.codata.Process0[Nothing]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>Process</code> which emits no values and halts immediately with the given exception.</p>
+    </li><li name="org.specs2.codata.Process#fill" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="fill[A](n:Int)(a:A,chunkSize:Int):org.specs2.codata.Process0[A]"></a>
+      <a id="fill[A](Int)(A,Int):Process0[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fill</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="n">n: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="params">(<span name="a">a: <span class="extype" name="org.specs2.codata.Process.fill.A">A</span></span>, <span name="chunkSize">chunkSize: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a> = <span class="symbol">1</span></span>)</span><span class="result">: <a href="package.html#Process0[+O]=org.specs2.codata.Process[Nothing,O]" class="extmbr" name="org.specs2.codata.Process0">Process0</a>[<span class="extype" name="org.specs2.codata.Process.fill.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@fill[A](n:Int)(a:A,chunkSize:Int):org.specs2.codata.Process0[A]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A <code>Process</code> which emits <code>n</code> repetitions of <code>a</code>.</p>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="org.specs2.codata.Process#forwardFill" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="forwardFill[A](p:org.specs2.codata.Process[scalaz.concurrent.Task,A])(implicitS:scalaz.concurrent.Strategy):org.specs2.codata.Process[scalaz.concurrent.Task,A]"></a>
+      <a id="forwardFill[A](Process[Task,A])(Strategy):Process[Task,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">forwardFill</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="p">p: <a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-concurrent_2.11/7.2.6/scalaz-concurrent_2.11-7.2.6-javadoc.jar/!/index.html#scalaz.concurrent.Task" class="extype" target="_top">Task</a>, <span class="extype" name="org.specs2.codata.Process.forwardFill.A">A</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="S">S: <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-concurrent_2.11/7.2.6/scalaz-concurrent_2.11-7.2.6-javadoc.jar/!/index.html#scalaz.concurrent.Strategy" class="extype" target="_top">Strategy</a></span>)</span><span class="result">: <a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-concurrent_2.11/7.2.6/scalaz-concurrent_2.11-7.2.6-javadoc.jar/!/index.html#scalaz.concurrent.Task" class="extype" target="_top">Task</a>, <span class="extype" name="org.specs2.codata.Process.forwardFill.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@forwardFill[A](p:org.specs2.codata.Process[scalaz.concurrent.Task,A])(implicitS:scalaz.concurrent.Strategy):org.specs2.codata.Process[scalaz.concurrent.Task,A]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Produce a continuous stream from a discrete stream by using the
+most recent value.</p>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.specs2.codata.Process#halt" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="halt:org.specs2.codata.Process0[Nothing]"></a>
+      <a id="halt:Process0[Nothing]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">halt</span><span class="result">: <a href="package.html#Process0[+O]=org.specs2.codata.Process[Nothing,O]" class="extmbr" name="org.specs2.codata.Process0">Process0</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Nothing" class="extype" target="_top">Nothing</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@halt:org.specs2.codata.Process0[Nothing]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>Process</code> which emits no values and signals normal termination.</p>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="org.specs2.codata.Process#iterate" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="iterate[A](start:A)(f:A=&gt;A):org.specs2.codata.Process0[A]"></a>
+      <a id="iterate[A](A)((A)⇒A):Process0[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">iterate</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="start">start: <span class="extype" name="org.specs2.codata.Process.iterate.A">A</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="org.specs2.codata.Process.iterate.A">A</span>) ⇒ <span class="extype" name="org.specs2.codata.Process.iterate.A">A</span></span>)</span><span class="result">: <a href="package.html#Process0[+O]=org.specs2.codata.Process[Nothing,O]" class="extmbr" name="org.specs2.codata.Process0">Process0</a>[<span class="extype" name="org.specs2.codata.Process.iterate.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@iterate[A](start:A)(f:A=&gt;A):org.specs2.codata.Process0[A]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An infinite <code>Process</code> that repeatedly applies a given function
+to a start value.</p><div class="fullcomment"><div class="comment cmt"><p>An infinite <code>Process</code> that repeatedly applies a given function
+to a start value. <code>start</code> is the first value emitted, followed
+by <code>f(start)</code>, then <code>f(f(start))</code>, and so on.
+</p></div></div>
+    </li><li name="org.specs2.codata.Process#iterateEval" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="iterateEval[F[_],A](start:A)(f:A=&gt;F[A]):org.specs2.codata.Process[F,A]"></a>
+      <a id="iterateEval[F[_],A](A)((A)⇒F[A]):Process[F,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">iterateEval</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="start">start: <span class="extype" name="org.specs2.codata.Process.iterateEval.A">A</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="org.specs2.codata.Process.iterateEval.A">A</span>) ⇒ <span class="extype" name="org.specs2.codata.Process.iterateEval.F">F</span>[<span class="extype" name="org.specs2.codata.Process.iterateEval.A">A</span>]</span>)</span><span class="result">: <a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<span class="extype" name="org.specs2.codata.Process.iterateEval.F">F</span>, <span class="extype" name="org.specs2.codata.Process.iterateEval.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@iterateEval[F[_],A](start:A)(f:A=&gt;F[A]):org.specs2.codata.Process[F,A]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Like <a href="#iterate[A](start:A)(f:A=&gt;A):org.specs2.codata.Process0[A]" class="extmbr" name="org.specs2.codata.Process#iterate">iterate</a>, but takes an effectful function for producing
+the next state.</p><div class="fullcomment"><div class="comment cmt"><p>Like <a href="#iterate[A](start:A)(f:A=&gt;A):org.specs2.codata.Process0[A]" class="extmbr" name="org.specs2.codata.Process#iterate">iterate</a>, but takes an effectful function for producing
+the next state. <code>start</code> is the first value emitted.
+</p></div></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@notify():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.specs2.codata.ProcessInstances#process1Choice" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="process1Choice:scalaz.Choice[org.specs2.codata.Process1]"></a>
+      <a id="process1Choice:Choice[Process1]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">process1Choice</span><span class="result">: <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-core_2.11/7.2.6/scalaz-core_2.11-7.2.6-javadoc.jar/!/index.html#scalaz.Choice" class="extype" target="_top">Choice</a>[<a href="package.html#Process1[-I,+O]=org.specs2.codata.Process[org.specs2.codata.Process.Env[I,Any]#Is,O]" class="extmbr" name="org.specs2.codata.Process1">Process1</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@process1Choice:scalaz.Choice[org.specs2.codata.Process1]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ProcessInstances</dd></dl></div>
+    </li><li name="org.specs2.codata.ProcessInstances#process1Contravariant" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="process1Contravariant[O]:scalaz.Contravariant[[α]org.specs2.codata.Process[org.specs2.codata.Process.Env[α,Any]#Is,O]]"></a>
+      <a id="process1Contravariant[O]:Contravariant[[α]Process[Is,O]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">process1Contravariant</span><span class="tparams">[<span name="O">O</span>]</span><span class="result">: <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-core_2.11/7.2.6/scalaz-core_2.11-7.2.6-javadoc.jar/!/index.html#scalaz.Contravariant" class="extype" target="_top">Contravariant</a>[[α]<a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<a href="Process$$Env$Is.html" class="extype" name="org.specs2.codata.Process.Env.Is">Is</a>, <span class="extype" name="org.specs2.codata.ProcessInstances.process1Contravariant.O">O</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@process1Contravariant[O]:scalaz.Contravariant[[α]org.specs2.codata.Process[org.specs2.codata.Process.Env[α,Any]#Is,O]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ProcessInstances</dd></dl></div>
+    </li><li name="org.specs2.codata.ProcessInstances#process1Profunctor" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="process1Profunctor:scalaz.Profunctor[org.specs2.codata.Process1]"></a>
+      <a id="process1Profunctor:Profunctor[Process1]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">process1Profunctor</span><span class="result">: <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-core_2.11/7.2.6/scalaz-core_2.11-7.2.6-javadoc.jar/!/index.html#scalaz.Profunctor" class="extype" target="_top">Profunctor</a>[<a href="package.html#Process1[-I,+O]=org.specs2.codata.Process[org.specs2.codata.Process.Env[I,Any]#Is,O]" class="extmbr" name="org.specs2.codata.Process1">Process1</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@process1Profunctor:scalaz.Profunctor[org.specs2.codata.Process1]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ProcessInstances</dd></dl></div>
+    </li><li name="org.specs2.codata.ProcessInstances#processHoist" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="processHoist:scalaz.Hoist[org.specs2.codata.Process]"></a>
+      <a id="processHoist:Hoist[Process]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">processHoist</span><span class="result">: <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-core_2.11/7.2.6/scalaz-core_2.11-7.2.6-javadoc.jar/!/index.html#scalaz.Hoist" class="extype" target="_top">Hoist</a>[<a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@processHoist:scalaz.Hoist[org.specs2.codata.Process]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ProcessInstances</dd></dl></div>
+    </li><li name="org.specs2.codata.ProcessInstances#processMonadPlus" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="processMonadPlus[F[_]]:scalaz.MonadPlus[[α]org.specs2.codata.Process[F,α]]"></a>
+      <a id="processMonadPlus[F[_]]:MonadPlus[[α]Process[F,α]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">processMonadPlus</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result">: <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-core_2.11/7.2.6/scalaz-core_2.11-7.2.6-javadoc.jar/!/index.html#scalaz.MonadPlus" class="extype" target="_top">MonadPlus</a>[[α]<a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<span class="extype" name="org.specs2.codata.ProcessInstances.processMonadPlus.F">F</span>, <span class="extype" name="org.specs2.codata.ProcessInstances.&lt;refinement&gt;.λ.α">α</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@processMonadPlus[F[_]]:scalaz.MonadPlus[[α]org.specs2.codata.Process[F,α]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ProcessInstances</dd></dl></div>
+    </li><li name="org.specs2.codata.Process#range" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="range(start:Int,stopExclusive:Int,by:Int):org.specs2.codata.Process0[Int]"></a>
+      <a id="range(Int,Int,Int):Process0[Int]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">range</span><span class="params">(<span name="start">start: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="stopExclusive">stopExclusive: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="by">by: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a> = <span class="symbol">1</span></span>)</span><span class="result">: <a href="package.html#Process0[+O]=org.specs2.codata.Process[Nothing,O]" class="extmbr" name="org.specs2.codata.Process0">Process0</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@range(start:Int,stopExclusive:Int,by:Int):org.specs2.codata.Process0[Int]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Lazily produce the range <code>[start, stopExclusive)</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Lazily produce the range <code>[start, stopExclusive)</code>. If you want to produce the sequence in one chunk, instead of lazily, use <code>emitAll(start until stopExclusive)</code>.</p></div></div>
+    </li><li name="org.specs2.codata.Process#ranges" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ranges(start:Int,stopExclusive:Int,size:Int):org.specs2.codata.Process0[(Int,Int)]"></a>
+      <a id="ranges(Int,Int,Int):Process0[(Int,Int)]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ranges</span><span class="params">(<span name="start">start: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="stopExclusive">stopExclusive: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="size">size: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="package.html#Process0[+O]=org.specs2.codata.Process[Nothing,O]" class="extmbr" name="org.specs2.codata.Process0">Process0</a>[(<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a>)]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@ranges(start:Int,stopExclusive:Int,size:Int):org.specs2.codata.Process0[(Int,Int)]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Lazily produce a sequence of nonoverlapping ranges, where each range
+contains <code>size</code> integers, assuming the upper bound is exclusive.</p><div class="fullcomment"><div class="comment cmt"><p>Lazily produce a sequence of nonoverlapping ranges, where each range
+contains <code>size</code> integers, assuming the upper bound is exclusive.
+Example: <code>ranges(0, 1000, 10)</code> results in the pairs
+<code>(0, 10), (10, 20), (20, 30) ... (990, 1000)</code></p><p>Note: The last emitted range may be truncated at <code>stopExclusive</code>. For
+instance, <code>ranges(0,5,4)</code> results in <code>(0,4), (4,5)</code>.
+</p></div><dl class="attributes block"> <dt>Exceptions thrown</dt><dd><span class="cmt"><p><span class="extype" name="IllegalArgumentException"><code>IllegalArgumentException</code></span> if <code>size</code> &lt;= 0</p></span></dd></dl></div>
+    </li><li name="org.specs2.codata.Process#receive1" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="receive1[I,O](rcv:I=&gt;org.specs2.codata.Process1[I,O]):org.specs2.codata.Process1[I,O]"></a>
+      <a id="receive1[I,O]((I)⇒Process1[I,O]):Process1[I,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">receive1</span><span class="tparams">[<span name="I">I</span>, <span name="O">O</span>]</span><span class="params">(<span name="rcv">rcv: (<span class="extype" name="org.specs2.codata.Process.receive1.I">I</span>) ⇒ <a href="package.html#Process1[-I,+O]=org.specs2.codata.Process[org.specs2.codata.Process.Env[I,Any]#Is,O]" class="extmbr" name="org.specs2.codata.Process1">Process1</a>[<span class="extype" name="org.specs2.codata.Process.receive1.I">I</span>, <span class="extype" name="org.specs2.codata.Process.receive1.O">O</span>]</span>)</span><span class="result">: <a href="package.html#Process1[-I,+O]=org.specs2.codata.Process[org.specs2.codata.Process.Env[I,Any]#Is,O]" class="extmbr" name="org.specs2.codata.Process1">Process1</a>[<span class="extype" name="org.specs2.codata.Process.receive1.I">I</span>, <span class="extype" name="org.specs2.codata.Process.receive1.O">O</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@receive1[I,O](rcv:I=&gt;org.specs2.codata.Process1[I,O]):org.specs2.codata.Process1[I,O]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The <code>Process1</code> which awaits a single input and passes it to <code>rcv</code> to
+determine the next state.</p>
+    </li><li name="org.specs2.codata.Process#receive1Or" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="receive1Or[I,O](fb:=&gt;org.specs2.codata.Process1[I,O])(rcv:I=&gt;org.specs2.codata.Process1[I,O]):org.specs2.codata.Process1[I,O]"></a>
+      <a id="receive1Or[I,O](⇒Process1[I,O])((I)⇒Process1[I,O]):Process1[I,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">receive1Or</span><span class="tparams">[<span name="I">I</span>, <span name="O">O</span>]</span><span class="params">(<span name="fb">fb: ⇒ <a href="package.html#Process1[-I,+O]=org.specs2.codata.Process[org.specs2.codata.Process.Env[I,Any]#Is,O]" class="extmbr" name="org.specs2.codata.Process1">Process1</a>[<span class="extype" name="org.specs2.codata.Process.receive1Or.I">I</span>, <span class="extype" name="org.specs2.codata.Process.receive1Or.O">O</span>]</span>)</span><span class="params">(<span name="rcv">rcv: (<span class="extype" name="org.specs2.codata.Process.receive1Or.I">I</span>) ⇒ <a href="package.html#Process1[-I,+O]=org.specs2.codata.Process[org.specs2.codata.Process.Env[I,Any]#Is,O]" class="extmbr" name="org.specs2.codata.Process1">Process1</a>[<span class="extype" name="org.specs2.codata.Process.receive1Or.I">I</span>, <span class="extype" name="org.specs2.codata.Process.receive1Or.O">O</span>]</span>)</span><span class="result">: <a href="package.html#Process1[-I,+O]=org.specs2.codata.Process[org.specs2.codata.Process.Env[I,Any]#Is,O]" class="extmbr" name="org.specs2.codata.Process1">Process1</a>[<span class="extype" name="org.specs2.codata.Process.receive1Or.I">I</span>, <span class="extype" name="org.specs2.codata.Process.receive1Or.O">O</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@receive1Or[I,O](fb:=&gt;org.specs2.codata.Process1[I,O])(rcv:I=&gt;org.specs2.codata.Process1[I,O]):org.specs2.codata.Process1[I,O]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Like <code>receive1</code>, but consults <code>fb</code> when it fails to receive an input.</p>
+    </li><li name="org.specs2.codata.Process#repeat" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="repeat[F[_],O](p:org.specs2.codata.Process[F,O]):org.specs2.codata.Process[F,O]"></a>
+      <a id="repeat[F[_],O](Process[F,O]):Process[F,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">repeat</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="O">O</span>]</span><span class="params">(<span name="p">p: <a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<span class="extype" name="org.specs2.codata.Process.repeat.F">F</span>, <span class="extype" name="org.specs2.codata.Process.repeat.O">O</span>]</span>)</span><span class="result">: <a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<span class="extype" name="org.specs2.codata.Process.repeat.F">F</span>, <span class="extype" name="org.specs2.codata.Process.repeat.O">O</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@repeat[F[_],O](p:org.specs2.codata.Process[F,O]):org.specs2.codata.Process[F,O]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Prefix syntax for <code>p.repeat</code>.</p>
+    </li><li name="org.specs2.codata.Process#repeatEval" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="repeatEval[F[_],O](fo:F[O]):org.specs2.codata.Process[F,O]"></a>
+      <a id="repeatEval[F[_],O](F[O]):Process[F,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">repeatEval</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="O">O</span>]</span><span class="params">(<span name="fo">fo: <span class="extype" name="org.specs2.codata.Process.repeatEval.F">F</span>[<span class="extype" name="org.specs2.codata.Process.repeatEval.O">O</span>]</span>)</span><span class="result">: <a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<span class="extype" name="org.specs2.codata.Process.repeatEval.F">F</span>, <span class="extype" name="org.specs2.codata.Process.repeatEval.O">O</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@repeatEval[F[_],O](fo:F[O]):org.specs2.codata.Process[F,O]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Evaluate an arbitrary effect in a <code>Process</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Evaluate an arbitrary effect in a <code>Process</code>. The resulting <code>Process</code> will emit values
+until an error occurs.</p></div></div>
+    </li><li name="org.specs2.codata.Process#sleepUntil" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="sleepUntil[F[_],A](awaken:org.specs2.codata.Process[F,Boolean])(p:org.specs2.codata.Process[F,A]):org.specs2.codata.Process[F,A]"></a>
+      <a id="sleepUntil[F[_],A](Process[F,Boolean])(Process[F,A]):Process[F,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">sleepUntil</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="A">A</span>]</span><span class="params">(<span name="awaken">awaken: <a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<span class="extype" name="org.specs2.codata.Process.sleepUntil.F">F</span>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>]</span>)</span><span class="params">(<span name="p">p: <a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<span class="extype" name="org.specs2.codata.Process.sleepUntil.F">F</span>, <span class="extype" name="org.specs2.codata.Process.sleepUntil.A">A</span>]</span>)</span><span class="result">: <a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<span class="extype" name="org.specs2.codata.Process.sleepUntil.F">F</span>, <span class="extype" name="org.specs2.codata.Process.sleepUntil.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@sleepUntil[F[_],A](awaken:org.specs2.codata.Process[F,Boolean])(p:org.specs2.codata.Process[F,A]):org.specs2.codata.Process[F,A]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Delay running <code>p</code> until <code>awaken</code> becomes true for the first time.</p><div class="fullcomment"><div class="comment cmt"><p>Delay running <code>p</code> until <code>awaken</code> becomes true for the first time.
+The <code>awaken</code> process may be discrete.
+</p></div></div>
+    </li><li name="org.specs2.codata.Process#supply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="supply(initial:Long):org.specs2.codata.Process[scalaz.concurrent.Task,Long]"></a>
+      <a id="supply(Long):Process[Task,Long]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">supply</span><span class="params">(<span name="initial">initial: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-concurrent_2.11/7.2.6/scalaz-concurrent_2.11-7.2.6-javadoc.jar/!/index.html#scalaz.concurrent.Task" class="extype" target="_top">Task</a>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@supply(initial:Long):org.specs2.codata.Process[scalaz.concurrent.Task,Long]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A supply of <code>Long</code> values, starting with <code>initial</code>.</p><div class="fullcomment"><div class="comment cmt"><p>A supply of <code>Long</code> values, starting with <code>initial</code>.
+Each read is guaranteed to return a value which is unique
+across all threads reading from this <code>supply</code>.
+</p></div></div>
+    </li><li name="org.specs2.codata.Process#suspend" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="suspend[F[_],O](p:=&gt;org.specs2.codata.Process[F,O]):org.specs2.codata.Process[F,O]"></a>
+      <a id="suspend[F[_],O](⇒Process[F,O]):Process[F,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">suspend</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="O">O</span>]</span><span class="params">(<span name="p">p: ⇒ <a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<span class="extype" name="org.specs2.codata.Process.suspend.F">F</span>, <span class="extype" name="org.specs2.codata.Process.suspend.O">O</span>]</span>)</span><span class="result">: <a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<span class="extype" name="org.specs2.codata.Process.suspend.F">F</span>, <span class="extype" name="org.specs2.codata.Process.suspend.O">O</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@suspend[F[_],O](p:=&gt;org.specs2.codata.Process[F,O]):org.specs2.codata.Process[F,O]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Produce <code>p</code> lazily.</p><div class="fullcomment"><div class="comment cmt"><p>Produce <code>p</code> lazily. Useful if producing the process involves allocation of
+some local mutable resource we want to ensure is freshly allocated
+for each consumer of <code>p</code>.</p><p>Note that this implementation assures that:</p><pre>suspend(p).kill === suspend(p.kill)
+suspend(p).kill === p.kill
+
+suspend(p).repeat === suspend(p.repeat)
+suspend(p).repeat ===  p.repeat
+
+suspend(p).eval === suspend(p.eval)
+suspend(p).eval === p.eval
+
+Halt(cause) ++ suspend(p) === Halt(cause) ++ p</pre></div></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.specs2.codata.Process#tell" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="tell[S](s:S):org.specs2.codata.Process0[scalaz.\/[S,Nothing]]"></a>
+      <a id="tell[S](S):Process0[\/[S,Nothing]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tell</span><span class="tparams">[<span name="S">S</span>]</span><span class="params">(<span name="s">s: <span class="extype" name="org.specs2.codata.Process.tell.S">S</span></span>)</span><span class="result">: <a href="package.html#Process0[+O]=org.specs2.codata.Process[Nothing,O]" class="extmbr" name="org.specs2.codata.Process0">Process0</a>[<a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-core_2.11/7.2.6/scalaz-core_2.11-7.2.6-javadoc.jar/!/index.html#scalaz.\/" class="extype" target="_top">\/</a>[<span class="extype" name="org.specs2.codata.Process.tell.S">S</span>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Nothing" class="extype" target="_top">Nothing</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@tell[S](s:S):org.specs2.codata.Process0[scalaz.\/[S,Nothing]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A <code>Writer</code> which writes the given value; alias for <code>emitW</code>.</p>
+    </li><li name="org.specs2.codata.Process#toChannelSyntax" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toChannelSyntax[F[_],I,O](self:org.specs2.codata.Channel[F,I,O]):org.specs2.codata.ChannelSyntax[F,I,O]"></a>
+      <a id="toChannelSyntax[F[_],I,O](Channel[F,I,O]):ChannelSyntax[F,I,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toChannelSyntax</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="I">I</span>, <span name="O">O</span>]</span><span class="params">(<span name="self">self: <a href="package.html#Channel[+F[_],-I,O]=org.specs2.codata.Process[F,I=&gt;F[O]]" class="extmbr" name="org.specs2.codata.Channel">Channel</a>[<span class="extype" name="org.specs2.codata.Process.toChannelSyntax.F">F</span>, <span class="extype" name="org.specs2.codata.Process.toChannelSyntax.I">I</span>, <span class="extype" name="org.specs2.codata.Process.toChannelSyntax.O">O</span>]</span>)</span><span class="result">: <a href="ChannelSyntax.html" class="extype" name="org.specs2.codata.ChannelSyntax">ChannelSyntax</a>[<span class="extype" name="org.specs2.codata.Process.toChannelSyntax.F">F</span>, <span class="extype" name="org.specs2.codata.Process.toChannelSyntax.I">I</span>, <span class="extype" name="org.specs2.codata.Process.toChannelSyntax.O">O</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@toChannelSyntax[F[_],I,O](self:org.specs2.codata.Channel[F,I,O]):org.specs2.codata.ChannelSyntax[F,I,O]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Adds syntax for <code>Channel</code>.</p>
+    </li><li name="org.specs2.codata.Process#toProcess1Syntax" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toProcess1Syntax[I,O](self:org.specs2.codata.Process1[I,O]):org.specs2.codata.Process1Syntax[I,O]"></a>
+      <a id="toProcess1Syntax[I,O](Process1[I,O]):Process1Syntax[I,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toProcess1Syntax</span><span class="tparams">[<span name="I">I</span>, <span name="O">O</span>]</span><span class="params">(<span name="self">self: <a href="package.html#Process1[-I,+O]=org.specs2.codata.Process[org.specs2.codata.Process.Env[I,Any]#Is,O]" class="extmbr" name="org.specs2.codata.Process1">Process1</a>[<span class="extype" name="org.specs2.codata.Process.toProcess1Syntax.I">I</span>, <span class="extype" name="org.specs2.codata.Process.toProcess1Syntax.O">O</span>]</span>)</span><span class="result">: <a href="Process1Syntax.html" class="extype" name="org.specs2.codata.Process1Syntax">Process1Syntax</a>[<span class="extype" name="org.specs2.codata.Process.toProcess1Syntax.I">I</span>, <span class="extype" name="org.specs2.codata.Process.toProcess1Syntax.O">O</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@toProcess1Syntax[I,O](self:org.specs2.codata.Process1[I,O]):org.specs2.codata.Process1Syntax[I,O]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Adds syntax for <code>Process1</code>.</p>
+    </li><li name="org.specs2.codata.Process#toSinkSyntax" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toSinkSyntax[F[_],I](self:org.specs2.codata.Sink[F,I]):org.specs2.codata.SinkSyntax[F,I]"></a>
+      <a id="toSinkSyntax[F[_],I](Sink[F,I]):SinkSyntax[F,I]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toSinkSyntax</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="I">I</span>]</span><span class="params">(<span name="self">self: <a href="package.html#Sink[+F[_],-O]=org.specs2.codata.Process[F,O=&gt;F[Unit]]" class="extmbr" name="org.specs2.codata.Sink">Sink</a>[<span class="extype" name="org.specs2.codata.Process.toSinkSyntax.F">F</span>, <span class="extype" name="org.specs2.codata.Process.toSinkSyntax.I">I</span>]</span>)</span><span class="result">: <a href="SinkSyntax.html" class="extype" name="org.specs2.codata.SinkSyntax">SinkSyntax</a>[<span class="extype" name="org.specs2.codata.Process.toSinkSyntax.F">F</span>, <span class="extype" name="org.specs2.codata.Process.toSinkSyntax.I">I</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@toSinkSyntax[F[_],I](self:org.specs2.codata.Sink[F,I]):org.specs2.codata.SinkSyntax[F,I]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Adds syntax for <code>Sink</code>.</p>
+    </li><li name="org.specs2.codata.Process#toSinkTaskSyntax" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toSinkTaskSyntax[F[_],I](self:org.specs2.codata.Sink[scalaz.concurrent.Task,I]):org.specs2.codata.SinkTaskSyntax[I]"></a>
+      <a id="toSinkTaskSyntax[F[_],I](Sink[Task,I]):SinkTaskSyntax[I]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toSinkTaskSyntax</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="I">I</span>]</span><span class="params">(<span name="self">self: <a href="package.html#Sink[+F[_],-O]=org.specs2.codata.Process[F,O=&gt;F[Unit]]" class="extmbr" name="org.specs2.codata.Sink">Sink</a>[<a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-concurrent_2.11/7.2.6/scalaz-concurrent_2.11-7.2.6-javadoc.jar/!/index.html#scalaz.concurrent.Task" class="extype" target="_top">Task</a>, <span class="extype" name="org.specs2.codata.Process.toSinkTaskSyntax.I">I</span>]</span>)</span><span class="result">: <a href="SinkTaskSyntax.html" class="extype" name="org.specs2.codata.SinkTaskSyntax">SinkTaskSyntax</a>[<span class="extype" name="org.specs2.codata.Process.toSinkTaskSyntax.I">I</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@toSinkTaskSyntax[F[_],I](self:org.specs2.codata.Sink[scalaz.concurrent.Task,I]):org.specs2.codata.SinkTaskSyntax[I]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Adds syntax for <code>Sink</code> that is specialized for Task.</p>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@toString():String" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.specs2.codata.Process#toTeeSyntax" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toTeeSyntax[I,I2,O](self:org.specs2.codata.Tee[I,I2,O]):org.specs2.codata.TeeSyntax[I,I2,O]"></a>
+      <a id="toTeeSyntax[I,I2,O](Tee[I,I2,O]):TeeSyntax[I,I2,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toTeeSyntax</span><span class="tparams">[<span name="I">I</span>, <span name="I2">I2</span>, <span name="O">O</span>]</span><span class="params">(<span name="self">self: <a href="package.html#Tee[-I,-I2,+O]=org.specs2.codata.Process[org.specs2.codata.Process.Env[I,I2]#T,O]" class="extmbr" name="org.specs2.codata.Tee">Tee</a>[<span class="extype" name="org.specs2.codata.Process.toTeeSyntax.I">I</span>, <span class="extype" name="org.specs2.codata.Process.toTeeSyntax.I2">I2</span>, <span class="extype" name="org.specs2.codata.Process.toTeeSyntax.O">O</span>]</span>)</span><span class="result">: <a href="TeeSyntax.html" class="extype" name="org.specs2.codata.TeeSyntax">TeeSyntax</a>[<span class="extype" name="org.specs2.codata.Process.toTeeSyntax.I">I</span>, <span class="extype" name="org.specs2.codata.Process.toTeeSyntax.I2">I2</span>, <span class="extype" name="org.specs2.codata.Process.toTeeSyntax.O">O</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@toTeeSyntax[I,I2,O](self:org.specs2.codata.Tee[I,I2,O]):org.specs2.codata.TeeSyntax[I,I2,O]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Adds syntax for <code>Tee</code>.</p>
+    </li><li name="org.specs2.codata.Process#toWriterSyntax" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toWriterSyntax[F[_],W,O](self:org.specs2.codata.Writer[F,W,O]):org.specs2.codata.WriterSyntax[F,W,O]"></a>
+      <a id="toWriterSyntax[F[_],W,O](Writer[F,W,O]):WriterSyntax[F,W,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toWriterSyntax</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="W">W</span>, <span name="O">O</span>]</span><span class="params">(<span name="self">self: <a href="package.html#Writer[+F[_],+W,+O]=org.specs2.codata.Process[F,scalaz.\/[W,O]]" class="extmbr" name="org.specs2.codata.Writer">Writer</a>[<span class="extype" name="org.specs2.codata.Process.toWriterSyntax.F">F</span>, <span class="extype" name="org.specs2.codata.Process.toWriterSyntax.W">W</span>, <span class="extype" name="org.specs2.codata.Process.toWriterSyntax.O">O</span>]</span>)</span><span class="result">: <a href="WriterSyntax.html" class="extype" name="org.specs2.codata.WriterSyntax">WriterSyntax</a>[<span class="extype" name="org.specs2.codata.Process.toWriterSyntax.F">F</span>, <span class="extype" name="org.specs2.codata.Process.toWriterSyntax.W">W</span>, <span class="extype" name="org.specs2.codata.Process.toWriterSyntax.O">O</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@toWriterSyntax[F[_],W,O](self:org.specs2.codata.Writer[F,W,O]):org.specs2.codata.WriterSyntax[F,W,O]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Adds syntax for <code>Writer</code>.</p>
+    </li><li name="org.specs2.codata.Process#toWriterTaskSyntax" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toWriterTaskSyntax[W,O](self:org.specs2.codata.Writer[scalaz.concurrent.Task,W,O]):org.specs2.codata.WriterTaskSyntax[W,O]"></a>
+      <a id="toWriterTaskSyntax[W,O](Writer[Task,W,O]):WriterTaskSyntax[W,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toWriterTaskSyntax</span><span class="tparams">[<span name="W">W</span>, <span name="O">O</span>]</span><span class="params">(<span name="self">self: <a href="package.html#Writer[+F[_],+W,+O]=org.specs2.codata.Process[F,scalaz.\/[W,O]]" class="extmbr" name="org.specs2.codata.Writer">Writer</a>[<a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-concurrent_2.11/7.2.6/scalaz-concurrent_2.11-7.2.6-javadoc.jar/!/index.html#scalaz.concurrent.Task" class="extype" target="_top">Task</a>, <span class="extype" name="org.specs2.codata.Process.toWriterTaskSyntax.W">W</span>, <span class="extype" name="org.specs2.codata.Process.toWriterTaskSyntax.O">O</span>]</span>)</span><span class="result">: <a href="WriterTaskSyntax.html" class="extype" name="org.specs2.codata.WriterTaskSyntax">WriterTaskSyntax</a>[<span class="extype" name="org.specs2.codata.Process.toWriterTaskSyntax.W">W</span>, <span class="extype" name="org.specs2.codata.Process.toWriterTaskSyntax.O">O</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@toWriterTaskSyntax[W,O](self:org.specs2.codata.Writer[scalaz.concurrent.Task,W,O]):org.specs2.codata.WriterTaskSyntax[W,O]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Adds syntax for <code>Writer</code> that is specialized for Task.</p>
+    </li><li name="org.specs2.codata.Process#toWyeSyntax" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toWyeSyntax[I,I2,O](self:org.specs2.codata.Wye[I,I2,O]):org.specs2.codata.WyeSyntax[I,I2,O]"></a>
+      <a id="toWyeSyntax[I,I2,O](Wye[I,I2,O]):WyeSyntax[I,I2,O]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toWyeSyntax</span><span class="tparams">[<span name="I">I</span>, <span name="I2">I2</span>, <span name="O">O</span>]</span><span class="params">(<span name="self">self: <a href="package.html#Wye[-I,-I2,+O]=org.specs2.codata.Process[org.specs2.codata.Process.Env[I,I2]#Y,O]" class="extmbr" name="org.specs2.codata.Wye">Wye</a>[<span class="extype" name="org.specs2.codata.Process.toWyeSyntax.I">I</span>, <span class="extype" name="org.specs2.codata.Process.toWyeSyntax.I2">I2</span>, <span class="extype" name="org.specs2.codata.Process.toWyeSyntax.O">O</span>]</span>)</span><span class="result">: <a href="WyeSyntax.html" class="extype" name="org.specs2.codata.WyeSyntax">WyeSyntax</a>[<span class="extype" name="org.specs2.codata.Process.toWyeSyntax.I">I</span>, <span class="extype" name="org.specs2.codata.Process.toWyeSyntax.I2">I2</span>, <span class="extype" name="org.specs2.codata.Process.toWyeSyntax.O">O</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@toWyeSyntax[I,I2,O](self:org.specs2.codata.Wye[I,I2,O]):org.specs2.codata.WyeSyntax[I,I2,O]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Adds syntax for <code>Wye</code>.</p>
+    </li><li name="org.specs2.codata.Process#unfold" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="unfold[S,A](s0:S)(f:S=&gt;Option[(A,S)]):org.specs2.codata.Process0[A]"></a>
+      <a id="unfold[S,A](S)((S)⇒Option[(A,S)]):Process0[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">unfold</span><span class="tparams">[<span name="S">S</span>, <span name="A">A</span>]</span><span class="params">(<span name="s0">s0: <span class="extype" name="org.specs2.codata.Process.unfold.S">S</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="org.specs2.codata.Process.unfold.S">S</span>) ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[(<span class="extype" name="org.specs2.codata.Process.unfold.A">A</span>, <span class="extype" name="org.specs2.codata.Process.unfold.S">S</span>)]</span>)</span><span class="result">: <a href="package.html#Process0[+O]=org.specs2.codata.Process[Nothing,O]" class="extmbr" name="org.specs2.codata.Process0">Process0</a>[<span class="extype" name="org.specs2.codata.Process.unfold.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@unfold[S,A](s0:S)(f:S=&gt;Option[(A,S)]):org.specs2.codata.Process0[A]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Produce a (potentially infinite) source from an unfold.</p>
+    </li><li name="org.specs2.codata.Process#unfoldEval" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="unfoldEval[F[_],S,A](s0:S)(f:S=&gt;F[Option[(A,S)]]):org.specs2.codata.Process[F,A]"></a>
+      <a id="unfoldEval[F[_],S,A](S)((S)⇒F[Option[(A,S)]]):Process[F,A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">unfoldEval</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>, <span name="S">S</span>, <span name="A">A</span>]</span><span class="params">(<span name="s0">s0: <span class="extype" name="org.specs2.codata.Process.unfoldEval.S">S</span></span>)</span><span class="params">(<span name="f">f: (<span class="extype" name="org.specs2.codata.Process.unfoldEval.S">S</span>) ⇒ <span class="extype" name="org.specs2.codata.Process.unfoldEval.F">F</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[(<span class="extype" name="org.specs2.codata.Process.unfoldEval.A">A</span>, <span class="extype" name="org.specs2.codata.Process.unfoldEval.S">S</span>)]]</span>)</span><span class="result">: <a href="Process.html" class="extype" name="org.specs2.codata.Process">Process</a>[<span class="extype" name="org.specs2.codata.Process.unfoldEval.F">F</span>, <span class="extype" name="org.specs2.codata.Process.unfoldEval.A">A</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@unfoldEval[F[_],S,A](s0:S)(f:S=&gt;F[Option[(A,S)]]):org.specs2.codata.Process[F,A]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Like <a href="#unfold[S,A](s0:S)(f:S=&gt;Option[(A,S)]):org.specs2.codata.Process0[A]" class="extmbr" name="org.specs2.codata.Process#unfold">unfold</a>, but takes an effectful function.</p>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@wait():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.specs2.codata.Process$@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="org.specs2.codata.ProcessInstances">
+              <h3>Inherited from <span class="extype" name="org.specs2.codata.ProcessInstances">ProcessInstances</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
