@@ -347,18 +347,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="org.specs2.reporter.HtmlBodyPrinter#makeBody" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="makeBody(spec:org.specs2.specification.core.SpecStructure,stats:org.specs2.specification.process.Stats,options:org.specs2.reporter.HtmlOptions,arguments:org.specs2.main.Arguments,pandoc:Boolean):String"></a>
-      <a id="makeBody(SpecStructure,Stats,HtmlOptions,Arguments,Boolean):String"></a>
+      <a id="makeBody(spec:org.specs2.specification.core.SpecStructure,stats:org.specs2.specification.process.Stats,timer:org.specs2.time.SimpleTimer,options:org.specs2.reporter.HtmlOptions,arguments:org.specs2.main.Arguments,pandoc:Boolean):String"></a>
+      <a id="makeBody(SpecStructure,Stats,SimpleTimer,HtmlOptions,Arguments,Boolean):String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">makeBody</span><span class="params">(<span name="spec">spec: <a href="../specification/core/SpecStructure.html" class="extype" name="org.specs2.specification.core.SpecStructure">SpecStructure</a></span>, <span name="stats">stats: <a href="../specification/process/Stats.html" class="extype" name="org.specs2.specification.process.Stats">Stats</a></span>, <span name="options">options: <a href="HtmlOptions.html" class="extype" name="org.specs2.reporter.HtmlOptions">HtmlOptions</a></span>, <span name="arguments">arguments: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>, <span name="pandoc">pandoc: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+        <span class="name">makeBody</span><span class="params">(<span name="spec">spec: <a href="../specification/core/SpecStructure.html" class="extype" name="org.specs2.specification.core.SpecStructure">SpecStructure</a></span>, <span name="stats">stats: <a href="../specification/process/Stats.html" class="extype" name="org.specs2.specification.process.Stats">Stats</a></span>, <span name="timer">timer: <a href="../time/SimpleTimer.html" class="extype" name="org.specs2.time.SimpleTimer">SimpleTimer</a></span>, <span name="options">options: <a href="HtmlOptions.html" class="extype" name="org.specs2.reporter.HtmlOptions">HtmlOptions</a></span>, <span name="arguments">arguments: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>, <span name="pandoc">pandoc: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.specs2.reporter.HtmlBodyPrinter$@makeBody(spec:org.specs2.specification.core.SpecStructure,stats:org.specs2.specification.process.Stats,options:org.specs2.reporter.HtmlOptions,arguments:org.specs2.main.Arguments,pandoc:Boolean):String" title="Permalink" target="_top">
+      <a href="../../../index.html#org.specs2.reporter.HtmlBodyPrinter$@makeBody(spec:org.specs2.specification.core.SpecStructure,stats:org.specs2.specification.process.Stats,timer:org.specs2.time.SimpleTimer,options:org.specs2.reporter.HtmlOptions,arguments:org.specs2.main.Arguments,pandoc:Boolean):String" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -454,18 +454,18 @@
       <p class="shortcomment cmt">Print a Fragment as a piece of Html</p><div class="fullcomment"><div class="comment cmt"><p>Print a Fragment as a piece of Html</p><p>If pandoc is true we make sure that text is not parsed in order to be correctly rendered as Markdown
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="HtmlBodyPrinter.html" class="extype" name="org.specs2.reporter.HtmlBodyPrinter">HtmlBodyPrinter</a></dd></dl></div>
     </li><li name="org.specs2.reporter.HtmlBodyPrinter#printStatistics" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="printStatistics(title:String,stats:org.specs2.specification.process.Stats,options:org.specs2.reporter.HtmlOptions):java.io.Serializable"></a>
-      <a id="printStatistics(String,Stats,HtmlOptions):Serializable"></a>
+      <a id="printStatistics(title:String,stats:org.specs2.specification.process.Stats,timer:org.specs2.time.SimpleTimer,options:org.specs2.reporter.HtmlOptions):java.io.Serializable"></a>
+      <a id="printStatistics(String,Stats,SimpleTimer,HtmlOptions):Serializable"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">printStatistics</span><span class="params">(<span name="title">title: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="stats">stats: <a href="../specification/process/Stats.html" class="extype" name="org.specs2.specification.process.Stats">Stats</a></span>, <span name="options">options: <a href="HtmlOptions.html" class="extype" name="org.specs2.reporter.HtmlOptions">HtmlOptions</a></span>)</span><span class="result">: <span class="extype" name="java.io.Serializable">Serializable</span></span>
+        <span class="name">printStatistics</span><span class="params">(<span name="title">title: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="stats">stats: <a href="../specification/process/Stats.html" class="extype" name="org.specs2.specification.process.Stats">Stats</a></span>, <span name="timer">timer: <a href="../time/SimpleTimer.html" class="extype" name="org.specs2.time.SimpleTimer">SimpleTimer</a></span>, <span name="options">options: <a href="HtmlOptions.html" class="extype" name="org.specs2.reporter.HtmlOptions">HtmlOptions</a></span>)</span><span class="result">: <span class="extype" name="java.io.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.specs2.reporter.HtmlBodyPrinter$@printStatistics(title:String,stats:org.specs2.specification.process.Stats,options:org.specs2.reporter.HtmlOptions):java.io.Serializable" title="Permalink" target="_top">
+      <a href="../../../index.html#org.specs2.reporter.HtmlBodyPrinter$@printStatistics(title:String,stats:org.specs2.specification.process.Stats,timer:org.specs2.time.SimpleTimer,options:org.specs2.reporter.HtmlOptions):java.io.Serializable" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

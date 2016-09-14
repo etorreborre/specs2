@@ -386,36 +386,36 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="org.specs2.reporter.HtmlPrinter#makeHtml" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="makeHtml(template:String,spec:org.specs2.specification.core.SpecStructure,stats:org.specs2.specification.process.Stats,options:org.specs2.reporter.HtmlOptions,arguments:org.specs2.main.Arguments):org.specs2.control.Action[String]"></a>
-      <a id="makeHtml(String,SpecStructure,Stats,HtmlOptions,Arguments):Action[String]"></a>
+      <a id="makeHtml(template:String,spec:org.specs2.specification.core.SpecStructure,stats:org.specs2.specification.process.Stats,timer:org.specs2.time.SimpleTimer,options:org.specs2.reporter.HtmlOptions,arguments:org.specs2.main.Arguments):org.specs2.control.Action[String]"></a>
+      <a id="makeHtml(String,SpecStructure,Stats,SimpleTimer,HtmlOptions,Arguments):Action[String]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">makeHtml</span><span class="params">(<span name="template">template: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="spec">spec: <a href="../specification/core/SpecStructure.html" class="extype" name="org.specs2.specification.core.SpecStructure">SpecStructure</a></span>, <span name="stats">stats: <a href="../specification/process/Stats.html" class="extype" name="org.specs2.specification.process.Stats">Stats</a></span>, <span name="options">options: <a href="HtmlOptions.html" class="extype" name="org.specs2.reporter.HtmlOptions">HtmlOptions</a></span>, <span name="arguments">arguments: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: <a href="../control/package.html#Action[A]=org.specs2.control.eff.Eff[org.specs2.control.package.ActionStack,A]" class="extmbr" name="org.specs2.control.Action">Action</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+        <span class="name">makeHtml</span><span class="params">(<span name="template">template: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="spec">spec: <a href="../specification/core/SpecStructure.html" class="extype" name="org.specs2.specification.core.SpecStructure">SpecStructure</a></span>, <span name="stats">stats: <a href="../specification/process/Stats.html" class="extype" name="org.specs2.specification.process.Stats">Stats</a></span>, <span name="timer">timer: <a href="../time/SimpleTimer.html" class="extype" name="org.specs2.time.SimpleTimer">SimpleTimer</a></span>, <span name="options">options: <a href="HtmlOptions.html" class="extype" name="org.specs2.reporter.HtmlOptions">HtmlOptions</a></span>, <span name="arguments">arguments: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: <a href="../control/package.html#Action[A]=org.specs2.control.eff.Eff[org.specs2.control.package.ActionStack,A]" class="extmbr" name="org.specs2.control.Action">Action</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.specs2.reporter.HtmlPrinter@makeHtml(template:String,spec:org.specs2.specification.core.SpecStructure,stats:org.specs2.specification.process.Stats,options:org.specs2.reporter.HtmlOptions,arguments:org.specs2.main.Arguments):org.specs2.control.Action[String]" title="Permalink" target="_top">
+      <a href="../../../index.html#org.specs2.reporter.HtmlPrinter@makeHtml(template:String,spec:org.specs2.specification.core.SpecStructure,stats:org.specs2.specification.process.Stats,timer:org.specs2.time.SimpleTimer,options:org.specs2.reporter.HtmlOptions,arguments:org.specs2.main.Arguments):org.specs2.control.Action[String]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Create the html file content from:</p><div class="fullcomment"><div class="comment cmt"><p>Create the html file content from:</p><ul><li>the template</li><li>the body of the file (built from the specification execution)
 </li></ul></div></div>
     </li><li name="org.specs2.reporter.HtmlPrinter#makePandocHtml" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="makePandocHtml(spec:org.specs2.specification.core.SpecStructure,stats:org.specs2.specification.process.Stats,pandoc:org.specs2.reporter.Pandoc,options:org.specs2.reporter.HtmlOptions,env:org.specs2.specification.core.Env):org.specs2.control.Action[Unit]"></a>
-      <a id="makePandocHtml(SpecStructure,Stats,Pandoc,HtmlOptions,Env):Action[Unit]"></a>
+      <a id="makePandocHtml(spec:org.specs2.specification.core.SpecStructure,stats:org.specs2.specification.process.Stats,timer:org.specs2.time.SimpleTimer,pandoc:org.specs2.reporter.Pandoc,options:org.specs2.reporter.HtmlOptions,env:org.specs2.specification.core.Env):org.specs2.control.Action[Unit]"></a>
+      <a id="makePandocHtml(SpecStructure,Stats,SimpleTimer,Pandoc,HtmlOptions,Env):Action[Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">makePandocHtml</span><span class="params">(<span name="spec">spec: <a href="../specification/core/SpecStructure.html" class="extype" name="org.specs2.specification.core.SpecStructure">SpecStructure</a></span>, <span name="stats">stats: <a href="../specification/process/Stats.html" class="extype" name="org.specs2.specification.process.Stats">Stats</a></span>, <span name="pandoc">pandoc: <a href="Pandoc.html" class="extype" name="org.specs2.reporter.Pandoc">Pandoc</a></span>, <span name="options">options: <a href="HtmlOptions.html" class="extype" name="org.specs2.reporter.HtmlOptions">HtmlOptions</a></span>, <span name="env">env: <a href="../specification/core/Env.html" class="extype" name="org.specs2.specification.core.Env">Env</a></span>)</span><span class="result">: <a href="../control/package.html#Action[A]=org.specs2.control.eff.Eff[org.specs2.control.package.ActionStack,A]" class="extmbr" name="org.specs2.control.Action">Action</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">makePandocHtml</span><span class="params">(<span name="spec">spec: <a href="../specification/core/SpecStructure.html" class="extype" name="org.specs2.specification.core.SpecStructure">SpecStructure</a></span>, <span name="stats">stats: <a href="../specification/process/Stats.html" class="extype" name="org.specs2.specification.process.Stats">Stats</a></span>, <span name="timer">timer: <a href="../time/SimpleTimer.html" class="extype" name="org.specs2.time.SimpleTimer">SimpleTimer</a></span>, <span name="pandoc">pandoc: <a href="Pandoc.html" class="extype" name="org.specs2.reporter.Pandoc">Pandoc</a></span>, <span name="options">options: <a href="HtmlOptions.html" class="extype" name="org.specs2.reporter.HtmlOptions">HtmlOptions</a></span>, <span name="env">env: <a href="../specification/core/Env.html" class="extype" name="org.specs2.specification.core.Env">Env</a></span>)</span><span class="result">: <a href="../control/package.html#Action[A]=org.specs2.control.eff.Eff[org.specs2.control.package.ActionStack,A]" class="extmbr" name="org.specs2.control.Action">Action</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.specs2.reporter.HtmlPrinter@makePandocHtml(spec:org.specs2.specification.core.SpecStructure,stats:org.specs2.specification.process.Stats,pandoc:org.specs2.reporter.Pandoc,options:org.specs2.reporter.HtmlOptions,env:org.specs2.specification.core.Env):org.specs2.control.Action[Unit]" title="Permalink" target="_top">
+      <a href="../../../index.html#org.specs2.reporter.HtmlPrinter@makePandocHtml(spec:org.specs2.specification.core.SpecStructure,stats:org.specs2.specification.process.Stats,timer:org.specs2.time.SimpleTimer,pandoc:org.specs2.reporter.Pandoc,options:org.specs2.reporter.HtmlOptions,env:org.specs2.specification.core.Env):org.specs2.control.Action[Unit]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -507,36 +507,36 @@
     </span>
       <p class="shortcomment cmt">convenience method to print a SpecStructure using the printer's Fold</p><div class="fullcomment"><div class="comment cmt"><p>convenience method to print a SpecStructure using the printer's Fold</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Printer.html" class="extype" name="org.specs2.reporter.Printer">Printer</a></dd></dl></div>
     </li><li name="org.specs2.reporter.HtmlPrinter#printHtml" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="printHtml(env:org.specs2.specification.core.Env,spec:org.specs2.specification.core.SpecStructure,stats:org.specs2.specification.process.Stats):org.specs2.control.Action[Unit]"></a>
-      <a id="printHtml(Env,SpecStructure,Stats):Action[Unit]"></a>
+      <a id="printHtml(env:org.specs2.specification.core.Env,spec:org.specs2.specification.core.SpecStructure,stats:org.specs2.specification.process.Stats,timer:org.specs2.time.SimpleTimer):org.specs2.control.Action[Unit]"></a>
+      <a id="printHtml(Env,SpecStructure,Stats,SimpleTimer):Action[Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">printHtml</span><span class="params">(<span name="env">env: <a href="../specification/core/Env.html" class="extype" name="org.specs2.specification.core.Env">Env</a></span>, <span name="spec">spec: <a href="../specification/core/SpecStructure.html" class="extype" name="org.specs2.specification.core.SpecStructure">SpecStructure</a></span>, <span name="stats">stats: <a href="../specification/process/Stats.html" class="extype" name="org.specs2.specification.process.Stats">Stats</a></span>)</span><span class="result">: <a href="../control/package.html#Action[A]=org.specs2.control.eff.Eff[org.specs2.control.package.ActionStack,A]" class="extmbr" name="org.specs2.control.Action">Action</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">printHtml</span><span class="params">(<span name="env">env: <a href="../specification/core/Env.html" class="extype" name="org.specs2.specification.core.Env">Env</a></span>, <span name="spec">spec: <a href="../specification/core/SpecStructure.html" class="extype" name="org.specs2.specification.core.SpecStructure">SpecStructure</a></span>, <span name="stats">stats: <a href="../specification/process/Stats.html" class="extype" name="org.specs2.specification.process.Stats">Stats</a></span>, <span name="timer">timer: <a href="../time/SimpleTimer.html" class="extype" name="org.specs2.time.SimpleTimer">SimpleTimer</a></span>)</span><span class="result">: <a href="../control/package.html#Action[A]=org.specs2.control.eff.Eff[org.specs2.control.package.ActionStack,A]" class="extmbr" name="org.specs2.control.Action">Action</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.specs2.reporter.HtmlPrinter@printHtml(env:org.specs2.specification.core.Env,spec:org.specs2.specification.core.SpecStructure,stats:org.specs2.specification.process.Stats):org.specs2.control.Action[Unit]" title="Permalink" target="_top">
+      <a href="../../../index.html#org.specs2.reporter.HtmlPrinter@printHtml(env:org.specs2.specification.core.Env,spec:org.specs2.specification.core.SpecStructure,stats:org.specs2.specification.process.Stats,timer:org.specs2.time.SimpleTimer):org.specs2.control.Action[Unit]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Print the execution results as an Html file</p><div class="fullcomment"><div class="comment cmt"><p>Print the execution results as an Html file</p><ul><li>copy resources: css, javascript, template</li><li>create the file content using the template</li><li>output the file
 </li></ul></div></div>
     </li><li name="org.specs2.reporter.HtmlPrinter#printHtmlWithPandoc" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="printHtmlWithPandoc(env:org.specs2.specification.core.Env,spec:org.specs2.specification.core.SpecStructure,stats:org.specs2.specification.process.Stats,pandoc:org.specs2.reporter.Pandoc):org.specs2.control.Action[Unit]"></a>
-      <a id="printHtmlWithPandoc(Env,SpecStructure,Stats,Pandoc):Action[Unit]"></a>
+      <a id="printHtmlWithPandoc(env:org.specs2.specification.core.Env,spec:org.specs2.specification.core.SpecStructure,stats:org.specs2.specification.process.Stats,timer:org.specs2.time.SimpleTimer,pandoc:org.specs2.reporter.Pandoc):org.specs2.control.Action[Unit]"></a>
+      <a id="printHtmlWithPandoc(Env,SpecStructure,Stats,SimpleTimer,Pandoc):Action[Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">printHtmlWithPandoc</span><span class="params">(<span name="env">env: <a href="../specification/core/Env.html" class="extype" name="org.specs2.specification.core.Env">Env</a></span>, <span name="spec">spec: <a href="../specification/core/SpecStructure.html" class="extype" name="org.specs2.specification.core.SpecStructure">SpecStructure</a></span>, <span name="stats">stats: <a href="../specification/process/Stats.html" class="extype" name="org.specs2.specification.process.Stats">Stats</a></span>, <span name="pandoc">pandoc: <a href="Pandoc.html" class="extype" name="org.specs2.reporter.Pandoc">Pandoc</a></span>)</span><span class="result">: <a href="../control/package.html#Action[A]=org.specs2.control.eff.Eff[org.specs2.control.package.ActionStack,A]" class="extmbr" name="org.specs2.control.Action">Action</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">printHtmlWithPandoc</span><span class="params">(<span name="env">env: <a href="../specification/core/Env.html" class="extype" name="org.specs2.specification.core.Env">Env</a></span>, <span name="spec">spec: <a href="../specification/core/SpecStructure.html" class="extype" name="org.specs2.specification.core.SpecStructure">SpecStructure</a></span>, <span name="stats">stats: <a href="../specification/process/Stats.html" class="extype" name="org.specs2.specification.process.Stats">Stats</a></span>, <span name="timer">timer: <a href="../time/SimpleTimer.html" class="extype" name="org.specs2.time.SimpleTimer">SimpleTimer</a></span>, <span name="pandoc">pandoc: <a href="Pandoc.html" class="extype" name="org.specs2.reporter.Pandoc">Pandoc</a></span>)</span><span class="result">: <a href="../control/package.html#Action[A]=org.specs2.control.eff.Eff[org.specs2.control.package.ActionStack,A]" class="extmbr" name="org.specs2.control.Action">Action</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.specs2.reporter.HtmlPrinter@printHtmlWithPandoc(env:org.specs2.specification.core.Env,spec:org.specs2.specification.core.SpecStructure,stats:org.specs2.specification.process.Stats,pandoc:org.specs2.reporter.Pandoc):org.specs2.control.Action[Unit]" title="Permalink" target="_top">
+      <a href="../../../index.html#org.specs2.reporter.HtmlPrinter@printHtmlWithPandoc(env:org.specs2.specification.core.Env,spec:org.specs2.specification.core.SpecStructure,stats:org.specs2.specification.process.Stats,timer:org.specs2.time.SimpleTimer,pandoc:org.specs2.reporter.Pandoc):org.specs2.control.Action[Unit]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

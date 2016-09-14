@@ -539,18 +539,18 @@
       <p class="shortcomment cmt">If the failure contains the expected and actual values, display them
 </p>
     </li><li name="org.specs2.reporter.TextPrinter#printFinalStats" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="printFinalStats(spec:org.specs2.specification.core.SpecStructure,args:org.specs2.main.Arguments,logger:org.specs2.reporter.LineLogger):((org.specs2.specification.process.Stats,Int))=&gt;scalaz.concurrent.Task[Unit]"></a>
-      <a id="printFinalStats(SpecStructure,Arguments,LineLogger):((Stats,Int))⇒Task[Unit]"></a>
+      <a id="printFinalStats(spec:org.specs2.specification.core.SpecStructure,args:org.specs2.main.Arguments,logger:org.specs2.reporter.LineLogger):(((org.specs2.specification.process.Stats,Int),org.specs2.time.SimpleTimer))=&gt;scalaz.concurrent.Task[Unit]"></a>
+      <a id="printFinalStats(SpecStructure,Arguments,LineLogger):(((Stats,Int),SimpleTimer))⇒Task[Unit]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">printFinalStats</span><span class="params">(<span name="spec">spec: <a href="../specification/core/SpecStructure.html" class="extype" name="org.specs2.specification.core.SpecStructure">SpecStructure</a></span>, <span name="args">args: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>, <span name="logger">logger: <a href="LineLogger.html" class="extype" name="org.specs2.reporter.LineLogger">LineLogger</a></span>)</span><span class="result">: ((<a href="../specification/process/Stats.html" class="extype" name="org.specs2.specification.process.Stats">Stats</a>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a>)) ⇒ <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-concurrent_2.11/7.2.6/scalaz-concurrent_2.11-7.2.6-javadoc.jar/!/index.html#scalaz.concurrent.Task" class="extype" target="_top">Task</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">printFinalStats</span><span class="params">(<span name="spec">spec: <a href="../specification/core/SpecStructure.html" class="extype" name="org.specs2.specification.core.SpecStructure">SpecStructure</a></span>, <span name="args">args: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>, <span name="logger">logger: <a href="LineLogger.html" class="extype" name="org.specs2.reporter.LineLogger">LineLogger</a></span>)</span><span class="result">: (((<a href="../specification/process/Stats.html" class="extype" name="org.specs2.specification.process.Stats">Stats</a>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a>), <a href="../time/SimpleTimer.html" class="extype" name="org.specs2.time.SimpleTimer">SimpleTimer</a>)) ⇒ <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/scalaz/scalaz-concurrent_2.11/7.2.6/scalaz-concurrent_2.11-7.2.6-javadoc.jar/!/index.html#scalaz.concurrent.Task" class="extype" target="_top">Task</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.specs2.reporter.TextPrinter@printFinalStats(spec:org.specs2.specification.core.SpecStructure,args:org.specs2.main.Arguments,logger:org.specs2.reporter.LineLogger):((org.specs2.specification.process.Stats,Int))=&gt;scalaz.concurrent.Task[Unit]" title="Permalink" target="_top">
+      <a href="../../../index.html#org.specs2.reporter.TextPrinter@printFinalStats(spec:org.specs2.specification.core.SpecStructure,args:org.specs2.main.Arguments,logger:org.specs2.reporter.LineLogger):(((org.specs2.specification.process.Stats,Int),org.specs2.time.SimpleTimer))=&gt;scalaz.concurrent.Task[Unit]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -692,18 +692,18 @@
     </span>
       
     </li><li name="org.specs2.reporter.TextPrinter#printStats" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="printStats(header:org.specs2.specification.core.SpecHeader,args:org.specs2.main.Arguments):org.specs2.specification.process.Stats=&gt;List[org.specs2.reporter.LogLine]"></a>
-      <a id="printStats(SpecHeader,Arguments):(Stats)⇒List[LogLine]"></a>
+      <a id="printStats(header:org.specs2.specification.core.SpecHeader,args:org.specs2.main.Arguments,stats:org.specs2.specification.process.Stats,timer:org.specs2.time.SimpleTimer):List[org.specs2.reporter.LogLine]"></a>
+      <a id="printStats(SpecHeader,Arguments,Stats,SimpleTimer):List[LogLine]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">printStats</span><span class="params">(<span name="header">header: <a href="../specification/core/SpecHeader.html" class="extype" name="org.specs2.specification.core.SpecHeader">SpecHeader</a></span>, <span name="args">args: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>)</span><span class="result">: (<a href="../specification/process/Stats.html" class="extype" name="org.specs2.specification.process.Stats">Stats</a>) ⇒ <span class="extype" name="scala.List">List</span>[<a href="LogLine.html" class="extype" name="org.specs2.reporter.LogLine">LogLine</a>]</span>
+        <span class="name">printStats</span><span class="params">(<span name="header">header: <a href="../specification/core/SpecHeader.html" class="extype" name="org.specs2.specification.core.SpecHeader">SpecHeader</a></span>, <span name="args">args: <a href="../main/Arguments.html" class="extype" name="org.specs2.main.Arguments">Arguments</a></span>, <span name="stats">stats: <a href="../specification/process/Stats.html" class="extype" name="org.specs2.specification.process.Stats">Stats</a></span>, <span name="timer">timer: <a href="../time/SimpleTimer.html" class="extype" name="org.specs2.time.SimpleTimer">SimpleTimer</a></span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[<a href="LogLine.html" class="extype" name="org.specs2.reporter.LogLine">LogLine</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.specs2.reporter.TextPrinter@printStats(header:org.specs2.specification.core.SpecHeader,args:org.specs2.main.Arguments):org.specs2.specification.process.Stats=&gt;List[org.specs2.reporter.LogLine]" title="Permalink" target="_top">
+      <a href="../../../index.html#org.specs2.reporter.TextPrinter@printStats(header:org.specs2.specification.core.SpecHeader,args:org.specs2.main.Arguments,stats:org.specs2.specification.process.Stats,timer:org.specs2.time.SimpleTimer):List[org.specs2.reporter.LogLine]" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
