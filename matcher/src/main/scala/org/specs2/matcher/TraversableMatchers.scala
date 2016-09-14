@@ -180,7 +180,7 @@ class SizedMatcher[T : Sized](n: Int, sizeWord: String) extends Matcher[T] {
     val valueSize = s.size(traversable.value)
     result(valueSize == n,
            traversable.description + " has "+sizeWord+" "+ n,
-           traversable.description + " doesn't have "+sizeWord+" " + n + " but "+sizeWord+" " + valueSize, traversable)
+           s"'${traversable.description}' doesn't have $sizeWord $n but $sizeWord $valueSize", traversable)
   }
 }
 

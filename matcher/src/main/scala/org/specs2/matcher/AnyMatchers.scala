@@ -169,7 +169,6 @@ class BeTrueMatcher extends Matcher[Boolean] {
  * Equality Matcher
  */
 class BeEqualTo(t: =>Any) extends BeTypedEqualTo2(t)
-//class BeEqualTo(t: =>Any) extends BeTypedEqualTo2(t)
 /**
  * This matcher always matches any value of type T
  */
@@ -265,8 +264,8 @@ case class BeOneOf[T](t: Seq[T]) extends Matcher[T] {
   def apply[S <: T](y: Expectable[S]) = {
     val x = t
     result(x.contains(y.value),
-      y.description + s" is contained in " + q(x.mkString(", ")),
-      y.description + s" is not contained in " + q(x.mkString(", ")),
+      s"${q(y.description)} is contained in ${q(x.mkString(", "))}",
+      s"${q(y.description)} is not contained in ${q(x.mkString(", "))}",
       y)
   }
 }

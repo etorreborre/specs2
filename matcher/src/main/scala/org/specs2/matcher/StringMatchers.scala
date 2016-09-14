@@ -73,13 +73,11 @@ trait StringBaseMatchers { outer =>
   /** alias for beMatching but matching just a fragment of the string */
   def =~(r: Regex) = new BeMatchingRegex(r.toString.regexPart.r)
   /** matches if b.startsWith(a) */
-  def startWith(t: String) = new Matcher[String] {
-    def apply[S <: String](b: Expectable[S]) = {
-      val a = t
-      result(b.value!= null && a!= null && b.value.startsWith(a),
-             b.description + " starts with " + q(a), 
-             b.description + " doesn't start with " + q(a), b)
-    }
+  def startWith(a: String) = new Matcher[String] {
+    def apply[S <: String](b: Expectable[S]) =
+      result(b.value != null && a != null && b.value.startsWith(a),
+             s"${b.description} starts with ${q(a)}",
+             s"${b.description} doesn't start with ${q(a)}", b)
   }
   /** matches if b.endsWith(a) */   
   def endWith(t: =>String) = new Matcher[String] { 
@@ -214,8 +212,8 @@ class BeMatching(t: =>String) extends Matcher[String] {
   def apply[S <: String](b: Expectable[S]) = {
     val a = t
     result(tryOrElse(pattern.matcher(b.value).matches)(false),
-           b.description + " matches " + q(a),
-           b.description + " doesn't match " + q(a), b)
+           s"${b.description} matches ${q(a)}",
+           s"'${b.description}' doesn't match ${q(a)}", b)
   }
 }
 

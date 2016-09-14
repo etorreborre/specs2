@@ -28,7 +28,7 @@ class ExpectableSpec extends Spec with ResultMatchers with org.specs2.mock.Mocki
     ("b" as ((s:String) => "a"+s+"c")).description must_== "abc"
   }
   "An expectable can be described with a function describing its value" in {
-    (List(1, 2) showAs((_:Seq[Int]).mkString("|")) must haveSize(3)) returns "1|2 doesn't have size 3 but size 2"
+    (List(1, 2) showAs((_:Seq[Int]).mkString("|")) must haveSize(3)) returns "'1|2' doesn't have size 3 but size 2"
   }
   "An expectable can be mapped to another value, keeping its ability to throw exceptions when not matching" in {
     val factory = new ThrownExpectations () {}

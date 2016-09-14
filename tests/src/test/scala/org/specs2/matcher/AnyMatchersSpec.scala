@@ -18,7 +18,7 @@ class AnyMatchersSpec extends script.Specification with Groups with ResultMatche
   be_==~ checks the equality of 2 objects, up to an implicit conversion
   ${ 1L must be_==~(1) }
   ${ 2L must not be_==~(1) }
-  ${ (2L must be_==~(1)).message must contain("'2 != 1'") }
+  ${ (2L must be_==~(1)).message must contain("2 != 1") }
 
   beTrue matches true values
   ${ true must beTrue }
@@ -106,7 +106,7 @@ Implicits
   + the must implicits can be deactivated with the NoMustExpectations trait
                                                                                                                         """
   "be like" - new group {
-    eg := { (List(1, 2) must beLike { case List(a, b) => (a + b) must_== 2 }) returns "'3 != 2'" }
+    eg := { (List(1, 2) must beLike { case List(a, b) => (a + b) must_== 2 }) returns "3 != 2" }
   }
 
   "must implicits" - new group {

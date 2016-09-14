@@ -114,10 +114,10 @@ class DataTablesSpec extends Specification with DataTables with ResultMatchers {
       "y"     !! "h"     ! "y h"        | { (a, b, c) =>  a+" "+b must_== c }
 
     table.message ===
-      "  | a     | b     | c          |                              "+"\n"+
-      "+ | hello | you   | hello you  |                              "+"\n"+
-      "x | you   | hello | you hello2 | ''you hello' != 'you hello2''"+"\n"+
-      "+ | y     | h     | y h        |                              "
+      "  | a     | b     | c          |                            "+"\n"+
+      "+ | hello | you   | hello you  |                            "+"\n"+
+      "x | you   | hello | you hello2 | 'you hello' != 'you hello2'"+"\n"+
+      "+ | y     | h     | y h        |                            "
   }
 
   def e12 = {
@@ -131,8 +131,8 @@ class DataTablesSpec extends Specification with DataTables with ResultMatchers {
        2    !  2  !  5  | { (a, b, c) =>  a + b must_== c }
 
     (t1 and t2).message ===
-      "  | a | b | c |         "+"\n"+
-      "x | 2 | 2 | 5 | '4 != 5'"
+      "  | a | b | c |       "+"\n"+
+      "x | 2 | 2 | 5 | 4 != 5"
   }
 
   def e13 =
@@ -179,10 +179,10 @@ class DataTablesSpec extends Specification with DataTables with ResultMatchers {
       3   ! "3" |* { (a: Int, b: String) => a ==== b.toInt }
 
     table(es).message ===
-      "  | a | b |         "+"\n"+
-      "+ | 1 | 1 |         "+"\n"+
-      "x | 2 | 0 | '2 != 0'"+"\n"+
-      "+ | 3 | 3 |         "
+      "  | a | b |       "+"\n"+
+      "+ | 1 | 1 |       "+"\n"+
+      "x | 2 | 0 | 2 != 0"+"\n"+
+      "+ | 3 | 3 |       "
 
   }
 

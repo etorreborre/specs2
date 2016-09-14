@@ -31,7 +31,8 @@ class MatcherMacrosSpec extends Spec with ResultMatchers with MatcherMacros with
   def e3 = cat must matchA[Cat].kitten((_:Seq[Cat]) must haveSize(2))
   def e4 = cat must matchA[Cat].name("Kitty").age(is(6)).kitten((_:Seq[Cat]) must haveSize(2))
 
-  def e5 = (cat must matchA[Cat].name("Kitty").age(is(7)).kitten((_:Seq[Cat]) must haveSize(2))) returns "'6' is not equal to '7'"
+  def e5 = cat must matchA[Cat].name("Kitty").age(is(7)).kitten((_:Seq[Cat]) must haveSize(2))
+//  def e5 = (cat must matchA[Cat].name("Kitty").age(is(7)).kitten((_:Seq[Cat]) must haveSize(2))) returns "'6' is not equal to '7'"
   def e6 = (cat must matchA[Cat].age(is(7))) returns "age: "
   def e7 = (cat aka "the cat" must matchA[Cat].name("Kitty").age(is(7)).kitten((_:Seq[Cat]) must haveSize(2))) returns cat.toString
   def e8 = (Nested() must matchA[Nested].n1(_ must matchA[Nested1].n2(_ must matchA[Nested2].n3(_ must matchA[Nested3].name("other"))))) returns

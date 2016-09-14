@@ -43,9 +43,9 @@ class BeEqualToMatcherSpec extends Spec with ResultMatchers with ShouldMatchers 
      """Array(1, 3 != 2)""" }
 
   Set equality
-  ${ (Set(1) must_== Set.empty[Int]) returns "'Set(1) != Set()'"}
+  ${ (Set(1) must_== Set.empty[Int]) returns "Set(1) != Set()"}
   ${ (Set(1, 2) must be_==(Set(2, 3))) returns
-      """'Set(1, 2) != Set(2, 3)'""" }
+      """Set(1, 2) != Set(2, 3)""" }
   ${ (Set(1, 2) must be_===(Set(2, 3))) returns
       """Set(2, added: 3, removed: 1)""" }
 
@@ -57,7 +57,7 @@ class BeEqualToMatcherSpec extends Spec with ResultMatchers with ShouldMatchers 
   Other collections use normal equality but display missing elements
   ${ Seq(1, 2) must be_==(Seq(1, 2)) }
   ${ (Seq(1, 2) must be_==(Seq(2, 3))) returns
-     """'List(1, 2) != List(2, 3)'""" }
+     """List(1, 2) != List(2, 3)""" }
   ${ Seq(1, 2) must be_===(Seq(1, 2)) }
   ${ Seq(1, 2) must be_===(Seq(2, 3)) returns
      """Seq(1 != 2, 2 != 3)""" }

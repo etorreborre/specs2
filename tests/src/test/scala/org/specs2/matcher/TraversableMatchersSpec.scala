@@ -148,7 +148,7 @@ class TraversableMatchersSpec extends Spec with ResultMatchers with Grouped with
 
  We can check the size of an Array
     ${ Array(1, 2) must have size(2) }
-    ${ (Array(1, 2) must have size(1)).message must_== "Array(1, 2) doesn't have size 1 but size 2" }
+    ${ (Array(1, 2) must have size(1)).message must_== "'Array(1, 2)' doesn't have size 1 but size 2" }
 
  Sorting
  =======
