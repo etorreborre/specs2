@@ -1,18 +1,24 @@
 package org.specs2
 package reporter
 
-import io.{FilePath, DirectoryPath}
+import io.{DirectoryPath, FilePath}
 import main.Arguments
 import data.Fold
-import foldm._, FoldM._, stream._, FoldProcessM._
+import foldm._
+import FoldM._
+import stream._
+import FoldProcessM._
+
 import scalaz.concurrent.Task
 import specification.core._
 import specification.process._
 import execute._
 import text.NotNullStrings._
+
 import scala.xml.NodeSeq
 import matcher._
 import form._
+import org.specs2.time.SimpleTimer
 
 /**
  * Create the body of an html file reporting a specification execution
@@ -21,7 +27,7 @@ trait HtmlBodyPrinter {
   /**
    * Make the body of the Html file based on all the specification fragments
    */
-  def makeBody(spec: SpecStructure, stats: Stats, options: HtmlOptions, arguments: Arguments, pandoc: Boolean): String = {
+  def makeBody(spec: SpecStructure, stats: Stats, timer: SimpleTimer, options: HtmlOptions, arguments: Arguments, pandoc: Boolean): String = {
     val title = spec.name
     type HtmlState = (String, Level)
 
@@ -33,7 +39,7 @@ trait HtmlBodyPrinter {
     val (html, _) = Fold.runFold(spec.fragments.contents, htmlFold.into[Task]).run
     html +
     s"""|
-        |${printStatistics(title, stats, options)}""".stripMargin
+        |${printStatistics(title, stats, timer, options)}""".stripMargin
   }
 
   /**
@@ -213,14 +219,14 @@ trait HtmlBodyPrinter {
   def makeDifferencesMessage(description: String, values: Seq[Any]): String =
     if (values.nonEmpty) s"\n$description (${values.size})  ${values.map(notNullPair).mkString("\n", "\n", "\n")}" else ""
 
-  def printStatistics(title: String, stats: Stats, options: HtmlOptions) =
+  def printStatistics(title: String, stats: Stats, timer: SimpleTimer, options: HtmlOptions) =
     if (options.noStats) ""
     else {
       val statsClass = if (stats.hasErrors) "error" else if (stats.hasIssues) "failure" else "success"
 
       <table class="datatable">
         <tr><th colSpan="2">{s"Total for specification ${title.trim}"}</th></tr>
-        <tr><td>Finished in</td><td class="info">{stats.time}</td></tr>
+        <tr><td>Finished in</td><td class="info">{stats.copy(timer = timer).time}</td></tr>
         <tr><td>Results</td><td class={statsClass}>
           {stats.displayResults(Arguments("nocolor"))}</td></tr>
       </table>

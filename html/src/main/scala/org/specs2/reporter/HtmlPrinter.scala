@@ -2,14 +2,19 @@ package org.specs2
 package reporter
 
 import specification.core._
-import specification.process.{Stats, Statistics}
-import foldm._, FoldM._, stream._, FoldProcessM._
+import specification.process.{Statistics, Stats}
+import foldm._
+import FoldM._
+import stream._
+import FoldProcessM._
 import io._
 import main.Arguments
 import control._
 import java.util.regex.Pattern._
 import java.net.{JarURLConnection, URL}
-import scalaz._, Scalaz._
+
+import scalaz._
+import Scalaz._
 import scalaz.concurrent.Task
 import HtmlBodyPrinter._
 import Pandoc._
@@ -19,8 +24,11 @@ import html.TableOfContents._
 import SpecHtmlPage._
 import eff.all._
 import eff.syntax.all._
-import scalaz._, Scalaz._
+
+import scalaz._
+import Scalaz._
 import eff.ErrorEffect._
+import org.specs2.time.SimpleTimer
 
 /**
  * Printer for html files
@@ -39,12 +47,12 @@ trait HtmlPrinter extends Printer {
 
   /** @return a SinkTask for the Html output */
   def sink(env: Env, spec: SpecStructure): SinkTask[Fragment] = {
-    ((Statistics.fold zip FoldId.list[Fragment]).into[Task] <*
-     fromStart((getHtmlOptions(env.arguments) >>= (options => copyResources(env, options))).toTask(env.systemLogger).void)).mapFlatten { case (stats, fragments) =>
+    ((Statistics.fold zip FoldId.list[Fragment] zip SimpleTimer.timerFold).into[Task] <*
+     fromStart((getHtmlOptions(env.arguments) >>= (options => copyResources(env, options))).toTask(env.systemLogger).void)).mapFlatten { case ((stats, fragments), timer) =>
       val expecutedSpec = spec.copy(lazyFragments = () => Fragments(fragments:_*))
       getPandoc(env).flatMap {
-          case None         => printHtml(env, expecutedSpec, stats)
-          case Some(pandoc) => printHtmlWithPandoc(env, expecutedSpec, stats, pandoc)
+          case None         => printHtml(env, expecutedSpec, stats, timer)
+          case Some(pandoc) => printHtmlWithPandoc(env, expecutedSpec, stats, timer, pandoc)
       }.toTask(env.systemLogger)
     }
   }
@@ -60,12 +68,12 @@ trait HtmlPrinter extends Printer {
    *  - create the file content using the template
    *  - output the file
    */
-  def printHtml(env: Env, spec: SpecStructure, stats: Stats): Action[Unit] = {
+  def printHtml(env: Env, spec: SpecStructure, stats: Stats, timer: SimpleTimer): Action[Unit] = {
     import env.fileSystem._
     for {
       options  <- getHtmlOptions(env.arguments)
       template <- readFile(options.template) ||| warnAndFail("No template file found at "+options.template.path, RunAborted)
-      content  <- makeHtml(template, spec, stats, options, env.arguments)
+      content  <- makeHtml(template, spec, stats, timer, options, env.arguments)
       _        <- writeFile(outputPath(options.outDir, spec), content)
     } yield ()
   }
@@ -96,8 +104,8 @@ trait HtmlPrinter extends Printer {
    *  - the template
    *  - the body of the file (built from the specification execution)
    */
-  def makeHtml(template: String, spec: SpecStructure, stats: Stats, options: HtmlOptions, arguments: Arguments): Action[String] = {
-    val body = makeBody(spec, stats, options, arguments, pandoc = true)
+  def makeHtml(template: String, spec: SpecStructure, stats: Stats, timer: SimpleTimer, options: HtmlOptions, arguments: Arguments): Action[String] = {
+    val body = makeBody(spec, stats, timer, options, arguments, pandoc = true)
     val variables1 =
       options.templateVariables
         .updated("body",    body)
@@ -117,14 +125,14 @@ trait HtmlPrinter extends Printer {
    *  - copy resources: css, javascript, template
    *  - create the file content using the template and Pandoc (as an external process)
    */
-  def printHtmlWithPandoc(env: Env, spec: SpecStructure, stats: Stats, pandoc: Pandoc): Action[Unit] = {
+  def printHtmlWithPandoc(env: Env, spec: SpecStructure, stats: Stats, timer: SimpleTimer, pandoc: Pandoc): Action[Unit] = {
     import env.fileSystem._
     for {
       options  <- getHtmlOptions(env.arguments)
       _        <- withEphemeralFile(options.outDir | options.template.name) {
                    (copyFile(options.outDir)(options.template) |||
                       warnAndFail("No template file found at "+options.template.path, RunAborted)) >>
-                    makePandocHtml(spec, stats, pandoc, options, env)
+                    makePandocHtml(spec, stats, timer, pandoc, options, env)
                   }
     } yield ()
   }
@@ -132,7 +140,7 @@ trait HtmlPrinter extends Printer {
   /**
    * Create the Html file by invoking Pandoc
    */
-  def makePandocHtml(spec: SpecStructure, stats: Stats, pandoc: Pandoc, options: HtmlOptions, env: Env): Action[Unit] =  {
+  def makePandocHtml(spec: SpecStructure, stats: Stats, timer: SimpleTimer, pandoc: Pandoc, options: HtmlOptions, env: Env): Action[Unit] =  {
     import env.fileSystem._
 
     val variables1 =
@@ -146,7 +154,7 @@ trait HtmlPrinter extends Printer {
     val pandocArguments = Pandoc.arguments(bodyFile, options.template, variables1, outputFilePath, pandoc)
 
     withEphemeralFile(bodyFile) {
-      writeFile(bodyFile, makeBody(spec, stats, options, env.arguments, pandoc = true)) >>
+      writeFile(bodyFile, makeBody(spec, stats, timer, options, env.arguments, pandoc = true)) >>
       warn(pandoc.executable.path+" "+pandocArguments.mkString(" ")).when(pandoc.verbose) >>
       Executable.run(pandoc.executable, pandocArguments) >>
       replaceInFile(outputPath(options.outDir, spec), "<code>", "<code class=\"prettyprint\">")

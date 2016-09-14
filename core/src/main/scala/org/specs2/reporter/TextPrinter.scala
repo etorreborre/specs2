@@ -9,6 +9,7 @@ import specification.core._
 import specification.process._
 import text.NotNullStrings._
 import text.Trim
+import time._
 import Trim._
 import execute._
 import main.Arguments
@@ -29,16 +30,19 @@ trait TextPrinter extends Printer {
 
   def sink(env: Env, spec: SpecStructure): SinkTask[Fragment] = {
     // statistics and indentation
-    type S = (Stats, Int)
+    type S = ((Stats, Int), SimpleTimer)
 
-    val values = Statistics.fold zip Indentation.fold
+    val values = Statistics.fold zip Indentation.fold zip SimpleTimer.timerFold
 
     lazy val logger = env.lineLogger
     lazy val args   = env.arguments <| spec.arguments
 
     lazy val sink: Sink[Task, (S, Fragment)] =
       fragmentsSink(logger, spec.header, args).map { write: (LogLine => Task[Unit]) =>
-        (current: (S, Fragment)) => printFragment(args)(current.swap).traverseU(write).void
+        (current: (S, Fragment)) => {
+          val (((stats, indentation), timer), fragment) = current
+          printFragment(args)((fragment, (stats, indentation))).traverseU(write).void
+        }
       }
 
     (values.into[Task] <<* fromSink(sink)).mapFlatten(printFinalStats(spec, args, logger))
@@ -58,8 +62,8 @@ trait TextPrinter extends Printer {
   def start(logger: LineLogger, header: SpecHeader, args: Arguments): Task[LineLogger] =
     Task.delay(printHeader(args)(header).foreach(_.log(logger))).as(logger)
 
-  def printFinalStats(spec: SpecStructure, args: Arguments, logger: LineLogger): ((Stats, Int)) => Task[Unit] = { case (stats, _) =>
-    Task.delay(printStats(spec.header, args)(stats).foreach(_.log(logger))) >>
+  def printFinalStats(spec: SpecStructure, args: Arguments, logger: LineLogger): (((Stats, Int), SimpleTimer)) => Task[Unit] = { case ((stats, _), timer) =>
+    Task.delay(printStats(spec.header, args, stats, timer).foreach(_.log(logger))) >>
     Task.delay(logger.close)
   }
 
@@ -68,7 +72,7 @@ trait TextPrinter extends Printer {
     else Nil
   }
 
-  def printStats(header: SpecHeader, args: Arguments): Stats => List[LogLine] = { stats: Stats =>
+  def printStats(header: SpecHeader, args: Arguments, stats: Stats, timer: SimpleTimer): List[LogLine] = {
     if ((args.xonly && stats.hasFailuresOrErrors || !args.xonly) && args.canShow("1")) {
       val title = if (header.show.isEmpty) "" else " "+header.show.trim
 
@@ -76,7 +80,7 @@ trait TextPrinter extends Printer {
       printNewLine ++
       List(
         s"Total for specification$title\n".info,
-        stats.display(args).info) ++
+        stats.copy(timer = timer).display(args).info) ++
       printNewLine ++
       printNewLine
     } else Nil

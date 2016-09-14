@@ -2,8 +2,12 @@ package org.specs2
 package time
 
 import java.util.Calendar
+
 import text.Plural._
 import control.Exceptions._
+import org.specs2.foldm.FoldM
+
+import scalaz.Scalaz._
 
 /**
  * This trait provides Timer functionalities based on the Java Calendar milliseconds
@@ -106,4 +110,12 @@ object SimpleTimer {
   def fromString(s: String) = new SimpleTimer {
     override protected val elapsedTimes = tryOrElse(List(java.lang.Long.parseLong(s)))(Nil)
   }
+
+  def timerFold[T] = new FoldM[T, Id, SimpleTimer] {
+    type S = SimpleTimer
+    def start = (new SimpleTimer).start
+    def fold: (S, T) => S = (s, t) => s
+    def end(s: S) =  s.stop
+  }
+
 }
