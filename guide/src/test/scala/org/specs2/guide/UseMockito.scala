@@ -8,7 +8,7 @@ import scala.concurrent.duration._
 
 object UseMockito extends UserGuidePage with Mockito { def is = "Mockito".title ^ s2"""
 
-[Mockito](https://code.google.com/p/mockito) allows to specify stubbed values and to verify that some calls have been made to your objects. In order to use those features, you need to extend the `org.specs2.mock.Mockito` trait:${snippet{
+[Mockito](https://github.com/mockito/mockito) allows to specify stubbed values and to verify that some calls have been made to your objects. In order to use those features, you need to extend the `org.specs2.mock.Mockito` trait:${snippet{
 
 class MockitoSpec extends Specification with Mockito { def is = s2"""
 
