@@ -29,7 +29,7 @@
 <div class="container">
 
 $if(sidebar)$
-<div class="col-md-2 sidebar-outer">
+<div class="col-md-2 col-sm-3 col-xs-3 sidebar-outer">
 <div class="col-md-2 fixed">
 $else$
 <div class="col-md-1"></div>
@@ -59,7 +59,7 @@ $else$
 $endif$
 
 
-<div class="col-md-10">
+<div class="col-md-10 col-sm-9 col-xs-9">
 $if(issues)$
 <h1>$title$
     <a href="#" onclick="hideByClass('ok');hideById('onlyIssuesLink');showById('allElementsLink')"><span id=onlyIssuesLink class="issues-toggle"> (issues only)</span></a>
