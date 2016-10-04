@@ -4,17 +4,19 @@ package reporter
 import java.lang.annotation.Annotation
 
 import org.junit.runner.Description
+
 import scalaz.{Tree, TreeLoc}
 import data.Trees._
 import control.Exceptions._
+
 import Tree._
 import data.Trees
 import Trees._
 import specification._
 import core._
 import process._
-import control.ExecutionOrigin
-import specification.core.{NoText, Fragment}
+import control._
+import specification.core.{Fragment, NoText}
 import specification.create.DefaultFragmentFactory
 
 /**
@@ -51,7 +53,7 @@ trait JUnitDescriptions extends ExecutionOrigin {
           case f @ Fragment(d, e, _) if !e.isExecutable => createDescription(className, suiteName = testName(d.show), annotations = annotations)
           case f @ Fragment(NoText, e, _) if e.mustJoin => createDescription(className, label = current.size.toString, suiteName = "step", annotations = annotations)
           case f @ Fragment(NoText, e, _)               => createDescription(className, label = current.size.toString, suiteName = "action", annotations = annotations)
-          case f @ Fragment(d, e, _)                    => createDescription(className, label = current.size.toString, testName = testName(d.show, parentPath(current.parents.map(_._2))), annotations = annotations)
+          case f @ Fragment(d, e, _)                    => createDescription(className, label = current.size.toString, id = f.location.hashCode.toString, testName = testName(d.show, parentPath(current.parents.map(_._2))), annotations = annotations)
         }
         (current.getLabel, description)
     }
@@ -74,7 +76,7 @@ trait JUnitDescriptions extends ExecutionOrigin {
     case f                                                => Some(f)
   }
 
-  def createDescription(className: String, suiteName: String = "", testName: String = "", label: String = "", annotations: Array[Annotation] = Array()): Description = {
+  def createDescription(className: String, suiteName: String = "", testName: String = "", label: String = "", id: String = "", annotations: Array[Annotation] = Array()): Description = {
     val origin =
       if (isExecutedFromAnIDE && !label.isEmpty) label
       else className
@@ -83,7 +85,10 @@ trait JUnitDescriptions extends ExecutionOrigin {
       if (testName.isEmpty) (if (suiteName.isEmpty) className else suiteName)
       else sanitize(testName) + "(" + origin + ")"
 
-    Description.createSuiteDescription(description, annotations:_*)
+    if (id.nonEmpty)
+      Description.createSuiteDescription(description, id, annotations:_*)
+    else
+      Description.createSuiteDescription(description, annotations:_*)
   }
 
   import text.Trim._
@@ -109,3 +114,9 @@ trait JUnitDescriptions extends ExecutionOrigin {
 }
 
 object JUnitDescriptions extends JUnitDescriptions
+
+case class JUnitDescriptionsTree(spec: SpecStructure) {
+  lazy val descriptionTree = JUnitDescriptions.createDescriptionTree(spec)
+  lazy val descriptions = descriptionTree.root.toTree.flattenLeft.toMap
+  lazy val description = JUnitDescriptions.createDescription(descriptionTree.map(_._2))
+}

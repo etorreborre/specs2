@@ -6,7 +6,7 @@ import specification.dsl.AcceptanceDsl
 import specification.core._
 import matcher.{MustMatchers, StandardMatchResults}
 import org.junit.runner.Description
-import execute.{Result, Success, StandardResults}
+import execute.{Result, StandardResults, Success}
 import ShowDescription._
 
 class JUnitDescriptionSpec extends Specification with JUnitDescriptionSpecTest { def is = s2"""
@@ -26,6 +26,7 @@ class JUnitDescriptionSpec extends Specification with JUnitDescriptionSpecTest {
    An example then a text grouping 2 examples are folded as 1 suite, with one test and 1 suite with 2 test cases    $a7
    An example description must not have newlines if executed from an IDE                                            $a8
    Empty descriptions must be removed from the tree                                                                 $a9
+   Examples with the same name must get different ids                                                               $a10
 
  The Descriptions objects must have proper details
    For as single Example                                                                                            $b1
@@ -125,6 +126,16 @@ class JUnitDescriptionSpec extends Specification with JUnitDescriptionSpecTest {
     "   |",
     "   `- level1::ex2(org.specs2.reporter.JUnitDescriptionSpec)\n")
 
+  def a10 = {
+    val ex1fst = "ex1" ! ok
+    val ex1snd = "ex1" ! ok
+    val ds =
+      ShowDescription.toTree(descriptions(false).
+        createDescription(titled(start ^ "level1" ^ break ^ ex1fst ^ ex1snd ^ end))).flatten.toList
+
+    ds.map(_.hashCode).distinct must haveSize(4)
+  }
+
   def b1 = details (
     description   = toDescription(ex1).getChildren.get(0),
     className     = "org.specs2.reporter.JUnitDescriptionSpec",
@@ -168,6 +179,7 @@ class JUnitDescriptionSpec extends Specification with JUnitDescriptionSpecTest {
   }
 
   def toDescription(f: Fragment): Description   = toDescription(Fragments(f))
+
   def toDescription(fs: Fragments): Description = {
     val spec = titled(fs)
 
@@ -175,7 +187,6 @@ class JUnitDescriptionSpec extends Specification with JUnitDescriptionSpecTest {
     val newHeader = spec.header.copy(specClass = classOf[JUnitDescriptionSpec])
     descriptions().createDescription(spec.copy(header = newHeader))
   }
-
 
   def descriptions(fromIDE: Boolean = false) = new JUnitDescriptions {
     override lazy val isExecutedFromAnIDE = fromIDE

@@ -149,6 +149,8 @@ class SelectorSpec extends script.Specification with Groups with ResultMatchers 
     }
 
     eg := {
+      val location = StacktraceLocation()
+
       val fragments = Fragments(
         text("  "),
         ex("e1"),
@@ -160,13 +162,14 @@ class SelectorSpec extends script.Specification with Groups with ResultMatchers 
         ff.tag("x"),
         ex("e4")
       )
-      filterIncluded(fragments, Seq("x")) ==== Vector(
+
+      filterIncluded(fragments, Seq("x")).map(_.setLocation(location)) ==== Vector(
         ff.break,
         ff.break,
         ex("e2"),
         ff.break,
         ex("e4")
-      )
+      ).map(_.setLocation(location))
     }
 
   }

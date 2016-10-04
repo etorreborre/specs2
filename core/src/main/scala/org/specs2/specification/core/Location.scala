@@ -40,13 +40,5 @@ case class StacktraceLocation(trace: Seq[StackTraceElement] = (new Exception).ge
   /** @return a filtered Location */
   def filter(filter: StackTraceFilter) = copy(filter(trace))
 
-  override def equals(a: Any) = a match {
-    case l: StacktraceLocation => l.toString == this.toString
-    case other                => false
-  }
-
-  override def hashCode =
-    trace.map(_.toString).hashCode
-
   override def toString = s"${getClass.getSimpleName}(${traceLocation(NoStackTraceFilter)}})"
 }

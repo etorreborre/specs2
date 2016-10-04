@@ -11,6 +11,7 @@ import matcher._
 import org.specs2.main.ArgumentsShortcuts
 import scalaz._, Scalaz._
 import MatchResultCombinators._
+import MatchersImplicits.matchResultFunctionToMatcher
 
 class MutableFragmentsDslSpec extends org.specs2.Spec with TypedEqual with TraversableMatchers { def is = s2"""
 
@@ -34,10 +35,12 @@ class MutableFragmentsDslSpec extends org.specs2.Spec with TypedEqual with Trave
 
 """
 
-  def e1 = fragments(new dsl { "e1" in ok }) must contain(exactly(break, break, example("e1", ok), break))
+  def e1 =
+    fragments(new dsl { "e1" in ok }) must
+      beTheSameFragments(break, break, example("e1", ok), break)
 
   def e2 = fragments(new dsl { "e1" in Result.foreach(1 to 2)(i => i === i) }) must
-    contain(exactly(break, break, example("e1", ok), break))
+    beTheSameFragments(break, break, example("e1", ok), break)
 
   def e3 = fragments(new dsl {
     "this" should {
@@ -108,4 +111,9 @@ class MutableFragmentsDslSpec extends org.specs2.Spec with TypedEqual with Trave
   }
 
   trait dsl extends MutableFragmentBuilder with MutableDsl
+
+  def beTheSameFragments(fs: Fragment*): Matcher[Seq[Fragment]] = { actual: Seq[Fragment] =>
+    val location = StacktraceLocation()
+    actual.map(_.setLocation(location)) must contain(exactly(fs.map(_.setLocation(location)):_*))
+  }
 }

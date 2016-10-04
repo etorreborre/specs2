@@ -12,7 +12,6 @@ import specification.core._
 import control._
 import scalaz._, Scalaz._
 
-
 /**
  * Runner for specs2 specifications
  */
@@ -73,8 +72,9 @@ class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterab
    */
   def createJUnitPrinter(specStructure: SpecStructure, n: RunNotifier): JUnitPrinter = new JUnitPrinter {
     lazy val notifier = n
-    lazy val descriptions = JUnitDescriptions.fragmentDescriptions(specStructure)
-    lazy val description = JUnitDescriptions.createDescription(specStructure)
+    lazy val descriptionsTree = JUnitDescriptionsTree(specStructure)
+    lazy val descriptions = descriptionsTree.descriptions
+    lazy val description = descriptionsTree.description
   }
 
   /**
