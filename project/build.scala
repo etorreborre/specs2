@@ -224,6 +224,7 @@ object build extends Build {
         Seq("-Xcheckinit", "-Xlint", "-deprecation", "-unchecked", "-feature", "-language:_")),
     addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.7.1"),
     addCompilerPlugin("com.milessabin" % "si2712fix-plugin_2.11.8" % "1.2.0"),
+    addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.0"),
     scalacOptions in Test ++= Seq("-Yrangepos"),
     scalacOptions in (Compile, doc) := Seq("-feature", "-language:_"),
     scalacOptions in (Compile, console) := Seq("-Yrangepos", "-feature", "-language:_"),
