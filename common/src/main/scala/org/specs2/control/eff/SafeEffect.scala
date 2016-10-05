@@ -78,7 +78,7 @@ trait SafeInterpretation extends SafeCreation { outer =>
 
   /** run a safe effect but drop the finalizer errors */
   def execSafe[R, U, A](r: Eff[R, A])(implicit m: Member.Aux[Safe, R, U]): Eff[U, Throwable \/ A] =
-  runSafe(r).map(_._1)
+    runSafe(r).map(_._1)
 
   /**
    * Attempt to execute a safe action including finalizers
@@ -180,10 +180,10 @@ trait SafeInterpretation extends SafeCreation { outer =>
    * Execute a second action if the first one is not successful, based on the error
    */
   def catchThrowable[R, A, B](action: Eff[R, A], pureValue: A => B, onThrowable: Throwable => Eff[R, B])(implicit m: Safe <= R): Eff[R, B] =
-  attemptSafe(action).flatMap {
-    case (-\/(t), ls) => onThrowable(t).flatMap(b => ls.traverse(f => finalizerException(f)).as(b))
-    case (\/-(a), ls) => pure(pureValue(a)).flatMap(b => ls.traverse(f => finalizerException(f)).as(b))
-  }
+    attemptSafe(action).flatMap {
+      case (-\/(t), ls) => onThrowable(t).flatMap(b => ls.traverse(f => finalizerException(f)).as(b))
+      case (\/-(a), ls) => pure(pureValue(a)).flatMap(b => ls.traverse(f => finalizerException(f)).as(b))
+    }
 
   /**
    * evaluate 1 action possibly throwing exceptions

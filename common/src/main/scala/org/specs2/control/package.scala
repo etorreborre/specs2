@@ -19,7 +19,7 @@ package object control {
   lazy val noLogging = (s: String) => ()
   lazy val consoleLogging = (s: String) => println(s)
 
-  type ActionStack = Fx.fx4[ErrorOrOk, Console, Warnings, Eval]
+  type ActionStack = Fx.fx4[ErrorOrOk, Console, Warnings, Safe]
 
   type Action[A] = Eff[ActionStack, A]
 
@@ -32,7 +32,8 @@ package object control {
     fail(failureMessage)
 
   def executeAction[A](action: Eff[ActionStack, A], printer: String => Unit = s => ()): (Error \/ A, List[String]) =
-    action.runError.runConsoleToPrinter(printer).runWarnings.runEval.run
+    action.execSafe.flatMap(_.fold(t => exception[Fx3[ErrorOrOk, Console, Warnings], A](t), a => Eff.pure[Fx3[ErrorOrOk, Console, Warnings], A](a))).
+      runError.runConsoleToPrinter(printer).runWarnings.run
 
   def runAction[A](action: Eff[ActionStack, A], printer: String => Unit = s => ()): Error \/ A =
     attemptExecuteAction(action, printer).fold(
@@ -40,7 +41,7 @@ package object control {
       other => other._1)
 
   def attemptExecuteAction[A](action: Eff[ActionStack, A], printer: String => Unit = s => ()): Throwable \/ (Error \/ A, List[String]) =
-    action.runError.runConsoleToPrinter(printer).runWarnings.attemptEval.run
+    action.runError.runConsoleToPrinter(printer).runWarnings.execSafe.run
 
   /**
    * This implicit allows any IO[Result] to be used inside an example:

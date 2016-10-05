@@ -1,13 +1,15 @@
 package org.specs2
 package io
 
-import java.io.{File, FileInputStream, BufferedInputStream}
+import java.io.{BufferedInputStream, File, FileInputStream}
+
 import control._
 import text.MD5
+
 import scala.io.Codec
-import scalaz.concurrent._
-import org.specs2.codata._
 import Paths._
+import org.specs2.control.producer._
+import org.specs2.control.eff.all._
 
 /**
  * Methods to read files on the FileSystem
@@ -17,10 +19,10 @@ trait FilePathReader {
   /**
    * @return the list of file paths accessible from dir
    */
-  def filePaths(dir: DirectoryPath, glob: String, verbose: Boolean): Action[IndexedSeq[FilePath]] = {
-    filePathsProcess(dir)
+  def filePaths(dir: DirectoryPath, glob: String, verbose: Boolean): Action[List[FilePath]] = {
+    filePathsProcess[ActionStack](dir)
       .filter(filterWithPattern(globToPattern(glob)))
-      .runLog.toAction.map(_.toIndexedSeq)
+      .runList
   }
 
   /**
@@ -47,8 +49,8 @@ trait FilePathReader {
   /**
    * @return the files accessible recursively from a directory
    */
-  def listFilePaths(directory: DirectoryPath): Action[IndexedSeq[FilePath]] =
-    filePathsProcess(directory).runLog.toAction.map(_.toIndexedSeq)
+  def listFilePaths(directory: DirectoryPath): Action[List[FilePath]] =
+    filePathsProcess[ActionStack](directory).runList
 
   /**
    * @return the files directly accessible from a directory
@@ -68,10 +70,10 @@ trait FilePathReader {
       .filter(_.isDirectory)
       .map(DirectoryPath.unsafe))
 
-  private def filePathsProcess(directory: DirectoryPath): Process[Task, FilePath] = {
-    def go(dir: DirectoryPath): Process[Task, FilePath] = {
-      val (files, directories) = Option(dir.toFile.listFiles).map(_.toIndexedSeq).getOrElse(IndexedSeq()).partition(_.isFile)
-      Process.emitAll(files.map(FilePath.unsafe)) fby Process.emitAll(directories.map(DirectoryPath.unsafe).map(go)).flatMap(identity)
+  private def filePathsProcess[R :_safe](directory: DirectoryPath): Producer[R, FilePath] = {
+    def go(dir: DirectoryPath): Producer[R, FilePath] = {
+      val (files, directories) = Option(dir.toFile.listFiles).map(_.toList).getOrElse(List()).partition(_.isFile)
+      Producer.emit(files.map(FilePath.unsafe)) append Producer.emit(directories.map(DirectoryPath.unsafe).map(go)).flatten
     }
     go(directory)
   }
