@@ -30,3 +30,12 @@ trait ReferenceDsl extends FragmentBuilder with dsl.ReferenceDsl {
   override def see(s: =>SpecificationStructure)  = addFragment(super.see(s))
 
 }
+
+/** deactivate the ReferenceDsl implicits */
+trait NoReferenceDsl extends ReferenceDsl with dsl.NoReferenceDsl {
+  override def mutableLinkFragment(alias: String) =
+    super.mutableLinkFragment(alias)
+
+  override def mutableSeeFragment(alias: String) =
+    super.mutableSeeFragment(alias)
+}
