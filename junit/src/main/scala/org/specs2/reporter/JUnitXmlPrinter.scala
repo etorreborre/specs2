@@ -25,7 +25,7 @@ trait JUnitXmlPrinter extends Printer {
   def prepare(env: Env, specs: List[SpecStructure]): Action[Unit]  = Actions.unit
   def finalize(env: Env, specs: List[SpecStructure]): Action[Unit] = Actions.unit
 
-  def sink(env: Env, spec: SpecStructure): SinkTask[Fragment] =
+  def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment] =
     (Statistics.fold zip FoldId.list[Fragment]).into[Task].
       mapFlatten(saveResults(env, spec))
 

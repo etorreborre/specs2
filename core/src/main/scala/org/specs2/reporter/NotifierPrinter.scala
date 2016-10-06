@@ -1,17 +1,15 @@
 package org.specs2
 package reporter
 
-import org.specs2.data.Processes
 import text.NotNullStrings._
-import foldm._, FoldM._
-import stream.FoldProcessM._
 import main.Arguments
-import control._
 import execute.Result
-import scalaz.Id, Id._
-import scalaz.concurrent.Task
-import org.specs2.codata._
+
 import scalaz.syntax.show._
+
+import control._
+import eff._, all._
+import control.origami._
 import specification.core._
 
 /**
@@ -26,16 +24,17 @@ object NotifierPrinter {
     def prepare(env: Env, specifications: List[SpecStructure]): Action[Unit]  = Actions.unit
     def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] = Actions.unit
 
-    def sink(env: Env, spec: SpecStructure): SinkTask[Fragment] = {
-      (notifyFold.into[Task]
-      	.startWith(Task.delay(notifier.specStart(spec.name, "")))
-      	.endWith(Task.delay(notifier.specEnd(spec.name, ""))) <<<* fromSink(notifySink(spec, notifier, env.arguments))).void}
+    def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment] = {
+      (notifyFold.into[ActionStack]
+      	.startWith(asyncDelay(notifier.specStart(spec.name, "")))
+      	.endWith(asyncDelay(notifier.specEnd(spec.name, ""))).observeWithNextState(notifySink(spec, notifier, env.arguments))).void
+    }
   }
 
-  def notifyFold: FoldState[Fragment, Notified] = new FoldM[Fragment, Id, Notified] {
+  def notifyFold: FoldState[Fragment, Notified] = new Fold[NoFx, Fragment, Notified] {
     type S = Notified
 
-    def start = Notified(context = "start", start = false, close = false, hide = true)
+    def start = pure[NoFx, S](Notified(context = "start", start = false, close = false, hide = true))
 
     def fold = (ps: S, f: Fragment) => {
       // if the previous state was defining the closing of a block
@@ -57,14 +56,16 @@ object NotifierPrinter {
       }
     }
 
-    def end(s: S) = s
+    def end(s: S) = pure[NoFx, S](s)
   }
 
-  def notifySink(spec: SpecStructure, notifier: Notifier, args: Arguments): Sink[Task, (Notified, Fragment)] =
-    Processes.resource(Task.now(notifier))(
-      (n: Notifier) => Task.now(()))(
-      (n: Notifier) => Task.delay { case (block: Notified, f: Fragment) => Task.now(printFragment(n, f, block, args)) })
-
+  def notifySink(spec: SpecStructure, notifier: Notifier, args: Arguments): AsyncSink[(Notified, Fragment)] =
+    new Fold[ActionStack, (Notified, Fragment), Unit] {
+      type S = Unit
+      def start = pure(())
+      def fold = (s: S, a: (Notified, Fragment)) => printFragment(notifier, a._2, a._1, args)
+      def end(s: S) = pure(s)
+    }
 
   def printFragment(n: Notifier, f: Fragment, notified: Notified, args: Arguments) = {
     val description = f.description.shows.trim

@@ -2,10 +2,9 @@ package org.specs2
 package reporter
 
 import control._
-import data.Fold
+import origami._
 import io._
 import execute._
-import foldm.stream.FoldProcessM._
 import main.Arguments
 import specification.core._
 import scalaz.Show
@@ -22,7 +21,7 @@ trait MarkdownPrinter extends Printer {
     Actions.unit
 
   /** @return a Fold for the markdown output */
-  def sink(env: Env, spec: SpecStructure): SinkTask[Fragment] = {
+  def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment] = {
     val options = MarkdownOptions.create(env.arguments)
     val show = MarkdownFragmentShow(options)
     val sink = Fold.showToFilePath(options.outDir / FilePath.unsafe(spec.header.className+"."+options.extension))(show)

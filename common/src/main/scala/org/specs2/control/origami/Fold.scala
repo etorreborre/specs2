@@ -176,7 +176,7 @@ trait Fold[R, A, B] { self =>
   /**
    * use a transformation to go from effect stack to another
    */
-  def into[U](implicit intoPoly: IntoPoly[R, U]) = new Fold[U, A, B] {
+  def into[U](implicit intoPoly: IntoPoly[R, U]): Fold[U, A, B] { type S = self.S } = new Fold[U, A, B] {
     type S = self.S
     def start = self.start.into[U]
     def fold = (s, a) => self.fold(s, a)
@@ -191,6 +191,19 @@ trait Fold[R, A, B] { self =>
   def void =
     as(())
 
+  def startWith(action: Eff[R, Unit]): Fold[R, A, B] { type S = self.S } = new Fold[R, A, B] {
+    type S = self.S
+    def start = action >> self.start
+    def fold = (s, a) => self.fold(s, a)
+    def end(s: S) = self.end(s)
+  }
+
+  def endWith(action: Eff[R, Unit]): Fold[R, A, B] { type S = self.S } = new Fold[R, A, B] {
+    type S = self.S
+    def start = self.start
+    def fold = (s, a) => self.fold(s, a)
+    def end(s: S) = self.end(s).flatMap(b => action.as(b))
+  }
 }
 
 /**

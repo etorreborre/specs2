@@ -25,11 +25,11 @@ import process._
 case class SpecStructure(header: SpecHeader, arguments: Arguments, lazyFragments: () => Fragments) {
   lazy val fragments = lazyFragments()
 
-  def contents: Process[Task, Fragment]                                        = fragments.contents
-  def map(f: Fragments => Fragments): SpecStructure                            = copy(lazyFragments = () => f(fragments))
-  def |>(p: Process1[Fragment, Fragment]): SpecStructure                       = copy(lazyFragments = () => fragments |> p)
-  def |>(f: Process[Task, Fragment] => Process[Task, Fragment]): SpecStructure = copy(lazyFragments = () => fragments update f)
-  def flatMap(f: Fragment => Process[Task, Fragment]): SpecStructure           = |>(_.flatMap(f))
+  def contents: AsyncStream[Fragment]                                      = fragments.contents
+  def map(f: Fragments => Fragments): SpecStructure                        = copy(lazyFragments = () => f(fragments))
+  def |>(p: AsyncTransducer[Fragment, Fragment]): SpecStructure            = copy(lazyFragments = () => fragments |> p)
+  def |>(f: AsyncStream[Fragment] => AsyncStream[Fragment]): SpecStructure = copy(lazyFragments = () => fragments update f)
+  def flatMap(f: Fragment => AsyncStream[Fragment]): SpecStructure         = |>(_.flatMap(f))
 
   def setHeader(h: SpecHeader) = copy(header = h)
   def setArguments(args: Arguments) = copy(arguments = args)

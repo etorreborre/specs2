@@ -57,7 +57,7 @@ trait Reporter {
   /**
    * Use a Fold to store the stats of each example + the stats of the specification
    */
-  def statsStoreSink(env: Env, spec: SpecStructure): SinkTask[Fragment] = {
+  def statsStoreSink(env: Env, spec: SpecStructure): AsyncSink[Fragment] = {
     val neverStore = env.arguments.store.never
     val resetStore = env.arguments.store.reset
 

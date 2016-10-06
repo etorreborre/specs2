@@ -1,10 +1,12 @@
-package org.specs2.control.eff
+package org.specs2.control
+package eff
 
 import scala.collection.mutable._
 import scalaz._, Scalaz._
-import Eff._
-import Interpret._
-import EvalEffect._
+import all._
+import interpret._
+import syntax.all._
+import origami._
 
 /**
  * Effect for logging values alongside computations
@@ -45,15 +47,15 @@ trait WriterInterpretation {
   /**
    * More general fold of runWriter where we can use a fold to accumulate values in a mutable buffer
    */
-  def runWriterFold[R, U, O, A, B](w: Eff[R, A])(fold: Fold[O, B])(implicit m: Member.Aux[Writer[O, ?], R, U]): Eff[U, (A, B)] = {
+  def runWriterFold[R, U, O, A, B](w: Eff[R, A])(fold: FoldId[O, B])(implicit m: Member.Aux[Writer[O, ?], R, U]): Eff[U, (A, B)] = {
     val recurse: StateRecurse[Writer[O, ?], A, (A, B)] = new StateRecurse[Writer[O, ?], A, (A, B)] {
       type S = fold.S
-      val init = fold.init
-      def apply[X](x: Writer[O, X], s: S) = (x.run._2, fold.fold(x.run._1, s))
-      def finalize(a: A, s: S) = (a, fold.finalize(s))
+      val init = fold.start.run
+      def apply[X](x: Writer[O, X], s: S) = (x.run._2, fold.fold(s, x.run._1))
+      def finalize(a: A, s: S) = (a, fold.end(s).run)
     }
 
-    interpretState1[R, U, Writer[O, ?], A, (A, B)]((a: A) => (a, fold.finalize(fold.init)))(recurse)(w)
+    interpretState1[R, U, Writer[O, ?], A, (A, B)]((a: A) => (a, fold.end(fold.start.run).run))(recurse)(w)
   }
 
   /**
@@ -62,45 +64,27 @@ trait WriterInterpretation {
   def runWriterUnsafe[R, U, O, A](w: Eff[R, A])(f: O => Unit)(implicit m: Member.Aux[Writer[O, ?], R, U]): Eff[U, A] =
     runWriterFold(w)(UnsafeFold(f)).map(_._1)
 
-  def runWriterEval[R, U, O, A](w: Eff[R, A])(f: O => Eval[Unit])(implicit m: Member.Aux[Writer[O, ?], R, U], ev: Eval |= U): Eff[U, A] =
-    runWriterFold(w)(EvalFold(f)).flatMap { case (a, e) => send[Eval, U, Unit](e).as(a) }
-
-  implicit def ListFold[A]: Fold[A, List[A]] = new Fold[A, List[A]] {
+  implicit def ListFold[A]: FoldId[A, List[A]] = new Fold[NoFx, A, List[A]] {
     type S = ListBuffer[A]
-    val init = new ListBuffer[A]
-    def fold(a: A, s: S) = { s.append(a); s }
-    def finalize(s: S) = s.toList
+    val start = pure[NoFx, ListBuffer[A]](new ListBuffer[A])
+    def fold = (s: S, a: A) => { s.append(a); s }
+    def end(s: S) = pure(s.toList)
   }
 
-  def MonoidFold[A : Monoid]: Fold[A, A] = new Fold[A, A] {
+  def MonoidFold[A : Monoid]: FoldId[A, A] = new Fold[NoFx, A, A] {
     type S = A
-    val init = Monoid[A].zero
-    def fold(a: A, s: S) = a |+| s
-    def finalize(s: S) = s
+    val start = pure[NoFx, A](Monoid[A].zero)
+    def fold = (s: S, a: A) => a |+| s
+    def end(s: S) = pure(s)
   }
 
-  def UnsafeFold[A](f: A => Unit): Fold[A, Unit] = new Fold[A, Unit] {
+  def UnsafeFold[A](f: A => Unit): FoldId[A, Unit] = new Fold[NoFx, A, Unit] {
     type S = Unit
-    val init = ()
-    def fold(a: A, s: S) = f(a)
-    def finalize(s: S) = s
+    val start = pure[NoFx, Unit](())
+    def fold = (s: S, a: A) => f(a)
+    def end(s: S) = pure(s)
   }
 
-  def EvalFold[A](f: A => Eval[Unit]): Fold[A, Eval[Unit]] = new Fold[A, Eval[Unit]] {
-    type S = Eval[Unit]
-    val init = Name(())
-    def fold(a: A, s: S) = s >> f(a)
-    def finalize(s: S) = s
-  }
-
-}
-
-/** support trait for folding values while possibly keeping some internal state */
-trait Fold[A, B] {
-  type S
-  val init: S
-  def fold(a: A, s: S): S
-  def finalize(s: S): B
 }
 
 object WriterInterpretation extends WriterInterpretation

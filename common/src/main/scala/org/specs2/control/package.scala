@@ -1,14 +1,19 @@
 package org.specs2
 
-import control.eff._, all._, syntax.all._
+import control.eff._
+import all._
+import syntax.all._
+
 import scalaz._
 import scalaz.effect.IO
 import org.specs2.execute.{AsResult, Result}
+
 import scalaz.concurrent.Task
 import scalaz.syntax.bind._
-import ErrorEffect.{ErrorOrOk, Error, fail, exception}
+import ErrorEffect.{Error, ErrorOrOk, exception, fail}
 import ConsoleEffect._
 import WarningsEffect._
+import org.specs2.control.producer._
 
 package object control {
 
@@ -19,9 +24,20 @@ package object control {
   lazy val noLogging = (s: String) => ()
   lazy val consoleLogging = (s: String) => println(s)
 
-  type ActionStack = Fx.fx4[ErrorOrOk, Console, Warnings, Safe]
+  type StreamStack = Fx.fx2[Async, Safe]
+  type ActionStack   = Fx.fx5[ErrorOrOk, Console, Warnings, Safe, Async]
 
   type Action[A] = Eff[ActionStack, A]
+  type AsyncStream[A] = Producer[StreamStack, A]
+  type AsyncTransducer[A, B] = Transducer[StreamStack, A, B]
+
+  type AsyncSink[A] = origami.Fold[ActionStack, A, Unit]
+
+  def emitAsync[A](as: A*): AsyncStream[A] =
+    producer.producers.emitSeq(as)
+
+  def emitAsyncDelayed[A](a: A): AsyncStream[A] =
+    producer.producers.eval(AsyncCreation.asyncDelay(a))
 
   /**
    * warn the user about something that is probably wrong on his side,
@@ -31,9 +47,12 @@ package object control {
     warn(message)(m1) >>
     fail(failureMessage)
 
-  def executeAction[A](action: Eff[ActionStack, A], printer: String => Unit = s => ()): (Error \/ A, List[String]) =
-    action.execSafe.flatMap(_.fold(t => exception[Fx3[ErrorOrOk, Console, Warnings], A](t), a => Eff.pure[Fx3[ErrorOrOk, Console, Warnings], A](a))).
-      runError.runConsoleToPrinter(printer).runWarnings.run
+  def executeAction[A](action: Eff[ActionStack, A], printer: String => Unit = s => ()): (Error \/ A, List[String]) = {
+    type S = Fx.append[Fx.fx2[ErrorOrOk, Console], Fx.fx2[Warnings, Async]]
+
+    action.execSafe.flatMap(_.fold(t => exception[S, A](t), a => Eff.pure[S, A](a))).
+       runError.runConsoleToPrinter(printer).runWarnings.runAsyncTask.run
+  }
 
   def runAction[A](action: Eff[ActionStack, A], printer: String => Unit = s => ()): Error \/ A =
     attemptExecuteAction(action, printer).fold(
@@ -41,7 +60,7 @@ package object control {
       other => other._1)
 
   def attemptExecuteAction[A](action: Eff[ActionStack, A], printer: String => Unit = s => ()): Throwable \/ (Error \/ A, List[String]) =
-    action.runError.runConsoleToPrinter(printer).runWarnings.execSafe.run
+    action.runError.runConsoleToPrinter(printer).runWarnings.execSafe.runAsyncTask.run
 
   /**
    * This implicit allows any IO[Result] to be used inside an example:

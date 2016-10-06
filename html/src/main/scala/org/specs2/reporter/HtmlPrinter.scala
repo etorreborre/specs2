@@ -28,11 +28,8 @@ import eff.syntax.all._
 import scalaz._
 import Scalaz._
 import eff.ErrorEffect._
-<<<<<<< f937264a00c9749e06a34b649dd3d663ea2cc643
 import org.specs2.time.SimpleTimer
-=======
 import Actions._
->>>>>>> updated eff to the latest code
 
 /**
  * Printer for html files
@@ -50,7 +47,7 @@ trait HtmlPrinter extends Printer {
     }
 
   /** @return a SinkTask for the Html output */
-  def sink(env: Env, spec: SpecStructure): SinkTask[Fragment] = {
+  def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment] = {
     ((Statistics.fold zip FoldId.list[Fragment] zip SimpleTimer.timerFold).into[Task] <*
      fromStart((getHtmlOptions(env.arguments) >>= (options => copyResources(env, options))).toTask(env.systemLogger).void)).mapFlatten { case ((stats, fragments), timer) =>
       val expecutedSpec = spec.copy(lazyFragments = () => Fragments(fragments:_*))

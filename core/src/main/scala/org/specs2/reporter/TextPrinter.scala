@@ -28,7 +28,7 @@ trait TextPrinter extends Printer {
   def prepare(env: Env, specifications: List[SpecStructure]): Action[Unit]  = Actions.unit
   def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] = Actions.unit
 
-  def sink(env: Env, spec: SpecStructure): SinkTask[Fragment] = {
+  def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment] = {
     // statistics and indentation
     type S = ((Stats, Int), SimpleTimer)
 

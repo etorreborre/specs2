@@ -9,6 +9,7 @@ package object producer {
   type Transducer[R, A, B] = Producer[R, A] => Producer[R, B]
 
   object producers extends Producers
+
   object transducers extends Transducers
 
   implicit class ProducerOps[R :_safe, A](p: Producer[R, A]) {

@@ -11,5 +11,6 @@ trait all extends
   safe with
   console with
   warnings with
+  async with
   eff
 

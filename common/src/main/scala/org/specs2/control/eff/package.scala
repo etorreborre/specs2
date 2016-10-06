@@ -11,6 +11,7 @@ package object eff {
   object disjunction extends DisjunctionCreation  with DisjunctionInterpretation
   object future      extends FutureCreation       with FutureInterpretation
   object safe        extends SafeCreation         with SafeInterpretation
+  object async       extends AsyncCreation        with AsyncInterpretation
 
   object create extends
     WriterCreation with
@@ -18,6 +19,7 @@ package object eff {
     DisjunctionCreation with
     FutureCreation with
     SafeCreation with
+    AsyncCreation with
     EffCreation
 
   object all extends
@@ -26,6 +28,7 @@ package object eff {
     DisjunctionEffect with
     FutureEffect with
     SafeEffect with
+    AsyncEffect with
     EffInterpretation with
     EffCreation with
     EffImplicits
