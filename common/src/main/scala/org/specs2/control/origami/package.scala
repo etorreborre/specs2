@@ -5,7 +5,7 @@ import eff.NoFx
 
 package object origami {
 
-  object fold extends FoldFunctions
+  object fold extends Folds
 
   /** alias for a non-effectful Fold */
   type FoldId[A, U] = Fold[NoFx, A, U]

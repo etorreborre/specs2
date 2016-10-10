@@ -23,9 +23,8 @@ trait MarkdownPrinter extends Printer {
   /** @return a Fold for the markdown output */
   def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment] = {
     val options = MarkdownOptions.create(env.arguments)
-    val show = MarkdownFragmentShow(options)
-    val sink = Fold.showToFilePath(options.outDir / FilePath.unsafe(spec.header.className+"."+options.extension))(show)
-    fromSink(sink)
+    implicit val show = MarkdownFragmentShow(options)
+    Fold.showToFilePath[ActionStack, Fragment](options.outDir / FilePath.unsafe(spec.header.className+"."+options.extension))
   }
 
   def fragmentToLine(options: MarkdownOptions) = { fragment: Fragment =>

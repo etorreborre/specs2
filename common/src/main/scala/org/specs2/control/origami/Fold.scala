@@ -1,8 +1,9 @@
-package org.specs2.control
+package org.specs2
+package control
 package origami
 
-import eff._
-import syntax.eff._
+import eff.syntax.all._
+import eff._, all._
 import scalaz._, Scalaz._
 
 /**
@@ -209,7 +210,7 @@ trait Fold[R, A, B] { self =>
 /**
  * Typeclass instances and creation methods for folds
  */
-trait FoldFunctions {
+trait Folds {
 
   /** @return a fold which uses a Monoid to accumulate elements */
   def fromMonoidMap[R, A, M : Monoid](f: A => M) = new Fold[R, A, M] {
@@ -254,5 +255,13 @@ trait FoldFunctions {
     def fold = (s: S, a: A) => s
     def end(s: S) = Eff.pure(s)
   }
+
+  def bracket[R :_Safe, A, C](open: Eff[R, C])(step: (C, A) => Eff[R, C])(close: C => Eff[R, Unit]): Fold[R, A, Unit] = new Fold[R, A, Unit] {
+    type S = Eff[R, C]
+    def start = pure(open)
+    def fold = (s: S, a: A) => otherwise(s.flatMap(c => step(c, a)), s.flatMap(close).flatMap(_ => s))
+    def end(s: S) = s.flatMap(close)
+  }
 }
 
+object Folds extends Folds
