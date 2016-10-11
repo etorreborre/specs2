@@ -3,13 +3,10 @@ package specification
 package process
 
 import text.Regexes._
-import org.specs2.codata._
-import org.specs2.codata.Process.{Env => _, _}
-import process1.zipWithNext
+import control._
+import producer._
 import data._
-
-import scalaz.syntax.foldable._
-import scalaz.std.list._
+import scalaz._, Scalaz._
 import specification.core._
 import Fragment._
 import org.specs2.specification.create.FormattingFragments
@@ -20,7 +17,7 @@ import org.specs2.specification.create.FormattingFragments
 trait Selector {
 
   /** select fragments by name, markers and previous execution */
-  def select(env: Env): Process1[Fragment, Fragment]
+  def select(env: Env): Transducer[ActionStack, Fragment, Fragment]
 
 }
 
@@ -34,19 +31,19 @@ trait Selector {
 trait DefaultSelector extends Selector {
 
   /** select fragments by name, markers and previous execution */
-  def select(env: Env): Process1[Fragment, Fragment] =
+  def select(env: Env): Transducer[ActionStack, Fragment, Fragment] =
     filterByName(env: Env) |> filterByMarker(env) |> filterByPrevious(env)
 
   /** filter fragments by name */
-  def filterByName(env: Env): Process1[Fragment, Fragment] = {
+  def filterByName(env: Env): Transducer[ActionStack, Fragment, Fragment] = {
     val regex = env.arguments.ex
     if (regex !=".*")
-      process1.filter {
+      transducers.filter {
         case Fragment(Text(t),e,_) if e.isExecutable => t matchesSafely regex
         case Fragment(Code(t),e,_) if e.isExecutable => t matchesSafely regex
         case other                                   => true
       }
-    else process1.id
+    else transducers.id
   }
 
   /**
@@ -58,10 +55,10 @@ trait DefaultSelector extends Selector {
    * - if the marker applies to the previous or next fragment
    * - if there is an irrelevant empty text between the marker and the fragment it applies to
    */
-  def filterByMarker(env: Env): Process1[Fragment, Fragment] = {
+  def filterByMarker(env: Env): Transducer[ActionStack, Fragment, Fragment] = {
     val arguments = env.arguments
 
-    def go(sections: List[NamedTag] = Nil): Process1[Fragment, Fragment] = {
+    def go(sections: List[NamedTag] = Nil): Transducer[ActionStack, Fragment, Fragment] = {
       receive1 {
         case Fragment(m @ Marker(t, _, _),_,_)  =>
           go(updateSections(sections, t))
@@ -77,10 +74,10 @@ trait DefaultSelector extends Selector {
     }
 
     if ((arguments.include + arguments.exclude).nonEmpty) normalize |> go() |> removeAdditionalEmptyText
-    else process1.id[Fragment]
+    else transducers.id
   }
 
-  def normalize: Process1[Fragment, Fragment] =
+  def normalize: Transducer[ActionStack, Fragment, Fragment] =
     swapBeforeMarkerAndEmptyText         |>
     swapAfterMarkerAndEmptyText          |>
     transformBeforeMarkersToAfterMarkers |>
@@ -98,7 +95,7 @@ trait DefaultSelector extends Selector {
    * e4 \${section("x")}
    * e5
    */
-  def transformBeforeMarkersToAfterMarkers: Process1[Fragment, Fragment] = {
+  def transformBeforeMarkersToAfterMarkers: Transducer[ActionStack, Fragment, Fragment] = {
     def go(previous: Option[Fragment] = None, sections: List[NamedTag] = Nil): Process1[(Fragment, Option[Fragment]), Fragment] = {
       receive1 {
         // section for before if this is the start of a section, do a swap
@@ -132,8 +129,8 @@ trait DefaultSelector extends Selector {
   def isEndTag(sections: List[NamedTag], tag: NamedTag): Boolean =
     sections.filter(_.names.exists(tag.names.contains)).nonEmpty
 
-  def swapBeforeMarkerAndEmptyText: Process1[Fragment, Fragment] = {
-    def go(previous: Option[Fragment] = None): Process1[(Fragment, Option[Fragment]), Fragment] = {
+  def swapBeforeMarkerAndEmptyText: Transducer[ActionStack, Fragment, Fragment] = {
+    def go(previous: Option[Fragment] = None): Transducer[ActionStack, (Fragment, Option[Fragment]), Fragment] = {
       receive1 {
         // tag or section for before
         case (m @ Fragment(Marker(t, _, false),_,_), _)  =>
@@ -152,8 +149,8 @@ trait DefaultSelector extends Selector {
     zipWithNext |> go()
   }
 
-  def swapAfterMarkerAndEmptyText: Process1[Fragment, Fragment] = {
-    def go(previous: Option[Fragment] = None): Process1[(Fragment, Option[Fragment]), Fragment] = {
+  def swapAfterMarkerAndEmptyText: Transducer[ActionStack, Fragment, Fragment] = {
+    def go(previous: Option[Fragment] = None): Transducer[ActionStack, (Fragment, Option[Fragment]), Fragment] = {
       receive1 {
         // tag or section for after
         case (m @ Fragment(Marker(t, _, true),_,_), _) =>
@@ -172,8 +169,8 @@ trait DefaultSelector extends Selector {
     zipWithNext |> go()
   }
 
-  def transformTagsToSections: Process1[Fragment, Fragment] = {
-    def go(previous: List[Fragment] = Nil): Process1[Fragment, Fragment] = {
+  def transformTagsToSections: Transducer[ActionStack, Fragment, Fragment] = {
+    def go(previous: List[Fragment] = Nil): Transducer[ActionStack, Fragment, Fragment] = {
       receive1 {
         case f @ Fragment(m @ Marker(t, false, _),_,_) =>
           go(previous :+ f.copy(description = m.copy(isSection = true)))
@@ -185,8 +182,8 @@ trait DefaultSelector extends Selector {
     go()
   }
 
-  def removeAdditionalEmptyText: Process1[Fragment, Fragment] = {
-    def go: Process1[Fragment, Fragment] = {
+  def removeAdditionalEmptyText: Transducer[ActionStack, Fragment, Fragment] = {
+    def go: Transducer[ActionStack, Fragment, Fragment] = {
       receive1 { f  =>
         if (Fragment.isEmptyText(f) || Fragment.isFormatting(f))
           go
@@ -200,9 +197,9 @@ trait DefaultSelector extends Selector {
   /**
    * filter fragments by previous execution and required status
    */
-  def filterByPrevious(env: Env): Process1[Fragment, Fragment] =
-    if (env.arguments.wasIsDefined) process1.filter((_: Fragment).was(env.arguments.was))
-    else process1.id[Fragment]
+  def filterByPrevious(env: Env): Transducer[ActionStack, Fragment, Fragment] =
+    if (env.arguments.wasIsDefined) transducers.filter((_: Fragment).was(env.arguments.was))
+    else transducers.id
 
 }
 

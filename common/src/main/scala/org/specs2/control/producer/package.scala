@@ -3,6 +3,7 @@ package org.specs2.control
 import scalaz._
 import eff._
 import eff.all._
+import org.specs2.control.origami.Fold
 
 package object producer {
 
@@ -36,6 +37,9 @@ package object producer {
 
     def fold[B, S](start: Eff[R, S], f: (S, A) => S, end: S => Eff[R, B]): Eff[R, B] =
       Producer.fold(p)(start, f, end)
+
+    def fold[S, B](f: Fold[R, A, B]): Eff[R, B] =
+      Producer.fold(p)(f.start, f.fold, f.end)
 
     def observe[S](start: Eff[R, S], f: (S, A) => S, end: S => Eff[R, Unit]): Producer[R, A] =
       Producer.observe(p)(start, f, end)
@@ -98,6 +102,30 @@ package object producer {
 
     def intersperse(a: A): Producer[R, A] =
       p |> transducers.intersperse(a: A)
+
+    def first: Producer[R, A] =
+      p |> transducers.first
+
+    def last: Producer[R, A] =
+      p |> transducers.last
+
+    def scan[B](start: B)(f: (B, A) => B): Producer[R, B] =
+      p |> transducers.scan(start)(f)
+
+    def scan1(f: (A, A) => A): Producer[R, A] =
+      p |> transducers.scan1(f)
+
+    def reduce(f: (A, A) => A): Producer[R, A] =
+      p |> transducers.reduce(f)
+
+    def reduceSemigroup(implicit semi: Semigroup[A]): Producer[R, A] =
+      p |> transducers.reduceSemigroup
+
+    def reduceMonoid(implicit monoid: Monoid[A]): Producer[R, A] =
+      p |> transducers.reduceMonoid
+
+    def reduceMap[B : Monoid](f: A => B): Producer[R, B] =
+      p |> transducers.reduceMap[R, A, B](f)
   }
 
   implicit class ProducerResourcesOps[R :_safe, A](p: Producer[R, A])(implicit s: Safe <= R) {

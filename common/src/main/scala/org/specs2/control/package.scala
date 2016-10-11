@@ -28,8 +28,8 @@ package object control {
   type ActionStack   = Fx.fx5[ErrorOrOk, Console, Warnings, Safe, Async]
 
   type Action[A] = Eff[ActionStack, A]
-  type AsyncStream[A] = Producer[StreamStack, A]
-  type AsyncTransducer[A, B] = Transducer[StreamStack, A, B]
+  type AsyncStream[A] = Producer[ActionStack, A]
+  type AsyncTransducer[A, B] = Transducer[ActionStack, A, B]
 
   type AsyncSink[A] = origami.Fold[ActionStack, A, Unit]
 

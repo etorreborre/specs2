@@ -9,7 +9,7 @@ import eff.all._
 
 import scalaz.Show
 
-object Fold {
+object FoldIo {
 
   /** create a fold sink to output lines to a file */
   def showToFilePath[R :_Safe, T : Show](path: FilePath): Fold[R, T, Unit] =

@@ -2,17 +2,14 @@ package org.specs2
 package specification
 package process
 
-import data.Processes
-
-import org.specs2.codata._
-import org.specs2.codata.Process.{Env =>_,_}
 import execute._
 import scalaz.{Success=>_, Failure=>_,_}, Scalaz._
 import specification.core._
 import org.specs2.time.SimpleTimer
 import scalaz.concurrent.Task
 import scala.concurrent.duration.FiniteDuration
-import Processes._
+import control._
+import producer._
 
 /**
  * Functions for executing fragments.
@@ -29,7 +26,7 @@ trait Executor {
    *  - filter the ones that the user wants to keep
    *  - sequence the execution so that only parts in between steps are executed concurrently
    */
-  def execute(env: Env): Process[Task, Fragment] => Process[Task, Fragment]
+  def execute(env: Env): Transducer[ActionStack, Fragment, Fragment]
 }
 
 /**
@@ -46,7 +43,7 @@ trait DefaultExecutor extends Executor {
    *  - filter the ones that the user wants to keep
    *  - sequence the execution so that only parts in between steps are executed concurrently
    */
-  def execute(env: Env): Process[Task, Fragment] => Process[Task, Fragment] = { contents: Process[Task, Fragment] =>
+  def execute(env: Env): Transducer[ActionStack, Fragment, Fragment] = { contents: Producer[ActionStack, Fragment] =>
     execute1(env)(contents).andFinally(Task.delay(env.shutdown))
   }
 
@@ -55,12 +52,12 @@ trait DefaultExecutor extends Executor {
    *
    * The difference with `execute` is that `execute` shuts down the environment when the process is finished
    */
-  def execute1(env: Env): Process[Task, Fragment] => Process[Task, Fragment] = { contents: Process[Task, Fragment] =>
+  def execute1(env: Env): Transducer[ActionStack, Fragment, Fragment] = { contents: Process[Task, Fragment] =>
     (contents |> sequencedExecution(env)).sequence(Runtime.getRuntime.availableProcessors).flatMap(executeOnline(env))
   }
 
   /** a Process1 to execute fragments as tasks */
-  def executeTasks(env: Env): Process1[Fragment, Task[Fragment]] =
+  def executeTasks(env: Env): Transducer[ActionStack, Fragment, Task[Fragment]] =
     sequencedExecution(env)
 
   /**
@@ -75,7 +72,7 @@ trait DefaultExecutor extends Executor {
    */
   def sequencedExecution(env: Env,
                          barrier: Task[FatalExecution \/ Result] = Task.now(\/-(Success("barrier"))),
-                         mustStop: Boolean = false): Process1[Fragment, Task[Fragment]] = {
+                         mustStop: Boolean = false): Transducer[ActionStack, Fragment, Task[Fragment]] = {
     receive1 { fragment: Fragment =>
       val arguments = env.arguments
 
@@ -155,10 +152,10 @@ trait DefaultExecutor extends Executor {
     fragment.execution.continuation match {
       case Some(continue) =>
         continue(fragment.executionResult).cata(
-          fs => Process(fragment).toSource fby execute1(env)(fs.contents),
-          Process(fragment).toSource)
+          fs => emitAsyncDelayed(fragment) fby execute1(env)(fs.contents),
+          emitAsyncDelayed(fragment))
 
-      case None => Process(fragment).toSource
+      case None => emitAsyncDelayed(fragment)
     }
   }
 
@@ -204,13 +201,13 @@ object DefaultExecutor extends DefaultExecutor {
 
   /** only to be used in tests */
   def executeSeq(seq: Seq[Fragment])(implicit env: Env = Env()): IndexedSeq[Fragment] =
-    try { (Process(seq:_*).toSource |> executeTasks(env)).sequence(Runtime.getRuntime.availableProcessors).runLog.run }
+    try { (emitAsync(seq:_*) |> executeTasks(env)).sequence(Runtime.getRuntime.availableProcessors).runLog.run }
     finally env.shutdown
 
   /** synchronous execution */
   def executeFragments1 =
-    process1.lift(executeFragment(Env()))
+    transducers.transducer(executeFragment(Env()))
 
   /** synchronous execution with a specific environment */
-  def executeFragments1(env: Env) = process1.lift(executeFragment(env))
+  def executeFragments1(env: Env) = transducers.transducer(executeFragment(env))
 }

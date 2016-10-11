@@ -2,7 +2,6 @@ package org.specs2
 package reporter
 
 import control._
-import origami._
 import io._
 import execute._
 import main.Arguments
@@ -24,7 +23,7 @@ trait MarkdownPrinter extends Printer {
   def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment] = {
     val options = MarkdownOptions.create(env.arguments)
     implicit val show = MarkdownFragmentShow(options)
-    Fold.showToFilePath[ActionStack, Fragment](options.outDir / FilePath.unsafe(spec.header.className+"."+options.extension))
+    FoldIo.showToFilePath[ActionStack, Fragment](options.outDir / FilePath.unsafe(spec.header.className+"."+options.extension))
   }
 
   def fragmentToLine(options: MarkdownOptions) = { fragment: Fragment =>

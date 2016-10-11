@@ -1,20 +1,14 @@
 package org.specs2
 package reporter
 
-import foldm.stream.FoldProcessM.{SinkTask, ProcessTask, fromSink, IdTaskNaturalTransformation}
-import foldm.stream.FoldableProcessM.ProcessFoldableM
-import foldm.FoldM.{fromStart}
 import specification._
 import specification.process._
 import core._
-import scalaz.concurrent.Task
 import control._
-import scalaz.{Writer => _}
-import scalaz.syntax.traverse.ToTraverseOpsUnapply
-import scalaz.syntax.functor.{ToFunctorOps}
-import scalaz.syntax.foldable.ToFoldableOps
-import scalaz.std.list._
-import org.specs2.codata.{Process, Sink, channel}
+import eff.all._
+import origami._, Folds._
+import producer._
+import scalaz._, Scalaz._
 import Statistics._
 
 /**
@@ -43,15 +37,15 @@ trait Reporter {
     val env1 = env.setArguments(env.arguments.overrideWith(spec.arguments))
     val executing = readStats(spec, env1) |> env1.selector.select(env1) |> env1.executor.execute(env1)
     
-    val contents =
+    val contents: AsyncStream[Fragment] =
       // evaluate all fragments before reporting if required
-      if (env.arguments.execute.asap) Process.eval(executing.contents.runLog).flatMap(Process.emitAll)
+      if (env.arguments.execute.asap) producers.emitEff(executing.contents.runList)
       else                            executing.contents
 
     val sinks = (printers.map(_.sink(env1, spec)) :+ statsStoreSink(env1, spec)).suml
     val reportFold = Statistics.statisticsFold <* sinks
 
-    Actions.fromTask(reportFold.run[ProcessTask](contents))
+    contents.fold(reportFold)
   }
 
   /**
@@ -61,21 +55,21 @@ trait Reporter {
     val neverStore = env.arguments.store.never
     val resetStore = env.arguments.store.reset
 
-    lazy val sink: Sink[Task, Fragment] =
-      channel.lift {  case fragment =>
-        if (neverStore) Task.delay(())
-        else            env.statisticsRepository.storeResult(spec.specClassName, fragment.description, fragment.executionResult).toTask(env.systemLogger)
+    lazy val sink: AsyncSink[Fragment] =
+      Folds.sink[ActionStack, Fragment] { fragment: Fragment =>
+        if (neverStore) Actions.unit
+        else            env.statisticsRepository.storeResult(spec.specClassName, fragment.description, fragment.executionResult)
       }
 
-    val prepare: Task[Unit] =
-      if (resetStore) env.statisticsRepository.resetStatistics.toTask(env.systemLogger)
-      else            Task.now(())
+    val prepare: Action[Unit] =
+      if (resetStore) env.statisticsRepository.resetStatistics
+      else            Actions.unit
 
     val last = (stats: Stats) =>
-      if (neverStore) Task.now(())
-      else            env.statisticsRepository.storeStatistics(spec.specClassName, stats).toTask(env.systemLogger)
+      if (neverStore) Actions.unit
+      else            env.statisticsRepository.storeStatistics(spec.specClassName, stats)
 
-    (Statistics.fold.into[Task] <* fromStart(prepare) <* fromSink(sink)).mapFlatten(last)
+    (Statistics.fold.into[ActionStack] <* fromStart(prepare) <* sink).mapFlatten(last)
   }
 
 }

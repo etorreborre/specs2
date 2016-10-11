@@ -68,7 +68,7 @@ trait Fold[R, A, B] { self =>
 
   /** zip 2 folds to return a pair of values. alias for zip */
   def <*>[C](f: Fold[R, A, C]) =
-  zip(f)
+    zip(f)
 
   /** zip 2 folds to return a pair of values. alias for <*> */
   def zip[C](f: Fold[R, A, C]) = new Fold[R, A, (B, C)] {
@@ -207,6 +207,93 @@ trait Fold[R, A, B] { self =>
   }
 }
 
+object Fold {
+
+  implicit def MonoidSink[R, A]: Monoid[Fold[R, A, Unit]] = new Monoid[Fold[R, A, Unit]] {
+    def zero = Folds.fromStart(pure(()))
+    def append(s1: Fold[R, A, Unit], s2: =>Fold[R, A, Unit]): Fold[R, A, Unit] = new Fold[R, A, Unit] {
+      lazy val s2_ = s2
+      type S = (s1.S, s2_.S)
+      def start = s1.start.flatMap(s1s => s2_.start.map(s2s => (s1s, s2s)))
+      def fold = (s: S, a: A) => (s1.fold(s._1, a), s2_.fold(s._2, a))
+      def end(s: S) = s1.end(s._1) >> s2_.end(s._2)
+    }
+  }
+
+  /**
+   * Apply instance
+   *
+   * This means that we can write:
+   *
+   *   val mean: Fold[Int, Int] = (sum |@| count)(_ / _)
+   *
+   * An Apply instance is also a Functor instance so we can write:
+   *
+   *   val meanTimes2 = mean.map(_ * 2)
+   */
+  implicit def ApplyFold[R, T]: Apply[Fold[R, T, ?]] = new Apply[Fold[R, T, ?]] {
+    type F[U] = Fold[R, T, U]
+
+    def map[A, B](fa: F[A])(f: A => B): F[B] =
+      fa map f
+
+    def ap[A, B](fa: =>F[A])(f: =>F[A => B]): F[B] =
+      map(fa zip f) { case (a, b) => b(a) }
+  }
+
+  /**
+   *  Profunctor instance
+   *
+   *  This is especially useful because we can "map" on the input element
+   *
+   *  val doubleSum = fromMonoid[Double] // sum all elements
+   *  val roundedDoubleSum = doubleSum.mapfst(_.round)
+   */
+  implicit def ProfunctorFold[R]: Profunctor[Fold[R, ?, ?]] = new Profunctor[Fold[R, ?, ?]] {
+    type =>:[A, B] = Fold[R, A, B]
+
+    /** Contramap on `A`. */
+    def mapfst[A, B, C](fab: (A =>: B))(f: C => A): (C =>: B) =
+      fab contramap f
+
+    /** Functor map on `B`. */
+    def mapsnd[A, B, C](fab: (A =>: B))(f: B => C): (A =>: C) =
+      fab map f
+  }
+
+  /**
+   * A Fold can be turned into a Compose
+   *
+   * This allows us to write:
+   *
+   * val scans = sum compose list
+   *
+   */
+  implicit def ComposeFold[R]: Compose[Fold[R, ?, ?]] = new Compose[Fold[R, ?, ?]] {
+    type F[A, B] = Fold[R, A, B]
+
+    def compose[A, B, C](f: F[B, C], g: F[A, B]): F[A, C] =
+      g compose f
+  }
+
+  /**
+   * Cobind instance
+   */
+  def CobindFold[R, T]: Cobind[Fold[R, T, ?]] = new Cobind[Fold[R, T, ?]] {
+    type F[U] = Fold[R, T, U]
+
+    def cobind[A, B](fa: F[A])(f: F[A] => B): F[B] = new Fold[R, T, B] {
+      type S = fa.S
+      def start = fa.start
+      def fold = fa.fold
+      def end(s: S) = pure(f(fa))
+    }
+
+    def map[A, B](fa: F[A])(f: A => B): F[B] =
+      fa map f
+  }
+}
+
 /**
  * Typeclass instances and creation methods for folds
  */
@@ -261,6 +348,13 @@ trait Folds {
     def start = pure(open)
     def fold = (s: S, a: A) => otherwise(s.flatMap(c => step(c, a)), s.flatMap(close).flatMap(_ => s))
     def end(s: S) = s.flatMap(close)
+  }
+
+  def sink[R, A](action: A => Eff[R, Unit]): Fold[R, A, Unit] = new Fold[R, A, Unit] {
+    type S = Eff[R, Unit]
+    def start = pure(pure(()))
+    def fold = (s: S, a: A) => action(a)
+    def end(s: S) = s.void
   }
 }
 

@@ -4,19 +4,19 @@ package process
 
 import control._
 import specification.core._
+
 import scalaz.concurrent.Task
-import org.specs2.codata._
-import foldm._, FoldM._
-import stream.FoldableProcessM._
-import stream.FoldProcessM._
+import control._
+import origami._
+import producer._
 
 /**
  * Compute the statistics for executed fragments
  */
 trait Statistics {
 
-  def statsProcess: Process1[Fragment, Stats] =
-    process1.reduceMap { fragment =>
+  def statsProcess: Transducer[ActionStack, Fragment, Stats] =
+    producers.fold()reduceMap { fragment =>
       fragment.execution.executedResult.map(Stats.apply).getOrElse(Stats.empty)
     }
 
@@ -34,12 +34,12 @@ trait Statistics {
   /**
    * read the stats for one Fragment
    */
-  def readStats(className: String, env: Env): Fragment => Process[Task, Fragment] = { f: Fragment =>
-    Process.eval(env.statisticsRepository.previousResult(className, f.description).map(r => f.setPreviousResult(r)).toTask(env.systemLogger))
+  def readStats(className: String, env: Env): Fragment => Action[Fragment] = { f: Fragment =>
+    env.statisticsRepository.previousResult(className, f.description).map(r => f.setPreviousResult(r))
   }
 
   def fold: FoldState[Fragment, Stats] =
-    FoldM.fromMonoidMap { fragment: Fragment =>
+    Folds.fromMonoidMap { fragment: Fragment =>
       fragment.execution.executedResult.fold(defaultStats(fragment)) { result =>
         defaultStats(fragment).withResult(result).copy(timer = fragment.execution.executionTime)
       }
@@ -48,9 +48,9 @@ trait Statistics {
 
 object Statistics extends Statistics {
   /** compute the statistics as a Fold */
-  def statisticsFold: FoldM[Fragment, Task, Stats] { type S = Stats } =
-    fold.into[Task]
+  def statisticsFold: Fold[ActionStack, Fragment, Stats] { type S = Stats } =
+    fold.into[ActionStack]
 
   def runStats(spec: SpecStructure): Stats =
-    statisticsFold.run[ProcessTask](spec.contents).run
+    statisticsFold.run(spec.contents).runOption.getOrElse(Stats.empty)
 }
