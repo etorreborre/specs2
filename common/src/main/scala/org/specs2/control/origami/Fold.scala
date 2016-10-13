@@ -78,12 +78,20 @@ trait Fold[R, A, B] { self =>
     def end(s: S) = Apply[Eff[R, ?]].tuple2(self.end(s._1), f.end(s._2))
   }
 
+  /** zip with another fold, running this one only for its side effects */
+  def *>[C](f: Fold[R, A, C]): Fold[R, A, C] =
+    zip(f).map(_._2)
+
+  /** alias for *> */
+  def observedBy[C](f: Fold[R, A, C]): Fold[R, A, C] =
+    zip(f).map(_._2)
+
   /** zip with another fold only for its side effects */
-  def <*(f: Sink[R, A]) =
+  def <*[C](f: Fold[R, A, C]) =
     zip(f).map(_._1)
 
   /** alias for <* */
-  def observe(f: Sink[R, A]) =
+  def observe[C](f: Fold[R, A, C]) =
     zip(f).map(_._1)
 
   /** observe both the input value and the current state */
@@ -96,7 +104,7 @@ trait Fold[R, A, B] { self =>
 
   /** alias for observeWithState */
   def <<-*(sink: Sink[R, (S, A)]) =
-  observeWithState(sink)
+    observeWithState(sink)
 
   /** observe the current state */
   def observeState(sink: Sink[R, S]) = new Fold[R, A, B] {
@@ -173,6 +181,10 @@ trait Fold[R, A, B] { self =>
 
     def end(s: S) = s
   }
+
+  /** create a fold that will run this fold repeatedly on input elements and collect all results */
+  def asFoldable[F[_]](implicit monoid: Monoid[B], foldable: Foldable[F]) =
+    nest[F, F[A]](fa => fa)
 
   /**
    * use a transformation to go from effect stack to another
@@ -350,7 +362,7 @@ trait Folds {
     def end(s: S) = s.flatMap(close)
   }
 
-  def sink[R, A](action: A => Eff[R, Unit]): Fold[R, A, Unit] = new Fold[R, A, Unit] {
+  def fromSink[R, A](action: A => Eff[R, Unit]): Fold[R, A, Unit] = new Fold[R, A, Unit] {
     type S = Eff[R, Unit]
     def start = pure(pure(()))
     def fold = (s: S, a: A) => action(a)

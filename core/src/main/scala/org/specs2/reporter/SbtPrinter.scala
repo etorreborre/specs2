@@ -1,9 +1,8 @@
 package org.specs2
 package reporter
 
-import control.{Actions, Action}
+import control.{Logger =>_,_}
 import execute.Details
-import foldm.stream.FoldProcessM.SinkTask
 import sbt.testing._
 import org.specs2.text.AnsiColors._
 import main.Arguments
@@ -36,13 +35,13 @@ trait SbtPrinter extends Printer {
    * - one for logging messages to the console
    * - one for registering sbt events
    */
-  def sink(env: Env, spec: SpecStructure): SinkTask[Fragment] =
+  def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment] =
     textSink(env, spec) <* eventSink(env, spec)
 
-  def textSink(env: Env, spec: SpecStructure): SinkTask[Fragment] =
+  def textSink(env: Env, spec: SpecStructure): AsyncSink[Fragment] =
     textPrinter.sink(env.setLineLogger(SbtLineLogger(loggers)), spec)
 
-  def eventSink(env: Env, spec: SpecStructure): SinkTask[Fragment] =
+  def eventSink(env: Env, spec: SpecStructure): AsyncSink[Fragment] =
     sbtNotifierPrinter(env.arguments).sink(env, spec)
 }
 

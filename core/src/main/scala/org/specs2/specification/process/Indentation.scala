@@ -3,8 +3,8 @@ package specification
 package process
 
 import scala.math._
+import control.origami._, Folds._
 import specification.core._
-import foldm._, FoldM._
 
 /**
  * Fold function to compute the indentation of each fragment based
