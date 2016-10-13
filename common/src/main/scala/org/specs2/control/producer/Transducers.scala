@@ -19,6 +19,36 @@ trait Transducers {
   def transducer[R :_safe, A, B](f: A => B): Transducer[R, A, B] =
     (p: Producer[R, A]) => p.map(f)
 
+  def producerState[R :_safe, A, B, S](start: S)(f: (A, S) => (Producer[R, B], S)): Transducer[R, A, B] = (producer: Producer[R, A]) => {
+    def go(p: Producer[R, A], s: S): Producer[R, B] =
+      Producer(p.run flatMap {
+        case Done() => done.run
+        case One(a) => f(a, s)._1.run
+        case More(as, next) =>
+          val (bs, news) = as.drop(1).foldLeft(f(as.head, s)) { case ((pb, s1), a) =>
+            val (pb1, s2) = f(a, s1)
+            (pb append pb1, s2)
+          }
+          (bs append go(next, news)).run
+      })
+    go(producer, start)
+  }
+
+  def state[R :_safe, A, B, S](start: S)(f: (A, S) => (B, S)): Transducer[R, A, B] = (producer: Producer[R, A]) => {
+    def go(p: Producer[R, A], s: S): Producer[R, B] =
+      Producer(p.run flatMap {
+        case Done() => done.run
+        case One(a) => one(f(a, s)._1).run
+        case More(as, next) =>
+          val (bs, news) = as.foldLeft((List[B](), s)) { case ((bs1, s1), a) =>
+            val (b, s2) = f(a, s1)
+            (bs1 :+ b, s2)
+          }
+          (emit(bs) append go(next, news)).run
+      })
+    go(producer, start)
+  }
+
   def receiveOr[R :_safe, A, B](f: A => Producer[R, B])(or: =>Producer[R, B]): Transducer[R, A, B] =
     cata_[R, A, B](
       or,

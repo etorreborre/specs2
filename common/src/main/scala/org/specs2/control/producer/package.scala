@@ -128,6 +128,14 @@ package object producer {
       p |> transducers.reduceMap[R, A, B](f)
   }
 
+  implicit class TransducerOps[R :_safe, A, B](t: Transducer[R, A, B]) {
+    def |>[C](next: Transducer[R, B, C]): Transducer[R, A, C] =
+      (p: Producer[R, A]) => next(t(p))
+
+    def filter(predicate: B => Boolean): Transducer[R, A, B] = (producer: Producer[R, A]) =>
+      t(producer).filter(predicate)
+  }
+
   implicit class ProducerResourcesOps[R :_safe, A](p: Producer[R, A])(implicit s: Safe <= R) {
     def andFinally(e: Eff[R, Unit]): Producer[R, A] =
       Producer[R, A](p.run flatMap {
