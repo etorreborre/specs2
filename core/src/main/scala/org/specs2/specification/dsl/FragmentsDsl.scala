@@ -22,7 +22,7 @@ trait FragmentsDsl extends FragmentsFactory with AcceptanceDsl1 { outer =>
   }
 
   implicit class appendToFragment(f: Fragment) {
-    def ^(others: Fragments)        : Fragments      = Fragments(Fragments(f).contents ++ others.contents)
+    def ^(others: Fragments)        : Fragments      = Fragments(Fragments(f).contents append others.contents)
     def ^(others: Seq[Fragment])    : Fragments      = ^(Fragments(others:_*))
     def ^(other: Fragment)          : Fragments      = Fragments(f, other)
     def ^(other: String)            : Fragments      = f ^ fragmentFactory.text(other)

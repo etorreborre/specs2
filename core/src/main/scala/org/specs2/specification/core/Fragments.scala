@@ -5,7 +5,6 @@ package core
 import scalaz.Monoid
 import Fragment._
 import control._
-import eff.syntax.all._
 import producer._
 
 /**
@@ -31,7 +30,10 @@ case class Fragments(contents: AsyncStream[Fragment]) {
 
   /** filter, map or flatMap the fragments */
 
-  def when(condition: =>Boolean) = copy(contents = contents when emit(condition))
+  def when(condition: =>Boolean) = {
+    lazy val c = condition
+    copy(contents = contents filter (_ => c))
+  }
 
   def map(f: Fragment => Fragment)                  = copy(contents = contents map f)
   def mapDescription(f: Description => Description) = map(_.updateDescription(f))
@@ -39,13 +41,13 @@ case class Fragments(contents: AsyncStream[Fragment]) {
 
   def update(f: AsyncTransducer[Fragment, Fragment])   = copy(contents = f(contents))
   def flatMap(f: Fragment => AsyncStream[Fragment])    = copy(contents = contents flatMap f)
-  def |> (other: AsyncTransducer[Fragment, Fragment])  = copy(contents = contents append other)
+  def |> (f: AsyncTransducer[Fragment, Fragment])  = copy(contents = f(contents))
   def append(other: AsyncStream[Fragment]): Fragments  = copy(contents = contents append other)
   def prepend(other: AsyncStream[Fragment]): Fragments = copy(contents = other append contents)
 
   /** run the process to get all fragments */
   def fragments: IndexedSeq[Fragment] =
-    ProducerOps(contents).runList.execSafe.runAsyncTask.run.toOption.getOrElse(Nil)
+    ProducerOps(contents).runList.toConsoleTask.run.to[IndexedSeq]
 
   /** run the process to filter all texts */
   def texts = fragments.filter(isText)

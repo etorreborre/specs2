@@ -5,10 +5,10 @@ package mutable
 
 import main.Arguments
 import control._
+import producer._
 import execute.{Pending, Result, ResultLogicalCombinators, Success}
 import ResultLogicalCombinators._
 import reflect.Classes
-import org.specs2.codata._
 import specification.create.FragmentsFactory
 import specification.core._
 
@@ -33,10 +33,10 @@ trait MutableFragmentBuilder extends FragmentBuilder
 
   def specificationFragments = (env: Env) => {
     val content = {
-      Seq.fill(2)(fragmentFactory.break) ++ // add 2 line breaks just after the specification title
-      replayFragments(env)
+      List.fill(2)(fragmentFactory.break) ++ // add 2 line breaks just after the specification title
+      replayFragments(env).toList
     }
-    Fragments(Process.emitAll(content).toSource)
+    Fragments(producers.emit[ActionStack, Fragment](content))
   }
 
   def specificationStructure = (env: Env) =>
