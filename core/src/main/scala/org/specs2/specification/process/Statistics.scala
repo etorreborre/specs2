@@ -5,7 +5,6 @@ package process
 import control._
 import specification.core._
 
-import scalaz.concurrent.Task
 import control._
 import origami._
 import producer._
@@ -15,8 +14,8 @@ import producer._
  */
 trait Statistics {
 
-  def statsProcess: Transducer[ActionStack, Fragment, Stats] =
-    producers.fold()reduceMap { fragment =>
+  def statsProcess: AsyncTransducer[Fragment, Stats] =
+    transducers.reduceMap { fragment =>
       fragment.execution.executedResult.map(Stats.apply).getOrElse(Stats.empty)
     }
 
@@ -34,8 +33,8 @@ trait Statistics {
   /**
    * read the stats for one Fragment
    */
-  def readStats(className: String, env: Env): Fragment => Action[Fragment] = { f: Fragment =>
-    env.statisticsRepository.previousResult(className, f.description).map(r => f.setPreviousResult(r))
+  def readStats(className: String, env: Env): Fragment => AsyncStream[Fragment] = { f: Fragment =>
+    producers.eval(env.statisticsRepository.previousResult(className, f.description).map(r => f.setPreviousResult(r)))
   }
 
   def fold: FoldState[Fragment, Stats] =
@@ -52,5 +51,5 @@ object Statistics extends Statistics {
     fold.into[ActionStack]
 
   def runStats(spec: SpecStructure): Stats =
-    statisticsFold.run(spec.contents).runOption.getOrElse(Stats.empty)
+    spec.contents.fold(statisticsFold).runOption.getOrElse(Stats.empty)
 }
