@@ -137,6 +137,9 @@ package object producer {
 
     def flatMap[C](f: B => Producer[R, C]): Transducer[R, A, C] =
       (p: Producer[R, A]) => t(p).flatMap(f)
+
+    def map[C](f: B => C): Transducer[R, A, C] =
+      (p: Producer[R, A]) => t(p).map(f)
   }
 
   implicit class ProducerResourcesOps[R :_safe, A](p: Producer[R, A])(implicit s: Safe <= R) {

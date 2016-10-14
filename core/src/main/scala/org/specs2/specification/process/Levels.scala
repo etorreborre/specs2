@@ -5,12 +5,13 @@ package process
 import scalaz.{Tree, TreeLoc}
 import Tree._
 import data.Trees._
-import org.specs2.codata._
 import specification.create._
 import DefaultFragmentFactory._
-import Process._
 import specification.core._
 import scala.math._
+import control._
+import producer._
+import transducers._
 
 /**
  * Compute the "level" of each fragment to be able to represent the whole specification
@@ -21,27 +22,22 @@ import scala.math._
  */
 trait Levels {
 
-  def levelsProcess: Process1[Fragment, (Fragment, Int)] =
-    levelsProcess1.map { case (f, level) => (f, level.l)}
+  def levelsProcess: AsyncTransducer[Fragment, (Fragment, Int)] =
+    levelsProcess1.map { case (f, level) => (f, level.l) }
   
-  def levelsProcess1: Process1[Fragment, (Fragment, Level)] = {
+  def levelsProcess1: AsyncTransducer[Fragment, (Fragment, Level)] = {
+    def sameLevel(f: Fragment, level: Level) = ((f, level), level)
+    def nextLevel(f: Fragment, level: Level, next: Level) = ((f, level), next)
 
-    def go(level: Level): Process1[Fragment, (Fragment, Level)] = {
-
-      def sameLevel(f: Fragment) = emit((f, level)) ++ go(level)
-      def nextLevel(f: Fragment, next: Level) = emit((f, level)) ++ go(next)
-
-      receive1 {
-        // level goes +1 when a new block starts
-        case f @ Fragment(Start,_ ,_) => nextLevel(f, level.copy(start = true, incrementNext = false))
-        case f if Fragment.isText(f)  => nextLevel(f, level.copy(start = true, incrementNext = true))
-        case f @ Fragment(End,_ ,_)   => nextLevel(f, level.copy(start = false, incrementNext = false, max(0, level.l - 1)))
-        case f                        =>
-          if (level.incrementNext) nextLevel(f, level.copy(start = false, incrementNext = false, l = level.l + 1))
-          else                     sameLevel(f)
-      }
+    state[ActionStack, Fragment, (Fragment, Level), Level](Level()) {
+      // level goes +1 when a new block starts
+      case (f @ Fragment(Start,_ ,_), level) => nextLevel(f, level, level.copy(start = true, incrementNext = false))
+      case (f , level) if Fragment.isText(f) => nextLevel(f, level, level.copy(start = true, incrementNext = true))
+      case (f @ Fragment(End,_ ,_), level)   => nextLevel(f, level, level.copy(start = false, incrementNext = false, max(0, level.l - 1)))
+      case (f, level)                        =>
+        if (level.incrementNext) nextLevel(f, level, level.copy(start = false, incrementNext = false, l = level.l + 1))
+        else                     sameLevel(f, level)
     }
-    go(Level())
   }
 
   def fold(fragment: Fragment, level: Level): Level = fragment match {
@@ -55,35 +51,33 @@ trait Levels {
   }
 
 
-  def levelsToTreeLoc(mapper: Mapper): Process1[(Fragment, Int), TreeLoc[Fragment]] = {
+  def levelsToTreeLoc(mapper: Mapper): AsyncTransducer[(Fragment, Int), TreeLoc[Fragment]] = {
+    val init = leaf((DefaultFragmentFactory.text("root"), 0)).loc
 
-    def go(treeLoc: TreeLoc[(Fragment, Int)]): Process1[(Fragment, Int), TreeLoc[(Fragment, Int)]] = {
-      receive1 {
-        case (f, level) =>
+    state[ActionStack, (Fragment, Int), TreeLoc[(Fragment, Int)], TreeLoc[(Fragment, Int)]](init) {
+      case ((f, level), treeLoc) =>
 
-          val parent = if (level == 0) treeLoc.root else (treeLoc.parentLocs :+ treeLoc).takeWhile(_.getLabel._2 < level).lastOption.getOrElse(treeLoc)
-          val newTree = mapper(f) match {
-            case Some(fragment) => parent.insertDownLast(leaf((fragment, level)))
-            case None           => treeLoc
-          }
-          emit(newTree) ++ go(newTree)
-      }
-    }
-    go(leaf((DefaultFragmentFactory.text("root"), 0)).loc).map(_.map(_._1))
+        val parent = if (level == 0) treeLoc.root else (treeLoc.parentLocs :+ treeLoc).takeWhile(_.getLabel._2 < level).lastOption.getOrElse(treeLoc)
+        val newTree = mapper(f) match {
+          case Some(fragment) => parent.insertDownLast(leaf((fragment, level)))
+          case None           => treeLoc
+        }
+        (newTree, newTree)
+    }.map(_.map(_._1))
   }
 
   def treeLoc(fs: Fragments): Option[TreeLoc[Fragment]] =
     treeLocMap(fs)(identityMapper)
 
   def levels(fs: Fragments): List[Int] =
-     fs.contents.pipe(levelsProcess).runLog.run.map(_._2).toList
+    fs.contents.pipe(levelsProcess).runList.toConsoleTask.run.map(_._2).toList
 
 
   def levels(f: Fragment): List[Int]   = levels(Fragments(f))
   def levels(structure: SpecStructure): List[Int] = levels(structure.fragments)
 
   def treeLocMap(fs: Fragments)(mapper: Mapper): Option[TreeLoc[Fragment]] =
-    fs.contents.pipe(levelsProcess).pipe(levelsToTreeLoc(mapper)).runLog.run.lastOption
+    fs.contents.pipe(levelsProcess).pipe(levelsToTreeLoc(mapper)).runList.toConsoleTask.run.lastOption
 
   def tree(fs: Fragments): Option[Tree[Fragment]] = treeLoc(fs).map(_.toTree)
   def treeMap(fs: Fragments)(mapper: Mapper): Option[Tree[Fragment]] = treeLocMap(fs)(mapper).map(_.toTree)
