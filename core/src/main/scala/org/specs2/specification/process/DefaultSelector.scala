@@ -6,7 +6,7 @@ import text.Regexes._
 import control._
 import producer._, transducers._, producers._
 import data._
-import scalaz._, Scalaz._
+import scalaz._, Scalaz.{ToIdOps => _,_}
 import specification.core._
 import create.FormattingFragments
 import Fragment._
@@ -59,7 +59,7 @@ trait DefaultSelector extends Selector {
     val arguments = env.arguments
 
     def go: AsyncTransducer[Fragment, Fragment] =
-      transducers.state[ActionStack, Fragment, Option[Fragment], List[NamedTag]](Nil) {
+      (transducers.state[ActionStack, Fragment, Option[Fragment], List[NamedTag]](Nil) {
         case (f @ Fragment(m @ Marker(t, _, _),_,_), sections)  =>
           (Option(f), updateSections(sections, t))
 
@@ -70,9 +70,9 @@ trait DefaultSelector extends Selector {
 
         case (fragment, sections) =>
           (Option(fragment), sections)
-      }
+      }).flatMap(f => emit(f.toList))
 
-    if ((arguments.include + arguments.exclude).nonEmpty) normalize |> go.filter(_.isDefined) |> removeAdditionalEmptyText
+    if ((arguments.include + arguments.exclude).nonEmpty) normalize |> go |> removeAdditionalEmptyText
     else transducers.id
   }
 
@@ -95,28 +95,30 @@ trait DefaultSelector extends Selector {
    * e5
    */
   def transformBeforeMarkersToAfterMarkers: AsyncTransducer[Fragment, Fragment] = {
-    def go(previous: Option[Fragment] = None, sections: List[NamedTag] = Nil): AsyncTransducer[(Fragment, Option[Fragment]), Fragment] = {
-      receive {
+    def go: AsyncTransducer[(Fragment, Option[Fragment]), Fragment] = {
+      type S = (Option[Fragment], List[NamedTag])
+
+      transducers.producerState[ActionStack, (Fragment, Option[Fragment]), Fragment, S]((None, Nil)){
         // section for before if this is the start of a section, do a swap
-        case (f @ Fragment(m @ Marker(t, true, false),_,_), _) if !isEndTag(sections, t) =>
-          emit(f.copy(description = m.copy(appliesToNext = true)) +: previous.toList) append go(sections = updateSections(sections, t))
+        case ((f @ Fragment(m @ Marker(t, true, false),_,_), _), (previous, sections)) if !isEndTag(sections, t) =>
+          (emit(f.copy(description = m.copy(appliesToNext = true)) +: previous.toList), (previous, updateSections(sections, t)))
 
         // section for before if this is the end of a section, don't swap
-        case (m @ Fragment(Marker(t, true, false),_,_), _) if isEndTag(sections, t) =>
-          emit(previous.toList :+ m) append go(sections = updateSections(sections, t))
+        case ((m @ Fragment(Marker(t, true, false),_,_), _), (previous, sections)) if isEndTag(sections, t) =>
+          (emit(previous.toList :+ m), (previous, updateSections(sections, t)))
 
         // tag for before
-        case (f @ Fragment(m @ Marker(t, false, false),_,_), _)  =>
-          emit(f.copy(description = m.copy(appliesToNext = true)) +: previous.toList) append go(None, sections)
+        case ((f @ Fragment(m @ Marker(t, false, false),_,_), _), (previous, sections))  =>
+          (emit(f.copy(description = m.copy(appliesToNext = true)) +: previous.toList), (None, sections))
 
-        case (f, Some(_)) =>
-          emit(previous.toList) append go(Some(f), sections)
+        case ((f, Some(_)), (previous, sections)) =>
+          (emit(previous.toList), (Option(f), sections))
 
-        case (f, None) =>
-          emit(previous.toList :+ f)
+        case ((f, None), (previous, sections)) =>
+          (emit(previous.toList :+ f), (previous, sections))
       }
     }
-    zipWithNext |> go()
+    zipWithNext[ActionStack, Fragment] |> go
   }
 
   def updateSections(sections: List[NamedTag], tag: NamedTag): List[NamedTag] = {
@@ -129,68 +131,59 @@ trait DefaultSelector extends Selector {
     sections.exists(_.names.exists(tag.names.contains))
 
   def swapBeforeMarkerAndEmptyText: AsyncTransducer[Fragment, Fragment] = {
-    def go(previous: Option[Fragment] = None): AsyncTransducer[(Fragment, Option[Fragment]), Fragment] = {
-      receive {
+    def go: AsyncTransducer[(Fragment, Option[Fragment]), Fragment] = {
+      transducers.producerState[ActionStack, (Fragment, Option[Fragment]), Fragment, Option[Fragment]](None) {
         // tag or section for before
-        case (m @ Fragment(Marker(t, _, false),_,_), _)  =>
+        case ((m @ Fragment(Marker(t, _, false),_,_), _), previous)  =>
           if (previous.exists(isEmptyText))
-            emit(m +: previous.toList) append go()
+            (emit(m +: previous.toList), previous)
           else
-            emit(previous.toList :+ m) append go()
+            (emit(previous.toList :+ m), previous)
 
-        case (f, Some(_)) =>
-          emit(previous.toList) append go(Some(f))
+        case ((f, _), previous @ Some(_)) =>
+          (emit(previous.toList), Some(f))
 
-        case (f, None) =>
-          emit(previous.toList :+ f)
+        case ((f, _), None) =>
+          (one(f), None)
       }
     }
-    zipWithNext |> go()
+    zipWithNext[ActionStack, Fragment] |> go
   }
 
   def swapAfterMarkerAndEmptyText: AsyncTransducer[Fragment, Fragment] = {
-    def go(previous: Option[Fragment] = None): AsyncTransducer[(Fragment, Option[Fragment]), Fragment] = {
-      receive {
+    def go: AsyncTransducer[(Fragment, Option[Fragment]), Fragment] = {
+      transducers.producerState[ActionStack, (Fragment, Option[Fragment]), Fragment, Option[Fragment]](None) {
         // tag or section for after
-        case (m @ Fragment(Marker(t, _, true),_,_), _) =>
-         emit(previous.toList) append go(Some(m))
+        case ((m @ Fragment(Marker(t, _, true),_,_), _), previous) =>
+          (emit(previous.toList), Some(m))
 
-        case (f, Some(_)) if isEmptyText(f) =>
-          emit(f) append go(previous)
+        case ((f, _), previous @ Some(_)) if isEmptyText(f) =>
+          (one(f), previous)
 
-        case (f, Some(_)) =>
-          emit(previous.toList :+ f) append go()
+        case ((f, _), previous @ Some(_)) =>
+          (emit(previous.toList :+ f), None)
 
-        case (f, None) =>
-          emit(previous.toList :+ f)
+        case ((f, _), None) =>
+          (one(f), None)
       }
     }
-    zipWithNext |> go()
+    zipWithNext[ActionStack, Fragment] |> go
   }
 
   def transformTagsToSections: AsyncTransducer[Fragment, Fragment] = {
-    def go(previous: List[Fragment] = Nil): AsyncTransducer[Fragment, Fragment] = {
-      receive {
-        case f @ Fragment(m @ Marker(t, false, _),_,_) =>
-          go(previous :+ f.copy(description = m.copy(isSection = true)))
+    transducers.producerState[ActionStack, Fragment, Fragment, List[Fragment]](Nil) {
+      case (f @ Fragment(m @ Marker(t, false, _),_,_), previous) =>
+        (done, previous :+ f.copy(description = m.copy(isSection = true)))
 
-        case f =>
-          emit(previous ++ Seq(f) ++ previous) append go()
-      }
+      case (f, previous) =>
+        (emit(previous ++ List(f) ++ previous), previous)
     }
-    go()
   }
 
-  def removeAdditionalEmptyText: AsyncTransducer[Fragment, Fragment] = {
-    def go: AsyncTransducer[Fragment, Fragment] = {
-      receive { f  =>
-        if (Fragment.isEmptyText(f) || Fragment.isFormatting(f))
-          go
-        else
-          emit(FormattingFragments.br) append emit(f) append go
-      }
-    }
-    emit(FormattingFragments.br) append go
+  def removeAdditionalEmptyText: AsyncTransducer[Fragment, Fragment] = { producer: Producer[ActionStack, Fragment] =>
+    one[ActionStack, Fragment](FormattingFragments.br) append
+    producer.filter(f => !Fragment.isEmptyText(f) && !Fragment.isFormatting(f)).
+      flatMap(f => emit(List(FormattingFragments.br, f)))
   }
 
   /**

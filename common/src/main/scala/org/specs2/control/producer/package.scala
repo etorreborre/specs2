@@ -130,10 +130,13 @@ package object producer {
 
   implicit class TransducerOps[R :_safe, A, B](t: Transducer[R, A, B]) {
     def |>[C](next: Transducer[R, B, C]): Transducer[R, A, C] =
+      andThen(next)
+
+    def andThen[C](next: Transducer[R, B, C]): Transducer[R, A, C] =
       (p: Producer[R, A]) => next(t(p))
 
-    def filter(predicate: B => Boolean): Transducer[R, A, B] = (producer: Producer[R, A]) =>
-      t(producer).filter(predicate)
+    def flatMap[C](f: B => Producer[R, C]): Transducer[R, A, C] =
+      (p: Producer[R, A]) => t(p).flatMap(f)
   }
 
   implicit class ProducerResourcesOps[R :_safe, A](p: Producer[R, A])(implicit s: Safe <= R) {
