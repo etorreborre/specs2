@@ -37,7 +37,7 @@ class SbtPrinterSpec extends Spec with ForEachEnv { def is = s2"""
     }
 
     def e1 = { env: Env =>
-      printer.print(env)(SpecStructure.create(SpecHeader(classOf[HelloWorldSpec]), Fragments(text("\ntitle"), text("\ntext")))).run
+      printer.print(env)(SpecStructure.create(SpecHeader(classOf[HelloWorldSpec]), Fragments(text("\ntitle"), text("\ntext")))).unsafePerformSync
       there was one(logger).info(beMatching("HelloWorldSpec\ntitle\ntext"))
     }
 
@@ -67,7 +67,7 @@ class SbtPrinterSpec extends Spec with ForEachEnv { def is = s2"""
 
     def executeAndPrintHelloWorldUnitSpec(env: Env) = {
       val executed = DefaultExecutor.executeSpec((new HelloWorldUnitSpec).specificationStructure(env), env)
-      printer.print(env)(executed).run
+      printer.print(env)(executed).unsafePerformSync
     }
 
   }
@@ -78,7 +78,7 @@ class SbtPrinterSpec extends Spec with ForEachEnv { def is = s2"""
       val hwSpec: org.specs2.Specification = new examples.HelloWorldSpec
       val executed = DefaultExecutor.executeSpec(hwSpec.is, env)
 
-      print(executed).replaceAll("\\d+ ms", "0 ms").replaceAll(" ", "_") ===
+      print(executed).replaceAll("""(\d+ seconds?, )?\d+ ms""", "0 ms").replaceAll(" ", "_") ===
       """|HelloWorldSpec
          |
          | This is a specification to check the 'Hello world' string
@@ -95,7 +95,7 @@ class SbtPrinterSpec extends Spec with ForEachEnv { def is = s2"""
     }
 
     def print(spec: SpecStructure) = {
-      printer.print(Env(arguments = Arguments("nocolor")))(spec).run
+      printer.print(Env(arguments = Arguments("nocolor")))(spec).unsafePerformSync
       stringLogger.flush()
       stringLogger.messages.mkString("\n")
     }
@@ -121,4 +121,3 @@ class SbtPrinterSpec extends Spec with ForEachEnv { def is = s2"""
   }
 
 }
-
