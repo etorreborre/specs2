@@ -124,7 +124,7 @@ trait SafeInterpretation extends SafeCreation { outer =>
    * evaluate 1 action possibly having error effects
    * execute a second action whether the first is successful or not but keep track of finalizer exceptions
    */
-  def andFinally[R, A](action: Eff[R, A], last: Eff[R, Unit])(implicit m: Safe <= R): Eff[R, A] = {
+  def thenFinally[R, A](action: Eff[R, A], last: Eff[R, Unit])(implicit m: Safe <= R): Eff[R, A] = {
     val loop = new StatelessLoop[Safe, R, A, Eff[R, A]] {
       def onPure(a: A): Eff[R, A] \/ Eff[R, A] =
         \/-(attempt(last) flatMap {
@@ -163,7 +163,7 @@ trait SafeInterpretation extends SafeCreation { outer =>
   def bracket[R, A, B, C](acquire: Eff[R, A])(step: A => Eff[R, B])(release: A => Eff[R, C])(implicit m: Safe <= R): Eff[R, B] =
     for {
       a <- acquire
-      b <- andFinally(step(a), release(a).void)
+      b <- thenFinally(step(a), release(a).void)
     } yield b
 
   /**

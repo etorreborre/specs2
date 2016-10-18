@@ -143,15 +143,15 @@ package object producer {
   }
 
   implicit class ProducerResourcesOps[R :_safe, A](p: Producer[R, A])(implicit s: Safe <= R) {
-    def andFinally(e: Eff[R, Unit]): Producer[R, A] =
+    def thenFinally(e: Eff[R, Unit]): Producer[R, A] =
       Producer[R, A](p.run flatMap {
-        case Done() => safe.andFinally(Producer.done[R, A].run, e)
-        case One(a) => safe.andFinally(Producer.one[R, A](a).run, e)
-        case More(as, next) => protect(More(as, ProducerResourcesOps(next).andFinally(e)))
+        case Done() => safe.thenFinally(Producer.done[R, A].run, e)
+        case One(a) => safe.thenFinally(Producer.one[R, A](a).run, e)
+        case More(as, next) => protect(More(as, ProducerResourcesOps(next).thenFinally(e)))
       })
 
     def `finally`(e: Eff[R, Unit]): Producer[R, A] =
-      p.andFinally(e)
+      p.thenFinally(e)
 
     def attempt: Producer[R, Throwable \/ A] =
       Producer[R, Throwable \/ A](SafeInterpretation.attempt(p.run) map {

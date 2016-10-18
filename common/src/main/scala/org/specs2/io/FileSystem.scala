@@ -43,7 +43,7 @@ trait FileSystem extends FilePathReader {
 
   /** execute an action with a File, then delete it */
   def withEphemeralFile(path: FilePath)(action: Action[Unit]): Action[Unit] =
-    action.andFinally(deleteFile(path).void)
+    action.thenFinally(deleteFile(path).void)
 
   /** create a directory and its parent directories */
   def mkdirs(path: DirectoryPath): Action[Unit] =

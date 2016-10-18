@@ -91,6 +91,51 @@ trait AsyncInterpretation { outer =>
     p.future
   }
 
+  def attempt[R, A](e: Eff[R, A])(implicit task: Task /= R): Eff[R, Throwable \/ A] = {
+    e match {
+      case Pure(a) => pure[R, Throwable \/ A](\/.right(a))
+
+      case Impure(u, c) =>
+        task.extract(u) match {
+          case Some(tx) =>
+            val union = task.inject(tx.attempt)
+            Impure(union, Arrs.singleton { ex: (Throwable \/ u.X) =>
+              ex match {
+                case \/-(x) => attempt(c(x))
+                case -\/(t) => pure(\/.left(t))
+              }
+            })
+
+          case None => Impure(u, Arrs.singleton((x: u.X) => attempt(c(x))))
+        }
+
+      case ImpureAp(unions, c) =>
+        def materialize(u: Union[R, Any]): Union[R, Any] =
+          task.extract(u) match {
+            case Some(tx) => task.inject(tx.attempt)
+            case None => u
+          }
+
+        val materializedUnions =
+          Unions(materialize(unions.first), unions.rest.map(materialize))
+
+        val collected = unions.extract(task)
+        val continuation = Arrs.singleton[R, List[Any], Throwable \/ A] { ls: List[Any] =>
+          val xors =
+            ls.zipWithIndex.collect { case (a, i) =>
+              if (collected.indices.contains(i)) a.asInstanceOf[Throwable \/ Any]
+              else \/.right(a)
+            }.sequence
+
+          xors match {
+            case -\/(t) => pure(\/.left(t))
+            case \/-(anys) => attempt(c(anys))
+          }
+        }
+
+        ImpureAp(materializedUnions, continuation)
+    }
+  }
 }
 
 object AsyncInterpretation extends AsyncInterpretation

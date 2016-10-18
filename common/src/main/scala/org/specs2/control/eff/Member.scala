@@ -1,11 +1,18 @@
-package org.specs2.control.eff
+package org.specs2.control
+package eff
 
 import scalaz._
+
 import scala.annotation.implicitNotFound
 
 @implicitNotFound("No instance found for MemberIn[${T}, ${R}].\nThe effect ${T} is not part of the stack ${R}")
-trait MemberIn[T[_], R] {
+trait MemberIn[T[_], R] { outer =>
   def inject[V](tv: T[V]): Union[R, V]
+
+  def transform[O[_]](implicit from: O ~> T): MemberIn[O, R] = new MemberIn[O, R] {
+    def inject[V](ov: O[V]): Union[R, V] =
+      outer.inject(from(ov))
+  }
 }
 
 object MemberIn extends MemberInLower1 {
@@ -74,8 +81,152 @@ trait MemberInLower5 {
   }
 }
 
+@implicitNotFound("No instance found for MemberInOut[${T}, ${R}].\nThe effect ${T} is not part of the stack ${R}")
+trait MemberInOut[T[_], R] extends MemberIn[T, R] { outer =>
+  def extract[V](union: Union[R, V]): Option[T[V]]
+
+  def transform[O[_]](implicit to: T ~> O, from: O ~> T): MemberIn[O, R] = new MemberIn[O, R] {
+    def inject[V](ov: O[V]): Union[R, V] =
+      outer.inject(from(ov))
+
+    def extract[V](union: Union[R, V]): Option[O[V]] =
+      outer.extract(union).map(to.apply)
+  }
+
+  def transformUnion[A](nat: T ~> T)(union: Union[R, A]): Union[R, A] =
+    extract(union).map(tx => nat(tx)).fold(union)(tx => inject(tx))
+
+}
+
+object MemberInOut extends MemberInOutLower1 {
+
+  @implicitNotFound("No instance found for MemberInOut[${T}, ${R}].\nThe effect ${T} is not part of the stack ${R}")
+  type /=[T[_], R] = MemberInOut[T, R]
+}
+
+trait MemberInOutLower1 extends MemberInOutLower2 {
+  implicit def MemberInOutOut1[T[_]]: MemberInOut[T, Fx1[T]] = new MemberInOut[T, Fx1[T]] {
+    def inject[V](effect: T[V]): Union[Fx1[T], V] =
+      Union1(effect)
+
+    def extract[V](union: Union[Fx1[T], V]): Option[T[V]] =
+      union match {
+        case Union1(e) => Option(e)
+      }
+
+  }
+}
+
+trait MemberInOutLower2 extends MemberInOutLower3 {
+  implicit def MemberInOut2L[L[_], R[_]]: MemberInOut[L, Fx2[L, R]] = new MemberInOut[L, Fx2[L, R]] {
+    def inject[V](effect: L[V]): Union[Fx2[L, R], V] =
+      Union2L(effect)
+
+    def extract[V](union: Union[Fx2[L, R], V]): Option[L[V]] =
+      union match {
+        case Union2L(e) => Option(e)
+        case _          => None
+      }
+  }
+
+  implicit def MemberInOut3L[L[_], M[_], R[_]]: MemberInOut[L, Fx3[L, M, R]] = new MemberInOut[L, Fx3[L, M, R]] {
+    def inject[V](effect: L[V]): Union[Fx3[L, M, R], V] =
+      Union3L(effect)
+
+    def extract[V](union: Union[Fx3[L, M, R], V]): Option[L[V]] =
+      union match {
+        case Union3L(e) => Option(e)
+        case _          => None
+      }
+  }
+
+  implicit def MemberInOutAppendL[T[_], L, R](implicit append: MemberInOut[T, L]): MemberInOut[T, FxAppend[L, R]] = new MemberInOut[T, FxAppend[L, R]] {
+    def inject[V](effect: T[V]): Union[FxAppend[L, R], V] =
+      UnionAppendL(append.inject(effect))
+
+    def extract[V](union: Union[FxAppend[L, R], V]): Option[T[V]] =
+      union match {
+        case UnionAppendL(u) => append.extract(u)
+        case _               => None
+      }
+  }
+}
+
+trait MemberInOutLower3 extends MemberInOutLower4 {
+  implicit def MemberInOut2R[L[_], R[_]]: MemberInOut[R, Fx2[L, R]] = new MemberInOut[R, Fx2[L, R]] {
+    def inject[V](effect: R[V]): Union[Fx2[L, R], V] =
+      Union2R(effect)
+
+    def extract[V](union: Union[Fx2[L, R], V]): Option[R[V]] =
+      union match {
+        case Union2R(e) => Option(e)
+        case _          => None
+      }
+  }
+
+  implicit def MemberInOut3M[L[_], M[_], R[_]]: MemberInOut[M, Fx3[L, M, R]] = new MemberInOut[M, Fx3[L, M, R]] {
+    def inject[V](effect: M[V]): Union[Fx3[L, M, R], V] =
+      Union3M(effect)
+
+    def extract[V](union: Union[Fx3[L, M, R], V]): Option[M[V]] =
+      union match {
+        case Union3M(e) => Option(e)
+        case _          => None
+      }
+  }
+
+  implicit def MemberInOutAppendR[T[_], L, R](implicit append: MemberInOut[T, R]): MemberInOut[T, FxAppend[L, R]] = new MemberInOut[T, FxAppend[L, R]] {
+    def inject[V](effect: T[V]): Union[FxAppend[L, R], V] =
+      UnionAppendR(append.inject(effect))
+
+    def extract[V](union: Union[FxAppend[L, R], V]): Option[T[V]] =
+      union match {
+        case UnionAppendR(u) => append.extract(u)
+        case _               => None
+      }
+  }
+}
+
+trait MemberInOutLower4 extends MemberInOutLower5 {
+  implicit def MemberInOut3R[L[_], M[_], R[_]]: MemberInOut[R, Fx3[L, M, R]] = new MemberInOut[R, Fx3[L, M, R]] {
+    def inject[V](effect: R[V]): Union[Fx3[L, M, R], V] =
+      Union3R(effect)
+
+    def extract[V](union: Union[Fx3[L, M, R], V]): Option[R[V]] =
+      union match {
+        case Union3R(e) => Option(e)
+        case _          => None
+      }
+  }
+}
+
+trait MemberInOutLower5 {
+  implicit def MemberInOutAppendAnyL[T[_], R]: MemberInOut[T, FxAppend[Fx1[T], R]] = new MemberInOut[T, FxAppend[Fx1[T], R]] {
+    def inject[V](effect: T[V]): Union[FxAppend[Fx1[T], R], V] =
+      UnionAppendL(Union1(effect))
+
+    def extract[V](union: Union[FxAppend[Fx1[T], R], V]): Option[T[V]] =
+      union match {
+        case UnionAppendL(Union1(e)) => Option(e)
+        case _                       => None
+      }
+  }
+
+  implicit def MemberInOutAppendAnyR[T[_], L, R](implicit m: MemberInOut[T, R]): MemberInOut[T, FxAppend[L, R]] = new MemberInOut[T, FxAppend[L, R]] {
+    def inject[V](effect: T[V]): Union[FxAppend[L, R], V] =
+      UnionAppendR(m.inject(effect))
+
+    def extract[V](union: Union[FxAppend[L, R], V]): Option[T[V]] =
+      union match {
+        case UnionAppendR(u) => m.extract(u)
+        case _               => None
+      }
+  }
+}
+
+
 @implicitNotFound("No instance found for Member[${T}, ${R}].\nThe effect ${T} is not part of the stack ${R}\n or it was not possible to determine the stack that would result from removing ${T} from ${R}")
-trait Member[T[_], R] extends MemberIn[T, R] {
+trait Member[T[_], R] extends MemberInOut[T, R] {
   type Out
 
   def accept[V](union: Union[Out, V]): Union[R, V]
@@ -84,6 +235,10 @@ trait Member[T[_], R] extends MemberIn[T, R] {
 
   def aux: Member.Aux[T, R, Out] =
     this
+
+  def extract[V](union: Union[R, V]): Option[T[V]] =
+    project(union).toOption
+
 }
 
 object Member extends MemberLower1 {
@@ -116,7 +271,7 @@ trait MemberLower1 extends MemberLower2 {
 
     def project[V](union: Union[Fx1[T], V]): Union[Out, V] \/ T[V] =
       union match {
-        case Union1(e) => \/-(e)
+        case Union1(e) => \/.right(e)
       }
   }
 }
@@ -135,8 +290,8 @@ trait MemberLower2 extends MemberLower3 {
 
     def project[V](union: Union[Fx2[L, R], V]): Union[Out, V] \/ L[V] =
       union match {
-        case Union2L(e) => \/-(e)
-        case Union2R(e) => -\/(Union1[R, V](e))
+        case Union2L(e) => \/.right(e)
+        case Union2R(e) => \/.left(Union1[R, V](e))
       }
   }
 }
@@ -156,9 +311,9 @@ trait MemberLower3 extends MemberLower4 {
 
     def project[V](union: Union[Fx3[L, M, R], V]): Union[Out, V] \/ L[V] =
       union match {
-        case Union3L(e) => \/-(e)
-        case Union3M(e) => -\/(Union2L[M, R, V](e))
-        case Union3R(e) => -\/(Union2R[M, R, V](e))
+        case Union3L(e) => \/.right(e)
+        case Union3M(e) => \/.left(Union2L[M, R, V](e))
+        case Union3R(e) => \/.left(Union2R[M, R, V](e))
       }
   }
 }
@@ -175,8 +330,8 @@ trait MemberLower4 extends MemberLower5 {
 
     def project[V](union: Union[FxAppend[Fx1[T], Fx3[L, M, R]], V]): Union[Out, V] \/ T[V] =
       union match {
-        case UnionAppendL(Union1(e)) => \/-(e)
-        case UnionAppendR(u)         => -\/(u)
+        case UnionAppendL(Union1(e)) => \/.right(e)
+        case UnionAppendR(u)         => \/.left(u)
       }
   }
 }
@@ -197,10 +352,10 @@ trait MemberLower5 extends MemberLower6 {
 
     def project[V](union: Union[FxAppend[Fx1[T], Fx3[L, M, R]], V]): Union[Fx3[T, M, R], V] \/ L[V] =
       union match {
-        case UnionAppendL(Union1(t))  => -\/(Union3L(t))
-        case UnionAppendR(Union3L(l)) => \/-(l)
-        case UnionAppendR(Union3M(m)) => -\/(Union3M(m))
-        case UnionAppendR(Union3R(r)) => -\/(Union3R(r))
+        case UnionAppendL(Union1(t))  => \/.left(Union3L(t))
+        case UnionAppendR(Union3L(l)) => \/.right(l)
+        case UnionAppendR(Union3M(m)) => \/.left(Union3M(m))
+        case UnionAppendR(Union3R(r)) => \/.left(Union3R(r))
         case UnionAppendR(_)          => sys.error("appeasing the compiler exhaustiveness checking for Member4RL")
       }
   }
@@ -222,10 +377,10 @@ trait MemberLower6 extends MemberLower7 {
 
     def project[V](union: Union[FxAppend[Fx1[T], Fx3[L, M, R]], V]): Union[Fx3[T, L, R], V] \/ M[V] =
       union match {
-        case UnionAppendL(Union1(t))  => -\/(Union3L(t))
-        case UnionAppendR(Union3L(l)) => -\/(Union3M(l))
-        case UnionAppendR(Union3M(m)) => \/-(m)
-        case UnionAppendR(Union3R(r)) => -\/(Union3R(r))
+        case UnionAppendL(Union1(t))  => \/.left(Union3L(t))
+        case UnionAppendR(Union3L(l)) => \/.left(Union3M(l))
+        case UnionAppendR(Union3M(m)) => \/.right(m)
+        case UnionAppendR(Union3R(r)) => \/.left(Union3R(r))
         case UnionAppendR(_)          => sys.error("appeasing the compiler exhaustiveness checking for Member4RM")
       }
   }
@@ -247,10 +402,10 @@ trait MemberLower7 extends MemberLower8 {
 
     def project[V](union: Union[FxAppend[Fx1[T], Fx3[L, M, R]], V]): Union[Fx3[T, L, M], V] \/ R[V] =
       union match {
-        case UnionAppendL(Union1(t))  => -\/(Union3L(t))
-        case UnionAppendR(Union3L(l)) => -\/(Union3M(l))
-        case UnionAppendR(Union3M(m)) => -\/(Union3R(m))
-        case UnionAppendR(Union3R(r)) => \/-(r)
+        case UnionAppendL(Union1(t))  => \/.left(Union3L(t))
+        case UnionAppendR(Union3L(l)) => \/.left(Union3M(l))
+        case UnionAppendR(Union3M(m)) => \/.left(Union3R(m))
+        case UnionAppendR(Union3R(r)) => \/.right(r)
         case UnionAppendR(_)          => sys.error("appeasing the compiler exhaustiveness checking for Member4RM")
       }
   }
@@ -268,8 +423,8 @@ trait MemberLower8 extends MemberLower9 {
 
     def project[V](union: Union[FxAppend[Fx1[T], R], V]): Union[Out, V] \/ T[V] =
       union match {
-        case UnionAppendL(Union1(e)) => \/-(e)
-        case UnionAppendR(u)         => -\/(u)
+        case UnionAppendL(Union1(e)) => \/.right(e)
+        case UnionAppendR(u)         => \/.left(u)
       }
   }
 }
@@ -315,7 +470,7 @@ trait MemberLower14 extends MemberLower15 {
     def project[V](union: Union[FxAppend[L, R], V]): Union[Out, V] \/ T[V] =
       union match {
         case UnionAppendL(u) => append.project(u).leftMap(UnionAppendL.apply)
-        case UnionAppendR(u) => -\/(UnionAppendR(u))
+        case UnionAppendR(u) => \/.left(UnionAppendR(u))
       }
   }
 }
@@ -334,8 +489,8 @@ trait MemberLower15 extends MemberLower16 {
 
     def project[V](union: Union[Fx2[L, R], V]): Union[Out, V] \/ R[V] =
       union match {
-        case Union2R(e) => \/-(e)
-        case Union2L(e) => -\/(Union1[L, V](e))
+        case Union2R(e) => \/.right(e)
+        case Union2L(e) => \/.left(Union1[L, V](e))
       }
 
   }
@@ -356,14 +511,19 @@ trait MemberLower16 extends MemberLower17 {
 
     def project[V](union: Union[Fx3[L, M, R], V]): Union[Out, V] \/ M[V] =
       union match {
-        case Union3L(e) => -\/(Union2L[L, R, V](e))
-        case Union3M(e) => \/-(e)
-        case Union3R(e) => -\/(Union2R[L, R, V](e))
+        case Union3L(e) => \/.left(Union2L[L, R, V](e))
+        case Union3M(e) => \/.right(e)
+        case Union3R(e) => \/.left(Union2R[L, R, V](e))
       }
   }
+
+  // Specifialized version of MemberAppendR with an existential type for the output stack
+  implicit def MemberAppendRNoAux[T[_], L, R](implicit append: Member[T, R]): Member.Aux[T, FxAppend[L, R], FxAppend[L, append.Out]] =
+  Member.MemberAppendR[T, L, R, append.Out](append)
 }
 
 trait MemberLower17 extends MemberLower18 {
+
   implicit def MemberAppendR[T[_], L, R, U](implicit append: Member.Aux[T, R, U]): Member.Aux[T, FxAppend[L, R], FxAppend[L, U]] = new Member[T, FxAppend[L, R]] {
     type Out = FxAppend[L, U]
 
@@ -378,7 +538,7 @@ trait MemberLower17 extends MemberLower18 {
 
     def project[V](union: Union[FxAppend[L, R], V]): Union[Out, V] \/ T[V] =
       union match {
-        case UnionAppendL(u) => -\/(UnionAppendL(u))
+        case UnionAppendL(u) => \/.left(UnionAppendL(u))
         case UnionAppendR(u) => append.project(u).leftMap(UnionAppendR.apply)
       }
 
@@ -400,9 +560,9 @@ trait MemberLower18 extends MemberLower19 {
 
     def project[V](union: Union[Fx3[L, M, R], V]): Union[Out, V] \/ R[V] =
       union match {
-        case Union3L(e) => -\/(Union2L[L, M, V](e))
-        case Union3M(e) => -\/(Union2R[L, M, V](e))
-        case Union3R(e) => \/-(e)
+        case Union3L(e) => \/.left(Union2L[L, M, V](e))
+        case Union3M(e) => \/.left(Union2R[L, M, V](e))
+        case Union3R(e) => \/.right(e)
       }
   }
 }
