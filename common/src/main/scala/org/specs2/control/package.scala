@@ -3,6 +3,8 @@ package org.specs2
 import control.eff._
 import all._
 import syntax.all._
+import concurrent.ExecutionEnv
+import scala.concurrent.duration.FiniteDuration
 
 import scalaz._
 import scalaz.effect.IO
@@ -47,19 +49,35 @@ package object control {
     warn(message)(m1) >>
     fail(failureMessage)
 
-  def executeAction[A](action: Eff[ActionStack, A], printer: String => Unit = s => ()): (Error \/ A, List[String]) = {
+  def executeAction[A](action: Action[A], printer: String => Unit = s => ()): (Error \/ A, List[String]) = {
     type S = Fx.append[Fx.fx2[ErrorOrOk, Console], Fx.fx2[Warnings, Async]]
 
     action.execSafe.flatMap(_.fold(t => exception[S, A](t), a => Eff.pure[S, A](a))).
        runError.runConsoleToPrinter(printer).runWarnings.runAsyncTask.run
   }
 
-  def runAction[A](action: Eff[ActionStack, A], printer: String => Unit = s => ()): Error \/ A =
+  def runAction[A](action: Action[A], printer: String => Unit = s => ()): Error \/ A =
     attemptExecuteAction(action, printer).fold(
       t => -\/(-\/(t)),
       other => other._1)
 
-  def attemptExecuteAction[A](action: Eff[ActionStack, A], printer: String => Unit = s => ()): Throwable \/ (Error \/ A, List[String]) =
+  def withTimeout[A](action: Action[A])(timeout: FiniteDuration, env: ExecutionEnv): Action[A] =
+    interpret.interceptNat[ActionStack, Async, A](action)(new (Async ~> Async) {
+      def apply[X](tx: Async[X]) =
+        tx match {
+          case AsyncTask(t) => AsyncTask(t.unsafePerformTimed(timeout)(env.scheduledExecutorService))
+        }
+    })
+
+
+  def attemptAction[A](action: Action[A], printer: String => Unit = s => ()): Throwable \/ A =
+    runAction(action, printer) match {
+      case -\/(-\/(t)) => -\/(t)
+      case -\/(\/-(f)) => -\/(new Exception(f))
+      case \/-(a)      => \/-(a)
+    }
+
+  def attemptExecuteAction[A](action: Action[A], printer: String => Unit = s => ()): Throwable \/ (Error \/ A, List[String]) =
     action.runError.runConsoleToPrinter(printer).runWarnings.execSafe.runAsyncTask.run
 
   /**
@@ -161,6 +179,12 @@ package object control {
 
     def ok[A](a: A): Action[A] =
       ErrorEffect.ok(a)
+
+    def protect[A](a: =>A): Action[A] =
+      SafeEffect.protect(a)
+
+    def asyncDelay[A](a: =>A): Action[A] =
+      AsyncCreation.asyncDelay(a)
 
     def delayed[A](a: =>A): Action[A] =
       ErrorEffect.ok(a)

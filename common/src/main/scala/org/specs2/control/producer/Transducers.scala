@@ -1,8 +1,10 @@
 package org.specs2.control
 package producer
 
-import eff.all._
 import scalaz._
+import eff._, all._
+import org.specs2.control.eff.syntax.eff._
+import Scalaz.{cata =>_,_}
 import Producer._
 
 trait Transducers {
@@ -46,6 +48,48 @@ trait Transducers {
           }
           (emit(bs) append go(next, news)).run
       })
+    go(producer, start)
+  }
+
+  def stateEval[R :_safe, A, B, S](start: S)(f: (A, S) => Eff[R, (B, S)]): Transducer[R, A, B] = (producer: Producer[R, A]) => {
+    def go(p: Producer[R, A], s: S): Producer[R, B] =
+      Producer(p.run flatMap {
+        case Done() => done.run
+        case One(a) => oneEff(f(a, s).map(_._1)).run
+        case More(as, next) =>
+          type U = Fx.prepend[State[S, ?], R]
+          val traversed: Eff[U, List[B]] =
+            as.traverse { a: A =>
+              for {
+                s1 <- StateEffect.get[U, S]
+                bs <- f(a, s1).into[U]
+                _  <- StateEffect.put[U, S](bs._2)
+              } yield bs._1
+            }
+
+          val result: Eff[R, (List[B], S)] = StateEffect.runState(s)(traversed)
+          result.flatMap { case (bs, news) =>
+            (emit(bs) append go(next, news)).run
+          }
+      })
+
+    go(producer, start)
+  }
+
+  def stateEff[R :_safe, A, B, S](start: S)(f: (A, S) => (Eff[R, B], S)): Transducer[R, A, Eff[R, B]] = (producer: Producer[R, A]) => {
+    def go(p: Producer[R, A], s: S): Producer[R, Eff[R, B]] =
+      Producer(p.run flatMap {
+        case Done() => done.run
+        case One(a) => one(f(a, s)._1).run
+        case More(as, next) =>
+          as match {
+            case Nil => go(next, s).run
+            case a :: rest =>
+              val (b, s1) = f(a, s)
+              (one(b) append go(emit(rest) append next, s1)).run
+          }
+      })
+
     go(producer, start)
   }
 

@@ -69,6 +69,11 @@ package object producer {
       Producer.flatten(p)
   }
 
+  implicit class ProducerEffOps[R :_safe, A](p: Producer[R, Eff[R, A]]) {
+    def sequence[F[_]](n: Int)(implicit f: F |= R): Producer[R, A] =
+      Producer.sequence[R, F, A](n)(p)
+  }
+
   implicit class ProducerTransducerOps[R :_safe, A](p: Producer[R, A]) {
     def receiveOr[B](f: A => Producer[R, B])(or: =>Producer[R, B]): Producer[R, B] =
       p |> transducers.receiveOr(f)(or)

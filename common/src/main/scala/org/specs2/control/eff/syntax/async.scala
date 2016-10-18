@@ -19,7 +19,7 @@ trait async {
   }
 
   implicit class AsyncOps[R, A](e: Eff[R, A]) {
-    def attempt(implicit task: Task /= R): Eff[R, Throwable \/ A] =
+    def attempt(implicit task: Async /= R): Eff[R, Throwable \/ A] =
       AsyncInterpretation.attempt(e)
   }
 

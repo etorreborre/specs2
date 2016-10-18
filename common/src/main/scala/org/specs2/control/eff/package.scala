@@ -9,6 +9,7 @@ package object eff {
   object eff         extends EffCreation          with EffInterpretation
   object writer      extends WriterCreation       with WriterInterpretation
   object eval        extends EvalEffect
+  object state       extends StateCreation        with StateInterpretation
   object disjunction extends DisjunctionCreation  with DisjunctionInterpretation
   object future      extends FutureCreation       with FutureInterpretation
   object safe        extends SafeCreation         with SafeInterpretation
@@ -17,6 +18,7 @@ package object eff {
   object create extends
     WriterCreation with
     EvalCreation with
+    StateCreation with
     DisjunctionCreation with
     FutureCreation with
     SafeCreation with
@@ -26,6 +28,7 @@ package object eff {
   object all extends
     WriterEffect with
     EvalEffect with
+    StateEffect with
     DisjunctionEffect with
     FutureEffect with
     SafeEffect with

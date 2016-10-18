@@ -241,6 +241,22 @@ trait Interpret {
   def interceptStatelessLoop1[R, M[_], A, B](pure: A => B)(loop: StatelessLoop[M, R, A, Eff[R, B]])(effects: Eff[R, A])(implicit m: Member[M, R]): Eff[R, B] =
     interceptStatelessLoop[R, M, A, B]((a: A) => EffMonad[R].point(pure(a)), loop)(effects)
 
+  def interceptNat[R, T[_], A](effects: Eff[R, A])
+                              (nat: T ~> T)
+                              (implicit m: MemberInOut[T, R]): Eff[R, A] =
+    effects match {
+      case Pure(a) => Pure(a)
+
+      case Impure(u, c) =>
+        m.extract(u) match {
+          case None     => Impure(u, Arrs.singleton((x: u.X) => interceptNat(c(x))(nat)))
+          case Some(tx) => Impure(m.inject(nat(tx)), Arrs.singleton((x: u.X) => interceptNat(c(x))(nat)))
+        }
+
+      case ImpureAp(unions, continuation) =>
+        ImpureAp(unions.transform(nat), Arrs.singleton(x => interceptNat(continuation(x))(nat)))
+    }
+
   /**
    * transform an effect into another one
    * using a natural transformation

@@ -125,6 +125,9 @@ object Execution {
   def apply[T : AsResult](r: =>T, continuation: FragmentsContinuation) =
     new Execution(run = Some((env: Env) => AsResult(r)), continuation = Some(continuation))
 
+  def fatal(t: Throwable): Execution =
+    new Execution(run = None, fatal = Option(FatalExecution(t)))
+
   /** create an execution returning a specific result */
   def result[T : AsResult](r: =>T)       = withEnv(_ => AsResult(r))
 

@@ -7,6 +7,7 @@ trait all extends
   eval with
   error with
   writer with
+  state with
   future with
   safe with
   console with
