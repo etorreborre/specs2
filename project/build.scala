@@ -198,7 +198,7 @@ object build extends Build {
     else if (scalaBinaryVersion.startsWith("2.11"))
       "2.11"
     else
-      "2.12.0-RC1"
+      "2.12.0-RCx"
 
   lazy val compilationSettings: Seq[Settings] = Seq(
     // https://gist.github.com/djspiewak/976cd8ac65e20e136f05
