@@ -20,7 +20,7 @@ case class Producer[R :_safe, A](run: Eff[R, Stream[R, A]]) {
     cata[R, A, B](this)(
       done[R, B],
       (a: A) => f(a),
-      (as: List[A], next: Producer[R, A]) => as.traverse(f).flatMap(emit[R, B]) append next.flatMap(f))
+      (as: List[A], next: Producer[R, A]) => as.map(f).foldMap(identity) append next.flatMap(f))
 
   def map[B](f: A => B): Producer[R, B] =
     flatMap(a => one(f(a)))
@@ -64,6 +64,12 @@ case class Producer[R :_safe, A](run: Eff[R, Stream[R, A]]) {
 
 
 object Producer extends Producers {
+  implicit def MonoidProducer[R :_safe, A]: Monoid[Producer[R, A]] = new Monoid[Producer[R, A]] {
+    def zero: Producer[R, A] = done[R, A]
+    def append(p1: Producer[R, A], p2: =>Producer[R, A]): Producer[R, A] =
+      p1 append p2
+  }
+
   implicit def FoldableProducer: Foldable[Producer[NoFx, ?]] = new Foldable[Producer[NoFx, ?]] {
     override def foldLeft[A, B](fa: Producer[NoFx, A], b: B)(f: (B, A) => B): B = {
       var s = b
