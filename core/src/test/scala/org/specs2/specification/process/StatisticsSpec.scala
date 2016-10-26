@@ -6,7 +6,7 @@ import Statistics._
 import execute._
 import specification.core._
 import scalaz._, Scalaz._
-import foldm._, FoldableM._
+import control.eff.syntax.eff._
 
 class StatisticsSpec extends Specification { def is = s2"""
 
@@ -21,7 +21,7 @@ class StatisticsSpec extends Specification { def is = s2"""
 
   def e2 = {
     def foldStats(r: Result): Stats =
-      Statistics.fold.run(List(Fragment(NoText, Execution.executed(r))))
+      Statistics.fold.run(List(Fragment(NoText, Execution.executed(r)))).run
 
     Seq(success, failure, pending, skipped) must contain((r: Result) => foldStats(r) === Stats.empty.withResult(r)).forall
   }

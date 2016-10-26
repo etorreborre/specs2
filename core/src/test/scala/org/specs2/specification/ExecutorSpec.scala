@@ -11,6 +11,7 @@ import main.Arguments
 import concurrent.ExecutionEnv
 import specification.core._
 import specification.process.DefaultExecutor
+import control.producer._
 
 class ExecutorSpec extends script.Specification with Groups with ResultMatchers with ThrownExpectations { def is = section("travis") ^ s2"""
 
@@ -172,8 +173,8 @@ class ExecutorSpec extends script.Specification with Groups with ResultMatchers 
 
   val factory = fragmentFactory
 
-  def execute(fragments: Seq[Fragment], env: Env): IndexedSeq[Result] =
-    DefaultExecutor.execute1(env)(Fragments(fragments:_*).contents).runLog.run.map(_.executionResult)
+  def execute(fragments: Seq[Fragment], env: Env): List[Result] =
+    DefaultExecutor.execute1(env)(Fragments(fragments:_*).contents).runList.unsafeRun.map(_.executionResult)
 
   trait results {
     val messages = new ListBuffer[String]

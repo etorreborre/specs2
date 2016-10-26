@@ -108,6 +108,9 @@ package object control {
    * An Action[T] can be converted to a Task[T]
    */
   implicit class actionToTask[T](action: Action[T]) {
+    def unsafeRun: T =
+      runAction(action).fold(e => sys.error(e.toString), t => t)
+
     def toConsoleTask =
       action.toTask(println)
 

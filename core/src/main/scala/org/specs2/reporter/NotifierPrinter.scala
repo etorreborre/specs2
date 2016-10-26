@@ -59,11 +59,11 @@ object NotifierPrinter {
     def end(s: S) = pure[NoFx, S](s)
   }
 
-  def notifySink(spec: SpecStructure, notifier: Notifier, args: Arguments): AsyncSink[(Notified, Fragment)] =
-    new Fold[ActionStack, (Notified, Fragment), Unit] {
+  def notifySink(spec: SpecStructure, notifier: Notifier, args: Arguments): AsyncSink[(Fragment, Notified)] =
+    new Fold[ActionStack, (Fragment, Notified), Unit] {
       type S = Unit
       def start = pure(())
-      def fold = (s: S, a: (Notified, Fragment)) => printFragment(notifier, a._2, a._1, args)
+      def fold = (s: S, a: (Fragment, Notified)) => printFragment(notifier, a._1, a._2, args)
       def end(s: S) = pure(s)
     }
 

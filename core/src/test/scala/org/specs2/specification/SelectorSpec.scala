@@ -162,8 +162,12 @@ class SelectorSpec extends script.Specification with Groups with ResultMatchers 
         ff.tag("x"),
         ex("e4")
       )
+<<<<<<< 8e1fc47f1d23489121a54e8aa0542861b55bd6a0
 
       filterIncluded(fragments, Seq("x")).map(_.setLocation(location)) ==== Vector(
+=======
+      filterIncluded(fragments, Seq("x")) ==== List(
+>>>>>>> compiled core tests and removed obvious bugs
         ff.break,
         ff.break,
         ex("e2"),
@@ -257,7 +261,7 @@ class SelectorSpec extends script.Specification with Groups with ResultMatchers 
 
   def filterIncluded(fragments: Fragments, tags: Seq[String]) = {
     val env = Env(arguments = Arguments.split(s"include ${tags.mkString(",")}"))
-    (fragments.contents |> DefaultSelector.filterByMarker(env)).runLog.run
+    (fragments.contents |> DefaultSelector.filterByMarker(env)).runList.unsafeRun
   }
 
   def filterExcluded(fragments: Fragments, tags: Seq[String]) = {

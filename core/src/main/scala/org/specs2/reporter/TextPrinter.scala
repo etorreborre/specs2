@@ -35,11 +35,11 @@ trait TextPrinter extends Printer {
     lazy val args   = env.arguments <| spec.arguments
 
     lazy val sink: AsyncSink[(Fragment, S)] =
-      (Folds.fromStart(start(logger, spec.header, args)) *> lineLoggerSink(logger, spec.header, args)).
-        asFoldable[List].
-        contramap[(Fragment, S)](printFragment(args))
+      Folds.fromStart(start(logger, spec.header, args)) *>
+        linesLoggerSink(logger, spec.header, args).
+          contramap[(Fragment, S)](printFragment(args))
 
-    (values.into[ActionStack] observeWithState sink.contramap(_.swap)).mapFlatten(printFinalStats(spec, args, logger))
+    (values.into[ActionStack] observeWithState sink).mapFlatten(printFinalStats(spec, args, logger))
   }
 
   /** run and shutdown the environment */
@@ -48,9 +48,9 @@ trait TextPrinter extends Printer {
     finally env.shutdown
   }
 
-  def lineLoggerSink(logger: LineLogger, header: SpecHeader, args: Arguments): AsyncSink[LogLine] =
-    Folds.fromSink[ActionStack, LogLine](line =>
-      asyncDelay[ActionStack, Unit](line.log(logger)))
+  def linesLoggerSink(logger: LineLogger, header: SpecHeader, args: Arguments): AsyncSink[List[LogLine]] =
+    Folds.fromSink[ActionStack, List[LogLine]](lines =>
+      Actions.protect(lines.foreach(_.log(logger))))
 
   def start(logger: LineLogger, header: SpecHeader, args: Arguments): Action[LineLogger] =
     asyncDelay[ActionStack, Unit](printHeader(args)(header).foreach(_.log(logger))).as(logger)

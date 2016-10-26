@@ -6,13 +6,12 @@ import main.Arguments
 import matcher._
 import execute._
 import LineLogger._
-import foldm._, stream._
 import specification.create.S2StringContext
 import specification.dsl.FragmentsDsl
 import specification.core._
 import specification.process._
 import ActionMatchers._
-import scalaz.concurrent.Task
+import org.specs2.control.origami.Folds
 
 class ReporterSpec extends Specification with ForEachEnv with ThrownExpectations { def is = s2"""
 
@@ -94,7 +93,7 @@ class FakeJUnitPrinter(logger: LineLogger) extends Printer {
   def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] = Actions.unit
 
   def sink(env: Env, spec: SpecStructure) =
-    FoldProcessM.lift((f: Fragment) => Task.now(logger.infoLog("junit\n")))
+    Folds.fromSink((f: Fragment) => Actions.ok(logger.infoLog("junit\n")))
 }
 
 object reporterSpecSupport extends MustMatchers with StandardMatchResults with S2StringContext with FragmentsDsl {

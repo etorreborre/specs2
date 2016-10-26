@@ -38,6 +38,6 @@ class SpecificationsFinderSpec extends Spec { def is = s2"""
     ).runOption must beSome((l: List[_]) => l must haveSize(1))
   }
 
-  def findFiles: Matcher[Action[IndexedSeq[FilePath]]] = (action: Action[IndexedSeq[FilePath]]) =>
-    action must beOk((_: IndexedSeq[FilePath]) must not(beEmpty))
+  def findFiles: Matcher[Action[List[FilePath]]] = (action: Action[List[FilePath]]) =>
+    action must beOk((_: List[FilePath]) must not(beEmpty))
 }
