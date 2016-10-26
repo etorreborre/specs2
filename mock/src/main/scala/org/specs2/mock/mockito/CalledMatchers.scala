@@ -158,8 +158,12 @@ trait CalledMatchers extends NumberOfTimes with FunctionArguments with TheMockit
    * The orderedBy method can be used to declare the mock order if there are several mocks
    */
   class ToInOrderMode[T : AsResult](calls: =>T) {
-    def andThen[U](otherCalls: =>U): Result =
-      checkResultFailure(AsResult(calls) and createExpectable(otherCalls).applyMatcher(checkCalls).toResult)
+    private lazy val makeCalls = calls
+
+    def andThen[U](otherCalls: =>U): Result = {
+      lazy val makeOtherCalls = otherCalls
+      checkResultFailure(AsResult(makeCalls) and createExpectable(makeOtherCalls).applyMatcher(checkCalls).toResult)
+    }
   }
 }
 

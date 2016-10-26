@@ -183,8 +183,10 @@ got {
 
 #### Order of calls
 
-The order of method calls can be checked by creating calls and chaining them with `andThen`: ${snippet{
+The order of method calls can be checked by creating an `InOrder` implicit and chaining calls with `andThen`: ${snippet{
 val m1 = mock[java.util.List[String]]
+
+implicit val order = inOrder(m1)
 
 m1.get(0)
 m1.get(1)
@@ -192,12 +194,12 @@ m1.get(1)
 there was one(m1).get(0) andThen one(m1).get(1)
 }}
 
-when several mocks are involved, the expected order must be specified as an implicit value: ${snippet{
+Several mocks can also be declared as having ordered calls: ${snippet{
 val m1 = mock[java.util.List[String]]
 val m2 = mock[java.util.List[String]]
 val m3 = mock[java.util.List[String]]
 
-// the order of mock objects doesn't matter here
+// here the order of mock objects doesn't matter
 implicit val order = inOrder(m1, m3, m2)
 
 m1.get(1); m2.get(2); m3.get(3)

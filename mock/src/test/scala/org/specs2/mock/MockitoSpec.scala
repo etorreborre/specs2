@@ -16,6 +16,7 @@ import duration._
 import ExecutionContext.Implicits.global
 import MatchersImplicits._
 import ReturnsSyntax._
+import execute._
 
 class MockitoSpec extends script.Spec with Mockito with ResultMatchers with Groups {  def is = s2"""
 
@@ -107,10 +108,12 @@ STUBS
  ==============
 
  The order of calls to a mocked method can be checked
-   + with 2 calls that were indeed in order
-   + with 2 calls that were indeed in order - ignoring stubbed methods
-   + with 2 calls that were indeed not in order
-   + with 3 calls that were indeed not in order
+   + with 2 calls that were in order
+   + with 2 calls that were in order - ignoring stubbed methods
+   + with 2 calls that were not in order - on the same mock
+   + with 2 calls that were not in order - on the same mock, with thrown expectations
+   + with 2 calls that were not in order - on different mocks
+   + with 3 calls that were not in order
 
  ANSWERS & PARAMETERS CAPTURE
  ============================
@@ -160,6 +163,7 @@ STUBS
       (there was one(list).add("one")).message must contain("list1.add(\"one\")")
     }
   }
+
   "verification" - new group with list {
     eg := { list.add("one"); success }
     eg := {
@@ -279,6 +283,7 @@ STUBS
       there were 1.times(foo).getBar(1)
     }
   }
+
   "stubs" - new group with list {
     eg := {
       list.add("one") returns true
@@ -334,6 +339,7 @@ STUBS
       mocked.contains("o") must beTrue
     }
   }
+
   "number of calls" - new group with list {
     val list2 = mock[java.util.List[String]]
 
@@ -374,6 +380,7 @@ STUBS
       there were noMoreCallsTo(ignoreStubs(list3, list4))
     }
   }
+
   "order of calls" - new group {
     val list1 = mock[java.util.List[String]]
     val list2 = mock[java.util.List[String]]
@@ -400,8 +407,35 @@ STUBS
     }
 
     eg := {
+      list1.get(0); list1.get(1)
+
+      implicit val order = inOrder(list1)
+
+      val result = there was one(list1).get(1) andThen
+        one(list1).get(0)
+
+      result.message must startWith("The mock was not called as expected")
+    }
+
+    eg := {
+      list1.get(0); list1.get(1)
+
+      implicit val order = inOrder(list1)
+
+      var result: Result = success
+
+      new Mockito with ThrownExpectations {
+        result = AsResult(there was one(list1).get(1) andThen
+          one(list1).get(0))
+      }
+
+      result.message must startWith("The mock was not called as expected")
+    }
+
+    eg := {
       list1.get(0)
       list2.get(0)
+
       implicit val order = inOrder(list1, list2)
       (there was one(list2)(order).get(0) andThen
         one(list1)(order).get(0)).message must startWith("The mock was not called as expected")
@@ -418,7 +452,9 @@ STUBS
 
       result.message must startWith("The mock was not called as expected")
     }
+
   }
+
   "callbacks" - new group {
     val list = mockAs[java.util.List[String]]("list")
 
