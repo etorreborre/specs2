@@ -35,7 +35,7 @@ object build extends Build {
       releaseSettings          ++
       siteSettings             ++
       Seq(name := "specs2", packagedArtifacts := Map.empty)
-  ).aggregate(codata, common, matcher, matcherExtra, core, cats, html, analysis, form, markdown, gwt, junit, scalacheck, mock, tests)
+  ).aggregate(common, matcher, matcherExtra, core, cats, html, analysis, form, markdown, gwt, junit, scalacheck, mock, tests)
    .enablePlugins(GitBranchPrompt)
 
   /** COMMON SETTINGS */
@@ -67,16 +67,6 @@ object build extends Build {
     Seq(name := "specs2-analysis")
   ).dependsOn(common % "test->test", core, matcher, scalacheck % "test")
 
-  lazy val codata: Project = Project(id = "codata", base = file("codata"),
-    settings = moduleSettings("codata") ++
-      Seq(
-        name := "specs2-codata",
-        libraryDependencies ++= depends.scalaz(scalazVersion.value),
-        scalacOptions in codata := Seq("-feature", "-language:_"),
-        logLevel in compile := Level.Error
-      )
-  )
-
   lazy val common = Project(id = "common", base = file("common"),
     settings = moduleSettings("common") ++
       Seq(conflictWarning ~= { _.copy(failOnConflict = false) }, // lame
@@ -88,7 +78,7 @@ object build extends Build {
             depends.scalaXML(scalaVersion.value) ++
             depends.scalacheck(scalaVersion.value).map(_ % "test"),
           name := "specs2-common")
-  ).dependsOn(codata)
+  )
 
   lazy val core = Project(id = "core", base = file("core"),
     settings = Seq(
@@ -304,11 +294,11 @@ object build extends Build {
   )
 
   lazy val aggregateCompile = ScopeFilter(
-    inProjects(codata, common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock),
+    inProjects(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock),
     inConfigurations(Compile))
 
   lazy val aggregateTest = ScopeFilter(
-    inProjects(codata, common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock, guide, examples),
+    inProjects(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock, guide, examples),
     inConfigurations(Test))
 
   lazy val releaseOfficialProcess = SettingKey[Seq[ReleaseStep]]("release-official-process")
