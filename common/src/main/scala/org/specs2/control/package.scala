@@ -33,6 +33,7 @@ package object control {
   type AsyncStream[A] = Producer[ActionStack, A]
   type AsyncTransducer[A, B] = Transducer[ActionStack, A, B]
 
+  type AsyncFold[A, B] = origami.Fold[ActionStack, A, B]
   type AsyncSink[A] = origami.Fold[ActionStack, A, Unit]
 
   def emitAsync[A](as: A*): AsyncStream[A] =

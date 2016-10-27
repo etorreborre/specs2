@@ -1,14 +1,12 @@
 package org.specs2
 package reporter
 
-import foldm._, FoldM._, FoldableM._, stream._, FoldProcessM._
-import scalaz.{Failure => _, _}, Scalaz._
+import scalaz.{Failure => _, _}, Scalaz.{fold => _,_}
 import org.junit.runner.Description
 import java.net.InetAddress
 import main.Arguments
 import execute._
 import io.FileName
-import scalaz.concurrent.Task
 import control._
 import io._
 import scala.collection.JavaConversions._
@@ -17,6 +15,7 @@ import specification.core._
 import specification.process._
 import text.NotNullStrings._
 import JUnitDescriptions._
+import origami._
 
 /**
  * The JUnitXmlPrinter creates an xml file with the specification execution results
@@ -26,17 +25,18 @@ trait JUnitXmlPrinter extends Printer {
   def finalize(env: Env, specs: List[SpecStructure]): Action[Unit] = Actions.unit
 
   def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment] =
-    (Statistics.fold zip FoldId.list[Fragment]).into[Task].
+    (Statistics.fold zip fold.list[Fragment]).into[ActionStack].
       mapFlatten(saveResults(env, spec))
 
-  def saveResults(env: Env, spec: SpecStructure): ((Stats, List[Fragment])) =>  Task[Unit] = { case (stats, fs) =>
-    val suite = descriptionFold(spec, stats, env).run(descriptions(spec, fs).toList)
-    env.fileSystem.writeFileTask(outputDirectory(env) | FileName.unsafe(spec.specClassName+".xml"), suite.xml)
+  def saveResults(env: Env, spec: SpecStructure): ((Stats, List[Fragment])) =>  Action[Unit] = { case (stats, fs) =>
+    descriptionFold(spec, stats, env).run(descriptions(spec, fs).toList).flatMap { suite =>
+       env.fileSystem.writeFile(outputDirectory(env) | FileName.unsafe(spec.specClassName+".xml"), suite.xml)
+    }
   }
 
-  def descriptionFold(spec: SpecStructure, stats: Stats, env: Env): Fold[(Fragment, Description), TestSuite] = {
+  def descriptionFold(spec: SpecStructure, stats: Stats, env: Env): AsyncFold[(Fragment, Description), TestSuite] = {
     val suite = TestSuite(specDescription(spec), spec.specClassName, stats.errors, stats.failures, stats.skipped, stats.timer.totalMillis)
-    fromFoldLeft[(Fragment, Description), TestSuite](suite) { case (res, (f, d)) =>
+    fold.fromFoldLeft[ActionStack, (Fragment, Description), TestSuite](suite) { case (res, (f, d)) =>
       if (Fragment.isExample(f)) res.addTest(new TestCase(d, f.executionResult, f.execution.executionTime.totalMillis)(env.arguments))
       else                       res
     }

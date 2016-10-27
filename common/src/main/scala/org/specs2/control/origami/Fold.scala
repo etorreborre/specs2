@@ -312,7 +312,7 @@ object Fold {
 trait Folds {
 
   /** @return a fold which uses a Monoid to accumulate elements */
-  def fromMonoidMap[R, A, M : Monoid](f: A => M) = new Fold[R, A, M] {
+  def fromMonoidMap[R, A, M : Monoid](f: A => M): Fold[R, A, M] { type S = M } = new Fold[R, A, M] {
     type S = M
     def start = Eff.pure(Monoid[M].zero)
     def fold = (s: S, a: A) => Monoid[M].append(s, f(a))
@@ -320,7 +320,7 @@ trait Folds {
   }
 
   /** @return a fold from arguments of a fold left */
-  def fromFoldLeft[R, A, B](b: B)(f: (B, A) => B) = new Fold[R, A, B] {
+  def fromFoldLeft[R, A, B](b: B)(f: (B, A) => B): Fold[R, A, B] { type S = B } = new Fold[R, A, B] {
     type S = B
     def start = Eff.pure(b)
     def fold = (s: S, a: A) => f(s, a)
@@ -328,24 +328,25 @@ trait Folds {
   }
 
   /** @return a fold from running a State object */
-  def fromStateRun[R, A, B, C](state: A => State[B, C])(init: B) = new Fold[R, A, (B, Option[C])] {
-    type S = (B, Option[C])
-    def start = Eff.pure((init, None))
-    def fold = (s: S, a: A) => {
-      val (sa, c) = s
-      val (newState, newC) = state(a).run(sa).value
-      (newState, Some(newC))
-    }
-    def end(s: S) = Eff.pure(s)
-  }
+  def fromStateRun[R, A, B, C](state: A => State[B, C])(init: B): Fold[R, A, (B, Option[C])]  { type S = (B, Option[C]) } =
+    new Fold[R, A, (B, Option[C])] {
+      type S = (B, Option[C])
+      def start = Eff.pure((init, None))
+      def fold = (s: S, a: A) => {
+        val (sa, c) = s
+        val (newState, newC) = state(a).run(sa).value
+        (newState, Some(newC))
+      }
+      def end(s: S) = Eff.pure(s)
+   }
 
   /** @return a fold for the execution of a State object */
   def fromStateExec[R, A, B, C](state: A => State[B, C])(init: B): Fold[R, A, B] =
-  fromStateRun(state)(init).map(_._1)
+    fromStateRun(state)(init).map(_._1)
 
   /** @return a fold for the evaluation of a State object */
   def fromStateEval[R, A, B, C](state: A => State[B, C])(init: B): Fold[R, A, Option[C]] =
-  fromStateRun(state)(init).map(_._2)
+    fromStateRun(state)(init).map(_._2)
 
   /** @return a fold with just a start action */
   def fromStart[R, A, S1](action: Eff[R, S1]) = new Fold[R, A, S1] {
@@ -368,6 +369,16 @@ trait Folds {
     def fold = (s: S, a: A) => s *> action(a)
     def end(s: S) = s.void
   }
+
+  /** @return a Fold which simply accumulates elements into a List */
+  def list[A]: Fold[NoFx, A, List[A]] = new Fold[NoFx, A, List[A]] {
+    // a ListBuffer is used for efficient appends
+    type S = scala.collection.mutable.ListBuffer[A]
+    def start = pure(new scala.collection.mutable.ListBuffer[A])
+    def fold = (s: S, a: A) => { s.append(a); s }
+    def end(s: S) = pure(s.toList)
+  }
+
 }
 
 object Folds extends Folds

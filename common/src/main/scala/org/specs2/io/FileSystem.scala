@@ -2,10 +2,9 @@ package org.specs2
 package io
 
 import control._
-import scalaz.{std, syntax, concurrent}
+import scalaz._
 import std.list._
 import syntax.all._
-import concurrent.Task
 import java.io._
 import java.util.regex.Pattern._
 import java.util.regex.Matcher._
@@ -24,10 +23,6 @@ trait FileSystem extends FilePathReader {
   def deleteFile(filePath: FilePath): Action[Boolean] =
     Actions.delayed(filePath.toFile.delete)
 
-  /** write a string to a file as UTF-8 */
-  def writeFile(filePath: FilePath, content: String): Action[Unit] =
-    Actions.fromTask(writeFileTask(filePath, content))
-
   /** modify the content of a file */
   def updateFileContent(filePath: FilePath)(update: String => String): Action[Unit] =
     readFile(filePath).flatMap(s => writeFile(filePath, update(s)))
@@ -37,9 +32,9 @@ trait FileSystem extends FilePathReader {
     updateFileContent(filePath)(_.replace(source, target))
 
   /** write a string to a file as UTF-8 */
-  def writeFileTask(filePath: FilePath, content: String): Task[Unit] =
-    mkdirs(filePath).toConsoleTask >>
-    Task.delay { new PrintWriter(filePath.path) { try write(content) finally close }; () }
+  def writeFile(filePath: FilePath, content: String): Action[Unit] =
+    mkdirs(filePath) >>
+    Actions.protect { new PrintWriter(filePath.path) { try write(content) finally close }; () }
 
   /** execute an action with a File, then delete it */
   def withEphemeralFile(path: FilePath)(action: Action[Unit]): Action[Unit] =
@@ -47,7 +42,7 @@ trait FileSystem extends FilePathReader {
 
   /** create a directory and its parent directories */
   def mkdirs(path: DirectoryPath): Action[Unit] =
-    Actions.delayed(path.toFile.mkdirs).void
+    Actions.protect(path.toFile.mkdirs).void
 
   /** create a the directory containing a file and its parent directories */
   def mkdirs(path: FilePath): Action[Unit] =

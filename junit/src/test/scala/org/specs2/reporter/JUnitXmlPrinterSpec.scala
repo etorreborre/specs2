@@ -4,8 +4,8 @@ package reporter
 import io._
 import specification.core._
 import scala.xml.NodeSeq
-import scalaz.concurrent.Task
 import matcher._
+import control._
 
 class JUnitXmlPrinterSpec extends Specification with XmlMatchers { def is = s2"""
 
@@ -103,8 +103,8 @@ is formatted for JUnit reporting tools.
   def printString(env1: Env)(fs: Fragments): String = {
     val mockFs = new FileSystem {
       var out: String = ""
-      override def writeFileTask(filePath: FilePath, content: String): Task[Unit] =
-        Task.now(out = content)
+      override def writeFile(filePath: FilePath, content: String): Action[Unit] =
+        Actions.ok(out = content)
     }
     val env = env1.copy(fileSystem = mockFs)
     Reporter.report(env, List(JUnitXmlPrinter))(SpecStructure(SpecHeader(getClass)).setFragments(fs)).runOption

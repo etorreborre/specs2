@@ -238,7 +238,7 @@ object DefaultExecutor extends DefaultExecutor {
 
   /** synchronous execution */
   def executeFragments1 =
-    transducers.transducer(executeFragment(Env()))
+    transducers.transducer[ActionStack, Fragment, Fragment](executeFragment(Env()))
 
   /** synchronous execution with a specific environment */
   def executeFragments1(env: Env) = transducers.transducer(executeFragment(env))

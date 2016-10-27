@@ -3,13 +3,6 @@ package reporter
 
 import io.{DirectoryPath, FilePath}
 import main.Arguments
-import data.Fold
-import foldm._
-import FoldM._
-import stream._
-import FoldProcessM._
-
-import scalaz.concurrent.Task
 import specification.core._
 import specification.process._
 import execute._
@@ -18,28 +11,32 @@ import text.NotNullStrings._
 import scala.xml.NodeSeq
 import matcher._
 import form._
+import control._
+import origami._
 import org.specs2.time.SimpleTimer
 
 /**
  * Create the body of an html file reporting a specification execution
  */
 trait HtmlBodyPrinter {
+
   /**
    * Make the body of the Html file based on all the specification fragments
    */
-  def makeBody(spec: SpecStructure, stats: Stats, timer: SimpleTimer, options: HtmlOptions, arguments: Arguments, pandoc: Boolean): String = {
+  def makeBody(spec: SpecStructure, stats: Stats, timer: SimpleTimer, options: HtmlOptions, arguments: Arguments, pandoc: Boolean): Action[String] = {
     val title = spec.name
     type HtmlState = (String, Level)
 
-    val htmlFold = fromFoldLeft[Fragment, HtmlState](("", Level())) { case ((html, level), fragment) =>
-      (html + printFragment(arguments, level, options.outDir, pandoc)(fragment),
+    val htmlFold = fold.fromFoldLeft[ActionStack, Fragment, HtmlState](("", Level())) { case ((htmlString, level), fragment) =>
+      (htmlString + printFragment(arguments, level, options.outDir, pandoc)(fragment),
        Levels.fold(fragment, level))
     }
 
-    val (html, _) = Fold.runFold(spec.fragments.contents, htmlFold.into[Task]).run
-    html +
-    s"""|
-        |${printStatistics(title, stats, timer, options)}""".stripMargin
+    spec.fragments.contents.fold(htmlFold).map { case (html, _) =>
+      html +
+      s"""|
+          |${printStatistics(title, stats, timer, options)}""".stripMargin
+    }
   }
 
   /**

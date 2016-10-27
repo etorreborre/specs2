@@ -2,20 +2,13 @@ package org.specs2
 package reporter
 
 import specification.core._
-import specification.process.{Statistics, Stats}
-import foldm._
-import FoldM._
-import stream._
-import FoldProcessM._
+import specification.process.{Stats, Statistics}
 import io._
 import main.Arguments
 import control._
 import java.util.regex.Pattern._
 import java.net.{JarURLConnection, URL}
-
-import scalaz._
-import Scalaz._
-import scalaz.concurrent.Task
+import scalaz._, Scalaz.{fold => _, _}
 import HtmlBodyPrinter._
 import Pandoc._
 import html._
@@ -24,12 +17,10 @@ import html.TableOfContents._
 import SpecHtmlPage._
 import eff.all._
 import eff.syntax.all._
-
-import scalaz._
-import Scalaz._
 import eff.ErrorEffect._
 import org.specs2.time.SimpleTimer
 import Actions._
+import origami._
 
 /**
  * Printer for html files
@@ -48,13 +39,13 @@ trait HtmlPrinter extends Printer {
 
   /** @return a SinkTask for the Html output */
   def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment] = {
-    ((Statistics.fold zip FoldId.list[Fragment] zip SimpleTimer.timerFold).into[Task] <*
-     fromStart((getHtmlOptions(env.arguments) >>= (options => copyResources(env, options))).toTask(env.systemLogger).void)).mapFlatten { case ((stats, fragments), timer) =>
+    ((Statistics.fold zip fold.list[Fragment] zip SimpleTimer.timerFold).into[ActionStack] <*
+     fold.fromStart((getHtmlOptions(env.arguments) >>= (options => copyResources(env, options))).void)).mapFlatten { case ((stats, fragments), timer) =>
       val expecutedSpec = spec.copy(lazyFragments = () => Fragments(fragments:_*))
       getPandoc(env).flatMap {
-          case None         => printHtml(env, expecutedSpec, stats, timer)
-          case Some(pandoc) => printHtmlWithPandoc(env, expecutedSpec, stats, timer, pandoc)
-      }.toTask(env.systemLogger)
+        case None         => printHtml(env, expecutedSpec, stats, timer)
+        case Some(pandoc) => printHtmlWithPandoc(env, expecutedSpec, stats, timer, pandoc)
+      }
     }
   }
 
@@ -105,16 +96,16 @@ trait HtmlPrinter extends Printer {
    *  - the template
    *  - the body of the file (built from the specification execution)
    */
-  def makeHtml(template: String, spec: SpecStructure, stats: Stats, timer: SimpleTimer, options: HtmlOptions, arguments: Arguments): Action[String] = {
-    val body = makeBody(spec, stats, timer, options, arguments, pandoc = true)
-    val variables1 =
-      options.templateVariables
-        .updated("body",    body)
-        .updated("title",   spec.wordsTitle)
-        .updated("path",    outputPath(options.outDir, spec).path)
+  def makeHtml(template: String, spec: SpecStructure, stats: Stats, timer: SimpleTimer, opiions: HtmlOptions, arguments: Arguments): Action[String] =
+    makeBody(spec, stats, timer, options, arguments, pandoc = true).flatMap { body =>
+      val variables1 =
+        options.templateVariables
+          .updated("body",    body)
+          .updated("title",   spec.wordsTitle)
+          .updated("path",    outputPath(options.outDir, spec).path)
 
-    HtmlTemplate.runTemplate(template, variables1)
-  }
+      HtmlTemplate.runTemplate(template, variables1)
+    }
 
   /**
    * WITH PANDOC
@@ -155,10 +146,12 @@ trait HtmlPrinter extends Printer {
     val pandocArguments = Pandoc.arguments(bodyFile, options.template, variables1, outputFilePath, pandoc)
 
     withEphemeralFile(bodyFile) {
-      writeFile(bodyFile, makeBody(spec, stats, timer, options, env.arguments, pandoc = true)) >>
-      warn(pandoc.executable.path+" "+pandocArguments.mkString(" ")).when(pandoc.verbose) >>
-      Executable.run(pandoc.executable, pandocArguments) >>
-      replaceInFile(outputPath(options.outDir, spec), "<code>", "<code class=\"prettyprint\">")
+      makeBody(spec, stats, timer, options, env.arguments, pandoc = true).flatMap { body =>
+        writeFile(bodyFile, body) >>
+          warn(pandoc.executable.path+" "+pandocArguments.mkString(" ")).when(pandoc.verbose) >>
+          Executable.run(pandoc.executable, pandocArguments) >>
+          replaceInFile(outputPath(options.outDir, spec), "<code>", "<code class=\"prettyprint\">")
+      }
     }
   }
 

@@ -1,13 +1,11 @@
 package org.specs2
 package reporter
 
-import data.Fold._
 import io._
 import matcher.ActionMatchers._
-import org.specs2.html
-import org.specs2.html.{IndexEntry, IndexedPage, Indexing}
+import org.specs2.html._
 import Indexing._
-import org.specs2.codata._
+import control._
 
 class IndexingSpec extends Specification { def is = s2"""
  From the set of all the generated html pages we can generate an index and convert it to the tipue search format.
@@ -18,12 +16,12 @@ class IndexingSpec extends Specification { def is = s2"""
 
 """
 
-  def index = html.Index.reducer.cons(pages(0), html.Index.empty) must_==
+  def index = html.Index.createIndex(pages(0)) must_==
            html.Index(Vector(IndexEntry(title = "page 1", text = "content1", tags = Vector("tag1", "tag2"), path = FilePath("page1"))))
 
   def save = {
     val path = "target" / "test" / "IndexingSpec" | "index.js"
-    runFold(Process.emitAll(pages), indexFold(path)).run
+    runAction(emitAsync(pages:_*).fold(indexFold(path)))
 
     val expected =
     s"""|var tipuesearch = {"pages": [{"title":"page 2", "text":"content2", "tags":"tag3", "loc":"page2"},

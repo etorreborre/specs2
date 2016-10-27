@@ -2,10 +2,7 @@ package org.specs2
 package reporter
 
 import junit.framework.AssertionFailedError
-import foldm._, stream._, FoldProcessM._
-import org.specs2.codata.{Sink}
 import text.NotNullStrings._
-import scalaz.concurrent.Task
 import org.junit.runner.Description
 import org.junit.runner.notification.RunNotifier
 import specification.core._
@@ -13,9 +10,10 @@ import text.AnsiColors
 import execute._
 import org.junit.ComparisonFailure
 import main.Arguments
-import control.{Actions, Action, Throwablex}
-import data.Processes
+import control._
+import origami._
 import control.ExecutionOrigin._
+import scalaz.{Failure => _, Success => _, _}, Scalaz.{fold => _, _}
 
 /**
  * The JUnitPrinter sends notifications to JUnit's RunNotifier
@@ -33,31 +31,27 @@ trait JUnitPrinter extends Printer { outer =>
   /** description for the whole specification */
   def description: Description
 
+  // test run start and finish must not be notified if we execute the test from
+  // the JUnitCore runner because it is already doing that.
+  // Otherwise this could lead to double reporting see #440
   def sink(env: Env, spec: SpecStructure) =
-    fromSink(scalazSink(spec, env))
+    fold.bracket[ActionStack, Fragment, RunNotifier](
+      open = Actions.protect { if (!isExecutedFromJUnitCore) notifier.fireTestRunStarted(description); notifier })(
+      step = (notifier: RunNotifier, fragment: Fragment) => notifyJUnit(env.arguments)(fragment).as(notifier))(
+      close = (notifier: RunNotifier) => Actions.protect(if (!isExecutedFromJUnitCore) notifier.fireTestRunFinished(new org.junit.runner.Result) else ())
+    )
 
-  def scalazSink(spec: SpecStructure, env: Env): Sink[Task, Fragment] = {
-    // test run start and finish must not be notified if we execute the test from
-    // the JUnitCore runner because it is already doing that.
-    // Otherwise this could lead to double reporting see #440
-    val acquire = Task.now { if (!isExecutedFromJUnitCore) notifier.fireTestRunStarted(description); notifier }
-    val shutdown = (notifier: RunNotifier) => Task.now(if (!isExecutedFromJUnitCore) notifier.fireTestRunFinished(new org.junit.runner.Result) else ())
-    val step =     (notifier: RunNotifier) => Task.now(notifyJUnit(env.arguments))
-
-    Processes.resource(acquire)(shutdown)(step)
-  }
-
-  def notifyJUnit(args: Arguments): Fragment => Task[Unit] = { fragment =>
+  def notifyJUnit(args: Arguments): Fragment => Action[Unit] = { fragment =>
     // find the fragment with the same description and same location
     val description = descriptions.find { case (f, d) =>
       f.description == fragment.description && f.location == fragment.location }.map(_._2)
 
     description.map { description: Description =>
-      if (fragment.isExecutable) Task.now {
+      if (fragment.isExecutable) Actions.ok {
         notifier.fireTestStarted(description)
         notifyResult(description, fragment.executionResult)(args)
-      } else Task.now(())
-    }.getOrElse(Task.now(()))
+      } else Actions.ok(())
+    }.getOrElse(Actions.ok(()))
   }
 
   private def notifyResult(description: Description, result: Result)(implicit args: Arguments) =

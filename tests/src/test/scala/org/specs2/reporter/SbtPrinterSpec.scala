@@ -10,6 +10,7 @@ import sbt.testing._
 import runner._
 import specification.core._
 import specification.process.DefaultExecutor
+import control.runAction
 
 class SbtPrinterSpec extends Spec with ForEachEnv { def is = s2"""
                                                                                                                         
@@ -37,7 +38,7 @@ class SbtPrinterSpec extends Spec with ForEachEnv { def is = s2"""
     }
 
     def e1 = { env: Env =>
-      printer.print(env)(SpecStructure.create(SpecHeader(classOf[HelloWorldSpec]), Fragments(text("\ntitle"), text("\ntext")))).unsafePerformSync
+      runAction(printer.print(env)(SpecStructure.create(SpecHeader(classOf[HelloWorldSpec]), Fragments(text("\ntitle"), text("\ntext")))))
       there was one(logger).info(beMatching("HelloWorldSpec\ntitle\ntext"))
     }
 
@@ -67,7 +68,7 @@ class SbtPrinterSpec extends Spec with ForEachEnv { def is = s2"""
 
     def executeAndPrintHelloWorldUnitSpec(env: Env) = {
       val executed = DefaultExecutor.executeSpec((new HelloWorldUnitSpec).specificationStructure(env), env)
-      printer.print(env)(executed).unsafePerformSync
+      runAction(printer.print(env)(executed))
     }
 
   }
@@ -95,7 +96,7 @@ class SbtPrinterSpec extends Spec with ForEachEnv { def is = s2"""
     }
 
     def print(spec: SpecStructure) = {
-      printer.print(Env(arguments = Arguments("nocolor")))(spec).unsafePerformSync
+      runAction(printer.print(Env(arguments = Arguments("nocolor")))(spec))
       stringLogger.flush()
       stringLogger.messages.mkString("\n")
     }

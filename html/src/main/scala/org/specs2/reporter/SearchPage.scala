@@ -2,12 +2,10 @@ package org.specs2
 package reporter
 
 import control._
-import data.Fold
-import html.{HtmlTemplate, Indexing}
+import html._
 import io._
-import specification.core.{SpecStructure, Env}
-
-import org.specs2.codata.Process
+import specification.core.{Env, SpecStructure}
+import producer._
 
 /**
  * Functions used to create an index and a search page for the generated html pages
@@ -18,7 +16,7 @@ trait SearchPage {
   def createIndex(env: Env, specifications: List[SpecStructure], options: HtmlOptions): Action[Unit] =
     for {
       htmlPages <- Actions.delayed(Indexing.createIndexedPages(env, specifications, options.outDir))
-      _         <- Fold.runFold(Process.emitAll(htmlPages), Indexing.indexFold(options.indexFile)).toAction
+      _         <- producers.emit[ActionStack, IndexedPage](htmlPages).fold(Indexing.indexFold(options.indexFile))
       _         <- createSearchPage(env, options)
     } yield ()
 
