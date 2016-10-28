@@ -234,7 +234,8 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
 
     val fragments = Fragments((1 to 100).flatMap(i => Seq(
       "ex"+i+"\n " ! {
-        Thread.sleep(scala.util.Random.nextInt(100).toLong)
+        val s = scala.util.Random.nextInt(100).toLong
+        Thread.sleep(s)
         logger.infoLine("executed "+i)
         ok
       })):_*)

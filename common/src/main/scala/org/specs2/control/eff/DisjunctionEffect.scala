@@ -1,6 +1,6 @@
 package org.specs2.control.eff
 
-import scalaz._
+import scalaz._, Scalaz._
 import Eff._
 import Interpret._
 
@@ -49,6 +49,9 @@ trait DisjunctionInterpretation {
           case -\/(e) => \/-(EffMonad[U].point(-\/(e)))
           case \/-(a) => -\/(a)
         }
+
+      def applicative[X, T[_] : Traverse](ms: T[E \/ X]): T[X] \/ (E \/ T[X]) =
+        \/-(ms.sequence)
     }
 
     interpret1[R, U, (E \/ ?), A, E \/ A]((a: A) => \/-(a): E \/ A)(recurse)(r)
@@ -66,6 +69,9 @@ trait DisjunctionInterpretation {
           case -\/(e) => \/-(handle(e))
           case \/-(a) => -\/(a)
         }
+
+      def applicative[X, T[_] : Traverse](ms: T[E \/ X]): T[X] \/ (E \/ T[X]) =
+        \/-(ms.sequence)
     }
 
     intercept1[R, (E \/ ?), A, A]((a: A) => a)(recurse)(r)

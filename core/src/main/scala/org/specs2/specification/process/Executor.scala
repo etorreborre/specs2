@@ -153,7 +153,7 @@ trait DefaultExecutor extends Executor {
           val timeout = env.timeout.orElse(fragment.execution.timeout)
 
           val executingFragment: Action[Fragment] =
-            timedout(fragment, env)(asyncDelay(executeFragment(env.userEnv)(fragment)))(timeout)
+            timedout(fragment, env)(asyncFork(executeFragment(env.userEnv)(fragment)))(timeout)
 
           val newBarrier =
             Eff.EffApplicative[ActionStack].tuple2(barrier, executingFragment).map {

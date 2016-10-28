@@ -45,6 +45,9 @@ trait FutureInterpretation {
       def apply[X](m: Future[X]) =
         try { -\/(Await.result(m, atMost)) }
         catch { case NonFatal(t) => \/-(Eff.pure(-\/(t))) }
+
+      def applicative[X, T[_] : Traverse](ms: T[Future[X]]): T[X] \/ Future[T[X]] =
+        \/-(ms.sequence)
     }
 
     interpret1((a: A) => \/-(a): Throwable \/ A)(recurse)(r)

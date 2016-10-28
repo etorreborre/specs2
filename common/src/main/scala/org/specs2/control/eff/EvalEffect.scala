@@ -1,7 +1,7 @@
 package org.specs2.control.eff
 
 import scala.util.control.NonFatal
-import scalaz._
+import scalaz._, Scalaz._
 import Eff._
 import Interpret._
 
@@ -37,6 +37,8 @@ trait EvalInterpretation extends EvalTypes {
   def runEval[R, U, A](r: Eff[R, A])(implicit m: Member.Aux[Eval, R, U]): Eff[U, A] = {
     val recurse = new Recurse[Eval, U, A] {
       def apply[X](m: Eval[X]) = -\/(m.value)
+      def applicative[X, T[_] : Traverse](ms: T[Eval[X]]): T[X] \/ Eval[T[X]] =
+        \/-(ms.sequence)
     }
 
     interpret1((a: A) => a)(recurse)(r)
@@ -47,6 +49,9 @@ trait EvalInterpretation extends EvalTypes {
       def apply[X](m: Eval[X]) =
         try { -\/(m.value) }
         catch { case NonFatal(t) => \/-(Eff.pure(-\/(t))) }
+
+      def applicative[X, T[_] : Traverse](ms: T[Eval[X]]): T[X] \/ Eval[T[X]] =
+        \/-(ms.sequence)
     }
 
     interpret1((a: A) => \/-(a): Throwable \/ A)(recurse)(r)

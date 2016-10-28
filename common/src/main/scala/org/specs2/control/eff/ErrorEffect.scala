@@ -75,6 +75,12 @@ trait ErrorInterpretation[F] extends ErrorCreation[F] { outer =>
             try -\/(a.value)
             catch { case NonFatal(t) => \/-(EffMonad[U].point(-\/(-\/(t)))) }
         }
+
+      def applicative[X, T[_]: Traverse](ms: T[ErrorOrOk[X]]): T[X] \/ ErrorOrOk[T[X]] =
+        ms.map(_.run).sequence match {
+          case -\/(e)   => \/-(Evaluate.error[F, T[X]](e))
+          case \/-(ls) => \/-(Evaluate.ok[F, T[X]](ls.map(_.value)))
+        }
     }
 
     interpret1[R, U, ErrorOrOk, A, Error \/ A]((a: A) => \/-(a): Error \/ A)(recurse)(r)
@@ -93,6 +99,12 @@ trait ErrorInterpretation[F] extends ErrorCreation[F] { outer =>
           case \/-(x) =>
             try -\/(x.value)
             catch { case NonFatal(t) => \/-(last.flatMap(_ => outer.exception[R, A](t))) }
+        }
+
+      def applicative[X, T[_]: Traverse](ms: T[ErrorOrOk[X]]): T[X] \/ ErrorOrOk[T[X]] =
+        ms.map(_.run).sequence match {
+          case -\/(e)   => \/-(Evaluate.error[F, T[X]](e))
+          case \/-(ls) => \/-(Evaluate.ok[F, T[X]](ls.map(_.value)))
         }
     }
     intercept[R, ErrorOrOk, A, A]((a: A) => last.as(a), recurse)(action)
@@ -120,6 +132,13 @@ trait ErrorInterpretation[F] extends ErrorCreation[F] { outer =>
             try -\/[X](x.value)
             catch { case NonFatal(t) => \/-(onError(-\/(t))) }
         }
+
+      def applicative[X, T[_]: Traverse](ms: T[ErrorOrOk[X]]): T[X] \/ ErrorOrOk[T[X]] =
+        ms.map(_.run).sequence match {
+          case -\/(e)   => \/-(Evaluate.error[F, T[X]](e))
+          case \/-(ls) => \/-(Evaluate.ok[F, T[X]](ls.map(_.value)))
+        }
+
     }
     intercept1[R, ErrorOrOk, A, B](pure)(recurse)(action)
   }

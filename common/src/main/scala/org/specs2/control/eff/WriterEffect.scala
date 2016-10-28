@@ -51,7 +51,19 @@ trait WriterInterpretation {
     val recurse: StateRecurse[Writer[O, ?], A, (A, B)] = new StateRecurse[Writer[O, ?], A, (A, B)] {
       type S = fold.S
       val init = fold.start.run
+
       def apply[X](x: Writer[O, X], s: S) = (x.run._2, fold.fold(s, x.run._1))
+
+      def applicative[X, T[_] : Traverse](ws: T[Writer[O, X]], s: S): (T[X], S) \/ (Writer[O, T[X]], S) =
+        -\/ {
+          val traversed: State[S, T[X]] = ws.traverse { w: Writer[O, X] =>
+            val (o, x) = w.run
+            State[S, X](s1 => (fold.fold(s1, o), x))
+          }
+          traversed.run(s).value.swap
+        }
+
+
       def finalize(a: A, s: S) = (a, fold.end(s).run)
     }
 

@@ -190,6 +190,9 @@ package object control {
     def asyncDelay[A](a: =>A): Action[A] =
       AsyncCreation.asyncDelay(a)
 
+    def asyncFork[A](a: =>A): Action[A] =
+      AsyncCreation.asyncFork(a)
+
     def delayed[A](a: =>A): Action[A] =
       ErrorEffect.ok(a)
 

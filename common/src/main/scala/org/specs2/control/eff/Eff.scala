@@ -329,9 +329,8 @@ case class Arrs[R, A, B](functions: Vector[Any => Eff[R, Any]]) extends (A => Ef
             case Impure(u, q) =>
               Impure[R, u.X, B](u, q.copy(functions = q.functions ++ rest))
 
-            case ap @ ImpureAp(unions, map) =>
-              val continuation = unions.continueWith(map)
-              Impure[R, unions.X, B](unions.first, continuation.copy(continuation.functions ++ rest))
+            case ap @ ImpureAp(unions, q) =>
+              ImpureAp[R, unions.X, B](unions, q.copy(q.functions ++ rest))
           }
       }
     }

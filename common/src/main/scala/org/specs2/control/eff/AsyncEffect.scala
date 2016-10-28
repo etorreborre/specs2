@@ -9,6 +9,7 @@ import scala.util.control.NonFatal
 import scalaz._, Scalaz._
 import scalaz.concurrent.Task
 import scala.concurrent.Promise
+import Async._
 
 trait AsyncEffect extends AsyncCreation with AsyncInterpretation
 object AsyncEffect extends AsyncEffect
@@ -39,7 +40,7 @@ trait AsyncCreation {
 
   /** use a ThrowableXor effect to store any exception */
   def asyncForkAttempt[R :_async :_throwableOr, A](a: =>A): Eff[R, A] =
-  asyncFork(\/.fromTryCatchNonFatal(a)).collapse
+    asyncFork(\/.fromTryCatchNonFatal(a)).collapse
 
   def fromFuture[R :_async, A](f: =>Future[A])(implicit ec: ExecutionContext): Eff[R, A] =
     create[R, A](Task.async[A] { register =>
@@ -75,10 +76,10 @@ object AsyncCreation extends AsyncCreation
 
 trait AsyncInterpretation { outer =>
   def runAsyncTask[A](e: Eff[Fx.fx1[Async], A]): Task[A] =
-    e.detach match { case AsyncTask(a) => a }
+    e.detachA(ApplicativeAsync) match { case AsyncTask(a) => a }
 
   def runAsyncFuture[A](e: Eff[Fx.fx1[Async], A]): Future[A] =
-    e.detach match { case AsyncTask(t) => taskToFuture(t) }
+    e.detachA(ApplicativeAsync) match { case AsyncTask(t) => taskToFuture(t) }
 
   def taskToFuture[T](task: Task[T]): Future[T] = {
     val p: Promise[T] = Promise()
@@ -148,6 +149,20 @@ case class AsyncTask[A](run: Task[A]) extends Async[A]
  * when Async is the last effect of the stack (see runAsyncTask)
  */
 object Async {
+
+  def ApplicativeAsync: Applicative[Async] = new Applicative[Async] {
+    def point[A](a: =>A) = AsyncTask(Task.now(a))
+
+    def ap[A, B](fa: =>Async[A])(ff: =>Async[A => B]): Async[B] =
+      AsyncTask {
+        (ff, fa) match { case (AsyncTask(ff1), AsyncTask(fa1)) =>
+          Nondeterminism[Task].mapBoth(ff1, fa1) { case (f, a) => f(a) }
+        }
+      }
+
+    override def toString = "Applicative[Async]"
+  }
+
   implicit def MonadAsync: Monad[Async] = new Monad[Async] {
     def point[A](a: =>A) = AsyncTask(Task.now(a))
 
@@ -157,6 +172,8 @@ object Async {
           fa1.flatMap(a => f(a) match { case AsyncTask(fa2) => fa2 })
         }
       }
+
+    override def toString = "Monad[Async]"
   }
 }
 
