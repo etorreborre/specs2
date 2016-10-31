@@ -140,7 +140,7 @@ e3 $ko
   def d1 =
 s2"""e1 ${1 must_== 2}""" contains
       """|[error] x e1
-         |[error]  '1' is not equal to '2'"""
+         |[error]  1 != 2"""
 
   def d2 = Arguments.split("failtrace fullstacktrace") ^
 s2"""e1 ${1 must_== 2}""" contains
