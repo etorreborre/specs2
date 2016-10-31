@@ -71,13 +71,20 @@ trait SetTypeProvider {
   protected final val className = "Set"
 }
 
-case class SeqIdentical(className: String, value: Seq[Any])
+case class SeqIdentical(value: Seq[Any])
   extends OrderedCollectionIdentical(value)
   with ComparisonResult
+  with ListTypeProvider
 
-case class SeqDifference(className: String, result: Seq[ComparisonResult], added: Seq[Any], removed: Seq[Any])
+case class SeqDifference(result: Seq[ComparisonResult], added: Seq[Any], removed: Seq[Any])
   extends OrderedCollectionDifferent(result, added, removed)
   with ComparisonResult
+  with ListTypeProvider
+
+trait ListTypeProvider {
+  protected final val className = "List"
+}
+
 
 case class ArrayIdentical(value: Seq[Any])
   extends OrderedCollectionIdentical(value)

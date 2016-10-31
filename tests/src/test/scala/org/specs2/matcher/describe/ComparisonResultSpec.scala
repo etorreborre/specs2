@@ -25,8 +25,6 @@ class ComparisonResultSpec extends Spec { def is = s2"""
     different seq should print added values with prefix added: a                            $seq4
     different seq should print removed values with prefix removed: b                        $seq5
     print order should be Seq(identical, added: added, removed: removed)                    $seq6
-    print identical seq with explicit type                                                  $seq7
-    print different seq with explicit type                                                  $seq8
 
     Array render:
     =============
@@ -156,17 +154,14 @@ class ComparisonResultSpec extends Spec { def is = s2"""
   def set5 = { SetDifference(identical = Seq("a", "b"), added = Seq("c", "d"), removed = Seq("e")).render must_== "Set('a', 'b', added: 'c', 'd', removed: 'e')" }
 
 
-  def seq1 = { SeqIdentical("Seq", Seq("a", "b")).render must_== "Seq('a', 'b')" }
-  def seq2 = { SeqDifference("Seq", Seq(PrimitiveIdentical("a")), Seq.empty, Seq.empty).render must_== "Seq('a')" }
-  def seq3 = { SeqDifference("Seq", Seq(PrimitiveDifference("b", "c")), Seq.empty, Seq.empty).render must_== "Seq('b' != 'c')" }
-  def seq4 = { SeqDifference("Seq", Seq.empty, added = Seq("d", "e"), Seq.empty).render must_== "Seq(added: 'd', 'e')" }
-  def seq5 = { SeqDifference("Seq", Seq.empty, Seq.empty, removed = Seq("f")).render must_== "Seq(removed: 'f')" }
-  def seq6 = { SeqDifference(className = "Seq",
-                             result = Seq(PrimitiveIdentical("a"), PrimitiveDifference("b", "c")),
+  def seq1 = { SeqIdentical(Seq("a", "b")).render must_== "Seq('a', 'b')" }
+  def seq2 = { SeqDifference(Seq(PrimitiveIdentical("a")), Seq.empty, Seq.empty).render must_== "Seq('a')" }
+  def seq3 = { SeqDifference(Seq(PrimitiveDifference("b", "c")), Seq.empty, Seq.empty).render must_== "Seq('b' != 'c')" }
+  def seq4 = { SeqDifference(Seq.empty, added = Seq("d", "e"), Seq.empty).render must_== "Seq(added: 'd', 'e')" }
+  def seq5 = { SeqDifference(Seq.empty, Seq.empty, removed = Seq("f")).render must_== "Seq(removed: 'f')" }
+  def seq6 = { SeqDifference(result = Seq(PrimitiveIdentical("a"), PrimitiveDifference("b", "c")),
                              added = Seq("d", "e"),
                              removed = Seq("f")).render must_== "Seq('a', 'b' != 'c', added: 'd', 'e', removed: 'f')" }
-  def seq7 = { SeqIdentical("XXX", Seq("a", "b")).render must_== "XXX('a', 'b')" }
-  def seq8 = { SeqDifference("YYY", Seq(PrimitiveIdentical("a")), Seq.empty, Seq.empty).render must_== "YYY('a')" }
 
   def arr1 = { ArrayIdentical(Seq("a", "b")).render must_== "Array('a', 'b')" }
   def arr2 = { ArrayDifference(Seq(PrimitiveIdentical("a")), Seq.empty, Seq.empty).render must_== "Array('a')" }

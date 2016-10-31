@@ -55,13 +55,13 @@ Compare result
 
   Seq (diff)
   ==========
-    equal Seqs should return SeqIdentical                        ${ differenceInspector.diff(Seq("a", "b"),Seq("a", "b")) must_== SeqIdentical("Seq", Seq("a", "b"))}
-    different Seqs should show which elements were changed       ${ differenceInspector.diff(Seq("a"), Seq("b")) must_== SeqDifference("Seq", Seq(PrimitiveDifference("a", "b")), Seq.empty, Seq.empty)}
-    different Seqs should show which elements were added         ${ differenceInspector.diff(Seq("a"), Seq("a", "b")) must_== SeqDifference("Seq", Seq(PrimitiveIdentical("a")), Seq("b"), Seq.empty)}
-    different Seqs should show which elements were removed       ${ differenceInspector.diff(Seq("a", "b"), Seq("a")) must_== SeqDifference("Seq", Seq(PrimitiveIdentical("a")), Seq.empty, Seq("b"))}
-    different Seqs should show changed and added with null       ${ differenceInspector.diff(Seq("a"), Seq(null)) must_== SeqDifference("Seq", Seq(PrimitiveDifference("a", null)), Seq.empty, Seq.empty)}
-    be able to compare Seq[Any]                                  ${differenceInspector.diff(Seq("a", 1, 2l, 3.3d, 4.4f), Seq("b", 2, 3l, 4.4d, 5.5f)) must_==
-                                                                        SeqDifference("Seq", Seq(OtherDifferent("a", "b"), OtherDifferent(1, 2), OtherDifferent(2l, 3l), OtherDifferent(3.3d, 4.4d), OtherDifferent(4.4f, 5.5f)), Seq.empty, Seq.empty)}
+    equal Seqs should return SeqIdentical                        ${ differenceInspector.diff(Seq("a", "b"),Seq("a", "b")) must_=== SeqIdentical(Seq("a", "b")) }
+    different Seqs should show which elements were changed       ${ differenceInspector.diff(Seq("a"), Seq("b")) must_=== SeqDifference(Seq(PrimitiveDifference("a", "b")), Seq.empty, Seq.empty) }
+    different Seqs should show which elements were added         ${ differenceInspector.diff(Seq("a"), Seq("a", "b")) must_=== SeqDifference(Seq(PrimitiveIdentical("a")), Seq("b"), Seq.empty) }
+    different Seqs should show which elements were removed       ${ differenceInspector.diff(Seq("a", "b"), Seq("a")) must_=== SeqDifference(Seq(PrimitiveIdentical("a")), Seq.empty, Seq("b")) }
+    different Seqs should show changed and added with null       ${ differenceInspector.diff(Seq("a"), Seq(null)) must_=== SeqDifference(Seq(PrimitiveDifference("a", null)), Seq.empty, Seq.empty) }
+    be able to compare Seq[Any]                                  ${ differenceInspector.diff(Seq("a", 1, 2l, 3.3d, 4.4f), Seq("b", 2, 3l, 4.4d, 5.5f)) must_===
+                                                                        SeqDifference(Seq(OtherDifferent("a", "b"), OtherDifferent(1, 2), OtherDifferent(2l, 3l), OtherDifferent(3.3d, 4.4d), OtherDifferent(4.4f, 5.5f)), Seq.empty, Seq.empty) }
 
   case classes
   ============
