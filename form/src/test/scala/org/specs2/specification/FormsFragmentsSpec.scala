@@ -36,7 +36,7 @@ class FormsFragmentsSpec extends Specification with Forms with ThrownExpectation
     }
     def e3 = {
       val example = DefaultExecutor.execute("the customer must be as expected" ! failedForm)
-      example.executionResult.message must_== "'20' is not equal to '18'"
+      example.executionResult.message must_== "20 is not equal to '18'"
       
     }
 
