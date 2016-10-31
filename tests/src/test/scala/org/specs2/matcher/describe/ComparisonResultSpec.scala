@@ -154,14 +154,14 @@ class ComparisonResultSpec extends Spec { def is = s2"""
   def set5 = { SetDifference(identical = Seq("a", "b"), added = Seq("c", "d"), removed = Seq("e")).render must_== "Set('a', 'b', added: 'c', 'd', removed: 'e')" }
 
 
-  def seq1 = { SeqIdentical(Seq("a", "b")).render must_== "Seq('a', 'b')" }
-  def seq2 = { SeqDifference(Seq(PrimitiveIdentical("a")), Seq.empty, Seq.empty).render must_== "Seq('a')" }
-  def seq3 = { SeqDifference(Seq(PrimitiveDifference("b", "c")), Seq.empty, Seq.empty).render must_== "Seq('b' != 'c')" }
-  def seq4 = { SeqDifference(Seq.empty, added = Seq("d", "e"), Seq.empty).render must_== "Seq(added: 'd', 'e')" }
-  def seq5 = { SeqDifference(Seq.empty, Seq.empty, removed = Seq("f")).render must_== "Seq(removed: 'f')" }
+  def seq1 = { SeqIdentical(Seq("a", "b")).render must_== "List('a', 'b')" }
+  def seq2 = { SeqDifference(Seq(PrimitiveIdentical("a")), Seq.empty, Seq.empty).render must_== "List('a')" }
+  def seq3 = { SeqDifference(Seq(PrimitiveDifference("b", "c")), Seq.empty, Seq.empty).render must_== "List('b' != 'c')" }
+  def seq4 = { SeqDifference(Seq.empty, added = Seq("d", "e"), Seq.empty).render must_== "List(added: 'd', 'e')" }
+  def seq5 = { SeqDifference(Seq.empty, Seq.empty, removed = Seq("f")).render must_== "List(removed: 'f')" }
   def seq6 = { SeqDifference(result = Seq(PrimitiveIdentical("a"), PrimitiveDifference("b", "c")),
                              added = Seq("d", "e"),
-                             removed = Seq("f")).render must_== "Seq('a', 'b' != 'c', added: 'd', 'e', removed: 'f')" }
+                             removed = Seq("f")).render must_== "List('a', 'b' != 'c', added: 'd', 'e', removed: 'f')" }
 
   def arr1 = { ArrayIdentical(Seq("a", "b")).render must_== "Array('a', 'b')" }
   def arr2 = { ArrayDifference(Seq(PrimitiveIdentical("a")), Seq.empty, Seq.empty).render must_== "Array('a')" }
