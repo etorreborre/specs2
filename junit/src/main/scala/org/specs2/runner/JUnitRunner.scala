@@ -18,11 +18,13 @@ import scalaz._, Scalaz._
 class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterable { outer =>
 
   /** specification to execute */
-  lazy val specification =
-    runAction(SpecificationStructure.create(klass.getName, Thread.currentThread.getContextClassLoader, Some(env)), consoleLogging).fold(
+  lazy val specification = {
+    val structure = SpecificationStructure.create(klass.getName, Thread.currentThread.getContextClassLoader, Some(env))
+    runAction(structure, consoleLogging)(env.executionContext).fold(
       error => error.fold(t => throw t, m => throw new Exception(m)),
       ok => ok
     )
+  }
 
   /** command line arguments, extracted from the system properties */
   lazy val arguments: Arguments = Arguments("junit")
@@ -49,9 +51,9 @@ class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterab
     val report: Action[Stats] =
       if (arguments.isSet("all")) {
         for {
-          reporter <- ClassRunner.createReporter(arguments, loader)
-          printers <- ClassRunner.createPrinters(arguments, loader)
-          ss       <- SpecStructure.linkedSpecifications(specStructure, env, loader)
+          reporter <- ClassRunner.createReporter(arguments, loader).toAction
+          printers <- ClassRunner.createPrinters(arguments, loader).toAction
+          ss       <- SpecStructure.linkedSpecifications(specStructure, env, loader).toAction
           sorted   <- delayed(SpecStructure.topologicalSort(ss).getOrElse(ss))
           _        <- reporter.prepare(env, printers)(sorted.toList)
           stats    <- sorted.toList.map(s => Reporter.report(env, createJUnitPrinter(s, n) +: printers)(s)).sequenceU
@@ -59,7 +61,7 @@ class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterab
         } yield stats.foldMap(identity _)
       } else
         for {
-          printers <- ClassRunner.createPrinters(arguments, loader)
+          printers <- ClassRunner.createPrinters(arguments, loader).toAction
           stats    <- Reporter.report(env, createJUnitPrinter(specStructure, n) +: printers)(specStructure)
         } yield stats
 

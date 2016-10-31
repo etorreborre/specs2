@@ -31,12 +31,12 @@ object SpecificationStructure {
   /**
    * create a SpecificationStructure from a class name
    */
-  def create(className: String, classLoader: ClassLoader = Thread.currentThread.getContextClassLoader, env: Option[Env] = None): Action[SpecificationStructure] = {
+  def create(className: String, classLoader: ClassLoader = Thread.currentThread.getContextClassLoader, env: Option[Env] = None): Operation[SpecificationStructure] = {
     val defaultInstances = env.toList.flatMap(_.defaultInstances)
 
     // make sure the instantiated class is a Specification Structure (see #477)
-    def asSpecificationStructure(i: Any): Action[SpecificationStructure] =
-      Actions.delayed(classOf[SpecificationStructure].cast(i).asInstanceOf[SpecificationStructure])
+    def asSpecificationStructure(i: Any): Operation[SpecificationStructure] =
+      Operations.delayed(classOf[SpecificationStructure].cast(i).asInstanceOf[SpecificationStructure])
 
     existsClass(className+"$", classLoader) flatMap { e =>
       if (e)
@@ -70,21 +70,21 @@ object SpecificationStructure {
         SpecStructure.dependsOn(s1.structure(env), s2.structure(env)))
 
   /** @return all the referenced specifications */
-  def referencedSpecifications(spec: SpecificationStructure, env: Env, classLoader: ClassLoader): Action[Seq[SpecificationStructure]] =
+  def referencedSpecifications(spec: SpecificationStructure, env: Env, classLoader: ClassLoader): Operation[Seq[SpecificationStructure]] =
     specificationsRefs(spec, env, classLoader)(referencedSpecificationsRefs)
 
   /** @return all the linked specifications */
-  def linkedSpecifications(spec: SpecificationStructure, env: Env, classLoader: ClassLoader): Action[Seq[SpecificationStructure]] =
+  def linkedSpecifications(spec: SpecificationStructure, env: Env, classLoader: ClassLoader): Operation[Seq[SpecificationStructure]] =
     specificationsRefs(spec, env, classLoader)(linkedSpecificationsRefs)
 
   /** @return all the see specifications */
-  def seeSpecifications(spec: SpecificationStructure, env: Env, classLoader: ClassLoader): Action[Seq[SpecificationStructure]] =
+  def seeSpecifications(spec: SpecificationStructure, env: Env, classLoader: ClassLoader): Operation[Seq[SpecificationStructure]] =
     specificationsRefs(spec, env, classLoader)(seeSpecificationsRefs)
 
   /** @return all the referenced specifications */
   def specificationsRefs(spec: SpecificationStructure,
                          env: Env,
-                         classLoader: ClassLoader)(refs: (SpecificationStructure, Env) => List[SpecificationRef]): Action[Seq[SpecificationStructure]] = {
+                         classLoader: ClassLoader)(refs: (SpecificationStructure, Env) => List[SpecificationRef]): Operation[Seq[SpecificationStructure]] = {
 
     val byName = (ss: List[SpecificationStructure]) => ss.foldLeft(Vector[(String, SpecificationStructure)]()) { (res, cur) =>
       val name = cur.structure(env).specClassName
@@ -96,7 +96,7 @@ object SpecificationStructure {
       refs(s, env).map(ref => create(ref.header.specClass.getName, classLoader, Some(env))).sequenceU.map(byName).runOption.getOrElse(Vector())
         .filterNot { case (n, _) => visited.map(_._1).contains(n) }
 
-    Actions.delayed {
+    Operations.delayed {
       def getAll(seed: Vector[SpecificationStructure], visited: Vector[(String, SpecificationStructure)]): Vector[SpecificationStructure] = {
         if (seed.isEmpty) visited.map(_._2)
         else {

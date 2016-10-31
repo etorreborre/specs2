@@ -22,7 +22,7 @@ trait TaskMatchers {
     attemptRun(ValueCheck.alwaysOk, Some(duration))
 
   private[specs2] def attemptRun[T](check: ValueCheck[T], duration: Option[Duration]): TaskMatcher[T] =
-   TaskMatcher(check, duration)
+    TaskMatcher(check, duration)
 
   case class TaskMatcher[T](check: ValueCheck[T], duration: Option[Duration]) extends Matcher[Task[T]] {
     def apply[S <: Task[T]](e: Expectable[S]) = {

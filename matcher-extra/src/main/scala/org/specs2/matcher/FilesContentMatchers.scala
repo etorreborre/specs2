@@ -35,7 +35,7 @@ trait FilesContentMatchers extends FileMatchers with LinesContentMatchers with T
   def haveSameMD5: Matcher[(File, File)] = { pair: (File, File) =>
     val (actual, expected) = pair
 
-    val action  = for {
+    val operation  = for {
       _     <- FilePathReader.mustExist(actual)
       _     <- FilePathReader.mustExist(expected)
       _     <- FilePathReader.mustNotBeADirectory(actual)
@@ -46,7 +46,7 @@ trait FilesContentMatchers extends FileMatchers with LinesContentMatchers with T
       val message = TextTable(header = Seq("file", "MD5"), lines = Seq(Seq(actual.getPath, md5_1), Seq(expected.getPath, md5_2))).show
       (md5_1 == md5_2, s"MD5 mismatch:\n$message")
     }
-    runAction(action).fold(
+    runOperation(operation).fold(
       error => (false, Result.disjunctionErrorToResult(error).message),
       identity)
   }

@@ -46,14 +46,14 @@ trait LayersAnalysis extends ClassycleDependencyFinder {
     lazy val packageNames = names.map(n => if (prefix.isEmpty) n else prefix+"."+n)
 
     /** @return the list of dependents of each package of this layer */
-    lazy val getDependents: Action[Set[Dependency]] =
+    lazy val getDependents: Operation[Set[Dependency]] =
       packageNames.toList.traverseU(getPackageDependents(sourceDir, targetDir)).map(_.flatten.toSet)
 
     /**
      * @return the list of dependencies showing that this layer depends on the `other` layer
      * meaning thisLayer -- depends on --> otherLayer
      */
-    def dependsOn(otherLayer: Layer): Action[Set[Dependency]] =
+    def dependsOn(otherLayer: Layer): Operation[Set[Dependency]] =
       otherLayer.getDependents.map(_.filter(inThisLayer))
 
     /** use regexes to include fully qualified class names in the layer */
@@ -92,7 +92,7 @@ trait LayersAnalysis extends ClassycleDependencyFinder {
     /** @return the layers as Markdown bullet points */
     lazy val toMarkdown: String = layers.map(l => " * "+l.names.mkString(" ")).mkString("\n")
     /** the list of dependencies which are not respecting the layers definitions */
-    lazy val unsatisfied: Action[Dependencies] =
+    lazy val unsatisfied: Operation[Dependencies] =
       unsatisfiedDependencies.map(Dependencies)
 
     /**
@@ -101,7 +101,7 @@ trait LayersAnalysis extends ClassycleDependencyFinder {
      * - taking all the subsequences of layers with at least 2 elements, say `Layers(l1, l2, l3) => Seq(Seq(l1, l2, l3), Seq(l1, l2))`
      * - getting all the dependencies of the last element of a sequence with all its parents (should always be empty)
      */
-    private lazy val unsatisfiedDependencies: Action[Seq[Dependency]] = {
+    private lazy val unsatisfiedDependencies: Operation[Seq[Dependency]] = {
       layers.inits.filter(_.size > 1).toList.traverseU(parents => parents.dropRight(1).toList.traverseU(parents.last.dependsOn)).map(_.flatten.flatten)
     }
   }

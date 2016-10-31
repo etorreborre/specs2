@@ -3,14 +3,14 @@ package matcher
 
 import execute._
 import ResultExecution._
-import text.{Trim, TextTable, NotNullStrings, Show1, Show2, Show3, Show4, Show5, Show6, Show7, Show8, Show9, Show10}
+import text.{NotNullStrings, Show1, Show10, Show2, Show3, Show4, Show5, Show6, Show7, Show8, Show9, TextTable, Trim}
 import Trim._
 import NotNullStrings._
 import ResultLogicalCombinators._
 
-import scalaz.{Success =>_,_}, Scalaz._
-import scalaz.concurrent.Future
-import java.util.concurrent.ExecutorService
+import scalaz.{Success => _, _}
+import Scalaz._
+import scala.concurrent._, duration._
 
 /**
  * This trait provides implicit definitions and types to create DataTables.
@@ -115,10 +115,10 @@ trait DataTables extends ExpectationsCreation {
       executeRowApply(f, execute)
     def |@>[M[_], R](f: (T1) => M[R])(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
       executeRowApply(f, true)
-    def |*[R](f: (T1) => R)(implicit asResult: AsResult[R]): ExecutorService => DecoratedResult[DataTable] = (es: ExecutorService) =>
-      executeRowApply((t1: T1) => Future.fork(Future.delay(f(t1)))(es), execute)(asResult, control.FutureInstances.parallelApplicative).run
-    def |*>[R](f: (T1) => R)(implicit asResult: AsResult[R]): ExecutorService => DecoratedResult[DataTable] = (es: ExecutorService) =>
-      executeRowApply((t1: T1) => Future.fork(Future.delay(f(t1)))(es), true)(asResult, control.FutureInstances.parallelApplicative).run
+    def |*[R](f: (T1) => R)(implicit asResult: AsResult[R]): ExecutionContext => DecoratedResult[DataTable] = (ec: ExecutionContext) =>
+      executeRowApply((t1: T1) => Future(f(t1))(ec), execute)(asResult, control.FutureInstances.parallelApplicative(ec)).run
+    def |*>[R](f: (T1) => R)(implicit asResult: AsResult[R]): ExecutionContext => DecoratedResult[DataTable] = (ec: ExecutionContext) =>
+      executeRowApply((t1: T1) => Future(f(t1))(ec), true)(asResult, control.FutureInstances.parallelApplicative(ec)).run
     def executeRowApply[R, M[_]](f: (T1) => M[R], exec: Boolean)(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] = {
       if (exec)
         app.map(app.traverse(rows) { d: DataRow1[T1] =>
@@ -140,10 +140,10 @@ trait DataTables extends ExpectationsCreation {
       executeRowApply(f, execute)
     def |@>[M[_], R](f: (T1, T2) => M[R])(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
       executeRowApply(f, true)
-    def |*[R](f: (T1, T2) => R)(implicit asResult: AsResult[R]): ExecutorService => DecoratedResult[DataTable] = (es: ExecutorService) =>
-      executeRowApply((t1: T1, t2: T2) => Future.fork(Future.delay(f(t1,t2)))(es), execute)(asResult, control.FutureInstances.parallelApplicative).run
-    def |*>[R](f: (T1, T2) => R)(implicit asResult: AsResult[R]): ExecutorService => DecoratedResult[DataTable] = (es: ExecutorService) =>
-      executeRowApply((t1: T1, t2: T2) => Future.fork(Future.delay(f(t1,t2)))(es), true)(asResult, control.FutureInstances.parallelApplicative).run
+    def |*[R](f: (T1, T2) => R)(implicit asResult: AsResult[R]): ExecutionContext => DecoratedResult[DataTable] = (ec: ExecutionContext) =>
+      executeRowApply((t1: T1, t2: T2) => Future(f(t1,t2))(ec), execute)(asResult, control.FutureInstances.parallelApplicative(ec)).run
+    def |*>[R](f: (T1, T2) => R)(implicit asResult: AsResult[R]): ExecutionContext => DecoratedResult[DataTable] = (ec: ExecutionContext) =>
+      executeRowApply((t1: T1, t2: T2) => Future(f(t1,t2))(ec), true)(asResult, control.FutureInstances.parallelApplicative(ec)).run
     def executeRowApply[R, M[_]](f: (T1, T2) => M[R], exec: Boolean)(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] = {
       if (exec)
         app.map(app.traverse(rows) { d: DataRow2[T1, T2] =>
@@ -165,10 +165,10 @@ trait DataTables extends ExpectationsCreation {
       executeRowApply(f, execute)
     def |@>[M[_], R](f: (T1, T2, T3) => M[R])(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
       executeRowApply(f, true)
-    def |*[R](f: (T1, T2, T3) => R)(implicit asResult: AsResult[R]): ExecutorService => DecoratedResult[DataTable] = (es: ExecutorService) =>
-      executeRowApply((t1: T1, t2: T2, t3: T3) => Future.fork(Future.delay(f(t1,t2,t3)))(es), execute)(asResult, control.FutureInstances.parallelApplicative).run
-    def |*>[R](f: (T1, T2, T3) => R)(implicit asResult: AsResult[R]): ExecutorService => DecoratedResult[DataTable] = (es: ExecutorService) =>
-      executeRowApply((t1: T1, t2: T2, t3: T3) => Future.fork(Future.delay(f(t1,t2,t3)))(es), true)(asResult, control.FutureInstances.parallelApplicative).run
+    def |*[R](f: (T1, T2, T3) => R)(implicit asResult: AsResult[R]): ExecutionContext => DecoratedResult[DataTable] = (ec: ExecutionContext) =>
+      executeRowApply((t1: T1, t2: T2, t3: T3) => Future(f(t1,t2,t3))(ec), execute)(asResult, control.FutureInstances.parallelApplicative(ec)).run
+    def |*>[R](f: (T1, T2, T3) => R)(implicit asResult: AsResult[R]): ExecutionContext => DecoratedResult[DataTable] = (ec: ExecutionContext) =>
+      executeRowApply((t1: T1, t2: T2, t3: T3) => Future(f(t1,t2,t3))(ec), true)(asResult, control.FutureInstances.parallelApplicative(ec)).run
     def executeRowApply[R, M[_]](f: (T1, T2, T3) => M[R], exec: Boolean)(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] = {
       if (exec)
         app.map(app.traverse(rows) { d: DataRow3[T1, T2, T3] =>
@@ -190,10 +190,10 @@ trait DataTables extends ExpectationsCreation {
       executeRowApply(f, execute)
     def |@>[M[_], R](f: (T1, T2, T3, T4) => M[R])(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
       executeRowApply(f, true)
-    def |*[R](f: (T1, T2, T3, T4) => R)(implicit asResult: AsResult[R]): ExecutorService => DecoratedResult[DataTable] = (es: ExecutorService) =>
-      executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4) => Future.fork(Future.delay(f(t1,t2,t3,t4)))(es), execute)(asResult, control.FutureInstances.parallelApplicative).run
-    def |*>[R](f: (T1, T2, T3, T4) => R)(implicit asResult: AsResult[R]): ExecutorService => DecoratedResult[DataTable] = (es: ExecutorService) =>
-      executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4) => Future.fork(Future.delay(f(t1,t2,t3,t4)))(es), true)(asResult, control.FutureInstances.parallelApplicative).run
+    def |*[R](f: (T1, T2, T3, T4) => R)(implicit asResult: AsResult[R]): ExecutionContext => DecoratedResult[DataTable] = (ec: ExecutionContext) =>
+      executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4) => Future(f(t1,t2,t3,t4))(ec), execute)(asResult, control.FutureInstances.parallelApplicative(ec)).run
+    def |*>[R](f: (T1, T2, T3, T4) => R)(implicit asResult: AsResult[R]): ExecutionContext => DecoratedResult[DataTable] = (ec: ExecutionContext) =>
+      executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4) => Future(f(t1,t2,t3,t4))(ec), true)(asResult, control.FutureInstances.parallelApplicative(ec)).run
     def executeRowApply[R, M[_]](f: (T1, T2, T3, T4) => M[R], exec: Boolean)(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] = {
       if (exec)
         app.map(app.traverse(rows) { d: DataRow4[T1, T2, T3, T4] =>
@@ -215,10 +215,10 @@ trait DataTables extends ExpectationsCreation {
       executeRowApply(f, execute)
     def |@>[M[_], R](f: (T1, T2, T3, T4, T5) => M[R])(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
       executeRowApply(f, true)
-    def |*[R](f: (T1, T2, T3, T4, T5) => R)(implicit asResult: AsResult[R]): ExecutorService => DecoratedResult[DataTable] = (es: ExecutorService) =>
-      executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5) => Future.fork(Future.delay(f(t1,t2,t3,t4,t5)))(es), execute)(asResult, control.FutureInstances.parallelApplicative).run
-    def |*>[R](f: (T1, T2, T3, T4, T5) => R)(implicit asResult: AsResult[R]): ExecutorService => DecoratedResult[DataTable] = (es: ExecutorService) =>
-      executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5) => Future.fork(Future.delay(f(t1,t2,t3,t4,t5)))(es), true)(asResult, control.FutureInstances.parallelApplicative).run
+    def |*[R](f: (T1, T2, T3, T4, T5) => R)(implicit asResult: AsResult[R]): ExecutionContext => DecoratedResult[DataTable] = (ec: ExecutionContext) =>
+      executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5) => Future(f(t1,t2,t3,t4,t5))(ec), execute)(asResult, control.FutureInstances.parallelApplicative(ec)).run
+    def |*>[R](f: (T1, T2, T3, T4, T5) => R)(implicit asResult: AsResult[R]): ExecutionContext => DecoratedResult[DataTable] = (ec: ExecutionContext) =>
+      executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5) => Future(f(t1,t2,t3,t4,t5))(ec), true)(asResult, control.FutureInstances.parallelApplicative(ec)).run
     def executeRowApply[R, M[_]](f: (T1, T2, T3, T4, T5) => M[R], exec: Boolean)(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] = {
       if (exec)
         app.map(app.traverse(rows) { d: DataRow5[T1, T2, T3, T4, T5] =>
@@ -240,10 +240,10 @@ trait DataTables extends ExpectationsCreation {
       executeRowApply(f, execute)
     def |@>[M[_], R](f: (T1, T2, T3, T4, T5, T6) => M[R])(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
       executeRowApply(f, true)
-    def |*[R](f: (T1, T2, T3, T4, T5, T6) => R)(implicit asResult: AsResult[R]): ExecutorService => DecoratedResult[DataTable] = (es: ExecutorService) =>
-      executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6) => Future.fork(Future.delay(f(t1,t2,t3,t4,t5,t6)))(es), execute)(asResult, control.FutureInstances.parallelApplicative).run
-    def |*>[R](f: (T1, T2, T3, T4, T5, T6) => R)(implicit asResult: AsResult[R]): ExecutorService => DecoratedResult[DataTable] = (es: ExecutorService) =>
-      executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6) => Future.fork(Future.delay(f(t1,t2,t3,t4,t5,t6)))(es), true)(asResult, control.FutureInstances.parallelApplicative).run
+    def |*[R](f: (T1, T2, T3, T4, T5, T6) => R)(implicit asResult: AsResult[R]): ExecutionContext => DecoratedResult[DataTable] = (ec: ExecutionContext) =>
+      executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6) => Future(f(t1,t2,t3,t4,t5,t6))(ec), execute)(asResult, control.FutureInstances.parallelApplicative(ec)).run
+    def |*>[R](f: (T1, T2, T3, T4, T5, T6) => R)(implicit asResult: AsResult[R]): ExecutionContext => DecoratedResult[DataTable] = (ec: ExecutionContext) =>
+      executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6) => Future(f(t1,t2,t3,t4,t5,t6))(ec), true)(asResult, control.FutureInstances.parallelApplicative(ec)).run
     def executeRowApply[R, M[_]](f: (T1, T2, T3, T4, T5, T6) => M[R], exec: Boolean)(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] = {
       if (exec)
         app.map(app.traverse(rows) { d: DataRow6[T1, T2, T3, T4, T5, T6] =>
@@ -265,10 +265,10 @@ trait DataTables extends ExpectationsCreation {
       executeRowApply(f, execute)
     def |@>[M[_], R](f: (T1, T2, T3, T4, T5, T6, T7) => M[R])(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
       executeRowApply(f, true)
-    def |*[R](f: (T1, T2, T3, T4, T5, T6, T7) => R)(implicit asResult: AsResult[R]): ExecutorService => DecoratedResult[DataTable] = (es: ExecutorService) =>
-      executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7) => Future.fork(Future.delay(f(t1,t2,t3,t4,t5,t6,t7)))(es), execute)(asResult, control.FutureInstances.parallelApplicative).run
-    def |*>[R](f: (T1, T2, T3, T4, T5, T6, T7) => R)(implicit asResult: AsResult[R]): ExecutorService => DecoratedResult[DataTable] = (es: ExecutorService) =>
-      executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7) => Future.fork(Future.delay(f(t1,t2,t3,t4,t5,t6,t7)))(es), true)(asResult, control.FutureInstances.parallelApplicative).run
+    def |*[R](f: (T1, T2, T3, T4, T5, T6, T7) => R)(implicit asResult: AsResult[R]): ExecutionContext => DecoratedResult[DataTable] = (ec: ExecutionContext) =>
+      executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7) => Future(f(t1,t2,t3,t4,t5,t6,t7))(ec), execute)(asResult, control.FutureInstances.parallelApplicative(ec)).run
+    def |*>[R](f: (T1, T2, T3, T4, T5, T6, T7) => R)(implicit asResult: AsResult[R]): ExecutionContext => DecoratedResult[DataTable] = (ec: ExecutionContext) =>
+      executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7) => Future(f(t1,t2,t3,t4,t5,t6,t7))(ec), true)(asResult, control.FutureInstances.parallelApplicative(ec)).run
     def executeRowApply[R, M[_]](f: (T1, T2, T3, T4, T5, T6, T7) => M[R], exec: Boolean)(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] = {
       if (exec)
         app.map(app.traverse(rows) { d: DataRow7[T1, T2, T3, T4, T5, T6, T7] =>
@@ -290,10 +290,10 @@ trait DataTables extends ExpectationsCreation {
       executeRowApply(f, execute)
     def |@>[M[_], R](f: (T1, T2, T3, T4, T5, T6, T7, T8) => M[R])(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
       executeRowApply(f, true)
-    def |*[R](f: (T1, T2, T3, T4, T5, T6, T7, T8) => R)(implicit asResult: AsResult[R]): ExecutorService => DecoratedResult[DataTable] = (es: ExecutorService) =>
-      executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8) => Future.fork(Future.delay(f(t1,t2,t3,t4,t5,t6,t7,t8)))(es), execute)(asResult, control.FutureInstances.parallelApplicative).run
-    def |*>[R](f: (T1, T2, T3, T4, T5, T6, T7, T8) => R)(implicit asResult: AsResult[R]): ExecutorService => DecoratedResult[DataTable] = (es: ExecutorService) =>
-      executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8) => Future.fork(Future.delay(f(t1,t2,t3,t4,t5,t6,t7,t8)))(es), true)(asResult, control.FutureInstances.parallelApplicative).run
+    def |*[R](f: (T1, T2, T3, T4, T5, T6, T7, T8) => R)(implicit asResult: AsResult[R]): ExecutionContext => DecoratedResult[DataTable] = (ec: ExecutionContext) =>
+      executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8) => Future(f(t1,t2,t3,t4,t5,t6,t7,t8))(ec), execute)(asResult, control.FutureInstances.parallelApplicative(ec)).run
+    def |*>[R](f: (T1, T2, T3, T4, T5, T6, T7, T8) => R)(implicit asResult: AsResult[R]): ExecutionContext => DecoratedResult[DataTable] = (ec: ExecutionContext) =>
+      executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8) => Future(f(t1,t2,t3,t4,t5,t6,t7,t8))(ec), true)(asResult, control.FutureInstances.parallelApplicative(ec)).run
     def executeRowApply[R, M[_]](f: (T1, T2, T3, T4, T5, T6, T7, T8) => M[R], exec: Boolean)(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] = {
       if (exec)
         app.map(app.traverse(rows) { d: DataRow8[T1, T2, T3, T4, T5, T6, T7, T8] =>
@@ -315,10 +315,10 @@ trait DataTables extends ExpectationsCreation {
       executeRowApply(f, execute)
     def |@>[M[_], R](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9) => M[R])(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
       executeRowApply(f, true)
-    def |*[R](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9) => R)(implicit asResult: AsResult[R]): ExecutorService => DecoratedResult[DataTable] = (es: ExecutorService) =>
-      executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8, t9: T9) => Future.fork(Future.delay(f(t1,t2,t3,t4,t5,t6,t7,t8,t9)))(es), execute)(asResult, control.FutureInstances.parallelApplicative).run
-    def |*>[R](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9) => R)(implicit asResult: AsResult[R]): ExecutorService => DecoratedResult[DataTable] = (es: ExecutorService) =>
-      executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8, t9: T9) => Future.fork(Future.delay(f(t1,t2,t3,t4,t5,t6,t7,t8,t9)))(es), true)(asResult, control.FutureInstances.parallelApplicative).run
+    def |*[R](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9) => R)(implicit asResult: AsResult[R]): ExecutionContext => DecoratedResult[DataTable] = (ec: ExecutionContext) =>
+      executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8, t9: T9) => Future(f(t1,t2,t3,t4,t5,t6,t7,t8,t9))(ec), execute)(asResult, control.FutureInstances.parallelApplicative(ec)).run
+    def |*>[R](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9) => R)(implicit asResult: AsResult[R]): ExecutionContext => DecoratedResult[DataTable] = (ec: ExecutionContext) =>
+      executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8, t9: T9) => Future(f(t1,t2,t3,t4,t5,t6,t7,t8,t9))(ec), true)(asResult, control.FutureInstances.parallelApplicative(ec)).run
     def executeRowApply[R, M[_]](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9) => M[R], exec: Boolean)(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] = {
       if (exec)
         app.map(app.traverse(rows) { d: DataRow9[T1, T2, T3, T4, T5, T6, T7, T8, T9] =>
@@ -340,10 +340,10 @@ trait DataTables extends ExpectationsCreation {
       executeRowApply(f, execute)
     def |@>[M[_], R](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10) => M[R])(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
       executeRowApply(f, true)
-    def |*[R](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10) => R)(implicit asResult: AsResult[R]): ExecutorService => DecoratedResult[DataTable] = (es: ExecutorService) =>
-      executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8, t9: T9, t10: T10) => Future.fork(Future.delay(f(t1,t2,t3,t4,t5,t6,t7,t8,t9,t10)))(es), execute)(asResult, control.FutureInstances.parallelApplicative).run
-    def |*>[R](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10) => R)(implicit asResult: AsResult[R]): ExecutorService => DecoratedResult[DataTable] = (es: ExecutorService) =>
-      executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8, t9: T9, t10: T10) => Future.fork(Future.delay(f(t1,t2,t3,t4,t5,t6,t7,t8,t9,t10)))(es), true)(asResult, control.FutureInstances.parallelApplicative).run
+    def |*[R](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10) => R)(implicit asResult: AsResult[R]): ExecutionContext => DecoratedResult[DataTable] = (ec: ExecutionContext) =>
+      executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8, t9: T9, t10: T10) => Future(f(t1,t2,t3,t4,t5,t6,t7,t8,t9,t10))(ec), execute)(asResult, control.FutureInstances.parallelApplicative(ec)).run
+    def |*>[R](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10) => R)(implicit asResult: AsResult[R]): ExecutionContext => DecoratedResult[DataTable] = (ec: ExecutionContext) =>
+      executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8, t9: T9, t10: T10) => Future(f(t1,t2,t3,t4,t5,t6,t7,t8,t9,t10))(ec), true)(asResult, control.FutureInstances.parallelApplicative(ec)).run
     def executeRowApply[R, M[_]](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10) => M[R], exec: Boolean)(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] = {
       if (exec)
         app.map(app.traverse(rows) { d: DataRow10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10] =>
@@ -351,6 +351,11 @@ trait DataTables extends ExpectationsCreation {
         })(rs => collect(rs))
       else app.pure(DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok")))
     }
+  }
+
+  implicit class FutureOps[A](f: Future[A]) {
+    def run: A =
+      Await.result(f, Duration.Inf)
   }
 
   abstract class DataRow[+T1, +T2, +T3, +T4, +T5, +T6, +T7, +T8, +T9, +T10] extends Product {
@@ -458,10 +463,10 @@ object DataTablesGenerator {
         "    executeRowApply(f, execute)",
         "  def |@>[M[_], R](f: "+typesTuple(i)+" => M[R])(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =",
         "    executeRowApply(f, true)",
-        "  def |*[R](f: "+typesTuple(i)+" => R)(implicit asResult: AsResult[R]): ExecutorService => DecoratedResult[DataTable] = (es: ExecutorService) => ",
-        "    executeRowApply("+parametersList(i: Int)+" => Future.fork(Future.delay(f("+(1 to i).map("t"+_).mkString(",")+")))(es), execute)(asResult, control.FutureInstances.parallelApplicative).run",
-        "  def |*>[R](f: "+typesTuple(i)+" => R)(implicit asResult: AsResult[R]): ExecutorService => DecoratedResult[DataTable] = (es: ExecutorService) => ",
-        "    executeRowApply("+parametersList(i: Int)+" => Future.fork(Future.delay(f("+(1 to i).map("t"+_).mkString(",")+")))(es), true)(asResult, control.FutureInstances.parallelApplicative).run",
+        "  def |*[R](f: "+typesTuple(i)+" => R)(implicit asResult: AsResult[R]): ExecutionContext => DecoratedResult[DataTable] = (ec: ExecutionContext) => ",
+        "    executeRowApply("+parametersList(i: Int)+" => Future(f("+(1 to i).map("t"+_).mkString(",")+"))(ec), execute)(asResult, control.FutureInstances.parallelApplicative(ec)).run",
+        "  def |*>[R](f: "+typesTuple(i)+" => R)(implicit asResult: AsResult[R]): ExecutionContext => DecoratedResult[DataTable] = (ec: ExecutionContext) => ",
+        "    executeRowApply("+parametersList(i: Int)+" => Future(f("+(1 to i).map("t"+_).mkString(",")+"))(ec), true)(asResult, control.FutureInstances.parallelApplicative(ec)).run",
         "  def executeRowApply[R, M[_]](f: "+typesTuple(i)+" => M[R], exec: Boolean)(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] = {",
         "    if (exec)",
         "      app.map(app.traverse(rows) { d: DataRow"+i+types(i)+" =>",

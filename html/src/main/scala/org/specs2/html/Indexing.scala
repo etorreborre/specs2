@@ -16,8 +16,8 @@ object Indexing {
    * An Index fold creates an Index page based on all pages to index and
    * saves it to a given file path
    */
-  def indexFold(path: FilePath): Fold[ActionStack, IndexedPage, Index] =
-    origami.fold.fromMonoidMap[ActionStack, IndexedPage, Index](Index.createIndex).mapFlatten((index: Index) =>
+  def indexFold(path: FilePath): Fold[OperationStack, IndexedPage, Index] =
+    origami.fold.fromMonoidMap[OperationStack, IndexedPage, Index](Index.createIndex).mapFlatten((index: Index) =>
       FileSystem.writeFile(path, Index.toJson(index)).as(index))
 
   def createIndexedPages(env: Env, specifications: List[SpecStructure], outDir: DirectoryPath): List[IndexedPage] =

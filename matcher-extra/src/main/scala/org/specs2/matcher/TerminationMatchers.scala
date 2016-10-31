@@ -5,8 +5,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 import org.specs2.concurrent.ExecutionEnv
 
 import scala.annotation.tailrec
-import scala.concurrent.duration._
-import scalaz.concurrent.Future
+import scala.concurrent._, duration._
 
 /**
  * This trait provides matchers to check if a block of code is terminating or not
@@ -89,9 +88,10 @@ class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[(
   private val cancelled = new AtomicBoolean(false)
 
   private def createFuture[A](a: =>A)(implicit ee: ExecutionEnv): Future[A] = {
-    implicit val executorService = ee.executorService
+    import ee._
     val future = Future(a)
-    future.runAsyncInterruptibly(_ => terminated.set(true), cancelled)
+    future.onSuccess { case _ => terminated.set(true) }
+    future.onFailure { case _ => cancelled.set(true) }
     future
   }
 

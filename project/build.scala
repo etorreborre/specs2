@@ -35,7 +35,7 @@ object build extends Build {
       releaseSettings          ++
       siteSettings             ++
       Seq(name := "specs2", packagedArtifacts := Map.empty)
-  ).aggregate(common, matcher, matcherExtra, core, cats, html, analysis, form, markdown, gwt, junit, scalacheck, mock, tests)
+  ).aggregate(common, matcher, matcherExtra, core, cats, scalaz, html, analysis, form, markdown, gwt, junit, scalacheck, mock, tests)
    .enablePlugins(GitBranchPrompt)
 
   /** COMMON SETTINGS */
@@ -154,6 +154,12 @@ object build extends Build {
       Seq(name := "specs2-cats") ++
       Seq((skip in compile) := scalaVersion.value startsWith "2.12",
           publishArtifact := !(scalaVersion.value startsWith "2.12"))
+  ).dependsOn(matcher, core % "test->test")
+
+  lazy val scalaz = Project(id = "scalaz", base = file("scalaz"),
+    settings = moduleSettings("scalaz") ++
+      Seq(libraryDependencies ++= depends.scalaz(scalazVersion.value) ++ depends.scalazConcurrent(scalazVersion.value)) ++
+      Seq(name := "specs2-scalaz")
   ).dependsOn(matcher, core % "test->test")
 
   lazy val mock = Project(id = "mock", base = file("mock"),

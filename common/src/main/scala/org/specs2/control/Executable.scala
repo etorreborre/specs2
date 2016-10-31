@@ -12,30 +12,30 @@ object Executable {
   /**
    * Run an external program
    */
-  def run(executable: FilePath, arguments: Seq[String] = Seq()): Action[Unit] = {
+  def run(executable: FilePath, arguments: Seq[String] = Seq()): Operation[Unit] = {
     val logger = new StringProcessLogger
     try {
 
       val code = sys.process.Process(executable.path, arguments).!(logger)
-      if (code == 0) Actions.ok(())
-      else           Actions.fail(logger.lines)
+      if (code == 0) Operations.ok(())
+      else           Operations.fail(logger.lines)
     } catch { case t: Throwable =>
-      Actions.fail(t.getMessage+"\n"+logger.lines)
+      Operations.fail(t.getMessage+"\n"+logger.lines)
     }
   }
 
   /**
    * Execute an external program and return the output
    */
-  def execute(executable: FilePath, arguments: Seq[String] = Seq()): Action[String] = {
+  def execute(executable: FilePath, arguments: Seq[String] = Seq()): Operation[String] = {
     val logger = new StringProcessLogger
     try {
 
       val code = sys.process.Process(executable.path, arguments).!(logger)
-      if (code == 0) Actions.ok(logger.lines)
-      else           Actions.fail(logger.lines)
+      if (code == 0) Operations.ok(logger.lines)
+      else           Operations.fail(logger.lines)
     } catch { case t: Throwable =>
-      Actions.fail(t.getMessage+"\n"+logger.lines)
+      Operations.fail(t.getMessage+"\n"+logger.lines)
     }
   }
 

@@ -18,7 +18,7 @@ object run extends ClassRunner {
     val env = Env(arguments = arguments,
                   lineLogger = consoleLogger)
 
-    try     Runner.execute(specifications.toList.map(report(env)).sequenceU.map(_.foldMap(identity _)), arguments, exit = false)
+    try     Runner.execute(specifications.toList.map(report(env)).sequenceU.map(_.foldMap(identity _)), arguments, exit = false)(env.executionContext)
     finally env.shutdown
   }
 

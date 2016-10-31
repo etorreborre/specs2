@@ -18,8 +18,8 @@ import SpecHtmlPage._
 import eff.all._
 import eff.syntax.all._
 import eff.ErrorEffect._
+import Operations._
 import org.specs2.time.SimpleTimer
-import Actions._
 import origami._
 
 /**
@@ -60,7 +60,7 @@ trait HtmlPrinter extends Printer {
    *  - create the file content using the template
    *  - output the file
    */
-  def printHtml(env: Env, spec: SpecStructure, stats: Stats, timer: SimpleTimer): Action[Unit] = {
+  def printHtml(env: Env, spec: SpecStructure, stats: Stats, timer: SimpleTimer): Operation[Unit] = {
     import env.fileSystem._
     for {
       options  <- getHtmlOptions(env.arguments)
@@ -73,10 +73,10 @@ trait HtmlPrinter extends Printer {
   /**
    * Get html options, possibly coming from the command line
    */
-  def getHtmlOptions(arguments: Arguments): Action[HtmlOptions] = {
+  def getHtmlOptions(arguments: Arguments): Operation[HtmlOptions] = {
     import arguments.commandLine._
     val out = directoryOr("html.outdir", HtmlOptions.outDir)
-    Actions.ok(HtmlOptions(
+    Operations.ok(HtmlOptions(
       outDir               = out,
       baseDir              = directoryOr("html.basedir",               HtmlOptions.baseDir),
       template             = fileOr(     "html.template",              HtmlOptions.template(out)),
@@ -96,7 +96,7 @@ trait HtmlPrinter extends Printer {
    *  - the template
    *  - the body of the file (built from the specification execution)
    */
-  def makeHtml(template: String, spec: SpecStructure, stats: Stats, timer: SimpleTimer, opiions: HtmlOptions, arguments: Arguments): Action[String] =
+  def makeHtml(template: String, spec: SpecStructure, stats: Stats, timer: SimpleTimer, opiions: HtmlOptions, arguments: Arguments): Operation[String] =
     makeBody(spec, stats, timer, options, arguments, pandoc = true).flatMap { body =>
       val variables1 =
         options.templateVariables
@@ -117,7 +117,7 @@ trait HtmlPrinter extends Printer {
    *  - copy resources: css, javascript, template
    *  - create the file content using the template and Pandoc (as an external process)
    */
-  def printHtmlWithPandoc(env: Env, spec: SpecStructure, stats: Stats, timer: SimpleTimer, pandoc: Pandoc): Action[Unit] = {
+  def printHtmlWithPandoc(env: Env, spec: SpecStructure, stats: Stats, timer: SimpleTimer, pandoc: Pandoc): Operation[Unit] = {
     import env.fileSystem._
     for {
       options  <- getHtmlOptions(env.arguments)
@@ -132,7 +132,7 @@ trait HtmlPrinter extends Printer {
   /**
    * Create the Html file by invoking Pandoc
    */
-  def makePandocHtml(spec: SpecStructure, stats: Stats, timer: SimpleTimer, pandoc: Pandoc, options: HtmlOptions, env: Env): Action[Unit] =  {
+  def makePandocHtml(spec: SpecStructure, stats: Stats, timer: SimpleTimer, pandoc: Pandoc, options: HtmlOptions, env: Env): Operation[Unit] =  {
     import env.fileSystem._
 
     val variables1 =
@@ -155,7 +155,7 @@ trait HtmlPrinter extends Printer {
     }
   }
 
-  def copyResources(env: Env, options: HtmlOptions): Action[List[Unit]] =
+  def copyResources(env: Env, options: HtmlOptions): Operation[List[Unit]] =
     env.fileSystem.mkdirs(options.outDir) >> {
       List(DirectoryPath("css"),
            DirectoryPath("javascript"),
@@ -166,7 +166,7 @@ trait HtmlPrinter extends Printer {
         .whenFailed((e: Error) => warnAndFail("Cannot copy resources to "+options.outDir.path+"\n"+e.fullMessage, RunAborted))
     }
 
-  def copySpecResourcesDir(env: Env, base: DirectoryPath, outputDir: DirectoryPath, loader: ClassLoader)(src: DirectoryPath): Action[Unit] = {
+  def copySpecResourcesDir(env: Env, base: DirectoryPath, outputDir: DirectoryPath, loader: ClassLoader)(src: DirectoryPath): Operation[Unit] = {
     Option(loader.getResource((base / src).path)) match {
       case None =>
         warnAndFail(s"no resource found for url ${(base / src).path}", RunAborted)
@@ -180,7 +180,7 @@ trait HtmlPrinter extends Printer {
     }
   }
 
-  def reportMissingSeeRefs(specs: List[SpecStructure], outDir: DirectoryPath): Action[Unit] = for {
+  def reportMissingSeeRefs(specs: List[SpecStructure], outDir: DirectoryPath): Operation[Unit] = for {
     missingSeeRefs <- specs.flatMap(_.seeReferences).distinct.filterM(ref => FilePathReader.doesNotExist(SpecHtmlPage.outputPath(outDir, ref.specClassName)))
     _              <- warn("The following specifications are being referenced but haven't been reported\n"+
                            missingSeeRefs.map(_.specClassName).distinct.mkString("\n")).unless(missingSeeRefs.isEmpty)

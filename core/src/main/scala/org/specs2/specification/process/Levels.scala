@@ -2,7 +2,7 @@ package org.specs2
 package specification
 package process
 
-import scalaz.{Tree, TreeLoc}
+import scalaz._, Scalaz.{state => _, _}
 import Tree._
 import data.Trees._
 import specification.create._
@@ -70,14 +70,14 @@ trait Levels {
     treeLocMap(fs)(identityMapper)
 
   def levels(fs: Fragments): List[Int] =
-    fs.contents.pipe(levelsProcess).runList.toConsoleTask.run.map(_._2).toList
+    fs.contents.pipe(levelsProcess).runList.run.map(_._2).toList
 
 
   def levels(f: Fragment): List[Int]   = levels(Fragments(f))
   def levels(structure: SpecStructure): List[Int] = levels(structure.fragments)
 
   def treeLocMap(fs: Fragments)(mapper: Mapper): Option[TreeLoc[Fragment]] =
-    fs.contents.pipe(levelsProcess).pipe(levelsToTreeLoc(mapper)).runList.toConsoleTask.run.lastOption
+    fs.contents.pipe(levelsProcess).pipe(levelsToTreeLoc(mapper)).runList.run.lastOption
 
   def tree(fs: Fragments): Option[Tree[Fragment]] = treeLoc(fs).map(_.toTree)
   def treeMap(fs: Fragments)(mapper: Mapper): Option[Tree[Fragment]] = treeLocMap(fs)(mapper).map(_.toTree)

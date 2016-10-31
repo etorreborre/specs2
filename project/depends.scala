@@ -10,9 +10,11 @@ object depends {
   def reflect(scalaVersion: String) = Seq("org.scala-lang" % "scala-reflect" % scalaVersion)
 
   def scalaz(scalazVersion: String) =
-    Seq("org.scalaz"        %% "scalaz-core",
-        "org.scalaz"        %% "scalaz-effect",
-        "org.scalaz"        %% "scalaz-concurrent").map(_ % scalazVersion)
+    Seq("org.scalaz" %% "scalaz-core",
+        "org.scalaz" %% "scalaz-effect").map(_ % scalazVersion)
+
+  def scalazConcurrent(scalazVersion: String) =
+    Seq("org.scalaz" %% "scalaz-concurrent").map(_ % scalazVersion)
 
   def scalaParser(scalaVersion: String) =
     PartialFunction.condOpt(CrossVersion.partialVersion(scalaVersion)){

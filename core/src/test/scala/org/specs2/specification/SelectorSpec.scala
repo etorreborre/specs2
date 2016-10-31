@@ -257,7 +257,7 @@ class SelectorSpec extends script.Specification with Groups with ResultMatchers 
 
   def filterIncluded(fragments: Fragments, tags: Seq[String]) = {
     val env = Env(arguments = Arguments.split(s"include ${tags.mkString(",")}"))
-    (fragments.contents |> DefaultSelector.filterByMarker(env)).runList.unsafeRun
+    (fragments.contents |> DefaultSelector.filterByMarker(env)).runList.run
   }
 
   def filterExcluded(fragments: Fragments, tags: Seq[String]) = {

@@ -12,8 +12,8 @@ class ActionsSpec extends Specification with DisjunctionMatchers { def is = s2""
 """
 
   def guard = {
-    val action = FileSystem.readFile(FilePath("missing")) orElse warnAndFail[ActionStack, String]("warning here", "failed")
-    val (value, warnings) = executeAction(action)
+    val operation = FileSystem.readFile(FilePath("missing")) orElse warnAndFail[OperationStack, String]("warning here", "failed")
+    val (value, warnings) = executeOperation(operation)
     (value must be_-\/) and (warnings must haveSize(1))
   }
 

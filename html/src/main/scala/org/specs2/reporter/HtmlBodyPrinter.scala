@@ -23,19 +23,21 @@ trait HtmlBodyPrinter {
   /**
    * Make the body of the Html file based on all the specification fragments
    */
-  def makeBody(spec: SpecStructure, stats: Stats, timer: SimpleTimer, options: HtmlOptions, arguments: Arguments, pandoc: Boolean): Action[String] = {
+  def makeBody(spec: SpecStructure, stats: Stats, timer: SimpleTimer, options: HtmlOptions, arguments: Arguments, pandoc: Boolean): Operation[String] = {
     val title = spec.name
     type HtmlState = (String, Level)
 
-    val htmlFold = fold.fromFoldLeft[ActionStack, Fragment, HtmlState](("", Level())) { case ((htmlString, level), fragment) =>
+    val htmlFold = fold.fromFoldLeft[OperationStack, Fragment, HtmlState](("", Level())) { case ((htmlString, level), fragment) =>
       (htmlString + printFragment(arguments, level, options.outDir, pandoc)(fragment),
        Levels.fold(fragment, level))
     }
 
-    spec.fragments.contents.fold(htmlFold).map { case (html, _) =>
-      html +
-      s"""|
-          |${printStatistics(title, stats, timer, options)}""".stripMargin
+    Operations.delayed(spec.fragments.contents.fold(htmlFold.into[ActionStack]).runOption).map {
+      case Some((html, _)) =>
+        html +
+        s"""${printStatistics(title, stats, timer, options)}"""
+      case None =>
+        s"<failed to produce the html for spec $spec>"
     }
   }
 

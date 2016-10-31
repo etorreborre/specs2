@@ -94,20 +94,20 @@ object SpecStructure {
     SpecStructure(SpecHeader(klass))
 
   /** @return all the referenced specifications */
-  def referencedSpecStructures(spec: SpecStructure, env: Env, classLoader: ClassLoader): Action[Seq[SpecStructure]] =
+  def referencedSpecStructures(spec: SpecStructure, env: Env, classLoader: ClassLoader): Operation[Seq[SpecStructure]] =
     specStructuresRefs(spec, env, classLoader)(referencedSpecStructuresRefs(env))
 
   /** @return all the linked specifications */
-  def linkedSpecifications(spec: SpecStructure, env: Env, classLoader: ClassLoader): Action[Seq[SpecStructure]] =
+  def linkedSpecifications(spec: SpecStructure, env: Env, classLoader: ClassLoader): Operation[Seq[SpecStructure]] =
     specStructuresRefs(spec, env, classLoader)(linkedSpecStructuresRefs(env))
 
   /** @return all the see specifications */
-  def seeSpecifications(spec: SpecStructure, env: Env, classLoader: ClassLoader): Action[Seq[SpecStructure]] =
+  def seeSpecifications(spec: SpecStructure, env: Env, classLoader: ClassLoader): Operation[Seq[SpecStructure]] =
     specStructuresRefs(spec, env, classLoader)(seeSpecStructuresRefs(env))
 
   /** @return all the referenced spec structures */
   def specStructuresRefs(spec: SpecStructure, env: Env,
-                         classLoader: ClassLoader)(refs: SpecStructure => List[SpecificationRef]): Action[Seq[SpecStructure]] = {
+                         classLoader: ClassLoader)(refs: SpecStructure => List[SpecificationRef]): Operation[Seq[SpecStructure]] = {
 
     val byName = (ss: List[SpecStructure]) => ss.foldLeft(Vector[(String, SpecStructure)]()) { (res, cur) =>
       val name = cur.specClassName
@@ -121,7 +121,7 @@ object SpecStructure {
       }.sequenceU.map(byName).runOption.getOrElse(Vector())
        .filterNot { case (n, _) => visited.map(_._1).contains(n) }
 
-    Actions.delayed {
+    Operations.delayed {
       def getAll(seed: Vector[SpecStructure], visited: Vector[(String, SpecStructure)]): Vector[SpecStructure] = {
         if (seed.isEmpty) visited.map(_._2)
         else {

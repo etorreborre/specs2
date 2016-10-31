@@ -74,6 +74,13 @@ package object control {
       t => -\/(-\/(t)),
       other => other._1)
 
+  def executeOperation[A](operation: Operation[A], printer: String => Unit = s => ()): (Error \/ A, List[String]) = {
+    type S = Fx.fx3[ErrorOrOk, Console, Warnings]
+
+    operation.execSafe.flatMap(_.fold(t => exception[S, A](t), a => Eff.pure[S, A](a))).
+      runError.runConsoleToPrinter(printer).runWarnings.run
+  }
+
   def withTimeout[A](action: Action[A])(timeout: FiniteDuration, env: ExecutionEnv): Action[A] =
     interpret.interceptNat[ActionStack, Async, A](action)(new (Async ~> Async) {
       def apply[X](tx: Async[X]) =
@@ -134,6 +141,16 @@ package object control {
       )
   }
 
+  /**
+   * This implicit allows an Operation[result] to be used inside an example.
+   */
+  implicit def operationAsResult[T : AsResult]: AsResult[Operation[T]] = new AsResult[Operation[T]] {
+    def asResult(operation: =>Operation[T]): Result =
+      runOperation(operation).fold(
+        err => err.fold(t => org.specs2.execute.Error(t), f => org.specs2.execute.Failure(f)),
+        ok => AsResult(ok)
+      )
+  }
 
   implicit class actionOps[T](action: Action[T]) {
     def run(implicit e: Monoid[T]): T =

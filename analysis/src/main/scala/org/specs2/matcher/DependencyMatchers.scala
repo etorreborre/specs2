@@ -37,7 +37,7 @@ trait DependencyBaseMatchers extends LayersAnalysis {
    */
   class LayersDependenciesMatcher extends Matcher[Layers] {
     def apply[S <: Layers](ls: Expectable[S]) = {
-      runAction(ls.value.unsatisfied).fold(
+      runOperation(ls.value.unsatisfied).fold(
         error => result(Result.disjunctionErrorToResult(error), ls),
         dependencies => result(dependencies.isEmpty, "all dependencies are satisfied", "those dependencies are not satisfied:\n"+dependencies.showBreaks, ls)
       )

@@ -18,7 +18,7 @@ import text.Trim._
 trait TableOfContents {
 
   /** create a table of contents for all the specifications */
-  def createToc(specifications: List[SpecStructure], outDir: DirectoryPath, entryMaxSize: Int, fileSystem: FileSystem): Action[Unit] = {
+  def createToc(specifications: List[SpecStructure], outDir: DirectoryPath, entryMaxSize: Int, fileSystem: FileSystem): Operation[Unit] = {
     // sort specifications a, b, c so that a depends on b and c
     val sorted = SpecStructure.reverseTopologicalSort(specifications).map(_.toList).getOrElse(List())
     for {
@@ -29,13 +29,13 @@ trait TableOfContents {
   }
 
   /** read the generated html pages and return them as a tree, based on the links relationships between them */
-  def readHtmlPages(specifications: List[SpecStructure], outDir: DirectoryPath, fileSystem: FileSystem): Action[List[SpecHtmlPage]] =
+  def readHtmlPages(specifications: List[SpecStructure], outDir: DirectoryPath, fileSystem: FileSystem): Operation[List[SpecHtmlPage]] =
     for {
       paths <- fileSystem.listFilePaths(outDir)
       pages <- createSpecPages(paths.toList, specifications, outDir, fileSystem)
     } yield pages
 
-  def createSpecPages(paths: List[FilePath], specifications: List[SpecStructure], outDir: DirectoryPath, fileSystem: FileSystem): Action[List[SpecHtmlPage]] = {
+  def createSpecPages(paths: List[FilePath], specifications: List[SpecStructure], outDir: DirectoryPath, fileSystem: FileSystem): Operation[List[SpecHtmlPage]] = {
     specifications.flatMap { spec =>
       val path = SpecHtmlPage.outputPath(outDir, spec)
       if (paths contains path) Some(fileSystem.readFile(path).map(content => SpecHtmlPage(spec, path, outDir, content)))
@@ -107,7 +107,7 @@ trait TableOfContents {
     }.rootLabel
   }
 
-  def saveHtmlPages(pages: List[SpecHtmlPage], fileSystem: FileSystem): Action[Unit] =
+  def saveHtmlPages(pages: List[SpecHtmlPage], fileSystem: FileSystem): Operation[Unit] =
     pages.map(page => fileSystem.writeFile(page.path, page.content)).sequenceU.void
 
 }

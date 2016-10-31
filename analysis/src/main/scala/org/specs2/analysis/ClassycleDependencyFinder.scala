@@ -14,7 +14,7 @@ import control._
 trait ClassycleDependencyFinder extends DependencyFinder {
   val fs = FilePathReader
 
-  def getPackageDependents(sourceDir: DirectoryPath, targetDir: DirectoryPath): String => Action[Seq[Dependency]] = (packageName: String) => {
+  def getPackageDependents(sourceDir: DirectoryPath, targetDir: DirectoryPath): String => Operation[Seq[Dependency]] = (packageName: String) => {
     fs.filePaths(targetDir, "**/*.class", verbose = false).map { paths =>
       val analyser = new Analyser(paths.map(_.path).toArray)
       analyser.createClassGraph()

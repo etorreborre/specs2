@@ -86,8 +86,8 @@ object StatisticsStore {
       writeFile(filepath(key), StoreKeys.encode(key, fact))
 
     def get[A](key: Key[A]): Action[Option[A]] =
-      exists(filepath(key)).flatMap { e =>
-        if (e) readFile(filepath(key)).map(content => StoreKeys.decode(key, content))
+      exists(filepath(key)).toAction.flatMap { e =>
+        if (e) readFile(filepath(key)).map(content => StoreKeys.decode(key, content)).toAction
         else   Actions.ok(None)
       }
 

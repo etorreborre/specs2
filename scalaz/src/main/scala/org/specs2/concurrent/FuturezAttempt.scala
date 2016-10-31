@@ -2,9 +2,11 @@ package org.specs2
 package concurrent
 
 import java.util.concurrent.TimeoutException
+
 import scalaz.concurrent._
 import scala.concurrent.duration._
-import scalaz._, Scalaz._
+import scalaz._
+import Scalaz._
 
 /**
  * implicit methods to attempt a Scalaz future values with a given timeout and

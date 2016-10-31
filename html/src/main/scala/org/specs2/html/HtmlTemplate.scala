@@ -8,13 +8,13 @@ import control._
  * String template for HTML files using the Pandoc templating approach where variables to replace are enclosed with $$
  */
 object HtmlTemplate {
-  def runTemplate(template: String, variables: Map[String, String]): Action[String] = {
+  def runTemplate(template: String, variables: Map[String, String]): Operation[String] = {
     val parser = pandocParser(variables)
 
     parser.parse(template) match {
-      case parser.Success(s, _) => Actions.ok(s)
-      case parser.Failure(e, _) => Actions.fail(e+" for template \n"+template)
-      case parser.Error(e, _)   => Actions.fail(e+" for template \n"+template)
+      case parser.Success(s, _) => Operations.ok(s)
+      case parser.Failure(e, _) => Operations.fail(e+" for template \n"+template)
+      case parser.Error(e, _)   => Operations.fail(e+" for template \n"+template)
     }
 
   }

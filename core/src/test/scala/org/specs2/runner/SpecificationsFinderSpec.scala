@@ -4,11 +4,10 @@ package runner
 import java.io.File
 import io._
 import FileSystem._
-import matcher.ActionMatchers._
-import control.Action
+import matcher.OperationMatchers._
+import control._
 import matcher._
 import MatchersCreation._
-
 
 class SpecificationsFinderSpec extends Spec { def is = s2"""
   It is possible to find specifications in the local test directory           $e1
@@ -38,6 +37,6 @@ class SpecificationsFinderSpec extends Spec { def is = s2"""
     ).runOption must beSome((l: List[_]) => l must haveSize(1))
   }
 
-  def findFiles: Matcher[Action[List[FilePath]]] = (action: Action[List[FilePath]]) =>
-    action must beOk((_: List[FilePath]) must not(beEmpty))
+  def findFiles: Matcher[Operation[List[FilePath]]] = (operation: Operation[List[FilePath]]) =>
+    operation must beOk((_: List[FilePath]) must not(beEmpty))
 }

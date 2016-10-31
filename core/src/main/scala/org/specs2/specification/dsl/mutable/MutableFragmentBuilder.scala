@@ -97,7 +97,7 @@ trait MutableFragmentBuilder extends FragmentBuilder
     Execution.withEnv { env: Env =>
 
       def instance =
-        runAction(Classes.createInstanceFromClass[MutableFragmentBuilder](getClass.asInstanceOf[Class[MutableFragmentBuilder]],
+        runOperation(Classes.createInstanceFromClass[MutableFragmentBuilder](getClass.asInstanceOf[Class[MutableFragmentBuilder]],
           getClass.getClassLoader, env.defaultInstances),
           env.systemLogger)
 

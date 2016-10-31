@@ -1,12 +1,9 @@
 package org.specs2
 package reflect
 
-import org.specs2.matcher.Matcher
 import specification.Grouped
 import Classes._
-import control._
-import eff.syntax.error._
-import matcher.MatchersImplicits._
+import org.specs2.matcher.OperationMatchers._
 
 class ClassesSpec extends Spec with Grouped { def is = s2"""
 
@@ -29,14 +26,8 @@ class ClassesSpec extends Spec with Grouped { def is = s2"""
 
   "exceptions" - new g2 {
     e1 := createInstance[Specification]("org.specs2.reflect.UserErrorSpecification", getClass.getClassLoader) must
-      failWith("org.specs2.control.UserException: cannot create an instance for class org.specs2.reflect.UserErrorSpecification")
+      beKo("org.specs2.control.UserException: cannot create an instance for class org.specs2.reflect.UserErrorSpecification")
   }
-
-  def beOk[T]: Matcher[Action[T]] = (action: Action[T]) =>
-    runAction(action).toOption must beSome
-
-  def failWith[T](message: String): Matcher[Action[T]] = (action: Action[T]) =>
-    runAction(action).toErrorFullMessage must beSome((_: String) must contain(message))
 
   class FromNestedClass extends Specification  { def is = ok }
 }
