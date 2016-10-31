@@ -3,6 +3,7 @@ package org.specs2.matcher.describe
 import java.io.{PrintWriter, StringWriter}
 
 import org.specs2.Spec
+import org.specs2.matcher.Hello
 
 class ComparisonResultSpec extends Spec { def is = s2"""
 
@@ -24,6 +25,8 @@ class ComparisonResultSpec extends Spec { def is = s2"""
     different seq should print added values with prefix added: a                            $seq4
     different seq should print removed values with prefix removed: b                        $seq5
     print order should be Seq(identical, added: added, removed: removed)                    $seq6
+    print identical seq with explicit type                                                  $seq7
+    print different seq with explicit type                                                  $seq8
 
     Array render:
     =============
@@ -105,8 +108,10 @@ class ComparisonResultSpec extends Spec { def is = s2"""
     Other Render:
     =============
 
-    OtherIdentical will return actual.toString                          $ot1
-    OtherDifference will return actual.toString != expected.toString    $ot2
+    OtherIdentical will return actual.toString                                                  $ot1
+    OtherDifference will return actual.toString != expected.toString                            $ot2
+    Unknown types where a primitive is compared to an object should print explicit class type   $ot3
+    when comparing two different objects, don't add explicit class type                         $ot4
 
   """
 
@@ -151,14 +156,17 @@ class ComparisonResultSpec extends Spec { def is = s2"""
   def set5 = { SetDifference(identical = Seq("a", "b"), added = Seq("c", "d"), removed = Seq("e")).render must_== "Set('a', 'b', added: 'c', 'd', removed: 'e')" }
 
 
-  def seq1 = { SeqIdentical(Seq("a", "b")).render must_== "Seq('a', 'b')" }
-  def seq2 = { SeqDifference(Seq(PrimitiveIdentical("a")), Seq.empty, Seq.empty).render must_== "Seq('a')" }
-  def seq3 = { SeqDifference(Seq(PrimitiveDifference("b", "c")), Seq.empty, Seq.empty).render must_== "Seq('b' != 'c')" }
-  def seq4 = { SeqDifference(Seq.empty, added = Seq("d", "e"), Seq.empty).render must_== "Seq(added: 'd', 'e')" }
-  def seq5 = { SeqDifference(Seq.empty, Seq.empty, removed = Seq("f")).render must_== "Seq(removed: 'f')" }
-  def seq6 = { SeqDifference(result = Seq(PrimitiveIdentical("a"), PrimitiveDifference("b", "c")),
+  def seq1 = { SeqIdentical("Seq", Seq("a", "b")).render must_== "Seq('a', 'b')" }
+  def seq2 = { SeqDifference("Seq", Seq(PrimitiveIdentical("a")), Seq.empty, Seq.empty).render must_== "Seq('a')" }
+  def seq3 = { SeqDifference("Seq", Seq(PrimitiveDifference("b", "c")), Seq.empty, Seq.empty).render must_== "Seq('b' != 'c')" }
+  def seq4 = { SeqDifference("Seq", Seq.empty, added = Seq("d", "e"), Seq.empty).render must_== "Seq(added: 'd', 'e')" }
+  def seq5 = { SeqDifference("Seq", Seq.empty, Seq.empty, removed = Seq("f")).render must_== "Seq(removed: 'f')" }
+  def seq6 = { SeqDifference(className = "Seq",
+                             result = Seq(PrimitiveIdentical("a"), PrimitiveDifference("b", "c")),
                              added = Seq("d", "e"),
                              removed = Seq("f")).render must_== "Seq('a', 'b' != 'c', added: 'd', 'e', removed: 'f')" }
+  def seq7 = { SeqIdentical("XXX", Seq("a", "b")).render must_== "XXX('a', 'b')" }
+  def seq8 = { SeqDifference("YYY", Seq(PrimitiveIdentical("a")), Seq.empty, Seq.empty).render must_== "YYY('a')" }
 
   def arr1 = { ArrayIdentical(Seq("a", "b")).render must_== "Array('a', 'b')" }
   def arr2 = { ArrayDifference(Seq(PrimitiveIdentical("a")), Seq.empty, Seq.empty).render must_== "Array('a')" }
@@ -190,6 +198,8 @@ class ComparisonResultSpec extends Spec { def is = s2"""
 
   def ot1 = { OtherIdentical(5).render must_=== "5" }
   def ot2 = { OtherDifferent(5, "5").render must_=== "5 != '5'" }
+  def ot3 = { OtherDifferent(Hello(), "hello").render must_=== "hello: org.specs2.matcher.Hello != hello: java.lang.String" }
+  def ot4 = { OtherDifferent(Set(1), Set.empty[Int]).render must_=== "Set(1) != Set()" }
 
   val stackTraceElement = new StackTraceElement("class", "method", "file", 666)
   val ex = new Exception

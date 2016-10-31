@@ -47,8 +47,6 @@ object Diffable extends DiffableIntrospectors {
 }
 
 trait DiffableIntrospectors extends Fallback {
-//  implicit def traversableDiffable[E: DifferenceInspectable]: DifferenceInspectable[Traversable[E]] = new TraversableDifferenceInspectable[E]
-
   implicit def caseClassDiffable[T <: Product with Serializable: IsCaseClass, L <: HList](implicit labelled: LabelledGeneric.Aux[T, L],
                                                                                                     di: CaseClassIntrospection[L]): Diffable[T] = new CaseClassDiffable[T, L]
 }

@@ -160,10 +160,17 @@ class SetDiffable[E] extends Diffable[Set[E]] {
 class SeqDiffable[E](implicit di: Diffable[E]) extends Diffable[Seq[E]] {
 
   def diff(actual: Seq[E], expected: Seq[E]) =
-    if (actual == expected) SeqIdentical(actual)
-    else SeqDifference(result = compareExisting(actual, expected),
+    if (actual == expected) SeqIdentical(typeOf(actual), actual)
+    else SeqDifference(className = typeOf(actual),
+                       result = compareExisting(actual, expected),
                        added = expected.drop( actual.length ),
                        removed = actual.drop( expected.length ) )
+
+  private def typeOf(actual: Seq[E]): String =
+    actual match {
+      case _: List[E] => "List"
+      case _ => "Seq"
+    }
 
   private def compareExisting(actual: Seq[E], expected: Seq[E]) =
     actual.zip(expected)

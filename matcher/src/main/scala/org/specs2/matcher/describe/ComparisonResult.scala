@@ -4,7 +4,7 @@ import java.io.{PrintWriter, StringWriter}
 
 import org.specs2.matcher.describe.ComparisonResultOps._
 import org.specs2.text.Quote._
-
+import org.specs2.text.NotNullStrings._
 
 sealed trait ComparisonResult {
   def render: String
@@ -71,20 +71,13 @@ trait SetTypeProvider {
   protected final val className = "Set"
 }
 
-
-case class SeqIdentical(value: Seq[Any])
+case class SeqIdentical(className: String, value: Seq[Any])
   extends OrderedCollectionIdentical(value)
-  with SeqTypeProvider
   with ComparisonResult
 
-case class SeqDifference(result: Seq[ComparisonResult], added: Seq[Any], removed: Seq[Any])
+case class SeqDifference(className: String, result: Seq[ComparisonResult], added: Seq[Any], removed: Seq[Any])
   extends OrderedCollectionDifferent(result, added, removed)
-  with SeqTypeProvider
   with ComparisonResult
-
-trait SeqTypeProvider {
-  protected final val className = "Seq"
-}
 
 case class ArrayIdentical(value: Seq[Any])
   extends OrderedCollectionIdentical(value)
@@ -205,7 +198,19 @@ case class OtherIdentical(actual: Any) extends ComparisonResult {
 }
 
 case class OtherDifferent(actual: Any, expected: Any) extends ComparisonResult {
-  def render = s"${actual.render} != ${expected.render}"
+
+  def render = s"${actual.render(showAll = comparingPrimitiveWithObject(actual, expected))} != ${expected.render(showAll = comparingPrimitiveWithObject(actual, expected))}"
+
+  private def comparingPrimitiveWithObject(a: Any, e: Any) = {
+    val (classA, classB) = classOf(a) -> classOf(e)
+    classA != classB && (isPrimitive(classA) ^ isPrimitive(classB))
+  }
+
+  private def isPrimitive(clazz: String) = clazz.startsWith("java.lang.")
+
+  private def classOf(v: Any) =
+    Option(v).map(_.getClass.getName)
+             .getOrElse("null")
 }
 
 
@@ -293,12 +298,16 @@ object ComparisonResultOps {
   case class PropertyDifference[A, E](actual: A, expected: E)
 
   implicit class `Any -> String`(private val value: Any) extends AnyVal {
-    def render: String =
+
+    def render(showAll: Boolean): String =
       value match {
+        case v if showAll => v.notNullWithClass(showAll = true)
         case (k, v) => s"${k.render} -> ${v.render}"
         case x: String => q(x)
         case x => unq(x)
       }
+
+    def render: String = render(showAll = false)
   }
 
   implicit class `Difference -> String`(private val diff: (Any, Any)) extends AnyVal {

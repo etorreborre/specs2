@@ -56,11 +56,9 @@ class BeEqualToMatcherSpec extends Spec with ResultMatchers with ShouldMatchers 
 
   Other collections use normal equality but display missing elements
   ${ Seq(1, 2) must be_==(Seq(1, 2)) }
-  ${ (Seq(1, 2) must be_==(Seq(2, 3))) returns
-     """List(1, 2) != List(2, 3)""" }
+  ${ (Seq(1, 2) must be_==(Seq(2, 3))) returns """List(1, 2) != List(2, 3)""" }
   ${ Seq(1, 2) must be_===(Seq(1, 2)) }
-  ${ Seq(1, 2) must be_===(Seq(2, 3)) returns
-     """Seq(1 != 2, 2 != 3)""" }
+  ${ Seq(1, 2) must be_===(Seq(2, 3)) returns """List(1 != 2, 2 != 3)""" }
 
   Expected values are kept in the failure details
   ${ (1 must_== 2).toResult must beLike { case Failure(_,_,_,FailureDetails(a, e)) => e must_== "2" } }
@@ -88,10 +86,6 @@ Details
     with 'hello': String and 'hello': Hello    $d2
     with List("1, 2") and List("1", "2")       $d3
     with Map(1 -> "2") and Map(1 -> 2)         $d4
-    with List[Int] and List[String]            $d11
-    with 'hello': String and 'hello': Hello    $d22
-    with List("1, 2") and List("1", "2")       $d33
-    with Map(1 -> "2") and Map(1 -> 2)         $d44
 """
 
   def r1 = ((null: String) must_== "1") must not(throwAn[Exception])
@@ -109,28 +103,16 @@ Details
     t1 must be_===(t2) must not(throwAn[Exception])
   }
 
-  def d1 = {
-    (List(1, 2) must_== List("1", "2")) must beFailing(
-     "\\Q'List('1', '2'): scala.collection.immutable.$colon$colon[java.lang.Integer]'\n\n is not equal to \n\n'List('1', '2'): scala.collection.immutable.$colon$colon[java.lang.String]'\\E")
-  }
+  def d1 = List(1, 2) must be_===( List("1", "2") ) must beFailing( "\\QList(1 != '1', 2 != '2')\\E" )
 
   def d2 = {
     ("hello" must_== Hello()) must beFailing(
-        "\\Q'hello: java.lang.String' is not equal to 'hello: org.specs2.matcher.Hello'\\E")
-  }
-  def d3 = {
-    (List("1, 2") must_== List("1", "2")) must beFailing(
-        "\\Q'List('1, 2'): scala.collection.immutable.$colon$colon[java.lang.String]'\n\n is not equal to \n\n'List('1', '2'): scala.collection.immutable.$colon$colon[java.lang.String]'\\E")
-  }
-  def d4= {
-    (Map(1 -> "2") must_== Map(1 -> 2)) must beFailing(
-        "\\Q'Map(1: java.lang.Integer -> 2: java.lang.String): scala.collection.immutable.Map$Map1'\n\n is not equal to \n\n'Map(1: java.lang.Integer -> 2: java.lang.Integer): scala.collection.immutable.Map$Map1'\\E")
+        "\\Qhello: java.lang.String != hello: org.specs2.matcher.Hello\\E")
   }
 
-  def d11 = List(1, 2) must be_===( List("1", "2") ) must beFailing( "\\QSeq(1 != '1', 2 != '2')\\E" )
-  def d22 = { "hello" must be_===( Hello() ) must beFailing( "\\Q'hello' != hello\\E" ) }
-  def d33 = { List("1, 2") must be_===( List("1", "2") ) must beFailing( "\\QSeq('1, 2' != '1', added: '2')\\E" ) }
-  def d44= { Map(1 -> "2") must be_===( Map(1 -> 2) ) must beFailing( "\\QMap(1 -> {'2' != 2})\\E" ) }
+  def d3 = { List("1, 2") must be_===( List("1", "2") ) must beFailing( "\\QList('1, 2' != '1', added: '2')\\E" ) }
+
+  def d4= { Map(1 -> "2") must be_===( Map(1 -> 2) ) must beFailing( "\\QMap(1 -> {'2' != 2})\\E" ) }
 
   trait TraversableWithNoDefinedForeach[T] extends Traversable[T] {
     def foreach[U](f: T => U): Unit = {
