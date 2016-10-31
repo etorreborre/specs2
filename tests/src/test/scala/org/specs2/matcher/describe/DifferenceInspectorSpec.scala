@@ -18,7 +18,6 @@ Compare result
     two different floats should return PrimitiveDifference      ${ differenceInspector.diff(0.5f, 0.6f) must_=== PrimitiveDifference(0.5f, 0.6f) }
     two different longs should return PrimitiveDifference       ${ differenceInspector.diff(1l, 2l) must_== PrimitiveDifference(1l, 2l) }
     two different doubles should return PrimitiveDifference     ${ differenceInspector.diff(0.5d, 0.6d) must_=== PrimitiveDifference(0.5d, 0.6d) }
-    //null check here ?
 
   Exceptions
     two identical exceptions will return ThrowableIdentical     ${ differenceInspector.diff(ex, ex) must_=== ThrowableIdentical(ex) }
@@ -132,9 +131,6 @@ Compare result
 
   val se = new StackTraceElement("class", "method", "filename", 666)
   val se2 = new StackTraceElement("class1", "method1", "filename1", 777)
-
-//  val ttt = Try(throw new RuntimeException)
-
 
 
   def m1 = {

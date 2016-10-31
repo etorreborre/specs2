@@ -130,7 +130,6 @@ class StackTraceElementDiffable(implicit sdi: Diffable[String],
 
 class ThrowableDiffable(implicit adi: Diffable[Array[StackTraceElement]])
   extends Diffable[Throwable] {
-  // todo: compare cause, also model the response
 
   def diff(actual: Throwable, expected: Throwable) =
     adi.diff(actual.getStackTrace, expected.getStackTrace) match {
