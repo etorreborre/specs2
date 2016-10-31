@@ -8,7 +8,7 @@ import text.SourceFile._
 import io._
 import scalaz._, Scalaz._
 import SpecificationsFinder._
-import control.Actions._
+import control.Operations._
 
 /**
  * This trait loads specifications found on a given source directory based
@@ -29,7 +29,7 @@ trait SpecificationsFinder {
                          verbose: Boolean               = false,
                          classLoader: ClassLoader       = Thread.currentThread.getContextClassLoader,
                          filePathReader: FilePathReader = FileSystem,
-                         env: Env                       = Env()): Action[List[SpecificationStructure]] =
+                         env: Env                       = Env()): Operation[List[SpecificationStructure]] =
     specificationNames(glob, pattern, basePath, filePathReader, verbose).flatMap { names =>
       names.filter(filter).map { name =>
         SpecificationStructure.create(name, classLoader, Some(env)).map(s => Option(s)).
@@ -50,7 +50,7 @@ trait SpecificationsFinder {
                      verbose: Boolean               = false,
                      classLoader: ClassLoader       = Thread.currentThread.getContextClassLoader,
                      filePathReader: FilePathReader = FileSystem): Seq[SpecificationStructure] =
-    runAction(
+    runOperation(
       findSpecifications(glob, pattern, filter, basePath, verbose, classLoader, filePathReader),
       if (verbose) consoleLogging else noLogging).
         fold(
@@ -63,17 +63,17 @@ trait SpecificationsFinder {
    * @param pattern a regular expression which is supposed to match an object name extending a Specification
    * @return specification names by scanning files and trying to find specifications declarations
    */
-  def specificationNames(pathGlob: String, pattern: String, basePath: DirectoryPath, filePathReader: FilePathReader, verbose: Boolean) : Action[List[String]] = {
+  def specificationNames(pathGlob: String, pattern: String, basePath: DirectoryPath, filePathReader: FilePathReader, verbose: Boolean) : Operation[List[String]] = {
     lazy val specClassPattern = {
       val p = specPattern("class", pattern)
       log("  the pattern used to match specification classes is: "+p, verbose) >>
-        Actions.delayed(Pattern.compile(p))
+        Operations.delayed(Pattern.compile(p))
     }
 
     lazy val specObjectPattern = {
       val p = specPattern("object", pattern)
       log("  the pattern used to match specification objects is: "+p, verbose) >>
-        Actions.delayed(Pattern.compile(p))
+        Operations.delayed(Pattern.compile(p))
     }
 
     for {
@@ -87,7 +87,7 @@ trait SpecificationsFinder {
    * Read the content of the file at 'path' and return all names matching the object pattern
    * or the class pattern
    */
-  def readClassNames(path: FilePath, objectPattern: Pattern, classPattern: Pattern, filePathReader: FilePathReader, verbose: Boolean): Action[List[String]] = {
+  def readClassNames(path: FilePath, objectPattern: Pattern, classPattern: Pattern, filePathReader: FilePathReader, verbose: Boolean): Operation[List[String]] = {
     for {
       fileContent <- filePathReader.readFile(path)
       packName    =  packageName(fileContent)

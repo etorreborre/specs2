@@ -2,8 +2,7 @@ package org.specs2.control.eff.syntax
 
 import org.specs2.control.eff._
 
-import scala.concurrent.Future
-import scalaz.concurrent.Task
+import scala.concurrent.{ExecutionContext, Future}
 import scalaz._
 
 object async extends async
@@ -11,10 +10,7 @@ object async extends async
 trait async {
 
   implicit class AsyncFinalOps[A](e: Eff[Fx.fx1[Async], A]) {
-    def runAsyncTask: Task[A] =
-      AsyncInterpretation.runAsyncTask(e)
-
-    def runAsyncFuture: Future[A] =
+    def runAsyncFuture(implicit ec: ExecutionContext): Future[A] =
       AsyncInterpretation.runAsyncFuture(e)
   }
 

@@ -2,7 +2,7 @@ package org.specs2
 package specification
 package core
 
-import scalaz.Monoid
+import scalaz._, Scalaz._
 import Fragment._
 import control._
 import producer._
@@ -47,7 +47,7 @@ case class Fragments(contents: AsyncStream[Fragment]) {
 
   /** run the process to get all fragments */
   def fragments: IndexedSeq[Fragment] =
-    ProducerOps(contents).runList.toConsoleTask.run.to[IndexedSeq]
+    ProducerOps(contents).runList.run.to[IndexedSeq]
 
   /** run the process to filter all texts */
   def texts = fragments.filter(isText)
@@ -101,6 +101,7 @@ case class Fragments(contents: AsyncStream[Fragment]) {
 }
 
 object Fragments {
+
   /** empty sequence of fragments */
   val empty = Fragments()
 

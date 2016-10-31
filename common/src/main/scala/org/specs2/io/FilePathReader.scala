@@ -19,8 +19,8 @@ trait FilePathReader {
   /**
    * @return the list of file paths accessible from dir
    */
-  def filePaths(dir: DirectoryPath, glob: String, verbose: Boolean): Action[List[FilePath]] = {
-    filePathsProcess[ActionStack](dir)
+  def filePaths(dir: DirectoryPath, glob: String, verbose: Boolean): Operation[List[FilePath]] = {
+    filePathsProcess[OperationStack](dir)
       .filter(filterWithPattern(globToPattern(glob)))
       .runList
   }
@@ -49,14 +49,14 @@ trait FilePathReader {
   /**
    * @return the files accessible recursively from a directory
    */
-  def listFilePaths(directory: DirectoryPath): Action[List[FilePath]] =
-    filePathsProcess[ActionStack](directory).runList
+  def listFilePaths(directory: DirectoryPath): Operation[List[FilePath]] =
+    filePathsProcess[OperationStack](directory).runList
 
   /**
    * @return the files directly accessible from a directory
    */
-  def listDirectFilePaths(directory: DirectoryPath): Action[IndexedSeq[FilePath]] =
-    Actions.delayed(Option(directory.toFile.listFiles)
+  def listDirectFilePaths(directory: DirectoryPath): Operation[IndexedSeq[FilePath]] =
+    Operations.delayed(Option(directory.toFile.listFiles)
       .map(_.toIndexedSeq).getOrElse(IndexedSeq())
       .filter(_.isFile)
       .map(FilePath.unsafe))
@@ -64,8 +64,8 @@ trait FilePathReader {
   /**
    * @return the files directly accessible from a directory
    */
-  def listDirectDirectoryPaths(directory: DirectoryPath): Action[IndexedSeq[DirectoryPath]] =
-    Actions.delayed(Option(directory.toFile.listFiles)
+  def listDirectDirectoryPaths(directory: DirectoryPath): Operation[IndexedSeq[DirectoryPath]] =
+    Operations.delayed(Option(directory.toFile.listFiles)
       .map(_.toIndexedSeq).getOrElse(IndexedSeq())
       .filter(_.isDirectory)
       .map(DirectoryPath.unsafe))
@@ -79,67 +79,67 @@ trait FilePathReader {
   }
 
   /** @return the content of a file encoded as UTF8 */
-  def readFile(path: FilePath): Action[String] =
+  def readFile(path: FilePath): Operation[String] =
     readLines(path).map(_.mkString("\n"))
 
   /** @return the content of a file as UTF-8 lines */
-  def readLines(filePath: FilePath): Action[IndexedSeq[String]] =
+  def readLines(filePath: FilePath): Operation[IndexedSeq[String]] =
     readLinesWithCodec(filePath, Codec.UTF8)
 
   /** @return the content of a file with a specific codec */
-  def readFileWithCodec(path: FilePath, codec: Codec): Action[String] =
+  def readFileWithCodec(path: FilePath, codec: Codec): Operation[String] =
     readLinesWithCodec(path, codec).map(_.mkString("\n"))
 
   /** @return the content of a file with a specific codec */
-  def readLinesWithCodec(filePath: FilePath, codec: Codec): Action[IndexedSeq[String]] =
-    Actions.delayed(scala.io.Source.fromFile(filePath.path)(codec).getLines.toIndexedSeq)
+  def readLinesWithCodec(filePath: FilePath, codec: Codec): Operation[IndexedSeq[String]] =
+    Operations.delayed(scala.io.Source.fromFile(filePath.path)(codec).getLines.toIndexedSeq)
 
   /** read the content of a file as an Array of Bytes */
-  def readBytes(filePath: FilePath): Action[Array[Byte]] = exists(filePath).map { exists =>
+  def readBytes(filePath: FilePath): Operation[Array[Byte]] = exists(filePath).map { exists =>
     val stream = new BufferedInputStream(new FileInputStream(filePath.path))
     try     Stream.continually(stream.read).takeWhile(-1 !=).map(_.toByte).toArray
     finally stream.close()
   }
 
   /** @return the MD5 hash of a file */
-  def md5(filePath: FilePath): Action[String] =
+  def md5(filePath: FilePath): Operation[String] =
     readBytes(filePath).map(MD5.md5Hex)
 
   /** @return true if the file exists */
-  def exists(filePath: FilePath): Action[Boolean] =
-    Actions.delayed(filePath.toFile.exists)
+  def exists(filePath: FilePath): Operation[Boolean] =
+    Operations.delayed(filePath.toFile.exists)
 
   /** @return true if the file doesn't exist */
-  def doesNotExist(filePath: FilePath): Action[Boolean] =
-    Actions.delayed(!filePath.toFile.exists)
+  def doesNotExist(filePath: FilePath): Operation[Boolean] =
+    Operations.delayed(!filePath.toFile.exists)
 
   /** @return true if the directory exists */
-  def exists(directoryPath: DirectoryPath): Action[Boolean] =
-    Actions.delayed(directoryPath.toFile.exists)
+  def exists(directoryPath: DirectoryPath): Operation[Boolean] =
+    Operations.delayed(directoryPath.toFile.exists)
 
   /** @return true if the directory doesn't exist */
-  def doesNotExist(directoryPath: DirectoryPath): Action[Boolean] =
-    Actions.delayed(!directoryPath.toFile.exists)
+  def doesNotExist(directoryPath: DirectoryPath): Operation[Boolean] =
+    Operations.delayed(!directoryPath.toFile.exists)
 
   /** succeeds if the file exists */
-  def mustExist(file: File): Action[Unit] =
-    Actions.delayed(file.exists).flatMap { exists =>
-      if (exists) Actions.ok(())
-      else        Actions.fail(s"$file does not exist")
+  def mustExist(file: File): Operation[Unit] =
+    Operations.delayed(file.exists).flatMap { exists =>
+      if (exists) Operations.ok(())
+      else        Operations.fail(s"$file does not exist")
     }
 
   /** succeeds if the file is a directory */
-  def mustBeADirectory(file: File): Action[Unit] =
-    Actions.delayed(file.isDirectory).flatMap { isDirectory =>
-      if (isDirectory) Actions.ok(())
-      else             Actions.fail(s"$file is a directory")
+  def mustBeADirectory(file: File): Operation[Unit] =
+    Operations.delayed(file.isDirectory).flatMap { isDirectory =>
+      if (isDirectory) Operations.ok(())
+      else             Operations.fail(s"$file is a directory")
     }
 
   /** succeeds if the file is not a directory */
-  def mustNotBeADirectory(file: File): Action[Unit] =
-    Actions.delayed(file.isDirectory).flatMap { isDirectory =>
-      if (isDirectory) Actions.fail(s"$file is a directory")
-      else             Actions.ok(())
+  def mustNotBeADirectory(file: File): Operation[Unit] =
+    Operations.delayed(file.isDirectory).flatMap { isDirectory =>
+      if (isDirectory) Operations.fail(s"$file is a directory")
+      else             Operations.ok(())
     }
 }
 

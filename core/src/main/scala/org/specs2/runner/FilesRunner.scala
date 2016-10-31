@@ -10,7 +10,7 @@ import specification.core._
 import runner.Runner._
 import scalaz._, Scalaz._
 import SpecificationsFinder._
-import Actions._
+import Operations._
 
 /**
  * This trait finds specifications in the source directory, instantiate them
@@ -32,7 +32,7 @@ trait FilesRunner {
         _     <- Actions.delayed(env.shutdown)
       } yield stats
 
-      execute(actions, env.arguments, exit)
+      execute(actions, env.arguments, exit)(env.executionContext)
   }
 
   def run(env: Env): Action[Stats] = {
@@ -44,14 +44,14 @@ trait FilesRunner {
         glob = args.commandLine.valueOr("filesrunner.path", specificationsPath),
         pattern = args.commandLine.valueOr("filesrunner.pattern", specificationsPattern),
         basePath = DirectoryPath.unsafe(basePath),
-        verbose = isVerbose(args))
+        verbose = isVerbose(args)).toAction
     } yield ss
 
     for {
-      _     <- beforeExecution(args, isVerbose(args))
+      _     <- beforeExecution(args, isVerbose(args)).toAction
       ss    <- specs.map(sort(env))
       stats <- ss.toList.map(ClassRunner.report(env)).sequenceU
-      _     <- afterExecution(ss, isVerbose(args))
+      _     <- afterExecution(ss, isVerbose(args)).toAction
     } yield stats.foldMap(identity _)
   }
 
@@ -64,17 +64,17 @@ trait FilesRunner {
   def isVerbose(args: Arguments) = args.isSet("filesrunner.verbose")
 
   /** print a message before the execution */
-  protected def beforeExecution(args: Arguments, verbose: Boolean): Action[Unit] = for {
-    _ <- log("\nExecuting specifications", verbose)
+  protected def beforeExecution(args: Arguments, verbose: Boolean): Operation[Unit] = for {
+    _        <- log("\nExecuting specifications", verbose)
     printers <- ClassRunner.createPrinters(args, Thread.currentThread.getContextClassLoader)
-    _ <- log("printers are " + printers.mkString(", "), verbose)
+    _        <- log("printers are " + printers.mkString(", "), verbose)
   } yield ()
 
 
   /** print a message after the execution based on the number of specifications */
-  protected def afterExecution(specs: Seq[SpecificationStructure], verbose: Boolean): Action[Unit] = {
+  protected def afterExecution(specs: Seq[SpecificationStructure], verbose: Boolean): Operation[Unit] = {
     if (specs.isEmpty) log("No specification found\n", verbose)
-    else log("Finished the execution of " + specs.size + " specifications\n", verbose)
+    else               log("Finished the execution of " + specs.size + " specifications\n", verbose)
   }
 }
 

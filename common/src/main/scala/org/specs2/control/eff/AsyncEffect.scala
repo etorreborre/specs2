@@ -7,8 +7,6 @@ import syntax.all._
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 import scalaz._, Scalaz._
-import scalaz.concurrent.Task
-import scala.concurrent.Promise
 import Async._
 
 trait AsyncEffect extends AsyncCreation with AsyncInterpretation
@@ -24,73 +22,34 @@ trait AsyncCreation {
   type _Async[R] = Async <= R
 
   def asyncNow[R :_async, A](a: A): Eff[R, A] =
-    create[R, A](Task.now(a))
+    create[R, A](ec => Future.successful(a))
 
   def asyncFail[R :_async, A](t: Throwable): Eff[R, A] =
-    create[R, A](Task.fail(t))
+    create[R, A](ec => Future.failed(t))
 
   def asyncDelay[R :_async, A](a: =>A): Eff[R, A] =
-    create[R, A](Task.delay(a))
+    create[R, A](ec => Future(a)(ec))
 
   def asyncDelayAttempt[R :_async :_throwableOr, A](a: =>A): Eff[R, A] =
     asyncDelay(\/.fromTryCatchNonFatal(a)).collapse
 
   def asyncFork[R :_async, A](a: =>A): Eff[R, A] =
-    create[R, A](Task.fork(Task.delay(a)))
+    asyncDelay(a)
 
   /** use a ThrowableXor effect to store any exception */
   def asyncForkAttempt[R :_async :_throwableOr, A](a: =>A): Eff[R, A] =
     asyncFork(\/.fromTryCatchNonFatal(a)).collapse
 
-  def fromFuture[R :_async, A](f: =>Future[A])(implicit ec: ExecutionContext): Eff[R, A] =
-    create[R, A](Task.async[A] { register =>
-      try {
-        f.onComplete {
-          case scala.util.Success(a) => register(\/-(a))
-          case scala.util.Failure(e) => register(-\/(e))
-        }
-      } catch {
-        case NonFatal(t) => register(-\/(t))
-      }
-    })
-
-  /** use a ThrowableXor effect to store any exception */
-  def fromFutureAttempt[R :_async :_throwableOr, A](f: =>Future[A])(implicit ec: ExecutionContext): Eff[R, A] =
-    fromFuture(Catchable[Future].attempt(f)).collapse
-
-  def fromTask[R :_async, A](t: Task[A]): Eff[R, A] =
-    send[Async, R, A](AsyncTask(t))
-
-  /** use a ThrowableXor effect to store any exception */
-  def fromTaskAttempt[R :_async :_throwableOr, A](t: Task[A]): Eff[R, A] =
-    fromTask(t.attempt).flatMap {
-      case \/-(a) => right[R, Throwable, A](a)
-      case -\/(e) => left[R, Throwable, A](e)
-    }
-
-  private def create[R :_async, A](t: Task[A]): Eff[R, A] =
-    send[Async, R, A](AsyncTask(t))
+  private def create[R :_async, A](f: ExecutionContext => Future[A]): Eff[R, A] =
+    send[Async, R, A](AsyncFuture(f))
 }
 
 object AsyncCreation extends AsyncCreation
 
 trait AsyncInterpretation { outer =>
-  def runAsyncTask[A](e: Eff[Fx.fx1[Async], A]): Task[A] =
-    e.detachA(ApplicativeAsync) match { case AsyncTask(a) => a }
 
-  def runAsyncFuture[A](e: Eff[Fx.fx1[Async], A]): Future[A] =
-    e.detachA(ApplicativeAsync) match { case AsyncTask(t) => taskToFuture(t) }
-
-  def taskToFuture[T](task: Task[T]): Future[T] = {
-    val p: Promise[T] = Promise()
-
-    task.unsafePerformAsync {
-      case -\/(ex) => p.failure(ex); ()
-      case \/-(r) => p.success(r); ()
-    }
-
-    p.future
-  }
+  def runAsyncFuture[A](e: Eff[Fx.fx1[Async], A])(implicit ec: ExecutionContext): Future[A] =
+    e.detachA(ApplicativeAsync) match { case AsyncFuture(f) => f(ec) }
 
   def attempt[R, A](e: Eff[R, A])(implicit async: Async /= R): Eff[R, Throwable \/ A] = {
     e match {
@@ -98,8 +57,9 @@ trait AsyncInterpretation { outer =>
 
       case Impure(u, c) =>
         async.extract(u) match {
-          case Some(AsyncTask(tx)) =>
-            val union = async.inject(AsyncTask(tx.attempt))
+          case Some(tx) =>
+            val union = async.inject(tx.attempt)
+
             Impure(union, Arrs.singleton { ex: (Throwable \/ u.X) =>
               ex match {
                 case \/-(x) => attempt(c(x))
@@ -113,7 +73,7 @@ trait AsyncInterpretation { outer =>
       case ImpureAp(unions, c) =>
         def materialize(u: Union[R, Any]): Union[R, Any] =
           async.extract(u) match {
-            case Some(AsyncTask(tx)) => async.inject(AsyncTask(tx.attempt))
+            case Some(tx) => async.inject(tx.attempt)
             case None => u
           }
 
@@ -141,8 +101,15 @@ trait AsyncInterpretation { outer =>
 
 object AsyncInterpretation extends AsyncInterpretation
 
-sealed trait Async[A]
-case class AsyncTask[A](run: Task[A]) extends Async[A]
+sealed trait Async[+A] {
+  def attempt: Async[Throwable \/ A]
+}
+case class AsyncFuture[A](run: ExecutionContext => Future[A]) extends Async[A] {
+  def attempt: Async[Throwable \/ A] =
+    AsyncFuture { implicit ec =>
+      run(ec).map(a => \/.right[Throwable, A](a))(ec) recover { case NonFatal(t) => -\/(t) }
+    }
+}
 
 /**
  * The Monad instance is necessary to be able to do a detach operation
@@ -151,12 +118,15 @@ case class AsyncTask[A](run: Task[A]) extends Async[A]
 object Async {
 
   def ApplicativeAsync: Applicative[Async] = new Applicative[Async] {
-    def point[A](a: =>A) = AsyncTask(Task.now(a))
+    def point[A](a: =>A) = AsyncFuture(_ => Future.successful(a))
 
     def ap[A, B](fa: =>Async[A])(ff: =>Async[A => B]): Async[B] =
-      AsyncTask {
-        (ff, fa) match { case (AsyncTask(ff1), AsyncTask(fa1)) =>
-          Nondeterminism[Task].mapBoth(ff1, fa1) { case (f, a) => f(a) }
+      AsyncFuture { implicit ec =>
+        (ff, fa) match { case (AsyncFuture(ff1), AsyncFuture(fa1)) =>
+          Future.sequence(List(ff1(ec), fa1(ec))).map {
+            case f :: a :: _ => f.asInstanceOf[A => B](a.asInstanceOf[A])
+            case _           => sys.error("impossible")
+          }
         }
       }
 
@@ -164,12 +134,12 @@ object Async {
   }
 
   implicit def MonadAsync: Monad[Async] = new Monad[Async] {
-    def point[A](a: =>A) = AsyncTask(Task.now(a))
+    def point[A](a: =>A) = AsyncFuture(_ => Future.successful(a))
 
     def bind[A, B](fa: Async[A])(f: A => Async[B]): Async[B] =
-      AsyncTask {
-        fa match { case AsyncTask(fa1) =>
-          fa1.flatMap(a => f(a) match { case AsyncTask(fa2) => fa2 })
+      AsyncFuture { implicit ec =>
+        fa match { case AsyncFuture(fa1) =>
+          fa1(ec).flatMap(a => f(a) match { case AsyncFuture(fa2) => fa2(ec) })
         }
       }
 

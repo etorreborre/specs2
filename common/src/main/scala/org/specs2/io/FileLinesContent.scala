@@ -13,9 +13,7 @@ import control._
 object FileLinesContent extends LinesContent[File] {
   def lines(f: File): Seq[String] =
     if (f.isDirectory) Seq()
-    else
-      runAction(FilePathReader.readLines(FilePath.unsafe(f)))
-        .toOption.getOrElse(Seq())
+    else FilePathReader.readLines(FilePath.unsafe(f)).runOption.getOrElse(Seq())
 
   def name(f: File) = f.getPath
 }

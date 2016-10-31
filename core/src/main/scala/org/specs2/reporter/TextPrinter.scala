@@ -16,6 +16,9 @@ import main.Arguments
 import LogLine._
 import scalaz._, Scalaz._
 
+import scala.concurrent._
+
+
 /**
  * Prints the result of a specification execution to the console (using the line logger provided by the environment)
  *
@@ -43,8 +46,8 @@ trait TextPrinter extends Printer {
   }
 
   /** run and shutdown the environment */
-  def run(env: Env): SpecStructure => Unit = { spec: SpecStructure =>
-    try     print(env)(spec).toConsoleTask.run
+  def run(env: Env)(implicit ec: ExecutionContext): SpecStructure => Unit = { spec: SpecStructure =>
+    try     { runAction(print(env)(spec)); () }
     finally env.shutdown
   }
 

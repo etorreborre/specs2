@@ -60,7 +60,6 @@ trait Extract {
   def float(name: String)(implicit args: Seq[String], sp: SystemProperties): Option[Float] =
     tryo(value(name)(args, sp).map(_.toFloat)).getOrElse(None)
 
-
   def instance[T <: AnyRef](name: String)(implicit m: ClassTag[T]): Option[T] =
     Classes.createInstance[T](name, getClass.getClassLoader).runOption
 

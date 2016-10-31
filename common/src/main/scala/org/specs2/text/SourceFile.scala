@@ -20,7 +20,7 @@ trait SourceFile {
    * @param content content of a source file
    * @param pattern a regular expression for a class name
    */
-  def classNames(packageName: String, content: String, pattern: Pattern, suffix: String, verbose: Boolean): Action[List[String]] = {
+  def classNames(packageName: String, content: String, pattern: Pattern, suffix: String, verbose: Boolean): Operation[List[String]] = {
     def result(m: Matcher): Stream[String] =
       if (m.find) {
         val fullName =
@@ -30,8 +30,8 @@ trait SourceFile {
       } else Stream.empty
 
     val found = result(pattern.matcher(content)).toList
-    log[ActionStack]("  found classes: "+found.mkString(", "), verbose && found.nonEmpty) >>
-      Actions.delayed(found.filter(c => CLASSNAME_REGEX.pattern.matcher(c).matches))
+    log[OperationStack]("  found classes: "+found.mkString(", "), verbose && found.nonEmpty) >>
+      Operations.delayed(found.filter(c => CLASSNAME_REGEX.pattern.matcher(c).matches))
   }
 
   /** @return the package name corresponding to the package declarations at the beginning of a file */

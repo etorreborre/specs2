@@ -15,37 +15,37 @@ import java.util.regex.Matcher.quoteReplacement
 import eff.syntax.all._
 
 /**
- * Interface for the FileSystem where effects are denoted with the "Action" type
+ * Interface for the FileSystem where effects are denoted with the "Operation" type
  */
 trait FileSystem extends FilePathReader {
 
   /** delete a file */
-  def deleteFile(filePath: FilePath): Action[Boolean] =
-    Actions.delayed(filePath.toFile.delete)
+  def deleteFile(filePath: FilePath): Operation[Boolean] =
+    Operations.delayed(filePath.toFile.delete)
 
   /** modify the content of a file */
-  def updateFileContent(filePath: FilePath)(update: String => String): Action[Unit] =
+  def updateFileContent(filePath: FilePath)(update: String => String): Operation[Unit] =
     readFile(filePath).flatMap(s => writeFile(filePath, update(s)))
 
   /** replace a string in a file */
-  def replaceInFile(filePath: FilePath, source: String, target: String): Action[Unit] =
+  def replaceInFile(filePath: FilePath, source: String, target: String): Operation[Unit] =
     updateFileContent(filePath)(_.replace(source, target))
 
   /** write a string to a file as UTF-8 */
-  def writeFile(filePath: FilePath, content: String): Action[Unit] =
+  def writeFile(filePath: FilePath, content: String): Operation[Unit] =
     mkdirs(filePath) >>
-    Actions.protect { new PrintWriter(filePath.path) { try write(content) finally close }; () }
+    Operations.protect { new PrintWriter(filePath.path) { try write(content) finally close }; () }
 
-  /** execute an action with a File, then delete it */
-  def withEphemeralFile(path: FilePath)(action: Action[Unit]): Action[Unit] =
-    action.thenFinally(deleteFile(path).void)
+  /** execute an operation with a File, then delete it */
+  def withEphemeralFile(path: FilePath)(operation: Operation[Unit]): Operation[Unit] =
+    operation.thenFinally(deleteFile(path).void)
 
   /** create a directory and its parent directories */
-  def mkdirs(path: DirectoryPath): Action[Unit] =
-    Actions.protect(path.toFile.mkdirs).void
+  def mkdirs(path: DirectoryPath): Operation[Unit] =
+    Operations.protect(path.toFile.mkdirs).void
 
   /** create a the directory containing a file and its parent directories */
-  def mkdirs(path: FilePath): Action[Unit] =
+  def mkdirs(path: FilePath): Operation[Unit] =
     mkdirs(path.dir)
 
   /**
@@ -58,7 +58,7 @@ trait FileSystem extends FilePathReader {
    *                    an entry as group 1 which will then be used relative
    *                    to dirPath as target path for that entry
    */
-  def unjar(jarUrl: URL, dest: DirectoryPath, regexFilter: String): Action[Unit] = {
+  def unjar(jarUrl: URL, dest: DirectoryPath, regexFilter: String): Operation[Unit] = {
     val regex = compile(regexFilter)
     val uis = jarUrl.openStream()
     val zis = new ZipInputStream(new BufferedInputStream(uis))
@@ -85,7 +85,7 @@ trait FileSystem extends FilePathReader {
       }
     }
 
-    Actions.delayed {
+    Operations.delayed {
       try     extractEntry(zis.getNextEntry)
       finally zis.close
     }
@@ -113,7 +113,7 @@ trait FileSystem extends FilePathReader {
    * @param src path of the directory to copy
    * @param dest destination directory path
    */
-  def copyDir(src: DirectoryPath, dest: DirectoryPath): Action[Unit] =
+  def copyDir(src: DirectoryPath, dest: DirectoryPath): Operation[Unit] =
     mkdirs(dest) >>
       listDirectFilePaths(src).flatMap { files =>
         files.toList.map(copyFile(dest)).sequenceU.void
@@ -127,9 +127,9 @@ trait FileSystem extends FilePathReader {
    * @param filePath path of the file to copy
    * @param dest destination directory path
    */
-  def copyFile(dest: DirectoryPath)(filePath: FilePath): Action[Unit] =
+  def copyFile(dest: DirectoryPath)(filePath: FilePath): Operation[Unit] =
     mkdirs(dest) >>
-    Actions.delayed {
+    Operations.delayed {
       copyLock.synchronized {
         import java.nio.file._
         Files.copy(Paths.get(filePath.path),
@@ -144,16 +144,16 @@ trait FileSystem extends FilePathReader {
   private[this] object copyLock
 
   /** create a new file */
-  def createFile(filePath: FilePath): Action[Boolean] =
+  def createFile(filePath: FilePath): Operation[Boolean] =
     mkdirs(filePath.dir) >>
-    Actions.delayed(filePath.toFile.createNewFile)
+    Operations.delayed(filePath.toFile.createNewFile)
 
   /** delete files or directories */
-  def delete(file: FilePath): Action[Unit] =
-    Actions.delayed(file.toFile.delete).void
+  def delete(file: FilePath): Operation[Unit] =
+    Operations.delayed(file.toFile.delete).void
 
   /** delete a directory */
-  def delete(dir: DirectoryPath): Action[Unit] =
+  def delete(dir: DirectoryPath): Operation[Unit] =
     listFilePaths(dir).flatMap(_.map(delete).toList.sequenceU.void) >>
     delete(dir.toFilePath) // delete the directory once it is empty
 }

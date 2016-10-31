@@ -19,6 +19,9 @@ import specification.core._
 import Actions._
 import eff.ErrorEffect._
 
+import scala.concurrent.ExecutionContext
+import scala.concurrent.ExecutionContext.Implicits.global
+
 /**
  * Runner for Sbt
  */
@@ -37,7 +40,7 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
       lazy val specStructure: (Error \/ Option[SpecStructure], List[String]) = {
         val action: Action[Option[SpecStructure]] =
           createSpecStructure(taskDef, loader, env)
-        executeAction(action)
+        executeAction(action)(env.executionContext)
       }
 
       /** @return the specification tags */
@@ -53,7 +56,7 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
 
         result.toOption.flatten.foreach { structure =>
           val action = specificationRun(aTaskDef, structure, env, handler, loggers)
-          val (rs, ws) = executeAction(action, consoleLogging)
+          val (rs, ws) = executeAction(action, consoleLogging)(env.executionContext)
           processResult(handler, loggers)(rs, ws)
         }
         // nothing more to execute
@@ -80,12 +83,12 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
   /** run a given spec structure */
   def specificationRun(taskDef: TaskDef, spec: SpecStructure, env: Env, handler: EventHandler, loggers: Array[Logger]): Action[Stats] =
     for {
-      printers <- createPrinters(taskDef, handler, loggers, commandLineArguments)
+      printers <- createPrinters(taskDef, handler, loggers, commandLineArguments).toAction
       stats    <- Runner.runSpecStructure(spec, env, loader, printers)
     } yield stats
 
   /** create a spec structure from the task definition containing the class name */
-  def createSpecStructure(taskDef: TaskDef, loader: ClassLoader, env: Env): Action[Option[SpecStructure]] =
+  def createSpecStructure(taskDef: TaskDef, loader: ClassLoader, env: Env): Operation[Option[SpecStructure]] =
     taskDef.fingerprint match {
       case f: SubclassFingerprint =>
         if (f.superclassName.endsWith("SpecificationStructure")) {
@@ -93,13 +96,13 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
           Classes.createInstance[SpecificationStructure](className, loader, env.defaultInstances).
             map(ss => Option(ss.structure(env)))
         }
-        else Actions.ok(None)
-      case _ => Actions.ok(None)
+        else Operations.ok(None)
+      case _ => Operations.ok(None)
     }
 
 
   /** accepted printers */
-  def createPrinters(taskDef: TaskDef, handler: EventHandler, loggers: Array[Logger], args: Arguments): Action[List[Printer]] =
+  def createPrinters(taskDef: TaskDef, handler: EventHandler, loggers: Array[Logger], args: Arguments): Operation[List[Printer]] =
     List(createSbtPrinter(handler, loggers, sbtEvents(taskDef, handler)),
       createJUnitXmlPrinter(args, loader),
       createHtmlPrinter(args, loader),
@@ -111,7 +114,7 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
     val arguments = Arguments(args: _*)
 
     if (!printerNames.map(_.name).exists(arguments.isSet) || arguments.isSet(CONSOLE.name))
-      Actions.ok(Some {
+      Operations.ok(Some {
         new SbtPrinter {
           lazy val handler = h
           lazy val loggers = ls
@@ -195,13 +198,13 @@ object sbtRun extends SbtRunner(Array(), Array(), Thread.currentThread.getContex
     exit(start(arguments: _*))
   }
 
-  def exit(action: Action[Stats]) {
+  def exit(action: Action[Stats])(implicit ec: ExecutionContext): Unit = {
     runAction(action).fold(
       err => System.exit(100),
       ok  => if (ok.isSuccess) System.exit(0) else System.exit(1))
   }
 
-  def start(arguments: String*): Action[Stats] = {
+  def start(arguments: String*)(implicit ec: ExecutionContext): Action[Stats] = {
     if (arguments.isEmpty)
       log("The first argument should at least be the specification class name") >>
       Actions.unit

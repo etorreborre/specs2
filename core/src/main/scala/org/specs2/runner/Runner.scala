@@ -2,7 +2,7 @@ package org.specs2
 package runner
 
 import control._, Throwablex._
-import control.Actions._
+import control.Operations._
 import eff._, all._, syntax.all._
 import specification.core._
 import specification.process.Stats
@@ -12,6 +12,7 @@ import scalaz._, Scalaz._
 import main.Arguments
 import reflect.Classes
 import reporter._, Printer._
+import scala.concurrent._
 
 /**
  * reusable actions for Runners
@@ -21,7 +22,7 @@ object Runner {
   /**
    * Execute some actions and exit with the proper code if 'exit' is true
    */
-  def execute(actions: Action[Stats], arguments: Arguments, exit: Boolean): Unit = {
+  def execute(actions: Action[Stats], arguments: Arguments, exit: Boolean)(implicit ec: ExecutionContext): Unit = {
     val (result, warnings) = executeAction(actions, consoleLogging)
     val logging = (s: String) => IO(consoleLogging(s))
     result.fold(
@@ -91,9 +92,9 @@ object Runner {
     val report: Action[Stats] =
       if (arguments.isSet("all")) {
         for {
-          reporter <- ClassRunner.createReporter(arguments, loader)
-          ss       <- SpecStructure.linkedSpecifications(specStructure, env, loader)
-          sorted   <- delayed(SpecStructure.topologicalSort(ss).getOrElse(ss))
+          reporter <- ClassRunner.createReporter(arguments, loader).toAction
+          ss       <- SpecStructure.linkedSpecifications(specStructure, env, loader).toAction
+          sorted   <- delayed(SpecStructure.topologicalSort(ss).getOrElse(ss)).toAction
           _        <- reporter.prepare(env, printers)(sorted.toList)
           stats    <- sorted.toList.map(Reporter.report(env, printers)).sequenceU
           _        <- Reporter.finalize(env, printers)(sorted.toList)
@@ -111,51 +112,51 @@ object Runner {
     if (exit) System.exit(status)
   }
 
-  def createTextPrinter(args: Arguments, loader: ClassLoader): Action[Option[Printer]] = {
-    if (!printerNames.map(_.name).exists(args.isSet) || args.isSet(CONSOLE.name)) Actions.ok(Some(TextPrinter))
+  def createTextPrinter(args: Arguments, loader: ClassLoader): Operation[Option[Printer]] = {
+    if (!printerNames.map(_.name).exists(args.isSet) || args.isSet(CONSOLE.name)) Operations.ok(Some(TextPrinter))
     else noInstance("no console printer defined", args.verbose)
   }
 
-  def createJUnitXmlPrinter(args: Arguments, loader: ClassLoader): Action[Option[Printer]] =
+  def createJUnitXmlPrinter(args: Arguments, loader: ClassLoader): Operation[Option[Printer]] =
     createPrinterInstance(args, loader,
       JUNITXML, "org.specs2.reporter.JUnitXmlPrinter$",
       "cannot create a JUnit XML printer. Please check that specs2-junit.jar is on the classpath",
       "no JUnit XML printer defined")
 
-  def createHtmlPrinter(args: Arguments, loader: ClassLoader): Action[Option[Printer]] =
+  def createHtmlPrinter(args: Arguments, loader: ClassLoader): Operation[Option[Printer]] =
     createPrinterInstance(args, loader,
       HTML, "org.specs2.reporter.HtmlPrinter$",
       "cannot create a HTML printer. Please check that specs2-html.jar is on the classpath",
       "no HTML printer defined")
 
-  def createMarkdownPrinter(args: Arguments, loader: ClassLoader): Action[Option[Printer]] =
+  def createMarkdownPrinter(args: Arguments, loader: ClassLoader): Operation[Option[Printer]] =
     createPrinterInstance(args, loader,
       MARKDOWN, "org.specs2.reporter.MarkdownPrinter$",
       "cannot create a Markdown printer. Please check that specs2-markdown is on the classpath",
       "no Markdown printer defined")
 
   /** create a custom printer from a Name passed in arguments */
-  def createPrinter(args: Arguments, loader: ClassLoader): Action[Option[Printer]] =
+  def createPrinter(args: Arguments, loader: ClassLoader): Operation[Option[Printer]] =
     createCustomInstance[Printer](args, loader,
       PRINTER.name,
       (className: String) => s"cannot create a $className printer. Please check that this class can be instantiated",
       s"no custom printer defined")
 
   /** create a custom printer from a Notifier instance passed in arguments */
-  def createNotifierPrinter(args: Arguments, loader: ClassLoader): Action[Option[Printer]] =
+  def createNotifierPrinter(args: Arguments, loader: ClassLoader): Operation[Option[Printer]] =
     createCustomInstance[Notifier](args, loader,
       NOTIFIER.name,
       (className: String) => s"cannot create a $className notifier. Please check that this class can be instantiated",
       s"no custom notifier defined").map(_.map(NotifierPrinter.printer))
 
   /** create a built-in specs2 printer */
-  def createPrinterInstance(args: Arguments, loader: ClassLoader, name: PrinterName, className: String, failureMessage: String, noRequiredMessage: String): Action[Option[Printer]] =
+  def createPrinterInstance(args: Arguments, loader: ClassLoader, name: PrinterName, className: String, failureMessage: String, noRequiredMessage: String): Operation[Option[Printer]] =
     if (args.isSet(name.name))
       for {
         instance <- Classes.createInstanceEither[Printer](className, loader)
         result <-
           instance match {
-            case \/-(i) => Actions.ok(Some(i))
+            case \/-(i) => Operations.ok(Some(i))
             case -\/(t) => noInstance(failureMessage, t, verbose = true)
           }
       } yield result
@@ -163,14 +164,14 @@ object Runner {
 
   /** create a custom instance */
   def createCustomInstance[T <: AnyRef](args: Arguments, loader: ClassLoader,
-    name: String, failureMessage: String => String, noRequiredMessage: String)(implicit m: ClassTag[T]): Action[Option[T]] =
+    name: String, failureMessage: String => String, noRequiredMessage: String)(implicit m: ClassTag[T]): Operation[Option[T]] =
     args.commandLine.value(name) match {
     case Some(className) =>
       for {
         instance <- Classes.createInstanceEither[T](className, loader)(m)
         result <-
           instance match {
-            case \/-(i) => Actions.ok(Some(i))
+            case \/-(i) => Operations.ok(Some(i))
             case -\/(t) => noInstance(failureMessage(className), t, verbose = true)
           }
       } yield result
@@ -179,21 +180,21 @@ object Runner {
     }
 
   /** print a message if a class can not be instantiated */
-  def noInstance[T](message: String, t: Throwable, verbose: Boolean): Action[Option[T]] =
+  def noInstance[T](message: String, t: Throwable, verbose: Boolean): Operation[Option[T]] =
     log("", verbose) >>
       log(message, verbose) >>
       log("", verbose) >>
       ConsoleEffect.logThrowable(t, verbose) >>
-      Actions.ok(None)
+      Operations.ok(None)
 
   /** print a message if a class can not be instantiated */
-  def noInstance[T](message: String): Action[Option[T]] =
+  def noInstance[T](message: String): Operation[Option[T]] =
     log(message) >>
-      Actions.ok(None)
+      Operations.ok(None)
 
   /** print a message if a class can not be instantiated */
-  def noInstance[T](message: String, verbose: Boolean): Action[Option[T]] =
+  def noInstance[T](message: String, verbose: Boolean): Operation[Option[T]] =
     log(message, verbose) >>
-      Actions.ok(None)
+      Operations.ok(None)
 
 }

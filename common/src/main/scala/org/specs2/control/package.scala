@@ -1,21 +1,25 @@
 package org.specs2
 
+import java.util.concurrent.TimeUnit
+
 import control.eff._
 import all._
 import syntax.all._
 import concurrent.ExecutionEnv
-import scala.concurrent.duration.FiniteDuration
 
+import scala.concurrent.duration.{Duration, FiniteDuration}
 import scalaz._
 import scalaz.effect.IO
 import org.specs2.execute.{AsResult, Result}
 
-import scalaz.concurrent.Task
 import scalaz.syntax.bind._
 import ErrorEffect.{Error, ErrorOrOk, exception, fail}
 import ConsoleEffect._
 import WarningsEffect._
 import org.specs2.control.producer._
+
+import scala.concurrent._
+import scala.util.control.NonFatal
 
 package object control {
 
@@ -27,9 +31,12 @@ package object control {
   lazy val consoleLogging = (s: String) => println(s)
 
   type StreamStack = Fx.fx2[Async, Safe]
-  type ActionStack   = Fx.fx5[ErrorOrOk, Console, Warnings, Safe, Async]
+  type ActionStack = Fx.fx5[ErrorOrOk, Console, Warnings, Safe, Async]
+  type OperationStack = Fx.fx4[ErrorOrOk, Console, Warnings, Safe]
 
   type Action[A] = Eff[ActionStack, A]
+  type Operation[A] = Eff[OperationStack, A]
+  
   type AsyncStream[A] = Producer[ActionStack, A]
   type AsyncTransducer[A, B] = Transducer[ActionStack, A, B]
 
@@ -50,15 +57,20 @@ package object control {
     warn(message)(m1) >>
     fail(failureMessage)
 
-  def executeAction[A](action: Action[A], printer: String => Unit = s => ()): (Error \/ A, List[String]) = {
+  def executeAction[A](action: Action[A], printer: String => Unit = s => ())(implicit ec: ExecutionContext): (Error \/ A, List[String]) = {
     type S = Fx.append[Fx.fx2[ErrorOrOk, Console], Fx.fx2[Warnings, Async]]
 
-    action.execSafe.flatMap(_.fold(t => exception[S, A](t), a => Eff.pure[S, A](a))).
-       runError.runConsoleToPrinter(printer).runWarnings.runAsyncTask.run
+    Await.result(action.execSafe.flatMap(_.fold(t => exception[S, A](t), a => Eff.pure[S, A](a))).
+      runError.runConsoleToPrinter(printer).runWarnings.runAsyncFuture, Duration.Inf)
   }
 
-  def runAction[A](action: Action[A], printer: String => Unit = s => ()): Error \/ A =
+  def runAction[A](action: Action[A], printer: String => Unit = s => ())(implicit ec: ExecutionContext): Error \/ A =
     attemptExecuteAction(action, printer).fold(
+      t => -\/(-\/(t)),
+      other => other._1)
+
+  def runOperation[A](operation: Operation[A], printer: String => Unit = s => ()): Error \/ A =
+    attemptExecuteOperation(operation, printer).fold(
       t => -\/(-\/(t)),
       other => other._1)
 
@@ -66,20 +78,37 @@ package object control {
     interpret.interceptNat[ActionStack, Async, A](action)(new (Async ~> Async) {
       def apply[X](tx: Async[X]) =
         tx match {
-          case AsyncTask(t) => AsyncTask(t.unsafePerformTimed(timeout)(env.scheduledExecutorService))
+          case AsyncFuture(x) => AsyncFuture { implicit ec =>
+            lazy val f = x(ec)
+            if (timeout.isFinite && timeout.length < 1) {
+              try f catch { case NonFatal(t) => Future.failed(t) }
+            } else {
+              val p = Promise[X]()
+              val r = new Runnable {
+                def run: Unit = {
+                  p completeWith { try f catch { case NonFatal(t) => Future.failed(t) } }
+                  ()
+                }
+              }
+              env.scheduledExecutorService.schedule(r, timeout.toMillis, TimeUnit.MILLISECONDS)
+              p.future
+            }
+          }
         }
     })
 
-
-  def attemptAction[A](action: Action[A], printer: String => Unit = s => ()): Throwable \/ A =
+  def attemptAction[A](action: Action[A], printer: String => Unit = s => ())(implicit ec: ExecutionContext): Throwable \/ A =
     runAction(action, printer) match {
       case -\/(-\/(t)) => -\/(t)
       case -\/(\/-(f)) => -\/(new Exception(f))
       case \/-(a)      => \/-(a)
     }
 
-  def attemptExecuteAction[A](action: Action[A], printer: String => Unit = s => ()): Throwable \/ (Error \/ A, List[String]) =
-    action.runError.runConsoleToPrinter(printer).runWarnings.execSafe.runAsyncTask.run
+  def attemptExecuteAction[A](action: Action[A], printer: String => Unit = s => ())(implicit ec: ExecutionContext): Throwable \/ (Error \/ A, List[String]) =
+    Await.result(action.runError.runConsoleToPrinter(printer).runWarnings.execSafe.runAsyncFuture, Duration.Inf)
+
+  def attemptExecuteOperation[A](operation: Operation[A], printer: String => Unit = s => ()): Throwable \/ (Error \/ A, List[String]) =
+    operation.runError.runConsoleToPrinter(printer).runWarnings.execSafe.run
 
   /**
    * This implicit allows any IO[Result] to be used inside an example:
@@ -97,7 +126,7 @@ package object control {
    *
    * For example to read a database.
    */
-  implicit def actionAsResult[T : AsResult]: AsResult[Action[T]] = new AsResult[Action[T]] {
+  implicit def actionAsResult[T : AsResult](implicit ec: ExecutionContext): AsResult[Action[T]] = new AsResult[Action[T]] {
     def asResult(action: =>Action[T]): Result =
       runAction(action).fold(
         err => err.fold(t => org.specs2.execute.Error(t), f => org.specs2.execute.Failure(f)),
@@ -105,29 +134,20 @@ package object control {
       )
   }
 
-  /**
-   * An Action[T] can be converted to a Task[T]
-   */
-  implicit class actionToTask[T](action: Action[T]) {
-    def unsafeRun: T =
-      runAction(action).fold(e => sys.error(e.toString), t => t)
-
-    def toConsoleTask =
-      action.toTask(println)
-
-    def toTask(logger: String => Unit) =
-      Task.delay(executeAction(action)).
-      flatMap { case (result, warnings) =>
-        result.fold(
-          error => error.fold(
-            t      => Task.fail(ActionException(warnings, None, Some(t))),
-            s      => Task.fail(ActionException(warnings, Some(s), None))),
-
-          t => Task.delay(warnings.foreach(w => logger(w+"\n"))) >> Task.now(t))
-    }
-  }
 
   implicit class actionOps[T](action: Action[T]) {
+    def run(implicit e: Monoid[T]): T =
+      runAction(action, println)(scala.concurrent.ExecutionContext.Implicits.global) match {
+        case \/-(a) => a
+        case -\/(t) => println("error while interpreting an action "+t.fold(Throwables.render, f => f)); Monoid[T].zero
+      }
+
+    def runOption: Option[T] =
+      runAction(action, println)(scala.concurrent.ExecutionContext.Implicits.global) match {
+        case \/-(a) => Option(a)
+        case -\/(t) => println("error while interpreting an action "+t.fold(Throwables.render, f => f)); None
+      }
+
     def when(condition: Boolean): Action[Unit] =
       if (condition) action.as(()) else Actions.ok(())
 
@@ -144,25 +164,22 @@ package object control {
       Actions.orElse(action, other)
   }
 
-  /**
-   * execute an action with no logging and return an option
-   */
-  implicit class ioActionToOption[T](action: Action[T]) {
-    def runOption = runAction(action).toOption
+  implicit class operationOps[T](operation: Operation[T]) {
+    def when(condition: Boolean): Operation[Unit] =
+      if (condition) operation.as(()) else Operations.ok(())
+
+    def unless(condition: Boolean): Operation[Unit] =
+      operation.when(!condition)
+
+    def whenFailed(error: Error => Operation[T]): Operation[T] =
+      Operations.whenFailed(operation, error)
+
+    def |||(other: Operation[T]): Operation[T] =
+      Operations.orElse(operation, other)
+
+    def orElse(other: Operation[T]): Operation[T] =
+      Operations.orElse(operation, other)
   }
-
-  /**
-   * A Task[T] (the result of running a Process[Task, T] for example) can be converted to
-   * an Action[T]
-   */
-  implicit class taskToAction[T](task: Task[T]) {
-    def toAction: Action[T] =
-      task.attemptRun.fold(t => exception(t), a => ErrorEffect.ok(a))
-
-    def runOption: Option[T] =
-      task.get.run.toOption
-  }
-
 
   object Actions {
 
@@ -208,9 +225,6 @@ package object control {
         else           fail(failureMessage)
       }
 
-    def fromTask[A](task: Task[A]): Action[A] =
-      task.toAction
-
     def fromError[A](error: ErrorEffect.Error): Action[A] =
       ErrorEffect.error(error)
 
@@ -219,6 +233,64 @@ package object control {
 
     def whenFailed[A](action: Action[A], onError: Error => Action[A]): Action[A] =
       ErrorEffect.whenFailed(action, onError)
+
+  }
+
+  implicit class ioOperationToOption[T](operation: Operation[T]) {
+    def runOption = runOperation(operation).toOption
+
+    def toAction: Action[T] = operation
+  }
+
+  implicit def operationToAction[A](operation: Operation[A]): Action[A] =
+    operation.into[ActionStack]
+
+  object Operations {
+
+    def log(m: String, doIt: Boolean = true): Operation[Unit] =
+      ConsoleEffect.log(m, doIt)
+
+    def logThrowable[R :_console](t: Throwable, doIt: Boolean = true): Eff[R, Unit] =
+      ConsoleEffect.logThrowable(t, doIt)
+
+    def logThrowable[R :_console](t: Throwable): Eff[R, Unit] =
+      ConsoleEffect.logThrowable(t)
+
+    def warn(m: String): Operation[Unit] =
+      WarningsEffect.warn(m)
+
+    def unit: Operation[Unit] =
+      ok(())
+
+    def ok[A](a: A): Operation[A] =
+      ErrorEffect.ok(a)
+
+    def protect[A](a: =>A): Operation[A] =
+      SafeEffect.protect(a)
+
+    def delayed[A](a: =>A): Operation[A] =
+      ErrorEffect.ok(a)
+
+    def fail[A](message: String): Operation[A] =
+      ErrorEffect.fail[OperationStack, A](message)
+
+    def exception[A](t: Throwable): Operation[A] =
+      ErrorEffect.exception[OperationStack, A](t)
+
+    def checkThat[A](a: =>A, condition: Boolean, failureMessage: String): Operation[A] =
+      delayed(a).flatMap { value =>
+        if (condition) delayed(value)
+        else           fail(failureMessage)
+      }
+
+    def fromError[A](error: ErrorEffect.Error): Operation[A] =
+      ErrorEffect.error(error)
+
+    def orElse[A](operation1: Operation[A], operation2: Operation[A]): Operation[A] =
+      ErrorEffect.orElse(operation1, operation2)
+
+    def whenFailed[A](operation: Operation[A], onError: Error => Operation[A]): Operation[A] =
+      ErrorEffect.whenFailed(operation, onError)
 
   }
 }

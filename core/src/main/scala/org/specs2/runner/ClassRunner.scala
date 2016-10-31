@@ -38,29 +38,29 @@ trait ClassRunner {
 
       case className :: rest =>
         for {
-          spec  <- createSpecification(className, Thread.currentThread.getContextClassLoader, Some(env))
+          spec  <- createSpecification(className, Thread.currentThread.getContextClassLoader, Some(env)).toAction
           stats <- report(env)(spec)
           _     <- Actions.delayed(env.shutdown)
         } yield stats
     }
-    execute(actions, arguments, exit)
+    execute(actions, arguments, exit)(env.executionContext)
   }
 
   /** create the specification from the class name */
-  def createSpecification(className: String, classLoader: ClassLoader = Thread.currentThread.getContextClassLoader, env: Option[Env] = None): Action[SpecificationStructure] =
+  def createSpecification(className: String, classLoader: ClassLoader = Thread.currentThread.getContextClassLoader, env: Option[Env] = None): Operation[SpecificationStructure] =
     SpecificationStructure.create(className, classLoader, env)
 
   /** report the specification */
   def report(env: Env): SpecificationStructure => Action[Stats] = { spec: SpecificationStructure =>
     val loader = Thread.currentThread.getContextClassLoader
     for {
-      printers <- createPrinters(env.arguments, loader)
+      printers <- createPrinters(env.arguments, loader).toAction
       stats    <- Runner.runSpecStructure(spec.structure(env), env, loader, printers)
     } yield stats
   }
 
   /** accepted printers */
-  def createPrinters(args: Arguments, loader: ClassLoader): Action[List[Printer]] =
+  def createPrinters(args: Arguments, loader: ClassLoader): Operation[List[Printer]] =
     List(createTextPrinter(args, loader),
       createJUnitXmlPrinter(args, loader),
       createHtmlPrinter(args, loader),
@@ -69,7 +69,7 @@ trait ClassRunner {
       createNotifierPrinter(args, loader)).sequenceU.map(_.flatten)
 
   /** custom or default reporter */
-  def createReporter(args: Arguments, loader: ClassLoader): Action[Reporter] =
+  def createReporter(args: Arguments, loader: ClassLoader): Operation[Reporter] =
     createCustomInstance[Reporter](args, loader, "reporter", (m: String) => "a custom reporter can not be instantiated " + m, "no custom reporter defined, using the default one")
       .map(_.getOrElse(Reporter))
 
@@ -90,12 +90,12 @@ object TextRunner extends ClassRunner {
     val logger = LineLogger.stringLogger
     try {
       val env1 = env.setLineLogger(logger).setArguments(env.arguments.overrideWith(args))
-      runAction(report(env1)(spec), env.systemLogger)
+      runAction(report(env1)(spec), env.systemLogger)(env.executionContext)
       logger
     } finally env.shutdown
   }
 
-  override def createPrinters(args: Arguments, loader: ClassLoader): Action[List[Printer]] =
+  override def createPrinters(args: Arguments, loader: ClassLoader): Operation[List[Printer]] =
     List(createTextPrinter(args, loader)).sequenceU.map(_.flatten)
 }
 
