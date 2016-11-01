@@ -35,7 +35,7 @@ class StatsSpec extends Specification { def is = s2"""
    */
 
   def runLast[A](p: AsyncStream[A]): Option[A] =
-    runAction(p.runList).map(_.lastOption).toOption.flatten
+    p.runList.runOption.map(_.lastOption).flatten
 
   def r1 =
     Stats(failure.setExpectationsNb(3)) === Stats(failures = 1, examples = 1, expectations = 3)

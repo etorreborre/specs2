@@ -20,7 +20,7 @@ class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterab
   /** specification to execute */
   lazy val specification = {
     val structure = SpecificationStructure.create(klass.getName, Thread.currentThread.getContextClassLoader, Some(env))
-    runAction(structure, consoleLogging)(env.executionContext).fold(
+    runAction(structure, consoleLogging).fold(
       error => error.fold(t => throw t, m => throw new Exception(m)),
       ok => ok
     )

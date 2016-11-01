@@ -10,7 +10,7 @@ import specification.create.S2StringContext
 import specification.dsl.FragmentsDsl
 import specification.core._
 import specification.process._
-import ActionMatchers._
+import OperationMatchers._
 import org.specs2.control.origami.Folds
 
 class ReporterSpec extends Specification with ForEachEnv with ThrownExpectations { def is = s2"""

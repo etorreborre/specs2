@@ -9,8 +9,9 @@ import scala.IllegalArgumentException
 import scalaz._, Scalaz._
 import control._, eff.ErrorEffect
 import matcher._
+import OperationMatchers._
 
-class SpecificationStructureSpec extends Specification with ScalaCheck with DisjunctionMatchers with ActionMatchers { def is = s2"""
+class SpecificationStructureSpec extends Specification with ScalaCheck with DisjunctionMatchers { def is = s2"""
 
  There can be links between specifications and it is possible to sort all the dependent specifications
  so that
@@ -45,7 +46,7 @@ class SpecificationStructureSpec extends Specification with ScalaCheck with Disj
   }.setArbitrary(ArbitraryLinks).set(maxSize = 5)
 
   def report = {
-    runAction(SpecificationStructure.create("org.specs2.specification.core.BrokenSpecification")) must be_-\/((e: ErrorEffect.Error) =>
+    runOperation(SpecificationStructure.create("org.specs2.specification.core.BrokenSpecification")) must be_-\/((e: ErrorEffect.Error) =>
       e must be_-\/((e1: Throwable) => e1.getCause.getCause.getMessage === "boom")
     )
   }

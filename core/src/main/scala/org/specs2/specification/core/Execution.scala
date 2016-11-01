@@ -12,6 +12,7 @@ import scalaz.Show
 import specification.process.Stats
 import time.SimpleTimer
 import text.NotNullStrings._
+import control._
 
 /**
  * Execution of a Fragment
@@ -173,7 +174,7 @@ object Execution {
     AsResult(env.statisticsRepository.getStatisticsOr(specClassName, Stats.empty).map { s =>
       if (s.examples == 0) Pending(" "): Result // use a space to avoid PENDING to be appended after the spec name
       else                 DecoratedResult(s.copy(specs = s.specs + 1), s.result): Result
-    }.run)
+    })
 
 }
 

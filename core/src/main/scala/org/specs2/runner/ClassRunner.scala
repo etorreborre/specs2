@@ -90,7 +90,7 @@ object TextRunner extends ClassRunner {
     val logger = LineLogger.stringLogger
     try {
       val env1 = env.setLineLogger(logger).setArguments(env.arguments.overrideWith(args))
-      runAction(report(env1)(spec), env.systemLogger)(env.executionContext)
+      runAction(report(env1)(spec), env.systemLogger)
       logger
     } finally env.shutdown
   }

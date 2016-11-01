@@ -78,7 +78,7 @@ class BeforeAfterAllSpec extends Specification { def is = s2"""
 
   def runSpec(s: SpecificationStructure, arguments: Arguments = Arguments()) = {
     val env = Env(arguments = arguments, lineLogger = NoLineLogger)
-    runAction(ClassRunner.report(env)(s), noLogging)(env.executionContext)
+    runAction(ClassRunner.report(env)(s), noLogging)
   }
 
 

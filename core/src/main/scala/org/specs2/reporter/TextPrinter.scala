@@ -84,7 +84,7 @@ trait TextPrinter extends Printer {
 
   /** transform a stream of fragments into a stream of strings for printing */
   def printFragment(args: Arguments): ((Fragment, ((Stats, Int), SimpleTimer))) => List[LogLine] = {
-    case (fragment, ((stats, indentation, _))) =>
+    case (fragment, ((stats, indentation), _)) =>
       fragment match {
         // only print steps and actions if there are issues
         case Fragment(NoText, e, l) if e.isExecutable && !e.result.isSuccess =>

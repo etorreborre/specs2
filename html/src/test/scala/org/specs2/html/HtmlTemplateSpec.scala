@@ -3,7 +3,7 @@ package html
 
 import mutable.Spec
 import HtmlTemplate._
-import matcher.ActionMatchers._
+import matcher.OperationMatchers._
 
 class HtmlTemplateSpec extends Spec {
   "replace variables in a template" >> {

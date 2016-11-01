@@ -15,26 +15,26 @@ import scala.collection.mutable.HashMap
  */
 case class StatisticsRepository(store: Store) {
   /** get the latest statistics for a given specification */
-  def getStatistics(specClassName: String): Action[Option[Stats]] =
+  def getStatistics(specClassName: String): Operation[Option[Stats]] =
     store.get(SpecificationStatsKey(specClassName))
 
   /** get the latest statistics for a given specification, or return a default value */
-  def getStatisticsOr(specClassName: String, stats: Stats): Action[Stats] =
+  def getStatisticsOr(specClassName: String, stats: Stats): Operation[Stats] =
     getStatistics(specClassName).map(_.getOrElse(stats))
 
   /** store the final statistics for a given specification */
-  def storeStatistics(specClassName: String, stats: Stats): Action[Unit] =
+  def storeStatistics(specClassName: String, stats: Stats): Operation[Unit] =
     store.set(SpecificationStatsKey(specClassName), stats)
 
-  def storeResult(specClassName: String, description: Description, result: Result): Action[Unit] =
+  def storeResult(specClassName: String, description: Description, result: Result): Operation[Unit] =
     store.set(SpecificationResultKey(specClassName, description), result)
 
   /** @return the previous executed result of an example */
-  def previousResult(specClassName: String, d: Description): Action[Option[Result]] =
+  def previousResult(specClassName: String, d: Description): Operation[Option[Result]] =
     store.get(SpecificationResultKey(specClassName, d))
 
   /** remove all previously stored statistics */
-  def resetStatistics: Action[Unit] =
+  def resetStatistics: Operation[Unit] =
     store.reset
 }
 
@@ -43,23 +43,23 @@ case class StatisticsRepository(store: Store) {
  */
 case class StatisticsMemoryStore(statistics: HashMap[String, Stats] = new HashMap[String, Stats],
                        results: HashMap[(String, Long), Result] = new HashMap[(String, Long), Result]) extends Store {
-  def get[A](key: Key[A]): Action[Option[A]] = key match {
+  def get[A](key: Key[A]): Operation[Option[A]] = key match {
     case SpecificationStatsKey(specClassName) =>
-      Actions.ok(statistics.get(specClassName))
+      Operations.ok(statistics.get(specClassName))
 
     case SpecificationResultKey(specClassName, description) =>
-      Actions.ok(results.get((specClassName, description.hashCode.toLong)))
+      Operations.ok(results.get((specClassName, description.hashCode.toLong)))
   }
 
-  def set[A](key: Key[A], a: A): Action[Unit] = key match {
+  def set[A](key: Key[A], a: A): Operation[Unit] = key match {
     case SpecificationStatsKey(specClassName) =>
-      Actions.ok(statistics.put(specClassName, a)).map(_ => ())
+      Operations.ok(statistics.put(specClassName, a)).map(_ => ())
 
     case SpecificationResultKey(specClassName, description) =>
-      Actions.ok(results.put((specClassName, description.hashCode.toLong), a)).map(_ => ())
+      Operations.ok(results.put((specClassName, description.hashCode.toLong), a)).map(_ => ())
   }
 
-  def reset: Action[Unit] = Actions.ok {
+  def reset: Operation[Unit] = Operations.ok {
     statistics.clear
     results.clear
   }
@@ -82,16 +82,16 @@ object StatisticsStore {
    */
   def directory(baseDirectory: DirectoryPath) = new Store {
 
-    def set[A](key: Key[A], fact: A): Action[Unit] =
+    def set[A](key: Key[A], fact: A): Operation[Unit] =
       writeFile(filepath(key), StoreKeys.encode(key, fact))
 
-    def get[A](key: Key[A]): Action[Option[A]] =
-      exists(filepath(key)).toAction.flatMap { e =>
-        if (e) readFile(filepath(key)).map(content => StoreKeys.decode(key, content)).toAction
-        else   Actions.ok(None)
+    def get[A](key: Key[A]): Operation[Option[A]] =
+      exists(filepath(key)).flatMap { e =>
+        if (e) readFile(filepath(key)).map(content => StoreKeys.decode(key, content))
+        else   Operations.ok(None)
       }
 
-    def reset: Action[Unit] = delete(baseDirectory)
+    def reset: Operation[Unit] = delete(baseDirectory)
 
     private def filepath[A](key: Key[A]): FilePath =
       baseDirectory / FilePath.unsafe(StoreKeys.resolve(key))

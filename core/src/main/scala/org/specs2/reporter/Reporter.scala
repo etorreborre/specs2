@@ -58,7 +58,7 @@ trait Reporter {
     lazy val sink: AsyncSink[Fragment] =
       Folds.fromSink[ActionStack, Fragment] { fragment: Fragment =>
         if (neverStore) Actions.unit
-        else            env.statisticsRepository.storeResult(spec.specClassName, fragment.description, fragment.executionResult)
+        else            env.statisticsRepository.storeResult(spec.specClassName, fragment.description, fragment.executionResult).toAction
       }
 
     val prepare: Action[Unit] =
@@ -67,7 +67,7 @@ trait Reporter {
 
     val last = (stats: Stats) =>
       if (neverStore) Actions.unit
-      else            env.statisticsRepository.storeStatistics(spec.specClassName, stats)
+      else            env.statisticsRepository.storeStatistics(spec.specClassName, stats).toAction
 
     (Statistics.fold.into[ActionStack] <* fromStart(prepare) <* sink).mapFlatten(last)
   }

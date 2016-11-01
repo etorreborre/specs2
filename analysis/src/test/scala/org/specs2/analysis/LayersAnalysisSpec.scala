@@ -57,7 +57,7 @@ trait DataLayers extends SpecificationLike with DependencyMatchers with ScalaChe
 
   // return dependent packages according to the alphabetical order
   override def getPackageDependents(sourceDir: DirectoryPath, targetDir: DirectoryPath) = (packageName: String) =>
-    Actions.ok(dependentPackages(packageName).map(p => Dependency(packageName+".AClass", p+".ADependentClass")))
+    Operations.ok(dependentPackages(packageName).map(p => Dependency(packageName+".AClass", p+".ADependentClass")))
 
   // dependent packages are all the packages which are lower is the alphabetical order
   def dependentPackages(packageName: String) = packageNames.slice(0, packageNames.indexOf(packageName))

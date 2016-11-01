@@ -91,7 +91,7 @@ trait DefaultExecutor extends Executor {
       else {
         // if we need to wait, we do, and get the result
         val barrierResult =
-          if (fragment.execution.mustJoin || arguments.sequential) attemptAction(barrier)(env.executionContext).fold(t => -\/(FatalExecution(t)), r => r)
+          if (fragment.execution.mustJoin || arguments.sequential) attemptAction(barrier).fold(t => -\/(FatalExecution(t)), r => r)
           else \/-(Success("no barrier result"))
 
         // depending on the result we decide if we should go on executing fragments
@@ -116,7 +116,7 @@ trait DefaultExecutor extends Executor {
 
         else if (fragment.execution.mustJoin) {
           val executedFragment: Throwable \/ Fragment =
-            attemptAction(timedout(fragment, env)(asyncDelay(executeFragment(env.userEnv)(fragment)))(timeout))(env.executionContext)
+            attemptAction(timedout(fragment, env)(asyncDelay(executeFragment(env.userEnv)(fragment)))(timeout))
 
           executedFragment match {
             case -\/(e) =>
@@ -135,7 +135,7 @@ trait DefaultExecutor extends Executor {
             (ok(fragment.skip), (barrier, barrierStop))
           else {
             lazy val executedFragment: Throwable \/ Fragment =
-              attemptAction(timedout(fragment, env)(asyncDelay(executeFragment(env)(fragment)))(timeout))(env.executionContext)
+              attemptAction(timedout(fragment, env)(asyncDelay(executeFragment(env)(fragment)))(timeout))
 
             executedFragment match {
               case -\/(e) =>
@@ -153,7 +153,7 @@ trait DefaultExecutor extends Executor {
           val timeout = env.timeout.orElse(fragment.execution.timeout)
 
           val executingFragment: Action[Fragment] =
-            timedout(fragment, env)(asyncFork(executeFragment(env.userEnv)(fragment)))(timeout)
+            timedout(fragment, env)(asyncFork(executeFragment(env.userEnv)(fragment))(env.executionContext))(timeout)
 
           val newBarrier =
             Eff.EffApplicative[ActionStack].tuple2(barrier, executingFragment).map {
@@ -218,7 +218,7 @@ object DefaultExecutor extends DefaultExecutor {
   }
 
   def runSpec(spec: SpecStructure, env: Env): List[Fragment] =
-    runAction(executeSpec(spec, env).contents.runList)(env.executionContext).toOption.getOrElse(Nil)
+    runAction(executeSpec(spec, env).contents.runList).toOption.getOrElse(Nil)
 
   def runSpecification(spec: SpecificationStructure) = {
     lazy val structure = spec.structure(Env())
@@ -233,7 +233,7 @@ object DefaultExecutor extends DefaultExecutor {
 
   /** only to be used in tests */
   def executeSeq(seq: Seq[Fragment])(implicit env: Env = Env()): List[Fragment] =
-    try runAction((emitAsync(seq:_*) |> executeTasks(env)).sequence(env.arguments.threadsNb).runList)(env.executionContext).toOption.getOrElse(Nil)
+    try runAction((emitAsync(seq:_*) |> executeTasks(env)).sequence(env.arguments.threadsNb).runList).toOption.getOrElse(Nil)
     finally env.shutdown
 
   /** synchronous execution */

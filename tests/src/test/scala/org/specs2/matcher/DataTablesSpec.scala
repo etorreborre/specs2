@@ -1,13 +1,13 @@
 package org.specs2
 package matcher
 
-import java.util.concurrent.{ExecutorService}
-import org.specs2.concurrent.ExecutionEnv
-import scalaz.concurrent.Future
+import org.specs2.concurrent._
+import FutureApplicative._
+import scala.concurrent._
 import sys._
 import execute._
 
-class DataTablesSpec extends Specification with DataTables with ResultMatchers { def is = s2"""
+class DataTablesSpec(implicit ee: ExecutionEnv) extends Specification with DataTables with ResultMatchers { def is = s2"""
 
  DataTables are useful to specify lots of examples varying just by a few values.
 
@@ -153,16 +153,16 @@ class DataTablesSpec extends Specification with DataTables with ResultMatchers {
   }
 
 
-  def applicative3 = { implicit ee: ExecutionEnv =>
+  def applicative3 = {
     "a" | "b" |>
     1   ! "1" |
-    2   ! "2" |@ { (a: Int, b: String) => Future.delay(a ==== b.toInt) } attempt
+    2   ! "2" |@ { (a: Int, b: String) => Future(a ==== b.toInt) } await
   }
 
-  def applicative4 = { implicit ee: ExecutionEnv =>
+  def applicative4 = {
     "a" | "b" |
     1   ! "1" |
-    2   ! "2" |@> { (a: Int, b: String) => Future.delay(a ==== b.toInt) } attempt
+    2   ! "2" |@> { (a: Int, b: String) => Future(a ==== b.toInt) } await
   }
 
   def applicative5 = {
@@ -171,14 +171,14 @@ class DataTablesSpec extends Specification with DataTables with ResultMatchers {
     2   ! "2" |* { (a: Int, b: String) => a ==== b.toInt }
   }
 
-  def applicative6 = { implicit es: ExecutorService =>
+  def applicative6 = {
     val table =
       "a" | "b" |>
       1   ! "1" |
       2   ! "0" |
       3   ! "3" |* { (a: Int, b: String) => a ==== b.toInt }
 
-    table(es).message ===
+    table(ee.executionContext).message ===
       "  | a | b |                        "+"\n"+
       "+ | 1 | 1 |                        "+"\n"+
       "x | 2 | 0 | '2' is not equal to '0'"+"\n"+

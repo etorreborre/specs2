@@ -57,14 +57,14 @@ package object control {
     warn(message)(m1) >>
     fail(failureMessage)
 
-  def executeAction[A](action: Action[A], printer: String => Unit = s => ())(implicit ec: ExecutionContext): (Error \/ A, List[String]) = {
+  def executeAction[A](action: Action[A], printer: String => Unit = s => ()): (Error \/ A, List[String]) = {
     type S = Fx.append[Fx.fx2[ErrorOrOk, Console], Fx.fx2[Warnings, Async]]
 
     Await.result(action.execSafe.flatMap(_.fold(t => exception[S, A](t), a => Eff.pure[S, A](a))).
       runError.runConsoleToPrinter(printer).runWarnings.runAsyncFuture, Duration.Inf)
   }
 
-  def runAction[A](action: Action[A], printer: String => Unit = s => ())(implicit ec: ExecutionContext): Error \/ A =
+  def runAction[A](action: Action[A], printer: String => Unit = s => ()): Error \/ A =
     attemptExecuteAction(action, printer).fold(
       t => -\/(-\/(t)),
       other => other._1)
@@ -85,7 +85,10 @@ package object control {
     interpret.interceptNat[ActionStack, Async, A](action)(new (Async ~> Async) {
       def apply[X](tx: Async[X]) =
         tx match {
-          case AsyncFuture(x) => AsyncFuture { implicit ec =>
+          case AsyncNow(a) => AsyncNow(a)
+          case AsyncFailed(t) => AsyncFailed(t)
+          case AsyncDelayed(a) => apply(AsyncFuture(env.executionContext, { ec => Future(a())(ec) }))
+          case AsyncFuture(ecx, x) => AsyncFuture(ecx, { implicit ec =>
             lazy val f = x(ec)
             if (timeout.isFinite && timeout.length < 1) {
               try f catch { case NonFatal(t) => Future.failed(t) }
@@ -100,18 +103,18 @@ package object control {
               env.scheduledExecutorService.schedule(r, timeout.toMillis, TimeUnit.MILLISECONDS)
               p.future
             }
-          }
+          })
         }
     })
 
-  def attemptAction[A](action: Action[A], printer: String => Unit = s => ())(implicit ec: ExecutionContext): Throwable \/ A =
+  def attemptAction[A](action: Action[A], printer: String => Unit = s => ()): Throwable \/ A =
     runAction(action, printer) match {
       case -\/(-\/(t)) => -\/(t)
       case -\/(\/-(f)) => -\/(new Exception(f))
       case \/-(a)      => \/-(a)
     }
 
-  def attemptExecuteAction[A](action: Action[A], printer: String => Unit = s => ())(implicit ec: ExecutionContext): Throwable \/ (Error \/ A, List[String]) =
+  def attemptExecuteAction[A](action: Action[A], printer: String => Unit = s => ()): Throwable \/ (Error \/ A, List[String]) =
     Await.result(action.runError.runConsoleToPrinter(printer).runWarnings.execSafe.runAsyncFuture, Duration.Inf)
 
   def attemptExecuteOperation[A](operation: Operation[A], printer: String => Unit = s => ()): Throwable \/ (Error \/ A, List[String]) =
@@ -133,7 +136,7 @@ package object control {
    *
    * For example to read a database.
    */
-  implicit def actionAsResult[T : AsResult](implicit ec: ExecutionContext): AsResult[Action[T]] = new AsResult[Action[T]] {
+  implicit def actionAsResult[T : AsResult]: AsResult[Action[T]] = new AsResult[Action[T]] {
     def asResult(action: =>Action[T]): Result =
       runAction(action).fold(
         err => err.fold(t => org.specs2.execute.Error(t), f => org.specs2.execute.Failure(f)),
@@ -154,13 +157,13 @@ package object control {
 
   implicit class actionOps[T](action: Action[T]) {
     def run(implicit e: Monoid[T]): T =
-      runAction(action, println)(scala.concurrent.ExecutionContext.Implicits.global) match {
+      runAction(action, println) match {
         case \/-(a) => a
         case -\/(t) => println("error while interpreting an action "+t.fold(Throwables.render, f => f)); Monoid[T].zero
       }
 
     def runOption: Option[T] =
-      runAction(action, println)(scala.concurrent.ExecutionContext.Implicits.global) match {
+      runAction(action, println) match {
         case \/-(a) => Option(a)
         case -\/(t) => println("error while interpreting an action "+t.fold(Throwables.render, f => f)); None
       }
@@ -224,7 +227,7 @@ package object control {
     def asyncDelay[A](a: =>A): Action[A] =
       AsyncCreation.asyncDelay(a)
 
-    def asyncFork[A](a: =>A): Action[A] =
+    def asyncFork[A](a: =>A)(implicit ec: ExecutionContext): Action[A] =
       AsyncCreation.asyncFork(a)
 
     def delayed[A](a: =>A): Action[A] =

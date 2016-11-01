@@ -37,5 +37,5 @@ class IndentationSpec extends Specification with ScalaCheck { def is = s2"""
   implicit val prettyFragments = Pretties.prettyFragments
 
   def indentation(fs: Fragments): Option[Int] =
-    runAction(fs.contents.fold(Indentation.fold.into[ActionStack])).toOption
+    fs.contents.fold(Indentation.fold.into[ActionStack]).runOption
 }

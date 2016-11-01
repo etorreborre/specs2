@@ -5,7 +5,7 @@ import execute._
 import org.specs2.concurrent._
 import FuturezAttempt._
 import scala.concurrent.duration._
-import scalaz.concurrent.{Future}
+import scalaz.concurrent._
 
 /**
  * This trait is for transforming matchers of values to matchers of scalaz.concurrent.Future
@@ -24,7 +24,7 @@ trait FuturezMatchers extends FuturezBaseMatchers { outer =>
   /**
    * when a Future contains a result, it can be attempted to return this result
    */
-  implicit class futureAsResult[T](f: Future[T])(implicit ee: ExecutionEnv, asResult: AsResult[T]) extends FuturezAsResult[T](f)
+  implicit class futurezAsResult[T](f: Future[T])(implicit ee: ExecutionEnv, asResult: AsResult[T]) extends FuturezAsResult[T](f)
 }
 
 private[specs2]

@@ -5,7 +5,8 @@ import java.util.Calendar
 
 import text.Plural._
 import control.Exceptions._
-import org.specs2.foldm.FoldM
+import org.specs2.control.eff.{Eff, NoFx}
+import org.specs2.control.origami.Fold
 
 import scalaz.Scalaz._
 
@@ -111,11 +112,11 @@ object SimpleTimer {
     override protected val elapsedTimes = tryOrElse(List(java.lang.Long.parseLong(s)))(Nil)
   }
 
-  def timerFold[T] = new FoldM[T, Id, SimpleTimer] {
+  def timerFold[T] = new Fold[NoFx, T, SimpleTimer] {
     type S = SimpleTimer
-    def start = (new SimpleTimer).start
+    def start = Eff.pure((new SimpleTimer).start)
     def fold: (S, T) => S = (s, t) => s
-    def end(s: S) =  s.stop
+    def end(s: S) =  Eff.pure(s.stop)
   }
 
 }

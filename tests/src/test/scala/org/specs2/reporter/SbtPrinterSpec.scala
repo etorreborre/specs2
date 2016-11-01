@@ -11,8 +11,9 @@ import runner._
 import specification.core._
 import specification.process.DefaultExecutor
 import control.runAction
+import scala.concurrent.ExecutionContext
 
-class SbtPrinterSpec extends Spec with ForEachEnv { def is = s2"""
+class SbtPrinterSpec(implicit ec: ExecutionContext) extends Spec with ForEachEnv { def is = s2"""
                                                                                                                         
  A SbtPrinter should
    print the specification title if defined                                   ${printer().e1}

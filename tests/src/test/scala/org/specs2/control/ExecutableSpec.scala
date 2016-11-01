@@ -4,7 +4,7 @@ package control
 import io._
 import matcher._
 
-class ExecutableSpec extends Specification with ActionMatchers { def is = s2"""
+class ExecutableSpec extends Specification with OperationMatchers { def is = s2"""
 
  we can use the Executable object to get git tags $tags
 

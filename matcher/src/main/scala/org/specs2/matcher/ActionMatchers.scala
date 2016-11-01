@@ -5,7 +5,6 @@ import execute._
 import control._
 import MatchersCreation._
 import text.Regexes._
-import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
  * Matchers for Action values

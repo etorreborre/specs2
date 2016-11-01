@@ -20,7 +20,6 @@ import Actions._
 import eff.ErrorEffect._
 
 import scala.concurrent.ExecutionContext
-import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
  * Runner for Sbt
@@ -40,7 +39,7 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
       lazy val specStructure: (Error \/ Option[SpecStructure], List[String]) = {
         val action: Action[Option[SpecStructure]] =
           createSpecStructure(taskDef, loader, env)
-        executeAction(action)(env.executionContext)
+        executeAction(action)
       }
 
       /** @return the specification tags */
@@ -56,7 +55,7 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
 
         result.toOption.flatten.foreach { structure =>
           val action = specificationRun(aTaskDef, structure, env, handler, loggers)
-          val (rs, ws) = executeAction(action, consoleLogging)(env.executionContext)
+          val (rs, ws) = executeAction(action, consoleLogging)
           processResult(handler, loggers)(rs, ws)
         }
         // nothing more to execute
@@ -195,7 +194,11 @@ trait SpecificationFingerprint extends SubclassFingerprint {
  */
 object sbtRun extends SbtRunner(Array(), Array(), Thread.currentThread.getContextClassLoader) {
   def main(arguments: Array[String]) {
-    exit(start(arguments: _*))
+    val env = Env(Arguments(arguments:_*))
+    implicit lazy val ec: ExecutionContext = env.executionContext
+
+    try exit(start(arguments: _*))
+    finally env.shutdown
   }
 
   def exit(action: Action[Stats])(implicit ec: ExecutionContext): Unit = {

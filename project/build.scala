@@ -181,7 +181,7 @@ object build extends Build {
   lazy val tests = Project(id = "tests", base = file("tests"),
     settings = moduleSettings("tests") ++
       Seq(name := "specs2-tests")
-  ).dependsOn(core % "compile->compile;test->test", matcherExtra, junit % "test->test", examples % "test->test", html)
+  ).dependsOn(core % "compile->compile;test->test", matcherExtra, junit % "test->test", examples % "test->test", html, scalaz)
 
   lazy val specs2ShellPrompt = shellPrompt in ThisBuild := { state =>
     val name = Project.extract(state).currentRef.project
@@ -218,7 +218,6 @@ object build extends Build {
             "-deprecation:false", "-Xcheckinit", "-unchecked", "-feature", "-language:_")
        else
         Seq("-Xcheckinit", "-Xlint", "-deprecation", "-unchecked", "-feature", "-language:_")),
-    addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.7.1"),
     addCompilerPlugin("com.milessabin" % "si2712fix-plugin_2.11.8" % "1.2.0"),
     addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.0"),
     scalacOptions in Test ++= Seq("-Yrangepos"),
