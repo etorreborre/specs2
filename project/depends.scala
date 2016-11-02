@@ -30,17 +30,14 @@ object depends {
     "org.spire-math" % "kind-projector" % "0.8.2" cross CrossVersion.binary
 
   def scalacheck(scalaVersion: String) =
-    Seq("org.scalacheck" %% "scalacheck" % "1.13.2")
+    Seq("org.scalacheck" %% "scalacheck" % "1.13.4")
 
-  lazy val mockito       = Seq("org.mockito"    %  "mockito-core"  % "1.9.5")
-  lazy val junit         = Seq("junit"          %  "junit"         % "4.12")
-  lazy val hamcrest      = Seq("org.hamcrest"   %  "hamcrest-core" % "1.3")
+  lazy val mockito       = Seq("org.mockito"  %  "mockito-core"  % "1.9.5")
+  lazy val junit         = Seq("junit"        %  "junit"         % "4.12")
+  lazy val hamcrest      = Seq("org.hamcrest" %  "hamcrest-core" % "1.3")
 
   def shapeless(scalaVersion: String) =
-    if (scalaVersion startsWith "2.12")
-      Seq("com.chuusai" % "shapeless_2.12.0-M5" % "2.3.2")
-    else
-      Seq("com.chuusai" %% "shapeless" % "2.3.2")
+    Seq("com.chuusai" %% "shapeless" % "2.3.2")
 
   lazy val cats = Seq("org.typelevel" %% "cats-core" % "0.7.2")
 

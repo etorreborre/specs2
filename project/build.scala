@@ -42,10 +42,10 @@ object build extends Build {
   lazy val specs2Settings: Seq[Settings] = Seq(
     organization := "org.specs2",
     specs2Version in GlobalScope <<= version,
-    scalazVersion in GlobalScope := "7.2.6",
+    scalazVersion in GlobalScope := "7.2.7",
     specs2ShellPrompt,
     scalaVersion := "2.11.8",
-    crossScalaVersions := Seq(scalaVersion.value, "2.12.0-RC2", "2.10.6"))
+    crossScalaVersions := Seq(scalaVersion.value, "2.12.0", "2.10.6"))
 
   lazy val specs2Version = settingKey[String]("defines the current specs2 version")
   lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
