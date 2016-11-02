@@ -1,0 +1,16 @@
+Maintenance version.
+
+## Improvements
+
+ * **core** updated to Scala `2.12.0`
+ * **core** update scalaz to `7.2.7` and `7.1.7` (use specs2 version `3.8.6-scalaz-7.1`)
+ * **scalacheck** updated scalacheck to `0.13.4`
+ * **core** added a trait for removing all `Reference` implicits in mutable specs: `org.specs2.specification.dsl.mutable.NoReferenceDsl` [#514](https://github.com/etorreborre/specs2/issues/514)
+
+## Fixes
+
+ * **mockito** fixed the evaluation of calls for in order calls when using Mockito. Specified the use of `inOrder` even for just one mock in the User Guide [#518](https://github.com/etorreborre/specs2/issues/518)
+ * **core** fixed the `equals` method for `Location` which results in a well-behaved `Fragment` as a hashmap key and consequently allows to set the location hashCode of a `Fragment` as a description id in `JUnit`. This way the Eclipse IDE can distinguish different tests with the same name
+ * **html** measure and display the total run time of a specification in the console and html [#507](https://github.com/etorreborre/specs2/issues/507)
+ * **guide** set sidebar size for narrow screens [#499](https://github.com/etorreborre/specs2/issues/499) thanks to Emma Burrows
+ * **guide** fixed the link to the Mockito project [#508](https://github.com/etorreborre/specs2/issues/508) thanks to Emma Burrows
