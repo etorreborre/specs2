@@ -60,7 +60,7 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
 
  Failing arguments are reported
  ${ check(prop((i: Int, s: String) => i.toString == s).setGens(Gen.const(0), Gen.const("1"))).message must
-      (contain("ARG_0: 0") and contain("ARG_1: \"1\"")) }
+      (contain("ARG_0: 0") and contain("ARG_1_ORIGINAL: \"1\"")) }
 
  The freqmap instance is used to  report frequencies
  ${ check(prop((i: Int) => true).prettyFreqMap(_ => "histogram").collect.verbose).expected must haveMessage("histogram") }
