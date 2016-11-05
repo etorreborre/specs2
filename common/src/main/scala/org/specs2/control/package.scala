@@ -20,6 +20,7 @@ import org.specs2.control.producer._
 
 import scala.concurrent._
 import scala.util.control.NonFatal
+import scala.concurrent.ExecutionContext.Implicits.global
 
 package object control {
 
@@ -43,11 +44,14 @@ package object control {
   type AsyncFold[A, B] = origami.Fold[ActionStack, A, B]
   type AsyncSink[A] = origami.Fold[ActionStack, A, Unit]
 
+
+  val asyncService = AsyncFutureService.create
+
   def emitAsync[A](as: A*): AsyncStream[A] =
     producer.producers.emitSeq(as)
 
   def emitAsyncDelayed[A](a: A): AsyncStream[A] =
-    producer.producers.eval(AsyncCreation.asyncDelay(a))
+    producer.producers.eval(asyncService.asyncDelay(a))
 
   /**
    * warn the user about something that is probably wrong on his side,
@@ -85,9 +89,10 @@ package object control {
     interpret.interceptNat[ActionStack, Async, A](action)(new (Async ~> Async) {
       def apply[X](tx: Async[X]) =
         tx match {
-          case AsyncNow(a) => AsyncNow(a)
-          case AsyncFailed(t) => AsyncFailed(t)
-          case AsyncDelayed(a) => apply(AsyncFuture(env.executionContext, { ec => Future(a())(ec) }))
+          case AsyncFutureNow(a)     => AsyncFutureNow(a)
+          case AsyncFutureFailed(t)  => AsyncFutureFailed(t)
+          case AsyncFutureDelayed(a) => apply(AsyncFuture(env.executionContext, { ec => Future(a())(ec) }))
+
           case AsyncFuture(ecx, x) => AsyncFuture(ecx, { implicit ec =>
             lazy val f = x(ec)
             if (timeout.isFinite && timeout.length < 1) {
@@ -225,10 +230,10 @@ package object control {
       SafeEffect.protect(a)
 
     def asyncDelay[A](a: =>A): Action[A] =
-      AsyncCreation.asyncDelay(a)
+      asyncService.asyncDelay(a)
 
     def asyncFork[A](a: =>A)(implicit ec: ExecutionContext): Action[A] =
-      AsyncCreation.asyncFork(a)
+      AsyncFutureService.create.asyncFork(a)
 
     def delayed[A](a: =>A): Action[A] =
       ErrorEffect.ok(a)

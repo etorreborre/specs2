@@ -24,12 +24,12 @@ case class Unions[R, A](first: Union[R, A], rest: List[Union[R, Any]]) {
    * if the first effect of this Unions object is interpreted
    */
   def continueWith[B](continuation: Arrs[R, List[Any], B]): Arrs[R, A, B] =
-  Arrs.singleton { (x: X) =>
-    rest match {
-      case Nil    => continuation(x :: Nil)
-      case h :: t => ImpureAp[R, h.X, B](Unions[R, h.X](h, t), Arrs.singleton((ys: List[Any]) => continuation(x :: ys)))
+    Arrs.singleton { (x: X) =>
+      rest match {
+        case Nil    => continuation(x :: Nil)
+        case h :: t => ImpureAp[R, h.X, B](Unions[R, h.X](h, t), Arrs.singleton((ys: List[Any]) => continuation(x :: ys)))
+      }
     }
-  }
 
   def into[S](f: UnionInto[R, S]): Unions[S, A] =
     Unions[S, A](f(first), rest.map(f.apply))
@@ -39,25 +39,25 @@ case class Unions[R, A](first: Union[R, A], rest: List[Union[R, Any]]) {
    * in a stack containing no more M effects
    */
   def project[M[_], U](implicit m: Member.Aux[M, R, U]): CollectedUnions[M, R, U] =
-  collect[M, U](m.project)
+    collect[M, U](m.project)
 
   /**
    * collect all the M effects and create a continuation for other effects
    * in the same stack
    */
   def extract[M[_]](implicit m: M /= R): CollectedUnions[M, R, R] =
-  collect[M, R](u => m.extract(u) match {
-    case Some(mx) => \/-(mx)
-    case None     => -\/(u)
-  })
+    collect[M, R](u => m.extract(u) match {
+      case Some(mx) => Right(mx)
+      case None     => Left(u)
+    })
 
-  private def collect[M[_], U](collect: Union[R, Any] => Union[U, Any] \/ M[Any]): CollectedUnions[M, R, U] = {
+  private def collect[M[_], U](collect: Union[R, Any] => Union[U, Any] Either M[Any]): CollectedUnions[M, R, U] = {
     val (effectsAndIndices, othersAndIndices) =
       unions.zipWithIndex.foldLeft((Vector[(M[Any], Int)](), Vector[(Union[U, Any], Int)]())) {
         case ((es, os), (u, i)) =>
           collect(u) match {
-            case \/-(mx) => (es :+ ((mx, i)), os)
-            case -\/(o) => (es, os :+ ((o, i)))
+            case Right(mx) => (es :+ ((mx, i)), os)
+            case Left(o) => (es, os :+ ((o, i)))
           }
       }
 

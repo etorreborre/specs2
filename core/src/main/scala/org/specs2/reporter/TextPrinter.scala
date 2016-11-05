@@ -15,7 +15,7 @@ import execute._
 import main.Arguments
 import LogLine._
 import scalaz._, Scalaz._
-
+import Actions._
 import scala.concurrent._
 
 
@@ -56,11 +56,11 @@ trait TextPrinter extends Printer {
       Actions.protect(lines.foreach(_.log(logger))))
 
   def start(logger: LineLogger, header: SpecHeader, args: Arguments): Action[LineLogger] =
-    asyncDelay[ActionStack, Unit](printHeader(args)(header).foreach(_.log(logger))).as(logger)
+    asyncDelay(printHeader(args)(header).foreach(_.log(logger))).as(logger)
 
   def printFinalStats(spec: SpecStructure, args: Arguments, logger: LineLogger): (((Stats, Int), SimpleTimer)) => Action[Unit] = { case ((stats, _), timer) =>
-    asyncDelay[ActionStack, Unit](printStats(spec.header, args, stats, timer).foreach(_.log(logger))) >>
-    asyncDelay[ActionStack, Unit](logger.close)
+    asyncDelay(printStats(spec.header, args, stats, timer).foreach(_.log(logger))) >>
+    asyncDelay(logger.close)
   }
 
   def printHeader(args: Arguments): SpecHeader => List[LogLine] = { header: SpecHeader =>

@@ -26,7 +26,7 @@ class ClassesSpec extends Spec with Grouped { def is = s2"""
 
   "exceptions" - new g2 {
     e1 := createInstance[Specification]("org.specs2.reflect.UserErrorSpecification", getClass.getClassLoader) must
-      beKo("org.specs2.control.UserException: cannot create an instance for class org.specs2.reflect.UserErrorSpecification")
+      beKo("cannot create an instance for class org.specs2.reflect.UserErrorSpecification")
   }
 
   class FromNestedClass extends Specification  { def is = ok }

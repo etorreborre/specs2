@@ -52,7 +52,7 @@ trait DefaultExecutor extends Executor {
    *  - sequence the execution so that only parts in between steps are executed concurrently
    */
   def execute(env: Env): AsyncTransducer[Fragment, Fragment] = { contents: AsyncStream[Fragment] =>
-    execute1(env)(contents).thenFinally(protect(env.shutdown))
+    execute1(env)(contents).andFinally(protect(env.shutdown))
   }
 
   /**
@@ -195,10 +195,10 @@ trait DefaultExecutor extends Executor {
     duration match {
       case None    => task
       case Some(d) =>
-        withTimeout(task)(d, env.executionEnv).attempt.map {
-          case -\/(t: TimeoutException)  => fragment.setExecution(fragment.execution.setResult(Skipped("timeout after "+d)))
-          case -\/(t)  => fragment.setExecution(fragment.execution.setResult(Error(t)))
-          case \/-(r)  => r
+        withTimeout(task)(d, env.executionEnv).asyncAttempt.map {
+          case Left(t: TimeoutException)  => fragment.setExecution(fragment.execution.setResult(Skipped("timeout after "+d)))
+          case Left(t)  => fragment.setExecution(fragment.execution.setResult(Error(t)))
+          case Right(r)  => r
         }
     }
   }

@@ -8,7 +8,6 @@ trait all extends
   error with
   writer with
   state with
-  future with
   safe with
   console with
   warnings with

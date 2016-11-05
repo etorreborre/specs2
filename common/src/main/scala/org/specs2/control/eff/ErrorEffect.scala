@@ -69,17 +69,17 @@ trait ErrorInterpretation[F] extends ErrorCreation[F] { outer =>
       def apply[X](m: ErrorOrOk[X]) =
         m.run match {
           case -\/(e) =>
-            \/-(EffMonad[U].point(-\/(e)))
+            Right(EffMonad[U].point(-\/(e)))
 
           case \/-(a) =>
-            try -\/(a.value)
-            catch { case NonFatal(t) => \/-(EffMonad[U].point(-\/(-\/(t)))) }
+            try Left(a.value)
+            catch { case NonFatal(t) => Right(EffMonad[U].point(-\/(-\/(t)))) }
         }
 
-      def applicative[X, T[_]: Traverse](ms: T[ErrorOrOk[X]]): T[X] \/ ErrorOrOk[T[X]] =
+      def applicative[X, T[_]: Traverse](ms: T[ErrorOrOk[X]]): T[X] Either ErrorOrOk[T[X]] =
         ms.map(_.run).sequence match {
-          case -\/(e)   => \/-(Evaluate.error[F, T[X]](e))
-          case \/-(ls) => \/-(Evaluate.ok[F, T[X]](ls.map(_.value)))
+          case -\/(e)  => Right(Evaluate.error[F, T[X]](e))
+          case \/-(ls) => Right(Evaluate.ok[F, T[X]](ls.map(_.value)))
         }
     }
 
@@ -93,18 +93,18 @@ trait ErrorInterpretation[F] extends ErrorCreation[F] { outer =>
    */
   def andFinally[R, A](action: Eff[R, A], last: Eff[R, Unit])(implicit m: ErrorOrOk <= R): Eff[R, A] = {
     val recurse = new Recurse[ErrorOrOk, R, A] {
-      def apply[X](current: ErrorOrOk[X]): X \/ Eff[R, A] =
+      def apply[X](current: ErrorOrOk[X]): X Either Eff[R, A] =
         current.run match {
-          case -\/(e) => \/-(last.flatMap(_ => outer.error[R, A](e)))
+          case -\/(e) => Right(last.flatMap(_ => outer.error[R, A](e)))
           case \/-(x) =>
-            try -\/(x.value)
-            catch { case NonFatal(t) => \/-(last.flatMap(_ => outer.exception[R, A](t))) }
+            try Left(x.value)
+            catch { case NonFatal(t) => Right(last.flatMap(_ => outer.exception[R, A](t))) }
         }
 
-      def applicative[X, T[_]: Traverse](ms: T[ErrorOrOk[X]]): T[X] \/ ErrorOrOk[T[X]] =
+      def applicative[X, T[_]: Traverse](ms: T[ErrorOrOk[X]]): T[X] Either ErrorOrOk[T[X]] =
         ms.map(_.run).sequence match {
-          case -\/(e)   => \/-(Evaluate.error[F, T[X]](e))
-          case \/-(ls) => \/-(Evaluate.ok[F, T[X]](ls.map(_.value)))
+          case -\/(e)  => Right(Evaluate.error[F, T[X]](e))
+          case \/-(ls) => Right(Evaluate.ok[F, T[X]](ls.map(_.value)))
         }
     }
     intercept[R, ErrorOrOk, A, A]((a: A) => last.as(a), recurse)(action)
@@ -125,18 +125,18 @@ trait ErrorInterpretation[F] extends ErrorCreation[F] { outer =>
    */
   def catchError[R, A, B](action: Eff[R, A], pure: A => B, onError: Error => Eff[R, B])(implicit m: ErrorOrOk <= R): Eff[R, B] = {
     val recurse = new Recurse[ErrorOrOk, R, B] {
-      def apply[X](current: ErrorOrOk[X]): X \/ Eff[R, B] =
+      def apply[X](current: ErrorOrOk[X]): X Either Eff[R, B] =
         current.run match {
-          case -\/(e) => \/-(onError(e))
+          case -\/(e) => Right(onError(e))
           case \/-(x) =>
-            try -\/[X](x.value)
-            catch { case NonFatal(t) => \/-(onError(-\/(t))) }
+            try Left(x.value)
+            catch { case NonFatal(t) => Right(onError(-\/(t))) }
         }
 
-      def applicative[X, T[_]: Traverse](ms: T[ErrorOrOk[X]]): T[X] \/ ErrorOrOk[T[X]] =
+      def applicative[X, T[_]: Traverse](ms: T[ErrorOrOk[X]]): T[X] Either ErrorOrOk[T[X]] =
         ms.map(_.run).sequence match {
-          case -\/(e)   => \/-(Evaluate.error[F, T[X]](e))
-          case \/-(ls) => \/-(Evaluate.ok[F, T[X]](ls.map(_.value)))
+          case -\/(e)  => Right(Evaluate.error[F, T[X]](e))
+          case \/-(ls) => Right(Evaluate.ok[F, T[X]](ls.map(_.value)))
         }
 
     }
@@ -227,7 +227,7 @@ object ErrorEffect extends ErrorEffect[String] {
 case class Evaluate[F, A](run: (Throwable \/ F) \/ Name[A])
 
 object Evaluate {
-  def ok[F, A](a: =>A)               = Evaluate[F, A](\/-(Name(a)))
+  def ok[F, A](a: =>A)               = Evaluate[F, A](\/-(Need(a)))
   def eval[F, A](a: Eval[A])         = Evaluate[F, A](\/-(a))
   def error[F, A](a: Throwable \/ F) = Evaluate[F, A](-\/(a))
   def fail[F, A](f: F)               = error[F, A](\/-(f))

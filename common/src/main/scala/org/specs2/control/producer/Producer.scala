@@ -60,6 +60,9 @@ case class Producer[R :_safe, A](run: Eff[R, Stream[R, A]]) {
               (emit(as zip bs) append ((emit(as.drop(bs.size)) append nexta) zip nextb)).run
         }
     })
+
+  def andFinally(last: Eff[R, Unit]): Producer[R, A] =
+    Producer(run.addLast(last))
 }
 
 

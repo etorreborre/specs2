@@ -1,9 +1,9 @@
-package org.specs2.control.eff
+package org.specs2.control
+package eff
 
-import scala.reflect.ClassTag
 import scalaz._, Scalaz._
-import org.specs2.control.eff.eff._
-import org.specs2.control.eff.interpret._
+import eff._
+import interpret._
 
 import scala.reflect.ClassTag
 
@@ -41,8 +41,8 @@ trait SafeInterpretation extends SafeCreation { outer =>
    *
    * Collect finalizer exceptions if any
    */
-  def runSafe[R, U, A](r: Eff[R, A])(implicit m: Member.Aux[Safe, R, U]): Eff[U, (Throwable \/ A, List[Throwable])] = {
-    type Out = (Throwable \/ A, Vector[Throwable])
+  def runSafe[R, U, A](r: Eff[R, A])(implicit m: Member.Aux[Safe, R, U]): Eff[U, (\/[Throwable, A], List[Throwable])] = {
+    type Out = (\/[Throwable, A], Vector[Throwable])
     interpretLoop1[R, U, Safe, A, Out]((a: A) => (\/-(a), Vector.empty): Out)(safeLoop[R, U, A])(r).map { case (a, vs) => (a, vs.toList) }
   }
 
@@ -53,46 +53,70 @@ trait SafeInterpretation extends SafeCreation { outer =>
   /**
    * Attempt to execute a safe action including finalizers
    */
-  def attemptSafe[R, A](r: Eff[R, A])(implicit m: Safe <= R): Eff[R, (Throwable \/ A, List[Throwable])] = {
-    type Out = (Throwable \/ A, Vector[Throwable])
+  def attemptSafe[R, A](r: Eff[R, A])(implicit m: Safe <= R): Eff[R, (\/[Throwable, A], List[Throwable])] = {
+    type Out = (\/[Throwable, A], Vector[Throwable])
     interceptLoop1[R, Safe, A, Out]((a: A) => (\/-(a), Vector.empty): Out)(safeLoop[R, R, A])(r).map { case (a, vs) => (a, vs.toList) }
   }
 
-  def safeLoop[R, U, A]: Loop[Safe, R, A, Eff[U, (Throwable \/ A, Vector[Throwable])]] = {
-    type Out = (Throwable \/ A, Vector[Throwable])
+  def safeLoop[R, U, A]: Loop[Safe, R, A, Eff[U, (Throwable \/ A, Vector[Throwable])], Eff[U, Unit]] = {
+    type Out = (\/[Throwable, A], Vector[Throwable])
 
-    new Loop[Safe, R, A, Eff[U, Out]] {
+    new Loop[Safe, R, A, Eff[U, Out], Eff[U, Unit]] {
       type S = Vector[Throwable]
       val init: S = Vector.empty[Throwable]
 
-      def onPure(a: A, s: S): (Eff[R, A], S) \/ Eff[U, Out] =
-        \/-(pure((\/-(a), s)))
+      def onPure(a: A, s: S): (Eff[R, A], S) Either Eff[U, Out] =
+        Right(pure((\/-(a), s)))
 
-      def onEffect[X](sx: Safe[X], continuation: Arrs[R, X, A], s: S): (Eff[R, A], S) \/ Eff[U, Out] =
+      def onEffect[X](sx: Safe[X], continuation: Arrs[R, X, A], s: S): (Eff[R, A], S) Either Eff[U, Out] =
         sx match {
           case EvaluateValue(v) =>
             \/.fromTryCatchNonFatal(v.value) match {
               case -\/(e) =>
-                \/-(pure((-\/(e), s)))
+                Right(pure((-\/(e), s)))
 
               case \/-(x) =>
                 \/.fromTryCatchNonFatal(continuation(x)) match {
-                  case -\/(e) => \/-(pure((-\/(e), s)))
-                  case \/-(c) =>  -\/((c, s))
+                  case -\/(e) => Right(pure((-\/(e), s)))
+                  case \/-(c) => Left((c, s))
                 }
             }
 
           case FailedValue(t) =>
-            \/-(pure((-\/(t), s)))
+            Right(pure((-\/(t), s)))
 
           case FailedFinalizer(t) =>
             \/.fromTryCatchNonFatal(continuation(())) match {
-              case -\/(e) => \/-(pure((-\/(e), s :+ t)))
-              case \/-(c) =>  -\/((c, s :+ t))
+              case -\/(e) => Right(pure((-\/(e), s :+ t)))
+              case \/-(c) => Left((c, s :+ t))
             }
         }
 
-      def onApplicativeEffect[X, T[_] : Traverse](xs: T[Safe[X]], continuation: Arrs[R, T[X], A], s: S): (Eff[R, A], S) \/ Eff[U, Out] =  {
+      def onLastEffect[X](sx: Safe[X], continuation: Arrs[R, X, Unit], s: S): (Eff[R, Unit], S) Either Eff[U, Unit] =
+        sx match {
+          case EvaluateValue(v) =>
+            \/.fromTryCatchNonFatal(v.value) match {
+              case -\/(e) =>
+                Right(pure(()))
+
+              case \/-(x) =>
+                \/.fromTryCatchNonFatal(continuation(x)) match {
+                  case -\/(e) => Right(pure(()))
+                  case \/-(c) => Left((c, s))
+                }
+            }
+
+          case FailedValue(t) =>
+            Right(pure(()))
+
+          case FailedFinalizer(t) =>
+            \/.fromTryCatchNonFatal(continuation(())) match {
+              case -\/(e) => Right(pure(()))
+              case \/-(c) =>  Left((c, s :+ t))
+            }
+        }
+
+      def onApplicativeEffect[X, T[_] : Traverse](xs: T[Safe[X]], continuation: Arrs[R, T[X], A], s: S): (Eff[R, A], S) Either Eff[U, Out] = {
         type F = (Vector[Throwable], Option[Throwable])
 
         val traversed: State[F, T[X]] = xs.traverse {
@@ -112,10 +136,36 @@ trait SafeInterpretation extends SafeCreation { outer =>
 
         val ((o, n), tx) = traversed.run((s, None)).value
         n match {
-          case Some(t) => \/-(pure((-\/(t), o)))
-          case None    => -\/((continuation(tx), o))
+          case Some(t) => Right(pure((-\/(t), o)))
+          case None    => Left((continuation(tx), o))
         }
       }
+
+      def onLastApplicativeEffect[X, T[_] : Traverse](xs: T[Safe[X]], continuation: Arrs[R, T[X], Unit], s: S): (Eff[R, Unit], S) Either Eff[U, Unit] = {
+        type F = (Vector[Throwable], Option[Throwable])
+
+        val traversed: State[F, T[X]] = xs.traverse {
+          case FailedFinalizer(t) => State { case (o, n) => ((o :+ t, n),       ().asInstanceOf[X]) }
+          case FailedValue(t)     => State { case (o, n) => ((o,      Some(t)), ().asInstanceOf[X]) }
+          case EvaluateValue(v)   => State { case (o, n) =>
+            n match {
+              case None =>
+                \/.fromTryCatchNonFatal(v.value) match {
+                  case \/-(a) => ((o, None), a)
+                  case -\/(t)  => ((o, Option(t)), ().asInstanceOf[X])
+                }
+              case Some(_) => ((o, n), ().asInstanceOf[X])
+            }
+          }
+        }
+
+        val ((o, n), tx) = traversed.run((s, None)).value
+        n match {
+          case Some(t) => Right(pure(()))
+          case None    => Left((continuation(tx), o))
+        }
+      }
+
     }
   }
 
@@ -125,38 +175,62 @@ trait SafeInterpretation extends SafeCreation { outer =>
    * execute a second action whether the first is successful or not but keep track of finalizer exceptions
    */
   def thenFinally[R, A](action: Eff[R, A], last: Eff[R, Unit])(implicit m: Safe <= R): Eff[R, A] = {
-    val loop = new StatelessLoop[Safe, R, A, Eff[R, A]] {
-      def onPure(a: A): Eff[R, A] \/ Eff[R, A] =
-        \/-(attempt(last) flatMap {
+    val loop = new StatelessLoop[Safe, R, A, Eff[R, A], Eff[R, Unit]] {
+      def onPure(a: A): Eff[R, A] Either Eff[R, A] =
+        Right(attempt(last) flatMap {
           case -\/(t)   => outer.finalizerException[R](t) >> pure(a)
           case \/-(()) => pure(a)
         })
 
-      def onEffect[X](sx: Safe[X], continuation: Arrs[R, X, A]): Eff[R, A] \/ Eff[R, A] =
+      def onEffect[X](sx: Safe[X], continuation: Arrs[R, X, A]): Eff[R, A] Either Eff[R, A] =
         sx match {
           case EvaluateValue(v) =>
             \/.fromTryCatchNonFatal(v.value) match {
               case -\/(e) =>
-                \/-(attempt(last) flatMap {
+                Right(attempt(last) flatMap {
                   case -\/(t)   => outer.finalizerException[R](t) >> outer.exception[R, A](e)
                   case \/-(()) => outer.exception[R, A](e)
                 })
 
               case \/-(x) =>
-                -\/(attempt(last) flatMap {
+                Left(attempt(last) flatMap {
                   case -\/(t)   => outer.finalizerException[R](t) >> continuation(x)
                   case \/-(()) => continuation(x)
                 })
             }
 
           case FailedValue(t) =>
-            \/-(outer.exception(t))
+            Right(outer.exception(t))
 
           case FailedFinalizer(t) =>
-            \/-(outer.finalizerException(t) >> continuation(()))
+            Right(outer.finalizerException(t) >> continuation(()))
         }
 
-      def onApplicativeEffect[X, T[_] : Traverse](xs: T[Safe[X]], continuation: Arrs[R, T[X], A]): Eff[R, A] \/ Eff[R, A] = {
+      def onLastEffect[X](sx: Safe[X], continuation: Arrs[R, X, Unit]): Eff[R, Unit] Either Eff[R, Unit] =
+        sx match {
+          case EvaluateValue(v) =>
+            \/.fromTryCatchNonFatal(v.value) match {
+              case -\/(e) =>
+                Right(attempt(last) flatMap {
+                  case -\/(t)   => outer.finalizerException[R](t) >> outer.exception[R, Unit](e)
+                  case \/-(()) => outer.exception[R, Unit](e)
+                })
+
+              case \/-(x) =>
+                Left(attempt(last) flatMap {
+                  case -\/(t)   => outer.finalizerException[R](t) >> continuation(x)
+                  case \/-(()) => continuation(x)
+                })
+            }
+
+          case FailedValue(t) =>
+            Right(outer.exception(t).void)
+
+          case FailedFinalizer(t) =>
+            Right(outer.finalizerException(t) >> continuation(()))
+        }
+
+      def onApplicativeEffect[X, T[_] : Traverse](xs: T[Safe[X]], continuation: Arrs[R, T[X], A]): Eff[R, A] Either Eff[R, A] = {
         // all the values are executed because they are considered to be independent in the applicative case
         type F = Vector[FailedValue[X]]
         val executed: State[F, T[X]] = xs.traverse {
@@ -173,16 +247,45 @@ trait SafeInterpretation extends SafeCreation { outer =>
 
         failures.toList match {
           case Nil =>
-            -\/(continuation(successes))
+            Left(continuation(successes))
 
           case FailedValue(throwable) :: rest =>
             // we just return the first failed value as an exception
-            \/-(attempt(last) flatMap {
+            Right(attempt(last) flatMap {
               case -\/(t)   => outer.finalizerException[R](t) >> outer.exception[R, A](throwable)
               case \/-(()) => exception[R, A](throwable)
             })
         }
       }
+
+      def onLastApplicativeEffect[X, T[_] : Traverse](xs: T[Safe[X]], continuation: Arrs[R, T[X], Unit]): Eff[R, Unit] Either Eff[R, Unit] = {
+        // all the values are executed because they are considered to be independent in the applicative case
+        type F = Vector[FailedValue[X]]
+        val executed: State[F, T[X]] = xs.traverse {
+          case EvaluateValue(a) =>
+            \/.fromTryCatchNonFatal(a.value) match {
+              case -\/(t)  => State { failed => (failed :+ FailedValue(t), ().asInstanceOf[X]) }
+              case \/-(x) => State { failed => (failed, x) }
+            }
+          case FailedValue(t)     => State { failed => (failed :+ FailedValue(t), ().asInstanceOf[X]) }
+          case FailedFinalizer(t) => State { failed => (failed, ().asInstanceOf[X]) }
+        }
+
+        val (failures, successes) = executed.run(Vector.empty[FailedValue[X]]).value
+
+        failures.toList match {
+          case Nil =>
+            Left(continuation(successes))
+
+          case FailedValue(throwable) :: rest =>
+            // we just return the first failed value as an exception
+            Right(attempt(last) flatMap {
+              case -\/(t)   => outer.finalizerException[R](t) >> outer.exception[R, Unit](throwable)
+              case \/-(()) => exception[R, Unit](throwable)
+            })
+        }
+      }
+
     }
 
     interceptStatelessLoop1[R, Safe, A, A]((a: A) => a)(loop)(action)
@@ -243,7 +346,7 @@ trait SafeInterpretation extends SafeCreation { outer =>
 object SafeInterpretation extends SafeInterpretation
 
 /**
- * The Safe type is a mix of a Throwable\/ / Eval effect
+ * The Safe type is a mix of a ThrowableEither / Eval effect
  *   and a writer effect to collect finalizer failures
  */
 sealed trait Safe[A]

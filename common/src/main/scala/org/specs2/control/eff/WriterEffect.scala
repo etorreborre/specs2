@@ -54,8 +54,8 @@ trait WriterInterpretation {
 
       def apply[X](x: Writer[O, X], s: S) = (x.run._2, fold.fold(s, x.run._1))
 
-      def applicative[X, T[_] : Traverse](ws: T[Writer[O, X]], s: S): (T[X], S) \/ (Writer[O, T[X]], S) =
-        -\/ {
+      def applicative[X, T[_] : Traverse](ws: T[Writer[O, X]], s: S): (T[X], S) Either (Writer[O, T[X]], S) =
+        Left {
           val traversed: State[S, T[X]] = ws.traverse { w: Writer[O, X] =>
             val (o, x) = w.run
             State[S, X](s1 => (fold.fold(s1, o), x))

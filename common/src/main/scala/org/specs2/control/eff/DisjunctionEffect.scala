@@ -46,12 +46,12 @@ trait DisjunctionInterpretation {
     val recurse = new Recurse[(E \/ ?), U, E \/ A] {
       def apply[X](m: E \/ X) =
         m match {
-          case -\/(e) => \/-(EffMonad[U].point(-\/(e)))
-          case \/-(a) => -\/(a)
+          case -\/(e) => Right(EffMonad[U].point(-\/(e)))
+          case \/-(a) => Left(a)
         }
 
-      def applicative[X, T[_] : Traverse](ms: T[E \/ X]): T[X] \/ (E \/ T[X]) =
-        \/-(ms.sequence)
+      def applicative[X, T[_] : Traverse](ms: T[E \/ X]): T[X] Either (E \/ T[X]) =
+        Right(ms.sequence)
     }
 
     interpret1[R, U, (E \/ ?), A, E \/ A]((a: A) => \/-(a): E \/ A)(recurse)(r)
@@ -66,12 +66,12 @@ trait DisjunctionInterpretation {
     val recurse = new Recurse[(E \/ ?), R, A] {
       def apply[X](m: E \/ X) =
         m match {
-          case -\/(e) => \/-(handle(e))
-          case \/-(a) => -\/(a)
+          case -\/(e) => Right(handle(e))
+          case \/-(a) => Left(a)
         }
 
-      def applicative[X, T[_] : Traverse](ms: T[E \/ X]): T[X] \/ (E \/ T[X]) =
-        \/-(ms.sequence)
+      def applicative[X, T[_] : Traverse](ms: T[E \/ X]): T[X] Either (E \/ T[X]) =
+        Right(ms.sequence)
     }
 
     intercept1[R, (E \/ ?), A, A]((a: A) => a)(recurse)(r)

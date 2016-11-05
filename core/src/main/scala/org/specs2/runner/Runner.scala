@@ -3,7 +3,7 @@ package runner
 
 import control._, Throwablex._
 import control.Operations._
-import eff._, all._, syntax.all._
+import eff._, all._
 import specification.core._
 import specification.process.Stats
 import scala.reflect.ClassTag
@@ -102,7 +102,7 @@ object Runner {
 
       } else Reporter.report(env, printers)(specStructure)
 
-    report.andFinally(Actions.delayed(env.shutdown))
+    report.addLast(Actions.delayed(env.shutdown))
   }
 
   /**

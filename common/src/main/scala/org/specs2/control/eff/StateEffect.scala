@@ -94,8 +94,8 @@ trait StateInterpretation {
       def apply[X](x: State[S, X], s: S) =
         x.run(s).value.swap
 
-      def applicative[X, T[_] : Traverse](xs: T[State[S, X]], s: S): (T[X], S) \/ (State[S, T[X]], S) =
-        -\/(xs.sequence.run(s).value.swap)
+      def applicative[X, T[_] : Traverse](xs: T[State[S, X]], s: S): (T[X], S) Either (State[S, T[X]], S) =
+        Left(xs.sequence.run(s).value.swap)
 
       def finalize(a: A, s: S) = (a, s)
 

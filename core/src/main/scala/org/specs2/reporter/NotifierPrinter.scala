@@ -11,6 +11,7 @@ import control._
 import eff._, all._
 import control.origami._
 import specification.core._
+import Actions._
 
 /**
  * A Printer can be created from a Notifier implementation
