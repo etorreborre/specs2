@@ -233,7 +233,7 @@ package object control {
       asyncService.asyncDelay(a)
 
     def asyncFork[A](a: =>A)(implicit ec: ExecutionContext): Action[A] =
-      AsyncFutureService.create.asyncFork(a)
+      AsyncFutureService.fromExecutionContext(ec).asyncFork(a)
 
     def delayed[A](a: =>A): Action[A] =
       ErrorEffect.ok(a)

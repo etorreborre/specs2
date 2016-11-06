@@ -11,7 +11,6 @@ import org.specs2.time.SimpleTimer
 
 import scala.concurrent.duration.FiniteDuration
 import control._
-import eff._
 import producer._
 import Actions._
 import Result.ResultFailureMonoid
@@ -81,10 +80,12 @@ trait DefaultExecutor extends Executor {
   def sequencedExecution(env: Env): AsyncTransducer[Fragment, Action[Fragment]] = {
     type Barrier = FatalExecution \/ Result
     type S = (Action[Barrier], Boolean)
+
     val init = (ok[Barrier](\/-(Success("barrier"))), false)
 
     transducers.stateEff[ActionStack, Fragment, Fragment, S](init) { case (fragment, (barrier, mustStop)) =>
       val arguments = env.arguments
+      val timeout = env.timeout.orElse(fragment.execution.timeout)
 
       if (arguments.skipAll)
         (ok(if (fragment.isExecutable) fragment.skip else fragment), (barrier, mustStop))
@@ -109,7 +110,6 @@ trait DefaultExecutor extends Executor {
         // if the previous fragments decided that we should stop the execution
         // skip the execution
         // otherwise execute synchronously or asynchronously
-        val timeout = env.timeout.orElse(fragment.execution.timeout)
 
         if (mustStop)
           (ok(fragment.skip), (barrier, barrierStop))
@@ -150,21 +150,22 @@ trait DefaultExecutor extends Executor {
             }
           }
         } else {
-          val timeout = env.timeout.orElse(fragment.execution.timeout)
+
+          lazy val execution = executeFragment(env.userEnv)(fragment)
 
           val executingFragment: Action[Fragment] =
-            timedout(fragment, env)(asyncFork(executeFragment(env.userEnv)(fragment))(env.executionContext))(timeout)
+            timedout(fragment, env)(asyncFork(execution)(env.executionContext))(timeout)
 
           val newBarrier =
-            Eff.EffApplicative[ActionStack].tuple2(barrier, executingFragment).map {
-              case (\/-(result), ef) =>
-                ef.executionFatalOrResult match {
-                  case -\/(f) => -\/(f)
-                  case \/-(r) => \/-(result |+| r)
-                }
+              barrier.map {
+                case \/-(result) =>
+                  execution.executionFatalOrResult match {
+                    case -\/(f) => -\/(f)
+                    case \/-(r) => \/-(result |+| r)
+                  }
 
-              case (-\/(e), _) => -\/(e)
-            }
+                case -\/(e) => -\/(e)
+              }
           (executingFragment, (newBarrier, barrierStop))
         }
       }

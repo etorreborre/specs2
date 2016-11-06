@@ -1,6 +1,8 @@
 package org.specs2.control
 package eff
 
+import java.util.concurrent.{ExecutorService, Executors, ScheduledExecutorService}
+
 import scalaz._
 import org.specs2.control.eff.syntax.all._
 import all._
@@ -153,4 +155,3 @@ case class AsyncFuture[A](ec: ExecutionContext, run: ExecutionContext => Future[
       run(ec).map(a => Right[Throwable, A](a))(ec) recover { case NonFatal(t) => Left(t) }
     })
 }
-
