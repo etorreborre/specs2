@@ -173,7 +173,7 @@ trait EffImplicits {
       Pure(a)
 
     def zip[A, B](fa: Eff[R, A], fb: Eff[R, B]): Eff[R, (A, B)] =
-      ap(fa)(map(fb)(b => (a: A) => (a, b)))
+      ap(fb)(map(fa)(a => (b: B) => (a, b)))
 
     def ap[A, B](fa: =>Eff[R, A])(ff: =>Eff[R, A => B]): Eff[R, B] =
       fa match {
