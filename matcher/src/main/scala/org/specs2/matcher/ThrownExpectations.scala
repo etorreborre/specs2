@@ -65,7 +65,8 @@ trait ThrownExpectables extends ExpectationsCreation {
     }
 
   override protected def checkResultFailure(result: =>Result) = {
-    result match {
+    lazy val r = result
+    r match {
       case f@Failure(_, _, _, _) => throw new FailureException(f)
       case s@Skipped(_, _) => throw new SkipException(s)
       case s@Pending(_) => throw new PendingException(s)
@@ -73,7 +74,7 @@ trait ThrownExpectables extends ExpectationsCreation {
       case d@DecoratedResult(_, r) => if (!r.isSuccess) throw new DecoratedResultException(d) else ()
       case _ => ()
     }
-    result
+    r
   }
 
   /** this method can be overriden to throw exceptions when checking the match result */
