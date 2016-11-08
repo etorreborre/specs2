@@ -31,7 +31,7 @@ trait ErrorTypes[F] {
    */
   type ErrorOrOk[A] = Evaluate[F, A]
 
-  type _ErrorOrOk[R] = ErrorOrOk <= R
+  type _ErrorOrOk[R] = ErrorOrOk /= R
   type _errorOrOk[R] = ErrorOrOk |= R
 }
 
@@ -91,7 +91,7 @@ trait ErrorInterpretation[F] extends ErrorCreation[F] { outer =>
    *
    * Execute a second action whether the first is successful or not
    */
-  def andFinally[R, A](action: Eff[R, A], last: Eff[R, Unit])(implicit m: ErrorOrOk <= R): Eff[R, A] = {
+  def andFinally[R, A](action: Eff[R, A], last: Eff[R, Unit])(implicit m: ErrorOrOk /= R): Eff[R, A] = {
     val recurse = new Recurse[ErrorOrOk, R, A] {
       def apply[X](current: ErrorOrOk[X]): X Either Eff[R, A] =
         current.run match {
@@ -115,7 +115,7 @@ trait ErrorInterpretation[F] extends ErrorCreation[F] { outer =>
    *
    * Execute a second action if the first one is not successful
    */
-  def orElse[R, A](action: Eff[R, A], onError: Eff[R, A])(implicit m: ErrorOrOk <= R): Eff[R, A] =
+  def orElse[R, A](action: Eff[R, A], onError: Eff[R, A])(implicit m: ErrorOrOk /= R): Eff[R, A] =
     whenFailed(action, _ => onError)
 
   /**
@@ -123,7 +123,7 @@ trait ErrorInterpretation[F] extends ErrorCreation[F] { outer =>
    *
    * Execute a second action if the first one is not successful, based on the error
    */
-  def catchError[R, A, B](action: Eff[R, A], pure: A => B, onError: Error => Eff[R, B])(implicit m: ErrorOrOk <= R): Eff[R, B] = {
+  def catchError[R, A, B](action: Eff[R, A], pure: A => B, onError: Error => Eff[R, B])(implicit m: ErrorOrOk /= R): Eff[R, B] = {
     val recurse = new Recurse[ErrorOrOk, R, B] {
       def apply[X](current: ErrorOrOk[X]): X Either Eff[R, B] =
         current.run match {
@@ -150,13 +150,13 @@ trait ErrorInterpretation[F] extends ErrorCreation[F] { outer =>
    *
    * The final value type is the same as the original type
    */
-  def whenFailed[R, A](action: Eff[R, A], onError: Error => Eff[R, A])(implicit m: ErrorOrOk <= R): Eff[R, A] =
+  def whenFailed[R, A](action: Eff[R, A], onError: Error => Eff[R, A])(implicit m: ErrorOrOk /= R): Eff[R, A] =
     catchError(action, identity[A], onError)
 
   /**
    * ignore one possible exception that could be thrown
    */
-  def ignoreException[R, E <: Throwable : ClassTag, A](action: Eff[R, A])(implicit m: ErrorOrOk <= R): Eff[R, Unit] =
+  def ignoreException[R, E <: Throwable : ClassTag, A](action: Eff[R, A])(implicit m: ErrorOrOk /= R): Eff[R, Unit] =
     catchError[R, A, Unit](action, (a: A) => (), { error: Error =>
       error match {
         case -\/(t) if implicitly[ClassTag[E]].runtimeClass.isInstance(t) =>

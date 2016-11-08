@@ -70,7 +70,7 @@ trait FilePathReader {
       .filter(_.isDirectory)
       .map(DirectoryPath.unsafe))
 
-  private def filePathsProcess[R :_safe](directory: DirectoryPath): Producer[R, FilePath] = {
+  private def filePathsProcess[R :_Safe](directory: DirectoryPath): Producer[R, FilePath] = {
     def go(dir: DirectoryPath): Producer[R, FilePath] = {
       val (files, directories) = Option(dir.toFile.listFiles).map(_.toList).getOrElse(List()).partition(_.isFile)
       Producer.emit(files.map(FilePath.unsafe)) append Producer.emit(directories.map(DirectoryPath.unsafe).map(go)).flatten

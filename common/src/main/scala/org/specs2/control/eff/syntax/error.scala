@@ -1,7 +1,6 @@
 package org.specs2.control.eff
 package syntax
 
-import Member.<=
 import ErrorEffect._
 import scalaz._
 import scala.reflect.ClassTag
@@ -15,13 +14,13 @@ trait error {
     def runError(implicit m: Member[ErrorOrOk, R]): Eff[m.Out, Error \/ A] =
       ErrorEffect.runError(action)(m.aux)
 
-    def andFinally(last: Eff[R, Unit])(implicit m: ErrorOrOk <= R): Eff[R, A] =
+    def andFinally(last: Eff[R, Unit])(implicit m: ErrorOrOk /= R): Eff[R, A] =
       ErrorEffect.andFinally(action, last)
 
-    def orElse(action2: Eff[R, A])(implicit m: ErrorOrOk <= R): Eff[R, A] =
+    def orElse(action2: Eff[R, A])(implicit m: ErrorOrOk /= R): Eff[R, A] =
       ErrorEffect.orElse(action, action2)
 
-    def ignore[E <: Throwable : ClassTag](implicit m: ErrorOrOk <= R): Eff[R, Unit] =
+    def ignore[E <: Throwable : ClassTag](implicit m: ErrorOrOk /= R): Eff[R, Unit] =
       ErrorEffect.ignoreException(action)
   }
 

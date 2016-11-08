@@ -13,7 +13,7 @@ package object producer {
 
   object transducers extends Transducers
 
-  implicit class ProducerOps[R :_safe, A](p: Producer[R, A]) {
+  implicit class ProducerOps[R :_Safe, A](p: Producer[R, A]) {
     def filter(f: A => Boolean): Producer[R, A] =
       Producer.filter(p)(f)
 
@@ -32,7 +32,7 @@ package object producer {
     def pipe[B](t: Transducer[R, A, B]): Producer[R, B] =
       Producer.pipe(p, t)
 
-    def into[U](implicit intoPoly: IntoPoly[R, U], s: Safe |= U): Producer[U, A] =
+    def into[U](implicit intoPoly: IntoPoly[R, U], s: _Safe[U]): Producer[U, A] =
       Producer.into(p)
 
     def fold[B, S](start: Eff[R, S], f: (S, A) => S, end: S => Eff[R, B]): Eff[R, B] =
@@ -54,27 +54,27 @@ package object producer {
       Producer.repeat(p)
   }
 
-  implicit class ProducerListOps[R :_safe, A](p: Producer[R, List[A]]) {
+  implicit class ProducerListOps[R :_Safe, A](p: Producer[R, List[A]]) {
     def flattenList: Producer[R, A] =
       Producer.flattenList(p)
   }
 
-  implicit class ProducerSeqOps[R :_safe, A](p: Producer[R, Seq[A]]) {
+  implicit class ProducerSeqOps[R :_Safe, A](p: Producer[R, Seq[A]]) {
     def flattenSeq: Producer[R, A] =
       Producer.flattenSeq(p)
   }
 
-  implicit class ProducerFlattenOps[R :_safe, A](p: Producer[R, Producer[R, A]]) {
+  implicit class ProducerFlattenOps[R :_Safe, A](p: Producer[R, Producer[R, A]]) {
     def flatten: Producer[R, A] =
       Producer.flatten(p)
   }
 
-  implicit class ProducerEffOps[R :_safe, A](p: Producer[R, Eff[R, A]]) {
+  implicit class ProducerEffOps[R :_Safe, A](p: Producer[R, Eff[R, A]]) {
     def sequence[F[_]](n: Int)(implicit f: F |= R): Producer[R, A] =
       Producer.sequence[R, F, A](n)(p)
   }
 
-  implicit class ProducerTransducerOps[R :_safe, A](p: Producer[R, A]) {
+  implicit class ProducerTransducerOps[R :_Safe, A](p: Producer[R, A]) {
     def receiveOr[B](f: A => Producer[R, B])(or: =>Producer[R, B]): Producer[R, B] =
       p |> transducers.receiveOr(f)(or)
 
@@ -133,7 +133,7 @@ package object producer {
       p |> transducers.reduceMap[R, A, B](f)
   }
 
-  implicit class TransducerOps[R :_safe, A, B](t: Transducer[R, A, B]) {
+  implicit class TransducerOps[R :_Safe, A, B](t: Transducer[R, A, B]) {
     def |>[C](next: Transducer[R, B, C]): Transducer[R, A, C] =
       andThen(next)
 
@@ -147,7 +147,7 @@ package object producer {
       (p: Producer[R, A]) => t(p).map(f)
   }
 
-  implicit class ProducerResourcesOps[R :_safe, A](p: Producer[R, A])(implicit s: Safe <= R) {
+  implicit class ProducerResourcesOps[R :_Safe, A](p: Producer[R, A]) {
     def thenFinally(e: Eff[R, Unit]): Producer[R, A] =
       Producer[R, A](p.run flatMap {
         case Done() => safe.thenFinally(Producer.done[R, A].run, e)
@@ -168,7 +168,7 @@ package object producer {
       })
   }
 
-  def bracket[R :_safe, A, B, C](open: Eff[R, A])(step: A => Producer[R, B])(close: A => Eff[R, C])(implicit s: Safe <= R): Producer[R, B] =
+  def bracket[R :_Safe, A, B, C](open: Eff[R, A])(step: A => Producer[R, B])(close: A => Eff[R, C]): Producer[R, B] =
     Producer[R, B] {
       open flatMap { resource =>
         (step(resource) `finally` close(resource).map(_ => ())).run

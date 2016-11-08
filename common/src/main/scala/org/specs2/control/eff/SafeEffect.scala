@@ -15,7 +15,7 @@ object SafeEffect extends SafeEffect
 
 trait SafeTypes {
 
-  type _Safe[R] = Safe <= R
+  type _Safe[R] = Safe /= R
   type _safe[R] = Safe |= R
 }
 
@@ -53,7 +53,7 @@ trait SafeInterpretation extends SafeCreation { outer =>
   /**
    * Attempt to execute a safe action including finalizers
    */
-  def attemptSafe[R, A](r: Eff[R, A])(implicit m: Safe <= R): Eff[R, (\/[Throwable, A], List[Throwable])] = {
+  def attemptSafe[R, A](r: Eff[R, A])(implicit m: Safe /= R): Eff[R, (\/[Throwable, A], List[Throwable])] = {
     type Out = (\/[Throwable, A], Vector[Throwable])
     interceptLoop1[R, Safe, A, Out]((a: A) => (\/-(a), Vector.empty): Out)(safeLoop[R, R, A])(r).map { case (a, vs) => (a, vs.toList) }
   }
@@ -174,7 +174,7 @@ trait SafeInterpretation extends SafeCreation { outer =>
    * evaluate 1 action possibly having error effects
    * execute a second action whether the first is successful or not but keep track of finalizer exceptions
    */
-  def thenFinally[R, A](action: Eff[R, A], last: Eff[R, Unit])(implicit m: Safe <= R): Eff[R, A] = {
+  def thenFinally[R, A](action: Eff[R, A], last: Eff[R, Unit])(implicit m: _Safe[R]): Eff[R, A] = {
     val loop = new StatelessLoop[Safe, R, A, Eff[R, A], Eff[R, Unit]] {
       def onPure(a: A): Eff[R, A] Either Eff[R, A] =
         Right(attempt(last) flatMap {
@@ -291,7 +291,7 @@ trait SafeInterpretation extends SafeCreation { outer =>
     interceptStatelessLoop1[R, Safe, A, A]((a: A) => a)(loop)(action)
   }
 
-  def bracket[R, A, B, C](acquire: Eff[R, A])(step: A => Eff[R, B])(release: A => Eff[R, C])(implicit m: Safe <= R): Eff[R, B] =
+  def bracket[R, A, B, C](acquire: Eff[R, A])(step: A => Eff[R, B])(release: A => Eff[R, C])(implicit m: Safe /= R): Eff[R, B] =
     for {
       a <- acquire
       b <- thenFinally(step(a), release(a).void)
@@ -302,7 +302,7 @@ trait SafeInterpretation extends SafeCreation { outer =>
    *
    * Execute a second action if the first one is not successful
    */
-  def otherwise[R, A](action: Eff[R, A], onThrowable: Eff[R, A])(implicit m: Safe <= R): Eff[R, A] =
+  def otherwise[R, A](action: Eff[R, A], onThrowable: Eff[R, A])(implicit m: Safe /= R): Eff[R, A] =
     whenFailed(action, _ => onThrowable)
 
   /**
@@ -310,7 +310,7 @@ trait SafeInterpretation extends SafeCreation { outer =>
    *
    * Execute a second action if the first one is not successful, based on the error
    */
-  def catchThrowable[R, A, B](action: Eff[R, A], pureValue: A => B, onThrowable: Throwable => Eff[R, B])(implicit m: Safe <= R): Eff[R, B] =
+  def catchThrowable[R, A, B](action: Eff[R, A], pureValue: A => B, onThrowable: Throwable => Eff[R, B])(implicit m: Safe /= R): Eff[R, B] =
     attemptSafe(action).flatMap {
       case (-\/(t), ls)  => onThrowable(t).flatMap(b => ls.traverse(f => finalizerException(f)).as(b))
       case (\/-(a), ls) => pure(pureValue(a)).flatMap(b => ls.traverse(f => finalizerException(f)).as(b))
@@ -323,19 +323,19 @@ trait SafeInterpretation extends SafeCreation { outer =>
    *
    * The final value type is the same as the original type
    */
-  def whenFailed[R, A](action: Eff[R, A], onThrowable: Throwable => Eff[R, A])(implicit m: Safe <= R): Eff[R, A] =
+  def whenFailed[R, A](action: Eff[R, A], onThrowable: Throwable => Eff[R, A])(implicit m: Safe /= R): Eff[R, A] =
     catchThrowable(action, identity[A], onThrowable)
 
   /**
    * try to execute an action an report any issue
    */
-  def attempt[R, A](action: Eff[R, A])(implicit m: Safe <= R): Eff[R, Throwable \/ A] =
+  def attempt[R, A](action: Eff[R, A])(implicit m: Safe /= R): Eff[R, Throwable \/ A] =
     catchThrowable(action, \/-[A], (t: Throwable) => pure(-\/(t)))
 
   /**
    * ignore one possible exception that could be thrown
    */
-  def ignoreException[R, E <: Throwable : ClassTag, A](action: Eff[R, A])(implicit m: Safe <= R): Eff[R, Unit] =
+  def ignoreException[R, E <: Throwable : ClassTag, A](action: Eff[R, A])(implicit m: Safe /= R): Eff[R, Unit] =
     catchThrowable[R, A, Unit](action, (a: A) => (), {
       case t if implicitly[ClassTag[E]].runtimeClass.isInstance(t) => pure(())
       case t => outer.exception(t)

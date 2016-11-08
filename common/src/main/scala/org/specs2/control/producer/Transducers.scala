@@ -9,19 +9,19 @@ import Producer._
 
 trait Transducers {
 
-  def id[R :_safe, A, B]: Transducer[R, A, A] =
+  def id[R :_Safe, A, B]: Transducer[R, A, A] =
     (p: Producer[R, A]) => p
 
-  def filter[R :_safe, A, B](f: A => Boolean): Transducer[R, A, A] =
+  def filter[R :_Safe, A, B](f: A => Boolean): Transducer[R, A, A] =
     (p: Producer[R, A]) => Producer.filter(p)(f)
 
-  def receive[R :_safe, A, B](f: A => Producer[R, B]): Transducer[R, A, B] =
+  def receive[R :_Safe, A, B](f: A => Producer[R, B]): Transducer[R, A, B] =
     (p: Producer[R, A]) => p.flatMap(f)
 
-  def transducer[R :_safe, A, B](f: A => B): Transducer[R, A, B] =
+  def transducer[R :_Safe, A, B](f: A => B): Transducer[R, A, B] =
     (p: Producer[R, A]) => p.map(f)
 
-  def producerState[R :_safe, A, B, S](start: S)(f: (A, S) => (Producer[R, B], S)): Transducer[R, A, B] = (producer: Producer[R, A]) => {
+  def producerState[R :_Safe, A, B, S](start: S)(f: (A, S) => (Producer[R, B], S)): Transducer[R, A, B] = (producer: Producer[R, A]) => {
     def go(p: Producer[R, A], s: S): Producer[R, B] =
       Producer(p.run flatMap {
         case Done() => done.run
@@ -36,7 +36,7 @@ trait Transducers {
     go(producer, start)
   }
 
-  def state[R :_safe, A, B, S](start: S)(f: (A, S) => (B, S)): Transducer[R, A, B] = (producer: Producer[R, A]) => {
+  def state[R :_Safe, A, B, S](start: S)(f: (A, S) => (B, S)): Transducer[R, A, B] = (producer: Producer[R, A]) => {
     def go(p: Producer[R, A], s: S): Producer[R, B] =
       Producer(p.run flatMap {
         case Done() => done.run
@@ -51,7 +51,7 @@ trait Transducers {
     go(producer, start)
   }
 
-  def stateEval[R :_safe, A, B, S](start: S)(f: (A, S) => Eff[R, (B, S)]): Transducer[R, A, B] = (producer: Producer[R, A]) => {
+  def stateEval[R :_Safe, A, B, S](start: S)(f: (A, S) => Eff[R, (B, S)]): Transducer[R, A, B] = (producer: Producer[R, A]) => {
     def go(p: Producer[R, A], s: S): Producer[R, B] =
       Producer(p.run flatMap {
         case Done() => done.run
@@ -76,7 +76,7 @@ trait Transducers {
     go(producer, start)
   }
 
-  def stateEff[R :_safe, A, B, S](start: S)(f: (A, S) => (Eff[R, B], S)): Transducer[R, A, Eff[R, B]] = (producer: Producer[R, A]) => {
+  def stateEff[R :_Safe, A, B, S](start: S)(f: (A, S) => (Eff[R, B], S)): Transducer[R, A, Eff[R, B]] = (producer: Producer[R, A]) => {
     def go(p: Producer[R, A], s: S): Producer[R, Eff[R, B]] =
       Producer(p.run flatMap {
         case Done() => done.run
@@ -93,16 +93,16 @@ trait Transducers {
     go(producer, start)
   }
 
-  def receiveOr[R :_safe, A, B](f: A => Producer[R, B])(or: =>Producer[R, B]): Transducer[R, A, B] =
+  def receiveOr[R :_Safe, A, B](f: A => Producer[R, B])(or: =>Producer[R, B]): Transducer[R, A, B] =
     cata_[R, A, B](
       or,
       (a: A) => f(a),
       (as: List[A], next: Producer[R, A]) => as.headOption.map(f).getOrElse(or))
 
-  def receiveOption[R :_safe, A, B]: Transducer[R, A, Option[A]] =
+  def receiveOption[R :_Safe, A, B]: Transducer[R, A, Option[A]] =
     receiveOr[R, A, Option[A]]((a: A) => one(Option(a)))(one(None))
 
-  def drop[R :_safe, A](n: Int): Transducer[R, A, A] =
+  def drop[R :_Safe, A](n: Int): Transducer[R, A, A] =
     cata_[R, A, A](
       done[R, A],
       (a: A) => if (n <= 0) one(a) else done,
@@ -110,7 +110,7 @@ trait Transducers {
         if (n < as.size) emit(as.drop(n)) append next
         else next |> drop(n - as.size))
 
-  def dropRight[R :_safe, A](n: Int): Transducer[R, A, A] =
+  def dropRight[R :_Safe, A](n: Int): Transducer[R, A, A] =
     (producer: Producer[R, A]) => {
       def go(p: Producer[R, A], elements: Vector[A]): Producer[R, A] =
         Producer(peek(p).flatMap {
@@ -127,7 +127,7 @@ trait Transducers {
       go(producer, Vector.empty[A])
     }
 
-  def take[R :_safe, A](n: Int): Transducer[R, A, A] =
+  def take[R :_Safe, A](n: Int): Transducer[R, A, A] =
     (producer: Producer[R, A]) => {
       def go(p: Producer[R, A], i: Int): Producer[R, A] =
         if (i <= 0) done
@@ -143,7 +143,7 @@ trait Transducers {
       go(producer, n)
     }
 
-  def takeWhile[R :_safe, A](f: A => Boolean): Transducer[R, A, A] =
+  def takeWhile[R :_Safe, A](f: A => Boolean): Transducer[R, A, A] =
     cata_[R, A, A](
       done[R, A],
       (a: A) => if (f(a)) one(a) else done,
@@ -153,7 +153,7 @@ trait Transducers {
           case some => emit(some) append next.takeWhile(f)
         })
 
-  def first[R :_safe, A]: Transducer[R, A, A] = (producer: Producer[R, A]) => {
+  def first[R :_Safe, A]: Transducer[R, A, A] = (producer: Producer[R, A]) => {
     Producer(producer.run flatMap {
       case Done() => done.run
       case One(a) => one(a).run
@@ -161,7 +161,7 @@ trait Transducers {
     })
   }
 
-  def last[R :_safe, A]: Transducer[R, A, A] = (producer: Producer[R, A]) => {
+  def last[R :_Safe, A]: Transducer[R, A, A] = (producer: Producer[R, A]) => {
     def go(p: Producer[R, A], previous: Option[A]): Producer[R, A] =
       Producer(p.run flatMap {
         case Done() => previous.map(pr => one(pr)).getOrElse(done).run
@@ -172,7 +172,7 @@ trait Transducers {
     go(producer, None)
   }
 
-  def scan[R :_safe, A, B](start: B)(f: (B, A) => B): Transducer[R, A, B] = (producer: Producer[R, A]) => {
+  def scan[R :_Safe, A, B](start: B)(f: (B, A) => B): Transducer[R, A, B] = (producer: Producer[R, A]) => {
     def go(p: Producer[R, A], previous: B): Producer[R, B] =
       Producer(p.run flatMap {
         case Done() => done.run
@@ -185,23 +185,23 @@ trait Transducers {
     one(start) append go(producer, start)
   }
 
-  def scan1[R :_safe, A](f: (A, A) => A): Transducer[R, A, A] = (producer: Producer[R, A]) =>
+  def scan1[R :_Safe, A](f: (A, A) => A): Transducer[R, A, A] = (producer: Producer[R, A]) =>
     producer.first.flatMap(a => producer.drop(1).scan(a)(f))
 
-  def reduceSemigroup[R :_safe, A : Semigroup]: Transducer[R, A, A] =
+  def reduceSemigroup[R :_Safe, A : Semigroup]: Transducer[R, A, A] =
     reduce(Semigroup[A].append(_, _))
 
-  def reduce[R :_safe, A](f: (A, A) => A): Transducer[R, A, A] = (producer: Producer[R, A]) =>
+  def reduce[R :_Safe, A](f: (A, A) => A): Transducer[R, A, A] = (producer: Producer[R, A]) =>
     last.apply(scan1(f).apply(producer))
 
-  def reduceMonoid[R :_safe, A : Monoid]: Transducer[R, A, A] =
+  def reduceMonoid[R :_Safe, A : Monoid]: Transducer[R, A, A] =
     reduceSemigroup[R, A]
 
-  def reduceMap[R :_safe, A, B : Monoid](f: A => B): Transducer[R, A, B] = (producer: Producer[R, A]) =>
+  def reduceMap[R :_Safe, A, B : Monoid](f: A => B): Transducer[R, A, B] = (producer: Producer[R, A]) =>
     reduceMonoid[R, B].apply(transducer(f).apply(producer))
 
 
-  def zipWithPrevious[R :_safe, A]: Transducer[R, A, (Option[A], A)] =
+  def zipWithPrevious[R :_Safe, A]: Transducer[R, A, (Option[A], A)] =
     (producer: Producer[R, A]) => {
       def go(p: Producer[R, A], previous: Option[A]): Producer[R, (Option[A], A)] =
         Producer(peek(p) flatMap {
@@ -212,7 +212,7 @@ trait Transducers {
       go(producer, None)
     }
 
-  def zipWithNext[R :_safe, A]: Transducer[R, A, (A, Option[A])] =
+  def zipWithNext[R :_Safe, A]: Transducer[R, A, (A, Option[A])] =
     (producer: Producer[R, A]) => {
       def go(p: Producer[R, A], previous: A): Producer[R, (A, Option[A])] =
         Producer(peek(p) flatMap {
@@ -225,15 +225,15 @@ trait Transducers {
       })
     }
 
-  def zipWithPreviousAndNext[R :_safe, A]: Transducer[R, A, (Option[A], A, Option[A])] =
+  def zipWithPreviousAndNext[R :_Safe, A]: Transducer[R, A, (Option[A], A, Option[A])] =
     (p: Producer[R, A]) =>
       ((p |> zipWithPrevious) zip (p |> zipWithNext)).map { case ((prev, a), (_, next)) => (prev, a, next) }
 
 
-  def zipWithIndex[R :_safe, A]: Transducer[R, A, (A, Int)] =
+  def zipWithIndex[R :_Safe, A]: Transducer[R, A, (A, Int)] =
     zipWithState[R, A, Int](0)((_, n: Int) => n + 1)
 
-  def zipWithState[R :_safe, A, B](b: B)(f: (A, B) => B): Transducer[R, A, (A, B)] =
+  def zipWithState[R :_Safe, A, B](b: B)(f: (A, B) => B): Transducer[R, A, (A, B)] =
     (producer: Producer[R, A]) => {
       def go(p: Producer[R, A], state: B): Producer[R, (A, B)] =
         Producer[R, (A, B)] {
@@ -258,7 +258,7 @@ trait Transducers {
       go(producer, b)
     }
 
-  def intersperse[R :_safe, A](in: A): Transducer[R, A, A] =
+  def intersperse[R :_Safe, A](in: A): Transducer[R, A, A] =
     (producer: Producer[R, A]) =>
       Producer[R, A](
         producer.run flatMap {
@@ -276,7 +276,7 @@ trait Transducers {
         })
 
 
-  private def cata_[R :_safe, A, B](onDone: Producer[R, B], onOne: A => Producer[R, B], onMore: (List[A], Producer[R, A]) => Producer[R, B]): Transducer[R, A, B] =
+  private def cata_[R :_Safe, A, B](onDone: Producer[R, B], onOne: A => Producer[R, B], onMore: (List[A], Producer[R, A]) => Producer[R, B]): Transducer[R, A, B] =
     (producer: Producer[R, A]) => cata(producer)(onDone, onOne, onMore)
 }
 
