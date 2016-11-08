@@ -1,8 +1,6 @@
 package org.specs2.control
 package eff
 
-import java.util.concurrent.{ExecutorService, Executors, ScheduledExecutorService}
-
 import scalaz._
 import org.specs2.control.eff.syntax.all._
 import all._

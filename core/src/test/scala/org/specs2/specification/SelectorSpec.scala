@@ -163,13 +163,13 @@ class SelectorSpec extends script.Specification with Groups with ResultMatchers 
         ex("e4")
       )
 
-      filterIncluded(fragments, Seq("x")).map(_.setLocation(location)) ==== List(
+      filterIncluded(fragments, Seq("x")).map(_.description) ==== List(
         ff.break,
         ff.break,
         ex("e2"),
         ff.break,
         ex("e4")
-      ).map(_.setLocation(location))
+      ).map(_.description)
     }
 
   }

@@ -59,7 +59,7 @@ trait DefaultSelector extends Selector {
     val arguments = env.arguments
 
     def go: AsyncTransducer[Fragment, Fragment] =
-      (transducers.state[ActionStack, Fragment, Option[Fragment], List[NamedTag]](Nil) {
+      transducers.state[ActionStack, Fragment, Option[Fragment], List[NamedTag]](Nil) {
         case (f @ Fragment(m @ Marker(t, _, _),_,_), sections)  =>
           (Option(f), updateSections(sections, t))
 
@@ -70,7 +70,7 @@ trait DefaultSelector extends Selector {
 
         case (fragment, sections) =>
           (Option(fragment), sections)
-      }).flatMap(f => emit(f.toList))
+      } flatMap (f => emit(f.toList))
 
     if ((arguments.include + arguments.exclude).nonEmpty) normalize |> go |> removeAdditionalEmptyText
     else transducers.id
@@ -101,11 +101,11 @@ trait DefaultSelector extends Selector {
       transducers.producerState[ActionStack, (Fragment, Option[Fragment]), Fragment, S]((None, Nil)){
         // section for before if this is the start of a section, do a swap
         case ((f @ Fragment(m @ Marker(t, true, false),_,_), _), (previous, sections)) if !isEndTag(sections, t) =>
-          (emit(f.copy(description = m.copy(appliesToNext = true)) +: previous.toList), (previous, updateSections(sections, t)))
+          (emit(f.copy(description = m.copy(appliesToNext = true)) +: previous.toList), (None, updateSections(sections, t)))
 
         // section for before if this is the end of a section, don't swap
         case ((m @ Fragment(Marker(t, true, false),_,_), _), (previous, sections)) if isEndTag(sections, t) =>
-          (emit(previous.toList :+ m), (previous, updateSections(sections, t)))
+          (emit(previous.toList :+ m), (None, updateSections(sections, t)))
 
         // tag for before
         case ((f @ Fragment(m @ Marker(t, false, false),_,_), _), (previous, sections))  =>
@@ -115,7 +115,7 @@ trait DefaultSelector extends Selector {
           (emit(previous.toList), (Option(f), sections))
 
         case ((f, None), (previous, sections)) =>
-          (emit(previous.toList :+ f), (previous, sections))
+          (emit(previous.toList :+ f), (None, Nil))
       }
     }
     zipWithNext[ActionStack, Fragment] |> go
@@ -136,15 +136,15 @@ trait DefaultSelector extends Selector {
         // tag or section for before
         case ((m @ Fragment(Marker(t, _, false),_,_), _), previous)  =>
           if (previous.exists(isEmptyText))
-            (emit(m +: previous.toList), previous)
+            (emit(m +: previous.toList), None)
           else
-            (emit(previous.toList :+ m), previous)
+            (emit(previous.toList :+ m), None)
 
-        case ((f, _), previous @ Some(_)) =>
+        case ((f, Some(_)), previous) =>
           (emit(previous.toList), Some(f))
 
-        case ((f, _), None) =>
-          (one(f), None)
+        case ((f, None), previous) =>
+          (emit(previous.toList :+ f), None)
       }
     }
     zipWithNext[ActionStack, Fragment] |> go
@@ -157,14 +157,14 @@ trait DefaultSelector extends Selector {
         case ((m @ Fragment(Marker(t, _, true),_,_), _), previous) =>
           (emit(previous.toList), Some(m))
 
-        case ((f, _), previous @ Some(_)) if isEmptyText(f) =>
+        case ((f, Some(_)), previous) if isEmptyText(f) =>
           (one(f), previous)
 
-        case ((f, _), previous @ Some(_)) =>
+        case ((f, Some(_)), previous) =>
           (emit(previous.toList :+ f), None)
 
-        case ((f, _), None) =>
-          (one(f), None)
+        case ((f, None), previous) =>
+          (emit(previous.toList :+ f), None)
       }
     }
     zipWithNext[ActionStack, Fragment] |> go
@@ -176,13 +176,13 @@ trait DefaultSelector extends Selector {
         (done, previous :+ f.copy(description = m.copy(isSection = true)))
 
       case (f, previous) =>
-        (emit(previous ++ List(f) ++ previous), previous)
+        (emit(previous ++ List(f) ++ previous), Nil)
     }
   }
 
   def removeAdditionalEmptyText: AsyncTransducer[Fragment, Fragment] = { producer: Producer[ActionStack, Fragment] =>
     one[ActionStack, Fragment](FormattingFragments.br) append
-    producer.filter(f => !Fragment.isEmptyText(f) && !Fragment.isFormatting(f)).
+    producer.filter(f => !Fragment.isEmptyText(f) && !Fragment.isFormatting(f) && !Fragment.isMarker(f)).
       flatMap(f => emit(List(FormattingFragments.br, f)))
   }
 
