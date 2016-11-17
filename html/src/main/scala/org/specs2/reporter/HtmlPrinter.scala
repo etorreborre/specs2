@@ -96,7 +96,7 @@ trait HtmlPrinter extends Printer {
    *  - the template
    *  - the body of the file (built from the specification execution)
    */
-  def makeHtml(template: String, spec: SpecStructure, stats: Stats, timer: SimpleTimer, opiions: HtmlOptions, arguments: Arguments): Operation[String] =
+  def makeHtml(template: String, spec: SpecStructure, stats: Stats, timer: SimpleTimer, options: HtmlOptions, arguments: Arguments): Operation[String] =
     makeBody(spec, stats, timer, options, arguments, pandoc = true).flatMap { body =>
       val variables1 =
         options.templateVariables

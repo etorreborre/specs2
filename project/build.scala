@@ -41,7 +41,7 @@ object build extends Build {
   /** COMMON SETTINGS */
   lazy val specs2Settings: Seq[Settings] = Seq(
     organization := "org.specs2",
-    specs2Version in GlobalScope <<= version,
+    specs2Version in GlobalScope := version.value,
     scalazVersion in GlobalScope := "7.2.7",
     specs2ShellPrompt,
     scalaVersion := "2.11.8",
@@ -243,7 +243,7 @@ object build extends Build {
    */
   lazy val releaseSettings: Seq[Settings] =
     ReleasePlugin.releaseSettings ++ Seq(
-    tagName <<= (version in ThisBuild) map (v => "SPECS2-" + v),
+    tagName := "SPECS2-" + (version in ThisBuild).value,
     crossBuild := true,
     releaseProcess := Seq[ReleaseStep](
       checkSnapshotDependencies,
@@ -371,15 +371,15 @@ object build extends Build {
    */
   lazy val siteSettings: Seq[Settings] = ghpages.settings ++ SbtSite.site.settings ++
     Seq(
-    siteSourceDirectory <<= target (_ / "specs2-reports" / "site"),
+    siteSourceDirectory := target.value / "specs2-reports" / "site",
     // copy the api files to a versioned directory
-    siteMappings <++= (mappings in packageDoc in Compile, version) map { (m, v) => m.map { case (f, d) => (f, s"api/SPECS2-$v/$d") } },
+    siteMappings ++= { (mappings in packageDoc in Compile).value.map { case (f, d) => (f, s"api/SPECS2-${version.value}/$d") } },
     includeFilter in makeSite := AllPassFilter,
     // override the synchLocal task to avoid removing the existing files
-    synchLocal <<= (privateMappings, updatedRepository, gitRunner, streams) map { (mappings, repo, git, s) =>
-      val betterMappings = mappings map { case (file, target) => (file, repo / target) }
+    synchLocal := {
+      val betterMappings = privateMappings.value map { case (file, target) => (file, updatedRepository.value / target) }
       IO.copy(betterMappings)
-      repo
+      updatedRepository.value
     },
     gitRemoteRepo := "git@github.com:etorreborre/specs2.git"
   )
@@ -401,10 +401,20 @@ object build extends Build {
     inConfig(Test)(testTaskOptions(task))        ++
     (testOptions in (Test, task) ++= options)
 
+
   def testTask(task: TaskKey[Tests.Output]) =
-    task <<= (streams in Test, loadedTestFrameworks in Test, testLoader in Test,
-      testGrouping in Test in test, testExecution in Test in task,
-      fullClasspath in Test in test, javaHome in test) flatMap Defaults.allTestGroupsTask
+    task := Def.taskDyn {
+      Def.task(
+        Defaults.allTestGroupsTask(
+          (streams in Test).value,
+          (loadedTestFrameworks in Test).value,
+          (testLoader in Test).value,
+          (testGrouping in Test in test).value,
+          (testExecution in Test in task).value,
+          (fullClasspath in Test in test).value,
+          (javaHome in test).value
+        )).flatMap(identity)
+    }.value
 
   /**
    * PUBLICATION
@@ -414,10 +424,7 @@ object build extends Build {
   lazy val releaseToSonatype = executeStepTask(sonatypeReleaseAll, "Closing and promoting the Sonatype repo")
 
   lazy val publicationSettings: Seq[Settings] = Seq(
-    publishTo in Global <<= version { v: String =>
-      val nexus = "https://oss.sonatype.org/"
-      Some("staging" at nexus + "service/local/staging/deploy/maven2")
-    },
+    publishTo in Global := Some("staging" at "https://oss.sonatype.org/service/local/staging/deploy/maven2"),
     publishMavenStyle := true,
     publishArtifact in Test := false,
     pomIncludeRepository := { x => false },
