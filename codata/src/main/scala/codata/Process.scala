@@ -6,11 +6,9 @@ import java.util.concurrent.atomic.{AtomicBoolean, AtomicReference}
 
 import scala.annotation.tailrec
 import scala.collection.SortedMap
-import scala.concurrent.duration._
-import scala.Function.const
 
 import org.specs2.codata.async.immutable.Signal
-import scalaz.{\/-, Catchable, Functor, Monad, Monoid, Nondeterminism, \/, -\/, ~>}
+import scalaz.{\/-, Catchable, Monad, Monoid, Nondeterminism, \/, -\/, ~>}
 import scalaz.\/._
 import scalaz.concurrent.{Actor, Future, Strategy, Task}
 import org.specs2.codata.process1.Await1

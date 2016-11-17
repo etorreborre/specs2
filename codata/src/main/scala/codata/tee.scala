@@ -2,7 +2,7 @@ package org.specs2.codata
 
 import Cause._
 import scala.annotation.tailrec
-import scalaz.{\/-, \/}
+import scalaz.\/
 import scalaz.\/._
 import org.specs2.codata.Process._
 import org.specs2.codata.Util._

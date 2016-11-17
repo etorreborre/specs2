@@ -1,14 +1,10 @@
 package org.specs2.codata.async.mutable
 
-import java.util.concurrent.atomic.AtomicInteger
-
 import org.specs2.codata.Cause._
 import scalaz.concurrent.{Actor, Strategy, Task}
-import org.specs2.codata.Process.Halt
-import org.specs2.codata.async
 import org.specs2.codata.async.immutable
-import org.specs2.codata.{Cause, Util, Process, Sink}
-import scalaz.{Either3, -\/, \/, \/-}
+import org.specs2.codata.{Cause, Process, Sink}
+import scalaz.{-\/, \/, \/-}
 import scalaz.\/._
 
 
