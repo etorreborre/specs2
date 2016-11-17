@@ -1,11 +1,8 @@
 package org.specs2
 
-import java.util.concurrent.TimeUnit
-
 import control.eff._
 import all._
 import syntax.all._
-import concurrent.ExecutionEnv
 
 import scala.concurrent.duration.{Duration, FiniteDuration}
 import scalaz._
@@ -19,7 +16,6 @@ import WarningsEffect._
 import org.specs2.control.producer._
 
 import scala.concurrent._
-import scala.util.control.NonFatal
 import scala.concurrent.ExecutionContext.Implicits.global
 
 package object control {
@@ -45,13 +41,14 @@ package object control {
   type AsyncSink[A] = origami.Fold[ActionStack, A, Unit]
 
 
-  val asyncService = AsyncFutureService.create
+  val asyncInterpreter = AsyncFutureInterpreter.create(global)
+  import asyncInterpreter._
 
   def emitAsync[A](as: A*): AsyncStream[A] =
     producer.producers.emitSeq(as)
 
   def emitAsyncDelayed[A](a: A): AsyncStream[A] =
-    producer.producers.eval(asyncService.asyncDelay(a))
+    producer.producers.eval(asyncDelay(a))
 
   /**
    * warn the user about something that is probably wrong on his side,
@@ -84,33 +81,6 @@ package object control {
     operation.execSafe.flatMap(_.fold(t => exception[S, A](t), a => Eff.pure[S, A](a))).
       runError.runConsoleToPrinter(printer).runWarnings.run
   }
-
-  def withTimeout[A](action: Action[A])(timeout: FiniteDuration, env: ExecutionEnv): Action[A] =
-    interpret.interceptNat[ActionStack, Async, A](action)(new (Async ~> Async) {
-      def apply[X](tx: Async[X]) =
-        tx match {
-          case AsyncFutureNow(a)     => AsyncFutureNow(a)
-          case AsyncFutureFailed(t)  => AsyncFutureFailed(t)
-          case AsyncFutureDelayed(a) => apply(AsyncFuture(env.executionContext, { ec => Future(a())(ec) }))
-
-          case AsyncFuture(ecx, x) => AsyncFuture(ecx, { implicit ec =>
-            lazy val f = x(ec)
-            if (timeout.isFinite && timeout.length < 1) {
-              try f catch { case NonFatal(t) => Future.failed(t) }
-            } else {
-              val p = Promise[X]()
-              val r = new Runnable {
-                def run: Unit = {
-                  p completeWith { try f catch { case NonFatal(t) => Future.failed(t) } }
-                  ()
-                }
-              }
-              env.scheduledExecutorService.schedule(r, timeout.toMillis, TimeUnit.MILLISECONDS)
-              p.future
-            }
-          })
-        }
-    })
 
   def attemptAction[A](action: Action[A], printer: String => Unit = s => ()): Throwable \/ A =
     runAction(action, printer) match {
@@ -229,11 +199,11 @@ package object control {
     def protect[A](a: =>A): Action[A] =
       SafeEffect.protect(a)
 
-    def asyncDelay[A](a: =>A): Action[A] =
-      asyncService.asyncDelay(a)
+    def asyncDelayAction[A](a: =>A, timeout: Option[FiniteDuration] = None): Action[A] =
+      AsyncEffect.asyncDelay[ActionStack, A](a, timeout)
 
-    def asyncFork[A](a: =>A)(implicit ec: ExecutionContext): Action[A] =
-      AsyncFutureService.fromExecutionContext(ec).asyncFork(a)
+    def asyncForkAction[A](a: =>A, timeout: Option[FiniteDuration] = None): Action[A] =
+      AsyncEffect.asyncFork[ActionStack, A](a, timeout)
 
     def delayed[A](a: =>A): Action[A] =
       ErrorEffect.ok(a)

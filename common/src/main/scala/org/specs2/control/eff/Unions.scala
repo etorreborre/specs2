@@ -24,12 +24,12 @@ case class Unions[R, A](first: Union[R, A], rest: List[Union[R, Any]]) {
    * if the first effect of this Unions object is interpreted
    */
   def continueWith[B](continuation: Arrs[R, List[Any], B]): Arrs[R, A, B] =
-    Arrs.singleton { (x: X) =>
-      rest match {
-        case Nil    => continuation(x :: Nil)
-        case h :: t => ImpureAp[R, h.X, B](Unions[R, h.X](h, t), Arrs.singleton((ys: List[Any]) => continuation(x :: ys)))
-      }
+  Arrs.singleton { (x: X) =>
+    rest match {
+      case Nil    => continuation(x :: Nil)
+      case h :: t => ImpureAp[R, h.X, B](Unions[R, h.X](h, t), Arrs.singleton((ys: List[Any]) => continuation(x :: ys)))
     }
+  }
 
   def into[S](f: UnionInto[R, S]): Unions[S, A] =
     Unions[S, A](f(first), rest.map(f.apply))
@@ -39,17 +39,17 @@ case class Unions[R, A](first: Union[R, A], rest: List[Union[R, Any]]) {
    * in a stack containing no more M effects
    */
   def project[M[_], U](implicit m: Member.Aux[M, R, U]): CollectedUnions[M, R, U] =
-    collect[M, U](m.project)
+  collect[M, U](m.project)
 
   /**
    * collect all the M effects and create a continuation for other effects
    * in the same stack
    */
   def extract[M[_]](implicit m: M /= R): CollectedUnions[M, R, R] =
-    collect[M, R](u => m.extract(u) match {
-      case Some(mx) => Right(mx)
-      case None     => Left(u)
-    })
+  collect[M, R](u => m.extract(u) match {
+    case Some(mx) => Right(mx)
+    case None     => Left(u)
+  })
 
   private def collect[M[_], U](collect: Union[R, Any] => Union[U, Any] Either M[Any]): CollectedUnions[M, R, U] = {
     val (effectsAndIndices, othersAndIndices) =
@@ -70,11 +70,8 @@ case class Unions[R, A](first: Union[R, A], rest: List[Union[R, Any]]) {
   def transform[M[_]](nat: M ~> M)(implicit m: M /= R): Unions[R, A] =
     Unions(m.transformUnion(nat)(first), rest.map(m.transformUnion(nat)))
 
-}
-
-object Unions {
-  def send[M[_], R, X](mx: M[X])(implicit m: MemberIn[M, R]) =
-    Unions[R, X](m.inject(mx), Nil)
+  def transformInto[M[_], N[_], U, S](nat: M ~> N)(implicit m: Member.Aux[M, R, U], n: Member.Aux[N, S, U]): Unions[S, A] =
+    Unions[S, A](m.transformUnionInto(nat)(first), rest.map(u => m.transformUnionInto(nat)(u)))
 }
 
 /**
@@ -104,7 +101,6 @@ case class CollectedUnions[M[_], R, U](effects: List[M[Any]], otherEffects: List
     (ls.zip(indices) ++ xs.zip(otherIndices)).sortBy(_._2).map(_._1)
 
 }
-
 
 trait UnionInto[R, S] {
   def apply[A](union: Union[R, A]): Union[S, A]

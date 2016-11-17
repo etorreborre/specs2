@@ -56,11 +56,11 @@ trait TextPrinter extends Printer {
       Actions.protect(lines.foreach(_.log(logger))))
 
   def start(logger: LineLogger, header: SpecHeader, args: Arguments): Action[LineLogger] =
-    asyncDelay(printHeader(args)(header).foreach(_.log(logger))).as(logger)
+    asyncDelayAction(printHeader(args)(header).foreach(_.log(logger))).as(logger)
 
   def printFinalStats(spec: SpecStructure, args: Arguments, logger: LineLogger): (((Stats, Int), SimpleTimer)) => Action[Unit] = { case ((stats, _), timer) =>
-    asyncDelay(printStats(spec.header, args, stats, timer).foreach(_.log(logger))) >>
-    asyncDelay(logger.close)
+    asyncDelayAction(printStats(spec.header, args, stats, timer).foreach(_.log(logger))) >>
+    asyncDelayAction(logger.close)
   }
 
   def printHeader(args: Arguments): SpecHeader => List[LogLine] = { header: SpecHeader =>

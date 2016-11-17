@@ -27,14 +27,14 @@ trait eff {
   }
 
   implicit class EffOneEffectOps[M[_] : Monad, A](e: Eff[Fx1[M], A]) {
-    def detach: M[A] =
+    def detach(implicit bindRec: BindRec[M]): M[A] =
       Eff.detach(e)
 
   }
 
   implicit class EffOneEffectApplicativeOps[M[_] : Monad, A](e: Eff[Fx1[M], A]) {
-    def detachA(implicit applicative: Applicative[M]): M[A] =
-      Eff.detachA(e)(implicitly[Monad[M]], applicative)
+    def detachA(implicit bindRec: BindRec[M], applicative: Applicative[M]): M[A] =
+      Eff.detachA(e)(implicitly[Monad[M]], bindRec, applicative)
   }
 
   implicit class EffOnePureValueOps[R, A](e: Eff[R, A]) {

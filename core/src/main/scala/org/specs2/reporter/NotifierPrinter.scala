@@ -27,8 +27,8 @@ object NotifierPrinter {
 
     def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment] = {
       (notifyFold.into[ActionStack]
-      	.startWith(asyncDelay(notifier.specStart(spec.name, "")))
-      	.endWith(asyncDelay(notifier.specEnd(spec.name, ""))).observeWithNextState(notifySink(spec, notifier, env.arguments))).void
+      	.startWith(asyncDelayAction(notifier.specStart(spec.name, "")))
+      	.endWith(asyncDelayAction(notifier.specEnd(spec.name, ""))).observeWithNextState(notifySink(spec, notifier, env.arguments))).void
     }
   }
 

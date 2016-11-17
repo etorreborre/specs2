@@ -238,6 +238,12 @@ trait Member[T[_], R] extends MemberInOut[T, R] {
   def extract[V](union: Union[R, V]): Option[T[V]] =
     project(union).right.toOption
 
+  def transformUnionInto[N[_], U, S, X](nat: T ~> N)(union: Union[R, X])(implicit n: Member.Aux[N, S, U]): Union[S, X] =
+    project(union) match {
+      case Right(tv) => n.inject(nat(tv))
+      case Left(u)   => n.accept(u.asInstanceOf[Union[n.Out, X]])
+    }
+
 }
 
 object Member extends MemberLower1 {

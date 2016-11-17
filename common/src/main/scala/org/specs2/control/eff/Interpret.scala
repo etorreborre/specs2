@@ -143,7 +143,7 @@ trait Interpret {
       ls match {
         case Last(None) => Eff.pure[U, Unit](())
         case Last(Some(l)) =>
-          l() match {
+          l.value match {
             case Pure(u, last) => goLast(last, s)
 
             case Impure(union, continuation, last) =>
@@ -276,7 +276,7 @@ trait Interpret {
       ls match {
         case Last(None) => Eff.pure[R, Unit](())
         case Last(Some(l)) =>
-          l() match {
+          l.value match {
             case Pure(u, last) => goLast(last, s)
 
             case Impure(union, continuation, last) =>
@@ -367,7 +367,7 @@ trait Interpret {
       ls match {
         case Last(None) => Eff.pure[BR, Unit](())
         case Last(Some(l)) =>
-          l() match {
+          l.value match {
             case Pure(u, last) => goLast(last)
 
             case Impure(union, continuation, last) =>
@@ -398,8 +398,8 @@ trait Interpret {
               Impure(br.accept(u1), Arrs.singleton((x: u.X) => go(c(x).addLast(last))))
           }
 
-        case ap @ ImpureAp(_,_,_) =>
-          go(ap.toMonadic)
+        case ap @ ImpureAp(unions, continuation, last) =>
+          ImpureAp(unions.transformInto(nat), Arrs.singleton(x => transform(continuation(x).addLast(last), nat)))
       }
     }
 
@@ -416,7 +416,7 @@ trait Interpret {
       ls match {
         case Last(None) => Eff.pure[U, Unit](())
         case Last(Some(l)) =>
-          l() match {
+          l.value match {
             case Pure(u, last) => goLast(last)
 
             case Impure(union, continuation, last) =>
@@ -489,7 +489,7 @@ trait Interpret {
       ls match {
         case Last(None) => Eff.pure[U, Unit](())
         case Last(Some(l)) =>
-          l() match {
+          l.value match {
             case Pure(u, last) => goLast(last)
 
             case i @ Impure(union, continuation, last) =>
@@ -519,15 +519,14 @@ trait Interpret {
     }
   }
 
-  def write[R, T[_], O, A](eff: Eff[R, A])(w: Write[T, O])(implicit m: MemberInOut[T, R]): Eff[Fx.prepend[Writer[O, ?], R], A] =  {
-    type U = Fx.prepend[Writer[O, ?], R]
+  def augment[R, T[_], O[_], A](eff: Eff[R, A])(w: Augment[T, O])(implicit m: MemberInOut[T, R]): Eff[Fx.prepend[O, R], A] =  {
+    type U = Fx.prepend[O, R]
     implicit val mw = MemberIn.MemberInAppendAnyL
 
     translateInto(eff)(new Translate[T, U] {
-      def apply[X](tx: T[X]) = WriterEffect.tell[U, O](w(tx)) >> send(tx)
+      def apply[X](tx: T[X]): Eff[U, X] = send[O, U, Unit](w(tx)) >> send[T, U, X](tx)
     })
   }
-
 
   /**
    * Intercept the values for one effect and transform them into
@@ -541,7 +540,7 @@ trait Interpret {
       ls match {
         case Last(None) => Eff.pure[R, Unit](())
         case Last(Some(l)) =>
-          l() match {
+          l.value match {
             case Pure(u, last) => goLast(last)
 
             case Impure(union, continuation, last) =>
@@ -664,6 +663,10 @@ trait Translate[T[_], U] {
 trait SideEffect[T[_]] {
   def apply[X](tx: T[X]): X
   def applicative[X, Tr[_] : Traverse](ms: Tr[T[X]]): Tr[X]
+}
+
+trait Augment[T[_], O[_]] {
+  def apply[X](tx: T[X]): O[Unit]
 }
 
 trait Write[T[_], O] {
