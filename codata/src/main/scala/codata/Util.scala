@@ -1,7 +1,6 @@
 package org.specs2.codata
 
 import scala.annotation.tailrec
-import java.util.concurrent.atomic.AtomicInteger
 
 private[codata] object Util {
 

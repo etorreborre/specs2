@@ -1,6 +1,6 @@
 package org.specs2.codata
 
-import scalaz.{Monoid, Applicative, Equal, Monad}
+import scalaz.{Monoid, Equal, Monad}
 
 
 sealed trait ReceiveY[+A,+B] {

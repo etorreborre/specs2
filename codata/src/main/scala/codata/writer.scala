@@ -1,6 +1,6 @@
 package org.specs2.codata
 
-import scalaz._, Scalaz._, \/._
+import scalaz._, \/._
 import scalaz.concurrent.Task
 import org.specs2.codata.Process._
 
