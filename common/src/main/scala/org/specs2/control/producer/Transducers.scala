@@ -21,20 +21,61 @@ trait Transducers {
   def transducer[R :_Safe, A, B](f: A => B): Transducer[R, A, B] =
     (p: Producer[R, A]) => p.map(f)
 
-  def producerState[R :_Safe, A, B, S](start: S)(f: (A, S) => (Producer[R, B], S)): Transducer[R, A, B] = (producer: Producer[R, A]) => {
-    def go(p: Producer[R, A], s: S): Producer[R, B] =
-      Producer(p.run flatMap {
-        case Done() => done.run
-        case One(a) => f(a, s)._1.run
-        case More(as, next) =>
-          val (bs, news) = as.drop(1).foldLeft(f(as.head, s)) { case ((pb, s1), a) =>
-            val (pb1, s2) = f(a, s1)
-            (pb append pb1, s2)
-          }
-          (bs append go(next, news)).run
-      })
-    go(producer, start)
-  }
+  def producerState[R :_Safe, A, B, S](start: S, last: Option[S => Producer[R, B]] = None)(f: (A, S) => (Producer[R, B], S)): Transducer[R, A, B] =
+    (producer: Producer[R, A]) => {
+      def go(p: Producer[R, A], s: S): Producer[R, B] =
+        Producer(p.run flatMap {
+          case Done() =>
+            last.map(_(s).run).getOrElse(done.run)
+
+          case One(a) =>
+            val (b, news) = f(a, s)
+            last match {
+              case None => b.run
+              case Some(l) => (b append l(news)).run
+            }
+
+          case More(as, next) =>
+            val (bs, news) = as.drop(1).foldLeft(f(as.head, s)) { case ((pb, s1), a) =>
+              val (pb1, s2) = f(a, s1)
+              (pb append pb1, s2)
+            }
+            (bs append go(next, news)).run
+        })
+      go(producer, start)
+    }
+
+  def producerStateEff[R :_Safe, A, B, S](start: S, last: Option[S => Producer[R, B]] = None)(f: (A, S) => Eff[R, (Producer[R, B], S)]): Transducer[R, A, B] =
+    (producer: Producer[R, A]) => {
+      def go(p: Producer[R, A], s: S): Producer[R, B] =
+        Producer(p.run flatMap {
+          case Done() =>
+            last match {
+              case Some(l) => l(s).run
+              case None    => done.run
+            }
+
+          case One(a) =>
+            f(a, s).flatMap { case (b, news) =>
+              last match {
+                case None => b.run
+                case Some(l) => (b append l(news)).run
+              }
+            }
+
+          case More(as, next) =>
+            val res = as.drop(1).foldLeft(f(as.head, s)) { (res, a) =>
+              res.flatMap { case (pb, s1) =>
+                f(a, s1).map { case (pb1, s2) =>
+                  (pb append pb1, s2)
+                }
+              }
+            }
+            producers.eval(res.map { case (bs, news) => bs append go(next, news) }).flatten.run
+        })
+
+      go(producer, start)
+    }
 
   def state[R :_Safe, A, B, S](start: S)(f: (A, S) => (B, S)): Transducer[R, A, B] = (producer: Producer[R, A]) => {
     def go(p: Producer[R, A], s: S): Producer[R, B] =
