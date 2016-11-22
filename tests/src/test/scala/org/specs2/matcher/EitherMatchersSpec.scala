@@ -13,7 +13,7 @@ class EitherMatchersSpec extends Spec with EitherMatchers with ResultMatchers { 
   ${ Right(Seq(1)) must beRight(===(Seq(1))) }
   ${ Left(1) must not be right(1) }
   ${ Right(1) must beRight.like { case i => i must be_>(0) } }
-  ${ (Right(1) must beRight.like { case i => i must be_<(0) }) returns "'Right(1)' is Right but 1 is not less than 0" }
+  ${ (Right(1) must beRight.like { case i => i must be_<(0) }) returns "Right(1) is Right but 1 is not less than 0" }
 
   beLeft checks if an element is Left(_)                                                                              
   ${ Left(1) must beLeft(1) }

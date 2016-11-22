@@ -23,12 +23,12 @@ class MatcherZipOperatorsSpec extends Spec with MustMatchers { def is = s2"""
   def ==~(d: =>Double) = beCloseTo(d +/- 0.1)
 
   def e1 = t1 must beMatching(t2)
-  def e2 = (t1 must beMatching(t3)) returns "For (z,b,c,List((d,1.0), (e,3.0)))\n  field _1: 'a' doesn't start with 'z'"
+  def e2 = (t1 must beMatching(t3)) returns "For (z,b,c,List((d,1.0), (e,3.0)))\n  field _1: a doesn't start with 'z'"
   def e3 = (t1 must beMatching(t4))  returns
     """|For (a,b,c,List((d,1.0), (e,3.0)))
        |  field _4: List((d,1.01), (e,2.02)) does not contain exactly 2 correct values in order
        |- (e,2.02)
        | * For (e,3.0)
-       |  field _2: '2.02' is not close to 3.0 +/- 0.1""".stripMargin
+       |  field _2: 2.02 is not close to 3.0 +/- 0.1""".stripMargin
 
 }

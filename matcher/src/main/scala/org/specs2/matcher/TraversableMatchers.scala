@@ -7,12 +7,15 @@ import text.Regexes._
 import text.Plural._
 import text.NotNullStrings._
 import collection.Seqx._
-import scala.collection.{GenTraversableOnce}
+
+import scala.collection.GenTraversableOnce
 import execute._
 import control.Times
 import execute.Failure
+
 import scala.annotation.tailrec
 import ValueChecks._
+import org.specs2.matcher.describe.Diffable
 /**
  * Matchers for traversables
  */
@@ -47,7 +50,7 @@ trait TraversableBaseMatchers { outer =>
   def atMost[T](checks: ValueCheck[T]*) : ContainWithResultSeq[T] = new ContainWithResultSeq(checks).atMost
 
   /** match if a traversable contains all the elements of seq (and maybe more) */
-  def containAllOf[T](seq: Seq[T]) = contain(atLeast(seq.map(v => valueIsTypedValueCheck(v)):_*))
+  def containAllOf[T : Diffable](seq: Seq[T]) = contain(atLeast(seq.map(v => valueIsTypedValueCheck(v)):_*))
   /** match if a traversable contains one of (t1, t2) */
   def containAnyOf[T](seq: Seq[T]) = contain(new BeOneOf(seq))
   /** match if traversable contains (x matches .*+t+.*) */
@@ -177,7 +180,7 @@ class SizedMatcher[T : Sized](n: Int, sizeWord: String) extends Matcher[T] {
     val valueSize = s.size(traversable.value)
     result(valueSize == n,
            traversable.description + " has "+sizeWord+" "+ n,
-           traversable.description + " doesn't have "+sizeWord+" " + n + " but "+sizeWord+" " + valueSize, traversable)
+           s"'${traversable.description}' doesn't have $sizeWord $n but $sizeWord $valueSize", traversable)
   }
 }
 

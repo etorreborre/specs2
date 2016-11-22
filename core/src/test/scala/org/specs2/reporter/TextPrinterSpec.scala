@@ -140,7 +140,7 @@ e3 $ko
   def d1 =
 s2"""e1 ${1 must_== 2}""" contains
       """|[error] x e1
-         |[error]  '1' is not equal to '2'"""
+         |[error]  1 != 2"""
 
   def d2 = Arguments.split("failtrace fullstacktrace") ^
 s2"""e1 ${1 must_== 2}""" contains
@@ -298,10 +298,10 @@ table ${
    1 ! 1   | { (i, j) => i === j}
   }""".stripMargin contains
     """|[error]_x_table
-       |[error]____|_a_|_b_|_______________________
-       |[error]__+_|_1_|_1_|_______________________
-       |[error]__x_|_1_|_2_|_'1'_is_not_equal_to_'2'
-       |[error]__+_|_1_|_1_|________________________"""
+       |[error]____|_a_|_b_|______
+       |[error]__+_|_1_|_1_|______
+       |[error]__x_|_1_|_2_|_1_!=_2
+       |[error]__+_|_1_|_1_|________"""
 
   /**
    * TEST METHODS

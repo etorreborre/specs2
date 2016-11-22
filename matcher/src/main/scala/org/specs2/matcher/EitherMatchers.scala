@@ -1,6 +1,8 @@
 package org.specs2
 package matcher
 
+import org.specs2.matcher.describe.Diffable
+
 /**
  * Matchers for the Either datatype
  */
@@ -9,25 +11,25 @@ object EitherMatchers extends EitherMatchers
 
 private[specs2]
 trait EitherBaseMatchers {
-  
+
   def beRight[T](t: ValueCheck[T]) = RightCheckedMatcher(t)
   def beRight[T] = new RightMatcher[T]
 
-  def right[T](t: T) = beRight(t)
+  def right[T : Diffable](t: T) = beRight(ValueChecks.valueIsTypedValueCheck(t))
   def right[T](t: ValueCheck[T]) = beRight(t)
   def right[T] = beRight
 
   def beLeft[T](t: ValueCheck[T]) = LeftCheckedMatcher(t)
   def beLeft[T] = LeftMatcher[T]()
 
-  def left[T](t: T) = beLeft(t)
+  def left[T : Diffable](t: T) = beLeft(ValueChecks.valueIsTypedValueCheck(t))
   def left[T](t: ValueCheck[T]) = beLeft(t)
   def left[T] = beLeft
 }
 
 private[specs2]
 trait EitherBeHaveMatchers extends BeHaveMatchers { outer: EitherBaseMatchers =>
-  implicit class EitherResultMatcher[L, R](result: MatchResult[Either[L, R]]) {
+  implicit class EitherResultMatcher[L : Diffable, R : Diffable](result: MatchResult[Either[L, R]]) {
     def right(r: =>R) = result(outer.beRight(r))
     def left(l: =>L) = result(outer.beLeft(l))
     def beRight(r: =>R) = result(outer.beRight(r))

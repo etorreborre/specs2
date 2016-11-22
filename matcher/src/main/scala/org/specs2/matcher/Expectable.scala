@@ -46,7 +46,7 @@ class Expectable[+T] private[specs2] (t: () => T) { outer =>
    * apply a matcher on the value and return a MatchResult which can later on be transformed to a simple Result
    */
   def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = {
-    if (m == null) throw new IllegalArgumentException("You cannot use a null matcher on "+description)
+    if (m == null) throw new IllegalArgumentException(s"You cannot use a null matcher on '$description'")
     check(m.apply(this))
   }
 
@@ -118,7 +118,7 @@ object Expectable {
     desc match {
       case None => value match {
         case b: Boolean   => "the value"
-        case _            => q(value)
+        case _            => value.notNull ///q(value)
       }
       case Some(de)       => de(value.notNull)
     }

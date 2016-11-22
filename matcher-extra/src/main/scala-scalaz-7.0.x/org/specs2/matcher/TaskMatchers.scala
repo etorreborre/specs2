@@ -2,6 +2,8 @@ package org.specs2
 package matcher
 
 import ValueChecks._
+import org.specs2.matcher.describe.Diffable
+
 import scalaz.concurrent.Task
 import text.NotNullStrings._
 
@@ -26,7 +28,7 @@ trait TaskMatchers {
     def withValue(check: ValueCheck[T]): TaskMatcher[T] =
       TaskMatcher(check)
 
-    def withValue(t: T): TaskMatcher[T] =
+    def withValue(t: T)(implicit di: Diffable[T]): TaskMatcher[T] =
       withValue(valueIsTypedValueCheck(t))
 
     private def failedAttempt[S <: Task[T]](e: Expectable[S])(t: Throwable): MatchResult[S] = {

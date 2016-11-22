@@ -134,10 +134,10 @@ trait ParserBaseMatchers extends TraversableMatchers {
       s.value match {
         case PSuccess(_, next) if !next.atEnd =>
           Matcher.result(true,
-                         s.description+" is a Success and the input was not completely parsed. "+
-                         remaining(next), s.description, s)
+                         s"'${s.description}' is a Success and the input was not completely parsed. ${remaining(next)}",
+                         s.description, s)
         case _                                                =>
-          Matcher.result(clazz.isInstance(s.value), s.description, s.description+" isn't a "+clazz.simpleName, s)
+          Matcher.result(clazz.isInstance(s.value), s.description, s"${s.description} isn't a ${clazz.simpleName}", s)
       }
     }
 
