@@ -23,13 +23,11 @@ import com.typesafe.tools.mima.plugin.MimaKeys._
 import xerial.sbt.Sonatype._
 import SonatypeKeys._
 import sbtbuildinfo.Plugin._
-import scoverage.ScoverageSbtPlugin._
-import ScoverageKeys._
 
 object build extends Build {
   type Settings = Def.Setting[_]
 
-  lazy val SCALAZ_VERSION = "7.1.0"
+  lazy val SCALAZ_VERSION = "7.1.11"
 
   /** MAIN PROJECT */
   lazy val specs2 = Project(
@@ -50,13 +48,12 @@ object build extends Build {
     specs2Version in GlobalScope <<= version,
     specs2ShellPrompt,
     scalazVersion := SCALAZ_VERSION,
-    scalaVersion := "2.11.5",
+    scalaVersion := "2.12.0",
     crossScalaVersions := Seq(scalaVersion.value, "2.10.4"))
 
   lazy val specs2Version = settingKey[String]("defines the current specs2 version")
   lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
-  lazy val paradisePlugin = Seq(compilerPlugin("org.scalamacros" %% "paradise"    % "2.0.0" cross CrossVersion.full),
-                                               "org.scalamacros" %% "quasiquotes" % "2.0.0")
+  lazy val paradisePlugin = Seq(compilerPlugin("org.scalamacros" %% "paradise"    % "2.1.0" cross CrossVersion.full))
 
   lazy val aggregateCompile = ScopeFilter(
              inProjects(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock),
@@ -120,6 +117,8 @@ object build extends Build {
           libraryDependencies ++= Seq(
             "org.scalaz"     %% "scalaz-core"       % scalazVersion.value,
             "org.scalaz"     %% "scalaz-concurrent" % scalazVersion.value,
+            "org.scala-lang.modules" %% "scala-xml" % "1.0.5",
+            "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.4",
             "org.scala-lang" %  "scala-reflect"     % scalaVersion.value,
             scalacheckLib % "test")) ++
       Seq(name := "specs2-common")
@@ -128,6 +127,7 @@ object build extends Build {
   lazy val core = Project(id = "core", base = file("core"),
     settings = Seq(
       libraryDependencies ++= Seq(
+        "org.scalaz"     %% "scalaz-concurrent" % scalazVersion.value,
         "org.scala-sbt"  % "test-interface" % "1.0" % "optional",
         mockitoLib % "test",
         junitLib   % "test")) ++
@@ -189,8 +189,8 @@ object build extends Build {
     settings = moduleSettings ++ Seq(
       name := "specs2-matcher-extra",
       libraryDependencies ++=
-        (if (scalazVersion.value == "7.1.0") Seq("org.scalaz.stream" %% "scalaz-stream" % "0.5a")
-         else                                Seq("org.scalaz.stream" %% "scalaz-stream" % "0.5")) ++
+        (if (scalazVersion.value == "7.1.0") Seq("org.scalaz.stream" %% "scalaz-stream" % "0.8.6a")
+         else                                Seq("org.scalaz.stream" %% "scalaz-stream" % "0.8.6")) ++
         (if (scalaVersion.value.startsWith("2.11")) Nil else paradisePlugin)
     )
   ).dependsOn(analysis, matcher, core % "test->test")
@@ -219,7 +219,7 @@ object build extends Build {
   /**
    * Main libraries 
    */
-  lazy val scalacheckLib = "org.scalacheck" %% "scalacheck"   % "1.12.1"
+  lazy val scalacheckLib = "org.scalacheck" %% "scalacheck"   % "1.12.6"
   lazy val mockitoLib    = "org.mockito"    % "mockito-core"  % "1.9.5"
   lazy val junitLib      = "junit"          % "junit"         % "4.11"
   lazy val hamcrestLib   = "org.hamcrest"   % "hamcrest-core" % "1.3"
@@ -244,8 +244,6 @@ object build extends Build {
     javaOptions += "-Xmx3G",
     fork in test := true,
     testOptions := Seq(Tests.Filter(s => Seq("Spec", "Guide", "Index").exists(s.endsWith) && Seq("Specification", "FeaturesSpec").forall(n => !s.endsWith(n))))
-  ) ++ instrumentSettings ++ Seq(
-    excludedPackages in ScoverageCompile := ".*create.AutoExamples.*;.*create.S2StringContext.*"
   )
 
   /**

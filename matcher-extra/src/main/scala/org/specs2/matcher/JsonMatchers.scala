@@ -5,7 +5,6 @@ import execute._
 import ResultLogicalCombinators._
 import MatchResultLogicalCombinators._
 import org.specs2.data.Sized
-import scala.util.parsing.json._
 import org.specs2.json._
 import Json._
 import control.Exceptions._
