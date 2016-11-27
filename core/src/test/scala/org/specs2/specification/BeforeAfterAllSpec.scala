@@ -24,20 +24,10 @@ class BeforeAfterAllSpec extends Specification { def is = s2"""
             | e2 $e2
             | """.stripMargin
 
-      def e1 = { messages.append("e1")
-        println("e1")
-        ok }
-      def e2 = { messages.append("e2")
-        println("e2")
-        ok }
-      def beforeAll = {
-        messages.append("before all")
-        println("before all")
-      }
-      def afterAll = {
-        messages.append("after all")
-        println("after all")
-      }
+      def e1 = { messages.append("e1"); ok }
+      def e2 = { messages.append("e2"); ok }
+      def beforeAll = messages.append("before all")
+      def afterAll = messages.append("after all")
     }
 
     runSpec(spec)

@@ -155,7 +155,7 @@ class ExecutorSpec(implicit ec: ExecutionContext) extends script.Specification w
     val timeFactor = env.arguments.execute.timeFactor
 
     val messages = new ListBuffer[String]
-    def verySlow      = { Thread.sleep(600 * timeFactor.toLong); messages.append("very slow"); success }
+    def verySlow = { Thread.sleep(600 * timeFactor.toLong); messages.append("very slow"); success }
 
     val fragments = Seq(example("very slow", verySlow))
     val env1 = env.setTimeout(100.millis * timeFactor.toLong)

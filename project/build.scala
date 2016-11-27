@@ -232,7 +232,7 @@ object build extends Build {
     cancelable in Global := true,
     testFrameworks := Seq(TestFramework("org.specs2.runner.Specs2Framework")),
     javaOptions ++= Seq("-Xmx3G", "-Xss4M"),
-    fork in test := true,
+    fork in (ThisBuild, Test) := true,
     testOptions := Seq(Tests.Filter(s =>
       (Seq(".guide.").exists(s.contains) || Seq("Spec", "Guide", "Website").exists(s.endsWith)) &&
         Seq("Specification", "FeaturesSpec").forall(n => !s.endsWith(n))))

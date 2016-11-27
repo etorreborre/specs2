@@ -26,21 +26,9 @@ case class Producer[R :_Safe, A](run: Eff[R, Stream[R, A]]) {
     flatMap(a => one(f(a)))
 
   def append(other: Producer[R, A]): Producer[R, A] =
-    Producer(run flatMap {
-      case Done() => other.run
-
-      case One(a) =>
-        val appended: Eff[R, Stream[R, A]] =
-          protect(other.run.map[Stream[R, A]] {
-            case Done() => One(a)
-            case One(b) => More(List(a, b), done)
-            case More(bs, next) => More(a +: bs, next)
-          }).flatten
-
-        appended.attempt.map {
-          case \/-(r) => r
-          case -\/(t)  => One(a)
-        }
+    Producer(run.flatMap {
+      case Done()         => protect(other.run).flatten
+      case One(a1)        => protect(More(List(a1), other))
       case More(as, next) => protect(More(as, next append other))
     })
 

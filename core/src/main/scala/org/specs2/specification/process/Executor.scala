@@ -2,6 +2,8 @@ package org.specs2
 package specification
 package process
 
+import java.util.concurrent.TimeoutException
+
 import scalaz.{Failure => _, Success => _, _}
 import Scalaz._
 import specification.core._
@@ -14,6 +16,7 @@ import producer._
 import producers._
 import Actions._
 import org.specs2.control.eff.syntax.all._
+import org.specs2.execute.{Result, Skipped, Success, Error}
 
 /**
  * Functions for executing fragments.
@@ -71,8 +74,8 @@ trait DefaultExecutor extends Executor {
    *  - the execution stops if one fragment indicates that the result of the previous executions is not correct
    */
   def sequencedExecution(env: Env): AsyncTransducer[Fragment, Fragment] = {
-    type S = (Vector[Fragment], Boolean)
-    val init: S = (Vector.empty, false)
+    type S = (Vector[Fragment], Result, Boolean)
+    val init: S = (Vector.empty, Success(), false)
     val arguments = env.arguments
 
     def executeFragments(fs: Seq[Fragment], timeout: Option[FiniteDuration] = None): AsyncStream[Fragment] =
@@ -81,41 +84,65 @@ trait DefaultExecutor extends Executor {
 
     def executeOneFragment(f: Fragment, timeout: Option[FiniteDuration] = None): Action[Fragment] =
       if (arguments.sequential) asyncDelayAction(executeFragment(env)(f), timeout)
-      else                      asyncForkAction(executeFragment(env)(f), timeout)
+      else                      asyncForkAction(executeFragment(env)(f), timeout).attempt.map {
+        case -\/(t: TimeoutException) => f.setExecution(Execution.result(Skipped("timed-out")))
+        case -\/(t) => f.setExecution(Execution.result(Error(t)))
+        case \/-(_) => f
+      }
 
 
     val last: S => AsyncStream[Fragment] = (s: S) =>
       s match {
-        case (fs, mustStop) =>
+        case (fs, previousResults, mustStop) =>
           if (mustStop) emit(fs.toList.map(_.skip))
           else          executeFragments(fs, env.timeout)
       }
 
-    transducers.producerStateEff(init, Option(last)) { case (fragment, (fragments, mustStop)) =>
+    transducers.producerStateEff(init, Option(last)) { case (fragment, (fragments, previousResults, mustStop)) =>
       val timeout = env.timeout.orElse(fragment.execution.timeout)
 
+      def stopAll(previousResults: Result, fragment: Fragment): Boolean = {
+        mustStop ||
+        arguments.stopOnFail && previousResults.isFailure ||
+        arguments.stopOnSkip && previousResults.isSkipped ||
+        fragment.execution.nextMustStopIf(previousResults) ||
+        fragment.executionFatalOrResult.isLeft
+      }
+
       if (arguments.skipAll || mustStop)
-        ok((one(if (fragment.isExecutable) fragment.skip else fragment), (Vector.empty, mustStop)))
+        ok((one(if (fragment.isExecutable) fragment.skip else fragment), (Vector.empty, previousResults, mustStop)))
+      else if (arguments.sequential)
+        executeOneFragment(fragment, timeout).flatMap { f =>
+          ok((one(f), (Vector.empty, previousResults, stopAll(f.executionResult, f))))
+        }
       else {
         if (fragments.count(_.isExecutable) >= arguments.threadsNb)
           executeFragments(fragments :+ fragment, timeout).run.flatMap {
-            case Done() => ok((done, (Vector.empty, mustStop)))
-            case producer.One(f) =>
-              ok((one(f), (Vector.empty, f.execution.result.isSuccess)))
-            case More(as, next) => ok((emitAsync(as:_*) append next, (Vector.empty, as.map(_.execution.result).forall(_.isSuccess))))
+            case Done()          => ok((done, (Vector.empty, previousResults, mustStop)))
+            case producer.One(f) => ok((one(f), (Vector.empty, f.executionResult |+| previousResults, mustStop)))
+            case More(as, next)  => ok((emitAsync(as:_*) append next, (Vector.empty, as.foldMap(_.executionResult) |+| previousResults, mustStop)))
           }
         else if (fragment.execution.mustJoin) {
           executeFragments(fragments, timeout).run.flatMap {
-            case Done() => ok((done, (Vector.empty, mustStop)))
-            case producer.One(f) => ok((one(f), (Vector.empty, f.execution.result.isSuccess)))
-            case More(as, next) => ok((emitAsync(as:_*) append next append executeFragments(List(fragment)), (Vector.empty, as.map(_.execution.result).forall(_.isSuccess))))
+            case Done() =>
+              ok((done, (Vector.empty, Success(), mustStop)))
+
+            case producer.One(f) =>
+              executeOneFragment(fragment, timeout).flatMap { step =>
+                ok((oneOrMore(f, List(step)), (Vector.empty, Success(), stopAll(f.executionResult |+| previousResults, step))))
+              }
+
+            case fs @ More(as, next) =>
+              executeOneFragment(fragment, timeout).flatMap { step =>
+                ok((emitAsync(as:_*) append next append one(step),
+                  (Vector.empty, Success(), stopAll(as.foldMap(_.executionResult) |+| previousResults, step))))
+              }
           }
         }
         else
-          ok((done[ActionStack, Fragment], (fragments :+ (if (fragment.isExecutable) fragment.skip else fragment), mustStop)))
+          ok((done[ActionStack, Fragment], (fragments :+ fragment, previousResults, mustStop)))
       }
     }
-
 
 
 //    type Barrier = (List[Future[Any]], FatalExecution \/ Result)
