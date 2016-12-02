@@ -62,7 +62,7 @@ class FutureMatchersSpec(env: Env) extends Specification with ResultMatchers wit
     val thrown = new mutable.Specification with FutureMatchers {
       "timeout ko" in new Scope {
         Future {
-          Thread.sleep(100)
+          try Thread.sleep(100) catch { case _: Throwable => () }
           1 must_== 2
         }.awaitFor(50.millis)
       }
