@@ -6,6 +6,7 @@ import matcher.OperationMatchers._
 import org.specs2.html._
 import Indexing._
 import control._
+
 import scala.concurrent._
 
 class IndexingSpec(implicit ec: ExecutionContext) extends Specification { def is = s2"""

@@ -35,6 +35,6 @@ object ConsoleEffect {
   /**
    * This interpreter prints messages to a printing function
    */
-  def runConsoleToPrinter[R, U, A](printer: String => Unit)(w: Eff[R, A])(implicit m : Member.Aux[Console, R, U]) =
+  def runConsoleToPrinter[R, U, A](printer: String => Unit)(w: Eff[R, A])(implicit m : Member.Aux[Console, R, U]): Eff[U, A] =
     w.runWriterUnsafe((message: ConsoleMessage) => printer(message.value))
 }

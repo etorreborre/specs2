@@ -28,7 +28,7 @@ package object control {
   lazy val consoleLogging = (s: String) => println(s)
 
   type StreamStack = Fx.fx2[Async, Safe]
-  type ActionStack = Fx.fx5[ErrorOrOk, Console, Warnings, Safe, Async]
+  type ActionStack = Fx.fx5[Async, ErrorOrOk, Console, Warnings, Safe]
   type OperationStack = Fx.fx4[ErrorOrOk, Console, Warnings, Safe]
 
   type Action[A] = Eff[ActionStack, A]
@@ -59,10 +59,10 @@ package object control {
     fail(failureMessage)
 
   def executeAction[A](action: Action[A], printer: String => Unit = s => ()): (Error \/ A, List[String]) = {
-    type S = Fx.append[Fx.fx2[ErrorOrOk, Console], Fx.fx2[Warnings, Async]]
+    type S = Fx.append[Fx.fx2[Async, ErrorOrOk], Fx.fx2[Console, Warnings]]
 
     Await.result(action.execSafe.flatMap(_.fold(t => exception[S, A](t), a => Eff.pure[S, A](a))).
-      runError.runConsoleToPrinter(printer).runWarnings.runAsyncFuture, Duration.Inf)
+      runError.runConsoleToPrinter(printer).runWarnings.into[Fx1[Async]].runAsyncFuture, Duration.Inf)
   }
 
   def runAction[A](action: Action[A], printer: String => Unit = s => ()): Error \/ A =

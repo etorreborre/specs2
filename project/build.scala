@@ -76,7 +76,8 @@ object build extends Build {
             depends.paradise(scalaVersion.value) ++
             depends.scalaParser(scalaVersion.value) ++
             depends.scalaXML(scalaVersion.value) ++
-            depends.scalacheck(scalaVersion.value).map(_ % "test"),
+            depends.scalacheck(scalaVersion.value).map(_ % "test") ++
+            depends.si2712Dependency(scalaVersion.value),
           name := "specs2-common")
   )
 
@@ -218,13 +219,18 @@ object build extends Build {
             "-deprecation:false", "-Xcheckinit", "-unchecked", "-feature", "-language:_")
        else
         Seq("-Xcheckinit", "-Xlint", "-deprecation", "-unchecked", "-feature", "-language:_")),
-    addCompilerPlugin("com.milessabin" % "si2712fix-plugin_2.11.8" % "1.2.0"),
+    si2712,
     addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.3"),
     scalacOptions in Test ++= Seq("-Yrangepos"),
     scalacOptions in (Compile, doc) := Seq("-feature", "-language:_"),
     scalacOptions in (Compile, console) := Seq("-Yrangepos", "-feature", "-language:_"),
     scalacOptions in (Test, console) := Seq("-Yrangepos", "-feature", "-language:_")
   )
+
+  lazy val si2712 =
+    scalacOptions ++=
+      (if (CrossVersion.partialVersion(scalaVersion.value).exists(_._2 >= 12)) Seq("-Ypartial-unification")
+       else Seq())
 
   lazy val testingSettings: Seq[Settings] = Seq(
     initialCommands in console in test := "import org.specs2._",

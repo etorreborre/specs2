@@ -34,6 +34,12 @@ object depends {
   def scalacheck(scalaVersion: String) =
     Seq("org.scalacheck" %% "scalacheck" % "1.13.4")
 
+  def si2712Dependency(scalaVersion: String) =
+    if (CrossVersion.partialVersion(scalaVersion).exists(_._2 < 12))
+      Seq(compilerPlugin("com.milessabin" % ("si2712fix-plugin_"+scalaVersion) % "1.2.0"))
+    else
+      Seq()
+
   lazy val mockito       = Seq("org.mockito"  %  "mockito-core"  % "1.9.5")
   lazy val junit         = Seq("junit"        %  "junit"         % "4.12")
   lazy val hamcrest      = Seq("org.hamcrest" %  "hamcrest-core" % "1.3")

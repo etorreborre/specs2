@@ -7,6 +7,7 @@ import scalaz._, Scalaz._
 import Arbitraries._
 import Fragment._
 import control._
+import producer._
 
 class IndentationSpec extends Specification with ScalaCheck { def is = s2"""
 
