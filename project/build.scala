@@ -78,7 +78,10 @@ object build extends Build {
             depends.scalaXML(scalaVersion.value) ++
             depends.scalacheck(scalaVersion.value).map(_ % "test") ++
             depends.si2712Dependency(scalaVersion.value),
-          name := "specs2-common")
+        // for now the doc can not be produced because the kind projector compiler plugin does not kick-in
+        sources in (Compile, doc) := (sources in (Compile, doc)).value.filterNot(_.getName endsWith ".scala"),
+        name := "specs2-common"
+      )
   )
 
   lazy val core = Project(id = "core", base = file("core"),
