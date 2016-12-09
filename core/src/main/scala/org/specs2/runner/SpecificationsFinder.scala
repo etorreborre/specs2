@@ -49,14 +49,15 @@ trait SpecificationsFinder {
                      basePath: DirectoryPath        = DirectoryPath.unsafe(new java.io.File("src/test/scala").getAbsolutePath),
                      verbose: Boolean               = false,
                      classLoader: ClassLoader       = Thread.currentThread.getContextClassLoader,
-                     filePathReader: FilePathReader = FileSystem): Seq[SpecificationStructure] =
-    runOperation(
-      findSpecifications(glob, pattern, filter, basePath, verbose, classLoader, filePathReader),
-      if (verbose) consoleLogging else noLogging).
-        fold(
-          e  => { if (verbose) e.fold(_.printStackTrace, println); Seq() },
-          seq => seq
-        )
+                     filePathReader: FilePathReader = FileSystem): Seq[SpecificationStructure] = {
+    val logging = if (verbose) consoleLogging else noLogging
+    val specs = findSpecifications(glob, pattern, filter, basePath, verbose, classLoader, filePathReader)
+
+    val (result, warnings) = executeOperation(specs, logging)
+
+    println(warnings.mkString("\n", "\n", "\n"))
+    result.fold(e  => { e.fold(_.printStackTrace, println); Seq() }, seq => seq)
+  }
 
   /**
    * @param pathGlob a path to a directory containing scala files (it can be a glob: i.e. "dir/**/*spec.scala")
