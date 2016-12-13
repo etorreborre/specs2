@@ -16,7 +16,7 @@ class HamcrestMatcherAdapterSpec extends mutable.Spec {
       matchMessage(1, 1) must_== ""
     }
     "when the match is ko" >> {
-      matchMessage(1, 2) must_== "'1' is equal to '2'"
+      matchMessage(1, 2) must_== "'1' is not equal to '2'"
     }
   }
 
