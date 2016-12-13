@@ -70,7 +70,7 @@ sealed trait Eff[R, A] {
 
   /** add one last action to be executed after any computation chained to this Eff value */
   def addLast(l: =>Eff[R, Unit]): Eff[R, A] =
-    addLast(Last.eff(l))
+    flatMap(a => pure(a).addLast(Last.eff(l)))
 
   /** add one last action to be executed after any computation chained to this Eff value */
   def addLast(l: Last[R]): Eff[R, A]
@@ -286,9 +286,11 @@ trait EffInterpretation {
   def detachA[M[_], A](eff: Eff[Fx1[M], A])(implicit monad: Monad[M], bindRec: BindRec[M], applicative: Applicative[M]): M[A] =
     bindRec.tailrecM[Eff[Fx1[M], A], A] {
       case Pure(a, Last(Some(l))) => monad.pure(-\/(l.value.as(a)))
+
       case Pure(a, Last(None))    => monad.pure(\/-(a))
     
       case Impure(u, continuation, last) =>
+
         u match {
           case Union1(ta) =>
             last match {
@@ -300,7 +302,7 @@ trait EffInterpretation {
       case ap @ ImpureAp(unions, continuation, last) =>
         val effects = unions.unions.collect { case Union1(mx) => mx }
         val sequenced = applicative.sequence(effects)
-    
+
         last match {
           case Last(Some(l)) => Monad[M].map(sequenced)(x => -\/(continuation(x).addLast(last)))
           case Last(None)    => Monad[M].map(sequenced)(x => -\/(continuation(x)))
