@@ -26,8 +26,8 @@ class IndexingSpec(implicit ec: ExecutionContext) extends Specification { def is
     runAction(emitAsync(pages:_*).fold(indexFold(path).into[ActionStack]))
 
     val expected =
-    s"""|var tipuesearch = {"pages": [{"title":"page 2", "text":"content2", "tags":"tag3", "loc":"page2"},
-        |{"title":"page 1", "text":"content1", "tags":"tag1 tag2", "loc":"page1"}]};""".stripMargin
+    s"""|var tipuesearch = {"pages": [{"title":"page 1", "text":"content1", "tags":"tag1 tag2", "loc":"page1"},
+        |{"title":"page 2", "text":"content2", "tags":"tag3", "loc":"page2"}]};""".stripMargin
 
     FileSystem.readFile(path).map(_.trim) must beOk(===(expected))
   }
