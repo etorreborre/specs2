@@ -17,6 +17,7 @@ import org.specs2.control.producer._
 
 import scala.concurrent._
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.util.control.NonFatal
 
 package object control {
 
@@ -90,7 +91,8 @@ package object control {
     }
 
   def attemptExecuteAction[A](action: Action[A], printer: String => Unit = s => ()): Throwable \/ (Error \/ A, List[String]) =
-    Await.result(action.runError.runConsoleToPrinter(printer).runWarnings.execSafe.runAsyncFuture, Duration.Inf)
+    try Await.result(action.runError.runConsoleToPrinter(printer).runWarnings.execSafe.runAsyncFuture, Duration.Inf)
+    catch { case NonFatal(t) => -\/(t) }
 
   def attemptExecuteOperation[A](operation: Operation[A], printer: String => Unit = s => ()): Throwable \/ (Error \/ A, List[String]) =
     operation.runError.runConsoleToPrinter(printer).runWarnings.execSafe.run
@@ -199,8 +201,8 @@ package object control {
     def protect[A](a: =>A): Action[A] =
       SafeEffect.protect(a)
 
-    def asyncDelayAction[A](a: =>A, timeout: Option[FiniteDuration] = None): Action[A] =
-      AsyncEffect.asyncDelay[ActionStack, A](a, timeout)
+    def asyncDelayAction[A](a: =>A): Action[A] =
+      AsyncEffect.asyncDelay[ActionStack, A](a)
 
     def asyncForkAction[A](a: =>A, timeout: Option[FiniteDuration] = None): Action[A] =
       AsyncEffect.asyncFork[ActionStack, A](a, timeout)

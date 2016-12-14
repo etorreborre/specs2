@@ -25,19 +25,19 @@ trait AsyncCreation {
   def asyncFail[R :_async, A](t: Throwable): Eff[R, A] =
     send[Async, R, A](AsyncFailed[A](t))
 
-  def asyncDelay[R :_async, A](a: =>A, timeout: Option[FiniteDuration] = None): Eff[R, A] =
-    send[Async, R, A](AsyncDelayed[A](Need(a), timeout))
+  def asyncDelay[R :_async, A](a: =>A): Eff[R, A] =
+    send[Async, R, A](AsyncDelayed[A](Need(a)))
 
   def asyncFork[R :_async, A](a: =>A, timeout: Option[FiniteDuration] = None): Eff[R, A] =
-    send[Async, R, A](AsyncEff(send[Subscribe, FS, A]((c: Callback[A]) => c(\/.fromTryCatchNonFatal(a))), timeout))
+    send[Async, R, A](AsyncEff(send[Subscribe, FS, A](SimpleSubscribe((c: Callback[A]) => c(\/.fromTryCatchNonFatal(a).toEither))), timeout))
 
   def fork[R :_async, A](a: =>Async[A], timeout: Option[FiniteDuration] = None): Eff[R, A] =
     asyncDelay[R, Eff[R, A]] {
       a match {
-        case AsyncNow(a1)         => asyncFork(a1, timeout)
-        case AsyncDelayed(a1, to) => asyncFork(a1.value, to)
-        case AsyncFailed(t)       => asyncFail(t)
-        case AsyncEff(e, to)      => send[Async, R, A](AsyncEff(e, to))
+        case AsyncNow(a1)     => asyncFork(a1, timeout)
+        case AsyncDelayed(a1) => asyncFork(a1.value, timeout)
+        case AsyncFailed(t)   => asyncFail(t)
+        case AsyncEff(e, to)  => send[Async, R, A](AsyncEff(e, to))
       }
     }.flatten
 
@@ -100,10 +100,10 @@ trait AsyncInterpretation {
 
   def attempt[A](a: Async[A]): Async[Throwable \/ A] =
     a match {
-      case AsyncNow(a1)         => AsyncNow[Throwable \/ A](\/-(a1))
-      case AsyncFailed(t)       => AsyncNow[Throwable \/A](-\/(t))
-      case AsyncDelayed(a1, to) => AsyncDelayed(Need(\/.fromTryCatchNonFatal(a1.value)), to)
-      case AsyncEff(e, to)      => AsyncEff(subscribeAttempt(e), to)
+      case AsyncNow(a1)     => AsyncNow[Throwable \/ A](\/-(a1))
+      case AsyncFailed(t)   => AsyncNow[Throwable \/A](-\/(t))
+      case AsyncDelayed(a1) => AsyncDelayed(Need(\/.fromTryCatchNonFatal(a1.value)))
+      case AsyncEff(e, to)  => AsyncEff(subscribeAttempt(e), to)
     }
 
   implicit final def toAttemptOps[R, A](e: Eff[R, A]): AttemptOps[R, A] = new AttemptOps[R, A](e)
@@ -121,7 +121,7 @@ sealed trait Async[A] extends Any
 
 case class AsyncNow[A](a: A) extends Async[A]
 case class AsyncFailed[A](t: Throwable) extends Async[A]
-case class AsyncDelayed[A](a: Name[A], timeout: Option[FiniteDuration] = None) extends Async[A]
+case class AsyncDelayed[A](a: Name[A]) extends Async[A]
 case class AsyncEff[A](e: Eff[FS, A], timeout: Option[FiniteDuration] = None) extends Async[A]
 
 object Async {
@@ -135,26 +135,26 @@ object Async {
         case (AsyncNow(f), AsyncNow(a)) =>
           AsyncNow(f(a))
 
-        case (AsyncNow(f), AsyncDelayed(a, to)) =>
-          AsyncDelayed(a.map(f), to)
+        case (AsyncNow(f), AsyncDelayed(a)) =>
+          AsyncDelayed(a.map(f))
 
         case (AsyncNow(f), AsyncEff(a, to)) =>
           AsyncEff(a.map(f), to)
 
-        case (AsyncDelayed(f, to), AsyncNow(a)) =>
-          AsyncDelayed(Need(f.value(a)), to)
+        case (AsyncDelayed(f), AsyncNow(a)) =>
+          AsyncDelayed(Need(f.value(a)))
 
-        case (AsyncDelayed(f, tof), AsyncDelayed(a, toa)) =>
-          AsyncDelayed(Apply[Name].ap(a)(f), (tof |@| toa)(_ min _))
+        case (AsyncDelayed(f), AsyncDelayed(a)) =>
+          AsyncDelayed(Apply[Name].ap(a)(f))
 
-        case (AsyncDelayed(f, tof), AsyncEff(a, toa)) =>
-          AsyncEff(a.map(f.value), (tof |@| toa)(_ min _))
+        case (AsyncDelayed(f), AsyncEff(a, toa)) =>
+          AsyncEff(a.map(f.value), toa)
 
         case (AsyncEff(f, to), AsyncNow(a)) =>
           AsyncEff(f.map(_(a)), to)
 
-        case (AsyncEff(f, tof), AsyncDelayed(a, toa)) =>
-          AsyncEff(f.map(_(a.value)), (tof |@| toa)(_ min _))
+        case (AsyncEff(f, tof), AsyncDelayed(a)) =>
+          AsyncEff(f.map(_(a.value)), tof)
 
         case (_, AsyncFailed(t)) =>
           AsyncFailed(t)
@@ -180,7 +180,7 @@ object Async {
         case AsyncFailed(t) =>
           AsyncFailed(t)
 
-        case AsyncDelayed(a, to) =>
+        case AsyncDelayed(a) =>
           \/.fromTryCatchNonFatal(f(a.value)) match {
             case -\/(t)   => AsyncFailed(t)
             case \/-(ab) => ab
@@ -192,10 +192,10 @@ object Async {
 
     def subscribeAsync[A](a: Async[A]): Eff[FS, A] =
       a  match {
-        case AsyncNow(a1)         => Eff.pure[FS, A](a1)
-        case AsyncFailed(t)       => send[Subscribe, FS, A](c => c(-\/(t)))
-        case AsyncDelayed(a1, to) => send[Subscribe, FS, A](c => c(\/.fromTryCatchNonFatal(a1.value)))
-        case AsyncEff(a1, to)     => a1
+        case AsyncNow(a1)     => Eff.pure[FS, A](a1)
+        case AsyncFailed(t)   => send[Subscribe, FS, A](SimpleSubscribe(c => c(Left(t))))
+        case AsyncDelayed(a1) => send[Subscribe, FS, A](SimpleSubscribe(c => c(\/.fromTryCatchNonFatal(a1.value).toEither)))
+        case AsyncEff(a1, to) => a1
       }
 
     def tailrecM[A, B](f: A => Async[A \/ B])(a: A): Async[B] =
@@ -203,7 +203,7 @@ object Async {
         case AsyncNow(-\/(a1)) => tailrecM(f)(a1)
         case AsyncNow(\/-(b)) => AsyncNow[B](b)
         case AsyncFailed(t)      => AsyncFailed[B](t)
-        case AsyncDelayed(ab, to) =>
+        case AsyncDelayed(ab) =>
           \/.fromTryCatchNonFatal(ab.value) match {
             case -\/(t) => AsyncFailed[B](t)
             case \/-(\/-(b)) => AsyncNow[B](b)

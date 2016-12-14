@@ -31,7 +31,7 @@ class ExecutorSpec(implicit ec: ExecutionContext) extends script.Specification w
   + with a fatal execution error
   + stopOnFail and sequential
 
-  with a timeout $timeOut
+  with a timeout $timeout
   with examples using an execution context $userEnv
 
 """
@@ -151,7 +151,7 @@ class ExecutorSpec(implicit ec: ExecutionContext) extends script.Specification w
     }
   }
 
-  def timeOut = { env: Env =>
+  def timeout = { env: Env =>
     val timeFactor = env.arguments.execute.timeFactor
 
     val messages = new ListBuffer[String]

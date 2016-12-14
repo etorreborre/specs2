@@ -82,21 +82,20 @@ trait DefaultExecutor extends Executor {
       if (arguments.sequential) emitEff(fs.toList.traverse(f => executeOneFragment(f, timeout)))
       else                      emitEff(fs.toList.traverseA(f => executeOneFragment(f, timeout)))
 
-    def executeOneFragment(f: Fragment, timeout: Option[FiniteDuration] = None): Action[Fragment] =
-      if (arguments.sequential) asyncDelayAction(executeFragment(env)(f), timeout)
-      else                      asyncForkAction(executeFragment(env)(f), timeout).attempt.map {
-        case -\/(t: TimeoutException) => f.setExecution(Execution.result(Skipped("timed-out")))
-        case -\/(t) => f.setExecution(Execution.result(Error(t)))
-        case \/-(_) => f
+    def executeOneFragment(f: Fragment, timeout: Option[FiniteDuration] = None): Action[Fragment] = {
+      if (arguments.sequential) asyncDelayAction(executeFragment(env)(f))
+      else                      asyncForkAction(executeFragment(env)(f), timeout).asyncAttempt.map {
+        case -\/(t: TimeoutException) => executeFragment(env)(f.setExecution(Execution.result(Skipped("timeout"+timeout.map(" after "+_).getOrElse("")))))
+        case -\/(t)                   => executeFragment(env)(f.setExecution(Execution.result(Error(t))))
+        case \/-(f1)                  => f1
       }
+    }
 
-
-    val last: S => AsyncStream[Fragment] = (s: S) =>
-      s match {
-        case (fs, previousResults, mustStop) =>
-          if (mustStop) emit(fs.toList.map(_.skip))
-          else          executeFragments(fs, env.timeout)
-      }
+    val last: S => AsyncStream[Fragment] = {
+      case (fs, previousResults, mustStop) =>
+        if (mustStop) emit(fs.toList.map(_.skip))
+        else          executeFragments(fs, env.timeout)
+    }
 
     transducers.producerStateEff(init, Option(last)) { case (fragment, (fragments, previousResults, mustStop)) =>
       val timeout = env.timeout.orElse(fragment.execution.timeout)
@@ -125,7 +124,9 @@ trait DefaultExecutor extends Executor {
         else if (fragment.execution.mustJoin) {
           executeFragments(fragments, timeout).run.flatMap {
             case Done() =>
-              ok((done, (Vector.empty, Success(), mustStop)))
+              executeOneFragment(fragment, timeout).flatMap { step =>
+                ok((one(step), (Vector.empty, Success(), stopAll(previousResults, step))))
+              }
 
             case producer.One(f) =>
               executeOneFragment(fragment, timeout).flatMap { step =>
@@ -144,112 +145,6 @@ trait DefaultExecutor extends Executor {
       }
     }
 
-
-//    type Barrier = (List[Future[Any]], FatalExecution \/ Result)
-//    type S = (Action[Barrier], Boolean)
-//    val async = AsyncFutureInterpreter.create(env.executionContext)
-//
-//    val init = (ok[Barrier]((Nil, \/-(Success("barrier")))), false)
-//
-//    transducers.stateEff[ActionStack, Fragment, Fragment, S](init) { case (fragment, (barrier, mustStop)) =>
-//      val arguments = env.arguments
-//      val timeout = env.timeout.orElse(fragment.execution.timeout)
-//
-//      if (arguments.skipAll)
-//        (ok(if (fragment.isExecutable) fragment.skip else fragment), (barrier, mustStop))
-//      else {
-//        // if we need to wait, we do, and get the result
-//        val barrierResult =
-//          if (fragment.execution.mustJoin || arguments.sequential) {
-//            attemptAction {
-//              barrier.map {
-//                case (futures, \/-(r)) =>
-//                  implicit val ec = env.executionContext
-//                  Await.result(Future.sequence(futures), scala.concurrent.duration.Duration.Inf)
-//                  \/-(r)
-////                  .map(_.executionFatalOrResult match {
-////                  case \/-(r) => \/-(result |+| r)
-////                  case -\/(f) => -\/(f)
-////                  case other  => \/-(result)
-////                }
-//                case (_, other) => other
-//              }
-//            }.fold(t => -\/(FatalExecution(t)), r => r)
-//          }
-//          else \/-(Success("no barrier result"))
-//
-//        // depending on the result we decide if we should go on executing fragments
-//        val barrierStop =
-//          mustStop ||
-//            (barrierResult match {
-//              case \/-(r) =>
-//                arguments.stopOnFail && r.isFailure ||
-//                arguments.stopOnSkip && r.isSkipped ||
-//                fragment.execution.nextMustStopIf(r)
-//
-//              case -\/(f) => true
-//            })
-//
-//        // if the previous fragments decided that we should stop the execution
-//        // skip the execution
-//        // otherwise execute synchronously or asynchronously
-//
-//        if (mustStop)
-//          (ok(fragment.skip), (barrier, barrierStop))
-//
-//        else if (fragment.execution.mustJoin) {
-//          val executedFragment: Throwable \/ Fragment =
-//            attemptAction(timedout(fragment, env)(asyncDelayAction(executeFragment(env.userEnv)(fragment)))(timeout))
-//
-//          executedFragment match {
-//            case -\/(e) =>
-//              (ok(fragment.setExecution(Execution.fatal(e))), (ok[Barrier]((Nil, -\/(FatalExecution(e)))), false))
-//
-//            case \/-(ef) =>
-//              val (nextBarrier, stepStop) = {
-//                val stepResult = ef.executionFatalOrResult
-//                (stepResult, stepResult.fold(_ => true, r => fragment.execution.nextMustStopIf(r)))
-//              }
-//              (ok(ef), (ok((Nil, nextBarrier)), barrierStop || stepStop))
-//          }
-//        } else if (env.arguments.sequential) {
-//          // stop right away if the previous fragment created a failed barrier
-//          if (barrierStop)
-//            (ok(fragment.skip), (barrier, barrierStop))
-//          else {
-//            lazy val executedFragment: Throwable \/ Fragment =
-//              attemptAction(timedout(fragment, env)(asyncDelayAction(executeFragment(env)(fragment)))(timeout))
-//
-//            executedFragment match {
-//              case -\/(e) =>
-//                (ok(fragment.setExecution(Execution.fatal(e))), (ok((Nil, -\/(FatalExecution(e)))), false))
-//
-//              case \/-(ef) =>
-//                val nextBarrier = barrier.map {
-//                  case (fs, \/-(result)) => (fs, ef.executionFatalOrResult.fold(f => -\/(f), r => \/-(result |+| r)))
-//                  case f => f
-//                }
-//                (ok(ef), (nextBarrier, barrierStop))
-//            }
-//          }
-//        } else {
-//
-//          val execution: Promise[Fragment] = Promise()
-//          lazy val executed = executeFragment(env.userEnv)(fragment)
-//          val fut = execution.complete(scala.util.Success(executed)).future
-//
-//          val executingFragment: Action[Fragment] =
-//            timedout(fragment, env)(asyncForkAction {
-//              executed
-//            })(timeout)
-//
-//          val newBarrier =
-//            barrier.map { case (futures, result) => (fut :: futures, result) }
-//
-//          (executingFragment, (newBarrier, barrierStop))
-//        }
-//      }
-//    }
   }
 
   /** execute one fragment */
@@ -270,19 +165,6 @@ trait DefaultExecutor extends Executor {
       case None => emitAsyncDelayed(fragment)
     }
   }
-
-  /** use the scalaz implementation of Timer to timeout the task */
-  def timedout(fragment: Fragment, env: Env)(task: Action[Fragment])(duration: Option[FiniteDuration]): Action[Fragment] = {
-    duration match {
-      case None => task
-      case Some(d) => task
-//        withTimeout(task)(d, env.executionEnv).asyncAttempt.map {
-//          case Left(t: TimeoutException)  => fragment.setExecution(fragment.execution.setResult(Skipped("timeout after "+d)))
-//          case Left(t)  => fragment.setExecution(fragment.execution.setResult(Error(t)))
-//          case Right(r)  => r
-//        }
-    }
-  }
 }
 
 /**
@@ -291,7 +173,7 @@ trait DefaultExecutor extends Executor {
 object DefaultExecutor extends DefaultExecutor {
 
   def executeSpecWithoutShutdown(spec: SpecStructure, env: Env): SpecStructure =
-    spec.|>((contents: AsyncStream[Fragment]) => (contents |> sequencedExecution(env)))
+    spec.|>((contents: AsyncStream[Fragment]) => contents |> sequencedExecution(env))
 
   def executeSpec(spec: SpecStructure, env: Env): SpecStructure = {
     spec.|>((contents: AsyncStream[Fragment]) => (contents |> sequencedExecution(env)).thenFinally(protect(env.shutdown)))

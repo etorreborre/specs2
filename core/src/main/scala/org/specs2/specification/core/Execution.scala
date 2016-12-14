@@ -130,7 +130,7 @@ object Execution {
     new Execution(run = None, fatal = Option(FatalExecution(t)))
 
   /** create an execution returning a specific result */
-  def result[T : AsResult](r: =>T)       = withEnv(_ => AsResult(r))
+  def result[T : AsResult](r: =>T) = withEnv(_ => AsResult(r))
 
   /** create an execution using the Env */
   def withEnv[T : AsResult](f: Env => T) = Execution(Some((env: Env) => AsResult(f(env))))
