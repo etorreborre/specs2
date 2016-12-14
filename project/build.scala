@@ -78,8 +78,6 @@ object build extends Build {
             depends.scalaXML(scalaVersion.value) ++
             depends.scalacheck(scalaVersion.value).map(_ % "test") ++
             depends.si2712Dependency(scalaVersion.value),
-        // for now the doc can not be produced because the kind projector compiler plugin does not kick-in
-        sources in (Compile, doc) := (sources in (Compile, doc)).value.filterNot(_.getName endsWith ".scala"),
         name := "specs2-common"
       )
   )
@@ -211,7 +209,7 @@ object build extends Build {
     javacOptions ++= Seq("-Xmx3G", "-Xms512m", "-Xss4m"),
     maxErrors := 20,
     incOptions := incOptions.value.withNameHashing(true),
-    scalacOptions ++=
+    scalacOptions in Compile ++=
       (if (scalaVersion.value.startsWith("2.11") || scalaVersion.value.startsWith("2.12"))
         Seq("-Xfatal-warnings",
             "-Xlint",
@@ -225,9 +223,9 @@ object build extends Build {
     si2712,
     addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.3"),
     scalacOptions in Test ++= Seq("-Yrangepos"),
-    scalacOptions in (Compile, doc) := Seq("-feature", "-language:_"),
-    scalacOptions in (Compile, console) := Seq("-Yrangepos", "-feature", "-language:_"),
-    scalacOptions in (Test, console) := Seq("-Yrangepos", "-feature", "-language:_")
+    scalacOptions in (Compile, doc) ++= Seq("-feature", "-language:_"),
+    scalacOptions in (Compile, console) ++= Seq("-Yrangepos", "-feature", "-language:_"),
+    scalacOptions in (Test, console) ++= Seq("-Yrangepos", "-feature", "-language:_")
   )
 
   lazy val si2712 =
