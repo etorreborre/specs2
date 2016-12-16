@@ -17,16 +17,16 @@ object depends {
     Seq("org.scalaz" %% "scalaz-concurrent").map(_ % scalazVersion)
 
   def scalaParser(scalaVersion: String) =
-    PartialFunction.condOpt(CrossVersion.partialVersion(scalaVersion)){
-      case Some((2, scalaMajor)) if scalaMajor >= 11 =>
-        "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.4"
-    }.toList
+    if (scalaMinorVersionAtLeast(scalaVersion, 11))
+      Seq("org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.4")
+    else
+      Seq()
 
   def scalaXML(scalaVersion: String) =
-    PartialFunction.condOpt(CrossVersion.partialVersion(scalaVersion)){
-      case Some((2, scalaMajor)) if scalaMajor >= 11 =>
-        "org.scala-lang.modules" %% "scala-xml" % "1.0.5"
-    }.toList
+    if (scalaMinorVersionAtLeast(scalaVersion, 11))
+      Seq("org.scala-lang.modules" %% "scala-xml" % "1.0.5")
+    else
+      Seq()
 
   def kindp(scalaVersion: String) =
     "org.spire-math" % "kind-projector" % "0.8.2" cross CrossVersion.binary
@@ -56,9 +56,11 @@ object depends {
   lazy val tagsoup = "org.ccil.cowan.tagsoup" % "tagsoup" % "1.2"
 
   def paradise(scalaVersion: String) =
-    if (scalaVersion.startsWith("2.11") || scalaVersion.startsWith("2.12")) Nil
-    else  Seq(compilerPlugin("org.scalamacros" %% "paradise"    % "2.1.0" cross CrossVersion.full),
-                             "org.scalamacros" %% "quasiquotes" % "2.1.0")
+    if (scalaMinorVersionAtLeast(scalaVersion, 11))
+      Nil
+    else
+      Seq(compilerPlugin("org.scalamacros" %% "paradise"    % "2.1.0" cross CrossVersion.full),
+          "org.scalamacros" %% "quasiquotes" % "2.1.0")
 
   lazy val resolvers =
     Seq(updateOptions := updateOptions.value.withCachedResolution(true)) ++ {
@@ -70,6 +72,12 @@ object depends {
         "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases")
     }
 
+  def scalaMinorVersionAtLeast(scalaVersion: String, n: Int): Boolean =
+    CrossVersion.partialVersion(scalaVersion) match {
+      case Some((2, minor)) if minor >= n =>
+        true
+      case _ =>
+        false
+    }
+
 }
-
-
