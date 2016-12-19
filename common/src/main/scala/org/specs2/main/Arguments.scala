@@ -103,10 +103,8 @@ case class Arguments (
 object Arguments extends Extract {
   
   /** @return new arguments from command-line arguments */
-  def apply(implicit arguments: String*): Arguments = {
-    if (arguments.isEmpty) new Arguments()
-    else                   extract(CommandLine.splitValues(arguments), sysProperties)
-  }
+  def apply(arguments: String*): Arguments =
+    extract(CommandLine.splitValues(arguments), sysProperties)
 
   /** create Arguments from a string by splitting it on spaces */
   def split(arguments: String): Arguments =
