@@ -16,6 +16,7 @@ class MustExpectable[T] private[specs2] (tm: () => T) extends Expectable[T](tm) 
   def mustNotEqual(other: =>Any) = applyMatcher[Any](new BeEqualTo(other).not)
   def must_==(other: =>Any)      = applyMatcher[Any](new BeEqualTo(other))
   def must_===(other: =>T)       = applyMatcher(new BeTypedEqualTo(other))
+  def must_!==(other: =>T)       = applyMatcher(new BeTypedEqualTo(other).not)
   def must_!=(other: =>Any)      = applyMatcher[Any](new BeEqualTo(other).not)
 }
 
