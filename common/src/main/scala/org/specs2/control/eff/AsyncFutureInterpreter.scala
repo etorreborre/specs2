@@ -140,16 +140,16 @@ object AsyncFutureInterpreter {
     override def toString = "Applicative[Future]"
   }
 
-  implicit def FutureMonad(implicit ec: ExecutionContext): Monad[Future] with BindRec[Future] = new Monad[Future] with BindRec[Future] {
+  implicit def FutureMonad(implicit ec: ExecutionContext): Monad[Future] with BindRecʹ[Future] = new Monad[Future] with BindRecʹ[Future] {
     def point[A](x: =>A): Future[A] =
       Future.successful(x)
 
     def bind[A, B](fa: Future[A])(f: A => Future[B]): Future[B] =
       fa.flatMap(f)
 
-    def tailrecM[A, B](f: A => Future[A \/ B])(a: A): Future[B] =
+    def tailrecM[A, B](a: A)(f: A => Future[A \/ B]): Future[B] =
       FutureMonad.bind(f(a)) {
-        case -\/(a1) => tailrecM(f)(a1)
+        case -\/(a1) => tailrecM(a1)(f)
         case \/-(b) => FutureMonad.point(b)
       }
 

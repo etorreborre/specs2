@@ -130,12 +130,14 @@ object Eff extends EffCreation with
   EffInterpretation with
   EffImplicits
 
+
+
 trait EffImplicits {
 
   /**
    * Monad implementation for the Eff[R, ?] type
    */
-  implicit final def EffMonad[R]: Monad[Eff[R, ?]] = new Monad[Eff[R, ?]] with BindRec[Eff[R, ?]] {
+  implicit final def EffMonad[R]: Monad[Eff[R, ?]] with BindRecʹ[Eff[R, ?]] = new Monad[Eff[R, ?]] with BindRecʹ[Eff[R, ?]] {
     def point[A](a: =>A): Eff[R, A] =
       Pure(a)
 
@@ -166,12 +168,11 @@ trait EffImplicits {
           ImpureAp(unions, continuation.append(f), last)
       }
 
-    def tailrecM[A, B](f: A => Eff[R, \/[A, B]])(a: A): Eff[R, B] =
+    def tailrecM[A, B](a: A)(f: A => Eff[R, \/[A, B]]): Eff[R, B] =
       bind(f(a)) {
         case \/-(b)   => pure(b)
-        case -\/(next) => tailrecM(f)(next)
+        case -\/(next) => tailrecM(next)(f)
       }
-
   }
 
   def EffApplicative[R]: Applicative[Eff[R, ?]] = new Applicative[Eff[R, ?]] {
@@ -262,8 +263,8 @@ trait EffInterpretation {
   /**
    * peel-off the only present effect
    */
-  def detach[M[_] : Monad, A](eff: Eff[Fx1[M], A])(implicit bindRec: BindRec[M]): M[A] =
-    bindRec.tailrecM[Eff[Fx1[M], A], A] {
+  def detach[M[_] : Monad, A](eff: Eff[Fx1[M], A])(implicit bindRec: BindRecʹ[M]): M[A] =
+    bindRec.tailrecM[Eff[Fx1[M], A], A](eff) {
       case Pure(a, Last(Some(l))) => Monad[M].pure(-\/(l.value.as(a)))
       case Pure(a, Last(None))    => Monad[M].pure(\/-(a))
     
@@ -278,13 +279,13 @@ trait EffInterpretation {
     
       case ap @ ImpureAp(u, continuation, last) =>
         Monad[M].point(-\/(ap.toMonadic))
-    }(eff)
+    }
 
   /**
    * peel-off the only present effect, using an Applicative instance where possible
    */
-  def detachA[M[_], A](eff: Eff[Fx1[M], A])(implicit monad: Monad[M], bindRec: BindRec[M], applicative: Applicative[M]): M[A] =
-    bindRec.tailrecM[Eff[Fx1[M], A], A] {
+  def detachA[M[_], A](eff: Eff[Fx1[M], A])(implicit monad: Monad[M], bindRec: BindRecʹ[M], applicative: Applicative[M]): M[A] =
+    bindRec.tailrecM[Eff[Fx1[M], A], A](eff) {
       case Pure(a, Last(Some(l))) => monad.pure(-\/(l.value.as(a)))
 
       case Pure(a, Last(None))    => monad.pure(\/-(a))
@@ -307,7 +308,7 @@ trait EffInterpretation {
           case Last(Some(l)) => Monad[M].map(sequenced)(x => -\/(continuation(x).addLast(last)))
           case Last(None)    => Monad[M].map(sequenced)(x => -\/(continuation(x)))
         }
-    }(eff)
+    }
 
   /**
    * get the pure value if there is no effect

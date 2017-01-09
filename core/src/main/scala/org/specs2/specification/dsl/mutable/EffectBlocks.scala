@@ -34,7 +34,7 @@ case class EffectBlocks(var mode: EffectBlocksMode = Record) {
    * run a specification in the "isolation" mode were the changes in local variables belonging to blocks are not seen by
    * other examples
    */
-  private[specs2] var blocksTree: TreeLoc[Int] = leaf(0).loc
+  private[specs2] var blocksTree: TreeLoc[Int] = Leaf(0).loc
 
   private[specs2] def paths: List[EffectPath] =
     blocksTree.toTree.allPaths.map(p => EffectPath(p:_*))
@@ -48,7 +48,7 @@ case class EffectBlocks(var mode: EffectBlocksMode = Record) {
 
   def clear = {
     effects.clear
-    blocksTree = leaf(0).loc
+    blocksTree = Leaf(0).loc
     this
   }
 
@@ -76,7 +76,7 @@ case class EffectBlocks(var mode: EffectBlocksMode = Record) {
   def replay(targetPath: EffectPath) = {
     mode = Replay
     // in replay mode don't update the blocksTree
-    blocksTree = leaf(0).loc
+    blocksTree = Leaf(0).loc
 
     def runPath(path: Seq[Int]): Unit = {
       path.toList match {
@@ -148,8 +148,8 @@ case class EffectBlocks(var mode: EffectBlocksMode = Record) {
 
   implicit class TreeLocx[T](t: TreeLoc[T]) {
     def getParent = t.parent.getOrElse(t)
-    def addChild(c: T) = t.insertDownLast(leaf(c)).getParent
-    def insertDownLast(c: T) = t.insertDownLast(leaf(c))
+    def addChild(c: T) = t.insertDownLast(Leaf(c)).getParent
+    def insertDownLast(c: T) = t.insertDownLast(Leaf(c))
   }
 
 }

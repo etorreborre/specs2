@@ -169,7 +169,7 @@ object Async {
     override def toString = "Applicative[Async]"
   }
 
-  implicit final def MonadAsync: Monad[Async] with BindRec[Async] = new Monad[Async] with BindRec[Async] {
+  implicit final def MonadAsync: Monad[Async] with BindRecʹ[Async] = new Monad[Async] with BindRecʹ[Async] {
     def point[A](a: =>A) = AsyncEff(Eff.pure[FS, A](a))
 
     def bind[A, B](aa: Async[A])(f: A => Async[B]): Async[B] =
@@ -198,33 +198,33 @@ object Async {
         case AsyncEff(a1, to) => a1
       }
 
-    def tailrecM[A, B](f: A => Async[A \/ B])(a: A): Async[B] =
+    def tailrecM[A, B](a: A)(f: A => Async[A \/ B]): Async[B] =
       f(a) match {
-        case AsyncNow(-\/(a1)) => tailrecM(f)(a1)
+        case AsyncNow(-\/(a1)) => tailrecM(a1)(f)
         case AsyncNow(\/-(b)) => AsyncNow[B](b)
         case AsyncFailed(t)      => AsyncFailed[B](t)
         case AsyncDelayed(ab) =>
           \/.fromTryCatchNonFatal(ab.value) match {
             case -\/(t) => AsyncFailed[B](t)
             case \/-(\/-(b)) => AsyncNow[B](b)
-            case \/-(-\/(a1)) => tailrecM(f)(a1)
+            case \/-(-\/(a1)) => tailrecM(a1)(f)
           }
         case AsyncEff(e, to) =>
           e match {
             case Pure(ab, last) => ab match {
-              case -\/(a1) => tailrecM(f)(a1)
+              case -\/(a1) => tailrecM(a1)(f)
               case \/-(b) => AsyncNow[B](b)
             }
 
             case imp @ Impure(u, c, last) =>
               AsyncEff(imp.flatMap {
-                case -\/(a1) => subscribeAsync(tailrecM(f)(a1))
+                case -\/(a1) => subscribeAsync(tailrecM(a1)(f))
                 case \/-(b) => Eff.pure(b)
               }, to)
 
             case imp @ ImpureAp(unions, continuation, last) =>
               AsyncEff(imp.flatMap {
-                case -\/(a1) => subscribeAsync(tailrecM(f)(a1))
+                case -\/(a1) => subscribeAsync(tailrecM(a1)(f))
                 case \/-(b) => Eff.pure(b)
               }, to)
           }

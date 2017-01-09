@@ -26,7 +26,7 @@ class TreesSpec extends Specification with ScalaCheck with ThrownExpectations { 
   def genTree(root: Int, nodes: List[Int]): Gen[TreeAndPaths] =
     nodes match {
       case Nil =>
-        Gen.const(TreeAndPaths(Tree.leaf(root), List(List(root))))
+        Gen.const(TreeAndPaths(Tree.Leaf(root), List(List(root))))
       case _ =>
         genTreeList(nodes).map { ls =>
           TreeAndPaths(Tree.Node(root, ls.toStream.map(_.tree)), ls.flatMap(l => l.paths.map(root :: _)))
