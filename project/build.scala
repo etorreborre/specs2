@@ -152,10 +152,14 @@ object build extends Build {
 
   lazy val cats = Project(id = "cats", base = file("cats"),
     settings = moduleSettings("cats") ++
-      Seq(libraryDependencies ++= (if (scalaVersion.value startsWith "2.12") Nil else depends.cats)) ++
+      Seq(libraryDependencies ++= (
+        if (scalaMinorVersionAtLeast(scalaVersion.value, 12))
+          Seq()
+        else
+          depends.cats)) ++
       Seq(name := "specs2-cats") ++
-      Seq((skip in compile) := scalaVersion.value startsWith "2.12",
-          publishArtifact := !(scalaVersion.value startsWith "2.12"))
+      Seq((skip in compile) := scalaMinorVersionAtLeast(scalaVersion.value, 12),
+          publishArtifact := !scalaMinorVersionAtLeast(scalaVersion.value, 12))
   ).dependsOn(matcher, core % "test->test")
 
   lazy val scalaz = Project(id = "scalaz", base = file("scalaz"),
@@ -210,7 +214,7 @@ object build extends Build {
     maxErrors := 20,
     incOptions := incOptions.value.withNameHashing(true),
     scalacOptions in Compile ++=
-      (if (scalaVersion.value.startsWith("2.11") || scalaVersion.value.startsWith("2.12"))
+      (if (scalaMinorVersionAtLeast(scalaVersion.value, 11))
         Seq("-Xfatal-warnings",
             "-Xlint",
             "-Ywarn-unused-import",
@@ -293,7 +297,10 @@ object build extends Build {
   documentationSettings ++
   apiSettings               ++
   Seq(scalacOptions in (Compile, doc) += "-Ymacro-no-expand") ++
-  Seq(sources in (Compile, doc) in common := (if (scalaVersion.value startsWith "2.10") List() else (sources in (Compile, doc) in common).value),
+  Seq(sources in (Compile, doc) in common :=
+        (if (!scalaMinorVersionAtLeast(scalaVersion.value, 11))
+           List()
+         else (sources in (Compile, doc) in common).value),
     sources in (Compile, doc) in core := List(),
     sources in (Compile, doc) in matcherExtra := List())
 
