@@ -13,7 +13,9 @@ class DefaultStackTraceFilterSpec extends Spec with ThrownExpectations { def is 
 
    when using SpecificationLike it should
      remove specs2 methods set on a user class (see #415)             $e3
-                                                                      """
+
+ It should find if the stacktrace results from a specs2 own specification $e4
+"""
 
   def e1 = { DefaultStackTraceFilter((new UserExpectations).failure1.exception.getStackTrace).map(_.toString) must not(containMatch(".*specs2.*")) }
 
@@ -34,6 +36,19 @@ class DefaultStackTraceFilterSpec extends Spec with ThrownExpectations { def is 
         DefaultStackTraceFilter(f.stackTrace).map(_.toString) must containMatch("UserExpectations.scala:18")
       case _ => ok
     }
+  }
+
+  // see issue #533
+  def e4 = {
+    AsResult((new UserExpectationsSpec).failure1) match {
+
+      // the right line must be set as the failure
+      // location
+      case f: Failure =>
+        DefaultStackTraceFilter(f.stackTrace).map(_.toString) must containMatch("UserExpectations.scala:22")
+      case _ => ok
+    }
+
   }
 
 }

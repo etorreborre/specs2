@@ -24,6 +24,9 @@ trait ExecutionOrigin extends Stacktraces {
   def isSpecificationFromSpecs2orScalaz(st: Seq[StackTraceElement]) = {
     isFromClass({ fullClassName: String =>
       val className = fullClassName.takeWhile(_ != '$').mkString
+      // this is a fix for #533 to properly recognize org.specs2.mutable.Spec
+      // used by a normal user
+      !className.split("\\.").last.equals("Spec") &&
       className.endsWith("Spec") && fromSpecs2orScalaz(className)
     }, st.takeWhile(t => fromSpecs2orScalaz(t.getClassName)))
   }
