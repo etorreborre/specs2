@@ -29,7 +29,7 @@ You can install Maven from [there](http://maven.apache.org/guides/getting-starte
 <dependencies>
   <dependency>
     <groupId>org.specs2</groupId>
-    <artifactId>specs2-core_2.11</artifactId>
+    <artifactId>specs2-core_2.12</artifactId>
     <version>$VERSION</version>
     <scope>test</scope>
   </dependency>
@@ -49,7 +49,7 @@ repositories {
 }
 
 dependencies {
-  testCompile "org.specs2:specs2-core_2.11:$VERSION"
+  testCompile "org.specs2:specs2-core_2.12:$VERSION"
 }
 ```
 
@@ -60,7 +60,8 @@ Depending on the $specs2 features you want to use you will need to add more depe
  Name                    | Functionality
  ----------------------- | --------------
  `specs2-matcher-extra`  | for the optional $specs2 matchers
- `specs2-cats`           | for the [cats](https://github.com/typelevel/cats) matchers
+ `specs2-cats`           | for the [cats](https://github.com/typelevel/cats) matchers (only for `cats < 0.8.x`)
+ `specs2-scalaz`         | for the [scalaz](https://github.com/scalaz/scalaz) matchers (`TaskMatcher` for example)
  `specs2-scalacheck`     | to use ScalaCheck properties in specifications
  `specs2-mock`           | to use Mockito matchers
  `specs2-analysis`       | to use the package dependencies matcher

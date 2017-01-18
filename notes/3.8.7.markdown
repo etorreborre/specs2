@@ -2,15 +2,16 @@ Maintenance version.
 
 ## Improvements
 
- * **core** updated to Scala `2.12.1`
- * **core** update scalaz to `7.2.7` and `7.1.7` (use specs2 version `3.8.6-scalaz-7.1`)
- * **scalacheck** updated scalacheck to `0.13.4`
- * **core** added a trait for removing all `Reference` implicits in mutable specs: `org.specs2.specification.dsl.mutable.NoReferenceDsl` [#514](https://github.com/etorreborre/specs2/issues/514)
-
+ * **core** added the `must_!==` and `should_!==` operators
+ * **core** removed the internal dependency to `scalaz-stream` classes a first step towards removing the dependency on Scalaz
+ * **matcher** moved `TaskMatchers` and `FuturezMatchers` to the `specs2-scalaz` module
+ * **cats** the `specs2-cats` module is deprecated since it only contains `XorMatchers` now removed from `cats`
+ * **project** update scalaz to `7.1.11` (use specs2 version `3.8.7-scalaz-7.1`)
+ * **project** make build Scala 2.13 friendly [#532](https://github.com/etorreborre/specs2/issues/532) (thanks to @SethTisue)
+ * **project** add compatibility with Scalaz 7.3. [#531](https://github.com/etorreborre/specs2/issues/531) (thanks to @sellout)
+ 
 ## Fixes
 
- * **mockito** fixed the evaluation of calls for in order calls when using Mockito. Specified the use of `inOrder` even for just one mock in the User Guide [#518](https://github.com/etorreborre/specs2/issues/518)
- * **core** fixed the `equals` method for `Location` which results in a well-behaved `Fragment` as a hashmap key and consequently allows to set the location hashCode of a `Fragment` as a description id in `JUnit`. This way the Eclipse IDE can distinguish different tests with the same name
- * **html** measure and display the total run time of a specification in the console and html [#507](https://github.com/etorreborre/specs2/issues/507)
- * **guide** set sidebar size for narrow screens [#499](https://github.com/etorreborre/specs2/issues/499) thanks to Emma Burrows
- * **guide** fixed the link to the Mockito project [#508](https://github.com/etorreborre/specs2/issues/508) thanks to Emma Burrows
+ * **core** fixed the location of `MatchResult` with `org.specs2.mutable.Spec` [#533](https://github.com/etorreborre/specs2/issues/533)
+ * **core** fixed the creation of `Arguments()` when no values are passed so that system properties are still read
+ * **core** fixed the evaluation of results with the `ThrownExpectations` trait so that they are always evaluated just once
