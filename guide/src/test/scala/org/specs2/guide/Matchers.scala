@@ -115,6 +115,7 @@ Future { Thread.sleep(100); 1 } must be_>(0).await(retries = 2, timeout = 100.mi
  * use `attempt` to create a matcher that will match on `Matcher[scalaz.concurrent.Future[T]]` (this requires an ${"execution environment" ~/ ExecutionEnvironments}): ${snippet{
   // 8<--
   import scala.concurrent.duration._
+  import org.specs2.matcher.FuturezMatchers._
   // 8<--
 // see the Matchers-Futures reference card on how to get an ExecutionEnv
 implicit val ee: ExecutionEnv = ???

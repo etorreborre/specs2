@@ -108,7 +108,7 @@ object build extends Build {
     settings = moduleSettings("guide") ++
       Seq(name := "specs2-guide") ++
       documentationSettings
-  ).dependsOn(examples % "compile->compile;test->test")
+  ).dependsOn(examples % "compile->compile;test->test", scalaz)
 
   lazy val gwt = Project(id = "gwt", base = file("gwt"),
     settings = Seq(

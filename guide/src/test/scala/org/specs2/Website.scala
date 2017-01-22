@@ -28,15 +28,15 @@ class Website extends Specification with Specs2Variables with Specs2Tags { def i
 
     pages.map { page =>
       for {
-        _               <- directories.map(d => fs.copyDir(d, siteOutputDir / d.name)).sequenceU
-        template        <- fs.readFile(page)
+        _               <- directories.map(d => fs.copyDir(d, siteOutputDir / d.name)).sequenceU.toAction
+        template        <- fs.readFile(page).toAction
         replacedVersion <- HtmlTemplate.runTemplate(template, vars)
         _               <-
           fs.writeFile(siteOutputDir | page.name, replacedVersion) >> {
             // copy the index page at the root of the site
             // it will then re-direct to a specific version
             if (page.path.contains("index.html") && isOfficial(VERSION)) fs.writeFile(outputDir | page.name, replacedVersion)
-            else Actions.ok(())
+            else Operations.ok(())
           }
       } yield ()
     }.sequenceU >> writeVersionsFile(fs, siteOutputDir, vars("GUIDE_DIR"), vars("API_DIR")).as(true)
@@ -45,7 +45,7 @@ class Website extends Specification with Specs2Variables with Specs2Tags { def i
   def createUserGuide = { env1: Env =>
     val guideOutputDir = outputDir / "guide" / versionDirName
     val env = env1.copy(arguments = Arguments.split(s"all html console html.search html.toc html.nostats html.outdir ${guideOutputDir.dirPath}"))
-    env.fileSystem.copyFile(guideOutputDir / "css")(resource("css/specs2-user.css")) >>
+    env.fileSystem.copyFile(guideOutputDir / "css")(resource("css/specs2-user.css")).toAction >>
     ClassRunner.report(env)(UserGuide).as(true)
   }
 

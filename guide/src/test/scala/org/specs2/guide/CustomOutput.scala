@@ -1,8 +1,7 @@
 package org.specs2
 package guide
 
-import scalaz.concurrent.Task
-import org.specs2.codata._
+import org.specs2.control.eff._
 
 object CustomOutput extends UserGuidePage { def is = s2"""
 
@@ -40,23 +39,19 @@ The `${fullName[org.specs2.reporter.Printer]}` trait defines how to output each 
 def fold(env: Env, spec: SpecStructure): Fold[Fragment]
 ```
 
-So what you need to create is a `Fold` over the executing specification. What is it? A `Fold` is composed of 5 operations:${snippet{
-trait Fold[Fragment] {
+So what you need to create is a `Fold` over the executing specification. What is it? A `Fold` is composed of 3 operations:${snippet{
+trait Fold[R, A, B] {
   type S
 
-  def prepare: Task[Unit]
-  def init: S
-  def sink: Sink[Task, (Fragment, S)]
-  def fold: (Fragment, S) => S
-  def last(s: S): Task[Unit]
+  def start: Eff[R, S]
+  def fold: (S, A) => S
+  def end(s: S): Eff[R, B]
 }
 }}
 
- * `prepare` is a `Task` which can "prepare" the reporting, like creating a directory
- * `init` is an initial state of type `S`. By using some state you can accumulate information about the execution of the whole specification
- * `sink` is a scalaz-stream `Sink` which can output each `Fragment` and possibly the current state
+ * `start` is an initial state of type `S`. By using some state you can accumulate information about the execution of the whole specification
  * `fold` is the function calculating the next state based on the current `Fragment` and the previous state
- * `last` take the last state and returns a `Task` doing the last action like reporting the final statistics
+ * `end` take the last state and returns a computation doing the last action like reporting the final statistics
 
 Once you've defined your `Printer` trait you can use the `printer` argument like so:
 ```
