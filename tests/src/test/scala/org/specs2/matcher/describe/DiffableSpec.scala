@@ -102,8 +102,8 @@ Compare result
     mixed Left and Right return EitherTypeDifferent   ${ Diffable.diff(Left[String, String]("abc"), Right[String, String]("def")) must_=== EitherTypeDifferent(isActualRight = false)  }
     mixed Left and Right return EitherTypeDifferent   ${ Diffable.diff(Right[String, String]("def"), Left[String, String]("abc")) must_=== EitherTypeDifferent(isActualRight = true)  }
 
-    Support Right without Left type information       ${ Diffable.diff(Right("abc"), Right("abc")) must_=== EitherIdentical(PrimitiveIdentical("abc"), isRight = true) }
-    Support Left without Right type information       ${ Diffable.diff(Left("abc"), Left("abc")) must_=== EitherIdentical(PrimitiveIdentical("abc"), isRight = false)  }
+    Support Right without Left type information       $${ Diffable.diff(Right("abc"), Right("abc")) must_=== EitherIdentical(PrimitiveIdentical("abc"), isRight = true) }
+    Support Left without Right type information       $${ Diffable.diff(Left("abc"), Left("abc")) must_=== EitherIdentical(PrimitiveIdentical("abc"), isRight = false)  }
 
 
 
@@ -115,12 +115,12 @@ Compare result
 
   Similar Failure Try object will return TryIdentical           ${ Diffable.diff(Failure[RuntimeException](ex), Failure[RuntimeException](ex)) must_=== TryIdentical(ex, isSuccess = false) }
   Different Failure Try object will return TryIdentical         ${ Diffable.diff(Failure[RuntimeException](ex), Failure[RuntimeException](ex2)) must_=== TryDifferent(Diffable.diff(ex, ex2), isSuccess = false) }
-  Support failure with no type information                      ${ Diffable.diff(Failure(ex), Failure(ex2)) must_=== TryDifferent(Diffable.diff(ex, ex2), isSuccess = false) }
+  Support failure with no type information                      $${ Diffable.diff(Failure(ex), Failure(ex2)) must_=== TryDifferent(Diffable.diff(ex, ex2), isSuccess = false) }
 
   Comparing success with failure will return type difference    ${ Diffable.diff(Try("abc"), Failure[String](ex2)) must_=== TryTypeDifferent(isActualSuccess = true) }
   Comparing success with failure will return type difference    ${ Diffable.diff(Failure[String](ex2), Try("abc")) must_=== TryTypeDifferent(isActualSuccess = false) }
   Comparing failure with success will return type difference    ${ Diffable.diff(Try("abc"), Failure[String](ex2)) must_=== TryTypeDifferent(isActualSuccess = true) }
-  todoL: handle non explicit types for Failure !!!
+  todo: handle non explicit types for Failure !!!
 
 
     We need to support different type compare
@@ -136,9 +136,9 @@ Compare result
   def m1 = {
     Diffable.diff(Map("a" -> "b", "c" -> "d", "e" -> "f"),
       Map("a" -> "b", "c" -> "x", "g" -> "h")) must_==
-      MapDifference(identical = Seq("a" -> "b"),
+      MapDifference(same    = Seq("a" -> "b"),
                     changed = Seq("c" -> PrimitiveDifference("d", "x")),
-                    added = Seq("g" -> "h"),
+                    added   = Seq("g" -> "h"),
                     removed = Seq("e" -> "f"))
   }
 
@@ -155,8 +155,8 @@ Compare result
       t.value match {
         case v: ThrowableDifferent if v.added.nonEmpty || v.removed.nonEmpty => failure("Exception contained added or removed lines", t)
         case v: ThrowableDifferent if v.result.count( _.isInstanceOf[StackElementDifferent] ) > 1 => failure("Exception contained more than once difference in stacktrace", t)
-        case v: ThrowableDifferent if v.result.headOption.contains(diff) => success("ok", t)
-        case v: ThrowableDifferent if !v.result.headOption.contains(diff) => failure(s"expected: $diff instead got: ${v.result.head}", t)
+        case v: ThrowableDifferent if v.result.headOption.exists(_ == diff) => success("ok", t)
+        case v: ThrowableDifferent if !v.result.headOption.exists(_ == diff) => failure(s"expected: $diff instead got: ${v.result.head}", t)
         case e => failure(s"result is of wrong type, should be ThrowableDifferent but was [${e.getClass.getSimpleName}]", t)
       }
   }

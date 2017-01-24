@@ -6,13 +6,13 @@ import org.specs2.text.NotNullStrings._
 
 import scala.collection.{GenTraversable, GenTraversableOnce}
 
-class EqualityMatcher[T : Diffable](t: =>T, equality: (T, T) => Boolean = (t1:T, t2:T) => t1 == t2) extends AdaptableMatcher[T] { outer =>
+class EqualityMatcher[T : Diffable](t: =>T) extends AdaptableMatcher[T] { outer =>
 
   protected val ok: String => String = identity
   protected val ko: String => String = identity
 
   def adapt(f: T => T, okFunction: String => String, koFunction: String => String) = {
-    new EqualityMatcher(f(t), equality) {
+    new EqualityMatcher(f(t)) {
       override def apply[S <: T](s: Expectable[S]): MatchResult[S] = {
         val originalValues = s"\nOriginal values\n  Expected: '$t'\n  Actual  : '${s.value}'"
         result(super.apply(s.map(f)).updateMessage(_ + originalValues), s)
@@ -23,38 +23,22 @@ class EqualityMatcher[T : Diffable](t: =>T, equality: (T, T) => Boolean = (t1:T,
     }
   }
 
-  /**
-   * we perform 2 kinds of check, depending on the elements to compare
-   *
-   *  - unordered sequences (maps, sets) are being compared with a matching algorithm
-   *  - arrays are being compared with the deep equality and a matching algorithm is used for missing elements
-   *  - sequences are being compared with the regular equality and a matching algorithm is used for missing elements
-   *  - other objects are being compared using the regular equality
-   *
-   * @return a MatchResult describing the outcome of the match
-   */
   def apply[S <: T](b: Expectable[S]): MatchResult[S] = {
     val (actual, expected) = (b.value, t)
-    val isEqual = checkEquality(actual, expected)
     val diff = Diffable.diff(actual, expected)
 
     failureDetailsFor(actual, expected) match {
       case Some(failureDetail) =>
-        result(isEqual,
+        result(diff.identical,
                ok(s"${b.description} == '${expected.notNull}'"),
                ko(b.describe(diff.render)), b, failureDetail)
+
       case None =>
-        result(isEqual,
+        result(diff.identical,
                ok(s"${b.description} == '${expected.notNull}'"),
                ko(b.describe(diff.render)), b, expected.notNull, actual.notNull)
     }
   }
-
-  private def checkEquality(actual: Any, expected: Any): Boolean =
-    (actual, expected) match {
-      case (e1: Array[_], e2: Array[_]) => e1.deep == e2.deep
-      case (e1, e2) => e1 == e2
-    }
 
   private def failureDetailsFor(actual: Any, expected: Any): Option[Details] =
     (actual, expected) match {
