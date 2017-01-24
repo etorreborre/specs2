@@ -22,6 +22,9 @@ trait DiffableLowPriorityCaseClass extends DiffableLowPriority2 {
   // cancel the inherited eitherDiffable implicit here, it will be found in the CaseClassDiffs trait directly
   override def eitherDiffable[L : Diffable, R : Diffable]: Diffable[Either[L, R]] = new EitherDiffable[L, R]
 
+  // cancel the inherited optionDiffable implicit here, it will be found in the CaseClassDiffs trait directly
+  override def optionDiffable[T : Diffable]: Diffable[Option[T]] = new OptionDiffable[T]
+
 }
 
 object CaseClassDiffs extends CaseClassDiffs

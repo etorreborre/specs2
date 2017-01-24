@@ -368,9 +368,9 @@ object ComparisonResultOps {
 
   case class PropertyDifference[A, E](actual: A, expected: E)
 
-  implicit class `Any -> String`(private val value: Any) extends AnyVal {
+  implicit class AnyRenderOps(val value: Any) extends AnyVal {
 
-    def render(showAll: Boolean): String =
+    def renderAny(showAll: Boolean = false): String =
       value match {
         case v if showAll => v.notNullWithClass(showAll = true)
         case (k, v) => s"${k.render} -> ${v.render}"
@@ -381,12 +381,12 @@ object ComparisonResultOps {
     def render: String = render(showAll = false)
   }
 
-  implicit class `Difference -> String`(private val diff: (Any, Any)) extends AnyVal {
+  implicit class DifferenceRenderOps(val diff: (Any, Any)) extends AnyVal {
     def renderDiff: String =
       s"${diff._1.render} != ${diff._2.render}"
   }
 
-  implicit class ClassesOps(private val values: String) extends AnyVal {
+  implicit class ClassesOps(val values: String) extends AnyVal {
     def wrapWith(`type`: String): String =
       s"${`type`}($values)"
 
@@ -394,7 +394,7 @@ object ComparisonResultOps {
       s"$tag: $values"
   }
 
-  implicit class SeqOps[T](private val s: Seq[T]) extends AnyVal {
+  implicit class SeqOps[T](val s: Seq[T]) extends AnyVal {
     final def toOption: Option[Seq[T]] = if (s.isEmpty) None else Some(s)
   }
 }
