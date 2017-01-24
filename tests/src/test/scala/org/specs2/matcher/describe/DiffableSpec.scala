@@ -5,8 +5,9 @@ import org.specs2.Spec
 import org.specs2.matcher._
 
 import scala.util.{Failure, Try}
+import CaseClassDiffs._
 
-class DiffableSpec extends Spec with CaseClassDiffs { def is = s2"""
+class DiffableSpec extends Spec { def is = s2"""
 
 Compare result
 ==============

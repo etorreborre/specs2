@@ -23,3 +23,5 @@ trait DiffableLowPriorityCaseClass extends DiffableLowPriority2 {
   override def eitherDiffable[L : Diffable, R : Diffable]: Diffable[Either[L, R]] = new EitherDiffable[L, R]
 
 }
+
+object CaseClassDiffs extends CaseClassDiffs
