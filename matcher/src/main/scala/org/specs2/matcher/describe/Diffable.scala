@@ -33,7 +33,6 @@ trait DiffableLowPriority1 extends DiffableLowPriority2 {
   implicit val exceptionDiffable: Diffable[Throwable] = new ThrowableDiffable
 
   //scala objects
-  implicit def optionDiffable[T : Diffable]: Diffable[Option[T]] = new OptionDiffable[T]
   implicit val optionNoneDiffable: Diffable[Option[Nothing]] = OptionNoneDiffable
 
   implicit def eitherRightDiffable[R : Diffable]: Diffable[Right[Nothing, R]] = new EitherRightDiffable[R]
@@ -51,6 +50,7 @@ trait DiffableLowPriority1 extends DiffableLowPriority2 {
 }
 
 trait DiffableLowPriority2 {
+  implicit def optionDiffable[T : Diffable]: Diffable[Option[T]] = new OptionDiffable[T]
   implicit def eitherDiffable[L : Diffable, R : Diffable]: Diffable[Either[L, R]] = new EitherDiffable[L, R]
   implicit def fallbackDiffable[T]: Diffable[T] = new FallbackDiffable[T]
 }

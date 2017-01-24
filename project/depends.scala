@@ -59,7 +59,8 @@ object depends {
     if (scalaMinorVersionAtLeast(scalaVersion, 11))
       Nil
     else
-      Seq(compilerPlugin("org.scalamacros" %% "paradise"    % "2.1.0" cross CrossVersion.full),
+      Seq(compilerPlugin(
+          "org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.full),
           "org.scalamacros" %% "quasiquotes" % "2.1.0")
 
   lazy val resolvers =

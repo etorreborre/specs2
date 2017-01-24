@@ -87,7 +87,6 @@ object build extends Build {
   lazy val core = Project(id = "core", base = file("core"),
     settings = Seq(
       libraryDependencies ++=
-        depends.reflect(scalaVersion.value) ++
         depends.paradise(scalaVersion.value) ++
         depends.testInterface.map(_ % "optional") ++
         depends.mockito.map(_ % "test") ++
@@ -155,7 +154,10 @@ object build extends Build {
   lazy val shapeless = Project(id = "shapeless", base = file("shapeless"),
     settings = moduleSettings("shapeless") ++
       Seq(name := "specs2-shapeless",
-        libraryDependencies ++= depends.shapeless(scalaVersion.value))
+        libraryDependencies ++=
+          depends.paradise(scalaVersion.value) ++
+          depends.shapeless(scalaVersion.value)
+      )
   ).dependsOn(matcher)
 
   lazy val cats = Project(id = "cats", base = file("cats"),
