@@ -1,10 +1,9 @@
-package org.specs2.matcher.describe.constraints
+package org.specs2.matcher.describe
 
 import org.specs2.Spec
 import org.specs2.matcher.TypecheckMatchers
-import org.specs2.matcher.describe.IsCaseClass
-import org.specs2.matcher.describe.IsCaseClass._
-
+import IsCaseClass.checkCaseClass
+import org.specs2.execute.Typecheck._
 
 class IsCaseClassMacroTest extends Spec with TypecheckMatchers { def is = s2"""
   macro is able to prove that class if of type case class ${
@@ -20,7 +19,7 @@ class IsCaseClassMacroTest extends Spec with TypecheckMatchers { def is = s2"""
   }
 
   type system is able to use macro and fails compilation if class is not a case class ${
-    tc"""CaseClassWrapper[NotCaseClass]""" must not(typecheck)
+    tc"""CaseClassWrapper[NotCaseClass]""" must not(succeed)
   }
 """
 

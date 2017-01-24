@@ -140,11 +140,11 @@ class SetDiffable[E] extends Diffable[Set[E]] {
 
   def diff(actual: Set[E], expected: Set[E]): ComparisonResult =
     if (actual == expected) SetIdentical(actual)
-    else SetDifference(identical = findIdentical(actual, expected),
+    else SetDifference(same = findSame(actual, expected),
       added = findAdded(actual, expected),
       removed = findRemoved(actual, expected))
 
-  private def findIdentical(actual: Set[E], expected: Set[E]): Seq[E] =
+  private def findSame(actual: Set[E], expected: Set[E]): Seq[E] =
     actual.intersect( expected ).toSeq
 
   private def findAdded(actual: Set[E], expected: Set[E]): Seq[E] =
@@ -171,9 +171,10 @@ class ArrayDiffable[E](implicit di: Diffable[E]) extends Diffable[Array[E]] {
 
   def diff(actual: Array[E], expected: Array[E]) =
     if (actual.deep == expected.deep) ArrayIdentical(actual)
-    else ArrayDifference(result = compareExisting(actual, expected),
-      added = expected.drop( actual.length ),
-      removed = actual.drop( expected.length ) )
+    else ArrayDifference(
+      results = compareExisting(actual, expected),
+      added    = expected.drop( actual.length ),
+      removed  = actual.drop( expected.length ) )
 
   private def compareExisting(actual: Array[E], expected: Array[E]) =
     actual.zip(expected)

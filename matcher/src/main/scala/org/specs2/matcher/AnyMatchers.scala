@@ -42,12 +42,12 @@ trait AnyBaseMatchers {
   /** matches if a == b */
   def equalTo[T](t: =>T) = beEqualTo(t)
   /** matches if a == b */
-  def beTypedEqualTo[T : Diffable](t: =>T, equality: (T, T) => Boolean = (t1:T, t2:T) => t1 == t2) =
-    new EqualityMatcher(t, equality)
+  def beTypedEqualTo[T : Diffable](t: =>T) =
+    new EqualityMatcher(t)
 
   /** matches if a == b */
-  def typedEqualTo[T](t: =>T, equality: (T, T) => Boolean = (t1:T, t2:T) => t1 == t2) =
-    beTypedEqualTo(t, equality)
+  def typedEqualTo[T](t: =>T) =
+    beTypedEqualTo(t)
 
   /** matches if a == b after an implicit conversion */
   def be_==~[T : Diffable, S](s: =>S)(implicit convert: S => T): Matcher[T] = new EqualityMatcher(convert(s)).
