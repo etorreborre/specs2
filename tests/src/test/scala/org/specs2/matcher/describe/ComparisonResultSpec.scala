@@ -130,7 +130,7 @@ class ComparisonResultSpec extends Spec { def is = s2"""
                   changed = Seq("c" -> PrimitiveDifference("d", "x")),
                   added   = Seq("g" -> "h"),
                   removed = Seq("e" -> "f")).render must_==
-      "Map('a' -> 'b', 'c' -> {'d' != 'x'}, added: 'g' -> 'h', removed: 'e' -> 'f')"
+      "Map('a' -> 'b',\n    'c' -> {'d' != 'x'},\n    added: 'g' -> 'h',\n    removed: 'e' -> 'f')"
   }
 
   def o1 = { OptionIdentical(Some(PrimitiveIdentical("abc"))).render must_== "Some('abc')" }
@@ -151,7 +151,7 @@ class ComparisonResultSpec extends Spec { def is = s2"""
   def set2 = { SetDifference(same = Seq("a", "b"), Seq.empty, Seq.empty).render must_== "Set('a', 'b')" }
   def set3 = { SetDifference(Seq.empty, added = Seq("c", "d"), Seq.empty).render must_== "Set(added: 'c', 'd')" }
   def set4 = { SetDifference(Seq.empty, Seq.empty, removed = Seq("e") ).render must_== "Set(removed: 'e')" }
-  def set5 = { SetDifference(same = Seq("a", "b"), added = Seq("c", "d"), removed = Seq("e")).render must_== "Set('a', 'b', added: 'c', 'd', removed: 'e')" }
+  def set5 = { SetDifference(same = Seq("a", "b"), added = Seq("c", "d"), removed = Seq("e")).render must_== "Set('a', 'b',\n    added: 'c', 'd',\n    removed: 'e')" }
 
 
   def seq1 = { SeqIdentical(Seq("a", "b")).render must_== "List('a', 'b')" }
@@ -175,7 +175,7 @@ class ComparisonResultSpec extends Spec { def is = s2"""
 
   def c1 = { CaseClassIdentical("ClassName").render must_=== "ClassName(...)" }
   def c2 = { CaseClassDifferent("ClassName", Seq(CaseClassPropertyComparison("prop2", PrimitiveIdentical("val"), identical = true),
-                                                 CaseClassPropertyComparison("prop", PrimitiveDifference("val1", "val2"), identical = false))).render must_=== "ClassName(prop2: 'val', prop: 'val1' != 'val2')" }
+                                                 CaseClassPropertyComparison("prop", PrimitiveDifference("val1", "val2"), identical = false))).render must_=== "ClassName(prop2: 'val',\n          prop: 'val1' != 'val2')" }
 
   def se1 = { StackElementIdentical(stackTraceElement).render must_=== stackTraceElement.toString }
   def se2 = { StackElementDifferent(PrimitiveDifference("class", "class1"),

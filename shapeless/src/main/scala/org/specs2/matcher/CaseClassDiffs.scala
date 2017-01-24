@@ -7,6 +7,9 @@ trait CaseClassDiffs extends DiffableLowPriority1 with DiffableLowPriorityCaseCl
   // the either diffable needs to be inferred before the case class diffable
   implicit def eitherDiffable1[L : Diffable, R : Diffable]: Diffable[Either[L, R]] = new EitherDiffable[L, R]
 
+  // the option diffable needs to be inferred before the case class diffable
+  implicit def optionDiffable1[T : Diffable]: Diffable[Option[T]] = new OptionDiffable[T]
+
 }
 
 trait DiffableLowPriorityCaseClass extends DiffableLowPriority2 {

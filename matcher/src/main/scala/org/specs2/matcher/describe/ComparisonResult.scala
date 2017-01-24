@@ -39,7 +39,7 @@ case class ThrowableIdentical(value: Throwable) extends ComparisonResult {
 
 case class ThrowableDifferent(result: Seq[ComparisonResult], added: Seq[StackTraceElement], removed: Seq[StackTraceElement]) extends ComparisonResult {
   def identical: Boolean =
-    true
+    false
 
   def render: String = {
     val results = result.map(_.render)
@@ -71,7 +71,7 @@ case class StackElementDifferent(className: ComparisonResult, methodName: Compar
 
 case class PrimitiveDifference(actual: Any, expected: Any) extends ComparisonResult {
   def identical: Boolean =
-    true
+    false
 
   def render: String =
     (actual, expected).renderDiff
@@ -89,8 +89,11 @@ case class SetDifference(same:    Seq[Any],
   with SetTypeProvider
   with ComparisonResult {
 
-  protected def renderElement(element: Any) = element.render
-  protected def renderChange(change: Any) = change.render
+  protected def renderElement(indent: String)(element: Any): String =
+    element.render
+
+  protected def renderChange(indent: String)(change: Any): String =
+    change.render
 }
 
 trait SetTypeProvider {
@@ -143,8 +146,11 @@ case class MapDifference(same:      Seq[(Any, Any)],
   with MapTypeProvider
   with ComparisonResult {
 
-  protected def renderElement(element: (Any, Any)) = element.render
-  protected def renderChange(change: (Any, ComparisonResult)) = s"${change._1.render} -> {${change._2.render}}"
+  protected def renderElement(indent: String)(element: (Any, Any)): String =
+    element.render
+
+  protected def renderChange(indent: String)(change: (Any, ComparisonResult)): String =
+    s"${change._1.render} -> {${change._2.render}}"
 }
 
 
@@ -247,10 +253,14 @@ case class CaseClassDifferent(className: String,
   extends UnorderedCollectionDifferent(result.filter(_.identical), result.filterNot(_.identical), Seq.empty, Seq.empty)
   with ComparisonResult {
 
-  protected def renderElement(element: CaseClassPropertyComparison) = renderProperty(element)
-  protected def renderChange(change: CaseClassPropertyComparison)   = renderProperty(change)
+  protected def renderElement(indent: String)(element: CaseClassPropertyComparison): String =
+    renderProperty(indent)(element)
 
-  private def renderProperty(r: CaseClassPropertyComparison) = r.result.render.tagWith(r.fieldName)
+  protected def renderChange(indent: String)(change: CaseClassPropertyComparison): String =
+    renderProperty(indent)(change)
+
+  private def renderProperty(indent: String)(r: CaseClassPropertyComparison): String =
+    r.result.render(indent + " " * (r.fieldName.size + 2)).tagWith(r.fieldName)
 }
 
 case class OtherIdentical(actual: Any) extends ComparisonResult {
@@ -265,7 +275,9 @@ case class OtherDifferent(actual: Any, expected: Any) extends ComparisonResult {
   def identical: Boolean =
     false
 
-  def render = s"${actual.render(showAll = comparingPrimitiveWithObject(actual, expected))} != ${expected.render(showAll = comparingPrimitiveWithObject(actual, expected))}"
+  def render: String =
+    s"${actual.renderAny(showAll = comparingPrimitiveWithObject(actual, expected))} != "+
+    s"${expected.renderAny(showAll = comparingPrimitiveWithObject(actual, expected))}"
 
   private def comparingPrimitiveWithObject(a: Any, e: Any): Boolean = {
     val (classA, classB) = classOf(a) -> classOf(e)
@@ -299,37 +311,34 @@ abstract class UnorderedCollectionDifferent[Element, Change](same:    Seq[Elemen
                                                              added:   Seq[Element],
                                                              removed: Seq[Element]) extends ComparisonResult {
 
-  def render: String =
-    Seq(renderIdentical ++ renderChanged ++ renderAdded ++ renderRemoved)
-      .flatten
-      .mkString(", ")
-      .wrapWith(className)
+  def identical: Boolean =
+    false
 
-  private def renderIdentical =
-    identical.toOption
-             .map(_.map(renderElement)
-                    .mkString(", "))
+  override def render: String =
+    render("")
 
-  private def renderChanged =
-    changed.toOption
-           .map(_.map(renderChange)
-                  .mkString(", "))
+  override def render(indent: String): String = {
+    val newIndent = indent+ " " * (className.size + 1)
+    Seq(renderIdentical(newIndent) ++ renderChanged(newIndent) ++ renderAdded(newIndent) ++ renderRemoved(newIndent))
+      .flatten.mkString("", ",\n"+newIndent, "").wrapWith(className)
+  }
 
-  private def renderAdded =
-    added.toOption
-         .map(_.map(renderElement)
-                .mkString(", ")
-                .tagWith("added"))
+  private def renderIdentical(indent: String): Option[String] =
+    same.toOption.map(_.map(renderElement(indent)).mkString(", "))
 
-  private def renderRemoved =
-    removed.toOption
-           .map(_.map(renderElement)
-                  .mkString(", ")
-                  .tagWith("removed"))
+  private def renderChanged(indent: String): Option[String] =
+    changed.toOption.map(_.map(renderChange(indent)).mkString(", "))
+
+  private def renderAdded(indent: String): Option[String] =
+    added.toOption.map(_.map(renderElement(indent)).mkString(", ").tagWith("added"))
+
+  private def renderRemoved(indent: String): Option[String] =
+    removed.toOption.map(_.map(renderElement(indent)).mkString(", ").tagWith("removed"))
 
   def className: String
-  protected def renderElement(element: Element): String
-  protected def renderChange(change: Change): String
+
+  protected def renderElement(indent: String)(element: Element): String
+  protected def renderChange(indent: String)(change: Change): String
 }
 
 abstract class OrderedCollectionDifferent[Element](results: Seq[ComparisonResult],
@@ -340,26 +349,16 @@ abstract class OrderedCollectionDifferent[Element](results: Seq[ComparisonResult
 
   def render: String =
     Seq(renderResult ++ renderAdded ++ renderRemoved)
-      .flatten
-      .mkString(", ")
-      .wrapWith(className)
+      .flatten.mkString(", ").wrapWith(className)
 
-  private def renderResult =
-    result.toOption
-          .map(_.map(_.render)
-          .mkString(", "))
+  private def renderResult: Option[String] =
+    results.toOption.map(_.map(_.render).mkString(", "))
 
-  private def renderAdded =
-    added.toOption
-         .map(_.map(_.render)
-                       .mkString(", ")
-                .tagWith("added"))
+  private def renderAdded: Option[String] =
+    added.toOption.map(_.map(_.render).mkString(", ").tagWith("added"))
 
-  private def renderRemoved =
-    removed.toOption
-           .map(_.map(_.render)
-                  .mkString(", ")
-                  .tagWith("removed"))
+  private def renderRemoved: Option[String] =
+    removed.toOption.map(_.map(_.render).mkString(", ").tagWith("removed"))
 
   def className: String
 }
@@ -378,7 +377,7 @@ object ComparisonResultOps {
         case x => unq(x)
       }
 
-    def render: String = render(showAll = false)
+    def render: String = renderAny(false)
   }
 
   implicit class DifferenceRenderOps(val diff: (Any, Any)) extends AnyVal {
