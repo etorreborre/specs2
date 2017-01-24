@@ -47,25 +47,25 @@ object Typecheck {
             c.parse(codeString)
           } catch {
             case ParseException(_, m) if ps.deferParsing =>
-              q"Typechecked($codeString, ParseError($m))"
+              q"org.specs2.execute.Typechecked($codeString, org.specs2.execute.ParseError($m))"
             case ParseException(_, m) if !ps.deferParsing =>
               c.abort(c.enclosingPosition, m)
             case e: Exception =>
-              q"Typechecked($codeString, UnexpectedTypecheckError(${e.getMessage}))"
+              q"org.specs2.execute.Typechecked($codeString, org.specs2.execute.UnexpectedTypecheckError(${e.getMessage}))"
           }
           c.typecheck(parsed, withMacrosDisabled = true)
           // if that's ok parse with macros
           try {
             c.typecheck(parsed)
-            q"Typechecked($codeString, TypecheckSuccess)"
+            q"org.specs2.execute.Typechecked($codeString, org.specs2.execute.TypecheckSuccess)"
           } catch {
             // got a typecheck exception with macros
             case TypecheckException(_, m) if ps.deferMacros =>
-              q"Typechecked($codeString, TypecheckError($m))"
+              q"org.specs2.execute.Typechecked($codeString, org.specs2.execute.TypecheckError($m))"
             case TypecheckException(_, m) if !ps.deferMacros =>
               c.abort(c.enclosingPosition, m)
             case e: Exception =>
-              q"Typechecked($codeString, UnexpectedTypecheckError(${e.getMessage}))"
+              q"org.specs2.execute.Typechecked($codeString, org.specs2.execute.UnexpectedTypecheckError(${e.getMessage}))"
           }
         } catch {
           // got a typecheck exception without macros
@@ -73,10 +73,10 @@ object Typecheck {
           case TypecheckException(_, m) if !ps.deferImplicits && m.startsWith("could not find implicit value") =>
             c.abort(c.enclosingPosition, m)
           case TypecheckException(_, m) =>
-            q"Typechecked($codeString, TypecheckError($m))"
+            q"org.specs2.execute.Typechecked($codeString, org.specs2.execute.TypecheckError($m))"
         }
 
-      case other => q"""Typechecked("", CanTypecheckLiteralsOnly)"""
+      case other => q"""org.specs2.execute.Typechecked("", CanTypecheckLiteralsOnly)"""
     }
   }
 
@@ -104,7 +104,7 @@ object Typecheck {
 
     val texts = c.prefix.tree match { case Apply(_, List(Apply(_, ts))) => ts }
     if (texts.size != 1)
-      q"""Typechecked(${texts.mkString}, TypecheckError("can only typecheck an interpolated string with no variables at the moment"))"""
+      q"""org.specs2.execute.Typechecked(${texts.mkString}, TypecheckError("can only typecheck an interpolated string with no variables at the moment"))"""
     else {
       val codeString = texts.head.asInstanceOf[Literal].value.value.asInstanceOf[String]
         // evaluate the parameters
@@ -117,11 +117,11 @@ object Typecheck {
             c.parse(codeString)
           } catch {
             case ParseException(_, m) if ps.deferParsing =>
-              q"Typechecked($codeString, ParseError($m))"
+              q"org.specs2.execute.Typechecked($codeString, org.specs2.execute.ParseError($m))"
             case ParseException(_, m) if !ps.deferParsing =>
               c.abort(c.enclosingPosition, m)
             case e: Exception =>
-              q"Typechecked($codeString, UnexpectedTypecheckError(${e.getMessage}))"
+              q"org.specs2.execute.Typechecked($codeString, org.specs2.execute.UnexpectedTypecheckError(${e.getMessage}))"
           }
           c.typecheck(parsed, withMacrosDisabled = true)
           // if that's ok parse with macros
@@ -130,11 +130,11 @@ object Typecheck {
           } catch {
             // got a typecheck exception with macros
             case TypecheckException(_, m) if ps.deferMacros =>
-              q"Typechecked($codeString, TypecheckError($m))"
+              q"org.specs2.execute.Typechecked($codeString, org.specs2.execute.TypecheckError($m))"
             case TypecheckException(_, m) if !ps.deferMacros =>
               c.abort(c.enclosingPosition, m)
             case e: Exception =>
-              q"Typechecked($codeString, UnexpectedTypecheckError(${e.getMessage}))"
+              q"org.specs2.execute.Typechecked($codeString, org.specs2.execute.UnexpectedTypecheckError(${e.getMessage}))"
           }
         } catch {
           // got a typecheck exception without macros
@@ -142,7 +142,7 @@ object Typecheck {
           case TypecheckException(_, m) if !ps.deferImplicits && m.startsWith("could not find implicit value") =>
             c.abort(c.enclosingPosition, m)
           case TypecheckException(_, m) =>
-            q"Typechecked($codeString, TypecheckError($m))"
+            q"org.specs2.execute.Typechecked($codeString, org.specs2.execute.TypecheckError($m))"
         }
     }
   }
