@@ -14,8 +14,8 @@ class EqualityMatcher[T : Diffable](t: =>T) extends AdaptableMatcher[T] { outer 
   def adapt(f: T => T, okFunction: String => String, koFunction: String => String) = {
     new EqualityMatcher(f(t)) {
       override def apply[S <: T](s: Expectable[S]): MatchResult[S] = {
-        val originalValues = s"\nOriginal values\n  Expected: '$t'\n  Actual  : '${s.value}'"
-        result(super.apply(s.map(f)).updateMessage(_ + originalValues), s)
+        val checkedValues = s"\n\nChecked values\n  Actual:   '${s.value}'\n  Expected: '$t'"
+        result(super.apply(s.map(f)).updateMessage(_ + checkedValues), s)
       }
 
       override protected val ok: String => String = okFunction compose outer.ok
