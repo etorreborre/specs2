@@ -161,7 +161,7 @@ class ComparisonResultSpec extends Spec { def is = s2"""
   def seq5 = { SeqDifference(Seq.empty, Seq.empty, removed = Seq("f")).render must_== "List(removed: 'f')" }
   def seq6 = { SeqDifference(result = Seq(PrimitiveIdentical("a"), PrimitiveDifference("b", "c")),
                              added = Seq("d", "e"),
-                             removed = Seq("f")).render must_== "List('a', 'b' != 'c', added: 'd', 'e', removed: 'f')" }
+                             removed = Seq("f")).render must_== "List('a', 'b' != 'c',\n     added: 'd', 'e',\n     removed: 'f')" }
 
   def arr1 = { ArrayIdentical(Seq("a", "b")).render must_== "Array('a', 'b')" }
   def arr2 = { ArrayDifference(Seq(PrimitiveIdentical("a")), Seq.empty, Seq.empty).render must_== "Array('a')" }
@@ -170,7 +170,7 @@ class ComparisonResultSpec extends Spec { def is = s2"""
   def arr5 = { ArrayDifference(Seq.empty, Seq.empty, removed = Seq("f")).render must_== "Array(removed: 'f')" }
   def arr6 = { ArrayDifference(results = Seq(PrimitiveIdentical("a"), PrimitiveDifference("b", "c")),
                                added   = Seq("d", "e"),
-                               removed = Seq("f")).render must_== "Array('a', 'b' != 'c', added: 'd', 'e', removed: 'f')" }
+                               removed = Seq("f")).render must_== "Array('a', 'b' != 'c',\n      added: 'd', 'e',\n      removed: 'f')" }
 
 
   def c1 = { CaseClassIdentical("ClassName").render must_=== "ClassName(...)" }
