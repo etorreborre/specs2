@@ -34,12 +34,12 @@ class BeEqualToMatcherSpec extends Spec with ResultMatchers with ShouldMatchers 
   ${ "a" must not be_!==("a") }
 
   Array equality uses deep array comparison
-  ${ Array(1, 2) must be_==(Array(1, 2)) }
-  ${ Array(1, 3) must not be_==(Array(1, 2)) }
+  ${ Array(1, 2) must be_===(Array(1, 2)) }
+  ${ Array(1, 3) must not be_===(Array(1, 2)) }
   ${ Array(1, 2) must be_===(Array(1, 2)) }
   ${ Array(Array(1, 2)) must be_===(Array(Array(1, 2))) }
   ${ Array(1, 3) must not be_===(Array(1, 2)) }
-  ${ (Array(1, 3) must not be_===(Array(1, 2))) returns
+  ${ (Array(1, 3) must be_===(Array(1, 2))) returns
      """Array(1, 3 != 2)""" }
 
   Set equality
@@ -47,7 +47,9 @@ class BeEqualToMatcherSpec extends Spec with ResultMatchers with ShouldMatchers 
   ${ (Set(1, 2) must be_==(Set(2, 3))) returns
       """Set(1, 2) != Set(2, 3)""" }
   ${ (Set(1, 2) must be_===(Set(2, 3))) returns
-      """Set(2, added: 3, removed: 1)""" }
+      """|Set(2,
+         |    added: 3,
+         |    removed: 1)""".stripMargin }
 
   Map equality
   ${ Map(1 -> 2, 3 -> 4) must be_==(Map(3 -> 4, 1 -> 2)) }
@@ -110,7 +112,7 @@ Details
         "\\Qhello: java.lang.String != hello: org.specs2.matcher.Hello\\E")
   }
 
-  def d3 = { List("1, 2") must be_===( List("1", "2") ) must beFailing( "\\QList('1, 2' != '1', added: '2')\\E" ) }
+  def d3 = { List("1, 2") must be_===( List("1", "2") ) must beFailing( "\\QList('1, 2' != '1',\n     added: '2')\\E" ) }
 
   def d4= { Map(1 -> "2") must be_===( Map(1 -> 2) ) must beFailing( "\\QMap(1 -> {'2' != 2})\\E" ) }
 

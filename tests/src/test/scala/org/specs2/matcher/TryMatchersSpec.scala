@@ -43,7 +43,7 @@ class TryMatchersSpec extends Spec with TryMatchers with ResultMatchers { def is
 
   """
 
-  def e = new MyException("boom")
+  val e = new MyException("boom")
   class MyException(m: String) extends Exception(m) {
     override def toString = m
     override def equals(o: Any) = o match {

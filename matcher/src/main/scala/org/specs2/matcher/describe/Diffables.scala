@@ -1,6 +1,7 @@
 package org.specs2.matcher.describe
 
 import scala.util.{Failure, Success, Try}
+import scalaz._, Scalaz._
 
 /**
  * Diffable instances for various types
@@ -51,7 +52,7 @@ class OptionDiffable[T : Diffable](implicit di: Diffable[T]) extends Diffable[Op
   def diff(actual: Option[T], expected: Option[T]): ComparisonResult =
     (actual, expected) match {
       case (Some(_), None) | (None, Some(_))  => OptionTypeDifferent(actual.isDefined, expected.isDefined)
-      case (a, e) if a == e                   => OptionIdentical( compare(a, e) )
+      case (a, e) if a == e                   => OptionIdentical(compare(a, e))
       case (Some(a), Some(e)) if a != e       => OptionDifferent(di.diff(a, e))
     }
 
@@ -71,8 +72,8 @@ class TryDiffable[T : Diffable](implicit di: Diffable[T], tdi: Diffable[Throwabl
   def diff(actual: Try[T], expected: Try[T]) = (actual, expected) match {
     case (Success(a), Success(e)) if a == e => TryIdentical(a, isSuccess = true)
     case (Failure(a), Failure(e)) if a == e => TryIdentical(a, isSuccess = false)
-    case (Success(a), Success(e)) => TryDifferent( di.diff(a, e), isSuccess = true)
-    case (Failure(a), Failure(e)) => TryDifferent( tdi.diff(a, e), isSuccess = false)
+    case (Success(a), Success(e)) => TryDifferent(di.diff(a, e), isSuccess = true)
+    case (Failure(a), Failure(e)) => TryDifferent(tdi.diff(a, e), isSuccess = false)
     case (a, e) => TryTypeDifferent(a.isSuccess)
   }
 }
@@ -80,7 +81,7 @@ class TryDiffable[T : Diffable](implicit di: Diffable[T], tdi: Diffable[Throwabl
 class FailureDiffable(implicit di: Diffable[Throwable]) extends Diffable[Failure[Nothing]] {
   def diff(actual: Failure[Nothing], expected: Failure[Nothing]) = (actual, expected) match {
     case (Failure(a), Failure(e)) if a == e => TryIdentical(a, isSuccess = false)
-    case (Failure(a), Failure(e)) => TryDifferent( di.diff(a, e), isSuccess = false)
+    case (Failure(a), Failure(e)) => TryDifferent(di.diff(a, e), isSuccess = false)
   }
 }
 
@@ -96,7 +97,7 @@ class MapDiffable[K, V](implicit diff: Diffable[V]) extends Diffable[Map[K, V]] 
 
 
   private def findIdentical(actual: Map[K, V], expected: Map[K, V]) =
-    actual.toSeq.intersect( expected.toSeq )
+    actual.toSeq.intersect(expected.toSeq)
 
   private def findChanged(actual: Map[K, V], expected: Map[K, V]) =
     for {
@@ -107,23 +108,23 @@ class MapDiffable[K, V](implicit diff: Diffable[V]) extends Diffable[Map[K, V]] 
     } yield (k, diff.diff(v1, v2))
 
   private def findAdded(actual: Map[K, V], expected: Map[K, V]) =
-    expected.filterKeys( k => !actual.contains(k)).toSeq
+    expected.filterKeys(k => !actual.contains(k)).toSeq
 
   private def findRemoved(actual: Map[K, V], expected: Map[K, V]) =
-    actual.filterKeys( k => !expected.contains(k)).toSeq
+    actual.filterKeys(k => !expected.contains(k)).toSeq
 }
 
-class StackTraceElementDiffable(implicit sdi: Diffable[String], idi: Diffable[Int]) extends Diffable[StackTraceElement] {
+class StackTraceElementDiffable(implicit nameDiffable: Diffable[String], lineDiffable: Diffable[Int]) extends Diffable[StackTraceElement] {
 
   def diff(actual: StackTraceElement, expected: StackTraceElement) =
-    if (actual == expected) StackElementIdentical(actual)
-    else StackElementDifferent(sdi.diff(actual.getClassName, expected.getClassName),
-      sdi.diff(actual.getMethodName, expected.getMethodName),
-      for {
-        a <- Option(actual.getFileName)
-        e <- Option(expected.getFileName)
-      } yield sdi.diff(a, e),
-      idi.diff(actual.getLineNumber, expected.getLineNumber) )
+    if (actual == expected)
+      StackElementIdentical(actual)
+    else
+      StackElementDifferent(
+        nameDiffable.diff(actual.getClassName, expected.getClassName),
+        nameDiffable.diff(actual.getMethodName, expected.getMethodName),
+        (Option(actual.getFileName) |@| Option(expected.getFileName))(nameDiffable.diff),
+        lineDiffable.diff(actual.getLineNumber, expected.getLineNumber))
 }
 
 class ThrowableDiffable(implicit adi: Diffable[Array[StackTraceElement]]) extends Diffable[Throwable] {
@@ -145,13 +146,13 @@ class SetDiffable[E] extends Diffable[Set[E]] {
       removed = findRemoved(actual, expected))
 
   private def findSame(actual: Set[E], expected: Set[E]): Seq[E] =
-    actual.intersect( expected ).toSeq
+    actual.intersect(expected).toSeq
 
   private def findAdded(actual: Set[E], expected: Set[E]): Seq[E] =
-    expected.diff( actual ).toSeq
+    expected.diff(actual).toSeq
 
   private def findRemoved(actual: Set[E], expected: Set[E]): Seq[E] =
-    actual.diff( expected ).toSeq
+    actual.diff(expected).toSeq
 }
 
 class SeqDiffable[E](implicit di: Diffable[E]) extends Diffable[Seq[E]] {
@@ -159,8 +160,8 @@ class SeqDiffable[E](implicit di: Diffable[E]) extends Diffable[Seq[E]] {
   def diff(actual: Seq[E], expected: Seq[E]) =
     if (actual == expected) SeqIdentical(actual)
     else SeqDifference(result = compareExisting(actual, expected),
-      added = expected.drop( actual.length ),
-      removed = actual.drop( expected.length ) )
+      added = expected.drop(actual.length),
+      removed = actual.drop(expected.length))
 
   private def compareExisting(actual: Seq[E], expected: Seq[E]) =
     actual.zip(expected)
@@ -169,21 +170,23 @@ class SeqDiffable[E](implicit di: Diffable[E]) extends Diffable[Seq[E]] {
 
 class ArrayDiffable[E](implicit di: Diffable[E]) extends Diffable[Array[E]] {
 
-  def diff(actual: Array[E], expected: Array[E]) =
-    if (actual.deep == expected.deep) ArrayIdentical(actual)
-    else ArrayDifference(
-      results = compareExisting(actual, expected),
-      added    = expected.drop( actual.length ),
-      removed  = actual.drop( expected.length ) )
+  def diff(actual: Array[E], expected: Array[E]) = {
+    if (actual.deep == expected.deep)
+      ArrayIdentical(actual)
+    else
+      ArrayDifference(
+        results = compareExisting(actual, expected),
+        added   = expected.drop(actual.length),
+        removed = actual.drop(expected.length))
+  }
 
   private def compareExisting(actual: Array[E], expected: Array[E]) =
-    actual.zip(expected)
-      .map { case (a, e) => di.diff(a, e) }
+    actual.zip(expected).map { case (a, e) => di.diff(a, e) }
 }
 
 class FallbackDiffable[T] extends Diffable[T] {
   def diff(actual: T, expected: T) =
     if (actual == expected) OtherIdentical(actual)
-    else OtherDifferent(actual, expected)
+    else                    OtherDifferent(actual, expected)
 }
 

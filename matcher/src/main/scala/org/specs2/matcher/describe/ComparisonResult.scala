@@ -77,17 +77,12 @@ case class PrimitiveDifference(actual: Any, expected: Any) extends ComparisonRes
     (actual, expected).renderDiff
 }
 
-case class SetIdentical(value: Set[_])
-  extends OrderedCollectionIdentical(value)
-  with SetTypeProvider
-  with ComparisonResult
+case class SetIdentical(value: Set[_]) extends OrderedCollectionIdentical(value) with SetTypeProvider
 
 case class SetDifference(same:    Seq[Any],
                          added:   Seq[Any],
                          removed: Seq[Any])
-  extends UnorderedCollectionDifferent(same, Seq.empty[Any], added, removed)
-  with SetTypeProvider
-  with ComparisonResult {
+  extends UnorderedCollectionDifferent(same, Seq.empty[Any], added, removed) with SetTypeProvider {
 
   protected def renderElement(indent: String)(element: Any): String =
     element.render
@@ -100,15 +95,10 @@ trait SetTypeProvider {
   val className = "Set"
 }
 
-case class SeqIdentical(value: Seq[Any])
-  extends OrderedCollectionIdentical(value)
-  with ComparisonResult
-  with ListTypeProvider
+case class SeqIdentical(value: Seq[Any]) extends OrderedCollectionIdentical(value) with ListTypeProvider
 
 case class SeqDifference(result: Seq[ComparisonResult], added: Seq[Any], removed: Seq[Any])
-  extends OrderedCollectionDifferent(result, added, removed)
-  with ComparisonResult
-  with ListTypeProvider
+  extends OrderedCollectionDifferent(result, added, removed) with ListTypeProvider
 
 trait ListTypeProvider {
   val className = "List"
@@ -116,23 +106,16 @@ trait ListTypeProvider {
 
 
 case class ArrayIdentical(value: Seq[Any])
-  extends OrderedCollectionIdentical(value)
-  with ArrayTypeProvider
-  with ComparisonResult
+  extends OrderedCollectionIdentical(value) with ArrayTypeProvider
 
 case class ArrayDifference(results: Seq[ComparisonResult], added: Seq[Any], removed: Seq[Any])
-  extends OrderedCollectionDifferent(results, added, removed)
-  with ArrayTypeProvider
-  with ComparisonResult
+  extends OrderedCollectionDifferent(results, added, removed) with ArrayTypeProvider
 
 trait ArrayTypeProvider {
   val className = "Array"
 }
 
-case class MapIdentical(m: Map[_, _])
-  extends OrderedCollectionIdentical(m)
-  with MapTypeProvider
-  with ComparisonResult
+case class MapIdentical(m: Map[_, _]) extends OrderedCollectionIdentical(m) with MapTypeProvider
 
 trait MapTypeProvider {
   val className = "Map"
@@ -142,9 +125,7 @@ case class MapDifference(same:      Seq[(Any, Any)],
                          changed:   Seq[(Any, ComparisonResult)],
                          added:     Seq[(Any, Any)],
                          removed:   Seq[(Any, Any)])
-  extends UnorderedCollectionDifferent(same, changed, added, removed)
-  with MapTypeProvider
-  with ComparisonResult {
+  extends UnorderedCollectionDifferent(same, changed, added, removed) with MapTypeProvider {
 
   protected def renderElement(indent: String)(element: (Any, Any)): String =
     element.render
@@ -250,8 +231,7 @@ case class CaseClassIdentical(className: String) extends ComparisonResult {
 
 case class CaseClassDifferent(className: String,
                               result:    Seq[CaseClassPropertyComparison])
-  extends UnorderedCollectionDifferent(result.filter(_.identical), result.filterNot(_.identical), Seq.empty, Seq.empty)
-  with ComparisonResult {
+  extends UnorderedCollectionDifferent(result.filter(_.identical), result.filterNot(_.identical), Seq.empty, Seq.empty) {
 
   protected def renderElement(indent: String)(element: CaseClassPropertyComparison): String =
     renderProperty(indent)(element)
@@ -295,7 +275,7 @@ case class OtherDifferent(actual: Any, expected: Any) extends ComparisonResult {
 
 
 
-abstract class OrderedCollectionIdentical(value: Iterable[Any]) {
+abstract class OrderedCollectionIdentical(value: Iterable[Any]) extends ComparisonResult {
   def identical: Boolean =
     true
 
@@ -319,6 +299,7 @@ abstract class UnorderedCollectionDifferent[Element, Change](same:    Seq[Elemen
 
   override def render(indent: String): String = {
     val newIndent = indent+ " " * (className.size + 1)
+
     Seq(renderIdentical(newIndent) ++ renderChanged(newIndent) ++ renderAdded(newIndent) ++ renderRemoved(newIndent))
       .flatten.mkString("", ",\n"+newIndent, "").wrapWith(className)
   }
@@ -343,21 +324,27 @@ abstract class UnorderedCollectionDifferent[Element, Change](same:    Seq[Elemen
 
 abstract class OrderedCollectionDifferent[Element](results: Seq[ComparisonResult],
                                                    added:   Seq[Element],
-                                                   removed: Seq[Element]) {
+                                                   removed: Seq[Element]) extends ComparisonResult {
   def identical: Boolean =
     false
 
-  def render: String =
-    Seq(renderResult ++ renderAdded ++ renderRemoved)
-      .flatten.mkString(", ").wrapWith(className)
+  override def render: String =
+    render("")
 
-  private def renderResult: Option[String] =
-    results.toOption.map(_.map(_.render).mkString(", "))
+  override def render(indent: String): String = {
+    val newIndent = indent + " " * (className.size + 1)
 
-  private def renderAdded: Option[String] =
+    Seq(renderResult(newIndent) ++ renderAdded(newIndent) ++ renderRemoved(newIndent))
+      .flatten.mkString("", ",\n"+newIndent, "").wrapWith(className)
+  }
+
+  private def renderResult(indent: String): Option[String] =
+    results.toOption.map(_.map(_.render(indent)).mkString(", "))
+
+  private def renderAdded(indent: String): Option[String] =
     added.toOption.map(_.map(_.render).mkString(", ").tagWith("added"))
 
-  private def renderRemoved: Option[String] =
+  private def renderRemoved(indent: String): Option[String] =
     removed.toOption.map(_.map(_.render).mkString(", ").tagWith("removed"))
 
   def className: String
