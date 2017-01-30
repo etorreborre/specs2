@@ -7,7 +7,7 @@ import PrimitiveDiffable.primitive
 /**
  * Typeclass for values which can be compared and return a comparison result
  */
-trait Diffable[-T]{
+trait Diffable[-T] {
 
   def diff(actual: T, expected: T): ComparisonResult
 
@@ -55,4 +55,17 @@ trait DiffableLowPriority2 {
   implicit def fallbackDiffable[T]: Diffable[T] = new FallbackDiffable[T]
 }
 
+trait Diffables {
+  implicit class DiffableOps[T](diffable: Diffable[T]) {
+    def compareWith(compare: (T, T) => Boolean): Diffable[T] =
+      new Diffable[T] {
+        def diff(actual: T, expected: T): ComparisonResult = new ComparisonResult {
+          def identical: Boolean = compare(actual, expected)
+          def render: String = diffable.diff(actual, expected).render
+          override def render(indent: String): String = diffable.diff(actual, expected).render(indent)
+        }
+      }
+  }
+}
 
+object Diffables extends Diffables

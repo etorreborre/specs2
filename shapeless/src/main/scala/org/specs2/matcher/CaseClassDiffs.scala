@@ -15,7 +15,7 @@ trait CaseClassDiffs extends DiffableLowPriority1 with DiffableLowPriorityCaseCl
 trait DiffableLowPriorityCaseClass extends DiffableLowPriority2 {
 
   /** this diffable instance provides better failure messages for case classes */
-  implicit def caseClassDiffable[T <: Product with Serializable: IsCaseClass, L <: HList](
+  implicit def caseClassDiffable[T <: Product with Serializable with AnyRef: IsCaseClass, L <: HList](
     implicit labelled: LabelledGeneric.Aux[T, L],
              di:       CaseClassIntrospection[L]): Diffable[T] = new CaseClassDiffable[T, L]
 

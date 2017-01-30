@@ -12,7 +12,7 @@ import org.specs2.text.NotNullStrings._
  * The comparison may turn out to render identical values
  * or differences
  */
-sealed trait ComparisonResult {
+trait ComparisonResult {
   def identical: Boolean
   def render: String
   def render(indent: String): String = render
@@ -308,13 +308,13 @@ abstract class UnorderedCollectionDifferent[Element, Change](same:    Seq[Elemen
     same.toOption.map(_.map(renderElement(indent)).mkString(", "))
 
   private def renderChanged(indent: String): Option[String] =
-    changed.toOption.map(_.map(renderChange(indent)).mkString(", "))
+    changed.toOption.map(_.map(renderChange(indent)).mkString("", ",\n"+indent, ""))
 
   private def renderAdded(indent: String): Option[String] =
-    added.toOption.map(_.map(renderElement(indent)).mkString(", ").tagWith("added"))
+    added.toOption.map(_.map(renderElement(indent)).mkString("", ",\n"+indent, "").tagWith("added"))
 
   private def renderRemoved(indent: String): Option[String] =
-    removed.toOption.map(_.map(renderElement(indent)).mkString(", ").tagWith("removed"))
+    removed.toOption.map(_.map(renderElement(indent)).mkString("", ",\n"+indent, "").tagWith("removed"))
 
   def className: String
 

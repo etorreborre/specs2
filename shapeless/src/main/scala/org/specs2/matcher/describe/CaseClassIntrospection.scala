@@ -1,16 +1,17 @@
 package org.specs2.matcher.describe
 
+import org.specs2.reflect.ClassName
 import shapeless.labelled._
 import shapeless.{::, HList, HNil, LabelledGeneric, Lazy, Witness}
 
 /**
  * Diffable instance for a case class
  */
-class CaseClassDiffable[T <: Product with Serializable: IsCaseClass, L <: HList](
+class CaseClassDiffable[T <: Product with Serializable with AnyRef: IsCaseClass, L <: HList](
   implicit labelled: LabelledGeneric.Aux[T, L], di: CaseClassIntrospection[L]) extends Diffable[T] {
 
   def diff(actual: T, expected: T): ComparisonResult =
-    di.diff(labelled.to(actual), labelled.to(expected)).toComparisonResult(actual.getClass.getSimpleName)
+    di.diff(labelled.to(actual), labelled.to(expected)).toComparisonResult(ClassName.simpleClassName(actual))
 }
 
 /**

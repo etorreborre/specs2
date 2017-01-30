@@ -40,6 +40,7 @@ cat must matchA[Cat]
 $AndIfYouWantToKnowMore
 
  - learn about all available ${"specs2 modules" ~/ Installation}
+ - show better failure messages for case classes with the  ${"Diffable typeclass" ~/ DiffableTypeclass}
 
 $vid
 

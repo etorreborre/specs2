@@ -54,7 +54,8 @@ class BeEqualToMatcherSpec extends Spec with ResultMatchers with ShouldMatchers 
   Map equality
   ${ Map(1 -> 2, 3 -> 4) must be_==(Map(3 -> 4, 1 -> 2)) }
   ${ Map(1 -> 2, 3 -> 4) must be_===(Map(3 -> 1, 1 -> 4)) returns
-      """Map(1 -> {2 != 4}, 3 -> {4 != 1})""" }
+      s"""|Map(1 -> {2 != 4},
+          |    3 -> {4 != 1})""".stripMargin }
 
   Other collections use normal equality but display missing elements
   ${ Seq(1, 2) must be_==(Seq(1, 2)) }

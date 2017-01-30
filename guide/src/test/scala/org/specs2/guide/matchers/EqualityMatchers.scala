@@ -5,7 +5,7 @@ package matchers
 object EqualityMatchers extends UserGuideCard {
   def title = "Equality"
   def text = s2"""
-The most common type of matcher is `beEqualTo` to test the equality of 2 values. Several syntaxes can be used, according to your own taste
+The most common type of matcher is `beEqualTo` to test the equality of 2 values with the underlying `==` operator. Several syntaxes can be used, according to your own taste
 
  Matcher                    |  Comment
  -------------------------- | --------------------------
@@ -30,8 +30,11 @@ There are also other notions of equality
  `be                       `| `a must be(b)`: synonym for `beTheSameAs`
  `beTrue, beFalse          `| shortcuts for Boolean equality
 
-_Note_: the `beEqualTo` matcher is using the regular `==` Scala equality. However in the case of `Arrays`, Scala `==` is just using reference equality, `eq`. So the `beEqualTo` matcher has been adapted to use the `.deep` method on `Arrays`, transforming them to `IndexedSeqs` (possibly nested), before checking for equality, so that `Array(1, 2, 3) === Array(1, 2, 3)` (despite the fact that `Array(1, 2, 3) != Array(1, 2, 3)`).
+_Note_: the `beEqualTo` matcher is using the regular `==` Scala equality. However in the case of `Arrays`, Scala `==` is just using reference equality, `eq`.
+So the `beEqualTo` matcher has been adapted to use the `.deep` method on `Arrays`, transforming them to `IndexedSeqs` (possibly nested),
+before checking for equality, so that `Array(1, 2, 3) === Array(1, 2, 3)` (despite the fact that `Array(1, 2, 3) != Array(1, 2, 3)`).
 
 """
 }
+
 case class Human(age: Int, wealth: Int)
