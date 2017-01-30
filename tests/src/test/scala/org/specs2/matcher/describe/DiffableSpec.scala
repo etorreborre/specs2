@@ -65,14 +65,6 @@ Compare result
     be able to compare Seq[Any]                                  ${ Diffable.diff(Seq("a", 1, 2l, 3.3d, 4.4f), Seq("b", 2, 3l, 4.4d, 5.5f)) must_===
                                                                         SeqDifference(Seq(OtherDifferent("a", "b"), OtherDifferent(1, 2), OtherDifferent(2l, 3l), OtherDifferent(3.3d, 4.4d), OtherDifferent(4.4f, 5.5f)), Seq.empty, Seq.empty) }
 
-  case classes
-  ============
-    case classes without any members will return CaseClassIdentical ${ Diffable.diff(EmptyCaseClass(), EmptyCaseClass()) must_== CaseClassIdentical("EmptyCaseClass") }
-    two identical case classes will return CaseClassIdentical       ${ Diffable.diff(Goo("a", "b"), Goo("a", "b")) must_== CaseClassIdentical("Goo") }
-    two different case classes will return CaseClassDifferent       ${ Diffable.diff(Goo(c = "a", d = "b"), Goo(c = "x", d = "b")) must_== CaseClassDifferent("Goo", Seq(CaseClassPropertyComparison("c", PrimitiveDifference("a", "x"), identical = false), CaseClassPropertyComparison("d", PrimitiveIdentical("b"), identical = true))) }
-
-
-
   Arrays
   ======
     similar arrays will return similar iterable                   ${ Diffable.diff(Array(1, 2, 3), Array(1, 2, 3)) must_== ArrayIdentical(Seq(1, 2, 3)) }
@@ -92,8 +84,6 @@ Compare result
     two identical Some will return OptionIdentical                ${ Diffable.diff(Some("abc"), Some("abc")) must_=== OptionIdentical(Some(PrimitiveIdentical("abc"))) }
 
 
-  Scala Objects: Either
-  =====================
 
     similar Either Right will return EitherIdentical  ${ Diffable.diff(Right[String, String]("abc"), Right[String, String]("abc")) must_=== EitherIdentical(PrimitiveIdentical("abc"), isRight = true)  }
     similar Either Left will return EitherIdentical   ${ Diffable.diff(Left[String, String]("abc"), Left[String, String]("abc")) must_=== EitherIdentical(PrimitiveIdentical("abc"), isRight = false)  }
@@ -101,10 +91,6 @@ Compare result
     different Left will return EitherDifferent        ${ Diffable.diff(Left[String, String]("abc"), Left[String, String]("def")) must_=== EitherDifferent(PrimitiveDifference("abc", "def"), isRight = false)  }
     mixed Left and Right return EitherTypeDifferent   ${ Diffable.diff(Left[String, String]("abc"), Right[String, String]("def")) must_=== EitherTypeDifferent(isActualRight = false)  }
     mixed Left and Right return EitherTypeDifferent   ${ Diffable.diff(Right[String, String]("def"), Left[String, String]("abc")) must_=== EitherTypeDifferent(isActualRight = true)  }
-
-    Support Right without Left type information       $${ Diffable.diff(Right("abc"), Right("abc")) must_=== EitherIdentical(PrimitiveIdentical("abc"), isRight = true) }
-    Support Left without Right type information       $${ Diffable.diff(Left("abc"), Left("abc")) must_=== EitherIdentical(PrimitiveIdentical("abc"), isRight = false)  }
-
 
 
   Scala Objects: Try
@@ -115,7 +101,6 @@ Compare result
 
   Similar Failure Try object will return TryIdentical           ${ Diffable.diff(Failure[RuntimeException](ex), Failure[RuntimeException](ex)) must_=== TryIdentical(ex, isSuccess = false) }
   Different Failure Try object will return TryIdentical         ${ Diffable.diff(Failure[RuntimeException](ex), Failure[RuntimeException](ex2)) must_=== TryDifferent(Diffable.diff(ex, ex2), isSuccess = false) }
-  Support failure with no type information                      $${ Diffable.diff(Failure(ex), Failure(ex2)) must_=== TryDifferent(Diffable.diff(ex, ex2), isSuccess = false) }
 
   Comparing success with failure will return type difference    ${ Diffable.diff(Try("abc"), Failure[String](ex2)) must_=== TryTypeDifferent(isActualSuccess = true) }
   Comparing success with failure will return type difference    ${ Diffable.diff(Failure[String](ex2), Try("abc")) must_=== TryTypeDifferent(isActualSuccess = false) }
@@ -162,11 +147,6 @@ Compare result
   }
 
 }
-
-case class Foo(a: String, b: String, goo: Goo)
-
-case class Goo(c: String, d: String)
-case class EmptyCaseClass()
 
 
 sealed trait Animal
