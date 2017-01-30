@@ -45,6 +45,7 @@ is formatted for JUnit reporting tools.
     the failure type                                                                                                    ${message.e5}
     the failure trace                                                                                                   ${message.e6}
     the skipped tag                                                                                                     ${message.e7}
+    names must be escaped                                                                                               ${message.e8}
 
 """
 
@@ -98,6 +99,7 @@ is formatted for JUnit reporting tools.
     def e5 = { (env: Env) => print(env)("t1" ^ br ^ "e3" ! failure) must \\("failure", "type" -> failure.exception.getClass.getName) }
     def e6 = { (env: Env) => print(env)("t1" ^ br ^ "e3" ! failure).toString must contain("JUnitXmlPrinterSpec.scala") }
     def e7 = { (env: Env) => print(env)("t1" ^ br ^ "e2" ! skipped) must \\("skipped") }
+    def e8 = { (env: Env) => print(env)("t1" ^ br ^ "<node.1/>" ! ok).toString must contain("t1::&lt;node.1/&gt;") }
   }
 
   def printString(env1: Env)(fs: Fragments): String = {
