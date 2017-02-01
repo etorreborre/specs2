@@ -366,7 +366,7 @@ trait Folds {
   def fromSink[R, A](action: A => Eff[R, Unit]): Fold[R, A, Unit] = new Fold[R, A, Unit] {
     type S = Eff[R, Unit]
     def start = pure(pure(()))
-    def fold = (s: S, a: A) => s *> action(a)
+    def fold = (s: S, a: A) => s >> action(a)
     def end(s: S) = s.void
   }
 
