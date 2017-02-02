@@ -170,23 +170,23 @@ object SequenceMatchersCreation extends SequenceMatchersCreation
 trait MatchersCreation {
 
   /**
-   * This method transform a function to a Matcher
+   * This method transforms a function to a Matcher
    */
   implicit def functionToMatcher[T](f: (T => Boolean, String)): Matcher[T] =
     functionAndMessagesToMatcher[T]((f._1, (t:T) => negateSentence(q(t)+" "+f._2), (t:T) => q(t)+" "+f._2))
 
   /**
-   * This method transform a function to a Matcher
+   * This method transforms a function to a Matcher
    */
   implicit def functionToMatcher2[T](f: (T => Boolean, String, String)): Matcher[T] =
     functionAndMessagesToMatcher[T]((f._1, (t:T) => q(t)+" "+f._2, (t:T) => q(t)+" "+f._3))
   /**
-   * This method transform a function to a Matcher
+   * This method transforms a function to a Matcher
    */
   implicit def functionAndKoMessageToMatcher[T](f: (T => Boolean, T => String)): Matcher[T] =
     functionAndMessagesToMatcher[T]((f._1, (t:T) => negateSentence(f._2(t)), f._2))
   /**
-   * This method transform a function, with function descriptors to a Matcher
+   * This method transforms a function, with function descriptors to a Matcher
    */
   implicit def functionAndMessagesToMatcher[T](f: (T => Boolean, T => String, T => String)): Matcher[T] = new Matcher[T] {
     def apply[S <: T](s: Expectable[S]) = {
@@ -195,7 +195,7 @@ trait MatchersCreation {
     }
   }
   /**
-   * This method transform a function returning a pair (Boolean, String for ko message) to a Matcher
+   * This method transforms a function returning a pair (Boolean, String for ko message) to a Matcher
    */
   implicit def pairFunctionToMatcher[T](f: T =>(Boolean, String)): Matcher[T] = new Matcher[T] {
     def apply[S <: T](s: Expectable[S]) = {
@@ -204,7 +204,7 @@ trait MatchersCreation {
     }
   }
   /**
-   * This method transform a function returning a triplet (Boolean, String for ok message, String for ko message) to a Matcher
+   * This method transforms a function returning a triplet (Boolean, String for ok message, String for ko message) to a Matcher
    */
   implicit def tripletFunctionToMatcher[T](f: T =>(Boolean, String, String)): Matcher[T] = new Matcher[T] {
     def apply[S <: T](s: Expectable[S]) = {
@@ -213,7 +213,7 @@ trait MatchersCreation {
     }
   }
   /**
-   * This method transform a function returning a Result to a Matcher
+   * This method transforms a function returning a Result to a Matcher
    */
   implicit def matchResultFunctionToMatcher[T, R : AsResult](f: T => R): Matcher[T] = new Matcher[T] {
     def apply[S <: T](s: Expectable[S]) = {

@@ -6,7 +6,7 @@ import execute._
 
 class MatchersImplicitsSpec extends Specification with ResultMatchers {
   "A sequence of match results can be implictly transformed to a single result" >> {
-    ((List.empty[MatchResult[Any]]): Result) must beSuccessful
+    (List.empty[MatchResult[Any]]: Result) must beSuccessful
     ResultExecution.execute(Seq(1 === 1, 2 === 3): Result) must beFailing
   }
 
@@ -24,4 +24,23 @@ class MatchersImplicitsSpec extends Specification with ResultMatchers {
       }
     nested must throwAn[ErrorException]("boom")
   }
+
+  "An implicit matcher defined with a Result must retain its stacktrace" >> {
+
+    val beZero: Matcher[Int] = { i: Int =>
+      if (i != 0) Failure(s"must be 0, got $i", "0", exception.getStackTrace.toList) else Success("ok")
+    }
+
+    AsResult(1 must beZero) must beLike {
+      case Failure(message, _, trace, _) =>
+        message ==== "must be 0, got 1"
+        trace ==== exception.getStackTrace.toList
+
+      case other => ko("got "+other)
+    }
+
+  }
+
+  val exception = new Exception
+
 }

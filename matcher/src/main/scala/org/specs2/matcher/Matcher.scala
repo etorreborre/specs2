@@ -243,6 +243,13 @@ trait Matcher[-T] { outer =>
 }
 
 object Matcher {
+
+  /** @return a MatchResult[T] from a condition, 2 messages and details, and a trace when there is a failure */
+  def result[T](test: Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[T], trace: List[StackTraceElement], details: Details): MatchResult[T] = {
+    if (test) MatchSuccess(okMessage.notNull, koMessage.notNull, value)
+    else      MatchFailure.create(okMessage.notNull, koMessage.notNull, value, trace, details)
+  }
+
   /** @return a MatchResult[T] from a condition, 2 messages and details */
   def result[T](test: Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[T], details: Details): MatchResult[T] = {
     if (test) MatchSuccess(okMessage.notNull, koMessage.notNull, value)
@@ -259,7 +266,10 @@ object Matcher {
 
   /** @return a MatchResult[T] from a result */
   def result[T](r: Result, value: Expectable[T]): MatchResult[T] =
-    result(r.isSuccess, r.message, r.message, value, details(r))
+    r match {
+      case Failure(m, e, trace, details) => result(false, m, m, value, trace, details)
+      case _ => result(r.isSuccess, r.message, r.message, value)
+    }
 
   /** @return a MatchResult[T] from a condition and just one message */
   def result[T](test: Boolean, message: =>String, value: Expectable[T]): MatchResult[T] =
