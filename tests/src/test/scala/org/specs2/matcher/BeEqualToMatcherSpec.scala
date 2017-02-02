@@ -33,7 +33,8 @@ class BeEqualToMatcherSpec extends Spec with ResultMatchers with ShouldMatchers 
   ${ "a" must be_!==("b") }
   ${ "a" must not be_!==("a") }
 
-  Array equality uses deep array comparison
+  Array equality uses deep array comparison, with or without typed equality
+  ${ Array(1, 2) must be_==(Array(1, 2)) }
   ${ Array(1, 2) must be_===(Array(1, 2)) }
   ${ Array(1, 3) must not be_===(Array(1, 2)) }
   ${ Array(1, 2) must be_===(Array(1, 2)) }
@@ -43,6 +44,7 @@ class BeEqualToMatcherSpec extends Spec with ResultMatchers with ShouldMatchers 
      """Array(1, 3 != 2)""" }
 
   Set equality
+  ${ Set(1, 2) must be_==(Set(2, 1)) }
   ${ (Set(1) must_== Set.empty[Int]) returns "Set(1) != Set()"}
   ${ (Set(1, 2) must be_==(Set(2, 3))) returns
       """Set(1, 2) != Set(2, 3)""" }
@@ -54,8 +56,9 @@ class BeEqualToMatcherSpec extends Spec with ResultMatchers with ShouldMatchers 
   Map equality
   ${ Map(1 -> 2, 3 -> 4) must be_==(Map(3 -> 4, 1 -> 2)) }
   ${ Map(1 -> 2, 3 -> 4) must be_===(Map(3 -> 1, 1 -> 4)) returns
-      s"""|Map(1 -> {2 != 4},
-          |    3 -> {4 != 1})""".stripMargin }
+     s"""|Map(1 -> {2 != 4},
+         |    3 -> {4 != 1})""".stripMargin }
+  ${ mutableMap(1 -> 2, 3 -> 4) must be_==(mutableMap(3 -> 4, 1 -> 2)) }
 
   Other collections use normal equality but display missing elements
   ${ Seq(1, 2) must be_==(Seq(1, 2)) }
@@ -121,5 +124,11 @@ Details
     def foreach[U](f: T => U): Unit = {
       sys.error("foreach is not defined on this traversable but toString is")
     }
+  }
+
+  def mutableMap(kv: (Int, Int)*): scala.collection.mutable.Map[Int, Int] = {
+    val map = new scala.collection.mutable.HashMap[Int, Int]
+    kv.foreach { case (k, v) => map.put(k, v) }
+    map
   }
 }
