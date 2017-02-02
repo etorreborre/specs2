@@ -73,7 +73,7 @@ class TextPrinterSpec extends Specification { def is = s2"""
     stats are not displayed with xonly when successful        $k2
 
  Fragments must be displayed in their creation order
-    as soon as computed                                       $l1 ${tag("travis")}
+    as soon as computed, without sequential                   $l1 ${tag("travis")}
     as soon as computed, with sequential                      $l2
 
  Datatable must be properly indented                          $m1
@@ -232,13 +232,13 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
   def l1 = {
     val logger = new TestLogger
 
-    val fragments = Fragments((1 to 100).flatMap(i => Seq(
+    val fragments = Fragments.foreach(1 to 100)(i =>
       "ex"+i+"\n " ! {
         val s = scala.util.Random.nextInt(100).toLong
         Thread.sleep(s)
         logger.infoLine("executed "+i)
         ok
-      })):_*)
+      } ^ p)
 
     val spec = SpecStructure.create(SpecHeader(getClass, Some("title\n")), Arguments(), fragments)
     val env = Env(lineLogger = logger)
@@ -262,12 +262,12 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
   def l2 = {
     val logger = new TestLogger
 
-    val fragments = Fragments((1 to 100).flatMap(i => Seq(
+    val fragments = Fragments.foreach(1 to 100)(i =>
       "ex"+i+"\n " ! {
         Thread.sleep(scala.util.Random.nextInt(100).toLong)
         logger.infoLine("executed "+i)
         ok
-      })):_*)
+      } ^ p)
 
     val spec = SpecStructure.create(SpecHeader(getClass, Some("title\n")), sequential, fragments)
     val env = Env(lineLogger = logger).setArguments(sequential)

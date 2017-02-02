@@ -53,7 +53,7 @@ trait TextPrinter extends Printer {
 
   def linesLoggerSink(logger: LineLogger, header: SpecHeader, args: Arguments): AsyncSink[List[LogLine]] =
     Folds.fromSink[ActionStack, List[LogLine]](lines =>
-      Actions.ok(lines.foreach(_.log(logger))))
+      pure(lines.foreach(_.log(logger))))
 
   def start(logger: LineLogger, header: SpecHeader, args: Arguments): Action[LineLogger] =
     asyncDelayAction(printHeader(args)(header).foreach(_.log(logger))).as(logger)
