@@ -115,13 +115,7 @@ trait DefaultExecutor extends Executor {
           ok((one(f), (Vector.empty, previousResults, stopAll(f.executionResult, f))))
         }
       else {
-        if (fragments.count(_.isExecutable) >= arguments.threadsNb)
-          executeFragments(fragments :+ fragment, timeout).run.flatMap {
-            case Done()          => ok((done, (Vector.empty, previousResults, mustStop)))
-            case producer.One(f) => ok((one(f), (Vector.empty, f.executionResult |+| previousResults, mustStop)))
-            case More(as, next)  => ok((emitAsync(as:_*) append next, (Vector.empty, as.foldMap(_.executionResult) |+| previousResults, mustStop)))
-          }
-        else if (fragment.execution.mustJoin) {
+        if (fragment.execution.mustJoin) {
           executeFragments(fragments, timeout).run.flatMap {
             case Done() =>
               executeOneFragment(fragment, timeout).flatMap { step =>
@@ -140,6 +134,12 @@ trait DefaultExecutor extends Executor {
               }
           }
         }
+        else if (fragments.count(_.isExecutable) >= arguments.threadsNb)
+          executeFragments(fragments :+ fragment, timeout).run.flatMap {
+            case Done()          => ok((done, (Vector.empty, previousResults, mustStop)))
+            case producer.One(f) => ok((one(f), (Vector.empty, f.executionResult |+| previousResults, mustStop)))
+            case More(as, next)  => ok((emitAsync(as:_*) append next, (Vector.empty, as.foldMap(_.executionResult) |+| previousResults, mustStop)))
+          }
         else
           ok((done[ActionStack, Fragment], (fragments :+ fragment, previousResults, mustStop)))
       }
