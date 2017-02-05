@@ -67,5 +67,3 @@ trait Diffables {
       }
   }
 }
-
-object Diffables extends Diffables
