@@ -18,18 +18,20 @@ trait ComparisonResult {
   def render(indent: String): String = render
 }
 
-case class PrimitiveIdentical(value: Any) extends ComparisonResult {
-  def identical: Boolean =
-    true
+sealed trait IdenticalComparisonResult extends ComparisonResult {
+  val identical = true
+}
 
+sealed trait DifferentComparisonResult extends ComparisonResult {
+  val identical = false
+}
+
+case class PrimitiveIdentical(value: Any) extends IdenticalComparisonResult {
   def render: String =
     value.render
 }
 
-case class ThrowableIdentical(value: Throwable) extends ComparisonResult {
-  def identical: Boolean =
-    true
-
+case class ThrowableIdentical(value: Throwable) extends IdenticalComparisonResult {
   def render: String = {
     val w = new StringWriter
     value.printStackTrace(new PrintWriter(w))
@@ -37,10 +39,7 @@ case class ThrowableIdentical(value: Throwable) extends ComparisonResult {
   }
 }
 
-case class ThrowableDifferent(result: Seq[ComparisonResult], added: Seq[StackTraceElement], removed: Seq[StackTraceElement]) extends ComparisonResult {
-  def identical: Boolean =
-    false
-
+case class ThrowableDifferent(result: Seq[ComparisonResult], added: Seq[StackTraceElement], removed: Seq[StackTraceElement]) extends DifferentComparisonResult {
   def render: String = {
     val results = result.map(_.render)
     (results.headOption.map(_.render) ++
@@ -49,18 +48,12 @@ case class ThrowableDifferent(result: Seq[ComparisonResult], added: Seq[StackTra
   }
 }
 
-case class StackElementIdentical(value: StackTraceElement) extends ComparisonResult {
-  def identical: Boolean =
-    true
-
+case class StackElementIdentical(value: StackTraceElement) extends IdenticalComparisonResult {
   def render: String =
     value.toString
 }
 
-case class StackElementDifferent(className: ComparisonResult, methodName: ComparisonResult, fileName: Option[ComparisonResult], lineNumber: ComparisonResult) extends ComparisonResult {
-  def identical: Boolean =
-    false
-
+case class StackElementDifferent(className: ComparisonResult, methodName: ComparisonResult, fileName: Option[ComparisonResult], lineNumber: ComparisonResult) extends DifferentComparisonResult {
   def render: String =
     s"${className.render}.${methodName.render}$renderSourceLocation"
 
@@ -69,10 +62,7 @@ case class StackElementDifferent(className: ComparisonResult, methodName: Compar
             .getOrElse("(Unknown Source)")
 }
 
-case class PrimitiveDifference(actual: Any, expected: Any) extends ComparisonResult {
-  def identical: Boolean =
-    false
-
+case class PrimitiveDifference(actual: Any, expected: Any) extends DifferentComparisonResult {
   def render: String =
     (actual, expected).renderDiff
 }
@@ -136,42 +126,27 @@ case class MapDifference(same:      Seq[(Any, Any)],
 
 
 
-case class OptionIdentical(same: Option[ComparisonResult]) extends ComparisonResult {
-  def identical: Boolean =
-    true
-
+case class OptionIdentical(same: Option[ComparisonResult]) extends IdenticalComparisonResult {
   def render: String =
     same.map(_.render.wrapWith("Some")).getOrElse("None")
 }
 
-case class EitherIdentical(same: ComparisonResult, isRight: Boolean) extends ComparisonResult {
-  def identical: Boolean =
-    true
-
+case class EitherIdentical(same: ComparisonResult, isRight: Boolean) extends IdenticalComparisonResult {
   def render: String =
     same.render.wrapWith(if (isRight) "Right" else "Left")
 }
 
-case class TryIdentical(same: Any, isSuccess: Boolean) extends ComparisonResult {
-  def identical: Boolean =
-    true
-
+case class TryIdentical(same: Any, isSuccess: Boolean) extends IdenticalComparisonResult {
   def render: String =
     same.render.wrapWith(if (isSuccess) "Success" else "Failure")
 }
 
-case class TryDifferent(value: ComparisonResult, isSuccess: Boolean) extends ComparisonResult {
-  def identical: Boolean =
-    false
-
+case class TryDifferent(value: ComparisonResult, isSuccess: Boolean) extends DifferentComparisonResult {
   def render: String =
     value.render.wrapWith(if (isSuccess) "Success" else "Failure")
 }
 
-case class TryTypeDifferent(isActualSuccess: Boolean) extends ComparisonResult {
-  def identical: Boolean =
-    false
-
+case class TryTypeDifferent(isActualSuccess: Boolean) extends DifferentComparisonResult {
   def render: String =
     s"${render(isActualSuccess)} ==> ${render(!isActualSuccess)}"
 
@@ -180,19 +155,13 @@ case class TryTypeDifferent(isActualSuccess: Boolean) extends ComparisonResult {
 
 }
 
-case class EitherDifferent(changed: ComparisonResult, isRight: Boolean) extends ComparisonResult {
-  def identical: Boolean =
-    false
-
+case class EitherDifferent(changed: ComparisonResult, isRight: Boolean) extends DifferentComparisonResult {
   def render: String =
     changed.render.wrapWith(if (isRight) "Right" else "Left")
 
 }
 
-case class EitherTypeDifferent(isActualRight: Boolean) extends ComparisonResult {
-  def identical: Boolean =
-    false
-
+case class EitherTypeDifferent(isActualRight: Boolean) extends DifferentComparisonResult {
   def render: String =
     s"${render(isActualRight)} ==> ${render(!isActualRight)}"
 
@@ -200,18 +169,12 @@ case class EitherTypeDifferent(isActualRight: Boolean) extends ComparisonResult 
     "...".wrapWith(if (right) "Right" else "Left")
 }
 
-case class OptionDifferent(changed: ComparisonResult) extends ComparisonResult {
-  def identical: Boolean =
-    false
-
+case class OptionDifferent(changed: ComparisonResult) extends DifferentComparisonResult {
   def render: String =
     changed.render.wrapWith("Some")
 }
 
-case class OptionTypeDifferent(isActualSome: Boolean, isExpectedSome: Boolean) extends ComparisonResult {
-  def identical: Boolean =
-    false
-
+case class OptionTypeDifferent(isActualSome: Boolean, isExpectedSome: Boolean) extends DifferentComparisonResult {
   def render: String =
     s"${render(isActualSome)} ==> ${render(isExpectedSome)}"
 
@@ -221,10 +184,7 @@ case class OptionTypeDifferent(isActualSome: Boolean, isExpectedSome: Boolean) e
 
 case class CaseClassPropertyComparison(fieldName: String, result: ComparisonResult, identical: Boolean)
 
-case class CaseClassIdentical(className: String) extends ComparisonResult {
-  def identical: Boolean =
-    true
-
+case class CaseClassIdentical(className: String) extends IdenticalComparisonResult {
   val render: String =
     "...".wrapWith(className)
 }
@@ -243,18 +203,12 @@ case class CaseClassDifferent(className: String,
     r.result.render(indent + " " * (r.fieldName.size + 2)).tagWith(r.fieldName)
 }
 
-case class OtherIdentical(actual: Any) extends ComparisonResult {
-  def identical: Boolean =
-    true
-
+case class OtherIdentical(actual: Any) extends IdenticalComparisonResult {
   def render: String =
     actual.render
 }
 
-case class OtherDifferent(actual: Any, expected: Any) extends ComparisonResult {
-  def identical: Boolean =
-    false
-
+case class OtherDifferent(actual: Any, expected: Any) extends DifferentComparisonResult {
   def render: String =
     s"${actual.renderAny(showAll = comparingPrimitiveWithObject(actual, expected))} != "+
     s"${expected.renderAny(showAll = comparingPrimitiveWithObject(actual, expected))}"
@@ -275,10 +229,7 @@ case class OtherDifferent(actual: Any, expected: Any) extends ComparisonResult {
 
 
 
-abstract class OrderedCollectionIdentical(value: Iterable[Any]) extends ComparisonResult {
-  def identical: Boolean =
-    true
-
+abstract class OrderedCollectionIdentical(value: Iterable[Any]) extends IdenticalComparisonResult {
   def render: String =
     value.map(_.render).mkString(", ").wrapWith(className)
 
@@ -289,10 +240,7 @@ abstract class OrderedCollectionIdentical(value: Iterable[Any]) extends Comparis
 abstract class UnorderedCollectionDifferent[Element, Change](same:    Seq[Element],
                                                              changed: Seq[Change],
                                                              added:   Seq[Element],
-                                                             removed: Seq[Element]) extends ComparisonResult {
-
-  def identical: Boolean =
-    false
+                                                             removed: Seq[Element]) extends DifferentComparisonResult {
 
   override def render: String =
     render("")
@@ -324,10 +272,7 @@ abstract class UnorderedCollectionDifferent[Element, Change](same:    Seq[Elemen
 
 abstract class OrderedCollectionDifferent[Element](results: Seq[ComparisonResult],
                                                    added:   Seq[Element],
-                                                   removed: Seq[Element]) extends ComparisonResult {
-  def identical: Boolean =
-    false
-
+                                                   removed: Seq[Element]) extends DifferentComparisonResult {
   override def render: String =
     render("")
 
