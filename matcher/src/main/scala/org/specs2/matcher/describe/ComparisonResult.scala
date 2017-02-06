@@ -18,11 +18,11 @@ trait ComparisonResult {
   def render(indent: String): String = render
 }
 
-sealed trait IdenticalComparisonResult extends ComparisonResult {
+trait IdenticalComparisonResult extends ComparisonResult {
   val identical = true
 }
 
-sealed trait DifferentComparisonResult extends ComparisonResult {
+trait DifferentComparisonResult extends ComparisonResult {
   val identical = false
 }
 
