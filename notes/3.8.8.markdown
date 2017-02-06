@@ -1,0 +1,38 @@
+Diffable version!
+
+## Improvements
+
+The main improvement of this version is the addition of a new typeclass, `Diffable`, used for typed equality, thanks to
+the relentless effort of @noam-almog (see [#500](https://github.com/etorreborre/specs2/pull/500)).
+
+This allows a much better display of differences but also makes equality and differences a "pluggable" behaviour of the 
+ typed-equality matchers. You can now implement your equality (ignoring some fields from comparison) or your own rendering
+ of differences.
+
+```
+Map(1 -> 2, 3 -> 4) must be_===(Map(3 -> 1, 1 -> 4))
+
+> Map(1 -> {2 != 4},
+      3 -> {4 != 1})
+```
+ 
+And with an additional dependency on `specs2-shapeless`, you get a very nice display of case class differences too:
+```
+val p1 = Person(44, "me", Address(14, "Best avenue"))
+val p2 = Person(27, "you", Address(14, "First street"))
+
+import org.specs2.matcher.CaseClassDiffs._
+
+p1 ==== p2
+
+> Person(age: 44 != 27,
+         name: 'me' != 'you',
+         address: Address(number: 14,
+                          street: 'Best avenue' != 'First street'))
+```
+ 
+## Fixes
+
+ * **core** make sure that steps are executed after the previous block of concurrent fragments
+ * **core** preserve the stacktrace of a `Failure` when used to define a `Matcher` with `MatcherImplicits`
+ * **core** sequence strictly the effects in a sink in order to avoid possible stack-overflow errors when folding a large number of elements [#539](https://github.com/etorreborre/specs2/issues/539)
