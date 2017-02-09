@@ -12,7 +12,7 @@ trait ScalaCheckPropertyDsl extends FragmentsFactory with AsResultProp {
 
   /** display properties as examples */
   def properties(ps: Properties): Fragments =
-    Fragments(fragmentFactory.tab) append Fragments.foreach(ps.properties) { case (name, prop) =>
+    Fragments.foreach(ps.properties) { case (name, prop) =>
       Fragments(fragmentFactory.break, fragmentFactory.example(name, prop))
     }
 
