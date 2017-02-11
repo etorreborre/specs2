@@ -1,9 +1,12 @@
 package org.specs2
 package matcher
 
+import AnyMatchers._
+import DisjunctionMatchers._
 import ValueChecks._
 import org.specs2.matcher.describe.Diffable
 
+import scala.reflect.ClassTag
 import scalaz.concurrent.Task
 import text.NotNullStrings._
 
@@ -17,6 +20,9 @@ trait TaskMatchers {
 
   def returnValue[T](check: ValueCheck[T]): TaskMatcher[T] =
     attemptRun(check)
+
+  def failWith[T <: Throwable : ClassTag]: Matcher[Task[_]] =
+    returnValue(be_-\/(haveClass[T])) ^^ { t: Task[_] => t.attempt }
 
   private[specs2] def attemptRun[T](check: ValueCheck[T]): TaskMatcher[T] =
     TaskMatcher(check)

@@ -5,8 +5,11 @@ import scala.concurrent.TimeoutException
 import scala.concurrent.duration.Duration
 import scalaz.concurrent.Task
 import text.NotNullStrings._
+import AnyMatchers._
+import DisjunctionMatchers._
 import ValueChecks._
 import org.specs2.matcher.describe.Diffable
+import scala.reflect.ClassTag
 
 /**
  * Matchers for scalaz.concurrent.Task
@@ -21,6 +24,9 @@ trait TaskMatchers {
 
   def returnBefore[T](duration: Duration): TaskMatcher[T] =
     attemptRun(ValueCheck.alwaysOk, Some(duration))
+
+  def failWith[T <: Throwable : ClassTag]: Matcher[Task[_]] =
+    returnValue(be_-\/(haveClass[T])) ^^ { t: Task[_] => t.attempt }
 
   private[specs2] def attemptRun[T](check: ValueCheck[T], duration: Option[Duration]): TaskMatcher[T] =
     TaskMatcher(check, duration)
