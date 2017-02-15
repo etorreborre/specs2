@@ -24,7 +24,7 @@ trait FutureMatchers extends FutureBaseMatchers {
   /**
    * when a Future contains a result, it can be awaited to return this result
    */
-  implicit class futureAsResult[T](f: Future[T])(implicit ee: ExecutionEnv, asResult: AsResult[T]) extends FutureAsResult[T](f)
+  implicit class futureAsResult[T](f: => Future[T])(implicit ee: ExecutionEnv, asResult: AsResult[T]) extends FutureAsResult[T](f)
 }
 
 private[specs2]
@@ -36,7 +36,7 @@ trait FutureBaseMatchers extends ExpectationsCreation {
   def retry[T](m: Matcher[T])(retries: Int)(implicit ee: ExecutionEnv): Matcher[Future[T]] = awaitMatcher(m)(retries, timeout = 1.second)
 
   private[specs2]
-  class FutureAsResult[T](f: Future[T])(implicit ee: ExecutionEnv, asResult: AsResult[T]) {
+  class FutureAsResult[T](f: => Future[T])(implicit ee: ExecutionEnv, asResult: AsResult[T]) {
     def await: Result =
       await(retries = 0, timeout = 1.second)
 
@@ -58,9 +58,10 @@ trait FutureBaseMatchers extends ExpectationsCreation {
       // evaluate the future value as such
       // it the future throws an exception, it will be
       // reported as an error
-      a.value
+      val syncFailCapture = a.value
       try {
-        val r = new FutureAsResult(a.value.map(v => AsResult(createExpectable(v).applyMatcher(m)))(ee.executionContext)).await(retries, timeout)
+        val futures = Iterator(syncFailCapture) ++ Iterator.continually(a.valueDefinition())
+        val r = new FutureAsResult(futures.next.map(v => AsResult(createExpectable(v).applyMatcher(m)))(ee.executionContext)).await(retries, timeout)
         result(r.isSuccess, r.message, r.message, a)
       } catch {
         // if awaiting on the future throws an exception because it was a failed future

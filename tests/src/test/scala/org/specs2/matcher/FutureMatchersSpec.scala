@@ -49,6 +49,8 @@ class FutureMatchersSpec(env: Env) extends Specification with ResultMatchers wit
  In a mutable spec with a negated matcher $e1
  In a mutable spec with a scope $e2
 
+ A Future should be retried the specified number of times in case of a timeout $e3
+ A Future should not be called more than the expected number of times $e4
 """
 
   def e1 = {
@@ -69,5 +71,29 @@ class FutureMatchersSpec(env: Env) extends Specification with ResultMatchers wit
     }
 
     ClassRunner.report(env)(thrown).runOption.get.failures === 1
+  }
+
+  def e3 = {
+    val retries = 2
+    var times = 0
+    val duration = 50l
+    def future = Future {
+      times += 1
+      if (retries != times)
+        Thread.sleep(duration * 4)
+      0
+    }
+    future must be_==(0).await(retries, duration.millis)
+  }
+
+  def e4 = {
+    val retries = 0
+    var times = 0
+    def future = Future {
+      times += 1
+      0
+    }
+    future must be_==(0).retryAwait(retries)
+    times must be_==(1)
   }
 }

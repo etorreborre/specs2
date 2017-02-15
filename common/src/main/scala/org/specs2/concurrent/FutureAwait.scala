@@ -11,7 +11,7 @@ import scalaz._, Scalaz._
  * number of retries
  */
 trait FutureAwait {
-  implicit class AwaitFuture[T](f: Future[T])(implicit ee: ExecutionEnv) {
+  implicit class AwaitFuture[T](f: => Future[T])(implicit ee: ExecutionEnv) {
     def await: TimeoutFailure \/ T =
       await(retries = 0, timeout = 1.second)
 
