@@ -10,6 +10,7 @@ object OptionalDataMatcherCards extends Cards {
     DisjunctionMatchers,
     XorMatchers,
     ValidationMatchers,
+    TaskMatchers,
     CaseClassMatchers,
     ResultMatchers,
     TerminationMatchers)
