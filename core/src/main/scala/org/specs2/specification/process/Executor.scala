@@ -134,7 +134,7 @@ trait DefaultExecutor extends Executor {
               }
           }
         }
-        else if (fragments.count(_.isExecutable) >= arguments.threadsNb)
+        else if (fragments.count(_.isExecutable) >= arguments.batchSize)
           executeFragments(fragments :+ fragment, timeout).run.flatMap {
             case Done()          => ok((done, (Vector.empty, previousResults, mustStop)))
             case producer.One(f) => ok((one(f), (Vector.empty, f.executionResult |+| previousResults, mustStop)))

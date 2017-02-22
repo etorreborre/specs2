@@ -14,6 +14,7 @@ case class Execute(
                     _isolated:           Option[Boolean]          = None,
                     _threadsNb:          Option[Int]              = None,
                     _scheduledThreadsNb: Option[Int]              = None,
+                    _batchSize:          Option[Int]              = None,
                     _timeFactor:         Option[Int]              = None,
                     _executor:           Option[String]           = None) extends ShowArgs {
 
@@ -26,6 +27,7 @@ case class Execute(
   def isolated: Boolean             = _isolated.getOrElse(false)
   def threadsNb: Int                = _threadsNb.getOrElse(Runtime.getRuntime.availableProcessors)
   def scheduledThreadsNb: Int       = _scheduledThreadsNb.getOrElse(1)
+  def batchSize: Int                = _batchSize.getOrElse(Runtime.getRuntime.availableProcessors)
   def timeFactor: Int               = _timeFactor.getOrElse(1)
   def executor: String              = _executor.getOrElse("")
 
@@ -40,6 +42,7 @@ case class Execute(
       other._isolated            .orElse(_isolated),
       other._threadsNb           .orElse(_threadsNb),
       other._scheduledThreadsNb  .orElse(_scheduledThreadsNb),
+      other._batchSize           .orElse(_batchSize),
       other._timeFactor          .orElse(_timeFactor),
       other._executor            .orElse(_executor)
     )
@@ -56,6 +59,7 @@ case class Execute(
       "isolated"            -> _isolated          ,
       "threadsNb"           -> _threadsNb         ,
       "scheduledThreadsNb"  -> _scheduledThreadsNb,
+      "batchSize"           -> _batchSize         ,
       "timeFactor"          -> _timeFactor        ,
       "executor"            -> _executor          ).flatMap(showArg).mkString("Execute(", ", ", ")")
 
@@ -73,9 +77,10 @@ object Execute extends Extract {
       _isolated            = bool("isolated"),
       _threadsNb           = int("threadsNb"),
       _scheduledThreadsNb  = int("scheduledThreadsNb"),
+      _batchSize           = bool("unbatched").map(_ => Int.MaxValue).orElse(int("batchSize")),
       _timeFactor          = int("timeFactor"),
       _executor            = value("executor")
     )
   }
-  val allValueNames = Seq("plan", "skipAll", "stopOnFail", "stopOnSkip", "sequential", "asap", "isolated", "threadsNb", "scheduledThreadsNb", "timeFactor", "executor")
+  val allValueNames = Seq("plan", "skipAll", "stopOnFail", "stopOnSkip", "sequential", "asap", "isolated", "threadsNb", "scheduledThreadsNb", "batchSize", "timeFactor", "executor")
 }

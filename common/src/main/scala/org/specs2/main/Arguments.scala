@@ -42,6 +42,7 @@ case class Arguments (
   def sequential: Boolean             = execute.sequential
   def isolated: Boolean               = execute.isolated
   def threadsNb: Int                  = execute.threadsNb
+  def batchSize: Int                  = execute.batchSize
   def scheduledThreadsNb: Int         = execute.scheduledThreadsNb
 
   def xonly: Boolean                  = report.xonly

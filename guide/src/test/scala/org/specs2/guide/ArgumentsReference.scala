@@ -71,6 +71,7 @@ This reference guide for arguments is divided in several sections:
  `isolated`              | `false`                                  | execute each example in its own specification to get "fresh" local variables
  `threadsNb`             | `Runtime.getRuntime.availableProcessors` | number of threads to use for concurrent execution
  `scheduledThreadsNb`    | `1`                                      | number of threads to use for timed out execution on Scalaz Futures
+ `batchSize`             | `Runtime.getRuntime.availableProcessors` | number of examples to execute concurrently at the time, then report
  `timeFactor`            | `1`                                      | multiply all durations by this factor when waiting for futures
  `executor`              | `""`                                     | implementation of the `org.specs2.specification.process.Executor` trait
 

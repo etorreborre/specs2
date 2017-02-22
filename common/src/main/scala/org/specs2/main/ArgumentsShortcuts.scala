@@ -14,6 +14,14 @@ trait ArgumentsShortcuts { this: ArgumentsCreation =>
    */
   def sequential: Arguments = args(sequential = ArgProperty(true))
   /**
+   * @return arguments for a specification where examples must in a given batch size
+   */
+  def batchSize(n: Int): Arguments = args(batchSize = ArgProperty(n))
+  /**
+   * @return arguments for a specification where examples must be executed inside just one big batch
+   */
+  def unbatched: Arguments = batchSize(Int.MaxValue)
+  /**
    * @return arguments for a specification where examples must be executed in their own specification
    */
   def isolated: Arguments = args(isolated = ArgProperty(true))

@@ -20,20 +20,21 @@ trait ArgumentsCreation {
 
   /** shorthand method to create an Arguments object */
   def args(
-    ex:            ArgProperty[String]            = ArgProperty[String](),
-    include:       ArgProperty[String]            = ArgProperty[String](),
-    exclude:       ArgProperty[String]            = ArgProperty[String](),
-    was:           ArgProperty[String]            = ArgProperty[String](),
-    plan:          ArgProperty[Boolean]           = ArgProperty[Boolean](),
-    skipAll:       ArgProperty[Boolean]           = ArgProperty[Boolean](),
-    stopOnFail:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
-    stopOnSkip:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
-    sequential:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
-    asap:          ArgProperty[Boolean]           = ArgProperty[Boolean](),
-    isolated:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
-    xonly:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
-    showOnly:      ArgProperty[String]            = ArgProperty[String](),
-    color:         ArgProperty[Boolean]           = ArgProperty[Boolean]()): Arguments =
+    ex:            ArgProperty[String]  = ArgProperty[String](),
+    include:       ArgProperty[String]  = ArgProperty[String](),
+    exclude:       ArgProperty[String]  = ArgProperty[String](),
+    was:           ArgProperty[String]  = ArgProperty[String](),
+    plan:          ArgProperty[Boolean] = ArgProperty[Boolean](),
+    skipAll:       ArgProperty[Boolean] = ArgProperty[Boolean](),
+    stopOnFail:    ArgProperty[Boolean] = ArgProperty[Boolean](),
+    stopOnSkip:    ArgProperty[Boolean] = ArgProperty[Boolean](),
+    sequential:    ArgProperty[Boolean] = ArgProperty[Boolean](),
+    batchSize:     ArgProperty[Int]     = ArgProperty[Int](),
+    asap:          ArgProperty[Boolean] = ArgProperty[Boolean](),
+    isolated:      ArgProperty[Boolean] = ArgProperty[Boolean](),
+    xonly:         ArgProperty[Boolean] = ArgProperty[Boolean](),
+    showOnly:      ArgProperty[String]  = ArgProperty[String](),
+    color:         ArgProperty[Boolean] = ArgProperty[Boolean]()): Arguments =
 
      (new ArgumentsNamespace).select(
             ex         = ex,
@@ -46,7 +47,8 @@ trait ArgumentsCreation {
               stopOnFail = stopOnFail,
               stopOnSkip = stopOnSkip,
               sequential = sequential,
-              asap = asap,
+              batchSize  = batchSize,
+              asap       = asap,
               isolated   = isolated) <|
      (new ArgumentsNamespace).report(
               xonly      = xonly,
@@ -80,6 +82,7 @@ trait ArgumentsCreation {
       isolated:           ArgProperty[Boolean]           = ArgProperty[Boolean](),
       threadsNb:          ArgProperty[Int]               = ArgProperty[Int](),
       scheduledThreadsNb: ArgProperty[Int]               = ArgProperty[Int](),
+      batchSize:          ArgProperty[Int]               = ArgProperty[Int](),
       timeFactor:         ArgProperty[Int]               = ArgProperty[Int](),
       executor:           ArgProperty[String]            = ArgProperty[String]()
     ) = new Arguments(
@@ -92,6 +95,7 @@ trait ArgumentsCreation {
                isolated.toOption,
                threadsNb.toOption,
                scheduledThreadsNb.toOption,
+               batchSize.toOption,
                timeFactor.toOption,
                executor.toOption))
 
