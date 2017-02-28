@@ -568,6 +568,56 @@ trait Interpret {
     }
   }
 
+  type of[F[_], G[_]] = {type l[A] = F[G[A]]}
+
+  /**
+   * Intercept the values for one effect,
+   * emitting new values for the same effect inside a monad which is interleaved in
+   */
+  def interceptNatM[R, T[_], F[_], A](effects: Eff[R, A], nat: T ~> (T `of` F)#l)
+                                     (implicit m: MemberInOut[T, R], FT: Traverse[F], FM: Monad[F]): Eff[R, F[A]] = {
+    effects match {
+      case Pure(a, last) =>
+        pure[R, F[A]](FM.point(a)).addLast(last)
+
+      case Impure(u, c, last) =>
+        m.extract(u) match {
+          case Some(tx) =>
+            val union = m.inject(nat(tx))
+
+            Impure(union, Arrs.singleton({ ex: F[u.X] =>
+              Eff.flatTraverseA(ex)(x => interceptNatM[R, T, F, A](c(x), nat))
+            }), last)
+
+          case None => Impure(u, c.mapLast(r => interceptNatM[R, T, F, A](r, nat)), last)
+        }
+
+      case ImpureAp(unions, continuation, last) =>
+        def materialize(u: Union[R, Any]): Union[R, Any] =
+          m.extract(u) match {
+            case Some(tx) => m.inject(nat(tx).asInstanceOf[T[Any]])
+            case None => u
+          }
+
+        val materializedUnions =
+          Unions(materialize(unions.first), unions.rest.map(materialize))
+
+        val collected = unions.extract(m)
+        val continuation1 = Arrs.singleton[R, List[Any], F[A]]({ ls: List[Any] =>
+          val xors =
+            ls.zipWithIndex.collect { case (a, i) =>
+              if (collected.indices.contains(i)) a.asInstanceOf[F[Any]]
+              else FM.pure(a)
+            }.sequence
+
+          Eff.flatTraverseA(xors)(x => interceptNatM[R, T, F, A](continuation(x), nat))
+
+        })
+
+        ImpureAp(materializedUnions, continuation1, last)
+    }
+  }
+
   /** interpret an effect by running side-effects */
   def interpretUnsafe[R, U, T[_], A](effects: Eff[R, A])
                                     (sideEffect: SideEffect[T])

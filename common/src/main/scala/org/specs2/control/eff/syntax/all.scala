@@ -12,5 +12,6 @@ trait all extends
   console with
   warnings with
   async with
+  future with
   eff
 

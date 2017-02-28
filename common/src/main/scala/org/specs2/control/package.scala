@@ -16,7 +16,7 @@ import WarningsEffect._
 import org.specs2.control.producer._
 
 import scala.concurrent._
-import scala.concurrent.ExecutionContext.Implicits.global
+import FutureEffect._
 import scala.util.control.NonFatal
 
 package object control {
@@ -28,8 +28,8 @@ package object control {
   lazy val noLogging = (s: String) => ()
   lazy val consoleLogging = (s: String) => println(s)
 
-  type StreamStack = Fx.fx2[Async, Safe]
-  type ActionStack = Fx.fx5[Async, ErrorOrOk, Console, Warnings, Safe]
+  type StreamStack = Fx.fx2[TimedFuture, Safe]
+  type ActionStack = Fx.fx5[TimedFuture, ErrorOrOk, Console, Warnings, Safe]
   type OperationStack = Fx.fx4[ErrorOrOk, Console, Warnings, Safe]
 
   type Action[A] = Eff[ActionStack, A]
@@ -41,15 +41,14 @@ package object control {
   type AsyncFold[A, B] = origami.Fold[ActionStack, A, B]
   type AsyncSink[A] = origami.Fold[ActionStack, A, Unit]
 
-
-  val asyncInterpreter = AsyncFutureInterpreter.create(global)
-  import asyncInterpreter._
+  lazy val executorServices = ExecutorServices.fromGlobalExecutionContext
+  import executorServices._
 
   def emitAsync[A](as: A*): AsyncStream[A] =
     producer.producers.emitSeq(as)
 
   def emitAsyncDelayed[A](a: A): AsyncStream[A] =
-    producer.producers.eval(asyncDelay(a))
+    producer.producers.eval(futureDelay(a))
 
   /**
    * warn the user about something that is probably wrong on his side,
@@ -60,10 +59,10 @@ package object control {
     fail(failureMessage)
 
   def executeAction[A](action: Action[A], printer: String => Unit = s => ()): (Error \/ A, List[String]) = {
-    type S = Fx.append[Fx.fx2[Async, ErrorOrOk], Fx.fx2[Console, Warnings]]
+    type S = Fx.append[Fx.fx2[TimedFuture, ErrorOrOk], Fx.fx2[Console, Warnings]]
 
     Await.result(action.execSafe.flatMap(_.fold(t => exception[S, A](t), a => Eff.pure[S, A](a))).
-      runError.runConsoleToPrinter(printer).runWarnings.into[Fx1[Async]].runAsyncFuture, Duration.Inf)
+      runError.runConsoleToPrinter(printer).runWarnings.into[Fx1[TimedFuture]].runAsync, Duration.Inf)
   }
 
   def runAction[A](action: Action[A], printer: String => Unit = s => ()): Error \/ A =
@@ -91,7 +90,7 @@ package object control {
     }
 
   def attemptExecuteAction[A](action: Action[A], printer: String => Unit = s => ()): Throwable \/ (Error \/ A, List[String]) =
-    try Await.result(action.runError.runConsoleToPrinter(printer).runWarnings.execSafe.runAsyncFuture, Duration.Inf)
+    try Await.result(action.runError.runConsoleToPrinter(printer).runWarnings.execSafe.runAsync, Duration.Inf)
     catch { case NonFatal(t) => -\/(t) }
 
   def attemptExecuteOperation[A](operation: Operation[A], printer: String => Unit = s => ()): Throwable \/ (Error \/ A, List[String]) =
@@ -202,10 +201,10 @@ package object control {
       SafeEffect.protect(a)
 
     def asyncDelayAction[A](a: =>A): Action[A] =
-      AsyncEffect.asyncDelay[ActionStack, A](a)
+      futureDelay[ActionStack, A](a)
 
-    def asyncForkAction[A](a: =>A, timeout: Option[FiniteDuration] = None): Action[A] =
-      AsyncEffect.asyncFork[ActionStack, A](a, timeout)
+    def asyncForkAction[A](a: =>A, ec: ExecutionContext, timeout: Option[FiniteDuration] = None): Action[A] =
+      futureFork[ActionStack, A](a, ec, timeout)
 
     def delayed[A](a: =>A): Action[A] =
       ErrorEffect.ok(a)

@@ -13,7 +13,8 @@ import specification.core._
 import specification.process.DefaultExecutor
 import control.producer._
 import ResultMatchers._
-import scala.concurrent.ExecutionContext
+
+import scala.concurrent._
 
 class ExecutorSpec(implicit ec: ExecutionContext) extends script.Specification with Groups with ThrownExpectations { def is = section("travis") ^ s2"""
 
@@ -166,8 +167,8 @@ class ExecutorSpec(implicit ec: ExecutionContext) extends script.Specification w
   def userEnv = { env: Env =>
     val fragments =
       Fragments.foreach(1 to 10) { i: Int =>
-        "test " + i ! Execution.withExecutionEnv { implicit ec: ExecutionEnv =>
-          scala.concurrent.Future(1) must be_==(1).await
+        "test " + i ! Execution.withExecutionEnv { implicit ee: ExecutionEnv =>
+          Await.result(scala.concurrent.Future(1), 1 second) ==== 1
         }
       }
     execute(fragments.fragments, env) must contain(beSuccessful[Result]).forall

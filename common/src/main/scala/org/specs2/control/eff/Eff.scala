@@ -242,6 +242,12 @@ trait EffCreation {
   def sequenceA[R, F[_] : Traverse, A](fs: F[Eff[R, A]]): Eff[R, F[A]] =
     Traverse[F].sequence(fs)(EffImplicits.EffApplicative[R])
 
+  /** use the applicative instance of Eff to traverse a list of values, then flatten it */
+  def flatTraverseA[R, F[_], A, B](fs: F[A])(f: A => Eff[R, F[B]])(implicit FT: Traverse[F], FM: Bind[F]): Eff[R, F[B]] = {
+    val applicative = EffImplicits.EffApplicative[R]
+    applicative.map(FT.traverse(fs)(f)(applicative))(FM.join)
+  }
+
 }
 
 object EffCreation extends EffCreation
@@ -350,9 +356,9 @@ case class Arrs[R, A, B](functions: Vector[Any => Eff[R, Any]]) extends (A => Ef
     Arrs(functions :+ f.asInstanceOf[Any => Eff[R, Any]])
 
   /** map the last returned effect */
-  def mapLast(f: Eff[R, B] => Eff[R, B]): Arrs[R, A, B] =
+  def mapLast[C](f: Eff[R, B] => Eff[R, C]): Arrs[R, A, C] =
     functions match {
-      case Vector() => this
+      case v if v.isEmpty => Arrs[R, A, C](v :+ ((a: Any) => f(Eff.pure(a.asInstanceOf[B])).asInstanceOf[Eff[R, Any]]))
       case fs :+ last => Arrs(fs :+ ((x: Any) => f(last(x).asInstanceOf[Eff[R, B]]).asInstanceOf[Eff[R, Any]]))
     }
 

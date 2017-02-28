@@ -84,10 +84,10 @@ trait DefaultExecutor extends Executor {
 
     def executeOneFragment(f: Fragment, timeout: Option[FiniteDuration] = None): Action[Fragment] = {
       if (arguments.sequential) asyncDelayAction(executeFragment(env)(f))
-      else                      asyncForkAction(executeFragment(env)(f), timeout).asyncAttempt.map {
-        case -\/(t: TimeoutException) => executeFragment(env)(f.setExecution(Execution.result(Skipped("timeout"+timeout.map(" after "+_).getOrElse("")))))
-        case -\/(t)                   => executeFragment(env)(f.setExecution(Execution.result(Error(t))))
-        case \/-(f1)                  => f1
+      else                      asyncForkAction(executeFragment(env)(f), env.executionContext, timeout).futureAttempt.map {
+        case Left(t: TimeoutException) => executeFragment(env)(f.setExecution(Execution.result(Skipped("timeout"+timeout.map(" after "+_).getOrElse("")))))
+        case Left(t)                   => executeFragment(env)(f.setExecution(Execution.result(Error(t))))
+        case Right(f1)                 => f1
       }
     }
 
