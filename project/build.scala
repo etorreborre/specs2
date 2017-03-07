@@ -21,6 +21,7 @@ import xerial.sbt.Sonatype._
 import SonatypeKeys._
 import depends._
 import com.ambiata.promulgate.project.ProjectPlugin._
+import ohnosequences.sbt.GithubRelease.keys._
 
 object build extends Build {
   type Settings = Def.Setting[_]
@@ -59,7 +60,8 @@ object build extends Build {
       specs2Settings       ++
       compilationSettings  ++
       testingSettings      ++
-      publicationSettings
+      publicationSettings  ++
+      notificationSettings
 
   /** MODULES (sorted in alphabetical order) */
   lazy val analysis = Project(id = "analysis", base = file("analysis"),
@@ -494,6 +496,22 @@ object build extends Build {
       st
     }
   )
+
+  lazy val notificationSettings: Seq[Settings] = Seq(
+    ghreleaseRepoOrg := "etorreborre",
+    ghreleaseRepoName := "specs2",
+    ghreleaseNotes := { tagName: TagName =>
+      // find the corresponding release notes
+      val notesFilePath = s"notes/${tagName.replace("SPECS2-", "")}.markdown"
+      try io.Source.fromFile(notesFilePath).mkString
+      catch { case t: Throwable => throw new Exception(s"the path $notesFilePath not found for tag $tagName") }
+    },
+    // just upload the notes
+    ghreleaseAssets := Seq()
+  )
+
+
+
 
   /**
    * COMPATIBILITY
