@@ -5,9 +5,9 @@ object depends {
 
   lazy val classycle = Seq("org.specs2" % "classycle" % "1.4.3")
 
-  def compiler(scalaVersion: String) = Seq("org.scala-lang" % "scala-compiler" % scalaVersion)
+  def compiler(scalaOrganization: String, scalaVersion: String) = Seq(scalaOrganization % "scala-compiler" % scalaVersion)
 
-  def reflect(scalaVersion: String) = Seq("org.scala-lang" % "scala-reflect" % scalaVersion)
+  def reflect(scalaOrganization: String, scalaVersion: String) = Seq(scalaOrganization % "scala-reflect" % scalaVersion)
 
   def scalaz(scalazVersion: String) =
     Seq("org.scalaz" %% "scalaz-core",
@@ -60,7 +60,7 @@ object depends {
       Nil
     else
       Seq(compilerPlugin(
-          "org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.full),
+          "org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.patch),
           "org.scalamacros" %% "quasiquotes" % "2.1.0")
 
   lazy val resolvers =

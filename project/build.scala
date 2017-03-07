@@ -64,7 +64,7 @@ object build extends Build {
   /** MODULES (sorted in alphabetical order) */
   lazy val analysis = Project(id = "analysis", base = file("analysis"),
     settings = Seq(
-      libraryDependencies ++= depends.classycle ++ depends.compiler(scalaVersion.value)) ++
+      libraryDependencies ++= depends.classycle ++ depends.compiler(scalaOrganization.value, scalaVersion.value)) ++
     moduleSettings("analysis") ++
     Seq(name := "specs2-analysis")
   ).dependsOn(common % "test->test", core, matcher, scalacheck % "test")
@@ -74,7 +74,7 @@ object build extends Build {
       Seq(conflictWarning ~= { _.copy(failOnConflict = false) }, // lame
           libraryDependencies ++=
             depends.scalaz(scalazVersion.value) ++
-            depends.reflect(scalaVersion.value) ++
+            depends.reflect(scalaOrganization.value, scalaVersion.value) ++
             depends.paradise(scalaVersion.value) ++
             depends.scalaParser(scalaVersion.value) ++
             depends.scalaXML(scalaVersion.value) ++
