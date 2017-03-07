@@ -1,0 +1,15 @@
+Maintenance version
+
+## Improvements
+
+ * **project** made the build [TLS friendly](https://github.com/typelevel/scala/issues/135)
+ * **core** added a `batchedSized(n: Int)` (or `unbatched`) argument to control how many examples are executed concurrently at once. 
+ (the default is `Runtime.getRuntime.availableProcessors`)
+ * **scalaz** added documentation for scalaz.Task matchers [#548](https://github.com/etorreborre/specs2/issues/548) (thanks to Fabio Labella)
+ * **scalaz** added a `Matcher` to assert that a `Task` can fail with a specific `Exception` [#546](https://github.com/etorreborre/specs2/issues/546) (thanks to Fabio Labella)
+ 
+## Fixes
+
+ * **core** fixed retry in await helper [#549](https://github.com/etorreborre/specs2/issues/549) (thanks to Joao Azevedo)
+ * **core** removed all formatting for `properties` on ScalaCheck properties [#545](https://github.com/etorreborre/specs2/issues/545) 
+ * **matcher** array equality fix [#541](https://github.com/etorreborre/specs2/issues/541) (thanks to Noam Almog)
