@@ -2,60 +2,60 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.specs2</groupId>
-  <artifactId>specs2_2.11</artifactId>
-  <version>3.7.1</version>
+  <artifactId>specs2_2.12</artifactId>
+  <version>3.8.9</version>
   <name>specs2 jars</name>
   <description>pom file for all the specs2 jars</description>
   <packaging>pom</packaging>
   <dependencies>
      <dependency>
         <groupId>org.specs2</groupId>
-        <artifactId>specs2-core_2.11</artifactId>
+        <artifactId>specs2-core_2.12</artifactId>
         <version>${project.version}</version>
      </dependency>
      <dependency>
         <groupId>org.specs2</groupId>
-        <artifactId>specs2-junit_2.11</artifactId>
+        <artifactId>specs2-junit_2.12</artifactId>
         <version>${project.version}</version>
      </dependency>
      <dependency>
         <groupId>org.specs2</groupId>
-        <artifactId>specs2-matcher-extra_2.11</artifactId>
+        <artifactId>specs2-matcher-extra_2.12</artifactId>
         <version>${project.version}</version>
      </dependency>
      <dependency>
         <groupId>org.specs2</groupId>
-        <artifactId>specs2-mock_2.11</artifactId>
+        <artifactId>specs2-mock_2.12</artifactId>
         <version>${project.version}</version>
      </dependency>
      <dependency>
         <groupId>org.specs2</groupId>
-        <artifactId>specs2-scalacheck_2.11</artifactId>
+        <artifactId>specs2-scalacheck_2.12</artifactId>
         <version>${project.version}</version>
      </dependency>
      <dependency>
         <groupId>org.specs2</groupId>
-        <artifactId>specs2-analysis_2.11</artifactId>
+        <artifactId>specs2-analysis_2.12</artifactId>
         <version>${project.version}</version>
      </dependency>
      <dependency>
         <groupId>org.specs2</groupId>
-        <artifactId>specs2-gwt_2.11</artifactId>
+        <artifactId>specs2-gwt_2.12</artifactId>
         <version>${project.version}</version>
      </dependency>
      <dependency>
         <groupId>org.specs2</groupId>
-        <artifactId>specs2-html_2.11</artifactId>
+        <artifactId>specs2-html_2.12</artifactId>
         <version>${project.version}</version>
      </dependency>
      <dependency>
         <groupId>org.specs2</groupId>
-        <artifactId>specs2-form_2.11</artifactId>
+        <artifactId>specs2-form_2.12</artifactId>
         <version>${project.version}</version>
      </dependency>
      <dependency>
         <groupId>org.specs2</groupId>
-        <artifactId>specs2-markdown_2.11</artifactId>
+        <artifactId>specs2-markdown_2.12</artifactId>
         <version>${project.version}</version>
      </dependency>
   </dependencies>
