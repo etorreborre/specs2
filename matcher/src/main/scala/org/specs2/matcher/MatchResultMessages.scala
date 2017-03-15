@@ -16,7 +16,7 @@ trait MatchResultMessages {
       case _                  => NeutralMessage(r.message)
     }}
 
-  implicit val MatchResultMessageMonoid = new Monoid[MatchResultMessage] {
+  implicit val MatchResultMessageMonoid: Monoid[MatchResultMessage] = new Monoid[MatchResultMessage] {
     val zero = new EmptySuccessMessage()
     def append(r1: MatchResultMessage, r2: =>MatchResultMessage) = r1 append r2
   }
