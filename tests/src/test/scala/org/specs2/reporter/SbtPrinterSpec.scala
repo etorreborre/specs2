@@ -55,7 +55,7 @@ class SbtPrinterSpec(implicit ec: ExecutionContext) extends Spec with ForEachEnv
 
     def e4 = { env: Env =>
       executeAndPrintHelloWorldUnitSpec(env)
-      there was atLeastOne(handler).handle(eventWithNameMatching("The 'Hello world' string should::contain 11 characters"))
+      there was atLeastOne(handler).handle(eventWithNameMatching("HW::The 'Hello world' string should::contain 11 characters"))
     }
 
     def eventWithStatus(s: Status): Matcher[Event] =

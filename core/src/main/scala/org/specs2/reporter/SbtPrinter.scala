@@ -51,7 +51,7 @@ object SbtPrinter {
       new scala.collection.mutable.Stack[String]
 
     private def inContext(name: String): String =
-      (context.toVector :+ name).mkString("::")
+      (name +: context.toVector).reverse.mkString("::")
 
     def specStart(title: String, location: String): Unit = ()
     def specEnd(title: String, location: String): Unit = ()
