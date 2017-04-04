@@ -1,7 +1,7 @@
 package org.specs2
 package mutable
 
-import specification.dsl.mutable.TagDsl
+import specification.dsl.mutable.{ExampleDsl, TagDsl}
 
 class SpecSpec extends Spec with TagDsl {
   sequential
@@ -16,6 +16,13 @@ class SpecSpec extends Spec with TagDsl {
         "matcherIsValueCheck",  // to use ValueChecks in contain matchers
         "functionIsValueCheck"
       ))
+  }
+
+  "A mutable Spec can use additional traits to expand its dsl" >> {
+    val s = new Spec with ExampleDsl {
+      "hello" >> ok
+    }
+    ok
   }
 
 }

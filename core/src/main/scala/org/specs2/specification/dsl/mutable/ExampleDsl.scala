@@ -9,10 +9,9 @@ import org.specs2.concurrent.ExecutionEnv
 import org.specs2.execute.AsResult
 import control.ImplicitParameters
 import ImplicitParameters._
-import org.specs2.main.{CommandLineAsResult, CommandLine}
+import org.specs2.main.CommandLine
 import org.specs2.specification.core._
 import org.specs2.specification.script.StepParser
-import specification.dsl
 
 import scala.concurrent.ExecutionContext
 
@@ -20,6 +19,7 @@ import scala.concurrent.ExecutionContext
  * Dsl for creating examples in a mutable specification
  */
 trait ExampleDsl extends ExampleDsl1 with dsl.ExampleDsl {
+
   override implicit def bangExample(d: String): BangExample =
     new MutableBangExample(d)
 
@@ -31,18 +31,15 @@ trait ExampleDsl extends ExampleDsl1 with dsl.ExampleDsl {
 }
 
 private[specs2]
-trait ExampleDsl1 extends BlockDsl {
+trait ExampleDsl1 extends BlockDsl with ExampleDsl0 {
+  // deactivate block0
+  override def blockExample0(d: String) = super.blockExample0(d)
+
   implicit def blockExample(d: String) = new BlockExample(d)
 
-  class BlockExample(d: String) {
-    def >>[R : CommandLineAsResult](r: =>R): Fragment =
-      >>(Execution.withEnv((env: Env) => CommandLineAsResult(r).apply(env.arguments.commandLine)))
-
+  class BlockExample(d: String) extends BlockExample0(d) {
     def >>[R](f: String => R)(implicit asResult: AsResult[R], p1: ImplicitParam1, p2: ImplicitParam2): Fragment =
       >>(Execution.result(f(d)))
-
-    def >>(f: =>Fragment): Fragment = describe(d) >> f
-    def >>(fs: =>Fragments)(implicit p1: ImplicitParam1): Fragments = describe(d).>>(fs)(p1)
 
     def >>[R](f: CommandLine => R)(implicit asResult: AsResult[R], p: ImplicitParam): Fragment =
       >>(Execution.withEnv((env: Env) => asResult.asResult(f(env.arguments.commandLine))))
@@ -71,7 +68,6 @@ trait ExampleDsl1 extends BlockDsl {
       addFragment(fragmentFactory.break)
     }
 
-    def in[R : CommandLineAsResult](r: =>R): Fragment = >>(r)
     def in[R](f: String => R)(implicit ar: AsResult[R], p1: ImplicitParam1, p2: ImplicitParam2): Fragment = >>(f)(ar, p1, p2)
     def in(f: =>Fragment): Fragment = describe(d) >> f
     def in(fs: =>Fragments)(implicit p1: ImplicitParam1): Fragments = describe(d).>>(fs)(p1)
@@ -91,9 +87,9 @@ trait ExampleDsl1 extends BlockDsl {
  */
 private[specs2]
 trait ExampleDsl0 extends BlockCreation {
-  implicit def blockExample(d: String) = new BlockExample(d)
+  implicit def blockExample0(d: String): BlockExample0 = new BlockExample0(d)
 
-  class BlockExample(d: String) {
+  class BlockExample0(d: String) {
     def >>(f: =>Fragment): Fragment = addBlock(d, f, addFragmentBlock)
 
     def >>(fs: =>Fragments)(implicit p1: ImplicitParam1): Fragments = addBlock(d, fs, addFragmentsBlock)
@@ -103,8 +99,10 @@ trait ExampleDsl0 extends BlockCreation {
       addFragment(fragmentFactory.break)
     }
 
-    def should(f: => Fragment): Fragment = addBlock(s"$d should", f, addFragmentBlock)
-    def can(f: => Fragment): Fragment    = addBlock(s"$d can",    f, addFragmentBlock)
+    def should(f: => Fragment): Fragment                                 = addBlock(s"$d should", f, addFragmentBlock)
+    def should(fs: => Fragments)(implicit p1: ImplicitParam1): Fragments = addBlock(s"$d should", fs, addFragmentsBlock)
+    def can(fs: => Fragments)(implicit p1: ImplicitParam1): Fragments    = addBlock(s"$d can",    fs, addFragmentsBlock)
+    def can(f: => Fragment): Fragment                                    = addBlock(s"$d can",    f, addFragmentBlock)
 
     def in[R : AsResult](r: =>R): Fragment = d >> r
   }
