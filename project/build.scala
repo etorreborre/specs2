@@ -198,7 +198,8 @@ object build extends Build {
 
   lazy val tests = Project(id = "tests", base = file("tests"),
     settings = moduleSettings("tests") ++
-      Seq(name := "specs2-tests")
+      Seq(name := "specs2-tests") ++
+      Seq(libraryDependencies ++= depends.scalaParallelCollections(scalaVersion.value))
   ).dependsOn(
     core % "compile->compile;test->test", shapeless % "compile->compile;test->test",
     junit % "test->test", examples % "test->test",
