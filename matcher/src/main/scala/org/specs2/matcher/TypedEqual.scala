@@ -27,7 +27,7 @@ trait TypedEqual { this: ExpectationsCreation =>
   }
 }
 
-object TypedEqual extends ExpectationsCreation
+object TypedEqual extends TypedEqual with ExpectationsCreation
 /**
  * This trait can be used to suppress the TypedEqual implicit
  */
