@@ -6,7 +6,7 @@ import execute.AsResult
 import io._
 import specification.BeforeAfterEach
 import control._
-import scalaz.syntax.bind._
+import org.specs2.fp.syntax._
 
 class FilesContentMatchersSpec extends Spec
   with FilesContentMatchers with BeforeAfterEach with ThrownExpectations with FileSystem { def is = sequential ^ diffs(show = true, triggerSize = 0, diffRatio = 100)^ s2"""

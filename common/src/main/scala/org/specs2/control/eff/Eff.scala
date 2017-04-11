@@ -1,6 +1,7 @@
 package org.specs2.control.eff
 
-import scalaz._, Scalaz._
+import org.specs2.fp._
+import org.specs2.fp.syntax._
 
 import scala.annotation.tailrec
 import Eff._
@@ -137,7 +138,7 @@ trait EffImplicits {
   /**
    * Monad implementation for the Eff[R, ?] type
    */
-  implicit final def EffMonad[R]: Monad[Eff[R, ?]] with BindRecʹ[Eff[R, ?]] = new Monad[Eff[R, ?]] with BindRecʹ[Eff[R, ?]] {
+  implicit final def EffMonad[R]: Monad[Eff[R, ?]] = new Monad[Eff[R, ?]] {
     def point[A](a: =>A): Eff[R, A] =
       Pure(a)
 
@@ -166,12 +167,6 @@ trait EffImplicits {
       
         case ImpureAp(unions, continuation, last) =>
           ImpureAp(unions, continuation.append(f), last)
-      }
-
-    def tailrecM[A, B](a: A)(f: A => Eff[R, \/[A, B]]): Eff[R, B] =
-      bind(f(a)) {
-        case \/-(b)   => pure(b)
-        case -\/(next) => tailrecM(next)(f)
       }
   }
 
@@ -243,7 +238,7 @@ trait EffCreation {
     Traverse[F].sequence(fs)(EffImplicits.EffApplicative[R])
 
   /** use the applicative instance of Eff to traverse a list of values, then flatten it */
-  def flatTraverseA[R, F[_], A, B](fs: F[A])(f: A => Eff[R, F[B]])(implicit FT: Traverse[F], FM: Bind[F]): Eff[R, F[B]] = {
+  def flatTraverseA[R, F[_], A, B](fs: F[A])(f: A => Eff[R, F[B]])(implicit FT: Traverse[F], FM: Monad[F]): Eff[R, F[B]] = {
     val applicative = EffImplicits.EffApplicative[R]
     applicative.map(FT.traverse(fs)(f)(applicative))(FM.join)
   }
@@ -269,40 +264,40 @@ trait EffInterpretation {
   /**
    * peel-off the only present effect
    */
-  def detach[M[_] : Monad, A](eff: Eff[Fx1[M], A])(implicit bindRec: BindRecʹ[M]): M[A] =
-    bindRec.tailrecM[Eff[Fx1[M], A], A](eff) {
-      case Pure(a, Last(Some(l))) => Monad[M].pure(-\/(l.value.as(a)))
-      case Pure(a, Last(None))    => Monad[M].pure(\/-(a))
+  def detach[M[_] : Monad, A](eff: Eff[Fx1[M], A]): M[A] =
+    Monad[M].tailrecM[Eff[Fx1[M], A], A](eff) {
+      case Pure(a, Last(Some(l))) => Monad[M].pure(Left(l.value.as(a)))
+      case Pure(a, Last(None))    => Monad[M].pure(Right(a))
     
       case Impure(u, continuation, last) =>
         u match {
           case Union1(ta) =>
             last match {
-              case Last(Some(l)) => Monad[M].map(ta)(x => -\/(continuation(x).addLast(last)))
-              case Last(None)    => Monad[M].map(ta)(x => -\/(continuation(x)))
+              case Last(Some(l)) => Monad[M].map(ta)(x => Left(continuation(x).addLast(last)))
+              case Last(None)    => Monad[M].map(ta)(x => Left(continuation(x)))
             }
         }
     
       case ap @ ImpureAp(u, continuation, last) =>
-        Monad[M].point(-\/(ap.toMonadic))
+        Monad[M].point(Left(ap.toMonadic))
     }
 
   /**
    * peel-off the only present effect, using an Applicative instance where possible
    */
-  def detachA[M[_], A](eff: Eff[Fx1[M], A])(implicit monad: Monad[M], bindRec: BindRecʹ[M], applicative: Applicative[M]): M[A] =
-    bindRec.tailrecM[Eff[Fx1[M], A], A](eff) {
-      case Pure(a, Last(Some(l))) => monad.pure(-\/(l.value.as(a)))
+  def detachA[M[_], A](eff: Eff[Fx1[M], A])(implicit monad: Monad[M], applicative: Applicative[M]): M[A] =
+    monad.tailrecM[Eff[Fx1[M], A], A](eff) {
+      case Pure(a, Last(Some(l))) => monad.pure(Left(l.value.as(a)))
 
-      case Pure(a, Last(None))    => monad.pure(\/-(a))
+      case Pure(a, Last(None))    => monad.pure(Right(a))
     
       case Impure(u, continuation, last) =>
 
         u match {
           case Union1(ta) =>
             last match {
-              case Last(Some(l)) => Monad[M].map(ta)(x => -\/(continuation(x).addLast(last)))
-              case Last(None)    => Monad[M].map(ta)(x => -\/(continuation(x)))
+              case Last(Some(l)) => Monad[M].map(ta)(x => Left(continuation(x).addLast(last)))
+              case Last(None)    => Monad[M].map(ta)(x => Left(continuation(x)))
             }
         }
     
@@ -311,8 +306,8 @@ trait EffInterpretation {
         val sequenced = applicative.sequence(effects)
 
         last match {
-          case Last(Some(l)) => Monad[M].map(sequenced)(x => -\/(continuation(x).addLast(last)))
-          case Last(None)    => Monad[M].map(sequenced)(x => -\/(continuation(x)))
+          case Last(Some(l)) => Monad[M].map(sequenced)(x => Left(continuation(x).addLast(last)))
+          case Last(None)    => Monad[M].map(sequenced)(x => Left(continuation(x)))
         }
     }
 

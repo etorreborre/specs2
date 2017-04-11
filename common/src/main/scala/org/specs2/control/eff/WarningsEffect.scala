@@ -1,7 +1,5 @@
 package org.specs2.control.eff
 
-import scalaz._
-
 object WarningsEffect {
 
   case class WarningsMessage(value: String) extends AnyVal

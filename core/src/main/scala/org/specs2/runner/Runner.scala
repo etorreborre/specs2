@@ -7,8 +7,8 @@ import eff._, all._
 import specification.core._
 import specification.process.Stats
 import scala.reflect.ClassTag
-import scalaz.effect._, IO._
-import scalaz._, Scalaz._
+import org.specs2.fp._
+import org.specs2.fp.syntax._
 import main.Arguments
 import reflect.Classes
 import reporter._, Printer._
@@ -24,21 +24,21 @@ object Runner {
    */
   def execute(actions: Action[Stats], arguments: Arguments, exit: Boolean)(implicit ec: ExecutionContext): Unit = {
     val (result, warnings) = executeAction(actions, consoleLogging)
-    val logging = (s: String) => IO(consoleLogging(s))
+    val logging = (s: String) => Name(consoleLogging(s))
     result.fold(
       error => error.fold(
         t => logUserWarnings(warnings)(logging) >> logThrowable(t, arguments)(logging),
         m => logUserWarnings(warnings)(logging) >> logging(m)
-      ) >> IO(exitSystem(100, exit)),
+      ) >> Name(exitSystem(100, exit)),
       ok => logUserWarnings(warnings)(logging) >>
-        (if (ok.isSuccess) IO(exitSystem(0, exit)) else IO(exitSystem(1, exit)))
-    ).unsafePerformIO
+        (if (ok.isSuccess) Name(exitSystem(0, exit)) else Name(exitSystem(1, exit)))
+    ).value
   }
 
   /**
    * Use the console logging to log exceptions
    */
-  def logThrowable(t: Throwable, arguments: Arguments)(print: String => IO[Unit]): IO[Unit] = {
+  def logThrowable(t: Throwable, arguments: Arguments)(print: String => Name[Unit]): Name[Unit] = {
     def logStack(exception: Throwable) =
       exception.chainedExceptions.traverse_(s => print("  caused by " + s.toString)) >>
         print("\nSTACKTRACE") >>
@@ -58,9 +58,9 @@ object Runner {
 
       case ActionException(warnings, message, exception) =>
         if (warnings.nonEmpty) print("Warnings:\n") >> print(warnings.mkString("", "\n", "\n"))
-        else IO(()) >>
-          message.traverseU(print).void >>
-          exception.traverseU(e => logException(e.getMessage, e)).void
+        else Name(()) >>
+          message.traverse(print).void >>
+          exception.traverse(e => logException(e.getMessage, e)).void
 
       case _: InterruptedException => print("User cancellation. Bye")
 
@@ -71,15 +71,15 @@ object Runner {
           print(" ")
 
       }
-    } else IO(())
+    } else Name(())
   }
 
   /**
    * Log the issues which might have been caused by the user
    */
-  def logUserWarnings(warnings: List[String])(print: String => IO[Unit]): IO[Unit] = {
-    (if (warnings.nonEmpty) print("Warnings:\n") else IO(())) >>
-      warnings.traverseU(print).void
+  def logUserWarnings(warnings: List[String])(print: String => Name[Unit]): Name[Unit] = {
+    (if (warnings.nonEmpty) print("Warnings:\n") else Name(())) >>
+      warnings.traverse(print).void
   }
 
   /**
@@ -96,7 +96,7 @@ object Runner {
           ss       <- SpecStructure.linkedSpecifications(specStructure, env, loader).toAction
           sorted   <- delayed(SpecStructure.topologicalSort(ss).getOrElse(ss)).toAction
           _        <- reporter.prepare(env, printers)(sorted.toList)
-          stats    <- sorted.toList.map(Reporter.report(env, printers)).sequenceU
+          stats    <- sorted.toList.map(Reporter.report(env, printers)).sequence
           _        <- Reporter.finalize(env, printers)(sorted.toList)
         } yield stats.foldMap(identity _)
 
@@ -156,8 +156,8 @@ object Runner {
         instance <- Classes.createInstanceEither[Printer](className, loader)
         result <-
           instance match {
-            case \/-(i) => Operations.ok(Some(i))
-            case -\/(t) => noInstance(failureMessage, t, verbose = true)
+            case Right(i) => Operations.ok(Some(i))
+            case Left(t) => noInstance(failureMessage, t, verbose = true)
           }
       } yield result
     else noInstance(noRequiredMessage, args.verbose)
@@ -171,8 +171,8 @@ object Runner {
         instance <- Classes.createInstanceEither[T](className, loader)(m)
         result <-
           instance match {
-            case \/-(i) => Operations.ok(Some(i))
-            case -\/(t) => noInstance(failureMessage(className), t, verbose = true)
+            case Right(i) => Operations.ok(Some(i))
+            case Left(t) => noInstance(failureMessage(className), t, verbose = true)
           }
       } yield result
 

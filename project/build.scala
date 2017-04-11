@@ -37,7 +37,7 @@ object build extends Build {
       siteSettings             ++
       Seq(name := "specs2", packagedArtifacts := Map.empty)
   ).aggregate(
-    common, matcher, matcherExtra, core, cats, scalaz, html, analysis,
+    fp, common, matcher, matcherExtra, core, cats, scalaz, html, analysis,
     shapeless, form, markdown, gwt, junit, scalacheck, mock, tests)
    .enablePlugins(GitBranchPrompt)
 
@@ -48,7 +48,7 @@ object build extends Build {
     scalazVersion in GlobalScope := "7.2.7",
     specs2ShellPrompt,
     scalaVersion := "2.12.1",
-    crossScalaVersions := Seq(scalaVersion.value, "2.11.8", "2.10.6"))
+    crossScalaVersions := Seq(scalaVersion.value, "2.11.9"))
 
   lazy val specs2Version = settingKey[String]("defines the current specs2 version")
   lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
@@ -71,20 +71,23 @@ object build extends Build {
     Seq(name := "specs2-analysis")
   ).dependsOn(common % "test->test", core, matcher, scalacheck % "test")
 
+  lazy val fp = Project(id = "fp", base = file("fp"),
+    settings = moduleSettings("fp") ++
+      Seq(name := "specs2-fp")
+  )
+
   lazy val common = Project(id = "common", base = file("common"),
     settings = moduleSettings("common") ++
       Seq(conflictWarning ~= { _.copy(failOnConflict = false) }, // lame
           libraryDependencies ++=
-            depends.scalaz(scalazVersion.value) ++
             depends.reflect(scalaOrganization.value, scalaVersion.value) ++
             depends.paradise(scalaVersion.value) ++
             depends.scalaParser(scalaVersion.value) ++
             depends.scalaXML(scalaVersion.value) ++
-            depends.scalacheck(scalaVersion.value).map(_ % "test") ++
-            depends.si2712Dependency(scalaVersion.value),
+            depends.scalacheck(scalaVersion.value).map(_ % "test"),
         name := "specs2-common"
       )
-  )
+  ).dependsOn(fp)
 
   lazy val core = Project(id = "core", base = file("core"),
     settings = Seq(
@@ -176,7 +179,9 @@ object build extends Build {
 
   lazy val scalaz = Project(id = "scalaz", base = file("scalaz"),
     settings = moduleSettings("scalaz") ++
-      Seq(libraryDependencies ++= depends.scalaz(scalazVersion.value) ++ depends.scalazConcurrent(scalazVersion.value)) ++
+      Seq(libraryDependencies ++=
+        depends.scalaz(scalazVersion.value) ++
+        depends.scalazConcurrent(scalazVersion.value)) ++
       Seq(name := "specs2-scalaz")
   ).dependsOn(matcher, core % "test->test")
 
@@ -211,21 +216,17 @@ object build extends Build {
   }
 
   def scalaSourceVersion(scalaBinaryVersion: String) =
-    if (scalaBinaryVersion.startsWith("2.10"))
-      "2.10"
-    else if (scalaBinaryVersion.startsWith("2.11"))
+    if (scalaBinaryVersion.startsWith("2.11"))
       "2.11"
     else
-      "2.12.0-RCx"
+      "2.12"
 
   lazy val compilationSettings: Seq[Settings] = Seq(
     // https://gist.github.com/djspiewak/976cd8ac65e20e136f05
     unmanagedSourceDirectories in Compile ++=
       Seq((sourceDirectory in Compile).value / s"scala-${scalaSourceVersion(scalaBinaryVersion.value)}",
-          if (scalazVersion.value.startsWith("7.0")) (sourceDirectory in Compile).value / s"scala-scalaz-7.0.x"
-          else                                       (sourceDirectory in Compile).value / s"scala-scalaz-7.1.x",
-          if (scalazVersion.value.startsWith("7.0")) (sourceDirectory in (Test, test)).value / s"scala-scalaz-7.0.x"
-          else                                       (sourceDirectory in (Test, test)).value / s"scala-scalaz-7.1.x"),
+          (sourceDirectory in Compile).value / s"scala-scalaz-7.1.x",
+          (sourceDirectory in (Test, test)).value / s"scala-scalaz-7.1.x"),
     javacOptions ++= Seq("-Xmx3G", "-Xms512m", "-Xss4m"),
     maxErrors := 20,
     incOptions := incOptions.value.withNameHashing(true),
@@ -240,18 +241,13 @@ object build extends Build {
             "-deprecation:false", "-Xcheckinit", "-unchecked", "-feature", "-language:_")
        else
         Seq("-Xcheckinit", "-Xlint", "-deprecation", "-unchecked", "-feature", "-language:_")),
-    si2712,
+    scalacOptions += "-Ypartial-unification",
     addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.3"),
     scalacOptions in Test ++= Seq("-Yrangepos"),
     scalacOptions in (Compile, doc) ++= Seq("-feature", "-language:_"),
     scalacOptions in (Compile, console) ++= Seq("-Yrangepos", "-feature", "-language:_"),
     scalacOptions in (Test, console) ++= Seq("-Yrangepos", "-feature", "-language:_")
   )
-
-  lazy val si2712 =
-    scalacOptions ++=
-      (if (CrossVersion.partialVersion(scalaVersion.value).exists(_._2 >= 12)) Seq("-Ypartial-unification")
-       else Seq())
 
   lazy val testingSettings: Seq[Settings] = Seq(
     initialCommands in console in test := "import org.specs2._",

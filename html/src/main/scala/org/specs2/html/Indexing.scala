@@ -3,7 +3,8 @@ package html
 
 import io.{DirectoryPath, FilePath, FileSystem}
 import specification.core._
-import scalaz._, Scalaz._
+import org.specs2.fp._
+import org.specs2.fp.syntax._
 import control._
 import origami._
 

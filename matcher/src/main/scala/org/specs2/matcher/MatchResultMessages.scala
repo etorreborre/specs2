@@ -1,20 +1,13 @@
 package org.specs2
 package matcher
 
-import scalaz.{Monoid, Reducer}
+import org.specs2.fp._
 
 /**
  * MatchResultMessages are used to accumulate the results of several matches into a "summary" one
  */
 private[specs2]
 trait MatchResultMessages {
-
-  implicit def MatchResultMessageReducer[T]: Reducer[MatchResult[T], MatchResultMessage] =
-    Reducer.unitReducer { r: MatchResult[T] => r match {
-      case s: MatchSuccess[_] => SuccessMessage.create(s.okMessage, s.koMessage)
-      case f: MatchFailure[_] => FailureMessage.create(f.okMessage, f.koMessage)
-      case _                  => NeutralMessage(r.message)
-    }}
 
   implicit val MatchResultMessageMonoid: Monoid[MatchResultMessage] = new Monoid[MatchResultMessage] {
     val zero = new EmptySuccessMessage()

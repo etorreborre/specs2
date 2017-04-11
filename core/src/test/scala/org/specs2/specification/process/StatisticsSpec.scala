@@ -5,7 +5,6 @@ package process
 import Statistics._
 import execute._
 import specification.core._
-import scalaz._, Scalaz._
 import control.eff.syntax.eff._
 
 class StatisticsSpec extends Specification { def is = s2"""

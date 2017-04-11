@@ -5,7 +5,7 @@ import scala.reflect.ClassTag
 import ClassName._
 import control._
 import scala.util.control.NonFatal
-import scalaz._, Scalaz._
+import org.specs2.fp.syntax._
 import java.lang.reflect.Constructor
 import eff._
 
@@ -30,13 +30,13 @@ trait Classes {
       klass.getDeclaredConstructors.toList.filter(_.getParameterTypes.size <= 1).sortBy(_.getParameterTypes.size))
 
   /** try to create an instance but return an exception if this is not possible */
-  def createInstanceEither[T <: AnyRef](className: String, loader: ClassLoader, defaultInstances: List[AnyRef] = Nil)(implicit m: ClassTag[T]): Operation[Throwable \/ T] =
-    loadClassEither(className, loader) >>= { tc: Throwable \/ Class[T] =>
+  def createInstanceEither[T <: AnyRef](className: String, loader: ClassLoader, defaultInstances: List[AnyRef] = Nil)(implicit m: ClassTag[T]): Operation[Throwable Either T] =
+    loadClassEither(className, loader) >>= { tc: Throwable Either Class[T] =>
       tc match {
-        case -\/(t) => Operations.ok(-\/(t))
-        case \/-(klass) =>
+        case Left(t) => Operations.ok(Left(t))
+        case Right(klass) =>
           findInstance[T](klass, loader, defaultInstances,
-            klass.getDeclaredConstructors.toList.filter(_.getParameterTypes.size <= 1).sortBy(_.getParameterTypes.size)).map(\/-(_))
+            klass.getDeclaredConstructors.toList.filter(_.getParameterTypes.size <= 1).sortBy(_.getParameterTypes.size)).map(Right(_))
       }
     }
 
@@ -88,13 +88,13 @@ trait Classes {
   /**
    * Load a class, given the class name
    */
-  def loadClassEither[T <: AnyRef](className: String, loader: ClassLoader): Operation[Throwable \/ Class[T]] = Operations.delayed {
-    try \/-(loader.loadClass(className).asInstanceOf[Class[T]])
-    catch { case NonFatal(t) => -\/(t) }
+  def loadClassEither[T <: AnyRef](className: String, loader: ClassLoader): Operation[Throwable Either Class[T]] = Operations.delayed {
+    try Right(loader.loadClass(className).asInstanceOf[Class[T]])
+    catch { case NonFatal(t) => Left(t) }
   }
 
   def loadClass[T <: AnyRef](className: String, loader: ClassLoader): Operation[Class[T]] =
-    loadClassEither(className, loader).flatMap((tc: Throwable \/ Class[T]) => tc.fold(Operations.exception, Operations.ok))
+    loadClassEither(className, loader).flatMap((tc: Throwable Either Class[T]) => tc.fold(Operations.exception, Operations.ok))
 
   /** @return true if a class can be loaded */
   def existsClass(className: String, loader: ClassLoader): Operation[Boolean] = Operations.delayed {

@@ -1,7 +1,7 @@
 package org.specs2
 package control
 
-import scalaz.Monoid
+import org.specs2.fp._
 
 /**
  * This class provides the possibility to execute a function on an object if a condition is true

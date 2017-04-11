@@ -4,10 +4,9 @@ package analysis
 import data.IncludedExcluded
 import io._
 import control._
-import util.Properties._
-import scalaz._
-import Scalaz._
 import text.Regexes._
+import util.Properties._
+import org.specs2.fp.syntax._
 
 /**
  * This trait allows to define expected dependencies between packages layers
@@ -47,7 +46,7 @@ trait LayersAnalysis extends ClassycleDependencyFinder {
 
     /** @return the list of dependents of each package of this layer */
     lazy val getDependents: Operation[Set[Dependency]] =
-      packageNames.toList.traverseU(getPackageDependents(sourceDir, targetDir)).map(_.flatten.toSet)
+      packageNames.toList.traverse(getPackageDependents(sourceDir, targetDir)).map(_.flatten.toSet)
 
     /**
      * @return the list of dependencies showing that this layer depends on the `other` layer
@@ -102,7 +101,7 @@ trait LayersAnalysis extends ClassycleDependencyFinder {
      * - getting all the dependencies of the last element of a sequence with all its parents (should always be empty)
      */
     private lazy val unsatisfiedDependencies: Operation[Seq[Dependency]] = {
-      layers.inits.filter(_.size > 1).toList.traverseU(parents => parents.dropRight(1).toList.traverseU(parents.last.dependsOn)).map(_.flatten.flatten)
+      layers.inits.filter(_.size > 1).toList.traverse(parents => parents.dropRight(1).toList.traverse(parents.last.dependsOn)).map(_.flatten.flatten)
     }
   }
 

@@ -13,7 +13,7 @@ import main.Arguments
 import control._
 import origami._
 import control.ExecutionOrigin._
-import scalaz.{Failure => _, Success => _, _}, Scalaz.{fold => _, _}
+import org.specs2.fp.syntax._
 
 /**
  * The JUnitPrinter sends notifications to JUnit's RunNotifier

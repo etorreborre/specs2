@@ -1,7 +1,8 @@
 package org.specs2
 package matcher
 
-import scalaz.{ Functor, Scalaz }, Scalaz._
+import org.specs2.fp._
+import org.specs2.fp.syntax._
 import execute._
 import MatchResultLogicalCombinators._
 import ResultLogicalCombinators._

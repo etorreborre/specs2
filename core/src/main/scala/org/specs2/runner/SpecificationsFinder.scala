@@ -6,7 +6,7 @@ import control._
 import specification.core._
 import text.SourceFile._
 import io._
-import scalaz._, Scalaz._
+import org.specs2.fp.syntax._
 import SpecificationsFinder._
 import control.Operations._
 
@@ -33,8 +33,8 @@ trait SpecificationsFinder {
     specificationNames(glob, pattern, basePath, filePathReader, verbose).flatMap { names =>
       names.filter(filter).map { name =>
         SpecificationStructure.create(name, classLoader, Some(env)).map(s => Option(s)).
-          orElse(warn("[warn] cannot create specification "+name).as(none[SpecificationStructure]))
-      }.sequenceU.map(_.flatten)
+          orElse(warn("[warn] cannot create specification "+name).as(None: Option[SpecificationStructure]))
+      }.sequence.map(_.flatten)
     }
 
   /**
@@ -81,7 +81,7 @@ trait SpecificationsFinder {
       objectPattern <- specObjectPattern
       classPattern  <- specClassPattern
       paths         <- filePathReader.filePaths(basePath, pathGlob, verbose)
-    } yield paths.toList.map(path => readClassNames(path, objectPattern, classPattern, filePathReader, verbose)).sequenceU.map(_.flatten)
+    } yield paths.toList.map(path => readClassNames(path, objectPattern, classPattern, filePathReader, verbose)).sequence.map(_.flatten)
   }.flatMap[List[String]](identity)
 
   /**

@@ -14,7 +14,7 @@ import Trim._
 import execute._
 import main.Arguments
 import LogLine._
-import scalaz._, Scalaz._
+import org.specs2.fp.syntax._
 import Actions._
 import scala.concurrent._
 

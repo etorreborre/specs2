@@ -6,9 +6,8 @@ import execute.Result
 
 import scala.concurrent.Future
 import scala.concurrent.duration.FiniteDuration
-import scalaz._
-import scalaz.Show
-import scalaz.syntax.show._
+import fp._
+import fp.syntax._
 
 /**
  * Fragment of a specification
@@ -18,11 +17,11 @@ import scalaz.syntax.show._
  */
 case class Fragment(description: Description, execution: Execution, location: Location = StacktraceLocation()) {
   /** @return a fatal error or a result */
-  def executionFatalOrResult: Throwable \/ Result =
+  def executionFatalOrResult: Throwable Either Result =
     execution.executed match {
-      case Left(t)        => \/.left(t)
-      case Right(None)    => \/.right(org.specs2.execute.Success())
-      case Right(Some(r)) => \/.right(r)
+      case Left(t)        => Either.left(t)
+      case Right(None)    => Either.right(org.specs2.execute.Success())
+      case Right(Some(r)) => Either.right(r)
     }
 
   /** @return the result of this fragment if it has been executed, Success otherwise */
@@ -73,8 +72,8 @@ case class Fragment(description: Description, execution: Execution, location: Lo
 
 object Fragment {
   implicit def showInstance(implicit showd: Show[Description], showe: Show[Execution]): Show[Fragment] = new Show[Fragment] {
-    override def shows(f: Fragment): String =
-      s"Fragment(${f.description.shows})"
+    def show(f: Fragment): String =
+      s"Fragment(${f.description.show})"
   }
 
   def isText(f: Fragment) = (f.description match {

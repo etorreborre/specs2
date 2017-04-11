@@ -1,7 +1,6 @@
 package org.specs2.control.eff.syntax
 
 import org.specs2.control.eff._
-import scalaz._
 
 import scala.reflect.ClassTag
 
@@ -11,10 +10,10 @@ trait safe {
 
   implicit class SafeEffectOps[R, A](e: Eff[R, A]) {
 
-    def runSafe[U](implicit m: Member.Aux[Safe, R, U]): Eff[U, (Throwable \/ A, List[Throwable])] =
+    def runSafe[U](implicit m: Member.Aux[Safe, R, U]): Eff[U, (Throwable Either A, List[Throwable])] =
       SafeEffect.runSafe[R, U, A](e)
 
-    def execSafe[U](implicit m: Member.Aux[Safe, R, U]): Eff[U, Throwable \/ A] =
+    def execSafe[U](implicit m: Member.Aux[Safe, R, U]): Eff[U, Throwable Either A] =
       SafeEffect.execSafe[R, U, A](e)
 
     def `finally`(last: Eff[R, Unit])(implicit m: Safe /= R): Eff[R, A] =
@@ -32,7 +31,7 @@ trait safe {
     def whenFailed(onThrowable: Throwable => Eff[R, A])(implicit m: Safe /= R): Eff[R, A] =
       SafeEffect.whenFailed(e, onThrowable)
 
-    def attempt(implicit m: Safe /= R): Eff[R, Throwable \/ A] =
+    def attempt(implicit m: Safe /= R): Eff[R, Throwable Either A] =
       SafeEffect.attempt(e)
 
     def ignoreException[E <: Throwable : ClassTag](implicit m: Safe /= R): Eff[R, Unit] =

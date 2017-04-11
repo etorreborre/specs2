@@ -6,7 +6,7 @@ import org.specs2.text.FromString
 import reflect.Classes
 
 import scala.reflect.ClassTag
-import scalaz.Memo._
+import org.specs2.fp.Memo._
 
 /**
  * Extraction functions for command line parameters

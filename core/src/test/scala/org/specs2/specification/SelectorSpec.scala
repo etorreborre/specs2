@@ -6,7 +6,6 @@ import process._
 import execute.Result
 import matcher._
 import control._
-import scalaz.{Tag =>_, _}, Scalaz._
 import main.Arguments
 
 class SelectorSpec extends script.Specification with Groups with ResultMatchers { def is = s2"""

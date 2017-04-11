@@ -7,7 +7,6 @@ import core._
 import process._
 import control._
 import producer._
-import scalaz.Scalaz.listMonoid
 
 class IsolatedExecutionSpec extends Spec with ForEachEnv { def is = s2"""
 

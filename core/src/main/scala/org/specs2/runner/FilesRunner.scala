@@ -8,7 +8,7 @@ import reporter.LineLogger._
 import specification.process.Stats
 import specification.core._
 import runner.Runner._
-import scalaz._, Scalaz._
+import org.specs2.fp.syntax._
 import SpecificationsFinder._
 import Operations._
 
@@ -50,7 +50,7 @@ trait FilesRunner {
     for {
       _     <- beforeExecution(args, isVerbose(args)).toAction
       ss    <- specs.map(sort(env))
-      stats <- ss.toList.map(ClassRunner.report(env)).sequenceU
+      stats <- ss.toList.map(ClassRunner.report(env)).sequence
       _     <- afterExecution(ss, isVerbose(args)).toAction
     } yield stats.foldMap(identity _)
   }

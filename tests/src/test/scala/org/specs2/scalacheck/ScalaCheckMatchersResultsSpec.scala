@@ -2,14 +2,11 @@ package org.specs2
 package scalacheck
 
 import org.scalacheck.util.Pretty
-import org.scalacheck.{Gen, Properties, Arbitrary, Prop}
+import org.scalacheck._
 import matcher._
 import execute._
 import org.scalacheck.Prop.{forAll}
 import org.specs2.main.CommandLine
-import scalaz.{Tag, Order, @@, Equal, Id}
-import scalaz.std.anyVal.intInstance
-import BrokenEqualInstances._
 
 class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with ResultMatchers with ReturnsSyntax { def is = s2"""
 
@@ -53,7 +50,7 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
  ${ check(complexProp) must beFailing(withMessage("result sum")) }
 
  Nested ScalaCheck properties must be labelled
- ${ check(equal.laws[Int @@ BrokenEqual]) must beFailing(withMessage("equal")) }
+ ${ check(new Properties("equal") { property("commutativity") = Prop.falsified}) must beFailing(withMessage("equal")) }
 
  Collected data is reported
  ${ check(prop((i: Int) => true).collect.verbose).expected must haveMessage("Collected test data") }
@@ -85,9 +82,9 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
 
   def exceptionWithCause(msg: String = "boom") = new java.lang.IllegalArgumentException(msg, new java.lang.Exception("cause"))
   def exceptionProp(msg: String = "boom") = forAll((b: Boolean) => {throw exceptionWithCause(msg); true})
-  def exceptionPropOnConversion: Prop = forAll { (b: Boolean) => {throw new execute.FailureException(failure); Prop.passed} }
+  def exceptionPropOnConversion: Prop = forAll { (b: Boolean) => {throw execute.FailureException(failure); Prop.passed} }
 
-  def failureExceptionProp = forAll((b: Boolean) => {throw new execute.FailureException(failure); true})
+  def failureExceptionProp = forAll((b: Boolean) => {throw execute.FailureException(failure); true})
 
   def assertionErrorProp = forAll((b: Boolean) => {assert(1 == 2, "1 is not equal to 2"); true})
 
@@ -120,31 +117,6 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
     implicit def ArbInt: Arbitrary[MyInt] = Arbitrary(Gen.const(MyInt(1)))
     implicit def pretty: MyInt => Pretty = PrettyProduct[MyInt]
   }
-}
-
-object equal {
-  def commutativity[A](implicit A: Equal[A], arb: Arbitrary[A]) = forAll(A.equalLaw.commutative _)
-  def reflexive[A](implicit A: Equal[A], arb: Arbitrary[A])     = forAll(A.equalLaw.reflexive _)
-  def transitive[A](implicit A: Equal[A], arb: Arbitrary[A])    = forAll(A.equalLaw.transitive _)
-  def naturality[A](implicit A: Equal[A], arb: Arbitrary[A])    = forAll(A.equalLaw.naturality _)
-
-  def laws[A](implicit A: Equal[A], arb: Arbitrary[A]) = new Properties("equal") {
-    property("commutativity") = commutativity[A]
-    property("reflexive")     = reflexive[A]
-    property("transitive")    = transitive[A]
-    property("naturality")    = naturality[A]
-  }
-}
-
-
-sealed trait BrokenEqual
-object BrokenEqualInstances {
-  import scalaz.Id._
-
-  implicit def brokenEqual[A](implicit ordA: Order[A]): Equal[A @@ BrokenEqual] =
-    Equal.equal((a1, a2) => ordA.lessThan(Tag.unsubst[A, Id, BrokenEqual](a1), Tag.unsubst[A, Id, BrokenEqual](a2)))
-  implicit def arbitrary[A](implicit arbA: Arbitrary[A]): Arbitrary[A @@ BrokenEqual] =
-    Arbitrary(arbA.arbitrary.map(Tag.apply))
 }
 
 class TSpec extends mutable.Specification with ScalaCheck {

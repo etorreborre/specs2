@@ -10,7 +10,7 @@ import org.specs2.text.Quote._
 import org.specs2.text.Sentences._
 
 import scala.concurrent.duration._
-import scalaz.Scalaz._
+import org.specs2.fp.syntax._
 
 /**
  * The `Matcher` trait is the base trait for any Matcher.

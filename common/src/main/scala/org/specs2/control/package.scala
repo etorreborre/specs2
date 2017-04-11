@@ -5,11 +5,10 @@ import all._
 import syntax.all._
 
 import scala.concurrent.duration.{Duration, FiniteDuration}
-import scalaz._
-import scalaz.effect.IO
+import org.specs2.fp._
+import org.specs2.fp.syntax._
 import org.specs2.execute.{AsResult, Result}
 
-import scalaz.syntax.bind._
 import ErrorEffect.{Error, ErrorOrOk, exception, fail}
 import ConsoleEffect._
 import WarningsEffect._
@@ -58,54 +57,43 @@ package object control {
     warn(message)(m1) >>
     fail(failureMessage)
 
-  def executeAction[A](action: Action[A], printer: String => Unit = s => ()): (Error \/ A, List[String]) = {
+  def executeAction[A](action: Action[A], printer: String => Unit = s => ()): (Error Either A, List[String]) = {
     type S = Fx.append[Fx.fx2[TimedFuture, ErrorOrOk], Fx.fx2[Console, Warnings]]
 
     Await.result(action.execSafe.flatMap(_.fold(t => exception[S, A](t), a => Eff.pure[S, A](a))).
       runError.runConsoleToPrinter(printer).runWarnings.into[Fx1[TimedFuture]].runAsync, Duration.Inf)
   }
 
-  def runAction[A](action: Action[A], printer: String => Unit = s => ()): Error \/ A =
+  def runAction[A](action: Action[A], printer: String => Unit = s => ()): Error Either A =
     attemptExecuteAction(action, printer).fold(
-      t => -\/(-\/(t)),
+      t => Left(Left(t)),
       other => other._1)
 
-  def runOperation[A](operation: Operation[A], printer: String => Unit = s => ()): Error \/ A =
+  def runOperation[A](operation: Operation[A], printer: String => Unit = s => ()): Error Either A =
     attemptExecuteOperation(operation, printer).fold(
-      t => -\/(-\/(t)),
+      t => Left(Left(t)),
       other => other._1)
 
-  def executeOperation[A](operation: Operation[A], printer: String => Unit = s => ()): (Error \/ A, List[String]) = {
+  def executeOperation[A](operation: Operation[A], printer: String => Unit = s => ()): (Error Either A, List[String]) = {
     type S = Fx.fx3[ErrorOrOk, Console, Warnings]
 
     operation.execSafe.flatMap(_.fold(t => exception[S, A](t), a => Eff.pure[S, A](a))).
       runError.runConsoleToPrinter(printer).runWarnings.run
   }
 
-  def attemptAction[A](action: Action[A], printer: String => Unit = s => ()): Throwable \/ A =
+  def attemptAction[A](action: Action[A], printer: String => Unit = s => ()): Throwable Either A =
     runAction(action, printer) match {
-      case -\/(-\/(t)) => -\/(t)
-      case -\/(\/-(f)) => -\/(new Exception(f))
-      case \/-(a)      => \/-(a)
+      case Left(Left(t)) => Left(t)
+      case Left(Right(f)) => Left(new Exception(f))
+      case Right(a)      => Right(a)
     }
 
-  def attemptExecuteAction[A](action: Action[A], printer: String => Unit = s => ()): Throwable \/ (Error \/ A, List[String]) =
+  def attemptExecuteAction[A](action: Action[A], printer: String => Unit = s => ()): Throwable Either (Error Either A, List[String]) =
     try Await.result(action.runError.runConsoleToPrinter(printer).runWarnings.execSafe.runAsync, Duration.Inf)
-    catch { case NonFatal(t) => -\/(t) }
+    catch { case NonFatal(t) => Left(t) }
 
-  def attemptExecuteOperation[A](operation: Operation[A], printer: String => Unit = s => ()): Throwable \/ (Error \/ A, List[String]) =
+  def attemptExecuteOperation[A](operation: Operation[A], printer: String => Unit = s => ()): Throwable Either (Error Either A, List[String]) =
     operation.runError.runConsoleToPrinter(printer).runWarnings.execSafe.run
-
-  /**
-   * This implicit allows any IO[Result] to be used inside an example:
-   *
-   * "this should work" in {
-   *   IO(success)
-   * }
-   */
-  implicit def ioResultAsResult[T : AsResult]: AsResult[IO[T]] = new AsResult[IO[T]] {
-    def asResult(io: =>IO[T]) = AsResult(io.unsafePerformIO())
-  }
 
   /**
    * This implicit allows an Action[result] to be used inside an example.
@@ -134,14 +122,14 @@ package object control {
   implicit class actionOps[T](action: Action[T]) {
     def run(implicit e: Monoid[T]): T =
       runAction(action, println) match {
-        case \/-(a) => a
-        case -\/(t) => println("error while interpreting an action "+t.fold(Throwables.render, f => f)); Monoid[T].zero
+        case Right(a) => a
+        case Left(t) => println("error while interpreting an action "+t.fold(Throwables.render, f => f)); Monoid[T].zero
       }
 
     def runOption: Option[T] =
       runAction(action, println) match {
-        case \/-(a) => Option(a)
-        case -\/(t) => println("error while interpreting an action "+t.fold(Throwables.render, f => f)); None
+        case Right(a) => Option(a)
+        case Left(t) => println("error while interpreting an action "+t.fold(Throwables.render, f => f)); None
       }
 
     def when(condition: Boolean): Action[Unit] =

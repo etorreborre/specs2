@@ -2,7 +2,6 @@ package org.specs2.control
 package eff
 package syntax
 
-import scalaz._
 import origami._
 
 object writer extends writer

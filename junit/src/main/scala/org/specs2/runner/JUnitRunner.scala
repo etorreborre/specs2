@@ -10,7 +10,7 @@ import control.Actions._
 import reporter._
 import specification.core._
 import control._
-import scalaz._, Scalaz._
+import org.specs2.fp.syntax._
 
 /**
  * Runner for specs2 specifications
@@ -56,7 +56,7 @@ class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterab
           ss       <- SpecStructure.linkedSpecifications(specStructure, env, loader).toAction
           sorted   <- delayed(SpecStructure.topologicalSort(ss).getOrElse(ss))
           _        <- reporter.prepare(env, printers)(sorted.toList)
-          stats    <- sorted.toList.map(s => Reporter.report(env, createJUnitPrinter(s, n) +: printers)(s)).sequenceU
+          stats    <- sorted.toList.map(s => Reporter.report(env, createJUnitPrinter(s, n) +: printers)(s)).sequence
           _        <- Reporter.finalize(env, printers)(sorted.toList)
         } yield stats.foldMap(identity _)
       } else

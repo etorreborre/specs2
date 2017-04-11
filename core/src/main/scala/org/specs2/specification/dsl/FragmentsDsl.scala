@@ -4,7 +4,7 @@ package dsl
 
 import core._
 import create._
-import scalaz.syntax.std.vector._
+import org.specs2.collection.Vectorx._
 
 /**
  * Creation of Fragments with the ^ syntax

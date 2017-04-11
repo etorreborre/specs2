@@ -8,7 +8,7 @@ import main.Arguments
 import control._
 import java.util.regex.Pattern._
 import java.net.{JarURLConnection, URL}
-import scalaz._, Scalaz.{fold => _, _}
+import org.specs2.fp.syntax._
 import HtmlBodyPrinter._
 import Pandoc._
 import html._
@@ -162,7 +162,7 @@ trait HtmlPrinter extends Printer {
            DirectoryPath("images"),
            DirectoryPath("templates")).
            map(copySpecResourcesDir(env, "org" / "specs2" / "reporter", options.outDir, classOf[HtmlPrinter].getClassLoader))
-        .sequenceU
+        .sequence
         .whenFailed((e: Error) => warnAndFail("Cannot copy resources to "+options.outDir.path+"\n"+e.fullMessage, RunAborted))
     }
 

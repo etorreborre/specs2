@@ -8,7 +8,7 @@ import control._
 import eff.all._
 import origami._, Folds._
 import producer._
-import scalaz._, Scalaz._
+import org.specs2.fp.syntax._
 import Statistics._
 
 /**
@@ -22,11 +22,11 @@ import Statistics._
 trait Reporter {
 
   def prepare(env: Env, printers: List[Printer]): List[SpecStructure] => Action[Unit] = { specs =>
-    printers.traverseU(_.prepare(env, specs)).void
+    printers.traverse(_.prepare(env, specs)).void
   }
 
   def finalize(env: Env, printers: List[Printer]): List[SpecStructure] => Action[Unit] = { specs =>
-    printers.traverseU(_.finalize(env, specs)).void
+    printers.traverse(_.finalize(env, specs)).void
   }
 
   /**
@@ -42,7 +42,7 @@ trait Reporter {
       if (env.arguments.execute.asap) producers.emitEff(executing.contents.runList)
       else                            executing.contents
 
-    val sinks = (printers.map(_.sink(env1, spec)) :+ statsStoreSink(env1, spec)).suml
+    val sinks = (printers.map(_.sink(env1, spec)) :+ statsStoreSink(env1, spec)).sumAll
     val reportFold = sinks *> Statistics.statisticsFold
 
     contents.fold(reportFold)

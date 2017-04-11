@@ -7,7 +7,7 @@ import org.specs2.specification.process.Stats
 import specification.core._
 import reporter._
 import main.Arguments
-import scalaz._, Scalaz._
+import org.specs2.fp.syntax._
 import Runner._
 import reporter.LineLogger._
 
@@ -66,7 +66,7 @@ trait ClassRunner {
       createHtmlPrinter(args, loader),
       createMarkdownPrinter(args, loader),
       createPrinter(args, loader),
-      createNotifierPrinter(args, loader)).sequenceU.map(_.flatten)
+      createNotifierPrinter(args, loader)).sequence.map(_.flatten)
 
   /** custom or default reporter */
   def createReporter(args: Arguments, loader: ClassLoader): Operation[Reporter] =
@@ -96,6 +96,6 @@ object TextRunner extends ClassRunner {
   }
 
   override def createPrinters(args: Arguments, loader: ClassLoader): Operation[List[Printer]] =
-    List(createTextPrinter(args, loader)).sequenceU.map(_.flatten)
+    List(createTextPrinter(args, loader)).sequence.map(_.flatten)
 }
 

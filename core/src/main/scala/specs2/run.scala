@@ -4,7 +4,7 @@ import org.specs2.main.Arguments
 import org.specs2.reporter.LineLogger._
 import org.specs2.runner.{Runner, ClassRunner}
 import org.specs2.specification.core.{Env, SpecificationStructure}
-import scalaz._, Scalaz._
+import org.specs2.fp.syntax._
 
 /**
  * Run a specification from the command-line with specs2.run <specification name> <arguments>
@@ -18,7 +18,7 @@ object run extends ClassRunner {
     val env = Env(arguments = arguments,
                   lineLogger = consoleLogger)
 
-    try     Runner.execute(specifications.toList.map(report(env)).sequenceU.map(_.foldMap(identity _)), arguments, exit = false)(env.executionContext)
+    try     Runner.execute(specifications.toList.map(report(env)).sequence.map(_.foldMap(identity _)), arguments, exit = false)(env.executionContext)
     finally env.shutdown
   }
 

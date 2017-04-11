@@ -1,8 +1,7 @@
 package org.specs2.matcher.describe
 
 import scala.util.{Failure, Success, Try}
-import scalaz._
-import Scalaz._
+import org.specs2.fp.syntax._
 
 /**
  * Diffable instances for various types

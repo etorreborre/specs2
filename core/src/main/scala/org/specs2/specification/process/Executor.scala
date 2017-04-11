@@ -4,8 +4,7 @@ package process
 
 import java.util.concurrent.TimeoutException
 
-import scalaz.{Failure => _, Success => _, _}
-import Scalaz._
+import org.specs2.fp.syntax._
 import specification.core._
 
 import scala.concurrent._
@@ -161,9 +160,8 @@ trait DefaultExecutor extends Executor {
   def executeOnline(env: Env): Fragment => AsyncStream[Fragment] = { fragment: Fragment =>
     fragment.execution.continuation match {
       case Some(continue) =>
-        continue(fragment.executionResult).cata(
-          fs => emitAsyncDelayed(fragment) append execute1(env)(fs.contents),
-          emitAsyncDelayed(fragment))
+        continue(fragment.executionResult).fold(emitAsyncDelayed(fragment))(
+          fs => emitAsyncDelayed(fragment) append execute1(env)(fs.contents))
 
       case None => emitAsyncDelayed(fragment)
     }
