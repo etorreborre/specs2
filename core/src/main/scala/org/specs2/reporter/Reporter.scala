@@ -43,7 +43,7 @@ trait Reporter {
       else                            executing.contents
 
     val sinks = (printers.map(_.sink(env1, spec)) :+ statsStoreSink(env1, spec)).suml
-    val reportFold = Statistics.statisticsFold <* sinks
+    val reportFold = sinks *> Statistics.statisticsFold
 
     contents.fold(reportFold)
   }

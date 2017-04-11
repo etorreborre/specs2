@@ -57,9 +57,9 @@ trait ImmutableSpecificationStructure extends SpecificationStructure {
             val isolatedExecution = newFragments.fragments(position).execution
 
             if (previousSteps.nonEmpty) {
-              val previousStepsExecution = previousSteps.foldLeft(Success(): Result) { _ and _.execution.execute(env).result }
-              previousStepsExecution and isolatedExecution.execute(env).result
-            } else isolatedExecution.execute(env).result
+              val previousStepsExecution = previousSteps.foldLeft(Success(): Result) { _ and _.execution.startExecution(env).result }
+              previousStepsExecution and isolatedExecution.startExecution(env).result
+            } else isolatedExecution.startExecution(env).result
           }
         )
       }

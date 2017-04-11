@@ -2,12 +2,14 @@ package org.specs2
 package specification
 package create
 
-import org.specs2.execute.{Result, AsResult}
+import org.specs2.execute.{AsResult, Result}
 import org.specs2.data.NamedTag
 import specification.core._
 import Execution._
 import control.ImplicitParameters._
 import specification.core.Text
+
+import scala.concurrent.Future
 
 /**
  * Interface for creating specification fragments
@@ -103,7 +105,7 @@ import control.ImplicitParameters._
  */
 class ContextualFragmentFactory(factory: FragmentFactory, context: Env => Context) extends FragmentFactory {
   def example(description: Description, execution: Execution): Fragment =
-    factory.example(description, execution.copy(run = execution.run.map(f => (e: Env) => context(e)(f(e)))))
+    factory.example(description, execution.updateRun(run => (env: Env) => Future.successful(context(env)(execution.result))))
 
   def example(text: String, execution: Execution): Fragment =
     example(Text(text), execution)

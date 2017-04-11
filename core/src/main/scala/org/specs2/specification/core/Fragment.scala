@@ -3,7 +3,9 @@ package specification
 package core
 
 import execute.Result
-import scala.concurrent.duration.{FiniteDuration}
+
+import scala.concurrent.Future
+import scala.concurrent.duration.FiniteDuration
 import scalaz._
 import scalaz.Show
 import scalaz.syntax.show._
@@ -16,11 +18,17 @@ import scalaz.syntax.show._
  */
 case class Fragment(description: Description, execution: Execution, location: Location = StacktraceLocation()) {
   /** @return a fatal error or a result */
-  def executionFatalOrResult: FatalExecution \/ Result =
-    execution.fatal.map(-\/(_)).getOrElse(\/-(execution.result))
+  def executionFatalOrResult: Throwable \/ Result =
+    execution.executed match {
+      case Left(t)        => \/.left(t)
+      case Right(None)    => \/.right(org.specs2.execute.Success())
+      case Right(Some(r)) => \/.right(r)
+    }
 
   /** @return the result of this fragment if it has been executed, Success otherwise */
   def executionResult = execution.result
+  /** wait until this fragment has finished executing */
+  def finishExecution = copy(execution = execution.finishExecution)
   /** @return true if this fragment has been executed */
   def isExecuted = execution.isExecuted
   /** @return true if this fragment can be executed */
@@ -47,7 +55,7 @@ case class Fragment(description: Description, execution: Execution, location: Lo
   /** skip this fragment */
   def skip              = updateExecution(_.skip)
   def updateExecution(f: Execution => Execution) = copy(execution = f(execution))
-  def updateRun(r: (Env => Result) => (Env => Result)) = updateExecution(_.updateRun(r))
+  def updateRun(r: (Env => Future[Result]) => (Env => Future[Result])) = updateExecution(_.updateRun(r))
 
   /** update the description */
   def updateDescription(f: Description => Description) = copy(description = f(description))

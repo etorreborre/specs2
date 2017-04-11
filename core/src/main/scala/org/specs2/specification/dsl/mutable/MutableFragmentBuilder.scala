@@ -111,9 +111,9 @@ trait MutableFragmentBuilder extends FragmentBuilder
             getOrElse(Execution.executed(Pending("isolation mode failure - could not find an isolated fragment to execute")))
 
           if (previousSteps.nonEmpty) {
-            val previousStepsExecution = previousSteps.foldLeft(Success(): Result) { _ and _.execution.execute(env).result }
-            previousStepsExecution and isolatedExecution.execute(env).result
-          } else isolatedExecution.execute(env).result
+            val previousStepsExecution = previousSteps.foldLeft(Success(): Result) { _ and _.execution.startExecution(env).result }
+            previousStepsExecution and isolatedExecution.startExecution(env).result
+          } else isolatedExecution.startExecution(env).result
         }
       )
     }

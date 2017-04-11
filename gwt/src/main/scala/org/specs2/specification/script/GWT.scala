@@ -211,11 +211,11 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
 
     /** @return the values of all executed steps */
     private def stepsValues(steps: Seq[Fragment]) = steps.foldRight(HNil: HList) { (cur, res) =>
-      value(cur.execution.execute(Env()).result) :: res
+      value(cur.execution.startExecution(Env()).result) :: res
     }
     /** @return a -and- on all the execution results of steps */
     private def result(steps: Seq[Fragment]) = steps.foldRight(Success(): Result) { (cur, res) =>
-      cur.execution.execute(Env()).result and res
+      cur.execution.startExecution(Env()).result and res
     }
     /** execute a block of code depending on a previous result */
     private def executeIf(result: Result)(value: =>Any) = if (result.isSuccess) value else Skipped(" ")

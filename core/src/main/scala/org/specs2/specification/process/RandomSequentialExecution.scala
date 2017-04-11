@@ -2,19 +2,21 @@ package org.specs2
 package specification
 package process
 
+
 import core._
 import collection.Seqx._
 import collection.Iterablex._
-import control.LazyValue
-import scala.collection.concurrent.{Map => CMap, TrieMap}
+
+import scala.collection.concurrent.{TrieMap, Map => CMap}
 
 /**
  * This trait adds random execution constraints between examples.
  *
- * As a result they will be executed randomly but in sequence
+ * As a result they will be executed in a random sequence
  */
 trait RandomSequentialExecution extends SpecificationStructure {
-  override def map(fs: =>Fragments, env: Env) = super.map(addExecutionConstraints(fs, env))
+  override def map(fs: =>Fragments, env: Env): Fragments =
+    super.map(addExecutionConstraints(fs, env))
 
   /**
    * find sequences of concurrent examples
@@ -36,26 +38,12 @@ trait RandomSequentialExecution extends SpecificationStructure {
     // scramble all fragments
     val scrambled = fragments.zipWithIndex.scramble(env.random)
     // map of all executions
-    val executions: CMap[Int, LazyValue[Execution]] = new TrieMap()
+    val executions: CMap[Int, Execution] = new TrieMap()
+    scrambled.foreach { case (pf, i) => executions.putIfAbsent(i, pf.execution.execute(env)) }
 
     fragments.zipWithIndex.map { case (f, i) =>
       if (Fragment.isExample(f)) {
-        // collect all previous executions
-        val previousExecutions: Seq[(Int, Execution)] =
-          scrambled.filter(fi => Fragment.isExample(fi._1)).takeWhile(_._2 != i).map { case (pf, pi) => (pi, pf.execution)}
-
-        f.updateRun { oldRun => (env: Env) =>
-          previousExecutions.foreach { case (pi, pexec) =>
-            // put the previous executions in a map if not already there
-            executions.putIfAbsent(pi, LazyValue(() => pexec.execute(env)))
-            // trigger the execution if not already done
-            executions(pi).value
-          }
-          // put this execution in the map if not already there
-          executions.putIfAbsent(i, LazyValue(() => f.execution.execute(env)))
-          // execute this fragment if not already done
-          executions(i).value.result
-        }
+        f.setExecution(Execution.result(executions(i).result))
       } else f
     }
   }

@@ -19,7 +19,7 @@ class BeforeAfterAllSpec extends Specification { def is = s2"""
   def beforeAfter = {
     val messages = new ArrayBuffer[String]
     val spec = new Spec with BeforeAfterAll {
-      def is =
+      def is = sequential ^
         s2""" e1 $e1
             | e2 $e2
             | """.stripMargin

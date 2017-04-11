@@ -7,7 +7,6 @@ import java.util.concurrent.TimeoutException
 import scalaz.{Failure => _, Success => _, _}
 import Scalaz._
 import specification.core._
-import org.specs2.time.SimpleTimer
 
 import scala.concurrent._
 import duration._
@@ -16,7 +15,7 @@ import producer._
 import producers._
 import Actions._
 import org.specs2.control.eff.syntax.all._
-import org.specs2.execute.{Result, Skipped, Success, Error}
+import org.specs2.execute.{Result, Skipped, Error}
 
 /**
  * Functions for executing fragments.
@@ -74,8 +73,8 @@ trait DefaultExecutor extends Executor {
    *  - the execution stops if one fragment indicates that the result of the previous executions is not correct
    */
   def sequencedExecution(env: Env): AsyncTransducer[Fragment, Fragment] = {
-    type S = (Vector[Fragment], Result, Boolean)
-    val init: S = (Vector.empty, Success(), false)
+    type S = (Vector[Fragment], Vector[Fragment], Boolean)
+    val init: S = (Vector.empty, Vector.empty, false)
     val arguments = env.arguments
 
     def executeFragments(fs: Seq[Fragment], timeout: Option[FiniteDuration] = None): AsyncStream[Fragment] =
@@ -83,21 +82,21 @@ trait DefaultExecutor extends Executor {
       else                      emitEff(fs.toList.traverseA(f => executeOneFragment(f, timeout)))
 
     def executeOneFragment(f: Fragment, timeout: Option[FiniteDuration] = None): Action[Fragment] = {
-      if (arguments.sequential) asyncDelayAction(executeFragment(env)(f))
-      else                      asyncForkAction(executeFragment(env)(f), env.executionContext, timeout).futureAttempt.map {
-        case Left(t: TimeoutException) => executeFragment(env)(f.setExecution(Execution.result(Skipped("timeout"+timeout.map(" after "+_).getOrElse("")))))
-        case Left(t)                   => executeFragment(env)(f.setExecution(Execution.result(Error(t))))
+      if (arguments.sequential) asyncDelayAction(executeFragment(env, timeout)(f))
+      else                      asyncForkAction(executeFragment(env, timeout)(f), env.executionContext).futureAttempt.map {
+        case Left(t: TimeoutException) => executeFragment(env, timeout)(f.setExecution(Execution.result(Skipped("timeout"+timeout.map(" after "+_).getOrElse("")))))
+        case Left(t)                   => executeFragment(env, timeout)(f.setExecution(Execution.result(Error(t))))
         case Right(f1)                 => f1
       }
     }
 
     val last: S => AsyncStream[Fragment] = {
-      case (fs, previousResults, mustStop) =>
-        if (mustStop) emit(fs.toList.map(_.skip))
-        else          executeFragments(fs, env.timeout)
+      case (toStart, _, mustStop) =>
+        if (mustStop) emit(toStart.toList.map(_.skip))
+        else          executeFragments(toStart, env.timeout)
     }
 
-    transducers.producerStateEff(init, Option(last)) { case (fragment, (fragments, previousResults, mustStop)) =>
+    transducers.producerStateEff(init, Option(last)) { case (fragment, (fragments, started, mustStop)) =>
       val timeout = env.timeout.orElse(fragment.execution.timeout)
 
       def stopAll(previousResults: Result, fragment: Fragment): Boolean = {
@@ -109,49 +108,53 @@ trait DefaultExecutor extends Executor {
       }
 
       if (arguments.skipAll || mustStop)
-        ok((one(if (fragment.isExecutable) fragment.skip else fragment), (Vector.empty, previousResults, mustStop)))
+        ok((one(if (fragment.isExecutable) fragment.skip else fragment), (Vector.empty, started, mustStop)))
       else if (arguments.sequential)
         executeOneFragment(fragment, timeout).flatMap { f =>
-          ok((one(f), (Vector.empty, previousResults, stopAll(f.executionResult, f))))
+          ok((one(f), (Vector.empty, started, stopAll(f.executionResult, f))))
         }
       else {
         if (fragment.execution.mustJoin) {
           executeFragments(fragments, timeout).run.flatMap {
             case Done() =>
               executeOneFragment(fragment, timeout).flatMap { step =>
-                ok((one(step), (Vector.empty, Success(), stopAll(previousResults, step))))
+                step.finishExecution
+                ok((one(step), (Vector.empty, Vector.empty, stopAll(started.foldMap(_.executionResult), step))))
               }
 
             case producer.One(f) =>
+              // wait for f to finish executing
+              f.finishExecution
               executeOneFragment(fragment, timeout).flatMap { step =>
-                ok((oneOrMore(f, List(step)), (Vector.empty, Success(), stopAll(f.executionResult |+| previousResults, step))))
+                ok((oneOrMore(f, List(step)), (Vector.empty, Vector.empty, stopAll((started :+ f).foldMap(_.executionResult), step))))
               }
 
             case fs @ More(as, next) =>
+              // wait for as to finish executing
+              as.map(_.finishExecution)
               executeOneFragment(fragment, timeout).flatMap { step =>
                 ok((emitAsync(as:_*) append next append one(step),
-                  (Vector.empty, Success(), stopAll(as.foldMap(_.executionResult) |+| previousResults, step))))
+                  (Vector.empty, Vector.empty, stopAll((started ++ as).foldMap(_.executionResult), step))))
               }
           }
         }
         else if (fragments.count(_.isExecutable) >= arguments.batchSize)
           executeFragments(fragments :+ fragment, timeout).run.flatMap {
-            case Done()          => ok((done, (Vector.empty, previousResults, mustStop)))
-            case producer.One(f) => ok((one(f), (Vector.empty, f.executionResult |+| previousResults, mustStop)))
-            case More(as, next)  => ok((emitAsync(as:_*) append next, (Vector.empty, as.foldMap(_.executionResult) |+| previousResults, mustStop)))
+            case Done()          => ok((done, (Vector.empty, started, mustStop)))
+            case producer.One(f) => ok((one(f), (Vector.empty, started, mustStop)))
+            case More(as, next)  => ok((emitAsync(as:_*) append next, (Vector.empty, as.toVector, mustStop)))
           }
         else
-          ok((done[ActionStack, Fragment], (fragments :+ fragment, previousResults, mustStop)))
+          ok((done[ActionStack, Fragment], (fragments :+ fragment, started, mustStop)))
       }
     }
 
   }
 
   /** execute one fragment */
-  def executeFragment(env: Env) = (fragment: Fragment) => {
-    fragment.updateExecution { execution =>
-      val timer = (new SimpleTimer).start
-      execution.execute(env).setExecutionTime(timer.stop)
+  def executeFragment(env: Env, timeout: Option[FiniteDuration] = None) = (fragment: Fragment) => {
+    timeout.fold(fragment)(t => fragment.setTimeout(t)).updateExecution { execution =>
+      execution.startExecution(env)
     }
   }
 
@@ -199,9 +202,10 @@ object DefaultExecutor extends DefaultExecutor {
     finally env.shutdown
 
   /** synchronous execution */
-  def executeFragments1 =
-    transducers.transducer[ActionStack, Fragment, Fragment](executeFragment(Env()))
+  def executeFragments1: AsyncTransducer[Fragment, Fragment] =
+    executeFragments1(Env())
 
   /** synchronous execution with a specific environment */
-  def executeFragments1(env: Env) = transducers.transducer[ActionStack, Fragment, Fragment](executeFragment(env))
+  def executeFragments1(env: Env): AsyncTransducer[Fragment, Fragment] =
+    transducers.transducer[ActionStack, Fragment, Fragment](executeFragment(env))
 }

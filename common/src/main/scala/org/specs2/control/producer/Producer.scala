@@ -25,6 +25,12 @@ case class Producer[R :_Safe, A](run: Eff[R, Stream[R, A]]) {
   def map[B](f: A => B): Producer[R, B] =
     flatMap(a => one(f(a)))
 
+  def collect[B](pf: PartialFunction[A, B]): Producer[R, B] =
+    flatMap { a =>
+      if (pf.isDefinedAt(a)) one(pf(a))
+      else done
+    }
+
   def append(other: Producer[R, A]): Producer[R, A] =
     Producer(run.flatMap {
       case Done()         => protect(other.run).flatten

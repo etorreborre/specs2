@@ -9,5 +9,10 @@ case class LazyValue[T](t: () => T) {
   lazy val value = {
     t()
   }
+
+  def execute: LazyValue[T] = {
+    value
+    this
+  }
 }
 

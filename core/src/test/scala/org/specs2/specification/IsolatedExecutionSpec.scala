@@ -5,6 +5,9 @@ import execute._
 import matcher._
 import core._
 import process._
+import control._
+import producer._
+import scalaz.Scalaz.listMonoid
 
 class IsolatedExecutionSpec extends Spec with ForEachEnv { def is = s2"""
 
@@ -15,33 +18,25 @@ class IsolatedExecutionSpec extends Spec with ForEachEnv { def is = s2"""
 """
 
   def e1 = {
-    val spec = new TestIsolatedSpec1
-    val executed = execute(spec)
-    val results = executed.collect { case f if f.isExecutable => f.execution.result }
-    results must contain(exactly[Result](Success("example1"), Success("example2")))
+    execute(TestIsolatedSpec1) must contain(exactly[Result](Success("example1"), Success("example2")))
   }
 
   def e2 = {
-    val spec = new TestIsolatedSpec2
-    val executed = execute(spec)
-
-    val results = executed.collect { case f if f.isExecutable => f.execution.result }
-    results must contain(exactly[Result](Success("example1"), Success("example2")))
+    execute(TestIsolatedSpec2) must contain(exactly[Result](Success("example1"), Success("example2")))
   }
 
   def execute(spec: SpecificationStructure) = {
     val env = Env()
     val fragments = spec.structure(env).fragments
-
-    try Fragments(DefaultExecutor.execute(env)(fragments.contents)).fragments
-    finally env.shutdown
+    val results = fragments.update(DefaultExecutor.execute(env)).contents.collect { case f if f.isExecutable => f.execution.result }
+    ProducerOps(results).runList.run
   }
 }
 
 /**
  * this isolated specification must have all its examples ok because they are properly isolated
  */
-class TestIsolatedSpec1 extends org.specs2.mutable.Specification with MustMatchers { isolated
+object TestIsolatedSpec1 extends org.specs2.mutable.Specification with MustMatchers { isolated
   var n = 0
   "this" should {
     n += 1
@@ -63,12 +58,13 @@ class TestIsolatedSpec1 extends org.specs2.mutable.Specification with MustMatche
   }
 }
 
-class TestIsolatedSpec2 extends org.specs2.Specification with MustMatchers { def is = isolated ^
-  s2"""
+object TestIsolatedSpec2 extends org.specs2.Specification with MustMatchers { def is = isolated ^ s2"""
+
   this should
     create example 1 $e1
     create example 2 $e2
-  """
+
+"""
 
   def e1 = {
     i += 1

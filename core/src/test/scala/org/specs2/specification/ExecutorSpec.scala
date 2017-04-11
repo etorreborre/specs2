@@ -161,7 +161,7 @@ class ExecutorSpec(implicit ec: ExecutionContext) extends script.Specification w
     val fragments = Seq(example("very slow", verySlow))
     val env1 = env.setTimeout(100.millis * timeFactor.toLong)
 
-    execute(fragments, env1) must contain(beSkipped[Result]("timeout after "+100*timeFactor+" milliseconds"))
+    execute(fragments, env1) must contain(beSkipped[Result]("timed out after \\["+100*timeFactor+" milliseconds\\]"))
   }
 
   def userEnv = { env: Env =>
@@ -190,7 +190,7 @@ class ExecutorSpec(implicit ec: ExecutionContext) extends script.Specification w
     def ex(s: String)                 = { messages.append(s); success }
     def mediumFail(timeFactor: Int)   = { Thread.sleep(10 * timeFactor.toLong);  messages.append("medium"); failure }
     def mediumSkipped(timeFactor: Int)= { Thread.sleep(10 * timeFactor.toLong);  messages.append("medium"); skipped }
-    def slow(timeFactor: Int)         = { Thread.sleep(200 * timeFactor.toLong); messages.append("slow");   success }
+    def slow(timeFactor: Int)         = { Thread.sleep(400 * timeFactor.toLong); messages.append("slow");   success }
     def verySlow(timeFactor: Int)     = { Thread.sleep(600 * timeFactor.toLong); messages.append("very slow"); success }
     def step1                         = { messages.append("step");   success }
     def fatalStep                     = { messages.append("fatal");  if (true) throw new java.lang.Error("fatal error!"); success }

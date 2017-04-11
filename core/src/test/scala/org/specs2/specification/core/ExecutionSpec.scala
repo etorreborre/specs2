@@ -19,7 +19,7 @@ class ExecutionSpec extends Specification { def is = s2"""
     val stats =  Stats(specs = 2, failures = 1, examples = 1)
     store.storeStatistics(getClass.getName, stats).runOption
 
-    Execution.specificationStats(getClass.getName).execute(env).result must beLike {
+    Execution.specificationStats(getClass.getName).startExecution(env).result must beLike {
       case DecoratedResult(s: Stats, r) =>
         (s must_== Stats(specs = 3, failures = 1, examples = 1)) and
         (r.isSuccess must beFalse)
