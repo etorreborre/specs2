@@ -9,7 +9,8 @@ import shapeless.ops.hlist.{ToTraversable, ToList}
 import execute._
 import ResultLogicalCombinators._
 import scala.collection.mutable
-import scalaz.syntax.std.list._
+import org.specs2.fp.syntax._
+import org.specs2.collection.Listx._
 
 /**
  * The GWT trait can be used to associate a piece of text to Given/When/Then steps according to the [BDD](http://en.wikipedia.org/wiki/Behavior-driven_development)

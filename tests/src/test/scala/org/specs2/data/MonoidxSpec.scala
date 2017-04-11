@@ -2,10 +2,9 @@ package org.specs2
 package data
 
 import matcher._
-import scalaz._
-import Scalaz._
+import org.specs2.fp._
 
-class MonoidxSpec extends mutable.Spec with InternalScalazMatchers with AnyMatchers {
+class MonoidxSpec extends mutable.Spec with FpMatchers with AnyMatchers {
   "There is a Monoid for a Map if there is a Monoid for the values" >>
-    implicitly[Monoid[Map[String, Int]]].isMonoid
+    Monoid.mapMonoid[String, Int].isMonoid
 }

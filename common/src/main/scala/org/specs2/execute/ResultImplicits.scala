@@ -4,8 +4,8 @@ package execute
 import Result.ResultFailureMonoid
 import text.Quote._
 import text.Plural._
-import scalaz._
-import Scalaz._
+import org.specs2.fp.syntax._
+import org.specs2.fp.syntax._
 /**
  * This trait adds some implicits to easily fold sequences of results
  */

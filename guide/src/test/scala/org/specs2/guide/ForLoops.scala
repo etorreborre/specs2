@@ -3,7 +3,7 @@ package guide
 
 import specification.core.{Fragment, Fragments}
 import execute._
-import scalaz._, Scalaz._
+import org.specs2.fp.syntax._
 
 object ForLoops extends UserGuidePage { def is = s2"""
 

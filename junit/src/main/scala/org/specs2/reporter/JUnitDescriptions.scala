@@ -5,11 +5,10 @@ import java.lang.annotation.Annotation
 
 import org.junit.runner.Description
 
-import scalaz.{Tree, TreeLoc}
+import org.specs2.fp._, Tree._
 import data.Trees._
 import control.Exceptions._
 
-import Tree._
 import data.Trees
 import Trees._
 import specification._
@@ -46,7 +45,7 @@ trait JUnitDescriptions extends ExecutionOrigin {
     val annotations = tryOrElse(getClass.getClassLoader.loadClass(spec.specClassName).getAnnotations)(Array())
     val rootFragment = DefaultFragmentFactory.text(spec.header.simpleName)
 
-    Levels.treeLocMap(spec.fragments)(keep).getOrElse(leaf(rootFragment).loc).root.setLabel(rootFragment).cojoin.map {
+    Levels.treeLocMap(spec.fragments)(keep).getOrElse(Leaf(rootFragment).loc).root.setLabel(rootFragment).cojoin.map {
       current: TreeLoc[Fragment] =>
         val description =
         current.getLabel match {

@@ -3,7 +3,7 @@ package matcher
 
 import scala.util.parsing.combinator._
 import scala.util.parsing.input.{CharSequenceReader, Reader}
-import scalaz.Scalaz._
+import org.specs2.fp.syntax._
 import text.Plural._
 import text.Quote._
 import scala.reflect.ClassTag

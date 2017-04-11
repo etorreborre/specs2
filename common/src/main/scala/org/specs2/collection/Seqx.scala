@@ -1,8 +1,7 @@
 package org.specs2
 package collection
 
-import scalaz._
-import std.iterable._
+import org.specs2.fp._
 import scala.collection.mutable.ListBuffer
 
 /**
@@ -24,10 +23,6 @@ trait Seqx { outer =>
    * Additional methods for seqs
    */
   implicit class ExtendedSeq[T](seq: Seq[T]) {
-
-    def reduceWith[S](reducer: Reducer[T, S]) = {
-      seq.toIterator.foldLeft(reducer.zero) { (res, cur) => reducer.snoc(res, cur) }
-    }
 
     /** update the last element if there is one */
     def updateLast(f: T => T) = seq match {
@@ -112,8 +107,9 @@ trait Seqx { outer =>
   }
 
   implicit def seqIsFoldable: Foldable[Seq] = new Foldable[Seq] {
-    def foldRight[A, B](fa: Seq[A], z: => B)(f: (A, =>B) => B) = implicitly[Foldable[Stream]].foldRight(fa.toStream, z)(f)
-    def foldMap[A, B](fa: Seq[A])(f: (A) => B)(implicit F: Monoid[B]) = implicitly[Foldable[Stream]].foldMap(fa.toStream)(f)
+    def foldLeft[A, B](fa: Seq[A], z: B)(f: (B, A) => B) = Foldable.listInstance.foldLeft(fa.toList, z)(f)
+    def foldRight[A, B](fa: Seq[A], z: => B)(f: (A, =>B) => B) = Foldable.listInstance.foldRight(fa.toList, z)(f)
+    def foldMap[A, B](fa: Seq[A])(f: (A) => B)(implicit F: Monoid[B]) = Foldable.listInstance.foldMap(fa.toList)(f)
   }
 }
 

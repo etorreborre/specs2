@@ -4,7 +4,7 @@ package core
 
 import org.specs2.main.Arguments
 
-import scalaz.Show
+import fp.Show
 import org.specs2.data.{NamedTag, Tag}
 import text.Regexes._
 
@@ -143,7 +143,7 @@ object Description {
     }
 
   implicit def showInstance: Show[Description] = new Show[Description] {
-    override def shows(d: Description): String =
+    def show(d: Description): String =
       d match {
         case Text(t) => t
         case _ => d.toString

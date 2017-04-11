@@ -2,7 +2,7 @@ package org.specs2
 package main
 
 import main.{SystemProperties => sysProperties}
-import scalaz.Monoid
+import org.specs2.fp._
 import control._
 import text._
 import scala.Predef._

@@ -1,6 +1,7 @@
 package org.specs2.control
 
-import scalaz._
+import org.specs2.fp._
+import org.specs2.fp.syntax._
 import eff._
 import eff.all._
 import org.specs2.control.origami.Fold
@@ -167,13 +168,13 @@ package object producer {
     def `finally`(e: Eff[R, Unit]): Producer[R, A] =
       p.thenFinally(e)
 
-    def attempt: Producer[R, Throwable \/ A] =
-      Producer[R, Throwable \/ A](SafeInterpretation.attempt(p.run) map {
-        case \/-(Done()) => Done()
-        case \/-(One(a)) => One(\/-(a))
-        case \/-(More(as, next)) => More(as.map(\/.right), next.map(\/.right))
+    def attempt: Producer[R, Throwable Either A] =
+      Producer[R, Throwable Either A](SafeInterpretation.attempt(p.run) map {
+        case Right(Done()) => Done()
+        case Right(One(a)) => One(Right(a))
+        case Right(More(as, next)) => More(as.map(Either.right), next.map(Either.right))
 
-        case -\/(t) => One(\/.left(t))
+        case Left(t) => One(Either.left(t))
       })
   }
 

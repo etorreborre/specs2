@@ -5,7 +5,7 @@ import java.util.concurrent.ScheduledExecutorService
 import scala.concurrent.duration.FiniteDuration
 import scala.concurrent.{ExecutionContext, Future, Promise, TimeoutException}
 import scala.util.{Failure, Success}
-import scalaz._, Scalaz._
+import org.specs2.fp._
 import Eff._
 
 object FutureCreation extends FutureCreation
@@ -44,17 +44,17 @@ object TimedFuture {
     override def toString = "Applicative[TimedFuture]"
   }
 
-  implicit final def MonadTimedFuture: Monad[TimedFuture] with BindRecʹ[TimedFuture] = new Monad[TimedFuture] with BindRecʹ[TimedFuture] {
+  implicit final def MonadTimedFuture: Monad[TimedFuture] = new Monad[TimedFuture] {
     def point[A](x: => A) = TimedFuture((_, _) => Future.successful(x))
 
     def bind[A, B](fa: TimedFuture[A])(f: A => TimedFuture[B]): TimedFuture[B] =
       TimedFuture[B]((sexs, ec) => fa.runNow(sexs, ec).flatMap(f(_).runNow(sexs, ec))(ec))
 
-    def tailrecM[A, B](a: A)(f: (A) => TimedFuture[\/[A, B]]): TimedFuture[B] =
+    override def tailrecM[A, B](a: A)(f: A => TimedFuture[Either[A, B]]): TimedFuture[B] =
       TimedFuture[B]({ (sexs, ec) =>
         def loop(va: A): Future[B] = f(va).runNow(sexs, ec).flatMap {
-          case -\/(na) => loop(na)
-          case \/-(nb) => Future.successful(nb)
+          case Left(na) => loop(na)
+          case Right(nb) => Future.successful(nb)
         }(ec)
         loop(a)
       })
@@ -62,8 +62,6 @@ object TimedFuture {
     override def toString = "Monad[TimedFuture]"
   }
 
-  implicit final def BindRecTimedFuture: BindRecʹ[TimedFuture] =
-    MonadTimedFuture
 }
 
 trait FutureTypes {
@@ -99,7 +97,7 @@ trait FutureCreation extends FutureTypes {
 trait FutureInterpretation extends FutureTypes {
 
   def runAsync[R, A](e: Eff[R, A])(implicit sexs: ScheduledExecutorService, exc: ExecutionContext, m: Member.Aux[TimedFuture, R, NoFx]): Future[A] =
-    Eff.detachA(Eff.effInto[R, Fx1[TimedFuture], A](e))(TimedFuture.MonadTimedFuture, TimedFuture.BindRecTimedFuture, TimedFuture.ApplicativeTimedFuture).runNow(sexs, exc)
+    Eff.detachA(Eff.effInto[R, Fx1[TimedFuture], A](e))(TimedFuture.MonadTimedFuture, TimedFuture.ApplicativeTimedFuture).runNow(sexs, exc)
 
   def runSequential[R, A](e: Eff[R, A])(implicit sexs: ScheduledExecutorService, exc: ExecutionContext, m: Member.Aux[TimedFuture, R, NoFx]): Future[A] =
     Eff.detach(Eff.effInto[R, Fx1[TimedFuture], A](e)).runNow(sexs, exc)

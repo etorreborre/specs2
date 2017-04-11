@@ -1,8 +1,8 @@
 package org.specs2
 package data
 
-import scalaz.{Tag => _}
-import scalaz.syntax.semigroup._
+import org.specs2.fp.syntax._
+import org.specs2.fp.syntax._
 import org.specs2.main.Arguments
 import NamedTag._
 import NamedTagsAreMonoid._

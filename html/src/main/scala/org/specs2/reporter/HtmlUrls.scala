@@ -6,7 +6,7 @@ import FilePathReader._
 import scala.xml.NodeSeq
 import java.net.{HttpURLConnection, URL}
 import control._
-import scalaz._, Scalaz._
+import org.specs2.fp.syntax._
 import Exceptions._
 import text.Trim._
 import html.Htmlx._

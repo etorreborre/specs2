@@ -1,7 +1,7 @@
 package org.specs2
 package specification
 
-import scalaz.Tree
+import org.specs2.fp._
 import core._
 import Fragment._
 import process._

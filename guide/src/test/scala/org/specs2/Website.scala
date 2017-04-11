@@ -4,7 +4,7 @@ import control._
 import guide._
 import io._
 import specification.core.Env
-import scalaz._, Scalaz._
+import org.specs2.fp.syntax._
 import html._
 import runner._
 import main._
@@ -28,7 +28,7 @@ class Website extends Specification with Specs2Variables with Specs2Tags { def i
 
     pages.map { page =>
       for {
-        _               <- directories.map(d => fs.copyDir(d, siteOutputDir / d.name)).sequenceU.toAction
+        _               <- directories.map(d => fs.copyDir(d, siteOutputDir / d.name)).sequence.toAction
         template        <- fs.readFile(page).toAction
         replacedVersion <- HtmlTemplate.runTemplate(template, vars)
         _               <-
@@ -39,7 +39,7 @@ class Website extends Specification with Specs2Variables with Specs2Tags { def i
             else Operations.ok(())
           }
       } yield ()
-    }.sequenceU >> writeVersionsFile(fs, siteOutputDir, vars("GUIDE_DIR"), vars("API_DIR")).as(true)
+    }.sequence >> writeVersionsFile(fs, siteOutputDir, vars("GUIDE_DIR"), vars("API_DIR")).as(true)
   }
 
   def createUserGuide = { env1: Env =>

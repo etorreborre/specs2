@@ -4,7 +4,8 @@ package origami
 
 import eff.syntax.all._
 import eff._, all._
-import scalaz._, Scalaz._
+import org.specs2.fp._
+import org.specs2.fp.syntax._
 
 /**
  * A Fold is a "left fold" over a data structure with:
@@ -73,9 +74,9 @@ trait Fold[R, A, B] { self =>
   /** zip 2 folds to return a pair of values. alias for <*> */
   def zip[C](f: Fold[R, A, C]) = new Fold[R, A, (B, C)] {
     type S = (self.S, f.S)
-    def start = Apply[Eff[R, ?]].tuple2(self.start, f.start)
+    def start = Applicative[Eff[R, ?]].tuple2(self.start, f.start)
     def fold = (s, a) => (self.fold(s._1, a), f.fold(s._2, a))
-    def end(s: S) = Apply[Eff[R, ?]].tuple2(self.end(s._1), f.end(s._2))
+    def end(s: S) = Applicative[Eff[R, ?]].tuple2(self.end(s._1), f.end(s._2))
   }
 
   /** zip with another fold, running this one only for its side effects */
@@ -97,9 +98,9 @@ trait Fold[R, A, B] { self =>
   /** observe both the input value and the current state */
   def observeWithState(sink: Sink[R, (A, S)]) = new Fold[R, A, B] {
     type S = (self.S, sink.S)
-    def start = Apply[Eff[R, ?]].tuple2(self.start , sink.start)
+    def start = Applicative[Eff[R, ?]].tuple2(self.start , sink.start)
     def fold = (s: S, a: A) => (self.fold(s._1, a), sink.fold(s._2, (a, s._1)))
-    def end(s: S) = Apply[Eff[R, ?]].tuple2(self.end(s._1), sink.end(s._2)).map(_._1)
+    def end(s: S) = Applicative[Eff[R, ?]].tuple2(self.end(s._1), sink.end(s._2)).map(_._1)
   }
 
   /** alias for observeWithState */
@@ -109,9 +110,9 @@ trait Fold[R, A, B] { self =>
   /** observe the current state */
   def observeState(sink: Sink[R, S]) = new Fold[R, A, B] {
     type S = (self.S, sink.S)
-    def start = Apply[Eff[R, ?]].tuple2(self.start , sink.start)
+    def start = Applicative[Eff[R, ?]].tuple2(self.start , sink.start)
     def fold = (s: S, a: A) => (self.fold(s._1, a), sink.fold(s._2, s._1))
-    def end(s: S) = Apply[Eff[R, ?]].tuple2(self.end(s._1), sink.end(s._2)).map(_._1)
+    def end(s: S) = Applicative[Eff[R, ?]].tuple2(self.end(s._1), sink.end(s._2)).map(_._1)
   }
 
   /** alias for observeState */
@@ -121,9 +122,9 @@ trait Fold[R, A, B] { self =>
   /** observe both the input value and the next state */
   def observeWithNextState(sink: Sink[R, (A, S)]) = new Fold[R, A, B] {
     type S = (self.S, sink.S)
-    def start = Apply[Eff[R, ?]].tuple2(self.start , sink.start)
+    def start = Applicative[Eff[R, ?]].tuple2(self.start , sink.start)
     def fold = (s: S, a: A) => { val next = self.fold(s._1, a); (next, sink.fold(s._2, (a, next))) }
-    def end(s: S) = Apply[Eff[R, ?]].tuple2(self.end(s._1), sink.end(s._2)).map(_._1)
+    def end(s: S) = Applicative[Eff[R, ?]].tuple2(self.end(s._1), sink.end(s._2)).map(_._1)
   }
 
   /** alias for observeWithNextState */
@@ -133,9 +134,9 @@ trait Fold[R, A, B] { self =>
   /** observe the next state */
   def observeNextState(sink: Sink[R, S]) = new Fold[R, A, B] {
     type S = (self.S, sink.S)
-    def start = Apply[Eff[R, ?]].tuple2(self.start , sink.start)
+    def start = Applicative[Eff[R, ?]].tuple2(self.start , sink.start)
     def fold = (s: S, a: A) => { val next = self.fold(s._1, a); (next, sink.fold(s._2, next)) }
-    def end(s: S) = Apply[Eff[R, ?]].tuple2(self.end(s._1), sink.end(s._2)).map(_._1)
+    def end(s: S) = Applicative[Eff[R, ?]].tuple2(self.end(s._1), sink.end(s._2)).map(_._1)
   }
 
   /** alias for observeNextState */
@@ -233,76 +234,33 @@ object Fold {
   }
 
   /**
-   * Apply instance
+   * Applicative instance
    *
    * This means that we can write:
    *
    *   val mean: Fold[Int, Int] = (sum |@| count)(_ / _)
    *
-   * An Apply instance is also a Functor instance so we can write:
+   * An Applicative instance is also a Functor instance so we can write:
    *
    *   val meanTimes2 = mean.map(_ * 2)
    */
-  implicit def ApplyFold[R, T]: Apply[Fold[R, T, ?]] = new Apply[Fold[R, T, ?]] {
+  implicit def ApplicativeFold[R, T]: Applicative[Fold[R, T, ?]] = new Applicative[Fold[R, T, ?]] {
     type F[U] = Fold[R, T, U]
 
-    def map[A, B](fa: F[A])(f: A => B): F[B] =
+    def point[A](a: =>A): Fold[R, T, A] =
+      new Fold[R, T, A] {
+        type S = Unit
+
+        def start: Eff[R, S] = Eff.pure(())
+        def fold: (S, T) => S = (s, t) => s
+        def end(s: S): Eff[R, A] = Eff.pure(a)
+      }
+
+    override def map[A, B](fa: F[A])(f: A => B): F[B] =
       fa map f
 
     def ap[A, B](fa: =>F[A])(f: =>F[A => B]): F[B] =
       map(fa zip f) { case (a, b) => b(a) }
-  }
-
-  /**
-   *  Profunctor instance
-   *
-   *  This is especially useful because we can "map" on the input element
-   *
-   *  val doubleSum = fromMonoid[Double] // sum all elements
-   *  val roundedDoubleSum = doubleSum.mapfst(_.round)
-   */
-  implicit def ProfunctorFold[R]: Profunctor[Fold[R, ?, ?]] = new Profunctor[Fold[R, ?, ?]] {
-    type =>:[A, B] = Fold[R, A, B]
-
-    /** Contramap on `A`. */
-    def mapfst[A, B, C](fab: (A =>: B))(f: C => A): (C =>: B) =
-      fab contramap f
-
-    /** Functor map on `B`. */
-    def mapsnd[A, B, C](fab: (A =>: B))(f: B => C): (A =>: C) =
-      fab map f
-  }
-
-  /**
-   * A Fold can be turned into a Compose
-   *
-   * This allows us to write:
-   *
-   * val scans = sum compose list
-   *
-   */
-  implicit def ComposeFold[R]: Compose[Fold[R, ?, ?]] = new Compose[Fold[R, ?, ?]] {
-    type F[A, B] = Fold[R, A, B]
-
-    def compose[A, B, C](f: F[B, C], g: F[A, B]): F[A, C] =
-      g compose f
-  }
-
-  /**
-   * Cobind instance
-   */
-  def CobindFold[R, T]: Cobind[Fold[R, T, ?]] = new Cobind[Fold[R, T, ?]] {
-    type F[U] = Fold[R, T, U]
-
-    def cobind[A, B](fa: F[A])(f: F[A] => B): F[B] = new Fold[R, T, B] {
-      type S = fa.S
-      def start = fa.start
-      def fold = fa.fold
-      def end(s: S) = pure(f(fa))
-    }
-
-    def map[A, B](fa: F[A])(f: A => B): F[B] =
-      fa map f
   }
 }
 
@@ -326,27 +284,6 @@ trait Folds {
     def fold = (s: S, a: A) => f(s, a)
     def end(s: S) = Eff.pure(s)
   }
-
-  /** @return a fold from running a State object */
-  def fromStateRun[R, A, B, C](state: A => State[B, C])(init: B): Fold[R, A, (B, Option[C])]  { type S = (B, Option[C]) } =
-    new Fold[R, A, (B, Option[C])] {
-      type S = (B, Option[C])
-      def start = Eff.pure((init, None))
-      def fold = (s: S, a: A) => {
-        val (sa, c) = s
-        val (newState, newC) = state(a).run(sa).value
-        (newState, Some(newC))
-      }
-      def end(s: S) = Eff.pure(s)
-   }
-
-  /** @return a fold for the execution of a State object */
-  def fromStateExec[R, A, B, C](state: A => State[B, C])(init: B): Fold[R, A, B] =
-    fromStateRun(state)(init).map(_._1)
-
-  /** @return a fold for the evaluation of a State object */
-  def fromStateEval[R, A, B, C](state: A => State[B, C])(init: B): Fold[R, A, Option[C]] =
-    fromStateRun(state)(init).map(_._2)
 
   /** @return a fold with just a start action */
   def fromStart[R, A, S1](action: Eff[R, S1]) = new Fold[R, A, S1] {

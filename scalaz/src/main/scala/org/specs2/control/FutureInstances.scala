@@ -1,8 +1,8 @@
 package org.specs2
 package control
 
-import scalaz._
-import concurrent.Future
+import org.specs2.fp._
+import scalaz.concurrent._
 
 object FuturezInstances {
 

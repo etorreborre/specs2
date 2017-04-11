@@ -6,8 +6,8 @@ import main.Arguments
 import org.specs2.control._
 import org.specs2.data.TopologicalSort
 import control._
-import scalaz.syntax.traverse._
-import scalaz.std.list._
+import org.specs2.fp.syntax._
+import org.specs2.fp.syntax._
 import process._
 
 /**
@@ -118,7 +118,7 @@ object SpecStructure {
     def getRefs(s: SpecStructure, visited: Vector[(String, SpecStructure)]): Vector[(String, SpecStructure)] =
       refs(s).map { ref =>
         SpecificationStructure.create(ref.header.specClass.getName, classLoader, Some(env)).map(_.structure(env).setArguments(ref.arguments))
-      }.sequenceU.map(byName).runOption.getOrElse(Vector())
+      }.sequence.map(byName).runOption.getOrElse(Vector())
        .filterNot { case (n, _) => visited.map(_._1).contains(n) }
 
     Operations.delayed {

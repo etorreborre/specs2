@@ -1,7 +1,8 @@
 package org.specs2.control.eff
 
 import scala.util.control.NonFatal
-import scalaz._, Scalaz._
+import org.specs2.fp._
+import org.specs2.fp.syntax._
 
 /**
  * Encapsulation of one optional last action to execute at the end of the program

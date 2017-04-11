@@ -2,7 +2,6 @@ package org.specs2.control.eff
 package syntax
 
 import ErrorEffect._
-import scalaz._
 import scala.reflect.ClassTag
 
 object error extends error
@@ -11,7 +10,7 @@ trait error {
 
   implicit class ErrorEffectOps[R, A](action: Eff[R, A]) {
 
-    def runError(implicit m: Member[ErrorOrOk, R]): Eff[m.Out, Error \/ A] =
+    def runError(implicit m: Member[ErrorOrOk, R]): Eff[m.Out, Error Either A] =
       ErrorEffect.runError(action)(m.aux)
 
     def andFinally(last: Eff[R, Unit])(implicit m: ErrorOrOk /= R): Eff[R, A] =
@@ -24,16 +23,16 @@ trait error {
       ErrorEffect.ignoreException(action)
   }
 
-  implicit class ErrorOrOkOps[A](c: Error \/ A) {
+  implicit class ErrorOrOkOps[A](c: Error Either A) {
     def toErrorSimpleMessage: Option[String] =
       c match {
-        case -\/(e) => Some(e.simpleMessage)
+        case Left(e) => Some(e.simpleMessage)
         case _      => None
       }
 
     def toErrorFullMessage: Option[String] =
       c match {
-        case -\/(e) => Some(e.fullMessage)
+        case Left(e) => Some(e.fullMessage)
         case _      => None
       }
   }
@@ -41,14 +40,14 @@ trait error {
   implicit class ErrorOps[A](e: Error) {
     def simpleMessage: String =
       e match {
-        case -\/(t) => render(t)
-        case \/-(m) => m
+        case Left(t) => render(t)
+        case Right(m) => m
       }
 
     def fullMessage: String =
       e match {
-        case -\/(t) => renderWithStack(t)
-        case \/-(m) => m
+        case Left(t) => renderWithStack(t)
+        case Right(m) => m
       }
   }
 

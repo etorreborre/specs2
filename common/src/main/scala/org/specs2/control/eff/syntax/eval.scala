@@ -1,6 +1,5 @@
 package org.specs2.control.eff.syntax
 
-import scalaz._
 import org.specs2.control.eff._
 import org.specs2.control.eff.eval._
 
@@ -13,7 +12,7 @@ trait eval {
     def runEval(implicit member: Member[Eval, R]): Eff[member.Out, A] =
       EvalInterpretation.runEval(e)(member.aux)
 
-    def attemptEval(implicit member: Member[Eval, R]): Eff[member.Out, Throwable \/ A] =
+    def attemptEval(implicit member: Member[Eval, R]): Eff[member.Out, Throwable Either A] =
       EvalInterpretation.attemptEval(e)(member.aux)
 
   }

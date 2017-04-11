@@ -2,7 +2,8 @@ package org.specs2.control
 package eff
 
 import scala.annotation.implicitNotFound
-import scalaz._, Scalaz._
+import org.specs2.fp.syntax._
+import org.specs2.fp._
 
 @implicitNotFound("No instance found for MemberIn[${T}, ${R}].\nThe effect ${T} is not part of the stack ${R}")
 trait MemberIn[T[_], R] { outer =>

@@ -4,7 +4,6 @@ package io
 import java.io._
 import java.net.URI
 import java.util.UUID
-import scalaz._, Scalaz._
 
 /**
  * Representation of a directory path which can be relative or absolute

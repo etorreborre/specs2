@@ -3,8 +3,7 @@ package data
 
 import org.scalacheck._
 
-import scalaz._
-import Scalaz._
+import org.specs2.fp._
 import Trees._
 import org.specs2.matcher.ThrownExpectations
 

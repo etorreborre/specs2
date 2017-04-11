@@ -5,8 +5,8 @@ import eff._
 import all._
 import syntax.all._
 
-import scalaz._
-import Scalaz.{cata => _, _}
+import org.specs2.fp._
+import org.specs2.fp.syntax._
 import Producer._
 
 sealed trait Stream[R, A]

@@ -1,6 +1,7 @@
 package org.specs2.control.eff
 
-import scalaz._, Scalaz._
+import org.specs2.fp._
+import org.specs2.fp.syntax._
 import Eff._
 
 /**

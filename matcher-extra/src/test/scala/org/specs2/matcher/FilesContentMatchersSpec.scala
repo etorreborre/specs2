@@ -6,7 +6,7 @@ import execute.AsResult
 import io._
 import specification.BeforeAfterEach
 import control._
-import scalaz.syntax.bind._
+import org.specs2.fp.syntax._
 import text.AnsiColors._
 import org.specs2.matcher.MatchResultLogicalCombinators._
 

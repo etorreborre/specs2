@@ -2,7 +2,7 @@ package org.specs2
 package data
 
 import main.Arguments
-import scalaz.Monoid
+import org.specs2.fp._
 
 /**
  * A tag with names.

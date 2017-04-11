@@ -2,11 +2,12 @@ package org.specs2.control
 package eff
 
 import scala.collection.mutable._
-import scalaz._, Scalaz._
 import all._
 import interpret._
 import syntax.all._
 import origami._
+import org.specs2.fp._
+import org.specs2.fp.syntax._
 
 /**
  * Effect for logging values alongside computations
@@ -54,15 +55,15 @@ trait WriterInterpretation {
 
       def apply[X](x: Writer[O, X], s: S) = (x.run._2, fold.fold(s, x.run._1))
 
-      def applicative[X, T[_] : Traverse](ws: T[Writer[O, X]], s: S): (T[X], S) Either (Writer[O, T[X]], S) =
-        Left {
-          val traversed: State[S, T[X]] = ws.traverse { w: Writer[O, X] =>
-            val (o, x) = w.run
-            State[S, X](s1 => (fold.fold(s1, o), x))
-          }
-          traversed.run(s).value.swap
+      def applicative[X, T[_] : Traverse](xs: T[Writer[O, X]], s: S): (T[X], S) Either (Writer[O, T[X]], S) = {
+        val os = new collection.mutable.ListBuffer[O]
+        val values = xs.map { w: Writer[O, X] =>
+          val (o, x) = w.run
+          os.append(o)
+          x
         }
-
+        Left((values, os.toList.foldLeft(s) { (res, cur) => fold.fold(res, cur) }))
+      }
 
       def finalize(a: A, s: S) = (a, fold.end(s).run)
     }
@@ -86,7 +87,7 @@ trait WriterInterpretation {
   def MonoidFold[A : Monoid]: FoldId[A, A] = new Fold[NoFx, A, A] {
     type S = A
     val start = pure[NoFx, A](Monoid[A].zero)
-    def fold = (s: S, a: A) => a |+| s
+    def fold = (s: S, a: A) => a append s
     def end(s: S) = pure(s)
   }
 

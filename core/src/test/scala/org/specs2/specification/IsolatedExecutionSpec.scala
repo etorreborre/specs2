@@ -7,7 +7,6 @@ import core._
 import process._
 import control._
 import producer._
-import scalaz.Scalaz.listMonoid
 
 class IsolatedExecutionSpec extends Spec { def is = skipAllIf(util.Properties.versionString.contains("2.11")) ^ s2"""
 

@@ -1,7 +1,6 @@
 package org.specs2
 package reporter
 
-import scalaz.{Failure => _, _}, Scalaz.{fold => _,_}
 import org.junit.runner.Description
 import java.net.InetAddress
 import main.Arguments
@@ -9,7 +8,7 @@ import execute._
 import io.FileName
 import control._
 import io._
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 import Exceptions._
 import specification.core._
 import specification.process._
@@ -71,7 +70,7 @@ trait JUnitXmlPrinter extends Printer {
      */
     def properties =
       s"""<properties>
-            ${System.getProperties.entrySet.toSeq.map(p => s"""<property name="${escape(p.getKey.toString)}" value="${escape(p.getValue.toString)}" ></property>""").mkString("\n")}
+            ${System.getProperties.entrySet.asScala.toSeq.map(p => s"""<property name="${escape(p.getKey.toString)}" value="${escape(p.getValue.toString)}" ></property>""").mkString("\n")}
           </properties>"""
   }
 

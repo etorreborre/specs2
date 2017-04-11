@@ -4,7 +4,7 @@ package core
 
 import org.scalacheck.util.Pretty
 import org.scalacheck.util.Pretty.Params
-import scalaz._, Scalaz._
+import org.specs2.fp.syntax._
 
 object Pretties {
 
@@ -13,6 +13,6 @@ object Pretties {
   }
 
   def prettyFragment: Fragment => Pretty = (f: Fragment) => Pretty { params: Params =>
-    f.shows
+    f.show
   }
 }

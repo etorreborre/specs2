@@ -6,7 +6,7 @@ import org.junit.runner.RunWith
 import org.scalacheck._, Gen._, Arbitrary._
 import org.specs2.runner.JUnitRunner
 import scala.IllegalArgumentException
-import scalaz._, Scalaz._
+import org.specs2.fp.syntax._
 import control._, eff.ErrorEffect
 import matcher._
 import OperationMatchers._
@@ -46,8 +46,8 @@ class SpecificationStructureSpec extends Specification with ScalaCheck with Disj
   }.setArbitrary(ArbitraryLinks).set(maxSize = 5)
 
   def report = {
-    runOperation(SpecificationStructure.create("org.specs2.specification.core.BrokenSpecification")) must be_-\/((e: ErrorEffect.Error) =>
-      e must be_-\/((e1: Throwable) => e1.getCause.getCause.getMessage === "boom")
+    runOperation(SpecificationStructure.create("org.specs2.specification.core.BrokenSpecification")) must beLeft((e: ErrorEffect.Error) =>
+      e must beLeft((e1: Throwable) => e1.getCause.getCause.getMessage === "boom")
     )
   }
 

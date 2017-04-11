@@ -6,7 +6,7 @@ import io._
 import execute._
 import main.Arguments
 import specification.core._
-import scalaz.Show
+import org.specs2.fp._
 
 /**
  * This trait is not a full fledged markdown printer yet
@@ -63,7 +63,7 @@ trait MarkdownPrinter extends Printer {
     s"[${ref.linkText}](${options.outDir / FilePath.unsafe(ref.url)})"
 
   implicit def MarkdownFragmentShow(options: MarkdownOptions): Show[Fragment] = new Show[Fragment] {
-    override def shows(f: Fragment): String =
+    def show(f: Fragment): String =
       fragmentToLine(options)(f)
   }
 }

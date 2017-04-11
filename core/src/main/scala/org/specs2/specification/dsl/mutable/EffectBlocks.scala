@@ -7,9 +7,7 @@ import org.specs2.control.{Throwablex, Throwables}
 import org.specs2.execute.ExecuteException
 import Throwablex._
 import scala.util.control.NonFatal
-import scalaz.TreeLoc
-import scalaz.Tree._
-import scalaz.std.anyVal._
+import org.specs2.fp._, Tree._
 import org.specs2.data.Trees._
 
 /**

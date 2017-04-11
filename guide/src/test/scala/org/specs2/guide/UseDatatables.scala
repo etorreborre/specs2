@@ -6,7 +6,7 @@ import specification.Tables
 import execute._
 import scala.concurrent.Future
 import matcher.DataTable
-import scalaz._, Scalaz._
+import org.specs2.fp.syntax._
 
 object UseDatatables extends UserGuidePage with Tables { def is = "Datatables".title ^ s2"""
 

@@ -3,13 +3,14 @@ package matcher
 
 import scala.concurrent.TimeoutException
 import scala.concurrent.duration.Duration
-import scalaz.concurrent.Task
+import scalaz.concurrent._
 import text.NotNullStrings._
 import AnyMatchers._
 import DisjunctionMatchers._
 import ValueChecks._
 import org.specs2.matcher.describe.Diffable
 import scala.reflect.ClassTag
+import scalaz.concurrent._
 
 /**
  * Matchers for scalaz.concurrent.Task

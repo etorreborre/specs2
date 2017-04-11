@@ -1,6 +1,7 @@
 package org.specs2
 package collection
 
+import scala.annotation.tailrec
 import scala.collection.immutable.List._
 
 /**
@@ -29,6 +30,17 @@ trait Listx { outer =>
      * @return a randomly mixed list
      */
     def scramble = list.sortWith((a, b) => (new java.util.Random).nextInt(1) > 0)
+
+    def intersperse[A](a: T): List[T] = {
+      @tailrec
+      def intersperse0(accum: List[T], rest: List[T]): List[T] = rest match {
+        case Nil      => accum
+        case x :: Nil => x :: accum
+        case h :: t   => intersperse0(a :: h :: accum, t)
+      }
+      intersperse0(Nil, list).reverse
+    }
+
   }
   
   /**

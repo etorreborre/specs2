@@ -4,7 +4,7 @@ package specification
 import control._
 import io._
 
-import scalaz.syntax.bind._
+import org.specs2.fp.syntax._
 import execute.AsResult
 import process._
 
