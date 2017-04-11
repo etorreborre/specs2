@@ -1,7 +1,7 @@
 package org.specs2.control.eff
 package syntax
 
-import scalaz._
+import org.specs2.fp._
 
 /**
  * Operations of Eff[R, A] values
@@ -27,14 +27,14 @@ trait eff {
   }
 
   implicit class EffOneEffectOps[M[_] : Monad, A](e: Eff[Fx1[M], A]) {
-    def detach(implicit bindRec: BindRecʹ[M]): M[A] =
+    def detach: M[A] =
       Eff.detach(e)
 
   }
 
   implicit class EffOneEffectApplicativeOps[M[_] : Monad, A](e: Eff[Fx1[M], A]) {
-    def detachA(implicit bindRec: BindRecʹ[M], applicative: Applicative[M]): M[A] =
-      Eff.detachA(e)(implicitly[Monad[M]], bindRec, applicative)
+    def detachA(implicit applicative: Applicative[M]): M[A] =
+      Eff.detachA(e)(implicitly[Monad[M]], applicative)
   }
 
   implicit class EffOnePureValueOps[R, A](e: Eff[R, A]) {

@@ -2,9 +2,7 @@ package org.specs2
 package io
 
 import control._
-import scalaz._
-import std.list._
-import syntax.all._
+import org.specs2.fp.syntax._
 import java.io._
 import java.util.regex.Pattern._
 import java.util.regex.Matcher._
@@ -116,10 +114,10 @@ trait FileSystem extends FilePathReader {
   def copyDir(src: DirectoryPath, dest: DirectoryPath): Operation[Unit] =
     mkdirs(dest) >>
       listDirectFilePaths(src).flatMap { files =>
-        files.toList.map(copyFile(dest)).sequenceU.void
+        files.toList.map(copyFile(dest)).sequence.void
       } >>
       listDirectDirectoryPaths(src).flatMap { directories: IndexedSeq[DirectoryPath] =>
-        directories.toList.map(dir => copyDir(dir, dest / dir.name)).sequenceU.void
+        directories.toList.map(dir => copyDir(dir, dest / dir.name)).sequence.void
       }
 
   /**
@@ -154,7 +152,7 @@ trait FileSystem extends FilePathReader {
 
   /** delete a directory */
   def delete(dir: DirectoryPath): Operation[Unit] =
-    listFilePaths(dir).flatMap(_.map(delete).toList.sequenceU.void) >>
+    listFilePaths(dir).flatMap(_.map(delete).toList.sequence.void) >>
     delete(dir.toFilePath) // delete the directory once it is empty
 }
 

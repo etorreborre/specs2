@@ -2,9 +2,6 @@ package org.specs2
 package collection
 
 import scala.collection.{GenSeq, GenIterable}
-import scalaz._
-import Generator._
-import std.iterable._
 import Seqx._
 
 /**
@@ -108,8 +105,6 @@ trait Iterablex {
     def mapFirst(f: T => T): GenSeq[T] = (xs.take(1).map(f) ++ xs.drop(1)).toSeq
     /** map the last element with a function */
     def mapLast(f: T => T): Seq[T] = (xs.seq.dropRight(1) ++ xs.seq.takeRight(1).map(f)).toSeq
-    /** reduce a list from left to right */
-    def reduceWith[S](reducer: Reducer[T, S]) = FoldlGenerator[Iterable].reduce(reducer, xs.seq)
     /** @return a sequence rotated of a number of elements */
     def rotate(n: Int) = xs.slice(n, xs.size) ++ xs.slice(0, n)
     /** @return a randomly mixed sequence */

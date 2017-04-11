@@ -9,9 +9,8 @@ import main._
 import reporter._
 import control.{Logger => _, _}
 
-import scalaz._
-import Scalaz._
-import scalaz.effect.IO
+import org.specs2.fp._
+import org.specs2.fp.syntax._
 import reporter.SbtLineLogger
 import reflect.Classes
 import reporter.Printer._
@@ -38,7 +37,7 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
           Env(arguments = commandLineArguments)
 
       // the specification to execute with error messages if it cannot be instantiated
-      lazy val specStructure: (Error \/ Option[SpecStructure], List[String]) = {
+      lazy val specStructure: (Error Either Option[SpecStructure], List[String]) = {
         val action: Action[Option[SpecStructure]] =
           createSpecStructure(taskDef, loader, env)
         executeAction(action)
@@ -68,7 +67,7 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
       def taskDef = aTaskDef
 
       /** display errorrs and warnings */
-      def processResult[A](handler: EventHandler, loggers: Array[Logger])(result: Error \/ A, warnings: List[String]): Unit = {
+      def processResult[A](handler: EventHandler, loggers: Array[Logger])(result: Error Either A, warnings: List[String]): Unit = {
         result.fold(
           e => {
             if (warnings.nonEmpty) handleRunWarnings(warnings, loggers, commandLineArguments)
@@ -109,7 +108,7 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
       createHtmlPrinter(args, loader),
       createMarkdownPrinter(args, loader),
       createPrinter(args, loader),
-      createNotifierPrinter(args, loader)).map(_.map(_.toList)).sequenceU.map(_.flatten)
+      createNotifierPrinter(args, loader)).map(_.map(_.toList)).sequence.map(_.flatten)
 
   def createSbtPrinter(h: EventHandler, ls: Array[Logger], e: SbtEvents) = {
     val arguments = Arguments(args: _*)
@@ -133,11 +132,11 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
   /**
    * Notify sbt of errors during the run
    */
-  private def handleRunError(e: Throwable \/ String, loggers: Array[Logger], events: SbtEvents, arguments: Arguments) {
+  private def handleRunError(e: Throwable Either String, loggers: Array[Logger], events: SbtEvents, arguments: Arguments) {
     val logger = SbtLineLogger(loggers)
 
     def logThrowable(t: Throwable) =
-      Runner.logThrowable(t, arguments)(m => IO(logger.errorLine(m))).unsafePerformIO
+      Runner.logThrowable(t, arguments)(m => Name(logger.errorLine(m))).value
 
     e.fold(
       t => { events.suiteError(t); logThrowable(t) },
@@ -152,7 +151,7 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
    */
   private def handleRunWarnings(warnings: List[String], loggers: Array[Logger], arguments: Arguments) {
     val logger = SbtLineLogger(loggers)
-    Runner.logUserWarnings(warnings)(m => IO(logger.failureLine(m))).unsafePerformIO
+    Runner.logUserWarnings(warnings)(m => Name(logger.failureLine(m))).value
     logger.close
   }
 }

@@ -8,8 +8,6 @@ import control.Exceptions._
 import org.specs2.control.eff.{Eff, NoFx}
 import org.specs2.control.origami.Fold
 
-import scalaz.Scalaz._
-
 /**
  * This trait provides Timer functionalities based on the Java Calendar milliseconds
  */

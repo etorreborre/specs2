@@ -4,8 +4,7 @@ package specification
 import org.specs2.execute.Result._
 import org.specs2.execute.{ResultExecution, Result, AsResult}
 import org.specs2.matcher.StoredExpectations
-import scalaz.Monad
-
+import org.specs2.fp._
 
 /**
  * generic trait for Before, After, Around
@@ -171,6 +170,7 @@ object Fixture {
     def point[A](a: =>A) = new Fixture[A] {
       def apply[R : AsResult](f: A => R): Result = AsResult(f(a))
     }
+
     def bind[A, B](fixture: Fixture[A])(fa: A => Fixture[B]): Fixture[B] = new Fixture[B] {
       def apply[R : AsResult](fb: B => R): Result = fixture((a: A) => fa(a)(fb))
     }

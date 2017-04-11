@@ -1,7 +1,7 @@
 package org.specs2.concurrent
 
 import scala.concurrent._
-import scalaz.Applicative
+import org.specs2.fp._
 
 trait FutureApplicative {
 

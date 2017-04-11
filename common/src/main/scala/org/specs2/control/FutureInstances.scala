@@ -2,7 +2,7 @@ package org.specs2
 package control
 
 import scala.concurrent.{ExecutionContext, Future}
-import scalaz.Applicative
+import org.specs2.fp._
 
 object FutureInstances {
 

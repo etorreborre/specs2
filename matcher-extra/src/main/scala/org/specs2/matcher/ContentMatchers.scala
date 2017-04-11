@@ -5,7 +5,7 @@ import java.io.File
 import org.specs2.text._
 import io._
 import MatchResult._
-import scalaz.Scalaz._
+import org.specs2.fp.syntax._
 
 /**
  * The ContentMatchers trait provides matchers to make comparisons between files, sequences,...

@@ -10,7 +10,7 @@ import text.Quote._
 import org.specs2.xml.NodeFunctions._
 import StringToElem._
 import collection.Seqx._
-import scalaz.std.string._
+
 /**
  * The XmlMatchers trait provides matchers which are applicaborderle to xml nodes
  */

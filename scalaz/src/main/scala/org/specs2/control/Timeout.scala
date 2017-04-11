@@ -1,11 +1,10 @@
 package org.specs2
 package control
 
-import scalaz._
-import Scalaz._
-import scalaz.concurrent._
 import scala.annotation.tailrec
 import java.util.concurrent.locks.ReentrantReadWriteLock
+import scalaz.concurrent._
+import scalaz._, Scalaz._
 
 /**
  * This code is taken from Scalaz to provide time-out functionality for Futures

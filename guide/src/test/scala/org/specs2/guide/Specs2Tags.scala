@@ -4,7 +4,7 @@ package guide
 import control._
 import io._
 import Functions._
-import scalaz._, Scalaz._
+import org.specs2.fp.syntax._
 
 /**
  * Functions for finding the most relevant specs2 tags to display on the website

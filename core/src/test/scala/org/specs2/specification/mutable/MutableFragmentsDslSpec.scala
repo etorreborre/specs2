@@ -9,7 +9,6 @@ import execute._
 import org.specs2.specification.dsl.mutable.{ArgumentsCreation, MutableDsl, MutableFragmentBuilder}
 import matcher._
 import org.specs2.main.ArgumentsShortcuts
-import scalaz._, Scalaz._
 import MatchResultCombinators._
 import MatchersImplicits.matchResultFunctionToMatcher
 

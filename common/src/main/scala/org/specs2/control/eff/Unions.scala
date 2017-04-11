@@ -1,6 +1,6 @@
 package org.specs2.control.eff
 
-import scalaz._
+import org.specs2.fp._
 
 /**
  * A non-empty list of Unions.

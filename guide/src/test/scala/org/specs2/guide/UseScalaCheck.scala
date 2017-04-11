@@ -6,7 +6,7 @@ import java.io.File
 import org.scalacheck.util.Pretty
 import org.scalacheck._
 import scalacheck._
-import scalaz._, Scalaz._
+import org.specs2.fp.syntax._
 import execute.ResultImplicits
 
 object UseScalaCheck extends UserGuidePage with ScalaCheck with ResultImplicits { def is = "ScalaCheck".title ^ s2"""

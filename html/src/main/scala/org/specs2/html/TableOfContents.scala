@@ -7,8 +7,9 @@ import scala.xml.NodeSeq
 import io._
 import xml.Nodex._
 import Htmlx._
+import org.specs2.fp._
+import org.specs2.fp.syntax._
 import data.Trees._
-import scalaz._, Scalaz._
 import text.Trim._
 
 /**
@@ -40,7 +41,7 @@ trait TableOfContents {
       val path = SpecHtmlPage.outputPath(outDir, spec)
       if (paths contains path) Some(fileSystem.readFile(path).map(content => SpecHtmlPage(spec, path, outDir, content)))
       else None
-    }.sequenceU
+    }.sequence
   }
 
   def createToc(pages: List[SpecHtmlPage], outDir: DirectoryPath, entryMaxSize: Int): SpecHtmlPage => NodeSeq = {
@@ -108,7 +109,7 @@ trait TableOfContents {
   }
 
   def saveHtmlPages(pages: List[SpecHtmlPage], fileSystem: FileSystem): Operation[Unit] =
-    pages.map(page => fileSystem.writeFile(page.path, page.content)).sequenceU.void
+    pages.map(page => fileSystem.writeFile(page.path, page.content)).sequence.void
 
 }
 

@@ -1,6 +1,6 @@
 package org.specs2.control.eff
 
-import scalaz._, Scalaz._
+import org.specs2.fp.syntax._
 import eff._, writer._
 import syntax.writer._
 
@@ -21,8 +21,8 @@ object ConsoleEffect {
     else      pure(())
 
   def logThrowable[R :_console](t: Throwable): Eff[R, Unit] =
-    log(t.getMessage, doIt = true) >>
-      log(t.getStackTrace.mkString("\n"), doIt = true) >>
+    log(t.getMessage) >>
+      log(t.getStackTrace.mkString("\n")) >>
       (if (t.getCause != null) logThrowable(t.getCause)
        else                    pure(()))
 
@@ -38,3 +38,10 @@ object ConsoleEffect {
   def runConsoleToPrinter[R, U, A](printer: String => Unit)(w: Eff[R, A])(implicit m : Member.Aux[Console, R, U]): Eff[U, A] =
     w.runWriterUnsafe((message: ConsoleMessage) => printer(message.value))
 }
+
+case class Writer[O, A](value: O, a: A) {
+  val run: (O, A) =
+    (value, a)
+}
+
+

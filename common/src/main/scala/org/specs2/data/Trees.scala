@@ -1,10 +1,8 @@
 package org.specs2
 package data
 
-import scalaz.{Tree, TreeLoc}
-import scalaz.syntax.foldable._
-import scalaz.std.stream._
-import Tree.{Node, Leaf}
+import org.specs2.fp._
+import Tree._
 
 /**
  * Utility methods for scalaz Trees
@@ -73,7 +71,7 @@ trait Trees { outer =>
 
   /** reimplementation of squish from scalaz, using a foldLeft */
   private def squishLeft[A](tree: Tree[A], xs: Stream[A]): Stream[A] =
-    Stream.cons(tree.rootLabel, tree.subForest.reverse.foldl(xs)(s => t => squishLeft(t, s)))
+    Stream.cons(tree.rootLabel, tree.subForest.reverse.foldLeft(xs)((s, t) => squishLeft(t, s)))
 
   /**
    * Implicit definition to add more functionalities to the TreeLoc class

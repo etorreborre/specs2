@@ -6,7 +6,7 @@ import text.Regexes._
 import control._
 import producer._, transducers._, producers._
 import data._
-import scalaz._, Scalaz.{ToIdOps => _,_}
+import org.specs2.fp.syntax._
 import specification.core._
 import create.FormattingFragments
 import Fragment._
@@ -64,7 +64,7 @@ trait DefaultSelector extends Selector {
           (Option(f), updateSections(sections, t))
 
         case (fragment, sections) if !Fragment.isFormatting(fragment) && !Fragment.isEmptyText(fragment) =>
-          val apply = sections.sumr
+          val apply = sections.sumAll
           val keep = apply.keep(arguments, apply.names)
           (Option(fragment).filter(_ => keep), sections)
 

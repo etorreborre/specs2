@@ -4,13 +4,12 @@ package execute
 import control.Throwablex
 import control.Throwablex._
 import main.Arguments
-import scalaz.Scalaz._
-import scalaz.Monoid
-import collection.Seqx._
+import org.specs2.fp._
+import org.specs2.fp.syntax._
 import text.Message.concat
 import text.Sentences._
 import text.NotNullStrings._
-import scalaz._
+
 /**
  * The result of an execution, either:
  *
@@ -142,6 +141,7 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
    */
   def mute: Result
 }
+
 object Result {
 
   /**
@@ -234,15 +234,12 @@ object Result {
     case _         => Success()
   }
 
-  def theseToResult(these: String \&/ Throwable): Result =
-    these.fold(s => Error(s), t => Error(t), (s, t) => new Error(s, t))
-
-  def disjunctionErrorToResult(error: Throwable \/ String): Result =
+  def disjunctionErrorToResult(error: Throwable Either String): Result =
     error.fold(t => Error(t), m => Error(m))
 
   /** this allows the creation of expectations with a for loop */
   def foreach[T, R : AsResult](seq: Seq[T])(f: T => R): Result = {
-    seq.foldMap(t => AsResult(f(t)))
+    seq.toList.foldMap(t => AsResult(f(t)))
   }
 }
 

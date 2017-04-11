@@ -2,7 +2,7 @@ package org.specs2
 package specification
 package core
 
-import scalaz._, Scalaz._
+import org.specs2.fp._
 import Fragment._
 import control._
 import producer._

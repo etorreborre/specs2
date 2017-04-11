@@ -6,7 +6,7 @@ import specification.BeforeAfterEach
 import control._
 import text.LinesContent
 import java.io.File
-import scalaz.syntax.bind._
+import org.specs2.fp.syntax._
 
 class ContentMatchersSpec extends Spec with LinesContentMatchers with BeforeAfterEach with FileSystem with TestFileNames { def is = sequential ^ s2"""
 

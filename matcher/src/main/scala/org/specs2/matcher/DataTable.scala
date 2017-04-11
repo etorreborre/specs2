@@ -8,8 +8,7 @@ import Trim._
 import NotNullStrings._
 import ResultLogicalCombinators._
 
-import scalaz.{Success => _, _}
-import Scalaz._
+import org.specs2.fp._
 import scala.concurrent._, duration._
 
 /**

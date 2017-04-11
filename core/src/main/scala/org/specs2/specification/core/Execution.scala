@@ -9,7 +9,7 @@ import org.specs2.concurrent.ExecutionEnv
 
 import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.concurrent.duration._
-import scalaz.Show
+import fp.Show
 import specification.process.Stats
 import time.SimpleTimer
 import text.NotNullStrings._
@@ -76,7 +76,6 @@ case class Execution(run:            Option[Env => Future[Result]]           = N
       case Left(t)  => Left(t)
       case Right(r) => Right(r.getOrElse(org.specs2.execute.Success()))
     }
-
 
   def isExecuted = executedResult.isDefined
 
@@ -221,7 +220,7 @@ object Execution {
   }
 
   implicit def showInstance: Show[Execution] = new Show[Execution] {
-    override def shows(e: Execution): String =
+    def show(e: Execution): String =
       s"${e.result.toString}"
   }
 

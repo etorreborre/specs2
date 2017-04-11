@@ -6,7 +6,7 @@ import data.TopologicalSort
 import control._
 import reflect.Classes
 import Classes._
-import scalaz._, Scalaz._
+import org.specs2.fp.syntax._
 
 trait ContextualSpecificationStructure {
   def structure: Env => SpecStructure
@@ -93,7 +93,7 @@ object SpecificationStructure {
     }
 
     def getRefs(s: SpecificationStructure, visited: Vector[(String, SpecificationStructure)]): Vector[(String, SpecificationStructure)] =
-      refs(s, env).map(ref => create(ref.header.specClass.getName, classLoader, Some(env))).sequenceU.map(byName).runOption.getOrElse(Vector())
+      refs(s, env).map(ref => create(ref.header.specClass.getName, classLoader, Some(env))).sequence.map(byName).runOption.getOrElse(Vector())
         .filterNot { case (n, _) => visited.map(_._1).contains(n) }
 
     Operations.delayed {

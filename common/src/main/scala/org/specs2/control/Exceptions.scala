@@ -2,7 +2,6 @@ package org.specs2
 package control
 
 import scala.util.control.NonFatal
-import scalaz.{-\/, \/-, \/}
 
 /**
  * This trait provides methods to catch exceptions and transform them into values which can be passed to
@@ -88,14 +87,14 @@ trait Exceptions {
   }
 
   /**
-   * try to evaluate an expression, returning \/
+   * try to evaluate an expression, returning Either
    *
    * If the expression throws an Exception a function f is used to return the left value
    * of the Either returned value.
    */
-  def try_\/[T, S](a: =>T)(f: Throwable => S): \/[S, T] = {
-    try \/-(a)
-    catch { case NonFatal(e) => -\/(f(e)) }
+  def try_Either[T, S](a: =>T)(f: Throwable => S): Either[S, T] = {
+    try Right(a)
+    catch { case NonFatal(e) => Left(f(e)) }
   }
 
   /** try to apply a partial function to a value */
@@ -118,14 +117,14 @@ trait Exceptions {
   }
 
   /**
-   * try to evaluate an expression, returning \/
+   * try to evaluate an expression, returning Either
    *
    * If the expression throws an Exception a function f is used to return the left value
    * of the Either returned value.
    */
-  def catchAll_\/[T, S](a: =>T)(f: Throwable => S): \/[S, T] = {
-    try \/-(a)
-    catch { case e: Throwable => -\/(f(e)) }
+  def catchAll_Either[T, S](a: =>T)(f: Throwable => S): Either[S, T] = {
+    try Right(a)
+    catch { case e: Throwable => Left(f(e)) }
   }
 }
 

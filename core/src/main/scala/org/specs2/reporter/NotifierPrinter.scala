@@ -5,8 +5,6 @@ import text.NotNullStrings._
 import main.Arguments
 import execute.Result
 
-import scalaz.syntax.show._
-
 import control._
 import eff._, all._
 import control.origami._
@@ -48,8 +46,8 @@ object NotifierPrinter {
         case Fragment(End,_ ,_) => s.copy(start = false, close = true, hide = true)
 
         case f1 if Fragment.isText(f1) =>
-          if (s.start) s.copy(context = f1.description.shows, start = true, hide = false)
-          else         s.copy(context = f1.description.shows, start = false, hide = false)
+          if (s.start) s.copy(context = f1.description.show, start = true, hide = false)
+          else         s.copy(context = f1.description.show, start = false, hide = false)
 
         case f1 if Fragment.isExample(f1) => s.copy(start = false, hide = false)
         case f1 if Fragment.isStep(f1)    => s.copy(start = false, hide = false)
@@ -69,7 +67,7 @@ object NotifierPrinter {
     }
 
   def printFragment(n: Notifier, f: Fragment, notified: Notified, args: Arguments) = {
-    val description = f.description.shows.trim
+    val description = f.description.show.trim
 
     val location = f.location.fullLocation(args.traceFilter).getOrElse("no location")
     def duration(f: Fragment) = f.execution.executionTime.totalMillis

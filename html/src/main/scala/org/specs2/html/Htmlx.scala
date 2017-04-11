@@ -4,8 +4,7 @@ package html
 import io._
 import scala.xml._
 import transform.RewriteRule
-import scalaz.{ Tree, TreeLoc, Show }
-import Tree._
+import org.specs2.fp._, Tree._
 import xml.Nodex._
 import java.net.URLDecoder
 import data.UniqueNames
@@ -53,7 +52,7 @@ trait Htmlx { outer =>
     nodes.filterNodes(isHeader)
 
   /** collect all the headers as a Tree */
-  def headersToTree(body: NodeSeq, headers: TreeLoc[Header] = leaf(Header()).loc): TreeLoc[Header] = {
+  def headersToTree(body: NodeSeq, headers: TreeLoc[Header] = Leaf(Header()).loc): TreeLoc[Header] = {
     def goUpUntil(headers: TreeLoc[Header], level: Int): TreeLoc[Header] =
       if (headers.tree.rootLabel.level > level) headers.parent.map(goUpUntil(_, level)).getOrElse(headers)
       else headers
@@ -61,7 +60,7 @@ trait Htmlx { outer =>
     lazy val currentLevel = headers.tree.rootLabel.level
 
     def insertHeader(eLevel: Int, e: Node, rest: NodeSeq): TreeLoc[Header] = {
-      val header = leaf(Header(eLevel, e, headers.getLabel.namer))
+      val header = Leaf(Header(eLevel, e, headers.getLabel.namer))
       val newHeaders = if (eLevel == currentLevel)
         headers.insertRight(header)
       else if (eLevel > currentLevel)

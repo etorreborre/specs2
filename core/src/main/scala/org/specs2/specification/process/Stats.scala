@@ -4,8 +4,8 @@ package process
 
 import main.Arguments
 import execute._
-import scalaz.{ Scalaz, Monoid }
-import Scalaz._
+import org.specs2.fp._
+import org.specs2.fp.syntax._
 import execute.StandardResults
 import text._
 import Plural._
@@ -212,7 +212,7 @@ case object Stats {
         errors       = s1.errors          + s2.errors,
         pending      = s1.pending         + s2.pending,
         skipped      = s1.skipped         + s2.skipped,
-        trend        = ^(s1.trend, s2.trend)(_ |+| _),
+        trend        = Applicative[Option].apply2(s1.trend, s2.trend)(_ |+| _),
         timer        = s1.timer           add s2.timer
       )
     }

@@ -10,8 +10,6 @@ import AsResultProp._
 import ScalaCheckProperty._
 import org.specs2.specification.core.{AsExecution, Execution}
 
-import scalaz.{Failure => _, Success => _}
-
 /**
  * A ScalaCheckProperty encapsulates a ScalaCheck Prop and its parameters
  */
