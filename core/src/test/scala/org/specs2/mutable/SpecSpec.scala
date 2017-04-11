@@ -12,7 +12,7 @@ class SpecSpec extends Spec with TagDsl {
     typeOf[Spec].members.filter(m => m.isImplicit && m.isMethod).map(_.name.toString).toSet must
       beEqualTo(Set(
         "theValue",             // must expectations
-        "blockExample",         // create >> examples
+        "blockExample0",        // create >> examples
         "matcherIsValueCheck",  // to use ValueChecks in contain matchers
         "functionIsValueCheck"
       ))

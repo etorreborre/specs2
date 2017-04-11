@@ -27,7 +27,7 @@ import scala.concurrent.ExecutionContext
  *  - fragments
  *
  */
-trait S2StringContext extends S2StringContextImplicitsControl { outer =>
+trait S2StringContext extends S2StringContext1 { outer =>
 
   implicit def descriptionToFragmentsIsInterpolatedFragment(fragments: String => Fragments): InterpolatedFragment = new InterpolatedFragment {
     def append(fs: Fragments, text: String, start: Location, end: Location, expression: String): Fragments = {

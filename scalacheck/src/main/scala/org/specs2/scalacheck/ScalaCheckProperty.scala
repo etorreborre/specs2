@@ -8,6 +8,8 @@ import execute._
 import specification._
 import AsResultProp._
 import ScalaCheckProperty._
+import org.specs2.specification.core.{AsExecution, Execution}
+
 import scalaz.{Failure => _, Success => _}
 
 /**
@@ -839,6 +841,11 @@ case class ScalaCheckArgInstances[T](arbitrary: Arbitrary[T], shrink: Option[Shr
 }
 
 object ScalaCheckProperty {
+
+  implicit def ScalaCheckPropertyAsExecution[S <: ScalaCheckProperty]: AsExecution[S] = new AsExecution[S] {
+    def execute(s: => S): Execution =
+      Execution.withEnv(env => AsResultProp.check(s.prop, s.parameters.overrideWith(env.commandLine), s.prettyFreqMap))
+  }
 
   def makeProp[T](f: T => Prop, shrink: Option[Shrink[T]])(implicit a: Arbitrary[T], p: T => Pretty): Prop =
     shrink.fold(Prop.forAllNoShrink(f))(s => Prop.forAll(f)(identity, a, s, p))

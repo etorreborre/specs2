@@ -4,7 +4,6 @@ package scalacheck
 import org.scalacheck.{Properties, Gen, Prop}
 import org.scalacheck.util._
 import execute._
-import org.specs2.main.{CommandLine, CommandLineAsResult}
 import scala.annotation.tailrec
 
 /**
@@ -41,13 +40,6 @@ trait AsResultProp extends ScalaCheckPropertyCheck with ScalaCheckParameters wit
           }
         }
      }
-  }
-
-  implicit def scalaCheckPropertyCommandLineAsResult[S <: ScalaCheckProperty]: CommandLineAsResult[S] = new CommandLineAsResult[S] {
-    def asResult(commandLine: CommandLine, prop: =>S): Result = {
-      lazy val p = prop
-      check(p.prop, p.parameters.overrideWith(commandLine), p.prettyFreqMap)
-    }
   }
 
   /** implicit typeclass instance to create examples from a Prop */

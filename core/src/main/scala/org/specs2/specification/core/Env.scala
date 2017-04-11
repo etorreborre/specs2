@@ -2,14 +2,15 @@ package org.specs2
 package specification
 package core
 
-import main.Arguments
+import main.{Arguments, CommandLine}
 import execute._
 import org.specs2.concurrent.ExecutionEnv
 import reporter.LineLogger
 import LineLogger._
 import io._
 import control._
-import process.{Executor, DefaultExecutor, StatisticsRepository, Selector, DefaultSelector}
+import process.{DefaultExecutor, DefaultSelector, Executor, Selector, StatisticsRepository}
+
 import scala.concurrent.duration.FiniteDuration
 
 /**
@@ -74,6 +75,9 @@ case class Env(arguments: Arguments = Arguments(),
 
   lazy val timeout =
     executionParameters.timeout
+
+  lazy val commandLine: CommandLine =
+    arguments.commandLine
 
   def defaultInstances =
     List(arguments.commandLine, executionEnv, executionContext, executorService, arguments, this)

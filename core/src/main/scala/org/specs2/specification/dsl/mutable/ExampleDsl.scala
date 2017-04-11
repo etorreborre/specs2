@@ -94,8 +94,8 @@ trait ExampleDsl0 extends BlockCreation {
 
     def >>(fs: =>Fragments)(implicit p1: ImplicitParam1): Fragments = addBlock(d, fs, addFragmentsBlock)
 
-    def >>[R : AsResult](r: =>R): Fragment = {
-      addFragment(fragmentFactory.example(Text(d), Execution.result(r)))
+    def >>[R : AsExecution](r: =>R): Fragment = {
+      addFragment(fragmentFactory.example(Text(d), AsExecution.apply[R].execute(r)))
       addFragment(fragmentFactory.break)
     }
 
