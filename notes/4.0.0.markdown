@@ -1,0 +1,11 @@
+Dependency-free version!
+
+`specs2-core` is finally dependency-free and doesn't need to be built for various versions of Scalaz.
+
+## Changes
+
+ * **project** dropped the support for Scala `2.10`
+ * **core** removed the dependency on Scalaz, there is now a `specs2-fp` module implementing a small amount of FP concepts
+   to support the internal implementation of specs2 itself
+ * **scalaz** moved `DisjunctionMatchers` and `ValidationMatchers` to that module
+ * **scalaz** dropped the support for scalaz `7.0`
