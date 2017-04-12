@@ -1,7 +1,7 @@
 package org.specs2
 package reporter
 
-import examples.{HelloWorldUnitSpec, HelloWorldSpec}
+import examples.{HelloWorldSpec, HelloWorldUnitSpec}
 import mock._
 import matcher._
 import main.Arguments
@@ -10,23 +10,77 @@ import sbt.testing._
 import runner._
 import specification.core._
 import specification.process.DefaultExecutor
-import control.runAction
+import control.ExecuteActions._
 
-class SbtPrinterSpec extends Spec { def is = s2"""
-                                                                                                                        
+class SbtPrinterSpec(env: Env) extends Spec { def is = s2"""
+
  A SbtPrinter should
-   print the specification title if defined                                   ${printer().e1}
-   print HelloWorldSpec ok                                                    ${printer2().e1}
+   print the specification title if defined      ${printer1().e1}
+   print HelloWorldSpec ok                       ${printer1().e2}
 
  Sbt event must be fired when a specification is being executed with the SbtPrinter
-   TestEvent: succeed                            ${printer().e2}
-   the duration must be defined                  ${printer().e3}
-   contexts must appear in the name of the event ${printer().e4}
+   TestEvent: succeed                            ${printer2().e1}
+   the duration must be defined                  ${printer2().e2}
+   contexts must appear in the name of the event ${printer2().e3}
 
 """
-  val factory = fragmentFactory; import factory._
+  val factory = fragmentFactory
 
-  case class printer() extends Mockito { outer =>
+  case class printer1() extends Mockito { outer =>
+
+    def e1 = {
+      runAction(printer.printSpecification(env)(new HelloWorldSpec { override def is = "title".title ^ "\ntext" }))(env.specs2ExecutionEnv)
+      eventually(there was one(logger).info(beMatching(".*title.*")))
+    }
+
+    def e2 = {
+      val executed = DefaultExecutor.executeSpec((new HelloWorldSpec).is, Env())
+
+      print(executed).replaceAll("""(\d+ seconds?, )?\d+ ms""", "0 ms").replaceAll(" ", "_") ===
+        """|HelloWorldSpec
+           |
+           | This is a specification to check the 'Hello world' string
+           |
+           | The 'Hello world' string should
+           |   + contain 11 characters
+           |   + start with 'Hello'
+           |   + end with 'world'
+           |
+           |Total for specification HelloWorldSpec
+           |Finished in 0 ms
+           |3 examples, 0 failure, 0 error
+           |""".stripMargin.replaceAll(" ", "_")
+    }
+
+    def print(spec: SpecStructure) = {
+      runAction(printer.print(Env(arguments = Arguments("nocolor")))(spec))(env.specs2ExecutionEnv)
+      stringLogger.flush()
+      stringLogger.messages.mkString("\n")
+    }
+
+    val handler = mock[EventHandler]
+    val logger = mock[Logger]
+
+    val stringLogger = new Logger with StringOutput {
+      def ansiCodesSupported = false
+      def warn(msg: String)  { append(msg) }
+      def error(msg: String) { append(msg) }
+      def debug(msg: String) { append(msg) }
+      def trace(t: Throwable){ append(t.getMessage) }
+      def info(msg: String)  { append(msg) }
+    }
+
+    val printer = new SbtPrinter {
+      lazy val loggers: Array[Logger] = Array(logger, stringLogger)
+      lazy val events = new SbtEvents {
+        lazy val handler = outer.handler
+        lazy val taskDef = new TaskDef("", Fingerprints.fp1, true, Array())
+      }
+    }
+
+  }
+
+  case class printer2() extends Mockito { outer =>
     val logger =  mock[Logger]
     val handler = mock[EventHandler]
 
@@ -39,89 +93,34 @@ class SbtPrinterSpec extends Spec { def is = s2"""
     }
 
     def e1 = {
-      val env = Env()
-      try runAction(printer.print(env)(SpecStructure.create(SpecHeader(classOf[HelloWorldSpec]), Fragments(text("\ntitle"), text("\ntext")))))
-      finally env.shutdown
-      there was one(logger).info(beMatching("HelloWorldSpec\ntitle\ntext"))
-    }
-
-    def e2 = {
-      executeAndPrintHelloWorldUnitSpec(Env())
+      executeAndPrintHelloWorldUnitSpec
       there was atLeastOne(handler).handle(eventWithStatus(Status.Success))
     }
 
-    def e3 = {
-      executeAndPrintHelloWorldUnitSpec(Env())
+    def e2 = {
+      executeAndPrintHelloWorldUnitSpec
       there was atLeastOne(handler).handle(eventWithDurationGreaterThanOrEqualTo(0))
     }
 
-    def e4 = {
-      executeAndPrintHelloWorldUnitSpec(Env())
+    def e3 = {
+      executeAndPrintHelloWorldUnitSpec
       there was atLeastOne(handler).handle(eventWithNameMatching("HW::The 'Hello world' string should::contain 11 characters"))
     }
 
-    def eventWithStatus(s: Status): Matcher[Event] =
-      beTypedEqualTo(s) ^^ ((_: Event).status())
-
-    def eventWithDurationGreaterThanOrEqualTo(d: Long): Matcher[Event] =
-      beGreaterThanOrEqualTo(d) ^^ ((_: Event).duration())
-
-    def eventWithNameMatching(n: String): Matcher[Event] =
-      beLike[Selector] { case ts: TestSelector => ts.testName must beMatching(n) } ^^ ((_: Event).selector())
-
-    def executeAndPrintHelloWorldUnitSpec(env: Env) = {
-      val executed = DefaultExecutor.executeSpec((new HelloWorldUnitSpec).specificationStructure(env), env)
-      runAction(printer.print(env)(executed))
+    def executeAndPrintHelloWorldUnitSpec = {
+      val executed = DefaultExecutor.executeSpec((new HelloWorldUnitSpec).is.fragments, env)
+      runAction(printer.print(env)(executed))(env.specs2ExecutionEnv)
     }
 
   }
 
-  case class printer2() extends Mockito { outer =>
+  def eventWithStatus(s: Status): Matcher[Event] =
+    beTypedEqualTo(s) ^^ ((_: Event).status())
 
-    def e1 = {
-      val hwSpec: org.specs2.Specification = new examples.HelloWorldSpec
-      val executed = DefaultExecutor.executeSpec(hwSpec.is, Env())
+  def eventWithDurationGreaterThanOrEqualTo(d: Long): Matcher[Event] =
+    beGreaterThanOrEqualTo(d) ^^ ((_: Event).duration())
 
-      print(executed).replaceAll("""(\d+ seconds?, )?\d+ ms""", "0 ms").replaceAll(" ", "_") ===
-      """|HelloWorldSpec
-         |
-         | This is a specification to check the 'Hello world' string
-         |
-         | The 'Hello world' string should
-         |   + contain 11 characters
-         |   + start with 'Hello'
-         |   + end with 'world'
-         |
-         |Total for specification HelloWorldSpec
-         |Finished in 0 ms
-         |3 examples, 0 failure, 0 error
-         |""".stripMargin.replaceAll(" ", "_")
-    }
-
-    def print(spec: SpecStructure) = {
-      runAction(printer.print(Env(arguments = Arguments("nocolor")))(spec))
-      stringLogger.flush()
-      stringLogger.messages.mkString("\n")
-    }
-    val handler = mock[EventHandler]
-
-    val printer = new SbtPrinter {
-      lazy val loggers: Array[Logger] = Array(stringLogger)
-      lazy val events = new SbtEvents {
-        lazy val handler = outer.handler
-        lazy val taskDef = new TaskDef("", Fingerprints.fp1, true, Array())
-      }
-    }
-
-    val stringLogger = new Logger with StringOutput {
-      def ansiCodesSupported = false
-      def warn(msg: String)  { append(msg) }
-      def error(msg: String) { append(msg) }
-      def debug(msg: String) { append(msg) }
-      def trace(t: Throwable){ append(t.getMessage) }
-      def info(msg: String)  { append(msg) }
-    }
-
-  }
+  def eventWithNameMatching(n: String): Matcher[Event] =
+    beLike[Selector] { case ts: TestSelector => ts.testName must beMatching(n) } ^^ ((_: Event).selector())
 
 }

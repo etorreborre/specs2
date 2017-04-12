@@ -1,5 +1,6 @@
 import sbt._
 import Keys._
+import org.scalajs.sbtplugin.ScalaJSPlugin.AutoImport._
 
 object depends {
 
@@ -16,6 +17,15 @@ object depends {
   def scalazConcurrent(scalazVersion: String) =
     Seq("org.scalaz" %% "scalaz-concurrent").map(_ % scalazVersion)
 
+  def jvmTest =
+    libraryDependencies ++= Seq(
+      "org.scala-sbt" % "test-interface" % "1.0",
+      "org.scala-js" %% "scalajs-stubs" % scalaJSVersion % "provided")
+
+  def jsTest =
+    Seq(libraryDependencies ++= Seq("org.scala-js" %% "scalajs-test-interface" % scalaJSVersion),
+        scalaJSStage in Test := FastOptStage)
+
   def scalaParser(scalaVersion: String) =
     if (scalaMinorVersionAtLeast(scalaVersion, 11))
       Seq("org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.6")
@@ -31,27 +41,31 @@ object depends {
   def kindp(scalaVersion: String) =
     "org.spire-math" % "kind-projector" % "0.8.2" cross CrossVersion.binary
 
-  def scalacheck(scalaVersion: String) =
-    Seq("org.scalacheck" %% "scalacheck" % "1.13.4")
-
   def si2712Dependency(scalaVersion: String) =
     if (CrossVersion.partialVersion(scalaVersion).exists(_._2 < 11))
       Seq(compilerPlugin("com.milessabin" % ("si2712fix-plugin_"+scalaVersion) % "1.2.0"))
     else
       Seq()
 
-  lazy val mockito       = Seq("org.mockito"  %  "mockito-core"  % "2.7.22")
-  lazy val junit         = Seq("junit"        %  "junit"         % "4.12")
-  lazy val hamcrest      = Seq("org.hamcrest" %  "hamcrest-core" % "1.3")
+  lazy val mockito       = Seq("org.mockito"  % "mockito-core"  % "2.7.22")
+  lazy val junit         = Seq("junit"        % "junit"         % "4.12")
+  lazy val hamcrest      = Seq("org.hamcrest" % "hamcrest-core" % "1.3")
 
   def shapeless(scalaVersion: String) =
     Seq("com.chuusai" %% "shapeless" % "2.3.2")
 
   lazy val pegdown = Seq("org.pegdown" % "pegdown" % "1.6.0")
 
-  lazy val testInterface = Seq("org.scala-sbt"  % "test-interface" % "1.0")
-
   lazy val tagsoup = "org.ccil.cowan.tagsoup" % "tagsoup" % "1.2"
+
+  def sbtJvm(scalaJsVersion: String) = Seq(
+    "org.scala-sbt" % "test-interface" % "1.0",
+    "org.scala-js" %% "scalajs-stubs" % scalaJsVersion % "provided"
+  )
+
+  def sbtJs(scalaJsVersion: String) = Seq(
+    "org.scala-js" %% "scalajs-test-interface" % scalaJsVersion
+  )
 
   def paradise(scalaVersion: String) =
     if (scalaMinorVersionAtLeast(scalaVersion, 11))

@@ -4,112 +4,114 @@ import java.io.{PrintWriter, StringWriter}
 
 import org.specs2.Spec
 import org.specs2.matcher.Hello
+import org.specs2.text.AnsiColors._
 
 class ComparisonResultSpec extends Spec { def is = s2"""
 
-    Primitive render:
-    =================
+  Primitive render:
+  =================
 
-      render primitive to toString of the value                     $p1
-      render string to quoted string                                $p2
-      render primitive difference to X != Y                         $p3
-      render primitive String difference to quoted 'X' != 'Y'       $p4
-      render null values                                            $p5
+    render primitive to toString of the value                     $p1
+    render string to quoted string                                $p2
+    render primitive difference to X != Y                         $p3
+    render primitive String difference to quoted 'X' != 'Y'       $p4
+    render null values                                            $p5
 
-    Seq render:
-    ===========
+  Seq render:
+  ===========
 
-    identicate seq should print to string of the set                                        $seq1
-    different seq should print identical values first                                       $seq2
-    different seq should print changed values first                                         $seq3
-    different seq should print added values with prefix added: a                            $seq4
-    different seq should print removed values with prefix removed: b                        $seq5
-    print order should be Seq(identical, added: added, removed: removed)                    $seq6
+  identicate seq should print to string of the set                                        $seq1
+  different seq should print identical values first                                       $seq2
+  different seq should print changed values first                                         $seq3
+  different seq should print added values with prefix added: a                            $seq4
+  different seq should print removed values with prefix removed: b                        $seq5
+  print order should be Seq(identical, added: added, removed: removed)                    $seq6
 
-    Array render:
-    =============
+  Array render:
+  =============
 
-    identicate array should print to string of the set                                      $arr1
-    different array should print identical values first                                     $arr2
-    different array should print changed values first                                       $arr3
-    different array should print added values with prefix added: a                          $arr4
-    different array should print removed values with prefix removed: b                      $arr5
-    print order should be Array(identical, added: added, removed: removed)                  $arr6
-
-
-    Set render:
-    ===========
-
-    identicate set should print to string of the set                                        $set1
-    different set should print identical values first                                       $set2
-    different set should print added values with prefix added: a                            $set3
-    different set should print removed values with prefix removed: b                        $set4
-    print order should be Set(identical, added: added, removed: removed)                    $set5
-
-    Map render:
-    ===========
-
-    identicate map should print to string of the map                                        $m1
-    different map should print identical values first                                       $m2
-    different map should print non identical values second in format: x -> { y != z }       $m3
-    different map should print added values with prefix added: x -> y                       $m4
-    different map should print removed values with prefix removed: x -> y                   $m5
-    print order should be Map(identical, changed, added: added, removed: removed)           $m6
-
-    Option render:
-    ==============
-
-    identical option will return the type Some(...)   $o1
-    identical option without value will None          $o2
-    different option will render the different        $o3
-    different option type Some(...) ==> None          $o4
-    different option type None ==> Some(...)          $o5
-
-    Either render:
-    ==============
-
-    identical Left will return the type Left(...)   $e1
-    identical Left will return the type Right(...)  $e2
-    different right render the different            $e3
-    different left render the different             $e4
-    different either type render Left ==> Right     $e5
-    different either type render Right ==> Left     $e6
-
-    Stacktrace render:
-    ==================
-
-    identical stack element is just to string of stack element              $se1
-    different stack element will render all differences                     $se2
-    different stack element without file name will print (Unknown Source)   $se3
-
-    identical identical throwable will toString throwable                   $th1
-    identical identical throwable will toString throwable                   $th2
+  identicate array should print to string of the set                                      $arr1
+  different array should print identical values first                                     $arr2
+  different array should print changed values first                                       $arr3
+  different array should print added values with prefix added: a                          $arr4
+  different array should print removed values with prefix removed: b                      $arr5
+  print order should be Array(identical, added: added, removed: removed)                  $arr6
 
 
-    Try render:
-    ===========
+  Set render:
+  ===========
 
-    identical success will return Success(...)                              ${ TryIdentical(1, isSuccess = true).render must_=== "Success(1)" }
-    identical failure will return Failure(...)                              ${ TryIdentical(1, isSuccess = false).render must_=== "Failure(1)" }
-    different success will return Success(...)                              ${ TryDifferent(PrimitiveDifference(1, 2), isSuccess = true).render must_=== "Success(1 != 2)" }
-    different failure will return Failure(...)                              ${ TryDifferent(PrimitiveDifference(1, 2), isSuccess = false).render must_=== "Failure(1 != 2)" }
-    different success failure type will be Success(...) ==> Failure(...)    ${ TryTypeDifferent(isActualSuccess = true).render must_=== "Success(...) ==> Failure(...)" }
-    different failure success type will be Success(...) ==> Failure(...)    ${ TryTypeDifferent(isActualSuccess = false).render must_=== "Failure(...) ==> Success(...)" }
+  identicate set should print to string of the set                                        $set1
+  different set should print identical values first                                       $set2
+  different set should print added values with prefix added: a                            $set3
+  different set should print removed values with prefix removed: b                        $set4
+  print order should be Set(identical, added: added, removed: removed)                    $set5
+
+  Map render:
+  ===========
+
+  identicate map should print to string of the map                                        $m1
+  different map should print identical values first                                       $m2
+  different map should print non identical values second in format: x -> { y != z }       $m3
+  different map should print added values with prefix added: x -> y                       $m4
+  different map should print removed values with prefix removed: x -> y                   $m5
+  print order should be Map(identical, changed, added: added, removed: removed)           $m6
+
+  Option render:
+  ==============
+
+  identical option will return the type Some(...)   $o1
+  identical option without value will None          $o2
+  different option will render the different        $o3
+  different option type Some(...) ==> None          $o4
+  different option type None ==> Some(...)          $o5
+
+  Either render:
+  ==============
+
+  identical Left will return the type Left(...)   $e1
+  identical Left will return the type Right(...)  $e2
+  different right render the different            $e3
+  different left render the different             $e4
+  different either type render Left ==> Right     $e5
+  different either type render Right ==> Left     $e6
+
+  Stacktrace render:
+  ==================
+
+  identical stack element is just to string of stack element              $se1
+  different stack element will render all differences                     $se2
+  different stack element without file name will print (Unknown Source)   $se3
+
+  identical throwable will toString throwable   $th1
+  different throwable with different message    $th2
+  different throwable with different stacktrace $th3
 
 
-    Case Class Render:
-    ==================
+  Try render:
+  ===========
 
-    Identical will show the class name SomeClass(...)                   $c1
-    Different will show the class name and list of changes in order     $c2
+  identical success will return Success(...)                              ${ TryIdentical(1, isSuccess = true).render must_=== "Success(1)" }
+  identical failure will return Failure(...)                              ${ TryIdentical(1, isSuccess = false).render must_=== "Failure(1)" }
+  different success will return Success(...)                              ${ TryDifferent(PrimitiveDifference(1, 2), isSuccess = true).render must_=== "Success(1 != 2)" }
+  different failure will return Failure(...)                              ${ TryDifferent(PrimitiveDifference(1, 2), isSuccess = false).render must_=== "Failure(1 != 2)" }
+  different success failure type will be Success(...) ==> Failure(...)    ${ TryTypeDifferent(isActualSuccess = true).render must_=== "Success(...) ==> Failure(...)" }
+  different failure success type will be Success(...) ==> Failure(...)    ${ TryTypeDifferent(isActualSuccess = false).render must_=== "Failure(...) ==> Success(...)" }
 
-    Other Render:
-    =============
 
-    OtherIdentical will return actual.toString                                                  $ot1
-    OtherDifference will return actual.toString != expected.toString                            $ot2
-    Unknown types where a primitive is compared to an object should print explicit class type   $ot3
-    when comparing two different objects, don't add explicit class type                         $ot4
+  Case Class Render:
+  ==================
+
+  Identical will show the class name SomeClass(...)                   $c1
+  Different will show the class name and list of changes in order     $c2
+
+  Other Render:
+  =============
+
+  OtherIdentical will return actual.toString                                                  $ot1
+  OtherDifference will return actual.toString != expected.toString                            $ot2
+  Unknown types where a primitive is compared to an object should print explicit class type   $ot3
+  when comparing two different objects, don't add explicit class type                         $ot4
 
   """
 
@@ -188,9 +190,13 @@ class ComparisonResultSpec extends Spec { def is = s2"""
                                     PrimitiveDifference(666, 777)).render must_=== "'class' != 'class1'.'method' != 'method1'(Unknown Source)" }
 
   def th1 = { ThrowableIdentical(ex).render must_=== { val w = new StringWriter(); ex.printStackTrace(new PrintWriter(w)); w.toString } }
-  def th2 = { ThrowableDifferent(Seq(StackElementIdentical(stackTraceElement), StackElementIdentical(stackTraceElement)),
-                                     Seq.empty, Seq.empty).render must_=== "'class.method(file:666)'\n\t'class.method(file:666)'" }
-
+  def th2 = { ThrowableDifferentMessage(PrimitiveDifference("m1", "m2")).render must_=== "\nthe message is incorrect\n'm1' != 'm2'" }
+  def th3 = { removeColors(ThrowableDifferentStackTrace(LinesComparisonResult(List("m1"), List("m2"))).render).trim must_===
+                  """|the stacktrace is incorrect
+                     |
+                     |- m1
+                     |+ m2""".stripMargin }
+                  
   def ot1 = { OtherIdentical(5).render must_=== "5" }
   def ot2 = { OtherDifferent(5, "5").render must_=== "5 != '5'" }
   def ot3 = { OtherDifferent(Hello(), "hello").render must_=== "hello: org.specs2.matcher.Hello != hello: java.lang.String" }

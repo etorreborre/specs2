@@ -1,0 +1,11 @@
+Maintenance version (3.9.3 was incorrect)
+
+## Improvements
+
+ * **core** when checking for the equality of 2 sets of lines only run the edit distance difference on them if they are different.
+ this improves build times
+
+## Fixes
+
+ * **core** set the minimum number of execution threads to 4 to avoid possible deadlocks on single core machines (cf some CI environments)
+ * **core** use the "user" execution environment to execute examples instead of specs2 own execution environment

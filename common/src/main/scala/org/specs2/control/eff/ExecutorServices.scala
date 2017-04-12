@@ -35,7 +35,8 @@ case class ExecutorServices(executorServiceEval:   Evaluated[ExecutorService],
 
 object ExecutorServices {
 
-  lazy val threadsNb = Runtime.getRuntime.availableProcessors
+  lazy val threadsNb: Int =
+    math.max(Runtime.getRuntime.availableProcessors, 4)
 
   def create(implicit es: ExecutorService, s: ScheduledExecutorService): ExecutorServices =
     fromExecutorServices(es, s)
@@ -48,7 +49,7 @@ object ExecutorServices {
     )
 
   def fromExecutorService(es: =>ExecutorService): ExecutorServices =
-    fromExecutorServices(es, scheduledExecutor(threadsNb))
+    fromExecutorServices(es, scheduledExecutor(1))
 
   def createExecutionContext(executorService: ExecutorService, logger: String => Unit = println): ExecutionContext =
     ExecutionContext.fromExecutorService(executorService, (t: Throwable) => logger(t.getStackTrace.mkString("\n")))
@@ -69,7 +70,7 @@ object ExecutorServices {
   def fromExecutionContext(ec: =>ExecutionContext): ExecutorServices =
     ExecutorServices(
       Memoized(executorFromExecutionContext(ec)),
-      Memoized(scheduledExecutor(threadsNb)),
+      Memoized(scheduledExecutor(1)),
       Memoized(ec))
 
   /** taken from https://gist.github.com/viktorklang/5245161 */

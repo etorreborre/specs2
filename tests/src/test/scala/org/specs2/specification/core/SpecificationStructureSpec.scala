@@ -3,15 +3,20 @@ package specification
 package core
 
 import org.junit.runner.RunWith
-import org.scalacheck._, Gen._, Arbitrary._
+import org.scalacheck._
+import Gen._
+import Arbitrary._
 import org.specs2.runner.JUnitRunner
+
 import scala.IllegalArgumentException
 import org.specs2.fp.syntax._
-import control._, eff.ErrorEffect
+import control._
+import eff.ErrorEffect
 import matcher._
 import OperationMatchers._
+import org.specs2.concurrent.ExecutionEnv
 
-class SpecificationStructureSpec extends Specification with ScalaCheck with DisjunctionMatchers { def is = s2"""
+class SpecificationStructureSpec(implicit ee: ExecutionEnv) extends Specification with ScalaCheck with DisjunctionMatchers { def is = s2"""
 
  There can be links between specifications and it is possible to sort all the dependent specifications
  so that
@@ -41,7 +46,7 @@ class SpecificationStructureSpec extends Specification with ScalaCheck with Disj
     val linked = SpecificationStructure.linkedSpecifications(specification, env, getClass.getClassLoader).runOption.getOrElse(List())
     val sorted = SpecificationStructure.topologicalSort(env)(linked).get.map(_.structure(env))
 
-    sorted.dropRight(1).map(_.specClassName) must_== specification.structure(env).linkReferences.map(_.specClassName)
+    sorted.dropRight(1).map(_.specClassName) must_== specification.structure(env).linkReferencesList.map(_.specClassName)
 
   }.setArbitrary(ArbitraryLinks).set(maxSize = 5)
 
@@ -68,7 +73,7 @@ class SpecificationStructureSpec extends Specification with ScalaCheck with Disj
   }
 
   def dependOn(s2: SpecStructure): Matcher[SpecStructure] = (s1: SpecStructure) =>
-    (s1 dependsOn s2, s"${s1.specClassName} doesn't depend on ${s2.specClassName}")
+    (s1.dependsOn(s2)(ee), s"${s1.specClassName} doesn't depend on ${s2.specClassName}")
 
   implicit def ArbitrarySpecificationStructure: Arbitrary[SpecificationStructure] =
     Arbitrary(arbitrary[SpecStructure].map(spec => new SpecificationStructure { def is = spec }))

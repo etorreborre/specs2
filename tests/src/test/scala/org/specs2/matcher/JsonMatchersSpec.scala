@@ -91,10 +91,14 @@ class JsonMatchersSpec extends Specification with JsonMatchers { def is = s2"""
      """|{"products":[
         |{"name":"shirt","price":10,"visible":false,"collectionIds":["coll1"]},
         |{"name":"shoe","price":5,"visible":null},
+        |{"name":"pants","price":5},
+        |{"name":"tie","price":5},
         |{"name":"shoe","price":5,"visible":true}]}""".stripMargin
 
    def aProductWith(name: Matcher[JsonType], price: Matcher[JsonType], visible: Matcher[JsonType]): Matcher[String] =
-     /("name").andHave(name) and /("price").andHave(price) and /("visible").andHave(visible)
+     /("name").andHave(name) and
+     /("price").andHave(price) and
+     /("visible").andHave(visible)
 
    def haveProducts(products: Matcher[String]*): Matcher[String] =
     /("products").andHave(allOf(products:_*))
@@ -102,7 +106,9 @@ class JsonMatchersSpec extends Specification with JsonMatchers { def is = s2"""
    json must haveProducts(
      aProductWith(name = "shirt", price = 10, visible = false) and /("collectionIds").andHave(exactly("coll1")),
      aProductWith(name = "shoe", price = 5, visible = beJsonNull),
-     aProductWith(name = "shoe", price = 5, visible = true)
+     aProductWith(name = "shoe", price = 5, visible = true),
+     /("name").andHave("pants") and /("price").andHave(5.0),
+     /("name").andHave("tie") and /("price").andHave(BigDecimal(5.0))
    )
  }
 
