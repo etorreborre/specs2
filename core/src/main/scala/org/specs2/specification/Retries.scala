@@ -1,11 +1,11 @@
 package org.specs2
-package matcher
+package specification
 
-import execute.{EventuallyResults, AsResult}
-import specification.AroundEach
+import org.specs2.execute.{AsResult, EventuallyResults}
+import EventuallyResults._
 import scala.concurrent.duration._
 
-trait Retries extends AroundEach with EventuallyResults {
+trait Retries extends AroundEach {
   def retries: Int = 5
   def sleep: Duration = 100.millis
 

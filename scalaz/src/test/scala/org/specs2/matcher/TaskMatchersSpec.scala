@@ -1,11 +1,12 @@
 package org.specs2.matcher
 
 import org.specs2.mutable
+import org.specs2.specification.Retries
 
 import scala.concurrent.duration._
 import scalaz.concurrent._
 
-class TaskMatchersSpec extends mutable.Specification with TaskMatchers with ResultMatchers {
+class TaskMatchersSpec extends mutable.Specification with TaskMatchers with ResultMatchers with Retries {
   sequential
 
   "It is possible to check the execution of tasks" >> {
