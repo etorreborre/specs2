@@ -3,10 +3,12 @@ package matcher
 
 import execute._
 import specification.core.Env
+
 import scala.concurrent._
 import duration._
 import runner._
 import control._
+import org.specs2.specification.Retries
 
 class FutureMatchersSpec(env: Env) extends Specification with ResultMatchers with Retries {
  val timeFactor = env.arguments.execute.timeFactor

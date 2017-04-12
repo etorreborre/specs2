@@ -9,3 +9,7 @@ Dependency-free version!
    to support the internal implementation of specs2 itself
  * **scalaz** moved `DisjunctionMatchers` and `ValidationMatchers` to that module
  * **scalaz** dropped the support for scalaz `7.0`
+
+## Improvements
+
+ * introduced a `org.specs2.specification.Retries` trait extending `AroundEach` to retry each example

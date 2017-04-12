@@ -160,21 +160,3 @@ trait BeforeAfterSpec extends SpecificationStructure {
   def afterSpec: core.Fragments
   override def map(fs: =>core.Fragments) = super.map(fs).prepend(beforeSpec).append(afterSpec)
 }
-
-/**
- * DEPRECATED TRAITS
- */
-@deprecated("use the BeforeEach trait instead", "3.0")
-trait BeforeExample extends BeforeEach
-
-@deprecated("use the AfterEach trait instead", "3.0")
-trait AfterExample extends AfterEach
-
-@deprecated("use the AroundEach trait instead", "3.0")
-trait AroundExample extends AroundEach
-
-@deprecated("use the BeforeAfterEach trait instead", "3.0")
-trait BeforeAfterExample extends BeforeAfterEach
-
-@deprecated("use the ForEach trait instead", "3.0")
-trait FixtureExample[T] extends ForEach[T]

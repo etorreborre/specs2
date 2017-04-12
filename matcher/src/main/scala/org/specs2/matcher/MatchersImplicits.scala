@@ -81,21 +81,6 @@ trait ResultImplicits extends ExpectationsCreation {
 object ResultImplicits extends ResultImplicits
 
 trait SequenceMatchersCreation extends ExpectationsCreation with ResultImplicits { outer =>
-  implicit class MatcherFunction[S, T](f: S => Matcher[T]) {
-    /**
-     * @deprecated use collection must contain(exactly(seq.map(f))).inOrder
-     * @return a function which will return a matcher checking a sequence of objects
-     */
-    def toSeq = (s: Seq[S]) => new SeqMatcher(s, f)
-
-    /**
-     * @deprecated use collection must contain(exactly(seq.map(f))).inOrder
-     * @return a function which will return a matcher checking a set of objects
-     */
-    def toSet = (s: Set[S]) => new SetMatcher(s, f)
-
-  }
-
   implicit class InvariantMatcherFunction[T](f: T => Matcher[T]) {
     /** @return a function which will return the composition of a matcher and a function */
     def ^^^[A](g: A => T) = (a: A) =>
