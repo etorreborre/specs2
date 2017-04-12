@@ -15,10 +15,8 @@ sealed abstract class Tree[A] {
   def subForest: Stream[Tree[A]]
 
   /** Maps the elements of the Tree into a Monoid and folds the resulting Tree. */
-  def foldMap[B : Monoid](f: A => B): B = {
-    val monoid = Monoid[B]
+  def foldMap[B : Monoid](f: A => B): B =
     f(rootLabel) |+| subForest.map(_.foldMap(f)).sumAll
-  }
 
   def foldRight[B](z: => B)(f: (A, => B) => B): B =
     Foldable[Stream].foldRight(flatten, z)(f)
