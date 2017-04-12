@@ -22,6 +22,8 @@ import SonatypeKeys._
 import depends._
 import com.ambiata.promulgate.project.ProjectPlugin._
 import ohnosequences.sbt.GithubRelease.keys._
+import org.scalajs.sbtplugin.ScalaJSPlugin
+import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
 
 object build extends Build {
   type Settings = Def.Setting[_]
@@ -37,8 +39,10 @@ object build extends Build {
       siteSettings             ++
       Seq(name := "specs2", packagedArtifacts := Map.empty)
   ).aggregate(
-    fp, common, matcher, matcherExtra, core, cats, scalaz, html, analysis,
-    shapeless, form, markdown, gwt, junit, scalacheck, mock, tests)
+    fpJvm, commonJvm, matcherJvm, coreJvm, matcherExtraJvm, catsJvm, scalazJvm, htmlJvm, analysisJvm,
+    shapelessJvm, formJvm, markdownJvm, gwtJvm, junitJvm, scalacheckJvm, mockJvm, tests,
+    fpJs, commonJs, matcherJs, coreJs, matcherExtraJs, catsJs, scalazJs, htmlJs, analysisJs,
+    shapelessJs, formJs, markdownJs, gwtJs, junitJs, scalacheckJs, mockJs)
    .enablePlugins(GitBranchPrompt)
 
   /** COMMON SETTINGS */
@@ -64,20 +68,24 @@ object build extends Build {
       notificationSettings
 
   /** MODULES (sorted in alphabetical order) */
-  lazy val analysis = Project(id = "analysis", base = file("analysis"),
-    settings = Seq(
+  lazy val analysis = crossProject.in(file("analysis")).
+    settings(Seq(
       libraryDependencies ++= depends.classycle ++ depends.compiler(scalaOrganization.value, scalaVersion.value)) ++
     moduleSettings("analysis") ++
-    Seq(name := "specs2-analysis")
-  ).dependsOn(common % "test->test", core, matcher, scalacheck % "test")
+    Seq(name := "specs2-analysis"):_*)
 
-  lazy val fp = Project(id = "fp", base = file("fp"),
-    settings = moduleSettings("fp") ++
-      Seq(name := "specs2-fp")
-  )
+  lazy val analysisJs  = analysis.js.dependsOn(commonJs % "test->test", coreJs, matcherJs, scalacheckJs % "test")
+  lazy val analysisJvm = analysis.jvm.dependsOn(commonJvm % "test->test", coreJvm, matcherJvm, scalacheckJvm % "test")
 
-  lazy val common = Project(id = "common", base = file("common"),
-    settings = moduleSettings("common") ++
+  lazy val fp = crossProject.in(file("fp")).
+    settings(moduleSettings("fp"):_*).
+    settings(name := "specs2-fp")
+
+  lazy val fpJvm = fp.jvm
+  lazy val fpJs  = fp.js
+
+  lazy val common = crossProject.in(file("common")).
+    settings(moduleSettings("common") ++
       Seq(conflictWarning ~= { _.copy(failOnConflict = false) }, // lame
           libraryDependencies ++=
             depends.reflect(scalaOrganization.value, scalaVersion.value) ++
@@ -86,87 +94,109 @@ object build extends Build {
             depends.scalaXML(scalaVersion.value) ++
             depends.scalacheck(scalaVersion.value).map(_ % "test"),
         name := "specs2-common"
-      )
-  ).dependsOn(fp)
+      ):_*)
 
-  lazy val core = Project(id = "core", base = file("core"),
-    settings = Seq(
+  lazy val commonJs  = common.js.dependsOn(fpJs)
+  lazy val commonJvm = common.jvm.dependsOn(fpJvm)
+
+  lazy val core = crossProject.in(file("core")).
+    settings(Seq(
       libraryDependencies ++=
         depends.paradise(scalaVersion.value) ++
         depends.testInterface.map(_ % "optional") ++
         depends.mockito.map(_ % "test") ++
         depends.junit.map(_ % "test")) ++
       moduleSettings("core") ++
-      Seq(name := "specs2-core")
-  ).dependsOn(matcher, common % "test->test")
+      Seq(name := "specs2-core"):_*)
 
-  lazy val examples = Project(id = "examples", base = file("examples"),
-    settings = moduleSettings("examples") ++
-      Seq(name := "specs2-examples")
-  ).dependsOn(common, matcher, matcherExtra, core, analysis, form, html, markdown, gwt, junit, scalacheck, mock)
+  lazy val coreJs  = core.js.dependsOn(matcherJs, commonJs % "test->test")
+  lazy val coreJvm = core.jvm.dependsOn(matcherJvm, commonJvm % "test->test")
 
-  lazy val form = Project(id = "form", base = file("form"),
-    settings = moduleSettings("form") ++
-      Seq(name := "specs2-form")
-  ).dependsOn(core, markdown, matcherExtra, scalacheck % "test->test")
+  lazy val examples = crossProject.in(file("examples")).
+    settings(moduleSettings("examples") ++
+      Seq(name := "specs2-examples"):_*)
+
+  lazy val examplesJs  = examples.js.dependsOn(commonJs, matcherJs, coreJs, matcherExtraJvm, analysisJs, formJs, htmlJs, markdownJs, gwtJs, junitJs, scalacheckJs, mockJs)
+  lazy val examplesJvm = examples.jvm.dependsOn(commonJvm, matcherJvm, coreJvm, matcherExtraJvm, analysisJvm, formJvm, htmlJvm, markdownJvm, gwtJvm, junitJvm, scalacheckJvm, mockJvm)
+
+  lazy val form = crossProject.in(file("form")).
+    settings(moduleSettings("form") ++
+      Seq(name := "specs2-form"):_*)
+
+  lazy val formJs = form.js.dependsOn(coreJs, markdownJs, matcherExtraJs, scalacheckJs % "test->test")
+  lazy val formJvm = form.jvm.dependsOn(coreJvm, markdownJvm, matcherExtraJvm, scalacheckJvm % "test->test")
 
   lazy val guide = Project(id = "guide", base = file("guide"),
     settings = moduleSettings("guide") ++
       Seq(name := "specs2-guide") ++
       documentationSettings
-  ).dependsOn(examples % "compile->compile;test->test", scalaz, shapeless)
+  ).dependsOn(examplesJvm % "compile->compile;test->test", scalazJvm, shapelessJvm)
 
-  lazy val gwt = Project(id = "gwt", base = file("gwt"),
-    settings = Seq(
+  lazy val gwt = crossProject.in(file("gwt")).
+    settings(Seq(
       libraryDependencies ++= depends.shapeless(scalaVersion.value)) ++
       moduleSettings("gwt") ++
-      Seq(name := "specs2-gwt")
-  ).dependsOn(core, matcherExtra, scalacheck)
+      Seq(name := "specs2-gwt"):_*)
+  
+  lazy val gwtJs = gwt.js.dependsOn(coreJs, matcherExtraJs, scalacheckJs)
+  lazy val gwtJvm = gwt.jvm.dependsOn(coreJvm, matcherExtraJvm, scalacheckJvm)
 
-  lazy val html = Project(id = "html", base = file("html"),
-    settings =
+  lazy val html = crossProject.in(file("html")).
+    settings(
       Seq(libraryDependencies += depends.tagsoup) ++
       moduleSettings("html") ++
-      Seq(name := "specs2-html")
-  ).dependsOn(form, mock % "test", matcherExtra % "test", scalacheck % "test")
+      Seq(name := "specs2-html"):_*)
+  
+  lazy val htmlJs = html.js.dependsOn(formJs, mockJs % "test", matcherExtraJs % "test", scalacheckJs % "test")
+  lazy val htmlJvm = html.jvm.dependsOn(formJvm, mockJvm % "test", matcherExtraJvm % "test", scalacheckJvm % "test")
 
-  lazy val junit = Project(id = "junit", base = file("junit"),
-    settings = Seq(
+  lazy val junit = crossProject.in(file("junit")).
+    settings(Seq(
       libraryDependencies ++= depends.junit ++ depends.mockito.map(_ % "test")) ++
       moduleSettings("junit") ++
-      Seq(name := "specs2-junit")
-  ).dependsOn(core, matcherExtra % "test", mock % "test")
+      Seq(name := "specs2-junit"):_*)
+  
+  lazy val junitJs = junit.js.dependsOn(coreJs, matcherExtraJs % "test", mockJs % "test")
+  lazy val junitJvm = junit.jvm.dependsOn(coreJvm, matcherExtraJvm % "test", mockJvm % "test")
 
-  lazy val markdown = Project(id = "markdown", base = file("markdown"),
-    settings = Seq(
+  lazy val markdown = crossProject.in(file("markdown")).
+    settings(Seq(
      libraryDependencies ++= depends.pegdown) ++
       moduleSettings("markdown") ++
-      Seq(name := "specs2-markdown")
-  ).dependsOn(common, core % "compile->test")
+      Seq(name := "specs2-markdown"):_*)
+  
+  lazy val markdownJs = markdown.js.dependsOn(commonJs, coreJs % "compile->test")
+  lazy val markdownJvm = markdown.jvm.dependsOn(commonJvm, coreJvm % "compile->test")
 
-  lazy val matcher = Project(id = "matcher", base = file("matcher"),
-    settings = moduleSettings("matcher") ++
-      Seq(name := "specs2-matcher")
-  ).dependsOn(common)
+  lazy val matcher = crossProject.in(file("matcher")).
+    settings(moduleSettings("matcher") ++
+      Seq(name := "specs2-matcher"):_*)
 
-  lazy val matcherExtra = Project(id = "matcher-extra", base = file("matcher-extra"),
-    settings = moduleSettings("matcherextra") ++ Seq(
+  lazy val matcherJs  = matcher.js.dependsOn(commonJs)
+  lazy val matcherJvm = matcher.jvm.dependsOn(commonJvm)
+
+  lazy val matcherExtra = crossProject.in(file("matcher-extra")).
+    settings(moduleSettings("matcherextra") ++ Seq(
       name := "specs2-matcher-extra",
       libraryDependencies ++= depends.paradise(scalaVersion.value)
-    )
-  ).dependsOn(analysis, matcher, core % "test->test")
+    ):_*)
 
-  lazy val shapeless = Project(id = "shapeless", base = file("shapeless"),
-    settings = moduleSettings("shapeless") ++
+  lazy val matcherExtraJs  = matcherExtra.js.dependsOn(analysisJs, matcherJs, coreJs % "test->test")
+  lazy val matcherExtraJvm = matcherExtra.jvm.dependsOn(analysisJvm, matcherJvm, coreJvm % "test->test")
+
+  lazy val shapeless = crossProject.in(file("shapeless")).
+    settings(moduleSettings("shapeless") ++
       Seq(name := "specs2-shapeless",
         libraryDependencies ++=
           depends.paradise(scalaVersion.value) ++
           depends.shapeless(scalaVersion.value)
-      )
-  ).dependsOn(matcher)
+      ):_*)
+  
+  lazy val shapelessJs = shapeless.js.dependsOn(matcherJs)
+  lazy val shapelessJvm = shapeless.jvm.dependsOn(matcherJvm)
 
-  lazy val cats = Project(id = "cats", base = file("cats"),
-    settings = moduleSettings("cats") ++
+  lazy val cats = crossProject.in(file("cats")).
+    settings(moduleSettings("cats") ++
       Seq(libraryDependencies ++= (
         if (scalaMinorVersionAtLeast(scalaVersion.value, 12))
           Seq()
@@ -174,41 +204,49 @@ object build extends Build {
           depends.cats)) ++
       Seq(name := "specs2-cats") ++
       Seq((skip in compile) := scalaMinorVersionAtLeast(scalaVersion.value, 12),
-          publishArtifact := !scalaMinorVersionAtLeast(scalaVersion.value, 12))
-  ).dependsOn(matcher, core % "test->test")
+          publishArtifact := !scalaMinorVersionAtLeast(scalaVersion.value, 12)):_*)
+  
+  lazy val catsJs = cats.js.dependsOn(matcherJs, coreJs % "test->test")
+  lazy val catsJvm = cats.jvm.dependsOn(matcherJvm, coreJvm % "test->test")
 
-  lazy val scalaz = Project(id = "scalaz", base = file("scalaz"),
-    settings = moduleSettings("scalaz") ++
+  lazy val scalaz = crossProject.in(file("scalaz")).
+    settings(moduleSettings("scalaz") ++
       Seq(libraryDependencies ++=
         depends.scalaz(scalazVersion.value) ++
         depends.scalazConcurrent(scalazVersion.value)) ++
-      Seq(name := "specs2-scalaz")
-  ).dependsOn(matcher, core % "test->test")
+      Seq(name := "specs2-scalaz"):_*)
+  
+  lazy val scalazJs = scalaz.js.dependsOn(matcherJs, coreJs % "test->test")
+  lazy val scalazJvm = scalaz.jvm.dependsOn(matcherJvm, coreJvm % "test->test")
 
-  lazy val mock = Project(id = "mock", base = file("mock"),
-    settings = Seq(
+  lazy val mock = crossProject.in(file("mock")).
+    settings(Seq(
       libraryDependencies ++=
         depends.hamcrest ++
         depends.mockito) ++
       moduleSettings("mock") ++
-      Seq(name := "specs2-mock")
-  ).dependsOn(core)
+      Seq(name := "specs2-mock"):_*)
+  
+  lazy val mockJs = mock.js.dependsOn(coreJs)
+  lazy val mockJvm = mock.jvm.dependsOn(coreJvm)
 
-  lazy val scalacheck = Project(id = "scalacheck", base = file("scalacheck"),
-    settings = Seq(
+  lazy val scalacheck = crossProject.in(file("scalacheck")).
+    settings(Seq(
       libraryDependencies ++= depends.scalacheck(scalaVersion.value)) ++
       moduleSettings("scalacheck") ++
-      Seq(name := "specs2-scalacheck")
-  ).dependsOn(core)
+      Seq(name := "specs2-scalacheck"):_*)
+
+  lazy val scalacheckJs  = scalacheck.js.dependsOn(coreJs)
+  lazy val scalacheckJvm = scalacheck.jvm.dependsOn(coreJvm)
 
   lazy val tests = Project(id = "tests", base = file("tests"),
     settings = moduleSettings("tests") ++
       Seq(name := "specs2-tests") ++
       Seq(libraryDependencies ++= depends.scalaParallelCollections(scalaVersion.value))
   ).dependsOn(
-    core % "compile->compile;test->test", shapeless % "compile->compile;test->test",
-    junit % "test->test", examples % "test->test",
-    matcherExtra, html, scalaz)
+    coreJvm % "compile->compile;test->test", shapelessJvm % "compile->compile;test->test",
+    junitJvm % "test->test", examplesJvm % "test->test",
+    matcherExtraJvm, htmlJvm, scalazJvm)
 
   lazy val specs2ShellPrompt = shellPrompt in ThisBuild := { state =>
     val name = Project.extract(state).currentRef.project
@@ -255,7 +293,6 @@ object build extends Build {
     cancelable in Global := true,
     testFrameworks := Seq(TestFramework("org.specs2.runner.Specs2Framework")),
     javaOptions ++= Seq("-Xmx3G", "-Xss4M"),
-    fork in (ThisBuild, Test) := true,
     testOptions := Seq(Tests.Filter(s =>
       (Seq(".guide.").exists(s.contains) || Seq("Spec", "Guide", "Website").exists(s.endsWith)) &&
         Seq("Specification", "FeaturesSpec").forall(n => !s.endsWith(n))))
@@ -309,12 +346,12 @@ object build extends Build {
   documentationSettings ++
   apiSettings               ++
   Seq(scalacOptions in (Compile, doc) += "-Ymacro-no-expand") ++
-  Seq(sources in (Compile, doc) in common :=
+  Seq(sources in (Compile, doc) in commonJvm :=
         (if (!scalaMinorVersionAtLeast(scalaVersion.value, 11))
            List()
-         else (sources in (Compile, doc) in common).value),
-    sources in (Compile, doc) in core := List(),
-    sources in (Compile, doc) in matcherExtra := List())
+         else (sources in (Compile, doc) in commonJvm).value),
+    sources in (Compile, doc) in coreJvm := List(),
+    sources in (Compile, doc) in matcherExtraJvm := List())
 
   lazy val apiSettings: Seq[Settings] = Seq(
     sources                      in (Compile, doc) := sources.all(aggregateCompile).value.flatten,
@@ -325,11 +362,14 @@ object build extends Build {
   )
 
   lazy val aggregateCompile = ScopeFilter(
-    inProjects(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock),
+    inProjects(
+      commonJvm, matcherJvm, matcherExtraJvm, coreJvm, htmlJvm, analysisJvm, formJvm, markdownJvm, gwtJvm, junitJvm, scalacheckJvm, mockJvm,
+      commonJs, matcherJs, matcherExtraJs, coreJs, htmlJs, analysisJs, formJs, markdownJs, gwtJs, junitJs, scalacheckJs, mockJs),
     inConfigurations(Compile))
 
   lazy val aggregateTest = ScopeFilter(
-    inProjects(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock, guide, examples),
+    inProjects(commonJvm, matcherJvm, matcherExtraJvm, coreJvm, htmlJvm, analysisJvm, formJvm, markdownJvm, gwtJvm, junitJvm, scalacheckJvm, mockJvm, guide, examplesJvm,
+      commonJs, matcherJs, matcherExtraJs, coreJs, htmlJs, analysisJs, formJs, markdownJs, gwtJs, junitJs, scalacheckJs, mockJs, examplesJs),
     inConfigurations(Test))
 
   lazy val releaseOfficialProcess = SettingKey[Seq[ReleaseStep]]("release-official-process")
