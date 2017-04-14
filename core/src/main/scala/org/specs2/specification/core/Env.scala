@@ -106,6 +106,10 @@ case class Env(arguments: Arguments = Arguments(),
     copy(arguments = args)
 
   /** @return an isolated env */
+  def setWithIsolation =
+    copy(executionParameters = executionParameters.setWithIsolation)
+
+  /** @return a non isolated env */
   def setWithoutIsolation =
     copy(executionParameters = executionParameters.setWithoutIsolation)
 
@@ -125,14 +129,23 @@ object Env {
   }
 }
 
-case class ExecutionParameters(
-  timeout:  Option[FiniteDuration] = None,
-  withoutIsolation: Boolean = false) {
+case class ExecutionParameters(timeout:       Option[FiniteDuration] = None,
+                               withIsolation: Boolean = true) {
+
+  def withoutIsolation: Boolean =
+    !withIsolation
+
   /**
-   * fragments must not be created as "isolated"
+   * fragments must be created as "isolated"
+   */
+  def setWithIsolation: ExecutionParameters =
+    copy(withIsolation = true)
+
+  /**
+   * fragments must be created as non "isolated"
    */
   def setWithoutIsolation: ExecutionParameters =
-    copy(withoutIsolation = true)
+    copy(withIsolation = false)
 
   def setTimeout(duration: FiniteDuration): ExecutionParameters =
     copy(timeout = Some(duration))

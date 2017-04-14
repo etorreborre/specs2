@@ -21,7 +21,7 @@ trait ImmutableSpecificationStructure extends SpecificationStructure {
     val specStructure = super.structure(env)
     val arguments = env.arguments <| specStructure.arguments
 
-    if (!arguments.isolated || env.executionParameters.withoutIsolation)
+    if (!arguments.isolated && !env.executionParameters.withIsolation)
       specStructure
     else
       specStructure.map(isolateExamples(env))
@@ -52,14 +52,14 @@ trait ImmutableSpecificationStructure extends SpecificationStructure {
         instance.fold(
           e => e.fold(t => org.specs2.execute.Error(t), m => org.specs2.execute.Error(m)),
           newSpec => {
-            val newFragments = newSpec.fragments(env.setWithoutIsolation)
+            val newFragments = newSpec.fragments(env)
             val previousSteps = newFragments.fragments.take(position).filter(f => Fragment.isStep(f) && f.execution.isolable)
             val isolatedExecution = newFragments.fragments(position).execution
 
             if (previousSteps.nonEmpty) {
-              val previousStepsExecution = previousSteps.foldLeft(Success(): Result) { _ and _.execution.startExecution(env).result }
-              previousStepsExecution and isolatedExecution.startExecution(env).result
-            } else isolatedExecution.startExecution(env).result
+              val previousStepsExecution = previousSteps.foldLeft(Success(): Result) { _ and _.execution.execute(env).result }
+              previousStepsExecution and isolatedExecution.execute(env).result
+            } else isolatedExecution.execute(env).result
           }
         )
       }
