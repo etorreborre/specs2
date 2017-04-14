@@ -1,7 +1,7 @@
 package org.specs2
 package time
 
-import java.util.Calendar
+import java.util.Date
 
 import text.Plural._
 import control.Exceptions._
@@ -84,7 +84,7 @@ trait HmsTimer[T <: HmsTimer[T]] {
   /**
    * this method can be overriden for testing
    */
-  protected def getTime = Calendar.getInstance.getTime.getTime
+  protected def getTime = new Date().getTime
 }
 
 class SimpleTimer extends HmsTimer[SimpleTimer] {

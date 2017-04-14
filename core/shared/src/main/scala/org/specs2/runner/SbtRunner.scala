@@ -2,13 +2,11 @@ package org.specs2
 package runner
 
 import Runner._
-import specification.process.Stats
+import specification.process.{StatisticsRepository, Stats}
 import sbt.testing._
-import Fingerprints._
 import main._
 import reporter._
 import control.{Logger => _, _}
-
 import org.specs2.fp._
 import org.specs2.fp.syntax._
 import reporter.SbtLineLogger
@@ -23,23 +21,22 @@ import scala.concurrent.ExecutionContext
 /**
  * Runner for Sbt
  */
-case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: ClassLoader) extends _root_.sbt.testing.Runner {
+abstract class BaseSbtRunner(args: Array[String], remoteArgs: Array[String], loader: ClassLoader) extends _root_.sbt.testing.Runner {
   private lazy val commandLineArguments = Arguments(args: _*)
 
   def tasks(taskDefs: Array[TaskDef]): Array[Task] =
     taskDefs.toList.map(newTask).toArray
 
   /** create a new test task */
-  def newTask(aTaskDef: TaskDef) =
+  def newTask(aTaskDef: TaskDef): Task =
     new Task {
-      lazy val env = Env(arguments = commandLineArguments)
+      lazy val env = Env(arguments = commandLineArguments).copy(
+        statsRepository = (args: Arguments) => if (true) StatisticsRepository.memory else Env().statsRepository(args)
+      )
 
       // the specification to execute with error messages if it cannot be instantiated
-      lazy val specStructure: (Error Either Option[SpecStructure], List[String]) = {
-        val action: Action[Option[SpecStructure]] =
-          createSpecStructure(taskDef, loader, env)
-        executeAction(action)
-      }
+      lazy val specStructure: (Error Either Option[SpecStructure], List[String]) =
+        executeAction(createSpecStructure(taskDef, loader, env))
 
       /** @return the specification tags */
       def tags: Array[String] =
@@ -48,10 +45,14 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
         else
           Array()
 
-      def execute(handler: EventHandler, loggers: Array[Logger]) = {
+      def execute(eventHandler: EventHandler, loggers: Array[Logger], continuation: Array[Task] => Unit): Unit =
+        continuation(execute(eventHandler, loggers))
+
+      def execute(handler: EventHandler, loggers: Array[Logger]): Array[Task] = {
         val (result, warnings) = specStructure
         processResult(handler, loggers)(result, warnings)
 
+        println("env "+env)
         result.toOption.flatten.foreach { structure =>
           val action = specificationRun(aTaskDef, structure, env, handler, loggers)
           val (rs, ws) = executeAction(action, consoleLogging)
@@ -78,6 +79,15 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
 
   def done = ""
 
+  def deserializeTask(task: String, deserializer: String => TaskDef): Task =
+    newTask(deserializer(task))
+
+  def serializeTask(task: Task, serializer: TaskDef => String): String =
+    serializer(task.taskDef)
+
+  def receiveMessage(msg: String): Option[String] =
+    Some(msg)
+
   /** run a given spec structure */
   def specificationRun(taskDef: TaskDef, spec: SpecStructure, env: Env, handler: EventHandler, loggers: Array[Logger]): Action[Stats] =
     for {
@@ -101,7 +111,8 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
 
   /** accepted printers */
   def createPrinters(taskDef: TaskDef, handler: EventHandler, loggers: Array[Logger], args: Arguments): Operation[List[Printer]] =
-    List(createSbtPrinter(handler, loggers, sbtEvents(taskDef, handler)),
+    List(
+      createSbtPrinter(handler, loggers, sbtEvents(taskDef, handler)),
       createJUnitXmlPrinter(args, loader),
       createHtmlPrinter(args, loader),
       createMarkdownPrinter(args, loader),
@@ -152,46 +163,25 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
     Runner.logUserWarnings(warnings)(m => Name(logger.failureLine(m))).value
     logger.close
   }
+
+  def isSlave: Boolean = false
 }
 
+case class MasterSbtRunner(args:       Array[String],
+                           remoteArgs: Array[String],
+                           loader:     ClassLoader) extends BaseSbtRunner(args, remoteArgs, loader)
 
-/**
- * Implementation of the Framework interface for the sbt tool.
- * It declares the classes which can be executed by the specs2 library.
- */
-class Specs2Framework extends Framework {
-  def name = "specs2"
-
-  def fingerprints = Array[Fingerprint](fp1, fp1m)
-
-  def runner(args: Array[String], remoteArgs: Array[String], loader: ClassLoader) =
-    new SbtRunner(args, remoteArgs, loader)
+case class SlaveSbtRunner(args:       Array[String],
+                          remoteArgs: Array[String],
+                          loader:     ClassLoader,
+                          send:       String => Unit) extends BaseSbtRunner(args, remoteArgs, loader) {
+  override def isSlave: Boolean = true
 }
-
-object Fingerprints {
-  val fp1 = new SpecificationFingerprint {
-    override def toString = "specs2 Specification fingerprint"
-  }
-  val fp1m = new SpecificationFingerprint {
-    override def toString = "specs2 Specification fingerprint"
-
-    override def isModule = false
-  }
-}
-
-trait SpecificationFingerprint extends SubclassFingerprint {
-  def isModule = true
-
-  def superclassName = "org.specs2.specification.core.SpecificationStructure"
-
-  def requireNoArgConstructor = false
-}
-
 
 /**
  * This object can be used to debug the behavior of the SbtRunner
  */
-object sbtRun extends SbtRunner(Array(), Array(), Thread.currentThread.getContextClassLoader) {
+object sbtRun extends MasterSbtRunner(Array(), Array(), Thread.currentThread.getContextClassLoader) {
   def main(arguments: Array[String]) {
     val env = Env(Arguments(arguments:_*))
     implicit lazy val ec: ExecutionContext = env.executionContext

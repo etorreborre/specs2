@@ -12,6 +12,8 @@ import reflect.Classes
 import specification.create.FragmentsFactory
 import specification.core._
 
+import scala.concurrent.Future
+
 /**
  * Creation of fragments in a mutable specification
  *
@@ -94,28 +96,39 @@ trait MutableFragmentBuilder extends FragmentBuilder
   }
 
   private def duplicateExecution(effectPath: EffectPath) = {
-    Execution.withEnv { env: Env =>
+    Execution.futureWithEnv { env: Env =>
 
       def instance =
         runOperation(Classes.createInstanceFromClass[MutableFragmentBuilder](getClass.asInstanceOf[Class[MutableFragmentBuilder]],
           getClass.getClassLoader, env.defaultInstances),
           env.systemLogger)
 
-      instance.fold(
-        e => e.fold(t => org.specs2.execute.Error(t), m => org.specs2.execute.Error(m)),
-        newSpec => {
-          newSpec.targetPath = Some(effectPath)
-          val pathFragments = newSpec.replayFragments(env)
-          val previousSteps = pathFragments.filter(f => Fragment.isStep(f) && f.execution.isolable)
-          val isolatedExecution = pathFragments.lastOption.map(_.execution).
-            getOrElse(Execution.executed(Pending("isolation mode failure - could not find an isolated fragment to execute")))
+        instance match {
+          case Left(e) =>
+            Future.successful(e.fold(t => org.specs2.execute.Error(t), m => org.specs2.execute.Error(m)))
 
-          if (previousSteps.nonEmpty) {
-            val previousStepsExecution = previousSteps.foldLeft(Success(): Result) { _ and _.execution.startExecution(env).result }
-            previousStepsExecution and isolatedExecution.startExecution(env).result
-          } else isolatedExecution.startExecution(env).result
+          case Right(newSpec) =>
+            implicit val ec = env.executionContext
+
+            newSpec.targetPath = Some(effectPath)
+            val pathFragments = newSpec.replayFragments(env)
+            val previousSteps = pathFragments.filter(f => Fragment.isStep(f) && f.execution.isolable)
+            val isolatedExecution = pathFragments.lastOption.map(_.execution).
+              getOrElse(Execution.executed(Pending("isolation mode failure - could not find an isolated fragment to execute")))
+
+            val previousResults =
+              if (previousSteps.nonEmpty)
+                Some(Future(previousSteps.foldLeft(Success(): Result) { _ and _.execution.execute(env).result }))
+              else
+                None
+
+            (previousResults, isolatedExecution.run) match {
+              case (None, None)       => Future.successful(Success())
+              case (None, Some(r))    => r(env)
+              case (Some(p), None)    => p
+              case (Some(p), Some(r)) => r(env).flatMap(r1 => p.map(p1 => p1 and r1))
+            }
         }
-      )
     }
   }
 

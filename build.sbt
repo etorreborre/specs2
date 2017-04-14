@@ -14,8 +14,6 @@ import xerial.sbt.Sonatype._
 import SonatypeKeys._
 import depends._
 import ohnosequences.sbt.GithubRelease.keys._
-import org.scalajs.sbtplugin.ScalaJSPlugin
-import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
 
 /** MAIN PROJECT */
 lazy val specs2 = Project(
@@ -23,14 +21,14 @@ lazy val specs2 = Project(
   base = file("."),
   settings =
     moduleSettings("") ++
-      siteSettings     ++
-      Seq(name := "specs2", packagedArtifacts := Map.empty)
+    siteSettings     ++
+    Seq(name := "specs2", packagedArtifacts := Map.empty)
 ).aggregate(
   fpJvm, commonJvm, matcherJvm, coreJvm, matcherExtraJvm, catsJvm, scalazJvm, htmlJvm, analysisJvm,
   shapelessJvm, formJvm, markdownJvm, gwtJvm, junitJvm, scalacheckJvm, mockJvm, tests,
   fpJs, commonJs, matcherJs, coreJs, matcherExtraJs, catsJs, scalazJs, htmlJs, analysisJs,
   shapelessJs, formJs, markdownJs, gwtJs, junitJs, scalacheckJs, mockJs)
-  .enablePlugins(GitBranchPrompt)
+  .enablePlugins(GitBranchPrompt).enablePlugins(ScalaJSPlugin)
 
 /** COMMON SETTINGS */
 lazy val specs2Settings = Seq(
@@ -43,29 +41,35 @@ lazy val specs2Settings = Seq(
 
 lazy val specs2Version = settingKey[String]("defines the current specs2 version")
 lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
+lazy val scalaJsVersion = "0.6.15"
 
 def moduleSettings(name: String) =
   coreDefaultSettings  ++
-    depends.resolvers    ++
-    specs2Settings       ++
-    compilationSettings  ++
-    testingSettings      ++
-    publicationSettings  ++
-    notificationSettings
+  depends.resolvers    ++
+  specs2Settings       ++
+  compilationSettings  ++
+  testingSettings      ++
+  publicationSettings  ++
+  notificationSettings
+
+def moduleJvmSettings(name: String) =
+  testingJvmSettings
 
 /** MODULES (sorted in alphabetical order) */
 lazy val analysis = crossProject.in(file("analysis")).
   settings(Seq(
     libraryDependencies ++= depends.classycle ++ depends.compiler(scalaOrganization.value, scalaVersion.value)) ++
     moduleSettings("analysis") ++
-    Seq(name := "specs2-analysis"):_*)
+    Seq(name := "specs2-analysis"):_*).
+  jvmSettings(moduleJvmSettings("analysis"))
 
 lazy val analysisJs  = analysis.js.dependsOn(commonJs % "test->test", coreJs, matcherJs, scalacheckJs % "test")
 lazy val analysisJvm = analysis.jvm.dependsOn(commonJvm % "test->test", coreJvm, matcherJvm, scalacheckJvm % "test")
 
 lazy val fp = crossProject.in(file("fp")).
   settings(moduleSettings("fp"):_*).
-  settings(name := "specs2-fp")
+  settings(name := "specs2-fp").
+  jvmSettings(moduleJvmSettings("fp"))
 
 lazy val fpJvm = fp.jvm
 lazy val fpJs  = fp.js
@@ -80,7 +84,8 @@ lazy val common = crossProject.in(file("common")).
           depends.scalaXML(scalaVersion.value) ++
           depends.scalacheck(scalaVersion.value).map(_ % "test"),
       name := "specs2-common"
-    ):_*)
+    ):_*).
+  jvmSettings(moduleJvmSettings("common"))
 
 lazy val commonJs  = common.js.dependsOn(fpJs)
 lazy val commonJvm = common.jvm.dependsOn(fpJvm)
@@ -93,21 +98,31 @@ lazy val core = crossProject.in(file("core")).
         depends.mockito.map(_ % "test") ++
         depends.junit.map(_ % "test")) ++
     moduleSettings("core") ++
-    Seq(name := "specs2-core"):_*)
+    Seq(name := "specs2-core"):_*).
+  jsSettings(
+    libraryDependencies += "org.scala-js" %% "scalajs-test-interface" % scalaJsVersion,
+    scalaJSStage in Test := FastOptStage
+  ).
+  jvmSettings(
+    moduleJvmSettings("core") ++
+    Seq(libraryDependencies +=
+          "org.scala-js" %% "scalajs-test-interface" % scalaJsVersion):_*)
 
 lazy val coreJs  = core.js.dependsOn(matcherJs, commonJs % "test->test")
 lazy val coreJvm = core.jvm.dependsOn(matcherJvm, commonJvm % "test->test")
 
 lazy val examples = crossProject.in(file("examples")).
   settings(moduleSettings("examples") ++
-    Seq(name := "specs2-examples"):_*)
+    Seq(name := "specs2-examples"):_*).
+  jvmSettings(moduleJvmSettings("examples"))
 
 lazy val examplesJs  = examples.js.dependsOn(commonJs, matcherJs, coreJs, matcherExtraJvm, analysisJs, formJs, htmlJs, markdownJs, gwtJs, junitJs, scalacheckJs, mockJs)
 lazy val examplesJvm = examples.jvm.dependsOn(commonJvm, matcherJvm, coreJvm, matcherExtraJvm, analysisJvm, formJvm, htmlJvm, markdownJvm, gwtJvm, junitJvm, scalacheckJvm, mockJvm)
 
 lazy val form = crossProject.in(file("form")).
   settings(moduleSettings("form") ++
-    Seq(name := "specs2-form"):_*)
+    Seq(name := "specs2-form"):_*).
+  jvmSettings(moduleJvmSettings("form"))
 
 lazy val formJs = form.js.dependsOn(coreJs, markdownJs, matcherExtraJs, scalacheckJs % "test->test")
 lazy val formJvm = form.jvm.dependsOn(coreJvm, markdownJvm, matcherExtraJvm, scalacheckJvm % "test->test")
@@ -115,13 +130,14 @@ lazy val formJvm = form.jvm.dependsOn(coreJvm, markdownJvm, matcherExtraJvm, sca
 lazy val guide = Project(id = "guide", base = file("guide"),
   settings = moduleSettings("guide") ++
     Seq(name := "specs2-guide")
-).dependsOn(examplesJvm % "compile->compile;test->test", scalazJvm, shapelessJvm)
+  ).dependsOn(examplesJvm % "compile->compile;test->test", scalazJvm, shapelessJvm)
 
 lazy val gwt = crossProject.in(file("gwt")).
   settings(Seq(
     libraryDependencies ++= depends.shapeless(scalaVersion.value)) ++
     moduleSettings("gwt") ++
-    Seq(name := "specs2-gwt"):_*)
+    Seq(name := "specs2-gwt"):_*).
+  jvmSettings(moduleJvmSettings("gwt"))
 
 lazy val gwtJs = gwt.js.dependsOn(coreJs, matcherExtraJs, scalacheckJs)
 lazy val gwtJvm = gwt.jvm.dependsOn(coreJvm, matcherExtraJvm, scalacheckJvm)
@@ -130,7 +146,8 @@ lazy val html = crossProject.in(file("html")).
   settings(
     Seq(libraryDependencies += depends.tagsoup) ++
       moduleSettings("html") ++
-      Seq(name := "specs2-html"):_*)
+      Seq(name := "specs2-html"):_*).
+  jvmSettings(moduleJvmSettings("html"))
 
 lazy val htmlJs = html.js.dependsOn(formJs, mockJs % "test", matcherExtraJs % "test", scalacheckJs % "test")
 lazy val htmlJvm = html.jvm.dependsOn(formJvm, mockJvm % "test", matcherExtraJvm % "test", scalacheckJvm % "test")
@@ -139,7 +156,8 @@ lazy val junit = crossProject.in(file("junit")).
   settings(Seq(
     libraryDependencies ++= depends.junit ++ depends.mockito.map(_ % "test")) ++
     moduleSettings("junit") ++
-    Seq(name := "specs2-junit"):_*)
+    Seq(name := "specs2-junit"):_*).
+  jvmSettings(moduleJvmSettings("junit"))
 
 lazy val junitJs = junit.js.dependsOn(coreJs, matcherExtraJs % "test", mockJs % "test")
 lazy val junitJvm = junit.jvm.dependsOn(coreJvm, matcherExtraJvm % "test", mockJvm % "test")
@@ -148,14 +166,16 @@ lazy val markdown = crossProject.in(file("markdown")).
   settings(Seq(
     libraryDependencies ++= depends.pegdown) ++
     moduleSettings("markdown") ++
-    Seq(name := "specs2-markdown"):_*)
+    Seq(name := "specs2-markdown"):_*).
+  jvmSettings(moduleJvmSettings("markdown"))
 
 lazy val markdownJs = markdown.js.dependsOn(commonJs, coreJs % "compile->test")
 lazy val markdownJvm = markdown.jvm.dependsOn(commonJvm, coreJvm % "compile->test")
 
 lazy val matcher = crossProject.in(file("matcher")).
   settings(moduleSettings("matcher") ++
-    Seq(name := "specs2-matcher"):_*)
+    Seq(name := "specs2-matcher"):_*).
+  jvmSettings(moduleJvmSettings("matcher"))
 
 lazy val matcherJs  = matcher.js.dependsOn(commonJs)
 lazy val matcherJvm = matcher.jvm.dependsOn(commonJvm)
@@ -164,7 +184,8 @@ lazy val matcherExtra = crossProject.in(file("matcher-extra")).
   settings(moduleSettings("matcherextra") ++ Seq(
     name := "specs2-matcher-extra",
     libraryDependencies ++= depends.paradise(scalaVersion.value)
-  ):_*)
+  ):_*).
+  jvmSettings(moduleJvmSettings("matcher-extra"))
 
 lazy val matcherExtraJs  = matcherExtra.js.dependsOn(analysisJs, matcherJs, coreJs % "test->test")
 lazy val matcherExtraJvm = matcherExtra.jvm.dependsOn(analysisJvm, matcherJvm, coreJvm % "test->test")
@@ -175,7 +196,8 @@ lazy val shapeless = crossProject.in(file("shapeless")).
       libraryDependencies ++=
         depends.paradise(scalaVersion.value) ++
           depends.shapeless(scalaVersion.value)
-    ):_*)
+    ):_*).
+  jvmSettings(moduleJvmSettings("shapeless"))
 
 lazy val shapelessJs = shapeless.js.dependsOn(matcherJs)
 lazy val shapelessJvm = shapeless.jvm.dependsOn(matcherJvm)
@@ -189,7 +211,8 @@ lazy val cats = crossProject.in(file("cats")).
         depends.cats)) ++
     Seq(name := "specs2-cats") ++
     Seq((skip in compile) := scalaMinorVersionAtLeast(scalaVersion.value, 12),
-      publishArtifact := !scalaMinorVersionAtLeast(scalaVersion.value, 12)):_*)
+      publishArtifact := !scalaMinorVersionAtLeast(scalaVersion.value, 12)):_*).
+  jvmSettings(moduleJvmSettings("cats"))
 
 lazy val catsJs = cats.js.dependsOn(matcherJs, coreJs % "test->test")
 lazy val catsJvm = cats.jvm.dependsOn(matcherJvm, coreJvm % "test->test")
@@ -199,7 +222,8 @@ lazy val scalaz = crossProject.in(file("scalaz")).
     Seq(libraryDependencies ++=
       depends.scalaz(scalazVersion.value) ++
         depends.scalazConcurrent(scalazVersion.value)) ++
-    Seq(name := "specs2-scalaz"):_*)
+    Seq(name := "specs2-scalaz"):_*).
+  jvmSettings(moduleJvmSettings("scalaz"))
 
 lazy val scalazJs = scalaz.js.dependsOn(matcherJs, coreJs % "test->test")
 lazy val scalazJvm = scalaz.jvm.dependsOn(matcherJvm, coreJvm % "test->test")
@@ -210,7 +234,8 @@ lazy val mock = crossProject.in(file("mock")).
       depends.hamcrest ++
         depends.mockito) ++
     moduleSettings("mock") ++
-    Seq(name := "specs2-mock"):_*)
+    Seq(name := "specs2-mock"):_*).
+  jvmSettings(moduleJvmSettings("mock"))
 
 lazy val mockJs = mock.js.dependsOn(coreJs)
 lazy val mockJvm = mock.jvm.dependsOn(coreJvm)
@@ -219,7 +244,8 @@ lazy val scalacheck = crossProject.in(file("scalacheck")).
   settings(Seq(
     libraryDependencies ++= depends.scalacheck(scalaVersion.value)) ++
     moduleSettings("scalacheck") ++
-    Seq(name := "specs2-scalacheck"):_*)
+    Seq(name := "specs2-scalacheck"):_*).
+  jvmSettings(moduleJvmSettings("scalacheck"))
 
 lazy val scalacheckJs  = scalacheck.js.dependsOn(coreJs)
 lazy val scalacheckJvm = scalacheck.jvm.dependsOn(coreJvm)
@@ -277,11 +303,14 @@ lazy val testingSettings = Seq(
   logBuffered := false,
   cancelable in Global := true,
   testFrameworks := Seq(TestFramework("org.specs2.runner.Specs2Framework")),
-  javaOptions ++= Seq("-Xmx3G", "-Xss4M"),
   testOptions := Seq(Tests.Filter(s =>
     (Seq(".guide.").exists(s.contains) || Seq("Spec", "Guide", "Website").exists(s.endsWith)) &&
       Seq("Specification", "FeaturesSpec").forall(n => !s.endsWith(n))))
 )
+
+lazy val testingJvmSettings =
+  Seq(javaOptions ++= Seq("-Xmx3G", "-Xss4M"))
+
 /**
  * DOCUMENTATION
  */

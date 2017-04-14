@@ -191,6 +191,9 @@ object Execution {
   /** create an execution using the Env */
   def withEnv[T : AsResult](f: Env => T) = Execution(Some((env: Env) => Future(AsResult(f(env)))(env.executionContext)))
 
+  /** create an execution using the Env */
+  def futureWithEnv[T : AsResult](f: Env => Future[T]) = Execution(Some((env: Env) => f(env).map(AsResult(_))(env.executionContext)))
+
   /** create an execution using the executor service */
   def withExecutorService[T : AsResult](f: ExecutorService => T) =
     withEnv((env: Env) => f(env.executorService))
