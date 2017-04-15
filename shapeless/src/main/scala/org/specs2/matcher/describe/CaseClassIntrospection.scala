@@ -66,9 +66,11 @@ class ClassFieldsDifferenceInspectable[Key <: Symbol, Value, Tail <: HList](
             .diff(actual.tail, expected.tail)
             .prepend( compareHead(key.value.name, actual.head, expected.head) )
 
-  private def compareHead(fieldName: String, actual: Value, expected: Value) =
+  private def compareHead(fieldName: String, actual: Value, expected: Value) = {
+    val compResult = di.diff(actual, expected)
     CaseClassPropertyComparison(fieldName = fieldName,
-                            result = di.diff(actual, expected),
-                            identical = actual == expected)
+      result = compResult,
+      identical = compResult.identical)
+  }
 }
 
