@@ -27,7 +27,7 @@ import specification.core._
 trait MutableFragmentBuilder extends FragmentBuilder
   with FragmentsFactory
   with MutableArgumentsBuilder
-  with MutableHeaderBuilder {
+  with MutableHeaderBuilder { outer =>
 
   private[specs2] val specFragments = new scala.collection.mutable.ListBuffer[Fragment]
 
@@ -111,9 +111,9 @@ trait MutableFragmentBuilder extends FragmentBuilder
             getOrElse(Execution.executed(Pending("isolation mode failure - could not find an isolated fragment to execute")))
 
           if (previousSteps.nonEmpty) {
-            val previousStepsExecution = previousSteps.foldLeft(Success(): Result)(_ and _.execution.execute(env).result)
-            previousStepsExecution and isolatedExecution.execute(env).result
-          } else isolatedExecution.execute(env).result
+            val previousStepsExecution = previousSteps.foldLeft(Success(): Result)(_ and _.execution.execute(outer.env).result)
+            previousStepsExecution and isolatedExecution.execute(outer.env).result
+          } else isolatedExecution.execute(outer.env).result
         }
       )
     }
