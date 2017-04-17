@@ -63,6 +63,7 @@ class OptionDiffable[T : Diffable](implicit di: Diffable[T]) extends Diffable[Op
         val result = di.diff(a, e)
         if (result.identical) OptionIdentical(Some(result))
         else OptionDifferent(result)
+      case (None, None) => OptionIdentical(None)
       case _ => OptionTypeDifferent(actual.isDefined, expected.isDefined)
     }
 }
