@@ -48,7 +48,10 @@ case class Env(arguments: Arguments = Arguments(),
           fileSystem: FileSystem = FileSystem,
 
           // parameters for fragments execution
-          executionParameters: ExecutionParameters = ExecutionParameters()) {
+          executionParameters: ExecutionParameters = ExecutionParameters(),
+
+          // custom context class loader passed by sbt
+          customClassLoader: Option[ClassLoader] = None) {
 
   lazy val userEnv: Env =
     copy()

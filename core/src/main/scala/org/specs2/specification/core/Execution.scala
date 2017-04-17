@@ -115,7 +115,10 @@ case class Execution(run:            Option[Env => Future[Result]]           = N
       case None => this
 
       case Some(r) =>
-        try   setExecuting(r(env)).startTimer
+        try {
+          env.customClassLoader.foreach(Thread.currentThread.setContextClassLoader(_))
+          setExecuting(r(env)).startTimer
+        }
         catch { case NonFatal(t) => copy(executing = Some(Left(t))).stopTimer }
     }
 
