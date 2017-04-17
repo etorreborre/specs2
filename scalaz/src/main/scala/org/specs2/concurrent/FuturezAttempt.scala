@@ -28,7 +28,7 @@ trait FuturezAttempt {
       val appliedTimeout = timeout * tf.toLong
 
       def attemptFuture(remainingRetries: Int, totalDuration: FiniteDuration): TimeoutFailure \/ T = {
-        f.timed(appliedTimeout.toMillis)(ee.scheduledExecutorService).run.fold({
+        f.timed(appliedTimeout.toMillis)(ee.scheduledExecutorService).unsafePerformSync.fold({
           case e if e.getClass == classOf[TimeoutException] =>
             if (remainingRetries <= 0) TimeoutFailure(appliedTimeout, totalDuration, tf).left
             else                       attemptFuture(remainingRetries - 1, totalDuration + appliedTimeout)

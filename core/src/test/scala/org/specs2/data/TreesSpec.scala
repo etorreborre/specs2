@@ -10,10 +10,10 @@ import specification._
 
 class TreesSpec extends script.Specification with DataTables with Grouped with Expectations { def is = s2"""
 
- # A tree can be pruned by providing a function mapping nodes to Option[Node]
-    + if a node is mapped to Some(n), it stays in the tree
-    if a node is mapped to None, it is removed from the tree
-      + if it's a leaf
+ # A tree can be pruned by providing a function mapping Nodes to Option[Node]
+    + if a Node is mapped to Some(n), it stays in the tree
+    if a Node is mapped to None, it is removed from the tree
+      + if it's a Leaf
       + if it's a subtree
       + even the root of the tree
 
@@ -51,7 +51,7 @@ class TreesSpec extends script.Specification with DataTables with Grouped with E
       tree2  ! 3      |
       tree3  ! 3      | { (tree, size) => tree.loc.size must_== size }
     }
-    // note that the TreeLoc stays at the root after the addition of the child node
+    // note that the TreeLoc stays at the root after the addition of the child Node
     eg := tree1.loc.addChild(3).tree.drawTree must beTree(
       "0",
       "|",
@@ -82,13 +82,13 @@ class TreesSpec extends script.Specification with DataTables with Grouped with E
   *  |
   *  `- 5
   */
-  def tree = node(0, node(2, leaf(1)) :: node(3, leaf(4)) :: leaf(5) :: Nil)
+  def tree = Node(0, Node(2, Leaf(1)) :: Node(3, Leaf(4)) :: Leaf(5) :: Nil)
 
-  def tree1 = node(0, node(2, leaf(2)))
-  def tree2 = node(0, node(2, leaf(1)))
-  def tree3 = node(0, node(1, leaf(2)))
-  def tree4 = node(1, node(2, leaf(1)))
-  def tree5 = node(0, Stream.cons(leaf(3), node(2, leaf(2))))
+  def tree1 = Node(0, Node(2, Leaf(2)))
+  def tree2 = Node(0, Node(2, Leaf(1)))
+  def tree3 = Node(0, Node(1, Leaf(2)))
+  def tree4 = Node(1, Node(2, Leaf(1)))
+  def tree5 = Node(0, Stream.cons(Leaf(3), Node(2, Leaf(2))))
 
 
   def pruneAndDraw(tree: Tree[Int], f: Int => Option[Int]) = tree.prune(f).map(_.drawTree).getOrElse("None\n")

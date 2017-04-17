@@ -45,7 +45,7 @@ object build extends Build {
   lazy val specs2Settings: Seq[Settings] = Seq(
     organization := "org.specs2",
     specs2Version in GlobalScope := version.value,
-    scalazVersion in GlobalScope := "7.2.7",
+    scalazVersion in GlobalScope := "7.3.0-M10",
     specs2ShellPrompt,
     scalaVersion := "2.12.1",
     crossScalaVersions := Seq(scalaVersion.value, "2.11.8", "2.10.6"))
@@ -221,11 +221,13 @@ object build extends Build {
   lazy val compilationSettings: Seq[Settings] = Seq(
     // https://gist.github.com/djspiewak/976cd8ac65e20e136f05
     unmanagedSourceDirectories in Compile ++=
-      Seq((sourceDirectory in Compile).value / s"scala-${scalaSourceVersion(scalaBinaryVersion.value)}",
-          if (scalazVersion.value.startsWith("7.0")) (sourceDirectory in Compile).value / s"scala-scalaz-7.0.x"
-          else                                       (sourceDirectory in Compile).value / s"scala-scalaz-7.1.x",
-          if (scalazVersion.value.startsWith("7.0")) (sourceDirectory in (Test, test)).value / s"scala-scalaz-7.0.x"
-          else                                       (sourceDirectory in (Test, test)).value / s"scala-scalaz-7.1.x"),
+      (Seq((sourceDirectory in Compile).value / s"scala-${scalaSourceVersion(scalaBinaryVersion.value)}") ++
+       (if (scalazVersion.value.startsWith("7.0"))      Seq((sourceDirectory in Compile).value / s"scala-scalaz-7.0.x")
+        else if (scalazVersion.value.startsWith("7.0")) Seq((sourceDirectory in Compile).value / s"scala-scalaz-7.1.x")
+        else Seq()) ++
+       (if (scalazVersion.value.startsWith("7.0"))      Seq((sourceDirectory in (Test, test)).value / s"scala-scalaz-7.0.x")
+        else if (scalazVersion.value.startsWith("7.1")) Seq((sourceDirectory in (Test, test)).value / s"scala-scalaz-7.1.x")
+        else Seq())),
     javacOptions ++= Seq("-Xmx3G", "-Xms512m", "-Xss4m"),
     maxErrors := 20,
     incOptions := incOptions.value.withNameHashing(true),

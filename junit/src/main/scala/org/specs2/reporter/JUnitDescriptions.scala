@@ -46,7 +46,7 @@ trait JUnitDescriptions extends ExecutionOrigin {
     val annotations = tryOrElse(getClass.getClassLoader.loadClass(spec.specClassName).getAnnotations)(Array())
     val rootFragment = DefaultFragmentFactory.text(spec.header.simpleName)
 
-    Levels.treeLocMap(spec.fragments)(keep).getOrElse(leaf(rootFragment).loc).root.setLabel(rootFragment).cojoin.map {
+    Levels.treeLocMap(spec.fragments)(keep).getOrElse(Leaf(rootFragment).loc).root.setLabel(rootFragment).cojoin.map {
       current: TreeLoc[Fragment] =>
         val description =
         current.getLabel match {

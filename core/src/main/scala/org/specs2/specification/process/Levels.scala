@@ -52,14 +52,14 @@ trait Levels {
 
 
   def levelsToTreeLoc(mapper: Mapper): AsyncTransducer[(Fragment, Int), TreeLoc[Fragment]] = {
-    val init = leaf((DefaultFragmentFactory.text("root"), 0)).loc
+    val init = Leaf((DefaultFragmentFactory.text("root"), 0)).loc
 
     state[ActionStack, (Fragment, Int), TreeLoc[(Fragment, Int)], TreeLoc[(Fragment, Int)]](init) {
       case ((f, level), treeLoc) =>
 
         val parent = if (level == 0) treeLoc.root else (treeLoc.parentLocs :+ treeLoc).takeWhile(_.getLabel._2 < level).lastOption.getOrElse(treeLoc)
         val newTree = mapper(f) match {
-          case Some(fragment) => parent.insertDownLast(leaf((fragment, level)))
+          case Some(fragment) => parent.insertDownLast(Leaf((fragment, level)))
           case None           => treeLoc
         }
         (newTree, newTree)

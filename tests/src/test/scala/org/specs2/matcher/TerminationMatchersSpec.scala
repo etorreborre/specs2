@@ -57,8 +57,8 @@ class TerminationMatchersSpec extends script.Specification with TerminationMatch
 
       val queue1 = new ArrayBlockingQueue[Int](1)
       var stop = true
-      def action1() = scalaz.concurrent.Future({ while (stop) { sleepFor(10)}; queue1.add(1) }).run
-      def action2() = scalaz.concurrent.Future({ stop = false }).run
+      def action1() = scalaz.concurrent.Future({ while (stop) { sleepFor(10)}; queue1.add(1) }).unsafePerformSync
+      def action2() = scalaz.concurrent.Future({ stop = false }).unsafePerformSync
 
       action1() must terminate.onlyWhen(action2())
     }
