@@ -81,6 +81,7 @@ Compare result
     None and Some will return OptionDifferent                     ${ Diffable.diff(None, Option("abc")) must_=== OptionTypeDifferent(isActualSome = false, isExpectedSome = true) }
     Some(x) and Some(y) will return OptionDifferent with result   ${ Diffable.diff(Option("abc"), Option("def")) must_=== OptionDifferent(PrimitiveDifference("abc", "def")) }
     two None will return OptionIdentical                          ${ Diffable.diff(None, None) must_=== OptionIdentical(None) }
+    two (None: Option[String]) will return OptionIdentical        ${ Diffable.diff((None: Option[String]), (None: Option[String])) must_=== OptionIdentical(None) }
     two identical Some will return OptionIdentical                ${ Diffable.diff(Some("abc"), Some("abc")) must_=== OptionIdentical(Some(PrimitiveIdentical("abc"))) }
 
 
