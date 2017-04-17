@@ -18,95 +18,104 @@ object PrimitiveDiffable {
 
 }
 
-class EitherDiffable[L : Diffable, R : Diffable](implicit ldi: Diffable[L],
-                                                 rdi: Diffable[R])
+class EitherDiffable[L : Diffable, R : Diffable]
   extends Diffable[Either[L, R]] {
+
+  def valdiff[A](a: A, e: A, isRight: Boolean)(implicit di: Diffable[A]) = {
+    val result = di.diff(a, e)
+    if (result.identical) EitherIdentical(result, isRight = isRight)
+    else EitherDifferent(result, isRight = isRight)
+  }
 
   def diff(actual: Either[L, R], expected: Either[L, R]) =
     (actual, expected) match {
-      case (Left(a), Left(e)) if a == e => EitherIdentical(ldi.diff(a, e), isRight = false)
-      case (Left(a), Left(e)) if a != e => EitherDifferent(ldi.diff(a, e), isRight = false)
-      case (Right(a), Right(e)) if a == e => EitherIdentical(rdi.diff(a, e), isRight = true)
-      case (Right(a), Right(e)) if a != e => EitherDifferent(rdi.diff(a, e), isRight = true)
+      case (Left(a), Left(e)) => valdiff(a, e, false)
+      case (Right(a), Right(e)) => valdiff(a, e, true)
       case (a, e) => EitherTypeDifferent(a.isRight)
     }
 
 }
 
-class EitherRightDiffable[R : Diffable](implicit rdi: Diffable[R]) extends Diffable[Right[Nothing, R]] {
-  def diff(actual: Right[Nothing, R], expected: Right[Nothing, R]) = (actual, expected) match {
-    case (Right(a), Right(e)) if a == e => EitherIdentical(rdi.diff(a, e), isRight = true)
-    case (Right(a), Right(e)) if a != e => EitherDifferent(rdi.diff(a, e), isRight = true)
-  }
+class EitherRightDiffable[R](implicit rdi: Diffable[R]) extends Diffable[Right[Nothing, R]] {
+  def diff(actual: Right[Nothing, R], expected: Right[Nothing, R]) =
+    (actual, expected) match {
+      case (Right(a), Right(e)) =>
+        val result = rdi.diff(a, e)
+        if (result.identical) EitherIdentical(result, isRight = true)
+        else EitherDifferent(result, isRight = true)
+    }
 }
 
-class EitherLeftDiffable[L : Diffable](implicit ldi: Diffable[L]) extends Diffable[Left[L, Nothing]] {
+class EitherLeftDiffable[L](implicit ldi: Diffable[L]) extends Diffable[Left[L, Nothing]] {
   def diff(actual: Left[L, Nothing], expected: Left[L, Nothing]) =
     (actual, expected) match {
-      case (Left(a), Left(e)) if a == e => EitherIdentical(ldi.diff(a, e), isRight = false)
-      case (Left(a), Left(e)) if a != e => EitherDifferent(ldi.diff(a, e), isRight = false)
+    case (Left(a), Left(e)) =>
+      val result = ldi.diff(a, e)
+      if (result.identical) EitherIdentical(result, isRight = false)
+      else EitherDifferent(result, isRight = true)
     }
 }
 
 class OptionDiffable[T : Diffable](implicit di: Diffable[T]) extends Diffable[Option[T]] {
-
   def diff(actual: Option[T], expected: Option[T]): ComparisonResult =
     (actual, expected) match {
-      case (Some(_), None) | (None, Some(_))  => OptionTypeDifferent(actual.isDefined, expected.isDefined)
-      case (a, e) if a == e                   => OptionIdentical(compare(a, e))
-      case (Some(a), Some(e)) if a != e       => OptionDifferent(di.diff(a, e))
+      case (Some(a), Some(e)) =>
+        val result = di.diff(a, e)
+        if (result.identical) OptionIdentical(Some(result))
+        else OptionDifferent(result)
+      case _ => OptionTypeDifferent(actual.isDefined, expected.isDefined)
     }
-
-  private def compare(actual: Option[T], expected: Option[T]): Option[ComparisonResult] =
-    for {
-      x <- actual
-      y <- expected
-    } yield di.diff(x, y)
 }
 
 case object OptionNoneDiffable extends Diffable[Option[Nothing]] {
   def diff(actual: Option[Nothing], expected: Option[Nothing]) = OptionIdentical(None)
 }
 
-class TryDiffable[T : Diffable](implicit di: Diffable[T], tdi: Diffable[Throwable]) extends Diffable[Try[T]] {
-
-  def diff(actual: Try[T], expected: Try[T]) = (actual, expected) match {
-    case (Success(a), Success(e)) if a == e => TryIdentical(a, isSuccess = true)
-    case (Failure(a), Failure(e)) if a == e => TryIdentical(a, isSuccess = false)
-    case (Success(a), Success(e)) => TryDifferent(di.diff(a, e), isSuccess = true)
-    case (Failure(a), Failure(e)) => TryDifferent(tdi.diff(a, e), isSuccess = false)
-    case (a, e) => TryTypeDifferent(a.isSuccess)
+class TryDiffable[T : Diffable](implicit tdi: Diffable[Throwable]) extends Diffable[Try[T]] {
+  def valdiff[A](a: A, e: A, isSuccess: Boolean)(implicit di: Diffable[A]) = {
+    val result = di.diff(a, e)
+    if (result.identical) TryIdentical(a, isSuccess = isSuccess)
+    else TryDifferent(result, isSuccess = isSuccess)
   }
+
+  def diff(actual: Try[T], expected: Try[T]) =
+    (actual, expected) match {
+      case (Failure(a), Failure(e)) => valdiff(a, e, false)
+      case (Success(a), Success(e)) => valdiff(a, e, true)
+      case (a, e) => TryTypeDifferent(a.isSuccess)
+    }
 }
 
 class FailureDiffable(implicit di: Diffable[Throwable]) extends Diffable[Failure[Nothing]] {
-  def diff(actual: Failure[Nothing], expected: Failure[Nothing]) = (actual, expected) match {
-    case (Failure(a), Failure(e)) if a == e => TryIdentical(a, isSuccess = false)
-    case (Failure(a), Failure(e)) => TryDifferent(di.diff(a, e), isSuccess = false)
+  def diff(actual: Failure[Nothing], expected: Failure[Nothing]) = {
+    val (a, e) = (actual.exception, expected.exception)
+    val result = di.diff(a, e)
+    if (result.identical) TryIdentical(a, isSuccess = false)
+    else TryDifferent(result, isSuccess = false)
   }
 }
 
 
 class MapDiffable[K, V](implicit diff: Diffable[V]) extends Diffable[Map[K, V]] {
 
-  def diff(actual: Map[K, V], expected: Map[K, V]) =
-    if (actual == expected) MapIdentical(actual)
-    else MapDifference(findIdentical(actual, expected),
-      findChanged(actual, expected),
-      findAdded(actual, expected),
-      findRemoved(actual, expected))
-
-
-  private def findIdentical(actual: Map[K, V], expected: Map[K, V]) =
-    actual.toSeq.intersect(expected.toSeq)
+  def diff(actual: Map[K, V], expected: Map[K, V]) = {
+    val changed = findChanged(actual, expected)
+    val added = findAdded(actual, expected)
+    val removed = findRemoved(actual, expected)
+    val keys = (changed ++ added ++ removed).map(_._1)
+    val identical = actual.filterKeys(k => !keys.contains(k)).toSeq
+    if (keys.isEmpty) MapIdentical(actual)
+    else MapDifference(identical, changed, added, removed)
+  }
 
   private def findChanged(actual: Map[K, V], expected: Map[K, V]) =
     for {
       k <- actual.keySet.intersect(expected.keySet).toSeq
       v1 <- actual.get(k)
       v2 <- expected.get(k)
-      if v1 != v2
-    } yield (k, diff.diff(v1, v2))
+      result = diff.diff(v1, v2)
+      if !result.identical
+    } yield (k, result)
 
   private def findAdded(actual: Map[K, V], expected: Map[K, V]) =
     expected.filterKeys(k => !actual.contains(k)).toSeq
@@ -158,11 +167,13 @@ class SetDiffable[E] extends Diffable[Set[E]] {
 
 class SeqDiffable[E](implicit di: Diffable[E]) extends Diffable[Seq[E]] {
 
-  def diff(actual: Seq[E], expected: Seq[E]) =
-    if (actual == expected) SeqIdentical(actual)
-    else SeqDifference(result = compareExisting(actual, expected),
+  def diff(actual: Seq[E], expected: Seq[E]) = {
+    val diffs = compareExisting(actual, expected)
+    if (actual.length == expected.length && diffs.forall(_.identical)) SeqIdentical(actual)
+    else SeqDifference(result = diffs,
       added = expected.drop(actual.length),
       removed = actual.drop(expected.length))
+  }
 
   private def compareExisting(actual: Seq[E], expected: Seq[E]) =
     actual.zip(expected)
@@ -172,11 +183,12 @@ class SeqDiffable[E](implicit di: Diffable[E]) extends Diffable[Seq[E]] {
 class ArrayDiffable[E](implicit di: Diffable[E]) extends Diffable[Array[E]] {
 
   def diff(actual: Array[E], expected: Array[E]) = {
-    if (actual.deep == expected.deep)
+    val result = compareExisting(actual, expected)
+    if (actual.length == expected.length && result.toSeq.forall(_.identical))
       ArrayIdentical(actual)
     else
       ArrayDifference(
-        results = compareExisting(actual, expected),
+        results = result,
         added   = expected.drop(actual.length),
         removed = actual.drop(expected.length))
   }

@@ -153,13 +153,13 @@ Compare result
 
   def ccFieldDiffable = {
     case class A(value: Int)
-    case class B(name: String, value: A)
+    case class B(name: String, value: List[A])
     implicit val diffableA: Diffable[A] = new Diffable[A] {
       def diff(actual: A, expected: A): ComparisonResult = CaseClassIdentical("A")
     }
     val name = "name"
-    val b1 = B(name, A(5))
-    val b2 = B(name, A(6))
+    val b1 = B(name, List(A(5)))
+    val b2 = B(name, List(A(6)))
     Diffable.diff(b1, b2) must_== CaseClassIdentical("B")
   }
 }
