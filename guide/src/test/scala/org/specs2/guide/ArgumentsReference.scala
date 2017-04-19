@@ -115,8 +115,8 @@ For ${"the HTML output" ~/ HtmlOutput} the following options can be used:
  `html.template`         | `target/specs2-reports/templates/specs2.html` | copied from the `resources/templates` directory
  `html.variables`        | `Map[String, String]()`                       | passed to the template during the Pandoc evaluation
  `html.nostats`          | `false`                                       | if true no stats are displayed
- `html.search`           | `true`                                        | add a search box to the generated files
- `html.toc`              | `true`                                        | add a table of contents to the generated files
+ `html.search`           | `false`                                       | add a search box to the generated files
+ `html.toc`              | `false`                                       | add a table of contents to the generated files
  `html.toc.entrymaxsize` | `18`                                          | maximum number of characters for an entry in the table of contents
  `html.warn.missingrefs` | `true`                                        | report "see" references which do not correspond to any generated file
 

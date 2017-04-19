@@ -84,7 +84,7 @@ trait HtmlPrinter extends Printer {
       noStats              = boolOr(     "html.nostats",               HtmlOptions.noStats),
       search               = boolOr(     "html.search",                HtmlOptions.search),
       toc                  = boolOr(     "html.toc",                   HtmlOptions.toc),
-      tocEntryMaxSize      = intOr(      "html.toc.entrymaxsize", HtmlOptions.tocEntryMaxSize),
+      tocEntryMaxSize      = intOr(      "html.toc.entrymaxsize",      HtmlOptions.tocEntryMaxSize),
       warnMissingSeeRefs   = boolOr(     "html.warn.missingseerefs",   HtmlOptions.warnMissingSeeRefs))
     )
   }
