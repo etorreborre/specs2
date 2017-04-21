@@ -5,8 +5,8 @@ import java.util.Calendar
 
 import text.Plural._
 import control.Exceptions._
-import org.specs2.control.eff.{Eff, NoFx}
 import org.specs2.control.origami.Fold
+import org.specs2.fp._
 
 /**
  * This trait provides Timer functionalities based on the Java Calendar milliseconds
@@ -110,11 +110,13 @@ object SimpleTimer {
     override protected val elapsedTimes = tryOrElse(List(java.lang.Long.parseLong(s)))(Nil)
   }
 
-  def timerFold[T] = new Fold[NoFx, T, SimpleTimer] {
+  def timerFold[T] = new Fold[Id, T, SimpleTimer] {
     type S = SimpleTimer
-    def start = Eff.pure((new SimpleTimer).start)
+    val monad = Monad.idMonad
+
+    def start = (new SimpleTimer).start
     def fold: (S, T) => S = (s, t) => s
-    def end(s: S) =  Eff.pure(s.stop)
+    def end(s: S) =  s.stop
   }
 
 }

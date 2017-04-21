@@ -157,6 +157,9 @@ trait FoldableSyntax {
 
     def foldLeft[B](z: B)(f: (B, A) => B): B =
       foldable.foldLeft(fa, z)(f)
+
+    def foldLeftM[M[_] : Monad, B](z: B)(f: (B, A) => M[B]): M[B] =
+      foldable.foldLeftM(fa, z)(f)
   }
 
   implicit class FoldableMonoidOps[F[_] : Foldable, A : Monoid](fa: F[A]) {

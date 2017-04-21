@@ -4,7 +4,6 @@ package eff
 import scala.collection.mutable._
 import all._
 import interpret._
-import syntax.all._
 import origami._
 import org.specs2.fp._
 import org.specs2.fp.syntax._
@@ -51,7 +50,7 @@ trait WriterInterpretation {
   def runWriterFold[R, U, O, A, B](w: Eff[R, A])(fold: FoldId[O, B])(implicit m: Member.Aux[Writer[O, ?], R, U]): Eff[U, (A, B)] = {
     val recurse: StateRecurse[Writer[O, ?], A, (A, B)] = new StateRecurse[Writer[O, ?], A, (A, B)] {
       type S = fold.S
-      val init = fold.start.run
+      val init: S = fold.start
 
       def apply[X](x: Writer[O, X], s: S) = (x.run._2, fold.fold(s, x.run._1))
 
@@ -65,10 +64,10 @@ trait WriterInterpretation {
         Left((values, os.toList.foldLeft(s) { (res, cur) => fold.fold(res, cur) }))
       }
 
-      def finalize(a: A, s: S) = (a, fold.end(s).run)
+      def finalize(a: A, s: S) = (a, fold.end(s))
     }
 
-    interpretState1[R, U, Writer[O, ?], A, (A, B)]((a: A) => (a, fold.end(fold.start.run).run))(recurse)(w)
+    interpretState1[R, U, Writer[O, ?], A, (A, B)]((a: A) => (a, fold.end(fold.start)))(recurse)(w)
   }
 
   /**
@@ -77,24 +76,27 @@ trait WriterInterpretation {
   def runWriterUnsafe[R, U, O, A](w: Eff[R, A])(f: O => Unit)(implicit m: Member.Aux[Writer[O, ?], R, U]): Eff[U, A] =
     runWriterFold(w)(UnsafeFold(f)).map(_._1)
 
-  implicit def ListFold[A]: FoldId[A, List[A]] = new Fold[NoFx, A, List[A]] {
+  implicit def ListFold[A]: FoldId[A, List[A]] = new Fold[Id, A, List[A]] {
     type S = ListBuffer[A]
-    val start = pure[NoFx, ListBuffer[A]](new ListBuffer[A])
+    val monad = Monad.idMonad
+    val start = new ListBuffer[A]
     def fold = (s: S, a: A) => { s.append(a); s }
-    def end(s: S) = pure(s.toList)
+    def end(s: S) = s.toList
   }
 
-  def MonoidFold[A : Monoid]: FoldId[A, A] = new Fold[NoFx, A, A] {
+  def MonoidFold[A : Monoid]: FoldId[A, A] = new Fold[Id, A, A] {
     type S = A
-    val start = pure[NoFx, A](Monoid[A].zero)
+    val monad = Monad.idMonad
+    val start = Monoid[A].zero
     def fold = (s: S, a: A) => a append s
-    def end(s: S) = pure(s)
+    def end(s: S) = s
   }
 
-  def UnsafeFold[A](f: A => Unit): FoldId[A, Unit] = new Fold[NoFx, A, Unit] {
+  def UnsafeFold[A](f: A => Unit): FoldId[A, Unit] = new Fold[Id, A, Unit] {
     type S = Unit
-    val start = pure[NoFx, Unit](())
-    def fold = (s: S, a: A) => f(a)
+    val monad = Monad.idMonad
+    val start = ()
+    def fold = (s: S, a: A) => pure(f(a))
     def end(s: S) = pure(s)
   }
 

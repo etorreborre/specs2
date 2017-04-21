@@ -37,8 +37,8 @@ package object control {
   type AsyncStream[A] = Producer[ActionStack, A]
   type AsyncTransducer[A, B] = Transducer[ActionStack, A, B]
 
-  type AsyncFold[A, B] = origami.Fold[ActionStack, A, B]
-  type AsyncSink[A] = origami.Fold[ActionStack, A, Unit]
+  type AsyncFold[A, B] = origami.Fold[Action, A, B]
+  type AsyncSink[A] = origami.Fold[Action, A, Unit]
 
   lazy val executorServices = ExecutorServices.fromGlobalExecutionContext
   import executorServices._

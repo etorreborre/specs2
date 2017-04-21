@@ -7,6 +7,9 @@ trait Monad[F[_]] extends Applicative[F] {
 
   def bind[A, B](fa: F[A])(f: A => F[B]): F[B]
 
+  def flatMap[A, B](fa: F[A])(f: A => F[B]): F[B] =
+    bind(fa)(f)
+
   def join[A](ffa: F[F[A]]): F[A] =
     bind(ffa)(a => a)
 
@@ -37,6 +40,13 @@ trait Monad[F[_]] extends Applicative[F] {
 object Monad {
 
   @inline def apply[F[_]](implicit F: Monad[F]): Monad[F] = F
+
+  implicit val idMonad: Monad[Id] = new Monad[Id] {
+    def point[A](a: =>A): Id[A] = a
+
+    def bind[A,B](fa: Id[A])(f: A => Id[B]): Id[B] =
+      f(fa)
+  }
 
   implicit val optionMonad: Monad[Option] = new Monad[Option] {
     def point[A](a: =>A): Option[A] = Some(a)
@@ -78,6 +88,9 @@ trait MonadSyntax {
 
   implicit class MonadOps[F[_] : Monad, A](fa: F[A]) {
     val monad = Monad.apply[F]
+
+    def flatMap[B](f: A => F[B]): F[B] =
+      monad.flatMap(fa)(f)
 
     def bind[B](f: A => F[B]): F[B] =
       monad.bind(fa)(f)

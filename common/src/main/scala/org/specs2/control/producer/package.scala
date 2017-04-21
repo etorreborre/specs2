@@ -36,10 +36,10 @@ package object producer {
     def into[U](implicit intoPoly: IntoPoly[R, U], s: _Safe[U]): Producer[U, A] =
       Producer.into(p)
 
-    def fold[B, S](start: Eff[R, S], f: (S, A) => S, end: S => Eff[R, B]): Eff[R, B] =
+    def fold[B, S](start: Eff[R, S], f: (S, A) => Eff[R, S], end: S => Eff[R, B]): Eff[R, B] =
       Producer.fold(p)(start, f, end)
 
-    def fold[S, B](f: Fold[R, A, B]): Eff[R, B] =
+    def fold[S, B](f: Fold[Eff[R, ?], A, B]): Eff[R, B] =
       Producer.fold(p)(f.start, f.fold, f.end)
 
     def observe[S](start: Eff[R, S], f: (S, A) => S, end: S => Eff[R, Unit]): Producer[R, A] =

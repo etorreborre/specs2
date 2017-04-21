@@ -171,19 +171,16 @@ trait Producers {
       case a :: as  => oneOrMore(a, as).run
     })
 
-  def fold[R :_Safe, A, B, S](producer: Producer[R, A])(start: Eff[R, S], f: (S, A) => S, end: S => Eff[R, B]): Eff[R, B] =
-    start.flatMap { init =>
-      def go(p: Producer[R, A], s: S): Eff[R, S] =
-        p.run flatMap {
-          case Done() => pure[R, S](s)
-          case One(a) => protect[R, S](f(s, a))
-          case More(as, next) =>
-            val newS = as.foldLeft(s)(f)
-            go(next, newS)
-        }
+  def fold[R :_Safe, A, B, S](producer: Producer[R, A])(start: Eff[R, S], f: (S, A) => Eff[R, S], end: S => Eff[R, B]): Eff[R, B] = {
+    def go(p: Producer[R, A], s: Eff[R, S]): Eff[R, S] =
+      p.run flatMap {
+        case Done() => s
+        case One(a) => s.flatMap(s1 => f(s1, a))
+        case More(as, next) => go(next, s.flatMap(s1 => as.foldLeftM(s1)(f)))
+      }
 
-      go(producer, init)
-    } flatMap end
+    go(producer, start).flatMap(end)
+  }
 
   def observe[R :_Safe, A, S](producer: Producer[R, A])(start: Eff[R, S], f: (S, A) => S, end: S => Eff[R, Unit]): Producer[R, A] =
     Producer[R, A](start flatMap { init =>
@@ -209,7 +206,7 @@ trait Producers {
     }
 
   def runList[R :_Safe, A](producer: Producer[R, A]): Eff[R, List[A]] =
-    producer.fold(pure(Vector[A]()), (vs: Vector[A], a: A) => vs :+ a, (vs:Vector[A]) => pure(vs.toList))
+    producer.fold(pure(Vector[A]()), (vs: Vector[A], a: A) => pure(vs :+ a), (vs:Vector[A]) => pure(vs.toList))
 
   def collect[R :_Safe, A](producer: Producer[R, A])(implicit m: Member[Writer[A, ?], R]): Eff[R, Unit] =
     producer.run flatMap {
