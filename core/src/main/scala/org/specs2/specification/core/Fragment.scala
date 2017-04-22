@@ -3,11 +3,9 @@ package specification
 package core
 
 import execute.Result
-
-import scala.concurrent.Future
-import scala.concurrent.duration.FiniteDuration
 import fp._
-import fp.syntax._
+import org.specs2.control._, Actions._
+import scala.concurrent.duration.FiniteDuration
 
 /**
  * Fragment of a specification
@@ -16,20 +14,15 @@ import fp.syntax._
  * It has an execution which might do or don't do anything (for examples it runs some code)
  */
 case class Fragment(description: Description, execution: Execution, location: Location = StacktraceLocation()) {
-  /** @return a fatal error or a result */
-  def executionFatalOrResult: Throwable Either Result =
-    execution.executed match {
-      case Left(t)        => Either.left(t)
-      case Right(None)    => Either.right(org.specs2.execute.Success())
-      case Right(Some(r)) => Either.right(r)
-    }
 
-  /** @return the result of this fragment if it has been executed, Success otherwise */
-  def executionResult = execution.result
-  /** wait until this fragment has finished executing */
-  def finishExecution = copy(execution = execution.finishExecution)
-  /** @return true if this fragment has been executed */
-  def isExecuted = execution.isExecuted
+  /** @return the result of this fragment and its execution time */
+  def executedResult: Action[ExecutedResult] =
+    timedFuture(execution.executedResult)
+
+  /** @return the result of this fragment  */
+  def executionResult: Action[Result] =
+    timedFuture(execution.executionResult)
+
   /** @return true if this fragment can be executed */
   def isExecutable = execution.isExecutable
 
@@ -54,13 +47,31 @@ case class Fragment(description: Description, execution: Execution, location: Lo
   /** skip this fragment */
   def skip              = updateExecution(_.skip)
   def updateExecution(f: Execution => Execution) = copy(execution = f(execution))
-  def updateRun(r: (Env => Future[Result]) => (Env => Future[Result])) = updateExecution(_.updateRun(r))
 
   /** update the description */
   def updateDescription(f: Description => Description) = copy(description = f(description))
 
   /** set a different execution */
   def setExecution(e: Execution) = updateExecution(_ => e)
+
+  /** start the execution of this fragment */
+  def startExecution(env: Env): Fragment =
+    setExecution(execution.startExecution(env))
+
+  /** start the execution of this fragment when the other one has finished executing */
+  def startExecutionAfter(other: Fragment)(env: Env): Fragment =
+    setExecution(execution.startAfter(other.execution)(env))
+
+  /** start the execution of this fragment when the other one has finished executing */
+  def startExecutionAfter(other: Option[Fragment])(env: Env): Fragment =
+    other match {
+      case Some(o) => startExecutionAfter(o)(env)
+      case None    => startExecution(env)
+    }
+
+  /** start the execution of this fragment when the other ones has finished executing */
+  def startExecutionAfter(others: List[Fragment])(env: Env): Fragment =
+    setExecution(execution.startAfter(others.map(_.execution))(env))
 
   /** set the previous execution result when known */
   def setPreviousResult(r: Option[Result]) = copy(execution = execution.setPreviousResult(r))
@@ -71,7 +82,7 @@ case class Fragment(description: Description, execution: Execution, location: Lo
 }
 
 object Fragment {
-  implicit def showInstance(implicit showd: Show[Description]): Show[Fragment] = new Show[Fragment] {
+  implicit val showInstance: Show[Fragment] = new Show[Fragment] {
     def show(f: Fragment): String =
       s"Fragment(${f.description.show})"
   }

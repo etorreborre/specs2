@@ -9,6 +9,7 @@ import reporter.LineLogger
 import LineLogger._
 import io._
 import control._
+import org.specs2.fp.Monoid
 import process.{DefaultExecutor, DefaultSelector, Executor, Selector, StatisticsRepository}
 
 import scala.concurrent.duration.FiniteDuration
@@ -53,7 +54,8 @@ case class Env(arguments: Arguments = Arguments(),
           // custom context class loader passed by sbt
           customClassLoader: Option[ClassLoader] = None) {
 
-  lazy val userEnv: Env =
+  // environment to execute specs2 itself
+  lazy val specs2Env: Env =
     copy()
 
   lazy val statisticsRepository: StatisticsRepository =
@@ -65,7 +67,7 @@ case class Env(arguments: Arguments = Arguments(),
 
   /** execution environment */
   lazy val executionEnv: ExecutionEnv =
-    ExecutionEnv.create(arguments, systemLogger, "env"+hashCode)
+    ExecutionEnv.create(arguments, systemLogger, "user-env"+hashCode)
 
   lazy val executorService =
     executionEnv.executorService
@@ -75,6 +77,16 @@ case class Env(arguments: Arguments = Arguments(),
 
   lazy val scheduledExecutorService =
     executionEnv.scheduledExecutorService
+
+  /** specs2 execution environment */
+  lazy val specs2ExecutionEnv: ExecutionEnv =
+    ExecutionEnv.create(arguments, systemLogger, "specs2-env"+hashCode)
+
+  lazy val specs2ExecutionContext =
+    specs2ExecutionEnv.executionContext
+
+  lazy val specs2ScheduledExecutorService =
+    specs2ExecutionEnv.scheduledExecutorService
 
   lazy val timeout =
     executionParameters.timeout
@@ -89,8 +101,8 @@ case class Env(arguments: Arguments = Arguments(),
     copy(executionParameters = executionParameters.setTimeout(duration))
 
   def shutdown(): Unit = {
-    try executionEnv.shutdown()
-    finally userEnv.executionEnv.shutdown()
+    try specs2Env.executionEnv.shutdown
+    finally executionEnv.shutdown
   }
 
   /** set new LineLogger */
@@ -126,6 +138,20 @@ object Env {
   def executeResult[R: AsResult](r: Env => R) = {
     val env = Env()
     AsResult(r(env))
+  }
+
+  implicit def finiteDurationMonoid: Monoid[Option[FiniteDuration]] = new Monoid[Option[FiniteDuration]] {
+    val zero: Option[FiniteDuration] =
+      None
+
+    def append(f1: Option[FiniteDuration], f2: =>Option[FiniteDuration]): Option[FiniteDuration] =
+      (f1, f2) match {
+        case (Some(t1), Some(t2)) => Some(t1 min t2)
+        case (Some(t1), None)     => Some(t1)
+        case (None,     Some(t2)) => Some(t2)
+        case _                    => None
+      }
+
   }
 }
 

@@ -4,8 +4,6 @@ package core
 
 import control._
 import reflect.Classes
-import execute._
-import ResultLogicalCombinators._
 
 /**
  * Structure of an immutable specification.
@@ -20,8 +18,7 @@ trait ImmutableSpecificationStructure extends SpecificationStructure {
   override def structure = (env: Env) => {
     val specStructure = super.structure(env)
     val arguments = env.arguments <| specStructure.arguments
-
-    if (!arguments.isolated && !env.executionParameters.withIsolation)
+    if (!arguments.isolated || env.executionParameters.withoutIsolation)
       specStructure
     else
       specStructure.map(isolateExamples(env))
@@ -32,8 +29,10 @@ trait ImmutableSpecificationStructure extends SpecificationStructure {
    */
   private def isolateExamples(env: Env): Fragments => Fragments = (fs: Fragments) => {
     val isolated = fs.fragments.zipWithIndex.map { case (f @ Fragment(d, e, l), i) =>
-      if (e.isExecutable && f.execution.isolable && env.arguments.isolated) isolate(fs, f, i, env)
-      else f
+      if (e.isExecutable && f.execution.isolable)
+        isolate(fs, f, i, env)
+      else
+        f
     }
     Fragments(isolated:_*)
   }
@@ -41,28 +40,25 @@ trait ImmutableSpecificationStructure extends SpecificationStructure {
   /**
    * Isolate the execution of a Fragment so that it is executed in a brand new Specification instance
    */
-  private def isolate(fs: Fragments, f: Fragment, position: Int, env: Env): Fragment = {
-    val isolated =
-      Execution.result {
-        val instance = runOperation(Classes.createInstanceFromClass[ImmutableSpecificationStructure](
-          getClass.asInstanceOf[Class[ImmutableSpecificationStructure]],
-          getClass.getClassLoader,
-          env.defaultInstances), env.systemLogger)
+  private def isolate(fs: Fragments, fragment: Fragment, position: Int, env: Env): Fragment = {
+    val instance = runOperation(Classes.createInstanceFromClass[ImmutableSpecificationStructure](
+      getClass.asInstanceOf[Class[ImmutableSpecificationStructure]],
+      getClass.getClassLoader,
+      env.defaultInstances), env.systemLogger)
 
-        instance.fold(
-          e => e.fold(t => org.specs2.execute.Error(t), m => org.specs2.execute.Error(m)),
-          newSpec => {
-            val newFragments = newSpec.fragments(env)
-            val previousSteps = newFragments.fragments.take(position).filter(f => Fragment.isStep(f) && f.execution.isolable)
-            val isolatedExecution = newFragments.fragments(position).execution
+    fragment.setExecution {
+      instance match {
+        case Left(e) =>
+          Execution.result(e.fold(t => org.specs2.execute.Error(t), m => org.specs2.execute.Error(m)))
 
-            if (previousSteps.nonEmpty) {
-              val previousStepsExecution = previousSteps.foldLeft(Success(): Result) { _ and _.execution.execute(env).result }
-              previousStepsExecution and isolatedExecution.execute(env).result
-            } else isolatedExecution.execute(env).result
+        case Right(newSpec) =>
+          val newFragments = newSpec.fragments(env.setWithoutIsolation)
+          val previousStepExecutions = newFragments.fragments.take(position).toList.collect {
+            case f if Fragment.isStep(f) && f.execution.isolable => f.execution
           }
-        )
+          val isolated = newFragments.fragments(position).execution
+          isolated.afterSuccessfulSequential(previousStepExecutions)(env)
       }
-    f.setExecution(isolated)
+    }
   }
 }

@@ -3,17 +3,21 @@ package reporter
 
 import org.junit.runner.Description
 import java.net.InetAddress
+
 import main.Arguments
 import execute._
 import io.FileName
 import control._
+import Actions._
 import io._
+
 import scala.collection.JavaConverters._
 import Exceptions._
 import specification.core._
 import specification.process._
 import text.NotNullStrings._
 import JUnitDescriptions._
+import org.specs2.concurrent.ExecutionEnv
 import origami._
 
 /**
@@ -24,25 +28,28 @@ trait JUnitXmlPrinter extends Printer {
   def finalize(env: Env, specs: List[SpecStructure]): Action[Unit] = Actions.unit
 
   def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment] =
-    (Statistics.fold zip fold.list[Fragment]).into[ActionStack].
+    (Statistics.fold zip fold.list[Fragment].into[Action]).
       mapFlatten(saveResults(env, spec))
 
   def saveResults(env: Env, spec: SpecStructure): ((Stats, List[Fragment])) =>  Action[Unit] = { case (stats, fs) =>
-    descriptionFold(spec, stats, env).run(descriptions(spec, fs).toList).flatMap { suite =>
+    descriptionFold(spec, stats, env).run(descriptions(spec, fs)(env.specs2ExecutionEnv).toList).flatMap { suite =>
        env.fileSystem.writeFile(outputDirectory(env) | FileName.unsafe(spec.specClassName+".xml"), suite.xml)
     }
   }
 
   def descriptionFold(spec: SpecStructure, stats: Stats, env: Env): AsyncFold[(Fragment, Description), TestSuite] = {
     val suite = TestSuite(specDescription(spec), spec.specClassName, stats.errors, stats.failures, stats.skipped, stats.timer.totalMillis)
-    fold.fromFoldLeft[ActionStack, (Fragment, Description), TestSuite](suite) { case (res, (f, d)) =>
-      if (Fragment.isExample(f)) res.addTest(new TestCase(d, f.executionResult, f.execution.executionTime.totalMillis)(env.arguments))
-      else                       res
+    fold.fromFoldLeft[Action, (Fragment, Description), TestSuite](suite) { case (res, (f, d)) =>
+      if (Fragment.isExample(f))
+        f.executedResult.map { case ExecutedResult(result, timer) =>
+          res.addTest(new TestCase(d, result, timer.totalMillis)(env.arguments))
+        }
+      else ok(res)
     }
   }
 
-  def descriptions(spec: SpecStructure, fragments: List[Fragment]) =
-    JUnitDescriptions.fragmentDescriptions(spec.setFragments(Fragments(fragments:_*)))
+  def descriptions(spec: SpecStructure, fragments: List[Fragment])(ee: ExecutionEnv) =
+    JUnitDescriptions.fragmentDescriptions(spec.setFragments(Fragments(fragments:_*)))(ee)
 
   def outputDirectory(env: Env): DirectoryPath =
     env.arguments.commandLine.directoryOr("junit.outdir", "target" / "test-reports")

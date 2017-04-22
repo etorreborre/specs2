@@ -5,6 +5,7 @@ package core
 import org.specs2.fp._
 import Fragment._
 import control._
+import org.specs2.concurrent.ExecutionEnv
 import producer._
 
 /**
@@ -47,7 +48,7 @@ case class Fragments(contents: AsyncStream[Fragment]) {
 
   /** run the process to get all fragments */
   def fragments: IndexedSeq[Fragment] =
-    ProducerOps(contents).runList.run.to[IndexedSeq]
+    ProducerOps(contents).runList.run(ExecutionEnv.fromGlobalExecutionContext).to[IndexedSeq]
 
   /** run the process to filter all texts */
   def texts = fragments.filter(isText)

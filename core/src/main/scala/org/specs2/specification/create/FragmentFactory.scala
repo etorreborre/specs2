@@ -9,8 +9,6 @@ import Execution._
 import control.ImplicitParameters._
 import specification.core.Text
 
-import scala.concurrent.Future
-
 /**
  * Interface for creating specification fragments
  */
@@ -105,7 +103,7 @@ import control.ImplicitParameters._
  */
 class ContextualFragmentFactory(factory: FragmentFactory, context: Env => Context) extends FragmentFactory {
   def example(description: Description, execution: Execution): Fragment =
-    factory.example(description, execution.updateRun(run => (env: Env) => Future.successful(context(env)(execution.result))))
+    factory.example(description, execution.updateRun(run => (env: Env) => run(env).map(r => () => context(env)(r()))(env.executionContext)))
 
   def example(text: String, execution: Execution): Fragment =
     example(Text(text), execution)

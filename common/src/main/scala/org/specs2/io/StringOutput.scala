@@ -35,7 +35,7 @@ trait StringOutput extends Output {
     ()
   }
 
-  protected def append(msg: String)  { msgs += msg; () }
+  protected def append(msg: String) = synchronized { msgs += msg; () }
   
   def clear() { msgs.clear() }
 }

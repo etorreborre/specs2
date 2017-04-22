@@ -2,6 +2,7 @@ package org.specs2
 package execute
 
 import ResultExecution._
+import org.specs2.control.eff.ErrorEffect
 
 /**
  * Typeclass trait for anything that can be transformed to a Result
@@ -14,6 +15,12 @@ object AsResult {
   /** implicit typeclass instance to create results from Booleans */
   implicit def booleanAsResult: AsResult[Boolean] = new AsResult[Boolean] {
     def asResult(t: =>Boolean): Result = Results.toResult(t)
+  }
+
+  /** implicit typeclass instance for error effect errors */
+  implicit def errorEffectErrorAsResult: AsResult[ErrorEffect.Error] = new AsResult[ErrorEffect.Error] {
+    def asResult(t: =>ErrorEffect.Error): Result =
+      t.fold(Error(_), Error(_))
   }
 
   /** typeclass instance for types which are convertible to Result */

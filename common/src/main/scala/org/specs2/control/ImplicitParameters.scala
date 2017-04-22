@@ -48,4 +48,9 @@ trait ImplicitParameters {
   implicit lazy val implicitParameter10: ImplicitParam10 = new ImplicitParam10 {}
 }
 
-object ImplicitParameters extends ImplicitParameters
+object ImplicitParameters extends ImplicitParameters {
+
+  // to avoid unused parameters
+  def use(a: Any, as: Any*): Any =
+    if (false) a else as
+}

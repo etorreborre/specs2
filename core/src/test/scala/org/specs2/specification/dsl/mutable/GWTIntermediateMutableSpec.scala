@@ -5,9 +5,12 @@ package mutable
 
 import script.StandardDelimitedStepParsers
 
-class GWTIntermediateSpec extends org.specs2.mutable.Spec with dsl.mutable.GWT with StandardDelimitedStepParsers {
+class GWTIntermediateMutableSpec extends org.specs2.mutable.Spec with dsl.mutable.GWT with StandardDelimitedStepParsers {
+ sequential
 
  addParagraph("adding numbers")
+
+  var number = 0
 
  "Given a first number {2}".step(anInt) { i =>
    number = i
@@ -21,7 +24,6 @@ class GWTIntermediateSpec extends org.specs2.mutable.Spec with dsl.mutable.GWT w
    number must_== i
  }
 
-  var number = 0
 }
 
 

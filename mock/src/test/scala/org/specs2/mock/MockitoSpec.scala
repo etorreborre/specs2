@@ -17,6 +17,8 @@ import ExecutionContext.Implicits.global
 import MatchersImplicits._
 import ReturnsSyntax._
 import execute._
+import ActionMatchers._
+import fp.syntax._
 
 class MockitoSpec extends script.Spec with Mockito with ResultMatchers with Groups {  def is = s2"""
 
@@ -509,7 +511,7 @@ STUBS
           1 must_== 1 // to check if the previous expectation really fails
         }
       }
-      DefaultExecutor.runSpec(s.is, Env()).filter(Fragment.isExample).map(_.executionResult.isSuccess) must contain (false)
+      DefaultExecutor.runSpec(s.is, Env()).filter(Fragment.isExample).traverse(_.executionResult.map(_.isSuccess)) must beOk(contain(false))
     }
 
     eg := {
@@ -521,7 +523,7 @@ STUBS
           there was one(list2).add("two") andThen one(list1).add("one")
         }
       }
-      DefaultExecutor.runSpec(s.is, Env()).filter(Fragment.isExample).map(_.executionResult.isSuccess) must contain (false)
+      DefaultExecutor.runSpec(s.is, Env()).filter(Fragment.isExample).traverse(_.executionResult.map(_.isSuccess)) must beOk(contain(false))
     }
   }
 

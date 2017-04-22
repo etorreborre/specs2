@@ -25,6 +25,9 @@ case class Producer[R :_Safe, A](run: Eff[R, Stream[R, A]]) {
   def map[B](f: A => B): Producer[R, B] =
     flatMap(a => one(f(a)))
 
+  def mapEval[B](f: A => Eff[R, B]): Producer[R, B] =
+    flatMap(a => Producer.eval(f(a)))
+
   def collect[B](pf: PartialFunction[A, B]): Producer[R, B] =
     flatMap { a =>
       if (pf.isDefinedAt(a)) one(pf(a))
@@ -164,6 +167,9 @@ trait Producers {
   def eval[R :_Safe, A](a: Eff[R, A]): Producer[R, A] =
     Producer(a.map(One(_)))
 
+  def evalProducer[R :_Safe, A](a: Eff[R, Producer[R, A]]): Producer[R, A] =
+    Producer(a.flatMap(_.run))
+
   def emitEff[R :_Safe, A](elements: Eff[R, List[A]]): Producer[R, A] =
     Producer(elements flatMap {
       case Nil      => done[R, A].run
@@ -172,14 +178,16 @@ trait Producers {
     })
 
   def fold[R :_Safe, A, B, S](producer: Producer[R, A])(start: Eff[R, S], f: (S, A) => Eff[R, S], end: S => Eff[R, B]): Eff[R, B] = {
-    def go(p: Producer[R, A], s: Eff[R, S]): Eff[R, S] =
-      p.run flatMap {
-        case Done() => s
-        case One(a) => s.flatMap(s1 => f(s1, a))
-        case More(as, next) => go(next, s.flatMap(s1 => as.foldLeftM(s1)(f)))
-      }
-
-    go(producer, start).flatMap(end)
+    producer.run flatMap {
+      case Done() => start.flatMap(end)
+      case One(a) => start.flatMap(s1 => f(s1, a).flatMap(end))
+      case More(as, next) =>
+        start.flatMap { s1 =>
+          as.foldLeftM(s1)(f).flatMap { s =>
+            fold(next)(protect(s), f, end)
+          }
+        }
+    }
   }
 
   def observe[R :_Safe, A, S](producer: Producer[R, A])(start: Eff[R, S], f: (S, A) => S, end: S => Eff[R, Unit]): Producer[R, A] =

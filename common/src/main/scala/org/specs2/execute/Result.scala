@@ -113,6 +113,10 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
    */
   def isSuccess: Boolean = false
   /**
+   * @return true if the result is a failure or an Error
+   */
+  def isIssue: Boolean = isFailure || isError
+  /**
    * @return true if the result is an Error instance
    */
   def isError: Boolean = false

@@ -78,6 +78,16 @@ trait Fold[M[_], A, B] { self =>
     def end(s: S) = self.end(s)
   }
 
+  /** contramap the input values with effects */
+  def contraflatMap[C](f: C => M[A]) = new Fold[M, C, B] {
+    type S = self.S
+    val monad: Monad[M] = self.monad
+
+    def start = self.start
+    def fold = (s: S, c: C) => monad.bind(f(c))(a => self.fold(s, a))
+    def end(s: S) = self.end(s)
+  }
+
   /** zip 2 folds to return a pair of values. alias for zip */
   def <*>[C](f: Fold[M, A, C]) =
     zip(f)
@@ -212,7 +222,7 @@ trait Fold[M[_], A, B] { self =>
   def void =
     as(())
 
-  def startWith(action: M[Unit]): Fold[M, A, B] = new Fold[M, A, B] {
+  def startWith(action: M[Unit]): Fold[M, A, B] { type S = self.S } = new Fold[M, A, B] {
     type S = self.S
     implicit val monad: Monad[M] = self.monad
 
@@ -221,7 +231,7 @@ trait Fold[M[_], A, B] { self =>
     def end(s: S) = self.end(s)
   }
 
-  def endWith(action: M[Unit]): Fold[M, A, B] = new Fold[M, A, B] {
+  def endWith(action: M[Unit]): Fold[M, A, B] { type S = self.S } = new Fold[M, A, B] {
     type S = self.S
     implicit val monad: Monad[M] = self.monad
 

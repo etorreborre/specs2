@@ -30,7 +30,8 @@ trait TextPrinter extends Printer {
     // statistics and indentation
     type S = ((Stats, Int), SimpleTimer)
 
-    val values = Statistics.fold zip Indentation.fold zip SimpleTimer.timerFold
+    val values: Fold[Action, Fragment, S] { type S = ((Stats, Int), SimpleTimer) } =
+      Statistics.fold zip Indentation.fold.into[Action] zip SimpleTimer.timerFold.into[Action]
 
     lazy val logger = env.lineLogger
     lazy val args   = env.arguments <| spec.arguments
@@ -38,19 +39,19 @@ trait TextPrinter extends Printer {
     lazy val sink: AsyncSink[(Fragment, S)] =
       Folds.fromStart(start(logger, spec.header, args)) *>
         linesLoggerSink(logger, spec.header, args).
-          contramap[(Fragment, S)](printFragment(args))
+          contraflatMap[(Fragment, S)](printFragment(args))
 
-    (values.into[ActionStack] observeWithState sink).mapFlatten(printFinalStats(spec, args, logger))
+    (values observeWithState sink).mapFlatten(printFinalStats(spec, args, logger))
   }
 
   /** run and shutdown the environment */
   def run(env: Env): SpecStructure => Unit = { spec: SpecStructure =>
-    try     { runAction(print(env)(spec)); () }
+    try     { runAction(print(env)(spec))(env.specs2ExecutionEnv); () }
     finally env.shutdown
   }
 
   def linesLoggerSink(logger: LineLogger, header: SpecHeader, args: Arguments): AsyncSink[List[LogLine]] =
-    Folds.fromSink[ActionStack, List[LogLine]](lines =>
+    Folds.fromSink[Action, List[LogLine]](lines =>
       pure(lines.foreach(_.log(logger))))
 
   def start(logger: LineLogger, header: SpecHeader, args: Arguments): Action[LineLogger] =
@@ -81,42 +82,44 @@ trait TextPrinter extends Printer {
   }
 
   /** transform a stream of fragments into a stream of strings for printing */
-  def printFragment(args: Arguments): ((Fragment, ((Stats, Int), SimpleTimer))) => List[LogLine] = {
+  def printFragment(args: Arguments): ((Fragment, ((Stats, Int), SimpleTimer))) => Action[List[LogLine]] = {
     case (fragment, ((stats, indentation), _)) =>
-      fragment match {
-        // only print steps and actions if there are issues
-        case Fragment(NoText, e, l) if e.isExecutable && !e.result.isSuccess =>
-          printExecutable(NoText, e, args, indentation)
+      fragment.executedResult.map { case ExecutedResult(result, timer) =>
+        fragment match {
+          // only print steps and actions if there are issues
+          case Fragment(NoText, e, l) if e.isExecutable && !result.isSuccess =>
+            printExecutable(NoText, result, timer, args, indentation)
 
-        case Fragment(d @ SpecificationRef(_, _, _, _, hidden, muted), e, l)  =>
-          if (!hidden)
-            if (e.isExecutable && !muted) printExecutable(d, e, args, indentation)
-            else                          List(d.show.info)
-          else Nil
+          case Fragment(d @ SpecificationRef(_, _, _, _, hidden, muted), e, l)  =>
+            if (!hidden)
+              if (e.isExecutable && !muted) printExecutable(d, result, timer, args, indentation)
+              else                          List(d.show.info)
+            else Nil
 
-        case Fragment(d, e, l) if e.isExecutable && d != NoText =>
-          printExecutable(d, e, args, indentation)
+          case Fragment(d, e, l) if e.isExecutable && d != NoText =>
+            printExecutable(d, result, timer, args, indentation)
 
-        case Fragment(Br, e, l) =>
-          if (args.canShow("-")) printNewLine
-          else Nil
+          case Fragment(Br, e, l) =>
+            if (args.canShow("-")) printNewLine
+            else Nil
 
-        case Fragment(Code(text), e, l) =>
-          if (args.canShow("-")) List(indentText(text, indentation, indentationSize(args)).info)
-          else Nil
+          case Fragment(Code(text), e, l) =>
+            if (args.canShow("-")) List(indentText(text, indentation, indentationSize(args)).info)
+            else Nil
 
-        case Fragment(d, e, l) =>
-          if (args.canShow("-")) List(indentText(d.show, indentation, indentationSize(args)).info)
-          else Nil
+          case Fragment(d, e, l) =>
+            if (args.canShow("-")) List(indentText(d.show, indentation, indentationSize(args)).info)
+            else Nil
+        }
       }
   }
 
   /** print an executed fragment: example, step, action */
-  def printExecutable(description: Description, execution: Execution, args: Arguments, indentation: Int): List[LogLine] = {
+  def printExecutable(description: Description, result: Result, timer: SimpleTimer, args: Arguments, indentation: Int): List[LogLine] = {
 
-    if (args.canShow(execution.result.status)) {
+    if (args.canShow(result.status)) {
       val text = description.show
-      val show = indentText(showTime(statusAndDescription(text, execution.result)(args), execution, args), indentation, indentationSize(args))
+      val show = indentText(showTime(statusAndDescription(text, result)(args), timer, args), indentation, indentationSize(args))
 
       def printResult(desc: String, r: Result) =
         r match {
@@ -128,7 +131,7 @@ trait TextPrinter extends Printer {
           case other                     => printOther(desc, other, args)
         }
 
-      execution.result match {
+      result match {
         case DecoratedResult(t: DataTable, r) =>
           // display the full table if it is an auto-example
           if (Description.isCode(description))
@@ -182,8 +185,8 @@ trait TextPrinter extends Printer {
     List(show.info)
 
   /** show execution times if the showtimes argument is true */
-  def showTime(description: String, execution: Execution, args: Arguments) = {
-    val time = if (args.showtimes) " ("+execution.time+")" else ""
+  def showTime(description: String, timer: SimpleTimer, args: Arguments) = {
+    val time = if (args.showtimes) " ("+timer.time+")" else ""
     description + time
   }
 

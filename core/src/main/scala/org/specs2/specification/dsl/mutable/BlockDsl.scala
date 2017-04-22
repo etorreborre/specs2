@@ -5,6 +5,7 @@ package mutable
 
 import control.ImplicitParameters._
 import execute.AsResult
+import org.specs2.specification.core.{Fragment, Fragments, StacktraceLocation}
 import org.specs2.control.Use
 import org.specs2.specification.core.{Fragment, Fragments, StacktraceLocation}
 import specification.create.FragmentsFactory

@@ -43,7 +43,7 @@ trait ClassRunner {
           _     <- Actions.delayed(env.shutdown)
         } yield stats
     }
-    execute(actions, arguments, exit)
+    execute(actions, arguments, exit)(env)
   }
 
   /** create the specification from the class name */
@@ -90,7 +90,7 @@ object TextRunner extends ClassRunner {
     val logger = LineLogger.stringLogger
     try {
       val env1 = env.setLineLogger(logger).setArguments(env.arguments.overrideWith(args))
-      runAction(report(env1)(spec), env.systemLogger)
+      runAction(report(env1)(spec), env.systemLogger)(env.specs2ExecutionEnv)
       logger
     } finally env.shutdown
   }

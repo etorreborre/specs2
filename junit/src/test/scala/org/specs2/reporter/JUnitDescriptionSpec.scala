@@ -8,8 +8,9 @@ import matcher.{MustMatchers, StandardMatchResults}
 import org.junit.runner.Description
 import execute.{Result, StandardResults, Success}
 import ShowDescription._
+import org.specs2.concurrent.ExecutionEnv
 
-class JUnitDescriptionSpec extends Specification with JUnitDescriptionSpecTest { def is = s2"""
+class JUnitDescriptionSpec(ee: ExecutionEnv) extends Specification with JUnitDescriptionSpecTest { def is = s2"""
                                                                                          
  A list of Fragments can be 'folded' into a tree of JUnit descriptions so that there is
  a root Description object (the top 'suite') and children objects representing either
@@ -131,7 +132,7 @@ class JUnitDescriptionSpec extends Specification with JUnitDescriptionSpecTest {
     val ex1snd = "ex1" ! ok
     val ds =
       ShowDescription.toTree(descriptions(false).
-        createDescription(titled(start ^ "level1" ^ break ^ ex1fst ^ ex1snd ^ end))).flatten.toList
+        createDescription(titled(start ^ "level1" ^ break ^ ex1fst ^ ex1snd ^ end))(ee)).flatten.toList
 
     ds.map(_.hashCode).distinct must haveSize(4)
   }
@@ -175,7 +176,7 @@ class JUnitDescriptionSpec extends Specification with JUnitDescriptionSpecTest {
   def showDescriptionTree(spec: SpecStructure, fromIDE: Boolean = false): String = {
     // set the header to the main specification class
     val newHeader = spec.header.copy(specClass = classOf[JUnitDescriptionSpec])
-    descriptions(fromIDE).createDescription(spec.copy(header = newHeader)).drawTree
+    descriptions(fromIDE).createDescription(spec.copy(header = newHeader))(ee).drawTree
   }
 
   def toDescription(f: Fragment): Description   = toDescription(Fragments(f))
@@ -185,7 +186,7 @@ class JUnitDescriptionSpec extends Specification with JUnitDescriptionSpecTest {
 
     // set the header to the main specification class
     val newHeader = spec.header.copy(specClass = classOf[JUnitDescriptionSpec])
-    descriptions().createDescription(spec.copy(header = newHeader))
+    descriptions().createDescription(spec.copy(header = newHeader))(ee)
   }
 
   def descriptions(fromIDE: Boolean = false) = new JUnitDescriptions {

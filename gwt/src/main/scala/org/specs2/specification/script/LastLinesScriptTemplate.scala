@@ -19,7 +19,7 @@ case class LastLinesScriptTemplate() extends ScriptTemplate[Scenario, GivenWhenT
       val (gwtLines, remainingLines) = res
       val (stepsNumber, createBlock) = cur
 
-      (gwtLines.prepend(createBlock(remainingLines.takeRight(stepsNumber))), remainingLines.dropRight(stepsNumber))
+      (gwtLines.prepend(createBlock(remainingLines.takeRight(stepsNumber).toVector)), remainingLines.dropRight(stepsNumber))
     }
     // add the remaining lines at the beginning and the empty lines at the end
     grouped._1.prepend(TextLines(grouped._2.mkString("\n"))).append(TextLines.create(emptyLines))

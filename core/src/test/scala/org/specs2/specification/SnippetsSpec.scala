@@ -90,12 +90,12 @@ n = 1
 // 8<--
 n = 0
 // 8<--
-var i = 0
+val i = 0
 i = 1
   } }""".trimmedTexts(1) ===
     """```
       |n = 1
-      |var i = 0
+      |val i = 0
       |i = 1
       |```""".stripMargin
 
@@ -149,12 +149,12 @@ n = 0
   }
   "results" - new group {
     eg := s2""" code: ${ snippet {
-  var n = 1
+  val n = 1
   n = 1 + n
   n
   }.eval.offsetIs(-2) }""".trimmedTexts.drop(1).take(3).mkString("\n") ===
     """|```
-       |var n = 1
+       |val n = 1
        |n = 1 + n
        |n
        |```

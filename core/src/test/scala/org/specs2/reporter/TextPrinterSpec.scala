@@ -32,7 +32,7 @@ class TextPrinterSpec extends Specification { def is = s2"""
    if showtimes is true, each individual time must be shown   $b7 ${tag("travis")}
 
  Statistics must be displayed at the end   
-   stats                                                      $c1 ${tag("travis")}
+   total stats                                                $c1 ${tag("travis")}
 
  Failure messages must be shown
    normal messages                                            $d1
@@ -241,7 +241,7 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
       } ^ p)
 
     val spec = SpecStructure.create(SpecHeader(getClass, Some("title\n")), Arguments(), fragments)
-    val env = Env(lineLogger = logger)
+    val env = Env(lineLogger = logger, arguments = Arguments("batchsize", "3"))
     TextPrinter.run(env)(DefaultExecutor.executeSpec(spec, env))
 
     val executed = logger.messages.filter(_.contains("executed")).map(_.replace("executed", "").trim.toInt)
@@ -251,11 +251,11 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
       printed must_== printed.sorted
     } and
     "executed is unsorted" ==> {
-      executed must not be_==(executed.sorted)
+      executed must not be_== executed.sorted
     } and
     "the execution is mixed with the printing" ==> {
       val (l1, l2) = logger.messages.filter(s => s.contains("executed") || s.contains("+")).span(_.contains("executed"))
-      l1.size aka (l1, l2).toString must not be_==(l2.size)
+      l1.size aka (l1, l2).toString must not be_== l2.size
     }
   }
 
@@ -279,13 +279,13 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
     "printed is sorted" ==> {
       printed must_== printed.sorted
     } and
-      "executed is sorted too" ==> {
-        executed must be_==(executed.sorted)
-      } and
-      "the execution is mixed with the printing" ==> {
-        val (l1, l2) = logger.messages.filter(s => s.contains("executed") || s.contains("+")).span(_.contains("executed"))
-        l1.size aka (l1, l2).toString must not be_==(l2.size)
-      }
+    "executed is sorted too" ==> {
+      executed must be_==(executed.sorted)
+    } and
+    "the execution is mixed with the printing" ==> {
+      val (l1, l2) = logger.messages.filter(s => s.contains("executed") || s.contains("+")).span(_.contains("executed"))
+      l1.size aka (l1, l2).toString must not be_== l2.size
+    }
   }
 
   import specification.Tables._

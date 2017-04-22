@@ -117,7 +117,7 @@ class JUnitReporterSpec extends Specification with Mockito with ForEachEnv {  de
       val reporter = Reporter
       val junitPrinter: Printer = new JUnitPrinter {
         def notifier = outer.notifier
-        def descriptions = JUnitDescriptions.fragmentDescriptions(spec)
+        def descriptions = JUnitDescriptions.fragmentDescriptions(spec)(env.specs2ExecutionEnv)
         def description = JUnitDescriptions.specDescription(spec)
       }
       reporter.report(env, List(junitPrinter))(spec) must beOk

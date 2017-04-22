@@ -7,9 +7,10 @@ import org.specs2.fp.syntax._
 import Arbitraries._
 import Fragment._
 import control._
+import org.specs2.concurrent.ExecutionEnv
 import producer._
 
-class IndentationSpec extends Specification with ScalaCheck { def is = s2"""
+class IndentationSpec(ee: ExecutionEnv) extends Specification with ScalaCheck { def is = s2"""
 
  The Indentation fold is responsible for computing the indentation level in a specification
  based on the presence of tab fragments
@@ -38,5 +39,5 @@ class IndentationSpec extends Specification with ScalaCheck { def is = s2"""
   implicit val prettyFragments = Pretties.prettyFragments
 
   def indentation(fs: Fragments): Option[Int] =
-    fs.contents.fold(Indentation.fold.into[ActionStack]).runOption
+    fs.contents.fold(Indentation.fold.into[Action]).runOption(ee)
 }

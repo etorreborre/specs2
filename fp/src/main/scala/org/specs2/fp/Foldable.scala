@@ -155,11 +155,20 @@ trait FoldableSyntax {
     def foldMap[B : Monoid](f: A => B): B =
       foldable.foldMap(fa)(f)
 
+    def sumr(implicit m: Monoid[A]): A =
+      foldable.sumr(fa)
+
+    def suml(implicit m: Monoid[A]): A =
+      foldable.suml(fa)
+
     def foldLeft[B](z: B)(f: (B, A) => B): B =
       foldable.foldLeft(fa, z)(f)
 
     def foldLeftM[M[_] : Monad, B](z: B)(f: (B, A) => M[B]): M[B] =
       foldable.foldLeftM(fa, z)(f)
+
+    def foldRightM[M[_] : Monad, B](z: B)(f: (A, =>B) => M[B]): M[B] =
+      foldable.foldRightM(fa, z)(f)
   }
 
   implicit class FoldableMonoidOps[F[_] : Foldable, A : Monoid](fa: F[A]) {

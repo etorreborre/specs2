@@ -8,8 +8,10 @@ import data.Trees._
 import specification.create._
 import DefaultFragmentFactory._
 import specification.core._
+
 import scala.math._
 import control._
+import org.specs2.concurrent.ExecutionEnv
 import producer._
 import transducers._
 
@@ -66,22 +68,24 @@ trait Levels {
     }.map(_.map(_._1))
   }
 
-  def treeLoc(fs: Fragments): Option[TreeLoc[Fragment]] =
-    treeLocMap(fs)(identityMapper)
+  def treeLoc(fs: Fragments)(ee: ExecutionEnv): Option[TreeLoc[Fragment]] =
+    treeLocMap(fs)(identityMapper)(ee)
 
-  def levels(fs: Fragments): List[Int] =
-    fs.contents.pipe(levelsProcess).runList.run.map(_._2).toList
+  def levels(fs: Fragments)(ee: ExecutionEnv): List[Int] =
+    fs.contents.pipe(levelsProcess).runList.run(ee).map(_._2).toList
 
+  def levels(f: Fragment)(ee: ExecutionEnv): List[Int] =
+    levels(Fragments(f))(ee)
 
-  def levels(f: Fragment): List[Int]   = levels(Fragments(f))
-  def levels(structure: SpecStructure): List[Int] = levels(structure.fragments)
+  def levels(structure: SpecStructure)(ee: ExecutionEnv): List[Int] =
+    levels(structure.fragments)(ee)
 
-  def treeLocMap(fs: Fragments)(mapper: Mapper): Option[TreeLoc[Fragment]] =
-    fs.contents.pipe(levelsProcess).pipe(levelsToTreeLoc(mapper)).runList.run.lastOption
+  def treeLocMap(fs: Fragments)(mapper: Mapper)(ee: ExecutionEnv): Option[TreeLoc[Fragment]] =
+    fs.contents.pipe(levelsProcess).pipe(levelsToTreeLoc(mapper)).runList.run(ee).lastOption
 
-  def tree(fs: Fragments): Option[Tree[Fragment]] = treeLoc(fs).map(_.toTree)
-  def treeMap(fs: Fragments)(mapper: Mapper): Option[Tree[Fragment]] = treeLocMap(fs)(mapper).map(_.toTree)
-  def treeMap(structure: SpecStructure)(mapper: Mapper): Option[Tree[Fragment]] = treeMap(structure.fragments)(mapper)
+  def tree(fs: Fragments)(ee: ExecutionEnv): Option[Tree[Fragment]] = treeLoc(fs)(ee).map(_.toTree)
+  def treeMap(fs: Fragments)(mapper: Mapper)(ee: ExecutionEnv): Option[Tree[Fragment]] = treeLocMap(fs)(mapper)(ee).map(_.toTree)
+  def treeMap(structure: SpecStructure)(mapper: Mapper)(ee: ExecutionEnv): Option[Tree[Fragment]] = treeMap(structure.fragments)(mapper)(ee)
 
   type Mapper = Fragment => Option[Fragment]
   val identityMapper: Mapper = (f: Fragment) => Some(f)

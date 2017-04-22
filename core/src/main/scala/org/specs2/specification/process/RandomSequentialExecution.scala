@@ -39,11 +39,13 @@ trait RandomSequentialExecution extends SpecificationStructure {
     val scrambled = fragments.zipWithIndex.scramble(env.random)
     // map of all executions
     val executions: CMap[Int, Execution] = new TrieMap()
-    scrambled.foreach { case (pf, i) => executions.putIfAbsent(i, pf.execution.execute(env)) }
+    scrambled.foreach { case (pf, i) => executions.putIfAbsent(i, pf.execution) }
 
     fragments.zipWithIndex.map { case (f, i) =>
       if (Fragment.isExample(f)) {
-        f.setExecution(Execution.result(executions(i).result))
+        val f1 = f.setExecution(executions(i).after(executions.toList.collect { case (j, e) if j < i => e })(env))
+        executions.remove(i)
+        f1
       } else f
     }
   }

@@ -12,6 +12,7 @@ import scala.xml.NodeSeq
 import matcher._
 import form._
 import control._
+import org.specs2.concurrent.ExecutionEnv
 import origami._
 import org.specs2.time.SimpleTimer
 
@@ -23,16 +24,18 @@ trait HtmlBodyPrinter {
   /**
    * Make the body of the Html file based on all the specification fragments
    */
-  def makeBody(spec: SpecStructure, stats: Stats, timer: SimpleTimer, options: HtmlOptions, arguments: Arguments, pandoc: Boolean): Operation[String] = {
+  def makeBody(spec: SpecStructure, stats: Stats, timer: SimpleTimer, options: HtmlOptions, arguments: Arguments, pandoc: Boolean)(ee: ExecutionEnv): Operation[String] = {
     val title = spec.name
     type HtmlState = (String, Level)
 
-    val htmlFold = fold.fromFoldLeft[OperationStack, Fragment, HtmlState](("", Level())) { case ((htmlString, level), fragment) =>
-      (htmlString + printFragment(arguments, level, options.outDir, pandoc)(fragment),
-       Levels.fold(fragment, level))
+    val htmlFold = fold.fromFoldLeft[Action, Fragment, HtmlState](("", Level())) { case ((htmlString, level), fragment) =>
+      fragment.executionResult.map { result =>
+        (htmlString + printFragment(fragment, result, arguments, level, options.outDir, pandoc),
+          Levels.fold(fragment, level))
+      }
     }
 
-    Operations.delayed(spec.fragments.contents.fold(htmlFold.into[ActionStack]).runOption).map {
+    Operations.delayed(spec.fragments.contents.fold(htmlFold).runOption(ee)).map {
       case Some((html, _)) =>
         html +
         s"""${printStatistics(title, stats, timer, options)}"""
@@ -46,7 +49,7 @@ trait HtmlBodyPrinter {
    *
    * If pandoc is true we make sure that text is not parsed in order to be correctly rendered as Markdown
    */
-  def printFragment(arguments: Arguments, level: Level, baseDir: DirectoryPath, pandoc: Boolean) = (fragment: Fragment) => {
+  def printFragment(fragment: Fragment, result: Result, arguments: Arguments, level: Level, baseDir: DirectoryPath, pandoc: Boolean): NodeSeq = {
 
     fragment match {
       case t if Fragment.isText(t) =>
@@ -65,7 +68,7 @@ trait HtmlBodyPrinter {
 
       case e if Fragment.isExample(e) =>
         val example =
-          e.executionResult match {
+          result match {
             case r: Success =>
               <li class="example success ok">{show(e)}</li>
 
@@ -110,7 +113,7 @@ trait HtmlBodyPrinter {
         else                     example
 
       case f if Fragment.isStepOrAction(f) =>
-        f.executionResult match {
+        result match {
           case f1 @ Failure(m, e1, st, details) =>
             failureElement("step", f1, <message class="failure">Failed step!</message>, m, arguments.failtrace, details, arguments)
 
@@ -124,7 +127,7 @@ trait HtmlBodyPrinter {
         if (ref.muted) {
           <link class="ok"><a href={FilePath.unsafe(ref.url).relativeTo(baseDir).path} tooltip={ref.tooltip} class="ok">{ref.linkText}</a></link>
         } else {
-          val status = fragment.executionResult.statusName(arguments)+" ok"
+          val status = result.statusName(arguments)+" ok"
           val image = if (fragment.isExecutable) <span class={status}> </span> else NodeSeq.Empty
           <link class="ok">{image}  <a href={FilePath.unsafe(ref.url).relativeTo(baseDir).path} tooltip={ref.tooltip} class="ok">{ref.linkText}</a></link>
         }

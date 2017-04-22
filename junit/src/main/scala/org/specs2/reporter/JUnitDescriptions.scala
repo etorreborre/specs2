@@ -4,17 +4,17 @@ package reporter
 import java.lang.annotation.Annotation
 
 import org.junit.runner.Description
-
-import org.specs2.fp._, Tree._
+import org.specs2.fp._
+import Tree._
 import data.Trees._
 import control.Exceptions._
-
 import data.Trees
 import Trees._
 import specification._
 import core._
 import process._
 import control._
+import org.specs2.concurrent.ExecutionEnv
 import specification.core.{Fragment, NoText}
 import specification.create.DefaultFragmentFactory
 
@@ -24,8 +24,8 @@ import specification.create.DefaultFragmentFactory
  */
 trait JUnitDescriptions extends ExecutionOrigin {
 
-  def createDescription(spec: SpecStructure): Description =
-    createDescription(createTreeLoc(spec))
+  def createDescription(spec: SpecStructure)(ee: ExecutionEnv): Description =
+    createDescription(createTreeLoc(spec)(ee))
 
   def createDescription(treeLoc: TreeLoc[Description]): Description = {
     treeLoc.toTree.bottomUp {
@@ -37,15 +37,15 @@ trait JUnitDescriptions extends ExecutionOrigin {
     }.rootLabel
   }
 
-  def createTreeLoc(spec: SpecStructure) =
-    createDescriptionTree(spec).map(_._2)
+  def createTreeLoc(spec: SpecStructure)(ee: ExecutionEnv) =
+    createDescriptionTree(spec)(ee).map(_._2)
 
-  def createDescriptionTree(spec: SpecStructure): TreeLoc[(Fragment, Description)] = {
+  def createDescriptionTree(spec: SpecStructure)(ee: ExecutionEnv): TreeLoc[(Fragment, Description)] = {
     val className = spec.specClassName
     val annotations = tryOrElse(getClass.getClassLoader.loadClass(spec.specClassName).getAnnotations)(Array())
     val rootFragment = DefaultFragmentFactory.text(spec.header.simpleName)
 
-    Levels.treeLocMap(spec.fragments)(keep).getOrElse(Leaf(rootFragment).loc).root.setLabel(rootFragment).cojoin.map {
+    Levels.treeLocMap(spec.fragments)(keep)(ee).getOrElse(Leaf(rootFragment).loc).root.setLabel(rootFragment).cojoin.map {
       current: TreeLoc[Fragment] =>
         val description =
         current.getLabel match {
@@ -65,8 +65,8 @@ trait JUnitDescriptions extends ExecutionOrigin {
   }
 
   /** Map of each fragment to its description */
-  def fragmentDescriptions(spec: SpecStructure): Map[Fragment, Description] =
-    createDescriptionTree(spec).root.toTree.flattenLeft.toMap
+  def fragmentDescriptions(spec: SpecStructure)(ee: ExecutionEnv): Map[Fragment, Description] =
+    createDescriptionTree(spec)(ee).root.toTree.flattenLeft.toMap
 
   /** filter out the fragments which don't need to be represented in the JUnit descriptions */
   def keep: Levels.Mapper = {
@@ -114,8 +114,8 @@ trait JUnitDescriptions extends ExecutionOrigin {
 
 object JUnitDescriptions extends JUnitDescriptions
 
-case class JUnitDescriptionsTree(spec: SpecStructure) {
-  lazy val descriptionTree = JUnitDescriptions.createDescriptionTree(spec)
+case class JUnitDescriptionsTree(spec: SpecStructure, ee: ExecutionEnv) {
+  lazy val descriptionTree = JUnitDescriptions.createDescriptionTree(spec)(ee)
   lazy val descriptions = descriptionTree.root.toTree.flattenLeft.toMap
   lazy val description = JUnitDescriptions.createDescription(descriptionTree.map(_._2))
 }

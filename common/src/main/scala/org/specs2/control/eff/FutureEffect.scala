@@ -26,6 +26,19 @@ final case class TimedFuture[A](callback: (ScheduledExecutorService, ExecutionCo
       promise.future
     }
   }
+
+  def attempt: TimedFuture[Throwable Either A] =
+    TimedFuture[Throwable Either A](callback = (sexs, ec) => {
+      val prom = Promise[Throwable Either A]()
+      runNow(sexs, ec).onComplete { t =>
+        prom.success(t match {
+          case Failure(ex) => Left(ex)
+          case Success(v) => Right(v)
+        })
+      }(ec)
+      prom.future
+    })
+
 }
 
 object TimedFuture {
@@ -62,6 +75,14 @@ object TimedFuture {
     override def toString = "Monad[TimedFuture]"
   }
 
+  def successful[A](a: A): TimedFuture[A] =
+    future(Future.successful(a))
+
+  def failed[A](t: Throwable): TimedFuture[A] =
+    future(Future.failed(t))
+
+  def future[A](f: =>Future[A]): TimedFuture[A] =
+    TimedFuture((_, _) => f)
 }
 
 trait FutureTypes {
@@ -74,9 +95,6 @@ trait FutureCreation extends FutureTypes {
   final def fromFutureWithExecutors[R :_future, A](c: (ScheduledExecutorService, ExecutionContext) => Future[A], timeout: Option[FiniteDuration] = None): Eff[R, A] =
     send[TimedFuture, R, A](TimedFuture(c, timeout))
 
-  final def fromFuture[R :_future, A](c: => Future[A], timeout: Option[FiniteDuration] = None): Eff[R, A] =
-    send[TimedFuture, R, A](TimedFuture((_, _) => c, timeout))
-
   final def futureFail[R :_future, A](t: Throwable): Eff[R, A] =
     send[TimedFuture, R, A](TimedFuture((_, _) => Future.failed(t)))
 
@@ -84,12 +102,12 @@ trait FutureCreation extends FutureTypes {
     e.fold(futureFail[R, A], Eff.pure[R, A])
 
   final def futureDelay[R :_future, A](a: => A, timeout: Option[FiniteDuration] = None): Eff[R, A] =
-    send[TimedFuture, R, A](TimedFuture((_, ec) => Future(a)(ec), timeout))
+    send[TimedFuture, R, A](TimedFuture((_, _) => Future.successful(a), timeout))
 
   final def futureFork[R :_future, A](a: => A, ec: ExecutionContext, timeout: Option[FiniteDuration] = None): Eff[R, A] =
     send[TimedFuture, R, A](TimedFuture((_, _) => Future(a)(ec), timeout))
 
-  final def futureDefer[R :_future, A](a: => Future[A], timeout: Option[FiniteDuration] = None): Eff[R, A] =
+  final def futureDefer[R :_future, A](a: =>Future[A], timeout: Option[FiniteDuration] = None): Eff[R, A] =
     send[TimedFuture, R, A](TimedFuture((_, _) => a, timeout))
 
 }
@@ -107,21 +125,8 @@ trait FutureInterpretation extends FutureTypes {
   final def futureAttempt[R, A](e: Eff[R, A])(implicit future: TimedFuture /= R): Eff[R, Throwable Either A] =
     interpret.interceptNatM[R, TimedFuture, Throwable Either ?, A](e,
       new (TimedFuture ~> (TimedFuture of (Throwable Either ?))#l) {
-        override def apply[X](fa: TimedFuture[X]): TimedFuture[Throwable Either X] = attempt(fa)
+        override def apply[X](fa: TimedFuture[X]): TimedFuture[Throwable Either X] = fa.attempt
       })
-
-  final def attempt[A](a: TimedFuture[A]): TimedFuture[Throwable Either A] = {
-    TimedFuture[Throwable Either A](callback = (sexs, ec) => {
-      val prom = Promise[Throwable Either A]()
-      a.runNow(sexs, ec).onComplete { t =>
-        prom.success(t match {
-          case Failure(ex) => Left(ex)
-          case Success(v) => Right(v)
-        })
-      }(ec)
-      prom.future
-    })
-  }
 
   final def memoize[A](key: AnyRef, cache: Cache, future: TimedFuture[A]): TimedFuture[A] =
     TimedFuture { (sexs, ec) =>

@@ -36,14 +36,14 @@ trait Reporter {
   def report(env: Env, printers: List[Printer]): SpecStructure => Action[Stats] = { spec =>
     val env1 = env.setArguments(env.arguments.overrideWith(spec.arguments))
     val executing = readStats(spec, env1) |> env1.selector.select(env1) |> env1.executor.execute(env1)
-    
+
     val contents: AsyncStream[Fragment] =
       // evaluate all fragments before reporting if required
       if (env.arguments.execute.asap) producers.emitEff(executing.contents.runList)
       else                            executing.contents
 
     val sinks = (printers.map(_.sink(env1, spec)) :+ statsStoreSink(env1, spec)).sumAll
-    val reportFold = sinks *> Statistics.statisticsFold
+    val reportFold = sinks *> Statistics.fold
 
     contents.fold(reportFold)
   }
@@ -56,9 +56,13 @@ trait Reporter {
     val resetStore = env.arguments.store.reset
 
     lazy val sink: AsyncSink[Fragment] =
-      Folds.fromSink[ActionStack, Fragment] { fragment: Fragment =>
-        if (neverStore) Actions.unit
-        else            env.statisticsRepository.storeResult(spec.specClassName, fragment.description, fragment.executionResult).toAction
+      Folds.fromSink[Action, Fragment] { fragment: Fragment =>
+        if (neverStore)
+          Actions.unit
+        else
+          fragment.executionResult.flatMap { r =>
+            env.statisticsRepository.storeResult(spec.specClassName, fragment.description, r).toAction
+          }
       }
 
     val prepare: Action[Unit] =
@@ -69,7 +73,7 @@ trait Reporter {
       if (neverStore) Actions.unit
       else            env.statisticsRepository.storeStatistics(spec.specClassName, stats).toAction
 
-    (Statistics.fold.into[ActionStack] <* fromStart(prepare) <* sink).mapFlatten(last)
+    (Statistics.fold <* fromStart(prepare) <* sink).mapFlatten(last)
   }
 
 }

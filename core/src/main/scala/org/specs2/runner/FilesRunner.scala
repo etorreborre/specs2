@@ -27,12 +27,9 @@ trait FilesRunner {
       lineLogger = consoleLogger)
 
     val actions: Action[Stats] =
-      for {
-        stats <- run(env)
-        _     <- Actions.delayed(env.shutdown)
-      } yield stats
+      run(env).addLast(Actions.delayed(env.shutdown))
 
-      execute(actions, env.arguments, exit)
+      execute(actions, env.arguments, exit)(env)
   }
 
   def run(env: Env): Action[Stats] = {

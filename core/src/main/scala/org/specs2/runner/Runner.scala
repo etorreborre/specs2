@@ -21,8 +21,8 @@ object Runner {
   /**
    * Execute some actions and exit with the proper code if 'exit' is true
    */
-  def execute(actions: Action[Stats], arguments: Arguments, exit: Boolean): Unit = {
-    val (result, warnings) = executeAction(actions, consoleLogging)
+  def execute(actions: Action[Stats], arguments: Arguments, exit: Boolean)(env: Env): Unit = {
+    val (result, warnings) = executeAction(actions, env.specs2ExecutionEnv, consoleLogging)
     val logging = (s: String) => Name(consoleLogging(s))
     result.fold(
       error => error.fold(

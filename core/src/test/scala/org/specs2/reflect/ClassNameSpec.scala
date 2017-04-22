@@ -41,4 +41,5 @@ class ClassNameSpec extends Spec with Tables with TypedEqual {
   }
 
   class ThisClassName
+
 }

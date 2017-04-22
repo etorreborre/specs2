@@ -6,9 +6,10 @@ import execute._
 import DefaultExecutor._
 import Statistics._
 import control._
+import org.specs2.concurrent.ExecutionEnv
 import producer._
 
-class StatsSpec extends Specification { def is = s2"""
+class StatsSpec(ee: ExecutionEnv) extends Specification { def is = s2"""
 
  Statitistics can be computed for a stream of fragments
   1 success            $e1
@@ -35,7 +36,7 @@ class StatsSpec extends Specification { def is = s2"""
    */
 
   def runLast[A](p: AsyncStream[A]): Option[A] =
-    p.runList.runOption.map(_.lastOption).flatten
+    p.runList.runOption(ee).map(_.lastOption).flatten
 
   def r1 =
     Stats(failure.setExpectationsNb(3)) === Stats(failures = 1, examples = 1, expectations = 3)

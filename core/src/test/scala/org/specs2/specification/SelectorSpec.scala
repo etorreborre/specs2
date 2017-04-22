@@ -7,8 +7,9 @@ import execute.Result
 import matcher._
 import control._
 import main.Arguments
+import org.specs2.concurrent.ExecutionEnv
 
-class SelectorSpec extends script.Specification with Groups with ResultMatchers { def is = s2"""
+class SelectorSpec(ee: ExecutionEnv) extends script.Specification with Groups with ResultMatchers { def is = s2"""
 
  Selection by name
  =================
@@ -254,7 +255,7 @@ class SelectorSpec extends script.Specification with Groups with ResultMatchers 
 
   def filterIncluded(fragments: Fragments, tags: Seq[String]) = {
     val env = Env(arguments = Arguments.split(s"include ${tags.mkString(",")}"))
-    (fragments.contents |> DefaultSelector.filterByMarker(env)).runList.run
+    (fragments.contents |> DefaultSelector.filterByMarker(env)).runList.run(ee)
   }
 
   def filterExcluded(fragments: Fragments, tags: Seq[String]) = {

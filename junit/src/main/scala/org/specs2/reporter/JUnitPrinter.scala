@@ -46,12 +46,14 @@ trait JUnitPrinter extends Printer { outer =>
     val description = descriptions.find { case (f, d) =>
       f.description == fragment.description && f.location == fragment.location }.map(_._2)
 
-    description.map { description: Description =>
-      if (fragment.isExecutable) Actions.ok {
-        notifier.fireTestStarted(description)
-        notifyResult(description, fragment.executionResult)(args)
-      } else Actions.ok(())
-    }.getOrElse(Actions.ok(()))
+    fragment.executionResult.map { result =>
+      description.map { description: Description =>
+        if (fragment.isExecutable) {
+          notifier.fireTestStarted(description)
+          notifyResult(description, result)(args)
+        } else ()
+      }.getOrElse(())
+    }
   }
 
   private def notifyResult(description: Description, result: Result)(implicit args: Arguments) =

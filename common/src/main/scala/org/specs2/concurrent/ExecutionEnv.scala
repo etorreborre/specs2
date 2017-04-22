@@ -21,8 +21,8 @@ case class ExecutionEnv(executor:          () => ExecutorService,
 
   /** note: shutdown only shuts down the executor services */
   def shutdown(): Unit = {
-    try { executorService.shutdownNow; () }
-    finally { scheduledExecutorService.shutdownNow; () }
+    try { executorService.shutdown; () }
+    finally { scheduledExecutorService.shutdown; () }
   }
 
   lazy val executorService = executor()

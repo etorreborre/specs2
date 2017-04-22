@@ -4,12 +4,14 @@ package reporter
 import text.NotNullStrings._
 import main.Arguments
 import execute.Result
-
 import control._
-import eff._, all._
+import eff._
+import all._
 import control.origami._
 import specification.core._
 import Actions._
+import org.specs2.time.SimpleTimer
+import fp._
 
 /**
  * A Printer can be created from a Notifier implementation
@@ -24,16 +26,19 @@ object NotifierPrinter {
     def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] = Actions.unit
 
     def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment] = {
-      (notifyFold.into[ActionStack]
+      val nf: Fold[Action, Fragment, Notified] { type S = Notified } =
+        notifyFold.into[Action]
       	.startWith(asyncDelayAction(notifier.specStart(spec.name, "")))
-      	.endWith(asyncDelayAction(notifier.specEnd(spec.name, ""))).observeWithNextState(notifySink(spec, notifier, env.arguments))).void
+      	.endWith(asyncDelayAction(notifier.specEnd(spec.name, "")))
+      nf.observeWithNextState(notifySink(spec, notifier, env.arguments)).void
     }
   }
 
-  def notifyFold: FoldState[Fragment, Notified] = new Fold[NoFx, Fragment, Notified] {
+  def notifyFold: FoldState[Fragment, Notified] = new Fold[Id, Fragment, Notified] {
     type S = Notified
+    val monad = Monad.idMonad
 
-    def start = pure[NoFx, S](Notified(context = "start", start = false, close = false, hide = true))
+    def start = Notified(context = "start", start = false, close = false, hide = true)
 
     def fold = (ps: S, f: Fragment) => {
       // if the previous state was defining the closing of a block
@@ -55,73 +60,83 @@ object NotifierPrinter {
       }
     }
 
-    def end(s: S) = pure[NoFx, S](s)
+    def end(s: S) = s
   }
 
   def notifySink(spec: SpecStructure, notifier: Notifier, args: Arguments): AsyncSink[(Fragment, Notified)] =
-    new Fold[ActionStack, (Fragment, Notified), Unit] {
-      type S = Unit
-      def start = pure(())
-      def fold = (s: S, a: (Fragment, Notified)) => printFragment(notifier, a._1, a._2, args)
-      def end(s: S) = pure(s)
+    Folds.fromSink { case (f, n) => printFragment(notifier, f, n, args) }
+
+  def printFragment(n: Notifier, f: Fragment, notified: Notified, args: Arguments): Action[Unit] =
+    f.executedResult.map { er =>
+        val location = f.location.fullLocation(args.traceFilter).getOrElse("no location")
+
+        if (!notified.hide) {
+          if (notified.start) n.contextStart(notified.context.trim, location)
+          else {
+            if (Fragment.isExample(f))   notifyExample(n, f, er, args)
+            else if (Fragment.isStep(f)) notifyStep(n, f, er, args)
+            else if (Fragment.isText(f)) notifyText(n, f, args)
+          }
+        } else if (notified.close) n.contextEnd(notified.context.trim, location)
     }
 
-  def printFragment(n: Notifier, f: Fragment, notified: Notified, args: Arguments) = {
+  private def notifyExample(n: Notifier, f: Fragment, executedResult: ExecutedResult, args: Arguments) = {
     val description = f.description.show.trim
-
     val location = f.location.fullLocation(args.traceFilter).getOrElse("no location")
-    def duration(f: Fragment) = f.execution.executionTime.totalMillis
 
-    if (!notified.hide) {
-      if (notified.start) n.contextStart(notified.context.trim, location)
-      else {
-        if (Fragment.isExample(f)) {
-          n.exampleStarted(description, location)
+    n.exampleStarted(description, location)
 
-          def notifyResult(result: Result): Unit =
-            result match {
-              case r: execute.Success =>
-                n.exampleSuccess(description, duration(f))
+    notifyResult(executedResult.result, n, description, location, executedResult.timer.totalMillis)
+  }
 
-              case r: execute.Failure =>
-                n.exampleFailure(description, r.message, location, r.exception, r.details, duration(f))
+  private def notifyResult(result: Result, n: Notifier, description: String, location: String, duration: Long): Unit =
+    result match {
+      case r: execute.Success =>
+        n.exampleSuccess(description, duration)
 
-              case r: execute.Error =>
-                n.exampleError(description, r.message, location, r.exception, duration(f))
+      case r: execute.Failure =>
+        n.exampleFailure(description, r.message, location, r.exception, r.details, duration)
 
-              case r: execute.Skipped =>
-                n.exampleSkipped(description, r.message, location, duration(f))
+      case r: execute.Error =>
+        n.exampleError(description, r.message, location, r.exception, duration)
 
-              case r: execute.Pending =>
-                n.examplePending(description, r.message, location, duration(f))
+      case r: execute.Skipped =>
+        n.exampleSkipped(description, r.message, location, duration)
 
-              case execute.DecoratedResult(_, r2) =>
-                notifyResult(r2)
-            }
+      case r: execute.Pending =>
+        n.examplePending(description, r.message, location, duration)
 
-          notifyResult(f.executionResult)
-        } else if (Fragment.isStep(f)) {
-          try {
-            n.stepStarted(location)
+      case execute.DecoratedResult(_, r2) =>
+        notifyResult(r2, n, description, location, duration)
+    }
 
-            def notifyResult(result: Result): Unit =
-              result match {
-                case r: execute.Success => n.stepSuccess(duration(f))
-                case r: execute.Failure => n.stepError(r.message, location, r.exception, duration(f))
-                case r: execute.Error   => n.stepError(r.message, location, r.exception, duration(f))
-                case _ => ()
-              }
-            notifyResult(f.executionResult)
-            // catch AbstractMethod errors coming from Intellij since adding
-            // calling new "step" methods on the Notifier interface is not supported yet
-          } catch {
-            case e: AbstractMethodError if e.getMessage.notNull.contains("JavaSpecs2Notifier") => ()
-            case other: Throwable => throw other
-          }
+  private def notifyStep(n: Notifier, f: Fragment, executedResult: ExecutedResult, args: Arguments) = {
+    try {
+      val location = f.location.fullLocation(args.traceFilter).getOrElse("no location")
+      n.stepStarted(location)
 
-        } else if (Fragment.isText(f)) n.text(description, location)
-      }
-    } else if (notified.close) n.contextEnd(notified.context.trim, location)
+      def notifyResult(result: Result, timer: SimpleTimer): Unit =
+        result match {
+          case r: execute.Success => n.stepSuccess(timer.totalMillis)
+          case r: execute.Failure => n.stepError(r.message, location, r.exception, timer.totalMillis)
+          case r: execute.Error   => n.stepError(r.message, location, r.exception, timer.totalMillis)
+          case _ => ()
+        }
+
+      notifyResult(executedResult.result, executedResult.timer)
+      // catch AbstractMethod errors coming from Intellij since adding
+      // calling new "step" methods on the Notifier interface is not supported yet
+    } catch {
+      case e: AbstractMethodError if e.getMessage.notNull.contains("JavaSpecs2Notifier") => ()
+      case other: Throwable => throw other
+    }
+  }
+
+  def notifyText(n: Notifier, f: Fragment, args: Arguments) = {
+    val description = f.description.show.trim
+    val location = f.location.fullLocation(args.traceFilter).getOrElse("no location")
+
+    n.text(description, location)
   }
 
   case class Notified(context: String = "", start: Boolean = false, close: Boolean = false, hide: Boolean = false)

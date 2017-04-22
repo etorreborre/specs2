@@ -6,8 +6,9 @@ import core._
 import Fragment._
 import process._
 import Levels._
+import org.specs2.concurrent.ExecutionEnv
 
-class LevelsSpec extends Spec { def is = s2"""
+class LevelsSpec(ee: ExecutionEnv) extends Spec { def is = s2"""
 
  The Levels class is used to compute the 'level' of Fragments in a list of Fragments.
  This is used with mutable specifications to be able to display a tree of examples (Acceptance specification just list their examples on the same level)
@@ -19,7 +20,7 @@ class LevelsSpec extends Spec { def is = s2"""
 
   trait spec extends org.specs2.mutable.Specification
   case class tree() {
-    def e1 = treeMap(new spec { "t1" >> { "e1" in ok; "e2" in ok } }.is.fragments)(mapper) must beDrawnAs(
+    def e1 = treeMap(new spec { "t1" >> { "e1" in ok; "e2" in ok } }.is.fragments)(mapper)(ee) must beDrawnAs(
       "Fragment(root)",
       "|",
       "`- Fragment(t1)",
@@ -28,7 +29,7 @@ class LevelsSpec extends Spec { def is = s2"""
       "   |",
       "   `- Fragment(e2)")
 
-    def e2 = treeMap(new spec { "t1" >> { "e1" in ok }; "t2" >> { "e2" in ok } }.is.fragments)(mapper) must beDrawnAs(
+    def e2 = treeMap(new spec { "t1" >> { "e1" in ok }; "t2" >> { "e2" in ok } }.is.fragments)(mapper)(ee) must beDrawnAs(
       "Fragment(root)",
       "|",
       "+- Fragment(t1)",

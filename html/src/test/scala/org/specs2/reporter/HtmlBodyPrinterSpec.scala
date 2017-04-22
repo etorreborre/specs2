@@ -17,5 +17,5 @@ object HtmlBodyPrinterSpec extends Specification { def is = s2"""
   }
 
   def print(f: Fragment) =
-    HtmlBodyPrinter.printFragment(Arguments(), Level.Root, DirectoryPath.Root, pandoc = true)(f)
+    HtmlBodyPrinter.printFragment(f, success, Arguments(), Level.Root, DirectoryPath.Root, pandoc = true)
 }

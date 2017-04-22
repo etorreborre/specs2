@@ -1,5 +1,7 @@
 package org.specs2.fp
 
+import scala.concurrent.{ExecutionContext, Future}
+
 /**
  * Inspired from the scalaz (https://github.com/scalaz/scalaz) project
  */
@@ -82,6 +84,12 @@ object Monad {
       }
   }
 
+  implicit def futureMonad(implicit ec: ExecutionContext): Monad[Future] = new Monad[Future] {
+    def point[A](a: =>A): Future[A] = Future.successful(a)
+
+    def bind[A,B](fa: Future[A])(f: A => Future[B]): Future[B] =
+      fa.flatMap(f)
+  }
 }
 
 trait MonadSyntax {

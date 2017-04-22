@@ -3,11 +3,12 @@ package specification
 
 import io.StringOutput
 import execute._
-import org.specs2.specification.core.SpecificationStructure
+import org.specs2.specification.core.{Env, SpecificationStructure}
 import org.specs2.specification.process.DefaultExecutor
 import _root_.org.specs2.mutable.{Specification => Spec}
+import fp.syntax._
 
-class BeforeAfterAroundSpec extends Specification with Grouped { def is = s2"""
+class BeforeAfterAroundSpec(env: Env) extends Specification with Grouped { def is = s2"""
 
  The `Before/After/Around Example` traits are used to automatically insert contexts around examples bodies            
  a spec can define a Before context that is used for each example                                                     
@@ -49,7 +50,7 @@ class BeforeAfterAroundSpec extends Specification with Grouped { def is = s2"""
   }
 
   def executeContains(s: SpecificationStructure with StringOutput, messages: String*) = {
-    DefaultExecutor.executeSeq(s.is.fragments.fragments).map(_.executionResult).toList
+    DefaultExecutor.executeSeq(s.is.fragments.fragments)(env).traverse(_.executionResult).run(env.executionEnv)
     s.messages must contain(allOf(messages:_*)).inOrder
   }
 

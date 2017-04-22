@@ -268,8 +268,7 @@ object build extends Build {
     logBuffered := false,
     cancelable in Global := true,
     testFrameworks := Seq(TestFramework("org.specs2.runner.Specs2Framework")),
-    javaOptions ++= Seq("-Xmx3G", "-Xss4M"),
-    fork in (ThisBuild, Test) := true,
+    javaOptions ++= Seq("-Xmx4G", "-Xss4M"),
     testOptions := Seq(Tests.Filter(s =>
       (Seq(".guide.").exists(s.contains) || Seq("Spec", "Guide", "Website").exists(s.endsWith)) &&
         Seq("Specification", "FeaturesSpec").forall(n => !s.endsWith(n))))
@@ -489,7 +488,7 @@ object build extends Build {
           </developer>
         </developers>
     ),
-    credentials := Seq(Credentials(Path.userHome / ".sbt" / "specs2.credentials"))
+    credentials ++= Seq(Credentials(Path.userHome / ".sbt" / "specs2.credentials"))
   ) ++
   sonatypeSettings
 

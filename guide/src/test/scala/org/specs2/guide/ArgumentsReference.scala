@@ -64,7 +64,9 @@ This reference guide for arguments is divided in several sections:
  ----------------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------
  `plan`                  | `false`                                  | only report the text of the specification without executing anything
  `skipAll`               | `false`                                  | skip all the examples
- `stopOnFail`            | `false`                                  | skip all examples after the first failure or error
+ `stopOnFail`            | `false`                                  | skip all examples after the first failure
+ `stopOnError`           | `false`                                  | skip all examples after the first error
+ `stopOnIssue`           | `false`                                  | skip all examples after the first failure or error
  `stopOnSkip`            | `false`                                  | skip all examples after the first skipped result
  `sequential`            | `false`                                  | don't execute examples concurrently
  `asap`                  | `false`                                  | execute all the examples before reporting them
@@ -147,6 +149,8 @@ There are also a few shortcuts:
  `plan`                                                                | `args(plan=true)`
  `skipAll`                                                             | `args(skipAll=true)`
  `stopOnFail`                                                          | `args(stopOnFail=true)`
+ `stopOnError`                                                         | `args(stopOnError=true)`
+ `stopOnIssue`                                                         | `args(stopOnIssue=true)`
  `stopOnSkip`                                                          | `args(stopOnSkip=true)`
  `sequential`                                                          | `args(sequential=true)`
  `isolated`                                                            | `args(isolated=true)`

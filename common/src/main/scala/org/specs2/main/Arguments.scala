@@ -38,6 +38,8 @@ case class Arguments (
   def skipAll: Boolean                = execute.skipAll
 
   def stopOnFail: Boolean             = execute.stopOnFail
+  def stopOnError: Boolean            = execute.stopOnError
+  def stopOnIssue: Boolean            = execute.stopOnIssue
   def stopOnSkip: Boolean             = execute.stopOnSkip
   def sequential: Boolean             = execute.sequential
   def isolated: Boolean               = execute.isolated

@@ -15,5 +15,8 @@ object WarningsEffect {
   def runWarnings[R, U, A](w: Eff[R, A])(implicit m: Member.Aux[Warnings, R, U]): Eff[U, (A, List[String])] =
     WriterEffect.runWriter(w).map { case (a, ls) => (a, ls.map(_.value)) }
 
+  def discardWarnings[R, U, A](w: Eff[R, A])(implicit m: Member.Aux[Warnings, R, U]): Eff[U, A] =
+    runWarnings(w).map(_._1)
+
 }
 

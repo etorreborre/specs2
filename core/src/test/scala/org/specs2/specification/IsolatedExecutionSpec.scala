@@ -7,8 +7,10 @@ import core._
 import process._
 import control._
 import producer._
+import fp.syntax._
+import org.specs2.main.Arguments
 
-class IsolatedExecutionSpec extends Spec with ForEachEnv { def is = s2"""
+class IsolatedExecutionSpec(env: Env) extends Spec with ForEachEnv { def is = s2"""
 
  We want to be able to isolate the execution of examples if isolated == true
  The isolated fragments must run with their own class instance
@@ -25,10 +27,14 @@ class IsolatedExecutionSpec extends Spec with ForEachEnv { def is = s2"""
   }
 
   def execute(spec: SpecificationStructure) = {
-    val env = Env()
-    val fragments = spec.structure(env).fragments
-    val results = fragments.update(DefaultExecutor.execute(env)).contents.collect { case f if f.isExecutable => f.execution.result }
-    ProducerOps(results).runList.run
+    val env1 = env.copy(arguments = Arguments("isolated"))
+    val fragments = spec.structure(env1).fragments
+
+    val results = fragments.update(DefaultExecutor.execute(env1)).contents.runList.flatMap(_.collect { case f if f.isExecutable =>
+      f.executionResult
+    }.sequence)
+
+    results.run(env1.specs2ExecutionEnv)
   }
 }
 

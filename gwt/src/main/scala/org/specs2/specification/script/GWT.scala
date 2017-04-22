@@ -4,13 +4,16 @@ package script
 
 import core.{Env, Fragment, Fragments}
 import create.{FragmentFactory, FragmentsFactory}
-import shapeless.{HList, HNil, ::}
-import shapeless.ops.hlist.{ToTraversable, ToList}
+import shapeless.{::, HList, HNil}
+import shapeless.ops.hlist.{ToList, ToTraversable}
 import execute._
 import ResultLogicalCombinators._
+
 import scala.collection.mutable
 import org.specs2.fp.syntax._
 import org.specs2.collection.Listx._
+import org.specs2.control.Action
+import org.specs2.control.producer._
 
 /**
  * The GWT trait can be used to associate a piece of text to Given/When/Then steps according to the [BDD](http://en.wikipedia.org/wiki/Behavior-driven_development)
@@ -151,10 +154,12 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
       var givenSteps: Seq[Fragment] = Seq()
       var whenSteps: Seq[Fragment]  = Seq()
 
-      lazy val givenValues = stepsValues(givenSteps)
-      lazy val givenResult = result(givenSteps)
-      lazy val whenValues = stepsValues(whenSteps)
-      lazy val whenResult = result(whenSteps)
+      val fs: Action[Fragments] = for {
+        givenValues <- fragmentsResults(givenSteps)
+        givenResult <- result(givenSteps)
+        whenValues  <- fragmentsResults(whenSteps)
+        whenResult  <- result(whenSteps)
+      } yield
 
       template.lines(text, this).lines.foldLeft(Fragments()) { (fs, lines) =>
         lines match {
@@ -173,7 +178,7 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
             whenSteps = (whenExtractorsList zip ls zip whenMappersList).map { case ((extractor, line), mapper) =>
               factory.step(execute(givenResult, extractor, line) { t: Any =>
                 val map = mapper.asInstanceOf[Mapper[Any, HList, Any, Any]]
-                DecoratedResult(map(t, if (map.f1.isDefined) Left(givenValues) else Right(givenValues.toList)), Success())
+                DecoratedResult(map(t, if (map.f1.isDefined) Left(toHList(givenValues)) else Right(givenValues)), Success())
               })
             }.reverse
 
@@ -185,12 +190,14 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
               example(extractor.strip(line),
                 execute(givenResult and whenResult, extractor, line) { t: Any =>
                   val verifyFunction = verify.asInstanceOf[VerifyFunction[Any, HList, Any, Any]]
-                  verifyFunction(t, if (verifyFunction.f1.isDefined) Left(whenValues) else Right(whenValues.toList))
+                  verifyFunction(t, if (verifyFunction.f1.isDefined) Left(toHList(whenValues)) else Right(whenValues))
                 }.asInstanceOf[Result])
             }
             fs append thenExamples.intersperse(factory.break)
         }
       }
+
+      Fragments(Producer.evalProducer(fs.map(_.contents)))
     }
 
 
@@ -209,15 +216,20 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
     private def whenMappersList     = whens.mappers.toList.reverse
     private def thenExtractorsList  = thenExtractors.toList.reverse.map(_.asInstanceOf[StepParser[_]])
     private def verificationsList   = verifications.toList.reverse
+    private def toHList[T](list: List[T]): HList =
+      list.headOption match {
+        case None => HNil
+        case Some(h) => h :: toHList(list.tail)
+      }
 
-    /** @return the values of all executed steps */
-    private def stepsValues(steps: Seq[Fragment]) = steps.foldRight(HNil: HList) { (cur, res) =>
-      value(cur.execution.startExecution(Env()).result) :: res
-    }
+    /** @return the results of a list of fragments */
+    private def fragmentsResults(fragments: Seq[Fragment]): Action[List[Result]] =
+      fragments.toList.traverse(_.startExecution(Env()).executionResult)
+
     /** @return a -and- on all the execution results of steps */
-    private def result(steps: Seq[Fragment]) = steps.foldRight(Success(): Result) { (cur, res) =>
-      cur.execution.startExecution(Env()).result and res
-    }
+    private def result(fragments: Seq[Fragment]) =
+      fragmentsResults(fragments).map(_.suml)
+
     /** execute a block of code depending on a previous result */
     private def executeIf(result: Result)(value: =>Any) = if (result.isSuccess) value else Skipped(" ")
 
@@ -269,11 +281,6 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
         }
       add(list)
     }
-  }
-
-  private def value(r: Result) = r match {
-    case DecoratedResult(v, _) => v
-    case _ => r
   }
 
 }

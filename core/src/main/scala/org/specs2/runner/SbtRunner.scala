@@ -40,7 +40,7 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
       lazy val specStructure: (Error Either Option[SpecStructure], List[String]) = {
         val action: Action[Option[SpecStructure]] =
           createSpecStructure(taskDef, loader, env)
-        executeAction(action)
+        executeAction(action, env.specs2ExecutionEnv)
       }
 
       /** @return the specification tags */
@@ -56,7 +56,7 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
 
         result.toOption.flatten.foreach { structure =>
           val action = specificationRun(aTaskDef, structure, env, handler, loggers)
-          val (rs, ws) = executeAction(action, consoleLogging)
+          val (rs, ws) = executeAction(action, env.specs2ExecutionEnv, consoleLogging)
           processResult(handler, loggers)(rs, ws)
         }
         // nothing more to execute
@@ -197,17 +197,17 @@ object sbtRun extends SbtRunner(Array(), Array(), Thread.currentThread.getContex
   def main(arguments: Array[String]) {
     val env = Env(Arguments(arguments:_*))
 
-    try exit(start(arguments: _*))
+    try     exit(start(arguments: _*)(env))(env)
     finally env.shutdown
   }
 
-  def exit(action: Action[Stats]): Unit = {
-    runAction(action).fold(
+  def exit(action: Action[Stats])(env: Env): Unit = {
+    runAction(action)(env.specs2ExecutionEnv).fold(
       err => System.exit(100),
       ok  => if (ok.isSuccess) System.exit(0) else System.exit(1))
   }
 
-  def start(arguments: String*): Action[Stats] = {
+  def start(arguments: String*)(env: Env): Action[Stats] = {
     if (arguments.isEmpty)
       log("The first argument should at least be the specification class name") >>
       Actions.unit

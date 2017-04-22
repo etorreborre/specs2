@@ -12,6 +12,9 @@ trait warnings {
     def runWarnings[U](implicit m: Member.Aux[Warnings, R, U]): Eff[U, (A, List[String])] =
       WarningsEffect.runWarnings(action)
 
+    def discardWarnings[U](implicit m: Member.Aux[Warnings, R, U]): Eff[U, A] =
+      WarningsEffect.discardWarnings(action)
+
   }
 
 }

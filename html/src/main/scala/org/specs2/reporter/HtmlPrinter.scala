@@ -2,12 +2,13 @@ package org.specs2
 package reporter
 
 import specification.core._
-import specification.process.{Stats, Statistics}
+import specification.process.{Statistics, Stats}
 import io._
 import main.Arguments
 import control._
 import java.util.regex.Pattern._
 import java.net.{JarURLConnection, URL}
+
 import org.specs2.fp.syntax._
 import HtmlBodyPrinter._
 import Pandoc._
@@ -19,6 +20,7 @@ import eff.all._
 import eff.syntax.all._
 import eff.ErrorEffect._
 import Operations._
+import org.specs2.concurrent.ExecutionEnv
 import org.specs2.time.SimpleTimer
 import origami._
 
@@ -39,7 +41,7 @@ trait HtmlPrinter extends Printer {
 
   /** @return a SinkTask for the Html output */
   def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment] = {
-    ((Statistics.fold zip fold.list[Fragment] zip SimpleTimer.timerFold).into[ActionStack] <*
+    ((Statistics.fold zip fold.list[Fragment].into[Action] zip SimpleTimer.timerFold.into[Action]) <*
      fold.fromStart((getHtmlOptions(env.arguments) >>= (options => copyResources(env, options))).void)).mapFlatten { case ((stats, fragments), timer) =>
       val expecutedSpec = spec.copy(lazyFragments = () => Fragments(fragments:_*))
       getPandoc(env).flatMap {
@@ -65,7 +67,7 @@ trait HtmlPrinter extends Printer {
     for {
       options  <- getHtmlOptions(env.arguments)
       template <- readFile(options.template) ||| warnAndFail("No template file found at "+options.template.path, RunAborted)
-      content  <- makeHtml(template, spec, stats, timer, options, env.arguments)
+      content  <- makeHtml(template, spec, stats, timer, options, env.arguments)(env.specs2ExecutionEnv)
       _        <- writeFile(outputPath(options.outDir, spec), content)
     } yield ()
   }
@@ -96,8 +98,8 @@ trait HtmlPrinter extends Printer {
    *  - the template
    *  - the body of the file (built from the specification execution)
    */
-  def makeHtml(template: String, spec: SpecStructure, stats: Stats, timer: SimpleTimer, options: HtmlOptions, arguments: Arguments): Operation[String] =
-    makeBody(spec, stats, timer, options, arguments, pandoc = true).flatMap { body =>
+  def makeHtml(template: String, spec: SpecStructure, stats: Stats, timer: SimpleTimer, options: HtmlOptions, arguments: Arguments)(ee: ExecutionEnv): Operation[String] =
+    makeBody(spec, stats, timer, options, arguments, pandoc = true)(ee).flatMap { body =>
       val variables1 =
         options.templateVariables
           .updated("body",    body)
@@ -146,7 +148,7 @@ trait HtmlPrinter extends Printer {
     val pandocArguments = Pandoc.arguments(bodyFile, options.template, variables1, outputFilePath, pandoc)
 
     withEphemeralFile(bodyFile) {
-      makeBody(spec, stats, timer, options, env.arguments, pandoc = true).flatMap { body =>
+      makeBody(spec, stats, timer, options, env.arguments, pandoc = true)(env.specs2ExecutionEnv).flatMap { body =>
         writeFile(bodyFile, body) >>
           warn(pandoc.executable.path+" "+pandocArguments.mkString(" ")).when(pandoc.verbose) >>
           Executable.run(pandoc.executable, pandocArguments) >>

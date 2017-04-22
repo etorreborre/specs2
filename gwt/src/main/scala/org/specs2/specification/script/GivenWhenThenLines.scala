@@ -5,7 +5,7 @@ package script
 /**
  * Set of extracted lines from some text which are either: simple text, given text, when text or then text
  */
-case class GivenWhenThenLines(lines: Seq[GWTLines] = Seq()) extends ScriptLines {
+case class GivenWhenThenLines(lines: Vector[GWTLines] = Vector()) extends ScriptLines {
   def prepend(ls: GWTLines) = (ls, lines.headOption) match {
     case (TextLines(l1), Some(TextLines(l2)))   => copy(lines = TextLines (l1 ++ l2) +: lines.tail)
     case (GivenLines(l1), Some(GivenLines(l2))) => copy(lines = GivenLines(l1 ++ l2) +: lines.tail)
@@ -27,14 +27,14 @@ case class GivenWhenThenLines(lines: Seq[GWTLines] = Seq()) extends ScriptLines 
 }
 
 trait GWTLines
-case class GivenLines(lines: Seq[String]) extends GWTLines
-object GivenLines { def create(line: String): GivenLines = GivenLines(Seq(line)) }
+case class GivenLines(lines: Vector[String]) extends GWTLines
+object GivenLines { def create(line: String): GivenLines = GivenLines(Vector(line)) }
 
-case class WhenLines(lines: Seq[String]) extends GWTLines
-object WhenLines { def create(line: String): WhenLines = WhenLines(Seq(line)) }
+case class WhenLines(lines: Vector[String]) extends GWTLines
+object WhenLines { def create(line: String): WhenLines = WhenLines(Vector(line)) }
 
-case class ThenLines(lines: Seq[String]) extends GWTLines
-object ThenLines { def create(line: String): ThenLines = ThenLines(Seq(line)) }
+case class ThenLines(lines: Vector[String]) extends GWTLines
+object ThenLines { def create(line: String): ThenLines = ThenLines(Vector(line)) }
 
 case class TextLines(lines: String) extends GWTLines
 object TextLines { def create(lines: Seq[String]): TextLines = TextLines(lines.mkString("\n")) }

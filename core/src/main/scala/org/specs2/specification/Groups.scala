@@ -2,12 +2,15 @@ package org.specs2
 package specification
 
 import java.util.concurrent.ExecutorService
+
 import control.Use
 import execute._
 import control.ImplicitParameters._
 import org.specs2.concurrent.ExecutionEnv
 import specification.core._
 import specification.create._
+
+import scala.concurrent.Future
 
 /**
  * This trait can be used to standardize names for groups of examples in an acceptance specification.
@@ -301,6 +304,11 @@ trait GroupsLike { this: S2StringContextCreation =>
       autoNumberedExamples = autoNumberedExamples :+ ExecutionVar.result(r)
     }
 
+    def :=[R](f: =>Future[R])(implicit asResult: AsResult[R], p1: ImplicitParam1) {
+      Use(p1)
+      autoNumberedExamples = autoNumberedExamples :+ ExecutionVar.futureResult(f)(asResult, p1)
+    }
+
     def :=[R : AsResult](f: Env => R) {
       autoNumberedExamples = autoNumberedExamples :+ ExecutionVar.withEnv(f)
     }
@@ -375,6 +383,11 @@ object ExecutionVar {
   def result[R : AsResult](r: =>R) =
     new ExecutionVar := r
   
+  def futureResult[R](f: =>Future[R])(implicit asResult: AsResult[R], p1: ImplicitParam1) = {
+    ImplicitParameters.use(p1)
+    new ExecutionVar(() => Execution.withEnvAsync(_ => f))
+  }
+
   def withEnv[R : AsResult](f: Env => R) =
     new ExecutionVar(() => Execution.withEnv(f))
 

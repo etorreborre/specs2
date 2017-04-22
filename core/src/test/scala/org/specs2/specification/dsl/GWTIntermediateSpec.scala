@@ -5,9 +5,11 @@ package dsl
 import org.specs2.specification.script.{StandardDelimitedStepParsers}
 
 class GWTIntermediateSpec extends Specification with GWT with StandardDelimitedStepParsers { def is = s2"""
+
  Given a first number {2}     $g1
  When multiply it by {3}      $w1
  Then I get {6}               $t1
+
 """
   var number = 0
   def g1 = step(anInt) { i =>

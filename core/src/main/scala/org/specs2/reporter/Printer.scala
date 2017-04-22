@@ -25,6 +25,10 @@ trait Printer {
     val printSink = sink(env, spec)
     producers.fold(spec.contents.into[ActionStack])(printSink.start, printSink.fold, printSink.end)
   }
+
+  /** convenience method to print a SpecificationStructure using the printer's Fold */
+  def printSpecification(env: Env): SpecificationStructure => Action[Unit] =
+    (spec: SpecificationStructure) => print(env)(spec.structure(env))
 }
 
 /**

@@ -11,6 +11,8 @@ import sys._
 import execute._
 import matcher._
 import _root_.org.specs2.mutable.{Around => MAround, Before => MBefore, After => MAfter}
+import fp.syntax._
+import control._
 
 class ContextSpec extends script.Spec with ResultMatchers with Groups { def is = s2"""
 
@@ -141,15 +143,14 @@ class ContextSpec extends script.Spec with ResultMatchers with Groups { def is =
   trait FragmentsExecution extends StringOutput with ContextData {
     def executeBodies(exs: Fragments) = {
       val env = Env(arguments = Arguments("sequential"))
-      DefaultExecutor.executeSeq(exs.fragments)(env).map(_.executionResult)
+      DefaultExecutor.executeSeq(exs.fragments)(env).traverse(_.executionResult).run(env.executionEnv)
     }
 
     def executing(exs: Fragments): Executed = Executed(executeBodies(exs))
 
     case class Executed(results: Seq[Result]) {
       def prints(ms: String*): Result = {
-        val msgs = messages.toList
-        (msgs must_== ms.toList).toResult
+        (messages must_== ms.toList).toResult
       }  
     }
   }

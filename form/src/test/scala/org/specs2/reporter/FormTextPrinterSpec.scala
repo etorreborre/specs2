@@ -5,8 +5,9 @@ import specification.core.Env
 import control._
 import form._
 import main._
+import org.specs2.concurrent.ExecutionEnv
 
-class FormTextPrinterSpec extends Specification with specification.Forms { def is = s2"""
+class FormTextPrinterSpec(ee: ExecutionEnv) extends Specification with specification.Forms { def is = s2"""
 
   A form must be properly displayed in an interpolated spec $printed
 
@@ -15,7 +16,7 @@ class FormTextPrinterSpec extends Specification with specification.Forms { def i
   def printed = { (env1: Env) =>
     val logger = LineLogger.stringLogger
     val env = env1.setLineLogger(logger).setArguments(Arguments())
-    Reporter.report(env, List(TextPrinter))(addressFormSpecStructure).runOption
+    Reporter.report(env, List(TextPrinter))(addressFormSpecStructure).runOption(ee)
     logger.messages.mkString("\n") must contain(
     """|[info]   The address must be retrieved from the database with the proper street and number
        |[info]   + | Address           |

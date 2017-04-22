@@ -3,7 +3,9 @@ package specification
 package process
 
 import scala.math._
-import control.origami._, Folds._
+import control.origami._
+import Folds._
+import org.specs2.fp.Id
 import specification.core._
 
 /**
@@ -28,10 +30,10 @@ trait Indentation {
     }
 
   def fold: FoldState[Fragment, Int] =
-    fromFoldLeft(0)(foldLeft)
+    fromFoldLeft[Id, Fragment, Int](0)(foldLeft)
 
   def foldIndentationState: FoldState[Fragment, IndentationState] =
-    fromFoldLeft(IndentationState.empty)(foldLeftIndentationState)
+    fromFoldLeft[Id, Fragment, IndentationState](IndentationState.empty)(foldLeftIndentationState)
 }
 
 object Indentation extends Indentation

@@ -23,7 +23,7 @@ class NotifierSpec(env: Env) extends Specification { def is = s2"""
     val spec = new NotifierSpec1
     val env1 = env.setArguments(Arguments("notifier"))
     val notifier = new TestNotifier
-    Reporter.report(env1, List(NotifierPrinter.printer(notifier)))(spec.structure(env)).runOption
+    Reporter.report(env1, List(NotifierPrinter.printer(notifier)))(spec.structure(env)).runOption(env.executionEnv)
     notifier.messages.mkString("\n") must_==
     List(
       "[start  ] NotifierSpec1",
@@ -55,7 +55,7 @@ class NotifierSpec(env: Env) extends Specification { def is = s2"""
     val spec = new NotifierSpecWithTables
     val env1 = env.setArguments(Arguments("notifier"))
     val notifier = new TestNotifier
-    Reporter.report(env1, List(NotifierPrinter.printer(notifier)))(spec.structure(env)).runOption
+    Reporter.report(env1, List(NotifierPrinter.printer(notifier)))(spec.structure(env)).runOption(env.executionEnv)
 
     "there is a failure for the table" ==> {
       notifier.messages must contain((m: String) => m must contain("failure"))
@@ -66,7 +66,7 @@ class NotifierSpec(env: Env) extends Specification { def is = s2"""
     val spec = new NotifierSpec2
     val env1 = env.setArguments(Arguments("notifier"))
     val notifier = new TestNotifier
-    Reporter.report(env1, List(NotifierPrinter.printer(notifier)))(spec.structure(env)).runOption
+    Reporter.report(env1, List(NotifierPrinter.printer(notifier)))(spec.structure(env)).runOption(env.executionEnv)
     notifier.messages.mkString("\n") must_==
       List(
         "[start  ] NotifierSpec2",
@@ -85,7 +85,7 @@ class NotifierSpec(env: Env) extends Specification { def is = s2"""
     val spec = new NotifierSpec3
     val env1 = env.setArguments(Arguments("notifier"))
     val notifier = new TestNotifier
-    Reporter.report(env1, List(NotifierPrinter.printer(notifier)))(spec.structure(env)).runOption
+    Reporter.report(env1, List(NotifierPrinter.printer(notifier)))(spec.structure(env)).runOption(env.executionEnv)
     notifier.messages.mkString("\n") must_==
       List(
         "[start  ] NotifierSpec3",
@@ -94,7 +94,7 @@ class NotifierSpec(env: Env) extends Specification { def is = s2"""
         "[success] ex1",
         "[close  ] group1",
         "[step   ]",
-        "[error  ] java.lang.RuntimeException: boom",
+        "[error  ] org.specs2.specification.core.FatalExecution: boom",
         "[end    ] NotifierSpec3").mkString("\n")
   }
 

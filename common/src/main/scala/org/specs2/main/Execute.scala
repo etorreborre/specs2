@@ -8,6 +8,8 @@ case class Execute(
                     _plan:                 Option[Boolean]          = None,
                     _skipAll:              Option[Boolean]          = None,
                     _stopOnFail:           Option[Boolean]          = None,
+                    _stopOnError:        Option[Boolean]          = None,
+                    _stopOnIssue:        Option[Boolean]          = None,
                     _stopOnSkip:           Option[Boolean]          = None,
                     _sequential:           Option[Boolean]          = None,
                     _asap:                 Option[Boolean]          = None,
@@ -22,6 +24,8 @@ case class Execute(
   def plan: Boolean                 = _plan.getOrElse(false)
   def skipAll: Boolean              = _skipAll.getOrElse(false)
   def stopOnFail: Boolean           = _stopOnFail.getOrElse(false)
+  def stopOnError: Boolean          = _stopOnError.getOrElse(false)
+  def stopOnIssue: Boolean          = _stopOnIssue.getOrElse(false)
   def stopOnSkip: Boolean           = _stopOnSkip.getOrElse(false)
   def sequential: Boolean           = _sequential.getOrElse(false)
   def asap: Boolean                 = _asap.getOrElse(false)
@@ -38,6 +42,8 @@ case class Execute(
       other._plan                .orElse(_plan),
       other._skipAll             .orElse(_skipAll),
       other._stopOnFail          .orElse(_stopOnFail),
+      other._stopOnError         .orElse(_stopOnError),
+      other._stopOnIssue         .orElse(_stopOnIssue),
       other._stopOnSkip          .orElse(_stopOnSkip),
       other._sequential          .orElse(_sequential),
       other._asap                .orElse(_asap),
@@ -56,6 +62,8 @@ case class Execute(
       "plan"                 -> _plan                ,
       "skipAll"              -> _skipAll             ,
       "stopOnFail"           -> _stopOnFail          ,
+      "stopOnError"         -> _stopOnError       ,
+      "stopOnIssue"         -> _stopOnIssue       ,
       "stopOnSkip"           -> _stopOnSkip          ,
       "sequential"           -> _sequential          ,
       "asap"                 -> _asap                ,
@@ -75,6 +83,8 @@ object Execute extends Extract {
       _plan                 = bool("plan"),
       _skipAll              = bool("skipAll"),
       _stopOnFail           = bool("stopOnFail"),
+      _stopOnError         = bool("stopOnError"),
+      _stopOnIssue         = bool("stopOnIssue"),
       _stopOnSkip           = bool("stopOnSkip"),
       _sequential           = bool("sequential"),
       _asap                 = bool("asap"),
@@ -87,7 +97,5 @@ object Execute extends Extract {
       _executor             = value("executor")
     )
   }
-
-  val allValueNames = Seq("plan", "skipAll", "stopOnFail", "stopOnSkip", "sequential", "asap", "isolated",
-    "useCustomClassLoader", "threadsNb", "scheduledThreadsNb", "batchSize", "timeFactor", "executor")
+  val allValueNames = Seq("plan", "skipAll", "stopOnFail", "stopOnError", "stopOnIssue", "stopOnSkip", "sequential", "asap", "isolated", "useCustomClassLoader", "threadsNb", "scheduledThreadsNb", "batchSize", "timeFactor", "executor")
 }

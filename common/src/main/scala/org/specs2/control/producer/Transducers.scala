@@ -19,6 +19,9 @@ trait Transducers {
   def transducer[R :_Safe, A, B](f: A => B): Transducer[R, A, B] =
     (p: Producer[R, A]) => p.map(f)
 
+  def transducerEval[R :_Safe, A, B](f: A => Eff[R, B]): Transducer[R, A, B] =
+    (p: Producer[R, A]) => p.mapEval(f)
+
   def producerState[R :_Safe, A, B, S](start: S, last: Option[S => Producer[R, B]] = None)(f: (A, S) => (Producer[R, B], S)): Transducer[R, A, B] =
     (producer: Producer[R, A]) => {
       def go(p: Producer[R, A], s: S): Producer[R, B] =
@@ -214,6 +217,8 @@ trait Transducers {
   def reduceMap[R :_Safe, A, B : Monoid](f: A => B): Transducer[R, A, B] = (producer: Producer[R, A]) =>
     reduceMonoid[R, B].apply(transducer(f).apply(producer))
 
+  def reduceMapEval[R :_Safe, A, B : Monoid](f: A => Eff[R, B]): Transducer[R, A, B] = (producer: Producer[R, A]) =>
+    reduceMonoid[R, B].apply(transducerEval(f).apply(producer))
 
   def zipWithPrevious[R :_Safe, A]: Transducer[R, A, (Option[A], A)] =
     (producer: Producer[R, A]) => {
