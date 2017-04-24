@@ -1206,7 +1206,7 @@ def e1 = Paths.directoryPath(&quot;/tmp/path/to/dir&quot;) must beEqualTo(&quot;
 <ul>
   <li>check its ordering (works with any type <code class="prettyprint">T</code> which has an <code class="prettyprint">Ordering</code>)<br/>  <code class="prettyprint">Seq(1, 2, 3) must beSorted</code></li>
 </ul>
-<h4><a name="check-each-element-individually" href="#check-each-element-individually"/>Check each element individually</h4>
+<h4><a name="check-each-element-individually" href="#check-each-element-individually">Check each element individually</a></h4>
 <p>Then you can check the elements which are contained in the Traversable</p>
 <ul>
   <li>
@@ -1231,7 +1231,7 @@ def e1 = Paths.directoryPath(&quot;/tmp/path/to/dir&quot;) must beEqualTo(&quot;
   <li><code class="prettyprint">Seq(1, 2, 3) must contain(be_&gt;(1)).between(1.times, 2.times)</code></li>
   <li><code class="prettyprint">Seq(1, 2, 3) must contain(be_&gt;(1)).between(1, 2)</code></li>
 </ul>
-<h4><a name="check-all-elements" href="#check-all-elements"/>Check all elements</h4>
+<h4><a name="check-all-elements" href="#check-all-elements">Check all elements</a></h4>
 <p>The other types of checks involve comparing the Traversable elements to other elements (values, matchers, function returning a <code class="prettyprint">Result</code>)</p>
 <ul>
   <li>
@@ -1321,9 +1321,9 @@ Future { Thread.sleep(100); 1 } must be_&gt;(0).awaitFor(100.millis)
 <pre><code class="prettyprint">Future(1 === 1).await
 Future(1 === 1).await(retries = 2, timeout = 100.millis)
 </code></pre>
-<h4><a name="scalaz-futures" href="#scalaz-futures"/>Scalaz Futures</h4>
+<h4><a name="scalaz-futures" href="#scalaz-futures">Scalaz Futures</a></h4>
 <p>All of the above is applicable to <code class="prettyprint">scalaz.concurrent.Future</code> by using the method <code class="prettyprint">attempt</code> instead of <code class="prettyprint">await</code>.</p>
-<h4><a name="execution" href="#execution"/>Execution</h4>
+<h4><a name="execution" href="#execution">Execution</a></h4>
 <p>The <code class="prettyprint">await</code>/<code class="prettyprint">attempt</code> methods require an implicit <code class="prettyprint">org.specs2.concurrent.ExecutionEnv</code> (see <a href="org.specs2.guide.ExecutionEnvironments.html">here</a> for more details). You can pass one in the body of your examples:</p>
 <pre><code class="prettyprint">import org.specs2.matcher.FuturezMatchers._
 
@@ -1355,7 +1355,7 @@ class MyMutableFutureSpec extends mutable.Specification {
   type EE = ExecutionEnv
 }
 </code></pre>
-<h4><a name="time-factor" href="#time-factor"/>Time factor</h4>
+<h4><a name="time-factor" href="#time-factor">Time factor</a></h4>
 <p>Some actions can be a lot slower when executed on a continuous integration server rather than a developer machine and some timeouts will fail.<br/>You can avoid this by setting the <code class="prettyprint">timeFactor</code> argument which will multiply the durations used when <code class="prettyprint">awaiting / attempting</code> by a constant factor.</p>
 <pre><code class="prettyprint">sbt&gt; testOnly *MyFuturesSpec* -- timeFactor 3
 </code></pre></td></tr></table></form></div><div class="tabbertab" title="Exception"><form>
@@ -1459,7 +1459,7 @@ class MyMutableFutureSpec extends mutable.Specification {
   <li><code class="prettyprint">returnValue(function: A =&gt; AsResult[B])</code> to check if a <code class="prettyprint">Task</code> completes successfully with a value <code class="prettyprint">a</code>, where <code class="prettyprint">function(a)</code> returns a successful <a href="org.specs.guide.AsResultTypeclass.html">Result</a>. This can be used to do conditional assertions that depend on which value is returned by your <code class="prettyprint">Task</code></li>
   <li><code class="prettyprint">failWith[ExceptionType]</code> to check if a <code class="prettyprint">Task</code> fails with an Exception of the given type</li>
 </ul>
-<h4><a name="task-execution" href="#task-execution"/>Task execution</h4>
+<h4><a name="task-execution" href="#task-execution">Task execution</a></h4>
 <p>Please note that all the matchers above will run the <code class="prettyprint">Task</code> for you, you should not call <code class="prettyprint">.run</code>/<code class="prettyprint">.unsafePerformSync</code> on them in your tests.</p></td></tr></table></form></div><div class="tabbertab" title="Case class"><form>
     <table><tr><td class="none" style="info"><p>There is a special support for matching case classes, using a matcher macro. To use it you need to add the <code class="prettyprint">specs2-matcher-extra</code> jar to your project and add the <code class="prettyprint">org.specs2.matcher.MatcherMacros</code> trait to your specification.</p>
 <p>Then, with the <code class="prettyprint">matchA</code> matcher you can check the values of case class attributes:</p>
@@ -1510,7 +1510,7 @@ action1 must terminate(retries=3, sleep=100.millis).when(action2)
 <p>When a second action is specified like that, <code class="prettyprint">action1</code> will be started and <code class="prettyprint">action2</code> will be started on the first retry. Otherwise, if you want to specify that <code class="prettyprint">action1</code> can <em>only</em> terminate when <code class="prettyprint">action2</code> is started, you write: </p>
 <pre><code class="prettyprint">action1 must terminate.onlyWhen(action2)
 </code></pre>
-<h4><a name="executionenv" href="#executionenv"/>ExecutionEnv</h4>
+<h4><a name="executionenv" href="#executionenv">ExecutionEnv</a></h4>
 <p>The <code class="prettyprint">terminate</code> matcher needs an implicit <code class="prettyprint">ExecutionEnv</code> to be used. See the page to learn how to get one.</p></td></tr></table></form></div></div></td></tr></table></form></td>
 <p>Those matchers can be used to check “content”</p>
 <td class="info"><form>
@@ -1620,7 +1620,7 @@ json must haveProducts(
   <li><code class="prettyprint">haveParent</code> check if a file has a given parent path</li>
   <li><code class="prettyprint">haveList</code> check if a file has a given list of children</li>
 </ul></td></tr></table></form></div><div class="tabbertab" title="Content"><form>
-    <table><tr><td class="none" style="info"><h5><a name="file-contents" href="#file-contents"/>File contents</h5>
+    <table><tr><td class="none" style="info"><h5><a name="file-contents" href="#file-contents">File contents</a></h5>
 <p>The matchers from the <code class="prettyprint">org.specs2.matcher.ContentMatchers</code> trait can help us check the contents of files. For example we can check that 2 text files have the same lines: </p>
 <pre><code class="prettyprint">(file1, file2) must haveSameLines
 file1 must haveSameLinesAs(file2)
@@ -1647,7 +1647,7 @@ file1 must haveSameLinesAs(file2)
 <pre><code class="prettyprint">(file1, file2) must haveSameLines.showOnly(10.differences).unordered
 </code></pre>
 <p>In the code above <code class="prettyprint">10.differences</code> builds a <code class="prettyprint">DifferenceFilter</code> which is merely a filtering function: <code class="prettyprint">(lines1: Seq[String], lines2: Seq[String]) =&gt; (Seq[String], Seq[String])</code>. The parameter <code class="prettyprint">lines1</code> is the sequence of lines not found in the second content while <code class="prettyprint">lines2</code> is the sequence of lines not found in the first content.</p>
-<h5><a name="directories-contents" href="#directories-contents"/>Directories contents</h5>
+<h5><a name="directories-contents" href="#directories-contents">Directories contents</a></h5>
 <p>We can compare the contents of 2 directories. We can for example check if no files are missing and none has been added: </p>
 <pre><code class="prettyprint">actualDir must haveSamePathsAs(expectedDir)
 // with a file filter applied to both the actual and expected directories
@@ -1666,7 +1666,7 @@ actualDir must haveSameFilesAs(expectedDir).withMatcher(haveSameMD5)
 // it is also possible to only check the content of actual files when they exist in the expected directory
 actualDir must haveSameFilesContentAs(expectedDir)
 </code></pre>
-<h5><a name="lines-contents" href="#lines-contents"/>Lines contents</h5>
+<h5><a name="lines-contents" href="#lines-contents">Lines contents</a></h5>
 <p>Files are not the only possible source of lines and it is useful to be able to check the content of a <code class="prettyprint">File</code> with a <code class="prettyprint">Seq[String]</code>: </p>
 <pre><code class="prettyprint">file1 must haveSameLinesAs(Seq(line1, line2, line3))
 </code></pre>
@@ -1723,7 +1723,7 @@ class ParserSpec extends Specification with matcher.ParserMatchers {  def is = s
   val parsers = NumberParsers
 }
 </code></pre></td></tr></table></form></div><div class="tabbertab" title="Typecheck"><form>
-    <table><tr><td class="none" style="info"><h3><a name="typecheck-matchers" href="#typecheck-matchers"/>Typecheck matchers</h3>
+    <table><tr><td class="none" style="info"><h3><a name="typecheck-matchers" href="#typecheck-matchers">Typecheck matchers</a></h3>
 <p>Some behaviours can be encoded with the type system and you just want to check that a given expression will typecheck: </p>
 <pre><code class="prettyprint">import org.specs2.execute._, Typecheck._
 import org.specs2.matcher.TypecheckMatchers._
@@ -1750,7 +1750,7 @@ Monoid[Plane].zero
   &quot;&quot;&quot;
 } must failWith(&quot;could not find implicit value for .* scalaz.Monoid&quot;)
 </code></pre>
-<h4><a name="typechecked" href="#typechecked"/>Typechecked</h4>
+<h4><a name="typechecked" href="#typechecked">Typechecked</a></h4>
 <p>Note that you actually don't have to use the <code class="prettyprint">succeed</code> matcher because <code class="prettyprint">typecheck</code> returns a <code class="prettyprint">Typechecked</code> object which has an <code class="prettyprint">AsResult</code> instance: </p>
 <pre><code class="prettyprint">&quot;this should typecheck ok&quot; ! typecheck {
 &quot;&quot;&quot;
@@ -1767,7 +1767,7 @@ Monoid[Plane].zero
   &quot;&quot;&quot;
 }.pendingUntilFixed(&quot;find a way to make this typecheck!&quot;)
 </code></pre>
-<h4><a name="interpolated-string" href="#interpolated-string"/>Interpolated string</h4>
+<h4><a name="interpolated-string" href="#interpolated-string">Interpolated string</a></h4>
 <p>Another way of checking if a piece of code typechecks is to use the <code class="prettyprint">tc</code> string interpolator: </p>
 <pre><code class="prettyprint">tc&quot; 1 must_== 1&quot;
 </code></pre>
@@ -1778,7 +1778,7 @@ Monoid[Plane].zero
   <li>otherwise it will create a <code class="prettyprint">Typechecked</code> object containing the reason for the failure</li>
 </ul>
 <p>Note that this interpolator can <em>not</em> take variables at the moment (so it doesn't interpolate much :-))</p>
-<h4><a name="typechecking-parameters" href="#typechecking-parameters"/>Typechecking parameters</h4>
+<h4><a name="typechecking-parameters" href="#typechecking-parameters">Typechecking parameters</a></h4>
 <p>It is possible to tweak the behaviour of the <code class="prettyprint">typecheck</code> method to allow errors to be reported at compile-time instead of runtime:</p>
 <ul>
   <li>macro-expansion errors can be reported at compile-time (default behaviour is runtime)</li>
@@ -1813,7 +1813,7 @@ typecheckWith(macrosAtCompileTime &lt;| implicitsAtCompileTime)(&quot;Monoid[Pla
 }
 </code></pre></td></tr></table></form></div><div class="tabbertab" title="Dependency Matchers"><form>
     <table><tr><td class="none" style="info"><p>It is highly desirable to have acyclic dependencies between the packages of a project. This often leads to describing the packages structure as &quot;layered&quot;: each package on a layer can only depend on a package on a lower layer. specs2 helps you enforce this design property with specific matchers.</p>
-<h3><a name="layers-definition" href="#layers-definition"/>Layers definition</h3>
+<h3><a name="layers-definition" href="#layers-definition">Layers definition</a></h3>
 <p>First you need to define the packages and their expected dependencies. Mix-in the <code class="prettyprint">org.specs2.specification.Analysis</code> trait and define layers (taking specs2 as an example): </p>
 <pre><code class="prettyprint">layers (
   &quot;runner&quot;,
@@ -1829,7 +1829,7 @@ typecheckWith(macrosAtCompileTime &lt;| implicitsAtCompileTime)(&quot;Monoid[Pla
 <p>By default, the packages are supposed to correspond to directories in the <code class="prettyprint">src/target/scala-&lt;version&gt;/classes</code> directory. If your project has a different layout you can declare another target directory: </p>
 <pre><code class="prettyprint">layers(&quot;...&quot;).inTargetDir(&quot;out&quot; / &quot;classes&quot;)
 </code></pre>
-<h3><a name="inclusion-exclusion" href="#inclusion-exclusion"/>Inclusion/Exclusion</h3>
+<h3><a name="inclusion-exclusion" href="#inclusion-exclusion">Inclusion/Exclusion</a></h3>
 <p>Every rule has exceptions :-). In some rare cases, it might be desirable to exclude a class from being checked on a given layer. To do this, you can use the <code class="prettyprint">include/exclude</code> methods on the <code class="prettyprint">Layer</code> class: </p>
 <pre><code class="prettyprint">layers (
   &quot;runner&quot;,
@@ -1846,7 +1846,7 @@ typecheckWith(macrosAtCompileTime &lt;| implicitsAtCompileTime)(&quot;Monoid[Pla
   <li>exclude fully qualified class names (generally, only <code class="prettyprint">exclude</code> will be necessary)</li>
   <li>re-include fully qualified class names if the exclusion list is to big</li>
 </ul>
-<h3><a name="verification" href="#verification"/>Verification</h3>
+<h3><a name="verification" href="#verification">Verification</a></h3>
 <p>Now you've defined layers, you can use the <code class="prettyprint">beRespected</code> matcher to check if all the dependencies are verified: </p>
 <pre><code class="prettyprint">val design = layers(&quot;...&quot;)
 design must beRespected
@@ -1856,7 +1856,7 @@ design must beRespected
 [error] org.specs2.main x-&gt; org.specs2.io because org.specs2.io.FileSystem -&gt; org.specs2.main.Arguments
 [error] org.specs2.main x-&gt; org.specs2.io because org.specs2.io.FileSystem -&gt; org.specs2.main.ArgumentsArgs
 </code></pre>
-<h3><a name="layers-as-an-example" href="#layers-as-an-example"/>Layers as an Example</h3>
+<h3><a name="layers-as-an-example" href="#layers-as-an-example">Layers as an Example</a></h3>
 <p>The <code class="prettyprint">org.specs2.specification.Analysis</code> trait allows to directly embed the layers definition in a <code class="prettyprint">Specification</code> and turn it into an <code class="prettyprint">Example</code>: </p>
 <pre><code class="prettyprint">class DependenciesSpec extends Specification with specification.Analysis { def is =
   &quot;this is the application design&quot; ^

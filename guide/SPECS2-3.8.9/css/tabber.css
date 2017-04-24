@@ -92,10 +92,10 @@ ul.tabbernav li.tabberactive a:hover
 
 /* If desired, hide the heading since a heading is provided by the tab */
 .tabberlive .tabbertab h2 {
- display:none;
+ display:true;
 }
 .tabberlive .tabbertab h3 {
- display:none;
+ display:true;
 }
 
 /* Example of using an ID to set different styles for the tabs on the page */

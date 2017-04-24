@@ -24,7 +24,7 @@
     <script src="./javascript/tipuesearch/tipuesearch.min.js"      type="text/javascript"></script>
 
 </head>
-<body onload="prettyPrint()">
+<body onload="prettyPrint(); tabberAutomatic([])">
 
 <div class="container">
 
@@ -1031,7 +1031,7 @@
 </ul>
 <h3 id="sbt">SBT</h3>
 <p>First you need to <a href="http://www.scala-sbt.org/release/tutorial/Setup.html">install sbt itself</a> then you need to add the following dependency:</p>
-<pre><code class="prettyprint">libraryDependencies += &quot;org.specs2&quot; %% &quot;specs2-core&quot; % &quot;3.8.9&quot; % &quot;test&quot;
+<pre><code class="prettyprint">libraryDependencies += &quot;org.specs2&quot; %% &quot;specs2-core&quot; % &quot;3.8.9-20170424065642-7b7973e&quot; % &quot;test&quot;
 
 scalacOptions in Test ++= Seq(&quot;-Yrangepos&quot;)</code></pre>
 <p>See <a href="http://www.scala-sbt.org/release/tutorial/Library-Dependencies.html">here</a> to learn more about sbt dependencies.</p>
@@ -1043,7 +1043,7 @@ scalacOptions in Test ++= Seq(&quot;-Yrangepos&quot;)</code></pre>
   &lt;dependency&gt;
     &lt;groupId&gt;org.specs2&lt;/groupId&gt;
     &lt;artifactId&gt;specs2-core_2.12&lt;/artifactId&gt;
-    &lt;version&gt;3.8.9&lt;/version&gt;
+    &lt;version&gt;3.8.9-20170424065642-7b7973e&lt;/version&gt;
     &lt;scope&gt;test&lt;/scope&gt;
   &lt;/dependency&gt;
 &lt;/dependencies&gt;
@@ -1058,7 +1058,7 @@ scalacOptions in Test ++= Seq(&quot;-Yrangepos&quot;)</code></pre>
 }
 
 dependencies {
-  testCompile &quot;org.specs2:specs2-core_2.12:3.8.9&quot;
+  testCompile &quot;org.specs2:specs2-core_2.12:3.8.9-20170424065642-7b7973e&quot;
 }</code></pre>
 <h3 id="other-dependencies">Other dependencies</h3>
 <p>Depending on the <s2>specs2</s2> features you want to use you will need to add more dependencies to your build:</p>

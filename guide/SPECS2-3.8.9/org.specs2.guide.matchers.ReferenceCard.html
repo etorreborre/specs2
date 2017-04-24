@@ -24,7 +24,7 @@
     <script src="./javascript/tipuesearch/tipuesearch.min.js"      type="text/javascript"></script>
 
 </head>
-<body onload="prettyPrint()">
+<body onload="prettyPrint(); tabberAutomatic([])">
 
 <div class="container">
 
@@ -1189,7 +1189,7 @@
 <ul>
   <li>check its ordering (works with any type <code class="prettyprint">T</code> which has an <code class="prettyprint">Ordering</code>)<br/>  <code class="prettyprint">Seq(1, 2, 3) must beSorted</code></li>
 </ul>
-<h4><a name="check-each-element-individually" href="#check-each-element-individually"/>Check each element individually</h4>
+<h4><a name="check-each-element-individually" href="#check-each-element-individually">Check each element individually</a></h4>
 <p>Then you can check the elements which are contained in the Traversable</p>
 <ul>
   <li>
@@ -1214,7 +1214,7 @@
   <li><code class="prettyprint">Seq(1, 2, 3) must contain(be_&gt;(1)).between(1.times, 2.times)</code></li>
   <li><code class="prettyprint">Seq(1, 2, 3) must contain(be_&gt;(1)).between(1, 2)</code></li>
 </ul>
-<h4><a name="check-all-elements" href="#check-all-elements"/>Check all elements</h4>
+<h4><a name="check-all-elements" href="#check-all-elements">Check all elements</a></h4>
 <p>The other types of checks involve comparing the Traversable elements to other elements (values, matchers, function returning a <code class="prettyprint">Result</code>)</p>
 <ul>
   <li>
@@ -1304,9 +1304,9 @@ Future { Thread.sleep(100); 1 } must be_&gt;(0).awaitFor(100.millis)
 <pre><code class="prettyprint">Future(1 === 1).await
 Future(1 === 1).await(retries = 2, timeout = 100.millis)
 </code></pre>
-<h4><a name="scalaz-futures" href="#scalaz-futures"/>Scalaz Futures</h4>
+<h4><a name="scalaz-futures" href="#scalaz-futures">Scalaz Futures</a></h4>
 <p>All of the above is applicable to <code class="prettyprint">scalaz.concurrent.Future</code> by using the method <code class="prettyprint">attempt</code> instead of <code class="prettyprint">await</code>.</p>
-<h4><a name="execution" href="#execution"/>Execution</h4>
+<h4><a name="execution" href="#execution">Execution</a></h4>
 <p>The <code class="prettyprint">await</code>/<code class="prettyprint">attempt</code> methods require an implicit <code class="prettyprint">org.specs2.concurrent.ExecutionEnv</code> (see <a href="org.specs2.guide.ExecutionEnvironments.html">here</a> for more details). You can pass one in the body of your examples:</p>
 <pre><code class="prettyprint">import org.specs2.matcher.FuturezMatchers._
 
@@ -1338,7 +1338,7 @@ class MyMutableFutureSpec extends mutable.Specification {
   type EE = ExecutionEnv
 }
 </code></pre>
-<h4><a name="time-factor" href="#time-factor"/>Time factor</h4>
+<h4><a name="time-factor" href="#time-factor">Time factor</a></h4>
 <p>Some actions can be a lot slower when executed on a continuous integration server rather than a developer machine and some timeouts will fail.<br/>You can avoid this by setting the <code class="prettyprint">timeFactor</code> argument which will multiply the durations used when <code class="prettyprint">awaiting / attempting</code> by a constant factor.</p>
 <pre><code class="prettyprint">sbt&gt; testOnly *MyFuturesSpec* -- timeFactor 3
 </code></pre></td></tr></table></form></div><div class="tabbertab" title="Exception"><form>
@@ -1441,7 +1441,7 @@ class MyMutableFutureSpec extends mutable.Specification {
   <li><code class="prettyprint">returnValue(function: A =&gt; AsResult[B])</code> to check if a <code class="prettyprint">Task</code> completes successfully with a value <code class="prettyprint">a</code>, where <code class="prettyprint">function(a)</code> returns a successful <a href="org.specs.guide.AsResultTypeclass.html">Result</a>. This can be used to do conditional assertions that depend on which value is returned by your <code class="prettyprint">Task</code></li>
   <li><code class="prettyprint">failWith[ExceptionType]</code> to check if a <code class="prettyprint">Task</code> fails with an Exception of the given type</li>
 </ul>
-<h4><a name="task-execution" href="#task-execution"/>Task execution</h4>
+<h4><a name="task-execution" href="#task-execution">Task execution</a></h4>
 <p>Please note that all the matchers above will run the <code class="prettyprint">Task</code> for you, you should not call <code class="prettyprint">.run</code>/<code class="prettyprint">.unsafePerformSync</code> on them in your tests.</p></td></tr></table></form></div><div class="tabbertab" title="Case class"><form>
     <table><tr><td class="none" style="info"><p>There is a special support for matching case classes, using a matcher macro. To use it you need to add the <code class="prettyprint">specs2-matcher-extra</code> jar to your project and add the <code class="prettyprint">org.specs2.matcher.MatcherMacros</code> trait to your specification.</p>
 <p>Then, with the <code class="prettyprint">matchA</code> matcher you can check the values of case class attributes:</p>
@@ -1492,7 +1492,7 @@ action1 must terminate(retries=3, sleep=100.millis).when(action2)
 <p>When a second action is specified like that, <code class="prettyprint">action1</code> will be started and <code class="prettyprint">action2</code> will be started on the first retry. Otherwise, if you want to specify that <code class="prettyprint">action1</code> can <em>only</em> terminate when <code class="prettyprint">action2</code> is started, you write: </p>
 <pre><code class="prettyprint">action1 must terminate.onlyWhen(action2)
 </code></pre>
-<h4><a name="executionenv" href="#executionenv"/>ExecutionEnv</h4>
+<h4><a name="executionenv" href="#executionenv">ExecutionEnv</a></h4>
 <p>The <code class="prettyprint">terminate</code> matcher needs an implicit <code class="prettyprint">ExecutionEnv</code> to be used. See the page to learn how to get one.</p></td></tr></table></form></div></div></td></tr></table></form></td>
 </div>
 
