@@ -1,1 +1,1 @@
-var tabberOptions = {'manualStartup':true,'addLinkId': true};
+var tabberOptions = {'addLinkId': true};
