@@ -18,18 +18,18 @@ object depends {
 
   def scalaParser(scalaVersion: String) =
     if (scalaMinorVersionAtLeast(scalaVersion, 11))
-      Seq("org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.4")
+      Seq("org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.6")
     else
       Seq()
 
   def scalaXML(scalaVersion: String) =
     if (scalaMinorVersionAtLeast(scalaVersion, 11))
-      Seq("org.scala-lang.modules" %% "scala-xml" % "1.0.5")
+      Seq("org.scala-lang.modules" %% "scala-xml" % "1.0.6")
     else
       Seq()
 
   def kindp(scalaVersion: String) =
-    "org.spire-math" % "kind-projector" % "0.8.2" cross CrossVersion.binary
+    "org.spire-math" % "kind-projector" % "0.9.3" cross CrossVersion.binary
 
   def scalacheck(scalaVersion: String) =
     Seq("org.scalacheck" %% "scalacheck" % "1.13.4")
@@ -40,14 +40,14 @@ object depends {
     else
       Seq()
 
-  lazy val mockito       = Seq("org.mockito"  %  "mockito-core"  % "1.9.5")
+  lazy val mockito       = Seq("org.mockito"  %  "mockito-core"  % "1.10.19")
   lazy val junit         = Seq("junit"        %  "junit"         % "4.12")
   lazy val hamcrest      = Seq("org.hamcrest" %  "hamcrest-core" % "1.3")
 
   def shapeless(scalaVersion: String) =
     Seq("com.chuusai" %% "shapeless" % "2.3.2")
 
-  lazy val cats = Seq("org.typelevel" %% "cats-core" % "0.7.2")
+  lazy val cats = Seq("org.typelevel" %% "cats-core" % "0.9.0")
 
   lazy val pegdown = Seq("org.pegdown" % "pegdown" % "1.6.0")
 
@@ -65,7 +65,7 @@ object depends {
 
   def scalaParallelCollections(scalaVersion: String) =
     if (scalaMinorVersionAtLeast(scalaVersion, 13))
-      Seq("org.scala-lang.modules" %% "scala-parallel-collections" % "0.1.1")
+      Seq("org.scala-lang.modules" %% "scala-parallel-collections" % "0.1.2")
     else
       Seq()
 
