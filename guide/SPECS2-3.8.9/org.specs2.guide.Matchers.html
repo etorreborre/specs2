@@ -1080,10 +1080,10 @@ def e1 = Paths.directoryPath(&quot;/tmp/path/to/dir&quot;) must beEqualTo(&quot;
 </tbody>
 </table>
 <p>There are also other notions of equality</p>
-<table style="width:75%;">
+<table style="width:76%;">
 <colgroup>
-<col width="37%" />
-<col width="37%" />
+<col width="15%" />
+<col width="61%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -1123,6 +1123,10 @@ def e1 = Paths.directoryPath(&quot;/tmp/path/to/dir&quot;) must beEqualTo(&quot;
 <tr class="even">
 <td align="left"><code class="prettyprint">beTrue, beFalse</code></td>
 <td align="left">shortcuts for Boolean equality</td>
+</tr>
+<tr class="odd">
+<td align="left"><code class="prettyprint">beLike</code></td>
+<td align="left">partial equality, using a <code class="prettyprint">PartialFunction[T, MatchResult[_]]</code>: <code class="prettyprint">(1, 2) must beLike { case (1, _) =&gt; ok }</code></td>
 </tr>
 </tbody>
 </table>
