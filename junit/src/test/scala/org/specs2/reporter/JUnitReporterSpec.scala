@@ -13,7 +13,7 @@ import specification.core._
 
 import scala.collection.mutable.ListBuffer
 
-class JUnitReporterSpec extends Specification with Mockito with ForEachEnv {  def is = s2"""
+class JUnitReporterSpec extends Specification with Mockito {  def is = s2"""
 
  The JUnitRunner is meant to be used with the RunWith annotation.
  It takes a Specification, executes it and notifies a RunNotifier object of the possible
@@ -33,54 +33,57 @@ class JUnitReporterSpec extends Specification with Mockito with ForEachEnv {  de
    1 pending example, a test ignored must be reported                                                 ${notified().e7}
    1 failing example with be_==, a ComparisonFailure message must be reported                         ${notified().e8}
    steps must be correctly sequenced with examples                                                    ${notified().e9}
+  ${step(env.shutdown)}
                                                                                                       """
+
+  lazy val env = Env()
 
   case class notified() extends WithNotifier with ReporterExamples {
     def desc(s: String) = =~(s) ^^ ((_:Description).getDisplayName)
 
-    def e1 = { env: Env =>
+    def e1 = {
       run(ex1)(env)
       Seq(there was one(notifier).fireTestStarted(desc("ex1")),
         there was one(notifier).fireTestFinished(desc("ex1")))
     }
-    def e2 = { env: Env =>
+    def e2 = {
       run(level1)(env)
       Seq("ex1", "ex2") flatMap { s =>
         Seq(there was one(notifier).fireTestStarted(desc(s)),
             there was one(notifier).fireTestFinished(desc(s)))
       }
     }
-    def e3 = { env: Env =>
+    def e3 = {
       run(ex1Failure)(env)
       Seq(there was one(notifier).fireTestStarted(desc("ex1")),
         there was one(notifier).fireTestFailure(any[Failure]))
     }
-    def e4 = { env: Env =>
+    def e4 = {
       run(ex1Failure)(env)
       val c = capture[Failure]
       there was one(notifier).fireTestFailure(c)
       c.value.getMessage must_== "failure"
     }
-    def e5 = { env: Env =>
+    def e5 = {
       run(ex1Error)(env)
       there was one(notifier).fireTestFailure(be_==("error")^^((_:Failure).getMessage))
     }
-    def e6 = { env: Env =>
+    def e6 = {
       run(ex1Skipped)(env)
       there was one(notifier).fireTestIgnored(desc("ex1"))
     }
-    def e7 = { env: Env =>
+    def e7 = {
       run(ex1Pending)(env)
       there was one(notifier).fireTestIgnored(desc("ex1"))
     }
-    def e8 = { env: Env =>
+    def e8 = {
       run(ex1BeEqualToFailure)(env)
       val c = capture[Failure]
       there was one(notifier).fireTestFailure(c)
       c.value.getException must haveSuperclass[ComparisonFailure]
     }
 
-    def e9 = { env: Env =>
+    def e9 = {
       val messages = new ListBuffer[String]
       run {
         step {

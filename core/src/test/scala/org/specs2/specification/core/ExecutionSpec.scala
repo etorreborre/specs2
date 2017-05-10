@@ -37,7 +37,7 @@ class ExecutionSpec(implicit ee: ExecutionEnv) extends Specification with Action
 
   def withTimeout = { env: Env =>
     val execution = Execution.withEnvAsync(_ => Future {
-      Thread.sleep(1000)
+      try Thread.sleep(1000) catch { case _ : InterruptedException => () }
       success }).setTimeout(100.millis)
     timedFuture(execution.startExecution(env).executionResult) must beOk(beSkipped[Result])
   }

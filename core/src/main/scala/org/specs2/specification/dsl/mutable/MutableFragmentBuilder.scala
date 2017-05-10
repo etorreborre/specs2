@@ -30,30 +30,27 @@ trait MutableFragmentBuilder extends FragmentBuilder
 
   private[specs2] val specFragments = new scala.collection.mutable.ListBuffer[Fragment]
 
-  def specificationFragments = (env: Env) => {
+  def specificationFragments = {
     val content = {
       List.fill(2)(fragmentFactory.break) ++ // add 2 line breaks just after the specification title
-      replayFragments(env).toList
+      replayFragments.toList
     }
     Fragments(producers.emit[ActionStack, Fragment](content))
   }
 
-  def specificationStructure = (env: Env) =>
-    SpecStructure.create(headerVar, argumentsVar, specificationFragments(env))
+  def is =
+    SpecStructure.create(headerVar, argumentsVar, specificationFragments)
 
-  private def replayFragments(environment: Env) = {
-    fragmentsEnv = environment
+  private def replayFragments: List[Fragment] = {
     targetPath.map(effects.replay).getOrElse(effects.record)
     effects.clear
-    specFragments
+    specFragments.toList
   }
 
   /** when a target path is specified we might limit the creation of fragments to only the fragments on the desired path */
   private[specs2] var targetPath: Option[EffectPath] = None
 
   private val effects = EffectBlocks()
-
-  private[specs2] var fragmentsEnv: Env = Env()
 
   def addFragmentBlock(f: =>Fragment) = {
     effects.nestBlock(f)
@@ -91,10 +88,9 @@ trait MutableFragmentBuilder extends FragmentBuilder
     targetPath.isEmpty
   }
 
-  private def duplicateExecution(effectPath: EffectPath): Execution = {
+  private def duplicateExecution(effectPath: EffectPath): Execution = Execution.withEnvFlatten { env =>
     val instance = runOperation(Classes.createInstanceFromClass[MutableFragmentBuilder](getClass.asInstanceOf[Class[MutableFragmentBuilder]],
-      getClass.getClassLoader, fragmentsEnv.defaultInstances),
-      fragmentsEnv.systemLogger)
+      getClass.getClassLoader, env.defaultInstances), env.systemLogger)
 
       instance match {
         case Left(e) =>
@@ -102,16 +98,16 @@ trait MutableFragmentBuilder extends FragmentBuilder
 
         case Right(newSpec) =>
           newSpec.targetPath = Some(effectPath)
-          val pathFragments = newSpec.replayFragments(fragmentsEnv)
-          val previousSteps = pathFragments.filter(f => Fragment.isStep(f) && f.execution.isolable).toList
+          val pathFragments = newSpec.replayFragments
+          val previousSteps = pathFragments.filter(f => Fragment.isStep(f) && f.execution.isolable)
 
           val previousStepExecutions = previousSteps.collect {
             case f if Fragment.isStep(f) && f.execution.isolable => f.execution
           }
-          val isolatedExecution = pathFragments.lastOption.map(_.execution).
+          val isolatedExecution: Execution = pathFragments.lastOption.map(_.execution).
             getOrElse(Execution.executed(Pending("isolation mode failure - could not find an isolated fragment to execute")))
 
-          isolatedExecution.afterSuccessfulSequential(previousStepExecutions)(fragmentsEnv)
+          isolatedExecution.afterSuccessfulSequential(previousStepExecutions)
       }
 
   }

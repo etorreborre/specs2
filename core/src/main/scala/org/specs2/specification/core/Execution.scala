@@ -2,7 +2,7 @@ package org.specs2
 package specification
 package core
 
-import java.util.concurrent.{ExecutorService, ScheduledExecutorService, TimeoutException}
+import java.util.concurrent.{ScheduledExecutorService, TimeoutException}
 
 import execute._
 import org.specs2.concurrent.ExecutionEnv
@@ -124,7 +124,7 @@ case class Execution(run:            Option[Env => Future[() => Result]]     = N
       case Some(r) =>
         val to = env.timeout |+| timeout
         try {
-          implicit val s = env.scheduledExecutorService
+          val s = env.scheduledExecutorService
           implicit val ec = env.executionContext
           env.customClassLoader.foreach(Thread.currentThread.setContextClassLoader(_))
 
@@ -178,60 +178,61 @@ case class Execution(run:            Option[Env => Future[() => Result]]     = N
     }
 
   /** run this execution after the previous executions are finished */
-  def after(executions: List[Execution])(env: Env): Execution =
-    afterExecutions(executions, sequential = false, checkResult = false)(env)
+  def after(executions: List[Execution]): Execution =
+    afterExecutions(executions, sequential = false, checkResult = false)
 
   /** run this execution after the executions and only if they are successful */
-  def afterSuccessful(executions: List[Execution])(env: Env): Execution =
-    afterExecutions(executions, sequential = false, checkResult = true)(env)
+  def afterSuccessful(executions: List[Execution]): Execution =
+    afterExecutions(executions, sequential = false, checkResult = true)
 
   /** run this execution after the other executions have been sequentially executed and only if they are successful */
-  def afterSuccessfulSequential(executions: List[Execution])(env: Env): Execution =
-    afterExecutions(executions, sequential = true, checkResult = true)(env)
+  def afterSuccessfulSequential(executions: List[Execution]): Execution =
+    afterExecutions(executions, sequential = true, checkResult = true)
 
   /** run this execution after the other executions have been sequentially executed */
-  def afterSequential(executions: List[Execution])(env: Env): Execution =
-    afterExecutions(executions, sequential = true, checkResult = false)(env)
+  def afterSequential(executions: List[Execution]): Execution =
+    afterExecutions(executions, sequential = true, checkResult = false)
 
   /** run this execution after the previous executions are finished */
-  private def afterExecutions(executions: List[Execution], sequential: Boolean, checkResult: Boolean)(env: Env): Execution = {
-    implicit val ec = env.executionContext
+  private def afterExecutions(executions: List[Execution], sequential: Boolean, checkResult: Boolean): Execution =
+    Execution.withEnvFlatten { env: Env =>
+      implicit val ec = env.executionContext
 
-    lazy val runs: List[Future[Result]] =
-      executions.flatMap(_.futureResult(env))
+      lazy val runs: List[Future[Result]] =
+        executions.flatMap(_.futureResult(env))
 
-    lazy val before: Future[Result] =
-      if (sequential) runs.foldLeftM[Future, Result](Success())((res, cur) => cur.map(r => res and r))
-      else            Future.sequence(runs).map(_.suml)
+      lazy val before: Future[Result] =
+        if (sequential) runs.foldLeftM[Future, Result](Success())((res, cur) => cur.map(r => res and r))
+        else            Future.sequence(runs).map(_.suml)
 
-    executing match {
-      case None =>
-        run match {
-          case None => this
-          case _ =>
-            updateRun { r => (env: Env) =>
-              before.flatMap { rs =>
-                if (checkResult) {
-                  if (rs.isSuccess) r(env)
-                  else Future.successful(() => rs)
-                } else r(env)
+      executing match {
+        case None =>
+          run match {
+            case None => this
+            case _ =>
+              updateRun { r => (env: Env) =>
+                before.flatMap { rs =>
+                  if (checkResult) {
+                    if (rs.isSuccess) r(env)
+                    else Future.successful(() => rs)
+                  } else r(env)
+                }
               }
-            }
-        }
-      case Some(Left(t)) =>
-        this
+          }
+        case Some(Left(t)) =>
+          this
 
-      case Some(Right(f)) =>
+        case Some(Right(f)) =>
 
-        val future = before.flatMap { rs =>
-          if (checkResult) {
-            if (rs.isSuccess) f
-            else              Future.successful(rs)
-          } else f
-        }
+          val future = before.flatMap { rs =>
+            if (checkResult) {
+              if (rs.isSuccess) f
+              else              Future.successful(rs)
+            } else f
+          }
 
-        setExecuting(future)
-    }
+          setExecuting(future)
+      }
   }
 
   /** @return true if something can be run */
@@ -295,6 +296,17 @@ object Execution {
   def withEnv[T : AsResult](f: Env => T): Execution =
     Execution(Some((env: Env) => Future(() => AsResult(f(env)))(env.executionContext)))
 
+  /** create an execution using the Env and Flatten the execution */
+  def withEnvFlatten(f: Env => Execution): Execution =
+    Execution(Some { env: Env =>
+      implicit val ec = env.executionContext
+      implicit val s = env.scheduledExecutorService
+      Future {
+        () =>
+        f(env).startExecution(env).executionResult.runNow(s, ec).map(r => () => r)
+      }.flatMap(future => future())
+    })
+
   /** create an execution using the Env */
   def withEnvSync[T : AsResult](f: Env => T): Execution =
     Execution(Some((env: Env) => Future.successful(() => AsResult(f(env)))))
@@ -302,10 +314,6 @@ object Execution {
   /** create an execution using the Env */
   def withEnvAsync[T : AsResult](f: Env => Future[T]): Execution =
     Execution(Some((env: Env) => f(env).map(r => () => AsResult(r))(env.executionContext)))
-
-  /** create an execution using the executor service */
-  def withExecutorService[T : AsResult](f: ExecutorService => T) =
-    withEnv((env: Env) => f(env.executorService))
 
   /** create an execution using the scheduled executor service */
   def withScheduledExecutorService[T : AsResult](f: ScheduledExecutorService => T) =

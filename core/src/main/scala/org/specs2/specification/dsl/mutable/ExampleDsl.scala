@@ -3,8 +3,6 @@ package specification
 package dsl
 package mutable
 
-import java.util.concurrent.ExecutorService
-
 import org.specs2.concurrent.ExecutionEnv
 import org.specs2.execute.AsResult
 import control.{ImplicitParameters, Use}
@@ -75,28 +73,12 @@ trait ExampleDsl1 extends BlockDsl with ExampleDsl0 {
       describe(d) >> f
 
     def in(fs: =>Fragments)(implicit p1: ImplicitParam1): Fragments =
-      describe(d).>>(fs)(p1)
-
-    def in[R](f: CommandLine => R)(implicit asResult: AsResult[R], p: ImplicitParam): Fragment =
-      >>(f)(asResult, p)
-
-    def in[R](f: Env => R)(implicit asResult: AsResult[R], p1: ImplicitParam1): Fragment =
-      d.>>(f)(asResult, p1)
-
-    def in[R](f: ExecutionContext => R)(implicit asResult: AsResult[R], p2: ImplicitParam2): Fragment =
-      d.>>(f)(asResult, p2)
-
-    def in[R](f: ExecutionEnv => R)(implicit asResult: AsResult[R], p3: ImplicitParam3): Fragment =
-      d.>>(f)(asResult, p3)
-
-    def in[R](f: ExecutorService => R)(implicit asResult: AsResult[R], p4: ImplicitParam4): Fragment =
-      d.>>(f)(asResult, p4)
-
-    def in[R: AsResult](parser: StepParser[R]): Fragment =
-      d.>>(parser)
-
-    def in(execution: Execution): Fragment =
-      d >> execution
+      describe(d).>>(fs)(p1)def in[R](f: CommandLine => R)(implicit asResult: AsResult[R], p: ImplicitParam): Fragment = >>(f)(asResult, p)
+    def in[R](f: Env => R)(implicit asResult: AsResult[R], p1: ImplicitParam1): Fragment = d.>>(f)(asResult, p1)
+    def in[R](f: ExecutionContext => R)(implicit asResult: AsResult[R], p2: ImplicitParam2): Fragment = d.>>(f)(asResult, p2)
+    def in[R](f: ExecutionEnv => R)(implicit asResult: AsResult[R], p3: ImplicitParam3): Fragment = d.>>(f)(asResult, p3)
+    def in[R: AsResult](parser: StepParser[R]): Fragment = d.>>(parser)
+    def in(execution: Execution): Fragment = d >> execution
   }
 }
 

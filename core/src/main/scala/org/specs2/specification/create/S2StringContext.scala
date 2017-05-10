@@ -1,8 +1,6 @@
 package org.specs2
 package specification.create
 
-import java.util.concurrent.ExecutorService
-
 import execute._
 import control.TraceLocation
 import org.specs2.concurrent.ExecutionEnv
@@ -71,9 +69,6 @@ trait S2StringContext extends S2StringContext1 { outer =>
 
   implicit def executionEnvFunctionIsInterpolatedFragment[R : AsResult](f: ExecutionEnv => R): InterpolatedFragment =
     envFunctionIsInterpolatedFragment((env: Env) => f(env.executionEnv))
-
-  implicit def executorServiceFunctionIsInterpolatedFragment[R : AsResult](f: ExecutorService => R): InterpolatedFragment =
-    envFunctionIsInterpolatedFragment((env: Env) => f(env.executorService))
 
   implicit def anyAsResultIsInterpolatedFragment(r: =>Function0Result): InterpolatedFragment = new InterpolatedFragment {
     def append(fs: Fragments, text: String, start: Location, end: Location, expression: String): Fragments =

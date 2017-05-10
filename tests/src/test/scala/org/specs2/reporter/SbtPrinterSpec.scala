@@ -54,7 +54,7 @@ class SbtPrinterSpec(env: Env) extends Specification { def is = s2"""
     }
 
     def executeAndPrintHelloWorldUnitSpec = {
-      val executed = DefaultExecutor.executeSpecWithoutShutdown((new HelloWorldUnitSpec).is.fragments, env)
+      val executed = DefaultExecutor.executeSpec((new HelloWorldUnitSpec).is.fragments, env)
       runAction(printer.print(env)(executed))(env.specs2ExecutionEnv)
     }
 
@@ -68,7 +68,7 @@ class SbtPrinterSpec(env: Env) extends Specification { def is = s2"""
     }
 
     def e2 = {
-      val executed = DefaultExecutor.executeSpecWithoutShutdown((new HelloWorldSpec).is, env)
+      val executed = DefaultExecutor.executeSpec((new HelloWorldSpec).is, env)
 
       print(executed).replaceAll("""(\d+ seconds?, )?\d+ ms""", "0 ms").replaceAll(" ", "_") ===
       """|HelloWorldSpec

@@ -57,7 +57,7 @@ trait ImmutableSpecificationStructure extends SpecificationStructure {
             case f if Fragment.isStep(f) && f.execution.isolable => f.execution
           }
           val isolated = newFragments.fragments(position).execution
-          isolated.afterSuccessfulSequential(previousStepExecutions)(env)
+          isolated.afterSuccessfulSequential(previousStepExecutions)
       }
     }
   }

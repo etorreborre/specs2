@@ -4,14 +4,17 @@ package matcher
 import specification.process.DefaultExecutor
 import specification._
 import java.util.Arrays._
+
 import scala.collection.parallel.ParSeq
 import control.NumberOfTimes
+
 import scala.collection.JavaConverters._
 import ActionMatchers._
 import fp.syntax._
 import execute.Result
+import org.specs2.specification.core.Env
 
-class TraversableMatchersSpec extends Spec with ResultMatchers with Grouped with NumberOfTimes with MustMatchers { def is = s2"""
+class TraversableMatchersSpec(env: Env) extends Spec with ResultMatchers with Grouped with NumberOfTimes with MustMatchers { def is = s2"""
 
  We can check the elements of a collection by using matchers
    ${ Seq(1, 2, 3) must contain(2) }
@@ -217,7 +220,7 @@ class TraversableMatchersSpec extends Spec with ResultMatchers with Grouped with
           Seq(1) must not contain(1)
         }
       }
-      DefaultExecutor.runSpecification(spec).traverse(_.executionResult).map(_.suml) must beOk(ResultMatchers.beFailing[Result])
+      DefaultExecutor.runSpecification(spec, env).traverse(_.executionResult).map(_.suml) must beOk(ResultMatchers.beFailing[Result])
     }
   }
 

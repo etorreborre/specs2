@@ -43,7 +43,8 @@ class ExecutorSpec(implicit ec: ExecutionContext) extends script.Specification w
 
   "steps" - new group with results {
 
-    eg := { env: Env =>
+    eg := {
+      val env: Env = Env()
       val tf = env.arguments.execute.timeFactor
 
       val fragments = Seq(
@@ -52,12 +53,14 @@ class ExecutorSpec(implicit ec: ExecutionContext) extends script.Specification w
         step(step1),
         example("fast", fast(tf)))
 
-      execute(fragments, env) must not(contain(beSkipped[Result]))
+      try execute(fragments, env) must not(contain(beSkipped[Result]))
+      finally env.shutdown
 
       messages.toList must_== Seq("medium", "slow", "step", "fast")
     }
 
-    eg := { env: Env =>
+    eg := {
+      val env = Env()
       val tf = env.arguments.execute.timeFactor
 
       val fragments = Seq(
@@ -66,12 +69,14 @@ class ExecutorSpec(implicit ec: ExecutionContext) extends script.Specification w
         step(step1).stopOnFail,
         example("fast", fast(tf)))
 
-      execute(fragments, env) must contain(beSkipped[Result])
+      try execute(fragments, env) must contain(beSkipped[Result])
+      finally env.shutdown
 
       messages.toList must_== Seq("medium", "slow", "step")
     }
 
-    eg := { env: Env =>
+    eg := {
+      val env: Env = Env()
       val tf = env.arguments.execute.timeFactor
 
       val fragments = Seq(
@@ -80,7 +85,8 @@ class ExecutorSpec(implicit ec: ExecutionContext) extends script.Specification w
         step(step1).stopOnError,
         example("fast", fast(tf)))
 
-      execute(fragments, env) must contain(beSkipped[Result])
+      try execute(fragments, env) must contain(beSkipped[Result])
+      finally env.shutdown
 
       messages.toList must_== Seq("medium", "slow", "step")
     }
@@ -99,14 +105,16 @@ class ExecutorSpec(implicit ec: ExecutionContext) extends script.Specification w
       messages.toList must_== Seq("medium", "slow", "step")
     }
 
-    eg := { env: Env =>
+    eg := {
+      val env: Env = Env()
       val tf = env.arguments.execute.timeFactor
 
       val fragments = Seq(
         example("ex1", fast(tf)),
         example("ex2", fast(tf)))
 
-      execute(fragments, env.setArguments(Arguments("skipAll"))) must contain(beSkipped[Result])
+      try execute(fragments, env.setArguments(Arguments("skipAll"))) must contain(beSkipped[Result])
+      finally env.shutdown
 
       messages.toList must beEmpty
     }
@@ -115,7 +123,8 @@ class ExecutorSpec(implicit ec: ExecutionContext) extends script.Specification w
 
   "execute" - new group with results {
 
-    eg := { env: Env =>
+    eg := {
+      val env: Env = Env()
       val tf = env.arguments.execute.timeFactor
 
       val fragments = Seq(
@@ -124,12 +133,14 @@ class ExecutorSpec(implicit ec: ExecutionContext) extends script.Specification w
         step(step1),
         example("fast", fast(tf)))
 
-      execute(fragments, env.setArguments(Arguments("sequential"))) must not(contain(beSkipped[Result]))
+      try execute(fragments, env.setArguments(Arguments("sequential"))) must not(contain(beSkipped[Result]))
+      finally env.shutdown
 
       messages.toList must_== Seq("slow", "medium", "step", "fast")
     }
 
-    eg := { env: Env =>
+    eg := {
+      val env: Env = Env()
       val tf = env.arguments.execute.timeFactor
 
       val fragments = Seq(
@@ -138,37 +149,43 @@ class ExecutorSpec(implicit ec: ExecutionContext) extends script.Specification w
         step(step1),
         example("fast", fast(tf)))
 
-      execute(fragments, env.setArguments(Arguments("sequential")))
+      try execute(fragments, env.setArguments(Arguments("sequential")))
+      finally env.shutdown
 
       messages.toList must_== Seq("slow", "medium", "step", "fast")
     }
 
-    eg := { env: Env =>
-
+    eg := {
+      val env: Env = Env()
       val fragments = Seq(
         example("fast1", ok("ok1")),
         step(fatalStep),
         example("fast2", ok("ok2")))
 
-      execute(fragments, env)
+      try execute(fragments, env)
+      finally env.shutdown
 
       messages.toList must_== Seq("ok1", "fatal")
     }
 
-    eg := { env: Env =>
+    eg := {
+      val env: Env = Env()
 
       val fragments = Seq(
         example("e1", ko("ko1")),
         example("e2", ok("ok2")))
 
-      val env1 = env.setArguments(Arguments.split("sequential stopOnFail"))
-      val results = execute(fragments, env1).map(_.status)
+      try {
+        val env1 = env.setArguments(Arguments.split("sequential stopOnFail"))
+        val results = execute(fragments, env1).map(_.status)
 
-      results must contain("x", "o")
+        results must contain("x", "o")
+      } finally env.shutdown
     }
   }
 
-  def timeout = { env: Env =>
+  def timeout = {
+    val env: Env = Env()
     val timeFactor = env.arguments.execute.timeFactor
 
     val messages = new ListBuffer[String]
@@ -177,23 +194,26 @@ class ExecutorSpec(implicit ec: ExecutionContext) extends script.Specification w
     val fragments = Seq(example("very slow", verySlow))
     val env1 = env.setTimeout(100.millis * timeFactor.toLong)
 
-    execute(fragments, env1) must contain(beSkipped[Result]("timed out after "+100*timeFactor+" milliseconds"))
+    try execute(fragments, env1) must contain(beSkipped[Result]("timed out after "+100*timeFactor+" milliseconds"))
+    finally env.shutdown
   }
 
-  def userEnv = { env: Env =>
+  def userEnv = {
+    val env: Env = Env()
     val fragments =
       Fragments.foreach(1 to 10) { i: Int =>
         "test " + i ! Execution.withExecutionEnv { implicit ee: ExecutionEnv =>
           Await.result(scala.concurrent.Future(1), 1 second) ==== 1
         }
       }
-    execute(fragments.fragments, env) must contain(beSuccessful[Result]).forall
+    try execute(fragments.fragments, env) must contain(beSuccessful[Result]).forall
+    finally env.shutdown
   }
 
   val factory = fragmentFactory
 
   def execute(fragments: Seq[Fragment], env: Env): List[Result] =
-    DefaultExecutor.execute1(env)(Fragments(fragments:_*).contents).runList.
+    DefaultExecutor.execute(env)(Fragments(fragments:_*).contents).runList.
       runOption(env.executionEnv).toList.flatten.traverse(_.executionResult).run(env.executionEnv)
 
   trait results {

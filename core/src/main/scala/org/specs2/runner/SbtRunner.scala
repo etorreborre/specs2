@@ -50,7 +50,7 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
         else
           Array()
 
-      def execute(handler: EventHandler, loggers: Array[Logger]) = {
+      def execute(handler: EventHandler, loggers: Array[Logger]): Array[Task] = try {
         val (result, warnings) = specStructure
         processResult(handler, loggers)(result, warnings)
 
@@ -61,7 +61,7 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
         }
         // nothing more to execute
         Array[Task]()
-      }
+      } finally env.shutdown
 
       /** @return the correponding task definition */
       def taskDef = aTaskDef
@@ -196,15 +196,13 @@ trait SpecificationFingerprint extends SubclassFingerprint {
 object sbtRun extends SbtRunner(Array(), Array(), Thread.currentThread.getContextClassLoader) {
   def main(arguments: Array[String]) {
     val env = Env(Arguments(arguments:_*))
-
-    try     exit(start(arguments: _*)(env))(env)
-    finally env.shutdown
+    exit(start(arguments: _*)(env))(env)
   }
 
   def exit(action: Action[Stats])(env: Env): Unit = {
     runAction(action)(env.specs2ExecutionEnv).fold(
-      err => System.exit(100),
-      ok  => if (ok.isSuccess) System.exit(0) else System.exit(1))
+      err => { env.shutdown; System.exit(100) },
+      ok  => { env.shutdown; if (ok.isSuccess) System.exit(0) else System.exit(1) })
   }
 
   def start(arguments: String*)(env: Env): Action[Stats] = {

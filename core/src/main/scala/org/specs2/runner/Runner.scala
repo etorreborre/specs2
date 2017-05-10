@@ -101,7 +101,7 @@ object Runner {
 
       } else Reporter.report(env, printers)(specStructure)
 
-    report.addLast(Actions.delayed(env.shutdown))
+    report
   }
 
   /**

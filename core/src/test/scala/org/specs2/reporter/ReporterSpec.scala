@@ -13,7 +13,7 @@ import specification.process._
 import OperationMatchers._
 import org.specs2.control.origami.Folds
 
-class ReporterSpec extends Specification with ForEachEnv with ThrownExpectations { def is = s2"""
+class ReporterSpec(env: Env) extends Specification with ThrownExpectations { def is = s2"""
 
  The reporter is responsible for:
    - filtering the specification fragments
@@ -38,44 +38,44 @@ class ReporterSpec extends Specification with ForEachEnv with ThrownExpectations
 
   import reporterSpecSupport._
 
-  def a1 = { env: Env =>
+  def a1 = {
     val logger = stringLogger
     reported(env.setArguments(Arguments.split("ex ex3")).setLineLogger(logger))
     logger.messages.mkString("\n") must contain("ex3")
     logger.messages.mkString("\n") must not contain("ex1")
   }
 
-  def a2 = { env: Env =>
+  def a2 = {
     val repository = StatisticsRepository.memory
     reported(env.setArguments(Arguments()).setStatisticRepository(repository))
     repository.getStatistics(spec().specClassName) must beOk(beSome((_: Stats).examples must_== 3))
   }
 
-  def a3 = { env: Env =>
+  def a3 = {
     val repository = StatisticsRepository.memory
     reported(env.setArguments(Arguments()).setStatisticRepository(repository))
     val ex2 = spec().fragments.fragments(3)
     repository.previousResult(spec().specClassName, ex2.description) must beOk(beSome((_: Result).isFailure must beTrue))
   }
 
-  def a4 = { env: Env =>
+  def a4 = {
     reported(env).map(_.copy(timer = Stats.empty.timer)) must beSome(Stats(examples = 3, successes = 2, expectations = 3, failures= 1))
   }
 
-  def b1 = { env: Env =>
+  def b1 = {
     val logger = stringLogger
     reported(env.setLineLogger(logger), logger)
     logger.messages must not(beEmpty)
   }
 
-  def b2 = { env: Env =>
+  def b2 = {
     val logger = stringLogger
     reported(env.setLineLogger(logger).setArguments(Arguments("junit")), printers = List(new FakeJUnitPrinter(logger)))
     logger.messages must not(contain("ex1"))
     logger.messages must contain("[info] junit")
   }
 
-  def b3 = { env: Env =>
+  def b3 = {
     val logger = stringLogger
 
     reported(env.setLineLogger(logger).setArguments(Arguments.split("console junit")),
@@ -113,8 +113,7 @@ object reporterSpecSupport extends MustMatchers with StandardMatchResults with S
   def ex3(logger: LineLogger) = { logger.infoLog("e3\n "); ok }
 
   def reported(env: Env, logger: LineLogger = NoLineLogger, printers: List[Printer] = List(TextPrinter)) =
-    try reporter.report(env, printers)(spec(logger)).runOption(env.executionEnv)
-    finally env.shutdown
+    reporter.report(env, printers)(spec(logger)).runOption(env.specs2ExecutionEnv)
 
   def indexOf(messages: Seq[String])(f: String => Boolean): Int =
     messages.zipWithIndex.find { case (s, i) => f(s)}.fold(-1)(_._2)

@@ -6,10 +6,10 @@ import control._
 import execute._
 import io.StringOutput
 import org.specs2.specification.{AfterAll, Tables}
-import specification.core.Env
+import specification.core.{Env, SpecificationStructure}
 import runner._
 
-class NotifierSpec(env: Env) extends Specification { def is = s2"""
+class NotifierSpec extends Specification { def is = s2"""
 
  Run a mutable spec with a Notifier                     $a1
  Run an acceptance spec with a Notifier                 $a2
@@ -20,11 +20,7 @@ class NotifierSpec(env: Env) extends Specification { def is = s2"""
 """
 
   def a1 = {
-    val spec = new NotifierSpec1
-    val env1 = env.setArguments(Arguments("notifier"))
-    val notifier = new TestNotifier
-    Reporter.report(env1, List(NotifierPrinter.printer(notifier)))(spec.structure(env)).runOption(env.executionEnv)
-    notifier.messages.mkString("\n") must_==
+    report(new NotifierSpec1).messages.mkString("\n") must_==
     List(
       "[start  ] NotifierSpec1",
       "[step   ]",
@@ -52,22 +48,13 @@ class NotifierSpec(env: Env) extends Specification { def is = s2"""
   }
 
   def a3 = {
-    val spec = new NotifierSpecWithTables
-    val env1 = env.setArguments(Arguments("notifier"))
-    val notifier = new TestNotifier
-    Reporter.report(env1, List(NotifierPrinter.printer(notifier)))(spec.structure(env)).runOption(env.executionEnv)
-
     "there is a failure for the table" ==> {
-      notifier.messages must contain((m: String) => m must contain("failure"))
+      report(new NotifierSpecWithTables).messages must contain((m: String) => m must contain("failure"))
     }
   }
 
   def a4 = {
-    val spec = new NotifierSpec2
-    val env1 = env.setArguments(Arguments("notifier"))
-    val notifier = new TestNotifier
-    Reporter.report(env1, List(NotifierPrinter.printer(notifier)))(spec.structure(env)).runOption(env.executionEnv)
-    notifier.messages.mkString("\n") must_==
+    report(new NotifierSpec2).messages.mkString("\n") must_==
       List(
         "[start  ] NotifierSpec2",
         "[open   ] group1",
@@ -82,11 +69,7 @@ class NotifierSpec(env: Env) extends Specification { def is = s2"""
   }
 
   def a5 = {
-    val spec = new NotifierSpec3
-    val env1 = env.setArguments(Arguments("notifier"))
-    val notifier = new TestNotifier
-    Reporter.report(env1, List(NotifierPrinter.printer(notifier)))(spec.structure(env)).runOption(env.executionEnv)
-    notifier.messages.mkString("\n") must_==
+    report(new NotifierSpec3).messages.mkString("\n") must_==
       List(
         "[start  ] NotifierSpec3",
         "[open   ] group1",
@@ -96,6 +79,17 @@ class NotifierSpec(env: Env) extends Specification { def is = s2"""
         "[step   ]",
         "[error  ] org.specs2.specification.core.FatalExecution: boom",
         "[end    ] NotifierSpec3").mkString("\n")
+  }
+
+
+  def report(spec: SpecificationStructure): TestNotifier = {
+    val env1 = Env(arguments = Arguments("notifier"))
+    val notifier = new TestNotifier
+
+    try     Reporter.report(env1, List(NotifierPrinter.printer(notifier)))(spec.structure(env1)).runOption(env1.executionEnv)
+    finally env1.shutdown
+
+    notifier
   }
 
 }

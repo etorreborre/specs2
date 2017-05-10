@@ -20,17 +20,17 @@ trait Classes {
    *
    * This is useful to instantiate nested classes which are referencing their outer class in their constructor
    */
-  def createInstance[T <: AnyRef](className: String, loader: ClassLoader, defaultInstances: List[AnyRef] = Nil)(implicit m: ClassTag[T]): Operation[T] =
+  def createInstance[T <: AnyRef](className: String, loader: ClassLoader, defaultInstances: =>List[AnyRef] = Nil)(implicit m: ClassTag[T]): Operation[T] =
     loadClass(className, loader) >>= { klass: Class[T] =>
       createInstanceFromClass(klass, loader, defaultInstances)
     }
 
-  def createInstanceFromClass[T <: AnyRef](klass: Class[T], loader: ClassLoader, defaultInstances: List[AnyRef] = Nil)(implicit m: ClassTag[T]): Operation[T] =
+  def createInstanceFromClass[T <: AnyRef](klass: Class[T], loader: ClassLoader, defaultInstances: =>List[AnyRef] = Nil)(implicit m: ClassTag[T]): Operation[T] =
     findInstance[T](klass, loader, defaultInstances,
       klass.getDeclaredConstructors.toList.filter(_.getParameterTypes.size <= 1).sortBy(_.getParameterTypes.size))
 
   /** try to create an instance but return an exception if this is not possible */
-  def createInstanceEither[T <: AnyRef](className: String, loader: ClassLoader, defaultInstances: List[AnyRef] = Nil)(implicit m: ClassTag[T]): Operation[Throwable Either T] =
+  def createInstanceEither[T <: AnyRef](className: String, loader: ClassLoader, defaultInstances: =>List[AnyRef] = Nil)(implicit m: ClassTag[T]): Operation[Throwable Either T] =
     loadClassEither(className, loader) >>= { tc: Throwable Either Class[T] =>
       tc match {
         case Left(t) => Operations.ok(Left(t))
@@ -40,7 +40,7 @@ trait Classes {
       }
     }
 
-  private def findInstance[T <: AnyRef : ClassTag](klass: Class[T], loader: ClassLoader, defaultInstances: List[AnyRef], cs: List[Constructor[_]], error: Option[ErrorEffect.Error] = None): Operation[T] =
+  private def findInstance[T <: AnyRef : ClassTag](klass: Class[T], loader: ClassLoader, defaultInstances: =>List[AnyRef], cs: List[Constructor[_]], error: Option[ErrorEffect.Error] = None): Operation[T] =
     cs match {
       case Nil => error.map(Operations.fromError[T]).getOrElse(Operations.fail[T]("Can't find a constructor for class "+klass.getName))
       case c :: rest =>
@@ -53,8 +53,10 @@ trait Classes {
   /**
    * Given a class, a zero or one-parameter constructor, return an instance of that class
    */
-  private def createInstanceForConstructor[T <: AnyRef : ClassTag](klass: Class[_], constructor: Constructor[_],
-                                                                   loader: ClassLoader, defaultInstances: List[AnyRef]): Operation[T] = {
+  private def createInstanceForConstructor[T <: AnyRef : ClassTag](klass: Class[_],
+                                                                   constructor: Constructor[_],
+                                                                   loader: ClassLoader,
+                                                                   defaultInstances: =>List[AnyRef]): Operation[T] = {
 
     constructor.setAccessible(true)
     if (constructor.getParameterTypes.isEmpty)

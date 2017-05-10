@@ -143,7 +143,8 @@ class ContextSpec extends script.Spec with ResultMatchers with Groups { def is =
   trait FragmentsExecution extends StringOutput with ContextData {
     def executeBodies(exs: Fragments) = {
       val env = Env(arguments = Arguments("sequential"))
-      DefaultExecutor.executeSeq(exs.fragments)(env).traverse(_.executionResult).run(env.executionEnv)
+      try DefaultExecutor.executeSeq(exs.fragments)(env).traverse(_.executionResult).run(env.executionEnv)
+      finally env.shutdown
     }
 
     def executing(exs: Fragments): Executed = Executed(executeBodies(exs))

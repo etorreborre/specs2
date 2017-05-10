@@ -1,9 +1,6 @@
 package org.specs2
 package specification
 
-import java.util.concurrent.ExecutorService
-
-import control.Use
 import execute._
 import control.ImplicitParameters._
 import org.specs2.concurrent.ExecutionEnv
@@ -393,8 +390,5 @@ object ExecutionVar {
 
   def withExecutionEnv[R : AsResult](f: ExecutionEnv => R) =
     new ExecutionVar(() => Execution.withExecutionEnv(f))
-
-  def withExecutorService[R : AsResult](f: ExecutorService => R) =
-    new ExecutionVar(() => Execution.withExecutorService(f))
 
 }

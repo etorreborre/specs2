@@ -5,12 +5,12 @@ import _root_.org.specs2.mutable.{Specification => Spec}
 import org.specs2.execute.Result
 import org.specs2.main.Arguments
 import org.specs2.specification.core.{Env, ContextualSpecificationStructure}
-import org.specs2.specification.process.{DefaultSelector, Statistics, Stats, DefaultExecutor}
+import org.specs2.specification.process._
 import user.specification._
 import fp.syntax._
 import control._
 
-class AllExpectationsSpec extends Spec with AllExpectations {
+class AllExpectationsSpec(env: Env) extends Spec with AllExpectations {
 
   "A specification with the AllExpectations trait should" >> {
     "evaluate all its expectations" >> {
@@ -62,19 +62,18 @@ class AllExpectationsSpec extends Spec with AllExpectations {
   }
 
   def stats(spec: ContextualSpecificationStructure)(args: Arguments): Stats = {
-    val env = Env(arguments = args)
+    val env1 = Env().setArguments(args)
     try {
-      val executed = DefaultExecutor.executeSpecWithoutShutdown(spec.structure(env) |> DefaultSelector.select(env), env)
-      Statistics.runStats(executed)(env.executionEnv)
-    }
-    finally env.shutdown
+      val executed = DefaultExecutor.executeSpec(spec.structure(env1) |> DefaultSelector.select(env1), env1)
+      Statistics.runStats(executed)(env1.executionEnv)
+    } finally env1.shutdown
   }
 
   def results(spec: ContextualSpecificationStructure)(args: Arguments): List[Result] = {
-    val env = Env(arguments = args)
-    try DefaultExecutor.executeSpecWithoutShutdown(spec.structure(env), env).fragments
-      .fragments.toList.traverse(_.executionResult).run(env.executionEnv)
-    finally env.shutdown
+    val env1 = Env().setArguments(args)
+    try DefaultExecutor.executeSpec(spec.structure(env1), env1).fragments.fragments.toList.
+          traverse(_.executionResult).run(env1.executionEnv)
+    finally env1.shutdown
   }
 
   def issues(spec: ContextualSpecificationStructure)(args: Arguments): List[Result] =

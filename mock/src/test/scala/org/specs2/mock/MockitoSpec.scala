@@ -140,7 +140,11 @@ STUBS
 
  + Various mockito matchers can be used
  + Matching with any
+
+${step(env)}                                                                                                                        ${step(env)}
 """
+
+  lazy val env = Env()
     
   "creation" - new group {
     eg := {
@@ -511,7 +515,7 @@ STUBS
           1 must_== 1 // to check if the previous expectation really fails
         }
       }
-      DefaultExecutor.runSpec(s.is, Env()).filter(Fragment.isExample).traverse(_.executionResult.map(_.isSuccess)) must beOk(contain(false))
+      DefaultExecutor.runSpec(s.is, env).filter(Fragment.isExample).traverse(_.executionResult.map(_.isSuccess)) must beOk(contain(false))
     }
 
     eg := {
@@ -523,7 +527,7 @@ STUBS
           there was one(list2).add("two") andThen one(list1).add("one")
         }
       }
-      DefaultExecutor.runSpec(s.is, Env()).filter(Fragment.isExample).traverse(_.executionResult.map(_.isSuccess)) must beOk(contain(false))
+      DefaultExecutor.runSpec(s.is, env).filter(Fragment.isExample).traverse(_.executionResult.map(_.isSuccess)) must beOk(contain(false))
     }
   }
 

@@ -1,5 +1,7 @@
 package org.specs2.matcher
 
+import java.util.concurrent.ExecutorService
+
 import org.specs2.mutable
 import org.specs2.specification.Retries
 
@@ -32,4 +34,9 @@ class TaskMatchersSpec extends mutable.Spec with TaskMatchers with ResultMatcher
       { (Task(3) must failWith[Exception]) must beFailing }
     }
   }
+
+  step(s.shutdown)
+
+  implicit val s: ExecutorService =
+    Strategy.DefaultExecutorService
 }

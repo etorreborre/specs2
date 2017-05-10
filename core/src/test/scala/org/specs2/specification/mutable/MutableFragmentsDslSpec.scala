@@ -102,12 +102,11 @@ class MutableFragmentsDslSpec extends org.specs2.Spec with TypedEqual with Trave
     contain(allOf(Seq(
       example("be ok", ok), break).map(_.description):_*)).inOrder
 
-  def fragments(dsl1: dsl) = structure(dsl1).fragments.fragments
+  def fragments(dsl1: dsl): List[Fragment] =
+    structure(dsl1).fragments.fragments.toList
 
-  def structure(dsl1: dsl) = {
-    val env = Env()
-    dsl1.specificationStructure(env)
-  }
+  def structure(dsl1: dsl): SpecStructure =
+    dsl1.is
 
   trait dsl extends MutableFragmentBuilder with MutableDsl
 

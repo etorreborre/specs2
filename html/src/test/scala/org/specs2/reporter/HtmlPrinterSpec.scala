@@ -14,9 +14,12 @@ class HtmlPrinterSpec extends Specification with ActionMatchers with ThrownExpec
    if html.search == true then it creates an index contents file $index
    if html.search == true then it creates a search page          $searchPage
 
+  ${step(env.shutdown)}
 """
 
-  def index = { env: Env =>
+  lazy val env = Env()
+
+  def index = {
     val spec = new Specification { def is = s2""" one example $ok """}
     val env1 = env.setArguments(searchArguments)
 
@@ -27,7 +30,7 @@ class HtmlPrinterSpec extends Specification with ActionMatchers with ThrownExpec
   }
 
 
-  def searchPage = { env: Env =>
+  def searchPage = {
     val spec = new Specification { def is = s2""" one example $ok """}
     val env1 = env.setArguments(searchArguments)
 

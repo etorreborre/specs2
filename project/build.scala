@@ -57,7 +57,7 @@ object build extends Build {
     scalazVersion in GlobalScope := "7.2.7",
     specs2ShellPrompt,
     scalaVersion := "2.12.2",
-    crossScalaVersions := Seq(scalaVersion.value, "2.11.11", "2.10.6"))
+    crossScalaVersions := Seq(scalaVersion.value, "2.11.11"))
 
   lazy val specs2Version = settingKey[String]("defines the current specs2 version")
   lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
@@ -268,7 +268,6 @@ object build extends Build {
     logBuffered := false,
     cancelable in Global := true,
     testFrameworks := Seq(TestFramework("org.specs2.runner.Specs2Framework")),
-    javaOptions ++= Seq("-Xmx4G", "-Xss4M"),
     testOptions := Seq(Tests.Filter(s =>
       (Seq(".guide.").exists(s.contains) || Seq("Spec", "Guide", "Website").exists(s.endsWith)) &&
         Seq("Specification", "FeaturesSpec").forall(n => !s.endsWith(n))))

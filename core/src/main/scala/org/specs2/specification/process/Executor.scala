@@ -9,7 +9,6 @@ import duration._
 import control._
 import producer._
 import producers._
-import Actions._
 import fp.syntax._
 
 /**
@@ -45,15 +44,6 @@ trait DefaultExecutor extends Executor {
    *  - sequence the execution so that only parts in between steps are executed concurrently
    */
   def execute(env: Env): AsyncTransducer[Fragment, Fragment] = { contents: AsyncStream[Fragment] =>
-    execute1(env)(contents).andFinally(protect(env.shutdown))
-  }
-
-  /**
-   * execute fragments possibly with a recursive call to execute1.
-   *
-   * The difference with `execute` is that `execute` shuts down the environment when the process is finished
-   */
-  def execute1(env: Env): AsyncTransducer[Fragment, Fragment] = { contents: AsyncStream[Fragment] =>
     sequencedExecution(env)(contents).flatMap(executeOnline(env))
   }
 
@@ -118,7 +108,7 @@ trait DefaultExecutor extends Executor {
       case Some(continue) =>
         Producer.evalProducer(fragment.executionResult.map { result =>
           continue(result).fold(emitAsyncDelayed(fragment))(
-            fs => emitAsyncDelayed(fragment) append execute1(env)(fs.contents))
+            fs => emitAsyncDelayed(fragment) append execute(env)(fs.contents))
         })
 
       case None => emitAsyncDelayed(fragment)
@@ -130,25 +120,16 @@ trait DefaultExecutor extends Executor {
  */
 object DefaultExecutor extends DefaultExecutor {
 
-  def executeSpecWithoutShutdown(spec: SpecStructure, env: Env): SpecStructure =
-    spec.|>((contents: AsyncStream[Fragment]) => contents |> sequencedExecution(env))
-
   def executeSpec(spec: SpecStructure, env: Env): SpecStructure = {
-    spec.|>((contents: AsyncStream[Fragment]) => (contents |> sequencedExecution(env)).thenFinally(protect(env.shutdown)))
+    spec.|>((contents: AsyncStream[Fragment]) => contents |> sequencedExecution(env))
   }
 
   def runSpec(spec: SpecStructure, env: Env): List[Fragment] =
     runAction(executeSpec(spec, env).contents.runList)(env.specs2ExecutionEnv).right.toOption.getOrElse(Nil)
 
-  def runSpecification(spec: SpecificationStructure): List[Fragment] = {
-    lazy val structure = spec.structure(Env())
-    val env = Env(arguments = structure.arguments)
-    runSpec(structure, env)
-  }
-
   def runSpecification(spec: SpecificationStructure, env: Env): List[Fragment] = {
     lazy val structure = spec.structure(env)
-    runAction(executeSpecWithoutShutdown(structure, env.copy(arguments = env.arguments <| structure.arguments)).contents.runList)(
+    runAction(executeSpec(structure, env.copy(arguments = env.arguments <| structure.arguments)).contents.runList)(
       env.specs2ExecutionEnv).
       right.toOption.getOrElse(Nil)
   }
@@ -156,13 +137,13 @@ object DefaultExecutor extends DefaultExecutor {
   def runSpecificationFuture(spec: SpecificationStructure, env: Env): Future[List[Fragment]] = {
     lazy val structure = spec.structure(env)
     val env1 = env.copy(arguments = env.arguments <| structure.arguments)
-    runActionFuture(executeSpecWithoutShutdown(structure, env1).contents.runList)(env.specs2ExecutionEnv)
+    runActionFuture(executeSpec(structure, env1).contents.runList)(env.specs2ExecutionEnv)
   }
 
   def runSpecificationAction(spec: SpecificationStructure, env: Env): Action[List[Fragment]] = {
     lazy val structure = spec.structure(env)
     val env1 = env.copy(arguments = env.arguments <| structure.arguments)
-    executeSpecWithoutShutdown(structure, env1).contents.runList.
+    executeSpec(structure, env1).contents.runList.
       flatMap { fs => fs.traverse(_.executionResult).as(fs) }
   }
 
@@ -179,10 +160,6 @@ object DefaultExecutor extends DefaultExecutor {
   /** only to be used in tests */
   def executeSeq(seq: Seq[Fragment])(env: Env): List[Fragment] =
     runAction((emitAsync(seq:_*) |> sequencedExecution(env)).runList)(env.specs2ExecutionEnv).right.toOption.getOrElse(Nil)
-
-  /** synchronous execution */
-  def executeFragments1: AsyncTransducer[Fragment, Fragment] =
-    executeFragments1(Env())
 
   /** synchronous execution with a specific environment */
   def executeFragments1(env: Env): AsyncTransducer[Fragment, Fragment] =

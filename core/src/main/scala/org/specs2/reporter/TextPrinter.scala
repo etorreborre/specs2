@@ -44,10 +44,9 @@ trait TextPrinter extends Printer {
     (values observeWithState sink).mapFlatten(printFinalStats(spec, args, logger))
   }
 
-  /** run and shutdown the environment */
+  /** run a specification */
   def run(env: Env): SpecStructure => Unit = { spec: SpecStructure =>
-    try     { runAction(print(env)(spec))(env.specs2ExecutionEnv); () }
-    finally env.shutdown
+    runAction(print(env)(spec))(env.specs2ExecutionEnv); ()
   }
 
   def linesLoggerSink(logger: LineLogger, header: SpecHeader, args: Arguments): AsyncSink[List[LogLine]] =

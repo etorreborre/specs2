@@ -40,10 +40,10 @@ trait ClassRunner {
         for {
           spec  <- createSpecification(className, Thread.currentThread.getContextClassLoader, Some(env)).toAction
           stats <- report(env)(spec)
-          _     <- Actions.delayed(env.shutdown)
         } yield stats
     }
-    execute(actions, arguments, exit)(env)
+    try execute(actions, arguments, exit)(env)
+    finally env.shutdown
   }
 
   /** create the specification from the class name */

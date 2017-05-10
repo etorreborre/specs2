@@ -17,12 +17,12 @@ trait ReferenceDsl extends ReferenceCreation {
     def ~(s: SpecStructure, tooltip: String): Fragment =
       fragmentFactory.link(SpecificationRef(s.header, s.arguments, alias = alias, tooltip = tooltip))
 
-    def ~(s: => SpecificationStructure): Fragment = {
+    def ~(s: =>SpecificationStructure): Fragment = {
       lazy val spec = s.is
       fragmentFactory.link(SpecificationRef(spec.header, spec.arguments, alias = alias))
     }
 
-    def ~(s: => SpecificationStructure, tooltip: String): Fragment =  {
+    def ~(s: =>SpecificationStructure, tooltip: String): Fragment =  {
       lazy val spec = s.is
       fragmentFactory.link(SpecificationRef(spec.header, spec.arguments, alias = alias, tooltip = tooltip))
     }
@@ -35,12 +35,12 @@ trait ReferenceDsl extends ReferenceCreation {
     def ~/(s: SpecStructure, tooltip: String): Fragment =
       fragmentFactory.see(SpecificationRef(s.header, s.arguments, alias = alias, tooltip = tooltip))
 
-    def ~/(s: => SpecificationStructure): Fragment = {
+    def ~/(s: =>SpecificationStructure): Fragment = {
       lazy val spec = s.is
       fragmentFactory.see(SpecificationRef(spec.header, spec.arguments, alias = alias))
     }
 
-    def ~/(s: => SpecificationStructure, tooltip: String): Fragment =  {
+    def ~/(s: =>SpecificationStructure, tooltip: String): Fragment =  {
       lazy val spec = s.is
       fragmentFactory.see(SpecificationRef(spec.header, spec.arguments, alias = alias, tooltip = tooltip))
     }

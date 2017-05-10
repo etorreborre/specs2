@@ -4,7 +4,6 @@ package runner
 import org.junit.runner.manipulation.{NoTestsRemainException, Filterable}
 import org.junit.runner.notification.RunNotifier
 import main._
-import control.eff._, all._, syntax.all._
 import specification.process.Stats
 import control.Actions._
 import reporter._
@@ -70,7 +69,7 @@ class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterab
           stats    <- Reporter.report(env, createJUnitPrinter(specStructure, n, env.specs2ExecutionEnv) +: printers)(specStructure)
         } yield stats
 
-    report.andFinally(Actions.delayed(env.shutdown))
+    report
   }
 
   /**

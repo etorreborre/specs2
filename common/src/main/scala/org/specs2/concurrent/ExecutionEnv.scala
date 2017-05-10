@@ -14,24 +14,29 @@ import ConsoleEffect._
  * if withoutIsolation is true then fragments are executed right away because they are
  * already in their own copy of the specification
  */
-case class ExecutionEnv(executor:          () => ExecutorService,
+case class ExecutionEnv(executorService:          Option[ExecutorService],
                         scheduledExecutor: () => ScheduledExecutorService,
                         exContext:         () => ExecutionContext,
                         timeFactor: Int) {
-
   /** note: shutdown only shuts down the executor services */
   def shutdown(): Unit = {
-    try { executorService.shutdown; () }
-    finally { scheduledExecutorService.shutdown; () }
+    try     { executorService.foreach(_.shutdownNow); () }
+    finally { scheduledExecutorService.shutdownNow; () }
   }
 
-  lazy val executorService = executor()
-  lazy val scheduledExecutorService = scheduledExecutor()
-  lazy val executionContext = exContext()
+  lazy val scheduledExecutorService =
+    scheduledExecutor()
 
-  implicit lazy val es  = executorService
-  implicit lazy val ses = scheduledExecutorService
-  implicit lazy val ec  = executionContext
+  val hash = System.identityHashCode(this)
+
+  lazy val executionContext =
+    exContext()
+
+  implicit lazy val ses =
+    scheduledExecutorService
+
+  implicit lazy val ec =
+    executionContext
 }
 
 object ExecutionEnv {
@@ -44,7 +49,7 @@ object ExecutionEnv {
   def create(arguments: Arguments, systemLogger: Logger, threadFactoryName: String): ExecutionEnv = {
     val executorService = executor(arguments.threadsNb, threadFactoryName)
     ExecutionEnv(
-      () => executorService,
+      Some(executorService),
       () => scheduledExecutor(arguments.scheduledThreadsNb, threadFactoryName),
       () => createExecutionContext(executorService, arguments.verbose, systemLogger),
       arguments.execute.timeFactor
@@ -73,7 +78,7 @@ object ExecutionEnv {
   /** create an ExecutionEnv from an execution context only */
   def fromExecutionContext(ec: ExecutionContext): ExecutionEnv =
     ExecutionEnv(
-      () => executor(1, "unused"),
+      None,
       () => scheduledExecutor(1, "unused"),
       () => ec,
       timeFactor = 1)

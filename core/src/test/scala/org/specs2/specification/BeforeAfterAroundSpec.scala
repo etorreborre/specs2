@@ -8,7 +8,7 @@ import org.specs2.specification.process.DefaultExecutor
 import _root_.org.specs2.mutable.{Specification => Spec}
 import fp.syntax._
 
-class BeforeAfterAroundSpec(env: Env) extends Specification with Grouped { def is = s2"""
+class BeforeAfterAroundSpec extends Specification with Grouped { def is = s2"""
 
  The `Before/After/Around Example` traits are used to automatically insert contexts around examples bodies            
  a spec can define a Before context that is used for each example                                                     
@@ -50,8 +50,11 @@ class BeforeAfterAroundSpec(env: Env) extends Specification with Grouped { def i
   }
 
   def executeContains(s: SpecificationStructure with StringOutput, messages: String*) = {
-    DefaultExecutor.executeSeq(s.is.fragments.fragments)(env).traverse(_.executionResult).run(env.executionEnv)
-    s.messages must contain(allOf(messages:_*)).inOrder
+    val env = Env()
+    try {
+      DefaultExecutor.executeSeq(s.is.fragments.fragments)(env).traverse(_.executionResult).run(env.executionEnv)
+      s.messages must contain(allOf(messages:_*)).inOrder
+    } finally env.shutdown
   }
 
 }

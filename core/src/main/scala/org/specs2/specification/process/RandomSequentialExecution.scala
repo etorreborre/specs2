@@ -43,7 +43,7 @@ trait RandomSequentialExecution extends SpecificationStructure {
 
     fragments.zipWithIndex.map { case (f, i) =>
       if (Fragment.isExample(f)) {
-        val f1 = f.setExecution(executions(i).after(executions.toList.collect { case (j, e) if j < i => e })(env))
+        val f1 = f.setExecution(executions(i).after(executions.toList.collect { case (j, e) if j < i => e }))
         executions.remove(i)
         f1
       } else f
