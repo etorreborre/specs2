@@ -5,6 +5,8 @@ build/
 .history
 .target/
 .jvmopts
+hydra.log
+**/*.hydra
 pgp.sbt
 project-old/lib_managed/
 project-old/boot/
