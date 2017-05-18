@@ -17,6 +17,7 @@ import reporter.Printer._
 import specification.core._
 import Actions._
 import eff.ErrorEffect._
+import SpecStructure._
 
 /**
  * Runner for Sbt
@@ -35,6 +36,7 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
           Env(arguments = commandLineArguments).setCustomClassLoader(loader)
         else
           Env(arguments = commandLineArguments)
+      implicit lazy val ee = env.executionEnv
 
       // the specification to execute with error messages if it cannot be instantiated
       lazy val specStructure: (Error Either Option[SpecStructure], List[String]) = {
@@ -46,7 +48,8 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
       /** @return the specification tags */
       def tags: Array[String] =
         if (commandLineArguments.commandLine.isSet("sbt.tags"))
-          specStructure._1.toOption.flatten.map(_.tags.flatMap(_.names).toArray).getOrElse(Array())
+          specStructure._1.toOption.flatten.
+            map(_.tagsList.flatMap(_.names).toArray).getOrElse(Array())
         else
           Array()
 

@@ -1,8 +1,11 @@
-package org.specs2.mutable
+package org.specs2
+package mutable
 
-class MutableSpec extends Specification {
+import org.specs2.concurrent.ExecutionEnv
+
+class MutableSpec(implicit ee: ExecutionEnv) extends Specification {
 
   "s2 strings must create examples".p
-  s2"""${ this.is.examples must haveSize(1) }"""
+  s2"""${ this.is.examplesList must haveSize(1) }"""
 
 }

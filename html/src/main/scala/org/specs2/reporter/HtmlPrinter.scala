@@ -35,8 +35,8 @@ trait HtmlPrinter extends Printer {
   def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] =
     getHtmlOptions(env.arguments) >>= { options: HtmlOptions =>
       createIndex(env, specifications, options).when(options.search) >>
-      createToc(specifications, options.outDir, options.tocEntryMaxSize, env.fileSystem).when(options.toc) >>
-      reportMissingSeeRefs(specifications, options.outDir).when(options.warnMissingSeeRefs)
+      createToc(env, specifications, options.outDir, options.tocEntryMaxSize, env.fileSystem).when(options.toc) >>
+      reportMissingSeeRefs(specifications, options.outDir)(env.specs2ExecutionEnv).when(options.warnMissingSeeRefs)
     }
 
   /** @return a SinkTask for the Html output */
@@ -182,8 +182,8 @@ trait HtmlPrinter extends Printer {
     }
   }
 
-  def reportMissingSeeRefs(specs: List[SpecStructure], outDir: DirectoryPath): Operation[Unit] = for {
-    missingSeeRefs <- specs.flatMap(_.seeReferences).distinct.filterM(ref => FilePathReader.doesNotExist(SpecHtmlPage.outputPath(outDir, ref.specClassName)))
+  def reportMissingSeeRefs(specs: List[SpecStructure], outDir: DirectoryPath)(implicit ee: ExecutionEnv): Operation[Unit] = for {
+    missingSeeRefs <- specs.flatMap(_.seeReferencesList).distinct.filterM(ref => FilePathReader.doesNotExist(SpecHtmlPage.outputPath(outDir, ref.specClassName)))
     _              <- warn("The following specifications are being referenced but haven't been reported\n"+
                            missingSeeRefs.map(_.specClassName).distinct.mkString("\n")).unless(missingSeeRefs.isEmpty)
   } yield ()

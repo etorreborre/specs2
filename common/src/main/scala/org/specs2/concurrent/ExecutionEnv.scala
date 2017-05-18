@@ -84,7 +84,7 @@ object ExecutionEnv {
       timeFactor = 1)
 
   /** create an ExecutionEnv from Scala global execution context */
-  def fromGlobalExecutionContext: ExecutionEnv =
+  lazy val fromGlobalExecutionContext: ExecutionEnv =
     fromExecutionContext(scala.concurrent.ExecutionContext.global)
 
 }

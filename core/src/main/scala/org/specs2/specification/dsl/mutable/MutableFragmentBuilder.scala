@@ -5,8 +5,7 @@ package mutable
 
 import main.Arguments
 import control._
-import producer._
-import execute.Pending
+import execute.{Pending, Skipped}
 import reflect.Classes
 import specification.create.FragmentsFactory
 import specification.core._
@@ -28,23 +27,22 @@ trait MutableFragmentBuilder extends FragmentBuilder
   with MutableArgumentsBuilder
   with MutableHeaderBuilder { outer =>
 
-  private[specs2] val specFragments = new scala.collection.mutable.ListBuffer[Fragment]
+  private[specs2] var specFragments = Fragments.empty
 
   def specificationFragments = {
-    val content = {
-      List.fill(2)(fragmentFactory.break) ++ // add 2 line breaks just after the specification title
-      replayFragments.toList
-    }
-    Fragments(producers.emit[ActionStack, Fragment](content))
+    val fs = replayFragments
+
+    // add 2 line breaks just after the specification title
+    fs.prepend(List.fill(2)(fragmentFactory.break))
   }
 
   def is =
     SpecStructure.create(headerVar, argumentsVar, specificationFragments)
 
-  private def replayFragments: List[Fragment] = {
+  private def replayFragments: Fragments = {
     targetPath.map(effects.replay).getOrElse(effects.record)
     effects.clear
-    specFragments.toList
+    specFragments
   }
 
   /** when a target path is specified we might limit the creation of fragments to only the fragments on the desired path */
@@ -52,26 +50,26 @@ trait MutableFragmentBuilder extends FragmentBuilder
 
   private val effects = EffectBlocks()
 
-  def addFragmentBlock(f: =>Fragment) = {
+  def addFragmentBlock(f: =>Fragment): Fragment = {
     effects.nestBlock(f)
     fragmentFactory.end
   }
 
-  def addFragmentsBlock(fs: =>Fragments) = {
+  def addFragmentsBlock(fs: =>Fragments): Fragments = {
     effects.nestBlock(fs)
-    Fragments()
+    Fragments.empty
   }
 
   def addFragment(fragment: Fragment): Fragment = {
     effects.addBlock {
-      specFragments.append(isolate(fragment, effects.effectPath))
+      specFragments = specFragments.append(isolate(fragment, effects.effectPath))
     }
 
     fragment
   }
 
   def addFragments(fragments: Fragments): Fragments = {
-    fragments.fragments.foreach(addFragment)
+    specFragments = specFragments.append(fragments)
     fragments
   }
 
@@ -103,9 +101,12 @@ trait MutableFragmentBuilder extends FragmentBuilder
 
           val previousStepExecutions = previousSteps.collect {
             case f if Fragment.isStep(f) && f.execution.isolable => f.execution
-          }
-          val isolatedExecution: Execution = pathFragments.lastOption.map(_.execution).
-            getOrElse(Execution.executed(Pending("isolation mode failure - could not find an isolated fragment to execute")))
+          }.runList.runOption(env.executionEnv).getOrElse(Nil)
+
+          val isolatedExecution: Execution = pathFragments.fragments.map(_.lastOption.map(_.execution).
+            getOrElse(Execution.executed(Pending("isolation mode failure - could not find an isolated fragment to execute")))).
+            runOption(env.executionEnv).
+            getOrElse(Execution.executed(Skipped(s"isolation mode failure - could not produce an isolated execution for effect path $effectPath")))
 
           isolatedExecution.afterSuccessfulSequential(previousStepExecutions)
       }

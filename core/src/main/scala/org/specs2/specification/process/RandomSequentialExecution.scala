@@ -22,13 +22,15 @@ trait RandomSequentialExecution extends SpecificationStructure {
    * find sequences of concurrent examples
    */
   private def addExecutionConstraints(fs: Fragments, env: Env): Fragments = {
-    val concurrentSequences = fs.fragments.foldLeft(Vector(Vector[Fragment]())) { (res, cur) =>
+    fs.mapFragments { fragments =>
+      val concurrentSequences = fragments.foldLeft(Vector(Vector[Fragment]())) { (res, cur) =>
       res.updateLast(_ :+ cur).toVector ++
         // start a new section if there is a step
         (if (Fragment.isStep(cur)) Vector(Vector[Fragment]()) else Vector())
+      }
+      val withConstraints = concurrentSequences.map(addExecutionConstraints(env))
+      withConstraints.reduce(_ ++ _).toList
     }
-    val withConstraints = concurrentSequences.map(addExecutionConstraints(env))
-    Fragments(withConstraints.reduce(_ ++ _): _*)
   }
 
   /**

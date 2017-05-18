@@ -28,7 +28,6 @@ package object control {
   lazy val noLogging = (s: String) => ()
   lazy val consoleLogging = (s: String) => println(s)
 
-  type StreamStack = Fx.fx2[TimedFuture, Safe]
   type ActionStack = Fx.fx5[TimedFuture, ErrorOrOk, Console, Warnings, Safe]
   type OperationStack = Fx.fx4[ErrorOrOk, Console, Warnings, Safe]
 

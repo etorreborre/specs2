@@ -3,6 +3,7 @@ package specification
 
 import core.Env
 import dsl._
+import org.specs2.concurrent.ExecutionEnv
 
 class AcceptanceDslSpec extends Spec with AcceptanceDsl { def is = s2"""
 
@@ -44,36 +45,40 @@ class AcceptanceDslSpec extends Spec with AcceptanceDsl { def is = s2"""
    "description" ! (s: String) => result $g2
    "description" ! (e: Env) => result    $g3
 
+ ${step(ee.shutdown)}
 """
+  implicit val ee: ExecutionEnv =
+    Env().executionEnv
+
   val factory = fragmentFactory; import factory._
 
-  def a1 = (f1 ^ f2).fragments must haveSize(2)
-  def a2 = (f1 ^ (f2 ^ f3)).fragments must haveSize(3)
-  def a3 = (f1 ^ f2 ^ f3).fragments must haveSize(3)
+  def a1 = (f1 ^ f2).fragmentsList(ee) must haveSize(2)
+  def a2 = (f1 ^ (f2 ^ f3)).fragmentsList(ee) must haveSize(3)
+  def a3 = (f1 ^ f2 ^ f3).fragmentsList(ee) must haveSize(3)
 
-  def b4 = ("s" ^ f2).fragments must haveSize(2)
-  def b5 = (f1 ^ "s").fragments must haveSize(2)
-  def b6 = ("s" ^ (f2 ^ f3)).fragments must haveSize(3)
-  def b7 = (f1 ^ f2 ^ "s").fragments must haveSize(3)
+  def b4 = ("s" ^ f2).fragmentsList(ee) must haveSize(2)
+  def b5 = (f1 ^ "s").fragmentsList(ee) must haveSize(2)
+  def b6 = ("s" ^ (f2 ^ f3)).fragmentsList(ee) must haveSize(3)
+  def b7 = (f1 ^ f2 ^ "s").fragmentsList(ee) must haveSize(3)
 
-  def c1 = (appendToArguments(xonly) ^ "s").fragments.fragments must haveSize(1)
-  def c2 = (xonly ^ f1).fragments.fragments must haveSize(1)
-  def c3 = (xonly ^ (f1 ^ f2)).fragments.fragments must haveSize(2)
+  def c1 = (appendToArguments(xonly) ^ "s").fragments.fragmentsList(ee) must haveSize(1)
+  def c2 = (xonly ^ f1).fragments.fragmentsList(ee) must haveSize(1)
+  def c3 = (xonly ^ (f1 ^ f2)).fragments.fragmentsList(ee) must haveSize(2)
 
-  def d1 = (header ^ "s").fragments.fragments must haveSize(1)
-  def d2 = (header ^ f1).fragments.fragments must haveSize(1)
-  def d3 = (header ^ (f1 ^ f2)).fragments.fragments must haveSize(2)
+  def d1 = (header ^ "s").fragments.fragmentsList(ee) must haveSize(1)
+  def d2 = (header ^ f1).fragments.fragmentsList(ee) must haveSize(1)
+  def d3 = (header ^ (f1 ^ f2)).fragments.fragmentsList(ee) must haveSize(2)
 
-  def e1 = (xonly ^ header ^ "s"      ).fragments.fragments must haveSize(1)
-  def e2 = (header ^ xonly ^ "s"      ).fragments.fragments must haveSize(1)
-  def e3 = (xonly ^ header ^ f1       ).fragments.fragments must haveSize(1)
-  def e4 = (header ^ xonly ^ f1       ).fragments.fragments must haveSize(1)
-  def e5 = (xonly ^ header ^ (f1 ^ f2)).fragments.fragments must haveSize(2)
-  def e6 = (header ^ xonly ^ (f1 ^ f2)).fragments.fragments must haveSize(2)
+  def e1 = (xonly ^ header ^ "s"      ).fragments.fragmentsList(ee) must haveSize(1)
+  def e2 = (header ^ xonly ^ "s"      ).fragments.fragmentsList(ee) must haveSize(1)
+  def e3 = (xonly ^ header ^ f1       ).fragments.fragmentsList(ee) must haveSize(1)
+  def e4 = (header ^ xonly ^ f1       ).fragments.fragmentsList(ee) must haveSize(1)
+  def e5 = (xonly ^ header ^ (f1 ^ f2)).fragments.fragmentsList(ee) must haveSize(2)
+  def e6 = (header ^ xonly ^ (f1 ^ f2)).fragments.fragmentsList(ee) must haveSize(2)
 
-  def g1 = ((bangExample("text") ! ok) ^ f1).fragments must haveSize(2)
-  def g2 = ((bangExample("text") ! ((s: String) => ok)) ^ f1).fragments must haveSize(2)
-  def g3 = ((bangExample("text") ! ((e: Env) => ok)) ^ f1).fragments must haveSize(2)
+  def g1 = ((bangExample("text") ! ok) ^ f1).fragmentsList(ee) must haveSize(2)
+  def g2 = ((bangExample("text") ! ((s: String) => ok)) ^ f1).fragmentsList(ee) must haveSize(2)
+  def g3 = ((bangExample("text") ! ((e: Env) => ok)) ^ f1).fragmentsList(ee) must haveSize(2)
 
 
   val (f1, f2, f3) = (text("t1"), text("t2"), text("t3"))

@@ -121,6 +121,12 @@ package object producer {
     def scan1(f: (A, A) => A): Producer[R, A] =
       p |> transducers.scan1(f)
 
+    def state[B, S](start: S)(f: (A, S) => (B, S)): Producer[R, B] =
+      p |> transducers.state(start)(f)
+
+    def producerState[B, S](start: S, last: Option[S => Producer[R, B]] = None)(f: (A, S) => (Producer[R, B], S)): Producer[R, B] =
+      p |> transducers.producerState(start, last)(f)
+
     def reduce(f: (A, A) => A): Producer[R, A] =
       p |> transducers.reduce(f)
 

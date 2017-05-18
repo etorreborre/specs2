@@ -5,10 +5,12 @@ import TableOfContents._
 import io._
 import specification._
 import core.SpecStructure
+
 import scala.xml.NodeSeq
 import matcher.XmlMatchers
+import org.specs2.concurrent.ExecutionEnv
 
-class TableOfContentsSpec extends script.Specification with HtmlDocuments with Grouped with XmlMatchers { def is = s2"""
+class TableOfContentsSpec(implicit ee: ExecutionEnv) extends script.Specification with HtmlDocuments with Grouped with XmlMatchers { def is = s2"""
 
  The table of contents is created from the specifications and the generated html files
 
@@ -37,7 +39,7 @@ class TableOfContentsSpec extends script.Specification with HtmlDocuments with G
 
   def addToc(body: NodeSeq) = {
     val page = SpecHtmlPage(SpecStructure.empty(getClass), outDir | "UserGuide.html", outDir, body.toString)
-    createToc(List(page), outDir, entryMaxSize = 18)(page)
+    createToc(List(page), outDir, entryMaxSize = 18).apply(page)
   }
 
   val outDir = DirectoryPath.unsafe("guide")

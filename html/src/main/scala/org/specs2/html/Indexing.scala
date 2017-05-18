@@ -6,12 +6,16 @@ import specification.core._
 import org.specs2.fp._
 import org.specs2.fp.syntax._
 import control._
+import org.specs2.concurrent.ExecutionEnv
 import origami._
 
 /**
  * Fold functions to create index files
  */
 object Indexing {
+
+  implicit def executionEnv: ExecutionEnv =
+    ExecutionEnv.fromGlobalExecutionContext
 
   /**
    * An Index fold creates an Index page based on all pages to index and
@@ -28,8 +32,8 @@ object Indexing {
     IndexedPage(
       path     = SpecHtmlPage.outputPath(outDir, spec).relativeTo(outDir),
       title    = spec.header.showWords,
-      contents = spec.texts.foldLeft(new StringBuilder)((res, cur) => res.append(cur.description.show)).toString,
-      tags     = spec.fragments.fragments.collect { case Fragment(Marker(t,_,_), _, _) => t.names }.flatten.map(sanitize))
+      contents = spec.textsList.foldLeft(new StringBuilder)((res, cur) => res.append(cur.description.show)).toString,
+      tags     = spec.tagsList.flatMap(_.names).map(sanitize).toIndexedSeq)
   }
 
   def createEntries(page: IndexedPage): Vector[IndexEntry] = 

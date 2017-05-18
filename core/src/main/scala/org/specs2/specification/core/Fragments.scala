@@ -5,8 +5,9 @@ package core
 import org.specs2.fp._
 import Fragment._
 import control._
-import org.specs2.concurrent.ExecutionEnv
 import producer._
+import Producer._
+import org.specs2.concurrent.ExecutionEnv
 
 /**
  * Fragments of a specification
@@ -36,9 +37,20 @@ case class Fragments(contents: AsyncStream[Fragment]) {
     copy(contents = contents filter (_ => c))
   }
 
-  def map(f: Fragment => Fragment)                  = copy(contents = contents map f)
-  def mapDescription(f: Description => Description) = map(_.updateDescription(f))
-  def filter(predicate: Fragment => Boolean)        = copy(contents = contents filter predicate)
+  def map(f: Fragment => Fragment): Fragments =
+    copy(contents = contents map f)
+
+  def mapFragments(f: List[Fragment] => List[Fragment]): Fragments =
+    copy(contents = Producer.emitEff(contents.runList.map(f)))
+
+  def mapDescription(f: Description => Description): Fragments =
+    map(_.updateDescription(f))
+
+  def filter(predicate: Fragment => Boolean): Fragments =
+    copy(contents = contents filter predicate)
+
+  def collect[A](predicate: PartialFunction[Fragment, A]): AsyncStream[A] =
+    contents collect predicate
 
   def update(f: AsyncTransducer[Fragment, Fragment])   = copy(contents = f(contents))
   def flatMap(f: Fragment => AsyncStream[Fragment])    = copy(contents = contents flatMap f)
@@ -47,33 +59,39 @@ case class Fragments(contents: AsyncStream[Fragment]) {
   def prepend(other: AsyncStream[Fragment]): Fragments = copy(contents = other append contents)
 
   /** run the process to get all fragments */
-  def fragments: IndexedSeq[Fragment] =
-    ProducerOps(contents).runList.run(ExecutionEnv.fromGlobalExecutionContext).to[IndexedSeq]
+  def fragments: Action[List[Fragment]] =
+    ProducerOps(contents).runList
+
+  /** run the process to get all fragments as a list */
+  def fragmentsList(ee: ExecutionEnv): List[Fragment] =
+    ProducerOps(contents).runList.runOption(ee).getOrElse(Nil)
 
   /** run the process to filter all texts */
-  def texts = fragments.filter(isText)
+  def texts = filter(isText).fragments
 
   /** run the process to filter all markers */
-  def markers = fragments.filter(isMarker)
+  def markers = filter(isMarker).fragments
 
   /** run the process to filter all examples */
-  def examples = fragments.filter(isExample)
+  def examples = filter(isExample).fragments
 
   /** run the process to collect all tags */
-  def tags = fragments.collect(marker).map(_.tag)
+  def tags = collect(marker).map(_.tag)
 
   /** run the process to get all specification references as Fragments */
-  def referenced = fragments.filter(isSpecificationRef)
+  def referenced = filter(isSpecificationRef).fragments
 
   /** run the process to get all specification references */
-  def specificationRefs = fragments.collect(specificationRef)
+  def specificationRefs: AsyncStream[SpecificationRef] =
+    collect(specificationRef)
 
   /** run the process to get all specification see references */
-  def seeReferences = fragments.collect(seeReference)
+  def seeReferences: AsyncStream[SpecificationRef] =
+    collect(seeReference)
 
   /** run the process to get all specification link references */
-  def linkReferences = fragments.collect(linkReference)
-
+  def linkReferences: AsyncStream[SpecificationRef] =
+    collect(linkReference)
 
   /** strip the margin of all examples */
   def stripMargin: Fragments = stripMargin('|')
@@ -82,21 +100,22 @@ case class Fragments(contents: AsyncStream[Fragment]) {
   def stripMargin(margin: Char): Fragments = mapDescription(_.stripMargin(margin))
 
   /** when 2 Text fragments are contiguous append them together to only make one */
-  def compact = {
-    val (text1, accumulated1) = fragments.foldLeft((None, Vector()): (Option[String], Seq[Fragment])) { case ((text, accumulated), fragment) =>
-      fragment match {
-        case Fragment(Text(t),l, e) if isText(fragment) =>
-          (text.map(_+t).orElse(Some(t)), accumulated)
+  def compact = Fragments {
+    type S = Option[String]
 
-        case other =>
-          text match {
-            case Some(t1) => (None, accumulated ++ Seq(Fragment(Text(t1), Execution.NoExecution), other))
-            case None     => (None, accumulated :+ other)
-          }
-      }
+    contents.producerState[Fragment, S](None, Some(s => s.fold(done[ActionStack, Fragment])(t => one(Fragment(Text(t)))))) {
+      case (f, text) =>
+        f match {
+          case Fragment(Text(t),l, e) if isText(f) =>
+            (done, text.map(_+t).orElse(Some(t)))
+
+          case other =>
+            text match {
+              case Some(t1) => (Producer.emit(List(Fragment(Text(t1)), other)), None)
+              case None     => (one(other), None)
+            }
+        }
     }
-    val compacted = text1.fold(accumulated1)(t => accumulated1 :+ Fragment(Text(t), Execution.NoExecution))
-    Fragments(compacted:_*)
   }
 
 }

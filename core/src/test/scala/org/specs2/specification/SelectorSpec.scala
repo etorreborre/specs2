@@ -48,14 +48,14 @@ class SelectorSpec(ee: ExecutionEnv) extends script.Specification with Groups wi
       val env = Env(arguments = Arguments.split("ex e1"))
       val executed = fragments |> DefaultSelector.select(env)
 
-      executed.fragments must haveSize(1)
+      executed.fragmentsList(ee) must haveSize(1)
     }
     eg := {
       val fragments = Fragments(code("e1"), code("e2"))
       val env = Env(arguments = Arguments.split("ex e1"))
       val executed = fragments |> DefaultSelector.select(env)
 
-      executed.fragments must haveSize(1)
+      executed.fragmentsList(ee) must haveSize(1)
     }
   }
 
@@ -190,7 +190,7 @@ class SelectorSpec(ee: ExecutionEnv) extends script.Specification with Groups wi
 
     def check(fragments: Fragments, expected: Seq[String], unexpected: Seq[String])(env: Env): Result = {
       val executed = fragments |> DefaultSelector.filterByPrevious(env)
-      val descriptions = executed.fragments.map(_.description.toString)
+      val descriptions = executed.fragmentsList(env.executionEnv).map(_.description.toString)
 
       expected.foreach(e => descriptions aka "expected for exclude" must contain(beMatching(".*"+e+".*")))
       unexpected.foreach(e => descriptions aka "unexpected for exclude"  must not(contain(beMatching(".*"+e+".*"))))
@@ -203,20 +203,20 @@ class SelectorSpec(ee: ExecutionEnv) extends script.Specification with Groups wi
     eg := {
       val original = Fragments(ex("e1"), ex("e2"), text(" "), taggedAs("t1"))
       val swapped = original |> DefaultSelector.swapBeforeMarkerAndEmptyText
-      swapped.fragments.map(_.description.show) must_== Fragments(ex("e1"), ex("e2"),
-        ff.tag("t1"), text(" ")).fragments.map(_.description.show)
+      swapped.fragmentsList(ee).map(_.description.show) must_== List(ex("e1"), ex("e2"),
+        ff.tag("t1"), text(" ")).map(_.description.show)
     }
     eg := {
       val original = Fragments(ex("e1"), ex("e2"), taggedAs("t1"))
       val swapped = original |> DefaultSelector.transformBeforeMarkersToAfterMarkers
-      swapped.fragments.map(_.description.show) must_==
-        Fragments(ex("e1"), ff.tag("t1"), ex("e2")).fragments.map(_.description.show)
+      swapped.fragmentsList(ee).map(_.description.show) must_==
+        List(ex("e1"), ff.tag("t1"), ex("e2")).map(_.description.show)
     }
     eg := {
       val original = Fragments(ex("e1"), tag("t1"), ex("e2"))
       val swapped = original |> DefaultSelector.transformTagsToSections
-      swapped.fragments.map(_.description.show) must_==
-        Fragments(ex("e1"), ff.section("t1"), ex("e2"), ff.section("t1")).fragments.map(_.description.show)
+      swapped.fragmentsList(ee).map(_.description.show) must_==
+        List(ex("e1"), ff.section("t1"), ex("e2"), ff.section("t1")).map(_.description.show)
     }
   }
 
@@ -245,7 +245,7 @@ class SelectorSpec(ee: ExecutionEnv) extends script.Specification with Groups wi
 
   def excludeContains(fragments: Fragments, tags: Seq[String], unexpected: Seq[String], expected: Seq[String]): Result = {
     val executed = filterExcluded(fragments, tags)
-    val descriptions = executed.fragments.map(_.description.show)
+    val descriptions = executed.fragmentsList(ee).map(_.description.show)
 
     s"${descriptions.mkString(",")} does not contain ${unexpected.mkString(",")} but contains ${expected.mkString(",")} for tags ${tags.mkString(",")}" ==> {
       Result.foreach(expected)  (e => descriptions aka "expected for exclude" must contain(beMatching(".*"+e+".*"))) and
@@ -264,5 +264,5 @@ class SelectorSpec(ee: ExecutionEnv) extends script.Specification with Groups wi
   }
 
   def show(fs: Fragments): String =
-    fs.fragments.map(_.description).mkString("\n")
+    fs.fragmentsList(ee).map(_.description).mkString("\n")
 }

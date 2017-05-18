@@ -2,8 +2,6 @@ package org.specs2
 package specification
 package script
 
-import core.Fragments
-
 /**
  * A Script is responsible for analysing a piece of text an creating a sequence of fragments.
  *
@@ -19,7 +17,7 @@ trait Script {
   /** @return the title of the script */
   def title: String
   /** create fragments corresponding on this sequence based on a piece of text */
-  def fragments(text: String): Fragments
+  def fragments(text: String): FragmentsSeq
 
   /** @return true if this object marks the beginning of the script */
   def isStart: Boolean

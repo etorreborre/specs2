@@ -102,7 +102,7 @@ class JUnitReporterSpec extends Specification with Mockito {  def is = s2"""
    * TEST METHODS
    */
   trait WithNotifier extends MustThrownMatchers { outer =>
-    lazy val notifier = mock[RunNotifier]
+    val notifier = mock[RunNotifier]
 
     lazy val messagesNotifier = new RunNotifier with StringOutput {
       override def fireTestRunStarted(desc: Description) { println("run started "+desc) }

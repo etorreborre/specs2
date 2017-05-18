@@ -58,7 +58,7 @@ class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterab
           reporter <- ClassRunner.createReporter(arguments, loader).toAction
           printers <- ClassRunner.createPrinters(arguments, loader).toAction
           ss       <- SpecStructure.linkedSpecifications(specStructure, env, loader).toAction
-          sorted   <- delayed(SpecStructure.topologicalSort(ss).getOrElse(ss))
+          sorted   <- delayed(SpecStructure.topologicalSort(ss)(env.specs2ExecutionEnv).getOrElse(ss))
           _        <- reporter.prepare(env, printers)(sorted.toList)
           stats    <- sorted.toList.map(s => Reporter.report(env, createJUnitPrinter(s, n, env.specs2ExecutionEnv) +: printers)(s)).sequence
           _        <- Reporter.finalize(env, printers)(sorted.toList)

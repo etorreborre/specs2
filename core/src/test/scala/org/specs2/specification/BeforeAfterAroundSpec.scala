@@ -52,7 +52,7 @@ class BeforeAfterAroundSpec extends Specification with Grouped { def is = s2"""
   def executeContains(s: SpecificationStructure with StringOutput, messages: String*) = {
     val env = Env()
     try {
-      DefaultExecutor.executeSeq(s.is.fragments.fragments)(env).traverse(_.executionResult).run(env.executionEnv)
+      DefaultExecutor.executeFragments(s.is.fragments)(env).traverse(_.executionResult).run(env.executionEnv)
       s.messages must contain(allOf(messages:_*)).inOrder
     } finally env.shutdown
   }

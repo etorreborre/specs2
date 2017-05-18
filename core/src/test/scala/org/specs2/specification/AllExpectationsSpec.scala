@@ -4,13 +4,13 @@ package specification
 import _root_.org.specs2.mutable.{Specification => Spec}
 import org.specs2.execute.Result
 import org.specs2.main.Arguments
-import org.specs2.specification.core.{Env, ContextualSpecificationStructure}
+import org.specs2.specification.core.{ContextualSpecificationStructure, Env}
 import org.specs2.specification.process._
 import user.specification._
 import fp.syntax._
 import control._
 
-class AllExpectationsSpec(env: Env) extends Spec with AllExpectations {
+class AllExpectationsSpec extends Spec with AllExpectations { sequential
 
   "A specification with the AllExpectations trait should" >> {
     "evaluate all its expectations" >> {
@@ -71,8 +71,8 @@ class AllExpectationsSpec(env: Env) extends Spec with AllExpectations {
 
   def results(spec: ContextualSpecificationStructure)(args: Arguments): List[Result] = {
     val env1 = Env().setArguments(args)
-    try DefaultExecutor.executeSpec(spec.structure(env1), env1).fragments.fragments.toList.
-          traverse(_.executionResult).run(env1.executionEnv)
+    try DefaultExecutor.executeSpec(spec.structure(env1), env1).fragments.fragments.
+      flatMap(_.traverse(_.executionResult)).run(env1.executionEnv)
     finally env1.shutdown
   }
 

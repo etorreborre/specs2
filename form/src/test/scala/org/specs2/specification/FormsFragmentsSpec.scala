@@ -41,7 +41,7 @@ class FormsFragmentsSpec(env: Env) extends Specification with Forms with ThrownE
     }
 
     def execute(spec: SpecStructure) =
-      DefaultExecutor.executeAll(spec.fragments.fragments:_*)(env)
+      DefaultExecutor.executeFragments(spec.fragments)(env)
   }
 
   trait Customers {

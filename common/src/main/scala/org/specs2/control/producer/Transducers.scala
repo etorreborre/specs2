@@ -254,27 +254,23 @@ trait Transducers {
 
   def zipWithState[R :_Safe, A, B](b: B)(f: (A, B) => B): Transducer[R, A, (A, B)] =
     (producer: Producer[R, A]) => {
-      def go(p: Producer[R, A], state: B): Producer[R, (A, B)] =
-        Producer[R, (A, B)] {
-          producer.run flatMap {
-            case Done() => done.run
-            case One(a) => one((a, state)).run
+      Producer[R, (A, B)] {
+        producer.run flatMap {
+          case Done() => done.run
+          case One(a) => one((a, b)).run
 
-            case More(as, next) =>
-              val zipped: Vector[(A, B)] =
-                as match {
-                  case Nil => Vector.empty
-                  case a :: rest => rest.foldLeft((Vector((a, state)), state)) { case ((ls, s), cur) =>
-                    val newState = f(cur, s)
-                    (ls :+ ((cur, newState)), newState)
-                  }._1
+          case More(as, next) =>
+            val (zipped, newState) =
+              as match {
+                case Nil => (Vector.empty, b)
+                case a :: rest => rest.foldLeft((Vector((a, b)), f(a, b))) { case ((ls, s), cur) =>
+                  (ls :+ ((cur, s)), f(cur, s))
                 }
+              }
 
-              (emit(zipped.toList) append zipWithState(b)(f).apply(next)).run
-
-          }
+            (emit(zipped.toList) append zipWithState(newState)(f).apply(next)).run
         }
-      go(producer, b)
+      }
     }
 
   def intersperse[R :_Safe, A](in: A): Transducer[R, A, A] =

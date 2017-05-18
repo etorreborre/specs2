@@ -4,9 +4,10 @@ package core
 
 import main.Arguments
 import org.specs2.control._
-import org.specs2.data.TopologicalSort
+import producer._
+import org.specs2.data.{NamedTag, TopologicalSort}
 import control._
-import org.specs2.fp.syntax._
+import org.specs2.concurrent.ExecutionEnv
 import org.specs2.fp.syntax._
 import process._
 
@@ -37,19 +38,32 @@ case class SpecStructure(header: SpecHeader, arguments: Arguments, lazyFragments
   def name = header.title.getOrElse(header.simpleName)
   def wordsTitle = header.title.getOrElse(header.wordsTitle)
 
-  def texts = fragments.texts
-  def examples = fragments.examples
-  def tags = fragments.tags
+  def fragmentsList(ee: ExecutionEnv): List[Fragment] =
+    fragments.fragmentsList(ee)
 
-  def references = fragments.referenced
-  def specificationRefs = fragments.specificationRefs
+  def texts: Action[List[Fragment]] =
+    fragments.texts
 
-  def seeReferences = fragments.seeReferences
+  def examples: Action[List[Fragment]] =
+    fragments.examples
 
-  def linkReferences = fragments.linkReferences
+  def tags: Action[List[NamedTag]] =
+    ProducerOps(fragments.tags).runList
 
-  def dependsOn(spec2: SpecStructure): Boolean =
-    SpecStructure.dependsOn(this, spec2)
+  def references: Action[List[Fragment]] =
+    fragments.referenced
+
+  def specificationRefs: Action[List[SpecificationRef]] =
+    fragments.specificationRefs.runList
+
+  def seeReferences: Action[List[SpecificationRef]] =
+    fragments.seeReferences.runList
+
+  def linkReferences: Action[List[SpecificationRef]] =
+    fragments.linkReferences.runList
+
+  def dependsOn(spec2: SpecStructure)(ee: ExecutionEnv): Boolean =
+    SpecStructure.dependsOn(ee)(this, spec2)
 }
 
 /**
@@ -73,20 +87,20 @@ object SpecStructure {
    *
    * means "dependents first"!
    */
-  def topologicalSort(specifications: Seq[SpecStructure]): Option[Vector[SpecStructure]] =
-    TopologicalSort.sort(specifications, (s1: SpecStructure, s2: SpecStructure) => dependsOn(s2, s1))
+  def topologicalSort(specifications: Seq[SpecStructure])(ee: ExecutionEnv): Option[Vector[SpecStructure]] =
+    TopologicalSort.sort(specifications, (s1: SpecStructure, s2: SpecStructure) => dependsOn(ee)(s2, s1))
 
   /**
    * sort the specifications in topological order where specification i doesn't depend on specification j if i > j
    *
    * means "dependents last"!
    */
-  def reverseTopologicalSort(specifications: Seq[SpecStructure]): Option[Vector[SpecStructure]] =
-    TopologicalSort.sort(specifications, dependsOn)
+  def reverseTopologicalSort(specifications: Seq[SpecStructure])(ee: ExecutionEnv): Option[Vector[SpecStructure]] =
+    TopologicalSort.sort(specifications, dependsOn(ee))
 
   /** return true if s1 depends on s2, i.e, s1 has a link to s2 */
-  val dependsOn = (s1: SpecStructure, s2: SpecStructure) => {
-    val s1Links = s1.fragments.fragments.collect(Fragment.linkReference).map(_.specClassName)
+  def dependsOn(ee: ExecutionEnv) = (s1: SpecStructure, s2: SpecStructure) => {
+    val s1Links = s1.fragments.fragments.runOption(ee).getOrElse(Nil).collect(Fragment.linkReference).map(_.specClassName)
     s1Links.contains(s2.specClassName)
   }
 
@@ -137,18 +151,44 @@ object SpecStructure {
 
   /** @return the class names of all the referenced specifications */
   def referencedSpecStructuresRefs(env: Env)(spec: SpecStructure): List[SpecificationRef] =
-    select(env)(spec).fragments.fragments.collect(Fragment.specificationRef).toList
+    selected(env)(spec).collect(Fragment.specificationRef)
 
   /** @return the class names of all the linked specifications */
   def linkedSpecStructuresRefs(env: Env)(spec: SpecStructure): List[SpecificationRef] =
-    select(env)(spec).fragments.fragments.collect(Fragment.linkReference).toList
+    selected(env)(spec).collect(Fragment.linkReference)
 
   /** @return the class names of all the see specifications */
   def seeSpecStructuresRefs(env: Env)(spec: SpecStructure): List[SpecificationRef] =
-    select(env)(spec).fragments.fragments.collect(Fragment.seeReference).toList
+    selected(env)(spec).collect(Fragment.seeReference)
 
   /** @return select only the fragments according to the current arguments */
   def select(env: Env)(spec: SpecStructure): SpecStructure =
     spec.map(fs => fs |> DefaultSelector.select(env))
 
+  private def selected(env: Env)(spec: SpecStructure): List[Fragment] =
+    select(env)(spec).fragments.fragments.runOption(env.executionEnv).getOrElse(Nil)
+
+  implicit class SpecStructureOps(s: SpecStructure)(implicit ee: ExecutionEnv) {
+    def textsList: List[Fragment] =
+      s.texts.runOption(ee).getOrElse(Nil)
+
+    def examplesList: List[Fragment] =
+      s.examples.runOption(ee).getOrElse(Nil)
+
+    def tagsList: List[NamedTag] =
+      s.tags.runOption(ee).getOrElse(Nil)
+
+    def referencesList: List[Fragment] =
+      s.references.runOption(ee).getOrElse(Nil)
+
+    def specificationRefsList: List[SpecificationRef] =
+      s.specificationRefs.runOption(ee).getOrElse(Nil)
+
+    def seeReferencesList: List[SpecificationRef] =
+      s.seeReferences.runOption(ee).getOrElse(Nil)
+
+    def linkReferencesList: List[SpecificationRef] =
+      s.linkReferences.runOption(ee).getOrElse(Nil)
+
+  }
 }

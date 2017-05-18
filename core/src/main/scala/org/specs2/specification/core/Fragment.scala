@@ -82,6 +82,10 @@ case class Fragment(description: Description, execution: Execution, location: Lo
 }
 
 object Fragment {
+
+  def apply(d: Description): Fragment =
+    Fragment(d, Execution.NoExecution)
+
   implicit val showInstance: Show[Fragment] = new Show[Fragment] {
     def show(f: Fragment): String =
       s"Fragment(${f.description.show})"

@@ -4,9 +4,10 @@ package specification
 import matcher._
 import execute.Snippet._
 import core._
+import org.specs2.concurrent.ExecutionEnv
 import control.Use
 
-class SnippetsSpec extends script.Spec with Snippets with DataTables with Grouped with TypedEqual { def is = sequential ^ s2"""
+class SnippetsSpec(ee: ExecutionEnv) extends script.Spec with Snippets with DataTables with Grouped with TypedEqual { def is = sequential ^ s2"""
 
  These are examples on how to use the various snippet methods
 
@@ -54,8 +55,8 @@ Robustness
   "snippets capture" - new group {
 
   eg := { s2""" code: ${ snippet { got {1 + 1} } } """.trimmedTexts(1) === "`got {1 + 1}`" }
-  def got[T](t: T) = t
 
+  def got[T](t: T) = t
 
   eg := s2""" code: ${ snippet {
 got {
@@ -90,12 +91,12 @@ n = 1
 // 8<--
 n = 0
 // 8<--
-val i = 0
+var i = 0
 i = 1
   } }""".trimmedTexts(1) ===
     """```
       |n = 1
-      |val i = 0
+      |var i = 0
       |i = 1
       |```""".stripMargin
 
@@ -149,12 +150,12 @@ n = 0
   }
   "results" - new group {
     eg := s2""" code: ${ snippet {
-  val n = 1
+  var n = 1
   n = 1 + n
   n
   }.eval.offsetIs(-2) }""".trimmedTexts.drop(1).take(3).mkString("\n") ===
     """|```
-       |val n = 1
+       |var n = 1
        |n = 1 + n
        |n
        |```
@@ -207,7 +208,7 @@ n = 0
   }
 
   implicit class fragmentsTexts(fs: Fragments) {
-    def trimmedTexts = fs.fragments.filter(Fragment.isText).map(_.description.show.trim)
+    def trimmedTexts = fs.fragmentsList(ee).filter(Fragment.isText).map(_.description.show.trim)
   }
   val attribute1 = 1
 }

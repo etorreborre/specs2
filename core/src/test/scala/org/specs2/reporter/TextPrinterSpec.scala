@@ -31,7 +31,7 @@ class TextPrinterSpec extends Specification { def is = s2"""
    a multi-line description must be indented ok               $b6
    if showtimes is true, each individual time must be shown   $b7 ${tag("travis")}
 
- Statistics must be displayed at the end   
+ Statistics must be displayed at the end
    total stats                                                $c1 ${tag("travis")}
 
  Failure messages must be shown

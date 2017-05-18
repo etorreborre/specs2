@@ -4,6 +4,7 @@ package specification
 import execute._
 import control.ImplicitParameters._
 import org.specs2.concurrent.ExecutionEnv
+import org.specs2.control.Use
 import specification.core._
 import specification.create._
 
@@ -314,9 +315,6 @@ trait GroupsLike { this: S2StringContextCreation =>
       Use.ignoring(p) { autoNumberedExamples = autoNumberedExamples :+ ExecutionVar.withExecutionEnv(f) }
     }
 
-    def :=[R](f: ExecutorService => R)(implicit p1: ImplicitParam1, asResult: AsResult[R]) {
-      Use.ignoring(p1) { autoNumberedExamples = autoNumberedExamples :+ ExecutionVar.withExecutorService(f) }
-    }
   }
 
   implicit def executionVarIsInterpolatedFragment(executionVar: =>ExecutionVar): InterpolatedFragment =
@@ -381,7 +379,7 @@ object ExecutionVar {
     new ExecutionVar := r
   
   def futureResult[R](f: =>Future[R])(implicit asResult: AsResult[R], p1: ImplicitParam1) = {
-    ImplicitParameters.use(p1)
+    Use(p1)
     new ExecutionVar(() => Execution.withEnvAsync(_ => f))
   }
 

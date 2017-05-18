@@ -6,7 +6,6 @@ import matcher._
 import core._
 import process._
 import control._
-import producer._
 import fp.syntax._
 import org.specs2.main.Arguments
 
@@ -30,11 +29,9 @@ class IsolatedExecutionSpec(env: Env) extends Spec { def is = s2"""
     val env1 = env.copy(arguments = Arguments("isolated"))
     val fragments = spec.structure(env1).fragments
 
-    val results = fragments.update(DefaultExecutor.execute(env1)).contents.runList.flatMap(_.collect { case f if f.isExecutable =>
+    DefaultExecutor.executeFragments(fragments)(env1).collect { case f if f.isExecutable =>
       f.executionResult
-    }.sequence)
-
-    results.run(env1.specs2ExecutionEnv)
+    }.sequence.run(env1.executionEnv)
   }
 }
 

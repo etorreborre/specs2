@@ -11,8 +11,9 @@ import matcher._
 import org.specs2.main.ArgumentsShortcuts
 import MatchResultCombinators._
 import MatchersImplicits.matchResultFunctionToMatcher
+import org.specs2.concurrent.ExecutionEnv
 
-class MutableFragmentsDslSpec extends org.specs2.Spec with TypedEqual with TraversableMatchers { def is = s2"""
+class MutableFragmentsDslSpec(ee: ExecutionEnv) extends org.specs2.Spec with TypedEqual with TraversableMatchers { def is = s2"""
 
   create examples
     with a string and a result   $e1
@@ -103,7 +104,7 @@ class MutableFragmentsDslSpec extends org.specs2.Spec with TypedEqual with Trave
       example("be ok", ok), break).map(_.description):_*)).inOrder
 
   def fragments(dsl1: dsl): List[Fragment] =
-    structure(dsl1).fragments.fragments.toList
+    structure(dsl1).fragmentsList(ee)
 
   def structure(dsl1: dsl): SpecStructure =
     dsl1.is

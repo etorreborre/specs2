@@ -24,7 +24,7 @@ trait Scripts { outer: FragmentsFactory =>
   implicit def scriptIsInterpolatedFragment(script: Script): InterpolatedFragment = new InterpolatedFragment {
     def append(fs: Fragments, text: String, start: Location, end: Location, expression: String): Fragments = {
       if (script.isStart) fs append factory.section(script.title) append factory.text(text).setLocation(start)
-      else                fs append (script.fragments(text).map(_.setLocation(end)) append factory.asSection(script.title))
+      else                fs append (script.fragments(text).toFragments.map(_.setLocation(end)) append factory.asSection(script.title))
     }
   }
 }

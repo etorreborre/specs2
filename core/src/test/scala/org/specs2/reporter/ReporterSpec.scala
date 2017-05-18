@@ -54,7 +54,7 @@ class ReporterSpec(env: Env) extends Specification with ThrownExpectations { def
   def a3 = {
     val repository = StatisticsRepository.memory
     reported(env.setArguments(Arguments()).setStatisticRepository(repository))
-    val ex2 = spec().fragments.fragments(3)
+    val ex2 = spec().fragmentsList(env.executionEnv)(3)
     repository.previousResult(spec().specClassName, ex2.description) must beOk(beSome((_: Result).isFailure must beTrue))
   }
 
