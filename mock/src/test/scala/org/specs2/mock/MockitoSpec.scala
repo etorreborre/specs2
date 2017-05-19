@@ -137,8 +137,8 @@ STUBS
  ========
 
  + Various mockito matchers can be used
-
-                                                                                                                        """
+ + Matching with any
+"""
     
   "creation" - new group {
     eg := {
@@ -539,7 +539,14 @@ STUBS
       def Map[K, V](a: Map[K, V])
 
       def varargs[T](ts: T*)
+
+      def method(a1: A, b: Boolean): Int
     }
+
+    trait A
+    class B extends A { override def toString = "B" }
+    class C extends A { override def toString = "C" }
+
     val m = mock[M]
 
     eg := {
@@ -582,8 +589,20 @@ STUBS
       there was one(m).varargs(anyVarArg[Int])
 
     }
+
+    eg := {
+      m.method(any[B], any[Boolean]) returns 1
+      m.method(anyObject, anyObject) returns 1
+
+      m.method(new B, true)
+      there was one(m).method(any[B], any[Boolean])
+      there was one(m).method(any(), anyObject)
+    }
   }
 
+  /**
+   * HELPERS
+   */
   trait list {
     val list = mock[java.util.List[String]]
     val queue = mock[scala.collection.immutable.Queue[String]]
