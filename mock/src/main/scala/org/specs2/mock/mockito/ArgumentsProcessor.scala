@@ -44,7 +44,7 @@ object ArgumentsProcessor {
   }
 
   def argumentsToMatchers(arguments: Array[Object]): List[Matcher[_]] = {
-    var matchers: List[Matcher[_]] = new ArrayList[Matcher[_]](arguments.length)
+    val matchers: List[Matcher[_]] = new ArrayList[Matcher[_]](arguments.length)
     for (arg <- arguments) {
       if (arg != null && arg.getClass.isArray) matchers.add(new ArrayEquals(arg))
       else if (arg != null && arg.getClass.getName.startsWith("scala.collection.mutable.WrappedArray")) matchers.add(new Equals(arg))

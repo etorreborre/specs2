@@ -70,7 +70,7 @@ package object producer {
   }
 
   implicit class ProducerEffOps[R :_Safe, A](p: Producer[R, Eff[R, A]]) {
-    def sequence[F[_]](n: Int)(implicit f: F |= R): Producer[R, A] =
+    def sequence[F[_]](n: Int): Producer[R, A] =
       Producer.sequence[R, F, A](n)(p)
   }
 

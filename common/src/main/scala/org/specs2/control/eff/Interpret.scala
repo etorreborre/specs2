@@ -521,8 +521,6 @@ trait Interpret {
 
   def augment[R, T[_], O[_], A](eff: Eff[R, A])(w: Augment[T, O])(implicit m: MemberInOut[T, R]): Eff[Fx.prepend[O, R], A] =  {
     type U = Fx.prepend[O, R]
-    implicit val mw = MemberIn.MemberInAppendAnyL
-
     translateInto(eff)(new Translate[T, U] {
       def apply[X](tx: T[X]): Eff[U, X] = send[O, U, Unit](w(tx)) >> send[T, U, X](tx)
     })

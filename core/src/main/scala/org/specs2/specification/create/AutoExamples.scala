@@ -28,10 +28,6 @@ trait AutoExamples extends FragmentsFactory {
       removeFirst("`\\(.*\\)").trimFirst("`").split("\n", -1).map(_.trim).mkString("\n")
   }
 
-  private def containsAccolade(expression: String) =
-    s"$ls*\\{$ls*.*".r.findPrefixOf(expression).isDefined
-
-  private lazy val ls = "[ \t\\x0B\f]"
 }
 
 object AutoExamples extends AutoExamples {

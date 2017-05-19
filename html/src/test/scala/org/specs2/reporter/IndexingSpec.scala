@@ -7,9 +7,7 @@ import org.specs2.html._
 import Indexing._
 import control._
 
-import scala.concurrent._
-
-class IndexingSpec(implicit ec: ExecutionContext) extends Specification { def is = s2"""
+class IndexingSpec extends Specification { def is = s2"""
  From the set of all the generated html pages we can generate an index and convert it to the tipue search format.
 
  An index is built from Html pages     $index

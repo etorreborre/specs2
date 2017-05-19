@@ -12,7 +12,6 @@ import scalaz._, Scalaz._
 import main.Arguments
 import reflect.Classes
 import reporter._, Printer._
-import scala.concurrent._
 
 /**
  * reusable actions for Runners
@@ -22,7 +21,7 @@ object Runner {
   /**
    * Execute some actions and exit with the proper code if 'exit' is true
    */
-  def execute(actions: Action[Stats], arguments: Arguments, exit: Boolean)(implicit ec: ExecutionContext): Unit = {
+  def execute(actions: Action[Stats], arguments: Arguments, exit: Boolean): Unit = {
     val (result, warnings) = executeAction(actions, consoleLogging)
     val logging = (s: String) => IO(consoleLogging(s))
     result.fold(

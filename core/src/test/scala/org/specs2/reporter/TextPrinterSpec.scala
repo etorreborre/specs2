@@ -242,7 +242,7 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
 
     val spec = SpecStructure.create(SpecHeader(getClass, Some("title\n")), Arguments(), fragments)
     val env = Env(lineLogger = logger)
-    TextPrinter.run(env)(env.executionContext)(DefaultExecutor.executeSpec(spec, env))
+    TextPrinter.run(env)(DefaultExecutor.executeSpec(spec, env))
 
     val executed = logger.messages.filter(_.contains("executed")).map(_.replace("executed", "").trim.toInt)
     val printed = logger.messages.filter(_.contains("+")).map(_.replace("+", "").replace("ex", "").trim.toInt)
@@ -271,7 +271,7 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
 
     val spec = SpecStructure.create(SpecHeader(getClass, Some("title\n")), sequential, fragments)
     val env = Env(lineLogger = logger).setArguments(sequential)
-    TextPrinter.run(env)(env.executionContext)(DefaultExecutor.executeSpec(spec, env))
+    TextPrinter.run(env)(DefaultExecutor.executeSpec(spec, env))
 
     val executed = logger.messages.filter(_.contains("executed")).map(_.replace("executed", "").trim.toInt)
     val printed = logger.messages.filter(_.contains("+")).map(_.replace("+", "").replace("ex", "").trim.toInt)
@@ -334,7 +334,7 @@ object TextPrinterSpecification extends MustMatchers with FragmentsDsl {
         optionalEnv.fold(Env(lineLogger = logger,
           arguments = spec.arguments.overrideWith(Arguments.split("sequential fullstacktrace"))))(_.copy(lineLogger = logger))
 
-      TextPrinter.run(env)(env.executionContext)(spec.setFragments(spec.fragments
+      TextPrinter.run(env)(spec.setFragments(spec.fragments
         .prepend(DefaultFragmentFactory.break) // add a newline after the title
         .update(DefaultExecutor.execute(env))))
 

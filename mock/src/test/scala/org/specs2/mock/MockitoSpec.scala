@@ -497,7 +497,6 @@ STUBS
       there was two(list).get(c)
       c.values.toString === "[1, 2]"
     }
-    implicit val args = main.Arguments()
   }
 
   "other contexts" - new group {

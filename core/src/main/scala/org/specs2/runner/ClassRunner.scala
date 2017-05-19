@@ -43,7 +43,7 @@ trait ClassRunner {
           _     <- Actions.delayed(env.shutdown)
         } yield stats
     }
-    execute(actions, arguments, exit)(env.executionContext)
+    execute(actions, arguments, exit)
   }
 
   /** create the specification from the class name */

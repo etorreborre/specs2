@@ -17,7 +17,6 @@ class ClassNameSpec extends Spec with Tables with TypedEqual {
     simpleName(classOf[ClassNameSpec]) === "ClassNameSpec"
   }
   "The class name of an internal class should only return the last name" in {
-    class ThisClassName
     simpleName(classOf[ThisClassName]) === "ThisClassName"
   }                                                                                       
   "The class name of an Int should be Integer" in {
@@ -40,4 +39,6 @@ class ClassNameSpec extends Spec with Tables with TypedEqual {
   class ThisClass extends MyTrait
     val anonymous = new ThisClass {
   }
+
+  class ThisClassName
 }

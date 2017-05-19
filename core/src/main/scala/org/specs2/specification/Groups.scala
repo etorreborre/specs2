@@ -2,7 +2,7 @@ package org.specs2
 package specification
 
 import java.util.concurrent.ExecutorService
-
+import control.Use
 import execute._
 import control.ImplicitParameters._
 import org.specs2.concurrent.ExecutionEnv
@@ -306,11 +306,11 @@ trait GroupsLike { this: S2StringContextCreation =>
     }
 
     def :=[R](f: ExecutionEnv => R)(implicit p: ImplicitParam, asResult: AsResult[R]) {
-      autoNumberedExamples = autoNumberedExamples :+ ExecutionVar.withExecutionEnv(f)
+      Use.ignoring(p) { autoNumberedExamples = autoNumberedExamples :+ ExecutionVar.withExecutionEnv(f) }
     }
 
     def :=[R](f: ExecutorService => R)(implicit p1: ImplicitParam1, asResult: AsResult[R]) {
-      autoNumberedExamples = autoNumberedExamples :+ ExecutionVar.withExecutorService(f)
+      Use.ignoring(p1) { autoNumberedExamples = autoNumberedExamples :+ ExecutionVar.withExecutorService(f) }
     }
   }
 

@@ -141,7 +141,6 @@ trait SafeInterpretation extends SafeCreation { outer =>
       }
 
       def onLastApplicativeEffect[X, T[_] : Traverse](xs: T[Safe[X]], continuation: Arrs[R, T[X], Unit], s: S): (Eff[R, Unit], S) Either Eff[U, Unit] = {
-        type F = (Vector[Throwable], Option[Throwable])
 
         val failedFinalizers = new collection.mutable.ListBuffer[Throwable]
         var error: Option[Throwable] = None

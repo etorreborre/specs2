@@ -8,9 +8,7 @@ import scalaz.syntax.bind._
 import execute.AsResult
 import process._
 
-import scala.concurrent.ExecutionContext
-
-class StoreSpec(implicit ec: ExecutionContext) extends Specification { def is = sequential ^ s2"""
+class StoreSpec extends Specification { def is = sequential ^ s2"""
  The file store stores values in files where the name of the file is
    defined by the key $e1
 

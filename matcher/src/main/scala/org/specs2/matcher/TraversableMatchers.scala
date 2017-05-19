@@ -211,7 +211,7 @@ case class ContainWithResult[T](check: ValueCheck[T], timesMin: Option[Times] = 
     val seq = Vector(t.value.seq.toSeq:_*)
 
     // stop after the first failure if !checkAll
-    val (successes, failures) = seq.foldLeft(Seq[Result](), Seq[Result]()) { (res, cur) =>
+    val (successes, failures) = seq.foldLeft((Seq[Result](), Seq[Result]())) { (res, cur) =>
       val (ss, fs) = res
       if (!checkAll && fs.nonEmpty) res
       else {

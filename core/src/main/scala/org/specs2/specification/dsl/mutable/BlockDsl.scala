@@ -5,7 +5,8 @@ package mutable
 
 import control.ImplicitParameters._
 import execute.AsResult
-import org.specs2.specification.core.{Fragments, StacktraceLocation, Fragment}
+import org.specs2.control.Use
+import org.specs2.specification.core.{Fragment, Fragments, StacktraceLocation}
 import specification.create.FragmentsFactory
 
 /**
@@ -18,9 +19,14 @@ trait BlockDsl extends BlockCreation {
     def should(f: => Fragment): Fragment = addBlock(s"$d should", f, addFragmentBlock)
     def can(f: => Fragment): Fragment    = addBlock(s"$d can",    f, addFragmentBlock)
 
-    def >>(fs: => Fragments)(implicit p1: ImplicitParam1): Fragments     = addBlock(d,            fs, addFragmentsBlock)
-    def should(fs: => Fragments)(implicit p1: ImplicitParam1): Fragments = addBlock(s"$d should", fs, addFragmentsBlock)
-    def can(fs: => Fragments)(implicit p1: ImplicitParam1): Fragments    = addBlock(s"$d can",    fs, addFragmentsBlock)
+    def >>(fs: => Fragments)(implicit p1: ImplicitParam1): Fragments =
+      Use.ignoring(p1) { addBlock(d, fs, addFragmentsBlock) }
+
+    def should(fs: => Fragments)(implicit p1: ImplicitParam1): Fragments =
+      Use.ignoring(p1) { addBlock(s"$d should", fs, addFragmentsBlock) }
+
+    def can(fs: => Fragments)(implicit p1: ImplicitParam1): Fragments =
+      Use.ignoring(p1) { addBlock(s"$d can", fs, addFragmentsBlock) }
   }
 
   /**

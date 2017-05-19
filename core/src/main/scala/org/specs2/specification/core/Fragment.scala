@@ -72,7 +72,7 @@ case class Fragment(description: Description, execution: Execution, location: Lo
 }
 
 object Fragment {
-  implicit def showInstance(implicit showd: Show[Description], showe: Show[Execution]): Show[Fragment] = new Show[Fragment] {
+  implicit def showInstance(implicit showd: Show[Description]): Show[Fragment] = new Show[Fragment] {
     override def shows(f: Fragment): String =
       s"Fragment(${f.description.shows})"
   }

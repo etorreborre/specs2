@@ -302,7 +302,7 @@ trait Producers {
   def flattenList[R :_Safe, A](producer: Producer[R, List[A]]): Producer[R, A] =
     producer.flatMap(emit[R, A])
 
-  def sequence[R :_Safe, F[_], A](n: Int)(producer: Producer[R, Eff[R, A]])(implicit f: F |= R) =
+  def sequence[R :_Safe, F[_], A](n: Int)(producer: Producer[R, Eff[R, A]]) =
     sliding(n)(producer).flatMap { actions => emitEff(Eff.sequenceA(actions)) }
 
   private[producer] def cata[R :_Safe, A, B](producer: Producer[R, A])(onDone: Producer[R, B], onOne: A => Producer[R, B], onMore: (List[A], Producer[R, A]) => Producer[R, B]): Producer[R, B] =

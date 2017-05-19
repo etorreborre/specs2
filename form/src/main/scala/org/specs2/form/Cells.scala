@@ -145,19 +145,9 @@ case class EffectCell(e: Effect[_], result: Option[Result] = None) extends Cell 
   def text = e.toString
 
   def xml(implicit args: Arguments) = {
-    val executed = e.valueOrResult match {
-      case Left(r)  => r
-      case Right(r) => r
-    }
     val executedResult = execute
     <td style={e.labelStyles} class="info">{e.decorateLabel(e.label)}</td> ++
     (<td class={executedResult.statusName} onclick={"showHide("+System.identityHashCode(executedResult).toString+")"}>{executedResult.message}</td> unless executedResult.isSuccess)
-  }
-
-  private def statusName(r: Result) = r match {
-    case Skipped(_, _) => "info"
-    case Success(_, _) => "info"
-    case _             => r.statusName
   }
 
   def execute = result.getOrElse(e.execute)

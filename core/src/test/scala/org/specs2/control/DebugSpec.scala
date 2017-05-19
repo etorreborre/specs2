@@ -33,8 +33,8 @@ class DebugSpec extends Specification { def is = s2"""
 }
 
 trait output extends Scope with MustThrownMatchers {
-  private var msgs = ListBuffer[String]()
-  private def messages = msgs.toSeq
+  private val msgs = ListBuffer[String]()
+  def messages = msgs.toList
 
   // this implicit intercepts appended messages from the calls to 'pp'
   implicit def debug[T](t: =>T): Debuggable[T] = new DebuggableMock(t)

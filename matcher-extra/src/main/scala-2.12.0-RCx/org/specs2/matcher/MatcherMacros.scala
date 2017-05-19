@@ -158,13 +158,6 @@ class MakeMatchers[C <: Context](val c: C) {
     (matcherClassType, classDefinition)
   }
 
-  private def isConstructor(c: Context) = { import c.universe._
-    (s: Symbol) =>  s match {
-      case m: c.universe.MethodSymbol => m.isConstructor
-      case other                      => false
-    }
-  }
-
   private def isSynthetic(c: Context) = { import c.universe._
     (s: Symbol) => s.isSynthetic
   }

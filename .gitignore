@@ -6,6 +6,7 @@ build/
 .target/
 .jvmopts
 hydra.log
+hydra-timings.csv
 **/*.hydra
 pgp.sbt
 project-old/lib_managed/

@@ -11,6 +11,7 @@ import matcher._
 import DecoratedProperties._
 import ResultLogicalCombinators._
 import control.ImplicitParameters._
+import control.Use
 
 /**
  * A Form is a container for Rows (@see Row) where each row contain some Cell (@see Cell).
@@ -46,7 +47,7 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
   /** add a new Header, with at least one Field */
   def th(h1: Field[_], hs: Field[_]*): Form = tr(Row.tr(FieldCell(h1.header), hs.map((f: Field[_]) => FieldCell(f.header)):_*))
   /** add a new Header */
-  def th(hs: Seq[String])(implicit p: ImplicitParam): Form = th(hs.map(Field(_)))
+  def th(hs: Seq[String])(implicit p: ImplicitParam): Form = Use.ignoring(p)(th(hs.map(Field(_))))
   /** add a new Header, with at least one Field */
   def th(h1: String, hs: String*): Form = th(Field(h1), hs.map(Field(_)):_*)
   /** add a new Row, with at least one Cell */

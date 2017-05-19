@@ -7,13 +7,17 @@ import control.ImplicitParameters.ImplicitParam
 import core.Fragment
 import form._
 import create._
+import org.specs2.control.Use
 
 /**
  * Dsl for creating Forms in a mutable specification
  */
 trait FormDsl extends FragmentBuilder with FormFragmentFactory { outer =>
-  def insert(aForm: =>Form): Fragment = addFragment(FormFragment(aForm))
-  def insert(aForm: =>{ def form: Form })(implicit p: ImplicitParam): Fragment = insert(aForm.form)
+  def insert(aForm: =>Form): Fragment =
+    addFragment(FormFragment(aForm))
+
+  def insert(aForm: =>{ def form: Form })(implicit p: ImplicitParam): Fragment =
+    Use.ignoring(p)(insert(aForm.form))
 
   implicit class insertForm(aForm: => Form) {
     def insert = outer.insert(aForm)
