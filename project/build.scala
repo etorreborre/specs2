@@ -38,8 +38,17 @@ object build extends Build {
       Seq(name := "specs2", packagedArtifacts := Map.empty)
   ).aggregate(
     common, matcher, matcherExtra, core, cats, scalaz, html, analysis,
-    shapeless, form, markdown, gwt, junit, scalacheck, mock, tests)
+    shapeless, form, markdown, gwt, junit, scalacheck, mock, tests).
+    dependsOn(common, matcher, matcherExtra, core, cats, scalaz, html, analysis,
+              shapeless, form, markdown, gwt, junit, scalacheck, mock)
    .enablePlugins(GitBranchPrompt)
+
+  lazy val pom = Project(id = "pom", base = file("pom"),
+    settings =
+      moduleSettings("") ++ Seq(
+      name := "specs2")
+    ).dependsOn(common, matcher, matcherExtra, core, cats, scalaz, html, analysis,
+                shapeless, form, markdown, gwt, junit, scalacheck, mock)
 
   /** COMMON SETTINGS */
   lazy val specs2Settings: Seq[Settings] = Seq(
