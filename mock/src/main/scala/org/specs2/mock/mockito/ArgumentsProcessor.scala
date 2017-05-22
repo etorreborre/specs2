@@ -1,15 +1,12 @@
 package org.mockito.internal.invocation
 
-import org.hamcrest.Matcher
-import org.mockito.internal.matchers.{EqualsFunction1, EqualsFunction0, ArrayEquals, Equals}
-
-import org.mockito.internal.util.collections.ArrayUtils
-
+import org.mockito.internal.matchers.{ArrayEquals, Equals, EqualsFunction0, EqualsFunction1}
 import java.util.ArrayList
 import java.util.List
+import org.mockito.ArgumentMatcher
 import org.mockito.internal.progress.ThreadSafeMockingProgress2
-import scala.collection.{GenSetLike, GenSeqLike, JavaConversions}
-import JavaConversions._
+import scala.collection.JavaConverters._
+import scala.collection.{GenSeqLike, GenSetLike}
 
 /*
  * Copyright (c) 2007 Mockito contributors
@@ -24,7 +21,7 @@ object ArgumentsProcessor {
   // varArgs (1, a, b);
   def expandVarArgs(isVarArgs: Boolean, args: Array[Object]) = {
 
-    if (!isVarArgs || new ArrayUtils().isEmpty(args) || args(args.length - 1) != null && !args(args.length - 1).getClass().isArray()) {
+    if (!isVarArgs || args.isEmpty || args(args.length - 1) != null && !args(args.length - 1).getClass().isArray()) {
       if (args == null) Array.ofDim[Object](0) else args
     } else {
       val nonVarArgsCount = args.length - 1
@@ -43,21 +40,23 @@ object ArgumentsProcessor {
     }
   }
 
-  def argumentsToMatchers(arguments: Array[Object]): List[Matcher[_]] = {
-    val matchers: List[Matcher[_]] = new ArrayList[Matcher[_]](arguments.length)
+  def argumentsToMatchers(arguments: Array[Object]): List[ArgumentMatcher[_]] = {
+    val matchers: List[ArgumentMatcher[_]] = new ArrayList[ArgumentMatcher[_]](arguments.length)
     for (arg <- arguments) {
       if (arg != null && arg.getClass.isArray) matchers.add(new ArrayEquals(arg))
       else if (arg != null && arg.getClass.getName.startsWith("scala.collection.mutable.WrappedArray")) matchers.add(new Equals(arg))
       else if (arg.isInstanceOf[Function0[_]]) {
+        val function0 = arg.asInstanceOf[Function0[_]]
         // matchers evaluation should not be done during a real call, which happens on spies
         // because they might trigger additional mocks evaluations
         // see #428
         if (!isCallRealMethod) {
           // evaluate the byname parameter to collect the argument matchers
           // if an exception is thrown we keep the value to compare it with the actual one (see "with Any" in the MockitoSpec and issue 82)
-          val value = try { arg.asInstanceOf[Function0[_]].apply() } catch { case e: Throwable => e }
+          val value = try { function0.apply() } catch { case e: Throwable => e }
           // during the evaluation of the value some matchers might have been created. pull them.
-          val argumentsMatchers = ThreadSafeMockingProgress2.pullLocalizedMatchers
+          val after = ThreadSafeMockingProgress2.pullLocalizedMatchers.asScala
+          val argumentsMatchers = after.map(adaptFunction0).asJava
           // if there are no matchers at all being registered this means that
           // we are invoking the method, not verifying it
           // in that case add a new matcher corresponding to the argument (an equals matcher using the value)
@@ -65,13 +64,13 @@ object ArgumentsProcessor {
           else {
             // otherwise we add all the existing arguments matchers +
             // we reset the state of the argumentMatchersStorage
-            matchers.addAll(argumentsMatchers.map(_.getActualMatcher))
-            ThreadSafeMockingProgress2.reportMatchers(argumentsMatchers.map(_.getActualMatcher))
+            matchers.addAll(argumentsMatchers)
+            ThreadSafeMockingProgress2.reportMatchers(argumentsMatchers)
           }
         }
       }
       else if (arg.isInstanceOf[org.specs2.matcher.Matcher[_]]) {
-        matchers.add(new org.specs2.mock.HamcrestMatcherAdapter(arg.asInstanceOf[org.specs2.matcher.Matcher[_]]))
+        matchers.add(new org.specs2.mock.ArgumentMatcherAdapter(arg.asInstanceOf[org.specs2.matcher.Matcher[_]]))
       }
       // special case for sequences and sets because they have an apply method making them instances of Function1
       // yet they define a useful equals method
@@ -87,6 +86,20 @@ object ArgumentsProcessor {
   }
 
   def isCallRealMethod: Boolean =
-    (new Exception).getStackTrace.toList.exists(t => t.getClassName == "org.mockito.internal.invocation.InvocationImpl" && t.getMethodName == "callRealMethod")
+    (new Exception).getStackTrace.toList.
+      exists(t =>
+        t.getClassName == "org.mockito.internal.creation.bytebuddy.InterceptedInvocation" &&
+        t.getMethodName == "callRealMethod")
+
+  def adaptFunction0(m: ArgumentMatcher[_]): ArgumentMatcher[_] = new ArgumentMatcher[Object] {
+    def matches(a: Object): Boolean = {
+      if (a.isInstanceOf[Function0[_]]) {
+        val value = a.asInstanceOf[Function0[_]].apply().asInstanceOf[Object]
+        m.asInstanceOf[ArgumentMatcher[Object]].matches(value)
+      }
+      else
+        m.asInstanceOf[ArgumentMatcher[Object]].matches(a)
+    }
+  }
 }
 

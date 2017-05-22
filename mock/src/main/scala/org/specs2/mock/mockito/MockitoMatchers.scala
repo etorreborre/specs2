@@ -2,8 +2,9 @@ package org.specs2
 package mock
 package mockito
 
-import org.mockito.Matchers
+import org.mockito.ArgumentMatchers
 import org.hamcrest.core.IsAnything
+
 import scala.reflect.ClassTag
 
 /**
@@ -11,38 +12,41 @@ import scala.reflect.ClassTag
  */
 trait MockitoMatchers extends ArgThat {
 
-  def anyString  = Matchers.anyString
-  def anyBoolean = Matchers.anyBoolean
-  def anyByte    = Matchers.anyByte
-  def anyShort   = Matchers.anyShort
-  def anyChar    = Matchers.anyChar
-  def anyInt     = Matchers.anyInt
-  def anyLong    = Matchers.anyLong
-  def anyDouble  = Matchers.anyDouble
-  def anyFloat   = Matchers.anyFloat
+  def anyString  = ArgumentMatchers.anyString
+  def anyBoolean = ArgumentMatchers.anyBoolean
+  def anyByte    = ArgumentMatchers.anyByte
+  def anyShort   = ArgumentMatchers.anyShort
+  def anyChar    = ArgumentMatchers.anyChar
+  def anyInt     = ArgumentMatchers.anyInt
+  def anyLong    = ArgumentMatchers.anyLong
+  def anyDouble  = ArgumentMatchers.anyDouble
+  def anyFloat   = ArgumentMatchers.anyFloat
 
-  def anyVarArg[T]      = Matchers.anyVararg[T]()
-  def anyJavaList       = Matchers.anyList
-  def anyJavaSet        = Matchers.anySet
-  def anyJavaCollection = Matchers.anyCollection()
-  def anyJavaMap        = Matchers.anyMap()
+  def anyVarArg[T]      = ArgumentMatchers.anyVararg[T]()
+  def anyJavaList       = ArgumentMatchers.anyList
+  def anyJavaSet        = ArgumentMatchers.anySet
+  def anyJavaCollection = ArgumentMatchers.anyCollection()
+  def anyJavaMap        = ArgumentMatchers.anyMap()
 
-  def anyJavaListOf[T : ClassTag]              = Matchers.anyListOf(implicitly[ClassTag[T]].runtimeClass)
-  def anyJavaSetOf[T : ClassTag]               = Matchers.anySetOf(implicitly[ClassTag[T]].runtimeClass)
-  def anyJavaCollectionOf[T : ClassTag]        = Matchers.anyCollectionOf(implicitly[ClassTag[T]].runtimeClass)
-  def anyJavaMapOf[K : ClassTag, V : ClassTag] = Matchers.anyMapOf(implicitly[ClassTag[K]].runtimeClass, implicitly[ClassTag[V]].runtimeClass)
+  def anyJavaListOf[T : ClassTag]              = ArgumentMatchers.anyListOf(implicitly[ClassTag[T]].runtimeClass)
+  def anyJavaSetOf[T : ClassTag]               = ArgumentMatchers.anySetOf(implicitly[ClassTag[T]].runtimeClass)
+  def anyJavaCollectionOf[T : ClassTag]        = ArgumentMatchers.anyCollectionOf(implicitly[ClassTag[T]].runtimeClass)
+  def anyJavaMapOf[K : ClassTag, V : ClassTag] = ArgumentMatchers.anyMapOf(implicitly[ClassTag[K]].runtimeClass, implicitly[ClassTag[V]].runtimeClass)
 
-  def anyList        = Matchers.any(classOf[List[_]])
-  def anySet         = Matchers.any(classOf[Set[_]])
-  def anyTraversable = Matchers.any(classOf[Traversable[_]])
-  def anyMap         = Matchers.any(classOf[Map[_,_]])
+  def anyList        = ArgumentMatchers.any(classOf[List[_]])
+  def anySet         = ArgumentMatchers.any(classOf[Set[_]])
+  def anyTraversable = ArgumentMatchers.any(classOf[Traversable[_]])
+  def anyMap         = ArgumentMatchers.any(classOf[Map[_,_]])
 
-  def anyListOf[T : ClassTag]              = Matchers.any(implicitly[ClassTag[List[T]]].runtimeClass).asInstanceOf[List[T]]
-  def anySetOf[T : ClassTag]               = Matchers.any(implicitly[ClassTag[Set[T]]].runtimeClass).asInstanceOf[Set[T]]
-  def anyTraversableOf[T : ClassTag]       = Matchers.any(implicitly[ClassTag[Traversable[T]]].runtimeClass).asInstanceOf[Traversable[T]]
-  def anyMapOf[K : ClassTag, V : ClassTag] = Matchers.any(implicitly[ClassTag[Map[K, V]]].runtimeClass).asInstanceOf[Map[K, V]]
+  def anyListOf[T : ClassTag]              = ArgumentMatchers.any(implicitly[ClassTag[List[T]]].runtimeClass).asInstanceOf[List[T]]
+  def anySetOf[T : ClassTag]               = ArgumentMatchers.any(implicitly[ClassTag[Set[T]]].runtimeClass).asInstanceOf[Set[T]]
+  def anyTraversableOf[T : ClassTag]       = ArgumentMatchers.any(implicitly[ClassTag[Traversable[T]]].runtimeClass).asInstanceOf[Traversable[T]]
+  def anyMapOf[K : ClassTag, V : ClassTag] = ArgumentMatchers.any(implicitly[ClassTag[Map[K, V]]].runtimeClass).asInstanceOf[Map[K, V]]
 
-  def any[T : ClassTag]: T = org.mockito.Matchers.any(implicitly[ClassTag[T]].runtimeClass).asInstanceOf[T]
+  def any[T : ClassTag]: T = org.mockito.ArgumentMatchers.any(implicitly[ClassTag[T]].runtimeClass).asInstanceOf[T]
+  def any[T]() = org.mockito.ArgumentMatchers.any.asInstanceOf[T]
+  // alias for any()
+  def anyObject[T] = org.mockito.ArgumentMatchers.any.asInstanceOf[T]
 
   def anyPartialFunction[T,R] = anArgThat(new IsAnything[PartialFunction[T,R]])
 
@@ -81,7 +85,7 @@ object MockitoMatchers extends MockitoMatchers
 //object MockitoMatchersGeneration {
 //  def main(args: Array[String]) {
 //
-//    FileWriter.writeFile("MockitoMatchers.scala",
+//    FileWriter.writeFile("MockitoArgumentMatchers.scala",
 //      (1 to 22).map { i =>
 //          "def anyFunction"+i+typeParameters(i)+" = anArgThat(new IsAnything["+function(i)+"])"
 //      }.mkString("\n", "\n", "\n"))

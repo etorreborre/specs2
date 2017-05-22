@@ -40,7 +40,7 @@ object depends {
     else
       Seq()
 
-  lazy val mockito       = Seq("org.mockito"  %  "mockito-core"  % "1.9.5")
+  lazy val mockito       = Seq("org.mockito"  %  "mockito-core"  % "2.7.22")
   lazy val junit         = Seq("junit"        %  "junit"         % "4.12")
   lazy val hamcrest      = Seq("org.hamcrest" %  "hamcrest-core" % "1.3")
 
