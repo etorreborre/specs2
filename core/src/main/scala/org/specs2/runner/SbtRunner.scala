@@ -31,7 +31,11 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
   /** create a new test task */
   def newTask(aTaskDef: TaskDef) =
     new Task {
-      lazy val env = Env(arguments = commandLineArguments).copy(customClassLoader = Some(loader))
+      lazy val env: Env =
+        if (commandLineArguments.useCustomClassLoader)
+          Env(arguments = commandLineArguments).setCustomClassLoader(loader)
+        else
+          Env(arguments = commandLineArguments)
 
       // the specification to execute with error messages if it cannot be instantiated
       lazy val specStructure: (Error \/ Option[SpecStructure], List[String]) = {

@@ -69,6 +69,7 @@ This reference guide for arguments is divided in several sections:
  `sequential`            | `false`                                  | don't execute examples concurrently
  `asap`                  | `false`                                  | execute all the examples before reporting them
  `isolated`              | `false`                                  | execute each example in its own specification to get "fresh" local variables
+ `useCustomClassLoader`  | `false`                                  | use a custom class loader set on the `Env` to execute each example. By default sbt's classloader for running tests is attached to the `Env`
  `threadsNb`             | `Runtime.getRuntime.availableProcessors` | number of threads to use for concurrent execution
  `scheduledThreadsNb`    | `1`                                      | number of threads to use for timing out execution
  `batchSize`             | `Runtime.getRuntime.availableProcessors` | number of examples which start executing concurrently at the time

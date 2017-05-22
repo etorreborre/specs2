@@ -112,6 +112,10 @@ case class Env(arguments: Arguments = Arguments(),
   /** set a new statistic repository */
   def setStatisticRepository(repository: StatisticsRepository) =
     copy(statsRepository = (args: Arguments) => repository)
+
+  /** set a new classloader to be used as the context classloader for each execution */
+  def setCustomClassLoader(classLoader: ClassLoader): Env =
+    copy(customClassLoader = Some(classLoader))
 }
 
 object Env {
