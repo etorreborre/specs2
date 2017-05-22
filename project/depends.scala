@@ -35,7 +35,7 @@ object depends {
     Seq("org.scalacheck" %% "scalacheck" % "1.13.4")
 
   def si2712Dependency(scalaVersion: String) =
-    if (CrossVersion.partialVersion(scalaVersion).exists(_._2 < 12))
+    if (CrossVersion.partialVersion(scalaVersion).exists(_._2 < 11))
       Seq(compilerPlugin("com.milessabin" % ("si2712fix-plugin_"+scalaVersion) % "1.2.0"))
     else
       Seq()

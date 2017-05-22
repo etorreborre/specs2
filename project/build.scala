@@ -48,7 +48,7 @@ object build extends Build {
     scalazVersion in GlobalScope := "7.2.7",
     specs2ShellPrompt,
     scalaVersion := "2.12.2",
-    crossScalaVersions := Seq(scalaVersion.value, "2.11.8", "2.10.6"))
+    crossScalaVersions := Seq(scalaVersion.value, "2.11.11", "2.10.6"))
 
   lazy val specs2Version = settingKey[String]("defines the current specs2 version")
   lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
@@ -250,7 +250,7 @@ object build extends Build {
 
   lazy val si2712 =
     scalacOptions ++=
-      (if (CrossVersion.partialVersion(scalaVersion.value).exists(_._2 >= 12)) Seq("-Ypartial-unification")
+      (if (CrossVersion.partialVersion(scalaVersion.value).exists(_._2 >= 11)) Seq("-Ypartial-unification")
        else Seq())
 
   lazy val testingSettings: Seq[Settings] = Seq(
