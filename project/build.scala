@@ -253,8 +253,8 @@ object build extends Build {
     addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.3"),
     scalacOptions in Test ++= Seq("-Yrangepos"),
     scalacOptions in (Compile, doc) ++= Seq("-feature", "-language:_"),
-    scalacOptions in (Compile, console) ++= Seq("-Yrangepos", "-feature", "-language:_"),
-    scalacOptions in (Test, console) ++= Seq("-Yrangepos", "-feature", "-language:_")
+    scalacOptions in (Compile, console) := Seq("-Yrangepos", "-feature", "-language:_"),
+    scalacOptions in (Test, console) := Seq("-Yrangepos", "-feature", "-language:_")
   )
 
   lazy val si2712 =
