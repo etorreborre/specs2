@@ -96,11 +96,20 @@ package object producer {
     def zipWithPrevious: Producer[R, (Option[A], A)] =
       p |> transducers.zipWithPrevious
 
+    def zipWithPreviousN(n: Int): Producer[R, (List[A], A)] =
+      p |> transducers.zipWithPreviousN(n)
+
     def zipWithNext: Producer[R, (A, Option[A])] =
       p |> transducers.zipWithNext
 
+    def zipWithNextN(n: Int): Producer[R, (A, List[A])] =
+      p |> transducers.zipWithNextN(n)
+
     def zipWithPreviousAndNext: Producer[R, (Option[A], A, Option[A])] =
       p |> transducers.zipWithPreviousAndNext
+
+    def zipWithPreviousAndNextN(n: Int): Producer[R, (List[A], A, List[A])] =
+      p |> transducers.zipWithPreviousAndNextN(n)
 
     def zipWithIndex: Producer[R, (A, Int)] =
       p |> transducers.zipWithIndex

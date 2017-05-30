@@ -241,34 +241,42 @@ trait Transducers {
   def reduceMap[R :_Safe, A, B : Monoid](f: A => B): Transducer[R, A, B] = (producer: Producer[R, A]) =>
     reduceMonoid[R, B].apply(transducer(f).apply(producer))
 
-
   def zipWithPrevious[R :_Safe, A]: Transducer[R, A, (Option[A], A)] =
+    zipWithPreviousN(1).map { case (prev, a) => (prev.headOption, a) }
+
+  def zipWithPreviousN[R :_Safe, A](n: Int): Transducer[R, A, (List[A], A)] =
     (producer: Producer[R, A]) => {
-      def go(p: Producer[R, A], previous: Option[A]): Producer[R, (Option[A], A)] =
+      def go(p: Producer[R, A], previous: Vector[A]): Producer[R, (List[A], A)] =
         Producer(peek(p) flatMap {
-          case (Some(a), as) => (one((previous, a)) append go(as, Option(a))).run
-          case (None, _)     => done.run
+          case (Some(a), as) =>
+            val ps = if (previous.size < n) previous else previous.drop(1)
+            (one((previous.take(n).toList, a)) append go(as, ps :+ a)).run
+          case (None, _) =>
+            done.run
         })
 
-      go(producer, None)
+      go(producer, Vector.empty)
     }
 
   def zipWithNext[R :_Safe, A]: Transducer[R, A, (A, Option[A])] =
+    zipWithNextN(1).map { case (a, next) => (a, next.headOption) }
+
+  def zipWithNextN[R :_Safe, A](n: Int): Transducer[R, A, (A, List[A])] =
     (producer: Producer[R, A]) => {
-      def go(p: Producer[R, A], previous: A): Producer[R, (A, Option[A])] =
-        Producer(peek(p) flatMap {
-          case (Some(a), as) => (one((previous, Option(a))) append go(as, a)).run
-          case (None, _)     => one[R, (A, Option[A])]((previous, None)).run
-        })
-      Producer(peek(producer) flatMap {
-        case (Some(a), as) => go(as, a).run
-        case (None, _) => done.run
+      Producer(peekN(producer, n + 1) flatMap { case (next, as) =>
+        if (next.isEmpty)
+          done.run
+        else
+          (one((next.head, next.drop(1))) append producer.drop(1).zipWithNextN(n)).run
       })
     }
 
   def zipWithPreviousAndNext[R :_Safe, A]: Transducer[R, A, (Option[A], A, Option[A])] =
+    zipWithPreviousAndNextN(n = 1).map { case (prev, a, next) => (prev.headOption, a, next.headOption) }
+
+  def zipWithPreviousAndNextN[R :_Safe, A](n: Int): Transducer[R, A, (List[A], A, List[A])] =
     (p: Producer[R, A]) =>
-      ((p |> zipWithPrevious) zip (p |> zipWithNext)).map { case ((prev, a), (_, next)) => (prev, a, next) }
+      ((p |> zipWithPreviousN(n)) zip (p |> zipWithNextN(n))).map { case ((prev, a), (_, next)) => (prev, a, next) }
 
 
   def zipWithIndex[R :_Safe, A]: Transducer[R, A, (A, Int)] =

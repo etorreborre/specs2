@@ -47,10 +47,10 @@ case class Producer[R :_Safe, A](run: Eff[R, Stream[R, A]]) {
           case One(b) => one((a, b)).run
 
           case More(bs, next) =>
-            bs.headOption.map(b => one[R, (A, B)]((a, b))).getOrElse(done).run
+            (bs.headOption.map(b => one[R, (A, B)]((a, b))).getOrElse(done) append (this.drop(1) zip other.drop(1))).run
         }
 
-      case More(Nil, next) => done.run
+      case More(Nil, next) => next.zip(other).run
 
       case More(as, nexta) =>
         other.run flatMap {
@@ -59,7 +59,7 @@ case class Producer[R :_Safe, A](run: Eff[R, Stream[R, A]]) {
 
           case More(bs, nextb) =>
             if (as.size == bs.size)
-              emit(as zip bs).run
+              (emit(as zip bs) append (nexta zip nextb)).run
             else if (as.size < bs.size)
               (emit(as zip bs) append (nexta zip (emit(bs.drop(as.size)) append nextb))).run
             else
@@ -298,6 +298,22 @@ trait Producers {
       case One(a) => (Option(a), done[R, A])
       case More(as, next) => (as.headOption, emit(as.tail) append next)
     }
+
+  def peekN[R :_Safe, A](producer: Producer[R, A], n: Int): Eff[R, (List[A], Producer[R, A])] = {
+    def go(p: Producer[R, A], collected: Vector[A]): Eff[R, (List[A], Producer[R, A])] =
+      p.run flatMap {
+        case Done() => Eff.pure((collected.toList, done[R, A]))
+        case One(a) => Eff.pure(((collected :+ a).take(n).toList, done[R, A]))
+        case More(as, next) =>
+          val all = collected ++ as
+          if (all.size >= n)
+            Eff.pure((all.take(n).toList, emit(all.drop(n).toList) append next))
+          else
+            go(next, all)
+      }
+
+    go(producer, Vector.empty)
+  }
 
   def flattenList[R :_Safe, A](producer: Producer[R, List[A]]): Producer[R, A] =
     producer.flatMap(emit[R, A])
