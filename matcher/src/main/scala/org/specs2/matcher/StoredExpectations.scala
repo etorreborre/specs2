@@ -15,8 +15,8 @@ trait StoredExpectations extends Expectations {
   }
 
   def storedResults: Seq[Result] = {
-    val failures = results.toSeq.filterNot(_.isSuccess)
-    val rs = results.toSeq.map {
+    val failures = results.filterNot(_.isSuccess)
+    val rs = results.map {
       case f: MatchFailure[_] if failures.size > 1 =>
         f.copy(ok = () => addLocation(f.okMessage, f.toResult.location), ko = () => addLocation(f.koMessage, f.toResult.location))
 
