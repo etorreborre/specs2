@@ -38,23 +38,17 @@ It is possible to relax the constraint by requiring the equality or containment 
  file1 must containLines(file2).unordered
 }}
 
-***Missing only***
+***Show differences***
 
-By default, `(file1, file2) must haveSameLines` will report misplaced lines if any, that is, lines of `f1` which appear in `f2` but not at the right position. However if `file2` is big, this search might degrade the performances. In that case you can turn it off with `missingOnly`: ${snippet{
+By default only the different lines are being shown with a bit of context (lines before and after the differences).
+You can however change this strategy. For example if there are too many differences, you can specify that you only want the first 10: ${snippet{
 
- (file1, file2) must haveSameLines.missingOnly
-
-}}
-
-***Show less differences***
-
-If there are too many differences, you can specify that you only want the first 10: ${snippet{
-
- (file1, file2) must haveSameLines.showOnly(10.differences).unordered
+ (file1, file2) must haveSameLines.showOnly(10.differences)
 
 }}
 
-In the code above `10.differences` builds a `DifferenceFilter` which is merely a filtering function: `(lines1: Seq[String], lines2: Seq[String]) => (Seq[String], Seq[String])`. The parameter `lines1` is the sequence of lines not found in the second content while `lines2` is the sequence of lines not found in the first content.
+In the code above `10.differences` builds a `DifferenceFilter` which is merely a filtering function: `(lines: Seq[LineComparison]) => Seq[LineComparison])`
+keeping the first 10 differences. A `LineComparison` is the result of comparing a list of lines, either a line has been added, deleted, modified or is the same.
 
 ##### Directories contents
 

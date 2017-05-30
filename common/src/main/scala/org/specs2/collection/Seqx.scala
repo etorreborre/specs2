@@ -51,7 +51,7 @@ trait Seqx { outer =>
     }
 
     /**
-     * @return all the elements in seq which are not in other, even if they are duplicates: Seq(1, 1).diff(Seq(1)) == Seq(1)
+     * @return all the elements in seq which are not in other, even if they are duplicates: Seq(1, 1).delta(Seq(1)) == Seq(1)
      *         this uses a user given comparison function
      */
     def delta[S](other: Seq[S], compare: (T, S) => Boolean): Seq[T] = {

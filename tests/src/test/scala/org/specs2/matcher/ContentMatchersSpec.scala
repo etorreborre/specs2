@@ -7,6 +7,7 @@ import control._
 import text.LinesContent
 import java.io.File
 import scalaz.syntax.bind._
+import org.specs2.text.AnsiColors._
 
 class ContentMatchersSpec extends Spec with LinesContentMatchers with BeforeAfterEach with FileSystem with TestFileNames { def is = sequential ^ s2"""
 
@@ -19,7 +20,7 @@ class ContentMatchersSpec extends Spec with LinesContentMatchers with BeforeAfte
    we can show only a given number of differences                                                        ${comp().e6}
    we can compare against a Seq of lines instead                                                         ${comp().e7}
    it works with duplicated lines                                                                        ${comp().e8}
-                                                                                                         """
+"""
 
   lazy val dir = "target" / "test" / "contents"
 
@@ -56,14 +57,14 @@ case class comp() extends MustMatchers with TestFileNames with ContentMatchers w
   def e4 = (dir | f1).toFile must containLines((dir | f4).toFile)
   def e5 = (dir | f1).toFile must containLines((dir | f5).toFile).unordered
 
-  def e6 = (((dir | f6).toFile, (dir | f7).toFile) must haveSameLines.showOnly(1.difference).unordered).message.split("\n").toSeq must
-              haveSameLinesAs(Seq(
-                s"${(dir | f6).path} is not the same as ${(dir | f7).path}",
-                s"  in ${(dir | f6).path}, not in ${(dir | f7).path}",
-                s"    2. morning",
-                s"",
-                s"  in ${(dir | f7).path}, not in ${(dir | f6).path}",
-                s"    2. day"))
+  def e6 = {
+    val message = (((dir | f6).toFile, (dir | f7).toFile) must haveSameLines.showOnly(1.difference).unordered).message
+    val lines = message.split("\n").toSeq.map(s => removeColors(s))
+println(lines)
+    lines must haveSameLinesAs(Seq(
+      s"${(dir | f6).path} is not the same as ${(dir | f7).path}",
+      s"      1. good"))
+  }
 
   def e7 = ((dir | f1).toFile, Seq("hello", "beautiful", "world")) must haveSameLines
 
