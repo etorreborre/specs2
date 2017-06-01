@@ -1,0 +1,26 @@
+Maintenance version
+
+## Improvements
+
+ * **matcher** implemented a much better display for content matchers to better show the differences between 2 files
+ * **matcher** added a `Diffable` for a list of lines using the edit distance to print added/deleted/modified lines
+ * **core** `Execution` now contains a `Future` result to allow display to happen as soon as possible
+ * **core** introduced an `AsExecution` typeclass to replace `CommandLineAsResult` to fix the passing of command line arguments to scalacheck properties
+ * **core** make `TypedEqual` object extend the `TypedEqual` trait [#566](https://github.com/etorreborre/specs2/issues/566) (thanks to Tin Pavlinic)
+ * **core**`ExampleDsl` can now be stacked on top of `Spec` without conflicts
+ * **project** make build Scala 2.13 friendly [#564](https://github.com/etorreborre/specs2/issues/564) (thanks to Seth Tisue)
+ * **mockito** upgraded to Mockito 2.0
+ * **project** added a sbt project to publish an aggregated pom file [#445](https://github.com/etorreborre/specs2/issues/445)
+ * **guide** added the `beLike` matcher to the user guide
+
+## Fixes
+
+ * **matcher** added the missing 8-arg version of the contain matcher fixed [#577](https://github.com/etorreborre/specs2/issues/577) (thanks to Joao Azevedo)
+ * **matcher** use `Diffable.identical` for `CaseClassPropertyComparison.identical` [#567](https://github.com/etorreborre/specs2/issues/567) (thanks to Torsten Schmits)
+ * **matcher** use nested `Diffable`s for equivalence in stdlib data classes [#568](https://github.com/etorreborre/specs2/issues/568) (thanks to Torsten Schmits)
+ * **core** set sbt's classloader on the thread running an execution to fix classloading issues in a multi-module build [#556](https://github.com/etorreborre/specs2/issues/556)
+ * **user guide** fixed the formatting in the user guide tabs
+ * **common** simplified match statement in the error effect [#571](https://github.com/etorreborre/specs2/issues/571) (thanks to Shunsuke Otani)
+ * **common** added a `tailrec` annotation [#563](https://github.com/etorreborre/specs2/issues/563) (thanks to Shunsuke Otani)
+ * **matcher** fix a `Diffable` bug for options [#569](https://github.com/etorreborre/specs2/issues/569) (Torsten Schmits)
+ * **core** fixed the `AllExpecations` trait which was not reporting issues anymore>
