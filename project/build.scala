@@ -118,6 +118,7 @@ object build extends Build {
 
   lazy val guide = Project(id = "guide", base = file("guide"),
     settings = moduleSettings("guide") ++
+      Seq(scalacOptions in Test := Seq("-Yrangepos", "-feature", "-language:_")) ++
       Seq(name := "specs2-guide") ++
       documentationSettings
   ).dependsOn(examples % "compile->compile;test->test", scalaz, shapeless)
