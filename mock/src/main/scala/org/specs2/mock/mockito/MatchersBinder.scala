@@ -7,11 +7,12 @@ package org.mockito.internal.invocation
 
 import java.io.Serializable
 import java.util.List
-import org.hamcrest.Matcher
-import org.mockito.exceptions.Reporter
+
+import org.mockito.internal.exceptions.Reporter
 import org.mockito.internal.progress.ArgumentMatcherStorage
 import org.mockito.invocation.Invocation
 import org.mockito.internal.matchers.LocalizedMatcher
+import scala.collection.JavaConverters._
 
 /**
  * This class is duplicated to allow some side-effect to happen during the evaluation of byname arguments
@@ -28,16 +29,16 @@ class MatchersBinder extends Serializable {
 
     val lastMatchers = argumentMatcherStorage.pullLocalizedMatchers
     validateMatchers(invocation, lastMatchers)
-    val invocationWithMatchers: InvocationMatcher = new InvocationMatcher(invocation, lastMatchers.asInstanceOf[List[Matcher[_]]])
+    val invocationWithMatchers: InvocationMatcher = new InvocationMatcher(invocation, lastMatchers.asScala.map(_.getMatcher).asJava)
     invocationWithMatchers
   }
 
-  private def validateMatchers(invocation: Invocation, lastMatchers: List[LocalizedMatcher]) {
+  private def validateMatchers(invocation: Invocation, lastMatchers: List[LocalizedMatcher]): Unit = {
     if (!lastMatchers.isEmpty) {
       val recordedMatchersSize: Int = lastMatchers.size
       val expectedMatchersSize: Int = invocation.getArguments.length
       if (expectedMatchersSize != recordedMatchersSize) {
-        new Reporter().invalidUseOfMatchers(expectedMatchersSize, lastMatchers)
+        throw Reporter.invalidUseOfMatchers(expectedMatchersSize, lastMatchers)
       }
     }
   }

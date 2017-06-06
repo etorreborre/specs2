@@ -43,7 +43,7 @@ class EventuallyResultsSpec extends Specification with ResultMatchers {
       def next: Int
     }
     val m = mock(classOf[ToMock])
-    (1 to 3).foreach(i => doReturn(i).when(m).next)
+    (1 to 3).foreach(i => doReturn(i, Nil:_*).when(m).next)
     eventually(m.next must_== 3) must beSuccessful
   }
 }

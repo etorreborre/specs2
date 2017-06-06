@@ -168,7 +168,7 @@ trait HtmlBodyPrinter {
         val missingValues = makeDifferencesMessage("Missing", missing)
         val details = List(addedValues, missingValues).mkString("\n")
 
-        <details class="failure">{"\n" + added + "\n" + missing}</details>
+        <details class="failure">{details}</details>
 
       case FailureSetDetails(expected, actual) if arguments.diffs.showSeq(expected.toSeq, actual.toSeq, ordered = false) =>
         val (added, missing) = arguments.diffs.showSeqDiffs(actual.toSeq, expected.toSeq, ordered = true)

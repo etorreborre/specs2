@@ -54,7 +54,7 @@ trait Classes {
    * Given a class, a zero or one-parameter constructor, return an instance of that class
    */
   private def createInstanceForConstructor[T <: AnyRef : ClassTag](klass: Class[_], constructor: Constructor[_],
-                                                                   loader: ClassLoader, defaultInstances: List[AnyRef] = Nil): Operation[T] = {
+                                                                   loader: ClassLoader, defaultInstances: List[AnyRef]): Operation[T] = {
 
     constructor.setAccessible(true)
     if (constructor.getParameterTypes.isEmpty)

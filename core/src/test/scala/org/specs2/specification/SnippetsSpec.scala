@@ -4,6 +4,7 @@ package specification
 import matcher._
 import execute.Snippet._
 import core._
+import control.Use
 
 class SnippetsSpec extends script.Spec with Snippets with DataTables with Grouped with TypedEqual { def is = sequential ^ s2"""
 
@@ -90,10 +91,12 @@ n = 1
 n = 0
 // 8<--
 var i = 0
+i = 1
   } }""".trimmedTexts(1) ===
     """```
       |n = 1
       |var i = 0
+      |i = 1
       |```""".stripMargin
 
    eg := s2""" code ${snippet { "e1" ! { ok } /**/;1/**/} }""".trimmedTexts(1) === """`"e1" ! { ok }`"""
@@ -147,11 +150,13 @@ n = 0
   "results" - new group {
     eg := s2""" code: ${ snippet {
   var n = 1
-  1 + n
-  }.eval.offsetIs(-2) }""".trimmedTexts.drop(1).take(2).mkString("\n") ===
+  n = 1 + n
+  n
+  }.eval.offsetIs(-2) }""".trimmedTexts.drop(1).take(3).mkString("\n") ===
     """|```
        |var n = 1
-       |1 + n
+       |n = 1 + n
+       |n
        |```
        |`> 2`""".stripMargin
   }
@@ -177,6 +182,8 @@ n = 0
 
     eg := {
       def function[T, S](t: T, s: S) = ""
+      Use(function(1, 1))
+
       "code"                                                        || "markdown"                                      |>
       s"""the method `${termName(function(1, ""))}`"""              !! "the method `function`"                         |
       s"""the method `${termName(function[Int, String](1, ""))}`""" !! "the method `function`"                         |

@@ -73,18 +73,19 @@ trait ArgumentsCreation {
 
     /** shorthand method to create an Arguments object */
     def execute(
-      plan:               ArgProperty[Boolean]           = ArgProperty[Boolean](),
-      skipAll:            ArgProperty[Boolean]           = ArgProperty[Boolean](),
-      stopOnFail:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
-      stopOnSkip:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
-      sequential:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
-      asap:               ArgProperty[Boolean]           = ArgProperty[Boolean](),
-      isolated:           ArgProperty[Boolean]           = ArgProperty[Boolean](),
-      threadsNb:          ArgProperty[Int]               = ArgProperty[Int](),
-      scheduledThreadsNb: ArgProperty[Int]               = ArgProperty[Int](),
-      batchSize:          ArgProperty[Int]               = ArgProperty[Int](),
-      timeFactor:         ArgProperty[Int]               = ArgProperty[Int](),
-      executor:           ArgProperty[String]            = ArgProperty[String]()
+      plan:                 ArgProperty[Boolean]           = ArgProperty[Boolean](),
+      skipAll:              ArgProperty[Boolean]           = ArgProperty[Boolean](),
+      stopOnFail:           ArgProperty[Boolean]           = ArgProperty[Boolean](),
+      stopOnSkip:           ArgProperty[Boolean]           = ArgProperty[Boolean](),
+      sequential:           ArgProperty[Boolean]           = ArgProperty[Boolean](),
+      asap:                 ArgProperty[Boolean]           = ArgProperty[Boolean](),
+      isolated:             ArgProperty[Boolean]           = ArgProperty[Boolean](),
+      useCustomClassLoader: ArgProperty[Boolean]           = ArgProperty[Boolean](),
+      threadsNb:            ArgProperty[Int]               = ArgProperty[Int](),
+      scheduledThreadsNb:   ArgProperty[Int]               = ArgProperty[Int](),
+      batchSize:            ArgProperty[Int]               = ArgProperty[Int](),
+      timeFactor:           ArgProperty[Int]               = ArgProperty[Int](),
+      executor:             ArgProperty[String]            = ArgProperty[String]()
     ) = new Arguments(
        execute = Execute(plan.toOption,
                skipAll.toOption,
@@ -93,6 +94,7 @@ trait ArgumentsCreation {
                sequential.toOption,
                asap.toOption,
                isolated.toOption,
+               useCustomClassLoader.toOption,
                threadsNb.toOption,
                scheduledThreadsNb.toOption,
                batchSize.toOption,

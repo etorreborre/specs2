@@ -16,7 +16,6 @@ class Interpolated(stringContent: String, texts: Seq[String]) extends Interpolat
       val minusText = new String(content.drop(text.size).mkString).
                         replace("$$", "$") // in next, this replacement has already been done
       val textToParse = new String(if (minusText.indexOf(next) > 0) minusText.substring(0, minusText.indexOf(next)) else minusText)
-      val fromDollar = textToParse.startFrom("$")
       val expression = interpolatedString(new CharSequenceReader(textToParse)) match {
         case Success(e, _) => e
         case Failure(m, _) => m

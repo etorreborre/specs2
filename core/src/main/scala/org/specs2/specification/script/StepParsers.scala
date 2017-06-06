@@ -3,7 +3,7 @@ package specification
 package script
 
 import util.matching.Regex
-import control.ImplicitParameters
+import control.{ImplicitParameters, Use}
 import control.Exceptions._
 import text.RegexExtractor
 
@@ -48,8 +48,6 @@ trait StepParsers extends ImplicitParameters {
     def apply(f: (String, String, String, String, String, String, String, String, String, String) => Unit) = and[Unit](f)
     def apply(f: Seq[String] => Unit)(implicit p: ImplicitParam) = and[Unit](f)(p,p)
 
-    private def value[T](t: =>T) = trye(t)(identity)
-
     trait ReadAsParser[T] extends StepParser[T] {
       def parse(text: String) = trye((text, parse1(text)))(identity)
       def run(text: String) = trye(parse1(text))(identity)
@@ -88,6 +86,7 @@ trait StepParsers extends ImplicitParameters {
       def parse1(text: String) = f.tupled(extract10(text, regex, groups))
     }
     def and[T](f: Seq[String] => T)(implicit p1: ImplicitParam, p2: ImplicitParam) = new ReadAsParser[T] {
+      Use(p1, p2)
       def parse1(text: String) = f(extractAll(text, regex, groups))
     }
   }

@@ -6,7 +6,6 @@ import ast._
 import scala.io.Source
 import scala.xml._
 import parsing.XhtmlParser
-import main.Arguments
 import control.Exceptions._
 import Trim._
 
@@ -19,7 +18,7 @@ trait Markdown {
    * @return a Markdown processor
    *         for now QUOTES and SMARTS are not rendered to avoid  <?> characters to appear on html pages
    */
-  def processor(implicit args: Arguments) =
+  def processor =
     new PegDownProcessor(
       ~Extensions.QUOTES &
       ~Extensions.SMARTS &
@@ -31,14 +30,14 @@ trait Markdown {
    * code tags are prettified and newlines in paragraphs are
    * transformed to <br/> tags
    */
-  def toHtml(text: String, options: MarkdownOptions = MarkdownOptions())(implicit args: Arguments) = {
+  def toHtml(text: String, options: MarkdownOptions = MarkdownOptions()) = {
     (new Specs2Visitor(text, options)).toHtml(processor.parseMarkdown(text.replace("\\\\n", "\n").toCharArray))
   }
 
   /**
    * parse the markdown string and return html without the enclosing paragraph
    */
-  def toHtmlNoPar(text: String, options: MarkdownOptions = MarkdownOptions())(implicit args: Arguments) = {
+  def toHtmlNoPar(text: String, options: MarkdownOptions = MarkdownOptions()) = {
     val html = toHtml(text, options)
     if (!text.contains("\n") || text.trim.isEmpty) html.removeEnclosingXmlTag("p") else html
   }
@@ -46,7 +45,7 @@ trait Markdown {
   /**
    * parse the markdown string and return xml (unless the arguments deactivate the markdown rendering)
    */
-  def toXhtml(text: String, options: MarkdownOptions = MarkdownOptions())(implicit args: Arguments): NodeSeq = {
+  def toXhtml(text: String, options: MarkdownOptions = MarkdownOptions()): NodeSeq = {
     val html = toHtmlNoPar(text, options)
     parse(html) match {
       case Some(f) => f
@@ -54,7 +53,7 @@ trait Markdown {
     }
   }
 
-  private def parse(html: String)(implicit args: Arguments) = {
+  private def parse(html: String) = {
     tryo(XhtmlParser(Source.fromString("<text>"+html+"</text>")).head.child)
   }
 }

@@ -44,7 +44,7 @@ trait ThrownExpectables extends ExpectationsCreation {
 
       override def evaluateOnce = {
         val v = t
-        createExpectable(t, desc)
+        createExpectable(v, desc)
       }
     }
 

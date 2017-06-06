@@ -77,11 +77,11 @@ trait DefaultExecutor extends Executor {
     val init: S = (Vector.empty, Vector.empty, false)
     val arguments = env.arguments
 
-    def executeFragments(fs: Seq[Fragment], timeout: Option[FiniteDuration] = None): AsyncStream[Fragment] =
+    def executeFragments(fs: Seq[Fragment], timeout: Option[FiniteDuration]): AsyncStream[Fragment] =
       if (arguments.sequential) emitEff(fs.toList.traverse(f => executeOneFragment(f, timeout)))
       else                      emitEff(fs.toList.traverseA(f => executeOneFragment(f, timeout)))
 
-    def executeOneFragment(f: Fragment, timeout: Option[FiniteDuration] = None): Action[Fragment] = {
+    def executeOneFragment(f: Fragment, timeout: Option[FiniteDuration]): Action[Fragment] = {
       if (arguments.sequential) asyncDelayAction(executeFragment(env, timeout)(f))
       else                      asyncForkAction(executeFragment(env, timeout)(f), env.executionContext).futureAttempt.map {
         case Left(t: TimeoutException) => executeFragment(env, timeout)(f.setExecution(Execution.result(Skipped("timeout"+timeout.map(" after "+_).getOrElse("")))))

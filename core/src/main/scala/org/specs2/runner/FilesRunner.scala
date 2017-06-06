@@ -32,7 +32,7 @@ trait FilesRunner {
         _     <- Actions.delayed(env.shutdown)
       } yield stats
 
-      execute(actions, env.arguments, exit)(env.executionContext)
+      execute(actions, env.arguments, exit)
   }
 
   def run(env: Env): Action[Stats] = {

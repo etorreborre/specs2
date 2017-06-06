@@ -128,7 +128,6 @@ case class ScalaCheckFunction1[T, R](execute: T => R,
 
   private implicit val asResult1  = asResult
   private implicit val arbitrary1 = arbitrary
-  private implicit val shrink1    = shrink
   private implicit val pretty1    = pretty
 
   lazy val propFunction = (t: T) => {

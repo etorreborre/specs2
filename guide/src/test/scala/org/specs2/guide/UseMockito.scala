@@ -102,7 +102,7 @@ mocked.contains("o") must beTrue
 ### With matchers
 
 The built-in Mockito argument matchers can be used to specify the method arguments for stubbing: ${snippet{
-m.get(org.mockito.Matchers.anyInt()) returns "element"
+m.get(org.mockito.ArgumentMatchers.anyInt) returns "element"
 m.get(999) must_== "element"
 }}
 
@@ -212,7 +212,7 @@ there was one(m1).get(1) andThen one(m2).get(2) andThen one(m3).get(3)
 When specifying the behavior of an object in relation to others you may want to verify that some mocks have been called as collaborators and you don't really want to specify what happens to other mocks because they are just playing the role of stubs.
 
 In this case the `ignoreStubs` method can be used: ${snippet{
-val (stub1, stub2) = (mock[AStub], mock[AStub])
+val (stub1: AStub, stub2: AStub) = (mock[AStub], mock[AStub])
 there were noMoreCallsTo(ignoreStubs(stub1, stub2))
 }}
 
@@ -253,7 +253,7 @@ As advised in the Mockito documentation, `doReturn` must be used in that case: $
 // 8<--
 val spiedList = spy(new LinkedList[String])
 // 8<--
-org.mockito.Mockito.doReturn("one").when(spiedList).get(0)
+org.mockito.Mockito.doReturn("one", Nil:_*).when(spiedList).get(0)
 }}
 
 #### Functions / PartialFunctions

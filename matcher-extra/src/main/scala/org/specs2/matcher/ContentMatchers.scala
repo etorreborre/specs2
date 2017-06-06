@@ -2,7 +2,9 @@ package org.specs2
 package matcher
 
 import java.io.File
-import org.specs2.text._
+
+import text._
+import AnsiColors._
 import io._
 import MatchResult._
 import scalaz.Scalaz._
@@ -29,7 +31,7 @@ trait LinesContentBaseMatchers extends DifferenceFilters with Expectations with 
 
   /** matches if 1 lines content contains the lines of the other one */
   def containLines[L1 : LinesContent, L2 : LinesContent](ls2: L2): LinesComparisonMatcher[L1, L2] =
-    LinesComparisonMatcher[L1, L2](ls2, partial = true)
+    LinesComparisonMatcher[L1, L2](ls2, all = false)
 
   // default implementation for reading file lines
   implicit protected val fileContentForMatchers: LinesContent[File] = FileLinesContent
@@ -39,10 +41,10 @@ trait LinesContentBaseMatchers extends DifferenceFilters with Expectations with 
    */
   case class LinesComparisonMatcher[L1 : LinesContent, L2 : LinesContent](
     ls2: L2,
-    partial: Boolean = false,
-    isUnordered: Boolean = false,
-    reportMisplaced: Boolean = true,
-    filter: DifferenceFilter = AllDifferences) extends Matcher[L1] {
+    all: Boolean = true,
+    ordered: Boolean = true,
+    colors: Boolean = true,
+    filter: DifferenceFilter = DifferencesClips()) extends Matcher[L1] {
 
     def apply[S <: L1](t: Expectable[S]): MatchResult[S] = {
       val ls1 = t.value
@@ -51,54 +53,55 @@ trait LinesContentBaseMatchers extends DifferenceFilters with Expectations with 
       val (name1, name2) = (content1.name(ls1), content2.name(ls2))
       val (n1, n2) = if (name1 == name2) ("the first "+name1, "the second "+name1) else (name1, name2)
 
-      val diffs = content1.differences(ls1, ls2, partial, isUnordered, reportMisplaced)
-      val (in1Not2, in2Not1) = filter(diffs.show)
+      val diffs = content1.differences(ls1, ls2, all, ordered)
 
       result(diffs.isEmpty,
              n1+" "+okMessage+" "+n2,
              n1+" "+koMessage+" "+n2+"\n"+
-             inANotB(n1, n2) + showDiffs(in1Not2)+"\n"+
-             inANotB(n2, n1) + showDiffs(in2Not1),
+             showDiffs(filter(diffs.show))+"\n",
              t)
     }
 
-    def showOnly(show: DifferenceFilter) = copy[L1, L2](filter = show)
-    def unordered                        = copy[L1, L2](isUnordered = true)
-    def missingOnly                      = copy[L1, L2](reportMisplaced = false)
+    def showWith(show: DifferenceFilter) = copy[L1, L2](filter = show)
+    def unordered                        = copy[L1, L2](ordered = false)
+    def nocolors                         = copy[L1, L2](colors = false)
 
-    protected def showDiffs(s: Seq[_]) = s.map("    "+_).mkString("", "\n", "\n")
-    protected def inANotB(n1: String, n2: String) = {
-      if (isUnordered || reportMisplaced) "  in "+n1+", not in "+n2+"\n"
-      else                                "  in "+n1+", not in "+n2+" on the same line\n"
+    protected def showDiffs(s: Seq[_]): String =
+      s.flatMap {
+        case SameLine(NumberedLine(n, l))    => List(s"  $n. $l")
+        case AddedLine(NumberedLine(n, l))   => List(color(s"+ $n. $l", green))
+        case DeletedLine(NumberedLine(n, l)) => List(color(s"- $n. $l", red))
 
-    }
+        case DifferentLine(NumberedLine(n1, l1), NumberedLine(n2, l2)) =>
+          List(color(s"+ $n1. $l1", green), color(s"- $n2. $l2", red))
+      }.map("    "+_).mkString("", "\n", "\n")
 
     protected def okMessage =
-      if (partial) "contains"
-      else         "is the same as"
+      if (all) "is the same as"
+      else     "contains"
 
     protected def koMessage = {
-      if (partial) "does not contain"
-      else         "is not the same as"
+      if (all) "is not the same as"
+      else     "does not contain"
     }
 
   }
 
-  case class LinesPairComparisonMatcher[L1 : LinesContent, L2 : LinesContent](partial: Boolean = false,
-                                                                              isUnordered: Boolean = false,
-                                                                              reportMisplaced: Boolean = true,
-                                                                              filter: DifferenceFilter = AllDifferences)
+  case class LinesPairComparisonMatcher[L1 : LinesContent, L2 : LinesContent](all: Boolean = true,
+                                                                              ordered: Boolean = true,
+                                                                              colors: Boolean = true,
+                                                                              filter: DifferenceFilter = DifferencesClips())
     extends Matcher[(L1, L2)] {
 
     def apply[S <: (L1, L2)](t: Expectable[S]): MatchResult[S] = {
       val (ls1, ls2) = t.value
-      new LinesComparisonMatcher[L1, L2](ls2, partial, isUnordered, reportMisplaced, filter).
+      new LinesComparisonMatcher[L1, L2](ls2, all, ordered, colors, filter).
         apply(createExpectable(ls1)).map((_:L1) => t.value)
     }
 
     def showOnly(show: DifferenceFilter) = copy[L1, L2](filter = show)
-    def unordered                        = copy[L1, L2](isUnordered = true)
-    def missingOnly                      = copy[L1, L2](reportMisplaced = false)
+    def unordered                        = copy[L1, L2](ordered = false)
+    def nocolors                         = copy[L1, L2](colors = false)
   }
 
 }
@@ -111,7 +114,8 @@ trait LinesContentBaseMatchers extends DifferenceFilters with Expectations with 
 private[specs2]
 trait SeqsContents {
   // default implementation for reading seq lines
-  implicit protected def seqContentForMatchers[T]: LinesContent[Seq[T]] = SeqLinesContent[T]()
+  implicit protected def seqContentForMatchers[T, CC[_] <: Traversable[_]]: LinesContent[CC[T]] =
+    SeqLinesContent[T, CC]()
 
 }
 
@@ -120,7 +124,9 @@ trait LinesContentBeHaveMatchers extends BeHaveMatchers { this: LinesContentBase
   /**
    * matcher aliases and implicits to use with BeVerb and HaveVerb
    */
-  implicit def toLinesContentResultMatcher[L1 : LinesContent](result: MatchResult[L1]) = new LinesContentResultMatcher(result)
+  implicit def toLinesContentResultMatcher[L1 : LinesContent](result: MatchResult[L1]): LinesContentResultMatcher[L1] =
+    new LinesContentResultMatcher(result)
+
   class LinesContentResultMatcher[L1 : LinesContent](result: MatchResult[L1]) {
     def sameLinesAs[L2: LinesContent](ls2: L2) = result(haveSameLinesAs[L1, L2](ls2))
   }

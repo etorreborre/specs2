@@ -38,8 +38,17 @@ object build extends Build {
       Seq(name := "specs2", packagedArtifacts := Map.empty)
   ).aggregate(
     common, matcher, matcherExtra, core, cats, scalaz, html, analysis,
-    shapeless, form, markdown, gwt, junit, scalacheck, mock, tests)
+    shapeless, form, markdown, gwt, junit, scalacheck, mock, tests).
+    dependsOn(common, matcher, matcherExtra, core, cats, scalaz, html, analysis,
+              shapeless, form, markdown, gwt, junit, scalacheck, mock)
    .enablePlugins(GitBranchPrompt)
+
+  lazy val pom = Project(id = "pom", base = file("pom"),
+    settings =
+      moduleSettings("") ++ Seq(
+      name := "specs2")
+    ).dependsOn(common, matcher, matcherExtra, core, cats, scalaz, html, analysis,
+                shapeless, form, markdown, gwt, junit, scalacheck, mock)
 
   /** COMMON SETTINGS */
   lazy val specs2Settings: Seq[Settings] = Seq(
@@ -109,6 +118,7 @@ object build extends Build {
 
   lazy val guide = Project(id = "guide", base = file("guide"),
     settings = moduleSettings("guide") ++
+      Seq(scalacOptions in Test := Seq("-Yrangepos", "-feature", "-language:_")) ++
       Seq(name := "specs2-guide") ++
       documentationSettings
   ).dependsOn(examples % "compile->compile;test->test", scalaz, shapeless)
@@ -244,13 +254,13 @@ object build extends Build {
     addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.3"),
     scalacOptions in Test ++= Seq("-Yrangepos"),
     scalacOptions in (Compile, doc) ++= Seq("-feature", "-language:_"),
-    scalacOptions in (Compile, console) ++= Seq("-Yrangepos", "-feature", "-language:_"),
-    scalacOptions in (Test, console) ++= Seq("-Yrangepos", "-feature", "-language:_")
+    scalacOptions in (Compile, console) := Seq("-Yrangepos", "-feature", "-language:_"),
+    scalacOptions in (Test, console) := Seq("-Yrangepos", "-feature", "-language:_")
   )
 
   lazy val si2712 =
     scalacOptions ++=
-      (if (CrossVersion.partialVersion(scalaVersion.value).exists(_._2 >= 12)) Seq("-Ypartial-unification")
+      (if (CrossVersion.partialVersion(scalaVersion.value).exists(_._2 >= 11)) Seq("-Ypartial-unification")
        else Seq())
 
   lazy val testingSettings: Seq[Settings] = Seq(

@@ -7,7 +7,7 @@ import java.util.concurrent.ExecutorService
 
 import org.specs2.concurrent.ExecutionEnv
 import org.specs2.execute.AsResult
-import control.ImplicitParameters
+import control.{ImplicitParameters, Use}
 import ImplicitParameters._
 import org.specs2.main.CommandLine
 import org.specs2.specification.core._
@@ -39,22 +39,22 @@ trait ExampleDsl1 extends BlockDsl with ExampleDsl0 {
 
   class BlockExample(d: String) extends BlockExample0(d) {
     def >>[R](f: String => R)(implicit asResult: AsResult[R], p1: ImplicitParam1, p2: ImplicitParam2): Fragment =
-      >>(Execution.result(f(d)))
+      Use.ignoring(p1, p2) { >>(Execution.result(f(d))) }
 
     def >>[R](f: CommandLine => R)(implicit asResult: AsResult[R], p: ImplicitParam): Fragment =
-      >>(Execution.withEnv((env: Env) => asResult.asResult(f(env.arguments.commandLine))))
+      Use.ignoring(p) { >>(Execution.withEnv((env: Env) => asResult.asResult(f(env.arguments.commandLine)))) }
 
     def >>[R](f: Env => R)(implicit asResult: AsResult[R], p1: ImplicitParam1): Fragment =
-      >>(Execution.withEnv((env: Env) => asResult.asResult(f(env))))
+      Use.ignoring(p1) { >>(Execution.withEnv((env: Env) => asResult.asResult(f(env)))) }
 
     def >>[R](f: ExecutionContext => R)(implicit asResult: AsResult[R], p2: ImplicitParam2): Fragment =
-      >>(Execution.withExecutionContext(f))
+      Use.ignoring(p2) { >>(Execution.withExecutionContext(f)) }
 
     def >>[R](f: ExecutionEnv => R)(implicit asResult: AsResult[R], p3: ImplicitParam3): Fragment =
-      >>(Execution.withExecutionEnv(f))
+      Use.ignoring(p3) { >>(Execution.withExecutionEnv(f)) }
 
     def >>[R](f: ExecutorService => R)(implicit asResult: AsResult[R], p4: ImplicitParam4): Fragment =
-      >>(Execution.withExecutorService(f))
+      Use.ignoring(p4) { >>(Execution.withExecutorService(f)) }
 
     def >>(execution: Execution): Fragment = {
       addFragment(fragmentFactory.example(Text(d), execution))
@@ -68,17 +68,35 @@ trait ExampleDsl1 extends BlockDsl with ExampleDsl0 {
       addFragment(fragmentFactory.break)
     }
 
-    def in[R](f: String => R)(implicit ar: AsResult[R], p1: ImplicitParam1, p2: ImplicitParam2): Fragment = >>(f)(ar, p1, p2)
-    def in(f: =>Fragment): Fragment = describe(d) >> f
-    def in(fs: =>Fragments)(implicit p1: ImplicitParam1): Fragments = describe(d).>>(fs)(p1)
+    def in[R](f: String => R)(implicit ar: AsResult[R], p1: ImplicitParam1, p2: ImplicitParam2): Fragment =
+      >>(f)(ar, p1, p2)
 
-    def in[R](f: CommandLine => R)(implicit asResult: AsResult[R], p: ImplicitParam): Fragment = >>(f)(asResult, p)
-    def in[R](f: Env => R)(implicit asResult: AsResult[R], p1: ImplicitParam1): Fragment = d.>>(f)(asResult, p1)
-    def in[R](f: ExecutionContext => R)(implicit asResult: AsResult[R], p2: ImplicitParam2): Fragment = d.>>(f)(asResult, p2)
-    def in[R](f: ExecutionEnv => R)(implicit asResult: AsResult[R], p3: ImplicitParam3): Fragment = d.>>(f)(asResult, p3)
-    def in[R](f: ExecutorService => R)(implicit asResult: AsResult[R], p4: ImplicitParam4): Fragment = d.>>(f)(asResult, p4)
-    def in[R: AsResult](parser: StepParser[R]): Fragment = d.>>(parser)
-    def in(execution: Execution): Fragment = d >> execution
+    def in(f: =>Fragment): Fragment =
+      describe(d) >> f
+
+    def in(fs: =>Fragments)(implicit p1: ImplicitParam1): Fragments =
+      describe(d).>>(fs)(p1)
+
+    def in[R](f: CommandLine => R)(implicit asResult: AsResult[R], p: ImplicitParam): Fragment =
+      >>(f)(asResult, p)
+
+    def in[R](f: Env => R)(implicit asResult: AsResult[R], p1: ImplicitParam1): Fragment =
+      d.>>(f)(asResult, p1)
+
+    def in[R](f: ExecutionContext => R)(implicit asResult: AsResult[R], p2: ImplicitParam2): Fragment =
+      d.>>(f)(asResult, p2)
+
+    def in[R](f: ExecutionEnv => R)(implicit asResult: AsResult[R], p3: ImplicitParam3): Fragment =
+      d.>>(f)(asResult, p3)
+
+    def in[R](f: ExecutorService => R)(implicit asResult: AsResult[R], p4: ImplicitParam4): Fragment =
+      d.>>(f)(asResult, p4)
+
+    def in[R: AsResult](parser: StepParser[R]): Fragment =
+      d.>>(parser)
+
+    def in(execution: Execution): Fragment =
+      d >> execution
   }
 }
 
@@ -90,19 +108,28 @@ trait ExampleDsl0 extends BlockCreation {
   implicit def blockExample0(d: String): BlockExample0 = new BlockExample0(d)
 
   class BlockExample0(d: String) {
-    def >>(f: =>Fragment): Fragment = addBlock(d, f, addFragmentBlock)
+    def >>(f: =>Fragment): Fragment =
+      addBlock(d, f, addFragmentBlock)
 
-    def >>(fs: =>Fragments)(implicit p1: ImplicitParam1): Fragments = addBlock(d, fs, addFragmentsBlock)
+    def >>(fs: =>Fragments)(implicit p1: ImplicitParam1): Fragments =
+      Use.ignoring(p1) { addBlock(d, fs, addFragmentsBlock) }
 
     def >>[R : AsExecution](r: =>R): Fragment = {
       addFragment(fragmentFactory.example(Text(d), AsExecution.apply[R].execute(r)))
       addFragment(fragmentFactory.break)
     }
 
-    def should(f: => Fragment): Fragment                                 = addBlock(s"$d should", f, addFragmentBlock)
-    def should(fs: => Fragments)(implicit p1: ImplicitParam1): Fragments = addBlock(s"$d should", fs, addFragmentsBlock)
-    def can(fs: => Fragments)(implicit p1: ImplicitParam1): Fragments    = addBlock(s"$d can",    fs, addFragmentsBlock)
-    def can(f: => Fragment): Fragment                                    = addBlock(s"$d can",    f, addFragmentBlock)
+    def should(f: => Fragment): Fragment =
+      addBlock(s"$d should", f, addFragmentBlock)
+
+    def should(fs: => Fragments)(implicit p1: ImplicitParam1): Fragments =
+      Use.ignoring(p1) { addBlock(s"$d should", fs, addFragmentsBlock) }
+
+    def can(fs: => Fragments)(implicit p1: ImplicitParam1): Fragments =
+      Use.ignoring(p1) { addBlock(s"$d can", fs, addFragmentsBlock) }
+
+    def can(f: => Fragment): Fragment =
+      addBlock(s"$d can", f, addFragmentBlock)
 
     def in[R : AsResult](r: =>R): Fragment = d >> r
   }

@@ -54,7 +54,7 @@ trait MockitoStubs extends MocksCreation with MockitoStubsLowerImplicits {
   implicit def aStubber(stub: =>Stubber) = new AStubber(stub)
   /** provide stub chain methods. */
   class AStubber[T](stub: =>Stubber) {
-    def thenReturn(t: T) = stub.doReturn(t)
+    def thenReturn(t: T) = stub.doReturn(t, List():_*)
     def thenThrow[E <: Throwable](e: E) = stub.doThrow(e)
   }
   /** @return an object allowing the chaining of stub values. */

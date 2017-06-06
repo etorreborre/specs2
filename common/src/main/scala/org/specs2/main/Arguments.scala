@@ -44,6 +44,7 @@ case class Arguments (
   def threadsNb: Int                  = execute.threadsNb
   def batchSize: Int                  = execute.batchSize
   def scheduledThreadsNb: Int         = execute.scheduledThreadsNb
+  def useCustomClassLoader: Boolean   = execute.useCustomClassLoader
 
   def xonly: Boolean                  = report.xonly
   def canShow(s: String)              = report.canShow(s)

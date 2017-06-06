@@ -19,8 +19,6 @@ import specification.core._
 import Actions._
 import eff.ErrorEffect._
 
-import scala.concurrent.ExecutionContext
-
 /**
  * Runner for Sbt
  */
@@ -33,7 +31,11 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
   /** create a new test task */
   def newTask(aTaskDef: TaskDef) =
     new Task {
-      lazy val env = Env(arguments = commandLineArguments).copy(customClassLoader = Some(loader))
+      lazy val env: Env =
+        if (commandLineArguments.useCustomClassLoader)
+          Env(arguments = commandLineArguments).setCustomClassLoader(loader)
+        else
+          Env(arguments = commandLineArguments)
 
       // the specification to execute with error messages if it cannot be instantiated
       lazy val specStructure: (Error \/ Option[SpecStructure], List[String]) = {
@@ -195,19 +197,18 @@ trait SpecificationFingerprint extends SubclassFingerprint {
 object sbtRun extends SbtRunner(Array(), Array(), Thread.currentThread.getContextClassLoader) {
   def main(arguments: Array[String]) {
     val env = Env(Arguments(arguments:_*))
-    implicit lazy val ec: ExecutionContext = env.executionContext
 
     try exit(start(arguments: _*))
     finally env.shutdown
   }
 
-  def exit(action: Action[Stats])(implicit ec: ExecutionContext): Unit = {
+  def exit(action: Action[Stats]): Unit = {
     runAction(action).fold(
       err => System.exit(100),
       ok  => if (ok.isSuccess) System.exit(0) else System.exit(1))
   }
 
-  def start(arguments: String*)(implicit ec: ExecutionContext): Action[Stats] = {
+  def start(arguments: String*): Action[Stats] = {
     if (arguments.isEmpty)
       log("The first argument should at least be the specification class name") >>
       Actions.unit

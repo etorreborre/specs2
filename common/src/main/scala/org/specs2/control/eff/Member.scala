@@ -84,12 +84,9 @@ trait MemberInLower5 {
 trait MemberInOut[T[_], R] extends MemberIn[T, R] { outer =>
   def extract[V](union: Union[R, V]): Option[T[V]]
 
-  def transform[O[_]](implicit to: T ~> O, from: O ~> T): MemberIn[O, R] = new MemberIn[O, R] {
+  override def transform[O[_]](implicit from: O ~> T): MemberIn[O, R] = new MemberIn[O, R] {
     def inject[V](ov: O[V]): Union[R, V] =
       outer.inject(from(ov))
-
-    def extract[V](union: Union[R, V]): Option[O[V]] =
-      outer.extract(union).map(to.apply)
   }
 
   def transformUnion[A](nat: T ~> T)(union: Union[R, A]): Union[R, A] =
