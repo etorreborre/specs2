@@ -37,9 +37,9 @@ object build extends Build {
       siteSettings             ++
       Seq(name := "specs2", packagedArtifacts := Map.empty)
   ).aggregate(
-    common, matcher, matcherExtra, core, cats, scalaz, html, analysis,
+    common, matcher, matcherExtra, core, scalaz, html, analysis,
     shapeless, form, markdown, gwt, junit, scalacheck, mock, tests).
-    dependsOn(common, matcher, matcherExtra, core, cats, scalaz, html, analysis,
+    dependsOn(common, matcher, matcherExtra, core, scalaz, html, analysis,
               shapeless, form, markdown, gwt, junit, scalacheck, mock)
    .enablePlugins(GitBranchPrompt)
 
@@ -47,7 +47,7 @@ object build extends Build {
     settings =
       moduleSettings("") ++ Seq(
       name := "specs2")
-    ).dependsOn(common, matcher, matcherExtra, core, cats, scalaz, html, analysis,
+    ).dependsOn(common, matcher, matcherExtra, core, scalaz, html, analysis,
                 shapeless, form, markdown, gwt, junit, scalacheck, mock)
 
   /** COMMON SETTINGS */
@@ -171,18 +171,6 @@ object build extends Build {
           depends.shapeless(scalaVersion.value)
       )
   ).dependsOn(matcher)
-
-  lazy val cats = Project(id = "cats", base = file("cats"),
-    settings = moduleSettings("cats") ++
-      Seq(libraryDependencies ++= (
-        if (scalaMinorVersionAtLeast(scalaVersion.value, 12))
-          Seq()
-        else
-          depends.cats)) ++
-      Seq(name := "specs2-cats") ++
-      Seq((skip in compile) := scalaMinorVersionAtLeast(scalaVersion.value, 12),
-          publishArtifact := !scalaMinorVersionAtLeast(scalaVersion.value, 12))
-  ).dependsOn(matcher, core % "test->test")
 
   lazy val scalaz = Project(id = "scalaz", base = file("scalaz"),
     settings = moduleSettings("scalaz") ++
