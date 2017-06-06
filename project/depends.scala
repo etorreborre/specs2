@@ -18,13 +18,13 @@ object depends {
 
   def scalaParser(scalaVersion: String) =
     if (scalaMinorVersionAtLeast(scalaVersion, 11))
-      Seq("org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.4")
+      Seq("org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.6")
     else
       Seq()
 
   def scalaXML(scalaVersion: String) =
     if (scalaMinorVersionAtLeast(scalaVersion, 11))
-      Seq("org.scala-lang.modules" %% "scala-xml" % "1.0.5")
+      Seq("org.scala-lang.modules" %% "scala-xml" % "1.0.6")
     else
       Seq()
 
@@ -63,7 +63,7 @@ object depends {
 
   def scalaParallelCollections(scalaVersion: String) =
     if (scalaMinorVersionAtLeast(scalaVersion, 13))
-      Seq("org.scala-lang.modules" %% "scala-parallel-collections" % "0.1.1")
+      Seq("org.scala-lang.modules" %% "scala-parallel-collections" % "0.1.2")
     else
       Seq()
 
