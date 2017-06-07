@@ -170,7 +170,7 @@ object build extends Build {
           depends.paradise(scalaVersion.value) ++
           depends.shapeless(scalaVersion.value)
       )
-  ).dependsOn(matcher)
+  ).dependsOn(matcher, core % "test->test", matcherExtra % "test->test")
 
   lazy val scalaz = Project(id = "scalaz", base = file("scalaz"),
     settings = moduleSettings("scalaz") ++

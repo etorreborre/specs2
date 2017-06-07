@@ -8,7 +8,34 @@ object CaseClassMatchers extends UserGuideCard with MatcherMacros {
   def title = "Case class"
 
   def text = s2"""
-There is a special support for matching case classes, using a matcher macro. To use it you need to add the `specs2-matcher-extra` jar to your project and add the `org.specs2.matcher.MatcherMacros` trait to your specification.
+There is a special support for matching case classes:
+
+ 1. using shapeless to "project" a case class to another one containing less fields to match
+ 2. using a matcher macro
+
+Both approaches are not incompatible, you can restrict the number of fields to match the remaining fields with more
+ precise criteria.
+
+### Case class projection
+
+You need to add the `specs2-shapeless` module to your project dependencies and add the `org.specs2.shapeless.Projection._`
+import to your file.
+
+Then you can "project" a type `A` on a "smaller" type `B`:${snippet{
+import org.specs2.shapeless.Projection._
+    
+case class User(id: Int, name: String, age: Int)
+case class ExpectedUser(name: String, age: Int)
+
+
+val u = User(123, "Martin", 58)
+
+u.projectOn[ExpectedUser] must_== ExpectedUser("Martin", 58)
+}}
+
+### Matcher macro
+
+You to add the `specs2-matcher-extra` module to your project dependencies and add the `org.specs2.matcher.MatcherMacros` trait to your specification.
 
 Then, with the `matchA` matcher you can check the values of case class attributes:${snippet{
 // case class for a Cat
