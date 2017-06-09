@@ -9,7 +9,7 @@ import control._
 import producer._
 import scalaz.Scalaz.listMonoid
 
-class IsolatedExecutionSpec extends Spec { def is = s2"""
+class IsolatedExecutionSpec extends Spec { def is = skipAllIf(util.Properties.versionString.contains("2.11")) ^ s2"""
 
  We want to be able to isolate the execution of examples if isolated == true
  The isolated fragments must run with their own class instance

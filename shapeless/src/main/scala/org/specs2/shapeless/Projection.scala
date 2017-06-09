@@ -9,7 +9,9 @@ import org.specs2.control._
 trait Projection {
 
   def apply[A, B](prj: A => B): A ProjectsOn B =
-    (a: A) => prj(a)
+    new ProjectsOn[A, B] {
+      def apply(a: A): B = prj(a)
+    }
 
   // This allows us to obtain an implicit evidence parameter when A cannot be projected onto B.
   implicit def notProjectsOn[A, B] = new DoesNotProjectOn[A, B] {}
