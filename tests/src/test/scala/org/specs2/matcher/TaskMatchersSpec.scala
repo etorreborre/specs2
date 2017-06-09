@@ -4,14 +4,14 @@ package matcher
 import scalaz.concurrent.Task
 import scala.concurrent.duration._
 
-class TaskMatchersSpec extends mutable.Spec with TaskMatchers with ResultMatchers with Retries {
+class TaskMatchersSpec extends mutable.Specification with TaskMatchers with ResultMatchers with Retries {
+  sequential
 
   "It is possible to check the execution of tasks" >> {
     "check the return value" >> {
       { Task(1) must returnValue(1) }
       { (Task(1) must returnValue(2)) returns "1 != 2" }
     }
-
     "check that the task finishes before a given time" >> {
       { Task(1) must returnBefore(10.millis) }
       { (Task { Thread.sleep(50); 1 } must returnBefore(10.millis)) returns "Timeout after 10 milliseconds" }
@@ -23,7 +23,7 @@ class TaskMatchersSpec extends mutable.Spec with TaskMatchers with ResultMatcher
     }
 
     "check that the task fails with a specific type of exception" >> {
-      val a: Task[String] = Task.fail(new NullPointerException)
+      def a: Task[String] = Task.fail(new NullPointerException)
 
       { a must failWith[NullPointerException] }
       { (a must failWith[IllegalArgumentException]) must beFailing }

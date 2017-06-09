@@ -3,6 +3,7 @@ sudo: false
 language: scala
 
 scala:
+  - 2.11.11
   - 2.12.2
 
 jdk:
@@ -21,7 +22,7 @@ before_cache:
 
 script: 
   - sbt -jvm-opts .travis.jvmopts -sbt-version 0.13.15 -scala-version $TRAVIS_SCALA_VERSION ';clean ;test:compile'
-  - sbt -jvm-opts .travis.jvmopts -sbt-version 0.13.15 -scala-version $TRAVIS_SCALA_VERSION 'testOnly -- xonly timefactor 3 exclude travis neverstore'
+  - sbt -jvm-opts .travis.jvmopts -sbt-version 0.13.15 -scala-version $TRAVIS_SCALA_VERSION 'testOnly -- xonly timefactor 3  neverstore'
   - find $HOME/.sbt -name "*.lock" | xargs rm
   - find $HOME/.ivy2 -name "ivydata-*.properties" | xargs rm
 

@@ -59,9 +59,9 @@ class LinesContentDifferenceSpec extends Specification with AllExpectations { s2
       LinesContentDifference(ls1, ls2, all = false, ordered = true)
 
     diff(lines1, lines2) must not(beEmpty)
-    diff(lines1, lines3).show === Seq(SameLine(line1), SameLine(line2), AddedLine(line3), AddedLine(line4))
-    diff(lines3, lines1).show === Seq(SameLine(line1), SameLine(line2))
-    diff(lines3, lines4).show === Seq(AddedLine(line1), SameLine(line2))
+    diff(lines1, lines3).show === Seq(SameLine(line1), SameLine(line2))
+    diff(lines3, lines1).show === Seq(SameLine(line1), SameLine(line2), DeletedLine(line3), DeletedLine(line4))
+    diff(lines3, lines4).show === Seq(SameLine(line2), DeletedLine(line4))
   }
 
   "4. all = false, ordered = false" >> {
@@ -69,10 +69,10 @@ class LinesContentDifferenceSpec extends Specification with AllExpectations { s2
       LinesContentDifference(ls1, ls2, all = false, ordered = false)
 
     diff(lines1, lines2) must beEmpty
-    diff(lines1, lines3).show === Seq(SameLine(line1), SameLine(line2), AddedLine(line3), AddedLine(line4))
-    diff(lines3, lines1).show === Seq(SameLine(line1), SameLine(line2))
-    diff(lines3, lines4).show === Seq(AddedLine(line1), SameLine(line2))
-    diff(lines1, lines5).show === Seq(SameLine(line1), AddedLine(line2), SameLine(line3), SameLine(line4), DeletedLine(line3))
+    diff(lines1, lines3).show === Seq(SameLine(line1), SameLine(line2))
+    diff(lines3, lines1).show === Seq(SameLine(line1), SameLine(line2), DeletedLine(line3), DeletedLine(line4))
+    diff(lines3, lines4).show === Seq(SameLine(line2), DeletedLine(line4))
+    diff(lines1, lines5).show === Seq(SameLine(line1), SameLine(line3), SameLine(line4), DeletedLine(line3))
 
   }
 

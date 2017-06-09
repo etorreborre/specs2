@@ -6,8 +6,9 @@ import FutureApplicative._
 import scala.concurrent._
 import sys._
 import execute._
+import org.specs2.specification.core.Env
 
-class DataTablesSpec(implicit ee: ExecutionEnv) extends Specification with DataTables with ResultMatchers { def is = s2"""
+class DataTablesSpec extends Specification with DataTables with ResultMatchers { def is = s2"""
 
  DataTables are useful to specify lots of examples varying just by a few values.
 
@@ -32,14 +33,19 @@ class DataTablesSpec(implicit ee: ExecutionEnv) extends Specification with DataT
  =================
 
  The default execution model for DataTables is sequential. You can however execute the rows of a DataTable
-   by using `|*` and the execution function                                                                  $applicative1
+   by using `|*`                                                                                             $applicative1
    `|*>` can be used to specify concurrent execution + `play`                                                $applicative2
    by using an applicative result type, like `Future` and the `|@` operator                                  $applicative3
    `|@>` can be used to specify concurrent execution + `play`                                                $applicative4
-   A call to |* returns (es: ExecutorService) => Result                                                      $applicative5
-
+   A call to |* with a previous |> will also execute the table                                               $applicative5
+                                                                                                              
  Even if the execution is concurrent you will get the errors corresponding to each row                       $applicative6
+
+ ${step(env.shutdown)}
                                                                                                              """
+
+  val env = Env()
+  implicit val ee: ExecutionEnv = env.executionEnv
 
   def boom = error("boom")
 
@@ -178,7 +184,7 @@ class DataTablesSpec(implicit ee: ExecutionEnv) extends Specification with DataT
       2   ! "0" |
       3   ! "3" |* { (a: Int, b: String) => a ==== b.toInt }
 
-    table(ee.executionContext).message ===
+    table.message ===
       "  | a | b |       "+"\n"+
       "+ | 1 | 1 |       "+"\n"+
       "x | 2 | 0 | 2 != 0"+"\n"+

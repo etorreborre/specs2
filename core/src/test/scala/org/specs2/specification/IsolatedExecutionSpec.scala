@@ -9,12 +9,13 @@ import control._
 import producer._
 import scalaz.Scalaz.listMonoid
 
-class IsolatedExecutionSpec extends Spec with ForEachEnv { def is = s2"""
+class IsolatedExecutionSpec extends Spec { def is = s2"""
 
  We want to be able to isolate the execution of examples if isolated == true
  The isolated fragments must run with their own class instance
    for a mutable spec     $e1
    for an acceptance spec $e2
+
 """
 
   def e1 = {
@@ -28,7 +29,8 @@ class IsolatedExecutionSpec extends Spec with ForEachEnv { def is = s2"""
   def execute(spec: SpecificationStructure) = {
     val env = Env()
     val fragments = spec.structure(env).fragments
-    val results = fragments.update(DefaultExecutor.execute(env)).contents.collect { case f if f.isExecutable => f.execution.result }
+    val results =
+      fragments.update(DefaultExecutor.execute(env)).contents.collect { case f if f.isExecutable => f.execution.result }
     ProducerOps(results).runList.run
   }
 }

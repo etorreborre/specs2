@@ -256,7 +256,7 @@ object build extends Build {
     logBuffered := false,
     cancelable in Global := true,
     testFrameworks := Seq(TestFramework("org.specs2.runner.Specs2Framework")),
-    javaOptions ++= Seq("-Xmx6G", "-Xss4M"),
+    javaOptions ++= Seq("-Xmx3G", "-Xss4M"),
     fork in (ThisBuild, Test) := true,
     testOptions := Seq(Tests.Filter(s =>
       (Seq(".guide.").exists(s.contains) || Seq("Spec", "Guide", "Website").exists(s.endsWith)) &&

@@ -19,7 +19,9 @@ trait InternalScalazMatchers extends ScalaCheck { outer =>
   }
 
   def isAssociative[T](implicit sg: Semigroup[T], a: Arbitrary[T], s: Shrink[T]): Prop =
-    prop { (b1: T, b2: T, b3: T) => be_==(b1 |+| (b2 |+| b3)).apply(createExpectable((b1 |+| b2) |+| b3)) }
+    prop { (b1: T, b2: T, b3: T) =>
+      be_==(b1 |+| (b2 |+| b3)).apply(createExpectable((b1 |+| b2) |+| b3))
+    }.set(minTestsOk = 20, maxSize = 10)
 
   implicit def monoidProperty[T](m: Monoid[T]): MonoidProperty[T] = new MonoidProperty[T]()(m)
   class MonoidProperty[T]()(implicit m: Monoid[T]) extends SemigroupProperty()(m) {
@@ -30,7 +32,7 @@ trait InternalScalazMatchers extends ScalaCheck { outer =>
   def hasNeutralElement[T](implicit m: Monoid[T], a: Arbitrary[T], s: Shrink[T]): Prop =
     prop { (t: T) =>
       be_==(t |+| m.zero).apply(createExpectable(t)) and be_==(m.zero |+| t).apply(createExpectable(t))
-    }
+    }.set(minTestsOk = 20, maxSize = 10)
 
   def isMonoid[T](implicit m: Monoid[T], a: Arbitrary[T], s: Shrink[T]) = isAssociative(m, a, s) && hasNeutralElement(m, a, s)
 

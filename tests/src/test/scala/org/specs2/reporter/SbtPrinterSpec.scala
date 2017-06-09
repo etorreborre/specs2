@@ -12,7 +12,7 @@ import specification.core._
 import specification.process.DefaultExecutor
 import control.runAction
 
-class SbtPrinterSpec extends Spec with ForEachEnv { def is = s2"""
+class SbtPrinterSpec extends Spec { def is = s2"""
                                                                                                                         
  A SbtPrinter should
    print the specification title if defined                                   ${printer().e1}
@@ -22,7 +22,8 @@ class SbtPrinterSpec extends Spec with ForEachEnv { def is = s2"""
    TestEvent: succeed                            ${printer().e2}
    the duration must be defined                  ${printer().e3}
    contexts must appear in the name of the event ${printer().e4}
-                                                                                 """
+
+"""
   val factory = fragmentFactory; import factory._
 
   case class printer() extends Mockito { outer =>
@@ -37,23 +38,25 @@ class SbtPrinterSpec extends Spec with ForEachEnv { def is = s2"""
       }
     }
 
-    def e1 = { env: Env =>
-      runAction(printer.print(env)(SpecStructure.create(SpecHeader(classOf[HelloWorldSpec]), Fragments(text("\ntitle"), text("\ntext")))))
+    def e1 = {
+      val env = Env()
+      try runAction(printer.print(env)(SpecStructure.create(SpecHeader(classOf[HelloWorldSpec]), Fragments(text("\ntitle"), text("\ntext")))))
+      finally env.shutdown
       there was one(logger).info(beMatching("HelloWorldSpec\ntitle\ntext"))
     }
 
-    def e2 = { env: Env =>
-      executeAndPrintHelloWorldUnitSpec(env)
+    def e2 = {
+      executeAndPrintHelloWorldUnitSpec(Env())
       there was atLeastOne(handler).handle(eventWithStatus(Status.Success))
     }
 
-    def e3 = { env: Env =>
-      executeAndPrintHelloWorldUnitSpec(env)
+    def e3 = {
+      executeAndPrintHelloWorldUnitSpec(Env())
       there was atLeastOne(handler).handle(eventWithDurationGreaterThanOrEqualTo(0))
     }
 
-    def e4 = { env: Env =>
-      executeAndPrintHelloWorldUnitSpec(env)
+    def e4 = {
+      executeAndPrintHelloWorldUnitSpec(Env())
       there was atLeastOne(handler).handle(eventWithNameMatching("HW::The 'Hello world' string should::contain 11 characters"))
     }
 
@@ -75,9 +78,9 @@ class SbtPrinterSpec extends Spec with ForEachEnv { def is = s2"""
 
   case class printer2() extends Mockito { outer =>
 
-    def e1 = { env: Env =>
+    def e1 = {
       val hwSpec: org.specs2.Specification = new examples.HelloWorldSpec
-      val executed = DefaultExecutor.executeSpec(hwSpec.is, env)
+      val executed = DefaultExecutor.executeSpec(hwSpec.is, Env())
 
       print(executed).replaceAll("""(\d+ seconds?, )?\d+ ms""", "0 ms").replaceAll(" ", "_") ===
       """|HelloWorldSpec

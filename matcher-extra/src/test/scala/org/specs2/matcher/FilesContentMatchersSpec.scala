@@ -7,9 +7,11 @@ import io._
 import specification.BeforeAfterEach
 import control._
 import scalaz.syntax.bind._
+import text.AnsiColors._
+import org.specs2.matcher.MatchResultLogicalCombinators._
 
 class FilesContentMatchersSpec extends Spec
-  with FilesContentMatchers with BeforeAfterEach with ThrownExpectations with FileSystem { def is = sequential ^ diffs(show = true, triggerSize = 0, diffRatio = 100)^ s2"""
+  with FilesContentMatchers with BeforeAfterEach with FileSystem { def is = sequential ^ diffs(show = true, triggerSize = 0, diffRatio = 100)^ s2"""
 
  File content matchers help to compare the contents of 2 directories:
 
@@ -43,15 +45,11 @@ class FilesContentMatchersSpec extends Spec
 
     action.runOption
 
-    (targetDir / actual).toFile must haveSamePathsAs((targetDir / expected).toFile)
-
-    ((targetDir / actual).toFile must haveSamePathsAs((targetDir / "expected2").toFile)) returns
+    matcherMessage((targetDir / actual).toFile must haveSamePathsAs((targetDir / "expected2").toFile)) ====
      s"""|${(targetDir / actual).path} is not the same as ${(targetDir / expected2).path}
-         |  in ${(targetDir / actual).path}, not in ${(targetDir / expected2).path}
-         |    MISSING:   2. sub/f2
-         |
-         |  in ${(targetDir / expected2).path}, not in ${(targetDir / actual).path}
-         |    MISSING:   2. sub/f3""".stripMargin
+         |      1. f1
+         |    + 2. sub/f2
+         |    - 2. sub/f3""".stripMargin
   }
 
   def e2 = {
@@ -81,14 +79,18 @@ class FilesContentMatchersSpec extends Spec
 
     action.runOption
 
-    (targetDir / actual).toFile must haveSameFilesContentAs((targetDir / expected).toFile)
-    ((targetDir / actual).toFile must haveSameFilesContentAs((targetDir / expected2).toFile)) returns
-     s"""|${(targetDir / actual / sub / f2).path} is not the same as ${(targetDir / expected2 / sub / f2).path}
-         |  in ${(targetDir / actual / sub / f2).path}, not in ${(targetDir / expected2 / sub / f2).path}
-         |    MISSING:   2. text3
-         |
-         |  in ${(targetDir / expected2 / sub / f2).path}, not in ${(targetDir / actual / sub / f2).path}
-         |    MISSING:   2. text4""".stripMargin
+    val result1 = (targetDir / actual).toFile must haveSameFilesContentAs((targetDir / expected).toFile)
+    val result2 = (targetDir / actual).toFile must haveSameFilesContentAs((targetDir / expected2).toFile)
+
+    result1 and  {
+      matcherMessage(result2) ====
+        s"""|There is 1 failure
+            |${(targetDir / actual / sub / f2).path} is not the same as ${(targetDir / expected2 / sub / f2).path}
+            |      1. text2
+            |    + 2. text3
+            |    - 2. text4""".stripMargin
+    }
+
   }
 
   def e4 = {
@@ -117,6 +119,9 @@ class FilesContentMatchersSpec extends Spec
 
   def before = FileSystem.mkdirs(targetDir).runOption
   def after  = FileSystem.delete(targetDir).runOption
+
+  def matcherMessage(m: MatchResult[_]): String =
+    removeColors(m.message.trim)
 
 }
 

@@ -3,19 +3,23 @@ package matcher
 
 import execute._
 import specification.core.Env
+
 import scala.concurrent._
 import duration._
 import runner._
 import control._
+import org.specs2.main.Arguments
 
-class FutureMatchersSpec(env: Env) extends Specification with ResultMatchers with Retries {
- val timeFactor = env.arguments.execute.timeFactor
- val sleepTime = 50 * timeFactor.toLong
- implicit val ee = env.executionEnv
- implicit val ec = env.executionContext
- class MyTimeout extends TimeoutException
+class FutureMatchersSpec extends Specification with ResultMatchers with Retries {
 
- def is = section("travis") ^ s2"""
+  lazy val env = Env(Arguments("threadsnb 4"))
+  lazy val timeFactor = env.arguments.execute.timeFactor
+  lazy val sleepTime = 50 * timeFactor.toLong
+  implicit lazy val ee = env.executionEnv
+  implicit lazy val ec = env.executionContext
+  class MyTimeout extends TimeoutException
+
+ def is = section("travis") ^ sequential ^ s2"""
 
  In this specification `Future` means `scala.concurrent.Future`
 
@@ -51,7 +55,7 @@ class FutureMatchersSpec(env: Env) extends Specification with ResultMatchers wit
 
  A Future should be retried the specified number of times in case of a timeout $e3
  A Future should not be called more than the expected number of times $e4
-"""
+""" ^ step(env.shutdown)
 
   def e1 = {
     val thrown = new FutureMatchers with MustThrownExpectations {
@@ -80,7 +84,7 @@ class FutureMatchersSpec(env: Env) extends Specification with ResultMatchers wit
     def future = Future {
       times += 1
       if (retries != times)
-        Thread.sleep(duration * 4)
+        try Thread.sleep(duration * 4) catch { case _: Throwable => 0 }
       0
     }
     future must be_==(0).await(retries, duration.millis)

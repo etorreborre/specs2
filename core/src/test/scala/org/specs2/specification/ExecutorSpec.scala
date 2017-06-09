@@ -16,7 +16,7 @@ import ResultMatchers._
 
 import scala.concurrent._
 
-class ExecutorSpec(implicit ec: ExecutionContext) extends script.Specification with Groups with ThrownExpectations { def is = section("travis") ^ s2"""
+class ExecutorSpec extends script.Specification with Groups with ThrownExpectations { def is = section("travis") ^ s2"""
 
  Steps
  =====
@@ -35,13 +35,17 @@ class ExecutorSpec(implicit ec: ExecutionContext) extends script.Specification w
   with a timeout $timeout
   with examples using an execution context $userEnv
 
+${step(env.shutdown)}
 """
 
   import factory._
 
+  val env = Env()
+  implicit val ec: ExecutionContext = env.executionContext
+
   "steps" - new group with results {
 
-    eg := { env: Env =>
+    eg := {
       val tf = env.arguments.execute.timeFactor
 
       val fragments = Seq(
@@ -55,7 +59,7 @@ class ExecutorSpec(implicit ec: ExecutionContext) extends script.Specification w
       messages.toList must_== Seq("medium", "slow", "step", "fast")
     }
 
-    eg := { env: Env =>
+    eg := {
       val tf = env.arguments.execute.timeFactor
 
       val fragments = Seq(
@@ -69,7 +73,7 @@ class ExecutorSpec(implicit ec: ExecutionContext) extends script.Specification w
       messages.toList must_== Seq("medium", "slow", "step")
     }
 
-    eg := { env: Env =>
+    eg := {
       val tf = env.arguments.execute.timeFactor
 
       val fragments = Seq(
@@ -83,7 +87,7 @@ class ExecutorSpec(implicit ec: ExecutionContext) extends script.Specification w
       messages.toList must_== Seq("medium", "slow", "step")
     }
 
-    eg := { env: Env =>
+    eg := {
       val tf = env.arguments.execute.timeFactor
 
       val fragments = Seq(
@@ -99,7 +103,7 @@ class ExecutorSpec(implicit ec: ExecutionContext) extends script.Specification w
 
   "execute" - new group with results {
 
-    eg := { env: Env =>
+    eg := {
       val tf = env.arguments.execute.timeFactor
 
       val fragments = Seq(
@@ -113,7 +117,7 @@ class ExecutorSpec(implicit ec: ExecutionContext) extends script.Specification w
       messages.toList must_== Seq("slow", "medium", "step", "fast")
     }
 
-    eg := { env: Env =>
+    eg := {
       val tf = env.arguments.execute.timeFactor
 
       val fragments = Seq(
@@ -127,7 +131,7 @@ class ExecutorSpec(implicit ec: ExecutionContext) extends script.Specification w
       messages.toList must_== Seq("slow", "medium", "step", "fast")
     }
 
-    eg := { env: Env =>
+    eg := {
 
       val fragments = Seq(
         example("fast1", ok("ok1")),
@@ -139,7 +143,7 @@ class ExecutorSpec(implicit ec: ExecutionContext) extends script.Specification w
       messages.toList must_== Seq("ok1", "fatal")
     }
 
-    eg := { env: Env =>
+    eg := {
 
       val fragments = Seq(
         example("e1", ko("ko1")),
@@ -152,7 +156,7 @@ class ExecutorSpec(implicit ec: ExecutionContext) extends script.Specification w
     }
   }
 
-  def timeout = { env: Env =>
+  def timeout = {
     val timeFactor = env.arguments.execute.timeFactor
 
     val messages = new ListBuffer[String]
@@ -164,14 +168,16 @@ class ExecutorSpec(implicit ec: ExecutionContext) extends script.Specification w
     execute(fragments, env1) must contain(beSkipped[Result]("timed out after \\["+100*timeFactor+" milliseconds\\]"))
   }
 
-  def userEnv = { env: Env =>
+  def userEnv = {
     val fragments =
-      Fragments.foreach(1 to 10) { i: Int =>
-        "test " + i ! Execution.withExecutionEnv { implicit ee: ExecutionEnv =>
-          Await.result(scala.concurrent.Future(1), 1 second) ==== 1
+      Fragments.foreach(1 to 2) { i: Int =>
+        "test " + i ! Execution.withExecutionEnv { ee: ExecutionEnv =>
+          Await.result(scala.concurrent.Future(1)(ee.executionContext), 5.second) ==== 1
         }
       }
-    execute(fragments.fragments, env) must contain(beSuccessful[Result]).forall
+    val e = Env()
+    try execute(fragments.fragments, e) must contain(beSuccessful[Result]).forall
+    finally e.shutdown
   }
 
   val factory = fragmentFactory
