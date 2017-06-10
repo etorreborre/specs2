@@ -25,7 +25,12 @@ object AsResult {
   def apply[R : AsResult](r: =>R): Result = implicitly[AsResult[R]].asResult(r)
 
   /** @return a Result but throw exceptions if it is not a success */
-  def effectively[R : AsResult](r: =>R): Result = ResultExecution.effectively(AsResult(r))
+  def effectively[R : AsResult](r: =>R): Result =
+    ResultExecution.effectively(AsResult(r))
+
+  /** @return a Result always, even when there are specs2 exceptions (when using ThrownExpectations */
+  def safely[R : AsResult](r: =>R): Result =
+    ResultExecution.execute(AsResult(r))
 }
 
 /**

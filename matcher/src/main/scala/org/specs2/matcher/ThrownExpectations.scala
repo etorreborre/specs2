@@ -97,7 +97,7 @@ trait ThrownStandardResults extends StandardResults with ExpectationsCreation {
   override lazy val success = Success("success")
 
   protected def success(m: String): Success = { checkResultFailure(Success(m)); Success(m) }
-  protected def failure(m: String): Failure = failure(Failure(m))
+  override def failure(m: String): Failure = failure(Failure(m))
 
   protected def failure(f: Failure): Failure = { checkResultFailure(throw new FailureException(f)); f }
 

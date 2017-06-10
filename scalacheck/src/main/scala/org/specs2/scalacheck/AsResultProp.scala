@@ -9,7 +9,7 @@ import scala.annotation.tailrec
 /**
  * Implicits to convert Prop to AsResult and AsResult to Prop
  */
-trait AsResultProp extends ScalaCheckPropertyCheck with ScalaCheckParameters with AsResultPropLowImplicits {
+trait AsResultProp extends ScalaCheckPropertyCheck with AsResultPropLowImplicits {
 
   implicit def asResultToProp[R : AsResult](r: R): Prop = {
     r match {
@@ -25,8 +25,12 @@ trait AsResultProp extends ScalaCheckPropertyCheck with ScalaCheckParameters wit
               case s : execute.Skipped            => Prop.exception(new SkipException(s))
               case p : execute.Pending            => Prop.exception(new PendingException(p))
               case e : execute.Error              => Prop.exception(e.exception)
-              case execute.DecoratedResult(_, r1) => resultToProp(r1)
-              case other                          => Prop.passed
+
+              case execute.DecoratedResult(_, r1) =>
+                // display the datatables on a new line
+                resultToProp(r1.mapMessage("\n"+_))
+
+              case other => Prop.passed
             }
 
           val prop = resultToProp(result)
@@ -44,8 +48,9 @@ trait AsResultProp extends ScalaCheckPropertyCheck with ScalaCheckParameters wit
 
   /** implicit typeclass instance to create examples from a Prop */
   implicit def propAsResult(implicit p: Parameters, pfq: FreqMap[Set[Any]] => Pretty): AsResult[Prop] = new AsResult[Prop] {
-    def asResult(prop: =>Prop): Result =
+    def asResult(prop: =>Prop): Result = {
       check(prop, p, pfq)
+    }
   }
 
   /** implicit typeclass instance to create examples from Properties */
@@ -55,11 +60,16 @@ trait AsResultProp extends ScalaCheckPropertyCheck with ScalaCheckParameters wit
   }
 }
 
-trait AsResultPropLowImplicits extends ScalaCheckPropertyCheck {
+trait AsResultPropLowImplicits extends ScalaCheckPropertyCheck with ScalaCheckParameters {
   implicit def scalaCheckPropertyAsResult[S <: ScalaCheckProperty]: AsResult[S] = new AsResult[S] {
     def asResult(prop: =>S): Result = {
-      lazy val p = prop
-      check(p.prop, p.parameters, p.prettyFreqMap)
+      try {
+        lazy val p = prop
+        check(p.prop, p.parameters, p.prettyFreqMap)
+      } catch {
+        // this is necessary in case of thrown expectations inside the property
+        case t: Throwable => AsResultProp.propAsResult(defaultParameters, defaultFreqMapPretty).asResult(Prop.exception(t))
+      }
     }
   }
 }

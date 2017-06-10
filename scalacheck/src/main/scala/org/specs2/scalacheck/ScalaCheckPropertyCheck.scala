@@ -51,6 +51,12 @@ trait ScalaCheckPropertyCheck extends ExpectationsCreation {
               // in that case we want to represent a normal failure
               val failedResult = prettyResult(result.copy(status = Test.Failed(args, labels)), prettyFreqMap)(parameters.prettyParams)
               new Failure(failedResult + "\n> " + f.message, details = f.details, stackTrace = f.stackTrace)
+
+            case DecoratedResultException(DecoratedResult(_, f)) =>
+              // in that case we want to represent a normal failure
+              val failedResult = prettyResult(result.copy(status = Test.Failed(args, labels)), prettyFreqMap)(parameters.prettyParams)
+              f.updateMessage(failedResult + "\n>\n" + f.message)
+
             case e: AssertionError =>
               val failedResult = prettyResult(result.copy(status = Test.Failed(args, labels)), prettyFreqMap)(parameters.prettyParams)
               new Failure(failedResult + "\n> " + e.getMessage, stackTrace = e.getStackTrace.toList)

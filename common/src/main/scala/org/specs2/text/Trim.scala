@@ -96,6 +96,9 @@ trait Trim {
 
     def trimSpaceEnd = s.reverse.dropWhile(Seq(' ').contains).reverse
 
+    def trimLinesSpaceEnd: String =
+      s.split("\n").map(_.trimSpaceEnd).mkString("\n")
+
     def replaceAll(pairs: (String, String)*) = pairs.foldLeft(s) { (res, cur) =>
       res.replaceAll(cur._1, cur._2)
     }

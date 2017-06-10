@@ -10,7 +10,9 @@ trait StandardResults {
   def todo = Pending("TODO")
   def anError = Error("error")
   def success = Success("success")
-  def failure = Failure("failure")
+
+  def failure: Failure = Failure("failure")
+  def failure(message: String): Failure = Failure(message)
 
   def pending(message: String): Pending = Pending(message)
   def pending: Pending = pending("PENDING")
