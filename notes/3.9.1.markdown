@@ -1,0 +1,10 @@
+Maintenance version
+
+## Improvements
+
+ * **shapeless** added a "Projection" support to `specs2-shapeless`  to "project" a type `A` onto a "smaller" type `B` (thanks to @danielkarch)
+
+## Fixes
+
+ * **scalacheck** fixed the use of `ThrownExpectations` with scalacheck properties
+ * **scalacheck** adjusted the display of `DataTables` with scalacheck properties
