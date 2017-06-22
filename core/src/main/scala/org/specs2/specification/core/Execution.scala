@@ -184,19 +184,19 @@ object Execution {
 
   /** create an execution with a Continuation */
   def apply[T : AsResult](r: =>T, continuation: FragmentsContinuation) =
-    new Execution(run = Some((env: Env) => Future.successful(AsResult(r))), continuation = Some(continuation))
+    new Execution(run = Some((env: Env) => Future.successful(AsResult.safely(r))), continuation = Some(continuation))
 
   def fatal(t: Throwable): Execution =
     new Execution(executing = Some(Left(FatalExecution(t))))
 
   /** create an execution returning a specific result */
-  def result[T : AsResult](r: =>T) = withEnv(_ => AsResult(r))
+  def result[T : AsResult](r: =>T) = withEnv(_ => AsResult.safely(r))
 
   /** create an execution using the Env */
-  def withEnv[T : AsResult](f: Env => T) = Execution(Some((env: Env) => Future(AsResult(f(env)))(env.executionContext)))
+  def withEnv[T : AsResult](f: Env => T) = Execution(Some((env: Env) => Future(AsResult.safely(f(env)))(env.executionContext)))
 
   /** create an execution using the Env */
-  def withEnvSync[T : AsResult](f: Env => T) = Execution(Some((env: Env) => Future.successful(AsResult(f(env)))))
+  def withEnvSync[T : AsResult](f: Env => T) = Execution(Some((env: Env) => Future.successful(AsResult.safely(f(env)))))
 
   /** create an execution using the executor service */
   def withExecutorService[T : AsResult](f: ExecutorService => T) =
@@ -216,7 +216,7 @@ object Execution {
 
   /** create an execution which will not execute but directly return a value */
   def executed[T : AsResult](r: T): Execution = {
-    lazy val asResult = AsResult(r)
+    lazy val asResult = AsResult.safely(r)
     Execution(executing = Some(Right(Future.successful(asResult))))
   }
 

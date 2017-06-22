@@ -11,6 +11,8 @@ class ExecutionSpec extends Specification { def is = s2"""
  A link is executed by getting the corresponding specification ref status in the Statistics store
    the Stats is the stats of the spec + specs += 1 $linkExecution
 
+ An execution can be created from a result throwing a FailureException $withFailureException
+
 """
 
   def linkExecution = { env1: Env =>
@@ -25,5 +27,10 @@ class ExecutionSpec extends Specification { def is = s2"""
         (r.isSuccess must beFalse)
     }
 
+  }
+
+  def withFailureException = { env: Env =>
+    val failure = Failure("ko")
+    Execution.withEnv(_ => {throw new FailureException(failure); success}).execute(env).executedResult must beSome(failure)
   }
 }
