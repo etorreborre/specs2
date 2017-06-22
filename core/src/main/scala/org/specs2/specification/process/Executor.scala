@@ -107,6 +107,9 @@ trait DefaultExecutor extends Executor {
         fragment.executionFatalOrResult.isLeft
       }
 
+      def stepMustStop(step: Fragment): Boolean =
+        step.executionFatalOrResult.fold(_ => true, r => r.isFailure || r.isError)
+
       if (arguments.skipAll || mustStop)
         ok((one(if (fragment.isExecutable) fragment.skip else fragment), (Vector.empty, started, mustStop)))
       else if (arguments.sequential)
@@ -119,14 +122,14 @@ trait DefaultExecutor extends Executor {
             case Done() =>
               executeOneFragment(fragment, timeout).flatMap { step =>
                 step.finishExecution
-                ok((one(step), (Vector.empty, Vector.empty, stopAll(started.foldMap(_.executionResult), step))))
+                ok((one(step), (Vector.empty, Vector.empty, stepMustStop(step) || stopAll(started.foldMap(_.executionResult), step))))
               }
 
             case producer.One(f) =>
               // wait for f to finish executing
               f.finishExecution
               executeOneFragment(fragment, timeout).flatMap { step =>
-                ok((oneOrMore(f, List(step)), (Vector.empty, Vector.empty, stopAll((started :+ f).foldMap(_.executionResult), step))))
+                ok((oneOrMore(f, List(step)), (Vector.empty, Vector.empty, stepMustStop(step) || stopAll((started :+ f).foldMap(_.executionResult), step))))
               }
 
             case fs @ More(as, next) =>
@@ -134,7 +137,7 @@ trait DefaultExecutor extends Executor {
               as.map(_.finishExecution)
               executeOneFragment(fragment, timeout).flatMap { step =>
                 ok((emitAsync(as:_*) append next append one(step),
-                  (Vector.empty, Vector.empty, stopAll((started ++ as).foldMap(_.executionResult), step))))
+                  (Vector.empty, Vector.empty, stepMustStop(step) || stopAll((started ++ as).foldMap(_.executionResult), step))))
               }
           }
         }

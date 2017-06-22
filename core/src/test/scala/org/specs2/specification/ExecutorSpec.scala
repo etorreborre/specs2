@@ -199,7 +199,7 @@ ${step(env.shutdown)}
     def slow(timeFactor: Int)         = { Thread.sleep(400 * timeFactor.toLong); messages.append("slow");   success }
     def verySlow(timeFactor: Int)     = { Thread.sleep(600 * timeFactor.toLong); messages.append("very slow"); success }
     def step1                         = { messages.append("step");   success }
-    def fatalStep                     = { messages.append("fatal");  if (true) throw new java.lang.Error("fatal error!"); success }
+    def fatalStep                     = { messages.append("fatal");  if (true) throw new Exception("fatal error!"); success }
   }
 
 }
