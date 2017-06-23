@@ -63,6 +63,9 @@ trait HtmlBodyPrinter {
           }
         } else NodeSeq.Empty
 
+      case Fragment(form @ FormDescription(_),_,_) =>
+        form.xml(arguments)
+
       case e if Fragment.isExample(e) =>
         val example =
           e.executionResult match {
@@ -128,9 +131,6 @@ trait HtmlBodyPrinter {
           val image = if (fragment.isExecutable) <span class={status}> </span> else NodeSeq.Empty
           <link class="ok">{image}  <a href={FilePath.unsafe(ref.url).relativeTo(baseDir).path} tooltip={ref.tooltip} class="ok">{ref.linkText}</a></link>
         }
-
-      case Fragment(form @ FormDescription(_),_,_) =>
-        form.xml(arguments)
 
       case Fragment(Br,_,_) => <br/>
 
