@@ -86,11 +86,10 @@ object Fragment {
   def isEmptyText(f: Fragment): Boolean =
     isText(f) && f.description.show.trim.isEmpty
 
-  def isExample(f: Fragment) = (f.description match {
-    case t: Text => true
-    case t: Code => true
-    case _       => false
-  }) && f.isExecutable
+  def isExample(f: Fragment) =
+    f.isExecutable &&
+      !isStepOrAction(f) &&
+      !isSpecificationRef(f)
 
   def isStepOrAction(f: Fragment) =
     (f.description == NoText) && f.isExecutable

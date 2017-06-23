@@ -67,7 +67,7 @@ case class SbtRunner(args: Array[String], remoteArgs: Array[String], loader: Cla
       /** @return the correponding task definition */
       def taskDef = aTaskDef
 
-      /** display errorrs and warnings */
+      /** display errors and warnings */
       def processResult[A](handler: EventHandler, loggers: Array[Logger])(result: Error \/ A, warnings: List[String]): Unit = {
         result.fold(
           e => {
