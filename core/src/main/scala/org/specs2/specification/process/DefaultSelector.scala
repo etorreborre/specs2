@@ -8,7 +8,6 @@ import producer._, transducers._, producers._
 import data._
 import scalaz._, Scalaz.{ToIdOps => _,_}
 import specification.core._
-import create.FormattingFragments
 import Fragment._
 
 /**
@@ -72,7 +71,7 @@ trait DefaultSelector extends Selector {
           (Option(fragment), sections)
       } flatMap (f => emit(f.toList))
 
-    if ((arguments.include + arguments.exclude).nonEmpty) normalize |> go |> removeAdditionalEmptyText
+    if ((arguments.include + arguments.exclude).nonEmpty) normalize |> go |> removeMarkers
     else transducers.id
   }
 
@@ -180,10 +179,8 @@ trait DefaultSelector extends Selector {
     }
   }
 
-  def removeAdditionalEmptyText: AsyncTransducer[Fragment, Fragment] = { producer: Producer[ActionStack, Fragment] =>
-    one[ActionStack, Fragment](FormattingFragments.br) append
-    producer.filter(f => !Fragment.isEmptyText(f) && !Fragment.isFormatting(f) && !Fragment.isMarker(f)).
-      flatMap(f => emit(List(FormattingFragments.br, f)))
+  def removeMarkers: AsyncTransducer[Fragment, Fragment] = { producer: Producer[ActionStack, Fragment] =>
+    producer.filter(f => !Fragment.isMarker(f))
   }
 
   /**

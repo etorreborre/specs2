@@ -27,7 +27,7 @@ class SelectorSpec extends script.Specification with Groups with ResultMatchers 
   + tagging a section of fragments, starting with the previous one and a blank text
   + with overlapping sections
   + with non-overlapping sections
-  + formatting fragments and empty text must be filtered out and remaining examples on newlines
+  + markers must be filtered out
 
  Selection by previous
  =====================
@@ -162,10 +162,10 @@ class SelectorSpec extends script.Specification with Groups with ResultMatchers 
       )
 
       filterIncluded(fragments, Seq("x")).map(_.description) ==== List(
-        ff.break,
-        ff.break,
+        text("  "),
         ex("e2"),
         ff.break,
+        ff.tab,
         ex("e4")
       ).map(_.description)
     }
