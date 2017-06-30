@@ -230,7 +230,17 @@ object JsonType {
 
   implicit def JsonTypeMatcherInt(expected: Int): Matcher[JsonType] = (actual: JsonType) => actual match {
     case JsonNumber(n) => (n.toDouble == expected.toDouble, s"$n is not equal to $expected")
-    case other         => (false, s"not a String: $other")
+    case other         => (false, s"not a Number: $other")
+  }
+
+  implicit def JsonTypeMatcherDouble(expected: Double): Matcher[JsonType] = (actual: JsonType) => actual match {
+    case JsonNumber(n) => (n.toDouble == expected.toDouble, s"$n is not equal to $expected")
+    case other         => (false, s"not a Number: $other")
+  }
+
+  implicit def JsonTypeMatcherBigDecimal(expected: BigDecimal): Matcher[JsonType] = (actual: JsonType) => actual match {
+    case JsonNumber(n) => (n.toDouble == expected.toDouble, s"$n is not equal to $expected")
+    case other         => (false, s"not a Number: $other")
   }
 
   implicit def JsonTypeMatcherBoolean(expected: Boolean): Matcher[JsonType] = (actual: JsonType) => actual match {
