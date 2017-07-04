@@ -1,0 +1,14 @@
+Maintenance version
+
+## Improvements
+
+ * **core** display lines diffs when diffing sequences to better see the difference between 2 lists
+ * **core** better display of throwable diffs: first message diff then lines diffs for stacktraces
+
+## Fixes
+
+ * **core** catch failure exceptions in `Executions`. As a result some ScalaCheck properties were not failing [#581](https://github.com/etorreborre/specs2/specs2/issues/581)
+ * **core** stop a specification execution if a step is a failure or an error
+ * **forms** fixed the reporting of forms (sbt + notifier + html)
+ * **matcher-extra** added implicit conversions for Double and BigDecimal to create json number matchers [#582](https://github.com/etorreborre/specs2/specs2/issues/582)
+ * **junit** fixed the example prefixes in the xml report file [#583](https://github.com/etorreborre/specs2/specs2/issues/582)
