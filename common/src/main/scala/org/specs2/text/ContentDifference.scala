@@ -55,7 +55,7 @@ case class LinesContentDifference(
     import EditDistance._
 
     val operations: IndexedSeq[EditDistanceOperation[NumberedLine]] =
-      levenhsteinDistance(numberedLines1, numberedLines2)
+      levenhsteinDistance(numberedLines1, numberedLines2)(Equiv.universal)
 
     operations.flatMap {
       case Same(line)          => List(SameLine(line))

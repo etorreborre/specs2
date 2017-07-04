@@ -1,13 +1,13 @@
 package org.specs2.matcher
 package describe
 
-import org.specs2.Spec
+import org.specs2.Specification
 import org.specs2.matcher._
 
 import scala.util.{Failure, Try}
 import CaseClassDiffs._
 
-class DiffableSpec extends Spec { def is = s2"""
+class DiffableSpec extends Specification { def is = s2"""
 
 Compare result
 ==============
@@ -22,8 +22,9 @@ Compare result
     two different doubles should return PrimitiveDifference     ${ Diffable.diff(0.5d, 0.6d) must_=== PrimitiveDifference(0.5d, 0.6d) }
 
   Exceptions
-    two identical exceptions will return ThrowableIdentical     ${ Diffable.diff(ex, ex) must_=== ThrowableIdentical(ex) }
-    two different exceptions will return ThrowableDifferent     ${ Diffable.diff(ex, ex2) must haveOneDifferenceOf(Diffable.diff(ex.getStackTrace.head, ex2.getStackTrace.head)) }
+    two identical exceptions will return ThrowableIdentical                 ${ Diffable.diff(ex, ex) must_=== ThrowableIdentical(ex) }
+    two exceptions with a != message return ThrowableDifferentMessage       ${ Diffable.diff(ex, ex2) must_=== ThrowableDifferentMessage(PrimitiveDifference("m1", "m2")) }
+    two exceptions with a != stacktrace return ThrowableDifferentStackTrace ${ Diffable.diff(ex3, ex4) must_=== ThrowableDifferentStackTrace(LinesComparisonResult(List(se), List(se2))) }
 
     two identical StackTraceElement return StackElementIdentical ${ Diffable.diff(se, se) must_=== StackElementIdentical(se) }
     two different StackTraceElement return StackElementDifferent ${ Diffable.diff(se, se2) must_=== StackElementDifferent(className = PrimitiveDifference("class", "class1"),
@@ -55,15 +56,19 @@ Compare result
     different sets should show which elements were removed        ${ Diffable.diff(Set("a", "b", "c"), Set("a", "b")) must_== SetDifference(Seq("a", "b"),Seq.empty,Seq("c"))}
     Sets with added/removed and null values should work           ${ Diffable.diff(Set("a", null, "b"), Set("a", null, "c")) must_== SetDifference(Seq("a", null),Seq("c"),Seq("b"))}'
 
+  Seq (lines)
+  ==========
+    A Seq different should a return LineComparisonResult          ${ Diffable.diff(Seq("a", "b"),Seq("a", "b")) must_=== LinesComparisonResult(List("a", "b"), List("a", "b")) }
+
   Seq (diff)
   ==========
-    equal Seqs should return SeqIdentical                        ${ Diffable.diff(Seq("a", "b"),Seq("a", "b")) must_=== SeqIdentical(Seq("a", "b")) }
-    different Seqs should show which elements were changed       ${ Diffable.diff(Seq("a"), Seq("b")) must_=== SeqDifference(Seq(PrimitiveDifference("a", "b")), Seq.empty, Seq.empty) }
-    different Seqs should show which elements were added         ${ Diffable.diff(Seq("a"), Seq("a", "b")) must_=== SeqDifference(Seq(PrimitiveIdentical("a")), Seq("b"), Seq.empty) }
-    different Seqs should show which elements were removed       ${ Diffable.diff(Seq("a", "b"), Seq("a")) must_=== SeqDifference(Seq(PrimitiveIdentical("a")), Seq.empty, Seq("b")) }
-    different Seqs should show changed and added with null       ${ Diffable.diff(Seq("a"), Seq(null)) must_=== SeqDifference(Seq(PrimitiveDifference("a", null)), Seq.empty, Seq.empty) }
-    be able to compare Seq[Any]                                  ${ Diffable.diff(Seq("a", 1, 2l, 3.3d, 4.4f), Seq("b", 2, 3l, 4.4d, 5.5f)) must_===
-                                                                        SeqDifference(Seq(OtherDifferent("a", "b"), OtherDifferent(1, 2), OtherDifferent(2l, 3l), OtherDifferent(3.3d, 4.4d), OtherDifferent(4.4f, 5.5f)), Seq.empty, Seq.empty) }
+    equal Seqs should return SeqIdentical                        ${ Diffable.diff(Seq("a", "b"),Seq("a", "b"))(seqDiffable) must_=== SeqIdentical(Seq("a", "b")) }
+    different Seqs should show which elements were changed       ${ Diffable.diff(Seq("a"), Seq("b"))(seqDiffable) must_=== SeqDifference(Seq(PrimitiveDifference("a", "b")), Seq.empty, Seq.empty) }
+    different Seqs should show which elements were added         ${ Diffable.diff(Seq("a"), Seq("a", "b"))(seqDiffable) must_=== SeqDifference(Seq(PrimitiveIdentical("a")), Seq("b"), Seq.empty) }
+    different Seqs should show which elements were removed       ${ Diffable.diff(Seq("a", "b"), Seq("a"))(seqDiffable) must_=== SeqDifference(Seq(PrimitiveIdentical("a")), Seq.empty, Seq("b")) }
+    different Seqs should show changed and added with null       ${ Diffable.diff(Seq("a"), Seq(null))(seqDiffable) must_=== SeqDifference(Seq(PrimitiveDifference("a", null)), Seq.empty, Seq.empty) }
+    be able to compare Seq[Any]                                  ${ Diffable.diff(Seq("a", 1, 2l, 3.3d, 4.4f), Seq("b", 2, 3l, 4.4d, 5.5f))(seqDiffable) must_===
+  SeqDifference(Seq(OtherDifferent("a", "b"), OtherDifferent(1, 2), OtherDifferent(2l, 3l), OtherDifferent(3.3d, 4.4d), OtherDifferent(4.4f, 5.5f)), Seq.empty, Seq.empty) }
 
   Arrays
   ======
@@ -117,12 +122,18 @@ Compare result
     We need to support different type compare
 """
 
-  val ex = new RuntimeException
-  val ex2 = new RuntimeException
+
+  sealed case class ExampleFailure(message: String, stacktrace: List[StackTraceElement] = Nil) extends RuntimeException(message) {
+    override def getStackTrace = stacktrace.toArray
+  }
 
   val se = new StackTraceElement("class", "method", "filename", 666)
   val se2 = new StackTraceElement("class1", "method1", "filename1", 777)
 
+  val ex = ExampleFailure("m1")
+  val ex2 = ExampleFailure("m2")
+  val ex3 = ExampleFailure("m", List(se))
+  val ex4 = ExampleFailure("m", List(se2))
 
   def m1 = {
     Diffable.diff(Map("a" -> "b", "c" -> "d", "e" -> "f"),
@@ -141,16 +152,8 @@ Compare result
     }
   }
 
-  def haveOneDifferenceOf(diff: ComparisonResult): Matcher[ComparisonResult] = new Matcher[ComparisonResult] {
-    def apply[S <: ComparisonResult](t: Expectable[S]) =
-      t.value match {
-        case v: ThrowableDifferent if v.added.nonEmpty || v.removed.nonEmpty => failure("Exception contained added or removed lines", t)
-        case v: ThrowableDifferent if v.result.count( _.isInstanceOf[StackElementDifferent] ) > 1 => failure("Exception contained more than once difference in stacktrace", t)
-        case v: ThrowableDifferent if v.result.headOption.exists(_ == diff) => success("ok", t)
-        case v: ThrowableDifferent if !v.result.headOption.exists(_ == diff) => failure(s"expected: $diff instead got: ${v.result.head}", t)
-        case e => failure(s"result is of wrong type, should be ThrowableDifferent but was [${e.getClass.getSimpleName}]", t)
-      }
-  }
+  def seqDiffable[T : Diffable]: SeqDiffable[T] =
+    new SeqDiffable[T]
 
   def ccFieldDiffable = {
     case class A(value: Int)

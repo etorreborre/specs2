@@ -13,40 +13,43 @@ object LinesDiffable {
           expected.toString.split("\n").toList)
 
       if (actualLines.size + expectedLines.size > 2)
-        linesDiffable.diff(actualLines, expectedLines)
+        linesDiffable[String].diff(actualLines, expectedLines)
       else
         Diffable.stringDiffable.diff(actual, expected)
     }
   }
 
-  implicit val linesDiffable: Diffable[List[String]] = new Diffable[List[String]] {
-    def diff(actual: List[String], expected: List[String]): ComparisonResult =
+  implicit def linesDiffable[T : Diffable]: Diffable[List[T]] = new Diffable[List[T]] {
+    def diff(actual: List[T], expected: List[T]): ComparisonResult =
       LinesComparisonResult(actual, expected)
   }
 
-  case class LinesComparisonResult(actual: List[String], expected: List[String]) extends ComparisonResult {
-    import org.specs2.data._
-    import EditDistance._
-    import org.specs2.text.AnsiColors._
+}
 
-    val operations: IndexedSeq[EditDistanceOperation[String]] =
-      levenhsteinDistance(actual.toIndexedSeq, expected.toIndexedSeq)
+case class LinesComparisonResult[T : Diffable](actual: List[T], expected: List[T]) extends ComparisonResult {
+  import org.specs2.data._
+  import EditDistance._
+  import org.specs2.text.AnsiColors._
 
-    def identical: Boolean =
-      operations.forall {
-        case _:Same[_] => true
-        case _ => false
-      }
+  val operations: IndexedSeq[EditDistanceOperation[T]] =
+    levenhsteinDistance[T](actual.toIndexedSeq, expected.toIndexedSeq)(new Equiv[T] {
+      def equiv(a: T, b: T) = implicitly[Diffable[T]].diff(a, b).identical
+    })
 
-    def render: String = operations.flatMap {
-      case Same(line)          => List(line)
-      case Add(line)           => List(color("+ "+line, green))
-      case Del(line)           => List(color("- "+line, red))
-      case Subst(line1, line2) => List(color("- "+line1, red), color("+ "+line2, green))
-    }.mkString("\n", "\n", "\n")
+  def identical: Boolean =
+    operations.forall {
+      case _:Same[_] => true
+      case _ => false
+    }
 
-  }
+  def render: String = operations.flatMap {
+    case Same(line)          => List(line)
+    case Add(line)           => List(color("+ "+line, green))
+    case Del(line)           => List(color("- "+line, red))
+    case Subst(line1, line2) => List(color("- "+line1, red), color("+ "+line2, green))
+  }.mkString("\n", "\n", "\n")
 
 }
+
 
 

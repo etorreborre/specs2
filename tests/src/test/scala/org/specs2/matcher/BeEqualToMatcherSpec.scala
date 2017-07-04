@@ -2,6 +2,7 @@ package org.specs2
 package matcher
 
 import execute._
+import org.specs2.text.AnsiColors._
 
 class BeEqualToMatcherSpec extends Spec with ResultMatchers with ShouldMatchers { def is = s2"""
 
@@ -64,7 +65,11 @@ class BeEqualToMatcherSpec extends Spec with ResultMatchers with ShouldMatchers 
   ${ Seq(1, 2) must be_==(Seq(1, 2)) }
   ${ (Seq(1, 2) must be_==(Seq(2, 3))) returns """List(1, 2) != List(2, 3)""" }
   ${ Seq(1, 2) must be_===(Seq(1, 2)) }
-  ${ Seq(1, 2) must be_===(Seq(2, 3)) returns """List(1 != 2, 2 != 3)""" }
+  ${ (Seq(1, 2) must be_===(Seq(2, 3))).normalized ====
+       """|- 1
+          |+ 2
+          |- 2
+          |+ 3""".stripMargin.trim }
 
   Expected values are kept in the failure details
   ${ (1 must_== 2).toResult must beLike { case Failure(_,_,_,FailureDetails(a, e)) => e must_== "2" } }
@@ -109,14 +114,14 @@ Details
     t1 must be_===(t2) must not(throwAn[Exception])
   }
 
-  def d1 = List(1, 2) must be_===( List("1", "2") ) must beFailing( "\\QList(1 != '1', 2 != '2')\\E" )
+  def d1 = List(1, 2) must be_===( List("1", "2") ) must beFailing
 
   def d2 = {
     ("hello" must_== Hello()) must beFailing(
         "\\Qhello: java.lang.String != hello: org.specs2.matcher.Hello\\E")
   }
 
-  def d3 = { List("1, 2") must be_===( List("1", "2") ) must beFailing( "\\QList('1, 2' != '1',\n     added: '2')\\E" ) }
+  def d3 = { List("1, 2") must be_===( List("1", "2") ) must beFailing }
 
   def d4= { Map(1 -> "2") must be_===( Map(1 -> 2) ) must beFailing( "\\QMap(1 -> {'2' != 2})\\E" ) }
 
@@ -130,5 +135,10 @@ Details
     val map = new scala.collection.mutable.HashMap[Int, Int]
     kv.foreach { case (k, v) => map.put(k, v) }
     map
+  }
+
+  implicit class NormalizeOps(m: MatchResult[_]) {
+    def normalized: String =
+      m.message.removeColors.trim
   }
 }

@@ -138,13 +138,15 @@ class StackTraceElementDiffable(implicit nameDiffable: Diffable[String], lineDif
         lineDiffable.diff(actual.getLineNumber, expected.getLineNumber))
 }
 
-class ThrowableDiffable(implicit adi: Diffable[Array[StackTraceElement]]) extends Diffable[Throwable] {
+class ThrowableDiffable(implicit sdi: Diffable[String], adi: Diffable[List[StackTraceElement]]) extends Diffable[Throwable] {
 
-  def diff(actual: Throwable, expected: Throwable) =
-    adi.diff(actual.getStackTrace, expected.getStackTrace) match {
-      case ArrayIdentical(_) => ThrowableIdentical(actual)
-      case ArrayDifference(res, a, r) => ThrowableDifferent(res, a.asInstanceOf[Seq[StackTraceElement]], r.asInstanceOf[Seq[StackTraceElement]])
-      case _ => throw new RuntimeException("should not happen")
+    def diff(actual: Throwable, expected: Throwable) = {
+      val messageResult = sdi.diff(actual.getMessage, expected.getMessage)
+      if (messageResult.identical) {
+        val stacktraceResult = adi.diff(actual.getStackTrace.toList, expected.getStackTrace.toList)
+        if (stacktraceResult.identical) ThrowableIdentical(actual)
+        else ThrowableDifferentStackTrace(stacktraceResult)
+      } else ThrowableDifferentMessage(messageResult)
     }
 }
 
@@ -166,6 +168,19 @@ class SetDiffable[E] extends Diffable[Set[E]] {
     actual.diff(expected).toSeq
 }
 
+/**
+ * This diffable uses the Lines diffables to show differences between 2 sequences
+ * as a unified sequence with inlined differences
+ */
+class SeqLinesDiffable[E](implicit di: Diffable[E]) extends Diffable[Seq[E]] {
+
+  def diff(actual: Seq[E], expected: Seq[E]) =
+    LinesDiffable.linesDiffable[E].diff(actual.toList, expected.toList)
+}
+
+/**
+ * This diffable displays elements missing or added from a Seq
+ */
 class SeqDiffable[E](implicit di: Diffable[E]) extends Diffable[Seq[E]] {
 
   def diff(actual: Seq[E], expected: Seq[E]) = {

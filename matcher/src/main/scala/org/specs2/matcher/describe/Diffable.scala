@@ -45,7 +45,7 @@ trait DiffableLowPriority1 extends DiffableLowPriority2 {
   // scala collections
   implicit def mapDiffable[K : Diffable, V : Diffable]: Diffable[Map[K, V]] = new MapDiffable[K, V]
   implicit def setDiffable[E : Diffable]: Diffable[Set[E]] = new SetDiffable
-  implicit def seqDiffable[E : Diffable]: Diffable[Seq[E]] = new SeqDiffable
+  implicit def seqDiffable[E : Diffable]: Diffable[Seq[E]] = new SeqLinesDiffable[E]
   implicit def arrayDiffable[E : Diffable]: Diffable[Array[E]] = new ArrayDiffable
 }
 

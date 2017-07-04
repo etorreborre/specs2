@@ -77,7 +77,7 @@ trait EditDistance {
     }
   }
 
-  def levenhsteinDistance[T](s1: IndexedSeq[T], s2: IndexedSeq[T]): IndexedSeq[EditDistanceOperation[T]] = {
+  def levenhsteinDistance[T : Equiv](s1: IndexedSeq[T], s2: IndexedSeq[T]): IndexedSeq[EditDistanceOperation[T]] = {
     val matrix = new EditMatrix[T](s1, s2, EditDistanceCosts.levenhsteinCosts[T])
     matrix.operations
   }
@@ -131,12 +131,17 @@ trait EditDistanceCosts[T] {
 }
 
 object EditDistanceCosts {
-  def levenhsteinCosts[T]: EditDistanceCosts[T] = new LevenhsteinCosts[T] {}
+  def levenhsteinCosts[T : Equiv]: EditDistanceCosts[T] =
+    new LevenhsteinCosts[T] {
+      val equiv = implicitly[Equiv[T]]
+    }
 }
 
 trait LevenhsteinCosts[T] extends EditDistanceCosts[T] {
+  def equiv: Equiv[T]
+
   /** @return the cost of a substitution */
-  def substitutionCost(a: T, b: T): Int = if (a == b) 0 else 1
+  def substitutionCost(a: T, b: T): Int = if (equiv.equiv(a, b)) 0 else 1
 
   /** @return the cost of an insertion or deletion */
   def insertionDeletionCost(c: T) = 1
@@ -152,18 +157,21 @@ trait LevenhsteinCosts[T] extends EditDistanceCosts[T] {
     val (opDel, opSubst, opIns) = (DelOp(del), SubstOp(subst), InsOp(ins))
     if (ins < del) {
       if (ins < subst) opIns
-      else if (ins == subst && a == b) opIns
+      else if (ins == subst && equiv.equiv(a, b)) opIns
       else opSubst
     } else {
       if (del < subst) opDel
-      else if (del == subst && a == b) opDel
+      else if (del == subst && equiv.equiv(a, b)) opDel
       else opSubst
     }
   }
 
 }
 
-object StringLevenhsteinCosts extends LevenhsteinCosts[Char]
+object StringLevenhsteinCosts extends LevenhsteinCosts[Char] {
+  val equiv: Equiv[Char] =
+      Equiv.universal[Char]
+}
 
 
 

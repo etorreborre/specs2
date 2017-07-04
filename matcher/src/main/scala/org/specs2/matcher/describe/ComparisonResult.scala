@@ -39,13 +39,16 @@ case class ThrowableIdentical(value: Throwable) extends IdenticalComparisonResul
   }
 }
 
-case class ThrowableDifferent(result: Seq[ComparisonResult], added: Seq[StackTraceElement], removed: Seq[StackTraceElement]) extends DifferentComparisonResult {
-  def render: String = {
-    val results = result.map(_.render)
-    (results.headOption.map(_.render) ++
-      results.tail.map(r => s"\n\t${r.render}"))
-          .mkString
-  }
+case class ThrowableDifferentMessage(result: ComparisonResult) extends DifferentComparisonResult {
+  def render: String =
+    "\nthe message is incorrect\n"+
+    result.render
+}
+
+case class ThrowableDifferentStackTrace(result: ComparisonResult) extends DifferentComparisonResult {
+  def render: String =
+    "\nthe stacktrace is incorrect\n"+
+    result.render
 }
 
 case class StackElementIdentical(value: StackTraceElement) extends IdenticalComparisonResult {
