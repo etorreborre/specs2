@@ -83,7 +83,7 @@ trait DefaultExecutor extends Executor {
 
     def executeOneFragment(f: Fragment, timeout: Option[FiniteDuration]): Action[Fragment] = {
       if (arguments.sequential) asyncDelayAction(executeFragment(env, timeout)(f))
-      else                      asyncForkAction(executeFragment(env, timeout)(f), env.executionContext).futureAttempt.map {
+      else                      asyncForkAction(executeFragment(env, timeout)(f), env.specs2ExecutionContext).futureAttempt.map {
         case Left(t: TimeoutException) => executeFragment(env, timeout)(f.setExecution(Execution.result(Skipped("timeout"+timeout.map(" after "+_).getOrElse("")))))
         case Left(t)                   => executeFragment(env, timeout)(f.setExecution(Execution.result(Error(t))))
         case Right(f1)                 => f1

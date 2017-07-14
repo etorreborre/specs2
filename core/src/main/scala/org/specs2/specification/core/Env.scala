@@ -53,9 +53,6 @@ case class Env(arguments: Arguments = Arguments(),
           // custom context class loader passed by sbt
           customClassLoader: Option[ClassLoader] = None) {
 
-  lazy val userEnv: Env =
-    copy()
-
   lazy val statisticsRepository: StatisticsRepository =
     statsRepository(arguments)
 
@@ -76,6 +73,19 @@ case class Env(arguments: Arguments = Arguments(),
   lazy val scheduledExecutorService =
     executionEnv.scheduledExecutorService
 
+  /** execution environment for specs2 itself */
+  lazy val specs2ExecutionEnv: ExecutionEnv =
+    ExecutionEnv.create(arguments, systemLogger, "specs2-env"+hashCode)
+
+  lazy val specs2ExecutorService =
+    specs2ExecutionEnv.executorService
+
+  lazy val specs2ExecutionContext =
+    specs2ExecutionEnv.executionContext
+
+  lazy val specs2ScheduledExecutorService =
+    specs2ExecutionEnv.scheduledExecutorService
+
   lazy val timeout =
     executionParameters.timeout
 
@@ -90,7 +100,7 @@ case class Env(arguments: Arguments = Arguments(),
 
   def shutdown(): Unit = {
     try executionEnv.shutdown()
-    finally userEnv.executionEnv.shutdown()
+    finally specs2ExecutionEnv.shutdown()
   }
 
   /** set new LineLogger */
