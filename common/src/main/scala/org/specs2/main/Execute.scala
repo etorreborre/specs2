@@ -1,6 +1,8 @@
 package org.specs2
 package main
 
+import org.specs2.control.eff.ExecutorServices
+
 /**
  * Execution arguments
  */
@@ -27,9 +29,9 @@ case class Execute(
   def asap: Boolean                 = _asap.getOrElse(false)
   def isolated: Boolean             = _isolated.getOrElse(false)
   def useCustomClassLoader: Boolean = _useCustomClassLoader.getOrElse(false)
-  def threadsNb: Int                = _threadsNb.getOrElse(Runtime.getRuntime.availableProcessors)
+  def threadsNb: Int                = _threadsNb.getOrElse(ExecutorServices.threadsNb)
   def scheduledThreadsNb: Int       = _scheduledThreadsNb.getOrElse(1)
-  def batchSize: Int                = _batchSize.getOrElse(Runtime.getRuntime.availableProcessors)
+  def batchSize: Int                = _batchSize.getOrElse(ExecutorServices.threadsNb)
   def timeFactor: Int               = _timeFactor.getOrElse(1)
   def executor: String              = _executor.getOrElse("")
 

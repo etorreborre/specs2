@@ -60,21 +60,21 @@ This reference guide for arguments is divided in several sections:
 
 ## Execution
 
- Name                    | Default value                            | Description
- ----------------------- | ---------------------------------------- | -------------------------------------------------------------------------------------------
- `plan`                  | `false`                                  | only report the text of the specification without executing anything
- `skipAll`               | `false`                                  | skip all the examples
- `stopOnFail`            | `false`                                  | skip all examples after the first failure or error
- `stopOnSkip`            | `false`                                  | skip all examples after the first skipped result
- `sequential`            | `false`                                  | don't execute examples concurrently
- `asap`                  | `false`                                  | execute all the examples before reporting them
- `isolated`              | `false`                                  | execute each example in its own specification to get "fresh" local variables
- `useCustomClassLoader`  | `false`                                  | use a custom class loader set on the `Env` to execute each example. By default sbt's classloader for running tests is attached to the `Env`
- `threadsNb`             | `Runtime.getRuntime.availableProcessors` | number of threads to use for concurrent execution
- `scheduledThreadsNb`    | `1`                                      | number of threads to use for timing out execution
- `batchSize`             | `Runtime.getRuntime.availableProcessors` | number of examples which start executing concurrently at the time
- `timeFactor`            | `1`                                      | multiply all durations by this factor when waiting for futures
- `executor`              | `""`                                     | implementation of the `org.specs2.specification.process.Executor` trait
+ Name                    | Default value                                    | Description
+ ----------------------- | ----------------------------------------         | -------------------------------------------------------------------------------------------
+ `plan`                  | `false`                                          | only report the text of the specification without executing anything
+ `skipAll`               | `false`                                          | skip all the examples
+ `stopOnFail`            | `false`                                          | skip all examples after the first failure or error
+ `stopOnSkip`            | `false`                                          | skip all examples after the first skipped result
+ `sequential`            | `false`                                          | don't execute examples concurrently
+ `asap`                  | `false`                                          | execute all the examples before reporting them
+ `isolated`              | `false`                                          | execute each example in its own specification to get "fresh" local variables
+ `useCustomClassLoader`  | `false`                                          | use a custom class loader set on the `Env` to execute each example. By default sbt's classloader for running tests is attached to the `Env`
+ `threadsNb`             | `min(Runtime.getRuntime.availableProcessors, 4)` | number of threads to use for concurrent execution
+ `scheduledThreadsNb`    | `1`                                              | number of threads to use for timing out execution
+ `batchSize`             | `min(Runtime.getRuntime.availableProcessors, 4)` | number of examples which start executing concurrently at the time
+ `timeFactor`            | `1`                                              | multiply all durations by this factor when waiting for futures
+ `executor`              | `""`                                             | implementation of the `org.specs2.specification.process.Executor` trait
 
 
 ## Storing
