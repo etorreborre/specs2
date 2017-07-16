@@ -57,7 +57,7 @@ object ExecutionEnv {
 
   /**
    * the number of executors is set from the arguments.threadsNb value which is
-   * Runtime.getRuntime.availableProcessors by default
+   * min(Runtime.getRuntime.availableProcessors, 4) by default
    */
   def executor(threadsNb: Int, name: String): ExecutorService =
     Executors.newFixedThreadPool(threadsNb, NamedThreadFactory("specs2.fixed."+name))
