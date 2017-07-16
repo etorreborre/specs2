@@ -36,7 +36,7 @@ case class ExecutorServices(executorServiceEval:   Evaluated[ExecutorService],
 object ExecutorServices {
 
   lazy val threadsNb: Int =
-    math.max(Runtime.getRuntime.availableProcessors, 4)
+    math.min(Runtime.getRuntime.availableProcessors, 4)
 
   def create(implicit es: ExecutorService, s: ScheduledExecutorService): ExecutorServices =
     fromExecutorServices(es, s)
