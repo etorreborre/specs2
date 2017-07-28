@@ -26,7 +26,14 @@ case class HamcrestMatcherAdapter[T](m: Matcher[T]) extends BaseMatcher[T] {
         case _ => true
       }
     // a class cast exception can happen if we tried: vet.treat(dog); there must be one(vet).treat(bird) (see issue #222)
-    } catch { case c: ClassCastException => false; case e: Throwable => throw e }
+    } catch {
+      case c: ClassCastException => false
+      case e: Throwable =>
+        // this is a stop-gap solution for #584
+        // it seems that Mockito can pass null values in some cases
+        if (item == null) false
+        else throw e
+    }
   }
 
   def describeTo(description: Description) {

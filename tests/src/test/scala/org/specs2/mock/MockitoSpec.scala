@@ -7,9 +7,19 @@ import junit.framework.AssertionFailedError
 
 class MockitoSpec extends script.Spec with Mockito with ResultMatchers with Groups {  def is = s2"""
 
- The Mockito trait is reusable in other contexts
+  Contexts
+  ========
+
+  The Mockito trait is reusable in other contexts
    + in JUnit
-                                                                                                                        """
+
+ Issues
+ ======
+ 
+ The following mockito issues are fixed
+   + #584
+
+"""
 
   "callbacks" - new group {
 
@@ -23,6 +33,18 @@ class MockitoSpec extends script.Spec with Mockito with ResultMatchers with Grou
         }
       }
       s.test must throwAn[AssertionFailedError]
+    }
+  }
+
+  "issues" - new group {
+    eg := {
+      trait Mockable { def method(list: List[String]): String }
+      lazy val m = mock[Mockable]
+
+      m.method(===(List[String]())).returns("Hello1")
+      m.method(===(List[String]("2"))).returns("Hello2")
+      m.method(List()) === "Hello1"
+      m.method(List("2")) === "Hello2"
     }
   }
 }
