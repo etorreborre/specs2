@@ -1,7 +1,7 @@
 package examples
 
 import org.specs2._
-import specification.AllExpectations
+import org.specs2.specification.AllExpectations
 
 class HelloWorldUnitAllExpectationsSpec extends mutable.Specification with AllExpectations {
 

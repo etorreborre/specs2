@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.specs2</groupId>
   <artifactId>specs2_2.12</artifactId>
-  <version>3.8.9</version>
+  <version>4.0.0-RC1</version>
   <name>specs2 jars</name>
   <description>pom file for all the specs2 jars</description>
   <packaging>pom</packaging>

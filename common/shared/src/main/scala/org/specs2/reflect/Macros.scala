@@ -1,7 +1,6 @@
-package org.specs2
-package reflect
+package org.specs2.reflect
 
-import MacroContext._
+import org.specs2.reflect.MacroContext._
 
 /**
  * Macros helper functions

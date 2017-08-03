@@ -1,13 +1,13 @@
-package org.specs2
-package specification.create
+package org.specs2.specification.create
 
-import specification.core.Fragments
-import reflect.MacroContext._
-import reflect.Macros._
+import org.specs2.reflect.MacroContext.Context
+import org.specs2.reflect.Macros.{methodCall, stringExpr, toAST}
+import org.specs2.specification.core.Fragments
 
 object S2Macro {
   def s2Implementation(c: Context)(variables: c.Expr[InterpolatedFragment]*) : c.Expr[Fragments] = {
-    import c.{universe => u}; import u.{ Position => _, _ }
+    import c.{universe => u}
+    import u.{Position => _, _}
 
     val texts = c.prefix.tree match { case Apply(_, List(Apply(_, ts))) => ts }
 

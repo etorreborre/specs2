@@ -67,14 +67,6 @@ lazy val analysis = crossProject.in(file("analysis")).
 lazy val analysisJs  = analysis.js.dependsOn(commonJs % "test->test", coreJs, matcherJs, scalacheckJs % "test")
 lazy val analysisJvm = analysis.jvm.dependsOn(commonJvm % "test->test", coreJvm, matcherJvm, scalacheckJvm % "test")
 
-lazy val fp = crossProject.in(file("fp")).
-  settings(moduleSettings("fp"):_*).
-  settings(name := "specs2-fp").
-  jvmSettings(moduleJvmSettings("fp"))
-
-lazy val fpJvm = fp.jvm
-lazy val fpJs  = fp.js
-
 lazy val common = crossProject.in(file("common")).
   settings(
     name := "specs2-common",
@@ -115,6 +107,14 @@ lazy val examples = crossProject.in(file("examples")).
 
 lazy val examplesJs  = examples.js.dependsOn(commonJs, matcherJs, coreJs, matcherExtraJvm, analysisJs, formJs, htmlJs, markdownJs, gwtJs, junitJs, scalacheckJs, mockJs)
 lazy val examplesJvm = examples.jvm.dependsOn(commonJvm, matcherJvm, coreJvm, matcherExtraJvm, analysisJvm, formJvm, htmlJvm, markdownJvm, gwtJvm, junitJvm, scalacheckJvm, mockJvm)
+
+lazy val fp = crossProject.in(file("fp")).
+  settings(moduleSettings("fp"):_*).
+  settings(name := "specs2-fp").
+  jvmSettings(moduleJvmSettings("fp"))
+
+lazy val fpJvm = fp.jvm
+lazy val fpJs  = fp.js
 
 lazy val form = crossProject.in(file("form")).
   settings(moduleSettings("form") ++
@@ -273,22 +273,19 @@ lazy val compilationSettings = Seq(
   maxErrors := 20,
   incOptions := incOptions.value.withNameHashing(true),
   scalacOptions in Compile ++=
-    (if (scalaMinorVersionAtLeast(scalaVersion.value, 11))
       Seq("-Xfatal-warnings",
         "-Xlint",
         "-Ywarn-unused-import",
         "-Yno-adapted-args",
         "-Ywarn-numeric-widen",
         "-Ywarn-value-discard",
-        "-deprecation:false", "-Xcheckinit", "-unchecked", "-feature", "-language:_")
-    else
-      Seq("-Xcheckinit", "-Xlint", "-deprecation", "-unchecked", "-feature", "-language:_")),
+        "-deprecation:false", "-Xcheckinit", "-unchecked", "-feature", "-language:_"),
   scalacOptions += "-Ypartial-unification",
-  addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.3"),
-  scalacOptions in Test ++= Seq("-Yrangepos"),
-  scalacOptions in (Compile, doc) ++= Seq("-feature", "-language:_"),
+  addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.4"),
+  scalacOptions in Test               ++= Seq("-Yrangepos"),
+  scalacOptions in (Compile, doc)     ++= Seq("-feature", "-language:_"),
   scalacOptions in (Compile, console) := Seq("-Yrangepos", "-feature", "-language:_"),
-  scalacOptions in (Test, console) := Seq("-Yrangepos", "-feature", "-language:_")
+  scalacOptions in (Test, console)    := Seq("-Yrangepos", "-feature", "-language:_")
 )
 
 lazy val testingSettings = Seq(

@@ -3,9 +3,13 @@ package org.specs2.concurrent
 import org.specs2.control.eff._
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.FiniteDuration
-import org.specs2.main._
-import org.specs2.control._
 
+/**
+ * Executor services for javascript
+ *
+ * The global execution context is used for both
+ * executing tests and scheduling timeouts
+ */
 case class ExecutorServices(executionContextEval: Evaluated[ExecutionContext],
                             schedulerEval: Evaluated[Scheduler]) {
 
@@ -27,9 +31,6 @@ case class ExecutorServices(executionContextEval: Evaluated[ExecutionContext],
 object ExecutorServices {
 
   lazy val threadsNb: Int = 1
-
-  def create(arguments: Arguments, systemLogger: Logger, threadFactoryName: String): ExecutorServices =
-    fromGlobalExecutionContext
 
   def fromExecutionContext(ec: =>ExecutionContext): ExecutorServices =
     ExecutorServices(

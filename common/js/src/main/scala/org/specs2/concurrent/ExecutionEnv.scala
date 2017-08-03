@@ -6,6 +6,9 @@ import org.specs2.main.Arguments
 
 import scala.concurrent.ExecutionContext
 
+/**
+ * Execution environment for javascript
+ */
 case class ExecutionEnv(executorServices: ExecutorServices,
                         timeFactor: Int) {
 

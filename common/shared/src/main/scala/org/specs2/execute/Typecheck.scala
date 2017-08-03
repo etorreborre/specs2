@@ -1,7 +1,7 @@
-package org.specs2
-package execute
+package org.specs2.execute
 
-import reflect.MacroContext._
+import org.specs2.reflect.MacroContext.Context
+
 import scala.reflect.macros.{ParseException, TypecheckException}
 
 /**
@@ -100,7 +100,8 @@ object Typecheck {
   }
 
   def typecheckCodeImplementation(c: Context)(variables: c.Expr[Any]*)(params: c.Expr[TypecheckParams]) : c.Tree = {
-    import c.{universe => u}; import u.{ Position => _, _ }
+    import c.{universe => u}
+    import u.{Position => _, _}
 
     val texts = c.prefix.tree match { case Apply(_, List(Apply(_, ts))) => ts }
     if (texts.size != 1)

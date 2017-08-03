@@ -1,6 +1,8 @@
 Dependency-free version!
 
 `specs2-core` is finally dependency-free and doesn't need to be built for various versions of Scalaz.
+`specs2-core` is also now available for Scala.js
+
 
 ## Changes
 
