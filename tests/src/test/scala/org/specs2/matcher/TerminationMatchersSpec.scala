@@ -4,14 +4,12 @@ package matcher
 import io.StringOutput
 import java.util.concurrent._
 
-import org.specs2.concurrent.ExecutionEnv
-import org.specs2.main.Arguments
-import org.specs2.specification.core.Env
+import org.specs2.specification.core.{Env, OwnExecutionEnv}
 import specification._
 
 import scala.concurrent.duration._
 
-class TerminationMatchersSpec extends script.Specification with TerminationMatchers with Grouped { def is = section("travis") ^ sequential ^ s2"""
+class TerminationMatchersSpec(val env: Env) extends script.Specification with TerminationMatchers with Grouped with OwnExecutionEnv { def is = section("travis") ^ sequential ^ s2"""
                                                                                                    
  It is possible to check if a block of code terminates
    with a default number of retries and default sleep time
@@ -35,10 +33,7 @@ class TerminationMatchersSpec extends script.Specification with TerminationMatch
 
   We should not overflow the stack
     + when a very large number of retries is provided
- """ ^ step(env.shutdown)
-
-  val env = Env(Arguments("threadsnb 4"))
-  implicit val ee: ExecutionEnv = env.executionEnv
+ """
 
   "termination" - new group {
     eg := { sleepFor(50) must terminate(sleep = 200.millis) }
@@ -99,8 +94,6 @@ class TerminationMatchersSpec extends script.Specification with TerminationMatch
     }
 
   }
-
-  type EE = ExecutionEnv
 
   def sleepFor(duration: Long) =
     try Thread.sleep(duration) catch { case t: Throwable => () }

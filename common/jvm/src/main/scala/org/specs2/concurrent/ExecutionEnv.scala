@@ -21,6 +21,8 @@ case class ExecutionEnv(executorServices: ExecutorServices,
   implicit lazy val ses = scheduledExecutorService
   implicit lazy val ec  = executionContext
 
+  def setTimeFactor(tf: Int): ExecutionEnv =
+    copy(timeFactor = tf)
 }
 
 object ExecutionEnv {

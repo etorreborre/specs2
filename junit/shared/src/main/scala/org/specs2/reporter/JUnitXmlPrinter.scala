@@ -33,7 +33,7 @@ trait JUnitXmlPrinter extends Printer {
 
   def saveResults(env: Env, spec: SpecStructure): ((Stats, List[Fragment])) =>  Action[Unit] = { case (stats, fs) =>
     descriptionFold(spec, stats, env).run(descriptions(spec, fs)(env.specs2ExecutionEnv).toList).flatMap { suite =>
-       env.fileSystem.writeFile(outputDirectory(env) | FileName.unsafe(spec.specClassName+".xml"), suite.xml)
+       env.fileSystem.writeFile(outputDirectory(env.arguments) | FileName.unsafe(spec.specClassName+".xml"), suite.xml)
     }
   }
 
@@ -51,8 +51,8 @@ trait JUnitXmlPrinter extends Printer {
   def descriptions(spec: SpecStructure, fragments: List[Fragment])(ee: ExecutionEnv) =
     JUnitDescriptions.fragmentDescriptions(spec.setFragments(Fragments(fragments:_*)))(ee)
 
-  def outputDirectory(env: Env): DirectoryPath =
-    env.arguments.commandLine.directoryOr("junit.outdir", "target" / "test-reports")
+  def outputDirectory(arguments: Arguments): DirectoryPath =
+    arguments.commandLine.directoryOr("junit.outdir", "target" / "test-reports")
 
   case class TestSuite(description: Description, className: String, errors: Int, failures: Int, skipped: Int, time: Long = 0, tests: Seq[TestCase] = Seq()) {
     def addTest(t: TestCase) = copy(tests = tests :+ t)

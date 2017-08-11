@@ -6,15 +6,15 @@ import io._
 
 /** Options for the Html generation */
 case class HtmlOptions(
-  outDir: DirectoryPath,
-  baseDir: DirectoryPath,
-  template: FilePath,
-  variables: Map[String, String],
-  noStats: Boolean,
-  search: Boolean,
+  outDir:             DirectoryPath,
+  baseDir:            DirectoryPath,
+  template:           FilePath,
+  variables:          Map[String, String],
+  noStats:            Boolean,
+  search:             Boolean,
   warnMissingSeeRefs: Boolean,
-  tocEntryMaxSize: Int,
-  toc: Boolean) {
+  tocEntryMaxSize:    Int,
+  toc:                Boolean) {
 
   def javascriptDir = outDir / "javascript"
   def indexDir      = javascriptDir / "tipuesearch"
@@ -42,6 +42,7 @@ case class HtmlOptions(
 }
 
 object HtmlOptions {
+
   val outDir             = DirectoryPath.unsafe(new File("target/specs2-reports").getAbsoluteFile)
   val baseDir            = DirectoryPath.unsafe(".")
   val variables          = Map[String, String]()

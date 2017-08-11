@@ -3,12 +3,13 @@ package matcher
 
 import org.specs2.concurrent._
 import FutureApplicative._
+
 import scala.concurrent._
 import sys._
 import execute._
-import org.specs2.specification.core.Env
+import org.specs2.specification.core.{Env, OwnExecutionEnv}
 
-class DataTablesSpec extends Specification with DataTables with ResultMatchers { def is = s2"""
+class DataTablesSpec(val env: Env) extends Specification with DataTables with ResultMatchers with OwnExecutionEnv { def is = s2"""
 
  DataTables are useful to specify lots of examples varying just by a few values.
 
@@ -41,11 +42,7 @@ class DataTablesSpec extends Specification with DataTables with ResultMatchers {
                                                                                                               
  Even if the execution is concurrent you will get the errors corresponding to each row                       $applicative6
 
- ${step(env.shutdown)}
                                                                                                              """
-
-  val env = Env()
-  implicit val ee: ExecutionEnv = env.executionEnv
 
   def boom = error("boom")
 

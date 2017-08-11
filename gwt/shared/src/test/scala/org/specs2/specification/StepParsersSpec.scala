@@ -2,9 +2,10 @@ package org.specs2
 package specification
 
 import matcher._
-import script.{StepParser, GWT}
+import script.StepParser
+import script.StepParsers._
 
-class StepParsersSpec extends Spec with GWT with Grouped with TypedEqual { def is = s2"""
+class StepParsersSpec extends Spec with Grouped with TypedEqual { def is = s2"""
 
 
  Delimited parsers can be used to extract values from specifications

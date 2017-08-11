@@ -18,7 +18,7 @@ import ResultMatchers._
 import scala.concurrent._
 import ExecuteActions._
 
-class ExecutorSpec extends script.Specification with Groups with ThrownExpectations { def is = section("travis") ^ s2"""
+class ExecutorSpec(val env: Env) extends script.Specification with Groups with ThrownExpectations with OwnEnv { def is = section("travis") ^ s2"""
 
  Steps
  =====
@@ -38,13 +38,9 @@ class ExecutorSpec extends script.Specification with Groups with ThrownExpectati
   with a timeout $timeout
   with examples using an execution context $userEnv
 
-${step(env.shutdown)}
 """
 
   import factory._
-
-  val env = Env()
-  implicit val ec: ExecutionContext = env.executionContext
 
   "steps" - new group with results {
 

@@ -3,16 +3,12 @@ package specification.create
 
 import execute._
 import control.TraceLocation
-import org.specs2.concurrent.ExecutionEnv
 import org.specs2.specification.script.StepParser
-import specification.process._
 import specification.core._
 import text.{Trim, Interpolated}
 import Trim._
 import text.NotNullStrings._
 import text.Trim._
-import org.specs2.main.{CommandLine, Arguments}
-import scala.concurrent.ExecutionContext
 
 /**
  * These implicit methods declare which kind of object can be interpolated in a s2 string;
@@ -49,26 +45,8 @@ trait S2StringContext extends S2StringContext1 { outer =>
       (parsed.fold(_ => None, sr => Some(sr._1)), (e: Env) => parsed.fold(t => Error(t), sr => AsResult(sr._2)))
     }
 
-  implicit def envFunctionIsInterpolatedFragment[R : AsResult](f: Env => R): InterpolatedFragment =
-    stringAndEnvFunctionIsInterpolatedFragment(_ => f)
-
-  implicit def argumentsFunctionIsInterpolatedFragment[R : AsResult](f: Arguments => R): InterpolatedFragment =
-    envFunctionIsInterpolatedFragment((env: Env) => f(env.arguments))
-
-  implicit def statsRepositoryFunctionIsInterpolatedFragment[R : AsResult](f: StatisticsRepository => R): InterpolatedFragment =
-    envFunctionIsInterpolatedFragment((env: Env) => f(env.statisticsRepository))
-
   implicit def executionIsInterpolatedFragment(execution: Execution): InterpolatedFragment =
     createExecutionInterpolatedFragment(execution)
-
-  implicit def commandLineFunctionIsInterpolatedFragment[R : AsResult](f: CommandLine => R): InterpolatedFragment =
-    envFunctionIsInterpolatedFragment((env: Env) => f(env.arguments.commandLine))
-
-  implicit def executionContextFunctionIsInterpolatedFragment[R : AsResult](f: ExecutionContext => R): InterpolatedFragment =
-    envFunctionIsInterpolatedFragment((env: Env) => f(env.executionContext))
-
-  implicit def executionEnvFunctionIsInterpolatedFragment[R : AsResult](f: ExecutionEnv => R): InterpolatedFragment =
-    envFunctionIsInterpolatedFragment((env: Env) => f(env.executionEnv))
 
   implicit def anyAsResultIsInterpolatedFragment(r: =>Function0Result): InterpolatedFragment = new InterpolatedFragment {
     def append(fs: Fragments, text: String, start: Location, end: Location, expression: String): Fragments =

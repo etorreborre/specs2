@@ -9,7 +9,7 @@ import org.junit.runner.Description
 import execute.{Result, StandardResults, Success}
 import ShowDescription._
 
-class JUnitDescriptionSpec extends Specification with JUnitDescriptionSpecTest { def is = s2"""
+class JUnitDescriptionSpec(val env: Env) extends Specification with JUnitDescriptionSpecTest with OwnExecutionEnv { def is = s2"""
                                                                                          
  A list of Fragments can be 'folded' into a tree of JUnit descriptions so that there is
  a root Description object (the top 'suite') and children objects representing either
@@ -34,10 +34,8 @@ class JUnitDescriptionSpec extends Specification with JUnitDescriptionSpecTest {
    For a Text followed by examples
      for the text                                                                                                   $b2
      for the first example                                                                                          $b3
-   ${step(env.shutdown)}
                                                                                                                     """
 
-  lazy val env = Env()
 
   import ReporterExamples._
   val factory = fragmentFactory; import factory._
@@ -135,7 +133,7 @@ class JUnitDescriptionSpec extends Specification with JUnitDescriptionSpecTest {
 
     val ds =
       ShowDescription.toTree(descriptions(false).
-        createDescription(titled(start ^ "level1" ^ break ^ ex1fst ^ ex1snd ^ end))(env.executionEnv)).flatten.toList
+        createDescription(titled(start ^ "level1" ^ break ^ ex1fst ^ ex1snd ^ end))(ee)).flatten.toList
 
     ds.map(_.hashCode).distinct must haveSize(4)
   }
@@ -179,7 +177,7 @@ class JUnitDescriptionSpec extends Specification with JUnitDescriptionSpecTest {
   def showDescriptionTree(spec: SpecStructure, fromIDE: Boolean = false): String = {
     // set the header to the main specification class
     val newHeader = spec.header.copy(specClass = classOf[JUnitDescriptionSpec])
-    descriptions(fromIDE).createDescription(spec.copy(header = newHeader))(env.executionEnv).drawTree
+    descriptions(fromIDE).createDescription(spec.copy(header = newHeader))(ee).drawTree
   }
 
   def toDescription(f: Fragment): Description   = toDescription(Fragments(f))
@@ -189,7 +187,7 @@ class JUnitDescriptionSpec extends Specification with JUnitDescriptionSpecTest {
 
     // set the header to the main specification class
     val newHeader = spec.header.copy(specClass = classOf[JUnitDescriptionSpec])
-    descriptions().createDescription(spec.copy(header = newHeader))(env.executionEnv)
+    descriptions().createDescription(spec.copy(header = newHeader))(ee)
   }
 
   def descriptions(fromIDE: Boolean = false) = new JUnitDescriptions {

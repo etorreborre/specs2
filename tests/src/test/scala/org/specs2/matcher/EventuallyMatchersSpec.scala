@@ -7,7 +7,7 @@ import org.specs2.concurrent.ExecutionEnv
 import scala.concurrent._
 import scala.concurrent.duration._
 
-class EventuallyMatchersSpec extends Specification with FutureMatchers with ExpectationsDescription { section("travis")
+class EventuallyMatchersSpec(implicit ee: ExecutionEnv) extends Specification with FutureMatchers with ExpectationsDescription { section("travis")
 addParagraph { """
 `eventually` can be used to retry any matcher until a maximum number of times is reached
 or until it succeeds.
@@ -36,7 +36,7 @@ or until it succeeds.
     def get = { i += 1; i }
     get aka "hello" must beEqualTo(3).eventually
   }
-  "It is possible to use await + eventually" in { implicit ee: ExecutionEnv =>
+  "It is possible to use await + eventually" in {
     var i = 0
     def op = if (i == 0) { i += 1; Future(0) } else Future(1)
 

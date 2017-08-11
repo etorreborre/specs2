@@ -3,15 +3,11 @@ package specification
 package dsl
 package mutable
 
-import org.specs2.concurrent.ExecutionEnv
 import org.specs2.execute.AsResult
 import control.{ImplicitParameters, Use}
 import ImplicitParameters._
-import org.specs2.main.CommandLine
 import org.specs2.specification.core._
 import org.specs2.specification.script.StepParser
-
-import scala.concurrent.ExecutionContext
 
 /**
  * Dsl for creating examples in a mutable specification
@@ -39,18 +35,6 @@ trait ExampleDsl1 extends BlockDsl with ExampleDsl0 {
     def >>[R](f: String => R)(implicit asResult: AsResult[R], p1: ImplicitParam1, p2: ImplicitParam2): Fragment =
       Use.ignoring(p1, p2) { >>(Execution.result(f(d))) }
 
-    def >>[R](f: CommandLine => R)(implicit asResult: AsResult[R], p: ImplicitParam): Fragment =
-      Use.ignoring(p) { >>(Execution.withEnv((env: Env) => asResult.asResult(f(env.arguments.commandLine)))) }
-
-    def >>[R](f: Env => R)(implicit asResult: AsResult[R], p1: ImplicitParam1): Fragment =
-      Use.ignoring(p1) { >>(Execution.withEnv((env: Env) => asResult.asResult(f(env)))) }
-
-    def >>[R](f: ExecutionContext => R)(implicit asResult: AsResult[R], p2: ImplicitParam2): Fragment =
-      Use.ignoring(p2) { >>(Execution.withExecutionContext(f)) }
-
-    def >>[R](f: ExecutionEnv => R)(implicit asResult: AsResult[R], p3: ImplicitParam3): Fragment =
-      Use.ignoring(p3) { >>(Execution.withExecutionEnv(f)) }
-
    def >>(execution: Execution): Fragment = {
       addFragment(fragmentFactory.example(Text(d), execution))
       addFragment(fragmentFactory.break)
@@ -71,18 +55,6 @@ trait ExampleDsl1 extends BlockDsl with ExampleDsl0 {
 
     def in(fs: =>Fragments)(implicit p1: ImplicitParam1): Fragments =
       describe(d).>>(fs)(p1)
-
-    def in[R](f: CommandLine => R)(implicit asResult: AsResult[R], p: ImplicitParam): Fragment =
-      >>(f)(asResult, p)
-
-    def in[R](f: Env => R)(implicit asResult: AsResult[R], p1: ImplicitParam1): Fragment =
-      d.>>(f)(asResult, p1)
-
-    def in[R](f: ExecutionContext => R)(implicit asResult: AsResult[R], p2: ImplicitParam2): Fragment =
-      d.>>(f)(asResult, p2)
-
-    def in[R](f: ExecutionEnv => R)(implicit asResult: AsResult[R], p3: ImplicitParam3): Fragment =
-      d.>>(f)(asResult, p3)
 
     def in[R: AsResult](parser: StepParser[R]): Fragment =
       d.>>(parser)

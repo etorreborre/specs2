@@ -41,6 +41,7 @@ lazy val specs2Settings = Seq(
 
 lazy val specs2Version = settingKey[String]("defines the current specs2 version")
 lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
+lazy val shapelessVersion = "2.3.2"
 
 def moduleSettings(name: String) =
   coreDefaultSettings  ++
@@ -131,7 +132,7 @@ lazy val guide = Project(id = "guide", base = file("guide"),
 
 lazy val gwt = crossProject.in(file("gwt")).
   settings(Seq(
-    libraryDependencies ++= depends.shapeless(scalaVersion.value)) ++
+    libraryDependencies += "com.chuusai" %%% "shapeless" % shapelessVersion) ++
     moduleSettings("gwt") ++
     Seq(name := "specs2-gwt"):_*).
   jvmSettings(depends.jvmTest, moduleJvmSettings("gwt"))
@@ -199,7 +200,7 @@ lazy val shapeless = crossProject.in(file("shapeless")).
     Seq(name := "specs2-shapeless",
       libraryDependencies ++=
         depends.paradise(scalaVersion.value) ++
-          depends.shapeless(scalaVersion.value)
+        Seq("com.chuusai" %%% "shapeless" % shapelessVersion)
     ):_*).
   jvmSettings(depends.jvmTest, moduleJvmSettings("shapeless"))
 

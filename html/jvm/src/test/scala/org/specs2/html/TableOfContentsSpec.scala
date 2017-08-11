@@ -14,7 +14,6 @@ class TableOfContentsSpec(implicit ee: ExecutionEnv) extends script.Specificatio
 
  The table of contents is created from the specifications and the generated html files
 
-
  Creating a table of content for a html document
     creates an unordered list from the html headers                                             
       + as nested <li/> lists corresponding to the hierarchy of the document headers

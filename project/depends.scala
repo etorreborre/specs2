@@ -51,9 +51,6 @@ object depends {
   lazy val junit         = Seq("junit"        % "junit"         % "4.12")
   lazy val hamcrest      = Seq("org.hamcrest" % "hamcrest-core" % "1.3")
 
-  def shapeless(scalaVersion: String) =
-    Seq("com.chuusai" %% "shapeless" % "2.3.2")
-
   lazy val pegdown = Seq("org.pegdown" % "pegdown" % "1.6.0")
 
   lazy val tagsoup = "org.ccil.cowan.tagsoup" % "tagsoup" % "1.2"

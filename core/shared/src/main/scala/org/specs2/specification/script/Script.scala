@@ -16,6 +16,7 @@ package script
 trait Script {
   /** @return the title of the script */
   def title: String
+
   /** create fragments corresponding on this sequence based on a piece of text */
   def fragments(text: String): FragmentsSeq
 

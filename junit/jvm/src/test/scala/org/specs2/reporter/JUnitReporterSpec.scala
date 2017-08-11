@@ -13,7 +13,7 @@ import specification.core._
 
 import scala.collection.mutable.ListBuffer
 
-class JUnitReporterSpec extends Specification with Mockito {  def is = s2"""
+class JUnitReporterSpec(val env: Env) extends Specification with Mockito with OwnEnv {  def is = s2"""
 
  The JUnitRunner is meant to be used with the RunWith annotation.
  It takes a Specification, executes it and notifies a RunNotifier object of the possible
@@ -33,10 +33,7 @@ class JUnitReporterSpec extends Specification with Mockito {  def is = s2"""
    1 pending example, a test ignored must be reported                                                 ${notified().e7}
    1 failing example with be_==, a ComparisonFailure message must be reported                         ${notified().e8}
    steps must be correctly sequenced with examples                                                    ${notified().e9}
-  ${step(env.shutdown)}
                                                                                                       """
-
-  lazy val env = Env()
 
   case class notified() extends WithNotifier with ReporterExamples {
     def desc(s: String) = =~(s) ^^ ((_:Description).getDisplayName)

@@ -3,12 +3,14 @@ package reporter
 
 import io._
 import specification.core._
+
 import scala.xml.NodeSeq
 import matcher._
 import control._
 import ExecuteActions._
+import org.specs2.main.Arguments
 
-class JUnitXmlPrinterSpec extends Specification with XmlMatchers { def is = s2"""
+class JUnitXmlPrinterSpec(val env: Env) extends Specification with XmlMatchers with OwnEnv { def is = s2"""
 
 The JUnitXmlPrinter allows to execute specifications and output xml files in a test-reports directory where each xml
 is formatted for JUnit reporting tools.
@@ -47,22 +49,19 @@ is formatted for JUnit reporting tools.
     the failure trace                                                                                                   ${message.e6}
     the skipped tag                                                                                                     ${message.e7}
     names must be escaped                                                                                               ${message.e8}
+  """
 
-  ${step(env.shutdown)}
-"""
-
-  lazy val env = Env()
   val printer = JUnitXmlPrinter
 
   object outputDir {
 
     def e1 = {
-      printer.outputDirectory(env).path must endWith("target/test-reports")
+      printer.outputDirectory(Arguments()).path must endWith("target/test-reports")
     }
 
     def e2 = {
       System.setProperty("specs2.junit.outDir", "target/reports/junit")
-      printer.outputDirectory(env).path must endWith("target/reports/junit")
+      printer.outputDirectory(Arguments()).path must endWith("target/reports/junit")
     }
   }
 

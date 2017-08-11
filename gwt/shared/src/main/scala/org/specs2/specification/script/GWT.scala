@@ -23,7 +23,7 @@ import org.specs2.control.ExecuteActions._
 trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
   private val factory: FragmentFactory = fragmentFactory; import factory._
 
-  implicit def executionEnv: ExecutionEnv =
+  def executionEnv: ExecutionEnv =
     ExecutionEnv.fromGlobalExecutionContext
 
   /** renaming of the shapeless cons object to avoid imports */
@@ -243,10 +243,10 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
 
     /** zip extractors, lines and steps to intercalate steps between texts fragments (and strip the lines of their delimiters if any */
     private def appendSteps(extractors: Seq[StepParser[_]], lines: Seq[String], steps: Seq[Fragment]): FragmentsSeq =
-      FragmentsSeq((extractors zip lines zip steps).toVector.map {
+      FragmentsSeq((extractors zip lines zip steps).toVector.flatMap {
         case ((extractor: StepParser[_], l: String), s: Fragment) =>
           Vector(factory.text(extractor.strip(l)), break, s)
-      }.flatten)
+      })
 
     /** extract values from a line and execute a function */
     private def execute(previousResult: Result, extractor: StepParser[_], line: String)(f: Any => Any) =

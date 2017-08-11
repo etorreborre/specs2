@@ -14,9 +14,8 @@ import control._
 import eff.ErrorEffect
 import matcher._
 import OperationMatchers._
-import org.specs2.concurrent.ExecutionEnv
 
-class SpecificationStructureSpec(implicit ee: ExecutionEnv) extends Specification with ScalaCheck with DisjunctionMatchers { def is = s2"""
+class SpecificationStructureSpec(val env: Env) extends Specification with ScalaCheck with DisjunctionMatchers with OwnEnv { def is = s2"""
 
  There can be links between specifications and it is possible to sort all the dependent specifications
  so that
@@ -31,7 +30,7 @@ class SpecificationStructureSpec(implicit ee: ExecutionEnv) extends Specificatio
 
 """
 
-  def sort = (env: Env) => prop { specification: SpecificationStructure =>
+  def sort = prop { specification: SpecificationStructure =>
     val linked = SpecificationStructure.linkedSpecifications(specification, env, getClass.getClassLoader).runOption.getOrElse(List())
     val sorted = SpecificationStructure.topologicalSort(env)(linked).getOrElse(Vector()).map(_.structure(env))
 
@@ -41,7 +40,7 @@ class SpecificationStructureSpec(implicit ee: ExecutionEnv) extends Specificatio
     }.forall
   }.set(maxSize = 5)
 
-  def linksOrder = (env: Env) => prop { links: List[Fragment] =>
+  def linksOrder = prop { links: List[Fragment] =>
     val specification = new SpecificationStructure { def is = SpecStructure.create(SpecHeader.create(getClass), Fragments(links:_*)) }
     val linked = SpecificationStructure.linkedSpecifications(specification, env, getClass.getClassLoader).runOption.getOrElse(List())
     val sorted = SpecificationStructure.topologicalSort(env)(linked).get.map(_.structure(env))

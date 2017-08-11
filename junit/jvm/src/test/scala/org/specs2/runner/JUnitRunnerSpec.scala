@@ -7,17 +7,16 @@ import main.Arguments
 import specification.core.Env
 import control._
 import ExecuteActions._
-import org.specs2.concurrent.ExecutionEnv
 
-class JUnitRunnerSpec(ee: ExecutionEnv) extends Specification { def is = s2"""
+class JUnitRunnerSpec(env: Env) extends Specification { def is = s2"""
 
  The Junit runner must run all linked specifications if 'all' is set on the command line $allSpecifications
 
 """
 
-  def allSpecifications = { env: Env =>
+  def allSpecifications = {
     val runner = createRunner(new MainJUnitSpecification)
-    runner.runWithEnv(runner.notifier, env.copy(arguments = Arguments("all", "junit"))).runOption(ee)
+    runner.runWithEnv(runner.notifier, env.copy(arguments = Arguments("all", "junit"))).runOption(env.executionEnv)
     runner.messages must contain("run started LinkedJUnitSpec", "run started MainJUnitSpecification")
   }
 

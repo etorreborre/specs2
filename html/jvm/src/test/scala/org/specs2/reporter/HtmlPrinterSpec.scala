@@ -3,21 +3,18 @@ package reporter
 
 import io._
 import main.Arguments
-import org.specs2.specification.core.{SpecificationStructure, Env}
+import org.specs2.specification.core.{OwnEnv, Env, SpecificationStructure}
 import matcher._
 import control._
 
-class HtmlPrinterSpec extends Specification with ActionMatchers with ThrownExpectations { def is = sequential ^ s2"""
+class HtmlPrinterSpec(val env: Env) extends Specification with ActionMatchers with ThrownExpectations with OwnEnv { def is = sequential ^ s2"""
 
  The Html printer outputs html files for a specification and its linked specification
 
    if html.search == true then it creates an index contents file $index
    if html.search == true then it creates a search page          $searchPage
 
-  ${step(env.shutdown)}
 """
-
-  lazy val env = Env()
 
   def index = {
     val spec = new Specification { def is = s2""" one example $ok """}
