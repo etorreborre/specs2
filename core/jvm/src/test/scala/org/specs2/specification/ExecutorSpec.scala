@@ -45,7 +45,7 @@ class ExecutorSpec(val env: Env) extends script.Specification with Groups with T
   "steps" - new group with results {
 
     eg := {
-      val tf = env.arguments.execute.timeFactor
+      val tf = ownEnv.arguments.execute.timeFactor
 
       val fragments = Fragments(
         example("slow", slow(tf)),
@@ -53,14 +53,13 @@ class ExecutorSpec(val env: Env) extends script.Specification with Groups with T
         step(step1),
         example("fast", fast(tf)))
 
-      try execute(fragments, env) must not(contain(beSkipped[Result]))
-      finally env.shutdown
+      execute(fragments, ownEnv) must not(contain(beSkipped[Result]))
 
       messages.toList must_== Seq("medium", "slow", "step", "fast")
     }
 
     eg := {
-      val tf = env.arguments.execute.timeFactor
+      val tf = ownEnv.arguments.execute.timeFactor
 
       val fragments = Fragments(
         example("slow", slow(tf)),
@@ -68,14 +67,13 @@ class ExecutorSpec(val env: Env) extends script.Specification with Groups with T
         step(step1).stopOnFail,
         example("fast", fast(tf)))
 
-      try execute(fragments, env) must contain(beSkipped[Result])
-      finally env.shutdown
+      execute(fragments, ownEnv) must contain(beSkipped[Result])
 
       messages.toList must_== Seq("medium", "slow", "step")
     }
 
     eg := {
-      val tf = env.arguments.execute.timeFactor
+      val tf = ownEnv.arguments.execute.timeFactor
 
       val fragments = Fragments(
         example("slow", slow(tf)),
@@ -83,14 +81,13 @@ class ExecutorSpec(val env: Env) extends script.Specification with Groups with T
         step(step1).stopOnError,
         example("fast", fast(tf)))
 
-      try execute(fragments, env) must contain(beSkipped[Result])
-      finally env.shutdown
+      execute(fragments, ownEnv) must contain(beSkipped[Result])
 
       messages.toList must_== Seq("medium", "slow", "step")
     }
 
-    eg := { env: Env =>
-      val tf = env.arguments.execute.timeFactor
+    eg := {
+      val tf = ownEnv.arguments.execute.timeFactor
 
       val fragments = Fragments(
         example("slow", slow(tf)),
@@ -98,20 +95,19 @@ class ExecutorSpec(val env: Env) extends script.Specification with Groups with T
         step(step1),
         example("fast", fast(tf)))
 
-      execute(fragments, env.setArguments(Arguments("stopOnSkip"))) must contain(beSkipped[Result])
+      execute(fragments, ownEnv.setArguments(Arguments("stopOnSkip"))) must contain(beSkipped[Result])
 
       messages.toList must_== Seq("medium", "slow", "step")
     }
 
     eg := {
-      val tf = env.arguments.execute.timeFactor
+      val tf = ownEnv.arguments.execute.timeFactor
 
       val fragments = Fragments(
         example("ex1", fast(tf)),
         example("ex2", fast(tf)))
 
-      try execute(fragments, env.setArguments(Arguments("skipAll"))) must contain(beSkipped[Result])
-      finally env.shutdown
+      execute(fragments, ownEnv.setArguments(Arguments("skipAll"))) must contain(beSkipped[Result])
 
       messages.toList must beEmpty
     }
@@ -121,7 +117,7 @@ class ExecutorSpec(val env: Env) extends script.Specification with Groups with T
   "execute" - new group with results {
 
     eg := {
-      val tf = env.arguments.execute.timeFactor
+      val tf = ownEnv.arguments.execute.timeFactor
 
       val fragments = Fragments(
         example("slow", slow(tf)),
@@ -129,14 +125,13 @@ class ExecutorSpec(val env: Env) extends script.Specification with Groups with T
         step(step1),
         example("fast", fast(tf)))
 
-      try execute(fragments, env.setArguments(Arguments("sequential"))) must not(contain(beSkipped[Result]))
-      finally env.shutdown
+      execute(fragments, ownEnv.setArguments(Arguments("sequential"))) must not(contain(beSkipped[Result]))
 
       messages.toList must_== Seq("slow", "medium", "step", "fast")
     }
 
     eg := {
-      val tf = env.arguments.execute.timeFactor
+      val tf = ownEnv.arguments.execute.timeFactor
 
       val fragments = Fragments(
         example("slow", slow(tf)),
@@ -144,8 +139,7 @@ class ExecutorSpec(val env: Env) extends script.Specification with Groups with T
         step(step1),
         example("fast", fast(tf)))
 
-      try execute(fragments, env.setArguments(Arguments("sequential")))
-      finally env.shutdown
+      execute(fragments, ownEnv.setArguments(Arguments("sequential")))
 
       messages.toList must_== Seq("slow", "medium", "step", "fast")
     }
@@ -157,8 +151,7 @@ class ExecutorSpec(val env: Env) extends script.Specification with Groups with T
         step(fatalStep),
         example("fast2", ok("ok2")))
 
-      try execute(fragments, env)
-      finally env.shutdown
+      execute(fragments, ownEnv)
 
       messages.toList must_== Seq("ok1", "fatal")
     }
@@ -169,26 +162,23 @@ class ExecutorSpec(val env: Env) extends script.Specification with Groups with T
         example("e1", ko("ko1")),
         example("e2", ok("ok2")))
 
-      try {
-        val env1 = env.setArguments(Arguments.split("sequential stopOnFail"))
+        val env1 = ownEnv.setArguments(Arguments.split("sequential stopOnFail"))
         val results = execute(fragments, env1).map(_.status)
 
         results must contain("x", "o")
-      } finally env.shutdown
-    }
+      }
   }
 
   def timeout = {
-    val timeFactor = env.arguments.execute.timeFactor
+    val timeFactor = ownEnv.arguments.execute.timeFactor
 
     val messages = new ListBuffer[String]
     def verySlow = { Thread.sleep(600 * timeFactor.toLong); messages.append("very slow"); success }
 
     val fragments = Fragments(example("very slow", verySlow))
-    val env1 = env.setTimeout(100.millis * timeFactor.toLong)
+    val env1 = ownEnv.setTimeout(100.millis * timeFactor.toLong)
 
-    try execute(fragments, env1) must contain(beSkipped[Result]("timed out after "+100*timeFactor+" milliseconds"))
-    finally env.shutdown
+    execute(fragments, env1) must contain(beSkipped[Result]("timed out after "+100*timeFactor+" milliseconds"))
   }
 
   def userEnv = {

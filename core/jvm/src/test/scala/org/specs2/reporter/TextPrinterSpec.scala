@@ -15,7 +15,7 @@ import process.{Stats, DefaultExecutor, StatisticsRepositoryCreation}
 import io.StringOutput
 import text.AnsiColors
 
-class TextPrinterSpec extends Specification { def is = s2"""
+class TextPrinterSpec(val env: Env) extends Specification with OwnEnv { def is = s2"""
 
  The results of a specification can be printed as lines
 
@@ -207,8 +207,8 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
   def j3 = {
     val repository = StatisticsRepositoryCreation.memory
     repository.storeStatistics(classOf[String].getName, Stats(examples = 1, failures = 1)).runOption
-    val env = Env().setStatisticRepository(repository)
-    (s2"""the ${SpecificationRef(SpecHeader(classOf[String], Some("STRING")), Arguments())} spec""", env) contains
+    val env1 = ownEnv.setArguments(Arguments()).setStatisticRepository(repository)
+    (s2"""the ${SpecificationRef(SpecHeader(classOf[String], Some("STRING")), Arguments())} spec""", env1) contains
     """|[info] the x STRING spec"""
 
   }
@@ -241,9 +241,9 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
       } ^ p)
 
     val spec = SpecStructure.create(SpecHeader(getClass, Some("title\n")), Arguments(), fragments)
-    val env = Env(lineLogger = logger, arguments = Arguments("batchsize", "3"))
-    try TextPrinter.run(env)(DefaultExecutor.executeSpec(spec, env))
-    finally env.shutdown
+    val env1 = ownEnv.copy(lineLogger = logger, arguments = Arguments("batchsize", "3"))
+    try TextPrinter.run(env1)(DefaultExecutor.executeSpec(spec, env1))
+    finally env1.shutdown
 
     val executed = logger.messages.filter(_.contains("executed")).map(_.replace("executed", "").trim.toInt)
     val printed = logger.messages.filter(_.contains("+")).map(_.replace("+", "").replace("ex", "").trim.toInt)
@@ -271,9 +271,9 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
       } ^ p)
 
     val spec = SpecStructure.create(SpecHeader(getClass, Some("title\n")), sequential, fragments)
-    val env = Env(lineLogger = logger).setArguments(sequential)
-    try TextPrinter.run(env)(DefaultExecutor.executeSpec(spec, env))
-    finally env.shutdown
+    val env1 = ownEnv.copy(lineLogger = logger).setArguments(sequential)
+    try TextPrinter.run(env1)(DefaultExecutor.executeSpec(spec, env1))
+    finally env1.shutdown
 
     val executed = logger.messages.filter(_.contains("executed")).map(_.replace("executed", "").trim.toInt)
     val printed = logger.messages.filter(_.contains("+")).map(_.replace("+", "").replace("ex", "").trim.toInt)
@@ -332,14 +332,14 @@ object TextPrinterSpecification extends MustMatchers with FragmentsDsl {
 
     lazy val printed = {
       val logger = stringLogger
-      lazy val env =
+      lazy val env1 =
         optionalEnv.fold(Env(lineLogger = logger,
           arguments = spec.arguments.overrideWith(Arguments.split("sequential fullstacktrace"))))(_.copy(lineLogger = logger))
 
-      try TextPrinter.run(env)(spec.setFragments(spec.fragments
+      try TextPrinter.run(env1)(spec.setFragments(spec.fragments
         .prepend(DefaultFragmentFactory.break) // add a newline after the title
-        .update(DefaultExecutor.execute(env))))
-      finally env.shutdown
+        .update(DefaultExecutor.execute(env1))))
+      finally env1.shutdown
 
       val messages = logger.messages
       messages.map(_.removeEnd(" ")).mkString("\n").replace(" ", "_")
