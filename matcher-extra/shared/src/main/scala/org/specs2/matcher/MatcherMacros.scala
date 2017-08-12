@@ -1,7 +1,7 @@
-package org.specs2
-package matcher
+package org.specs2.matcher
 
-import reflect.MacroContext._
+import org.specs2.reflect.MacroContext.Context
+
 import scala.annotation.StaticAnnotation
 
 /**

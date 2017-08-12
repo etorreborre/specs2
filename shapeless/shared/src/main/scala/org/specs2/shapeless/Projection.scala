@@ -1,7 +1,7 @@
 package org.specs2.shapeless
 
-import shapeless._
 import org.specs2.control._
+import shapeless._
 
 /**
  * implicit instances for projecting objects of a type A on objects of a type B

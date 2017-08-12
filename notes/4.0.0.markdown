@@ -15,3 +15,5 @@ Dependency-free version!
 ## Improvements
 
  * introduced a `org.specs2.specification.Retries` trait extending `AroundEach` to retry each example
+ * introduced `org.specs2.specification.core.OwnEnv/OwnExecutionEnv` traits to isolate the execution environments of
+   some specifications

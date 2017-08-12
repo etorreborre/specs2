@@ -1,10 +1,9 @@
 package org.specs2.matcher.describe
 
 import org.specs2.Spec
-import org.specs2.matcher._
+import org.specs2.matcher.CaseClassDiffs._
 
 import scala.util.Failure
-import CaseClassDiffs._
 
 /** special cases which can not be executed with scala 2.10 */
 class DiffablePlusSpec extends Spec { def is = s2"""
@@ -18,7 +17,7 @@ class DiffablePlusSpec extends Spec { def is = s2"""
   Scala Objects: Either
   =====================
 
-  Support Right without Left type information       ${ Diffable.diff(Right("abc"), Right("abc")) must_=== EitherIdentical(PrimitiveIdentical("abc"), isRight = true) }
+  Support Right without Left type information     ${ Diffable.diff(Right("abc"), Right("abc")) must_=== EitherIdentical(PrimitiveIdentical("abc"), isRight = true) }
   Support Left without Right type information     ${ Diffable.diff(Left("abc"), Left("abc")) must_=== EitherIdentical(PrimitiveIdentical("abc"), isRight = false)  }
 
 
