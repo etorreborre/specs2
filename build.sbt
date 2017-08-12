@@ -24,10 +24,10 @@ lazy val specs2 = Project(
       siteSettings     ++
       Seq(name := "specs2", packagedArtifacts := Map.empty)
 ).aggregate(
-  fpJvm, commonJvm, matcherJvm, coreJvm, matcherExtraJvm, scalazJvm, htmlJvm, analysisJvm,
-  shapelessJvm, formJvm, markdownJvm, gwtJvm, junitJvm, scalacheckJvm, mockJvm, tests,
-  fpJs, commonJs, matcherJs, coreJs, matcherExtraJs, scalazJs, htmlJs, analysisJs,
-  shapelessJs, formJs, markdownJs, gwtJs, junitJs, scalacheckJs, mockJs)
+  fpJvm, commonJvm, matcherJvm, coreJvm, matcherExtraJvm, scalazJvm, html, analysisJvm,
+  shapelessJvm, form, markdown, gwt, junitJvm, scalacheckJvm, mockJvm, tests,
+  fpJs, commonJs, matcherJs, coreJs, matcherExtraJs, scalazJs, analysisJs,
+  shapelessJs, form, junitJs, scalacheckJs, mockJs)
   .enablePlugins(GitBranchPrompt).enablePlugins(ScalaJSPlugin)
 
 /** COMMON SETTINGS */
@@ -106,8 +106,8 @@ lazy val examples = crossProject.in(file("examples")).
     Seq(name := "specs2-examples"):_*).
   jvmSettings(depends.jvmTest, moduleJvmSettings("examples"))
 
-lazy val examplesJs  = examples.js.dependsOn(commonJs, matcherJs, coreJs, matcherExtraJvm, analysisJs, formJs, htmlJs, markdownJs, gwtJs, junitJs, scalacheckJs, mockJs)
-lazy val examplesJvm = examples.jvm.dependsOn(commonJvm, matcherJvm, coreJvm, matcherExtraJvm, analysisJvm, formJvm, htmlJvm, markdownJvm, gwtJvm, junitJvm, scalacheckJvm, mockJvm)
+lazy val examplesJs  = examples.js.dependsOn(commonJs, matcherJs, coreJs, matcherExtraJvm, junitJs, scalacheckJs, mockJs)
+lazy val examplesJvm = examples.jvm.dependsOn(commonJvm, matcherJvm, coreJvm, matcherExtraJvm, analysisJvm, form, gwt, html, markdown, junitJvm, scalacheckJvm, mockJvm)
 
 lazy val fp = crossProject.in(file("fp")).
   settings(moduleSettings("fp"):_*).
@@ -117,38 +117,32 @@ lazy val fp = crossProject.in(file("fp")).
 lazy val fpJvm = fp.jvm
 lazy val fpJs  = fp.js
 
-lazy val form = crossProject.in(file("form")).
+lazy val form = project.in(file("form")).
   settings(moduleSettings("form") ++
     Seq(name := "specs2-form"):_*).
-  jvmSettings(depends.jvmTest, moduleJvmSettings("form"))
-
-lazy val formJs = form.js.dependsOn(coreJs, markdownJs, matcherExtraJs, scalacheckJs % "test->test")
-lazy val formJvm = form.jvm.dependsOn(coreJvm, markdownJvm, matcherExtraJvm, scalacheckJvm % "test->test")
+  settings(depends.jvmTest, moduleJvmSettings("form")).
+  dependsOn(coreJvm, markdown, matcherExtraJvm, scalacheckJvm % "test->test")
 
 lazy val guide = Project(id = "guide", base = file("guide"),
   settings = moduleSettings("guide") ++
     Seq(name := "specs2-guide")
 ).dependsOn(examplesJvm % "compile->compile;test->test", scalazJvm, shapelessJvm)
 
-lazy val gwt = crossProject.in(file("gwt")).
+lazy val gwt = project.in(file("gwt")).
   settings(Seq(
     libraryDependencies += "com.chuusai" %%% "shapeless" % shapelessVersion) ++
     moduleSettings("gwt") ++
     Seq(name := "specs2-gwt"):_*).
-  jvmSettings(depends.jvmTest, moduleJvmSettings("gwt"))
+  settings(depends.jvmTest, moduleJvmSettings("gwt")).
+  dependsOn(coreJvm, matcherExtraJvm, scalacheckJvm)
 
-lazy val gwtJs = gwt.js.dependsOn(coreJs, matcherExtraJs, scalacheckJs)
-lazy val gwtJvm = gwt.jvm.dependsOn(coreJvm, matcherExtraJvm, scalacheckJvm)
-
-lazy val html = crossProject.in(file("html")).
+lazy val html = project.in(file("html")).
   settings(
     Seq(libraryDependencies += depends.tagsoup) ++
       moduleSettings("html") ++
       Seq(name := "specs2-html"):_*).
-  jvmSettings(depends.jvmTest, moduleJvmSettings("html"))
-
-lazy val htmlJs = html.js.dependsOn(formJs, mockJs % "test", matcherExtraJs % "test", scalacheckJs % "test")
-lazy val htmlJvm = html.jvm.dependsOn(formJvm, mockJvm % "test", matcherExtraJvm % "test", scalacheckJvm % "test")
+  settings(depends.jvmTest, moduleJvmSettings("html")).
+  dependsOn(form, mockJvm % "test", matcherExtraJvm % "test", scalacheckJvm % "test")
 
 lazy val junit = crossProject.in(file("junit")).
   settings(Seq(
@@ -160,15 +154,13 @@ lazy val junit = crossProject.in(file("junit")).
 lazy val junitJs = junit.js.dependsOn(coreJs, matcherExtraJs % "test", mockJs % "test")
 lazy val junitJvm = junit.jvm.dependsOn(coreJvm, matcherExtraJvm % "test", mockJvm % "test")
 
-lazy val markdown = crossProject.in(file("markdown")).
+lazy val markdown = project.in(file("markdown")).
   settings(Seq(
     libraryDependencies ++= depends.pegdown) ++
     moduleSettings("markdown") ++
     Seq(name := "specs2-markdown"):_*).
-  jvmSettings(depends.jvmTest, moduleJvmSettings("markdown"))
-
-lazy val markdownJs = markdown.js.dependsOn(commonJs, coreJs % "compile->test")
-lazy val markdownJvm = markdown.jvm.dependsOn(commonJvm, coreJvm % "compile->test")
+  settings(depends.jvmTest, moduleJvmSettings("markdown")).
+  dependsOn(commonJvm, coreJvm % "compile->test")
 
 lazy val matcher = crossProject.in(file("matcher")).
   settings(moduleSettings("matcher") ++
@@ -192,8 +184,8 @@ lazy val pom = Project(id = "pom", base = file("pom"),
   settings =
     moduleSettings("") ++ Seq(
       name := "specs2")
-  ).dependsOn(commonJvm, matcherJvm, matcherExtraJvm, coreJvm, scalazJvm, htmlJvm, analysisJvm,
-    shapelessJvm, formJvm, markdownJvm, gwtJvm, junitJvm, scalacheckJvm, mockJvm)
+  ).dependsOn(commonJvm, matcherJvm, matcherExtraJvm, coreJvm, scalazJvm, html, analysisJvm,
+    shapelessJvm, form, markdown, gwt, junitJvm, scalacheckJvm, mockJvm)
 
 lazy val shapeless = crossProject.in(file("shapeless")).
   settings(moduleSettings("shapeless") ++
@@ -204,8 +196,8 @@ lazy val shapeless = crossProject.in(file("shapeless")).
     ):_*).
   jvmSettings(depends.jvmTest, moduleJvmSettings("shapeless"))
 
-lazy val shapelessJs = shapeless.js.dependsOn(matcherJs)
-lazy val shapelessJvm = shapeless.jvm.dependsOn(matcherJvm)
+lazy val shapelessJs = shapeless.js.dependsOn(matcherJs, matcherExtraJs % "test->test")
+lazy val shapelessJvm = shapeless.jvm.dependsOn(matcherJvm, matcherExtraJvm % "test->test")
 
 lazy val scalaz = crossProject.in(file("scalaz")).
   settings(moduleSettings("scalaz") ++
@@ -251,7 +243,7 @@ lazy val tests = Project(id = "tests", base = file("tests"),
   junitJvm     % "test->test",
   examplesJvm  % "test->test",
   matcherExtraJvm,
-  htmlJvm,
+  html,
   scalazJvm)
 
 lazy val specs2ShellPrompt = shellPrompt in ThisBuild := { state =>
