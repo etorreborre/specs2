@@ -41,6 +41,7 @@ class SelectorSpec(ee: ExecutionEnv) extends script.Specification with Groups wi
   + transform before markers to after markers
   + transform tags to sections
 """
+
   import ff._
 
   "by name" - new group {
@@ -191,7 +192,7 @@ class SelectorSpec(ee: ExecutionEnv) extends script.Specification with Groups wi
 
     def check(fragments: Fragments, expected: Seq[String], unexpected: Seq[String])(env: Env): Result = {
       val executed = fragments |> DefaultSelector.filterByPrevious(env)
-      val descriptions = executed.fragmentsList(env.executionEnv).map(_.description.toString)
+      val descriptions = executed.fragmentsList(ee).map(_.description.toString)
 
       expected.foreach(e => descriptions aka "expected for exclude" must contain(beMatching(".*"+e+".*")))
       unexpected.foreach(e => descriptions aka "unexpected for exclude"  must not(contain(beMatching(".*"+e+".*"))))
@@ -254,14 +255,14 @@ class SelectorSpec(ee: ExecutionEnv) extends script.Specification with Groups wi
     }
   }
 
-  def filterIncluded(fragments: Fragments, tags: Seq[String]) = {
+  def filterIncluded(fragments: Fragments, tags: Seq[String]): List[Fragment] = {
     val env = Env(arguments = Arguments.split(s"include ${tags.mkString(",")}"))
     (fragments.contents |> DefaultSelector.filterByMarker(env)).runList.run(ee)
   }
 
-  def filterExcluded(fragments: Fragments, tags: Seq[String]) = {
-    val env = Env(arguments = Arguments.split(s"exclude ${tags.mkString(",")}"))
-    fragments |> DefaultSelector.filterByMarker(env)
+  def filterExcluded(fragments: Fragments, tags: Seq[String]): Fragments = {
+   val env = Env(arguments = Arguments.split(s"exclude ${tags.mkString(",")}"))
+   fragments |> DefaultSelector.filterByMarker(env)
   }
 
   def show(fs: Fragments): String =

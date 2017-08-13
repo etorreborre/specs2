@@ -44,6 +44,7 @@ case class Arguments (
   def sequential: Boolean             = execute.sequential
   def isolated: Boolean               = execute.isolated
   def threadsNb: Int                  = execute.threadsNb
+  def specs2ThreadsNb: Int            = execute.specs2ThreadsNb
   def batchSize: Int                  = execute.batchSize
   def scheduledThreadsNb: Int         = execute.scheduledThreadsNb
   def useCustomClassLoader: Boolean   = execute.useCustomClassLoader

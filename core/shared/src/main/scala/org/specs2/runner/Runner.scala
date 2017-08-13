@@ -100,7 +100,7 @@ object Runner {
         for {
           reporter <- ClassRunner.createReporter(arguments, loader).toAction
           ss       <- SpecStructure.linkedSpecifications(specStructure, env, loader).toAction
-          sorted   <- delayed(SpecStructure.topologicalSort(ss)(env.executionEnv).getOrElse(ss)).toAction
+          sorted   <- delayed(SpecStructure.topologicalSort(ss)(env.specs2ExecutionEnv).getOrElse(ss)).toAction
           _        <- reporter.prepare(env, printers)(sorted.toList)
           stats    <- sorted.toList.map(Reporter.report(env, printers)).sequence
           _        <- Reporter.finalize(env, printers)(sorted.toList)

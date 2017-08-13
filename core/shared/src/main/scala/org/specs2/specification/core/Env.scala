@@ -24,23 +24,19 @@ import scala.concurrent.duration.FiniteDuration
  *       to be shutdown at the end of the execution
  */
 case class Env(
-          arguments:           Arguments                         = default.arguments,
-          systemLogger:        Logger                            = default.systemLogger,
-          selectorInstance:    Arguments => Selector             = default.selectorInstance,
-          executorInstance:    Arguments => Executor             = default.executorInstance,
-          lineLogger:          LineLogger                        = default.lineLogger,
-          statsRepository:     Arguments => StatisticsRepository = default.statsRepository,
-          random:              scala.util.Random                 = default.random,
-          fileSystem:          FileSystem                        = default.fileSystem,
-          executionParameters: ExecutionParameters               = default.executionParameters,
-          customClassLoader:   Option[ClassLoader]               = default.customClassLoader,
-          classLoading:        ClassLoading                      = default.classLoading) {
-
-  lazy val executionEnv: ExecutionEnv =
-    ExecutionEnv.create(arguments, systemLogger, "env"+hash)
-
-  lazy val specs2ExecutionEnv: ExecutionEnv =
-    ExecutionEnv.create(arguments, systemLogger, "specs2-env"+hash)
+  arguments:           Arguments,
+  systemLogger:        Logger,
+  selectorInstance:    Arguments => Selector,
+  executorInstance:    Arguments => Executor,
+  lineLogger:          LineLogger,
+  statsRepository:     Arguments => StatisticsRepository,
+  random:              scala.util.Random,
+  fileSystem:          FileSystem,
+  executionParameters: ExecutionParameters,
+  customClassLoader:   Option[ClassLoader],
+  classLoading:        ClassLoading,
+  executionEnv:        ExecutionEnv,
+  specs2ExecutionEnv:  ExecutionEnv) {
 
   lazy val statisticsRepository: StatisticsRepository =
     statsRepository(arguments)
@@ -48,8 +44,6 @@ case class Env(
   lazy val selector = selectorInstance(arguments)
 
   lazy val executor = executorInstance(arguments)
-
-  val hash = System.identityHashCode(this)
 
   def executionContext =
     executionEnv.executionContext
@@ -72,16 +66,9 @@ case class Env(
   def setTimeout(duration: FiniteDuration): Env =
     copy(executionParameters = executionParameters.setTimeout(duration))
 
-  def shutdown(): Unit = {
-    try {
-      //println("shutdown specs2 execution env for "+System.identityHashCode(this))
-      specs2ExecutionEnv.shutdown
-    }
-    finally {
-      //println("shutdown execution env for "+System.identityHashCode(this))
-      executionEnv.shutdown
-    }
-  }
+  def shutdown(): Unit =
+    try     specs2ExecutionEnv.shutdown
+    finally executionEnv.shutdown
 
   /** set new LineLogger */
   def setLineLogger(logger: LineLogger) =
@@ -116,6 +103,33 @@ case class Env(
 }
 
 object Env {
+
+  def apply(
+    arguments:           Arguments                         = default.arguments,
+    systemLogger:        Logger                            = default.systemLogger,
+    selectorInstance:    Arguments => Selector             = default.selectorInstance,
+    executorInstance:    Arguments => Executor             = default.executorInstance,
+    lineLogger:          LineLogger                        = default.lineLogger,
+    statsRepository:     Arguments => StatisticsRepository = default.statsRepository,
+    random:              scala.util.Random                 = default.random,
+    fileSystem:          FileSystem                        = default.fileSystem,
+    executionParameters: ExecutionParameters               = default.executionParameters,
+    customClassLoader:   Option[ClassLoader]               = default.customClassLoader,
+    classLoading:        ClassLoading                      = default.classLoading): Env =
+    Env(
+      arguments,
+      systemLogger,
+      selectorInstance,
+      executorInstance,
+      lineLogger,
+      statsRepository,
+      random,
+      fileSystem,
+      executionParameters,
+      customClassLoader,
+      classLoading,
+      executionEnv =       ExecutionEnv.create(arguments, systemLogger),
+      specs2ExecutionEnv = ExecutionEnv.createSpecs2(arguments, systemLogger))
 
   def executeResult[R : AsResult](r: Env => R) = {
     lazy val env = Env()

@@ -18,6 +18,7 @@ case class Execute(
                     _isolated:             Option[Boolean]          = None,
                     _useCustomClassLoader: Option[Boolean]          = None,
                     _threadsNb:            Option[Int]              = None,
+                    _specs2ThreadsNb:      Option[Int]              = None,
                     _scheduledThreadsNb:   Option[Int]              = None,
                     _batchSize:            Option[Int]              = None,
                     _timeFactor:           Option[Int]              = None,
@@ -34,6 +35,7 @@ case class Execute(
   def isolated: Boolean             = _isolated.getOrElse(false)
   def useCustomClassLoader: Boolean = _useCustomClassLoader.getOrElse(false)
   def threadsNb: Int                = _threadsNb.getOrElse(ExecutorServices.threadsNb)
+  def specs2ThreadsNb: Int          = _specs2ThreadsNb.getOrElse(ExecutorServices.specs2ThreadsNb)
   def scheduledThreadsNb: Int       = _scheduledThreadsNb.getOrElse(1)
   def batchSize: Int                = _batchSize.getOrElse(ExecutorServices.threadsNb)
   def timeFactor: Int               = _timeFactor.getOrElse(1)
@@ -52,6 +54,7 @@ case class Execute(
       other._isolated            .orElse(_isolated),
       other._useCustomClassLoader.orElse(_useCustomClassLoader),
       other._threadsNb           .orElse(_threadsNb),
+      other._specs2ThreadsNb     .orElse(_specs2ThreadsNb),
       other._scheduledThreadsNb  .orElse(_scheduledThreadsNb),
       other._batchSize           .orElse(_batchSize),
       other._timeFactor          .orElse(_timeFactor),
@@ -64,14 +67,15 @@ case class Execute(
       "plan"                 -> _plan                ,
       "skipAll"              -> _skipAll             ,
       "stopOnFail"           -> _stopOnFail          ,
-      "stopOnError"         -> _stopOnError       ,
-      "stopOnIssue"         -> _stopOnIssue       ,
+      "stopOnError"          -> _stopOnError         ,
+      "stopOnIssue"          -> _stopOnIssue         ,
       "stopOnSkip"           -> _stopOnSkip          ,
       "sequential"           -> _sequential          ,
       "asap"                 -> _asap                ,
       "isolated"             -> _isolated            ,
       "useCustomClassLoader" -> _useCustomClassLoader,
       "threadsNb"            -> _threadsNb           ,
+      "specs2ThreadsNb"      -> _specs2ThreadsNb     ,
       "scheduledThreadsNb"   -> _scheduledThreadsNb  ,
       "batchSize"            -> _batchSize           ,
       "timeFactor"           -> _timeFactor          ,
@@ -93,11 +97,13 @@ object Execute extends Extract {
       _isolated             = bool("isolated"),
       _useCustomClassLoader = bool("useCustomClassLoader"),
       _threadsNb            = int("threadsNb"),
+      _specs2ThreadsNb      = int("specs2ThreadsNb"),
       _scheduledThreadsNb   = int("scheduledThreadsNb"),
       _batchSize            = bool("unbatched").map(_ => Int.MaxValue).orElse(int("batchSize")),
       _timeFactor           = int("timeFactor"),
       _executor             = value("executor")
     )
   }
-  val allValueNames = Seq("plan", "skipAll", "stopOnFail", "stopOnError", "stopOnIssue", "stopOnSkip", "sequential", "asap", "isolated", "useCustomClassLoader", "threadsNb", "scheduledThreadsNb", "batchSize", "timeFactor", "executor")
+  val allValueNames = Seq("plan", "skipAll", "stopOnFail", "stopOnError", "stopOnIssue", "stopOnSkip", "sequential",
+    "asap", "isolated", "useCustomClassLoader", "threadsNb", "specs2ThreadsNb", "scheduledThreadsNb", "batchSize", "timeFactor", "executor")
 }

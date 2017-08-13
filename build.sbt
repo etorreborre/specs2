@@ -236,7 +236,8 @@ lazy val tests = Project(id = "tests", base = file("tests"),
   settings = moduleSettings("tests") ++
     Seq(name := "specs2-tests") ++
     Seq(libraryDependencies ++= depends.scalaParallelCollections(scalaVersion.value)) ++
-    depends.jvmTest
+    depends.jvmTest ++
+    moduleJvmSettings("tests")
 ).dependsOn(
   coreJvm      % "compile->compile;test->test",
   shapelessJvm % "compile->compile;test->test",

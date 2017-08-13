@@ -1,9 +1,14 @@
 package org.specs2.concurrent
 
+import java.util.UUID
+
 import org.specs2.control.eff.Evaluated
+
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.FiniteDuration
 import java.util.concurrent._
+import java.util.concurrent.atomic.AtomicBoolean
+
 import org.specs2.main._
 import org.specs2.control._
 import org.specs2.control.eff._
@@ -15,17 +20,30 @@ case class ExecutorServices(executorServiceEval:          Evaluated[ExecutorServ
                             schedulerEval:                Evaluated[Scheduler],
                             shutdown:                     Evaluated[Unit]) {
 
-  implicit lazy val executorService: ExecutorService =
+  private val started = new AtomicBoolean(false)
+
+  implicit lazy val executorService: ExecutorService = {
+    started.set(true)
     executorServiceEval.value
+  }
 
-  implicit lazy val scheduledExecutorService: ScheduledExecutorService =
+  implicit lazy val scheduledExecutorService: ScheduledExecutorService = {
+    started.set(true)
     scheduledExecutorServiceEval.value
+  }
 
-  implicit lazy val executionContext: ExecutionContext =
+  implicit lazy val executionContext: ExecutionContext = {
+    started.set(true)
     executionContextEval.value
+  }
 
-  implicit lazy val scheduler: Scheduler =
+  implicit lazy val scheduler: Scheduler = {
+    started.set(true)
     schedulerEval.value
+  }
+
+  def shutdownNow(): Unit =
+    if (started.get) shutdown.value
 
   /** convenience method to shutdown the services when the final future has completed */
   def shutdownOnComplete[A](future: scala.concurrent.Future[A]): ExecutorServices = {
@@ -40,25 +58,47 @@ case class ExecutorServices(executorServiceEval:          Evaluated[ExecutorServ
 
 object ExecutorServices {
 
+  /** default max threads number for the user execution environment */
   lazy val threadsNb: Int =
     math.max(Runtime.getRuntime.availableProcessors, 4)
 
-  def create(arguments: Arguments, systemLogger: Logger, threadFactoryName: String): ExecutorServices = {
-    val executorService = executor(arguments.threadsNb, threadFactoryName)
-    val scheduledExecutorService = scheduledExecutor(arguments.scheduledThreadsNb, threadFactoryName)
+  /** default threads number for the specs2 execution environment */
+  lazy val specs2ThreadsNb: Int =
+    math.max(Runtime.getRuntime.availableProcessors, 4)
+
+  def create(arguments: Arguments, systemLogger: Logger): ExecutorServices =
+    createExecutorServices(arguments, systemLogger, isSpecs2 = false)
+
+  def createSpecs2(arguments: Arguments, systemLogger: Logger): ExecutorServices =
+    createExecutorServices(arguments, systemLogger, isSpecs2 = true)
+
+  private def createExecutorServices(arguments: Arguments, systemLogger: Logger, isSpecs2: Boolean): ExecutorServices = {
+    val threadFactoryName: String =
+      if (isSpecs2) "specs2.fixed"
+      else          "specs2.user-"+UUID.randomUUID.toString
+
+    lazy val executorService =
+      if (isSpecs2) fixedExecutor(arguments.specs2ThreadsNb, threadFactoryName)
+      else          fixedExecutor(arguments.threadsNb, threadFactoryName)
+
+    lazy val scheduledExecutorService =
+      scheduledExecutor(arguments.scheduledThreadsNb, threadFactoryName)
+
+    lazy val executionContext =
+      createExecutionContext(executorService, arguments.verbose, systemLogger)
 
     ExecutorServices(
       Memoized(executorService),
-      Memoized(createExecutionContext(executorService, arguments.verbose, systemLogger)),
+      Memoized(executionContext),
       Memoized(scheduledExecutorService),
       Memoized(Schedulers.schedulerFromScheduledExecutorService(scheduledExecutorService)),
-      Memoized(executorService.shutdown)
+      Memoized { try executorService.shutdown finally scheduledExecutorService.shutdown }
     )
   }
 
   def fromExecutionContext(ec: ExecutionContext): ExecutorServices =
     ExecutorServices(
-      Memoized(executor(1, "unused")),
+      Memoized(fixedExecutor(1, "unused")),
       Memoized(ec),
       Memoized(scheduledExecutor(1, "unused")),
       Memoized(Schedulers.default),
@@ -71,12 +111,8 @@ object ExecutorServices {
     ExecutionContext.fromExecutorService(executorService,
       (t: Throwable) => {runConsoleToPrinter(systemLogger)(logThrowable[Fx1[Console]](t, verbose)); ()})
 
-  /**
-   * the number of executors is set from the arguments.threadsNb value which is
-   * Runtime.getRuntime.availableProcessors by default
-   */
-  def executor(threadsNb: Int, name: String): ExecutorService =
-    Executors.newFixedThreadPool(threadsNb, NamedThreadFactory("specs2.fixed."+name))
+  def fixedExecutor(threadsNb: Int, name: String): ExecutorService =
+    Executors.newFixedThreadPool(threadsNb, NamedThreadFactory(name))
 
   /**
    * the number of executors is set from the arguments.scheduledThreadsNb value which is

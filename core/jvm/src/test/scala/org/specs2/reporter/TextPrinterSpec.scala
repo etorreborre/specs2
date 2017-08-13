@@ -242,8 +242,7 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
 
     val spec = SpecStructure.create(SpecHeader(getClass, Some("title\n")), Arguments(), fragments)
     val env1 = ownEnv.copy(lineLogger = logger, arguments = Arguments("batchsize", "3"))
-    try TextPrinter.run(env1)(DefaultExecutor.executeSpec(spec, env1))
-    finally env1.shutdown
+    TextPrinter.run(env1)(DefaultExecutor.executeSpec(spec, env1))
 
     val executed = logger.messages.filter(_.contains("executed")).map(_.replace("executed", "").trim.toInt)
     val printed = logger.messages.filter(_.contains("+")).map(_.replace("+", "").replace("ex", "").trim.toInt)
@@ -272,8 +271,7 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
 
     val spec = SpecStructure.create(SpecHeader(getClass, Some("title\n")), sequential, fragments)
     val env1 = ownEnv.copy(lineLogger = logger).setArguments(sequential)
-    try TextPrinter.run(env1)(DefaultExecutor.executeSpec(spec, env1))
-    finally env1.shutdown
+    TextPrinter.run(env1)(DefaultExecutor.executeSpec(spec, env1))
 
     val executed = logger.messages.filter(_.contains("executed")).map(_.replace("executed", "").trim.toInt)
     val printed = logger.messages.filter(_.contains("+")).map(_.replace("+", "").replace("ex", "").trim.toInt)
@@ -333,13 +331,22 @@ object TextPrinterSpecification extends MustMatchers with FragmentsDsl {
     lazy val printed = {
       val logger = stringLogger
       lazy val env1 =
-        optionalEnv.fold(Env(lineLogger = logger,
-          arguments = spec.arguments.overrideWith(Arguments.split("sequential fullstacktrace"))))(_.copy(lineLogger = logger))
+        optionalEnv match {
+          case Some(ownEnv) =>
+            ownEnv.copy(lineLogger = logger)
 
-      try TextPrinter.run(env1)(spec.setFragments(spec.fragments
-        .prepend(DefaultFragmentFactory.break) // add a newline after the title
-        .update(DefaultExecutor.execute(env1))))
-      finally env1.shutdown
+          case None =>
+            Env(lineLogger = logger,
+              arguments = spec.arguments.overrideWith(Arguments.split("sequential fullstacktrace")))
+        }
+
+      try {
+        TextPrinter.run(env1)(spec.setFragments(spec.fragments
+          .prepend(DefaultFragmentFactory.break) // add a newline after the title
+          .update(DefaultExecutor.execute(env1))))
+      } finally {
+        if (optionalEnv.isEmpty) env1.shutdown
+      }
 
       val messages = logger.messages
       messages.map(_.removeEnd(" ")).mkString("\n").replace(" ", "_")

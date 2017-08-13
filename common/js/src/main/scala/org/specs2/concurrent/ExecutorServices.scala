@@ -19,6 +19,9 @@ case class ExecutorServices(executionContextEval: Evaluated[ExecutionContext],
   implicit lazy val scheduler: Scheduler =
     schedulerEval.value
 
+  def shutdownNow(): Unit =
+    ()
+
   /** convenience method to shutdown the services when the final future has completed */
   def shutdownOnComplete[A](future: scala.concurrent.Future[A]): ExecutorServices =
     this
@@ -31,6 +34,7 @@ case class ExecutorServices(executionContextEval: Evaluated[ExecutionContext],
 object ExecutorServices {
 
   lazy val threadsNb: Int = 1
+  lazy val specs2ThreadsNb: Int = 1
 
   def fromExecutionContext(ec: =>ExecutionContext): ExecutorServices =
     ExecutorServices(

@@ -150,7 +150,7 @@ object DefaultExecutor extends DefaultExecutor {
 
   /** only to be used in tests */
   def executeFragments(fs: Fragments)(env: Env): List[Fragment] =
-    fs.fragments.map(fs => executeAll(fs:_*)(env)).runOption(env.executionEnv).getOrElse(Nil)
+    fs.fragments.map(fs => executeAll(fs:_*)(env)).runOption(env.specs2ExecutionEnv).getOrElse(Nil)
 
   def executeAll(seq: Fragment*)(env: Env): List[Fragment] =
     executeSeq(seq)(env)

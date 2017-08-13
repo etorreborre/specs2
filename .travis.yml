@@ -21,7 +21,18 @@ before_cache:
 
 script:
   - sbt -jvm-opts .travis.jvmopts -sbt-version 0.13.15 -scala-version $TRAVIS_SCALA_VERSION ';clean ;test:compile'
-  - sbt -jvm-opts .travis.jvmopts -sbt-version 0.13.15 -scala-version $TRAVIS_SCALA_VERSION 'coreJVM/testOnly -- xonly timefactor 3 neverstore'
+  - ./.travis-test.sh coreJVM
+  - ./.travis-test.sh junitJVM
+  - ./.travis-test.sh matcherExtraJVM
+  - ./.travis-test.sh mockJVM
+  - ./.travis-test.sh scalacheckJVM
+  - ./.travis-test.sh scalazJVM
+  - ./.travis-test.sh shapelessJVM
+
+  - ./.travis-test.sh gwt
+  - ./.travis-test.sh html
+  - ./.travis-test.sh markdown
+
   - find $HOME/.sbt -name "*.lock" | xargs rm
   - find $HOME/.ivy2 -name "ivydata-*.properties" | xargs rm
 

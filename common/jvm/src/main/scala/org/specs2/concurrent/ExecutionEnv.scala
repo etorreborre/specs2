@@ -10,7 +10,7 @@ case class ExecutionEnv(executorServices: ExecutorServices,
                         timeFactor: Int) {
 
   def shutdown(): Unit =
-    executorServices.shutdown.value
+    executorServices.shutdownNow
 
   lazy val executionContext         = executorServices.executionContext
   lazy val executorService          = executorServices.executorService
@@ -33,10 +33,17 @@ object ExecutionEnv {
       ExecutorServices.fromExecutionContext(ec),
       timeFactor = 1)
 
-  def create(arguments: Arguments, systemLogger: Logger, threadFactoryName: String): ExecutionEnv =
+  def create(arguments: Arguments, systemLogger: Logger): ExecutionEnv = {
     ExecutionEnv(
-      ExecutorServices.create(arguments, systemLogger, threadFactoryName),
+      ExecutorServices.create(arguments, systemLogger),
       timeFactor = arguments.execute.timeFactor)
+  }
+
+  def createSpecs2(arguments: Arguments, systemLogger: Logger): ExecutionEnv = {
+    ExecutionEnv(
+      ExecutorServices.createSpecs2(arguments, systemLogger),
+      timeFactor = arguments.execute.timeFactor)
+  }
 
   /** create an ExecutionEnv from Scala global execution context */
   def fromGlobalExecutionContext: ExecutionEnv =
