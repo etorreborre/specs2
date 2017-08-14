@@ -30,9 +30,13 @@ script:
   - ./.travis-test.sh scalazJVM
   - ./.travis-test.sh shapelessJVM
 
+  - ./.travis-test.sh coreJS
+  - ./.travis-test.sh examplesJS
+
   - ./.travis-test.sh gwt
   - ./.travis-test.sh html
   - ./.travis-test.sh markdown
+  - ./.travis-test.sh tests
 
   - find $HOME/.sbt -name "*.lock" | xargs rm
   - find $HOME/.ivy2 -name "ivydata-*.properties" | xargs rm

@@ -1,8 +1,8 @@
 package examples
 
 import org.specs2._
-import specification._
-import form._
+import org.specs2.form._
+import org.specs2.specification._
 
 /**
  * This specification show how to use Forms to display tables in html documents
@@ -47,7 +47,7 @@ class SpecificationWithFormsSpec extends Specification with Forms { def is = s2"
   }              
 }
 
-import specification.Forms._
+import org.specs2.specification.Forms._
 
 case class Address(street: String = "", number: Int = 0) {
   def address = number+", "+street
