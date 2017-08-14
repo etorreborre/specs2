@@ -6,7 +6,7 @@ import execute.AsResult
 import reflect.MacroContext._
 import reflect.Macros
 import text.Trim._
-import org.specs2.specification.core.{Description, Fragments}
+import org.specs2.specification.core.{Description, Fragment, Fragments}
 
 /**
  * This trait allows to create examples where the description is the code itself
@@ -17,7 +17,10 @@ trait AutoExamples extends FragmentsFactory {
   implicit def eg[T : AsResult](code: =>T): Fragments = macro AutoExamples.create[T]
 
   def createExample[T](expression: String, code: =>T, asResult: AsResult[T]): Fragments =
-    Fragments(fragmentFactory.example(Description.code(trimExpression(expression)), code)(asResult))
+    Fragments(makeExample(expression, code, asResult))
+
+  protected def makeExample[T](expression: String, code: =>T, asResult: AsResult[T]): Fragment =
+    fragmentFactory.example(Description.code(trimExpression(expression)), code)(asResult)
 
   private[specs2] def trimExpression(call: String) = {
     call.

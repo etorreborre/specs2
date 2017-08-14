@@ -80,12 +80,11 @@ trait MutableFragmentBuilder extends FragmentBuilder
     else
       fragment
 
-  private def mustBeIsolated(fragment: Fragment) = {
+  private def mustBeIsolated(fragment: Fragment) =
     fragment.isExecutable                     &&
     fragment.execution.isolable               &&
     argumentsVar.isolated                     &&
     targetPath.isEmpty
-  }
 
   private def duplicateExecution(effectPath: EffectPath): Execution = Execution.withEnvFlatten { env =>
     val klass = getClass.asInstanceOf[Class[MutableFragmentBuilder]]
@@ -109,11 +108,11 @@ trait MutableFragmentBuilder extends FragmentBuilder
 
           val previousStepExecutions = previousSteps.collect {
             case f if Fragment.isStep(f) && f.execution.isolable => f.execution
-          }.runList.run(env.executionEnv)
+          }.runList.run(env.specs2ExecutionEnv)
 
           val isolatedExecution: Execution = pathFragments.fragments.map(_.lastOption.map(_.execution).
             getOrElse(Execution.executed(Pending("isolation mode failure - could not find an isolated fragment to execute")))).
-            runOption(env.executionEnv).
+            runOption(env.specs2ExecutionEnv).
             getOrElse(Execution.executed(Skipped(s"isolation mode failure - could not produce an isolated execution for effect path $effectPath")))
 
           isolatedExecution.afterSuccessfulSequential(previousStepExecutions)

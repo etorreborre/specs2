@@ -73,7 +73,7 @@ class SpecificationSpec extends script.Spec with Grouped { def is = s2"""
 
   def run(text1: String, groups: ExamplesGroup*)(implicit arguments: Arguments = Arguments()): Seq[String] = {
     val spec = new script.Specification with Grouped { outer =>
-      def is = arguments ^ nocolor ^ s2"""$text1"""
+      def is = arguments ^ sequential ^   nocolor ^ s2"""$text1"""
       (0 until groups.size) foreach { i =>
         (0 until 22).foreach(j => outer.createExamplesGroup(i).createExample(j) := groups(i).createExample(j))
       }

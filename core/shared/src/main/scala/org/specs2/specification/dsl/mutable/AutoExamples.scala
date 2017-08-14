@@ -10,7 +10,10 @@ import org.specs2.specification.core.{Fragments}
  * Auto-example creation for mutable specifications
  */
 trait AutoExamples extends create.AutoExamples with FragmentBuilder {
-  override def createExample[T](expression: String, code: =>T, asResult: AsResult[T]): Fragments =
-    addFragments(super.createExample(expression, code, asResult).append(fragmentFactory.break))
+  override def createExample[T](expression: String, code: =>T, asResult: AsResult[T]): Fragments = {
+    addFragment(makeExample(expression, code, asResult))
+    addFragment(fragmentFactory.break)
+    Fragments.empty
+  }
 
 }

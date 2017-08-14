@@ -294,7 +294,7 @@ lazy val testingSettings = Seq(
 
 lazy val testingJvmSettings =
   Seq(javaOptions ++= Seq("-Xmx3G", "-Xss4M"),
-    fork in Test := true)
+      fork in Test := true)
 
 /**
  * DOCUMENTATION
