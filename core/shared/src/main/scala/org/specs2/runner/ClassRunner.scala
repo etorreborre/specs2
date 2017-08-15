@@ -87,13 +87,11 @@ object consoleRunner extends ClassRunner {
  * Test runner to simulate a console run
  */
 object TextRunner extends ClassRunner {
-  def run(spec: SpecificationStructure, args: Arguments = Arguments())(implicit env: Env = Env()): LineLogger with StringOutput = {
+  def run(spec: SpecificationStructure, args: Arguments = Arguments())(env: Env): LineLogger with StringOutput = {
     val logger = LineLogger.stringLogger
-    try {
-      val env1 = env.setLineLogger(logger).setArguments(env.arguments.overrideWith(args))
-      runAction(report(env1)(spec), env.systemLogger)(env.executionEnv)
-      logger
-    } finally env.shutdown
+    val env1 = env.setLineLogger(logger).setArguments(env.arguments.overrideWith(args))
+    runAction(report(env1)(spec), env1.systemLogger)(env1.specs2ExecutionEnv)
+    logger
   }
 
   override def createPrinters(args: Arguments, loader: ClassLoader): Operation[List[Printer]] =
