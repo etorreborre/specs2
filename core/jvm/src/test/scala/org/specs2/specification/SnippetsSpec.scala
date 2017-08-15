@@ -4,10 +4,9 @@ package specification
 import matcher._
 import execute.Snippet._
 import core._
-import org.specs2.concurrent.ExecutionEnv
 import control.Use
 
-class SnippetsSpec(ee: ExecutionEnv) extends script.Spec with Snippets with DataTables with Grouped with TypedEqual { def is = sequential ^ s2"""
+class SnippetsSpec(val env: Env) extends script.Spec with Snippets with DataTables with Grouped with TypedEqual with OwnExecutionEnv { def is = sequential ^ s2"""
 
  These are examples on how to use the various snippet methods
 
