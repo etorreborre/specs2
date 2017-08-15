@@ -21,6 +21,7 @@ class S2StringContextSpec extends Spec { def is = s2"""
   2 examples                                                                      ${exs.e7}
   a method call                                                                   ${exs.e8}
   consecutive strings must be compacted                                           ${exs.e9}
+  tabs are replaced by 2 spaces                                                   ${exs.e10}
 
   when more than one lines are indented they are taken as the description
     when the last line is indented it is taken as the description                 ${desc.e1}
@@ -65,6 +66,18 @@ object exs extends MustMatchers with StandardResults with S2StringContext with T
   }
 
   def e9 = s2"""this is ${"some text"} $ok""".fragments must haveSize(2)
+
+  def e10 = {
+    val fragments =
+s2"""
+Intro
+	test1 $ok
+	test2 $ok
+""".fragments
+
+    fragments.map(_.description.show.replace(" ", "-").replace("\n", "*")).toList ====
+    List("*Intro*--", "test1", "*--", "test2")
+  }
 
   def `a method call` = ok
 

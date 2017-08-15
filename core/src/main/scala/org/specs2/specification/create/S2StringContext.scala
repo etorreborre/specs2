@@ -165,7 +165,7 @@ trait S2StringContextCreation extends FragmentsFactory { outer =>
   }
 
   private[specs2] def descriptionAndBefore(text: String, start: Location, end: Location, expression: String): (Description, Vector[Fragment]) = {
-    val texts = text.split("\n", -1).toSeq
+    val texts = text.replace("\t", "  ").split("\n", -1).toSeq
     val autoExample = texts.lastOption.exists(_.trim.isEmpty)
 
     if (autoExample) {
