@@ -36,7 +36,7 @@ lazy val specs2Settings = Seq(
   specs2Version in GlobalScope := version.value,
   scalazVersion in GlobalScope := "7.2.7",
   specs2ShellPrompt,
-  scalaVersion := "2.12.2",
+  scalaVersion := "2.12.3",
   crossScalaVersions := Seq(scalaVersion.value, "2.11.11"))
 
 lazy val specs2Version = settingKey[String]("defines the current specs2 version")
