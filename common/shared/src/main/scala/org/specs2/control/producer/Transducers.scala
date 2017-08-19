@@ -221,7 +221,8 @@ trait Transducers {
     reduceMonoid[R, B].apply(transducerEval(f).apply(producer))
 
   def zipWithPrevious[R :_Safe, A]: Transducer[R, A, (Option[A], A)] =
-    zipWithPreviousN(1).map { case (prev, a) => (prev.headOption, a) }
+    (producer: Producer[R, A]) =>
+      one(None: Option[A]).append(producer.map(Option.apply)).zip(producer)
 
   def zipWithPreviousN[R :_Safe, A](n: Int): Transducer[R, A, (List[A], A)] =
     (producer: Producer[R, A]) => {
@@ -238,15 +239,18 @@ trait Transducers {
     }
 
   def zipWithNext[R :_Safe, A]: Transducer[R, A, (A, Option[A])] =
-    (producer: Producer[R, A]) => producer.zip(producer.drop(1).map(Option.apply).append(one(None: Option[A])))
+    (producer: Producer[R, A]) =>
+      producer.zip(producer.drop(1).map(Option.apply).append(one(None: Option[A])))
 
   def zipWithNextN[R :_Safe, A](n: Int): Transducer[R, A, (A, List[A])] =
     (producer: Producer[R, A]) => {
       Producer(peekN(producer, n + 1).flatMap { case (next, as) =>
         if (next.isEmpty)
           done.run
-        else
-          (one((next.head, next.drop(1))) append as.zipWithNextN(n)).run
+        else {
+          val rest = next.drop(1)
+          (one((next.head, rest)) append (emit(rest) append as).zipWithNextN(n)).run
+        }
       })
     }
 
