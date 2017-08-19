@@ -238,15 +238,15 @@ trait Transducers {
     }
 
   def zipWithNext[R :_Safe, A]: Transducer[R, A, (A, Option[A])] =
-    zipWithNextN(1).map { case (a, next) => (a, next.headOption) }
+    (producer: Producer[R, A]) => producer.zip(producer.drop(1).map(Option.apply).append(one(None: Option[A])))
 
   def zipWithNextN[R :_Safe, A](n: Int): Transducer[R, A, (A, List[A])] =
     (producer: Producer[R, A]) => {
-      Producer(peekN(producer, n + 1) flatMap { case (next, as) =>
+      Producer(peekN(producer, n + 1).flatMap { case (next, as) =>
         if (next.isEmpty)
           done.run
         else
-          (one((next.head, next.drop(1))) append producer.drop(1).zipWithNextN(n)).run
+          (one((next.head, next.drop(1))) append as.zipWithNextN(n)).run
       })
     }
 
