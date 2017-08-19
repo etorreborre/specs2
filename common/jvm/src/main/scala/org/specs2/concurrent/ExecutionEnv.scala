@@ -33,15 +33,15 @@ object ExecutionEnv {
       ExecutorServices.fromExecutionContext(ec),
       timeFactor = 1)
 
-  def create(arguments: Arguments, systemLogger: Logger): ExecutionEnv = {
+  def create(arguments: Arguments, systemLogger: Logger, tag: Option[String] = None): ExecutionEnv = {
     ExecutionEnv(
-      ExecutorServices.create(arguments, systemLogger),
+      ExecutorServices.create(arguments, systemLogger, tag),
       timeFactor = arguments.execute.timeFactor)
   }
 
-  def createSpecs2(arguments: Arguments, systemLogger: Logger): ExecutionEnv = {
+  def createSpecs2(arguments: Arguments, systemLogger: Logger, tag: Option[String] = None): ExecutionEnv = {
     ExecutionEnv(
-      ExecutorServices.createSpecs2(arguments, systemLogger),
+      ExecutorServices.createSpecs2(arguments, systemLogger, tag),
       timeFactor = arguments.execute.timeFactor)
   }
 

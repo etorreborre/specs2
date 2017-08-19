@@ -1,7 +1,5 @@
 package org.specs2.concurrent
 
-import java.util.UUID
-
 import org.specs2.control.eff.Evaluated
 
 import scala.concurrent.ExecutionContext
@@ -66,16 +64,16 @@ object ExecutorServices {
   lazy val specs2ThreadsNb: Int =
     math.max(Runtime.getRuntime.availableProcessors, 4)
 
-  def create(arguments: Arguments, systemLogger: Logger): ExecutorServices =
-    createExecutorServices(arguments, systemLogger, isSpecs2 = false)
+  def create(arguments: Arguments, systemLogger: Logger, tag: Option[String] = None): ExecutorServices =
+    createExecutorServices(arguments, systemLogger, tag, isSpecs2 = false)
 
-  def createSpecs2(arguments: Arguments, systemLogger: Logger): ExecutorServices =
-    createExecutorServices(arguments, systemLogger, isSpecs2 = true)
+  def createSpecs2(arguments: Arguments, systemLogger: Logger, tag: Option[String] = None): ExecutorServices =
+    createExecutorServices(arguments, systemLogger, tag, isSpecs2 = true)
 
-  private def createExecutorServices(arguments: Arguments, systemLogger: Logger, isSpecs2: Boolean): ExecutorServices = {
+  private def createExecutorServices(arguments: Arguments, systemLogger: Logger, tag: Option[String], isSpecs2: Boolean): ExecutorServices = {
     val threadFactoryName: String =
-      if (isSpecs2) "specs2.fixed"
-      else          "specs2.user-"+UUID.randomUUID.toString
+      if (isSpecs2) "specs2"+tag.map("-"+_).getOrElse("")
+      else          "specs2.user"+tag.map("-"+_).getOrElse("")
 
     lazy val executorService =
       if (isSpecs2) fixedExecutor(arguments.specs2ThreadsNb, threadFactoryName)

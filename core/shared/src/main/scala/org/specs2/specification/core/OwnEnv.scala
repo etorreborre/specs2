@@ -19,8 +19,8 @@ trait OwnEnv extends AfterAll {
 
   lazy val ownEnv: Env =
     env.copy(
-      executionEnv =       ExecutionEnv.create(env.arguments, env.systemLogger),
-      specs2ExecutionEnv = ExecutionEnv.createSpecs2(env.arguments, env.systemLogger))
+      executionEnv =       ExecutionEnv.create(env.arguments, env.systemLogger, tag = Some(getClass.getName)),
+      specs2ExecutionEnv = ExecutionEnv.createSpecs2(env.arguments, env.systemLogger, tag = Some(getClass.getName)))
 
   implicit lazy val ee: ExecutionEnv =
     ownEnv.executionEnv
