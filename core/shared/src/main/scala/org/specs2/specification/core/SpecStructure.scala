@@ -167,7 +167,7 @@ object SpecStructure {
     spec.map(fs => fs |> DefaultSelector.select(env))
 
   private def selected(env: Env)(spec: SpecStructure): List[Fragment] =
-    select(env)(spec).fragments.fragments.runOption(env.executionEnv).getOrElse(Nil)
+    select(env)(spec).fragments.fragments.runOption(env.specs2ExecutionEnv).getOrElse(Nil)
 
   implicit class SpecStructureOps(s: SpecStructure)(implicit ee: ExecutionEnv) {
     def textsList: List[Fragment] =

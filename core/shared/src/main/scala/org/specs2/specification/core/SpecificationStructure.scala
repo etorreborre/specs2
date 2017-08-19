@@ -61,7 +61,7 @@ object SpecificationStructure {
    */
   def topologicalSort(env: Env) = (specifications: Seq[SpecificationStructure]) =>
     TopologicalSort.sort(specifications, (s1: SpecificationStructure, s2: SpecificationStructure) =>
-      SpecStructure.dependsOn(env.executionEnv)(s2.structure(env), s1.structure(env)))
+      SpecStructure.dependsOn(env.specs2ExecutionEnv)(s2.structure(env), s1.structure(env)))
 
   /**
    * sort the specifications in topological order where specification i doesn't depend on specification j if i < j
@@ -70,7 +70,7 @@ object SpecificationStructure {
    */
   def reverseTopologicalSort(env: Env) = (specifications: Seq[SpecificationStructure]) =>
     TopologicalSort.sort(specifications, (s1: SpecificationStructure, s2: SpecificationStructure) =>
-        SpecStructure.dependsOn(env.executionEnv)(s1.structure(env), s2.structure(env)))
+        SpecStructure.dependsOn(env.specs2ExecutionEnv)(s1.structure(env), s2.structure(env)))
 
   /** @return all the referenced specifications */
   def referencedSpecifications(spec: SpecificationStructure, env: Env, classLoader: ClassLoader): Operation[Seq[SpecificationStructure]] =

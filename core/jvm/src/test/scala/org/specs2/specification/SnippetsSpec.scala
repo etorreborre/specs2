@@ -6,7 +6,7 @@ import execute.Snippet._
 import core._
 import control.Use
 
-class SnippetsSpec(val env: Env) extends script.Spec with Snippets with DataTables with Grouped with TypedEqual with OwnExecutionEnv { def is = sequential ^ s2"""
+class SnippetsSpec(val env: Env) extends script.Spec with Snippets with DataTables with Grouped with TypedEqual with OwnExecutionEnv { def is = s2"""
 
  These are examples on how to use the various snippet methods
 
