@@ -79,9 +79,10 @@ object sbtRun extends MasterSbtRunner(Array(), Array(), Thread.currentThread.get
   }
 
   def exit(action: Action[Stats])(implicit ee: ExecutionEnv): Unit = {
-    runActionFuture(action)(ee).onComplete(_.fold(
-      err => System.exit(100),
-      ok  => if (ok.isSuccess) System.exit(0) else System.exit(1)))(ee.executionContext)
+    runActionFuture(action)(ee).onComplete {
+      case scala.util.Failure(_)     => System.exit(100)
+      case scala.util.Success(stats) => if (stats.isSuccess) System.exit(0) else System.exit(1)
+    }(ee.executionContext)
   }
 
   def start(arguments: String*): Action[Stats] = {

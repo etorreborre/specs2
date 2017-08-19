@@ -90,8 +90,8 @@ class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[(
   private def createFuture[A](a: =>A)(implicit ee: ExecutionEnv): Future[A] = {
     val future = Future(a)(ee.executionContext)
     future.onComplete {
-      case util.Success(_) => terminated.set(true)
-      case util.Failure(_) => terminated.set(true)
+      case scala.util.Success(_) => terminated.set(true)
+      case scala.util.Failure(_) => terminated.set(true)
     }(ee.executionContext)
     future
   }

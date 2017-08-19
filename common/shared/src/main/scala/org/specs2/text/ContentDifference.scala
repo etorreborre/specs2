@@ -121,7 +121,7 @@ object LineComparison {
 
       case _ =>
         done[Fx1[Safe], LineComparison]
-    }.runList.execSafe.run.toOption.getOrElse(List())
+    }.runList.execSafe.run.fold(_ => List(), identity)
 
   }
 

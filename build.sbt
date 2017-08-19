@@ -70,14 +70,15 @@ lazy val analysisJvm = analysis.jvm.dependsOn(commonJvm % "test->test", coreJvm,
 
 lazy val common = crossProject.in(file("common")).
   settings(
-    name := "specs2-common",
     libraryDependencies ++=
       Seq("org.scala-lang.modules" %%% "scala-parser-combinators" % "1.0.5") ++
       depends.reflect(scalaOrganization.value, scalaVersion.value) ++
       depends.paradise(scalaVersion.value) ++
       depends.scalaXML(scalaVersion.value) ++
       Seq("org.scalacheck" %%% "scalacheck" % "1.13.4" % "test"),
-    moduleSettings("common")).
+    moduleSettings("common")++
+    Seq(name := "specs2-common")
+).
   jsSettings(depends.jsTest).
   jvmSettings(moduleJvmSettings("common"))
 
