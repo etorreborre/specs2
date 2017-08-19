@@ -28,10 +28,10 @@ object ExecutionEnv {
       ExecutorServices.fromExecutionContext(ec),
       timeFactor = 1)
 
-  def create(arguments: Arguments, systemLogger: Logger): ExecutionEnv =
+  def create(arguments: Arguments, systemLogger: Logger, tag: Option[String] = None): ExecutionEnv =
     fromGlobalExecutionContext
 
-  def createSpecs2(arguments: Arguments, systemLogger: Logger): ExecutionEnv =
+  def createSpecs2(arguments: Arguments, systemLogger: Logger, tag: Option[String] = None): ExecutionEnv =
     fromGlobalExecutionContext
 
   /** create an ExecutionEnv from Scala global execution context */
