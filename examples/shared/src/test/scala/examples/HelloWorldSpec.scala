@@ -20,5 +20,3 @@ class HelloWorldSpec extends Specification { def is = s2"""
   def e3 = "Hello world" must endWith("world")
 
 }
-
-

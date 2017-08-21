@@ -39,6 +39,22 @@ lazy val specs2Settings = Seq(
   scalaVersion := "2.12.3",
   crossScalaVersions := Seq(scalaVersion.value, "2.11.11"))
 
+lazy val tagName = Def.setting{
+  s"specs2-${version.value}"
+}
+
+lazy val commonJsSettings = Seq(
+  scalacOptions += {
+    val tagOrHash =
+      if(isSnapshot.value) sys.process.Process("git rev-parse HEAD").lines_!.head
+      else tagName.value
+    val a = (baseDirectory in LocalRootProject).value.toURI.toString
+    val g = "https://raw.githubusercontent.com/etorreborre/specs2/" + tagOrHash
+    s"-P:scalajs:mapSourceURI:$a->$g/"
+  },
+  parallelExecution in Test := false
+)
+
 lazy val specs2Version = settingKey[String]("defines the current specs2 version")
 lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
 lazy val shapelessVersion = "2.3.2"
@@ -55,6 +71,9 @@ def moduleSettings(name: String) =
 def moduleJvmSettings(name: String) =
   testingJvmSettings
 
+def moduleJsSettings(name: String) =
+  commonJsSettings
+
 /** MODULES (sorted in alphabetical order) */
 lazy val analysis = crossProject.in(file("analysis")).
   settings(Seq(
@@ -63,7 +82,8 @@ lazy val analysis = crossProject.in(file("analysis")).
     Seq(name := "specs2-analysis"):_*).
   jvmSettings(
     depends.jvmTest,
-    moduleJvmSettings("analysis"))
+    moduleJvmSettings("analysis")).
+  jsSettings(moduleJsSettings("analysis"))
 
 lazy val analysisJs  = analysis.js.dependsOn(commonJs % "test->test", coreJs, matcherJs, scalacheckJs % "test")
 lazy val analysisJvm = analysis.jvm.dependsOn(commonJvm % "test->test", coreJvm, matcherJvm, scalacheckJvm % "test")
@@ -79,7 +99,7 @@ lazy val common = crossProject.in(file("common")).
     moduleSettings("common")++
     Seq(name := "specs2-common")
 ).
-  jsSettings(depends.jsTest).
+  jsSettings(depends.jsTest, moduleJsSettings("common")).
   jvmSettings(moduleJvmSettings("common"))
 
 lazy val commonJs  = common.js.dependsOn(fpJs)
@@ -94,7 +114,7 @@ lazy val core = crossProject.in(file("core")).
       depends.mockito.map(_ % "test") ++
       depends.junit.map(_ % "test")
     ).
-  jsSettings(depends.jsTest).
+  jsSettings(depends.jsTest, moduleJsSettings("analysis")).
   jvmSettings(
     depends.jvmTest,
     moduleJvmSettings("core"))
@@ -105,6 +125,7 @@ lazy val coreJvm = core.jvm.dependsOn(matcherJvm, commonJvm % "test->test")
 lazy val examples = crossProject.in(file("examples")).
   settings(moduleSettings("examples") ++
     Seq(name := "specs2-examples"):_*).
+  jsSettings(depends.jsTest, moduleJsSettings("examples")).
   jvmSettings(depends.jvmTest, moduleJvmSettings("examples"))
 
 lazy val examplesJs  = examples.js.dependsOn(commonJs, matcherJs, coreJs, matcherExtraJvm, junitJs, scalacheckJs, mockJs)
@@ -113,6 +134,7 @@ lazy val examplesJvm = examples.jvm.dependsOn(commonJvm, matcherJvm, coreJvm, ma
 lazy val fp = crossProject.in(file("fp")).
   settings(moduleSettings("fp"):_*).
   settings(name := "specs2-fp").
+  jsSettings(depends.jsTest, moduleJsSettings("fp")).
   jvmSettings(moduleJvmSettings("fp"))
 
 lazy val fpJvm = fp.jvm
@@ -166,6 +188,7 @@ lazy val markdown = project.in(file("markdown")).
 lazy val matcher = crossProject.in(file("matcher")).
   settings(moduleSettings("matcher") ++
     Seq(name := "specs2-matcher"):_*).
+  jsSettings(depends.jsTest, moduleJsSettings("matcher")).
   jvmSettings(moduleJvmSettings("matcher"))
 
 lazy val matcherJs  = matcher.js.dependsOn(commonJs)
@@ -176,6 +199,7 @@ lazy val matcherExtra = crossProject.in(file("matcher-extra")).
     name := "specs2-matcher-extra",
     libraryDependencies ++= depends.paradise(scalaVersion.value)
   ):_*).
+  jsSettings(depends.jsTest, moduleJsSettings("matcher-extra")).
   jvmSettings(depends.jvmTest, moduleJvmSettings("matcher-extra"))
 
 lazy val matcherExtraJs  = matcherExtra.js.dependsOn(analysisJs, matcherJs, coreJs % "test->test")
@@ -195,6 +219,7 @@ lazy val shapeless = crossProject.in(file("shapeless")).
         depends.paradise(scalaVersion.value) ++
         Seq("com.chuusai" %%% "shapeless" % shapelessVersion)
     ):_*).
+  jsSettings(depends.jsTest, moduleJsSettings("shapeless")).
   jvmSettings(depends.jvmTest, moduleJvmSettings("shapeless"))
 
 lazy val shapelessJs = shapeless.js.dependsOn(matcherJs, matcherExtraJs % "test->test")
@@ -206,6 +231,7 @@ lazy val scalaz = crossProject.in(file("scalaz")).
       depends.scalaz(scalazVersion.value) ++
         depends.scalazConcurrent(scalazVersion.value)) ++
     Seq(name := "specs2-scalaz"):_*).
+  jsSettings(depends.jsTest, moduleJsSettings("scalaz")).
   jvmSettings(depends.jvmTest, moduleJvmSettings("scalaz"))
 
 lazy val scalazJs = scalaz.js.dependsOn(matcherJs, coreJs % "test->test")
@@ -218,6 +244,7 @@ lazy val mock = crossProject.in(file("mock")).
         depends.mockito) ++
     moduleSettings("mock") ++
     Seq(name := "specs2-mock"):_*).
+  jsSettings(depends.jsTest, moduleJsSettings("mock")).
   jvmSettings(depends.jvmTest, moduleJvmSettings("mock"))
 
 lazy val mockJs = mock.js.dependsOn(coreJs)
@@ -228,6 +255,7 @@ lazy val scalacheck = crossProject.in(file("scalacheck")).
     Seq(libraryDependencies += "org.scalacheck" %%% "scalacheck" % "1.13.4") ++
     moduleSettings("scalacheck") ++
     Seq(name := "specs2-scalacheck"):_*).
+  jsSettings(depends.jsTest, moduleJsSettings("scalacheck")).
   jvmSettings(depends.jvmTest, moduleJvmSettings("scalacheck"))
 
 lazy val scalacheckJs  = scalacheck.js.dependsOn(coreJs)
