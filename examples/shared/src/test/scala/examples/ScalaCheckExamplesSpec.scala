@@ -9,7 +9,7 @@ import org.specs2._
  * Boolean assertions are replaced by `must` expectations to get better failure messages in case of a failure
  *
  */
-class ScalaCheckExamplesSpec extends Specification with ScalaCheck { def is = s2"""
+object ScalaCheckExamplesSpec extends Specification with ScalaCheck { def is = s2"""
 
   startsWith ${ prop { (a: String, b: String) => (a+b) must startWith(a) } }
   endsWith   ${ prop { (a: String, b: String) => (a+b) must endWith(b) } }

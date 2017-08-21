@@ -11,8 +11,10 @@ trait Classes extends ClassOperations {
   def createInstance[T <: AnyRef](className: String)(implicit m: ClassTag[T]): Operation[T] =
     throw new Exception("Classes.createInstance: no js implementation")
 
-  def createInstance[T <: AnyRef](className: String, loader: ClassLoader, defaultInstances: =>List[AnyRef] = Nil)(implicit m: ClassTag[T]): Operation[T] =
-    protect[OperationStack, T](TestUtils.newInstance(className, loader, Nil)(Nil).asInstanceOf[T])
+  def createInstance[T <: AnyRef](className: String, loader: ClassLoader, defaultInstances: =>List[AnyRef] = Nil)(implicit m: ClassTag[T]): Operation[T] = {
+    if (className.endsWith("$")) protect[OperationStack, T](TestUtils.loadModule(className.dropRight(1), loader).asInstanceOf[T])
+    else                         protect[OperationStack, T](TestUtils.newInstance(className, loader, Nil)(Nil).asInstanceOf[T])
+  }
 
   def createInstanceFromClass[T <: AnyRef](klass: Class[T], defaultInstances: =>List[AnyRef])(implicit m: ClassTag[T]): Operation[T] = {
     Use(m)
@@ -20,7 +22,7 @@ trait Classes extends ClassOperations {
   }
 
   def createInstanceFromClass[T <: AnyRef](klass: Class[T], loader: ClassLoader, defaultInstances: =>List[AnyRef] = Nil)(implicit m: ClassTag[T]): Operation[T] =
-    protect[OperationStack, T](TestUtils.newInstance(klass.getName, loader, Nil)(Nil).asInstanceOf[T])
+    createInstance(klass.getName, loader, defaultInstances)
 
   /** try to create an instance but return an exception if this is not possible */
   def createInstanceEither[T <: AnyRef](className: String, loader: ClassLoader, defaultInstances: =>List[AnyRef] = Nil)(implicit m: ClassTag[T]): Operation[Throwable Either T] =
