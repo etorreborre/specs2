@@ -31,16 +31,17 @@ case class LinesComparisonResult[T : Diffable](actual: List[T], expected: List[T
   import EditDistance._
   import org.specs2.text.AnsiColors._
 
-  val operations: IndexedSeq[EditDistanceOperation[T]] =
+  private val diffable: Diffable[T] =
+    implicitly[Diffable[T]]
+
+  private lazy val operations: IndexedSeq[EditDistanceOperation[T]] =
     levenhsteinDistance[T](actual.toIndexedSeq, expected.toIndexedSeq)(new Equiv[T] {
-      def equiv(a: T, b: T) = implicitly[Diffable[T]].diff(a, b).identical
+      def equiv(a: T, b: T) = diffable.diff(a, b).identical
     })
 
   def identical: Boolean =
-    operations.forall {
-      case _:Same[_] => true
-      case _ => false
-    }
+    actual.size == expected.size &&
+      actual.zip(expected).forall { case (a, e) => diffable.diff(a, e).identical }
 
   def render: String = operations.flatMap {
     case Same(line)          => List(line)
