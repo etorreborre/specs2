@@ -181,6 +181,9 @@ case class FragmentsSeq(fs: Vector[Fragment]) {
   def toFragments: Fragments =
     Fragments.apply(fs:_*)
 
+  def map(f: Fragment => Fragment): FragmentsSeq =
+    FragmentsSeq(fs map f)
+
   def append(fragment: Fragment): FragmentsSeq =
     FragmentsSeq(fs :+ fragment)
 
