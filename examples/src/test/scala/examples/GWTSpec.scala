@@ -28,6 +28,8 @@ class GWTSpec extends Specification with GWT with StandardRegexStepParsers { def
 """
   val anOperator = readAs(".*: (.)$").and((s: String) => s)
 
+  val thirdNumber = 6
+
   val calculator1 =
     Scenario("calculator1")
       .given(anInt)

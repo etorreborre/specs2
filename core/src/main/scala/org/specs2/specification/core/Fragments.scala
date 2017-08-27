@@ -44,6 +44,8 @@ case class Fragments(contents: AsyncStream[Fragment]) {
   def |> (f: AsyncTransducer[Fragment, Fragment])  = copy(contents = f(contents))
   def append(other: AsyncStream[Fragment]): Fragments  = copy(contents = contents append other)
   def prepend(other: AsyncStream[Fragment]): Fragments = copy(contents = other append contents)
+  def updateFragments(update: List[Fragment] => Fragments): Fragments =
+    copy(Producer.emitEff(contents.runList.flatMap(fs => update(fs).contents.runList)))
 
   /** run the process to get all fragments */
   def fragments: IndexedSeq[Fragment] =
