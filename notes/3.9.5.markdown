@@ -1,0 +1,7 @@
+Maintenance version
+
+## Fixes
+
+ * **mock** protect `HamcrestMatcherAdapter` from possible null values passed by Mockito [#584](https://github.com/etorreborre/specs2/issues/584)
+ * **core** replace tabs by spaces before creating fragments in s2 strings [#587](https://github.com/etorreborre/specs2/issues/587)
+ * **gwt**  use all the text fragments a scenario, even interpolated strings [#595](https://github.com/etorreborre/specs2/issues/595)
