@@ -19,11 +19,11 @@ class IsolatedExecutionSpec(env: Env) extends Spec { def is = skipAllIf(util.Pro
 """
 
   def e1 = {
-    execute(TestIsolatedSpec1) must contain(exactly[Result](Success("example1"), Success("example2")))
+    execute(new TestIsolatedSpec1) must contain(exactly[Result](Success("example1"), Success("example2")))
   }
 
   def e2 = {
-    execute(TestIsolatedSpec2) must contain(exactly[Result](Success("example1"), Success("example2")))
+    execute(new TestIsolatedSpec2) must contain(exactly[Result](Success("example1"), Success("example2")))
   }
 
   def execute(spec: SpecificationStructure) = {
@@ -39,7 +39,7 @@ class IsolatedExecutionSpec(env: Env) extends Spec { def is = skipAllIf(util.Pro
 /**
  * this isolated specification must have all its examples ok because they are properly isolated
  */
-object TestIsolatedSpec1 extends org.specs2.mutable.Specification with MustMatchers { isolated
+class TestIsolatedSpec1 extends org.specs2.mutable.Specification with MustMatchers { isolated
   var n = 0
   "this" should {
     n += 1
@@ -61,7 +61,7 @@ object TestIsolatedSpec1 extends org.specs2.mutable.Specification with MustMatch
   }
 }
 
-object TestIsolatedSpec2 extends org.specs2.Specification with MustMatchers { def is = isolated ^ s2"""
+class TestIsolatedSpec2 extends org.specs2.Specification with MustMatchers { def is = isolated ^ s2"""
 
   this should
     create example 1 $e1
