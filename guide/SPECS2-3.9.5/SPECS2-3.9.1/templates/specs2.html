@@ -1,0 +1,89 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>$title$</title>
+    <link href="$baseDir$/images/s2.ico"                                   type="image/x-icon" rel="specs2 icon"/>
+    <link href="$baseDir$/css/opensans-fonts.css"                          type="text/css"     rel="stylesheet" />
+    <link href="$baseDir$/css/bootstrap.min.css"                           type="text/css"     rel="stylesheet" />
+    <link href="$baseDir$/css/font-awesome.min.css"                        type="text/css"     rel="stylesheet" />
+    <link href="$baseDir$/css/prettify.css"                                type="text/css"     rel="stylesheet" />
+    <link href="$baseDir$/css/tabber.css"                                  type="text/css"     rel="stylesheet" />
+    <link href="$baseDir$/css/tipuesearch.css"                             type="text/css"     rel="stylesheet" />
+    <link href="$baseDir$/css/specs2.css"                                  type="text/css"     rel="stylesheet" />
+    <link href="$baseDir$/css/specs2-user.css"                             type="text/css"     rel="stylesheet" />
+
+    <script src="$baseDir$/javascript/jquery.js"                           type="text/javascript"></script>
+    <script src="$baseDir$/javascript/jquery.jstree.js"                    type="text/javascript"></script>
+    <script src="$baseDir$/javascript/tabber.js"                           type="text/javascript"></script>
+    <script src="$baseDir$/javascript/tabber_start.js"                     type="text/javascript"></script>
+    <script src="$baseDir$/javascript/prettify.js"                         type="text/javascript"></script>
+    <script src="$baseDir$/javascript/specs2.js"                           type="text/javascript"></script>
+    <script src="$baseDir$/javascript/specs2-user.js"                      type="text/javascript"></script>
+    <script src="$baseDir$/javascript/tipuesearch/tipuesearch_set.js"      type="text/javascript"></script>
+    <script src="$baseDir$/javascript/tipuesearch/tipuesearch_contents.js" type="text/javascript"></script>
+    <script src="$baseDir$/javascript/tipuesearch/tipuesearch.min.js"      type="text/javascript"></script>
+
+</head>
+<body onload="prettyPrint(); tabberAutomatic([])">
+
+<div class="container">
+
+$if(sidebar)$
+<div class="col-md-2 col-sm-3 col-xs-3 sidebar-outer">
+<div class="col-md-2 fixed">
+$else$
+<div class="col-md-1"></div>
+$endif$
+
+$if(search)$
+<!-- search box -->
+<div class="search-box">
+  <form action="search.html">
+    <input type="text" name="q" id="tipue_search_input" autocomplete="off" required>
+  </form>
+</div>
+$else$
+<div class="col-md-1"></div>
+$endif$
+
+$if(toc)$
+<!-- table of contents -->
+<toc/>
+$else$
+$endif$
+
+$if(sidebar)$
+</div>
+</div>
+$else$
+$endif$
+
+
+<div class="col-md-10 col-sm-9 col-xs-9">
+$if(issues)$
+<h1>$title$
+    <a href="#" onclick="hideByClass('ok');hideById('onlyIssuesLink');showById('allElementsLink')"><span id=onlyIssuesLink class="issues-toggle"> (issues only)</span></a>
+    <a href="#" onclick="showByClass('ok');hideById('allElementsLink');showById('onlyIssuesLink')"><span id=allElementsLink style="display:none" class="issues-toggle"> (all)</span></a>
+</h1>
+$else$
+<h1>$title$</h1>
+<div id="tipue_search_content"></div>
+$endif$
+
+$body$
+</div>
+
+$if(search)$
+<script>
+$$(document).ready(function() {
+  $$('#tipue_search_input').tipuesearch({
+    'show': 6
+  });
+});
+</script>
+$else$
+$endif$
+</div>
+
+</body>
+</html>
