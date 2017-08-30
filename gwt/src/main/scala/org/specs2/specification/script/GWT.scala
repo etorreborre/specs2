@@ -4,8 +4,8 @@ package script
 
 import core.{Env, Fragment, Fragments}
 import create.{FragmentFactory, FragmentsFactory}
-import shapeless.{HList, HNil, ::}
-import shapeless.ops.hlist.{ToTraversable, ToList}
+import _root_.shapeless.{HList, HNil, ::}
+import _root_.shapeless.ops.hlist.{ToTraversable, ToList}
 import execute._
 import ResultLogicalCombinators._
 import scala.collection.mutable
@@ -19,7 +19,7 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
   private val factory: FragmentFactory = fragmentFactory; import factory._
 
   /** renaming of the shapeless cons object to avoid imports */
-  val :: = shapeless.::
+  val :: = _root_.shapeless.::
 
   /**
    * start a sequence of GWT steps
