@@ -212,6 +212,9 @@ package object control {
     def protect[A](a: =>A): Operation[A] =
       SafeEffect.protect(a)
 
+    def attempt[A](a: Operation[A]): Operation[Throwable Either A] =
+      SafeEffect.attempt(a)
+
     def delayed[A](a: =>A): Operation[A] =
       ErrorEffect.ok(a)
 

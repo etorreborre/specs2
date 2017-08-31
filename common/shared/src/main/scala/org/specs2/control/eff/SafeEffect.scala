@@ -54,10 +54,10 @@ trait SafeInterpretation extends SafeCreation { outer =>
   /**
    * Attempt to execute a safe action including finalizers
    */
-  def attemptSafe[R, A](r: Eff[R, A])(implicit m: Safe /= R): Eff[R, (Either[Throwable, A], List[Throwable])] = {
+  def attemptSafe[R, A](r: Eff[R, A])(implicit m: Safe /= R): Eff[R, (Either[Throwable, A], List[Throwable])] = protect {
     type Out = (Either[Throwable, A], Vector[Throwable])
     interceptLoop1[R, Safe, A, Out]((a: A) => (Right(a), Vector.empty): Out)(safeLoop[R, R, A])(r).map { case (a, vs) => (a, vs.toList) }
-  }
+  }.flatten
 
   def safeLoop[R, U, A]: Loop[Safe, R, A, Eff[U, (Throwable Either A, Vector[Throwable])], Eff[U, Unit]] = {
     type Out = (Either[Throwable, A], Vector[Throwable])
@@ -122,8 +122,8 @@ trait SafeInterpretation extends SafeCreation { outer =>
         var error: Option[Throwable] = None
 
         val traversed: T[X] = xs.map {
-          case FailedFinalizer(t) => { failedFinalizers.append(t); ().asInstanceOf[X] }
-          case FailedValue(t)     => { error = Some(t); ().asInstanceOf[X] }
+          case FailedFinalizer(t) => failedFinalizers.append(t); ().asInstanceOf[X]
+          case FailedValue(t)     => error = Some(t); ().asInstanceOf[X]
           case EvaluateValue(v)   =>
             error match {
               case None =>

@@ -3,6 +3,8 @@ package control
 
 import io.FilePath
 import scala.sys.process.ProcessLogger
+import Operations._
+import fp.syntax._
 
 /**
  * Execute external commands
@@ -12,30 +14,22 @@ object Executable {
   /**
    * Run an external program
    */
-  def run(executable: FilePath, arguments: Seq[String] = Seq()): Operation[Unit] = {
-    val logger = new StringProcessLogger
-    try {
-
-      val code = sys.process.Process(executable.path, arguments).!(logger)
-      if (code == 0) Operations.ok(())
-      else           Operations.fail(logger.lines)
-    } catch { case t: Throwable =>
-      Operations.fail(t.getMessage+"\n"+logger.lines)
-    }
-  }
+  def run(executable: FilePath, arguments: Seq[String] = Seq()): Operation[Unit] =
+    execute(executable, arguments).void
 
   /**
    * Execute an external program and return the output
    */
   def execute(executable: FilePath, arguments: Seq[String] = Seq()): Operation[String] = {
-    val logger = new StringProcessLogger
-    try {
-
-      val code = sys.process.Process(executable.path, arguments).!(logger)
-      if (code == 0) Operations.ok(logger.lines)
-      else           Operations.fail(logger.lines)
-    } catch { case t: Throwable =>
-      Operations.fail(t.getMessage+"\n"+logger.lines)
+    lazy val logger = new StringProcessLogger
+    attempt {
+      protect(sys.process.Process(executable.path, arguments).!(logger)).flatMap { code =>
+        if (code == 0) ok(logger.lines)
+        else           fail[String](logger.lines)
+      }
+    }.flatMap {
+       case Left(t)  => fail[String](t.getMessage+"\n"+logger.lines)
+       case Right(s) => ok(s)
     }
   }
 
