@@ -200,7 +200,7 @@ object build extends Build {
   lazy val matcherExtra = Project(id = "matcher-extra", base = file("matcher-extra"),
     settings = moduleSettings ++ Seq(
       name := "specs2-matcher-extra",
-      libraryDependencies ++= paradisePlugin
+      libraryDependencies ++= Seq("org.scalaz.stream" % "scalaz-stream_2.12" % "0.8.6a") ++ paradisePlugin
     )
   ).dependsOn(analysis, matcher, core % "test->test")
 
