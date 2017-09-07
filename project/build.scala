@@ -23,13 +23,12 @@ import com.typesafe.tools.mima.plugin.MimaKeys._
 import xerial.sbt.Sonatype._
 import SonatypeKeys._
 import sbtbuildinfo.Plugin._
-import scoverage.ScoverageSbtPlugin._
-import ScoverageKeys._
+import scoverage.ScoverageKeys.coverageExcludedPackages
 
 object build extends Build {
   type Settings = Def.Setting[_]
 
-  lazy val SCALAZ_VERSION = "7.2.0"
+  lazy val SCALAZ_VERSION = "7.2.15"
 
   /** MAIN PROJECT */
   lazy val specs2 = Project(
@@ -55,7 +54,7 @@ object build extends Build {
 
   lazy val specs2Version = settingKey[String]("defines the current specs2 version")
   lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
-  lazy val paradisePlugin = Seq(compilerPlugin("org.scalamacros" %% "paradise"    % "2.0.1"))
+  lazy val paradisePlugin = Seq(compilerPlugin("org.scalamacros" % "paradise_2.12.3" % "2.1.1"))
 
   lazy val aggregateCompile = ScopeFilter(
              inProjects(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock),
@@ -131,8 +130,8 @@ object build extends Build {
       // from https://github.com/scala/scala-module-dependency-sample
       Seq(libraryDependencies := {
             libraryDependencies.value ++ Seq(
-              "org.scala-lang.modules" %% "scala-xml" % "1.0.3",
-              "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.3"
+              "org.scala-lang.modules" %% "scala-xml" % "1.0.6",
+              "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.6"
             )
       }) ++
       Seq(name := "specs2-common")
@@ -229,7 +228,7 @@ object build extends Build {
   /**
    * Main libraries
    */
-  lazy val scalacheckLib = "org.scalacheck" %% "scalacheck"   % "1.12.1"
+  lazy val scalacheckLib = "org.scalacheck" %% "scalacheck"   % "1.12.6"
   lazy val mockitoLib    = "org.mockito"    % "mockito-core"  % "1.9.5"
   lazy val junitLib      = "junit"          % "junit"         % "4.11"
   lazy val hamcrestLib   = "org.hamcrest"   % "hamcrest-core" % "1.3"
@@ -254,8 +253,8 @@ object build extends Build {
     javaOptions += "-Xmx3G",
     fork in test := true,
     testOptions := Seq(Tests.Filter(s => Seq("Spec", "Guide", "Index").exists(s.endsWith) && Seq("Specification", "FeaturesSpec").forall(n => !s.endsWith(n))))
-  ) ++ instrumentSettings ++ Seq(
-    excludedPackages in ScoverageCompile := ".*create.AutoExamples.*;.*create.S2StringContext.*"
+  ) ++ Seq(
+    coverageExcludedPackages := ".*create.AutoExamples.*;.*create.S2StringContext.*"
   )
 
   /**
