@@ -50,13 +50,12 @@ object build extends Build {
     specs2Version in GlobalScope <<= version,
     specs2ShellPrompt,
     scalazVersion := SCALAZ_VERSION,
-    scalaVersion := "2.11.7",
-    crossScalaVersions := Seq(scalaVersion.value, "2.10.6"))
+    scalaVersion := "2.12.3"
+)
 
   lazy val specs2Version = settingKey[String]("defines the current specs2 version")
   lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
-  lazy val paradisePlugin = Seq(compilerPlugin("org.scalamacros" %% "paradise"    % "2.0.1" cross CrossVersion.full),
-                                               "org.scalamacros" %% "quasiquotes" % "2.0.1")
+  lazy val paradisePlugin = Seq(compilerPlugin("org.scalamacros" %% "paradise"    % "2.0.1"))
 
   lazy val aggregateCompile = ScopeFilter(
              inProjects(common, matcher, matcherExtra, core, html, analysis, form, markdown, gwt, junit, scalacheck, mock),
@@ -131,15 +130,10 @@ object build extends Build {
             scalacheckLib % "test")) ++
       // from https://github.com/scala/scala-module-dependency-sample
       Seq(libraryDependencies := {
-        CrossVersion.partialVersion(scalaVersion.value) match {
-          // if scala 2.11+ is used, add dependency on scala-xml module
-          case Some((2, scalaMajor)) if scalaMajor >= 11 =>
             libraryDependencies.value ++ Seq(
               "org.scala-lang.modules" %% "scala-xml" % "1.0.3",
               "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.3"
             )
-          case _ => libraryDependencies.value
-        }
       }) ++
       Seq(name := "specs2-common")
   )
@@ -207,10 +201,7 @@ object build extends Build {
   lazy val matcherExtra = Project(id = "matcher-extra", base = file("matcher-extra"),
     settings = moduleSettings ++ Seq(
       name := "specs2-matcher-extra",
-      libraryDependencies ++=
-        (if (scalazVersion.value == "7.1.0") Seq("org.scalaz.stream" %% "scalaz-stream" % "0.5a")
-         else                                Seq("org.scalaz.stream" %% "scalaz-stream" % "0.5")) ++
-        (if (scalaVersion.value.startsWith("2.11")) Nil else paradisePlugin)
+      libraryDependencies ++= paradisePlugin
     )
   ).dependsOn(analysis, matcher, core % "test->test")
 
@@ -273,7 +264,6 @@ object build extends Build {
   lazy val releaseSettings: Seq[Settings] =
     ReleasePlugin.releaseSettings ++ Seq(
     tagName <<= (version in ThisBuild) map (v => "SPECS2-" + v),
-    crossBuild := true,
     releaseProcess := Seq[ReleaseStep](
       checkSnapshotDependencies,
       inquireVersions,
@@ -282,7 +272,7 @@ object build extends Build {
       generateUserGuide,
       generateIndexPage,
       publishSite,
-      ReleaseStep(publishSignedArtifacts, check = identity, enableCrossBuild = true),
+      ReleaseStep(publishSignedArtifacts, check = identity),
       releaseToSonatype,
       notifyHerald,
       tagRelease,
@@ -499,5 +489,3 @@ object build extends Build {
   }
 
 }
-
-
