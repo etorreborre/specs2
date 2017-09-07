@@ -25,7 +25,7 @@ While the formal type of output is Unit, the HtmlExporting trait actually transf
                                                                                                                         """
   def exporter = new HtmlExporting {}
   
-  def e1 = check { (spec: ExecutedSpecification) =>
+  def e1 = prop { (spec: ExecutedSpecification) =>
     (1 + spec.includedLinkedSpecifications.size) === exporter.print(spec)(args()).size
   }
 }

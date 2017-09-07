@@ -6,7 +6,6 @@ import script._
 import org.specs2.time.{NoTimeConversions}
 import concurrent._
 import duration._
-import ExecutionContext.Implicits.global
 import java.util.concurrent.{Executors, ThreadPoolExecutor, ForkJoinPool, Executor}
 
 class FutureMatchersSpec extends Specification with Groups with NoTimeConversions with ResultMatchers with Retries { def is = sequential ^ s2"""

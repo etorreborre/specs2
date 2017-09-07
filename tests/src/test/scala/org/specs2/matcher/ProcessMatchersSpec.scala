@@ -35,10 +35,6 @@ class ProcessMatchersSpec extends Specification with ProcessMatchers with Result
    ${ oneElement(1) must terminateBefore(10.millis) }
    ${ (oneElementAfter(1, 100.millis) must terminateBefore(50.millis)) returns "Timeout after 50 milliseconds" } $xtag
 
-   check the produced value with a timeout
-   ${ oneElementAfter(1, 10.millis) must terminateBefore(100.millis).withValues(Seq(1)) }
-   ${ oneElementAfter(1, 10.millis) must returnValues(Seq(1)).before(100.millis) }
-
    ${Step(scheduledExecutorService.shutdown)}
 """
 
@@ -46,7 +42,7 @@ class ProcessMatchersSpec extends Specification with ProcessMatchers with Result
     Process.eval(Task.delay(t))
 
   def oneElementAfter[T](t: =>T, duration: FiniteDuration) =
-    Process.sleep(duration) fby oneElement(t)
+    Process(Thread.sleep(duration.toMillis)) fby oneElement(t)
 
   implicit val scheduledExecutorService: ScheduledExecutorService =
     Executors.newScheduledThreadPool(1)
@@ -58,6 +54,6 @@ trait Retries extends AroundExample with EventuallyResults {
 
   // if the ci server is very loaded the tests might fail, so we retry 5 times
   def around[R : AsResult](r: =>R) =
-    AsResult(eventually(retries = retries, sleep = time.Duration.fromScalaDuration(sleep))(r))
+    AsResult(eventually(retries = retries, sleep = org.specs2.time.Duration.fromScalaDuration(sleep))(r))
 
 }

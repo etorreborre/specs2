@@ -6,7 +6,6 @@ import execute._
 import org.specs2.time.NoTimeConversions
 import scala.concurrent._
 import scala.concurrent.duration._
-import ExecutionContext.Implicits.global
 
 class EventuallyMatchersSpec extends Specification with NoTimeConversions {
                                                                                                                         """

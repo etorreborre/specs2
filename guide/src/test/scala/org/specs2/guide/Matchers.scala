@@ -144,7 +144,6 @@ iterator.next must be_==(3).eventually
 import time.NoTimeConversions._
     import scala.concurrent._
     import duration._
-    import ExecutionContext.Implicits.global
 // 8<--
 future(1) must be_>(0).await
 future { Thread.sleep(100); 1 } must be_>(0).await(retries = 2, timeout = 100.millis)
@@ -155,7 +154,6 @@ future { Thread.sleep(100); 1 } must be_>(0).await(retries = 2, timeout = 100.mi
 import time.NoTimeConversions._
 import scala.concurrent._
 import duration._
-import ExecutionContext.Implicits.global
 // 8<--
 future(1 === 1).await
 future(1 === 1).await(retries = 2, timeout = 100.millis)
@@ -328,7 +326,7 @@ implicit def a = Arbitrary { for { a <- Gen.oneOf("a", "b"); b <- Gen.oneOf("a",
 
 "a simple property" ! ex1
 
-def ex1 = check((s: String) => s must contain("a") or contain("b"))
+def ex1 = prop((s: String) => s must contain("a") or contain("b"))
 }}
 
 You can also be very specific if you want to use an `Arbitrary` instance only on one example. In that case, just replace the `check` method with the name of your `Arbitrary` instance: ${snippet{

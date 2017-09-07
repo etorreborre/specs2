@@ -136,7 +136,7 @@ class ScalaCheckMatchersSpec extends Specification with ScalaCheckProperties { d
 
   val positiveInts = Arbitrary(Gen.choose(1, 5))
 
-  def arb1: Prop = {
+  def arb1: Prop = prop {
     implicit def ab = Arbitrary { for { a <- Gen.oneOf("a", "b"); b <- Gen.oneOf("a", "b") } yield a+b }
     (s: String) => s must contain("a") or contain("b")
   }
