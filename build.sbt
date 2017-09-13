@@ -1,19 +1,7 @@
 import sbt._
-import complete.DefaultParsers._
 import Keys._
-import com.typesafe.sbt._
-import pgp.PgpKeys._
-import SbtSite._
-import SiteKeys._
-import SbtGit._
-import GitKeys._
-import SbtGhPages._
-import GhPagesKeys._
 import Defaults._
-import xerial.sbt.Sonatype._
-import SonatypeKeys._
-import depends._
-import ohnosequences.sbt.GithubRelease.keys._
+import com.typesafe.sbt.pgp.PgpKeys._
 
 /** MAIN PROJECT */
 lazy val specs2 = Project(
@@ -28,7 +16,7 @@ lazy val specs2 = Project(
   shapelessJvm, form, markdown, gwt, junitJvm, scalacheckJvm, mockJvm, tests,
   fpJs, commonJs, matcherJs, coreJs, matcherExtraJs, scalazJs, analysisJs,
   shapelessJs, form, junitJs, scalacheckJs, mockJs)
-  .enablePlugins(GitBranchPrompt).enablePlugins(ScalaJSPlugin)
+  .enablePlugins(GitBranchPrompt, ScalaJSPlugin, GhpagesPlugin)
 
 /** COMMON SETTINGS */
 lazy val specs2Settings = Seq(
@@ -328,19 +316,19 @@ lazy val testingJvmSettings =
 /**
  * DOCUMENTATION
  */
-lazy val siteSettings = ghpages.settings ++ SbtSite.site.settings ++
+lazy val siteSettings = GhpagesPlugin.projectSettings ++ SitePlugin.projectSettings ++
   Seq(
     siteSourceDirectory := target.value / "specs2-reports" / "site",
     // copy the api files to a versioned directory
     siteMappings ++= { (mappings in packageDoc in Compile).value.map { case (f, d) => (f, s"api/SPECS2-${version.value}/$d") } },
     includeFilter in makeSite := AllPassFilter,
     // override the synchLocal task to avoid removing the existing files
-    synchLocal := {
-      val betterMappings = privateMappings.value map { case (file, target) => (file, updatedRepository.value / target) }
+    ghpagesSynchLocal := {
+      val betterMappings = ghpagesPrivateMappings.value map { case (file, target) => (file, ghpagesUpdatedRepository.value / target) }
       IO.copy(betterMappings)
-      updatedRepository.value
+      ghpagesUpdatedRepository.value
     },
-    gitRemoteRepo := "git@github.com:etorreborre/specs2.git"
+    git.remoteRepo := "git@github.com:etorreborre/specs2.git"
   )
 
 /**
@@ -376,7 +364,7 @@ lazy val publicationSettings = Seq(
     ),
   credentials := Seq(Credentials(Path.userHome / ".sbt" / "specs2.credentials"))
 ) ++
-  sonatypeSettings
+  Sonatype.projectSettings
 
 /**
  * NOTIFICATION
