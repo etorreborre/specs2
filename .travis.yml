@@ -3,7 +3,7 @@ sudo: false
 language: scala
 
 scala:
-  - 2.12.2
+  - 2.12.3
 
 jdk:
   - oraclejdk8
@@ -20,7 +20,7 @@ before_cache:
   - find $HOME/.sbt        -name "*.lock"               -print -delete
 
 script:
-  - sbt -jvm-opts .travis.jvmopts -sbt-version 0.13.16 -scala-version $TRAVIS_SCALA_VERSION ';clean ;test:compile'
+  - sbt -jvm-opts .travis.jvmopts -scala-version $TRAVIS_SCALA_VERSION ';clean ;test:compile'
   - ./.travis-test.sh coreJVM
   - ./.travis-test.sh examplesJVM
   - ./.travis-test.sh junitJVM
