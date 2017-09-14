@@ -45,6 +45,7 @@ trait BlockCreation extends FragmentBuilder with FragmentsFactory {
   private val factory = fragmentFactory
 
   private[specs2] def addBlock[T](text: String, t: =>T, addFunction: (=>T) => T, location: StacktraceLocation = StacktraceLocation()): T = addFunction {
+
     addStart
     addText(text, location)
     addFragment(factory.tab)
@@ -53,6 +54,8 @@ trait BlockCreation extends FragmentBuilder with FragmentsFactory {
     addFragment(factory.backtab)
     addEnd
     result
+
+
   }
 
   private def addText(text: String, location: StacktraceLocation) =

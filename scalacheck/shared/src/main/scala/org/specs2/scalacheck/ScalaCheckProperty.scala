@@ -114,13 +114,16 @@ trait ScalaCheckFunction extends ScalaCheckProperty {
 
 }
 
-case class ScalaCheckFunction1[T, R](execute: T => R,
-                                 arbitrary: Arbitrary[T], shrink: Option[Shrink[T]],
-                                 collectors: List[T => Any],
-                                 pretty: T => Pretty, prettyFreqMap: FreqMap[Set[Any]] => Pretty,
-                                 asResult: AsResult[R],
-                                 context: Option[Context],
-                                 parameters: Parameters) extends ScalaCheckFunction {
+case class ScalaCheckFunction1[T, R](
+  execute:       T => R,
+  arbitrary:     Arbitrary[T],
+  shrink:        Option[Shrink[T]],
+  collectors:    List[T => Any],
+  pretty:        T => Pretty,
+  prettyFreqMap: FreqMap[Set[Any]] => Pretty,
+  asResult:      AsResult[R],
+  context:       Option[Context],
+  parameters:    Parameters) extends ScalaCheckFunction {
 
   type SelfType = ScalaCheckFunction1[T, R]
 
