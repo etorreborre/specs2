@@ -6,19 +6,23 @@ import org.specs2.specification.core.Fragments
 
 object Selection extends UserGuidePage { def is = s2"""
 
-Many specifications are written incrementally. You specify a little bit then you implement the application. When you go through this "Specify-Implement-Execute" cycle it is useful to be able to focus on just one example, the one you are currently working on. The `ex` argument is what you need (`ex` stands for "example"):
+Many specifications are written incrementally. You specify a little bit then you implement the application. When you go
+through this "Specify-Implement-Execute" cycle it is useful to be able to focus on just one example, the one you are
+currently working on. The `ex` argument is what you need (`ex` stands for "example"):
 ```
 sbt> testOnly *MySpecification* -- ex contains
 ```
 
-The command above will execute any example which description matches the regular expression `.*contains.*` (which means that you can pass regular expressions in general). If you want to match a few words you will need to use double quotes:
+The command above will execute any example which description matches the regular expression `.*contains.*` (which means
+that you can pass regular expressions in general). If you want to match a few words you will need to use double quotes:
 ```
 sbt> testOnly *MySpecification* -- ex "contains hello" sequential
 ```
 
 ### Use tags
 
-Tags can be used in a Specification to include or exclude some examples or a complete section of fragments from the execution. Let's have a look at one example: ${snippet{
+Tags can be used in a Specification to include or exclude some examples or a complete section of fragments from the
+execution. Let's have a look at one example: ${snippet{
 class TaggedSpecification extends Specification { def is = s2"""
  this is some introductory text
   and the first group of examples
@@ -89,6 +93,33 @@ But they can also be applied to fragments preceding them:
 
  * when the `section` call is appended to a block of Fragments on the same line, all the fragments of that block are part of
  the section: `example 5` and `example 6` are tagged with `slow`
+
+##### Automatic sections
+
+If you call `addSections` from inside the specification, each "block" will be surrounded by section tags having the same
+name as the block text:${snippet{
+import org.specs2.mutable._
+
+class SectionsSpecification extends Specification { addSections
+  "first section" >> {
+    "and the first group of examples" >> {
+      "example 1" in success
+      "example 2" in success
+    }
+  }
+  "second section" >> {
+    "example 3" in success
+    "example 4" in success
+  }
+
+  "third section" >> {
+    "example 5" in success
+    "example 6" in success
+  }
+}
+}}
+
+If you want you can execute only example 3 and 4 by running `sbt> testOnly *SectionsSpecification -- include "second section"`.
 
 #### `Always` tag
 

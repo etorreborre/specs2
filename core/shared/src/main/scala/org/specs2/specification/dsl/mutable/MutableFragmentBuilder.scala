@@ -30,6 +30,9 @@ trait MutableFragmentBuilder extends FragmentBuilder
 
   private[specs2] var specFragments = Fragments.empty
 
+  // if this variable is true then each block will have section markers
+  private[specs2] var addSectionsForBlocks = false
+
   def specificationFragments = {
     val fs = replayFragments
 
@@ -73,6 +76,12 @@ trait MutableFragmentBuilder extends FragmentBuilder
     specFragments = specFragments.append(fragments)
     fragments
   }
+
+  def addSections(): Unit =
+    addSectionsForBlocks = true
+
+  def hasSectionsForBlocks: Boolean =
+    addSectionsForBlocks
 
   private def isolate(fragment: Fragment, effectPath: EffectPath) =
     if (mustBeIsolated(fragment))
@@ -123,6 +132,8 @@ trait MutableFragmentBuilder extends FragmentBuilder
 }
 
 trait FragmentBuilder {
+  def addSections(): Unit
+  def hasSectionsForBlocks: Boolean
   def addFragment(f: Fragment): Fragment
   def addFragments(fs: Fragments): Fragments
   def addFragmentBlock(block: =>Fragment): Fragment

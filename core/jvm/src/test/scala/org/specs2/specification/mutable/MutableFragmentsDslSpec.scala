@@ -46,11 +46,11 @@ class MutableFragmentsDslSpec(ee: ExecutionEnv) extends org.specs2.Spec with Typ
   }).map(_.description) must
     contain(exactly(Seq(
       break,
-      start, break,
+      start, fragmentFactory.section("this should"), break,
       text("this should"), tab, break,
       example("e1", ok), break,
       example("e2", ok),
-      break, backtab, end).map(_.description):_*))
+      break, backtab, fragmentFactory.section("this should"), end).map(_.description):_*))
 
   def e4 = fragments(new dsl {
     "this" should {
@@ -59,11 +59,11 @@ class MutableFragmentsDslSpec(ee: ExecutionEnv) extends org.specs2.Spec with Typ
   }).map(_.description) must
     contain(exactly(Seq(
       break,
-      start, break,
+      start, fragmentFactory.section("this should"), break,
       text("this should"), tab, break,
       example("e1", ok), break,
       example("e2", ok),
-      break, backtab, end).map(_.description):_*))
+      break, backtab, fragmentFactory.section("this should"), end).map(_.description):_*))
 
   def e5 = structure(new dsl {
     "have a title".title
@@ -105,7 +105,9 @@ class MutableFragmentsDslSpec(ee: ExecutionEnv) extends org.specs2.Spec with Typ
   def structure(dsl1: dsl): SpecStructure =
     dsl1.is
 
-  trait dsl extends MutableFragmentBuilder with MutableDsl
+  trait dsl extends MutableFragmentBuilder with MutableDsl {
+    addSections
+  }
 
   def beTheSameFragments(fs: Fragment*): Matcher[Seq[Fragment]] = { actual: Seq[Fragment] =>
     val location = StacktraceLocation()
