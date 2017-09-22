@@ -138,12 +138,13 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
 
   private def executeFuture(handler: EventHandler, loggers: Array[Logger]): Future[Unit] = {
     val ee = env.specs2ExecutionEnv
+    val printer = (s: String) => loggers.foreach(_.warn(s))
 
-    executeActionFuture(createSpecStructure(taskDef, loader, env))(ee).flatMap { case (result, warnings) =>
+    executeActionFuture(createSpecStructure(taskDef, loader, env), printer)(ee).flatMap { case (result, warnings) =>
       processResult(handler, loggers)(result, warnings)
       result.toOption.flatten match {
         case Some(structure) =>
-          executeActionFuture(specificationRun(aTaskDef, structure, env, handler, loggers))(ee).map { case (rs, ws) =>
+          executeActionFuture(specificationRun(aTaskDef, structure, env, handler, loggers), printer)(ee).map { case (rs, ws) =>
             processResult(handler, loggers)(rs, ws)
           }
 
