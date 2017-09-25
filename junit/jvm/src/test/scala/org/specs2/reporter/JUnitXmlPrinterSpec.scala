@@ -65,7 +65,7 @@ is formatted for JUnit reporting tools.
     }
   }
 
-  def header = { printString(env)("e1" ! success) must startWith("<?xml version='1.0' encoding='utf-8'?>") }
+  def header = { printString(ownEnv)("e1" ! success) must startWith("<?xml version='1.0' encoding='utf-8'?>") }
 
   object suite {
     def xml(env: Env) =
@@ -75,33 +75,33 @@ is formatted for JUnit reporting tools.
       "e3"      ! failure^ br^
       "e4"      ! skipped)
 
-    def e1  = { xml(env) must \\("testsuite", "hostname") }
-    def e2  = { xml(env) must \\("testsuite", "name" -> "org.specs2.reporter.JUnitXmlPrinterSpec") }
-    def e3  = { xml(env) must \\("testsuite", "tests" -> "4") }
-    def e4  = { xml(env) must \\("testsuite", "errors" -> "1") }
-    def e5  = { xml(env) must \\("testsuite", "failures" -> "1") }
-    def e6  = { xml(env) must \\("testsuite", "skipped" -> "1") }
-    def e7  = { xml(env) must \\("testsuite", "time") }
-    def e8  = { xml(env) must \\("system-out") }
-    def e9  = { xml(env) must \\("system-err") }
-    def e10 = { xml(env) must (\\("properties") and \\("property")) }
+    def e1  = { xml(ownEnv) must \\("testsuite", "hostname") }
+    def e2  = { xml(ownEnv) must \\("testsuite", "name" -> "org.specs2.reporter.JUnitXmlPrinterSpec") }
+    def e3  = { xml(ownEnv) must \\("testsuite", "tests" -> "4") }
+    def e4  = { xml(ownEnv) must \\("testsuite", "errors" -> "1") }
+    def e5  = { xml(ownEnv) must \\("testsuite", "failures" -> "1") }
+    def e6  = { xml(ownEnv) must \\("testsuite", "skipped" -> "1") }
+    def e7  = { xml(ownEnv) must \\("testsuite", "time") }
+    def e8  = { xml(ownEnv) must \\("system-out") }
+    def e9  = { xml(ownEnv) must \\("system-err") }
+    def e10 = { xml(ownEnv) must (\\("properties") and \\("property")) }
   }
 
   object test {
-    def e1 = { print(env)("t1" ^ br ^ "e1<>&\"" ! success) must \\("testcase", "classname" -> "org.specs2.reporter.JUnitXmlPrinterSpec") }
-    def e2 = { print(env)("t1" ^ br ^ "e1<>&\"" ! success) must \\("testcase", "name" -> scala.xml.Utility.escape("t1::e1<>&\"")) }
-    def e3 = { print(env)("t1" ^ br ^ "e1<>&\"" ! success) must \\("testcase", "time") }
+    def e1 = { print(ownEnv)("t1" ^ br ^ "e1<>&\"" ! success) must \\("testcase", "classname" -> "org.specs2.reporter.JUnitXmlPrinterSpec") }
+    def e2 = { print(ownEnv)("t1" ^ br ^ "e1<>&\"" ! success) must \\("testcase", "name" -> scala.xml.Utility.escape("t1::e1<>&\"")) }
+    def e3 = { print(ownEnv)("t1" ^ br ^ "e1<>&\"" ! success) must \\("testcase", "time") }
   }
 
   object message {
-    def e1 = { print(env)("t1" ^ br ^ "e2" ! anError) must \\("error", "message" -> anError.exception.getMessage) }
-    def e2 = { print(env)("t1" ^ br ^ "e2" ! anError) must \\("error", "type" -> anError.exception.getClass.getName) }
-    def e3 = { print(env)("t1" ^ br ^ "e2" ! anError).toString must contain("JUnitXmlPrinterSpec.scala") }
-    def e4 = { print(env)("t1" ^ br ^ "e3" ! failure) must \\("failure", "message" -> failure.message) }
-    def e5 = { print(env)("t1" ^ br ^ "e3" ! failure) must \\("failure", "type" -> failure.exception.getClass.getName) }
-    def e6 = { print(env)("t1" ^ br ^ "e3" ! failure).toString must contain("JUnitXmlPrinterSpec.scala") }
-    def e7 = { print(env)("t1" ^ br ^ "e2" ! skipped) must \\("skipped") }
-    def e8 = { print(env)("t1" ^ br ^ "<node.1/>" ! ok).toString must contain("t1::&lt;node.1/&gt;") }
+    def e1 = { print(ownEnv)("t1" ^ br ^ "e2" ! anError) must \\("error", "message" -> anError.exception.getMessage) }
+    def e2 = { print(ownEnv)("t1" ^ br ^ "e2" ! anError) must \\("error", "type" -> anError.exception.getClass.getName) }
+    def e3 = { print(ownEnv)("t1" ^ br ^ "e2" ! anError).toString must contain("JUnitXmlPrinterSpec.scala") }
+    def e4 = { print(ownEnv)("t1" ^ br ^ "e3" ! failure) must \\("failure", "message" -> failure.message) }
+    def e5 = { print(ownEnv)("t1" ^ br ^ "e3" ! failure) must \\("failure", "type" -> failure.exception.getClass.getName) }
+    def e6 = { print(ownEnv)("t1" ^ br ^ "e3" ! failure).toString must contain("JUnitXmlPrinterSpec.scala") }
+    def e7 = { print(ownEnv)("t1" ^ br ^ "e2" ! skipped) must \\("skipped") }
+    def e8 = { print(ownEnv)("t1" ^ br ^ "<node.1/>" ! ok).toString must contain("t1::&lt;node.1/&gt;") }
   }
 
   def printString(env1: Env)(fs: Fragments): String = {
