@@ -142,25 +142,35 @@ case class Execution(run:            Option[Env => Future[() => Result]]     = N
 
     val started: TimedFuture[Result] =
       others.map(_.executionResult).sequence.flatMap { results =>
-        if (results.exists(FatalExecution.isFatalResult)) TimedFuture.successful(Skipped(): Result)
-        else {
-          val result = results.suml
-          val mustStop =
-            arguments.stopOnFail  && result.isFailure  ||
-            arguments.stopOnError && result.isError    ||
-            arguments.stopOnIssue && result.isIssue    ||
-            arguments.stopOnSkip  && result.isSkipped  ||
-            nextMustStopIf(result)
+        results.find(FatalExecution.isFatalResult) match {
+          // if a previous fragment was fatal, we skip the current one
+          case Some(_) =>
+            TimedFuture.successful(Skipped(): Result)
 
-          startExecution(env).executionResult.map { r =>
-            if (mustStop) {
-              if (env.arguments.sequential) Skipped()
-              else                          Error(FatalExecution(new Exception))
+          case None =>
+            // if a previous result indicates that we should stop
+            results.find { result =>
+              arguments.stopOnFail  && result.isFailure  ||
+              arguments.stopOnError && result.isError    ||
+              arguments.stopOnIssue && result.isIssue    ||
+              arguments.stopOnSkip  && result.isSkipped  ||
+              nextMustStopIf(result)
+            } match {
+              case Some(r) =>
+                // if this execution is a step we still execute it
+                // to allow for clean up actions
+                if (mustJoin)
+                  startExecution(env).executionResult.map(_ => Error(FatalExecution(new Exception("stopped"))))
+                // otherwise we skip
+                else
+                  TimedFuture.successful(Skipped(): Result)
+
+              // if everything is fine we run this current execution
+              case None =>
+                startExecution(env).executionResult
             }
-            else r
-          }
-        }
       }
+    }
     copy(executing = Some(Right(started.runNow(env.executorServices))))
   }
 

@@ -19,3 +19,8 @@ Dependency-free version!
    some specifications
  * added `addSections` to "unit" specifications to enclose each block with `section` markers and allow it to be selected
    with `include` on the command line
+
+## Fixes
+
+ * fixed the execution with `stopOnXXX` arguments for a sequential spec
+

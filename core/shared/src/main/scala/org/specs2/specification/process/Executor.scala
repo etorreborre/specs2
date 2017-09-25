@@ -73,7 +73,7 @@ trait DefaultExecutor extends Executor {
         (one(if (fragment.isExecutable) fragment.skip else fragment), init)
       else if (arguments.sequential) {
         val started = fragment.startExecutionAfter(previousStarted.toList)(env)
-        (one(started), (previous, Vector(started), None))
+        (one(started), (previous, previousStarted :+ started, None))
       }
       else {
         if (fragment.execution.mustJoin) {

@@ -26,6 +26,7 @@ class ExecutorSpec(val env: Env) extends script.Specification with Groups with T
   + stop on failed specified on a step
   + stop on error specified on a step
   + stop on skip specified in arguments
+  + stop on failed with a sequential specification
   + skipAll from arguments
 
  Execute
@@ -98,6 +99,19 @@ class ExecutorSpec(val env: Env) extends script.Specification with Groups with T
       execute(fragments, ownEnv.setArguments(Arguments("stopOnSkip"))) must contain(beSkipped[Result])
 
       messages.toList must_== Seq("medium", "slow", "step")
+    }
+
+    eg := {
+      val tf = ownEnv.arguments.execute.timeFactor
+
+      val fragments = Fragments(
+        example("slow", slow(tf)),
+        example("medium", mediumFail(tf)),
+        example("fast", fast(tf)))
+
+      execute(fragments, ownEnv.setArguments(Arguments("stopOnFail", "sequential"))) must contain(beFailing[Result])
+
+      messages.toList must_== Seq("slow", "medium")
     }
 
     eg := {
