@@ -77,8 +77,8 @@ Execution
   }
                                               
   "display" - new g2 {
-    e1 := new Prop("name", expected = Property("fanny")).toString       === "name: fanny (actual: _)"
-    e2 := new Prop("name", actual = Property("eric")).toString          === "name: _ (actual: eric)"
+    e1 := new Prop("name", expected = Property("fanny")).toString       === "name: _ (expected: fanny)"
+    e2 := new Prop("name", actual = Property("eric")).toString          === "name: eric"
     e3 := new Prop("name", Property("eric"), Property("eric")).toString === "name: eric"
   }
 

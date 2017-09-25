@@ -74,8 +74,9 @@ case class Prop[T, S](
    */
   override def toString = {
     (if (label.isEmpty) "" else label + ": ") +
-    valueToString(expectedValue) +
-    (if (expectedValue.right.toOption == actualValue.right.toOption) "" else " (actual: " + valueToString(actualValue) + ")")
+    valueToString(actualValue) +
+    (if (expected.toOption.isEmpty || expectedValue.right.toOption == actualValue.right.toOption) ""
+     else " (expected: " + valueToString(expectedValue) + ")")
   }
 
   /**
