@@ -60,6 +60,7 @@ class MySpec extends mutable.Specification {
 }}
 
 In that case the `Result.foreach` method is the one to use, it returns a `Result` that is the logical `and` of all results.
+It will stop after the first issue (error or failure), if you want to collect *all* the results you can use `Result.forall`.
 
 $AndIfYouWantToKnowMore
 

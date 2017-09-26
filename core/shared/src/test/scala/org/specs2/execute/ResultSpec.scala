@@ -74,8 +74,11 @@ more precisely:
  results have methods to know their status: isSuccess, isPending, ... $statuses
 
  The result monoid must only evaluate values once
-  with the result monoid  $monoidAppendOnce
-  with the failure monoid $failureMonoidAppendOnce
+  with the result monoid        $monoidAppendOnce
+  with the failure monoid       $failureMonoidAppendOnce
+
+ The short-circuit monoid must not evaluate the second argument
+ in case of a failure of the first $shortCircuitMonoid
 
  A result message can be updated or mapped
  ${ success1.updateMessage("ok").message must_== "ok" }
@@ -103,6 +106,8 @@ more precisely:
  the Result.unit method must re-throw FailureExceptions
  ${ Result.unit(Seq(1).foreach(i => throw new FailureException(failure))) must throwA[FailureException] }
 
+ the foreach method stops on the first failure $foreachFails
+ the forall method collects all results        $forallFails
 """
 
   def statuses =
@@ -129,6 +134,38 @@ more precisely:
     def b: Result = { count += 1; Success() }
     Result.ResultFailureMonoid.append(a, b)
     count must be_==(2)
+  }
+
+  def shortCircuitMonoid = {
+    Result.ResultShortCircuitMonoid.append(Failure("wrong"), throw new Exception("boom")) must beFailing[Result]
+  }
+
+  def foreachFails = {
+    var count = 0
+
+    val result =
+      Result.foreach(1 to 10) { i =>
+        count += 1
+        if (i == 5) Failure("boom")
+        else        Success()
+      }
+
+    (result must beFailing("boom")) and
+    (count === 5)
+  }
+
+  def forallFails = {
+    var count = 0
+
+    val result =
+      Result.forall(1 to 10) { i =>
+        count += 1
+        if (i == 5) Failure("boom")
+        else        Success()
+      }
+
+    (result must beFailing("boom")) and
+      (count === 10)
   }
 
   val success1: Result = Success("s1")

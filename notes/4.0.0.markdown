@@ -24,4 +24,5 @@ Dependency-free version!
 ## Fixes
 
  * fixed the execution with `stopOnXXX` arguments for a sequential spec
+ * *core* the `Result.foreach` method must stop evaluating elements if there is an issue
 
