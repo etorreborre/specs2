@@ -18,6 +18,7 @@ trait ExampleDsl extends ExampleDsl1 with dsl.ExampleDsl {
     new MutableBangExample(d)
 
   class MutableBangExample(d: String) extends BangExample(d) {
+    override def !(execution: Execution): Fragment                                       = addFragment(fragmentFactory.example(Text(d), execution))
     override def ![R : AsResult](r: => R): Fragment                                      = addFragment(fragmentFactory.example(d, r))
     override def ![R : AsResult](r: String => R): Fragment                               = addFragment(fragmentFactory.example(d, r))
     override def ![R](r: Env => R)(implicit as: AsResult[R], p: ImplicitParam): Fragment = addFragment(fragmentFactory.example(d, r)(as, p))
