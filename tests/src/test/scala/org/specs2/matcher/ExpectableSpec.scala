@@ -1,9 +1,11 @@
 package org.specs2
 package matcher
+
 import mutable._
 import execute.FailureException
+import org.specs2.mock.Mockito
 
-class ExpectableSpec extends Spec with ResultMatchers with org.specs2.mock.Mockito with MustMatchers {
+class ExpectableSpec extends Spec with ResultMatchers with MustMatchers {
 
   "An expectable can have a precise description with aka(description)" in {
     ("a" aka "the string").description must_== "the string 'a'"
@@ -55,7 +57,7 @@ class ExpectableSpec extends Spec with ResultMatchers with org.specs2.mock.Mocki
     }
   }
   "An expectable must match without an exception on a mock" in {
-    val l = mock[List[Int]]
+    val l = Mockito.mock[List[Int]]
     l must be_==(l)
   }
   "the description of an Expectable can be updated with another description" in {

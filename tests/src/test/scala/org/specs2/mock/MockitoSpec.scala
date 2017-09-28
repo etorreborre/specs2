@@ -4,6 +4,7 @@ package mock
 import specification._
 import matcher._
 import junit.framework.AssertionFailedError
+import org.specs2.fp.Monad
 
 class MockitoSpec extends script.Spec with Mockito with ResultMatchers with Groups {  def is = s2"""
 
@@ -17,7 +18,8 @@ class MockitoSpec extends script.Spec with Mockito with ResultMatchers with Grou
  ======
  
  The following mockito issues are fixed
-   + #584
+   + #584 NPE when setting expectations twice on a mockito mock
+   + #603 classcast exception with smart return values
 
 """
 
@@ -46,6 +48,18 @@ class MockitoSpec extends script.Spec with Mockito with ResultMatchers with Grou
       m.method(List()) === "Hello1"
       m.method(List("2")) === "Hello2"
     }
+
+    eg :=  {
+      class MyDAO[M[_] : Monad] {
+        def test: M[Int] = Monad[M].pure(0)
+      }
+
+      val m: MyDAO[Option] = mock[MyDAO[Option]].smart
+      m.test returns Option(1)
+
+      m.test must beSome(1)
+    }
+
   }
 }
 

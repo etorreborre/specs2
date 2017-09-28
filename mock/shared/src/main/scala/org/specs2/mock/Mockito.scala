@@ -16,3 +16,5 @@ trait Mockito extends MocksCreation
   with Expectations
   with MockitoFunctions
 
+object Mockito extends Mockito
+

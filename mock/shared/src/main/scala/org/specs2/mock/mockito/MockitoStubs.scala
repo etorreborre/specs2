@@ -29,13 +29,13 @@ trait MockitoStubs extends MocksCreation with MockitoStubsLowerImplicits {
   def doAnswer[T](f: Any => T) = mocker.doAnswer(new MockAnswer(f))
   
   /** @return an object supporting the stub methods. */
-  implicit def theStubbed[T](c: =>T) = new Stubbed(c)
+  implicit def theStubbed[T](c: T) = new Stubbed(c)
 
   /** 
    * This class provide stub methods like returns, throws and answers.
    * Internally it calls Mockito.when(mock call).thenReturn(returnValue)
    */
-  class Stubbed [T](c: =>T) {
+  class Stubbed[T](c: T) {
     def returns(t: T, t2: T*): OngoingStubbing[T] = {
       if (t2.isEmpty) 
         mocker.when(c).thenReturn(t)

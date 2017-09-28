@@ -15,7 +15,6 @@ import scala.concurrent._
 import duration._
 import ExecutionContext.Implicits.global
 import MatchersImplicits._
-import ReturnsSyntax._
 import execute._
 import ActionMatchers._
 import fp.syntax._
