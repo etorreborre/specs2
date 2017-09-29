@@ -9,7 +9,7 @@ import fp.syntax._
 import org.specs2.main.Arguments
 import org.specs2.control.ExecuteActions._
 
-class IsolatedExecutionSpec(env: Env) extends Spec { def is = skipAllIf(util.Properties.versionString.contains("2.11")) ^ s2"""
+class IsolatedExecutionSpec(val env: Env) extends Spec with OwnEnv { def is = skipAllIf(util.Properties.versionString.contains("2.11")) ^ s2"""
 
  We want to be able to isolate the execution of examples if isolated == true
  The isolated fragments must run with their own class instance
@@ -27,7 +27,7 @@ class IsolatedExecutionSpec(env: Env) extends Spec { def is = skipAllIf(util.Pro
   }
 
   def execute(spec: SpecificationStructure) = {
-    val env1 = env.copy(arguments = Arguments("isolated"))
+    val env1 = ownEnv.copy(arguments = Arguments("isolated"))
     val fragments = spec.structure(env1).fragments
 
     DefaultExecutor.executeFragments(fragments)(env1).collect { case f if f.isExecutable =>

@@ -6,9 +6,9 @@ import main.Arguments
 import runner.TextRunner
 import specification.create.{FragmentsFactory, S2StringContext}
 import matcher.MatchersImplicits._
-import org.specs2.specification.core.Env
+import org.specs2.specification.core.{Env, OwnEnv}
 
-class SpecificationSpec(env: Env) extends script.Spec with Grouped { def is = sequential ^ s2"""
+class SpecificationSpec(val env: Env) extends script.Spec with Grouped with OwnEnv { def is = sequential ^ s2"""
 
  Examples creation
  ================
@@ -79,7 +79,7 @@ class SpecificationSpec(env: Env) extends script.Spec with Grouped { def is = se
         (0 until 22).foreach(j => outer.createExamplesGroup(i).createExample(j) := groups(i).createExample(j))
       }
     }
-    TextRunner.run(spec)(env.setArguments(arguments)).messages
+    TextRunner.run(spec)(ownEnv.setArguments(arguments)).messages
   }
 
 

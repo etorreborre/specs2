@@ -2,11 +2,11 @@ package org.specs2
 package execute
 
 import mutable.Specification
-import org.specs2.specification.core.{Env, Fragment}
+import org.specs2.specification.core.{Env, Fragment, OwnEnv}
 import org.specs2.specification.process.DefaultExecutor
 import org.specs2.control.ExecuteActions._
 
-class PendingUntilFixedSpec(env: Env) extends Specification {
+class PendingUntilFixedSpec(val env: Env) extends Specification with OwnEnv {
 
   "An example can be marked as pending until fixed" in e1
   "with a specific message" in e2
@@ -36,6 +36,6 @@ class PendingUntilFixedSpec(env: Env) extends Specification {
   }
 
   def execute(f: Fragment) =
-    DefaultExecutor.executeAll(f)(env).head.executionResult.run(env.executionEnv)
+    DefaultExecutor.executeAll(f)(ownEnv).head.executionResult.run(ownEnv.executionEnv)
 
 }

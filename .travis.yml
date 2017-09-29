@@ -1,4 +1,5 @@
 sudo: false
+dist: trusty
 
 language: scala
 
@@ -20,8 +21,18 @@ before_cache:
   - find $HOME/.sbt        -name "*.lock"               -print -delete
 
 script:
-  - sbt -jvm-opts .travis.jvmopts -sbt-version 0.13.16 -scala-version $TRAVIS_SCALA_VERSION ';clean ;test:compile'
-  - ./.travis-test.sh coreJVM
+  - sbt -jvm-opts .travis.jvmopts -sbt-version 0.13.16 -scala-version $TRAVIS_SCALA_VERSION ";set parallelExecution in ThisBuild := false; coreJVM/testOnly *.c.* -- timefactor 3 neverstore exclude travis"
+  - sbt -jvm-opts .travis.jvmopts -sbt-version 0.13.16 -scala-version $TRAVIS_SCALA_VERSION ";set parallelExecution in ThisBuild := false; coreJVM/testOnly *.e.* -- timefactor 3 neverstore exclude travis"
+  - sbt -jvm-opts .travis.jvmopts -sbt-version 0.13.16 -scala-version $TRAVIS_SCALA_VERSION ";set parallelExecution in ThisBuild := false; coreJVM/testOnly *.i.* -- timefactor 3 neverstore exclude travis"
+  - sbt -jvm-opts .travis.jvmopts -sbt-version 0.13.16 -scala-version $TRAVIS_SCALA_VERSION ";set parallelExecution in ThisBuild := false; coreJVM/testOnly *.m.* -- timefactor 3 neverstore exclude travis"
+  - sbt -jvm-opts .travis.jvmopts -sbt-version 0.13.16 -scala-version $TRAVIS_SCALA_VERSION ";set parallelExecution in ThisBuild := false; coreJVM/testOnly *.s.* -- timefactor 3 neverstore exclude travis"
+  - sbt -jvm-opts .travis.jvmopts -sbt-version 0.13.16 -scala-version $TRAVIS_SCALA_VERSION ";set parallelExecution in ThisBuild := false; coreJVM/testOnly *.r.* -- timefactor 3 neverstore exclude travis"
+  - sbt -jvm-opts .travis.jvmopts -sbt-version 0.13.16 -scala-version $TRAVIS_SCALA_VERSION ";set parallelExecution in ThisBuild := false; coreJVM/testOnly *.t.* -- timefactor 3 neverstore exclude travis"
+  - sbt -jvm-opts .travis.jvmopts -sbt-version 0.13.16 -scala-version $TRAVIS_SCALA_VERSION ";set parallelExecution in ThisBuild := false; coreJVM/testOnly *.x.* -- timefactor 3 neverstore exclude travis"
+
+  #- ./.travis-test.sh coreJVM
+  - ./.travis-test.sh tests
+
   - ./.travis-test.sh examplesJVM
   - ./.travis-test.sh junitJVM
   - ./.travis-test.sh matcherExtraJVM
@@ -47,4 +58,4 @@ notifications:
       - https://webhooks.gitter.im/e/6f43e8d682579a80ef5f
     on_success: always
     on_failure: always
-    on_start: false
+    on_start:   never

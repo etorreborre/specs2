@@ -15,7 +15,7 @@ class SpecStructureSpec extends Specification { def is = s2"""
 
  We can get all the linked specifications according to tags $b1
 
-${step(ee.shutdown)}
+${step(env.shutdown)}
 """
 
   val env = Env()

@@ -76,6 +76,12 @@ trait FormsBuilder {
   /** @return a new Prop with a label, an actual value and a matcher to apply to the actual value */
   def prop[T, S](label: String, actual: =>T, expected: => S, c: Matcher[T]) = Prop[T, S](label, actual, expected, c)
 
+  /** @return a new Prop with a label, which has the same actual and expected value to test the result of an action */
+  def action[T](label: String, a: =>T): Prop[T, T] = {
+    lazy val act = a
+    prop(label, act)(act)
+  }
+
   /** @return a new Tabs object */
   def tabs = new Tabs()
 

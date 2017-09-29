@@ -3,11 +3,11 @@ package specification
 
 import form._
 import matcher._
-import org.specs2.specification.core.{Env, SpecStructure}
+import org.specs2.specification.core.{Env, OwnEnv, SpecStructure}
 import org.specs2.specification.process.DefaultExecutor
 import ActionMatchers._
 
-class FormsFragmentsSpec(env: Env) extends Specification with Forms with ThrownExpectations { def is = s2"""
+class FormsFragmentsSpec(val env: Env) extends Specification with Forms with ThrownExpectations with OwnEnv { def is = s2"""
   
  A form can be added as a Fragment in a specification
    creating a new Text Fragment                                                      ${frags.e1_1}
@@ -33,15 +33,15 @@ class FormsFragmentsSpec(env: Env) extends Specification with Forms with ThrownE
 
     def e2 = {
       val example = "the customer must be as expected" ! form
-      example.startExecution(env).executionResult.map(_.isSuccess) must beOkWithValue(true)
+      example.startExecution(ownEnv).executionResult.map(_.isSuccess) must beOkWithValue(true)
     }
     def e3 = {
-      val example = DefaultExecutor.execute("the customer must be as expected" ! failedForm)(env)
+      val example = DefaultExecutor.execute("the customer must be as expected" ! failedForm)(ownEnv)
       example.executionResult.map(_.message) must beOkWithValue("20 != 18")
     }
 
     def execute(spec: SpecStructure) =
-      DefaultExecutor.executeFragments(spec.fragments)(env)
+      DefaultExecutor.executeFragments(spec.fragments)(ownEnv)
   }
 
   trait Customers {

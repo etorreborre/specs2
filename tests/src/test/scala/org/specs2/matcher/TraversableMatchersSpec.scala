@@ -12,9 +12,9 @@ import scala.collection.JavaConverters._
 import ActionMatchers._
 import fp.syntax._
 import execute.Result
-import org.specs2.specification.core.Env
+import org.specs2.specification.core.{Env, OwnEnv}
 
-class TraversableMatchersSpec(env: Env) extends Spec with ResultMatchers with Grouped with NumberOfTimes with MustMatchers { def is = s2"""
+class TraversableMatchersSpec(val env: Env) extends Spec with ResultMatchers with Grouped with NumberOfTimes with MustMatchers with OwnEnv { def is = s2"""
 
  We can check the elements of a collection by using matchers
    ${ Seq(1, 2, 3) must contain(2) }
@@ -220,7 +220,7 @@ class TraversableMatchersSpec(env: Env) extends Spec with ResultMatchers with Gr
           Seq(1) must not contain(1)
         }
       }
-      DefaultExecutor.runSpecification(spec, env).traverse(_.executionResult).map(_.suml) must beOk(ResultMatchers.beFailing[Result])
+      DefaultExecutor.runSpecification(spec, ownEnv).traverse(_.executionResult).map(_.suml) must beOk(ResultMatchers.beFailing[Result])
     }
   }
 

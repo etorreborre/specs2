@@ -14,6 +14,7 @@ trait Forms extends FormsBuilder
   with DecoratedProperties
   with FormS2StringContext
   with FormDsl
+  with PropSyntax
 
 object Forms extends Forms
 

@@ -6,7 +6,7 @@ import process.DefaultExecutor
 import execute._
 import org.specs2.matcher.ActionMatchers
 
-class FragmentsContinuationSpec(env: Env) extends Specification with ActionMatchers { def is = s2"""
+class FragmentsContinuationSpec(val env: Env) extends Specification with ActionMatchers with OwnEnv { def is = s2"""
 
  A fragment continuation must
    return other fragments if the previous result is a success                $continuationAfterSuccess
@@ -29,6 +29,6 @@ class FragmentsContinuationSpec(env: Env) extends Specification with ActionMatch
   }
 
   def runContinuation[R : AsResult](r: =>R, fs: =>Fragments): List[Fragment] =
-    Fragments(DefaultExecutor.execute(env)(Fragments("test" ! FragmentsContinuation.continueWith(r, fs)).contents)).
-      fragmentsList(env.executionEnv)
+    Fragments(DefaultExecutor.execute(ownEnv)(Fragments("test" ! FragmentsContinuation.continueWith(r, fs)).contents)).
+      fragmentsList(ownEnv.executionEnv)
 }

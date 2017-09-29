@@ -44,8 +44,10 @@ case class Prop[T, S](
    * The apply method sets the expected value and returns the Prop
    */
   def apply(e: =>S): Prop[T, S] = new Prop(label, actual, expected(e), constraint)
+
   /** @return the actual value as either Right(value) or Left(result) */
   lazy val actualValue = ResultExecution.executeProperty(actual, Pending("No actual value"))
+
   /** @return the expected value as an option */
   lazy val expectedValue = ResultExecution.executeProperty(expected, Pending("No expected value"))
 
@@ -61,11 +63,14 @@ case class Prop[T, S](
   /**
    * set a specific result on the property
    */
-  def resultIs(r: =>Result): Prop[T, S] = copy(constraint = (t: T, s: S) => r)
+  def resultIs(r: =>Result): Prop[T, S] =
+    copy(constraint = (t: T, s: S) => r)
+
   /**
-   * set a specific constraint on the property
+   * set a specific constraint between the actual and expected value
    */
-  def matchWith(c: (T, S) => Result): Prop[T, S] = copy(constraint = c)
+  def matchWith(c: (T, S) => Result): Prop[T, S] =
+    copy(constraint = c)
 
   /**
    * Display the property:
@@ -96,8 +101,10 @@ case class Prop[T, S](
     case Prop(l, a, e, c, d) => label == l && actual == a && expected == e
     case _                   => false
   }
+
   override def hashCode = label.hashCode + actual.hashCode + expected.hashCode
 }
+
 /**
  * Companion object with factory methods
  */
@@ -128,6 +135,23 @@ object Prop {
 
   /** default constraint function */
   private[Prop] def checkProp[T, S]: (T, T) => Result = (t: T, s: T) => new BeTypedEqualTo(s).apply(Expectable(t)).toResult
+}
+
+trait PropSyntax {
+
+  implicit class PropOps[T](p: Prop[T, T]) {
+    /**
+     * check the actual value with a function
+     */
+    def checkWith[R : AsResult](f: T => R): Prop[T, T] =
+      p.matchWith((t, _) => AsResult(f(t)))
+
+    /**
+     * check the actual value with a matcher
+     */
+    def must(m: Matcher[T]): Prop[T, T] =
+      p.matchWith((t, _) => m.apply(createExpectable(t)).toResult)
+  }
 }
 
 /**

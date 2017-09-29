@@ -34,7 +34,7 @@ class SbtPrinterSpec(val env: Env) extends Spec with OwnEnv { def is = s2"""
     }
 
     def e2 = {
-      val executed = DefaultExecutor.executeSpec((new HelloWorldSpec).is, Env())
+      val executed = DefaultExecutor.executeSpec((new HelloWorldSpec).is, ownEnv)
 
       print(executed).replaceAll("""(\d+ seconds?, )?\d+ ms""", "0 ms").replaceAll(" ", "_") ===
         """|HelloWorldSpec
