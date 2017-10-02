@@ -21,16 +21,16 @@ before_cache:
   - find $HOME/.sbt        -name "*.lock"               -print -delete
 
 script:
-  - sbt -jvm-opts .travis.jvmopts -sbt-version 0.13.16 -scala-version $TRAVIS_SCALA_VERSION ";set parallelExecution in ThisBuild := false; coreJVM/testOnly *.c.* -- timefactor 3 neverstore exclude travis"
-  - sbt -jvm-opts .travis.jvmopts -sbt-version 0.13.16 -scala-version $TRAVIS_SCALA_VERSION ";set parallelExecution in ThisBuild := false; coreJVM/testOnly *.e.* -- timefactor 3 neverstore exclude travis"
-  - sbt -jvm-opts .travis.jvmopts -sbt-version 0.13.16 -scala-version $TRAVIS_SCALA_VERSION ";set parallelExecution in ThisBuild := false; coreJVM/testOnly *.i.* -- timefactor 3 neverstore exclude travis"
-  - sbt -jvm-opts .travis.jvmopts -sbt-version 0.13.16 -scala-version $TRAVIS_SCALA_VERSION ";set parallelExecution in ThisBuild := false; coreJVM/testOnly *.m.* -- timefactor 3 neverstore exclude travis"
-  - sbt -jvm-opts .travis.jvmopts -sbt-version 0.13.16 -scala-version $TRAVIS_SCALA_VERSION ";set parallelExecution in ThisBuild := false; coreJVM/testOnly *.s.* -- timefactor 3 neverstore exclude travis"
-  - sbt -jvm-opts .travis.jvmopts -sbt-version 0.13.16 -scala-version $TRAVIS_SCALA_VERSION ";set parallelExecution in ThisBuild := false; coreJVM/testOnly *.r.* -- timefactor 3 neverstore exclude travis"
-  - sbt -jvm-opts .travis.jvmopts -sbt-version 0.13.16 -scala-version $TRAVIS_SCALA_VERSION ";set parallelExecution in ThisBuild := false; coreJVM/testOnly *.t.* -- timefactor 3 neverstore exclude travis"
-  - sbt -jvm-opts .travis.jvmopts -sbt-version 0.13.16 -scala-version $TRAVIS_SCALA_VERSION ";set parallelExecution in ThisBuild := false; coreJVM/testOnly *.x.* -- timefactor 3 neverstore exclude travis"
 
-  #- ./.travis-test.sh coreJVM
+  - ./.travis-test-only.sh coreJVM *.c*
+  - ./.travis-test-only.sh coreJVM *.e*
+  - ./.travis-test-only.sh coreJVM *.i*
+  - ./.travis-test-only.sh coreJVM *.m*
+  - ./.travis-test-only.sh coreJVM *.r*
+  - ./.travis-test-only.sh coreJVM *.s*
+  - ./.travis-test-only.sh coreJVM *.t*
+  - ./.travis-test-only.sh coreJVM *.x*
+
   - ./.travis-test.sh tests
 
   - ./.travis-test.sh examplesJVM
