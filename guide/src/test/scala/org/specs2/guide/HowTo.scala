@@ -3,8 +3,8 @@ package guide
 
 object HowTo extends UserGuidePage { def is = sortedLinks ^ s2"""
 
- Question                                                                                | See
----------------------------------------------------------------------------------------- | ------
+ Question                                              | See
+------------------------------------------------------ | ---------------
 How to execute an action before all the examples?                                        | ${link(Contexts).mute}
 How to execute an action before each example?                                            | ${link(Contexts).mute}
 Can I create and reuse a Specification "template"?                                       | ${link(SpecificationTemplate).mute}

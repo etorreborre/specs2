@@ -2,21 +2,23 @@ import sbt._
 import Keys._
 import Defaults._
 import com.typesafe.sbt.pgp.PgpKeys._
+import java.util.{Date, TimeZone}
+import java.text.SimpleDateFormat
 
 /** MAIN PROJECT */
-lazy val specs2 = Project(
-  id = "specs2",
-  base = file("."),
-  settings =
-    moduleSettings("") ++
-      siteSettings     ++
-      Seq(name := "specs2", packagedArtifacts := Map.empty)
-).aggregate(
-  fpJvm, commonJvm, matcherJvm, coreJvm, matcherExtraJvm, scalazJvm, html, analysisJvm,
-  shapelessJvm, form, markdown, gwt, junitJvm, scalacheckJvm, mockJvm, tests,
-  fpJs, commonJs, matcherJs, coreJs, matcherExtraJs, scalazJs, analysisJs,
-  shapelessJs, form, junitJs, scalacheckJs, mockJs)
-  .enablePlugins(GitBranchPrompt, ScalaJSPlugin, GhpagesPlugin)
+lazy val specs2 = project.in(file(".")).
+  enablePlugins(GitBranchPrompt, ScalaJSPlugin, GhpagesPlugin).
+  settings(
+    moduleSettings("")  ++
+    siteSettings,
+    apiSettings,
+    Seq(name := "specs2", packagedArtifacts := Map.empty)
+  ).aggregate(
+      fpJvm, commonJvm, matcherJvm, coreJvm, matcherExtraJvm, scalazJvm, html, analysisJvm,
+      shapelessJvm, form, markdown, gwt, junitJvm, scalacheckJvm, mockJvm, tests,
+      fpJs, commonJs, matcherJs, coreJs, matcherExtraJs, scalazJs, analysisJs,
+      shapelessJs, form, junitJs, scalacheckJs, mockJs)
+
 
 /** COMMON SETTINGS */
 lazy val specs2Settings = Seq(
@@ -26,6 +28,21 @@ lazy val specs2Settings = Seq(
   specs2ShellPrompt,
   scalaVersion := "2.12.3",
   crossScalaVersions := Seq(scalaVersion.value, "2.11.11"))
+
+
+lazy val buildInfoSettings = Seq(
+  buildInfoKeys :=
+    Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion) ++
+    Seq(BuildInfoKey.action("commit")(Process(s"git log --pretty=format:%h -n  1").lines.head),
+        BuildInfoKey.action("timestamp")(timestamp(new Date))),
+  buildInfoPackage := "org.specs2"
+)
+
+def timestamp(instant: Date, format: String = "yyyyMMddHHmmss") = {
+  val formatter = new SimpleDateFormat("yyyyMMddHHmmss")
+  formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
+  formatter.format(instant)
+}
 
 lazy val tagName = Def.setting{
   s"specs2-${version.value}"
@@ -134,10 +151,12 @@ lazy val form = project.in(file("form")).
   settings(depends.jvmTest, moduleJvmSettings("form")).
   dependsOn(coreJvm, markdown, matcherExtraJvm, scalacheckJvm % "test->test")
 
-lazy val guide = Project(id = "guide", base = file("guide"),
-  settings = moduleSettings("guide") ++
-    Seq(name := "specs2-guide")
-).dependsOn(examplesJvm % "compile->compile;test->test", scalazJvm, shapelessJvm)
+lazy val guide = project.in(file("guide")).
+  enablePlugins(BuildInfoPlugin).
+  settings(moduleSettings("guide") ++ buildInfoSettings ++
+    Seq(name := "specs2-guide",
+      scalacOptions in Compile --= Seq("-Xlint", "-Ywarn-unused-import"))).
+  dependsOn(examplesJvm % "compile->compile;test->test", scalazJvm, shapelessJvm)
 
 lazy val gwt = project.in(file("gwt")).
   settings(Seq(
@@ -330,6 +349,30 @@ lazy val siteSettings = GhpagesPlugin.projectSettings ++ SitePlugin.projectSetti
     },
     git.remoteRepo := "git@github.com:etorreborre/specs2.git"
   )
+
+lazy val apiSettings = Seq(
+  sources                      in (Compile, doc) := sources.all(aggregateCompile).value.flatten,
+  unmanagedSources             in (Compile, doc) := unmanagedSources.all(aggregateCompile).value.flatten,
+  unmanagedSourceDirectories   in (Compile, doc) := unmanagedSourceDirectories.all(aggregateCompile).value.flatten,
+  unmanagedResourceDirectories in (Compile, doc) := unmanagedResourceDirectories.all(aggregateCompile).value.flatten,
+  libraryDependencies                            := libraryDependencies.all(aggregateTest).value.flatten.map(maybeMarkProvided)) ++
+  Seq(scalacOptions in (Compile, doc) += "-Ymacro-no-expand")
+
+lazy val aggregateCompile = ScopeFilter(
+  inProjects(fpJvm, commonJvm, matcherJvm, matcherExtraJvm, coreJvm, html, analysisJvm, form, shapelessJvm, markdown, gwt, junitJvm, scalacheckJvm, mockJvm),
+  inConfigurations(Compile))
+
+lazy val aggregateTest = ScopeFilter(
+  inProjects(fpJvm, commonJvm, matcherJvm, matcherExtraJvm, coreJvm, html, analysisJvm, form, shapelessJvm, markdown, gwt, junitJvm, scalacheckJvm, mockJvm),
+  inConfigurations(Test))
+
+def maybeMarkProvided(dep: ModuleID): ModuleID =
+  if (providedDependenciesInAggregate.exists(dep.name.startsWith)) dep.copy(configurations = Some("provided"))
+  else dep
+
+/* A list of dependency module names that should be marked as "provided" for the aggregate artifact */
+lazy val providedDependenciesInAggregate = Seq("shapeless")
+
 
 /**
  * PUBLICATION

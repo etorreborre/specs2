@@ -152,7 +152,7 @@ ScalaCheck test generation can be tuned with a few properties. If you want to ch
 The parameters you can modify are:
 
  Parameter         | Default                | Description
- ----------------- | ---------------------- | ------------
+ ----------------- | -----------            | ----------------------------------------
  `minTestsOk`      | `100`                  | minimum of tests which must be ok before the property is ok
  `maxDiscardRatio` | `5.0f`                 | if the data generation discards too many values, then the property can't be proven
  `minSize`         | `0`                    | minimum size for the "sized" data generators, like list generators

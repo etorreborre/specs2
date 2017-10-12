@@ -20,7 +20,7 @@ The most common type of matcher is `beEqualTo` to test the equality of 2 values 
 There are also other notions of equality
 
  Matcher            |  Comment
- ----------         | -------------------------------------------
+ ----------         | -----------------------------------------------------
  `beTypedEqualTo   `| typed equality. `a must beTypedEqualTo(b)` will not work if `a` and `b` don't have compatible types
  `be_===           `| synonym for `beTypedEqualTo`
  `a ==== b         `| synonym for `a must beTypedEqualTo(b)`

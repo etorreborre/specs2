@@ -28,7 +28,7 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
     ExecutionEnv.fromGlobalExecutionContext
 
   /** renaming of the shapeless cons object to avoid imports */
-  val :: = shapeless.::
+  val :: = _root_.shapeless.::
 
   /**
    * start a sequence of GWT steps

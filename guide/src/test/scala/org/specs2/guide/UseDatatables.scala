@@ -77,6 +77,9 @@ You can solve this conflict by either:
 
 By default the execution of a datatable is sequential, one row after another. This might not be very practical if you have long-running computations on each row.
 If this is the case you can use the `|*` operator (instead of just `|`) to define your execution function:${snippet{
+
+implicit val ec = scala.concurrent.ExecutionContext.Implicits.global
+
   "a"   | "b" | "c" |>
    2    !  2  !  4  |
    1    !  1  !  2  |* { (a, b, c) => a + b must_== c }
@@ -84,7 +87,7 @@ If this is the case you can use the `|*` operator (instead of just `|`) to defin
 
 This returns a function `ExecutorService => Result` which can be used directly as the body of an example. You can also pass it your own thread pool by creating, for example, `java.util.concurrent.Executors.newFixedThreadPool(4)`.
 
-More generally, you can use the "Applicative" operator `|@` to pass anything having a `scalaz.Applicative` instance, like a `scala.concurrent.Future`:${snippet {
+More generally, you can use the "Applicative" operator `|@` to pass anything having a `org.specs2.fp.Applicative` instance, like a `scala.concurrent.Future`:${snippet {
   // this table uses the global execution context implicitly to create futures
   // scala.concurrent.ExecutionContext.Implicits.global
   def result: scala.concurrent.Future[DecoratedResult[DataTable]] =

@@ -1,8 +1,6 @@
 package org.specs2
 package guide
 
-import info.guide.BuildInfo
-
 object Specs2Variables extends Specs2Variables
 
 trait Specs2Variables {
@@ -27,6 +25,6 @@ trait Specs2Variables {
 
   /** @return true if the version is not timestamped */
   def isOfficial(version: String): Boolean =
-    !version.contains(BuildInfo.date)
+    !version.contains(BuildInfo.timestamp)
 }
 

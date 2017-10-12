@@ -41,32 +41,30 @@ All of the above is applicable to `scalaz.concurrent.Future` by using the method
 The `await`/`attempt` methods require an implicit `org.specs2.concurrent.ExecutionEnv` (see [here](org.specs2.guide.ExecutionEnvironments.html) for more details). You can pass one in the body of your examples:${snippet{
 import org.specs2.matcher.FuturezMatchers._
 
-class MyFutureSpec extends Specification { def is = s2"""
+class MyFutureSpec(implicit ee: ExecutionEnv) extends Specification { def is = s2"""
 
- Let's check this scala future ${ implicit ee: EE =>
+ Let's check this scala future ${
    Future(1) must be_>(0).await
  }
 
- Let's check this scalaz future ${ implicit ee: EE =>
+ Let's check this scalaz future ${
    scalaz.concurrent.Future(1) must be_>(0).attempt
  }
 
 """
-  type EE = ExecutionEnv
 }
 
 // in a mutable specification
-class MyMutableFutureSpec extends mutable.Specification {
+class MyMutableFutureSpec(implicit ee: ExecutionEnv) extends mutable.Specification {
 
-  "Let's check this scala future" >> { implicit ee: EE =>
+  "Let's check this scala future" >> {
     Future(1) must be_>(0).await
   }
 
-  "Let's check this scalaz future" >> { implicit ee: EE =>
+  "Let's check this scalaz future" >> {
     scalaz.concurrent.Future(1) must be_>(0).attempt
   }
 
-  type EE = ExecutionEnv
 }
 }}
 

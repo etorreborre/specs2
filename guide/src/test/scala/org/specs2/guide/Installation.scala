@@ -58,7 +58,7 @@ dependencies {
 Depending on the $specs2 features you want to use you will need to add more dependencies to your build:
 
  Name                    | Functionality
- ----------------------- | --------------
+ ----------------------- | ----------------------------
  `specs2-matcher-extra`  | for the optional $specs2 matchers
  `specs2-cats`           | for the [cats](https://github.com/typelevel/cats) matchers (only for `cats < 0.8.x`)
  `specs2-scalaz`         | for the [scalaz](https://github.com/scalaz/scalaz) matchers (`TaskMatcher` for example)
@@ -73,7 +73,7 @@ Depending on the $specs2 features you want to use you will need to add more depe
 Note: the `specs2-core` jar depends on 2 other $specs2 jars:
 
  Name                    | Functionality
- ----------------------- | --------------
+ ----------------------- | ----------------------------
  `specs2-common`         | utility classes for text, collections, xml,...
  `specs2-matcher`        | common $specs2 matchers. They can be used as a stand-alone library with [JUnit](http://junit.org)
 

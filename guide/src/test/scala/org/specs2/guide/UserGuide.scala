@@ -10,13 +10,14 @@ object UserGuide extends UserGuidePage { def is = "User Guide".title ^ s2"""
  * specifications for simple classes (*unit* specifications)
  * specifications for full features (*acceptance* specifications)
 
+<p/>
   In this user guide, you will find:
 
  ${win}a ${ "quick start guide" ~/ QuickStart }
  ${win}how to ${"structure your specification" ~/ Structure}
  ${win}how to use ${"matchers" ~/ Matchers }
  ${win}how to ${"execute a specification" ~/ Runners }
-
+<p/>
  And much more!
 
  ${link(QuickStart).hide}

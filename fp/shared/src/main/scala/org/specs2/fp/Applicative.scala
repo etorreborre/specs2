@@ -1,5 +1,7 @@
 package org.specs2.fp
 
+import scala.concurrent.{ExecutionContext, Future}
+
 /**
  * Inspired from the scalaz (https://github.com/scalaz/scalaz) project
  */
@@ -8,9 +10,9 @@ trait Applicative[F[_]] extends Functor[F] { self =>
   def point[A](a: =>A): F[A]
 
   // alias for point
-  final def pure[A](a: => A): F[A] = point(a)
+  final def pure[A](a: =>A): F[A] = point(a)
 
-  def ap[A,B](fa: => F[A])(f: => F[A => B]): F[B]
+  def ap[A,B](fa: =>F[A])(f: =>F[A => B]): F[B]
 
   def ap2[A,B,C](fa: => F[A], fb: => F[B])(f: F[(A,B) => C]): F[C] =
     ap(fb)(ap(fa)(map(f)(_.curried)))
@@ -127,6 +129,19 @@ object Applicative {
 
   implicit def eitherApplicative[L]: Applicative[Either[L, ?]] =
     Monad.eitherMonad[L]
+
+  implicit def futureApplicative(implicit ec: ExecutionContext): Applicative[Future] =
+    new Applicative[Future] {
+      def point[A](a: =>A): Future[A] =
+        Future(a)
+
+      def ap[A,B](fa: =>Future[A])(ff: =>Future[A => B]): Future[B] =
+        Future.sequence(List(fa, ff)).map {
+          case a :: f :: Nil =>
+            f.asInstanceOf[A => B](a.asInstanceOf[A])
+          case _ => sys.error("impossible")
+        }
+    }
 }
 
 trait ApplicativeSyntax {

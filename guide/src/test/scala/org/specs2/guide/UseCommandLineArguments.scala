@@ -4,7 +4,7 @@ package guide
 import main._
 import execute.AsResult
 import org.specs2.specification.core.Fragment
-import org.specs2.specification.{BeforeAfterAll, CommandLineArguments, ContextWithCommandLineArguments, ForEachWithCommandLineArguments, Before}
+import org.specs2.specification.{BeforeAfterAll, ContextWithCommandLineArguments, ForEachWithCommandLineArguments, Before}
 
 object UseCommandLineArguments extends UserGuidePage { def is = "Use command-line arguments".title ^ s2"""
 
@@ -13,69 +13,37 @@ Some specifications need to be fine-tuned and constantly modified. Sometimes to 
 ### Control an example
 
 Let's see first how to use the command line to modify the outcome of just one example:${snippet{
-class SpecificationWithArgs extends Specification { def is = s2"""
+
+import org.specs2.main._
+
+class SpecificationWithArgs(args: CommandLine) extends Specification { def is = s2"""
  This example is controlled from the command line $e1
 """
 
-  def e1 = (commandLine: CommandLine) =>
-    if (commandLine.isSet("isOk")) 1 must_== 1
-    else                           1 must_== 2
+  def e1 =
+    if (args.isSet("isOk")) 1 must_== 1
+    else                    1 must_== 2
 }
 }}
 
 With a mutable specification the code is similar:${snippet{
-class SpecificationWithArgs extends mutable.Specification {
- "This example is controlled from the command line" in { commandLine: CommandLine =>
-   if (commandLine.isSet("isOk")) 1 must_== 1
-   else                           1 must_== 2
+class SpecificationWithArgs(args: CommandLine) extends mutable.Specification {
+ "This example is controlled from the command line" in {
+   if (args.isSet("isOk")) 1 must_== 1
+   else                    1 must_== 2
  }
 }
 }}
 
 ### Control a specification
 
-There are 2 ways to drive the creation of the full specification with command line arguments.
-
-#### CommandLineArguments trait
-
-Mixing-in the `CommandLineArguments` trait allow you to pass the command line arguments in the `is` method: ${snippet{
-class SpecificationWithArgs extends Specification with CommandLineArguments { def is(commandLine: CommandLine) =
-  if (commandLine.isSet("small"))
-s2"""
- This is a small specification
-  with one example $e1
-"""
-  else
-s2"""
- This is a BIG specification
-  with many examples ${ Fragment.foreach(1 to 1000)(i => "ex"+i ! ok) }
-"""
-  def e1 = ok
-}
-}}
-
-For a mutable specification we can use almost the same syntax but the `CommandLineArguments` trait must come from the `org.specs2.specification.mutable` package:${snippet{
-class SpecificationWithArgs extends mutable.Specification with specification.mutable.CommandLineArguments {
-  def is(commandLine: CommandLine) =
-    if (commandLine.isSet("small"))
-      "This is a small specification" should {
-        "with one example" in { 1 must_== 1 }
-      }
-    else
-      "This is a small specification" >> {
-        "with lots of examples" >> Fragment.foreach(1 to 1000)(i => "ex"+i >> ok)
-      }
-}
-}}
-
-#### Dependency injection
-
 Any specification with a 1-parameter constructor can be instantiated provided that:
 
  - the parameter has itself a constructor with no parameters or a 1-parameter constructor which we can instantiate
- - the paramater is of type `Env`, `Arguments`, `CommandLine`
+ - the parameter is of type `Env`, `ExecutionEnv`, `Arguments`, `CommandLine`
 
-In particular this means that you can define a `Specification` with a constructor using a `CommandLine` argument and when the specification will be created it will be passed the command line arguments: ${snippet{
+In particular this means that you can define a `Specification` with a constructor using a `CommandLine` argument and when
+the specification will be created it will be passed the command line arguments: ${snippet{
 case class MyDbSpec(commandLine: CommandLine) extends Specification with DbSpec { def is = s2"""
 
   create a user $createUser

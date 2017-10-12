@@ -23,10 +23,10 @@ trait Specs2Tags {
     (lastBefore3 ++ officialsAfter3).sorted.reverse
   }
 
-  def isGreaterThanEqualVersion3 = (tag: VersionTag) =>
-    tag.number >= DotNumber(List(3))
+  def isGreaterThanEqualVersion3: VersionTag => Boolean = (tag: VersionTag) =>
+    Ordering[DotNumber].gt(tag.number, DotNumber(List(3)))
 
-  def isTimestamped = (tag: VersionTag) =>
+  def isTimestamped: VersionTag => Boolean = (tag: VersionTag) =>
     tag.timestamp.isDefined
 
   /** find the latest timestamped tag */
@@ -51,10 +51,10 @@ class Specs2TagsSpec extends Specification { def is = s2"""
            "SPECS2-3.0-20150307203418-cdafed1a",
            "SPECS2-3.0.1",
            "SPECS2-3.0.1-20150307203418-cdafed1a",
-           "SPECS2-3.0.1-20150307223251-cdafed1a").map(VersionTag.fromString).flatten) ====
+           "SPECS2-3.0.1-20150307223251-cdafed1a").flatMap(VersionTag.fromString)) ====
       List("SPECS2-2.4.17",
            "SPECS2-3.0",
-           "SPECS2-3.0.1").map(VersionTag.fromString).flatten
+           "SPECS2-3.0.1").flatMap(VersionTag.fromString)
   }
 """
 }
@@ -77,11 +77,10 @@ object VersionTag {
     }
   }
 
-  implicit def VersionTagOrder: Order[VersionTag] =
-    Order.orderBy[VersionTag, (DotNumber, Option[String])](vt => (vt.number, vt.timestamp))
-
-  implicit def VersionTagOrdering: scala.Ordering[VersionTag] =
-    VersionTagOrder.toScalaOrdering
+  implicit def VersionTagOrdering: Ordering[VersionTag] = new Ordering[VersionTag] {
+    def compare(x: VersionTag, y: VersionTag): Int =
+      Ordering[(DotNumber, Option[String])].compare((x.number, x.timestamp), (y.number, y.timestamp))
+  }
 }
 
 case class DotNumber(values: List[Int]) {
@@ -96,6 +95,10 @@ object DotNumber {
   def fromString(s: String): Option[DotNumber] =
     tryo(DotNumber(s.split("\\.").toList.map(_.toInt)))
 
-  implicit def DotNumberOrder: Order[DotNumber] =
-    Order.orderBy[DotNumber, List[Int]](_.values)
+  implicit val DotNumberOrdering: Ordering[DotNumber] = new Ordering[DotNumber] {
+    def compare(x: DotNumber, y: DotNumber): Int =
+      if (x.values.zip(y.values).forall { case (n1, n2) => n1 > n2 }) 1
+      else if (x.values == y.values) 0
+      else -1
+  }
 }

@@ -17,6 +17,7 @@ In a specification some examples are very straightforward. They just check that 
  * with state being setup before *all* examples
  * with state being cleaned up after *all* the examples
 
+<p/>
 For all those situations, there is a $specs2 trait which you can mix in your specification.
 
 ### BeforeEach / AfterEach
@@ -104,6 +105,7 @@ The `AroundEach` trait can be used for lots of different purposes:
  - to time them out if they run for too long
  - to run them in different contexts, with different parameters
 
+ <p/>
 There is however one thing you cannot do with `AroundExample`. You can't pass the context to the example if it needs it. The `ForEach` trait solves this problem.
 
 ### ForEach
@@ -149,8 +151,8 @@ Some setups are very expensive and can be shared across all examples. For exampl
 $AndIfYouWantToKnowMore
 
  * read about $specs2 ${"execution model" ~/ Execution} to understand how `Examples` and `Steps` are being executed
- * use ${"`Context` objects" ~ ContextObjects} to create contexts for just a few examples in the specification
- * use ${"traits and`Scopes`" ~ Scopes} to create contexts in unit specifications where you can access state directly on variables
+ * use ${("`Context` objects" ~ ContextObjects).mute} to create contexts for just a few examples in the specification
+ * use ${("traits and`Scopes`" ~ Scopes).mute} to create contexts in unit specifications where you can access state directly on variables
 
 $vid
 """

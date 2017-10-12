@@ -2,7 +2,6 @@ package org.specs2
 package guide
 
 import concurrent.ExecutionEnv
-import specification.ExecutionEnvironment
 
 object TimeoutExamples extends UserGuidePage { def is = s2"""
 
@@ -12,9 +11,7 @@ Some examples take too long to run and it is desirable to interrupt them if they
 import org.specs2.specification.AroundTimeout
 import scala.concurrent.duration._
 
-class MySpec extends Specification with AroundTimeout
-                                   with ExecutionEnvironment {
-def is(implicit ee: ExecutionEnv) = s2"""
+class MySpec(implicit ee: ExecutionEnv) extends Specification with AroundTimeout { def is = s2"""
 
   this should not take too long ${upTo(1.second)(e1)}
 
@@ -31,9 +28,7 @@ Note that you need to extend the `org.specs2.specification.ExecutionEnvironment`
 You can also declare a timeout for all the examples of a given specification with the `org.specs2.specification.ExamplesTimeout` trait:${snippet{
 import org.specs2.specification.ExamplesTimeout
 
-class MySpec extends Specification with ExamplesTimeout
-                                   with ExecutionEnvironment {
-def is(implicit ee: ExecutionEnv) = s2"""
+class MySpec(implicit ee: ExecutionEnv) extends Specification with ExamplesTimeout { def is = s2"""
 
   this should not take too long $e1
   this one too                  $e2

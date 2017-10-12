@@ -10,6 +10,7 @@ In a Specification you generally want to include 2 things:
  - some informal text describing what the system/application/function should do
  - some Scala code specifying exactly inputs and expected outputs
 
+<p/>
 With $specs2 you have 2 main ways to do this:
 
  - you can create an *"Acceptance"* specification where all the informal text is written in one place and the code is written somewhere else. The name "acceptance" comes from the fact that it might be easier for a non-developer to just read some text to validate your specification
@@ -42,6 +43,7 @@ The `s2` string contains the text of your specification as well as some referenc
  - one `Example` with the description "where example 1 must be true" and the code `1 must_== 1`
  - another `Example` with the description "where example 2 must be true" and the code `2 must_== 2`
 
+<p/>
 All the rest, `"this is my specification"`, is parsed as `Text` and is not executed.
 
 ### Unit specification
@@ -64,6 +66,7 @@ This specification creates one piece of `Text` and 2 `Examples` as before but:
  - there is no need to define an `is` method (this means that a mutable variable is used to collect the `Texts` and `Examples` hence the `mutable` package name)
  - the code is close to each piece of text it specifies
 
+<p/>
 However once a specification is created with all its `Texts` and `Examples`, the execution will be the same, whether it is an Acceptance one or a Unit one.
 
 The `>>` blocks can be nested and this allows you to structure your specification so that the outermost blocks describe a general context while the innermost ones describe more specific contexts. A similar effect can be achieved by simply indenting text in an acceptance specification.
@@ -122,7 +125,7 @@ $vid
 $AndIfYouWantToKnowMore
 
  - ${"skip" ~/ SkipExamples} examples
- - use a ${"different syntax" ~ MutableSpecSyntax} for mutable specifications
+ - use a ${("different syntax" ~ MutableSpecSyntax).mute} for mutable specifications
  - collect ${"*all* expectations" ~/ GetAllExpectations}
  - mark examples as ${"pending until they are fixed" ~/ PendingUntilFixedExamples}
  - add ${"references to other specifications" ~/ ReferenceOtherSpecifications}

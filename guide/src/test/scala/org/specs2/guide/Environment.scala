@@ -1,11 +1,8 @@
 package org.specs2
 package guide
 
-import main.CommandLine
-import concurrent.ExecutionEnv
-import scala.concurrent.{ExecutionContext, Future, duration, Await}, duration._
-import specification._
-import specification.core.Env
+import scala.concurrent._, duration._
+import specification.core.{Env, OwnEnv, OwnExecutionEnv}
 import io._
 import control._
 

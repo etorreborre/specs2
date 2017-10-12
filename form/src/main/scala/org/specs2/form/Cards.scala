@@ -5,6 +5,7 @@ import DecoratedProperties._
 import specification._
 import core._
 import org.specs2.concurrent.ExecutionEnv
+import SpecStructure._
 
 /**
  * A set of tabs with a title, where each tab simply contains some text
@@ -21,14 +22,16 @@ trait Cards {
  * The text will be interpreted as Markdown text when rendered as html
  */
 trait Card extends Specification with Snippets { def is = text
-  implicit def executionEnv: ExecutionEnv =
-    ExecutionEnv.fromGlobalExecutionContext
 
   def title: String
   def text: SpecStructure
 
-  def texts: List[Fragment] =
+  def texts: List[Fragment] = {
+    implicit val executionEnv: ExecutionEnv =
+      ExecutionEnv.fromGlobalExecutionContext
+
     text.textsList
+  }
 
   def toTab: Tab =
     form.Tab(title, Form.tr(TextCell(texts.map(_.description.show).mkString).bkWhite))

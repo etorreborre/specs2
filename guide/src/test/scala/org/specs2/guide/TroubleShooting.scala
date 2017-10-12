@@ -51,7 +51,7 @@ To fix this you can either:
  - either return `ok` after `println`
  - create your own matcher (see ${see(Matchers)}) and make sure you have a proper expectation for your example
  - add an `AsResult[Unit]` instance like this
-
+<p/>
 ${snippet{
 implicit def unitAsResult: AsResult[Unit] = new AsResult[Unit] {
   def asResult(r: =>Unit) =

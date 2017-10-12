@@ -3,7 +3,6 @@ package guide
 
 import java.util.concurrent.ExecutorService
 import org.specs2.matcher.TerminationMatchers
-import specification.ExecutionEnvironment
 import concurrent.ExecutionEnv
 import scala.concurrent._
 import duration._
@@ -35,7 +34,7 @@ class MyMutableFutureSpec(implicit ec: ExecutionContext) extends mutable.Specifi
 
 You can also use an `ExecutionEnv` (from now on code examples are provided for immutable specifications only but are transposable to mutable ones): ${snippet{
 class MyFutureSpec(implicit ee: ExecutionEnv) extends Specification { def is = s2"""
- Let's check this scala future ${ implicit ee: ExecutionEnv =>
+ Let's check this scala future ${
    Await.result(Future(1), Duration.Inf) must_== 1
  }
 """
@@ -90,6 +89,7 @@ Future $Matchers (see the "Future" tab) require an implicit `ExecutionEnv`. This
 The `terminate` matcher (see the "Termination" tab in the optional $Matchers section) also needs an `ExecutionEnv` to run a piece of code and periodically check if it has terminated or not: ${snippet{
   s2"""
   this code must be fast enough ${
+    implicit val ee = ExecutionEnv.fromGlobalExecutionContext
     Thread.sleep(100) must terminate(retries = 1, sleep = 60.millis)
   }
 """

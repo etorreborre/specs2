@@ -8,18 +8,22 @@ import org.specs2.fp.syntax._
 import html._
 import runner._
 import main._
+import org.specs2.concurrent.ExecutionEnv
+import ExecuteActions._
 
-class Website extends Specification with Specs2Variables with Specs2Tags { def is = s2"""
+class Website(env: Env) extends Specification with Specs2Variables with Specs2Tags { def is = sequential ^ s2"""
 
  create the website    $createWebsite
  create the user guide $createUserGuide
 
 """
 
+  implicit val ee = env.executionEnv
+  
   val outputDir = "target" / "specs2-reports" / "site"
   val versionDirName = FileName.unsafe("SPECS2-"+VERSION)
 
-  def createWebsite = { env: Env =>
+  def createWebsite = {
     val fs = env.fileSystem
     val pages = List("index", "quickstart", "learn", "project", "nav").map(_ +".html").map(resource)
     val directories = List("css", "fonts", "images", "javascript").map(resourceDir)
@@ -42,11 +46,12 @@ class Website extends Specification with Specs2Variables with Specs2Tags { def i
     }.sequence >> writeVersionsFile(fs, siteOutputDir, vars("GUIDE_DIR"), vars("API_DIR")).as(true)
   }
 
-  def createUserGuide = { env1: Env =>
+  def createUserGuide = {
     val guideOutputDir = outputDir / "guide" / versionDirName
-    val env = env1.copy(arguments = Arguments.split(s"all html console html.search html.toc html.nostats html.outdir ${guideOutputDir.dirPath}"))
-    env.fileSystem.copyFile(guideOutputDir / "css")(resource("css/specs2-user.css")).toAction >>
-    ClassRunner.report(env)(UserGuide).as(true)
+    val env1 = env.copy(arguments = Arguments.split(s"all html console html.search html.toc html.nostats html.outdir ${guideOutputDir.dirPath}"))
+
+    env1.fileSystem.copyFile(guideOutputDir / "css")(resource("css/specs2-user.css")).toAction >>
+      ClassRunner.report(env1)(UserGuide).as(true)
   }
 
   def writeVersionsFile(fs: FileSystem, siteOutputDir: DirectoryPath, guideDir: String, apiDir: String): Action[Unit] =
