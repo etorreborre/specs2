@@ -22,10 +22,10 @@ lazy val specs2 = Project(
 lazy val specs2Settings = Seq(
   organization := "org.specs2",
   specs2Version in GlobalScope := version.value,
-  scalazVersion in GlobalScope := "7.2.7",
+  scalazVersion in GlobalScope := "7.2.15",
   specs2ShellPrompt,
   scalaVersion := "2.12.3",
-  crossScalaVersions := Seq(scalaVersion.value, "2.11.11"))
+  crossScalaVersions := Seq(scalaVersion.value, "2.11.11", "2.13.0-M2"))
 
 lazy val tagName = Def.setting{
   s"specs2-${version.value}"
@@ -79,11 +79,11 @@ lazy val analysisJvm = analysis.jvm.dependsOn(commonJvm % "test->test", coreJvm,
 lazy val common = crossProject.in(file("common")).
   settings(
     libraryDependencies ++=
-      Seq("org.scala-lang.modules" %%% "scala-parser-combinators" % "1.0.5") ++
       depends.reflect(scalaOrganization.value, scalaVersion.value) ++
       depends.paradise(scalaVersion.value) ++
       depends.scalaXML(scalaVersion.value) ++
-      Seq("org.scalacheck" %%% "scalacheck" % "1.13.4" % "test"),
+      Seq("org.scalacheck" %%% "scalacheck" % "1.13.5" % "test",
+          "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.6"),
     moduleSettings("common")++
     Seq(name := "specs2-common")
 ).
@@ -116,7 +116,7 @@ lazy val examples = crossProject.in(file("examples")).
   jsSettings(depends.jsTest, moduleJsSettings("examples")).
   jvmSettings(depends.jvmTest, moduleJvmSettings("examples"))
 
-lazy val examplesJs  = examples.js.dependsOn(commonJs, matcherJs, coreJs, matcherExtraJvm, junitJs, scalacheckJs, mockJs)
+lazy val examplesJs  = examples.js.dependsOn(commonJs, matcherJs, coreJs, matcherExtraJs, junitJs, scalacheckJs, mockJs)
 lazy val examplesJvm = examples.jvm.dependsOn(commonJvm, matcherJvm, coreJvm, matcherExtraJvm, analysisJvm, form, gwt, html, markdown, junitJvm, scalacheckJvm, mockJvm)
 
 lazy val fp = crossProject.in(file("fp")).
@@ -185,7 +185,8 @@ lazy val matcherJvm = matcher.jvm.dependsOn(commonJvm)
 lazy val matcherExtra = crossProject.in(file("matcher-extra")).
   settings(moduleSettings("matcherextra") ++ Seq(
     name := "specs2-matcher-extra",
-    libraryDependencies ++= depends.paradise(scalaVersion.value)
+    libraryDependencies ++= depends.paradise(scalaVersion.value) ++
+      Seq("org.scala-lang.modules" %%% "scala-parser-combinators" % "1.0.6")
   ):_*).
   jsSettings(depends.jsTest, moduleJsSettings("matcher-extra")).
   jvmSettings(depends.jvmTest, moduleJvmSettings("matcher-extra"))
@@ -240,7 +241,7 @@ lazy val mockJvm = mock.jvm.dependsOn(coreJvm)
 
 lazy val scalacheck = crossProject.in(file("scalacheck")).
   settings(
-    Seq(libraryDependencies += "org.scalacheck" %%% "scalacheck" % "1.13.4") ++
+    Seq(libraryDependencies += "org.scalacheck" %%% "scalacheck" % "1.13.5") ++
     moduleSettings("scalacheck") ++
     Seq(name := "specs2-scalacheck"):_*).
   jsSettings(depends.jsTest, moduleJsSettings("scalacheck")).
@@ -292,7 +293,7 @@ lazy val compilationSettings = Seq(
         "-Ywarn-value-discard",
         "-deprecation:false", "-Xcheckinit", "-unchecked", "-feature", "-language:_"),
   scalacOptions += "-Ypartial-unification",
-  addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.4"),
+  addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.5"),
   scalacOptions in Test               ++= Seq("-Yrangepos"),
   scalacOptions in (Compile, doc)     ++= Seq("-feature", "-language:_"),
   scalacOptions in (Compile, console) := Seq("-Yrangepos", "-feature", "-language:_"),
