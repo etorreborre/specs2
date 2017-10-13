@@ -1,5 +1,4 @@
-package org.specs2
-package json
+package org.specs2.json
 
 /**
  * COPIED from the standard lib for convenience. Internal use only

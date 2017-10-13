@@ -79,14 +79,7 @@ object depends {
       Seq()
 
   lazy val resolvers =
-    Seq(updateOptions := updateOptions.value.withCachedResolution(true)) ++ {
-      sbt.Keys.resolvers ++=
-      Seq(
-        Resolver.sonatypeRepo("releases"),
-        Resolver.sonatypeRepo("snapshots"),
-        Resolver.typesafeIvyRepo("releases"),
-        "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases")
-    }
+    Seq(sbt.Keys.resolvers ++= Seq(Resolver.sonatypeRepo("releases")))
 
   def scalaMinorVersionAtLeast(scalaVersion: String, n: Int): Boolean =
     CrossVersion.partialVersion(scalaVersion) match {

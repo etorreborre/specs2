@@ -1,5 +1,4 @@
-package org.specs2
-package json
+package org.specs2.json
 
 /**
  * This trait provides utility functions for Json objects
