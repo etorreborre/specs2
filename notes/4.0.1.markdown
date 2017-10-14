@@ -1,0 +1,5 @@
+Maintenance version
+
+## Fixes
+
+ * **core** fixed some possible deadlock when using an implicit `ExecutionEnv`
