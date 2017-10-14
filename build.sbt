@@ -7,11 +7,12 @@ import java.text.SimpleDateFormat
 
 /** MAIN PROJECT */
 lazy val specs2 = project.in(file(".")).
-  enablePlugins(GitBranchPrompt, ScalaJSPlugin, GhpagesPlugin).
+  enablePlugins(GitBranchPrompt, ScalaJSPlugin, GhpagesPlugin, BuildInfoPlugin).
   settings(
     moduleSettings("")  ++
     siteSettings,
     apiSettings,
+    buildInfoSettings,
     Seq(name := "specs2", packagedArtifacts := Map.empty)
   ).aggregate(
       fpJvm, commonJvm, matcherJvm, coreJvm, matcherExtraJvm, scalazJvm, html, analysisJvm,
@@ -29,6 +30,21 @@ lazy val specs2Settings = Seq(
   scalaVersion := "2.12.3",
   crossScalaVersions := Seq(scalaVersion.value, "2.11.11", "2.13.0-M2"))
 
+lazy val versionSettings =
+  Seq(
+    version := {
+      import sys.process._
+      if (!"git tag".!!.contains(version.value)) {
+        val commish = "git log --pretty=format:%h -n 1".!!.trim
+        version.value+"-"+commish+"-"+timestamp(new Date)
+      }
+      else
+        version.value
+    }
+  )
+
+
+lazy val latestTag = "git tag"
 
 lazy val buildInfoSettings = Seq(
   buildInfoKeys :=
@@ -66,12 +82,13 @@ lazy val shapelessVersion = "2.3.2"
 
 def moduleSettings(name: String) =
   coreDefaultSettings  ++
-    depends.resolvers    ++
-    specs2Settings       ++
-    compilationSettings  ++
-    testingSettings      ++
-    publicationSettings  ++
-    notificationSettings
+  versionSettings      ++
+  depends.resolvers    ++
+  specs2Settings       ++
+  compilationSettings  ++
+  testingSettings      ++
+  publicationSettings  ++
+  notificationSettings
 
 def moduleJvmSettings(name: String) =
   testingJvmSettings
