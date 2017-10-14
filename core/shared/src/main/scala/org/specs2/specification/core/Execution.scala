@@ -24,7 +24,8 @@ import Execution._
  * Execution of a Fragment
  *
  *  - there can be none (for a piece of text)
- *  - the execution depends on the current Env
+ *  - the execution depends on the current Env.
+ *    by default executions are created synchronously but can also be fork-off with Execution.withEnvAsync
  *  - it can have its own timeout (default is infinite)
  *  - once executed the result is kept
  *  - if mustJoin is true this means that all previous executions must be finished before this one can start
@@ -123,7 +124,7 @@ case class Execution(run:            Option[Env => Future[() => Result]]     = N
       case Some(r) =>
         val to = env.timeout |+| timeout
         try {
-          implicit val ec = env.executionContext
+          implicit val ec = env.specs2ExecutionContext
           env.setContextClassLoader()
 
           val future = TimedFuture(es => r(env).map(_()), to).runNow(env.executorServices)
@@ -298,9 +299,9 @@ object Execution {
   def result[T : AsResult](r: =>T): Execution =
     withEnv(_ => AsResult.safely(r))
 
-  /** create an execution using the Env */
+  /** create an execution using the Env, synchronously by default */
   def withEnv[T : AsResult](f: Env => T): Execution =
-    Execution(Some((env: Env) => Future(() => AsResult.safely(f(env)))(env.executionContext)))
+    withEnvSync(f)
 
   /** create an execution using the Env and Flatten the execution */
   def withEnvFlatten(f: Env => Execution): Execution =
