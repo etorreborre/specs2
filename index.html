@@ -105,7 +105,7 @@ class HelloWorldSpec extends Specification {
             </div>
             <div class="item">
                 <div class="caption">Manage contexts for integration testing</div>
-                <pre><code class="prettyprint carousel-code">class UsersSpec extends Specification with BeforeAll with Before {
+                <pre><code class="prettyprint carousel-code">class UsersSpec extends Specification with BeforeAll with BeforeEach {
   def is = sequential ^ s2"""
 
   We can create in the database
