@@ -272,7 +272,7 @@ trait TextPrinter extends Printer {
 
   /** print a short summary of differences between Seqs, Sets or Maps */
   def printSummary(descriptions: (String, Seq[String])*) =
-    if (descriptions.flatMap(_._2).mkString("\n").split("\n").size >= 50)
+    if (descriptions.flatMap(_._2).mkString("\n").split("\n").length >= 50)
       List((descriptions.map { case (name, values) => s"$name = ${values.size}" }.mkString(", ")).failure)
     else Nil
 

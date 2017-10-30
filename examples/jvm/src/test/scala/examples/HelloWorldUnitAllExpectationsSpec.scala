@@ -10,7 +10,7 @@ class HelloWorldUnitAllExpectationsSpec extends mutable.Specification with AllEx
 
     "Hello world" >> {
       "Hello world".reverse === "dlrow olleH"
-      "Hello world".size === 11
+      "Hello world".length === 11
       "Hello world".split("\\s") must haveSize(2)
       "Hello world".toLowerCase === "hello world"
     }

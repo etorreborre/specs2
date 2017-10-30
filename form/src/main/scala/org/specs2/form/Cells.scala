@@ -37,7 +37,7 @@ trait Text {
   def text: String
 
   /** @return the width of the cell, without borders when it's a FormCell */
-  def width: Int = text.size
+  def width: Int = text.length
 }
 /**
  * Base type for anything returning some xml
@@ -194,7 +194,7 @@ class FormCell(_form: =>Form, result: Option[Result] = None) extends Cell {
    * @return the width of a form when inlined.
    *         It is the width of its text size minus 4, which is the size of the borders "| " and " |"
    */
-  override def width = text.split("\n").map((_:String).size).max[Int] - 4
+  override def width = text.split("\n").map((_: String).length).max[Int] - 4
 }
 object FormCell {
   def unapply(cell: FormCell): Option[Form] = Some(cell.form)

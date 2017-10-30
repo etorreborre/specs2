@@ -22,10 +22,10 @@ trait Trim {
   case class Trimmed(s: String) {
 
     def trimStart(start: String) =
-      if (s.trim.startsWith(start)) s.trim.drop(start.size) else s.trim
+      if (s.trim.startsWith(start)) s.trim.drop(start.length) else s.trim
 
     def trimEnd(end: String) =
-      if (s.trim.endsWith(end)) s.trim.dropRight(end.size)  else s.trim
+      if (s.trim.endsWith(end)) s.trim.dropRight(end.length)  else s.trim
 
     def trimEndSpace =
       s.takeWhile(_ == ' ') + s.trim
@@ -39,10 +39,10 @@ trait Trim {
     def trimEnclosingXmlTag(t: String) = trimFirst("<"+t+".*?>").trimEnd("</"+t+">")
 
     def removeStart(start: String) =
-      if (s.startsWith(start)) s.drop(start.size) else s
+      if (s.startsWith(start)) s.drop(start.length) else s
 
     def removeEnd(end: String) =
-      if (s.endsWith(end)) s.dropRight(end.size)  else s
+      if (s.endsWith(end)) s.dropRight(end.length)  else s
 
     def removeEnclosing(toRemove: String):String = removeEnclosing(toRemove, toRemove)
 
@@ -73,7 +73,7 @@ trait Trim {
       if (matches.isEmpty) s
       else {
         val last = matches.last
-        s.substring(0, last.start) + s.substring(last.end, s.size)
+        s.substring(0, last.start) + s.substring(last.end, s.length)
       }
     }
 
@@ -142,7 +142,7 @@ trait Trim {
 
     /** truncate a string to a given number of characters and ellide the missing characters with ... */
     def truncate(length: Int): String =
-      if (s.size > length) s.take(length - 3)+"..."
+      if (s.length > length) s.take(length - 3)+"..."
       else s
   }
 

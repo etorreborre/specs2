@@ -26,7 +26,7 @@ trait Quote {
   /** quote a sequence, with commas if short, with newlines otherwise */
   def qseq(seq: GenTraversableOnce[_]): String = {
     val withCommas = q(seq.mkString(", "))
-    if (withCommas.size < 30) withCommas
+    if (withCommas.length < 30) withCommas
     else seq.mkString("\n", "\n  ", "\n")
   }
 

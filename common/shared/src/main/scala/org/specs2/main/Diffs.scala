@@ -54,7 +54,7 @@ case class SmartDiffs(show: Boolean       = true,
 
   def showDiffs(actualValue: Any, expectedValue: Any) = {
     val (actual, expected) = (actualValue.notNull, expectedValue.notNull)
-    if (editDistance(actual, expected).doubleValue / (actual.size + expected.size) < diffRatio.doubleValue / 100)
+    if (editDistance(actual, expected).doubleValue / (actual.length + expected.length) < diffRatio.doubleValue / 100)
       showDistance(actual, expected, separators, shortenSize)
     else
       (actual, expected)

@@ -32,7 +32,7 @@ case class TextTable(header: Seq[String], lines: Seq[Seq[String]], separator: St
 
   /** @return the seq of maximum size of each column */
   private def maximumsByColumn(lines: Seq[Seq[String]]): Seq[Int] =
-    transpose(lines).map(column => column.map(_.size).max)
+    transpose(lines).map(column => column.map(_.length).max)
 
 }
 
