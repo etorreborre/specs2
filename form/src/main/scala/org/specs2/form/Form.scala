@@ -27,7 +27,7 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
   /** @return the maximum cell size, column by column */
   lazy val maxSizes = allRows.map(_.cells).safeTranspose.map(l => l.map(_.width).max[Int])
 
-  /** @return a new Form. This method can be overriden to return a more accurate subtype */
+  /** @return a new Form. This method can be overridden to return a more accurate subtype */
   protected def newForm(title: Option[String] = None, rows: Seq[Row] = Vector(), result: Option[Result] = None) =
     new Form(title, rows, result)
   /** @return a Form where every Row is executed with a Success */

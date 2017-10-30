@@ -67,7 +67,7 @@ class AnyMatchersSpec extends script.Specification with Groups with ResultMatche
   ${ (null:String) must not be asNullAs(1) }
   ${ 1 must be asNullAs(1) }
 
-  beOneOf matches a value is amongs others
+  beOneOf checks if a value is amongst others
   ${ 1 must beOneOf(1, 2, 3) }
   ${ 4 must not be oneOf(1, 2, 3) }
 

@@ -24,7 +24,7 @@ trait StringEditDistance extends DiffShortener {
     })
 
   /**
-   * @param sep separators used to hightlight differences. If sep is empty, then no separator is used. If sep contains
+   * @param sep separators used to highlight differences. If sep is empty, then no separator is used. If sep contains
    * one character, it is taken as the unique separator. If sep contains 2 or more characters, the first half of the characters are taken as
    * opening separator and the second half as closing separator.
    *
@@ -68,10 +68,10 @@ trait StringEditDistance extends DiffShortener {
     shorten(fullResult, delimiter.first, delimiter.second, shortenSize)
   }
 
-  /** apply edit distance functions on strings splitted on newlines so that there are no memory issues */
+  /** apply edit distance functions on strings split on newlines so that there are no memory issues */
   def foldSplittedStrings[T](s1: String, s2: String, init: T, f: (T, String, String) => T): T = {
-    val (splitted1, splitted2) = split(s1, s2)
-    splitted1.zip(splitted2).foldLeft(init) { (result, current) =>
+    val (split1, split2) = split(s1, s2)
+    split1.zip(split2).foldLeft(init) { (result, current) =>
       f(result, current._1, current._2)
     }
   }
@@ -82,9 +82,9 @@ trait StringEditDistance extends DiffShortener {
    *  - otherwise split the strings so that they are less than 200 characters long
    */
   private def split(s1: String, s2: String): (List[String], List[String]) = {
-    val (splitted1, splitted2) = (s1.split("\n").toList, s2.split("\n").toList)
+    val (split1, split2) = (s1.split("\n").toList, s2.split("\n").toList)
     def splitToSize(strings: List[String]) = strings.flatMap(_.splitToSize(200))
-    (splitToSize(splitted1), splitToSize(splitted2))
+    (splitToSize(split1), splitToSize(split2))
   }
 
 
@@ -124,10 +124,10 @@ trait DiffShortener {
     def split(s: String, sep: String): Array[String] =
       if (List("[", "]" ,"(", ")", "-", "+", "?", "*").contains(sep)) split(s, "\\" + sep) else s.split(sep)
 
-    val splitted = split(s, firstSep)
-    if (splitted.size == 1) List(s)
+    val splitStr = split(s, firstSep)
+    if (splitStr.size == 1) List(s)
     else {
-      splitted.foldLeft(List[String]()) { (res, cur) =>
+      splitStr.foldLeft(List[String]()) { (res, cur) =>
         if (!cur.contains(secondSep)) res :+ cur
         else {
           lazy val diff = split(cur, secondSep)(0)

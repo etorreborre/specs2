@@ -51,15 +51,15 @@ case class IncludeExcludeStackTraceFilter(include: Seq[String], exclude: Seq[Str
  */
 object IncludeExcludeStackTraceFilter {
   def fromString(s: String): StackTraceFilter = {
-    val splitted = s.split("/").toSeq
-    if (splitted.size == 0)
+    val split = s.split("/").toSeq
+    if (split.size == 0)
       new IncludeExcludeStackTraceFilter(Seq[String](), Seq[String]())
-    else if (splitted.size == 1)
-      new IncludeExcludeStackTraceFilter(splitted(0).splitTrim(","), Seq[String]())
-    else if (splitted.size == 2)
-      new IncludeExcludeStackTraceFilter(splitted(0).splitTrim(","), splitted(1).splitTrim(","))
+    else if (split.size == 1)
+      new IncludeExcludeStackTraceFilter(split(0).splitTrim(","), Seq[String]())
+    else if (split.size == 2)
+      new IncludeExcludeStackTraceFilter(split(0).splitTrim(","), split(1).splitTrim(","))
     else
-      new IncludeExcludeStackTraceFilter(splitted(0).splitTrim(","), splitted.drop(1).mkString(",").splitTrim(","))
+      new IncludeExcludeStackTraceFilter(split(0).splitTrim(","), split.drop(1).mkString(",").splitTrim(","))
   }
 }
 

@@ -19,7 +19,7 @@ case class Property[T](value: () => Option[T], evaluated: Boolean = false, evalu
   def toOption: Option[T] = optionalValue
   /** update the value */
   def update(newValue: =>T) = withValue(newValue)
-  /** alial for update */
+  /** alias for update */
   def apply(newValue: =>T) = update(newValue)
   /** @return an iterator containing the value if present */
   def iterator = optionalValue.iterator

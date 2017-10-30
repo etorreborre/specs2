@@ -12,7 +12,7 @@ class StoreSpec extends Specification { def is = sequential ^ s2"""
  The file store stores values in files where the name of the file is
    defined by the key $e1
 
- The store can be resetted $e2
+ The store can be reset $e2
 
 """
 
