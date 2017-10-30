@@ -61,7 +61,7 @@ class TreesSpec extends script.Specification with DataTables with Grouped with E
 
     eg := {
       val tree = tree3.loc.addChild(4).tree
-      tree.flattenLeft.toSeq aka "flattenLeft" must_== tree.flatten.toSeq
+      tree.flattenLeft aka "flattenLeft" must_== tree.flatten
     }
   }
 

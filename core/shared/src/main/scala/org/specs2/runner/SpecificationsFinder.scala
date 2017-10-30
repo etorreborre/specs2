@@ -81,7 +81,7 @@ trait SpecificationsFinder {
       objectPattern <- specObjectPattern
       classPattern  <- specClassPattern
       paths         <- filePathReader.filePaths(basePath, pathGlob, verbose)
-    } yield paths.toList.map(path => readClassNames(path, objectPattern, classPattern, filePathReader, verbose)).sequence.map(_.flatten)
+    } yield paths.map(path => readClassNames(path, objectPattern, classPattern, filePathReader, verbose)).sequence.map(_.flatten)
   }.flatMap[List[String]](identity)
 
   /**

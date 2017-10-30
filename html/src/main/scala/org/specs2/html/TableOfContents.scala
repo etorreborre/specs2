@@ -102,10 +102,10 @@ trait TableOfContents {
         s.reduceNodes.updateHeadAttribute("id", page.path.name.name)
       else if (h.level > 1)
         <li><a href={page.relativePath.path+"#"+h.pandocName} title={h.name}>{h.name.truncate(entryMaxSize)}</a>
-          { <ul>{s.toSeq}</ul> unless s.isEmpty }
+          { <ul>{s}</ul> unless s.isEmpty }
         </li>
       else
-        <ul>{s.toSeq}</ul> unless s.isEmpty
+        <ul>{s}</ul> unless s.isEmpty
 
     }.rootLabel
   }

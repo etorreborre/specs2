@@ -16,7 +16,7 @@ trait SeqGenerators {
       }
     }
     for {
-      indices <- Gen.someOf((0 until ts.size).toSeq)
+      indices <- Gen.someOf((0 until ts.size))
     } yield slice(indices.sorted)
   }
 

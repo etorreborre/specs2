@@ -111,7 +111,7 @@ trait JUnitPrinter extends Printer { outer =>
       val details =
         if (args.diffs.showSeq(actual.toSeq, expected.toSeq, ordered = false)) {
           val (added, missing) = args.diffs.showSeqDiffs(actual.toSeq, expected.toSeq, ordered = false)
-          List(showValues("Added", added.toSeq), showValues("Missing", missing.toSeq)).mkString(" / ")
+          List(showValues("Added", added), showValues("Missing", missing)).mkString(" / ")
         } else ""
 
       new ComparisonFailure(AnsiColors.removeColors(m+details), expected.mkString("\n"), actual.mkString("\n")) {

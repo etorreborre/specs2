@@ -27,12 +27,12 @@ class IndentationSpec(implicit ee: ExecutionEnv) extends Specification with Scal
   }
 
   def lessThanOrEqualTabs = prop { fs: Fragments =>
-    val tabsNumber = fs.fragmentsList(ee).collect { case Fragment(Tab(n),_,_) => n }.toList.sumAll
+    val tabsNumber = fs.fragmentsList(ee).collect { case Fragment(Tab(n), _, _) => n }.sumAll
     indentation(fs) must beSome(be_<=(tabsNumber))
   }
 
   def equalTabsWhenNoBacktabs = prop { fs: Fragments =>
-    val tabsNumber = fs.fragmentsList(ee).collect { case Fragment(Tab(n),_,_) => n }.toList.sumAll
+    val tabsNumber = fs.fragmentsList(ee).collect { case Fragment(Tab(n), _, _) => n }.sumAll
     indentation(fs.filter(!isBacktab(_))) must beSome(tabsNumber)
   }
 

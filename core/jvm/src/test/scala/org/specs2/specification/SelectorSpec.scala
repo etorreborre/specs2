@@ -128,7 +128,7 @@ class SelectorSpec(ee: ExecutionEnv) extends script.Specification with Groups wi
       )
       checkSelection(fragments, "x",           expected = Seq("e2", "e3", "e4", "e5", "e6"), unexpected = Seq("e1", "e7", "e8", "e9")) and
       checkSelection(fragments, "x&&y",        expected = Seq("e4", "e5", "e6"),             unexpected = Seq("e1", "e2", "e3", "e7", "e8", "e9")) and
-      checkSelection(fragments, Seq("x", "y"), expected = (2 to 8).map("e"+_).toSeq,         unexpected = Seq("e1", "e9"))
+      checkSelection(fragments, Seq("x", "y"), expected = (2 to 8).map("e" + _),             unexpected = Seq("e1", "e9"))
     }
 
     eg := {

@@ -56,14 +56,14 @@ trait TraversableBaseMatchers { outer =>
   /** match if traversable contains (x matches .*+t+.*) */
   def containMatch[T](t: =>String) = containPattern[T](t.regexPart)
   /** match if traversable contains (x matches p) */
-  def containPattern[T](t: =>String) = ContainWithResult(matcherIsValueCheck(new BeMatching(t))) ^^ ((ts: GenTraversableOnce[T]) => ts.toSeq.map(_.toString).to[GenTraversableOnce])
+  def containPattern[T](t: =>String) = ContainWithResult(matcherIsValueCheck(new BeMatching(t))) ^^ ((ts: GenTraversableOnce[T]) => ts.toSeq.map(_.toString))
 
   /** does a containAll comparison in both ways */
   def containTheSameElementsAs[T](seq: Seq[T], equality: (T, T) => Boolean = (_:T) == (_:T)): Matcher[Traversable[T]] = new Matcher[Traversable[T]] {
 
     def apply[S <: Traversable[T]](t: Expectable[S]) = {
-      val missing = seq.toSeq.difference(t.value.toSeq, equality)
-      val added   = t.value.toSeq.difference(seq.toSeq, equality)
+      val missing = seq.difference(t.value.toSeq, equality)
+      val added   = t.value.toSeq.difference(seq, equality)
       def message(diffs: Seq[_], msg: String) =
         if (diffs.isEmpty) "" else diffs.mkString("\n  "+msg+": ", ", ", "")
 

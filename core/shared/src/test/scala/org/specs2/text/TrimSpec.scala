@@ -39,9 +39,9 @@ class TrimSpec extends Specification { def is = s2"""
   ${eg{ "hello\n\r world".removeNewLines === "hello world" }}
 
   Split and trim
-  ${eg{ "a,b,c".splitTrim(",").toSeq === Seq("a", "b", "c") }}
-  ${eg{ "a, b , c".splitTrim(",").toSeq === Seq("a", "b", "c") }}
-  ${eg{ "a,  ,c".splitTrim(",").toSeq === Seq("a", "c") }}
+  ${eg{ "a,b,c".splitTrim(",") === Seq("a", "b", "c") }}
+  ${eg{ "a, b , c".splitTrim(",") === Seq("a", "b", "c") }}
+  ${eg{ "a,  ,c".splitTrim(",") === Seq("a", "c") }}
 
   Start from trims the string of everything that is before the start substring
     if the string starts with the specified substring
