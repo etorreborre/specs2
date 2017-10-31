@@ -15,7 +15,7 @@ object S2Macro {
     val fileContent = macroPos.source.content.mkString
 
     def contentFrom(pos: c.Position) = fileContent.split("\n").drop(pos.line - 1).mkString("\n").drop(pos.column-1)
-    val content = contentFrom(macroPos).drop("s2\"\"\"".size)
+    val content = contentFrom(macroPos).drop("s2\"\"\"".length)
     val Yrangepos = macroPos.isRange
 
     def traceLocation(pos: c.universe.Position): String =

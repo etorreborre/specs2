@@ -485,7 +485,7 @@ ${step(env)}                                                                    
     }
 
     eg := {
-      list.size answers { m => m.toString.size}
+      list.size answers { m => m.toString.length}
       list.size must_== 4
     }
     eg := {

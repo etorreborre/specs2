@@ -29,7 +29,7 @@ object Sized {
   }
   /** a regular string has a size, without having to be converted to an Traversable */
   implicit def stringIsSized: Sized[String] = new Sized[String] {
-    def size(t: String) = t.size
+    def size(t: String) = t.length
   }
 
 }

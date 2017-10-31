@@ -77,14 +77,14 @@ case class Specs2Visitor(text: String, options: MarkdownOptions = MarkdownOption
   override def visit(node: SimpleNode) {
     super.visit(node)
     if (node.getType == SimpleNode.Type.Linebreak) {
-      val indent = text.drop(node.getEndIndex).takeWhile(_ == ' ').size
+      val indent = text.drop(node.getEndIndex).takeWhile(_ == ' ').length
       (1 to indent) foreach { i => super.visit(new SimpleNode(SimpleNode.Type.Nbsp)) }
     }
   }
   override def visit(node: VerbatimNode) {
     // render verbatim nodes as simple text if the verbatim option is false
     if (!options.verbatim && node.getType.isEmpty && node.getText.contains("\n")) {
-      val indents = text.split("\n").filter(_.nonEmpty).map(line => line.takeWhile(_==' ').size)
+      val indents = text.split("\n").filter(_.nonEmpty).map(line => line.takeWhile(_ == ' ').length)
       val verbatim = node.getText.split("\n").map(line => line.trim)
       val lines = (indents zip verbatim).map { case (indent, line) => "&nbsp;"*indent + line }.mkString("<br/>")
       super.visit(new TextNode(lines))

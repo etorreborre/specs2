@@ -34,7 +34,7 @@ trait NodeFunctions {
    * @return true if two Nodes are equal without considering spaces
    */
   def isEqualIgnoringSpace(node: NodeSeq, n: NodeSeq): Boolean = {
-    def sameAs(nodes1: NodeSeq, nodes2: NodeSeq) = nodes1.toList.sameElementsAs(nodes2.toSeq, isEqualIgnoringSpace)
+    def sameAs(nodes1: NodeSeq, nodes2: NodeSeq) = nodes1.toList.sameElementsAs(nodes2, isEqualIgnoringSpace)
     isEqualIgnoringSpace(node, n, sameAs)
   }
 

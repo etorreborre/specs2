@@ -378,7 +378,7 @@ case class Error(m: String, t: Throwable) extends Result(s"${t.getClass.getName}
 
   /** @return an exception created from the message and the stackTraceElements */
   def exception = t
-  def stackTrace = t.getFullStackTrace.toList
+  def stackTrace = t.getFullStackTrace
 
   override def equals(o: Any) = {
     o match {

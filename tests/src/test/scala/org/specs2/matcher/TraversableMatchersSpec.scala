@@ -31,7 +31,7 @@ class TraversableMatchersSpec(val env: Env) extends Spec with ResultMatchers wit
    ${ Seq(1, 2) must contain(anyOf(1, 4)) }
    ${ (Seq(1, 2, 3) must not(contain(anyOf(1, 2, 4)))) returns "There are 2 successes\n'1' is contained in '1, 2, 4'\n'2' is contained in '1, 2, 4'\n" }
    ${ Seq("hello", "world") must contain(matching(".*orld")) }
-   ${ Seq("hello", "world") must contain((s: String) => s.size > 2) }
+   ${ Seq("hello", "world") must contain((s: String) => s.length > 2) }
    ${ Seq("1", "2", "3") must contain("3") and contain("2":Any) }
    ${ Seq("foobar").must(contain("foo")).not } see #416
    ${ Seq[Food](Pizza(), new Fruit()) must contain(Pizza()) }

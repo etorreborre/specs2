@@ -87,7 +87,7 @@ object DefaultStackTraceFilter extends
   }
 
   private def truncated(size: Int): Seq[StackTraceElement] = {
-    def trace(message: String) = new StackTraceElement(message, " "*(70 - message.size), "", 0)
+    def trace(message: String) = new StackTraceElement(message, " "*(70 - message.length), "", 0)
     Seq(trace("="*70)) ++
     Seq.fill(10)(trace("...")) ++
     Seq(trace("....  TRUNCATED: the stacktrace is bigger than 1000 lines: "+size)) ++

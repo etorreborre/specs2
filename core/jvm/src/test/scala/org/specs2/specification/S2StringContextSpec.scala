@@ -81,7 +81,7 @@ Intro
 	test2 $ok
 """.fragmentsList(ee)
 
-      fragments.map(_.description.show.replace(" ", "-").replace("\n", "*")).toList ====
+      fragments.map(_.description.show.replace(" ", "-").replace("\n", "*")) ====
         List("*Intro*--", "test1", "*--", "test2")
     }
 

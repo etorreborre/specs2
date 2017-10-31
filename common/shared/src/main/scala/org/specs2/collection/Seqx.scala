@@ -70,7 +70,7 @@ trait Seqx { outer =>
       for (x <- seq)
         if (occurrences(D(x, equality)) == 0) result += x
         else                                  occurrences(D(x, equality)) -= 1
-      result.toSeq
+      result
     }
 
     private case class D(t: T, equality: (T, T) => Boolean) {
