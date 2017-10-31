@@ -16,7 +16,7 @@ This version adds new features on top of 1.8.2:
  * added a `stopOnSkip` argument to stop the execution of a specification after the first skipped value
  * added a `skipAllIf(condition)` argument to skip all the examples if a condition is verified
  * added a `checkUrl` argument to check that urls in the produced html files are indeed accessible
- * added a confliciting implicit with a method name explaining what is happening if an operator is forgotten for an `Example`. When trying to compile: `"this example won't work" { ko }`, the compiler will raise an implicit conflict error with including this message `***If you see this message this means that you've forgotten an operator after the description string: you should write "example" >> result ***`
+ * added a conflicting implicit with a method name explaining what is happening if an operator is forgotten for an `Example`. When trying to compile: `"this example won't work" { ko }`, the compiler will raise an implicit conflict error with including this message `***If you see this message this means that you've forgotten an operator after the description string: you should write "example" >> result ***`
  
 And some fixes:
 

@@ -6,7 +6,7 @@ import matcher._
 
 class SplitSpec extends mutable.Spec with TypedEqual {
 
-  "a command line can be splitted" >> {
+  "a command line can be split" >> {
     "around spaces" >> {
       "this is hello world".splitQuoted === Seq("this", "is", "hello", "world")
     }

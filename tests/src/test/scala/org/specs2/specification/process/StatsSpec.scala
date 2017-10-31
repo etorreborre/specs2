@@ -12,7 +12,7 @@ import ExecuteActions._
 
 class StatsSpec(val env: Env) extends Specification with OwnEnv { def is = s2"""
 
- Statitistics can be computed for a stream of fragments
+ Statistics can be computed for a stream of fragments
   1 success            $e1
   1 success, 1 failure $e2
 

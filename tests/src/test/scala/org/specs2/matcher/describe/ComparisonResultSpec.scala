@@ -20,7 +20,7 @@ class ComparisonResultSpec extends Spec { def is = s2"""
   Seq render:
   ===========
 
-  identicate seq should print to string of the set                                        $seq1
+  identical seq should print to string of the set                                         $seq1
   different seq should print identical values first                                       $seq2
   different seq should print changed values first                                         $seq3
   different seq should print added values with prefix added: a                            $seq4
@@ -30,7 +30,7 @@ class ComparisonResultSpec extends Spec { def is = s2"""
   Array render:
   =============
 
-  identicate array should print to string of the set                                      $arr1
+  identical array should print to string of the set                                       $arr1
   different array should print identical values first                                     $arr2
   different array should print changed values first                                       $arr3
   different array should print added values with prefix added: a                          $arr4
@@ -41,7 +41,7 @@ class ComparisonResultSpec extends Spec { def is = s2"""
   Set render:
   ===========
 
-  identicate set should print to string of the set                                        $set1
+  identical set should print to string of the set                                         $set1
   different set should print identical values first                                       $set2
   different set should print added values with prefix added: a                            $set3
   different set should print removed values with prefix removed: b                        $set4
@@ -50,7 +50,7 @@ class ComparisonResultSpec extends Spec { def is = s2"""
   Map render:
   ===========
 
-  identicate map should print to string of the map                                        $m1
+  identical map should print to string of the map                                         $m1
   different map should print identical values first                                       $m2
   different map should print non identical values second in format: x -> { y != z }       $m3
   different map should print added values with prefix added: x -> y                       $m4

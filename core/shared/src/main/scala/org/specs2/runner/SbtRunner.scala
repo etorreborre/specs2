@@ -160,7 +160,7 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
     Array()
   }
 
-  /** @return the correponding task definition */
+  /** @return the corresponding task definition */
   def taskDef = aTaskDef
 
   /** display errors and warnings */

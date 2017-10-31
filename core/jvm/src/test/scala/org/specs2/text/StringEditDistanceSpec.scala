@@ -39,7 +39,7 @@ class StringEditDistanceSpec extends Spec with StringEditDistance with DataTable
 
  The edit distance algorithm should
    not use too much memory on a big string comparison when working with file lines                        ${g4.e1}
-   dont use too much memory on a big string comparison on any type of string                              ${g4.e2}
+   not use too much memory on a big string comparison on any type of string                               ${g4.e2}
                                                                                                            """
 
   "edit distance" - new g1 {

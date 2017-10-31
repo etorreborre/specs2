@@ -135,9 +135,9 @@ case class SnippetParams[T](
 case class ScissorsCutter(cutMarker: String       = scissorsMarker,
                           cutMarkerFormat: String = scissorsMarkerFormat) extends (String => String) {
   def apply(text: String) = {
-    val splitted = text.split(cutMarkerFormat)
+    val split = text.split(cutMarkerFormat)
 
-    splitted.zipWithIndex.
+    split.zipWithIndex.
       collect { case (s, i) if i % 2 == 0 => s.removeStart("\n").removeEnd("\n") }.
       filter(_.trim.nonEmpty).mkString("\n")
   }

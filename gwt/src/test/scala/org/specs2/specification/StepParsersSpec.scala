@@ -10,7 +10,7 @@ class StepParsersSpec extends Spec with Grouped with TypedEqual { def is = s2"""
 
  Delimited parsers can be used to extract values from specifications
 
- The defaul delimiters are `{}`
+ The default delimiters are `{}`
    one value can be extracted with a function with one argument                       ${g1.e1}
    two values can be extracted with a function with two arguments                     ${g1.e2}
    a sequence of values can be extracted with a function taking a Seq of values       ${g1.e3}

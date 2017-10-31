@@ -82,7 +82,7 @@ trait HmsTimer[T <: HmsTimer[T]] {
   }
 
   /**
-   * this method can be overriden for testing
+   * this method can be overridden for testing
    */
   protected def getTime = new Date().getTime
 }

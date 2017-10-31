@@ -5,7 +5,7 @@ import text.Plural._
 import NumericMatchers._
 
 /**
-  * Matchers for Numerical values
+ * Matchers for Numerical values
  */
 trait NumericMatchers extends NumericBaseMatchers with NumericBeHaveMatchers {
   /** implicit definition to create delta for the beCloseTo matcher */

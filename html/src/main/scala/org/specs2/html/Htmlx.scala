@@ -154,9 +154,9 @@ trait Htmlx { outer =>
   /** @return the href urls in <a/> elements */
   def urls(ns: NodeSeq, filePath: FilePath = DirectoryPath.EMPTY.toFilePath): List[String] = {
     def decode(href: String) = {
-      val splitted = href.split("#").toSeq
-      val url    = filePath.dir / FilePath.unsafe(URLDecoder.decode(splitted(0), "UTF-8"))
-      val anchor = splitted.drop(1).lastOption.map(anchor => "#"+anchor).getOrElse("")
+      val split = href.split("#").toSeq
+      val url    = filePath.dir / FilePath.unsafe(URLDecoder.decode(split(0), "UTF-8"))
+      val anchor = split.drop(1).lastOption.map(anchor => "#"+anchor).getOrElse("")
       url.path + anchor
     }
     (ns \\ "a").flatMap(a => a.attribute("href").map(href => decode(href.mkString))).toList

@@ -35,7 +35,7 @@ trait Timed extends AroundEach {
     result.updateExpected("Execution time: "+timer.time)
   }
 
-  /** mesure the execution time of a piece of code */
+  /** measure the execution time of a piece of code */
   def withTimer[T](t: =>T): (T, SimpleTimer) = {
     val timer = (new SimpleTimer).start
     val result = t

@@ -26,7 +26,7 @@ trait FormsBuilder {
   implicit def fieldIsTextCell(t: Field[_]): FieldCell = new FieldCell(t)
   /** a Effect can be added on a Form row as a EffectCell */
   implicit def effectIsTextCell(t: Effect[_]): EffectCell = new EffectCell(t)
-  /** a Prop can be adde d on a Form row as a PropCell */
+  /** a Prop can be added on a Form row as a PropCell */
   implicit def propIsCell(t: Prop[_, _]): PropCell = new PropCell(t)
   /** a Form can be added on a Form row as a FormCell */
   implicit def formIsCell(t: =>Form): FormCell = new FormCell(t)
