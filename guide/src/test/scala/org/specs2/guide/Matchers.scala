@@ -240,7 +240,7 @@ $NowLearnTo
 
  - use ${"standard results" ~/ StandardResults} (`failure`, `success`, `skipped`, `todo`...) instead of matchers
  - add ${"descriptions" ~/ ExpectationDescription} to your expectations to create even better failure messages
- - use a different equality function or display other failure messages with the ${"Diffable typeclass" ~/ DiffableTypeclass}
+ - use a different equality function or display other failure messages with the ${("Diffable typeclass" ~ DiffableTypeclass).mute}
  - use ${"datatables" ~/ UseDatatables} to conveniently group several examples into one
  - use ${"ScalaCheck" ~/ UseScalaCheck} to generate and verify data for your examples
  - use ${"Mockito " ~/ UseMockito} to mock the interactions with another system

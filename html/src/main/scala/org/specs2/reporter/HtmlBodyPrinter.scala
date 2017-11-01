@@ -14,6 +14,7 @@ import form._
 import control._
 import ExecuteActions._
 import org.specs2.concurrent.ExecutionEnv
+import org.specs2.text.AnsiColors
 import origami._
 import org.specs2.time.SimpleTimer
 
@@ -54,7 +55,9 @@ trait HtmlBodyPrinter {
 
     fragment match {
       case t if Fragment.isText(t) =>
-        val text = t.description.show
+        // remove Ansi colors in case some of them are present in the text
+        val text = AnsiColors.removeColors(t.description.show)
+
         if (text.trim.nonEmpty) {
           if (pandoc)
             scala.xml.Unparsed(text)
