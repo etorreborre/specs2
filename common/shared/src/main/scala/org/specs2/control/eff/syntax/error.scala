@@ -26,7 +26,7 @@ trait error {
   implicit class ErrorOrOkOps[A](c: Error Either A) {
     def toErrorSimpleMessage: Option[String] = c.left.toOption.map(_.simpleMessage)
 
-    def toErrorFullMessage: Option[String] = c.left.toOption.map(_.simpleMessage)
+    def toErrorFullMessage: Option[String] = c.left.toOption.map(_.fullMessage)
   }
 
   implicit class ErrorOps[A](e: Error) {
