@@ -32,7 +32,7 @@ trait FileSystem extends FilePathReader {
   /** write a string to a file as UTF-8 */
   def writeFile(filePath: FilePath, content: String): Operation[Unit] =
     mkdirs(filePath) >>
-    Operations.protect { new PrintWriter(filePath.path) { try write(content) finally close }; () }
+    Operations.protect { new PrintWriter(filePath.path, "UTF-8") { try write(content) finally close }; () }
 
   /** execute an operation with a File, then delete it */
   def withEphemeralFile(path: FilePath)(operation: Operation[Unit]): Operation[Unit] =
