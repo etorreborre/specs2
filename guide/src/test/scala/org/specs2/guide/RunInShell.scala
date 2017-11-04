@@ -12,8 +12,8 @@ When you use a build tool you generally only need to specify the main dependenci
 
  Dependency                                                                             | Comment
  -------------------------------------------------------------------------------------- | ---------------------------
- `"org.scalaz" %% "scalaz-core" % "7.2.7"`                                              | mandatory
- `"org.scalaz" %% "scalaz-concurrent" % "7.2.7"`                                        | mandatory
+ `"org.scalaz" %% "scalaz-core" % "7.2.15"`                                             | if using specs2-scalaz
+ `"org.scalaz" %% "scalaz-concurrent" % "7.2.15"`                                       | if using specs2-scalaz
  `"com.chuusai" %% "shapeless" % "2.3.2"`                                               | if you use the GWT trait or case class diffs
  `"org.scalacheck" %% "scalacheck" % "1.13.4"`                                          | if using ScalaCheck
  `"org.mockito" % "mockito-core" % "1.9.5"`                                             | if using Mockito. Note: specs2.jar must be placed before mockito.jar on the classpath
