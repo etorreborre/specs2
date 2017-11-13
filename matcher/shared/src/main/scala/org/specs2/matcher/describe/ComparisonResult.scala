@@ -256,7 +256,7 @@ abstract class UnorderedCollectionDifferent[Element, Change](same:    Seq[Elemen
   }
 
   private def renderIdentical(indent: String): Option[String] =
-    same.toOption.map(_.map(renderElement(indent)).mkString(", "))
+    same.toOption.map(_.map(renderElement(indent)).mkString("", ",\n"+indent, ""))
 
   private def renderChanged(indent: String): Option[String] =
     changed.toOption.map(_.map(renderChange(indent)).mkString("", ",\n"+indent, ""))

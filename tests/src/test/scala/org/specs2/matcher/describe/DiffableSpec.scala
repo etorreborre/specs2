@@ -48,8 +48,8 @@ Compare result
     different map should show which elements were added         ${ Diffable.diff(Map.empty[String, String], Map("y" -> "z")) must_== MapDifference(Seq.empty, Seq.empty, added = Seq("y" -> "z"), Seq.empty)}
     different map should compose all changes                    $m1
 
-   Set
-   ===
+  Set
+  ===
     equal sets should return SetIdentical                         ${ Diffable.diff(Set("a", "b"), Set("a", "b")) must_== SetIdentical(Set("a", "b"))}
     different sets should show which elements were added/removed  ${ Diffable.diff(Set("a", "b"), Set("a", "c")) must_== SetDifference(Seq("a"),Seq("c"),Seq("b"))}
     different sets should show which elements were added          ${ Diffable.diff(Set("a", "b"), Set("a", "b", "c")) must_== SetDifference(Seq("a","b"),Seq("c"),Seq.empty)}
@@ -118,9 +118,13 @@ Compare result
 
   Allow using custom Diffable for case class fields $ccFieldDiffable
 
+  $test
 
-    We need to support different type compare
 """
+
+  def test = {
+    Set(1, 2, 3) ==== Set(2, 3, 4)
+  }
 
 
   sealed case class ExampleFailure(message: String, stacktrace: List[StackTraceElement] = Nil) extends RuntimeException(message) {

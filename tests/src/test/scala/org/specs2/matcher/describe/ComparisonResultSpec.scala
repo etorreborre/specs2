@@ -150,10 +150,10 @@ class ComparisonResultSpec extends Spec { def is = s2"""
 
 
   def set1 = { SetIdentical(Set("a", "b")).render must_== "Set('a', 'b')" }
-  def set2 = { SetDifference(same = Seq("a", "b"), Seq.empty, Seq.empty).render must_== "Set('a', 'b')" }
+  def set2 = { SetDifference(same = Seq("a", "b"), Seq.empty, Seq.empty).render must_== "Set('a',\n    'b')" }
   def set3 = { SetDifference(Seq.empty, added = Seq("c", "d"), Seq.empty).render must_== "Set(added: 'c',\n    'd')" }
   def set4 = { SetDifference(Seq.empty, Seq.empty, removed = Seq("e") ).render must_== "Set(removed: 'e')" }
-  def set5 = { SetDifference(same = Seq("a", "b"), added = Seq("c", "d"), removed = Seq("e")).render must_== "Set('a', 'b',\n    added: 'c',\n    'd',\n    removed: 'e')" }
+  def set5 = { SetDifference(same = Seq("a", "b"), added = Seq("c", "d"), removed = Seq("e")).render must_== "Set('a',\n    'b',\n    added: 'c',\n    'd',\n    removed: 'e')" }
 
 
   def seq1 = { SeqIdentical(Seq("a", "b")).render must_== "List('a', 'b')" }
