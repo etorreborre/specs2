@@ -24,32 +24,14 @@ trait error {
   }
 
   implicit class ErrorOrOkOps[A](c: Error Either A) {
-    def toErrorSimpleMessage: Option[String] =
-      c match {
-        case Left(e) => Some(e.simpleMessage)
-        case _      => None
-      }
+    def toErrorSimpleMessage: Option[String] = c.left.toOption.map(_.simpleMessage)
 
-    def toErrorFullMessage: Option[String] =
-      c match {
-        case Left(e) => Some(e.fullMessage)
-        case _      => None
-      }
+    def toErrorFullMessage: Option[String] = c.left.toOption.map(_.fullMessage)
   }
 
   implicit class ErrorOps[A](e: Error) {
-    def simpleMessage: String =
-      e match {
-        case Left(t) => render(t)
-        case Right(m) => m
-      }
+    def simpleMessage: String = e.left.map(render).merge
 
-    def fullMessage: String =
-      e match {
-        case Left(t) => renderWithStack(t)
-        case Right(m) => m
-      }
+    def fullMessage: String = e.left.map(renderWithStack).merge
   }
-
-
 }

@@ -20,7 +20,8 @@ trait AnsiColors { outer =>
     
   lazy val reset   = AnsiColor("\u001b[0m")
     
-  lazy val all = Seq(black, red, green, yellow, blue, magenta, cyan, white, reset)
+  lazy val allColors = Seq(black, red, green, yellow, blue, magenta, cyan, white)
+  lazy val all = allColors :+ reset
 
   /** @return a string with no color codes */
   def removeColors(s: String, doIt: Boolean = true): String = {
