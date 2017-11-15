@@ -25,7 +25,7 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
 
    A FailureException makes a Failure
    ${ check(failureExceptionProp) must beFailing(withMessage("failure")) }
-   ${ check(propFailureExceptionProp) must beFailing(withMessage("failure")) }
+   ${ check(propFailureExceptionProp) must beFailing(withMessage("Falsified after 1 passed tests.> ARG_0: true> failure")) }
 
    An AssertionError makes a Failure
    ${ check(assertionErrorProp) must beFailing(withMessage("assertion failed")) }
@@ -95,10 +95,21 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
 
   def exceptionWithCause(msg: String = "boom") = new java.lang.IllegalArgumentException(msg, new java.lang.Exception("cause"))
   def exceptionProp(msg: String = "boom") = forAll((b: Boolean) => {throw exceptionWithCause(msg); true})
-  def exceptionPropOnConversion: Prop = forAll { (b: Boolean) => {throw execute.FailureException(failure); Prop.passed} }
+  def exceptionPropOnConversion: Prop = forAll((b: Boolean) => {throw execute.FailureException(failure); Prop.passed})
 
   def failureExceptionProp = forAll((b: Boolean) => {throw execute.FailureException(failure); true})
-  def propFailureExceptionProp = prop((b: Boolean) => {throw new execute.FailureException(failure); true})
+
+  // only throw on the second try to make sure the reporting is showing the right tests number
+  // this also reproduces what happens when ThrownExceptions is used with ScalaCheck
+  var doneOnce = false
+  def propFailureExceptionProp =
+    scalaCheckPropertyAsResult.asResult {
+      prop { b: Boolean =>
+        if (!doneOnce) doneOnce = true
+        else            throw new execute.FailureException(failure)
+        true
+      }.setGen(Gen.const(true))
+    }
 
   def assertionErrorProp = forAll((b: Boolean) => {assert(1 == 2, "1 is not equal to 2"); true})
 
