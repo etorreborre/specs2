@@ -45,7 +45,7 @@ case class Fragment(description: Description, execution: Execution, location: Lo
   def setTimeout(timeout: FiniteDuration) = updateExecution(_.setTimeout(timeout))
 
   /** skip this fragment */
-  def skip              = updateExecution(_.skip)
+  def skip              = updateExecution(_.skip.startTimer)
   def updateExecution(f: Execution => Execution) = copy(execution = f(execution))
 
   /** update the description */

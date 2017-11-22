@@ -49,7 +49,7 @@ case class Execution(run:            Option[Env => Future[() => Result]]     = N
   lazy val executedResult: TimedFuture[ExecutedResult] =
     executing match {
       case None =>
-        TimedFuture.successful(ExecutedResult(Skipped(), timer))
+        TimedFuture.successful(ExecutedResult(Skipped(), timer.stop))
 
       case Some(Left(t)) =>
         TimedFuture.failed(t)
@@ -65,8 +65,12 @@ case class Execution(run:            Option[Env => Future[() => Result]]     = N
           case Some(to) => Skipped(s"timed out after $to", t.getMessage)
           case None => Error(t)
         }
-      case Left(t) => Error(t)
-      case Right(ExecutedResult(r, _)) => r
+
+      case Left(t) =>
+        Error(t)
+
+      case Right(ExecutedResult(r, _)) =>
+        r
     }
 
   private def futureResult(env: Env): Option[Future[Result]] =
@@ -90,6 +94,7 @@ case class Execution(run:            Option[Env => Future[() => Result]]     = N
 
   def makeGlobal: Execution =
     makeGlobal(when = true)
+
   def makeGlobal(when: Boolean): Execution =
     copy(isolable = !when)
 
@@ -172,7 +177,7 @@ case class Execution(run:            Option[Env => Future[() => Result]]     = N
             }
       }
     }
-    copy(executing = Some(Right(started.runNow(env.executorServices))))
+    copy(executing = Some(Right(started.runNow(env.executorServices)))).startTimer
   }
 
   def setErrorAsFatal: Execution =
