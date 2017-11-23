@@ -110,7 +110,7 @@ object DirectoryPath {
   def unsafe(s: String): DirectoryPath = {
     val withoutScheme = removeScheme(s)
     val isAbsolute = withoutScheme.startsWith(File.separator)
-    DirectoryPath(withoutScheme.split(File.separator).filter(_.nonEmpty).map(FileName.unsafe).toVector, isAbsolute)
+    DirectoryPath(withoutScheme.split(s"\\Q${File.separator}\\E").filter(_.nonEmpty).map(FileName.unsafe).toVector, isAbsolute)
   }
 
   def unsafe(f: File): DirectoryPath = unsafe(f.getPath)
