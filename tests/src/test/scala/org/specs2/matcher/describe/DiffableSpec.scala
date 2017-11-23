@@ -118,14 +118,7 @@ Compare result
 
   Allow using custom Diffable for case class fields $ccFieldDiffable
 
-  $test
-
 """
-
-  def test = {
-    Set(1, 2, 3) ==== Set(2, 3, 4)
-  }
-
 
   sealed case class ExampleFailure(message: String, stacktrace: List[StackTraceElement] = Nil) extends RuntimeException(message) {
     override def getStackTrace = stacktrace.toArray

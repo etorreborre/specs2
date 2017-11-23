@@ -43,7 +43,7 @@ case class HtmlOptions(
 
 object HtmlOptions {
 
-  val outDir             = DirectoryPath.unsafe(new File("target/specs2-reports").getAbsoluteFile)
+  val outDir             = DirectoryPath.unsafe(new File("target", "specs2-reports").getAbsoluteFile)
   val baseDir            = DirectoryPath.unsafe(".")
   val variables          = Map[String, String]()
   val noStats            = false
