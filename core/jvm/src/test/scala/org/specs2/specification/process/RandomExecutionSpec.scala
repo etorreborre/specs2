@@ -7,8 +7,6 @@ import specification.core.{Env, Fragments, OwnEnv}
 
 import scala.collection.mutable.ListBuffer
 import matcher._
-import TraversableMatchers._
-import ExpectationsDescription._
 import org.specs2.execute.{AsResult, Result}
 
 import fp.syntax._
