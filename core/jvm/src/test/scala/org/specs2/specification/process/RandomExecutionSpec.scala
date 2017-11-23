@@ -14,7 +14,7 @@ import org.specs2.execute.{AsResult, Result}
 import fp.syntax._
 import control.ExecuteActions._
 
-class RandomExecutionSpec(val env: Env) extends script.Spec with Groups with ThrownExpectations with ExampleDsl with OwnEnv { def is = s2"""
+class RandomExecutionSpec(val env: Env) extends script.Specification with Groups with ThrownExpectations with ExampleDsl with OwnEnv { def is = section("travis") ^ s2"""
 
  It is possible to force the order of execution of a specification so that
    + the execution is sequential but with a random order on the examples

@@ -22,15 +22,7 @@ before_cache:
 
 script:
 
-  - ./.travis-test-only.sh coreJVM *.c*
-  - ./.travis-test-only.sh coreJVM *.e*
-  - ./.travis-test-only.sh coreJVM *.i*
-  - ./.travis-test-only.sh coreJVM *.m*
-  - ./.travis-test-only.sh coreJVM *.r*
-  - ./.travis-test-only.sh coreJVM *.s*
-  - ./.travis-test-only.sh coreJVM *.t*
-  - ./.travis-test-only.sh coreJVM *.x*
-
+  - ./.travis-test.sh coreJVM
   - ./.travis-test.sh tests
 
   - ./.travis-test.sh examplesJVM
