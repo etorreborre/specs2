@@ -1,0 +1,19 @@
+Maintenance version
+
+## Improvements
+
+ * **core** better display of failure messages for sets
+
+## Fixes
+
+ * **core** fixed the reporting of times when using `sequential` or `skipAll`
+ * **scalacheck** fixed the reporting of scalacheck failures when using `ThrownExpectations` a duplicate "Failed after" message was reported on top of the actual message
+ * **html** remove ansi colors in `Text` when reported to html
+ * **guide** scalaz dependency is not mandatory since version 4.0.0 (thanks to kenji yoshida)
+ * **core** fixed `ErrorOrOkOps.toErrorFullMessage` (thanks to Shunsuke Otani)
+ * **html** specify charset when writing files (Andreas Flierl)
+ * **core** simplify expressions by using `Either.left` (thanks to Shunsuke Otani)
+ * **core** avoid unnecessary conversions (thanks to João Costa)
+ * **core** fix multiple typos (thanks to João Costa)
+ * **website** fixed the link for the release notes
+ * **website** fixed the integration spec on the website
