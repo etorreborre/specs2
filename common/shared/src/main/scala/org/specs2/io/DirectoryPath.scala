@@ -30,10 +30,10 @@ case class DirectoryPath(dirs: Vector[FileName], absolute: Boolean) {
     }
 
   /** @return the path for this file as a / separated string */
-  def path: String = (if (absolute) "/" else "") + dirs.map(_.name).toList.mkString("/")
+  def path: String = (if (absolute) File.separator else "") + dirs.map(_.name).toList.mkString(File.separator)
 
   /** @return the path for this file as a / separated string, with a final / */
-  def dirPath: String = if (isRoot) path else path+"/"
+  def dirPath: String = if (isRoot) path else path+File.separator
 
   /** @return a File for this path */
   def toFile: File = new File(path)
@@ -109,8 +109,8 @@ object DirectoryPath {
 
   def unsafe(s: String): DirectoryPath = {
     val withoutScheme = removeScheme(s)
-    val isAbsolute = withoutScheme.startsWith("/")
-    DirectoryPath(withoutScheme.split("/").filter(_.nonEmpty).map(FileName.unsafe).toVector, isAbsolute)
+    val isAbsolute = withoutScheme.startsWith(File.separator)
+    DirectoryPath(withoutScheme.split(s"\\Q${File.separator}\\E").filter(_.nonEmpty).map(FileName.unsafe).toVector, isAbsolute)
   }
 
   def unsafe(f: File): DirectoryPath = unsafe(f.getPath)
@@ -133,7 +133,7 @@ case class FilePath(dir: DirectoryPath, name: FileName) {
   def root: DirectoryPath = dir.root
 
   /** @return the path for this file as a / separated string */
-  def path: String = if (dir.isRoot) name.name else dir.path+"/"+name.name
+  def path: String = if (dir.isRoot) name.name else dir.path+File.separator+name.name
 
   /** @return a File for this path */
   def toFile: File = new File(path)

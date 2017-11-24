@@ -39,6 +39,13 @@ class ExecutorSpec(val env: Env) extends script.Specification with Groups with T
   with a timeout $timeout
   with examples using an execution context $userEnv
 
+ Time
+ ====
+
+  + the timer must be started for each execution
+  + the timer must be started for each sequential execution
+  + the timer must be started for each skipped execution
+
 """
 
   import factory._
@@ -183,6 +190,35 @@ class ExecutorSpec(val env: Env) extends script.Specification with Groups with T
       }
   }
 
+  "timer" - new group with results {
+
+    def tf = ownEnv.arguments.execute.timeFactor
+
+    def fragments = Fragments(
+      example("slow", slow(tf)),
+      example("medium", medium(tf)),
+      example("fast", fast(tf)))
+
+    eg := {
+      val times = executions(fragments, ownEnv).map(_.timer.stop.time)
+
+      times must containMatch("\\d\\d ms")
+    }
+
+    eg := {
+      val times = executions(fragments, ownEnv.setArguments(Arguments("sequential"))).map(_.timer.stop.time)
+
+      times must containMatch("\\d\\d ms")
+    }
+
+    eg := {
+      val times = executions(fragments, ownEnv.setArguments(Arguments("skipAll"))).map(_.timer.stop.time)
+
+      times must containMatch("\\d\\d ms")
+    }
+
+  }
+
   def timeout = {
     val timeFactor = ownEnv.arguments.execute.timeFactor
 
@@ -207,11 +243,15 @@ class ExecutorSpec(val env: Env) extends script.Specification with Groups with T
     finally e.shutdown
   }
 
-  val factory = fragmentFactory
+  lazy val factory = fragmentFactory
 
   def execute(fragments: Fragments, env: Env): List[Result] =
     DefaultExecutor.execute(env)(fragments.contents).runList.
       runOption(env.executionEnv).toList.flatten.traverse(_.executionResult).run(env.executionEnv)
+
+  def executions(fragments: Fragments, env: Env): List[Execution] =
+    DefaultExecutor.execute(env)(fragments.contents).runList.
+      runOption(env.executionEnv).toList.flatten.map(_.execution)
 
   trait results {
     val messages = new ListBuffer[String]

@@ -68,7 +68,11 @@ trait AsResultPropLowImplicits extends ScalaCheckPropertyCheck with ScalaCheckPa
         check(p.prop, p.parameters, p.prettyFreqMap)
       } catch {
         // this is necessary in case of thrown expectations inside the property
-        case t: Throwable => AsResultProp.propAsResult(defaultParameters, defaultFreqMapPretty).asResult(Prop.exception(t))
+        case FailureException(f) =>
+          f
+
+        case t: Throwable =>
+          AsResultProp.propAsResult(defaultParameters, defaultFreqMapPretty).asResult(Prop.exception(t))
       }
     }
   }
