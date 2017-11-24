@@ -24,8 +24,8 @@ package object io {
    * create a file name from a String
    */
   def fileNameFromString(s: String): Option[FileName] =
-    if (s.contains(File.separator)) None
-    else                            Some(FileName.unsafe(s))
+    if (s.contains(File.separator) || isWindows && s.contains("/")) None
+    else Some(FileName.unsafe(s))
 
   def createFileName(c: Context)(s: c.Expr[String]): c.Expr[FileName] = {
     import c.universe._
@@ -34,6 +34,8 @@ package object io {
       case _ => c.abort(c.enclosingPosition, s"Not a literal ${showRaw(s)}")
     }
   }
+
+  val isWindows = sys.props("os.name").startsWith("Windows")
 
   private def createFileNameFromString(c: Context)(s: String): c.Expr[FileName] = {
     import c.universe._
