@@ -329,7 +329,7 @@ lazy val compilationSettings = Seq(
         "-Ywarn-value-discard",
         "-deprecation:false", "-Xcheckinit", "-unchecked", "-feature", "-language:_"),
   scalacOptions += "-Ypartial-unification",
-  addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.4"),
+  addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.5"),
   scalacOptions in Test               ++= Seq("-Yrangepos"),
   scalacOptions in (Compile, doc)     ++= Seq("-feature", "-language:_"),
   scalacOptions in (Compile, console) := Seq("-Yrangepos", "-feature", "-language:_"),
