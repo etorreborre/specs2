@@ -11,7 +11,8 @@ Maintenance version
  * **html** remove ansi colors in `Text` when reported to html
  * **guide** scalaz dependency is not mandatory since version 4.0.0 (thanks to kenji yoshida)
  * **core** fixed `ErrorOrOkOps.toErrorFullMessage` (thanks to Shunsuke Otani)
- * **html** specify charset when writing files (Andreas Flierl)
+ * **html** specify charset when writing files (thanks to Andreas Flierl)
+ * **html** handle Windows file paths like Unix paths (thanks to Andreas Flierl)
  * **core** simplify expressions by using `Either.left` (thanks to Shunsuke Otani)
  * **core** avoid unnecessary conversions (thanks to João Costa)
  * **core** fix multiple typos (thanks to João Costa)
