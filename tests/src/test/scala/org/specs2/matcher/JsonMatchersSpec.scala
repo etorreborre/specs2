@@ -84,7 +84,10 @@ class JsonMatchersSpec extends Specification with JsonMatchers { def is = s2"""
 
  String, Int, Boolean, Double and Traversable matchers can be used with the andHave method $andHave
 
-                                                                                                                        """
+ Matchers must be resilient when there are null values
+ ${ """{ "b" : { "a" : 2, "c" : null } }""" must /("b" -> /("a" -> 2)) }
+
+"""
 
  def andHave = {
    val json =
