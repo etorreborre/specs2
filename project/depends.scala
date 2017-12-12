@@ -28,7 +28,7 @@ object depends {
 
   def scalaParser(scalaVersion: String) =
     if (scalaMinorVersionAtLeast(scalaVersion, 11))
-      Seq("org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.6")
+      Seq("org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.5")
     else
       Seq()
 
