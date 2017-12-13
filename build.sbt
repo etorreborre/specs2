@@ -115,14 +115,22 @@ lazy val common = crossProject.in(file("common")).
     libraryDependencies ++=
       depends.reflect(scalaOrganization.value, scalaVersion.value) ++
       depends.paradise(scalaVersion.value) ++
-      depends.scalaXML(scalaVersion.value) ++
-      Seq("org.scalacheck" %%% "scalacheck" % "1.13.5" % "test",
-          "org.scala-lang.modules" %%% "scala-parser-combinators" % "1.0.5"),
+      depends.scalaXML(scalaVersion.value),
     moduleSettings("common")++
     Seq(name := "specs2-common")
 ).
-  jsSettings(depends.jsTest, moduleJsSettings("common")).
-  jvmSettings(moduleJvmSettings("common"))
+  jsSettings(depends.jsTest, moduleJsSettings("common"),
+    libraryDependencies ++= Seq(
+      "org.scalacheck" %%% "scalacheck" % "1.13.5" % "test",
+      "org.scala-lang.modules" %%% "scala-parser-combinators" % "1.0.5"
+    )
+  ).
+  jvmSettings(moduleJvmSettings("common"),
+    libraryDependencies ++= Seq(
+      "org.scalacheck" %% "scalacheck" % "1.13.5" % "test",
+      "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.5"
+    )
+  )
 
 lazy val commonJs  = common.js.dependsOn(fpJs)
 lazy val commonJvm = common.jvm.dependsOn(fpJvm)
@@ -177,7 +185,7 @@ lazy val guide = project.in(file("guide")).
 
 lazy val gwt = project.in(file("gwt")).
   settings(Seq(
-    libraryDependencies += "com.chuusai" %%% "shapeless" % shapelessVersion) ++
+    libraryDependencies += "com.chuusai" %% "shapeless" % shapelessVersion) ++
     moduleSettings("gwt") ++
     Seq(name := "specs2-gwt"):_*).
   settings(depends.jvmTest, moduleJvmSettings("gwt")).
@@ -221,10 +229,12 @@ lazy val matcherJvm = matcher.jvm.dependsOn(commonJvm)
 lazy val matcherExtra = crossProject.in(file("matcher-extra")).
   settings(moduleSettings("matcherextra") ++ Seq(
     name := "specs2-matcher-extra",
-    libraryDependencies ++= depends.paradise(scalaVersion.value) ++
-      Seq("org.scala-lang.modules" %%% "scala-parser-combinators" % "1.0.5")
+    libraryDependencies ++= depends.paradise(scalaVersion.value)
   ):_*).
-  jsSettings(depends.jsTest, moduleJsSettings("matcher-extra")).
+  jsSettings(depends.jsTest, moduleJsSettings("matcher-extra"),
+    libraryDependencies ++=
+      Seq("org.scala-lang.modules" %%% "scala-parser-combinators" % "1.0.5")
+  ).
   jvmSettings(depends.jvmTest, moduleJvmSettings("matcher-extra"))
 
 lazy val matcherExtraJs  = matcherExtra.js.dependsOn(analysisJs, matcherJs, coreJs % "test->test")
@@ -241,11 +251,14 @@ lazy val shapeless = crossProject.in(file("shapeless")).
   settings(moduleSettings("shapeless") ++
     Seq(name := "specs2-shapeless",
       libraryDependencies ++=
-        depends.paradise(scalaVersion.value) ++
-        Seq("com.chuusai" %%% "shapeless" % shapelessVersion)
+        depends.paradise(scalaVersion.value)
     ):_*).
-  jsSettings(depends.jsTest, moduleJsSettings("shapeless")).
-  jvmSettings(depends.jvmTest, moduleJvmSettings("shapeless"))
+  jsSettings(depends.jsTest, moduleJsSettings("shapeless"), libraryDependencies +=
+    "com.chuusai" %%% "shapeless" % shapelessVersion
+  ).
+  jvmSettings(depends.jvmTest, moduleJvmSettings("shapeless"), libraryDependencies +=
+    "com.chuusai" %% "shapeless" % shapelessVersion
+  )
 
 lazy val shapelessJs = shapeless.js.dependsOn(matcherJs, matcherExtraJs % "test->test")
 lazy val shapelessJvm = shapeless.jvm.dependsOn(matcherJvm, matcherExtraJvm % "test->test")
@@ -277,11 +290,14 @@ lazy val mockJvm = mock.jvm.dependsOn(coreJvm)
 
 lazy val scalacheck = crossProject.in(file("scalacheck")).
   settings(
-    Seq(libraryDependencies += "org.scalacheck" %%% "scalacheck" % "1.13.5") ++
     moduleSettings("scalacheck") ++
     Seq(name := "specs2-scalacheck"):_*).
-  jsSettings(depends.jsTest, moduleJsSettings("scalacheck")).
-  jvmSettings(depends.jvmTest, moduleJvmSettings("scalacheck"))
+  jsSettings(depends.jsTest, moduleJsSettings("scalacheck"), libraryDependencies +=
+    "org.scalacheck" %%% "scalacheck" % "1.13.5"
+  ).
+  jvmSettings(depends.jvmTest, moduleJvmSettings("scalacheck"), libraryDependencies +=
+    "org.scalacheck" %% "scalacheck" % "1.13.5"
+  )
 
 lazy val scalacheckJs  = scalacheck.js.dependsOn(coreJs)
 lazy val scalacheckJvm = scalacheck.jvm.dependsOn(coreJvm)
