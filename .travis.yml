@@ -38,8 +38,8 @@ script:
   - ./.travis-test.sh markdown
   - ./.travis-test.sh tests
 
-  # - ./.travis-test.sh coreJS
-  # - ./.travis-test.sh examplesJS
+  - ./.travis-test.sh coreJS
+  - ./.travis-test.sh examplesJS
 
   - find $HOME/.sbt -name "*.lock" | xargs rm
   - find $HOME/.ivy2 -name "ivydata-*.properties" | xargs rm

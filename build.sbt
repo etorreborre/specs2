@@ -117,7 +117,7 @@ lazy val common = crossProject.in(file("common")).
       depends.paradise(scalaVersion.value) ++
       depends.scalaXML(scalaVersion.value) ++
       Seq("org.scalacheck" %%% "scalacheck" % "1.13.5" % "test",
-          "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.6"),
+          "org.scala-lang.modules" %%% "scala-parser-combinators" % "1.0.5"),
     moduleSettings("common")++
     Seq(name := "specs2-common")
 ).
@@ -222,7 +222,7 @@ lazy val matcherExtra = crossProject.in(file("matcher-extra")).
   settings(moduleSettings("matcherextra") ++ Seq(
     name := "specs2-matcher-extra",
     libraryDependencies ++= depends.paradise(scalaVersion.value) ++
-      Seq("org.scala-lang.modules" %%% "scala-parser-combinators" % "1.0.6")
+      Seq("org.scala-lang.modules" %%% "scala-parser-combinators" % "1.0.5")
   ):_*).
   jsSettings(depends.jsTest, moduleJsSettings("matcher-extra")).
   jvmSettings(depends.jvmTest, moduleJvmSettings("matcher-extra"))
