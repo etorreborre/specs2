@@ -77,7 +77,7 @@ trait DefaultExecutor extends Executor {
       }
       else {
         if (fragment.execution.mustJoin) {
-          val started = previous.map(_.startExecution(env))
+          val started = previous.map(_.startExecutionAfter(previousStep)(env))
           val step =
             fragment.
               updateExecution(_.setErrorAsFatal).

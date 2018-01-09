@@ -34,6 +34,7 @@ class ExecutorSpec(val env: Env) extends script.Specification with Groups with T
   + sequentially
   + with in-between steps
   + with a fatal execution error
+  + with a fatal execution error in a step
   + stopOnFail and sequential
 
   with a timeout $timeout
@@ -180,6 +181,18 @@ class ExecutorSpec(val env: Env) extends script.Specification with Groups with T
     eg := {
 
       val fragments = Fragments(
+        step(throw new Exception("fatal")),
+        example("e1", ok("ok")),
+        step(throw new Exception("fatal")))
+
+      val results = execute(fragments, ownEnv).map(_.status)
+
+      results must contain("!", "o", "!")
+    }
+
+    eg := {
+
+      val fragments = Fragments(
         example("e1", ko("ko1")),
         example("e2", ok("ok2")))
 
@@ -202,19 +215,19 @@ class ExecutorSpec(val env: Env) extends script.Specification with Groups with T
     eg := {
       val times = executions(fragments, ownEnv).map(_.timer.stop.time)
 
-      times must containMatch("\\d\\d ms")
+      times must containMatch("(\\d)+ ms")
     }
 
     eg := {
       val times = executions(fragments, ownEnv.setArguments(Arguments("sequential"))).map(_.timer.stop.time)
 
-      times must containMatch("\\d\\d ms")
+      times must containMatch("(\\d)+ ms")
     }
 
     eg := {
       val times = executions(fragments, ownEnv.setArguments(Arguments("skipAll"))).map(_.timer.stop.time)
 
-      times must containMatch("\\d\\d ms")
+      times must containMatch("(\\d)+ ms")
     }
 
   }
