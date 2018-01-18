@@ -99,7 +99,8 @@ s2"""
            ("hello" must startWith("hell"))
 }}
 
-This is a bit tedious and not very pleasing to read so you can see why this mode encourages one expectation per example only! If you want to declare several expectations per example, you can mix-in the `org.specs2.execute.ThrownExpectations` trait to the specification.
+This is a bit tedious and not very pleasing to read so you can see why this mode encourages one expectation per example only!
+If you want to declare several expectations per example, you can mix-in the `org.specs2.matcher.ThrownExpectations` trait to the specification.
 
 #### Thrown expectations
 
