@@ -1120,7 +1120,7 @@ s2&quot;&quot;&quot;
 &quot;&quot;&quot;
   def e1 = (&quot;hello&quot; must have size (10000)) and
            (&quot;hello&quot; must startWith(&quot;hell&quot;))</code></pre>
-<p>This is a bit tedious and not very pleasing to read so you can see why this mode encourages one expectation per example only! If you want to declare several expectations per example, you can mix-in the <code class="prettyprint">org.specs2.execute.ThrownExpectations</code> trait to the specification.</p>
+<p>This is a bit tedious and not very pleasing to read so you can see why this mode encourages one expectation per example only! If you want to declare several expectations per example, you can mix-in the <code class="prettyprint">org.specs2.matcher.ThrownExpectations</code> trait to the specification.</p>
 <h4 id="thrown-expectations">Thrown expectations</h4>
 <p>With a unit specification you get “thrown expectations” by default. When an expectation fails, it throws an exception and the rest of the example is not executed:</p>
 <pre><code class="prettyprint">class MySpecification extends org.specs2.mutable.Specification {
