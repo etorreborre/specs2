@@ -61,7 +61,7 @@ case class Env(
     arguments.commandLine
 
   def defaultInstances =
-    List(arguments.commandLine, executionEnv, executionContext, arguments, this)
+    List[AnyRef](arguments.commandLine, executionEnv, executionContext, arguments, this)
 
   def setTimeout(duration: FiniteDuration): Env =
     copy(executionParameters = executionParameters.setTimeout(duration))

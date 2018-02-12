@@ -31,9 +31,9 @@ class StackIsolatedSpec extends Specification { def is = isolated ^ s2"""
                                                                       """
 
   /** stacks creation */
-  def stackIsEmpty  = step(stack = emptyStack)
-  def stackIsNormal = step(stack = normalStack)
-  def stackIsFull   = step(stack = fullStack)
+  def stackIsEmpty  = step { stack = emptyStack }
+  def stackIsNormal = step { stack = normalStack }
+  def stackIsFull   = step { stack = fullStack }
 
   def emptyStack  = SizedStack(maxCapacity = 10, size = 0)
   def normalStack = SizedStack(maxCapacity = 10, size = 2)

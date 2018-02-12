@@ -27,10 +27,10 @@ lazy val specs2 = project.in(file(".")).
 lazy val specs2Settings = Seq(
   organization := "org.specs2",
   specs2Version in GlobalScope := version.value,
-  scalazVersion in GlobalScope := "7.2.15",
+  scalazVersion in GlobalScope := "7.2.19",
   specs2ShellPrompt,
   scalaVersion := "2.12.3",
-  crossScalaVersions := Seq(scalaVersion.value, "2.11.11", "2.13.0-M2"))
+  crossScalaVersions := Seq(scalaVersion.value, "2.11.11", "2.13.0-M3"))
 
 lazy val versionSettings =
   Seq(
@@ -80,7 +80,7 @@ lazy val commonJsSettings = Seq(
 
 lazy val specs2Version = settingKey[String]("defines the current specs2 version")
 lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
-lazy val shapelessVersion = "2.3.2"
+lazy val shapelessVersion = "2.3.3"
 
 def moduleSettings(name: String) =
   coreDefaultSettings  ++
@@ -124,13 +124,13 @@ lazy val common = crossProject(JSPlatform, JVMPlatform).in(file("common")).
   jsSettings(depends.jsTest, moduleJsSettings("common"),
     libraryDependencies ++= Seq(
       "org.scalacheck" %%% "scalacheck" % "1.13.5" % "test",
-      "org.scala-lang.modules" %%% "scala-parser-combinators" % "1.0.5"
+      "org.scala-lang.modules" %%% "scala-parser-combinators" % "1.1.0"
     )
   ).
   jvmSettings(moduleJvmSettings("common"),
     libraryDependencies ++= Seq(
       "org.scalacheck" %% "scalacheck" % "1.13.5" % "test",
-      "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.5"
+      "org.scala-lang.modules" %% "scala-parser-combinators" % "1.1.0"
     )
   )
 
@@ -347,7 +347,7 @@ lazy val compilationSettings = Seq(
         "-Ywarn-value-discard",
         "-deprecation:false", "-Xcheckinit", "-unchecked", "-feature", "-language:_"),
   scalacOptions += "-Ypartial-unification",
-  addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.5"),
+  addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.6"),
   scalacOptions in Test               ++= Seq("-Yrangepos"),
   scalacOptions in (Compile, doc)     ++= Seq("-feature", "-language:_"),
   scalacOptions in (Compile, console) := Seq("-Yrangepos", "-feature", "-language:_"),

@@ -70,10 +70,6 @@ trait MemberInLower4 extends MemberInLower5 {
 }
 
 trait MemberInLower5 {
-  implicit def MemberInAppendAnyL[T[_], R]: MemberIn[T, FxAppend[Fx1[T], R]] = new MemberIn[T, FxAppend[Fx1[T], R]] {
-    def inject[V](effect: T[V]): Union[FxAppend[Fx1[T], R], V] =
-      UnionAppendL(Union1(effect))
-  }
 
   implicit def MemberInAppendAnyR[T[_], L, R](implicit m: MemberIn[T, R]): MemberIn[T, FxAppend[L, R]] = new MemberIn[T, FxAppend[L, R]] {
     def inject[V](effect: T[V]): Union[FxAppend[L, R], V] =
@@ -198,16 +194,6 @@ trait MemberInOutLower4 extends MemberInOutLower5 {
 }
 
 trait MemberInOutLower5 {
-  implicit def MemberInOutAppendAnyL[T[_], R]: MemberInOut[T, FxAppend[Fx1[T], R]] = new MemberInOut[T, FxAppend[Fx1[T], R]] {
-    def inject[V](effect: T[V]): Union[FxAppend[Fx1[T], R], V] =
-      UnionAppendL(Union1(effect))
-
-    def extract[V](union: Union[FxAppend[Fx1[T], R], V]): Option[T[V]] =
-      union match {
-        case UnionAppendL(Union1(e)) => Option(e)
-        case _                       => None
-      }
-  }
 
   implicit def MemberInOutAppendAnyR[T[_], L, R](implicit m: MemberInOut[T, R]): MemberInOut[T, FxAppend[L, R]] = new MemberInOut[T, FxAppend[L, R]] {
     def inject[V](effect: T[V]): Union[FxAppend[L, R], V] =

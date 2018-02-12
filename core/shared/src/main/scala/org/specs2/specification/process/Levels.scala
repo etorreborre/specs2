@@ -6,7 +6,6 @@ import org.specs2.fp._
 import Tree._
 import data.Trees._
 import specification.create._
-import DefaultFragmentFactory._
 import specification.core._
 
 import scala.math._

@@ -27,7 +27,7 @@ object EnvDefault {
     )
 
   def defaultInstances(env: Env) =
-    List(
+    List[AnyRef](
       env.arguments.commandLine,
       env.executionEnv,
       env.executionContext,

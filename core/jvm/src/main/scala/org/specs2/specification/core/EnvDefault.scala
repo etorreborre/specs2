@@ -27,7 +27,7 @@ object EnvDefault {
       classLoading        = new ClassLoading {})
 
   def defaultInstances(env: Env) =
-    List(env.arguments.commandLine,
+    List[AnyRef](env.arguments.commandLine,
          env.executionEnv,
          env.executionEnv.executorService,
          env.executionContext,
