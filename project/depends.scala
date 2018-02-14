@@ -1,6 +1,6 @@
 import sbt._
 import Keys._
-import org.scalajs.sbtplugin.ScalaJSPlugin.AutoImport._
+import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
 
 object depends {
 
@@ -26,11 +26,12 @@ object depends {
     Seq(libraryDependencies ++= Seq("org.scala-js" %% "scalajs-test-interface" % scalaJSVersion),
         scalaJSStage in Test := FastOptStage)
 
-  def scalaParser(scalaVersion: String) =
-    if (scalaMinorVersionAtLeast(scalaVersion, 11))
-      Seq("org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.5")
+  def scalaParser = Def.setting {
+    if (scalaMinorVersionAtLeast(scalaVersion.value, 11))
+      Seq("org.scala-lang.modules" %%% "scala-parser-combinators" % "1.1.0")
     else
       Seq()
+  }
 
   def scalaXML(scalaVersion: String) =
     if (scalaMinorVersionAtLeast(scalaVersion, 11))
