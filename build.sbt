@@ -117,20 +117,19 @@ lazy val common = crossProject(JSPlatform, JVMPlatform).in(file("common")).
     libraryDependencies ++=
       depends.reflect(scalaOrganization.value, scalaVersion.value) ++
       depends.paradise(scalaVersion.value) ++
+      depends.scalaParser.value ++
       depends.scalaXML(scalaVersion.value),
     moduleSettings("common")++
     Seq(name := "specs2-common")
 ).
   jsSettings(depends.jsTest, moduleJsSettings("common"),
     libraryDependencies ++= Seq(
-      "org.scalacheck" %%% "scalacheck" % "1.13.5" % "test",
-      "org.scala-lang.modules" %%% "scala-parser-combinators" % "1.1.0"
+      "org.scalacheck" %%% "scalacheck" % "1.13.5" % "test"
     )
   ).
   jvmSettings(moduleJvmSettings("common"),
     libraryDependencies ++= Seq(
-      "org.scalacheck" %% "scalacheck" % "1.13.5" % "test",
-      "org.scala-lang.modules" %% "scala-parser-combinators" % "1.1.0"
+      "org.scalacheck" %% "scalacheck" % "1.13.5" % "test"
     )
   )
 
@@ -233,9 +232,7 @@ lazy val matcherExtra = crossProject(JSPlatform, JVMPlatform).in(file("matcher-e
     name := "specs2-matcher-extra",
     libraryDependencies ++= depends.paradise(scalaVersion.value)
   ):_*).
-  jsSettings(depends.jsTest, moduleJsSettings("matcher-extra"),
-    libraryDependencies ++=
-      Seq("org.scala-lang.modules" %%% "scala-parser-combinators" % "1.0.5")
+  jsSettings(depends.jsTest, moduleJsSettings("matcher-extra")
   ).
   jvmSettings(depends.jvmTest, moduleJvmSettings("matcher-extra"))
 
