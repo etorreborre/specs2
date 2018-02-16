@@ -25,7 +25,7 @@ object Name {
 }
 
 object Need {
-  def apply[A](a: => A): Need[A] = {
+  def apply[A](a: => A): Name[A] = {
     new Need[A] {
       private[this] lazy val value0: A = a
       def value = value0

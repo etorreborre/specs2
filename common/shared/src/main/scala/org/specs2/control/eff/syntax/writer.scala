@@ -2,8 +2,6 @@ package org.specs2.control
 package eff
 package syntax
 
-import origami._
-
 object writer extends writer
 
 trait writer {
@@ -19,7 +17,7 @@ trait writer {
     def runWriterLog[O](implicit member: Member[Writer[O, ?], R]): Eff[member.Out, List[O]] =
       runWriter[O](member).map(_._2)
 
-    def runWriterFold[O, B](fold: FoldId[O, B])(implicit member: Member[Writer[O, ?], R]): Eff[member.Out, (A, B)] =
+    def runWriterFold[O, B](fold: RightFold[O, B])(implicit member: Member[Writer[O, ?], R]): Eff[member.Out, (A, B)] =
       WriterInterpretation.runWriterFold(e)(fold)(member.aux)
 
     def runWriterUnsafe[O](f: O => Unit)(implicit member: Member[Writer[O, ?], R]): Eff[member.Out, A] =

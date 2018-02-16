@@ -46,3 +46,11 @@ object Monoid {
 
 }
 
+trait MonoidSyntax {
+
+  implicit class MonoidOps[A : Monoid](a1: A) {
+    def |+|(a2: A): A =
+      Monoid[A].append(a1, a2)
+  }
+
+}

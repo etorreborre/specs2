@@ -110,4 +110,14 @@ trait MonadSyntax {
       bind(_ => fb)
   }
 
+  implicit class MonadOps2[F[_] : Monad, A](fa: F[F[A]]) {
+    val monad = Monad.apply[F]
+
+    def flatten: F[A] =
+      monad.join(fa)
+
+    def joiv: F[A] =
+      monad.join(fa)
+  }
+
 }

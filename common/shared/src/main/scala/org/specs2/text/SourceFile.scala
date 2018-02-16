@@ -4,7 +4,6 @@ package text
 import java.util.regex.{Matcher, Pattern}
 import control._
 import eff.ConsoleEffect.log
-import org.specs2.fp.syntax._
 
 /**
  * Utility methods to parse the contents of source files

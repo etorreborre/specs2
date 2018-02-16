@@ -11,6 +11,7 @@ package object fp {
          FunctorSyntax
     with ApplicativeSyntax
     with MonadSyntax
+    with MonoidSyntax
     with TraverseSyntax
     with FoldableSyntax
     with SemigroupSyntax

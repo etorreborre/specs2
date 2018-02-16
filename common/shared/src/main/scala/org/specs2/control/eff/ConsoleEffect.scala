@@ -1,6 +1,5 @@
 package org.specs2.control.eff
 
-import org.specs2.fp.syntax._
 import eff._, writer._
 import syntax.writer._
 
@@ -42,6 +41,13 @@ object ConsoleEffect {
 case class Writer[O, A](value: O, a: A) {
   val run: (O, A) =
     (value, a)
+}
+
+object Writer {
+
+  def tell[O](o: O): Writer[O, Unit] =
+    Writer(o, ())
+
 }
 
 

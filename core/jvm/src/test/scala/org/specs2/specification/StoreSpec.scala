@@ -4,7 +4,6 @@ package specification
 import control._
 import io._
 
-import org.specs2.fp.syntax._
 import execute.AsResult
 import process._
 

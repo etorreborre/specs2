@@ -1,9 +1,11 @@
 package org.specs2.fp
 
+import syntax._
+
 /**
  * Inspired from the scalaz (https://github.com/scalaz/scalaz) project
  */
-trait Traverse[F[_]] extends Functor[F] {
+trait Traverse[F[_]] extends Functor[F] with Foldable[F] {
 
   /** Transform `fa` using `f`, collecting all the `G`s with `ap`. */
   def traverseImpl[G[_]: Applicative,A,B](fa: F[A])(f: A => G[B]): G[F[B]]
@@ -20,6 +22,9 @@ trait Traverse[F[_]] extends Functor[F] {
 
   final def traverseM[A, G[_], B](fa: F[A])(f: A => G[F[B]])(implicit G: Applicative[G], F: Monad[F]): G[F[B]] =
     G.map(G.traverse(fa)(f)(this))(F.join)
+
+  def flatTraverse[G[_], A, B](fa: F[A])(f: A => G[F[B]])(implicit G: Applicative[G], F: Monad[F]): G[F[B]] =
+    G.map(traverse(fa)(f))(F.join)
 
   /** Traverse with the identity function. */
   def sequence[G[_]: Applicative,A](fga: F[G[A]]): G[F[A]] =
@@ -41,6 +46,38 @@ object Traverse {
 
     def map[A, B](fa: List[A])(f: A => B): List[B] =
       fa.map(f)
+
+    def foldMap[A, B](fa: List[A])(f: A => B)(implicit F: Monoid[B]): B =
+      fa.foldLeft(F.zero)((res, cur) => res |+| f(cur))
+
+    def foldRight[A, B](fa: List[A], z: => B)(f: (A, => B) => B): B =
+      fa.foldRight(z)((cur, res) => f(cur, res))
+
+    def foldLeft[A, B](fa: List[A], z: B)(f: (B, A) => B): B =
+      fa.foldLeft(z)(f)
+
+  }
+
+  implicit val vectorInstance: Traverse[Vector] = new Traverse[Vector] {
+    def traverseImpl[G[_]: Applicative, A, B](fa: Vector[A])(f: A => G[B]): G[Vector[B]] = {
+      val g = Applicative.apply[G]
+      fa match {
+        case h +: t => g.apply2(f(h), traverseImpl(t)(f))((b, r) => b +: r)
+        case _ => g.point(Vector.empty)
+      }
+    }
+
+    def map[A, B](fa: Vector[A])(f: A => B): Vector[B] =
+      fa.map(f)
+
+    def foldMap[A, B](fa: Vector[A])(f: A => B)(implicit F: Monoid[B]): B =
+      fa.foldLeft(F.zero)((res, cur) => res |+| f(cur))
+
+    def foldRight[A, B](fa: Vector[A], z: => B)(f: (A, => B) => B): B =
+      fa.foldRight(z)((cur, res) => f(cur, res))
+
+    def foldLeft[A, B](fa: Vector[A], z: B)(f: (B, A) => B): B =
+      fa.foldLeft(z)(f)
   }
 
   implicit def optionInstance[L]: Traverse[Option] = new Traverse[Option] {
@@ -54,6 +91,16 @@ object Traverse {
 
     def map[A, B](fa: Option[A])(f: A => B): Option[B] =
       fa.map(f)
+
+    def foldMap[A, B](fa: Option[A])(f: A => B)(implicit F: Monoid[B]): B =
+      fa.foldLeft(F.zero)((res, cur) => res |+| f(cur))
+
+    def foldRight[A, B](fa: Option[A], z: => B)(f: (A, => B) => B): B =
+      fa.foldRight(z)((cur, res) => f(cur, res))
+
+    def foldLeft[A, B](fa: Option[A], z: B)(f: (B, A) => B): B =
+      fa.foldLeft(z)(f)
+
   }
 
   implicit def eitherInstance[L]: Traverse[Either[L, ?]] = new Traverse[Either[L, ?]] {
@@ -69,6 +116,24 @@ object Traverse {
       fa match {
         case Left(l)  => Left(l)
         case Right(a) => Right(f(a))
+      }
+
+    def foldMap[A, B](fa: Either[L, A])(f: A => B)(implicit F: Monoid[B]): B =
+      fa match {
+        case Left(l) => F.zero
+        case Right(a) => f(a)
+      }
+
+    def foldRight[A, B](fa: Either[L, A], z: => B)(f: (A, => B) => B): B =
+      fa match {
+        case Left(l) => z
+        case Right(a) => f(a, z)
+      }
+
+    def foldLeft[A, B](fa: Either[L, A], z: B)(f: (B, A) => B): B =
+      fa match {
+        case Left(l) => z
+        case Right(a) => f(z, a)
       }
   }
 }
