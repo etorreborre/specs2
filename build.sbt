@@ -118,7 +118,7 @@ lazy val common = crossProject(JSPlatform, JVMPlatform).in(file("common")).
       depends.reflect(scalaOrganization.value, scalaVersion.value) ++
       depends.paradise(scalaVersion.value) ++
       depends.scalaParser.value ++
-      depends.scalaXML(scalaVersion.value),
+      depends.scalaXML.value,
     moduleSettings("common")++
     Seq(name := "specs2-common")
 ).

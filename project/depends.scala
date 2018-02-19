@@ -27,26 +27,15 @@ object depends {
         scalaJSStage in Test := FastOptStage)
 
   def scalaParser = Def.setting {
-    if (scalaMinorVersionAtLeast(scalaVersion.value, 11))
-      Seq("org.scala-lang.modules" %%% "scala-parser-combinators" % "1.1.0")
-    else
-      Seq()
+    Seq("org.scala-lang.modules" %%% "scala-parser-combinators" % "1.1.0") 
   }
 
-  def scalaXML(scalaVersion: String) =
-    if (scalaMinorVersionAtLeast(scalaVersion, 11))
-      Seq("org.scala-lang.modules" %% "scala-xml" % "1.0.6")
-    else
-      Seq()
+  def scalaXML = Def.setting {
+    Seq("org.scala-lang.modules" %% "scala-xml" % "1.0.6")
+  }
 
   def kindp(scalaVersion: String) =
     "org.spire-math" % "kind-projector" % "0.8.2" cross CrossVersion.binary
-
-  def si2712Dependency(scalaVersion: String) =
-    if (CrossVersion.partialVersion(scalaVersion).exists(_._2 < 11))
-      Seq(compilerPlugin("com.milessabin" % ("si2712fix-plugin_"+scalaVersion) % "1.2.0"))
-    else
-      Seq()
 
   lazy val mockito       = Seq("org.mockito"  % "mockito-core"  % "2.7.22")
   lazy val junit         = Seq("junit"        % "junit"         % "4.12")
