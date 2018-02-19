@@ -1,0 +1,15 @@
+Maintenance version
+
+## Improvements
+
+ * **build** update and cleanup scala-parser-combinators dependency setting (#634) (thanks to Kenji Yoshida)
+ * **build** Adding support for sbt-crossproject (#621) (thanks to Matthew de Detrich)
+ * **scala** published for 2.13.0-M3
+ * **core** added a method to create specification links from specifications found with the `SpecificationsFinder`
+ * **core** skip the execution of examples if a step stops with a fatal error
+
+
+
+## Fixes
+
+ * **matchers** fixed a NPE with Json matchers when there are null values
