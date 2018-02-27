@@ -36,6 +36,9 @@ trait S2StringContext extends S2StringContext1 { outer =>
     }
   }
 
+  implicit def asExecutionIsInterpolatedFragment[R : AsExecution](e: =>R): InterpolatedFragment =
+    executionIsInterpolatedFragment(AsExecution[R].execute(e))
+
   implicit def stringFunctionIsInterpolatedFragment[R : AsResult](f: String => R): InterpolatedFragment =
     stringAndEnvFunctionIsInterpolatedFragment((s: String) => (e: Env) => f(s))
 

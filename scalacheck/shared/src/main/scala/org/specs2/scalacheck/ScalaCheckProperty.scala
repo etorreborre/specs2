@@ -843,7 +843,9 @@ object ScalaCheckProperty {
 
   implicit def ScalaCheckPropertyAsExecution[S <: ScalaCheckProperty]: AsExecution[S] = new AsExecution[S] {
     def execute(s: => S): Execution =
-      Execution.withEnv(env => AsResultProp.check(s.prop, s.parameters.overrideWith(env.commandLine), s.prettyFreqMap))
+      Execution.withEnv { env =>
+        AsResultProp.check(s.prop, s.parameters.overrideWith(env.commandLine), s.prettyFreqMap)
+      }
   }
 
   def makeProp[T](f: T => Prop, shrink: Option[Shrink[T]])(implicit a: Arbitrary[T], p: T => Pretty): Prop =
