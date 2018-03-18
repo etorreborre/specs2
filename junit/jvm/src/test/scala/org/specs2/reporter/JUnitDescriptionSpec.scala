@@ -27,6 +27,7 @@ class JUnitDescriptionSpec(val env: Env) extends Specification with JUnitDescrip
    An example description must not have newlines if executed from an IDE                                            $a8
    Empty descriptions must be removed from the tree                                                                 $a9
    Examples with the same name must get different ids                                                               $a10
+   Examples with the same location (e.g. Fragments.foreach) must get different ids                                  $a11
 
  The Descriptions objects must have proper details
    For as single Example                                                                                            $b1
@@ -135,6 +136,18 @@ class JUnitDescriptionSpec(val env: Env) extends Specification with JUnitDescrip
       ShowDescription.toTree(descriptions(false).
         createDescription(titled(start ^ "level1" ^ break ^ ex1fst ^ ex1snd ^ end))(ee)).flatten.toList
 
+    ds.map(_.hashCode).distinct must haveSize(4)
+  }
+
+  def a11 = {
+    val fs =
+      Fragments.foreach(Seq("ex1", "ex2", "ex3")) { _ => success }
+
+    val ds =
+      ShowDescription.toTree(descriptions(false).
+        createDescription(fs)(ee)).flatten.toList
+
+    // header + 3 examples
     ds.map(_.hashCode).distinct must haveSize(4)
   }
 
