@@ -17,6 +17,21 @@ import scala.collection.{GenSeqLike, GenSetLike}
  * by Szczepan Faber, created at: 3/31/12
  */
 object ArgumentsProcessor {
+
+  import org.mockito.internal.invocation.MockitoMethod
+  import java.util
+  // drops hidden synthetic parameters (last continuation parameter from Kotlin suspending functions)// drops hidden synthetic parameters (last continuation parameter from Kotlin suspending functions)
+
+  // and expands varargs
+  def expandArgs(method: MockitoMethod, args: Array[AnyRef]): Array[AnyRef] = {
+    val nParams = method.getParameterTypes.length
+    if (args != null && args.length > nParams) {
+      // drop extra args
+      // (currently -- Kotlin continuation synthetic arg)
+      expandVarArgs(method.isVarArgs, util.Arrays.copyOf(args, nParams))
+    } else args
+  }
+
   // expands array varArgs that are given by runtime (1, [a, b]) into true
   // varArgs (1, a, b);
   def expandVarArgs(isVarArgs: Boolean, args: Array[Object]) = {
@@ -88,7 +103,7 @@ object ArgumentsProcessor {
   def isCallRealMethod: Boolean =
     (new Exception).getStackTrace.toList.
       exists(t =>
-        t.getClassName == "org.mockito.internal.creation.bytebuddy.InterceptedInvocation" &&
+        t.getClassName == "org.mockito.internal.invocation.InterceptedInvocation" &&
         t.getMethodName == "callRealMethod")
 
   def adaptFunction0(m: ArgumentMatcher[_]): ArgumentMatcher[_] = new ArgumentMatcher[Object] {
