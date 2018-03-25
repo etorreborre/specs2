@@ -108,7 +108,7 @@ is formatted for JUnit reporting tools.
     val mockFs = new FileSystem {
       var out: String = ""
       override def writeFile(filePath: FilePath, content: String): Operation[Unit] =
-        Operations.ok(out = content)
+        Operations.ok(this.out = content)
     }
     val env = env1.copy(fileSystem = mockFs)
     Reporter.report(env, List(JUnitXmlPrinter))(SpecStructure(SpecHeader(getClass)).setFragments(fs)).runOption(env1.specs2ExecutionEnv)
