@@ -52,7 +52,7 @@ trait JUnitDescriptions extends ExecutionOrigin {
           case f @ Fragment(d, e, _) if !e.isExecutable => createDescription(className, suiteName = testName(d.show), annotations = annotations)
           case f @ Fragment(NoText, e, _) if e.mustJoin => createDescription(className, label = current.size.toString, suiteName = "step", annotations = annotations)
           case f @ Fragment(NoText, e, _)               => createDescription(className, label = current.size.toString, suiteName = "action", annotations = annotations)
-          case f @ Fragment(d, e, _)                    => createDescription(className, label = current.size.toString, id = f.location.hashCode.toString, testName = testName(d.show, parentPath(current.parents.map(_._2))), annotations = annotations)
+          case f @ Fragment(d, e, _)                    => createDescription(className, label = current.size.toString, id = f.hashCode.toString, testName = testName(d.show, parentPath(current.parents.map(_._2))), annotations = annotations)
         }
         (current.getLabel, description)
     }
