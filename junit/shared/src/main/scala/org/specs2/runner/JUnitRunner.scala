@@ -90,7 +90,7 @@ class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterab
    *
    * if the more fine-grained filtering is needed tags must be used
    */
-  def filter(filter: org.junit.runner.manipulation.Filter) {
+  def filter(filter: org.junit.runner.manipulation.Filter): Unit = {
     if (!filter.shouldRun(getDescription)) throw new NoTestsRemainException
   }
 }

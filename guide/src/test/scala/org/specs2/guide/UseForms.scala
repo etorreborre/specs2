@@ -605,9 +605,9 @@ Note that the Calculator class is not, in itself an Example. But there is an imp
   def actualStreet(i: Int) = "street"
   def actualNumber(i: Int) = i
 
-  def clickOn(s: String){}
-  def enter(s: String, s2: String){}
-  def submit() {}
+  def clickOn(s: String): Unit ={}
+  def enter(s: String, s2: String): Unit ={}
+  def submit(): Unit = {}
 
   case class Customer(name: String = "", address: Address = Address()) {
     def retrieve(customerId: Int) = {

@@ -37,7 +37,7 @@ Another way to provide a description for an expectation is to use the `==>` (or 
 s2"""A byname function can be transformed into a strict one $e1"""
 
 def e1 = {
-  def byNameFunction(u: =>Unit) {}
+  def byNameFunction(u: =>Unit): Unit = {}
   var parameter = "not evaluated"
   toStrictFunction1(byNameFunction){ parameter = "evaluated" }
 

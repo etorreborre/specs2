@@ -71,7 +71,7 @@ case class SlaveSbtRunner(args:       Array[String],
  * This object can be used to debug the behavior of the SbtRunner
  */
 object sbtRun extends MasterSbtRunner(Array(), Array(), Thread.currentThread.getContextClassLoader) {
-  def main(arguments: Array[String]) {
+  def main(arguments: Array[String]): Unit = {
     val env = Env(Arguments(arguments:_*))
     implicit def ee: ExecutionEnv = env.specs2ExecutionEnv
     try exit(start(arguments: _*))
@@ -98,7 +98,7 @@ object sbtRun extends MasterSbtRunner(Array(), Array(), Thread.currentThread.get
 }
 
 object NoEventHandler extends EventHandler {
-  def handle(event: Event) {}
+  def handle(event: Event): Unit = {}
 }
 
 object ConsoleLogger extends Logger {
@@ -246,7 +246,7 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
   /**
    * Notify sbt of warnings during the run
    */
-  private def handleRunWarnings(warnings: List[String], loggers: Array[Logger]) {
+  private def handleRunWarnings(warnings: List[String], loggers: Array[Logger]): Unit = {
     val logger = SbtLineLogger(loggers)
     Runner.logUserWarnings(warnings)(m => Name(logger.failureLine(m))).value
     logger.close

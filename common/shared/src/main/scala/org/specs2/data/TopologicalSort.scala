@@ -42,7 +42,7 @@ object TopologicalSort {
     val processed = elements.map(t => new Node(t))
     val result    = new ListBuffer[T]
 
-    def visit(n: Node) {
+    def visit(n: Node): Unit = {
       if (n.temp) throw new CycleException
       else if (!n.permanent) {
         n.setTemp

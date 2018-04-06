@@ -35,8 +35,8 @@ object Executable {
 
   val NullProcessLogger = new ProcessLogger {
     def buffer[T](f: => T): T = f
-    def err(s: => String) {}
-    def out(s: => String) {}
+    def err(s: => String): Unit = {}
+    def out(s: => String): Unit = {}
   }
 
   def stringProcessLogger = new StringProcessLogger
@@ -48,8 +48,8 @@ object Executable {
       messages.clear
       f
     }
-    def err(s: => String) { messages.append(s+"\n"); () }
-    def out(s: => String) { messages.append(s+"\n"); () }
+    def err(s: => String): Unit = { messages.append(s+"\n"); () }
+    def out(s: => String): Unit = { messages.append(s+"\n"); () }
   }
 
 

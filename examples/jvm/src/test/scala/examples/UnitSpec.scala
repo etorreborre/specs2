@@ -72,7 +72,7 @@ class UnitSpec extends mutable.Specification {
 
 
   object context extends Before {
-    def before {} // do something to setup the context
+    def before: Unit = {} // do something to setup the context
   }
   // we need to extend Scope to be used as an Example body
   trait system extends Scope {

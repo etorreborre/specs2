@@ -21,7 +21,7 @@ trait StringOutput extends Output {
    * if a message is printed with a newline it is considered as being a new message
    * otherwise it is added to the last message
    */
-  override def printf(s: String, args: Any*) {
+  override def printf(s: String, args: Any*): Unit = {
     val formatted = s format (args : _*)
     if (formatted.endsWith("\n"))
       append(formatted.dropRight(1))
@@ -37,5 +37,5 @@ trait StringOutput extends Output {
 
   protected def append(msg: String) = synchronized { msgs += msg; () }
   
-  def clear() { msgs.clear() }
+  def clear(): Unit = { msgs.clear() }
 }

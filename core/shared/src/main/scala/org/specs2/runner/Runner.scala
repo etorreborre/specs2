@@ -114,7 +114,7 @@ object Runner {
   /**
    * Exit the JVM with a given status
    */
-  def exitSystem(status: Int, exit: Boolean) {
+  def exitSystem(status: Int, exit: Boolean): Unit = {
     if (exit) System.exit(status)
   }
 
