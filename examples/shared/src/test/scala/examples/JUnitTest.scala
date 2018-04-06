@@ -8,22 +8,22 @@ import org.specs2.matcher._
 class JUnitTest extends JUnitMustMatchers {
 
   @Test
-  def test1() {
+  def test1(): Unit = {
     "Hello world" must haveSize(11); ()
   }
 
   @Test
-  def test2() {
+  def test2(): Unit = {
     "Hello world" must startWith("Hello"); ()
   }
 
   @Test
-  def test3() {
+  def test3(): Unit = {
     "Hello world" must endWith("world"); ()
   }
 
   @Test
-  def test4() {
+  def test4(): Unit = {
     "Hello world" must endWithWorld; ()
   }
 

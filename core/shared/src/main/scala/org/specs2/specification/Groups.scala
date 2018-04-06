@@ -275,7 +275,7 @@ trait Grouped extends GroupsLike { outer: S2StringContextCreation =>
   implicit def namedGroup(s: String): NamedGroup = new NamedGroup(s)
   class NamedGroup(s: String) {
 
-    def -(g: =>ExamplesGroup) {
+    def -(g: =>ExamplesGroup): Unit = {
       val examplesGroup = g
       examplesGroup.nameIs(s)
       if (examplesGroup.isInstanceOf[AutoNumberedGroup]) {
@@ -298,20 +298,20 @@ trait GroupsLike { this: S2StringContextCreation =>
 
     def eg = this
 
-    def :=[R: AsResult](r: =>R) {
+    def :=[R: AsResult](r: =>R): Unit = {
       autoNumberedExamples = autoNumberedExamples :+ ExecutionVar.result(r)
     }
 
-    def :=[R](f: =>Future[R])(implicit asResult: AsResult[R], p1: ImplicitParam1) {
+    def :=[R](f: =>Future[R])(implicit asResult: AsResult[R], p1: ImplicitParam1): Unit = {
       Use(p1)
       autoNumberedExamples = autoNumberedExamples :+ ExecutionVar.futureResult(f)(asResult, p1)
     }
 
-    def :=[R : AsResult](f: Env => R) {
+    def :=[R : AsResult](f: Env => R): Unit = {
       autoNumberedExamples = autoNumberedExamples :+ ExecutionVar.withEnv(f)
     }
 
-    def :=[R](f: ExecutionEnv => R)(implicit p: ImplicitParam, asResult: AsResult[R]) {
+    def :=[R](f: ExecutionEnv => R)(implicit p: ImplicitParam, asResult: AsResult[R]): Unit = {
       Use.ignoring(p) { autoNumberedExamples = autoNumberedExamples :+ ExecutionVar.withExecutionEnv(f) }
     }
 

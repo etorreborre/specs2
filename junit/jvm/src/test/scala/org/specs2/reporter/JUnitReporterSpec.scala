@@ -102,12 +102,12 @@ class JUnitReporterSpec(val env: Env) extends Specification with Mockito with Ow
     val notifier = mock[RunNotifier]
 
     lazy val messagesNotifier = new RunNotifier with StringOutput {
-      override def fireTestRunStarted(desc: Description) { println("run started "+desc) }
-      override def fireTestRunFinished(result: org.junit.runner.Result) { println("run finished "+result) }
-      override def fireTestStarted(desc: Description) { println("test started "+desc) }
-      override def fireTestFailure(failure: org.junit.runner.notification.Failure) { println("test failed "+failure) }
-      override def fireTestIgnored(desc: Description) { println("test ignored "+desc) }
-      override def fireTestFinished(desc: Description) { println("test finished "+desc) }
+      override def fireTestRunStarted(desc: Description): Unit = { println("run started "+desc) }
+      override def fireTestRunFinished(result: org.junit.runner.Result): Unit = { println("run finished "+result) }
+      override def fireTestStarted(desc: Description): Unit = { println("test started "+desc) }
+      override def fireTestFailure(failure: org.junit.runner.notification.Failure): Unit = { println("test failed "+failure) }
+      override def fireTestIgnored(desc: Description): Unit = { println("test ignored "+desc) }
+      override def fireTestFinished(desc: Description): Unit = { println("test finished "+desc) }
     }
 
     def run(f: Fragment)(env: Env): Unit = run(Fragments(f))(env)

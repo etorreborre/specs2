@@ -86,9 +86,9 @@ trait JUnitPrinter extends Printer { outer =>
       private val e = args.traceFilter(f.exception)
       override def getStackTrace = e.getStackTrace
       override def getCause = e.getCause
-      override def printStackTrace() { e.printStackTrace() }
-      override def printStackTrace(w: java.io.PrintStream) { e.printStackTrace(w) }
-      override def printStackTrace(w: java.io.PrintWriter) { e.printStackTrace(w) }
+      override def printStackTrace(): Unit = { e.printStackTrace() }
+      override def printStackTrace(w: java.io.PrintStream): Unit = { e.printStackTrace(w) }
+      override def printStackTrace(w: java.io.PrintWriter): Unit = { e.printStackTrace(w) }
     }
 
     case Failure(m, e, st, FailureSeqDetails(actual, expected)) =>
@@ -102,9 +102,9 @@ trait JUnitPrinter extends Printer { outer =>
         private val e = args.traceFilter(f.exception)
         override def getStackTrace = e.getStackTrace
         override def getCause = e.getCause
-        override def printStackTrace() { e.printStackTrace() }
-        override def printStackTrace(w: java.io.PrintStream) { e.printStackTrace(w) }
-        override def printStackTrace(w: java.io.PrintWriter) { e.printStackTrace(w) }
+        override def printStackTrace(): Unit = { e.printStackTrace() }
+        override def printStackTrace(w: java.io.PrintStream): Unit = { e.printStackTrace(w) }
+        override def printStackTrace(w: java.io.PrintWriter): Unit = { e.printStackTrace(w) }
       }
 
     case Failure(m, e, st, details @ FailureSetDetails(actual, expected)) =>
@@ -118,9 +118,9 @@ trait JUnitPrinter extends Printer { outer =>
         private val e = args.traceFilter(f.exception)
         override def getStackTrace = e.getStackTrace
         override def getCause = e.getCause
-        override def printStackTrace() { e.printStackTrace() }
-        override def printStackTrace(w: java.io.PrintStream) { e.printStackTrace(w) }
-        override def printStackTrace(w: java.io.PrintWriter) { e.printStackTrace(w) }
+        override def printStackTrace(): Unit = { e.printStackTrace() }
+        override def printStackTrace(w: java.io.PrintStream): Unit = { e.printStackTrace(w) }
+        override def printStackTrace(w: java.io.PrintWriter): Unit = { e.printStackTrace(w) }
       }
 
     case Failure(m, e, st, details @ FailureMapDetails(actual, expected)) =>
@@ -134,9 +134,9 @@ trait JUnitPrinter extends Printer { outer =>
         private val e = args.traceFilter(f.exception)
         override def getStackTrace = e.getStackTrace
         override def getCause = e.getCause
-        override def printStackTrace() { e.printStackTrace() }
-        override def printStackTrace(w: java.io.PrintStream) { e.printStackTrace(w) }
-        override def printStackTrace(w: java.io.PrintWriter) { e.printStackTrace(w) }
+        override def printStackTrace(): Unit = { e.printStackTrace() }
+        override def printStackTrace(w: java.io.PrintStream): Unit = { e.printStackTrace(w) }
+        override def printStackTrace(w: java.io.PrintWriter): Unit = { e.printStackTrace(w) }
       }
   }
 
@@ -154,8 +154,8 @@ class SpecFailureAssertionFailedError(e: Exception) extends AssertionFailedError
   override def toString = e.toString
   override def getStackTrace = e.getStackTrace
   override def getCause = e.getCause
-  override def printStackTrace() { e.printStackTrace() }
-  override def printStackTrace(w: java.io.PrintStream) { e.printStackTrace(w) }
-  override def printStackTrace(w: java.io.PrintWriter) { e.printStackTrace(w) }
+  override def printStackTrace(): Unit = { e.printStackTrace() }
+  override def printStackTrace(w: java.io.PrintStream): Unit = { e.printStackTrace(w) }
+  override def printStackTrace(w: java.io.PrintWriter): Unit = { e.printStackTrace(w) }
 }
 

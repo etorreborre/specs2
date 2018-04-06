@@ -22,7 +22,7 @@ trait FilesRunner {
   /**
    * Run the specifications found in files based on command-line arguments
    */
-  def run(args: Array[String], exit: Boolean = false) {
+  def run(args: Array[String], exit: Boolean = false): Unit = {
     val env = Env(arguments = Arguments(args: _*),
       lineLogger = consoleLogger)
 

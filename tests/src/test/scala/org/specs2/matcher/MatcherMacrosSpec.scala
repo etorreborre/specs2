@@ -48,7 +48,7 @@ class MatcherMacrosSpec extends Spec with ResultMatchers with MatcherMacros with
   case class Cat(name: String = "", age: Int = 0, kitten: Seq[Cat] = Seq()) {
     // additional methods can exist on the case class
     // but will not be used for matching
-    def test(hello: String) {}
+    def test(hello: String): Unit = {}
   }
 
   case class Nested(n1: Nested1 = Nested1())

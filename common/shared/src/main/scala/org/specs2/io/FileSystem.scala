@@ -62,7 +62,7 @@ trait FileSystem extends FilePathReader {
     val zis = new ZipInputStream(new BufferedInputStream(uis))
 
     @annotation.tailrec
-    def extractEntry(entry: ZipEntry) {
+    def extractEntry(entry: ZipEntry): Unit = {
       if (entry != null) {
         val matcher = regex.matcher(entry.getName)
         if (matcher.matches) {
@@ -94,7 +94,7 @@ trait FileSystem extends FilePathReader {
    * @param input input stream
    * @param output output stream
    */
-  private def copy(input: InputStream, output: OutputStream) {
+  private def copy(input: InputStream, output: OutputStream): Unit = {
     val data = new Array[Byte](2048)
     def readData(count: Int): Unit = {
       if (count != -1) {

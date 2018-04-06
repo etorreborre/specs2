@@ -25,7 +25,7 @@ trait BufferedLineLogger extends LineLogger {
   protected def warnLine(msg: String): Unit
 
   private val buffer = new StringBuilder
-  private def add(msg: String) { buffer.append(msg); () }
+  private def add(msg: String): Unit = { buffer.append(msg); () }
 
   private def flushText(force: Boolean = false): String = {
     if (force) {

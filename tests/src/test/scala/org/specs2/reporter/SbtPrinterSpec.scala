@@ -63,11 +63,11 @@ class SbtPrinterSpec(val env: Env) extends Spec with OwnEnv { def is = s2"""
 
     val stringLogger = new Logger with StringOutput {
       def ansiCodesSupported = false
-      def warn(msg: String)  { append(msg) }
-      def error(msg: String) { append(msg) }
-      def debug(msg: String) { append(msg) }
-      def trace(t: Throwable){ append(t.getMessage) }
-      def info(msg: String)  { append(msg) }
+      def warn(msg: String): Unit =  { append(msg) }
+      def error(msg: String): Unit = { append(msg) }
+      def debug(msg: String): Unit = { append(msg) }
+      def trace(t: Throwable): Unit ={ append(t.getMessage) }
+      def info(msg: String): Unit =  { append(msg) }
     }
 
     val printer = new SbtPrinter {

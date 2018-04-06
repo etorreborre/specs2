@@ -39,7 +39,7 @@ trait output extends Scope with MustThrownMatchers {
   // this implicit intercepts appended messages from the calls to 'pp'
   implicit def debug[T](t: =>T): Debuggable[T] = new DebuggableMock(t)
   class DebuggableMock[T](t: =>T) extends Debuggable(t) with StringOutput {
-    override def append(msg: String) { msgs += msg; () }
+    override def append(msg: String): Unit = { msgs += msg; () }
   }
 
   implicit def printable[T](t: =>T): Printable[T] = new Printable(t)

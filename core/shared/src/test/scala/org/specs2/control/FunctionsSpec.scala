@@ -7,7 +7,7 @@ import matcher.ExpectationsDescription._
 class FunctionsSpec extends Spec { def is = s2"""
 
   a byname function can be transformed into a strict one  ${
-    def byNameFunction(u: =>Unit) {}
+    def byNameFunction(u: =>Unit): Unit = {}
     var parameter = "not evaluated"
     toStrictFunction1(byNameFunction){ parameter = "evaluated" }
 

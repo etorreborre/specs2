@@ -21,14 +21,14 @@ trait ClassRunner {
   /**
    * run a specification but don't exit with System.exit
    */
-  def run(args: Array[String]) {
+  def run(args: Array[String]): Unit = {
     run(args, exit = false)
   }
 
   /**
    * run the specification, the first argument is expected to be the specification name
    */
-  def run(args: Array[String], exit: Boolean) {
+  def run(args: Array[String], exit: Boolean): Unit = {
     val arguments = Arguments(args.drop(1): _*)
     val env = Env(arguments = arguments, lineLogger = consoleLogger)
 

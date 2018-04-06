@@ -64,24 +64,24 @@ object Markdown extends Markdown
  * specialised pegdown visitor to control the rendering of code blocks
  */
 case class Specs2Visitor(text: String, options: MarkdownOptions = MarkdownOptions()) extends org.pegdown.ToHtmlSerializer(new LinkRenderer) {
-  override def visit(node: CodeNode) {
+  override def visit(node: CodeNode): Unit = {
     printCode(node)
   }
-  override def visit(node: ParaNode) {
+  override def visit(node: ParaNode): Unit = {
     super.visit(node)
   }
-  override def visit(node: TextNode) {
+  override def visit(node: TextNode): Unit = {
     super.visit(node)
   }
 
-  override def visit(node: SimpleNode) {
+  override def visit(node: SimpleNode): Unit = {
     super.visit(node)
     if (node.getType == SimpleNode.Type.Linebreak) {
       val indent = text.drop(node.getEndIndex).takeWhile(_ == ' ').length
       (1 to indent) foreach { i => super.visit(new SimpleNode(SimpleNode.Type.Nbsp)) }
     }
   }
-  override def visit(node: VerbatimNode) {
+  override def visit(node: VerbatimNode): Unit = {
     // render verbatim nodes as simple text if the verbatim option is false
     if (!options.verbatim && node.getType.isEmpty && node.getText.contains("\n")) {
       val indents = text.split("\n").filter(_.nonEmpty).map(line => line.takeWhile(_ == ' ').length)
@@ -92,7 +92,7 @@ case class Specs2Visitor(text: String, options: MarkdownOptions = MarkdownOption
     else super.visit(new VerbatimNode(node.getText, "prettyprint"))
   }
 
-  private def printCode(node: TextNode) {
+  private def printCode(node: TextNode): Unit = {
     val text = node.getText
     if (text.contains("\n"))
       printer.print("<pre>").
