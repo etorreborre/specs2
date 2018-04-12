@@ -108,10 +108,17 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersImplicits { outer =
     }
 
     private def selectorNotFound[K, V](selector: JsonSelector, map: Map[K, V]) =
-      Failure(s"${showMap(map)} doesn't contain ${selector.name}")
+      selector match {
+        case JsonPairSelector(_, _) | JsonValueOrKeySelector(_) =>
+          Failure(s"the object\n${showMap(map)}\ndoesn't contain the ${selector.description}")
+
+        case _ =>
+          Failure(s"the object\n${showMap(map)}\ndoesn't contain the ${selector.description}\nThis selector can " +
+            s"only be used with an array. Use /(k -> anyValue) if you just want to find the key 'k'")
+      }
 
     private def selectorNotFound[T](selector: JsonSelector, list: List[T]) =
-      Failure(s"${showList(list)} doesn't contain ${selector.name}")
+      Failure(s"the array\n${showList(list)}\ndoesn't contain the ${selector.description}")
 
     private def showMap[K, V](map: Map[K, V]) =
       map.map { case (k,v) => s"$k:$v" }.mkString("{",", ","}")
@@ -263,6 +270,7 @@ trait JsonSelectors {
     def select(list: List[Any]): Option[Any]
     def select(map: Map[String, Any]): Option[(String, Any)]
     def name: String
+    def description: String
 
     def toValueOrKey = JsonValueOrKeySelector(this)
   }
@@ -273,6 +281,7 @@ trait JsonSelectors {
     def select(names: List[Any]) = names.find(_.notNull == v.notNull)
     def select(map: Map[String, Any]) = None
     def name = s"'${v.notNull}'"
+    def description: String = s"value $name"
   }
   case class JsonIntSelector(n: Int) extends JsonValueSelector {
     def select(values: List[Any]) =
@@ -283,6 +292,7 @@ trait JsonSelectors {
       }
     def select(map: Map[String, Any]) = None
     def name = n.toString
+    def description: String = s"value $name"
   }
   case class JsonDoubleSelector(d: Double) extends JsonValueSelector {
     def select(values: List[Any]) =
@@ -294,28 +304,33 @@ trait JsonSelectors {
 
     def select(map: Map[String, Any]) = None
     def name = d.toString
+    def description: String = s"value $name"
   }
   case class JsonIndexSelector(n: Int) extends JsonSelector {
     def select(names: List[Any]) = names.zipWithIndex.find { case (_, i) => i == n }.map(_._1)
     def select(map: Map[String, Any]) = map.zipWithIndex.find { case (_, i) => i == n }.map(_._1)
     def name = s"index $n'"
+    def description: String = s"value $name"
   }
   case class JsonRegexSelector(r: Regex) extends JsonValueSelector {
     def select(names: List[Any]) = names.find(_.notNull matches r.toString).map(_.notNull)
     def select(map: Map[String, Any]) = None
     def name = s"'$r'"
+    def description: String = s"regex $name"
   }
   case class JsonMatcherSelector(m: Matcher[String]) extends JsonValueSelector {
     def select(names: List[Any])      = names.find(n => m(Expectable(n.notNull)).isSuccess)
     def select(map: Map[String, Any]) = None
     def name = "matcher"
+    def description: String = s"specified $name"
   }
   case class JsonPairSelector(_1: JsonSelector, _2: JsonSelector) extends JsonSelector {
     def select(list: List[Any]): Option[Any] = None
     def select(map: Map[String, Any]): Option[(String, Any)] =
       _1.select(map.keys.toList).flatMap(k => map.find { case (k1, v) => k.notNull == k1 && _2.select(List(v)).isDefined })
 
-    def name = s"${_1.name}:${_2.name}"
+    def name = s"${_1.name}:${_2.description}"
+    def description: String = s"pair $name"
   }
   case class JsonValueOrKeySelector(selector: JsonSelector) extends JsonSelector {
     def select(list: List[Any]): Option[Any] = selector.select(list)
@@ -323,8 +338,8 @@ trait JsonSelectors {
       selector.select(map.keys.toList).flatMap(k => map.find { case (k1, v) => k.notNull == k1 })
 
     def name = selector.name
+    def description: String = s"selector ${selector.description}"
   }
-
 
   sealed trait JsonQueryType
   case object First extends JsonQueryType
@@ -333,6 +348,9 @@ trait JsonSelectors {
   case class JsonQuery(query: JsonQueryType, selector: JsonSelector) {
     def name = selector.name
   }
+
+  val anyValue: Matcher[Any] =
+    new NeutralMatcher[Any]
 
 }
 
