@@ -426,10 +426,6 @@ lazy val publicationSettings = Seq(
           <distribution>repo</distribution>
         </license>
       </licenses>
-      <scm>
-        <url>http://github.com/etorreborre/specs2</url>
-        <connection>scm:git:git@github.com:etorreborre/specs2.git</connection>
-      </scm>
       <developers>
         <developer>
           <id>etorreborre</id>
