@@ -1,0 +1,19 @@
+Maintenance version
+
+## Improvements
+
+ * **mockito** add `anyFunction0` to the `MockitoMatchers` (#634) (thanks to @hmemcpy)
+ * **mockito** upgraded to Mockito `2.16.0` (#641)
+ * **scala** avoid procedure syntax (#647) (thanks to Kenji Yoshida)
+ * **matcher-extra** output better failure messages for Json matchers (#650)
+ 
+## Fixes
+
+ * various fixes to the test suite (#643, #644, #645) (thanks to @hmemcpy)
+ * **core** changed the fragment’s id to the hashcode of a fragment, rather than its location (#640). This fixes a
+      description issue with JUnit when using `Fragment.foreach` (thanks to @hmemcpy)
+ * **junit** shutdown the execution environment after executing junit tests (#648)
+ * **core** fixed the visibility of `AllExpectations.fragmentsFactory` to allow mixing the trait with 
+ `Before/After/Around Each` (#651)
+
+
