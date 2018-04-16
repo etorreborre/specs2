@@ -25,7 +25,6 @@ object Pandoc {
       "-f", options.inputFormat,
       "-t", options.outputFormat,
       "--template", templatePath.path,
-      "-s", "-S",
       "--indented-code-classes=prettyprint",
       "-o", outputFile.path) ++
       variablesOption
