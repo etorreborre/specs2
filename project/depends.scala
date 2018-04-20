@@ -37,7 +37,7 @@ object depends {
   def kindp(scalaVersion: String) =
     "org.spire-math" % "kind-projector" % "0.8.2" cross CrossVersion.binary
 
-  lazy val mockito       = Seq("org.mockito"  % "mockito-core"  % "2.16.0")
+  lazy val mockito       = Seq("org.mockito"  % "mockito-core"  % "2.18.0")
   lazy val junit         = Seq("junit"        % "junit"         % "4.12")
   lazy val hamcrest      = Seq("org.hamcrest" % "hamcrest-core" % "1.3")
 
@@ -69,7 +69,8 @@ object depends {
       Seq()
 
   lazy val resolvers =
-    Seq(sbt.Keys.resolvers ++= Seq(Resolver.sonatypeRepo("releases")))
+    Seq(sbt.Keys.resolvers ++= Seq(
+      Resolver.sonatypeRepo("releases")))
 
   def scalaMinorVersionAtLeast(scalaVersion: String, n: Int): Boolean =
     CrossVersion.partialVersion(scalaVersion) match {

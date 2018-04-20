@@ -1,0 +1,9 @@
+Upgrade version
+
+## Upgrades
+
+ * **mockito** upgraded to Mockito `2.18.2`, this is mostly to avoid a concurrency bug introduced by Mockito (#641).
+ * **html** the default options for pandoc are now compatible with pandoc `2.1.3` for markdown generation
+ 
+ Otherwise please refer to the `4.0.4` notes for the latest changes.
+
