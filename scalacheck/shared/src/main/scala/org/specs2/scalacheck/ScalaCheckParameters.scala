@@ -11,7 +11,6 @@ trait ScalaCheckParameters {
    * default parameters. Uses ScalaCheck default values and doesn't print anything to the console
    */
   implicit def defaultParameters: Parameters = Parameters()
-  implicit def defaultSeed: Seed = Seed.random
 
   implicit def defaultFreqMapPretty: FreqMap[Set[Any]] => Pretty = (fq: FreqMap[Set[Any]]) =>
     Pretty.prettyFreqMap(removeDetails(fq))
@@ -23,8 +22,9 @@ trait ScalaCheckParameters {
           maxSize: Int                                 = defaultParameters.maxSize,
           workers: Int                                 = defaultParameters.workers,
           callback: Test.TestCallback                  = defaultParameters.testCallback,
-          loader: Option[ClassLoader]                  = defaultParameters.loader): Parameters =
-    new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, callback, loader)
+          loader: Option[ClassLoader]                  = defaultParameters.loader,
+          seed: Seed                                   = Seed.random): Parameters =
+    Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, callback, loader, seed = seed)
 
   /** create parameters with verbose = true */
   def display(minTestsOk: Int                              = defaultParameters.minTestsOk,
@@ -33,7 +33,8 @@ trait ScalaCheckParameters {
               maxSize: Int                                 = defaultParameters.maxSize,
               workers: Int                                 = defaultParameters.workers,
               callback: Test.TestCallback                  = defaultParameters.testCallback,
-              loader: Option[ClassLoader]                  = defaultParameters.loader): Parameters =
-    new Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, callback, loader).verbose
+              loader: Option[ClassLoader]                  = defaultParameters.loader,
+              seed: Seed                                   = Seed.random): Parameters =
+    Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, callback, loader, seed = seed).verbose
 }
 

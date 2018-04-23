@@ -24,6 +24,8 @@ trait ScalaCheckProperty {
 
   def setParameters(ps: Parameters): SelfType
 
+  def setSeed(seed: Seed): SelfType
+
   def setVerbosity(v: Int): SelfType =
     setParameters(parameters.setVerbosity(v))
 
@@ -123,8 +125,7 @@ case class ScalaCheckFunction1[T, R](
   prettyFreqMap: FreqMap[Set[Any]] => Pretty,
   asResult:      AsResult[R],
   context:       Option[Context],
-  parameters:    Parameters,
-  seed:          Seed) extends ScalaCheckFunction {
+  parameters:    Parameters) extends ScalaCheckFunction {
 
   type SelfType = ScalaCheckFunction1[T, R]
 
@@ -139,7 +140,7 @@ case class ScalaCheckFunction1[T, R](
   }
 
   lazy val prop: Prop =
-    shrink.fold(Prop.forAllNoShrink(propFunction))(_ => Prop.forAll(propFunction).useSeed("unused", seed))
+    shrink.fold(Prop.forAllNoShrink(propFunction))(_ => Prop.forAll(propFunction).useSeed("unused", parameters.seed))
 
   def noShrink: SelfType = copy(shrink = None)
 
@@ -164,9 +165,6 @@ case class ScalaCheckFunction1[T, R](
   def setParameters(ps: Parameters): SelfType =
     copy(parameters = ps)
 
-  def setSeed(seed: Seed): SelfType =
-    copy(seed = seed)
-
   def collect: SelfType =
     collectArg(_.toString)
 
@@ -179,17 +177,18 @@ case class ScalaCheckFunction1[T, R](
   def setContext(context: Context): SelfType =
     copy(context = Some(context))
 
+  def setSeed(seed: Seed): SelfType =
+    copy(parameters = parameters.copy(seed = seed))
+
 }
 
 
-case class ScalaCheckFunction2[T1, T2, R](
-                                           execute: (T1, T2) => R,
+case class ScalaCheckFunction2[T1, T2, R]( execute: (T1, T2) => R,
                                            argInstances1: ScalaCheckArgInstances[T1], argInstances2: ScalaCheckArgInstances[T2],
                                            prettyFreqMap: FreqMap[Set[Any]] => Pretty,
                                            asResult: AsResult[R],
                                            context: Option[Context],
-                                           parameters: Parameters,
-                                           seed: Seed) extends ScalaCheckFunction {
+                                           parameters: Parameters) extends ScalaCheckFunction {
 
   type SelfType = ScalaCheckFunction2[T1, T2, R]
 
@@ -205,7 +204,8 @@ case class ScalaCheckFunction2[T1, T2, R](
   }
 
   lazy val prop: Prop =
-    makeProp((t1: T1) => makeProp((t2: T2) => propFunction(t1, t2), argInstances2.shrink), argInstances1.shrink).useSeed("unused", seed)
+    makeProp((t1: T1) => makeProp((t2: T2) => propFunction(t1, t2), argInstances2.shrink), argInstances1.shrink)
+      .useSeed("unused", parameters.seed)
 
   def noShrink: SelfType = copy(argInstances1 = argInstances1.copy(shrink = None), argInstances2 = argInstances2.copy(shrink = None))
 
@@ -253,7 +253,9 @@ case class ScalaCheckFunction2[T1, T2, R](
   def setContext(context: Context): SelfType = copy(context = Some(context))
 
   def setParameters(ps: Parameters): SelfType = copy(parameters = ps)
-  def setParameters(seed: Seed): SelfType = copy(seed = seed)
+
+  def setSeed(seed: Seed): SelfType =
+    copy(parameters = parameters.copy(seed = seed))
 }
 
 
@@ -263,8 +265,7 @@ case class ScalaCheckFunction3[T1, T2, T3, R](
                                                prettyFreqMap: FreqMap[Set[Any]] => Pretty,
                                                asResult: AsResult[R],
                                                context: Option[Context],
-                                               parameters: Parameters,
-                                               seed: Seed) extends ScalaCheckFunction {
+                                               parameters: Parameters) extends ScalaCheckFunction {
 
   type SelfType = ScalaCheckFunction3[T1, T2, T3, R]
 
@@ -280,7 +281,8 @@ case class ScalaCheckFunction3[T1, T2, T3, R](
   }
 
   lazy val prop: Prop =
-    makeProp((t1: T1) => makeProp((t2: T2) => makeProp((t3: T3) => propFunction(t1, t2, t3), argInstances3.shrink), argInstances2.shrink), argInstances1.shrink).useSeed("unused", seed)
+    makeProp((t1: T1) => makeProp((t2: T2) => makeProp((t3: T3) => propFunction(t1, t2, t3), argInstances3.shrink),
+      argInstances2.shrink), argInstances1.shrink).useSeed("unused", parameters.seed)
 
   def noShrink: SelfType = copy(argInstances1 = argInstances1.copy(shrink = None), argInstances2 = argInstances2.copy(shrink = None), argInstances3 = argInstances3.copy(shrink = None))
 
@@ -335,7 +337,10 @@ case class ScalaCheckFunction3[T1, T2, T3, R](
   def setContext(context: Context): SelfType = copy(context = Some(context))
 
   def setParameters(ps: Parameters): SelfType = copy(parameters = ps)
-  def setParameters(seed: Seed): SelfType = copy(seed = seed)
+
+  def setSeed(seed: Seed): SelfType =
+    copy(parameters = parameters.copy(seed = seed))
+
 }
 
 
@@ -345,8 +350,7 @@ case class ScalaCheckFunction4[T1, T2, T3, T4, R](
                                                    prettyFreqMap: FreqMap[Set[Any]] => Pretty,
                                                    asResult: AsResult[R],
                                                    context: Option[Context],
-                                                   parameters: Parameters,
-                                                   seed: Seed) extends ScalaCheckFunction {
+                                                   parameters: Parameters) extends ScalaCheckFunction {
 
   type SelfType = ScalaCheckFunction4[T1, T2, T3, T4, R]
 
@@ -362,7 +366,7 @@ case class ScalaCheckFunction4[T1, T2, T3, T4, R](
   }
 
   lazy val prop: Prop =
-    makeProp((t1: T1) => makeProp((t2: T2) => makeProp((t3: T3) => makeProp((t4: T4) => propFunction(t1, t2, t3, t4), argInstances4.shrink), argInstances3.shrink), argInstances2.shrink), argInstances1.shrink).useSeed("unused", seed)
+    makeProp((t1: T1) => makeProp((t2: T2) => makeProp((t3: T3) => makeProp((t4: T4) => propFunction(t1, t2, t3, t4), argInstances4.shrink), argInstances3.shrink), argInstances2.shrink), argInstances1.shrink).useSeed("unused", parameters.seed)
 
   def noShrink: SelfType = copy(argInstances1 = argInstances1.copy(shrink = None), argInstances2 = argInstances2.copy(shrink = None), argInstances3 = argInstances3.copy(shrink = None), argInstances4 = argInstances4.copy(shrink = None))
 
@@ -424,7 +428,10 @@ case class ScalaCheckFunction4[T1, T2, T3, T4, R](
   def setContext(context: Context): SelfType = copy(context = Some(context))
 
   def setParameters(ps: Parameters): SelfType = copy(parameters = ps)
-  def setParameters(seed: Seed): SelfType = copy(seed = seed)
+
+  def setSeed(seed: Seed): SelfType =
+    copy(parameters = parameters.copy(seed = seed))
+
 }
 
 
@@ -434,8 +441,7 @@ case class ScalaCheckFunction5[T1, T2, T3, T4, T5, R](
                                                        prettyFreqMap: FreqMap[Set[Any]] => Pretty,
                                                        asResult: AsResult[R],
                                                        context: Option[Context],
-                                                       parameters: Parameters,
-                                                       seed: Seed) extends ScalaCheckFunction {
+                                                       parameters: Parameters) extends ScalaCheckFunction {
 
   type SelfType = ScalaCheckFunction5[T1, T2, T3, T4, T5, R]
 
@@ -451,7 +457,7 @@ case class ScalaCheckFunction5[T1, T2, T3, T4, T5, R](
   }
 
   lazy val prop: Prop =
-    makeProp((t1: T1) => makeProp((t2: T2) => makeProp((t3: T3) => makeProp((t4: T4) => makeProp((t5: T5) => propFunction(t1, t2, t3, t4, t5), argInstances5.shrink), argInstances4.shrink), argInstances3.shrink), argInstances2.shrink), argInstances1.shrink).useSeed("unused", seed)
+    makeProp((t1: T1) => makeProp((t2: T2) => makeProp((t3: T3) => makeProp((t4: T4) => makeProp((t5: T5) => propFunction(t1, t2, t3, t4, t5), argInstances5.shrink), argInstances4.shrink), argInstances3.shrink), argInstances2.shrink), argInstances1.shrink).useSeed("unused", parameters.seed)
 
   def noShrink: SelfType = copy(argInstances1 = argInstances1.copy(shrink = None), argInstances2 = argInstances2.copy(shrink = None), argInstances3 = argInstances3.copy(shrink = None), argInstances4 = argInstances4.copy(shrink = None), argInstances5 = argInstances5.copy(shrink = None))
 
@@ -520,7 +526,9 @@ case class ScalaCheckFunction5[T1, T2, T3, T4, T5, R](
   def setContext(context: Context): SelfType = copy(context = Some(context))
 
   def setParameters(ps: Parameters): SelfType = copy(parameters = ps)
-  def setParameters(seed: Seed): SelfType = copy(seed = seed)
+
+  def setSeed(seed: Seed): SelfType =
+    copy(parameters = parameters.copy(seed = seed))
 }
 
 
@@ -530,8 +538,7 @@ case class ScalaCheckFunction6[T1, T2, T3, T4, T5, T6, R](
                                                            prettyFreqMap: FreqMap[Set[Any]] => Pretty,
                                                            asResult: AsResult[R],
                                                            context: Option[Context],
-                                                           parameters: Parameters,
-                                                           seed: Seed) extends ScalaCheckFunction {
+                                                           parameters: Parameters) extends ScalaCheckFunction {
 
   type SelfType = ScalaCheckFunction6[T1, T2, T3, T4, T5, T6, R]
 
@@ -547,7 +554,8 @@ case class ScalaCheckFunction6[T1, T2, T3, T4, T5, T6, R](
   }
 
   lazy val prop: Prop =
-    makeProp((t1: T1) => makeProp((t2: T2) => makeProp((t3: T3) => makeProp((t4: T4) => makeProp((t5: T5) => makeProp((t6: T6) => propFunction(t1, t2, t3, t4, t5, t6), argInstances6.shrink), argInstances5.shrink), argInstances4.shrink), argInstances3.shrink), argInstances2.shrink), argInstances1.shrink).useSeed("unused", seed)
+    makeProp((t1: T1) => makeProp((t2: T2) => makeProp((t3: T3) => makeProp((t4: T4) => makeProp((t5: T5) => makeProp((t6: T6) => propFunction(t1, t2, t3, t4, t5, t6), argInstances6.shrink), argInstances5.shrink), argInstances4.shrink), argInstances3.shrink), argInstances2.shrink),
+      argInstances1.shrink).useSeed("unused", parameters.seed)
 
   def noShrink: SelfType = copy(argInstances1 = argInstances1.copy(shrink = None), argInstances2 = argInstances2.copy(shrink = None), argInstances3 = argInstances3.copy(shrink = None), argInstances4 = argInstances4.copy(shrink = None), argInstances5 = argInstances5.copy(shrink = None), argInstances6 = argInstances6.copy(shrink = None))
 
@@ -623,7 +631,10 @@ case class ScalaCheckFunction6[T1, T2, T3, T4, T5, T6, R](
   def setContext(context: Context): SelfType = copy(context = Some(context))
 
   def setParameters(ps: Parameters): SelfType = copy(parameters = ps)
-  def setParameters(seed: Seed): SelfType = copy(seed = seed)
+
+  def setSeed(seed: Seed): SelfType =
+    copy(parameters = parameters.copy(seed = seed))
+
 }
 
 
@@ -633,8 +644,7 @@ case class ScalaCheckFunction7[T1, T2, T3, T4, T5, T6, T7, R](
                                                                prettyFreqMap: FreqMap[Set[Any]] => Pretty,
                                                                asResult: AsResult[R],
                                                                context: Option[Context],
-                                                               parameters: Parameters,
-                                                               seed: Seed) extends ScalaCheckFunction {
+                                                               parameters: Parameters) extends ScalaCheckFunction {
 
   type SelfType = ScalaCheckFunction7[T1, T2, T3, T4, T5, T6, T7, R]
 
@@ -650,7 +660,7 @@ case class ScalaCheckFunction7[T1, T2, T3, T4, T5, T6, T7, R](
   }
 
   lazy val prop: Prop =
-    makeProp((t1: T1) => makeProp((t2: T2) => makeProp((t3: T3) => makeProp((t4: T4) => makeProp((t5: T5) => makeProp((t6: T6) => makeProp((t7: T7) => propFunction(t1, t2, t3, t4, t5, t6, t7), argInstances7.shrink), argInstances6.shrink), argInstances5.shrink), argInstances4.shrink), argInstances3.shrink), argInstances2.shrink), argInstances1.shrink).useSeed("unused", seed)
+    makeProp((t1: T1) => makeProp((t2: T2) => makeProp((t3: T3) => makeProp((t4: T4) => makeProp((t5: T5) => makeProp((t6: T6) => makeProp((t7: T7) => propFunction(t1, t2, t3, t4, t5, t6, t7), argInstances7.shrink), argInstances6.shrink), argInstances5.shrink), argInstances4.shrink), argInstances3.shrink), argInstances2.shrink), argInstances1.shrink).useSeed("unused", parameters.seed)
 
   def noShrink: SelfType = copy(argInstances1 = argInstances1.copy(shrink = None), argInstances2 = argInstances2.copy(shrink = None), argInstances3 = argInstances3.copy(shrink = None), argInstances4 = argInstances4.copy(shrink = None), argInstances5 = argInstances5.copy(shrink = None), argInstances6 = argInstances6.copy(shrink = None), argInstances7 = argInstances7.copy(shrink = None))
 
@@ -733,7 +743,10 @@ case class ScalaCheckFunction7[T1, T2, T3, T4, T5, T6, T7, R](
   def setContext(context: Context): SelfType = copy(context = Some(context))
 
   def setParameters(ps: Parameters): SelfType = copy(parameters = ps)
-  def setParameters(seed: Seed): SelfType = copy(seed = seed)
+
+  def setSeed(seed: Seed): SelfType =
+    copy(parameters = parameters.copy(seed = seed))
+
 }
 
 
@@ -743,8 +756,7 @@ case class ScalaCheckFunction8[T1, T2, T3, T4, T5, T6, T7, T8, R](
                                                                    prettyFreqMap: FreqMap[Set[Any]] => Pretty,
                                                                    asResult: AsResult[R],
                                                                    context: Option[Context],
-                                                                   parameters: Parameters,
-                                                                   seed: Seed) extends ScalaCheckFunction {
+                                                                   parameters: Parameters) extends ScalaCheckFunction {
 
   type SelfType = ScalaCheckFunction8[T1, T2, T3, T4, T5, T6, T7, T8, R]
 
@@ -760,7 +772,7 @@ case class ScalaCheckFunction8[T1, T2, T3, T4, T5, T6, T7, T8, R](
   }
 
   lazy val prop: Prop =
-    makeProp((t1: T1) => makeProp((t2: T2) => makeProp((t3: T3) => makeProp((t4: T4) => makeProp((t5: T5) => makeProp((t6: T6) => makeProp((t7: T7) => makeProp((t8: T8) => propFunction(t1, t2, t3, t4, t5, t6, t7, t8), argInstances8.shrink), argInstances7.shrink), argInstances6.shrink), argInstances5.shrink), argInstances4.shrink), argInstances3.shrink), argInstances2.shrink), argInstances1.shrink).useSeed("unused", seed)
+    makeProp((t1: T1) => makeProp((t2: T2) => makeProp((t3: T3) => makeProp((t4: T4) => makeProp((t5: T5) => makeProp((t6: T6) => makeProp((t7: T7) => makeProp((t8: T8) => propFunction(t1, t2, t3, t4, t5, t6, t7, t8), argInstances8.shrink), argInstances7.shrink), argInstances6.shrink), argInstances5.shrink), argInstances4.shrink), argInstances3.shrink), argInstances2.shrink), argInstances1.shrink).useSeed("unused", parameters.seed)
 
   def noShrink: SelfType = copy(argInstances1 = argInstances1.copy(shrink = None), argInstances2 = argInstances2.copy(shrink = None), argInstances3 = argInstances3.copy(shrink = None), argInstances4 = argInstances4.copy(shrink = None), argInstances5 = argInstances5.copy(shrink = None), argInstances6 = argInstances6.copy(shrink = None), argInstances7 = argInstances7.copy(shrink = None), argInstances8 = argInstances8.copy(shrink = None))
 
@@ -850,7 +862,10 @@ case class ScalaCheckFunction8[T1, T2, T3, T4, T5, T6, T7, T8, R](
   def setContext(context: Context): SelfType = copy(context = Some(context))
 
   def setParameters(ps: Parameters): SelfType = copy(parameters = ps)
-  def setParameters(seed: Seed): SelfType = copy(seed = seed)
+
+  def setSeed(seed: Seed): SelfType =
+    copy(parameters = parameters.copy(seed = seed))
+
 }
 
 case class ScalaCheckArgInstances[T](arbitrary: Arbitrary[T], shrink: Option[Shrink[T]], collectors: List[T => Any], pretty: T => Pretty) {
@@ -905,7 +920,7 @@ case class ScalaCheckFunction$n[${TNList(n)}, R](
   lazy val prop: Prop =
     ${(1 to n).reverse.foldLeft(s"propFunction(${NParamList(n)})") { (res, i) =>
        s"makeProp((t$i: T$i) => $res, argInstances$i.shrink)"
-    }}.useSeed("unused", seed)
+    }}.useSeed("unused", parameters.seed)
 
   def noShrink: SelfType = copy(${(1 to n).map(i => s"argInstances$i = argInstances$i.copy(shrink = None)").mkString(", ")})
 
@@ -946,7 +961,9 @@ case class ScalaCheckFunction$n[${TNList(n)}, R](
   def setContext(context: Context): SelfType = copy(context = Some(context))
 
   def setParameters(ps: Parameters): SelfType = copy(parameters = ps)
-  def setParameters(seed: Seed): SelfType = copy(seed = seed)
+
+  def setSeed(seed: Seed): SelfType =
+    copy(parameters = parameters.copy(seed = seed))
 }""".stripMargin
 
 
