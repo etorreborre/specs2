@@ -124,12 +124,12 @@ lazy val common = crossProject(JSPlatform, JVMPlatform).in(file("common")).
 ).
   jsSettings(depends.jsTest, moduleJsSettings("common"),
     libraryDependencies ++= Seq(
-      "org.scalacheck" %%% "scalacheck" % "1.13.5" % "test"
+      "org.scalacheck" %%% "scalacheck" % "1.14.0" % "test"
     )
   ).
   jvmSettings(moduleJvmSettings("common"),
     libraryDependencies ++= Seq(
-      "org.scalacheck" %% "scalacheck" % "1.13.5" % "test"
+      "org.scalacheck" %% "scalacheck" % "1.14.0" % "test"
     )
   )
 
@@ -292,10 +292,10 @@ lazy val scalacheck = crossProject(JSPlatform, JVMPlatform).in(file("scalacheck"
     moduleSettings("scalacheck") ++
     Seq(name := "specs2-scalacheck"):_*).
   jsSettings(depends.jsTest, moduleJsSettings("scalacheck"), libraryDependencies +=
-    "org.scalacheck" %%% "scalacheck" % "1.13.5"
+    "org.scalacheck" %%% "scalacheck" % "1.14.0"
   ).
   jvmSettings(depends.jvmTest, moduleJvmSettings("scalacheck"), libraryDependencies +=
-    "org.scalacheck" %% "scalacheck" % "1.13.5"
+    "org.scalacheck" %% "scalacheck" % "1.14.0"
   )
 
 lazy val scalacheckJs  = scalacheck.js.dependsOn(coreJs)

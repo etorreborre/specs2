@@ -50,7 +50,7 @@ trait ScalaCheckPropertyCheck extends ExpectationsCreation {
             case FailureException(f) =>
               // in that case we want to represent a normal failure
               val failedResult = prettyResult(result.copy(status = Test.Failed(args, labels)), prettyFreqMap)(parameters.prettyParams)
-              new Failure(failedResult + "\n> " + f.message, details = f.details, stackTrace = f.stackTrace)
+              Failure(failedResult + "\n> " + f.message, details = f.details, stackTrace = f.stackTrace)
 
             case DecoratedResultException(DecoratedResult(_, f)) =>
               // in that case we want to represent a normal failure
@@ -59,7 +59,7 @@ trait ScalaCheckPropertyCheck extends ExpectationsCreation {
 
             case e: AssertionError =>
               val failedResult = prettyResult(result.copy(status = Test.Failed(args, labels)), prettyFreqMap)(parameters.prettyParams)
-              new Failure(failedResult + "\n> " + e.getMessage, stackTrace = e.getStackTrace.toList)
+              Failure(failedResult + "\n> " + e.getMessage, stackTrace = e.getStackTrace.toList)
 
             case SkipException(s)    => s
             case PendingException(p) => p
@@ -84,22 +84,21 @@ trait ScalaCheckPropertyCheck extends ExpectationsCreation {
   def prettyResult(res: Test.Result, freqMapPretty: FreqMap[Set[Any]] => Pretty) = Pretty { prms =>
     def labels(ls: scala.collection.immutable.Set[String]) =
       if(ls.isEmpty) ""
-      else "> Labels of failing property: " / ls.mkString("\n")
+      else s"> Labels of failing property:${ls.mkString("\n")}"
     val s = res.status match {
-      case Test.Proved(args) => "OK, proved property."/prettyArgs(args)(prms)
+      case Test.Proved(args) => s"OK, proved property.${prettyArgs(args)(prms)}"
       case Test.Passed => "OK, passed "+res.succeeded+" tests."
       case Test.Failed(args, l) =>
-        "Falsified after "+res.succeeded+" passed tests."/labels(l)/prettyArgs(args)(prms)
+        s"Falsified after "+res.succeeded+s" passed tests.\n${labels(l)}${prettyArgs(args)(prms)}"
       case Test.Exhausted =>
         "Gave up after only "+res.succeeded+" passed tests. " +
           res.discarded+" tests were discarded."
       case Test.PropException(args,e,l) =>
-        "Exception raised on property evaluation."/labels(l)/prettyArgs(args)(prms)/
-          "> Exception: "+pretty(e,prms)
+        s"Exception raised on property evaluation.${labels(l)}${prettyArgs(args)(prms)}> Exception: "+pretty(e,prms)
     }
     val t = if(prms.verbosity <= 1) "" else "Elapsed time: "+prettyTime(res.time)
     val map = freqMapPretty(res.freqMap).apply(prms)
-    s/t/map
+    s"$s$t$map"
   }
 
 
