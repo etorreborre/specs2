@@ -20,7 +20,7 @@ class ScalaCheckMatchersApiSpec extends Specification with ScalaCheck { def is =
     returning a boolean value
     ${ prop { (i: Int) => i > 0 || i <= 0 } }
     using  an implication and a match result
-    ${ prop { i: Int => (i > 0) ==> (i must be_>(0)) } } $xtag
+    ${ prop { i: Int => (i > 0) ==> (i must be_>(0)) } }
     ${ prop { (i: Int, j: Int) => (i > j) ==> (i must be_>(j)) } }
     using an implication and a boolean value
     ${ prop { (i:Int) => (i > 0) ==> (i > 0) } }

@@ -4,7 +4,6 @@ package scalacheck
 import org.scalacheck.util._
 import org.scalacheck.Test
 import PrettyDetails._
-import org.scalacheck.rng.Seed
 
 trait ScalaCheckParameters {
   /**
@@ -22,9 +21,8 @@ trait ScalaCheckParameters {
           maxSize: Int                                 = defaultParameters.maxSize,
           workers: Int                                 = defaultParameters.workers,
           callback: Test.TestCallback                  = defaultParameters.testCallback,
-          loader: Option[ClassLoader]                  = defaultParameters.loader,
-          seed: Seed                                   = Seed.random): Parameters =
-    Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, callback, loader, seed = seed)
+          loader: Option[ClassLoader]                  = defaultParameters.loader): Parameters =
+    Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, callback, loader)
 
   /** create parameters with verbose = true */
   def display(minTestsOk: Int                              = defaultParameters.minTestsOk,
@@ -33,8 +31,7 @@ trait ScalaCheckParameters {
               maxSize: Int                                 = defaultParameters.maxSize,
               workers: Int                                 = defaultParameters.workers,
               callback: Test.TestCallback                  = defaultParameters.testCallback,
-              loader: Option[ClassLoader]                  = defaultParameters.loader,
-              seed: Seed                                   = Seed.random): Parameters =
-    Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, callback, loader, seed = seed).verbose
+              loader: Option[ClassLoader]                  = defaultParameters.loader): Parameters =
+    Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, callback, loader).verbose
 }
 

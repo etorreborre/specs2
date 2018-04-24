@@ -26,7 +26,7 @@ case class ScalaCheckProp(prop: Prop, parameters: Parameters, prettyFreqMap: Fre
     copy(parameters = ps)
 
   def setSeed(seed: Seed): SelfType =
-    copy(parameters = parameters.copy(seed = seed))
+    copy(parameters = parameters.copy(seed = Some(seed)))
 
   def setPrettyFreqMap(f: FreqMap[Set[Any]] => Pretty): SelfType =
     copy(prettyFreqMap = f)

@@ -1,5 +1,5 @@
--XX:+CMSClassUnloadingEnabled
--Xms1536m
--Xmx4G
--XX:MaxPermSize=384m
--XX:ReservedCodeCacheSize=192m
+-J-XX:+CMSClassUnloadingEnabled
+-J-Xms1536m
+-J-Xmx4G
+-J-XX:MaxPermSize=384m
+-J-XX:ReservedCodeCacheSize=192m

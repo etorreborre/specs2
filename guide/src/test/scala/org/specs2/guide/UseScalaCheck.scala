@@ -162,6 +162,8 @@ The parameters you can modify are:
  `callback`        |                        | a ScalaCheck TestCallback (see the [ScalaCheck documentation](http://www.scalacheck.org))
  `loader`          |                        | a custom classloader (see the [ScalaCheck documentation](http://www.scalacheck.org))
  `prettyParams`    |                        | a `Pretty.Params` instance to set the verbosity level when displaying `Pretty` instances
+ `seed`            | `None`                 | a Base64 encoded string which you can get from a previous failed run.
+ You can set the seed on the property directly with `setSeed(string)`
 
 #### Property level
 
@@ -185,6 +187,7 @@ Some properties can be overridden from the command line
  `maxSize`         | `scalacheck.maxsize`
  `workers`         | `scalacheck.workers`
  `verbose`         | `scalacheck.verbose`
+ `seed`            | `scalacheck.seed`
 
 #### Expectations
 
