@@ -46,7 +46,7 @@ trait ValueChecks extends ValueChecksBase {
   /** a partial function returning an object having an AsResult instance can check a value */
   implicit def partialfunctionIsValueCheck[T, R : AsResult](f: PartialFunction[T, R]): ValueCheck[T] = new ValueCheck[T] {
     def check    = (t: T) => {
-      if (f.isDefinedAt(t)) functionResult(AsResult(f(t)), t)
+      if (f.isDefinedAt(t)) functionResult(AsResult.safely(f(t)), t)
       else                  Failure("undefined function for "+q(t))
     }
     def checkNot = (t: T) => Results.negate(check(t))
@@ -60,8 +60,8 @@ trait ValueChecksBase extends ValueChecksLowImplicits {
 
   /** a Matcher[T] can check a value */
   implicit def matcherIsValueCheck[T](m: Matcher[T]): ValueCheck[T] = new ValueCheck[T] {
-    def check    = (t: T) => AsResult(m(Expectable(t)))
-    def checkNot = (t: T) => AsResult(m.not(Expectable(t)))
+    def check    = (t: T) => AsResult.safely(m(Expectable(t)))
+    def checkNot = (t: T) => AsResult.safely(m.not(Expectable(t)))
   }
 
   /** an expected value can be used to check another value */
@@ -72,7 +72,7 @@ trait ValueChecksBase extends ValueChecksLowImplicits {
 trait ValueChecksLowImplicits {
   /** a function returning an object having an AsResult instance can check a value */
   implicit def functionIsValueCheck[T, R : AsResult](f: T => R): ValueCheck[T] = new ValueCheck[T] {
-    def check    = (t: T) => functionResult(AsResult(f(t)), t)
+    def check    = (t: T) => functionResult(AsResult.safely(f(t)), t)
     def checkNot = (t: T) => Results.negate(check(t))
   }
 
@@ -87,8 +87,8 @@ object ValueChecks extends ValueChecks
 /** ValueCheck for a typed expected value. It uses the BeTypedEqualTo matcher */
 case class BeEqualTypedValueCheck[T : Diffable](expected: T) extends ValueCheck[T] {
   private lazy val matcher = new EqualityMatcher(expected)
-  def check    = (t: T) => AsResult(matcher(Expectable(t)))
-  def checkNot = (t: T) => AsResult(matcher.not(Expectable(t)))
+  def check    = (t: T) => AsResult.safely(matcher(Expectable(t)))
+  def checkNot = (t: T) => AsResult.safely(matcher.not(Expectable(t)))
 
   def downcast[S] = new BeEqualValueCheck[S](expected)
 
@@ -97,8 +97,8 @@ case class BeEqualTypedValueCheck[T : Diffable](expected: T) extends ValueCheck[
 /** ValueCheck for an untyped expected value. It uses the BeEqualTo matcher */
 case class BeEqualValueCheck[T](expected: Any) extends ValueCheck[T] {
   private lazy val matcher = new BeEqualTo(expected)
-  def check    = (t: T) => AsResult(matcher(Expectable(t)))
-  def checkNot = (t: T) => AsResult(matcher.not(Expectable(t)))
+  def check    = (t: T) => AsResult.safely(matcher(Expectable(t)))
+  def checkNot = (t: T) => AsResult.safely(matcher.not(Expectable(t)))
 }
 
 
