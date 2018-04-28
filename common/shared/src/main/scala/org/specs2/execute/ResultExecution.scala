@@ -111,8 +111,9 @@ trait ResultExecution { outer =>
   }
 
   /** determine if an AssertionError has been thrown from JUnit or not */
-  private def fromJUnit(e: AssertionError) = e.getStackTrace.exists((st: StackTraceElement) => JUNIT_ASSERT.matcher(st.getClassName).matches)
+  private def fromJUnit(e: AssertionError) =
+    e.getStackTrace.exists((st: StackTraceElement) => JUNIT_ASSERT.matcher(st.getClassName).matches)
 
-  private lazy val JUNIT_ASSERT = Pattern.compile(".*junit.*Assert.*")
+  private lazy val JUNIT_ASSERT = Pattern.compile("org.junit.*")
 }
 object ResultExecution extends ResultExecution
