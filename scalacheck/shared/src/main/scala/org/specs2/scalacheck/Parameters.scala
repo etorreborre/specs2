@@ -44,7 +44,7 @@ case class Parameters(minTestsOk: Int                 = Test.Parameters.default.
         maxDiscardRatio = commandLine.floatOr("scalacheck.maxdiscardratio", maxDiscardRatio),
         maxSize         = commandLine.intOr  ("scalacheck.maxsize",         maxSize),
         workers         = commandLine.intOr  ("scalacheck.workers",         workers),
-        seed            = commandLine.value  ("scalacheck.seed").flatMap(Parameters.makeSeed).orElse(seed),
+        seed            = commandLine.value  ("scalacheck.seed").flatMap(Parameters.makeSeed).orElse(seed)
       ).setVerbosity(commandLine.intOr  ("scalacheck.verbosity",       prettyParams.verbosity))
 
     if (commandLine.boolOr("scalacheck.verbose", false)) updated.verbose
