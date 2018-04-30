@@ -14,6 +14,7 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
  Reporting for Props
 
    ${ check(Prop.passed) returns "OK, passed 100 tests." }
+   ${ checkVerbose0(Prop.falsified) returns "The seed is" }
    ${ check(Prop.falsified) must beFailing(withMessage("Falsified after 0 passed tests.")) }
    ${ check(Prop.undecided) must beFailing(withMessage("Gave up after only 0 passed tests. 501 tests were discarded")) }
    when there is a conversion exception
@@ -88,10 +89,13 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
 """
 
   def check(prop: ScalaCheckProperty): Result =
-    check(prop.prop, prop.parameters, prop.prettyFreqMap)
+    check(prop.prop, prop.parameters.setVerbosity(-1), prop.prettyFreqMap)
+
+  def checkVerbose0(prop: Prop): Result =
+    check(prop, defaultParameters, defaultFreqMapPretty)
 
   def check(prop: Prop): Result =
-    check(prop, defaultParameters, defaultFreqMapPretty)
+    check(prop, defaultParameters.setVerbosity(-1), defaultFreqMapPretty)
 
   def exceptionWithCause(msg: String = "boom") = new java.lang.IllegalArgumentException(msg, new java.lang.Exception("cause"))
   def exceptionProp(msg: String = "boom") = forAll((b: Boolean) => {throw exceptionWithCause(msg); true})
@@ -108,7 +112,7 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
         if (!doneOnce) doneOnce = true
         else            throw new execute.FailureException(failure)
         true
-      }.setGen(Gen.const(true))
+      }.setGen(Gen.const(true)).setVerbosity(-1)
     }
 
   def assertionErrorProp = forAll((b: Boolean) => {assert(1 == 2, "1 is not equal to 2"); true})

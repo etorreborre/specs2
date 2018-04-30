@@ -120,7 +120,10 @@ trait ScalaCheckPropertyCheck extends ExpectationsCreation {
     prms =>
 
     def displaySeed: String =
-      s"\nThe seed is ${initialSeed.toBase64}\n"
+      if (prms.verbosity >= 0)
+        s"\nThe seed is ${initialSeed.toBase64}\n"
+      else
+        ""
 
     def labels(ls: scala.collection.immutable.Set[String]) =
       if(ls.isEmpty) ""
@@ -132,7 +135,7 @@ trait ScalaCheckPropertyCheck extends ExpectationsCreation {
         (if (prms.verbosity > 1) displaySeed else "")
 
       case Test.Passed =>
-        "OK, passed "+res.succeeded+" tests"+
+        "OK, passed "+res.succeeded+" tests."+
           (if (prms.verbosity > 1) displaySeed else "")
 
       case Test.Failed(args, l) =>

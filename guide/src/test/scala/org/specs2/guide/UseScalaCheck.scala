@@ -225,5 +225,16 @@ With $specs2 and the `org.specs2.execute.ResultImplicits` trait you can use the 
 prop((i: Int) => (i >= 18 && i <= 55) <==> isYoung(i))
 }}
 
+### Working with Seeds
+
+By default when a property fails the seed will be displayed (unless you `setVerbosity` to a negative number).
+If you want to "replay" a property with a that specific seed you can copy and set it on the property: ${snippet{
+prop ((i: Int) => i % 2 == 0).setSeed("f7ZhfyfeJz5eRysok6qBmtvt4SOxHjCIBNgn3Yhs5SD")
+}}
+
+You can also pass it on the command-line
+```
+sbt> testOnly *MySpec -- ex myTest scalacheck.seed f7ZhfyfeJz5eRysok6qBmtvt4SOxHjCIBNgn3Yhs5SD
+```
 """
 }
