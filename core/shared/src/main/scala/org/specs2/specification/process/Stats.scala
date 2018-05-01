@@ -92,7 +92,7 @@ case class Stats(specs:        Int = 0,
       "pending"      -> pending.toString,
       "skipped"      -> skipped.toString,
       "time"         -> timer.totalMillis.toString)
-    (stats /: attributes) { (res, cur) =>
+    attributes.foldLeft(stats) { (res, cur) =>
       if (cur._2 == "0") res
       else            res % new UnprefixedAttribute(cur._1, cur._2, Null)
     }
