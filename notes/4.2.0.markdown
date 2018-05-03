@@ -1,0 +1,14 @@
+Upgrade version
+
+## Upgrades
+
+ * **scalacheck** upgraded to ScalaCheck `1.14.0`. It is now possible to visualize the seed used
+  to generate a counter-example and reuse it to run a property (`myProp.setSeed("xxx")` or use `scalacheck.seed xxx` on the command line)
+  
+## Improvements
+
+ * Use `foldLeft` instead of `/:` (#654) (thanks to @xuwei-k)  
+ 
+## Fixes
+
+ * **junit** fixed an issue where `List(1,2) must contain(===(2))` would fail with `JUnitMatchers` and a JUnit test class
