@@ -220,15 +220,16 @@ trait Matcher[-T] { outer =>
   /**
    * @return a Matcher with no messages
    */
-  def mute = new Matcher[T] {
-    def apply[S <: T](s: Expectable[S]) = outer.apply(s).mute
-  }
+  def mute = setMessage("")
 
   /**
    * @return update the failure message of a matcher
    */
   def updateMessage(f: String => String) = new Matcher[T] {
-    def apply[S <: T](s: Expectable[S]) = outer.apply(s).updateMessage(f)
+    def apply[S <: T](s: Expectable[S]) =
+      try outer.apply(s).updateMessage(f)
+      catch { case FailureException(Failure(m, e, st, d)) =>
+        throw FailureException(Failure(f(m), e, st, d)) }
   }
 
   /**

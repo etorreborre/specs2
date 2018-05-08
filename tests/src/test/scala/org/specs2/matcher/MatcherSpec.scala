@@ -49,7 +49,9 @@ Messages
 ========
 
   + a matcher can have a different failure message
-                                                                                          """
+  + a specific messages can be set on a mutable matcher
+
+"""
 
   "adaptation" - new group {
     eg := new Exception("message")  must be_==("message") ^^ ((_:Exception).getMessage)
@@ -161,6 +163,14 @@ Messages
       def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i+" is even", (i: Int) => i+" is odd")
       (3 must beEven.setMessage("is not even")).message === "is not even"
     }
+    eg := {
+      val spec = new org.specs2.mutable.Specification {
+        def test: Result =
+          true must beFalse.setMessage("is not ok")
+      }
+      ResultExecution.execute(spec.test).message === "is not ok"
+    }
+
   }
 
 }
