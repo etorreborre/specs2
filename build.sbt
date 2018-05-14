@@ -9,7 +9,7 @@ import sbtcrossproject.{crossProject, CrossType}
 
 /** MAIN PROJECT */
 lazy val specs2 = project.in(file(".")).
-  enablePlugins(GitBranchPrompt, ScalaJSPlugin, GhpagesPlugin, BuildInfoPlugin).
+  enablePlugins(GitBranchPrompt, ScalaJSPlugin, SitePlugin, GhpagesPlugin, BuildInfoPlugin).
   settings(
     moduleSettings("")  ++
     siteSettings,
@@ -27,10 +27,10 @@ lazy val specs2 = project.in(file(".")).
 lazy val specs2Settings = Seq(
   organization := "org.specs2",
   specs2Version in GlobalScope := version.value,
-  scalazVersion in GlobalScope := "7.2.19",
+  scalazVersion in GlobalScope := "7.2.22",
   specs2ShellPrompt,
-  scalaVersion := "2.12.3",
-  crossScalaVersions := Seq(scalaVersion.value, "2.11.11", "2.13.0-M3"))
+  scalaVersion := "2.12.6",
+  crossScalaVersions := Seq(scalaVersion.value, "2.11.12", "2.13.0-M3"))
 
 lazy val versionSettings =
   Seq(
@@ -51,7 +51,7 @@ lazy val latestTag = "git tag"
 lazy val buildInfoSettings = Seq(
   buildInfoKeys :=
     Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion) ++
-    Seq(BuildInfoKey.action("commit")(Process(s"git log --pretty=format:%h -n  1").lines.head),
+    Seq(BuildInfoKey.action("commit")(sys.process.Process(s"git log --pretty=format:%h -n  1").lineStream.head),
         BuildInfoKey.action("timestamp")(timestamp(new Date))),
   buildInfoPackage := "org.specs2"
 )
@@ -68,9 +68,10 @@ lazy val tagName = Def.setting{
 
 lazy val commonJsSettings = Seq(
   scalacOptions += {
+    val tag = tagName.value
     val tagOrHash =
-      if(isSnapshot.value) sys.process.Process("git rev-parse HEAD").lines_!.head
-      else tagName.value
+      if(isSnapshot.value) sys.process.Process("git rev-parse HEAD").lineStream_!.head
+      else tag
     val a = (baseDirectory in LocalRootProject).value.toURI.toString
     val g = "https://raw.githubusercontent.com/etorreborre/specs2/" + tagOrHash
     s"-P:scalajs:mapSourceURI:$a->$g/"
@@ -239,11 +240,9 @@ lazy val matcherExtra = crossProject(JSPlatform, JVMPlatform).in(file("matcher-e
 lazy val matcherExtraJs  = matcherExtra.js.dependsOn(analysisJs, matcherJs, coreJs % "test->test")
 lazy val matcherExtraJvm = matcherExtra.jvm.dependsOn(analysisJvm, matcherJvm, coreJvm % "test->test")
 
-lazy val pom = Project(id = "pom", base = file("pom"),
-  settings =
-    moduleSettings("") ++ Seq(
-      name := "specs2")
-  ).dependsOn(commonJvm, matcherJvm, matcherExtraJvm, coreJvm, scalazJvm, html, analysisJvm,
+lazy val pom = Project(id = "pom", base = file("pom")).
+  settings(moduleSettings("") ++ Seq(name := "specs2")).
+  dependsOn(commonJvm, matcherJvm, matcherExtraJvm, coreJvm, scalazJvm, html, analysisJvm,
     shapelessJvm, form, markdown, gwt, junitJvm, scalacheckJvm, mockJvm)
 
 lazy val shapeless = crossProject(JSPlatform, JVMPlatform).in(file("shapeless")).
@@ -301,20 +300,21 @@ lazy val scalacheck = crossProject(JSPlatform, JVMPlatform).in(file("scalacheck"
 lazy val scalacheckJs  = scalacheck.js.dependsOn(coreJs)
 lazy val scalacheckJvm = scalacheck.jvm.dependsOn(coreJvm)
 
-lazy val tests = Project(id = "tests", base = file("tests"),
-  settings = moduleSettings("tests") ++
+lazy val tests = Project(id = "tests", base = file("tests")).
+  settings(
+    moduleSettings("tests") ++
     Seq(name := "specs2-tests") ++
     Seq(libraryDependencies ++= depends.scalaParallelCollections(scalaVersion.value)) ++
     depends.jvmTest ++
     moduleJvmSettings("tests")
-).dependsOn(
-  coreJvm      % "compile->compile;test->test",
-  shapelessJvm % "compile->compile;test->test",
-  junitJvm     % "test->test",
-  examplesJvm  % "test->test",
-  matcherExtraJvm,
-  html,
-  scalazJvm)
+  ).dependsOn(
+     coreJvm      % "compile->compile;test->test",
+     shapelessJvm % "compile->compile;test->test",
+     junitJvm     % "test->test",
+     examplesJvm  % "test->test",
+     matcherExtraJvm,
+     html,
+     scalazJvm)
 
 lazy val specs2ShellPrompt = shellPrompt in ThisBuild := { state =>
   val name = Project.extract(state).currentRef.project
@@ -334,7 +334,6 @@ lazy val compilationSettings = Seq(
       (sourceDirectory in Compile).value / s"scala-scalaz-7.1.x",
       (sourceDirectory in (Test, test)).value / s"scala-scalaz-7.1.x"),
   maxErrors := 20,
-  incOptions := incOptions.value.withNameHashing(true),
   scalacOptions in Compile ++=
       Seq("-Xfatal-warnings",
         "-Xlint",
@@ -400,7 +399,7 @@ lazy val aggregateTest = ScopeFilter(
   inConfigurations(Test))
 
 def maybeMarkProvided(dep: ModuleID): ModuleID =
-  if (providedDependenciesInAggregate.exists(dep.name.startsWith)) dep.copy(configurations = Some("provided"))
+  if (providedDependenciesInAggregate.exists(dep.name.startsWith)) dep.withConfigurations(configurations = Some("provided"))
   else dep
 
 /* A list of dependency module names that should be marked as "provided" for the aggregate artifact */
@@ -410,8 +409,6 @@ lazy val providedDependenciesInAggregate = Seq("shapeless")
 /**
  * PUBLICATION
  */
-lazy val publishSignedArtifacts = executeAggregateTask(publishSigned, "Publishing signed artifacts")
-
 lazy val publicationSettings = Seq(
   publishTo in Global := Some("staging" at "https://oss.sonatype.org/service/local/staging/deploy/maven2"),
   publishMavenStyle := true,
@@ -444,36 +441,12 @@ lazy val publicationSettings = Seq(
 lazy val notificationSettings = Seq(
   ghreleaseRepoOrg := "etorreborre",
   ghreleaseRepoName := "specs2",
-  ghreleaseNotes := { tagName: TagName =>
+  ghreleaseNotes := {
     // find the corresponding release notes
-    val notesFilePath = s"notes/${tagName.replace("SPECS2-", "")}.markdown"
-    try io.Source.fromFile(notesFilePath).mkString
-    catch { case t: Throwable => throw new Exception(s"the path $notesFilePath not found for tag $tagName") }
+    val notesFilePath = s"notes/${tagName.value.toUpperCase.replace("SPECS2-", "")}.markdown"
+    try scala.io.Source.fromFile(notesFilePath).mkString
+    catch { case t: Throwable => throw new Exception(s"the path $notesFilePath not found for tag ${tagName.value}") }
   },
   // just upload the notes
   ghreleaseAssets := Seq()
 )
-
-/**
- * UTILITIES
- */
-def executeAggregateTask(task: TaskKey[_], info: String) = (st: State) => {
-  st.log.info(info)
-  val extracted = Project.extract(st)
-  val ref: ProjectRef = extracted.get(thisProjectRef)
-  extracted.runAggregated(task in ref, st)
-}
-
-def executeTask(task: TaskKey[_], info: String) = (st: State) => {
-  st.log.info(info)
-  val extracted = Project.extract(st)
-  val ref: ProjectRef = extracted.get(thisProjectRef)
-  extracted.runTask(task in ref, st)._1
-}
-
-def executeTask(task: TaskKey[_], info: String, configuration: Configuration) = (st: State) => {
-  st.log.info(info)
-  val extracted = Project.extract(st)
-  val ref: ProjectRef = extracted.get(thisProjectRef)
-  extracted.runTask(task in configuration, st)._1
-}

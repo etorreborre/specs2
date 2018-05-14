@@ -1,8 +1,9 @@
-package org.specs2
-package reporter
 
 
 /*
+package org.specs2
+package reporter
+
 import mutable.Specification
 import matcher.ResultMatchers
 import scala.xml.NodeSeq
