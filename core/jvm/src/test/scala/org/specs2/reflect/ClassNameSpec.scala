@@ -37,8 +37,8 @@ class ClassNameSpec extends Spec with Tables with TypedEqual {
 
   trait MyTrait
   class ThisClass extends MyTrait
-    val anonymous = new ThisClass {
-  }
+
+  val anonymous = new ThisClass {}
 
   class ThisClassName
 
