@@ -6,15 +6,12 @@ language: scala
 scala:
   - 2.12.6
 
-# Get latest install-jdk.sh script
-before_install:
-  - wget https://github.com/sormuras/bach/raw/master/install-jdk.sh
+jdk: oraclejdk9
 
-matrix:
-  include:
-# Java 10 "OpenJDK"
-    - env: JDK='OpenJDK 10'
-      install: . ./install-jdk.sh -F 10 -L GPL
+addons:
+  apt:
+    packages:
+      - oracle-java9-installer
 
 # These directories are cached to S3 at the end of the build
 cache:
