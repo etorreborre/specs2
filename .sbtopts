@@ -2,4 +2,5 @@
 -J-Xms1536m
 -J-Xmx4G
 -J-XX:ReservedCodeCacheSize=192m
+-J-XX:+IgnoreUnrecognizedVMOptions
 -J--add-modules=java.activation
