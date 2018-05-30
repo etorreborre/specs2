@@ -4,7 +4,9 @@ package mockito
 
 import org.mockito.stubbing.Answer
 import org.mockito.invocation.InvocationOnMock
-import org.mockito.stubbing.{ OngoingStubbing, Stubber }
+import org.mockito.stubbing.{OngoingStubbing, Stubber}
+import org.specs2.control.ImplicitParameters.ImplicitParam
+import org.specs2.control.Use
 
 /**
  * This trait provides functionalities to declare stub values on method calls.
@@ -44,6 +46,9 @@ trait MockitoStubs extends MocksCreation with MockitoStubsLowerImplicits {
     }
     def answers(function: Any => T) = mocker.when(c).thenAnswer(new MockAnswer(function))
     def answers(function: (Any, Any) => T) = mocker.when(c).thenAnswer(new MockAnswer2(function))
+    def answers(function: Array[AnyRef] => T)(implicit p: ImplicitParam) = Use.ignoring(p) {
+      mocker.when(c).thenAnswer(new MockAnswer3(function))
+    }
     def responds(function: Any => T) = answers(function)
     def throws[E <: Throwable](e: E*): OngoingStubbing[T] = {
       if (e.isEmpty) throw new java.lang.IllegalArgumentException("The parameter passed to throws must not be empty")
@@ -101,6 +106,14 @@ trait MockitoStubs extends MocksCreation with MockitoStubsLowerImplicits {
    */
   class MockAnswer2[T](function: (Any, Any) => T) extends Answer[T] {
     def answer(invocation: InvocationOnMock): T = function(invocation.getArguments, invocation.getMock)
+  }
+
+  /**
+   * in this case we the function expects all the arguments from the invocation
+   */
+  class MockAnswer3[T](function: Array[AnyRef] => T) extends Answer[T] {
+    def answer(invocation: InvocationOnMock): T =
+      function(invocation.getArguments)
   }
 }
 

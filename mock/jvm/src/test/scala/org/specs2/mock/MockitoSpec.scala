@@ -123,6 +123,7 @@ STUBS
  + Answers can use the method's parameters passed as an array
  + Answers can use the mock instance as the second parameter
  + Answers can use the mock instance, even when the method has 0 parameters
+ + Answers can use the all the invocation parameters
 
  + A parameter can be captured in order to check its value
  + A parameter can be captured in order to check its successive values
@@ -488,6 +489,12 @@ ${step(env)}                                                                    
       list.size answers { m => m.toString.length}
       list.size must_== 4
     }
+
+    eg := {
+      list.get(anyInt) answers { is: Array[AnyRef] => "The parameters are "+is.mkString("[", ",", "]") }
+      list.get(2) must_== "The parameters are [2]"
+    }
+
     eg := {
       list.get(1)
       val c = capture[Int]
