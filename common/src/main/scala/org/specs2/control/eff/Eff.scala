@@ -137,7 +137,7 @@ trait EffImplicits {
   /**
    * Monad implementation for the Eff[R, ?] type
    */
-  implicit final def EffMonad[R]: Monad[Eff[R, ?]] with BindRecʹ[Eff[R, ?]] = new Monad[Eff[R, ?]] with BindRecʹ[Eff[R, ?]] {
+  implicit final def EffMonad[R]: Monad[Eff[R, ?]] with BindRec1[Eff[R, ?]] = new Monad[Eff[R, ?]] with BindRec1[Eff[R, ?]] {
     def point[A](a: =>A): Eff[R, A] =
       Pure(a)
 
@@ -269,7 +269,7 @@ trait EffInterpretation {
   /**
    * peel-off the only present effect
    */
-  def detach[M[_] : Monad, A](eff: Eff[Fx1[M], A])(implicit bindRec: BindRecʹ[M]): M[A] =
+  def detach[M[_] : Monad, A](eff: Eff[Fx1[M], A])(implicit bindRec: BindRec1[M]): M[A] =
     bindRec.tailrecM[Eff[Fx1[M], A], A](eff) {
       case Pure(a, Last(Some(l))) => Monad[M].pure(-\/(l.value.as(a)))
       case Pure(a, Last(None))    => Monad[M].pure(\/-(a))
@@ -290,7 +290,7 @@ trait EffInterpretation {
   /**
    * peel-off the only present effect, using an Applicative instance where possible
    */
-  def detachA[M[_], A](eff: Eff[Fx1[M], A])(implicit monad: Monad[M], bindRec: BindRecʹ[M], applicative: Applicative[M]): M[A] =
+  def detachA[M[_], A](eff: Eff[Fx1[M], A])(implicit monad: Monad[M], bindRec: BindRec1[M], applicative: Applicative[M]): M[A] =
     bindRec.tailrecM[Eff[Fx1[M], A], A](eff) {
       case Pure(a, Last(Some(l))) => monad.pure(-\/(l.value.as(a)))
 

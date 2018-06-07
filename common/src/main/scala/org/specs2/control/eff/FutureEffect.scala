@@ -44,7 +44,7 @@ object TimedFuture {
     override def toString = "Applicative[TimedFuture]"
   }
 
-  implicit final def MonadTimedFuture: Monad[TimedFuture] with BindRecʹ[TimedFuture] = new Monad[TimedFuture] with BindRecʹ[TimedFuture] {
+  implicit final def MonadTimedFuture: Monad[TimedFuture] with BindRec1[TimedFuture] = new Monad[TimedFuture] with BindRec1[TimedFuture] {
     def point[A](x: => A) = TimedFuture((_, _) => Future.successful(x))
 
     def bind[A, B](fa: TimedFuture[A])(f: A => TimedFuture[B]): TimedFuture[B] =
@@ -62,7 +62,7 @@ object TimedFuture {
     override def toString = "Monad[TimedFuture]"
   }
 
-  implicit final def BindRecTimedFuture: BindRecʹ[TimedFuture] =
+  implicit final def BindRecTimedFuture: BindRec1[TimedFuture] =
     MonadTimedFuture
 }
 
