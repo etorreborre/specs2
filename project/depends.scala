@@ -32,7 +32,7 @@ object depends {
     "org.spire-math" % "kind-projector" % "0.8.2" cross CrossVersion.binary
 
   def scalacheck(scalaVersion: String) =
-    Seq("org.scalacheck" %% "scalacheck" % "1.13.4")
+    Seq("org.scalacheck" %% "scalacheck" % "1.14.0")
 
   def si2712Dependency(scalaVersion: String) =
     if (CrossVersion.partialVersion(scalaVersion).exists(_._2 < 11))
