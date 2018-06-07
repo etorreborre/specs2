@@ -102,5 +102,7 @@ trait ScalaCheckPropertyCheck extends ExpectationsCreation {
     s/t/map
   }
 
-
+  private implicit class StrBreak(val s1: String) {
+    def /(s2: String) = if(s2 == "") s1 else s1+"\n"+s2
+  }
 }
