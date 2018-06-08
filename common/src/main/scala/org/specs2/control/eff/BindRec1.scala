@@ -3,7 +3,7 @@ package org.specs2.control.eff
 import scalaz._
 
 /** Papers over the parameter order change in Scalaz 7.3 */
-trait BindRecʹ[M[_]] extends BindRec[M] {
+trait BindRec1[M[_]] extends BindRec[M] {
 
   def tailrecM[A, B](a: A)(f: A => M[\/[A, B]]): M[B]
 
