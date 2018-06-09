@@ -1,6 +1,5 @@
 package org.specs2.fp
 
-import scala.collection.generic.CanBuildFrom
 
 /**
  * Inspired from the scalaz (https://github.com/scalaz/scalaz) project
@@ -70,8 +69,6 @@ trait Foldable[F[_]]  {
   def toVector[A](fa: F[A]): Vector[A] = foldLeft(fa, Vector[A]())(_ :+ _)
   def toSet[A](fa: F[A]): Set[A] = foldLeft(fa, Set[A]())(_ + _)
   def toStream[A](fa: F[A]): Stream[A] = foldRight[A, Stream[A]](fa, Stream.empty)(Stream.cons(_, _))
-  def to[A, G[_]](fa: F[A])(implicit c: CanBuildFrom[Nothing, A, G[A]]): G[A] =
-    foldLeft(fa, c())(_ += _).result
 
   /** Whether all `A`s in `fa` yield true from `p`. */
   def all[A](fa: F[A])(p: A => Boolean): Boolean = foldRight(fa, true)(p(_) && _)
