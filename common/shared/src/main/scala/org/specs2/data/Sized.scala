@@ -1,8 +1,6 @@
 package org.specs2
 package data
 
-import scala.collection.GenTraversableOnce
-
 /**
  * A trait for anything that can be sized
  */
@@ -16,7 +14,7 @@ trait Sized[T] {
 
 object Sized {
   /** any scala collection has a size */
-  implicit def scalaTraversableIsSized[I <: GenTraversableOnce[_]]: Sized[I] = new Sized[I] {
+  implicit def scalaTraversableIsSized[I <: Traversable[_]]: Sized[I] = new Sized[I] {
     def size(t: I) = t.size
   }
   /** any scala array has a size */

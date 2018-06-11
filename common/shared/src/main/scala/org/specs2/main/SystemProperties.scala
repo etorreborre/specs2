@@ -1,7 +1,7 @@
 package org.specs2
 package main
 
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 import text.NotNullStrings._
 import text.FromString
 
@@ -13,7 +13,7 @@ trait SystemProperties {
 
   /** copy system properties on first access to avoid possible concurrent modification exceptions later */
   private lazy val systemProperties =
-    synchronized(System.getProperties.stringPropertyNames.toList.foldLeft(Map[String, String]()) { (res, key) =>
+    synchronized(System.getProperties.stringPropertyNames.asScala.foldLeft(Map[String, String]()) { (res, key) =>
       res.updated(key,System.getProperty(key))
     })
 

@@ -25,7 +25,7 @@ trait ClassycleDependencyFinder extends DependencyFinder {
             Dependency(ClassName.className(classVertex.getAttributes.asInstanceOf[ClassAttributes].getName),
               ClassName.className(classVertex.getTailVertex(i).getAttributes.asInstanceOf[ClassAttributes].getName))
           }
-      }.flatMap(identity).distinct.toSeq
+      }.flatten.distinct.toSeq
     }
   }
 }

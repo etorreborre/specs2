@@ -4,7 +4,7 @@ package guide
 import java.io.{PrintWriter, ByteArrayOutputStream}
 import java.util.Properties
 
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 
 object Isolation extends UserGuidePage { def is = s2"""
 
@@ -32,7 +32,7 @@ class IsolatedSpec extends mutable.Specification {
     "we can get all the properties names" >> {
       props.setProperty("p1", "v1")
       props.setProperty("p2", "v2")
-      props.propertyNames.toList must_== List("p1", "p2")
+      props.propertyNames.asScala.toList must_== List("p1", "p2")
     }
     "Properties can be stored" >> {
       // non-empty properties context

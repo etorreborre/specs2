@@ -23,7 +23,7 @@ trait StoredExpectations extends Expectations {
       case other => other
     }.map(_.toResult)
     results.clear()
-    rs
+    rs.toSeq
   }
 
   def addLocation(message: String, location: String): String = {
@@ -33,11 +33,11 @@ trait StoredExpectations extends Expectations {
 
   override def sandboxMatchResult[T](mr: =>MatchResult[T]): MatchResult[T] = synchronized {
     val resultsCopy = new scala.collection.mutable.ListBuffer[MatchResult[_]]
-    resultsCopy.appendAll(results)
+    resultsCopy ++= results
     try mr
     finally {
       results.clear
-      results.appendAll(resultsCopy)
+      results ++= resultsCopy
     }
   }
 }

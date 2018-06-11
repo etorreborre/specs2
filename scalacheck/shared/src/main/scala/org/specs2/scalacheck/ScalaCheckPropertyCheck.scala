@@ -15,7 +15,7 @@ trait ScalaCheckPropertyCheck extends ExpectationsCreation {
 
   def checkProperties(properties: Properties, parameters: Parameters, prettyFreqMap: FreqMap[Set[Any]] => Pretty): Result = {
     val prop = Prop { params: Gen.Parameters =>
-      Prop.all(properties.properties.map { case (n, p) => p :| n }:_*)(params)
+      Prop.all(properties.properties.toList.map { case (n, p) => p :| n }:_*)(params)
     }
     check(prop, parameters, prettyFreqMap)
   }

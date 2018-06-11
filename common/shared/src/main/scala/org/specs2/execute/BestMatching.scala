@@ -27,7 +27,9 @@ object BestMatching {
 
     // edges of the graph in the form of a map from t vertex in the first part of the bipartite graph to a list of vertices
     // in the second part
-    val startMap = Map[Int, Seq[Int]]().withDefault(_ => Vector())
+    val startMap: Map[Int,Seq[Int]] =
+      Map[Int, Seq[Int]]().withDefault(_ => Vector.empty)
+
     val edges = matches.foldLeft(startMap) { case (res, (t, i, v, j, r)) =>
       if (r.isSuccess) res + (i -> (res(i) :+ j).sorted) else res
     }

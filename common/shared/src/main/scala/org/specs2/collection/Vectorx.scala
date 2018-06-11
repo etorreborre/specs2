@@ -1,7 +1,6 @@
 package org.specs2.collection
 
 import scala.annotation.tailrec
-import scala.collection.immutable.Vector._
 
 /**
  * This trait provides additional methods on Vectors and nested Vectors

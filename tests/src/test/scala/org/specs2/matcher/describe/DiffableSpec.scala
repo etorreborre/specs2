@@ -141,14 +141,6 @@ Compare result
                     removed = Seq("e" -> "f"))
   }
 
-
-
-  trait TraversableWithNoDefinedForeach[T] extends Traversable[T] {
-    def foreach[U](f: T => U): Unit = {
-      sys.error("foreach is not defined on this traversable but toString is")
-    }
-  }
-
   def seqDiffable[T : Diffable]: SeqDiffable[T] =
     new SeqDiffable[T]
 

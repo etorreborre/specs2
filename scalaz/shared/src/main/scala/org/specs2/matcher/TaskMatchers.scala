@@ -26,8 +26,8 @@ trait TaskMatchers {
   def returnBefore[T](duration: Duration): TaskMatcher[T] =
     attemptRun(ValueCheck.alwaysOk, Some(duration))
 
-  def failWith[T <: Throwable : ClassTag]: Matcher[Task[_]] =
-    returnValue(be_-\/(haveClass[T])) ^^ { t: Task[_] => t.attempt }
+  def failWith[T <: Throwable : ClassTag]: Matcher[Task[Any]] =
+    returnValue(be_-\/[Throwable](haveClass(implicitly[ClassTag[T]]))) ^^ { t: Task[Any] => t.attempt }
 
   private[specs2] def attemptRun[T](check: ValueCheck[T], duration: Option[Duration]): TaskMatcher[T] =
     TaskMatcher(check, duration)

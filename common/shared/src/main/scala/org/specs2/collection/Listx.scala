@@ -2,7 +2,6 @@ package org.specs2
 package collection
 
 import scala.annotation.tailrec
-import scala.collection.immutable.List._
 
 /**
  * This trait provides additional methods on Lists and nested Lists

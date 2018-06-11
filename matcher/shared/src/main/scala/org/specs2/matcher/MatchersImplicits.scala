@@ -3,7 +3,7 @@ package matcher
 
 import execute._
 import text.Quote._
-import scala.collection.{GenTraversable, GenTraversableOnce}
+import scala.collection.Traversable
 import ResultLogicalCombinators._
 import text.Sentences._
 import control.Times
@@ -71,10 +71,10 @@ trait ResultImplicits extends ExpectationsCreation {
     def exactly(n: Times)               : ContainWithResult[T] = cc.exactly(n)
     def exactly(n: Int)                 : ContainWithResult[T] = cc.exactly(n)
 
-    def forall(values: GenTraversableOnce[T])      = createExpectable(values).applyMatcher(cc.forall)
-    def foreach(values: GenTraversableOnce[T])     = createExpectable(values).applyMatcher(cc.foreach)
-    def atLeastOnce(values: GenTraversableOnce[T]) = createExpectable(values).applyMatcher(cc.atLeastOnce)
-    def atMostOnce(values: GenTraversableOnce[T])  = createExpectable(values).applyMatcher(cc.atMostOnce)
+    def forall(values: Traversable[T])      = createExpectable(values).applyMatcher(cc.forall)
+    def foreach(values: Traversable[T])     = createExpectable(values).applyMatcher(cc.foreach)
+    def atLeastOnce(values: Traversable[T]) = createExpectable(values).applyMatcher(cc.atLeastOnce)
+    def atMostOnce(values: Traversable[T])  = createExpectable(values).applyMatcher(cc.atMostOnce)
   }
 }
 
@@ -93,10 +93,10 @@ trait SequenceMatchersCreation extends ExpectationsCreation with ResultImplicits
 
     private def applyMatcher = (t: T) => f(t)(createExpectable(t))
 
-    def forall(values: GenTraversable[T])      = outer.forall     (values)(applyMatcher)
-    def foreach(values: GenTraversable[T])     = outer.foreach    (values)(applyMatcher)
-    def atLeastOnce(values: GenTraversable[T]) = outer.atLeastOnce(values)(applyMatcher)
-    def atMostOnce(values: GenTraversable[T])  = outer.atMostOnce (values)(applyMatcher)
+    def forall(values: Traversable[T])      = outer.forall     (values)(applyMatcher)
+    def foreach(values: Traversable[T])     = outer.foreach    (values)(applyMatcher)
+    def atLeastOnce(values: Traversable[T]) = outer.atLeastOnce(values)(applyMatcher)
+    def atMostOnce(values: Traversable[T])  = outer.atMostOnce (values)(applyMatcher)
   }
 
   /**
@@ -125,29 +125,29 @@ trait SequenceMatchersCreation extends ExpectationsCreation with ResultImplicits
   }
 
   /** verify the function f for all the values, stopping after the first failure */
-  def forall[T, R : AsResult](values: GenTraversableOnce[T])(f: T => R) = f.forall(values)
+  def forall[T, R : AsResult](values: Traversable[T])(f: T => R) = f.forall(values)
   /** apply a matcher for all values */
   def forall[T](matcher: Matcher[T]) = ContainWithResult(ValueChecks.matcherIsValueCheck(matcher)).forall
   /** verify the function f for all the values, stopping after the first failure, where the PartialFunction is defined */
-  def forallWhen[T, U](values: GenTraversable[T])(f: PartialFunction[T, MatchResult[U]]) = forall(values.filter(f.isDefinedAt))(f)
+  def forallWhen[T, U](values: Traversable[T])(f: PartialFunction[T, MatchResult[U]]) = forall(values.filter(f.isDefinedAt))(f)
   /** verify the function f for all the values, and collect all failures */
-  def foreach[T, R : AsResult](values: GenTraversableOnce[T])(f: T => R) = f.foreach(values)
+  def foreach[T, R : AsResult](values: Traversable[T])(f: T => R) = f.foreach(values)
   /** apply a matcher foreach value */
   def foreach[T](matcher: Matcher[T]) = ContainWithResult(ValueChecks.matcherIsValueCheck(matcher)).foreach
   /** verify the function f for all the values, and collect all failures, where the PartialFunction is defined */
-  def foreachWhen[T, R : AsResult](values: GenTraversable[T])(f: PartialFunction[T, R]) = foreach(values.filter(f.isDefinedAt))(f)
+  def foreachWhen[T, R : AsResult](values: Traversable[T])(f: PartialFunction[T, R]) = foreach(values.filter(f.isDefinedAt))(f)
   /** verify the function f for at least one value */
-  def atLeastOnce[T, R : AsResult](values: GenTraversableOnce[T])(f: T => R) = f.atLeastOnce(values)
+  def atLeastOnce[T, R : AsResult](values: Traversable[T])(f: T => R) = f.atLeastOnce(values)
   /** verify the function f for at least one value */
-  def atMostOnce[T, R : AsResult](values: GenTraversableOnce[T])(f: T => R) = f.atMostOnce(values)
+  def atMostOnce[T, R : AsResult](values: Traversable[T])(f: T => R) = f.atMostOnce(values)
   /** apply a matcher atLeast one value */
   def atLeastOnce[T](matcher: Matcher[T]) = ContainWithResult(ValueChecks.matcherIsValueCheck(matcher)).atLeastOnce
   /** apply a matcher atLeast one value */
   def atMostOnce[T](matcher: Matcher[T]) = ContainWithResult(ValueChecks.matcherIsValueCheck(matcher)).atMostOnce
   /** verify the function f for at least one value, where the PartialFunction is defined */
-  def atLeastOnceWhen[T, R : AsResult](values: GenTraversable[T])(f: PartialFunction[T, R]) = atLeastOnce(values.filter(f.isDefinedAt))(f)
+  def atLeastOnceWhen[T, R : AsResult](values: Traversable[T])(f: PartialFunction[T, R]) = atLeastOnce(values.filter(f.isDefinedAt))(f)
   /** verify the function f for at least one value, where the PartialFunction is defined */
-  def atMostOnceWhen[T, R : AsResult](values: GenTraversable[T])(f: PartialFunction[T, R]) = atMostOnce(values.filter(f.isDefinedAt))(f)
+  def atMostOnceWhen[T, R : AsResult](values: Traversable[T])(f: PartialFunction[T, R]) = atMostOnce(values.filter(f.isDefinedAt))(f)
 }
 
 object SequenceMatchersCreation extends SequenceMatchersCreation

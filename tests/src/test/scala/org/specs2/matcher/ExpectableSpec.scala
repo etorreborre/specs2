@@ -47,15 +47,6 @@ class ExpectableSpec extends Spec with ResultMatchers with MustMatchers {
     }
     NullString() must_== NullString()
   }
-  "A Traversable expectable can be described if" >> {
-    "if it has a valid toString method" >> {
-      trait Trav[T] extends Traversable[T] {
-        override def toString = "trav"
-        def foreach[U](f: T => U): Unit = ()
-      }
-      theValue(new Trav[Int] {}).description === "trav"
-    }
-  }
   "An expectable must match without an exception on a mock" in {
     val l = Mockito.mock[List[Int]]
     l must be_==(l)

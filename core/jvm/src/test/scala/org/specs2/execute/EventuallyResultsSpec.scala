@@ -22,9 +22,10 @@ class EventuallyResultsSpec extends Specification with ResultMatchers {
     val iterator = List(Failure(), Failure(), Success()).iterator
     eventually(iterator.next)
   }
+
+
   "If all retries fail, the result will eventually fail" in {
-    lazy val failures: Stream[Result] = Failure() #:: failures
-    val iterator = failures.iterator
+    val iterator = Stream.continually(Failure()).iterator
     eventually(iterator.next).not
   }
   "Any object convertible to a result can be used with eventually" in {

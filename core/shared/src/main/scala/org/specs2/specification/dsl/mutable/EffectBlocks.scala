@@ -59,12 +59,12 @@ case class EffectBlocks(var mode: EffectBlocksMode = Record) {
       effects.clear
 
       effect.run()
-      effects.append(rest:_*)
+      effects ++= rest
     }
 
     // at the end of the recording we restore the effects
     // but leave out the path effects
-    effects.append(saved.filter(_.replay):_*)
+    effects ++= saved.filter(_.replay)
     this
   }
 
