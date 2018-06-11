@@ -63,12 +63,6 @@ object depends {
           "org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.patch),
           "org.scalamacros" %% "quasiquotes" % "2.1.0")
 
-  def scalaParallelCollections(scalaVersion: String) =
-    if (scalaMinorVersionAtLeast(scalaVersion, 13))
-      Seq("org.scala-lang.modules" %% "scala-parallel-collections" % "0.1.2")
-    else
-      Seq()
-
   lazy val resolvers =
     Seq(sbt.Keys.resolvers ++= Seq(
       Resolver.sonatypeRepo("releases")))

@@ -27,10 +27,10 @@ lazy val specs2 = project.in(file(".")).
 lazy val specs2Settings = Seq(
   organization := "org.specs2",
   specs2Version in GlobalScope := version.value,
-  scalazVersion in GlobalScope := "7.2.22",
+  scalazVersion in GlobalScope := "7.2.24",
   specs2ShellPrompt,
   scalaVersion := "2.12.6",
-  crossScalaVersions := Seq(scalaVersion.value, "2.11.12", "2.13.0-M3"))
+  crossScalaVersions := Seq(scalaVersion.value, "2.11.12", "2.13.0-M4"))
 
 lazy val versionSettings =
   Seq(
@@ -304,7 +304,6 @@ lazy val tests = Project(id = "tests", base = file("tests")).
   settings(
     moduleSettings("tests") ++
     Seq(name := "specs2-tests") ++
-    Seq(libraryDependencies ++= depends.scalaParallelCollections(scalaVersion.value)) ++
     depends.jvmTest ++
     moduleJvmSettings("tests")
   ).dependsOn(
