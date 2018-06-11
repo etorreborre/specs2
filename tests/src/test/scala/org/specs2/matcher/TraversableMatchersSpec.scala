@@ -5,7 +5,6 @@ import specification.process.DefaultExecutor
 import specification._
 import java.util.Arrays._
 
-import scala.collection.parallel.ParSeq
 import control.NumberOfTimes
 
 import scala.collection.JavaConverters._
@@ -202,12 +201,7 @@ class TraversableMatchersSpec(val env: Env) extends Spec with ResultMatchers wit
    ${ asList("Hello", "World") must haveSize(2) }
    ${ asList("Hello", "World").asScala must containMatch("ll") }
 
- With Parallel collections
- =========================
-
- Parallel collections work with any matcher
-   ${ ParSeq(1, 2, 3) must contain(allOf(1, 2, 3)) }
-                                                                                                                        """
+  """
 
   /**
    * Examples

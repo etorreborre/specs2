@@ -4,6 +4,8 @@ package guide
 import java.io.{PrintWriter, ByteArrayOutputStream}
 import java.util.Properties
 
+import scala.collection.JavaConverters._
+
 object Isolation extends UserGuidePage { def is = s2"""
 
 Unit specifications allow to nest blocks, as if they were different contexts, going from the more general to the more specific. It can be very tempting, for some applications, to include some mutable state representing data in more and more specific contexts. However, this can be problematic because:
@@ -30,7 +32,7 @@ class IsolatedSpec extends mutable.Specification {
     "we can get all the properties names" >> {
       props.setProperty("p1", "v1")
       props.setProperty("p2", "v2")
-      props.propertyNames.toList must_== List("p1", "p2")
+      props.propertyNames.asScala.toList must_== List("p1", "p2")
     }
     "Properties can be stored" >> {
       // non-empty properties context

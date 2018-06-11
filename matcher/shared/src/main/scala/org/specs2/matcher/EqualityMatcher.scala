@@ -4,8 +4,6 @@ import org.specs2.execute._
 import org.specs2.matcher.describe._
 import org.specs2.text.NotNullStrings._
 
-import scala.collection.{GenTraversable, GenTraversableOnce}
-
 class EqualityMatcher[T : Diffable](t: =>T) extends AdaptableMatcher[T] { outer =>
 
   protected val ok: String => String = identity
@@ -45,12 +43,12 @@ class EqualityMatcher[T : Diffable](t: =>T) extends AdaptableMatcher[T] { outer 
       case (e1: Map[_, _], e2: Map[_, _]) => Some( FailureMapDetails(e1.toMap[Any, Any], e2.toMap[Any, Any]) )
       case (e1: Set[_], e2: Set[_]) => Some( FailureSetDetails(e1.toSet[Any], e2.toSet[Any]) )
       case (e1: Array[_], e2: Array[_]) => Some( FailureSeqDetails(e1.toSeq, e2.toSeq) )
-      case (e1: GenTraversable[_], e2: GenTraversable[_]) if foreachIsDefined(e2) => Some( FailureSeqDetails(e1.toSeq.seq, e2.toSeq.seq) )
-      case (e1: GenTraversable[_], e2: GenTraversable[_]) => None
+      case (e1: Traversable[_], e2: Traversable[_]) if foreachIsDefined(e2) => Some( FailureSeqDetails(e1.toSeq.seq, e2.toSeq.seq) )
+      case (e1: Traversable[_], e2: Traversable[_]) => None
       case (e1, e2) => None
     }
 
-  private def foreachIsDefined(seq: GenTraversableOnce[_]): Boolean =
+  private def foreachIsDefined(seq: Traversable[_]): Boolean =
     try { seq.foreach(identity); true }
     catch { case _: Exception => false }
 

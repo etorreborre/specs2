@@ -9,9 +9,8 @@ import duration._
 import runner._
 import control.ExecuteActions._
 import org.specs2.main.Arguments
-import org.specs2.specification.Retries
 
-class FutureMatchersSpec extends Specification with ResultMatchers with Retries {
+class FutureMatchersSpec extends Specification with ResultMatchers with specification.Retries {
 
   lazy val env = Env(Arguments("threadsnb 4"))
   lazy val timeFactor = env.arguments.execute.timeFactor

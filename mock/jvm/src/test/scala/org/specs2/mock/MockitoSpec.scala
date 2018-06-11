@@ -465,7 +465,7 @@ ${step(env)}                                                                    
     val list = mockAs[java.util.List[String]]("list")
 
     eg := {
-      list.get(anyInt) answers { i => "The parameter is " + i.toString}
+      list.get(anyInt) answers { i: Any => "The parameter is " + i.toString}
       list.get(2) must_== "The parameter is 2"
     }
 
@@ -476,7 +476,7 @@ ${step(env)}                                                                    
     }
 
     eg := {
-      list.set(anyInt, anyString) answers { i => "The parameters are " + (i.asInstanceOf[Array[_]].mkString("(",",",")")) }
+      list.set(anyInt, anyString) answers { i: Any => "The parameters are " + (i.asInstanceOf[Array[_]].mkString("(",",",")")) }
       list.set(1,"foo") must_== "The parameters are (1,foo)"
     }
 
@@ -486,7 +486,7 @@ ${step(env)}                                                                    
     }
 
     eg := {
-      list.size answers { m => m.toString.length}
+      list.size answers { m: Any => m.toString.length}
       list.size must_== 4
     }
 

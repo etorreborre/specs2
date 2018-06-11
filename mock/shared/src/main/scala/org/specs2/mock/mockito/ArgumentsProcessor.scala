@@ -6,7 +6,6 @@ import java.util.List
 import org.mockito.ArgumentMatcher
 import org.mockito.internal.progress.ThreadSafeMockingProgress2
 import scala.collection.JavaConverters._
-import scala.collection.{GenSeqLike, GenSetLike}
 
 /*
  * Copyright (c) 2007 Mockito contributors
@@ -89,7 +88,7 @@ object ArgumentsProcessor {
       }
       // special case for sequences and sets because they have an apply method making them instances of Function1
       // yet they define a useful equals method
-      else if (arg.isInstanceOf[GenSeqLike[_,_]] || arg.isInstanceOf[GenSetLike[_,_]]) {
+      else if (arg.isInstanceOf[Seq[_]] || arg.isInstanceOf[Set[_]]) {
         matchers.add(new Equals(arg))
       }
       else if (arg.isInstanceOf[scala.runtime.AbstractFunction1[_,_]]) {

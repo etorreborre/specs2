@@ -46,7 +46,7 @@ trait NotNullStrings {
     def notNullWithClass(showAll: Boolean): String = {
       if (a == null) "null"
       else {
-        def sameElementTypes(ts: TraversableOnce[_]) =
+        def sameElementTypes(ts: Traversable[_]) =
           ts.nonEmpty && (ts.toSeq.collect { case t if t != null => t.getClass.getName }.distinct.size == 1)
 
         def sameKeyValueTypes(map: Map[_,_]) = sameElementTypes(map.keys) && sameElementTypes(map.values)
@@ -54,14 +54,24 @@ trait NotNullStrings {
         tryOrElse {
           a match {
             case ar: Array[_] =>
-              if (!showAll && sameElementTypes(ar)) ar.map(a => quote(a.notNull)).mkString("Array(", ", ", "): Array["+ar(0).getClass.getName+"]")
-              else                                  ar.map(_.notNullWithClass(showAll)).mkString("Array(", ", ", ")")
+              if (!showAll && sameElementTypes(ar))
+                ar.map(a => quote(a.notNull)).mkString("Array(", ", ", "): Array["+ar(0).getClass.getName+"]")
+              else
+                ar.map(_.notNullWithClass(showAll)).mkString("Array(", ", ", ")")
+
             case map: Map[_,_] =>
-              if (!showAll && sameKeyValueTypes(map)) map.notNullMkStringWith(addQuotes = true)+": "+map.getClass.getName+"["+map.toSeq(0).getClass.getName+"]"
-              else                                    map.map { case (k, v) => (k.notNullWithClass(showAll), v.notNullWithClass(showAll)) }+": "+map.getClass.getName
-            case it: TraversableOnce[_] =>
-              if (!showAll && sameElementTypes(it))   it.toSeq.notNullMkStringWith(addQuotes = true)+": "+it.getClass.getName+"["+it.toSeq(0).getClass.getName+"]"
-              else                                    it.toSeq.map(_.notNullWithClass(showAll))+": "+it.getClass.getName
+              if (!showAll && sameKeyValueTypes(map))
+                map.notNullMkStringWith(addQuotes = true)+": "+map.getClass.getName+"["+map.head.getClass.getName+"]"
+              else
+                map.map { case (k, v) => (k.notNullWithClass(showAll), v.notNullWithClass(showAll)) }.mkString("Map(", ", ", ")")+
+                  ": "+map.getClass.getName
+
+            case it: Traversable[_] =>
+              if (!showAll && sameElementTypes(it))
+                it.toSeq.notNullMkStringWith(addQuotes = true)+": "+it.getClass.getName+"["+it.head.getClass.getName+"]"
+              else
+                it.toSeq.map(_.notNullWithClass(showAll))+": "+it.getClass.getName
+
             case _ =>                     evaluate(a)+": "+a.getClass.getName
           }
         }(evaluate(a)+": "+a.getClass.getName) // in case the collection throws an exception during its traversal

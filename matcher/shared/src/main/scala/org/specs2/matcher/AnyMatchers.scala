@@ -88,7 +88,7 @@ trait AnyBaseMatchers {
   def beAnyOf[T](t: T*): Matcher[T] = BeOneOf(t)
 
   /** matches if the value returns a successful result when applied to a PartialFunction */
-  def beLike[T](pattern: PartialFunction[T, MatchResult[_]]) = new Matcher[T] {
+  def beLike[T](pattern: PartialFunction[T, MatchResult[_]]): Matcher[T] = new Matcher[T] {
     def apply[S <: T](a: Expectable[S]) = {
       val r = if (pattern.isDefinedAt(a.value)) pattern.apply(a.value) else MatchFailure("", "", a)
       result(r.isSuccess,
@@ -98,7 +98,7 @@ trait AnyBaseMatchers {
     }
   }
   /** matches if v.getClass == c */
-  def haveClass[T : ClassTag] = new Matcher[AnyRef] {
+  def haveClass[T : ClassTag]: Matcher[AnyRef] = new Matcher[AnyRef] {
     def apply[S <: AnyRef](x: Expectable[S]) = {
       val c = implicitly[ClassTag[T]].runtimeClass
       val xClass = x.value.getClass
@@ -109,7 +109,7 @@ trait AnyBaseMatchers {
     }
   }
   /** matches if c.isAssignableFrom(v.getClass.getSuperclass) */
-  def haveSuperclass[T : ClassTag] = new Matcher[AnyRef] {
+  def haveSuperclass[T : ClassTag]: Matcher[AnyRef] = new Matcher[AnyRef] {
     def apply[S <: AnyRef](x: Expectable[S]) = {
       val c = implicitly[ClassTag[T]].runtimeClass
       val xClass = x.value.getClass
@@ -121,7 +121,7 @@ trait AnyBaseMatchers {
   }
 
   /** matches if x.getClass.getInterfaces.contains(T) */
-  def haveInterface[T : ClassTag] = new Matcher[AnyRef] {
+  def haveInterface[T : ClassTag]: Matcher[AnyRef] = new Matcher[AnyRef] {
     def apply[S <: AnyRef](x: Expectable[S]) = {
       val c = implicitly[ClassTag[T]].runtimeClass
       val xClass = x.value.getClass
@@ -133,7 +133,7 @@ trait AnyBaseMatchers {
   }
 
   /** matches if v.isAssignableFrom(c) */
-  def beAssignableFrom[T : ClassTag] = new Matcher[Class[_]] {
+  def beAssignableFrom[T : ClassTag]: Matcher[Class[_]] = new Matcher[Class[_]] {
     def apply[S <: Class[_]](x: Expectable[S]) = {
       val c = implicitly[ClassTag[T]].runtimeClass
       result(x.value.isAssignableFrom(c),
@@ -143,7 +143,7 @@ trait AnyBaseMatchers {
     }
   }
 
-  def beAnInstanceOf[T: ClassTag] = new Matcher[AnyRef] {
+  def beAnInstanceOf[T: ClassTag]: Matcher[AnyRef] = new Matcher[AnyRef] {
     def apply[S <: AnyRef](x: Expectable[S]) = {
       val c = implicitly[ClassTag[T]].runtimeClass
       val xClass = x.value.getClass

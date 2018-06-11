@@ -86,8 +86,6 @@ Robustness
   the be_== matcher must be robust in face of
     a null object                      $r1
     a null object                      $r11
-    a non-traversable collection       $r2
-    a non-traversable collection       $r22
 
 Details
 =======
@@ -102,18 +100,6 @@ Details
   def r1 = ((null: String) must_== "1") must not(throwAn[Exception])
   def r11 = (null: String) must be_===("1") must not(throwAn[Exception])
 
-  def r2 = {
-    def newTraversable = new TraversableWithNoDefinedForeach[Int] {}
-    val (t1, t2) = (newTraversable, newTraversable)
-    (t1 must_== t2) must not(throwAn[Exception])
-  }
-
-  def r22 = {
-    def newTraversable = new TraversableWithNoDefinedForeach[Int] {}
-    val (t1, t2) = (newTraversable, newTraversable)
-    t1 must be_===(t2) must not(throwAn[Exception])
-  }
-
   def d1 = List(1, 2) must be_===( List("1", "2") ) must beFailing
 
   def d2 = {
@@ -124,12 +110,6 @@ Details
   def d3 = { List("1, 2") must be_===( List("1", "2") ) must beFailing }
 
   def d4= { Map(1 -> "2") must be_===( Map(1 -> 2) ) must beFailing( "\\QMap(1 -> {'2' != 2})\\E" ) }
-
-  trait TraversableWithNoDefinedForeach[T] extends Traversable[T] {
-    def foreach[U](f: T => U): Unit = {
-      sys.error("foreach is not defined on this traversable but toString is")
-    }
-  }
 
   def mutableMap(kv: (Int, Int)*): scala.collection.mutable.Map[Int, Int] = {
     val map = new scala.collection.mutable.HashMap[Int, Int]
