@@ -36,7 +36,7 @@ object Memo {
 
   import collection.immutable.{HashMap, ListMap, TreeMap}
 
-  def immutableHashMapMemo[K, V]: Memo[K, V] = immutableMapMemo(new HashMap[K, V])
+  def immutableHashMapMemo[K, V]: Memo[K, V] = immutableMapMemo(HashMap.empty[K, V])
 
   def immutableListMapMemo[K, V]: Memo[K, V] = immutableMapMemo(new ListMap[K, V])
 
