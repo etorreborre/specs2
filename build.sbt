@@ -337,12 +337,30 @@ lazy val compilationSettings = Seq(
   scalacOptions in Compile ++=
       Seq("-Xfatal-warnings",
         "-Xlint",
-        "-Ywarn-unused-import",
-        "-Yno-adapted-args",
         "-Ywarn-numeric-widen",
         "-Ywarn-value-discard",
         "-deprecation:false", "-Xcheckinit", "-unchecked", "-feature", "-language:_"),
-  scalacOptions += "-Ypartial-unification",
+  scalacOptions in Compile ++= {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, v)) if v <= 12 =>
+        Seq(
+          "-Ywarn-unused-import",
+          "-Yno-adapted-args"
+        )
+      case _ =>
+        Nil
+    }
+  },
+  scalacOptions ++= {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, v)) if v <= 12 =>
+        Seq(
+          "-Ypartial-unification"
+        )
+      case _ =>
+        Nil
+    }
+  },
   addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.7"),
   scalacOptions in Test               ++= Seq("-Yrangepos"),
   scalacOptions in (Compile, doc)     ++= Seq("-feature", "-language:_"),
