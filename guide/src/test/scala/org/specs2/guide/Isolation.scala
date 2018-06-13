@@ -4,8 +4,6 @@ package guide
 import java.io.{PrintWriter, ByteArrayOutputStream}
 import java.util.Properties
 
-import scala.collection.JavaConversions._
-
 object Isolation extends UserGuidePage { def is = s2"""
 
 Unit specifications allow to nest blocks, as if they were different contexts, going from the more general to the more specific. It can be very tempting, for some applications, to include some mutable state representing data in more and more specific contexts. However, this can be problematic because:
