@@ -188,7 +188,7 @@ trait Scope extends matcher.Scope
  *
  * @see the AllExpectations trait for its use
  */
-class ResultsContext(results: =>Seq[Result]) extends StoredResultsContext {
+class ResultsContext(results: => scala.collection.Seq[Result]) extends StoredResultsContext {
   def storedResults = results
 }
 
@@ -205,7 +205,7 @@ trait StoredExpectationsContext extends StoredExpectations with StoredResultsCon
  * It evaluates the result of an example, which is supposed to create side-effects
  * and returns the 'storedResults' as the summary of all results
  */
-trait StoredResultsContext extends Context { this: { def storedResults: Seq[Result]} =>
+trait StoredResultsContext extends Context { this: { def storedResults: scala.collection.Seq[Result]} =>
   def apply[T : AsResult](r: =>T): Result = {
     // evaluate r, triggering side effects
     val asResult = AsResult(r)

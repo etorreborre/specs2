@@ -151,7 +151,7 @@ object Result {
   /**
    * @return the accumulation of all results, without success messages
    */
-  def issues(results: Seq[Result], separator: String = "; ") =
+  def issues(results: scala.collection.Seq[Result], separator: String = "; ") =
     results.toList.foldMap(identity)(ResultFailuresMonoid(separator)).addExpectationsNb(-1)
 
   /**
