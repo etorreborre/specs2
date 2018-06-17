@@ -82,6 +82,9 @@ trait JUnitPrinter extends Printer { outer =>
     case Failure(m, e, st, FromJUnitAssertionError) =>
       new SpecFailureAssertionFailedError(Throwablex.exception(AnsiColors.removeColors(m), args.traceFilter(st)))
 
+    case Failure(m, e, st, FromExpectationError) =>
+      new SpecFailureAssertionFailedError(Throwablex.exception(AnsiColors.removeColors(m), args.traceFilter(st)))
+
     case Failure(m, e, st, FailureDetails(actual, expected)) => new ComparisonFailure(AnsiColors.removeColors(m), expected, actual) {
       private val e = args.traceFilter(f.exception)
       override def getStackTrace = e.getStackTrace

@@ -32,6 +32,9 @@ Executing a Result
  a NotImplementedError must return a Failure
  ${ execute { throw NotImplementedError("???"); success } must_== Failure("???") }
 
+ an ExpectationError must return a Failure
+ ${ execute { throw ExpectationError("???"); success } must_== Failure("???") }
+
  fatal exceptions must not be caught
  ${ execute { throw new OutOfMemoryError("oome"); success } must throwAn[OutOfMemoryError] }
 
@@ -44,4 +47,5 @@ Executing a Result
 
 
   case class NotImplementedError(msg: String) extends java.lang.Error(msg)
+  case class ExpectationError(m: String)      extends java.lang.Error(m)
 }

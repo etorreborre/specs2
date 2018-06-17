@@ -352,7 +352,7 @@ case class Failure(m: String = "", e: String = "", stackTrace: List[StackTraceEl
   override def hashCode = m.hashCode + e.hashCode
   override def isFailure: Boolean = true
   override def isThrownFailure: Boolean =
-    Seq(FromNotImplementedError, FromJUnitAssertionError).contains(details)
+    Seq(FromNotImplementedError, FromJUnitAssertionError, FromExpectationError).contains(details)
 
   def skip: Skipped = Skipped(m, e)
 }
@@ -367,8 +367,11 @@ case class FailureSetDetails(actual: Set[Any], expected: Set[Any]) extends Detai
 case class FailureMapDetails(actual: Map[Any, Any], expected: Map[Any, Any]) extends Details
 case object NoDetails extends Details
 
-case object FromNotImplementedError extends Details
-case object FromJUnitAssertionError extends Details
+case object FromNotImplementedError       extends Details
+case object FromJUnitAssertionError       extends Details
+
+// This error type can be found in a library like JMock
+case object FromExpectationError extends Details
 
 /**
  * This class represents an exception occurring during an execution.
