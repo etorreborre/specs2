@@ -9,7 +9,7 @@ import org.specs2._
  * Note the use of eg to avoid early evaluation of the stack variable by the interpolated String when a block contains
  * several statements
  */
-class StackIsolatedSpec extends Specification { def is = isolated ^ s2"""
+class StackIsolatedSpec extends Specification { def is = isolated ^ sequential ^ s2"""
                                                                              
  A Stack with limited capacity can either be:
  1. Empty
