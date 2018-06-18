@@ -25,7 +25,7 @@ class EventuallyResultsSpec extends Specification with ResultMatchers {
 
 
   "If all retries fail, the result will eventually fail" in {
-    val iterator = Stream.continually(Failure()).iterator
+    val iterator = Iterator.continually(Failure())
     eventually(iterator.next).not
   }
   "Any object convertible to a result can be used with eventually" in {
