@@ -1,0 +1,14 @@
+Maintenance version, thanks Kenji Yoshida and others for the numerous small PRs!
+
+## Upgrades
+
+ * compiled with Scala `2.13.0-M4` and the new collections library
+ * upgraded sbt to `1.x`
+ * upgraded scala-js to `0.6.23`
+ * upgraded scalaz to `7.2.24`
+ 
+## Fixes
+
+ * **mock** catch `ExpectationError` from JMock and make them failures #672
+ * **matcher** fixed the setting of messages with matchers throwing exceptions #655
+ * **core** fixed the 'humanName' method for anonymous classes on jdk >= 9 #659
