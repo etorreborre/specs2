@@ -17,9 +17,9 @@ lazy val specs2 = project.in(file(".")).
     buildInfoSettings,
     Seq(name := "specs2", packagedArtifacts := Map.empty)
   ).aggregate(
-      fpJvm, commonJvm, matcherJvm, coreJvm, matcherExtraJvm, scalazJvm, html, analysisJvm,
+      fpJvm, catsJvm, commonJvm, matcherJvm, coreJvm, matcherExtraJvm, scalazJvm, html, analysisJvm,
       shapelessJvm, form, markdown, gwt, junitJvm, scalacheckJvm, mockJvm, tests,
-      fpJs, commonJs, matcherJs, coreJs, matcherExtraJs, scalazJs, analysisJs,
+      fpJs, catsJs, commonJs, matcherJs, coreJs, matcherExtraJs, scalazJs, analysisJs,
       shapelessJs, form, junitJs, scalacheckJs, mockJs)
 
 
@@ -82,6 +82,7 @@ lazy val commonJsSettings = Seq(
 lazy val specs2Version = settingKey[String]("defines the current specs2 version")
 lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
 lazy val shapelessVersion = "2.3.3"
+lazy val catsVersion = "1.1.0"
 
 def moduleSettings(name: String) =
   coreDefaultSettings  ++
@@ -112,6 +113,19 @@ lazy val analysis = crossProject(JSPlatform, JVMPlatform).in(file("analysis")).
 
 lazy val analysisJs  = analysis.js.dependsOn(commonJs % "test->test", coreJs, matcherJs, scalacheckJs % "test")
 lazy val analysisJvm = analysis.jvm.dependsOn(commonJvm % "test->test", coreJvm, matcherJvm, scalacheckJvm % "test")
+
+lazy val cats = crossProject(JSPlatform, JVMPlatform).in(file("cats")).
+  settings(
+    moduleSettings("cats") ++
+      Seq(libraryDependencies +=
+      "org.typelevel" %% "cats-core" % catsVersion) ++
+      Seq(name := "specs2-cats"):_*
+  ).
+  jsSettings(depends.jsTest, moduleJsSettings("cats")).
+  jvmSettings(depends.jvmTest, moduleJvmSettings("cats"))
+
+lazy val catsJs = cats.js.dependsOn(matcherJs, coreJs % "test->test")
+lazy val catsJvm = cats.jvm.dependsOn(matcherJvm, coreJvm % "test->test")
 
 lazy val common = crossProject(JSPlatform, JVMPlatform).in(file("common")).
   settings(
@@ -242,7 +256,7 @@ lazy val matcherExtraJvm = matcherExtra.jvm.dependsOn(analysisJvm, matcherJvm, c
 
 lazy val pom = Project(id = "pom", base = file("pom")).
   settings(moduleSettings("") ++ Seq(name := "specs2")).
-  dependsOn(commonJvm, matcherJvm, matcherExtraJvm, coreJvm, scalazJvm, html, analysisJvm,
+  dependsOn(catsJvm, commonJvm, matcherJvm, matcherExtraJvm, coreJvm, scalazJvm, html, analysisJvm,
     shapelessJvm, form, markdown, gwt, junitJvm, scalacheckJvm, mockJvm)
 
 lazy val shapeless = crossProject(JSPlatform, JVMPlatform).in(file("shapeless")).
@@ -313,7 +327,8 @@ lazy val tests = Project(id = "tests", base = file("tests")).
      examplesJvm  % "test->test",
      matcherExtraJvm,
      html,
-     scalazJvm)
+     scalazJvm,
+     catsJvm)
 
 lazy val specs2ShellPrompt = shellPrompt in ThisBuild := { state =>
   val name = Project.extract(state).currentRef.project
