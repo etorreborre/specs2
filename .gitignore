@@ -8,3 +8,5 @@
 hydra.log
 hydra-timings.csv
 project/hydra.sbt
+
+/out
