@@ -17,7 +17,7 @@ lazy val specs2 = project.in(file(".")).
     buildInfoSettings,
     Seq(name := "specs2", packagedArtifacts := Map.empty)
   ).aggregate(
-      fpJvm, commonJvm, matcherJvm, coreJvm, matcherExtraJvm, scalazJvm, html, analysisJvm,
+      fpJvm, catsJvm, commonJvm, matcherJvm, coreJvm, matcherExtraJvm, scalazJvm, html, analysisJvm,
       shapelessJvm, form, markdown, gwt, junitJvm, scalacheckJvm, mockJvm, tests,
       fpJs, commonJs, matcherJs, coreJs, matcherExtraJs, scalazJs, analysisJs,
       shapelessJs, form, junitJs, scalacheckJs, mockJs)
@@ -112,6 +112,17 @@ lazy val analysis = crossProject(JSPlatform, JVMPlatform).in(file("analysis")).
 
 lazy val analysisJs  = analysis.js.dependsOn(commonJs % "test->test", coreJs, matcherJs, scalacheckJs % "test")
 lazy val analysisJvm = analysis.jvm.dependsOn(commonJvm % "test->test", coreJvm, matcherJvm, scalacheckJvm % "test")
+
+lazy val cats = crossProject(JSPlatform, JVMPlatform).in(file("cats")).
+  settings(
+    moduleSettings("cats") ++
+      Seq(name := "specs2-cats"):_*
+  ).
+  jvmSettings(depends.jvmTest, moduleJvmSettings("cats"), libraryDependencies +=
+    "org.typelevel" %% "cats-core" % "1.1.0"
+  )
+
+lazy val catsJvm = cats.jvm.dependsOn(matcherJvm, coreJvm % "test->test")
 
 lazy val common = crossProject(JSPlatform, JVMPlatform).in(file("common")).
   settings(
