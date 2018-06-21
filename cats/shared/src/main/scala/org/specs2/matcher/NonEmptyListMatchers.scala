@@ -9,6 +9,3 @@ trait NonEmptyListMatchers {
     override def size(t: NonEmptyList[T]): Int = t.length
   }
 }
-
-object NonEmptyListMatchers {
-}
