@@ -30,8 +30,6 @@ object TraversableMatchers extends TraversableMatchers
 
 private[specs2]
 trait TraversableBaseMatchers { outer =>
-  
-  trait TraversableMatcher[T] extends Matcher[Traversable[T]]
 
   /**
    * ELEMENTS MATCHERS

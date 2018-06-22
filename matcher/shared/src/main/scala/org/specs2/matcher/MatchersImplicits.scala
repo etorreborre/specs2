@@ -99,31 +99,6 @@ trait SequenceMatchersCreation extends ExpectationsCreation with ResultImplicits
     def atMostOnce(values: Traversable[T])  = outer.atMostOnce (values)(applyMatcher)
   }
 
-  /**
-   * The `SeqMatcher` class is a matcher matching a sequence of objects with a matcher returned by a function.<p>
-   * Usage: List(1, 2, 3) must ((beEqualTo(_:Int)).toSeq)(List(1, 2, 3))
-   */
-  class SeqMatcher[S, T](s: Seq[S], f: S => Matcher[T]) extends Matcher[Seq[T]] {
-    def apply[U <: Seq[T]](t: Expectable[U]) =
-      ContainWithResultSeq[T](s.map(f).map(ValueChecks.matcherIsValueCheck[T]),
-        containsAtLeast = true,
-        containsAtMost = true,
-        checkOrder = true).apply(t)
-  }
-
-  /**
-   * The `SetMatcher` class is a matcher matching a set of objects with a matcher returned by a function.<p>
-   * Usage: List(1, 2, 3) must ((beEqualTo(_:Int)).toSet)(List(2, 1, 3)) }}}
-   */
-  class SetMatcher[S, T](s: Set[S], f: S => Matcher[T]) extends Matcher[Set[T]] {
-    def apply[U <: Set[T]](t: Expectable[U]) =
-      ContainWithResultSeq[T](s.toSeq.map(f).map(ValueChecks.matcherIsValueCheck[T]),
-        containsAtLeast = true,
-        containsAtMost = true,
-        checkOrder = false).apply(t)
-
-  }
-
   /** verify the function f for all the values, stopping after the first failure */
   def forall[T, R : AsResult](values: Traversable[T])(f: T => R) = f.forall(values)
   /** apply a matcher for all values */
