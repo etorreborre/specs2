@@ -83,6 +83,7 @@ lazy val specs2Version = settingKey[String]("defines the current specs2 version"
 lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
 lazy val shapelessVersion = "2.3.3"
 lazy val catsVersion = "1.1.0"
+lazy val catsEffectVersion = "1.0.0-RC2"
 
 def moduleSettings(name: String) =
   coreDefaultSettings  ++
@@ -117,8 +118,9 @@ lazy val analysisJvm = analysis.jvm.dependsOn(commonJvm % "test->test", coreJvm,
 lazy val cats = crossProject(JSPlatform, JVMPlatform).in(file("cats")).
   settings(
     moduleSettings("cats") ++
-      Seq(libraryDependencies +=
-      "org.typelevel" %% "cats-core" % catsVersion) ++
+      Seq(libraryDependencies ++= Seq(
+      "org.typelevel" %% "cats-core" % catsVersion,
+      "org.typelevel" %% "cats-effect" % catsEffectVersion)) ++
       Seq(name := "specs2-cats"):_*
   ).
   jsSettings(depends.jsTest, moduleJsSettings("cats")).
