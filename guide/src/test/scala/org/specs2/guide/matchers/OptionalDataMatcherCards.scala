@@ -9,6 +9,7 @@ object OptionalDataMatcherCards extends Cards {
   def cards = Seq(
     DisjunctionMatchers,
     ValidationMatchers,
+    ValidatedMatchers,
     TaskMatchers,
     CaseClassMatchers,
     ResultMatchers,
