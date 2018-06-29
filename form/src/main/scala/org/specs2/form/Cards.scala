@@ -3,7 +3,7 @@ package form
 
 import DecoratedProperties._
 import specification._
-import core._
+import core.{ Tab => _, _ }
 import org.specs2.concurrent.ExecutionEnv
 import SpecStructure._
 

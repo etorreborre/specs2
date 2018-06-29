@@ -2,7 +2,6 @@ package org.specs2
 package matcher
 
 import text.Plural._
-import NumericMatchers._
 
 /**
  * Matchers for Numerical values
@@ -167,6 +166,8 @@ object NumericMatchers extends NumericMatchers {
     }
   }
 }
+
+import NumericMatchers._
 
 class BeLessThanOrEqualTo[T <% Ordered[T]](n: T) extends Matcher[T] { 
   def apply[S <: T](a: Expectable[S]) = {
