@@ -20,6 +20,7 @@ class MockitoSpec extends script.Spec with Mockito with ResultMatchers with Grou
  The following mockito issues are fixed
    + #584 NPE when setting expectations twice on a mockito mock
    + #603 classcast exception with smart return values
+   + #679 any[T] matcher must work like org.mockito.ArgumentMatchers.any
 
 """
 
@@ -60,6 +61,16 @@ class MockitoSpec extends script.Spec with Mockito with ResultMatchers with Grou
       m.test must beSome(1)
     }
 
+    eg :=  {
+      class Test {
+        def fn1(a: Int, b: Option[Int] = None): Int =
+          a + b.getOrElse(0)
+      }
+      val test = mock[Test]
+
+      test.fn1(anyInt, any[Option[Int]]).returns(3)
+      test.fn1(100) ==== 3
+    }
   }
 }
 

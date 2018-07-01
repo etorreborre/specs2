@@ -43,8 +43,8 @@ trait MockitoMatchers extends ArgThat {
   def anyTraversableOf[T : ClassTag]       = ArgumentMatchers.any(implicitly[ClassTag[Traversable[T]]].runtimeClass).asInstanceOf[Traversable[T]]
   def anyMapOf[K : ClassTag, V : ClassTag] = ArgumentMatchers.any(implicitly[ClassTag[Map[K, V]]].runtimeClass).asInstanceOf[Map[K, V]]
 
-  def any[T : ClassTag]: T = org.mockito.ArgumentMatchers.any(implicitly[ClassTag[T]].runtimeClass).asInstanceOf[T]
-  def any[T]() = org.mockito.ArgumentMatchers.any.asInstanceOf[T]
+  def any[T : ClassTag]: T = org.mockito.ArgumentMatchers.any[T]
+  def any[T]() = org.mockito.ArgumentMatchers.any[T]
   // alias for any()
   def anyObject[T] = org.mockito.ArgumentMatchers.any.asInstanceOf[T]
 
