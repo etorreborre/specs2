@@ -9,6 +9,14 @@ import MatchResultCombinators._
 
 class LogicalMatcherSpec extends script.Spec with ResultMatchers with Grouped with StringMatchers with TraversableMatchers with TypedEqual { def is = s2"""
 
+Not matches
+===========
+
+A matcher can be negated
+  + in the pure case
+  + in the case of a thrown expectation
+
+
 Or matches
 ==========
 
@@ -80,7 +88,22 @@ Custom
 ======
 
  + a custom match can be negated, or used with be/have
-                                                                                                                """
+
+"""
+
+  "not matches" - new group {
+    eg := "eric" must not(beMatching("c.*"))
+
+    eg := {
+      // see #684
+      MustThrownMatchers.theValue("eric") must
+        // the matcher does not throw an exception
+        // the first 'not' will throw an exception
+        // setMessage will catch it, change the message, rethrow the exception
+        // the second 'not' will catch the exception and turn it to a success
+        beMatching("e.*").not.setMessage("wrong").not
+    }
+  }
 
   "or matches" - new group {
     eg := "eric" must (beMatching("e.*") or beMatching(".*c"))
