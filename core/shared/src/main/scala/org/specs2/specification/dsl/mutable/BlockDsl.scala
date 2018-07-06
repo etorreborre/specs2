@@ -21,14 +21,18 @@ trait BlockDsl extends BlockCreation {
     def can(f: => Fragment): Fragment    = addBlock(s"$d can",    f, addFragmentBlock)
 
     def >>(fs: => Fragments)(implicit p1: ImplicitParam1): Fragments =
-      Use.ignoring(p1) { addBlock(d, fs, addFragmentsBlock) }
+      Use.ignoring(p1)(keyword(d, fs))
 
     def should(fs: => Fragments)(implicit p1: ImplicitParam1): Fragments =
-      Use.ignoring(p1) { addBlock(s"$d should", fs, addFragmentsBlock) }
+      Use.ignoring(p1)(keyword(s"$d should", fs))
 
     def can(fs: => Fragments)(implicit p1: ImplicitParam1): Fragments =
-      Use.ignoring(p1) { addBlock(s"$d can", fs, addFragmentsBlock) }
+      Use.ignoring(p1)(keyword(s"$d can", fs))
   }
+
+  def keyword(text: String, fs: =>Fragments): Fragments =
+    addBlock(text, fs, addFragmentsBlock)
+
 
   /**
    * adding a conflicting implicit to warn the user when a `>>` was forgotten
