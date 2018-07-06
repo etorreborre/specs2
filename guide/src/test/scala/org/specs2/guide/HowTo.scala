@@ -31,6 +31,7 @@ Can I create an example description spanning several lines?                     
 How to isolate each example from another so that they don't share variables              | ${link(Isolation).mute}
 How to timeout examples?                                                                 | ${link(TimeoutExamples).mute}
 Can I use parts of an example description in the example itself?                         | ${link(ExampleDescription).mute}
+Add my own keywords (other than '>>', 'should', 'can') to a mutable specification        | ${link(AddKeywords).mute}
 Help, I need to troubleshoot my issues!                                                  | ${link(Troubleshooting).mute}
 
 """

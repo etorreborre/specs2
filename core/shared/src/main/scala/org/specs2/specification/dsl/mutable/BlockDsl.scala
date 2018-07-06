@@ -3,36 +3,36 @@ package specification
 package dsl
 package mutable
 
-import control.ImplicitParameters._
 import execute.AsResult
-import org.specs2.specification.core.{Fragment, Fragments, StacktraceLocation}
 import org.specs2.control.Use
 import org.specs2.specification.core.{Fragment, Fragments, StacktraceLocation}
 import specification.create.FragmentsFactory
+import org.specs2.control.ImplicitParameters._
 
 /**
  * Create blocks of examples in a mutable specification
  */
-private[specs2]
 trait BlockDsl extends BlockCreation {
   implicit class describe(d: String) {
-    def >>(f: => Fragment): Fragment     = addBlock(d,            f, addFragmentBlock)
-    def should(f: => Fragment): Fragment = addBlock(s"$d should", f, addFragmentBlock)
-    def can(f: => Fragment): Fragment    = addBlock(s"$d can",    f, addFragmentBlock)
+    def >>(f: => Fragment): Fragment     = addFragmentBlockWithText(d, f)
+    def should(f: => Fragment): Fragment = addFragmentBlockWithText(s"$d should", f)
+    def can(f: => Fragment): Fragment    = addFragmentBlockWithText(s"$d can", f)
 
     def >>(fs: => Fragments)(implicit p1: ImplicitParam1): Fragments =
-      Use.ignoring(p1)(keyword(d, fs))
+      addFragmentsBlockWithText(d, fs)(p1)
 
     def should(fs: => Fragments)(implicit p1: ImplicitParam1): Fragments =
-      Use.ignoring(p1)(keyword(s"$d should", fs))
+      addFragmentsBlockWithText(s"$d should", fs)(p1)
 
     def can(fs: => Fragments)(implicit p1: ImplicitParam1): Fragments =
-      Use.ignoring(p1)(keyword(s"$d can", fs))
+      addFragmentsBlockWithText(s"$d can", fs)(p1)
   }
 
-  def keyword(text: String, fs: =>Fragments): Fragments =
-    addBlock(text, fs, addFragmentsBlock)
+  def addFragmentBlockWithText(text: String, f: =>Fragment): Fragment =
+    addBlock(text, f, addFragmentBlock)
 
+  def addFragmentsBlockWithText(text: String, fs: =>Fragments)(implicit p1: ImplicitParam1): Fragments =
+    Use.ignoring(p1)(addBlock(text, fs, addFragmentsBlock))
 
   /**
    * adding a conflicting implicit to warn the user when a `>>` was forgotten
