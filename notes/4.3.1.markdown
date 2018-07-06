@@ -1,0 +1,19 @@
+Maintenance version with an important fix for possible stackoverflow exceptions on large specifications.
+
+## Improvements
+
+ * **matcher** #676 added matchers for `cats.data.Validated` (Isla Zhang)
+ * **matcher** #675 added "sized" matchers for `cats.data.NonEmptyList` (Keir Lawson)
+ * **core** #685 refactored the `BlockDsl` in mutable specifications to to allow the easy definition of other keywords than "can", "should",...
+ 
+## Fixes
+
+ * **matcher** #684 fixed the negation of a matcher in case of thrown expectations 
+ * **core** #683 take constant stack while running examples in parallel (Edmund Noble)
+ * **mock** #679 fixed the use of the `any[T]` matcher
+
+## Code cleanup
+
+ * #677 removed redundant code (Keir Lawson)
+ * #674 removed references to deleted xor code (Keir Lawson)
+ 
