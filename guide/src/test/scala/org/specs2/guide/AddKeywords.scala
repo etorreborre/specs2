@@ -7,7 +7,7 @@ import org.specs2._
 
 class MySpecification extends mutable.Specification {
 
-  "the and function" should {
+  "the 'and' function" should {
     "return true when passed true, true" >> {
       true && true ==== true
     }
@@ -21,7 +21,7 @@ class MySpecification extends mutable.Specification {
 
 This will print:
 ```
- the and function should
+ the 'and' function should
    + return true when passed true, true
    + return false when passed true, false
 ```
@@ -47,7 +47,7 @@ trait ToKeyword extends BlockDsl {
 
 class MySpecification extends mutable.Specification with ToKeyword {
 
-    "the and function is used" to {
+    "the 'and' function is used" to {
       "return true when passed true, true" >> {
         true && true ==== true
       }
@@ -60,7 +60,7 @@ class MySpecification extends mutable.Specification with ToKeyword {
 
 Now this will print
 ```
- the and is use to
+ the 'and' function is used to
    + return true when passed true, true
    + return false when passed true, false
 ```
