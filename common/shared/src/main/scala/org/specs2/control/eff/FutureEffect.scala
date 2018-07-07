@@ -42,8 +42,8 @@ object TimedFuture {
 
     def ap[A, B](fa: =>TimedFuture[A])(ff: =>TimedFuture[(A) => B]): TimedFuture[B] = {
       val newCallback = { es: ExecutorServices =>
-        val ffRan = Future(ff.runNow(es))(es.executionContext).flatten
-        val faRan = Future(fa.runNow(es))(es.executionContext).flatten
+        val ffRan = Future(ff.runNow(es))(es.executionContext).flatMap(identity)(es.executionContext)
+        val faRan = Future(fa.runNow(es))(es.executionContext).flatMap(identity)(es.executionContext)
         faRan.flatMap(a => ffRan.map(f => f(a))(es.executionContext))(es.executionContext)
       }
       TimedFuture(newCallback)
