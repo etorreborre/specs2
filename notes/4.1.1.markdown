@@ -1,0 +1,5 @@
+Backport version
+
+## Fixes
+
+ * **core** #682 fixed a StackOverflow exception when running large specifications
