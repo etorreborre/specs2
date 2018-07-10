@@ -1,0 +1,6 @@
+Maintenance version with an additional fix for possible stackoverflow exceptions on large specifications.
+
+## Fixes
+
+ * **core** #682 use constant stack running `TimedFuture` sequentially, too take constant stack while running examples in parallel (Edmund Noble)
+ 
