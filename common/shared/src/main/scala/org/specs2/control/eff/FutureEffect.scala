@@ -42,9 +42,11 @@ object TimedFuture {
 
     def ap[A, B](fa: =>TimedFuture[A])(ff: =>TimedFuture[(A) => B]): TimedFuture[B] = {
       val newCallback = { es: ExecutorServices =>
-        val ffRan = Future(ff.runNow(es))(es.executionContext).flatMap(identity)(es.executionContext)
-        val faRan = Future(fa.runNow(es))(es.executionContext).flatMap(identity)(es.executionContext)
-        faRan.flatMap(a => ffRan.map(f => f(a))(es.executionContext))(es.executionContext)
+        implicit val ec = es.executionContext
+
+        val ffRan = Future(ff.runNow(es)).flatMap(identity)
+        val faRan = Future(fa.runNow(es)).flatMap(identity)
+        faRan.flatMap(a => ffRan.map(f => f(a)))
       }
       TimedFuture(newCallback)
     }
@@ -59,9 +61,11 @@ object TimedFuture {
 
     override def ap[A, B](fa: =>TimedFuture[A])(ff: =>TimedFuture[(A) => B]): TimedFuture[B] = {
       val newCallback = { es: ExecutorServices =>
-        Future(ff.runNow(es))(es.executionContext).flatten.flatMap { f =>
-          Future(fa.runNow(es))(es.executionContext).flatten.map(f)(es.executionContext)
-        }(es.executionContext)
+        implicit val ec = es.executionContext
+
+        Future(ff.runNow(es)).flatMap(identity).flatMap { f =>
+          Future(fa.runNow(es)).flatMap(identity).map(f)
+        }
       }
       TimedFuture(newCallback)
     }
