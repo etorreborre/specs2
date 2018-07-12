@@ -240,7 +240,7 @@ trait SafeInterpretation extends SafeCreation { outer =>
           case EvaluateValue(v)   =>
             Either.catchNonFatal(v.value) match {
               case Right(a) => a
-              case Left(t) => failedValues.append(FailedValue(t)); ().asInstanceOf[X]
+              case Left(t) => failedValues.append(FailedValue[X](t)); ().asInstanceOf[X]
             }
         }
 
@@ -267,7 +267,7 @@ trait SafeInterpretation extends SafeCreation { outer =>
           case EvaluateValue(v)   =>
             Either.catchNonFatal(v.value) match {
               case Right(a) => a
-              case Left(t) => failedValues.append(FailedValue(t)); ().asInstanceOf[X]
+              case Left(t) => failedValues.append(FailedValue[X](t)); ().asInstanceOf[X]
             }
         }
 
