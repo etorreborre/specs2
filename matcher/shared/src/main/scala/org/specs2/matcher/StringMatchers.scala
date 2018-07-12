@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-import java.util.regex._
+import java.util.regex.{ Matcher => _, MatchResult => _, _ }
 import control.Exceptions._
 import text.Quote._
 import util.matching.Regex

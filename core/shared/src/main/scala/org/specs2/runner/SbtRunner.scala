@@ -3,7 +3,7 @@ package runner
 
 import Runner._
 import specification.process.Stats
-import sbt.testing._
+import sbt.testing.{ Runner => _, _ }
 import main._
 import reporter._
 import control.{Logger => _, _}

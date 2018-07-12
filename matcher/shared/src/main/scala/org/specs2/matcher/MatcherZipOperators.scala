@@ -1,12 +1,12 @@
 package org.specs2
 package matcher
 
-import MatchersImplicits._
-
 /**
  * This trait provides 'zip' operators to create matchers on tuples based on "zipped" matchers on fields
  */
 trait MatcherZipOperators extends ExpectationsCreation { outer =>
+
+  import MatchersImplicits._
 
   def contain[T, S](f: (=>(T)) => Matcher[S])(expected: =>Seq[T]) = (s: Seq[S]) =>
     expected.contain(f)(createExpectable(s))

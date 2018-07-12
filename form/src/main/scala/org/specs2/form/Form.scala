@@ -1,7 +1,7 @@
 package org.specs2
 package form
 
-import scala.xml._
+import scala.xml.{ Text => _, _ }
 import collection.Seqx._
 import xml.Nodex._
 import execute._

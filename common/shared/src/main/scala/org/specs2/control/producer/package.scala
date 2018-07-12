@@ -2,7 +2,7 @@ package org.specs2.control
 
 import org.specs2.fp._
 import org.specs2.fp.syntax._
-import eff._
+import eff.{ eff => _, _ }
 import eff.all._
 import org.specs2.control.origami.Fold
 
