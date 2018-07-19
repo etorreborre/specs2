@@ -10,7 +10,7 @@ import text.AnsiColors
 import execute._
 import org.junit.ComparisonFailure
 import main.Arguments
-import control._
+import control.{Actions, _}
 import origami._
 import control.ExecutionOrigin._
 import org.specs2.fp.syntax._
@@ -34,7 +34,7 @@ trait JUnitPrinter extends Printer { outer =>
   // test run start and finish must not be notified if we execute the test from
   // the JUnitCore runner because it is already doing that.
   // Otherwise this could lead to double reporting see #440
-  def sink(env: Env, spec: SpecStructure) =
+  def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment] =
     fold.bracket[ActionStack, Fragment, RunNotifier](
       open = Actions.protect { if (!isExecutedFromJUnitCore) notifier.fireTestRunStarted(description); notifier })(
       step = (notifier: RunNotifier, fragment: Fragment) => notifyJUnit(env.arguments)(fragment).as(notifier))(
@@ -42,18 +42,18 @@ trait JUnitPrinter extends Printer { outer =>
     )
 
   def notifyJUnit(args: Arguments): Fragment => Action[Unit] = { fragment =>
-    // find the fragment with the same description and same location
-    val description = descriptions.find { case (f, d) =>
-      f.description == fragment.description && f.location == fragment.location }.map(_._2)
-
-    fragment.executionResult.map { result =>
-      description.map { description: Description =>
-        if (fragment.isExecutable) {
+    if (Fragment.isExample(fragment)) {
+      fragment.executionResult.map { result =>
+        // find the fragment with the same description and same location
+        val description = descriptions.find { case (f, d) =>
+          f.description == fragment.description && f.location == fragment.location
+        }.map(_._2)
+        description.foreach { description: Description =>
           notifier.fireTestStarted(description)
           notifyResult(description, result)(args)
-        } else ()
-      }.getOrElse(())
-    }
+        }
+      }
+    } else Actions.unit
   }
 
   private def notifyResult(description: Description, result: Result)(implicit args: Arguments) =
