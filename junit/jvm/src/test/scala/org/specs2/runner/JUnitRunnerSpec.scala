@@ -16,6 +16,7 @@ class JUnitRunnerSpec(val env: Env) extends Specification with OwnEnv {
 
       The Junit runner must run all linked specifications if 'all' is set on the command line $allSpecifications
       The Junit runner must run only examples $onlyExamples
+      The Junit runner must ignore pending example $pendingExample
 
       """
 
@@ -31,6 +32,18 @@ class JUnitRunnerSpec(val env: Env) extends Specification with OwnEnv {
         "run started JUnitWithBeforeAfterAllSpecification",
         "test started one example(org.specs2.runner.JUnitWithBeforeAfterAllSpecification)",
         "test finished one example(org.specs2.runner.JUnitWithBeforeAfterAllSpecification)",
+        "run finished")
+    }
+  }
+
+  def pendingExample = {
+    runSpecification(new JUnitRunner(classOf[JUnitPendingSpecification])) { messages =>
+      messages.toList === List(
+        "run started JUnitPendingSpecification",
+        "test started Below examples should::fail(org.specs2.runner.JUnitPendingSpecification)",
+        "test failure Below examples should::fail(org.specs2.runner.JUnitPendingSpecification) 1 != 2 expected:<[2]> but was:<[1]>",
+        "test finished Below examples should::fail(org.specs2.runner.JUnitPendingSpecification)",
+        "test ignored Below examples should::be pending(org.specs2.runner.JUnitPendingSpecification)",
         "run finished")
     }
   }
@@ -56,14 +69,11 @@ class JUnitRunnerSpec(val env: Env) extends Specification with OwnEnv {
       override def testFinished(description: Description): Unit =
         messages.append("test finished " + description.getDisplayName)
 
-      override def testFailure(failure: Failure): Unit = {
+      override def testFailure(failure: Failure): Unit =
         messages.append("test failure " + failure.getDescription.getDisplayName + " " + failure.getMessage)
-      }
 
-      override def testIgnored(description: Description): Unit = {
+      override def testIgnored(description: Description): Unit =
         messages.append("test ignored " + description.getDisplayName)
-      }
-
     }
     val notifier = new RunNotifier
     notifier.addListener(listener)
@@ -76,30 +86,37 @@ class JUnitRunnerSpec(val env: Env) extends Specification with OwnEnv {
 class MainJUnitSpecification extends Specification {
   def is =
     s2"""
-
-  one example $ok
-  and a ${"linked spec" ~ LinkedJUnitSpec}
-
-"""
+      one example $ok
+      and a ${"linked spec" ~ LinkedJUnitSpec}
+      """
 }
 
 @RunWith(classOf[JUnitRunner])
 object LinkedJUnitSpec extends mutable.Specification {
 
   "ok" >> ok
-
 }
 
 @RunWith(classOf[JUnitRunner])
 class JUnitWithBeforeAfterAllSpecification extends Specification with BeforeAfterAll {
   def is =
     s2"""
-
-  one example $ok
-
-"""
+      one example $ok
+      """
 
   def beforeAll: Unit = ()
 
   def afterAll: Unit = ()
+}
+
+@RunWith(classOf[JUnitRunner])
+class JUnitPendingSpecification extends mutable.Specification {
+  "Below examples" should {
+    "fail" in {
+      1 must_== 2
+    }
+    "be pending" in {
+      1 must_== 2
+    }.pendingUntilFixed
+  }
 }

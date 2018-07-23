@@ -49,7 +49,6 @@ trait JUnitPrinter extends Printer { outer =>
           f.description == fragment.description && f.location == fragment.location
         }.map(_._2)
         description.foreach { description: Description =>
-          notifier.fireTestStarted(description)
           notifyResult(description, result)(args)
         }
       }
@@ -63,11 +62,17 @@ trait JUnitPrinter extends Printer { outer =>
       case DecoratedResult(_, f @ Failure(m, e, st, d)) => failWith(description, junitFailure(f))
       case DecoratedResult(_, e @ Error(m, st))         => failWith(description, args.traceFilter(e.exception))
       case Pending(_) | Skipped(_, _)                   => notifier.fireTestIgnored(description)
-      case Success(_, _) | DecoratedResult(_, _)        => notifier.fireTestFinished(description)
+      case Success(_, _) | DecoratedResult(_, _)        => successWith(description)
     }
 
   private def failWith(description: Description, failure: Throwable) = {
+    notifier.fireTestStarted(description)
     notifier.fireTestFailure(new org.junit.runner.notification.Failure(description, failure))
+    notifier.fireTestFinished(description)
+  }
+
+  private def successWith(description: Description) = {
+    notifier.fireTestStarted(description)
     notifier.fireTestFinished(description)
   }
 
