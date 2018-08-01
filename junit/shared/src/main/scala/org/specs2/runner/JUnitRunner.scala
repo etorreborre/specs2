@@ -47,8 +47,7 @@ class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterab
     try {
       runWithEnv(n, env).runEither(env.specs2ExecutionEnv) match {
         case Right(_) => ()
-        case Left(Left(throwable)) => n.fireTestFailure(new Failure(getDescription, throwable))
-        case Left(Right(error)) => n.fireTestFailure(new Failure(getDescription, new RuntimeException(error)))
+        case Left(error) => n.fireTestFailure(new Failure(getDescription, error.fold(identity _, new RuntimeException(_))))
       }
     }
     finally env.shutdown
