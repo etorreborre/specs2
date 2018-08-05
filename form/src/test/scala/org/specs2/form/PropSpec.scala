@@ -3,7 +3,7 @@ package form
 
 import control.Property
 import execute._
-import sys._
+import sys.error
 import specification._
 import matcher._
 import MatchersImplicits._
