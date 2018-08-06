@@ -8,12 +8,12 @@ import text.AnsiColors
  * Logger with info, failure, error where each new message is displayed on a new line
  */
 trait LineLogger {
-  def infoLog(msg: String)
-  def failureLog(msg: String)
-  def errorLog(msg: String)
-  def warnLog(msg: String)
-  def newline()
-  def close()
+  def infoLog(msg: String): Unit
+  def failureLog(msg: String): Unit
+  def errorLog(msg: String): Unit
+  def warnLog(msg: String): Unit
+  def newline(): Unit
+  def close(): Unit
 }
 
 object LineLogger {

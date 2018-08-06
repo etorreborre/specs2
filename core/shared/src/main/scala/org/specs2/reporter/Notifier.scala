@@ -10,21 +10,21 @@ import org.specs2.execute.Details
  * A pair of contextStart/contextEnd calls delimits a sequence of children in that tree.
  */
 trait Notifier {
-  def specStart(title: String, location: String)
-  def specEnd(title: String, location: String)
-  def contextStart(text: String, location: String)
-  def contextEnd(text: String, location: String)
-  def text(text: String, location: String)
-  def exampleStarted(name: String, location: String)
-  def exampleSuccess(name: String, duration: Long)
-  def exampleFailure(name: String, message: String, location: String, f: Throwable, details: Details, duration: Long)
-  def exampleError  (name: String, message: String, location: String, f: Throwable, duration: Long)
-  def exampleSkipped(name: String, message: String, location: String, duration: Long)
-  def examplePending(name: String, message: String, location: String, duration: Long)
+  def specStart(title: String, location: String): Unit
+  def specEnd(title: String, location: String): Unit
+  def contextStart(text: String, location: String): Unit
+  def contextEnd(text: String, location: String): Unit
+  def text(text: String, location: String): Unit
+  def exampleStarted(name: String, location: String): Unit
+  def exampleSuccess(name: String, duration: Long): Unit
+  def exampleFailure(name: String, message: String, location: String, f: Throwable, details: Details, duration: Long): Unit
+  def exampleError  (name: String, message: String, location: String, f: Throwable, duration: Long): Unit
+  def exampleSkipped(name: String, message: String, location: String, duration: Long): Unit
+  def examplePending(name: String, message: String, location: String, duration: Long): Unit
 
-  def stepStarted(location: String)
-  def stepSuccess(duration: Long)
-  def stepError(message: String, location: String, f: Throwable, duration: Long)
+  def stepStarted(location: String): Unit
+  def stepSuccess(duration: Long): Unit
+  def stepError(message: String, location: String, f: Throwable, duration: Long): Unit
 }
 
 /**
