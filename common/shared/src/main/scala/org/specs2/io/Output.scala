@@ -8,7 +8,7 @@ trait Output {
   /**
    * print several objects according to a format string (see Console.printf)
    */
-  def printf(format: String, args: Any*)
+  def printf(format: String, args: Any*): Unit
   /**
    * print an object with a newline
    */

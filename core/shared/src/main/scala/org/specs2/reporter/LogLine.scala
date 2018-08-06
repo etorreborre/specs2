@@ -5,7 +5,7 @@ package reporter
  * ADT for logging strings as info, warning or errors
  */
 sealed trait LogLine {
-  def log(logger: LineLogger)
+  def log(logger: LineLogger): Unit
 }
 
 case class InfoLine(s: String)    extends LogLine { def log(logger: LineLogger) = logger.infoLog(s) }

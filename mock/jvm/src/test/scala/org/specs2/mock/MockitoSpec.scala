@@ -539,17 +539,17 @@ ${step(env)}                                                                    
 
   "mockito matchers" - new group with Mockito with ThrownExpectations {
     trait M {
-      def javaList[T](a: java.util.List[T])
-      def javaSet[T](a: java.util.Set[T])
-      def javaCollection[T](a: java.util.Collection[T])
-      def javaMap[K, V](a: java.util.Map[K, V])
+      def javaList[T](a: java.util.List[T]): Unit
+      def javaSet[T](a: java.util.Set[T]): Unit
+      def javaCollection[T](a: java.util.Collection[T]): Unit
+      def javaMap[K, V](a: java.util.Map[K, V]): Unit
 
-      def List[T](a: List[T])
-      def Set[T](a: Set[T])
-      def Traversable[T](a: Traversable[T])
-      def Map[K, V](a: Map[K, V])
+      def List[T](a: List[T]): Unit
+      def Set[T](a: Set[T]): Unit
+      def Traversable[T](a: Traversable[T]): Unit
+      def Map[K, V](a: Map[K, V]): Unit
 
-      def varargs[T](ts: T*)
+      def varargs[T](ts: T*): Unit
 
       def method(a1: A, b: Boolean): Int
     }
