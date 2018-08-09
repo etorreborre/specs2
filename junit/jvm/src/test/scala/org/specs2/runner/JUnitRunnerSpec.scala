@@ -99,7 +99,7 @@ class JUnitWithBeforeAfterAllSpecification extends Specification with BeforeAfte
 
 """
 
-  override def beforeAll(): Unit = {}
+  def beforeAll: Unit = ()
 
-  override def afterAll(): Unit = {}
+  def afterAll: Unit = ()
 }
