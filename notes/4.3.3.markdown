@@ -1,0 +1,12 @@
+Maintenance version, mostly with a JUnit enhancement 
+
+## Enhancements
+
+ * **junit** #697 report failures when a specification fails to be created (Dávid István Bíró)
+
+## Fixes
+
+ * **all** #699 remove the procedure syntax (kenji yoshida)
+ * **all** #698 fixed a compile error with latest Scala 2.13.x (kenji yoshida)
+ * **mock** #690 display the proper failure message for a jmock failure 
+ 
