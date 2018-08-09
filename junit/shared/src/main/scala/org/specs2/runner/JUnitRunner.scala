@@ -1,8 +1,8 @@
 package org.specs2
 package runner
 
-import org.junit.runner.manipulation.{NoTestsRemainException, Filterable}
-import org.junit.runner.notification.RunNotifier
+import org.junit.runner.manipulation.{Filterable, NoTestsRemainException}
+import org.junit.runner.notification.{Failure, RunNotifier}
 import main._
 import specification.process.Stats
 import control.Actions._
@@ -44,9 +44,13 @@ class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterab
 
   /** run the specification with a Notifier */
   def run(n: RunNotifier): Unit = {
-    try runWithEnv(n, env).runOption(env.specs2ExecutionEnv)
+    try {
+      runWithEnv(n, env).runEither(env.specs2ExecutionEnv) match {
+        case Right(_) => ()
+        case Left(error) => n.fireTestFailure(new Failure(getDescription, error.fold(identity _, new RuntimeException(_))))
+      }
+    }
     finally env.shutdown
-    ()
   }
 
   /** run the specification with a Notifier and an environment */

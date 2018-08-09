@@ -82,6 +82,9 @@ trait ExecuteActions {
         case Right(a) => Option(a)
         case Left(t) => println("error while interpreting an action "+t.fold(Throwables.render, f => f)); None
       }
+
+    def runEither(ee: ExecutionEnv): Either[Error, T] =
+      runAction(action, println)(ee)
   }
 
 
