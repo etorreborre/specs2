@@ -10,9 +10,7 @@ import org.specs2.specification.core.{Env, OwnEnv}
 
 import scala.collection.mutable.ListBuffer
 
-class JUnitRunnerSpec(val env: Env) extends Specification with OwnEnv {
-  def is =
-    s2"""
+class JUnitRunnerSpec(val env: Env) extends Specification with OwnEnv { def is = s2"""
 
       The Junit runner must run all linked specifications if 'all' is set on the command line $allSpecifications
       The Junit runner must run only examples $onlyExamples
@@ -94,9 +92,7 @@ class JUnitRunnerSpec(val env: Env) extends Specification with OwnEnv {
 }
 
 @RunWith(classOf[JUnitRunner])
-class MainJUnitSpecification extends Specification {
-  def is =
-    s2"""
+class MainJUnitSpecification extends Specification { def is = s2"""
       one example $ok
       and a ${"linked spec" ~ LinkedJUnitSpec}
       """
@@ -109,9 +105,7 @@ object LinkedJUnitSpec extends mutable.Specification {
 }
 
 @RunWith(classOf[JUnitRunner])
-class JUnitWithBeforeAfterAllSpecification extends Specification with BeforeAfterAll {
-  def is =
-    s2"""
+class JUnitWithBeforeAfterAllSpecification extends Specification with BeforeAfterAll { def is = s2"""
       one example $ok
       """
 
@@ -133,9 +127,7 @@ class JUnitPendingSpecification extends mutable.Specification {
 }
 
 @RunWith(classOf[JUnitRunner])
-class JUnitErrorInBeforeAllSpecification extends Specification with BeforeAfterAll {
-  def is =
-    s2"""
+class JUnitErrorInBeforeAllSpecification extends Specification with BeforeAfterAll { def is = s2"""
       one example $ok
       """
 
