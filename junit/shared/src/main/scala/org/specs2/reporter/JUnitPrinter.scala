@@ -74,10 +74,10 @@ trait JUnitPrinter extends Printer { outer =>
 
   private def notifyStepError(description: Description, result: Result)(implicit args: Arguments) =
     result match {
-      case f @ Failure(m, e, st, d)                     => specFailWIth(description, junitFailure(f))
-      case e @ Error(m, st)                             => specFailWIth(description, args.traceFilter(e.exception))
-      case DecoratedResult(_, f @ Failure(m, e, st, d)) => specFailWIth(description, junitFailure(f))
-      case DecoratedResult(_, e @ Error(m, st))         => specFailWIth(description, args.traceFilter(e.exception))
+      case f @ Failure(m, e, st, d)                     => specFailWith(description, junitFailure(f))
+      case e @ Error(m, st)                             => specFailWith(description, args.traceFilter(e.exception))
+      case DecoratedResult(_, f @ Failure(m, e, st, d)) => specFailWith(description, junitFailure(f))
+      case DecoratedResult(_, e @ Error(m, st))         => specFailWith(description, args.traceFilter(e.exception))
       case _                                            => ()
     }
 
@@ -92,7 +92,7 @@ trait JUnitPrinter extends Printer { outer =>
     notifier.fireTestFinished(description)
   }
 
-  private def specFailWIth(description: Description, failure: Throwable) =
+  private def specFailWith(description: Description, failure: Throwable) =
     notifier.fireTestFailure(new org.junit.runner.notification.Failure(description, failure))
 
   /** @return a Throwable expected by JUnit Failure object */
