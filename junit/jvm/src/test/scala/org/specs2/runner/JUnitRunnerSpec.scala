@@ -17,6 +17,7 @@ class JUnitRunnerSpec(val env: Env) extends Specification with OwnEnv {
       The Junit runner must run all linked specifications if 'all' is set on the command line $allSpecifications
       The Junit runner must run only examples $onlyExamples
       The Junit runner must ignore pending example $pendingExample
+      The Junit runner must show error in step $errorInStepExample
 
       """
 
@@ -44,6 +45,16 @@ class JUnitRunnerSpec(val env: Env) extends Specification with OwnEnv {
         "test failure Below examples should::fail(org.specs2.runner.JUnitPendingSpecification) 1 != 2 expected:<[2]> but was:<[1]>",
         "test finished Below examples should::fail(org.specs2.runner.JUnitPendingSpecification)",
         "test ignored Below examples should::be pending(org.specs2.runner.JUnitPendingSpecification)",
+        "run finished")
+    }
+  }
+
+  def errorInStepExample = {
+    runSpecification(new JUnitRunner(classOf[JUnitErrorInBeforeAllSpecification])) { messages =>
+      messages.toList === List(
+        "run started JUnitErrorInBeforeAllSpecification",
+        "test failure org.specs2.runner.JUnitErrorInBeforeAllSpecification java.lang.RuntimeException: Error.",
+        "test ignored one example(org.specs2.runner.JUnitErrorInBeforeAllSpecification)",
         "run finished")
     }
   }
@@ -119,4 +130,16 @@ class JUnitPendingSpecification extends mutable.Specification {
       1 must_== 2
     }.pendingUntilFixed
   }
+}
+
+@RunWith(classOf[JUnitRunner])
+class JUnitErrorInBeforeAllSpecification extends Specification with BeforeAfterAll {
+  def is =
+    s2"""
+      one example $ok
+      """
+
+  def beforeAll: Unit = throw new RuntimeException("Error.")
+
+  def afterAll: Unit = ()
 }

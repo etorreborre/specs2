@@ -114,6 +114,9 @@ object Fragment {
   def isAction(f: Fragment) =
     isStepOrAction(f) && !f.execution.mustJoin
 
+  def isExampleOrStep(f: Fragment) =
+    isExample(f) || isStep(f)
+
   def isMarker(f: Fragment) = f.description match {
     case m: Marker => true
     case _         => false

@@ -42,11 +42,14 @@ trait JUnitPrinter extends Printer { outer =>
     )
 
   def notifyJUnit(args: Arguments): Fragment => Action[Unit] = { fragment =>
-    if (Fragment.isExample(fragment)) {
+    if (Fragment.isExampleOrStep(fragment)) {
+      val description = findDescription(fragment)
       fragment.executionResult.map { result =>
-        val description = findDescription(fragment)
         description.foreach { description: Description =>
-          notifyResult(description, result)(args)
+          if (Fragment.isExample(fragment))
+            notifyTestResult(description, result)(args)
+          else
+            notifyStepError(description, result)(args)
         }
       }
     } else Actions.unit
@@ -59,7 +62,7 @@ trait JUnitPrinter extends Printer { outer =>
     }.map(_._2)
   }
 
-  private def notifyResult(description: Description, result: Result)(implicit args: Arguments) =
+  private def notifyTestResult(description: Description, result: Result)(implicit args: Arguments) =
     result match {
       case f @ Failure(m, e, st, d)                     => failWith(description, junitFailure(f))
       case e @ Error(m, st)                             => failWith(description, args.traceFilter(e.exception))
@@ -67,6 +70,15 @@ trait JUnitPrinter extends Printer { outer =>
       case DecoratedResult(_, e @ Error(m, st))         => failWith(description, args.traceFilter(e.exception))
       case Pending(_) | Skipped(_, _)                   => notifier.fireTestIgnored(description)
       case Success(_, _) | DecoratedResult(_, _)        => successWith(description)
+    }
+
+  private def notifyStepError(description: Description, result: Result)(implicit args: Arguments) =
+    result match {
+      case f @ Failure(m, e, st, d)                     => specFailWIth(description, junitFailure(f))
+      case e @ Error(m, st)                             => specFailWIth(description, args.traceFilter(e.exception))
+      case DecoratedResult(_, f @ Failure(m, e, st, d)) => specFailWIth(description, junitFailure(f))
+      case DecoratedResult(_, e @ Error(m, st))         => specFailWIth(description, args.traceFilter(e.exception))
+      case _                                            => ()
     }
 
   private def failWith(description: Description, failure: Throwable) = {
@@ -79,6 +91,9 @@ trait JUnitPrinter extends Printer { outer =>
     notifier.fireTestStarted(description)
     notifier.fireTestFinished(description)
   }
+
+  private def specFailWIth(description: Description, failure: Throwable) =
+    notifier.fireTestFailure(new org.junit.runner.notification.Failure(description, failure))
 
   /** @return a Throwable expected by JUnit Failure object */
   private def junitFailure(f: Failure)(implicit args: Arguments): Throwable = f match {
