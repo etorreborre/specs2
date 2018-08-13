@@ -44,15 +44,19 @@ trait JUnitPrinter extends Printer { outer =>
   def notifyJUnit(args: Arguments): Fragment => Action[Unit] = { fragment =>
     if (Fragment.isExample(fragment)) {
       fragment.executionResult.map { result =>
-        // find the fragment with the same description and same location
-        val description = descriptions.find { case (f, d) =>
-          f.description == fragment.description && f.location == fragment.location
-        }.map(_._2)
+        val description = findDescription(fragment)
         description.foreach { description: Description =>
           notifyResult(description, result)(args)
         }
       }
     } else Actions.unit
+  }
+
+  private def findDescription(fragment: Fragment) = {
+    // find the fragment with the same description and same location
+    descriptions.find { case (f, d) =>
+      f.description == fragment.description && f.location == fragment.location
+    }.map(_._2)
   }
 
   private def notifyResult(description: Description, result: Result)(implicit args: Arguments) =
