@@ -34,7 +34,7 @@ class LevelsSpec(ee: ExecutionEnv) extends Spec { def is = s2"""
       "|",
       "`- Fragment(e2)")
 
-    def e1: MatchResult[Option[Tree[Fragment]]] = treeMap(new mutableSpec { "t1" >> { "e1" in ok; "e2" in ok } }.is.fragments)(mapper)(ee) must beDrawnAs(
+    def e1: MatchResult[Option[Tree[Fragment]]] = treeMap(new mutableSpec { "t1" >> { "e1" in ok; "e2" >> ok } }.is.fragments)(mapper)(ee) must beDrawnAs(
       "Fragment(root)",
       "|",
       "`- Fragment(t1)",
@@ -56,6 +56,7 @@ class LevelsSpec(ee: ExecutionEnv) extends Spec { def is = s2"""
 
     def e3: MatchResult[Option[Tree[Fragment]]] = treeMap(new mutableSpec {
       "t1" >> {
+        br
         "t2" >> {
           ok
           Fragment.foreach(1 to 3) { i =>

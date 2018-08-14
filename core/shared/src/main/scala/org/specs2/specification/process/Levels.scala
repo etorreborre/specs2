@@ -29,19 +29,15 @@ trait Levels {
     levelsProcess1.map { case (f, level) => (f, level.l) }
   
   def levelsProcess1: AsyncTransducer[Fragment, (Fragment, Level)] = {
-    def sameLevel(f: Fragment, level: Level) = ((f, level), level)
     def nextLevel(f: Fragment, level: Level, next: Level) = ((f, level), next)
 
     state[ActionStack, Fragment, (Fragment, Level), Level](Level()) {
       // level goes +1 when a new block starts
-      case (f @ Fragment(Start,_ ,_), level) => nextLevel(f, level, level.copy(start = true, incrementNext = false))
-      case (f @ Fragment(End,_ ,_), level)   => nextLevel(f, level, level.copy(start = false, incrementNext = false, max(0, level.l - 1)))
-      case (f , level) if Fragment.isText(f) && (level.start || level.incrementNext)
-                                             => nextLevel(f, level, level.copy(start = false, incrementNext = true))
-      case (f , level) if Fragment.isText(f) => nextLevel(f, level, level.copy(start = false, incrementNext = false))
-      case (f, level)                        =>
-        if (level.incrementNext) nextLevel(f, level.copy(l = level.l + 1), level.copy(start = false, incrementNext = false, l = level.l + 1))
-        else                     sameLevel(f, level)
+      case (f @ Fragment(Start,_ ,_), level) => nextLevel(f, level, level.copy(start = true))
+      case (f @ Fragment(End,_ ,_), level)   => nextLevel(f, level, level.copy(start = false, l = max(0, level.l - 1)))
+      case (f , level) if Fragment.isText(f) && level.start
+                                             => nextLevel(f, level, level.copy(start = false, l = level.l + 1))
+      case (f, level)                        => nextLevel(f, level, level.copy(start = false))
     }
   }
 
