@@ -10,7 +10,7 @@ import text.AnsiColors
 import execute._
 import org.junit.ComparisonFailure
 import main.Arguments
-import control._
+import control.{Actions, _}
 import origami._
 import control.ExecutionOrigin._
 import org.specs2.fp.syntax._
@@ -34,7 +34,7 @@ trait JUnitPrinter extends Printer { outer =>
   // test run start and finish must not be notified if we execute the test from
   // the JUnitCore runner because it is already doing that.
   // Otherwise this could lead to double reporting see #440
-  def sink(env: Env, spec: SpecStructure) =
+  def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment] =
     fold.bracket[ActionStack, Fragment, RunNotifier](
       open = Actions.protect { if (!isExecutedFromJUnitCore) notifier.fireTestRunStarted(description); notifier })(
       step = (notifier: RunNotifier, fragment: Fragment) => notifyJUnit(env.arguments)(fragment).as(notifier))(
@@ -42,34 +42,58 @@ trait JUnitPrinter extends Printer { outer =>
     )
 
   def notifyJUnit(args: Arguments): Fragment => Action[Unit] = { fragment =>
-    // find the fragment with the same description and same location
-    val description = descriptions.find { case (f, d) =>
-      f.description == fragment.description && f.location == fragment.location }.map(_._2)
-
-    fragment.executionResult.map { result =>
-      description.map { description: Description =>
-        if (fragment.isExecutable) {
-          notifier.fireTestStarted(description)
-          notifyResult(description, result)(args)
-        } else ()
-      }.getOrElse(())
-    }
+    if (Fragment.isExampleOrStep(fragment)) {
+      val description = findDescription(fragment)
+      fragment.executionResult.map { result =>
+        description.foreach { description: Description =>
+          if (Fragment.isExample(fragment))
+            notifyTestResult(description, result)(args)
+          else
+            notifyStepError(description, result)(args)
+        }
+      }
+    } else Actions.unit
   }
 
-  private def notifyResult(description: Description, result: Result)(implicit args: Arguments) =
+  private def findDescription(fragment: Fragment) = {
+    // find the fragment with the same description and same location
+    descriptions.find { case (f, d) =>
+      f.description == fragment.description && f.location == fragment.location
+    }.map(_._2)
+  }
+
+  private def notifyTestResult(description: Description, result: Result)(implicit args: Arguments) =
     result match {
       case f @ Failure(m, e, st, d)                     => failWith(description, junitFailure(f))
       case e @ Error(m, st)                             => failWith(description, args.traceFilter(e.exception))
       case DecoratedResult(_, f @ Failure(m, e, st, d)) => failWith(description, junitFailure(f))
       case DecoratedResult(_, e @ Error(m, st))         => failWith(description, args.traceFilter(e.exception))
       case Pending(_) | Skipped(_, _)                   => notifier.fireTestIgnored(description)
-      case Success(_, _) | DecoratedResult(_, _)        => notifier.fireTestFinished(description)
+      case Success(_, _) | DecoratedResult(_, _)        => successWith(description)
+    }
+
+  private def notifyStepError(description: Description, result: Result)(implicit args: Arguments) =
+    result match {
+      case f @ Failure(m, e, st, d)                     => specFailWith(description, junitFailure(f))
+      case e @ Error(m, st)                             => specFailWith(description, args.traceFilter(e.exception))
+      case DecoratedResult(_, f @ Failure(m, e, st, d)) => specFailWith(description, junitFailure(f))
+      case DecoratedResult(_, e @ Error(m, st))         => specFailWith(description, args.traceFilter(e.exception))
+      case _                                            => ()
     }
 
   private def failWith(description: Description, failure: Throwable) = {
+    notifier.fireTestStarted(description)
     notifier.fireTestFailure(new org.junit.runner.notification.Failure(description, failure))
     notifier.fireTestFinished(description)
   }
+
+  private def successWith(description: Description) = {
+    notifier.fireTestStarted(description)
+    notifier.fireTestFinished(description)
+  }
+
+  private def specFailWith(description: Description, failure: Throwable) =
+    notifier.fireTestFailure(new org.junit.runner.notification.Failure(description, failure))
 
   /** @return a Throwable expected by JUnit Failure object */
   private def junitFailure(f: Failure)(implicit args: Arguments): Throwable = f match {
