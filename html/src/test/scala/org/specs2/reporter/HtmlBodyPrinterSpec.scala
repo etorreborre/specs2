@@ -1,18 +1,17 @@
 package org.specs2
 package reporter
 
-import io.DirectoryPath
-import main.Arguments
 import org.specs2.concurrent.ExecutionEnv
-import org.specs2.control.ExecuteActions._
+import org.specs2.io.DirectoryPath
+import org.specs2.main.Arguments
 import org.specs2.matcher.XmlMatchers
 import org.specs2.specification.Forms
-import specification.process.{Level, Stats}
-import specification.core.{Fragment, SpecStructure}
-
-import scala.xml.NodeSeq
+import org.specs2.specification.core.{Fragment, SpecStructure}
+import org.specs2.specification.process.{Level, Stats}
 import org.specs2.text.AnsiColors
 import org.specs2.time.SimpleTimer
+
+import scala.xml.NodeSeq
 
 class HtmlBodyPrinterSpec(ee: ExecutionEnv) extends Specification with Forms with XmlMatchers { def is = s2"""
 
@@ -21,11 +20,12 @@ class HtmlBodyPrinterSpec(ee: ExecutionEnv) extends Specification with Forms wit
 
  Ansi colors must be removed in text fragments $ansiColors
 
- Fragments must have proper levels in html body $htmlBody
+ Fragments from mutable spec must have proper levels in html body $mutableHtmlBody
+ Fragments from nonmutable spec must have proper levels in html body $nonmutableHtmlBody
 """
 
   def hidden = {
-    print(link(new spec { def is = s2"""
+    print(link(new nonmutableSpec { def is = s2"""
         Explanation Text.
        example no. one $ok"""}).hide) must beEmpty
   }
@@ -42,10 +42,77 @@ class HtmlBodyPrinterSpec(ee: ExecutionEnv) extends Specification with Forms wit
   def print(f: Fragment): NodeSeq =
     HtmlBodyPrinter.printFragment(f, success, Arguments(), Level.Root, DirectoryPath.Root, pandoc = true)
 
-  trait spec extends org.specs2.Specification
+  trait mutableSpec extends org.specs2.mutable.Specification
 
-  def htmlBody = {
-    val fragments = new spec { def is = s2"""
+  def mutableHtmlBody = {
+    val fragments = new mutableSpec {
+      "t1" >> {
+        br
+        "t2" >> {
+          ok
+          Fragment.foreach(1 to 3) { i =>
+            "e" + i in ok
+          }
+          "t3" >> {
+            "e4" in ok
+          }
+
+          "e5" in ok
+        }
+        "e6" in ok
+      }
+    }.is.fragments
+
+    makeBody(fragments)(ee).map(_.trim.replaceAll("\\s+","")).runOption === Some(
+      """<br/>
+        |<br/>
+        |<text class="ok">t1</text>
+        |<br/>
+        |<br/>
+        |<text class="ok">t2</text>
+        |<br/>
+        |<li class="example skipped ok">
+        |   <text>e1</text>
+        |   <br/>
+        |   <message class="skipped"></message>
+        |</li>
+        |<br/>
+        |<li class="example skipped ok">
+        |   <text>e2</text>
+        |   <br/>
+        |   <message class="skipped"></message>
+        |</li>
+        |<br/>
+        |<li class="example skipped ok">
+        |   <text>e3</text>
+        |   <br/>
+        |   <message class="skipped"></message>
+        |</li>
+        |<br/>
+        |<text class="ok">t3</text>
+        |<br/>
+        |<li class="example skipped ok">
+        |   <text>e4</text>
+        |   <br/>
+        |   <message class="skipped"></message>
+        |</li>
+        |<br/>
+        |<li class="example skipped ok">
+        |   <text>e5</text><br/>
+        |   <message class="skipped"></message>
+        |</li>
+        |<br/>
+        |<li class="example skipped ok">
+        |   <text>e6</text><br/>
+        |   <message class="skipped"></message>
+        |</li>
+        |<br/>""".stripMargin.trim.replaceAll("\\s+",""))
+  }
+
+  trait nonmutableSpec extends org.specs2.Specification
+
+  def nonmutableHtmlBody = {
+    val fragments = new nonmutableSpec { def is = s2"""
         Explanation Text.
 
         First starting test line
@@ -58,7 +125,6 @@ class HtmlBodyPrinterSpec(ee: ExecutionEnv) extends Specification with Forms wit
           second set of fragments $fragments2
           """
     }.is.fragments
-    println(fragments.contents.runList.runOption(ee))
 
     makeBody(fragments)(ee).map(_.trim.replaceAll("\\s+","")).runOption === Some(
       """
