@@ -64,6 +64,8 @@ This reference guide for arguments is divided in several sections:
  ----------------------- | ----------------------------------------         | -------------------------------------------------------------------------------------------
  `plan`                  | `false`                                          | only report the text of the specification without executing anything
  `skipAll`               | `false`                                          | skip all the examples
+ `skipAllIf(condition)`  |                                                  | skip all the examples if a given condition is met
+ `skipAllUnless(condition)` |                                               | skip all the examples unless a given condition is met
  `stopOnFail`            | `false`                                          | skip all examples after the first failure
  `stopOnError`           | `false`                                          | skip all examples after the first error
  `stopOnIssue`           | `false`                                          | skip all examples after the first failure or error
@@ -149,6 +151,8 @@ There are also a few shortcuts:
  `was(status: String)`                                                 | `args(was=status)`
  `plan`                                                                | `args(plan=true)`
  `skipAll`                                                             | `args(skipAll=true)`
+ `skipAllIf(condition)`                                                | `args(skipAll=condition)`
+ `skipAllUnless(condition)`                                            | `args(skipAll=!condition)`
  `stopOnFail`                                                          | `args(stopOnFail=true)`
  `stopOnError`                                                         | `args(stopOnError=true)`
  `stopOnIssue`                                                         | `args(stopOnIssue=true)`
