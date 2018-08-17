@@ -51,6 +51,8 @@ is formatted for JUnit reporting tools.
     names must be escaped                                                                                               ${message.e8}
   """
 
+  private val factory = fragmentFactory; import factory._
+
   val printer = JUnitXmlPrinter
 
   object outputDir {
@@ -89,7 +91,7 @@ is formatted for JUnit reporting tools.
 
   object test {
     def e1 = { print(ownEnv)("t1" ^ br ^ "e1<>&\"" ! success) must \\("testcase", "classname" -> "org.specs2.reporter.JUnitXmlPrinterSpec") }
-    def e2 = { print(ownEnv)("t1" ^ br ^ "e1<>&\"" ! success) must \\("testcase", "name" -> scala.xml.Utility.escape("t1::e1<>&\"")) }
+    def e2 = { print(ownEnv)(start ^ "t1" ^ br ^ "e1<>&\"" ! success ^ end) must \\("testcase", "name" -> scala.xml.Utility.escape("t1::e1<>&\"")) }
     def e3 = { print(ownEnv)("t1" ^ br ^ "e1<>&\"" ! success) must \\("testcase", "time") }
   }
 
@@ -101,7 +103,7 @@ is formatted for JUnit reporting tools.
     def e5 = { print(ownEnv)("t1" ^ br ^ "e3" ! failure) must \\("failure", "type" -> failure.exception.getClass.getName) }
     def e6 = { print(ownEnv)("t1" ^ br ^ "e3" ! failure).toString must contain("JUnitXmlPrinterSpec.scala") }
     def e7 = { print(ownEnv)("t1" ^ br ^ "e2" ! skipped) must \\("skipped") }
-    def e8 = { print(ownEnv)("t1" ^ br ^ "<node.1/>" ! ok).toString must contain("t1::&lt;node.1/&gt;") }
+    def e8 = { print(ownEnv)(start ^ "t1" ^ br ^ "<node.1/>" ! ok ^ end).toString must contain("t1::&lt;node.1/&gt;") }
   }
 
   def printString(env1: Env)(fs: Fragments): String = {
