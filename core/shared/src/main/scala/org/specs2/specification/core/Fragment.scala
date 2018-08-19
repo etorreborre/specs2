@@ -4,7 +4,9 @@ package core
 
 import execute.Result
 import fp._
-import org.specs2.control._, Actions._
+import org.specs2.control._
+import Actions._
+
 import scala.concurrent.duration.FiniteDuration
 
 /**
@@ -129,6 +131,11 @@ object Fragment {
 
   def isBacktab(f: Fragment) = f.description match {
     case Backtab(_) => true
+    case _          => false
+  }
+
+  def isBr(f: Fragment) = f.description match {
+    case Br         => true
     case _          => false
   }
 

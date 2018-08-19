@@ -14,6 +14,7 @@ import form._
 import control._
 import ExecuteActions._
 import org.specs2.concurrent.ExecutionEnv
+import org.specs2.control.producer.{Transducer, Transducers}
 import org.specs2.text.AnsiColors
 import origami._
 import org.specs2.time.SimpleTimer
@@ -30,6 +31,17 @@ trait HtmlBodyPrinter {
     val title = spec.name
     type HtmlState = (String, Level)
 
+    // Br (new line) fragment's description is meant for console output but
+    // in html output examples are embedded in <li></li> tags and
+    // there is no need to render additional blank line between them
+    val deleteLineBetweenExamples: Transducer[ActionStack, Fragment, Fragment] = producer =>
+      producer.pipe(Transducers.zipWithPreviousAndNext).filter {
+        case (Some(f1), f2, Some(f3)) if Fragment.isExample(f1) && Fragment.isBr(f2) && Fragment.isExample(f3) => false
+        case _ => true
+      }.map {
+        case (_, f, _) => f
+      }
+
     val htmlFold = fold.fromFoldLeft[Action, Fragment, HtmlState](("", Level())) { case ((htmlString, level), fragment) =>
       fragment.executionResult.map { result =>
         (htmlString + printFragment(fragment, result, arguments, level, options.outDir, pandoc),
@@ -37,7 +49,7 @@ trait HtmlBodyPrinter {
       }
     }
 
-    Operations.delayed(spec.fragments.contents.fold(htmlFold).runOption(ee)).map {
+    Operations.delayed(spec.fragments.contents.pipe(deleteLineBetweenExamples).fold(htmlFold).runOption(ee)).map {
       case Some((html, _)) =>
         html +
         s"""${printStatistics(title, stats, timer, options)}"""

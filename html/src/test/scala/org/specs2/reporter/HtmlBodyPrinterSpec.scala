@@ -76,13 +76,11 @@ class HtmlBodyPrinterSpec(ee: ExecutionEnv) extends Specification with Forms wit
         |   <br/>
         |   <message class="skipped"></message>
         |</li>
-        |<br/>
         |<li class="example skipped ok">
         |   <text>e2</text>
         |   <br/>
         |   <message class="skipped"></message>
         |</li>
-        |<br/>
         |<li class="example skipped ok">
         |   <text>e3</text>
         |   <br/>
@@ -155,7 +153,6 @@ class HtmlBodyPrinterSpec(ee: ExecutionEnv) extends Specification with Forms wit
         |   <br/>
         |   <message class="skipped"></message>
         |</li>
-        |<br/>
         |<li class="example skipped ok">
         |   <text>example no. two from first set</text>
         |   <br/>
@@ -172,7 +169,6 @@ class HtmlBodyPrinterSpec(ee: ExecutionEnv) extends Specification with Forms wit
         |   <br/>
         |   <message class="skipped"></message>
         |</li>
-        |<br/>
         |<li class="example skipped ok">
         |   <text>example no. two from second set</text>
         |   <br/>
