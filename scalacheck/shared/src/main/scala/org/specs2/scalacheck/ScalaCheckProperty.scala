@@ -26,6 +26,8 @@ trait ScalaCheckProperty {
 
   def setSeed(seed: Seed): SelfType
 
+  def setSeed(seed: String): SelfType
+
   def setVerbosity(v: Int): SelfType =
     setParameters(parameters.setVerbosity(v))
 
@@ -258,6 +260,9 @@ case class ScalaCheckFunction2[T1, T2, R]( execute: (T1, T2) => R,
 
   def setSeed(seed: Seed): SelfType =
     copy(parameters = parameters.copy(seed = Some(seed)))
+
+  def setSeed(seed: String): SelfType =
+    copy(parameters = parameters.copy(seed = Parameters.makeSeed(seed)))
 }
 
 
@@ -342,6 +347,8 @@ case class ScalaCheckFunction3[T1, T2, T3, R](
   def setSeed(seed: Seed): SelfType =
     copy(parameters = parameters.copy(seed = Some(seed)))
 
+  def setSeed(seed: String): SelfType =
+    copy(parameters = parameters.copy(seed = Parameters.makeSeed(seed)))
 }
 
 
@@ -432,6 +439,8 @@ case class ScalaCheckFunction4[T1, T2, T3, T4, R](
   def setSeed(seed: Seed): SelfType =
     copy(parameters = parameters.copy(seed = Some(seed)))
 
+  def setSeed(seed: String): SelfType =
+    copy(parameters = parameters.copy(seed = Parameters.makeSeed(seed)))
 }
 
 
@@ -528,6 +537,9 @@ case class ScalaCheckFunction5[T1, T2, T3, T4, T5, R](
 
   def setSeed(seed: Seed): SelfType =
     copy(parameters = parameters.copy(seed = Some(seed)))
+
+  def setSeed(seed: String): SelfType =
+    copy(parameters = parameters.copy(seed = Parameters.makeSeed(seed)))
 }
 
 
@@ -633,6 +645,8 @@ case class ScalaCheckFunction6[T1, T2, T3, T4, T5, T6, R](
   def setSeed(seed: Seed): SelfType =
     copy(parameters = parameters.copy(seed = Some(seed)))
 
+  def setSeed(seed: String): SelfType =
+    copy(parameters = parameters.copy(seed = Parameters.makeSeed(seed)))
 }
 
 
@@ -744,6 +758,8 @@ case class ScalaCheckFunction7[T1, T2, T3, T4, T5, T6, T7, R](
   def setSeed(seed: Seed): SelfType =
     copy(parameters = parameters.copy(seed = Some(seed)))
 
+  def setSeed(seed: String): SelfType =
+    copy(parameters = parameters.copy(seed = Parameters.makeSeed(seed)))
 }
 
 
@@ -863,6 +879,8 @@ case class ScalaCheckFunction8[T1, T2, T3, T4, T5, T6, T7, T8, R](
   def setSeed(seed: Seed): SelfType =
     copy(parameters = parameters.copy(seed = Some(seed)))
 
+  def setSeed(seed: String): SelfType =
+    copy(parameters = parameters.copy(seed = Parameters.makeSeed(seed)))
 }
 
 case class ScalaCheckArgInstances[T](arbitrary: Arbitrary[T], shrink: Option[Shrink[T]], collectors: List[T => Any], pretty: T => Pretty) {
@@ -966,6 +984,9 @@ case class ScalaCheckFunction$n[${TNList(n)}, R](
 
   def setSeed(seed: Seed): SelfType =
     copy(parameters = parameters.copy(seed = Some(seed)))
+
+  def setSeed(seed: String): SelfType =
+    copy(parameters = parameters.copy(seed = Parameters.makeSeed(seed)))
 }""".stripMargin
 
 
