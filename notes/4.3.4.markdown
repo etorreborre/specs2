@@ -1,0 +1,14 @@
+Maintenance version, with some HTML enhancement and most importantly a fix for Bazel builds. 
+
+## Enhancements
+
+ * **scalacheck** added missing `setSeed(String)` methods on scalacheck functions
+ * **html** #704 remove superflous lines between examples (by @kaatzee)
+ * **html** #696 set better levels for non mutable specifications reporting in HTML (by @kaatzee)
+ * **guide** #689 document the `skipAllIf/skipAllUnless` arguments
+
+## Fixes
+
+ * **junit** #705 added an exclusion for the Bazel runner, to prevent double reporting (#705) (17 minutes ago) (thanks to Igal Tabachnik)
+ * **core** #700 log errors properly when `beforeAll` fails (thanks to @kaatzee)
+ 
