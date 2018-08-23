@@ -21,6 +21,10 @@ trait ExecutionOrigin extends Stacktraces {
   lazy val isExecutedFromJUnitCore = isExecutedFrom("org.junit.runner")
   /** return true if the current test is executed with Scala.js */
   lazy val isExecutedFromScalaJs = isExecutedFrom("org.scalajs")
+  /** return true if the current test is executed with Bazel */
+  lazy val isExecutedFromBazel = isExecutedFrom("com.google.testing.junit")
+
+  lazy val excludeFromReporting: Boolean = isExecutedFromJUnitCore || isExecutedFromBazel
 
   /** try to approximate if a specification is a specs2 one or scalaz one by passing name = org.specs2 or name = scalaz */
   def isSpecificationFromSpecs2orScalaz(st: Seq[StackTraceElement]) = {
