@@ -34,12 +34,17 @@ trait JUnitPrinter extends Printer { outer =>
   // test run start and finish must not be notified if we execute the test from
   // the JUnitCore runner because it is already doing that.
   // Otherwise this could lead to double reporting see #440
-  def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment] =
+  // 
+  // The value should be evaluated once in the outer scope, because the 
+  // original stack trace is lost inside the callbacks.
+  def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment] = {
+    val shouldNotify = !excludeFromReporting
     fold.bracket[ActionStack, Fragment, RunNotifier](
-      open = Actions.protect { if (!isExecutedFromJUnitCore) notifier.fireTestRunStarted(description); notifier })(
+      open = Actions.protect { if (shouldNotify) notifier.fireTestRunStarted(description); notifier })(
       step = (notifier: RunNotifier, fragment: Fragment) => notifyJUnit(env.arguments)(fragment).as(notifier))(
-      close = (notifier: RunNotifier) => Actions.protect(if (!isExecutedFromJUnitCore) notifier.fireTestRunFinished(new org.junit.runner.Result) else ())
+      close = (notifier: RunNotifier) => Actions.protect(if (shouldNotify) notifier.fireTestRunFinished(new org.junit.runner.Result) else ())
     )
+  }
 
   def notifyJUnit(args: Arguments): Fragment => Action[Unit] = { fragment =>
     if (Fragment.isExampleOrStep(fragment)) {
