@@ -48,7 +48,9 @@ trait Classes extends ClassOperations {
 
   private def findInstance[T <: AnyRef : ClassTag](klass: Class[T], loader: ClassLoader, defaultInstances: =>List[AnyRef], cs: List[Constructor[_]], error: Option[ErrorEffect.Error] = None): Operation[T] =
     cs match {
-      case Nil => error.map(Operations.fromError[T]).getOrElse(Operations.fail[T]("Can't find a constructor for class "+klass.getName))
+      case Nil =>
+        error.map(Operations.fromError[T]).getOrElse(Operations.fail[T]("Can't find a suitable constructor with 0 or 1 parameter for class "+klass.getName))
+
       case c :: rest =>
         runOperation(createInstanceForConstructor[T](klass, c, loader, defaultInstances)).
           fold(e => findInstance[T](klass, loader, defaultInstances, rest, Some(e)),
