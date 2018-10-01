@@ -207,7 +207,8 @@ object ErrorEffect extends ErrorEffect[String] {
   }
 
   def traceWithIndent(t: Throwable, indent: String): String =
-    trace(t).lines.map(line => indent + line).mkString("\n")
+    // Predef.augmentString = work around scala/bug#11125 on JDK 11
+    Predef.augmentString(trace(t)).lines.map(line => indent + line).mkString("\n")
 }
 
 case class Evaluate[F, A](run: (Throwable Either F) Either Name[A])
