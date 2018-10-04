@@ -4,9 +4,11 @@ dist: trusty
 language: scala
 
 scala:
-  - 2.12.6
+  - 2.12.7
 
-jdk: oraclejdk9
+jdk:
+  - oraclejdk8
+  - openjdk11
 
 addons:
   apt:

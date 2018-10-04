@@ -3,4 +3,3 @@
 -Xmx3G
 -Xss6M
 -XX:ReservedCodeCacheSize=256M
---add-modules=java.activation

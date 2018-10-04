@@ -1,4 +1,4 @@
-addSbtPlugin("org.scala-js"       % "sbt-scalajs"              % "0.6.23")
+addSbtPlugin("org.scala-js"       % "sbt-scalajs"              % "0.6.25")
 addSbtPlugin("org.portable-scala" % "sbt-crossproject"         % "0.4.0")
 addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "0.4.0")
 addSbtPlugin("com.jsuereth"       % "sbt-pgp"                  % "1.1.1")
@@ -11,3 +11,7 @@ addSbtPlugin("ohnosequences"      % "sbt-github-release"       % "0.7.0")
 addSbtPlugin("com.eed3si9n"       % "sbt-buildinfo"            % "0.7.0")
 
 resolvers += Resolver.url("sonatype", new URL("https://oss.sonatype.org/content/repositories/releases"))(Resolver.ivyStylePatterns)
+
+// needed by sbt-github-release when building on JDK 11.
+// reference: https://github.com/ohnosequences/sbt-github-release/issues/28
+libraryDependencies += "com.sun.activation" % "javax.activation" % "1.2.0"
