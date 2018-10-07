@@ -71,6 +71,10 @@ trait RunTimedMatchers[F[_]] {
 trait IOMatchers extends RunTimedMatchers[IO] {
 
   import scala.concurrent.ExecutionContext.Implicits.global
+  implicit val catsEffectTimer: cats.effect.Timer[IO] =
+    IO.timer(global)
+  implicit val catsEffectContextShift: cats.effect.ContextShift[IO] =
+    IO.contextShift(global)
 
   protected def runWithTimeout[A](fa: IO[A], d: FiniteDuration): A = fa.timeout(d).unsafeRunSync
   protected def runAwait[A](fa: IO[A]) : A = fa.unsafeRunSync

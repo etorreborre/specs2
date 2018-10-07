@@ -82,8 +82,8 @@ lazy val commonJsSettings = Seq(
 lazy val specs2Version = settingKey[String]("defines the current specs2 version")
 lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
 lazy val shapelessVersion = "2.3.3"
-lazy val catsVersion = "1.1.0"
-lazy val catsEffectVersion = "1.0.0-RC2"
+lazy val catsVersion = "1.3.1"
+lazy val catsEffectVersion = "1.0.0"
 
 def moduleSettings(name: String) =
   coreDefaultSettings  ++
