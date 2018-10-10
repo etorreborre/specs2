@@ -151,7 +151,11 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
         case None =>
           Future(())
       }
-    }.recover { case t => loggers.foreach(_.trace(t)) }
+    }.recover { case t =>
+      val events = sbtEvents(taskDef, handler)
+      events.suiteError(t)
+      loggers.foreach(_.trace(t))
+    }
 
   }
 
