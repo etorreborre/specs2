@@ -18,19 +18,20 @@ lazy val specs2 = project.in(file(".")).
     Seq(name := "specs2", packagedArtifacts := Map.empty)
   ).aggregate(
       fpJvm, catsJvm, commonJvm, matcherJvm, coreJvm, matcherExtraJvm, scalazJvm, html, analysisJvm,
-      shapelessJvm, form, markdown, gwt, junitJvm, scalacheckJvm, mockJvm, tests,
-      fpJs, catsJs, commonJs, matcherJs, coreJs, matcherExtraJs, scalazJs, analysisJs,
-      shapelessJs, form, junitJs, scalacheckJs, mockJs)
+      shapelessJvm, form, markdown, gwt, junitJvm, scalacheckJvm, mockJvm, tests//,
+  //    fpJs, catsJs, commonJs, matcherJs, coreJs, matcherExtraJs, scalazJs, analysisJs,
+  //    shapelessJs, form, junitJs, scalacheckJs, mockJs
+  )
 
 
 /** COMMON SETTINGS */
 lazy val specs2Settings = Seq(
   organization := "org.specs2",
   specs2Version in GlobalScope := version.value,
-  scalazVersion in GlobalScope := "7.2.24",
+  scalazVersion in GlobalScope := "7.2.26",
   specs2ShellPrompt,
   scalaVersion := "2.12.7",
-  crossScalaVersions := Seq(scalaVersion.value, "2.11.12", "2.13.0-M4"))
+  crossScalaVersions := Seq(scalaVersion.value, "2.11.12", "2.13.0-M5"))
 
 lazy val versionSettings =
   Seq(
@@ -82,7 +83,7 @@ lazy val commonJsSettings = Seq(
 lazy val specs2Version = settingKey[String]("defines the current specs2 version")
 lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
 lazy val shapelessVersion = "2.3.3"
-lazy val catsVersion = "1.3.1"
+lazy val catsVersion = "1.4.0"
 lazy val catsEffectVersion = "1.0.0"
 
 def moduleSettings(name: String) =
@@ -118,9 +119,16 @@ lazy val analysisJvm = analysis.jvm.dependsOn(commonJvm % "test->test", coreJvm,
 lazy val cats = crossProject(JSPlatform, JVMPlatform).in(file("cats")).
   settings(
     moduleSettings("cats") ++
-      Seq(libraryDependencies ++= Seq(
-      "org.typelevel" %% "cats-core" % catsVersion,
-      "org.typelevel" %% "cats-effect" % catsEffectVersion)) ++
+      Seq(libraryDependencies ++=
+        (if (scalaVersion.value.toString.endsWith("M5"))
+          Seq(
+            "org.typelevel" % "cats-core_2.13.0-M4" % catsVersion,
+            "org.typelevel" % "cats-effect_2.13.0-M4" % catsEffectVersion)
+        else
+          Seq(
+            "org.typelevel" %% "cats-core" % catsVersion,
+            "org.typelevel" %% "cats-effect" % catsEffectVersion)))
+      ++
       Seq(name := "specs2-cats"):_*
   ).
   jsSettings(depends.jsTest, moduleJsSettings("cats")).
@@ -140,9 +148,11 @@ lazy val common = crossProject(JSPlatform, JVMPlatform).in(file("common")).
     Seq(name := "specs2-common")
 ).
   jsSettings(depends.jsTest, moduleJsSettings("common"),
-    libraryDependencies ++= Seq(
-      "org.scalacheck" %%% "scalacheck" % "1.14.0" % "test"
-    )
+    libraryDependencies ++=
+      (if (scalaVersion.value.toString.endsWith("M5"))
+        Seq("org.scalacheck" % "scalacheck_sjs0.6_2.13.0-M4" % "1.14.0" % "test")
+      else
+        Seq("org.scalacheck" %%% "scalacheck" % "1.14.0" % "test"))
   ).
   jvmSettings(moduleJvmSettings("common"),
     libraryDependencies ++= Seq(
@@ -307,7 +317,10 @@ lazy val scalacheck = crossProject(JSPlatform, JVMPlatform).in(file("scalacheck"
     moduleSettings("scalacheck") ++
     Seq(name := "specs2-scalacheck"):_*).
   jsSettings(depends.jsTest, moduleJsSettings("scalacheck"), libraryDependencies +=
-    "org.scalacheck" %%% "scalacheck" % "1.14.0"
+    (if (scalaVersion.value.toString.endsWith("M5"))
+       "org.scalacheck" % "scalacheck_sjs0.6_2.13.0-M4" % "1.14.0"
+     else
+       "org.scalacheck" %%% "scalacheck" % "1.14.0")
   ).
   jvmSettings(depends.jvmTest, moduleJvmSettings("scalacheck"), libraryDependencies +=
     "org.scalacheck" %% "scalacheck" % "1.14.0"
@@ -377,7 +390,7 @@ lazy val compilationSettings = Seq(
         Nil
     }
   },
-  addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.7"),
+  addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.8"),
   scalacOptions in Test               ++= Seq("-Yrangepos"),
   scalacOptions in (Compile, doc)     ++= Seq("-feature", "-language:_"),
   scalacOptions in (Compile, console) := Seq("-Yrangepos", "-feature", "-language:_"),
