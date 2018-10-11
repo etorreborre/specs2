@@ -1,9 +1,9 @@
-package org.specs2
-package form
+package org.specs2.form
 
 import DecoratedProperties._
-import specification._
-import core._
+import org.specs2._
+import org.specs2.specification._
+import org.specs2.specification.core.{Tab=>_,_}
 import org.specs2.concurrent.ExecutionEnv
 import SpecStructure._
 

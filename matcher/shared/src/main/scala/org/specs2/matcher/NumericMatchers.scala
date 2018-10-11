@@ -2,7 +2,7 @@ package org.specs2
 package matcher
 
 import text.Plural._
-import NumericMatchers._
+import NumericMatchersDescription._
 
 /**
  * Matchers for Numerical values
@@ -158,6 +158,17 @@ trait NumericBeHaveMatchers extends BeHaveMatchers { outer: NumericBaseMatchers 
 }
 
 object NumericMatchers extends NumericMatchers {
+  import text.NotNullStrings._
+
+  private[specs2] def description[S](e: Expectable[S]) = {
+    e.desc match {
+      case Some(d) => d(e.value.notNull)
+      case None    => e.value.notNull
+    }
+  }
+}
+
+object NumericMatchersDescription {
   import text.NotNullStrings._
 
   private[specs2] def description[S](e: Expectable[S]) = {

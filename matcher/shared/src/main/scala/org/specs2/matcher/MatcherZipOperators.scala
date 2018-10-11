@@ -1,7 +1,8 @@
 package org.specs2
 package matcher
 
-import MatchersImplicits._
+import MatchResultCombinators._
+import MatchersCreation._
 
 /**
  * This trait provides 'zip' operators to create matchers on tuples based on "zipped" matchers on fields

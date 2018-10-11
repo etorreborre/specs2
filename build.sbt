@@ -9,7 +9,7 @@ import sbtcrossproject.{crossProject, CrossType}
 
 /** MAIN PROJECT */
 lazy val specs2 = project.in(file(".")).
-  enablePlugins(GitBranchPrompt, ScalaJSPlugin, SitePlugin, GhpagesPlugin, BuildInfoPlugin).
+  enablePlugins(GitBranchPrompt, SitePlugin, GhpagesPlugin, BuildInfoPlugin).
   settings(
     moduleSettings("")  ++
     siteSettings,
@@ -364,7 +364,8 @@ lazy val compilationSettings = Seq(
       (sourceDirectory in (Test, test)).value / s"scala-scalaz-7.1.x"),
   maxErrors := 20,
   scalacOptions in Compile ++=
-      Seq("-Xfatal-warnings",
+      Seq(
+        //"-Xfatal-warnings",
         "-Xlint",
         "-Ywarn-numeric-widen",
         "-Ywarn-value-discard",

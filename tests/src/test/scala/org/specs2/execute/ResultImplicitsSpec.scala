@@ -1,7 +1,7 @@
 package org.specs2
 package execute
 
-import org.scalacheck._, Arbitrary._
+import org.scalacheck._
 
 class ResultImplicitsSpec extends Specification with ScalaCheck with ResultImplicits { def is = s2"""
 

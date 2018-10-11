@@ -1,17 +1,16 @@
-package org.specs2
-package form
+package org.specs2.form
 
-import scala.xml._
-import collection.Seqx._
-import xml.Nodex._
-import execute._
-import main.Arguments
+import scala.xml.{Text=>_,_}
+import org.specs2.collection.Seqx._
+import org.specs2.xml.Nodex._
+import org.specs2.execute._
+import org.specs2.main.Arguments
 import StandardResults._
-import matcher._
+import org.specs2.matcher._
 import DecoratedProperties._
 import ResultLogicalCombinators._
-import control.ImplicitParameters._
-import control.Use
+import org.specs2.control.ImplicitParameters._
+import org.specs2.control.Use
 
 /**
  * A Form is a container for Rows (@see Row) where each row contain some Cell (@see Cell).

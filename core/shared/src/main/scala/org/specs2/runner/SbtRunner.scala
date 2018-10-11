@@ -1,20 +1,19 @@
-package org.specs2
-package runner
+package org.specs2.runner
 
 import Runner._
-import specification.process.Stats
-import sbt.testing._
-import main._
-import reporter._
-import control.{Logger => _, _}
+import org.specs2.specification.process.Stats
+import sbt.testing.{Runner=>_,_}
+import org.specs2.main._
+import org.specs2.reporter._
+import org.specs2.control.{Logger => _, _}
 import org.specs2.fp._
 import org.specs2.fp.syntax._
-import reporter.SbtLineLogger
-import reporter.Printer._
-import specification.core._
+import org.specs2.reporter.SbtLineLogger
+import org.specs2.reporter.Printer._
+import org.specs2.specification.core._
 import Actions._
-import reflect._
-import eff.ErrorEffect._
+import org.specs2.reflect._
+import org.specs2.control.eff.ErrorEffect._
 import org.specs2.concurrent.ExecutionEnv
 import org.specs2.control.ExecuteActions._
 import org.specs2.data.NamedTag

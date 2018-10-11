@@ -1,11 +1,10 @@
-package org.specs2
-package matcher
+package org.specs2.matcher
 
-import java.util.regex.{Matcher => _, _}
-import control.Exceptions._
-import text.Quote._
+import java.util.regex.{Matcher => _, MatchResult =>_, Pattern}
+import org.specs2.text.Quote._
+import org.specs2.control.Exceptions._
+import org.specs2.text.Regexes._
 import util.matching.Regex
-import text.Regexes._
 
 /**
  * The `StringMatchers` trait provides matchers which are applicable to String objects

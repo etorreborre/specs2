@@ -2,7 +2,6 @@ package org.specs2
 package reflect
 
 import scala.reflect.ClassTag
-import language.existentials
 
 /**
  * This trait adds some syntactic sugar to create a sequence of classes from the declaration of their types
