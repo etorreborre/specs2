@@ -1,0 +1,18 @@
+Maintenance version
+
+## Enhancements
+
+ * **core**  report `Throwables` at the end of a sbt execution (#714)
+ * **cats** refactor `IOMatchers` to add `Generic` (#707) (Diego E. Alonso Blas)* **core** return a better failure message when the argument for a spec cannot be buit
+
+## 2.13 and upgrades
+
+ * use cats-1.4.0
+ * use scalacheck-1.14.0
+ * add explicit return types for macro (#706) (kenji yoshida)
+ * fix compile errors latest Scala 2.13.x (#708) (kenji yoshida)
+ * allow building on JDK 11 (#710) (Seth Tisue)
+ * upgrade cats + cats-effect to versions community build expects (#711) (Seth Tisue)
+ * upgraded to scala 2.12.7
+ * adjustments for 2.13.0-M5 but some tests are not passing anymore probably because of some changes with collections
+
