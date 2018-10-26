@@ -18,9 +18,9 @@ lazy val specs2 = project.in(file(".")).
     Seq(name := "specs2", packagedArtifacts := Map.empty)
   ).aggregate(
       fpJvm, catsJvm, commonJvm, matcherJvm, coreJvm, matcherExtraJvm, scalazJvm, html, analysisJvm,
-      shapelessJvm, form, markdown, gwt, junitJvm, scalacheckJvm, mockJvm, tests//,
-  //    fpJs, catsJs, commonJs, matcherJs, coreJs, matcherExtraJs, scalazJs, analysisJs,
-  //    shapelessJs, form, junitJs, scalacheckJs, mockJs
+      shapelessJvm, form, markdown, gwt, junitJvm, scalacheckJvm, mockJvm, tests,
+      fpJs, commonJs, matcherJs, coreJs, matcherExtraJs, scalazJs, analysisJs,
+      shapelessJs, junitJs, scalacheckJs, mockJs
   )
 
 
@@ -149,10 +149,7 @@ lazy val common = crossProject(JSPlatform, JVMPlatform).in(file("common")).
 ).
   jsSettings(depends.jsTest, moduleJsSettings("common"),
     libraryDependencies ++=
-      (if (scalaVersion.value.toString.endsWith("M5"))
-        Seq("org.scalacheck" % "scalacheck_sjs0.6_2.13.0-M4" % "1.14.0" % "test")
-      else
-        Seq("org.scalacheck" %%% "scalacheck" % "1.14.0" % "test"))
+      Seq("org.scalacheck" %%% "scalacheck" % "1.14.0" % "test")
   ).
   jvmSettings(moduleJvmSettings("common"),
     libraryDependencies ++= Seq(
@@ -317,10 +314,7 @@ lazy val scalacheck = crossProject(JSPlatform, JVMPlatform).in(file("scalacheck"
     moduleSettings("scalacheck") ++
     Seq(name := "specs2-scalacheck"):_*).
   jsSettings(depends.jsTest, moduleJsSettings("scalacheck"), libraryDependencies +=
-    (if (scalaVersion.value.toString.endsWith("M5"))
-       "org.scalacheck" % "scalacheck_sjs0.6_2.13.0-M4" % "1.14.0"
-     else
-       "org.scalacheck" %%% "scalacheck" % "1.14.0")
+    "org.scalacheck" %%% "scalacheck" % "1.14.0"
   ).
   jvmSettings(depends.jvmTest, moduleJvmSettings("scalacheck"), libraryDependencies +=
     "org.scalacheck" %% "scalacheck" % "1.14.0"
