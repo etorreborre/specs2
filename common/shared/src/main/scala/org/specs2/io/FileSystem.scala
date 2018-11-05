@@ -32,7 +32,19 @@ trait FileSystem extends FilePathReader {
   /** write a string to a file as UTF-8 */
   def writeFile(filePath: FilePath, content: String): Operation[Unit] =
     mkdirs(filePath) >>
-    Operations.protect { new PrintWriter(filePath.path, "UTF-8") { try write(content) finally close }; () }
+    Operations.protect {
+      val writer = new PrintWriter(filePath.path, "UTF-8")
+      try Right(writer.write(content))
+      catch { case e: Exception => Left(e) }
+      finally writer.close
+    }.flatMap {
+      case Left(e) =>
+        Operations.logThrowable[OperationStack](e) >>
+        Operations.warn("could not write file "+filePath.path)
+
+      case Right(_) =>
+        Operations.unit
+    }
 
   /** execute an operation with a File, then delete it */
   def withEphemeralFile(path: FilePath)(operation: Operation[Unit]): Operation[Unit] =
