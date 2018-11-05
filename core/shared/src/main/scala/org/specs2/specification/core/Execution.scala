@@ -3,6 +3,7 @@ package specification
 package core
 
 import java.util.concurrent._
+
 import execute._
 import org.specs2.concurrent.ExecutionEnv
 
@@ -132,7 +133,11 @@ case class Execution(run:            Option[Env => Future[() => Result]]     = N
           implicit val ec = env.specs2ExecutionContext
           env.setContextClassLoader()
 
-          val future = TimedFuture(es => r(env).map(_()), to).runNow(env.executorServices)
+          val future = TimedFuture(es => r(env).map(_()), to).runNow(env.executorServices).recoverWith { case e: FailureException =>
+            // Future execution could still throw FailureExceptions which can only be
+            // recovered here
+            Future.successful(ResultExecution.handleExceptionsPurely(e))
+          }
           setExecuting(future).copy(timeout = to).startTimer
         }
         catch { case t: Throwable => setFatal(t).stopTimer }

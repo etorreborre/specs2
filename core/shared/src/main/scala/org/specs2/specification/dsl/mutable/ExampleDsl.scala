@@ -33,8 +33,8 @@ trait ExampleDsl1 extends BlockDsl with ExampleDsl0 {
   implicit def blockExample(d: String) = new BlockExample(d)
 
   class BlockExample(d: String) extends BlockExample0(d) {
-    def >>[R](f: String => R)(implicit asResult: AsResult[R], p1: ImplicitParam1, p2: ImplicitParam2): Fragment =
-      Use.ignoring(p1, p2) { >>(Execution.result(f(d))) }
+    def >>[R](f: String => R)(implicit asExecution: AsExecution[R]): Fragment =
+      >>(asExecution.execute(f(d)))
 
    def >>(execution: Execution): Fragment = {
       addFragment(fragmentFactory.example(Text(d), execution))
@@ -48,8 +48,8 @@ trait ExampleDsl1 extends BlockDsl with ExampleDsl0 {
       addFragment(fragmentFactory.break)
     }
 
-    def in[R](f: String => R)(implicit ar: AsResult[R], p1: ImplicitParam1, p2: ImplicitParam2): Fragment =
-      >>(f)(ar, p1, p2)
+    def in[R](f: String => R)(implicit ar: AsExecution[R]): Fragment =
+      >>(f)(ar)
 
     def in(f: =>Fragment): Fragment =
       describe(d) >> f
@@ -96,7 +96,7 @@ trait ExampleDsl0 extends BlockCreation {
     def can(f: => Fragment): Fragment =
       addBlock(s"$d can", f, addFragmentBlock)
 
-    def in[R : AsResult](r: =>R): Fragment = d >> r
+    def in[R : AsExecution](r: =>R): Fragment = d >> r
   }
 }
 

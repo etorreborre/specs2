@@ -19,9 +19,11 @@ trait ResultExecution { outer =>
 
   /** execute a Result and return a Result even if there are specs2 exceptions */
   def execute(result: =>Result) =
-    try {
-      result
-    } catch {
+    try  result
+    catch handleExceptionsPurely
+
+  /** handle result exceptions and do not rethrow them */
+  def handleExceptionsPurely: PartialFunction[Throwable, Result] = {
       case FailureException(f)                                               => f
       case SkipException(f)                                                  => f
       case PendingException(f)                                               => f
