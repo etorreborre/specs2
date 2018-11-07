@@ -104,10 +104,10 @@ trait S2StringContext1 extends S2StringContextCreation { outer =>
 trait S2StringContextCreation extends FragmentsFactory { outer =>
   private[specs2] val ff = fragmentFactory
 
-  def createExecutionInterpolatedFragment(execution: Execution): InterpolatedFragment = new InterpolatedFragment {
+  def createExecutionInterpolatedFragment[R : AsExecution](execution: R): InterpolatedFragment = new InterpolatedFragment {
     def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) = {
       val (description, before) = descriptionAndBefore(text, start, end, expression)
-      fs append before append ff.example(description, execution).setLocation(end)
+      fs append before append ff.example(description, AsExecution[R].execute(execution)).setLocation(end)
     }
   }
 

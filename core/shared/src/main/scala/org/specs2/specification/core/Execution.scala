@@ -390,6 +390,10 @@ object Execution {
 
   }
 
+  implicit def executionAsExecution: AsExecution[Execution] = new AsExecution[Execution] {
+    def execute(r: =>Execution): Execution = r
+  }
+
 }
 
 case class FatalExecution(t: Throwable) extends Exception(t) {
