@@ -39,7 +39,7 @@ object depends {
     "org.spire-math" % "kind-projector" % "0.8.2" cross CrossVersion.binary
 
   lazy val mockito       = Seq("org.mockito"  % "mockito-core"  % "2.18.0")
-  lazy val junit         = Seq("junit"        % "junit"         % "4.12")
+  lazy val junit         = Seq("org.junit.vintage" % "junit-vintage-engine" % "5.3.1")
   lazy val hamcrest      = Seq("org.hamcrest" % "hamcrest-core" % "1.3")
 
   lazy val pegdown = Seq("org.pegdown" % "pegdown" % "1.6.0")
