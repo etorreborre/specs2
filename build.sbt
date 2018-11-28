@@ -28,7 +28,7 @@ lazy val specs2 = project.in(file(".")).
 lazy val specs2Settings = Seq(
   organization := "org.specs2",
   specs2Version in GlobalScope := version.value,
-  scalazVersion in GlobalScope := "7.2.26",
+  scalazVersion in GlobalScope := "7.2.27",
   specs2ShellPrompt,
   scalaVersion := "2.12.7",
   crossScalaVersions := Seq(scalaVersion.value, "2.11.12", "2.13.0-M5"))
@@ -385,7 +385,7 @@ lazy val compilationSettings = Seq(
         Nil
     }
   },
-  addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.8"),
+  addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.9"),
   scalacOptions in Test               ++= Seq("-Yrangepos"),
   scalacOptions in (Compile, doc)     ++= Seq("-feature", "-language:_"),
   scalacOptions in (Compile, console) := Seq("-Yrangepos", "-feature", "-language:_"),

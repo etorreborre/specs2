@@ -32,19 +32,19 @@ object depends {
   }
 
   def scalaXML = Def.setting {
-    Seq("org.scala-lang.modules" %% "scala-xml" % "1.1.0")
+    Seq("org.scala-lang.modules" %% "scala-xml" % "1.1.1")
   }
 
   def kindp(scalaVersion: String) =
     "org.spire-math" % "kind-projector" % "0.8.2" cross CrossVersion.binary
 
-  lazy val mockito       = Seq("org.mockito"  % "mockito-core"  % "2.18.0")
+  lazy val mockito       = Seq("org.mockito"  % "mockito-core"  % "2.18.3")
   lazy val junit         = Seq("junit"        % "junit"         % "4.12")
   lazy val hamcrest      = Seq("org.hamcrest" % "hamcrest-core" % "1.3")
 
   lazy val pegdown = Seq("org.pegdown" % "pegdown" % "1.6.0")
 
-  lazy val tagsoup = "org.ccil.cowan.tagsoup" % "tagsoup" % "1.2"
+  lazy val tagsoup = "org.ccil.cowan.tagsoup" % "tagsoup" % "1.2.1"
 
   def sbtJvm(scalaJsVersion: String) = Seq(
     "org.scala-sbt" % "test-interface" % "1.0",
