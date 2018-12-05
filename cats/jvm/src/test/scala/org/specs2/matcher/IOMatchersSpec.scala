@@ -24,6 +24,13 @@ class IOMatchersSpec extends mutable.Specification with IOMatchers with ResultMa
       { IO { Thread.sleep(5); 1 } must returnBefore(10.millis).withValue(1) }
       { IO { Thread.sleep(5); 1 } must returnValue(1).before(10.millis) }
     }
+
+    "an IO[MatchResult[_]] is implicitly a Result" >> {
+      for {
+        x <- IO.pure(42)
+      } yield {
+        x must_== 42
+      }
+    }
   }
 }
-

@@ -1,8 +1,11 @@
 package org.specs2.matcher
 
-import cats.effect.IO
+import cats.effect._
+import cats.implicits._
+import org.specs2.execute._
 import org.specs2.matcher.ValueChecks.valueIsTypedValueCheck
 import org.specs2.matcher.describe.Diffable
+import org.specs2.specification.core._
 
 import scala.concurrent.TimeoutException
 import scala.concurrent.duration.FiniteDuration
@@ -75,6 +78,10 @@ trait IOMatchers extends RunTimedMatchers[IO] {
     IO.timer(global)
   implicit val catsEffectContextShift: cats.effect.ContextShift[IO] =
     IO.contextShift(global)
+
+  implicit def ioAsExecution[R: AsResult]: AsExecution[IO[R]] = new AsExecution[IO[R]] {
+    def execute(r: => IO[R]): Execution = Execution.withEnvAsync(env => (IO.shift(env.executionContext) >> r).unsafeToFuture())
+  }
 
   protected def runWithTimeout[A](fa: IO[A], d: FiniteDuration): A = fa.timeout(d).unsafeRunSync
   protected def runAwait[A](fa: IO[A]) : A = fa.unsafeRunSync
