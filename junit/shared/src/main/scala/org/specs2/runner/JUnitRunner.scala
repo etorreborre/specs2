@@ -12,6 +12,7 @@ import control._
 import org.specs2.fp.syntax._
 import org.specs2.concurrent.ExecutionEnv
 import ExecuteActions._
+import scala.util.control.NonFatal
 
 /**
  * Runner for specs2 specifications
@@ -35,8 +36,9 @@ class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterab
   lazy val env: Env =
     Env(arguments = arguments, lineLogger = LineLogger.consoleLogger)
 
-  lazy val getDescription =
-    JUnitDescriptions.createDescription(specStructure)(env.specs2ExecutionEnv)
+  lazy val getDescription: org.junit.runner.Description =
+    try JUnitDescriptions.createDescription(specStructure)(env.specs2ExecutionEnv)
+    catch { case NonFatal(t) => env.shutdown; throw t; }
 
   /** specification structure for the environment */
   lazy val specStructure: SpecStructure =
