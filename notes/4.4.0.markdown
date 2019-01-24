@@ -1,0 +1,5 @@
+Maintenance version
+
+This release is the same as `4.3.6` but bumped up to `4.4.0` because `4.3.6` is
+not binary compatible with `4.3.5`
+
