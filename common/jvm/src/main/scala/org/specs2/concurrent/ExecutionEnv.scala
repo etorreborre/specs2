@@ -23,6 +23,9 @@ case class ExecutionEnv(executorServices: ExecutorServices,
 
   def setTimeFactor(tf: Int): ExecutionEnv =
     copy(timeFactor = tf)
+
+  def isShutdown: Boolean =
+    executorService.isShutdown
 }
 
 object ExecutionEnv {

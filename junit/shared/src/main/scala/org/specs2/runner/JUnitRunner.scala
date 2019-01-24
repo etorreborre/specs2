@@ -37,6 +37,9 @@ class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterab
     Env(arguments = arguments, lineLogger = LineLogger.consoleLogger)
 
   lazy val getDescription: org.junit.runner.Description =
+    getDescription(env)
+
+  def getDescription(env: Env): org.junit.runner.Description =
     try JUnitDescriptions.createDescription(specStructure)(env.specs2ExecutionEnv)
     catch { case NonFatal(t) => env.shutdown; throw t; }
 
