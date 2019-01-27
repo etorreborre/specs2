@@ -1,0 +1,5 @@
+Maintenance version
+
+## Fixes
+
+ * #727 gracefully shut down specs2 env on exception from JUnit's `Description` creation (thanks to @hmemcpy)
