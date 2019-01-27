@@ -3,7 +3,9 @@ package runner
 
 import org.junit.runner.notification._
 import org.junit.runner.{Description, Result, RunWith}
+import org.specs2.concurrent.ExecutionEnv
 import org.specs2.control.ExecuteActions._
+import org.specs2.control.UserException
 import org.specs2.main.Arguments
 import org.specs2.specification.BeforeAfterAll
 import org.specs2.specification.core.{Env, OwnEnv}
@@ -16,6 +18,7 @@ class JUnitRunnerSpec(val env: Env) extends Specification with OwnEnv { def is =
       The Junit runner must run only examples $onlyExamples
       The Junit runner must ignore pending example $pendingExample
       The Junit runner must show error in step $errorInStepExample
+      The Junit runner must shutdown if error happened during initialization $errorInInitialization
 
       """
 
@@ -55,6 +58,18 @@ class JUnitRunnerSpec(val env: Env) extends Specification with OwnEnv { def is =
         "test ignored one example(org.specs2.runner.JUnitErrorInBeforeAllSpecification)",
         "run finished")
     }
+  }
+
+  def errorInInitialization = {
+    val runner = new JUnitRunner(classOf[JUnitWithErrorInInitialization])
+    val testEnv = env.copy(
+      executionEnv =       ExecutionEnv.create(env.arguments, env.systemLogger),
+      specs2ExecutionEnv = ExecutionEnv.createSpecs2(env.arguments, env.systemLogger))
+
+    val _ = testEnv.executionEnv.executorService // simulates starting an environment
+
+    runner.getDescription(testEnv) must throwA[UserException]
+    testEnv.executionEnv.isShutdown must beTrue
   }
 
   private def runSpecification[T](runner: JUnitRunner)(assertMessages: ListBuffer[String] => T): T = {
@@ -134,4 +149,10 @@ class JUnitErrorInBeforeAllSpecification extends Specification with BeforeAfterA
   def beforeAll: Unit = throw new RuntimeException("Error.")
 
   def afterAll: Unit = ()
+}
+
+class JUnitWithErrorInInitialization extends mutable.Specification {
+  val boom = { throw new RuntimeException("Error.") }
+
+  "example" >> ok
 }
