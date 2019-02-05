@@ -3,10 +3,11 @@ package matcher
 
 import cats.effect._
 import cats.implicits._
+import org.specs2.concurrent.ExecutionEnv
 
 import scala.concurrent.duration._
 
-class IOMatchersJvmSpec extends mutable.Specification with IOMatchers with ResultMatchers {
+class IOMatchersJvmSpec(implicit val ee: ExecutionEnv) extends mutable.Specification with IOMatchers with ResultMatchers {
 
   "It is possible to check the execution of tasks" >> {
     "check the return value" >> {

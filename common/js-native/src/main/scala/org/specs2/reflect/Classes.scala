@@ -4,6 +4,7 @@ package reflect
 import scala.reflect.ClassTag
 import control._
 import org.scalajs.testinterface._
+import org.specs2.concurrent.ExecutionEnv
 import org.specs2.control.eff.SafeEffect._
 
 trait Classes extends ClassOperations {
@@ -12,8 +13,9 @@ trait Classes extends ClassOperations {
     throw new Exception("Classes.createInstance: no js implementation")
 
   def createInstance[T <: AnyRef](className: String, loader: ClassLoader, defaultInstances: =>List[AnyRef] = Nil)(implicit m: ClassTag[T]): Operation[T] = {
+
     if (className.endsWith("$")) protect[OperationStack, T](TestUtils.loadModule(className.dropRight(1), loader).asInstanceOf[T])
-    else                         protect[OperationStack, T](TestUtils.newInstance(className, loader, Nil)(Nil).asInstanceOf[T])
+    else                         protect[OperationStack, T](newInstanceWithOptionalExecutionEnvironment[T](className, loader, defaultInstances))
   }
 
   def createInstanceFromClass[T <: AnyRef](klass: Class[T], defaultInstances: =>List[AnyRef])(implicit m: ClassTag[T]): Operation[T] = {
@@ -36,6 +38,14 @@ trait Classes extends ClassOperations {
 
   def existsClass(className: String, loader: ClassLoader): Operation[Boolean] =
     throw new Exception("Classes.existsClass: no js implementation")
+
+  private def newInstanceWithOptionalExecutionEnvironment[T](className: String, loader: ClassLoader, defaultInstances: => List[AnyRef]): T =
+    try {
+      TestUtils.newInstance(className, loader, Nil)(Nil).asInstanceOf[T]
+    } catch {
+      case _: InstantiationError =>
+        TestUtils.newInstance(className, loader, Seq(classOf[ExecutionEnv]))(List(defaultInstances.tail.head)).asInstanceOf[T]
+    }
 
 }
 
