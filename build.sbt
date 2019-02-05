@@ -18,7 +18,7 @@ lazy val specs2 = project.in(file(".")).
   ).aggregate(
     fpJVM, catsJVM, commonJVM, matcherJVM, coreJVM, matcherExtraJVM, scalazJVM, html,
     analysisJVM, shapelessJVM, formJVM, markdownJVM, gwtJVM, junitJVM, scalacheckJVM, mockJVM,
-    tests, fpJS, commonJS, matcherJS, coreJS, matcherExtraJS, scalazJS, analysisJS,
+    tests, fpJS, commonJS, matcherJS, coreJS, catsJS, matcherExtraJS, scalazJS, analysisJS,
     shapelessJS, formJS, markdownJS, gwtJS, junitJS, scalacheckJS, mockJS
   )
 
@@ -140,8 +140,8 @@ lazy val cats = crossProject(JSPlatform, JVMPlatform).in(file("cats")).
   jvmSettings(depends.jvmTest, commonJvmSettings).
   dependsOn(matcher, core % "test->test")
 
-lazy val catsJS = cats.js
-lazy val catsJVM = cats.jvm
+lazy val catsJS = cats.js.dependsOn(coreJS)
+lazy val catsJVM = cats.jvm.dependsOn(coreJVM)
 
 lazy val common = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("common")).
   settings(
