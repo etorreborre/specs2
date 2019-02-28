@@ -2,9 +2,9 @@ import sbt._
 import Keys._
 import org.portablescala.sbtplatformdeps.PlatformDepsPlugin.autoImport._
 import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
+import scalanative.sbtplugin.ScalaNativePlugin.autoImport._
 
 object depends {
-
   lazy val classycle = Seq("org.specs2" % "classycle" % "1.4.3")
 
   def compiler(scalaOrganization: String, scalaVersion: String) = Seq(scalaOrganization % "scala-compiler" % scalaVersion)
@@ -26,9 +26,16 @@ object depends {
   def jsTest =
     Seq(libraryDependencies ++= Seq("org.scala-js" %% "scalajs-test-interface" % scalaJSVersion),
         scalaJSStage in Test := FastOptStage)
+        
+  def nativeTest =
+    Seq(libraryDependencies ++= Seq("org.scala-native" %%% "test-interface" % "0.3.8") )
 
   def scalaParser = Def.setting {
     Seq("org.scala-lang.modules" %%% "scala-parser-combinators" % "1.1.1")
+  }
+  
+  def scalaParserNative = Def.setting {
+    Seq("com.github.lolgab" %%% "scala-parser-combinators" % "1.1.2")
   }
 
   def scalaXML = Def.setting {
@@ -53,6 +60,10 @@ object depends {
 
   def sbtJs(scalaJsVersion: String) = Seq(
     "org.scala-js" %% "scalajs-test-interface" % scalaJsVersion
+  )
+
+  def sbtNative(scalaJsVersion: String) = Seq(
+    "org.scala-native" %% "test-intersdfvsdfface" % "0.3.8"
   )
 
   def paradise(scalaVersion: String) =

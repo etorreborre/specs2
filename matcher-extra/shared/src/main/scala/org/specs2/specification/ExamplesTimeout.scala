@@ -2,12 +2,11 @@ package org.specs2
 package specification
 
 import execute._
+import matcher._
 import org.specs2.concurrent.ExecutionEnv
 import specification.core._
-
 import scala.concurrent.duration._
-
-import scala.concurrent.{Await, Future}
+import TerminationMatchers._
 
 /**
  * This trait can be used to add a global time out to each example or for a specific one:
@@ -35,8 +34,11 @@ trait AroundTimeout {
   def aroundTimeout(to: Duration)(implicit ee: ExecutionEnv): Around =
     new Around {
       def around[T : AsResult](t: =>T) = {
-        try Await.result(Future(AsResult(t))(ee.executionContext), to)
-        catch { case e: Exception => Skipped("TIMEOUT!!! "+to.toString) }
+        lazy val result = t
+        val termination = terminate(retries = 10, sleep = (to.toMillis / 10).millis).orSkip(_ => "TIMEOUT: "+to)(Expectable(result))
+
+        if (!termination.toResult.isSkipped) AsResult(result)
+        else termination.toResult
       }
     }
 }
