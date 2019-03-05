@@ -118,4 +118,9 @@ object SimpleTimer {
     def end(s: S) = s.stop
   }
 
+  def startSimpleTimer: SimpleTimer = {
+    val timer = new SimpleTimer
+    timer.start
+  }
+
 }

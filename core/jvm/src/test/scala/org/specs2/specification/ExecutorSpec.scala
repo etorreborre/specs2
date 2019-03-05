@@ -15,6 +15,7 @@ import control._
 import control.producer._
 import fp.syntax._
 import ResultMatchers._
+
 import scala.concurrent._
 import ExecuteActions._
 
@@ -213,19 +214,19 @@ class ExecutorSpec(val env: Env) extends script.Specification with Groups with T
       example("fast", fast(tf)))
 
     eg := {
-      val times = executions(fragments, ownEnv).map(_.timer.stop.time)
+      val times = executionTimes(fragments, ownEnv)
 
       times must containMatch("(\\d)+ ms")
     }
 
     eg := {
-      val times = executions(fragments, ownEnv.setArguments(Arguments("sequential"))).map(_.timer.stop.time)
+      val times = executionTimes(fragments, ownEnv.setArguments(Arguments("sequential")))
 
       times must containMatch("(\\d)+ ms")
     }
 
     eg := {
-      val times = executions(fragments, ownEnv.setArguments(Arguments("skipAll"))).map(_.timer.stop.time)
+      val times = executionTimes(fragments, ownEnv.setArguments(Arguments("skipAll")))
 
       times must containMatch("(\\d)+ ms")
     }
@@ -261,6 +262,10 @@ class ExecutorSpec(val env: Env) extends script.Specification with Groups with T
   def execute(fragments: Fragments, env: Env): List[Result] =
     DefaultExecutor.execute(env)(fragments.contents).runList.
       runOption(env.executionEnv).toList.flatten.traverse(_.executionResult).run(env.executionEnv)
+
+  def executionTimes(fragments: Fragments, env: Env): List[String] =
+    DefaultExecutor.execute(env)(fragments.contents).runList.
+      runOption(env.executionEnv).toList.flatten.traverse(_.executedResult.map(_.timer.time)).run(env.executionEnv)
 
   def executions(fragments: Fragments, env: Env): List[Execution] =
     DefaultExecutor.execute(env)(fragments.contents).runList.
