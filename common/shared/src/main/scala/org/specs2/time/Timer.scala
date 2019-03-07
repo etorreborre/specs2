@@ -30,9 +30,10 @@ trait HmsTimer[T <: HmsTimer[T]] {
 
   /**
    * Stop the timer, store the number of elapsed millis and return a String representing the time as hour/minute/second/ms
-   * @return the elapsed time as a String
+   * @return the elapsed time as a Long representing milliseconds
    */
-  def stop = copy((getTime - lastTimestamp) :: elapsedTimes, startedTimestamps.drop(1))
+  def stop: T =
+    copy((getTime - lastTimestamp) :: elapsedTimes, startedTimestamps.drop(1))
 
   /** add 2 timers together */
   def add(t: HmsTimer[T]) =
