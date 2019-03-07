@@ -14,21 +14,22 @@ class StackIsolatedSpec extends Specification { def is = isolated ^ sequential ^
  A Stack with limited capacity can either be:
  1. Empty
    when the stack is empty $stackIsEmpty
-   ${ stack must be empty }
-   ${ stack.top must throwA[NoSuchElementException] }
-   ${ stack.pop must throwA[NoSuchElementException] }
+   ${ eg { stack must be empty }}
+   ${ eg { stack.top must throwA[NoSuchElementException] }}
+   ${ eg { stack.pop must throwA[NoSuchElementException] }}
 
  2. Non-empty and not full
    when the stack is not empty and not full $stackIsNormal
-   ${ stack must not be empty }
+   ${ eg { stack must not be empty } }
    ${ eg { stack.top === normalStack.top; stack === normalStack } }
    ${ eg { stack.pop === normalStack.top; stack !== normalStack } }
    ${ eg { stack push 1; stack.top === 1; stack !== normalStack } }
 
  3. Full
    when the stack is full $stackIsFull
-   ${ (stack push 1) must throwAn[Error] }
-                                                                      """
+   ${ eg { (stack push 1) must throwAn[Error] }}
+                                                                       
+"""
 
   /** stacks creation */
   def stackIsEmpty  = step { stack = emptyStack }

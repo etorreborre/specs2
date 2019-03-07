@@ -29,8 +29,8 @@ trait ImmutableSpecificationStructure extends SpecificationStructure {
    */
   private def isolateExamples(env: Env): Fragments => Fragments = (fragments: Fragments) =>
     Fragments(fragments.contents.zipWithIndex.mapEval {
-      case (f @ Fragment(d, e, l), i) =>
-        if (e.isExecutable && f.execution.isolable)
+      case (f, i) =>
+        if (Fragment.isExample(f) && f.execution.isolable)
           isolate(f, i, env)
         else
           ok(f)
