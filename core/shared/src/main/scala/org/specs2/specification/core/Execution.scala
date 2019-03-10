@@ -81,7 +81,7 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
         Some(result)
 
       case NotExecuting =>
-        startExecution(env).futureResult(env)
+        Some(Future.successful((Success(), new SimpleTimer)))
     }
 
   /** methods to set the execution */

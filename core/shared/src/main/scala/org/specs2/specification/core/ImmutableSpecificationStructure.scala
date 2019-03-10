@@ -53,7 +53,7 @@ trait ImmutableSpecificationStructure extends SpecificationStructure {
           case Right(newSpec) =>
             newSpec.fragments(env.setWithoutIsolation).fragments.map { fs =>
               val previousStepExecutions = fs.take(position).collect {
-                case f if Fragment.isStep(f) && f.execution.isolable => f.execution
+                case f if Fragment.isStep(f) && f.execution.isolable => f.execution.startExecution((env))
               }
               val isolated = fs(position).execution
               isolated.afterSuccessfulSequential(previousStepExecutions)
