@@ -1,0 +1,8 @@
+Maintenance version, with a change in the internal API which should not impact regular users.
+The important fix is the one about the reported times which should be a lot more correct now.
+
+## Fixes
+
+ * #731 make sure that times are reported consistently (this changes the internal API for `Expectation`)
+ * #728 use a simple Await to timeout examples
+ * fixed a comment on `SimpleTimer` and added a return type 
