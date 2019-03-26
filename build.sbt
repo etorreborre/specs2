@@ -9,7 +9,7 @@ import sbtcrossproject.{crossProject, CrossType}
 
 /** MAIN PROJECT */
 lazy val specs2 = project.in(file(".")).
-  enablePlugins(GitBranchPrompt, SitePlugin, GhpagesPlugin, BuildInfoPlugin).
+  enablePlugins(GitBranchPrompt, SitePlugin, GhpagesPlugin).
   settings(
     moduleSettings("")  ++
     siteSettings,
