@@ -12,7 +12,7 @@ class HtmlxSpec extends Spec with HtmlDocuments with Grouped with TypedEqual { d
   ${ isHeader(<h2/>) must beTrue }
   ${`headersToTree builds a Tree of headers from a html document`}
   ${`headersToTree builds a Tree of headers - 2`}
-  ${ (<h2 id="1"/> ++ <h3/>).updateHeadAttribute("id", 3) === (<h2 id='3'/> ++ <h3/>) }
+  ${ (<h2 id="1"/> ++ <h3/>).updateHeadAttribute("id", 3).toList ==== List(<h2 id='3'/>, <h3/>) }
   ${ <h2>hello</h2>.addHeadersAnchors.toString must beMatching("<a name=\"hello\"><h2>hello</h2></a>") }
 
   the headers methods
@@ -47,7 +47,7 @@ class HtmlxSpec extends Spec with HtmlDocuments with Grouped with TypedEqual { d
        .`- a h2 header""".stripMargin('.').replace("\r", "")
 
   "headers" - new g1 {
-    e1 := headers(<body><h1>title1</h1>Some text <h2>title2</h2>Some other text</body>) must_== (<h1>title1</h1> ++ <h2>title2</h2>)
+    e1 := headers(<body><h1>title1</h1>Some text <h2>title2</h2>Some other text</body>).toList must_=== List(<h1>title1</h1>, <h2>title2</h2>)
   }
 
   "anchors" - new g2 {
