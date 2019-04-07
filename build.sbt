@@ -380,7 +380,7 @@ lazy val compilationSettings = Seq(
         Nil
     }
   },
-  addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.9"),
+  addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.0"),
   scalacOptions in Test               ++= Seq("-Yrangepos"),
   scalacOptions in (Compile, doc)     ++= Seq("-feature", "-language:_"),
   scalacOptions in (Compile, console) := Seq("-Yrangepos", "-feature", "-language:_"),
