@@ -12,15 +12,15 @@ lazy val specs2 = project.in(file(".")).
   enablePlugins(GitBranchPrompt, SitePlugin, GhpagesPlugin).
   settings(
     moduleSettings("")  ++
-    siteSettings,
+      siteSettings,
     apiSettings,
     buildInfoSettings,
     Seq(name := "specs2", packagedArtifacts := Map.empty)
   ).aggregate(
-      fpJvm, catsJvm, commonJvm, matcherJvm, coreJvm, matcherExtraJvm, scalazJvm, html, analysisJvm,
-      shapelessJvm, form, markdown, gwt, junitJvm, scalacheckJvm, mockJvm, tests,
-      fpJs, commonJs, matcherJs, coreJs, matcherExtraJs, scalazJs, analysisJs,
-      shapelessJs, junitJs, scalacheckJs, mockJs
+    fpJvm, catsJvm, commonJvm, matcherJvm, coreJvm, matcherExtraJvm, scalazJvm, html, analysisJvm,
+    shapelessJvm, form, markdown, gwt, junitJvm, scalacheckJvm, mockJvm, tests,
+    fpJs, commonJs, matcherJs, coreJs, matcherExtraJs, scalazJs, analysisJs,
+    shapelessJs, junitJs, scalacheckJs, mockJs
   )
 
 
@@ -31,7 +31,7 @@ lazy val specs2Settings = Seq(
   scalazVersion in GlobalScope := "7.2.27",
   specs2ShellPrompt,
   scalaVersion := "2.12.7",
-  crossScalaVersions := Seq(scalaVersion.value, "2.11.12", "2.13.0-M5"))
+  crossScalaVersions := Seq(scalaVersion.value, "2.11.12", "2.13.0-RC1"))
 
 lazy val versionSettings =
   Seq(
@@ -52,7 +52,7 @@ lazy val latestTag = "git tag"
 lazy val buildInfoSettings = Seq(
   buildInfoKeys :=
     Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion) ++
-    Seq(BuildInfoKey.action("commit")(sys.process.Process(s"git log --pretty=format:%h -n  1").lineStream.head),
+      Seq(BuildInfoKey.action("commit")(sys.process.Process(s"git log --pretty=format:%h -n  1").lineStream.head),
         BuildInfoKey.action("timestamp")(timestamp(new Date))),
   buildInfoPackage := "org.specs2"
 )
@@ -83,18 +83,18 @@ lazy val commonJsSettings = Seq(
 lazy val specs2Version = settingKey[String]("defines the current specs2 version")
 lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
 lazy val shapelessVersion = "2.3.3"
-lazy val catsVersion = "1.5.0"
-lazy val catsEffectVersion = "1.1.0"
+lazy val catsVersion = "1.6.0"
+lazy val catsEffectVersion = "1.2.0"
 
 def moduleSettings(name: String) =
   coreDefaultSettings  ++
-  versionSettings      ++
-  depends.resolvers    ++
-  specs2Settings       ++
-  compilationSettings  ++
-  testingSettings      ++
-  publicationSettings  ++
-  notificationSettings
+    versionSettings      ++
+    depends.resolvers    ++
+    specs2Settings       ++
+    compilationSettings  ++
+    testingSettings      ++
+    publicationSettings  ++
+    notificationSettings
 
 def moduleJvmSettings(name: String) =
   testingJvmSettings
@@ -120,9 +120,13 @@ lazy val cats = crossProject(JSPlatform, JVMPlatform).in(file("cats")).
   settings(
     moduleSettings("cats") ++
       Seq(libraryDependencies ++=
-        Seq(
-          "org.typelevel" %% "cats-core" % catsVersion,
-          "org.typelevel" %% "cats-effect" % catsEffectVersion))
+        (if (scalaVersion.value == "2.13.0-RC1")
+           Seq("org.typelevel" % "cats-core_2.13.0-M5" % "1.6.0",
+               "org.typelevel" % "cats-effect_2.13.0-M5" % "1.2.0")
+         else
+           Seq("org.typelevel" %% "cats-core" % catsVersion,
+               "org.typelevel" %% "cats-effect" % catsEffectVersion)
+        ))
       ++
       Seq(name := "specs2-cats"):_*
   ).
@@ -136,12 +140,12 @@ lazy val common = crossProject(JSPlatform, JVMPlatform).in(file("common")).
   settings(
     libraryDependencies ++=
       depends.reflect(scalaOrganization.value, scalaVersion.value) ++
-      depends.paradise(scalaVersion.value) ++
-      depends.scalaParser.value ++
-      depends.scalaXML.value,
+        depends.paradise(scalaVersion.value) ++
+        depends.scalaParser.value ++
+        depends.scalaXML.value,
     moduleSettings("common")++
-    Seq(name := "specs2-common")
-).
+      Seq(name := "specs2-common")
+  ).
   jsSettings(depends.jsTest, moduleJsSettings("common"),
     libraryDependencies ++=
       Seq("org.scalacheck" %%% "scalacheck" % "1.14.0" % "test")
@@ -161,9 +165,9 @@ lazy val core = crossProject(JSPlatform, JVMPlatform).in(file("core")).
     name := "specs2-core",
     libraryDependencies ++=
       depends.paradise(scalaVersion.value) ++
-      depends.mockito.map(_ % "test") ++
-      depends.junit.map(_ % "test")
-    ).
+        depends.mockito.map(_ % "test") ++
+        depends.junit.map(_ % "test")
+  ).
   jsSettings(depends.jsTest, moduleJsSettings("analysis")).
   jvmSettings(
     depends.jvmTest,
@@ -307,7 +311,7 @@ lazy val mockJvm = mock.jvm.dependsOn(coreJvm)
 lazy val scalacheck = crossProject(JSPlatform, JVMPlatform).in(file("scalacheck")).
   settings(
     moduleSettings("scalacheck") ++
-    Seq(name := "specs2-scalacheck"):_*).
+      Seq(name := "specs2-scalacheck"):_*).
   jsSettings(depends.jsTest, moduleJsSettings("scalacheck"), libraryDependencies +=
     "org.scalacheck" %%% "scalacheck" % "1.14.0"
   ).
@@ -321,18 +325,18 @@ lazy val scalacheckJvm = scalacheck.jvm.dependsOn(coreJvm)
 lazy val tests = Project(id = "tests", base = file("tests")).
   settings(
     moduleSettings("tests") ++
-    Seq(name := "specs2-tests") ++
-    depends.jvmTest ++
-    moduleJvmSettings("tests")
+      Seq(name := "specs2-tests") ++
+      depends.jvmTest ++
+      moduleJvmSettings("tests")
   ).dependsOn(
-     coreJvm      % "compile->compile;test->test",
-     shapelessJvm % "compile->compile;test->test",
-     junitJvm     % "test->test",
-     examplesJvm  % "test->test",
-     matcherExtraJvm,
-     html,
-     scalazJvm,
-     catsJvm)
+  coreJvm      % "compile->compile;test->test",
+  shapelessJvm % "compile->compile;test->test",
+  junitJvm     % "test->test",
+  examplesJvm  % "test->test",
+  matcherExtraJvm,
+  html,
+  scalazJvm,
+  catsJvm)
 
 lazy val specs2ShellPrompt = shellPrompt in ThisBuild := { state =>
   val name = Project.extract(state).currentRef.project
@@ -353,12 +357,12 @@ lazy val compilationSettings = Seq(
       (sourceDirectory in (Test, test)).value / s"scala-scalaz-7.1.x"),
   maxErrors := 20,
   scalacOptions in Compile ++=
-      Seq(
-        //"-Xfatal-warnings",
-        "-Xlint",
-        "-Ywarn-numeric-widen",
-        "-Ywarn-value-discard",
-        "-deprecation:false", "-Xcheckinit", "-unchecked", "-feature", "-language:_"),
+    Seq(
+      //"-Xfatal-warnings",
+      "-Xlint",
+      "-Ywarn-numeric-widen",
+      "-Ywarn-value-discard",
+      "-deprecation:false", "-Xcheckinit", "-unchecked", "-feature", "-language:_"),
   scalacOptions in Compile ++= {
     CrossVersion.partialVersion(scalaVersion.value) match {
       case Some((2, v)) if v <= 12 =>
@@ -380,7 +384,7 @@ lazy val compilationSettings = Seq(
         Nil
     }
   },
-  addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.9"),
+  addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.10"),
   scalacOptions in Test               ++= Seq("-Yrangepos"),
   scalacOptions in (Compile, doc)     ++= Seq("-feature", "-language:_"),
   scalacOptions in (Compile, console) := Seq("-Yrangepos", "-feature", "-language:_"),
@@ -399,7 +403,7 @@ lazy val testingSettings = Seq(
 
 lazy val testingJvmSettings =
   Seq(javaOptions ++= Seq("-Xmx3G", "-Xss4M"),
-      fork in Test := true)
+    fork in Test := true)
 
 /**
  * DOCUMENTATION

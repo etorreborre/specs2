@@ -28,15 +28,12 @@ object depends {
         scalaJSStage in Test := FastOptStage)
 
   def scalaParser = Def.setting {
-    Seq("org.scala-lang.modules" %%% "scala-parser-combinators" % "1.1.1")
+    Seq("org.scala-lang.modules" %%% "scala-parser-combinators" % "1.1.2")
   }
 
   def scalaXML = Def.setting {
-    Seq("org.scala-lang.modules" %% "scala-xml" % "1.1.1")
+    Seq("org.scala-lang.modules" %% "scala-xml" % "1.2.0")
   }
-
-  def kindp(scalaVersion: String) =
-    "org.spire-math" % "kind-projector" % "0.8.2" cross CrossVersion.binary
 
   lazy val mockito       = Seq("org.mockito"  % "mockito-core"  % "2.23.4")
   lazy val junit         = Seq("junit"        % "junit"         % "4.12")
