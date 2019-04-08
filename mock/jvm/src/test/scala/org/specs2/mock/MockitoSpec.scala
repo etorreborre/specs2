@@ -143,29 +143,39 @@ STUBS
 
 ${step(env)}                                                                                                                        ${step(env)}
 """
+  
+  trait ListOf[T] {
+    def add(t: T): Boolean
+    def add(i: Int, t: T): Unit
+    def set(i: Int, t: T): T
+    def get(i: Int): T
+    def size(): Int
+    def clear(): ListOf[T]
+    def contains(t: Any): Boolean
+  }
 
   lazy val env = Env()
     
   "creation" - new group {
     eg := {
-      val list = mock[java.util.List[String]].as("list1")
+      val list = mock[ListOf[String]].as("list1")
       (there was one(list).add("one")).message must contain("list1.add(\"one\")")
     }
     eg := {
-      val list = mock[java.util.List[String]].settings(defaultReturn = 10)
+      val list = mock[ListOf[String]].settings(defaultReturn = 10)
       list.size must_== 10
     }
     eg := {
-      val list = mock[java.util.List[String]].settings(name = "list1", defaultReturn = 10, extraInterfaces = classesOf[Cloneable, Serializable])
+      val list = mock[ListOf[String]].settings(name = "list1", defaultReturn = 10, extraInterfaces = classesOf[Cloneable, Serializable])
       (list.size must_== 10) and 
       ((there was one(list).add("one")).message must contain("list1.add(\"one\")"))
     }
     eg := {
-      val list = mock[java.util.List[String]].defaultAnswer((p1: InvocationOnMock) => "hello")
+      val list = mock[ListOf[String]].defaultAnswer((p1: InvocationOnMock) => "hello")
       list.get(0) must_== "hello" 
     }
     eg := {
-      val list = mock[java.util.List[String]](withSettings.name("list1"))
+      val list = mock[ListOf[String]](withSettings.name("list1"))
       (there was one(list).add("one")).message must contain("list1.add(\"one\")")
     }
   }
@@ -264,7 +274,7 @@ ${step(env)}                                                                    
     eg := {
       repeated.call(1, 2, 3)
       (there was one(repeated).call(1, 2, 3)) and
-      ((there was one(repeated).call(1, 2)).message must contain("WrappedArray(1, 2)"))
+      ((there was one(repeated).call(1, 2)).message must contain("(1, 2)"))
     }
 
     eg := {
@@ -341,13 +351,13 @@ ${step(env)}                                                                    
       list.clear()
     } must throwAn[IllegalArgumentException]
     eg := {
-      val mocked: java.util.List[String] = mock[java.util.List[String]].contains("o") returns true
+      val mocked: ListOf[String] = mock[ListOf[String]].contains("o") returns true
       mocked.contains("o") must beTrue
     }
   }
 
   "number of calls" - new group with list {
-    val list2 = mock[java.util.List[String]]
+    val list2 = mock[ListOf[String]]
 
     list.add("one")
     1 to 2 foreach { i => list.add("two") }
@@ -370,8 +380,8 @@ ${step(env)}                                                                    
       there were noMoreCallsTo(list)
     }
     eg := {
-      val list3 = mock[java.util.List[String]]
-      val list4 = mock[java.util.List[String]]
+      val list3 = mock[ListOf[String]]
+      val list4 = mock[ListOf[String]]
       list3.contains("3") returns false
       list4.contains("4") returns false
 
@@ -388,8 +398,8 @@ ${step(env)}                                                                    
   }
 
   "order of calls" - new group {
-    val list1 = mock[java.util.List[String]]
-    val list2 = mock[java.util.List[String]]
+    val list1 = mock[ListOf[String]]
+    val list2 = mock[ListOf[String]]
 
     eg := {
       list1.get(0)
@@ -462,7 +472,7 @@ ${step(env)}                                                                    
   }
 
   "callbacks" - new group {
-    val list = mockAs[java.util.List[String]]("list")
+    val list = mockAs[ListOf[String]]("list")
 
     eg := {
       list.get(anyInt) answers { i: Any => "The parameter is " + i.toString}
@@ -514,7 +524,7 @@ ${step(env)}                                                                    
   "other contexts" - new group {
     eg := {
       val s = new org.specs2.mutable.Specification with Mockito {
-        val list = mock[java.util.List[String]]
+        val list = mock[ListOf[String]]
         "ex1" in {
           list.add("one")
           there was one(list).add("two")
@@ -527,7 +537,7 @@ ${step(env)}                                                                    
     eg := {
       val s = new org.specs2.mutable.Specification with Mockito {
         "ex1" in new specification.Scope {
-          val (list1, list2) = (mock[java.util.List[String]], mock[java.util.List[String]])
+          val (list1, list2) = (mock[ListOf[String]], mock[ListOf[String]])
           list1.add("two"); list2.add("one")
           implicit val order = inOrder(list1, list2)
           there was one(list2).add("two") andThen one(list1).add("one")
@@ -615,8 +625,7 @@ ${step(env)}                                                                    
    * HELPERS
    */
   trait list {
-    val list = mock[java.util.List[String]]
-    val queue = mock[scala.collection.immutable.Queue[String]]
+    val list = mock[ListOf[String]]
 
     trait ByName {
       def call(i: =>Int) = i
