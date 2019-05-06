@@ -14,6 +14,8 @@ support you.
 ## Moderation
 
 For any questions, concerns, or moderation requests please contact a
-member of the project.
+member of the project:
+
+ - [Eric Torreborre](etorreborre@yahoo.com)
 
 [Scala Code of Conduct]: https://typelevel.org/code-of-conduct.html
