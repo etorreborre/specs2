@@ -1,6 +1,7 @@
 package org.specs2
 package matcher
 
+import org.specs2.control.ImplicitParameters._
 import org.specs2.matcher.describe.Diffable
 
 /**
@@ -13,18 +14,18 @@ private[specs2]
 trait EitherBaseMatchers {
 
   def beRight[T](t: ValueCheck[T]) = RightCheckedMatcher(t)
-  def beRight[T] = new RightMatcher[T]
+  def beRight[T](implicit p: ImplicitParam = implicitParameter) = use(p)(new RightMatcher[T])
 
   def right[T : Diffable](t: T) = beRight(ValueChecks.valueIsTypedValueCheck(t))
   def right[T](t: ValueCheck[T]) = beRight(t)
-  def right[T] = beRight
+  def right[T](implicit p: ImplicitParam = implicitParameter) = beRight(p)
 
-  def beLeft[T](t: ValueCheck[T]) = LeftCheckedMatcher(t)
-  def beLeft[T] = LeftMatcher[T]()
+  def beLeft[T](t: ValueCheck[T]): LeftCheckedMatcher[T] = LeftCheckedMatcher(t)
+  def beLeft[T](implicit p: ImplicitParam = implicitParameter): LeftMatcher[T] = use(p)(LeftMatcher[T]())
 
   def left[T : Diffable](t: T) = beLeft(ValueChecks.valueIsTypedValueCheck(t))
   def left[T](t: ValueCheck[T]) = beLeft(t)
-  def left[T] = beLeft
+  def left[T](implicit p: ImplicitParam = implicitParameter) = beLeft(p)
 }
 
 private[specs2]
