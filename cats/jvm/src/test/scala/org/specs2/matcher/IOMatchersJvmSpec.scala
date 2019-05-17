@@ -9,6 +9,11 @@ import scala.concurrent.duration._
 class IOMatchersJvmSpec extends mutable.Specification with IOMatchers with ResultMatchers {
 
   "It is possible to check the execution of tasks" >> {
+    "check the return value" >> {
+      { IO(1) must returnValue(1) }
+      { (IO(1) must returnValue(2)) returns "1 != 2" }
+    }
+
     "check that the task finishes before a given time" >> {
       { IO(1) must returnBefore(10.millis) }
       { (IO.sleep(50.millis).as(1) must returnBefore(10.millis)) returns "Timeout after 10 milliseconds" }
