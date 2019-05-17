@@ -28,6 +28,7 @@ script:
   - ./.travis-test.sh coreJVM
   - ./.travis-test.sh tests
 
+  - ./.travis-test.sh catsJVM
   - ./.travis-test.sh examplesJVM
   - ./.travis-test.sh junitJVM
   - ./.travis-test.sh matcherExtraJVM
@@ -42,6 +43,7 @@ script:
   - ./.travis-test.sh html
 
   - ./.travis-test.sh coreJS
+  - ./.travis-test.sh catsJS
   - ./.travis-test.sh examplesJS
 
   - find $HOME/.sbt -name "*.lock" | xargs rm
