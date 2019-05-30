@@ -1,3 +1,6 @@
+# needed to get oraclejdk8
+dist: trusty
+
 language: scala
 
 scala:
