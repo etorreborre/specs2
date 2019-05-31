@@ -1,11 +1,12 @@
 package org.specs2
 package control
 
-import io.StringOutput
-import specification.Scope
-import scala.collection.mutable.ListBuffer
+import org.specs2.control.Debug.Debuggable
+import org.specs2.io.StringOutput
 import org.specs2.matcher.MustThrownMatchers
-import control.Debug.Debuggable
+import org.specs2.specification.Scope
+
+import scala.collection.mutable.ListBuffer
 
 class DebugSpec extends Specification { def is = s2"""
 
