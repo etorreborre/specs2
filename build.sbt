@@ -31,7 +31,7 @@ lazy val specs2Settings = Seq(
   scalazVersion in GlobalScope := "7.2.27",
   specs2ShellPrompt,
   scalaVersion := "2.12.8",
-  crossScalaVersions := Seq(scalaVersion.value, "2.11.12", "2.13.0-RC3"))
+  crossScalaVersions := Seq(scalaVersion.value, "2.11.12", "2.13.0"))
 
 lazy val versionSettings =
   Seq(
@@ -120,7 +120,7 @@ lazy val cats = crossProject(JSPlatform, JVMPlatform).in(file("cats")).
   settings(
     moduleSettings("cats") ++
       Seq(libraryDependencies ++=
-        (if (scalaVersion.value == "2.13.0-RC3")
+        (if (scalaVersion.value == "2.13.0")
            Seq("org.typelevel" % "cats-core_2.13.0-M5" % "1.6.0",
                "org.typelevel" % "cats-effect_2.13.0-M5" % "1.2.0")
          else
@@ -384,7 +384,7 @@ lazy val compilationSettings = Seq(
         Nil
     }
   },
-  addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.2"),
+  addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3"),
   scalacOptions in Test               ++= Seq("-Yrangepos"),
   scalacOptions in (Compile, doc)     ++= Seq("-feature", "-language:_"),
   scalacOptions in (Compile, console) := Seq("-Yrangepos", "-feature", "-language:_"),
