@@ -130,7 +130,7 @@ trait Matcher[-T] { outer =>
   def not = new Matcher[T] {
     def apply[U <: T](a: Expectable[U]) = {
       val result = try outer(a)
-                   catch { case FailureException(f: Failure) => MatchFailure(f.message, f.message, a) }
+                   catch { case FailureException(f: Failure) => a.check(MatchFailure(f.message, f.message, a)) }
       result.not
     }
   }
