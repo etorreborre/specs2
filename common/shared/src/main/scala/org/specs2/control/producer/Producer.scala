@@ -161,7 +161,7 @@ trait Producers {
   def emitSeq[R :_Safe, A](elements: Seq[A]): Producer[R, A] =
     elements.headOption match {
       case None    => done[R, A]
-      case Some(a) => one[R, A](a) append emitSeq(elements.tail)
+      case Some(a) => Producer(protect(More[R, A](elements.headOption.toList, emitSeq(elements.tail))))
     }
 
   def eval[R :_Safe, A](a: Eff[R, A]): Producer[R, A] =
