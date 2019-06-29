@@ -20,6 +20,10 @@ object Diffable extends DiffableLowPriority1 {
 }
 
 trait DiffableLowPriority1 extends DiffableLowPriority2 {
+  // Needed to avoid ambiguous implicits with Dotty when looking for a Diffable
+  // for `Either[Int, Nothing]` for example.
+  implicit val nothingDiffable: Diffable[Nothing] = NothingDiffable
+
   // instances for primitive types
   implicit val intDiffable    : Diffable[Int]     = primitive
   implicit val booleanDiffable: Diffable[Boolean] = primitive
