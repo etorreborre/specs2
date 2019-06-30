@@ -64,6 +64,8 @@ trait FutureBaseMatchers extends ExpectationsCreation {
         val r = new FutureAsResult(futures.next.map(v => AsResult(createExpectable(v).applyMatcher(m)))(ee.executionContext)).await(retries, timeout)
         result(r.isSuccess, r.message, r.message, a)
       } catch {
+        case f: FailureException =>
+          throw f
         // if awaiting on the future throws an exception because it was a failed future
         // there try to match again because the matcher can be a `throwA` matcher
         case t: Throwable =>
