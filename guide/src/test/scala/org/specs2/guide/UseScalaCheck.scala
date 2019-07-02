@@ -165,6 +165,8 @@ The parameters you can modify are:
  `seed`            | `None`                 | a Base64 encoded string which you can get from a previous failed run.
  You can set the seed on the property directly with `setSeed(string)`
 
+Note that `minTestsOk` in `specs2` corresponds to the `minSuccessfulTests` parameter in `ScalaCheck`.
+
 #### Property level
 
 It is also possible to specifically set the execution parameters on a given property: ${snippet{
