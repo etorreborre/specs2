@@ -8,6 +8,8 @@ import org.scalacheck.rng.Seed
 
 /**
  * This class encapsulates ScalaCheck parameters + any additional parameters
+ *
+ * Note that minTestsOk in specs2 corresponds to the minSuccessfulTests parameter in ScalaCheck.
  */
 case class Parameters(minTestsOk: Int                 = Test.Parameters.default.minSuccessfulTests,
                       minSize: Int                    = Test.Parameters.default.minSize,
