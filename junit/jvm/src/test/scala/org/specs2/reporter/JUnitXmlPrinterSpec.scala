@@ -91,7 +91,7 @@ is formatted for JUnit reporting tools.
 
   object test {
     def e1 = { print(ownEnv)("t1" ^ br ^ "e1<>&\"" ! success) must \\("testcase", "classname" -> "org.specs2.reporter.JUnitXmlPrinterSpec") }
-    def e2 = { print(ownEnv)(start ^ "t1" ^ br ^ "e1<>&\"" ! success ^ end) must \\("testcase", "name" -> scala.xml.Utility.escape("t1::e1<>&\"")) }
+    def e2 = { print(ownEnv)(start ^ "t1" ^ br ^ "e1<>&" ! success ^ end) must \\("testcase", "name" -> "t1::e1&lt;&gt;&amp;") }
     def e3 = { print(ownEnv)("t1" ^ br ^ "e1<>&\"" ! success) must \\("testcase", "time") }
   }
 
