@@ -237,8 +237,8 @@ For more documentation about this Mockito functionality, please read [here](http
 Spies can be used to do "partial mocking" of real objects: ${snippet{
 val spiedList = spy(new LinkedList[String])
 
-// methods can be stubbed on a spy
-spiedList.size returns 100
+// methods can be stubbed on a spy, however the syntax for stubbing a spy is a bit different than with a mock:
+doReturn(100).when(s).size // instead of spiedList.size returns 100 which would throw an exception
 
 // other methods can also be used
 spiedList.add("one")
