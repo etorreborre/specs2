@@ -238,7 +238,7 @@ Spies can be used to do "partial mocking" of real objects: ${snippet{
 val spiedList = spy(new LinkedList[String])
 
 // methods can be stubbed on a spy, however the syntax for stubbing a spy is a bit different than with a mock:
-doReturn(100).when(s).size // instead of spiedList.size returns 100 which would throw an exception
+doReturn(100).when(s).size // instead of spiedList.size returns 100, where real method would be called and could throw an exception
 
 // other methods can also be used
 spiedList.add("one")
