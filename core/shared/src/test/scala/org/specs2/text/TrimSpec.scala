@@ -91,7 +91,7 @@ class TrimSpec extends Specification { def is = s2"""
 """
 
   def e1 = "<li><p>hello\ndear\nworld</p></li>".
-           replaceAll("<p>((.|\n)*)</p>", (s: String) => s.replace("\n", "<br/>")) ===
+           replaceAll("<p>[\\S\\s]*</p>", (s: String) => s.replace("\n", "<br/>")) ===
            "<li><p>hello<br/>dear<br/>world</p></li>"
 
   def e2 = "hello\nworld\n   \nhow are\nyou\n".lastBlock must_== "how are\nyou"

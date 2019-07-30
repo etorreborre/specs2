@@ -199,15 +199,6 @@ lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("c
   nativeSettings(commonNativeSettings).
   platformsSettings(JSPlatform, NativePlatform)(
     commonJsNativeSettings
-  ).
-  nativeSettings(
-    // Workaround for Scala Native bug https://github.com/scala-native/scala-native/issues/1673
-    Test / sources :=
-    (Test / sources).value
-      .filterNot { s =>
-        val path = s.getPath
-        path.contains("core/shared/src/test/scala/org/specs2/text/TrimSpec.scala")
-    }
   )
 
 lazy val coreJs     = core.js.dependsOn(matcherJs, commonJs, commonJs % "test->test")
