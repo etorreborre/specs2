@@ -5,9 +5,18 @@
 *.iml
 .jvmopts
 
+.metals
+.bloop
+
 **/*.hydra
 hydra.log
 hydra-timings.csv
 project/hydra.sbt
 
 /out
+
+lowered.hnir
+
+.js
+.jvm
+.native

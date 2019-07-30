@@ -54,3 +54,14 @@ notifications:
     on_success: always
     on_failure: always
     on_start:   never
+
+matrix:
+  include:
+  - scala: 2.11.12
+    jdk: openjdk8
+    before_script:
+      - curl https://raw.githubusercontent.com/scala-native/scala-native/master/scripts/travis_setup.sh | bash -
+    sudo: required
+    script:
+      - ./.travis-test.sh coreNative
+      - ./.travis-test.sh examplesNative

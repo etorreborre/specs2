@@ -250,7 +250,6 @@ case object Stats {
         (stats \ "trend" \ "stats").headOption.flatMap(fromXml),
         map.get("time").map(SimpleTimer.fromString).getOrElse(new SimpleTimer)))
     }
-
   }
 }
 
