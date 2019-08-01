@@ -18,9 +18,9 @@ lazy val specs2 = project.in(file(".")).
     packagedArtifacts := Map.empty
   ).aggregate(
     fpJvm, catsJvm, commonJvm, matcherJvm, coreJvm, matcherExtraJvm, scalazJvm, html,
-    analysisJvm, shapelessJvm, form, markdown, gwt, junitJvm, scalacheckJvm, mockJvm,
+    analysisJvm, shapelessJvm, formJvm, markdownJvm, gwtJvm, junitJvm, scalacheckJvm, mockJvm,
     tests, fpJs, commonJs, matcherJs, coreJs, matcherExtraJs, scalazJs, analysisJs,
-    shapelessJs, junitJs, scalacheckJs, mockJs
+    shapelessJs, formJs, markdownJs, gwtJs, junitJs, scalacheckJs, mockJs
   )
 
 val scala211 = "2.11.12"
@@ -209,8 +209,8 @@ lazy val examples = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(fil
   nativeSettings(commonNativeSettings)
 
 lazy val examplesJs  = examples.js.dependsOn(commonJs, matcherJs, coreJs, matcherExtraJs, junitJs, scalacheckJs, mockJs)
-lazy val examplesJvm = examples.jvm.dependsOn(commonJvm, matcherJvm, coreJvm, matcherExtraJvm, analysisJvm, form, gwt, html, markdown, junitJvm, scalacheckJvm, mockJvm)
-lazy val examplesNative = examples.native.dependsOn(commonNative, matcherNative, coreNative, matcherExtraNative, analysisNative, form, gwt, html, markdown, junitNative, scalacheckNative, mockNative)
+lazy val examplesJvm = examples.jvm.dependsOn(commonJvm, matcherJvm, coreJvm, matcherExtraJvm, analysisJvm, formJvm, gwtJvm, html, markdownJvm, junitJvm, scalacheckJvm, mockJvm)
+lazy val examplesNative = examples.native.dependsOn(commonNative, matcherNative, coreNative, matcherExtraNative, junitNative, scalacheckNative, mockNative)
 
 lazy val fp = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("fp")).
   settings(commonSettings:_*).
@@ -223,12 +223,19 @@ lazy val fpJvm     = fp.jvm
 lazy val fpJs      = fp.js
 lazy val fpNative  = fp.native
 
-lazy val form = project.in(file("form")).
+lazy val form = crossProject(JSPlatform, JVMPlatform, NativePlatform).
+  crossType(CrossType.Pure).
+  in(file("form")).
   settings(
     commonSettings,
     name := "specs2-form").
-  settings(depends.jvmTest, commonJvmSettings).
-  dependsOn(coreJvm, markdown, matcherExtraJvm, scalacheckJvm % "test->test")
+  jvmSettings(depends.jvmTest, commonJvmSettings).
+  jsSettings(depends.jsTest, commonJsSettings).
+  nativeSettings(depends.nativeTest, commonNativeSettings)
+
+lazy val formJvm = form.jvm.dependsOn(coreJvm, markdownJvm, matcherExtraJvm, scalacheckJvm % "test->test")
+lazy val formJs = form.js.dependsOn(coreJs, markdownJs, matcherExtraJs, scalacheckJs % "test->test")
+lazy val formNative = form.native.dependsOn(coreJvm, markdownNative, matcherExtraNative, scalacheckNative % "test->test")
 
 lazy val guide = project.in(file("guide")).
   enablePlugins(BuildInfoPlugin).
@@ -239,13 +246,19 @@ lazy val guide = project.in(file("guide")).
     scalacOptions in Compile --= Seq("-Xlint", "-Ywarn-unused-import")).
   dependsOn(examplesJvm % "compile->compile;test->test", scalazJvm, shapelessJvm)
 
-lazy val gwt = project.in(file("gwt")).
+lazy val gwt = crossProject(JSPlatform, JVMPlatform, NativePlatform).
+  crossType(CrossType.Pure).
+  in(file("gwt")).
   settings(
-    libraryDependencies += "com.chuusai" %% "shapeless" % shapelessVersion,
     commonSettings,
     name := "specs2-gwt").
-  settings(depends.jvmTest, commonJvmSettings).
-  dependsOn(coreJvm, matcherExtraJvm, scalacheckJvm)
+  jvmSettings(depends.jvmTest, commonJvmSettings).
+  jsSettings(depends.jsTest, commonJsSettings).
+  nativeSettings(depends.nativeTest, commonNativeSettings)
+
+lazy val gwtJvm = gwt.jvm.dependsOn(coreJvm, matcherExtraJvm, scalacheckJvm)
+lazy val gwtJs = gwt.jvm.dependsOn(coreJs, matcherExtraJs, scalacheckJs)
+lazy val gwtNative = gwt.jvm.dependsOn(coreNative, matcherExtraNative, scalacheckNative)
 
 lazy val html = project.in(file("html")).
   settings(
@@ -253,7 +266,7 @@ lazy val html = project.in(file("html")).
     commonSettings,
     name := "specs2-html").
   settings(depends.jvmTest, commonJvmSettings).
-  dependsOn(form, mockJvm % Test, matcherExtraJvm % Test, scalacheckJvm % Test)
+  dependsOn(formJvm, mockJvm % Test, matcherExtraJvm % Test, scalacheckJvm % Test)
 
 lazy val junit = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("junit")).
   settings(
@@ -269,13 +282,20 @@ lazy val junitJs = junit.js.dependsOn(coreJs, matcherExtraJs % Test, mockJs % Te
 lazy val junitJvm = junit.jvm.dependsOn(coreJvm, matcherExtraJvm % Test, mockJvm % Test)
 lazy val junitNative = junit.native.dependsOn(coreNative, matcherExtraNative % Test, mockNative % Test)
 
-lazy val markdown = project.in(file("markdown")).
+lazy val markdown = crossProject(JSPlatform, JVMPlatform, NativePlatform).
+  crossType(CrossType.Pure).
+  in(file("markdown")).
   settings(
     libraryDependencies += depends.pegdown,
     commonSettings,
     name := "specs2-markdown").
-  settings(depends.jvmTest, commonJvmSettings).
-  dependsOn(commonJvm, coreJvm % "compile->test")
+  jvmSettings(depends.jvmTest, commonJvmSettings).
+  jsSettings(depends.jsTest, commonJsSettings).
+  nativeSettings(depends.nativeTest, commonNativeSettings)
+
+lazy val markdownJvm = markdown.jvm.dependsOn(commonJvm, coreJvm % "compile->test")
+lazy val markdownJs = markdown.js.dependsOn(commonJs, coreJs % "compile->test")
+lazy val markdownNative = markdown.native.dependsOn(commonNative, coreNative % "compile->test")
 
 lazy val matcher = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("matcher")).
   settings(
@@ -290,12 +310,12 @@ lazy val matcherJvm    = matcher.jvm.dependsOn(commonJvm)
 lazy val matcherNative = matcher.native.dependsOn(commonNative)
 
 lazy val matcherExtra = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("matcher-extra")).
-  settings(commonSettings ++ Seq(
+  settings(
+    commonSettings,
     name := "specs2-matcher-extra",
     libraryDependencies ++= depends.paradise(scalaVersion.value)
-  ):_*).
-  jsSettings(depends.jsTest, commonJsSettings
   ).
+  jsSettings(depends.jsTest, commonJsSettings).
   jvmSettings(depends.jvmTest, commonJvmSettings).
   nativeSettings(depends.nativeTest, commonNativeSettings)
 
@@ -306,7 +326,7 @@ lazy val matcherExtraNative = matcherExtra.native.dependsOn(analysisNative, matc
 lazy val pom = Project(id = "pom", base = file("pom")).
   settings(commonSettings).
   dependsOn(catsJvm, commonJvm, matcherJvm, matcherExtraJvm, coreJvm, scalazJvm, html, analysisJvm,
-    shapelessJvm, form, markdown, gwt, junitJvm, scalacheckJvm, mockJvm)
+    shapelessJvm, formJvm, markdownJvm, gwtJvm, junitJvm, scalacheckJvm, mockJvm)
 
 lazy val shapeless = crossProject(JSPlatform, JVMPlatform, NativePlatform).
   crossType(CrossType.Pure).
@@ -350,9 +370,7 @@ lazy val mock = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("m
   jsSettings(depends.jsTest, commonJsSettings).
   jvmSettings(depends.jvmTest, commonJvmSettings).
   nativeSettings(depends.nativeTest, commonNativeSettings).
-  platformsSettings(JSPlatform, NativePlatform)(
-    commonJsNativeSettings
-  )
+  platformsSettings(JSPlatform, NativePlatform)(commonJsNativeSettings)
 
 lazy val mockJs = mock.js.dependsOn(coreJs)
 lazy val mockJvm = mock.jvm.dependsOn(coreJvm)
@@ -488,11 +506,11 @@ lazy val apiSettings = Seq(
   Seq(scalacOptions in (Compile, doc) += "-Ymacro-no-expand")
 
 lazy val aggregateCompile = ScopeFilter(
-  inProjects(fpJvm, commonJvm, matcherJvm, matcherExtraJvm, coreJvm, html, analysisJvm, form, shapelessJvm, markdown, gwt, junitJvm, scalacheckJvm, mockJvm),
+  inProjects(fpJvm, commonJvm, matcherJvm, matcherExtraJvm, coreJvm, html, analysisJvm, formJvm, shapelessJvm, markdownJvm, gwtJvm, junitJvm, scalacheckJvm, mockJvm),
   inConfigurations(Compile))
 
 lazy val aggregateTest = ScopeFilter(
-  inProjects(fpJvm, commonJvm, matcherJvm, matcherExtraJvm, coreJvm, html, analysisJvm, form, shapelessJvm, markdown, gwt, junitJvm, scalacheckJvm, mockJvm),
+  inProjects(fpJvm, commonJvm, matcherJvm, matcherExtraJvm, coreJvm, html, analysisJvm, formJvm, shapelessJvm, markdownJvm, gwtJvm, junitJvm, scalacheckJvm, mockJvm),
   inConfigurations(Test))
 
 def maybeMarkProvided(dep: ModuleID): ModuleID =
