@@ -20,9 +20,7 @@ lazy val specs2 = project.in(file(".")).
     fpJvm, catsJvm, commonJvm, matcherJvm, coreJvm, matcherExtraJvm, scalazJvm, html,
     analysisJvm, shapelessJvm, form, markdown, gwt, junitJvm, scalacheckJvm, mockJvm,
     tests, fpJs, commonJs, matcherJs, coreJs, matcherExtraJs, scalazJs, analysisJs,
-    shapelessJs, junitJs, scalacheckJs, mockJs, fpNative, commonNative, matcherNative,
-    coreNative, matcherExtraNative, scalazNative, analysisNative, shapelessNative,
-    scalacheckNative, mockNative
+    shapelessJs, junitJs, scalacheckJs, mockJs
   )
 
 val scala211 = "2.11.12"
@@ -97,8 +95,8 @@ lazy val commonJsNativeSettings = Seq(
 lazy val specs2Version = settingKey[String]("defines the current specs2 version")
 lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
 lazy val shapelessVersion = "2.3.3"
-lazy val catsVersion = "1.6.0"
-lazy val catsEffectVersion = "1.2.0"
+lazy val catsVersion = "1.6.1"
+lazy val catsEffectVersion = "1.4.0"
 
 val commonSettings =
   coreDefaultSettings  ++
@@ -158,20 +156,17 @@ lazy val common = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file(
     name := "specs2-common"
   ).
   platformsSettings(JVMPlatform, JSPlatform)(
-    libraryDependencies ++= depends.scalaParser.value
-  ).
-  jsSettings(depends.jsTest, commonJsSettings,
+    libraryDependencies ++= depends.scalaParser.value,
     libraryDependencies +=
       "org.scalacheck" %%% "scalacheck" % "1.14.0" % Test
   ).
-  jvmSettings(commonJvmSettings,
-    libraryDependencies +=
-      "org.scalacheck" %% "scalacheck" % "1.14.0" % Test
-  ).
+  jsSettings(depends.jsTest, commonJsSettings).
+  jvmSettings(commonJvmSettings).
   nativeSettings(
     commonNativeSettings,
     depends.nativeTest,
-    libraryDependencies ++= depends.scalaParserNative.value :+
+    libraryDependencies ++= depends.scalaParserNative.value,
+    libraryDependencies +=
       "com.github.lolgab" %%% "scalacheck" % "1.14.1" % Test
   ).
   platformsSettings(JSPlatform, NativePlatform)(
@@ -220,9 +215,9 @@ lazy val examplesNative = examples.native.dependsOn(commonNative, matcherNative,
 lazy val fp = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("fp")).
   settings(commonSettings:_*).
   settings(name := "specs2-fp").
-  jsSettings(depends.jsTest, commonJsSettings).
   jvmSettings(commonJvmSettings).
-  nativeSettings(commonNativeSettings)
+  jsSettings(depends.jsTest, commonJsSettings).
+  nativeSettings(depends.nativeTest, commonNativeSettings)
 
 lazy val fpJvm     = fp.jvm
 lazy val fpJs      = fp.js
@@ -319,14 +314,11 @@ lazy val shapeless = crossProject(JSPlatform, JVMPlatform, NativePlatform).
   settings(
     commonSettings,
     name := "specs2-shapeless",
-    libraryDependencies ++= depends.paradise(scalaVersion.value)
+    libraryDependencies ++= depends.paradise(scalaVersion.value),
+    libraryDependencies += "com.chuusai" %%% "shapeless" % shapelessVersion
   ).
-  jsSettings(depends.jsTest, commonJsSettings, libraryDependencies +=
-    "com.chuusai" %%% "shapeless" % shapelessVersion
-  ).
-  jvmSettings(depends.jvmTest, commonJvmSettings, libraryDependencies +=
-    "com.chuusai" %% "shapeless" % shapelessVersion
-  ).
+  jsSettings(depends.jsTest, commonJsSettings).
+  jvmSettings(depends.jvmTest, commonJvmSettings).
   nativeSettings(depends.nativeTest, commonNativeSettings)
 
 lazy val shapelessJs = shapeless.js.dependsOn(matcherJs, matcherExtraJs % "test->test")
