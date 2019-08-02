@@ -35,11 +35,11 @@ script:
   - ./.travis-test.sh scalacheckJVM
   - ./.travis-test.sh scalazJVM
   - ./.travis-test.sh shapelessJVM
+  - ./.travis-test.sh gwtJvm
+  - ./.travis-test.sh markdownJvm
+  - ./.travis-test.sh formJvm
 
-  - ./.travis-test.sh gwt
   - ./.travis-test.sh html
-  - ./.travis-test.sh markdown
-  - ./.travis-test.sh tests
 
   - ./.travis-test.sh coreJS
   - ./.travis-test.sh examplesJS
