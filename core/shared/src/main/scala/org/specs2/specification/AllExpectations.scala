@@ -41,4 +41,26 @@ trait AllExpectations extends StoredExpectations with FragmentsFactory with Spec
   /** modify the specification structure */
   override def map(structure: SpecStructure): SpecStructure =
     structure.setArguments(structure.arguments <| args(sequential = ArgProperty(true)))
+
+  /** use a side-effect to register a standard result */
+  override def skipped(message: String): Skipped = {
+    val r = Skipped(message)
+    checkResultFailure(r)
+    r
+  }
+
+  /** use a side-effect to register a standard result */
+  override def anError: Error = {
+    val r = Error("error")
+    checkResultFailure(r)
+    r
+  }
+
+  /** use a side-effect to register a standard result */
+  override def failure(message: String): Failure = {
+    val r = Failure(message)
+    checkResultFailure(r)
+    r
+  }
+
 }
