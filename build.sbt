@@ -257,6 +257,7 @@ lazy val gwt = crossProject(JSPlatform, JVMPlatform, NativePlatform).
   in(file("gwt")).
   settings(
     commonSettings,
+    libraryDependencies += "com.chuusai" %%% "shapeless" % shapelessVersion,
     name := "specs2-gwt").
   jvmSettings(depends.jvmTest, commonJvmSettings).
   jsSettings(depends.jsTest, commonJsSettings).
