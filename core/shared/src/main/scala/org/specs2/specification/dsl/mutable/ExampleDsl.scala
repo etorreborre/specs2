@@ -74,10 +74,10 @@ trait ExampleDsl0 extends BlockCreation {
 
   class BlockExample0(d: String) {
     def >>(f: =>Fragment): Fragment =
-      addBlock(d, f, addFragmentBlock)
+      addBlock(d, f)
 
     def >>(fs: =>Fragments)(implicit p1: ImplicitParam1): Fragments =
-      Use.ignoring(p1) { addBlock(d, fs, addFragmentsBlock) }
+      Use.ignoring(p1) { addBlock(d, fs) }
 
     def >>[R : AsExecution](r: =>R): Fragment = {
       addFragment(fragmentFactory.example(Text(d), AsExecution.apply[R].execute(r)))
@@ -85,16 +85,16 @@ trait ExampleDsl0 extends BlockCreation {
     }
 
     def should(f: => Fragment): Fragment =
-      addBlock(s"$d should", f, addFragmentBlock)
+      addBlock(s"$d should", f)
 
     def should(fs: => Fragments)(implicit p1: ImplicitParam1): Fragments =
-      Use.ignoring(p1) { addBlock(s"$d should", fs, addFragmentsBlock) }
+      Use.ignoring(p1) { addBlock(s"$d should", fs) }
 
     def can(fs: => Fragments)(implicit p1: ImplicitParam1): Fragments =
-      Use.ignoring(p1) { addBlock(s"$d can", fs, addFragmentsBlock) }
+      Use.ignoring(p1) { addBlock(s"$d can", fs) }
 
     def can(f: => Fragment): Fragment =
-      addBlock(s"$d can", f, addFragmentBlock)
+      addBlock(s"$d can", f)
 
     def in[R : AsExecution](r: =>R): Fragment = d >> r
   }
@@ -104,5 +104,3 @@ trait ExampleDsl0 extends BlockCreation {
 trait NoExampleDsl extends ExampleDsl {
   override def blockExample(d: String) = super.blockExample(d)
 }
-
-

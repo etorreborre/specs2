@@ -15,7 +15,6 @@ case class Execute(
                     _stopOnSkip:           Option[Boolean]          = None,
                     _sequential:           Option[Boolean]          = None,
                     _asap:                 Option[Boolean]          = None,
-                    _isolated:             Option[Boolean]          = None,
                     _useCustomClassLoader: Option[Boolean]          = None,
                     _threadsNb:            Option[Int]              = None,
                     _specs2ThreadsNb:      Option[Int]              = None,
@@ -32,7 +31,6 @@ case class Execute(
   def stopOnSkip: Boolean           = _stopOnSkip.getOrElse(false)
   def sequential: Boolean           = _sequential.getOrElse(false)
   def asap: Boolean                 = _asap.getOrElse(false)
-  def isolated: Boolean             = _isolated.getOrElse(false)
   def useCustomClassLoader: Boolean = _useCustomClassLoader.getOrElse(false)
   def threadsNb: Int                = _threadsNb.getOrElse(ExecutorServices.threadsNb)
   def specs2ThreadsNb: Int          = _specs2ThreadsNb.getOrElse(ExecutorServices.specs2ThreadsNb)
@@ -51,7 +49,6 @@ case class Execute(
       other._stopOnSkip          .orElse(_stopOnSkip),
       other._sequential          .orElse(_sequential),
       other._asap                .orElse(_asap),
-      other._isolated            .orElse(_isolated),
       other._useCustomClassLoader.orElse(_useCustomClassLoader),
       other._threadsNb           .orElse(_threadsNb),
       other._specs2ThreadsNb     .orElse(_specs2ThreadsNb),
@@ -72,7 +69,6 @@ case class Execute(
       "stopOnSkip"           -> _stopOnSkip          ,
       "sequential"           -> _sequential          ,
       "asap"                 -> _asap                ,
-      "isolated"             -> _isolated            ,
       "useCustomClassLoader" -> _useCustomClassLoader,
       "threadsNb"            -> _threadsNb           ,
       "specs2ThreadsNb"      -> _specs2ThreadsNb     ,
@@ -94,7 +90,6 @@ object Execute extends Extract {
       _stopOnSkip           = bool("stopOnSkip"),
       _sequential           = bool("sequential"),
       _asap                 = bool("asap"),
-      _isolated             = bool("isolated"),
       _useCustomClassLoader = bool("useCustomClassLoader"),
       _threadsNb            = int("threadsNb"),
       _specs2ThreadsNb      = int("specs2ThreadsNb"),
@@ -105,5 +100,5 @@ object Execute extends Extract {
     )
   }
   val allValueNames = Seq("plan", "skipAll", "stopOnFail", "stopOnError", "stopOnIssue", "stopOnSkip", "sequential",
-    "asap", "isolated", "useCustomClassLoader", "threadsNb", "specs2ThreadsNb", "scheduledThreadsNb", "batchSize", "timeFactor", "executor")
+    "asap", "useCustomClassLoader", "threadsNb", "specs2ThreadsNb", "scheduledThreadsNb", "batchSize", "timeFactor", "executor")
 }

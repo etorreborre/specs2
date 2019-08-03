@@ -33,7 +33,6 @@ trait ArgumentsCreation {
     sequential:    ArgProperty[Boolean] = ArgProperty[Boolean](),
     batchSize:     ArgProperty[Int]     = ArgProperty[Int](),
     asap:          ArgProperty[Boolean] = ArgProperty[Boolean](),
-    isolated:      ArgProperty[Boolean] = ArgProperty[Boolean](),
     xonly:         ArgProperty[Boolean] = ArgProperty[Boolean](),
     showOnly:      ArgProperty[String]  = ArgProperty[String](),
     color:         ArgProperty[Boolean] = ArgProperty[Boolean]()): Arguments =
@@ -52,8 +51,7 @@ trait ArgumentsCreation {
               stopOnSkip  = stopOnSkip,
               sequential  = sequential,
               batchSize   = batchSize,
-              asap        = asap,
-              isolated    = isolated) <|
+              asap        = asap) <|
      (new ArgumentsNamespace).report(
               xonly      = xonly,
               showOnly   = showOnly,
@@ -85,7 +83,6 @@ trait ArgumentsCreation {
       stopOnSkip:           ArgProperty[Boolean]           = ArgProperty[Boolean](),
       sequential:           ArgProperty[Boolean]           = ArgProperty[Boolean](),
       asap:                 ArgProperty[Boolean]           = ArgProperty[Boolean](),
-      isolated:             ArgProperty[Boolean]           = ArgProperty[Boolean](),
       useCustomClassLoader: ArgProperty[Boolean]           = ArgProperty[Boolean](),
       threadsNb:            ArgProperty[Int]               = ArgProperty[Int](),
       specs2ThreadsNb:      ArgProperty[Int]               = ArgProperty[Int](),
@@ -102,7 +99,6 @@ trait ArgumentsCreation {
                stopOnSkip.toOption,
                sequential.toOption,
                asap.toOption,
-               isolated.toOption,
                useCustomClassLoader.toOption,
                threadsNb.toOption,
                specs2ThreadsNb.toOption,

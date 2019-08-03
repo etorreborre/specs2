@@ -16,9 +16,9 @@ import specification.create._
  * of all the individual issues.
  *
  * It must be noted that this trait relies on a mutable list to collect the results as they are created in the example body.
- * Because of this restriction, a Specification using that trait can either run sequentially or isolated.
+ * Because of this restriction, a Specification using that trait must run sequentially
  *
- * If the specification is neither sequential or isolated, we force it to be isolated by default.
+ * If the specification is not sequential we force it to be
  */
 trait AllExpectations extends StoredExpectations with FragmentsFactory with SpecificationStructure with ArgumentsCreation with StandardResults {
   /**
@@ -35,15 +35,12 @@ trait AllExpectations extends StoredExpectations with FragmentsFactory with Spec
   def resultsContext(results: => scala.collection.Seq[Result]): Context = new ResultsContext(results)
 
   /**
-   * we force the specification to be isolated if it's not sequential or already isolated.
+   * we force the specification to be sequential if it's not already
    * this is important because when an example runs, its results are being stored into a shared list
    */
   /** modify the specification structure */
-  override def map(structure: SpecStructure): SpecStructure = {
-    val arguments = structure.arguments
-    if (arguments.isolated || arguments.sequential) structure
-    else structure.setArguments(arguments <| args(isolated = ArgProperty(true)))
-  }
+  override def map(structure: SpecStructure): SpecStructure =
+    structure.setArguments(structure.arguments <| args(sequential = ArgProperty(true)))
 
   /** use a side-effect to register a standard result */
   override def skipped(message: String): Skipped = {

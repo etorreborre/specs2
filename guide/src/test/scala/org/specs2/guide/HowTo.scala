@@ -28,7 +28,6 @@ Is it possible to reduce the number of implicits in scope and improve compilatio
 How can I collect execution data?                                                        | ${link(PrintExecutionData).mute}
 Can I display some data when an example succeeds?                                        | ${link(PrintExecutionData).mute}
 Can I create an example description spanning several lines?                              | ${link(MultilineDescriptions).mute}
-How to isolate each example from another so that they don't share variables              | ${link(Isolation).mute}
 How to timeout examples?                                                                 | ${link(TimeoutExamples).mute}
 Can I use parts of an example description in the example itself?                         | ${link(ExampleDescription).mute}
 Add my own keywords (other than '>>', 'should', 'can') to a mutable specification        | ${link(AddKeywords).mute}
@@ -46,7 +45,6 @@ Help, I need to troubleshoot my issues!                                         
     link(ExampleDescription).hide ^
     link(ForLoops).hide ^
     link(HtmlOutput).hide ^
-    link(Isolation).hide ^
     link(JUnitXmlOutput).hide ^
     link(LightweightSpecs).hide ^
     link(MultilineDescriptions).hide ^
