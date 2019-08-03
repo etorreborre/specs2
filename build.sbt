@@ -213,7 +213,7 @@ lazy val examples = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(fil
   nativeSettings(commonNativeSettings).
   dependsOn(common, matcher, core, matcherExtra, junit, scalacheck, mock)
 
-lazy val examplesJvm = examples.jvm
+lazy val examplesJvm = examples.jvm.dependsOn(analysisJvm, formJvm, gwtJvm, html, markdownJvm)
 lazy val examplesJs = examples.js
 lazy val examplesNative = examples.native
 
