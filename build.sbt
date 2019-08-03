@@ -17,10 +17,10 @@ lazy val specs2 = project.in(file(".")).
     name := "specs2",
     packagedArtifacts := Map.empty
   ).aggregate(
-    fpJvm, catsJvm, commonJvm, matcherJvm, coreJvm, matcherExtraJvm, scalazJvm, html,
-    analysisJvm, shapelessJvm, formJvm, markdownJvm, gwtJvm, junitJvm, scalacheckJvm, mockJvm,
-    tests, fpJs, commonJs, matcherJs, coreJs, matcherExtraJs, scalazJs, analysisJs,
-    shapelessJs, formJs, markdownJs, gwtJs, junitJs, scalacheckJs, mockJs
+    fpJVM, catsJVM, commonJVM, matcherJVM, coreJVM, matcherExtraJVM, scalazJVM, html,
+    analysisJVM, shapelessJVM, formJVM, markdownJVM, gwtJVM, junitJVM, scalacheckJVM, mockJVM,
+    tests, fpJS, commonJS, matcherJS, coreJS, matcherExtraJS, scalazJS, analysisJS,
+    shapelessJS, formJS, markdownJS, gwtJS, junitJS, scalacheckJS, mockJS
   )
 
 val scala211 = "2.11.12"
@@ -124,8 +124,8 @@ lazy val analysis = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(fil
   nativeSettings(commonNativeSettings).
   dependsOn(common % "test->test", core, matcher, scalacheck % Test)
 
-lazy val analysisJvm = analysis.jvm
-lazy val analysisJs = analysis.js
+lazy val analysisJVM = analysis.jvm
+lazy val analysisJS = analysis.js
 lazy val analysisNative = analysis.native
 
 lazy val cats = crossProject(JSPlatform, JVMPlatform).in(file("cats")).
@@ -145,8 +145,8 @@ lazy val cats = crossProject(JSPlatform, JVMPlatform).in(file("cats")).
   jvmSettings(depends.jvmTest, commonJvmSettings).
   dependsOn(matcher, core % "test->test")
 
-lazy val catsJs = cats.js
-lazy val catsJvm = cats.jvm
+lazy val catsJS = cats.js
+lazy val catsJVM = cats.jvm
 
 lazy val common = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("common")).
   settings(
@@ -176,8 +176,8 @@ lazy val common = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file(
   ).
   dependsOn(fp)
 
-lazy val commonJs = common.js
-lazy val commonJvm = common.jvm
+lazy val commonJS = common.js
+lazy val commonJVM = common.jvm
 lazy val commonNative = common.native
 
 lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("core")).
@@ -200,8 +200,8 @@ lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("c
   ).
   dependsOn(matcher, common, common % "test->test")
 
-lazy val coreJvm = core.jvm
-lazy val coreJs = core.js
+lazy val coreJVM = core.jvm
+lazy val coreJS = core.js
 lazy val coreNative = core.native
 
 lazy val examples = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("examples")).
@@ -213,8 +213,8 @@ lazy val examples = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(fil
   nativeSettings(commonNativeSettings).
   dependsOn(common, matcher, core, matcherExtra, junit, scalacheck, mock)
 
-lazy val examplesJvm = examples.jvm.dependsOn(analysisJvm, formJvm, gwtJvm, html, markdownJvm)
-lazy val examplesJs = examples.js
+lazy val examplesJVM = examples.jvm.dependsOn(analysisJVM, formJVM, gwtJVM, html, markdownJVM)
+lazy val examplesJS = examples.js
 lazy val examplesNative = examples.native
 
 lazy val fp = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("fp")).
@@ -224,8 +224,8 @@ lazy val fp = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("fp"
   jsSettings(depends.jsTest, commonJsSettings).
   nativeSettings(depends.nativeTest, commonNativeSettings)
 
-lazy val fpJvm = fp.jvm
-lazy val fpJs = fp.js
+lazy val fpJVM = fp.jvm
+lazy val fpJS = fp.js
 lazy val fpNative = fp.native
 
 lazy val form = crossProject(JSPlatform, JVMPlatform, NativePlatform).
@@ -239,8 +239,8 @@ lazy val form = crossProject(JSPlatform, JVMPlatform, NativePlatform).
   nativeSettings(depends.nativeTest, commonNativeSettings).
   dependsOn(core, markdown, matcherExtra, scalacheck % "test->test")
 
-lazy val formJvm = form.jvm
-lazy val formJs = form.js
+lazy val formJVM = form.jvm
+lazy val formJS = form.js
 lazy val formNative = form.native
 
 lazy val guide = project.in(file("guide")).
@@ -250,7 +250,7 @@ lazy val guide = project.in(file("guide")).
     buildInfoSettings,
     name := "specs2-guide",
     scalacOptions in Compile --= Seq("-Xlint", "-Ywarn-unused-import")).
-  dependsOn(examplesJvm % "compile->compile;test->test", scalazJvm, shapelessJvm)
+  dependsOn(examplesJVM % "compile->compile;test->test", scalazJVM, shapelessJVM)
 
 lazy val gwt = crossProject(JSPlatform, JVMPlatform, NativePlatform).
   crossType(CrossType.Pure).
@@ -264,8 +264,8 @@ lazy val gwt = crossProject(JSPlatform, JVMPlatform, NativePlatform).
   nativeSettings(depends.nativeTest, commonNativeSettings).
   dependsOn(core, matcherExtra, scalacheck)
 
-lazy val gwtJvm = gwt.jvm
-lazy val gwtJs = gwt.js
+lazy val gwtJVM = gwt.jvm
+lazy val gwtJS = gwt.js
 lazy val gwtNative = gwt.native
 
 lazy val html = project.in(file("html")).
@@ -274,7 +274,7 @@ lazy val html = project.in(file("html")).
     commonSettings,
     name := "specs2-html").
   settings(depends.jvmTest, commonJvmSettings).
-  dependsOn(formJvm, mockJvm % Test, matcherExtraJvm % Test, scalacheckJvm % Test)
+  dependsOn(formJVM, mockJVM % Test, matcherExtraJVM % Test, scalacheckJVM % Test)
 
 lazy val junit = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("junit")).
   settings(
@@ -287,8 +287,8 @@ lazy val junit = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("
   nativeSettings(depends.nativeTest, commonNativeSettings).
   dependsOn(core, matcherExtra % Test, mock % Test)
 
-lazy val junitJvm = junit.jvm
-lazy val junitJs = junit.js
+lazy val junitJVM = junit.jvm
+lazy val junitJS = junit.js
 lazy val junitNative = junit.native
 
 lazy val markdown = crossProject(JSPlatform, JVMPlatform, NativePlatform).
@@ -303,8 +303,8 @@ lazy val markdown = crossProject(JSPlatform, JVMPlatform, NativePlatform).
   nativeSettings(depends.nativeTest, commonNativeSettings).
   dependsOn(common, core % "compile->test")
 
-lazy val markdownJvm = markdown.jvm
-lazy val markdownJs = markdown.js
+lazy val markdownJVM = markdown.jvm
+lazy val markdownJS = markdown.js
 lazy val markdownNative = markdown.native
 
 lazy val matcher = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("matcher")).
@@ -316,8 +316,8 @@ lazy val matcher = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file
   nativeSettings(depends.nativeTest, commonNativeSettings).
   dependsOn(common)
 
-lazy val matcherJs = matcher.js
-lazy val matcherJvm = matcher.jvm
+lazy val matcherJS = matcher.js
+lazy val matcherJVM = matcher.jvm
 lazy val matcherNative = matcher.native
 
 lazy val matcherExtra = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("matcher-extra")).
@@ -331,14 +331,14 @@ lazy val matcherExtra = crossProject(JSPlatform, JVMPlatform, NativePlatform).in
   nativeSettings(depends.nativeTest, commonNativeSettings).
   dependsOn(analysis, matcher, core % "test->test")
 
-lazy val matcherExtraJs = matcherExtra.js
-lazy val matcherExtraJvm = matcherExtra.jvm
+lazy val matcherExtraJS = matcherExtra.js
+lazy val matcherExtraJVM = matcherExtra.jvm
 lazy val matcherExtraNative = matcherExtra.native
 
 lazy val pom = Project(id = "pom", base = file("pom")).
   settings(commonSettings).
-  dependsOn(catsJvm, commonJvm, matcherJvm, matcherExtraJvm, coreJvm, scalazJvm, html, analysisJvm,
-    shapelessJvm, formJvm, markdownJvm, gwtJvm, junitJvm, scalacheckJvm, mockJvm)
+  dependsOn(catsJVM, commonJVM, matcherJVM, matcherExtraJVM, coreJVM, scalazJVM, html, analysisJVM,
+    shapelessJVM, formJVM, markdownJVM, gwtJVM, junitJVM, scalacheckJVM, mockJVM)
 
 lazy val shapeless = crossProject(JSPlatform, JVMPlatform, NativePlatform).
   crossType(CrossType.Pure).
@@ -354,8 +354,8 @@ lazy val shapeless = crossProject(JSPlatform, JVMPlatform, NativePlatform).
   nativeSettings(depends.nativeTest, commonNativeSettings).
   dependsOn(matcher, matcherExtra % "test->test")
 
-lazy val shapelessJs = shapeless.js
-lazy val shapelessJvm = shapeless.jvm
+lazy val shapelessJS = shapeless.js
+lazy val shapelessJVM = shapeless.jvm
 lazy val shapelessNative = shapeless.native
 
 lazy val scalaz = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("scalaz")).
@@ -370,8 +370,8 @@ lazy val scalaz = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file(
   nativeSettings(depends.nativeTest, commonNativeSettings).
   dependsOn(matcher, core % "test->test")
 
-lazy val scalazJs = scalaz.js
-lazy val scalazJvm = scalaz.jvm
+lazy val scalazJS = scalaz.js
+lazy val scalazJVM = scalaz.jvm
 lazy val scalazNative = scalaz.native
 
 lazy val mock = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("mock")).
@@ -387,8 +387,8 @@ lazy val mock = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("m
   platformsSettings(JSPlatform, NativePlatform)(commonJsNativeSettings).
   dependsOn(core)
 
-lazy val mockJs = mock.js
-lazy val mockJvm = mock.jvm
+lazy val mockJS = mock.js
+lazy val mockJVM = mock.jvm
 lazy val mockNative = mock.native
 
 lazy val scalacheck = crossProject(JSPlatform, JVMPlatform, NativePlatform)
@@ -410,8 +410,8 @@ lazy val scalacheck = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   ).
   dependsOn(core)
 
-lazy val scalacheckJs  = scalacheck.js
-lazy val scalacheckJvm = scalacheck.jvm
+lazy val scalacheckJS  = scalacheck.js
+lazy val scalacheckJVM = scalacheck.jvm
 lazy val scalacheckNative = scalacheck.native
 
 lazy val tests = Project(id = "tests", base = file("tests")).
@@ -421,14 +421,14 @@ lazy val tests = Project(id = "tests", base = file("tests")).
     depends.jvmTest,
     commonJvmSettings
   ).dependsOn(
-  coreJvm      % "compile->compile;test->test",
-  shapelessJvm % "compile->compile;test->test",
-  junitJvm     % "test->test",
-  examplesJvm  % "test->test",
-  matcherExtraJvm,
+  coreJVM      % "compile->compile;test->test",
+  shapelessJVM % "compile->compile;test->test",
+  junitJVM     % "test->test",
+  examplesJVM  % "test->test",
+  matcherExtraJVM,
   html,
-  scalazJvm,
-  catsJvm)
+  scalazJVM,
+  catsJVM)
 
 lazy val specs2ShellPrompt = shellPrompt in ThisBuild := { state =>
   val name = Project.extract(state).currentRef.project
@@ -522,11 +522,11 @@ lazy val apiSettings = Seq(
   Seq(scalacOptions in (Compile, doc) += "-Ymacro-no-expand")
 
 lazy val aggregateCompile = ScopeFilter(
-  inProjects(fpJvm, commonJvm, matcherJvm, matcherExtraJvm, coreJvm, html, analysisJvm, formJvm, shapelessJvm, markdownJvm, gwtJvm, junitJvm, scalacheckJvm, mockJvm),
+  inProjects(fpJVM, commonJVM, matcherJVM, matcherExtraJVM, coreJVM, html, analysisJVM, formJVM, shapelessJVM, markdownJVM, gwtJVM, junitJVM, scalacheckJVM, mockJVM),
   inConfigurations(Compile))
 
 lazy val aggregateTest = ScopeFilter(
-  inProjects(fpJvm, commonJvm, matcherJvm, matcherExtraJvm, coreJvm, html, analysisJvm, formJvm, shapelessJvm, markdownJvm, gwtJvm, junitJvm, scalacheckJvm, mockJvm),
+  inProjects(fpJVM, commonJVM, matcherJVM, matcherExtraJVM, coreJVM, html, analysisJVM, formJVM, shapelessJVM, markdownJVM, gwtJVM, junitJVM, scalacheckJVM, mockJVM),
   inConfigurations(Test))
 
 def maybeMarkProvided(dep: ModuleID): ModuleID =

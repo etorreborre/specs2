@@ -35,9 +35,9 @@ script:
   - ./.travis-test.sh scalacheckJVM
   - ./.travis-test.sh scalazJVM
   - ./.travis-test.sh shapelessJVM
-  - ./.travis-test.sh gwtJvm
-  - ./.travis-test.sh markdownJvm
-  - ./.travis-test.sh formJvm
+  - ./.travis-test.sh gwtJVM
+  - ./.travis-test.sh markdownJVM
+  - ./.travis-test.sh formJVM
 
   - ./.travis-test.sh html
 
