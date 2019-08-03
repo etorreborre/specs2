@@ -18,13 +18,8 @@ trait StoredExpectations extends Expectations {
 
       case other => other
     }.map(_.toResult)
-    matchResults.clear
-
-    val resultsCopy = new scala.collection.mutable.ListBuffer[Result]
-    resultsCopy ++= results
-    results.clear
-
-    rs.toSeq ++ resultsCopy
+    results.clear()
+    rs
   }
 
   def addLocation(message: String, location: String): String = {

@@ -3,7 +3,7 @@ package user.specification
 import org.specs2.mutable
 import org.specs2.specification.{Scope, AllExpectations}
 
-class AllExpectationsSpecification extends mutable.Specification with AllExpectations {
+class AllExpectationsSpecification extends mutable.Specification with AllExpectations { sequential
   "In this example all the expectations are evaluated" >> {
     1 === 2
     1 === 3

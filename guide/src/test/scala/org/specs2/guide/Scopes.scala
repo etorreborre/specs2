@@ -37,7 +37,6 @@ $warn Do not use an abstract class instead of a trait when using `Before`, `Afte
 
 $AndIfYouWantToKnowMore
 
- - "isolate" examples using the ${"`isolated` argument" ~/ Isolation}
  - print ${"execution data" ~/ PrintExecutionData}
 
 $vid

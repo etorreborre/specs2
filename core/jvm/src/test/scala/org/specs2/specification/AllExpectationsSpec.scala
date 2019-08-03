@@ -11,7 +11,7 @@ import fp.syntax._
 import control._
 import ExecuteActions._
 
-class AllExpectationsSpec(val env: Env) extends Spec with AllExpectations with OwnEnv { sequential
+class AllExpectationsSpec(val env: Env) extends Spec with OwnEnv {
 
   "A specification with the AllExpectations trait should" >> {
     "evaluate all its expectations" >> {
@@ -34,11 +34,6 @@ class AllExpectationsSpec(val env: Env) extends Spec with AllExpectations with O
       executedSelected.hasIssues must beTrue
       executedSelected.expectations === 4
       executedSelected.failures === 2
-    }
-    "work ok on a sequential specification" >> {
-      executedSequential.hasIssues must beTrue
-      executedSequential.expectations === 10
-      executedSequential.failures === 4
     }
     "work ok on a mutable specification with Scopes" >> {
       executedWithScope.hasIssues must beTrue
@@ -74,13 +69,15 @@ class AllExpectationsSpec(val env: Env) extends Spec with AllExpectations with O
   }
 
   def stats(spec: ContextualSpecificationStructure)(args: Arguments): Stats = {
-    val env1 = ownEnv.setArguments(args)
+    // all the executions need to be sequential
+    val env1 = ownEnv.setArguments(args <| sequential)
     val executed = DefaultExecutor.executeSpec(spec.structure(env1) |> DefaultSelector.select(env1), env1)
     Statistics.runStats(executed)(env1.executionEnv)
   }
 
   def results(spec: ContextualSpecificationStructure)(args: Arguments): List[Result] = {
-    val env1 = ownEnv.setArguments(args)
+    // all the executions need to be sequential
+    val env1 = ownEnv.setArguments(args <| sequential)
     DefaultExecutor.executeSpec(spec.structure(env1), env1).fragments.fragments.
       flatMap(_.traverse(_.executionResult)).run(env1.executionEnv)
   }
@@ -96,7 +93,6 @@ class AllExpectationsSpec(val env: Env) extends Spec with AllExpectations with O
   def executedSuspended = suspended(new AllExpectationsSpecification)(args())
   def executedException = stats(new AllExpectationsSpecificationWithException)(args())
   def executedSelected = stats(new AllExpectationsSpecification)(args(ex = "It is"))
-  def executedSequential = stats(new AllExpectationsSpecification)(sequential)
   def executedWithScope = stats(new AllExpectationsSpecificationWithScope)(args())
   def executedWithScopeIssues = issues(new AllExpectationsSpecificationWithScope)(args())
   def executedWithNotImplementedError = stats(new AllExpectationsSpecificationWithNotImplementedError)(args())

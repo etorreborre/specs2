@@ -22,10 +22,6 @@ trait ArgumentsShortcuts { this: ArgumentsCreation =>
    */
   def unbatched: Arguments = batchSize(Int.MaxValue)
   /**
-   * @return arguments for a specification where examples must be executed in their own specification
-   */
-  def isolated: Arguments = args(isolated = ArgProperty(true))
-  /**
    * shortcut to show only the text without any execution
    */
   def plan: Arguments = args(plan = ArgProperty(true))

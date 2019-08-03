@@ -3,7 +3,6 @@ package specification
 
 import org.specs2.execute.Result._
 import org.specs2.execute.{ResultExecution, Result, AsResult}
-import org.specs2.matcher.StoredExpectations
 import org.specs2.fp._
 
 /**
@@ -191,14 +190,6 @@ trait Scope extends matcher.Scope
 class ResultsContext(results: => scala.collection.Seq[Result]) extends StoredResultsContext {
   def storedResults = results
 }
-
-/**
- * This trait can be used when it is not desirable to use the AllExpectations trait, that is, when the specification
- * examples must be executed concurrently and not isolated.
- *
- * @see the UserGuide on how to use this trait
- */
-trait StoredExpectationsContext extends StoredExpectations with StoredResultsContext
 
 /**
  * This trait is a context which will use the results provided by the class inheriting that trait.

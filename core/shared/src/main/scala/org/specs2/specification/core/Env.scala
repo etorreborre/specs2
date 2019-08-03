@@ -82,14 +82,6 @@ case class Env(
   def setArguments(args: Arguments) =
     copy(arguments = args)
 
-  /** @return an isolated env */
-  def setWithIsolation =
-    copy(executionParameters = executionParameters.setWithIsolation)
-
-  /** @return a non isolated env */
-  def setWithoutIsolation =
-    copy(executionParameters = executionParameters.setWithoutIsolation)
-
   /** set a new statistic repository */
   def setStatisticRepository(repository: StatisticsRepository) =
     copy(statsRepository = (args: Arguments) => repository)
@@ -138,24 +130,7 @@ object Env {
 
 }
 
-case class ExecutionParameters(timeout:       Option[FiniteDuration] = None,
-                               withIsolation: Boolean = true) {
-
-  def withoutIsolation: Boolean =
-    !withIsolation
-
-  /**
-   * fragments must be created as "isolated"
-   */
-  def setWithIsolation: ExecutionParameters =
-    copy(withIsolation = true)
-
-  /**
-   * fragments must be created as non "isolated"
-   */
-  def setWithoutIsolation: ExecutionParameters =
-    copy(withIsolation = false)
-
+case class ExecutionParameters(timeout: Option[FiniteDuration] = None) {
   def setTimeout(duration: FiniteDuration): ExecutionParameters =
     copy(timeout = Some(duration))
 }

@@ -36,7 +36,6 @@ trait ArgumentsCreation extends org.specs2.main.ArgumentsCreation with MutableAr
                      sequential:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
                      batchSize:     ArgProperty[Int]               = ArgProperty[Int](),
                      asap:          ArgProperty[Boolean]           = ArgProperty[Boolean](),
-                     isolated:      ArgProperty[Boolean]           = ArgProperty[Boolean](),
                      xonly:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
                      showOnly:      ArgProperty[String]            = ArgProperty[String](),
                      color:         ArgProperty[Boolean]           = ArgProperty[Boolean]()): Arguments =
@@ -55,7 +54,6 @@ trait ArgumentsCreation extends org.specs2.main.ArgumentsCreation with MutableAr
       sequential,
       batchSize,
       asap,
-      isolated,
       xonly,
       showOnly,
       color))
@@ -85,7 +83,6 @@ trait ArgumentsCreation extends org.specs2.main.ArgumentsCreation with MutableAr
                           stopOnSkip:           ArgProperty[Boolean]           = ArgProperty[Boolean](),
                           sequential:           ArgProperty[Boolean]           = ArgProperty[Boolean](),
                           asap:                 ArgProperty[Boolean]           = ArgProperty[Boolean](),
-                          isolated:             ArgProperty[Boolean]           = ArgProperty[Boolean](),
                           useCustomClassLoader: ArgProperty[Boolean]           = ArgProperty[Boolean](),
                           threadsNb:            ArgProperty[Int]               = ArgProperty[Int](),
                           specs2ThreadsNb:      ArgProperty[Int]               = ArgProperty[Int](),
@@ -102,7 +99,6 @@ trait ArgumentsCreation extends org.specs2.main.ArgumentsCreation with MutableAr
       stopOnSkip,
       sequential,
       asap,
-      isolated,
       useCustomClassLoader,
       threadsNb,
       specs2ThreadsNb,
@@ -151,6 +147,3 @@ trait ArgumentsCreation extends org.specs2.main.ArgumentsCreation with MutableAr
 
 
 }
-
-
-

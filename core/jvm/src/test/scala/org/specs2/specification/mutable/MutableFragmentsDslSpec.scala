@@ -78,12 +78,10 @@ class MutableFragmentsDslSpec(ee: ExecutionEnv) extends org.specs2.Spec with Typ
   def e7 = {
     val arguments = structure(new dsl with ArgumentsShortcuts with ArgumentsCreation {
       sequential
-      isolated
       "this" should { "have an example" in ok }
     }).arguments
 
-    (arguments.sequential must beTrue) and
-    (arguments.isolated must beTrue)
+    arguments.sequential must beTrue
   }
 
   def breaks1 = fragments(new dsl { "spec".title }).map(_.description) must
