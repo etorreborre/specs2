@@ -72,7 +72,6 @@ This reference guide for arguments is divided in several sections:
  `stopOnSkip`            | `false`                                          | skip all examples after the first skipped result
  `sequential`            | `false`                                          | don't execute examples concurrently
  `asap`                  | `false`                                          | execute all the examples before reporting them
- `isolated`              | `false`                                          | execute each example in its own specification to get "fresh" local variables
  `useCustomClassLoader`  | `false`                                          | use a custom class loader set on the `Env` to execute each example. By default sbt's classloader for running tests is attached to the `Env`
  `threadsNb`             | `min(Runtime.getRuntime.availableProcessors, 4)` | number of threads to use for concurrent execution inside the user examples
  `specs2ThreadsNb`       | `min(Runtime.getRuntime.availableProcessors, 4)` | number of threads to use for the concurrent execution of specs2 actions
@@ -158,7 +157,6 @@ There are also a few shortcuts:
  `stopOnIssue`                                                         | `args(stopOnIssue=true)`
  `stopOnSkip`                                                          | `args(stopOnSkip=true)`
  `sequential`                                                          | `args(sequential=true)`
- `isolated`                                                            | `args(isolated=true)`
  `xonly`                                                               | `args(xonly=true)`
  `showOnly(status: String)`                                            | `args(showOnly=status)`
  `fullStackTrace`                                                      | `args.report(traceFilter=NoStackTraceFilter)`

@@ -29,10 +29,10 @@ trait BlockDsl extends BlockCreation {
   }
 
   def addFragmentBlockWithText(text: String, f: =>Fragment): Fragment =
-    addBlock(text, f, addFragmentBlock)
+    addBlock(text, f)
 
   def addFragmentsBlockWithText(text: String, fs: =>Fragments)(implicit p1: ImplicitParam1): Fragments =
-    Use.ignoring(p1)(addBlock(text, fs, addFragmentsBlock))
+    Use.ignoring(p1)(addBlock(text, fs))
 
   /**
    * adding a conflicting implicit to warn the user when a `>>` was forgotten
@@ -48,14 +48,14 @@ private[specs2]
 trait BlockCreation extends FragmentBuilder with FragmentsFactory {
   private val factory = fragmentFactory
 
-  private[specs2] def addBlock[T](text: String, t: =>T, addFunction: (=>T) => T, location: StacktraceLocation = StacktraceLocation()): T = addFunction {
+  private[specs2] def addBlock[T](text: String, t: =>T, location: StacktraceLocation = StacktraceLocation()): T = {
 
     addStart
     if (hasSectionsForBlocks) addFragment(factory.section(text))
     addText(text, location)
     addFragment(factory.tab)
     addBreak
-    val result = addFunction(t)
+    val result = t
     addFragment(factory.backtab)
     if (hasSectionsForBlocks) addFragment(factory.section(text))
     addEnd

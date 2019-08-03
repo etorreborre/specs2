@@ -88,7 +88,6 @@ class ActionSpec extends Specification { def is = s2"""
 $NowLearnTo
 
  - use ${"arguments and tags" ~/ Selection} to select the examples to execute
- - run each example in ${"its own instance of the specification" ~/ Isolation}
 
 $vid
 

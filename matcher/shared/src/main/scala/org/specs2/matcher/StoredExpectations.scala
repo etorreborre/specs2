@@ -23,7 +23,7 @@ trait StoredExpectations extends Expectations {
       case other => other
     }.map(_.toResult)
     results.clear()
-    rs.toSeq
+    rs
   }
 
   def addLocation(message: String, location: String): String = {

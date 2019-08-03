@@ -42,7 +42,6 @@ case class Arguments (
   def stopOnIssue: Boolean            = execute.stopOnIssue
   def stopOnSkip: Boolean             = execute.stopOnSkip
   def sequential: Boolean             = execute.sequential
-  def isolated: Boolean               = execute.isolated
   def threadsNb: Int                  = execute.threadsNb
   def specs2ThreadsNb: Int            = execute.specs2ThreadsNb
   def batchSize: Int                  = execute.batchSize
