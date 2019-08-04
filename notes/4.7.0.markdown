@@ -1,0 +1,13 @@
+Scala Native version!
+
+## Improvements
+
+ * runs on Scala 2.11 for Scala Native thanks to @lolgab
+ * `form`, `gwt` and `markdown` are now crossprojects (@lolgab)
+ * *guide* mention that `minTestsOk` is equivalent to `minSuccessfulTests` (@jkleckner)
+ * usual thanks to @xuwei-k for updating dependencies
+ 
+## Fixes
+
+ * #754 remove quote from test of XML escape (@ashawley)
+ * #755 find package names with `SpecificationFinder` even when there are comments 
