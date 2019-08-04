@@ -29,7 +29,7 @@ val scala211 = "2.11.12"
 lazy val specs2Settings = Seq(
   organization := "org.specs2",
   specs2Version in GlobalScope := version.value,
-  scalazVersion in GlobalScope := "7.2.27",
+  scalazVersion in GlobalScope := "7.2.28",
   specs2ShellPrompt,
   scalaVersion := "2.12.8",
   crossScalaVersions := Seq(scalaVersion.value, scala211, "2.13.0"))
