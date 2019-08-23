@@ -95,8 +95,8 @@ lazy val commonJsNativeSettings = Seq(
 lazy val specs2Version = settingKey[String]("defines the current specs2 version")
 lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
 lazy val shapelessVersion = "2.3.3"
-lazy val catsVersion = "1.6.1"
-lazy val catsEffectVersion = "1.4.0"
+lazy val catsVersion = "2.0.0-RC1"
+lazy val catsEffectVersion = "2.0.0-RC1"
 
 val commonSettings =
   coreDefaultSettings  ++
@@ -131,14 +131,10 @@ lazy val analysisNative = analysis.native
 lazy val cats = crossProject(JSPlatform, JVMPlatform).in(file("cats")).
   settings(
     commonSettings,
-    libraryDependencies ++=
-      (if (scalaVersion.value == "2.13.0")
-          Seq("org.typelevel" % "cats-core_2.13.0-M5" % "1.6.0",
-              "org.typelevel" % "cats-effect_2.13.0-M5" % "1.2.0")
-        else
-          Seq("org.typelevel" %% "cats-core" % catsVersion,
-              "org.typelevel" %% "cats-effect" % catsEffectVersion)
-      ),
+    libraryDependencies ++= Seq(
+      "org.typelevel" %% "cats-core" % catsVersion,
+      "org.typelevel" %% "cats-effect" % catsEffectVersion
+    ),
     name := "specs2-cats"
   ).
   jsSettings(depends.jsTest, commonJsSettings).
