@@ -1,14 +1,34 @@
 package org.specs2
 package text
 
-import Regexes._
+import java.util.regex.Pattern
 
-class RegexesSpec extends Spec { def is = s2"""
- `matchesSafely` can be used to match with string which might be malformed regular expression
-   if the expression is well formed     $e1
-   if the expression is not well formed $e2
-"""
+import org.specs2.text.Regexes._
 
-  def e1 = "eric" matchesSafely ".*r.c"
-  def e2 = "][" matchesSafely "]["
+class RegexesSpec extends mutable.Spec {
+
+  "`matchesSafely` can be used to match with string which might be malformed regular expression" >> {
+    "if the expression is well formed" >> {
+      "eric" matchesSafely ".*r.c"
+    }
+
+    "if the expression is not well formed" >> {
+      "][" matchesSafely "]["
+    }
+  }
+
+  "`matchesSafely` can match special characters" >> {
+    "if the expression contains a newline" >> {
+      "a\nb" matchesSafely Pattern.quote("a\nb")
+    }
+
+    "if the expression contains a tab" >> {
+      "a\tb" matchesSafely Pattern.quote("a\tb")
+    }
+
+    "if the expression contains a carriage return" >> {
+      "a\rb" matchesSafely Pattern.quote("a\rb")
+    }
+  }
+
 }

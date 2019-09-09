@@ -19,7 +19,7 @@ trait Regexes {
      */
     def matchesSafely(p: String, enclosing: String = ""): Boolean = {
       val pattern = tryOrElse(Pattern.compile(p))(Pattern.compile(enclosing+Pattern.quote(p.trimEnclosing(enclosing))+enclosing))
-      pattern.matcher(s.removeAll("\n").removeAll("\r")).matches
+      pattern.matcher(s).matches
     }
 
     /** @return a regular expression String matching 's' inside another string, possibly multi-string */
