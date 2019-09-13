@@ -19,16 +19,17 @@ class RegexesSpec extends mutable.Spec {
 
   "`matchesSafely` can match special characters" >> {
     "if the expression contains a newline" >> {
-      "a\nb" matchesSafely Pattern.quote("a\nb")
+      "a\nb" matchesSafely "a\nb"
     }
 
     "if the expression contains a tab" >> {
-      "a\tb" matchesSafely Pattern.quote("a\tb")
+      "a\tb" matchesSafely "a\tb"
     }
 
     "if the expression contains a carriage return" >> {
-      "a\rb" matchesSafely Pattern.quote("a\rb")
+      "a\rb" matchesSafely "a\rb"
     }
   }
 
 }
+
