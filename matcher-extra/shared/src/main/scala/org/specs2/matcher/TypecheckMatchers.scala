@@ -3,6 +3,7 @@ package matcher
 
 import execute._
 import text.Regexes._
+import text.Trim._
 
 /**
  * Matchers for checking if a piece of code compiles or not
@@ -42,7 +43,8 @@ class TypecheckMatcher extends Matcher[Typechecked] {
 
 case class FailTypecheckMatcher(expected: String) extends Matcher[Typechecked] {
   def apply[S <: Typechecked](actual: Expectable[S]): MatchResult[S] = {
-    result(!actual.value.isSuccess && resultMessage(actual.value.result).exists(_ matchesSafely ".*"+expected+".*"),
+    result(!actual.value.isSuccess && resultMessage(actual.value.result)
+      .map(_.removeAll("\n").removeAll("\r")).exists(_ matchesSafely ".*"+expected+".*"),
       s"no compilation error",
       message(actual.value.result, expected), actual)
   }
