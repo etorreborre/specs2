@@ -1,8 +1,6 @@
 package org.specs2
 package text
 
-import java.util.regex.Pattern
-
 import org.specs2.text.Regexes._
 
 class RegexesSpec extends mutable.Spec {
