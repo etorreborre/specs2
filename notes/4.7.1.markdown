@@ -1,0 +1,10 @@
+Maintenance release
+
+## Improvements
+
+ * upgraded cats to `2.0.0`
+ 
+## Fixes
+
+ * #765 Allow matching special line characters with regex (thanks to @mantasak)
+ 
