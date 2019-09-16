@@ -31,7 +31,7 @@ lazy val specs2Settings = Seq(
   specs2Version in GlobalScope := version.value,
   scalazVersion in GlobalScope := "7.2.28",
   specs2ShellPrompt,
-  scalaVersion := "2.12.8",
+  scalaVersion := "2.12.10",
   crossScalaVersions := Seq(scalaVersion.value, scala211, "2.13.0"))
 
 lazy val versionSettings =
@@ -181,7 +181,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("c
     commonSettings,
     name := "specs2-core",
     libraryDependencies ++=
-      depends.paradise(scalaVersion.value) ++ 
+      depends.paradise(scalaVersion.value) ++
       Seq(
         depends.mockito % Test,
         depends.junit % Test)
@@ -565,15 +565,15 @@ lazy val publicationSettings = Seq(
 /**
  * NOTIFICATION
  */
-lazy val notificationSettings = Seq(
-  ghreleaseRepoOrg := "etorreborre",
-  ghreleaseRepoName := "specs2",
-  ghreleaseNotes := { tagName: TagName =>
-    // find the corresponding release notes
-    val notesFilePath = s"notes/${tagName.toUpperCase.replace("SPECS2-", "")}.markdown"
-    try scala.io.Source.fromFile(notesFilePath).mkString
-    catch { case t: Throwable => throw new Exception(s"the path $notesFilePath not found for tag $tagName") }
-  },
-  // just upload the notes
-  ghreleaseAssets := Seq()
-)
+ lazy val notificationSettings = Seq()
+//   ghreleaseRepoOrg := "etorreborre",
+//   ghreleaseRepoName := "specs2",
+//   ghreleaseNotes := { tagName: TagName =>
+//     // find the corresponding release notes
+//     val notesFilePath = s"notes/${tagName.toUpperCase.replace("SPECS2-", "")}.markdown"
+//     try scala.io.Source.fromFile(notesFilePath).mkString
+//     catch { case t: Throwable => throw new Exception(s"the path $notesFilePath not found for tag $tagName") }
+//   },
+//   // just upload the notes
+//   ghreleaseAssets := Seq()
+// )
