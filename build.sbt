@@ -95,8 +95,8 @@ lazy val commonJsNativeSettings = Seq(
 lazy val specs2Version = settingKey[String]("defines the current specs2 version")
 lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
 lazy val shapelessVersion = "2.3.3"
-lazy val catsVersion = "2.0.0-RC1"
-lazy val catsEffectVersion = "2.0.0-RC1"
+lazy val catsVersion = "2.0.0"
+lazy val catsEffectVersion = "2.0.0"
 
 val commonSettings =
   coreDefaultSettings  ++
@@ -537,7 +537,7 @@ lazy val providedDependenciesInAggregate = Seq("shapeless")
  * PUBLICATION
  */
 lazy val publicationSettings = Seq(
-  publishTo in Global := Some("staging" at "https://oss.sonatype.org/service/local/staging/deploy/maven2"),
+  publishTo in Global := sonatypePublishToBundle.value,
   publishMavenStyle := true,
   publishArtifact in Test := false,
   pomIncludeRepository := { x => false },
