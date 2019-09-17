@@ -149,14 +149,12 @@ lazy val common = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file(
     libraryDependencies ++=
       depends.paradise(scalaVersion.value) ++
       Seq(depends.reflect(scalaOrganization.value, scalaVersion.value),
-        depends.scalaXML),
+        depends.scalaXML, depends.scalacheck.value % Test),
     commonSettings,
     name := "specs2-common"
   ).
   platformsSettings(JVMPlatform, JSPlatform)(
     libraryDependencies ++= depends.scalaParser.value,
-    libraryDependencies +=
-      "org.scalacheck" %%% "scalacheck" % "1.14.0" % Test
   ).
   jsSettings(depends.jsTest, commonJsSettings).
   jvmSettings(commonJvmSettings).
@@ -164,8 +162,6 @@ lazy val common = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file(
     commonNativeSettings,
     depends.nativeTest,
     libraryDependencies ++= depends.scalaParserNative.value,
-    libraryDependencies +=
-      "com.github.lolgab" %%% "scalacheck" % "1.14.1" % Test
   ).
   platformsSettings(JSPlatform, NativePlatform)(
     commonJsNativeSettings
@@ -391,16 +387,11 @@ lazy val scalacheck = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .in(file("scalacheck")).
   settings(
     commonSettings,
-    name := "specs2-scalacheck"
+    name := "specs2-scalacheck",
+    libraryDependencies += depends.scalacheck.value
   ).
   jsSettings(depends.jsTest, commonJsSettings).
   jvmSettings(depends.jvmTest, commonJvmSettings).
-  platformsSettings(JVMPlatform, JSPlatform)(
-    libraryDependencies += "org.scalacheck" %%% "scalacheck" % "1.14.0"
-  ).
-  nativeSettings(depends.nativeTest, commonNativeSettings,
-    libraryDependencies += "com.github.lolgab" %%% "scalacheck" % "1.14.1"
-  ).
   platformsSettings(JSPlatform, NativePlatform)(
     commonJsNativeSettings
   ).
