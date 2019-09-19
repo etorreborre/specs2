@@ -1,6 +1,5 @@
 import sbt._
 import Defaults._
-import com.typesafe.sbt.pgp.PgpKeys._
 import java.util.{Date, TimeZone}
 import java.text.SimpleDateFormat
 // shadow sbt-scalajs' crossProject and CrossType until Scala.js 1.0.0 is released

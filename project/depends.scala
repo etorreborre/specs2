@@ -23,7 +23,7 @@ object depends {
   def jvmTest =
     libraryDependencies ++= Seq(
       "org.scala-sbt" % "test-interface" % "1.0",
-      "org.scala-js" %% "scalajs-stubs" % scalaJSVersion % "provided")
+      "org.scala-js" %% "scalajs-stubs" % "1.0.0" % "provided")
 
   def jsTest =
     Seq(libraryDependencies ++= Seq("org.scala-js" %% "scalajs-test-interface" % scalaJSVersion),
