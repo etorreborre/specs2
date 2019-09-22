@@ -23,7 +23,6 @@ class EventuallyResultsSpec extends Specification with ResultMatchers {
     eventually(iterator.next)
   }
 
-
   "If all retries fail, the result will eventually fail" in {
     val iterator = Iterator.continually(Failure())
     eventually(iterator.next).not
