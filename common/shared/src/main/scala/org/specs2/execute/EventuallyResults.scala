@@ -11,29 +11,45 @@ import scala.concurrent.duration._
 trait EventuallyResults {
 
   /**
+   * @param sleep the function applied on the retry number (first is 1)
    * @return a matcher that will retry the nested matcher a given number of times
    */
-  def eventually[T : AsResult](retries: Int, sleep: Duration)(result: =>T): T = {
-    def retry(retries: Int, sleep: Duration, r: =>T): T = {
-      if (retries <= 1) {
-        r
+  def eventually[T : AsResult](retries: Int, sleep: Int => Duration)(result: =>T): T = {
+    val max = retries - 1
+
+    @annotation.tailrec def retry(retried: Int): T = {
+      if (retried == max) {
+        result
       } else {
-        lazy val t = r
-        val result = ResultExecution.execute(t)(AsResult(_))
-        if (result.isSuccess)
+        lazy val t = result
+        val check = ResultExecution.execute(t)(AsResult(_))
+
+        if (check.isSuccess) {
           t
-        else {
-          Thread.sleep(sleep.toMillis)
-          retry(retries - 1, sleep, r)
+        } else {
+          val pause = sleep(retried).toMillis
+          Thread.sleep(pause)
+          retry(retried + 1)
         }
       }
     }
-    retry(retries, sleep, result)
+
+    if (retries <= 1) {
+      result
+    } else {
+      retry(0)
+    }
   }
+
+  /**
+   * @return a matcher that will retry the nested matcher a given number of times
+   */
+  def eventually[T : AsResult](retries: Int, sleep: Duration)(result: =>T): T =
+    eventually[T](retries, (_: Int) => sleep)(result)
 
   /** @return a result that is retried at least 40 times until it's ok */
   def eventually[T : AsResult](result: =>T): T =
-    eventually(40, 100.millis)(result)
+    eventually(40, (_: Int) => 100.millis)(result)
 }
 
 object EventuallyResults extends EventuallyResults

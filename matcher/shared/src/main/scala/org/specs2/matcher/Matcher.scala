@@ -218,6 +218,7 @@ trait Matcher[-T] { outer =>
    * of 100 milliseconds
    */
   def eventually: Matcher[T] = EventuallyMatchers.eventually(this)
+
   /**
    * @return a matcher that needs to eventually match, after a given number of retries
    * and a sleep time
