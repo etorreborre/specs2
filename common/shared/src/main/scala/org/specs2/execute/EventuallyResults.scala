@@ -13,6 +13,12 @@ trait EventuallyResults {
   /**
    * @param sleep the function applied on the retry number (first is 1)
    * @return a matcher that will retry the nested matcher a given number of times
+   *
+   * {{{
+   * eventually(retries = 2, sleep = _ * 100.milliseconds) {
+   *   aResult
+   * }
+   * }}}
    */
   def eventually[T : AsResult](retries: Int, sleep: Int => Duration)(result: =>T): T = {
     val max = retries - 1
