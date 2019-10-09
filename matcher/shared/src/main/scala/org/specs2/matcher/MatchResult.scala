@@ -85,8 +85,17 @@ trait MatchResult[+T] extends ResultLike {
     if (m == null) apply(new BeNull)
     else apply(m)
   }
-  def be[S >: T <: AnyRef](s: S) = {
-    apply(new BeTheSameAs(s))
+  def be[S >: T <: AnyRef](s: S): MatchResult[S] = {
+    // we need to distinguish the cases of
+    // "xxx must not be matcher"
+    // and
+    // "xxx must not be yyy"
+    s match {
+      case m: Matcher[T] =>
+        apply(m)
+      case _ =>
+        apply(new BeTheSameAs(s))
+    }
   }
   /** apply the matcher */
   def have(m: Matcher[T]) = apply(m)
