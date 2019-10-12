@@ -14,10 +14,25 @@ case class CommandLine(_arguments: Seq[String] = Seq()) extends ShowArgs {
   def arguments: Seq[String] = _arguments
   def contains(a: String) = arguments contains a
   def isDefined(name: String) = value(name).isDefined
-  /** @return true if a switch is present or a flag is defined */
+
+  /**
+   * @return true if a specific string is present in the list of arguments from the command line
+   *         or if an attribute with that name (and any value) has been defined
+   */
   def isSet(name: String) = contains(name) || isDefined(name)
 
-  def value(name: String) = Arguments.value(name)(_arguments, SystemProperties)
+  /**
+   * @return the value for a given attribute
+   *         attribute names and values are defined in a positional way where an attribute name is always succeeded
+   *         with an attribute value. For example:
+   *
+   *         name1 value1 name2 value2
+   *
+   * values can also be retrieved from system properties set with the regular jvm syntax `-Dname=value`
+   */
+  def value(name: String): Option[String] =
+    Arguments.value(name)(_arguments, SystemProperties)
+
   def valueOr(name: String, defaultValue: String) = value(name).getOrElse(defaultValue)
 
   def map(name: String) = value(name).map(vs => Map(vs.split(",").map(v => (v.split("=")(0), v.split("=")(1))): _*))
