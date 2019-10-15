@@ -12,14 +12,14 @@ class ValidationMatchersSpec extends Spec with ValidationMatchers with ResultMat
   ${ Success(1) must beSuccess(Seq(true, true)) }
   ${ Success(1) must beSuccess(===(1)) }
   ${ Success(Seq(1)) must beSuccess(===(Seq(1))) }
-  ${ Failure(1) must not be right(1) }
+  ${ Failure("wrong") must not(beFailure("bad")) }
   ${ Success(1) must beSuccess.like { case i => i must be_>(0) } }
   ${ (Success(1) must beSuccess.like { case i => i must be_<(0) }) returns "Success(1) is Success but 1 is not less than 0" }
 
   beFailure checks if an element is Failure(_)
   ${ Failure(1) must beFailure(1) }
   ${ Failure(1) must beFailure(===(1)) }
-  ${ Success(1) must not be left(1) }
+  ${ Success(1) must not(beSuccess(2)) }
   ${ Failure(1) must beFailure.like { case i => i must be_>(0) } }
                                                                                                                         """
 
