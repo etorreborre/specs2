@@ -18,7 +18,7 @@ lazy val specs2 = project.in(file(".")).
   ).aggregate(
     fpJVM, catsJVM, commonJVM, matcherJVM, coreJVM, matcherExtraJVM, scalazJVM, html,
     analysisJVM, shapelessJVM, formJVM, markdownJVM, gwtJVM, junitJVM, scalacheckJVM, mockJVM,
-    tests, fpJS, commonJS, matcherJS, coreJS, matcherExtraJS, scalazJS, analysisJS,
+    tests, fpJS, catsJS, commonJS, matcherJS, coreJS, matcherExtraJS, scalazJS, analysisJS,
     shapelessJS, formJS, markdownJS, gwtJS, junitJS, scalacheckJS, mockJS
   )
 
