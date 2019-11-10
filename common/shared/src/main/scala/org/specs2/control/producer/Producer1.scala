@@ -1,11 +1,12 @@
 package org.specs2.control
 package producer
 
-import org.specs2.fp._
-import org.specs2.fp.syntax._
+import org.specs2._
+import fp._, syntax._
 import Producer1._
-import transducers1._
+import Transducer1._
 import Action1._
+import origami._
 
 sealed trait Stream1[A]
 case class Done1[A]() extends Stream1[A]
@@ -118,6 +119,165 @@ object Producer1 extends Producers1 {
       one(a)
   }
 
+  implicit class Producer1Ops[A](p: Producer1[A]) {
+    def filter(f: A => Boolean): Producer1[A] =
+      Producer1.filter(p)(f)
+
+    def sliding(n: Int): Producer1[List[A]] =
+      Producer1.sliding(n)(p)
+
+    def chunk(n: Int): Producer1[A] =
+      Producer1.chunk(n)(p)
+
+    def >(p2: Producer1[A]): Producer1[A] =
+      p append p2
+
+    def |>[B](t: Transducer1[A, B]): Producer1[B] =
+      pipe(t)
+
+    def pipe[B](t: Transducer1[A, B]): Producer1[B] =
+      Producer1.pipe(p, t)
+
+    def fold[B, S](start: Action1[S], f: (S, A) => Action1[S], end: S => Action1[B]): Action1[B] =
+      Producer1.fold(p)(start, f, end)
+
+    def fold[S, B](f: Fold[Action1[?], A, B]): Action1[B] =
+      Producer1.fold(p)(f.start, f.fold, f.end)
+
+    def observe[S](start: Action1[S], f: (S, A) => S, end: S => Action1[Unit]): Producer1[A] =
+      Producer1.observe(p)(start, f, end)
+
+    def runLast: Action1[Option[A]] =
+      Producer1.runLast(p)
+
+    def runList: Action1[List[A]] =
+      Producer1.runList(p)
+
+    def repeat: Producer1[A] =
+      Producer1.repeat(p)
+  }
+
+  implicit class Producer1ListOps[A](p: Producer1[List[A]]) {
+    def flattenList: Producer1[A] =
+      Producer1.flattenList(p)
+  }
+
+  implicit class Producer1SeqOps[A](p: Producer1[Seq[A]]) {
+    def flattenSeq: Producer1[A] =
+      Producer1.flattenSeq(p)
+  }
+
+  implicit class Producer1FlattenOps[A](p: Producer1[Producer1[A]]) {
+    def flatten: Producer1[A] =
+      Producer1.flatten(p)
+  }
+
+  implicit class Producer1ActionOps[A](p: Producer1[Action1[A]]) {
+    def sequence[F[_]](n: Int): Producer1[A] =
+      Producer1.sequence[F, A](n)(p)
+  }
+
+  implicit class Producer1Transducer1Ops[A](p: Producer1[A]) {
+    def receiveOr[B](f: A => Producer1[B])(or: =>Producer1[B]): Producer1[B] =
+      p |> transducers1.receiveOr(f)(or)
+
+    def receiveOption[B]: Producer1[Option[A]] =
+      p |> transducers1.receiveOption
+
+    def drop(n: Int): Producer1[A] =
+      p |> transducers1.drop(n)
+
+    def dropRight(n: Int): Producer1[A] =
+      p |> transducers1.dropRight(n)
+
+    def take(n: Int): Producer1[A] =
+      p |> transducers1.take(n)
+
+    def takeWhile(f: A => Boolean): Producer1[A] =
+      p |> transducers1.takeWhile(f)
+
+    def zipWithPrevious: Producer1[(Option[A], A)] =
+      p |> transducers1.zipWithPrevious
+
+    def zipWithPreviousN(n: Int): Producer1[(List[A], A)] =
+      p |> transducers1.zipWithPreviousN(n)
+
+    def zipWithNext: Producer1[(A, Option[A])] =
+      p |> transducers1.zipWithNext
+
+    def zipWithNextN(n: Int): Producer1[(A, List[A])] =
+      p |> transducers1.zipWithNextN(n)
+
+    def zipWithPreviousAndNext: Producer1[(Option[A], A, Option[A])] =
+      p |> transducers1.zipWithPreviousAndNext
+
+    def zipWithPreviousAndNextN(n: Int): Producer1[(List[A], A, List[A])] =
+      p |> transducers1.zipWithPreviousAndNextN(n)
+
+    def zipWithIndex: Producer1[(A, Int)] =
+      p |> transducers1.zipWithIndex
+
+    def intersperse(a: A): Producer1[A] =
+      p |> transducers1.intersperse(a: A)
+
+    def first: Producer1[A] =
+      p |> transducers1.first
+
+    def last: Producer1[A] =
+      p |> transducers1.last
+
+    def scan[B](start: B)(f: (B, A) => B): Producer1[B] =
+      p |> transducers1.scan(start)(f)
+
+    def scan1(f: (A, A) => A): Producer1[A] =
+      p |> transducers1.scan1(f)
+
+    def state[B, S](start: S)(f: (A, S) => (B, S)): Producer1[B] =
+      p |> transducers1.state(start)(f)
+
+    def producerState[B, S](start: S, last: Option[S => Producer1[B]] = None)(f: (A, S) => (Producer1[B], S)): Producer1[B] =
+      p |> transducers1.producerState(start, last)(f)
+
+    def reduce(f: (A, A) => A): Producer1[A] =
+      p |> transducers1.reduce(f)
+
+    def reduceSemigroup(implicit semi: Semigroup[A]): Producer1[A] =
+      p |> transducers1.reduceSemigroup
+
+    def reduceMonoid(implicit monoid: Monoid[A]): Producer1[A] =
+      p |> transducers1.reduceMonoid
+
+    def reduceMap[B : Monoid](f: A => B): Producer1[B] =
+      p |> transducers1.reduceMap[A, B](f)
+  }
+
+  implicit class Producer1ResourcesOps[A](p: Producer1[A]) {
+    def thenFinally(e: Action1[Unit]): Producer1[A] =
+      Producer1[A](p.run flatMap {
+        case Done1() => Action1.thenFinally(Producer1.done[A].run, e)
+        case One1(a) => Action1.thenFinally(Producer1.one[A](a).run, e)
+        case More1(as, next) => protect(More1(as, Producer1ResourcesOps(next).thenFinally(e)))
+      })
+
+    def `finally`(e: Action1[Unit]): Producer1[A] =
+      p.thenFinally(e)
+
+    def attempt: Producer1[Throwable Either A] =
+      Producer1[Throwable Either A](Action1.attempt(p.run) map {
+        case Right(Done1()) => Done1()
+        case Right(One1(a)) => One1(Right(a))
+        case Right(More1(as, next)) => More1(as.map(Either.right), next.map(Either.right))
+
+        case Left(t) => One1(Either.left(t))
+      })
+  }
+
+  def bracket1[A, B, C](open: Action1[A])(step: A => Producer1[B])(close: A => Action1[C]): Producer1[B] =
+    Producer1[B] {
+      open flatMap { resource =>
+        (step(resource) `finally` close(resource).map(_ => ())).run
+      }
+    }
 }
 
 trait Producers1 {
@@ -160,7 +320,7 @@ trait Producers1 {
   def emitSeq[A](elements: Seq[A]): Producer1[A] =
     elements.headOption match {
       case None    => done[A]
-      case Some(a) => Producer1(protect(More[A](elements.headOption.toList, emitSeq(elements.tail))))
+      case Some(a) => Producer1(protect(More1[A](elements.headOption.toList, emitSeq(elements.tail))))
     }
 
   def eval[A](a: Action1[A]): Producer1[A] =
@@ -316,7 +476,7 @@ trait Producers1 {
     producer.flatMap(emit[A])
 
   def sequence[F[_], A](n: Int)(producer: Producer1[Action1[A]]) =
-    sliding(n)(producer).flatMap { actions => Producer1.emitAction1(Action1.sequenceA(actions)) }
+    sliding(n)(producer).flatMap { actions => Producer1.emitAction1(Traverse[List].sequence(actions)) }
 
   private[producer] def cata[A, B](producer: Producer1[A])(onDone: Producer1[B], onOne: A => Producer1[B], onMore: (List[A], Producer1[A]) => Producer1[B]): Producer1[B] =
     Producer1[B](producer.run.flatMap {

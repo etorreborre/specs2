@@ -1,8 +1,9 @@
 package org.specs2.control
 package producer
 
-import org.specs2.control.producer.Producer._
-import org.specs2.fp._
+import producer.Producer1._
+import Transducer1._
+import org.specs2.fp._, syntax._
 
 trait Transducers1 {
 
@@ -10,7 +11,7 @@ trait Transducers1 {
     (p: Producer1[A]) => p
 
   def filter[A, B](f: A => Boolean): Transducer1[A, A] =
-    (p: Producer1[A]) => Producer.filter(p)(f)
+    (p: Producer1[A]) => Producer1.filter(p)(f)
 
   def receive[A, B](f: A => Producer1[B]): Transducer1[A, B] =
     (p: Producer1[A]) => p.flatMap(f)
@@ -24,18 +25,18 @@ trait Transducers1 {
   def producerState[A, B, S](start: S, last: Option[S => Producer1[B]] = None)(f: (A, S) => (Producer1[B], S)): Transducer1[A, B] =
     (producer: Producer1[A]) => {
       def go(p: Producer1[A], s: S): Producer1[B] =
-        Producer1(p.run flatMap {
-          case Done() =>
+        Producer1(p.run.flatMap {
+          case Done1() =>
             last.map(_(s).run).getOrElse(done.run)
 
-          case One(a) =>
+          case One1(a) =>
             val (b, news) = f(a, s)
             last match {
               case None => b.run
               case Some(l) => (b append l(news)).run
             }
 
-          case More(as, next) =>
+          case More1(as, next) =>
             val (bs, news) = as.drop(1).foldLeft(f(as.head, s)) { case ((pb, s1), a) =>
               val (pb1, s2) = f(a, s1)
               (pb append pb1, s2)
@@ -95,7 +96,7 @@ trait Transducers1 {
   def stateEff[A, B, S](start: S)(f: (A, S) => (Action1[B], S)): Transducer1[A, Action1[B]] = (producer: Producer1[A]) => {
     def go(p: Producer1[A], s: S): Producer1[Action1[B]] =
       Producer1(p.run flatMap {
-        case Done() => done.run
+        case Done1() => done.run
         case One1(a) => one(f(a, s)._1).run
         case More1(as, next) =>
           as match {
@@ -260,7 +261,6 @@ trait Transducers1 {
     (p: Producer1[A]) =>
       ((p |> zipWithPreviousN(n)) zip (p |> zipWithNextN(n))).map { case ((prev, a), (_, next)) => (prev, a, next) }
 
-
   def zipWithIndex[A]: Transducer1[A, (A, Int)] =
     zipWithState[A, Int](0)((_, n: Int) => n + 1)
 
@@ -296,7 +296,7 @@ trait Transducers1 {
             val interspersed = as.init.foldRight(as.lastOption.toList)(_ +: in +: _)
 
             (emit(interspersed) append
-              Producer1(next.run flatMap {
+              Producer1(next.run.flatMap {
                 case Done1() => done[A].run
                 case _ =>      (one[A](in) append intersperse(in).apply(next)).run
               })).run
@@ -307,6 +307,21 @@ trait Transducers1 {
     (producer: Producer1[A]) => cata(producer)(onDone, onOne, onMore)
 }
 
+object Transducer1 {
+  type Transducer1[A, B] = Producer1[A] => Producer1[B]
 
+  implicit class Transducer1Ops[A, B](t: Transducer1[A, B]) {
+    def |>[C](next: Transducer1[B, C]): Transducer1[A, C] =
+      andThen(next)
 
+    def andThen[C](next: Transducer1[B, C]): Transducer1[A, C] =
+      (p: Producer1[A]) => next(t(p))
 
+    def flatMap[C](f: B => Producer1[C]): Transducer1[A, C] =
+      (p: Producer1[ A]) => t(p).flatMap(f)
+
+    def map[C](f: B => C): Transducer1[A, C] =
+      (p: Producer1[ A]) => t(p).map(f)
+  }
+
+}

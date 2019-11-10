@@ -27,27 +27,32 @@ object Labelled {
           Labelled(b, messages ++ messages2)
       }
 
-    def ap[A, B](fa: =>Labelled[A])(ff: =>Labelled[A => B]): Labelled[B] = {
+    override def ap[A, B](fa: =>Labelled[A])(ff: =>Labelled[A => B]): Labelled[B] = {
       val messages = fa.messages ++ ff.messages
       Labelled(ff.a(fa.a), messages)
     }
 
     @tailrec
-    def tailrecM[A, B](a: A)(f: A => Labelled[Either[A, B]]): Labelled[B] =
+    override def tailrecM[A, B](a: A)(f: A => Labelled[Either[A, B]]): Labelled[B] =
       f(a) match {
         case Labelled(Right(b), messages) => Labelled(b, messages)
         case Labelled(Left(a), messages) => tailrecM(a)(f)
       }
-    def toString = "Monad[Labelled]"
+
+    override def toString: String =
+      "Monad[Labelled]"
   }
 }
 
-trait ExecutionIssue
+trait ExecutionIssue extends Throwable
 case class ThrowableIssue(t: Throwable) extends ExecutionIssue
 case class FailureIssue(t: String) extends ExecutionIssue
 case class FinalizationIssue(t: Throwable) extends ExecutionIssue
 
-case class Action1[A](runNow: ExecutorServices => Future[Execute[A]], timeout: Option[FiniteDuration] = None)
+case class Action1[A](runNow: ExecutorServices => Future[Execute[A]], timeout: Option[FiniteDuration] = None, last: Vector[Action1[Unit]] = Vector.empty) {
+  def addLast(action: Action1[Unit]): Action1[A] =
+    copy(last = last :+ action)
+}
 
 object Action1 {
   type Execute[A] = Either[ExecutionIssue, Labelled[A]]
@@ -61,9 +66,22 @@ object Action1 {
   def protect[A](a: =>A): Action1[A] =
     Action1Monad.point(a)
 
+  def attempt[A](action: =>Action1[A]): Action1[Either[ExecutionIssue, A]] =
+    Action1 { es =>
+      implicit val ec: ExecutionContext = es.executionContext
+      action.runNow(es).map {
+        case Left(e) => Right(Labelled(Left(e)))
+        case Right(Labelled(a, ms)) => Right(Labelled(Right(a), ms))
+      }
+    }
+
+  def thenFinally[A](action: Action1[A], last: Action1[Unit]): Action1[A] =
+    action.addLast(last)
+
   implicit val Action1Monad: Monad[Action1[?]] = new Monad[Action1[?]] {
     def point[A](a: =>A): Action1[A] =
       Action1(_ => Future.successful(Right(Labelled(a))))
+
     def bind[A, B](fa: Action1[A])(f: A => Action1[B]): Action1[B] =
       Action1[B] { es =>
         implicit val ec: ExecutionContext = es.executionContext
@@ -79,6 +97,37 @@ object Action1 {
         }
     }
 
+    override def ap[A, B](fa: =>Action1[A])(ff: =>Action1[A => B]): Action1[B] = {
+      Action1 { es: ExecutorServices =>
+        implicit val ec: ExecutionContext = es.executionContext
+        fa.runNow(es).zip(ff.runNow(es)).map {
+          case (Left(e), _) => Left(e)
+          case (_, Left(e)) => Left(e)
+          case (Right(l1), Right(l2)) => Right(l1.ap(l2))
+        }
+      }
+    }
+
+   override def tailrecM[A, B](a: A)(f: A => Action1[Either[A, B]]): Action1[B] =
+      Action1[B] { es =>
+        implicit val ec: ExecutionContext = es.executionContext
+        def loop(va: A, ms1: Vector[Message] = Vector.empty): Future[Execute[B]] =
+          f(va).runNow(es).flatMap {
+            case Left(e) => Future.successful(Left(e))
+            case Right(Labelled(Right(b), ms2)) => Future.successful(Right(Labelled(b, ms1 ++ ms2)))
+            case Right(Labelled(Left(a), ms2)) => loop(a, ms1 ++ ms2)
+          }
+        loop(a)
+      }
+
+    override def toString: String =
+      "Monad[Action1]"
+  }
+
+  implicit val Action1Applicative: Applicative[Action1[?]] = new Applicative[Action1[?]] {
+    def point[A](a: =>A): Action1[A] =
+      Action1(_ => Future.successful(Right(Labelled(a))))
+
     def ap[A, B](fa: =>Action1[A])(ff: =>Action1[A => B]): Action1[B] = {
       Action1 { es: ExecutorServices =>
         implicit val ec: ExecutionContext = es.executionContext
@@ -90,19 +139,10 @@ object Action1 {
       }
     }
 
-    def tailrecM[A, B](a: A)(f: A => Action1[Either[A, B]]): Action1[B] =
-      Action1[B] { es =>
-        implicit val ec: ExecutionContext = es.executionContext
-        def loop(va: A, ms1: Vector[Message] = Vector.empty): Future[Execute[B]] =
-          f(va).runNow(es).flatMap {
-            case Left(e) => Future.successful(Left(e))
-            case Right(Labelled(Right(b), ms2)) => Future.successful(Right(Labelled(b, ms1 ++ ms2)))
-            case Right(Labelled(Left(a), ms2)) => loop(a, ms1 ++ ms2)
-          }
-        loop(a)
-      }
-    def toString = "Monad[Action1]"
+    override def toString: String =
+      "Applicative[Action1]"
   }
+
 }
 
 case class Operation1[A](operation: Execute[A])
