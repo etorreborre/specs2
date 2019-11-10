@@ -12,7 +12,6 @@ import ErrorEffect.{Error, ErrorOrOk, exception, fail}
 import ConsoleEffect._
 import WarningsEffect._
 import org.specs2.control.producer._
-import org.specs2.concurrent._
 import scala.concurrent._
 import FutureEffect._
 
@@ -24,70 +23,6 @@ package object control {
   type Logger = String => Unit
   lazy val noLogging = (s: String) => ()
   lazy val consoleLogging = (s: String) => println(s)
-
-  sealed trait Message
-  case object NoMessage extends Message
-  case class ConsoleMessage(m: String) extends Message
-  case class WarningMessage(m: String) extends Message
-
-  case class Labelled[A](a: A, message: Message = Vector[Message] = Vector.empty)
-
-  trait ExecutionIssue
-  case class ThrowableIssue(t: Throwable) extends ExecutionIssue
-  case class FailureIssue(t: String) extends ExecutionIssue
-  case class FinalizationIssue(t: Throwable) extends ExecutionIssue
-
-  type Execute[A] = Either[ExecutionIssue, Labelled[A]]
-
-  case class Action1[A](runNow: ExecutorServices => Future[Execute[A]], timeout: Option[FiniteDuration] = None)
-
-  object Action1 {
-    def pure[A](a: =>A): Action1[A] =
-      Action1Monad.point(a)
-
-    def unit: Action1[Unit] =
-      pure(())
-
-    def protect[A](a: =>A): Action1[A] =
-      Action1Monad.point(a)
-
-    implicit val Action1Monad: Monad[Action1[?]] = new Monad[Action1[?]] {
-      def point[A](a: =>A): Action1[A] =
-        Action1(_ => Future.successful(Right(Labelled(a))))
-
-      def bind[A, B](fa: Action1[A])(f: A => Action1[B]): Action1[B] =
-        Action1[B](es => fa.runNow(es).flatMap {
-          case Left(e) =>
-          case Right(Labelled(a, message)) =>
-            val (b, f(a).runNow(es))(es.executionContext)
-        }
-
-      def ap[A, B](fa: =>Action1[A])(ff: =>Action1[A => B]): Action1[B] = {
-        val newRunNow= { es: ExecutorServices =>
-          implicit val ec: ExecutionContext = es.executionContext
-
-          Action1(ff.runNow(es)).flatMap(identity).flatMap { f =>
-            Action1(fa.runNow(es)).flatMap(identity).map(f)
-          }
-        }
-        Action1(newRunNow)
-      }
-
-      def tailrecM[A, B](a: A)(f: A => Action1[Either[A, B]]): Action1[B] =
-        Action1[B] { es =>
-          def loop(va: A): Future[B] = f(va).runNow(es).flatMap {
-            case Left(na) => loop(na)
-            case Right(nb) => Future.successful(nb)
-          }(es.executionContext)
-          loop(a)
-        }
-
-      def toString = "Monad[Action1]"
-    }
-
-
-  }
-  case class Operation1[A](operation: Execute[A])
 
   type ActionStack = Fx.fx5[TimedFuture, ErrorOrOk, Console, Warnings, Safe]
   type OperationStack = Fx.fx4[ErrorOrOk, Console, Warnings, Safe]
