@@ -51,3 +51,18 @@ class AllExpectationsSpecificationWithNotImplementedError extends mutable.Specif
     3 === 4
   }
 }
+
+class AllExpectationsSpecificationWithSkipped extends org.specs2.Specification with AllExpectations { def is = s2"""
+  all expectations with a skipped value $e1
+  all expectations with a skipped value and a failure $e2
+"""
+
+  def e1 = {
+    skipped("skipped message")
+  }
+
+  def e2 = {
+    failure("failure message")
+    skipped("skipped message")
+  }
+}
