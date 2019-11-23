@@ -39,7 +39,7 @@ trait Classes extends ClassOperations {
   def createInstanceEither[T <: AnyRef](className: String, loader: ClassLoader, defaultInstances: =>List[AnyRef] = Nil)(implicit m: ClassTag[T]): Operation[Throwable Either T] =
     loadClassEither(className, loader) >>= { tc: Throwable Either Class[T] =>
       tc match {
-        case Left(t) => Operations.ok(Left(t))
+        case Left(t) => Operation.pure(Left(t))
         case Right(klass) =>
           findInstance[T](klass, loader, defaultInstances,
             klass.getDeclaredConstructors.toList.filter(_.getParameterTypes.size <= 1).sortBy(_.getParameterTypes.size)).map(Right(_))

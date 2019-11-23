@@ -1,7 +1,5 @@
 package org.specs2.concurrent
 
-import org.specs2.control.eff.Evaluated
-
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.FiniteDuration
 import java.util.concurrent._
@@ -9,43 +7,41 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 import org.specs2.main._
 import org.specs2.control._
-import org.specs2.control.eff._
-import org.specs2.control.eff.ConsoleEffect._
 
-case class ExecutorServices(executorServiceEval:          Evaluated[ExecutorService],
-                            executionContextEval:         Evaluated[ExecutionContext],
-                            scheduledExecutorServiceEval: Evaluated[ScheduledExecutorService],
-                            schedulerEval:                Evaluated[Scheduler],
-                            shutdown:                     Evaluated[Unit]) {
+case class ExecutorServices(executorServiceEval:          () => ExecutorService,
+                            executionContextEval:         () => ExecutionContext,
+                            scheduledExecutorServiceEval: () => ScheduledExecutorService,
+                            schedulerEval:                () => Scheduler,
+                            shutdown:                     () => Unit) {
 
   private val started = new AtomicBoolean(false)
 
   implicit lazy val executorService: ExecutorService = {
     started.set(true)
-    executorServiceEval.value
+    executorServiceEval()
   }
 
   implicit lazy val scheduledExecutorService: ScheduledExecutorService = {
     started.set(true)
-    scheduledExecutorServiceEval.value
+    scheduledExecutorServiceEval()
   }
 
   implicit lazy val executionContext: ExecutionContext = {
     started.set(true)
-    executionContextEval.value
+    executionContextEval()
   }
 
   implicit lazy val scheduler: Scheduler = {
     started.set(true)
-    schedulerEval.value
+    schedulerEval()
   }
 
   def shutdownNow(): Unit =
-    if (started.get) shutdown.value
+    if (started.get) shutdown()
 
   /** convenience method to shutdown the services when the final future has completed */
   def shutdownOnComplete[A](future: scala.concurrent.Future[A]): ExecutorServices = {
-    future.onComplete(_ => shutdown.value)
+    future.onComplete(_ => shutdown())
     this
   }
 
@@ -86,28 +82,28 @@ object ExecutorServices {
       createExecutionContext(executorService, arguments.verbose, systemLogger)
 
     ExecutorServices(
-      Memoized(executorService),
-      Memoized(executionContext),
-      Memoized(scheduledExecutorService),
-      Memoized(Schedulers.schedulerFromScheduledExecutorService(scheduledExecutorService)),
-      Memoized { try executorService.shutdown finally scheduledExecutorService.shutdown }
+      () => executorService,
+      () => executionContext,
+      () => scheduledExecutorService,
+      () => Schedulers.schedulerFromScheduledExecutorService(scheduledExecutorService),
+      () => { try executorService.shutdown finally scheduledExecutorService.shutdown }
     )
   }
 
   def fromExecutionContext(ec: ExecutionContext): ExecutorServices =
     ExecutorServices(
-      Memoized(fixedExecutor(1, "unused")),
-      Memoized(ec),
-      Memoized(scheduledExecutor(1, "unused")),
-      Memoized(Schedulers.default),
-      Memoized(()))
+      () => fixedExecutor(1, "unused"),
+      () => ec,
+      () => scheduledExecutor(1, "unused"),
+      () => Schedulers.default,
+      () => ())
 
   def fromGlobalExecutionContext: ExecutorServices =
     fromExecutionContext(scala.concurrent.ExecutionContext.global)
 
   def createExecutionContext(executorService: ExecutorService, verbose: Boolean, systemLogger: Logger) =
     ExecutionContext.fromExecutorService(executorService,
-      (t: Throwable) => {runConsoleToPrinter(systemLogger)(logThrowable[Fx1[Console]](t, verbose)); ()})
+      (t: Throwable) => { systemLogger.logThrowable(t, verbose) })
 
   def fixedExecutor(threadsNb: Int, name: String): ExecutorService =
     Executors.newFixedThreadPool(threadsNb, NamedThreadFactory(name))

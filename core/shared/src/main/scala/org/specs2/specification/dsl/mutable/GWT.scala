@@ -28,8 +28,8 @@ trait GWT extends org.specs2.specification.dsl.GWT { outer: MutableFragmentBuild
   def step[T](description: String)(parser: StepParser[T])(action: T => Any): Fragments =
     addFragments(super.step(parser)(action)(description).append(factory.break))
 
-  def action[T](description: String)(parser: StepParser[T])(action1: T => Any): Fragments =
-    addFragments(super.action(parser)(action1)(description).append(factory.break))
+  def action[T](description: String)(parser: StepParser[T])(Action: T => Any): Fragments =
+    addFragments(super.action(parser)(Action)(description).append(factory.break))
 
   def example[T, R : AsResult](description: String)(parser: StepParser[T])(action: T => R): Fragments =
     addFragments(super.example(parser)(action).apply(description).append(factory.break))
@@ -79,5 +79,3 @@ trait GivenWhenAndThenSyntax { this: GWT =>
   def andThen[T, R : AsResult](description: String)(parser: StepParser[T])(action: T => R): Fragments =
     example("then "+description)(parser)(action)
 }
-
-

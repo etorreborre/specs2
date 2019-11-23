@@ -10,7 +10,7 @@ import specification._
 import scala.concurrent.duration._
 
 class TerminationMatchersSpec(val env: Env) extends script.Specification with TerminationMatchers with Grouped with OwnExecutionEnv { def is = section("travis") ^ sequential ^ s2"""
-                                                                                                   
+
  It is possible to check if a block of code terminates
    with a default number of retries and default sleep time
      + if it succeeds
@@ -26,10 +26,10 @@ class TerminationMatchersSpec(val env: Env) extends script.Specification with Te
  We should be able to observe that an action unblocks another
    + with a when clause
    with an onlyWhen clause
-     + if action1 terminates after action 2 -> success
-     + if action1 terminates before action 2 -> failure
-     + if action1 terminates before action 2 -> failure with a specific message
-     + if action1 doesn't terminate after action 2 -> failure
+     + if Action terminates after action 2 -> success
+     + if Action terminates before action 2 -> failure
+     + if Action terminates before action 2 -> failure with a specific message
+     + if Action doesn't terminate after action 2 -> failure
 
   We should not overflow the stack
     + when a very large number of retries is provided
@@ -59,10 +59,10 @@ class TerminationMatchersSpec(val env: Env) extends script.Specification with Te
 
       val queue1 = new ArrayBlockingQueue[Int](1)
       var stop = true
-      def action1() = scalaz.concurrent.Future({ while (stop) { sleepFor(10)}; queue1.add(1) }).run
+      def Action() = scalaz.concurrent.Future({ while (stop) { sleepFor(10)}; queue1.add(1) }).run
       def action2() = scalaz.concurrent.Future({ stop = false }).run
 
-      action1() must terminate.onlyWhen(action2())
+      Action() must terminate.onlyWhen(action2())
     }
 
     eg := {

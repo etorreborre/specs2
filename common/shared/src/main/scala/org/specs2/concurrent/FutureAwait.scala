@@ -3,7 +3,7 @@ package concurrent
 
 import java.util.concurrent.TimeoutException
 import scala.concurrent.{Await, Future}
-import scala.concurrent.duration._
+import scala.concurrent._, duration._
 
 /**
  * implicit methods to await a future values with a given timeout and

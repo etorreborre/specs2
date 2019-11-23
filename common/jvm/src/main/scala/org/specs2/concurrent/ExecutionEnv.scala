@@ -1,8 +1,8 @@
 package org.specs2
 package concurrent
 
-import org.specs2.control.Logger
 import org.specs2.main.Arguments
+import org.specs2.control.Logger
 
 import scala.concurrent.ExecutionContext
 

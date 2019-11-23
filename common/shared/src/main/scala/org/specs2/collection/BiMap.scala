@@ -45,4 +45,3 @@ trait SemiEntry[K] {
   def k: K
   def <->[V](v: V): BiMapEntry[K, V] = new BiMapEntry[K,  V]() { val key = k; val value = v}
 }
-
