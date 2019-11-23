@@ -69,8 +69,8 @@ case class Producer1[A](run: Action1[Stream1[A]]) {
         }
     })
 
-  def andFinally(last: Action1[Unit]): Producer1[A] =
-    Producer1(run.addLast(last))
+  def andFinally(finalizer: Finalizer): Producer1[A] =
+    Producer1(run.addLast(finalizer))
 }
 
 
@@ -252,14 +252,14 @@ object Producer1 extends Producers1 {
   }
 
   implicit class Producer1ResourcesOps[A](p: Producer1[A]) {
-    def thenFinally(e: Action1[Unit]): Producer1[A] =
+    def thenFinally(e: Finalizer): Producer1[A] =
       Producer1[A](p.run flatMap {
         case Done1() => Action1.thenFinally(Producer1.done[A].run, e)
         case One1(a) => Action1.thenFinally(Producer1.one[A](a).run, e)
         case More1(as, next) => protect(More1(as, Producer1ResourcesOps(next).thenFinally(e)))
       })
 
-    def `finally`(e: Action1[Unit]): Producer1[A] =
+    def `finally`(e: Finalizer): Producer1[A] =
       p.thenFinally(e)
 
     def attempt: Producer1[Throwable Either A] =
@@ -272,10 +272,10 @@ object Producer1 extends Producers1 {
       })
   }
 
-  def bracket1[A, B, C](open: Action1[A])(step: A => Producer1[B])(close: A => Action1[C]): Producer1[B] =
+  def bracket1[A, B, C](open: Action1[A])(step: A => Producer1[B])(close: A => Finalizer): Producer1[B] =
     Producer1[B] {
       open flatMap { resource =>
-        (step(resource) `finally` close(resource).map(_ => ())).run
+        step(resource).run.addLast(close(resource))
       }
     }
 }
