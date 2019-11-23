@@ -1,25 +1,26 @@
 package org.specs2
 package control
 
-import Action1._
+import Action._
 import fp._
-import producer._, Transducer1._
+import producer._
+import Transducer._
 
 object Control {
 
-  type AsyncStream[A] = Producer1[A]
-  type AsyncTransducer[A, B] = Transducer1[A, B]
+  type AsyncStream[A] = Producer[A]
+  type AsyncTransducer[A, B] = Transducer[A, B]
 
-  type AsyncFold[A, B] = origami.Fold[Action1, A, B]
-  type AsyncSink[A] = origami.Fold[Action1, A, Unit]
+  type AsyncFold[A, B] = origami.Fold[Action, A, B]
+  type AsyncSink[A] = origami.Fold[Action, A, Unit]
 
-  implicit val idToAction1: NaturalTransformation[Id, Action1] =
-    NaturalTransformation.naturalId[Action1]
+  implicit val idToAction: NaturalTransformation[Id, Action] =
+    NaturalTransformation.naturalId[Action]
 
   def emitAsync[A](as: A*): AsyncStream[A] =
-    producer.producers1.emitSeq(as)
+    Producer.emitSeq(as)
 
   def emitAsyncDelayed[A](a: A): AsyncStream[A] =
-    producer.producers1.eval(Action1.protect(a))
+    Producer.eval(Action.protect(a))
 
 }

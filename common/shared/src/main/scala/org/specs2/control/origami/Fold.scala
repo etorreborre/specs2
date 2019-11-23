@@ -2,7 +2,6 @@ package org.specs2
 package control
 package origami
 
-import eff._, all._
 import org.specs2.fp._
 import org.specs2.fp.syntax._
 
@@ -337,13 +336,13 @@ trait Folds {
     def end(s: S) = monad.point(s)
   }
 
-  def bracket[R :_Safe, A, C](open: Eff[R, C])(step: (C, A) => Eff[R, C])(close: C => Eff[R, Unit]): Fold[Eff[R, ?], A, Unit] = new Fold[Eff[R, ?], A, Unit] {
+  def bracket[A, C](open: Action[C])(step: (C, A) => Action[C])(close: C => Finalizer): Fold[Action, A, Unit] = new Fold[Action, A, Unit] {
     type S = C
-    val monad: Monad[Eff[R, ?]] = Monad[Eff[R, ?]]
+    val monad: Monad[Action] = Monad[Action]
 
     def start = open
-    def fold = (s: S, a: A) => otherwise(step(s, a), close(s).as(s))
-    def end(s: S) = close(s)
+    def fold = (s: S, a: A) => step(s, a).addLast(close(s))
+    def end(s: S) = monad.point(close(s).run())
   }
 
   def fromSink[M[_] : Monad, A](action: A => M[Unit]): Fold[M, A, Unit] = new Fold[M, A, Unit] {

@@ -16,8 +16,8 @@ case class ThrowableIssue(t: Throwable) extends ExecutionIssue
 case class FailureIssue(t: String) extends ExecutionIssue
 case class FinalizationIssue(t: Throwable) extends ExecutionIssue
 
-case class Action1[A](runNow: ExecutorServices => Future[Execute[A]], timeout: Option[FiniteDuration] = None, last: Vector[Action1[Unit]] = Vector.empty) {
-  def addLast(action: Action1[Unit]): Action1[A] =
+case class Action[A](runNow: ExecutorServices => Future[Execute[A]], timeout: Option[FiniteDuration] = None, last: Vector[Action[Unit]] = Vector.empty) {
+  def addLast(action: Action[Unit]): Action[A] =
     copy(last = last :+ action)
 
 
@@ -30,21 +30,21 @@ case class Labelled[A](a: A, messages: Vector[Message] = Vector.empty)
 
 }
 
-object Action1 {
+object Action {
   type Execute[A] = Either[ExecutionIssue, Labelled[A]]
 
 
   */
 
 
-  // def executeActionFuture[A](action: Action1[A], printer: String => Unit = s => ())(ee: ExecutionEnv): Future[(Error Either A, List[String])] = {
+  // def executeActionFuture[A](action: Action[A], printer: String => Unit = s => ())(ee: ExecutionEnv): Future[(Error Either A, List[String])] = {
   //   implicit val es = ee.executorServices
 
   //   action.execSafe.flatMap(_.fold(t => exception[S, A](t), a => Eff.pure[S, A](a))).
   //     runError.runConsoleToPrinter(printer).runWarnings.into[Fx1[TimedFuture]].runAsync
   // }
 
-  // def runActionFuture[A](action: Action1[A], printer: String => Unit = s => ())(ee: ExecutionEnv): Future[A] = {
+  // def runActionFuture[A](action: Action[A], printer: String => Unit = s => ())(ee: ExecutionEnv): Future[A] = {
   //   implicit val ec = ee.executionContext
   //   implicit val es = ee.executorServices
 
@@ -56,12 +56,12 @@ object Action1 {
   //   }
   // }
 
-  // def runAction[A](action: Action1[A], printer: String => Unit = s => ())(ee: ExecutionEnv): Error Either A =
+  // def runAction[A](action: Action[A], printer: String => Unit = s => ())(ee: ExecutionEnv): Error Either A =
   //   attemptExecuteAction(action, printer)(ee).fold(
   //     t => Left(Left(t)),
   //     other => other._1)
 
-  // def attemptExecuteAction[A](action: Action1[A], printer: String => Unit = s => ())(ee: ExecutionEnv): Throwable Either (Error Either A, List[String]) =
+  // def attemptExecuteAction[A](action: Action[A], printer: String => Unit = s => ())(ee: ExecutionEnv): Throwable Either (Error Either A, List[String]) =
   //   try {
   //     implicit val es = ee.executorServices
   //     Await.result(action.runError.runConsoleToPrinter(printer).runWarnings.execSafe.runAsync, Duration.Inf)
@@ -69,19 +69,19 @@ object Action1 {
   //   catch { case NonFatal(t) => Left(t) }
 
   // /**
-  //  * This implicit allows an Action1[result] to be used inside an example.
+  //  * This implicit allows an Action[result] to be used inside an example.
   //  *
   //  * For example to read a database.
   //  */
-  // implicit def actionAsResult[T](implicit r: AsResult[T], ee: ExecutionEnv): AsResult[Action1[T]] = new AsResult[Action1[T]] {
-  //   def asResult(action: =>Action1[T]): Result =
+  // implicit def actionAsResult[T](implicit r: AsResult[T], ee: ExecutionEnv): AsResult[Action[T]] = new AsResult[Action[T]] {
+  //   def asResult(action: =>Action[T]): Result =
   //     runAction(action)(ee).fold(
   //       err => err.fold(t => org.specs2.execute.Error(t), f => org.specs2.execute.Failure(f)),
   //       ok => AsResult(ok)
   //     )
   // }
 
-  // implicit class ActionRunOps[T](action: Action1[T]) {
+  // implicit class ActionRunOps[T](action: Action[T]) {
   //   def run(ee: ExecutionEnv)(implicit m: Monoid[T]): T =
   //     action.runOption(ee).getOrElse(m.zero)
 
