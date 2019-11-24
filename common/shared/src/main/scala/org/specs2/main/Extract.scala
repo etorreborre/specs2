@@ -64,4 +64,3 @@ trait Extract {
     Classes.createInstance[T](name).runOption
 
 }
-

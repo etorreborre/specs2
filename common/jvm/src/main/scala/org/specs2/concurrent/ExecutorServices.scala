@@ -52,14 +52,6 @@ case class ExecutorServices(executorServiceEval:          () => ExecutorService,
 
 object ExecutorServices {
 
-  /** default max threads number for the user execution environment */
-  lazy val threadsNb: Int =
-    math.max(Runtime.getRuntime.availableProcessors, 4)
-
-  /** default threads number for the specs2 execution environment */
-  lazy val specs2ThreadsNb: Int =
-    math.max(Runtime.getRuntime.availableProcessors, 4)
-
   def create(arguments: Arguments, systemLogger: Logger, tag: Option[String] = None): ExecutorServices =
     createExecutorServices(arguments, systemLogger, tag, isSpecs2 = false)
 
@@ -101,9 +93,9 @@ object ExecutorServices {
   def fromGlobalExecutionContext: ExecutorServices =
     fromExecutionContext(scala.concurrent.ExecutionContext.global)
 
-  def createExecutionContext(executorService: ExecutorService, verbose: Boolean, systemLogger: Logger) =
+  def createExecutionContext(executorService: ExecutorService, verbose: Boolean, systemLogger: Logger): ExecutionContext =
     ExecutionContext.fromExecutorService(executorService,
-      (t: Throwable) => { systemLogger.logThrowable(t, verbose) })
+      (t: Throwable) => { systemLogger.logThrowable(t, verbose).runVoid })
 
   def fixedExecutor(threadsNb: Int, name: String): ExecutorService =
     Executors.newFixedThreadPool(threadsNb, NamedThreadFactory(name))

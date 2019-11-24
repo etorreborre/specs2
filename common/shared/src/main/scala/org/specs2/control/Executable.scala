@@ -3,7 +3,7 @@ package control
 
 import io.FilePath
 import scala.sys.process.ProcessLogger
-import Operations._
+import Operation._
 import fp.syntax._
 
 /**
@@ -23,12 +23,12 @@ object Executable {
   def execute(executable: FilePath, arguments: Seq[String] = Seq()): Operation[String] = {
     lazy val logger = new StringProcessLogger
     attempt {
-      protect(sys.process.Process(executable.path, arguments).!(logger)).flatMap { code =>
+      ok[Int](sys.process.Process(executable.path, arguments).!(logger)).flatMap { code =>
         if (code == 0) ok(logger.lines)
         else           fail[String](logger.lines)
       }
     }.flatMap {
-       case Left(t)  => fail[String](t.getMessage+"\n"+logger.lines)
+       case Left(t)  => fail(t.getMessage+"\n"+logger.lines)
        case Right(s) => ok(s)
     }
   }

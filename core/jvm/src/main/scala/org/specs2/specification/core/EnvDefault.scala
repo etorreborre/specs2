@@ -2,7 +2,7 @@ package org.specs2
 package specification
 package core
 
-import org.specs2.control.consoleLogging
+import org.specs2.control._
 import org.specs2.io.FileSystem
 import org.specs2.io._
 import org.specs2.main.Arguments
@@ -15,13 +15,13 @@ object EnvDefault {
   def default: Env =
     Env(
       arguments           = Arguments(),
-      systemLogger        = consoleLogging,
+      systemLogger        = ConsoleLogger(),
       selectorInstance    = (arguments: Arguments) => Arguments.instance(arguments.select.selector).getOrElse(DefaultSelector),
       executorInstance    = (arguments: Arguments) => Arguments.instance(arguments.execute.executor).getOrElse(DefaultExecutor),
       lineLogger          = NoLineLogger,
       statsRepository     = (arguments: Arguments) => StatisticsRepositoryCreation.file(arguments.commandLine.directoryOr("stats.outdir", "target" / "specs2-reports" / "stats")),
       random              = new scala.util.Random,
-      fileSystem          = FileSystem,
+      fileSystem          = FileSystem(ConsoleLogger()),
       executionParameters = ExecutionParameters(),
       customClassLoader   = None,
       classLoading        = new ClassLoading {})

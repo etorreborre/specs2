@@ -9,7 +9,8 @@ import text.MD5
 import scala.io.Codec
 import Paths._
 import org.specs2.control.producer._
-import org.specs2.control.eff.all._
+import Producer._
+import fp._, syntax._
 
 /**
  * Methods to read files on the FileSystem
@@ -19,11 +20,8 @@ trait FilePathReader {
   /**
    * @return the list of file paths accessible from dir
    */
-  def filePaths(dir: DirectoryPath, glob: String, verbose: Boolean): Operation[List[FilePath]] = {
-    filePathsProcess[OperationStack](dir)
-      .filter(filterWithPattern(globToPattern(glob)))
-      .runList
-  }
+  def filePaths(dir: DirectoryPath, glob: String, verbose: Boolean): Operation[List[FilePath]] =
+    filePathsProcess(dir).filter(filterWithPattern(globToPattern(glob))).runList
 
   /**
    * filter files according to a regex pattern
@@ -50,13 +48,13 @@ trait FilePathReader {
    * @return the files accessible recursively from a directory
    */
   def listFilePaths(directory: DirectoryPath): Operation[List[FilePath]] =
-    filePathsProcess[OperationStack](directory).runList
+    filePathsProcess(directory).runList
 
   /**
    * @return the files directly accessible from a directory
    */
   def listDirectFilePaths(directory: DirectoryPath): Operation[IndexedSeq[FilePath]] =
-    Operations.delayed(Option(directory.toFile.listFiles)
+    Operation.delayed(Option(directory.toFile.listFiles)
       .map(_.toIndexedSeq).getOrElse(IndexedSeq())
       .filter(_.isFile)
       .map(FilePath.unsafe))
@@ -65,15 +63,16 @@ trait FilePathReader {
    * @return the files directly accessible from a directory
    */
   def listDirectDirectoryPaths(directory: DirectoryPath): Operation[IndexedSeq[DirectoryPath]] =
-    Operations.delayed(Option(directory.toFile.listFiles)
+    Operation.delayed(Option(directory.toFile.listFiles)
       .map(_.toIndexedSeq).getOrElse(IndexedSeq())
       .filter(_.isDirectory)
       .map(DirectoryPath.unsafe))
 
-  private def filePathsProcess[R :_Safe](directory: DirectoryPath): Producer[R, FilePath] = {
-    def go(dir: DirectoryPath): Producer[R, FilePath] = {
+  private def filePathsProcess(directory: DirectoryPath): Producer[Operation, FilePath] = {
+    def go(dir: DirectoryPath): Producer[Operation, FilePath] = {
       val (files, directories) = Option(dir.toFile.listFiles).map(_.toList).getOrElse(List()).partition(_.isFile)
-      Producer.emit(files.map(FilePath.unsafe)) append Producer.emit(directories.map(DirectoryPath.unsafe).map(go)).flatten
+      Producer.emit[Operation, FilePath](files.map(FilePath.unsafe)) append
+       Producer.emit[Operation, Producer[Operation, FilePath]](directories.map(DirectoryPath.unsafe).map(go)).flatten
     }
     go(directory)
   }
@@ -92,7 +91,7 @@ trait FilePathReader {
 
   /** @return the content of a file with a specific codec */
   def readLinesWithCodec(filePath: FilePath, codec: Codec): Operation[IndexedSeq[String]] =
-    Operations.delayed(scala.io.Source.fromFile(filePath.path)(codec).getLines.toIndexedSeq)
+    Operation.delayed(scala.io.Source.fromFile(filePath.path)(codec).getLines.toIndexedSeq)
 
   /** read the content of a file as an Array of Bytes */
   def readBytes(filePath: FilePath): Operation[Array[Byte]] = exists(filePath).map { exists =>
@@ -107,39 +106,39 @@ trait FilePathReader {
 
   /** @return true if the file exists */
   def exists(filePath: FilePath): Operation[Boolean] =
-    Operations.delayed(filePath.toFile.exists)
+    Operation.delayed(filePath.toFile.exists)
 
   /** @return true if the file doesn't exist */
   def doesNotExist(filePath: FilePath): Operation[Boolean] =
-    Operations.delayed(!filePath.toFile.exists)
+    Operation.delayed(!filePath.toFile.exists)
 
   /** @return true if the directory exists */
   def exists(directoryPath: DirectoryPath): Operation[Boolean] =
-    Operations.delayed(directoryPath.toFile.exists)
+    Operation.delayed(directoryPath.toFile.exists)
 
   /** @return true if the directory doesn't exist */
   def doesNotExist(directoryPath: DirectoryPath): Operation[Boolean] =
-    Operations.delayed(!directoryPath.toFile.exists)
+    Operation.delayed(!directoryPath.toFile.exists)
 
   /** succeeds if the file exists */
   def mustExist(file: File): Operation[Unit] =
-    Operations.delayed(file.exists).flatMap { exists =>
-      if (exists) Operations.ok(())
-      else        Operations.fail(s"$file does not exist")
+    Operation.delayed(file.exists).flatMap { exists =>
+      if (exists) Operation.ok(())
+      else        Operation.fail(s"$file does not exist")
     }
 
   /** succeeds if the file is a directory */
   def mustBeADirectory(file: File): Operation[Unit] =
-    Operations.delayed(file.isDirectory).flatMap { isDirectory =>
-      if (isDirectory) Operations.ok(())
-      else             Operations.fail(s"$file is a directory")
+    Operation.delayed(file.isDirectory).flatMap { isDirectory =>
+      if (isDirectory) Operation.ok(())
+      else             Operation.fail(s"$file is a directory")
     }
 
   /** succeeds if the file is not a directory */
   def mustNotBeADirectory(file: File): Operation[Unit] =
-    Operations.delayed(file.isDirectory).flatMap { isDirectory =>
-      if (isDirectory) Operations.fail(s"$file is a directory")
-      else             Operations.ok(())
+    Operation.delayed(file.isDirectory).flatMap { isDirectory =>
+      if (isDirectory) Operation.fail(s"$file is a directory")
+      else             Operation.ok(())
     }
 }
 
