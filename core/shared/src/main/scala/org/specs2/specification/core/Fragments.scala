@@ -2,13 +2,13 @@ package org.specs2
 package specification
 package core
 
-import org.specs2.fp._
+import fp._, syntax._
 import Fragment._
 import control._
 import producer._
 import Producer._
-import org.specs2.concurrent.ExecutionEnv
-import ExecuteActions._
+import Control._
+import concurrent.ExecutionEnv
 
 /**
  * Fragments of a specification
@@ -42,7 +42,7 @@ case class Fragments(contents: AsyncStream[Fragment]) {
     copy(contents = contents map f)
 
   def mapFragments(f: List[Fragment] => List[Fragment]): Fragments =
-    copy(contents = Producer.emitEff(contents.runList.map(f)))
+    copy(contents = Producer.emitAction(contents.runList.map(f)))
 
   def mapDescription(f: Description => Description): Fragments =
     map(_.updateDescription(f))
@@ -59,7 +59,7 @@ case class Fragments(contents: AsyncStream[Fragment]) {
   def append(other: AsyncStream[Fragment]): Fragments  = copy(contents = contents append other)
   def prepend(other: AsyncStream[Fragment]): Fragments = copy(contents = other append contents)
   def updateFragments(update: List[Fragment] => Fragments): Fragments =
-    copy(Producer.emitEff(contents.runList.flatMap(fs => update(fs).contents.runList)))
+    copy(Producer.emitAction(contents.runList.flatMap(fs => update(fs).contents.runList)))
 
   /** run the process to get all fragments */
   def fragments: Action[List[Fragment]] =
@@ -67,7 +67,10 @@ case class Fragments(contents: AsyncStream[Fragment]) {
 
   /** run the process to get all fragments as a list */
   def fragmentsList(ee: ExecutionEnv): List[Fragment] =
-    ProducerOps(contents).runList.run(ee)
+    ProducerOps(contents).runList.runAction(ee.executionContext) match {
+      case Left(e) => List(Fragment(Text("ERROR WHILE CREATING THE SPECIFICATION! "+e.getMessage)))
+      case Right(fs) => fs
+    }
 
   /** run the process to filter all texts */
   def texts = filter(isText).fragments
@@ -106,7 +109,7 @@ case class Fragments(contents: AsyncStream[Fragment]) {
   def compact = Fragments {
     type S = Option[String]
 
-    contents.producerState[Fragment, S](None, Some(s => s.fold(done[ActionStack, Fragment])(t => one(Fragment(Text(t)))))) {
+    contents.producerState[Fragment, S](None, Some(s => s.fold(done[Action, Fragment])(t => one(Fragment(Text(t)))))) {
       case (f, text) =>
         f match {
           case Fragment(Text(t),l, e) if isText(f) =>
@@ -143,4 +146,3 @@ object Fragments {
   def foreach[T](seq: Seq[T])(f: T => Fragments): Fragments =
     seq.foldLeft(Fragments.empty)((res, cur) => res.append(f(cur)))
 }
-

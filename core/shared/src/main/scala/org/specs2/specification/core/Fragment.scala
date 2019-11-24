@@ -5,13 +5,11 @@ package core
 import execute.Result
 import fp._
 import org.specs2.control._
-import Actions._
-
 import scala.concurrent.duration.FiniteDuration
 
 /**
  * Fragment of a specification
- * 
+ *
  * It has a description (generally text but sometimes not, for a step for example)
  * It has an execution which might do or don't do anything (for examples it runs some code)
  */
@@ -19,11 +17,11 @@ case class Fragment(description: Description, execution: Execution, location: Lo
 
   /** @return the result of this fragment and its execution time */
   def executedResult: Action[ExecutedResult] =
-    timedFuture(execution.executedResult)
+    execution.executedResult
 
   /** @return the result of this fragment  */
   def executionResult: Action[Result] =
-    timedFuture(execution.executionResult)
+    execution.executionResult
 
   /** @return true if this fragment can be executed */
   def isExecutable = execution.isExecutable
@@ -180,5 +178,3 @@ object Fragment {
     seq.foldLeft(Fragments.empty) { (res, cur) => res.append(f(cur)) }
 
 }
-
-
