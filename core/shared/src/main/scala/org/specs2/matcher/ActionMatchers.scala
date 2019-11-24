@@ -6,36 +6,34 @@ import concurrent._
 import execute._
 import matcher.MatchersImplicits._
 import text.Regexes._
+import scala.concurrent.ExecutionContext.global
 
 /**
  * Matchers for Action values
  */
 trait ActionMatchers extends ValueChecks {
 
-  private lazy val actionMatchersExecutionEnv = ExecutionEnv.fromGlobalExecutionContext
-
   def beOk[T]: Matcher[Action[T]] = (action: Action[T]) =>
-    AsResult(action.runAction(actionMatchersExecutionEnv).fold(t => t.fold(Error(_), Error(_)), _ => Success()))
+    AsResult(action.runAction(global).fold(t => Error(t), _ => Success()))
 
   def beOk[T, R : AsResult](f: T => R): Matcher[Action[T]] = (action: Action[T]) =>
-    AsResult(runAction(action)(actionMatchersExecutionEnv).fold(t => t.fold(Error(_), Error(_)), t => AsResult(f(t))))
+    AsResult(action.runAction(global).fold(t => Error(t), t => AsResult(f(t))))
 
   def beOk[T](check: ValueCheck[T]): Matcher[Action[T]] = (action: Action[T]) =>
-    AsResult(runAction(action)(actionMatchersExecutionEnv).fold(t => t.fold(Error(_), Error(_)), check.check))
+    AsResult(action.runAction(global).fold(t => Error(t), check.check))
 
   def beOkWithValue[T](t: T): Matcher[Action[T]] =
     beOk(new BeEqualTo(t))
 
   def beKo[T]: Matcher[Action[T]] = (action: Action[T]) =>
-    runAction(action)(actionMatchersExecutionEnv).fold(
+    action.runAction(global).fold(
       e => Success(),
       ok => Failure("a failure was expected")
     )
 
   def beKo[T](message: String): Matcher[Action[T]] = (action: Action[T]) =>
-    runAction(action)(actionMatchersExecutionEnv).fold(
-      e => e.fold(throwable => if (throwable.getMessage matchesSafely message) Success() else Failure(s"the action failed with message ${throwable.getMessage}. Expected: $message"),
-        m         => if (m matchesSafely message) Success() else Failure(s"the action failed with message $m. Expected: $message")),
+    action.runAction(global).fold(
+      throwable => if (throwable.getMessage matchesSafely message) Success() else Failure(s"the action failed with message ${throwable.getMessage}. Expected: $message"),
       ok => Failure(s"a failure with message $message was expected")
     )
 
