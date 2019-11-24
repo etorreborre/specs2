@@ -7,7 +7,6 @@ import control._
 import scala.util.control.NonFatal
 import org.specs2.fp.syntax._
 import java.lang.reflect.Constructor
-import eff._
 
 /**
  * This trait provides functions to instantiate classes
@@ -46,15 +45,15 @@ trait Classes extends ClassOperations {
       }
     }
 
-  private def findInstance[T <: AnyRef : ClassTag](klass: Class[T], loader: ClassLoader, defaultInstances: =>List[AnyRef], cs: List[Constructor[_]], error: Option[ErrorEffect.Error] = None): Operation[T] =
+  private def findInstance[T <: AnyRef : ClassTag](klass: Class[T], loader: ClassLoader, defaultInstances: =>List[AnyRef], cs: List[Constructor[_]], error: Option[Throwable] = None): Operation[T] =
     cs match {
       case Nil =>
-        error.map(Operations.fromError[T]).getOrElse(Operations.fail[T]("Can't find a suitable constructor with 0 or 1 parameter for class "+klass.getName))
+        error.map(Operation.exception[T]).getOrElse(Operation.fail[T]("Can't find a suitable constructor with 0 or 1 parameter for class "+klass.getName))
 
       case c :: rest =>
-        runOperation(createInstanceForConstructor[T](klass, c, loader, defaultInstances)).
+        createInstanceForConstructor[T](klass, c, loader, defaultInstances).runOperation.
           fold(e => findInstance[T](klass, loader, defaultInstances, rest, Some(e)),
-            a => Operations.delayed[T](a))
+            a => Operation.ok[T](a))
     }
 
 
@@ -85,29 +84,29 @@ trait Classes extends ClassOperations {
         case Some(instance) =>
           newInstance(klass, constructor.newInstance(instance))
       }
-    } else Operations.fail[T]("Can't find a suitable constructor for class "+klass.getName)
+    } else Operation.fail[T]("Can't find a suitable constructor for class "+klass.getName)
   }
 
   /** create a new instance for a given class and return a proper error if this fails */
   private def newInstance[T](klass: Class[_], instance: =>Any): Operation[T] =
-    try Operations.ok(instance.asInstanceOf[T])
+    try Operation.ok(instance.asInstanceOf[T])
     catch { case NonFatal(t) =>
-      Operations.exception(UserException("cannot create an instance for class " + klass.getName, t))
+      Operation.exception(UserException("cannot create an instance for class " + klass.getName, t))
     }
 
   /**
    * Load a class, given the class name
    */
-  def loadClassEither[T <: AnyRef](className: String, loader: ClassLoader): Operation[Throwable Either Class[T]] = Operations.delayed {
+  def loadClassEither[T <: AnyRef](className: String, loader: ClassLoader): Operation[Throwable Either Class[T]] = Operation.delayed {
     try Right(loader.loadClass(className).asInstanceOf[Class[T]])
     catch { case NonFatal(t) => Left(t) }
   }
 
   def loadClass[T <: AnyRef](className: String, loader: ClassLoader): Operation[Class[T]] =
-    loadClassEither(className, loader).flatMap((tc: Throwable Either Class[T]) => tc.fold(Operations.exception, Operations.ok))
+    loadClassEither(className, loader).flatMap((tc: Throwable Either Class[T]) => tc.fold(Operation.exception[Class[T]], Operation.ok[Class[T]]))
 
   /** @return true if a class can be loaded */
-  def existsClass(className: String, loader: ClassLoader): Operation[Boolean] = Operations.delayed {
+  def existsClass(className: String, loader: ClassLoader): Operation[Boolean] = Operation.delayed {
     try   { loader.loadClass(className); true }
     catch { case NonFatal(t) => false }
   }

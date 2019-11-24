@@ -8,8 +8,8 @@ import Transducer._
 
 object Control {
 
-  type AsyncStream[A] = Producer[A]
-  type AsyncTransducer[A, B] = Transducer[A, B]
+  type AsyncStream[A] = Producer[Action, A]
+  type AsyncTransducer[A, B] = Transducer[Action, A, B]
 
   type AsyncFold[A, B] = origami.Fold[Action, A, B]
   type AsyncSink[A] = origami.Fold[Action, A, Unit]

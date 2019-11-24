@@ -10,16 +10,15 @@ import java.net.URL
 import java.util.zip._
 import java.util.regex.Pattern.compile
 import java.util.regex.Matcher.quoteReplacement
-import eff.syntax.all._
 
 /**
  * Interface for the FileSystem where effects are denoted with the "Operation" type
  */
-trait FileSystem extends FilePathReader {
+case class FileSystem(logger: Logger) extends FilePathReader {
 
   /** delete a file */
   def deleteFile(filePath: FilePath): Operation[Boolean] =
-    Operations.delayed(filePath.toFile.delete)
+    Operation.delayed(filePath.toFile.delete)
 
   /** modify the content of a file */
   def updateFileContent(filePath: FilePath)(update: String => String): Operation[Unit] =
@@ -32,18 +31,18 @@ trait FileSystem extends FilePathReader {
   /** write a string to a file as UTF-8 */
   def writeFile(filePath: FilePath, content: String): Operation[Unit] =
     mkdirs(filePath) >>
-    Operations.protect {
+    Operation.protect {
       val writer = new PrintWriter(filePath.path, "UTF-8")
       try Right(writer.write(content))
       catch { case e: Exception => Left(e) }
       finally writer.close
     }.flatMap {
       case Left(e) =>
-        Operations.logThrowable[OperationStack](e) >>
-        Operations.warn("could not write file "+filePath.path)
+        logger.logThrowable(e) >>
+        logger.warn("could not write file "+filePath.path)
 
       case Right(_) =>
-        Operations.unit
+        Operation.unit
     }
 
   /** execute an operation with a File, then delete it */
@@ -52,7 +51,7 @@ trait FileSystem extends FilePathReader {
 
   /** create a directory and its parent directories */
   def mkdirs(path: DirectoryPath): Operation[Unit] =
-    Operations.protect(path.toFile.mkdirs).void
+    Operation.protect(path.toFile.mkdirs).void
 
   /** create a the directory containing a file and its parent directories */
   def mkdirs(path: FilePath): Operation[Unit] =
@@ -95,7 +94,7 @@ trait FileSystem extends FilePathReader {
       }
     }
 
-    Operations.delayed {
+    Operation.delayed {
       try     extractEntry(zis.getNextEntry)
       finally zis.close
     }
@@ -139,7 +138,7 @@ trait FileSystem extends FilePathReader {
    */
   def copyFile(dest: DirectoryPath)(filePath: FilePath): Operation[Unit] =
     mkdirs(dest) >>
-    Operations.delayed {
+    Operation.delayed {
       copyLock.synchronized {
         import java.nio.file._
         Files.copy(Paths.get(filePath.path),
@@ -156,16 +155,14 @@ trait FileSystem extends FilePathReader {
   /** create a new file */
   def createFile(filePath: FilePath): Operation[Boolean] =
     mkdirs(filePath.dir) >>
-    Operations.delayed(filePath.toFile.createNewFile)
+    Operation.delayed(filePath.toFile.createNewFile)
 
   /** delete files or directories */
   def delete(file: FilePath): Operation[Unit] =
-    Operations.delayed(file.toFile.delete).void
+    Operation.delayed(file.toFile.delete).void
 
   /** delete a directory */
   def delete(dir: DirectoryPath): Operation[Unit] =
     listFilePaths(dir).flatMap(_.map(delete).toList.sequence.void) >>
     delete(dir.toFilePath) // delete the directory once it is empty
 }
-
-object FileSystem extends FileSystem

@@ -4,7 +4,6 @@ package reflect
 import scala.reflect.ClassTag
 import control._
 import org.scalajs.testinterface._
-import org.specs2.control.eff.SafeEffect._
 
 trait Classes extends ClassOperations {
 

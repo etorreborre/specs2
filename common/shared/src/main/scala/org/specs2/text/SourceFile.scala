@@ -3,14 +3,13 @@ package text
 
 import java.util.regex.{Matcher, Pattern}
 import control._
-import eff.ConsoleEffect.log
-import org.specs2.fp.syntax._
+import fp.syntax._
 
 /**
  * Utility methods to parse the contents of source files
  */
 private[specs2]
-trait SourceFile {
+case class SourceFile(logger: Logger) {
   private lazy val CLASSNAME_REGEX = "([\\p{L}_$][\\p{L}\\p{N}_$]*\\.)*[\\p{L}_$][\\p{L}\\p{N}_$]*".r
 
   /**
@@ -30,8 +29,8 @@ trait SourceFile {
       } else Stream.empty
 
     val found = result(pattern.matcher(content)).toList
-    log[OperationStack]("  found classes: "+found.mkString(", "), verbose && found.nonEmpty) >>
-      Operations.delayed(found.filter(c => CLASSNAME_REGEX.pattern.matcher(c).matches))
+    logger.info("  found classes: "+found.mkString(", "), verbose && found.nonEmpty) >>
+      Operation.delayed(found.filter(c => CLASSNAME_REGEX.pattern.matcher(c).matches))
   }
 
   /** @return the package name corresponding to the package declarations at the beginning of a file */
@@ -48,7 +47,3 @@ trait SourceFile {
   }
 
 }
-
-private[specs2]
-object SourceFile extends SourceFile
-

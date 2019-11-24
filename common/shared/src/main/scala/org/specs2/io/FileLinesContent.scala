@@ -3,7 +3,6 @@ package io
 
 import java.io.File
 import text._
-import control._
 
 /**
  * Default implementation for reading lines out of a file

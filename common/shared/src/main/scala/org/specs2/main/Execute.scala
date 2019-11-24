@@ -1,7 +1,7 @@
 package org.specs2
 package main
 
-import org.specs2.concurrent.ExecutorServices
+import org.specs2.concurrent.ExecuteArguments
 
 /**
  * Execution arguments
@@ -32,10 +32,10 @@ case class Execute(
   def sequential: Boolean           = _sequential.getOrElse(false)
   def asap: Boolean                 = _asap.getOrElse(false)
   def useCustomClassLoader: Boolean = _useCustomClassLoader.getOrElse(false)
-  def threadsNb: Int                = _threadsNb.getOrElse(ExecutorServices.threadsNb)
-  def specs2ThreadsNb: Int          = _specs2ThreadsNb.getOrElse(ExecutorServices.specs2ThreadsNb)
+  def threadsNb: Int                = _threadsNb.getOrElse(ExecuteArguments.threadsNb)
+  def specs2ThreadsNb: Int          = _specs2ThreadsNb.getOrElse(ExecuteArguments.specs2ThreadsNb)
   def scheduledThreadsNb: Int       = _scheduledThreadsNb.getOrElse(1)
-  def batchSize: Int                = _batchSize.getOrElse(ExecutorServices.threadsNb)
+  def batchSize: Int                = _batchSize.getOrElse(ExecuteArguments.threadsNb)
   def timeFactor: Int               = _timeFactor.getOrElse(1)
   def executor: String              = _executor.getOrElse("")
 

@@ -75,7 +75,7 @@ case class Env(
     copy(lineLogger = logger)
 
   /** set new system logger */
-  def setSystemLogger(logger: String => Unit) =
+  def setSystemLogger(logger: Logger) =
     copy(systemLogger = logger)
 
   /** set new arguments */

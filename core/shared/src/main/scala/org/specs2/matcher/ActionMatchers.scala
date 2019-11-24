@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-import control._, ExecuteActions._
+import control._
 import concurrent._
 import execute._
 import matcher.MatchersImplicits._
@@ -15,7 +15,7 @@ trait ActionMatchers extends ValueChecks {
   private lazy val actionMatchersExecutionEnv = ExecutionEnv.fromGlobalExecutionContext
 
   def beOk[T]: Matcher[Action[T]] = (action: Action[T]) =>
-    AsResult(runAction(action)(actionMatchersExecutionEnv).fold(t => t.fold(Error(_), Error(_)), _ => Success()))
+    AsResult(action.runAction(actionMatchersExecutionEnv).fold(t => t.fold(Error(_), Error(_)), _ => Success()))
 
   def beOk[T, R : AsResult](f: T => R): Matcher[Action[T]] = (action: Action[T]) =>
     AsResult(runAction(action)(actionMatchersExecutionEnv).fold(t => t.fold(Error(_), Error(_)), t => AsResult(f(t))))

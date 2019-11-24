@@ -2,21 +2,21 @@ package org.specs2
 package io
 
 import control._
-import FileSystem._
 import specification.process._
+import fp._, syntax._
 
-case class DirectoryStore(baseDirectory: DirectoryPath) extends Store {
+case class DirectoryStore(baseDirectory: DirectoryPath, fileSystem: FileSystem) extends Store {
 
   def set[A](key: Key[A], fact: A): Operation[Unit] =
-    writeFile(filepath(key), StoreKeys.encode(key, fact))
+    fileSystem.writeFile(filepath(key), StoreKeys.encode(key, fact))
 
   def get[A](key: Key[A]): Operation[Option[A]] =
-    exists(filepath(key)).flatMap { e =>
-      if (e) readFile(filepath(key)).map(content => StoreKeys.decode(key, content))
-      else   Operations.ok(None)
+    fileSystem.exists(filepath(key)).flatMap { e =>
+      if (e) fileSystem.readFile(filepath(key)).map(content => StoreKeys.decode(key, content))
+      else   Operation.ok(None)
     }
 
-  def reset: Operation[Unit] = delete(baseDirectory)
+  def reset: Operation[Unit] = fileSystem.delete(baseDirectory)
 
   private def filepath[A](key: Key[A]): FilePath =
     baseDirectory / FilePath.unsafe(StoreKeys.resolve(key))
