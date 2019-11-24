@@ -2,7 +2,7 @@ package org.specs2
 package control
 
 import fp._, syntax._
-import concurrent.{ExecutorServices}
+import org.specs2.concurrent.{ExecutorServices}
 import scala.concurrent._
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.global
