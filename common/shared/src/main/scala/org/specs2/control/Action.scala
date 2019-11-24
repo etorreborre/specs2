@@ -2,6 +2,7 @@ package org.specs2
 package control
 
 import fp._, syntax._
+import concurrent.{ExecutorServices}
 import scala.concurrent._
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.global
@@ -9,11 +10,20 @@ import scala.util._
 import scala.annotation.tailrec
 import Finalizer._
 import Operation._
+import execute._
 
 case class Action[A](runNow: ExecutionContext => Future[A], timeout: Option[FiniteDuration] = None, last: Vector[Finalizer] = Vector.empty) {
 
   def attempt: Action[Throwable Either A] =
-    Action(ec => runNow(ec).transform(r => Success(r.toEither))(ec), timeout, last)
+    Action(ec => runNow(ec).transform(r => scala.util.Success(r.toEither))(ec), timeout, last)
+
+  def runFuture(es: ExecutorServices): Future[A] =
+    timeout.fold(runNow(es.executionContext)) { t =>
+      val promise = Promise[A]
+      es.schedule( { promise.tryFailure(new TimeoutException); () }, t)
+      promise.tryCompleteWith(runNow(es.executionContext))
+      promise.future
+    }
 
   def runAction(ec: ExecutionContext): Throwable Either A =
     try Right(Await.result(runNow(ec), timeout.getOrElse(Duration.Inf)))
@@ -58,6 +68,12 @@ object Action {
 
   def protect[A](a: =>A): Action[A] =
     ActionMonad.point(a)
+
+  def exception[A](t: Throwable): Action[A] =
+    Action(_ => Future.failed[A](t))
+
+  def future[A](f: Future[A]): Action[A] =
+    Action(_ => f)
 
   def attempt[A](action: =>Action[A]): Action[Either[Throwable, A]] =
     Action { implicit es =>
@@ -225,4 +241,8 @@ object Operation {
       fa.attempt
   }
 
+  implicit def operationAsResult[T : AsResult]: AsResult[Operation[T]] = new AsResult[Operation[T]] {
+    def asResult(operation: =>Operation[T]): Result =
+      operation.runOperation.fold(err => Error(err),  ok => AsResult(ok))
+  }
 }

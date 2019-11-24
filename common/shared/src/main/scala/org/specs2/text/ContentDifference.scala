@@ -4,7 +4,8 @@ package text
 import collection._
 import Seqx._
 import LineComparison._
-import org.specs2.control.producer._, Producer._
+import control._
+import producer._, Producer._
 
 /**
  * This trait represents the difference between 2 "contents"
@@ -109,7 +110,7 @@ object LineComparison {
   def clipDifferences(differences: Seq[LineComparison], clipSize: Int): Seq[LineComparison] = {
     val diffs = differences.toList
 
-    emit[LineComparison](diffs).zipWithPreviousAndNextN(clipSize).flatMap {
+    emit[Operation, LineComparison](diffs).zipWithPreviousAndNextN(clipSize).flatMap {
       case (before, SameLine(l), after) if (before ++ after).exists(_.isDifference) =>
         one(sameLine(l))
 
@@ -117,8 +118,8 @@ object LineComparison {
         one(l)
 
       case _ =>
-        done[LineComparison]
-    }.runList.toOperation.runOperation.fold(_ => List(), identity)
+        done[Operation, LineComparison]
+    }.runList.runOperation.fold(_ => List(), identity)
 
   }
 

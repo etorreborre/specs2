@@ -18,7 +18,6 @@ import control._
 
 import scala.util.control.NonFatal
 import ResultLogicalCombinators._
-import org.specs2.control.eff.TimedFuture
 import Execution._
 
 /**
@@ -45,19 +44,19 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
                      previousResult: Option[Result]                      = None,
                      continuation:   Option[FragmentsContinuation]       = None) {
 
-  lazy val executedResult: TimedFuture[ExecutedResult] =
+  lazy val executedResult: Action[ExecutedResult] =
     executing match {
       case NotExecuting =>
-        TimedFuture.successful(ExecutedResult(Skipped(), new SimpleTimer))
+        Action.pure(ExecutedResult(Skipped(), new SimpleTimer))
 
       case Failed(t) =>
-        TimedFuture.failed(t)
+        Action.exception(t)
 
       case Started(f) =>
-        TimedFuture.future(f).map { case (r, timer) => ExecutedResult(r, timer) }
+        Action.future(f).map { case (r, timer) => ExecutedResult(r, timer) }
     }
 
-  lazy val executionResult: TimedFuture[Result] =
+  lazy val executionResult: Action[Result] =
     executedResult.attempt.map {
       case Left(t: TimeoutException) =>
         timeout match {
@@ -138,11 +137,11 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
 
           val timer = startSimpleTimer
 
-          val timedFuture = TimedFuture({ es =>
+          val timedFuture = Action({ es =>
             r(env).map(action => (action(), timer.stop))
           }, to)
 
-          val future = timedFuture.runNow(env.executorServices).recoverWith { case e: FailureException =>
+          val future = timedFuture.runNow(env.executorServices.executionContext).recoverWith { case e: FailureException =>
             // Future execution could still throw FailureExceptions which can only be
             // recovered here
             Future.successful((ResultExecution.handleExceptionsPurely(e), timer.stop))
@@ -162,12 +161,12 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
 
     val timer = startSimpleTimer
 
-    val started: TimedFuture[(Result, SimpleTimer)] =
+    val started: Action[(Result, SimpleTimer)] =
       others.map(_.executionResult).sequence.flatMap { results =>
         results.find(FatalExecution.isFatalResult) match {
           // if a previous fragment was fatal, we skip the current one
           case Some(_) =>
-            TimedFuture.successful((Skipped(): Result, timer.stop))
+            Action.pure((Skipped(): Result, timer.stop))
 
           case None =>
             // if a previous result indicates that we should stop
@@ -185,7 +184,7 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
                   startExecution(env).executionResult.map(_ => (Error(FatalExecution(new Exception("stopped"))), timer.stop))
                 // otherwise we skip
                 else
-                  TimedFuture.successful((Skipped(): Result, timer.stop))
+                  Action.pure((Skipped(): Result, timer.stop))
 
               // if everything is fine we run this current execution
               case None =>
@@ -193,7 +192,7 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
             }
       }
     }
-    copy(executing = Started(started.runNow(env.executorServices)))
+    copy(executing = Started(started.runFuture(env.executorServices)))
   }
 
   def setErrorAsFatal: Execution =
@@ -349,7 +348,7 @@ object Execution {
       implicit val ec = env.executionContext
       Future {
         () =>
-        f(env).startExecution(env).executionResult.runNow(env.executorServices).map(r => () => r)
+        f(env).startExecution(env).executionResult.runFuture(env.executorServices).map(r => () => r)
       }.flatMap(future => future())
     })
 
