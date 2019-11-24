@@ -25,9 +25,16 @@ case class Action[A](runNow: ExecutionContext => Future[A], timeout: Option[Fini
       promise.future
     }
 
+  def runOption(ec: ExecutionContext): Option[A] =
+    runAction(ec).toOption
+
   def runAction(ec: ExecutionContext): Throwable Either A =
     try Right(Await.result(runNow(ec), timeout.getOrElse(Duration.Inf)))
     catch { case t: Throwable => Left(t) }
+    finally Finalizer.runFinalizers(last)
+
+  def unsafeRunAction(ec: ExecutionContext): A =
+    try Await.result(runNow(ec), timeout.getOrElse(Duration.Inf))
     finally Finalizer.runFinalizers(last)
 
   def toOperation: Operation[A] =

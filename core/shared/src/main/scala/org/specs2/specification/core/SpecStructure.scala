@@ -3,14 +3,14 @@ package specification
 package core
 
 import main.Arguments
-import org.specs2.control._
-import producer._
-import org.specs2.data.{NamedTag, TopologicalSort}
 import control._
-import org.specs2.concurrent.ExecutionEnv
-import org.specs2.fp.syntax._
+import Control._
+import producer._, Producer._
+import data.{NamedTag, TopologicalSort}
+import concurrent.ExecutionEnv
+import fp.syntax._
 import process._
-import ExecuteActions._
+import scala.concurrent.ExecutionContext
 
 /**
  * Structure of a Specification:
@@ -101,7 +101,7 @@ object SpecStructure {
 
   /** return true if s1 depends on s2, i.e, s1 has a link to s2 */
   def dependsOn(ee: ExecutionEnv) = (s1: SpecStructure, s2: SpecStructure) => {
-    val s1Links = s1.fragments.fragments.run(ee).collect(Fragment.linkReference).map(_.specClassName)
+    val s1Links = s1.fragments.fragments.unsafeRunAction(ee.executionContext).collect(Fragment.linkReference).map(_.specClassName)
     s1Links.contains(s2.specClassName)
   }
 
@@ -136,7 +136,7 @@ object SpecStructure {
       }.sequence.map(byName).runOption.getOrElse(Vector())
        .filterNot { case (n, _) => visited.map(_._1).contains(n) }
 
-    Operations.delayed {
+    Operation.delayed {
       def getAll(seed: Vector[SpecStructure], visited: Vector[(String, SpecStructure)]): Vector[SpecStructure] = {
         if (seed.isEmpty) visited.map(_._2)
         else {
@@ -167,29 +167,29 @@ object SpecStructure {
     spec.map(fs => fs |> DefaultSelector.select(env))
 
   private def selected(env: Env)(spec: SpecStructure): List[Fragment] =
-    select(env)(spec).fragments.fragments.runOption(env.specs2ExecutionEnv).getOrElse(Nil)
+    select(env)(spec).fragments.fragments.runOption(env.specs2ExecutionEnv.executionContext).getOrElse(Nil)
 
-  implicit class SpecStructureOps(s: SpecStructure)(implicit ee: ExecutionEnv) {
+  implicit class SpecStructureOps(s: SpecStructure)(implicit ee: ExecutionContext) {
     def textsList: List[Fragment] =
-      s.texts.run(ee)
+      s.texts.unsafeRunAction(ee)
 
     def examplesList: List[Fragment] =
-      s.examples.run(ee)
+      s.examples.unsafeRunAction(ee)
 
     def tagsList: List[NamedTag] =
-      s.tags.run(ee)
+      s.tags.unsafeRunAction(ee)
 
     def referencesList: List[Fragment] =
-      s.references.run(ee)
+      s.references.unsafeRunAction(ee)
 
     def specificationRefsList: List[SpecificationRef] =
-      s.specificationRefs.run(ee)
+      s.specificationRefs.unsafeRunAction(ee)
 
     def seeReferencesList: List[SpecificationRef] =
-      s.seeReferences.run(ee)
+      s.seeReferences.unsafeRunAction(ee)
 
     def linkReferencesList: List[SpecificationRef] =
-      s.linkReferences.run(ee)
+      s.linkReferences.unsafeRunAction(ee)
 
   }
 }

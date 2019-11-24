@@ -39,7 +39,7 @@ object SpecificationStructure {
 
     // make sure the instantiated class is a Specification Structure (see #477)
     def asSpecificationStructure(i: Any): Operation[SpecificationStructure] =
-      Operations.delayed(classOf[SpecificationStructure].cast(i))
+      Operation.delayed(classOf[SpecificationStructure].cast(i))
 
     existsClass(className+"$", classLoader) flatMap { e =>
       if (e)
@@ -99,7 +99,7 @@ object SpecificationStructure {
       refs(s, env).map(ref => create(ref.header.specClass.getName, classLoader, Some(env))).sequence.map(byName).runOption.getOrElse(Vector())
         .filterNot { case (n, _) => visited.map(_._1).contains(n) }
 
-    Operations.delayed {
+    Operation.delayed {
       def getAll(seed: Vector[SpecificationStructure], visited: Vector[(String, SpecificationStructure)]): Vector[SpecificationStructure] = {
         if (seed.isEmpty) visited.map(_._2)
         else {
@@ -125,4 +125,3 @@ object SpecificationStructure {
   def seeSpecificationsRefs(spec: SpecificationStructure, env: Env): List[SpecificationRef] =
     SpecStructure.seeSpecStructuresRefs(env)(spec.structure(env))
 }
-
