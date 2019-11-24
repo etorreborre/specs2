@@ -26,4 +26,3 @@ trait SpecificationFeatures extends
   with ImplicitParameters
   with Debug
   with ImplicitExecutionContexts
-
