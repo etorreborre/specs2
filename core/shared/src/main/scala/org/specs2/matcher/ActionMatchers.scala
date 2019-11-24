@@ -2,7 +2,6 @@ package org.specs2
 package matcher
 
 import control._
-import concurrent._
 import execute._
 import matcher.MatchersImplicits._
 import text.Regexes._
