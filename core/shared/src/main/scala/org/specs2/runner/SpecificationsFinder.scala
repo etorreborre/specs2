@@ -5,12 +5,11 @@ import java.util.regex._
 
 import control._
 import specification.core._
-import text.SourceFile._
+import text._
 import io._
 import org.specs2.fp.syntax._
 import SpecificationsFinder._
-import control.Operations._
-import org.specs2.control.eff.Eff
+import control._
 import org.specs2.specification.create.DefaultFragmentFactory
 import org.specs2.specification.create.DefaultFragmentFactory.link
 
@@ -32,12 +31,13 @@ trait SpecificationsFinder {
                          basePath: DirectoryPath        = DirectoryPath.unsafe(new java.io.File(specificationsBasePath).getAbsolutePath),
                          verbose: Boolean               = false,
                          classLoader: ClassLoader       = Thread.currentThread.getContextClassLoader,
-                         filePathReader: FilePathReader = FileSystem,
+                         filePathReader: FilePathReader = FileSystem(new ConsoleLogger()),
+                         logger: Logger                 = ConsoleLogger(),
                          env: Env                       = Env()): Operation[List[SpecificationStructure]] =
     specificationNames(glob, pattern, basePath, filePathReader, verbose).flatMap { names =>
       names.filter(filter).map { name =>
         SpecificationStructure.create(name, classLoader, Some(env)).map(s => Option(s)).
-          orElse(warn("[warn] cannot create specification "+name).as(None: Option[SpecificationStructure]))
+          orElse(logger.warn("[warn] cannot create specification "+name).as(None: Option[SpecificationStructure]))
       }.sequence.map(_.flatten)
     }
 
@@ -53,14 +53,11 @@ trait SpecificationsFinder {
                      basePath: DirectoryPath        = DirectoryPath.unsafe(new java.io.File("src/test/scala").getAbsolutePath),
                      verbose: Boolean               = false,
                      classLoader: ClassLoader       = Thread.currentThread.getContextClassLoader,
-                     filePathReader: FilePathReader = FileSystem): Seq[SpecificationStructure] = {
-    val logging = if (verbose) consoleLogging else noLogging
+                     filePathReader: FilePathReader = FileSystem(ConsoleLogger())): Seq[SpecificationStructure] = {
     val specs = findSpecifications(glob, pattern, filter, basePath, verbose, classLoader, filePathReader)
+    val result = specs.runOperation
 
-    val (result, warnings) = executeOperation(specs, logging)
-
-    println(warnings.mkString("\n", "\n", "\n"))
-    result.fold(e  => { e.fold(_.printStackTrace, println); Seq() }, seq => seq)
+    result.fold(e => { e.printStackTrace; Seq() }, seq => seq)
   }
 
   /**
@@ -76,25 +73,20 @@ trait SpecificationsFinder {
                          basePath: DirectoryPath        = DirectoryPath.unsafe(new java.io.File("src/test/scala").getAbsolutePath),
                          verbose: Boolean               = false,
                          classLoader: ClassLoader       = Thread.currentThread.getContextClassLoader,
-                         filePathReader: FilePathReader = FileSystem,
+                         filePathReader: FilePathReader = FileSystem(ConsoleLogger()),
                          env: Env                       = Env()): Seq[Fragment] = {
-    val logging = if (verbose) consoleLogging else noLogging
     import DefaultFragmentFactory._
 
     val links: Operation[List[Fragment]] = specificationNames(glob, pattern, basePath, filePathReader, verbose).flatMap { names =>
       names.filter(filter).traverse { name =>
         SpecificationStructure.create(name, classLoader, Some(env)).map(s => link(SpecificationRef.create(s.is))).
-        whenFailed {
-          case Left(t) => Eff.pure(example("cannot create specification " + name, Execution.result(org.specs2.execute.Error(t))))
-          case Right(m) => Eff.pure(example("cannot create specification " + name, Execution.result(org.specs2.execute.Error(m))))
+        recoverWith { t: Throwable =>
+          example("cannot create specification " + name, Execution.result(org.specs2.execute.Error(t)))
         }
       }
     }
 
-    val (results, warnings) = executeOperation(links, logging)
-    println(warnings.mkString("\n", "\n", "\n"))
-
-    results match {
+    links.runOperation match {
       case Left(t) => println(t); Seq()
       case Right(ss) => ss
     }
@@ -106,17 +98,23 @@ trait SpecificationsFinder {
    * @param pattern a regular expression which is supposed to match an object name extending a Specification
    * @return specification names by scanning files and trying to find specifications declarations
    */
-  def specificationNames(pathGlob: String, pattern: String, basePath: DirectoryPath, filePathReader: FilePathReader, verbose: Boolean) : Operation[List[String]] = {
+  def specificationNames(
+    pathGlob: String,
+    pattern: String,
+    basePath: DirectoryPath,
+    filePathReader: FilePathReader,
+    verbose: Boolean,
+    logger: Logger = ConsoleLogger()) : Operation[List[String]] = {
     lazy val specClassPattern = {
       val p = specPattern("class", pattern)
-      log("  the pattern used to match specification classes is: "+p, verbose) >>
-        Operations.delayed(Pattern.compile(p))
+      logger.info("  the pattern used to match specification classes is: "+p, verbose) >>
+        Operation.delayed(Pattern.compile(p))
     }
 
     lazy val specObjectPattern = {
       val p = specPattern("object", pattern)
-      log("  the pattern used to match specification objects is: "+p, verbose) >>
-        Operations.delayed(Pattern.compile(p))
+      logger.info("  the pattern used to match specification objects is: "+p, verbose) >>
+        Operation.delayed(Pattern.compile(p))
     }
 
     for {
@@ -130,12 +128,19 @@ trait SpecificationsFinder {
    * Read the content of the file at 'path' and return all names matching the object pattern
    * or the class pattern
    */
-  def readClassNames(path: FilePath, objectPattern: Pattern, classPattern: Pattern, filePathReader: FilePathReader, verbose: Boolean): Operation[List[String]] = {
+  def readClassNames(
+    path: FilePath,
+    objectPattern: Pattern,
+    classPattern: Pattern,
+    filePathReader: FilePathReader,
+    verbose: Boolean,
+    logger: Logger = ConsoleLogger()): Operation[List[String]] = {
+    val sourceFile = SourceFile(logger)
     for {
       fileContent <- filePathReader.readFile(path)
-      packName    =  packageName(fileContent)
-      _           <- log("Searching for specifications in file: "+path.path, verbose)
-    } yield (classNames(packName, fileContent, objectPattern, "$", verbose) |@| classNames(packName, fileContent, classPattern, "", verbose))(_ ++ _)
+      packName    =  sourceFile.packageName(fileContent)
+      _           <- logger.info("Searching for specifications in file: "+path.path, verbose)
+    } yield (sourceFile.classNames(packName, fileContent, objectPattern, "$", verbose) |@| sourceFile.classNames(packName, fileContent, classPattern, "", verbose))(_ ++ _)
   }.flatMap(identity)
 
   /**
@@ -158,4 +163,3 @@ object SpecificationsFinder extends SpecificationsFinder {
   val specificationsPattern: String =
     "(.*Spec)\\s*extends\\s*.*"
 }
-

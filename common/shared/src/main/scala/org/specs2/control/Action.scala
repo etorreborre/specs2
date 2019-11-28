@@ -163,10 +163,16 @@ case class Operation[A](operation: () => A, last: Vector[Finalizer] = Vector.emp
   def thenFinally(operation: Operation[A]): Operation[A] =
     addLast(Finalizer(() => operation.runVoid))
 
-  def orElse(alternative: Operation[A]): Operation[A] =
+  def orElse(other: Operation[A]): Operation[A] =
     attempt.flatMap {
-      case Left(_) => alternative
+      case Left(_) => other.copy(last = other.last ++ this.last)
       case Right(a) => Operation(() => a, last)
+    }
+
+  def recoverWith(f: Throwable => A): Operation[A] =
+    attempt.map {
+      case Left(t) => f(t)
+      case Right(a) => a
     }
 
   def attempt: Operation[Throwable Either A] =
