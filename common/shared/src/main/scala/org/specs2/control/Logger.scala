@@ -4,13 +4,13 @@ package control
 import fp._, syntax._
 
 trait Logger {
-  def logThrowable(t: Throwable, verbose: Boolean = false): Operation[Unit]
   def warn(message: String, doIt: Boolean = true): Operation[Unit]
   def info(message: String, doIt: Boolean = true): Operation[Unit]
+  def exception(t: Throwable, doIt: Boolean = true): Operation[Unit]
 }
 
 case class ConsoleLogger() extends Logger {
-  def logThrowable(t: Throwable, verbose: Boolean = false): Operation[Unit] =
+  def exception(t: Throwable, verbose: Boolean = false): Operation[Unit] =
     Operation.delayed(println("[ERROR] "+t.getMessage)) >>
     (if (verbose) Operation.delayed(t.printStackTrace) else Operation.unit)
 

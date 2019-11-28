@@ -2,8 +2,7 @@ package org.specs2
 package runner
 
 import control._, Throwablex._
-import control.Operations._
-import eff._, all._
+import control._
 import specification.core._
 import specification.process.Stats
 import scala.reflect.ClassTag
@@ -12,7 +11,6 @@ import org.specs2.fp.syntax._
 import main.Arguments
 import reflect.Classes
 import reporter._, Printer._
-import org.specs2.control.ExecuteActions._
 
 /**
  * reusable actions for Runners
@@ -23,21 +21,21 @@ object Runner {
    * Execute some actions and exit with the proper code if 'exit' is true
    */
   def execute(action: Action[Stats], arguments: Arguments, exit: Boolean)(env: Env): Unit = {
-    val logging = (s: String) => Name(consoleLogging(s))
+    val logger = ConsoleLogger()
 
-    attemptExecuteAction(action, consoleLogging)(env.specs2ExecutionEnv) match {
+    action.attempt.runAction(env.specs2ExecutionContext) match {
       case Left(t) =>
-        logThrowable(t, arguments)(logging).value
+        logger.exception(t).runVoid
 
-      case Right((result, warnings))=>
-        result.fold(
-          error => error.fold(
-            t => logUserWarnings(warnings)(logging) >> logThrowable(t, arguments)(logging),
-            m => logUserWarnings(warnings)(logging) >> logging(m)
-          ) >> Name(exitSystem(100, exit)),
-          ok => logUserWarnings(warnings)(logging) >>
-            (if (ok.isSuccess) Name(exitSystem(0, exit)) else Name(exitSystem(1, exit)))
-        ).value
+      case Right(Left(t)) =>
+        logger.exception(t).runVoid
+        exitSystem(1, exit)
+
+      case Right(Right(result)) =>
+        if (result.isSuccess)
+           exitSystem(0, exit)
+        else
+          exitSystem(1, exit)
     }
   }
 
@@ -100,7 +98,7 @@ object Runner {
         for {
           reporter <- ClassRunner.createReporter(arguments, loader).toAction
           ss       <- SpecStructure.linkedSpecifications(specStructure, env, loader).toAction
-          sorted   <- delayed(SpecStructure.topologicalSort(ss)(env.specs2ExecutionEnv).getOrElse(ss)).toAction
+          sorted   <- Action.pure(SpecStructure.topologicalSort(ss)(env.specs2ExecutionEnv).getOrElse(ss))
           _        <- reporter.prepare(env, printers)(sorted.toList)
           stats    <- sorted.toList.map(Reporter.report(env, printers)).sequence
           _        <- Reporter.finalize(env, printers)(sorted.toList)
@@ -119,7 +117,7 @@ object Runner {
   }
 
   def createTextPrinter(args: Arguments, loader: ClassLoader): Operation[Option[Printer]] = {
-    if (!printerNames.map(_.name).exists(args.isSet) || args.isSet(CONSOLE.name)) Operations.ok(Some(TextPrinter))
+    if (!printerNames.map(_.name).exists(args.isSet) || args.isSet(CONSOLE.name)) Operation.ok(Some(TextPrinter))
     else noInstance("no console printer defined", args.verbose)
   }
 
@@ -162,8 +160,8 @@ object Runner {
         instance <- Classes.createInstanceEither[Printer](className, loader)
         result <-
           instance match {
-            case Right(i) => Operations.ok(Some(i))
-            case Left(t) => noInstance(failureMessage, t, verbose = true)
+            case Right(i) => Operation.ok(Some(i))
+            case Left(t) => noInstanceWithException(failureMessage, t, verbose = true)
           }
       } yield result
     else noInstance(noRequiredMessage, args.verbose)
@@ -177,8 +175,8 @@ object Runner {
         instance <- Classes.createInstanceEither[T](className, loader)(m)
         result <-
           instance match {
-            case Right(i) => Operations.ok(Some(i))
-            case Left(t) => noInstance(failureMessage(className), t, verbose = true)
+            case Right(i) => Operation.ok(Some(i))
+            case Left(t) => noInstanceWithException(failureMessage(className), t, verbose = true)
           }
       } yield result
 
@@ -186,21 +184,16 @@ object Runner {
     }
 
   /** print a message if a class can not be instantiated */
-  def noInstance[T](message: String, t: Throwable, verbose: Boolean): Operation[Option[T]] =
-    log("", verbose) >>
-      log(message, verbose) >>
-      log("", verbose) >>
-      ConsoleEffect.logThrowable(t, verbose) >>
-      Operations.ok(None)
+  def noInstanceWithException[T](message: String, t: Throwable, verbose: Boolean, logger: Logger = ConsoleLogger()): Operation[Option[T]] =
+    logger.info("", verbose) >>
+      logger.info(message, verbose) >>
+      logger.info("", verbose) >>
+      logger.exception(t, verbose) >>
+      Operation.ok(None)
 
   /** print a message if a class can not be instantiated */
-  def noInstance[T](message: String): Operation[Option[T]] =
-    log(message) >>
-      Operations.ok(None)
-
-  /** print a message if a class can not be instantiated */
-  def noInstance[T](message: String, verbose: Boolean): Operation[Option[T]] =
-    log(message, verbose) >>
-      Operations.ok(None)
+  def noInstance[T](message: String, verbose: Boolean, logger: Logger = ConsoleLogger()): Operation[Option[T]] =
+    logger.info(message, verbose) >>
+      Operation.ok(None)
 
 }
