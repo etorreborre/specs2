@@ -38,7 +38,7 @@ case class FileSystem(logger: Logger) extends FilePathReader {
       finally writer.close
     }.flatMap {
       case Left(e) =>
-        logger.logThrowable(e) >>
+        logger.exception(e) >>
         logger.warn("could not write file "+filePath.path)
 
       case Right(_) =>
