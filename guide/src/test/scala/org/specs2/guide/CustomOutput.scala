@@ -1,7 +1,7 @@
 package org.specs2
 package guide
 
-import org.specs2.control.eff._
+import org.specs2.control._
 
 object CustomOutput extends UserGuidePage { def is = s2"""
 
@@ -40,12 +40,12 @@ def fold(env: Env, spec: SpecStructure): Fold[Fragment]
 ```
 
 So what you need to create is a `Fold` over the executing specification. What is it? A `Fold` is composed of 3 operations:${snippet{
-trait Fold[R, A, B] {
+trait Fold[M[_], A, B] {
   type S
 
-  def start: Eff[R, S]
+  def start: M[S]
   def fold: (S, A) => S
-  def end(s: S): Eff[R, B]
+  def end(s: S): M[B]
 }
 }}
 
@@ -82,4 +82,3 @@ def report(env: Env, printers: List[Printer]): SpecStructure => Action[Unit]
 If your custom `Notifier` or `Printer` fails to be instantiated you can re-run the execution with the `verbose` argument in order to get an error message and a stack trace.
 """
 }
-

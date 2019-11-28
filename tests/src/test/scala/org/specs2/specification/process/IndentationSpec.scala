@@ -3,12 +3,13 @@ package specification
 package process
 
 import core._
-import org.specs2.fp.syntax._
+import fp.syntax._
 import Arbitraries._
 import Fragment._
-import control._, ExecuteActions._
-import control.producer._
-import org.specs2.concurrent.ExecutionEnv
+import control._
+import Control._
+import producer._, Producer._
+import concurrent.ExecutionEnv
 
 class IndentationSpec(implicit ee: ExecutionEnv) extends Specification with ScalaCheck { def is = s2"""
 

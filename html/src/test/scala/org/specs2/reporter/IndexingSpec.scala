@@ -1,13 +1,14 @@
 package org.specs2
 package reporter
 
+import fp.syntax._
 import io._
 import matcher.OperationMatchers._
-import org.specs2.html._
+import html._
 import Indexing._
 import control._
-import ExecuteActions._
-import org.specs2.specification.core.{Env, OwnExecutionEnv}
+import Control._
+import specification.core.{Env, OwnExecutionEnv}
 
 class IndexingSpec(val env: Env) extends Specification with OwnExecutionEnv { def is = s2"""
  From the set of all the generated html pages we can generate an index and convert it to the tipue search format.
@@ -23,13 +24,13 @@ class IndexingSpec(val env: Env) extends Specification with OwnExecutionEnv { de
 
   def save = {
     val path = "target" / "test" / "IndexingSpec" | "index.js"
-    runAction(emitAsync(pages:_*).fold(indexFold(path).into[Action]))(ee)
+    emitAsync(pages:_*).fold(indexFold(path).into[Action]).runAction(ee)
 
     val expected =
     s"""|var tipuesearch = {"pages": [{"title":"page 1", "text":"content1", "tags":"tag1 tag2", "loc":"page1"},
         |{"title":"page 2", "text":"content2", "tags":"tag3", "loc":"page2"}]};""".stripMargin
 
-    FileSystem.readFile(path).map(_.trim) must beOk(===(expected))
+    FileSystem(NoLogger).readFile(path).map(_.trim) must beOk(===(expected))
   }
 
   def quoted =
@@ -39,4 +40,3 @@ class IndexingSpec(val env: Env) extends Specification with OwnExecutionEnv { de
                      IndexedPage(FilePath("page2"), "page 2", "content2", Vector("tag3")))
 
 }
-

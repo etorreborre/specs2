@@ -9,7 +9,7 @@ import java.io.File
 import org.specs2.fp.syntax._
 import org.specs2.text.AnsiColors._
 
-class ContentMatchersSpec extends Spec with LinesContentMatchers with BeforeAfterEach with FileSystem with TestFileNames { def is = sequential ^ s2"""
+class ContentMatchersSpec extends Spec with LinesContentMatchers with BeforeAfterEach with TestFileNames { def is = sequential ^ s2"""
 
  haveSameLinesAs checks if a file has the same lines as another file                                     ${comp().e1}
    it is possible to write (f1, f2) must haveSameLines as well                                           ${comp().e2}
@@ -21,33 +21,36 @@ class ContentMatchersSpec extends Spec with LinesContentMatchers with BeforeAfte
    we can compare against a Seq of lines instead                                                         ${comp().e7}
    it works with duplicated lines                                                                        ${comp().e8}
 """
+  val fs = FileSystem(NoLogger)
 
   lazy val dir = "target" / "test" / "contents"
 
   def before = {
     val action =
-      writeFile(dir | f1, "hello\nbeautiful\nworld")         >>
-      writeFile(dir | f2, "hello\nbeautiful\nworld")         >>
-      writeFile(dir | f3, "beautiful\nworld\nhello")         >>
-      writeFile(dir | f4, "hello\nworld")                    >>
-      writeFile(dir | f5, "world\nhello")                    >>
-      writeFile(dir | f6, "good\nmorning\nbeautiful\nworld") >>
-      writeFile(dir | f7, "good\nday\ncrazy\nworld")         >>
-      writeFile(dir | f8, "good\nday\ncrazy\nworld\nworld")
+      fs.writeFile(dir | f1, "hello\nbeautiful\nworld")         >>
+      fs.writeFile(dir | f2, "hello\nbeautiful\nworld")         >>
+      fs.writeFile(dir | f3, "beautiful\nworld\nhello")         >>
+      fs.writeFile(dir | f4, "hello\nworld")                    >>
+      fs.writeFile(dir | f5, "world\nhello")                    >>
+      fs.writeFile(dir | f6, "good\nmorning\nbeautiful\nworld") >>
+      fs.writeFile(dir | f7, "good\nday\ncrazy\nworld")         >>
+      fs.writeFile(dir | f8, "good\nday\ncrazy\nworld\nworld")
 
     action.runOption
   }
 
-  def after = delete(dir).runOption
+  def after = fs.delete(dir).runOption
 
 }
 
-case class comp() extends MustMatchers with TestFileNames with ContentMatchers with FileSystem {
+case class comp() extends MustMatchers with TestFileNames with ContentMatchers {
+  val fs = FileSystem(NoLogger)
+
   lazy val dir = "target" / "test" / "contents"
 
   override implicit protected val fileContentForMatchers = new LinesContent[File] {
     def name(f: File) = f.getPath
-    def lines(f: File) = readLines(FilePath.unsafe(f)).runOption.get
+    def lines(f: File) = fs.readLines(FilePath.unsafe(f)).runOption.get
   }
 
   def e1 =  (dir | f1).toFile must haveSameLinesAs((dir | f2).toFile)

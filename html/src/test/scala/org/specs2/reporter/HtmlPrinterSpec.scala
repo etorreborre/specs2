@@ -1,9 +1,10 @@
 package org.specs2
 package reporter
 
+import fp.syntax._
 import io._
 import main.Arguments
-import org.specs2.specification.core.{OwnEnv, Env, SpecificationStructure}
+import specification.core.{OwnEnv, Env, SpecificationStructure}
 import matcher._
 import control._
 
@@ -43,7 +44,7 @@ class HtmlPrinterSpec(val env: Env) extends Specification with ActionMatchers wi
     } yield ()
 
 
-  val printer = HtmlPrinter
+  val printer = HtmlPrinter(SearchPage())
 
   val outDir = "target" / "test" / "HtmlPrinterSpec"
   val searchArguments = Arguments.split(s"html.search html.outdir ${outDir.path}")

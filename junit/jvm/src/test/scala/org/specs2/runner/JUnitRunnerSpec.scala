@@ -4,7 +4,6 @@ package runner
 import org.junit.runner.notification._
 import org.junit.runner.{Description, Result, RunWith}
 import org.specs2.concurrent.ExecutionEnv
-import org.specs2.control.ExecuteActions._
 import org.specs2.control.UserException
 import org.specs2.main.Arguments
 import org.specs2.specification.BeforeAfterAll

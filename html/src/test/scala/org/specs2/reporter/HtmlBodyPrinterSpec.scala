@@ -1,15 +1,16 @@
 package org.specs2
 package reporter
 
-import org.specs2.concurrent.ExecutionEnv
-import org.specs2.io.DirectoryPath
-import org.specs2.main.Arguments
-import org.specs2.matcher.XmlMatchers
-import org.specs2.specification.Forms
-import org.specs2.specification.core.{Fragment, SpecStructure}
-import org.specs2.specification.process.{Level, Stats}
-import org.specs2.text.AnsiColors
-import org.specs2.time.SimpleTimer
+import fp.syntax._
+import concurrent.ExecutionEnv
+import io.DirectoryPath
+import main.Arguments
+import matcher.XmlMatchers
+import specification.Forms
+import specification.core.{Fragment, SpecStructure}
+import specification.process.{Level, Stats}
+import text.AnsiColors
+import time.SimpleTimer
 
 import scala.xml.NodeSeq
 

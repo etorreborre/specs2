@@ -14,13 +14,13 @@ object EnvDefault {
   def default: Env =
     Env(
       arguments           = Arguments(),
-      systemLogger        = consoleLogging,
+      systemLogger        = ConsoleLogger(),
       selectorInstance    = (arguments: Arguments) => DefaultSelector,
       executorInstance    = (arguments: Arguments) => DefaultExecutor,
       lineLogger          = NoLineLogger,
       statsRepository     = (arguments: Arguments) => StatisticsRepositoryCreation.memory,
       random              = new scala.util.Random,
-      fileSystem          = new FileSystem {},
+      fileSystem          = FileSystem(ConsoleLogger()),
       executionParameters = ExecutionParameters(),
       customClassLoader   = None,
       classLoading        = new ClassLoading {}

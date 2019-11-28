@@ -4,12 +4,11 @@ package core
 
 import main.{Arguments, CommandLine}
 import execute._
-import org.specs2.concurrent.ExecutionEnv
+import concurrent.ExecutionEnv
 import reporter.LineLogger
 import io._
 import control._
 import process.{Executor, Selector, StatisticsRepository}
-import EnvDefault._
 import reflect._
 
 import scala.concurrent.duration.FiniteDuration
@@ -100,17 +99,17 @@ case class Env(
 object Env {
 
   def apply(
-    arguments:           Arguments                         = default.arguments,
-    systemLogger:        Logger                            = default.systemLogger,
-    selectorInstance:    Arguments => Selector             = default.selectorInstance,
-    executorInstance:    Arguments => Executor             = default.executorInstance,
-    lineLogger:          LineLogger                        = default.lineLogger,
-    statsRepository:     Arguments => StatisticsRepository = default.statsRepository,
-    random:              scala.util.Random                 = default.random,
-    fileSystem:          FileSystem                        = default.fileSystem,
-    executionParameters: ExecutionParameters               = default.executionParameters,
-    customClassLoader:   Option[ClassLoader]               = default.customClassLoader,
-    classLoading:        ClassLoading                      = default.classLoading): Env =
+    arguments:           Arguments                         = EnvDefault.default.arguments,
+    systemLogger:        Logger                            = EnvDefault.default.systemLogger,
+    selectorInstance:    Arguments => Selector             = EnvDefault.default.selectorInstance,
+    executorInstance:    Arguments => Executor             = EnvDefault.default.executorInstance,
+    lineLogger:          LineLogger                        = EnvDefault.default.lineLogger,
+    statsRepository:     Arguments => StatisticsRepository = EnvDefault.default.statsRepository,
+    random:              scala.util.Random                 = EnvDefault.default.random,
+    fileSystem:          FileSystem                        = EnvDefault.default.fileSystem,
+    executionParameters: ExecutionParameters               = EnvDefault.default.executionParameters,
+    customClassLoader:   Option[ClassLoader]               = EnvDefault.default.customClassLoader,
+    classLoading:        ClassLoading                      = EnvDefault.default.classLoading): Env =
     Env(
       arguments,
       systemLogger,

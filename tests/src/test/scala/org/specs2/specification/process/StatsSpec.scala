@@ -6,9 +6,8 @@ import execute._
 import DefaultExecutor._
 import Statistics._
 import control._
-import org.specs2.specification.core.{Env, OwnEnv}
-import producer._
-import ExecuteActions._
+import Control._
+import specification.core.{Env, OwnEnv}
 
 class StatsSpec(val env: Env) extends Specification with OwnEnv { def is = s2"""
 

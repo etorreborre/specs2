@@ -14,10 +14,13 @@ case class ExecutionEnv(executorServices: ExecutorServices,
 
   def shutdown(): Unit = ()
 
-  lazy val executionContext = executorServices.executionContext
+  lazy val executionContext: ExecutionContext =
+    executorServices.executionContext
+
   lazy val scheduler = executorServices.scheduler
 
-  implicit lazy val ec = executorServices.executionContext
+  implicit lazy val ec: ExecutionContext =
+    executorServices.executionContext
 }
 
 object ExecutionEnv {

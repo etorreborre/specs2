@@ -9,20 +9,22 @@ import scala.concurrent.ExecutionContext
 /**
  * Execution environment for javascript
  */
-case class ExecutionEnv(executionContext: ExecutionContext,
-                        scheduler: Scheduler,
-                        timeFactor: Int) {
+case class ExecutionEnv(executorServices: ExecutorServices, timeFactor: Int) {
 
   def shutdown(): Unit = ()
 
-  implicit lazy val ec = executionContext
+  lazy val executionContext: ExecutionContext =
+    executorServices.executionContext
+    
+  implicit lazy val ec: ExecutionContext =
+    executorServices.executionContext
 }
 
 object ExecutionEnv {
 
   /** create an ExecutionEnv from an execution context only */
   def fromExecutionContext(ec: =>ExecutionContext): ExecutionEnv =
-    ExecutionEnv(ec, Schedulers.default, timeFactor = 1)
+    ExecutionEnv(ExecutorServices(() => ec, () => Schedulers.default), timeFactor = 1)
 
   def create(arguments: Arguments, systemLogger: Logger, tag: Option[String] = None): ExecutionEnv =
     fromGlobalExecutionContext

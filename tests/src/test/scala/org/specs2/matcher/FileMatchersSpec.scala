@@ -107,14 +107,16 @@ case class fs() extends MustMatchers with TestFiles with FileMatchers with Stand
   def e7 = dirPath must listPaths("file.txt")
   def e8 = file(okPath) must exist
   def e9 = file(missingPath) must not exist
-  def e10 =  file(setReadable(okPath, true)) must beReadable
+  def e10 = file(setReadable(okPath, true)) must beReadable
   def e11 = file(setWritable(okPath, true)) must beWritable
   def e12 = file(dirPath) must haveList("file.txt")
 
 }
 
 
-trait TestFiles extends FileSystem with BeforeAfterEach {
+trait TestFiles extends BeforeAfterEach {
+  val fileSystem = FileSystem(NoLogger)
+
   lazy val directoryPath = "target" / "test" / "fs"
   lazy val dirPath = directoryPath.path
   lazy val okFilePath = directoryPath | "file.txt"
@@ -122,9 +124,10 @@ trait TestFiles extends FileSystem with BeforeAfterEach {
   lazy val missingPath = "absent"
 
   def before =
-    writeFile(okFilePath, "").runOption
+    fileSystem.writeFile(okFilePath, "").runOption
 
-  def after = delete(directoryPath).runOption
+  def after =
+    fileSystem.delete(directoryPath).runOption
 
   def setReadable(path: String, r: Boolean) = {
     new File(path).setReadable(r)
