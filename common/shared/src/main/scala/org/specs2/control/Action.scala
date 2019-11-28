@@ -83,6 +83,9 @@ object Action {
   def protect[A](a: =>A): Action[A] =
     ActionMonad.point(a)
 
+  def fail[A](message: String): Action[A] =
+    exception(new UserException(message, new Exception))
+
   def exception[A](t: Throwable): Action[A] =
     Action(_ => Future.failed[A](t))
 

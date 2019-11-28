@@ -10,7 +10,6 @@ import main.Arguments
 import org.specs2.fp.syntax._
 import Runner._
 import reporter.LineLogger._
-import ExecuteActions._
 
 /**
  * The class runner expects the first command-line argument to be the class name of
@@ -34,8 +33,8 @@ trait ClassRunner {
 
     val actions: Action[Stats] = args.toList match {
       case Nil =>
-        Actions.fail("there must be at least one argument, the fully qualified class name") >>
-        Actions.ok(Stats.empty)
+        Action.fail("there must be at least one argument, the fully qualified class name") >>
+        Action.pure(Stats.empty)
 
       case className :: rest =>
         for {
@@ -90,11 +89,10 @@ object TextRunner extends ClassRunner {
   def run(spec: SpecificationStructure, args: Arguments = Arguments())(env: Env): LineLogger with StringOutput = {
     val logger = LineLogger.stringLogger
     val env1 = env.setLineLogger(logger).setArguments(env.arguments.overrideWith(args))
-    runAction(report(env1)(spec), env1.systemLogger)(env1.specs2ExecutionEnv)
+    report(env1)(spec).runAction(env1.specs2ExecutionContext)
     logger
   }
 
   override def createPrinters(args: Arguments, loader: ClassLoader): Operation[List[Printer]] =
     List(createTextPrinter(args, loader)).sequence.map(_.flatten)
 }
-
