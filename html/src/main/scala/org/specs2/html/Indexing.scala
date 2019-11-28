@@ -23,7 +23,7 @@ object Indexing {
    */
   def indexFold(path: FilePath): Fold[Operation, IndexedPage, Index] =
     origami.fold.fromMonoidMap[Operation, IndexedPage, Index](Index.createIndex).mapFlatten((index: Index) =>
-      FileSystem.writeFile(path, Index.toJson(index)).as(index))
+      FileSystem(ConsoleLogger()).writeFile(path, Index.toJson(index)).as(index))
 
   def createIndexedPages(env: Env, specifications: List[SpecStructure], outDir: DirectoryPath): List[IndexedPage] =
     specifications.map(createIndexedPage(env, outDir))
@@ -36,7 +36,7 @@ object Indexing {
       tags     = spec.tagsList.flatMap(_.names).map(sanitize).toIndexedSeq)
   }
 
-  def createEntries(page: IndexedPage): Vector[IndexEntry] = 
+  def createEntries(page: IndexedPage): Vector[IndexEntry] =
     Vector(IndexEntry(page.title, page.contents, page.tags, page.path))
 
   /** remove quotes from names in order to add as json values */
@@ -95,4 +95,3 @@ object Index {
 }
 
 case class IndexEntry(title: String, text: String, tags: IndexedSeq[String], path: FilePath)
-

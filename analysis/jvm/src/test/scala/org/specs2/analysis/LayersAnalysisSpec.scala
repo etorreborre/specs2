@@ -35,7 +35,7 @@ trait DataLayers extends SpecificationLike with DependencyMatchers with ScalaChe
    * The ok layers are random but sorted so that the letter in one layer always precede the letters in a lower layer.
    * The ko layers must be unsorted
    *
-   * Then the DependencyFinder trait is overriden so that it always provides an evidence that a package represented by a 'lower' letter depends
+   * Then the DependencyFinder trait is overridden so that it always provides an evidence that a package represented by a 'lower' letter depends
    * on a package represented by a 'higher' letter ('a' depends on 'c' for example)
    */
   // this generator makes sure that layers are sorted according to the alphabetical order
@@ -57,7 +57,7 @@ trait DataLayers extends SpecificationLike with DependencyMatchers with ScalaChe
 
   // return dependent packages according to the alphabetical order
   override def getPackageDependents(sourceDir: DirectoryPath, targetDir: DirectoryPath) = (packageName: String) =>
-    Operations.ok(dependentPackages(packageName).map(p => Dependency(packageName+".AClass", p+".ADependentClass")))
+    Operation.ok(dependentPackages(packageName).map(p => Dependency(packageName+".AClass", p+".ADependentClass")))
 
   // dependent packages are all the packages which are lower is the alphabetical order
   def dependentPackages(packageName: String) = packageNames.slice(0, packageNames.indexOf(packageName))

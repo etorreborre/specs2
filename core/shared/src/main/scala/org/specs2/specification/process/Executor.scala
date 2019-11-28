@@ -126,18 +126,18 @@ object DefaultExecutor extends DefaultExecutor {
   }
 
   def runSpec(spec: SpecStructure, env: Env): List[Fragment] =
-    executeSpec(spec, env).contents.runList.runMonoid(env.specs2ExecutionContext)
+    executeSpec(spec, env).contents.runList.runMonoid(env.specs2ExecutionEnv)
 
   def runSpecification(spec: SpecificationStructure, env: Env): List[Fragment] = {
     lazy val structure = spec.structure(env)
     executeSpec(structure, env.copy(arguments = env.arguments <| structure.arguments)).contents.runList.
-      runMonoid(env.specs2ExecutionContext)
+      runMonoid(env.specs2ExecutionEnv)
   }
 
   def runSpecificationFuture(spec: SpecificationStructure, env: Env): Future[List[Fragment]] = {
     lazy val structure = spec.structure(env)
     val env1 = env.copy(arguments = env.arguments <| structure.arguments)
-    executeSpec(structure, env1).contents.runList.runFuture(env.specs2ExecutorServices)
+    executeSpec(structure, env1).contents.runList.runFuture(env.specs2ExecutionEnv)
   }
 
   def runSpecificationAction(spec: SpecificationStructure, env: Env): Action[List[Fragment]] = {
@@ -149,7 +149,7 @@ object DefaultExecutor extends DefaultExecutor {
 
   /** only to be used in tests */
   def executeFragments(fs: Fragments)(env: Env): List[Fragment] =
-    fs.fragments.map(fs => executeAll(fs:_*)(env)).runMonoid(env.specs2ExecutionContext)
+    fs.fragments.map(fs => executeAll(fs:_*)(env)).runMonoid(env.specs2ExecutionEnv)
 
   def executeAll(seq: Fragment*)(env: Env): List[Fragment] =
     executeSeq(seq)(env)
@@ -159,7 +159,7 @@ object DefaultExecutor extends DefaultExecutor {
 
   /** only to be used in tests */
   def executeSeq(seq: Seq[Fragment])(env: Env): List[Fragment] =
-    (emitAsync(seq:_*) |> sequencedExecution(env)).runList.runMonoid(env.specs2ExecutionContext)
+    (emitAsync(seq:_*) |> sequencedExecution(env)).runList.runMonoid(env.specs2ExecutionEnv)
 
   /** synchronous execution with a specific environment */
   def executeFragments1(env: Env): AsyncTransducer[Fragment, Fragment] =

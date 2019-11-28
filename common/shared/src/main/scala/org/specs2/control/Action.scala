@@ -2,10 +2,9 @@ package org.specs2
 package control
 
 import fp._, syntax._
-import org.specs2.concurrent.{ExecutorServices, ExecutionEnv}
+import concurrent.{ExecutionEnv}
 import scala.concurrent._
 import scala.concurrent.duration._
-import scala.concurrent.ExecutionContext.global
 import scala.util._
 import scala.annotation.tailrec
 import Finalizer._
@@ -14,45 +13,63 @@ import execute._
 
 case class Action[A](runNow: ExecutionContext => Future[A], timeout: Option[FiniteDuration] = None, last: Vector[Finalizer] = Vector.empty) {
 
+  /** add a finalizer */
+  def addLast(finalizer: Finalizer): Action[A] =
+    copy(last = last :+ finalizer)
+
+  /** catch any exception resulting from running the action later */
   def attempt: Action[Throwable Either A] =
     Action(ec => runNow(ec).transform(r => scala.util.Success(r.toEither))(ec), timeout, last)
 
-  def runFuture(es: ExecutorServices): Future[A] =
-    timeout.fold(runNow(es.executionContext)) { t =>
+  def orElse(other: Action[A]): Action[A] =
+    attempt.flatMap {
+      case Left(_) => other.copy(last = other.last ++ this.last)
+      case Right(a) => Action.pure(a).copy(timeout = timeout, last = last)
+    }
+
+  def |||(other: Action[A]): Action[A] =
+    orElse(other)
+
+  /**
+   * run as a Future and raise a timeout exception if necessary
+   * NOTE: this does not execute the finalizers!!!
+   */
+  def runFuture(ee: ExecutionEnv): Future[A] =
+    timeout.fold(runNow(ee.executionContext)) { t =>
       val promise = Promise[A]
-      es.schedule( { promise.tryFailure(new TimeoutException); () }, t)
-      promise.tryCompleteWith(runNow(es.executionContext))
+      ee.executorServices.schedule( { promise.tryFailure(new TimeoutException); () }, t * ee.timeFactor.toLong)
+      promise.tryCompleteWith(runNow(ee.executionContext))
       promise.future
     }
 
-  def runVoid(ec: ExecutionContext): Unit = {
-      runOption(ec); ()
-  }
-
-  def runOption(ec: ExecutionContext): Option[A] =
-    runAction(ec).toOption
-
-  def runMonoid(ec: ExecutionContext)(implicit m: Monoid[A]): A =
-    runOption(ec).getOrElse(m.zero)
-
-  def runAction(ec: ExecutionContext): Throwable Either A =
-    try Right(Await.result(runNow(ec), timeout.getOrElse(Duration.Inf)))
+  /**
+   * Run the action and return an exception if it fails
+   * Whatever happens run the finalizers
+   */
+  def runAction(ee: ExecutionEnv): Throwable Either A =
+    try Right(Await.result(runFuture(ee), timeout.getOrElse(Duration.Inf)))
     catch { case t: Throwable => Left(t) }
     finally Finalizer.runFinalizers(last)
 
-  def unsafeRunAction(ec: ExecutionContext): A =
-    try Await.result(runNow(ec), timeout.getOrElse(Duration.Inf))
-    finally Finalizer.runFinalizers(last)
+  /** run the action and return Nothing is case of an error */
+  def runOption(ee: ExecutionEnv): Option[A] =
+    runAction(ee).toOption
+
+  /** run the action for its side effects */
+  def runVoid(ee: ExecutionEnv): Unit =
+    runOption(ee).void.getOrElse(())
+
+  /** run the action and the return an empty value in case of an error */
+  def runMonoid(ee: ExecutionEnv)(implicit m: Monoid[A]): A =
+    runOption(ee).getOrElse(m.zero)
+
+  /** run the action and throw any exception */
+  def unsafeRunAction(ee: ExecutionEnv): A =
+    runOption(ee).get
 
   // for backwards compatibility
   def run(ee: ExecutionEnv): A =
-    unsafeRunAction(ee.executionContext)
-
-  def toOperation: Operation[A] =
-    Operation(() => Await.result(runNow(global), timeout.getOrElse(Duration.Inf)), last)
-
-  def addLast(finalizer: Finalizer): Action[A] =
-    copy(last = last :+ finalizer)
+    unsafeRunAction(ee)
 }
 
 case class Finalizer(run: () => Unit) {
@@ -74,6 +91,9 @@ object Safe {
 object Finalizer {
   def runFinalizers(finalizers: Vector[Finalizer]): Unit =
     finalizers.foreach(_.attempt)
+
+  def create(action: =>Unit): Finalizer =
+    Finalizer(() => action)
 }
 
 object Action {
@@ -164,6 +184,9 @@ case class Operation[A](operation: () => A, last: Vector[Finalizer] = Vector.emp
     attempted.run
   }
 
+  def unsafeRun: A =
+    runOption.get
+
   def runOption: Option[A] =
     runOperation.toOption
 
@@ -186,10 +209,16 @@ case class Operation[A](operation: () => A, last: Vector[Finalizer] = Vector.emp
       case Right(a) => Operation(() => a, last)
     }
 
+  def |||(other: Operation[A]): Operation[A] =
+    orElse(other)
+
   def recoverWith(f: Throwable => A): Operation[A] =
-    attempt.map {
+    recover(t => Operation.ok(f(t)))
+
+  def recover(f: Throwable => Operation[A]): Operation[A] =
+    attempt.flatMap {
       case Left(t) => f(t)
-      case Right(a) => a
+      case Right(a) => Operation.ok(a)
     }
 
   def attempt: Operation[Throwable Either A] =

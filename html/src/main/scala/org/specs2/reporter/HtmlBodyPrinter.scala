@@ -10,14 +10,15 @@ import text.NotNullStrings._
 
 import scala.xml.NodeSeq
 import matcher._
+import fp.syntax._
 import form._
 import control._
-import ExecuteActions._
-import org.specs2.concurrent.ExecutionEnv
-import org.specs2.control.producer.{Transducer, Transducers}
-import org.specs2.text.AnsiColors
+import concurrent.ExecutionEnv
+import control.producer._
+import Transducer._
+import text.AnsiColors
 import origami._
-import org.specs2.time.SimpleTimer
+import time.SimpleTimer
 
 /**
  * Create the body of an html file reporting a specification execution
@@ -34,7 +35,7 @@ trait HtmlBodyPrinter {
     // Br (new line) fragment's description is meant for console output but
     // in html output examples are embedded in <li></li> tags and
     // there is no need to render additional blank line between them
-    val deleteLineBetweenExamples: Transducer[ActionStack, Fragment, Fragment] = producer =>
+    val deleteLineBetweenExamples: Transducer[Action, Fragment, Fragment] = producer =>
       producer.pipe(Transducers.zipWithPreviousAndNext).filter {
         case (Some(f1), f2, Some(f3)) if Fragment.isExample(f1) && Fragment.isBr(f2) && Fragment.isExample(f3) => false
         case _ => true
@@ -49,7 +50,7 @@ trait HtmlBodyPrinter {
       }
     }
 
-    Operations.delayed(spec.fragments.contents.pipe(deleteLineBetweenExamples).fold(htmlFold).runOption(ee)).map {
+    Operation.delayed(spec.fragments.contents.pipe(deleteLineBetweenExamples).fold(htmlFold).runOption(ee)).map {
       case Some((html, _)) =>
         html +
         s"""${printStatistics(title, stats, timer, options)}"""

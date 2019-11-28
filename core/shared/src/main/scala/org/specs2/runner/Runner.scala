@@ -23,7 +23,7 @@ object Runner {
   def execute(action: Action[Stats], arguments: Arguments, exit: Boolean)(env: Env): Unit = {
     val logger = ConsoleLogger()
 
-    action.attempt.runAction(env.specs2ExecutionContext) match {
+    action.attempt.runAction(env.specs2ExecutionEnv) match {
       case Left(t) =>
         logger.exception(t).runVoid
 
@@ -116,59 +116,73 @@ object Runner {
     if (exit) System.exit(status)
   }
 
-  def createTextPrinter(args: Arguments, loader: ClassLoader): Operation[Option[Printer]] = {
+  def createTextPrinter(args: Arguments, loader: ClassLoader, logger: Logger = ConsoleLogger()): Operation[Option[Printer]] = {
     if (!printerNames.map(_.name).exists(args.isSet) || args.isSet(CONSOLE.name)) Operation.ok(Some(TextPrinter))
-    else noInstance("no console printer defined", args.verbose)
+    else noInstance("no console printer defined", args.verbose, logger)
   }
 
-  def createJUnitXmlPrinter(args: Arguments, loader: ClassLoader): Operation[Option[Printer]] =
+  def createJUnitXmlPrinter(args: Arguments, loader: ClassLoader, logger: Logger = ConsoleLogger()): Operation[Option[Printer]] =
     createPrinterInstance(args, loader,
       JUNITXML, "org.specs2.reporter.JUnitXmlPrinter$",
       "cannot create a JUnit XML printer. Please check that specs2-junit.jar is on the classpath",
-      "no JUnit XML printer defined")
+      "no JUnit XML printer defined", logger)
 
-  def createHtmlPrinter(args: Arguments, loader: ClassLoader): Operation[Option[Printer]] =
+  def createHtmlPrinter(args: Arguments, loader: ClassLoader, logger: Logger = ConsoleLogger()): Operation[Option[Printer]] =
     createPrinterInstance(args, loader,
       HTML, "org.specs2.reporter.HtmlPrinter$",
       "cannot create a HTML printer. Please check that specs2-html.jar is on the classpath",
-      "no HTML printer defined")
+      "no HTML printer defined", logger)
 
-  def createMarkdownPrinter(args: Arguments, loader: ClassLoader): Operation[Option[Printer]] =
+  def createMarkdownPrinter(args: Arguments, loader: ClassLoader, logger: Logger = ConsoleLogger()): Operation[Option[Printer]] =
     createPrinterInstance(args, loader,
       MARKDOWN, "org.specs2.reporter.MarkdownPrinter$",
       "cannot create a Markdown printer. Please check that specs2-markdown is on the classpath",
-      "no Markdown printer defined")
+      "no Markdown printer defined", logger)
 
   /** create a custom printer from a Name passed in arguments */
-  def createPrinter(args: Arguments, loader: ClassLoader): Operation[Option[Printer]] =
+  def createPrinter(args: Arguments, loader: ClassLoader, logger: Logger = ConsoleLogger()): Operation[Option[Printer]] =
     createCustomInstance[Printer](args, loader,
       PRINTER.name,
       (className: String) => s"cannot create a $className printer. Please check that this class can be instantiated",
-      s"no custom printer defined")
+      s"no custom printer defined", logger)
 
   /** create a custom printer from a Notifier instance passed in arguments */
-  def createNotifierPrinter(args: Arguments, loader: ClassLoader): Operation[Option[Printer]] =
+  def createNotifierPrinter(args: Arguments, loader: ClassLoader, logger: Logger = ConsoleLogger()): Operation[Option[Printer]] =
     createCustomInstance[Notifier](args, loader,
       NOTIFIER.name,
       (className: String) => s"cannot create a $className notifier. Please check that this class can be instantiated",
-      s"no custom notifier defined").map(_.map(NotifierPrinter.printer))
+      s"no custom notifier defined", logger).map(_.map(NotifierPrinter.printer))
 
   /** create a built-in specs2 printer */
-  def createPrinterInstance(args: Arguments, loader: ClassLoader, name: PrinterName, className: String, failureMessage: String, noRequiredMessage: String): Operation[Option[Printer]] =
+  def createPrinterInstance(
+    args: Arguments,
+    loader: ClassLoader,
+    name: PrinterName,
+    className: String,
+    failureMessage: String,
+    noRequiredMessage: String,
+    logger: Logger = ConsoleLogger()): Operation[Option[Printer]] =
+
     if (args.isSet(name.name))
       for {
         instance <- Classes.createInstanceEither[Printer](className, loader)
         result <-
           instance match {
             case Right(i) => Operation.ok(Some(i))
-            case Left(t) => noInstanceWithException(failureMessage, t, verbose = true)
+            case Left(t) => noInstanceWithException(failureMessage, t, verbose = true, logger)
           }
       } yield result
-    else noInstance(noRequiredMessage, args.verbose)
+    else noInstance(noRequiredMessage, args.verbose, logger)
 
   /** create a custom instance */
-  def createCustomInstance[T <: AnyRef](args: Arguments, loader: ClassLoader,
-    name: String, failureMessage: String => String, noRequiredMessage: String)(implicit m: ClassTag[T]): Operation[Option[T]] =
+  def createCustomInstance[T <: AnyRef](
+    args: Arguments,
+    loader: ClassLoader,
+    name: String,
+    failureMessage: String => String,
+    noRequiredMessage: String,
+    logger: Logger = ConsoleLogger())(implicit m: ClassTag[T]): Operation[Option[T]] =
+
     args.commandLine.value(name) match {
     case Some(className) =>
       for {
@@ -176,11 +190,11 @@ object Runner {
         result <-
           instance match {
             case Right(i) => Operation.ok(Some(i))
-            case Left(t) => noInstanceWithException(failureMessage(className), t, verbose = true)
+            case Left(t) => noInstanceWithException(failureMessage(className), t, verbose = true, logger)
           }
       } yield result
 
-    case None => noInstance(noRequiredMessage, args.verbose)
+    case None => noInstance(noRequiredMessage, args.verbose, logger)
     }
 
   /** print a message if a class can not be instantiated */

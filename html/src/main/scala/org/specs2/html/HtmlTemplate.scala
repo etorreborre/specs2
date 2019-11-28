@@ -12,9 +12,9 @@ object HtmlTemplate {
     val parser = pandocParser(variables)
 
     parser.parse(template) match {
-      case parser.Success(s, _) => Operations.ok(s)
-      case parser.Failure(e, _) => Operations.fail(e+" for template \n"+template)
-      case parser.Error(e, _)   => Operations.fail(e+" for template \n"+template)
+      case parser.Success(s, _) => Operation.ok(s)
+      case parser.Failure(e, _) => Operation.fail(e+" for template \n"+template)
+      case parser.Error(e, _)   => Operation.fail(e+" for template \n"+template)
     }
 
   }
@@ -31,7 +31,7 @@ object HtmlTemplate {
     lazy val block: Parser[String] = rep1(dollar | variable | text) ^^ { _.mkString }
 
     lazy val dollar: Parser[String] = "$$" ^^ { s => "$" }
-    
+
     lazy val variable: Parser[String] =
       ("$" ~> "[^\\$]+".r <~ "$").filter(v => !Seq("if(", "endif", "else").exists(v.startsWith)) ^^ { (v: String) => variables.getOrElse(v, "") }
 
@@ -40,12 +40,12 @@ object HtmlTemplate {
     lazy val if1: Parser[String]   = "$if(" ~> "[^\\$\\)]+".r <~ ")$"
     lazy val else1: Parser[String] = "$else$"
     lazy val endif: Parser[String] = "$endif$"
-    
+
     lazy val conditional = if1.flatMap { variable =>
       if (variables.contains(variable)) block <~ (else1 ~> block <~ endif)
       else                              (block ~ else1) ~> block <~ endif
     }
-    
+
     def parse(string: String) = parseAll(template, string)
   }
 

@@ -11,7 +11,7 @@ import text.AnsiColors._
 import org.specs2.matcher.MatchResultLogicalCombinators._
 
 class FilesContentMatchersSpec extends Spec
-  with FilesContentMatchers with BeforeAfterEach with FileSystem { def is = sequential ^ diffs(show = true, triggerSize = 0, diffRatio = 100)^ s2"""
+  with FilesContentMatchers with BeforeAfterEach { def is = sequential ^ diffs(show = true, triggerSize = 0, diffRatio = 100)^ s2"""
 
  File content matchers help to compare the contents of 2 directories:
 
@@ -34,14 +34,16 @@ class FilesContentMatchersSpec extends Spec
     (FileName.unsafe("actual"), FileName.unsafe("expected"), FileName.unsafe("expected2"),
       FileName.unsafe("sub"), FileName.unsafe("f1"), FileName.unsafe("f2"), FileName.unsafe("f3"))
 
+  val fs = FileSystem(NoLogger)
+
   def e1 = {
     val action =
-      createFile(targetDir / actual    | f1)       >>
-      createFile(targetDir / actual    / sub | f2) >>
-      createFile(targetDir / expected  | f1)       >>
-      createFile(targetDir / expected  / sub | f2) >>
-      createFile(targetDir / expected2 | f1)       >>
-      createFile(targetDir / expected2 / sub | f3)
+      fs.createFile(targetDir / actual    | f1)       >>
+      fs.createFile(targetDir / actual    / sub | f2) >>
+      fs.createFile(targetDir / expected  | f1)       >>
+      fs.createFile(targetDir / expected  / sub | f2) >>
+      fs.createFile(targetDir / expected2 | f1)       >>
+      fs.createFile(targetDir / expected2 / sub | f3)
 
     action.runOption
 
@@ -55,11 +57,11 @@ class FilesContentMatchersSpec extends Spec
   def e2 = {
 
     val action =
-      createFile(targetDir / actual    | f1)         >>
-      createFile(targetDir / actual    / sub | f2) >>
-      createFile(targetDir / expected2 | f1)         >>
-      createFile(targetDir / expected2 / sub | f2) >>
-      createFile(targetDir / expected2 / sub | f3)
+      fs.createFile(targetDir / actual    | f1)         >>
+      fs.createFile(targetDir / actual    / sub | f2) >>
+      fs.createFile(targetDir / expected2 | f1)         >>
+      fs.createFile(targetDir / expected2 / sub | f2) >>
+      fs.createFile(targetDir / expected2 / sub | f3)
 
     action.runOption
 
@@ -70,12 +72,12 @@ class FilesContentMatchersSpec extends Spec
 
   def e3 = {
     val action =
-      writeFile(targetDir / actual    | f1,         "text1")        >>
-      writeFile(targetDir / actual    / sub | f2, "text2\ntext3") >>
-      writeFile(targetDir / expected  | f1,         "text1")        >>
-      writeFile(targetDir / expected  / sub | f2, "text2\ntext3") >>
-      writeFile(targetDir / expected2 | f1,         "text1")        >>
-      writeFile(targetDir / expected2 / sub | f2, "text2\ntext4")
+      fs.writeFile(targetDir / actual    | f1,         "text1")        >>
+      fs.writeFile(targetDir / actual    / sub | f2, "text2\ntext3") >>
+      fs.writeFile(targetDir / expected  | f1,         "text1")        >>
+      fs.writeFile(targetDir / expected  / sub | f2, "text2\ntext3") >>
+      fs.writeFile(targetDir / expected2 | f1,         "text1")        >>
+      fs.writeFile(targetDir / expected2 / sub | f2, "text2\ntext4")
 
     action.runOption
 
@@ -95,12 +97,12 @@ class FilesContentMatchersSpec extends Spec
 
   def e4 = {
     val action =
-      writeFile(targetDir / actual    | f1,          "text1")        >>
-      writeFile(targetDir / actual    / sub | f2,  "text2\ntext3") >>
-      writeFile(targetDir / expected  | f1,          "text1")        >>
-      writeFile(targetDir / expected  / sub | f2,  "text2\ntext3") >>
-      writeFile(targetDir / expected2 | f1,          "text1")        >>
-      writeFile(targetDir / expected2 / sub | f2,  "text2\ntext4")
+      fs.writeFile(targetDir / actual    | f1,          "text1")        >>
+      fs.writeFile(targetDir / actual    / sub | f2,  "text2\ntext3") >>
+      fs.writeFile(targetDir / expected  | f1,          "text1")        >>
+      fs.writeFile(targetDir / expected  / sub | f2,  "text2\ntext3") >>
+      fs.writeFile(targetDir / expected2 | f1,          "text1")        >>
+      fs.writeFile(targetDir / expected2 / sub | f2,  "text2\ntext4")
 
     action.runOption
 
@@ -117,11 +119,10 @@ class FilesContentMatchersSpec extends Spec
 
   val targetDir = "target" / "test" / FileName.unsafe("fcm-"+hashCode)
 
-  def before = FileSystem.mkdirs(targetDir).runOption
-  def after  = FileSystem.delete(targetDir).runOption
+  def before = fs.mkdirs(targetDir).runOption
+  def after  = fs.delete(targetDir).runOption
 
   def matcherMessage(m: MatchResult[_]): String =
     removeColors(m.message.trim)
 
 }
-

@@ -5,7 +5,7 @@ package core
 import java.util.concurrent._
 
 import execute._
-import org.specs2.concurrent.ExecutionEnv
+import concurrent.ExecutionEnv
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
@@ -192,7 +192,7 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
             }
       }
     }
-    copy(executing = Started(started.runFuture(env.executorServices)))
+    copy(executing = Started(started.runFuture(env.executionEnv)))
   }
 
   def setErrorAsFatal: Execution =
@@ -348,7 +348,7 @@ object Execution {
       implicit val ec = env.executionContext
       Future {
         () =>
-        f(env).startExecution(env).executionResult.runFuture(env.executorServices).map(r => () => r)
+        f(env).startExecution(env).executionResult.runFuture(env.executionEnv).map(r => () => r)
       }.flatMap(future => future())
     })
 

@@ -76,7 +76,7 @@ object sbtRun extends MasterSbtRunner(Array(), Array(), Thread.currentThread.get
   }
 
   def exit(action: Action[Stats])(implicit ee: ExecutionEnv): Unit = {
-    action.runFuture(ee.executorServices).onComplete {
+    action.runFuture(ee).onComplete {
       case scala.util.Failure(_)     => System.exit(100)
       case scala.util.Success(stats) => if (stats.isSuccess) System.exit(0) else System.exit(1)
     }(ee.executionContext)
@@ -123,7 +123,7 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
   def tags: Array[String] = {
     lazy val spec = createSpecStructure(taskDef, loader, env).runOption.flatten
     lazy val tags: List[NamedTag] =
-      spec.flatMap(s => s.tags.runOption(env.specs2ExecutionContext)).getOrElse(Nil)
+      spec.flatMap(s => s.tags.runOption(env.specs2ExecutionEnv)).getOrElse(Nil)
 
     if (env.arguments.commandLine.isSet("sbt.tags"))
       tags.flatMap(_.names).toArray
@@ -137,7 +137,7 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
   private def executeFuture(handler: EventHandler, loggers: Array[Logger]): Future[Unit] = {
     val ee = env.specs2ExecutionEnv
 
-    createSpecStructure(taskDef, loader, env).toAction.attempt.runFuture(ee.executorServices).flatMap {
+    createSpecStructure(taskDef, loader, env).toAction.attempt.runFuture(ee).flatMap {
       case Left(t) =>
         Future(processResult(handler, loggers)(t))
 
@@ -145,7 +145,7 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
         Future(())
 
       case Right(Some(structure)) =>
-        specificationRun(aTaskDef, structure, env, handler, loggers).attempt.runFuture(ee.executorServices).map {
+        specificationRun(aTaskDef, structure, env, handler, loggers).attempt.runFuture(ee).map {
           case Left(t) => processResult(handler, loggers)(t)
           case _ => ()
         }

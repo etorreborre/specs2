@@ -22,7 +22,7 @@ s2"""
 text$t
 other text
 """
-    TextPrinter.print(ownEnv.setArguments(Arguments("indentation", "4")).setLineLogger(logger))(spec).runOption(ownEnv.executionContext)
+    TextPrinter.print(ownEnv.setArguments(Arguments("indentation", "4")).setLineLogger(logger))(spec).runOption(ownEnv.executionEnv)
     (logger.messages(1), logger.messages(2)) must_==
       (("[info] text    ",
         "[info]     other text"))
