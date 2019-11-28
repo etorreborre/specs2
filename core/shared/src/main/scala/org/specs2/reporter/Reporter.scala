@@ -1,14 +1,14 @@
 package org.specs2
 package reporter
 
+import fp._, syntax._
+import control._
+import Control._
+import producer._
+import origami._, Folds._
 import specification._
 import specification.process._
 import core._
-import control._
-import eff.all._
-import origami._, Folds._
-import producer._
-import org.specs2.fp.syntax._
 import Statistics._
 
 /**
@@ -39,7 +39,7 @@ trait Reporter {
 
     val contents: AsyncStream[Fragment] =
       // evaluate all fragments before reporting if required
-      if (env.arguments.execute.asap) producers.emitEff(executing.contents.runList)
+      if (env.arguments.execute.asap) Producer.emitAction(executing.contents.runList)
       else                            executing.contents
 
     val sinks = (printers.map(_.sink(env1, spec)) :+ statsStoreSink(env1, spec)).sumAll
@@ -58,7 +58,7 @@ trait Reporter {
     lazy val sink: AsyncSink[Fragment] =
       Folds.fromSink[Action, Fragment] { fragment: Fragment =>
         if (neverStore)
-          Actions.unit
+          Action.unit
         else
           fragment.executionResult.flatMap { r =>
             env.statisticsRepository.storeResult(spec.specClassName, fragment.description, r).toAction
@@ -66,11 +66,11 @@ trait Reporter {
       }
 
     val prepare: Action[Unit] =
-      if (resetStore) env.statisticsRepository.resetStatistics
-      else            Actions.unit
+      if (resetStore) env.statisticsRepository.resetStatistics.toAction
+      else            Action.unit
 
     val last = (stats: Stats) =>
-      if (neverStore) Actions.unit
+      if (neverStore) Action.unit
       else            env.statisticsRepository.storeStatistics(spec.specClassName, stats).toAction
 
     (Statistics.fold <* fromStart(prepare) <* sink).mapFlatten(last)
@@ -79,4 +79,3 @@ trait Reporter {
 }
 
 object Reporter extends Reporter
-
