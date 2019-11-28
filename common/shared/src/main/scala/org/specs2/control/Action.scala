@@ -28,6 +28,9 @@ case class Action[A](runNow: ExecutionContext => Future[A], timeout: Option[Fini
   def runOption(ec: ExecutionContext): Option[A] =
     runAction(ec).toOption
 
+  def runMonoid(ec: ExecutionContext)(implicit m: Monoid[A]): A =
+    runOption(ec).getOrElse(m.zero)
+
   def runAction(ec: ExecutionContext): Throwable Either A =
     try Right(Await.result(runNow(ec), timeout.getOrElse(Duration.Inf)))
     catch { case t: Throwable => Left(t) }
@@ -146,6 +149,9 @@ case class Operation[A](operation: () => A, last: Vector[Finalizer] = Vector.emp
 
   def runOption: Option[A] =
     runOperation.toOption
+
+  def runMonoid(implicit m: Monoid[A]): A =
+    runOption.getOrElse(m.zero)
 
   def runVoid(): Unit = {
     runOption; ()

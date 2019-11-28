@@ -103,7 +103,7 @@ trait FilesContentMatchers extends FileMatchers with LinesContentMatchers with T
   }
 
   private case class LocalPaths(base: DirectoryPath, filter: FilePath => Boolean) {
-    def files = FilePathReader.listFilePaths(base).map(_.filter(filter).map(_.relativeTo(base)).sortBy(_.path)).runOption.getOrElse(Nil)
+    def files = FilePathReader.listFilePaths(base).map(_.filter(filter).map(_.relativeTo(base)).sortBy(_.path)).runMonoid
     def localPaths = files.map(_.path).sorted
   }
 

@@ -88,7 +88,7 @@ trait HtmlUrls {
     val (file, anchor) = (url.split("#")(0), url.split("#")(1))
     isAliveFile(file, others, rootDirectory) &&
       (isAliveAnchor(anchor, others.find { case (k, v) => k == file }.fold(NodeSeq.Empty)(_._2)) ||
-        isAliveAnchor(anchor, readFile(rootDirectory / FilePath.unsafe(file)).runOption.getOrElse("")))
+        isAliveAnchor(anchor, readFile(rootDirectory / FilePath.unsafe(file)).runMonoid))
   }
 }
 

@@ -31,7 +31,7 @@ class SpecificationStructureSpec(val env: Env) extends Specification with ScalaC
 """
 
   def sort = prop { specification: SpecificationStructure =>
-    val linked = SpecificationStructure.linkedSpecifications(specification, env, getClass.getClassLoader).runOption.getOrElse(List())
+    val linked = SpecificationStructure.linkedSpecifications(specification, env, getClass.getClassLoader).runMonoid
     val sorted = SpecificationStructure.topologicalSort(env)(linked).getOrElse(Vector()).map(_.structure(env))
 
     sorted must contain { s: SpecStructure =>
@@ -42,7 +42,7 @@ class SpecificationStructureSpec(val env: Env) extends Specification with ScalaC
 
   def linksOrder = prop { links: List[Fragment] =>
     val specification = new SpecificationStructure { def is = SpecStructure.create(SpecHeader.create(getClass), Fragments(links:_*)) }
-    val linked = SpecificationStructure.linkedSpecifications(specification, env, getClass.getClassLoader).runOption.getOrElse(List())
+    val linked = SpecificationStructure.linkedSpecifications(specification, env, getClass.getClassLoader).runMonoid
     val sorted = SpecificationStructure.topologicalSort(env)(linked).get.map(_.structure(env))
 
     sorted.dropRight(1).map(_.specClassName) must_== specification.structure(env).linkReferencesList.map(_.specClassName)

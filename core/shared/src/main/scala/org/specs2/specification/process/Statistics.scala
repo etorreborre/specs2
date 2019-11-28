@@ -49,5 +49,5 @@ trait Statistics {
 
 object Statistics extends Statistics {
   def runStats(spec: SpecStructure)(ee: ExecutionEnv): Stats =
-    spec.contents.fold(fold).runOption(ee).getOrElse(Stats.empty)
+    spec.contents.fold(fold).runMonoid(ee)
 }
