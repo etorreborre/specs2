@@ -25,6 +25,10 @@ case class Action[A](runNow: ExecutionContext => Future[A], timeout: Option[Fini
       promise.future
     }
 
+  def runVoid(ec: ExecutionContext): Unit = {
+      runOption(ec); ()
+  }
+
   def runOption(ec: ExecutionContext): Option[A] =
     runAction(ec).toOption
 
