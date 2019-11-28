@@ -2,7 +2,7 @@ package org.specs2
 package control
 
 import fp._, syntax._
-import concurrent.{ExecutionEnv}
+import concurrent.{ExecutionEnv, ExecuteActions}
 import scala.concurrent._
 import scala.concurrent.duration._
 import scala.util._
@@ -35,21 +35,14 @@ case class Action[A](runNow: ExecutionContext => Future[A], timeout: Option[Fini
    * NOTE: this does not execute the finalizers!!!
    */
   def runFuture(ee: ExecutionEnv): Future[A] =
-    timeout.fold(runNow(ee.executionContext)) { t =>
-      val promise = Promise[A]
-      ee.executorServices.schedule( { promise.tryFailure(new TimeoutException); () }, t * ee.timeFactor.toLong)
-      promise.tryCompleteWith(runNow(ee.executionContext))
-      promise.future
-    }
+    ExecuteActions.runActionToFuture(runNow, timeout, ee)
 
   /**
    * Run the action and return an exception if it fails
    * Whatever happens run the finalizers
    */
   def runAction(ee: ExecutionEnv): Throwable Either A =
-    try Right(Await.result(runFuture(ee), timeout.getOrElse(Duration.Inf)))
-    catch { case t: Throwable => Left(t) }
-    finally Finalizer.runFinalizers(last)
+    ExecuteActions.awaitAction(runNow, timeout, Finalizer.runFinalizers(last), ee)
 
   /** run the action and return Nothing is case of an error */
   def runOption(ee: ExecutionEnv): Option[A] =
