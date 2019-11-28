@@ -7,7 +7,7 @@ import org.specs2.mutable
 import org.specs2.specification._
 import execute._
 
-object Contexts extends UserGuidePage with FileMatchers with FileSystem { def is = s2"""
+object Contexts extends UserGuidePage with FileMatchers { def is = s2"""
 
 In a specification some examples are very straightforward. They just check that a function is returning expected values when given some inputs. However other examples can be more complex and require to execute in a specific context:
 
@@ -157,5 +157,3 @@ $AndIfYouWantToKnowMore
 $vid
 """
 }
-
-

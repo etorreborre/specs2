@@ -9,9 +9,7 @@ import Arbitrary._
 import org.specs2.runner.JUnitRunner
 
 import scala.IllegalArgumentException
-import org.specs2.fp.syntax._
-import control._
-import eff.ErrorEffect
+import fp.syntax._
 import matcher._
 import OperationMatchers._
 
@@ -50,9 +48,8 @@ class SpecificationStructureSpec(val env: Env) extends Specification with ScalaC
   }.setArbitrary(ArbitraryLinks).set(maxSize = 5)
 
   def report = {
-    runOperation(SpecificationStructure.create("org.specs2.specification.core.BrokenSpecification")) must beLeft((e: ErrorEffect.Error) =>
-      e must beLeft((e1: Throwable) => e1.getCause.getCause.getMessage === "boom")
-    )
+    SpecificationStructure.create("org.specs2.specification.core.BrokenSpecification").runOperation must beLeft((t: Throwable) =>
+       t.getCause.getCause.getMessage === "boom")
   }
 
   def companion = {

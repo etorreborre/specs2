@@ -26,16 +26,16 @@ In a further scenario, we might want to check that triggering another action is 
 // 8<----
 implicit val ee: ExecutionEnv = ??? // import your own
 // 8<----
-Action must terminate.when(action2)
-Action must terminate.when("starting the second action", action2)
-Action must terminate(retries=3, sleep=100.millis).when(action2)
+action must terminate.when(action2)
+action must terminate.when("starting the second action", action2)
+action must terminate(retries=3, sleep=100.millis).when(action2)
 }}
 
 When a second action is specified like that, `Action` will be started and `action2` will be started on the first retry. Otherwise, if you want to specify that `Action` can *only* terminate when `action2` is started, you write: ${snippet{
 // 8<----
 implicit val ee: ExecutionEnv = ??? // import your own
 // 8<----
-Action must terminate.onlyWhen(action2)
+action must terminate.onlyWhen(action2)
 }}
 
 #### ExecutionEnv
@@ -43,5 +43,5 @@ Action must terminate.onlyWhen(action2)
 The `terminate` matcher needs an implicit `ExecutionEnv` to be used. See the $ExecutionEnvironments page to learn how to get one.
 
 """
-  lazy val (Action, action2) = ("", "")
+  lazy val (action, action2) = ("", "")
 }

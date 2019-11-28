@@ -7,8 +7,7 @@ import specification.core._
 import scala.xml.NodeSeq
 import matcher._
 import control._
-import ExecuteActions._
-import org.specs2.main.Arguments
+import main.Arguments
 
 class JUnitXmlPrinterSpec(val env: Env) extends Specification with XmlMatchers with OwnEnv { def is = s2"""
 
@@ -107,10 +106,10 @@ is formatted for JUnit reporting tools.
   }
 
   def printString(env1: Env)(fs: Fragments): String = {
-    val mockFs = new FileSystem {
+    val mockFs = new FileSystem(NoLogger) {
       var out: String = ""
       override def writeFile(filePath: FilePath, content: String): Operation[Unit] =
-        Operations.ok(this.out = content)
+        Operation.ok(this.out = content)
     }
     val env = env1.copy(fileSystem = mockFs)
     Reporter.report(env, List(JUnitXmlPrinter))(SpecStructure(SpecHeader(getClass)).setFragments(fs)).runOption(env1.specs2ExecutionEnv)

@@ -1,6 +1,8 @@
 package org.specs2.runner
 
 import Runner._
+import org.specs2.specification.core._
+import org.specs2.specification.core.EnvDefault
 import org.specs2.specification.process.Stats
 import sbt.testing.{Runner=>_,_}
 import org.specs2.main._
@@ -10,7 +12,6 @@ import org.specs2.fp._
 import org.specs2.fp.syntax._
 import org.specs2.reporter.SbtLineLogger
 import org.specs2.reporter.Printer._
-import org.specs2.specification.core._
 import org.specs2.reflect._
 import org.specs2.fp._, syntax._
 import org.specs2.concurrent.ExecutionEnv

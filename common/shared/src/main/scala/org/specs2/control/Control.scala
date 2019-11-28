@@ -17,6 +17,12 @@ object Control {
   implicit val idToAction: NaturalTransformation[Id, Action] =
     NaturalTransformation.naturalId[Action]
 
+  implicit val operationToAction: NaturalTransformation[Operation, Action] =
+    new NaturalTransformation[Operation, Action] {
+      def apply[A](operation: Operation[A]): Action[A] =
+        operation.toAction
+    }
+
   def emitAsync[A](as: A*): AsyncStream[A] =
     Producer.emitSeq(as)
 

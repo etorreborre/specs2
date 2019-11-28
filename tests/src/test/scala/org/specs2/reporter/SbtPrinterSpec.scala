@@ -10,7 +10,6 @@ import sbt.testing._
 import runner._
 import specification.core._
 import specification.process.DefaultExecutor
-import control.ExecuteActions._
 
 class SbtPrinterSpec(val env: Env) extends Spec with OwnEnv { def is = s2"""
 
@@ -29,7 +28,7 @@ class SbtPrinterSpec(val env: Env) extends Spec with OwnEnv { def is = s2"""
   case class printer1() extends Mockito { outer =>
 
     def e1 = {
-      runAction(printer.printSpecification(ownEnv)(new HelloWorldSpec { override def is = "title".title ^ "\ntext" }))(ownEnv.specs2ExecutionEnv)
+      printer.printSpecification(ownEnv)(new HelloWorldSpec { override def is = "title".title ^ "\ntext" }).runAction(ownEnv.specs2ExecutionEnv)
       eventually(there was one(logger).info(beMatching(".*title.*")))
     }
 
@@ -53,7 +52,7 @@ class SbtPrinterSpec(val env: Env) extends Spec with OwnEnv { def is = s2"""
     }
 
     def print(spec: SpecStructure) = {
-      runAction(printer.print(Env(arguments = Arguments("nocolor")))(spec))(ownEnv.specs2ExecutionEnv)
+      printer.print(Env(arguments = Arguments("nocolor")))(spec).runAction(ownEnv.specs2ExecutionEnv)
       stringLogger.flush()
       stringLogger.messages.mkString("\n")
     }
@@ -109,7 +108,7 @@ class SbtPrinterSpec(val env: Env) extends Spec with OwnEnv { def is = s2"""
 
     def executeAndPrintHelloWorldUnitSpec = {
       val executed = DefaultExecutor.executeSpec((new HelloWorldUnitSpec).is.fragments, env)
-      runAction(printer.print(env)(executed))(env.specs2ExecutionEnv)
+      printer.print(env)(executed).runAction(env.specs2ExecutionEnv)
     }
 
   }

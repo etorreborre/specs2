@@ -27,6 +27,9 @@ object Monoid {
   implicit def listMonoid[A]: Monoid[List[A]] =
     instance((s1, s2) => s1 ++ s2, List.empty[A])
 
+  implicit def seqMonoid[A]: Monoid[Seq[A]] =
+    instance((s1, s2) => s1 ++ s2, Seq.empty[A])
+
   implicit def vectorMonoid[A]: Monoid[Vector[A]] =
     instance((s1, s2) => s1 ++ s2, Vector.empty[A])
 
@@ -45,4 +48,3 @@ object Monoid {
 
 
 }
-

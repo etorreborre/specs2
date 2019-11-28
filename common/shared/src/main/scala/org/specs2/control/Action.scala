@@ -172,6 +172,11 @@ object Action {
 
   }
 
+  implicit def actionAsResult[T : AsResult]: AsResult[Action[T]] = new AsResult[Action[T]] {
+    def asResult(action: =>Action[T]): Result =
+      action.runAction(ExecutionEnv.fromGlobalExecutionContext).fold(err => Error(err),  ok => AsResult(ok))
+  }
+
 }
 
 case class Operation[A](operation: () => A, last: Vector[Finalizer] = Vector.empty) {

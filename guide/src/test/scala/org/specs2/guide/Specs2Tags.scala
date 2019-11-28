@@ -10,10 +10,10 @@ import org.specs2.fp.syntax._
  * Functions for finding the most relevant specs2 tags to display on the website
  */
 trait Specs2Tags {
-  def allTags: Action[List[VersionTag]] =
+  def allTags: Operation[List[VersionTag]] =
     Executable.execute(FilePath("git"), Seq("tag")).map(_.trim.split("\n").map(VersionTag.fromString).toList.flatten)
 
-  def publishedTags: Action[List[VersionTag]] =
+  def publishedTags: Operation[List[VersionTag]] =
     allTags.map(filterPublished)
 
   def filterPublished(tags: List[VersionTag]): List[VersionTag] = {

@@ -7,8 +7,7 @@ import specification.core.Env
 import scala.concurrent._
 import duration._
 import runner._
-import control.ExecuteActions._
-import org.specs2.main.Arguments
+import main.Arguments
 
 class FutureMatchersSpec extends Specification with ResultMatchers with specification.Retries {
 
