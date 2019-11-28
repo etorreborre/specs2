@@ -90,7 +90,7 @@ object sbtRun extends MasterSbtRunner(Array(), Array(), Thread.currentThread.get
         Actions.unit
     else {
       val taskDef = new TaskDef(arguments(0), Fingerprints.fp1, true, Array())
-      Actions.delayed(newTask(taskDef).execute(NoEventHandler, Array(ConsoleLogger))).as(())
+      Actions.delayed(newTask(taskDef).execute(NoEventHandler, Array(ConsoleTestingLogger))).as(())
     }
   }.as(Stats.empty)
 
@@ -100,7 +100,7 @@ object NoEventHandler extends EventHandler {
   def handle(event: Event): Unit = {}
 }
 
-object ConsoleLogger extends Logger {
+object ConsoleTestingLogger extends Logger {
   def ansiCodesSupported = false
 
   def error(message: String) = println("error: " + message)
