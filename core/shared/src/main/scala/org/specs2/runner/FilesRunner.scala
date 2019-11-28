@@ -10,7 +10,6 @@ import specification.core._
 import runner.Runner._
 import org.specs2.fp.syntax._
 import SpecificationsFinder._
-import Operations._
 
 /**
  * This trait finds specifications in the source directory, instantiate them
@@ -34,7 +33,7 @@ trait FilesRunner {
     val args = env.arguments
     val base = args.commandLine.valueOr("filesrunner.basepath", new java.io.File(specificationsBasePath).getAbsolutePath)
     val specs = for {
-      basePath <- Actions.checkThat(base, new java.io.File(base).isDirectory, s"$base must be a directory")
+      basePath <- Action.checkThat(base, new java.io.File(base).isDirectory, s"$base must be a directory")
       ss <- findSpecifications(
         glob = args.commandLine.valueOr("filesrunner.path", specificationsPath),
         pattern = args.commandLine.valueOr("filesrunner.pattern", specificationsPattern),
@@ -42,11 +41,13 @@ trait FilesRunner {
         verbose = isVerbose(args)).toAction
     } yield ss
 
+    val logger = ConsoleLogger()
+
     for {
-      _     <- beforeExecution(args, isVerbose(args)).toAction
+      _     <- beforeExecution(args, isVerbose(args), logger).toAction
       ss    <- specs.map(sort(env))
       stats <- ss.toList.map(ClassRunner.report(env)).sequence
-      _     <- afterExecution(ss, isVerbose(args)).toAction
+      _     <- afterExecution(ss, isVerbose(args), logger).toAction
     } yield stats.foldMap(identity _)
   }
 
@@ -59,17 +60,17 @@ trait FilesRunner {
   def isVerbose(args: Arguments) = args.isSet("filesrunner.verbose")
 
   /** print a message before the execution */
-  protected def beforeExecution(args: Arguments, verbose: Boolean): Operation[Unit] = for {
-    _        <- log("\nExecuting specifications", verbose)
+  protected def beforeExecution(args: Arguments, verbose: Boolean, logger: Logger = ConsoleLogger()): Operation[Unit] = for {
+    _        <- logger.info("\nExecuting specifications", verbose)
     printers <- ClassRunner.createPrinters(args, Thread.currentThread.getContextClassLoader)
-    _        <- log("printers are " + printers.mkString(", "), verbose)
+    _        <- logger.info("printers are " + printers.mkString(", "), verbose)
   } yield ()
 
 
   /** print a message after the execution based on the number of specifications */
-  protected def afterExecution(specs: Seq[SpecificationStructure], verbose: Boolean): Operation[Unit] = {
-    if (specs.isEmpty) log("No specification found\n", verbose)
-    else               log("Finished the execution of " + specs.size + " specifications\n", verbose)
+  protected def afterExecution(specs: Seq[SpecificationStructure], verbose: Boolean, logger: Logger = ConsoleLogger()): Operation[Unit] = {
+    if (specs.isEmpty) logger.info("No specification found\n", verbose)
+    else               logger.info("Finished the execution of " + specs.size + " specifications\n", verbose)
   }
 }
 
