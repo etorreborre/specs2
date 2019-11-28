@@ -2,6 +2,7 @@ package org.specs2
 package specification
 package process
 
+import fp._, syntax._
 import control._
 import execute.Result
 import io._
@@ -45,21 +46,21 @@ case class StatisticsMemoryStore(statistics: HashMap[String, Stats] = new HashMa
                        results: HashMap[(String, Long), Result] = new HashMap[(String, Long), Result]) extends Store {
   def get[A](key: Key[A]): Operation[Option[A]] = key match {
     case SpecificationStatsKey(specClassName) =>
-      Operations.ok(statistics.get(specClassName))
+      Operation.ok(statistics.get(specClassName))
 
     case SpecificationResultKey(specClassName, description) =>
-      Operations.ok(results.get((specClassName, description.hashCode.toLong)))
+      Operation.ok(results.get((specClassName, description.hashCode.toLong)))
   }
 
   def set[A](key: Key[A], a: A): Operation[Unit] = key match {
     case SpecificationStatsKey(specClassName) =>
-      Operations.ok(statistics.put(specClassName, a)).map(_ => ())
+      Operation.ok(statistics.put(specClassName, a)).map(_ => ())
 
     case SpecificationResultKey(specClassName, description) =>
-      Operations.ok(results.put((specClassName, description.hashCode.toLong), a)).map(_ => ())
+      Operation.ok(results.put((specClassName, description.hashCode.toLong), a)).map(_ => ())
   }
 
-  def reset: Operation[Unit] = Operations.ok {
+  def reset: Operation[Unit] = Operation.ok {
     statistics.clear
     results.clear
   }
