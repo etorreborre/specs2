@@ -2,7 +2,6 @@ package org.specs2.specification.process
 
 import org.specs2.Specification
 import org.specs2.concurrent.ExecutionEnv
-import org.specs2.control.ExecuteActions._
 import org.specs2.execute.Result
 import org.specs2.specification.core.{Execution, Fragment, NoText}
 import org.specs2.specification.process.Statistics._
@@ -25,4 +24,3 @@ class StatisticsSpec(ee: ExecutionEnv) extends Specification { def is = s2"""
     Seq(success, failure, pending, skipped) must contain((r: Result) => foldStats(r) === Stats.empty.withResult(r)).forall
   }
 }
-

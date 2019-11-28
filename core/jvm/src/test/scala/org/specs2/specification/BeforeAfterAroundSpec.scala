@@ -7,12 +7,11 @@ import org.specs2.specification.core.{Env, SpecificationStructure}
 import org.specs2.specification.process.DefaultExecutor
 import _root_.org.specs2.mutable.{Specification => Spec}
 import fp.syntax._
-import org.specs2.control.ExecuteActions._
 
 class BeforeAfterAroundSpec extends Specification with Grouped { def is = s2"""
 
- The `Before/After/Around Example` traits are used to automatically insert contexts around examples bodies            
- a spec can define a Before context that is used for each example                                                     
+ The `Before/After/Around Example` traits are used to automatically insert contexts around examples bodies
+ a spec can define a Before context that is used for each example
    in a mutable spec                                                                                          ${g1.e1}
    also in an acceptance spec                                                                                 ${g1.e2}
 

@@ -2,7 +2,6 @@ package org.specs2
 package specification
 
 import core._
-import control._
 import main._
 import org.specs2.concurrent.ExecutionEnv
 

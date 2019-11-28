@@ -2,15 +2,12 @@ package org.specs2
 package specification
 package process
 
-import org.specs2.specification.dsl.ExampleDsl
-import specification.core.{Env, Fragments, OwnEnv}
-
 import scala.collection.mutable.ListBuffer
-import matcher._
-import org.specs2.execute.{AsResult, Result}
-
 import fp.syntax._
-import control.ExecuteActions._
+import matcher._
+import execute.{Result}
+import specification.dsl.ExampleDsl
+import specification.core.{Env, Fragments, OwnEnv}
 
 class RandomExecutionSpec(val env: Env) extends script.Specification with Groups with ThrownExpectations with ExampleDsl with OwnEnv { def is = section("travis") ^ s2"""
 
@@ -30,7 +27,7 @@ class RandomExecutionSpec(val env: Env) extends script.Specification with Groups
         def ex(i: =>Int) = { print("ex"+i); ok }
       }
 
-      runAction(DefaultExecutor.runSpecificationAction(spec, ownEnv) as {
+      DefaultExecutor.runSpecificationAction(spec, ownEnv).runAction(ownEnv.executionContext).as {
         val allExamples = allOf((1 to n).map("ex"+_):_*)
 
         messages must haveSize(10)
@@ -38,8 +35,7 @@ class RandomExecutionSpec(val env: Env) extends script.Specification with Groups
         "the examples are executed randomly" ==> {
           messages must not (contain(allExamples).inOrder)
         }
-      })(ownEnv.executionEnv).fold(AsResult(_), identity)
-
+      }.fold(execute.Error(_), identity)
     }
 
     eg := {
@@ -53,7 +49,7 @@ class RandomExecutionSpec(val env: Env) extends script.Specification with Groups
         s2"""${fs_1_to_5.append(step("stop")).append(fs_6_to_10)}"""
       }
 
-      runAction(DefaultExecutor.runSpecificationAction(spec, ownEnv) as {
+      DefaultExecutor.runSpecificationAction(spec, ownEnv).runAction(ownEnv.executionContext).as {
 
         val allExamples = allOf((1 to n).map("ex"+_):_*)
 
@@ -66,7 +62,7 @@ class RandomExecutionSpec(val env: Env) extends script.Specification with Groups
         Result.foreach(1 to 5) { i =>
           messages.indexOf("ex"+i) must be_<(messages.indexOf("ex"+(i+5)))
         }
-      })(ownEnv.executionEnv).fold(AsResult(_), identity)
+      }.fold(execute.Error(_), identity)
     }
   }
 

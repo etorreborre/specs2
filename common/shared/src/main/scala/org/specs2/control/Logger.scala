@@ -10,6 +10,7 @@ trait Logger {
 }
 
 case class ConsoleLogger() extends Logger {
+
   def exception(t: Throwable, verbose: Boolean = false): Operation[Unit] =
     Operation.delayed(println("[ERROR] "+t.getMessage)) >>
     (if (verbose) Operation.delayed(t.printStackTrace) else Operation.unit)
@@ -22,4 +23,10 @@ case class ConsoleLogger() extends Logger {
     if (doIt) Operation.delayed((println("[INFO] "+message)))
     else Operation.unit
 
+}
+
+object NoLogger extends Logger {
+  def warn(message: String, doIt: Boolean = true): Operation[Unit] = Operation.unit
+  def info(message: String, doIt: Boolean = true): Operation[Unit] = Operation.unit
+  def exception(t: Throwable, doIt: Boolean = true): Operation[Unit] = Operation.unit
 }

@@ -2,9 +2,9 @@ package org.specs2
 package reporter
 
 import control._
-import main.Arguments
 import matcher._
 import execute._
+import main.Arguments
 import LineLogger._
 import specification.create.S2StringContext
 import specification.dsl.FragmentsDsl
@@ -12,7 +12,6 @@ import specification.core._
 import specification.process._
 import OperationMatchers._
 import org.specs2.control.origami.Folds
-import org.specs2.control.ExecuteActions._
 
 class ReporterSpec(val env: Env) extends Specification with ThrownExpectations with OwnEnv { def is = s2"""
 
@@ -90,11 +89,11 @@ class ReporterSpec(val env: Env) extends Specification with ThrownExpectations w
 }
 
 class FakeJUnitPrinter(logger: LineLogger) extends Printer {
-  def prepare(env: Env, specifications: List[SpecStructure]): Action[Unit] = Actions.unit
-  def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] = Actions.unit
+  def prepare(env: Env, specifications: List[SpecStructure]): Action[Unit] = Action.unit
+  def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] = Action.unit
 
   def sink(env: Env, spec: SpecStructure) =
-    Folds.fromSink((f: Fragment) => Actions.ok(logger.infoLog("junit\n")))
+    Folds.fromSink((f: Fragment) => Action.pure(logger.infoLog("junit\n")))
 }
 
 object reporterSpecSupport extends MustMatchers with StandardMatchResults with S2StringContext with FragmentsDsl {
@@ -114,7 +113,7 @@ object reporterSpecSupport extends MustMatchers with StandardMatchResults with S
   def ex3(logger: LineLogger) = { logger.infoLog("e3\n "); ok }
 
   def reported(env: Env, logger: LineLogger = NoLineLogger, printers: List[Printer] = List(TextPrinter)) =
-    reporter.report(env, printers)(spec(logger)).runOption(env.specs2ExecutionEnv)
+    reporter.report(env, printers)(spec(logger)).runOption(env.specs2ExecutionContext)
 
   def indexOf(messages: Seq[String])(f: String => Boolean): Int =
     messages.zipWithIndex.find { case (s, i) => f(s)}.fold(-1)(_._2)

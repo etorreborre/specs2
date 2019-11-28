@@ -4,6 +4,7 @@ package analysis
 import classycle._
 import reflect._
 import io._
+import fp.syntax._
 import control._
 
 /**

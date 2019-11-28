@@ -1,7 +1,8 @@
 package org.specs2
 package fp
 
-import org.specs2.control.producer.Producer
+import org.specs2.control._
+import org.specs2.control.producer._
 
 class ProducerSpec extends Specification { def is = s2"""
 
@@ -10,7 +11,8 @@ class ProducerSpec extends Specification { def is = s2"""
 """
 
   def stackOverflow = {
-    Producer.emitSeq(List.range(1, 10000))
+    Producer.emitSeq[Operation, Int](List.range(1, 10000))
+    Producer.emitSeq[Action, Int](List.range(1, 10000))
     ok
   }
 

@@ -4,7 +4,6 @@ package execute
 import mutable.Specification
 import org.specs2.specification.core.{Env, Fragment, OwnEnv}
 import org.specs2.specification.process.DefaultExecutor
-import org.specs2.control.ExecuteActions._
 
 class PendingUntilFixedSpec(val env: Env) extends Specification with OwnEnv {
 

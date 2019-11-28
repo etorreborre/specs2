@@ -2,8 +2,6 @@ package org.specs2
 package matcher
 
 import analysis._
-import execute.Result
-import control._
 
 /**
  * The dependency matchers trait provides a way to specify the dependencies that should be verified in your project
@@ -37,8 +35,8 @@ trait DependencyBaseMatchers extends LayersAnalysis {
    */
   class LayersDependenciesMatcher extends Matcher[Layers] {
     def apply[S <: Layers](ls: Expectable[S]) = {
-      runOperation(ls.value.unsatisfied).fold(
-        error => result(Result.disjunctionErrorToResult(error), ls),
+      ls.value.unsatisfied.runOperation.fold(
+        error => result(execute.Error(error), ls),
         dependencies => result(dependencies.isEmpty, "all dependencies are satisfied", "those dependencies are not satisfied:\n"+dependencies.showBreaks, ls)
       )
 

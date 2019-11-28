@@ -1,0 +1,829 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  SIGSEGV (0xb) at pc=0x00007fff3fde757e, pid=70373, tid=0x00000000001285b7
+#
+# JRE version: Java(TM) SE Runtime Environment (8.0_181-b13) (build 1.8.0_181-b13)
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (25.181-b13 mixed mode bsd-amd64 compressed oops)
+# Problematic frame:
+# C  [CoreFoundation+0x5657e]  CFMachPortInvalidate+0x47
+#
+# Failed to write core dump. Core dumps have been disabled. To enable core dumping, try "ulimit -c unlimited" before starting Java again
+#
+# If you would like to submit a bug report, please visit:
+#   http://bugreport.java.com/bugreport/crash.jsp
+# The crash happened outside the Java Virtual Machine in native code.
+# See problematic frame for where to report the bug.
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x00007f923c4af800):  JavaThread "pool-1-thread-179" [_thread_in_native, id=1213879, stack(0x000070000d715000,0x000070000db15000)]
+
+siginfo: si_signo: 11 (SIGSEGV), si_code: 1 (SEGV_MAPERR), si_addr: 0x0000000000000000
+
+Registers:
+RAX=0x0000000000000000, RBX=0x00007f9235be5330, RCX=0x0000010000000100, RDX=0x0000000000000000
+RSP=0x000070000db131a0, RBP=0x000070000db131d0, RSI=0x00000000000020a4, RDI=0x0000000000000000
+R8 =0x00000000000030a4, R9 =0x00007f922e7907a8, R10=0x0000000000000000, R11=0x00007f922e7907a0
+R12=0x0000000000000000, R13=0x000000012da47504, R14=0x0000000000000000, R15=0xb94552c764b90019
+RIP=0x00007fff3fde757e, EFLAGS=0x0000000000010246, ERR=0x0000000000000004
+  TRAPNO=0x000000000000000e
+
+Top of Stack: (sp=0x000070000db131a0)
+0x000070000db131a0:   0000000000000000 00007f9235be5330
+0x000070000db131b0:   0000000000000000 000000012da47504
+0x000070000db131c0:   0000000000000000 b94552c764b90019
+0x000070000db131d0:   000070000db131f0 00007fff4138427c
+0x000070000db131e0:   000070000db13150 0000000000000001
+0x000070000db131f0:   000070000db13200 000000012da47f14
+0x000070000db13200:   0000000000000000 000070000db13c08
+0x000070000db13210:   000070000db132d0 000000012da474dd
+0x000070000db13220:   000070000db13af0 000070000db133b0
+0x000070000db13230:   000070000db13398 000070000db13c08
+0x000070000db13240:   00007fff413841c9 000070000db13320
+0x000070000db13250:   000070000db13150 000070000db13180
+0x000070000db13260:   0000000000000001 0000000000000001
+0x000070000db13270:   0000000000000001 000070000db132e0
+0x000070000db13280:   000070000db13200 000070000db132f0
+0x000070000db13290:   0000000000000001 00007f923956b930
+0x000070000db132a0:   b94552c764b90019 00007f923c4af9f8
+0x000070000db132b0:   000070000db13328 000070000db13300
+0x000070000db132c0:   0000000000000000 0000000000000000
+0x000070000db132d0:   000070000db13bf0 000000012da3d299
+0x000070000db132e0:   000070000db13320 00007f923c4af9f8
+0x000070000db132f0:   000000012da48570 0000000110d2158f
+0x000070000db13300:   00007f923c4af800 00007f923c4af9f8
+0x000070000db13310:   000070000db13c08 00007fff413841c9
+0x000070000db13320:   00007f9235be5330 000000012da3c9e9
+0x000070000db13330:   000070000db133a0 000000000001e200
+0x000070000db13340:   00007f921ec02968 00007fff413841c9
+0x000070000db13350:   000070000db13c08 0000000000000001
+0x000070000db13360:   000000012da48498 0000000000000001
+0x000070000db13370:   000070000db132e0 000070000db132f0
+0x000070000db13380:   000070000db13c38 0000000000000000
+0x000070000db13390:   0000000000000000 0000000100000002 
+
+Instructions: (pc=0x00007fff3fde757e)
+0x00007fff3fde755e:   00 8a 05 36 71 fd 57 84 c0 74 0f 48 83 c4 08 5b
+0x00007fff3fde756e:   41 5c 41 5d 41 5e 41 5f 5d c3 41 f6 c4 01 75 67
+0x00007fff3fde757e:   49 8b 04 24 48 85 c0 74 2b 48 8d 0d 52 27 fd 57
+0x00007fff3fde758e:   48 3b 01 74 1f 48 8b 0d d6 51 fd 57 48 39 c8 74 
+
+Register to memory mapping:
+
+RAX=0x0000000000000000 is an unknown value
+RBX=0x00007f9235be5330 is an unknown value
+RCX=0x0000010000000100 is an unknown value
+RDX=0x0000000000000000 is an unknown value
+RSP=0x000070000db131a0 is pointing into the stack for thread: 0x00007f923c4af800
+RBP=0x000070000db131d0 is pointing into the stack for thread: 0x00007f923c4af800
+RSI=0x00000000000020a4 is an unknown value
+RDI=0x0000000000000000 is an unknown value
+R8 =0x00000000000030a4 is an unknown value
+R9 =0x00007f922e7907a8 is an unknown value
+R10=0x0000000000000000 is an unknown value
+R11=0x00007f922e7907a0 is an unknown value
+R12=0x0000000000000000 is an unknown value
+R13=0x000000012da47504: ffi_call+0x414 in /private/var/folders/kb/tjt27xcn6_dg095y88337mjm0000gn/T/jna-1005382995/jna2952893857635498119.tmp at 0x000000012da3a000
+R14=0x0000000000000000 is an unknown value
+R15=0xb94552c764b90019 is an unknown value
+
+
+Stack: [0x000070000d715000,0x000070000db15000],  sp=0x000070000db131a0,  free space=4088k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+C  [CoreFoundation+0x5657e]  CFMachPortInvalidate+0x47
+C  [FSEvents+0x327c]  FSEventStreamStop+0xb3
+C  [jna2952893857635498119.tmp+0xdf14]  ffi_call_unix64+0x4c
+C  0x000070000db13c08
+
+Java frames: (J=compiled Java code, j=interpreted, Vv=VM code)
+J 9436  com.sun.jna.Native.invokeVoid(Lcom/sun/jna/Function;JI[Ljava/lang/Object;)V (0 bytes) @ 0x000000011f408da9 [0x000000011f408d40+0x69]
+J 144735 C2 com.sun.jna.Function.invoke([Ljava/lang/Object;Ljava/lang/Class;ZI)Ljava/lang/Object; (769 bytes) @ 0x000000011e3dd424 [0x000000011e3dd3c0+0x64]
+J 144710 C2 com.sun.jna.Function.invoke(Ljava/lang/reflect/Method;[Ljava/lang/Class;Ljava/lang/Class;[Ljava/lang/Object;Ljava/util/Map;)Ljava/lang/Object; (548 bytes) @ 0x000000011ef053dc [0x000000011ef04600+0xddc]
+J 144736 C2 com.sun.jna.Library$Handler.invoke(Ljava/lang/Object;Ljava/lang/reflect/Method;[Ljava/lang/Object;)Ljava/lang/Object; (348 bytes) @ 0x000000012357a750 [0x000000012357a240+0x510]
+j  com.sun.proxy.$Proxy9.FSEventStreamStop(Lio/methvin/watchservice/jna/FSEventStreamRef;)V+16
+j  io.methvin.watchservice.MacOSXListeningWatchService.close()V+52
+j  io.methvin.watcher.DirectoryWatcher.close()V+4
+j  scala.meta.internal.metals.FileWatcher.$anonfun$stopWatching$1(Lio/methvin/watcher/DirectoryWatcher;)V+1
+j  scala.meta.internal.metals.FileWatcher.$anonfun$stopWatching$1$adapted(Lio/methvin/watcher/DirectoryWatcher;)Ljava/lang/Object;+1
+j  scala.meta.internal.metals.FileWatcher$$Lambda$3268.apply(Ljava/lang/Object;)Ljava/lang/Object;+4
+J 40948 C2 scala.Option.foreach(Lscala/Function1;)V (19 bytes) @ 0x0000000121b29b9c [0x0000000121b29b20+0x7c]
+j  scala.meta.internal.metals.FileWatcher.stopWatching()V+9
+j  scala.meta.internal.metals.FileWatcher.startWatching(Ljava/util/List;Ljava/util/List;)V+1
+j  scala.meta.internal.metals.FileWatcher.restart()V+67
+j  scala.meta.internal.metals.MetalsLanguageServer.$anonfun$indexWorkspace$4(Lscala/meta/internal/metals/MetalsLanguageServer;)V+4
+j  scala.meta.internal.metals.MetalsLanguageServer$$Lambda$3261.apply$mcV$sp()V+4
+J 45407 C2 scala.runtime.java8.JFunction0$mcV$sp.apply()Ljava/lang/Object; (10 bytes) @ 0x0000000125206a9c [0x0000000125206a60+0x3c]
+j  scala.meta.internal.metals.MetalsLanguageServer.timedThunk(Ljava/lang/String;ZLscala/Function0;)Ljava/lang/Object;+14
+j  scala.meta.internal.metals.MetalsLanguageServer.indexWorkspace(Lscala/meta/internal/metals/ImportedBuild;)V+45
+j  scala.meta.internal.metals.MetalsLanguageServer.$anonfun$connectToNewBuildServer$9(Lscala/meta/internal/metals/MetalsLanguageServer;Lscala/meta/internal/metals/ImportedBuild;)V+2
+j  scala.meta.internal.metals.MetalsLanguageServer$$Lambda$3208.apply$mcV$sp()V+8
+j  scala.meta.internal.metals.MetalsLanguageServer.$anonfun$profiledIndexWorkspace$2(Lscala/Function0;)V+1
+j  scala.meta.internal.metals.MetalsLanguageServer$$Lambda$3210.apply$mcV$sp()V+4
+J 45407 C2 scala.runtime.java8.JFunction0$mcV$sp.apply()Ljava/lang/Object; (10 bytes) @ 0x0000000125206a9c [0x0000000125206a60+0x3c]
+j  scala.meta.internal.metals.MetalsLanguageServer.timedThunk(Ljava/lang/String;ZLscala/Function0;)Ljava/lang/Object;+14
+j  scala.meta.internal.metals.MetalsLanguageServer.$anonfun$profiledIndexWorkspace$1(Lscala/meta/internal/metals/MetalsLanguageServer;Lscala/Function0;)V+11
+j  scala.meta.internal.metals.MetalsLanguageServer$$Lambda$3209.apply$mcV$sp()V+8
+J 45407 C2 scala.runtime.java8.JFunction0$mcV$sp.apply()Ljava/lang/Object; (10 bytes) @ 0x0000000125206a9c [0x0000000125206a60+0x3c]
+J 99923 C2 scala.concurrent.Future$$$Lambda$80.apply(Ljava/lang/Object;)Ljava/lang/Object; (12 bytes) @ 0x00000001292eeeb4 [0x00000001292eee60+0x54]
+J 145179 C2 scala.concurrent.impl.Promise.liftedTree1$1(Lscala/Function1;Lscala/util/Try;)Lscala/util/Try; (56 bytes) @ 0x000000011e194e1c [0x000000011e194d60+0xbc]
+j  scala.concurrent.impl.Promise.$anonfun$transform$1(Lscala/concurrent/impl/Promise$DefaultPromise;Lscala/Function1;Lscala/util/Try;)Lscala/concurrent/impl/Promise$DefaultPromise;+3
+j  scala.concurrent.impl.Promise$$Lambda$82.apply(Ljava/lang/Object;)Ljava/lang/Object;+12
+J 5508 C2 scala.concurrent.impl.CallbackRunnable.run()V (70 bytes) @ 0x000000011ed96f6c [0x000000011ed96f00+0x6c]
+J 42583 C2 java.util.concurrent.ThreadPoolExecutor.runWorker(Ljava/util/concurrent/ThreadPoolExecutor$Worker;)V (225 bytes) @ 0x0000000124ca83e4 [0x0000000124ca80e0+0x304]
+j  java.util.concurrent.ThreadPoolExecutor$Worker.run()V+5
+j  java.lang.Thread.run()V+11
+v  ~StubRoutines::call_stub
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+  0x00007f9232ec4800 JavaThread "scala-execution-context-global-4516" daemon [_thread_blocked, id=1808643, stack(0x000070009959f000,0x000070009999f000)]
+  0x00007f9235137800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/junitJVM/scala-2.12/bloop-bsp-clients-classes/classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1770499, stack(0x000070009919c000,0x000070009959c000)]
+  0x00007f922f472000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/shapelessJVM/scala-2.12/bloop-bsp-clients-classes/classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1811203, stack(0x0000700098d99000,0x0000700099199000)]
+  0x00007f922fdbb000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/matcherExtraJS/scala-2.12/bloop-bsp-clients-classes/classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1812483, stack(0x0000700098996000,0x0000700098d96000)]
+  0x00007f9235136800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/gwtJS/scala-2.12/bloop-bsp-clients-classes/classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1767171, stack(0x0000700098593000,0x0000700098993000)]
+  0x00007f9235136000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/markdownJS/scala-2.12/bloop-bsp-clients-classes/classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1766659, stack(0x0000700098190000,0x0000700098590000)]
+  0x00007f921fbf4000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/shapelessJS/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1815299, stack(0x0000700097d8d000,0x000070009818d000)]
+  0x00007f922fdb9800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/scalacheckJS/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1816579, stack(0x000070009798a000,0x0000700097d8a000)]
+  0x00007f923564e800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/analysisJVM/scala-2.12/bloop-bsp-clients-classes/classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1817603, stack(0x0000700097587000,0x0000700097987000)]
+  0x00007f921fbf3000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/commonJVM/scala-2.12/bloop-bsp-clients-classes/classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1818883, stack(0x0000700097184000,0x0000700097584000)]
+  0x00007f921fbf2000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/pom/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1819907, stack(0x0000700096d81000,0x0000700097181000)]
+  0x00007f921fbf1800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/analysisJS/scala-2.12/bloop-bsp-clients-classes/classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1760515, stack(0x000070009697e000,0x0000700096d7e000)]
+  0x00007f922f484800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/formJVM/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1760003, stack(0x000070009657b000,0x000070009697b000)]
+  0x00007f9232129800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/formJS/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1758979, stack(0x0000700096178000,0x0000700096578000)]
+  0x00007f922fdb8000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/markdownJS/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1757699, stack(0x0000700095d75000,0x0000700096175000)]
+  0x00007f923cdf6800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/guide/scala-2.12/bloop-bsp-clients-classes/classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1825283, stack(0x0000700095972000,0x0000700095d72000)]
+  0x00007f923cdf6000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/junitJS/scala-2.12/bloop-bsp-clients-classes/classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1755907, stack(0x000070009556f000,0x000070009596f000)]
+  0x00007f922fdb6800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/fpJS/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1827587, stack(0x000070009516c000,0x000070009556c000)]
+  0x00007f923564d800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/coreJVM/scala-2.12/bloop-bsp-clients-classes/classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1753859, stack(0x0000700094d69000,0x0000700095169000)]
+  0x00007f9232128800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/scalacheckJVM/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1752579, stack(0x0000700094966000,0x0000700094d66000)]
+  0x00007f9231862000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/mockJS/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1751043, stack(0x0000700094563000,0x0000700094963000)]
+  0x00007f922f484000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/html/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1750019, stack(0x0000700094160000,0x0000700094560000)]
+  0x00007f922f483000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/commonJS/scala-2.12/bloop-bsp-clients-classes/classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1832963, stack(0x0000700093d5d000,0x000070009415d000)]
+  0x00007f922fdb5800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/matcherJS/scala-2.12/bloop-bsp-clients-classes/classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1833987, stack(0x000070009395a000,0x0000700093d5a000)]
+  0x00007f922fdb4800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/scalazJVM/scala-2.12/bloop-bsp-clients-classes/classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1747459, stack(0x0000700093557000,0x0000700093957000)]
+  0x00007f921fbee800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/examplesJVM/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1701379, stack(0x0000700093154000,0x0000700093554000)]
+  0x00007f923564c800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/commonJVM/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1700355, stack(0x0000700092d51000,0x0000700093151000)]
+  0x00007f922f482000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/examplesJVM/scala-2.12/bloop-bsp-clients-classes/classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1705219, stack(0x000070009294e000,0x0000700092d4e000)]
+  0x00007f923564b800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/mockJVM/scala-2.12/bloop-bsp-clients-classes/classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1698051, stack(0x000070009254b000,0x000070009294b000)]
+  0x00007f9232dc0800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/specs2/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1696771, stack(0x0000700092148000,0x0000700092548000)]
+  0x00007f922f481800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/tests/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1695235, stack(0x0000700091d45000,0x0000700092145000)]
+  0x00007f92310ec000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/analysisJVM/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1708291, stack(0x0000700091942000,0x0000700091d42000)]
+  0x00007f9231ce3800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/fpJVM/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1709571, stack(0x000070009153f000,0x000070009193f000)]
+  0x00007f9234a67800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/scalacheckJS/scala-2.12/bloop-bsp-clients-classes/classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1692675, stack(0x000070009113c000,0x000070009153c000)]
+  0x00007f923564a800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/tests/scala-2.12/bloop-bsp-clients-classes/classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1711363, stack(0x0000700090d39000,0x0000700091139000)]
+  0x00007f923564a000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/examplesJS/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1690627, stack(0x0000700090936000,0x0000700090d36000)]
+  0x00007f92310eb800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/formJS/scala-2.12/bloop-bsp-clients-classes/classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1714179, stack(0x0000700090533000,0x0000700090933000)]
+  0x00007f92310ea800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/coreJS/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1714435, stack(0x0000700090130000,0x0000700090530000)]
+  0x00007f922f480800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/gwtJVM/scala-2.12/bloop-bsp-clients-classes/classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1688067, stack(0x000070008fd2d000,0x000070009012d000)]
+  0x00007f923407d000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/markdownJVM/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-SLyRQA5_TwGY0HHecyoQhQ==/META-INF/semanticdb" daemon [_thread_in_native, id=1717251, stack(0x000070008f92a000,0x000070008fd2a000)]
+  0x00007f92331fc800 JavaThread "scala-execution-context-global-4007" daemon [_thread_blocked, id=78615, stack(0x00007000b3edd000,0x00007000b42dd000)]
+  0x00007f92308e6000 JavaThread "scala-execution-context-global-4006" daemon [_thread_blocked, id=1204243, stack(0x00007000b3ada000,0x00007000b3eda000)]
+  0x00007f922f61c800 JavaThread "scala-execution-context-global-4005" daemon [_thread_blocked, id=49299, stack(0x00007000a7a4a000,0x00007000a7e4a000)]
+  0x00007f92348d8000 JavaThread "scala-execution-context-global-4004" daemon [_thread_blocked, id=83275, stack(0x00007000a6a3e000,0x00007000a6e3e000)]
+  0x00007f923178d800 JavaThread "ForkJoinPool.commonPool-worker-2" daemon [_thread_blocked, id=1140503, stack(0x00007000a7244000,0x00007000a7644000)]
+  0x00007f922fc20800 JavaThread "pool-1-thread-183" [_thread_blocked, id=1140111, stack(0x00007000a663b000,0x00007000a6a3b000)]
+  0x00007f922e9ea800 JavaThread "bloop-io-4001" daemon [_thread_blocked, id=1212995, stack(0x00007000b36d7000,0x00007000b3ad7000)]
+  0x00007f92365eb800 JavaThread "bloop-io-4000" daemon [_thread_blocked, id=46699, stack(0x00007000b32d4000,0x00007000b36d4000)]
+  0x00007f9234277000 JavaThread "bloop-io-3999" daemon [_thread_blocked, id=85147, stack(0x00007000b2ed1000,0x00007000b32d1000)]
+  0x00007f923306b000 JavaThread "bloop-io-3998" daemon [_thread_blocked, id=31335, stack(0x00007000b2ace000,0x00007000b2ece000)]
+  0x00007f9231abf000 JavaThread "bloop-io-3997" daemon [_thread_blocked, id=1147419, stack(0x00007000b26cb000,0x00007000b2acb000)]
+  0x00007f9239b57000 JavaThread "bloop-io-3996" daemon [_thread_blocked, id=46127, stack(0x00007000b22c8000,0x00007000b26c8000)]
+  0x00007f9232380000 JavaThread "bloop-io-3995" daemon [_thread_blocked, id=1142627, stack(0x00007000b1ec5000,0x00007000b22c5000)]
+  0x00007f922ed33800 JavaThread "bloop-io-3994" daemon [_thread_blocked, id=45747, stack(0x00007000b1ac2000,0x00007000b1ec2000)]
+  0x00007f922eacc000 JavaThread "bloop-io-3991" daemon [_thread_blocked, id=41563, stack(0x00007000b16bf000,0x00007000b1abf000)]
+  0x00007f92331b5800 JavaThread "bloop-io-3993" daemon [_thread_blocked, id=1149447, stack(0x00007000b12bc000,0x00007000b16bc000)]
+  0x00007f923ca75000 JavaThread "bloop-io-3992" daemon [_thread_in_native, id=1206299, stack(0x00007000b0eb9000,0x00007000b12b9000)]
+  0x00007f922ede6800 JavaThread "bloop-io-3990" daemon [_thread_blocked, id=1099471, stack(0x00007000b06b3000,0x00007000b0ab3000)]
+  0x00007f9235602000 JavaThread "bloop-io-3989" daemon [_thread_blocked, id=1095307, stack(0x00007000afead000,0x00007000b02ad000)]
+  0x00007f923c11a000 JavaThread "bloop-io-3988" daemon [_thread_blocked, id=33699, stack(0x00007000afaaa000,0x00007000afeaa000)]
+  0x00007f9233090000 JavaThread "bloop-io-3987" daemon [_thread_blocked, id=80659, stack(0x00007000af6a7000,0x00007000afaa7000)]
+  0x00007f9236697000 JavaThread "bloop-io-3986" daemon [_thread_blocked, id=1143059, stack(0x00007000aeea1000,0x00007000af2a1000)]
+  0x00007f92339b8800 JavaThread "bloop-io-3984" daemon [_thread_blocked, id=1205511, stack(0x00007000aea9e000,0x00007000aee9e000)]
+  0x00007f9234214000 JavaThread "bloop-io-3985" daemon [_thread_blocked, id=1136451, stack(0x00007000ae69b000,0x00007000aea9b000)]
+  0x00007f923529a000 JavaThread "bloop-io-3983" daemon [_thread_blocked, id=1145119, stack(0x00007000ae298000,0x00007000ae698000)]
+  0x00007f923094a800 JavaThread "bloop-io-3982" daemon [_thread_blocked, id=1214775, stack(0x00007000ad28c000,0x00007000ad68c000)]
+  0x00007f92363ff000 JavaThread "bloop-io-3981" daemon [_thread_blocked, id=1143851, stack(0x00007000ac683000,0x00007000aca83000)]
+  0x00007f9236346000 JavaThread "bloop-io-3980" daemon [_thread_blocked, id=1143355, stack(0x00007000ac280000,0x00007000ac680000)]
+  0x00007f922f57f000 JavaThread "bloop-io-3979" daemon [_thread_blocked, id=1091939, stack(0x00007000aba7a000,0x00007000abe7a000)]
+  0x00007f92317e3000 JavaThread "bloop-io-3978" daemon [_thread_blocked, id=1085291, stack(0x00007000ab274000,0x00007000ab674000)]
+  0x00007f9235616000 JavaThread "bloop-io-3977" daemon [_thread_blocked, id=1213455, stack(0x00007000aa66b000,0x00007000aaa6b000)]
+  0x00007f9239b8f800 JavaThread "bloop-io-3976" daemon [_thread_blocked, id=1139003, stack(0x00007000aa268000,0x00007000aa668000)]
+  0x00007f9231890000 JavaThread "scala-execution-context-global-3975" daemon [_thread_blocked, id=29139, stack(0x00007000a9e65000,0x00007000aa265000)]
+  0x00007f923174f000 JavaThread "scala-execution-context-global-3970" daemon [_thread_blocked, id=1210675, stack(0x00007000a522c000,0x00007000a562c000)]
+  0x00007f922f1b6000 JavaThread "scala-execution-context-global-3969" daemon [_thread_blocked, id=77419, stack(0x00007000a4623000,0x00007000a4a23000)]
+  0x00007f923553b000 JavaThread "scala-execution-context-global-3968" daemon [_thread_blocked, id=77235, stack(0x00007000a4220000,0x00007000a4620000)]
+  0x00007f9235490000 JavaThread "scala-execution-context-global-3967" daemon [_thread_blocked, id=1215259, stack(0x00007000a3a1a000,0x00007000a3e1a000)]
+  0x00007f9232706000 JavaThread "bloop-io-3966" daemon [_thread_blocked, id=1212171, stack(0x00007000a3214000,0x00007000a3614000)]
+  0x00007f923dd9b000 JavaThread "bloop-io-3965" daemon [_thread_blocked, id=82983, stack(0x00007000a2a0e000,0x00007000a2e0e000)]
+  0x00007f923255b000 JavaThread "bloop-io-3964" daemon [_thread_in_native, id=49743, stack(0x00007000a01f0000,0x00007000a05f0000)]
+  0x00007f923516c000 JavaThread "pool-1-thread-182" [_thread_blocked, id=1140799, stack(0x000070009f9ea000,0x000070009fdea000)]
+  0x00007f922f98e000 JavaThread "pool-1-thread-181" [_thread_in_native, id=1209927, stack(0x000070001e7e1000,0x000070001ebe1000)]
+  0x00007f92356e2800 JavaThread "pool-1-thread-180" [_thread_in_native, id=1095711, stack(0x0000700015372000,0x0000700015772000)]
+  0x00007f92338e3800 JavaThread "pool-1-thread-178" [_thread_blocked, id=1100263, stack(0x0000700011f4b000,0x000070001234b000)]
+=>0x00007f923c4af800 JavaThread "pool-1-thread-179" [_thread_in_native, id=1213879, stack(0x000070000d715000,0x000070000db15000)]
+  0x00007f921f699000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1204519, stack(0x00007000a1e05000,0x00007000a2205000)]
+  0x00007f9232fa4800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1209395, stack(0x000070001bbc0000,0x000070001bfc0000)]
+  0x00007f9234572800 JavaThread "scala-execution-context-global-3945" daemon [_thread_blocked, id=1222703, stack(0x00007000aae71000,0x00007000ab271000)]
+  0x00007f9231ae7000 JavaThread "scala-execution-context-global-3922" daemon [_thread_blocked, id=76215, stack(0x00007000a965f000,0x00007000a9a5f000)]
+  0x00007f9232fb1800 JavaThread "bloop-io-3907" daemon [_thread_blocked, id=1149203, stack(0x00007000b5af2000,0x00007000b5ef2000)]
+  0x00007f9233ab9000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1207095, stack(0x000070001c3c6000,0x000070001c7c6000)]
+  0x00007f9239ab6800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=47427, stack(0x000070001bfc3000,0x000070001c3c3000)]
+  0x00007f922faae000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1221795, stack(0x00007000a4a26000,0x00007000a4e26000)]
+  0x00007f923dacf000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1220935, stack(0x0000700016f87000,0x0000700017387000)]
+  0x00007f923d06e000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=42123, stack(0x0000700015f7b000,0x000070001637b000)]
+  0x00007f92315f6800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1212723, stack(0x0000700014b6c000,0x0000700014f6c000)]
+  0x00007f9231668800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=81491, stack(0x0000700017b90000,0x0000700017f90000)]
+  0x00007f922ea7e000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=22115, stack(0x000070001738a000,0x000070001778a000)]
+  0x00007f9230c47800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1220463, stack(0x00007000a260b000,0x00007000a2a0b000)]
+  0x00007f923270e000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1220679, stack(0x000070009f5e7000,0x000070009f9e7000)]
+  0x00007f922fac9000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1147923, stack(0x0000700018f9f000,0x000070001939f000)]
+  0x00007f9233a88800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1092203, stack(0x00007000a925c000,0x00007000a965c000)]
+  0x00007f92318c1800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=51215, stack(0x00007000b0ab6000,0x00007000b0eb6000)]
+  0x00007f92353ea800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1208123, stack(0x000070001afb7000,0x000070001b3b7000)]
+  0x00007f9236337000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1211915, stack(0x0000700018396000,0x0000700018796000)]
+  0x00007f9234cfb800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1085051, stack(0x00007000a8a56000,0x00007000a8e56000)]
+  0x00007f923186a800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1137739, stack(0x00007000ace89000,0x00007000ad289000)]
+  0x00007f922f6e0800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1222583, stack(0x00007000aca86000,0x00007000ace86000)]
+  0x00007f9233045800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=4455, stack(0x00007000ade95000,0x00007000ae295000)]
+  0x00007f9231bba000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=78867, stack(0x00007000abe7d000,0x00007000ac27d000)]
+  0x00007f9234416000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1217883, stack(0x00007000ada92000,0x00007000ade92000)]
+  0x00007f922f7e9800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1091391, stack(0x000070001abb4000,0x000070001afb4000)]
+  0x00007f922ec55800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1099651, stack(0x0000700015775000,0x0000700015b75000)]
+  0x00007f92313a7000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1142055, stack(0x000070001a7b1000,0x000070001abb1000)]
+  0x00007f923558c000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1215491, stack(0x00007000a9a62000,0x00007000a9e62000)]
+  0x00007f922faba000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=86059, stack(0x00007000a15ff000,0x00007000a19ff000)]
+  0x00007f922f4b0000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=77999, stack(0x0000700017f93000,0x0000700018393000)]
+  0x00007f9239eb2800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=58031, stack(0x00007000a7647000,0x00007000a7a47000)]
+  0x00007f9230987000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1218339, stack(0x00007000a2e11000,0x00007000a3211000)]
+  0x00007f9236647800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1218599, stack(0x000070000f32a000,0x000070000f72a000)]
+  0x00007f922f2fb000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1141255, stack(0x00007000ad68f000,0x00007000ada8f000)]
+  0x00007f9231bdc800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=25527, stack(0x00007000a0df9000,0x00007000a11f9000)]
+  0x00007f923d36f800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1091703, stack(0x00007000197a5000,0x0000700019ba5000)]
+  0x00007f923c040000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1138311, stack(0x0000700014f6f000,0x000070001536f000)]
+  0x00007f92308d4800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1096819, stack(0x000070001234e000,0x000070001274e000)]
+  0x00007f922f68f800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=76567, stack(0x000070000bf03000,0x000070000c303000)]
+  0x00007f9233c10000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=53575, stack(0x00007000a6238000,0x00007000a6638000)]
+  0x00007f9231472800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1098555, stack(0x0000700016b84000,0x0000700016f84000)]
+  0x00007f92342ae800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1221211, stack(0x00007000a05f3000,0x00007000a09f3000)]
+  0x00007f9235746800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1086027, stack(0x0000700015b78000,0x0000700015f78000)]
+  0x00007f923135c800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=32303, stack(0x000070000aaf4000,0x000070000aef4000)]
+  0x00007f922eb1f000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=71263, stack(0x000070000d312000,0x000070000d712000)]
+  0x00007f923abf1800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=79463, stack(0x000070000a2ee000,0x000070000a6ee000)]
+  0x00007f922eab7800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1221983, stack(0x00007000a8653000,0x00007000a8a53000)]
+  0x00007f92341a2800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1137483, stack(0x0000700016781000,0x0000700016b81000)]
+  0x00007f923aa8a800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=48023, stack(0x0000700011745000,0x0000700011b45000)]
+  0x00007f92351d3000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=46403, stack(0x0000700006a99000,0x0000700006e99000)]
+  0x00007f9230902800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1136143, stack(0x000070000e721000,0x000070000eb21000)]
+  0x00007f922e8ae000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1090435, stack(0x0000700012b54000,0x0000700012f54000)]
+  0x00007f923ca74800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1086999, stack(0x0000700013f63000,0x0000700014363000)]
+  0x00007f922fc21000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=47847, stack(0x00007000a2208000,0x00007000a2608000)]
+  0x00007f92308fa000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=23923, stack(0x000070001335a000,0x000070001375a000)]
+  0x00007f923994c800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=74863, stack(0x0000700014769000,0x0000700014b69000)]
+  0x00007f92319a0000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1094447, stack(0x000070000b2fa000,0x000070000b6fa000)]
+  0x00007f9233a48000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=81711, stack(0x0000700012751000,0x0000700012b51000)]
+  0x00007f922ff6c000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1092631, stack(0x00007000a5e35000,0x00007000a6235000)]
+  0x00007f9239f0c000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1093143, stack(0x00007000a5a32000,0x00007000a5e32000)]
+  0x00007f92331ab000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1093903, stack(0x00007000a562f000,0x00007000a5a2f000)]
+  0x00007f9230b12000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1093403, stack(0x00007000a4e29000,0x00007000a5229000)]
+  0x00007f92331c0000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1096483, stack(0x000070001778d000,0x0000700017b8d000)]
+  0x00007f923cc61800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=32595, stack(0x000070000e31e000,0x000070000e71e000)]
+  0x00007f9230995000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=44607, stack(0x000070000df1b000,0x000070000e31b000)]
+  0x00007f92309eb000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1096203, stack(0x00007000a1a02000,0x00007000a1e02000)]
+  0x00007f9233698800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=78399, stack(0x00007000193a2000,0x00007000197a2000)]
+  0x00007f9234270800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=78127, stack(0x0000700007ad0000,0x0000700007ed0000)]
+  0x00007f923ad7b800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=56427, stack(0x000070000ff33000,0x0000700010333000)]
+  0x00007f922fc6a800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=59447, stack(0x000070001b7bd000,0x000070001bbbd000)]
+  0x00007f922ffee000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1086755, stack(0x00007000082d6000,0x00007000086d6000)]
+  0x00007f92316db800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1098795, stack(0x00007000a11fc000,0x00007000a15fc000)]
+  0x00007f9236338000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=53863, stack(0x0000700011b48000,0x0000700011f48000)]
+  0x00007f9233480800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=54803, stack(0x0000700012f57000,0x0000700013357000)]
+  0x00007f923144c800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=56111, stack(0x000070000ef27000,0x000070000f327000)]
+  0x00007f9232f6b800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=32795, stack(0x0000700010b3c000,0x0000700010f3c000)]
+  0x00007f922eb88000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=84531, stack(0x0000700006e9c000,0x000070000729c000)]
+  0x00007f9236231000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=55075, stack(0x0000700006696000,0x0000700006a96000)]
+  0x00007f9238c64000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1084463, stack(0x0000700014366000,0x0000700014766000)]
+  0x00007f92352a5800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=31551, stack(0x000070000bb00000,0x000070000bf00000)]
+  0x00007f922eabf000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=83483, stack(0x0000700010739000,0x0000700010b39000)]
+  0x00007f9234b49000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=37943, stack(0x000070001c7c9000,0x000070001cbc9000)]
+  0x00007f9233076000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=24387, stack(0x000070000a6f1000,0x000070000aaf1000)]
+  0x00007f92342d3000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=82455, stack(0x000070001b3ba000,0x000070001b7ba000)]
+  0x00007f922f959800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=83999, stack(0x000070001a3ae000,0x000070001a7ae000)]
+  0x00007f9234c65000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=71055, stack(0x0000700019fab000,0x000070001a3ab000)]
+  0x00007f9232fa5800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=25663, stack(0x000070000cf0f000,0x000070000d30f000)]
+  0x00007f9235589800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=58159, stack(0x0000700011342000,0x0000700011742000)]
+  0x00007f9236ff5800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=86863, stack(0x0000700010336000,0x0000700010736000)]
+  0x00007f922f667000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=72751, stack(0x000070000fb30000,0x000070000ff30000)]
+  0x00007f922fc90800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=57395, stack(0x000070000c306000,0x000070000c706000)]
+  0x00007f9239b4d000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=54327, stack(0x000070000c709000,0x000070000cb09000)]
+  0x00007f92331b9800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=35851, stack(0x00007000086d9000,0x0000700008ad9000)]
+  0x00007f922ff2a800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=72479, stack(0x0000700004a81000,0x0000700004e81000)]
+  0x00007f9232eec000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=81163, stack(0x000070001637e000,0x000070001677e000)]
+  0x00007f922f5f3800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=76823, stack(0x0000700009eeb000,0x000070000a2eb000)]
+  0x00007f92316b4000 JavaThread "Timer-0" daemon [_thread_blocked, id=38923, stack(0x0000700005287000,0x0000700005687000)]
+  0x00007f9234275000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1100307, stack(0x000070009ede1000,0x000070009f1e1000)]
+  0x00007f92311c6800 JavaThread "AsyncReporter{URLConnectionSender{http://127.0.0.1:9411/api/v2/spans}}" daemon [_thread_blocked, id=1101059, stack(0x000070009e5db000,0x000070009e9db000)]
+  0x00007f92310f6800 JavaThread "pool-4-thread-1" [_thread_blocked, id=1101571, stack(0x000070009e1d8000,0x000070009e5d8000)]
+  0x00007f9231a1d000 JavaThread "pool-3-thread-1" [_thread_blocked, id=1101827, stack(0x000070009ddd5000,0x000070009e1d5000)]
+  0x00007f92348e2800 JavaThread "monix-scheduler-133" daemon [_thread_blocked, id=69891, stack(0x000070001ebe4000,0x000070001efe4000)]
+  0x00007f9233039000 JavaThread "pool-1-thread-4" [_thread_blocked, id=26883, stack(0x0000700009ae8000,0x0000700009ee8000)]
+  0x00007f9231258800 JavaThread "pool-6-thread-6" daemon [_thread_blocked, id=36099, stack(0x00007000096e5000,0x0000700009ae5000)]
+  0x00007f922fb2b000 JavaThread "pool-6-thread-5" daemon [_thread_blocked, id=36611, stack(0x00007000092e2000,0x00007000096e2000)]
+  0x00007f92308c2000 JavaThread "pool-6-thread-4" daemon [_thread_blocked, id=26115, stack(0x0000700008edf000,0x00007000092df000)]
+  0x00007f92308c1800 JavaThread "pool-6-thread-3" daemon [_thread_blocked, id=37123, stack(0x0000700008adc000,0x0000700008edc000)]
+  0x00007f9234834800 JavaThread "pool-6-thread-2" daemon [_thread_blocked, id=24835, stack(0x00007000076cd000,0x0000700007acd000)]
+  0x00007f922fb22000 JavaThread "pool-6-thread-1" daemon [_thread_blocked, id=24579, stack(0x00007000072ca000,0x00007000076ca000)]
+  0x00007f9233b3f800 JavaThread "H2 Log Writer METALS" daemon [_thread_blocked, id=40715, stack(0x0000700006293000,0x0000700006693000)]
+  0x00007f9232886800 JavaThread "H2 TCP Server (tcp://localhost:50973)" daemon [_thread_in_native, id=39947, stack(0x0000700005e90000,0x0000700006290000)]
+  0x00007f9232076800 JavaThread "H2 File Lock Watchdog /Users/etorreborre/projects/specs2/specs2/.metals/metals.lock.db" daemon [_thread_blocked, id=40971, stack(0x0000700005a8d000,0x0000700005e8d000)]
+  0x00007f923123d800 JavaThread "pool-2-thread-1" [_thread_blocked, id=41219, stack(0x000070000568a000,0x0000700005a8a000)]
+  0x00007f9232755000 JavaThread "pool-1-thread-3" [_thread_in_native, id=22275, stack(0x0000700004e84000,0x0000700005284000)]
+  0x00007f923272c000 JavaThread "pool-1-thread-1" [_thread_in_native, id=42499, stack(0x000070000467e000,0x0000700004a7e000)]
+  0x00007f922f007800 JavaThread "Service Thread" daemon [_thread_blocked, id=21763, stack(0x0000700004178000,0x0000700004578000)]
+  0x00007f9231802000 JavaThread "C1 CompilerThread3" daemon [_thread_blocked, id=15875, stack(0x0000700004075000,0x0000700004175000)]
+  0x00007f9231801000 JavaThread "C2 CompilerThread2" daemon [_thread_blocked, id=15363, stack(0x0000700003f72000,0x0000700004072000)]
+  0x00007f9233009000 JavaThread "C2 CompilerThread1" daemon [_thread_blocked, id=16643, stack(0x0000700003e6f000,0x0000700003f6f000)]
+  0x00007f9232026800 JavaThread "C2 CompilerThread0" daemon [_thread_blocked, id=15107, stack(0x0000700003d6c000,0x0000700003e6c000)]
+  0x00007f9232025800 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=17155, stack(0x0000700003969000,0x0000700003d69000)]
+  0x00007f9232814800 JavaThread "Finalizer" daemon [_thread_blocked, id=18435, stack(0x0000700003566000,0x0000700003966000)]
+  0x00007f9232814000 JavaThread "Reference Handler" daemon [_thread_blocked, id=18947, stack(0x0000700003163000,0x0000700003563000)]
+  0x00007f9232800000 JavaThread "main" [_thread_blocked, id=9731, stack(0x000070000223f000,0x000070000263f000)]
+
+Other Threads:
+  0x00007f923280f800 VMThread [stack: 0x0000700003060000,0x0000700003160000] [id=13059]
+  0x00007f9230839000 WatcherThread [stack: 0x000070000457b000,0x000070000467b000] [id=43011]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+Heap:
+ PSYoungGen      total 1202176K, used 492327K [0x000000076ab00000, 0x00000007c0000000, 0x00000007c0000000)
+  eden space 1004032K, 40% used [0x000000076ab00000,0x00000007836af790,0x00000007a7f80000)
+  from space 198144K, 43% used [0x00000007b3e80000,0x00000007b939a560,0x00000007c0000000)
+  to   space 195584K, 0% used [0x00000007a7f80000,0x00000007a7f80000,0x00000007b3e80000)
+ ParOldGen       total 2159104K, used 1851863K [0x00000006c0000000, 0x0000000743c80000, 0x000000076ab00000)
+  object space 2159104K, 85% used [0x00000006c0000000,0x0000000731075c40,0x0000000743c80000)
+ Metaspace       used 414732K, capacity 492517K, committed 507156K, reserved 1484800K
+  class space    used 47775K, capacity 57847K, committed 72468K, reserved 1048576K
+
+Card table byte_map: [0x0000000111d74000,0x0000000112575000] byte_map_base: 0x000000010e774000
+
+Marking Bits: (ParMarkBitMap*) 0x00000001112f9cd0
+ Begin Bits: [0x0000000112acb000, 0x0000000116acb000)
+ End Bits:   [0x0000000116acb000, 0x000000011aacb000)
+
+Polling page: 0x000000010f125000
+
+CodeCache: size=245760Kb used=203138Kb max_used=225172Kb free=42622Kb
+ bounds [0x000000011df2d000, 0x000000012bd7d000, 0x000000012cf2d000]
+ total_blobs=51681 nmethods=50922 adapters=666
+ compilation: enabled
+
+Compilation events (10 events):
+Event: 9113.345 Thread 0x00007f9232026800 145218       4       org.h2.value.Value::compareTo (81 bytes)
+Event: 9113.345 Thread 0x00007f9231802000 145217       1       org.h2.value.ValueString::getType (3 bytes)
+Event: 9113.345 Thread 0x00007f9231802000 nmethod 145217 0x000000011f006350 code [0x000000011f0064a0, 0x000000011f0065b0]
+Event: 9113.345 Thread 0x00007f9231802000 145216       1       org.h2.table.Column::getColumnId (5 bytes)
+Event: 9113.346 Thread 0x00007f9231802000 nmethod 145216 0x000000011f006090 code [0x000000011f0061e0, 0x000000011f0062f0]
+Event: 9113.346 Thread 0x00007f9231801000 145219       4       org.h2.index.IndexCursor::getSearchRow (10 bytes)
+Event: 9113.350 Thread 0x00007f9232026800 nmethod 145218 0x000000011f08ccd0 code [0x000000011f08ce40, 0x000000011f08cf98]
+Event: 9113.351 Thread 0x00007f9231801000 nmethod 145219 0x000000011f005dd0 code [0x000000011f005f20, 0x000000011f005fd8]
+Event: 9113.427 Thread 0x00007f9231802000 145220       1       scala.collection.concurrent.CNode::bitmap (5 bytes)
+Event: 9113.428 Thread 0x00007f9231802000 nmethod 145220 0x000000011f08ca10 code [0x000000011f08cb60, 0x000000011f08cc70]
+
+GC Heap History (10 events):
+Event: 8949.428 GC heap before
+{Heap before GC invocations=548 (full 14):
+ PSYoungGen      total 1204736K, used 1147659K [0x000000076ab00000, 0x00000007bff00000, 0x00000007c0000000)
+  eden space 1020928K, 100% used [0x000000076ab00000,0x00000007a9000000,0x00000007a9000000)
+  from space 183808K, 68% used [0x00000007a9000000,0x00000007b0bc2f48,0x00000007b4380000)
+  to   space 181760K, 0% used [0x00000007b4d80000,0x00000007b4d80000,0x00000007bff00000)
+ ParOldGen       total 2159104K, used 1828395K [0x00000006c0000000, 0x0000000743c80000, 0x000000076ab00000)
+  object space 2159104K, 84% used [0x00000006c0000000,0x000000072f98ae18,0x0000000743c80000)
+ Metaspace       used 390699K, capacity 464605K, committed 482580K, reserved 1460224K
+  class space    used 45156K, capacity 55053K, committed 72468K, reserved 1048576K
+Event: 8949.578 GC heap after
+Heap after GC invocations=548 (full 14):
+ PSYoungGen      total 1203712K, used 121913K [0x000000076ab00000, 0x00000007bf500000, 0x00000007c0000000)
+  eden space 1032192K, 0% used [0x000000076ab00000,0x000000076ab00000,0x00000007a9b00000)
+  from space 171520K, 71% used [0x00000007b4d80000,0x00000007bc48e748,0x00000007bf500000)
+  to   space 177152K, 0% used [0x00000007a9b00000,0x00000007a9b00000,0x00000007b4800000)
+ ParOldGen       total 2159104K, used 1833360K [0x00000006c0000000, 0x0000000743c80000, 0x000000076ab00000)
+  object space 2159104K, 84% used [0x00000006c0000000,0x000000072fe64020,0x0000000743c80000)
+ Metaspace       used 390699K, capacity 464605K, committed 482580K, reserved 1460224K
+  class space    used 45156K, capacity 55053K, committed 72468K, reserved 1048576K
+}
+Event: 8958.841 GC heap before
+{Heap before GC invocations=549 (full 14):
+ PSYoungGen      total 1203712K, used 1154105K [0x000000076ab00000, 0x00000007bf500000, 0x00000007c0000000)
+  eden space 1032192K, 100% used [0x000000076ab00000,0x00000007a9b00000,0x00000007a9b00000)
+  from space 171520K, 71% used [0x00000007b4d80000,0x00000007bc48e748,0x00000007bf500000)
+  to   space 177152K, 0% used [0x00000007a9b00000,0x00000007a9b00000,0x00000007b4800000)
+ ParOldGen       total 2159104K, used 1833360K [0x00000006c0000000, 0x0000000743c80000, 0x000000076ab00000)
+  object space 2159104K, 84% used [0x00000006c0000000,0x000000072fe64020,0x0000000743c80000)
+ Metaspace       used 405092K, capacity 481497K, committed 497428K, reserved 1474560K
+  class space    used 46703K, capacity 56717K, committed 72468K, reserved 1048576K
+Event: 8959.124 GC heap after
+Heap after GC invocations=549 (full 14):
+ PSYoungGen      total 1209344K, used 143599K [0x000000076ab00000, 0x00000007c0000000, 0x00000007c0000000)
+  eden space 1032192K, 0% used [0x000000076ab00000,0x000000076ab00000,0x00000007a9b00000)
+  from space 177152K, 81% used [0x00000007a9b00000,0x00000007b273bce0,0x00000007b4800000)
+  to   space 181248K, 0% used [0x00000007b4f00000,0x00000007b4f00000,0x00000007c0000000)
+ ParOldGen       total 2159104K, used 1838048K [0x00000006c0000000, 0x0000000743c80000, 0x000000076ab00000)
+  object space 2159104K, 85% used [0x00000006c0000000,0x00000007302f8270,0x0000000743c80000)
+ Metaspace       used 405092K, capacity 481497K, committed 497428K, reserved 1474560K
+  class space    used 46703K, capacity 56717K, committed 72468K, reserved 1048576K
+}
+Event: 8964.084 GC heap before
+{Heap before GC invocations=550 (full 14):
+ PSYoungGen      total 1209344K, used 1175791K [0x000000076ab00000, 0x00000007c0000000, 0x00000007c0000000)
+  eden space 1032192K, 100% used [0x000000076ab00000,0x00000007a9b00000,0x00000007a9b00000)
+  from space 177152K, 81% used [0x00000007a9b00000,0x00000007b273bce0,0x00000007b4800000)
+  to   space 181248K, 0% used [0x00000007b4f00000,0x00000007b4f00000,0x00000007c0000000)
+ ParOldGen       total 2159104K, used 1838048K [0x00000006c0000000, 0x0000000743c80000, 0x000000076ab00000)
+  object space 2159104K, 85% used [0x00000006c0000000,0x00000007302f8270,0x0000000743c80000)
+ Metaspace       used 405152K, capacity 481579K, committed 497428K, reserved 1474560K
+  class space    used 46706K, capacity 56720K, committed 72468K, reserved 1048576K
+Event: 8964.402 GC heap after
+Heap after GC invocations=550 (full 14):
+ PSYoungGen      total 1190912K, used 170885K [0x000000076ab00000, 0x00000007c0000000, 0x00000007c0000000)
+  eden space 1009664K, 0% used [0x000000076ab00000,0x000000076ab00000,0x00000007a8500000)
+  from space 181248K, 94% used [0x00000007b4f00000,0x00000007bf5e17b8,0x00000007c0000000)
+  to   space 194048K, 0% used [0x00000007a8500000,0x00000007a8500000,0x00000007b4280000)
+ ParOldGen       total 2159104K, used 1842647K [0x00000006c0000000, 0x0000000743c80000, 0x000000076ab00000)
+  object space 2159104K, 85% used [0x00000006c0000000,0x0000000730775f28,0x0000000743c80000)
+ Metaspace       used 405152K, capacity 481579K, committed 497428K, reserved 1474560K
+  class space    used 46706K, capacity 56720K, committed 72468K, reserved 1048576K
+}
+Event: 8976.208 GC heap before
+{Heap before GC invocations=551 (full 14):
+ PSYoungGen      total 1190912K, used 1180549K [0x000000076ab00000, 0x00000007c0000000, 0x00000007c0000000)
+  eden space 1009664K, 100% used [0x000000076ab00000,0x00000007a8500000,0x00000007a8500000)
+  from space 181248K, 94% used [0x00000007b4f00000,0x00000007bf5e17b8,0x00000007c0000000)
+  to   space 194048K, 0% used [0x00000007a8500000,0x00000007a8500000,0x00000007b4280000)
+ ParOldGen       total 2159104K, used 1842647K [0x00000006c0000000, 0x0000000743c80000, 0x000000076ab00000)
+  object space 2159104K, 85% used [0x00000006c0000000,0x0000000730775f28,0x0000000743c80000)
+ Metaspace       used 405212K, capacity 481597K, committed 497428K, reserved 1474560K
+  class space    used 46708K, capacity 56723K, committed 72468K, reserved 1048576K
+Event: 8976.268 GC heap after
+Heap after GC invocations=551 (full 14):
+ PSYoungGen      total 1069568K, used 59790K [0x000000076ab00000, 0x00000007c0000000, 0x00000007c0000000)
+  eden space 1009664K, 0% used [0x000000076ab00000,0x000000076ab00000,0x00000007a8500000)
+  from space 59904K, 99% used [0x00000007a8500000,0x00000007abf63a90,0x00000007abf80000)
+  to   space 198144K, 0% used [0x00000007b3e80000,0x00000007b3e80000,0x00000007c0000000)
+ ParOldGen       total 2159104K, used 1847261K [0x00000006c0000000, 0x0000000743c80000, 0x000000076ab00000)
+  object space 2159104K, 85% used [0x00000006c0000000,0x0000000730bf7660,0x0000000743c80000)
+ Metaspace       used 405212K, capacity 481597K, committed 497428K, reserved 1474560K
+  class space    used 46708K, capacity 56723K, committed 72468K, reserved 1048576K
+}
+Event: 9108.425 GC heap before
+{Heap before GC invocations=552 (full 14):
+ PSYoungGen      total 1069568K, used 1069454K [0x000000076ab00000, 0x00000007c0000000, 0x00000007c0000000)
+  eden space 1009664K, 100% used [0x000000076ab00000,0x00000007a8500000,0x00000007a8500000)
+  from space 59904K, 99% used [0x00000007a8500000,0x00000007abf63a90,0x00000007abf80000)
+  to   space 198144K, 0% used [0x00000007b3e80000,0x00000007b3e80000,0x00000007c0000000)
+ ParOldGen       total 2159104K, used 1847261K [0x00000006c0000000, 0x0000000743c80000, 0x000000076ab00000)
+  object space 2159104K, 85% used [0x00000006c0000000,0x0000000730bf7660,0x0000000743c80000)
+ Metaspace       used 414714K, capacity 492511K, committed 507156K, reserved 1484800K
+  class space    used 47774K, capacity 57846K, committed 72468K, reserved 1048576K
+Event: 9109.413 GC heap after
+Heap after GC invocations=552 (full 14):
+ PSYoungGen      total 1202176K, used 87145K [0x000000076ab00000, 0x00000007c0000000, 0x00000007c0000000)
+  eden space 1004032K, 0% used [0x000000076ab00000,0x000000076ab00000,0x00000007a7f80000)
+  from space 198144K, 43% used [0x00000007b3e80000,0x00000007b939a560,0x00000007c0000000)
+  to   space 195584K, 0% used [0x00000007a7f80000,0x00000007a7f80000,0x00000007b3e80000)
+ ParOldGen       total 2159104K, used 1851863K [0x00000006c0000000, 0x0000000743c80000, 0x000000076ab00000)
+  object space 2159104K, 85% used [0x00000006c0000000,0x0000000731075c40,0x0000000743c80000)
+ Metaspace       used 414714K, capacity 492511K, committed 507156K, reserved 1484800K
+  class space    used 47774K, capacity 57846K, committed 72468K, reserved 1048576K
+}
+
+Deoptimization events (10 events):
+Event: 9109.916 Thread 0x00007f9233090000 Uncommon trap: reason=class_check action=maybe_recompile pc=0x0000000124c447f8 method=jawn.ByteBasedParser.parseString(ILjawn/FContext;)I @ 30
+Event: 9111.281 Thread 0x00007f92356e2800 Uncommon trap: reason=class_check action=maybe_recompile pc=0x000000011ff2e024 method=scala.concurrent.impl.Promise$DefaultPromise.tryCompleteAndGetListeners(Lscala/util/Try;)Lscala/collection/immutable/List; @ 43
+Event: 9111.282 Thread 0x00007f923c4af800 Uncommon trap: reason=class_check action=maybe_recompile pc=0x0000000120504e80 method=scala.collection.MapLike$DefaultKeySet.size()I @ 4
+Event: 9111.283 Thread 0x00007f923c4af800 Uncommon trap: reason=class_check action=maybe_recompile pc=0x0000000120504e80 method=scala.collection.MapLike$DefaultKeySet.size()I @ 4
+Event: 9111.283 Thread 0x00007f923c4af800 Uncommon trap: reason=bimorphic action=maybe_recompile pc=0x000000012791869c method=scala.concurrent.impl.Promise.liftedTree1$1(Lscala/Function1;Lscala/util/Try;)Lscala/util/Try; @ 2
+Event: 9111.284 Thread 0x00007f923178d800 Uncommon trap: reason=unstable_if action=reinterpret pc=0x0000000125f737a4 method=com.google.gson.internal.Excluder.excludeField(Ljava/lang/reflect/Field;Z)Z @ 9
+Event: 9111.285 Thread 0x00007f923178d800 Uncommon trap: reason=unstable_if action=reinterpret pc=0x00000001225940f0 method=com.google.gson.internal.bind.ReflectiveTypeAdapterFactory.excludeField(Ljava/lang/reflect/Field;ZLcom/google/gson/internal/Excluder;)Z @ 18
+Event: 9113.302 Thread 0x00007f923c4af800 Uncommon trap: reason=bimorphic action=maybe_recompile pc=0x0000000123676a04 method=scala.collection.MapLike$$anon$2.next()Ljava/lang/Object; @ 4
+Event: 9113.334 Thread 0x00007f923c4af800 Uncommon trap: reason=class_check action=maybe_recompile pc=0x000000012164e2ec method=org.eclipse.lsp4j.jsonrpc.json.adapters.CollectionTypeAdapter.write(Lcom/google/gson/stream/JsonWriter;Ljava/util/Collection;)V @ 60
+Event: 9113.466 Thread 0x00007f92356e2800 Uncommon trap: reason=class_check action=maybe_recompile pc=0x000000012164e2ec method=org.eclipse.lsp4j.jsonrpc.json.adapters.CollectionTypeAdapter.write(Lcom/google/gson/stream/JsonWriter;Ljava/util/Collection;)V @ 60
+
+Classes redefined (0 events):
+No events
+
+Internal exceptions (10 events):
+Event: 9113.481 Thread 0x00007f923c4af800 Exception <a 'sun/nio/fs/UnixException'> (0x0000000783385af8) thrown at [/Users/java_re/workspace/8-2-build-macosx-x86_64/jdk8u181/11358/hotspot/src/share/vm/prims/jni.cpp, line 709]
+Event: 9113.481 Thread 0x00007f923c4af800 Exception <a 'sun/nio/fs/UnixException'> (0x0000000783386508) thrown at [/Users/java_re/workspace/8-2-build-macosx-x86_64/jdk8u181/11358/hotspot/src/share/vm/prims/jni.cpp, line 709]
+Event: 9113.481 Thread 0x00007f923c4af800 Exception <a 'sun/nio/fs/UnixException'> (0x0000000783386e20) thrown at [/Users/java_re/workspace/8-2-build-macosx-x86_64/jdk8u181/11358/hotspot/src/share/vm/prims/jni.cpp, line 709]
+Event: 9113.481 Thread 0x00007f923c4af800 Exception <a 'sun/nio/fs/UnixException'> (0x0000000783387620) thrown at [/Users/java_re/workspace/8-2-build-macosx-x86_64/jdk8u181/11358/hotspot/src/share/vm/prims/jni.cpp, line 709]
+Event: 9113.481 Thread 0x00007f923c4af800 Exception <a 'sun/nio/fs/UnixException'> (0x0000000783387ee8) thrown at [/Users/java_re/workspace/8-2-build-macosx-x86_64/jdk8u181/11358/hotspot/src/share/vm/prims/jni.cpp, line 709]
+Event: 9113.482 Thread 0x00007f923c4af800 Exception <a 'sun/nio/fs/UnixException'> (0x000000078338a258) thrown at [/Users/java_re/workspace/8-2-build-macosx-x86_64/jdk8u181/11358/hotspot/src/share/vm/prims/jni.cpp, line 709]
+Event: 9113.482 Thread 0x00007f923c4af800 Exception <a 'sun/nio/fs/UnixException'> (0x000000078338ac60) thrown at [/Users/java_re/workspace/8-2-build-macosx-x86_64/jdk8u181/11358/hotspot/src/share/vm/prims/jni.cpp, line 709]
+Event: 9113.482 Thread 0x00007f923c4af800 Exception <a 'sun/nio/fs/UnixException'> (0x000000078338b578) thrown at [/Users/java_re/workspace/8-2-build-macosx-x86_64/jdk8u181/11358/hotspot/src/share/vm/prims/jni.cpp, line 709]
+Event: 9113.482 Thread 0x00007f923c4af800 Exception <a 'sun/nio/fs/UnixException'> (0x000000078338bd78) thrown at [/Users/java_re/workspace/8-2-build-macosx-x86_64/jdk8u181/11358/hotspot/src/share/vm/prims/jni.cpp, line 709]
+Event: 9113.482 Thread 0x00007f923c4af800 Exception <a 'sun/nio/fs/UnixException'> (0x000000078338c638) thrown at [/Users/java_re/workspace/8-2-build-macosx-x86_64/jdk8u181/11358/hotspot/src/share/vm/prims/jni.cpp, line 709]
+
+Events (10 events):
+Event: 9113.530 Thread 0x00007f9232331800 Thread exited: 0x00007f9232331800
+Event: 9113.530 Thread 0x00007f92314fe000 Thread exited: 0x00007f92314fe000
+Event: 9113.530 Thread 0x00007f923605f800 Thread exited: 0x00007f923605f800
+Event: 9113.530 Thread 0x00007f92357d7800 Thread exited: 0x00007f92357d7800
+Event: 9113.530 Thread 0x00007f92350f0800 Thread exited: 0x00007f92350f0800
+Event: 9113.530 Thread 0x00007f9232dfa800 Thread exited: 0x00007f9232dfa800
+Event: 9113.531 Thread 0x00007f923c1ff000 Thread exited: 0x00007f923c1ff000
+Event: 9113.531 Thread 0x00007f9236060800 Thread exited: 0x00007f9236060800
+Event: 9113.531 Thread 0x00007f922f431000 Thread exited: 0x00007f922f431000
+Event: 9113.531 Thread 0x00007f9233846800 Thread exited: 0x00007f9233846800
+
+
+Dynamic libraries:
+0x00007fff3f5a9000 	/System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa
+0x00007fff4b28b000 	/System/Library/Frameworks/Security.framework/Versions/A/Security
+0x00007fff3e23e000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/ApplicationServices
+0x00007fff6b8d3000 	/usr/lib/libz.1.dylib
+0x00007fff69003000 	/usr/lib/libSystem.B.dylib
+0x00007fff6a9fd000 	/usr/lib/libobjc.A.dylib
+0x00007fff3fd91000 	/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation
+0x00007fff42005000 	/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation
+0x00007fff3d437000 	/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit
+0x00007fff3f924000 	/System/Library/Frameworks/CoreData.framework/Versions/A/CoreData
+0x00007fff62b52000 	/System/Library/PrivateFrameworks/RemoteViewServices.framework/Versions/A/RemoteViewServices
+0x00007fff66d46000 	/System/Library/PrivateFrameworks/UIFoundation.framework/Versions/A/UIFoundation
+0x00007fff68428000 	/System/Library/PrivateFrameworks/XCTTargetBootstrap.framework/Versions/A/XCTTargetBootstrap
+0x00007fff5d98f000 	/System/Library/PrivateFrameworks/IconServices.framework/Versions/A/IconServices
+0x00007fff4491e000 	/System/Library/Frameworks/Metal.framework/Versions/A/Metal
+0x00007fff54f1a000 	/System/Library/PrivateFrameworks/DesktopServicesPriv.framework/Versions/A/DesktopServicesPriv
+0x00007fff69d63000 	/usr/lib/libenergytrace.dylib
+0x00007fff65235000 	/System/Library/PrivateFrameworks/SkyLight.framework/Versions/A/SkyLight
+0x00007fff401d6000 	/System/Library/Frameworks/CoreGraphics.framework/Versions/A/CoreGraphics
+0x00007fff3c203000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Accelerate
+0x00007fff4274b000 	/System/Library/Frameworks/IOSurface.framework/Versions/A/IOSurface
+0x00007fff54d86000 	/System/Library/PrivateFrameworks/DFRFoundation.framework/Versions/A/DFRFoundation
+0x00007fff3e721000 	/System/Library/Frameworks/AudioToolbox.framework/Versions/A/AudioToolbox
+0x00007fff3e99a000 	/System/Library/Frameworks/AudioUnit.framework/Versions/A/AudioUnit
+0x00007fff54e1b000 	/System/Library/PrivateFrameworks/DataDetectorsCore.framework/Versions/A/DataDetectorsCore
+0x00007fff3f0ad000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/HIToolbox.framework/Versions/A/HIToolbox
+0x00007fff69ebc000 	/usr/lib/libicucore.A.dylib
+0x00007fff4a802000 	/System/Library/Frameworks/QuartzCore.framework/Versions/A/QuartzCore
+0x00007fff3f481000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/SpeechRecognition.framework/Versions/A/SpeechRecognition
+0x00007fff69157000 	/usr/lib/libauto.dylib
+0x00007fff6b7c7000 	/usr/lib/libxml2.2.dylib
+0x00007fff54966000 	/System/Library/PrivateFrameworks/CoreUI.framework/Versions/A/CoreUI
+0x00007fff3f80f000 	/System/Library/Frameworks/CoreAudio.framework/Versions/A/CoreAudio
+0x00007fff41e41000 	/System/Library/Frameworks/DiskArbitration.framework/Versions/A/DiskArbitration
+0x00007fff6a169000 	/usr/lib/liblangid.dylib
+0x00007fff5ed8e000 	/System/Library/PrivateFrameworks/MultitouchSupport.framework/Versions/A/MultitouchSupport
+0x00007fff426ba000 	/System/Library/Frameworks/IOKit.framework/Versions/A/IOKit
+0x00007fff68bc4000 	/usr/lib/libDiagnosticMessagesClient.dylib
+0x00007fff40fe2000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/CoreServices
+0x00007fff60964000 	/System/Library/PrivateFrameworks/PerformanceAnalysis.framework/Versions/A/PerformanceAnalysis
+0x00007fff499f2000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/OpenGL
+0x00007fff3f5b7000 	/System/Library/Frameworks/ColorSync.framework/Versions/A/ColorSync
+0x00007fff40867000 	/System/Library/Frameworks/CoreImage.framework/Versions/A/CoreImage
+0x00007fff419bb000 	/System/Library/Frameworks/CoreText.framework/Versions/A/CoreText
+0x00007fff427ae000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/ImageIO
+0x00007fff50fc4000 	/System/Library/PrivateFrameworks/Backup.framework/Versions/A/Backup
+0x00007fff690aa000 	/usr/lib/libarchive.2.dylib
+0x00007fff3ecf2000 	/System/Library/Frameworks/CFNetwork.framework/Versions/A/CFNetwork
+0x00007fff4b9e4000 	/System/Library/Frameworks/SystemConfiguration.framework/Versions/A/SystemConfiguration
+0x00007fff68af5000 	/usr/lib/libCRFSuite.dylib
+0x00007fff69246000 	/usr/lib/libc++.1.dylib
+0x00007fff6929a000 	/usr/lib/libc++abi.dylib
+0x00007fff6c0c2000 	/usr/lib/system/libcache.dylib
+0x00007fff6c0c7000 	/usr/lib/system/libcommonCrypto.dylib
+0x00007fff6c0d2000 	/usr/lib/system/libcompiler_rt.dylib
+0x00007fff6c0da000 	/usr/lib/system/libcopyfile.dylib
+0x00007fff6c0e4000 	/usr/lib/system/libcorecrypto.dylib
+0x00007fff6c1ef000 	/usr/lib/system/libdispatch.dylib
+0x00007fff6c229000 	/usr/lib/system/libdyld.dylib
+0x00007fff6c256000 	/usr/lib/system/libkeymgr.dylib
+0x00007fff6c264000 	/usr/lib/system/liblaunch.dylib
+0x00007fff6c265000 	/usr/lib/system/libmacho.dylib
+0x00007fff6c26b000 	/usr/lib/system/libquarantine.dylib
+0x00007fff6c26e000 	/usr/lib/system/libremovefile.dylib
+0x00007fff6c270000 	/usr/lib/system/libsystem_asl.dylib
+0x00007fff6c288000 	/usr/lib/system/libsystem_blocks.dylib
+0x00007fff6c289000 	/usr/lib/system/libsystem_c.dylib
+0x00007fff6c311000 	/usr/lib/system/libsystem_configuration.dylib
+0x00007fff6c315000 	/usr/lib/system/libsystem_coreservices.dylib
+0x00007fff6c319000 	/usr/lib/system/libsystem_darwin.dylib
+0x00007fff6c320000 	/usr/lib/system/libsystem_dnssd.dylib
+0x00007fff6c327000 	/usr/lib/system/libsystem_info.dylib
+0x00007fff6c39c000 	/usr/lib/system/libsystem_m.dylib
+0x00007fff6c3e8000 	/usr/lib/system/libsystem_malloc.dylib
+0x00007fff6c40d000 	/usr/lib/system/libsystem_networkextension.dylib
+0x00007fff6c418000 	/usr/lib/system/libsystem_notify.dylib
+0x00007fff6c435000 	/usr/lib/system/libsystem_sandbox.dylib
+0x00007fff6c439000 	/usr/lib/system/libsystem_secinit.dylib
+0x00007fff6c373000 	/usr/lib/system/libsystem_kernel.dylib
+0x00007fff6c420000 	/usr/lib/system/libsystem_platform.dylib
+0x00007fff6c42a000 	/usr/lib/system/libsystem_pthread.dylib
+0x00007fff6c43c000 	/usr/lib/system/libsystem_symptoms.dylib
+0x00007fff6c444000 	/usr/lib/system/libsystem_trace.dylib
+0x00007fff6c45b000 	/usr/lib/system/libunwind.dylib
+0x00007fff6c461000 	/usr/lib/system/libxpc.dylib
+0x00007fff69227000 	/usr/lib/libbsm.0.dylib
+0x00007fff6c257000 	/usr/lib/system/libkxld.dylib
+0x00007fff5020a000 	/System/Library/PrivateFrameworks/AppleFSCompression.framework/Versions/A/AppleFSCompression
+0x00007fff68ec3000 	/usr/lib/libOpenScriptingUtil.dylib
+0x00007fff6954f000 	/usr/lib/libcoretls.dylib
+0x00007fff69566000 	/usr/lib/libcoretls_cfhelpers.dylib
+0x00007fff6b194000 	/usr/lib/libpam.2.dylib
+0x00007fff6b354000 	/usr/lib/libsqlite3.dylib
+0x00007fff6b7b5000 	/usr/lib/libxar.1.dylib
+0x00007fff69238000 	/usr/lib/libbz2.1.0.dylib
+0x00007fff6a16b000 	/usr/lib/liblzma.5.dylib
+0x00007fff6a61c000 	/usr/lib/libnetwork.dylib
+0x00007fff69093000 	/usr/lib/libapple_nghttp2.dylib
+0x00007fff6b19b000 	/usr/lib/libpcap.A.dylib
+0x00007fff41381000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/FSEvents.framework/Versions/A/FSEvents
+0x00007fff41060000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/CarbonCore.framework/Versions/A/CarbonCore
+0x00007fff4153d000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Metadata
+0x00007fff415dc000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/OSServices.framework/Versions/A/OSServices
+0x00007fff41627000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/SearchKit.framework/Versions/A/SearchKit
+0x00007fff40fe3000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/AE.framework/Versions/A/AE
+0x00007fff4138a000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/LaunchServices
+0x00007fff41338000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/DictionaryServices.framework/Versions/A/DictionaryServices
+0x00007fff4168f000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/SharedFileList.framework/Versions/A/SharedFileList
+0x00007fff459cd000 	/System/Library/Frameworks/NetFS.framework/Versions/A/NetFS
+0x00007fff5eff4000 	/System/Library/PrivateFrameworks/NetAuth.framework/Versions/A/NetAuth
+0x00007fff6882c000 	/System/Library/PrivateFrameworks/login.framework/Versions/A/Frameworks/loginsupport.framework/Versions/A/loginsupport
+0x00007fff6694f000 	/System/Library/PrivateFrameworks/TCC.framework/Versions/A/TCC
+0x00007fff53fc5000 	/System/Library/PrivateFrameworks/CoreNLP.framework/Versions/A/CoreNLP
+0x00007fff5ea8e000 	/System/Library/PrivateFrameworks/MetadataUtilities.framework/Versions/A/MetadataUtilities
+0x00007fff6a240000 	/usr/lib/libmecabra.dylib
+0x00007fff3e23f000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ATS.framework/Versions/A/ATS
+0x00007fff3e58e000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ColorSyncLegacy.framework/Versions/A/ColorSyncLegacy
+0x00007fff3e62d000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/HIServices.framework/Versions/A/HIServices
+0x00007fff3e680000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/LangAnalysis.framework/Versions/A/LangAnalysis
+0x00007fff3e690000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/PrintCore.framework/Versions/A/PrintCore
+0x00007fff3e6da000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/QD.framework/Versions/A/QD
+0x00007fff3e714000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/SpeechSynthesis.framework/Versions/A/SpeechSynthesis
+0x00007fff692c2000 	/usr/lib/libcompression.dylib
+0x00007fff3fca9000 	/System/Library/Frameworks/CoreDisplay.framework/Versions/A/CoreDisplay
+0x00007fff44bd5000 	/System/Library/Frameworks/MetalPerformanceShaders.framework/Versions/A/MetalPerformanceShaders
+0x00007fff3c21b000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vImage.framework/Versions/A/vImage
+0x00007fff3d295000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/vecLib
+0x00007fff3d1e1000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libvMisc.dylib
+0x00007fff3cff9000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libvDSP.dylib
+0x00007fff3c8b5000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
+0x00007fff3cba2000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libLAPACK.dylib
+0x00007fff3cf4c000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libLinearAlgebra.dylib
+0x00007fff3cfe5000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libSparseBLAS.dylib
+0x00007fff3cf62000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libQuadrature.dylib
+0x00007fff3cb2f000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBNNS.dylib
+0x00007fff3cf68000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libSparse.dylib
+0x00007fff5b300000 	/System/Library/PrivateFrameworks/GPUWrangler.framework/Versions/A/GPUWrangler
+0x00007fff5d5c4000 	/System/Library/PrivateFrameworks/IOAccelerator.framework/Versions/A/IOAccelerator
+0x00007fff5d5cf000 	/System/Library/PrivateFrameworks/IOPresentment.framework/Versions/A/IOPresentment
+0x00007fff54d96000 	/System/Library/PrivateFrameworks/DSExternalDisplay.framework/Versions/A/DSExternalDisplay
+0x00007fff48e49000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libCoreFSCache.dylib
+0x00007fff449c9000 	/System/Library/Frameworks/MetalPerformanceShaders.framework/Frameworks/MPSCore.framework/Versions/A/MPSCore
+0x00007fff449e9000 	/System/Library/Frameworks/MetalPerformanceShaders.framework/Frameworks/MPSImage.framework/Versions/A/MPSImage
+0x00007fff44a8e000 	/System/Library/Frameworks/MetalPerformanceShaders.framework/Frameworks/MPSNeuralNetwork.framework/Versions/A/MPSNeuralNetwork
+0x00007fff44a66000 	/System/Library/Frameworks/MetalPerformanceShaders.framework/Frameworks/MPSMatrix.framework/Versions/A/MPSMatrix
+0x00007fff44bba000 	/System/Library/Frameworks/MetalPerformanceShaders.framework/Frameworks/MPSRayIntersector.framework/Versions/A/MPSRayIntersector
+0x00007fff5eab7000 	/System/Library/PrivateFrameworks/MetalTools.framework/Versions/A/MetalTools
+0x00007fff4f90b000 	/System/Library/PrivateFrameworks/AggregateDictionary.framework/Versions/A/AggregateDictionary
+0x00007fff68ea4000 	/usr/lib/libMobileGestalt.dylib
+0x00007fff41b1e000 	/System/Library/Frameworks/CoreVideo.framework/Versions/A/CoreVideo
+0x00007fff5c10a000 	/System/Library/PrivateFrameworks/GraphVisualizer.framework/Versions/A/GraphVisualizer
+0x00007fff55f90000 	/System/Library/PrivateFrameworks/FaceCore.framework/Versions/A/FaceCore
+0x00007fff48477000 	/System/Library/Frameworks/OpenCL.framework/Versions/A/OpenCL
+0x00007fff68bfc000 	/usr/lib/libFosl_dynamic.dylib
+0x00007fff5f85f000 	/System/Library/PrivateFrameworks/OTSVG.framework/Versions/A/OTSVG
+0x00007fff3e343000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ATS.framework/Versions/A/Resources/libFontParser.dylib
+0x00007fff3e45b000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ATS.framework/Versions/A/Resources/libFontRegistry.dylib
+0x00007fff42a1c000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libJPEG.dylib
+0x00007fff42d2e000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libTIFF.dylib
+0x00007fff42d04000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libPng.dylib
+0x00007fff4293a000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libGIF.dylib
+0x00007fff4293f000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libJP2.dylib
+0x00007fff42d2b000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libRadiance.dylib
+0x00007fff5035f000 	/System/Library/PrivateFrameworks/AppleJPEG.framework/Versions/A/AppleJPEG
+0x00007fff48e54000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGFXShared.dylib
+0x00007fff49017000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGLU.dylib
+0x00007fff48e5d000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib
+0x00007fff48e69000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGLImage.dylib
+0x00007fff48e46000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libCVMSPluginSupport.dylib
+0x00007fff48e4f000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libCoreVMClient.dylib
+0x00007fff69bd9000 	/usr/lib/libcups.2.dylib
+0x00007fff43ef1000 	/System/Library/Frameworks/Kerberos.framework/Versions/A/Kerberos
+0x00007fff42421000 	/System/Library/Frameworks/GSS.framework/Versions/A/GSS
+0x00007fff6b2e9000 	/usr/lib/libresolv.9.dylib
+0x00007fff69dcb000 	/usr/lib/libiconv.2.dylib
+0x00007fff5c266000 	/System/Library/PrivateFrameworks/Heimdal.framework/Versions/A/Heimdal
+0x00007fff69d9b000 	/usr/lib/libheimdal-asn1.dylib
+0x00007fff484eb000 	/System/Library/Frameworks/OpenDirectory.framework/Versions/A/OpenDirectory
+0x00007fff52d2c000 	/System/Library/PrivateFrameworks/CommonAuth.framework/Versions/A/CommonAuth
+0x00007fff484cf000 	/System/Library/Frameworks/OpenDirectory.framework/Versions/A/Frameworks/CFOpenDirectory.framework/Versions/A/CFOpenDirectory
+0x00007fff4b58a000 	/System/Library/Frameworks/SecurityFoundation.framework/Versions/A/SecurityFoundation
+0x00007fff4ee66000 	/System/Library/PrivateFrameworks/APFS.framework/Versions/A/APFS
+0x00007fff6b7b1000 	/usr/lib/libutil.dylib
+0x00007fff692b0000 	/usr/lib/libcharset.1.dylib
+0x00007fff505fc000 	/System/Library/PrivateFrameworks/AppleSauce.framework/Versions/A/AppleSauce
+0x00007fff5077d000 	/System/Library/PrivateFrameworks/AssertionServices.framework/Versions/A/AssertionServices
+0x00007fff5105a000 	/System/Library/PrivateFrameworks/BaseBoard.framework/Versions/A/BaseBoard
+0x00007fff6a19b000 	/usr/lib/libmecab.1.0.0.dylib
+0x00007fff69d95000 	/usr/lib/libgermantok.dylib
+0x00007fff69080000 	/usr/lib/libThaiTokenizer.dylib
+0x00007fff68b2c000 	/usr/lib/libChineseTokenizer.dylib
+0x00007fff5dc7b000 	/System/Library/PrivateFrameworks/LanguageModeling.framework/Versions/A/LanguageModeling
+0x00007fff53a0b000 	/System/Library/PrivateFrameworks/CoreEmoji.framework/Versions/A/CoreEmoji
+0x00007fff5dd57000 	/System/Library/PrivateFrameworks/Lexicon.framework/Versions/A/Lexicon
+0x00007fff5dd9a000 	/System/Library/PrivateFrameworks/LinguisticData.framework/Versions/A/LinguisticData
+0x00007fff692b1000 	/usr/lib/libcmph.dylib
+0x00007fff4b648000 	/System/Library/Frameworks/ServiceManagement.framework/Versions/A/ServiceManagement
+0x00007fff50fbb000 	/System/Library/PrivateFrameworks/BackgroundTaskManagement.framework/Versions/A/BackgroundTaskManagement
+0x00007fff6b8aa000 	/usr/lib/libxslt.1.dylib
+0x00007fff3f3ae000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/Ink.framework/Versions/A/Ink
+0x00007fff66bc1000 	/System/Library/PrivateFrameworks/TextureIO.framework/Versions/A/TextureIO
+0x00007fff690d4000 	/usr/lib/libate.dylib
+0x00007fff54ce6000 	/System/Library/PrivateFrameworks/CrashReporterSupport.framework/Versions/A/CrashReporterSupport
+0x00007fff64373000 	/System/Library/PrivateFrameworks/Sharing.framework/Versions/A/Sharing
+0x00007fff50b5c000 	/System/Library/PrivateFrameworks/AuthKit.framework/Versions/A/AuthKit
+0x00007fff4ff06000 	/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Apple80211
+0x00007fff54a92000 	/System/Library/PrivateFrameworks/CoreUtils.framework/Versions/A/CoreUtils
+0x00007fff41b5c000 	/System/Library/Frameworks/CoreWLAN.framework/Versions/A/CoreWLAN
+0x00007fff42550000 	/System/Library/Frameworks/IOBluetooth.framework/Versions/A/IOBluetooth
+0x00007fff62803000 	/System/Library/PrivateFrameworks/ProtocolBuffer.framework/Versions/A/ProtocolBuffer
+0x00007fff5ecec000 	/System/Library/PrivateFrameworks/MobileKeyBag.framework/Versions/A/MobileKeyBag
+0x00007fff542d8000 	/System/Library/PrivateFrameworks/CorePhoneNumbers.framework/Versions/A/CorePhoneNumbers
+0x00007fff50313000 	/System/Library/PrivateFrameworks/AppleIDAuthSupport.framework/Versions/A/AppleIDAuthSupport
+0x00007fff5dc4e000 	/System/Library/PrivateFrameworks/KeychainCircle.framework/Versions/A/KeychainCircle
+0x00007fff629b9000 	/System/Library/PrivateFrameworks/ROCKit.framework/Versions/A/ROCKit
+0x00007fff54c82000 	/System/Library/PrivateFrameworks/CoreWiFi.framework/Versions/A/CoreWiFi
+0x00007fff3f8f9000 	/System/Library/Frameworks/CoreBluetooth.framework/Versions/A/CoreBluetooth
+0x00007fff54edc000 	/System/Library/PrivateFrameworks/DebugSymbols.framework/Versions/A/DebugSymbols
+0x00007fff54853000 	/System/Library/PrivateFrameworks/CoreSymbolication.framework/Versions/A/CoreSymbolication
+0x00007fff663dd000 	/System/Library/PrivateFrameworks/Symbolication.framework/Versions/A/Symbolication
+0x00007fff65c80000 	/System/Library/PrivateFrameworks/SpeechRecognitionCore.framework/Versions/A/SpeechRecognitionCore
+0x0000000110a00000 	/Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home/jre/lib/server/libjvm.dylib
+0x00007fff6b682000 	/usr/lib/libstdc++.6.dylib
+0x000000010f0e1000 	/Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home/jre/lib/libverify.dylib
+0x000000010f0ef000 	/Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home/jre/lib/libjava.dylib
+0x000000010f16f000 	/Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home/jre/lib/libzip.dylib
+0x000000012d363000 	/Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home/jre/lib/libnio.dylib
+0x000000012d4c3000 	/Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home/jre/lib/./libnet.dylib
+0x000000012da3a000 	/private/var/folders/kb/tjt27xcn6_dg095y88337mjm0000gn/T/jna-1005382995/jna2952893857635498119.tmp
+0x00007fff43eec000 	/System/Library/Frameworks/JavaVM.framework/Versions/A/JavaVM
+0x00007fff5db6d000 	/System/Library/PrivateFrameworks/JavaLaunching.framework/Versions/A/JavaLaunching
+0x000000012f00e000 	/private/var/folders/kb/tjt27xcn6_dg095y88337mjm0000gn/T/jna-1005382995/jna6854986669246507802.tmp
+0x00007fff3f0a8000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Carbon
+0x00007fff3f0a9000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/CommonPanels.framework/Versions/A/CommonPanels
+0x00007fff3f3a4000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/Help.framework/Versions/A/Help
+0x00007fff3f3a8000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/ImageCapture.framework/Versions/A/ImageCapture
+0x00007fff3f444000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/OpenScripting.framework/Versions/A/OpenScripting
+0x00007fff3f47c000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/Print.framework/Versions/A/Print
+0x00007fff3f47e000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/SecurityHI.framework/Versions/A/SecurityHI
+
+VM Arguments:
+jvm_args: -Dmetals.input-box=on -Dmetals.client=vscode -Xss4m -Xms100m 
+java_command: scala.meta.metals.Main
+java_class_path (initial): /Users/etorreborre/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar:/Users/etorreborre/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/lihaoyi/sourcecode_2.12/0.1.7/sourcecode_2.12-0.1.7.jar:/Users/etorreborre/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/google/guava/guava/28.0-jre/guava-28.0-jre.jar:/Users/etorreborre/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/jsoup/jsoup/1.11.3/jsoup-1.11.3.jar:/Users/etorreborre/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scalameta/metals_2.12/0.7.6/metals_2.12-0.7.6.jar:/Users/etorreborre/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/eclipse/xtext/org.eclipse.xtext.xbase.lib/2.18.0/org.eclipse.xtext.xbase.lib-2.18.0.jar:/Users/etorreborre/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/scalap/2.12.9/scalap-2.12.9.jar:/Users/etorreborre/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/ipcsocket/ipcsocket/1.0.0/ipcsocket-1.0.0.jar:/Users/etorreborre/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scalameta/fastparse-utils_2.12/1.0.1/fastparse-utils_2.12-1.0.1.jar:/Users/etorreborre/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/google/errorprone/error_prone_annotations/2.3.2/error_prone_annotations-2.3.2.jar:/Users/etorreborre/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/modules/scala-xml_2.12/1.1.1/scala-xml_2.12-1.1.1.jar:/Users/etorreborre/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/thesamet/scalapb/lenses_2.12/0.9.0/lenses_2.12-0.9.0.jar:/Users/etorreborre/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/jboss/logging/jboss-logging/3.3.2.Final/jboss-logging-3.3.2.Final.jar:/Users/etorreborre/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scalameta/scalameta_2.12/4.2.3/scalameta_2.12-4.2.3.jar:/Users/etorreborre/Library/Caches/Coursier/v1/h
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home
+PATH=/Users/etorreborre/.pyenv/plugins/pyenv-virtualenv/shims:/Users/etorreborre/.pyenv/shims:/Users/etorreborre/.pyenv/bin:/Users/etorreborre/.pl:/Users/etorreborre/.stack/compiler-tools/x86_64-osx/ghc-8.4.4/bin:/Users/etorreborre/.stack:/Users/etorreborre/.local/bin:/Users/etorreborre/.ghcup/bin:/Users/etorreborre/.cabal/bin:/Applications/google-cloud-sdk/bin:/usr/local/homebrew/opt/openssl/bin:/usr/local/homebrew/bin:LOCAL_BIN:~/.symbiont/cabal-docker:~/.symbiont/:/Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:/Users/etorreborre/bin:/pkg-config/0.29.2/bin:/Users/etorreborre/local/bin:/usr/local/homebrew/opt/fzf/bin
+SHELL=/bin/zsh
+DISPLAY=/private/tmp/com.apple.launchd.qikc3OhfwH/org.macosforge.xquartz:0
+
+Signal Handlers:
+SIGSEGV: [libjvm.dylib+0x5b6029], sa_mask[0]=11111111011111110111111111111111, sa_flags=SA_ONSTACK|SA_RESTART|SA_SIGINFO
+SIGBUS: [libjvm.dylib+0x5b6029], sa_mask[0]=11111111011111110111111111111111, sa_flags=SA_RESTART|SA_SIGINFO
+SIGFPE: [libjvm.dylib+0x48b934], sa_mask[0]=11111111011111110111111111111111, sa_flags=SA_RESTART|SA_SIGINFO
+SIGPIPE: [libjvm.dylib+0x48b934], sa_mask[0]=11111111011111110111111111111111, sa_flags=SA_RESTART|SA_SIGINFO
+SIGXFSZ: [libjvm.dylib+0x48b934], sa_mask[0]=11111111011111110111111111111111, sa_flags=SA_RESTART|SA_SIGINFO
+SIGILL: [libjvm.dylib+0x48b934], sa_mask[0]=11111111011111110111111111111111, sa_flags=SA_RESTART|SA_SIGINFO
+SIGUSR1: SIG_DFL, sa_mask[0]=00000000000000000000000000000000, sa_flags=SA_RESTART
+SIGUSR2: [libjvm.dylib+0x48b452], sa_mask[0]=00000000000000000000000000000000, sa_flags=SA_RESTART|SA_SIGINFO
+SIGHUP: [libjvm.dylib+0x489a1d], sa_mask[0]=11111111011111110111111111111111, sa_flags=SA_RESTART|SA_SIGINFO
+SIGINT: [libjvm.dylib+0x489a1d], sa_mask[0]=11111111011111110111111111111111, sa_flags=SA_RESTART|SA_SIGINFO
+SIGTERM: [libjvm.dylib+0x489a1d], sa_mask[0]=11111111011111110111111111111111, sa_flags=SA_RESTART|SA_SIGINFO
+SIGQUIT: [libjvm.dylib+0x489a1d], sa_mask[0]=11111111011111110111111111111111, sa_flags=SA_RESTART|SA_SIGINFO
+
+
+---------------  S Y S T E M  ---------------
+
+OS:Bsduname:Darwin 18.5.0 Darwin Kernel Version 18.5.0: Mon Mar 11 20:40:32 PDT 2019; root:xnu-4903.251.3~3/RELEASE_X86_64 x86_64
+rlimit: STACK 8192k, CORE 0k, NPROC 1418, NOFILE 10240, AS infinity
+load average:4.67 5.30 5.63
+
+CPU:total 12 (initial active 12) (6 cores per cpu, 2 threads per core) family 6 model 158 stepping 10, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, avx, avx2, aes, clmul, erms, 3dnowpref, lzcnt, ht, tsc, tscinvbit, bmi1, bmi2, adx
+
+Memory: 4k page, physical 16777216k(739604k free)
+
+/proc/meminfo:
+
+
+vm_info: Java HotSpot(TM) 64-Bit Server VM (25.181-b13) for bsd-amd64 JRE (1.8.0_181-b13), built on Jul  7 2018 01:02:31 by "java_re" with gcc 4.2.1 (Based on Apple Inc. build 5658) (LLVM build 2336.11.00)
+
+time: Thu Nov 28 15:13:24 2019
+elapsed time: 9113 seconds (0d 2h 31m 53s)
+

@@ -1,13 +1,11 @@
 package org.specs2
 package specification
 
-import org.specs2.control._
 import org.specs2.main.Arguments
 import org.specs2.reporter.LineLogger._
 import org.specs2.specification.core.{SpecificationStructure, Env}
 import runner._
 import scala.collection.mutable.ArrayBuffer
-import org.specs2.control.ExecuteActions._
 
 class BeforeAfterAllSpec extends Specification { def is = s2"""
 
@@ -79,7 +77,7 @@ class BeforeAfterAllSpec extends Specification { def is = s2"""
 
   def runSpec(s: SpecificationStructure, arguments: Arguments = Arguments()) = {
     val env = Env(arguments = arguments, lineLogger = NoLineLogger)
-    try runAction(ClassRunner.report(env)(s), noLogging)(env.executionEnv)
+    try ClassRunner.report(env)(s).runVoid(env.executionContext)
     finally env.shutdown
   }
 
