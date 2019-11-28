@@ -2,6 +2,7 @@ package org.specs2
 package reporter
 
 import control.{Logger =>_,_}
+import Control._
 import execute.Details
 import sbt.testing._
 import org.specs2.text.AnsiColors._
@@ -16,8 +17,8 @@ import SbtPrinter._
  * It also publishes events (success, error, skipped, pending) to Sbt
  */
 trait SbtPrinter extends Printer {
-  def prepare(env: Env, specifications: List[SpecStructure]): Action[Unit] = Actions.unit
-  def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] = Actions.unit
+  def prepare(env: Env, specifications: List[SpecStructure]): Action[Unit] = Action.unit
+  def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] = Action.unit
 
   /** sbt loggers to display text */
   def loggers: Array[Logger]
