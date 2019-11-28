@@ -1,6 +1,7 @@
 package org.specs2
 package reporter
 
+import fp._, syntax._
 import control._
 import Control._
 import io._
@@ -14,7 +15,7 @@ import specification.core._
 trait MarkdownPrinter extends Printer {
 
   def prepare(env: Env, specifications: List[SpecStructure]): Action[Unit] =
-    env.fileSystem.mkdirs(MarkdownOptions.create(env.arguments).outDir)
+    env.fileSystem.mkdirs(MarkdownOptions.create(env.arguments).outDir).toAction
 
   def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] =
     Action.unit
@@ -23,12 +24,12 @@ trait MarkdownPrinter extends Printer {
   def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment] = {
     val options = MarkdownOptions.create(env.arguments)
     val path = options.outDir / FilePath.unsafe(spec.header.className+"."+options.extension)
-    FoldIo.printToFilePath[ActionStack, Fragment](path)(f => fragmentToLine(options)(f))
+    FoldIo.printToFilePath[Fragment](path)(f => fragmentToLine(options)(f))
   }
 
   def fragmentToLine(options: MarkdownOptions)(fragment: Fragment): Action[String] = {
     fragment match {
-      case t if Fragment.isText(t) => protect(t.description.show)
+      case t if Fragment.isText(t) => Action.protect(t.description.show)
 
       case e if Fragment.isExample(e) =>
         val description = e.description.show
@@ -49,8 +50,8 @@ trait MarkdownPrinter extends Printer {
           case _                   => ""
         }
 
-      case Fragment(ref: SpecificationRef,_,_) => protect(toMarkdown(ref, options))
-      case _                                   => ok("")
+      case Fragment(ref: SpecificationRef,_,_) => Action.protect(toMarkdown(ref, options))
+      case _                                   => Action.pure("")
     }
   }
 
