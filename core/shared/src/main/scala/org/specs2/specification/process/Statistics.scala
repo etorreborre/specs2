@@ -2,14 +2,16 @@ package org.specs2
 package specification
 package process
 
+import fp._, syntax._
 import control._
-import Actions._
+import Control._
 import specification.core._
 import control._
 import org.specs2.concurrent.ExecutionEnv
 import origami._
 import producer._
-import ExecuteActions._
+import Producer._
+import Transducers._
 
 /**
  * Compute the statistics for executed fragments
@@ -17,7 +19,7 @@ import ExecuteActions._
 trait Statistics {
 
   def statsProcess: AsyncTransducer[Fragment, Stats] =
-    transducers.reduceMapEval[ActionStack, Fragment, Stats](_.executionResult.map(Stats.apply))
+    reduceMapEval[Action, Fragment, Stats](_.executionResult.map(Stats.apply))
 
   def defaultStats(fragment: Fragment) =
     if (Fragment.isExample(fragment)) Stats(examples = 1)
@@ -34,7 +36,7 @@ trait Statistics {
    * read the stats for one Fragment
    */
   def readStats(className: String, env: Env): Fragment => AsyncStream[Fragment] = { f: Fragment =>
-    producers.eval(env.statisticsRepository.previousResult(className, f.description).map(r => f.setPreviousResult(r)))
+    eval[Action, Fragment](env.statisticsRepository.previousResult(className, f.description).map(r => f.setPreviousResult(r)).toAction)
   }
 
   def fold: AsyncFold[Fragment, Stats] { type S = Stats } =
@@ -43,11 +45,11 @@ trait Statistics {
         fragment.executedResult.map { case ExecutedResult(result, timer) =>
           defaultStats(fragment).withResult(result).copy(timer = timer)
         }
-      } else ok(Stats.empty)
+      } else Action.pure(Stats.empty)
     }
 }
 
 object Statistics extends Statistics {
   def runStats(spec: SpecStructure)(ee: ExecutionEnv): Stats =
-    spec.contents.fold(fold).runMonoid(ee)
+    spec.contents.fold(fold).runMonoid(ee.executionContext)
 }

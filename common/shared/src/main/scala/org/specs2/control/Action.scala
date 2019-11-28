@@ -176,6 +176,8 @@ case class Operation[A](operation: () => A, last: Vector[Finalizer] = Vector.emp
     }
     catch { case t: Throwable => Operation(() => Left(t), last) }
 
+  def toAction: Action[A] =
+    Action.pure(run).copy(last = last)
 }
 
 object Operation {
