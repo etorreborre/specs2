@@ -46,7 +46,7 @@ trait TextPrinter extends Printer {
 
   /** run a specification */
   def run(env: Env): SpecStructure => Unit = { spec: SpecStructure =>
-    print(env)(spec).runVoid(env.specs2ExecutionContext)
+    print(env)(spec).runVoid(env.specs2ExecutionEnv)
   }
 
   def linesLoggerSink(logger: LineLogger, header: SpecHeader, args: Arguments): AsyncSink[List[LogLine]] =

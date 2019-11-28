@@ -1,6 +1,6 @@
 package org.specs2.specification.core
 
-import org.specs2.concurrent.ExecutionEnv
+import org.specs2.concurrent.{ExecutorServices, ExecutionEnv}
 import org.specs2.specification.AfterAll
 
 import scala.concurrent.ExecutionContext
@@ -24,6 +24,9 @@ trait OwnEnv extends AfterAll {
 
   implicit lazy val ee: ExecutionEnv =
     ownEnv.executionEnv
+
+  lazy val es: ExecutorServices =
+    ownEnv.executorServices
 
   lazy val ec: ExecutionContext =
     ownEnv.executionContext

@@ -10,17 +10,18 @@ import text.AnsiColors
 import execute._
 import org.junit.ComparisonFailure
 import main.Arguments
-import control.{Actions, _}
-import origami._
+import control._
 import control.ExecutionOrigin._
+import Control._
+import origami._
 import org.specs2.fp.syntax._
 
 /**
  * The JUnitPrinter sends notifications to JUnit's RunNotifier
  */
 trait JUnitPrinter extends Printer { outer =>
-  def prepare(env: Env, specifications: List[SpecStructure]): Action[Unit] = Actions.unit
-  def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] = Actions.unit
+  def prepare(env: Env, specifications: List[SpecStructure]): Action[Unit] = Action.unit
+  def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] = Action.unit
 
   /** the junit notifier to use */
   def notifier: RunNotifier
@@ -34,15 +35,15 @@ trait JUnitPrinter extends Printer { outer =>
   // test run start and finish must not be notified if we execute the test from
   // the JUnitCore runner because it is already doing that.
   // Otherwise this could lead to double reporting see #440
-  // 
-  // The value should be evaluated once in the outer scope, because the 
+  //
+  // The value should be evaluated once in the outer scope, because the
   // original stack trace is lost inside the callbacks.
   def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment] = {
     val shouldNotify = !excludeFromReporting
-    fold.bracket[ActionStack, Fragment, RunNotifier](
-      open = Actions.protect { if (shouldNotify) notifier.fireTestRunStarted(description); notifier })(
+    fold.bracket[Fragment, RunNotifier](
+      open = Action.protect { if (shouldNotify) notifier.fireTestRunStarted(description); notifier })(
       step = (notifier: RunNotifier, fragment: Fragment) => notifyJUnit(env.arguments)(fragment).as(notifier))(
-      close = (notifier: RunNotifier) => Actions.protect(if (shouldNotify) notifier.fireTestRunFinished(new org.junit.runner.Result) else ())
+      close = (notifier: RunNotifier) => Finalizer.create(if (shouldNotify) notifier.fireTestRunFinished(new org.junit.runner.Result) else ())
     )
   }
 
@@ -57,7 +58,7 @@ trait JUnitPrinter extends Printer { outer =>
             notifyStepError(description, result)(args)
         }
       }
-    } else Actions.unit
+    } else Action.unit
   }
 
   private def findDescription(fragment: Fragment) = {
@@ -190,4 +191,3 @@ class SpecFailureAssertionFailedError(e: Exception) extends AssertionFailedError
   override def printStackTrace(w: java.io.PrintStream): Unit = { e.printStackTrace(w) }
   override def printStackTrace(w: java.io.PrintWriter): Unit = { e.printStackTrace(w) }
 }
-

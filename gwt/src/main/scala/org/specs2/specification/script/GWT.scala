@@ -14,8 +14,6 @@ import org.specs2.fp.syntax._
 import org.specs2.collection.Listx._
 import org.specs2.concurrent.ExecutionEnv
 import org.specs2.control._
-import org.specs2.control.Actions._
-import org.specs2.control.ExecuteActions._
 
 /**
  * The GWT trait can be used to associate a piece of text to Given/When/Then steps according to the [BDD](http://en.wikipedia.org/wiki/Behavior-driven_development)
@@ -229,7 +227,7 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
 
     /** @return the values of all executed steps */
     private def stepsValues(steps: Seq[Fragment]) = steps.foldRight(HNil: HList) { (cur, res) =>
-      value(timedFuture(cur.execution.startExecution(Env()).executionResult).run(executionEnv)) :: res
+      value(cur.execution.startExecution(Env()).executionResult.run(executionEnv)) :: res
     }
 
     /** @return the results of a list of fragments */
@@ -299,4 +297,3 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
     case _ => r
   }
 }
-

@@ -3,6 +3,7 @@ package runner
 
 import main.Arguments
 import Runner._
+import control.StringOutputLogger
 import matcher.ActionMatchers
 import org.specs2.io.StringOutput
 
@@ -51,7 +52,7 @@ class RunnerSpec extends Specification with ActionMatchers { def is = s2"""
 
   def createPrintersAndExpectMessage(arguments: Arguments, message: String) = {
     val output = new StringOutput {}
-    ClassRunner.createPrinters(arguments, loader).runVoid
+    ClassRunner.createPrinters(arguments, loader, StringOutputLogger(output)).runVoid
     output.messages must contain(contain(message))
   }
 

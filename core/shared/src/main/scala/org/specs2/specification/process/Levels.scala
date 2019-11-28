@@ -76,7 +76,7 @@ object Levels extends Levels {
     treeLocMap(fs)(identityMapper)(ee)
 
   def treeLocMap(fs: Fragments)(mapper: Mapper)(ee: ExecutionEnv): Option[TreeLoc[Fragment]] =
-    fs.contents.pipe(levelsProcess).pipe(levelsToTreeLoc(mapper)).runLast.runOption(ee.executionContext).flatten
+    fs.contents.pipe(levelsProcess).pipe(levelsToTreeLoc(mapper)).runLast.runOption(ee).flatten
 
   def tree(fs: Fragments)(ee: ExecutionEnv): Option[Tree[Fragment]] = treeLoc(fs)(ee).map(_.toTree)
   def treeMap(fs: Fragments)(mapper: Mapper)(ee: ExecutionEnv): Option[Tree[Fragment]] = treeLocMap(fs)(mapper)(ee).map(_.toTree)

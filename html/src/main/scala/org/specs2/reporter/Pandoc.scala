@@ -1,6 +1,7 @@
 package org.specs2
 package reporter
 
+import fp.syntax._
 import control._
 import io._
 import specification.core.Env
@@ -8,7 +9,7 @@ import specification.core.Env
 /** Representation of the Pandoc executable */
 case class Pandoc(verbose: Boolean, executable: FilePath, inputFormat: String, outputFormat: String) {
   def isExecutableAvailable: Action[Unit] =
-    Executable.run(executable, Seq("--version"))
+    Executable.run(executable, Seq("--version")).toAction
 
 }
 
@@ -43,12 +44,10 @@ object Pandoc {
         outputFormat = valueOr("pandoc.outputformat", Pandoc.outputFormat))
 
       pandoc.isExecutableAvailable.map(_ => Option(pandoc)).orElse(
-        Actions.fail[Option[Pandoc]]("the pandoc executable is not available at: "+pandoc.executable.path))
+        Action.fail[Option[Pandoc]]("the pandoc executable is not available at: "+pandoc.executable.path))
     }
 
-    else Actions.ok(None)
+    else Action.pure(None)
   }
 
 }
-
-

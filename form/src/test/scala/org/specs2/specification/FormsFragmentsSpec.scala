@@ -2,13 +2,14 @@ package org.specs2
 package specification
 
 import form._
+import fp.syntax._
 import matcher._
 import org.specs2.specification.core.{Env, OwnEnv, SpecStructure}
 import org.specs2.specification.process.DefaultExecutor
 import ActionMatchers._
 
 class FormsFragmentsSpec(val env: Env) extends Specification with Forms with ThrownExpectations with OwnEnv { def is = s2"""
-  
+
  A form can be added as a Fragment in a specification
    creating a new Text Fragment                                                      ${frags.e1_1}
    showing all expected values                                                       ${frags.e1_2}
@@ -19,7 +20,7 @@ class FormsFragmentsSpec(val env: Env) extends Specification with Forms with Thr
    returning success if the form is a success                                        ${frags.e2}
    returning a failure if one property in the form fails                             ${frags.e3}
                                                                                      """
-                                                                               
+
   object frags extends Customers {
     def e1_1 = execute("This is the expected customer" ^ form).size must_== 2
     def e1_2 = execute("This is the expected customer" ^ form).map(_.description.show).apply(1) must_== s"$formText"

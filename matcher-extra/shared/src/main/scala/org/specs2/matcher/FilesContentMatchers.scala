@@ -2,10 +2,9 @@ package org.specs2
 package matcher
 
 import java.io.File
-import execute.Result
 import text._
 import io._
-import control._
+import fp.syntax._
 import MatchersImplicits._
 import ValueChecks._
 
@@ -46,8 +45,8 @@ trait FilesContentMatchers extends FileMatchers with LinesContentMatchers with T
       val message = TextTable(header = Seq("file", "MD5"), lines = Seq(Seq(actual.getPath, md5_1), Seq(expected.getPath, md5_2))).show
       (md5_1 == md5_2, s"MD5 mismatch:\n$message")
     }
-    runOperation(operation).fold(
-      error => (false, Result.disjunctionErrorToResult(error).message),
+    operation.runOperation.fold(
+      error => (false, execute.Error(error).message),
       identity)
   }
 

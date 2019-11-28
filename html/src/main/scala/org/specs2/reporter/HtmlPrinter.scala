@@ -9,44 +9,42 @@ import control._
 import java.util.regex.Pattern._
 import java.net.{JarURLConnection, URL}
 
-import org.specs2.fp.syntax._
+import fp.syntax._
 import HtmlBodyPrinter._
 import Pandoc._
 import html._
-import SearchPage._
 import html.TableOfContents._
 import SpecHtmlPage._
-import eff.all._
-import eff.syntax.all._
-import eff.ErrorEffect._
-import Operations._
-import org.specs2.concurrent.ExecutionEnv
-import org.specs2.time.SimpleTimer
+import concurrent.ExecutionEnv
+import time.SimpleTimer
 import origami._
+import Control._
+import HtmlPrinter._
 
 /**
  * Printer for html files
  */
-trait HtmlPrinter extends Printer {
+case class HtmlPrinter(searchPage: SearchPage, logger: Logger = ConsoleLogger()) extends Printer {
 
-  def prepare(env: Env, specifications: List[SpecStructure]): Action[Unit]  = Actions.unit
+  def prepare(env: Env, specifications: List[SpecStructure]): Action[Unit]  = Action.unit
 
   /** create an index for all the specifications, if required */
-  def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] =
+  def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] = {
     getHtmlOptions(env.arguments) >>= { options: HtmlOptions =>
-      createIndex(env, specifications, options).when(options.search) >>
+      searchPage.createIndex(env, specifications, options).when(options.search) >>
       createToc(env, specifications, options.outDir, options.tocEntryMaxSize, env.fileSystem).when(options.toc) >>
       reportMissingSeeRefs(specifications, options.outDir)(env.specs2ExecutionEnv).when(options.warnMissingSeeRefs)
     }
+  }.toAction
 
   /** @return a SinkTask for the Html output */
   def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment] = {
     ((Statistics.fold zip fold.list[Fragment].into[Action] zip SimpleTimer.timerFold.into[Action]) <*
-     fold.fromStart((getHtmlOptions(env.arguments) >>= (options => copyResources(env, options))).void)).mapFlatten { case ((stats, fragments), timer) =>
-      val expecutedSpec = spec.copy(lazyFragments = () => Fragments(fragments:_*))
+     fold.fromStart((getHtmlOptions(env.arguments) >>= (options => copyResources(env, options))).void.toAction)).mapFlatten { case ((stats, fragments), timer) =>
+      val executedSpec = spec.copy(lazyFragments = () => Fragments(fragments:_*))
       getPandoc(env).flatMap {
-        case None         => printHtml(env, expecutedSpec, stats, timer)
-        case Some(pandoc) => printHtmlWithPandoc(env, expecutedSpec, stats, timer, pandoc)
+        case None         => printHtml(env, executedSpec, stats, timer).toAction
+        case Some(pandoc) => printHtmlWithPandoc(env, executedSpec, stats, timer, pandoc).toAction
       }
     }
   }
@@ -63,12 +61,12 @@ trait HtmlPrinter extends Printer {
    *  - output the file
    */
   def printHtml(env: Env, spec: SpecStructure, stats: Stats, timer: SimpleTimer): Operation[Unit] = {
-    import env.fileSystem._
+    import env.{fileSystem => fs}
     for {
       options  <- getHtmlOptions(env.arguments)
-      template <- readFile(options.template) ||| warnAndFail("No template file found at "+options.template.path, RunAborted)
+      template <- fs.readFile(options.template) ||| logger.warnAndFail[String]("No template file found at "+options.template.path, RunAborted)
       content  <- makeHtml(template, spec, stats, timer, options, env.arguments)(env.specs2ExecutionEnv)
-      _        <- writeFile(outputPath(options.outDir, spec), content)
+      _        <- fs.writeFile(outputPath(options.outDir, spec), content)
     } yield ()
   }
 
@@ -78,7 +76,7 @@ trait HtmlPrinter extends Printer {
   def getHtmlOptions(arguments: Arguments): Operation[HtmlOptions] = {
     import arguments.commandLine._
     val out = directoryOr("html.outdir", HtmlOptions.outDir)
-    Operations.ok(HtmlOptions(
+    Operation.ok(HtmlOptions(
       outDir               = out,
       baseDir              = directoryOr("html.basedir",               HtmlOptions.baseDir),
       template             = fileOr(     "html.template",              HtmlOptions.template(out)),
@@ -120,12 +118,12 @@ trait HtmlPrinter extends Printer {
    *  - create the file content using the template and Pandoc (as an external process)
    */
   def printHtmlWithPandoc(env: Env, spec: SpecStructure, stats: Stats, timer: SimpleTimer, pandoc: Pandoc): Operation[Unit] = {
-    import env.fileSystem._
+    import env.{fileSystem => fs}
     for {
       options  <- getHtmlOptions(env.arguments)
-      _        <- withEphemeralFile(options.outDir | options.template.name) {
-                   (copyFile(options.outDir)(options.template) |||
-                      warnAndFail("No template file found at "+options.template.path, RunAborted)) >>
+      _        <- fs.withEphemeralFile(options.outDir | options.template.name) {
+                   (fs.copyFile(options.outDir)(options.template) |||
+                      logger.warnAndFail("No template file found at "+options.template.path, RunAborted)) >>
                     makePandocHtml(spec, stats, timer, pandoc, options, env)
                   }
     } yield ()
@@ -135,7 +133,7 @@ trait HtmlPrinter extends Printer {
    * Create the Html file by invoking Pandoc
    */
   def makePandocHtml(spec: SpecStructure, stats: Stats, timer: SimpleTimer, pandoc: Pandoc, options: HtmlOptions, env: Env): Operation[Unit] =  {
-    import env.fileSystem._
+    import env.{fileSystem => fs}
 
     val variables1 =
       options.templateVariables
@@ -147,12 +145,12 @@ trait HtmlPrinter extends Printer {
     val outputFilePath = outputPath(options.outDir, spec)
     val pandocArguments = Pandoc.arguments(bodyFile, options.template, variables1, outputFilePath, pandoc)
 
-    withEphemeralFile(bodyFile) {
+    fs.withEphemeralFile(bodyFile) {
       makeBody(spec, stats, timer, options, env.arguments, pandoc = true)(env.specs2ExecutionEnv).flatMap { body =>
-        writeFile(bodyFile, body) >>
-          warn(pandoc.executable.path+" "+pandocArguments.mkString(" ")).when(pandoc.verbose) >>
+        fs.writeFile(bodyFile, body) >>
+          logger.warn(pandoc.executable.path+" "+pandocArguments.mkString(" ")).when(pandoc.verbose) >>
           Executable.run(pandoc.executable, pandocArguments) >>
-          replaceInFile(outputPath(options.outDir, spec), "<code>", "<code class=\"prettyprint\">")
+          fs.replaceInFile(outputPath(options.outDir, spec), "<code>", "<code class=\"prettyprint\">")
       }
     }
   }
@@ -165,9 +163,9 @@ trait HtmlPrinter extends Printer {
            DirectoryPath("templates")).
            map(copySpecResourcesDir(env, "org" / "specs2" / "reporter", options.outDir, classOf[HtmlPrinter].getClassLoader))
         .sequence
-        .whenFailed { e: Error =>
-          val message = "Cannot copy resources to "+options.outDir.path+"\n"+e.fullMessage
-          warnAndFail(message, RunAborted + message)
+        .recover { t: Throwable =>
+          val message = "Cannot copy resources to "+options.outDir.path+"\n"+t.getMessage
+          logger.warnAndFail[List[Unit]](message, RunAborted + message)
         }
     }
 
@@ -175,7 +173,7 @@ trait HtmlPrinter extends Printer {
     Option(loader.getResource((base / src).path)) match {
       case None =>
         val message = s"no resource found for path ${(base / src).path}"
-        warnAndFail(message, message)
+        logger.warnAndFail(message, message)
 
       case Some(url) =>
         val fs = env.fileSystem
@@ -188,14 +186,15 @@ trait HtmlPrinter extends Printer {
 
   def reportMissingSeeRefs(specs: List[SpecStructure], outDir: DirectoryPath)(implicit ee: ExecutionEnv): Operation[Unit] = for {
     missingSeeRefs <- specs.flatMap(_.seeReferencesList).distinct.filterM(ref => FilePathReader.doesNotExist(SpecHtmlPage.outputPath(outDir, ref.specClassName)))
-    _              <- warn("The following specifications are being referenced but haven't been reported\n"+
+    _              <- logger.warn("The following specifications are being referenced but haven't been reported\n"+
                            missingSeeRefs.map(_.specClassName).distinct.mkString("\n")).unless(missingSeeRefs.isEmpty)
   } yield ()
 
   private def jarOf(url: URL): URL = url.openConnection.asInstanceOf[JarURLConnection].getJarFileURL
+}
+
+object HtmlPrinter {
 
   val RunAborted =
     "\nHtml run aborted!\n "
 }
-
-object HtmlPrinter extends HtmlPrinter

@@ -6,9 +6,10 @@ import java.net.InetAddress
 
 import main.Arguments
 import execute._
+import fp.syntax._
 import io.FileName
 import control._
-import Actions._
+import Control._
 import io._
 
 import scala.collection.JavaConverters._
@@ -24,8 +25,8 @@ import origami._
  * The JUnitXmlPrinter creates an xml file with the specification execution results
  */
 trait JUnitXmlPrinter extends Printer {
-  def prepare(env: Env, specs: List[SpecStructure]): Action[Unit]  = Actions.unit
-  def finalize(env: Env, specs: List[SpecStructure]): Action[Unit] = Actions.unit
+  def prepare(env: Env, specs: List[SpecStructure]): Action[Unit]  = Action.unit
+  def finalize(env: Env, specs: List[SpecStructure]): Action[Unit] = Action.unit
 
   def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment] =
     (Statistics.fold zip fold.list[Fragment].into[Action]).
@@ -33,7 +34,7 @@ trait JUnitXmlPrinter extends Printer {
 
   def saveResults(env: Env, spec: SpecStructure): ((Stats, List[Fragment])) =>  Action[Unit] = { case (stats, fs) =>
     descriptionFold(spec, stats, env).run(descriptions(spec, fs)(env.specs2ExecutionEnv).toList).flatMap { suite =>
-       env.fileSystem.writeFile(outputDirectory(env.arguments) | FileName.unsafe(spec.specClassName+".xml"), suite.xml)
+       env.fileSystem.writeFile(outputDirectory(env.arguments) | FileName.unsafe(spec.specClassName+".xml"), suite.xml).toAction
     }
   }
 
@@ -44,7 +45,7 @@ trait JUnitXmlPrinter extends Printer {
         f.executedResult.map { case ExecutedResult(result, timer) =>
           res.addTest(new TestCase(d, result, timer.totalMillis)(env.arguments))
         }
-      else ok(res)
+      else Action.pure(res)
     }
   }
 

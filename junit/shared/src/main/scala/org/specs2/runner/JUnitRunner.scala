@@ -5,13 +5,11 @@ import org.junit.runner.manipulation.{Filterable, NoTestsRemainException}
 import org.junit.runner.notification.{Failure, RunNotifier}
 import main._
 import specification.process.Stats
-import control.Actions._
 import reporter._
 import specification.core._
 import control._
 import org.specs2.fp.syntax._
 import org.specs2.concurrent.ExecutionEnv
-import ExecuteActions._
 import scala.util.control.NonFatal
 
 /**
@@ -22,10 +20,7 @@ class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterab
   /** specification to execute */
   lazy val specification = {
     val structure = SpecificationStructure.create(klass.getName, Thread.currentThread.getContextClassLoader, Some(env))
-    runAction(structure, consoleLogging)(env.specs2ExecutionEnv).fold(
-      error => error.fold(t => throw t, m => throw new Exception(m)),
-      ok => ok
-    )
+    structure.unsafeRun
   }
 
   /** command line arguments, extracted from the system properties */
@@ -50,9 +45,9 @@ class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterab
   /** run the specification with a Notifier */
   def run(n: RunNotifier): Unit = {
     try {
-      runWithEnv(n, env).runEither(env.specs2ExecutionEnv) match {
+      runWithEnv(n, env).runAction(env.specs2ExecutionEnv) match {
         case Right(_) => ()
-        case Left(error) => n.fireTestFailure(new Failure(getDescription, error.fold(identity _, new RuntimeException(_))))
+        case Left(t) => n.fireTestFailure(new Failure(getDescription, new RuntimeException(t)))
       }
     }
     finally env.shutdown
@@ -69,7 +64,7 @@ class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterab
           reporter <- ClassRunner.createReporter(arguments, loader).toAction
           printers <- ClassRunner.createPrinters(arguments, loader).toAction
           ss       <- SpecStructure.linkedSpecifications(specStructure, env, loader).toAction
-          sorted   <- delayed(SpecStructure.topologicalSort(ss)(env.specs2ExecutionEnv).getOrElse(ss))
+          sorted   <- Action.pure(SpecStructure.topologicalSort(ss)(env.specs2ExecutionEnv).getOrElse(ss))
           _        <- reporter.prepare(env, printers)(sorted.toList)
           stats    <- sorted.toList.map(s => Reporter.report(env, createJUnitPrinter(s, n, env.specs2ExecutionEnv) +: printers)(s)).sequence
           _        <- Reporter.finalize(env, printers)(sorted.toList)

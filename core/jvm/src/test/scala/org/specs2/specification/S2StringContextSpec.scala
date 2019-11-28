@@ -113,13 +113,13 @@ s2"""
     |a multi-line
     |  margin example $ok""") must_== Description.text("a multi-line\n      margin example")
 
-  def e4 =
-    getDescription(
-      s2"""this is an auto-example
-           $ok""") must_== Description.code("ok")
-
-  def getDescription(fs: Fragments): Description =
-    fs.examples.runMonoid(ee.executionContext).head.description
+    def e4 =
+      getDescription(
+        s2"""this is an auto-example
+             $ok""") must_== Description.code("ok")
+  
+    def getDescription(fs: Fragments): Description =
+      fs.examples.runMonoid(ee).head.description
   }
 }
 trait dsl1 extends S2StringContext with FragmentsDsl

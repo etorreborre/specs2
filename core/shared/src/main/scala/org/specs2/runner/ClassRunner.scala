@@ -51,26 +51,27 @@ trait ClassRunner {
     SpecificationStructure.create(className, classLoader, env)
 
   /** report the specification */
-  def report(env: Env): SpecificationStructure => Action[Stats] = { spec: SpecificationStructure =>
+  def report(env: Env, logger: Logger = ConsoleLogger()): SpecificationStructure => Action[Stats] = { spec: SpecificationStructure =>
     val loader = Thread.currentThread.getContextClassLoader
     for {
-      printers <- createPrinters(env.arguments, loader).toAction
+      printers <- createPrinters(env.arguments, loader, logger).toAction
       stats    <- Runner.runSpecStructure(spec.structure(env), env, loader, printers)
     } yield stats
   }
 
   /** accepted printers */
-  def createPrinters(args: Arguments, loader: ClassLoader): Operation[List[Printer]] =
-    List(createTextPrinter(args, loader),
-      createJUnitXmlPrinter(args, loader),
-      createHtmlPrinter(args, loader),
-      createMarkdownPrinter(args, loader),
-      createPrinter(args, loader),
-      createNotifierPrinter(args, loader)).sequence.map(_.flatten)
+  def createPrinters(args: Arguments, loader: ClassLoader, logger: Logger = ConsoleLogger()): Operation[List[Printer]] =
+    List(createTextPrinter(args, loader, logger),
+      createJUnitXmlPrinter(args, loader, logger),
+      createHtmlPrinter(args, loader, logger),
+      createMarkdownPrinter(args, loader, logger),
+      createPrinter(args, loader, logger),
+      createNotifierPrinter(args, loader, logger)).sequence.map(_.flatten)
 
   /** custom or default reporter */
-  def createReporter(args: Arguments, loader: ClassLoader): Operation[Reporter] =
-    createCustomInstance[Reporter](args, loader, "reporter", (m: String) => "a custom reporter can not be instantiated " + m, "no custom reporter defined, using the default one")
+  def createReporter(args: Arguments, loader: ClassLoader, logger: Logger = ConsoleLogger()): Operation[Reporter] =
+    createCustomInstance[Reporter](args, loader, "reporter",
+      (m: String) => "a custom reporter can not be instantiated " + m, "no custom reporter defined, using the default one", logger)
       .map(_.getOrElse(Reporter))
 
 }
@@ -89,10 +90,10 @@ object TextRunner extends ClassRunner {
   def run(spec: SpecificationStructure, args: Arguments = Arguments())(env: Env): LineLogger with StringOutput = {
     val logger = LineLogger.stringLogger
     val env1 = env.setLineLogger(logger).setArguments(env.arguments.overrideWith(args))
-    report(env1)(spec).runAction(env1.specs2ExecutionContext)
+    report(env1)(spec).runAction(env1.specs2ExecutionEnv)
     logger
   }
 
-  override def createPrinters(args: Arguments, loader: ClassLoader): Operation[List[Printer]] =
-    List(createTextPrinter(args, loader)).sequence.map(_.flatten)
+  override def createPrinters(args: Arguments, loader: ClassLoader, logger: Logger = ConsoleLogger()): Operation[List[Printer]] =
+    List(createTextPrinter(args, loader, logger)).sequence.map(_.flatten)
 }

@@ -67,7 +67,7 @@ case class Fragments(contents: AsyncStream[Fragment]) {
 
   /** run the process to get all fragments as a list */
   def fragmentsList(ee: ExecutionEnv): List[Fragment] =
-    ProducerOps(contents).runList.runAction(ee.executionContext) match {
+    ProducerOps(contents).runList.runAction(ee) match {
       case Left(e) => List(Fragment(Text("ERROR WHILE CREATING THE SPECIFICATION! "+e.getMessage)))
       case Right(fs) => fs
     }

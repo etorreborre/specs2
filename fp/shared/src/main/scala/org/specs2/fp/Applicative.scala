@@ -113,12 +113,12 @@ trait Applicative[F[_]] extends Functor[F] { self =>
   /**
    * Returns the given argument if `cond` is `false`, otherwise, unit lifted into F.
    */
-  def unlessM[A](cond: Boolean)(f: => F[A]): F[Unit] = if (cond) point(()) else void(f)
+  def unless[A](cond: Boolean)(f: => F[A]): F[Unit] = if (cond) point(()) else void(f)
 
   /**
    * Returns the given argument if `cond` is `true`, otherwise, unit lifted into F.
    */
-  def whenM[A](cond: Boolean)(f: => F[A]): F[Unit] = if (cond) void(f) else point(())
+  def when[A](cond: Boolean)(f: => F[A]): F[Unit] = if (cond) void(f) else point(())
 }
 
 object Applicative {
@@ -160,6 +160,12 @@ trait ApplicativeSyntax {
 
     def *>[B](fb: F[B]): F[B] =
       applicative.apply2(fa, fb)((_, b) => b)
+
+    def when(condition: Boolean): F[Unit] =
+      applicative.when(condition)(fa)
+
+    def unless(condition: Boolean): F[Unit] =
+      applicative.unless(condition)(fa)
   }
 
   implicit class ListApplicativeOps[A](fa: List[A]) {
@@ -168,4 +174,3 @@ trait ApplicativeSyntax {
   }
 
 }
-
