@@ -3,7 +3,7 @@ package reporter
 
 import control._
 import specification.core._
-import producer._
+import Control._
 
 /**
  * A Printer is essentially defined by a FoldM sink that:
@@ -23,7 +23,7 @@ trait Printer {
   /** convenience method to print a SpecStructure using the printer's Fold */
   def print(env: Env): SpecStructure => Action[Unit] = { spec: SpecStructure =>
     val printSink = sink(env, spec)
-    producers.fold(spec.contents.into[ActionStack])(printSink.start, printSink.fold, printSink.end)
+    spec.contents.fold(printSink.start, printSink.fold, printSink.end)
   }
 
   /** convenience method to print a SpecificationStructure using the printer's Fold */
@@ -47,4 +47,3 @@ object Printer {
 
   case class PrinterName(name: String) extends AnyVal
 }
-
