@@ -4,7 +4,6 @@ package core
 
 import execute._
 import process._
-import control._
 import scala.concurrent._, duration._
 
 class ExecutionSpec(val env: Env) extends Specification with OwnEnv { def is = s2"""
@@ -41,6 +40,6 @@ class ExecutionSpec(val env: Env) extends Specification with OwnEnv { def is = s
 
   implicit class ExecutionOps(e: Execution) {
     def result(env: Env): Result =
-      Await.result(e.startExecution(env).executedResult.runNow(ee.executorServices), 10.seconds).result
+      Await.result(e.startExecution(env).executedResult.runNow(ee.executionContext), 10.seconds).result
   }
 }

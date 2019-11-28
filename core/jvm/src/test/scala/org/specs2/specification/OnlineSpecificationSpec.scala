@@ -6,7 +6,8 @@ import core._
 import matcher.Matcher
 import specification.dsl.Online
 import reporter.TextPrinterSpecification._
-import control._, producer._, producers._
+import control._
+import producer._, Producer._
 
 class OnlineSpecificationSpec extends Specification { def is = s2"""
 
@@ -18,7 +19,7 @@ class OnlineSpecificationSpec extends Specification { def is = s2"""
   def e1 = {
     def continue(n: Int): FragmentsContinuation = FragmentsContinuation { r: Result =>
       if (n == 1) None
-      else        Some(core.Fragments(one[ActionStack, Fragment](break) append createExample(n - 1).contents))
+      else        Some(core.Fragments(one[Action, Fragment](break) append createExample(n - 1).contents))
     }
 
     def online(n: Int) = Execution(success, continue(n))

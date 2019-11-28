@@ -3,7 +3,6 @@ package reporter
 
 import main.Arguments
 import org.specs2.specification.core._
-import org.specs2.control.ExecuteActions._
 
 class TextPrinterIndentationSpec(val env: Env) extends Specification with OwnEnv { def is = s2"""
 
@@ -23,7 +22,7 @@ s2"""
 text$t
 other text
 """
-    TextPrinter.print(ownEnv.setArguments(Arguments("indentation", "4")).setLineLogger(logger))(spec).runOption(ownEnv.executionEnv)
+    TextPrinter.print(ownEnv.setArguments(Arguments("indentation", "4")).setLineLogger(logger))(spec).runOption(ownEnv.executionContext)
     (logger.messages(1), logger.messages(2)) must_==
       (("[info] text    ",
         "[info]     other text"))

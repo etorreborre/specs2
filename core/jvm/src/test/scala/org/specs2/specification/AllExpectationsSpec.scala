@@ -8,8 +8,6 @@ import org.specs2.specification.core.{ContextualSpecificationStructure, Env, Own
 import org.specs2.specification.process._
 import user.specification._
 import fp.syntax._
-import control._
-import ExecuteActions._
 
 class AllExpectationsSpec(val env: Env) extends Spec with OwnEnv {
 

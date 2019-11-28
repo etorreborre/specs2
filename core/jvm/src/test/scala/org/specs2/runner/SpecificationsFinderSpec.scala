@@ -4,8 +4,8 @@ import java.io.File
 
 import org.specs2.Spec
 import org.specs2.control.Operation
-import org.specs2.io.FileSystem.{filePaths, filterWithPattern, globToPattern}
 import org.specs2.io._
+import org.specs2.control._
 import org.specs2.matcher.Matcher
 import org.specs2.matcher.OperationMatchers.beOk
 import org.specs2.matcher.MatchersImplicits._
@@ -18,6 +18,7 @@ class SpecificationsFinderSpec extends Spec { def is = s2"""
 """
 
   val base = new File(".").getAbsolutePath
+  val fileSystem = FileSystem(ConsoleLogger()); import fileSystem._
 
   def e1 =
     filePaths(DirectoryPath.unsafe(base) / "src" / "test" / "scala", "**/*.scala", verbose = false) must findFiles

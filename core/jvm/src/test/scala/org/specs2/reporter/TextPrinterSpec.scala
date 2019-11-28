@@ -5,7 +5,6 @@ import matcher.MustMatchers
 import specification._
 import dsl.FragmentsDsl
 import specification.create.DefaultFragmentFactory
-import control._
 import text.Trim._
 import execute._
 import main.{Report, Arguments}

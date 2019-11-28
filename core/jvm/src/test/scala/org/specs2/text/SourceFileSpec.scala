@@ -7,7 +7,7 @@ import matcher.TypedEqual
 import specification.Grouped
 import control._
 
-class SourceFileSpec extends Spec with Grouped with SourceFile with TypedEqual { def is = sequential ^ s2"""
+class SourceFileSpec extends Spec with Grouped with TypedEqual { def is = sequential ^ s2"""
 
  the package name of a source file can be extracted
    for a simple name                                                     ${g1.e1}
@@ -22,23 +22,24 @@ class SourceFileSpec extends Spec with Grouped with SourceFile with TypedEqual {
 
                                                                          """
 
+  val sourceFile = SourceFile(NoLogger)
 
   "packages" - new g1 {
-    e1 := packageName {
+    e1 := sourceFile.packageName {
       """
       package test
       class HelloWorld
       """
     } === "test"
 
-    e2 := packageName {
+    e2 := sourceFile.packageName {
       """
       package test;
       class HelloWorld
       """
     } === "test"
 
-    e3 := packageName {
+    e3 := sourceFile.packageName {
       """
       package com
 
@@ -50,7 +51,7 @@ class SourceFileSpec extends Spec with Grouped with SourceFile with TypedEqual {
       """
     } === "com.test.me"
 
-    e4 := packageName {
+    e4 := sourceFile.packageName {
       """
       /** Copyright myself
        *  with no warranties of any sort
@@ -61,7 +62,7 @@ class SourceFileSpec extends Spec with Grouped with SourceFile with TypedEqual {
       """
     } === "com.test"
 
-    e5 := packageName {
+    e5 := sourceFile.packageName {
       """
       package com//the com package
       package test // the test package
@@ -73,9 +74,9 @@ class SourceFileSpec extends Spec with Grouped with SourceFile with TypedEqual {
   "class names" - new g2 {
     val pattern = Pattern.compile("\\s*class\\s*(.*Spec)\\s*extends\\s*.*")
     val content = "\nclass MySpec extends Spec\n"
-    e1 := classNames("com.example", content, pattern, suffix = "", verbose = true).runOption must beSome(Seq("com.example.MySpec"))
+    e1 := sourceFile.classNames("com.example", content, pattern, suffix = "", verbose = true).runOption must beSome(Seq("com.example.MySpec"))
 
-    e2 := classNames("", content, pattern, suffix = "", verbose = true).runOption must beSome(Seq("MySpec"))
+    e2 := sourceFile.classNames("", content, pattern, suffix = "", verbose = true).runOption must beSome(Seq("MySpec"))
 
   }
 }

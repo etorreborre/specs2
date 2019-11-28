@@ -2,13 +2,11 @@ package org.specs2
 package reporter
 
 import main._
-import control._
 import execute._
 import io.StringOutput
 import org.specs2.specification.{AfterAll, Tables}
 import specification.core.{Env, SpecificationStructure}
 import runner._
-import org.specs2.control.ExecuteActions._
 
 class NotifierSpec extends Specification { def is = s2"""
 
@@ -87,7 +85,7 @@ class NotifierSpec extends Specification { def is = s2"""
     val env1 = Env(arguments = Arguments("notifier"))
     val notifier = new TestNotifier
 
-    try     Reporter.report(env1, List(NotifierPrinter.printer(notifier)))(spec.structure(env1)).runOption(env1.executionEnv)
+    try     Reporter.report(env1, List(NotifierPrinter.printer(notifier)))(spec.structure(env1)).runOption(env1.executionContext)
     finally env1.shutdown
 
     notifier

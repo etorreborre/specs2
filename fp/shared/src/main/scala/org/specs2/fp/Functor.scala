@@ -17,6 +17,11 @@ trait Functor[F[_]] {
 
 object Functor {
   @inline def apply[F[_]](implicit F: Functor[F]): Functor[F] = F
+
+  implicit def EitherFunctor[E]: Functor[Either[E, ?]] = new Functor[Either[E, ?]] {
+    def map[A, B](fa: Either[E, A])(f: A => B): Either[E, B] =
+      fa.map(f)
+  }
 }
 
 trait FunctorSyntax {
