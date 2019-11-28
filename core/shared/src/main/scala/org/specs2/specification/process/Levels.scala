@@ -11,8 +11,9 @@ import specification.core._
 import scala.math._
 import control._
 import producer._
-import transducers._
-import ExecuteActions._
+import Transducers._
+import Transducer._
+import Control._
 import Levels._
 import org.specs2.concurrent.ExecutionEnv
 
@@ -27,11 +28,11 @@ trait Levels {
 
   def levelsProcess: AsyncTransducer[Fragment, (Fragment, Int)] =
     levelsProcess1.map { case (f, level) => (f, level.l) }
-  
+
   def levelsProcess1: AsyncTransducer[Fragment, (Fragment, Level)] = {
     def nextLevel(f: Fragment, level: Level, next: Level) = ((f, level), next)
 
-    state[ActionStack, Fragment, (Fragment, Level), Level](Level()) {
+    state[Action, Fragment, (Fragment, Level), Level](Level()) {
       // level goes +1 when a new block starts
       case (f @ Fragment(Start,_ ,_), level) => nextLevel(f, level, level.copy(start = true))
       case (f @ Fragment(End,_ ,_), level)   => nextLevel(f, level, level.copy(start = false, l = max(0, level.l - 1)))
@@ -55,7 +56,7 @@ trait Levels {
   def levelsToTreeLoc(mapper: Mapper): AsyncTransducer[(Fragment, Int), TreeLoc[Fragment]] = {
     val init = Leaf((DefaultFragmentFactory.text("root"), 0)).loc
 
-    state[ActionStack, (Fragment, Int), TreeLoc[(Fragment, Int)], TreeLoc[(Fragment, Int)]](init) {
+    state[Action, (Fragment, Int), TreeLoc[(Fragment, Int)], TreeLoc[(Fragment, Int)]](init) {
       case ((f, level), treeLoc) =>
 
         val parent = if (level == 0) treeLoc.root else (treeLoc.parentLocs :+ treeLoc).takeWhile(_.getLabel._2 < level).lastOption.getOrElse(treeLoc)
@@ -75,7 +76,7 @@ object Levels extends Levels {
     treeLocMap(fs)(identityMapper)(ee)
 
   def treeLocMap(fs: Fragments)(mapper: Mapper)(ee: ExecutionEnv): Option[TreeLoc[Fragment]] =
-    fs.contents.pipe(levelsProcess).pipe(levelsToTreeLoc(mapper)).runLast.runOption(ee).flatten
+    fs.contents.pipe(levelsProcess).pipe(levelsToTreeLoc(mapper)).runLast.runOption(ee.executionContext).flatten
 
   def tree(fs: Fragments)(ee: ExecutionEnv): Option[Tree[Fragment]] = treeLoc(fs)(ee).map(_.toTree)
   def treeMap(fs: Fragments)(mapper: Mapper)(ee: ExecutionEnv): Option[Tree[Fragment]] = treeLocMap(fs)(mapper)(ee).map(_.toTree)
@@ -92,4 +93,3 @@ case class Level(start: Boolean = false, incrementNext: Boolean = false, l: Int 
 object Level {
   val Root = Level()
 }
-
