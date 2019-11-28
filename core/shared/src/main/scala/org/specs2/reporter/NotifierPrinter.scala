@@ -5,13 +5,11 @@ import text.NotNullStrings._
 import main.Arguments
 import execute.Result
 import control._
-import eff._
-import all._
+import Control._
+import fp._, syntax._
 import control.origami._
 import specification.core._
-import Actions._
 import org.specs2.time.SimpleTimer
-import fp._
 
 /**
  * A Printer can be created from a Notifier implementation
@@ -22,14 +20,14 @@ object NotifierPrinter {
    * create a printer from a notifier
    */
   def printer(notifier: Notifier) = new Printer {
-    def prepare(env: Env, specifications: List[SpecStructure]): Action[Unit]  = Actions.unit
-    def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] = Actions.unit
+    def prepare(env: Env, specifications: List[SpecStructure]): Action[Unit]  = Action.unit
+    def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] = Action.unit
 
     def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment] = {
       val nf: Fold[Action, Fragment, Notified] { type S = Notified } =
         notifyFold.into[Action]
-      	.startWith(asyncDelayAction(notifier.specStart(spec.name, "")))
-      	.endWith(asyncDelayAction(notifier.specEnd(spec.name, "")))
+      	.startWith(Action.pure(notifier.specStart(spec.name, "")))
+      	.endWith(Action.pure(notifier.specEnd(spec.name, "")))
       nf.observeWithNextState(notifySink(spec, notifier, env.arguments)).void
     }
   }
@@ -141,5 +139,3 @@ object NotifierPrinter {
 
   case class Notified(context: String = "", start: Boolean = false, close: Boolean = false, hide: Boolean = false)
 }
-
-

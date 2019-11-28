@@ -3,8 +3,9 @@ package reporter
 
 import matcher.DataTable
 import control._
+import Control._
 import origami._
-import eff.Eff._
+import fp._, syntax._
 import specification.core._
 import specification.process._
 import text.NotNullStrings._
@@ -15,8 +16,6 @@ import execute._
 import main.Arguments
 import LogLine._
 import org.specs2.fp.syntax._
-import Actions._
-import ExecuteActions._
 
 /**
  * Prints the result of a specification execution to the console (using the line logger provided by the environment)
@@ -24,8 +23,8 @@ import ExecuteActions._
  * At the end of the run the specification statistics are displayed as well.
  */
 trait TextPrinter extends Printer {
-  def prepare(env: Env, specifications: List[SpecStructure]): Action[Unit]  = Actions.unit
-  def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] = Actions.unit
+  def prepare(env: Env, specifications: List[SpecStructure]): Action[Unit]  = Action.unit
+  def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] = Action.unit
 
   def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment] = {
     // statistics and indentation
@@ -47,19 +46,19 @@ trait TextPrinter extends Printer {
 
   /** run a specification */
   def run(env: Env): SpecStructure => Unit = { spec: SpecStructure =>
-    runAction(print(env)(spec))(env.specs2ExecutionEnv); ()
+    print(env)(spec).runVoid(env.specs2ExecutionContext)
   }
 
   def linesLoggerSink(logger: LineLogger, header: SpecHeader, args: Arguments): AsyncSink[List[LogLine]] =
     Folds.fromSink[Action, List[LogLine]](lines =>
-      pure(lines.foreach(_.log(logger))))
+      Action.pure(lines.foreach(_.log(logger))))
 
   def start(logger: LineLogger, header: SpecHeader, args: Arguments): Action[LineLogger] =
-    asyncDelayAction(printHeader(args)(header).foreach(_.log(logger))).as(logger)
+    Action.pure(printHeader(args)(header).foreach(_.log(logger))).as(logger)
 
   def printFinalStats(spec: SpecStructure, args: Arguments, logger: LineLogger): (((Stats, Int), SimpleTimer)) => Action[Unit] = { case ((stats, _), timer) =>
-    asyncDelayAction(printStats(spec.header, args, stats, timer).foreach(_.log(logger))) >>
-    asyncDelayAction(logger.close)
+    Action.pure(printStats(spec.header, args, stats, timer).foreach(_.log(logger))) >>
+    Action.pure(logger.close)
   }
 
   def printHeader(args: Arguments): SpecHeader => List[LogLine] = { header: SpecHeader =>
@@ -286,4 +285,3 @@ trait TextPrinter extends Printer {
 }
 
 object TextPrinter extends TextPrinter
-
