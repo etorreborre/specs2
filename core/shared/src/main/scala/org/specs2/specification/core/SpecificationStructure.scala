@@ -96,7 +96,7 @@ object SpecificationStructure {
     }
 
     def getRefs(s: SpecificationStructure, visited: Vector[(String, SpecificationStructure)]): Vector[(String, SpecificationStructure)] =
-      refs(s, env).map(ref => create(ref.header.specClass.getName, classLoader, Some(env))).sequence.map(byName).runOption.getOrElse(Vector())
+      refs(s, env).map(ref => create(ref.header.specClass.getName, classLoader, Some(env))).sequence.map(byName).runMonoid
         .filterNot { case (n, _) => visited.map(_._1).contains(n) }
 
     Operation.delayed {

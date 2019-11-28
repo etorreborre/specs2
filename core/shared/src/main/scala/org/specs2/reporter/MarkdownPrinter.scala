@@ -2,7 +2,7 @@ package org.specs2
 package reporter
 
 import control._
-import Actions._
+import Control._
 import io._
 import execute._
 import main.Arguments
@@ -17,7 +17,7 @@ trait MarkdownPrinter extends Printer {
     env.fileSystem.mkdirs(MarkdownOptions.create(env.arguments).outDir)
 
   def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] =
-    Actions.unit
+    Action.unit
 
   /** @return a Fold for the markdown output */
   def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment] = {
@@ -32,7 +32,7 @@ trait MarkdownPrinter extends Printer {
 
       case e if Fragment.isExample(e) =>
         val description = e.description.show
-        
+
         e.executionResult.map {
           case r: Success              => showDescription(description, r)
           case r @ Failure(m, _, _, _) => showDescription(description, r) + "\n  " + m

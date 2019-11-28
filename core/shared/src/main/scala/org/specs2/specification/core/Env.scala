@@ -54,6 +54,9 @@ case class Env(
   def specs2ExecutionContext =
     specs2ExecutionEnv.executionContext
 
+  def specs2ExecutorServices =
+    specs2ExecutionEnv.executorServices
+
   lazy val timeout =
     executionParameters.timeout
 

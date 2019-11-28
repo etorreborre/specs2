@@ -120,9 +120,7 @@ s2"""
            $ok""") must_== Description.code("ok")
 
   def getDescription(fs: Fragments): Description =
-    fs.examples.runOption(ee).getOrElse(Nil)(0).
-
-      description
+    fs.examples.runMonoid(ee)(0).description
   }
 }
 trait dsl1 extends S2StringContext with FragmentsDsl

@@ -8,9 +8,9 @@ import scala.concurrent._
 import duration._
 import control._
 import producer._
-import producers._
+import Producer._
+import Control._
 import fp.syntax._
-import ExecuteActions._
 
 /**
  * Functions for executing fragments.
@@ -32,7 +32,7 @@ trait Executor {
 
 /**
  * Default execution for specifications:
- * 
+ *
  *  - concurrent by default
  *  - using steps for synchronisation points
  */
@@ -68,7 +68,7 @@ trait DefaultExecutor extends Executor {
         emit(toStart.toList.map(_.startExecutionAfter(previousStep)(env)))
     }
 
-    transducers.producerState(init, Option(last)) { case (fragment, (previous, previousStarted, previousStep)) =>
+    Transducers.producerState(init, Option(last)) { case (fragment, (previous, previousStarted, previousStep)) =>
       if (arguments.skipAll)
         (one(if (fragment.isExecutable) fragment.skip else fragment), init)
       else if (arguments.sequential) {
@@ -90,7 +90,7 @@ trait DefaultExecutor extends Executor {
           (emit(started.toList), (Vector.empty, previousStarted ++ started, previousStep))
         }
         else
-          (done[ActionStack, Fragment], (previous :+ fragment, previousStarted, previousStep))
+          (done[Action, Fragment], (previous :+ fragment, previousStarted, previousStep))
       }
     }
 
@@ -126,19 +126,18 @@ object DefaultExecutor extends DefaultExecutor {
   }
 
   def runSpec(spec: SpecStructure, env: Env): List[Fragment] =
-    runAction(executeSpec(spec, env).contents.runList)(env.specs2ExecutionEnv).right.toOption.getOrElse(Nil)
+    executeSpec(spec, env).contents.runList.runMonoid(env.specs2ExecutionContext)
 
   def runSpecification(spec: SpecificationStructure, env: Env): List[Fragment] = {
     lazy val structure = spec.structure(env)
-    runAction(executeSpec(structure, env.copy(arguments = env.arguments <| structure.arguments)).contents.runList)(
-      env.specs2ExecutionEnv).
-      right.toOption.getOrElse(Nil)
+    executeSpec(structure, env.copy(arguments = env.arguments <| structure.arguments)).contents.runList.
+      runMonoid(env.specs2ExecutionContext)
   }
 
   def runSpecificationFuture(spec: SpecificationStructure, env: Env): Future[List[Fragment]] = {
     lazy val structure = spec.structure(env)
     val env1 = env.copy(arguments = env.arguments <| structure.arguments)
-    runActionFuture(executeSpec(structure, env1).contents.runList)(env.specs2ExecutionEnv)
+    executeSpec(structure, env1).contents.runList.runFuture(env.specs2ExecutorServices)
   }
 
   def runSpecificationAction(spec: SpecificationStructure, env: Env): Action[List[Fragment]] = {
@@ -150,7 +149,7 @@ object DefaultExecutor extends DefaultExecutor {
 
   /** only to be used in tests */
   def executeFragments(fs: Fragments)(env: Env): List[Fragment] =
-    fs.fragments.map(fs => executeAll(fs:_*)(env)).runOption(env.specs2ExecutionEnv).getOrElse(Nil)
+    fs.fragments.map(fs => executeAll(fs:_*)(env)).runMonoid(env.specs2ExecutionContext)
 
   def executeAll(seq: Fragment*)(env: Env): List[Fragment] =
     executeSeq(seq)(env)
@@ -160,9 +159,9 @@ object DefaultExecutor extends DefaultExecutor {
 
   /** only to be used in tests */
   def executeSeq(seq: Seq[Fragment])(env: Env): List[Fragment] =
-    runAction((emitAsync(seq:_*) |> sequencedExecution(env)).runList)(env.specs2ExecutionEnv).right.toOption.getOrElse(Nil)
+    (emitAsync(seq:_*) |> sequencedExecution(env)).runList.runMonoid(env.specs2ExecutionContext)
 
   /** synchronous execution with a specific environment */
   def executeFragments1(env: Env): AsyncTransducer[Fragment, Fragment] =
-    transducers.transducer[ActionStack, Fragment, Fragment](executeFragment(env))
+    Transducers.transducer[Action, Fragment, Fragment](executeFragment(env))
 }

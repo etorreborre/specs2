@@ -133,7 +133,8 @@ object SpecStructure {
     def getRefs(s: SpecStructure, visited: Vector[(String, SpecStructure)]): Vector[(String, SpecStructure)] =
       refs(s).map { ref =>
         SpecificationStructure.create(ref.header.specClass.getName, classLoader, Some(env)).map(_.structure(env).setArguments(ref.arguments))
-      }.sequence.map(byName).runOption.getOrElse(Vector())
+      }.sequence.map(byName)
+       .runMonoid
        .filterNot { case (n, _) => visited.map(_._1).contains(n) }
 
     Operation.delayed {
@@ -167,7 +168,7 @@ object SpecStructure {
     spec.map(fs => fs |> DefaultSelector.select(env))
 
   private def selected(env: Env)(spec: SpecStructure): List[Fragment] =
-    select(env)(spec).fragments.fragments.runOption(env.specs2ExecutionEnv.executionContext).getOrElse(Nil)
+    select(env)(spec).fragments.fragments.runMonoid(env.specs2ExecutionContext)
 
   implicit class SpecStructureOps(s: SpecStructure)(implicit ee: ExecutionContext) {
     def textsList: List[Fragment] =
