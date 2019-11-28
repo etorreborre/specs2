@@ -100,6 +100,12 @@ object Action {
   def thenFinally[A](action: Action[A], last: Finalizer): Action[A] =
     action.addLast(last)
 
+  def checkThat[A](a: =>A, condition: Boolean, failureMessage: String): Action[A] =
+    pure(a).flatMap { value =>
+      if (condition) pure(value)
+      else           fail(failureMessage)
+    }
+
   implicit val ActionMonad: Monad[Action[?]] = new Monad[Action[?]] {
     def point[A](a: =>A): Action[A] =
       Action(_ => Future.successful(a))
