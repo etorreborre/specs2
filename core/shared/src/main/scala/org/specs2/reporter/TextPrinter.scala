@@ -3,7 +3,6 @@ package reporter
 
 import matcher.DataTable
 import control._
-import Control._
 import origami._
 import fp._, syntax._
 import specification.core._

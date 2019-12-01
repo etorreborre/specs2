@@ -140,6 +140,12 @@ object Operation {
       "Applicative[Operation]"
   }
 
+  implicit val operationToAction: NaturalTransformation[Operation, Action] =
+    new NaturalTransformation[Operation, Action] {
+      def apply[A](operation: Operation[A]): Action[A] =
+        operation.toAction
+    }
+
   implicit def SafeOperation: Safe[Operation] = new Safe[Operation] {
     def finalizeWith[A](fa: Operation[A], f: Finalizer): Operation[A] =
       fa.addLast(f)

@@ -139,6 +139,8 @@ object Action {
     override def toString: String =
       "Applicative[Action]"
   }
+  implicit val idToAction: NaturalTransformation[Id, Action] =
+    NaturalTransformation.naturalId[Action]
 
   implicit def FinalizedAction: Safe[Action] = new Safe[Action] {
     def finalizeWith[A](fa: Action[A], f: Finalizer): Action[A] =
@@ -146,7 +148,6 @@ object Action {
 
     def attempt[A](action: Action[A]): Action[Throwable Either A] =
       action.attempt
-
   }
 
   implicit def actionAsResult[T : AsResult]: AsResult[Action[T]] = new AsResult[Action[T]] {

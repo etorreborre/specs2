@@ -22,12 +22,12 @@ class StatsSpec(val env: Env) extends Specification with OwnEnv { def is = s2"""
 """
 
   def e1 = {
-    val p = emitAsync("ex1" ! ok) |> executeFragments1(ownEnv) |> statsProcess
+    val p = one("ex1" ! ok) |> executeFragments1(ownEnv) |> statsProcess
     runLast(p) must beSome(Stats(examples = 1, expectations = 1, successes = 1))
   }
 
   def e2 = {
-    val p = emitAsync("ex1" ! ok, "ex2" ! ko) |> executeFragments1(ownEnv) |> statsProcess
+    val p = one("ex1" ! ok, "ex2" ! ko) |> executeFragments1(ownEnv) |> statsProcess
     runLast(p) must beSome(Stats(examples = 2, expectations = 2, successes = 1, failures = 1))
   }
 

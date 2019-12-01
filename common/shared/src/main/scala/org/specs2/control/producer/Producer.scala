@@ -641,6 +641,9 @@ trait Producers {
   def one[F[_] : Monad : Safe, A](a: A): Producer[F, A] =
     Producer[F, A](Monad[F].pure(One(a)))
 
+  def oneDelayed[F[_] : Monad : Safe, A](e: =>A): Producer[F, A] =
+    oneAction(Monad[F].pure(e))
+
   def oneAction[F[_] : Monad : Safe, A](e: F[A]): Producer[F, A] =
     Producer[F, A](e.flatMap(a => one[F, A](a).run))
 
@@ -665,6 +668,9 @@ trait Producers {
       case None    => done[F, A]
       case Some(a) => Producer(Monad[F].pure(More[F, A](elements.headOption.toList, emitSeq(elements.tail))))
     }
+
+  def emitAll[F[_] : Monad : Safe, A](elements: A*): Producer[F, A] =
+    emitSeq(elements)
 
   def eval[F[_] : Monad : Safe, A](a: F[A]): Producer[F, A] =
     Producer(a.map(One(_)))
