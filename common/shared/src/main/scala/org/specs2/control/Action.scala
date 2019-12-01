@@ -6,11 +6,16 @@ import concurrent.{ExecutionEnv, ExecuteActions}
 import scala.concurrent._
 import scala.concurrent.duration._
 import scala.util._
-import scala.annotation.tailrec
-import Finalizer._
-import Operation._
 import execute._
 
+/**
+ * Asynchronous action with:
+ *
+ * - an optional timeout
+ * - an optional list of "finalization" actions to be executed when this action is done
+ *   whether it has timed-out or thrown an exception. This allows resources to be safely disposed of
+ *
+ */
 case class Action[A](runNow: ExecutionContext => Future[A], timeout: Option[FiniteDuration] = None, last: Vector[Finalizer] = Vector.empty) {
 
   /** add a finalizer */
@@ -21,12 +26,14 @@ case class Action[A](runNow: ExecutionContext => Future[A], timeout: Option[Fini
   def attempt: Action[Throwable Either A] =
     Action(ec => runNow(ec).transform(r => scala.util.Success(r.toEither))(ec), timeout, last)
 
+  /** run another action if this one fails */
   def orElse(other: Action[A]): Action[A] =
     attempt.flatMap {
       case Left(_) => other.copy(last = other.last ++ this.last)
       case Right(a) => Action.pure(a).copy(timeout = timeout, last = last)
     }
 
+  /** synonym for orElse */
   def |||(other: Action[A]): Action[A] =
     orElse(other)
 
@@ -65,29 +72,6 @@ case class Action[A](runNow: ExecutionContext => Future[A], timeout: Option[Fini
     unsafeRunAction(ee)
 }
 
-case class Finalizer(run: () => Unit) {
-  def attempt: Option[Throwable] =
-    try { run(); None }
-    catch { case t: Throwable => Some(t) }
-}
-
-trait Safe[F[_]] {
-  def finalizeWith[A](fa: F[A], f: Finalizer): F[A]
-  def attempt[A](fa: F[A]): F[Throwable Either A]
-}
-
-object Safe {
-  def apply[F[_]](implicit f: Safe[F]): Safe[F] =
-    f
-}
-
-object Finalizer {
-  def runFinalizers(finalizers: Vector[Finalizer]): Unit =
-    finalizers.foreach(_.attempt)
-
-  def create(action: =>Unit): Finalizer =
-    Finalizer(() => action)
-}
 
 object Action {
 
@@ -170,144 +154,4 @@ object Action {
       action.runAction(ExecutionEnv.fromGlobalExecutionContext).fold(err => Error(err),  ok => AsResult(ok))
   }
 
-}
-
-case class Operation[A](operation: () => A, last: Vector[Finalizer] = Vector.empty) {
-  private def run: A =
-    operation()
-
-  def runOperation: Throwable Either A = {
-    val attempted = attempt
-    runFinalizers(attempted.last)
-    attempted.run
-  }
-
-  def unsafeRun: A =
-    runOption.get
-
-  def runOption: Option[A] =
-    runOperation.toOption
-
-  def runMonoid(implicit m: Monoid[A]): A =
-    runOption.getOrElse(m.zero)
-
-  def runVoid(): Unit = {
-    runOption; ()
-  }
-
-  def addLast(finalizer: Finalizer): Operation[A] =
-    copy(last = last :+ finalizer)
-
-  def thenFinally(operation: Operation[A]): Operation[A] =
-    addLast(Finalizer(() => operation.runVoid))
-
-  def orElse(other: Operation[A]): Operation[A] =
-    attempt.flatMap {
-      case Left(_) => other.copy(last = other.last ++ this.last)
-      case Right(a) => Operation(() => a, last)
-    }
-
-  def |||(other: Operation[A]): Operation[A] =
-    orElse(other)
-
-  def recoverWith(f: Throwable => A): Operation[A] =
-    recover(t => Operation.ok(f(t)))
-
-  def recover(f: Throwable => Operation[A]): Operation[A] =
-    attempt.flatMap {
-      case Left(t) => f(t)
-      case Right(a) => Operation.ok(a)
-    }
-
-  def attempt: Operation[Throwable Either A] =
-    try {
-      val value = operation()
-      Operation(() => Right(value), last)
-    }
-    catch { case t: Throwable => Operation(() => Left(t), last) }
-
-  def toAction: Action[A] =
-    Action.pure(run).copy(last = last)
-}
-
-object Operation {
-
-  def ok[A](a: A): Operation[A] =
-    pure(a)
-
-  def delayed[A](a: =>A): Operation[A] =
-    pure(a)
-
-  def fail[A](a: Any): Operation[A] =
-  exception[A](new Exception(a.toString))
-
-  def exception[A](e: Throwable): Operation[A] =
-    Operation[A](() => throw e)
-
-  def pure[A](a: =>A): Operation[A] =
-    OperationMonad.point(a)
-
-  def unit: Operation[Unit] =
-    pure(())
-
-  def protect[A](a: =>A): Operation[A] =
-    OperationMonad.point(a)
-
-  def attempt[A](operation: =>Operation[A]): Operation[Either[Throwable, A]] =
-    Operation { () =>
-      try Right(operation.run)
-      catch { case e: Throwable => Left(e) }
-    }
-
-  def thenFinally[A](operation: Operation[A], last: Finalizer): Operation[A] =
-    operation.addLast(last)
-
-  implicit val OperationMonad: Monad[Operation[?]] = new Monad[Operation[?]] {
-    def point[A](a: =>A): Operation[A] =
-      Operation(() => a)
-
-    def bind[A, B](fa: Operation[A])(f: A => Operation[B]): Operation[B] =
-      Operation[B](() => f(fa.run).run)
-
-    override def ap[A, B](fa: =>Operation[A])(ff: =>Operation[A => B]): Operation[B] =
-      Operation(() => ff.run(fa.run))
-
-   override def tailrecM[A, B](a: A)(f: A => Operation[Either[A, B]]): Operation[B] =
-      Operation[B] { () =>
-        @tailrec
-        def loop(va: A): B =
-          f(va).run match {
-            case Right(b) => b
-            case Left(a) => loop(a)
-          }
-        loop(a)
-      }
-
-    override def toString: String =
-      "Monad[Operation]"
-  }
-
-  implicit val OperationApplicative: Applicative[Operation[?]] = new Applicative[Operation[?]] {
-    def point[A](a: =>A): Operation[A] =
-      Operation(() => a)
-
-    def ap[A, B](fa: =>Operation[A])(ff: =>Operation[A => B]): Operation[B] =
-      Operation(() => ff.run(fa.run))
-
-    override def toString: String =
-      "Applicative[Operation]"
-  }
-
-  implicit def SafeOperation: Safe[Operation] = new Safe[Operation] {
-    def finalizeWith[A](fa: Operation[A], f: Finalizer): Operation[A] =
-      fa.addLast(f)
-
-    def attempt[A](fa: Operation[A]): Operation[Throwable Either A] =
-      fa.attempt
-  }
-
-  implicit def operationAsResult[T : AsResult]: AsResult[Operation[T]] = new AsResult[Operation[T]] {
-    def asResult(operation: =>Operation[T]): Result =
-      operation.runOperation.fold(err => Error(err),  ok => AsResult(ok))
-  }
 }
