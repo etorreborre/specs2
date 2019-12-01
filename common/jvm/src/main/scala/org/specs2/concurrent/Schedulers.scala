@@ -20,8 +20,8 @@ object Schedulers {
 
   def schedulerFromScheduledExecutorService(s: ScheduledExecutorService): Scheduler =
     new Scheduler {
-      def schedule(timedout: =>Unit, duration: FiniteDuration): () => Unit = {
-        val scheduled = s.schedule(new Runnable { def run(): Unit = timedout }, duration.toNanos, TimeUnit.NANOSECONDS)
+      def schedule(action: =>Unit, duration: FiniteDuration): () => Unit = {
+        val scheduled = s.schedule(new Runnable { def run(): Unit = action }, duration.toNanos, TimeUnit.NANOSECONDS)
         () => { scheduled.cancel(false); () }
       }
 

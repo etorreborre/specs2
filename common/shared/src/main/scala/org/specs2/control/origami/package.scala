@@ -5,8 +5,6 @@ import fp._
 
 package object origami {
 
-  object fold extends Folds
-
   /** alias for a non-effectful Fold */
   type FoldId[A, U] = Fold[Id, A, U]
 

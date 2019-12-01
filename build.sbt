@@ -135,7 +135,7 @@ lazy val common = crossProject(JSPlatform, JVMPlatform).in(file("common")).
     libraryDependencies ++=
       depends.paradise(scalaVersion.value) ++
       Seq(depends.reflect(scalaOrganization.value, scalaVersion.value),
-        depends.scalaXML, depends.scalacheck.value % Test),
+        depends.scalaXML.value, depends.scalacheck.value % Test),
     commonSettings,
     name := "specs2-common"
   ).
@@ -249,7 +249,7 @@ lazy val markdown = crossProject(JSPlatform, JVMPlatform).
   crossType(CrossType.Pure).
   in(file("markdown")).
   settings(
-    libraryDependencies += depends.pegdown,
+    libraryDependencies += depends.pegdown.value,
     commonSettings,
     name := "specs2-markdown").
   jvmSettings(depends.jvmTest, commonJvmSettings).

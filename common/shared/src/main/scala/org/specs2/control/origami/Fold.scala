@@ -12,7 +12,6 @@ import org.specs2.fp.syntax._
  *  - an 'end' method to finalize the result
  *
  * Both 'start' and 'end' have an effect which allows the whole folding to take place inside a context.
- *
  */
 trait Fold[M[_], A, B] { self =>
   implicit def monad: Monad[M]

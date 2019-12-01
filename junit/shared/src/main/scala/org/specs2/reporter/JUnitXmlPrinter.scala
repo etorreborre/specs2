@@ -14,12 +14,13 @@ import io._
 
 import scala.collection.JavaConverters._
 import Exceptions._
+import concurrent.ExecutionEnv
 import specification.core._
 import specification.process._
 import text.NotNullStrings._
 import JUnitDescriptions._
-import org.specs2.concurrent.ExecutionEnv
 import origami._
+import Folds._
 
 /**
  * The JUnitXmlPrinter creates an xml file with the specification execution results
@@ -29,7 +30,7 @@ trait JUnitXmlPrinter extends Printer {
   def finalize(env: Env, specs: List[SpecStructure]): Action[Unit] = Action.unit
 
   def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment] =
-    (Statistics.fold zip fold.list[Fragment].into[Action]).
+    (Statistics.fold zip list[Fragment].into[Action]).
       mapFlatten(saveResults(env, spec))
 
   def saveResults(env: Env, spec: SpecStructure): ((Stats, List[Fragment])) =>  Action[Unit] = { case (stats, fs) =>
@@ -40,7 +41,7 @@ trait JUnitXmlPrinter extends Printer {
 
   def descriptionFold(spec: SpecStructure, stats: Stats, env: Env): AsyncFold[(Fragment, Description), TestSuite] = {
     val suite = TestSuite(specDescription(spec), spec.specClassName, stats.errors, stats.failures, stats.skipped, stats.timer.totalMillis)
-    fold.fromFoldLeft[Action, (Fragment, Description), TestSuite](suite) { case (res, (f, d)) =>
+    fromFoldLeft[Action, (Fragment, Description), TestSuite](suite) { case (res, (f, d)) =>
       if (Fragment.isExample(f))
         f.executedResult.map { case ExecutedResult(result, timer) =>
           res.addTest(new TestCase(d, result, timer.totalMillis)(env.arguments))
