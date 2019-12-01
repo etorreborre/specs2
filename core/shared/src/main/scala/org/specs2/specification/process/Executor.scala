@@ -9,7 +9,6 @@ import duration._
 import control._
 import producer._
 import Producer._
-import Control._
 import fp.syntax._
 
 /**
@@ -108,11 +107,11 @@ trait DefaultExecutor extends Executor {
     fragment.execution.continuation match {
       case Some(continue) =>
         Producer.evalProducer(fragment.executionResult.map { result =>
-          continue(result).fold(emitAsyncDelayed(fragment))(
-            fs => emitAsyncDelayed(fragment) append execute(env)(fs.contents))
+          continue(result).fold(oneDelayed[Action, Fragment](fragment))(
+            fs => oneDelayed[Action, Fragment](fragment) append execute(env)(fs.contents))
         })
 
-      case None => emitAsyncDelayed(fragment)
+      case None => oneDelayed(fragment)
     }
 }
 
@@ -159,7 +158,7 @@ object DefaultExecutor extends DefaultExecutor {
 
   /** only to be used in tests */
   def executeSeq(seq: Seq[Fragment])(env: Env): List[Fragment] =
-    (emitAsync(seq:_*) |> sequencedExecution(env)).runList.runMonoid(env.specs2ExecutionEnv)
+    (emitSeq[Action, Fragment](seq) |> sequencedExecution(env)).runList.runMonoid(env.specs2ExecutionEnv)
 
   /** synchronous execution with a specific environment */
   def executeFragments1(env: Env): AsyncTransducer[Fragment, Fragment] = (p: AsyncStream[Fragment]) =>

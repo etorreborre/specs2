@@ -24,7 +24,7 @@ class IndexingSpec(val env: Env) extends Specification with OwnExecutionEnv { de
 
   def save = {
     val path = "target" / "test" / "IndexingSpec" | "index.js"
-    emitAsync(pages:_*).fold(indexFold(path).into[Action]).runAction(ee)
+    one(pages:_*).fold(indexFold(path).into[Action]).runAction(ee)
 
     val expected =
     s"""|var tipuesearch = {"pages": [{"title":"page 1", "text":"content1", "tags":"tag1 tag2", "loc":"page1"},

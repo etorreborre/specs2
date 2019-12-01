@@ -9,7 +9,6 @@ import execute._
 import fp.syntax._
 import io.FileName
 import control._
-import Control._
 import io._
 
 import scala.collection.JavaConverters._

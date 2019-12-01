@@ -7,7 +7,6 @@ import Fragment._
 import control._
 import producer._
 import Producer._
-import Control._
 import concurrent.ExecutionEnv
 
 /**
@@ -19,17 +18,17 @@ import concurrent.ExecutionEnv
 case class Fragments(contents: AsyncStream[Fragment]) {
   /** append one or several fragments to this process */
 
-  def append(other: Fragment): Fragments       = append(emitAsync(other))
+  def append(other: Fragment): Fragments       = append(one[Action, Fragment](other))
   def append(others: Seq[Fragment]): Fragments = append(Fragments(others:_*))
   def append(others: Fragments): Fragments     = append(others.contents)
-  def appendLazy(other: =>Fragment): Fragments = append(emitAsyncDelayed(other))
+  def appendLazy(other: =>Fragment): Fragments = append(oneDelayed[Action, Fragment](other))
 
   /** prepend one or several fragments to this process */
 
-  def prepend(other: Fragment): Fragments       = prepend(emitAsync(other))
+  def prepend(other: Fragment): Fragments       = prepend(one[Action, Fragment](other))
   def prepend(others: Fragments): Fragments     = prepend(others.contents)
   def prepend(others: Seq[Fragment]): Fragments = prepend(Fragments(others:_*))
-  def prependLazy(other: =>Fragment): Fragments = prepend(emitAsyncDelayed(other))
+  def prependLazy(other: =>Fragment): Fragments = prepend(oneDelayed[Action, Fragment](other))
 
   /** filter, map or flatMap the fragments */
 
@@ -133,7 +132,7 @@ object Fragments {
 
   /** create fragments from a sequence of individual fragments */
   def apply(fragments: Fragment*): Fragments =
-    new Fragments(emitAsync(fragments:_*))
+    new Fragments(emitSeq[Action, Fragment](fragments))
 
   implicit def FragmentsMonoid: Monoid[Fragments] = new Monoid[Fragments] {
     def zero : Fragments = Fragments.empty

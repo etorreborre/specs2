@@ -5,7 +5,6 @@ import text.NotNullStrings._
 import main.Arguments
 import execute.Result
 import control._
-import Control._
 import fp._, syntax._
 import control.origami._
 import specification.core._
