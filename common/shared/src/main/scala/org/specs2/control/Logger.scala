@@ -4,6 +4,9 @@ package control
 import io._
 import fp._, syntax._
 
+/**
+ * specs2 logger support
+ */
 trait Logger {
   def warn(message: String, doIt: Boolean = true): Operation[Unit]
   def info(message: String, doIt: Boolean = true): Operation[Unit]
@@ -14,6 +17,9 @@ trait Logger {
     warn(warnMessage, doIt) >> Operation.fail[A](failureMessage)
 }
 
+/**
+ * Logger implementation directing messages to the console
+ */
 case class ConsoleLogger() extends Logger {
 
   def exception(t: Throwable, verbose: Boolean = false): Operation[Unit] =
