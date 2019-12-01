@@ -142,6 +142,9 @@ object Applicative {
           case _ => sys.error("impossible")
         }
     }
+
+    override def toString: String =
+      "Applicative[Future]"
 }
 
 trait ApplicativeSyntax {
