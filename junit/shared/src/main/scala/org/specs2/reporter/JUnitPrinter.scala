@@ -10,11 +10,8 @@ import text.AnsiColors
 import execute._
 import org.junit.ComparisonFailure
 import main.Arguments
-import control._
-import control.ExecutionOrigin._
-import Control._
-import origami._
-import Folds._
+import control._, ExecutionOrigin._
+import origami._, Folds._
 import fp.syntax._
 
 /**

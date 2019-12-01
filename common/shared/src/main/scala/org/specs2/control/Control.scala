@@ -4,15 +4,9 @@ package control
 import Action._
 import fp._
 import producer._
-import Transducer._
+
 
 object Control {
-
-  type AsyncStream[A] = Producer[Action, A]
-  type AsyncTransducer[A, B] = Transducer[Action, A, B]
-
-  type AsyncFold[A, B] = origami.Fold[Action, A, B]
-  type AsyncSink[A] = origami.Fold[Action, A, Unit]
 
   implicit val idToAction: NaturalTransformation[Id, Action] =
     NaturalTransformation.naturalId[Action]

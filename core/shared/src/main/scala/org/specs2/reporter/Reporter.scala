@@ -3,7 +3,6 @@ package reporter
 
 import fp._, syntax._
 import control._
-import Control._
 import producer._
 import origami._, Folds._
 import specification._

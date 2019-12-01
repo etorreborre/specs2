@@ -3,14 +3,13 @@ package io
 
 import java.io.{BufferedInputStream, File, FileInputStream}
 
+import fp._, syntax._
 import control._
+import producer._
 import text.MD5
 
 import scala.io.Codec
 import Paths._
-import org.specs2.control.producer._
-import Producer._
-import fp._, syntax._
 
 /**
  * Methods to read files on the FileSystem

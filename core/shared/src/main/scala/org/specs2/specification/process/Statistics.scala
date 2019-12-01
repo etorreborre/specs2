@@ -4,14 +4,11 @@ package process
 
 import fp._, syntax._
 import control._
-import Control._
-import specification.core._
-import control._
-import org.specs2.concurrent.ExecutionEnv
 import origami._
+import specification.core._
+import concurrent.ExecutionEnv
 import producer._
 import Producer._
-import Transducers._
 
 /**
  * Compute the statistics for executed fragments
@@ -19,7 +16,7 @@ import Transducers._
 trait Statistics {
 
   def statsProcess: AsyncTransducer[Fragment, Stats] =
-    reduceMapEval[Action, Fragment, Stats](_.executionResult.map(Stats.apply))
+    (p: AsyncStream[Fragment]) => p.reduceMapEval(_.executionResult.map(Stats.apply))
 
   def defaultStats(fragment: Fragment) =
     if (Fragment.isExample(fragment)) Stats(examples = 1)

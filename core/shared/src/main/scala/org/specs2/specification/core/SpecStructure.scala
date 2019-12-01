@@ -2,14 +2,13 @@ package org.specs2
 package specification
 package core
 
-import main.Arguments
-import control._
-import Control._
-import producer._, Producer._
-import data.{NamedTag, TopologicalSort}
-import concurrent.ExecutionEnv
 import fp.syntax._
 import process._
+import control._
+import producer._
+import main.Arguments
+import data.{NamedTag, TopologicalSort}
+import concurrent.ExecutionEnv
 
 /**
  * Structure of a Specification:
@@ -48,7 +47,7 @@ case class SpecStructure(header: SpecHeader, arguments: Arguments, lazyFragments
     fragments.examples
 
   def tags: Action[List[NamedTag]] =
-    ProducerOps(fragments.tags).runList
+    fragments.tags.runList
 
   def references: Action[List[Fragment]] =
     fragments.referenced
