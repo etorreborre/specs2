@@ -3,7 +3,7 @@ package reporter
 
 import fp._, syntax._
 import control._
-import Control._
+import origami._
 import io._
 import execute._
 import main.Arguments

@@ -11,9 +11,6 @@ import specification.core._
 import scala.math._
 import control._
 import producer._
-import Transducers._
-import Transducer._
-import Control._
 import Levels._
 import org.specs2.concurrent.ExecutionEnv
 
@@ -26,13 +23,13 @@ import org.specs2.concurrent.ExecutionEnv
  */
 trait Levels {
 
-  def levelsProcess: AsyncTransducer[Fragment, (Fragment, Int)] =
-    levelsProcess1.map { case (f, level) => (f, level.l) }
+  def levelsProcess: AsyncTransducer[Fragment, (Fragment, Int)] = (p: AsyncStream[Fragment]) =>
+    levelsProcess1(p).map { case (f, level) => (f, level.l) }
 
-  def levelsProcess1: AsyncTransducer[Fragment, (Fragment, Level)] = {
+  def levelsProcess1: AsyncTransducer[Fragment, (Fragment, Level)] = { (p: AsyncStream[Fragment]) =>
     def nextLevel(f: Fragment, level: Level, next: Level) = ((f, level), next)
 
-    state[Action, Fragment, (Fragment, Level), Level](Level()) {
+    p.state[(Fragment, Level), Level](Level()) {
       // level goes +1 when a new block starts
       case (f @ Fragment(Start,_ ,_), level) => nextLevel(f, level, level.copy(start = true))
       case (f @ Fragment(End,_ ,_), level)   => nextLevel(f, level, level.copy(start = false, l = max(0, level.l - 1)))
@@ -53,10 +50,10 @@ trait Levels {
   }
 
 
-  def levelsToTreeLoc(mapper: Mapper): AsyncTransducer[(Fragment, Int), TreeLoc[Fragment]] = {
+  def levelsToTreeLoc(mapper: Mapper): AsyncTransducer[(Fragment, Int), TreeLoc[Fragment]] = { (p: AsyncStream[(Fragment, Int)]) =>
     val init = Leaf((DefaultFragmentFactory.text("root"), 0)).loc
 
-    state[Action, (Fragment, Int), TreeLoc[(Fragment, Int)], TreeLoc[(Fragment, Int)]](init) {
+    p.state[TreeLoc[(Fragment, Int)], TreeLoc[(Fragment, Int)]](init) {
       case ((f, level), treeLoc) =>
 
         val parent = if (level == 0) treeLoc.root else (treeLoc.parentLocs :+ treeLoc).takeWhile(_.getLabel._2 < level).lastOption.getOrElse(treeLoc)

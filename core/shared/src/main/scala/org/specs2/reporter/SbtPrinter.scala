@@ -2,7 +2,7 @@ package org.specs2
 package reporter
 
 import control.{Logger =>_,_}
-import Control._
+import origami._
 import execute.Details
 import sbt.testing._
 import org.specs2.text.AnsiColors._

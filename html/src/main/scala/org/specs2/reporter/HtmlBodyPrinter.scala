@@ -36,7 +36,7 @@ trait HtmlBodyPrinter {
     // in html output examples are embedded in <li></li> tags and
     // there is no need to render additional blank line between them
     val deleteLineBetweenExamples: Transducer[Action, Fragment, Fragment] = producer =>
-      producer.pipe(Transducers.zipWithPreviousAndNext).filter {
+      producer.zipWithPreviousAndNext.filter {
         case (Some(f1), f2, Some(f3)) if Fragment.isExample(f1) && Fragment.isBr(f2) && Fragment.isExample(f3) => false
         case _ => true
       }.map {

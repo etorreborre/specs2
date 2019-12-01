@@ -58,7 +58,7 @@ trait DefaultExecutor extends Executor {
    *
    *  - the execution stops if one fragment indicates that the result of the previous executions is not correct
    */
-  def sequencedExecution(env: Env): AsyncTransducer[Fragment, Fragment] = {
+  def sequencedExecution(env: Env): AsyncTransducer[Fragment, Fragment] = { (p: AsyncStream[Fragment]) =>
     type S = (Vector[Fragment], Vector[Fragment], Option[Fragment])
     val init: S = (Vector.empty, Vector.empty, None)
     val arguments = env.arguments
@@ -68,7 +68,7 @@ trait DefaultExecutor extends Executor {
         emit(toStart.toList.map(_.startExecutionAfter(previousStep)(env)))
     }
 
-    Transducers.producerState(init, Option(last)) { case (fragment, (previous, previousStarted, previousStep)) =>
+    p.producerState(init, Option(last)) { case (fragment, (previous, previousStarted, previousStep)) =>
       if (arguments.skipAll)
         (one(if (fragment.isExecutable) fragment.skip else fragment), init)
       else if (arguments.sequential) {
@@ -162,6 +162,6 @@ object DefaultExecutor extends DefaultExecutor {
     (emitAsync(seq:_*) |> sequencedExecution(env)).runList.runMonoid(env.specs2ExecutionEnv)
 
   /** synchronous execution with a specific environment */
-  def executeFragments1(env: Env): AsyncTransducer[Fragment, Fragment] =
-    Transducers.transducer[Action, Fragment, Fragment](executeFragment(env))
+  def executeFragments1(env: Env): AsyncTransducer[Fragment, Fragment] = (p: AsyncStream[Fragment]) =>
+    p.map(executeFragment(env))
 }

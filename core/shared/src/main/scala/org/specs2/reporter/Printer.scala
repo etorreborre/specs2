@@ -2,8 +2,8 @@ package org.specs2
 package reporter
 
 import control._
+import origami._
 import specification.core._
-import Control._
 
 /**
  * A Printer is essentially defined by a FoldM sink that:
