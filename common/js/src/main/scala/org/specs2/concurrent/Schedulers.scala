@@ -9,8 +9,8 @@ trait Schedulers {
    * Default Scheduler for JavaScript
    */
   def default: Scheduler = new Scheduler {
-    def schedule(timedout: =>Unit, duration: FiniteDuration): () => Unit = {
-      val handle = setTimeout(duration)(timedout)
+    def schedule(action: =>Unit, duration: FiniteDuration): () => Unit = {
+      val handle = setTimeout(duration)(action)
       () => clearTimeout(handle)
     }
 
@@ -22,4 +22,3 @@ trait Schedulers {
 }
 
 object Schedulers extends Schedulers
-

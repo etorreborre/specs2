@@ -9,22 +9,17 @@ import scala.annotation.tailrec
 private[specs2]
 trait Listx { outer =>
 
-  /** @return an extension for a nested list */
-  implicit def extendNestedList[T](list: List[List[T]]): ExtendedNestedList[T] = new ExtendedNestedList(list)
-
   /**
    * Additional methods for nested lists
    */
-  class ExtendedNestedList[T](list: List[List[T]]) {
+  implicit class ExtendedNestedList[T](list: List[List[T]]) {
     def safeTranspose = outer.transpose(list)
   }
-  
-  /** @return an extension for a list */
-  implicit def extendList[T](list: List[T]): ExtendedList[T] = new ExtendedList(list)
+
   /**
    * Additional methods for lists
    */
-  class ExtendedList[T](list: List[T]) {
+  implicit class ExtendedList[T](list: List[T]) {
     /**
      * @return a randomly mixed list
      */
@@ -41,11 +36,11 @@ trait Listx { outer =>
     }
 
   }
-  
+
   /**
    * This methods works like the transpose method defined on Traversable
    * but it doesn't fail when the input is not formatted like a regular matrix
-   * 
+   *
    *  List(List("a",  "bb", "ccc"),
    *       List("dd", "e",  "fff")) =>
    *  List(List("a",  "dd"),

@@ -8,22 +8,17 @@ import scala.annotation.tailrec
 private[specs2]
 trait Vectorx { outer =>
 
-  /** @return an extension for a nested vector */
-  implicit def extendNestedVector[T](vector: Vector[Vector[T]]): ExtendedNestedVector[T] = new ExtendedNestedVector(vector)
-
   /**
    * Additional methods for nested vectors
    */
-  class ExtendedNestedVector[T](vector: Vector[Vector[T]]) {
+  implicit class ExtendedNestedVector[T](vector: Vector[Vector[T]]) {
     def safeTranspose = outer.transpose(vector)
   }
-  
-  /** @return an extension for a vector */
-  implicit def extendVector[T](vector: Vector[T]): ExtendedVector[T] = new ExtendedVector(vector)
+
   /**
    * Additional methods for vectors
    */
-  class ExtendedVector[T](vector: Vector[T]) {
+  implicit class ExtendedVector[T](vector: Vector[T]) {
     /**
      * @return a randomly mixed vector
      */
@@ -40,11 +35,11 @@ trait Vectorx { outer =>
     }
 
   }
-  
+
   /**
    * This methods works like the transpose method defined on Traversable
    * but it doesn't fail when the input is not formatted like a regular matrix
-   * 
+   *
    *  Vector(Vector("a",  "bb", "ccc"),
    *       Vector("dd", "e",  "fff")) =>
    *  Vector(Vector("a",  "dd"),

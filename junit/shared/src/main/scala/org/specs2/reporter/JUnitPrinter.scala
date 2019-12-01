@@ -14,7 +14,8 @@ import control._
 import control.ExecutionOrigin._
 import Control._
 import origami._
-import org.specs2.fp.syntax._
+import Folds._
+import fp.syntax._
 
 /**
  * The JUnitPrinter sends notifications to JUnit's RunNotifier
@@ -40,7 +41,7 @@ trait JUnitPrinter extends Printer { outer =>
   // original stack trace is lost inside the callbacks.
   def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment] = {
     val shouldNotify = !excludeFromReporting
-    fold.bracket[Fragment, RunNotifier](
+    bracket[Fragment, RunNotifier](
       open = Action.protect { if (shouldNotify) notifier.fireTestRunStarted(description); notifier })(
       step = (notifier: RunNotifier, fragment: Fragment) => notifyJUnit(env.arguments)(fragment).as(notifier))(
       close = (notifier: RunNotifier) => Finalizer.create(if (shouldNotify) notifier.fireTestRunFinished(new org.junit.runner.Result) else ())

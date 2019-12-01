@@ -25,8 +25,8 @@ case class ExecutorServices(executionContextEval: () => ExecutionContext,
   def shutdownOnComplete[A](future: scala.concurrent.Future[A]): ExecutorServices =
     this
 
-  def schedule(timedout: =>Unit, duration: FiniteDuration): () => Unit =
-    scheduler.schedule(timedout, duration)
+  def schedule(action: =>Unit, duration: FiniteDuration): () => Unit =
+    scheduler.schedule(action, duration)
 
 }
 

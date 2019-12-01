@@ -8,7 +8,11 @@ import scala.concurrent.duration._
  */
 trait Scheduler {
 
-  def schedule(timedout: =>Unit, duration: FiniteDuration): () => Unit
+  /**
+   * schedule an action which should time out  after a given duration
+   * @return a function cancelling the action even before the timeout
+   */
+  def schedule(action: =>Unit, duration: FiniteDuration): () => Unit
 
   def shutdown(): Unit
 

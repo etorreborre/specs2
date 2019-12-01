@@ -36,19 +36,21 @@ object depends {
     Seq("org.scala-lang.modules" %%% "scala-parser-combinators" % "1.1.2")
   }
   def scalaParserNative = Def.setting {
-    if(nativeVersion == "0.4.0-M2")
+    if (nativeVersion == "0.4.0-M2")
       Seq("com.github.lolgab" %%% "scala-parser-combinators" % "1.1.2")
     else
       scalaParser.value
   }
 
-  def scalaXML = "org.scala-lang.modules" %% "scala-xml" % "1.2.0"
+  def scalaXML = Def.setting {
+    "org.scala-lang.modules" %%% "scala-xml" % "1.2.0"
+  }
 
   lazy val mockito  = "org.mockito"  % "mockito-core"  % "3.1.0"
   lazy val junit    = "junit"        % "junit"         % "4.12"
   lazy val hamcrest = "org.hamcrest" % "hamcrest-core" % "2.2"
 
-  lazy val pegdown = "org.pegdown" % "pegdown" % "1.6.0"
+  lazy val pegdown = Def.setting { "org.pegdown" %%% "pegdown" % "1.6.0" }
 
   lazy val tagsoup = "org.ccil.cowan.tagsoup" % "tagsoup" % "1.2.1"
 

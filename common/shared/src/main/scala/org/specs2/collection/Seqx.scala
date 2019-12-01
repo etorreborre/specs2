@@ -10,12 +10,10 @@ import scala.collection.mutable.ListBuffer
 private[specs2]
 trait Seqx { outer =>
 
-  /** @return an extension for a nested seq */
-  implicit def extendNestedSeq[T](seq: Seq[Seq[T]]): ExtendedNestedSeq[T] = new ExtendedNestedSeq(seq)
   /**
    * Additional methods for nested seqs
    */
-  class ExtendedNestedSeq[T](seq: Seq[Seq[T]]) {
+  implicit class ExtendedNestedSeq[T](seq: Seq[Seq[T]]) {
     def safeTranspose = outer.transpose(seq)
   }
 

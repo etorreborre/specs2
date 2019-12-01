@@ -8,7 +8,7 @@ trait Schedulers {
    * Default Scheduler for Scala Native
    */
   def default: Scheduler = new Scheduler {
-    def schedule(timedout: =>Unit, duration: FiniteDuration): () => Unit =
+    def schedule(action: =>Unit, duration: FiniteDuration): () => Unit =
       () => ()
 
     def shutdown() = ()
@@ -19,4 +19,3 @@ trait Schedulers {
 }
 
 object Schedulers extends Schedulers
-
