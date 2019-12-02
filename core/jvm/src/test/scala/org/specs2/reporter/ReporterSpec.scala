@@ -77,9 +77,9 @@ class ReporterSpec(val env: Env) extends Specification with ThrownExpectations w
 
   def b3 = {
     val logger = stringLogger
+    val env = ownEnv.setLineLogger(logger).setArguments(Arguments.split("console junit"))
 
-    reported(ownEnv.setLineLogger(logger).setArguments(Arguments.split("console junit")),
-      printers = List(TextPrinter, new FakeJUnitPrinter(logger)))
+    reported(env, printers = List(TextPrinter(env), new FakeJUnitPrinter(logger)))
 
     val messages = logger.messages
     messages must contain(beMatching(".*ex1.*"))
@@ -89,10 +89,10 @@ class ReporterSpec(val env: Env) extends Specification with ThrownExpectations w
 }
 
 class FakeJUnitPrinter(logger: LineLogger) extends Printer {
-  def prepare(env: Env, specifications: List[SpecStructure]): Action[Unit] = Action.unit
-  def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] = Action.unit
+  def prepare(specifications: List[SpecStructure]): Action[Unit] = Action.unit
+  def finalize(specifications: List[SpecStructure]): Action[Unit] = Action.unit
 
-  def sink(env: Env, spec: SpecStructure) =
+  def sink(spec: SpecStructure) =
     Folds.fromSink((f: Fragment) => Action.pure(logger.infoLog("junit\n")))
 }
 
@@ -100,7 +100,6 @@ object reporterSpecSupport extends MustMatchers with StandardMatchResults with S
   /**
    * TEST METHODS
    */
-  lazy val reporter = new Reporter {}
 
   def spec(logger: LineLogger = NoLineLogger): SpecStructure = s2"""
  ex1 ${ex1(logger)}
@@ -112,8 +111,11 @@ object reporterSpecSupport extends MustMatchers with StandardMatchResults with S
   def ex2(logger: LineLogger) = { logger.infoLog("e2\n "); ko }
   def ex3(logger: LineLogger) = { logger.infoLog("e3\n "); ok }
 
-  def reported(env: Env, logger: LineLogger = NoLineLogger, printers: List[Printer] = List(TextPrinter)) =
-    reporter.report(env, printers)(spec(logger)).runOption(env.executionEnv)
+  def reported(env: Env, logger: LineLogger = NoLineLogger, printers: List[Printer] = Nil) = {
+    val printers1 = if (printers.isEmpty) List(TextPrinter(env)) else printers
+    val reporter = DefaultReporter(env.arguments, env, printers1)
+    reporter.report(spec(logger)).runOption(env.executionEnv)
+  }
 
   def indexOf(messages: Seq[String])(f: String => Boolean): Int =
     messages.zipWithIndex.find { case (s, i) => f(s)}.fold(-1)(_._2)

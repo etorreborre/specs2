@@ -21,11 +21,11 @@ import org.specs2.fp.syntax._
  *
  * At the end of the run the specification statistics are displayed as well.
  */
-trait TextPrinter extends Printer {
-  def prepare(env: Env, specifications: List[SpecStructure]): Action[Unit]  = Action.unit
-  def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] = Action.unit
+case class TextPrinter(env: Env) extends Printer {
+  def prepare(specifications: List[SpecStructure]): Action[Unit]  = Action.unit
+  def finalize(specifications: List[SpecStructure]): Action[Unit] = Action.unit
 
-  def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment] = {
+  def sink(spec: SpecStructure): AsyncSink[Fragment] = {
     // statistics and indentation
     type S = ((Stats, Int), SimpleTimer)
 
@@ -44,9 +44,8 @@ trait TextPrinter extends Printer {
   }
 
   /** run a specification */
-  def run(env: Env): SpecStructure => Unit = { spec: SpecStructure =>
-    print(env)(spec).runVoid(env.specs2ExecutionEnv)
-  }
+  def run(spec: SpecStructure): Unit =
+    print(spec).runVoid(env.specs2ExecutionEnv)
 
   def linesLoggerSink(logger: LineLogger, header: SpecHeader, args: Arguments): AsyncSink[List[LogLine]] =
     Folds.fromSink[Action, List[LogLine]](lines =>
@@ -283,4 +282,7 @@ trait TextPrinter extends Printer {
 
 }
 
-object TextPrinter extends TextPrinter
+object TextPrinter {
+  val default: TextPrinter =
+    TextPrinter(Env())
+}

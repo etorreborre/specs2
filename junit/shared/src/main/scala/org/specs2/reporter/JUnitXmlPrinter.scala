@@ -24,21 +24,21 @@ import Folds._
 /**
  * The JUnitXmlPrinter creates an xml file with the specification execution results
  */
-trait JUnitXmlPrinter extends Printer {
-  def prepare(env: Env, specs: List[SpecStructure]): Action[Unit]  = Action.unit
-  def finalize(env: Env, specs: List[SpecStructure]): Action[Unit] = Action.unit
+class JUnitXmlPrinter(env: Env) extends Printer {
+  def prepare(specs: List[SpecStructure]): Action[Unit]  = Action.unit
+  def finalize(specs: List[SpecStructure]): Action[Unit] = Action.unit
 
-  def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment] =
+  def sink(spec: SpecStructure): AsyncSink[Fragment] =
     (Statistics.fold zip list[Fragment].into[Action]).
-      mapFlatten(saveResults(env, spec))
+      mapFlatten(saveResults(spec))
 
-  def saveResults(env: Env, spec: SpecStructure): ((Stats, List[Fragment])) =>  Action[Unit] = { case (stats, fs) =>
-    descriptionFold(spec, stats, env).run(descriptions(spec, fs)(env.specs2ExecutionEnv).toList).flatMap { suite =>
+  def saveResults(spec: SpecStructure): ((Stats, List[Fragment])) =>  Action[Unit] = { case (stats, fs) =>
+    descriptionFold(spec, stats).run(descriptions(spec, fs)(env.specs2ExecutionEnv).toList).flatMap { suite =>
        env.fileSystem.writeFile(outputDirectory(env.arguments) | FileName.unsafe(spec.specClassName+".xml"), suite.xml).toAction
     }
   }
 
-  def descriptionFold(spec: SpecStructure, stats: Stats, env: Env): AsyncFold[(Fragment, Description), TestSuite] = {
+  def descriptionFold(spec: SpecStructure, stats: Stats): AsyncFold[(Fragment, Description), TestSuite] = {
     val suite = TestSuite(specDescription(spec), spec.specClassName, stats.errors, stats.failures, stats.skipped, stats.timer.totalMillis)
     fromFoldLeft[Action, (Fragment, Description), TestSuite](suite) { case (res, (f, d)) =>
       if (Fragment.isExample(f))
@@ -114,5 +114,3 @@ trait JUnitXmlPrinter extends Printer {
 
   private def formatTime(t: Long) = "%.3f" format (t / 1000.0)
 }
-
-object JUnitXmlPrinter extends JUnitXmlPrinter

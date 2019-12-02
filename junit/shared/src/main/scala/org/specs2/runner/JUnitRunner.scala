@@ -4,12 +4,11 @@ package runner
 import org.junit.runner.manipulation.{Filterable, NoTestsRemainException}
 import org.junit.runner.notification.{Failure, RunNotifier}
 import main._
+import fp.syntax._
+import control._
+import specification.core._
 import specification.process.Stats
 import reporter._
-import specification.core._
-import control._
-import org.specs2.fp.syntax._
-import org.specs2.concurrent.ExecutionEnv
 import scala.util.control.NonFatal
 
 /**
@@ -54,39 +53,20 @@ class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterab
   }
 
   /** run the specification with a Notifier and an environment */
-  def runWithEnv(n: RunNotifier, env: Env): Action[Stats] = {
+  def runWithEnv(runNotifier: RunNotifier, env: Env): Action[Stats] = {
     val loader = Thread.currentThread.getContextClassLoader
     val arguments = env.arguments
+    val customInstances = CustomInstances(arguments, loader, ConsoleLogger())
+    val printerFactory = PrinterFactory(arguments, env, customInstances, ConsoleLogger())
+    val junitPrinter = JUnitPrinter(env, runNotifier)
 
-    val report: Action[Stats] =
-      if (arguments.isSet("all")) {
-        for {
-          reporter <- ClassRunner.createReporter(arguments, loader).toAction
-          printers <- ClassRunner.createPrinters(arguments, loader).toAction
-          ss       <- SpecStructure.linkedSpecifications(specStructure, env, loader).toAction
-          sorted   <- Action.pure(SpecStructure.topologicalSort(ss)(env.specs2ExecutionEnv).getOrElse(ss))
-          _        <- reporter.prepare(env, printers)(sorted.toList)
-          stats    <- sorted.toList.map(s => Reporter.report(env, createJUnitPrinter(s, n, env.specs2ExecutionEnv) +: printers)(s)).sequence
-          _        <- Reporter.finalize(env, printers)(sorted.toList)
-        } yield stats.foldMap(identity _)
-      } else
-        for {
-          printers <- ClassRunner.createPrinters(arguments, loader).toAction
-          stats    <- Reporter.report(env, createJUnitPrinter(specStructure, n, env.specs2ExecutionEnv) +: printers)(specStructure)
-        } yield stats
-
-    report
-  }
-
-  /**
-   * create a printer for a specific specification structure
-   * The printer needs to know about all the example descriptions beforehand
-   */
-  def createJUnitPrinter(specStructure: SpecStructure, n: RunNotifier, ee: ExecutionEnv): JUnitPrinter = new JUnitPrinter {
-    lazy val notifier = n
-    lazy val descriptionsTree = JUnitDescriptionsTree(specStructure, ee)
-    lazy val descriptions = descriptionsTree.descriptions
-    lazy val description = descriptionsTree.description
+    for {
+      printers <- printerFactory.createPrinters.toAction
+      reporter <- customInstances.createCustomInstance[Reporter]( "reporter",
+           (m: String) => "a custom reporter can not be instantiated " + m, "no custom reporter defined, using the default one")
+           .map(_.getOrElse(DefaultReporter(arguments, env, junitPrinter +: printers))).toAction
+      stats <- reporter.report(specStructure)
+     } yield stats
   }
 
   /**

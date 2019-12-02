@@ -198,7 +198,7 @@ class ExecutorSpec(val env: Env) extends Specification with ThrownExpectations w
   }
 
   def timeout = {
-    val timeFactor = ownEnv.arguments.execute.timeFactor
+    val timeFactor = 1 //ownEnv.arguments.execute.timeFactor
 
     val messages = new ListBuffer[String]
     def verySlow = { Thread.sleep(600 * timeFactor.toLong); messages.append("very slow"); success }

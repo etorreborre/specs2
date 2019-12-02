@@ -13,21 +13,23 @@ import org.specs2.time.SimpleTimer
 /**
  * A Printer can be created from a Notifier implementation
  */
-object NotifierPrinter {
+case class NotifierPrinter(env: Env) {
 
   /**
    * create a printer from a notifier
    */
   def printer(notifier: Notifier) = new Printer {
-    def prepare(env: Env, specifications: List[SpecStructure]): Action[Unit]  = Action.unit
-    def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] = Action.unit
+    def prepare(specifications: List[SpecStructure]): Action[Unit]  = Action.unit
+    def finalize(specifications: List[SpecStructure]): Action[Unit] = Action.unit
 
-    def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment] = {
+    def sink(spec: SpecStructure): AsyncSink[Fragment] = {
+      val env1 = env.setArguments(env.arguments.overrideWith(spec.arguments))
+
       val nf: Fold[Action, Fragment, Notified] { type S = Notified } =
         notifyFold.into[Action]
       	.startWith(Action.pure(notifier.specStart(spec.name, "")))
       	.endWith(Action.pure(notifier.specEnd(spec.name, "")))
-      nf.observeWithNextState(notifySink(spec, notifier, env.arguments)).void
+      nf.observeWithNextState(notifySink(spec, notifier, env1.arguments)).void
     }
   }
 

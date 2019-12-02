@@ -24,12 +24,12 @@ import HtmlPrinter._
 /**
  * Printer for html files
  */
-case class HtmlPrinter(searchPage: SearchPage, logger: Logger = ConsoleLogger()) extends Printer {
+case class HtmlPrinter(env: Env, searchPage: SearchPage, logger: Logger = ConsoleLogger()) extends Printer {
 
-  def prepare(env: Env, specifications: List[SpecStructure]): Action[Unit]  = Action.unit
+  def prepare(specifications: List[SpecStructure]): Action[Unit]  = Action.unit
 
   /** create an index for all the specifications, if required */
-  def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] = {
+  def finalize(specifications: List[SpecStructure]): Action[Unit] = {
     getHtmlOptions(env.arguments) >>= { options: HtmlOptions =>
       searchPage.createIndex(env, specifications, options).when(options.search) >>
       createToc(env, specifications, options.outDir, options.tocEntryMaxSize, env.fileSystem).when(options.toc) >>
@@ -38,9 +38,9 @@ case class HtmlPrinter(searchPage: SearchPage, logger: Logger = ConsoleLogger())
   }.toAction
 
   /** @return a SinkTask for the Html output */
-  def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment] = {
-    ((Statistics.fold zip fold.list[Fragment].into[Action] zip SimpleTimer.timerFold.into[Action]) <*
-     fold.fromStart((getHtmlOptions(env.arguments) >>= (options => copyResources(env, options))).void.toAction)).mapFlatten { case ((stats, fragments), timer) =>
+  def sink(spec: SpecStructure): AsyncSink[Fragment] = {
+    ((Statistics.fold zip Fold.list[Fragment].into[Action] zip SimpleTimer.timerFold.into[Action]) <*
+     Fold.fromStart((getHtmlOptions(env.arguments) >>= (options => copyResources(env, options))).void.toAction)).mapFlatten { case ((stats, fragments), timer) =>
       val executedSpec = spec.copy(lazyFragments = () => Fragments(fragments:_*))
       getPandoc(env).flatMap {
         case None         => printHtml(env, executedSpec, stats, timer).toAction

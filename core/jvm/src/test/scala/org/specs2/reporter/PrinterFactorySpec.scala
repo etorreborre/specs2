@@ -1,22 +1,18 @@
 package org.specs2
-package runner
+package reporter
 
 import main.Arguments
-import Runner._
 import control.StringOutputLogger
+import control.ConsoleLogger
 import matcher.ActionMatchers
-import org.specs2.io.StringOutput
+import io.StringOutput
+import specification.core.Env
 
-class RunnerSpec extends Specification with ActionMatchers { def is = s2"""
+class PrinterFactorySpec extends Specification with ActionMatchers { def is = s2"""
 
- A runner creates printers based on the command line arguments
+ A printer factory creates printers based on the command line arguments
    the console printer must be created if there aren't other printers $console1
    or if console is passed on the command line $console2
-
- A runner instantiates specifications from names
-   from object names            $objects1
-   from object names without $$ $objects2
-   from classes                 $classes
 
  If a printer can not be instantiated there must be
    a message                                         $instantiationFailure
@@ -26,20 +22,17 @@ class RunnerSpec extends Specification with ActionMatchers { def is = s2"""
 
 """
 
-  def console1 =
-    createTextPrinter(Arguments.split(""), loader).runOption.flatten must beSome
+  def console1 = {
+    val args = Arguments.split("")
+    val factory = PrinterFactory(args, Env(args), CustomInstances.create(args), ConsoleLogger())
+    factory.createTextPrinter.runOption.flatten must beSome
+  }
 
-  def console2 =
-    createTextPrinter(Arguments.split("html console"), loader).runOption.flatten must beSome
-
-  def objects1 =
-    TextRunner.createSpecification("org.specs2.runner.RunnerSpecification$").runOption must beSome
-
-  def objects2 =
-    TextRunner.createSpecification("org.specs2.runner.RunnerSpecification").runOption must beSome
-
-  def classes =
-    TextRunner.createSpecification("org.specs2.runner.RunnerSpec").runOption must beSome
+  def console2 = {
+    val args = Arguments.split("html console")
+    val factory = PrinterFactory(args, Env(args), CustomInstances.create(args), ConsoleLogger())
+    factory.createTextPrinter.runOption.flatten must beSome
+  }
 
   def instantiationFailure =
     createPrintersAndExpectMessage(Arguments.split("notifier missing"), "cannot create a missing notifier")
@@ -52,11 +45,11 @@ class RunnerSpec extends Specification with ActionMatchers { def is = s2"""
 
   def createPrintersAndExpectMessage(arguments: Arguments, message: String) = {
     val output = new StringOutput {}
-    ClassRunner.createPrinters(arguments, loader, StringOutputLogger(output)).runVoid
+    val logger = StringOutputLogger(output)
+    val factory = PrinterFactory(arguments, Env(arguments), CustomInstances.create(arguments, logger), logger)
+    factory.createPrinters.runVoid
     output.messages must contain(contain(message))
   }
 
   val loader = getClass.getClassLoader
 }
-
-object RunnerSpecification extends Specification { def is = success }

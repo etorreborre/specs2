@@ -17,18 +17,9 @@ import fp.syntax._
 /**
  * The JUnitPrinter sends notifications to JUnit's RunNotifier
  */
-trait JUnitPrinter extends Printer { outer =>
-  def prepare(env: Env, specifications: List[SpecStructure]): Action[Unit] = Action.unit
-  def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] = Action.unit
-
-  /** the junit notifier to use */
-  def notifier: RunNotifier
-
-  /** the descriptions of the specification fragments */
-  def descriptions: Map[Fragment, Description]
-
-  /** description for the whole specification */
-  def description: Description
+case class JUnitPrinter(env: Env, notifier: RunNotifier) extends Printer {
+  def prepare(specifications: List[SpecStructure]): Action[Unit] = Action.unit
+  def finalize(specifications: List[SpecStructure]): Action[Unit] = Action.unit
 
   // test run start and finish must not be notified if we execute the test from
   // the JUnitCore runner because it is already doing that.
@@ -36,18 +27,21 @@ trait JUnitPrinter extends Printer { outer =>
   //
   // The value should be evaluated once in the outer scope, because the
   // original stack trace is lost inside the callbacks.
-  def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment] = {
+  def sink(spec: SpecStructure): AsyncSink[Fragment] = {
+    val descriptionsTree = JUnitDescriptionsTree(spec, env.specs2ExecutionEnv)
+    val description = descriptionsTree.description
+
     val shouldNotify = !excludeFromReporting
     bracket[Fragment, RunNotifier](
       open = Action.protect { if (shouldNotify) notifier.fireTestRunStarted(description); notifier })(
-      step = (notifier: RunNotifier, fragment: Fragment) => notifyJUnit(env.arguments)(fragment).as(notifier))(
+      step = (notifier: RunNotifier, fragment: Fragment) => notifyJUnit(env.arguments, descriptionsTree.descriptions)(fragment).as(notifier))(
       close = (notifier: RunNotifier) => Finalizer.create(if (shouldNotify) notifier.fireTestRunFinished(new org.junit.runner.Result) else ())
     )
   }
 
-  def notifyJUnit(args: Arguments): Fragment => Action[Unit] = { fragment =>
+  private def notifyJUnit(args: Arguments, descriptions: Map[Fragment, Description]): Fragment => Action[Unit] = { fragment =>
     if (Fragment.isExampleOrStep(fragment)) {
-      val description = findDescription(fragment)
+      val description = findDescription(descriptions, fragment)
       fragment.executionResult.map { result =>
         description.foreach { description: Description =>
           if (Fragment.isExample(fragment))
@@ -59,7 +53,7 @@ trait JUnitPrinter extends Printer { outer =>
     } else Action.unit
   }
 
-  private def findDescription(fragment: Fragment) = {
+  private def findDescription(descriptions: Map[Fragment, Description], fragment: Fragment) = {
     // find the fragment with the same description and same location
     descriptions.find { case (f, d) =>
       f.description == fragment.description && f.location == fragment.location

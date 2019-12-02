@@ -9,6 +9,7 @@ import specification._
 import specification.process._
 import core._
 import Statistics._
+import main.Arguments
 
 /**
  * A reporter is responsible for
@@ -18,21 +19,33 @@ import Statistics._
  *
  * It is also responsible for saving the specification state at the end of the run
  */
+
 trait Reporter {
 
-  def prepare(env: Env, printers: List[Printer]): List[SpecStructure] => Action[Unit] = { specs =>
-    printers.traverse(_.prepare(env, specs)).void
-  }
+  def prepare(specs: List[SpecStructure]): Action[Unit]
 
-  def finalize(env: Env, printers: List[Printer]): List[SpecStructure] => Action[Unit] = { specs =>
-    printers.traverse(_.finalize(env, specs)).void
-  }
+  def finalize(specs: List[SpecStructure] ):  Action[Unit]
+
+  def report(spec: SpecStructure): Action[Stats]
+
+}
+
+/**
+ * Default implementation of a Reporter using specs2 Printers
+ */
+case class DefaultReporter(arguments: Arguments, env: Env, printers: List[Printer]) extends Reporter {
+
+  def prepare(specs: List[SpecStructure]): Action[Unit] =
+    printers.traverse(_.prepare(specs)).void
+
+  def finalize(specs: List[SpecStructure] ): Action[Unit] =
+    printers.traverse(_.finalize(specs)).void
 
   /**
    * report 1 spec structure with the given printers
    * first find and sort the referenced specifications and report them
    */
-  def report(env: Env, printers: List[Printer]): SpecStructure => Action[Stats] = { spec =>
+  def report(spec: SpecStructure): Action[Stats] = {
     val env1 = env.setArguments(env.arguments.overrideWith(spec.arguments))
     val executing = readStats(spec, env1) |> env1.selector.select(env1) |> env1.executor.execute(env1)
 
@@ -41,7 +54,7 @@ trait Reporter {
       if (env.arguments.execute.asap) Producer.emitAction(executing.contents.runList)
       else                            executing.contents
 
-    val sinks = (printers.map(_.sink(env1, spec)) :+ statsStoreSink(env1, spec)).sumAll
+    val sinks = (printers.map(_.sink(spec)) :+ statsStoreSink(env1, spec)).sumAll
     val reportFold = sinks *> Statistics.fold
 
     contents.fold(reportFold)
@@ -50,9 +63,9 @@ trait Reporter {
   /**
    * Use a Fold to store the stats of each example + the stats of the specification
    */
-  def statsStoreSink(env: Env, spec: SpecStructure): AsyncSink[Fragment] = {
-    val neverStore = env.arguments.store.never
-    val resetStore = env.arguments.store.reset
+  private def statsStoreSink(env1: Env, spec: SpecStructure): AsyncSink[Fragment] = {
+    val neverStore = env1.arguments.store.never
+    val resetStore = env1.arguments.store.reset
 
     lazy val sink: AsyncSink[Fragment] =
       Folds.fromSink[Action, Fragment] { fragment: Fragment =>
@@ -60,21 +73,19 @@ trait Reporter {
           Action.unit
         else
           fragment.executionResult.flatMap { r =>
-            env.statisticsRepository.storeResult(spec.specClassName, fragment.description, r).toAction
+            env1.statisticsRepository.storeResult(spec.specClassName, fragment.description, r).toAction
           }
       }
 
     val prepare: Action[Unit] =
-      if (resetStore) env.statisticsRepository.resetStatistics.toAction
+      if (resetStore) env1.statisticsRepository.resetStatistics.toAction
       else            Action.unit
 
     val last = (stats: Stats) =>
       if (neverStore) Action.unit
-      else            env.statisticsRepository.storeStatistics(spec.specClassName, stats).toAction
+      else            env1.statisticsRepository.storeStatistics(spec.specClassName, stats).toAction
 
     (Statistics.fold <* fromStart(prepare) <* sink).mapFlatten(last)
   }
 
 }
-
-object Reporter extends Reporter

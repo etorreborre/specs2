@@ -28,7 +28,7 @@ class SbtPrinterSpec(val env: Env) extends Spec with OwnEnv { def is = s2"""
   case class printer1() extends Mockito { outer =>
 
     def e1 = {
-      printer.printSpecification(ownEnv)(new HelloWorldSpec { override def is = "title".title ^ "\ntext" }).runAction(ownEnv.specs2ExecutionEnv)
+      printer.print((new HelloWorldSpec { override def is = "title".title ^ "\ntext" }).structure(ownEnv)).runAction(ownEnv.specs2ExecutionEnv)
       eventually(there was one(logger).info(beMatching(".*title.*")))
     }
 

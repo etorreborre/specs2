@@ -241,7 +241,8 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
 
     val spec = SpecStructure.create(SpecHeader(getClass, Some("title\n")), Arguments(), fragments)
     val env1 = ownEnv.copy(lineLogger = logger, arguments = Arguments("batchsize", "3"))
-    TextPrinter.run(env1)(DefaultExecutor.executeSpec(spec, env1))
+    val printer = TextPrinter(env1)
+    printer.run(DefaultExecutor.executeSpec(spec, env1))
 
     val executed = logger.messages.filter(_.contains("executed")).map(_.replace("executed", "").trim.toInt)
     val printed = logger.messages.filter(_.contains("+")).map(_.replace("+", "").replace("ex", "").trim.toInt)
@@ -270,7 +271,8 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
 
     val spec = SpecStructure.create(SpecHeader(getClass, Some("title\n")), sequential, fragments)
     val env1 = ownEnv.copy(lineLogger = logger).setArguments(sequential)
-    TextPrinter.run(env1)(DefaultExecutor.executeSpec(spec, env1))
+    val printer = TextPrinter(env1)
+    printer.run(DefaultExecutor.executeSpec(spec, env1))
 
     val executed = logger.messages.filter(_.contains("executed")).map(_.replace("executed", "").trim.toInt)
     val printed = logger.messages.filter(_.contains("+")).map(_.replace("+", "").replace("ex", "").trim.toInt)
@@ -340,7 +342,8 @@ object TextPrinterSpecification extends MustMatchers with FragmentsDsl {
         }
 
       try {
-        TextPrinter.run(env1)(spec.setFragments(spec.fragments
+        val printer = TextPrinter(env1)
+        printer.run(spec.setFragments(spec.fragments
           .prepend(DefaultFragmentFactory.break) // add a newline after the title
           .update(DefaultExecutor.execute(env1))))
       } finally {

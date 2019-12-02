@@ -7,7 +7,7 @@ import org.specs2.fp._
 import org.specs2.fp.syntax._
 import control._
 import org.specs2.concurrent.ExecutionEnv
-import origami._
+import origami._, Fold._
 
 /**
  * Fold functions to create index files
@@ -22,7 +22,7 @@ object Indexing {
    * saves it to a given file path
    */
   def indexFold(path: FilePath): Fold[Operation, IndexedPage, Index] =
-    origami.fold.fromMonoidMap[Operation, IndexedPage, Index](Index.createIndex).mapFlatten((index: Index) =>
+    fromMonoidMap[Operation, IndexedPage, Index](Index.createIndex).mapFlatten((index: Index) =>
       FileSystem(ConsoleLogger()).writeFile(path, Index.toJson(index)).as(index))
 
   def createIndexedPages(env: Env, specifications: List[SpecStructure], outDir: DirectoryPath): List[IndexedPage] =

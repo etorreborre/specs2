@@ -16,15 +16,19 @@ import execute._
  *   whether it has timed-out or thrown an exception. This allows resources to be safely disposed of
  *
  */
-case class Action[A](runNow: ExecutionContext => Future[A], timeout: Option[FiniteDuration] = None, last: Vector[Finalizer] = Vector.empty) {
+case class Action[A](private[control] runNow: ExecutionEnv => Future[A], timeout: Option[FiniteDuration] = None, last: Vector[Finalizer] = Vector.empty) {
 
   /** add a finalizer */
   def addLast(finalizer: Finalizer): Action[A] =
     copy(last = last :+ finalizer)
 
+  /** add a finalizer */
+  def thenFinally(last: Finalizer): Action[A] =
+    addLast(last)
+
   /** catch any exception resulting from running the action later */
   def attempt: Action[Throwable Either A] =
-    Action(ec => runNow(ec).transform(r => scala.util.Success(r.toEither))(ec), timeout, last)
+    Action(ee => runFuture(ee).transform(r => scala.util.Success(r.toEither))(ee.executionContext), timeout, last)
 
   /** run another action if this one fails */
   def orElse(other: Action[A]): Action[A] =
@@ -90,16 +94,8 @@ object Action {
   def exception[A](t: Throwable): Action[A] =
     Action(_ => Future.failed[A](t))
 
-  def future[A](f: Future[A]): Action[A] =
-    Action(_ => f)
-
-  def attempt[A](action: =>Action[A]): Action[Either[Throwable, A]] =
-    Action { implicit es =>
-      action.runNow(es).map(Right.apply).recoverWith { case e => Future.successful(Left(e)) }
-    }
-
-  def thenFinally[A](action: Action[A], last: Finalizer): Action[A] =
-    action.addLast(last)
+  def future[A](f: Future[A], timeout: Option[FiniteDuration] = None): Action[A] =
+    Action(_ => f, timeout = timeout)
 
   def checkThat[A](a: =>A, condition: Boolean, failureMessage: String): Action[A] =
     pure(a).flatMap { value =>
@@ -112,13 +108,15 @@ object Action {
       Action(_ => Future.successful(a))
 
     def bind[A, B](fa: Action[A])(f: A => Action[B]): Action[B] =
-      Action[B] { implicit es =>
-        fa.runNow(es).flatMap { case a => f(a).runNow(es) }
+      Action[B] { ee =>
+        implicit val ec = ee.executionContext
+        fa.runNow(ee).flatMap { case a => f(a).runNow(ee) }
     }
 
     override def ap[A, B](fa: =>Action[A])(ff: =>Action[A => B]): Action[B] = {
-      Action { implicit ec =>
-        fa.runNow(ec).zip(ff.runNow(ec)).map { case (a, f) => f(a) }
+      Action { ee =>
+        implicit val ec = ee.executionContext
+        fa.runNow(ee).zip(ff.runNow(ee)).map { case (a, f) => f(a) }
       }
     }
 
@@ -131,8 +129,9 @@ object Action {
       Action(_ => Future.successful(a))
 
     def ap[A, B](fa: =>Action[A])(ff: =>Action[A => B]): Action[B] = {
-      Action { implicit ec =>
-        fa.runNow(ec).zip(ff.runNow(ec)).map { case (a, f) => f(a) }
+      Action { ee =>
+        implicit val ec = ee.executionContext
+        fa.runNow(ee).zip(ff.runNow(ee)).map { case (a, f) => f(a) }
       }
     }
 
