@@ -40,6 +40,6 @@ class ExecutionSpec(val env: Env) extends Specification with OwnEnv { def is = s
 
   implicit class ExecutionOps(e: Execution) {
     def result(env: Env): Result =
-      Await.result(e.startExecution(env).executedResult.runNow(ee.executionContext), 10.seconds).result
+      Await.result(e.startExecution(env).executedResult.runFuture(env.executionEnv), 10.seconds).result
   }
 }

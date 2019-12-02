@@ -7,6 +7,7 @@ import io.DirectoryPath
 import reporter.LineLogger._
 import specification.process.Stats
 import specification.core._
+import reporter._
 import runner.Runner._
 import org.specs2.fp.syntax._
 import SpecificationsFinder._
@@ -46,7 +47,8 @@ trait FilesRunner {
     for {
       _     <- beforeExecution(args, isVerbose(args), logger).toAction
       ss    <- specs.map(sort(env))
-      stats <- ss.toList.map(ClassRunner.report(env)).sequence
+      cr    <- ClassRunner.createClassRunner(args, env)
+      stats <- ss.toList.traverse(cr.run)
       _     <- afterExecution(ss, isVerbose(args), logger).toAction
     } yield stats.foldMap(identity _)
   }
@@ -62,7 +64,7 @@ trait FilesRunner {
   /** print a message before the execution */
   protected def beforeExecution(args: Arguments, verbose: Boolean, logger: Logger = ConsoleLogger()): Operation[Unit] = for {
     _        <- logger.info("\nExecuting specifications", verbose)
-    printers <- ClassRunner.createPrinters(args, Thread.currentThread.getContextClassLoader)
+    printers <- PrinterFactory.create(args).createPrinters
     _        <- logger.info("printers are " + printers.mkString(", "), verbose)
   } yield ()
 

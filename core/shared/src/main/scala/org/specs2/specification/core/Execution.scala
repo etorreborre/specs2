@@ -53,7 +53,7 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
         Action.exception(t)
 
       case Started(f) =>
-        Action.future(f).map { case (r, timer) => ExecutedResult(r, timer) }
+        Action.future(f, timeout).map { case (r, timer) => ExecutedResult(r, timer) }
     }
 
   lazy val executionResult: Action[Result] =
@@ -136,12 +136,9 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
           env.setContextClassLoader()
 
           val timer = startSimpleTimer
+          val timedFuture = Action.future(r(env).map(action => (action(), timer.stop)), to)
 
-          val timedFuture = Action({ es =>
-            r(env).map(action => (action(), timer.stop))
-          }, to)
-
-          val future = timedFuture.runNow(env.executorServices.executionContext).recoverWith { case e: FailureException =>
+          val future = timedFuture.runFuture(env.executionEnv).recoverWith { case e: FailureException =>
             // Future execution could still throw FailureExceptions which can only be
             // recovered here
             Future.successful((ResultExecution.handleExceptionsPurely(e), timer.stop))

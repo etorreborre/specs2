@@ -8,27 +8,23 @@ import specification.core._
 /**
  * A Printer is essentially defined by a FoldM sink that:
  *
- *  - can run a Process[Task, Fragment]
- *  - uses a scalaz-stream Sink for side-effects and
+ *  - can run a AsyncStream[Fragment]
+ *  - uses an AsyncSink for side-effects and
  *  - accumulates state for final reporting
  *
  *  See TextPrinter for an example of such a Printer
  */
 trait Printer {
-  def prepare(env: Env, specifications: List[SpecStructure]): Action[Unit]
-  def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit]
+  def prepare(specifications: List[SpecStructure]): Action[Unit]
+  def finalize(specifications: List[SpecStructure]): Action[Unit]
 
-  def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment]
+  def sink(spec: SpecStructure): AsyncSink[Fragment]
 
   /** convenience method to print a SpecStructure using the printer's Fold */
-  def print(env: Env): SpecStructure => Action[Unit] = { spec: SpecStructure =>
-    val printSink = sink(env, spec)
+  def print(spec: SpecStructure): Action[Unit] = {
+    val printSink = sink(spec)
     spec.contents.fold(printSink.start, printSink.fold, printSink.end)
   }
-
-  /** convenience method to print a SpecificationStructure using the printer's Fold */
-  def printSpecification(env: Env): SpecificationStructure => Action[Unit] =
-    (spec: SpecificationStructure) => print(env)(spec.structure(env))
 }
 
 /**

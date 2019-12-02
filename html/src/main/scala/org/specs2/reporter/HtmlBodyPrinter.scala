@@ -11,13 +11,12 @@ import text.NotNullStrings._
 import scala.xml.NodeSeq
 import matcher._
 import fp.syntax._
+import origami._
 import form._
 import control._
-import concurrent.ExecutionEnv
 import control.producer._
-import Transducer._
+import concurrent.ExecutionEnv
 import text.AnsiColors
-import origami._
 import time.SimpleTimer
 
 /**
@@ -43,7 +42,7 @@ trait HtmlBodyPrinter {
         case (_, f, _) => f
       }
 
-    val htmlFold = fold.fromFoldLeft[Action, Fragment, HtmlState](("", Level())) { case ((htmlString, level), fragment) =>
+    val htmlFold = Fold.fromFoldLeft[Action, Fragment, HtmlState](("", Level())) { case ((htmlString, level), fragment) =>
       fragment.executionResult.map { result =>
         (htmlString + printFragment(fragment, result, arguments, level, options.outDir, pandoc),
           Levels.fold(fragment, level))

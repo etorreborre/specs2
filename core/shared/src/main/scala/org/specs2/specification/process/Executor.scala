@@ -53,7 +53,7 @@ trait DefaultExecutor extends Executor {
    *  - "join" points are respected, i.e. when a Fragment is a join we must make sure that all previously
    *    executing fragments have finished their execution
    *
-   *  - the fragments execute sequentially when args.sequential
+   *  - the fragments execute sequentially when args.sequential is true
    *
    *  - the execution stops if one fragment indicates that the result of the previous executions is not correct
    */

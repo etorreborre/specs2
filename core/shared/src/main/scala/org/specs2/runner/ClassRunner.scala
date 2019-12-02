@@ -3,29 +3,60 @@ package runner
 
 import control._
 import io.StringOutput
-import org.specs2.specification.process.Stats
+import specification.process.Stats
 import specification.core._
 import reporter._
 import main.Arguments
-import org.specs2.fp.syntax._
+import fp.syntax._
 import Runner._
 import reporter.LineLogger._
 
-/**
- * The class runner expects the first command-line argument to be the class name of
- * a specification to execute
- */
 trait ClassRunner {
+  def run(className: String): Action[Stats]
+  def run(spec: SpecificationStructure): Action[Stats]
+  def run(spec: SpecStructure): Action[Stats]
+}
 
+/**
+ * A runner for Specification classes based on their names
+ */
+
+case class DefaultClassRunner(arguments: Arguments, reporter: Reporter, specFactory: SpecFactory, env: Env) extends ClassRunner {
+
+  /** instantiate a Specification from its class name and use arguments to determine how to
+   * execute it and report results
+   */
+  def run(className: String): Action[Stats] =
+    specFactory.createSpecification(className).toAction.flatMap(spec => run(spec.structure(env)))
+
+  def run(spec: SpecificationStructure): Action[Stats] =
+    run(spec.structure(env))
+
+  def run(specStructure: SpecStructure): Action[Stats] = for {
+    stats <- if (arguments.isSet("all")) {
+        for {
+          ss       <- specFactory.createLinkedSpecs(specStructure).toAction
+          sorted   <- Action.pure(SpecStructure.topologicalSort(ss)(env.specs2ExecutionEnv).getOrElse(ss))
+          _        <- reporter.prepare(sorted.toList)
+          stats    <- sorted.toList.map(reporter.report).sequence
+          _        <- reporter.finalize(sorted.toList)
+        } yield stats.foldMap(identity _)
+      } else reporter.report(specStructure)
+    } yield stats
+
+}
+
+trait ClassRunnerMain {
   /**
    * run a specification but don't exit with System.exit
    */
-  def run(args: Array[String]): Unit = {
+  def run(args: Array[String]): Unit =
     run(args, exit = false)
-  }
 
   /**
    * run the specification, the first argument is expected to be the specification name
+   * The class runner expects the first command-line argument to be the class name of
+   * a specification to execute
    */
   def run(args: Array[String], exit: Boolean): Unit = {
     val arguments = Arguments(args.drop(1): _*)
@@ -36,49 +67,36 @@ trait ClassRunner {
         Action.fail("there must be at least one argument, the fully qualified class name") >>
         Action.pure(Stats.empty)
 
-      case className :: rest =>
-        for {
-          spec  <- createSpecification(className, Thread.currentThread.getContextClassLoader, Some(env)).toAction
-          stats <- report(env)(spec)
+      case className :: rest => for {
+          classRunner <- createClassRunner(arguments, env)
+          stats <- classRunner.run(className)
         } yield stats
-    }
+      }
+
     try execute(actions, arguments, exit)(env)
     finally env.shutdown
   }
 
-  /** create the specification from the class name */
-  def createSpecification(className: String, classLoader: ClassLoader = Thread.currentThread.getContextClassLoader, env: Option[Env] = None): Operation[SpecificationStructure] =
-    SpecificationStructure.create(className, classLoader, env)
-
-  /** report the specification */
-  def report(env: Env, logger: Logger = ConsoleLogger()): SpecificationStructure => Action[Stats] = { spec: SpecificationStructure =>
+  def createClassRunner(arguments: Arguments, env: Env): Action[ClassRunner] = {
     val loader = Thread.currentThread.getContextClassLoader
+    val customInstances = CustomInstances(arguments, loader, ConsoleLogger())
+    val printerFactory = PrinterFactory(arguments, env, customInstances, ConsoleLogger())
+    val specFactory = DefaultSpecFactory(env, loader)
+
     for {
-      printers <- createPrinters(env.arguments, loader, logger).toAction
-      stats    <- Runner.runSpecStructure(spec.structure(env), env, loader, printers)
-    } yield stats
+      printers <- printerFactory.createPrinters.toAction
+      reporter <- customInstances.createCustomInstance[Reporter]( "reporter",
+        (m: String) => "a custom reporter can not be instantiated " + m, "no custom reporter defined, using the default one")
+        .map(_.getOrElse(DefaultReporter(arguments, env, printers))).toAction
+      classRunner = DefaultClassRunner(arguments, reporter, specFactory, env)
+     } yield classRunner
+
   }
-
-  /** accepted printers */
-  def createPrinters(args: Arguments, loader: ClassLoader, logger: Logger = ConsoleLogger()): Operation[List[Printer]] =
-    List(createTextPrinter(args, loader, logger),
-      createJUnitXmlPrinter(args, loader, logger),
-      createHtmlPrinter(args, loader, logger),
-      createMarkdownPrinter(args, loader, logger),
-      createPrinter(args, loader, logger),
-      createNotifierPrinter(args, loader, logger)).sequence.map(_.flatten)
-
-  /** custom or default reporter */
-  def createReporter(args: Arguments, loader: ClassLoader, logger: Logger = ConsoleLogger()): Operation[Reporter] =
-    createCustomInstance[Reporter](args, loader, "reporter",
-      (m: String) => "a custom reporter can not be instantiated " + m, "no custom reporter defined, using the default one", logger)
-      .map(_.getOrElse(Reporter))
-
 }
 
-object ClassRunner extends ClassRunner
+object ClassRunner extends ClassRunnerMain
 
-object consoleRunner extends ClassRunner {
+object consoleRunner extends ClassRunnerMain {
   def main(args: Array[String]) =
     run(args, exit = true)
 }
@@ -86,14 +104,23 @@ object consoleRunner extends ClassRunner {
 /**
  * Test runner to simulate a console run
  */
-object TextRunner extends ClassRunner {
-  def run(spec: SpecificationStructure, args: Arguments = Arguments())(env: Env): LineLogger with StringOutput = {
+object TextRunner extends ClassRunnerMain {
+
+  def run(spec: SpecificationStructure, arguments: Arguments = Arguments())(env: Env): LineLogger with StringOutput = {
     val logger = LineLogger.stringLogger
-    val env1 = env.setLineLogger(logger).setArguments(env.arguments.overrideWith(args))
-    report(env1)(spec).runAction(env1.specs2ExecutionEnv)
+    val env1 = env.setLineLogger(logger).setArguments(env.arguments.overrideWith(arguments))
+    val loader = Thread.currentThread.getContextClassLoader
+    val customInstances = CustomInstances(arguments, loader, StringOutputLogger(logger))
+    val action =
+      for {
+        reporter <- customInstances.createCustomInstance[Reporter]( "reporter",
+          (m: String) => "a custom reporter can not be instantiated " + m, "no custom reporter defined, using the default one")
+          .map(_.getOrElse(DefaultReporter(arguments, env, List(TextPrinter(env1))))).toAction
+        stats <- reporter.report(spec.structure(env1))
+       } yield stats
+
+    action.runAction(env1.specs2ExecutionEnv)
     logger
   }
 
-  override def createPrinters(args: Arguments, loader: ClassLoader, logger: Logger = ConsoleLogger()): Operation[List[Printer]] =
-    List(createTextPrinter(args, loader, logger)).sequence.map(_.flatten)
 }

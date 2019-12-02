@@ -12,17 +12,18 @@ import specification.core._
 /**
  * This trait is not a full fledged markdown printer yet
  */
-trait MarkdownPrinter extends Printer {
+case class MarkdownPrinter(env: Env) extends Printer {
 
-  def prepare(env: Env, specifications: List[SpecStructure]): Action[Unit] =
+  def prepare(specifications: List[SpecStructure]): Action[Unit] =
     env.fileSystem.mkdirs(MarkdownOptions.create(env.arguments).outDir).toAction
 
-  def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] =
+  def finalize(specifications: List[SpecStructure]): Action[Unit] =
     Action.unit
 
   /** @return a Fold for the markdown output */
-  def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment] = {
-    val options = MarkdownOptions.create(env.arguments)
+  def sink(spec: SpecStructure): AsyncSink[Fragment] = {
+    val env1 = env.setArguments(env.arguments.overrideWith(spec.arguments))
+    val options = MarkdownOptions.create(env1.arguments)
     val path = options.outDir / FilePath.unsafe(spec.header.className+"."+options.extension)
     FoldIo.printToFilePath[Fragment](path)(f => fragmentToLine(options)(f))
   }
@@ -66,7 +67,9 @@ trait MarkdownPrinter extends Printer {
 
 }
 
-object MarkdownPrinter extends MarkdownPrinter
+object MarkdownPrinter {
+  val default = MarkdownPrinter(Env())
+}
 
 case class MarkdownOptions(
   outDir: DirectoryPath,

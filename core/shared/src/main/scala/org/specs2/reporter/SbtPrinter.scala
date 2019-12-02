@@ -16,34 +16,28 @@ import SbtPrinter._
  * It delegates the console printing to a normal text printer but using the Sbt loggers
  * It also publishes events (success, error, skipped, pending) to Sbt
  */
-trait SbtPrinter extends Printer {
-  def prepare(env: Env, specifications: List[SpecStructure]): Action[Unit] = Action.unit
-  def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] = Action.unit
+case class SbtPrinter(env: Env, loggers: Array[Logger], events: SbtEvents) extends Printer {
+  def prepare(specifications: List[SpecStructure]): Action[Unit] = Action.unit
+  def finalize(specifications: List[SpecStructure]): Action[Unit] = Action.unit
 
-  /** sbt loggers to display text */
-  def loggers: Array[Logger]
-
-  /** events handler to notify Sbt of successes/failures */
-  def events: SbtEvents
-
-  lazy val textPrinter = TextPrinter
+  lazy val textPrinter = TextPrinter(env.setLineLogger(SbtLineLogger(loggers)))
 
   def sbtNotifierPrinter(args: Arguments): Printer =
-    NotifierPrinter.printer(sbtNotifier(events, args))
+    NotifierPrinter(env).printer(sbtNotifier(events, args))
 
   /**
    * use 2 Folds:
    * - one for logging messages to the console
    * - one for registering sbt events
    */
-  def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment] =
-    textSink(env, spec) <* eventSink(env, spec)
+  def sink(spec: SpecStructure): AsyncSink[Fragment] =
+    textSink(spec) <* eventSink(spec)
 
-  def textSink(env: Env, spec: SpecStructure): AsyncSink[Fragment] =
-    textPrinter.sink(env.setLineLogger(SbtLineLogger(loggers)), spec)
+  def textSink(spec: SpecStructure): AsyncSink[Fragment] =
+    textPrinter.sink(spec)
 
-  def eventSink(env: Env, spec: SpecStructure): AsyncSink[Fragment] =
-    sbtNotifierPrinter(env.arguments).sink(env, spec)
+  def eventSink(spec: SpecStructure): AsyncSink[Fragment] =
+    sbtNotifierPrinter(env.arguments).sink(spec)
 }
 
 object SbtPrinter {

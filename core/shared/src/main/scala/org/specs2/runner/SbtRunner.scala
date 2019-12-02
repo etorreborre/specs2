@@ -1,6 +1,5 @@
 package org.specs2.runner
 
-import Runner._
 import org.specs2.specification.core._
 import org.specs2.specification.core.EnvDefault
 import org.specs2.specification.process.Stats
@@ -171,11 +170,18 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
     handleRunError(Left(t), loggers, sbtEvents(taskDef, handler))
 
   /** run a given spec structure */
-  private def specificationRun(taskDef: TaskDef, spec: SpecStructure, env: Env, handler: EventHandler, loggers: Array[Logger]): Action[Stats] =
+  private def specificationRun(taskDef: TaskDef, spec: SpecStructure, env: Env, handler: EventHandler, loggers: Array[Logger]): Action[Stats] = {
+    val customInstances = CustomInstances(arguments, loader, ConsoleLogger())
+
     for {
-      printers <- createPrinters(taskDef, handler, loggers, arguments).toAction
-      stats    <- Runner.runSpecStructure(spec, env, loader, printers)
+      printers <- createPrinters(customInstances, taskDef, handler, loggers, arguments).toAction
+      reporter <- customInstances.createCustomInstance[Reporter]( "reporter",
+        (m: String) => "a custom reporter can not be instantiated " + m, "no custom reporter defined, using the default one")
+        .map(_.getOrElse(DefaultReporter(arguments, env, printers))).toAction
+
+      stats    <- reporter.report(spec)
     } yield stats
+  }
 
   /** create a spec structure from the task definition containing the class name */
   private def createSpecStructure(taskDef: TaskDef, loader: ClassLoader, env: Env): Operation[Option[SpecStructure]] =
@@ -192,25 +198,22 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
 
 
   /** accepted printers */
-  private def createPrinters(taskDef: TaskDef, handler: EventHandler, loggers: Array[Logger], args: Arguments): Operation[List[Printer]] =
+  private def createPrinters(customInstances: CustomInstances, taskDef: TaskDef, handler: EventHandler, loggers: Array[Logger], args: Arguments): Operation[List[Printer]] = {
+    val printerFactory = PrinterFactory(arguments, env, customInstances, ConsoleLogger())
     List(
-      createSbtPrinter(handler, loggers, sbtEvents(taskDef, handler)),
-      createJUnitXmlPrinter(args, loader),
-      createHtmlPrinter(args, loader),
-      createMarkdownPrinter(args, loader),
-      createPrinter(args, loader),
-      createNotifierPrinter(args, loader)).map(_.map(_.toList)).sequence.map(_.flatten)
+      createSbtPrinter(loggers, sbtEvents(taskDef, handler), customInstances),
+      printerFactory.createJUnitXmlPrinter,
+      printerFactory.createHtmlPrinter,
+      printerFactory.createMarkdownPrinter,
+      printerFactory.createPrinter,
+      printerFactory.createNotifierPrinter).map(_.map(_.toList)).sequence.map(_.flatten)
+  }
 
-  private def createSbtPrinter(h: EventHandler, ls: Array[Logger], e: SbtEvents) = {
+  private def createSbtPrinter(loggers: Array[Logger], sbtEvents: SbtEvents, customInstances: CustomInstances) = {
     if (!printerNames.map(_.name).exists(arguments.isSet) || arguments.isSet(CONSOLE.name))
-      Operation.ok(Some {
-        new SbtPrinter {
-          lazy val handler = h
-          lazy val loggers = ls
-          lazy val events = e
-        }
-      })
-    else noInstance("no console printer defined", arguments.verbose)
+      Operation.ok(Some(SbtPrinter(env, loggers, sbtEvents)))
+    else
+      customInstances.noInstance("no console printer defined")
   }
 
   private def sbtEvents(t: TaskDef, h: EventHandler) = new SbtEvents {
