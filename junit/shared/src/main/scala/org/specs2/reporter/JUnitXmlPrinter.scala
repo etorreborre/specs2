@@ -24,7 +24,7 @@ import Folds._
 /**
  * The JUnitXmlPrinter creates an xml file with the specification execution results
  */
-class JUnitXmlPrinter(env: Env) extends Printer {
+case class JUnitXmlPrinter(env: Env) extends Printer {
   def prepare(specs: List[SpecStructure]): Action[Unit]  = Action.unit
   def finalize(specs: List[SpecStructure]): Action[Unit] = Action.unit
 

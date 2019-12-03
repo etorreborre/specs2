@@ -6,7 +6,7 @@ import execute._
 import DefaultExecutor._
 import Statistics._
 import control._
-import Control._
+import producer._, Producer._
 import specification.core.{Env, OwnEnv}
 
 class StatsSpec(val env: Env) extends Specification with OwnEnv { def is = s2"""
@@ -22,12 +22,12 @@ class StatsSpec(val env: Env) extends Specification with OwnEnv { def is = s2"""
 """
 
   def e1 = {
-    val p = one("ex1" ! ok) |> executeFragments1(ownEnv) |> statsProcess
+    val p = oneAsync("ex1" ! ok) |> executeFragments1(ownEnv) |> statsProcess
     runLast(p) must beSome(Stats(examples = 1, expectations = 1, successes = 1))
   }
 
   def e2 = {
-    val p = one("ex1" ! ok, "ex2" ! ko) |> executeFragments1(ownEnv) |> statsProcess
+    val p = emitAllAsync("ex1" ! ok, "ex2" ! ko) |> executeFragments1(ownEnv) |> statsProcess
     runLast(p) must beSome(Stats(examples = 2, expectations = 2, successes = 1, failures = 1))
   }
 

@@ -110,7 +110,7 @@ object LineComparison {
   def clipDifferences(differences: Seq[LineComparison], clipSize: Int): Seq[LineComparison] = {
     val diffs = differences.toList
 
-    emit[Operation, LineComparison](diffs).zipWithPreviousAndNextN(clipSize).flatMap {
+    emitSync(diffs).zipWithPreviousAndNextN(clipSize).flatMap {
       case (before, SameLine(l), after) if (before ++ after).exists(_.isDifference) =>
         one(sameLine(l))
 

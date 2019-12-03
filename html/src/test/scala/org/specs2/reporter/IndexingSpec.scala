@@ -7,7 +7,7 @@ import matcher.OperationMatchers._
 import html._
 import Indexing._
 import control._
-import Control._
+import producer._, Producer._
 import specification.core.{Env, OwnExecutionEnv}
 
 class IndexingSpec(val env: Env) extends Specification with OwnExecutionEnv { def is = s2"""
@@ -24,7 +24,7 @@ class IndexingSpec(val env: Env) extends Specification with OwnExecutionEnv { de
 
   def save = {
     val path = "target" / "test" / "IndexingSpec" | "index.js"
-    one(pages:_*).fold(indexFold(path).into[Action]).runAction(ee)
+    emitSeq[Action, IndexedPage](pages).fold(indexFold(path).into[Action]).runAction(ee)
 
     val expected =
     s"""|var tipuesearch = {"pages": [{"title":"page 1", "text":"content1", "tags":"tag1 tag2", "loc":"page1"},

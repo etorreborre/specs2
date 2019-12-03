@@ -14,7 +14,7 @@ class FormTextPrinterSpec(val env: Env) extends Specification with specification
   def printed = {
     val logger = LineLogger.stringLogger
     val env1 = ownEnv.setLineLogger(logger).setArguments(Arguments())
-    Reporter.report(env1, List(TextPrinter))(addressFormSpecStructure).runOption(env1.executionEnv)
+    DefaultReporter(env1.arguments, env1, List(TextPrinter.default)).report(addressFormSpecStructure).runOption(env1.executionEnv)
     logger.messages.mkString("\n") must contain(
     """|[info]   The address must be retrieved from the database with the proper street and number
        |[info]   + | Address           |

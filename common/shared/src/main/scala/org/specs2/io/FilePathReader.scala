@@ -70,8 +70,8 @@ trait FilePathReader {
   private def filePathsProcess(directory: DirectoryPath): Producer[Operation, FilePath] = {
     def go(dir: DirectoryPath): Producer[Operation, FilePath] = {
       val (files, directories) = Option(dir.toFile.listFiles).map(_.toList).getOrElse(List()).partition(_.isFile)
-      Producer.emit[Operation, FilePath](files.map(FilePath.unsafe)) append
-       Producer.emit[Operation, Producer[Operation, FilePath]](directories.map(DirectoryPath.unsafe).map(go)).flatten
+      Producer.emitSync(files.map(FilePath.unsafe)) append
+       Producer.emitSync(directories.map(DirectoryPath.unsafe).map(go)).flatten
     }
     go(directory)
   }

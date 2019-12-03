@@ -18,17 +18,17 @@ import concurrent.ExecutionEnv
 case class Fragments(contents: AsyncStream[Fragment]) {
   /** append one or several fragments to this process */
 
-  def append(other: Fragment): Fragments       = append(one[Action, Fragment](other))
+  def append(other: Fragment): Fragments       = append(oneAsync(other))
   def append(others: Seq[Fragment]): Fragments = append(Fragments(others:_*))
   def append(others: Fragments): Fragments     = append(others.contents)
-  def appendLazy(other: =>Fragment): Fragments = append(oneDelayed[Action, Fragment](other))
+  def appendLazy(other: =>Fragment): Fragments = append(oneDelayedAsync(other))
 
   /** prepend one or several fragments to this process */
 
-  def prepend(other: Fragment): Fragments       = prepend(one[Action, Fragment](other))
+  def prepend(other: Fragment): Fragments       = prepend(oneAsync(other))
   def prepend(others: Fragments): Fragments     = prepend(others.contents)
   def prepend(others: Seq[Fragment]): Fragments = prepend(Fragments(others:_*))
-  def prependLazy(other: =>Fragment): Fragments = prepend(oneDelayed[Action, Fragment](other))
+  def prependLazy(other: =>Fragment): Fragments = prepend(oneDelayedAsync(other))
 
   /** filter, map or flatMap the fragments */
 

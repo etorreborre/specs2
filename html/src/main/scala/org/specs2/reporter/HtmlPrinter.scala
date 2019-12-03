@@ -17,8 +17,7 @@ import html.TableOfContents._
 import SpecHtmlPage._
 import concurrent.ExecutionEnv
 import time.SimpleTimer
-import origami._
-import Control._
+import origami._, Folds._
 import HtmlPrinter._
 
 /**
@@ -39,8 +38,8 @@ case class HtmlPrinter(env: Env, searchPage: SearchPage, logger: Logger = Consol
 
   /** @return a SinkTask for the Html output */
   def sink(spec: SpecStructure): AsyncSink[Fragment] = {
-    ((Statistics.fold zip Fold.list[Fragment].into[Action] zip SimpleTimer.timerFold.into[Action]) <*
-     Fold.fromStart((getHtmlOptions(env.arguments) >>= (options => copyResources(env, options))).void.toAction)).mapFlatten { case ((stats, fragments), timer) =>
+    ((Statistics.fold zip list[Fragment].into[Action] zip SimpleTimer.timerFold.into[Action]) <*
+     fromStart((getHtmlOptions(env.arguments) >>= (options => copyResources(env, options))).void.toAction)).mapFlatten { case ((stats, fragments), timer) =>
       val executedSpec = spec.copy(lazyFragments = () => Fragments(fragments:_*))
       getPandoc(env).flatMap {
         case None         => printHtml(env, executedSpec, stats, timer).toAction

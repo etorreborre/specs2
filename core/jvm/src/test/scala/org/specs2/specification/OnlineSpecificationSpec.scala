@@ -19,7 +19,7 @@ class OnlineSpecificationSpec extends Specification { def is = s2"""
   def e1 = {
     def continue(n: Int): FragmentsContinuation = FragmentsContinuation { r: Result =>
       if (n == 1) None
-      else        Some(core.Fragments(one[Action, Fragment](break) append createExample(n - 1).contents))
+      else        Some(core.Fragments(oneAsync(break) append createExample(n - 1).contents))
     }
 
     def online(n: Int) = Execution(success, continue(n))

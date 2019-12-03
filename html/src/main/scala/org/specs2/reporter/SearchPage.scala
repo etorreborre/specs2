@@ -17,7 +17,7 @@ case class SearchPage(logger: Logger = ConsoleLogger()) {
   def createIndex(env: Env, specifications: List[SpecStructure], options: HtmlOptions): Operation[Unit] =
     for {
       htmlPages <- Operation.delayed(Indexing.createIndexedPages(env, specifications, options.outDir))
-      _         <- Producer.emit[Operation, IndexedPage](htmlPages).fold(Indexing.indexFold(options.indexFile))
+      _         <- Producer.emitSync(htmlPages).fold(Indexing.indexFold(options.indexFile))
       _         <- createSearchPage(env, options)
     } yield ()
 
@@ -46,4 +46,3 @@ case class SearchPage(logger: Logger = ConsoleLogger()) {
     options.outDir | "search.html"
 
 }
-

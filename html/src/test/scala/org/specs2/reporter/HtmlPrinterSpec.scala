@@ -40,11 +40,11 @@ class HtmlPrinterSpec(val env: Env) extends Specification with ActionMatchers wi
     for {
       options <- printer.getHtmlOptions(env.arguments).toAction
       _       <- printer.copyResources(env, options).toAction
-      _       <- printer.finalize(env, List(spec.structure(env)))
+      _       <- printer.finalize(List(spec.structure(env)))
     } yield ()
 
 
-  val printer = HtmlPrinter(SearchPage())
+  val printer = HtmlPrinter(env, SearchPage())
 
   val outDir = "target" / "test" / "HtmlPrinterSpec"
   val searchArguments = Arguments.split(s"html.search html.outdir ${outDir.path}")

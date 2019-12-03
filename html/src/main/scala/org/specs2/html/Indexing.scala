@@ -7,7 +7,7 @@ import org.specs2.fp._
 import org.specs2.fp.syntax._
 import control._
 import org.specs2.concurrent.ExecutionEnv
-import origami._, Fold._
+import origami._, Folds._
 
 /**
  * Fold functions to create index files

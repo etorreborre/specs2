@@ -11,9 +11,9 @@ import text.NotNullStrings._
 import scala.xml.NodeSeq
 import matcher._
 import fp.syntax._
-import origami._
 import form._
 import control._
+import origami._, Folds._
 import control.producer._
 import concurrent.ExecutionEnv
 import text.AnsiColors
@@ -42,7 +42,7 @@ trait HtmlBodyPrinter {
         case (_, f, _) => f
       }
 
-    val htmlFold = Fold.fromFoldLeft[Action, Fragment, HtmlState](("", Level())) { case ((htmlString, level), fragment) =>
+    val htmlFold = fromFoldLeft[Action, Fragment, HtmlState](("", Level())) { case ((htmlString, level), fragment) =>
       fragment.executionResult.map { result =>
         (htmlString + printFragment(fragment, result, arguments, level, options.outDir, pandoc),
           Levels.fold(fragment, level))
