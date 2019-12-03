@@ -7,7 +7,6 @@ import fp.syntax._
 import Arbitraries._
 import Fragment._
 import control._
-import Control._
 import producer._, Producer._
 import concurrent.ExecutionEnv
 

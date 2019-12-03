@@ -52,7 +52,7 @@ is formatted for JUnit reporting tools.
 
   private val factory = fragmentFactory; import factory._
 
-  val printer = JUnitXmlPrinter
+  val printer = JUnitXmlPrinter(env)
 
   object outputDir {
 
@@ -112,7 +112,9 @@ is formatted for JUnit reporting tools.
         Operation.ok(this.out = content)
     }
     val env = env1.copy(fileSystem = mockFs)
-    Reporter.report(env, List(JUnitXmlPrinter))(SpecStructure(SpecHeader(getClass)).setFragments(fs)).runOption(env1.specs2ExecutionEnv)
+    val reporter = DefaultReporter(env.arguments, env, List(printer))
+
+    reporter.report(SpecStructure(SpecHeader(getClass)).setFragments(fs)).runOption(env1.specs2ExecutionEnv)
     mockFs.out
   }
 

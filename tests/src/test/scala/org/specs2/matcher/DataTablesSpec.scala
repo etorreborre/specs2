@@ -1,13 +1,10 @@
 package org.specs2
 package matcher
 
-import org.specs2.concurrent._
-import FutureApplicative._
-
 import scala.concurrent._
 import sys._
 import execute._
-import org.specs2.specification.core.{Env, OwnExecutionEnv}
+import specification.core.{Env, OwnExecutionEnv}
 
 class DataTablesSpec(val env: Env) extends Specification with DataTables with ResultMatchers with OwnExecutionEnv { def is = s2"""
 
@@ -39,7 +36,7 @@ class DataTablesSpec(val env: Env) extends Specification with DataTables with Re
    by using an applicative result type, like `Future` and the `|@` operator                                  $applicative3
    `|@>` can be used to specify concurrent execution + `play`                                                $applicative4
    A call to |* with a previous |> will also execute the table                                               $applicative5
-                                                                                                              
+
  Even if the execution is concurrent you will get the errors corresponding to each row                       $applicative6
 
                                                                                                              """
@@ -200,4 +197,3 @@ class InAMutableContext extends MustThrownMatchers with DataTables {
     "a" | "b"    |>
      1  ! 2      | { (a, b) =>  a must_== b }
 }
-

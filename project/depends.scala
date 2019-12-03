@@ -50,7 +50,7 @@ object depends {
   lazy val junit    = "junit"        % "junit"         % "4.12"
   lazy val hamcrest = "org.hamcrest" % "hamcrest-core" % "2.2"
 
-  lazy val pegdown = Def.setting { "org.pegdown" %%% "pegdown" % "1.6.0" }
+  lazy val pegdown = Def.setting { "org.pegdown" % "pegdown" % "1.6.0" }
 
   lazy val tagsoup = "org.ccil.cowan.tagsoup" % "tagsoup" % "1.2.1"
 

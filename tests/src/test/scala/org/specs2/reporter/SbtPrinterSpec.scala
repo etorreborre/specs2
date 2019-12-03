@@ -52,7 +52,7 @@ class SbtPrinterSpec(val env: Env) extends Spec with OwnEnv { def is = s2"""
     }
 
     def print(spec: SpecStructure) = {
-      printer.print(Env(arguments = Arguments("nocolor")))(spec).runAction(ownEnv.specs2ExecutionEnv)
+      printer.print(spec).runAction(ownEnv.specs2ExecutionEnv)
       stringLogger.flush()
       stringLogger.messages.mkString("\n")
     }
@@ -69,27 +69,24 @@ class SbtPrinterSpec(val env: Env) extends Spec with OwnEnv { def is = s2"""
       def info(msg: String): Unit =  { append(msg) }
     }
 
-    val printer = new SbtPrinter {
-      lazy val loggers: Array[Logger] = Array(logger, stringLogger)
-      lazy val events = new SbtEvents {
-        lazy val handler = outer.handler
-        lazy val taskDef = new TaskDef("", Fingerprints.fp1, true, Array())
-      }
+    lazy val events = new SbtEvents {
+      lazy val handler = outer.handler
+      lazy val taskDef = new TaskDef("", Fingerprints.fp1, true, Array())
     }
+    val env = Env(arguments = Arguments("nocolor"))
+    val printer = SbtPrinter(env, Array(logger, stringLogger), events)
 
   }
 
   case class printer2() extends Mockito { outer =>
     val logger =  mock[Logger]
     val handler = mock[EventHandler]
-
-    val printer = new SbtPrinter {
-      lazy val loggers = Array(logger)
-      lazy val events = new SbtEvents {
-        lazy val handler = outer.handler
-        lazy val taskDef = new TaskDef("", Fingerprints.fp1, true, Array())
-      }
+    lazy val events = new SbtEvents {
+      lazy val handler = outer.handler
+      lazy val taskDef = new TaskDef("", Fingerprints.fp1, true, Array())
     }
+
+    val printer = SbtPrinter(env, Array(logger), events)
 
     def e1 = {
       executeAndPrintHelloWorldUnitSpec
@@ -108,7 +105,7 @@ class SbtPrinterSpec(val env: Env) extends Spec with OwnEnv { def is = s2"""
 
     def executeAndPrintHelloWorldUnitSpec = {
       val executed = DefaultExecutor.executeSpec((new HelloWorldUnitSpec).is.fragments, env)
-      printer.print(env)(executed).runAction(env.specs2ExecutionEnv)
+      printer.print(executed).runAction(env.specs2ExecutionEnv)
     }
 
   }

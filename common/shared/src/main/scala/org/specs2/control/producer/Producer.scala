@@ -641,10 +641,22 @@ trait Producers {
   def one[F[_] : Monad : Safe, A](a: A): Producer[F, A] =
     Producer[F, A](Monad[F].pure(One(a)))
 
-  def oneDelayed[F[_] : Monad : Safe, A](e: =>A): Producer[F, A] =
-    oneAction(Monad[F].pure(e))
+  def oneAsync[A](a: A): Producer[Action, A] =
+    one[Action, A](a)
 
-  def oneAction[F[_] : Monad : Safe, A](e: F[A]): Producer[F, A] =
+  def oneSync[A](a: A): Producer[Operation, A] =
+    one[Operation, A](a)
+
+  def oneDelayed[F[_] : Monad : Safe, A](e: =>A): Producer[F, A] =
+    oneEval(Monad[F].pure(e))
+
+  def oneDelayedAsync[A](e: =>A): Producer[Action, A] =
+    oneDelayed[Action, A](e)
+
+  def oneDelayedSync[A](e: =>A): Producer[Operation, A] =
+    oneDelayed[Operation, A](e)
+
+  def oneEval[F[_] : Monad : Safe, A](e: F[A]): Producer[F, A] =
     Producer[F, A](e.flatMap(a => one[F, A](a).run))
 
   def oneOrMore[F[_] : Monad : Safe, A](a: A, as: List[A]): Producer[F, A] =
@@ -663,16 +675,34 @@ trait Producers {
       case a :: as  => oneOrMore(a, as)
     }
 
+  def emitAsync[A](elements: List[A]): Producer[Action, A] =
+    emit[Action, A](elements)
+
+  def emitSync[A](elements: List[A]): Producer[Operation, A] =
+    emit[Operation, A](elements)
+
   def emitSeq[F[_] : Monad : Safe, A](elements: Seq[A]): Producer[F, A] =
     elements.headOption match {
       case None    => done[F, A]
       case Some(a) => Producer(Monad[F].pure(More[F, A](elements.headOption.toList, emitSeq(elements.tail))))
     }
 
+  def emitSeqAsync[A](elements: Seq[A]): Producer[Action, A] =
+    emitSeq[Action, A](elements)
+
+  def emitSeqSync[A](elements: Seq[A]): Producer[Operation, A] =
+    emitSeq[Operation, A](elements)
+
   def emitAll[F[_] : Monad : Safe, A](elements: A*): Producer[F, A] =
     emitSeq(elements)
 
-  def eval[F[_] : Monad : Safe, A](a: F[A]): Producer[F, A] =
+  def emitAllAsync[A](elements: A*): Producer[Action, A] =
+    emitSeq[Action, A](elements)
+
+  def emitAllSync[A](elements: A*): Producer[Operation, A] =
+    emitSeq[Operation, A](elements)
+
+    def eval[F[_] : Monad : Safe, A](a: F[A]): Producer[F, A] =
     Producer(a.map(One(_)))
 
   def evalProducer[F[_] : Monad : Safe, A](a: F[Producer[F, A]]): Producer[F, A] =

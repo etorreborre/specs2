@@ -2,8 +2,8 @@ package org.specs2
 package matcher
 
 import execute._
+import fp._, syntax._
 import specification.core.Env
-
 import scala.concurrent._
 import duration._
 import runner._
@@ -81,7 +81,7 @@ class FutureMatchersSpec extends Specification with ResultMatchers with specific
       }
     }
 
-    ClassRunner.report(env)(thrown).runOption(env.specs2ExecutionEnv).get.failures === 1
+    ClassRunner.createClassRunner(env.arguments, env).flatMap(_.run(thrown)).runOption(env.specs2ExecutionEnv).get.failures === 1
   }
 
   def e4 = {

@@ -112,15 +112,11 @@ class JUnitReporterSpec(val env: Env) extends Specification with Mockito with Ow
 
     def run(f: Fragment)(env: Env): Unit = run(Fragments(f))(env)
     def run(fs: Fragments)(env: Env): Unit = run(SpecStructure.create(SpecHeader(getClass), Arguments(), fs))(env)
-    
+
     def run(spec: SpecStructure)(env: Env): Unit = {
-      val reporter = Reporter
-      val junitPrinter: Printer = new JUnitPrinter {
-        def notifier = outer.notifier
-        def descriptions = JUnitDescriptions.fragmentDescriptions(spec)(env.specs2ExecutionEnv)
-        def description = JUnitDescriptions.specDescription(spec)
-      }
-      reporter.report(env, List(junitPrinter))(spec) must beOk
+      val junitPrinter: Printer = JUnitPrinter(env, outer.notifier)
+      val reporter = DefaultReporter(env.arguments, env, List(junitPrinter))
+      reporter.report(spec) must beOk
       ()
     }
   }
