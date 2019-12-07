@@ -53,7 +53,7 @@ case class DefaultReporter(arguments: Arguments, env: Env, printers: List[Printe
    */
   def reportOne(spec: SpecStructure): Action[Stats] = {
     val env1 = env.setArguments(env.arguments.overrideWith(spec.arguments))
-    val executing = readStats(spec, env1) |> env1.selector.select(env1) |> env1.executor.execute(env1)
+    val executing = readStats(spec, env1) |> env1.selector.select |> env1.executor.execute(env1)
 
     val contents: AsyncStream[Fragment] =
       // evaluate all fragments before reporting if required

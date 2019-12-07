@@ -163,7 +163,7 @@ object SpecStructure {
 
   /** @return select only the fragments according to the current arguments */
   def select(env: Env)(spec: SpecStructure): SpecStructure =
-    spec.map(fs => fs |> DefaultSelector.select(env))
+    spec.map(fs => fs |> DefaultSelector(env.arguments).select)
 
   private def selected(env: Env)(spec: SpecStructure): List[Fragment] =
     select(env)(spec).fragments.fragments.runMonoid(env.specs2ExecutionEnv)
