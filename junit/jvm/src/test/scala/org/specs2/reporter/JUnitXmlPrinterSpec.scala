@@ -112,7 +112,7 @@ is formatted for JUnit reporting tools.
         Operation.ok(this.out = content)
     }
     val env = env1.copy(fileSystem = mockFs)
-    val reporter = DefaultReporter(env.arguments, env, List(printer))
+    val reporter = Reporter.create(List(printer), env)
 
     reporter.report(SpecStructure(SpecHeader(getClass)).setFragments(fs)).runOption(env1.specs2ExecutionEnv)
     mockFs.out

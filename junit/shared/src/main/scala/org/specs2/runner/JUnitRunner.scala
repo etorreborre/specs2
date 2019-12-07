@@ -7,7 +7,7 @@ import main._
 import fp.syntax._
 import control._
 import specification.core._
-import specification.process.Stats
+import specification.process._
 import reporter._
 import scala.util.control.NonFatal
 
@@ -64,7 +64,7 @@ class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterab
       printers <- printerFactory.createPrinters.toAction
       reporter <- customInstances.createCustomInstance[Reporter]( "reporter",
            (m: String) => "a custom reporter can not be instantiated " + m, "no custom reporter defined, using the default one")
-           .map(_.getOrElse(DefaultReporter(arguments, env, junitPrinter +: printers))).toAction
+           .map(_.getOrElse(Reporter.create(junitPrinter +: printers, env))).toAction
       stats <- reporter.report(specStructure)
      } yield stats
   }

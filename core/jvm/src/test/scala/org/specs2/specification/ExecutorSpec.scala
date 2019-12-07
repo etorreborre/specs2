@@ -224,15 +224,15 @@ class ExecutorSpec(val env: Env) extends Specification with ThrownExpectations w
   lazy val factory = fragmentFactory
 
   def execute(fragments: Fragments, env: Env): List[Result] =
-    DefaultExecutor.execute(env)(fragments.contents).runList.
+    DefaultExecutor(env).execute(fragments.contents).runList.
       runOption(env.executionEnv).toList.flatten.traverse(_.executionResult).run(env.executionEnv)
 
   def executionTimes(fragments: Fragments, env: Env): List[String] =
-    DefaultExecutor.execute(env)(fragments.contents).runList.
+    DefaultExecutor(env).execute(fragments.contents).runList.
       runOption(env.executionEnv).toList.flatten.traverse(_.executedResult.map(_.timer.time)).run(env.executionEnv)
 
   def executions(fragments: Fragments, env: Env): List[Execution] =
-    DefaultExecutor.execute(env)(fragments.contents).runList.
+    DefaultExecutor(env).execute(fragments.contents).runList.
       runOption(env.executionEnv).toList.flatten.map(_.execution)
 
   case class Results() {

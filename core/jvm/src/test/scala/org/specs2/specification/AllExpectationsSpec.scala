@@ -69,7 +69,7 @@ class AllExpectationsSpec(val env: Env) extends Spec with OwnEnv {
   def stats(spec: ContextualSpecificationStructure)(args: Arguments): Stats = {
     // all the executions need to be sequential
     val env1 = ownEnv.setArguments(args <| sequential)
-    val executed = DefaultExecutor.executeSpec(spec.structure(env1) |> DefaultSelector.select(env1), env1)
+    val executed = DefaultExecutor.executeSpec(spec.structure(env1) |> DefaultSelector(env1.arguments).select, env1)
     Statistics.runStats(executed)(env1.executionEnv)
   }
 

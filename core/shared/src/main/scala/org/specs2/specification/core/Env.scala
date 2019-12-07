@@ -8,7 +8,7 @@ import concurrent.ExecutionEnv
 import reporter.LineLogger
 import io._
 import control._
-import process.{Executor, Selector, StatisticsRepository}
+import process.{StatisticsRepository}
 import reflect._
 
 import scala.concurrent.duration.FiniteDuration
@@ -25,8 +25,6 @@ import scala.concurrent.duration.FiniteDuration
 case class Env(
   arguments:           Arguments,
   systemLogger:        Logger,
-  selectorInstance:    Arguments => Selector,
-  executorInstance:    Arguments => Executor,
   lineLogger:          LineLogger,
   statsRepository:     Arguments => StatisticsRepository,
   random:              scala.util.Random,
@@ -39,10 +37,6 @@ case class Env(
 
   lazy val statisticsRepository: StatisticsRepository =
     statsRepository(arguments)
-
-  lazy val selector = selectorInstance(arguments)
-
-  lazy val executor = executorInstance(arguments)
 
   def executionContext =
     executionEnv.executionContext
@@ -101,8 +95,6 @@ object Env {
   def apply(
     arguments:           Arguments                         = EnvDefault.default.arguments,
     systemLogger:        Logger                            = EnvDefault.default.systemLogger,
-    selectorInstance:    Arguments => Selector             = EnvDefault.default.selectorInstance,
-    executorInstance:    Arguments => Executor             = EnvDefault.default.executorInstance,
     lineLogger:          LineLogger                        = EnvDefault.default.lineLogger,
     statsRepository:     Arguments => StatisticsRepository = EnvDefault.default.statsRepository,
     random:              scala.util.Random                 = EnvDefault.default.random,
@@ -113,8 +105,6 @@ object Env {
     Env(
       arguments,
       systemLogger,
-      selectorInstance,
-      executorInstance,
       lineLogger,
       statsRepository,
       random,
