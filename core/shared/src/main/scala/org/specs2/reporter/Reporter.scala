@@ -33,7 +33,7 @@ trait Reporter {
 /**
  * Default implementation of a Reporter using specs2 Printers
  */
-case class DefaultReporter(arguments: Arguments, env: Env, printers: List[Printer]) extends Reporter {
+case class DefaultReporter(selector: Selector, executor: Executor, printers: List[Printer], env: Env) extends Reporter {
 
   def report(specs: List[SpecStructure]): Action[Stats] = for {
     _     <- prepare(specs)
@@ -53,7 +53,7 @@ case class DefaultReporter(arguments: Arguments, env: Env, printers: List[Printe
    */
   def reportOne(spec: SpecStructure): Action[Stats] = {
     val env1 = env.setArguments(env.arguments.overrideWith(spec.arguments))
-    val executing = readStats(spec, env1) |> env1.selector.select |> env1.executor.execute(env1)
+    val executing = readStats(spec, env1) |> selector.select |> executor.execute
 
     val contents: AsyncStream[Fragment] =
       // evaluate all fragments before reporting if required
@@ -92,6 +92,17 @@ case class DefaultReporter(arguments: Arguments, env: Env, printers: List[Printe
       else            env1.statisticsRepository.storeStatistics(spec.specClassName, stats).toAction
 
     (Statistics.fold <* fromStart(prepare) <* sink).mapFlatten(last)
+  }
+
+}
+
+object Reporter {
+
+  def create(printers: List[Printer], env: Env): Reporter = {
+    val arguments = env.arguments
+    val selector = Arguments.instance(arguments.select.selector).getOrElse(DefaultSelector(arguments))
+    val executor = Arguments.instance(arguments.execute.executor).getOrElse(DefaultExecutor(env))
+    DefaultReporter(selector, executor, printers, env)
   }
 
 }

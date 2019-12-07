@@ -7,8 +7,7 @@ import specification.core._
 import scala.concurrent._
 import duration._
 import control._
-import producer._
-import Producer._
+import producer._, Producer._
 import fp.syntax._
 
 /**
@@ -26,7 +25,7 @@ trait Executor {
    *  - filter the ones that the user wants to keep
    *  - sequence the execution so that only parts in between steps are executed concurrently
    */
-  def execute(env: Env): AsyncTransducer[Fragment, Fragment]
+  def execute: AsyncTransducer[Fragment, Fragment]
 }
 
 /**
@@ -35,7 +34,7 @@ trait Executor {
  *  - concurrent by default
  *  - using steps for synchronisation points
  */
-trait DefaultExecutor extends Executor {
+case class DefaultExecutor(env: Env) extends Executor {
 
   /**
    * execute fragments:
@@ -43,8 +42,8 @@ trait DefaultExecutor extends Executor {
    *  - filter the ones that the user wants to keep
    *  - sequence the execution so that only parts in between steps are executed concurrently
    */
-  def execute(env: Env): AsyncTransducer[Fragment, Fragment] = { contents: AsyncStream[Fragment] =>
-    sequencedExecution(env)(contents).flatMap(executeOnline(env))
+  def execute: AsyncTransducer[Fragment, Fragment] = { contents: AsyncStream[Fragment] =>
+    sequencedExecution(contents).flatMap(executeOnline)
   }
 
   /**
@@ -57,7 +56,7 @@ trait DefaultExecutor extends Executor {
    *
    *  - the execution stops if one fragment indicates that the result of the previous executions is not correct
    */
-  def sequencedExecution(env: Env): AsyncTransducer[Fragment, Fragment] = { (p: AsyncStream[Fragment]) =>
+  def sequencedExecution: AsyncTransducer[Fragment, Fragment] = { (p: AsyncStream[Fragment]) =>
     type S = (Vector[Fragment], Vector[Fragment], Option[Fragment])
     val init: S = (Vector.empty, Vector.empty, None)
     val arguments = env.arguments
@@ -96,19 +95,19 @@ trait DefaultExecutor extends Executor {
   }
 
   /** execute one fragment */
-  def executeFragment(env: Env, timeout: Option[FiniteDuration] = None)(fragment: Fragment): Fragment =
-    fragment.updateExecution(executeExecution(env, timeout))
+  def executeFragment(timeout: Option[FiniteDuration] = None)(fragment: Fragment): Fragment =
+    fragment.updateExecution(executeExecution(timeout))
 
   /** execute one Execution */
-  def executeExecution(env: Env, timeout: Option[FiniteDuration] = None)(execution: Execution): Execution =
+  def executeExecution(timeout: Option[FiniteDuration] = None)(execution: Execution): Execution =
     timeout.fold(execution)(t => execution.setTimeout(t)).startExecution(env)
 
-  def executeOnline(env: Env)(fragment: Fragment): AsyncStream[Fragment] =
+  def executeOnline(fragment: Fragment): AsyncStream[Fragment] =
     fragment.execution.continuation match {
       case Some(continue) =>
         Producer.evalProducer(fragment.executionResult.map { result =>
           continue(result).fold(oneDelayed[Action, Fragment](fragment))(
-            fs => oneDelayed[Action, Fragment](fragment) append execute(env)(fs.contents))
+            fs => oneDelayed[Action, Fragment](fragment) append execute(fs.contents))
         })
 
       case None => oneDelayed(fragment)
@@ -118,10 +117,10 @@ trait DefaultExecutor extends Executor {
 /**
  * helper functions for executing fragments
  */
-object DefaultExecutor extends DefaultExecutor {
+object DefaultExecutor {
 
   def executeSpec(spec: SpecStructure, env: Env): SpecStructure = {
-    spec.|>((contents: AsyncStream[Fragment]) => contents |> sequencedExecution(env))
+    spec.|>((contents: AsyncStream[Fragment]) => contents |> DefaultExecutor(env).sequencedExecution)
   }
 
   def runSpec(spec: SpecStructure, env: Env): List[Fragment] =
@@ -158,9 +157,9 @@ object DefaultExecutor extends DefaultExecutor {
 
   /** only to be used in tests */
   def executeSeq(seq: Seq[Fragment])(env: Env): List[Fragment] =
-    (emitSeq[Action, Fragment](seq) |> sequencedExecution(env)).runList.runMonoid(env.specs2ExecutionEnv)
+    (emitSeq[Action, Fragment](seq) |> DefaultExecutor(env).sequencedExecution).runList.runMonoid(env.specs2ExecutionEnv)
 
   /** synchronous execution with a specific environment */
   def executeFragments1(env: Env): AsyncTransducer[Fragment, Fragment] = (p: AsyncStream[Fragment]) =>
-    p.map(executeFragment(env))
+    p.map(DefaultExecutor(env).executeFragment())
 }

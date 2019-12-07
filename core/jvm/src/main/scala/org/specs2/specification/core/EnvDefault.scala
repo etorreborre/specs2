@@ -16,8 +16,6 @@ object EnvDefault {
     Env(
       arguments           = Arguments(),
       systemLogger        = ConsoleLogger(),
-      selectorInstance    = (arguments: Arguments) => Arguments.instance(arguments.select.selector).getOrElse(DefaultSelector(arguments)),
-      executorInstance    = (arguments: Arguments) => Arguments.instance(arguments.execute.executor).getOrElse(DefaultExecutor),
       lineLogger          = NoLineLogger,
       statsRepository     = (arguments: Arguments) => StatisticsRepositoryCreation.file(arguments.commandLine.directoryOr("stats.outdir", "target" / "specs2-reports" / "stats")),
       random              = new scala.util.Random,

@@ -3,7 +3,7 @@ package runner
 
 import control._
 import io.StringOutput
-import specification.process.Stats
+import specification.process._
 import specification.core._
 import reporter._
 import main.Arguments
@@ -85,7 +85,7 @@ trait ClassRunnerMain {
       printers <- printerFactory.createPrinters.toAction
       reporter <- customInstances.createCustomInstance[Reporter]( "reporter",
         (m: String) => "a custom reporter can not be instantiated " + m, "no custom reporter defined, using the default one")
-        .map(_.getOrElse(DefaultReporter(arguments, env, printers))).toAction
+        .map(_.getOrElse(Reporter.create(printers, env))).toAction
       classRunner = DefaultClassRunner(arguments, reporter, specFactory, env)
      } yield classRunner
 
@@ -109,11 +109,12 @@ object TextRunner extends ClassRunnerMain {
     val env1 = env.setLineLogger(logger).setArguments(env.arguments.overrideWith(arguments))
     val loader = Thread.currentThread.getContextClassLoader
     val customInstances = CustomInstances(arguments, loader, StringOutputLogger(logger))
+
     val action =
       for {
         reporter <- customInstances.createCustomInstance[Reporter]( "reporter",
           (m: String) => "a custom reporter can not be instantiated " + m, "no custom reporter defined, using the default one")
-          .map(_.getOrElse(DefaultReporter(arguments, env, List(TextPrinter(env1))))).toAction
+          .map(_.getOrElse(Reporter.create(List(TextPrinter(env1)), env1))).toAction
         stats <- reporter.report(spec.structure(env1))
        } yield stats
 

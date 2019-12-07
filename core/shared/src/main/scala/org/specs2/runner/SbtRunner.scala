@@ -2,7 +2,7 @@ package org.specs2.runner
 
 import org.specs2.specification.core._
 import org.specs2.specification.core.EnvDefault
-import org.specs2.specification.process.Stats
+import org.specs2.specification.process._
 import sbt.testing.{Runner=>_,_}
 import org.specs2.main._
 import org.specs2.reporter._
@@ -172,12 +172,14 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
   /** run a given spec structure */
   private def specificationRun(taskDef: TaskDef, spec: SpecStructure, env: Env, handler: EventHandler, loggers: Array[Logger]): Action[Stats] = {
     val customInstances = CustomInstances(arguments, loader, ConsoleLogger())
+    val selector = Arguments.instance(arguments.select.selector).getOrElse(DefaultSelector(arguments))
+    val executor = Arguments.instance(arguments.execute.executor).getOrElse(DefaultExecutor(env))
 
     for {
       printers <- createPrinters(customInstances, taskDef, handler, loggers, arguments).toAction
       reporter <- customInstances.createCustomInstance[Reporter]( "reporter",
         (m: String) => "a custom reporter can not be instantiated " + m, "no custom reporter defined, using the default one")
-        .map(_.getOrElse(DefaultReporter(arguments, env, printers))).toAction
+        .map(_.getOrElse(DefaultReporter(selector, executor, printers, env))).toAction
 
       stats    <- reporter.report(spec)
     } yield stats

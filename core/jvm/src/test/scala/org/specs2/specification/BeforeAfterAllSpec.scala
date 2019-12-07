@@ -77,7 +77,7 @@ class BeforeAfterAllSpec extends Specification { def is = s2"""
 
   def runSpec(s: SpecificationStructure, arguments: Arguments = Arguments()) = {
     val env = Env(arguments = arguments, lineLogger = NoLineLogger)
-    try DefaultReporter(arguments, env, Nil).report(s.structure(env)).runVoid(env.executionEnv)
+    try Reporter.create(Nil, env).report(s.structure(env)).runVoid(env.executionEnv)
     finally env.shutdown
   }
 
