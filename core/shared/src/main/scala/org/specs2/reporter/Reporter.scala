@@ -12,21 +12,21 @@ import Statistics._
 import main.Arguments
 
 /**
- * A reporter is responsible for
- *  - selecting printers based on the command-line arguments
- *  - executing the specification
- *  - passing it to each printer for printing
+ * A reporter executes a list of specification and return statistics
+ * representing the execution results.
  *
- * It is also responsible for saving the specification state at the end of the run
+ * A full list of specification is passed instead of just one specification because
+ * it gives the possibility to the reporter to prepare and finalize the reporting
+ * according to the needs of each Printer (see the Printer doc)
  */
 
 trait Reporter {
 
-  def prepare(specs: List[SpecStructure]): Action[Unit]
+  def report(specs: List[SpecStructure]): Action[Stats]
 
-  def finalize(specs: List[SpecStructure] ):  Action[Unit]
-
-  def report(spec: SpecStructure): Action[Stats]
+  /** convenience method to execute several specifications as varargs */
+  def report(specs: SpecStructure*): Action[Stats] =
+    report(specs.toList)
 
 }
 
@@ -34,6 +34,12 @@ trait Reporter {
  * Default implementation of a Reporter using specs2 Printers
  */
 case class DefaultReporter(arguments: Arguments, env: Env, printers: List[Printer]) extends Reporter {
+
+  def report(specs: List[SpecStructure]): Action[Stats] = for {
+    _     <- prepare(specs)
+    stats <- specs.traverse(reportOne)
+    _     <- finalize(specs)
+  } yield stats.suml
 
   def prepare(specs: List[SpecStructure]): Action[Unit] =
     printers.traverse(_.prepare(specs)).void
@@ -45,7 +51,7 @@ case class DefaultReporter(arguments: Arguments, env: Env, printers: List[Printe
    * report 1 spec structure with the given printers
    * first find and sort the referenced specifications and report them
    */
-  def report(spec: SpecStructure): Action[Stats] = {
+  def reportOne(spec: SpecStructure): Action[Stats] = {
     val env1 = env.setArguments(env.arguments.overrideWith(spec.arguments))
     val executing = readStats(spec, env1) |> env1.selector.select(env1) |> env1.executor.execute(env1)
 

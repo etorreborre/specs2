@@ -37,10 +37,8 @@ case class DefaultClassRunner(arguments: Arguments, reporter: Reporter, specFact
         for {
           ss       <- specFactory.createLinkedSpecs(specStructure).toAction
           sorted   <- Action.pure(SpecStructure.topologicalSort(ss)(env.specs2ExecutionEnv).getOrElse(ss))
-          _        <- reporter.prepare(sorted.toList)
-          stats    <- sorted.toList.map(reporter.report).sequence
-          _        <- reporter.finalize(sorted.toList)
-        } yield stats.foldMap(identity _)
+          stats    <- reporter.report(sorted.toList)
+        } yield stats
       } else reporter.report(specStructure)
     } yield stats
 
