@@ -43,7 +43,7 @@ case class Producer[F[_] : Monad : Safe, A](run: F[Stream[F, A]]) {
     cata(
       done[F, B],
       (a: A) => f(a),
-      (as: List[A], next: Producer[F, A]) => as.map(f).foldMap(identity) append next.flatMap(f))
+      (as: List[A], next: Producer[F, A]) => as.map(f).suml append next.flatMap(f))
 
   def map[B](f: A => B): Producer[F, B] =
     flatMap(a => one(f(a)))

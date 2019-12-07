@@ -50,7 +50,7 @@ trait FilesRunner {
       cr    <- ClassRunner.createClassRunner(args, env)
       stats <- ss.toList.traverse(cr.run)
       _     <- afterExecution(ss, isVerbose(args), logger).toAction
-    } yield stats.foldMap(identity _)
+    } yield stats.suml
   }
 
   /** sort the specifications in topological order where specification i doesn't depend on specification j if i > j == dependents first */
