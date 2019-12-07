@@ -10,6 +10,7 @@ import Producer._
 import data._
 import specification.core._
 import Fragment._
+import main.Arguments
 
 /**
  * Selection function for Fragment processes
@@ -17,7 +18,7 @@ import Fragment._
 trait Selector {
 
   /** select fragments by name, markers and previous execution */
-  def select(env: Env): AsyncTransducer[Fragment, Fragment]
+  def select: AsyncTransducer[Fragment, Fragment]
 
 }
 
@@ -28,15 +29,15 @@ trait Selector {
  *  - filter based on the tags
  *  - filter based on previous execution
  */
-trait DefaultSelector extends Selector {
+case class DefaultSelector(arguments: Arguments) extends Selector {
 
   /** select fragments by name, markers and previous execution */
-  def select(env: Env): AsyncTransducer[Fragment, Fragment] =
-    filterByName(env: Env) |> filterByMarker(env) |> filterByPrevious(env)
+  def select: AsyncTransducer[Fragment, Fragment] =
+    filterByName |> filterByMarker |> filterByPrevious
 
   /** filter fragments by name */
-  def filterByName(env: Env): AsyncTransducer[Fragment, Fragment] = { p: AsyncStream[Fragment] =>
-    val regex = env.arguments.ex
+  def filterByName: AsyncTransducer[Fragment, Fragment] = { p: AsyncStream[Fragment] =>
+    val regex = arguments.ex
     if (regex !=".*")
       p.filter {
         case Fragment(Text(t),e,_) if e.isExecutable => t matchesSafely regex
@@ -55,8 +56,7 @@ trait DefaultSelector extends Selector {
    * - if the marker applies to the previous or next fragment
    * - if there is an irrelevant empty text between the marker and the fragment it applies to
    */
-  def filterByMarker(env: Env): AsyncTransducer[Fragment, Fragment] = { p: AsyncStream[Fragment] =>
-    val arguments = env.arguments
+  def filterByMarker: AsyncTransducer[Fragment, Fragment] = { p: AsyncStream[Fragment] =>
 
     def go: AsyncTransducer[Fragment, Fragment] = (p1: AsyncStream[Fragment]) =>
       p1.state[Option[Fragment], List[NamedTag]](Nil) {
@@ -187,10 +187,14 @@ trait DefaultSelector extends Selector {
   /**
    * filter fragments by previous execution and required status
    */
-  def filterByPrevious(env: Env): AsyncTransducer[Fragment, Fragment] = (p: AsyncStream[Fragment]) =>
-    if (env.arguments.wasIsDefined) p.filter((_: Fragment).was(env.arguments.was))
+  def filterByPrevious: AsyncTransducer[Fragment, Fragment] = (p: AsyncStream[Fragment]) =>
+    if (arguments.wasIsDefined) p.filter((_: Fragment).was(arguments.was))
     else p
 
 }
 
-object DefaultSelector extends DefaultSelector
+object Selector {
+
+  val default: Selector =
+    DefaultSelector(Arguments())
+}
