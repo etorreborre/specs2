@@ -3,6 +3,8 @@ package specification
 
 import core._
 import process._
+import control._
+import producer._, Producer._
 import execute.Result
 import matcher._
 import main.Arguments
@@ -175,14 +177,15 @@ class SelectorSpec(ee: ExecutionEnv) extends script.Specification with Groups wi
   "by previous" - new group {
     eg := {
       val repo = StatisticsRepositoryCreation.memory
-      val env = Env(arguments = Arguments.split("was x")).setStatisticRepository(repo)
+      val arguments = Arguments.split("was x")
+      val env = Env(arguments = arguments).setStatisticRepository(repo)
 
       repo.storeResult(getClass.getName, Text("e1"), org.specs2.execute.Failure("failed")).runOption
 
       val fragments = Fragments(
         ex("e1"),
         ex("e2")
-      ).flatMap(Statistics.readStats(getClass.getName, env))
+      ).flatMap(f => eval[Action, Fragment](DefaultStatistics(arguments, repo).readStats(getClass.getName)(f).toAction))
 
       check(fragments, expected = Seq("e1"), unexpected = Seq("e2"))(env)
     }

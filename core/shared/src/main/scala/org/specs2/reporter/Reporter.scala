@@ -8,7 +8,7 @@ import origami._, Folds._
 import specification._
 import specification.process._
 import core._
-import Statistics._
+import control._
 import main.Arguments
 
 /**
@@ -33,7 +33,7 @@ trait Reporter {
 /**
  * Default implementation of a Reporter using specs2 Printers
  */
-case class DefaultReporter(selector: Selector, executor: Executor, printers: List[Printer], env: Env) extends Reporter {
+case class DefaultReporter(statistics: Statistics, selector: Selector, executor: Executor, printers: List[Printer], env: Env) extends Reporter {
 
   def report(specs: List[SpecStructure]): Action[Stats] = for {
     _     <- prepare(specs)
@@ -53,7 +53,7 @@ case class DefaultReporter(selector: Selector, executor: Executor, printers: Lis
    */
   def reportOne(spec: SpecStructure): Action[Stats] = {
     val env1 = env.setArguments(env.arguments.overrideWith(spec.arguments))
-    val executing = readStats(spec, env1) |> selector.select |> executor.execute
+    val executing = statistics.readStats(spec) |> selector.select |> executor.execute
 
     val contents: AsyncStream[Fragment] =
       // evaluate all fragments before reporting if required
@@ -100,9 +100,11 @@ object Reporter {
 
   def create(printers: List[Printer], env: Env): Reporter = {
     val arguments = env.arguments
+    val statsRepository = StatisticsRepositoryCreation.memory
+    val statistics = DefaultStatistics(arguments, statsRepository)
     val selector = Arguments.instance(arguments.select.selector).getOrElse(DefaultSelector(arguments))
     val executor = Arguments.instance(arguments.execute.executor).getOrElse(DefaultExecutor(env))
-    DefaultReporter(selector, executor, printers, env)
+    DefaultReporter(statistics, selector, executor, printers, env)
   }
 
 }

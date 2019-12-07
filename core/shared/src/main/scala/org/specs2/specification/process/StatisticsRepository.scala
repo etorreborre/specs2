@@ -14,7 +14,26 @@ import scala.collection.mutable.HashMap
  *
  * The actual store might be on disk on in-memory
  */
-case class StatisticsRepository(store: Store) {
+trait StatisticsRepository {
+  /** get the latest statistics for a given specification */
+  def getStatistics(specClassName: String): Operation[Option[Stats]]
+
+  /** get the latest statistics for a given specification, or return a default value */
+  def getStatisticsOr(specClassName: String, stats: Stats): Operation[Stats]
+
+  /** store the final statistics for a given specification */
+  def storeStatistics(specClassName: String, stats: Stats): Operation[Unit]
+
+  def storeResult(specClassName: String, description: Description, result: Result): Operation[Unit]
+
+  /** @return the previous executed result of an example */
+  def previousResult(specClassName: String, d: Description): Operation[Option[Result]]
+
+  /** remove all previously stored statistics */
+  def resetStatistics: Operation[Unit]
+}
+
+case class DefaultStatisticsRepository(store: Store) extends StatisticsRepository {
   /** get the latest statistics for a given specification */
   def getStatistics(specClassName: String): Operation[Option[Stats]] =
     store.get(SpecificationStatsKey(specClassName))

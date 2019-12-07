@@ -23,31 +23,28 @@ import scala.concurrent.duration.FiniteDuration
  *       to be shutdown at the end of the execution
  */
 case class Env(
-  arguments:           Arguments,
-  systemLogger:        Logger,
-  lineLogger:          LineLogger,
-  statsRepository:     Arguments => StatisticsRepository,
-  random:              scala.util.Random,
-  fileSystem:          FileSystem,
-  executionParameters: ExecutionParameters,
-  customClassLoader:   Option[ClassLoader],
-  classLoading:        ClassLoading,
-  executionEnv:        ExecutionEnv,
-  specs2ExecutionEnv:  ExecutionEnv) {
+  arguments:            Arguments,
+  systemLogger:         Logger,
+  lineLogger:           LineLogger,
+  statisticsRepository: StatisticsRepository,
+  random:               scala.util.Random,
+  fileSystem:           FileSystem,
+  executionParameters:  ExecutionParameters,
+  customClassLoader:    Option[ClassLoader],
+  classLoading:         ClassLoading,
+  executionEnv:         ExecutionEnv,
+  specs2ExecutionEnv:   ExecutionEnv) {
 
-  lazy val statisticsRepository: StatisticsRepository =
-    statsRepository(arguments)
-
-  def executionContext =
+  lazy val executionContext =
     executionEnv.executionContext
 
-  def executorServices =
+  lazy val executorServices =
     executionEnv.executorServices
 
-  def specs2ExecutionContext =
+  lazy val specs2ExecutionContext =
     specs2ExecutionEnv.executionContext
 
-  def specs2ExecutorServices =
+  lazy val specs2ExecutorServices =
     specs2ExecutionEnv.executorServices
 
   lazy val timeout =
@@ -56,7 +53,7 @@ case class Env(
   lazy val commandLine: CommandLine =
     arguments.commandLine
 
-  def defaultInstances =
+  lazy val defaultInstances =
     List[AnyRef](arguments.commandLine, executionEnv, executionContext, arguments, this)
 
   def setTimeout(duration: FiniteDuration): Env =
@@ -80,7 +77,7 @@ case class Env(
 
   /** set a new statistic repository */
   def setStatisticRepository(repository: StatisticsRepository) =
-    copy(statsRepository = (args: Arguments) => repository)
+    copy(statisticsRepository = repository)
 
   /** set a new classloader to be used as the context classloader for each execution */
   def setCustomClassLoader(classLoader: ClassLoader): Env =
@@ -93,20 +90,20 @@ case class Env(
 object Env {
 
   def apply(
-    arguments:           Arguments                         = EnvDefault.default.arguments,
-    systemLogger:        Logger                            = EnvDefault.default.systemLogger,
-    lineLogger:          LineLogger                        = EnvDefault.default.lineLogger,
-    statsRepository:     Arguments => StatisticsRepository = EnvDefault.default.statsRepository,
-    random:              scala.util.Random                 = EnvDefault.default.random,
-    fileSystem:          FileSystem                        = EnvDefault.default.fileSystem,
-    executionParameters: ExecutionParameters               = EnvDefault.default.executionParameters,
-    customClassLoader:   Option[ClassLoader]               = EnvDefault.default.customClassLoader,
-    classLoading:        ClassLoading                      = EnvDefault.default.classLoading): Env =
+    arguments:            Arguments            = EnvDefault.default.arguments,
+    systemLogger:         Logger               = EnvDefault.default.systemLogger,
+    lineLogger:           LineLogger           = EnvDefault.default.lineLogger,
+    statisticsRepository: StatisticsRepository = EnvDefault.default.statisticsRepository,
+    random:               scala.util.Random    = EnvDefault.default.random,
+    fileSystem:           FileSystem           = EnvDefault.default.fileSystem,
+    executionParameters:  ExecutionParameters  = EnvDefault.default.executionParameters,
+    customClassLoader:    Option[ClassLoader]  = EnvDefault.default.customClassLoader,
+    classLoading:         ClassLoading         = EnvDefault.default.classLoading): Env =
     Env(
       arguments,
       systemLogger,
       lineLogger,
-      statsRepository,
+      statisticsRepository,
       random,
       fileSystem,
       executionParameters,
