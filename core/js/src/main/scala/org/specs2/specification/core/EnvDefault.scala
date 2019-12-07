@@ -13,15 +13,15 @@ object EnvDefault {
 
   lazy val default: Env =
     Env(
-      arguments           = Arguments(),
-      systemLogger        = ConsoleLogger(),
-      lineLogger          = NoLineLogger,
-      statsRepository     = (arguments: Arguments) => StatisticsRepositoryCreation.memory,
-      random              = new scala.util.Random,
-      fileSystem          = FileSystem(ConsoleLogger()),
-      executionParameters = ExecutionParameters(),
-      customClassLoader   = None,
-      classLoading        = new ClassLoading {}
+      arguments            = Arguments(),
+      systemLogger         = ConsoleLogger(),
+      lineLogger           = NoLineLogger,
+      statisticsRepository = StatisticsRepositoryCreation.memory,
+      random               = new scala.util.Random,
+      fileSystem           = FileSystem(ConsoleLogger()),
+      executionParameters  = ExecutionParameters(),
+      customClassLoader    = None,
+      classLoading         = new ClassLoading {}
     )
 
   def defaultInstances(env: Env) =

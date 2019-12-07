@@ -14,15 +14,15 @@ object EnvDefault {
 
   def default: Env =
     Env(
-      arguments           = Arguments(),
-      systemLogger        = ConsoleLogger(),
-      lineLogger          = NoLineLogger,
-      statsRepository     = (arguments: Arguments) => StatisticsRepositoryCreation.file(arguments.commandLine.directoryOr("stats.outdir", "target" / "specs2-reports" / "stats")),
-      random              = new scala.util.Random,
-      fileSystem          = FileSystem(ConsoleLogger()),
-      executionParameters = ExecutionParameters(),
-      customClassLoader   = None,
-      classLoading        = new ClassLoading {})
+      arguments            = Arguments(),
+      systemLogger         = ConsoleLogger(),
+      lineLogger           = NoLineLogger,
+      statisticsRepository = StatisticsRepositoryCreation.file(Arguments().commandLine.directoryOr("stats.outdir", "target" / "specs2-reports" / "stats")),
+      random               = new scala.util.Random,
+      fileSystem           = FileSystem(ConsoleLogger()),
+      executionParameters  = ExecutionParameters(),
+      customClassLoader    = None,
+      classLoading         = new ClassLoading {})
 
   def defaultInstances(env: Env) =
     List[AnyRef](env.arguments.commandLine,

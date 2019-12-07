@@ -7,7 +7,7 @@ import control._
 
 object StatisticsRepositoryCreation {
 
-  def memory = StatisticsRepository(StatisticsMemoryStore())
-  def file(dir: DirectoryPath) = StatisticsRepository(DirectoryStore(dir, FileSystem(ConsoleLogger())))
+  def memory = DefaultStatisticsRepository(StatisticsMemoryStore())
+  def file(dir: DirectoryPath) = DefaultStatisticsRepository(DirectoryStore(dir, FileSystem(ConsoleLogger())))
 
 }

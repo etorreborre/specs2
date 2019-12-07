@@ -8,14 +8,14 @@ import org.specs2.specification.process.Statistics._
 
 class StatisticsSpec(ee: ExecutionEnv) extends Specification { def is = s2"""
 
- defaultStats sets example = 1 only for examples $e1
- fold adds the fragment result to stats          $e2
+ emptyStats sets example = 1 only for examples $e1
+ fold adds the fragment result to stats        $e2
 
 """
 
   def e1 =
-    (defaultStats("ex" ! skipped).examples ==== 1) and
-    (defaultStats(step("")).examples ==== 0)
+    (emptyStats("ex" ! skipped).examples ==== 1) and
+    (emptyStats(step("")).examples ==== 0)
 
   def e2 = {
     def foldStats(r: Result): Stats =

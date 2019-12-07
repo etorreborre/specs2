@@ -4,8 +4,6 @@ package process
 
 object StatisticsRepositoryCreation {
 
-  def memory = StatisticsRepository(StatisticsMemoryStore())
+  def memory = DefaultStatisticsRepository(StatisticsMemoryStore())
 
 }
-
-
