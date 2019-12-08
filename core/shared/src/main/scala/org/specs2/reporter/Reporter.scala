@@ -33,7 +33,7 @@ trait Reporter {
 /**
  * Default implementation of a Reporter using specs2 Printers
  */
-case class DefaultReporter(statistics: Statistics, selector: Selector, executor: Executor, printers: List[Printer], env: Env) extends Reporter {
+case class DefaultReporter(statistics: Statistics, statisticsRepository: StatisticsRepository, selector: Selector, executor: Executor, printers: List[Printer], env: Env) extends Reporter {
 
   def report(specs: List[SpecStructure]): Action[Stats] = for {
     _     <- prepare(specs)
@@ -52,15 +52,17 @@ case class DefaultReporter(statistics: Statistics, selector: Selector, executor:
    * first find and sort the referenced specifications and report them
    */
   def reportOne(spec: SpecStructure): Action[Stats] = {
-    val env1 = env.setArguments(env.arguments.overrideWith(spec.arguments))
-    val executing = statistics.readStats(spec) |> selector.select |> executor.execute
+    val executing =
+      statistics.readStats(spec) |>
+      selector.select(spec.arguments) |>
+      executor.execute(spec.arguments)
 
     val contents: AsyncStream[Fragment] =
       // evaluate all fragments before reporting if required
       if (env.arguments.execute.asap) Producer.emitAction(executing.contents.runList)
       else                            executing.contents
 
-    val sinks = (printers.map(_.sink(spec)) :+ statsStoreSink(env1, spec)).sumAll
+    val sinks = (printers.map(_.sink(spec)) :+ statsStoreSink(spec)).sumAll
     val reportFold = sinks *> Statistics.fold
 
     contents.fold(reportFold)
@@ -69,27 +71,23 @@ case class DefaultReporter(statistics: Statistics, selector: Selector, executor:
   /**
    * Use a Fold to store the stats of each example + the stats of the specification
    */
-  private def statsStoreSink(env1: Env, spec: SpecStructure): AsyncSink[Fragment] = {
-    val neverStore = env1.arguments.store.never
-    val resetStore = env1.arguments.store.reset
+  private def statsStoreSink(spec: SpecStructure): AsyncSink[Fragment] = {
+    val arguments = env.arguments.overrideWith(spec.arguments)
+    val neverStore = arguments.store.never
+    val resetStore = arguments.store.reset
 
     lazy val sink: AsyncSink[Fragment] =
       Folds.fromSink[Action, Fragment] { fragment: Fragment =>
-        if (neverStore)
-          Action.unit
-        else
-          fragment.executionResult.flatMap { r =>
-            env1.statisticsRepository.storeResult(spec.specClassName, fragment.description, r).toAction
-          }
+        fragment.executionResult.flatMap { r =>
+          statisticsRepository.storeResult(spec.specClassName, fragment.description, r).toAction
+        }.when(neverStore)
       }
 
     val prepare: Action[Unit] =
-      if (resetStore) env1.statisticsRepository.resetStatistics.toAction
-      else            Action.unit
+      statisticsRepository.resetStatistics.toAction.when(resetStore)
 
     val last = (stats: Stats) =>
-      if (neverStore) Action.unit
-      else            env1.statisticsRepository.storeStatistics(spec.specClassName, stats).toAction
+      statisticsRepository.storeStatistics(spec.specClassName, stats).toAction.when(neverStore)
 
     (Statistics.fold <* fromStart(prepare) <* sink).mapFlatten(last)
   }
@@ -104,7 +102,7 @@ object Reporter {
     val statistics = DefaultStatistics(arguments, statsRepository)
     val selector = Arguments.instance(arguments.select.selector).getOrElse(DefaultSelector(arguments))
     val executor = Arguments.instance(arguments.execute.executor).getOrElse(DefaultExecutor(env))
-    DefaultReporter(statistics, selector, executor, printers, env)
+    DefaultReporter(statistics, statsRepository, selector, executor, printers, env)
   }
 
 }

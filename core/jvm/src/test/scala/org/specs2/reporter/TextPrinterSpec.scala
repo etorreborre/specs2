@@ -345,7 +345,7 @@ object TextPrinterSpecification extends MustMatchers with FragmentsDsl {
         val printer = TextPrinter(env1)
         printer.run(spec.setFragments(spec.fragments
           .prepend(DefaultFragmentFactory.break) // add a newline after the title
-          .update(DefaultExecutor(env1).execute)))
+          .update(DefaultExecutor(env1).execute(spec.arguments))))
       } finally {
         if (optionalEnv.isEmpty) env1.shutdown
       }

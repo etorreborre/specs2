@@ -31,9 +31,15 @@ trait Statistics {
 
 case class DefaultStatistics(arguments: Arguments, statisticsRepository: StatisticsRepository) extends Statistics {
 
-  def readStats(spec: SpecStructure): SpecStructure =
-    if (arguments.wasIsDefined) spec.flatMap(f => eval[Action, Fragment](readStats(spec.specClassName)(f).toAction))
-    else                        spec
+  def readStats(spec: SpecStructure): SpecStructure = {
+    // we need to use the arguments passed on the command line and override them with the spec arguments
+    val args = arguments.overrideWith(spec.arguments)
+
+    if (args.wasIsDefined)
+      spec.flatMap(f => eval[Action, Fragment](readStats(spec.specClassName)(f).toAction))
+    else
+      spec
+  }
 
   /**
    * read the stats for one Fragment from the statistics repository

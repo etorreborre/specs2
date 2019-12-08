@@ -29,6 +29,6 @@ class FragmentsContinuationSpec(val env: Env) extends Specification with ActionM
   }
 
   def runContinuation[R : AsResult](r: =>R, fs: =>Fragments): List[Fragment] =
-    Fragments(DefaultExecutor(ownEnv).execute(Fragments("test" ! FragmentsContinuation.continueWith(r, fs)).contents)).
+    Fragments(DefaultExecutor(ownEnv).execute(ownEnv.arguments)(Fragments("test" ! FragmentsContinuation.continueWith(r, fs)).contents)).
       fragmentsList(ownEnv.executionEnv)
 }
