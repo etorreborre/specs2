@@ -113,7 +113,7 @@ object reporterSpecSupport extends MustMatchers with StandardMatchResults with S
 
   def reported(env: Env, logger: PrinterLogger = NoPrinterLogger, printers: List[Printer] = Nil) = {
     val printers1 = if (printers.isEmpty) List(TextPrinter(env)) else printers
-    val reporter = Reporter.create(printers1, env)
+    val reporter = Reporter.create(printers1, env.copy(printerLogger = NoPrinterLogger, systemLogger = NoLogger))
     reporter.report(spec(logger)).runOption(env.executionEnv)
   }
 

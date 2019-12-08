@@ -80,14 +80,14 @@ case class DefaultReporter(statistics: Statistics, statisticsRepository: Statist
       Folds.fromSink[Action, Fragment] { fragment: Fragment =>
         fragment.executionResult.flatMap { r =>
           statisticsRepository.storeResult(spec.specClassName, fragment.description, r).toAction
-        }.when(neverStore)
+        }.unless(neverStore)
       }
 
     val prepare: Action[Unit] =
       when(resetStore)(statisticsRepository.resetStatistics).toAction
 
     val last = (stats: Stats) =>
-      when(neverStore)(statisticsRepository.storeStatistics(spec.specClassName, stats)).toAction
+      unless(neverStore)(statisticsRepository.storeStatistics(spec.specClassName, stats)).toAction
 
     (Statistics.fold <* fromStart(prepare) <* sink).mapFlatten(last)
   }
