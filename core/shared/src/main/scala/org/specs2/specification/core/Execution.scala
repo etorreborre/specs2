@@ -133,6 +133,9 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
         val to = env.arguments.timeout |+| timeout
         try {
           implicit val ec = env.specs2ExecutionContext
+
+          // this sets any custom classloader, like the one passed from SBT
+          // as the context classloader this thread
           env.setContextClassLoader()
 
           val timer = startSimpleTimer

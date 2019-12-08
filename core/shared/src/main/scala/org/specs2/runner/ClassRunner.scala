@@ -20,7 +20,10 @@ trait ClassRunner {
  * A runner for Specification classes based on their names
  */
 
-case class DefaultClassRunner(arguments: Arguments, reporter: Reporter, specFactory: SpecFactory, env: Env) extends ClassRunner {
+case class DefaultClassRunner(env: Env, reporter: Reporter, specFactory: SpecFactory) extends ClassRunner {
+
+  val arguments: Arguments =
+    env.arguments
 
   /** instantiate a Specification from its class name and use arguments to determine how to
    * execute it and report results
@@ -77,8 +80,8 @@ trait ClassRunnerMain {
   def createClassRunner(env: Env): Action[ClassRunner] = {
     val arguments = env.arguments
     val loader = Thread.currentThread.getContextClassLoader
-    val customInstances = CustomInstances(arguments, loader, ConsoleLogger())
-    val printerFactory = PrinterFactory(arguments, env, customInstances, ConsoleLogger())
+    val customInstances = CustomInstances(arguments, loader, env.systemLogger)
+    val printerFactory = PrinterFactory(arguments, env, customInstances, env.systemLogger)
     val specFactory = DefaultSpecFactory(env, loader)
 
     for {
@@ -86,7 +89,7 @@ trait ClassRunnerMain {
       reporter <- customInstances.createCustomInstance[Reporter]( "reporter",
         (m: String) => "a custom reporter can not be instantiated " + m, "no custom reporter defined, using the default one")
         .map(_.getOrElse(Reporter.create(printers, env))).toAction
-      classRunner = DefaultClassRunner(arguments, reporter, specFactory, env)
+      classRunner = DefaultClassRunner(env, reporter, specFactory)
      } yield classRunner
 
   }
