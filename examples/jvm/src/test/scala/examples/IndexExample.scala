@@ -19,6 +19,6 @@ class IndexExample extends Specification { def is =
    */
   def examplesLinks(t: String) =
     t.title ^
-    Fragments.foreach(specifications())(s => link(s) ^ br)
+    Fragments.foreach(default.findSpecifications().unsafeRun)(s => link(s) ^ br)
 
 }

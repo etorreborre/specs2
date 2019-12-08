@@ -16,8 +16,8 @@ object Runner {
   /**
    * Execute some actions and exit with the proper code if 'exit' is true
    */
-  def execute(action: Action[Stats], arguments: Arguments, exit: Boolean)(env: Env): Unit = {
-    val logger = ConsoleLogger()
+  def execute(action: Action[Stats], env: Env, exit: Boolean): Unit = {
+    val logger = env.systemLogger
 
     action.attempt.runAction(env.specs2ExecutionEnv) match {
       case Left(t) =>

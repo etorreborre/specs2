@@ -24,7 +24,7 @@ object Module extends SpecificationCreation {
   def specifications(klass: Class[_], filter: String => Boolean = (s: String) => true) = {
     val name = klass.getSimpleName.replace("$", "")
     val base = DirectoryPath.unsafe(new java.io.File(".").getAbsolutePath) / FileName.unsafe(name.toLowerCase) / "src" / "test" / "scala"
-    val specs = SpecificationsFinder.specifications(basePath = base, verbose = false, filter = filter).take(3)
+    val specs = SpecificationsFinder.default.findSpecifications(basePath = base, verbose = false, filter = filter).unsafeRun.take(3)
 
     name.title.copy(specClass = klass) ^
     br ^

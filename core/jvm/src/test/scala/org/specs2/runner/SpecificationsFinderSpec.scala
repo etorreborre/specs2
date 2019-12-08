@@ -35,7 +35,7 @@ class SpecificationsFinderSpec extends Spec { def is = s2"""
       s.contains("SourceFileSpec") || // SourceFileSpec cannot be instantiated
       s.contains("SpecificationsFinderSpec")
 
-    SpecificationsFinder.findSpecifications(
+    SpecificationsFinder.default.findSpecifications(
       basePath = DirectoryPath.unsafe(base) / "src" / "test" / "scala",
       filter = filter
     ).runOption must beSome((l: List[_]) => l must haveSize(1))
