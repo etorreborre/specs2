@@ -171,6 +171,12 @@ trait ApplicativeSyntax {
       applicative.unless(condition)(fa)
   }
 
+  def when[F[_], A](condition: Boolean)(fa: F[A])(implicit applicative: Applicative[F]): F[Unit] =
+    applicative.when(condition)(fa)
+
+  def unless[F[_], A](condition: Boolean)(fa: F[A])(implicit applicative: Applicative[F]): F[Unit] =
+    applicative.unless(condition)(fa)
+
   implicit class ListApplicativeOps[A](fa: List[A]) {
     def filterM[F[_] : Applicative](f: A => F[Boolean]): F[List[A]] =
       Applicative.apply[F].filterM(fa)(f)
