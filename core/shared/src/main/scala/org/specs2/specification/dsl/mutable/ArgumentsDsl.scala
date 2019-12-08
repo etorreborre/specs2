@@ -4,6 +4,7 @@ package dsl
 package mutable
 
 import main._
+import scala.concurrent.duration.FiniteDuration
 import control.StackTraceFilter
 import text.Colors
 
@@ -35,6 +36,8 @@ trait ArgumentsCreation extends org.specs2.main.ArgumentsCreation with MutableAr
                      stopOnSkip:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
                      sequential:    ArgProperty[Boolean]           = ArgProperty[Boolean](),
                      batchSize:     ArgProperty[Int]               = ArgProperty[Int](),
+                     timeFactor:    ArgProperty[Int]               = ArgProperty[Int](),
+                     timeout:       ArgProperty[FiniteDuration]    = ArgProperty[FiniteDuration](),
                      asap:          ArgProperty[Boolean]           = ArgProperty[Boolean](),
                      xonly:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
                      showOnly:      ArgProperty[String]            = ArgProperty[String](),
@@ -53,6 +56,8 @@ trait ArgumentsCreation extends org.specs2.main.ArgumentsCreation with MutableAr
       stopOnSkip,
       sequential,
       batchSize,
+      timeFactor,
+      timeout,
       asap,
       xonly,
       showOnly,
@@ -89,6 +94,7 @@ trait ArgumentsCreation extends org.specs2.main.ArgumentsCreation with MutableAr
                           scheduledThreadsNb:   ArgProperty[Int]               = ArgProperty[Int](),
                           batchSize:            ArgProperty[Int]               = ArgProperty[Int](),
                           timeFactor:           ArgProperty[Int]               = ArgProperty[Int](),
+                          timeout:              ArgProperty[FiniteDuration]    = ArgProperty[FiniteDuration](),
                           executor:             ArgProperty[String]            = ArgProperty[String]()
                           ) = updateArguments(super.execute(
       plan,
@@ -105,6 +111,7 @@ trait ArgumentsCreation extends org.specs2.main.ArgumentsCreation with MutableAr
       scheduledThreadsNb,
       batchSize,
       timeFactor,
+      timeout,
       executor))
 
     /** shorthand method to create an Arguments object */

@@ -2,6 +2,7 @@ package org.specs2
 package main
 
 import org.specs2.concurrent.ExecuteArguments
+import scala.concurrent.duration._
 
 /**
  * Execution arguments
@@ -21,23 +22,26 @@ case class Execute(
                     _scheduledThreadsNb:   Option[Int]              = None,
                     _batchSize:            Option[Int]              = None,
                     _timeFactor:           Option[Int]              = None,
+                    _timeout:              Option[FiniteDuration]   = None,
                     _executor:             Option[String]           = None) extends ShowArgs {
 
-  def plan: Boolean                 = _plan.getOrElse(false)
-  def skipAll: Boolean              = _skipAll.getOrElse(false)
-  def stopOnFail: Boolean           = _stopOnFail.getOrElse(false)
-  def stopOnError: Boolean          = _stopOnError.getOrElse(false)
-  def stopOnIssue: Boolean          = _stopOnIssue.getOrElse(false)
-  def stopOnSkip: Boolean           = _stopOnSkip.getOrElse(false)
-  def sequential: Boolean           = _sequential.getOrElse(false)
-  def asap: Boolean                 = _asap.getOrElse(false)
-  def useCustomClassLoader: Boolean = _useCustomClassLoader.getOrElse(false)
-  def threadsNb: Int                = _threadsNb.getOrElse(ExecuteArguments.threadsNb)
-  def specs2ThreadsNb: Int          = _specs2ThreadsNb.getOrElse(ExecuteArguments.specs2ThreadsNb)
-  def scheduledThreadsNb: Int       = _scheduledThreadsNb.getOrElse(1)
-  def batchSize: Int                = _batchSize.getOrElse(ExecuteArguments.threadsNb)
-  def timeFactor: Int               = _timeFactor.getOrElse(1)
-  def executor: String              = _executor.getOrElse("")
+  def plan: Boolean                   = _plan.getOrElse(false)
+  def skipAll: Boolean                = _skipAll.getOrElse(false)
+  def stopOnFail: Boolean             = _stopOnFail.getOrElse(false)
+  def stopOnError: Boolean            = _stopOnError.getOrElse(false)
+  def stopOnIssue: Boolean            = _stopOnIssue.getOrElse(false)
+  def stopOnSkip: Boolean             = _stopOnSkip.getOrElse(false)
+  def sequential: Boolean             = _sequential.getOrElse(false)
+  def asap: Boolean                   = _asap.getOrElse(false)
+  def useCustomClassLoader: Boolean   = _useCustomClassLoader.getOrElse(false)
+  def threadsNb: Int                  = _threadsNb.getOrElse(ExecuteArguments.threadsNb)
+  def specs2ThreadsNb: Int            = _specs2ThreadsNb.getOrElse(ExecuteArguments.specs2ThreadsNb)
+  def scheduledThreadsNb: Int         = _scheduledThreadsNb.getOrElse(1)
+  def batchSize: Int                  = _batchSize.getOrElse(ExecuteArguments.threadsNb)
+  def timeFactor: Int                 = _timeFactor.getOrElse(1)
+  def timeout: Option[FiniteDuration] = _timeout
+  def setTimeout(t: FiniteDuration)   = copy(_timeout = Some(t))
+  def executor: String                = _executor.getOrElse("")
 
   def overrideWith(other: Execute) = {
     new Execute(
@@ -55,6 +59,7 @@ case class Execute(
       other._scheduledThreadsNb  .orElse(_scheduledThreadsNb),
       other._batchSize           .orElse(_batchSize),
       other._timeFactor          .orElse(_timeFactor),
+      other._timeout             .orElse(_timeout),
       other._executor            .orElse(_executor)
     )
   }
@@ -75,6 +80,7 @@ case class Execute(
       "scheduledThreadsNb"   -> _scheduledThreadsNb  ,
       "batchSize"            -> _batchSize           ,
       "timeFactor"           -> _timeFactor          ,
+      "timeout"              -> _timeout             ,
       "executor"             -> _executor            ).flatMap(showArg).mkString("Execute(", ", ", ")")
 
 }
@@ -96,9 +102,10 @@ object Execute extends Extract {
       _scheduledThreadsNb   = int("scheduledThreadsNb"),
       _batchSize            = bool("unbatched").map(_ => Int.MaxValue).orElse(int("batchSize")),
       _timeFactor           = int("timeFactor"),
+      _timeout              = int("timeout").map(_.millis),
       _executor             = value("executor")
     )
   }
   val allValueNames = Seq("plan", "skipAll", "stopOnFail", "stopOnError", "stopOnIssue", "stopOnSkip", "sequential",
-    "asap", "useCustomClassLoader", "threadsNb", "specs2ThreadsNb", "scheduledThreadsNb", "batchSize", "timeFactor", "executor")
+    "asap", "useCustomClassLoader", "threadsNb", "specs2ThreadsNb", "scheduledThreadsNb", "batchSize", "timeFactor", "timeout", "executor")
 }

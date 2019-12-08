@@ -11,15 +11,17 @@ import reflect._
 
 object EnvDefault {
 
-  lazy val default: Env =
+  def default: Env =
+    create(Arguments())
+
+  def create(arguments: Arguments): Env =
     Env(
-      arguments            = Arguments(),
+      arguments            = arguments,
       systemLogger         = ConsoleLogger(),
       printerLogger        = NoPrinterLogger,
       statisticsRepository = StatisticsRepositoryCreation.memory,
       random               = new scala.util.Random,
       fileSystem           = FileSystem(ConsoleLogger()),
-      executionParameters  = ExecutionParameters(),
       customClassLoader    = None,
       classLoading         = new ClassLoading {}
     )

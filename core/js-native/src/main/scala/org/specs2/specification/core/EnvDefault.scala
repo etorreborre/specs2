@@ -12,14 +12,16 @@ import reflect._
 object EnvDefault {
 
   def default: Env =
+    create(Arguments())
+
+  def create(arguments: Arguments): Env =
     Env(
-      arguments           = Arguments(),
+      arguments           = arguments,
       systemLogger        = ConsoleLogger(),
       printerLogger       = NoPrinterLogger,
-      statsRepository     = (arguments: Arguments) => StatisticsRepositoryCreation.memory,
+      statsRepository     = StatisticsRepositoryCreation.memory,
       random              = new scala.util.Random,
       fileSystem          = FileSystem(ConsoleLogger()),
-      executionParameters = ExecutionParameters(),
       customClassLoader   = None,
       classLoading        = new ClassLoading {}
     )

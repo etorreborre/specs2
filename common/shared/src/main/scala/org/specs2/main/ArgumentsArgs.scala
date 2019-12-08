@@ -3,11 +3,12 @@ package main
 
 import control._
 import text._
+import scala.concurrent.duration._
 
 /**
  * Methods with default Property values to create Arguments instances
- * 
- * There is an implicit conversion from (=> T) to Property[T] to allow the direct passing of parameters 
+ *
+ * There is an implicit conversion from (=> T) to Property[T] to allow the direct passing of parameters
  */
 trait ArgumentsArgs extends ArgumentsCreation with ArgProperties
 
@@ -20,22 +21,24 @@ trait ArgumentsCreation {
 
   /** shorthand method to create an Arguments object */
   def args(
-    ex:            ArgProperty[String]  = ArgProperty[String](),
-    include:       ArgProperty[String]  = ArgProperty[String](),
-    exclude:       ArgProperty[String]  = ArgProperty[String](),
-    was:           ArgProperty[String]  = ArgProperty[String](),
-    plan:          ArgProperty[Boolean] = ArgProperty[Boolean](),
-    skipAll:       ArgProperty[Boolean] = ArgProperty[Boolean](),
-    stopOnFail:    ArgProperty[Boolean] = ArgProperty[Boolean](),
-    stopOnError:   ArgProperty[Boolean] = ArgProperty[Boolean](),
-    stopOnIssue:   ArgProperty[Boolean] = ArgProperty[Boolean](),
-    stopOnSkip:    ArgProperty[Boolean] = ArgProperty[Boolean](),
-    sequential:    ArgProperty[Boolean] = ArgProperty[Boolean](),
-    batchSize:     ArgProperty[Int]     = ArgProperty[Int](),
-    asap:          ArgProperty[Boolean] = ArgProperty[Boolean](),
-    xonly:         ArgProperty[Boolean] = ArgProperty[Boolean](),
-    showOnly:      ArgProperty[String]  = ArgProperty[String](),
-    color:         ArgProperty[Boolean] = ArgProperty[Boolean]()): Arguments =
+    ex:            ArgProperty[String]         = ArgProperty[String](),
+    include:       ArgProperty[String]         = ArgProperty[String](),
+    exclude:       ArgProperty[String]         = ArgProperty[String](),
+    was:           ArgProperty[String]         = ArgProperty[String](),
+    plan:          ArgProperty[Boolean]        = ArgProperty[Boolean](),
+    skipAll:       ArgProperty[Boolean]        = ArgProperty[Boolean](),
+    stopOnFail:    ArgProperty[Boolean]        = ArgProperty[Boolean](),
+    stopOnError:   ArgProperty[Boolean]        = ArgProperty[Boolean](),
+    stopOnIssue:   ArgProperty[Boolean]        = ArgProperty[Boolean](),
+    stopOnSkip:    ArgProperty[Boolean]        = ArgProperty[Boolean](),
+    sequential:    ArgProperty[Boolean]        = ArgProperty[Boolean](),
+    batchSize:     ArgProperty[Int]            = ArgProperty[Int](),
+    timeFactor:   ArgProperty[Int]             = ArgProperty[Int](),
+    timeout:       ArgProperty[FiniteDuration] = ArgProperty[FiniteDuration](),
+    asap:          ArgProperty[Boolean]        = ArgProperty[Boolean](),
+    xonly:         ArgProperty[Boolean]        = ArgProperty[Boolean](),
+    showOnly:      ArgProperty[String]         = ArgProperty[String](),
+    color:         ArgProperty[Boolean]        = ArgProperty[Boolean]()): Arguments =
 
      (new ArgumentsNamespace).select(
             ex         = ex,
@@ -51,6 +54,8 @@ trait ArgumentsCreation {
               stopOnSkip  = stopOnSkip,
               sequential  = sequential,
               batchSize   = batchSize,
+              timeFactor  = timeFactor,
+              timeout     = timeout,
               asap        = asap) <|
      (new ArgumentsNamespace).report(
               xonly      = xonly,
@@ -89,6 +94,7 @@ trait ArgumentsCreation {
       scheduledThreadsNb:   ArgProperty[Int]               = ArgProperty[Int](),
       batchSize:            ArgProperty[Int]               = ArgProperty[Int](),
       timeFactor:           ArgProperty[Int]               = ArgProperty[Int](),
+      timeout:              ArgProperty[FiniteDuration]    = ArgProperty[FiniteDuration](),
       executor:             ArgProperty[String]            = ArgProperty[String]()
     ) = new Arguments(
        execute = Execute(plan.toOption,
@@ -105,6 +111,7 @@ trait ArgumentsCreation {
                scheduledThreadsNb.toOption,
                batchSize.toOption,
                timeFactor.toOption,
+               timeout.toOption,
                executor.toOption))
 
     /** shorthand method to create an Arguments object */
