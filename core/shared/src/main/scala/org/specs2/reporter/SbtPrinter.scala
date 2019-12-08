@@ -20,7 +20,7 @@ case class SbtPrinter(env: Env, loggers: Array[Logger], events: SbtEvents) exten
   def prepare(specifications: List[SpecStructure]): Action[Unit] = Action.unit
   def finalize(specifications: List[SpecStructure]): Action[Unit] = Action.unit
 
-  lazy val textPrinter = TextPrinter(env.setLineLogger(SbtLineLogger(loggers)))
+  lazy val textPrinter = TextPrinter(env.setPrinterLogger(SbtPrinterLogger(loggers)))
 
   def sbtNotifierPrinter(args: Arguments): Printer =
     NotifierPrinter(env).printer(sbtNotifier(events, args))
@@ -121,7 +121,7 @@ trait SbtEvents {
 /**
  * Line logger using sbt's loggers
  */
-case class SbtLineLogger(loggers: Array[Logger]) extends BufferedLineLogger {
+case class SbtPrinterLogger(loggers: Array[Logger]) extends BufferedPrinterLogger {
   def infoLine(msg: String) = loggers.foreach { logger =>
     logger.info(removeColors(msg, !logger.ansiCodesSupported))
   }

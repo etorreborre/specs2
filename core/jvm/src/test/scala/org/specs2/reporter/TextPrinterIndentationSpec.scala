@@ -16,13 +16,13 @@ class TextPrinterIndentationSpec(val env: Env) extends Specification with OwnEnv
 """
 
   def indentationSpaces = {
-    val logger = LineLogger.stringLogger
+    val logger = PrinterLogger.stringPrinterLogger
     val spec: SpecStructure =
 s2"""
 text$t
 other text
 """
-    val printer = TextPrinter(ownEnv.setArguments(Arguments("indentation", "4")).setLineLogger(logger))
+    val printer = TextPrinter(ownEnv.setArguments(Arguments("indentation", "4")).setPrinterLogger(logger))
     printer.print(spec).runOption(ownEnv.executionEnv)
     (logger.messages(1), logger.messages(2)) must_==
       (("[info] text    ",

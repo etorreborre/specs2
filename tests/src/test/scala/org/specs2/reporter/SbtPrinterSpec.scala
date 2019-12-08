@@ -53,14 +53,14 @@ class SbtPrinterSpec(val env: Env) extends Spec with OwnEnv { def is = s2"""
 
     def print(spec: SpecStructure) = {
       printer.print(spec).runAction(ownEnv.specs2ExecutionEnv)
-      stringLogger.flush()
-      stringLogger.messages.mkString("\n")
+      stringPrinterLogger.flush()
+      stringPrinterLogger.messages.mkString("\n")
     }
 
     val handler = mock[EventHandler]
     val logger = mock[Logger]
 
-    val stringLogger = new Logger with StringOutput {
+    val stringPrinterLogger = new Logger with StringOutput {
       def ansiCodesSupported = false
       def warn(msg: String): Unit =  { append(msg) }
       def error(msg: String): Unit = { append(msg) }
@@ -74,7 +74,7 @@ class SbtPrinterSpec(val env: Env) extends Spec with OwnEnv { def is = s2"""
       lazy val taskDef = new TaskDef("", Fingerprints.fp1, true, Array())
     }
     val env = Env(arguments = Arguments("nocolor"))
-    val printer = SbtPrinter(env, Array(logger, stringLogger), events)
+    val printer = SbtPrinter(env, Array(logger, stringPrinterLogger), events)
 
   }
 

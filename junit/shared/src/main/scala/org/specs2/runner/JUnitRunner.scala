@@ -28,7 +28,7 @@ class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterab
 
   /** specification environment */
   lazy val env: Env =
-    Env(arguments = arguments, lineLogger = LineLogger.consoleLogger)
+    Env(arguments = arguments, printerLogger = PrinterLogger.consolePrinterLogger)
 
   lazy val getDescription: org.junit.runner.Description =
     getDescription(env)

@@ -4,7 +4,7 @@ package runner
 import main._
 import control._
 import io.DirectoryPath
-import reporter.LineLogger._
+import reporter.PrinterLogger._
 import specification.process.Stats
 import specification.core._
 import reporter._
@@ -24,7 +24,7 @@ trait FilesRunner {
    */
   def run(args: Array[String], exit: Boolean = false): Unit = {
     val env = Env(arguments = Arguments(args: _*),
-      lineLogger = consoleLogger)
+      printerLogger = consolePrinterLogger)
 
     try     execute(run(env), env.arguments, exit)(env)
     finally env.shutdown

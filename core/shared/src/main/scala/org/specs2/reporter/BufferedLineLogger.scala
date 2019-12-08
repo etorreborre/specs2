@@ -11,7 +11,7 @@ import text.AnsiColors
  *
  * Then there will be only 2 lines displayed and not 3 (2 for the first infoLog, 1 for the second one)
  */
-trait BufferedLineLogger extends LineLogger {
+trait BufferedPrinterLogger extends PrinterLogger {
   def infoLog(msg: String)   : Unit = { val rest = flushText(); add(rest+msg) }
   def errorLog(msg: String)  : Unit = { val rest = flushText(); errorLine(rest+msg)  }
   def failureLog(msg: String): Unit = { val rest = flushText(); failureLine(rest+msg) }
@@ -55,4 +55,3 @@ trait BufferedLineLogger extends LineLogger {
   }
 
 }
-

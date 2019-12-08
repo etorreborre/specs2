@@ -32,7 +32,7 @@ case class TextPrinter(env: Env) extends Printer {
     val values: Fold[Action, Fragment, S] { type S = ((Stats, Int), SimpleTimer) } =
       Statistics.fold zip Indentation.fold.into[Action] zip SimpleTimer.timerFold.into[Action]
 
-    lazy val logger = env.lineLogger
+    lazy val logger = env.printerLogger
     lazy val args   = env.arguments <| spec.arguments
 
     lazy val sink: AsyncSink[(Fragment, S)] =
@@ -47,14 +47,14 @@ case class TextPrinter(env: Env) extends Printer {
   def run(spec: SpecStructure): Unit =
     print(spec).runVoid(env.specs2ExecutionEnv)
 
-  def linesLoggerSink(logger: LineLogger, header: SpecHeader, args: Arguments): AsyncSink[List[LogLine]] =
+  def linesLoggerSink(logger: PrinterLogger, header: SpecHeader, args: Arguments): AsyncSink[List[LogLine]] =
     Folds.fromSink[Action, List[LogLine]](lines =>
       Action.pure(lines.foreach(_.log(logger))))
 
-  def start(logger: LineLogger, header: SpecHeader, args: Arguments): Action[LineLogger] =
+  def start(logger: PrinterLogger, header: SpecHeader, args: Arguments): Action[PrinterLogger] =
     Action.pure(printHeader(args)(header).foreach(_.log(logger))).as(logger)
 
-  def printFinalStats(spec: SpecStructure, args: Arguments, logger: LineLogger): (((Stats, Int), SimpleTimer)) => Action[Unit] = { case ((stats, _), timer) =>
+  def printFinalStats(spec: SpecStructure, args: Arguments, logger: PrinterLogger): (((Stats, Int), SimpleTimer)) => Action[Unit] = { case ((stats, _), timer) =>
     Action.pure(printStats(spec.header, args, stats, timer).foreach(_.log(logger))) >>
     Action.pure(logger.close)
   }

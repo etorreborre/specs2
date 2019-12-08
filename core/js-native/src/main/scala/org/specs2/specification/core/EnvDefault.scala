@@ -5,7 +5,7 @@ package core
 import control._
 import io.FileSystem
 import main.Arguments
-import reporter.LineLogger.NoLineLogger
+import reporter.PrinterLogger.NoPrinterLogger
 import specification.process._
 import reflect._
 
@@ -15,7 +15,7 @@ object EnvDefault {
     Env(
       arguments           = Arguments(),
       systemLogger        = ConsoleLogger(),
-      lineLogger          = NoLineLogger,
+      printerLogger       = NoPrinterLogger,
       statsRepository     = (arguments: Arguments) => StatisticsRepositoryCreation.memory,
       random              = new scala.util.Random,
       fileSystem          = FileSystem(ConsoleLogger()),
