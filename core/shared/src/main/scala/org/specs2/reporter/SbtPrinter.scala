@@ -23,7 +23,7 @@ case class SbtPrinter(env: Env, loggers: Array[Logger], events: SbtEvents) exten
   lazy val textPrinter = TextPrinter(env.setPrinterLogger(SbtPrinterLogger(loggers)))
 
   def sbtNotifierPrinter(args: Arguments): Printer =
-    NotifierPrinter(env).printer(sbtNotifier(events, args))
+    NotifierPrinter(args).printer(sbtNotifier(events, args))
 
   /**
    * use 2 Folds:

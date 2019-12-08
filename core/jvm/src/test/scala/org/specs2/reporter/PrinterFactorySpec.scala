@@ -3,7 +3,6 @@ package reporter
 
 import main.Arguments
 import control.StringOutputLogger
-import control.ConsoleLogger
 import matcher.ActionMatchers
 import io.StringOutput
 import specification.core.Env
@@ -24,13 +23,13 @@ class PrinterFactorySpec extends Specification with ActionMatchers { def is = s2
 
   def console1 = {
     val args = Arguments.split("")
-    val factory = PrinterFactory(args, Env(args), CustomInstances.create(args), ConsoleLogger())
+    val factory = PrinterFactory.create(Env(args))
     factory.createTextPrinter.runOption.flatten must beSome
   }
 
   def console2 = {
     val args = Arguments.split("html console")
-    val factory = PrinterFactory(args, Env(args), CustomInstances.create(args), ConsoleLogger())
+    val factory = PrinterFactory.create(Env(args))
     factory.createTextPrinter.runOption.flatten must beSome
   }
 
@@ -46,7 +45,7 @@ class PrinterFactorySpec extends Specification with ActionMatchers { def is = s2
   def createPrintersAndExpectMessage(arguments: Arguments, message: String) = {
     val output = new StringOutput {}
     val logger = StringOutputLogger(output)
-    val factory = PrinterFactory(arguments, Env(arguments), CustomInstances.create(arguments, logger), logger)
+    val factory = PrinterFactory.create(Env(arguments).setSystemLogger(logger))
     factory.createPrinters.runVoid
     output.messages must contain(contain(message))
   }

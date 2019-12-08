@@ -56,16 +56,14 @@ class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterab
   def runWithEnv(runNotifier: RunNotifier, env: Env): Action[Stats] = {
     val loader = Thread.currentThread.getContextClassLoader
     val arguments = env.arguments
-    val customInstances = CustomInstances(arguments, loader, ConsoleLogger())
-    val printerFactory = PrinterFactory(arguments, env, customInstances, ConsoleLogger())
+    val customInstances = CustomInstances(arguments, loader, env.systemLogger)
+    val printerFactory = PrinterFactory(arguments, customInstances, env.systemLogger)
     val junitPrinter = JUnitPrinter(env, runNotifier)
 
     for {
       printers <- printerFactory.createPrinters.toAction
-      reporter <- customInstances.createCustomInstance[Reporter]( "reporter",
-           (m: String) => "a custom reporter can not be instantiated " + m, "no custom reporter defined, using the default one")
-           .map(_.getOrElse(Reporter.create(junitPrinter +: printers, env))).toAction
-      stats <- reporter.report(specStructure)
+      reporter <- Reporter.createCustomInstance(customInstances).map(_.getOrElse(Reporter.create(junitPrinter +: printers, env))).toAction
+      stats    <- reporter.report(specStructure)
      } yield stats
   }
 

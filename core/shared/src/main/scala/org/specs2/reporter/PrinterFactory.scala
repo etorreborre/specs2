@@ -11,7 +11,7 @@ import specification.core._
  * Create printers based on their class names and the arguments passed by the user
  * Note that this operation might fail if the corresponding printer classes are not on the class path
  */
-case class PrinterFactory(arguments: Arguments, env: Env, customInstances: CustomInstances, logger: Logger) {
+case class PrinterFactory(arguments: Arguments, customInstances: CustomInstances, logger: Logger) {
 
   /** accepted printers created from the list of arguments */
   def createPrinters: Operation[List[Printer]] =
@@ -57,16 +57,16 @@ case class PrinterFactory(arguments: Arguments, env: Env, customInstances: Custo
     customInstances.createCustomInstance[Notifier](
       NOTIFIER.name,
       (className: String) => s"cannot create a $className notifier. Please check that this class can be instantiated",
-      s"no custom notifier defined").map(_.map(NotifierPrinter(env).printer))
+      s"no custom notifier defined").map(_.map(NotifierPrinter(arguments).printer))
 
 }
 
 object PrinterFactory {
-  
-  def default: PrinterFactory =
-    create(Arguments())
 
-  def create(args: Arguments): PrinterFactory =
-    PrinterFactory(args, Env(args), CustomInstances.create(args), ConsoleLogger())
+  def default: PrinterFactory =
+    create(EnvDefault.default)
+
+  def create(env: Env): PrinterFactory =
+    PrinterFactory(env.arguments, CustomInstances.create(env.arguments, env.systemLogger), env.systemLogger)
 
 }

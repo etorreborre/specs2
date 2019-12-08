@@ -77,20 +77,20 @@ trait ClassRunnerMain {
     finally env.shutdown
   }
 
+  /**
+   * Create a ClassRunner from the default environment containing the command line arguments
+   */
   def createClassRunner(env: Env): Operation[ClassRunner] = {
     val arguments = env.arguments
     val loader = Thread.currentThread.getContextClassLoader
     val customInstances = CustomInstances(arguments, loader, env.systemLogger)
-    val printerFactory = PrinterFactory(arguments, env, customInstances, env.systemLogger)
+    val printerFactory = PrinterFactory(arguments, customInstances, env.systemLogger)
     val specFactory = DefaultSpecFactory(env, loader)
 
     for {
       printers <- printerFactory.createPrinters
-      reporter <- customInstances.createCustomInstance[Reporter]( "reporter",
-        (m: String) => "a custom reporter can not be instantiated " + m, "no custom reporter defined, using the default one")
-        .map(_.getOrElse(Reporter.create(printers, env)))
-      classRunner = DefaultClassRunner(env, reporter, specFactory)
-     } yield classRunner
+      reporter <- Reporter.createCustomInstance(customInstances).map(_.getOrElse(Reporter.create(printers, env)))
+     } yield DefaultClassRunner(env, reporter, specFactory)
 
   }
 }

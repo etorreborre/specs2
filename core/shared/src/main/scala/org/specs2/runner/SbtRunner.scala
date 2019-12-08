@@ -171,17 +171,11 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
 
   /** run a given spec structure */
   private def specificationRun(taskDef: TaskDef, spec: SpecStructure, env: Env, handler: EventHandler, loggers: Array[Logger]): Action[Stats] = {
-    val customInstances = CustomInstances(arguments, loader, ConsoleLogger())
-    val selector = Arguments.instance(arguments.select.selector).getOrElse(DefaultSelector(arguments))
-    val executor = Arguments.instance(arguments.execute.executor).getOrElse(DefaultExecutor(env))
-    val statistics = DefaultStatistics(env.arguments, env.statisticsRepository)
+    val customInstances = CustomInstances(arguments, loader, env.systemLogger)
 
     for {
       printers <- createPrinters(customInstances, taskDef, handler, loggers, arguments).toAction
-      reporter <- customInstances.createCustomInstance[Reporter]( "reporter",
-        (m: String) => "a custom reporter can not be instantiated " + m, "no custom reporter defined, using the default one")
-        .map(_.getOrElse(DefaultReporter(statistics, env.statisticsRepository, selector, executor, printers, env))).toAction
-
+      reporter <- Reporter.createCustomInstance(customInstances).map(_.getOrElse(Reporter.create(printers, env))).toAction
       stats    <- reporter.report(spec)
     } yield stats
   }
@@ -202,7 +196,7 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
 
   /** accepted printers */
   private def createPrinters(customInstances: CustomInstances, taskDef: TaskDef, handler: EventHandler, loggers: Array[Logger], args: Arguments): Operation[List[Printer]] = {
-    val printerFactory = PrinterFactory(arguments, env, customInstances, ConsoleLogger())
+    val printerFactory = PrinterFactory(arguments, customInstances, ConsoleLogger())
     List(
       createSbtPrinter(loggers, sbtEvents(taskDef, handler), customInstances),
       printerFactory.createJUnitXmlPrinter,

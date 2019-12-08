@@ -104,4 +104,6 @@ object Reporter {
     DefaultReporter(statistics, env.statisticsRepository, selector, executor, printers, env)
   }
 
+  def createCustomInstance(customInstances: CustomInstances): Operation[Option[Reporter]] =
+    customInstances.createCustomInstance[Reporter]("reporter", (m: String) => "a custom reporter can not be instantiated " + m, "no custom reporter defined, using the default one")
 }
