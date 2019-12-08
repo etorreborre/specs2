@@ -8,12 +8,13 @@ import control._
 import fp._, syntax._
 import control.origami._
 import specification.core._
-import org.specs2.time.SimpleTimer
+import time.SimpleTimer
+import main.Arguments
 
 /**
  * A Printer can be created from a Notifier implementation
  */
-case class NotifierPrinter(env: Env) {
+case class NotifierPrinter(commandLineArguments: Arguments) {
 
   /**
    * create a printer from a notifier
@@ -23,13 +24,11 @@ case class NotifierPrinter(env: Env) {
     def finalize(specifications: List[SpecStructure]): Action[Unit] = Action.unit
 
     def sink(spec: SpecStructure): AsyncSink[Fragment] = {
-      val env1 = env.setArguments(env.arguments.overrideWith(spec.arguments))
-
       val nf: Fold[Action, Fragment, Notified] { type S = Notified } =
         notifyFold.into[Action]
       	.startWith(Action.pure(notifier.specStart(spec.name, "")))
       	.endWith(Action.pure(notifier.specEnd(spec.name, "")))
-      nf.observeWithNextState(notifySink(spec, notifier, env1.arguments)).void
+      nf.observeWithNextState(notifySink(spec, notifier)).void
     }
   }
 
@@ -62,8 +61,10 @@ case class NotifierPrinter(env: Env) {
     def end(s: S) = s
   }
 
-  def notifySink(spec: SpecStructure, notifier: Notifier, args: Arguments): AsyncSink[(Fragment, Notified)] =
-    Folds.fromSink { case (f, n) => printFragment(notifier, f, n, args) }
+  def notifySink(spec: SpecStructure, notifier: Notifier): AsyncSink[(Fragment, Notified)] = {
+    val arguments = commandLineArguments.overrideWith(spec.arguments)
+    Folds.fromSink { case (f, n) => printFragment(notifier, f, n, arguments) }
+  }
 
   def printFragment(n: Notifier, f: Fragment, notified: Notified, args: Arguments): Action[Unit] =
     f.executedResult.map { er =>

@@ -54,7 +54,7 @@ case class DefaultFilesRunner(env: Env, specificationsFinder: SpecificationsFind
   /** print a message before the execution */
   protected def beforeExecution: Operation[Unit] = for {
     _        <- logger.info("\nExecuting specifications", isVerbose)
-    printers <- PrinterFactory.create(arguments).createPrinters
+    printers <- PrinterFactory.create(env).createPrinters
     _        <- logger.info("printers are " + printers.mkString(", "), isVerbose)
   } yield ()
 
