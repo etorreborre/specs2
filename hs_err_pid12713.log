@@ -1,0 +1,1299 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  SIGILL (0x4) at pc=0x00007fff52a39d0d, pid=12713, tid=0x00000000001b6433
+#
+# JRE version: Java(TM) SE Runtime Environment (8.0_181-b13) (build 1.8.0_181-b13)
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (25.181-b13 mixed mode bsd-amd64 compressed oops)
+# Problematic frame:
+# C  [CoreFoundation+0x9d0d]  CFRelease+0x6d
+#
+# Failed to write core dump. Core dumps have been disabled. To enable core dumping, try "ulimit -c unlimited" before starting Java again
+#
+# If you would like to submit a bug report, please visit:
+#   http://bugreport.java.com/bugreport/crash.jsp
+# The crash happened outside the Java Virtual Machine in native code.
+# See problematic frame for where to report the bug.
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x00007fbca1d6b000):  JavaThread "pool-1-thread-282" [_thread_in_native, id=1795123, stack(0x00007000aeafe000,0x00007000aeefe000)]
+
+siginfo: si_signo: 4 (SIGILL), si_code: 1 (ILL_ILLOPC), si_addr: 0x00007fff52a39d0d
+
+Registers:
+RAX=0x00007fff52db175f, RBX=0x00007fbca8641e40, RCX=0x0000000000000000, RDX=0x0000000000105af0
+RSP=0x00007000aeefc170, RBP=0x00007000aeefc170, RSI=0x00007fbca2e00000, RDI=0x0000000000000000
+R8 =0x0000000000000000, R9 =0x00007fbc94ad1400, R10=0x0000000000000001, R11=0x0000000000000001
+R12=0x0000000000000000, R13=0x000000012066d504, R14=0x0000000000000000, R15=0x760140b4c1550010
+RIP=0x00007fff52a39d0d, EFLAGS=0x0000000000010246, ERR=0x0000000000000000
+  TRAPNO=0x0000000000000006
+
+Top of Stack: (sp=0x00007000aeefc170)
+0x00007000aeefc170:   00007000aeefc190 00007fff54023288
+0x00007000aeefc180:   00007000aeefc0f0 0000000000000001
+0x00007000aeefc190:   00007000aeefc1a0 000000012066df14
+0x00007000aeefc1a0:   0000000000000000 00007000aeefcba8
+0x00007000aeefc1b0:   00007000aeefc270 000000012066d4dd
+0x00007000aeefc1c0:   000000b7a1d6b000 00007000aeefc350
+0x00007000aeefc1d0:   00007000aeefc338 00007000aeefcba8
+0x00007000aeefc1e0:   00007fff540231c9 00007000aeefc2c0
+0x00007000aeefc1f0:   00007000aeefc0f0 00007000aeefc120
+0x00007000aeefc200:   0000000000000001 0000000000000001
+0x00007000aeefc210:   0000000000000001 00007000aeefc280
+0x00007000aeefc220:   00007000aeefc1a0 00007000aeefc290
+0x00007000aeefc230:   0000000000000001 00007fbcad761f60
+0x00007000aeefc240:   760140b4c1550010 00007fbca1d6b1f8
+0x00007000aeefc250:   00007000aeefc2c8 00007000aeefc2a0
+0x00007000aeefc260:   0000000000000000 0000000000000000
+0x00007000aeefc270:   00007000aeefcb90 0000000120663299
+0x00007000aeefc280:   00007000aeefc2c0 00007fbca1d6b1f8
+0x00007000aeefc290:   000000012066e570 000000010392158f
+0x00007000aeefc2a0:   00007fbca1d6b000 00007fbca1d6b1f8
+0x00007000aeefc2b0:   00007000aeefcba8 00007fff540231c9
+0x00007000aeefc2c0:   00007fbca8641e40 00000001206629e9
+0x00007000aeefc2d0:   0000000000000016 00007fbcaad04c00
+0x00007000aeefc2e0:   0000000000000000 00007fff540231c9
+0x00007000aeefc2f0:   00007000aeefcba8 0000000000000001
+0x00007000aeefc300:   000000012066e498 0000000000000001
+0x00007000aeefc310:   00007000aeefc280 00007000aeefc290
+0x00007000aeefc320:   00007000aeefcbd8 0000000000000000
+0x00007000aeefc330:   0000000000000000 0000000100000002
+0x00007000aeefc340:   00007000aeefc290 000000012066e498
+0x00007000aeefc350:   0000000000000000 00000000aad05328
+0x00007000aeefc360:   0000000200000000 00007fbcaad052f0 
+
+Instructions: (pc=0x00007fff52a39d0d)
+0x00007fff52a39ced:   17 25 ee 57 48 23 02 48 39 c8 74 e5 5d e9 63 ef
+0x00007fff52a39cfd:   18 00 48 8d 05 59 7a 37 00 48 89 05 0b 19 02 58
+0x00007fff52a39d0d:   0f 0b 90 90 55 48 89 e5 48 83 ec 08 31 c0 41 b9
+0x00007fff52a39d1d:   01 00 00 00 50 6a ff 50 50 50 e8 37 89 ff ff 48 
+
+Register to memory mapping:
+
+RAX=0x00007fff52db175f: _XMLPlistAppendDataUsingBase64.__CFPLDataEncodeTable+0x1b0f in /System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation at 0x00007fff52a30000
+RBX=0x00007fbca8641e40 is an unknown value
+RCX=0x0000000000000000 is an unknown value
+RDX=0x0000000000105af0 is an unknown value
+RSP=0x00007000aeefc170 is pointing into the stack for thread: 0x00007fbca1d6b000
+RBP=0x00007000aeefc170 is pointing into the stack for thread: 0x00007fbca1d6b000
+RSI=0x00007fbca2e00000 is an unknown value
+RDI=0x0000000000000000 is an unknown value
+R8 =0x0000000000000000 is an unknown value
+R9 =0x00007fbc94ad1400 is an unknown value
+R10=0x0000000000000001 is an unknown value
+R11=0x0000000000000001 is an unknown value
+R12=0x0000000000000000 is an unknown value
+R13=0x000000012066d504: ffi_call+0x414 in /private/var/folders/kb/tjt27xcn6_dg095y88337mjm0000gn/T/jna-1005382995/jna8424751700070829228.tmp at 0x0000000120660000
+R14=0x0000000000000000 is an unknown value
+R15=0x760140b4c1550010 is an unknown value
+
+
+Stack: [0x00007000aeafe000,0x00007000aeefe000],  sp=0x00007000aeefc170,  free space=4088k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+C  [CoreFoundation+0x9d0d]  CFRelease+0x6d
+C  [FSEvents+0x3288]  FSEventStreamStop+0xbf
+C  [jna8424751700070829228.tmp+0xdf14]  ffi_call_unix64+0x4c
+C  0x00007000aeefcba8
+
+Java frames: (J=compiled Java code, j=interpreted, Vv=VM code)
+J 9378  com.sun.jna.Native.invokeVoid(Lcom/sun/jna/Function;JI[Ljava/lang/Object;)V (0 bytes) @ 0x00000001102ee7e9 [0x00000001102ee780+0x69]
+J 162674 C2 com.sun.jna.Function.invoke([Ljava/lang/Object;Ljava/lang/Class;ZI)Ljava/lang/Object; (769 bytes) @ 0x0000000114cb8de4 [0x0000000114cb8d80+0x64]
+J 9492 C2 com.sun.jna.Function.invoke(Ljava/lang/reflect/Method;[Ljava/lang/Class;Ljava/lang/Class;[Ljava/lang/Object;Ljava/util/Map;)Ljava/lang/Object; (548 bytes) @ 0x00000001103948f4 [0x0000000110393b60+0xd94]
+J 162675 C2 com.sun.jna.Library$Handler.invoke(Ljava/lang/Object;Ljava/lang/reflect/Method;[Ljava/lang/Object;)Ljava/lang/Object; (348 bytes) @ 0x00000001149f0b98 [0x00000001149f06a0+0x4f8]
+j  com.sun.proxy.$Proxy9.FSEventStreamStop(Lio/methvin/watchservice/jna/FSEventStreamRef;)V+16
+j  io.methvin.watchservice.MacOSXListeningWatchService.close()V+52
+j  io.methvin.watcher.DirectoryWatcher.close()V+4
+j  scala.meta.internal.metals.FileWatcher.$anonfun$stopWatching$1(Lio/methvin/watcher/DirectoryWatcher;)V+1
+j  scala.meta.internal.metals.FileWatcher.$anonfun$stopWatching$1$adapted(Lio/methvin/watcher/DirectoryWatcher;)Ljava/lang/Object;+1
+j  scala.meta.internal.metals.FileWatcher$$Lambda$3175.apply(Ljava/lang/Object;)Ljava/lang/Object;+4
+J 5491 C2 scala.Option.foreach(Lscala/Function1;)V (19 bytes) @ 0x000000010fd2cdc4 [0x000000010fd2cd60+0x64]
+j  scala.meta.internal.metals.FileWatcher.stopWatching()V+9
+j  scala.meta.internal.metals.FileWatcher.startWatching(Ljava/util/List;Ljava/util/List;)V+1
+j  scala.meta.internal.metals.FileWatcher.restart()V+67
+j  scala.meta.internal.metals.MetalsLanguageServer.$anonfun$indexWorkspace$4(Lscala/meta/internal/metals/MetalsLanguageServer;)V+4
+j  scala.meta.internal.metals.MetalsLanguageServer$$Lambda$3168.apply$mcV$sp()V+4
+J 28888 C2 scala.runtime.java8.JFunction0$mcV$sp.apply()Ljava/lang/Object; (10 bytes) @ 0x0000000112c76904 [0x0000000112c76100+0x804]
+j  scala.meta.internal.metals.MetalsLanguageServer.timedThunk(Ljava/lang/String;ZLscala/Function0;)Ljava/lang/Object;+14
+j  scala.meta.internal.metals.MetalsLanguageServer.indexWorkspace(Lscala/meta/internal/metals/ImportedBuild;)V+45
+j  scala.meta.internal.metals.MetalsLanguageServer.$anonfun$connectToNewBuildServer$9(Lscala/meta/internal/metals/MetalsLanguageServer;Lscala/meta/internal/metals/ImportedBuild;)V+2
+j  scala.meta.internal.metals.MetalsLanguageServer$$Lambda$3115.apply$mcV$sp()V+8
+j  scala.meta.internal.metals.MetalsLanguageServer.$anonfun$profiledIndexWorkspace$2(Lscala/Function0;)V+1
+j  scala.meta.internal.metals.MetalsLanguageServer$$Lambda$3117.apply$mcV$sp()V+4
+J 28888 C2 scala.runtime.java8.JFunction0$mcV$sp.apply()Ljava/lang/Object; (10 bytes) @ 0x0000000112c76904 [0x0000000112c76100+0x804]
+j  scala.meta.internal.metals.MetalsLanguageServer.timedThunk(Ljava/lang/String;ZLscala/Function0;)Ljava/lang/Object;+14
+j  scala.meta.internal.metals.MetalsLanguageServer.$anonfun$profiledIndexWorkspace$1(Lscala/meta/internal/metals/MetalsLanguageServer;Lscala/Function0;)V+11
+j  scala.meta.internal.metals.MetalsLanguageServer$$Lambda$3116.apply$mcV$sp()V+8
+J 28888 C2 scala.runtime.java8.JFunction0$mcV$sp.apply()Ljava/lang/Object; (10 bytes) @ 0x0000000112c76904 [0x0000000112c76100+0x804]
+J 130569 C2 scala.concurrent.Future$$$Lambda$80.apply(Ljava/lang/Object;)Ljava/lang/Object; (12 bytes) @ 0x0000000118f1c974 [0x0000000118f1c920+0x54]
+J 67235 C2 scala.concurrent.impl.Promise$$Lambda$82.apply(Ljava/lang/Object;)Ljava/lang/Object; (16 bytes) @ 0x000000011565d018 [0x000000011565cf00+0x118]
+J 4785 C2 scala.concurrent.impl.CallbackRunnable.run()V (70 bytes) @ 0x000000010fb54a2c [0x000000010fb549c0+0x6c]
+J 42307 C2 java.util.concurrent.ThreadPoolExecutor.runWorker(Ljava/util/concurrent/ThreadPoolExecutor$Worker;)V (225 bytes) @ 0x000000011632bc0c [0x000000011632b9a0+0x26c]
+j  java.util.concurrent.ThreadPoolExecutor$Worker.run()V+5
+j  java.lang.Thread.run()V+11
+v  ~StubRoutines::call_stub
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+=>0x00007fbca1d6b000 JavaThread "pool-1-thread-282" [_thread_in_native, id=1795123, stack(0x00007000aeafe000,0x00007000aeefe000)]
+  0x00007fbca1aca000 JavaThread "scala-execution-context-global-6584" daemon [_thread_blocked, id=1788439, stack(0x00007000a3e7d000,0x00007000a427d000)]
+  0x00007fbca6300000 JavaThread "scala-execution-context-global-6583" daemon [_thread_blocked, id=1804159, stack(0x00007000a3274000,0x00007000a3674000)]
+  0x00007fbcac8b2800 JavaThread "ForkJoinPool.commonPool-worker-13" daemon [_thread_blocked, id=1808655, stack(0x000070001ac14000,0x000070001b014000)]
+  0x00007fbca62ad800 JavaThread "bloop-io-6581" daemon [_thread_blocked, id=1806247, stack(0x00007000ac6e3000,0x00007000acae3000)]
+  0x00007fbca32d4000 JavaThread "scala-execution-context-global-6580" daemon [_thread_blocked, id=1775739, stack(0x00007000a8ab6000,0x00007000a8eb6000)]
+  0x00007fbca4658000 JavaThread "scala-execution-context-global-6579" daemon [_thread_blocked, id=71383, stack(0x00007000ac2e0000,0x00007000ac6e0000)]
+  0x00007fbc91d24000 JavaThread "scala-execution-context-global-6578" daemon [_thread_blocked, id=1776427, stack(0x000070001cc2c000,0x000070001d02c000)]
+  0x00007fbcacdb5000 JavaThread "scala-execution-context-global-6577" daemon [_thread_blocked, id=1086855, stack(0x000070002206b000,0x000070002246b000)]
+  0x00007fbca8ab7800 JavaThread "scala-execution-context-global-6576" daemon [_thread_blocked, id=1777703, stack(0x00007000abada000,0x00007000abeda000)]
+  0x00007fbca3be6800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1815727, stack(0x00007000ad2ec000,0x00007000ad6ec000)]
+  0x00007fbc91adb800 JavaThread "scala-execution-context-global-6569" daemon [_thread_blocked, id=1795599, stack(0x00007000acee9000,0x00007000ad2e9000)]
+  0x00007fbca3e86800 JavaThread "scala-execution-context-global-6570" daemon [_thread_blocked, id=1803547, stack(0x00007000acae6000,0x00007000acee6000)]
+  0x00007fbcb08b6000 JavaThread "scala-execution-context-global-6565" daemon [_thread_blocked, id=1787915, stack(0x00007000a9ac2000,0x00007000a9ec2000)]
+  0x00007fbca49a3000 JavaThread "pool-1-thread-281" [_thread_blocked, id=1782931, stack(0x00007000bf3c4000,0x00007000bf7c4000)]
+  0x00007fbca1a85000 JavaThread "scala-execution-context-global-6561" daemon [_thread_blocked, id=1812915, stack(0x00007000abedd000,0x00007000ac2dd000)]
+  0x00007fbca4ce5800 JavaThread "scala-execution-context-global-6556" daemon [_thread_blocked, id=50955, stack(0x00007000ab6d7000,0x00007000abad7000)]
+  0x00007fbca35ff000 JavaThread "bloop-io-6552" daemon [_thread_blocked, id=46951, stack(0x00007000bdbb2000,0x00007000bdfb2000)]
+  0x00007fbca3059000 JavaThread "bloop-io-6544" daemon [_thread_blocked, id=1780743, stack(0x00007000bd7af000,0x00007000bdbaf000)]
+  0x00007fbca9e33800 JavaThread "bloop-io-6546" daemon [_thread_in_native, id=85395, stack(0x00007000bd3ac000,0x00007000bd7ac000)]
+  0x00007fbca66fa000 JavaThread "bloop-io-6548" daemon [_thread_blocked, id=1797171, stack(0x00007000bcfa9000,0x00007000bd3a9000)]
+  0x00007fbca4f4c000 JavaThread "bloop-io-6551" daemon [_thread_blocked, id=1804367, stack(0x00007000bcba6000,0x00007000bcfa6000)]
+  0x00007fbca3381000 JavaThread "bloop-io-6550" daemon [_thread_blocked, id=1793031, stack(0x00007000bc7a3000,0x00007000bcba3000)]
+  0x00007fbcaa097800 JavaThread "bloop-io-6549" daemon [_thread_blocked, id=1778747, stack(0x00007000bc3a0000,0x00007000bc7a0000)]
+  0x00007fbca322e800 JavaThread "bloop-io-6547" daemon [_thread_blocked, id=1782535, stack(0x00007000bbf9d000,0x00007000bc39d000)]
+  0x00007fbc927d9800 JavaThread "bloop-io-6545" daemon [_thread_blocked, id=1765015, stack(0x00007000bbb9a000,0x00007000bbf9a000)]
+  0x00007fbca6393000 JavaThread "bloop-io-6542" daemon [_thread_blocked, id=1759223, stack(0x00007000baf91000,0x00007000bb391000)]
+  0x00007fbca484b800 JavaThread "bloop-io-6540" daemon [_thread_blocked, id=1756695, stack(0x00007000bab8e000,0x00007000baf8e000)]
+  0x00007fbca1da7800 JavaThread "pool-1-thread-279" [_thread_blocked, id=1811719, stack(0x00007000b9f85000,0x00007000ba385000)]
+  0x00007fbca62d0000 JavaThread "bloop-io-6535" daemon [_thread_blocked, id=1807979, stack(0x00007000b8773000,0x00007000b8b73000)]
+  0x00007fbca4cec000 JavaThread "bloop-io-6534" daemon [_thread_blocked, id=1759919, stack(0x00007000b8370000,0x00007000b8770000)]
+  0x00007fbc918c1000 JavaThread "bloop-io-6530" daemon [_thread_blocked, id=1783307, stack(0x00007000b7f6d000,0x00007000b836d000)]
+  0x00007fbca69e5800 JavaThread "bloop-io-6532" daemon [_thread_blocked, id=1816087, stack(0x00007000b7767000,0x00007000b7b67000)]
+  0x00007fbcb08b9800 JavaThread "bloop-io-6529" daemon [_thread_blocked, id=1805059, stack(0x00007000b7364000,0x00007000b7764000)]
+  0x00007fbca8df2000 JavaThread "bloop-io-6528" daemon [_thread_blocked, id=1087039, stack(0x00007000b6f61000,0x00007000b7361000)]
+  0x00007fbcaaa94000 JavaThread "bloop-io-6527" daemon [_thread_blocked, id=1789451, stack(0x00007000b675b000,0x00007000b6b5b000)]
+  0x00007fbca6acb800 JavaThread "bloop-io-6525" daemon [_thread_blocked, id=1795867, stack(0x00007000b5f55000,0x00007000b6355000)]
+  0x00007fbcaa14b000 JavaThread "bloop-io-6524" daemon [_thread_blocked, id=1098855, stack(0x00007000b574f000,0x00007000b5b4f000)]
+  0x00007fbca3fc9000 JavaThread "bloop-io-6522" daemon [_thread_blocked, id=1793547, stack(0x00007000b4f49000,0x00007000b5349000)]
+  0x00007fbcaa321800 JavaThread "bloop-io-6521" daemon [_thread_blocked, id=1774447, stack(0x00007000b4b46000,0x00007000b4f46000)]
+  0x00007fbca3f8e000 JavaThread "bloop-io-6519" daemon [_thread_blocked, id=1802071, stack(0x00007000b4743000,0x00007000b4b43000)]
+  0x00007fbca8df3800 JavaThread "bloop-io-6520" daemon [_thread_blocked, id=1800199, stack(0x00007000b4340000,0x00007000b4740000)]
+  0x00007fbca4cdc000 JavaThread "bloop-io-6518" daemon [_thread_blocked, id=1789195, stack(0x00007000b3f3d000,0x00007000b433d000)]
+  0x00007fbca43d9800 JavaThread "bloop-io-6517" daemon [_thread_blocked, id=1805627, stack(0x00007000b3b3a000,0x00007000b3f3a000)]
+  0x00007fbca1feb800 JavaThread "bloop-io-6514" daemon [_thread_blocked, id=1801127, stack(0x00007000b1b22000,0x00007000b1f22000)]
+  0x00007fbc91872000 JavaThread "bloop-io-6513" daemon [_thread_blocked, id=1798455, stack(0x00007000b171f000,0x00007000b1b1f000)]
+  0x00007fbc9186a000 JavaThread "bloop-io-6512" daemon [_thread_blocked, id=1812043, stack(0x00007000b131c000,0x00007000b171c000)]
+  0x00007fbcac8df000 JavaThread "bloop-io-6511" daemon [_thread_blocked, id=1815207, stack(0x00007000b0f19000,0x00007000b1319000)]
+  0x00007fbc930d4000 JavaThread "bloop-io-6510" daemon [_thread_in_native, id=1772855, stack(0x00007000b0310000,0x00007000b0710000)]
+  0x00007fbca226e000 JavaThread "bloop-io-6508" daemon [_thread_blocked, id=1806475, stack(0x00007000afb0a000,0x00007000aff0a000)]
+  0x00007fbca6c80800 JavaThread "bloop-io-6509" daemon [_thread_blocked, id=1785867, stack(0x00007000af707000,0x00007000afb07000)]
+  0x00007fbca22cc000 JavaThread "bloop-io-6507" daemon [_thread_blocked, id=1788935, stack(0x00007000af304000,0x00007000af704000)]
+  0x00007fbca5b73000 JavaThread "bloop-io-6504" daemon [_thread_blocked, id=56371, stack(0x00007000ad6ef000,0x00007000adaef000)]
+  0x00007fbca3a0c800 JavaThread "bloop-io-6494" daemon [_thread_blocked, id=76675, stack(0x00007000a266b000,0x00007000a2a6b000)]
+  0x00007fbc92f8c000 JavaThread "pool-1-thread-277" [_thread_in_native, id=1792275, stack(0x000070001ec44000,0x000070001f044000)]
+  0x00007fbcb0976000 JavaThread "bloop-io-6453" daemon [_thread_blocked, id=1788679, stack(0x00007000adaf2000,0x00007000adef2000)]
+  0x00007fbcac927000 JavaThread "pool-1-thread-274" [_thread_blocked, id=30247, stack(0x00007000bb797000,0x00007000bbb97000)]
+  0x00007fbca68eb000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1808147, stack(0x00007000a7aaa000,0x00007000a7eaa000)]
+  0x00007fbcacceb000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=33551, stack(0x00007000b2f31000,0x00007000b3331000)]
+  0x00007fbca9923800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1771883, stack(0x00007000aef01000,0x00007000af301000)]
+  0x00007fbcaa09c000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=78619, stack(0x000070001b41a000,0x000070001b81a000)]
+  0x00007fbca5cec800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1800503, stack(0x00007000a6a9e000,0x00007000a6e9e000)]
+  0x00007fbc93604800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=33799, stack(0x00007000a72a4000,0x00007000a76a4000)]
+  0x00007fbc91ae3000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=80943, stack(0x00007000a96bf000,0x00007000a9abf000)]
+  0x00007fbc92dc0000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1098499, stack(0x000070002387d000,0x0000700023c7d000)]
+  0x00007fbcacd5b800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1814979, stack(0x0000700024486000,0x0000700024886000)]
+  0x00007fbca3be7000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1097863, stack(0x00007000ae2f8000,0x00007000ae6f8000)]
+  0x00007fbca5afc800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1773739, stack(0x00007000a9ec5000,0x00007000aa2c5000)]
+  0x00007fbca4b3b000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1807447, stack(0x0000700021865000,0x0000700021c65000)]
+  0x00007fbca9b07000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1801823, stack(0x000070001a811000,0x000070001ac11000)]
+  0x00007fbc9316d000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1766207, stack(0x00007000aff0d000,0x00007000b030d000)]
+  0x00007fbcacce8800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=41971, stack(0x0000700019402000,0x0000700019802000)]
+  0x00007fbc92a73000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1801271, stack(0x00007000b2328000,0x00007000b2728000)]
+  0x00007fbca78d6800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1821975, stack(0x00007000a3677000,0x00007000a3a77000)]
+  0x00007fbca99d8000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1822475, stack(0x00007000a2268000,0x00007000a2668000)]
+  0x00007fbca5b1c000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1779223, stack(0x00007000be3b8000,0x00007000be7b8000)]
+  0x00007fbcb0fc3800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1819947, stack(0x000070009fa4a000,0x000070009fe4a000)]
+  0x00007fbca63b7800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=86379, stack(0x0000700022c74000,0x0000700023074000)]
+  0x00007fbca7ea0800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1769759, stack(0x00007000ab2d4000,0x00007000ab6d4000)]
+  0x00007fbcaac8a800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1816955, stack(0x00007000aaed1000,0x00007000ab2d1000)]
+  0x00007fbca5f03000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=33415, stack(0x000070001f047000,0x000070001f447000)]
+  0x00007fbca887a000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1770299, stack(0x000070001c023000,0x000070001c423000)]
+  0x00007fbc91d25800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=82511, stack(0x00007000a8eb9000,0x00007000a92b9000)]
+  0x00007fbca63b6800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1816719, stack(0x000070001c829000,0x000070001cc29000)]
+  0x00007fbca3c4d800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=75119, stack(0x00007000ae6fb000,0x00007000aeafb000)]
+  0x00007fbcaa116000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1089135, stack(0x0000700020053000,0x0000700020453000)]
+  0x00007fbcaadbd800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=56067, stack(0x0000700024889000,0x0000700024c89000)]
+  0x00007fbcaa04b800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1813359, stack(0x0000700018bfc000,0x0000700018ffc000)]
+  0x00007fbca9943000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=42091, stack(0x000070001fc50000,0x0000700020050000)]
+  0x00007fbca7800000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1087603, stack(0x000070000bf38000,0x000070000c338000)]
+  0x00007fbca9cb2800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1765411, stack(0x000070000bb35000,0x000070000bf35000)]
+  0x00007fbca3a57800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=54403, stack(0x00007000a1e65000,0x00007000a2265000)]
+  0x00007fbca5c87000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1764439, stack(0x000070001bc20000,0x000070001c020000)]
+  0x00007fbc91a5b000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1814379, stack(0x0000700021462000,0x0000700021862000)]
+  0x00007fbcaaf00800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1769055, stack(0x000070001e43e000,0x000070001e83e000)]
+  0x00007fbca9bfc000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1765659, stack(0x000070001e841000,0x000070001ec41000)]
+  0x00007fbca9cb9800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1085231, stack(0x00007000a92bc000,0x00007000a96bc000)]
+  0x00007fbcacc9d000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1769243, stack(0x0000700022871000,0x0000700022c71000)]
+  0x00007fbca7d6f000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1097251, stack(0x00007000a6298000,0x00007000a6698000)]
+  0x00007fbca5687800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1099043, stack(0x000070001e03b000,0x000070001e43b000)]
+  0x00007fbca68d1000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1765895, stack(0x00007000157d5000,0x0000700015bd5000)]
+  0x00007fbc92f81800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=72795, stack(0x00007000aaace000,0x00007000aaece000)]
+  0x00007fbc923ba000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=78143, stack(0x00007000aa6cb000,0x00007000aaacb000)]
+  0x00007fbca5a70800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=73375, stack(0x00007000aa2c8000,0x00007000aa6c8000)]
+  0x00007fbca5f05800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=45883, stack(0x00007000a3a7a000,0x00007000a3e7a000)]
+  0x00007fbcaa3d8000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=75871, stack(0x000070002246e000,0x000070002286e000)]
+  0x00007fbca4659000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=30115, stack(0x0000700013fc3000,0x00007000143c3000)]
+  0x00007fbca3bff800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=81779, stack(0x00007000187f9000,0x0000700018bf9000)]
+  0x00007fbcaa268800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1767979, stack(0x00007000a86b3000,0x00007000a8ab3000)]
+  0x00007fbca5378000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1810479, stack(0x00007000a82b0000,0x00007000a86b0000)]
+  0x00007fbca4579000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1098079, stack(0x0000700017ff3000,0x00007000183f3000)]
+  0x00007fbc92624800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1806623, stack(0x000070002347a000,0x000070002387a000)]
+  0x00007fbca30ef800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1766435, stack(0x0000700023077000,0x0000700023477000)]
+  0x00007fbca68db800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1768471, stack(0x0000700020859000,0x0000700020c59000)]
+  0x00007fbc91bdc000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1762587, stack(0x000070001f44a000,0x000070001f84a000)]
+  0x00007fbcaab86000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1762835, stack(0x000070001b81d000,0x000070001bc1d000)]
+  0x00007fbca9c03800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1820683, stack(0x000070001f84d000,0x000070001fc4d000)]
+  0x00007fbca99d7800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/junitJVM/scala-2.12/bloop-bsp-clients-classes/classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1755395, stack(0x000070009f244000,0x000070009f644000)]
+  0x00007fbca700e800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/shapelessJVM/scala-2.12/bloop-bsp-clients-classes/classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1827075, stack(0x000070009ee41000,0x000070009f241000)]
+  0x00007fbc92006800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/matcherExtraJS/scala-2.12/bloop-bsp-clients-classes/classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1752835, stack(0x000070009ea3e000,0x000070009ee3e000)]
+  0x00007fbc93014800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/gwtJS/scala-2.12/bloop-bsp-clients-classes/classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1751811, stack(0x000070009e63b000,0x000070009ea3b000)]
+  0x00007fbca99d6000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/markdownJS/scala-2.12/bloop-bsp-clients-classes/classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1829891, stack(0x000070009e238000,0x000070009e638000)]
+  0x00007fbc93013800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/shapelessJS/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1832451, stack(0x000070009de35000,0x000070009e235000)]
+  0x00007fbc92a3d800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/scalacheckJS/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1832707, stack(0x000070009da32000,0x000070009de32000)]
+  0x00007fbc92a3c000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/analysisJVM/scala-2.12/bloop-bsp-clients-classes/classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1748483, stack(0x000070009d62f000,0x000070009da2f000)]
+  0x00007fbc93012800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/commonJVM/scala-2.12/bloop-bsp-clients-classes/classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1747459, stack(0x000070009d22c000,0x000070009d62c000)]
+  0x00007fbc93011800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/pom/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1703427, stack(0x000070009ce29000,0x000070009d229000)]
+  0x00007fbc92004800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/analysisJS/scala-2.12/bloop-bsp-clients-classes/classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1703683, stack(0x000070009ca26000,0x000070009ce26000)]
+  0x00007fbcaa10e800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/formJVM/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1699075, stack(0x000070009c623000,0x000070009ca23000)]
+  0x00007fbca69e1800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/formJS/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1705987, stack(0x000070009c220000,0x000070009c620000)]
+  0x00007fbcb09e9000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/markdownJS/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1706499, stack(0x000070009be1d000,0x000070009c21d000)]
+  0x00007fbca31e9800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/guide/scala-2.12/bloop-bsp-clients-classes/classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1707779, stack(0x000070009ba1a000,0x000070009be1a000)]
+  0x00007fbca4c38800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/junitJS/scala-2.12/bloop-bsp-clients-classes/classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1694723, stack(0x000070009b617000,0x000070009ba17000)]
+  0x00007fbca4c37800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/fpJS/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1693443, stack(0x000070009b214000,0x000070009b614000)]
+  0x00007fbca4cd9000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/coreJVM/scala-2.12/bloop-bsp-clients-classes/classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1692419, stack(0x000070009ae11000,0x000070009b211000)]
+  0x00007fbc93010800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/scalacheckJVM/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1690883, stack(0x000070009aa0e000,0x000070009ae0e000)]
+  0x00007fbc93010000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/mockJS/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1690115, stack(0x000070009a60b000,0x000070009aa0b000)]
+  0x00007fbca70a7800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/html/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1713923, stack(0x000070009a208000,0x000070009a608000)]
+  0x00007fbca31e8800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/commonJS/scala-2.12/bloop-bsp-clients-classes/classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1688067, stack(0x0000700099e05000,0x000070009a205000)]
+  0x00007fbc92a3b000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/matcherJS/scala-2.12/bloop-bsp-clients-classes/classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1716227, stack(0x0000700099a02000,0x0000700099e02000)]
+  0x00007fbca99d5800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/scalazJVM/scala-2.12/bloop-bsp-clients-classes/classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1717507, stack(0x00007000995ff000,0x00007000999ff000)]
+  0x00007fbca351d000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/examplesJVM/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1685763, stack(0x00007000991fc000,0x00007000995fc000)]
+  0x00007fbc9300f000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/commonJVM/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1684995, stack(0x0000700098df9000,0x00007000991f9000)]
+  0x00007fbcb0b32000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/examplesJVM/scala-2.12/bloop-bsp-clients-classes/classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1721347, stack(0x00007000989f6000,0x0000700098df6000)]
+  0x00007fbc92003000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/mockJVM/scala-2.12/bloop-bsp-clients-classes/classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1723139, stack(0x00007000985f3000,0x00007000989f3000)]
+  0x00007fbc92a3a800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/specs2/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1724419, stack(0x00007000981f0000,0x00007000985f0000)]
+  0x00007fbc92a39800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/tests/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1724931, stack(0x0000700097ded000,0x00007000981ed000)]
+  0x00007fbc92a39000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/analysisJVM/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1726211, stack(0x00007000979ea000,0x0000700097dea000)]
+  0x00007fbca99d4000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/fpJVM/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1727235, stack(0x00007000975e7000,0x00007000979e7000)]
+  0x00007fbca99d3800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/scalacheckJS/scala-2.12/bloop-bsp-clients-classes/classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1728515, stack(0x00007000971e4000,0x00007000975e4000)]
+  0x00007fbca9b87000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/tests/scala-2.12/bloop-bsp-clients-classes/classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1730051, stack(0x0000700096de1000,0x00007000971e1000)]
+  0x00007fbc92002800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/examplesJS/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1731331, stack(0x00007000969de000,0x0000700096dde000)]
+  0x00007fbc920bb800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/formJS/scala-2.12/bloop-bsp-clients-classes/classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1677059, stack(0x00007000965db000,0x00007000969db000)]
+  0x00007fbc92001000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/coreJS/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1733379, stack(0x00007000961d8000,0x00007000965d8000)]
+  0x00007fbca68d9800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/gwtJVM/scala-2.12/bloop-bsp-clients-classes/classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1734659, stack(0x0000700095dd5000,0x00007000961d5000)]
+  0x00007fbc92a38000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/markdownJVM/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1673987, stack(0x00007000959d2000,0x0000700095dd2000)]
+  0x00007fbc92a37800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/coreJVM/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1736451, stack(0x00007000955cf000,0x00007000959cf000)]
+  0x00007fbc92a36800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/matcherJS/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1737475, stack(0x00007000951cc000,0x00007000955cc000)]
+  0x00007fbc9300e800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/specs2/scala-2.12/bloop-bsp-clients-classes/classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1738499, stack(0x0000700094dc9000,0x00007000951c9000)]
+  0x00007fbc93245800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/gwtJVM/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1670147, stack(0x00007000949c6000,0x0000700094dc6000)]
+  0x00007fbc91cbf000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/matcherExtraJVM/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1740547, stack(0x00007000945c3000,0x00007000949c3000)]
+  0x00007fbca630d800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/matcherExtraJS/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1666819, stack(0x00007000941c0000,0x00007000945c0000)]
+  0x00007fbc91cbe000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/gwtJS/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1665539, stack(0x0000700093dbd000,0x00007000941bd000)]
+  0x00007fbcaa059800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/mockJVM/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1742339, stack(0x00007000939ba000,0x0000700093dba000)]
+  0x00007fbc920bc800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/matcherJVM/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1743107, stack(0x00007000935b7000,0x00007000939b7000)]
+  0x00007fbc9300d000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/junitJS/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1662467, stack(0x00007000931b4000,0x00007000935b4000)]
+  0x00007fbca351c000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/markdownJVM/scala-2.12/bloop-bsp-clients-classes/classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1661699, stack(0x0000700092db1000,0x00007000931b1000)]
+  0x00007fbc91cba800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/scalazJVM/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1747203, stack(0x00007000929ae000,0x0000700092dae000)]
+  0x00007fbca8977800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/matcherExtraJVM/scala-2.12/bloop-bsp-clients-classes/classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1614339, stack(0x00007000925ab000,0x00007000929ab000)]
+  0x00007fbca44cc000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/shapelessJVM/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1613827, stack(0x00007000921a8000,0x00007000925a8000)]
+  0x00007fbca31d5800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/scalazJS/scala-2.12/bloop-bsp-clients-classes/classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1617923, stack(0x0000700091da5000,0x00007000921a5000)]
+  0x00007fbca4cd8800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/matcherJVM/scala-2.12/bloop-bsp-clients-classes/classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1619459, stack(0x00007000919a2000,0x0000700091da2000)]
+  0x00007fbca44cb000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/mockJS/scala-2.12/bloop-bsp-clients-classes/classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1621251, stack(0x000070009159f000,0x000070009199f000)]
+  0x00007fbcb0b31000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/fpJS/scala-2.12/bloop-bsp-clients-classes/classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1622787, stack(0x000070009119c000,0x000070009159c000)]
+  0x00007fbcb0b2e800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/formJVM/scala-2.12/bloop-bsp-clients-classes/classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1610499, stack(0x0000700090d99000,0x0000700091199000)]
+  0x00007fbc93247000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/fpJVM/scala-2.12/bloop-bsp-clients-classes/classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1609219, stack(0x0000700090996000,0x0000700090d96000)]
+  0x00007fbcb0b2f800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/coreJS/scala-2.12/bloop-bsp-clients-classes/classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1607939, stack(0x0000700090593000,0x0000700090993000)]
+  0x00007fbc920ba800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/scalazJS/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1625859, stack(0x0000700090190000,0x0000700090590000)]
+  0x00007fbc920ba000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/catsJS/scala-2.12/bloop-bsp-clients-classes/classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1627651, stack(0x000070008fd8d000,0x000070009018d000)]
+  0x00007fbca8978800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/html/scala-2.12/bloop-bsp-clients-classes/classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1628675, stack(0x000070008f98a000,0x000070008fd8a000)]
+  0x00007fbca25f8800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/catsJVM/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1630211, stack(0x000070008f587000,0x000070008f987000)]
+  0x00007fbca4f80000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/catsJVM/scala-2.12/bloop-bsp-clients-classes/classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1603843, stack(0x000070008f184000,0x000070008f584000)]
+  0x00007fbca44ca800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/guide/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1602307, stack(0x000070008ed81000,0x000070008f181000)]
+  0x00007fbca2685800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/analysisJS/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1601283, stack(0x000070008e97e000,0x000070008ed7e000)]
+  0x00007fbca31d5000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/catsJS/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1634051, stack(0x000070008e57b000,0x000070008e97b000)]
+  0x00007fbcb002c800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/junitJVM/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1634563, stack(0x000070008e178000,0x000070008e578000)]
+  0x00007fbcb002b800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/shapelessJS/scala-2.12/bloop-bsp-clients-classes/classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1636099, stack(0x000070008dd75000,0x000070008e175000)]
+  0x00007fbca6313000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/scalacheckJVM/scala-2.12/bloop-bsp-clients-classes/classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1596163, stack(0x000070008d972000,0x000070008dd72000)]
+  0x00007fbc93244000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/commonJS/scala-2.12/bloop-bsp-clients-classes/test-classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1638147, stack(0x000070008d56f000,0x000070008d96f000)]
+  0x00007fbca6b08000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/pom/scala-2.12/bloop-bsp-clients-classes/classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1594115, stack(0x000070008d16c000,0x000070008d56c000)]
+  0x00007fbc920b8800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/.bloop/examplesJS/scala-2.12/bloop-bsp-clients-classes/classes-Metals-1feBlu-uT6m8I0iWZOZVkg==/META-INF/semanticdb" daemon [_thread_in_native, id=1640451, stack(0x000070008cd69000,0x000070008d169000)]
+  0x00007fbca4f81000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/shapeless/src/main/scala-2.12" daemon [_thread_in_native, id=1591043, stack(0x000070008c966000,0x000070008cd66000)]
+  0x00007fbc93243800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/mock/jvm/src/test/scala-2.12" daemon [_thread_in_native, id=1590531, stack(0x000070008c563000,0x000070008c963000)]
+  0x00007fbc93241800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/gwt/.jvm/src/main/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1644547, stack(0x000070008c160000,0x000070008c560000)]
+  0x00007fbcb0b2e000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/markdown/.js/target/scala-2.12/src_managed/test" daemon [_thread_in_native, id=1587203, stack(0x000070008bd5d000,0x000070008c15d000)]
+  0x00007fbcb0b2a800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/core/js/target/scala-2.12/src_managed/test" daemon [_thread_in_native, id=1645827, stack(0x000070008b95a000,0x000070008bd5a000)]
+  0x00007fbca630e800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/form/.js/src/test/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1649155, stack(0x000070008b557000,0x000070008b957000)]
+  0x00007fbca25f8000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalaz/shared/src/main/scala" daemon [_thread_in_native, id=1575427, stack(0x000070008b154000,0x000070008b554000)]
+  0x00007fbc920b7800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/gwt/.js/src/test/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1657347, stack(0x000070008ad51000,0x000070008b151000)]
+  0x00007fbcb0b2d000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/tests/src/main/java" daemon [_thread_in_native, id=1657859, stack(0x000070008a94e000,0x000070008ad4e000)]
+  0x00007fbcb0b2c000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/fp/jvm/target/scala-2.12/src_managed/main" daemon [_thread_in_native, id=1658371, stack(0x000070008a54b000,0x000070008a94b000)]
+  0x00007fbcb0b2b800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/form/.js/src/test/java" daemon [_thread_in_native, id=1658883, stack(0x000070008a148000,0x000070008a548000)]
+  0x00007fbcb0b29800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/examples/shared/src/test/scala-2.12" daemon [_thread_in_native, id=1574915, stack(0x0000700089d45000,0x000070008a145000)]
+  0x00007fbcb0b28800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/gwt/.js/src/main/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1574403, stack(0x0000700089942000,0x0000700089d42000)]
+  0x00007fbcb0b28000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/examples/js/target/scala-2.12/src_managed/main" daemon [_thread_in_native, id=1659139, stack(0x000070008953f000,0x000070008993f000)]
+  0x00007fbcb0b27000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalaz/jvm/src/main/scala" daemon [_thread_in_native, id=1573891, stack(0x000070008913c000,0x000070008953c000)]
+  0x00007fbcb0345000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/analysis/js/target/scala-2.12/src_managed/test" daemon [_thread_in_native, id=1573635, stack(0x0000700088d39000,0x0000700089139000)]
+  0x00007fbcb0b26800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/mock/shared/src/test/scala" daemon [_thread_in_native, id=1573379, stack(0x0000700088936000,0x0000700088d36000)]
+  0x00007fbcaa364000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/markdown/.js/src/main/java" daemon [_thread_in_native, id=1572867, stack(0x0000700088533000,0x0000700088933000)]
+  0x00007fbca4c1a000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/fp/jvm/src/test/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1524227, stack(0x0000700088130000,0x0000700088530000)]
+  0x00007fbcb0b25800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/analysis/jvm/src/main/scala-2.12" daemon [_thread_in_native, id=1524739, stack(0x0000700087d2d000,0x000070008812d000)]
+  0x00007fbcb0621000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/analysis/js/src/test/scala" daemon [_thread_in_native, id=1522691, stack(0x000070008792a000,0x0000700087d2a000)]
+  0x00007fbca630c800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/core/jvm/target/scala-2.12/src_managed/test" daemon [_thread_in_native, id=1522179, stack(0x0000700087527000,0x0000700087927000)]
+  0x00007fbcb0b25000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/analysis/shared/src/test/scala" daemon [_thread_in_native, id=1527555, stack(0x0000700087124000,0x0000700087524000)]
+  0x00007fbcb0e09800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalacheck/jvm/src/test/java" daemon [_thread_in_native, id=1520643, stack(0x0000700086d21000,0x0000700087121000)]
+  0x00007fbcb0e09000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalacheck/jvm/target/scala-2.12/src_managed/main" daemon [_thread_in_native, id=1530371, stack(0x000070008691e000,0x0000700086d1e000)]
+  0x00007fbcb0e06000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalacheck/jvm/src/main/scala" daemon [_thread_in_native, id=1530627, stack(0x000070008651b000,0x000070008691b000)]
+  0x00007fbc92a33800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/examples/js/src/test/java" daemon [_thread_in_native, id=1517827, stack(0x0000700086118000,0x0000700086518000)]
+  0x00007fbc92a33000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/fp/js/src/main/java" daemon [_thread_in_native, id=1532931, stack(0x0000700085d15000,0x0000700086115000)]
+  0x00007fbc920b4000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/shapeless/.jvm/src/main/scala" daemon [_thread_in_native, id=1533955, stack(0x0000700085912000,0x0000700085d12000)]
+  0x00007fbc92a30000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/form/.jvm/target/scala-2.12/src_managed/test" daemon [_thread_in_native, id=1515011, stack(0x000070008550f000,0x000070008590f000)]
+  0x00007fbc920b5800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalacheck/jvm/target/scala-2.12/src_managed/test" daemon [_thread_in_native, id=1536003, stack(0x000070008510c000,0x000070008550c000)]
+  0x00007fbca630c000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/cats/shared/src/test/scala-2.12" daemon [_thread_in_native, id=1536771, stack(0x0000700084d09000,0x0000700085109000)]
+  0x00007fbca6312000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/cats/jvm/src/test/java" daemon [_thread_in_native, id=1538051, stack(0x0000700084906000,0x0000700084d06000)]
+  0x00007fbcb0620800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalacheck/js/src/test/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1538307, stack(0x0000700084503000,0x0000700084903000)]
+  0x00007fbcacf63000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/html/src/test/scala" daemon [_thread_in_native, id=45175, stack(0x00007000127b1000,0x0000700012bb1000)]
+  0x00007fbc92a2f800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/shapeless/.js/src/main/java" daemon [_thread_in_native, id=1539587, stack(0x0000700084100000,0x0000700084500000)]
+  0x00007fbca9b86800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/markdown/.jvm/src/main/scala" daemon [_thread_in_native, id=1541123, stack(0x0000700083cfd000,0x00007000840fd000)]
+  0x00007fbc92a2e800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/html/target/scala-2.12/src_managed/main" daemon [_thread_in_native, id=1542147, stack(0x00007000838fa000,0x0000700083cfa000)]
+  0x00007fbca9b83800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalaz/jvm/src/test/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1505027, stack(0x00007000834f7000,0x00007000838f7000)]
+  0x00007fbca32a2000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/mock/jvm/src/main/scala" daemon [_thread_in_native, id=1543939, stack(0x00007000830f4000,0x00007000834f4000)]
+  0x00007fbc92a2d800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/form/.js/src/main/scala" daemon [_thread_in_native, id=1545731, stack(0x0000700082cf1000,0x00007000830f1000)]
+  0x00007fbc92a2a000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/core/js/src/test/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1548035, stack(0x00007000828ee000,0x0000700082cee000)]
+  0x00007fbca69df000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/cats/jvm/src/main/scala-2.12" daemon [_thread_in_native, id=1502467, stack(0x00007000824eb000,0x00007000828eb000)]
+  0x00007fbc91cb9800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalacheck/jvm/src/test/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1549571, stack(0x00007000820e8000,0x00007000824e8000)]
+  0x00007fbcb0e07000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher/shared/src/main/scala" daemon [_thread_in_native, id=1550851, stack(0x0000700081ce5000,0x00007000820e5000)]
+  0x00007fbcb0ba4000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/shapeless/.js/src/test/java" daemon [_thread_in_native, id=1551875, stack(0x00007000818e2000,0x0000700081ce2000)]
+  0x00007fbcb0e04800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/form/.jvm/src/main/scala-2.12" daemon [_thread_in_native, id=1553155, stack(0x00007000814df000,0x00007000818df000)]
+  0x00007fbca4c68800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/fp/jvm/src/main/scala" daemon [_thread_in_native, id=1497859, stack(0x00007000810dc000,0x00007000814dc000)]
+  0x00007fbca6310800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/cats/js/src/main/scala-2.12" daemon [_thread_in_native, id=1555715, stack(0x0000700080cd9000,0x00007000810d9000)]
+  0x00007fbc920b3000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher-extra/js/target/scala-2.12/src_managed/test" daemon [_thread_in_native, id=1556483, stack(0x00007000808d6000,0x0000700080cd6000)]
+  0x00007fbc920b2800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/src/main/scala-2.12" daemon [_thread_in_native, id=1558531, stack(0x00007000804d3000,0x00007000808d3000)]
+  0x00007fbc92a29000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalaz/jvm/src/main/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1494275, stack(0x00007000800d0000,0x00007000804d0000)]
+  0x00007fbca36c0800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/fp/js/src/test/scala" daemon [_thread_in_native, id=1561091, stack(0x000070007fccd000,0x00007000800cd000)]
+  0x00007fbca3486800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/junit/shared/src/test/scala-2.12" daemon [_thread_in_native, id=1562115, stack(0x000070007f8ca000,0x000070007fcca000)]
+  0x00007fbcb0018800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/common/jvm/src/test/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1491459, stack(0x000070007f4c7000,0x000070007f8c7000)]
+  0x00007fbca63f6800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/shapeless/.jvm/src/test/scala" daemon [_thread_in_native, id=1490435, stack(0x000070007f0c4000,0x000070007f4c4000)]
+  0x00007fbc91cb7800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher/jvm/src/main/java" daemon [_thread_in_native, id=1564931, stack(0x000070007ecc1000,0x000070007f0c1000)]
+  0x00007fbca2683800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/mock/jvm/target/scala-2.12/src_managed/test" daemon [_thread_in_native, id=1489667, stack(0x000070007e8be000,0x000070007ecbe000)]
+  0x00007fbca6a50000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/tests/src/main/scala" daemon [_thread_in_native, id=1567235, stack(0x000070007e4bb000,0x000070007e8bb000)]
+  0x00007fbca2684800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/cats/shared/src/main/scala" daemon [_thread_in_native, id=1487619, stack(0x000070007e0b8000,0x000070007e4b8000)]
+  0x00007fbc9190c800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/shapeless/.jvm/src/main/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1569539, stack(0x000070007dcb5000,0x000070007e0b5000)]
+  0x00007fbca9b84800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher/shared/src/test/scala-2.12" daemon [_thread_in_native, id=1571843, stack(0x000070007d8b2000,0x000070007dcb2000)]
+  0x00007fbca7953800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher-extra/jvm/target/scala-2.12/src_managed/test" daemon [_thread_in_native, id=1572611, stack(0x000070007d4af000,0x000070007d8af000)]
+  0x00007fbca6006800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/shapeless/.js/src/test/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1440259, stack(0x000070007d0ac000,0x000070007d4ac000)]
+  0x00007fbc920b1000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/markdown/.js/src/test/scala" daemon [_thread_in_native, id=1438211, stack(0x000070007cca9000,0x000070007d0a9000)]
+  0x00007fbc920b0800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/analysis/shared/src/test/scala-2.12" daemon [_thread_in_native, id=1442819, stack(0x000070007c8a6000,0x000070007cca6000)]
+  0x00007fbc91cb5800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/markdown/.js/target/scala-2.12/src_managed/main" daemon [_thread_in_native, id=1435651, stack(0x000070007c4a3000,0x000070007c8a3000)]
+  0x00007fbcaca31000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/fp/jvm/src/test/scala" daemon [_thread_in_native, id=1444355, stack(0x000070007c0a0000,0x000070007c4a0000)]
+  0x00007fbca7953000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/pom/src/test/scala" daemon [_thread_in_native, id=1433091, stack(0x000070007bc9d000,0x000070007c09d000)]
+  0x00007fbcaca35000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalaz/js/src/main/scala" daemon [_thread_in_native, id=1446147, stack(0x000070007b89a000,0x000070007bc9a000)]
+  0x00007fbcaca36000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/fp/js/src/main/scala" daemon [_thread_in_native, id=1447427, stack(0x000070007b497000,0x000070007b897000)]
+  0x00007fbca7951000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/core/jvm/src/test/java" daemon [_thread_in_native, id=1448451, stack(0x000070007b094000,0x000070007b494000)]
+  0x00007fbca4c68000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/common/shared/src/test/scala-2.12" daemon [_thread_in_native, id=1449219, stack(0x000070007ac91000,0x000070007b091000)]
+  0x00007fbc91cb5000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/examples/jvm/src/main/java" daemon [_thread_in_native, id=1428483, stack(0x000070007a88e000,0x000070007ac8e000)]
+  0x00007fbca7952000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/tests/src/test/scala" daemon [_thread_in_native, id=1451523, stack(0x000070007a48b000,0x000070007a88b000)]
+  0x00007fbc92a27800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/examples/jvm/src/test/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1452291, stack(0x000070007a088000,0x000070007a488000)]
+  0x00007fbca3369000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/pom/src/test/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1425155, stack(0x0000700079c85000,0x000070007a085000)]
+  0x00007fbcb0ba2800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/common/shared/src/main/scala-2.12" daemon [_thread_in_native, id=1424131, stack(0x0000700079882000,0x0000700079c82000)]
+  0x00007fbcaca33000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/common/jvm/target/scala-2.12/src_managed/test" daemon [_thread_in_native, id=1423363, stack(0x000070007947f000,0x000070007987f000)]
+  0x00007fbcb0f6b800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/junit/jvm/src/test/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1456387, stack(0x000070007907c000,0x000070007947c000)]
+  0x00007fbc920af800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalaz/shared/src/test/scala" daemon [_thread_in_native, id=1421059, stack(0x0000700078c79000,0x0000700079079000)]
+  0x00007fbc92a26800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/mock/jvm/src/main/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1459459, stack(0x0000700078876000,0x0000700078c76000)]
+  0x00007fbc92a26000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/examples/js/target/scala-2.12/src_managed/test" daemon [_thread_in_native, id=1459971, stack(0x0000700078473000,0x0000700078873000)]
+  0x00007fbc9190d800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/common/js/src/test/scala-2.12" daemon [_thread_in_native, id=1461507, stack(0x0000700078070000,0x0000700078470000)]
+  0x00007fbca4ccd000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/fp/js/target/scala-2.12/src_managed/test" daemon [_thread_in_native, id=1463043, stack(0x0000700077c6d000,0x000070007806d000)]
+  0x00007fbcb0f6d000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/examples/js/src/main/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1464323, stack(0x000070007786a000,0x0000700077c6a000)]
+  0x00007fbc9190c000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/junit/js/target/scala-2.12/src_managed/main" daemon [_thread_in_native, id=1416451, stack(0x0000700077467000,0x0000700077867000)]
+  0x00007fbc93240800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/shapeless/.jvm/target/scala-2.12/src_managed/test" daemon [_thread_in_native, id=1414915, stack(0x0000700077064000,0x0000700077464000)]
+  0x00007fbcaca32800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/examples/shared/src/test/scala" daemon [_thread_in_native, id=1466627, stack(0x0000700076c61000,0x0000700077061000)]
+  0x00007fbca4ccc000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/mock/jvm/src/test/java" daemon [_thread_in_native, id=1468419, stack(0x000070007685e000,0x0000700076c5e000)]
+  0x00007fbc920ae800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/common/jvm/target/scala-2.12/src_managed/main" daemon [_thread_in_native, id=1469699, stack(0x000070007645b000,0x000070007685b000)]
+  0x00007fbc920ae000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher/js/src/main/scala-2.12" daemon [_thread_in_native, id=1410307, stack(0x0000700076058000,0x0000700076458000)]
+  0x00007fbc92a23800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/markdown/.jvm/src/test/scala-2.12" daemon [_thread_in_native, id=1409283, stack(0x0000700075c55000,0x0000700076055000)]
+  0x00007fbc920ad000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/guide/target/scala-2.12/src_managed/test" daemon [_thread_in_native, id=1408771, stack(0x0000700075852000,0x0000700075c52000)]
+  0x00007fbc920ac800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalaz/jvm/src/main/java" daemon [_thread_in_native, id=1472771, stack(0x000070007544f000,0x000070007584f000)]
+  0x00007fbc920ab800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/fp/js/src/main/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1406467, stack(0x000070007504c000,0x000070007544c000)]
+  0x00007fbc920ab000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/core/js/target/scala-2.12/src_managed/main" daemon [_thread_in_native, id=1405187, stack(0x0000700074c49000,0x0000700075049000)]
+  0x00007fbc920aa000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalacheck/jvm/src/main/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1475075, stack(0x0000700074846000,0x0000700074c46000)]
+  0x00007fbc920a8000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/markdown/.js/src/test/java" daemon [_thread_in_native, id=1477379, stack(0x0000700074443000,0x0000700074843000)]
+  0x00007fbc920a7800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/analysis/js/src/main/scala" daemon [_thread_in_native, id=1478915, stack(0x0000700074040000,0x0000700074440000)]
+  0x00007fbcacdb1000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher-extra/js/src/test/scala-2.12" daemon [_thread_in_native, id=1479427, stack(0x0000700073c3d000,0x000070007403d000)]
+  0x00007fbcb0f6c800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/core/jvm/src/test/scala-2.12" daemon [_thread_in_native, id=1480451, stack(0x000070007383a000,0x0000700073c3a000)]
+  0x00007fbca741e800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/markdown/.jvm/src/main/java" daemon [_thread_in_native, id=1481987, stack(0x0000700073437000,0x0000700073837000)]
+  0x00007fbca6b35000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/gwt/.js/target/scala-2.12/src_managed/main" daemon [_thread_in_native, id=1482755, stack(0x0000700073034000,0x0000700073434000)]
+  0x00007fbca716a000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/gwt/src/main/scala-2.12" daemon [_thread_in_native, id=1399043, stack(0x0000700072c31000,0x0000700073031000)]
+  0x00007fbcaca30000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/analysis/js/src/main/java" daemon [_thread_in_native, id=1349891, stack(0x000070007282e000,0x0000700072c2e000)]
+  0x00007fbc93240000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/fp/js/src/main/scala-2.12" daemon [_thread_in_native, id=1350659, stack(0x000070007242b000,0x000070007282b000)]
+  0x00007fbc9323f000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalacheck/js/src/main/scala-2.12" daemon [_thread_in_native, id=1347331, stack(0x0000700072028000,0x0000700072428000)]
+  0x00007fbc9323c800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/core/js/src/test/scala-2.12" daemon [_thread_in_native, id=1352451, stack(0x0000700071c25000,0x0000700072025000)]
+  0x00007fbca7950800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/markdown/.jvm/src/main/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1345539, stack(0x0000700071822000,0x0000700071c22000)]
+  0x00007fbcb0f6a800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher-extra/jvm/src/main/scala" daemon [_thread_in_native, id=1354755, stack(0x000070007141f000,0x000070007181f000)]
+  0x00007fbcb0fe9000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher/jvm/target/scala-2.12/src_managed/test" daemon [_thread_in_native, id=1355779, stack(0x000070007101c000,0x000070007141c000)]
+  0x00007fbca57a7000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/cats/js/src/test/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1341699, stack(0x0000700070c19000,0x0000700071019000)]
+  0x00007fbca57a6800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/common/js/src/test/java" daemon [_thread_in_native, id=1339651, stack(0x0000700070816000,0x0000700070c16000)]
+  0x00007fbca57a5800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/gwt/.js/src/main/java" daemon [_thread_in_native, id=1338883, stack(0x0000700070413000,0x0000700070813000)]
+  0x00007fbcacdb2000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/junit/shared/src/main/scala-2.12" daemon [_thread_in_native, id=1358851, stack(0x0000700070010000,0x0000700070410000)]
+  0x00007fbc9323d800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher/js/target/scala-2.12/src_managed/main" daemon [_thread_in_native, id=1359619, stack(0x000070006fc0d000,0x000070007000d000)]
+  0x00007fbca6008800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/core/jvm/src/test/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1336067, stack(0x000070006f80a000,0x000070006fc0a000)]
+  0x00007fbca9b7c000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/mock/js/src/test/java" daemon [_thread_in_native, id=1335299, stack(0x000070006f407000,0x000070006f807000)]
+  0x00007fbc92a22800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/gwt/.jvm/src/test/java" daemon [_thread_in_native, id=1334531, stack(0x000070006f004000,0x000070006f404000)]
+  0x00007fbc920a5800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/form/.jvm/src/test/java" daemon [_thread_in_native, id=1365251, stack(0x000070006ec01000,0x000070006f001000)]
+  0x00007fbc920a5000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/examples/js/src/main/scala" daemon [_thread_in_native, id=1366531, stack(0x000070006e7fe000,0x000070006ebfe000)]
+  0x00007fbc9190a800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/examples/jvm/src/test/java" daemon [_thread_in_native, id=1332995, stack(0x000070006e3fb000,0x000070006e7fb000)]
+  0x00007fbcb0f6a000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/gwt/.js/src/main/scala-2.12" daemon [_thread_in_native, id=1331459, stack(0x000070006dff8000,0x000070006e3f8000)]
+  0x00007fbc92a21800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/guide/src/test/scala-2.12" daemon [_thread_in_native, id=1369091, stack(0x000070006dbf5000,0x000070006dff5000)]
+  0x00007fbc92a21000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalacheck/js/target/scala-2.12/src_managed/main" daemon [_thread_in_native, id=1370627, stack(0x000070006d7f2000,0x000070006dbf2000)]
+  0x00007fbcb0f69000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/src/test/java" daemon [_thread_in_native, id=1372419, stack(0x000070006d3ef000,0x000070006d7ef000)]
+  0x00007fbca57a5000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/mock/shared/src/main/scala-2.12" daemon [_thread_in_native, id=1328643, stack(0x000070006cfec000,0x000070006d3ec000)]
+  0x00007fbc92a20000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/core/jvm/target/scala-2.12/src_managed/main" daemon [_thread_in_native, id=1375235, stack(0x000070006cbe9000,0x000070006cfe9000)]
+  0x00007fbc92a1f800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/core/js/src/main/java" daemon [_thread_in_native, id=1326595, stack(0x000070006c7e6000,0x000070006cbe6000)]
+  0x00007fbcb0fec800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher-extra/jvm/src/main/scala-2.12" daemon [_thread_in_native, id=1377283, stack(0x000070006c3e3000,0x000070006c7e3000)]
+  0x00007fbca214d000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/cats/js/src/main/java" daemon [_thread_in_native, id=1379075, stack(0x000070006bfe0000,0x000070006c3e0000)]
+  0x00007fbc92a1e800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/html/src/test/java" daemon [_thread_in_native, id=1324035, stack(0x000070006bbdd000,0x000070006bfdd000)]
+  0x00007fbcb0feb000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/form/.jvm/src/main/java" daemon [_thread_in_native, id=1380355, stack(0x000070006b7da000,0x000070006bbda000)]
+  0x00007fbc9323a000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/junit/jvm/target/scala-2.12/src_managed/main" daemon [_thread_in_native, id=1381891, stack(0x000070006b3d7000,0x000070006b7d7000)]
+  0x00007fbc92a1e000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/mock/jvm/src/test/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1321219, stack(0x000070006afd4000,0x000070006b3d4000)]
+  0x00007fbcaaac9800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/src/main/scala" daemon [_thread_in_native, id=1383939, stack(0x000070006abd1000,0x000070006afd1000)]
+  0x00007fbcaaac8800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/guide/src/test/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1319939, stack(0x000070006a7ce000,0x000070006abce000)]
+  0x00007fbc93239800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalacheck/js/src/test/java" daemon [_thread_in_native, id=1387267, stack(0x000070006a3cb000,0x000070006a7cb000)]
+  0x00007fbc93237000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher-extra/jvm/src/test/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1318403, stack(0x0000700069fc8000,0x000070006a3c8000)]
+  0x00007fbca214c000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalaz/shared/src/main/scala-2.12" daemon [_thread_in_native, id=1317635, stack(0x0000700069bc5000,0x0000700069fc5000)]
+  0x00007fbca214b800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalacheck/shared/src/test/scala-2.12" daemon [_thread_in_native, id=1316355, stack(0x00007000697c2000,0x0000700069bc2000)]
+  0x00007fbcb0fea800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/fp/jvm/src/test/java" daemon [_thread_in_native, id=1391363, stack(0x00007000693bf000,0x00007000697bf000)]
+  0x00007fbc920a2800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/markdown/.js/src/main/scala-2.12" daemon [_thread_in_native, id=1392131, stack(0x0000700068fbc000,0x00007000693bc000)]
+  0x00007fbc9209f000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/core/jvm/src/test/scala" daemon [_thread_in_native, id=1313539, stack(0x0000700068bb9000,0x0000700068fb9000)]
+  0x00007fbca9b78800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/common/jvm/src/test/scala-2.12" daemon [_thread_in_native, id=1312259, stack(0x00007000687b6000,0x0000700068bb6000)]
+  0x00007fbca9b7a800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/common/shared/src/main/scala" daemon [_thread_in_native, id=1395459, stack(0x00007000683b3000,0x00007000687b3000)]
+  0x00007fbcaaac7800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/markdown/.jvm/src/test/java" daemon [_thread_in_native, id=1310723, stack(0x0000700067fb0000,0x00007000683b0000)]
+  0x00007fbca62a0000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/gwt/.jvm/src/main/java" daemon [_thread_in_native, id=1261827, stack(0x0000700067bad000,0x0000700067fad000)]
+  0x00007fbcb0fe9800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalaz/js/target/scala-2.12/src_managed/test" daemon [_thread_in_native, id=1262595, stack(0x00007000677aa000,0x0000700067baa000)]
+  0x00007fbcb0b41800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/guide/target/scala-2.12/src_managed/main" daemon [_thread_in_native, id=1257987, stack(0x00007000673a7000,0x00007000677a7000)]
+  0x00007fbcaaac6800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/form/.js/src/test/scala" daemon [_thread_in_native, id=1265667, stack(0x0000700066fa4000,0x00007000673a4000)]
+  0x00007fbcaaac6000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/junit/jvm/src/test/scala-2.12" daemon [_thread_in_native, id=1266435, stack(0x0000700066ba1000,0x0000700066fa1000)]
+  0x00007fbcaaac5000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher-extra/shared/src/main/scala-2.12" daemon [_thread_in_native, id=1255171, stack(0x000070006679e000,0x0000700066b9e000)]
+  0x00007fbcaaac4800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/common/jvm/src/test/scala" daemon [_thread_in_native, id=1268227, stack(0x000070006639b000,0x000070006679b000)]
+  0x00007fbcaaac3800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/fp/jvm/target/scala-2.12/src_managed/test" daemon [_thread_in_native, id=1253379, stack(0x0000700065f98000,0x0000700066398000)]
+  0x00007fbca2475000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/guide/src/main/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1269763, stack(0x0000700065b95000,0x0000700065f95000)]
+  0x00007fbcaab01000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/core/shared/src/test/scala-2.12" daemon [_thread_in_native, id=1270787, stack(0x0000700065792000,0x0000700065b92000)]
+  0x00007fbc9379f000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher-extra/jvm/src/test/scala-2.12" daemon [_thread_in_native, id=1250307, stack(0x000070006538f000,0x000070006578f000)]
+  0x00007fbca9b79800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/shapeless/.js/src/test/scala" daemon [_thread_in_native, id=1249539, stack(0x0000700064f8c000,0x000070006538c000)]
+  0x00007fbc93231800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/mock/js/target/scala-2.12/src_managed/test" daemon [_thread_in_native, id=1274627, stack(0x0000700064b89000,0x0000700064f89000)]
+  0x00007fbc93230800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/cats/shared/src/test/scala" daemon [_thread_in_native, id=1248259, stack(0x0000700064786000,0x0000700064b86000)]
+  0x00007fbca2474800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/analysis/jvm/src/test/scala" daemon [_thread_in_native, id=1277955, stack(0x0000700064383000,0x0000700064783000)]
+  0x00007fbcb0b42800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/form/.js/target/scala-2.12/src_managed/main" daemon [_thread_in_native, id=1246723, stack(0x0000700063f80000,0x0000700064380000)]
+  0x00007fbca9b78000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/analysis/jvm/src/test/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1244931, stack(0x0000700063b7d000,0x0000700063f7d000)]
+  0x00007fbca9b77000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/mock/jvm/target/scala-2.12/src_managed/main" daemon [_thread_in_native, id=1244675, stack(0x000070006377a000,0x0000700063b7a000)]
+  0x00007fbca2473800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher/jvm/src/test/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1281539, stack(0x0000700063377000,0x0000700063777000)]
+  0x00007fbca9f7b000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/examples/jvm/target/scala-2.12/src_managed/main" daemon [_thread_in_native, id=1243139, stack(0x0000700062f74000,0x0000700063374000)]
+  0x00007fbca2620000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalaz/jvm/target/scala-2.12/src_managed/test" daemon [_thread_in_native, id=1284355, stack(0x0000700062b71000,0x0000700062f71000)]
+  0x00007fbca261f800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/junit/jvm/src/main/scala" daemon [_thread_in_native, id=1241091, stack(0x000070006276e000,0x0000700062b6e000)]
+  0x00007fbcaaaff800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/pom/src/test/java" daemon [_thread_in_native, id=1239811, stack(0x000070006236b000,0x000070006276b000)]
+  0x00007fbc93230000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/core/jvm/src/main/scala-2.12" daemon [_thread_in_native, id=1238531, stack(0x0000700061f68000,0x0000700062368000)]
+  0x00007fbc93457800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/markdown/.jvm/target/scala-2.12/src_managed/test" daemon [_thread_in_native, id=1238019, stack(0x0000700061b65000,0x0000700061f65000)]
+  0x00007fbc93457000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalacheck/shared/src/main/scala" daemon [_thread_in_native, id=1237507, stack(0x0000700061762000,0x0000700061b62000)]
+  0x00007fbc93465800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/cats/jvm/target/scala-2.12/src_managed/test" daemon [_thread_in_native, id=1236739, stack(0x000070006135f000,0x000070006175f000)]
+  0x00007fbcb0b41000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalacheck/jvm/src/main/java" daemon [_thread_in_native, id=1292803, stack(0x0000700060f5c000,0x000070006135c000)]
+  0x00007fbcb0b40000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalacheck/js/src/main/java" daemon [_thread_in_native, id=1294083, stack(0x0000700060b59000,0x0000700060f59000)]
+  0x00007fbcacee9800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher-extra/js/src/main/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1295363, stack(0x0000700060756000,0x0000700060b56000)]
+  0x00007fbc9209e000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/common/js/src/main/scala" daemon [_thread_in_native, id=1233923, stack(0x0000700060353000,0x0000700060753000)]
+  0x00007fbc92680000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/fp/shared/src/test/scala-2.12" daemon [_thread_in_native, id=1298947, stack(0x000070005ff50000,0x0000700060350000)]
+  0x00007fbc9267f800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/gwt/.jvm/src/test/scala" daemon [_thread_in_native, id=1232899, stack(0x000070005fb4d000,0x000070005ff4d000)]
+  0x00007fbcb0b3f800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher-extra/js/target/scala-2.12/src_managed/main" daemon [_thread_in_native, id=1231619, stack(0x000070005f74a000,0x000070005fb4a000)]
+  0x00007fbc9267e800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher/js/target/scala-2.12/src_managed/test" daemon [_thread_in_native, id=1301763, stack(0x000070005f347000,0x000070005f747000)]
+  0x00007fbc9266c000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/form/.jvm/src/test/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1229571, stack(0x000070005ef44000,0x000070005f344000)]
+  0x00007fbca3951800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/junit/jvm/src/test/scala" daemon [_thread_in_native, id=1303555, stack(0x000070005eb41000,0x000070005ef41000)]
+  0x00007fbca9b5d800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/gwt/.jvm/target/scala-2.12/src_managed/main" daemon [_thread_in_native, id=1228803, stack(0x000070005e73e000,0x000070005eb3e000)]
+  0x00007fbca9b7f800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher-extra/shared/src/test/scala" daemon [_thread_in_native, id=1306627, stack(0x000070005e33b000,0x000070005e73b000)]
+  0x00007fbcb06a8800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalaz/shared/src/test/scala-2.12" daemon [_thread_in_native, id=1226499, stack(0x000070005df38000,0x000070005e338000)]
+  0x00007fbca32d6800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/mock/js/src/test/scala-2.12" daemon [_thread_in_native, id=1225475, stack(0x000070005db35000,0x000070005df35000)]
+  0x00007fbca3424800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/tests/src/test/java" daemon [_thread_in_native, id=1309443, stack(0x000070005d732000,0x000070005db32000)]
+  0x00007fbcb06b0000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher-extra/jvm/src/main/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1223171, stack(0x000070005d32f000,0x000070005d72f000)]
+  0x00007fbca3950800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/analysis/js/target/scala-2.12/src_managed/main" daemon [_thread_in_native, id=1176067, stack(0x000070005cf2c000,0x000070005d32c000)]
+  0x00007fbca3950000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/common/jvm/src/main/scala-2.12" daemon [_thread_in_native, id=1179139, stack(0x000070005cb29000,0x000070005cf29000)]
+  0x00007fbcacc96000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalacheck/shared/src/test/scala" daemon [_thread_in_native, id=1179907, stack(0x000070005c726000,0x000070005cb26000)]
+  0x00007fbca7ff6800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/analysis/jvm/target/scala-2.12/src_managed/test" daemon [_thread_in_native, id=1180675, stack(0x000070005c323000,0x000070005c723000)]
+  0x00007fbca25fa000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/markdown/src/test/scala" daemon [_thread_in_native, id=1181955, stack(0x000070005bf20000,0x000070005c320000)]
+  0x00007fbca793c800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher/jvm/src/test/scala-2.12" daemon [_thread_in_native, id=1171459, stack(0x000070005bb1d000,0x000070005bf1d000)]
+  0x00007fbc9190a000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/examples/js/src/test/scala-2.12" daemon [_thread_in_native, id=1170179, stack(0x000070005b71a000,0x000070005bb1a000)]
+  0x00007fbcaaab7000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/target/scala-2.12/src_managed/main" daemon [_thread_in_native, id=1169667, stack(0x000070005b317000,0x000070005b717000)]
+  0x00007fbca394f000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher-extra/js/src/test/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1187075, stack(0x000070005af14000,0x000070005b314000)]
+  0x00007fbca3929800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/gwt/.js/src/test/scala" daemon [_thread_in_native, id=1188867, stack(0x000070005ab11000,0x000070005af11000)]
+  0x00007fbca394e800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/core/shared/src/main/scala" daemon [_thread_in_native, id=1190403, stack(0x000070005a70e000,0x000070005ab0e000)]
+  0x00007fbca261e800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalacheck/js/src/main/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1191683, stack(0x000070005a30b000,0x000070005a70b000)]
+  0x00007fbca3929000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/examples/jvm/src/test/scala" daemon [_thread_in_native, id=1192451, stack(0x0000700059f08000,0x000070005a308000)]
+  0x00007fbca9b5c000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher-extra/shared/src/test/scala-2.12" daemon [_thread_in_native, id=1193475, stack(0x0000700059b05000,0x0000700059f05000)]
+  0x00007fbca3928000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/html/src/main/scala-2.12" daemon [_thread_in_native, id=1195011, stack(0x0000700059702000,0x0000700059b02000)]
+  0x00007fbca3927800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalacheck/jvm/src/test/scala" daemon [_thread_in_native, id=1195523, stack(0x00007000592ff000,0x00007000596ff000)]
+  0x00007fbca261d800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/gwt/src/test/scala-2.12" daemon [_thread_in_native, id=1197059, stack(0x0000700058efc000,0x00007000592fc000)]
+  0x00007fbcb0409000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/form/.js/src/test/scala-2.12" daemon [_thread_in_native, id=1161475, stack(0x0000700058af9000,0x0000700058ef9000)]
+  0x00007fbca3926800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalaz/js/src/main/scala-2.12" daemon [_thread_in_native, id=1159683, stack(0x00007000586f6000,0x0000700058af6000)]
+  0x00007fbca39a0800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/src/test/scala-2.12" daemon [_thread_in_native, id=1199619, stack(0x00007000582f3000,0x00007000586f3000)]
+  0x00007fbca39a0000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/analysis/shared/src/main/scala" daemon [_thread_in_native, id=1157635, stack(0x0000700057ef0000,0x00007000582f0000)]
+  0x00007fbc9266a000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher-extra/js/src/test/java" daemon [_thread_in_native, id=1200899, stack(0x0000700057aed000,0x0000700057eed000)]
+  0x00007fbca9b7e000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/cats/jvm/src/test/scala" daemon [_thread_in_native, id=1155843, stack(0x00007000576ea000,0x0000700057aea000)]
+  0x00007fbca9b7d800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/cats/jvm/src/test/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1154563, stack(0x00007000572e7000,0x00007000576e7000)]
+  0x00007fbcaceea800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/examples/js/src/test/scala" daemon [_thread_in_native, id=1203971, stack(0x0000700056ee4000,0x00007000572e4000)]
+  0x00007fbc92669000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/guide/src/main/scala" daemon [_thread_in_native, id=1205251, stack(0x0000700056ae1000,0x0000700056ee1000)]
+  0x00007fbc92444000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/markdown/.jvm/target/scala-2.12/src_managed/main" daemon [_thread_in_native, id=1206787, stack(0x00007000566de000,0x0000700056ade000)]
+  0x00007fbc92443000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/junit/jvm/src/test/java" daemon [_thread_in_native, id=1208579, stack(0x00007000562db000,0x00007000566db000)]
+  0x00007fbcacee9000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/html/src/main/java" daemon [_thread_in_native, id=1210371, stack(0x0000700055ed8000,0x00007000562d8000)]
+  0x00007fbcaced5000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalaz/js/src/test/java" daemon [_thread_in_native, id=1150467, stack(0x0000700055ad5000,0x0000700055ed5000)]
+  0x00007fbcaaabd800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/cats/js/src/test/scala-2.12" daemon [_thread_in_native, id=1149187, stack(0x00007000556d2000,0x0000700055ad2000)]
+  0x00007fbc923be000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/analysis/js/src/test/scala-2.12" daemon [_thread_in_native, id=1147651, stack(0x00007000552cf000,0x00007000556cf000)]
+  0x00007fbc93463800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/mock/js/src/main/java" daemon [_thread_in_native, id=1146371, stack(0x0000700054ecc000,0x00007000552cc000)]
+  0x00007fbc92440800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/html/src/main/scala" daemon [_thread_in_native, id=1145859, stack(0x0000700054ac9000,0x0000700054ec9000)]
+  0x00007fbca3bd5000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/shapeless/.jvm/src/main/scala-2.12" daemon [_thread_in_native, id=1217027, stack(0x00007000546c6000,0x0000700054ac6000)]
+  0x00007fbca399e000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/core/jvm/src/main/scala" daemon [_thread_in_native, id=1144323, stack(0x00007000542c3000,0x00007000546c3000)]
+  0x00007fbca262f000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/fp/jvm/src/test/scala-2.12" daemon [_thread_in_native, id=1142275, stack(0x0000700053ec0000,0x00007000542c0000)]
+  0x00007fbca262e000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalacheck/js/src/main/scala" daemon [_thread_in_native, id=1218563, stack(0x0000700053abd000,0x0000700053ebd000)]
+  0x00007fbca262d800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher-extra/shared/src/main/scala" daemon [_thread_in_native, id=1139971, stack(0x00007000536ba000,0x0000700053aba000)]
+  0x00007fbca4c64800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/junit/js/src/test/scala-2.12" daemon [_thread_in_native, id=1219587, stack(0x00007000532b7000,0x00007000536b7000)]
+  0x00007fbc91909000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/analysis/jvm/target/scala-2.12/src_managed/main" daemon [_thread_in_native, id=1220611, stack(0x0000700052eb4000,0x00007000532b4000)]
+  0x00007fbca3bd4000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/mock/jvm/src/main/scala-2.12" daemon [_thread_in_native, id=1222915, stack(0x0000700052ab1000,0x0000700052eb1000)]
+  0x00007fbcaced6000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher/js/src/main/java" daemon [_thread_in_native, id=1094915, stack(0x00007000526ae000,0x0000700052aae000)]
+  0x00007fbc9345a000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/markdown/.js/src/test/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1091843, stack(0x00007000522ab000,0x00007000526ab000)]
+  0x00007fbca9942000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/html/target/scala-2.12/src_managed/test" daemon [_thread_in_native, id=1091331, stack(0x0000700051ea8000,0x00007000522a8000)]
+  0x00007fbca9b61800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/form/.js/src/main/java" daemon [_thread_in_native, id=50819, stack(0x0000700051aa5000,0x0000700051ea5000)]
+  0x00007fbca9b62800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/core/js/src/test/java" daemon [_thread_in_native, id=70471, stack(0x00007000516a2000,0x0000700051aa2000)]
+  0x00007fbcacbd6000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher/shared/src/test/scala" daemon [_thread_in_native, id=38675, stack(0x000070005129f000,0x000070005169f000)]
+  0x00007fbca262c800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/examples/jvm/target/scala-2.12/src_managed/test" daemon [_thread_in_native, id=1088015, stack(0x0000700050e9c000,0x000070005129c000)]
+  0x00007fbc9345b000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalaz/js/target/scala-2.12/src_managed/main" daemon [_thread_in_native, id=84039, stack(0x0000700050a99000,0x0000700050e99000)]
+  0x00007fbca9b81800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/pom/src/main/scala-2.12" daemon [_thread_in_native, id=26527, stack(0x0000700050696000,0x0000700050a96000)]
+  0x00007fbca25b2000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/form/src/main/scala-2.12" daemon [_thread_in_native, id=44563, stack(0x0000700050293000,0x0000700050693000)]
+  0x00007fbca25b1800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/guide/src/main/scala-2.12" daemon [_thread_in_native, id=130823, stack(0x000070004fe90000,0x0000700050290000)]
+  0x00007fbcaaab6800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalacheck/js/src/test/scala-2.12" daemon [_thread_in_native, id=91911, stack(0x000070004fa8d000,0x000070004fe8d000)]
+  0x00007fbca25b0800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/analysis/jvm/src/main/scala-scalaz-7.1.x" daemon [_thread_in_native, id=130567, stack(0x000070004f68a000,0x000070004fa8a000)]
+  0x00007fbca66ad800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/form/.js/src/main/scala-scalaz-7.1.x" daemon [_thread_in_native, id=126983, stack(0x000070004f287000,0x000070004f687000)]
+  0x00007fbc93459000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/shapeless/src/test/scala-2.12" daemon [_thread_in_native, id=125959, stack(0x000070004ee84000,0x000070004f284000)]
+  0x00007fbca25b0000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/markdown/src/main/scala-2.12" daemon [_thread_in_native, id=105483, stack(0x000070004ea81000,0x000070004ee81000)]
+  0x00007fbc91a2c000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/junit/js/src/test/java" daemon [_thread_in_native, id=107275, stack(0x000070004e67e000,0x000070004ea7e000)]
+  0x00007fbc9331d000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/gwt/.jvm/target/scala-2.12/src_managed/test" daemon [_thread_in_native, id=173835, stack(0x000070004e27b000,0x000070004e67b000)]
+  0x00007fbcaaab5800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/fp/shared/src/main/scala" daemon [_thread_in_native, id=104715, stack(0x000070004de78000,0x000070004e278000)]
+  0x00007fbca6f23000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/junit/js/src/main/java" daemon [_thread_in_native, id=113927, stack(0x000070004da75000,0x000070004de75000)]
+  0x00007fbca3bd3800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher-extra/jvm/target/scala-2.12/src_managed/main" daemon [_thread_in_native, id=111111, stack(0x000070004d672000,0x000070004da72000)]
+  0x00007fbca9b81000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/form/.js/target/scala-2.12/src_managed/test" daemon [_thread_in_native, id=169991, stack(0x000070004d26f000,0x000070004d66f000)]
+  0x00007fbcacb30800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/common/js/target/scala-2.12/src_managed/test" daemon [_thread_in_native, id=134407, stack(0x000070004ce6c000,0x000070004d26c000)]
+  0x00007fbc92440000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/examples/js/src/test/scala-scalaz-7.1.x" daemon [_thread_in_native, id=145415, stack(0x000070004ca69000,0x000070004ce69000)]
+  0x00007fbc930e3000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/cats/jvm/src/main/scala" daemon [_thread_in_native, id=169223, stack(0x000070004c666000,0x000070004ca66000)]
+  0x00007fbca793e000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/tests/target/scala-2.12/src_managed/test" daemon [_thread_in_native, id=174599, stack(0x000070004c263000,0x000070004c663000)]
+  0x00007fbca3bd8800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/fp/shared/src/main/scala-2.12" daemon [_thread_in_native, id=158471, stack(0x000070004be60000,0x000070004c260000)]
+  0x00007fbca793d000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/form/src/test/scala-2.12" daemon [_thread_in_native, id=152327, stack(0x000070004ba5d000,0x000070004be5d000)]
+  0x00007fbca7ff6000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/mock/jvm/src/test/scala" daemon [_thread_in_native, id=175367, stack(0x000070004b65a000,0x000070004ba5a000)]
+  0x00007fbcacb30000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/fp/jvm/src/main/java" daemon [_thread_in_native, id=206859, stack(0x000070004b257000,0x000070004b657000)]
+  0x00007fbca9b74000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/core/jvm/src/main/scala-scalaz-7.1.x" daemon [_thread_in_native, id=210951, stack(0x000070004ae54000,0x000070004b254000)]
+  0x00007fbca3c31000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalaz/jvm/src/test/java" daemon [_thread_in_native, id=207879, stack(0x000070004aa51000,0x000070004ae51000)]
+  0x00007fbca6307800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/common/js/src/main/scala-scalaz-7.1.x" daemon [_thread_in_native, id=186119, stack(0x000070004a64e000,0x000070004aa4e000)]
+  0x00007fbcaaab3800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/junit/js/target/scala-2.12/src_managed/test" daemon [_thread_in_native, id=202759, stack(0x000070004a24b000,0x000070004a64b000)]
+  0x00007fbca4ad3000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/fp/js/src/test/scala-2.12" daemon [_thread_in_native, id=218631, stack(0x0000700049e48000,0x000070004a248000)]
+  0x00007fbca4cd6800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/common/jvm/src/main/scala" daemon [_thread_in_native, id=193799, stack(0x0000700049a45000,0x0000700049e45000)]
+  0x00007fbca8a43800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/junit/shared/src/main/scala" daemon [_thread_in_native, id=261127, stack(0x0000700049642000,0x0000700049a42000)]
+  0x00007fbcaaabc800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/gwt/.jvm/src/main/scala" daemon [_thread_in_native, id=223239, stack(0x000070004923f000,0x000070004963f000)]
+  0x00007fbcaaabc000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/examples/shared/src/main/scala-2.12" daemon [_thread_in_native, id=224519, stack(0x0000700048e3c000,0x000070004923c000)]
+  0x00007fbcacc96800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalacheck/jvm/src/main/scala-2.12" daemon [_thread_in_native, id=229127, stack(0x0000700048a39000,0x0000700048e39000)]
+  0x00007fbcaaabb000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/junit/jvm/src/main/scala-scalaz-7.1.x" daemon [_thread_in_native, id=250379, stack(0x0000700048636000,0x0000700048a36000)]
+  0x00007fbca4c20800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/examples/jvm/src/main/scala-2.12" daemon [_thread_in_native, id=238347, stack(0x0000700048233000,0x0000700048633000)]
+  0x00007fbc923bf000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/mock/js/src/test/scala" daemon [_thread_in_native, id=244999, stack(0x0000700047e30000,0x0000700048230000)]
+  0x00007fbca3c2f800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/gwt/.js/target/scala-2.12/src_managed/test" daemon [_thread_in_native, id=239367, stack(0x0000700047a2d000,0x0000700047e2d000)]
+  0x00007fbc930e2800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher/js/src/test/scala-2.12" daemon [_thread_in_native, id=265223, stack(0x000070004762a000,0x0000700047a2a000)]
+  0x00007fbcaaada800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalaz/jvm/src/test/scala-2.12" daemon [_thread_in_native, id=264455, stack(0x0000700047227000,0x0000700047627000)]
+  0x00007fbcacee3000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/junit/jvm/src/main/scala-2.12" daemon [_thread_in_native, id=298759, stack(0x0000700046e24000,0x0000700047224000)]
+  0x00007fbcac861800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher/jvm/src/test/scala" daemon [_thread_in_native, id=272651, stack(0x0000700046a21000,0x0000700046e21000)]
+  0x00007fbca262b000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/junit/jvm/target/scala-2.12/src_managed/test" daemon [_thread_in_native, id=271367, stack(0x000070004661e000,0x0000700046a1e000)]
+  0x00007fbca262a800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/shapeless/.js/target/scala-2.12/src_managed/main" daemon [_thread_in_native, id=275207, stack(0x000070004621b000,0x000070004661b000)]
+  0x00007fbc930e1800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher/js/src/main/scala" daemon [_thread_in_native, id=280071, stack(0x0000700045e18000,0x0000700046218000)]
+  0x00007fbca5a84800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/core/js/src/main/scala-scalaz-7.1.x" daemon [_thread_in_native, id=282887, stack(0x0000700045a15000,0x0000700045e15000)]
+  0x00007fbca64db000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalacheck/js/src/test/scala" daemon [_thread_in_native, id=306439, stack(0x0000700045612000,0x0000700045a12000)]
+  0x00007fbca7168800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/cats/jvm/src/main/java" daemon [_thread_in_native, id=311047, stack(0x000070004520f000,0x000070004560f000)]
+  0x00007fbc923bd800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/shapeless/.jvm/src/test/scala-2.12" daemon [_thread_in_native, id=309771, stack(0x0000700044e0c000,0x000070004520c000)]
+  0x00007fbc923bc800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/junit/shared/src/test/scala" daemon [_thread_in_native, id=338951, stack(0x0000700044a09000,0x0000700044e09000)]
+  0x00007fbcaaacd000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/pom/target/scala-2.12/src_managed/test" daemon [_thread_in_native, id=333067, stack(0x0000700044606000,0x0000700044a06000)]
+  0x00007fbca7a7e800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/shapeless/.js/src/main/scala-2.12" daemon [_thread_in_native, id=319751, stack(0x0000700044203000,0x0000700044603000)]
+  0x00007fbc930d7000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/cats/js/src/test/java" daemon [_thread_in_native, id=324871, stack(0x0000700043e00000,0x0000700044200000)]
+  0x00007fbca6695000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/analysis/jvm/src/main/java" daemon [_thread_in_native, id=392455, stack(0x00007000439fd000,0x0000700043dfd000)]
+  0x00007fbcb0029000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/common/js/src/test/scala-scalaz-7.1.x" daemon [_thread_in_native, id=392199, stack(0x00007000435fa000,0x00007000439fa000)]
+  0x00007fbca7a7e000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/examples/jvm/src/main/scala" daemon [_thread_in_native, id=354823, stack(0x00007000431f7000,0x00007000435f7000)]
+  0x00007fbcaaad9800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/src/main/java" daemon [_thread_in_native, id=384519, stack(0x0000700042df4000,0x00007000431f4000)]
+  0x00007fbca3bd7800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/cats/jvm/src/test/scala-2.12" daemon [_thread_in_native, id=362763, stack(0x00007000429f1000,0x0000700042df1000)]
+  0x00007fbcb0eac800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/junit/jvm/src/main/java" daemon [_thread_in_native, id=382215, stack(0x00007000425ee000,0x00007000429ee000)]
+  0x00007fbca66b2000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/cats/js/target/scala-2.12/src_managed/main" daemon [_thread_in_native, id=380167, stack(0x00007000421eb000,0x00007000425eb000)]
+  0x00007fbca53f4800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/analysis/jvm/src/test/java" daemon [_thread_in_native, id=375559, stack(0x0000700041de8000,0x00007000421e8000)]
+  0x00007fbca5a84000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/fp/jvm/src/main/scala-scalaz-7.1.x" daemon [_thread_in_native, id=371463, stack(0x00007000419e5000,0x0000700041de5000)]
+  0x00007fbc91b78000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/markdown/src/test/scala-2.12" daemon [_thread_in_native, id=435975, stack(0x00007000415e2000,0x00007000419e2000)]
+  0x00007fbca5a83000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher/jvm/src/main/scala" daemon [_thread_in_native, id=429831, stack(0x00007000411df000,0x00007000415df000)]
+  0x00007fbcaaad8000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/target/scala-2.12/src_managed/test" daemon [_thread_in_native, id=397323, stack(0x0000700040ddc000,0x00007000411dc000)]
+  0x00007fbca6b34000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalacheck/jvm/src/test/scala-2.12" daemon [_thread_in_native, id=404743, stack(0x00007000409d9000,0x0000700040dd9000)]
+  0x00007fbca657f000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/analysis/js/src/main/scala-scalaz-7.1.x" daemon [_thread_in_native, id=407819, stack(0x00007000405d6000,0x00007000409d6000)]
+  0x00007fbca621c000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/mock/jvm/src/main/java" daemon [_thread_in_native, id=418059, stack(0x00007000401d3000,0x00007000405d3000)]
+  0x00007fbca633d800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher-extra/jvm/src/test/java" daemon [_thread_in_native, id=416779, stack(0x000070003fdd0000,0x00007000401d0000)]
+  0x00007fbcaabda000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher/jvm/src/main/scala-2.12" daemon [_thread_in_native, id=478983, stack(0x000070003f9cd000,0x000070003fdcd000)]
+  0x00007fbca5c3f000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/fp/js/src/test/java" daemon [_thread_in_native, id=437511, stack(0x000070003f5ca000,0x000070003f9ca000)]
+  0x00007fbc930d6000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/examples/js/src/main/java" daemon [_thread_in_native, id=473611, stack(0x000070003f1c7000,0x000070003f5c7000)]
+  0x00007fbc9331c000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/common/js/src/test/scala" daemon [_thread_in_native, id=443143, stack(0x000070003edc4000,0x000070003f1c4000)]
+  0x00007fbca3ed6800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/markdown/src/main/scala" daemon [_thread_in_native, id=469515, stack(0x000070003e9c1000,0x000070003edc1000)]
+  0x00007fbca3ed5800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher-extra/js/src/main/scala" daemon [_thread_in_native, id=466699, stack(0x000070003e5be000,0x000070003e9be000)]
+  0x00007fbca5c3e000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/gwt/.jvm/src/test/scala-2.12" daemon [_thread_in_native, id=461835, stack(0x000070003e1bb000,0x000070003e5bb000)]
+  0x00007fbca5c3d800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/tests/src/test/scala-2.12" daemon [_thread_in_native, id=456199, stack(0x000070003ddb8000,0x000070003e1b8000)]
+  0x00007fbca3ed5000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/common/jvm/src/test/java" daemon [_thread_in_native, id=482823, stack(0x000070003d9b5000,0x000070003ddb5000)]
+  0x00007fbc91a29800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/tests/src/main/scala-2.12" daemon [_thread_in_native, id=458503, stack(0x000070003d5b2000,0x000070003d9b2000)]
+  0x00007fbca273c000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher-extra/js/src/test/scala" daemon [_thread_in_native, id=485639, stack(0x000070003d1af000,0x000070003d5af000)]
+  0x00007fbcb0ead800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/core/shared/src/test/scala" daemon [_thread_in_native, id=491271, stack(0x000070003cdac000,0x000070003d1ac000)]
+  0x00007fbc91a29000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/cats/js/target/scala-2.12/src_managed/test" daemon [_thread_in_native, id=516103, stack(0x000070003c9a9000,0x000070003cda9000)]
+  0x00007fbc93318000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/gwt/.jvm/src/test/scala-scalaz-7.1.x" daemon [_thread_in_native, id=509707, stack(0x000070003c5a6000,0x000070003c9a6000)]
+  0x00007fbc9331b800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/mock/js/src/main/scala-scalaz-7.1.x" daemon [_thread_in_native, id=497671, stack(0x000070003c1a3000,0x000070003c5a3000)]
+  0x00007fbc9331a800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/analysis/js/src/main/scala-2.12" daemon [_thread_in_native, id=498951, stack(0x000070003bda0000,0x000070003c1a0000)]
+  0x00007fbc925f9000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/common/js/target/scala-2.12/src_managed/main" daemon [_thread_in_native, id=563979, stack(0x000070003b99d000,0x000070003bd9d000)]
+  0x00007fbc925f8800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/pom/src/test/scala-2.12" daemon [_thread_in_native, id=561671, stack(0x000070003b59a000,0x000070003b99a000)]
+  0x00007fbca7932800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/markdown/.jvm/src/main/scala-2.12" daemon [_thread_in_native, id=530187, stack(0x000070003b197000,0x000070003b597000)]
+  0x00007fbcaa2c6000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/shapeless/.js/target/scala-2.12/src_managed/test" daemon [_thread_in_native, id=556551, stack(0x000070003ad94000,0x000070003b194000)]
+  0x00007fbcb02c2800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/analysis/jvm/src/main/scala" daemon [_thread_in_native, id=533767, stack(0x000070003a991000,0x000070003ad91000)]
+  0x00007fbc9244f000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/mock/js/target/scala-2.12/src_managed/main" daemon [_thread_in_native, id=555527, stack(0x000070003a58e000,0x000070003a98e000)]
+  0x00007fbc9244e000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/cats/js/src/main/scala" daemon [_thread_in_native, id=546059, stack(0x000070003a18b000,0x000070003a58b000)]
+  0x00007fbca5840800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/cats/jvm/src/main/scala-scalaz-7.1.x" daemon [_thread_in_native, id=539911, stack(0x0000700039d88000,0x000070003a188000)]
+  0x00007fbcb0348800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/common/js/src/main/scala-2.12" daemon [_thread_in_native, id=569351, stack(0x0000700039985000,0x0000700039d85000)]
+  0x00007fbca755d800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/form/src/test/scala" daemon [_thread_in_native, id=551179, stack(0x0000700039582000,0x0000700039982000)]
+  0x00007fbca7167800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/form/.jvm/src/main/scala" daemon [_thread_in_native, id=568583, stack(0x000070003917f000,0x000070003957f000)]
+  0x00007fbc91a28000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/analysis/js/src/test/java" daemon [_thread_in_native, id=602119, stack(0x0000700038d7c000,0x000070003917c000)]
+  0x00007fbca7047800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/common/jvm/src/main/java" daemon [_thread_in_native, id=573447, stack(0x0000700038979000,0x0000700038d79000)]
+  0x00007fbc91c42800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/junit/js/src/test/scala-scalaz-7.1.x" daemon [_thread_in_native, id=582155, stack(0x0000700038576000,0x0000700038976000)]
+  0x00007fbca3b0f800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher-extra/js/src/main/java" daemon [_thread_in_native, id=585479, stack(0x0000700038173000,0x0000700038573000)]
+  0x00007fbca3b10800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/junit/js/src/main/scala-2.12" daemon [_thread_in_native, id=586759, stack(0x0000700037d70000,0x0000700038170000)]
+  0x00007fbca66c0000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/html/src/test/scala-2.12" daemon [_thread_in_native, id=612615, stack(0x000070003796d000,0x0000700037d6d000)]
+  0x00007fbca3a5b000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/tests/src/main/scala-scalaz-7.1.x" daemon [_thread_in_native, id=651527, stack(0x000070003756a000,0x000070003796a000)]
+  0x00007fbcb002f000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/gwt/src/test/scala" daemon [_thread_in_native, id=649223, stack(0x0000700037167000,0x0000700037567000)]
+  0x00007fbca4851800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/core/shared/src/main/scala-2.12" daemon [_thread_in_native, id=617479, stack(0x0000700036d64000,0x0000700037164000)]
+  0x00007fbcb06fe800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/form/.jvm/target/scala-2.12/src_managed/main" daemon [_thread_in_native, id=619783, stack(0x0000700036961000,0x0000700036d61000)]
+  0x00007fbca6b91000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/html/src/test/scala-scalaz-7.1.x" daemon [_thread_in_native, id=623623, stack(0x000070003655e000,0x000070003695e000)]
+  0x00007fbca788b800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/gwt/.js/src/test/java" daemon [_thread_in_native, id=636167, stack(0x000070003615b000,0x000070003655b000)]
+  0x00007fbca5d3e000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/shapeless/src/main/scala" daemon [_thread_in_native, id=631303, stack(0x0000700035d58000,0x0000700036158000)]
+  0x00007fbcacbba800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/form/.jvm/src/test/scala-2.12" daemon [_thread_in_native, id=632331, stack(0x0000700035955000,0x0000700035d55000)]
+  0x00007fbca2604000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/cats/js/src/test/scala" daemon [_thread_in_native, id=694027, stack(0x0000700035552000,0x0000700035952000)]
+  0x00007fbca6acb000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/mock/shared/src/test/scala-2.12" daemon [_thread_in_native, id=694535, stack(0x000070003514f000,0x000070003554f000)]
+  0x00007fbca3587000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/markdown/.js/src/test/scala-2.12" daemon [_thread_in_native, id=664587, stack(0x0000700034d4c000,0x000070003514c000)]
+  0x00007fbc91c41800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalaz/js/src/main/scala-scalaz-7.1.x" daemon [_thread_in_native, id=663303, stack(0x0000700034949000,0x0000700034d49000)]
+  0x00007fbcaaacc000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/examples/shared/src/main/scala" daemon [_thread_in_native, id=670987, stack(0x0000700034546000,0x0000700034946000)]
+  0x00007fbca3a5c000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/core/js/src/main/scala" daemon [_thread_in_native, id=686087, stack(0x0000700034143000,0x0000700034543000)]
+  0x00007fbca2603000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/common/jvm/src/main/scala-scalaz-7.1.x" daemon [_thread_in_native, id=672263, stack(0x0000700033d40000,0x0000700034140000)]
+  0x00007fbcb0c3d000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/pom/src/main/scala-scalaz-7.1.x" daemon [_thread_in_native, id=674567, stack(0x000070003393d000,0x0000700033d3d000)]
+  0x00007fbc92ee5000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/markdown/.js/src/main/scala" daemon [_thread_in_native, id=702219, stack(0x000070003353a000,0x000070003393a000)]
+  0x00007fbcaaacb000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/core/js/src/test/scala" daemon [_thread_in_native, id=701959, stack(0x0000700033137000,0x0000700033537000)]
+  0x00007fbca9e00800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/examples/js/src/main/scala-2.12" daemon [_thread_in_native, id=712455, stack(0x0000700032d34000,0x0000700033134000)]
+  0x00007fbca2799800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/analysis/shared/src/main/scala-2.12" daemon [_thread_in_native, id=707595, stack(0x0000700032931000,0x0000700032d31000)]
+  0x00007fbca9b2f000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalaz/jvm/target/scala-2.12/src_managed/main" daemon [_thread_in_native, id=770311, stack(0x000070003252e000,0x000070003292e000)]
+  0x00007fbca9cb1000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/form/.js/src/main/scala-2.12" daemon [_thread_in_native, id=717575, stack(0x000070003212b000,0x000070003252b000)]
+  0x00007fbcb0c3c800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/tests/src/test/scala-scalaz-7.1.x" daemon [_thread_in_native, id=767755, stack(0x0000700031d28000,0x0000700032128000)]
+  0x00007fbca3bcb000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/guide/src/test/scala" daemon [_thread_in_native, id=766471, stack(0x0000700031925000,0x0000700031d25000)]
+  0x00007fbc91b77800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/shapeless/.jvm/src/test/java" daemon [_thread_in_native, id=725511, stack(0x0000700031522000,0x0000700031922000)]
+  0x00007fbca4c7a000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/junit/js/src/test/scala" daemon [_thread_in_native, id=730891, stack(0x000070003111f000,0x000070003151f000)]
+  0x00007fbc925f3000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/core/jvm/src/main/java" daemon [_thread_in_native, id=732679, stack(0x0000700030d1c000,0x000070003111c000)]
+  0x00007fbca27d5800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/examples/jvm/src/main/scala-scalaz-7.1.x" daemon [_thread_in_native, id=756487, stack(0x0000700030919000,0x0000700030d19000)]
+  0x00007fbc93319000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/src/test/scala-scalaz-7.1.x" daemon [_thread_in_native, id=733447, stack(0x0000700030516000,0x0000700030916000)]
+  0x00007fbc91c43800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalaz/js/src/test/scala-scalaz-7.1.x" daemon [_thread_in_native, id=747783, stack(0x0000700030113000,0x0000700030513000)]
+  0x00007fbcb0b53000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher/jvm/src/main/scala-scalaz-7.1.x" daemon [_thread_in_native, id=746503, stack(0x000070002fd10000,0x0000700030110000)]
+  0x00007fbca9b98800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/fp/shared/src/test/scala" daemon [_thread_in_native, id=872967, stack(0x000070002f90d000,0x000070002fd0d000)]
+  0x00007fbc93316000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalacheck/js/target/scala-2.12/src_managed/test" daemon [_thread_in_native, id=870667, stack(0x000070002f50a000,0x000070002f90a000)]
+  0x00007fbca899d800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher/js/src/test/scala" daemon [_thread_in_native, id=869383, stack(0x000070002f107000,0x000070002f507000)]
+  0x00007fbcb0b52000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/markdown/.jvm/src/test/scala" daemon [_thread_in_native, id=793351, stack(0x000070002ed04000,0x000070002f104000)]
+  0x00007fbcb094a800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/cats/jvm/target/scala-2.12/src_managed/main" daemon [_thread_in_native, id=797959, stack(0x000070002e901000,0x000070002ed01000)]
+  0x00007fbca391c000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalaz/jvm/src/main/scala-2.12" daemon [_thread_in_native, id=860935, stack(0x000070002e4fe000,0x000070002e8fe000)]
+  0x00007fbc93317000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalaz/jvm/src/test/scala" daemon [_thread_in_native, id=802055, stack(0x000070002e0fb000,0x000070002e4fb000)]
+  0x00007fbc931c1800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/form/.jvm/src/main/scala-scalaz-7.1.x" daemon [_thread_in_native, id=805643, stack(0x000070002dcf8000,0x000070002e0f8000)]
+  0x00007fbcac87d000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/form/src/main/scala" daemon [_thread_in_native, id=851719, stack(0x000070002d8f5000,0x000070002dcf5000)]
+  0x00007fbcac865000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/junit/js/src/main/scala-scalaz-7.1.x" daemon [_thread_in_native, id=849671, stack(0x000070002d4f2000,0x000070002d8f2000)]
+  0x00007fbcacae3000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/pom/target/scala-2.12/src_managed/main" daemon [_thread_in_native, id=845575, stack(0x000070002d0ef000,0x000070002d4ef000)]
+  0x00007fbca5b13800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher/js/src/test/scala-scalaz-7.1.x" daemon [_thread_in_native, id=845067, stack(0x000070002ccec000,0x000070002d0ec000)]
+  0x00007fbca5c5f000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/junit/js/src/main/scala" daemon [_thread_in_native, id=822023, stack(0x000070002c8e9000,0x000070002cce9000)]
+  0x00007fbcacf4a800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/mock/shared/src/main/scala" daemon [_thread_in_native, id=813579, stack(0x000070002c4e6000,0x000070002c8e6000)]
+  0x00007fbc92ee4000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher-extra/jvm/src/main/java" daemon [_thread_in_native, id=837383, stack(0x000070002c0e3000,0x000070002c4e3000)]
+  0x00007fbcaaac2800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/guide/src/main/java" daemon [_thread_in_native, id=836107, stack(0x000070002bce0000,0x000070002c0e0000)]
+  0x00007fbcb0b5a000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher/jvm/target/scala-2.12/src_managed/main" daemon [_thread_in_native, id=827399, stack(0x000070002b8dd000,0x000070002bcdd000)]
+  0x00007fbcaaac1800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher/js/src/test/java" daemon [_thread_in_native, id=828935, stack(0x000070002b4da000,0x000070002b8da000)]
+  0x00007fbc931c0800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/cats/shared/src/main/scala-2.12" daemon [_thread_in_native, id=881671, stack(0x000070002b0d7000,0x000070002b4d7000)]
+  0x00007fbc93489800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/mock/js/src/test/scala-scalaz-7.1.x" daemon [_thread_in_native, id=954119, stack(0x000070002acd4000,0x000070002b0d4000)]
+  0x00007fbc93147000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/shapeless/.js/src/main/scala-scalaz-7.1.x" daemon [_thread_in_native, id=878091, stack(0x000070002a8d1000,0x000070002acd1000)]
+  0x00007fbc93146000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/src/test/scala" daemon [_thread_in_native, id=890631, stack(0x000070002a4ce000,0x000070002a8ce000)]
+  0x00007fbca1bfd000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/core/js/src/main/scala-2.12" daemon [_thread_in_native, id=891403, stack(0x000070002a0cb000,0x000070002a4cb000)]
+  0x00007fbc93049800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/pom/src/main/java" daemon [_thread_in_native, id=890887, stack(0x0000700029cc8000,0x000070002a0c8000)]
+  0x00007fbca2730800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/shapeless/.jvm/src/test/scala-scalaz-7.1.x" daemon [_thread_in_native, id=940551, stack(0x00007000298c5000,0x0000700029cc5000)]
+  0x00007fbca5a62000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/src/main/scala-scalaz-7.1.x" daemon [_thread_in_native, id=936459, stack(0x00007000294c2000,0x00007000298c2000)]
+  0x00007fbca2733000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/shapeless/.js/src/test/scala-2.12" daemon [_thread_in_native, id=905991, stack(0x00007000290bf000,0x00007000294bf000)]
+  0x00007fbc9313e800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/guide/src/test/java" daemon [_thread_in_native, id=904967, stack(0x0000700028cbc000,0x00007000290bc000)]
+  0x00007fbca5fed800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/analysis/js/src/test/scala-scalaz-7.1.x" daemon [_thread_in_native, id=932875, stack(0x00007000288b9000,0x0000700028cb9000)]
+  0x00007fbca1da2000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/pom/src/main/scala" daemon [_thread_in_native, id=929035, stack(0x00007000284b6000,0x00007000288b6000)]
+  0x00007fbca7930800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/shapeless/.jvm/src/main/java" daemon [_thread_in_native, id=925703, stack(0x00007000280b3000,0x00007000284b3000)]
+  0x00007fbca1e04000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher-extra/js/src/main/scala-2.12" daemon [_thread_in_native, id=917511, stack(0x0000700027cb0000,0x00007000280b0000)]
+  0x00007fbcacaf6000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/mock/js/src/main/scala" daemon [_thread_in_native, id=1047815, stack(0x00007000278ad000,0x0000700027cad000)]
+  0x00007fbc931b0800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/tests/target/scala-2.12/src_managed/main" daemon [_thread_in_native, id=964359, stack(0x00007000274aa000,0x00007000278aa000)]
+  0x00007fbca18af000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/fp/js/target/scala-2.12/src_managed/main" daemon [_thread_in_native, id=1045515, stack(0x00007000270a7000,0x00007000274a7000)]
+  0x00007fbc91be2800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalaz/js/src/test/scala" daemon [_thread_in_native, id=1038343, stack(0x0000700026ca4000,0x00007000270a4000)]
+  0x00007fbcace0e800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/markdown/.js/src/main/scala-scalaz-7.1.x" daemon [_thread_in_native, id=976395, stack(0x00007000268a1000,0x0000700026ca1000)]
+  0x00007fbca5bcb800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher/js/src/main/scala-scalaz-7.1.x" daemon [_thread_in_native, id=978439, stack(0x000070002649e000,0x000070002689e000)]
+  0x00007fbcaaab1800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/gwt/.js/src/test/scala-2.12" daemon [_thread_in_native, id=975367, stack(0x000070002609b000,0x000070002649b000)]
+  0x00007fbcb0b59000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/cats/js/src/main/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1034251, stack(0x0000700025492000,0x0000700025892000)]
+  0x00007fbca1d4f800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalaz/js/src/test/scala-2.12" daemon [_thread_in_native, id=1024779, stack(0x000070002508f000,0x000070002548f000)]
+  0x00007fbcac9a9800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/gwt/.jvm/src/main/scala-2.12" daemon [_thread_in_native, id=1014535, stack(0x0000700020c5c000,0x000070002105c000)]
+  0x00007fbca7b09800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/common/shared/src/test/scala" daemon [_thread_in_native, id=1016839, stack(0x0000700020456000,0x0000700020856000)]
+  0x00007fbcaaac1000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher/shared/src/main/scala-2.12" daemon [_thread_in_native, id=982279, stack(0x000070001d432000,0x000070001d832000)]
+  0x00007fbca392b800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/common/js/src/main/java" daemon [_thread_in_native, id=992263, stack(0x000070001b017000,0x000070001b417000)]
+  0x00007fbcaa8cf800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/shapeless/src/test/scala" daemon [_thread_in_native, id=1021703, stack(0x000070001a40e000,0x000070001a80e000)]
+  0x00007fbcaa8ba800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/shapeless/.js/src/main/scala" daemon [_thread_in_native, id=993799, stack(0x0000700019805000,0x0000700019c05000)]
+  0x00007fbcaacce000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/html/src/main/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1134343, stack(0x0000700018fff000,0x00007000193ff000)]
+  0x00007fbcaadbe800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/analysis/jvm/src/test/scala-2.12" daemon [_thread_in_native, id=1050631, stack(0x0000700017bf0000,0x0000700017ff0000)]
+  0x00007fbc9370f800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher-extra/jvm/src/test/scala" daemon [_thread_in_native, id=1051911, stack(0x00007000167e1000,0x0000700016be1000)]
+  0x00007fbca1ecf800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/fp/jvm/src/main/scala-2.12" daemon [_thread_in_native, id=1131531, stack(0x0000700015bd8000,0x0000700015fd8000)]
+  0x00007fbca258d800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/gwt/.js/src/main/scala" daemon [_thread_in_native, id=1128455, stack(0x0000700014fcf000,0x00007000153cf000)]
+  0x00007fbca3ac4800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/fp/js/src/test/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1059595, stack(0x0000700014bcc000,0x0000700014fcc000)]
+  0x00007fbc92aa5000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/shapeless/.jvm/target/scala-2.12/src_managed/main" daemon [_thread_in_native, id=1069319, stack(0x0000700013bc0000,0x0000700013fc0000)]
+  0x00007fbca9b5f800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/markdown/.jvm/src/test/scala-scalaz-7.1.x" daemon [_thread_in_native, id=1118475, stack(0x00007000137bd000,0x0000700013bbd000)]
+  0x00007fbcb0ad5800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/form/.jvm/src/test/scala" daemon [_thread_in_native, id=1075975, stack(0x0000700011ba8000,0x0000700011fa8000)]
+  0x00007fbc93000000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalacheck/shared/src/main/scala-2.12" daemon [_thread_in_native, id=1068299, stack(0x0000700010f9f000,0x000070001139f000)]
+  0x00007fbca3d69000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/examples/jvm/src/test/scala-2.12" daemon [_thread_blocked, id=1107211, stack(0x0000700010b9c000,0x0000700010f9c000)]
+  0x00007fbcb0dde800 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/mock/js/src/main/scala-2.12" daemon [_thread_blocked, id=1114375, stack(0x000070000ef87000,0x000070000f387000)]
+  0x00007fbcaa9f3000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/scalaz/js/src/main/java" daemon [_thread_in_Java, id=1070599, stack(0x000070000df50000,0x000070000e350000)]
+  0x00007fbca279e000 JavaThread "WatchService for /Users/etorreborre/projects/specs2/specs2/matcher/jvm/src/test/java" daemon [_thread_blocked, id=1081095, stack(0x000070000db4d000,0x000070000df4d000)]
+  0x00007fbcacbee800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=55387, stack(0x0000700024c8c000,0x000070002508c000)]
+  0x00007fbca3d46800 JavaThread "pool-1-thread-88" [_thread_blocked, id=41507, stack(0x00007000147c9000,0x0000700014bc9000)]
+  0x00007fbca5cfa000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=70147, stack(0x00007000123ae000,0x00007000127ae000)]
+  0x00007fbca18ae000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1100807, stack(0x0000700019c08000,0x000070001a008000)]
+  0x00007fbca6a5c000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=79627, stack(0x0000700016fe7000,0x00007000173e7000)]
+  0x00007fbca5d27800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1087775, stack(0x00007000a5e95000,0x00007000a6295000)]
+  0x00007fbca31d2800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=71515, stack(0x00007000a5a92000,0x00007000a5e92000)]
+  0x00007fbca668f000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=48915, stack(0x0000700025895000,0x0000700025c95000)]
+  0x00007fbcaa786000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=31247, stack(0x0000700023c80000,0x0000700024080000)]
+  0x00007fbcaca49800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=84527, stack(0x00007000113a2000,0x00007000117a2000)]
+  0x00007fbca30ef000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=28563, stack(0x00007000173ea000,0x00007000177ea000)]
+  0x00007fbca66aa800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=35691, stack(0x0000700010799000,0x0000700010b99000)]
+  0x00007fbcb05a0800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=34691, stack(0x00007000153d2000,0x00007000157d2000)]
+  0x00007fbca577f000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=81195, stack(0x000070002105f000,0x000070002145f000)]
+  0x00007fbca3bd6000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=51467, stack(0x0000700011fab000,0x00007000123ab000)]
+  0x00007fbcacba8800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=1101595, stack(0x000070001a00b000,0x000070001a40b000)]
+  0x00007fbcaa361000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=39251, stack(0x0000700024083000,0x0000700024483000)]
+  0x00007fbcafed8000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=77367, stack(0x000070001dc38000,0x000070001e038000)]
+  0x00007fbcaa75a000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=32799, stack(0x00007000163de000,0x00007000167de000)]
+  0x00007fbca5a63000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=23555, stack(0x0000700012fb7000,0x00007000133b7000)]
+  0x00007fbca6902800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=56663, stack(0x000070001d02f000,0x000070001d42f000)]
+  0x00007fbca57bf800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=44915, stack(0x0000700016be4000,0x0000700016fe4000)]
+  0x00007fbca72fa000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=78391, stack(0x00007000117a5000,0x0000700011ba5000)]
+  0x00007fbca755c000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=74571, stack(0x00007000133ba000,0x00007000137ba000)]
+  0x00007fbca740f800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=79151, stack(0x000070001c426000,0x000070001c826000)]
+  0x00007fbcaa8b2000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=86611, stack(0x00007000183f6000,0x00007000187f6000)]
+  0x00007fbca35d1800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=70739, stack(0x0000700015fdb000,0x00007000163db000)]
+  0x00007fbca3d78800 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=49975, stack(0x000070000eb84000,0x000070000ef84000)]
+  0x00007fbca5848000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=79395, stack(0x00007000177ed000,0x0000700017bed000)]
+  0x00007fbca35c7000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=59443, stack(0x000070000d74a000,0x000070000db4a000)]
+  0x00007fbca9fb3000 JavaThread "Scala Presentation Compiler []" daemon [_thread_blocked, id=59175, stack(0x000070001d835000,0x000070001dc35000)]
+  0x00007fbca8ab6000 JavaThread "Timer-0" daemon [_thread_blocked, id=47415, stack(0x0000700012bb4000,0x0000700012fb4000)]
+  0x00007fbca23ee000 JavaThread "AsyncReporter{URLConnectionSender{http://127.0.0.1:9411/api/v2/spans}}" daemon [_thread_blocked, id=81415, stack(0x00007000143c6000,0x00007000147c6000)]
+  0x00007fbca9b6f800 JavaThread "pool-4-thread-1" [_thread_blocked, id=1102083, stack(0x00007000a568f000,0x00007000a5a8f000)]
+  0x00007fbca9159800 JavaThread "pool-3-thread-1" [_thread_blocked, id=1084419, stack(0x00007000a528c000,0x00007000a568c000)]
+  0x00007fbca1fd0800 JavaThread "monix-scheduler-133" daemon [_thread_blocked, id=69891, stack(0x0000700025c98000,0x0000700026098000)]
+  0x00007fbca3d64000 JavaThread "pool-1-thread-4" [_thread_in_native, id=25603, stack(0x0000700010396000,0x0000700010796000)]
+  0x00007fbca5478800 JavaThread "pool-6-thread-6" daemon [_thread_blocked, id=35843, stack(0x000070000ff93000,0x0000700010393000)]
+  0x00007fbca468f800 JavaThread "pool-6-thread-5" daemon [_thread_blocked, id=36355, stack(0x000070000fb90000,0x000070000ff90000)]
+  0x00007fbca68cc000 JavaThread "pool-6-thread-4" daemon [_thread_blocked, id=36867, stack(0x000070000f78d000,0x000070000fb8d000)]
+  0x00007fbca5e33800 JavaThread "pool-6-thread-3" daemon [_thread_blocked, id=25091, stack(0x000070000f38a000,0x000070000f78a000)]
+  0x00007fbca7048800 JavaThread "pool-6-thread-2" daemon [_thread_blocked, id=37891, stack(0x000070000e781000,0x000070000eb81000)]
+  0x00007fbca3040000 JavaThread "pool-6-thread-1" daemon [_thread_blocked, id=38147, stack(0x000070000e37e000,0x000070000e77e000)]
+  0x00007fbca465f800 JavaThread "H2 Log Writer METALS" daemon [_thread_blocked, id=40459, stack(0x000070000d347000,0x000070000d747000)]
+  0x00007fbca22e6800 JavaThread "H2 TCP Server (tcp://localhost:56920)" daemon [_thread_in_native, id=23307, stack(0x000070000cf44000,0x000070000d344000)]
+  0x00007fbca22e5800 JavaThread "H2 File Lock Watchdog /Users/etorreborre/projects/specs2/specs2/.metals/metals.lock.db" daemon [_thread_blocked, id=40971, stack(0x000070000cb41000,0x000070000cf41000)]
+  0x00007fbca1f7c000 JavaThread "pool-2-thread-1" [_thread_blocked, id=41219, stack(0x000070000c73e000,0x000070000cb3e000)]
+  0x00007fbca1f77800 JavaThread "pool-1-thread-1" [_thread_in_native, id=22019, stack(0x000070000b732000,0x000070000bb32000)]
+  0x00007fbca4025800 JavaThread "Service Thread" daemon [_thread_blocked, id=21763, stack(0x000070000b22c000,0x000070000b62c000)]
+  0x00007fbca1836000 JavaThread "C1 CompilerThread3" daemon [_thread_in_vm, id=15619, stack(0x000070000b129000,0x000070000b229000)]
+  0x00007fbca400a800 JavaThread "C2 CompilerThread2" daemon [_thread_blocked, id=15107, stack(0x000070000b026000,0x000070000b126000)]
+  0x00007fbca182d800 JavaThread "C2 CompilerThread1" daemon [_thread_blocked, id=16131, stack(0x000070000af23000,0x000070000b023000)]
+  0x00007fbca582a000 JavaThread "C2 CompilerThread0" daemon [_thread_blocked, id=16643, stack(0x000070000ae20000,0x000070000af20000)]
+  0x00007fbca5821800 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=14595, stack(0x000070000aa1d000,0x000070000ae1d000)]
+  0x00007fbca7000000 JavaThread "Finalizer" daemon [_thread_blocked, id=18947, stack(0x000070000a61a000,0x000070000aa1a000)]
+  0x00007fbca4008000 JavaThread "Reference Handler" daemon [_thread_blocked, id=13571, stack(0x000070000a217000,0x000070000a617000)]
+  0x00007fbca5001800 JavaThread "main" [_thread_blocked, id=6403, stack(0x00007000092f3000,0x00007000096f3000)]
+
+Other Threads:
+  0x00007fbca4003000 VMThread [stack: 0x000070000a114000,0x000070000a214000] [id=19715]
+  0x00007fbca4028000 WatcherThread [stack: 0x000070000b62f000,0x000070000b72f000] [id=43011]
+
+VM state:synchronizing (normal execution)
+
+VM Mutex/Monitor currently owned by a thread:  ([mutex/lock_event])
+[0x00007fbca2b01290] Safepoint_lock - owner thread: 0x00007fbca4003000
+[0x00007fbca2b01310] Threads_lock - owner thread: 0x00007fbca4003000
+
+Heap:
+ PSYoungGen      total 1260544K, used 662962K [0x000000076ab00000, 0x00000007bf900000, 0x00000007c0000000)
+  eden space 1128960K, 51% used [0x000000076ab00000,0x000000078e7b65b0,0x00000007af980000)
+  from space 131584K, 58% used [0x00000007af980000,0x00000007b44364e8,0x00000007b7a00000)
+  to   space 127488K, 0% used [0x00000007b7c80000,0x00000007b7c80000,0x00000007bf900000)
+ ParOldGen       total 2796544K, used 2315975K [0x00000006c0000000, 0x000000076ab00000, 0x000000076ab00000)
+  object space 2796544K, 82% used [0x00000006c0000000,0x000000074d5b1c68,0x000000076ab00000)
+ Metaspace       used 368632K, capacity 418299K, committed 617656K, reserved 1550336K
+  class space    used 42558K, capacity 45733K, committed 117600K, reserved 1048576K
+
+Card table byte_map: [0x0000000104974000,0x0000000105175000] byte_map_base: 0x0000000101374000
+
+Marking Bits: (ParMarkBitMap*) 0x0000000103ef9cd0
+ Begin Bits: [0x00000001056cb000, 0x00000001096cb000)
+ End Bits:   [0x00000001096cb000, 0x000000010d6cb000)
+
+Polling page: 0x0000000101cd9000
+
+CodeCache: size=245760Kb used=188710Kb max_used=222106Kb free=57049Kb
+ bounds [0x000000010edaf000, 0x000000011ccaf000, 0x000000011ddaf000]
+ total_blobs=41111 nmethods=40343 adapters=673
+ compilation: enabled
+
+Compilation events (10 events):
+Event: 16551.847 Thread 0x00007fbca1836000 363751       3       sun.nio.fs.UnixPath::getFileName (90 bytes)
+Event: 16551.848 Thread 0x00007fbca1836000 nmethod 363751 0x000000010f558f10 code [0x000000010f5590c0, 0x000000010f5596f8]
+Event: 16551.854 Thread 0x00007fbca1836000 363732       3       scala.collection.concurrent.TrieMap::getOrElseUpdate (112 bytes)
+Event: 16551.855 Thread 0x00007fbca1836000 nmethod 363732 0x000000010feb9010 code [0x000000010feb9240, 0x000000010feba088]
+Event: 16551.861 Thread 0x00007fbca1836000 363727       3       scala.collection.concurrent.CNode$::dual (193 bytes)
+Event: 16551.864 Thread 0x00007fbca1836000 nmethod 363727 0x0000000110893190 code [0x0000000110893460, 0x0000000110894f58]
+Event: 16551.870 Thread 0x00007fbca1836000 363745       1       scala.meta.internal.metals.HtmlBuilder::sb (5 bytes)
+Event: 16551.871 Thread 0x00007fbca1836000 nmethod 363745 0x0000000110a28010 code [0x0000000110a28160, 0x0000000110a28270]
+Event: 16551.877 Thread 0x00007fbca1836000 363742       1       scala.meta.internal.metals.ScalaTarget::info (5 bytes)
+Event: 16551.877 Thread 0x00007fbca1836000 nmethod 363742 0x0000000111542050 code [0x00000001115421a0, 0x00000001115422b0]
+
+GC Heap History (10 events):
+Event: 16443.749 GC heap before
+{Heap before GC invocations=480 (full 22):
+ PSYoungGen      total 1229312K, used 716136K [0x000000076ab00000, 0x00000007bef80000, 0x00000007c0000000)
+  eden space 1086976K, 58% used [0x000000076ab00000,0x0000000791c43898,0x00000007ad080000)
+  from space 142336K, 53% used [0x00000007ad080000,0x00000007b1a96808,0x00000007b5b80000)
+  to   space 136704K, 0% used [0x00000007b6a00000,0x00000007b6a00000,0x00000007bef80000)
+ ParOldGen       total 2796544K, used 2659314K [0x00000006c0000000, 0x000000076ab00000, 0x000000076ab00000)
+  object space 2796544K, 95% used [0x00000006c0000000,0x00000007624fcb98,0x000000076ab00000)
+ Metaspace       used 886177K, capacity 1017183K, committed 1027256K, reserved 1959936K
+  class space    used 99067K, capacity 107584K, committed 117600K, reserved 1048576K
+Event: 16443.832 GC heap after
+Heap after GC invocations=480 (full 22):
+ PSYoungGen      total 1248256K, used 56473K [0x000000076ab00000, 0x00000007bf280000, 0x00000007c0000000)
+  eden space 1111552K, 0% used [0x000000076ab00000,0x000000076ab00000,0x00000007ae880000)
+  from space 136704K, 41% used [0x00000007b6a00000,0x00000007ba1265b8,0x00000007bef80000)
+  to   space 132608K, 0% used [0x00000007ae880000,0x00000007ae880000,0x00000007b6a00000)
+ ParOldGen       total 2796544K, used 2678277K [0x00000006c0000000, 0x000000076ab00000, 0x000000076ab00000)
+  object space 2796544K, 95% used [0x00000006c0000000,0x00000007637816c0,0x000000076ab00000)
+ Metaspace       used 886177K, capacity 1017183K, committed 1027256K, reserved 1959936K
+  class space    used 99067K, capacity 107584K, committed 117600K, reserved 1048576K
+}
+Event: 16443.832 GC heap before
+{Heap before GC invocations=481 (full 23):
+ PSYoungGen      total 1248256K, used 56473K [0x000000076ab00000, 0x00000007bf280000, 0x00000007c0000000)
+  eden space 1111552K, 0% used [0x000000076ab00000,0x000000076ab00000,0x00000007ae880000)
+  from space 136704K, 41% used [0x00000007b6a00000,0x00000007ba1265b8,0x00000007bef80000)
+  to   space 132608K, 0% used [0x00000007ae880000,0x00000007ae880000,0x00000007b6a00000)
+ ParOldGen       total 2796544K, used 2678277K [0x00000006c0000000, 0x000000076ab00000, 0x000000076ab00000)
+  object space 2796544K, 95% used [0x00000006c0000000,0x00000007637816c0,0x000000076ab00000)
+ Metaspace       used 886177K, capacity 1017183K, committed 1027256K, reserved 1959936K
+  class space    used 99067K, capacity 107584K, committed 117600K, reserved 1048576K
+Event: 16451.444 GC heap after
+Heap after GC invocations=481 (full 23):
+ PSYoungGen      total 1248256K, used 0K [0x000000076ab00000, 0x00000007bf280000, 0x00000007c0000000)
+  eden space 1111552K, 0% used [0x000000076ab00000,0x000000076ab00000,0x00000007ae880000)
+  from space 136704K, 0% used [0x00000007b6a00000,0x00000007b6a00000,0x00000007bef80000)
+  to   space 132608K, 0% used [0x00000007ae880000,0x00000007ae880000,0x00000007b6a00000)
+ ParOldGen       total 2796544K, used 2266948K [0x00000006c0000000, 0x000000076ab00000, 0x000000076ab00000)
+  object space 2796544K, 81% used [0x00000006c0000000,0x000000074a5d13e0,0x000000076ab00000)
+ Metaspace       used 215847K, capacity 242271K, committed 617656K, reserved 1550336K
+  class space    used 25795K, capacity 27270K, committed 117600K, reserved 1048576K
+}
+Event: 16478.281 GC heap before
+{Heap before GC invocations=482 (full 23):
+ PSYoungGen      total 1248256K, used 1111552K [0x000000076ab00000, 0x00000007bf280000, 0x00000007c0000000)
+  eden space 1111552K, 100% used [0x000000076ab00000,0x00000007ae880000,0x00000007ae880000)
+  from space 136704K, 0% used [0x00000007b6a00000,0x00000007b6a00000,0x00000007bef80000)
+  to   space 132608K, 0% used [0x00000007ae880000,0x00000007ae880000,0x00000007b6a00000)
+ ParOldGen       total 2796544K, used 2266948K [0x00000006c0000000, 0x000000076ab00000, 0x000000076ab00000)
+  object space 2796544K, 81% used [0x00000006c0000000,0x000000074a5d13e0,0x000000076ab00000)
+ Metaspace       used 270120K, capacity 304753K, committed 617656K, reserved 1550336K
+  class space    used 31764K, capacity 33808K, committed 117600K, reserved 1048576K
+Event: 16479.127 GC heap after
+Heap after GC invocations=482 (full 23):
+ PSYoungGen      total 1244160K, used 95894K [0x000000076ab00000, 0x00000007c0000000, 0x00000007c0000000)
+  eden space 1111552K, 0% used [0x000000076ab00000,0x000000076ab00000,0x00000007ae880000)
+  from space 132608K, 72% used [0x00000007ae880000,0x00000007b46258c8,0x00000007b6a00000)
+  to   space 136192K, 0% used [0x00000007b7b00000,0x00000007b7b00000,0x00000007c0000000)
+ ParOldGen       total 2796544K, used 2266972K [0x00000006c0000000, 0x000000076ab00000, 0x000000076ab00000)
+  object space 2796544K, 81% used [0x00000006c0000000,0x000000074a5d73e0,0x000000076ab00000)
+ Metaspace       used 270120K, capacity 304753K, committed 617656K, reserved 1550336K
+  class space    used 31764K, capacity 33808K, committed 117600K, reserved 1048576K
+}
+Event: 16509.379 GC heap before
+{Heap before GC invocations=483 (full 23):
+ PSYoungGen      total 1244160K, used 1207446K [0x000000076ab00000, 0x00000007c0000000, 0x00000007c0000000)
+  eden space 1111552K, 100% used [0x000000076ab00000,0x00000007ae880000,0x00000007ae880000)
+  from space 132608K, 72% used [0x00000007ae880000,0x00000007b46258c8,0x00000007b6a00000)
+  to   space 136192K, 0% used [0x00000007b7b00000,0x00000007b7b00000,0x00000007c0000000)
+ ParOldGen       total 2796544K, used 2266972K [0x00000006c0000000, 0x000000076ab00000, 0x000000076ab00000)
+  object space 2796544K, 81% used [0x00000006c0000000,0x000000074a5d73e0,0x000000076ab00000)
+ Metaspace       used 310553K, capacity 351465K, committed 617656K, reserved 1550336K
+  class space    used 36193K, capacity 38720K, committed 117600K, reserved 1048576K
+Event: 16509.596 GC heap after
+Heap after GC invocations=483 (full 23):
+ PSYoungGen      total 1259520K, used 62034K [0x000000076ab00000, 0x00000007bfa80000, 0x00000007c0000000)
+  eden space 1128960K, 0% used [0x000000076ab00000,0x000000076ab00000,0x00000007af980000)
+  from space 130560K, 47% used [0x00000007b7b00000,0x00000007bb794980,0x00000007bfa80000)
+  to   space 131584K, 0% used [0x00000007af980000,0x00000007af980000,0x00000007b7a00000)
+ ParOldGen       total 2796544K, used 2293632K [0x00000006c0000000, 0x000000076ab00000, 0x000000076ab00000)
+  object space 2796544K, 82% used [0x00000006c0000000,0x000000074bfe00b0,0x000000076ab00000)
+ Metaspace       used 310553K, capacity 351465K, committed 617656K, reserved 1550336K
+  class space    used 36193K, capacity 38720K, committed 117600K, reserved 1048576K
+}
+Event: 16535.323 GC heap before
+{Heap before GC invocations=484 (full 23):
+ PSYoungGen      total 1259520K, used 1190994K [0x000000076ab00000, 0x00000007bfa80000, 0x00000007c0000000)
+  eden space 1128960K, 100% used [0x000000076ab00000,0x00000007af980000,0x00000007af980000)
+  from space 130560K, 47% used [0x00000007b7b00000,0x00000007bb794980,0x00000007bfa80000)
+  to   space 131584K, 0% used [0x00000007af980000,0x00000007af980000,0x00000007b7a00000)
+ ParOldGen       total 2796544K, used 2293632K [0x00000006c0000000, 0x000000076ab00000, 0x000000076ab00000)
+  object space 2796544K, 82% used [0x00000006c0000000,0x000000074bfe00b0,0x000000076ab00000)
+ Metaspace       used 358924K, capacity 407135K, committed 617656K, reserved 1550336K
+  class space    used 41494K, capacity 44560K, committed 117600K, reserved 1048576K
+Event: 16535.400 GC heap after
+Heap after GC invocations=484 (full 23):
+ PSYoungGen      total 1260544K, used 76505K [0x000000076ab00000, 0x00000007bf900000, 0x00000007c0000000)
+  eden space 1128960K, 0% used [0x000000076ab00000,0x000000076ab00000,0x00000007af980000)
+  from space 131584K, 58% used [0x00000007af980000,0x00000007b44364e8,0x00000007b7a00000)
+  to   space 127488K, 0% used [0x00000007b7c80000,0x00000007b7c80000,0x00000007bf900000)
+ ParOldGen       total 2796544K, used 2315975K [0x00000006c0000000, 0x000000076ab00000, 0x000000076ab00000)
+  object space 2796544K, 82% used [0x00000006c0000000,0x000000074d5b1c68,0x000000076ab00000)
+ Metaspace       used 358924K, capacity 407135K, committed 617656K, reserved 1550336K
+  class space    used 41494K, capacity 44560K, committed 117600K, reserved 1048576K
+}
+
+Deoptimization events (10 events):
+Event: 16549.984 Thread 0x00007fbc930d4000 Uncommon trap: reason=unloaded action=reinterpret pc=0x0000000110f21db0 method=sun.nio.fs.UnixDirectoryStream$UnixDirectoryIterator.readNextEntry()Ljava/nio/file/Path; @ 84
+Event: 16551.724 Thread 0x00007fbca1d6b000 Uncommon trap: reason=unstable_if action=reinterpret pc=0x000000011545158c method=scala.collection.concurrent.INode.rec_insertif(Ljava/lang/Object;Ljava/lang/Object;ILjava/lang/Object;ILscala/collection/concurrent/INode;Lscala/collection/concurrent/Gen;Ls
+Event: 16551.726 Thread 0x00007fbca1d6b000 Uncommon trap: reason=unstable_if action=reinterpret pc=0x000000011b0b5fe4 method=scala.collection.concurrent.INode.GCAS_Complete(Lscala/collection/concurrent/MainNode;Lscala/collection/concurrent/TrieMap;)Lscala/collection/concurrent/MainNode; @ 88
+Event: 16551.727 Thread 0x00007fbca1d6b000 Uncommon trap: reason=unstable_if action=reinterpret pc=0x00000001128463c4 method=scala.collection.concurrent.TrieMap.insertifhc(Ljava/lang/Object;ILjava/lang/Object;Ljava/lang/Object;)Lscala/Option; @ 32
+Event: 16551.727 Thread 0x00007fbca1d6b000 Uncommon trap: reason=unstable_if action=reinterpret pc=0x000000011b8f8e8c method=scala.collection.concurrent.TrieMap.insertifhc(Ljava/lang/Object;ILjava/lang/Object;Ljava/lang/Object;)Lscala/Option; @ 32
+Event: 16551.763 Thread 0x00007fbca1d6b000 Uncommon trap: reason=class_check action=maybe_recompile pc=0x0000000114560fd4 method=org.eclipse.lsp4j.jsonrpc.json.adapters.CollectionTypeAdapter.write(Lcom/google/gson/stream/JsonWriter;Ljava/util/Collection;)V @ 60
+Event: 16551.764 Thread 0x00007fbca1da7800 Uncommon trap: reason=class_check action=maybe_recompile pc=0x0000000114560fd4 method=org.eclipse.lsp4j.jsonrpc.json.adapters.CollectionTypeAdapter.write(Lcom/google/gson/stream/JsonWriter;Ljava/util/Collection;)V @ 60
+Event: 16551.767 Thread 0x00007fbca1da7800 Uncommon trap: reason=unstable_if action=reinterpret pc=0x000000011309ab4c method=sun.nio.fs.UnixPath.initOffsets()V @ 166
+Event: 16551.822 Thread 0x00007fbca1d6b000 Uncommon trap: reason=unstable_if action=reinterpret pc=0x000000011026f918 method=sun.nio.fs.UnixPath.initOffsets()V @ 166
+Event: 16551.875 Thread 0x00007fbca1d6b000 Uncommon trap: reason=null_check action=make_not_entrant pc=0x0000000110359074 method=com.sun.jna.NativeMappedConverter.getInstance(Ljava/lang/Class;)Lcom/sun/jna/NativeMappedConverter; @ 27
+
+Classes redefined (0 events):
+No events
+
+Internal exceptions (10 events):
+Event: 16551.875 Thread 0x00007fbca1da7800 Exception <a 'sun/nio/fs/UnixException'> (0x000000078e74cb78) thrown at [/Users/java_re/workspace/8-2-build-macosx-x86_64/jdk8u181/11358/hotspot/src/share/vm/prims/jni.cpp, line 709]
+Event: 16551.875 Thread 0x00007fbca1d6b000 Exception <a 'sun/nio/fs/UnixException'> (0x000000078e75fa90) thrown at [/Users/java_re/workspace/8-2-build-macosx-x86_64/jdk8u181/11358/hotspot/src/share/vm/prims/jni.cpp, line 709]
+Event: 16551.875 Thread 0x00007fbca1da7800 Exception <a 'sun/nio/fs/UnixException'> (0x000000078e74d4a0) thrown at [/Users/java_re/workspace/8-2-build-macosx-x86_64/jdk8u181/11358/hotspot/src/share/vm/prims/jni.cpp, line 709]
+Event: 16551.875 Thread 0x00007fbca1d6b000 Exception <a 'sun/nio/fs/UnixException'> (0x000000078e760290) thrown at [/Users/java_re/workspace/8-2-build-macosx-x86_64/jdk8u181/11358/hotspot/src/share/vm/prims/jni.cpp, line 709]
+Event: 16551.875 Thread 0x00007fbca1da7800 Exception <a 'sun/nio/fs/UnixException'> (0x000000078e74dca0) thrown at [/Users/java_re/workspace/8-2-build-macosx-x86_64/jdk8u181/11358/hotspot/src/share/vm/prims/jni.cpp, line 709]
+Event: 16551.875 Thread 0x00007fbca1d6b000 Exception <a 'sun/nio/fs/UnixException'> (0x000000078e760b40) thrown at [/Users/java_re/workspace/8-2-build-macosx-x86_64/jdk8u181/11358/hotspot/src/share/vm/prims/jni.cpp, line 709]
+Event: 16551.875 Thread 0x00007fbca1da7800 Exception <a 'sun/nio/fs/UnixException'> (0x000000078e74e550) thrown at [/Users/java_re/workspace/8-2-build-macosx-x86_64/jdk8u181/11358/hotspot/src/share/vm/prims/jni.cpp, line 709]
+Event: 16551.875 Thread 0x00007fbca1da7800 Exception <a 'sun/nio/fs/UnixException'> (0x000000078e74f628) thrown at [/Users/java_re/workspace/8-2-build-macosx-x86_64/jdk8u181/11358/hotspot/src/share/vm/prims/jni.cpp, line 709]
+Event: 16551.875 Thread 0x00007fbca1da7800 Exception <a 'sun/nio/fs/UnixException'> (0x000000078e750128) thrown at [/Users/java_re/workspace/8-2-build-macosx-x86_64/jdk8u181/11358/hotspot/src/share/vm/prims/jni.cpp, line 709]
+Event: 16551.875 Thread 0x00007fbca1d6b000 Implicit null exception at 0x0000000110357c1e to 0x0000000110359035
+
+Events (10 events):
+Event: 16551.868 Thread 0x00007fbca1836000 flushing nmethod 0x00000001184dd910
+Event: 16551.869 Thread 0x00007fbca1836000 flushing nmethod 0x00000001187ca190
+Event: 16551.872 Thread 0x00007fbca1836000 flushing nmethod 0x0000000118f912d0
+Event: 16551.874 Thread 0x00007fbca1836000 flushing nmethod 0x00000001197ca290
+Event: 16551.875 Thread 0x00007fbca1d6b000 Uncommon trap: trap_request=0xfffffff4 fr.pc=0x0000000110359074
+Event: 16551.875 Thread 0x00007fbca1d6b000 DEOPT PACKING pc=0x0000000110359074 sp=0x00007000aeefcbb0
+Event: 16551.876 Thread 0x00007fbca1d6b000 DEOPT UNPACKING pc=0x000000010edf473a sp=0x00007000aeefcaf0 mode 2
+Event: 16551.879 Executing VM operation: RevokeBias
+Event: 16551.881 Executing VM operation: RevokeBias done
+Event: 16551.881 Thread 0x00007fbca7b28000 Thread exited: 0x00007fbca7b28000
+
+
+Dynamic libraries:
+0x00007fff52248000 	/System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa
+0x00007fff5df2a000 	/System/Library/Frameworks/Security.framework/Versions/A/Security
+0x00007fff50edd000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/ApplicationServices
+0x00007fff7e572000 	/usr/lib/libz.1.dylib
+0x00007fff7bca2000 	/usr/lib/libSystem.B.dylib
+0x00007fff7d69c000 	/usr/lib/libobjc.A.dylib
+0x00007fff52a30000 	/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation
+0x00007fff54ca4000 	/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation
+0x00007fff500d6000 	/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit
+0x00007fff525c3000 	/System/Library/Frameworks/CoreData.framework/Versions/A/CoreData
+0x00007fff757f1000 	/System/Library/PrivateFrameworks/RemoteViewServices.framework/Versions/A/RemoteViewServices
+0x00007fff799e5000 	/System/Library/PrivateFrameworks/UIFoundation.framework/Versions/A/UIFoundation
+0x00007fff7b0c7000 	/System/Library/PrivateFrameworks/XCTTargetBootstrap.framework/Versions/A/XCTTargetBootstrap
+0x00007fff7062e000 	/System/Library/PrivateFrameworks/IconServices.framework/Versions/A/IconServices
+0x00007fff575bd000 	/System/Library/Frameworks/Metal.framework/Versions/A/Metal
+0x00007fff67bb9000 	/System/Library/PrivateFrameworks/DesktopServicesPriv.framework/Versions/A/DesktopServicesPriv
+0x00007fff7ca02000 	/usr/lib/libenergytrace.dylib
+0x00007fff77ed4000 	/System/Library/PrivateFrameworks/SkyLight.framework/Versions/A/SkyLight
+0x00007fff52e75000 	/System/Library/Frameworks/CoreGraphics.framework/Versions/A/CoreGraphics
+0x00007fff4eea2000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Accelerate
+0x00007fff553ea000 	/System/Library/Frameworks/IOSurface.framework/Versions/A/IOSurface
+0x00007fff67a25000 	/System/Library/PrivateFrameworks/DFRFoundation.framework/Versions/A/DFRFoundation
+0x00007fff513c0000 	/System/Library/Frameworks/AudioToolbox.framework/Versions/A/AudioToolbox
+0x00007fff51639000 	/System/Library/Frameworks/AudioUnit.framework/Versions/A/AudioUnit
+0x00007fff67aba000 	/System/Library/PrivateFrameworks/DataDetectorsCore.framework/Versions/A/DataDetectorsCore
+0x00007fff51d4c000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/HIToolbox.framework/Versions/A/HIToolbox
+0x00007fff7cb5b000 	/usr/lib/libicucore.A.dylib
+0x00007fff5d4a1000 	/System/Library/Frameworks/QuartzCore.framework/Versions/A/QuartzCore
+0x00007fff52120000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/SpeechRecognition.framework/Versions/A/SpeechRecognition
+0x00007fff7bdf6000 	/usr/lib/libauto.dylib
+0x00007fff7e466000 	/usr/lib/libxml2.2.dylib
+0x00007fff67605000 	/System/Library/PrivateFrameworks/CoreUI.framework/Versions/A/CoreUI
+0x00007fff524ae000 	/System/Library/Frameworks/CoreAudio.framework/Versions/A/CoreAudio
+0x00007fff54ae0000 	/System/Library/Frameworks/DiskArbitration.framework/Versions/A/DiskArbitration
+0x00007fff7ce08000 	/usr/lib/liblangid.dylib
+0x00007fff71a2d000 	/System/Library/PrivateFrameworks/MultitouchSupport.framework/Versions/A/MultitouchSupport
+0x00007fff55359000 	/System/Library/Frameworks/IOKit.framework/Versions/A/IOKit
+0x00007fff7b863000 	/usr/lib/libDiagnosticMessagesClient.dylib
+0x00007fff53c81000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/CoreServices
+0x00007fff73603000 	/System/Library/PrivateFrameworks/PerformanceAnalysis.framework/Versions/A/PerformanceAnalysis
+0x00007fff5c691000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/OpenGL
+0x00007fff52256000 	/System/Library/Frameworks/ColorSync.framework/Versions/A/ColorSync
+0x00007fff53506000 	/System/Library/Frameworks/CoreImage.framework/Versions/A/CoreImage
+0x00007fff5465a000 	/System/Library/Frameworks/CoreText.framework/Versions/A/CoreText
+0x00007fff5544d000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/ImageIO
+0x00007fff63c63000 	/System/Library/PrivateFrameworks/Backup.framework/Versions/A/Backup
+0x00007fff7bd49000 	/usr/lib/libarchive.2.dylib
+0x00007fff51991000 	/System/Library/Frameworks/CFNetwork.framework/Versions/A/CFNetwork
+0x00007fff5e683000 	/System/Library/Frameworks/SystemConfiguration.framework/Versions/A/SystemConfiguration
+0x00007fff7b794000 	/usr/lib/libCRFSuite.dylib
+0x00007fff7bee5000 	/usr/lib/libc++.1.dylib
+0x00007fff7bf39000 	/usr/lib/libc++abi.dylib
+0x00007fff7ed61000 	/usr/lib/system/libcache.dylib
+0x00007fff7ed66000 	/usr/lib/system/libcommonCrypto.dylib
+0x00007fff7ed71000 	/usr/lib/system/libcompiler_rt.dylib
+0x00007fff7ed79000 	/usr/lib/system/libcopyfile.dylib
+0x00007fff7ed83000 	/usr/lib/system/libcorecrypto.dylib
+0x00007fff7ee8e000 	/usr/lib/system/libdispatch.dylib
+0x00007fff7eec8000 	/usr/lib/system/libdyld.dylib
+0x00007fff7eef5000 	/usr/lib/system/libkeymgr.dylib
+0x00007fff7ef03000 	/usr/lib/system/liblaunch.dylib
+0x00007fff7ef04000 	/usr/lib/system/libmacho.dylib
+0x00007fff7ef0a000 	/usr/lib/system/libquarantine.dylib
+0x00007fff7ef0d000 	/usr/lib/system/libremovefile.dylib
+0x00007fff7ef0f000 	/usr/lib/system/libsystem_asl.dylib
+0x00007fff7ef27000 	/usr/lib/system/libsystem_blocks.dylib
+0x00007fff7ef28000 	/usr/lib/system/libsystem_c.dylib
+0x00007fff7efb0000 	/usr/lib/system/libsystem_configuration.dylib
+0x00007fff7efb4000 	/usr/lib/system/libsystem_coreservices.dylib
+0x00007fff7efb8000 	/usr/lib/system/libsystem_darwin.dylib
+0x00007fff7efbf000 	/usr/lib/system/libsystem_dnssd.dylib
+0x00007fff7efc6000 	/usr/lib/system/libsystem_info.dylib
+0x00007fff7f03b000 	/usr/lib/system/libsystem_m.dylib
+0x00007fff7f087000 	/usr/lib/system/libsystem_malloc.dylib
+0x00007fff7f0ac000 	/usr/lib/system/libsystem_networkextension.dylib
+0x00007fff7f0b7000 	/usr/lib/system/libsystem_notify.dylib
+0x00007fff7f0d4000 	/usr/lib/system/libsystem_sandbox.dylib
+0x00007fff7f0d8000 	/usr/lib/system/libsystem_secinit.dylib
+0x00007fff7f012000 	/usr/lib/system/libsystem_kernel.dylib
+0x00007fff7f0bf000 	/usr/lib/system/libsystem_platform.dylib
+0x00007fff7f0c9000 	/usr/lib/system/libsystem_pthread.dylib
+0x00007fff7f0db000 	/usr/lib/system/libsystem_symptoms.dylib
+0x00007fff7f0e3000 	/usr/lib/system/libsystem_trace.dylib
+0x00007fff7f0fa000 	/usr/lib/system/libunwind.dylib
+0x00007fff7f100000 	/usr/lib/system/libxpc.dylib
+0x00007fff7bec6000 	/usr/lib/libbsm.0.dylib
+0x00007fff7eef6000 	/usr/lib/system/libkxld.dylib
+0x00007fff62ea9000 	/System/Library/PrivateFrameworks/AppleFSCompression.framework/Versions/A/AppleFSCompression
+0x00007fff7bb62000 	/usr/lib/libOpenScriptingUtil.dylib
+0x00007fff7c1ee000 	/usr/lib/libcoretls.dylib
+0x00007fff7c205000 	/usr/lib/libcoretls_cfhelpers.dylib
+0x00007fff7de33000 	/usr/lib/libpam.2.dylib
+0x00007fff7dff3000 	/usr/lib/libsqlite3.dylib
+0x00007fff7e454000 	/usr/lib/libxar.1.dylib
+0x00007fff7bed7000 	/usr/lib/libbz2.1.0.dylib
+0x00007fff7ce0a000 	/usr/lib/liblzma.5.dylib
+0x00007fff7d2bb000 	/usr/lib/libnetwork.dylib
+0x00007fff7bd32000 	/usr/lib/libapple_nghttp2.dylib
+0x00007fff7de3a000 	/usr/lib/libpcap.A.dylib
+0x00007fff54020000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/FSEvents.framework/Versions/A/FSEvents
+0x00007fff53cff000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/CarbonCore.framework/Versions/A/CarbonCore
+0x00007fff541dc000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Metadata
+0x00007fff5427b000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/OSServices.framework/Versions/A/OSServices
+0x00007fff542c6000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/SearchKit.framework/Versions/A/SearchKit
+0x00007fff53c82000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/AE.framework/Versions/A/AE
+0x00007fff54029000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/LaunchServices
+0x00007fff53fd7000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/DictionaryServices.framework/Versions/A/DictionaryServices
+0x00007fff5432e000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/SharedFileList.framework/Versions/A/SharedFileList
+0x00007fff5866c000 	/System/Library/Frameworks/NetFS.framework/Versions/A/NetFS
+0x00007fff71c93000 	/System/Library/PrivateFrameworks/NetAuth.framework/Versions/A/NetAuth
+0x00007fff7b4cb000 	/System/Library/PrivateFrameworks/login.framework/Versions/A/Frameworks/loginsupport.framework/Versions/A/loginsupport
+0x00007fff795ee000 	/System/Library/PrivateFrameworks/TCC.framework/Versions/A/TCC
+0x00007fff66c64000 	/System/Library/PrivateFrameworks/CoreNLP.framework/Versions/A/CoreNLP
+0x00007fff7172d000 	/System/Library/PrivateFrameworks/MetadataUtilities.framework/Versions/A/MetadataUtilities
+0x00007fff7cedf000 	/usr/lib/libmecabra.dylib
+0x00007fff50ede000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ATS.framework/Versions/A/ATS
+0x00007fff5122d000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ColorSyncLegacy.framework/Versions/A/ColorSyncLegacy
+0x00007fff512cc000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/HIServices.framework/Versions/A/HIServices
+0x00007fff5131f000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/LangAnalysis.framework/Versions/A/LangAnalysis
+0x00007fff5132f000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/PrintCore.framework/Versions/A/PrintCore
+0x00007fff51379000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/QD.framework/Versions/A/QD
+0x00007fff513b3000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/SpeechSynthesis.framework/Versions/A/SpeechSynthesis
+0x00007fff7bf61000 	/usr/lib/libcompression.dylib
+0x00007fff52948000 	/System/Library/Frameworks/CoreDisplay.framework/Versions/A/CoreDisplay
+0x00007fff57874000 	/System/Library/Frameworks/MetalPerformanceShaders.framework/Versions/A/MetalPerformanceShaders
+0x00007fff4eeba000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vImage.framework/Versions/A/vImage
+0x00007fff4ff34000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/vecLib
+0x00007fff4fe80000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libvMisc.dylib
+0x00007fff4fc98000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libvDSP.dylib
+0x00007fff4f554000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
+0x00007fff4f841000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libLAPACK.dylib
+0x00007fff4fbeb000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libLinearAlgebra.dylib
+0x00007fff4fc84000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libSparseBLAS.dylib
+0x00007fff4fc01000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libQuadrature.dylib
+0x00007fff4f7ce000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBNNS.dylib
+0x00007fff4fc07000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libSparse.dylib
+0x00007fff6df9f000 	/System/Library/PrivateFrameworks/GPUWrangler.framework/Versions/A/GPUWrangler
+0x00007fff70263000 	/System/Library/PrivateFrameworks/IOAccelerator.framework/Versions/A/IOAccelerator
+0x00007fff7026e000 	/System/Library/PrivateFrameworks/IOPresentment.framework/Versions/A/IOPresentment
+0x00007fff67a35000 	/System/Library/PrivateFrameworks/DSExternalDisplay.framework/Versions/A/DSExternalDisplay
+0x00007fff5bae8000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libCoreFSCache.dylib
+0x00007fff57668000 	/System/Library/Frameworks/MetalPerformanceShaders.framework/Frameworks/MPSCore.framework/Versions/A/MPSCore
+0x00007fff57688000 	/System/Library/Frameworks/MetalPerformanceShaders.framework/Frameworks/MPSImage.framework/Versions/A/MPSImage
+0x00007fff5772d000 	/System/Library/Frameworks/MetalPerformanceShaders.framework/Frameworks/MPSNeuralNetwork.framework/Versions/A/MPSNeuralNetwork
+0x00007fff57705000 	/System/Library/Frameworks/MetalPerformanceShaders.framework/Frameworks/MPSMatrix.framework/Versions/A/MPSMatrix
+0x00007fff57859000 	/System/Library/Frameworks/MetalPerformanceShaders.framework/Frameworks/MPSRayIntersector.framework/Versions/A/MPSRayIntersector
+0x00007fff71756000 	/System/Library/PrivateFrameworks/MetalTools.framework/Versions/A/MetalTools
+0x00007fff625aa000 	/System/Library/PrivateFrameworks/AggregateDictionary.framework/Versions/A/AggregateDictionary
+0x00007fff7bb43000 	/usr/lib/libMobileGestalt.dylib
+0x00007fff547bd000 	/System/Library/Frameworks/CoreVideo.framework/Versions/A/CoreVideo
+0x00007fff6eda9000 	/System/Library/PrivateFrameworks/GraphVisualizer.framework/Versions/A/GraphVisualizer
+0x00007fff68c2f000 	/System/Library/PrivateFrameworks/FaceCore.framework/Versions/A/FaceCore
+0x00007fff5b116000 	/System/Library/Frameworks/OpenCL.framework/Versions/A/OpenCL
+0x00007fff7b89b000 	/usr/lib/libFosl_dynamic.dylib
+0x00007fff724fe000 	/System/Library/PrivateFrameworks/OTSVG.framework/Versions/A/OTSVG
+0x00007fff50fe2000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ATS.framework/Versions/A/Resources/libFontParser.dylib
+0x00007fff510fa000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ATS.framework/Versions/A/Resources/libFontRegistry.dylib
+0x00007fff556bb000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libJPEG.dylib
+0x00007fff559cd000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libTIFF.dylib
+0x00007fff559a3000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libPng.dylib
+0x00007fff555d9000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libGIF.dylib
+0x00007fff555de000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libJP2.dylib
+0x00007fff559ca000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libRadiance.dylib
+0x00007fff62ffe000 	/System/Library/PrivateFrameworks/AppleJPEG.framework/Versions/A/AppleJPEG
+0x00007fff5baf3000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGFXShared.dylib
+0x00007fff5bcb6000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGLU.dylib
+0x00007fff5bafc000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib
+0x00007fff5bb08000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGLImage.dylib
+0x00007fff5bae5000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libCVMSPluginSupport.dylib
+0x00007fff5baee000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libCoreVMClient.dylib
+0x00007fff7c878000 	/usr/lib/libcups.2.dylib
+0x00007fff56b90000 	/System/Library/Frameworks/Kerberos.framework/Versions/A/Kerberos
+0x00007fff550c0000 	/System/Library/Frameworks/GSS.framework/Versions/A/GSS
+0x00007fff7df88000 	/usr/lib/libresolv.9.dylib
+0x00007fff7ca6a000 	/usr/lib/libiconv.2.dylib
+0x00007fff6ef05000 	/System/Library/PrivateFrameworks/Heimdal.framework/Versions/A/Heimdal
+0x00007fff7ca3a000 	/usr/lib/libheimdal-asn1.dylib
+0x00007fff5b18a000 	/System/Library/Frameworks/OpenDirectory.framework/Versions/A/OpenDirectory
+0x00007fff659cb000 	/System/Library/PrivateFrameworks/CommonAuth.framework/Versions/A/CommonAuth
+0x00007fff5b16e000 	/System/Library/Frameworks/OpenDirectory.framework/Versions/A/Frameworks/CFOpenDirectory.framework/Versions/A/CFOpenDirectory
+0x00007fff5e229000 	/System/Library/Frameworks/SecurityFoundation.framework/Versions/A/SecurityFoundation
+0x00007fff61b05000 	/System/Library/PrivateFrameworks/APFS.framework/Versions/A/APFS
+0x00007fff7e450000 	/usr/lib/libutil.dylib
+0x00007fff7bf4f000 	/usr/lib/libcharset.1.dylib
+0x00007fff6329b000 	/System/Library/PrivateFrameworks/AppleSauce.framework/Versions/A/AppleSauce
+0x00007fff6341c000 	/System/Library/PrivateFrameworks/AssertionServices.framework/Versions/A/AssertionServices
+0x00007fff63cf9000 	/System/Library/PrivateFrameworks/BaseBoard.framework/Versions/A/BaseBoard
+0x00007fff7ce3a000 	/usr/lib/libmecab.1.0.0.dylib
+0x00007fff7ca34000 	/usr/lib/libgermantok.dylib
+0x00007fff7bd1f000 	/usr/lib/libThaiTokenizer.dylib
+0x00007fff7b7cb000 	/usr/lib/libChineseTokenizer.dylib
+0x00007fff7091a000 	/System/Library/PrivateFrameworks/LanguageModeling.framework/Versions/A/LanguageModeling
+0x00007fff666aa000 	/System/Library/PrivateFrameworks/CoreEmoji.framework/Versions/A/CoreEmoji
+0x00007fff709f6000 	/System/Library/PrivateFrameworks/Lexicon.framework/Versions/A/Lexicon
+0x00007fff70a39000 	/System/Library/PrivateFrameworks/LinguisticData.framework/Versions/A/LinguisticData
+0x00007fff7bf50000 	/usr/lib/libcmph.dylib
+0x00007fff5e2e7000 	/System/Library/Frameworks/ServiceManagement.framework/Versions/A/ServiceManagement
+0x00007fff63c5a000 	/System/Library/PrivateFrameworks/BackgroundTaskManagement.framework/Versions/A/BackgroundTaskManagement
+0x00007fff7e549000 	/usr/lib/libxslt.1.dylib
+0x00007fff5204d000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/Ink.framework/Versions/A/Ink
+0x00007fff79860000 	/System/Library/PrivateFrameworks/TextureIO.framework/Versions/A/TextureIO
+0x00007fff7bd73000 	/usr/lib/libate.dylib
+0x00007fff67985000 	/System/Library/PrivateFrameworks/CrashReporterSupport.framework/Versions/A/CrashReporterSupport
+0x00007fff77012000 	/System/Library/PrivateFrameworks/Sharing.framework/Versions/A/Sharing
+0x00007fff637fb000 	/System/Library/PrivateFrameworks/AuthKit.framework/Versions/A/AuthKit
+0x00007fff62ba5000 	/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Apple80211
+0x00007fff67731000 	/System/Library/PrivateFrameworks/CoreUtils.framework/Versions/A/CoreUtils
+0x00007fff547fb000 	/System/Library/Frameworks/CoreWLAN.framework/Versions/A/CoreWLAN
+0x00007fff551ef000 	/System/Library/Frameworks/IOBluetooth.framework/Versions/A/IOBluetooth
+0x00007fff754a2000 	/System/Library/PrivateFrameworks/ProtocolBuffer.framework/Versions/A/ProtocolBuffer
+0x00007fff7198b000 	/System/Library/PrivateFrameworks/MobileKeyBag.framework/Versions/A/MobileKeyBag
+0x00007fff66f77000 	/System/Library/PrivateFrameworks/CorePhoneNumbers.framework/Versions/A/CorePhoneNumbers
+0x00007fff62fb2000 	/System/Library/PrivateFrameworks/AppleIDAuthSupport.framework/Versions/A/AppleIDAuthSupport
+0x00007fff708ed000 	/System/Library/PrivateFrameworks/KeychainCircle.framework/Versions/A/KeychainCircle
+0x00007fff75658000 	/System/Library/PrivateFrameworks/ROCKit.framework/Versions/A/ROCKit
+0x00007fff67921000 	/System/Library/PrivateFrameworks/CoreWiFi.framework/Versions/A/CoreWiFi
+0x00007fff52598000 	/System/Library/Frameworks/CoreBluetooth.framework/Versions/A/CoreBluetooth
+0x00007fff67b7b000 	/System/Library/PrivateFrameworks/DebugSymbols.framework/Versions/A/DebugSymbols
+0x00007fff674f2000 	/System/Library/PrivateFrameworks/CoreSymbolication.framework/Versions/A/CoreSymbolication
+0x00007fff7907c000 	/System/Library/PrivateFrameworks/Symbolication.framework/Versions/A/Symbolication
+0x00007fff7891f000 	/System/Library/PrivateFrameworks/SpeechRecognitionCore.framework/Versions/A/SpeechRecognitionCore
+0x0000000103600000 	/Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home/jre/lib/server/libjvm.dylib
+0x00007fff7e321000 	/usr/lib/libstdc++.6.dylib
+0x0000000101c95000 	/Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home/jre/lib/libverify.dylib
+0x0000000101ca3000 	/Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home/jre/lib/libjava.dylib
+0x0000000101d23000 	/Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home/jre/lib/libzip.dylib
+0x000000011ff33000 	/Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home/jre/lib/libnio.dylib
+0x0000000120097000 	/Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home/jre/lib/./libnet.dylib
+0x0000000120660000 	/private/var/folders/kb/tjt27xcn6_dg095y88337mjm0000gn/T/jna-1005382995/jna8424751700070829228.tmp
+0x00007fff56b8b000 	/System/Library/Frameworks/JavaVM.framework/Versions/A/JavaVM
+0x00007fff7080c000 	/System/Library/PrivateFrameworks/JavaLaunching.framework/Versions/A/JavaLaunching
+0x0000000121eac000 	/private/var/folders/kb/tjt27xcn6_dg095y88337mjm0000gn/T/jna-1005382995/jna6575098671674917152.tmp
+0x00007fff51d47000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Carbon
+0x00007fff51d48000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/CommonPanels.framework/Versions/A/CommonPanels
+0x00007fff52043000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/Help.framework/Versions/A/Help
+0x00007fff52047000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/ImageCapture.framework/Versions/A/ImageCapture
+0x00007fff520e3000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/OpenScripting.framework/Versions/A/OpenScripting
+0x00007fff5211b000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/Print.framework/Versions/A/Print
+0x00007fff5211d000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/SecurityHI.framework/Versions/A/SecurityHI
+
+VM Arguments:
+jvm_args: -Dmetals.input-box=on -Dmetals.client=vscode -Xss4m -Xms100m 
+java_command: scala.meta.metals.Main
+java_class_path (initial): /Users/etorreborre/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar:/Users/etorreborre/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/lihaoyi/sourcecode_2.12/0.1.7/sourcecode_2.12-0.1.7.jar:/Users/etorreborre/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/google/guava/guava/28.0-jre/guava-28.0-jre.jar:/Users/etorreborre/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/jsoup/jsoup/1.11.3/jsoup-1.11.3.jar:/Users/etorreborre/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scalameta/metals_2.12/0.7.6/metals_2.12-0.7.6.jar:/Users/etorreborre/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/eclipse/xtext/org.eclipse.xtext.xbase.lib/2.18.0/org.eclipse.xtext.xbase.lib-2.18.0.jar:/Users/etorreborre/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/scalap/2.12.9/scalap-2.12.9.jar:/Users/etorreborre/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/ipcsocket/ipcsocket/1.0.0/ipcsocket-1.0.0.jar:/Users/etorreborre/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scalameta/fastparse-utils_2.12/1.0.1/fastparse-utils_2.12-1.0.1.jar:/Users/etorreborre/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/google/errorprone/error_prone_annotations/2.3.2/error_prone_annotations-2.3.2.jar:/Users/etorreborre/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/modules/scala-xml_2.12/1.1.1/scala-xml_2.12-1.1.1.jar:/Users/etorreborre/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/com/thesamet/scalapb/lenses_2.12/0.9.0/lenses_2.12-0.9.0.jar:/Users/etorreborre/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/jboss/logging/jboss-logging/3.3.2.Final/jboss-logging-3.3.2.Final.jar:/Users/etorreborre/Library/Caches/Coursier/v1/https/repo1.maven.org/maven2/org/scalameta/scalameta_2.12/4.2.3/scalameta_2.12-4.2.3.jar:/Users/etorreborre/Library/Caches/Coursier/v1/h
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home
+PATH=/Users/etorreborre/.pyenv/plugins/pyenv-virtualenv/shims:/Users/etorreborre/.pyenv/shims:/Users/etorreborre/.pyenv/bin:/Users/etorreborre/.pl:/Users/etorreborre/.stack/compiler-tools/x86_64-osx/ghc-8.4.4/bin:/Users/etorreborre/.stack:/Users/etorreborre/.local/bin:/Users/etorreborre/.ghcup/bin:/Users/etorreborre/.cabal/bin:/Applications/google-cloud-sdk/bin:/usr/local/homebrew/opt/openssl/bin:/usr/local/homebrew/bin:LOCAL_BIN:~/.symbiont/cabal-docker:~/.symbiont/:/Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:/Users/etorreborre/bin:/pkg-config/0.29.2/bin:/Users/etorreborre/local/bin:/usr/local/homebrew/opt/fzf/bin
+SHELL=/bin/zsh
+DISPLAY=/private/tmp/com.apple.launchd.Pdms94KaX6/org.macosforge.xquartz:0
+
+Signal Handlers:
+SIGSEGV: [libjvm.dylib+0x5b6029], sa_mask[0]=11111111011111110111111111111111, sa_flags=SA_ONSTACK|SA_RESTART|SA_SIGINFO
+SIGBUS: [libjvm.dylib+0x5b6029], sa_mask[0]=11111111011111110111111111111111, sa_flags=SA_RESTART|SA_SIGINFO
+SIGFPE: [libjvm.dylib+0x48b934], sa_mask[0]=11111111011111110111111111111111, sa_flags=SA_RESTART|SA_SIGINFO
+SIGPIPE: [libjvm.dylib+0x48b934], sa_mask[0]=11111111011111110111111111111111, sa_flags=SA_RESTART|SA_SIGINFO
+SIGXFSZ: [libjvm.dylib+0x48b934], sa_mask[0]=11111111011111110111111111111111, sa_flags=SA_RESTART|SA_SIGINFO
+SIGILL: [libjvm.dylib+0x48b934], sa_mask[0]=11111111011111110111111111111111, sa_flags=SA_RESTART|SA_SIGINFO
+SIGUSR1: SIG_DFL, sa_mask[0]=00000000000000000000000000000000, sa_flags=SA_RESTART
+SIGUSR2: [libjvm.dylib+0x48b452], sa_mask[0]=00000000000000000000000000000000, sa_flags=SA_RESTART|SA_SIGINFO
+SIGHUP: [libjvm.dylib+0x489a1d], sa_mask[0]=11111111011111110111111111111111, sa_flags=SA_RESTART|SA_SIGINFO
+SIGINT: [libjvm.dylib+0x489a1d], sa_mask[0]=11111111011111110111111111111111, sa_flags=SA_RESTART|SA_SIGINFO
+SIGTERM: [libjvm.dylib+0x489a1d], sa_mask[0]=11111111011111110111111111111111, sa_flags=SA_RESTART|SA_SIGINFO
+SIGQUIT: [libjvm.dylib+0x489a1d], sa_mask[0]=11111111011111110111111111111111, sa_flags=SA_RESTART|SA_SIGINFO
+
+
+---------------  S Y S T E M  ---------------
+
+OS:Bsduname:Darwin 18.5.0 Darwin Kernel Version 18.5.0: Mon Mar 11 20:40:32 PDT 2019; root:xnu-4903.251.3~3/RELEASE_X86_64 x86_64
+rlimit: STACK 8192k, CORE 0k, NPROC 1418, NOFILE 10240, AS infinity
+load average:6.64 5.65 4.57
+
+CPU:total 12 (initial active 12) (6 cores per cpu, 2 threads per core) family 6 model 158 stepping 10, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, avx, avx2, aes, clmul, erms, 3dnowpref, lzcnt, ht, tsc, tscinvbit, bmi1, bmi2, adx
+
+Memory: 4k page, physical 16777216k(743912k free)
+
+/proc/meminfo:
+
+
+vm_info: Java HotSpot(TM) 64-Bit Server VM (25.181-b13) for bsd-amd64 JRE (1.8.0_181-b13), built on Jul  7 2018 01:02:31 by "java_re" with gcc 4.2.1 (Based on Apple Inc. build 5658) (LLVM build 2336.11.00)
+
+time: Sat Dec  7 21:42:18 2019
+elapsed time: 16551 seconds (0d 4h 35m 51s)
+

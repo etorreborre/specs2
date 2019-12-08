@@ -84,10 +84,10 @@ case class DefaultReporter(statistics: Statistics, statisticsRepository: Statist
       }
 
     val prepare: Action[Unit] =
-      statisticsRepository.resetStatistics.toAction.when(resetStore)
+      statisticsRepository.resetStatistics.when(resetStore).toAction
 
     val last = (stats: Stats) =>
-      statisticsRepository.storeStatistics(spec.specClassName, stats).toAction.when(neverStore)
+      statisticsRepository.storeStatistics(spec.specClassName, stats).when(neverStore).toAction
 
     (Statistics.fold <* fromStart(prepare) <* sink).mapFlatten(last)
   }

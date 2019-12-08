@@ -50,9 +50,21 @@ case class Env(
    *  copying directories and so on...
    */
   fileSystem:           FileSystem,
+
+  /** a custom classloader can set on the environment when specifications must be
+   * executed in a specific one, for example when running inside SBT
+   */
   customClassLoader:    Option[ClassLoader],
+
+  /** this is an indirection allowing Thread.setContextClassLoader with the custom class loader when
+   * the platform permits it
+   */
   classLoading:         ClassLoading,
+
+  /** execution environment for the code *inside* the specification examples */
   executionEnv:         ExecutionEnv,
+
+  /** execution environment for the specs2 own reporting */
   specs2ExecutionEnv:   ExecutionEnv) {
 
   lazy val executionContext =
@@ -103,6 +115,9 @@ case class Env(
   def setCustomClassLoader(classLoader: ClassLoader): Env =
     copy(customClassLoader = Some(classLoader))
 
+  /** if a custom classloader is used, give the possibility to set it as the context class loader
+   * This is used during the execution of fragments. See Execution.scala
+   */
   def setContextClassLoader(): Unit =
     customClassLoader.foreach(classLoading.setContextClassLoader)
 }
