@@ -130,7 +130,7 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
       case None => this
 
       case Some(r) =>
-        val to = env.timeout |+| timeout
+        val to = env.arguments.timeout |+| timeout
         try {
           implicit val ec = env.specs2ExecutionContext
           env.setContextClassLoader()

@@ -50,7 +50,7 @@ class Website(env: Env) extends Specification with Specs2Variables with Specs2Ta
     val env1 = env.copy(arguments = Arguments.split(s"all html console html.search html.toc html.nostats html.outdir ${guideOutputDir.dirPath}"))
 
     env1.fileSystem.copyFile(guideOutputDir / "css")(resource("css/specs2-user.css")).toAction >>
-      ClassRunner.createClassRunner(env1.arguments, env1).flatMap(_.run(UserGuide).as(true))
+      ClassRunner.createClassRunner(env1).flatMap(_.run(UserGuide).as(true))
   }
 
   def writeVersionsFile(fs: FileSystem, siteOutputDir: DirectoryPath, guideDir: String, apiDir: String): Operation[Unit] =

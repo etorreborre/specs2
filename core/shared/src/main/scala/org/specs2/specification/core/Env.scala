@@ -41,11 +41,15 @@ case class Env(
    * in case they are needed to drive the current execution */
   statisticsRepository: StatisticsRepository,
 
-  /** the StatisticsRepository contains the result of previous executions
-   * in case they are needed to drive the current execution */
+  /** the random object is only invoked when using the RandomSequentialExecution
+   * to execute examples randomly in a specification
+   */
   random:               scala.util.Random,
+
+  /** the FileSystem gives access to reading/writing files,
+   *  copying directories and so on...
+   */
   fileSystem:           FileSystem,
-  executionParameters:  ExecutionParameters,
   customClassLoader:    Option[ClassLoader],
   classLoading:         ClassLoading,
   executionEnv:         ExecutionEnv,
@@ -64,7 +68,7 @@ case class Env(
     specs2ExecutionEnv.executorServices
 
   lazy val timeout =
-    executionParameters.timeout
+    arguments.timeout
 
   lazy val commandLine: CommandLine =
     arguments.commandLine
@@ -73,7 +77,7 @@ case class Env(
     List[AnyRef](arguments.commandLine, executionEnv, executionContext, arguments, this)
 
   def setTimeout(duration: FiniteDuration): Env =
-    copy(executionParameters = executionParameters.setTimeout(duration))
+    copy(arguments = arguments.setTimeout(duration))
 
   def shutdown(): Unit =
     try     specs2ExecutionEnv.shutdown
@@ -108,11 +112,10 @@ object Env {
   def apply(
     arguments:            Arguments            = EnvDefault.default.arguments,
     systemLogger:         Logger               = EnvDefault.default.systemLogger,
-    printerLogger:           PrinterLogger           = EnvDefault.default.printerLogger,
+    printerLogger:        PrinterLogger        = EnvDefault.default.printerLogger,
     statisticsRepository: StatisticsRepository = EnvDefault.default.statisticsRepository,
     random:               scala.util.Random    = EnvDefault.default.random,
     fileSystem:           FileSystem           = EnvDefault.default.fileSystem,
-    executionParameters:  ExecutionParameters  = EnvDefault.default.executionParameters,
     customClassLoader:    Option[ClassLoader]  = EnvDefault.default.customClassLoader,
     classLoading:         ClassLoading         = EnvDefault.default.classLoading): Env =
     Env(
@@ -122,7 +125,6 @@ object Env {
       statisticsRepository,
       random,
       fileSystem,
-      executionParameters,
       customClassLoader,
       classLoading,
       executionEnv =       ExecutionEnv.create(arguments, systemLogger),
@@ -133,9 +135,4 @@ object Env {
     AsResult(r(env))
   }
 
-}
-
-case class ExecutionParameters(timeout: Option[FiniteDuration] = None) {
-  def setTimeout(duration: FiniteDuration): ExecutionParameters =
-    copy(timeout = Some(duration))
 }

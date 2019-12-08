@@ -81,7 +81,7 @@ class FutureMatchersSpec extends Specification with ResultMatchers with specific
       }
     }
 
-    ClassRunner.createClassRunner(env.arguments, env).flatMap(_.run(thrown)).runOption(env.specs2ExecutionEnv).get.failures === 1
+    ClassRunner.createClassRunner(env).flatMap(_.run(thrown)).runOption(env.specs2ExecutionEnv).get.failures === 1
   }
 
   def e4 = {

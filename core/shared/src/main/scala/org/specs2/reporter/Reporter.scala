@@ -98,11 +98,10 @@ object Reporter {
 
   def create(printers: List[Printer], env: Env): Reporter = {
     val arguments = env.arguments
-    val statsRepository = StatisticsRepositoryCreation.memory
-    val statistics = DefaultStatistics(arguments, statsRepository)
+    val statistics = DefaultStatistics(arguments, env.statisticsRepository)
     val selector = Arguments.instance(arguments.select.selector).getOrElse(DefaultSelector(arguments))
     val executor = Arguments.instance(arguments.execute.executor).getOrElse(DefaultExecutor(env))
-    DefaultReporter(statistics, statsRepository, selector, executor, printers, env)
+    DefaultReporter(statistics, env.statisticsRepository, selector, executor, printers, env)
   }
 
 }

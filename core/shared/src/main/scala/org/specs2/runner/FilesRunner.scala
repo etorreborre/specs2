@@ -47,7 +47,7 @@ trait FilesRunner {
     for {
       _     <- beforeExecution(args, isVerbose(args), logger).toAction
       ss    <- specs.map(sort(env))
-      cr    <- ClassRunner.createClassRunner(args, env)
+      cr    <- ClassRunner.createClassRunner(env)
       stats <- ss.toList.traverse(cr.run)
       _     <- afterExecution(ss, isVerbose(args), logger).toAction
     } yield stats.suml

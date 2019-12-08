@@ -9,7 +9,6 @@ import reporter._
 import main.Arguments
 import fp.syntax._
 import Runner._
-import reporter.PrinterLogger._
 
 trait ClassRunner {
   def run(className: String): Action[Stats]
@@ -58,7 +57,7 @@ trait ClassRunnerMain {
    */
   def run(args: Array[String], exit: Boolean): Unit = {
     val arguments = Arguments(args.drop(1): _*)
-    val env = Env(arguments = arguments, printerLogger = consolePrinterLogger)
+    val env = EnvDefault.create(arguments)
 
     val actions: Action[Stats] = args.toList match {
       case Nil =>
@@ -66,7 +65,7 @@ trait ClassRunnerMain {
         Action.pure(Stats.empty)
 
       case className :: rest => for {
-          classRunner <- createClassRunner(arguments, env)
+          classRunner <- createClassRunner(env)
           stats <- classRunner.run(className)
         } yield stats
       }
@@ -75,7 +74,8 @@ trait ClassRunnerMain {
     finally env.shutdown
   }
 
-  def createClassRunner(arguments: Arguments, env: Env): Action[ClassRunner] = {
+  def createClassRunner(env: Env): Action[ClassRunner] = {
+    val arguments = env.arguments
     val loader = Thread.currentThread.getContextClassLoader
     val customInstances = CustomInstances(arguments, loader, ConsoleLogger())
     val printerFactory = PrinterFactory(arguments, env, customInstances, ConsoleLogger())

@@ -6,6 +6,7 @@ import org.specs2.fp._
 import control._
 import text._
 import scala.Predef._
+import scala.concurrent.duration.FiniteDuration
 
 /**
  * This class holds all the options that are relevant for specs2 execution and reporting.
@@ -44,6 +45,9 @@ case class Arguments (
   def sequential: Boolean             = execute.sequential
   def threadsNb: Int                  = execute.threadsNb
   def specs2ThreadsNb: Int            = execute.specs2ThreadsNb
+  def timeFactor: Int                 = execute.timeFactor
+  def timeout: Option[FiniteDuration] = execute.timeout
+  def setTimeout(t: FiniteDuration)   = copy(execute = execute.setTimeout(t))
   def batchSize: Int                  = execute.batchSize
   def scheduledThreadsNb: Int         = execute.scheduledThreadsNb
   def useCustomClassLoader: Boolean   = execute.useCustomClassLoader
@@ -63,7 +67,7 @@ case class Arguments (
   def isSet(a: String) = commandLine isSet a
   /** alias for overrideWith */
   def <|(other: Arguments) = overrideWith(other)
-  
+
   /**
    * @return a new Arguments object where the values of this are overridden with the values of other if defined
    */
@@ -105,7 +109,7 @@ case class Arguments (
 }
 
 object Arguments extends Extract {
-  
+
   /** @return new arguments from command-line arguments */
   def apply(arguments: String*): Arguments =
     extract(CommandLine.splitValues(arguments), sysProperties)
@@ -123,7 +127,7 @@ object Arguments extends Extract {
        commandLine   = CommandLine.extract
     )
   }
-  
+
   implicit def ArgumentsMonoid: Monoid[Arguments] = new Monoid[Arguments] {
     def append(a1: Arguments, a2: =>Arguments) = a1 overrideWith a2
     val zero = Arguments()
