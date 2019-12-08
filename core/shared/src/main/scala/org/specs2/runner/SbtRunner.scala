@@ -9,7 +9,7 @@ import org.specs2.reporter._
 import org.specs2.control.{Logger => _, _}
 import org.specs2.fp._
 import org.specs2.fp.syntax._
-import org.specs2.reporter.SbtLineLogger
+import org.specs2.reporter.SbtPrinterLogger
 import org.specs2.reporter.Printer._
 import org.specs2.reflect._
 import org.specs2.fp._, syntax._
@@ -228,7 +228,7 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
    * Notify sbt of errors during the run
    */
   private def handleRunError(e: Throwable Either String, loggers: Array[Logger], events: SbtEvents): Unit = {
-    val logger = SbtLineLogger(loggers)
+    val logger = SbtPrinterLogger(loggers)
 
     def logThrowable(t: Throwable) =
       Runner.logThrowable(t, arguments)(m => Name(logger.errorLine(m))).value

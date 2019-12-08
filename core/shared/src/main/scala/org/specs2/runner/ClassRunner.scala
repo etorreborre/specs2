@@ -9,7 +9,7 @@ import reporter._
 import main.Arguments
 import fp.syntax._
 import Runner._
-import reporter.LineLogger._
+import reporter.PrinterLogger._
 
 trait ClassRunner {
   def run(className: String): Action[Stats]
@@ -58,7 +58,7 @@ trait ClassRunnerMain {
    */
   def run(args: Array[String], exit: Boolean): Unit = {
     val arguments = Arguments(args.drop(1): _*)
-    val env = Env(arguments = arguments, lineLogger = consoleLogger)
+    val env = Env(arguments = arguments, printerLogger = consolePrinterLogger)
 
     val actions: Action[Stats] = args.toList match {
       case Nil =>
@@ -104,9 +104,9 @@ object consoleRunner extends ClassRunnerMain {
  */
 object TextRunner extends ClassRunnerMain {
 
-  def run(spec: SpecificationStructure, arguments: Arguments = Arguments())(env: Env): LineLogger with StringOutput = {
-    val logger = LineLogger.stringLogger
-    val env1 = env.setLineLogger(logger).setArguments(env.arguments.overrideWith(arguments))
+  def run(spec: SpecificationStructure, arguments: Arguments = Arguments())(env: Env): PrinterLogger with StringOutput = {
+    val logger = PrinterLogger.stringPrinterLogger
+    val env1 = env.setPrinterLogger(logger).setArguments(env.arguments.overrideWith(arguments))
     val loader = Thread.currentThread.getContextClassLoader
     val customInstances = CustomInstances(arguments, loader, StringOutputLogger(logger))
 

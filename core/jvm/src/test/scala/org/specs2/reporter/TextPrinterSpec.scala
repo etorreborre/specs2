@@ -8,7 +8,7 @@ import specification.create.DefaultFragmentFactory
 import text.Trim._
 import execute._
 import main.{Report, Arguments}
-import LineLogger._
+import PrinterLogger._
 import core._
 import process.{Stats, DefaultExecutor, StatisticsRepositoryCreation}
 import io.StringOutput
@@ -240,7 +240,7 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
       } ^ p)
 
     val spec = SpecStructure.create(SpecHeader(getClass, Some("title\n")), Arguments(), fragments)
-    val env1 = ownEnv.copy(lineLogger = logger, arguments = Arguments("batchsize", "3"))
+    val env1 = ownEnv.copy(printerLogger = logger, arguments = Arguments("batchsize", "3"))
     val printer = TextPrinter(env1)
     printer.run(DefaultExecutor.executeSpec(spec, env1))
 
@@ -270,7 +270,7 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
       } ^ p)
 
     val spec = SpecStructure.create(SpecHeader(getClass, Some("title\n")), sequential, fragments)
-    val env1 = ownEnv.copy(lineLogger = logger).setArguments(sequential)
+    val env1 = ownEnv.copy(printerLogger = logger).setArguments(sequential)
     val printer = TextPrinter(env1)
     printer.run(DefaultExecutor.executeSpec(spec, env1))
 
@@ -330,14 +330,14 @@ object TextPrinterSpecification extends MustMatchers with FragmentsDsl {
     lazy val optionalEnv: Option[Env] = None
 
     lazy val printed = {
-      val logger = stringLogger
+      val logger = stringPrinterLogger
       lazy val env1 =
         optionalEnv match {
           case Some(ownEnv) =>
-            ownEnv.copy(lineLogger = logger)
+            ownEnv.copy(printerLogger = logger)
 
           case None =>
-            Env(lineLogger = logger,
+            Env(printerLogger = logger,
               arguments = spec.arguments.overrideWith(Arguments.split("sequential fullstacktrace")))
         }
 
@@ -375,7 +375,7 @@ object TextPrinterSpecification extends MustMatchers with FragmentsDsl {
   }
 }
 
-class TestLogger extends BufferedLineLogger with StringOutput {
+class TestLogger extends BufferedPrinterLogger with StringOutput {
   def infoLine(msg: String)    = super.append(AnsiColors.removeColors(msg))
   def errorLine(msg: String)   = ()
   def failureLine(msg: String) = ()

@@ -3,7 +3,7 @@ package specification
 
 import main.Arguments
 import reporter._
-import reporter.LineLogger._
+import reporter.PrinterLogger._
 import specification.core.{SpecificationStructure, Env}
 import scala.collection.mutable.ArrayBuffer
 
@@ -76,7 +76,7 @@ class BeforeAfterAllSpec extends Specification { def is = s2"""
   }
 
   def runSpec(s: SpecificationStructure, arguments: Arguments = Arguments()) = {
-    val env = Env(arguments = arguments, lineLogger = NoLineLogger)
+    val env = Env(arguments = arguments, printerLogger = NoPrinterLogger)
     try Reporter.create(Nil, env).report(s.structure(env)).runVoid(env.executionEnv)
     finally env.shutdown
   }

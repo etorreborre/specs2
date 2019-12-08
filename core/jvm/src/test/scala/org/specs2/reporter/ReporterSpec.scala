@@ -5,7 +5,7 @@ import control._
 import matcher._
 import execute._
 import main.Arguments
-import LineLogger._
+import PrinterLogger._
 import specification.create.S2StringContext
 import specification.dsl.FragmentsDsl
 import specification.core._
@@ -39,8 +39,8 @@ class ReporterSpec(val env: Env) extends Specification with ThrownExpectations w
   import reporterSpecSupport._
 
   def a1 = {
-    val logger = stringLogger
-    reported(ownEnv.setArguments(Arguments.split("ex ex3")).setLineLogger(logger))
+    val logger = stringPrinterLogger
+    reported(ownEnv.setArguments(Arguments.split("ex ex3")).setPrinterLogger(logger))
     logger.messages.mkString("\n") must contain("ex3")
     logger.messages.mkString("\n") must not contain("ex1")
   }
@@ -63,21 +63,21 @@ class ReporterSpec(val env: Env) extends Specification with ThrownExpectations w
   }
 
   def b1 = {
-    val logger = stringLogger
-    reported(ownEnv.setLineLogger(logger), logger)
+    val logger = stringPrinterLogger
+    reported(ownEnv.setPrinterLogger(logger), logger)
     logger.messages must not(beEmpty)
   }
 
   def b2 = {
-    val logger = stringLogger
-    reported(ownEnv.setLineLogger(logger).setArguments(Arguments("junit")), printers = List(new FakeJUnitPrinter(logger)))
+    val logger = stringPrinterLogger
+    reported(ownEnv.setPrinterLogger(logger).setArguments(Arguments("junit")), printers = List(new FakeJUnitPrinter(logger)))
     logger.messages must not(contain("ex1"))
     logger.messages must contain("[info] junit")
   }
 
   def b3 = {
-    val logger = stringLogger
-    val env = ownEnv.setLineLogger(logger).setArguments(Arguments.split("console junit"))
+    val logger = stringPrinterLogger
+    val env = ownEnv.setPrinterLogger(logger).setArguments(Arguments.split("console junit"))
 
     reported(env, printers = List(TextPrinter(env), new FakeJUnitPrinter(logger)))
 
@@ -88,7 +88,7 @@ class ReporterSpec(val env: Env) extends Specification with ThrownExpectations w
 
 }
 
-class FakeJUnitPrinter(logger: LineLogger) extends Printer {
+class FakeJUnitPrinter(logger: PrinterLogger) extends Printer {
   def prepare(specifications: List[SpecStructure]): Action[Unit] = Action.unit
   def finalize(specifications: List[SpecStructure]): Action[Unit] = Action.unit
 
@@ -101,17 +101,17 @@ object reporterSpecSupport extends MustMatchers with StandardMatchResults with S
    * TEST METHODS
    */
 
-  def spec(logger: LineLogger = NoLineLogger): SpecStructure = s2"""
+  def spec(logger: PrinterLogger = NoPrinterLogger): SpecStructure = s2"""
  ex1 ${ex1(logger)}
  ex2 ${ex2(logger)}
  ex3 ${ex3(logger)}
  """
 
-  def ex1(logger: LineLogger) = { Thread.sleep(200); logger.infoLog(" e1\n "); ok}
-  def ex2(logger: LineLogger) = { logger.infoLog("e2\n "); ko }
-  def ex3(logger: LineLogger) = { logger.infoLog("e3\n "); ok }
+  def ex1(logger: PrinterLogger) = { Thread.sleep(200); logger.infoLog(" e1\n "); ok}
+  def ex2(logger: PrinterLogger) = { logger.infoLog("e2\n "); ko }
+  def ex3(logger: PrinterLogger) = { logger.infoLog("e3\n "); ok }
 
-  def reported(env: Env, logger: LineLogger = NoLineLogger, printers: List[Printer] = Nil) = {
+  def reported(env: Env, logger: PrinterLogger = NoPrinterLogger, printers: List[Printer] = Nil) = {
     val printers1 = if (printers.isEmpty) List(TextPrinter(env)) else printers
     val reporter = Reporter.create(printers1, env)
     reporter.report(spec(logger)).runOption(env.executionEnv)

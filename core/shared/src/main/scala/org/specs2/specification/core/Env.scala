@@ -5,7 +5,7 @@ package core
 import main.{Arguments, CommandLine}
 import execute._
 import concurrent.ExecutionEnv
-import reporter.LineLogger
+import reporter.PrinterLogger
 import io._
 import control._
 import process.{StatisticsRepository}
@@ -23,10 +23,26 @@ import scala.concurrent.duration.FiniteDuration
  *       to be shutdown at the end of the execution
  */
 case class Env(
+  /** arguments passed on the command line */
   arguments:            Arguments,
+
+  /** specs2 logger to report the overall execution of a specification
+   * including warnings and errors prior to the execution itself
+   *
+   * This way a specification run can be made verbose if necessary by using
+   * this logger
+   */
   systemLogger:         Logger,
-  lineLogger:           LineLogger,
+
+  /** specification logger to print out the execution results */
+  printerLogger:        PrinterLogger,
+
+  /** the StatisticsRepository contains the result of previous executions
+   * in case they are needed to drive the current execution */
   statisticsRepository: StatisticsRepository,
+
+  /** the StatisticsRepository contains the result of previous executions
+   * in case they are needed to drive the current execution */
   random:               scala.util.Random,
   fileSystem:           FileSystem,
   executionParameters:  ExecutionParameters,
@@ -63,9 +79,9 @@ case class Env(
     try     specs2ExecutionEnv.shutdown
     finally executionEnv.shutdown
 
-  /** set new LineLogger */
-  def setLineLogger(logger: LineLogger) =
-    copy(lineLogger = logger)
+  /** set new PrinterLogger */
+  def setPrinterLogger(logger: PrinterLogger) =
+    copy(printerLogger = logger)
 
   /** set new system logger */
   def setSystemLogger(logger: Logger) =
@@ -92,7 +108,7 @@ object Env {
   def apply(
     arguments:            Arguments            = EnvDefault.default.arguments,
     systemLogger:         Logger               = EnvDefault.default.systemLogger,
-    lineLogger:           LineLogger           = EnvDefault.default.lineLogger,
+    printerLogger:           PrinterLogger           = EnvDefault.default.printerLogger,
     statisticsRepository: StatisticsRepository = EnvDefault.default.statisticsRepository,
     random:               scala.util.Random    = EnvDefault.default.random,
     fileSystem:           FileSystem           = EnvDefault.default.fileSystem,
@@ -102,7 +118,7 @@ object Env {
     Env(
       arguments,
       systemLogger,
-      lineLogger,
+      printerLogger,
       statisticsRepository,
       random,
       fileSystem,
