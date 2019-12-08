@@ -180,7 +180,7 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
       printers <- createPrinters(customInstances, taskDef, handler, loggers, arguments).toAction
       reporter <- customInstances.createCustomInstance[Reporter]( "reporter",
         (m: String) => "a custom reporter can not be instantiated " + m, "no custom reporter defined, using the default one")
-        .map(_.getOrElse(DefaultReporter(statistics, selector, executor, printers, env))).toAction
+        .map(_.getOrElse(DefaultReporter(statistics, env.statisticsRepository, selector, executor, printers, env))).toAction
 
       stats    <- reporter.report(spec)
     } yield stats

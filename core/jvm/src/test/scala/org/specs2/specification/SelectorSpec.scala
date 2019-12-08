@@ -48,14 +48,14 @@ class SelectorSpec(ee: ExecutionEnv) extends script.Specification with Groups wi
     eg := {
       val fragments = Fragments(ex("e1"), ex("e2"))
       val arguments = Arguments.split("ex e1")
-      val executed = fragments |> DefaultSelector(arguments).select
+      val executed = fragments |> DefaultSelector(arguments).select(arguments)
 
       executed.fragmentsList(ee) must haveSize(1)
     }
     eg := {
       val fragments = Fragments(code("e1"), code("e2"))
       val arguments = Arguments.split("ex e1")
-      val executed = fragments |> DefaultSelector(arguments).select
+      val executed = fragments |> DefaultSelector(arguments).select(arguments)
 
       executed.fragmentsList(ee) must haveSize(1)
     }
@@ -192,7 +192,7 @@ class SelectorSpec(ee: ExecutionEnv) extends script.Specification with Groups wi
 
 
     def check(fragments: Fragments, expected: Seq[String], unexpected: Seq[String])(env: Env): Result = {
-      val executed = fragments |> DefaultSelector(env.arguments).filterByPrevious
+      val executed = fragments |> DefaultSelector(env.arguments).filterByPrevious(env.arguments)
       val descriptions = executed.fragmentsList(ee).map(_.description.toString)
 
       expected.foreach(e => descriptions aka "expected for exclude" must contain(beMatching(".*"+e+".*")))
@@ -258,12 +258,12 @@ class SelectorSpec(ee: ExecutionEnv) extends script.Specification with Groups wi
 
   def filterIncluded(fragments: Fragments, tags: Seq[String]): List[Fragment] = {
     val arguments = Arguments.split(s"include ${tags.mkString(",")}")
-    (fragments.contents |> DefaultSelector(arguments).filterByMarker).runList.run(ee)
+    (fragments.contents |> DefaultSelector(arguments).filterByMarker(arguments)).runList.run(ee)
   }
 
   def filterExcluded(fragments: Fragments, tags: Seq[String]): Fragments = {
    val arguments = Arguments.split(s"exclude ${tags.mkString(",")}")
-   fragments |> DefaultSelector(arguments).filterByMarker
+   fragments |> DefaultSelector(arguments).filterByMarker(arguments)
   }
 
   def show(fs: Fragments): String =
