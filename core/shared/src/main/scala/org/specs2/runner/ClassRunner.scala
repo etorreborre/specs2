@@ -73,7 +73,7 @@ trait ClassRunnerMain {
         } yield stats
       }
 
-    try execute(actions, arguments, exit)(env)
+    try execute(actions, env, exit)
     finally env.shutdown
   }
 

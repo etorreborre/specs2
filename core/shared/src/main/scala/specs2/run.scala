@@ -21,7 +21,7 @@ object run extends ClassRunnerMain {
       result <- specifications.toList.traverse(s => classRunner.run(s)).map(_.suml)
     } yield result
 
-    try Runner.execute(action, arguments, exit = false)(env)
+    try Runner.execute(action, env, exit = false)
     finally env.shutdown
   }
 
