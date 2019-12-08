@@ -68,7 +68,7 @@ trait ClassRunnerMain {
         Action.pure(Stats.empty)
 
       case className :: rest => for {
-          classRunner <- createClassRunner(env)
+          classRunner <- createClassRunner(env).toAction
           stats <- classRunner.run(className)
         } yield stats
       }
@@ -77,7 +77,7 @@ trait ClassRunnerMain {
     finally env.shutdown
   }
 
-  def createClassRunner(env: Env): Action[ClassRunner] = {
+  def createClassRunner(env: Env): Operation[ClassRunner] = {
     val arguments = env.arguments
     val loader = Thread.currentThread.getContextClassLoader
     val customInstances = CustomInstances(arguments, loader, env.systemLogger)
@@ -85,10 +85,10 @@ trait ClassRunnerMain {
     val specFactory = DefaultSpecFactory(env, loader)
 
     for {
-      printers <- printerFactory.createPrinters.toAction
+      printers <- printerFactory.createPrinters
       reporter <- customInstances.createCustomInstance[Reporter]( "reporter",
         (m: String) => "a custom reporter can not be instantiated " + m, "no custom reporter defined, using the default one")
-        .map(_.getOrElse(Reporter.create(printers, env))).toAction
+        .map(_.getOrElse(Reporter.create(printers, env)))
       classRunner = DefaultClassRunner(env, reporter, specFactory)
      } yield classRunner
 

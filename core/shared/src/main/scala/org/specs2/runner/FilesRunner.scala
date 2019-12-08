@@ -36,7 +36,7 @@ case class DefaultFilesRunner(env: Env, specificationsFinder: SpecificationsFind
     for {
       _     <- beforeExecution.toAction
       ss    <- specs.map(sort)
-      cr    <- ClassRunner.createClassRunner(env)
+      cr    <- ClassRunner.createClassRunner(env).toAction
       stats <- ss.toList.traverse(cr.run)
       _     <- afterExecution(ss).toAction
     } yield stats.suml

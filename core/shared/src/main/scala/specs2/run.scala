@@ -17,7 +17,7 @@ object run extends ClassRunnerMain {
     val env = EnvDefault.create(arguments)
 
     val action = for {
-      classRunner <- ClassRunner.createClassRunner(env)
+      classRunner <- ClassRunner.createClassRunner(env).toAction
       result <- specifications.toList.traverse(s => classRunner.run(s)).map(_.suml)
     } yield result
 
