@@ -26,7 +26,7 @@ abstract class BaseSbtRunner(args: Array[String], remoteArgs: Array[String], loa
 
   lazy val commandLineArguments = Arguments(args ++ remoteArgs: _*)
 
-  lazy val env = Env(arguments = commandLineArguments, customClassLoader = Some(loader))
+  lazy val env = EnvDefault.create(commandLineArguments).setCustomClassLoader(loader)
 
   def tasks(taskDefs: Array[TaskDef]): Array[Task] =
     taskDefs.toList.map(newTask).toArray
@@ -230,14 +230,11 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
   private def handleRunError(e: Throwable Either String, loggers: Array[Logger], events: SbtEvents): Unit = {
     val logger = SbtPrinterLogger(loggers)
 
-    def logThrowable(t: Throwable) =
-      Runner.logThrowable(t, arguments)(m => Name(logger.errorLine(m))).value
-
     e match {
       case Left(t) =>
         events.suiteError(t)
         logger.errorLine(t.getMessage)
-        logThrowable(t)
+        RunnerLogger(env).logThrowable(t).unsafeRun
 
       case Right(m) =>
         events.suiteError

@@ -4,6 +4,7 @@ package runner
 import fp._, syntax._
 import control._, Throwablex._
 import control._
+import reporter._
 import specification.core._
 import specification.process.Stats
 import main.Arguments
@@ -35,30 +36,37 @@ object Runner {
     }
   }
 
+
+
+  /**
+   * Exit the JVM with a given status
+   */
+  def exitSystem(status: Int, exit: Boolean): Unit = {
+    if (exit) System.exit(status)
+  }
+
+}
+
+case class RunnerLogger(env: Env) {
+
+  val arguments: Arguments =
+    env.arguments
+
+  val logger: PrinterLogger =
+    env.printerLogger
+
   /**
    * Use the console logging to log exceptions
    */
-  def logThrowable(t: Throwable, arguments: Arguments)(print: String => Name[Unit]): Name[Unit] = {
-    def logStack(exception: Throwable) =
-      exception.chainedExceptions.traverse_(s => print("  caused by " + s.toString)) >>
-        print("\nSTACKTRACE") >>
-        exception.getStackTrace.toList.traverse_(e => print("  " + e.toString)) >>
-        exception.chainedExceptions.traverse_ { s =>
-          print("\n  CAUSED BY " + s.toString) >> s.getStackTrace.toList.traverse_(e => print("  " + e.toString))
-        }
+  def logThrowable(t: Throwable): Operation[Unit] = {
 
-     def logException(m: String, throwable: Throwable) =
-       print("\n" + m + "\n") >>
-         logStack(throwable) >>
-         print(" ")
-
-    if (!arguments.commandLine.boolOr("silent", false)) {
+    when (!arguments.commandLine.boolOr("silent", false)) {
       t match {
       case UserException(m, throwable) => logException(m, throwable)
 
       case ActionException(warnings, message, exception) =>
         if (warnings.nonEmpty) print("Warnings:\n") >> print(warnings.mkString("", "\n", "\n"))
-        else Name(()) >>
+        else Operation.unit >>
           message.traverse(print).void >>
           exception.traverse(e => logException(e.getMessage, e)).void
 
@@ -71,22 +79,31 @@ object Runner {
           print(" ")
 
       }
-    } else Name(())
+    }
   }
+
+  def logStack(exception: Throwable) =
+    exception.chainedExceptions.traverse_(s => print("  caused by " + s.toString)) >>
+      print("\nSTACKTRACE") >>
+      exception.getStackTrace.toList.traverse_(e => print("  " + e.toString)) >>
+      exception.chainedExceptions.traverse_ { s =>
+        print("\n  CAUSED BY " + s.toString) >> s.getStackTrace.toList.traverse_(e => print("  " + e.toString))
+      }
+
+  def logException(m: String, throwable: Throwable) =
+    print("\n" + m + "\n") >>
+      logStack(throwable) >>
+      print(" ")
 
   /**
    * Log the issues which might have been caused by the user
    */
-  def logUserWarnings(warnings: List[String])(print: String => Name[Unit]): Name[Unit] = {
-    (if (warnings.nonEmpty) print("Warnings:\n") else Name(())) >>
+  def logUserWarnings(warnings: List[String]): Operation[Unit] = {
+    when(warnings.nonEmpty)(print("Warnings:\n")) >>
       warnings.traverse(print).void
   }
 
-  /**
-   * Exit the JVM with a given status
-   */
-  def exitSystem(status: Int, exit: Boolean): Unit = {
-    if (exit) System.exit(status)
-  }
+  private def print(m: String): Operation[Unit] =
+    Operation.delayed(logger.errorLog(m))
 
 }
