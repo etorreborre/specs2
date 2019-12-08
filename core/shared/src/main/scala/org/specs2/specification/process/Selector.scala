@@ -32,7 +32,7 @@ trait Selector {
 case class DefaultSelector(commandLineArguments: Arguments) extends Selector {
 
   /** select fragments by name, markers and previous execution */
-  def select(specArguments: Arguments): AsyncTransducer[Fragment, Fragment] =
+  def select(specArguments: Arguments): AsyncTransducer[Fragment, Fragment] = 
     filterByName(specArguments) |>
     filterByMarker(specArguments) |>
     filterByPrevious(specArguments)
