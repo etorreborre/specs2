@@ -135,8 +135,6 @@ $AndIfYouWantToKnowMore
  - create a trait which will ${"decorate or transform other specifications" ~/ SpecificationTemplate} when mixed-in
  - create ${"*auto-examples*" ~/ AutoExamples} where the code *is* the description of the `Example`
  - integrate ${"snippets of code" ~/ CaptureSnippets} to your specification
- - use ${"named examples" ~/ NamedExamples} in acceptance specifications to get default example names
- - use ${"scripts and auto-numbered examples" ~/ AutoNumberedExamples} to completely separate the specification text from the code
  - use ${"lightweight specifications" ~/ LightweightSpecs} to reduce the number of implicits in scope
  - use the ${"Given/When/Then style" ~/ GivenWhenThenStyle} to structure specifications
  - use ${"Forms" ~/ UseForms} to create executable HTML tables in your specification

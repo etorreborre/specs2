@@ -9,8 +9,6 @@ Use the Given/When/Then style                                        | ${link(Gi
 Gather all expectations in an example                                | ${link(GetAllExpectations).mute}
 Reference another specification                                      | ${link(ReferenceOtherSpecifications).mute}
 Add formatting to a specification                                    | ${link(SpecificationFormatting).mute}
-Create example names automatically in an acceptance specification    | ${link(NamedExamples).mute}
-Infer example descriptions from text in an acceptance specification  | ${link(AutoNumberedExamples).mute}
 Create HTML tables to specify examples                               | ${link(UseForms).mute}
 Create examples "on the fly" as the specification executes           | ${link(CreateOnlineSpecifications).mute}
 Create an example with different data displayed in a table           | ${link(UseDatatables).mute}
@@ -32,7 +30,6 @@ Arguments reference card                                             | ${link(Ar
   link(AsResultTypeclass).hide ^
   link(ArgumentsReference).hide ^
   link(AutoExamples).hide ^
-  link(AutoNumberedExamples).hide ^
   link(matchers.CaseClassMatchers).hide ^
   link(UseDatatables).hide ^
   link(matchers.DependencyMatchers).hide ^
@@ -43,7 +40,6 @@ Arguments reference card                                             | ${link(Ar
   link(FragmentsApi).hide ^
   link(GetAllExpectations).hide ^
   link(GivenWhenThenStyle).hide ^
-  link(NamedExamples).hide ^
   link(OtherBuildTools).hide ^
   link(matchers.OutsideSpecs2).hide ^
   link(matchers.ReferenceCard).hide ^

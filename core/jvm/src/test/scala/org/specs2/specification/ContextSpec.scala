@@ -3,7 +3,7 @@ package specification
 
 import io._
 import main.Arguments
-import specification.core.{Env, Fragments}
+import specification.core.{Env, Fragments, Fragment, OwnEnv}
 import specification.create.FragmentsFactory
 import specification.dsl._
 import specification.process.DefaultExecutor
@@ -13,7 +13,7 @@ import matcher._
 import _root_.org.specs2.mutable.{Around => MAround, Before => MBefore, After => MAfter}
 import fp.syntax._
 
-class ContextSpec extends script.Spec with ResultMatchers with Groups { def is = s2"""
+case class ContextSpec(env: Env) extends Spec with ResultMatchers with OwnEnv { def is = s2"""
 
  It is sometimes necessary to provide functions to "prepare" the specification before executing the Fragments
  and clean it up afterwards. This may be for example:
@@ -34,119 +34,127 @@ class ContextSpec extends script.Spec with ResultMatchers with Groups { def is =
     * Around
 
  The Before trait can be used to execute methods before Fragments
-   the before method is executed before a first example                                                    ${g1().e1}
-   the before method is executed before the second example                                                 ${g1().e2}
+   the before method is executed before a first example                                                    $before1
+   the before method is executed before the second example                                                 $before2
 
  If the before method throws an exception
-   the first example will not execute                                                                      ${g1().e3}
-   and it will be reported as an error                                                                     ${g1().e4}
+   the first example will not execute                                                                      $before3
+   and it will be reported as an error                                                                     $before4
 
  If the before method returns Skipped
-   the first example will not execute                                                                      ${g1().e5}
-   and it will be reported as skipped with the reason                                                      ${g1().e6}
+   the first example will not execute                                                                      $before5
+   and it will be reported as skipped with the reason                                                      $before6
 
  If the before method throws a SkippedException
-   the first example will not execute                                                                      ${g1().e7}
-   and it will be reported as skipped with the reason                                                      ${g1().e8}
+   the first example will not execute                                                                      $before7
+   and it will be reported as skipped with the reason                                                      $before8
 
  If the before method returns a MatchFailure
-   the first example will not execute                                                                      ${g1().e9}
-   and it will be reported as failed with the reason                                                       ${g1().e1}
+   the first example will not execute                                                                      $before9
+   and it will be reported as failed with the reason                                                       $before10
 
  If the before method returns a MatchFailure
-   the first example will not execute                                                                      ${g1().e1}
-   and it will be reported as failed with the reason                                                       ${g1().e1}
+   the first example will not execute                                                                      $before11
+   and it will be reported as failed with the reason                                                       $before12
 
  The After trait can be used to execute methods after Fragments
-   the after method is executed after a first example                                                      ${g2().e1}
-   the after method is executed after the second example                                                   ${g2().e2}
-   if the expectation fails then the example must fail as well                                             ${g2().e3}
+   the after method is executed after a first example                                                      $after1
+   the after method is executed after the second example                                                   $after2
+   if the expectation fails then the example must fail as well                                             $after3
 
  If the after method throws an exception
-   the first example will execute                                                                          ${g2().e4}
-   but it will be reported as an error                                                                     ${g2().e5}
+   the first example will execute                                                                          $after4
+   but it will be reported as an error                                                                     $after5
 
  The Around trait can be used to
-   execute the example inside a user provided context                                                      ${g2().e6}
-
+   execute the example inside a user provided context                                                      $around1
 
  Two traits can be mixed together and their effects combined
-   BeforeAfter and Around                                                                                  ${g3().e1}
+   BeforeAfter and Around                                                                                  $combined1
 
  An Action can be used to create Step fragments containing an action to execute:
    val beforeSpec = new Action
    def is = beforeSpec(c.println('beforeSpec')) ^ ex1
 
-   that action will execute and return a result                                                            ${g4().e1}
-   if it executes ok, nothing is printed, it is a silent Success                                           ${g4().e2}
-   otherwise, it is reported as an Error                                                                   ${g4().e3}
+   that action will execute and return a result                                                            $step1
+   if it executes ok, nothing is printed, it is a silent Success                                           $step2
+   otherwise, it is reported as an Error                                                                   $step3
 
  In a mutable spec
-   the before code must be called before the body code                                                     ${g6().e1}
-   the after code must be called after the body code                                                       ${g6().e2}
-   the around code must be called around the body code                                                     ${g6().e3}
-   the around method must rethrow failed results as exceptions                                             ${g6().e4}
+   the before code must be called before the body code                                                     $mutableStep1
+   the after code must be called after the body code                                                       $mutableStep2
+   the around code must be called around the body code                                                     $mutableStep3
+   the around method must rethrow failed results as exceptions                                             $mutableStep4
                                                                                                            """
 
   implicit val arguments = main.Arguments()
 
-  "before" - new g1 with FragmentsExecution {
-    e1  := executing(ex1Before).prints("before", "e1")
-    e2  := executing(ex1_2Before).prints("before", "e1", "before", "e2")
-    e3  := executing(ex1_beforeFail).prints()
-    e4  := executeBodies(ex1_beforeFail).map(_.message) must_== List("java.lang.RuntimeException: error")
-    e5  := executing(ex1_beforeSkipped).prints()
-    e6  := executeBodies(ex1_beforeSkipped).map(_.message) must_== List("skipped")
-    e7  := executing(ex1_beforeSkippedThrown).prints()
-    e8  := executeBodies(ex1_beforeSkippedThrown).map(_.message) must_== List("skipped")
-    e9  := executing(ex1_beforeMatchFailed).prints()
-    e10 := executeBodies(ex1_beforeMatchFailed).map(_.message) must_== List("'1' is not equal to '2'")
-    e11 := executing(ex1_beforeMatchFailedThrown).prints()
-    e12 := executeBodies(ex1_beforeMatchFailedThrown).map(_.message) must_== List("'1' is not equal to '2'")
-  }
+  def before1  = { val d = data(); d.executing(d.ex1Before).prints("before", "e1") }
+  def before2  = { val d = data(); d.executing(d.ex1_2Before).prints("before", "e1", "before", "e2") }
+  def before3  = { val d = data(); d.executing(d.ex1_beforeFail).prints() }
+  def before4  = { val d = data(); d.executeBodies(d.ex1_beforeFail).map(_.message) must_== List("java.lang.RuntimeException: error") }
+  def before5  = { val d = data(); d.executing(d.ex1_beforeSkipped).prints() }
+  def before6  = { val d = data(); d.executeBodies(d.ex1_beforeSkipped).map(_.message) must_== List("skipped") }
+  def before7  = { val d = data(); d.executing(d.ex1_beforeSkippedThrown).prints() }
+  def before8  = { val d = data(); d.executeBodies(d.ex1_beforeSkippedThrown).map(_.message) must_== List("skipped") }
+  def before9  = { val d = data(); d.executing(d.ex1_beforeMatchFailed).prints() }
+  def before10 = { val d = data(); d.executeBodies(d.ex1_beforeMatchFailed).map(_.message) must_== List("1 != 2") }
+  def before11 = { val d = data(); d.executing(d.ex1_beforeMatchFailedThrown).prints() }
+  def before12 = { val d = data(); d.executeBodies(d.ex1_beforeMatchFailedThrown).map(_.message) must_== List("1 != 2") }
+  def after1 =  { val d = data(); d.executing(d.ex1After).prints("e1", "after") }
+  def after2 =  { val d = data(); d.executing(d.ex1_2After).prints("e1", "after", "e2", "after") }
+  def after3 =  { val d = data(); d.executeBodies(d.ex1FailAfter).head must beFailing }
+  def after4 =  { val d = data(); d.executing(d.ex1_afterFail).prints("e1") }
+  def after5 =  { val d = data(); d.executeBodies(d.ex1_beforeFail).map(_.message) must_== List("java.lang.RuntimeException: error") }
+  def around1 = { val d = data(); d.executing(d.ex1Around).prints("around", "e1") }
 
-  "context" - new g2 with FragmentsExecution {
-    e1  := executing(ex1After).prints("e1", "after")
-    e2  := executing(ex1_2After).prints("e1", "after", "e2", "after")
-    e3  := executeBodies(ex1FailAfter).head must beFailing
-    e4  := executing(ex1_afterFail).prints("e1")
-    e5  := executeBodies(ex1_beforeFail).map(_.message) must_== List("java.lang.RuntimeException: error")
-    e6  := executing(ex1Around).prints("around", "e1")
-  }
+  def combined1 = {
+    val d = data(); import d._
 
-  "combination" - new g3 with FragmentsExecution {
-    e1  := { env: Env =>
-      abstract class ParentSpecification extends Specification with BeforeAfterEach { def before = println("before"); def after = println("after") }
-      abstract class ChildSpecification extends ParentSpecification with AroundEach { def around[R : AsResult](r: =>R) = { println("around"); AsResult(r) } }
-      val child = new ChildSpecification { def is =
-        "e1" ! {println("e1"); ok}
-      }
-
-      executing(child.fragments(env)).prints("before", "around", "e1", "after")
+    abstract class ParentSpecification extends Specification with BeforeAfterEach { def before = println("before"); def after = println("after") }
+    abstract class ChildSpecification extends ParentSpecification with AroundEach { def around[R : AsResult](r: =>R) = { println("around"); AsResult(r) } }
+    val child = new ChildSpecification { def is =
+      "e1" ! {println("e1"); ok}
     }
+    executing(child.fragments(env)).prints("before", "around", "e1", "after")
   }
 
-  "other context" - new g4 with FragmentsExecution {
-    e1 := executing(firstThenEx1).prints("first", "e1")
-    e2 := executeBodies(silentFirstThenEx1).map(_.message) must_== List("", "success")
-    e3 := executeBodies(failingFirstThenEx1).map(_.message) must_== List("java.lang.RuntimeException: error", "success")
+  def step1 = { val d = data(); d.executing(d.firstThenEx1).prints("first", "e1") }
+  def step2 = { val d = data(); d.executeBodies(d.silentFirstThenEx1).map(_.message) must_== List("", "success") }
+  def step3 = { val d = data(); d.executeBodies(d.failingFirstThenEx1).map(_.message) must_== List("java.lang.RuntimeException: error", "success") }
+
+
+  def mutableStep1 = {
+    val d = data(); import d._
+    executing("e1" ! new beforeMutableContext { println("body"); 1 must_== 1 }).prints("before", "body")
   }
 
-  "mutable contexts" - new g6 with FragmentsExecution with MustThrownExpectations {
-    e1 := executing("e1" ! new beforeMutableContext { println("body"); 1 must_== 1 }).prints("before", "body")
-    e2 := executing("e1" ! new afterMutableContext { println("body"); 1 must_== 1 }).prints("body", "after")
-    e3 := executing("e1" ! new aroundMutableContext { println("body"); 1 must_== 1 }).prints("before", "body", "after")
-    e4 := executing("e1" ! new aroundMutableContext { 1 must_== 2 }).results.head must beFailing
+  def mutableStep2 = {
+    val d = data(); import d._
+    executing("e1" ! new afterMutableContext { println("body"); 1 must_== 1 }).prints("body", "after")
   }
 
-  trait FragmentsExecution extends StringOutput with ContextData {
-    def executeBodies(exs: Fragments) = {
+  def mutableStep3 = { val d = data(); import d._
+    executing("e1" ! new aroundMutableContext { println("body"); 1 must_== 1 }).prints("before", "body", "after")
+  }
+
+  def mutableStep4 = {
+    val d = data(); import d._
+    executing("e1" ! new aroundMutableContext { 1 must_== 2 }).results.head must beFailing
+  }
+
+  case class data() extends StringOutput with ContextData {
+    def executeBodies(ex: Fragment): List[Result] =
+      executeBodies(Fragments(ex))
+
+    def executeBodies(exs: Fragments): List[Result] = {
       val env = Env(arguments = Arguments("sequential"))
       try DefaultExecutor.executeFragments(exs)(env).traverse(_.executionResult).run(env.executionEnv)
       finally env.shutdown
     }
 
     def executing(exs: Fragments): Executed = Executed(executeBodies(exs))
+    def executing(ex: Fragment): Executed = Executed(executeBodies(ex))
 
     case class Executed(results: Seq[Result]) {
       def prints(ms: String*): Result = {
@@ -196,11 +204,11 @@ trait ContextData extends StandardResults with FragmentsFactory with ContextsFor
   trait afterMutableContext extends MAfter {
     def after = println("after")
   }
-  trait aroundMutableContext extends MAround {
+  trait aroundMutableContext extends MAround with MustThrownExpectations {
     def around[R : AsResult](r: =>R) = { println("before"); try { AsResult(r) } finally { println("after") }}
   }
 
-  def ex1Around = "ex1" ! around1(ok1)
+  def ex1Around: Fragments = "ex1" ! around1(ok1)
 
   def firstThenEx1 = step(println("first")) ^ ex1
   def silentFirstThenEx1 =  step("first") ^ ex1
@@ -223,7 +231,7 @@ trait ContextsForFragments extends StringOutput {
   object beforeWithSkippedThrown extends Before with StringOutput with MustThrownMatchers {
     def before = skipped("skipped")
   }
-  object beforeWithMatchFailed extends Before with StringOutput with MustMatchers {
+  object beforeWithMatchFailed extends Before with StringOutput with MustThrownMatchers {
     def before = 1 must_== 2
   }
   object beforeWithMatchFailedThrown extends Before with StringOutput with MustThrownMatchers {

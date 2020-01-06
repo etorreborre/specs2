@@ -15,11 +15,11 @@ Arguments can be passed on the command line as an Array of Strings. There are 2 
 
  * string arguments which have a specific value
    e.g. `srcTestDir src/test` to specify the directory holding the source files
-                                                                                                                        
+
 Definition
 ==========
 
-  If an argument is specified, its value is returned                                                                  
+  If an argument is specified, its value is returned
     + for a boolean argument like xonly the value is true
     + a boolean argument can be negated by adding ! in front of it.
       ex: `Arguments("!pandoc").commandLine.boolOr("pandoc", true) is false`
@@ -102,8 +102,8 @@ Creation
   }
 
   "properties" - new group {
-     case class properties(map:(String, String)*) extends MapSystemProperties {
-       lazy val properties = Map(map:_*)
+     case class properties(properties: (String, String)*) extends SystemProperties {
+      override def systemGetProperty(p: String) = Map(properties: _*).get(p)
      }
 
     eg := Arguments.extract(Seq(""), properties("plan" -> "")).plan must_== true
@@ -168,4 +168,3 @@ Creation
     eg := Arguments("MySpec", "notifier", "IntelliJNotifier").report.notifier === "IntelliJNotifier"
   }
 }
-

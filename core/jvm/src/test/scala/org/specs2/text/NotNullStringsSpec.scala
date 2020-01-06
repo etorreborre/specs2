@@ -1,54 +1,42 @@
-package org.specs2.text
+package org.specs2
+package text
 
-import org.specs2.specification.{Groups, script}
-import org.specs2.text.NotNullStrings._
+import NotNullStrings._
 
-class NotNullStringsSpec extends script.Specification with Groups { def is = s2"""
+class NotNullStringsSpec extends Specification { def is = s2"""
 
- # Several functions are available to display strings without evaluation errors for
-  + a null string
-  + a list where the toString method is undefined
-  + a map
+Several functions are available to display strings without evaluation errors for
+ a null string $nullString
+ a list where the toString method is undefined $noToStringDefined
+ a map $aMap
 
- # It is also possible to display the class of elements in a collection
-  + for an Array
-  + for a Seq
-  + for a Map
+It is also possible to display the class of elements in a collection
+ for an Array $withClass1
+ for a Seq $withClass2
+ for a Map $withClass3
 
-  the description must be extended if not all elements have the same class
-   + for a List
-   + for a Map
+ the description must be extended if not all elements have the same class
+  for a List $withClass4
+  for a Map $withClass5
 
 """
+  def nullString = (null: String).notNull must_== "null"
 
-  "toString" - new group {
-    eg := (null: String).notNull must_== "null"
-
-    eg := {
-      case class L(values: Seq[Int]) extends Seq[Int] {
-        override def toString = ???
-        def iterator = values.iterator
-        def apply(i: Int) = values(i)
-        def length = values.length
-      }
-
-      L(Seq(1, 2)).notNull must_== "Exception when evaluating toString: an implementation is missing"
+  def noToStringDefined = {
+    case class L(values: Seq[Int]) extends Seq[Int] {
+      override def toString = ???
+      def iterator = values.iterator
+      def apply(i: Int) = values(i)
+      def length = values.length
     }
-
-    eg := Map(1 -> "2").notNull === "Map(1 -> 2)"
-
+    L(Seq(1, 2)).notNull must_== "Exception when evaluating toString: an implementation is missing"
   }
 
-  "with class" - new group {
-    eg := Array(1, 2).notNullWithClass === "Array('1', '2'): Array[java.lang.Integer]"
+  def aMap = Map(1 -> "2").notNull === "Map(1 -> 2)"
 
-    // this case doesn't pass because of toSeq in NotNull
-    eg := todo
-    // Vector(1, 2).notNullWithClass === "Vector('1', '2'): scala.collection.immutable.Vector[java.lang.Integer]"
-
-    eg := Map(1 -> "2", 2 -> "3").notNullWithClass === "Map('1' -> '2', '2' -> '3'): scala.collection.immutable.Map$Map2[scala.Tuple2]"
-
-    eg := Vector(1, "2").notNullWithClass === "Vector(1: java.lang.Integer, 2: java.lang.String): scala.collection.immutable.Vector"
-    eg := Map(1 -> "2", 2 -> 3).notNullWithClass === "Map(1: java.lang.Integer -> 2: java.lang.String, 2: java.lang.Integer -> 3: java.lang.Integer): scala.collection.immutable.Map$Map2"
-  }
+  def withClass1 = Array(1, 2).notNullWithClass === "Array('1', '2'): Array[java.lang.Integer]"
+  def withClass2 = Vector(1, 2).notNullWithClass === "Vector('1', '2'): scala.collection.immutable.Vector[java.lang.Integer]"
+  def withClass3 = Map(1 -> "2", 2 -> "3").notNullWithClass === "Map('1' -> '2', '2' -> '3'): scala.collection.immutable.Map$Map2[scala.Tuple2]"
+  def withClass4 = Vector(1, "2").notNullWithClass === "Vector(1: java.lang.Integer, 2: java.lang.String): scala.collection.immutable.Vector"
+  def withClass5= Map(1 -> "2", 2 -> 3).notNullWithClass === "Map(1: java.lang.Integer -> 2: java.lang.String, 2: java.lang.Integer -> 3: java.lang.Integer): scala.collection.immutable.Map$Map2"
 }

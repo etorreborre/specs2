@@ -3,7 +3,7 @@ package specification
 package script
 
 /**
- * A Script is responsible for analysing a piece of text an creating a sequence of fragments.
+ * A Script is responsible for analysing a piece of text and creating a sequence of fragments.
  *
  * It usually uses a ScriptTemplate specifying how to parse the text into block of lines that the Script
  * knows how to transform to fragments.
@@ -38,4 +38,3 @@ trait ScriptLines
 trait ScriptTemplate[T <: Script, L <: ScriptLines] {
   def lines(text: String, script: T): L
 }
-

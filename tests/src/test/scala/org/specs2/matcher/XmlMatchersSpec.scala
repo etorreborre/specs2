@@ -2,9 +2,8 @@ package org.specs2
 package matcher
 
 import scala.xml._
-import specification.{script, Groups}
 
-class XmlMatchersSpec extends script.Spec with Groups with XmlMatchers with MustExpectations { def is = s2"""
+class XmlMatchersSpec extends Spec with XmlMatchers with MustExpectations { def is = s2"""
 
  A equals ignore spaces matcher should
    match nodes, even if there are spaces
@@ -25,10 +24,10 @@ class XmlMatchersSpec extends script.Spec with Groups with XmlMatchers with Must
    provide a way to specify that the comparison should be ordered
    ${ <a><c/> <b/></a> must ==/(<a> <c/><b/></a>).ordered }
 
-   + match if there are newlines
-   + match if attributes are not in the right order
-   + fail if 2 nodes are not equal, even ignoring spaces
-   + fail if 2 nodes are a Text and an Atom with different data
+   match if there are newlines $match1
+   match if attributes are not in the right order $match2
+   fail if 2 nodes are not equal, even ignoring spaces $match3
+   fail if 2 nodes are a Text and an Atom with different data $match4
 
    provide be + matchers forms
    ${ <a><b/></a> must be equalToIgnoringSpace(<a> <b/></a>) }
@@ -53,14 +52,14 @@ class XmlMatchersSpec extends script.Spec with Groups with XmlMatchers with Must
    ${ <a><b n="v" n2="v2" n3="v3"></b></a> must \("b", "n"->"v", "n2"->"v2") }
 
  A \\ matcher should not match a node
-   + when the source has no children
-   + when the searched node is not a direct child
-   + when an attribute name is missing
-   + when the attribute is ok, but the value is ko
-   + when the attribute is ko, but the value is ok
-   + when the attribute is ko, and the value is ko
-   + when matching exactly and an attribute is missing
-   + when the searched node contains unmatching nodes
+   when the source has no children $path1
+   when the searched node is not a direct child $path2
+   when an attribute name is missing $path3
+   when the attribute is ok, but the value is ko $path4
+   when the attribute is ko, but the value is ok $path5
+   when the attribute is ko, and the value is ko $path6
+   when matching exactly and an attribute is missing $path7
+   when the searched node contains unmatching nodes $path8
 
  A \\\\ matcher should match if a node is a nested child of another
    ${ <a></a> must \\("a") }
@@ -76,65 +75,73 @@ class XmlMatchersSpec extends script.Spec with Groups with XmlMatchers with Must
    ${ <a><b n="v" n2="v2" n3="v3"></b></a> must \\("b", "n"->"v", "n2"->"v2") }
 
  A \\\\ matcher should not match a node
-   + when an attribute name is missing
-   + when the attribute is ok, but the value is ko
-   + when the attribute is ko, but the value is ok
-   + when the attribute is ko, and the value is ko
-   + when matching exactly and an attribute is missing
-   + when the searched node contains unmatching nodes
-   + when it doesn't contain the same text
-   + when it doen't contain the same text even when one is an Atom and the other a Text
-                                                                                                                        """
+   when an attribute name is missing $deepPath1
+   when the attribute is ok, but the value is ko $deepPath2
+   when the attribute is ko, but the value is ok $deepPath3
+   when the attribute is ko, and the value is ko $deepPath4
+   when matching exactly and an attribute is missing $deepPath5
+   when the searched node contains unmatching Podes $deepPath6
+   when it doesn't contain the same text $deepPath7
+   when it doen't contain the same text even when one is an Atom and the other a Text $deepPath8
+"""
 
-  "eis" - new g1 {
-     e1 := <a> <b/></a> must ==/ {<a>
-               <b/>
+   def match1 = <a> <b/></a> must ==/ {<a>
+             <b/>
+           </a>}
 
-             </a>}
+   def match2 = <a><b n1="n1" n2="n2"/></a> must ==/(<a><b n2="n2" n1="n1"/></a>)
 
-    e2 := <a><b n1="n1" n2="n2"/></a> must ==/(<a><b n2="n2" n1="n1"/></a>)
+   def match3 = (<a><b/></a> must ==/(<a> <c/></a>)) returns
+        "<a><b/></a> is not equal to <a> <c/></a>"
 
-    e3 := (<a><b/></a> must ==/(<a> <c/></a>)) returns
-          "<a><b/></a> is not equal to <a> <c/></a>"
-    e4 := (new Atom("hello").toSeq aka "the seq" must ==/(new Text("world").toSeq)) returns
-          "the seq 'hello' is not equal to world"
+   def match4 = (new Atom("hello").toSeq aka "the seq" must ==/(new Text("world").toSeq)) returns
+        "the seq 'hello' is not equal to world"
 
-  }
 
-  "firstChild" - new g2 {
-    e1 := (<a></a> must \("a")) returns "<a></a> doesn't contain subnode 'a'"
-    e2 := (<a><b><c></c></b></a> must \("c")) returns
-                "<a><b><c></c></b></a> doesn't contain subnode 'c'"
-    e3 := (<a><b name2="value"></b></a> must \("b", "name")) returns
-          "<a><b name2=\"value\"></b></a> doesn't contain subnode 'b' with attributes: name"
-    e4 := (<a><b n="v"></b></a> must \("b", "n"->"v1")) returns
-          "<a><b n=\"v\"></b></a> doesn't contain subnode 'b' with attributes: n=\"v1\""
-    e5 :=  (<a><b n="v"></b></a> must \("b", "n1"->"v")) returns
-          "<a><b n=\"v\"></b></a> doesn't contain subnode 'b' with attributes: n1=\"v\""
-    e6 := (<a><b n="v"></b></a> must \("b", "n"->"v", "n2"->"v2")) returns
-          "<a><b n=\"v\"></b></a> doesn't contain subnode 'b' with attributes: n=\"v\" n2=\"v2\""
-    e7 := (<a><b n="v" n2="v"></b></a> must \("b", "n"->"v").exactly) returns
-          "<a><b n=\"v\" n2=\"v\"></b></a> doesn't contain subnode 'b' with exactly the attributes: n=\"v\""
-    e8 := (<a><b><c></c></b></a> must \(<b><d></d></b>)) returns
-                "<a><b><c></c></b></a> doesn't contain <b><d></d></b>"
-  }
+  def path1 = (<a></a> must \("a")) returns "<a></a> doesn't contain subnode 'a'"
 
-  "deepChild" - new g3 {
-    e1 := (<a><b name2="value"></b></a> must \\("b", "name")) returns
-          "<a><b name2=\"value\"></b></a> doesn't contain node 'b' with attributes: name"
-    e2 := (<a><b n="v"></b></a> must \\("b", "n"->"v1")) returns
-          "<a><b n=\"v\"></b></a> doesn't contain node 'b' with attributes: n=\"v1\""
-    e3 :=  (<a><b n="v"></b></a> must \\("b", "n1"->"v")) returns
-          "<a><b n=\"v\"></b></a> doesn't contain node 'b' with attributes: n1=\"v\""
-    e4 := (<a><b n="v"></b></a> must \\("b", "n"->"v", "n2"->"v2")) returns
-          "<a><b n=\"v\"></b></a> doesn't contain node 'b' with attributes: n=\"v\" n2=\"v2\""
-    e5 := (<a><b n="v" n2="v"></b></a> must \\("b", "n"->"v").exactly) returns
-          "<a><b n=\"v\" n2=\"v\"></b></a> doesn't contain node 'b' with exactly the attributes: n=\"v\""
-    e6 := (<a><b><c></c></b></a> must \\(<b><d></d></b>)) returns
-          "<a><b><c></c></b></a> doesn't contain <b><d></d></b>"
-    e7 := (<a><b>hello</b></a> must \\(<b>world</b>)) returns
-          "<a><b>hello</b></a> doesn't contain <b>world</b>"
-    e8 := (<a><b>{"hello"}</b></a> must \\(<b>world</b>)) returns
-          "<a><b>hello</b></a> doesn't contain <b>world</b>"
-  }
+  def path2 = (<a><b><c></c></b></a> must \("c")) returns
+    "<a><b><c></c></b></a> doesn't contain subnode 'c'"
+
+  def path3 = (<a><b name2="value"></b></a> must \("b", "name")) returns
+    "<a><b name2=\"value\"></b></a> doesn't contain subnode 'b' with attributes: name"
+
+  def path4 = (<a><b n="v"></b></a> must \("b", "n"->"v1")) returns
+     "<a><b n=\"v\"></b></a> doesn't contain subnode 'b' with attributes: n=\"v1\""
+
+  def path5 =  (<a><b n="v"></b></a> must \("b", "n1"->"v")) returns
+    "<a><b n=\"v\"></b></a> doesn't contain subnode 'b' with attributes: n1=\"v\""
+
+  def path6= (<a><b n="v"></b></a> must \("b", "n"->"v", "n2"->"v2")) returns
+    "<a><b n=\"v\"></b></a> doesn't contain subnode 'b' with attributes: n=\"v\" n2=\"v2\""
+
+  def path7 = (<a><b n="v" n2="v"></b></a> must \("b", "n"->"v").exactly) returns
+    "<a><b n=\"v\" n2=\"v\"></b></a> doesn't contain subnode 'b' with exactly the attributes: n=\"v\""
+
+  def path8 = (<a><b><c></c></b></a> must \(<b><d></d></b>)) returns
+    "<a><b><c></c></b></a> doesn't contain <b><d></d></b>"
+
+  def deepPath1 = (<a><b name2="value"></b></a> must \\("b", "name")) returns
+    "<a><b name2=\"value\"></b></a> doesn't contain node 'b' with attributes: name"
+
+  def deepPath2 = (<a><b n="v"></b></a> must \\("b", "n"->"v1")) returns
+    "<a><b n=\"v\"></b></a> doesn't contain node 'b' with attributes: n=\"v1\""
+
+  def deepPath3 =  (<a><b n="v"></b></a> must \\("b", "n1"->"v")) returns
+      "<a><b n=\"v\"></b></a> doesn't contain node 'b' with attributes: n1=\"v\""
+
+  def deepPath4 = (<a><b n="v"></b></a> must \\("b", "n"->"v", "n2"->"v2")) returns
+    "<a><b n=\"v\"></b></a> doesn't contain node 'b' with attributes: n=\"v\" n2=\"v2\""
+
+  def deepPath5 = (<a><b n="v" n2="v"></b></a> must \\("b", "n"->"v").exactly) returns
+    "<a><b n=\"v\" n2=\"v\"></b></a> doesn't contain node 'b' with exactly the attributes: n=\"v\""
+
+  def deepPath6 = (<a><b><c></c></b></a> must \\(<b><d></d></b>)) returns
+    "<a><b><c></c></b></a> doesn't contain <b><d></d></b>"
+
+  def deepPath7 = (<a><b>hello</b></a> must \\(<b>world</b>)) returns
+    "<a><b>hello</b></a> doesn't contain <b>world</b>"
+
+  def deepPath8 = (<a><b>{"hello"}</b></a> must \\(<b>world</b>)) returns
+    "<a><b>hello</b></a> doesn't contain <b>world</b>"
 }
