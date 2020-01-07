@@ -24,7 +24,8 @@ trait SourceFile {
     def result(m: Matcher): Stream[String] =
       if (m.find) {
         val fullName =
-          if (packageName.isEmpty) m.group(1).trim + suffix
+          if (m.groupCount <= 1) m.group().trim + suffix
+          else if (packageName.isEmpty) m.group(1).trim + suffix
           else                     List(packageName, m.group(1).trim).mkString(".") + suffix
         Stream.cons(fullName, result(m))
       } else Stream.empty
@@ -51,4 +52,3 @@ trait SourceFile {
 
 private[specs2]
 object SourceFile extends SourceFile
-
