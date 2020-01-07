@@ -1,0 +1,6 @@
+Maintenance release
+
+## Fixes
+
+ * *core* #797 fixed the evaluation order for the List `Traverse` instance. This fixes the execution order for linked specifications
+ * *core* prevent pattern match exceptions in the `SpecificationFinder`
