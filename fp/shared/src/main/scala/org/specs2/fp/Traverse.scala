@@ -35,7 +35,7 @@ object Traverse {
       val g = Applicative.apply[G]
       fa match {
         case Nil => g.point(Nil)
-        case h :: t => g.apply2(f(h), traverseImpl(t)(f))((b, r) => b :: r)
+        case h :: t => g.apply2(traverseImpl(t)(f), f(h))((r, b) => b :: r)
       }
     }
 
