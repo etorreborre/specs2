@@ -1,0 +1,5 @@
+Maintenance release
+
+## Fixes
+
+ * *core* #798 proper fix for possible regex match failures in `SpecificationFinder` when trying to find specification class names
