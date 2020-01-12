@@ -4,28 +4,27 @@ package analysis
 import matcher._
 
 import org.scalacheck._
-import Prop._
 import collection.SeqGenerators._
 import collection.Iterablex._
 import io.DirectoryPath
 import control._
-import specification._
 
-class LayersAnalysisSpec extends script.Specification with DataLayers with Grouped with ScalaCheck { def is = s2"""
+class LayersAnalysisSpec extends Specification with DataLayers with ScalaCheck { def is = s2"""
 
 
  It is possible to specify dependencies between packages as 'layers'. A `Layers` object is an ordered sequence of other `Layer`s.
 
- A `Layer` is simply a list of package names, with possibly a prefix to factor out their common package by default all the packages are supposed to have corresponding class files in the src/main/scala directory, but it is possible to specify another directory.
+ A `Layer` is simply a list of package names, with possibly a prefix to factor out their common package
+ by default all the packages are supposed to have corresponding class files in the src/main/scala directory,
+ but it is possible to specify another directory.
 
- If all dependencies are respected between any 2 packages of different layers, there must be no unsatisfied dependencies
- otherwise, it must display the failing dependencies
-                                                                                                                        """
+ If all dependencies are respected between any 2 packages of different layers, there must be no unsatisfied dependencies $e1
+ otherwise, it must display the failing dependencies $e2
+"""
 
-  "dependencies" - new g1 {
-    e1 := forAll(okLayers) { (ls: Layers) => ls must beRespected }
-    e2 := forAll(koLayers) { (ls: Layers) => ls must not beRespected }.set(maxDiscardRatio = 100)
-  }
+  def e1 = prop { ls: Layers => ls must beRespected }.setGen(okLayers)
+  def e2 = prop { ls: Layers => ls must not beRespected }.set(maxDiscardRatio = 100).setGen(koLayers)
+
 }
 
 trait DataLayers extends SpecificationLike with DependencyMatchers with ScalaCheck {
@@ -42,6 +41,9 @@ trait DataLayers extends SpecificationLike with DependencyMatchers with ScalaChe
   lazy val okLayers = for {
     ls <- someSlicesOf("a", "b", "c", "d", "e", "f")
   } yield Layers(ls.map(l => Layer(l.toSet)).sortBy(_.names.mkString))
+
+  implicit def arbitraryLayers: Arbitrary[Layers] =
+    Arbitrary(okLayers)
 
   // this generator makes sure that layers are unsorted according to the alphabetical order
   lazy val koLayers = for {

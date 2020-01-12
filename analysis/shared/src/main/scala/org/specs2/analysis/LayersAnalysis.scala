@@ -40,7 +40,7 @@ trait LayersAnalysis extends ClassycleDependencyFinder {
     /** specify a target directory for this layer packages */
     def inTargetDir(dir: DirectoryPath) = copy(targetDir = dir)
 
-    override def toString = names.mkString("\n") + (if (prefix == "") "" else " ("+prefix+")")
+    override def toString = names.mkString(", ") + (if (prefix == "") "" else " ("+prefix+")")
     /** @return the package names */
     lazy val packageNames = names.map(n => if (prefix.isEmpty) n else prefix+"."+n)
 
