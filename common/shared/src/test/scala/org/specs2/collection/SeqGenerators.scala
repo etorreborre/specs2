@@ -14,10 +14,8 @@ trait SeqGenerators {
   /**
    * @return a Generator for slices of a some elements out of a given sequence of elements.
    */
-  def someSlicesOf[T](ts: T*): Gen[Seq[Seq[T]]] = for {
-    tss <- Gen.someOf(ts)
-    result <- slicesOfElements(tss.toList)
-  } yield result
+  def someSlicesOf[T](ts: T*): Gen[Seq[Seq[T]]] =
+    slicesOfElements(ts.toList)
 
   private def slicesOfElements[T](ts: Seq[T]): Gen[Seq[Seq[T]]] = {
     def slice(indices: Seq[Int]): Seq[Seq[T]] = {
