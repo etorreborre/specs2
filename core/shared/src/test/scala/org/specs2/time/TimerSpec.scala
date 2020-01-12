@@ -1,85 +1,73 @@
 package org.specs2
 package time
 
-import org.specs2.matcher.TypedEqual
-import specification.Grouped
+import matcher.TypedEqual
 
-class TimerSpec extends Spec with Grouped with TypedEqual {  def is = s2"""
+class TimerSpec extends Spec with TypedEqual {  def is = sequential ^ s2"""
 
-  A timer can be created and not started                                   
-    neverStarted returns true                                              ${g1.e1}
-    isStarted returns false                                                ${g1.e2}
-    it displays no elapsed time                                            
-      in hms                                                               ${g1.e3}
-    in hms and millis                                                      ${g1.e4}
+  A timer can be created and not started
+    neverStarted returns true                                              $timer1
+    isStarted returns false                                                $timer2
+    it displays no elapsed time
+      in hms                                                               $timer3
+    in hms and millis                                                      $timer4
 
-  When started                                                             
-    neverStarted returns false                                             ${g2.e1}
-    isStarted returns true                                                 ${g2.e2}
-    it displays no elapsed time                                            ${g2.e3}
-                                                                             
-  When stopped                                                             
-    neverStarted returns false                                             ${g3.e1}
-    isStarted returns false                                                ${g3.e2}
+  When started
+    neverStarted returns false                                             $started1
+    isStarted returns true                                                 $started2
+    it displays no elapsed time                                            $started3
+
+  When stopped
+    neverStarted returns false                                             $stopped1
+    isStarted returns false                                                $stopped2
   it can
-      display the elapsed time in hour-minute-second                       ${g3.e3}
-      display the elapsed time in hms and millis                           ${g3.e4}
-      display the correct time when it is more than 1 hour                 ${g3.e5}
-                                                                             
-  A Timer can also have nested starts and stops                            
-    it will then return cumulated times                                    ${g4.e1}
-                                                                             
-  2 Timers can be added together                                           
-    if they both have elapsed times we take the maximum                    ${g5.e1}
-    if they both have started timestamps we take the greatest difference   ${g5.e2}
-                                                                           """
-    
-  "timer is not started" - new g1 {
-    val timer = TestTimer()
+      display the elapsed time in hour-minute-second                       $stopped3
+      display the elapsed time in hms and millis                           $stopped4
+      display the correct time when it is more than 1 hour                 $stopped5
 
-    e1 := timer.neverStarted must beTrue
-    e2 := timer.isStarted must beFalse
-    e3 := timer.hms must_== "0 second"
-    e4 := timer.time must_== "0 ms"
-  }
-  
-  "timer is started" - new g2 {
-    val timer = TestTimer().start
+  A Timer can also have nested starts and stops
+    it will then return cumulated times                                    $nested1
 
-    e1 := timer.neverStarted must beFalse
-    e2 := timer.isStarted must beTrue
-    e3 := timer.time must_== "0 ms"
-  }
+  2 Timers can be added together
+    if they both have elapsed times we take the maximum                    $add1
+    if they both have started timestamps we take the greatest difference   $add2
+"""
 
-  "timer is stopped" - new g3  {
-    val timer = TestTimer().set(currentTime = 0L).start.
+  val timer = TestTimer()
+
+  def timer1 = timer.neverStarted must beTrue
+  def timer2 = timer.isStarted must beFalse
+  def timer3 = timer.hms must_== "0 second"
+  def timer4 = timer.time must_== "0 ms"
+
+  val started = TestTimer().start
+
+  def started1 = started.neverStarted must beFalse
+  def started2 = started.isStarted must beTrue
+  def started3 = started.time must_== "0 ms"
+
+  val stopped = TestTimer().set(currentTime = 0L).start.
                             set(currentTime = 500L).stop
 
-    e1 := timer.neverStarted must beFalse
-    e2 := timer.isStarted must beFalse
+  def stopped1 = stopped.neverStarted must beFalse
+  def stopped2 = stopped.isStarted must beFalse
+  def stopped3 = TestTimer().set(currentTime = 1000L).start.
+                    set(currentTime = 2000L).stop.hms must_== "1 second"
 
-    e3 := TestTimer().set(currentTime = 1000L).start.
-                      set(currentTime = 2000L).stop.hms must_== "1 second"
-  
-    e4 := TestTimer().set(currentTime = 1000L).start.
-                      set(currentTime = 2500L).stop.time must beMatching("1 second, 500 ms")
-                                                                                         
-    e5 := TestTimer().set(currentTime = 0L).start.
-                      set(currentTime = 3800010L).stop.time must beMatching("1 hour 3 minutes 20 seconds, 10 ms")
-  }
+  def stopped4 = TestTimer().set(currentTime = 1000L).start.
+                             set(currentTime = 2500L).stop.time must beMatching("1 second, 500 ms")
 
-  "nested starts" - new g4 {
-    e1 := TestTimer().set(currentTime = 1000L).start.
+  def stopped5 = TestTimer().set(currentTime = 0L).start.
+                             set(currentTime = 3800010L).stop.time must beMatching("1 hour 3 minutes 20 seconds, 10 ms")
+
+
+  def nested1 = TestTimer().set(currentTime = 1000L).start.
                       set(currentTime = 2000L).start.
                       set(currentTime = 3000L).stop.
                       set(currentTime = 4000L).stop.time must beMatching("3 seconds, 0 ms")
-  }
-    
-  "times addition" - new g5 {
-    e1 := (TestTimer().runFor(100L) add TestTimer().runFor(200L)).time === "200 ms"
-    e2 := (TestTimer().set(currentTime = 300L).start add TestTimer().set(currentTime = 100L).start).time === "200 ms"
-  }
 
+  def add1 = (TestTimer().runFor(100L) add TestTimer().runFor(200L)).time === "200 ms"
+  def add2 = (TestTimer().set(currentTime = 300L).start add TestTimer().set(currentTime = 100L).start).time === "200 ms"
 
 
   case class TestTimer(currentTime: Long = 0L) extends HmsTimer[TestTimer] { outer =>
@@ -89,7 +77,7 @@ class TimerSpec extends Spec with Grouped with TypedEqual {  def is = s2"""
 
     def set(currentTime: Long = 0L) = newTestTimer(currentTime, elapsedTimes, startedTimestamps)
     def copy(e: List[Long], m: List[Long]) = newTestTimer(currentTime, e, m)
-    
+
     def newTestTimer(currentTime: Long, elapsed: List[Long], timestamps: List[Long]) =
       new TestTimer(currentTime) {
         override protected val elapsedTimes = elapsed

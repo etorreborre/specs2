@@ -1,42 +1,38 @@
 package org.specs2
 package form
 
-import execute._
 import sys._
-import specification._
+import execute._
 import matcher._
 
-class FieldSpec extends script.Spec with Grouped with TypedEqual { def is = s2"""
+class FieldSpec extends Spec with TypedEqual { def is = s2"""
 
-A Field is a labelled property with can be embedded in a Form.                                                        
+A Field is a labelled property with can be embedded in a Form.
 
  # A Field can be created
-   + from just a value (then its name is empty)
-   + from a name and a value
-   + from existing fields, concatenating them
+   from just a value (then its name is empty) $creation1
+   from a name and a value                    $creation2
+   from existing fields, concatenating them   $creation3
 
  # A Field can be executed
-   + it returns skipped if the value is ok
-   + it returns an error if the value throws an exception
+   it returns skipped if the value is ok                $execution1
+   it returns an error if the value throws an exception $execution2
 
  # A Field can be modified
-   + to a string Field
-                                                                            """
+   to a string Field $modification1
+
+"""
 
   val name     = Field("name", "eric")
   val age      = Field("age", 18)
   val ageError = Field("age", { error("error"); 18 })
 
-  "creation" - new g1 {
-    e1 := Field(18).label                     === ""
-    e2 := age.toOption                        === Some(18)
-    e3 := Field("person", name, age).toString === "person: eric/18"
-  }
-  "execution" - new g2 {
-    e1 := age.execute      must_== skipped
-    e2 := ageError.execute must beLike { case Error(_, _) => ok }
-  }
-  "modification" - new g3 {
-    e1 := age.toStringField.toOption must_== Some("18")
-  }
+  def creation1 = Field(18).label                     === ""
+  def creation2 = age.toOption                        === Some(18)
+  def creation3 = Field("person", name, age).toString === "person: eric/18"
+
+  def execution1 = age.execute      must_== skipped
+  def execution2 = ageError.execute must beLike { case Error(_, _) => ok }
+
+  def modification1 = age.toStringField.toOption must_== Some("18")
 }
