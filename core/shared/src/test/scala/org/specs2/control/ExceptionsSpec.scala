@@ -2,10 +2,9 @@ package org.specs2
 package control
 
 import sys._
-import specification._
 
-class ExceptionsSpec extends script.Spec with Exceptions with Grouped {  def is = s2"""
-                                                                                                               
+class ExceptionsSpec extends Spec with Exceptions {  def is = s2"""
+
 The Exceptions trait provides functional ways to catch exceptions and deal with them:
 
   * tryo returns the result in an Option
@@ -18,71 +17,69 @@ The Exceptions trait provides functional ways to catch exceptions and deal with 
   * tryOk returns true iff the expression doesn't throw an Exception
 
   tryo executes an expression and returns an Option
-    + Some(result) if the expression doesn't throw an exception
-    + None if the expression failed
+    Some(result) if the expression doesn't throw an exception                            $tryo1
+    None if the expression failed                                                        $tryo2
 
   tryOr executes an expression and returns the result or a default value. It returns
-    + the result if the expression doesn't throw an exception
-    + a default value if the expression throws an exception
+    the result if the expression doesn't throw an exception                              $tryOr1
+    a default value if the expression throws an exception                                $tryOr2
 
   tryOrElse executes an expression and returns the result or another value. It returns
-    + the result if the expression doesn't throw an exception
-    + another value if the expression throws an exception
+    the result if the expression doesn't throw an exception                              $tryOrElse1
+    another value if the expression throws an exception                                  $tryOrElse2
 
   tryMap executes an expression and returns
-    + a 'ok' value if the expression doesn't throw an exception
-    + a 'ko' value if the expression throws an exception
+    a 'ok' value if the expression doesn't throw an exception                            $tryMap1
+    a 'ko' value if the expression throws an exception                                   $tryMap2
 
   tryOk executes an expression and returns a Boolean
-    + true if the expression doesn't throw an exception
-    + false if the expression throws an exception
+    true if the expression doesn't throw an exception                                    $tryOk1
+    false if the expression throws an exception                                          $tryOk2
 
   trye executes an expression and returns an Either value
-    + Right(result) if the expression doesn't throw an exception
-    + Left(f(e)) if the expression failed, where f is a function of an exception
+    + Right(result) if the expression doesn't throw an exception                         $trye1
+    + Left(f(e)) if the expression failed, where f is a function of an exception         $trye2
 
   catchAll executes an expression and returns an Either value
-    + Right(result) if the expression doesn't throw a Throwable
-    + Left(f(e)) if the expression threw anything, even an error
+    Right(result) if the expression doesn't throw a Throwable                            $catchAll1
+    Left(f(e)) if the expression threw anything, even an error                           $catchAll2
 
-  tryOr executes an expression and returns the result or a default value. It returns
-    + the result if the expression doesn't throw an exception
-    + a default value if the expression throws an exception
+  catchAllOr executes an expression and returns the result or a default value. It returns
+    the result if the expression doesn't throw an exception                              $catchAllOr1
+    a default value if the expression throws an exception                                $catchAllOr2
 
   tryCollect uses a partial function to evaluate a value
-    + tryCollect returns a boolean
-    + tryCollectOr returns any value
-                                                                                                  """
-    
-  "tryo" - new group {
-    eg := tryo("a") must_== Some("a")
-    eg := tryo(boom) must_== None
+    tryCollect returns a boolean                                                         $tryCollect1
+    tryCollectOr returns any value                                                       $tryCollect2
 
-    eg := tryOr("a")(_.getMessage) must_== "a"
-    eg := tryOr(boom)(_ => "bang") must_== "bang"
+ """
 
-    eg := tryOrElse("a")("b") must_== "a"
-    eg := tryOrElse(boom)("bang") must_== "bang"
+  def tryo1 = tryo("a") must_== Some("a")
+  def tryo2 = tryo(boom) must_== None
 
-    eg := tryMap("a")(true)(false) must_== true
-    eg := tryMap(boom)(true)(false) must_== false
+  def tryOr1 = tryOr("a")(_.getMessage) must_== "a"
+  def tryOr2 = tryOr(boom)(_ => "bang") must_== "bang"
 
-    eg := tryOk("a") must_== true
-    eg := tryOk(boom) must_== false
+  def tryOrElse1 = tryOrElse("a")("b") must_== "a"
+  def tryOrElse2 = tryOrElse(boom)("bang") must_== "bang"
 
-    eg := trye("a")(_.getMessage) must_== Right("a")
-    eg := trye(boom)(_.getMessage) must_== Left("boom")
+  def tryMap1 = tryMap("a")(true)(false) must_== true
+  def tryMap2 = tryMap(boom)(true)(false) must_== false
 
-    eg := catchAll("a")(_.getMessage) must_== Right("a")
-    eg := catchAll({throw new Error("boom"); "a"})(_.getMessage) must_== Left("boom")
+  def tryOk1 = tryOk("a") must_== true
+  def tryOk2 = tryOk(boom) must_== false
 
-    eg := catchAllOr("a")(_.getMessage) must_== "a"
-    eg := catchAllOr({throw new Error("boom"); "a"})(_ => "bang") must_== "bang"
+  def trye1 = trye("a")(_.getMessage) must_== Right("a")
+  def trye2 = trye(boom)(_.getMessage) must_== Left("boom")
 
-    eg := tryCollect("a") { case x => x == "a" }
-    eg := tryCollectOr("x", 100) { case x => x.toInt } must_== 100
+  def catchAll1 = catchAll("a")(_.getMessage) must_== Right("a")
+  def catchAll2 = catchAll({throw new Error("boom"); "a"})(_.getMessage) must_== Left("boom")
 
-  }
+  def catchAllOr1 = catchAllOr("a")(_.getMessage) must_== "a"
+  def catchAllOr2 = catchAllOr({throw new Error("boom"); "a"})(_ => "bang") must_== "bang"
+
+  def tryCollect1 = tryCollect("a") { case x => x == "a" }
+  def tryCollect2 = tryCollectOr("x", 100) { case x => x.toInt } must_== 100
 
   def boom = { error("boom"); "a" }
 

@@ -1,12 +1,11 @@
 package org.specs2
 package main
 
-import org.specs2.matcher.{TypedEqual, DataTables}
+import matcher.{TypedEqual, DataTables}
 import execute.Result
-import org.specs2.text.MappedColors
-import specification._
+import text.MappedColors
 
-class ArgumentsSpec extends script.Spec with DataTables with Grouped with TypedEqual with ArgProperties { def is = s2"""
+class ArgumentsSpec extends Spec with DataTables with TypedEqual with ArgProperties { def is = s2"""
 
 Arguments can be passed on the command line as an Array of Strings. There are 2 types of arguments:
 
@@ -20,151 +19,146 @@ Definition
 ==========
 
   If an argument is specified, its value is returned
-    + for a boolean argument like xonly the value is true
-    + a boolean argument can be negated by adding ! in front of it.
-      ex: `Arguments("!pandoc").commandLine.boolOr("pandoc", true) is false`
-    + for a string argument, it is the 'next' value
+    for a boolean argument like xonly the value is true                        $values1
+    a boolean argument can be negated by adding ! in front of it.              $values2
+      ex: `Arguments("!pandoc").commandLine.boolOr("pandoc", true) is false
+    for a string argument, it is the 'next' value                              $values3
 
   If an argument is not specified, its default value is returned
-    + for a boolean argument like xonly, it is false
-    + for a string argument like ex, it is .*
+    for a boolean argument like xonly, it is false                             $values4
+    for a string argument like ex, it is .*                                    $values5
 
-  The argument names can be capitalized or not
-    + for a boolean argument like xonly, xOnly is admissible
-    + for a string argument like colorsclass, colorsClass is admissible
-    + but the name has to match exactly, 'exclude' must not be mistaken for 'ex'
+  The argument names can be capitalized or no
+    for a boolean argument like xonly, xOnly is admissible                     $values6
+    for a string argument like colorsclass, colorsClass is admissible          $values7
+    but the name has to match exactly, 'exclude' must not be mistaken for 'ex' $values8
 
-    + Quoted arguments must be been properly passed
-    + Some boolean arguments have negated names, like nocolor, meaning !color
+    Quoted arguments must be been properly passed                              $values9
+    Some boolean arguments have negated names, like nocolor, meaning !color    $values10
 
 Overriding
 ==========
 
   An Arguments instance can be overridden by another with the `<|` operator: `a <| b`
-    + if there's no corresponding value in b, the value in a stays
-    + there is a corresponding value in b, the value in a is overridden when there is one
-    + there is a corresponding value in b, the value in b is kept
+    if there's no corresponding value in b, the value in a stays                        $overriding1
+    there is a corresponding value in b, the value in a is overridden when there is one $overriding2
+    there is a corresponding value in b, the value in b is kept                         $overriding3
 
 System props
 ============
 
   Arguments can also be passed from system properties
-    + a boolean value just have to exist as -Dname
-    + a boolean value can be -Dname=true
-    + a boolean value can be -Dname=false
-    + a string value will be -Dname=value
-    + properties can also be passed as -Dspecs2.name to avoid conflicts with other properties
-    + with the color/nocolor property
+    a boolean value just have to exist as -Dname                                            $properties1
+    a boolean value can be -Dname=true                                                      $properties2
+    a boolean value can be -Dname=false                                                     $properties3
+    a string value will be -Dname=value                                                     $properties4
+    properties can also be passed as -Dspecs2.name to avoid conflicts with other properties $properties5
+    with the color/nocolor property                                                         $properties6
 
 Execution
 =========
 
   Arguments can decide if a result must be shown or not, depending on its status
-    + xonly => canShow(x)
-    + xonly => canShow(result.status)
+    xonly => canShow(x)                               $execution1
+    xonly => canShow(result.status)                   $execution2
 
   Some values can be filtered from the command line
-    + to include only some arguments
-    + to exclude some arguments
+    to include only some arguments                    $execution3
+    to exclude some arguments                         $execution4
 
 Creation
 ========
 
   Arguments can be created from a sequence of strings
-    + to declare a Notifier
+    to declare a Notifier                             $creation1
 
-                                                                                                               """
+"""
 
+  def values1 = Arguments("xonly").xonly must beTrue
+  def values2 = Arguments("!pandoc").commandLine.boolOr("pandoc", true) must beFalse
+  def values3 = Arguments("ex", "Hello").ex must_== ".*Hello.*"
 
-  "values" - new group {
-    eg := Arguments("xonly").xonly must beTrue
-    eg := Arguments("!pandoc").commandLine.boolOr("pandoc", true) must beFalse
-    eg := Arguments("ex", "Hello").ex must_== ".*Hello.*"
+  def values4 = Arguments("").xonly must beFalse
+  def values5 = Arguments("").ex must_== ".*"
 
-    eg := Arguments("").xonly must beFalse
-    eg := Arguments("").ex must_== ".*"
+  def values6 = Arguments("xOnly").xonly must beTrue
+  def values7 = Arguments("colorClass", classOf[MappedColors].getName).colors must_== MappedColors()
+  def values8 = Arguments("exclude", "spec").ex must_== Arguments().ex
 
-    eg := Arguments("xOnly").xonly must beTrue
-    eg := Arguments("colorClass", classOf[MappedColors].getName).colors must_== MappedColors()
-    eg := Arguments("exclude", "spec").ex must_== Arguments().ex
+  def values9 = Arguments("ex", "this test").select.ex must_== ".*this test.*"
 
-    eg := Arguments("ex", "this test").select.ex must_== ".*this test.*"
-    eg := {
-      List("nocolor", "color", "nocolor true", "nocolor false", "color true", "color false").map(a => Arguments.split(a).color) must_==
+  def values10 = {
+    List("nocolor", "color", "nocolor true", "nocolor false", "color true", "color false").map(a => Arguments.split(a).color) must_==
+    List(false, true, false, true, true, false)
+  }
+
+  def overriding1 = (args(xonly = true) <| args(plan = false)).xonly must_== true
+  def overriding2 = args(xonly = true).overrideWith(args(xonly = false)).xonly must_== false
+  def overriding3 = (args(xonly = true) <| args(plan = true)).plan must_== true
+
+  case class properties(properties: (String, String)*) extends SystemProperties {
+    override def systemGetProperty(p: String) = Map(properties: _*).get(p)
+  }
+
+  def properties1 = Arguments.extract(Seq(""), properties("plan" -> "")).plan must_== true
+  def properties2 = Arguments.extract(Seq(""), properties("plan" -> "true")).plan must_== true
+  def properties3 = Arguments.extract(Seq(""), properties("plan" -> "false")).plan must_== false
+  def properties4 = Arguments.extract(Seq(""), properties("ex"   -> "spec")).ex must_== ".*spec.*"
+  def properties5 = Arguments.extract(Seq(""), properties("specs2.ex" -> "spec")).ex must_== ".*spec.*"
+
+  def properties6 = {
+    List(("nocolor", ""), ("color", ""), ("nocolor", "true"), ("nocolor", "false"), ("color", "true"), ("color", "false")).map { case (k, v) =>
+      Arguments.extract(Seq(""), properties(k -> v)).color
+    } must_==
       List(false, true, false, true, true, false)
-    }
-   }
-
-  "overriding" - new group {
-    eg := (args(xonly = true) <| args(plan = false)).xonly must_== true
-    eg := args(xonly = true).overrideWith(args(xonly = false)).xonly must_== false
-    eg := (args(xonly = true) <| args(plan = true)).plan must_== true
   }
 
-  "properties" - new group {
-     case class properties(properties: (String, String)*) extends SystemProperties {
-      override def systemGetProperty(p: String) = Map(properties: _*).get(p)
-     }
+  def execution1 =
+    "args"                      | "status" | "canShow"    |>
+    xonly                       ! "x"      ! true         |
+    xonly                       ! "!"      ! true         |
+    xonly                       ! "o"      ! false        |
+    xonly                       ! "+"      ! false        |
+    xonly                       ! "-"      ! false        |
+    showOnly("x!")              ! "x"      ! true         |
+    showOnly("x!")              ! "!"      ! true         |
+    showOnly("x!")              ! "o"      ! false        |
+    showOnly("x!")              ! "+"      ! false        |
+    showOnly("x!")              ! "-"      ! false        |
+    showOnly("o")               ! "x"      ! false        |
+    showOnly("o")               ! "!"      ! false        |
+    showOnly("o")               ! "o"      ! true         |
+    showOnly("o")               ! "+"      ! false        |
+    showOnly("o")               ! "-"      ! false        |
+    Arguments("showonly","o")   ! "x"      ! false        |
+    Arguments("showonly","o")   ! "!"      ! false        |
+    Arguments("showonly","o")   ! "o"      ! true         |
+    Arguments("showonly","o")   ! "+"      ! false        |
+    Arguments("showonly","o")   ! "-"      ! false        |
+    { (a, s, r) =>  a.canShow(s) must_== r }
 
-    eg := Arguments.extract(Seq(""), properties("plan" -> "")).plan must_== true
-    eg := Arguments.extract(Seq(""), properties("plan" -> "true")).plan must_== true
-    eg := Arguments.extract(Seq(""), properties("plan" -> "false")).plan must_== false
-    eg := Arguments.extract(Seq(""), properties("ex"   -> "spec")).ex must_== ".*spec.*"
-    eg := Arguments.extract(Seq(""), properties("specs2.ex" -> "spec")).ex must_== ".*spec.*"
+  def execution2 =
+    "args"                     | "status"            | "canShow"    |>
+    xonly                      ! (failure:Result)    ! true         |
+    xonly                      ! anError             ! true         |
+    xonly                      ! skipped             ! false        |
+    xonly                      ! success             ! false        |
+    showOnly("x!")             ! failure             ! true         |
+    showOnly("x!")             ! anError             ! true         |
+    showOnly("x!")             ! skipped             ! false        |
+    showOnly("x!")             ! success             ! false        |
+    showOnly("o")              ! failure             ! false        |
+    showOnly("o")              ! anError             ! false        |
+    showOnly("o")              ! skipped             ! true         |
+    showOnly("o")              ! success             ! false        |
+    { (a, s, r) =>  a.canShow(s.status) must_== r }
 
-    eg := {
-      List(("nocolor", ""), ("color", ""), ("nocolor", "true"), ("nocolor", "false"), ("color", "true"), ("color", "false")).map { case (k, v) =>
-        Arguments.extract(Seq(""), properties(k -> v)).color
-      } must_==
-        List(false, true, false, true, true, false)
-    }
+  def execution3 =
+    Arguments("this", "is", "cool").commandLineFilter("this", "cool").commandLine.arguments === Seq("this", "cool")
 
-  }
+  def execution4 =
+    Arguments("this", "is", "cool").commandLineFilterNot("this", "cool").commandLine.arguments === Seq("is")
 
-  "execution" - new group {
-    eg := "args"                      | "status" | "canShow"    |>
-          xonly                       ! "x"      ! true         |
-          xonly                       ! "!"      ! true         |
-          xonly                       ! "o"      ! false        |
-          xonly                       ! "+"      ! false        |
-          xonly                       ! "-"      ! false        |
-          showOnly("x!")              ! "x"      ! true         |
-          showOnly("x!")              ! "!"      ! true         |
-          showOnly("x!")              ! "o"      ! false        |
-          showOnly("x!")              ! "+"      ! false        |
-          showOnly("x!")              ! "-"      ! false        |
-          showOnly("o")               ! "x"      ! false        |
-          showOnly("o")               ! "!"      ! false        |
-          showOnly("o")               ! "o"      ! true         |
-          showOnly("o")               ! "+"      ! false        |
-          showOnly("o")               ! "-"      ! false        |
-          Arguments("showonly","o")   ! "x"      ! false        |
-          Arguments("showonly","o")   ! "!"      ! false        |
-          Arguments("showonly","o")   ! "o"      ! true         |
-          Arguments("showonly","o")   ! "+"      ! false        |
-          Arguments("showonly","o")   ! "-"      ! false        |
-          { (a, s, r) =>  a.canShow(s) must_== r }
-
-     eg := "args"                      | "status"            | "canShow"    |>
-            xonly                      ! (failure:Result)    ! true         |
-            xonly                      ! anError             ! true         |
-            xonly                      ! skipped             ! false        |
-            xonly                      ! success             ! false        |
-            showOnly("x!")             ! failure             ! true         |
-            showOnly("x!")             ! anError             ! true         |
-            showOnly("x!")             ! skipped             ! false        |
-            showOnly("x!")             ! success             ! false        |
-            showOnly("o")              ! failure             ! false        |
-            showOnly("o")              ! anError             ! false        |
-            showOnly("o")              ! skipped             ! true         |
-            showOnly("o")              ! success             ! false        |
-            { (a, s, r) =>  a.canShow(s.status) must_== r }
-
-    eg := Arguments("this", "is", "cool").commandLineFilter("this", "cool").commandLine.arguments === Seq("this", "cool")
-    eg := Arguments("this", "is", "cool").commandLineFilterNot("this", "cool").commandLine.arguments === Seq("is")
-  }
-
-  "creation" - new group {
-    eg := Arguments("MySpec", "notifier", "IntelliJNotifier").report.notifier === "IntelliJNotifier"
-  }
+  def creation1 =
+    Arguments("MySpec", "notifier", "IntelliJNotifier").report.notifier === "IntelliJNotifier"
 }
