@@ -2,7 +2,6 @@ package org.specs2
 package matcher
 
 import specification.process.DefaultExecutor
-import specification._
 import java.util.Arrays._
 
 import control.NumberOfTimes
@@ -13,7 +12,7 @@ import fp.syntax._
 import execute.Result
 import org.specs2.specification.core.{Env, OwnEnv}
 
-class TraversableMatchersSpec(val env: Env) extends Spec with ResultMatchers with Grouped with NumberOfTimes with MustMatchers with OwnEnv { def is = s2"""
+class TraversableMatchersSpec(val env: Env) extends Spec with ResultMatchers with NumberOfTimes with MustMatchers with OwnEnv { def is = s2"""
 
  We can check the elements of a collection by using matchers
    ${ Seq(1, 2, 3) must contain(2) }
@@ -34,7 +33,7 @@ class TraversableMatchersSpec(val env: Env) extends Spec with ResultMatchers wit
    ${ Seq("1", "2", "3") must contain("3") and contain("2":Any) }
    ${ Seq("foobar").must(contain("foo")).not } see #416
    ${ Seq[Food](Pizza(), new Fruit()) must contain(Pizza()) }
-   `not contain(1)` must work in a mutable Scope ${g1.e1}
+   `not contain(1)` must work in a mutable Scope $edgeCase1
    a string inclusion must work as well  ${ "abc" must contain('b') }
 
 
@@ -212,17 +211,16 @@ class TraversableMatchersSpec(val env: Env) extends Spec with ResultMatchers wit
    * Examples
    */
 
-  "edge cases" - new g1 {
-    e1 := {
-      val spec = new org.specs2.mutable.Specification {
-        "ex1" >> new Scope {
-          Seq(1) must not contain(1)
-        }
+  def edgeCase1 = {
+    val spec = new org.specs2.mutable.Specification {
+      "ex1" >> new Scope {
+        Seq(1) must not contain(1)
       }
-      DefaultExecutor.runSpecification(spec, ownEnv).traverse(_.executionResult).map(_.suml) must beOk(ResultMatchers.beFailing[Result])
     }
+    DefaultExecutor.runSpecification(spec, ownEnv).traverse(_.executionResult).map(_.suml) must beOk(ResultMatchers.beFailing[Result])
   }
 
+  // HELPERS
   class Food
   case class Pizza() extends Food
   case class Fruit() extends Food

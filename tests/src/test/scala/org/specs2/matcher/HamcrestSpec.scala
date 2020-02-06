@@ -2,19 +2,17 @@ package org.specs2
 package matcher
 
 import org.hamcrest._
-import specification._
 
-class HamcrestSpec extends script.Spec with Grouped with Hamcrest with TypedEqual { def is = s2"""
+class HamcrestSpec extends Spec with Hamcrest with TypedEqual { def is = s2"""
 
-  Hamcrest matchers can be used as specs2 matchers by mixing in the Hamcrest trait      
-  + for example a beEven hamcrest matcher can be used in a 'must' expression
-    + the failure message must contain the matched value and the hamcrest failure message
-                                                                                           """
+  Hamcrest matchers can be used as specs2 matchers by mixing in the Hamcrest trait
+    for example a beEven hamcrest matcher can be used in a 'must' expression $matcher1
+    the failure message must contain the matched value and the hamcrest failure message $matcher2
 
-  new g1 {
-    e1 := 2 must beEven
-    e2 := (3 must beEven).message === "\nExpected: an even Int\n     but: <3> is odd"
-  }
+"""
+
+  def matcher1 = 2 must beEven
+  def matcher2 = (3 must beEven).message === "\nExpected: an even Int\n     but: <3> is odd"
 
   // a Hamcrest matcher for even numbers
   object beEven extends BaseMatcher[Int] {
