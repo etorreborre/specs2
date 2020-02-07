@@ -1,4 +1,4 @@
-**/.DS_Store
+m **/.DS_Store
 guide/.DS_Store
 specs2_2.12.iml
 .hydra
@@ -6,20 +6,3 @@ specs2_2.12.iml
 guide/target
 target
 pom
-analysis
-cats
-core
-common
-gwt
-html
-examples
-form
-fp
-junit
-markdown
-matcher
-matcher-extra
-mock
-scalacheck
-scalaz
-shapeless
