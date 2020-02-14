@@ -106,6 +106,10 @@ prop((s: String) => s must contain("a") or contain("b")).setPretty((s: String) =
 prop((s: String) => s must contain("a") or contain("b")).pretty((_: String).toUpperCase)
 }}
 
+Note that it is also possible to _remove_ shrinking by appending `noShrink` to your property: ${snippet{
+prop((s1: String, s2: String) => s1.nonEmpty or s2.nonEmpty).noShrink
+}}
+
 ### Contexts
 
 ScalaCheck properties are sometimes used to test stateful applications rather than pure functions. For example you want to test that a function is writing files somewhere and you would like those files to be deleted after each property execution: ${snippet{
