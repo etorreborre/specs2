@@ -1,8 +1,8 @@
 package org.specs2
 package reporter
 
-import examples.{HelloWorldSpec, HelloWorldUnitSpec}
-import mock._
+import examples.{HelloWorldSpec, HelloWorldUnitSpec
+}
 import matcher._
 import main.Arguments
 import io.StringOutput
@@ -10,8 +10,9 @@ import sbt.testing._
 import runner._
 import specification.core._
 import specification.process.DefaultExecutor
+import scala.collection.mutable.ListBuffer
 
-class SbtPrinterSpec(val env: Env) extends Spec with OwnEnv { def is = s2"""
+class SbtPrinterSpec(val env: Env) extends Specification with OwnEnv { def is = s2"""
 
  A SbtPrinter should
    print the specification title if defined      ${printer1().e1}
@@ -25,11 +26,11 @@ class SbtPrinterSpec(val env: Env) extends Spec with OwnEnv { def is = s2"""
 """
   val factory = fragmentFactory
 
-  case class printer1() extends Mockito { outer =>
+  case class printer1() { outer =>
 
     def e1 = {
       printer.print((new HelloWorldSpec { override def is = "title".title ^ "\ntext" }).structure(ownEnv)).runAction(ownEnv.specs2ExecutionEnv)
-      eventually(there was one(logger).info(beMatching(".*title.*")))
+      eventually(logger.messages must contain (beMatching("\\[INFO\\].*title.*")))
     }
 
     def e2 = {
@@ -53,14 +54,14 @@ class SbtPrinterSpec(val env: Env) extends Spec with OwnEnv { def is = s2"""
 
     def print(spec: SpecStructure) = {
       printer.print(spec).runAction(ownEnv.specs2ExecutionEnv)
-      stringPrinterLogger.flush()
-      stringPrinterLogger.messages.mkString("\n")
+      stringOutputLogger.flush()
+      stringOutputLogger.messages.mkString("\n")
     }
 
-    val handler = mock[EventHandler]
-    val logger = mock[Logger]
+    val handler = createHandler
+    val logger = createLogger
 
-    val stringPrinterLogger = new Logger with StringOutput {
+    val stringOutputLogger = new Logger with StringOutput {
       def ansiCodesSupported = false
       def warn(msg: String): Unit =  { append(msg) }
       def error(msg: String): Unit = { append(msg) }
@@ -74,13 +75,13 @@ class SbtPrinterSpec(val env: Env) extends Spec with OwnEnv { def is = s2"""
       lazy val taskDef = new TaskDef("", Fingerprints.fp1, true, Array())
     }
     val env = Env(arguments = Arguments("nocolor"))
-    val printer = SbtPrinter(env, Array(logger, stringPrinterLogger), events)
+    val printer = SbtPrinter(env, Array(logger, stringOutputLogger), events)
 
   }
 
-  case class printer2() extends Mockito { outer =>
-    val logger =  mock[Logger]
-    val handler = mock[EventHandler]
+  case class printer2() { outer =>
+    val logger = createLogger
+    val handler = createHandler
     lazy val events = new SbtEvents {
       lazy val handler = outer.handler
       lazy val taskDef = new TaskDef("", Fingerprints.fp1, true, Array())
@@ -90,17 +91,17 @@ class SbtPrinterSpec(val env: Env) extends Spec with OwnEnv { def is = s2"""
 
     def e1 = {
       executeAndPrintHelloWorldUnitSpec
-      there was atLeastOne(handler).handle(eventWithStatus(Status.Success))
+      handler.events must contain(eventWithStatus(Status.Success))
     }
 
     def e2 = {
       executeAndPrintHelloWorldUnitSpec
-      there was atLeastOne(handler).handle(eventWithDurationGreaterThanOrEqualTo(0))
+      handler.events must contain(eventWithDurationGreaterThanOrEqualTo(0))
     }
 
     def e3 = {
       executeAndPrintHelloWorldUnitSpec
-      there was atLeastOne(handler).handle(eventWithNameMatching("HW::The 'Hello world' string should::contain 11 characters"))
+      handler.events must contain(eventWithNameMatching("HW::The 'Hello world' string should::contain 11 characters"))
     }
 
     def executeAndPrintHelloWorldUnitSpec = {
@@ -109,6 +110,22 @@ class SbtPrinterSpec(val env: Env) extends Spec with OwnEnv { def is = s2"""
     }
 
   }
+
+  def createHandler = new EventHandler {
+    val events = new ListBuffer[Event]
+    def handle(event: Event): Unit =
+      events.append(event)
+  }
+
+  def createLogger = new Logger with StringOutput {
+    def ansiCodesSupported = false
+    def warn(msg: String): Unit =  { append("[WARN] "+msg) }
+    def error(msg: String): Unit = { append("[ERROR] "+msg) }
+    def debug(msg: String): Unit = { append("[DEBUG] "+msg) }
+    def trace(t: Throwable): Unit ={ append("[TRACE] "+t.getMessage) }
+    def info(msg: String): Unit =  { append("[INFO] "+msg) }
+  }
+
 
   def eventWithStatus(s: Status): Matcher[Event] =
     beTypedEqualTo(s) ^^ ((_: Event).status())

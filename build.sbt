@@ -17,9 +17,9 @@ lazy val specs2 = project.in(file(".")).
     packagedArtifacts := Map.empty
   ).aggregate(
     fpJVM, catsJVM, commonJVM, matcherJVM, coreJVM, matcherExtraJVM, scalazJVM, html,
-    analysisJVM, shapelessJVM, formJVM, markdownJVM, gwtJVM, junitJVM, scalacheckJVM, mockJVM,
+    analysisJVM, shapelessJVM, formJVM, markdownJVM, gwtJVM, junitJVM, scalacheckJVM,
     tests, fpJS, catsJS, commonJS, matcherJS, coreJS, matcherExtraJS, scalazJS, analysisJS,
-    shapelessJS, formJS, markdownJS, gwtJS, junitJS, scalacheckJS, mockJS
+    shapelessJS, formJS, markdownJS, gwtJS, junitJS, scalacheckJS
   )
 
 val scala211 = "2.11.12"
@@ -156,7 +156,6 @@ lazy val core = crossProject(JSPlatform, JVMPlatform).in(file("core")).
     libraryDependencies ++=
       depends.paradise(scalaVersion.value) ++
       Seq(
-        depends.mockito % Test,
         depends.junit % Test)
   ).
   jsSettings(depends.jsTest, commonJsSettings).
@@ -174,7 +173,7 @@ lazy val examples = crossProject(JSPlatform, JVMPlatform).in(file("examples")).
     name := "specs2-examples").
   jsSettings(depends.jsTest, commonJsSettings).
   jvmSettings(depends.jvmTest, commonJvmSettings).
-  dependsOn(common, matcher, core, matcherExtra, junit, scalacheck, mock)
+  dependsOn(common, matcher, core, matcherExtra, junit, scalacheck)
 
 lazy val examplesJVM = examples.jvm.dependsOn(analysisJVM, formJVM, gwtJVM, html, markdownJVM)
 lazy val examplesJS = examples.js
@@ -230,17 +229,16 @@ lazy val html = project.in(file("html")).
     commonSettings,
     name := "specs2-html").
   settings(depends.jvmTest, commonJvmSettings).
-  dependsOn(formJVM, mockJVM % Test, matcherExtraJVM % Test, scalacheckJVM % Test)
+  dependsOn(formJVM, matcherExtraJVM % Test, scalacheckJVM % Test)
 
 lazy val junit = crossProject(JSPlatform, JVMPlatform).in(file("junit")).
   settings(
     libraryDependencies ++= Seq(
-      depends.junit,
-      depends.mockito % Test),
+      depends.junit),
     commonSettings,
     name := "specs2-junit").
   jvmSettings(depends.jvmTest, commonJvmSettings).
-  dependsOn(core, matcherExtra % Test, mock % Test)
+  dependsOn(core, matcherExtra % Test)
 
 lazy val junitJVM = junit.jvm
 lazy val junitJS = junit.js
@@ -286,7 +284,7 @@ lazy val matcherExtraJVM = matcherExtra.jvm
 lazy val pom = Project(id = "pom", base = file("pom")).
   settings(commonSettings).
   dependsOn(catsJVM, commonJVM, matcherJVM, matcherExtraJVM, coreJVM, scalazJVM, html, analysisJVM,
-    shapelessJVM, formJVM, markdownJVM, gwtJVM, junitJVM, scalacheckJVM, mockJVM)
+    shapelessJVM, formJVM, markdownJVM, gwtJVM, junitJVM, scalacheckJVM)
 
 lazy val shapeless = crossProject(JSPlatform, JVMPlatform).
   crossType(CrossType.Pure).
@@ -317,20 +315,6 @@ lazy val scalaz = crossProject(JSPlatform, JVMPlatform).in(file("scalaz")).
 
 lazy val scalazJS = scalaz.js
 lazy val scalazJVM = scalaz.jvm
-
-lazy val mock = crossProject(JSPlatform, JVMPlatform).in(file("mock")).
-  settings(
-    libraryDependencies ++= Seq(
-      depends.hamcrest,
-      depends.mockito),
-    commonSettings,
-    name := "specs2-mock").
-  jsSettings(depends.jsTest, commonJsSettings).
-  jvmSettings(depends.jvmTest, commonJvmSettings).
-  dependsOn(core)
-
-lazy val mockJS = mock.js
-lazy val mockJVM = mock.jvm
 
 lazy val scalacheck = crossProject(JSPlatform, JVMPlatform)
   .in(file("scalacheck")).
@@ -454,11 +438,11 @@ lazy val apiSettings = Seq(
   Seq(scalacOptions in (Compile, doc) += "-Ymacro-no-expand")
 
 lazy val aggregateCompile = ScopeFilter(
-  inProjects(fpJVM, commonJVM, matcherJVM, matcherExtraJVM, coreJVM, html, analysisJVM, formJVM, shapelessJVM, markdownJVM, gwtJVM, junitJVM, scalacheckJVM, mockJVM),
+  inProjects(fpJVM, commonJVM, matcherJVM, matcherExtraJVM, coreJVM, html, analysisJVM, formJVM, shapelessJVM, markdownJVM, gwtJVM, junitJVM, scalacheckJVM),
   inConfigurations(Compile))
 
 lazy val aggregateTest = ScopeFilter(
-  inProjects(fpJVM, commonJVM, matcherJVM, matcherExtraJVM, coreJVM, html, analysisJVM, formJVM, shapelessJVM, markdownJVM, gwtJVM, junitJVM, scalacheckJVM, mockJVM),
+  inProjects(fpJVM, commonJVM, matcherJVM, matcherExtraJVM, coreJVM, html, analysisJVM, formJVM, shapelessJVM, markdownJVM, gwtJVM, junitJVM, scalacheckJVM),
   inConfigurations(Test))
 
 def maybeMarkProvided(dep: ModuleID): ModuleID =

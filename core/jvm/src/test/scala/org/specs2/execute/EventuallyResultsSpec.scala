@@ -2,7 +2,6 @@ package org.specs2
 package execute
 
 import mutable.Specification
-import org.mockito.Mockito._
 import org.specs2.matcher.ResultMatchers
 import scala.concurrent._, duration._
 
@@ -37,13 +36,5 @@ class EventuallyResultsSpec extends Specification with ResultMatchers {
 
     eventually(retries = 3, sleep = 100.millis)(r) must beFailing
     eval must_== 3
-  }
-  "eventually can be used for a Mockito result" in {
-    trait ToMock {
-      def next: Int
-    }
-    val m = mock(classOf[ToMock])
-    (1 to 3).foreach(i => doReturn(i, Nil:_*).when(m).next)
-    eventually(m.next must_== 3) must beSuccessful
   }
 }

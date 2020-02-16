@@ -2,9 +2,8 @@ package org.specs2.matcher
 
 import org.specs2.Specification
 import org.specs2.execute.Typecheck._
-import org.specs2.mock.Mockito
 
-class ArgThatSpec extends Specification with TypecheckMatchers with Mockito { def is = s2"""
+class ArgThatSpec extends Specification with TypecheckMatchers { def is = s2"""
 
  the argThat implicit conversion must be safe $e1
 
@@ -13,7 +12,7 @@ class ArgThatSpec extends Specification with TypecheckMatchers with Mockito { de
   def e1 = {
     // see #260
     typecheck { """
-      object test extends Mockito {
+      object test {
         def beTrueCustom: Matcher[Boolean] = beTrue ^^ {(t: Boolean) => t}
         def someFun(x: Int): (Option[String], Boolean) = (Some("Test"), true)
         someFun(42) must beTrueCustom
