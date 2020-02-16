@@ -17,7 +17,7 @@ import org.specs2.specification.create.DefaultFragmentFactory.link
  * This trait loads specifications found on a given source directory based
  * on a regular expression representing the Specification name, usually .*Spec
  */
-trait SpecificationsFinder{
+trait SpecificationsFinder {
 
   /**
    * @param glob a path to a directory containing scala files (it can be a glob: i.e. "dir/**/*spec.scala")
@@ -25,12 +25,30 @@ trait SpecificationsFinder{
    * @param filter a function to filter out unwanted specifications
    * @return specifications created from specification names
    */
-  def findSpecifications(glob: String                   = specificationsPath,
-                         pattern: String                = specificationsPattern,
+  def findSpecifications(glob: String                   = SpecificationsFinder.specificationsPath,
+                         pattern: String                = SpecificationsFinder.specificationsPattern,
                          filter: String => Boolean      = { (name: String) => true },
                          basePath: DirectoryPath        = DirectoryPath.unsafe(new java.io.File(specificationsBasePath).getAbsolutePath),
                          verbose: Boolean               = false,
                          classLoader: ClassLoader       = Thread.currentThread.getContextClassLoader): Operation[List[SpecificationStructure]]
+
+  /**
+   * @param glob a path to a directory containing scala files (it can be a glob: i.e. "dir/**/*spec.scala")
+   * @param pattern a regular expression which is supposed to match an object/class name extending a Specification
+   * @param filter a function to filter out unwanted specifications
+   * @return specifications created from specification names
+   */
+  def specifications(glob: String                   = "**/*.scala",
+                     pattern: String                = SpecificationsFinder.specificationsPattern,
+                     filter: String => Boolean      = { (name: String) => true },
+                     basePath: DirectoryPath        = DirectoryPath.unsafe(new java.io.File("src/test/scala").getAbsolutePath),
+                     verbose: Boolean               = false,
+                     classLoader: ClassLoader       = Thread.currentThread.getContextClassLoader): Seq[SpecificationStructure] = {
+    val specs = findSpecifications(glob, pattern, filter, basePath, verbose, classLoader)
+    val result = specs.runOperation
+
+    result.fold(e => { e.printStackTrace; Seq() }, seq => seq)
+  }
 
 }
 
@@ -61,24 +79,6 @@ case class DefaultSpecificationsFinder(env: Env) extends SpecificationsFinder {
           orElse(logger.warn("[warn] cannot create specification "+name).as(None: Option[SpecificationStructure]))
       }.map(_.flatten)
     }
-
-  /**
-   * @param glob a path to a directory containing scala files (it can be a glob: i.e. "dir/**/*spec.scala")
-   * @param pattern a regular expression which is supposed to match an object/class name extending a Specification
-   * @param filter a function to filter out unwanted specifications
-   * @return specifications created from specification names
-   */
-  def specifications(glob: String                   = "**/*.scala",
-                     pattern: String                = SpecificationsFinder.specificationsPattern,
-                     filter: String => Boolean      = { (name: String) => true },
-                     basePath: DirectoryPath        = DirectoryPath.unsafe(new java.io.File("src/test/scala").getAbsolutePath),
-                     verbose: Boolean               = false,
-                     classLoader: ClassLoader       = Thread.currentThread.getContextClassLoader): Seq[SpecificationStructure] = {
-    val specs = findSpecifications(glob, pattern, filter, basePath, verbose, classLoader)
-    val result = specs.runOperation
-
-    result.fold(e => { e.printStackTrace; Seq() }, seq => seq)
-  }
 
   /**
    * @param glob a path to a directory containing scala files (it can be a glob: i.e. "dir/**/*spec.scala")
@@ -165,7 +165,7 @@ case class DefaultSpecificationsFinder(env: Env) extends SpecificationsFinder {
 
 object SpecificationsFinder {
 
-  def default: SpecificationsFinder =
+  val default: SpecificationsFinder =
     DefaultSpecificationsFinder(EnvDefault.default)
 
   /** base path for the specification files */

@@ -75,7 +75,7 @@ Here is something you can do to automatically create an index page for your spec
 
 import org.specs2._
 import specification.core._
-import runner.SpecificationsFinder._
+import runner.SpecificationsFinder.default._
 
 class index extends Specification { def is =
 
