@@ -3,21 +3,22 @@ package specification
 package script
 
 /**
- * A Script is responsible for analysing a piece of text and creating a sequence of fragments.
+ * A Script is an object responsible for analysing a piece of text and creating a sequence of fragments.
  *
- * It usually uses a ScriptTemplate specifying how to parse the text into block of lines that the Script
- * knows how to transform to fragments.
+ * It is first created with a list of fragments executions (some code) and when the `fragments` method is called
+ * it can associate each execution to some portion of text according to a template.
  *
  * For example a GWT script (a `Scenario`) stores functions to create Given/When/Then steps and examples and the
- * LastLinesScriptTemplate extract the last lines of a piece of text and divides them into blocks of Given/When/Then lines
+ * `LastLinesScriptTemplate` extracts the last lines of a piece of text, divides them into blocks of Given/When/Then lines
  * based on the number of steps in the Scenario.
  *
+ * See the GWTSpec in the examples module
  */
 trait Script {
   /** @return the title of the script */
   def title: String
 
-  /** create fragments corresponding on this sequence based on a piece of text */
+  /** parse the passed text and return a list of corresponding fragments */
   def fragments(text: String): FragmentsSeq
 
   /** @return true if this object marks the beginning of the script */
@@ -31,9 +32,6 @@ trait ScriptLines
 
 /**
  * A ScriptTemplate parses some text to create ScriptLines that the associated script knows how to translate to Fragments.
- *
- * For example a script.Specification has a Script which takes text and asks the `BulletedExamplesTemplate` to return
- * FragmentsScriptLines containing Text fragments for normal text and Examples for text that's starting with `+`
  */
 trait ScriptTemplate[T <: Script, L <: ScriptLines] {
   def lines(text: String, script: T): L
