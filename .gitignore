@@ -6,6 +6,7 @@
 .jvmopts
 .vscode
 .metals
+project/metals.sbt
 .bloop
 
 **/*.hydra

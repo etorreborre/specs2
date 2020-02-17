@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat
 // shadow sbt-scalajs' crossProject and CrossType until Scala.js 1.0.0 is released
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
+enablePlugins(ScalaJSPlugin)
+
 /** MAIN PROJECT */
 lazy val specs2 = project.in(file(".")).
   enablePlugins(GitBranchPrompt, SitePlugin, GhpagesPlugin).
@@ -30,8 +32,8 @@ lazy val specs2Settings = Seq(
   specs2Version in GlobalScope := version.value,
   scalazVersion in GlobalScope := "7.2.28",
   specs2ShellPrompt,
-  scalaVersion := "2.12.10",
-  crossScalaVersions := Seq(scalaVersion.value, scala211, "2.13.1"))
+  scalaVersion := "2.13.1",
+  crossScalaVersions := Seq(scalaVersion.value, scala211, "2.12.10"))
 
 lazy val versionSettings =
   Seq(
