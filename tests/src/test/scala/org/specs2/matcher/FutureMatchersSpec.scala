@@ -73,7 +73,7 @@ class FutureMatchersSpec extends Specification with ResultMatchers with specific
 
   def e3 = {
     val thrown = new mutable.Specification with FutureMatchers {
-      "timeout ko" in new Scope {
+      "timeout ko" in {
         Future {
           try sleep(100) catch { case _: InterruptedException => () }
           1 must_== 2

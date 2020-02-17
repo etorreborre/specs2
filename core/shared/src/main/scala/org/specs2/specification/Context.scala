@@ -8,7 +8,7 @@ import org.specs2.fp._
 /**
  * generic trait for Before, After, Around
  */
-trait Context extends Scope {
+trait Context {
   def apply[T : AsResult](a: =>T): Result
 }
 
@@ -175,12 +175,6 @@ object Fixture {
     }
   }
 }
-
-/**
- * Marker trait that is used to create a new scope with variables and implicitly converted to a Success in a mutable
- * Specification
- */
-trait Scope extends matcher.Scope
 
 /**
  * This class is used to evaluate a Context as a sequence of results by side-effects.

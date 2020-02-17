@@ -51,4 +51,3 @@ object MustThrownMatchers extends MustThrownMatchers with NoMatchResultStackTrac
 
 trait ShouldThrownMatchers extends Matchers with ShouldThrownExpectations
 object ShouldThrownMatchers extends ShouldThrownMatchers with NoMatchResultStackTrace
-

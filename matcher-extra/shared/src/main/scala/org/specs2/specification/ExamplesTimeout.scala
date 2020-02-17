@@ -1,12 +1,11 @@
 package org.specs2
 package specification
 
+import core._
 import execute._
-import org.specs2.concurrent.ExecutionEnv
-import specification.core._
+import concurrent.ExecutionEnv
 
 import scala.concurrent.duration._
-
 import scala.concurrent.{Await, Future}
 
 /**
@@ -42,4 +41,3 @@ trait AroundTimeout {
 }
 
 object AroundTimeout extends AroundTimeout
-

@@ -10,7 +10,6 @@ import specification.process.DefaultExecutor
 import sys._
 import execute._
 import matcher._
-import _root_.org.specs2.mutable.{Around => MAround, Before => MBefore, After => MAfter}
 import fp.syntax._
 
 case class ContextSpec(env: Env) extends Spec with ResultMatchers with OwnEnv { def is = s2"""
@@ -80,12 +79,7 @@ case class ContextSpec(env: Env) extends Spec with ResultMatchers with OwnEnv { 
    if it executes ok, nothing is printed, it is a silent Success                                           $step2
    otherwise, it is reported as an Error                                                                   $step3
 
- In a mutable spec
-   the before code must be called before the body code                                                     $mutableStep1
-   the after code must be called after the body code                                                       $mutableStep2
-   the around code must be called around the body code                                                     $mutableStep3
-   the around method must rethrow failed results as exceptions                                             $mutableStep4
-                                                                                                           """
+"""
 
   implicit val arguments = main.Arguments()
 
@@ -122,26 +116,6 @@ case class ContextSpec(env: Env) extends Spec with ResultMatchers with OwnEnv { 
   def step1 = { val d = data(); d.executing(d.firstThenEx1).prints("first", "e1") }
   def step2 = { val d = data(); d.executeBodies(d.silentFirstThenEx1).map(_.message) must_== List("", "success") }
   def step3 = { val d = data(); d.executeBodies(d.failingFirstThenEx1).map(_.message) must_== List("java.lang.RuntimeException: error", "success") }
-
-
-  def mutableStep1 = {
-    val d = data(); import d._
-    executing("e1" ! new beforeMutableContext { println("body"); 1 must_== 1 }).prints("before", "body")
-  }
-
-  def mutableStep2 = {
-    val d = data(); import d._
-    executing("e1" ! new afterMutableContext { println("body"); 1 must_== 1 }).prints("body", "after")
-  }
-
-  def mutableStep3 = { val d = data(); import d._
-    executing("e1" ! new aroundMutableContext { println("body"); 1 must_== 1 }).prints("before", "body", "after")
-  }
-
-  def mutableStep4 = {
-    val d = data(); import d._
-    executing("e1" ! new aroundMutableContext { 1 must_== 2 }).results.head must beFailing
-  }
 
   case class data() extends StringOutput with ContextData {
     def executeBodies(ex: Fragment): List[Result] =
@@ -196,15 +170,6 @@ trait ContextData extends StandardResults with FragmentsFactory with ContextsFor
     def after = println("after")
   }
   trait aroundContext extends Around {
-    def around[R : AsResult](r: =>R) = { println("before"); try { AsResult(r) } finally { println("after") }}
-  }
-  trait beforeMutableContext extends MBefore {
-    def before = println("before")
-  }
-  trait afterMutableContext extends MAfter {
-    def after = println("after")
-  }
-  trait aroundMutableContext extends MAround with MustThrownExpectations {
     def around[R : AsResult](r: =>R) = { println("before"); try { AsResult(r) } finally { println("after") }}
   }
 

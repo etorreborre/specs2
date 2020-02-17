@@ -229,7 +229,7 @@ lazy val matcherExtra = crossProject(JSPlatform, JVMPlatform).in(file("matcher-e
   ).
   jsSettings(depends.jsTest, commonJsSettings).
   jvmSettings(depends.jvmTest, commonJvmSettings).
-  dependsOn(matcher, core % "test->test")
+  dependsOn(matcher, core, core % "test->test")
 
 lazy val matcherExtraJS = matcherExtra.js
 lazy val matcherExtraJVM = matcherExtra.jvm

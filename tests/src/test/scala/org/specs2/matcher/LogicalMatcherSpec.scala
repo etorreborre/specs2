@@ -108,13 +108,16 @@ Custom
   def or5 = ("eric" must (beMatching("a.*") or beMatching("z.*"))) returns
             "'eric' doesn't match 'a.*'; 'eric' doesn't match 'z.*'"
 
-  def or6 = new Scope with MustThrownMatchers { "eric" must (beMatching("a.*") or beMatching("e.*"))  }
+  def or6 = {
+    import MustThrownMatchers._
+    createMustExpectable("eric").must(MustThrownMatchers.beMatching("a.*") or MustThrownMatchers.beMatching("e.*"))
+  }
 
   def or7 = ("eric" must be matching("e.*")) or ("eric" must be matching(".*d"))
   def or8 = {
     val out = new StringOutput {}
-    ("eric" must be matching("e.*")) or { out.println("DONT"); "torreborre" must be matching(".*tor.*") }
-    out.messages must not contain("DONT")
+    ("eric" must be matching("e.*")) or { out.println("DON'T"); "torreborre" must be matching(".*tor.*") }
+    out.messages must not contain("DON'T")
   }
 
   def or9 = ((true === false) or (true === true) or (true === false)) must beSuccessful
@@ -129,8 +132,8 @@ Custom
   def and2 = ("eric" must be matching("e.*")) and ("torreborre" must be matching(".*tor.*"))
   def and3 = {
     val out = new StringOutput {}
-    ("eric" must be matching("x.*")) and { out.println("DONT"); "torreborre" must be matching(".*tor.*") }
-    out.messages must not contain("DONT")
+    ("eric" must be matching("x.*")) and { out.println("DON'T"); "torreborre" must be matching(".*tor.*") }
+    out.messages must not contain("DON'T")
   }
   def and4 = ((true === true) and (true === false) and (true === true)) must beFailing
 

@@ -152,7 +152,6 @@ $AndIfYouWantToKnowMore
 
  * read about $specs2 ${"execution model" ~/ Execution} to understand how `Examples` and `Steps` are being executed
  * use ${("`Context` objects" ~ ContextObjects).mute} to create contexts for just a few examples in the specification
- * use ${("traits and`Scopes`" ~ Scopes).mute} to create contexts in unit specifications where you can access state directly on variables
 
 $vid
 """

@@ -35,24 +35,24 @@ class ThrownExpectationsSpec extends Spec with ResultMatchers {
   def execute[T](t: =>T) = ResultExecution.execute(t)(_ => Success())
 }
 object ThrownExpectationsSpecData {
-  def body1 = new MustThrownExpectations with matcher.Scope {
+  def body1 = new MustThrownExpectations {
     1 must_== 2; success
   }
-  def body2 = new ShouldThrownExpectations with matcher.Scope {
+  def body2 = new ShouldThrownExpectations {
     1 should_== 2; success
   }
-  def body3 = new MustThrownExpectations with matcher.Scope {
+  def body3 = new MustThrownExpectations {
     1 must_== 2; success
   }
-  def body4 = new ShouldThrownExpectations with matcher.Scope {
+  def body4 = new ShouldThrownExpectations {
     1 should_== 2; success
   }
-  def body5 = new MustThrownExpectations with matcher.Scope with DataTables with Debug {
+  def body5 = new MustThrownExpectations with DataTables with Debug {
     "a" | "b" | "c" |>
     1   ! 1   ! 2   |
     1   ! 1   ! 3   | { (a, b, c) => (a+b) must_== c }
   }
-  def body6 = new MustThrownExpectations with matcher.Scope {
+  def body6 = new MustThrownExpectations {
     var i = 0
     checkResultFailure { i += 1; success }
   }

@@ -26,17 +26,19 @@ class MatchResultCombinatorsSpec extends mutable.Spec with ResultMatchers with M
 
   "Match results must not be evaluated twice when failing with and" >> {
     "when the first match is failing" >> {
-      var evaluated = 0;
+      var evaluated: Int = 0
+
       {evaluated += 1; 1 must_== 2} must beFailing
       evaluated === 1
     }
-    "when the second match is failing" >> new StringOutput with specification.Scope {
-      def printMsg(m: String) = println(m)
-      def beKo: Matcher[Int] = (i: Int) => ({printMsg("ko"); false}, "ko")
-      def beOk: Matcher[Int] = (i: Int) => ({printMsg("ok"); true}, "ok")
+    "when the second match is failing" >> {
+      val output = new StringOutput {}
+
+      def beKo: Matcher[Int] = (i: Int) => ({ output.println("ko"); false}, "ko")
+      def beOk: Matcher[Int] = (i: Int) => ({ output.println("ok"); true}, "ok")
 
       (1 must beOk and beKo) must throwA[MatchFailureException[_]]
-      messages === Seq("ok", "ko")
+      output.messages === Seq("ok", "ko")
     }
   }
 

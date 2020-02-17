@@ -33,13 +33,6 @@ class AllExpectationsSpec(val env: Env) extends Spec with OwnEnv {
       executedSelected.expectations === 4
       executedSelected.failures === 2
     }
-    "work ok on a mutable specification with Scopes" >> {
-      executedWithScope.hasIssues must beTrue
-      executedWithScope.expectations === 3
-      executedWithScope.failures === 1
-      executedWithScopeIssues.head.message === "1 != 2 [AllExpectationsSpecification.scala:31]\n"+
-                                               "1 != 3 [AllExpectationsSpecification.scala:32]"
-    }
     "evaluate an exception" >> {
       executedException.hasIssues must beTrue
       executedException.expectations === 1

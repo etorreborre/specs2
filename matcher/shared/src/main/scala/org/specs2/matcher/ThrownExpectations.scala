@@ -77,7 +77,7 @@ trait ThrownExpectables extends ExpectationsCreation {
     r
   }
 
-  /** this method can be overriden to throw exceptions when checking the match result */
+  /** this method can be overridden to throw exceptions when checking the match result */
   override protected def checkMatchResultFailure[T](m: MatchResult[T]) = {
     m match {
       case f@MatchFailure(_, _, _, _, _) => throw new MatchFailureException(f)
@@ -136,23 +136,6 @@ object ThrownExpectations extends ThrownExpectations
 trait NoThrownExpectations extends Expectations {
   override protected def checkResultFailure(r: =>Result) = r
   override protected def checkMatchResultFailure[T](m: MatchResult[T]): MatchResult[T] = m
-}
-
-/**
- * This trait represents any Scope that is used to enclose expectations which might be thrown
- */
-trait Scope {
-  if (this.isInstanceOf[ExpectationsCreation] && !this.isInstanceOf[ThrownExpectationsCreation])
-    throw new RuntimeException("You shouldn't mixin `org.specs2.matcher.MustExpectations` or `org.specs2.matcher.ShouldExpectations` with `Scope`, use `org.specs2.matcher.MustThrownExpectations` or `org.specs2.matcher.ShouldThrownExpectations` instead.")
-}
-
-object Scope {
-  /** typeclass to transform a Scope to a Result */
-  implicit def scopeAsResult[S <: Scope]: AsResult[S] = new AsResult[S] {
-    def asResult(t: =>S): Result = AsResult.safely { Result.resultOrSuccess(t) }
-  }
-  /** typeclass to transform a Scope to a Result */
-  implicit def scopeToResult(t: =>Scope): Result = AsResult(t)
 }
 
 /**
