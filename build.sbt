@@ -17,8 +17,8 @@ lazy val specs2 = project.in(file(".")).
     packagedArtifacts := Map.empty
   ).aggregate(
     fpJVM, commonJVM, matcherJVM, coreJVM, matcherExtraJVM, html,
-    analysisJVM, shapelessJVM, formJVM, markdownJVM, junitJVM, scalacheckJVM,
-    tests, fpJS, commonJS, matcherJS, coreJS, matcherExtraJS, analysisJS,
+    shapelessJVM, formJVM, markdownJVM, junitJVM, scalacheckJVM,
+    tests, fpJS, commonJS, matcherJS, coreJS, matcherExtraJS,
     shapelessJS, formJS, markdownJS, junitJS, scalacheckJS
   )
 
@@ -96,19 +96,6 @@ def commonJvmSettings =
   testingJvmSettings
 
 /** MODULES (sorted in alphabetical order) */
-lazy val analysis = crossProject(JSPlatform, JVMPlatform).in(file("analysis")).
-  settings(
-    libraryDependencies ++= depends.classycle ++ depends.compiler(scalaOrganization.value, scalaVersion.value),
-    commonSettings,
-    name := "specs2-analysis").
-  jvmSettings(
-    depends.jvmTest,
-    commonJvmSettings).
-  jsSettings(commonJsSettings).
-  dependsOn(common % "test->test", core, matcher, scalacheck % Test)
-
-lazy val analysisJVM = analysis.jvm
-lazy val analysisJS = analysis.js
 
 lazy val common = crossProject(JSPlatform, JVMPlatform).in(file("common")).
   settings(
@@ -155,7 +142,7 @@ lazy val examples = crossProject(JSPlatform, JVMPlatform).in(file("examples")).
   jvmSettings(depends.jvmTest, commonJvmSettings).
   dependsOn(common, matcher, core, matcherExtra, junit, scalacheck)
 
-lazy val examplesJVM = examples.jvm.dependsOn(analysisJVM, formJVM, html, markdownJVM)
+lazy val examplesJVM = examples.jvm.dependsOn(formJVM, html, markdownJVM)
 lazy val examplesJS = examples.js
 
 lazy val fp = crossProject(JSPlatform, JVMPlatform).in(file("fp")).
@@ -242,14 +229,14 @@ lazy val matcherExtra = crossProject(JSPlatform, JVMPlatform).in(file("matcher-e
   ).
   jsSettings(depends.jsTest, commonJsSettings).
   jvmSettings(depends.jvmTest, commonJvmSettings).
-  dependsOn(analysis, matcher, core % "test->test")
+  dependsOn(matcher, core % "test->test")
 
 lazy val matcherExtraJS = matcherExtra.js
 lazy val matcherExtraJVM = matcherExtra.jvm
 
 lazy val pom = Project(id = "pom", base = file("pom")).
   settings(commonSettings).
-  dependsOn(commonJVM, matcherJVM, matcherExtraJVM, coreJVM, html, analysisJVM,
+  dependsOn(commonJVM, matcherJVM, matcherExtraJVM, coreJVM, html,
     shapelessJVM, formJVM, markdownJVM, junitJVM, scalacheckJVM)
 
 lazy val shapeless = crossProject(JSPlatform, JVMPlatform).
@@ -386,11 +373,11 @@ lazy val apiSettings = Seq(
   Seq(scalacOptions in (Compile, doc) += "-Ymacro-no-expand")
 
 lazy val aggregateCompile = ScopeFilter(
-  inProjects(fpJVM, commonJVM, matcherJVM, matcherExtraJVM, coreJVM, html, analysisJVM, formJVM, shapelessJVM, markdownJVM, junitJVM, scalacheckJVM),
+  inProjects(fpJVM, commonJVM, matcherJVM, matcherExtraJVM, coreJVM, html, formJVM, shapelessJVM, markdownJVM, junitJVM, scalacheckJVM),
   inConfigurations(Compile))
 
 lazy val aggregateTest = ScopeFilter(
-  inProjects(fpJVM, commonJVM, matcherJVM, matcherExtraJVM, coreJVM, html, analysisJVM, formJVM, shapelessJVM, markdownJVM, junitJVM, scalacheckJVM),
+  inProjects(fpJVM, commonJVM, matcherJVM, matcherExtraJVM, coreJVM, html, formJVM, shapelessJVM, markdownJVM, junitJVM, scalacheckJVM),
   inConfigurations(Test))
 
 def maybeMarkProvided(dep: ModuleID): ModuleID =

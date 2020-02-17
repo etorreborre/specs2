@@ -231,7 +231,6 @@ $NowLearnTo
  - use a different equality function or display other failure messages with the ${("Diffable typeclass" ~ DiffableTypeclass).mute}
  - use ${"datatables" ~/ UseDatatables} to conveniently group several examples into one
  - use ${"ScalaCheck" ~/ UseScalaCheck} to generate and verify data for your examples
- - use ${"Mockito " ~/ UseMockito} to mock the interactions with another system
  - use ${"Forms" ~/ UseForms} to display actual and expected values in html tables
 
 $vid
@@ -242,7 +241,6 @@ $AndIfYouWantToKnowMore
  - use ${"syntactic variations" ~/ SyntacticVariations} on the `value must matcher` form
  - implement the ${"`AsResult` typeclass" ~/ AsResultTypeclass} to go beyond matchers
  - use the ${"`beA[CaseClass]`" ~/ CaseClassMatchers} matcher to automatically create matchers for case classes
- - use the ${"dependencies matchers" ~/ DependencyMatchers} to specify dependencies between packages
  - use $specs2 matchers ${s"outside <s2>specs2</s2>" ~/ OutsideSpecs2}
 
 $vid

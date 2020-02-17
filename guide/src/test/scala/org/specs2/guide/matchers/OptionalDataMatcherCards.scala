@@ -26,6 +26,5 @@ object OptionalLanguageMatcherCards extends Cards {
   def cards = Seq(
     ParserMatchers,
     TypecheckMatchers,
-    InterpreterMatchers,
-    DependencyMatchers)
+    InterpreterMatchers)
 }

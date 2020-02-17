@@ -5,8 +5,6 @@ import scala.reflect.ClassTag
 
 /**
  * This trait adds some syntactic sugar to create a sequence of classes from the declaration of their types
- *
- * This is used in Mockito to specify extra mocked interfaces
  */
 trait ClassesOf {
 
@@ -28,4 +26,3 @@ trait ClassesOf {
 }
 
 object ClassesOf extends ClassesOf
-

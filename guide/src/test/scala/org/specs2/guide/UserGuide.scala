@@ -26,7 +26,6 @@ object UserGuide extends UserGuidePage { def is = "User Guide".title ^ s2"""
  ${link(Runners).hide}
  ${link(Contexts).hide}
  ${link(UseScalaCheck).hide}
- ${link(UseMockito).hide}
  ${link(Installation).hide}
  ${link(HowTo).hide}
  ${link(DetailedTopics).hide}

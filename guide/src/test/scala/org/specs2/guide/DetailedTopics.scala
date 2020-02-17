@@ -19,7 +19,6 @@ Create a new type of Result                                          | ${link(As
 Other build tools                                                    | ${link(OtherBuildTools).mute}
 Syntax variations with matchers                                      | ${link(matchers.SyntacticVariations).mute}
 Matchers for case classes                                            | ${link(matchers.CaseClassMatchers).mute}
-Matchers for packages dependencies                                   | ${link(matchers.DependencyMatchers).mute}
 Use $specs2 matchers outside of $specs2                              | ${link(matchers.OutsideSpecs2).mute}
 Matchers reference card                                              | ${link(matchers.ReferenceCard).mute}
 Arguments reference card                                             | ${link(ArgumentsReference).mute}
@@ -31,7 +30,6 @@ Arguments reference card                                             | ${link(Ar
   link(AutoExamples).hide ^
   link(matchers.CaseClassMatchers).hide ^
   link(UseDatatables).hide ^
-  link(matchers.DependencyMatchers).hide ^
   link(UseForms).hide ^
   link(CreateOnlineSpecifications).hide ^
   link(Environment).hide ^

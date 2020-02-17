@@ -6,8 +6,6 @@ import scala.scalanative.sbtplugin.ScalaNativePlugin.autoImport._
 
 object depends {
 
-  lazy val classycle = Seq("org.specs2" % "classycle" % "1.4.3")
-
   def compiler(scalaOrganization: String, scalaVersion: String) = Seq(scalaOrganization % "scala-compiler" % scalaVersion)
 
   def reflect(scalaOrganization: String, scalaVersion: String) = scalaOrganization % "scala-reflect" % scalaVersion
