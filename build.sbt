@@ -16,9 +16,9 @@ lazy val specs2 = project.in(file(".")).
     name := "specs2",
     packagedArtifacts := Map.empty
   ).aggregate(
-    fpJVM, catsJVM, commonJVM, matcherJVM, coreJVM, matcherExtraJVM, html,
+    fpJVM, commonJVM, matcherJVM, coreJVM, matcherExtraJVM, html,
     analysisJVM, shapelessJVM, formJVM, markdownJVM, junitJVM, scalacheckJVM,
-    tests, fpJS, catsJS, commonJS, matcherJS, coreJS, matcherExtraJS, analysisJS,
+    tests, fpJS, commonJS, matcherJS, coreJS, matcherExtraJS, analysisJS,
     shapelessJS, formJS, markdownJS, junitJS, scalacheckJS
   )
 
@@ -81,8 +81,6 @@ lazy val commonJsSettings = Seq(
 
 lazy val specs2Version = settingKey[String]("defines the current specs2 version")
 lazy val shapelessVersion = "2.3.3"
-lazy val catsVersion = "2.0.0"
-lazy val catsEffectVersion = "2.0.0"
 
 val commonSettings =
   coreDefaultSettings  ++
@@ -111,22 +109,6 @@ lazy val analysis = crossProject(JSPlatform, JVMPlatform).in(file("analysis")).
 
 lazy val analysisJVM = analysis.jvm
 lazy val analysisJS = analysis.js
-
-lazy val cats = crossProject(JSPlatform, JVMPlatform).in(file("cats")).
-  settings(
-    commonSettings,
-    libraryDependencies ++= Seq(
-      "org.typelevel" %% "cats-core" % catsVersion,
-      "org.typelevel" %% "cats-effect" % catsEffectVersion
-    ),
-    name := "specs2-cats"
-  ).
-  jsSettings(depends.jsTest, commonJsSettings).
-  jvmSettings(depends.jvmTest, commonJvmSettings).
-  dependsOn(matcher, core % "test->test")
-
-lazy val catsJS = cats.js
-lazy val catsJVM = cats.jvm
 
 lazy val common = crossProject(JSPlatform, JVMPlatform).in(file("common")).
   settings(
@@ -267,7 +249,7 @@ lazy val matcherExtraJVM = matcherExtra.jvm
 
 lazy val pom = Project(id = "pom", base = file("pom")).
   settings(commonSettings).
-  dependsOn(catsJVM, commonJVM, matcherJVM, matcherExtraJVM, coreJVM, html, analysisJVM,
+  dependsOn(commonJVM, matcherJVM, matcherExtraJVM, coreJVM, html, analysisJVM,
     shapelessJVM, formJVM, markdownJVM, junitJVM, scalacheckJVM)
 
 lazy val shapeless = crossProject(JSPlatform, JVMPlatform).
@@ -312,8 +294,7 @@ lazy val tests = Project(id = "tests", base = file("tests")).
   junitJVM     % "test->test",
   examplesJVM  % "test->test",
   matcherExtraJVM,
-  html,
-  catsJVM)
+  html)
 
 lazy val specs2ShellPrompt = shellPrompt in ThisBuild := { state =>
   val name = Project.extract(state).currentRef.project

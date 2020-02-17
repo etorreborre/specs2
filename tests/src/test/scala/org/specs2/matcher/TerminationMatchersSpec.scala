@@ -1,8 +1,8 @@
 package org.specs2
 package matcher
 
-import java.util.concurrent._
-import scala.concurrent.duration._
+import java.util.concurrent.ArrayBlockingQueue
+import scala.concurrent._, duration._
 
 import io.StringOutput
 import specification.core.{Env, OwnExecutionEnv}
@@ -55,9 +55,9 @@ class TerminationMatchersSpec(val env: Env) extends Specification with Terminati
   def termination8 = {
     val queue1 = new ArrayBlockingQueue[Int](1)
     var stop = true
-    def Action() = scalaz.concurrent.Future({ while (stop) { sleepFor(10)}; queue1.add(1) }).run
-    def action2() = scalaz.concurrent.Future({ stop = false }).run
-    Action() must terminate.onlyWhen(action2())
+    def action1 = Await.result(Future({ while (stop) { sleepFor(10) }; queue1.add(1) }), Duration.Inf)
+    def action2 = Await.result(Future({ sleepFor(10); stop = false; 1 }), Duration.Inf)
+    action1 must terminate.onlyWhen(action2)
   }
 
   def termination9 = {
