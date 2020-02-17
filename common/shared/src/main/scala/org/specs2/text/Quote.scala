@@ -15,6 +15,7 @@ trait Quote:
     if (a == null) quote("null")
     else
       a match
+        case option: Option[_]      => quote(option.notNull)
         case ar: Array[_]           => ar.notNull
         case map: Map[_,_]          => map.notNull
         case it: TraversableOnce[_] => it.notNull
