@@ -17,9 +17,9 @@ lazy val specs2 = project.in(file(".")).
     packagedArtifacts := Map.empty
   ).aggregate(
     fpJVM, catsJVM, commonJVM, matcherJVM, coreJVM, matcherExtraJVM, scalazJVM, html,
-    analysisJVM, shapelessJVM, formJVM, markdownJVM, gwtJVM, junitJVM, scalacheckJVM,
+    analysisJVM, shapelessJVM, formJVM, markdownJVM, junitJVM, scalacheckJVM,
     tests, fpJS, catsJS, commonJS, matcherJS, coreJS, matcherExtraJS, scalazJS, analysisJS,
-    shapelessJS, formJS, markdownJS, gwtJS, junitJS, scalacheckJS
+    shapelessJS, formJS, markdownJS, junitJS, scalacheckJS
   )
 
 val scala211 = "2.11.12"
@@ -175,7 +175,7 @@ lazy val examples = crossProject(JSPlatform, JVMPlatform).in(file("examples")).
   jvmSettings(depends.jvmTest, commonJvmSettings).
   dependsOn(common, matcher, core, matcherExtra, junit, scalacheck)
 
-lazy val examplesJVM = examples.jvm.dependsOn(analysisJVM, formJVM, gwtJVM, html, markdownJVM)
+lazy val examplesJVM = examples.jvm.dependsOn(analysisJVM, formJVM, html, markdownJVM)
 lazy val examplesJS = examples.js
 
 lazy val fp = crossProject(JSPlatform, JVMPlatform).in(file("fp")).
@@ -208,20 +208,6 @@ lazy val guide = project.in(file("guide")).
     name := "specs2-guide",
     scalacOptions in Compile --= Seq("-Xlint", "-Ywarn-unused-import")).
   dependsOn(examplesJVM % "compile->compile;test->test", scalazJVM, shapelessJVM)
-
-lazy val gwt = crossProject(JSPlatform, JVMPlatform).
-  crossType(CrossType.Pure).
-  in(file("gwt")).
-  settings(
-    commonSettings,
-    libraryDependencies += "com.chuusai" %%% "shapeless" % shapelessVersion,
-    name := "specs2-gwt").
-  jvmSettings(depends.jvmTest, commonJvmSettings).
-  jsSettings(depends.jsTest, commonJsSettings).
-  dependsOn(core, matcherExtra, scalacheck)
-
-lazy val gwtJVM = gwt.jvm
-lazy val gwtJS = gwt.js
 
 lazy val html = project.in(file("html")).
   settings(
@@ -284,7 +270,7 @@ lazy val matcherExtraJVM = matcherExtra.jvm
 lazy val pom = Project(id = "pom", base = file("pom")).
   settings(commonSettings).
   dependsOn(catsJVM, commonJVM, matcherJVM, matcherExtraJVM, coreJVM, scalazJVM, html, analysisJVM,
-    shapelessJVM, formJVM, markdownJVM, gwtJVM, junitJVM, scalacheckJVM)
+    shapelessJVM, formJVM, markdownJVM, junitJVM, scalacheckJVM)
 
 lazy val shapeless = crossProject(JSPlatform, JVMPlatform).
   crossType(CrossType.Pure).
@@ -438,11 +424,11 @@ lazy val apiSettings = Seq(
   Seq(scalacOptions in (Compile, doc) += "-Ymacro-no-expand")
 
 lazy val aggregateCompile = ScopeFilter(
-  inProjects(fpJVM, commonJVM, matcherJVM, matcherExtraJVM, coreJVM, html, analysisJVM, formJVM, shapelessJVM, markdownJVM, gwtJVM, junitJVM, scalacheckJVM),
+  inProjects(fpJVM, commonJVM, matcherJVM, matcherExtraJVM, coreJVM, html, analysisJVM, formJVM, shapelessJVM, markdownJVM, junitJVM, scalacheckJVM),
   inConfigurations(Compile))
 
 lazy val aggregateTest = ScopeFilter(
-  inProjects(fpJVM, commonJVM, matcherJVM, matcherExtraJVM, coreJVM, html, analysisJVM, formJVM, shapelessJVM, markdownJVM, gwtJVM, junitJVM, scalacheckJVM),
+  inProjects(fpJVM, commonJVM, matcherJVM, matcherExtraJVM, coreJVM, html, analysisJVM, formJVM, shapelessJVM, markdownJVM, junitJVM, scalacheckJVM),
   inConfigurations(Test))
 
 def maybeMarkProvided(dep: ModuleID): ModuleID =

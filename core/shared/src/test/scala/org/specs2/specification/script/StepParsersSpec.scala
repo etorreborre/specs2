@@ -1,9 +1,9 @@
 package org.specs2
 package specification
+package script
 
 import matcher._
-import script.StepParser
-import script.StepParsers._
+import StepParsers._
 
 class StepParsersSpec extends Spec with TypedEqual { def is = s2"""
 

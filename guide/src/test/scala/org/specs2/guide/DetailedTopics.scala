@@ -5,7 +5,6 @@ object DetailedTopics extends UserGuidePage { def is = sortedLinks ^ s2"""
  Topic                                                               | See
 ------------------------------------------------------               | ---------------
 Create an example with just some code as the description             | ${link(AutoExamples).mute}
-Use the Given/When/Then style                                        | ${link(GivenWhenThenStyle).mute}
 Gather all expectations in an example                                | ${link(GetAllExpectations).mute}
 Reference another specification                                      | ${link(ReferenceOtherSpecifications).mute}
 Add formatting to a specification                                    | ${link(SpecificationFormatting).mute}
@@ -39,7 +38,6 @@ Arguments reference card                                             | ${link(Ar
   link(ExecutionEnvironments).hide ^
   link(FragmentsApi).hide ^
   link(GetAllExpectations).hide ^
-  link(GivenWhenThenStyle).hide ^
   link(OtherBuildTools).hide ^
   link(matchers.OutsideSpecs2).hide ^
   link(matchers.ReferenceCard).hide ^

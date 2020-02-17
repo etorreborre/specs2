@@ -29,7 +29,7 @@ s2"""
 
 #### Delimited values
 
-We can reuse the `StepParsers` presented in the ${"Given/When/Then style" ~/ GivenWhenThenStyle } to extract the values we wish to use: ${snippet{
+We can reuse the `StepParsers` to extract the values we wish to use: ${snippet{
 s2"""
  {1971-01-01} is a correct date $correct
  {1} plus {1} is {2}            $addition

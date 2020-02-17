@@ -136,7 +136,6 @@ $AndIfYouWantToKnowMore
  - create ${"*auto-examples*" ~/ AutoExamples} where the code *is* the description of the `Example`
  - integrate ${"snippets of code" ~/ CaptureSnippets} to your specification
  - use ${"lightweight specifications" ~/ LightweightSpecs} to reduce the number of implicits in scope
- - use the ${"Given/When/Then style" ~/ GivenWhenThenStyle} to structure specifications
  - use ${"Forms" ~/ UseForms} to create executable HTML tables in your specification
  - use the ${"command line arguments" ~/ UseCommandLineArguments} to define the body of an example
  - add ${"debug statements" ~/ DebugStatements}

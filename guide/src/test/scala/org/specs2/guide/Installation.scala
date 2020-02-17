@@ -60,15 +60,15 @@ Depending on the $specs2 features you want to use you will need to add more depe
  Name                    | Functionality
  ----------------------- | ----------------------------
  `specs2-matcher-extra`  | for the optional $specs2 matchers
+ `specs2-html`           | to export specifications as html
+ `specs2-form`           | to create html form-like specifications
+ `specs2-junit`          | to run specifications as JUnit tests
  `specs2-cats`           | for the [cats](https://github.com/typelevel/cats) matchers (only for `cats < 0.8.x`)
  `specs2-scalaz`         | for the [scalaz](https://github.com/scalaz/scalaz) matchers (`TaskMatcher` for example)
  `specs2-scalacheck`     | to use ScalaCheck properties in specifications
  `specs2-mock`           | to use Mockito matchers
  `specs2-analysis`       | to use the package dependencies matcher
  `specs2-gwt`            | to write given/when/then specifications
- `specs2-html`           | to export specifications as html
- `specs2-form`           | to create html form-like specifications
- `specs2-junit`          | to run specifications as JUnit tests
 
 Note: the `specs2-core` jar depends on 2 other $specs2 jars:
 
