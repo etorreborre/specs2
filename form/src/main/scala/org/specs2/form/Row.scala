@@ -54,7 +54,6 @@ case class Row(private val cellList: List[Cell]) extends Executable {
 
   /** append a new Cell */
   def add(cell: Cell) =
-    // this specific form of append is used to be compatible with both Scalaz 7.1 and 7.2
     copy(cellList = cellList :+ cell)
 
   override def equals(a: Any) = a match {

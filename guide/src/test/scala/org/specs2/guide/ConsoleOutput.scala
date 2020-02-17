@@ -47,7 +47,6 @@ For example if you just want to show text and failures you can use `showonly -x`
 The `tracefilter` argument uses include/exclude patterns to define an instance of the `org.specs2.control.StackTraceFilter` trait which will filter stacktraces. By default the `DefaultStackTraceFilter` filter will exclude lines matching the following packages:
 
  * `org.specs2`
- * `scalaz\\.`
  * `scala\\.`, `java\\.`
  * `sbt\\.`, `com.intellij`, `org.eclipse.jdt`, `org.junit`
 
@@ -165,4 +164,3 @@ Finally note that the the color support for sbt on Windows is a bit tricky. You 
 
 """
 }
-

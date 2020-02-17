@@ -38,23 +38,14 @@ Future(1 === 1).await
 Future(1 === 1).await(retries = 2, timeout = 100.millis)
 }}
 
-#### Scalaz Futures
-
-All of the above is applicable to `scalaz.concurrent.Future` by using the method `attempt` instead of `await`.
-
 #### Execution
 
-The `await`/`attempt` methods require an implicit `org.specs2.concurrent.ExecutionEnv` (see [here](org.specs2.guide.ExecutionEnvironments.html) for more details). You can pass one in the body of your examples:${snippet{
-import org.specs2.matcher.FuturezMatchers._
+The `await` method require an implicit `org.specs2.concurrent.ExecutionEnv` (see [here](org.specs2.guide.ExecutionEnvironments.html) for more details). You can pass one in the body of your examples:${snippet{
 
 class MyFutureSpec(implicit ee: ExecutionEnv) extends Specification { def is = s2"""
 
  Let's check this scala future ${
    Future(1) must be_>(0).await
- }
-
- Let's check this scalaz future ${
-   scalaz.concurrent.Future(1) must be_>(0).attempt
  }
 
 """
@@ -65,10 +56,6 @@ class MyMutableFutureSpec(implicit ee: ExecutionEnv) extends mutable.Specificati
 
   "Let's check this scala future" >> {
     Future(1) must be_>(0).await
-  }
-
-  "Let's check this scalaz future" >> {
-    scalaz.concurrent.Future(1) must be_>(0).attempt
   }
 
 }

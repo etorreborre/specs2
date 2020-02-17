@@ -112,18 +112,6 @@ Future(1) must be_>(0).await
 Future { Thread.sleep(100); 1 } must be_>(0).await(retries = 2, timeout = 100.millis)
 }}
 
- * use `attempt` to create a matcher that will match on `Matcher[scalaz.concurrent.Future[T]]` (this requires an ${"execution environment" ~/ ExecutionEnvironments}): ${snippet{
-  // 8<--
-  import scala.concurrent.duration._
-  import org.specs2.matcher.FuturezMatchers._
-  // 8<--
-// see the Matchers-Futures reference card on how to get an ExecutionEnv
-implicit val ee: ExecutionEnv = ???
-
-  scalaz.concurrent.Future(1) must be_>(0).attempt
-scalaz.concurrent.Future { Thread.sleep(100); 1 } must be_>(0).attempt(retries = 2, timeout = 100.millis)
-}}
-
  * use `when` or `unless` to apply a matcher only if a condition is satisfied: ${snippet{
 
 1 must be_==(2).when(false)                        // will return a success

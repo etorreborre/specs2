@@ -19,8 +19,8 @@ When we want to create a list of examples we need to return a `Fragments` object
   (1 to 3).foldLeft(Fragments.empty)((res, i) => res.append("example "+i ! { i must_== i }))
 }}
 
-Or, a bit fancier with Scalaz:${snippet{
-  // Fragments has a Monoid so you can use the foldMap method
+Or, a bit fancier with `foldMap`:${snippet{
+  // Fragments has a Monoid instance so you can use the foldMap method
   (1 to 3).toList.foldMap(i => Fragments("example "+i ! { i must_== i }))
 }}
 

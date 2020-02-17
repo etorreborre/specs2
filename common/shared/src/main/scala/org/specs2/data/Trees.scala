@@ -5,7 +5,7 @@ import org.specs2.fp._
 import Tree._
 
 /**
- * Utility methods for scalaz Trees
+ * Utility methods for Trees
  */
 trait Trees { outer =>
 

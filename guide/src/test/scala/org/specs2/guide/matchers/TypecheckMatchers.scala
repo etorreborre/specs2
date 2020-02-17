@@ -41,7 +41,7 @@ typecheck {
 // there must be not a Monoid instance for Plane
 Monoid[Plane].zero
   """
-} must failWith("could not find implicit value for .* scalaz.Monoid")
+} must failWith("could not find implicit value for .* org.specs2.fp.Monoid")
 }}
 
 #### Typechecked

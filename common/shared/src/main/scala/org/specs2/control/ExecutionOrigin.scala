@@ -26,17 +26,17 @@ trait ExecutionOrigin extends Stacktraces {
 
   lazy val excludeFromReporting: Boolean = isExecutedFromJUnitCore || isExecutedFromBazel
 
-  /** try to approximate if a specification is a specs2 one or scalaz one by passing name = org.specs2 or name = scalaz */
-  def isSpecificationFromSpecs2orScalaz(st: Seq[StackTraceElement]) = {
+  /** try to approximate if a specification is a specs2 by passing name = org.specs2 */
+  def isSpecificationFromSpecs2(st: Seq[StackTraceElement]) = {
     isFromClass({ fullClassName: String =>
       val className = fullClassName.takeWhile(_ != '$').mkString
       // this is a fix for #533 to properly recognize org.specs2.mutable.Spec
       // used by a normal user
       !className.split("\\.").last.equals("Spec") &&
-      className.endsWith("Spec") && fromSpecs2orScalaz(className)
-    }, st.takeWhile(t => fromSpecs2orScalaz(t.getClassName)))
+      className.endsWith("Spec") && fromSpecs2(className)
+    }, st.takeWhile(t => fromSpecs2(t.getClassName)))
   }
-  def fromSpecs2orScalaz = (className: String) => className.startsWith("org.specs2.") || className.startsWith("scalaz.")
+  def fromSpecs2 = (className: String) => className.startsWith("org.specs2.")
 }
 
 object ExecutionOrigin extends ExecutionOrigin

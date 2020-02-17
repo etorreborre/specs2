@@ -16,9 +16,9 @@ lazy val specs2 = project.in(file(".")).
     name := "specs2",
     packagedArtifacts := Map.empty
   ).aggregate(
-    fpJVM, catsJVM, commonJVM, matcherJVM, coreJVM, matcherExtraJVM, scalazJVM, html,
+    fpJVM, catsJVM, commonJVM, matcherJVM, coreJVM, matcherExtraJVM, html,
     analysisJVM, shapelessJVM, formJVM, markdownJVM, junitJVM, scalacheckJVM,
-    tests, fpJS, catsJS, commonJS, matcherJS, coreJS, matcherExtraJS, scalazJS, analysisJS,
+    tests, fpJS, catsJS, commonJS, matcherJS, coreJS, matcherExtraJS, analysisJS,
     shapelessJS, formJS, markdownJS, junitJS, scalacheckJS
   )
 
@@ -28,7 +28,6 @@ val scala211 = "2.11.12"
 lazy val specs2Settings = Seq(
   organization := "org.specs2",
   specs2Version in GlobalScope := version.value,
-  scalazVersion in GlobalScope := "7.2.28",
   specs2ShellPrompt,
   scalaVersion := "2.12.10",
   crossScalaVersions := Seq(scalaVersion.value, "2.13.1"))
@@ -81,7 +80,6 @@ lazy val commonJsSettings = Seq(
 )
 
 lazy val specs2Version = settingKey[String]("defines the current specs2 version")
-lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
 lazy val shapelessVersion = "2.3.3"
 lazy val catsVersion = "2.0.0"
 lazy val catsEffectVersion = "2.0.0"
@@ -207,7 +205,7 @@ lazy val guide = project.in(file("guide")).
     buildInfoSettings,
     name := "specs2-guide",
     scalacOptions in Compile --= Seq("-Xlint", "-Ywarn-unused-import")).
-  dependsOn(examplesJVM % "compile->compile;test->test", scalazJVM, shapelessJVM)
+  dependsOn(examplesJVM % "compile->compile;test->test", shapelessJVM)
 
 lazy val html = project.in(file("html")).
   settings(
@@ -269,7 +267,7 @@ lazy val matcherExtraJVM = matcherExtra.jvm
 
 lazy val pom = Project(id = "pom", base = file("pom")).
   settings(commonSettings).
-  dependsOn(catsJVM, commonJVM, matcherJVM, matcherExtraJVM, coreJVM, scalazJVM, html, analysisJVM,
+  dependsOn(catsJVM, commonJVM, matcherJVM, matcherExtraJVM, coreJVM, html, analysisJVM,
     shapelessJVM, formJVM, markdownJVM, junitJVM, scalacheckJVM)
 
 lazy val shapeless = crossProject(JSPlatform, JVMPlatform).
@@ -287,20 +285,6 @@ lazy val shapeless = crossProject(JSPlatform, JVMPlatform).
 
 lazy val shapelessJS = shapeless.js
 lazy val shapelessJVM = shapeless.jvm
-
-lazy val scalaz = crossProject(JSPlatform, JVMPlatform).in(file("scalaz")).
-  settings(
-    commonSettings,
-    libraryDependencies ++=
-      depends.scalaz(scalazVersion.value) :+
-      depends.scalazConcurrent(scalazVersion.value),
-    name := "specs2-scalaz").
-  jsSettings(depends.jsTest, commonJsSettings).
-  jvmSettings(depends.jvmTest, commonJvmSettings).
-  dependsOn(matcher, core % "test->test")
-
-lazy val scalazJS = scalaz.js
-lazy val scalazJVM = scalaz.jvm
 
 lazy val scalacheck = crossProject(JSPlatform, JVMPlatform)
   .in(file("scalacheck")).
@@ -329,7 +313,6 @@ lazy val tests = Project(id = "tests", base = file("tests")).
   examplesJVM  % "test->test",
   matcherExtraJVM,
   html,
-  scalazJVM,
   catsJVM)
 
 lazy val specs2ShellPrompt = shellPrompt in ThisBuild := { state =>
@@ -343,9 +326,7 @@ def scalaSourceVersion(scalaBinaryVersion: String) =
 lazy val compilationSettings = Seq(
   // https://gist.github.com/djspiewak/976cd8ac65e20e136f05
   unmanagedSourceDirectories in Compile ++=
-    Seq((sourceDirectory in Compile).value / s"scala-${scalaSourceVersion(scalaBinaryVersion.value)}",
-      (sourceDirectory in Compile).value / s"scala-scalaz-7.1.x",
-      (sourceDirectory in (Test, test)).value / s"scala-scalaz-7.1.x"),
+    Seq((sourceDirectory in Compile).value / s"scala-${scalaSourceVersion(scalaBinaryVersion.value)}"),
   maxErrors := 20,
   scalacOptions in Compile ++=
     Seq(

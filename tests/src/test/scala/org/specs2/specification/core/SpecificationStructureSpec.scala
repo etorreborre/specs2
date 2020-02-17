@@ -13,7 +13,7 @@ import fp.syntax._
 import matcher._
 import OperationMatchers._
 
-class SpecificationStructureSpec(val env: Env) extends Specification with ScalaCheck with DisjunctionMatchers with OwnEnv { def is = s2"""
+class SpecificationStructureSpec(val env: Env) extends Specification with ScalaCheck with OwnEnv { def is = s2"""
 
  There can be links between specifications and it is possible to sort all the dependent specifications
  so that

@@ -44,9 +44,9 @@ case class IncludeExcludeStackTraceFilter(include: Seq[String], exclude: Seq[Str
 /**
  * Factory object to build a stack trace filter from include/exclude expressions:
  *
- * .*specs2                       ==> include .*specs2 traces
- * .*specs2/scala.*               ==> include .*specs2 traces, exclude scala.* traces
- * .*specs2,scala/scalaz,eclipse  ==> include .*specs2,scala traces, exclude scalaz and eclipse traces
+ * .*specs2          ==> include .*specs2 traces
+ * .*specs2/scala.*  ==> include .*specs2 traces, exclude scala.* traces
+ * .*specs2,eclipse  ==> include .*specs2,scala traces and eclipse traces
  *
  */
 object IncludeExcludeStackTraceFilter {
@@ -68,7 +68,7 @@ object IncludeExcludeStackTraceFilter {
  */
 object DefaultStackTraceFilter extends
   IncludeExcludeStackTraceFilter(Seq(),
-    Seq("^org.specs2", "^scalaz\\.",
+    Seq("^org.specs2",
         "^java\\.", "^scala\\.",
         // this is a work-around for #415
         // when SpecificationLike is used setStacktrace is
@@ -79,7 +79,7 @@ object DefaultStackTraceFilter extends
 
   override def apply(e: Seq[StackTraceElement]): Seq[StackTraceElement] = {
     val filtered =
-      if (isSpecificationFromSpecs2orScalaz(e)) e.dropWhile(t => !isSpecificationFromSpecs2orScalaz(Seq(t)))
+      if (isSpecificationFromSpecs2(e)) e.dropWhile(t => !isSpecificationFromSpecs2(Seq(t)))
       else                                      super.apply(e)
 
     if (filtered.size >= 1000) filtered.take(200) ++ truncated(filtered.size) ++ filtered.takeRight(200)

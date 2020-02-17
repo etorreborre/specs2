@@ -12,14 +12,6 @@ object depends {
 
   def reflect(scalaOrganization: String, scalaVersion: String) = scalaOrganization % "scala-reflect" % scalaVersion
 
-
-  def scalaz(scalazVersion: String) =
-    Seq("org.scalaz" %% "scalaz-core",
-        "org.scalaz" %% "scalaz-effect").map(_ % scalazVersion)
-
-  def scalazConcurrent(scalazVersion: String) =
-    "org.scalaz" %% "scalaz-concurrent" % scalazVersion
-
   def jvmTest =
     libraryDependencies ++= Seq(
       "org.scala-sbt" % "test-interface" % "1.0",
