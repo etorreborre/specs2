@@ -17,9 +17,9 @@ lazy val specs2 = project.in(file(".")).
     packagedArtifacts := Map.empty
   ).aggregate(
     fpJVM, commonJVM, matcherJVM, coreJVM, matcherExtraJVM, html,
-    shapelessJVM, formJVM, markdownJVM, junitJVM, scalacheckJVM,
+    formJVM, markdownJVM, junitJVM, scalacheckJVM,
     tests, fpJS, commonJS, matcherJS, coreJS, matcherExtraJS,
-    shapelessJS, formJS, markdownJS, junitJS, scalacheckJS
+    formJS, markdownJS, junitJS, scalacheckJS
   )
 
 val scala211 = "2.11.12"
@@ -29,8 +29,8 @@ lazy val specs2Settings = Seq(
   organization := "org.specs2",
   specs2Version in GlobalScope := version.value,
   specs2ShellPrompt,
-  scalaVersion := "2.12.10",
-  crossScalaVersions := Seq(scalaVersion.value, "2.13.1"))
+  scalaVersion := "2.13.1",
+  crossScalaVersions := Seq(scalaVersion.value, scala211, "2.12.10"))
 
 lazy val versionSettings =
   Seq(
@@ -174,7 +174,7 @@ lazy val guide = project.in(file("guide")).
     buildInfoSettings,
     name := "specs2-guide",
     scalacOptions in Compile --= Seq("-Xlint", "-Ywarn-unused-import")).
-  dependsOn(examplesJVM % "compile->compile;test->test", shapelessJVM)
+  dependsOn(examplesJVM % "compile->compile;test->test")
 
 lazy val html = project.in(file("html")).
   settings(
@@ -237,23 +237,7 @@ lazy val matcherExtraJVM = matcherExtra.jvm
 lazy val pom = Project(id = "pom", base = file("pom")).
   settings(commonSettings).
   dependsOn(commonJVM, matcherJVM, matcherExtraJVM, coreJVM, html,
-    shapelessJVM, formJVM, markdownJVM, junitJVM, scalacheckJVM)
-
-lazy val shapeless = crossProject(JSPlatform, JVMPlatform).
-  crossType(CrossType.Pure).
-  in(file("shapeless")).
-  settings(
-    commonSettings,
-    name := "specs2-shapeless",
-    libraryDependencies ++= depends.paradise(scalaVersion.value),
-    libraryDependencies += "com.chuusai" %%% "shapeless" % shapelessVersion
-  ).
-  jsSettings(depends.jsTest, commonJsSettings).
-  jvmSettings(depends.jvmTest, commonJvmSettings).
-  dependsOn(matcher, matcherExtra % "test->test")
-
-lazy val shapelessJS = shapeless.js
-lazy val shapelessJVM = shapeless.jvm
+    formJVM, markdownJVM, junitJVM, scalacheckJVM)
 
 lazy val scalacheck = crossProject(JSPlatform, JVMPlatform)
   .in(file("scalacheck")).
@@ -277,7 +261,6 @@ lazy val tests = Project(id = "tests", base = file("tests")).
     commonJvmSettings
   ).dependsOn(
   coreJVM      % "compile->compile;test->test",
-  shapelessJVM % "compile->compile;test->test",
   junitJVM     % "test->test",
   examplesJVM  % "test->test",
   matcherExtraJVM,
@@ -369,24 +352,16 @@ lazy val apiSettings = Seq(
   unmanagedSources             in (Compile, doc) := unmanagedSources.all(aggregateCompile).value.flatten,
   unmanagedSourceDirectories   in (Compile, doc) := unmanagedSourceDirectories.all(aggregateCompile).value.flatten,
   unmanagedResourceDirectories in (Compile, doc) := unmanagedResourceDirectories.all(aggregateCompile).value.flatten,
-  libraryDependencies                            := libraryDependencies.all(aggregateTest).value.flatten.map(maybeMarkProvided)) ++
+  libraryDependencies                            := libraryDependencies.all(aggregateTest).value.flatten) ++
   Seq(scalacOptions in (Compile, doc) += "-Ymacro-no-expand")
 
 lazy val aggregateCompile = ScopeFilter(
-  inProjects(fpJVM, commonJVM, matcherJVM, matcherExtraJVM, coreJVM, html, formJVM, shapelessJVM, markdownJVM, junitJVM, scalacheckJVM),
+  inProjects(fpJVM, commonJVM, matcherJVM, matcherExtraJVM, coreJVM, html, formJVM, markdownJVM, junitJVM, scalacheckJVM),
   inConfigurations(Compile))
 
 lazy val aggregateTest = ScopeFilter(
-  inProjects(fpJVM, commonJVM, matcherJVM, matcherExtraJVM, coreJVM, html, formJVM, shapelessJVM, markdownJVM, junitJVM, scalacheckJVM),
+  inProjects(fpJVM, commonJVM, matcherJVM, matcherExtraJVM, coreJVM, html, formJVM, markdownJVM, junitJVM, scalacheckJVM),
   inConfigurations(Test))
-
-def maybeMarkProvided(dep: ModuleID): ModuleID =
-  if (providedDependenciesInAggregate.exists(dep.name.startsWith)) dep.withConfigurations(configurations = Some("provided"))
-  else dep
-
-/* A list of dependency module names that should be marked as "provided" for the aggregate artifact */
-lazy val providedDependenciesInAggregate = Seq("shapeless")
-
 
 /**
  * PUBLICATION

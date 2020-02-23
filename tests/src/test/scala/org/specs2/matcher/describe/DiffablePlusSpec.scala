@@ -1,7 +1,6 @@
 package org.specs2.matcher.describe
 
 import org.specs2.Spec
-import org.specs2.matcher.CaseClassDiffs._
 
 import scala.util.Failure
 
@@ -36,5 +35,3 @@ class DiffablePlusSpec extends Spec { def is = s2"""
 case class EmptyCaseClass()
 case class Foo(a: String, b: String, goo: Goo)
 case class Goo(c: String, d: String)
-
-

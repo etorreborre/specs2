@@ -2,10 +2,8 @@ package org.specs2.matcher
 package describe
 
 import org.specs2.Specification
-import org.specs2.matcher._
 
 import scala.util.{Failure, Try}
-import CaseClassDiffs._
 
 class DiffableSpec extends Specification { def is = s2"""
 
@@ -162,4 +160,3 @@ Compare result
 sealed trait Animal
 case class Cat() extends Animal
 case class Dog() extends Animal
-

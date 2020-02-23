@@ -7,7 +7,6 @@ import form._
 object OptionalDataMatcherCards extends Cards {
   def title = "Optional data matchers"
   def cards = Seq(
-    CaseClassMatchers,
     ResultMatchers,
     TerminationMatchers)
 }

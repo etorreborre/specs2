@@ -75,7 +75,8 @@ case class comp() extends MustMatchers with TestFileNames with ContentMatchers {
 }
 
 trait TestFileNames {
-  lazy val f1 :: f2 :: f3 :: f4 :: f5 :: f6 :: f7 :: f8 :: _ =
-    (1 to 8).toList.map(i => FileName.unsafe("f"+i))
+  import FileName._
+
+  lazy val (f1, f2, f3, f4, f5, f6, f7, f8) = (unsafe("f1"), unsafe("f2"), unsafe("f3"), unsafe("f3"), unsafe("f5"), unsafe("f6"), unsafe("f7"), unsafe("f8"))
 
 }
