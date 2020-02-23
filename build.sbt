@@ -106,9 +106,6 @@ lazy val common = crossProject(JSPlatform, JVMPlatform).in(file("common")).
     commonSettings,
     name := "specs2-common"
   ).
-  platformsSettings(JVMPlatform, JSPlatform)(
-    libraryDependencies ++= depends.scalaParser.value,
-  ).
   jsSettings(depends.jsTest, commonJsSettings).
   jvmSettings(commonJvmSettings).
   dependsOn(fp)
@@ -308,7 +305,7 @@ lazy val compilationSettings = Seq(
     }
   },
   addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3"),
-  scalacOptions in Test               += "-Yrangepos",
+  //scalacOptions in Test               += "-Yrangepos",
   scalacOptions in (Compile, doc)    ++= Seq("-feature", "-language:_"),
   scalacOptions in (Compile, console) := Seq("-Yrangepos", "-feature", "-language:_"),
   scalacOptions in (Test, console)    := Seq("-Yrangepos", "-feature", "-language:_")

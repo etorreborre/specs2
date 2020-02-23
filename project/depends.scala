@@ -22,16 +22,6 @@ object depends {
   def nativeTest =
     Seq(libraryDependencies += "org.scala-native" %%% "test-interface" % nativeVersion)
 
-  def scalaParser = Def.setting {
-    Seq("org.scala-lang.modules" %%% "scala-parser-combinators" % "1.1.2")
-  }
-  def scalaParserNative = Def.setting {
-    if (nativeVersion == "0.4.0-M2")
-      Seq("com.github.lolgab" %%% "scala-parser-combinators" % "1.1.2")
-    else
-      scalaParser.value
-  }
-
   def scalaXML = Def.setting {
     "org.scala-lang.modules" %%% "scala-xml" % "1.2.0"
   }
