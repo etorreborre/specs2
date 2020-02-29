@@ -11,17 +11,26 @@ trait Classes extends ClassOperations {
   type EnableReflectiveInstantiation =
     org.portablescala.reflect.annotation.EnableReflectiveInstantiation
 
-  def loadModule(name: String, loader: ClassLoader): Any =
+  def newInstance(name: String, loader: ClassLoader): Any =
     Reflect
       .lookupInstantiatableClass(name, loader)
       .getOrElse(throw new ClassNotFoundException(name))
       .newInstance
 
+  def loadModule(name: String, loader: ClassLoader): Any =
+    Reflect
+      .lookupLoadableModuleClass(name, loader)
+      .getOrElse(throw new ClassNotFoundException(name))
+      .loadModule
+
   def createInstance[T <: AnyRef](className: String)(implicit m: ClassTag[T]): Operation[T] =
     throw new Exception("Classes.createInstance: no js implementation")
 
   def createInstance[T <: AnyRef](className: String, loader: ClassLoader, defaultInstances: =>List[AnyRef] = Nil)(implicit m: ClassTag[T]): Operation[T] =
-    protect[OperationStack, T](loadModule(className, loader).asInstanceOf[T])
+    if (className.endsWith("$"))
+      protect[OperationStack, T](loadModule(className, loader).asInstanceOf[T])
+    else
+      protect[OperationStack, T](newInstance(className, loader).asInstanceOf[T])
 
   def createInstanceFromClass[T <: AnyRef](klass: Class[T], defaultInstances: =>List[AnyRef])(implicit m: ClassTag[T]): Operation[T] = {
     Use(m)
