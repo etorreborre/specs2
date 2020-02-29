@@ -96,8 +96,8 @@ trait WriterInterpretation {
     type S = Unit
     val monad = Monad.idMonad
     val start = ()
-    def fold = (s: S, a: A) => pure(f(a))
-    def end(s: S) = pure(s)
+    def fold = (s: S, a: A) => f(a); ()
+    def end(s: S): Unit = ()
   }
 
 }

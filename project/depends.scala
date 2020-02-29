@@ -23,10 +23,13 @@ object depends {
   def jvmTest =
     libraryDependencies ++= Seq(
       "org.scala-sbt" % "test-interface" % "1.0",
+      "org.portable-scala" %%% "portable-scala-reflect" % "1.0.0",
       "org.scala-js" %% "scalajs-stubs" % "1.0.0" % "provided")
 
   def jsTest =
-    Seq(libraryDependencies ++= Seq("org.scala-js" %% "scalajs-test-interface" % scalaJSVersion),
+    Seq(libraryDependencies ++= Seq(
+      "org.scala-js" %% "scalajs-test-interface" % scalaJSVersion,
+      "org.portable-scala" %%% "portable-scala-reflect" % "1.0.0"),
         scalaJSStage in Test := FastOptStage)
 
   def nativeTest =

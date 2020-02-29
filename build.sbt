@@ -21,7 +21,7 @@ lazy val specs2 = project.in(file(".")).
     fpJVM, catsJVM, commonJVM, matcherJVM, coreJVM, matcherExtraJVM, scalazJVM, html,
     analysisJVM, shapelessJVM, formJVM, markdownJVM, gwtJVM, junitJVM, scalacheckJVM, mockJVM,
     tests, fpJS, catsJS, commonJS, matcherJS, coreJS, matcherExtraJS, scalazJS, analysisJS,
-    shapelessJS, formJS, markdownJS, gwtJS, junitJS, scalacheckJS, mockJS
+    formJS, markdownJS, junitJS, scalacheckJS, mockJS
   )
 
 val scala211 = "2.11.12"
@@ -158,7 +158,7 @@ lazy val common = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file(
     libraryDependencies ++= depends.scalaParser.value,
   ).
   jsSettings(depends.jsTest, commonJsSettings).
-  jvmSettings(commonJvmSettings).
+  jvmSettings(depends.jvmTest, commonJvmSettings).
   nativeSettings(
     commonNativeSettings,
     depends.nativeTest,

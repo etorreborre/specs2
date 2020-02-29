@@ -14,6 +14,9 @@ import eff._
  */
 trait Classes extends ClassOperations {
 
+  type EnableReflectiveInstantiation =
+    org.portablescala.reflect.annotation.EnableReflectiveInstantiation
+
   /**
    * Try to create an instance of a given class by using whatever constructor is available
    * and trying to instantiate the first parameter recursively if there is a parameter for that constructor.
