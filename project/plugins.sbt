@@ -3,6 +3,7 @@ Option(System.getenv("SCALAJS_VERSION")).getOrElse("1.0.0")
 val scalaNativeVersion =
 Option(System.getenv("SCALANATIVE_VERSION")).getOrElse("0.4.0-M2")
 
+addSbtPlugin("ch.epfl.lamp"       % "sbt-dotty"                     % "0.4.0")
 addSbtPlugin("org.scala-js"       % "sbt-scalajs"                   % scalaJSVersion)
 addSbtPlugin("org.scala-native"   % "sbt-scala-native"              % scalaNativeVersion)
 addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject"      % "1.0.0")
