@@ -109,7 +109,6 @@ def commonJvmSettings =
 lazy val common = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("common")).
   settings(
     libraryDependencies ++=
-      depends.paradise(scalaVersion.value) ++
       Seq(depends.reflect(scalaOrganization.value, scalaVersion.value),
         depends.scalaXML.value, depends.scalacheck.value % Test),
     commonSettings,
@@ -138,19 +137,12 @@ lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("c
   settings(
     commonSettings,
     name := "specs2-core",
-    libraryDependencies ++=
-      depends.paradise(scalaVersion.value) ++
-      Seq(
-        depends.junit % Test)
+    libraryDependencies += depends.junit % Test
   ).
   jsSettings(depends.jsTest, commonJsSettings).
-  jvmSettings(
-    depends.jvmTest,
-    commonJvmSettings).
+  jvmSettings(depends.jvmTest, commonJvmSettings).
   nativeSettings(commonNativeSettings).
-  platformsSettings(JSPlatform, NativePlatform)(
-    commonJsNativeSettings
-  ).
+  platformsSettings(JSPlatform, NativePlatform)(commonJsNativeSettings).
   dependsOn(matcher, common, common % "test->test")
 
 lazy val coreJVM = core.jvm
@@ -231,7 +223,7 @@ lazy val markdown = crossProject(JSPlatform, JVMPlatform, NativePlatform).
   crossType(CrossType.Pure).
   in(file("markdown")).
   settings(
-    libraryDependencies += depends.pegdown.value,
+    libraryDependencies += depends.pegdown,
     commonSettings,
     name := "specs2-markdown").
   jvmSettings(depends.jvmTest, commonJvmSettings).
@@ -259,9 +251,7 @@ lazy val matcherNative = matcher.native
 lazy val matcherExtra = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("matcher-extra")).
   settings(
     commonSettings,
-    name := "specs2-matcher-extra",
-    libraryDependencies ++= depends.paradise(scalaVersion.value)
-  ).
+    name := "specs2-matcher-extra").
   jsSettings(depends.jsTest, commonJsSettings).
   jvmSettings(depends.jvmTest, commonJvmSettings).
   nativeSettings(depends.nativeTest, commonNativeSettings).

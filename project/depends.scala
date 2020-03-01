@@ -28,7 +28,7 @@ object depends {
     Seq(libraryDependencies ++=
       Seq("org.scala-native" %%% "test-interface" % nativeVersion,
           "org.portable-scala" %%% "portable-scala-reflect" % "1.0.0"))
-          
+
   def scalaParser = Def.setting {
     Seq("org.scala-lang.modules" %%% "scala-parser-combinators" % "1.1.2")
   }
@@ -43,22 +43,14 @@ object depends {
     "org.scala-lang.modules" %% "scala-xml" % "1.2.0"
   }
 
-  lazy val junit = "junit" % "junit" % "4.13"
-  lazy val pegdown = Def.setting { "org.pegdown" % "pegdown" % "1.6.0" }
-
-  lazy val tagsoup = "org.ccil.cowan.tagsoup" % "tagsoup" % "1.2.1"
-
   lazy val scalacheck = Def.setting {
     "org.scalacheck" %%% "scalacheck" % "1.14.3"
   }
 
-  def paradise(scalaVersion: String) =
-    if (scalaMinorVersionAtLeast(scalaVersion, 11))
-      Nil
-    else
-      Seq(compilerPlugin(
-          "org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.patch),
-          "org.scalamacros" %% "quasiquotes" % "2.1.0")
+  // java dependencies
+  lazy val junit = "junit" % "junit" % "4.13"
+  lazy val pegdown = "org.pegdown" % "pegdown" % "1.6.0"
+  lazy val tagsoup = "org.ccil.cowan.tagsoup" % "tagsoup" % "1.2.1"
 
   lazy val resolvers =
     Seq(sbt.Keys.resolvers ++= Seq(
