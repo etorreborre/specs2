@@ -25,8 +25,10 @@ object depends {
         scalaJSStage in Test := FastOptStage)
 
   def nativeTest =
-    Seq(libraryDependencies += "org.scala-native" %%% "test-interface" % nativeVersion)
-
+    Seq(libraryDependencies ++=
+      Seq("org.scala-native" %%% "test-interface" % nativeVersion,
+          "org.portable-scala" %%% "portable-scala-reflect" % "1.0.0"))
+          
   def scalaParser = Def.setting {
     Seq("org.scala-lang.modules" %%% "scala-parser-combinators" % "1.1.2")
   }
