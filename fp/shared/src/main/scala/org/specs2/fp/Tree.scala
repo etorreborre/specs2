@@ -12,14 +12,14 @@ sealed abstract class Tree[A] {
   def rootLabel: A
 
   /** The child nodes of this tree. */
-  def subForest: Stream[Tree[A]]
+  def subForest: LazyList[Tree[A]]
 
   /** Maps the elements of the Tree into a Monoid and folds the resulting Tree. */
   def foldMap[B : Monoid](f: A => B): B =
     f(rootLabel) |+| subForest.map(_.foldMap(f)).sumAll
 
   def foldRight[B](z: => B)(f: (A, => B) => B): B =
-    Foldable[Stream].foldRight(flatten, z)(f)
+    Foldable[LazyList].foldRight(flatten, z)(f)
 
   /** A 2D String representation of this Tree. */
   def drawTree(implicit sh: Show[A]): String = {
@@ -35,7 +35,7 @@ sealed abstract class Tree[A] {
    * is a function of the corresponding element in this tree
    * and the histomorphic transform of its children.
    **/
-  def scanr[B](g: (A, Stream[Tree[B]]) => B): Tree[B] = {
+  def scanr[B](g: (A, LazyList[Tree[B]]) => B): Tree[B] = {
     val c = Need(subForest.map(_.scanr(g)))
     Node(g(rootLabel, c.value), c.value)
   }
@@ -49,7 +49,7 @@ sealed abstract class Tree[A] {
     val stem = " -`" // "`- ".reverse
     val trunk = "  |" // "|  ".reverse
 
-    def drawSubTrees(s: Stream[Tree[A]]): Vector[StringBuilder] = s match {
+    def drawSubTrees(s: LazyList[Tree[A]]): Vector[StringBuilder] = s match {
       case ts if ts.isEmpty       => Vector.empty[StringBuilder]
       case t #:: ts if ts.isEmpty => new StringBuilder("|") +: shift(stem, "   ", t.draw)
       case t #:: ts               =>
@@ -70,26 +70,26 @@ sealed abstract class Tree[A] {
   }
 
   /** Pre-order traversal. */
-  def flatten: Stream[A] = {
-    def squish(tree: Tree[A], xs: Stream[A]): Stream[A] =
-      Stream.cons(tree.rootLabel, Foldable[Stream].foldRight(tree.subForest, xs)(squish(_, _)))
+  def flatten: LazyList[A] = {
+    def squish(tree: Tree[A], xs: LazyList[A]): LazyList[A] =
+      LazyList.cons(tree.rootLabel, Foldable[LazyList].foldRight(tree.subForest, xs)(squish(_, _)))
 
-    squish(this, Stream.Empty)
+    squish(this, LazyList.empty)
   }
 
   /** Breadth-first traversal. */
-  def levels: Stream[Stream[A]] = {
-    val f = (s: Stream[Tree[A]]) => {
-      Foldable[Stream].foldMap(s)((_: Tree[A]).subForest)
+  def levels: LazyList[LazyList[A]] = {
+    val f = (s: LazyList[Tree[A]]) => {
+      Foldable[LazyList].foldMap(s)((_: Tree[A]).subForest)
     }
-    Stream.iterate(Stream(this))(f) takeWhile (_.nonEmpty) map (_ map (_.rootLabel))
+    LazyList.iterate(LazyList(this))(f) takeWhile (_.nonEmpty) map (_ map (_.rootLabel))
   }
 
   /** Binds the given function across all the subtrees of this tree. */
   def cobind[B](f: Tree[A] => B): Tree[B] = unfoldTree(this)(t => (f(t), () => t.subForest))
 
   /** A TreeLoc zipper of this tree, focused on the root node. */
-  def loc: TreeLoc[A] = TreeLoc.loc(this, Stream.Empty, Stream.Empty, Stream.Empty)
+  def loc: TreeLoc[A] = TreeLoc.loc(this, LazyList.empty, LazyList.empty, LazyList.empty)
 
   /** Turns a tree of pairs into a pair of trees. */
   def unzip[A1, A2](implicit p: A => (A1, A2)): (Tree[A1], Tree[A2]) = {
@@ -99,7 +99,7 @@ sealed abstract class Tree[A] {
     (Node(rootLabel._1, fst.value), Node(rootLabel._2, snd.value))
   }
 
-  def foldNode[Z](f: A => Stream[Tree[A]] => Z): Z =
+  def foldNode[Z](f: A => LazyList[Tree[A]] => Z): Z =
     f(rootLabel)(subForest)
 
   def map[B](f: A => B): Tree[B] =
@@ -116,7 +116,7 @@ object Tree {
   def apply[A](root: => A): Tree[A] = Leaf(root)
 
   object Node {
-    def apply[A](root: => A, forest: => Stream[Tree[A]]): Tree[A] = {
+    def apply[A](root: => A, forest: => LazyList[Tree[A]]): Tree[A] = {
       new Tree[A] {
         private[this] val rootc = Need(root)
         private[this] val forestc = Need(forest)
@@ -127,17 +127,17 @@ object Tree {
       }
     }
 
-    def unapply[A](t: Tree[A]): Option[(A, Stream[Tree[A]])] = Some((t.rootLabel, t.subForest))
+    def unapply[A](t: Tree[A]): Option[(A, LazyList[Tree[A]])] = Some((t.rootLabel, t.subForest))
   }
 
   object Leaf {
     def apply[A](root: => A): Tree[A] = {
-      Node(root, Stream.empty)
+      Node(root, LazyList.empty)
     }
 
     def unapply[A](t: Tree[A]): Option[A] = {
       t match {
-        case Node(root, Stream.Empty) =>
+        case Node(root, LazyList()) =>
           Some(root)
         case _ =>
           None
@@ -145,10 +145,10 @@ object Tree {
     }
   }
 
-  def unfoldForest[A, B](s: Stream[A])(f: A => (B, () => Stream[A])): Stream[Tree[B]] =
+  def unfoldForest[A, B](s: LazyList[A])(f: A => (B, () => LazyList[A])): LazyList[Tree[B]] =
     s.map(unfoldTree(_)(f))
 
-  def unfoldTree[A, B](v: A)(f: A => (B, () => Stream[A])): Tree[B] =
+  def unfoldTree[A, B](v: A)(f: A => (B, () => LazyList[A])): Tree[B] =
     f(v) match {
       case (a, bs) => Node(a, unfoldForest(bs.apply())(f))
     }

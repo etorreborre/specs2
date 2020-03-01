@@ -67,7 +67,7 @@ object Monad {
       }
   }
 
-  implicit def eitherMonad[L]: Monad[Either[L, ?]] = new Monad[Either[L, ?]] {
+  implicit def eitherMonad[L]: Monad[Either[L, *]] = new Monad[Either[L, *]] {
     def point[A](a: =>A): Either[L, A] = Right(a)
 
     def bind[A,B](fa: Either[L, A])(f: A => Either[L, B]): Either[L, B] =

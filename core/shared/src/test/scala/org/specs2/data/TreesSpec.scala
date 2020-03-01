@@ -85,12 +85,12 @@ class TreesSpec extends Specification with DataTables with Expectations { def is
   def tree2 = Node(0, Node(2, Leaf(1)))
   def tree3 = Node(0, Node(1, Leaf(2)))
   def tree4 = Node(1, Node(2, Leaf(1)))
-  def tree5 = Node(0, Stream.cons(Leaf(3), Node(2, Leaf(2))))
+  def tree5 = Node(0, LazyList.cons(Leaf(3), Node(2, Leaf(2))))
 
 
   def pruneAndDraw(tree: Tree[Int], f: Int => Option[Int]) = tree.prune(f).map(_.drawTree).getOrElse("None\n")
   def beTree(s: String*) = be_==(s.mkString("", "\n", "\n"))
 
-  implicit def anyToStream[A](a: A): Stream[A] = Stream(a)
-  implicit def listToStream[A](a: List[A]): Stream[A] = a.toStream
+  implicit def anyToStream[A](a: A): LazyList[A] = LazyList(a)
+  implicit def listToStream[A](a: List[A]): LazyList[A] = a.toStream
 }

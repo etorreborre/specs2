@@ -13,7 +13,7 @@ trait Trees { outer =>
    * Implicit definition to add more functionalities to the Tree trait
    */
   implicit class Treex[A](t: Tree[A]) {
-    def bottomUp[B](f: ((A, Stream[B]) => B)) = outer.bottomUp(t, f)
+    def bottomUp[B](f: ((A, LazyList[B]) => B)) = outer.bottomUp(t, f)
     def prune[B](f: A => Option[B]): Option[Tree[B]] = outer.prune(t, f)
     def prune(f: Tree[A] => Option[A])(implicit initial: A): Tree[A] = outer.prune(t, f)(initial)
     def flattenSubForests = outer.flattenSubForests(t)
@@ -36,7 +36,7 @@ trait Trees { outer =>
    * This is used in JUnit to map a Tree[Description] where no Description objects are related to a Tree[Description]
    * where each node returns the children nodes on the "getChildren" method
    */
-  def bottomUp[A, B](t: Tree[A], f: ((A, Stream[B]) => B)): Tree[B] = {
+  def bottomUp[A, B](t: Tree[A], f: ((A, LazyList[B]) => B)): Tree[B] = {
     val tbs = t.subForest.map(t => bottomUp(t, f))
     Node(f(t.rootLabel, tbs.map(_.rootLabel)), tbs)
   }
@@ -67,11 +67,11 @@ trait Trees { outer =>
   /**
    * flatten the tree using a foldLeft to avoid SOF
    */
-  def flattenLeft[A](tree: Tree[A]): Stream[A] = squishLeft(tree, Stream.Empty)
+  def flattenLeft[A](tree: Tree[A]): LazyList[A] = squishLeft(tree, LazyList.empty)
 
   /** reimplementation of squish from scalaz, using a foldLeft */
-  private def squishLeft[A](tree: Tree[A], xs: Stream[A]): Stream[A] =
-    Stream.cons(tree.rootLabel, tree.subForest.reverse.foldLeft(xs)((s, t) => squishLeft(t, s)))
+  private def squishLeft[A](tree: Tree[A], xs: LazyList[A]): LazyList[A] =
+    LazyList.cons(tree.rootLabel, tree.subForest.reverse.foldLeft(xs)((s, t) => squishLeft(t, s)))
 
   /**
    * Implicit definition to add more functionalities to the TreeLoc class

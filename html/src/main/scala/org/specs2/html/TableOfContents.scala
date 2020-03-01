@@ -52,7 +52,7 @@ trait TableOfContents {
       case main :: rest =>
         val treeLoc = pagesTree(main, pages)
         val tocNodes: NodeSeq =
-          treeLoc.cojoin.toTree.bottomUp { (pageTreeLoc: TreeLoc[SpecHtmlPage], subtocs: Stream[NodeSeq]) =>
+          treeLoc.cojoin.toTree.bottomUp { (pageTreeLoc: TreeLoc[SpecHtmlPage], subtocs: LazyList[NodeSeq]) =>
             val page = pageTreeLoc.getLabel
               <ul>
                 {li(outDir, entryMaxSize)(page)(
@@ -96,7 +96,7 @@ trait TableOfContents {
 
   def createHeadersSubtoc(page: SpecHtmlPage, entryMaxSize: Int): NodeSeq = {
     page.body.headersTree.
-      bottomUp { (h: Header, s: Stream[NodeSeq]) =>
+      bottomUp { (h: Header, s: LazyList[NodeSeq]) =>
       if (h.isRoot)
         // 'id' is the name of the attribute expected by jstree to "open" the tree on a specific node
         s.reduceNodes.updateHeadAttribute("id", page.path.name.name)

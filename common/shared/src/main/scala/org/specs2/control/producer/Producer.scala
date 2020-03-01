@@ -13,18 +13,18 @@ import Producer._
  *  - One: there is just one element
  *  - More(as, next): there are `as` elements and the next producer
  */
-sealed trait Stream[F[_], A]
-case class Done[F[_], A]() extends Stream[F, A]
-case class One[F[_], A](a: A) extends Stream[F, A]
-case class More[F[_], A](as: List[A], next: Producer[F, A]) extends Stream[F, A]
+sealed trait LazyList[F[_], A]
+case class Done[F[_], A]() extends LazyList[F, A]
+case class One[F[_], A](a: A) extends LazyList[F, A]
+case class More[F[_], A](as: List[A], next: Producer[F, A]) extends LazyList[F, A]
 
 /**
  * Simple streaming data structure for elements of type A and effects F
  */
-case class Producer[F[_] : Monad : Safe, A](run: F[Stream[F, A]]) {
+case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]) {
 
   /**
-   * Catamorphism on the Stream data type to produce another stream
+   * Catamorphism on the LazyList data type to produce another stream
    */
   private[producer]
   def cata[B](onDone: Producer[F, B], onOne: A => Producer[F, B], onMore: (List[A], Producer[F, A]) => Producer[F, B]): Producer[F, B] =
@@ -615,7 +615,7 @@ object Producer extends Producers {
       p1 append p2
   }
 
-  implicit def ProducerMonad[F[_] : Monad : Safe]: Monad[Producer[F, ?]] = new Monad[Producer[F, ?]] {
+  implicit def ProducerMonad[F[_] : Monad : Safe]: Monad[Producer[F, *]] = new Monad[Producer[F, *]] {
     def bind[A, B](fa: Producer[F, A])(f: A => Producer[F, B]): Producer[F, B] =
       fa.flatMap(f)
 

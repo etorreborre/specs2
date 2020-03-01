@@ -68,7 +68,7 @@ trait Foldable[F[_]]  {
   def toList[A](fa: F[A]): List[A] = foldLeft(fa, scala.List[A]())((t, h) => h :: t).reverse
   def toVector[A](fa: F[A]): Vector[A] = foldLeft(fa, Vector[A]())(_ :+ _)
   def toSet[A](fa: F[A]): Set[A] = foldLeft(fa, Set[A]())(_ + _)
-  def toStream[A](fa: F[A]): Stream[A] = foldRight[A, Stream[A]](fa, Stream.empty)(Stream.cons(_, _))
+  def toStream[A](fa: F[A]): LazyList[A] = foldRight[A, LazyList[A]](fa, LazyList.empty)(LazyList.cons(_, _))
 
   /** Whether all `A`s in `fa` yield true from `p`. */
   def all[A](fa: F[A])(p: A => Boolean): Boolean = foldRight(fa, true)(p(_) && _)
@@ -126,14 +126,14 @@ object Foldable {
       fa.foldLeft(z)(f)
   }
 
-  implicit def streamInstance: Foldable[Stream] = new Foldable[Stream] {
-    def foldMap[A,B](fa: Stream[A])(f: A => B)(implicit F: Monoid[B]): B =
+  implicit def streamInstance: Foldable[LazyList] = new Foldable[LazyList] {
+    def foldMap[A,B](fa: LazyList[A])(f: A => B)(implicit F: Monoid[B]): B =
       fa.foldLeft(F.zero) { (res, cur) => F.append(res, f(cur)) }
 
-    def foldRight[A, B](fa: Stream[A], z: => B)(f: (A, => B) => B): B =
+    def foldRight[A, B](fa: LazyList[A], z: => B)(f: (A, => B) => B): B =
       fa.foldRight(z) { (cur, res) => f(cur, res) }
 
-    def foldLeft[A, B](fa: Stream[A], z: B)(f: (B, A) => B): B =
+    def foldLeft[A, B](fa: LazyList[A], z: B)(f: (B, A) => B): B =
       fa.foldLeft(z)(f)
   }
 }
@@ -173,5 +173,3 @@ trait FoldableSyntax {
       Foldable.apply[F].foldMap(fa)(identity)
   }
 }
-
-

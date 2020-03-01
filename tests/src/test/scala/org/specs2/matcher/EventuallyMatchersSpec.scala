@@ -12,7 +12,7 @@ addParagraph { """
 `eventually` can be used to retry any matcher until a maximum number of times is reached
 or until it succeeds.
 """ }
-  
+
   "A matcher can match right away with eventually" in {
     1 must eventually(be_==(1))
   }
@@ -28,7 +28,7 @@ or until it succeeds.
     option must be_==(Some(3)).eventually
   }
   "If all retries fail, the matcher will eventually fail" in {
-    val iterator = Stream.from(1).iterator
+    val iterator = LazyList.from(1).iterator
     (iterator.next must be_==(-1).eventually) must throwA[FailureException]
   }
   "It is possible to use aka with eventually (issue #231)" in {

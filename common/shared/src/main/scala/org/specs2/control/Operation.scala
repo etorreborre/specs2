@@ -104,7 +104,7 @@ object Operation {
   def thenFinally[A](operation: Operation[A], last: Finalizer): Operation[A] =
     operation.addLast(last)
 
-  implicit val OperationMonad: Monad[Operation[?]] = new Monad[Operation[?]] {
+  implicit val OperationMonad: Monad[Operation[*]] = new Monad[Operation[*]] {
     def point[A](a: =>A): Operation[A] =
       Operation(() => a)
 
@@ -129,7 +129,7 @@ object Operation {
       "Monad[Operation]"
   }
 
-  implicit val OperationApplicative: Applicative[Operation[?]] = new Applicative[Operation[?]] {
+  implicit val OperationApplicative: Applicative[Operation[*]] = new Applicative[Operation[*]] {
     def point[A](a: =>A): Operation[A] =
       Operation(() => a)
 

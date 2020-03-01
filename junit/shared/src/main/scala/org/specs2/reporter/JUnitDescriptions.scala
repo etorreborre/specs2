@@ -29,7 +29,7 @@ trait JUnitDescriptions extends ExecutionOrigin {
 
   def createDescription(treeLoc: TreeLoc[Description]): Description = {
     treeLoc.toTree.bottomUp {
-      (description: Description, children: Stream[Description]) =>
+      (description: Description, children: LazyList[Description]) =>
         children.foreach {
           child => description.addChild(child)
         }

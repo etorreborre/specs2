@@ -36,8 +36,8 @@ object Monoid {
   implicit val stringMonoid: Monoid[String] =
     instance((s1, s2) => s1 + s2, "")
 
-  implicit def streamMonoid[A]: Monoid[Stream[A]] =
-    instance((s1, s2) => s1 ++ s2, Stream.empty[A])
+  implicit def streamMonoid[A]: Monoid[LazyList[A]] =
+    instance((s1, s2) => s1 ++ s2, LazyList.empty[A])
 
   implicit def mapMonoid[K, V : Monoid]: Monoid[Map[K, V]] = {
     def merge(m1: Map[K, V], m2: Map[K, V]): Map[K, V] =

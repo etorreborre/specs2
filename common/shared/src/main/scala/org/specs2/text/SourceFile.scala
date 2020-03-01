@@ -20,13 +20,13 @@ case class SourceFile(logger: Logger) {
    * @param pattern a regular expression for a class name
    */
   def classNames(packageName: String, content: String, pattern: Pattern, suffix: String, verbose: Boolean): Operation[List[String]] = {
-    def result(m: Matcher): Stream[String] =
+    def result(m: Matcher): LazyList[String] =
       if (m.find && m.groupCount >= 1) {
         val fullName =
           if (packageName.isEmpty) m.group(1).trim + suffix
           else                     List(packageName, m.group(1).trim).mkString(".") + suffix
-        Stream.cons(fullName, result(m))
-      } else Stream.empty
+        LazyList.cons(fullName, result(m))
+      } else LazyList.empty
 
     val found = result(pattern.matcher(content)).toList
     logger.info("  found classes: "+found.mkString(", "), verbose && found.nonEmpty) >>
@@ -35,9 +35,9 @@ case class SourceFile(logger: Logger) {
 
   /** @return the package name corresponding to the package declarations at the beginning of a file */
   def packageName(content: String): String = {
-    def result(m: Matcher): Stream[String] =
-      if (m.find) Stream.cons(m.group(1).replace(";", "").trim, result(m))
-      else Stream.empty
+    def result(m: Matcher): LazyList[String] =
+      if (m.find) LazyList.cons(m.group(1).replace(";", "").trim, result(m))
+      else LazyList.empty
 
     val pattern = "\\s*package\\s*?([^\\s/]+).*"
 

@@ -279,7 +279,7 @@ object Fold {
    *
    *   val meanTimes2 = mean.map(_ * 2)
    */
-  implicit def ApplicativeFold[M[_] : Monad, T]: Applicative[Fold[M, T, ?]] = new Applicative[Fold[M, T, ?]] {
+  implicit def ApplicativeFold[M[_] : Monad, T]: Applicative[Fold[M, T, *]] = new Applicative[Fold[M, T, *]] {
     type F[U] = Fold[M, T, U]
 
     def point[A](a: =>A): Fold[M, T, A] =

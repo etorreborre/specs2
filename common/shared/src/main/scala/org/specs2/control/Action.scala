@@ -103,7 +103,7 @@ object Action {
       else           fail(failureMessage)
     }
 
-  implicit val ActionMonad: Monad[Action[?]] = new Monad[Action[?]] {
+  implicit val ActionMonad: Monad[Action[*]] = new Monad[Action[*]] {
     def point[A](a: =>A): Action[A] =
       Action(_ => Future.successful(a))
 
@@ -124,7 +124,7 @@ object Action {
       "Monad[Action]"
   }
 
-  implicit val ActionApplicative: Applicative[Action[?]] = new Applicative[Action[?]] {
+  implicit val ActionApplicative: Applicative[Action[*]] = new Applicative[Action[*]] {
     def point[A](a: =>A): Action[A] =
       Action(_ => Future.successful(a))
 
