@@ -2,8 +2,6 @@ import sbt._
 import Defaults._
 import java.util.{Date, TimeZone}
 import java.text.SimpleDateFormat
-// shadow sbt-scalajs' crossProject and CrossType until Scala.js 1.0.0 is released
-import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
 /** MAIN PROJECT */
 lazy val specs2 = project.in(file(".")).
@@ -32,22 +30,6 @@ lazy val specs2Settings = Seq(
   scalaVersion := "2.13.1",
   crossScalaVersions := Seq(scalaVersion.value, scala211, "2.12.10"))
 
-lazy val versionSettings =
-  Seq(
-    version := {
-      import sys.process._
-      if (!"git tag".!!.contains(version.value)) {
-        val commish = "git log --pretty=format:%h -n 1".!!.trim
-        version.value+"-"+commish+"-"+timestamp(new Date)
-      }
-      else
-        version.value
-    }
-  )
-
-
-lazy val latestTag = "git tag"
-
 lazy val buildInfoSettings = Seq(
   buildInfoKeys :=
     Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion) ++
@@ -56,19 +38,9 @@ lazy val buildInfoSettings = Seq(
   buildInfoPackage := "org.specs2"
 )
 
-def timestamp(instant: Date, format: String = "yyyyMMddHHmmss") = {
-  val formatter = new SimpleDateFormat("yyyyMMddHHmmss")
-  formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
-  formatter.format(instant)
-}
-
-lazy val tagName = Def.setting{
-  s"specs2-${version.value}"
-}
-
 lazy val commonJsSettings = Seq(
   scalacOptions += {
-    val tag = tagName.value
+    val tag = s"SPECS2-${version.value}"
     val tagOrHash =
       if(isSnapshot.value) sys.process.Process("git rev-parse HEAD").lineStream_!.head
       else tag
@@ -93,13 +65,11 @@ lazy val specs2Version = settingKey[String]("defines the current specs2 version"
 
 val commonSettings =
   coreDefaultSettings  ++
-    versionSettings      ++
     depends.resolvers    ++
     specs2Settings       ++
     compilationSettings  ++
     testingSettings      ++
-    publicationSettings  ++
-    notificationSettings
+    publicationSettings
 
 def commonJvmSettings =
   testingJvmSettings
@@ -110,12 +80,9 @@ lazy val common = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file(
   settings(
     libraryDependencies ++=
       Seq(depends.reflect(scalaOrganization.value, scalaVersion.value),
-        depends.scalaXML.value, depends.scalacheck.value % Test),
+          depends.scalaXML.value, depends.scalacheck.value % Test),
     commonSettings,
     name := "specs2-common"
-  ).
-  platformsSettings(JVMPlatform, JSPlatform)(
-    libraryDependencies ++= depends.scalaParser.value,
   ).
   jsSettings(depends.jsTest, commonJsSettings).
   jvmSettings(depends.jvmTest, commonJvmSettings).
@@ -124,9 +91,8 @@ lazy val common = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file(
     depends.nativeTest,
     libraryDependencies ++= depends.scalaParserNative.value,
   ).
-  platformsSettings(JSPlatform, NativePlatform)(
-    commonJsNativeSettings
-  ).
+  platformsSettings(JVMPlatform, JSPlatform)(libraryDependencies ++= depends.scalaParser.value).
+  platformsSettings(JSPlatform, NativePlatform)(commonJsNativeSettings).
   dependsOn(fp)
 
 lazy val commonJS = common.js
@@ -266,8 +232,8 @@ lazy val pom = Project(id = "pom", base = file("pom")).
   dependsOn(commonJVM, matcherJVM, matcherExtraJVM, coreJVM, html,
     formJVM, markdownJVM, junitJVM, scalacheckJVM)
 
-lazy val scalacheck = crossProject(JSPlatform, JVMPlatform, NativePlatform)
-  .in(file("scalacheck")).
+lazy val scalacheck = crossProject(JSPlatform, JVMPlatform, NativePlatform).
+  in(file("scalacheck")).
   settings(
     commonSettings,
     name := "specs2-scalacheck",
@@ -275,9 +241,7 @@ lazy val scalacheck = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   ).
   jsSettings(depends.jsTest, commonJsSettings).
   jvmSettings(depends.jvmTest, commonJvmSettings).
-  platformsSettings(JSPlatform, NativePlatform)(
-    commonJsNativeSettings
-  ).
+  platformsSettings(JSPlatform, NativePlatform)(commonJsNativeSettings).
   dependsOn(core)
 
 lazy val scalacheckJS  = scalacheck.js
@@ -312,34 +276,23 @@ lazy val compilationSettings = Seq(
   maxErrors := 20,
   scalacOptions in Compile ++=
     Seq(
-      //"-Xfatal-warnings",
       "-Xlint",
       "-Ywarn-numeric-widen",
       "-Ywarn-value-discard",
       "-deprecation:false", "-Xcheckinit", "-unchecked", "-feature", "-language:_"),
   scalacOptions in Compile ++= {
     CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, v)) if v <= 12 =>
-        Seq(
-          "-Ywarn-unused-import",
-          "-Yno-adapted-args"
-        )
-      case _ =>
-        Nil
+      case Some((2, v)) if v <= 12 => Seq("-Ywarn-unused-import", "-Yno-adapted-args")
+      case _ => Nil
     }
   },
   scalacOptions ++= {
     CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, v)) if v <= 12 =>
-        Seq(
-          "-Ypartial-unification"
-        )
-      case _ =>
-        Nil
+      case Some((2, v)) if v <= 12 => Seq("-Ypartial-unification")
+      case _ => Nil
     }
   },
   addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3"),
-  //scalacOptions in Test               += "-Yrangepos",
   scalacOptions in (Compile, doc)    ++= Seq("-feature", "-language:_"),
   scalacOptions in (Compile, console) := Seq("-Yrangepos", "-feature", "-language:_"),
   scalacOptions in (Test, console)    := Seq("-Yrangepos", "-feature", "-language:_")
@@ -423,18 +376,8 @@ lazy val publicationSettings = Seq(
 ) ++
   Sonatype.projectSettings
 
-/**
- * NOTIFICATION
- */
- lazy val notificationSettings = Seq()
-//   ghreleaseRepoOrg := "etorreborre",
-//   ghreleaseRepoName := "specs2",
-//   ghreleaseNotes := { tagName: TagName =>
-//     // find the corresponding release notes
-//     val notesFilePath = s"notes/${tagName.toUpperCase.replace("SPECS2-", "")}.markdown"
-//     try scala.io.Source.fromFile(notesFilePath).mkString
-//     catch { case t: Throwable => throw new Exception(s"the path $notesFilePath not found for tag $tagName") }
-//   },
-//   // just upload the notes
-//   ghreleaseAssets := Seq()
-// )
+def timestamp(instant: Date, format: String = "yyyyMMddHHmmss") = {
+  val formatter = new SimpleDateFormat("yyyyMMddHHmmss")
+  formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
+  formatter.format(instant)
+}
