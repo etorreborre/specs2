@@ -16,14 +16,14 @@ object EnvDefault {
 
   def create(arguments: Arguments): Env =
     Env(
-      arguments           = arguments,
-      systemLogger        = ConsoleLogger(),
-      printerLogger       = NoPrinterLogger,
-      statsRepository     = StatisticsRepositoryCreation.memory,
-      random              = new scala.util.Random,
-      fileSystem          = FileSystem(ConsoleLogger()),
-      customClassLoader   = None,
-      classLoading        = new ClassLoading {}
+      arguments            = arguments,
+      systemLogger         = ConsoleLogger(),
+      printerLogger        = NoPrinterLogger,
+      statisticsRepository = StatisticsRepositoryCreation.memory,
+      random               = new scala.util.Random,
+      fileSystem           = FileSystem(ConsoleLogger()),
+      customClassLoader    = None,
+      classLoading         = new ClassLoading {}
     )
 
   def defaultInstances(env: Env) =

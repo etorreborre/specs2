@@ -6,29 +6,42 @@ import scala.scalanative.sbtplugin.ScalaNativePlugin.autoImport._
 
 object depends {
 
-  def compiler(scalaOrganization: String, scalaVersion: String) = Seq(scalaOrganization % "scala-compiler" % scalaVersion)
+  def compiler(scalaOrganization: String, scalaVersion: String) =
+    Seq(scalaOrganization % "scala-compiler" % scalaVersion)
 
-  def reflect(scalaOrganization: String, scalaVersion: String) = scalaOrganization % "scala-reflect" % scalaVersion
+  def reflect(scalaOrganization: String, scalaVersion: String) =
+    scalaOrganization % "scala-reflect" % scalaVersion
 
   def jvmTest =
     libraryDependencies ++= Seq(
       "org.scala-sbt" % "test-interface" % "1.0",
+      "org.portable-scala" %%% "portable-scala-reflect" % "1.0.0",
       "org.scala-js" %% "scalajs-stubs" % "1.0.0" % "provided")
 
   def jsTest =
-    Seq(libraryDependencies ++= Seq("org.scala-js" %% "scalajs-test-interface" % scalaJSVersion),
+    Seq(libraryDependencies ++= Seq(
+      "org.scala-js" %% "scalajs-test-interface" % scalaJSVersion,
+      "org.portable-scala" %%% "portable-scala-reflect" % "1.0.0"),
         scalaJSStage in Test := FastOptStage)
 
   def nativeTest =
     Seq(libraryDependencies += "org.scala-native" %%% "test-interface" % nativeVersion)
 
-  def scalaXML = Def.setting {
-    "org.scala-lang.modules" %%% "scala-xml" % "1.2.0"
+  def scalaParser = Def.setting {
+    Seq("org.scala-lang.modules" %%% "scala-parser-combinators" % "1.1.2")
+  }
+  def scalaParserNative = Def.setting {
+    if(nativeVersion == "0.4.0-M2")
+      Seq("com.github.lolgab" %%% "scala-parser-combinators" % "1.1.2")
+    else
+      scalaParser.value
   }
 
-  lazy val junit    = "junit"        % "junit"         % "4.13"
-  lazy val hamcrest = "org.hamcrest" % "hamcrest-core" % "2.2"
+  def scalaXML = Def.setting {
+    "org.scala-lang.modules" %% "scala-xml" % "1.2.0"
+  }
 
+  lazy val junit = "junit" % "junit" % "4.13"
   lazy val pegdown = Def.setting { "org.pegdown" % "pegdown" % "1.6.0" }
 
   lazy val tagsoup = "org.ccil.cowan.tagsoup" % "tagsoup" % "1.2.1"

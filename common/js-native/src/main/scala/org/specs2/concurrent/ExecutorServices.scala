@@ -10,7 +10,7 @@ import scala.concurrent.duration.FiniteDuration
  * executing tests and scheduling timeouts
  */
 case class ExecutorServices(executionContextEval: () => ExecutionContext,
-                            schedulerEval: () => Scheduler) {
+                            schedulerEval: () =>  Scheduler) {
 
   implicit lazy val executionContext: ExecutionContext =
     executionContextEval()
@@ -37,8 +37,8 @@ object ExecutorServices {
 
   def fromExecutionContext(ec: =>ExecutionContext): ExecutorServices =
     ExecutorServices(
-      Memoized(ec),
-      Memoized(Schedulers.default)
+      () => ec,
+      () => Schedulers.default
     )
 
   def fromGlobalExecutionContext: ExecutorServices =

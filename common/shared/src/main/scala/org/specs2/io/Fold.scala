@@ -18,5 +18,5 @@ object FoldIo {
   def printToFilePath[T](path: FilePath)(print: T => Action[String]): Sink[Action, T] =
     Folds.bracket(Action.pure(new PrintWriter(path.path)))(
       (p: PrintWriter, t: T) => print(t).map(p.write).as(p))(
-      (p: PrintWriter) => Finalizer(p.close))
+      (p: PrintWriter) => Finalizer(() => p.close()))
 }

@@ -3,17 +3,33 @@ package reflect
 
 import scala.reflect.ClassTag
 import control._
-import org.scalajs.testinterface._
+import org.portablescala.reflect.Reflect
 
 trait Classes extends ClassOperations {
+
+  type EnableReflectiveInstantiation =
+    org.portablescala.reflect.annotation.EnableReflectiveInstantiation
+
+  def newInstance(name: String, loader: ClassLoader): Any =
+    Reflect
+      .lookupInstantiatableClass(name, loader)
+      .getOrElse(throw new ClassNotFoundException(name))
+      .newInstance
+
+  def loadModule(name: String, loader: ClassLoader): Any =
+    Reflect
+      .lookupLoadableModuleClass(name, loader)
+      .getOrElse(throw new ClassNotFoundException(name))
+      .loadModule
 
   def createInstance[T <: AnyRef](className: String)(implicit m: ClassTag[T]): Operation[T] =
     throw new Exception("Classes.createInstance: no js implementation")
 
-  def createInstance[T <: AnyRef](className: String, loader: ClassLoader, defaultInstances: =>List[AnyRef] = Nil)(implicit m: ClassTag[T]): Operation[T] = {
-    if (className.endsWith("$")) protect[OperationStack, T](TestUtils.loadModule(className.dropRight(1), loader).asInstanceOf[T])
-    else                         protect[OperationStack, T](TestUtils.newInstance(className, loader, Nil)(Nil).asInstanceOf[T])
-  }
+  def createInstance[T <: AnyRef](className: String, loader: ClassLoader, defaultInstances: =>List[AnyRef] = Nil)(implicit m: ClassTag[T]): Operation[T] =
+    if (className.endsWith("$"))
+      Operation.delayed(loadModule(className, loader).asInstanceOf[T])
+    else
+      Operation.delayed(newInstance(className, loader).asInstanceOf[T])
 
   def createInstanceFromClass[T <: AnyRef](klass: Class[T], defaultInstances: =>List[AnyRef])(implicit m: ClassTag[T]): Operation[T] = {
     Use(m)
