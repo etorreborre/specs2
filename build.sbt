@@ -21,7 +21,8 @@ lazy val specs2 = project.in(file(".")).
     fpJVM, catsJVM, commonJVM, matcherJVM, coreJVM, matcherExtraJVM, scalazJVM, html,
     analysisJVM, shapelessJVM, formJVM, markdownJVM, gwtJVM, junitJVM, scalacheckJVM, mockJVM,
     tests, fpJS, catsJS, commonJS, matcherJS, coreJS, matcherExtraJS, scalazJS, analysisJS,
-    shapelessJS, formJS, markdownJS, gwtJS, junitJS, scalacheckJS, mockJS
+    shapelessJS, formJS, markdownJS, gwtJS,
+    junitJS, scalacheckJS, mockJS
   )
 
 val scala211 = "2.11.12"
