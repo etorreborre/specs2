@@ -70,7 +70,7 @@ trait NotNullStrings {
               if (!showAll && sameElementTypes(it))
                 it.toSeq.notNullMkStringWith(addQuotes = true)+": "+it.getClass.getName+"["+it.head.getClass.getName+"]"
               else
-                it.toSeq.map(_.notNullWithClass(showAll))+": "+it.getClass.getName
+                it.toSeq.map(_.notNullWithClass(showAll)).toString+": "+it.getClass.getName
 
             case _ =>                     evaluate(a)+": "+a.getClass.getName
           }

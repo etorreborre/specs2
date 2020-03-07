@@ -4,9 +4,8 @@ package execute
 import control.Exceptions._
 import text.NotNullStrings._
 import text.Trim._
-import scala.reflect.runtime.universe._
-import reflect._
 import Snippet._
+import scala.quoted._
 
 /**
  * Snippets of code can be extracted from interpolated specification strings.
@@ -48,27 +47,24 @@ trait Snippets {
     def checkOk = s.copy(params = s.params.copy(verify = Some((t: T) => AsResult(t))))
   }
 
-  def snippet[T](code: =>T)(implicit params: SnippetParams[T]): Snippet[T] = macro Snippets.create[T]
+  inline def snippet[T](code: =>T)(implicit params: SnippetParams[T]): Snippet[T] =
+    ${ Snippets.create[T]('code, 'params) }
 
-  def createSnippet[T](rangepos: Boolean, expression: String, code: =>T, params: SnippetParams[T]): Snippet[T] = {
-    if (rangepos) new Snippet[T](() => code, codeExpression = Some(expression), params.copy(trimExpression = trimRangePosSnippet))
-    else          new Snippet[T](() => code, codeExpression = None, params)
-  }
-
-  def simpleName[T : WeakTypeTag]: String = implicitly[WeakTypeTag[T]].tpe.typeSymbol.name.toString.trim
-  def fullName[T : WeakTypeTag]: String   = implicitly[WeakTypeTag[T]].tpe.typeSymbol.fullName.trim
-  def termName(m: Any): String            = macro Macros.termName
+  // def simpleName[T : WeakTypeTag]: String = implicitly[WeakTypeTag[T]].tpe.typeSymbol.name.toString.trim
+  // def fullName[T : WeakTypeTag]: String   = implicitly[WeakTypeTag[T]].tpe.typeSymbol.fullName.trim
+  // def termName(m: Any): String            = macro Macros.termName
 }
 
-import reflect.MacroContext._
-
 object Snippets extends Snippets {
-  def create[T](c: Context)(code: c.Expr[T])(params: c.Expr[SnippetParams[T]]): c.Expr[Snippet[T]] = {
-    import c.{universe => u}; import u._
-    import Macros._
-    val result = c.Expr(methodCall(c)("createSnippet", q"${c.macroApplication.pos.isRange}", stringExprMacroPos(c)(code), code.tree.duplicate, params.tree))
-    c.Expr(atPos(c.prefix.tree.pos)(result.tree))
+
+  def create[T](code: Expr[T], params: Expr[SnippetParams[T]])(using qctx: QuoteContext)(using t: Type[T]): Expr[Snippet[T]] = {
+    val expression = Expr(code.show)
+    Expr.betaReduce('{(ex: String, c: $t, ps: SnippetParams[$t]) => createSnippet[$t](ex, c, ps)})(expression, code, params)
   }
+
+  def createSnippet[T](expression: String, code: =>T, params: SnippetParams[T]): Snippet[T] =
+    new Snippet[T](() => code, codeExpression = Some(expression), params)
+
 }
 
 /**
