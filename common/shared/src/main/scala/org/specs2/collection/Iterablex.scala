@@ -21,7 +21,7 @@ trait Iterablex {
   class ExtendedIterable[T](xs: GenIterable[T]) {
 
     /**
-     * @return true if the 2 iterables contain the same elements, in the same order, 
+     * @return true if the 2 iterables contain the same elements, in the same order,
      *         according to a function f
      */
     def isSimilar[S >: T](that: GenIterable[S], f: Function2[T, S, Boolean]): Boolean = {
@@ -65,7 +65,7 @@ trait Iterablex {
             val (x, y, resta, restb) = (a.head, b.head, a.drop(1), b.drop(1))
             matchTwo(x, y) && resta.sameElementsAs(restb, f) ||
             resta.exists(matchTwo(_, y)) && restb.exists(matchTwo(x, _)) &&
-              resta.removeFirst(matchTwo(_, y)).sameElementsAs(restb.removeFirst(matchTwo(x, _)), f)
+              resta.toSeq.removeFirst(matchTwo(_, y)).sameElementsAs(restb.toSeq.removeFirst(matchTwo(x, _)), f)
           }
 
         case _ => ita == itb

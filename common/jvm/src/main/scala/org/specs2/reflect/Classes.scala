@@ -23,7 +23,7 @@ trait Classes extends ClassOperations {
     createInstance(className, getClass.getClassLoader)
 
   def createInstance[T <: AnyRef](className: String, loader: ClassLoader, defaultInstances: =>List[AnyRef] = Nil)(implicit m: ClassTag[T]): Operation[T] =
-    loadClass(className, loader) >>= { klass: Class[T] =>
+    loadClass(className, loader) >>= { (klass: Class[T]) =>
       createInstanceFromClass(klass, loader, defaultInstances)
     }
 
@@ -36,7 +36,7 @@ trait Classes extends ClassOperations {
 
   /** try to create an instance but return an exception if this is not possible */
   def createInstanceEither[T <: AnyRef](className: String, loader: ClassLoader, defaultInstances: =>List[AnyRef] = Nil)(implicit m: ClassTag[T]): Operation[Throwable Either T] =
-    loadClassEither(className, loader) >>= { tc: Throwable Either Class[T] =>
+    loadClassEither(className, loader) >>= { (tc: Throwable Either Class[T]) =>
       tc match {
         case Left(t) => Operation.pure(Left(t))
         case Right(klass) =>

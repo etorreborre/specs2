@@ -23,7 +23,8 @@ import Snippet._
  */
 trait Snippets {
   /** implicit parameters selected for the creation of Snippets */
-  implicit def defaultSnippetParameters[T] = Snippet.defaultParams[T]
+  implicit def defaultSnippetParameters[T]: SnippetParams[T] =
+    Snippet.defaultParams[T]
 
   /** implicit function modify the Snippet parameters */
   implicit class SettableSnippet[T](s: Snippet[T]) {
@@ -118,7 +119,7 @@ case class Snippet[T](code: () => T,
  *  - the `eval` boolean indicating if a snippet must be evaluated
  *  - the `verify` function checking the result
  */
-case class SnippetParams[T]( 
+case class SnippetParams[T](
   trimExpression: String => String   = trimApproximatedSnippet,
   cutter: String => String           = ScissorsCutter(),
   asCode: (String, String) => String = markdownCode(offset = 0),
@@ -203,4 +204,3 @@ object Snippet {
   lazy val ls = "[ \t\\x0B\f]"
   lazy val parameters = "(\\([^\\)]+\\))*"
 }
-

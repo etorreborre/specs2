@@ -36,7 +36,7 @@ trait Quote {
   /** @return an object.toString() without quotes (used in messages creation) */
   def unq(a: Any)  = a.notNull
 
-  implicit def prefixed(s: String) = new Prefixed(s)
+  implicit def prefixed(s: String): Prefixed = new Prefixed(s)
   class Prefixed(s: String) {
     def prefix(separator: String, other: String) = Seq(s, other).filter(_.nonEmpty).mkString(separator)
   }

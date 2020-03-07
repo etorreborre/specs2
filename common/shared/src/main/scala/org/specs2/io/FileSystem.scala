@@ -127,7 +127,7 @@ case class FileSystem(logger: Logger) extends FilePathReader {
       listDirectFilePaths(src).flatMap { files =>
         files.toList.map(copyFile(dest)).sequence.void
       } >>
-      listDirectDirectoryPaths(src).flatMap { directories: IndexedSeq[DirectoryPath] =>
+      listDirectDirectoryPaths(src).flatMap { (directories: IndexedSeq[DirectoryPath]) =>
         directories.toList.map(dir => copyDir(dir, dest / dir.name)).sequence.void
       }
 

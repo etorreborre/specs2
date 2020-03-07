@@ -41,7 +41,7 @@ case class Operation[A](operation: () => A, last: Vector[Finalizer] = Vector.emp
     copy(last = last :+ finalizer)
 
   def thenFinally(operation: Operation[A]): Operation[A] =
-    addLast(Finalizer(() => operation.runVoid))
+    addLast(Finalizer(() => operation.runVoid()))
 
   def orElse(other: Operation[A]): Operation[A] =
     attempt.flatMap {

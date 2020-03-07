@@ -3,23 +3,23 @@ package concurrent
 
 import org.specs2.main.Arguments
 import org.specs2.control.Logger
-
+import java.util.concurrent._
 import scala.concurrent.ExecutionContext
 
 case class ExecutionEnv(executorServices: ExecutorServices,
                         timeFactor: Int) {
 
   def shutdown(): Unit =
-    executorServices.shutdownNow
+    executorServices.shutdownNow()
 
   lazy val executionContext         = executorServices.executionContext
   lazy val executorService          = executorServices.executorService
   lazy val scheduledExecutorService = executorServices.scheduledExecutorService
   lazy val scheduler                = executorServices.scheduler
 
-  implicit lazy val es  = executorService
-  implicit lazy val ses = scheduledExecutorService
-  implicit lazy val ec  = executionContext
+  implicit lazy val es: ExecutorService  = executorService
+  implicit lazy val ses: ScheduledExecutorService = scheduledExecutorService
+  implicit lazy val ec: ExecutionContext = executionContext
 
   def setTimeFactor(tf: Int): ExecutionEnv =
     copy(timeFactor = tf)

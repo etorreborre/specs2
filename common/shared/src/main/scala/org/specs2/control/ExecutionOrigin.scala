@@ -28,7 +28,7 @@ trait ExecutionOrigin extends Stacktraces {
 
   /** try to approximate if a specification is a specs2 by passing name = org.specs2 */
   def isSpecificationFromSpecs2(st: Seq[StackTraceElement]) = {
-    isFromClass({ fullClassName: String =>
+    isFromClass({ (fullClassName: String) =>
       val className = fullClassName.takeWhile(_ != '$').mkString
       // this is a fix for #533 to properly recognize org.specs2.mutable.Spec
       // used by a normal user

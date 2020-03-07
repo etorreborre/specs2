@@ -12,7 +12,8 @@ trait Throwablex {
   /**
    * Implicit method to add additional methods to Throwable objects
    */
-  implicit def extend[T <: Throwable](t: T) = new ExtendedThrowable(t)
+  implicit def extend[T <: Throwable](t: T): ExtendedThrowable[T] =
+    new ExtendedThrowable(t)
 
   /**
    * See the ExtendedExceptions object description

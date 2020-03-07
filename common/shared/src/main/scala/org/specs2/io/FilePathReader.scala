@@ -25,7 +25,7 @@ trait FilePathReader {
   /**
    * filter files according to a regex pattern
    */
-  def filterWithPattern(pattern: String): FilePath => Boolean = { filePath: FilePath =>
+  def filterWithPattern(pattern: String): FilePath => Boolean = { (filePath: FilePath) =>
     // remove any letter drive on Windows
     filePath.path.replaceFirst(".:", "").unixize matches pattern
   }

@@ -75,7 +75,7 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]) {
         }
     })
 
-    def drop(n: Int): Producer[F, A] =
+  def drop(n: Int): Producer[F, A] =
     cata(
       done[F, A],
       (a: A) => if (n <= 0) one(a) else done,
@@ -702,7 +702,7 @@ trait Producers {
   def emitAllSync[A](elements: A*): Producer[Operation, A] =
     emitSeq[Operation, A](elements)
 
-    def eval[F[_] : Monad : Safe, A](a: F[A]): Producer[F, A] =
+  def eval[F[_] : Monad : Safe, A](a: F[A]): Producer[F, A] =
     Producer(a.map(One(_)))
 
   def evalProducer[F[_] : Monad : Safe, A](a: F[Producer[F, A]]): Producer[F, A] =
