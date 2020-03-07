@@ -2,6 +2,7 @@ import sbt._
 import Defaults._
 import java.util.{Date, TimeZone}
 import java.text.SimpleDateFormat
+import libraryDependencies._
 
 /** MAIN PROJECT */
 lazy val specs2 = project.in(file(".")).
@@ -78,9 +79,9 @@ def commonJvmSettings =
 
 lazy val common = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("common")).
   settings(
-    libraryDependencies ++=
-      Seq(depends.reflect(scalaOrganization.value, scalaVersion.value),
-          depends.scalaXML.value, depends.scalacheck.value % Test).map(_.withDottyCompat(scalaVersion.value)),
+    depends.reflect,
+    depends.scalaXML,
+    depends.scalacheckTest,
     commonSettings,
     name := "specs2-common"
   ).
@@ -89,9 +90,9 @@ lazy val common = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file(
   nativeSettings(
     commonNativeSettings,
     depends.nativeTest,
-    libraryDependencies ++= depends.scalaParserNative.value.map(_.withDottyCompat(scalaVersion.value)),
+    depends.scalaParserNative,
   ).
-  platformsSettings(JVMPlatform, JSPlatform)(libraryDependencies ++= depends.scalaParser.value.map(_.withDottyCompat(scalaVersion.value))).
+  platformsSettings(JVMPlatform, JSPlatform)(depends.scalaParser).
   platformsSettings(JSPlatform, NativePlatform)(commonJsNativeSettings).
   dependsOn(fp)
 
@@ -237,7 +238,7 @@ lazy val scalacheck = crossProject(JSPlatform, JVMPlatform, NativePlatform).
   settings(
     commonSettings,
     name := "specs2-scalacheck",
-    libraryDependencies += depends.scalacheck.value.withDottyCompat(scalaVersion.value)
+    depends.scalacheck
   ).
   jsSettings(depends.jsTest, commonJsSettings).
   jvmSettings(depends.jvmTest, commonJvmSettings).
