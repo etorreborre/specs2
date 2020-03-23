@@ -1,9 +1,9 @@
 package org.specs2
 package matcher
 
-import org.specs2.matcher.describe.Diffable
-import org.specs2.text.Quote._
-
+import matcher.describe.Diffable
+import text.Quote._
+import IsEmpty.IsEmptyOps
 import scala.reflect.ClassTag
 
 /**
@@ -59,7 +59,7 @@ trait AnyBaseMatchers {
   def not[T](m: Matcher[T]) = m.not
 
   /** matches if a.isEmpty */
-  def beEmpty[T <% Any { def isEmpty: Boolean }] = new Matcher[T] {
+  def beEmpty[T : IsEmpty] = new Matcher[T] {
     def apply[S <: T](iterable: Expectable[S]) = {
       // we need to pattern match on arrays otherwise we get a reflection exception
       iterable.value match {
@@ -69,7 +69,7 @@ trait AnyBaseMatchers {
             iterable.description + " is not empty", iterable)
 
         case _ =>
-          result(iterable.value.isEmpty,
+            result((iterable.value: T).isEmpty,
             iterable.description + " is empty",
             iterable.description + " is not empty", iterable)
       }
@@ -85,8 +85,8 @@ trait AnyBaseMatchers {
       val x = a
       result(x == null && y.value == null || x != null && y.value != null,
              "both values are null",
-             if (x == null) y.description + " is not null" else q(x) + " is not null" +
-             y.optionalDescription.map(" but " + _ + " is null").getOrElse(""),
+             if (x == null) "the actual value " +y.description + " is not null"
+             else "the expected value " + q(x) + " is not null but the actual value is null",
              y)
     }
   }
@@ -165,6 +165,26 @@ trait AnyBaseMatchers {
   }
 }
 
+trait IsEmpty[T] {
+  def isEmpty(t: T): Boolean
+}
+
+object IsEmpty {
+
+  def apply[T](implicit ev: IsEmpty[T]): IsEmpty[T] =
+    ev
+
+  implicit class IsEmptyOps[T : IsEmpty](t: T) {
+    def isEmpty: Boolean =
+      IsEmpty[T].isEmpty(t)
+  }
+
+  implicit def seqIsEmpty[T]: IsEmpty[Seq[T]] =
+    new IsEmpty[Seq[T]] {
+      def isEmpty(t: Seq[T]): Boolean =
+        t.isEmpty
+    }
+}
 
 /**
  * Matcher for a boolean value which must be true
@@ -226,13 +246,14 @@ trait AnyBeHaveMatchers extends BeHaveMatchers { outer: AnyMatchers =>
 
   implicit def toClassMatcherResult(result: MatchResult[Class[_]]): ClassMatcherResult = new ClassMatcherResult(result)
   class ClassMatcherResult(result: MatchResult[Class[_]]) {
-    def assignableFrom = result(outer.beAssignableFrom)
+    def assignableFrom[T : ClassTag] =
+      result(outer.beAssignableFrom[T])
   }
-  
-  implicit def anyWithEmpty[T <% Any { def isEmpty: Boolean }](result: MatchResult[T]): AnyWithEmptyMatchers[T] =
+
+  implicit def anyWithEmpty[T : IsEmpty](result: MatchResult[T]): AnyWithEmptyMatchers[T] =
     new AnyWithEmptyMatchers(result)
 
-  class AnyWithEmptyMatchers[T <% Any { def isEmpty: Boolean }](result: MatchResult[T]) {
+  class AnyWithEmptyMatchers[T : IsEmpty](result: MatchResult[T]) {
     def empty = result(outer.beEmpty[T])
     def beEmpty = result(outer.beEmpty[T])
   }
@@ -245,7 +266,7 @@ trait AnyBeHaveMatchers extends BeHaveMatchers { outer: AnyMatchers =>
   def like[T](pattern: =>PartialFunction[T, MatchResult[_]]) = beLike(pattern)
   def beLikeA[T](pattern: =>PartialFunction[T, MatchResult[_]]) = beLike(pattern)
   def likeA[T](pattern: =>PartialFunction[T, MatchResult[_]]) = beLike(pattern)
-  def empty[T <: Any { def isEmpty: Boolean }] = beEmpty[T]
+  def empty[T : IsEmpty] = beEmpty[T]
   def oneOf[T](t: T*) = beOneOf(t:_*)
   def anyOf[T](t: T*) = beAnyOf(t:_*)
   def klass[T : ClassTag]: Matcher[AnyRef] = outer.haveClass[T]

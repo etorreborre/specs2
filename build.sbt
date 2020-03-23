@@ -21,7 +21,7 @@ lazy val specs2 = project.in(file(".")).
   )
 
 val scala211 = "2.11.12"
-val scalaDotty = "0.22.0-RC1"
+val scalaDotty = "0.23.0-RC1"
 
 /** COMMON SETTINGS */
 lazy val specs2Settings = Seq(

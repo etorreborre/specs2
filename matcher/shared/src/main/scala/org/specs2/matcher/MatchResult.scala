@@ -9,49 +9,49 @@ import ResultLogicalCombinators._
 
 /**
  * Result of a Match.
- * 
+ *
  * A MatchResult contains several information about a match on an expectable:
- * 
+ *
  * - the expectable value, to allow the chaining of matches
  * - a pair of messages ok message / ko message to allow the easy creation of the negation
  *   of a match
- * 
+ *
  * A MatchResult can be transformed to a simple Result object to be the body of an Example.
- * 
+ *
  * There are different kinds of MatchResults, some of them being only created to support
  * English-like combination of Matchers:
- * 
+ *
  * `1 must be equalTo(1) and not be equalTo(2)`
- * 
+ *
  * In an Expectation like the one above, there is a left to right evaluation:
- * 
+ *
  *  1. be is a NeutralMatcher, returning a NeutralMatch doing nothing yet, just storing
  *     the expectable
- *  
+ *
  *  2. equalTo(1) is a real Matcher which is applied to the NeutralMatch MatchResult
- *     thanks to an implicit definition in the BeHaveAnyMatchers trait. This yields a 
+ *     thanks to an implicit definition in the BeHaveAnyMatchers trait. This yields a
  *     MatchSuccess result
- *  
+ *
  *  3. not creates a NotMatcher and can be and-ed with the previous MatchSuccess to
  *     yield a AndMatch(MatchSuccess, NotMatch), with NotMatch being the result of
- *     applying the NotMatcher to the expectable. This AndMatch is evaluated to create a 
+ *     applying the NotMatcher to the expectable. This AndMatch is evaluated to create a
  *     AndNotMatch(MatchSuccess, MatchSkip)
- *     
+ *
  *     Basically this is like forming an evaluation
  *     structure which will be resolved when the next 'real' matcher will arrive
- *     
+ *
  *  4. the AndNotMatch get nows it be method called with the equalTo Matcher.
  *     This results in equalTo being applied to the AndNotMatch, effectively doing:
  *     MatchSuccess and MatchSkip.apply(equalTo(2).not), which is
  *     MatchSuccess and expectable.applyMatcher(equalTo(2).not) which is MatchSuccess
- * 
+ *
  * @see org.specs2.matcher.BeHaveMatchersSpec for examples
  */
 trait MatchResult[+T] extends ResultLike {
   /** the value being matched */
   val expectable: Expectable[T]
 
-  /** 
+  /**
    * apply a Matcher to the expectable contained in that MatchResult. Depending on the exact type of the MatchResult,
    * that logic may vary.
    *
@@ -152,7 +152,8 @@ case class MatchFailure[T] private[specs2](ok: () => String, ko: () => String, e
   /** an exception having the same stacktrace */
   lazy val exception = new Exception(koMessage)
 
-  override def toResult = Failure(koMessage, okMessage, trace, details)
+  override def toResult: Result =
+    Failure(koMessage, okMessage, trace, details)
 
   def negate: MatchResult[T] = MatchSuccess(koMessage, okMessage, expectable)
   def apply(matcher: Matcher[T]): MatchResult[T] = expectable.applyMatcher(matcher)
@@ -160,10 +161,21 @@ case class MatchFailure[T] private[specs2](ok: () => String, ko: () => String, e
   def setExpectable[S >: T](e: Expectable[S]): MatchResult[S] =
     copy(expectable = e)
 
-  override def mute                               = copy(ok = () => "", ko = () => "", details = NoDetails)
-  override def updateMessage(f: String => String) = copy(ok = () => f(okMessage), ko = () => f(koMessage))
-  override def orThrow: MatchFailure[T]           = throw new FailureException(toResult)
-  override def orSkip: MatchFailure[T]            = throw new SkipException(toResult)
+  override def mute =
+    copy(ok = () => "", ko = () => "", details = NoDetails)
+
+  override def updateMessage(f: String => String) =
+    copy(ok = () => f(okMessage), ko = () => f(koMessage))
+
+  override def orThrow: MatchFailure[T] =
+    throw new FailureException(toFailure)
+
+  override def orSkip: MatchFailure[T] =
+    throw new SkipException(Skipped(okMessage))
+
+  def toFailure: Failure =
+    Failure(koMessage, okMessage, trace, details)
+
 }
 
 object MatchFailure {
@@ -187,8 +199,12 @@ case class MatchSkip[T] private[specs2](override val message: String, expectable
   override def toResult = Skipped(message)
   override def mute = MatchSkip("", expectable)
   override def updateMessage(f: String => String) = MatchSkip(f(message), expectable)
-  override def orThrow: MatchSkip[T] = throw new SkipException(toResult)
+  override def orThrow: MatchSkip[T] = throw new SkipException(toSkipped)
+
+  def toSkipped: Skipped =
+    Skipped(message)
 }
+
 case class MatchPending[T] private[specs2](override val message: String, expectable: Expectable[T]) extends MatchResult[T] {
   def negate: MatchResult[T] = this
   def apply(matcher: Matcher[T]): MatchResult[T] = expectable.applyMatcher(matcher)
@@ -199,7 +215,10 @@ case class MatchPending[T] private[specs2](override val message: String, expecta
   override def toResult = Pending(message)
   override def mute = MatchPending("", expectable)
   override def updateMessage(f: String => String) = MatchPending(message, expectable)
-  override def orThrow: MatchPending[T] = throw new PendingException(toResult)
+  override def orThrow: MatchPending[T] = throw new PendingException(toPending)
+
+  def toPending: Pending =
+    Pending(message)
 }
 case class NotMatch[T] private[specs2](m: MatchResult[T]) extends MatchResult[T] {
   val expectable = m.expectable
@@ -362,4 +381,3 @@ object MatchResult {
   def sequence[T](seq: Seq[MatchResult[T]]): MatchResult[Seq[T]] =
     Matcher.result(AsResult(seq), MustExpectations.createExpectable(seq.map(_.expectable.value)))
 }
-

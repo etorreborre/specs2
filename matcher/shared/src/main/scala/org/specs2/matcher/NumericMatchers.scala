@@ -3,6 +3,7 @@ package matcher
 
 import text.Plural._
 import NumericMatchersDescription._
+import math.Ordering.Implicits.infixOrderingOps
 
 /**
  * Matchers for Numerical values
@@ -27,40 +28,40 @@ trait NumericMatchers extends NumericBaseMatchers with NumericBeHaveMatchers {
 
 private[specs2]
 trait NumericBaseMatchers {
-  /** matches if x <= n */   
-  def beLessThanOrEqualTo[S <% Ordered[S]](n: S) = new BeLessThanOrEqualTo(n)
   /** matches if x <= n */
-  def lessThanOrEqualTo[S <% Ordered[S]](n: S) = beLessThanOrEqualTo(n)
+  def beLessThanOrEqualTo[S : Ordering](n: S) = new BeLessThanOrEqualTo(n)
+  /** matches if x <= n */
+  def lessThanOrEqualTo[S : Ordering](n: S) = beLessThanOrEqualTo(n)
   /** alias for beLessThanOrEqualTo */
-  def be_<=[S <% Ordered[S]](n: S) = beLessThanOrEqualTo(n)
+  def be_<=[S : Ordering](n: S) = beLessThanOrEqualTo(n)
   /** alias for beLessThanOrEqualTo */
-  def <=[S <% Ordered[S]](n: S) = beLessThanOrEqualTo(n)
+  def <=[S : Ordering](n: S) = beLessThanOrEqualTo(n)
   /** matches if x < n */
-  def beLessThan[S <% Ordered[S]](n: S) = new BeLessThan(n)
-  def lessThan[S <% Ordered[S]](n: S) = beLessThan(n)
+  def beLessThan[S : Ordering](n: S) = new BeLessThan(n)
+  def lessThan[S : Ordering](n: S) = beLessThan(n)
   /** alias for beLessThan */
-  def be_<[S <% Ordered[S]](n: S) = beLessThan(n)
+  def be_<[S : Ordering](n: S) = beLessThan(n)
   /** alias for beLessThan */
-  def <[S <% Ordered[S]](n: S) = beLessThan(n)
-  /** matches if x >= n */   
-  def beGreaterThanOrEqualTo[S <% Ordered[S]](n: S) = new BeLessThan(n).not
-  def greaterThanOrEqualTo[S <% Ordered[S]](n: S) = beGreaterThanOrEqualTo(n)
+  def <[S : Ordering](n: S) = beLessThan(n)
+  /** matches if x >= n */
+  def beGreaterThanOrEqualTo[S : Ordering](n: S) = new BeLessThan(n).not
+  def greaterThanOrEqualTo[S : Ordering](n: S) = beGreaterThanOrEqualTo(n)
   /** alias for beGreaterThanOrEqualTo */
-  def be_>=[S <% Ordered[S]](n: S) = beGreaterThanOrEqualTo(n)
+  def be_>=[S : Ordering](n: S) = beGreaterThanOrEqualTo(n)
   /** alias for beGreaterThanOrEqualTo */
-  def >=[S <% Ordered[S]](n: S) = beGreaterThanOrEqualTo(n)
-  /** matches if x > n */   
-  def beGreaterThan[S <% Ordered[S]](n: S) = new BeLessThanOrEqualTo(n).not
-  def greaterThan[S <% Ordered[S]](n: S) = beGreaterThan(n)
+  def >=[S : Ordering](n: S) = beGreaterThanOrEqualTo(n)
+  /** matches if x > n */
+  def beGreaterThan[S : Ordering](n: S) = new BeLessThanOrEqualTo(n).not
+  def greaterThan[S : Ordering](n: S) = beGreaterThan(n)
   /** alias for beGreaterThan */
-  def be_>[S <% Ordered[S]](n: S) = beGreaterThan(n)
+  def be_>[S : Ordering](n: S) = beGreaterThan(n)
   /** alias for beGreaterThan */
-  def >[S <% Ordered[S]](n: S) = beGreaterThan(n)
-  
+  def >[S : Ordering](n: S) = beGreaterThan(n)
+
   /** matches if x = n +/- delta */
   def beCloseTo[S : Numeric](n: S, delta: S): Matcher[S] = new BeCloseTo(n, delta)
   def closeTo[S : Numeric](n: S, delta: S): Matcher[S] = beCloseTo(n, delta)
-  /** matches if x = n +/- delta */   
+  /** matches if x = n +/- delta */
   def beCloseTo[S : Numeric](delta: PlusOrMinus[S]): Matcher[S] = beCloseTo(delta.n, delta.delta)
   def closeTo[S : Numeric](delta: PlusOrMinus[S]): Matcher[S] = beCloseTo(delta)
   /** alias for beCloseTo */
@@ -83,13 +84,13 @@ trait NumericBaseMatchers {
 
 
   /** matches if a value is between 2 others according to an Ordering */
-  def beBetween[T <% Ordered[T]](t1: T, t2: T): BetweenMatcher[T] = BetweenMatcher(t1, t2)
-  def between[T <% Ordered[T]](t1: T, t2: T): BetweenMatcher[T] = BetweenMatcher(t1, t2)
+  def beBetween[T : Ordering](t1: T, t2: T): BetweenMatcher[T] = BetweenMatcher(t1, t2)
+  def between[T : Ordering](t1: T, t2: T): BetweenMatcher[T] = BetweenMatcher(t1, t2)
 
   /** alias for the adventurous: 5 must (`be[(2, 7)`[`) */
-  def `be[`[T <% Ordered[T]](t1: T, t2: T): BetweenMatcher[T] = BetweenMatcher(t1, t2)
+  def `be[`[T : Ordering](t1: T, t2: T): BetweenMatcher[T] = BetweenMatcher(t1, t2)
   /** alias for the adventurous: 5 must (`be](2, 7)`[`) */
-  def `be]`[T <% Ordered[T]](t1: T, t2: T): BetweenMatcher[T] = BetweenMatcher(t1, t2).excludingStart
+  def `be]`[T : Ordering](t1: T, t2: T): BetweenMatcher[T] = BetweenMatcher(t1, t2).excludingStart
 }
 
 /** transient class allowing the creation of a delta */
@@ -101,12 +102,12 @@ case class PlusOrMinus[S](n: S, delta: S)
 
 private[specs2]
 trait NumericBeHaveMatchers extends BeHaveMatchers { outer: NumericBaseMatchers =>
-  /** 
+  /**
    * matcher aliases and implicits to use with be + matcher
    */
 
-  implicit def toOrderedResultMatcher[S <% Ordered[S]](result: MatchResult[S]): OrderedResultMatcher[S] = new OrderedResultMatcher(result)
-  class OrderedResultMatcher[S <% Ordered[S]](result: MatchResult[S]) {
+  implicit def toOrderedResultMatcher[S : Ordering](result: MatchResult[S]): OrderedResultMatcher[S] = new OrderedResultMatcher(result)
+  class OrderedResultMatcher[S : Ordering](result: MatchResult[S]) {
     def be_<=(n: S) = result(outer.beLessThanOrEqualTo(n))
     def <=(n: S) = result(outer.beLessThanOrEqualTo(n))
     def lessThanOrEqualTo(n: S) = result(outer.beLessThanOrEqualTo(n))
@@ -140,13 +141,13 @@ trait NumericBeHaveMatchers extends BeHaveMatchers { outer: NumericBaseMatchers 
     def beCloseTo(target: S, figures: SignificantFigures) = result(outer.beCloseTo(target, figures))
     def beCloseTo(target: SignificantTarget[S]) = result(outer.beCloseTo(target))
   }
-  implicit def toNeutralMatcherOrdered(result: NeutralMatcher[Any]) : NeutralMatcherOrdered = 
+  implicit def toNeutralMatcherOrdered(result: NeutralMatcher[Any]) : NeutralMatcherOrdered =
     new NeutralMatcherOrdered(result)
   class NeutralMatcherOrdered(result: NeutralMatcher[Any]) {
-    def <=[S <% Ordered[S]](n: S)    = outer.beLessThanOrEqualTo(n)
-    def <[S <% Ordered[S]](n: S)     = outer.beLessThan(n)
-    def >=[S <% Ordered[S]](n: S)    = outer.beGreaterThanOrEqualTo(n)
-    def >[S <% Ordered[S]](n: S)     = outer.beGreaterThan(n)
+    def <=[S : Ordering](n: S)    = outer.beLessThanOrEqualTo(n)
+    def <[S : Ordering](n: S)     = outer.beLessThan(n)
+    def >=[S : Ordering](n: S)    = outer.beGreaterThanOrEqualTo(n)
+    def >[S : Ordering](n: S)     = outer.beGreaterThan(n)
   }
 
   implicit def toNeutralMatcherNumeric(result: NeutralMatcher[Any]) : NeutralMatcherNumeric =
@@ -179,20 +180,22 @@ object NumericMatchersDescription {
   }
 }
 
-class BeLessThanOrEqualTo[T <% Ordered[T]](n: T) extends Matcher[T] { 
+class BeLessThanOrEqualTo[T : Ordering](n: T) extends Matcher[T] {
   def apply[S <: T](a: Expectable[S]) = {
-    val r = a.value <= n
-    val isEqual = a.value == n  
-    result(r, 
+    val value: T = a.value
+    val r = value <= n
+    val isEqual = value == n
+    result(r,
            if (isEqual) description(a) + " is equal to " + n.toString else description(a) + " is less than " + n.toString,
            description(a) + " is greater than " + n.toString,
            a)
   }
 }
-class BeLessThan[T <% Ordered[T]](n: T) extends Matcher[T] { 
+class BeLessThan[T : Ordering](n: T) extends Matcher[T] {
   def apply[S <: T](a: Expectable[S]) = {
-    val r = a.value < n
-    result(r, 
+    val value: T = a.value
+    val r = value < n
+    result(r,
            description(a) + " is less than " + n.toString,
            description(a) + " is not less than " + n.toString,
            a)
@@ -201,7 +204,7 @@ class BeLessThan[T <% Ordered[T]](n: T) extends Matcher[T] {
 class BeCloseTo[T : Numeric](n: T, delta: T) extends Matcher[T] {
   def apply[S <: T](x: Expectable[S]) = {
     val num = implicitly[Numeric[T]]
-    result(num.lteq(num.minus(n, delta), x.value) && num.lteq(x.value, num.plus(n, delta)), 
+    result(num.lteq(num.minus(n, delta), x.value) && num.lteq(x.value, num.plus(n, delta)),
            description(x) + " is close to " + n.toString + " +/- " + delta,
            description(x) + " is not close to " + n.toString + " +/- " + delta, x)
   }
@@ -233,17 +236,17 @@ class BeSignificantlyCloseTo[T : Numeric](target: T, sf: SignificantFigures) ext
 case class SignificantTarget[T : Numeric](target: T, significantFigures: SignificantFigures)
 case class SignificantFigures(number: Int)
 
-case class BetweenMatcher[T <% Ordered[T]](t1: T, t2: T, includeStart: Boolean = true, includeEnd: Boolean = true) extends Matcher[T] {
+case class BetweenMatcher[T : Ordering](t1: T, t2: T, includeStart: Boolean = true, includeEnd: Boolean = true) extends Matcher[T] {
   def apply[S <: T](s: Expectable[S]) = {
-    val value = s.value
+    val value: T = s.value
     val included = (includeStart && (value >= t1) || !includeStart && (value > t1)) &&
                    (includeEnd   && (value <= t2) || !includeEnd   && (value < t2))
 
     def bracket(b: Boolean) = if (b) "[" else "]"
     val (start, end) = (bracket(includeStart), bracket(!includeEnd))
 
-    val (ok, ko) = (s.value+" is in "+start+t1+", "+t2+end,
-      s.value+" is not in "+start+t1+", "+t2+end)
+    val (ok, ko) = (s.description+" is in "+start+t1+", "+t2+end,
+      s.description+" is not in "+start+t1+", "+t2+end)
     result(included, ok, ko, s)
   }
 

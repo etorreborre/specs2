@@ -37,9 +37,9 @@ trait OptionBaseMatchers {
   def beAsNoneAs[T](other: =>Option[T]): Matcher[Option[T]] = new Matcher[Option[T]] {
     def apply[S <: Option[T]](a: Expectable[S]) = {
       val b = other
-      result(a.value == None && b == None || a.value != None && b != None, 
+      result(a.value == None && b == None || a.value != None && b != None,
              a.description + " is None as well",
-             if (a.value == None) b + " is not None" else a.description + " is not None",
+             if (a.value == None) b.toString + " is not None" else a.description + " is not None",
              a)
     }
   }
@@ -50,7 +50,7 @@ trait OptionBaseMatchers {
 
 private[specs2]
 trait OptionBeHaveMatchers extends BeHaveMatchers { outer: OptionBaseMatchers =>
-  implicit def toOptionResultMatcher[T](result: MatchResult[Option[T]]) = new OptionResultMatcher(result)
+  implicit def toOptionResultMatcher[T](result: MatchResult[Option[T]]): OptionResultMatcher[T] = new OptionResultMatcher(result)
   class OptionResultMatcher[T](result: MatchResult[Option[T]]) {
     def beSome = result(outer.beSome)
     def beSome(check: ValueCheck[T]) = result(outer.beSome(check))

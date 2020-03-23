@@ -63,7 +63,7 @@ trait Seqx { outer =>
      * @return remove all the elements of other from seq with a user-defined equality function
      */
     def difference(other: Seq[T], equality: (T, T) => Boolean = (_:T) == (_:T)): scala.collection.Seq[T] = {
-      val occurrences = occurrenceCounts(other.seq, equality)
+      val occurrences = occurrenceCounts(other, equality)
       val result = new ListBuffer[T]
       for (x <- seq)
         if (occurrences(D(x, equality)) == 0) result += x
@@ -82,7 +82,7 @@ trait Seqx { outer =>
     }
     private def occurrenceCounts(sq: Seq[T], equality: (T, T) => Boolean): scala.collection.mutable.Map[D, Int] = {
       val occurrences = new scala.collection.mutable.HashMap[D, Int] { override def default(k: D) = 0 }
-      for (y <- sq.seq) occurrences(D(y, equality)) += 1
+      for (y <- sq) occurrences(D(y, equality)) += 1
       occurrences
     }
 

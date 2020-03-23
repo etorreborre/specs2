@@ -68,7 +68,7 @@ trait Iterablex {
               resta.toSeq.removeFirst(matchTwo(_, y)).sameElementsAs(restb.toSeq.removeFirst(matchTwo(x, _)), f)
           }
 
-        case _ => ita == itb
+        case (_, _) => ita == itb
       }
     }
     /**
@@ -104,7 +104,7 @@ trait Iterablex {
     /** map the first element with a function */
     def mapFirst(f: T => T): GenSeq[T] = (xs.take(1).map(f) ++ xs.drop(1)).toSeq
     /** map the last element with a function */
-    def mapLast(f: T => T): Seq[T] = (xs.seq.dropRight(1) ++ xs.seq.takeRight(1).map(f)).toSeq
+    def mapLast(f: T => T): Seq[T] = (xs.dropRight(1) ++ xs.takeRight(1).map(f)).toSeq
     /** @return a sequence rotated of a number of elements */
     def rotate(n: Int) = xs.slice(n, xs.size) ++ xs.slice(0, n)
     /** @return a randomly mixed sequence */
@@ -113,7 +113,7 @@ trait Iterablex {
     /** @return a randomly mixed sequence */
     def scramble(random: scala.util.Random): Seq[T] =
       // rotate arbitrarily the sequence first then sort randomly
-      xs.rotate(random.nextInt(xs.size+1)).seq.toSeq.sortWith((_,_) => random.nextInt(2) > 0)
+      xs.rotate(random.nextInt(xs.size+1)).toSeq.sortWith((_,_) => random.nextInt(2) > 0)
 
   }
 }

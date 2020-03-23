@@ -5,6 +5,7 @@ import java.io.File
 
 import io._
 import text.Split._
+import scala.collection.immutable.ArraySeq
 
 /**
  * Command-line arguments
@@ -75,10 +76,10 @@ object CommandLine extends Extract {
 
   val allValueNames = Select.allValueNames ++ Store.allValueNames ++ Execute.allValueNames ++ Report.allValueNames
 
-  def splitValues(arguments: String): Seq[String] = splitValues(arguments.split(" "))
+  def splitValues(arguments: String): Seq[String] =
+    splitValues(ArraySeq.unsafeWrapArray(arguments.split(" ")))
 
   def splitValues(arguments: Seq[String]): Seq[String] =
     arguments.splitDashed(allValueNames)
 
 }
-

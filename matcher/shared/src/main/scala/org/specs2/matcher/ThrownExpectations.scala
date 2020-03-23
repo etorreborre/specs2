@@ -147,7 +147,7 @@ trait ThrownMessages { this: ThrownExpectations =>
 }
 
 /** this class allows to throw a match failure result in an Exception */
-class MatchFailureException[T](val failure: MatchFailure[T]) extends FailureException(failure.toResult) with MatchResultException[T] {
+class MatchFailureException[T](val failure: MatchFailure[T]) extends FailureException(failure.toFailure) with MatchResultException[T] {
   lazy val matchResult = failure
 
   override def getMessage = f.message
@@ -158,7 +158,7 @@ object MatchFailureException {
   def unapply[T](m: MatchFailureException[T]): Option[MatchFailure[T]] = Some(m.failure)
 }
 /** this class allows to throw a skipped match result in an Exception */
-class MatchSkipException[T](val s: MatchSkip[T]) extends SkipException(s.toResult) with MatchResultException[T] {
+class MatchSkipException[T](val s: MatchSkip[T]) extends SkipException(s.toSkipped) with MatchResultException[T] {
   lazy val matchResult = s
 }
 object MatchSkipException {
@@ -166,7 +166,7 @@ object MatchSkipException {
 }
 
 /** this class allows to throw a pending result in an Exception */
-class MatchPendingException[T](val p: MatchPending[T]) extends PendingException(p.toResult) with MatchResultException[T] {
+class MatchPendingException[T](val p: MatchPending[T]) extends PendingException(p.toPending) with MatchResultException[T] {
   lazy val matchResult = p
 }
 object MatchPendingException {

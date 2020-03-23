@@ -80,7 +80,7 @@ object Report extends Extract {
       _colors            = value("colors").map(MappedColors.fromArgs).orElse(value("colorsclass").flatMap(instance[Colors])),
       _showtimes         = bool("showTimes"),
       _offset            = int("offset"),
-      _diffs             = value("smartdiffs").flatMap(parameters => SmartDiffs.fromString(parameters).right.toOption).
+      _diffs             = value("smartdiffs").flatMap(parameters => SmartDiffs.fromString(parameters).toOption).
                             orElse(value("diffsclass").flatMap(instance)),
       _traceFilter       = bool("fullStackTrace").map(t => NoStackTraceFilter).
                              orElse(value("traceFilter", IncludeExcludeStackTraceFilter.fromString)),

@@ -44,7 +44,7 @@ object BestMatching {
     // collect one failure per unmatched value
     val failures = matches.collect { case (t, i, v, j, r) if !successfulIndices.contains(i) && !best.exists(_._2 == j) && !r.isSuccess =>
       (i, (t, v, r))
-    }.groupBy(_._1).mapValues(_.head._2).values.toList
+    }.groupBy(_._1).view.mapValues(_.head._2).values.toList
 
     def isUnchecked(j: Int) = {
       !best.exists(_._2 == j) && (eachCheck || !allResults.exists { case ((i, j1), (_, _, r)) => j1 == j && r.isSuccess })
@@ -56,4 +56,3 @@ object BestMatching {
   }
 
 }
-

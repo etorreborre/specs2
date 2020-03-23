@@ -99,16 +99,18 @@ trait NotNullStrings {
   implicit def traversableOnceToNotNull[T](a: =>TraversableOnce[T]): NotNullTraversableOnce[T] = new NotNullTraversableOnce(a)
   class NotNullTraversableOnce[T](values: =>TraversableOnce[T]) extends NotNullMkString {
     def notNullMkString(sep: String, start: String = "", end: String = ""): String = {
-      if (values == null) "null"
-      else                evaluate(catchAllOrElse(values.mkString(start, sep, end))(evaluate(values.toString)))
+      if (values == null)
+        "null"
+      else
+        evaluate(catchAllOrElse(values.iterator.mkString(start, sep, end))(evaluate(values.toString)))
     }
     def notNullMkStringWith(addQuotes: Boolean = false): String = {
-      def traversableWithQuotedElements = values.toSeq.map(v => quote(evaluate(v), addQuotes)).toString
+      def traversableWithQuotedElements = values.iterator.to(Seq).map(v => quote(evaluate(v), addQuotes)).toString
       def quotedTraversable             = quote(evaluate(values.toString))
 
       if (values == null) quote("null", addQuotes)
       else if (addQuotes) evaluate(catchAllOrElse(traversableWithQuotedElements)(quotedTraversable))
-      else                evaluate(catchAllOrElse(evaluate(values.toString))(values.toSeq.map(v => evaluate(v)).toString))
+      else                evaluate(catchAllOrElse(evaluate(values.toString))(values.iterator.to(Seq).map(v => evaluate(v)).toString))
     }
   }
 

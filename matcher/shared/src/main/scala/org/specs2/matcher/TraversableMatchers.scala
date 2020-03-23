@@ -66,8 +66,8 @@ trait TraversableBaseMatchers { outer =>
         if (diffs.isEmpty) "" else diffs.mkString("\n  "+msg+": ", ", ", "")
 
       result(missing.isEmpty && added.isEmpty,
-             t.value + "\n  contains the same elements as\n"+ seq,
-             t.value + message(missing, "is missing") + message(added, "must not contain"),
+             t.description + "\n  contains the same elements as\n"+ seq,
+             t.description + message(missing, "is missing") + message(added, "must not contain"),
              t)
     }
   }
@@ -458,4 +458,3 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
 
   override def not = copy(negate = !negate)
 }
-

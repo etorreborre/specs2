@@ -1,4 +1,4 @@
-package org.specs2.execute
+//package org.specs2.execute
 
 /**
  * This macro checks if some code can be parsed and typechecks ok

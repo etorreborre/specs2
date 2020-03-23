@@ -14,7 +14,7 @@ object ExecuteActions {
     timeout.fold(runNow(ee)) { t =>
       val promise = Promise[A]
       ee.executorServices.schedule( { promise.tryFailure(new TimeoutException); () }, t * ee.timeFactor.toLong)
-      promise.tryCompleteWith(runNow(ee))
+      promise.completeWith(runNow(ee))
       promise.future
     }
   }

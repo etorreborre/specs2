@@ -2,11 +2,11 @@ package org.specs2
 package matcher
 
 class NumericMatchersSpec extends Spec with NumericMatchers with MustExpectations with MatchersImplicits {  def is = s2"""
-                                                                                                                        
+
 The NumericMatchers trait provides matchers to do comparisons with Numeric
 types and more generally with Ordered types.
-                                                                                                                        
-  beLessThanOrEqualTo compares any Ordered type with <=                                                               
+
+  beLessThanOrEqualTo compares any Ordering type with <=
   ${ 1 must be_<=(2) }
   ${ 2 must be <=(2) }
   ${ 1 must beLessThanOrEqualTo(2) }
@@ -76,7 +76,7 @@ types and more generally with Ordered types.
   ${ 0 must be closeTo(0 within 1.significantFigure) }
   ${ 0.0 must not be closeTo(0.1 within 1.significantFigure) }
 
-  beBetween tests if one value is between 2 other values                                                              
+  beBetween tests if one value is between 2 other values
   ${ 5 must beBetween(3, 6) }
   ${ 5 must beBetween(3, 5) }
   ${ 5 must beBetween(3, 6).excludingEnd }

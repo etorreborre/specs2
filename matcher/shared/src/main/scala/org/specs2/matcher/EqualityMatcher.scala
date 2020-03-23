@@ -43,7 +43,7 @@ class EqualityMatcher[T : Diffable](t: =>T) extends AdaptableMatcher[T] { outer 
       case (e1: Map[_, _], e2: Map[_, _]) => Some( FailureMapDetails(e1.toMap[Any, Any], e2.toMap[Any, Any]) )
       case (e1: Set[_], e2: Set[_]) => Some( FailureSetDetails(e1.toSet[Any], e2.toSet[Any]) )
       case (e1: Array[_], e2: Array[_]) => Some( FailureSeqDetails(e1.toSeq, e2.toSeq) )
-      case (e1: Traversable[_], e2: Traversable[_]) if foreachIsDefined(e2) => Some( FailureSeqDetails(e1.toSeq.seq, e2.toSeq.seq) )
+      case (e1: Traversable[_], e2: Traversable[_]) if foreachIsDefined(e2) => Some( FailureSeqDetails(e1.toSeq, e2.toSeq) )
       case (e1: Traversable[_], e2: Traversable[_]) => None
       case (e1, e2) => None
     }
