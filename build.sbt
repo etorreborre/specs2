@@ -331,7 +331,7 @@ lazy val apiSettings = Seq(
   unmanagedSourceDirectories   in (Compile, doc) := unmanagedSourceDirectories.all(aggregateCompile).value.flatten,
   unmanagedResourceDirectories in (Compile, doc) := unmanagedResourceDirectories.all(aggregateCompile).value.flatten,
   libraryDependencies                            := libraryDependencies.all(aggregateTest).value.flatten) ++
-  Seq(scalacOptions in (Compile, doc) += "-Ymacro-no-expand")
+  Seq(scalacOptions in (Compile, doc) += "-Ymacro-expand:none")
 
 lazy val aggregateCompile = ScopeFilter(
   inProjects(fpJVM, commonJVM, matcherJVM, matcherExtraJVM, coreJVM, html, formJVM, markdownJVM, junitJVM, scalacheckJVM),
