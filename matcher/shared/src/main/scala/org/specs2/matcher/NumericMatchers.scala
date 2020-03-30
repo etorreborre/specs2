@@ -1,6 +1,7 @@
 package org.specs2
 package matcher
 
+import java.math._
 import text.Plural._
 import NumericMatchersDescription._
 
@@ -27,7 +28,7 @@ trait NumericMatchers extends NumericBaseMatchers with NumericBeHaveMatchers {
 
 private[specs2]
 trait NumericBaseMatchers {
-  /** matches if x <= n */   
+  /** matches if x <= n */
   def beLessThanOrEqualTo[S <% Ordered[S]](n: S) = new BeLessThanOrEqualTo(n)
   /** matches if x <= n */
   def lessThanOrEqualTo[S <% Ordered[S]](n: S) = beLessThanOrEqualTo(n)
@@ -42,25 +43,25 @@ trait NumericBaseMatchers {
   def be_<[S <% Ordered[S]](n: S) = beLessThan(n)
   /** alias for beLessThan */
   def <[S <% Ordered[S]](n: S) = beLessThan(n)
-  /** matches if x >= n */   
+  /** matches if x >= n */
   def beGreaterThanOrEqualTo[S <% Ordered[S]](n: S) = new BeLessThan(n).not
   def greaterThanOrEqualTo[S <% Ordered[S]](n: S) = beGreaterThanOrEqualTo(n)
   /** alias for beGreaterThanOrEqualTo */
   def be_>=[S <% Ordered[S]](n: S) = beGreaterThanOrEqualTo(n)
   /** alias for beGreaterThanOrEqualTo */
   def >=[S <% Ordered[S]](n: S) = beGreaterThanOrEqualTo(n)
-  /** matches if x > n */   
+  /** matches if x > n */
   def beGreaterThan[S <% Ordered[S]](n: S) = new BeLessThanOrEqualTo(n).not
   def greaterThan[S <% Ordered[S]](n: S) = beGreaterThan(n)
   /** alias for beGreaterThan */
   def be_>[S <% Ordered[S]](n: S) = beGreaterThan(n)
   /** alias for beGreaterThan */
   def >[S <% Ordered[S]](n: S) = beGreaterThan(n)
-  
-  /** matches if x = n +/- delta */
+
+  /** matches if actual = n +/- delta */
   def beCloseTo[S : Numeric](n: S, delta: S): Matcher[S] = new BeCloseTo(n, delta)
   def closeTo[S : Numeric](n: S, delta: S): Matcher[S] = beCloseTo(n, delta)
-  /** matches if x = n +/- delta */   
+  /** matches if actual = n +/- delta */
   def beCloseTo[S : Numeric](delta: PlusOrMinus[S]): Matcher[S] = beCloseTo(delta.n, delta.delta)
   def closeTo[S : Numeric](delta: PlusOrMinus[S]): Matcher[S] = beCloseTo(delta)
   /** alias for beCloseTo */
@@ -101,7 +102,7 @@ case class PlusOrMinus[S](n: S, delta: S)
 
 private[specs2]
 trait NumericBeHaveMatchers extends BeHaveMatchers { outer: NumericBaseMatchers =>
-  /** 
+  /**
    * matcher aliases and implicits to use with be + matcher
    */
 
@@ -140,7 +141,7 @@ trait NumericBeHaveMatchers extends BeHaveMatchers { outer: NumericBaseMatchers 
     def beCloseTo(target: S, figures: SignificantFigures) = result(outer.beCloseTo(target, figures))
     def beCloseTo(target: SignificantTarget[S]) = result(outer.beCloseTo(target))
   }
-  implicit def toNeutralMatcherOrdered(result: NeutralMatcher[Any]) : NeutralMatcherOrdered = 
+  implicit def toNeutralMatcherOrdered(result: NeutralMatcher[Any]) : NeutralMatcherOrdered =
     new NeutralMatcherOrdered(result)
   class NeutralMatcherOrdered(result: NeutralMatcher[Any]) {
     def <=[S <% Ordered[S]](n: S)    = outer.beLessThanOrEqualTo(n)
@@ -179,20 +180,20 @@ object NumericMatchersDescription {
   }
 }
 
-class BeLessThanOrEqualTo[T <% Ordered[T]](n: T) extends Matcher[T] { 
+class BeLessThanOrEqualTo[T <% Ordered[T]](n: T) extends Matcher[T] {
   def apply[S <: T](a: Expectable[S]) = {
     val r = a.value <= n
-    val isEqual = a.value == n  
-    result(r, 
+    val isEqual = a.value == n
+    result(r,
            if (isEqual) description(a) + " is equal to " + n.toString else description(a) + " is less than " + n.toString,
            description(a) + " is greater than " + n.toString,
            a)
   }
 }
-class BeLessThan[T <% Ordered[T]](n: T) extends Matcher[T] { 
+class BeLessThan[T <% Ordered[T]](n: T) extends Matcher[T] {
   def apply[S <: T](a: Expectable[S]) = {
     val r = a.value < n
-    result(r, 
+    result(r,
            description(a) + " is less than " + n.toString,
            description(a) + " is not less than " + n.toString,
            a)
@@ -201,7 +202,7 @@ class BeLessThan[T <% Ordered[T]](n: T) extends Matcher[T] {
 class BeCloseTo[T : Numeric](n: T, delta: T) extends Matcher[T] {
   def apply[S <: T](x: Expectable[S]) = {
     val num = implicitly[Numeric[T]]
-    result(num.lteq(num.minus(n, delta), x.value) && num.lteq(x.value, num.plus(n, delta)), 
+    result(num.lteq(num.minus(n, delta), x.value) && num.lteq(x.value, num.plus(n, delta)),
            description(x) + " is close to " + n.toString + " +/- " + delta,
            description(x) + " is not close to " + n.toString + " +/- " + delta, x)
   }
@@ -210,24 +211,16 @@ class BeCloseTo[T : Numeric](n: T, delta: T) extends Matcher[T] {
 class BeSignificantlyCloseTo[T : Numeric](target: T, sf: SignificantFigures) extends Matcher[T] {
   def apply[S <: T](x: Expectable[S]) = {
     val num = implicitly[Numeric[T]]
-    val actual = x.value
-    if (target == 0)
-      result(actual == 0,
-        s"$actual is equal to $target",
-        s"${description(x)} is not equal to 0 (significant figures do not apply since the target is 0)", x)
-    else {
-      // Calculate the order of the number
-      val o = order(num.toDouble(target))
-      // Calculate both actual and target as ints of just their significant figures
-      // e.g. 0.1234 to 2 sig figs as 12
-      val a = (num.toDouble(actual) * Math.pow(10, (sf.number - o - 1).toDouble)).round.toInt
-      val t = (num.toDouble(target) * Math.pow(10, (sf.number - o - 1).toDouble)).round.toInt
-      result(a == t,
-        s"${description(x)} is close to $target with ${sf.number.qty("significant digit")}",
-        s"${description(x)} is not close to $target with ${sf.number.qty("significant digit")}", x)
-    }
+    val actualUnscaled = BigDecimal.valueOf(num.toDouble(x.value))
+
+    val newScale = sf.number - actualUnscaled.precision + actualUnscaled.scale
+    val actual = actualUnscaled.setScale(newScale, RoundingMode.HALF_UP)
+    val expected = BigDecimal.valueOf(num.toDouble(target)).setScale(newScale, RoundingMode.HALF_UP)
+
+    result(actual == expected,
+      s"${description(x)} is close to $target with ${sf.number.qty("significant digit")}",
+      s"${description(x)} is not close to $target with ${sf.number.qty("significant digit")}", x)
   }
-  def order(n: Double):Int = Math.log10(n.abs).floor.toInt
 }
 
 case class SignificantTarget[T : Numeric](target: T, significantFigures: SignificantFigures)
