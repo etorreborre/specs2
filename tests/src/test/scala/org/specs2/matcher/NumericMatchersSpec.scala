@@ -72,9 +72,11 @@ types and more generally with Ordered types.
   ${ 0.00123 must not(beCloseTo(0.00124 within 3.significantFigures)) }
   ${ 0.00123 must beCloseTo(0.00124 within 2.significantFigures) }
   ${ 900 must not(beCloseTo(1000 within 2.significantFigures)) }
-  ${ 900 must be closeTo(1000 within 1.significantFigures) }
-  ${ 0 must be closeTo(0 within 1.significantFigure) }
+  ${ 900 must not(beCloseTo(1000 within 1.significantFigures)) }
+  ${ 0 must beCloseTo(0 within 1.significantFigure) }
   ${ 0.0 must not(beCloseTo(0.1 within 1.significantFigure)) }
+  ${ 0.0 must beCloseTo(1E-300, 15.significantFigures) }
+  ${ 1.0 must not(beCloseTo(1E-300, 15.significantFigures)) }
 
   beBetween tests if one value is between 2 other values
   ${ 5 must beBetween(3, 6) }
