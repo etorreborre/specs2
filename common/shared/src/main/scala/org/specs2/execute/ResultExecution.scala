@@ -33,7 +33,7 @@ trait ResultExecution { outer =>
       case e: AssertionError                                                 => Error(e)
       case e: java.lang.Error if simpleClassName(e) == "NotImplementedError" => Failure(e.getMessage.notNull, "", e.getStackTrace.toList, details = FromJUnitAssertionError)
       case e: java.lang.Error if simpleClassName(e) == "ExpectationError"    => Failure(e.toString, "", e.getStackTrace.toList, details = FromExpectationError)
-      case t: Exception                                                      => Error(t)
+      case t: Throwable                                                      => Error(t)
     }
 
   /** execute a Result and rethrow any exception or throws an exception if it is not a success */
@@ -60,7 +60,7 @@ trait ResultExecution { outer =>
       case e: AssertionError                                                 => throw ErrorException(Error(e))
       case e: java.lang.Error if simpleClassName(e) == "NotImplementedError" => throw FailureException(Failure(e.getMessage.notNull, "", e.getStackTrace.toList, details = FromJUnitAssertionError))
       case e: java.lang.Error if simpleClassName(e) == "ExpectationError"    => throw FailureException(Failure(e.toString, "", e.getStackTrace.toList, details = FromExpectationError))
-      case t: Exception                                                      => throw ErrorException(Error(t))
+      case t: Throwable                                                      => throw ErrorException(Error(t))
     }
 
   /**
