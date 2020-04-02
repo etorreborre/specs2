@@ -69,7 +69,7 @@ trait NumericBaseMatchers {
   /** alias for beCloseTo */
   def ~[S : Numeric](delta: PlusOrMinus[S]): Matcher[S] = beCloseTo(delta)
 
-  /** matches if target - actual < 10 pow (log x - significantDigits) */
+  /** matches if target - actual < 10 pow (log actual - significantDigits) */
   def beCloseTo[S : Numeric](target: S, figures: SignificantFigures): Matcher[S] =
     new BeSignificantlyCloseTo[S](target, figures)
 
