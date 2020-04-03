@@ -134,9 +134,14 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
           // this sets any custom classloader, like the one passed from SBT
           // as the context classloader this thread
           env.setContextClassLoader()
-
           val timer = startSimpleTimer
-          val timedFuture = Action.future(r(env).map(action => (action(), timer.stop)), to)
+
+          val timedFuture = Action.future(r(env).flatMap { action =>
+              try Future.successful((action(), timer.stop))
+              catch { case t: Throwable =>
+                Future.failed(t)
+              }
+            }, to)
 
           val future = timedFuture.runFuture(env.executionEnv).recoverWith { case e: FailureException =>
             // Future execution could still throw FailureExceptions which can only be

@@ -6,6 +6,7 @@ import control.Property
 import reflect.ClassName._
 import text.NotNullStrings._
 import java.util.regex.Pattern
+import scala.util.control.NonFatal
 
 /**
 * This trait executes a Result and returns an appropriate value when a specs2 exception is thrown
@@ -32,7 +33,7 @@ trait ResultExecution { outer =>
       case e: AssertionError                                                 => Error(e)
       case e: java.lang.Error if simpleClassName(e) == "NotImplementedError" => Failure(e.getMessage.notNull, "", e.getStackTrace.toList, details = FromJUnitAssertionError)
       case e: java.lang.Error if simpleClassName(e) == "ExpectationError"    => Failure(e.toString, "", e.getStackTrace.toList, details = FromExpectationError)
-      case t: Exception                                                      => Error(t)
+      case NonFatal(t)                                                       => Error(t)
 
   /** execute a Result and rethrow any exception or throws an exception if it is not a success */
   def effectively(result: =>Result): Result =
@@ -57,7 +58,7 @@ trait ResultExecution { outer =>
       case e: AssertionError                                                 => throw ErrorException(Error(e))
       case e: java.lang.Error if simpleClassName(e) == "NotImplementedError" => throw FailureException(Failure(e.getMessage.notNull, "", e.getStackTrace.toList, details = FromJUnitAssertionError))
       case e: java.lang.Error if simpleClassName(e) == "ExpectationError"    => throw FailureException(Failure(e.toString, "", e.getStackTrace.toList, details = FromExpectationError))
-      case t: Exception                                                      => throw ErrorException(Error(t))
+      case NonFatal(t)                                                       => throw ErrorException(Error(t))
 
   /**
    * execute a piece of code and return a result:
