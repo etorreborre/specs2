@@ -34,6 +34,7 @@ lazy val specs2Settings = Seq(
   scalazVersion in GlobalScope := "7.2.28",
   specs2ShellPrompt,
   scalaVersion := "2.13.1",
+  SettingKey[Boolean]("ide-skip-project") := platformDepsCrossVersion.value == ScalaNativeCrossVersion.binary,
   crossScalaVersions := Seq(scalaVersion.value, scala211, "2.12.10"))
 
 lazy val versionSettings =
