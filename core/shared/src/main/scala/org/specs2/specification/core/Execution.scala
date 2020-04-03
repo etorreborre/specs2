@@ -137,9 +137,14 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
           env.setContextClassLoader()
 
           val timer = startSimpleTimer
-
+          
           val timedFuture = TimedFuture({ es =>
-            r(env).map(action => (action(), timer.stop))
+            r(env).flatMap { action =>
+              try Future.successful((action(), timer.stop))
+              catch { case t: Throwable =>
+                Future.failed(t)
+              }
+            }
           }, to)
 
           val future = timedFuture.runNow(env.executorServices).recoverWith { case e: FailureException =>
