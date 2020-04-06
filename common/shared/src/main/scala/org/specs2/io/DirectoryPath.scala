@@ -4,6 +4,8 @@ package io
 import java.io._
 import java.net.URI
 import java.util.UUID
+import FileName._
+
 
 /**
  * Representation of a directory path which can be relative or absolute
@@ -121,78 +123,3 @@ object DirectoryPath {
   val Root = DirectoryPath(dirs = Vector(), absolute = true)
   val EMPTY = DirectoryPath(dirs = Vector(), absolute = false)
 }
-
-/**
- * Representation of a file path, absolute or relative
- *
- * It has a parent directory and a name
- */
-case class FilePath(dir: DirectoryPath, name: FileName) {
-
-  /** @return the root directory containing this file */
-  def root: DirectoryPath = dir.root
-
-  /** @return the path for this file as a / separated string */
-  def path: String = if (dir.isRoot) name.name else dir.path + "/" + name.name
-
-  /** @return a File for this path */
-  def toFile: File = new File(path)
-
-  /** @return the portion of a file path that is relative to another */
-  def relativeTo(other: DirectoryPath): FilePath =
-    copy(dir = dir.relativeTo(other))
-
-  /** @return a file path with the same name but in another directory path */
-  def rebaseTo(other: DirectoryPath): FilePath =
-    copy(dir = other)
-
-  /** @return return the portion of the file path that starts from the rootname */
-  def fromRoot: FilePath = relativeTo(root)
-
-  /** @return interpret this FilePath as a DirectoryPath */
-  def toDirectoryPath: DirectoryPath = dir / name
-
-  /** @return true if the file path is absolute */
-  def isAbsolute = dir.isAbsolute
-
-  /** @return an absolute file path */
-  def asAbsolute = setAbsolute(absolute = true)
-
-  /** @return a relative file path */
-  def asRelative = setAbsolute(absolute = false)
-
-  /** @return modify the absolute status of this file path */
-  def setAbsolute(absolute: Boolean) = copy(dir.setAbsolute(absolute))
-
-  /** @return true if this file path is relative */
-  def isRelative = !isAbsolute
-
-}
-
-object FilePath {
-  def apply(n: FileName): FilePath = FilePath(DirectoryPath.Root, n)
-  def apply(uuid: UUID): FilePath = apply(FileName(uuid))
-
-  def unsafe(s: String): FilePath = DirectoryPath.unsafe(s).toFilePath
-  def unsafe(f: File): FilePath   = DirectoryPath.unsafe(f).toFilePath
-  def unsafe(uri: URI): FilePath  = DirectoryPath.unsafe(uri).toFilePath
-}
-
-/**
- * The component of a path name according to the unix definition
- *   http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap03.html#tag_03_267
- */
-case class FileName private(name: String) {
-  def /(other: DirectoryPath) : DirectoryPath  = DirectoryPath(this +: other.dirs, absolute = false)
-  def /(other: FilePath): FilePath = FilePath(DirectoryPath(this +: other.dir.dirs, absolute = false), other.name)
-  def /(other: FileName): DirectoryPath  = DirectoryPath(Vector(this), absolute = false) / other
-  def |(other: FileName): FilePath = DirectoryPath(Vector(this), absolute = false) | other
-}
-
-object FileName {
-  def unsafe(s: String) = new FileName(s)
-  def apply(uuid: UUID) = new FileName(uuid.toString)
-}
-
-
-

@@ -5,12 +5,16 @@ package core
 import org.specs2.control._
 import org.specs2.io.FileSystem
 import org.specs2.io._
+import org.specs2.io.FileName._
 import org.specs2.main.Arguments
 import org.specs2.reflect.ClassLoading
 import org.specs2.reporter.PrinterLogger.consolePrinterLogger
 import org.specs2.specification.process._
 
 object EnvDefault {
+
+  val statsDirectoryPath: DirectoryPath =
+    "target" / "specs2-reports" / "stats"
 
   def default: Env =
     create(Arguments())
@@ -20,7 +24,7 @@ object EnvDefault {
       arguments            = arguments,
       systemLogger         = ConsoleLogger(),
       printerLogger        = consolePrinterLogger,
-      statisticsRepository = StatisticsRepositoryCreation.file(arguments.commandLine.directoryOr("stats.outdir", "target" / "specs2-reports" / "stats")),
+      statisticsRepository = StatisticsRepositoryCreation.file(arguments.commandLine.directoryOr("stats.outdir", statsDirectoryPath)),
       random               = new scala.util.Random,
       fileSystem           = FileSystem(ConsoleLogger()),
       customClassLoader    = None,
