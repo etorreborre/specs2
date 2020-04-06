@@ -32,13 +32,13 @@ trait Selector {
 case class DefaultSelector(commandLineArguments: Arguments) extends Selector {
 
   /** select fragments by name, markers and previous execution */
-  def select(specArguments: Arguments): AsyncTransducer[Fragment, Fragment] = 
+  def select(specArguments: Arguments): AsyncTransducer[Fragment, Fragment] =
     filterByName(specArguments) |>
     filterByMarker(specArguments) |>
     filterByPrevious(specArguments)
 
   /** filter fragments by name */
-  def filterByName(specArguments: Arguments): AsyncTransducer[Fragment, Fragment] = { p: AsyncStream[Fragment] =>
+  def filterByName(specArguments: Arguments): AsyncTransducer[Fragment, Fragment] = { (p: AsyncStream[Fragment]) =>
     val arguments = commandLineArguments.overrideWith(specArguments)
 
     val regex = arguments.ex
@@ -60,7 +60,7 @@ case class DefaultSelector(commandLineArguments: Arguments) extends Selector {
    * - if the marker applies to the previous or next fragment
    * - if there is an irrelevant empty text between the marker and the fragment it applies to
    */
-  def filterByMarker(specArguments: Arguments): AsyncTransducer[Fragment, Fragment] = { p: AsyncStream[Fragment] =>
+  def filterByMarker(specArguments: Arguments): AsyncTransducer[Fragment, Fragment] = { (p: AsyncStream[Fragment]) =>
     val arguments = commandLineArguments.overrideWith(specArguments)
 
     def go: AsyncTransducer[Fragment, Fragment] = (p1: AsyncStream[Fragment]) =>
@@ -99,7 +99,7 @@ case class DefaultSelector(commandLineArguments: Arguments) extends Selector {
    * e4 \${section("x")}
    * e5
    */
-  def transformBeforeMarkersToAfterMarkers: AsyncTransducer[Fragment, Fragment] = { p: AsyncStream[Fragment] =>
+  def transformBeforeMarkersToAfterMarkers: AsyncTransducer[Fragment, Fragment] = { (p: AsyncStream[Fragment]) =>
     def go: AsyncTransducer[(Fragment, Option[Fragment]), Fragment] = (p1: AsyncStream[(Fragment, Option[Fragment])]) => {
       type S = (Option[Fragment], List[NamedTag])
 
@@ -135,8 +135,8 @@ case class DefaultSelector(commandLineArguments: Arguments) extends Selector {
   def isEndTag(sections: List[NamedTag], tag: NamedTag): Boolean =
     sections.exists(_.names.exists(tag.names.contains))
 
-  def swapBeforeMarkerAndEmptyText: AsyncTransducer[Fragment, Fragment] = { p: AsyncStream[Fragment] =>
-    def go: AsyncTransducer[(Fragment, Option[Fragment]), Fragment] = { p1: AsyncStream[(Fragment, Option[Fragment])] =>
+  def swapBeforeMarkerAndEmptyText: AsyncTransducer[Fragment, Fragment] = { (p: AsyncStream[Fragment]) =>
+    def go: AsyncTransducer[(Fragment, Option[Fragment]), Fragment] = { (p1: AsyncStream[(Fragment, Option[Fragment])]) =>
       p1.producerState[Fragment, Option[Fragment]](None) {
         // tag or section for before
         case ((m @ Fragment(Marker(t, _, false),_,_), _), previous)  =>
@@ -155,8 +155,8 @@ case class DefaultSelector(commandLineArguments: Arguments) extends Selector {
     go(p.zipWithNext)
   }
 
-  def swapAfterMarkerAndEmptyText: AsyncTransducer[Fragment, Fragment] = { p: AsyncStream[Fragment] =>
-    def go: AsyncTransducer[(Fragment, Option[Fragment]), Fragment] = { p1: AsyncStream[(Fragment, Option[Fragment])] =>
+  def swapAfterMarkerAndEmptyText: AsyncTransducer[Fragment, Fragment] = { (p: AsyncStream[Fragment]) =>
+    def go: AsyncTransducer[(Fragment, Option[Fragment]), Fragment] = { (p1: AsyncStream[(Fragment, Option[Fragment])]) =>
       p1.producerState[Fragment, Option[Fragment]](None) {
         // tag or section for after
         case ((m @ Fragment(Marker(t, _, true),_,_), _), previous) =>
@@ -175,7 +175,7 @@ case class DefaultSelector(commandLineArguments: Arguments) extends Selector {
     go(p.zipWithNext)
   }
 
-  def transformTagsToSections: AsyncTransducer[Fragment, Fragment] = { p: AsyncStream[Fragment] =>
+  def transformTagsToSections: AsyncTransducer[Fragment, Fragment] = { (p: AsyncStream[Fragment]) =>
     p.producerState[Fragment, List[Fragment]](Nil) {
       case (f @ Fragment(m @ Marker(t, false, _),_,_), previous) =>
         (done, previous :+ f.copy(description = m.copy(isSection = true)))
@@ -185,14 +185,14 @@ case class DefaultSelector(commandLineArguments: Arguments) extends Selector {
     }
   }
 
-  def removeMarkers: AsyncTransducer[Fragment, Fragment] = { p: Producer[Action, Fragment] =>
+  def removeMarkers: AsyncTransducer[Fragment, Fragment] = { (p: Producer[Action, Fragment]) =>
     p.filter(f => !Fragment.isMarker(f))
   }
 
   /**
    * filter fragments by previous execution and required status
    */
-  def filterByPrevious(specArguments: Arguments): AsyncTransducer[Fragment, Fragment] = { p: AsyncStream[Fragment] =>
+  def filterByPrevious(specArguments: Arguments): AsyncTransducer[Fragment, Fragment] = { (p: AsyncStream[Fragment]) =>
     val arguments = commandLineArguments.overrideWith(specArguments)
     if (arguments.wasIsDefined) p.filter((_: Fragment).was(arguments.was))
     else p

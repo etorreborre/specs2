@@ -26,7 +26,7 @@ trait Scripts { outer: FragmentsFactory =>
       if (script.isStart)
         fs append factory.section(script.title) append factory.text(text).setLocation(start)
       else
-        fs.compact.updateFragments { fragments: List[Fragment] =>
+        fs.compact.updateFragments { (fragments: List[Fragment]) =>
             val scriptFragments =
               fragments.lastOption match {
                 case Some(f) if Fragment.isText(f) =>
@@ -41,4 +41,3 @@ trait Scripts { outer: FragmentsFactory =>
     }
   }
 }
-

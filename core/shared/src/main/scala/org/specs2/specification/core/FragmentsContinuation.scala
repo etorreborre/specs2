@@ -21,11 +21,9 @@ object FragmentsContinuation {
         Fragment(Text("Could not create fragments after the previous successful result"),
                  Execution.result(Error(e))))
 
-    Execution(result, FragmentsContinuation { r: Result =>
+    Execution(result, FragmentsContinuation { (r: Result) =>
       if (r.isSuccess) Some(tryOr(fs)(fragmentsCreationError))
       else None
     })
   }
 }
-
-

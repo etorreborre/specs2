@@ -17,7 +17,7 @@ import org.specs2.concurrent.ExecutionEnv
 import org.specs2.data.NamedTag
 
 import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, Future}
+import scala.concurrent.{Await, Future, ExecutionContext}
 
 /**
  * Runner for Sbt
@@ -36,7 +36,7 @@ abstract class BaseSbtRunner(args: Array[String], remoteArgs: Array[String], loa
     SbtTask(aTaskDef, env, loader)
 
   def done = {
-    env.shutdown
+    env.shutdown()
     ""
   }
 
@@ -72,7 +72,7 @@ object sbtRun extends MasterSbtRunner(Array(), Array(), Thread.currentThread.get
     val env = Env(Arguments(arguments:_*))
     implicit def ee: ExecutionEnv = env.specs2ExecutionEnv
     try exit(start(arguments: _*))
-    finally env.shutdown
+    finally env.shutdown()
   }
 
   def exit(action: Action[Stats])(implicit ee: ExecutionEnv): Unit = {
@@ -117,7 +117,8 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
 
   private val arguments = env.arguments
 
-  private implicit lazy val ec = env.specs2ExecutionContext
+  private implicit lazy val ec: ExecutionContext =
+      env.specs2ExecutionContext
 
   /** @return the specification tags */
   def tags: Array[String] = {
@@ -167,7 +168,7 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
 
   /** display errors and warnings */
   private def processResult[A](handler: EventHandler, loggers: Array[Logger])(t: Throwable): Unit =
-    handleRunError(Left(t), loggers, sbtEvents(taskDef, handler))
+    handleRunError(t, loggers, sbtEvents(taskDef, handler))
 
   /** run a given spec structure */
   private def specificationRun(taskDef: TaskDef, spec: SpecStructure, env: Env, handler: EventHandler, loggers: Array[Logger]): Action[Stats] = {
@@ -219,22 +220,15 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
   }
 
   /**
-   * Notify sbt of errors during the run
+   * Notify sbt of exceptions during the run
    */
-  private def handleRunError(e: Throwable Either String, loggers: Array[Logger], events: SbtEvents): Unit = {
+  private def handleRunError(t: Throwable, loggers: Array[Logger], events: SbtEvents): Unit = {
     val logger = SbtPrinterLogger(loggers)
 
-    e match {
-      case Left(t) =>
-        events.suiteError(t)
-        logger.errorLine(t.getMessage)
-        RunnerLogger(env).logThrowable(t).unsafeRun
-
-      case Right(m) =>
-        events.suiteError
-        logger.errorLine(m)
-    }
-    logger.close
+    events.suiteError(t)
+    logger.errorLine(t.getMessage)
+    RunnerLogger(env).logThrowable(t).unsafeRun
+    logger.close()
   }
 
 }

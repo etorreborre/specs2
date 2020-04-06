@@ -98,7 +98,7 @@ case class DefaultSpecificationsFinder(env: Env) extends SpecificationsFinder {
     val links: Operation[List[Fragment]] = specificationNames(glob, pattern, basePath, verbose).flatMap { names =>
       names.filter(filter).traverse { name =>
         SpecificationStructure.create(name, classLoader, Some(env)).map(s => link(SpecificationRef.create(s.is))).
-        recoverWith { t: Throwable =>
+        recoverWith { (t: Throwable) =>
           example("cannot create specification " + name, Execution.result(org.specs2.execute.Error(t)))
         }
       }

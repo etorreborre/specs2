@@ -22,7 +22,7 @@ object run extends ClassRunnerMain {
     } yield result
 
     try Runner.execute(action, env, exit = false)
-    finally env.shutdown
+    finally env.shutdown()
   }
 
   /** main method for the command line */

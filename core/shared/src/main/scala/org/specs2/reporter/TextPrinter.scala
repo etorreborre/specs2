@@ -56,10 +56,10 @@ case class TextPrinter(env: Env) extends Printer {
 
   def printFinalStats(spec: SpecStructure, args: Arguments, logger: PrinterLogger): (((Stats, Int), SimpleTimer)) => Action[Unit] = { case ((stats, _), timer) =>
     Action.pure(printStats(spec.header, args, stats, timer).foreach(_.log(logger))) >>
-    Action.pure(logger.close)
+    Action.pure(logger.close())
   }
 
-  def printHeader(args: Arguments): SpecHeader => List[LogLine] = { header: SpecHeader =>
+  def printHeader(args: Arguments): SpecHeader => List[LogLine] = { (header: SpecHeader) =>
     if (args.canShow("#")) List(header.show.info)
     else Nil
   }
@@ -201,12 +201,12 @@ case class TextPrinter(env: Env) extends Printer {
   def indentationSize(args: Arguments): Int =
     args.commandLine.int("indentation").getOrElse(2)
 
-  def printMessage(args: Arguments, description: String, as: String => LogLine): Result with ResultStackTrace => List[LogLine] = { result: Result with ResultStackTrace =>
+  def printMessage(args: Arguments, description: String, as: String => LogLine): Result with ResultStackTrace => List[LogLine] = { (result: Result with ResultStackTrace) =>
     val margin = description.takeWhile(_ == ' ')+" "
     List(as(result.message.split("\n").mkString(margin, "\n"+margin, "") + location(result, args)))
   }
 
-  def printStacktrace(args: Arguments, print: Boolean, as: String => LogLine): Result with ResultStackTrace => List[LogLine] = { result: Result with ResultStackTrace =>
+  def printStacktrace(args: Arguments, print: Boolean, as: String => LogLine): Result with ResultStackTrace => List[LogLine] = { (result: Result with ResultStackTrace) =>
     if (print) args.traceFilter(result.stackTrace).map(t => as(t.toString)).toList
     else Nil
   }

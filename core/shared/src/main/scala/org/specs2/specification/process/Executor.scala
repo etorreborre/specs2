@@ -46,7 +46,7 @@ case class DefaultExecutor(env: Env) extends Executor {
    *  - filter the ones that the user wants to keep
    *  - sequence the execution so that only parts in between steps are executed concurrently
    */
-  def execute(specArguments: Arguments): AsyncTransducer[Fragment, Fragment] = { contents: AsyncStream[Fragment] =>
+  def execute(specArguments: Arguments): AsyncTransducer[Fragment, Fragment] = { (contents: AsyncStream[Fragment]) =>
     sequencedExecution(specArguments)(contents).flatMap(executeOnline(specArguments))
   }
 

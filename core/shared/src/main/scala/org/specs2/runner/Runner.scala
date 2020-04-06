@@ -22,10 +22,10 @@ object Runner {
 
     action.attempt.runAction(env.specs2ExecutionEnv) match {
       case Left(t) =>
-        logger.exception(t).runVoid
+        logger.exception(t).runVoid()
 
       case Right(Left(t)) =>
-        logger.exception(t).runVoid
+        logger.exception(t).runVoid()
         exitSystem(1, exit)
 
       case Right(Right(result)) =>

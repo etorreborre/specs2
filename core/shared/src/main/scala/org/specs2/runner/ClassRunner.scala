@@ -74,7 +74,7 @@ trait ClassRunnerMain {
       }
 
     try execute(actions, env, exit)
-    finally env.shutdown
+    finally env.shutdown()
   }
 
   /**

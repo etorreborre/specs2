@@ -9,7 +9,9 @@ import core.SpecHeader
  */
 trait TitleDsl { outer =>
 
-  implicit def title(s: String) = new TitleOps(s)
+  implicit def title(s: String): TitleOps =
+    new TitleOps(s)
+    
   class TitleOps(s: String) {
     def title: SpecHeader = SpecHeader(outer.getClass, Some(s))
   }
@@ -21,4 +23,3 @@ trait NoTitleDsl extends TitleDsl {
   override def title(s: String) =
     super.title(s)
 }
-

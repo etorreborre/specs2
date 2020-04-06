@@ -222,7 +222,7 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
 
   /** run this execution after the previous executions are finished */
   private def afterExecutions(executions: List[Execution], sequential: Boolean, checkResult: Boolean): Execution =
-    Execution.withEnvFlatten { env: Env =>
+    Execution.withEnvFlatten { (env: Env) =>
       implicit val ec = env.executionContext
 
       lazy val runs: List[Future[Result]] =
@@ -344,7 +344,7 @@ object Execution {
 
   /** create an execution using the Env and Flatten the execution */
   def withEnvFlatten(f: Env => Execution): Execution =
-    Execution(Some { env: Env =>
+    Execution(Some { (env: Env) =>
       implicit val ec = env.executionContext
       Future {
         () =>

@@ -43,7 +43,7 @@ trait S2StringContext extends S2StringContext1 { outer =>
     stringAndEnvFunctionIsInterpolatedFragment((s: String) => (e: Env) => f(s))
 
   implicit def stepParserIsInterpolatedFragment[R : AsResult](f: StepParser[R]): InterpolatedFragment =
-    stringAndUpdatedDescriptionAndEnvFunctionIsInterpolatedFragment { s: String =>
+    stringAndUpdatedDescriptionAndEnvFunctionIsInterpolatedFragment { (s: String) =>
       val parsed: Either[Throwable, (String, R)] = f.parse(s)
       (parsed.fold(_ => None, sr => Some(sr._1)), (e: Env) => parsed.fold(t => Error(t), sr => AsResult(sr._2)))
     }
@@ -183,7 +183,7 @@ trait S2StringContextCreation extends FragmentsFactory { outer =>
 
     val expressions = if (Yrangepos) rangeExpressions else new Interpolated(content, texts).expressions
 
-    val (textsStartLocations1, textsEndLocations1) = 
+    val (textsStartLocations1, textsEndLocations1) =
       (positionsToLocation(textsStartPositions), positionsToLocation(textsEndPositions))
 
     val fragments = (texts zip variables zip expressions zip textsStartLocations1 zip textsEndLocations1).foldLeft(Fragments()) { (res, cur) =>
@@ -203,7 +203,7 @@ trait S2StringContextCreation extends FragmentsFactory { outer =>
       macro S2Macro.s2Implementation
   }
 
-  
+
   private def positionsToLocation(positions: Seq[String]): Seq[TraceLocation] =
     positions.map(_.split("\\|").toList).map {
       case path :: fileName :: line :: _ => TraceLocation(path, fileName, "Specification", "s2", line.toInt)
@@ -224,4 +224,3 @@ object S2StringContext extends DefaultFragmentFactory
 trait InterpolatedFragment {
   def append(fragments: Fragments, text: String, start: Location, end: Location, expression: String): Fragments
 }
-

@@ -5,6 +5,7 @@ import fp._, syntax._
 import control._
 import origami._
 import io._
+import FileName._
 import execute._
 import main.Arguments
 import specification.core._
@@ -85,6 +86,6 @@ object MarkdownOptions {
       extension = arguments.commandLine.valueOr("markdown.ext", extension)
     )
 
-  val outDir    = "target" / "specs2-reports"
+  val outDir: DirectoryPath = "target" / "specs2-reports"
   val extension = "md"
 }

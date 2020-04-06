@@ -77,7 +77,7 @@ case class DefaultReporter(statistics: Statistics, statisticsRepository: Statist
     val resetStore = arguments.store.reset
 
     lazy val sink: AsyncSink[Fragment] =
-      Folds.fromSink[Action, Fragment] { fragment: Fragment =>
+      Folds.fromSink[Action, Fragment] { (fragment: Fragment) =>
         fragment.executionResult.flatMap { r =>
           statisticsRepository.storeResult(spec.specClassName, fragment.description, r).toAction
         }.unless(neverStore)
@@ -99,8 +99,8 @@ object Reporter {
   def create(printers: List[Printer], env: Env): Reporter = {
     val arguments = env.arguments
     val statistics = DefaultStatistics(arguments, env.statisticsRepository)
-    val selector = Arguments.instance(arguments.select.selector).getOrElse(DefaultSelector(arguments))
-    val executor = Arguments.instance(arguments.execute.executor).getOrElse(DefaultExecutor(env))
+    val selector = Arguments.instance[Selector](arguments.select.selector).getOrElse(DefaultSelector(arguments))
+    val executor = Arguments.instance[Executor](arguments.execute.executor).getOrElse(DefaultExecutor(env))
     DefaultReporter(statistics, env.statisticsRepository, selector, executor, printers, env)
   }
 

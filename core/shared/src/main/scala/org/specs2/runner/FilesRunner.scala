@@ -43,7 +43,7 @@ case class DefaultFilesRunner(env: Env, specificationsFinder: SpecificationsFind
   }
 
   /** sort the specifications in topological order where specification i doesn't depend on specification j if i > j == dependents first */
-  def sort = { specifications: Seq[SpecificationStructure] =>
+  def sort = { (specifications: Seq[SpecificationStructure]) =>
     SpecificationStructure.topologicalSort(env)(specifications).getOrElse(specifications)
   }
 
@@ -79,8 +79,8 @@ trait FilesRunnerMain {
   def run(args: Array[String], exit: Boolean = false): Unit = {
     val env = EnvDefault.create(Arguments(args: _*))
     val specificationsFinder = DefaultSpecificationsFinder(env)
-    try     execute(DefaultFilesRunner(env, specificationsFinder).run, env, exit)
-    finally env.shutdown
+    try execute(DefaultFilesRunner(env, specificationsFinder).run, env, exit)
+    finally env.shutdown()
   }
 }
 
