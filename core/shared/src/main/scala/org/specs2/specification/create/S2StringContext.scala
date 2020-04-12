@@ -168,41 +168,11 @@ trait S2StringContextCreation extends FragmentsFactory { outer =>
     }
   }
 
-  /**
-   * based on the interpolated variables and the expressions captured with the macro, create the appropriate fragments
-   *
-   * if the Yrangepos scalac option is not set then we use an approximated method to find the expressions texts
-   */
-  def s2(content: String,
-         Yrangepos: Boolean,
-         texts: Seq[String],
-         textsStartPositions: Seq[String],
-         textsEndPositions: Seq[String],
-         variables: Seq[InterpolatedFragment],
-         rangeExpressions: Seq[String]): Fragments =  {
+  inline def s2(inline sc: StringContext)(inline variables: InterpolatedFragment*): Fragments =
+    ${S2Macro.s2Implementation('sc)('variables, 'ff, 'postProcessS2Fragments)}
 
-    val expressions = if (Yrangepos) rangeExpressions else new Interpolated(content, texts).expressions
-
-    val (textsStartLocations1, textsEndLocations1) =
-      (positionsToLocation(textsStartPositions), positionsToLocation(textsEndPositions))
-
-    val fragments = (texts zip variables zip expressions zip textsStartLocations1 zip textsEndLocations1).foldLeft(Fragments()) { (res, cur) =>
-      val ((((text, variable), expression), startLocation), endLocation) = cur
-      variable.append(res, text, SimpleLocation(startLocation), SimpleLocation(endLocation), expression)
-    }
-
-    // The last piece of text is trimmed to allow the placement of closing quotes in the s2 string
-    // to be on column 0 or aligned with examples and still have the same display when using the Text printer
-    val last = texts.lastOption.map(_.trimEnd).filterNot(_.isEmpty).map(ff.text).toSeq
-
-    fragments append Fragments(last:_*)
-  }
-
-  implicit class specificationInStringContext(sc: StringContext) {
-    def s2(variables: InterpolatedFragment*): Fragments =
-      macro S2Macro.s2Implementation
-  }
-
+  def postProcessS2Fragments(fs: Fragments): Fragments =
+    fs
 
   private def positionsToLocation(positions: Seq[String]): Seq[TraceLocation] =
     positions.map(_.split("\\|").toList).map {

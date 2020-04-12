@@ -19,15 +19,8 @@ trait SpecificationCreation extends specification.create.SpecificationCreation
   with ArgumentsDsl {
 
   /** add fragments created with the s2 interpolated string */
-  override def s2(content: String, Yrangepos: Boolean, texts: Seq[String],
-                  textsStartPositions: Seq[String], textsEndPositions: Seq[String],
-                  variables: Seq[InterpolatedFragment], rangeExpressions: Seq[String]): Fragments = {
-    addFragments(super.s2(
-      content, Yrangepos, texts,
-      textsStartPositions, textsEndPositions,
-      variables, rangeExpressions).append(fragmentFactory.break))
-  }
+  override def postProcessS2Fragments(fs: Fragments): Fragments =
+    addFragments(fs.append(fragmentFactory.break))
 
 
 }
-
