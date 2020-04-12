@@ -1,9 +1,10 @@
 package org.specs2
 package specification
 
-import org.specs2.execute.Result._
-import org.specs2.execute.{ResultExecution, Result, AsResult}
-import org.specs2.fp._
+import execute.{ResultExecution, Result, AsResult}
+import Result._
+import fp._
+import scala.reflect.Selectable.reflectiveSelectable
 
 /**
  * generic trait for Before, After, Around
