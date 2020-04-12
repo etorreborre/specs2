@@ -49,10 +49,6 @@ trait Snippets {
 
   inline def snippet[T](code: =>T)(implicit params: SnippetParams[T]): Snippet[T] =
     ${ Snippets.create[T]('code, 'params) }
-
-  // def simpleName[T : WeakTypeTag]: String = implicitly[WeakTypeTag[T]].tpe.typeSymbol.name.toString.trim
-  // def fullName[T : WeakTypeTag]: String   = implicitly[WeakTypeTag[T]].tpe.typeSymbol.fullName.trim
-  // def termName(m: Any): String            = macro Macros.termName
 }
 
 object Snippets extends Snippets {
