@@ -17,8 +17,7 @@ trait ForEachWithCommandLine[T] extends specification.ForEachWithCommandLineArgu
       >>(foreachFunctionToExecution(f))
 
     def in[R : AsResult](f: T => R): Fragment =
-      d >> f
+      BlockExample1(d) >> f
   }
 
 }
-

@@ -3,6 +3,7 @@ package execute
 
 import control._
 import Throwablex._
+import scala.collection.immutable.ArraySeq
 
 /**
  * The stacktrace for a Result
@@ -13,7 +14,7 @@ trait ResultStackTrace extends HasStackTrace {
 
   def location(filter: StackTraceFilter) = {
     val filtered = Throwablex.exception(filter(stackTrace)).getStackTrace
-    Throwablex.exception(filtered).location
+    Throwablex.exception(ArraySeq.unsafeWrapArray(filtered)).location
   }
 
   def exception: Throwable
