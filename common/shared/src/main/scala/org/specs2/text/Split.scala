@@ -1,7 +1,6 @@
 package org.specs2
 package text
 
-import scala.collection.immutable.ArraySeq
 import Trim._
 import collection.Seqx._
 
@@ -10,7 +9,7 @@ trait Split { outer =>
 
   implicit class Splitted(s: String) {
     def splitDashed(names: Seq[String]) =
-      outer.splitDashed(ArraySeq.unsafeWrapArray(s.split("\\s")), names)
+      outer.splitDashed(s.split("\\s").toIndexedSeq, names)
 
     private val quoted = "\"[^\"]*\"|[^\\s]+".r
     def splitQuoted = quoted.findAllIn(s).toSeq.map(_.trimEnclosing("\""))

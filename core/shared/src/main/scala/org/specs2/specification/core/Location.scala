@@ -33,7 +33,7 @@ case class SimpleLocation(trace: TraceLocation) extends Location {
     traceLocation(filter).fold(this)(SimpleLocation.apply)
 }
 
-case class StacktraceLocation(trace: Seq[StackTraceElement] = (new Exception).getStackTrace) extends Location {
+case class StacktraceLocation(trace: Seq[StackTraceElement] = (new Exception).getStackTrace.toIndexedSeq) extends Location {
   def traceLocation(filter: StackTraceFilter): Option[TraceLocation] =
     filter(trace).headOption.map(TraceLocation.apply)
 

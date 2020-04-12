@@ -1,7 +1,6 @@
 package org.specs2
 package text
 
-import scala.collection.immutable.ArraySeq
 import java.io.StringWriter
 import java.util.regex.Pattern
 import util.matching.Regex
@@ -123,7 +122,7 @@ trait Trim {
 
     /** @return a sequence of lines by splitting on newlines */
     def lines: Seq[String] =
-      ArraySeq.unsafeWrapArray(s.removeAll("\r").split("\n"))
+      s.removeAll("\r").split("\n").toIndexedSeq
 
     /** remove empty lines in a block of lines */
     def removeEmptyLines: String = nonEmptyLines.mkString("\n")

@@ -2,7 +2,6 @@ package org.specs2
 package text
 
 import java.security.MessageDigest
-import scala.collection.immutable.ArraySeq
 
 /**
  * MD5 functions
@@ -15,7 +14,7 @@ trait MD5 {
 
   /** @return the MD5 hash of a sequence of bytes as bytes */
   def md5Bytes(bytes: Array[Byte]): Seq[Byte] =
-    ArraySeq.unsafeWrapArray(MessageDigest.getInstance("MD5").digest(bytes))
+    MessageDigest.getInstance("MD5").digest(bytes).toIndexedSeq
 
 }
 

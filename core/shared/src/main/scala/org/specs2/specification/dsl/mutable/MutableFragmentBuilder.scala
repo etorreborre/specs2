@@ -50,7 +50,7 @@ trait MutableFragmentBuilder extends FragmentBuilder
     fragments
   }
 
-  def addSections: Unit =
+  def addSections(): Unit =
     addSectionsForBlocks = true
 
   def hasSectionsForBlocks: Boolean =
