@@ -14,7 +14,7 @@ case class NamedThreadFactory(namePrefix: String,
                               group: ThreadGroup = Thread.currentThread.getThreadGroup,
                               priority: Int = Thread.currentThread.getPriority) extends ThreadFactory {
 
-  private[this] val threadNumber = new AtomicInteger(1)
+  private val threadNumber = new AtomicInteger(1)
 
   require(priority >= Thread.MIN_PRIORITY, "priority too low: " + priority)
   require(priority <= Thread.MAX_PRIORITY, "priority too high: " + priority)
@@ -25,4 +25,3 @@ case class NamedThreadFactory(namePrefix: String,
     t
   }
 }
-

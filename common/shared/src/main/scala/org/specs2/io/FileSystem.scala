@@ -150,7 +150,7 @@ case class FileSystem(logger: Logger) extends FilePathReader {
    * the Files.copy operation is being called concurrently, sometimes to copy the same files when
    * running the Html printer for example. Without a lock a FileAlreadyException can be thrown
    */
-  private[this] object copyLock
+  private object copyLock
 
   /** create a new file */
   def createFile(filePath: FilePath): Operation[Boolean] =

@@ -118,8 +118,8 @@ object Tree {
   object Node {
     def apply[A](root: => A, forest: => LazyList[Tree[A]]): Tree[A] = {
       new Tree[A] {
-        private[this] val rootc = Need(root)
-        private[this] val forestc = Need(forest)
+        private val rootc = Need(root)
+        private val forestc = Need(forest)
         def rootLabel = rootc.value
         def subForest = forestc.value
 
