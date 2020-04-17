@@ -3,9 +3,9 @@ val scalaNativeVersion = Option(System.getenv("SCALANATIVE_VERSION")).getOrElse(
 
 addSbtPlugin("ch.epfl.lamp"       % "sbt-dotty"                     % "0.4.1")
 addSbtPlugin("org.scala-js"       % "sbt-scalajs"                   % scalaJSVersion)
-addSbtPlugin("org.scala-native"   % "sbt-scala-native"              % scalaNativeVersion)
+// addSbtPlugin("org.scala-native"   % "sbt-scala-native"              % scalaNativeVersion)
 addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject"      % "1.0.0")
-addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "1.0.0")
+//addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "1.0.0")
 addSbtPlugin("com.jsuereth"       % "sbt-pgp"                       % "2.0.1")
 addSbtPlugin("com.typesafe.sbt"   % "sbt-ghpages"                   % "0.6.3")
 addSbtPlugin("com.typesafe.sbt"   % "sbt-site"                      % "1.4.0")
@@ -19,3 +19,6 @@ resolvers += Resolver.url("sonatype", new URL("https://oss.sonatype.org/content/
 // needed by sbt-github-release when building on JDK 11.
 // reference: https://github.com/ohnosequences/sbt-github-release/issues/28
 libraryDependencies += "com.sun.activation" % "javax.activation" % "1.2.0"
+
+resolvers += Resolver.sonatypeRepo("snapshots")
+addSbtPlugin("ch.epfl.scala" % "sbt-bloop" % "1.4.0-RC1-192-72a856b6")
