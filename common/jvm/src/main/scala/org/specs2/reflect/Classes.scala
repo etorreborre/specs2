@@ -1,7 +1,7 @@
 package org.specs2
 package reflect
 
-import scala.reflect.ClassTag
+import scala.reflect.{ClassTag, NameTransformer}
 import ClassName._
 import control._
 import scala.util.control.NonFatal
@@ -70,9 +70,13 @@ trait Classes extends ClassOperations {
                                                                    defaultInstances: =>List[AnyRef]): Operation[T] = {
 
     constructor.setAccessible(true)
-    if (constructor.getParameterTypes.isEmpty)
-      newInstance(klass, constructor.newInstance())
-
+    if (constructor.getParameterTypes.isEmpty) {
+      if (klass.getName.endsWith("$")) {
+        newInstance(klass, klass.getDeclaredField(NameTransformer.MODULE_INSTANCE_NAME).get(null))
+      } else {
+        newInstance(klass, constructor.newInstance())
+      }
+    }
     else if (constructor.getParameterTypes.size == 1) {
       defaultInstances.find(i => constructor.getParameterTypes.apply(0) isAssignableFrom i.getClass) match {
         case None =>
