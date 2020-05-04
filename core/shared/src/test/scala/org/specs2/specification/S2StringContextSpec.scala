@@ -29,7 +29,7 @@ class S2StringContextSpec extends Spec { def is = s2"""
     when more than one lines have a | margin they are taken as the description    ${desc.e3}
     for an auto-example (no text on the last line)                                ${desc.e4}
 
-${step(ee.shutdown)}
+${step(ee.shutdown())}
 """
 
   implicit val ee: ExecutionEnv =
@@ -117,7 +117,7 @@ s2"""
       getDescription(
         s2"""this is an auto-example
              $ok""") must_== Description.code("ok")
-  
+
     def getDescription(fs: Fragments): Description =
       fs.examples.runMonoid(ee).head.description
   }

@@ -13,7 +13,6 @@ class FragmentsContinuationSpec(val env: Env) extends Specification with ActionM
    not return other fragments if the previous result is not a success        $continuationAfterFailure
    return an error fragment if the continuation fragments fail to be created $continuationError
 
-
 """
 
   def continuationAfterSuccess =
@@ -28,7 +27,9 @@ class FragmentsContinuationSpec(val env: Env) extends Specification with ActionM
     (fragments(1).description.show must beMatching("Could not create fragments after the previous successful result"))
   }
 
-  def runContinuation[R : AsResult](r: =>R, fs: =>Fragments): List[Fragment] =
-    Fragments(DefaultExecutor(ownEnv).execute(ownEnv.arguments)(Fragments("test" ! FragmentsContinuation.continueWith(r, fs)).contents)).
+  def runContinuation[R : AsResult](r1: =>R, r2: =>R): List[Fragment] = {
+    val fs = "boom" ! ko
+    Fragments(DefaultExecutor(ownEnv).execute(ownEnv.arguments)(Fragments("test" ! FragmentsContinuation.continueWith(r1, fs)).contents)).
       fragmentsList(ownEnv.executionEnv)
+  }
 }

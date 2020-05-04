@@ -14,29 +14,29 @@ import org.specs2.fp.syntax._
 
 /**
  * The `Matcher` trait is the base trait for any Matcher.
- * 
+ *
  * This trait can be extended to provide an appropriate `apply` method that
  * will check an expectable value `a: Expectable[T]`.
  *
  * The result of a match is a MatchResult object (@see MatchResult).
- * 
+ *
  * Matchers can be composed.
- * 
+ *
  * Implementation notes:
  *   - the parameter to the apply method must be a by-name parameter.
  *     This allows some values to be evaluated only when necessary.
- *     
+ *
  *   - However in the implementation of the apply function, it must be taken care of not
  *     evaluating the parameter twice. Assigning it to a val is the solution to this issue.
  */
 trait Matcher[-T] { outer =>
 
-  /** 
+  /**
    * apply this matcher to an Expectable
    * @return a MatchResult describing the outcome of the match
    */
   def apply[S <: T](t: Expectable[S]): MatchResult[S]
-  
+
   /**
    * @return a MatchResult with an okMessage, a koMessage and the expectable value
    */
@@ -100,7 +100,7 @@ trait Matcher[-T] { outer =>
     }
     Matcher.result(other.isSuccess, messages._1, messages._2, value)
   }
- 
+
   /**
    * Adapt a matcher to another.
    * ex: `be_==("message") ^^ (_.getMessage)` can be applied to an exception
@@ -206,15 +206,15 @@ trait Matcher[-T] { outer =>
   }
   /**
    *  The `lazily` operator returns a Matcher which will match a function returning the expected value
-   */   
-  def lazily = new Matcher[() => T]() {
+   */
+  def lazily = new Matcher[() => T]() { self =>
     def apply[S <: () => T](function: Expectable[S]) = {
       val r = outer(Expectable(function.value()))
-      result(r, function)
-    } 
+      self.result(r, function)
+    }
   }
-  /** 
-   * @return a matcher that needs to eventually match, after 40 retries and a sleep time 
+  /**
+   * @return a matcher that needs to eventually match, after 40 retries and a sleep time
    * of 100 milliseconds
    */
   def eventually: Matcher[T] = EventuallyMatchers.eventually(this)
@@ -229,7 +229,7 @@ trait Matcher[-T] { outer =>
    * @param sleep the function applied on the retry number (first is 1)
    * @return a matcher that needs to eventually match, after a given number of retries
    * and a sleep time
-   * 
+   *
    * {{{
    * aResult mustEqual(expected).eventually(retries = 2, _ * 100.milliseconds)
    * }}}

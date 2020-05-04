@@ -79,6 +79,15 @@ case class LinesContentDifference(
 
 }
 
+object LinesContentDifference {
+
+  implicit def LinesContentDifferenceIsEmpty: IsEmpty[LinesContentDifference] = new IsEmpty[LinesContentDifference] {
+    def isEmpty(diff: LinesContentDifference): Boolean =
+      diff.isEmpty
+  }
+
+}
+
 /**
  * case classes for the representation of lines which are different: not found, missing, misplaced
  */

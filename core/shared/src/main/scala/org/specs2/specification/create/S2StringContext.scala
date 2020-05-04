@@ -168,8 +168,10 @@ trait S2StringContextCreation extends FragmentsFactory { outer =>
     }
   }
 
-  inline def s2(inline sc: StringContext)(inline variables: InterpolatedFragment*): Fragments =
-    ${S2Macro.s2Implementation('sc)('variables, 'ff, 'postProcessS2Fragments)}
+  implicit class StringContextOps(sc: StringContext) {
+    inline def s2(inline variables: InterpolatedFragment*): Fragments =
+      ${S2Macro.s2Implementation('sc)('variables, 'ff, 'postProcessS2Fragments)}
+  }
 
   def postProcessS2Fragments(fs: Fragments): Fragments =
     fs

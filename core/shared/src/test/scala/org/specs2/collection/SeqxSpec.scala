@@ -19,8 +19,8 @@ class SeqxSpec extends mutable.Specification with DataTables with ScalaCheckResu
 
   "delta removes elements, leaving duplicates, and using a custom comparison function".p
     "for example, comparing only the second element of a pair" >> {
-      val compare = (p: (Int, Symbol), o: Symbol) => p._2 == o
-      Seq((1, 'a), (2, 'b), (3, 'c), (4, 'b), (5, 'e)).delta(Seq('c, 'b, 'a), compare) must_==  Seq((4, 'b), (5, 'e))
+      val compare = (p: (Int, String), o: String) => p._2 == o
+      Seq((1, "a"), (2, "b"), (3, "c"), (4, "b"), (5, "e")).delta(Seq("c", "b", "a"), compare) must_==  Seq((4, "b"), (5, "e"))
     }
 
   "A removeFirst function" should {

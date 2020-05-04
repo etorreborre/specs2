@@ -206,7 +206,7 @@ import text.Plural._
 
 case class ContainWithResult[T](check: ValueCheck[T], timesMin: Option[Times] = Some(1.times), timesMax: Option[Times] = None, checkAll: Boolean = true) extends Matcher[Traversable[T]] {
   def apply[S <: Traversable[T]](t: Expectable[S]) = {
-    val seq = Vector(t.value.seq.toSeq:_*)
+    val seq = Vector(t.value.toSeq:_*)
 
     // stop after the first failure if !checkAll
     val (successes, failures) = seq.foldLeft((Seq[Result](), Seq[Result]())) { (res, cur) =>
@@ -283,7 +283,7 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
                                    negate: Boolean = false) extends Matcher[Traversable[T]] {
 
   def apply[S <: Traversable[T]](t: Expectable[S]) = {
-    val seq = t.value.seq.toSeq
+    val seq = t.value.toSeq
 
     // results for each element, either checked in order or
     // trying to find the best matching from the list of checks

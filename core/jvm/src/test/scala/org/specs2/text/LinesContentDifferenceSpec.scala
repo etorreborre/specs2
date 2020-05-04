@@ -34,17 +34,17 @@ class LinesContentDifferenceSpec extends Specification with AllExpectations { s2
   val line4 = NumberedLine(4, "d")
 
   "1. all = true, ordered = true" >> {
-    def diff(ls1: Seq[String], ls2: Seq[String]) =
+    def diff(ls1: Seq[String], ls2: Seq[String]): LinesContentDifference =
       LinesContentDifference(ls1, ls2, all = true, ordered = true)
 
-    diff(lines1, lines2) must not(beEmpty)
+    diff(lines1, lines2) must not(beEmpty[LinesContentDifference])
     diff(lines1, lines3).show === Seq(SameLine(line1), SameLine(line2), AddedLine(line3), AddedLine(line4))
     diff(lines3, lines1).show === Seq(SameLine(line1), SameLine(line2), DeletedLine(line3), DeletedLine(line4))
     diff(lines3, lines4).show === Seq(DifferentLine(line1, line2), DifferentLine(line2, line4))
   }
 
   "2. all = true, ordered = false" >> {
-    def diff(ls1: Seq[String], ls2: Seq[String]) =
+    def diff(ls1: Seq[String], ls2: Seq[String]): LinesContentDifference =
       LinesContentDifference(ls1, ls2, all = true, ordered = false)
 
     diff(lines1, lines2) must beEmpty
@@ -55,17 +55,17 @@ class LinesContentDifferenceSpec extends Specification with AllExpectations { s2
 
 
   "3. all = false, ordered = true" >> {
-    def diff(ls1: Seq[String], ls2: Seq[String]) =
+    def diff(ls1: Seq[String], ls2: Seq[String]): LinesContentDifference =
       LinesContentDifference(ls1, ls2, all = false, ordered = true)
 
-    diff(lines1, lines2) must not(beEmpty)
+    diff(lines1, lines2) must not(beEmpty[LinesContentDifference])
     diff(lines1, lines3).show === Seq(SameLine(line1), SameLine(line2))
     diff(lines3, lines1).show === Seq(SameLine(line1), SameLine(line2), DeletedLine(line3), DeletedLine(line4))
     diff(lines3, lines4).show === Seq(SameLine(line2), DeletedLine(line4))
   }
 
   "4. all = false, ordered = false" >> {
-    def diff(ls1: Seq[String], ls2: Seq[String]) =
+    def diff(ls1: Seq[String], ls2: Seq[String]): LinesContentDifference =
       LinesContentDifference(ls1, ls2, all = false, ordered = false)
 
     diff(lines1, lines2) must beEmpty

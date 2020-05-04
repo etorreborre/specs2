@@ -25,8 +25,8 @@ class BeforeAfterAllSpec extends Specification { def is = s2"""
 
       def e1 = { messages.append("e1"); ok }
       def e2 = { messages.append("e2"); ok }
-      def beforeAll = messages.append("before all")
-      def afterAll = messages.append("after all")
+      def beforeAll() = messages.append("before all")
+      def afterAll() = messages.append("after all")
     }
 
     runSpec(spec)
@@ -46,8 +46,8 @@ class BeforeAfterAllSpec extends Specification { def is = s2"""
 
       def e1 = { messages.append("e1"); ok }
       def e2 = { messages.append("e2"); ok }
-      def beforeAll = messages.append("before all")
-      def afterAll = messages.append("after all")
+      def beforeAll() = messages.append("before all")
+      def afterAll() = messages.append("after all")
     }
 
     runSpec(spec, arguments = Arguments("include", "s"))
@@ -67,8 +67,8 @@ class BeforeAfterAllSpec extends Specification { def is = s2"""
 
       def e1 = { messages.append("e1"); ok }
       def e2 = { messages.append("e2"); ok }
-      def beforeAll = messages.append("before all")
-      def afterAll = messages.append("after all")
+      def beforeAll() = messages.append("before all")
+      def afterAll() = messages.append("after all")
     }
 
     runSpec(spec, arguments = Arguments("exclude", "s"))
@@ -78,7 +78,7 @@ class BeforeAfterAllSpec extends Specification { def is = s2"""
   def runSpec(s: SpecificationStructure, arguments: Arguments = Arguments()) = {
     val env = Env(arguments = arguments, printerLogger = NoPrinterLogger)
     try Reporter.create(Nil, env).report(s.structure(env)).runVoid(env.executionEnv)
-    finally env.shutdown
+    finally env.shutdown()
   }
 
 

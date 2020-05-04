@@ -47,7 +47,8 @@ class RandomExecutionSpec(val env: Env) extends Specification with ThrownExpecta
       s2"""${fs_1_to_5.append(step("stop")).append(fs_6_to_10)}"""
     }
     DefaultExecutor.runSpecificationAction(spec, ownEnv).runAction(ownEnv.executionEnv).as {
-      val allExamples = allOf((1 to n).map("ex"+_):_*)
+      val allExamples = allOf[String]((1 to n).map("ex"+_):_*)
+
       messages must haveSize(10)
        messages must contain(allExamples)
        "the examples are executed randomly" ==> {

@@ -95,7 +95,7 @@ trait FilePathReader {
   /** read the content of a file as an Array of Bytes */
   def readBytes(filePath: FilePath): Operation[Array[Byte]] = exists(filePath).map { exists =>
     val stream = new BufferedInputStream(new FileInputStream(filePath.path))
-    try     LazyList.continually(stream.read).takeWhile(-1 !=).map(_.toByte).toArray
+    try     LazyList.continually(stream.read).takeWhile(b => -1 != b).map(_.toByte).toArray
     finally stream.close()
   }
 

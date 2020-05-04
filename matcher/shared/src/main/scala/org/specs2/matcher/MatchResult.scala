@@ -81,22 +81,14 @@ trait MatchResult[+T] extends ResultLike {
   def negate: MatchResult[T]
 
   /** apply the matcher */
-  def be(m: Matcher[T]) = {
+  def be[S >: T](m: Matcher[T]): MatchResult[S] = {
     if (m == null) apply(new BeNull)
     else apply(m)
   }
-  def be[S >: T <: AnyRef](s: S): MatchResult[S] = {
-    // we need to distinguish the cases of
-    // "xxx must not be matcher"
-    // and
-    // "xxx must not be yyy"
-    s match {
-      case m: Matcher[T] =>
-        apply(m)
-      case _ =>
-        apply(new BeTheSameAs(s))
-    }
-  }
+
+  def be[S >: T <: AnyRef](s: S): MatchResult[S] =
+    apply(new BeTheSameAs(s))
+
   /** apply the matcher */
   def have(m: Matcher[T]) = apply(m)
   def toResult: Result = evaluate.toResult

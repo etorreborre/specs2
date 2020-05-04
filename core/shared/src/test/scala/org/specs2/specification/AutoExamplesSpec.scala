@@ -4,7 +4,7 @@ package specification
 import matcher._
 import org.specs2.concurrent.ExecutionEnv
 import org.specs2.specification.core.{Fragment, Fragments}
-import org.specs2.specification.create.AutoExamples
+import org.specs2.specification.create.AutoExamples, AutoExamples._
 import org.specs2.specification.dsl.FragmentsDsl
 
 class AutoExamplesSpec(implicit ee: ExecutionEnv) extends org.specs2.Spec with DataTables with AutoExamples with FragmentsDsl { def is = s2"""

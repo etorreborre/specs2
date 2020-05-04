@@ -201,7 +201,7 @@ class ExecutorSpec(val env: Env) extends Specification with ThrownExpectations w
     val timeFactor = 1 //ownEnv.arguments.execute.timeFactor
 
     val messages = new ListBuffer[String]
-    def verySlow = { Thread.sleep(600 * timeFactor.toLong); messages.append("very slow"); success }
+    def verySlow: Result = { Thread.sleep(600 * timeFactor.toLong); messages.append("very slow"); success }
 
     val fragments = Fragments(example("very slow", verySlow))
     val env1 = ownEnv.setTimeout(100.millis * timeFactor.toLong)
@@ -211,17 +211,17 @@ class ExecutorSpec(val env: Env) extends Specification with ThrownExpectations w
 
   def userEnv = {
     val fragments =
-      Fragments.foreach(1 to 2) { i: Int =>
-        "test " + i ! Execution.withExecutionEnv { ee: ExecutionEnv =>
+      Fragments.foreach(1 to 2) { (i: Int) =>
+        "test " + i ! Execution.withExecutionEnv { (ee: ExecutionEnv) =>
           Await.result(scala.concurrent.Future(1)(ee.executionContext), 5.second) ==== 1
         }
       }
     val e = Env()
     try execute(fragments, e) must contain(beSuccessful[Result]).forall
-    finally e.shutdown
+    finally e.shutdown()
   }
 
-  lazy val factory = fragmentFactory
+  final lazy val factory = fragmentFactory
 
   def execute(fragments: Fragments, env: Env): List[Result] =
     DefaultExecutor(env).execute(env.arguments)(fragments.contents).runList.
@@ -239,18 +239,18 @@ class ExecutorSpec(val env: Env) extends Specification with ThrownExpectations w
     val messages = new ListBuffer[String]
 
     // this cannot be made lazy vals otherwise this will block on 'slow'
-    def ok(name: String)              = { messages.append(name); success }
-    def ko(name: String)              = { messages.append(name); failure }
-    def fast(timeFactor: Int)         = { messages.append("fast"); success }
-    def medium(timeFactor: Int)       = { Thread.sleep(10 * timeFactor.toLong);  messages.append("medium"); success }
-    def ex(s: String)                 = { messages.append(s); success }
-    def mediumFail(timeFactor: Int)   = { Thread.sleep(10 * timeFactor.toLong);  messages.append("medium"); failure }
-    def mediumError(timeFactor: Int)  = { Thread.sleep(10 * timeFactor.toLong);  messages.append("medium"); anError }
-    def mediumSkipped(timeFactor: Int)= { Thread.sleep(10 * timeFactor.toLong);  messages.append("medium"); skipped }
-    def slow(timeFactor: Int)         = { Thread.sleep(400 * timeFactor.toLong); messages.append("slow");   success }
-    def verySlow(timeFactor: Int)     = { Thread.sleep(600 * timeFactor.toLong); messages.append("very slow"); success }
-    def step1                         = { messages.append("step");   success }
-    def fatalStep                     = { messages.append("fatal");  if (true) throw new java.lang.Error("fatal error!"); success }
+    def ok(name: String)              : Result = { messages.append(name); success }
+    def ko(name: String)              : Result = { messages.append(name); failure }
+    def fast(timeFactor: Int)         : Result = { messages.append("fast"); success }
+    def medium(timeFactor: Int)       : Result = { Thread.sleep(10 * timeFactor.toLong);  messages.append("medium"); success }
+    def ex(s: String)                 : Result = { messages.append(s); success }
+    def mediumFail(timeFactor: Int)   : Result = { Thread.sleep(10 * timeFactor.toLong);  messages.append("medium"); failure }
+    def mediumError(timeFactor: Int)  : Result = { Thread.sleep(10 * timeFactor.toLong);  messages.append("medium"); anError }
+    def mediumSkipped(timeFactor: Int): Result = { Thread.sleep(10 * timeFactor.toLong);  messages.append("medium"); skipped }
+    def slow(timeFactor: Int)         : Result = { Thread.sleep(400 * timeFactor.toLong); messages.append("slow");   success }
+    def verySlow(timeFactor: Int)     : Result = { Thread.sleep(600 * timeFactor.toLong); messages.append("very slow"); success }
+    def step1                         : Result = { messages.append("step");   success }
+    def fatalStep                     : Result = { messages.append("fatal");  if (true) throw new java.lang.Error("fatal error!"); success }
   }
 
 }

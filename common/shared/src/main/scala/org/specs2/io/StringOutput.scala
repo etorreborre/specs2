@@ -13,16 +13,19 @@ trait StringOutput extends Output {
   private val msgs: ListBuffer[String] = new ListBuffer
 
   /**  @return the list of stored messages */
-  def messages = msgs.toList
+  def messages: List[String] =
+    msgs.toList
+
   /** @return the output as one string */
-  def output = messages.mkString("\n")
+  def output: String =
+    messages.mkString("\n")
 
   /**
    * if a message is printed with a newline it is considered as being a new message
    * otherwise it is added to the last message
    */
   override def printf(s: String, args: Any*): Unit = {
-    val formatted = s format (args : _*)
+    val formatted = s.format(args:_*)
     if (formatted.endsWith("\n"))
       append(formatted.dropRight(1))
     else if (msgs.isEmpty)
@@ -36,6 +39,6 @@ trait StringOutput extends Output {
   }
 
   protected def append(msg: String) = synchronized { msgs += msg; () }
-  
+
   def clear(): Unit = { msgs.clear() }
 }

@@ -86,21 +86,6 @@ trait TextDsl extends TextCreation { outer =>
   }
 }
 
-/** deactivate the TextDsl implicits */
-trait NoTextDsl extends TextDsl {
-
-  override def textFragment(s: String) =
-    super.textFragment(s)
-
-  override def fragmentFormatting(f: =>Fragment) =
-    super.fragmentFormatting(f)
-
-  override def fragmentsFormatting(fs: =>Fragments) =
-    super.fragmentsFormatting(fs)
-}
-
-
-
 trait TextCreation extends FragmentBuilder with FragmentsFactory { outer =>
 
   def addText(s: String): Fragment =

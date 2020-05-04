@@ -81,7 +81,7 @@ case class ContextSpec(env: Env) extends Spec with ResultMatchers with OwnEnv { 
 
 """
 
-  implicit val arguments = main.Arguments()
+  implicit val arguments: Arguments = main.Arguments()
 
   def before1  = { val d = data(); d.executing(d.ex1Before).prints("before", "e1") }
   def before2  = { val d = data(); d.executing(d.ex1_2Before).prints("before", "e1", "before", "e2") }
@@ -124,7 +124,7 @@ case class ContextSpec(env: Env) extends Spec with ResultMatchers with OwnEnv { 
     def executeBodies(exs: Fragments): List[Result] = {
       val env = Env(arguments = Arguments("sequential"))
       try DefaultExecutor.executeFragments(exs)(env).traverse(_.executionResult).run(env.executionEnv)
-      finally env.shutdown
+      finally env.shutdown()
     }
 
     def executing(exs: Fragments): Executed = Executed(executeBodies(exs))

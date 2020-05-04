@@ -100,6 +100,3 @@ case class BeEqualValueCheck[T](expected: Any) extends ValueCheck[T] {
   def check    = (t: T) => AsResult.safely(matcher(Expectable(t)))
   def checkNot = (t: T) => AsResult.safely(matcher.not(Expectable(t)))
 }
-
-
-

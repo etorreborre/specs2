@@ -18,7 +18,7 @@ class SeparatedTagsSpec extends mutable.Spec with Tables {
     "t1,t2"        ! ""           ! "t1 && t2" ! false  |
     "t1"           ! ""           ! "t1 && t2" ! true   |
     { (elementTags, included, excluded, keep) =>
-      SeparatedTags(included, excluded).keep(elementTags.split(",")) must_== keep
+      SeparatedTags(included, excluded).keep(elementTags.split(",").toIndexedSeq) must_== keep
     }
   }
 
@@ -35,7 +35,7 @@ class SeparatedTagsSpec extends mutable.Spec with Tables {
       "t1,t2"        ! ""           ! "t1 && t2" ! false     |
       "t1"           ! ""           ! "t1 && t2" ! false     |
       { (elementTags, included, excluded, contain) =>
-        SeparatedTags(included, excluded).contain(elementTags.split(",")) must_== contain
+        SeparatedTags(included, excluded).contain(elementTags.split(",").toIndexedSeq) must_== contain
       }
   }
 }

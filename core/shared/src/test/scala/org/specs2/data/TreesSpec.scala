@@ -92,5 +92,5 @@ class TreesSpec extends Specification with DataTables with Expectations { def is
   def beTree(s: String*) = be_==(s.mkString("", "\n", "\n"))
 
   implicit def anyToStream[A](a: A): LazyList[A] = LazyList(a)
-  implicit def listToStream[A](a: List[A]): LazyList[A] = a.toStream
+  implicit def listToStream[A](as: List[A]): LazyList[A] = LazyList(as:_*)
 }

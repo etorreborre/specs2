@@ -17,7 +17,9 @@ class DefaultStackTraceFilterSpec extends Spec with ThrownExpectations { def is 
  It should find if the stacktrace results from a specs2 own specification $e4
 """
 
-  def e1 = { DefaultStackTraceFilter((new UserExpectations).failure1.exception.getStackTrace).map(_.toString) must not(containMatch(".*specs2.*")) }
+  def e1 = {
+    val stacktrace = (new UserExpectations).failure1.exception.getStackTrace.toIndexedSeq
+    DefaultStackTraceFilter(stacktrace).map(_.toString) must not(containMatch(".*specs2.*")) }
 
   def e2 = {
     val huge = new Exception

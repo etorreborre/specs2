@@ -53,6 +53,9 @@ object StoreKeys {
     s.split(",").map(_.split("=")(1)).toList match {
       case List(specs,examples,successes,expectations,failures,errors,pending,skipped,time) =>
         Stats(specs.toInt, examples.toInt, successes.toInt, expectations.toInt, failures.toInt, errors.toInt, pending.toInt, skipped.toInt, trend = None, SimpleTimer.fromString(time))
+
+      case otherwise =>
+        throw new Exception(s"$s is not a well formatted Stats object")
     }
   }.toOption
 

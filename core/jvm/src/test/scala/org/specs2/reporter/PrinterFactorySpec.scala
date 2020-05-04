@@ -46,7 +46,7 @@ class PrinterFactorySpec extends Specification with ActionMatchers { def is = s2
     val output = new StringOutput {}
     val logger = StringOutputLogger(output)
     val factory = PrinterFactory.create(Env(arguments).setSystemLogger(logger))
-    factory.createPrinters.runVoid
+    factory.createPrinters.runVoid()
     output.messages must contain(contain(message))
   }
 

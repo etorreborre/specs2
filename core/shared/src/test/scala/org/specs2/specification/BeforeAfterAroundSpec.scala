@@ -23,19 +23,19 @@ class BeforeAfterAroundSpec extends Specification { def is = s2"""
 
   def mutableBefore = executeContains(
     new Spec with BeforeEach with StringOutput {
-      def before: Unit = { println("before") }
+      def before(): Unit = { println("before") }
       "ex1" ! success
     }, "before")
 
   def acceptanceBefore = executeContains(
     new Specification with BeforeEach with StringOutput {
-      def before: Unit = { println("before") }
+      def before(): Unit = { println("before") }
       def is = "ex1" ! success
     }, "before")
 
   def afterContext = executeContains(
     new Spec with AfterEach with StringOutput {
-      def after: Unit = { println("after") }
+      def after(): Unit = { println("after") }
       "ex1" ! success
     },"after")
 
@@ -51,7 +51,7 @@ class BeforeAfterAroundSpec extends Specification { def is = s2"""
     try {
       DefaultExecutor.executeFragments(s.is.fragments)(env).traverse(_.executionResult).run(env.executionEnv)
       s.messages must contain(allOf(messages:_*)).inOrder
-    } finally env.shutdown
+    } finally env.shutdown()
   }
 
 }

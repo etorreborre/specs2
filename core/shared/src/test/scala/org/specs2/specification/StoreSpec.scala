@@ -6,6 +6,7 @@ import fp.syntax._
 import execute.AsResult
 import control._
 import process._
+import FileName._
 
 class StoreSpec extends Specification { def is = sequential ^ s2"""
  The file store stores values in files where the name of the file is

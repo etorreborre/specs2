@@ -20,8 +20,8 @@ class TagSpec extends Specification with DataTables { def is = s2"""
 
  """
 
-  def zeroTag = allTags must contain { t: NamedTag =>
-    allNames must contain { names: String =>
+  def zeroTag = allTags must contain { (t: NamedTag) =>
+    allNames must contain { (names: String) =>
       val arguments = Arguments.split("include "+names)
 
       ((t |+| zero) ==== (zero |+| t)) and
@@ -29,10 +29,10 @@ class TagSpec extends Specification with DataTables { def is = s2"""
     }.forall
   }.forall
 
-  def associative = allTags must contain { t1: NamedTag =>
-    allTags must contain { t2: NamedTag =>
-      allTags must contain { t3: NamedTag =>
-        allNames must contain { names: String =>
+  def associative = allTags must contain { (t1: NamedTag) =>
+    allTags must contain { (t2: NamedTag) =>
+      allTags must contain { (t3: NamedTag) =>
+        allNames must contain { (names: String) =>
           val arguments = Arguments.split("include "+names)
           val values = (t1, t2, t3, names).toString
 

@@ -108,7 +108,7 @@ class MapDiffable[K, V](implicit diff: Diffable[V]) extends Diffable[Map[K, V]] 
     val added = findAdded(actual, expected)
     val removed = findRemoved(actual, expected)
     val keys = (changed ++ added ++ removed).map(_._1)
-    val identical = actual.filterKeys(k => !keys.contains(k)).toSeq
+    val identical = actual.view.filterKeys(k => !keys.contains(k)).toSeq
     if (keys.isEmpty) MapIdentical(actual)
     else MapDifference(identical, changed, added, removed)
   }
@@ -123,10 +123,10 @@ class MapDiffable[K, V](implicit diff: Diffable[V]) extends Diffable[Map[K, V]] 
     } yield (k, result)
 
   private def findAdded(actual: Map[K, V], expected: Map[K, V]) =
-    expected.filterKeys(k => !actual.contains(k)).toSeq
+    expected.view.filterKeys(k => !actual.contains(k)).toSeq
 
   private def findRemoved(actual: Map[K, V], expected: Map[K, V]) =
-    actual.filterKeys(k => !expected.contains(k)).toSeq
+    actual.view.filterKeys(k => !expected.contains(k)).toSeq
 }
 
 class StackTraceElementDiffable(implicit nameDiffable: Diffable[String], lineDiffable: Diffable[Int]) extends Diffable[StackTraceElement] {
@@ -205,12 +205,12 @@ class ArrayDiffable[E](implicit di: Diffable[E]) extends Diffable[Array[E]] {
   def diff(actual: Array[E], expected: Array[E]) = {
     val result = compareExisting(actual, expected)
     if (actual.length == expected.length && result.toSeq.forall(_.identical))
-      ArrayIdentical(actual)
+      ArrayIdentical(actual.toIndexedSeq)
     else
       ArrayDifference(
-        results = result,
-        added   = expected.drop(actual.length),
-        removed = actual.drop(expected.length))
+        results = result.toIndexedSeq,
+        added   = expected.drop(actual.length).toIndexedSeq,
+        removed = actual.drop(expected.length).toIndexedSeq)
   }
 
   private def compareExisting(actual: Array[E], expected: Array[E]) =
@@ -226,4 +226,3 @@ class FallbackDiffable[T] extends Diffable[T] {
     }
   }
 }
-

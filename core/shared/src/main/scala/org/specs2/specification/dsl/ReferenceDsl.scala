@@ -47,15 +47,6 @@ trait ReferenceDsl extends ReferenceCreation {
   }
 }
 
-/** deactivate the ReferenceDsl implicits */
-trait NoReferenceDsl extends ReferenceDsl {
-  override def linkFragment(alias: String) =
-    super.linkFragment(alias)
-
-  override def seeFragment(alias: String) =
-    super.seeFragment(alias)
-}
-
 /**
  * Create references without any implicits
  */
@@ -66,4 +57,3 @@ trait ReferenceCreation extends FragmentsFactory {
   def see(s: SpecStructure): Fragment            = fragmentFactory.see(SpecificationRef.create(s))
   def see(s: =>SpecificationStructure): Fragment = fragmentFactory.see(SpecificationRef.create(s))
 }
-

@@ -3,7 +3,8 @@ package matcher
 
 import matcher.describe.Diffable
 import text.Quote._
-import IsEmpty.IsEmptyOps
+import collection.IsEmpty
+import collection.IsEmpty.IsEmptyOps
 import scala.reflect.ClassTag
 
 /**
@@ -165,27 +166,6 @@ trait AnyBaseMatchers {
   }
 }
 
-trait IsEmpty[T] {
-  def isEmpty(t: T): Boolean
-}
-
-object IsEmpty {
-
-  def apply[T](implicit ev: IsEmpty[T]): IsEmpty[T] =
-    ev
-
-  implicit class IsEmptyOps[T : IsEmpty](t: T) {
-    def isEmpty: Boolean =
-      IsEmpty[T].isEmpty(t)
-  }
-
-  implicit def seqIsEmpty[T]: IsEmpty[Seq[T]] =
-    new IsEmpty[Seq[T]] {
-      def isEmpty(t: Seq[T]): Boolean =
-        t.isEmpty
-    }
-}
-
 /**
  * Matcher for a boolean value which must be true
  */
@@ -255,7 +235,7 @@ trait AnyBeHaveMatchers extends BeHaveMatchers { outer: AnyMatchers =>
 
   class AnyWithEmptyMatchers[T : IsEmpty](result: MatchResult[T]) {
     def empty = result(outer.beEmpty[T])
-    def beEmpty = result(outer.beEmpty[T])
+    def beEmpty: MatchResult[T] = result(outer.beEmpty[T])
   }
   implicit def toBeLikeResultMatcher[T](result: MatchResult[T]): BeLikeResultMatcher[T] = new BeLikeResultMatcher(result)
   class BeLikeResultMatcher[T](result: MatchResult[T]) {

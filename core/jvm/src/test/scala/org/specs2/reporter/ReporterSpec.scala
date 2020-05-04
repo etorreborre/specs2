@@ -71,7 +71,7 @@ class ReporterSpec(val env: Env) extends Specification with ThrownExpectations w
   def b2 = {
     val logger = stringPrinterLogger
     reported(ownEnv.setPrinterLogger(logger).setArguments(Arguments("junit")), printers = List(new FakeJUnitPrinter(logger)))
-    logger.messages must not(contain("ex1"))
+    logger.messages must not(contain[String]("ex1"))
     logger.messages must contain("[info] junit")
   }
 

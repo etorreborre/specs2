@@ -29,7 +29,7 @@ trait Vectorx { outer =>
       def intersperse0(accum: Vector[T], rest: Vector[T]): Vector[T] = rest match {
         case Vector()  => accum
         case Vector(x) => x +: accum
-        case h +: t    => intersperse0(a +: h +: accum, t)
+        case v    => intersperse0(a +: v.head +: accum, v.tail)
       }
       intersperse0(Vector(), vector).reverse
     }

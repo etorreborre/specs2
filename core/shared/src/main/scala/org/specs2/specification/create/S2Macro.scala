@@ -13,31 +13,13 @@ object S2Macro {
         variables: Expr[Seq[InterpolatedFragment]],
         ff: Expr[FragmentFactory],
         postProcess: Expr[Fragments => Fragments])(using qctx: QuoteContext) : Expr[Fragments] = {
-
-    def notStatic =
-      qctx.throwError("Expected statically known String Context", sc)
-
-    def splitParts(seq: Expr[Seq[String]]) = seq match {
-      case Varargs(p1) =>
-        p1 match {
-          case Consts(p2) => (p1.toList, p2.toList)
-          case _ => notStatic
-        }
-      case _ => notStatic
-    }
-
-    val parts = sc match {
-      case '{ StringContext($parts: _*) } => parts
-      case '{ new StringContext($parts: _*) } => parts
-      case _ => notStatic
-    }
-
+          
     val args = variables match {
       case Varargs(args) => args
       case _ => qctx.throwError("Expected statically known argument list", variables)
     }
 
-    '{s2(${parts}, ${variables}, ${ff}, ${postProcess})}
+    '{s2(${sc}.parts, ${variables}, ${ff}, ${postProcess})}
 
   }
 
