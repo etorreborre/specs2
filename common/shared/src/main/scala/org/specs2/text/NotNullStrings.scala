@@ -25,10 +25,10 @@ trait NotNullStrings {
       if (a == null) "null"
       else {
         a match {
-          case ar: Array[_]           => ar.notNullMkString(", ", "Array(", ")")
-          case map: Map[_,_]          => new NotNullMap(map).notNullMkStringWith(addQuotes = false)
-          case it: TraversableOnce[_] => it.notNullMkStringWith(addQuotes = false)
-          case _                      => evaluate(a)
+          case ar: Array[_]    => ar.notNullMkString(", ", "Array(", ")")
+          case map: Map[_,_]   => new NotNullMap(map).notNullMkStringWith(addQuotes = false)
+          case it: Iterable[_] => it.notNullMkStringWith(addQuotes = false)
+          case _               => evaluate(a)
         }
       }
     }
@@ -37,7 +37,7 @@ trait NotNullStrings {
      * @return the string evaluation of an object + its class name
      *
      * - if it is null => null
-     * - if this is an Array or a traversable => it prints the class name of the full collection if each element has the same type: List[Int] for example
+     * - if this is an Array or an Iterable => it prints the class name of the full collection if each element has the same type: List[Int] for example
      *                                          other it prints each element with its class name (with a special case for maps)
      * - if this is another type of object   => calls the toString method + getClass.getName
      *
@@ -46,7 +46,7 @@ trait NotNullStrings {
     def notNullWithClass(showAll: Boolean): String = {
       if (a == null) "null"
       else {
-        def sameElementTypes(ts: Traversable[_]) =
+        def sameElementTypes(ts: Iterable[_]) =
           ts.nonEmpty && (ts.toSeq.collect { case t if t != null => t.getClass.getName }.distinct.size == 1)
 
         def sameKeyValueTypes(map: Map[_,_]) = sameElementTypes(map.keys) && sameElementTypes(map.values)
@@ -66,13 +66,13 @@ trait NotNullStrings {
                 map.map { case (k, v) => (k.notNullWithClass(showAll), v.notNullWithClass(showAll)) }.mkString("Map(", ", ", ")")+
                   ": "+map.getClass.getName
 
-            case it: Traversable[_] =>
+            case it: Iterable[_] =>
               if (!showAll && sameElementTypes(it))
-                it.toSeq.notNullMkStringWith(addQuotes = true)+": "+it.getClass.getName+"["+it.head.getClass.getName+"]"
+                it.notNullMkStringWith(addQuotes = true)+": "+it.getClass.getName+"["+it.head.getClass.getName+"]"
               else
-                it.toSeq.map(_.notNullWithClass(showAll)).toString+": "+it.getClass.getName
+                it.map(_.notNullWithClass(showAll)).toString+": "+it.getClass.getName
 
-            case _ =>                     evaluate(a)+": "+a.getClass.getName
+            case _ => evaluate(a)+": "+a.getClass.getName
           }
         }(evaluate(a)+": "+a.getClass.getName) // in case the collection throws an exception during its traversal
       }
@@ -90,14 +90,14 @@ trait NotNullStrings {
   trait NotNullMkString {
     def notNullMkString(sep: String, start: String = "", end: String = ""): String
   }
-  implicit def arrayToNotNull[T](a: Array[T]): NotNullMkString = if (a == null) new NullMkString else new NotNullTraversableOnce(a.toSeq)
+  implicit def arrayToNotNull[T](a: Array[T]): NotNullMkString = if (a == null) new NullMkString else new NotNullIterable(a.toSeq)
 
   class NullMkString extends NotNullMkString {
     def notNullMkString(sep: String, start: String = "", end: String = ""): String = "null"
   }
 
-  implicit def traversableOnceToNotNull[T](a: =>TraversableOnce[T]): NotNullTraversableOnce[T] = new NotNullTraversableOnce(a)
-  class NotNullTraversableOnce[T](values: =>TraversableOnce[T]) extends NotNullMkString {
+  implicit def iterableToNotNull[T](a: =>Iterable[T]): NotNullIterable[T] = new NotNullIterable(a)
+  class NotNullIterable[T](values: =>Iterable[T]) extends NotNullMkString {
     def notNullMkString(sep: String, start: String = "", end: String = ""): String = {
       if (values == null)
         "null"
@@ -105,12 +105,12 @@ trait NotNullStrings {
         evaluate(catchAllOrElse(values.iterator.mkString(start, sep, end))(evaluate(values.toString)))
     }
     def notNullMkStringWith(addQuotes: Boolean = false): String = {
-      def traversableWithQuotedElements = values.iterator.to(Seq).map(v => quote(evaluate(v), addQuotes)).toString
-      def quotedTraversable             = quote(evaluate(values.toString))
+      def iterableWithQuotedElements = values.map(v => quote(evaluate(v), addQuotes)).toString
+      def quotedIterable             = quote(evaluate(values.toString))
 
       if (values == null) quote("null", addQuotes)
-      else if (addQuotes) evaluate(catchAllOrElse(traversableWithQuotedElements)(quotedTraversable))
-      else                evaluate(catchAllOrElse(evaluate(values.toString))(values.iterator.to(Seq).map(v => evaluate(v)).toString))
+      else if (addQuotes) evaluate(catchAllOrElse(iterableWithQuotedElements)(quotedIterable))
+      else                evaluate(catchAllOrElse(evaluate(values.toString))(values.map(v => evaluate(v)).toString))
     }
   }
 
