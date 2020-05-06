@@ -27,7 +27,7 @@ trait Throwablex {
     /** @return the class name, file Name and the line number where the Throwable was created */
     def fullLocation= topTrace.fullLocation
     /** @return the ith stacktrace element */
-    def apply(i: Int) = t.getStackTrace()(i)
+    def apply(i: Int) = t.getStackTrace.apply(i)
     /** @return the first stacktrace element as an option */
     def headOption = t.getStackTrace.toList.headOption
     /**

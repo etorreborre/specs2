@@ -40,6 +40,6 @@ It provides utility functions for stacktrace elements
   def filter1 = e.filter("org.specs2.specification.core").getStackTrace.toList.map(_.toString) must containMatch("org.specs2.specification.core")
   def filter2 = e.filterNot("org.specs2.control").getStackTrace.toList.map(_.toString) must not (containMatch("org.specs2.control"))
 
-  def stack1 = e(1).toString aka e.getStackTrace.mkString("\n") must beMatching(".*org.specs2.control.ThrowableExamples\\$.e.*")
+  def stack1 = e(0).toString must beMatching(".*org.specs2.control.ThrowableExamples\\$.e.*")
   def stack2 = e.headOption.map(_.toString).toIterable must containMatch("ThrowableExamples")
 }
