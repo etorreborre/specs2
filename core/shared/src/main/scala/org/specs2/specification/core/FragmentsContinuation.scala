@@ -16,10 +16,12 @@ case class FragmentsContinuation(continue: Result => Option[Fragments]) {
 object FragmentsContinuation {
   /** create a continuation */
   def continueWith[R : AsResult](result: =>R, fs: =>Fragments): Execution = {
-    def fragmentsCreationError(e: Throwable): Fragments =
+    def fragmentsCreationError(e: Throwable): Fragments = {
+println(e)
       Fragments(
         Fragment(Text("Could not create fragments after the previous successful result"),
                  Execution.result(Error(e))))
+    }
 
     Execution(result, FragmentsContinuation { (r: Result) =>
       if (r.isSuccess) Some(tryOr(fs)(fragmentsCreationError))

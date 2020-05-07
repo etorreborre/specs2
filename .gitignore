@@ -12,7 +12,7 @@
 hydra.log
 hydra-timings.csv
 project/hydra.sbt
-
+project/metals.sbt
 /out
 
 lowered.hnir
