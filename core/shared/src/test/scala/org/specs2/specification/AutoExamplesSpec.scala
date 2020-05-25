@@ -11,14 +11,15 @@ class AutoExamplesSpec(implicit ee: ExecutionEnv) extends org.specs2.Spec with D
 
  The trimExpression function should
    remove backticks
-     with no parameter list                                                                  $e1
-     with a parameter list - one param                                                       $e2
-     with a parameter list - 2 params                                                        $e3
+     with no parameter list            $e1
+     with a parameter list - one param $e2
+     with a parameter list - 2 params  $e3
 
- DataTables can be used as examples directly                                                 $dt1
+ DataTables can be used as examples directly $dt1
 
- Autoexamples can also be used in mutable specifications                                     $m1
-                                                                                             """
+ Autoexamples can also be used in mutable specifications $m1
+
+"""
 
   def e1 = trimExpression("`method`") must_== "method"
   def e2 = trimExpression("`method`(p1)") must_== "method"

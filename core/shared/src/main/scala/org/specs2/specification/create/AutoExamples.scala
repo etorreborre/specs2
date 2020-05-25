@@ -12,8 +12,8 @@ import scala.quoted._
  * and the code returns an AsResult value
  */
 trait AutoExamples extends FragmentsFactory {
-  inline def eg[T](code: =>T)(using asResult: AsResult[T]): Fragments =
-    ${ AutoExamples.create[T]('code, 'asResult, 'postProcessAutoExample) }
+  inline def eg[T](inline code: =>T)(using asResult: AsResult[T]): Fragments =
+    ${ AutoExamples.create[T]('{() => code}, 'asResult, 'postProcessAutoExample) }
 
   /** this function is introduced just to allow the mutable specification to register the newly created fragments */
   def postProcessAutoExample(fs: Fragments): Fragments =
@@ -22,14 +22,18 @@ trait AutoExamples extends FragmentsFactory {
 
 object AutoExamples extends AutoExamples {
 
-  def create[T](code: Expr[T], asResult: Expr[AsResult[T]], postProcess: Expr[Fragments => Fragments])(using qctx: QuoteContext)(using t: Type[T]): Expr[Fragments] = {
-    val expression = Expr(code.show)
-    Expr.betaReduce('{(ex: String, c: $t, as: AsResult[$t], post: Fragments => Fragments) =>
+  def create[T](code: Expr[() => T], asResult: Expr[AsResult[T]], postProcess: Expr[Fragments => Fragments])(
+    using qctx: QuoteContext)(using t: Type[T], t1: Type[() => T]): Expr[Fragments] = {
+
+    import qctx.tasty._
+    val expression = Expr(rootPosition.sourceCode)
+    // we need to pass () => T here because betaReduce would evaluate the code here otherwise
+    Expr.betaReduce('{(ex: String, c: $t1, as: AsResult[$t], post: Fragments => Fragments) =>
       post(createExample[$t](ex, c, as))})(expression, code, asResult, postProcess)
   }
 
-  def createExample[T](expression: String, code: =>T, asResult: AsResult[T]): Fragments =
-    Fragments(AutoExamples.makeExample(expression, code, asResult))
+  def createExample[T](expression: String, code: () => T, asResult: AsResult[T]): Fragments =
+    Fragments(AutoExamples.makeExample(expression, code(), asResult))
 
   def makeExample[T](expression: String, code: =>T, asResult: AsResult[T]): Fragment =
     fragmentFactory.example(Description.code(trimExpression(expression)), code)(asResult)
