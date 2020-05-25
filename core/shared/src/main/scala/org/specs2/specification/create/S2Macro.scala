@@ -6,6 +6,7 @@ import org.specs2.text.{Trim, Interpolated}
 import Trim._
 import org.specs2.text.NotNullStrings._
 import org.specs2.control._
+import Exprs._
 
 object S2Macro {
 
@@ -13,14 +14,13 @@ object S2Macro {
         variables: Expr[Seq[InterpolatedFragment]],
         ff: Expr[FragmentFactory],
         postProcess: Expr[Fragments => Fragments])(using qctx: QuoteContext) : Expr[Fragments] = {
-          
+
     val args = variables match {
       case Varargs(args) => args
       case _ => qctx.throwError("Expected statically known argument list", variables)
     }
 
-    '{s2(${sc}.parts, ${variables}, ${ff}, ${postProcess})}
-
+    '{s2(${sc}.parts, ${variables}, ${Expr(args.map(_.show))}, ${ff}, ${postProcess})}
   }
 
    /**
@@ -28,12 +28,11 @@ object S2Macro {
    *
    * if the Yrangepos scalac option is not set then we use an approximated method to find the expressions texts
    */
-  def s2(texts: Seq[String], variables: Seq[InterpolatedFragment], ff: FragmentFactory, postProcess: Fragments => Fragments): Fragments =  {
-
+  def s2(texts: Seq[String], variables: Seq[InterpolatedFragment], expressions: Seq[String], ff: FragmentFactory, postProcess: Fragments => Fragments): Fragments =  {
     val location = SimpleLocation(TraceLocation("path", "fileName", "className", "methodName", lineNumber = 0))
-    val fragments = (texts zip variables).foldLeft(Fragments()) { (res, cur) =>
+    val fragments = Fragments.reduce(texts zip variables zip expressions) { case (res, (cur, expression)) =>
       val (text, variable) = cur
-      variable.append(res, text, location, location, "expression")
+      variable.append(res, text, location, location, expression)
     }
 
     // The last piece of text is trimmed to allow the placement of closing quotes in the s2 string
@@ -42,6 +41,11 @@ object S2Macro {
 
     postProcess(fragments append Fragments(last:_*))
   }
-
-
 }
+
+object Exprs {
+    implicit class LiftExprOps[T](x: T) extends AnyVal {
+      def toExpr(using Liftable[T], QuoteContext): Expr[T] =
+        summon[Liftable[T]].toExpr(x)
+    }
+  }

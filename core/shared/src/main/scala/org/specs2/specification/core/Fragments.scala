@@ -143,5 +143,9 @@ object Fragments {
 
   /** iterate over elements to create a Fragments object */
   def foreach[T](seq: Seq[T])(f: T => Fragments): Fragments =
-    seq.foldLeft(Fragments.empty)((res, cur) => res.append(f(cur)))
+    reduce(seq)((res, cur) => res.append(f(cur)))
+
+  /** iterate over elements to create a Fragments object */
+  def reduce[T](seq: Seq[T])(f: (Fragments, T) => Fragments): Fragments =
+    seq.foldLeft(Fragments.empty)((res, cur) => f(res, cur))
 }

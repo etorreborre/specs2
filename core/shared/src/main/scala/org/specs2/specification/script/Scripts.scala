@@ -32,7 +32,7 @@ trait Scripts { outer: FragmentsFactory =>
                 case Some(f) if Fragment.isText(f) =>
                   Fragments(fragments.dropRight(1):_*) append script.fragments(f.description.show + text).map(_.setLocation(end)).toFragments
 
-                case None =>
+                case _ =>
                   Fragments(fragments:_*) append script.fragments(text).map(_.setLocation(end)).toFragments
 
               }

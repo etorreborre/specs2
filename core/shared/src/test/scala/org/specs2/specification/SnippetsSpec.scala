@@ -10,7 +10,7 @@ class SnippetsSpec(val env: Env) extends Spec with Snippets with DataTables with
 
  These are examples on how to use the various snippet methods
 
-  with the `snippet` method xxxx $snippet1
+  with the `snippet` method $snippet1
   with the `snippet` method and 2 lines $snippet2
   with the `snippet` method and cut comments $snippet3
   with the `snippet` method and cut comments - 2 blocks $snippet4
@@ -37,11 +37,11 @@ Results
 Names
 =====
  It is also possible to capture code names
-   for types (trait, classes,...) $$names1
-     with a fully qualified name $$names2
-   for method names $$names3
-   for method names with type parameters $$names4
-   for attribute names $$names5
+   for types (trait, classes,...) $names1
+     with a fully qualified name $names2
+   for method names $names3
+   for method names with type parameters $names4
+   for attribute names $names5
 
 Robustness
 ==========
@@ -95,7 +95,7 @@ i = 1
       |i = 1
       |```""".stripMargin
 
-  def snippet5 = s2""" code ${snippet { "e1" ! { ok } /**/;1/**/} }""".trimmedTexts(1) === """`"e1" ! { ok }`"""
+  def snippet5 = s2""" code ${snippet { "e1" ! { ok } /**/;1/**/} }""".trimmedTexts(1) === """`"e1" ! { ok } /**/;1/**/`"""
 
   def offset1 = s2""" code: ${ snippet {
 // 8<--
@@ -152,39 +152,39 @@ n = 0
        |```
        |`> 2`""".stripMargin
 
-  // def names1 = {
-  //   "code"                                         || "markdown"                 |>
-  //   s"""the trait `${simpleName[Snippets]}`"""     !! "the trait `Snippets`"     |
-  //   { (code, markdown) => code === markdown}
-  // }
+  def names1 = {
+    "code"                                         || "markdown"             |>
+    s"""the trait `${simpleName[Snippets]}`"""     !! "the trait `Snippets`" |
+    { (code, markdown) => code === markdown}
+  }
 
-  // def names2 = {
-  //   "code"                                   || "markdown"                                      |>
-  //   s"""the trait `${fullName[Snippets]}`""" !! "the trait `org.specs2.specification.Snippets`" |
-  //   { (code, markdown) => code === markdown}
-  // }
+  def names2 = {
+    "code"                                   || "markdown"                                      |>
+    s"""the trait `${fullName[Snippets]}`""" !! "the trait `org.specs2.specification.Snippets`" |
+    { (code, markdown) => code === markdown}
+  }
 
-  // def names3 = {
-  //   "code"                              || "markdown"                                      |>
-  //   s"""the method `${termName(is)}`""" !! "the method `is`"                               |
-  //     { (code, markdown) => code === markdown}
-  // }
+  def names3 = {
+    "code"                              || "markdown"        |>
+    s"""the method `${termName(is)}`""" !! "the method `is`" |
+      { (code, markdown) => code === markdown}
+  }
 
-  // def names4 = {
-  //   def function[T, S](t: T, s: S) = ""
-  //   Use(function(1, 1))
+  def names4 = {
+    def function[T, S](t: T, s: S) = ""
+    Use(function(1, 1))
 
-  //   "code"                                                        || "markdown"                                      |>
-  //   s"""the method `${termName(function(1, ""))}`"""              !! "the method `function`"                         |
-  //   s"""the method `${termName(function[Int, String](1, ""))}`""" !! "the method `function`"                         |
-  //   { (code, markdown) => code === markdown}
-  // }
+    "code"                                                        || "markdown"              |>
+    s"""the method `${termName(function(1, ""))}`"""              !! "the method `function`" |
+    s"""the method `${termName(function[Int, String](1, ""))}`""" !! "the method `function`" |
+    { (code, markdown) => code === markdown}
+  }
 
-  // def names5 = {
-  //   "code"                                         || "markdown"                   |>
-  //   s"""the attribute `${termName(attribute1)}`""" !! "the attribute `attribute1`" |
-  //     { (code, markdown) => code === markdown}
-  // }
+  def names5 = {
+    "code"                                         || "markdown"                   |>
+    s"""the attribute `${termName(attribute1)}`""" !! "the attribute `attribute1`" |
+      { (code, markdown) => code === markdown}
+  }
 
   def effects1 =
     snippet[Unit](sys.error("boom")) must not(throwAn[Exception])

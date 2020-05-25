@@ -47,19 +47,54 @@ trait Snippets {
     def checkOk = s.copy(params = s.params.copy(verify = Some((t: T) => AsResult(t))))
   }
 
-  inline def snippet[T](code: =>T)(implicit params: SnippetParams[T]): Snippet[T] =
-    ${ Snippets.create[T]('code, 'params) }
+  inline def snippet[T](inline code: =>T)(implicit params: SnippetParams[T]): Snippet[T] =
+    ${ Snippets.create[T]('{() => code}, 'params) }
+
+  inline def simpleName[T]: String =
+    ${ Snippets.typeSimpleName[T] }
+
+  inline def fullName[T]: String =
+    ${ Snippets.typeFullName[T] }
+
+  inline def termName[T](inline t: =>T): String =
+    ${ Snippets.termFullName[T]('t) }
+
 }
 
 object Snippets extends Snippets {
 
-  def create[T](code: Expr[T], params: Expr[SnippetParams[T]])(using qctx: QuoteContext)(using t: Type[T]): Expr[Snippet[T]] = {
-    val expression = Expr(code.show)
-    Expr.betaReduce('{(ex: String, c: $t, ps: SnippetParams[$t]) => createSnippet[$t](ex, c, ps)})(expression, code, params)
+  def create[T](code: Expr[() => T], params: Expr[SnippetParams[T]])(using qctx: QuoteContext)(using t: Type[T], t1: Type[() => T]): Expr[Snippet[T]] = {
+    import qctx.tasty._
+    val expression = Expr(rootPosition.sourceCode)
+    // we need to pass () => T here because betaReduce would evaluate the code here otherwise
+    Expr.betaReduce('{(ex: String, c: $t1, ps: SnippetParams[$t]) => createSnippet[$t](ex, c, ps)})(expression, code, params)
   }
 
-  def createSnippet[T](expression: String, code: =>T, params: SnippetParams[T]): Snippet[T] =
-    new Snippet[T](() => code, codeExpression = Some(expression), params)
+  def createSnippet[T](expression: String, code: () => T, params: SnippetParams[T]): Snippet[T] =
+    new Snippet[T](code, codeExpression = Some(expression), params)
+
+  def typeSimpleName[T](using qctx: QuoteContext)(using t: Type[T]): Expr[String] = {
+    import qctx.tasty._
+    Expr(t.unseal.symbol.name)
+  }
+
+  def typeFullName[T](using qctx: QuoteContext)(using t: Type[T]): Expr[String] = {
+    import qctx.tasty._
+    Expr(t.unseal.symbol.fullName)
+  }
+
+  def termFullName[T](e: Expr[T])(using qctx: QuoteContext): Expr[String] = {
+    import qctx.tasty._
+    val name = e.unseal match {
+      case Ident(termName)                                    => termName
+      case Select(_, termName)                                => termName.toString
+      case Inlined(_,_,Apply(Ident(termName),_))              => termName.toString
+      case Inlined(_,_,Apply(TypeApply(Ident(termName),_),_)) => termName.toString
+      case Inlined(_,_,Select(_,termName))                    => termName.toString
+      case other                                              => qctx.error("The code must be a member selection, or a function application", e);""
+    }
+    Expr(name)
+  }
 
 }
 

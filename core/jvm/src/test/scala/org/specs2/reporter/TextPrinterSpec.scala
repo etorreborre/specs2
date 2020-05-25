@@ -150,8 +150,9 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
     """|[error] Actual:   a[b]cdea[b]cdea[b]cdea[b]cdea[b]cde
        |[error] Expected: a[d]cdea[d]cdea[d]cdea[d]cdea[d]cde"""
 
+  case class A(s: String) { override def equals(a: Any) = false }
+
   def d4 = {
-    case class A(s: String) { override def equals(a: Any) = false }
     s2"""e1 ${A("a"*100) must_== A("a"*100)}""" doesntContain
       """|[error] Actual"""
   }
