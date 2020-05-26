@@ -1,6 +1,7 @@
 package org.specs2
 package specification
 
+import scala.quoted._
 import org.specs2.execute._
 import specification.core._
 import specification.create._
@@ -21,26 +22,44 @@ import specification.create._
 trait Snippets extends org.specs2.execute.Snippets { outer: S2StringContextCreation with FragmentsFactory =>
   private val factory = outer.fragmentFactory
 
-  implicit def snippetIsSpecPart[T](snippet: Snippet[T]): InterpolatedFragment = new InterpolatedFragment {
-    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String): Fragments =
-      (fs append factory.text(text).setLocation(start)) append snippetFragments(snippet, end, expression)
+  implicit inline def snippetIsInterpolatedFragment[T](inline snippet: Snippet[T]): InterpolatedFragment =
+    ${Snippets.createInterpolatedFragment('{snippet}, '{outer.fragmentFactory})}
+}
 
-    private def snippetFragments(snippet: Snippet[T], location: Location, expression: String): Fragments = {
-      Fragments(
-        Seq(factory.text(snippet.show(expression)).setLocation(location)) ++
-          resultFragments(snippet, location) ++
-          checkFragments(snippet, location):_*)
+object Snippets {
+
+  def createInterpolatedFragment[T](snippetExpr: Expr[Snippet[T]], factoryExpr: Expr[FragmentFactory])(
+    using qctx: QuoteContext, t: Type[T]): Expr[InterpolatedFragment] = {
+    import qctx.tasty._
+    '{
+       new InterpolatedFragment {
+         private val expression = ${Expr(rootPosition.sourceCode)}
+         private val snippet: Snippet[$t] = ${snippetExpr}
+         private val factory = ${factoryExpr}
+
+         def append(fs: Fragments, text: String, start: Location, end: Location): Fragments =
+           (fs append factory.text(text).setLocation(start)) append snippetFragments(snippet, end, expression)
+
+         def snippetFragments(snippet: Snippet[$t], location: Location, expression: String): Fragments = {
+           Fragments(
+             Seq(factory.text(snippet.show(expression)).setLocation(location)) ++
+               resultFragments(snippet, location) ++
+               checkFragments(snippet, location):_*)
+         }
+         def resultFragments(snippet: Snippet[$t], location: Location) = {
+           if (snippet.showResult.isEmpty)
+             Seq()
+           else
+             Seq(factory.text("\n"+snippet.showResult).setLocation(location))
+         }
+         def checkFragments(snippet: Snippet[$t], location: Location) = {
+           if (snippet.mustBeVerified)
+             Seq(factory.step(snippet.verify.mapMessage("Snippet failure: "+_)).setLocation(location))
+           else
+             Seq()
+         }
+       }
     }
-
-    private def resultFragments(snippet: Snippet[T], location: Location) = {
-      if (snippet.showResult.isEmpty) Seq()
-      else                            Seq(factory.text("\n"+snippet.showResult).setLocation(location))
-    }
-
-    private def checkFragments(snippet: Snippet[T], location: Location) = {
-      if (snippet.mustBeVerified) Seq(factory.step(snippet.verify.mapMessage("Snippet failure: "+_)).setLocation(location))
-      else                        Seq()
-    }
-
   }
+
 }

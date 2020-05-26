@@ -97,8 +97,8 @@ trait ForEachWithCommandLineArguments[T] extends FragmentsFactory { outer: S2Str
     Execution.withEnv((env: Env) => foreach(env.arguments.commandLine)(f))
 
   implicit def foreachFunctionIsInterpolatedFragment[R : AsResult](f: =>(T => R)): InterpolatedFragment = new InterpolatedFragment {
-    def append(fs: Fragments, text: String, start: Location, end: Location, expression: String) = {
-      val (description, before) = descriptionAndBefore(text, start, end, expression)
+    def append(fs: Fragments, text: String, start: Location, end: Location) = {
+      val (description, before) = S2StringContext.descriptionAndBefore(outer.fragmentFactory, text, start, end)
       fs append before append ff.example(description, foreachFunctionToExecution(f)).setLocation(end)
     }
   }
