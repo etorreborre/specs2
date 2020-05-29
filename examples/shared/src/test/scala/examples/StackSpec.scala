@@ -58,7 +58,7 @@ class StackSpec extends Specification { def is =  "Specification for a Stack wit
     val stack = newEmptyStack
 
     def e1 = stack.size must_== 0
-    def e2 = stack.top must throwA[NoSuchElementException]
+    def e2 = stack.top must throwA[RuntimeException]  // 2.11: NoSuchElementException; 2.12/13: IndexOutOfBoundsException
     def e3 = stack.pop must throwA[NoSuchElementException]
   }
 

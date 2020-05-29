@@ -19,7 +19,7 @@ class MutableStackIsolatedSpec extends Specification { isolated
   "when the stack is empty".br
   step { stack = emptyStack }
   eg { stack must beEmpty }
-  eg { stack.top must throwA[NoSuchElementException] }
+  eg { stack.top must throwA[RuntimeException] }  // 2.11: NoSuchElementException; 2.12/13: IndexOutOfBoundsException
   eg { stack.pop must throwA[NoSuchElementException] }; p
 
   "2. Non-empty and not full".p

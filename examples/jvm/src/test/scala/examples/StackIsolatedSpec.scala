@@ -19,7 +19,8 @@ class StackIsolatedSpec extends Specification { def is = isolated ^ sequential ^
  1. Empty
    when the stack is empty $stackIsEmpty
    $${ eg { stack must be empty }}
-   $${ eg { stack.top must throwA[NoSuchElementException] }}
+   $${ eg { stack.top must throwA[RuntimeException] }}  // 2.11: NoSuchElementException; 2.12/13: IndexOutOfBoundsException
+
    $${ eg { stack.pop must throwA[NoSuchElementException] }}
 
  2. Non-empty and not full
