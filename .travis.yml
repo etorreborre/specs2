@@ -4,9 +4,9 @@ dist: trusty
 language: scala
 
 scala:
-  - 2.12.10
+  - 2.12.11
   - 2.11.12
-  - 2.13.1
+  - 2.13.2
 
 jdk:
   - oraclejdk8
@@ -43,9 +43,6 @@ script:
 
   - ./.travis-test.sh coreJS
   - ./.travis-test.sh examplesJS
-
-  - find $HOME/.sbt -name "*.lock" | xargs rm
-  - find $HOME/.ivy2 -name "ivydata-*.properties" | xargs rm
 
 notifications:
   webhooks:
