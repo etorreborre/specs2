@@ -44,9 +44,6 @@ script:
   - ./.travis-test.sh coreJS
   - ./.travis-test.sh examplesJS
 
-  - find $HOME/.sbt -name "*.lock" | xargs rm
-  - find $HOME/.ivy2 -name "ivydata-*.properties" | xargs rm
-
 notifications:
   webhooks:
     urls:
