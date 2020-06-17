@@ -7,8 +7,6 @@ import org.specs2.io.Key
 import time.SimpleTimer
 import scala.util.Try
 import org.specs2.fp.syntax._
-import org.specs2.fp.syntax._
-import org.specs2.fp.syntax._
 
 object StoreKeys {
   def resolve[A](key: Key[A]): String =
