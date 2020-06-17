@@ -4,18 +4,28 @@ package reflect
 import scala.reflect.ClassTag
 import control._
 import fp.syntax._
-import org.portablescala.reflect.Reflect
+import org.portablescala.reflect._
 
 trait Classes extends ClassOperations {
 
   type EnableReflectiveInstantiation =
     org.portablescala.reflect.annotation.EnableReflectiveInstantiation
 
-  def newInstance(name: String): Any =
-    Reflect
+  def newInstance(name: String, defaultInstances: =>List[AnyRef] = Nil): Any =
+    newInstance(Reflect
       .lookupInstantiatableClass(name)
-      .getOrElse(throw new ClassNotFoundException(name))
-      .newInstance
+      .getOrElse(throw new ClassNotFoundException(name)), defaultInstances)
+
+  def newInstance(klass: InstantiatableClass, defaultInstances: =>List[AnyRef]): Any = {
+    defaultInstances match {
+      case Nil => klass.newInstance
+      case (h :: t) =>
+        klass.getConstructor(h.getClass) match {
+          case Some(c) => c.newInstance(h)
+          case None => newInstance(klass, t)
+        }
+    }
+  }
 
   def loadModule(name: String): Any =
     Reflect
@@ -23,24 +33,24 @@ trait Classes extends ClassOperations {
       .getOrElse(throw new ClassNotFoundException(name))
       .loadModule
 
-  def createInstance[T <: AnyRef](className: String)(implicit m: ClassTag[T]): Operation[T] =
+  def createInstanceFromName[T <: AnyRef](className: String, defaultInstances: =>List[AnyRef] = Nil)(implicit m: ClassTag[T]): Operation[T] =
     if (className.endsWith("$"))
       Operation.delayed(loadModule(className).asInstanceOf[T])
     else
       Operation.delayed(newInstance(className).asInstanceOf[T])
 
   def createInstance[T <: AnyRef](className: String, loader: ClassLoader, defaultInstances: =>List[AnyRef] = Nil)(implicit m: ClassTag[T]): Operation[T] =
-    createInstance(className)(m)
+    createInstance(className, defaultInstances)(m)
 
   def createInstanceFromClass[T <: AnyRef](klass: Class[T], defaultInstances: =>List[AnyRef])(implicit m: ClassTag[T]): Operation[T] =
-    createInstance(klass.getName)(m)
+    createInstance(klass.getName, defaultInstances)(m)
 
   def createInstanceFromClass[T <: AnyRef](klass: Class[T], loader: ClassLoader, defaultInstances: =>List[AnyRef] = Nil)(implicit m: ClassTag[T]): Operation[T] =
     createInstance(klass.getName)(m)
 
   /** try to create an instance but return an exception if this is not possible */
   def createInstanceEither[T <: AnyRef](className: String, loader: ClassLoader, defaultInstances: =>List[AnyRef] = Nil)(implicit m: ClassTag[T]): Operation[Throwable Either T] =
-    try createInstance(className)(m).map(Right(_))
+    try createInstance(className, defaultInstances)(m).map(Right(_))
     catch {
       case e: Throwable => Operation.pure(Left(e))
     }
