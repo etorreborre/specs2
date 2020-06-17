@@ -441,6 +441,8 @@ lazy val compilationSettings = Seq(
       "-Xlint",
       "-Ywarn-numeric-widen",
       "-Ywarn-value-discard",
+      "-Xlint:-byname-implicit",
+      "-Xlint:-nullary-override",
       "-deprecation:false", "-Xcheckinit", "-unchecked", "-feature", "-language:_"),
   scalacOptions in Compile ++= {
     CrossVersion.partialVersion(scalaVersion.value) match {
