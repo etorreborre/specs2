@@ -12,7 +12,6 @@ import SpecificationsFinder._
 import control.Operations._
 import org.specs2.control.eff.Eff
 import org.specs2.specification.create.DefaultFragmentFactory
-import org.specs2.specification.create.DefaultFragmentFactory.link
 
 /**
  * This trait loads specifications found on a given source directory based
@@ -158,4 +157,3 @@ object SpecificationsFinder extends SpecificationsFinder {
   val specificationsPattern: String =
     "(.*Spec)\\s*extends\\s*.*"
 }
-
