@@ -15,7 +15,7 @@ trait ClassOperations {
    *
    * This is useful to instantiate nested classes which are referencing their outer class in their constructor
    */
-  def createInstance[T <: AnyRef](className: String)(implicit m: ClassTag[T]): Operation[T]
+  def createInstanceFromName[T <: AnyRef](className: String, defaultInstances: =>List[AnyRef] = Nil)(implicit m: ClassTag[T]): Operation[T]
 
   def createInstance[T <: AnyRef](className: String, loader: ClassLoader, defaultInstances: =>List[AnyRef] = Nil)(implicit m: ClassTag[T]): Operation[T]
 
