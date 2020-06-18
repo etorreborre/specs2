@@ -1,0 +1,5 @@
+Maintenance release
+
+## Fixes
+
+* #757 fixed the instantiation of objects (by @xuwei_k)

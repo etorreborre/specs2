@@ -1,0 +1,5 @@
+Maintenance release
+
+## Fixes
+
+* *core* fixed the instantiation of specification objects with ScalaJS

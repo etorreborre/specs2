@@ -1,0 +1,10 @@
+Maintenance release
+
+## Improvements
+
+* *guide* #834 added a note about trait inheritance for contexts
+
+## Fixes
+
+* allow parameters to be injected in ScalaJS specifications
+* moved scala and scalaz future matchers to the JVM

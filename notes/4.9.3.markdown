@@ -1,0 +1,6 @@
+Maintenance release
+
+## Fixes
+
+ * #822 catch fatal errors in executions
+ * #818 changed the implementation for `beCloseTo` with significant figures
