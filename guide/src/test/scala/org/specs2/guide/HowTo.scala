@@ -33,6 +33,7 @@ How to timeout examples?                                                        
 Can I use parts of an example description in the example itself?                         | ${link(ExampleDescription).mute}
 Add my own keywords (other than '>>', 'should', 'can') to a mutable specification        | ${link(AddKeywords).mute}
 Help, I need to troubleshoot my issues!                                                  | ${link(Troubleshooting).mute}
+How can I integrate my own IO type to specifications?                                    | ${link(IoIntegration).mute}
 
 """
 
