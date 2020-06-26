@@ -40,7 +40,8 @@ class TryMatchersSpec extends Spec with TryMatchers with ResultMatchers { def is
   ${ Failed[I](e) must not be aFailedTry.withThrowable[MyException]("bang") }
   ${ (Failed[I](e) must beAFailedTry.withThrowable[MyException]("bang")) returns "Failure(boom) is a Failure but 'boom' doesn't match 'bang'" }
   ${ Failed[I](e) must not be aFailedTry.withThrowable[OtherException] }
-
+  ${ Failed[I](ExceptionTrait("bang")) must beFailedTry.withThrowable[ExceptionTrait] }
+  ${ Failed[I](ExceptionTrait("bang")) must beFailedTry.withThrowable[ExceptionTrait]("bang") }
   """
 
   val e = new MyException("boom")
@@ -53,4 +54,11 @@ class TryMatchersSpec extends Spec with TryMatchers with ResultMatchers { def is
   }
   class OtherException extends Exception
   type I = Int
+
+  trait ExceptionTrait extends Exception
+  object ExceptionTrait {
+    def apply(message: String): ExceptionTrait = new ExceptionTrait {
+      override def getMessage: String = message
+    }
+  }
 }
