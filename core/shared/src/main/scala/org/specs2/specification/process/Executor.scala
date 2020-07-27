@@ -72,7 +72,8 @@ case class DefaultExecutor(env: Env) extends Executor:
       if (arguments.skipAll)
         (one(if (fragment.isExecutable) fragment.skip else fragment), init)
       else if (arguments.sequential)
-        val started = fragment.startExecutionAfter(previousStarted.toList)(env)
+        val f = if (Fragment.isStep(fragment)) fragment.updateExecution(_.setErrorAsFatal) else fragment
+        val started = f.startExecutionAfter(previousStarted.toList)(env)
         (one(started), (previous, previousStarted :+ started, None))
       else
         if (fragment.execution.mustJoin)
