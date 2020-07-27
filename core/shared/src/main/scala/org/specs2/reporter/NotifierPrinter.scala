@@ -3,7 +3,7 @@ package reporter
 
 import text.NotNullStrings._
 import main.Arguments
-import execute.Result
+import execute.{NoDetails, Result}
 import control._
 import fp._, syntax._
 import control.origami._
@@ -105,8 +105,8 @@ case class NotifierPrinter(commandLineArguments: Arguments):
         notifyResult(r2, n, description, location, duration)
 
   private def notifyStep(n: Notifier, f: Fragment, executedResult: ExecutedResult, args: Arguments) =
+    val location = f.location.show
     try
-      val location = f.location.show
       n.stepStarted(location)
 
       def notifyResult(result: Result, timer: SimpleTimer): Unit =
@@ -115,12 +115,20 @@ case class NotifierPrinter(commandLineArguments: Arguments):
           case r: execute.Failure => n.stepError(r.message, location, r.exception, timer.totalMillis)
           case r: execute.Error   => n.stepError(r.message, location, r.exception, timer.totalMillis)
           case _ => ()
-
       notifyResult(executedResult.result, executedResult.timer)
-      // catch AbstractMethod errors coming from Intellij since adding
+      // catch AbstractMethod errors coming from Intellij since
       // calling new "step" methods on the Notifier interface is not supported yet
     catch
-      case e: AbstractMethodError if e.getMessage.notNull.contains("JavaSpecs2Notifier") => ()
+      case e: AbstractMethodError if e.getMessage.notNull.contains("JavaSpecs2Notifier") =>
+        // if steps are not supported print failures and errors as examples failures and errors
+        executedResult.result match
+          case r: execute.Failure =>
+            n.exampleFailure("step", r.message, location, r.exception, NoDetails, executedResult.timer.totalMillis)
+          case r: execute.Error =>
+            n.exampleError("step", r.message, location, r.exception, executedResult.timer.totalMillis)
+          case _ =>
+            ()
+
       case other: Throwable => throw other
 
   def notifyText(n: Notifier, f: Fragment, args: Arguments) =
