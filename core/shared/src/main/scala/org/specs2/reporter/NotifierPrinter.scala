@@ -119,7 +119,7 @@ case class NotifierPrinter(commandLineArguments: Arguments):
       // catch AbstractMethod errors coming from Intellij since
       // calling new "step" methods on the Notifier interface is not supported yet
     catch
-      case e: AbstractMethodError if e.getMessage.notNull.contains("JavaSpecs2Notifier") =>
+      case e: AbstractMethodError if e.getMessage.notNull.contains("Specs2Notifier") =>
         // if steps are not supported print failures and errors as examples failures and errors
         executedResult.result match
           case r: execute.Failure =>
