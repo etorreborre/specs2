@@ -1,6 +1,8 @@
 package org.specs2
 package form
 
+import FormsExamples._
+
 class FormsSpec extends Spec with FormsBuilder { def is = s2"""
 
 The Forms object provides several utility functions for creating forms
@@ -48,8 +50,6 @@ The Forms object provides several utility functions for creating forms
   def subset6 = FormDiffs.subset(set1, set1 ++ set2).exists(_.isSuccess) &&
     FormDiffs.subset(set1, set1 ++ set2).exists(!_.isSuccess) must beTrue
 
-  import forms._
-
   def subsequence1 = sameExecution(FormDiffs.subsequence(ab ++ cd, ab), ok(ab ++ cd))
   def subsequence2 = sameExecution(FormDiffs.subsequence(bac ++ d, abc), ko(b) ++ ok(a) ++ ko(c) ++ ok(d))
   def subsequence3 = sameExecution(FormDiffs.subsequence(cd, ab), cd ++ ko(ab))
@@ -66,17 +66,14 @@ The Forms object provides several utility functions for creating forms
   def checkSequence3 = sameExecution(FormDiffs.sequence(ab, ba ++ c), ko(a) ++ ok(b) ++ ko(c))
   def checkSequence4 = sameExecution(FormDiffs.sequence(abc, ba), ko(a) ++ ok(b) ++ ko(c))
 
-  // HELPERS
-  trait forms {
-    val (a, b, c, d)     = (List(Form.tr("a")), List(Form.tr("b")), List(Form.tr("c")), List(Form.tr("d")))
-    val (ab, ba, bc, cd) = (List(Form.tr("a"), Form.tr("b")), List(Form.tr("b"), Form.tr("a")), List(Form.tr("b"), Form.tr("c")), List(Form.tr("c"), Form.tr("d")))
-    val (abc, bac)       = (List(Form.tr("a"), Form.tr("b"), Form.tr("c")), List(Form.tr("b"), Form.tr("a"), Form.tr("c")))
-  }
-
-  object forms extends forms
-
   def sameExecution(f1: Seq[Form], f2: Seq[Form]) = f1.map(_.execute.message) must_== f2.map(_.execute.message)
 
   def ok(f: Seq[Form]) = f.map(_.setSuccess)
   def ko(f: Seq[Form]) = f.map(_.setFailure)
 }
+
+object FormsExamples extends FormsBuilder {
+  val (a, b, c, d)     = (List(Form.tr("a")), List(Form.tr("b")), List(Form.tr("c")), List(Form.tr("d")))
+  val (ab, ba, bc, cd) = (List(Form.tr("a"), Form.tr("b")), List(Form.tr("b"), Form.tr("a")), List(Form.tr("b"), Form.tr("c")), List(Form.tr("c"), Form.tr("d")))
+  val (abc, bac)       = (List(Form.tr("a"), Form.tr("b"), Form.tr("c")), List(Form.tr("b"), Form.tr("a"), Form.tr("c")))
+} 

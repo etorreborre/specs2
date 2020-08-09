@@ -9,13 +9,15 @@ import StandardResults._
 import org.specs2.matcher._
 import DecoratedProperties._
 import ResultLogicalCombinators._
+import org.specs2.control.Properties._
 import org.specs2.control.ImplicitParameters._
 import org.specs2.control.Use
+import reflect.Selectable.reflectiveSelectable
 
 /**
  * A Form is a container for Rows (@see Row) where each row contain some Cell (@see Cell).
  * It has an optional title and possibly no rows.
- * 
+ *
  * A Form can be executed by executing each row and collecting the results.
  */
 class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val result: Option[Result] = None) extends Executable with Text {
@@ -66,7 +68,7 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
 
   /**
    * execute all rows
-   * @return a logical and on all results 
+   * @return a logical and on all results
    */
   def execute = result getOrElse (executeForm.result getOrElse success)
   def executeRows = rows.map(_.executeRow)
@@ -102,16 +104,16 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
   def sequence(f1: Traversable[Form], f2: Traversable[Form]): Form = {
     addLines(FormDiffs.sequence(f1.toSeq, f2.toSeq))
   }
-  def subset[T <: Any { def form: Form }](f1: Seq[T], f2: Seq[T]): Form = {
+  def subset(f1: Seq[HasForm], f2: Seq[HasForm]): Form = {
     addLines(FormDiffs.subset(f1.map(_.form), f2.map(_.form)))
   }
-  def subsequence[T <: Any { def form: Form }](f1: Seq[T], f2: Seq[T]): Form = {
+  def subsequence[T <: HasForm](f1: Seq[T], f2: Seq[T]): Form = {
     addLines(FormDiffs.subsequence(f1.map(_.form), f2.map(_.form)))
   }
-  def set[T <: Any { def form: Form }](f1: Seq[T], f2: Seq[T]): Form = {
+  def set[T <: HasForm](f1: Seq[T], f2: Seq[T]): Form = {
     addLines(FormDiffs.set(f1.map(_.form), f2.map(_.form)))
   }
-  def sequence[T <: Any { def form: Form }](f1: Seq[T], f2: Seq[T]): Form = {
+  def sequence[T <: HasForm](f1: Seq[T], f2: Seq[T]): Form = {
     addLines(FormDiffs.sequence(f1.map(_.form), f2.map(_.form)))
   }
 
@@ -255,3 +257,6 @@ case object Form {
 
 }
 
+type HasForm = {
+  def form: Form
+}

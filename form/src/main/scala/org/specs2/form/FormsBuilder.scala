@@ -1,14 +1,15 @@
 package org.specs2
 package form
 
-import control.{ Property }
+import control.Property
+import control.Properties._
 import execute._
 import matcher._
 
 import scala.xml.NodeSeq
 
 /**
- * Utility methods to build Fields, Props and Forms and insert them in other Forms or 
+ * Utility methods to build Fields, Props and Forms and insert them in other Forms or
  * Fragments.
  */
 private[specs2]
@@ -19,7 +20,7 @@ trait FormsBuilder {
   /** anything can be added on a Form row as a TextCell */
   implicit def anyIsFieldCell(t: =>Any): FieldCell = fieldIsTextCell(Field(t))
   /** any seq of object convertible to cells */
-  implicit def anyCellableSeq[T <% Cell](seq: Seq[T]): Seq[Cell] = seq.map(s => implicitly[T=>Cell].apply(s))
+  implicit def anyCellableSeq[T : ToCell](seq: Seq[T]): Seq[Cell] = seq.map(summon[ToCell[T]].toCell)
   /** any xml can be injected as a cell */
   implicit def xmlIsACell[T](xml: =>NodeSeq): XmlCell = new XmlCell(xml)
   /** a Field can be added on a Form row as a FieldCell */
@@ -50,7 +51,7 @@ trait FormsBuilder {
 
   /** @return a new Field with a label and several values */
   def field(label: String, value1: Field[_], values: Field[_]*): Field[String] = Field(label, value1, values:_*)
-  
+
   /** @return a new Prop with an actual value only */
   def prop[T](act: =>T) = new Prop[T, T](actual = Property(act))
 
@@ -60,21 +61,21 @@ trait FormsBuilder {
   /** @return a new Prop with a label, an actual value and expected value */
   def prop[T, S](label: String, actual: =>T, exp: =>S) =
     new Prop[T, S](label, new Property(() => Some(actual)), new Property(() => Some(exp)))
-
+  
   /** @return a new Prop with a label, an actual value and a constraint to apply to values */
-  def prop[T, S](label: String, actual: =>T, c: (T, S) => Result) = Prop(label, actual, c)
+  def prop[T, S, R : AsResult](label: String, actual: =>T, c: (T, S) => R): Prop[T, S] = Prop(label, actual, c)
 
   /** @return a new Prop with a label, an actual value and a matcher to apply to values */
   def prop[T, S](label: String, actual: =>T, c: (S) => Matcher[T]) = Prop[T, S](label, actual, c)
 
   /** @return a new Prop with a label, an actual value and a matcher to apply to the actual value */
-  def prop[T](label: String, actual: =>T, c: Matcher[T]) = Prop[T](label, actual, c)
+  def prop[T](label: String, actual: =>T, c: Matcher[T]): Prop[T, T] = Prop[T](label, actual, c)
 
   /** @return a new Prop with no label, an actual value and a matcher to apply to the actual value */
-  def prop[T](actual: =>T, c: Matcher[T]) = Prop[T]("", actual, c)
+  def prop[T](actual: =>T, c: Matcher[T]): Prop[T, T] = Prop[T]("", actual, c)
 
   /** @return a new Prop with a label, an actual value and a matcher to apply to the actual value */
-  def prop[T, S](label: String, actual: =>T, expected: => S, c: Matcher[T]) = Prop[T, S](label, actual, expected, c)
+  def prop[T, S](label: String, actual: =>T, expected: =>S, c: Matcher[T]): Prop[T, S] = Prop[T, S](label, actual, expected, c)
 
   /** @return a new Prop with a label, which has the same actual and expected value to test the result of an action */
   def action[T](label: String, a: =>T): Prop[T, T] = {

@@ -8,6 +8,8 @@ import form._
 import text.NotNullStrings._
 import execute._
 import control.Exceptions._
+import scala.reflect.Selectable.reflectiveSelectable
+import FormsBuilder._
 
 /**
  * Factory for creating Form fragments
@@ -21,14 +23,14 @@ trait FormFragmentFactory {
  * Default implementation for the FormFragment Factory
  */
 trait DefaultFormFragmentFactory extends FormFragmentFactory {
-  def FormFragment(aForm: =>{ def form: Form })(implicit p: ImplicitParam): Fragment = addForm(aForm.form)
+  def FormFragment(aForm: =>HasForm)(implicit p: ImplicitParam): Fragment = addForm(aForm.form)
 
   def FormFragment(aForm: =>Form): Fragment = addForm(aForm)
 
   private def addForm(aForm: =>Form): Fragment = {
     lazy val form: Form =
       tryOr(aForm.executeForm){ t =>
-        Form("Initialisation error").tr(PropCell(Prop("", t.getMessage.notNull, (_: String, _: String) => Error(t))("message")))
+        Form("Initialisation error").tr(PropCell(prop("", t.getMessage.notNull, (_: String, _: String) => Error(t)).apply("message")))
       }
 
     Fragment(FormDescription(() => form), Execution.result(form.result.getOrElse(Success(""))))

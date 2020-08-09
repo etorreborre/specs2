@@ -1,7 +1,8 @@
 package org.specs2
 package form
 
-import control.{ Property }
+import control.Property
+import control.Properties._
 import execute._
 import matcher._
 import text.NotNullStrings._
@@ -11,25 +12,25 @@ import text.NotNullStrings._
  *   - an actual value
  *   - an expected value
  *   - a constraint to check if the actual value conforms to the expected one
- * 
+ *
  * This property can be executed and can be inserted in a Form.
  *
  * A Prop is meant to be declared as "bound" to an actual value:
  *
  *   `val customerName = Prop("Customer name", person.name)`
- * 
+ *
  * [the actual value is not evaluated until the Prop is executed]
- * 
+ *
  * Then it can be associated an expected value with the apply method (usually in a Form declaration):
- * 
+ *
  *   `customerName("Bill")`
- * 
- * The actual and the expected values can have different types and the constraint which is 
+ *
+ * The actual and the expected values can have different types and the constraint which is
  * applied to them can be anything returning a result.
- * 
+ *
  * However the Prop companion object provides a method to create a Property with a constraint
  * using a beEqualTo matcher:
- * 
+ *
  * `Prop("Name", "Eric")("Eric") must_== Success("'Eric' is equal to 'Eric'")`
  *
  */
@@ -39,7 +40,7 @@ case class Prop[T, S](
               expected: Property[S] = Property[S](),
               constraint: (T, S) => Result = Prop.checkProp,
               decorator: Decorator = Decorator().bkGreyLabel) extends Executable with DecoratedProperty[Prop[T, S]] {
-  
+
   /**
    * The apply method sets the expected value and returns the Prop
    */
@@ -54,8 +55,8 @@ case class Prop[T, S](
   /** execute the constraint set on this property, with the expected value */
   def execute: Result = {
     val result = for {
-      a <- actualValue.right.toOption
-      e <- expectedValue.right.toOption
+      a <- actualValue.toOption
+      e <- expectedValue.toOption
     } yield ResultExecution.execute(constraint(a, e))
     result.getOrElse(expectedValue.left.toOption.getOrElse(actualValue.left.toOption.get))
   }
@@ -74,13 +75,13 @@ case class Prop[T, S](
 
   /**
    * Display the property:
-   * 
+   *
    * label: "this" (actual: "that")
    */
   override def toString = {
     (if (label.isEmpty) "" else label + ": ") +
     valueToString(actualValue) +
-    (if (expected.toOption.isEmpty || expectedValue.right.toOption == actualValue.right.toOption) ""
+    (if (expected.toOption.isEmpty || expectedValue.toOption == actualValue.toOption) ""
      else " (expected: " + valueToString(expectedValue) + ")")
   }
 
@@ -114,11 +115,11 @@ object Prop {
     new Prop(label, Property(actual), Property[T](), checkProp)
 
   /** create a Prop with a label, an actual value, and a constraint */
-  def apply[T, S](label: String, act: =>T, c: (T, S) => Result) =
-    new Prop[T, S](label, actual = Property(act), constraint = c)
+  def apply[T, S, R : AsResult](label: String, act: =>T, c: (T, S) => R): Prop[T, S] =
+    new Prop[T, S](label, actual = Property(act), constraint = (t, s) => AsResult(c(t, s)))
 
   /** create a Prop with a label, an expected value, and a constraint */
-  def apply[T, S](label: String, act: =>T, c: S => Matcher[T]) =
+  def apply[T, S](label: String, act: =>T, c: S => Matcher[T]): Prop[T, S] =
     new Prop[T, S](label, actual = Property(act), constraint = (t: T, s: S) => c(s).apply(Expectable(t)).toResult)
 
   /** create a Prop with a label, an actual value, and a matcher on the actual value */
@@ -131,7 +132,8 @@ object Prop {
     new Prop[T, S](label, actual = Property(act), expected = Property(exp), constraint = (t: T, s: S) => c(Expectable(t)).toResult)
   }
   /** create a Prop with an empty label and an actual value */
-  def apply[T](act: =>T): Prop[T, T] = new Prop[T, T](actual = Property(act))
+  def apply[T](act: =>T): Prop[T, T] =
+    new Prop[T, T](actual = Property(act))
 
   /** default constraint function */
   private[Prop] def checkProp[T, S]: (T, T) => Result = (t: T, s: T) => new BeTypedEqualTo(s).apply(Expectable(t)).toResult

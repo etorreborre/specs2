@@ -2,6 +2,7 @@ package org.specs2
 package form
 
 import control.Property
+import control.Properties._
 import execute._
 import sys.error
 import matcher._
@@ -59,12 +60,12 @@ Execution
 
 """
 
-  val nameProp = Prop("name", "eric")
-  val noValues = new Prop("name")
-  val actualOnly = Prop(18)
-  val expectedOnly = new Prop("", Property(), Property(18))
+  val nameProp: Prop[String, String] = Prop("name", "eric")
+  val noValues: Prop[String, String] = Prop("name")
+  val actualOnly: Prop[Int, Int] = Prop(18)
+  val expectedOnly: Prop[Int, Int] = Prop("", Property(), Property(18))
   val constrained: Prop[String, String] = Prop("name", "eric", (s1: String, s2: String) => s1 must contain(s2))
-  val withMatcher = Prop("name", "eric", contain(_:String))
+  val withMatcher: Prop[String, String] = Prop("name", "eric", contain(_:String))
 
   def creation1 = noValues.label                       === "name"
   def creation2 = actualOnly.actual.toOption           === Some(18)
@@ -74,9 +75,9 @@ Execution
   def creation6 = Prop("", 1, be_>(0).mute).execute    === Success("")
   def creation7 = Prop("", 1, 2, be_>(0).mute).execute === Success("")
 
-  def display1 = new Prop("name", expected = Property("fanny")).toString       === "name: _ (expected: fanny)"
-  def display2 = new Prop("name", actual = Property("eric")).toString          === "name: eric"
-  def display3 = new Prop("name", Property("eric"), Property("eric")).toString === "name: eric"
+  def display1 = Prop("name", expected = Property("fanny")).toString       === "name: _ (expected: fanny)"
+  def display2 = Prop("name", actual = Property("eric")).toString          === "name: eric"
+  def display3 = Prop("name", Property("eric"), Property("eric")).toString === "name: eric"
 
   def update1 = Prop("name", "eric")("paolo").expected.toOption must_== Some("paolo")
 
