@@ -234,7 +234,7 @@ trait AnyBeHaveMatchers extends BeHaveMatchers { outer: AnyMatchers =>
     new AnyWithEmptyMatchers(result)
 
   class AnyWithEmptyMatchers[T : IsEmpty](result: MatchResult[T]) {
-    def empty = result(outer.beEmpty[T])
+    def empty: MatchResult[T] = result(outer.beEmpty[T])
     def beEmpty: MatchResult[T] = result(outer.beEmpty[T])
   }
   implicit def toBeLikeResultMatcher[T](result: MatchResult[T]): BeLikeResultMatcher[T] = new BeLikeResultMatcher(result)

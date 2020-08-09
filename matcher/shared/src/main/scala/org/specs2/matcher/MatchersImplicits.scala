@@ -18,7 +18,6 @@ import control.Times
 */
 trait MatchersImplicits extends
        MatchResultCombinators
-  with MatcherZipOperators
   with MatchResultImplicits
   with ResultImplicits
   with MatchersCreation

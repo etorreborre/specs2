@@ -81,9 +81,9 @@ class ExceptionMatchersSpec extends Specification with ResultMatchers { def is =
   def byType3 = (theBlock(error("boom")) must throwAn[IAE]).message must startWith(
     "Expected: java.lang.IllegalArgumentException. Got: java.lang.RuntimeException: boom instead")
 
-  def byType4 = (1 must not throwA(new Exception)).toResult must beSuccessful
+  def byType4 = (1 must not(throwA(new Exception))).toResult must beSuccessful
 
-  def byType5 = ({sys.error("boom"); 1} must not throwA).toResult must beFailing
+  def byType5 = ({sys.error("boom"); 1} must not(throwAn[Exception])).toResult must beFailing
 
   def byType6 = { throw new StackOverflowError("play again"); 1 } must throwAn[Error]
 

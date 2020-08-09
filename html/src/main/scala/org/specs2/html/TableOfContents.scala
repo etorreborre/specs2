@@ -77,13 +77,13 @@ trait TableOfContents {
     Tree.unfoldTree((page, (pages, List[SpecHtmlPage]()))) { current =>
       val (p1: SpecHtmlPage, (remaining, visited)) = current
       val (dependents, others) = remaining.partition(p2 => p1.specification.dependsOn(p2.specification)(ee) && !visited.contains(p2))
-      val distinctDependents = dependents.groupBy(_.className).mapValues(_.head).values.toList
+      val distinctDependents = dependents.groupBy(_.className).view.mapValues(_.head).values.toList
       val visited1 = distinctDependents ::: visited
-      ((p1, (others, visited1)), () => distinctDependents.sortBy(linkIndexIn(p1.specification.linkReferencesList)).toStream.map((_, (others, visited1))))
+      ((p1, (others, visited1)), () => distinctDependents.sortBy(linkIndexIn(p1.specification.linkReferencesList)).to(LazyList).map((_, (others, visited1))))
     }.loc.map(_._1)
 
   /** @return the index of a linked specification in 'main' */
-  def linkIndexIn(s1Refs: Seq[SpecificationRef]): SpecHtmlPage => Int = { s2: SpecHtmlPage =>
+  def linkIndexIn(s1Refs: Seq[SpecificationRef]): SpecHtmlPage => Int = { (s2: SpecHtmlPage) =>
     s1Refs.map(_.specClassName).indexOf(s2.className)
   }
 

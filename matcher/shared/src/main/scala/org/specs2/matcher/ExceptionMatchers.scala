@@ -226,12 +226,12 @@ trait ExceptionBaseMatchers extends ExpectationsCreation {
 private[specs2]
 trait ExceptionBeHaveMatchers extends BeHaveMatchers { outer: ExceptionBaseMatchers =>
   implicit class ExceptionMatcherResult[T](result: MatchResult[T]) {
-    def throwA[E <: Throwable](implicit m: ClassTag[E]) = result(outer.throwA(m))
-    def throwA[E <: Throwable](message: String = ".*")(implicit m: ClassTag[E]) = result(outer.throwA(message)(m))
-    def throwA[E <: Throwable](e: E) = result(outer.throwA(e))
+    def throwA[E <: Throwable](implicit m: ClassTag[E]): MatchResult[T]        = result(outer.throwA(m))
+    def throwA[E <: Throwable](message: String = ".*")(implicit m: ClassTag[E]): MatchResult[T] = result(outer.throwA(message)(m))
+    def throwA[E <: Throwable](e: E): MatchResult[T] = result(outer.throwA(e))
 
-    def throwAn[E <: Throwable](implicit m: ClassTag[E]) = result(outer.throwA(m))
-    def throwAn[E <: Throwable](message: String = ".*")(implicit m: ClassTag[E]) = result(outer.throwA(message)(m))
-    def throwAn[E <: Throwable](e: E) = result(outer.throwA(e))
+    def throwAn[E <: Throwable](implicit m: ClassTag[E]): MatchResult[T] = result(outer.throwA(m))
+    def throwAn[E <: Throwable](message: String = ".*")(implicit m: ClassTag[E]): MatchResult[T] = result(outer.throwA(message)(m))
+    def throwAn[E <: Throwable](e: E): MatchResult[T] = result(outer.throwA(e))
   }
 }

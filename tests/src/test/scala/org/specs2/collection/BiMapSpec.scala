@@ -28,7 +28,7 @@ Bimaps define bijection relationships between values
     val zipped = keys.distinct.zip(values.distinct)
     val bimap: BiMap[String, Int] = zipped.map { case (k, v) => k <-> v }
 
-    zipped must contain { kv: (String, Int) => kv match {
+    zipped must contain { (kv: (String, Int)) => kv match {
       case (k, v) =>
         (bimap.fromKey(k) must beSome(v)) and
         (bimap.fromValue(v) must beSome(k))

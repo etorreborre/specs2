@@ -35,22 +35,22 @@ class SpecificationWithFormsSpec extends Specification with Forms { def is = s2"
               fill("Rose Cr.", 3)) }
    }
                                                                                  """
-                                                                                          
-  def person(first: String, last: String, initials: String) =  
+
+  def person(first: String, last: String, initials: String) =
      Form("Person").
        tr(field("first name", first)).
        tr(field("last name", last)).
        tr(prop("initials", Person(first, last).initials)(initials))
 
   case class Person(firstName: String, lastName: String) {
-    def initials = firstName.take(1).capitalize+"."+lastName.take(1).capitalize+"."      
-  }              
+    def initials = firstName.take(1).capitalize+"."+lastName.take(1).capitalize+"."
+  }
 }
 
 import org.specs2.specification.Forms._
 
 case class Address(street: String = "", number: Int = 0) {
-  def address = number+", "+street
+  def address = number.toString+", "+street
   def retrieve(i: Int) = this
   def actualIs(a: Address) = this
   def form = fill(street, number)

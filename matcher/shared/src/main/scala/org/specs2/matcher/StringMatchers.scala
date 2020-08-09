@@ -42,7 +42,7 @@ trait StringBaseMatchers { outer =>
   /** matches if a.toLowerCase.trim != b.toLowerCase.trim */
   def !=/(s: String) = be_!=/(s)
   /** matches if (b contains a) */
-  def contain(t: String) = new Matcher[String] {
+  def contain(t: String): Matcher[String] = new Matcher[String] {
     def apply[S <: String](b: Expectable[S]) = {
       val a = t
       result(a != null && b.value != null && b.value.contains(a),
@@ -51,7 +51,7 @@ trait StringBaseMatchers { outer =>
     }
   }
   /** matches if (b contains a) */
-  def contain(t: Char) = new Matcher[String] {
+  def contain(t: Char): Matcher[String] = new Matcher[String] {
     def apply[S <: String](b: Expectable[S]) = {
       val a = t
       result(b.value != null && b.value.contains(a),
@@ -60,11 +60,11 @@ trait StringBaseMatchers { outer =>
     }
   }
   /** matches if b matches the regular expression a */
-  def beMatching(a: =>String) = new BeMatching(a)
+  def beMatching(a: =>String): BeMatching = new BeMatching(a)
   /** matches if b matches the pattern a */
-  def beMatching(a: Pattern) = new BeMatchingPattern(a)
+  def beMatching(a: Pattern): BeMatchingPattern = new BeMatchingPattern(a)
   /** matches if b matches the regex a */
-  def beMatching(a: Regex) = new BeMatchingRegex(a)
+  def beMatching(a: Regex): BeMatchingRegex = new BeMatchingRegex(a)
   /** alias for beMatching but matching just a fragment of the string */
   def =~(t: =>String) = BeMatching.withPart(t)
   /** alias for beMatching but matching just a fragment of the string */
@@ -72,14 +72,14 @@ trait StringBaseMatchers { outer =>
   /** alias for beMatching but matching just a fragment of the string */
   def =~(r: Regex) = new BeMatchingRegex(r.toString.regexPart.r)
   /** matches if b.startsWith(a) */
-  def startWith(a: String) = new Matcher[String] {
+  def startWith(a: String): Matcher[String] = new Matcher[String] {
     def apply[S <: String](b: Expectable[S]) =
       result(b.value != null && a != null && b.value.startsWith(a),
              s"${b.description} starts with ${q(a)}",
              s"${b.description} doesn't start with ${q(a)}", b)
   }
   /** matches if b.endsWith(a) */
-  def endWith(t: =>String) = new Matcher[String] {
+  def endWith(t: =>String): Matcher[String] = new Matcher[String] {
     def apply[S <: String](b: Expectable[S]) = {
       val a = t
       result(b.value!= null && a!= null && b.value.endsWith(a),

@@ -3,6 +3,7 @@ package matcher
 
 import java.io.File
 import io._
+import FileName._
 import execute.StandardResults
 import org.specs2.specification._
 import control._
@@ -117,7 +118,7 @@ case class fs() extends MustMatchers with TestFiles with FileMatchers with Stand
 trait TestFiles extends BeforeAfterEach {
   val fileSystem = FileSystem(NoLogger)
 
-  lazy val directoryPath = "target" / "test" / "fs"
+  lazy val directoryPath: DirectoryPath = "target" / "test" / "fs"
   lazy val dirPath = directoryPath.path
   lazy val okFilePath = directoryPath | "file.txt"
   lazy val okPath = okFilePath.path

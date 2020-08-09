@@ -77,27 +77,27 @@ trait TraversableBaseMatchers { outer =>
    */
 
   /** match if there is a way to size T */
-  def haveSize[T : Sized](n: Int) = new SizedMatcher[T](n, "size")
+  def haveSize[T : Sized](n: Int): SizedMatcher[T] = new SizedMatcher[T](n, "size")
   /** alias for haveSize */
-  def size[T : Sized](n: Int) = haveSize[T](n)
+  def size[T : Sized](n: Int): SizedMatcher[T] = haveSize[T](n)
   /** alias for haveSize */
-  def haveLength[T : Sized](n: Int) = new SizedMatcher[T](n, "length")
+  def haveLength[T : Sized](n: Int): SizedMatcher[T] = new SizedMatcher[T](n, "length")
   /** alias for haveSize */
-  def length[T : Sized](n: Int) = haveLength[T](n)
+  def length[T : Sized](n: Int): SizedMatcher[T] = haveLength[T](n)
 
   /** match if there is a way to size T */
-  def haveSize[T : Sized](check: ValueCheck[Int]) = new SizedCheckedMatcher[T](check, "size")
+  def haveSize[T : Sized](check: ValueCheck[Int]): SizedCheckedMatcher[T] = new SizedCheckedMatcher[T](check, "size")
   /** alias for haveSize */
-  def size[T : Sized](check: ValueCheck[Int]) = haveSize[T](check)
+  def size[T : Sized](check: ValueCheck[Int]): SizedCheckedMatcher[T] = haveSize[T](check)
   /** alias for haveSize */
-  def haveLength[T : Sized](check: ValueCheck[Int]) = new SizedCheckedMatcher[T](check, "length")
+  def haveLength[T : Sized](check: ValueCheck[Int]): SizedCheckedMatcher[T] = new SizedCheckedMatcher[T](check, "length")
   /** alias for haveSize */
-  def length[T : Sized](check: ValueCheck[Int]) = haveLength[T](check)
+  def length[T : Sized](check: ValueCheck[Int]): SizedCheckedMatcher[T] = haveLength[T](check)
 
   /** @return a matcher checking if the elements are ordered */
-  def beSorted[T : Ordering] = new OrderingMatcher[T]
+  def beSorted[T : Ordering]: OrderingMatcher[T] = new OrderingMatcher[T]
   /** alias for beSorted */
-  def sorted[T : Ordering] = beSorted[T]
+  def sorted[T : Ordering]: OrderingMatcher[T] = beSorted[T]
 
   /**
    * Additional contain methods using to avoid automatic tuple conversions

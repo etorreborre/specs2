@@ -82,7 +82,8 @@ class SbtPrinterSpec(val env: Env) extends Specification with OwnEnv { def is = 
   case class printer2() { outer =>
     val logger = createLogger
     val handler = createHandler
-    lazy val events = new SbtEvents {
+    lazy val events = MySbtEvents()
+    case class MySbtEvents() extends SbtEvents {
       lazy val handler = outer.handler
       lazy val taskDef = new TaskDef("", Fingerprints.fp1, true, Array())
     }
@@ -111,13 +112,17 @@ class SbtPrinterSpec(val env: Env) extends Specification with OwnEnv { def is = 
 
   }
 
-  def createHandler = new EventHandler {
+  def createHandler = MyEventHandler()
+
+  case class MyEventHandler() extends EventHandler {
     val events = new ListBuffer[Event]
     def handle(event: Event): Unit =
       events.append(event)
   }
 
-  def createLogger = new Logger with StringOutput {
+  def createLogger = MyLogger()
+    
+  case class MyLogger() extends Logger with StringOutput {
     def ansiCodesSupported = false
     def warn(msg: String): Unit =  { append("[WARN] "+msg) }
     def error(msg: String): Unit = { append("[ERROR] "+msg) }

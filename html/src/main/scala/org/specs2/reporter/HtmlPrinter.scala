@@ -4,6 +4,7 @@ package reporter
 import specification.core._
 import specification.process.{Statistics, Stats}
 import io._
+import FileName._
 import main.Arguments
 import control._
 import java.util.regex.Pattern._
@@ -29,7 +30,7 @@ case class HtmlPrinter(env: Env, searchPage: SearchPage, logger: Logger = Consol
 
   /** create an index for all the specifications, if required */
   def finalize(specifications: List[SpecStructure]): Action[Unit] = {
-    getHtmlOptions(env.arguments) >>= { options: HtmlOptions =>
+    getHtmlOptions(env.arguments) >>= { (options: HtmlOptions) =>
       searchPage.createIndex(env, specifications, options).when(options.search) >>
       createToc(env, specifications, options.outDir, options.tocEntryMaxSize, env.fileSystem).when(options.toc) >>
       reportMissingSeeRefs(specifications, options.outDir)(env.specs2ExecutionEnv).when(options.warnMissingSeeRefs)
@@ -162,7 +163,7 @@ case class HtmlPrinter(env: Env, searchPage: SearchPage, logger: Logger = Consol
            DirectoryPath("templates")).
            map(copySpecResourcesDir(env, "org" / "specs2" / "reporter", options.outDir, classOf[HtmlPrinter].getClassLoader))
         .sequence
-        .recover { t: Throwable =>
+        .recover { (t: Throwable) =>
           val message = "Cannot copy resources to "+options.outDir.path+"\n"+t.getMessage
           logger.warnAndFail[List[Unit]](message, RunAborted + message)
         }

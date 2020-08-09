@@ -3,6 +3,7 @@ package matcher
 
 import mutable._
 import execute.FailureException
+import scala.language.postfixOps
 
 class ExpectableSpec extends Spec with ResultMatchers with MustMatchers {
 

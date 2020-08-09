@@ -8,7 +8,7 @@ import Exceptions._
  * evaluated lazily:
  * {{{
  *   def method[T](values: LazyParameter[T]*) = {
- *     values.toStream // use the toStream method to consume the values lazily
+ *     values.to(LazyList) // use the toStream method to consume the values lazily
  *   }
  *   // usage
  *   method(exp1, exp2, exp3)
@@ -30,11 +30,10 @@ class LazyParameter[+T](private val v: () => T) {
    *         specifications, if the user has defined a 'value' method somewhere in his code
    */
   private[specs2] def value = evaluated
-  
+
   override def toString = tryOrElse(value.toString)("Evaluation error")
   override def equals(o: Any) = value == o
   override def hashCode = value.hashCode
 
   def map[S >: T](f: T => S) = LazyParameters.lazyParameter(f(value))
 }
-

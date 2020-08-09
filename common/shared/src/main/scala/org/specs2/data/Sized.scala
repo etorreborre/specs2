@@ -12,22 +12,29 @@ trait Sized[T] {
   def length(t: T) : Int = size(t)
 }
 
-object Sized {
-  /** any scala collection has a size */
-  implicit def scalaTraversableIsSized[I <: Traversable[_]]: Sized[I] = new Sized[I] {
-    def size(t: I) = t.size
-  }
-  /** any scala array has a size */
-  implicit def scalaArrayIsSized[T]: Sized[Array[T]] = new Sized[Array[T]] {
-    def size(t: Array[T]) = t.length
-  }
-  /** any java collection has a size */
-  implicit def javaCollectionIsSized[T <: java.util.Collection[_]]: Sized[T] = new Sized[T] {
-    def size(t: T) = t.size()
-  }
+object Sized extends SizedLowPriority1 {
   /** a regular string has a size, without having to be converted to an Traversable */
   implicit def stringIsSized: Sized[String] = new Sized[String] {
     def size(t: String) = t.length
   }
+}
 
+trait SizedLowPriority1 extends SizedLowPriority2 {
+  /** any java collection has a size */
+  implicit def javaCollectionIsSized[T <: java.util.Collection[_]]: Sized[T] = new Sized[T] {
+    def size(t: T) = t.size()
+  }
+
+  /** any scala array has a size */
+  implicit def scalaArrayIsSized[T]: Sized[Array[T]] = new Sized[Array[T]] {
+    def size(t: Array[T]) = t.length
+  }
+}
+
+trait SizedLowPriority2 {
+
+  /** any scala collection has a size */
+  implicit def scalaTraversableIsSized[I <: Traversable[_]]: Sized[I] = new Sized[I] {
+    def size(t: I) = t.size
+  }
 }

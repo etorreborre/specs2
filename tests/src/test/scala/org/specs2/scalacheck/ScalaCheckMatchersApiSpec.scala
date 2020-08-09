@@ -2,8 +2,9 @@ package org.specs2
 package scalacheck
 
 import org.scalacheck.Prop._
+import org.scalacheck.Prop.propBoolean
 import org.scalacheck.util.{FreqMap, Pretty}
-import org.scalacheck.{Arbitrary, Gen, Shrink}
+import org.scalacheck._
 import org.specs2.Specification
 
 class ScalaCheckMatchersApiSpec extends Specification with ScalaCheck { def is = s2"""
@@ -20,7 +21,7 @@ class ScalaCheckMatchersApiSpec extends Specification with ScalaCheck { def is =
     returning a boolean value
     ${ prop { (i: Int) => i > 0 || i <= 0 } }
     using  an implication and a match result
-    ${ prop { i: Int => (i > 0) ==> (i must be_>(0)) } }
+    ${ prop { (i: Int) => (i > 0) ==> (i must be_>(0)) } }
     ${ prop { (i: Int, j: Int) => (i > j) ==> (i must be_>(j)) } }
     using an implication and a boolean value
     ${ prop { (i:Int) => (i > 0) ==> (i > 0) } }
@@ -85,7 +86,7 @@ class ScalaCheckMatchersApiSpec extends Specification with ScalaCheck { def is =
 
   val positiveInts = Arbitrary(Gen.choose(1, 5))
 
-  val shrinkInts = Shrink[Int](x => LazyList.empty)
+  val shrinkInts = Shrink[Int](x => Stream.empty)
 
   val prettyInts = (i: Int) => Pretty(_ => i.toString)
   val prettyStrings = (s: String) => Pretty(_ => s)

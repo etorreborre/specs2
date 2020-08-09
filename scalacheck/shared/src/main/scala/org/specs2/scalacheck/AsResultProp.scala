@@ -53,14 +53,15 @@ trait AsResultProp extends ScalaCheckPropertyCheck with AsResultPropLowImplicits
     }
   }
 
+}
+
+trait AsResultPropLowImplicits extends ScalaCheckPropertyCheck with ScalaCheckParameters {
   /** implicit typeclass instance to create examples from Properties */
   implicit def propertiesAsResult(implicit p: Parameters, pfq: FreqMap[Set[Any]] => Pretty): AsResult[Properties] = new AsResult[Properties] {
     def asResult(properties: =>Properties): Result =
       checkProperties(properties, p, pfq)
   }
-}
 
-trait AsResultPropLowImplicits extends ScalaCheckPropertyCheck with ScalaCheckParameters {
   implicit def scalaCheckPropertyAsResult[S <: ScalaCheckProperty]: AsResult[S] = new AsResult[S] {
     def asResult(prop: =>S): Result = {
       try {

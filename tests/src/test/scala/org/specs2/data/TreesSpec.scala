@@ -13,7 +13,7 @@ class TreesSpec extends Specification with ScalaCheck with ThrownExpectations { 
 
 """
 
-  def paths = prop { treeAndPaths: TreeAndPaths =>
+  def paths = prop { (treeAndPaths: TreeAndPaths) =>
     val TreeAndPaths(tree, paths) = treeAndPaths
     tree.allPaths must_== paths
   }
@@ -28,7 +28,7 @@ class TreesSpec extends Specification with ScalaCheck with ThrownExpectations { 
         Gen.const(TreeAndPaths(Tree.Leaf(root), List(List(root))))
       case _ =>
         genTreeList(nodes).map { ls =>
-          TreeAndPaths(Tree.Node(root, ls.toStream.map(_.tree)), ls.flatMap(l => l.paths.map(root :: _)))
+          TreeAndPaths(Tree.Node(root, ls.to(LazyList).map(_.tree)), ls.flatMap(l => l.paths.map(root :: _)))
         }
     }
 
@@ -45,7 +45,7 @@ class TreesSpec extends Specification with ScalaCheck with ThrownExpectations { 
 
   case class TreeAndPaths(tree: Tree[Int], paths: List[List[Int]]) {
     override def toString =
-      tree.drawTree + "\n"
+      tree.drawTree + "\n" +
       paths.mkString("\n")
   }
 }

@@ -1,6 +1,8 @@
 package org.specs2
 package matcher
 
+import scala.language.postfixOps
+
 class BeHaveMatchersSpec extends Specification { def is = s2"""
 
  The following ways of using matchers are allowed

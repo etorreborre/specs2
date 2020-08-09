@@ -36,6 +36,7 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersImplicits { outer =
 
     def negate: JsonMatcher
     def negated: Boolean
+
     protected def queries: Seq[JsonQuery]
     protected def check: Matcher[JsonType]
 
@@ -178,8 +179,8 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersImplicits { outer =
   }
 
   object JsonMatcher {
-    def create(path: JsonQuery*)         = JsonSelectorMatcher(path)
-    def create(check: Matcher[JsonType]) = JsonFinalMatcher(Nil, check)
+    def create(path: JsonQuery*): JsonSelectorMatcher = JsonSelectorMatcher(path)
+    def create(check: Matcher[JsonType]): JsonFinalMatcher = JsonFinalMatcher(Nil, check)
   }
 
   def beJsonNull: Matcher[JsonType] = new Matcher[JsonType] {
@@ -213,7 +214,7 @@ object JsonType {
   }
 
   implicit def JsonTypeIsSized: Sized[JsonType] = new Sized[JsonType] {
-    def size(json: JsonType) = json match {
+    def size(json: JsonType): Int = json match {
       case JsonArray(list) => list.size
       case JsonMap(map)    => map.size
       case JsonString(_)   => 1
@@ -404,11 +405,12 @@ trait JsonMatchersLowImplicits extends JsonSelectors { this: JsonBaseMatchers =>
 private[specs2]
 trait JsonBaseBeHaveMatchers extends BeHaveMatchers { outer: JsonBaseMatchers =>
 
-  implicit def toNotMatcherJson(result: NotMatcher[Any]) : NotMatcherJson = new NotMatcherJson(result)
+  implicit def toNotMatcherJson(result: NotMatcher[Any]): NotMatcherJson = new NotMatcherJson(result)
+
   class NotMatcherJson(result: NotMatcher[Any]) {
-    def have(m: Matcher[JsonType])   = outer.have(m).negate
-    def /#(i: Int)                   = outer./#(i).negate
-    def /(selector: JsonSelector)    = outer./(selector).negate
-    def */(selector: JsonSelector)   = outer.*/(selector).negate
+    def have(m: Matcher[JsonType]): JsonMatcher = outer.have(m).negate
+    def /#(i: Int): JsonMatcher = outer./#(i).negate
+    def /(selector: JsonSelector): JsonMatcher = outer./(selector).negate
+    def */(selector: JsonSelector): JsonMatcher = outer.*/(selector).negate
   }
 }

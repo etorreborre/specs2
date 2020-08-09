@@ -127,7 +127,10 @@ trait Htmlx { outer =>
   }
 
   /** @return a rewrite rule that will rewrite recursively each node based on a partial function */
-  def rewriteRule(pf: PartialFunction[Node, Seq[Node]]) = new RewriteRule {
+  def rewriteRule(pf: PartialFunction[Node, Seq[Node]]): NodeRewriteRule =
+    NodeRewriteRule(pf)
+
+  case class NodeRewriteRule(pf: PartialFunction[Node, Seq[Node]]) extends RewriteRule {
     def applyTransformation(ns: Seq[Node]): Seq[Node] =
       if (ns.isEmpty) ns
       else            applyTransformation(ns.head) ++ applyTransformation(ns.tail)

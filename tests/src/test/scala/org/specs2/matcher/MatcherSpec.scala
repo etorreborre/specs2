@@ -172,11 +172,11 @@ Messages
   }
 
   def messages2 = {
-    val spec = new org.specs2.mutable.Specification {
+    class Spec1() extends org.specs2.mutable.Specification {
       def test: Result =
         true must beFalse.setMessage("is not ok")
     }
-    ResultExecution.execute(spec.test).message === "is not ok"
+    ResultExecution.execute(Spec1().test).message === "is not ok"
   }
 
 }

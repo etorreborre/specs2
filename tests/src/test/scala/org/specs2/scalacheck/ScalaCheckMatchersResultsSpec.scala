@@ -108,7 +108,7 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
   var doneOnce = false
   def propFailureExceptionProp =
     scalaCheckPropertyAsResult.asResult {
-      prop { b: Boolean =>
+      prop { (b: Boolean) =>
         if (!doneOnce) doneOnce = true
         else            throw new execute.FailureException(failure)
         true
@@ -120,13 +120,13 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
   def failureWithStacktraceProp = forAll((b: Boolean) => 1 must_== 2)
 
   import DataTables._
-  def datatableFailureProp = forAll { b: Boolean =>
+  def datatableFailureProp = forAll { (b: Boolean) =>
     "a" | "b" |>
      1  ! 1   |
      1  ! 2   | { (a, b) => a must_== b }
    }
 
-  def datatableThrownProp = forAll(Gen.const(true)) { b: Boolean =>
+  def datatableThrownProp = forAll(Gen.const(true)) { (b: Boolean) =>
     "a" | "b" |>
      1  ! 2   |
      1  ! 2   | { (a, b) => throw new FailureException(failure("ko")); ok }
@@ -155,7 +155,7 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
 }
 
 class TSpec extends mutable.Specification with ScalaCheck {
-  "a prop" >> prop { i: Int =>
+  "a prop" >> prop { (i: Int) =>
     true
   }
 }

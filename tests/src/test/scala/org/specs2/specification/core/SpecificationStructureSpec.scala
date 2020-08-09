@@ -28,17 +28,17 @@ class SpecificationStructureSpec(val env: Env) extends Specification with ScalaC
 
 """
 
-  def sort = prop { specification: SpecificationStructure =>
+  def sort = prop { (specification: SpecificationStructure) =>
     val linked = SpecificationStructure.linkedSpecifications(specification, env, getClass.getClassLoader).runMonoid
     val sorted = SpecificationStructure.topologicalSort(env)(linked).getOrElse(Vector()).map(_.structure(env))
 
-    sorted must contain { s: SpecStructure =>
+    sorted must contain { (s: SpecStructure) =>
       val (before, after) = sorted.splitAt(sorted.indexOf(s))
       before must contain((b: SpecStructure) => b must not(dependOn(s))).forall
     }.forall
   }.set(maxSize = 5)
 
-  def linksOrder = prop { links: List[Fragment] =>
+  def linksOrder = prop { (links: List[Fragment]) =>
     val specification = new SpecificationStructure { def is = SpecStructure.create(SpecHeader.create(getClass), Fragments(links:_*)) }
     val linked = SpecificationStructure.linkedSpecifications(specification, env, getClass.getClassLoader).runMonoid
     val sorted = SpecificationStructure.topologicalSort(env)(linked).get.map(_.structure(env))

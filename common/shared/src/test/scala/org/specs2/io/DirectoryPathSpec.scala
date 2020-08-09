@@ -1,7 +1,6 @@
 package org.specs2.io
 
 import FileName.ToFileName
-import org.specs2.io.FileName.ToFileName
 
 class DirectoryPathSpec {
 

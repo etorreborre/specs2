@@ -22,16 +22,16 @@ class IndentationSpec(implicit ee: ExecutionEnv) extends Specification with Scal
 
 """
 
-  def positive = prop { fs: Fragments =>
+  def positive = prop { (fs: Fragments) =>
     indentation(fs) must beSome(be_>=(0))
   }
 
-  def lessThanOrEqualTabs = prop { fs: Fragments =>
+  def lessThanOrEqualTabs = prop { (fs: Fragments) =>
     val tabsNumber = fs.fragmentsList(ee).collect { case Fragment(Tab(n), _, _) => n }.sumAll
     indentation(fs) must beSome(be_<=(tabsNumber))
   }
 
-  def equalTabsWhenNoBacktabs = prop { fs: Fragments =>
+  def equalTabsWhenNoBacktabs = prop { (fs: Fragments) =>
     val tabsNumber = fs.fragmentsList(ee).collect { case Fragment(Tab(n), _, _) => n }.sumAll
     indentation(fs.filter(!isBacktab(_))) must beSome(tabsNumber)
   }

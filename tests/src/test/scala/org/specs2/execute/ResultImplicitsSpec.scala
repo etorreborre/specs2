@@ -9,7 +9,7 @@ class ResultImplicitsSpec extends Specification with ScalaCheck with ResultImpli
 
 """
 
-  def equivalent = prop { r1: Result =>
+  def equivalent = prop { (r1: Result) =>
     (r1 <==> r1) &&
     (r1 <==> r1.not).not
   }.set(minTestsOk = 5)

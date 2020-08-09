@@ -276,7 +276,7 @@ lazy val compilationSettings = Seq(
   // https://gist.github.com/djspiewak/976cd8ac65e20e136f05
   unmanagedSourceDirectories in Compile ++= Seq((sourceDirectory in Compile).value / s"scala-${scalaSourceVersion(scalaBinaryVersion.value)}"),
   maxErrors := 20,
-  scalacOptions in Compile ++= (if (isDotty.value) Seq("-language:Scala2Compat,implicitConversions", "-rewrite", "-Ykind-projector") else Nil),
+  scalacOptions in Compile ++= (if (isDotty.value) Seq("-language:Scala2Compat,implicitConversions,postfixOps", "-rewrite", "-Ykind-projector") else Nil),
   scalacOptions in Compile ++= Seq("-deprecation:false", "-unchecked", "-feature"),
   scalacOptions in Compile ++= {
     CrossVersion.partialVersion(scalaVersion.value) match {

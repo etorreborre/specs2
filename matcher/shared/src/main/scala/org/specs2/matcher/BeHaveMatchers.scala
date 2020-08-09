@@ -3,14 +3,14 @@ package matcher
 
 /**
  * This trait provides special matchers to be used in expressions like
- * 
+ *
  * 1 must be equalTo(1) and not be equalTo(2)
  */
 private[specs2]
 trait BeHaveMatchers {
-  def be = new NeutralMatcher[Any]
-  def have = be
-  def not = new NotMatcher[Any]
+  def be: NeutralMatcher[Any] = new NeutralMatcher[Any]
+  def have: NeutralMatcher[Any] = be
+  def not: NotMatcher[Any] = new NotMatcher[Any]
 }
 /**
  * This special matcher always return a NeutralMatch MatchResult (an implicit Success)

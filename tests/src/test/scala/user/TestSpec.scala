@@ -8,14 +8,14 @@ class TestSpec extends Specification with ScalaCheck { def is = s2"""
 
 """
 
-  def e1 = prop { n: Int =>
+  def e1 = prop { (n: Int) =>
     n ==== n
   }
 
 }
 
 class TestMutableSpec extends mutable.Specification with ScalaCheck {
-  "e1" >> prop { n: Int =>
+  "e1" >> prop { (n: Int) =>
     n ==== n
   }
 

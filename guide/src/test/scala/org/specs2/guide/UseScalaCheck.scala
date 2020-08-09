@@ -115,7 +115,7 @@ implicit val arbitraryFile: Arbitrary[File] = ???
 def createFile(f: File): Unit = ???
 def deleteTmpDir(): Unit = ???
 
-prop { f: File =>
+prop { (f: File) =>
   createFile(f)
   f.exists
 }.after(deleteTmpDir) // before and beforeAfter can also be used there

@@ -7,7 +7,7 @@ import text.Sentences._
 
 class MatchResultSpec extends Specification with ScalaCheck { def is = s2"""
 
- A list of match results can be sequenced 
+ A list of match results can be sequenced
    the result of the sequence is the fold of all the results   $fold
    the expectable of the sequence contains all the expectables $expectables
 
@@ -26,11 +26,11 @@ class MatchResultSpec extends Specification with ScalaCheck { def is = s2"""
     MatchResult.sequence(results).expectable.value must_== results.map(_.expectable.value)
   }
 
-  def mute = prop { result: MatchResult[Int] =>
+  def mute = prop { (result: MatchResult[Int]) =>
     result.mute.message must beEmpty
   }
 
-  def muteFailure = prop { result: MatchFailure[Int] =>
+  def muteFailure = prop { (result: MatchFailure[Int]) =>
     result.mute.details must_== NoDetails
   }
 

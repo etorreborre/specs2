@@ -2,6 +2,7 @@ package org.specs2
 package matcher
 
 import io._
+import FileName._ 
 import specification.BeforeAfterEach
 import control._
 import text.LinesContent

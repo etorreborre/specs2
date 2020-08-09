@@ -97,35 +97,35 @@ trait FileMatchers extends FileBaseMatchers with FileBeHaveMatchers
 object FileMatchers extends FileMatchers
 
 type HasPath = {
-  def getPath: String
+  def getPath(): String
 }
 
 private[specs2]
 trait FileBaseMatchers extends PathMatchers {
   /** matches if file.exists */
-  def exist = (beAnExistingPath) ^^ ((_:HasPath).getPath)
+  def exist: Matcher[HasPath] = (beAnExistingPath) ^^ ((_:HasPath).getPath())
   /** matches if file.canRead */
-  def beReadable = (beAReadablePath) ^^ ((_:HasPath).getPath)
+  def beReadable: Matcher[HasPath] = (beAReadablePath) ^^ ((_:HasPath).getPath())
   /** matches if file.canWrite */
-  def beWritable = (beAWritablePath) ^^ ((_:HasPath).getPath)
+  def beWritable: Matcher[HasPath] = (beAWritablePath) ^^ ((_:HasPath).getPath())
   /** matches if file.isAbsolute */
-  def beAbsolute = (beAnAbsolutePath) ^^ ((_:HasPath).getPath)
+  def beAbsolute: Matcher[HasPath] = (beAnAbsolutePath) ^^ ((_:HasPath).getPath())
   /** matches if file.isHidden */
-  def beHidden = (beAHiddenPath) ^^ ((_:HasPath).getPath)
+  def beHidden: Matcher[HasPath] = (beAHiddenPath) ^^ ((_:HasPath).getPath())
   /** matches if file.isFile */
-  def beAFile = (beAFilePath) ^^ ((_:HasPath).getPath)
+  def beAFile: Matcher[HasPath] = (beAFilePath) ^^ ((_:HasPath).getPath())
   /** matches if file.isDirectory */
-  def beADirectory = (beADirectoryPath) ^^ ((_:HasPath).getPath)
+  def beADirectory: Matcher[HasPath] = (beADirectoryPath) ^^ ((_:HasPath).getPath())
   /** matches if file.getName == name */
-  def haveName(name: String) = (havePathName(name)) ^^ ((_:HasPath).getPath)
+  def haveName(name: String): Matcher[HasPath] = (havePathName(name)) ^^ ((_:HasPath).getPath())
   /** matches if file.getAbsolutePath == path  */
-  def haveAbsolutePath(path: String) = (haveAsAbsolutePath(path)) ^^ ((_:HasPath).getPath)
+  def haveAbsolutePath(path: String): Matcher[HasPath] = (haveAsAbsolutePath(path)) ^^ ((_:HasPath).getPath())
   /** matches if file.getCanonicalPath == path */
-  def haveCanonicalPath(path: String) = (haveAsCanonicalPath(path)) ^^ ((_:HasPath).getPath)
+  def haveCanonicalPath(path: String): Matcher[HasPath] = (haveAsCanonicalPath(path)) ^^ ((_:HasPath).getPath())
   /** matches if file.getParent == path */
-  def haveParent(path: String) = (haveParentPath(path)) ^^ ((_:HasPath).getPath)
+  def haveParent(path: String): Matcher[HasPath] = (haveParentPath(path)) ^^ ((_:HasPath).getPath())
   /** matches if file.list == list */
-  def haveList(list: String) = (listPaths(list)) ^^ ((_:HasPath).getPath)
+  def haveList(list: String): Matcher[HasPath] = (listPaths(list)) ^^ ((_:HasPath).getPath())
 }
 /**
  * This case class is used to provide the getPath() method,

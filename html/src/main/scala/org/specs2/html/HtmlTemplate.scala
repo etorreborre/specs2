@@ -22,7 +22,10 @@ object HtmlTemplate {
   /**
    * Variables replacement parser for Pandoc-like templates
    */
-  def pandocParser(variables: Map[String, String]) = new RegexParsers {
+  def pandocParser(variables: Map[String, String]) =
+    PandocParser(variables)
+
+  case class PandocParser(variables: Map[String, String]) extends RegexParsers {
     override def skipWhitespace = false
 
     lazy val template: Parser[String] =

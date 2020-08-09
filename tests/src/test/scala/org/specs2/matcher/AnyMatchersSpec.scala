@@ -3,6 +3,7 @@ package matcher
 
 import java.io._
 import execute._
+import scala.language.postfixOps
 
 class AnyMatchersSpec extends Specification with ResultMatchers with AnyMatchers with ValueChecks with TypecheckMatchers { def is = s2"""
 
@@ -90,9 +91,7 @@ class AnyMatchersSpec extends Specification with ResultMatchers with AnyMatchers
   ${ type1 must beAnInstanceOf[Type1] }
   ${ type1 must not be anInstanceOf[Type2] }
   ${ (type1 must beAnInstanceOf[Type2]).message must_== s"'type1: ${type1.getClass.getName}' is not an instance of 'org.specs2.matcher.Type2'" }
-  // doesn't typecheck with AnyVals
-  ${ Typecheck.typecheck("false must beAnInstanceOf[Boolean]") must not succeed }
-
+  
 Implicits
 =========
 
@@ -103,27 +102,27 @@ Implicits
   def implicits1 = {
     // if this specification compiles and if result is ok, this means that the === implicit could be redefined
     // thanks to the NoCanBeEqual trait
-    val spec = new Specification with NoTypedEqual {
-      implicit def otherTripleEqualUse[T](t: =>T) = new {
+    case class Spec1() extends Specification with NoTypedEqual {
+      implicit class otherTripleEqualUse[T](t: =>T) {
         def ===[S](other: S) = other
       }
       val result = (1 === 2) must_== 2
       def is = result
     }
-    spec.result
+    Spec1().result
   }
 
   def implicits2 = {
     // if this specification compiles and if result is ok, this means that the must implicit could be redefined
     // thanks to the NoMustExpectations trait
-    val spec = new org.specs2.mutable.Specification with NoMustExpectations {
-      implicit def aValue[T](t: =>T) = new {
+    case class Spec1() extends org.specs2.mutable.Specification with NoMustExpectations {
+      implicit class aValue[T](t: =>T) {
         def must(other: Int) = other
       }
       val result = (1 must 2) === 2
       "an example" >> result
     }
-    spec.result
+    Spec1().result
   }
 
   val aValue: String = "a value"

@@ -159,24 +159,24 @@ Custom
   def custom1 = (12 must bePositive) and
           (12 must be positive) and
           (-12 must not bePositive) and
-          (-12 must not be positive)
+          (-12 must not be positive[Int])
 
   // HELPERS
   case class CustomMatcher[T : Numeric]() extends Matcher[T] {
     def apply[S <: T](e: Expectable[S]) =
-      result(implicitly[Numeric[T]].abs(e.value) == e.value, e.value+" is positive", e.value+" is negative", e)
+      result(implicitly[Numeric[T]].abs(e.value) == e.value, s"${e.value} is positive", s"${e.value}   is negative", e)
   }
   /** this allows to write "a must not bePositive" or "a must be positive" */
   lazy val outer = this
-  implicit def anyBePositive[T : Numeric](result: MatchResult[T]) = new AnyBePositive(result)
+  implicit def anyBePositive[T : Numeric](result: MatchResult[T]): AnyBePositive[T] = new AnyBePositive(result)
   class AnyBePositive[T : Numeric](result: MatchResult[T]) {
-    def bePositive = result(outer.bePositive)
-    def positive = result(outer.bePositive)
+    def bePositive: MatchResult[T] = result(outer.bePositive)
+    def positive: MatchResult[T] = result(outer.bePositive)
   }
 
   /** custom matcher */
-  def bePositive[T : Numeric] = CustomMatcher[T]()
+  def bePositive[T : Numeric]: Matcher[T] = CustomMatcher[T]()
   /** this allows to write "a must not be positive" */
-  def positive[T : Numeric] = bePositive
+  def positive[T : Numeric]: Matcher[T] = bePositive[T]
 
 }
