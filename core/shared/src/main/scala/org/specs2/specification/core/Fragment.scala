@@ -13,7 +13,7 @@ import scala.concurrent.duration.FiniteDuration
  * It has a description (generally text but sometimes not, for a step for example)
  * It has an execution which might do or don't do anything (for examples it runs some code)
  */
-case class Fragment(description: Description, execution: Execution, location: Location = StacktraceLocation()) {
+case class Fragment(description: Description, execution: Execution, location: Option[Location] = None) {
 
   /** @return the result of this fragment and its execution time */
   def executedResult: Action[ExecutedResult] =
@@ -77,8 +77,15 @@ case class Fragment(description: Description, execution: Execution, location: Lo
   def setPreviousResult(r: Option[Result]) = copy(execution = execution.setPreviousResult(r))
   def was(statusCheck: String => Boolean) = execution.was(statusCheck)
 
-  def setLocation(location: Location) = copy(location = location)
-  override def toString = s"Fragment($description, $execution) ($location)"
+  def setLocation(location: Location) = copy(location = Some(location))
+
+  override def toString = {
+    val fragmentLocation = location match {
+      case Some(l) => s" ($l)"
+      case None => ""
+    }
+    s"Fragment($description, $execution)$fragmentLocation"
+  }
 }
 
 object Fragment {

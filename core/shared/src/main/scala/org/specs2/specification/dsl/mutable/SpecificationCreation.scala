@@ -5,7 +5,6 @@ package mutable
 
 import main.ArgumentsShortcuts
 import org.specs2.specification.core.Fragments
-import org.specs2.specification.create.InterpolatedFragment
 import org.specs2.specification.create.mutable.FormattingFragments
 
 /**

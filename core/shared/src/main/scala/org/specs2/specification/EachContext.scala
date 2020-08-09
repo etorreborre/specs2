@@ -2,9 +2,9 @@ package org.specs2
 package specification
 
 import core._
-import org.specs2.data.AlwaysTag
-import org.specs2.specification.create.{InterpolatedFragment, S2StringContext, ContextualFragmentFactory, FragmentsFactory}
 import execute._
+import org.specs2.specification.create.{Interpolated, S2StringContext, ContextualFragmentFactory, FragmentsFactory}
+import org.specs2.data.AlwaysTag
 import org.specs2.main.CommandLine
 
 /**
@@ -96,12 +96,8 @@ trait ForEachWithCommandLineArguments[T] extends FragmentsFactory { outer: S2Str
   implicit def foreachFunctionToExecution[R : AsResult](f: T => R): Execution =
     Execution.withEnv((env: Env) => foreach(env.arguments.commandLine)(f))
 
-  implicit def foreachFunctionIsInterpolatedFragment[R : AsResult](f: =>(T => R)): InterpolatedFragment = new InterpolatedFragment {
-    def append(fs: Fragments, text: String, start: Location, end: Location) = {
-      val (description, before) = S2StringContext.descriptionAndBefore(outer.fragmentFactory, text, start, end)
-      fs append before append ff.example(description, foreachFunctionToExecution(f)).setLocation(end)
-    }
-  }
+  implicit inline def foreachFunctionIsInterpolated[R : AsResult](f: =>(T => R)): Interpolated =
+    ${S2StringContext.executionInterpolated('{foreachFunctionToExecution(f)}, '{outer.fragmentFactory})}
 
   override protected def fragmentFactory = new ContextualFragmentFactory(super.fragmentFactory, foreachWithCommandLineContext)
 

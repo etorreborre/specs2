@@ -198,5 +198,3 @@ trait FragmentsFactory {
 }
 
 object DefaultFragmentFactory extends DefaultFragmentFactory
-
-

@@ -22,23 +22,25 @@ import specification.create._
 trait Snippets extends org.specs2.execute.Snippets { outer: S2StringContextCreation with FragmentsFactory =>
   private val factory = outer.fragmentFactory
 
-  implicit inline def snippetIsInterpolatedFragment[T](inline snippet: Snippet[T]): InterpolatedFragment =
+  implicit inline def snippetIsInterpolatedFragment[T](inline snippet: Snippet[T]): Interpolated =
     ${Snippets.createInterpolatedFragment('{snippet}, '{outer.fragmentFactory})}
 }
 
 object Snippets {
 
   def createInterpolatedFragment[T](snippetExpr: Expr[Snippet[T]], factoryExpr: Expr[FragmentFactory])(
-    using qctx: QuoteContext, t: Type[T]): Expr[InterpolatedFragment] = {
+    using qctx: QuoteContext, t: Type[T]): Expr[Interpolated] = {
     import qctx.tasty._
     '{
-       new InterpolatedFragment {
+       new Interpolated {
          private val expression = ${Expr(rootPosition.sourceCode)}
          private val snippet: Snippet[$t] = ${snippetExpr}
          private val factory = ${factoryExpr}
+         private val start = PositionLocation(${Expr(rootPosition.sourceFile.jpath.toString)}, ${Expr(rootPosition.startLine)}, ${Expr(rootPosition.startColumn)})
+         private val end = PositionLocation(${Expr(rootPosition.sourceFile.jpath.toString)}, ${Expr(rootPosition.endLine)}, ${Expr(rootPosition.endColumn)})
 
-         def append(fs: Fragments, text: String, start: Location, end: Location): Fragments =
-           (fs append factory.text(text).setLocation(start)) append snippetFragments(snippet, end, expression)
+         def append(text: String): Fragments =
+           Fragments(factory.text(text).setLocation(start)).append(snippetFragments(snippet, end, expression))
 
          def snippetFragments(snippet: Snippet[$t], location: Location, expression: String): Fragments = {
            Fragments(

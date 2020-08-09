@@ -4,9 +4,9 @@ package specification.create
 import scala.quoted._
 import execute._
 import control.TraceLocation
-import org.specs2.specification.script.StepParser
+import specification.script.StepParser
 import specification.core._
-import text.{Trim, Interpolated}
+import text.{Trim}
 import Trim._
 import text.NotNullStrings._
 import text.Trim._
@@ -23,60 +23,43 @@ import S2StringContext._
  *  - fragments
  *
  */
-trait S2StringContext extends S2StringContext1 { outer =>
+trait S2StringContext extends S2StringContext1 {
 
-  implicit def descriptionToFragmentsIsInterpolatedFragment(fragments: String => Fragments): InterpolatedFragment = new InterpolatedFragment {
-    def append(fs: Fragments, text: String, start: Location, end: Location): Fragments = {
-      val (description, before) = descriptionAndBefore(ff, text, start, end)
-      fs append before append fragments(description.show)
-    }
+  /** create an example based on an execution.
+   */
+  implicit inline def asExecutionIsInterpolated[R : AsExecution](inline r: =>R)(implicit inline factory: FragmentFactory): Interpolated =
+    ${executionInterpolated('{AsExecution[R].execute(r)}, 'factory)}
+
+  implicit def specificationRefIsInterpolated(ref: SpecificationRef): Interpolated = new Interpolated {
+    def append(text: String): Fragments =
+      Fragments(fragmentFactory.text(text), fragmentFactory.link(ref))
   }
 
-  implicit def specificationRefIsInterpolatedFragment(ref: SpecificationRef): InterpolatedFragment = new InterpolatedFragment {
-    def append(fs: Fragments, text: String, start: Location, end: Location): Fragments = {
-      fs append ff.text(text).setLocation(start) append fragmentFactory.link(ref).setLocation(end)
-    }
+  implicit def specificationStructureIsInterpolated(s: SpecificationStructure): Interpolated = new Interpolated {
+    val specStructure = s.is
+    val ref = SpecificationRef(specStructure.header, specStructure.arguments, alias = specStructure.header.show)
+
+    def append(text: String): Fragments =
+      Fragments(fragmentFactory.text(text), fragmentFactory.see(ref))
   }
 
-  implicit inline def asExecutionIsInterpolatedFragment[R : AsExecution](inline e: =>R): InterpolatedFragment =
-    ${executionInterpolatedFragment('{AsExecution[R].execute(e)}, '{fragmentFactory})}
-
-  implicit def stringFunctionIsInterpolatedFragment[R : AsResult](f: String => R): InterpolatedFragment =
-    stringAndEnvFunctionIsInterpolatedFragment((s: String) => (e: Env) => f(s))
-
-  implicit def stepParserIsInterpolatedFragment[R : AsResult](f: StepParser[R]): InterpolatedFragment =
-    stringAndUpdatedDescriptionAndEnvFunctionIsInterpolatedFragment { (s: String) =>
-      val parsed: Either[Throwable, (String, R)] = f.parse(s)
-      (parsed.fold(_ => None, sr => Some(sr._1)), (e: Env) => parsed.fold(t => Error(t), sr => AsResult(sr._2)))
-    }
-
-  implicit def anyAsResultIsInterpolatedFragment(r: =>Function0Result): InterpolatedFragment = new InterpolatedFragment {
-    def append(fs: Fragments, text: String, start: Location, end: Location): Fragments =
-      asResultIsInterpolatedFragment(AsResult(r)).append(fs, text, start, end)
+  implicit def specStructureIsInterpolated(s: SpecStructure): Interpolated = new Interpolated {
+    def append(text: String): Fragments =
+      Fragments(fragmentFactory.text(text)).append(s.fragments)
   }
 
-  implicit def specificationStructureIsInterpolatedFragment(s: SpecificationStructure): InterpolatedFragment = {
-    lazy val specStructure = s.is
-    fragmentIsInterpolatedFragment(ff.see(SpecificationRef(specStructure.header, specStructure.arguments, alias = specStructure.header.show)))
-  }
-
-  implicit def specStructureIsInterpolatedFragment(s: SpecStructure): InterpolatedFragment = new InterpolatedFragment {
-    def append(fs: Fragments, text: String, start: Location, end: Location): Fragments =
-      (fs append ff.text(text).setLocation(start)) append s.fragments
-  }
-
-  implicit def stringIsInterpolatedFragment(s: =>String): InterpolatedFragment = new InterpolatedFragment {
-    def append(fs: Fragments, text: String, start: Location, end: Location): Fragments =  {
+  implicit def stringIsInterpolated(s: =>String): Interpolated = new Interpolated {
+    def append(text: String): Fragments =  {
       val s1 =
         try s
         catch { case e: Throwable => s"[${e.getMessage.notNull}]" }
-      fs append ff.text(text + s1).setLocation(start)
+      Fragments(fragmentFactory.text(text + s1))
     }
   }
 
-  implicit def fragmentsIsInterpolatedFragment(fragments: Fragments): InterpolatedFragment = new InterpolatedFragment {
-    def append(fs: Fragments, text: String, start: Location, end: Location): Fragments =
-      (fs append ff.text(text).setLocation(start)) append fragments
+  implicit def fragmentsAreInterpolated(fragments: Fragments): Interpolated = new Interpolated {
+    def append(text: String): Fragments =
+      Fragments(fragmentFactory.text(text)).append(fragments)
   }
 
 }
@@ -85,145 +68,62 @@ trait S2StringContext extends S2StringContext1 { outer =>
  * Lightweight methods to interpolate fragments where only results and fragment can be interpolated
  */
 private[specs2]
-trait S2StringContext1 extends S2StringContextCreation { outer =>
+trait S2StringContext1 extends S2StringContextCreation {
 
-  implicit def fragmentIsInterpolatedFragment(f: =>Fragment): InterpolatedFragment = new InterpolatedFragment {
-    def append(fs: Fragments, text: String, start: Location, end: Location): Fragments =
-      fs append ff.text(text).setLocation(start) appendLazy f.setLocation(end)
+  implicit inline def fragmentIsInterpolated(inline f: =>Fragment): Interpolated = new Interpolated {
+    def append(text: String): Fragments =
+      Fragments(fragmentFactory.text(text)).appendLazy(f)
   }
 
-  implicit def asResultIsInterpolatedFragment[R : AsResult](r: =>R): InterpolatedFragment =
-    stringAndEnvFunctionIsInterpolatedFragment(_ => (env: Env) => r)
-
+  implicit inline def asResultIsInterpolated[R : AsResult](inline r: =>R): Interpolated =
+    ${executionInterpolated('{Execution.result(r)}, 'fragmentFactory)}
 }
 
-/**
- * Methods to create interpolated fragments with no implicits
- */
-trait S2StringContextCreation extends FragmentsFactory { outer =>
-  private[specs2] val ff = fragmentFactory
+trait S2StringContextCreation extends FragmentsFactory {
+  /** The FragmentFactory has to be passed as an implicit in order to be inlined in macros */
+  implicit val _fragmentFactory: FragmentFactory = fragmentFactory
 
-  private[specs2] def stringAndEnvFunctionIsInterpolatedFragment[R : AsResult](f: String => Env => R): InterpolatedFragment =
-    stringAndUpdatedDescriptionAndEnvFunctionIsInterpolatedFragment((s: String) => (None, (e: Env) => f(s)(e)))
-
-  private[specs2] def stringAndUpdatedDescriptionAndEnvFunctionIsInterpolatedFragment[R : AsResult](f: String => (Option[String], Env => R)): InterpolatedFragment =
-    new InterpolatedFragment {
-    def append(fs: Fragments, text: String, start: Location, end: Location) =  {
-      val (description, before) = descriptionAndBefore(ff, text, start, end)
-
-      val result =
-        implicitly[AsResult[R]] match {
-          case v : AnyValueAsResult[_] =>
-            val (newDescription, executionFunction) = f(description.show)
-            val (updatedDescription, r) = (newDescription.fold(description)(Text.apply), Env.executeResult(executionFunction))
-            (r : @unchecked) match {
-              case DecoratedResult(t, e: Error) => before :+ ff.example(updatedDescription, e).setLocation(end)
-              case DecoratedResult(t, _)        => Vector(ff.text(text), ff.text(t.notNull)).map(_.setLocation(end))
-            }
-
-          case other =>
-            val (newDescription, executionFunction) = f(description.show)
-            val updatedDescription = newDescription.fold(description)(Text.apply)
-
-            before :+ ff.example(updatedDescription, Execution.withEnv(executionFunction)).setLocation(end)
-        }
-
-      fs append result
-    }
+  /**
+   * String interpolation for specs2 fragments
+   */
+  implicit class StringContextOps(sc: StringContext)(implicit factory: FragmentFactory) {
+    inline def s2(inline variables: Interpolated*): Fragments =
+      ${s2Implementation('sc)('variables, 'factory, 'postProcessS2Fragments)}
   }
 
-  implicit class StringContextOps(sc: StringContext) {
-    inline def s2(inline variables: InterpolatedFragment*): Fragments =
-      ${s2Implementation('sc)('variables, 'ff, 'postProcessS2Fragments)}
-  }
-
+  /** this function is exposed so that it can be overridden with side-effects when using s2 strings in mutable specs */
   def postProcessS2Fragments(fs: Fragments): Fragments =
     fs
-
-  private def positionsToLocation(positions: Seq[String]): Seq[TraceLocation] =
-    positions.map(_.split("\\|").toList).map {
-      case path :: fileName :: line :: _ =>
-        TraceLocation(path, fileName, "Specification", "s2", line.toInt)
-      // this case should not happen!
-      case other =>
-        TraceLocation("not found", "file name", "Specification", "s2", 0)
-    }
 }
 
 object S2StringContext {
 
-    def s2Implementation(sc: Expr[StringContext])(
-        variables: Expr[Seq[InterpolatedFragment]],
+  /**
+   * Macro implementation for s2 strings. It extracts the s2 texts + interpolated fragments
+   */
+  def s2Implementation(sc: Expr[StringContext])(
+        variables: Expr[Seq[Interpolated]],
         ff: Expr[FragmentFactory],
         postProcess: Expr[Fragments => Fragments])(using qctx: QuoteContext) : Expr[Fragments] = {
 
     val args = variables match {
       case Varargs(args) => args
-      case _ => qctx.throwError("Expected statically known argument list", variables)
+      case _ => report.throwError("Expected a statically known argument list", variables)
     }
 
     '{s2(${sc}.parts, ${variables}, ${ff}, ${postProcess})}
   }
 
-  def executionInterpolatedFragment[T](
-    execution: Expr[Execution],
-    ff: Expr[FragmentFactory])(using qctx: QuoteContext): Expr[InterpolatedFragment] = {
-
-    import qctx.tasty._
-    '{
-      new InterpolatedFragment {
-        def append(fragments: Fragments, text: String, start: Location, end: Location): Fragments = {
-          val (description, before) = descriptionAndBefore(${ff}, text, start, end, ${Expr(rootPosition.sourceCode)})
-          fragments append before append ${ff}.example(description, ${execution}).setLocation(end)
-        }
-      }
-    }
-  }
-
-  private[specs2] def descriptionAndBefore(
-    ff: FragmentFactory,
-    text: String,
-    start: Location,
-    end: Location,
-    expression: String = ""): (Description, Vector[Fragment]) = {
-
-    val texts = text.replace("\t", "  ").split("\n", -1).toSeq
-    val autoExample = texts.lastOption.exists(_.trim.isEmpty)
-
-    if (autoExample) {
-      (Description.code(expression.removeEnclosing("`")),
-        if (texts.size == 1) Vector()
-        else                 Vector(ff.text(texts.mkString("\n")).setLocation(start)))
-    }
-    else {
-      val lastLine = texts.lastOption.getOrElse("")
-      val lastIndent = lastLine.takeWhile(_ == ' ')
-      val (descriptionLines, beforeLines) = texts.reverse.span(_.takeWhile(_ == ' ') == lastIndent)
-
-      val description =
-        if (descriptionLines.size > 1)
-          if (lastLine.trim.startsWith("|")) descriptionLines.reverse.map(_.removeFirst("\\|")).mkString("\n")
-          else descriptionLines.reverse.mkString("\n")
-        else descriptionLines.map(_.dropWhile(_ == ' ')).reverse.mkString("\n")
-
-      val before =
-        if (beforeLines.isEmpty) Vector()
-        else                     Vector(ff.text(beforeLines.reverse.mkString("", "\n", "\n" + lastIndent)).setLocation(start))
-
-      (Description.text(description.removeStart(lastIndent).trimEndSpace), before)
-    }
-  }
-
   /**
-   * based on the interpolated variables and the expressions captured with the macro, create the appropriate fragments
+   * Create fragments based on captured texts + "interpolated fragments"
    *
-   * if the Yrangepos scalac option is not set then we use an approximated method to find the expressions texts
+   * Depending on the interpolated element being added the preceding text can be left as it is or used as
+   * a description (e.g. to create an Example)
    */
-  def s2(texts: Seq[String], variables: Seq[InterpolatedFragment], ff: FragmentFactory, postProcess: Fragments => Fragments): Fragments =  {
-    val location = SimpleLocation(TraceLocation("path", "fileName", "className", "methodName", lineNumber = 0))
-    val fragments = Fragments.reduce(texts zip variables) { case (res, cur) =>
+  def s2(texts: Seq[String], interpolated: Seq[Interpolated], ff: FragmentFactory, postProcess: Fragments => Fragments): Fragments =  {
+    val fragments = Fragments.reduce(texts zip interpolated) { case (res, cur) =>
       val (text, variable) = cur
-      variable.append(res, text, location, location)
+      res.append(variable.append(text))
     }
 
     // The last piece of text is trimmed to allow the placement of closing quotes in the s2 string
@@ -233,15 +133,101 @@ object S2StringContext {
     postProcess(fragments append Fragments(last:_*))
   }
 
-}
+  def executionInterpolated(execution: Expr[Execution], ff: Expr[FragmentFactory])(using qctx: QuoteContext): Expr[Interpolated] = {
+    import qctx.tasty._
+    '{
+      new Interpolated {
+        def append(text: String): Fragments = {
+          createExample($ff,
+            text,
+            $execution,
+            ${Expr(rootPosition.sourceCode)},
+            ${Expr(PositionLocation(rootPosition.sourceFile.jpath.toString, rootPosition.startLine, rootPosition.startColumn))})
+        }
+      }
+    }
+  }
 
+  def createInterpolatedExecution(execution: Execution, sourceCode: String, start: PositionLocation, ff: FragmentFactory): Interpolated =
+    new Interpolated {
+      def append(text: String): Fragments = {
+        createExample(ff,
+          text,
+          execution,
+          sourceCode,
+          start)
+      }
+    }
 
-/**
- * An interpolated fragment
- *
- *  - is appended to the previous fragments
- *  - can use the previous text, start location, end location and interpolated expression to create new Fragments
- */
-trait InterpolatedFragment {
-  def append(fragments: Fragments, text: String, start: Location, end: Location): Fragments
+  private[specs2] def fragmentInterpolated(fragment: Fragment, start: PositionLocation, ff: FragmentFactory): Interpolated =
+    new Interpolated {
+      def append(text: String): Fragments =
+        Fragments(ff.text(text), fragment.setLocation(start))
+    }
+
+  /**
+   * The text captured before an interpolated execution can be arbitrarily long. It is used
+   *  to create an example description when an Execution is interpolated.
+   *
+   * We interpret it in the following way:
+   *
+   *  1. if there is a piece of text on 1 line then the text is the execution description
+   *
+   *  2. if there is some text on more than one line then
+   *
+   *      2.1 if the last line contains only spaces (followed by the execution line) then this is an auto-example
+   *           which uses its own 'sourceCode' as a Description
+   *
+   *      2.2 otherwise we divide the text into 2 parts:
+   *           - all the lines having the same indentation as the last line
+   *           - all the lines before
+   *          we use the first set to create the example description and the second set to create
+   *          a Text Fragment
+   */
+  private[specs2] def createExample(
+    ff: FragmentFactory,
+    text: String,
+    execution: Execution,
+    sourceCode: String,
+    start: PositionLocation): Fragments = {
+
+    val texts = text.replace("\t", "  ").split("\n", -1).toSeq
+
+    // we have an auto-example when the last line is empty
+    val isAutoExample = texts.lastOption.exists(_.trim.isEmpty)
+
+    if (isAutoExample) {
+      val example = ff.example(Description.code(sourceCode.removeEnclosing("`")), execution).setLocation(start)
+      if (texts.size == 1)
+        Fragments(example)
+      else
+        Fragments(ff.text(texts.mkString("\n")), example)
+    }
+    else {
+      val lastLine = texts.lastOption.getOrElse("")
+      // indentation of the last line (spaces before the text)
+      val lastIndent = lastLine.takeWhile(_ == ' ')
+
+      // extract the lines before the description based on the last indentation
+      // all lines having the same indentation as the last line are considered as being
+      // part of the description
+      val (descriptionLines, beforeLines) = texts.reverse.span(_.takeWhile(_ == ' ') == lastIndent)
+
+      val description =
+        if (descriptionLines.size > 1)
+          if (lastLine.trim.startsWith("|")) descriptionLines.reverse.map(_.removeFirst("\\|")).mkString("\n")
+          else descriptionLines.reverse.mkString("\n")
+        else
+          descriptionLines.map(_.dropWhile(_ == ' ')).reverse.mkString("\n")
+
+      val example =
+            ff.example(Description.text(description.removeStart(lastIndent).trimEndSpace), execution).setLocation(start)
+
+      if (beforeLines.isEmpty)
+        Fragments(example)
+      else
+        Fragments(ff.text(beforeLines.reverse.mkString("", "\n", "\n" + lastIndent)), example)
+    }
+  }
+
 }

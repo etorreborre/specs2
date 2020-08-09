@@ -3,6 +3,7 @@ package specification
 package core
 
 import control._
+import quoted._
 
 /**
  * Location of a Fragment
@@ -10,35 +11,61 @@ import control._
  * This is currently implemented using stacktraces which is very brittle
  */
 trait Location {
-  def traceLocation(filter: StackTraceFilter): Option[TraceLocation]
-  /** @return a filtered Location */
-  def filter(filter: StackTraceFilter): Location
-  /** file name and line number */
-  def location(filter: StackTraceFilter) = traceLocation(filter).map(_.location)
-  /** the class name and the line number where the Throwable was created */
-  def classLocation(filter: StackTraceFilter) = traceLocation(filter).map(_.classLocation)
-  /** the class name, file Name and the line number where the Throwable was created */
-  def fullLocation(filter: StackTraceFilter) = traceLocation(filter).map(_.fullLocation)
-  /** the line number */
-  def lineNumber(filter: StackTraceFilter) = traceLocation(filter).headOption.map(_.lineNumber)
+  /** the file path */
+  def path: String
 
-  override def toString = traceLocation(NoStackTraceFilter).fold("<empty filtered stacktrace>")(_.fullLocation)
+  /** the line number */
+  def lineNumber: Int
+
+  /** the column number */
+  def columnNumber: Int
+
+  /** display this location */
+  def show: String
+
 }
 
-case class SimpleLocation(trace: TraceLocation) extends Location {
-  def traceLocation(filter: StackTraceFilter) =
-    filter(Seq(trace.stackTraceElement)).map(TraceLocation.apply).headOption
+/**
+ * Location created from a Tasty position
+ */
+case class PositionLocation(path: String, lineNumber: Int, columnNumber: Int) extends Location {
+  def show: String =
+    s"""$path (line: $lineNumber, column: $columnNumber)"""
+}
 
-  def filter(filter: StackTraceFilter) =
-    traceLocation(filter).fold(this)(SimpleLocation.apply)
+object PositionLocation {
+
+    implicit def PositionLiftable: Liftable[PositionLocation] = new Liftable[PositionLocation] {
+      def toExpr(location: PositionLocation): (QuoteContext) ?=> Expr[PositionLocation] = { (using qctx: QuoteContext) =>
+        location match {
+          case PositionLocation(path, line, column) =>
+            val pathExpr: Expr[String] = Expr(path)
+            val lineExpr: Expr[Int] = Expr(line)
+            val columnExpr: Expr[Int] = Expr(column)
+            Expr.betaReduce('{PositionLocation.apply})(pathExpr, lineExpr, columnExpr)
+      }
+    }
+  }
+
 }
 
 case class StacktraceLocation(trace: Seq[StackTraceElement] = (new Exception).getStackTrace.toIndexedSeq) extends Location {
+  def path: String =
+    traceLocation(DefaultStackTraceFilter).map(_.path).getOrElse("no path")
+
+  def lineNumber: Int =
+    traceLocation(DefaultStackTraceFilter).map(_.lineNumber).getOrElse(0)
+
+  def columnNumber: Int =
+    0
+
   def traceLocation(filter: StackTraceFilter): Option[TraceLocation] =
     filter(trace).headOption.map(TraceLocation.apply)
 
   /** @return a filtered Location */
   def filter(filter: StackTraceFilter) = copy(filter(trace))
 
-  override def toString = s"${getClass.getSimpleName}(${traceLocation(NoStackTraceFilter)}})"
+  def show: String =
+    s"${getClass.getSimpleName}(${traceLocation(DefaultStackTraceFilter)}})"
+
 }

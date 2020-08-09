@@ -52,6 +52,7 @@ trait BlockCreation extends FragmentBuilder with FragmentsFactory {
 
     addStart
     if (hasSectionsForBlocks) addFragment(factory.section(text))
+    //print((text, location.trace.map(t => println((text, t)))))
     addText(text, location)
     addFragment(factory.tab)
     addBreak
@@ -72,5 +73,3 @@ trait BlockCreation extends FragmentBuilder with FragmentsFactory {
   private def addEnd   = addFragment(factory.end)
 
 }
-
-

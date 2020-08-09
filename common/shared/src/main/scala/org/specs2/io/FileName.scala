@@ -5,7 +5,7 @@ import java.io._
 import java.net.URI
 import java.util.UUID
 import scala.quoted._
-import scala.quoted.matching._
+import scala.quoted._
 
 /**
  * The component of a path name according to the unix definition
@@ -41,12 +41,12 @@ object FileName {
     fileName match {
       case e@Const(s) =>
       FileName.fileNameFromString(s) match {
-        case Left(m) => qctx.throwError(m, fileName)
+        case Left(m) => report.throwError(m, fileName)
         case Right(fn) => '{FileName.unsafe($e)}
       }
 
       case other =>
-        qctx.throwError(s"Not a valid file name. It must be a literal string without any /", fileName)
+        report.throwError(s"Not a valid file name. It must be a literal string without any /", fileName)
     }
 
   val isWindows = sys.props("os.name").startsWith("Windows")

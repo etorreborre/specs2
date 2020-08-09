@@ -74,7 +74,7 @@ class LocationSpec extends org.specs2.mutable.Spec with TypedEqual {
 
     val fragmentLocation = fragments(spec).filter(selector).apply(index).location
 
-    fragmentLocation.filter(filter).lineNumber(filter)
+    fragmentLocation.map(_.lineNumber).getOrElse(0)
   }
 
   def fragments(implicit spec: WithFragments): List[Fragment] =

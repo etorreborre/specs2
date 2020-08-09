@@ -91,7 +91,7 @@ object Snippets extends Snippets {
       case Inlined(_,_,Apply(Ident(termName),_))              => termName.toString
       case Inlined(_,_,Apply(TypeApply(Ident(termName),_),_)) => termName.toString
       case Inlined(_,_,Select(_,termName))                    => termName.toString
-      case other                                              => qctx.error("The code must be a member selection, or a function application", e);""
+      case other                                              => report.error("The code must be a member selection, or a function application", e);""
     }
     Expr(name)
   }

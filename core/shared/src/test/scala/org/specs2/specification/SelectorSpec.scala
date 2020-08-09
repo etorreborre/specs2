@@ -44,6 +44,7 @@ Support Functions
 
 """
 
+  val ff = fragmentFactory
   import ff._
 
   def byName1 = {
