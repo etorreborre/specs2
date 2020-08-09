@@ -5,7 +5,6 @@ import java.io._
 import java.net.URI
 import java.util.UUID
 import scala.quoted._
-import scala.quoted._
 
 /**
  * The component of a path name according to the unix definition

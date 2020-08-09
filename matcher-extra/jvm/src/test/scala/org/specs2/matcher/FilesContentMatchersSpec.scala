@@ -9,6 +9,7 @@ import control._
 import org.specs2.fp.syntax._
 import text.AnsiColors._
 import org.specs2.matcher.MatchResultLogicalCombinators._
+import org.specs2.io.FileName.ToFileName
 
 class FilesContentMatchersSpec extends Spec
   with FilesContentMatchers with BeforeAfterEach { def is = sequential ^ diffs(show = true, triggerSize = 0, diffRatio = 100)^ s2"""
@@ -117,7 +118,7 @@ class FilesContentMatchersSpec extends Spec
           |""".stripMargin.replace(" ", "")
   }
 
-  val targetDir = "target" / "test" / FileName.unsafe("fcm-"+hashCode)
+  val targetDir: DirectoryPath = "target" / "test" / FileName.unsafe("fcm-"+hashCode)
 
   def before = fs.mkdirs(targetDir).runOption
   def after  = fs.delete(targetDir).runOption
