@@ -178,7 +178,7 @@ class Lexer extends StdLexical with ImplicitConversions {
   def intList = nonzero ~ rep(digit) ^^ {case x ~ y => (x :: y) mkString ""}
   def fracPart = '.' ~> rep(digit) ^^ { _ mkString "" }
   def expPart = exponent ~ opt(sign) ~ rep1(digit) ^^ { case e ~ s ~ d =>
-    e + optString("", s) + d.mkString("")
+    e.toString + optString("", s) + d.mkString("")
   }
 
   private def optString[A](pre: String, a: Option[A]) = a match {

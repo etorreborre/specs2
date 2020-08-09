@@ -86,7 +86,7 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersImplicits { outer =
             case Some(v: JSONType) => find(Some(v), rest)
             case Some(v)           => checkRest(v, rest)
             case None    =>
-              list.toStream.map {
+              list.to(LazyList).map {
                 case v: JSONType => find(Some(v), queries)
                 case v           => checkRest(v, queries)
               }.find(_.isSuccess)
