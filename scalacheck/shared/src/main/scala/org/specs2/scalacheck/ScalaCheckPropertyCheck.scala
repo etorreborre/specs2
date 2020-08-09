@@ -14,7 +14,7 @@ import scala.util.control.NonFatal
 trait ScalaCheckPropertyCheck extends ExpectationsCreation {
 
   def checkProperties(properties: Properties, parameters: Parameters, prettyFreqMap: FreqMap[Set[Any]] => Pretty): Result = {
-    val prop = Prop { params: Gen.Parameters =>
+    val prop = Prop { (params: Gen.Parameters) =>
       Prop.all(properties.properties.toList.map { case (n, p) => p :| n }:_*)(params)
     }
     check(prop, parameters, prettyFreqMap)
@@ -129,7 +129,7 @@ trait ScalaCheckPropertyCheck extends ExpectationsCreation {
       if(ls.isEmpty) ""
       else s"> Labels of failing property:${ls.mkString("\n")}"
 
-      val s = res.status match {
+    val s = res.status match {
       case Test.Proved(args) =>
         s"OK, proved property.${prettyArgs(args)(prms)}" +
         (if (prms.verbosity > 1) displaySeed else "")

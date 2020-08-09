@@ -15,7 +15,7 @@ trait AsResultProp extends ScalaCheckPropertyCheck with AsResultPropLowImplicits
     r match {
       case p: Prop => p
       case _ =>
-        Prop.apply { params: Gen.Parameters =>
+        Prop.apply { (params: Gen.Parameters) =>
           lazy val result = ResultExecution.execute(AsResult(r))
 
           @tailrec
