@@ -43,7 +43,7 @@ case class JUnitPrinter(env: Env, notifier: RunNotifier) extends Printer {
     if (Fragment.isExampleOrStep(fragment)) {
       val description = findDescription(descriptions, fragment)
       fragment.executionResult.map { result =>
-        description.foreach { description: Description =>
+        description.foreach { (description: Description) =>
           if (Fragment.isExample(fragment))
             notifyTestResult(description, result)(args)
           else

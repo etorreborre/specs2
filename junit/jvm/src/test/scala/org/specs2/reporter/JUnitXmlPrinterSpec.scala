@@ -8,6 +8,8 @@ import scala.xml.NodeSeq
 import matcher._
 import control._
 import main.Arguments
+import scala.reflect._
+import scala.reflect.Selectable._
 
 class JUnitXmlPrinterSpec(val env: Env) extends Specification with XmlMatchers with OwnEnv { def is = s2"""
 
@@ -106,10 +108,11 @@ is formatted for JUnit reporting tools.
   }
 
   def printString(env1: Env)(fs: Fragments): String = {
-    val mockFs = new FileSystem(NoLogger) {
-      var out: String = ""
+    val mockFs = new FileSystem(NoLogger) with Selectable {
+      var output: String = ""
+      def out: String = output
       override def writeFile(filePath: FilePath, content: String): Operation[Unit] =
-        Operation.ok(this.out = content)
+        Operation.ok(this.output = content)
     }
     val env = env1.copy(fileSystem = mockFs)
     val reporter = Reporter.create(List(printer), env)

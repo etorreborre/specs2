@@ -42,25 +42,24 @@ trait JUnitDescriptions extends ExecutionOrigin {
 
   def createDescriptionTree(spec: SpecStructure)(ee: ExecutionEnv): TreeLoc[(Fragment, Description)] = {
     val className = spec.specClassName
-    val annotations = tryOrElse(getClass.getClassLoader.loadClass(spec.specClassName).getAnnotations)(Array())
+    val annotations = tryOrElse(getClass.getClassLoader.loadClass(spec.specClassName).getAnnotations)(Array[Annotation]())
     val rootFragment = DefaultFragmentFactory.text(spec.header.simpleName)
 
-    Levels.treeLocMap(spec.fragments)(keep)(ee).getOrElse(Leaf(rootFragment).loc).root.setLabel(rootFragment).cojoin.map {
-      current: TreeLoc[Fragment] =>
-        val description =
+    Levels.treeLocMap(spec.fragments)(keep)(ee).getOrElse(Leaf(rootFragment).loc).root.setLabel(rootFragment).cojoin.map { (current: TreeLoc[Fragment]) =>
+      val description =
         current.getLabel match {
           case f @ Fragment(d, e, _) if !e.isExecutable => createDescription(className, suiteName = testName(d.show), annotations = annotations)
           case f @ Fragment(NoText, e, _) if e.mustJoin => createDescription(className, label = current.size.toString, annotations = annotations)
           case f @ Fragment(NoText, e, _)               => createDescription(className, label = current.size.toString, suiteName = "action", annotations = annotations)
           case f @ Fragment(d, e, _)                    => createDescription(className, label = current.size.toString, id = f.hashCode.toString, testName = testName(d.show, parentPath(current.parents.map(_._2))), annotations = annotations)
         }
-        (current.getLabel, description)
+      (current.getLabel, description)
     }
   }
 
   /** description for the beginning of the specification */
   def specDescription(spec: SpecStructure) = {
-    val annotations = tryOrElse(getClass.getClassLoader.loadClass(spec.specClassName).getAnnotations)(Array())
+    val annotations = tryOrElse(getClass.getClassLoader.loadClass(spec.specClassName).getAnnotations)(Array[Annotation]())
     createDescription(spec.specClassName, suiteName = testName(spec.name), annotations = annotations)
   }
 

@@ -10,13 +10,13 @@ import execute.{Result, StandardResults, Success}
 import ShowDescription._
 
 class JUnitDescriptionSpec(val env: Env) extends Specification with JUnitDescriptionSpecTest with OwnExecutionEnv { def is = s2"""
-                                                                                         
+
  A list of Fragments can be 'folded' into a tree of JUnit descriptions so that there is
  a root Description object (the top 'suite') and children objects representing either
  nested suites or Tests.
-                                                                                        
- The list must be properly folded to a Descriptions tree                                                             
-                                                                                                                       
+
+ The list must be properly folded to a Descriptions tree
+
    An example is folded into a root description for the spec class and a description of the example                 $a1
    Two examples are folded as 2 children descriptions                                                               $a2
    A text and two subordinates examples are folded as a node and 2 children descriptions                            $a3
@@ -140,8 +140,8 @@ class JUnitDescriptionSpec(val env: Env) extends Specification with JUnitDescrip
   }
 
   def a11 = {
-    val fs =
-      Fragments.foreach(Seq("ex1", "ex2", "ex3")) { _ => success }
+    val fs: Fragments =
+      Fragments.foreach(Seq("ex1", "ex2", "ex3")) { ex => ex ! success }
 
     val ds =
       ShowDescription.toTree(descriptions(false).

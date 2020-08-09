@@ -35,7 +35,7 @@ class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterab
 
   def getDescription(env: Env): org.junit.runner.Description =
     try JUnitDescriptions.createDescription(specStructure)(env.specs2ExecutionEnv)
-    catch { case NonFatal(t) => env.shutdown; throw t; }
+    catch { case NonFatal(t) => env.shutdown(); throw t; }
 
   /** specification structure for the environment */
   lazy val specStructure: SpecStructure =
@@ -49,7 +49,7 @@ class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterab
         case Left(t) => n.fireTestFailure(new Failure(getDescription, new RuntimeException(t)))
       }
     }
-    finally env.shutdown
+    finally env.shutdown()
   }
 
   /** run the specification with a Notifier and an environment */

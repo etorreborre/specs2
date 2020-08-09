@@ -16,9 +16,8 @@ trait ShowDescription {
   }
 
   implicit def toTree(desc: Description): Tree[Description] =
-    unfoldTree(desc)((d: Description) => (d, () => d.getChildren.asScala.toStream))
+    unfoldTree(desc)((d: Description) => (d, () => d.getChildren.asScala.to(LazyList)))
 
 }
 
 object ShowDescription extends ShowDescription
-
