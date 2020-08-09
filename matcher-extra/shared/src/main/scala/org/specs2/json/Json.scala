@@ -12,15 +12,14 @@ trait Json {
    * @return Some(json) if the string is parsable as a JSON document
    */
   def parse(s: String): Option[JSONType] = {
-    val parser = new Parser {
-      def parseRaw(input : String) : Option[JSONType] =
-        phrase(root)(new lexical.Scanner(input)) match {
-          case Success(result, _) => Some(result)
-          case _ => None
-      }
+    def parseRaw(p: Parser, input: String): Option[JSONType] =
+      p.phrase(p.root)(new p.lexical.Scanner(input)) match {
+        case p.Success(result, _) => Some(result)
+        case _ => None
     }
+    val parser = new Parser
     // give the parser a chance to parse singly-quoted json
-    parser.parseRaw(s).orElse(if (s.contains("'")) parser.parseRaw(s.replace("'", "\"")) else None)
+    parseRaw(parser, s).orElse(if (s.contains("'")) parseRaw(parser, s.replace("'", "\"")) else None)
   }
 
   /** show JSON objects with null values shown as 'null' */
@@ -48,7 +47,7 @@ trait Json {
     case b: Boolean      => b.toString
     case other           => showJson(other)
   }
-  
+
 }
 private[specs2]
 object Json extends Json

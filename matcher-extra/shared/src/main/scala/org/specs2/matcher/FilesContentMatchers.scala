@@ -31,7 +31,7 @@ trait FilesContentMatchers extends FileMatchers with LinesContentMatchers with T
   def haveSameFilesAs(expectedDir: File) = LocalPathsAndFilesContentMatcher(expectedDir)
 
   /** match 2 files if they have the same MD5 digest */
-  def haveSameMD5: Matcher[(File, File)] = { pair: (File, File) =>
+  def haveSameMD5: Matcher[(File, File)] = { (pair: (File, File)) =>
     val (actual, expected) = pair
 
     val operation  = for {
@@ -51,7 +51,7 @@ trait FilesContentMatchers extends FileMatchers with LinesContentMatchers with T
   }
 
   /** match 2 files if they have the same MD5 digest */
-  def haveSameMD5As(expected: File): Matcher[File] = { actual: File =>
+  def haveSameMD5As(expected: File): Matcher[File] = { (actual: File) =>
     haveSameMD5(createExpectable((actual, expected)))
   }
 

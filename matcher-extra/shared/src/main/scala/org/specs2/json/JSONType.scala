@@ -26,7 +26,8 @@ sealed abstract class JSONType {
    * Returns a String representation of this JSON value
    * using the JSONFormat.defaultFormatter.
    */
-  override def toString = toString(JSONFormat.defaultFormatter)
+  override def toString: String =
+    toString(JSONFormat.defaultFormatter)
 }
 
 /**
