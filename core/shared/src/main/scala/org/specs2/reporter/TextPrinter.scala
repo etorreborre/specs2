@@ -121,17 +121,21 @@ trait TextPrinter extends Printer {
       val text = description.show
       val show = indentText(showTime(statusAndDescription(text, result)(args), timer, args), indentation, indentationSize(args))
 
-      def printResult(desc: String, r: Result) =
+      def printResult(desc: String, r: Result): List[LogLine] =
         r match {
           case err: execute.Error        => printError(desc, err, args)
           case failure: execute.Failure  => printFailure(desc, failure, args)
           case success: execute.Success  => printSuccess(desc, success, args)
           case pending: execute.Pending  => printPending(desc, pending, args)
           case skipped: execute.Skipped  => printSkipped(desc, skipped, args)
+          case DecoratedResult(_, r)     => printResult(desc, r)
           case other                     => printOther(desc, other, args)
         }
 
       result match {
+        // special case for SpecificationRefs
+        case DecoratedResult(t: Stats, r) =>
+          printOther(show, r, args)
         case DecoratedResult(t: DataTable, r) =>
           // display the full table if it is an auto-example
           if (Description.isCode(description))
@@ -286,4 +290,3 @@ trait TextPrinter extends Printer {
 }
 
 object TextPrinter extends TextPrinter
-

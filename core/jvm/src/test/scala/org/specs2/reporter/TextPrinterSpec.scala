@@ -77,6 +77,7 @@ class TextPrinterSpec(val env: Env) extends Specification with OwnEnv { def is =
     as soon as computed, with sequential                      $l2
 
  Datatable must be properly indented                          $m1
+ Nested datatables must be reported                           $m2
 """
   import TextPrinterSpecification._
   val factory = fragmentFactory; import factory._
@@ -303,6 +304,24 @@ table ${
        |[error]__+_|_1_|_1_|______
        |[error]__x_|_1_|_2_|_1_!=_2
        |[error]__+_|_1_|_1_|________"""
+
+  def m2 =
+    s2"""
+table ${
+ "a" | "b" |>
+   1 ! 1   |
+   1 ! 2   |
+   1 ! 1   | { (i, j) =>
+   "c" | "d" |>
+     i ! j   | { (k, l) => k === l }
+   }
+  }""".stripMargin contains
+    """|[error]_x_table
+       |[error]____|_a_|_b_|__________________
+       |[error]__+_|_1_|_1_|__________________
+       |[error]__x_|_1_|_2_|___|_c_|_d_|______
+       |[error]____|___|___|_x_|_1_|_2_|_1_!=_2
+       |[error]__+_|_1_|_1_|___________________"""
 
   /**
    * TEST METHODS
