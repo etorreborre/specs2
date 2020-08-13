@@ -8,14 +8,27 @@ import collection.Seqx._
  *
  * It is expected that the size of the header and all the lines are the same.
  *
- * The main purpose of this class is to display equal-length cells on each column
+ * The main purpose of this class is to:
+ *   - display equal-length cells on each column
+ *   - allow line breaks in cells for each line
  */
 case class TextTable(header: Seq[String], lines: Seq[Seq[String]], separator: String = "|"):
 
   /** show the table with equal-length cells */
   def show =
-    val maxByColumn = maximumsByColumn(Seq(header) ++ lines)
-    formatWithMaxSize(Seq(header) ++ lines, maxByColumn).mkString("\n")
+    val heightFormatted: Seq[Seq[String]] = (header +: lines).flatMap(formatHeight)
+    val maxByColumn = maximumsByColumn(heightFormatted)
+    formatWithMaxSize(heightFormatted, maxByColumn).mkString("\n")
+
+  /**
+   * Format each line cell by splitting them along new lines and adding
+   * padding with additional rows
+   */
+  def formatHeight(line: Seq[String]): Seq[Seq[String]] =
+    val cells = line.map(_.split("\n").toSeq)
+    val maxHeight = cells.map(_.size).max
+    val heightPadded = cells.map(c => c ++ List.fill(maxHeight - c.size)(""))
+    transpose(heightPadded)
 
   /**
    * @return a seq of lines where each cell is right-padded with the maximum size of the column cells
@@ -34,6 +47,6 @@ case class TextTable(header: Seq[String], lines: Seq[Seq[String]], separator: St
     transpose(lines).map(column => column.map(_.length).max)
 
 
-object TextTable {
-  def apply(header: Seq[String], lines: Seq[String]*): TextTable = new TextTable(header, lines)
-}
+object TextTable:
+  def apply(header: Seq[String], lines: Seq[String]*): TextTable =
+    new TextTable(header, lines)
