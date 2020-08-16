@@ -21,10 +21,12 @@ class ScalaCheckMatchersApiSpec extends Specification with ScalaCheck { def is =
     returning a boolean value
     ${ prop { (i: Int) => i > 0 || i <= 0 } }
     using  an implication and a match result
-    ${ prop { (i: Int) => (i > 0) ==> (i must be_>(0)) } }
-    ${ prop { (i: Int, j: Int) => (i > j) ==> (i must be_>(j)) } }
+
+    // propBoolean is used - can be removed when scalacheck 1.15.0 is out
+    ${ prop { (i: Int) => propBoolean(i > 0) ==> (i must be_>(0)) } }
+    ${ prop { (i: Int, j: Int) => propBoolean(i > j) ==> (i must be_>(j)) } }
     using an implication and a boolean value
-    ${ prop { (i:Int) => (i > 0) ==> (i > 0) } }
+    ${ prop { (i:Int) => propBoolean(i > 0) ==> (i > 0) } }
 
  It is possible to specify typeclass instances for Arbitrary, Shrink, Pretty and collect
    Arbitrary
@@ -78,9 +80,9 @@ class ScalaCheckMatchersApiSpec extends Specification with ScalaCheck { def is =
 
  Test parameters can also be specified
    the minimum number of ok tests
-   ${ prop { (i:Int) => (i > 0) ==> (i > 0) }.set(minTestsOk = 50) }
+   ${ prop { (i:Int) => propBoolean(i > 0) ==> (i > 0) }.set(minTestsOk = 50) }
    the verbosity of a property can be turned on and off
-   ${ prop { (i:Int) => (i > 0) ==> (i > 0) }.set(minTestsOk = 50).verbose }
+   ${ prop { (i:Int) => propBoolean(i > 0) ==> (i > 0) }.set(minTestsOk = 50).verbose }
 
   """
 
