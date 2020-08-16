@@ -10,7 +10,6 @@ class TraversableMatchersSpec(val env: Env) extends Spec with ResultMatchers wit
  We can check the elements of a collection by using matchers
    ${ Seq(1, 2, 3) must contain(2) }
    ${ Seq(1, 2, 3) must contain(be_>=(2)) }
-   ${ Seq(1, 2, 3) must not contain(be_>=(4)) }
    ${ Seq(1, 2, 3) must not(contain(be_>=(4))) }
    ${ Seq(1, 2, 3) must contain(be_>=(2)).atLeastOnce }
    ${ Seq(1, 2, 3) must contain(be_>=(2)).exactly(2.times)          }
@@ -137,19 +136,15 @@ class TraversableMatchersSpec(val env: Env) extends Spec with ResultMatchers wit
  We can check the size of an traversable
     ${ Seq() must beEmpty }
     ${ Seq() must be empty }
-    ${ (Seq() must not be empty) must beFailing }
+    ${ (Seq() must not(beEmpty)) must beFailing }
     ${ Seq(1, 2) must haveSize(2) }
     ${ Seq(1, 2) must haveSize(be_>=(1)) }
     ${ Seq(1, 2) must not(haveSize(be_<=(0))) }
-    ${ Seq(1, 2) must have size(2) }
-    ${ Seq(1, 2) must not have size(1) }
     ${ Seq(1, 2) must haveLength(2) }
-    ${ Seq(1, 2) must have length(2) }
-    ${ Seq(1, 2) must not have length(1) }
 
  We can check the size of an Array
-    ${ Array(1, 2) must have size(2) }
-    ${ (Array(1, 2) must have size(1)).message must_== "'Array(1, 2)' doesn't have size 1 but size 2" }
+    ${ Array(1, 2) must haveSize(2) }
+    ${ (Array(1, 2) must haveSize(1)).message must_== "'Array(1, 2)' doesn't have size 1 but size 2" }
 
  Sorting
  =======
@@ -157,9 +152,9 @@ class TraversableMatchersSpec(val env: Env) extends Spec with ResultMatchers wit
  We can check if a sequence is sorted
     ${ Seq(1, 2, 3) must beSorted }
     ${ Seq(1, 2, 3) must be sorted }
-    ${ Seq(2, 1, 3) must not beSorted }
+    ${ Seq(2, 1, 3) must not(beSorted) }
     // this doesn't compile because of 'diverging implicit'
-    //{ Seq(2, 1, 3) must not be sorted }
+    //{ Seq(2, 1, 3) must not(beSorted) }
     ${ (Seq(2, 1, 3) must beSorted) returns "List(2, 1, 3) is not sorted" }
 
  Compare to another traversable

@@ -56,7 +56,7 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
    if the message is null the exception cause must be displayed
    ${ check(exceptionProp("null")) must beError(withMessage("caused by java.lang.Exception: cause")) }
    the stacktrace must be displayed
-   ${ check(exceptionProp()) must beLike { case Error(m, ex) => ex.getStackTrace must not be empty } }
+   ${ check(exceptionProp()) must beLike { case Error(m, ex) => ex.getStackTrace must not(beEmpty) } }
 
  Additional data
 

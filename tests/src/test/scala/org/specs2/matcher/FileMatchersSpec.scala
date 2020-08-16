@@ -34,23 +34,23 @@ class FileMatchersSpec extends Spec with TestFiles with FileMatchers {  def is =
 
    beAnAbsolutePath checks if a path is absolute
    ${ "/tmp" must beAnAbsolutePath }
-   ${ "./tmp" must not be anAbsolutePath }
+   ${ "./tmp" must not(beAnAbsolutePath) }
 
    "beAHiddenPath checks if a path is hidden
    ${ ".tmp" must beAHiddenPath }
-   ${ "/tmp" must not be aHiddenPath }
+   ${ "/tmp" must not(beAHiddenPath) }
 
    beAFilePath checks if a path is a file
    ${ okPath must beAFilePath }
-   ${ dirPath must not be aFilePath }
+   ${ dirPath must not(beAFilePath) }
 
    beADirectorPath checks if a path is a directory
    ${ dirPath must beADirectoryPath }
-   ${ okPath must not be aDirectoryPath }
+   ${ okPath must not(beADirectoryPath) }
 
    havePathName checks if a path has a given name
    ${ okPath must havePathName("file.txt") }
-   ${ okPath must not have pathName("name.txt") }
+   ${ okPath must not(havePathName("name.txt")) }
 
    haveAsAbsolutePath checks if a path has a given absolute path
    ${ okPath must haveAsAbsolutePath(new File(okPath).getAbsolutePath) }
@@ -100,14 +100,14 @@ class FileMatchersSpec extends Spec with TestFiles with FileMatchers {  def is =
 
 case class fs() extends MustMatchers with TestFiles with FileMatchers with StandardResults with Debug {
   def e1 = okPath must beAnExistingPath
-  def e2 = missingPath must not be anExistingPath
+  def e2 = missingPath must not(beAnExistingPath)
   def e3 = setReadable(okPath, true) must beAReadablePath
-  def e4 = setReadable(okPath, false) must not be aReadablePath
+  def e4 = setReadable(okPath, false) must not(beAReadablePath)
   def e5 = setWritable(okPath, true) must beAWritablePath
-  def e6 = setWritable(okPath, false) must not be aWritablePath
+  def e6 = setWritable(okPath, false) must not(beAWritablePath)
   def e7 = dirPath must listPaths("file.txt")
   def e8 = file(okPath) must exist
-  def e9 = file(missingPath) must not exist
+  def e9 = file(missingPath) must not(exist)
   def e10 = file(setReadable(okPath, true)) must beReadable
   def e11 = file(setWritable(okPath, true)) must beWritable
   def e12 = file(dirPath) must haveList("file.txt")

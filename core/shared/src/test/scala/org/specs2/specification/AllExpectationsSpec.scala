@@ -22,11 +22,11 @@ class AllExpectationsSpec(val env: Env) extends Spec with OwnEnv {
     }
     "short-circuit the rest of the example if an expectation fails and uses 'orThrow'" >> {
       executedIssues.map(_.message) must containMatch("51 != 52")
-      executedIssues.map(_.message) must not containMatch("13 != 14")
+      executedIssues.map(_.message) must not(containMatch("13 != 14"))
     }
     "short-circuit the rest of the example if an expectation fails and uses 'orSkip'" >> {
-      executedSuspended.map(_.message) must not containMatch("'51' is not equal to '52'")
-      executedIssues.map(_.message) must not containMatch("'15' is not equal to '16'")
+      executedSuspended.map(_.message) must not(containMatch("'51' is not equal to '52'"))
+      executedIssues.map(_.message) must not(containMatch("'15' is not equal to '16'"))
     }
     "work ok on a specification with selected fragments" >> {
       executedSelected.hasIssues must beTrue

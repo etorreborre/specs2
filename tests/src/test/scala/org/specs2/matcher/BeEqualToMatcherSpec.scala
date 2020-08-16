@@ -8,15 +8,15 @@ class BeEqualToMatcherSpec extends Spec with ResultMatchers with ShouldMatchers 
 
   be_== checks the equality of 2 objects
   ${ "a" must_== "a" }
-  ${ "a" must not be_==(null) }
-  ${ (null: String) must not be_==("a") }
+  ${ "a" must not(be_==(null)) }
+  ${ (null: String) must not(be_==("a")) }
   ${ "a" must_!= "b" }
   ${ "a" should_== "a" }
   ${ "a" should_!= "b" }
   ${ "a" must be_==("a") }
-  ${ "a" must not be_==("b") }
+  ${ "a" must not(be_==("b")) }
   ${ "a" must be_!=("b") }
-  ${ "a" must not be_!=("a") }
+  ${ "a" must not(be_!=("a")) }
   ${ "a" === "a" }
   ${ "a" !== "b" }
 
@@ -29,18 +29,18 @@ class BeEqualToMatcherSpec extends Spec with ResultMatchers with ShouldMatchers 
   ${ "a" must_!== "b" }
   // doesn't compile
   // { "a" ==== 1 }
-  ${ "a" must not be_===("b") }
-  ${ "a" must not be_==("b") }
+  ${ "a" must not(be_===("b")) }
+  ${ "a" must not(be_==("b")) }
   ${ "a" must be_!==("b") }
-  ${ "a" must not be_!==("a") }
+  ${ "a" must not(be_!==("a")) }
 
   Array equality uses deep array comparison, with or without typed equality
   ${ Array(1, 2) must be_==(Array(1, 2)) }
   ${ Array(1, 2) must be_===(Array(1, 2)) }
-  ${ Array(1, 3) must not be_===(Array(1, 2)) }
+  ${ Array(1, 3) must not(be_===(Array(1, 2))) }
   ${ Array(1, 2) must be_===(Array(1, 2)) }
   ${ Array(Array(1, 2)) must be_===(Array(Array(1, 2))) }
-  ${ Array(1, 3) must not be_===(Array(1, 2)) }
+  ${ Array(1, 3) must not(be_===(Array(1, 2))) }
   ${ (Array(1, 3) must be_===(Array(1, 2))) returns
      """Array(1, 3 != 2)""" }
 

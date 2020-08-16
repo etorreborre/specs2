@@ -19,7 +19,7 @@ class TerminationMatchersSpec(val env: Env) extends Specification with Terminati
      if it fails                                                                 $termination4
 
    if the termination fails, the computation is stopped                          $termination5
-   We can write 'action must not terminate'                                      $termination6
+   We can write 'action must not(terminate)'                                     $termination6
 
  We should be able to observe that an action unblocks another
    with a when clause                                                            $termination7
@@ -40,12 +40,12 @@ class TerminationMatchersSpec(val env: Env) extends Specification with Terminati
 
   def termination5 = {
     val out = new StringOutput { }
-    val terminated = (1 to 5).foreach (i => {sleepFor(80 * i.toLong); out.println(i) }) must not terminate(retries=5, sleep=20.millis)
+    val terminated = (1 to 5).foreach (i => {sleepFor(80 * i.toLong); out.println(i) }) must not(terminate(retries=5, sleep=20.millis))
     sleepFor(300) // wait until all the messages are possibly written to out if the action was not terminated
-    terminated and (out.messages must not contain("3"))
+    terminated and (out.messages must not(contain("3")))
   }
 
-  def termination6 = { sleepFor(150) must not terminate }
+  def termination6 = { sleepFor(150) must not(terminate) }
 
   def termination7 = {
     val queue = new ArrayBlockingQueue[Int](1)

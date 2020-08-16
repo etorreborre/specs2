@@ -104,7 +104,7 @@ Custom
   def or1 = "eric" must (beMatching("e.*") or beMatching(".*c"))
   def or2 = "eric" must (beMatching("a.*") or beMatching(".*z")).not
   def or3 = "eric" must (beMatching("e.*") or beMatching({error("boom");".*z"}))
-  def or4 = "eric" must not (beMatching("a.*") or beMatching(".*z"))
+  def or4 = "eric" must not(beMatching("a.*") or beMatching(".*z"))
   def or5 = ("eric" must (beMatching("a.*") or beMatching("z.*"))) returns
             "'eric' doesn't match 'a.*'; 'eric' doesn't match 'z.*'"
 
@@ -117,7 +117,7 @@ Custom
   def or8 = {
     val out = new StringOutput {}
     ("eric" must be matching("e.*")) or { out.println("DON'T"); "torreborre" must be matching(".*tor.*") }
-    out.messages must not contain("DON'T")
+    out.messages must not(contain("DON'T"))
   }
 
   def or9 = ((true === false) or (true === true) or (true === false)) must beSuccessful
@@ -133,7 +133,7 @@ Custom
   def and3 = {
     val out = new StringOutput {}
     ("eric" must be matching("x.*")) and { out.println("DON'T"); "torreborre" must be matching(".*tor.*") }
-    out.messages must not contain("DON'T")
+    out.messages must not(contain("DON'T"))
   }
   def and4 = ((true === true) and (true === false) and (true === true)) must beFailing
 
@@ -158,8 +158,7 @@ Custom
 
   def custom1 = (12 must bePositive) and
           (12 must be positive) and
-          (-12 must not bePositive) and
-          (-12 must not be positive[Int])
+          (-12 must not(bePositive))
 
   // HELPERS
   case class CustomMatcher[T : Numeric]() extends Matcher[T] {

@@ -19,8 +19,6 @@ class StandardMatchResultsSpec extends Specification { def is = s2"""
     ko("this is ko").message     === "this is ko"
 
   def ko2 =
-    ko.toResult must beLike { case f: Failure => f.stackTrace must not beEmpty }
-  
+    ko.toResult must beLike { case f: Failure => f.stackTrace must not(beEmpty) }
+
 }
-
-

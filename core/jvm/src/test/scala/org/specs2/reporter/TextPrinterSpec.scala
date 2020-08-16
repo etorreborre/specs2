@@ -252,11 +252,11 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
       printed must_== printed.sorted
     } and
     "executed is unsorted" ==> {
-      executed must not be_== executed.sorted
+      executed must not(be_==(executed.sorted))
     } and
     "the execution is mixed with the printing" ==> {
       val (l1, l2) = logger.messages.filter(s => s.contains("executed") || s.contains("+")).span(_.contains("executed"))
-      l1.size aka (l1, l2).toString must not be_== l2.size
+      l1.size aka (l1, l2).toString must not(be_==(l2.size))
     }
   }
 
@@ -286,7 +286,7 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
     } and
     "the execution is mixed with the printing" ==> {
       val (l1, l2) = logger.messages.filter(s => s.contains("executed") || s.contains("+")).span(_.contains("executed"))
-      l1.size aka (l1, l2).toString must not be_== l2.size
+      l1.size aka (l1, l2).toString must not(be_==(l2.size))
     }
   }
 
@@ -356,7 +356,7 @@ object TextPrinterSpecification extends MustMatchers with FragmentsDsl {
     }
 
     def doesntContain(contained: String, f: String => String = identity) =
-      not(contains(contained, f))
+      contains(contained, f).not
 
     def contains(contained: String, f: String => String = identity) =
       f(printed) must contain(contained.stripMargin.replace(" ", "_"))

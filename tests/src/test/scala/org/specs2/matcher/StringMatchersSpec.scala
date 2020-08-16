@@ -4,7 +4,7 @@ package matcher
 import java.util.regex.Pattern
 
 class StringMatchersSpec extends Spec with StringMatchers with MustExpectations with TraversableMatchers with AnyMatchers { def is = s2"""
-  
+
   A string can be matched against a pattern using
     beMatching
     ${ "eric" must beMatching("e.*") }
@@ -15,7 +15,7 @@ class StringMatchersSpec extends Spec with StringMatchers with MustExpectations 
 
     "or 'be matching'
     ${ "eric" aka "ETO" must be matching("e.*") }
-    ${ "a" must not be matching("{\"a\":\"b\"}") }
+    ${ "a" must not(beMatching("{\"a\":\"b\"}")) }
 
     find ... withGroups, to check for groups
     ${ "erirec" must find("(e|i).").withGroups("e", "i", "e") }
@@ -25,13 +25,9 @@ class StringMatchersSpec extends Spec with StringMatchers with MustExpectations 
   The length of a string can be checked
     with have length
     ${ "Eric" must haveLength(4) }
-    ${ "Eric" must have length(4) }
-    ${ "Eric" must not have length(3) }
 
     or with haveSize because a String is also an Iterable[Char]
     ${ "Eric" must haveSize(4) }
-    ${ "Eric" must have size(4) }
-    ${ "Eric" must not have size(3) }
 
     or with beEmpty because a String is also an Iterable[Char]
     ${ "" must beEmpty }
@@ -60,17 +56,17 @@ class StringMatchersSpec extends Spec with StringMatchers with MustExpectations 
 
   It is possible to check if one string is contained in another one
   ${ "Eric" must contain("ri") }
-  ${ "Eric" must not contain("ra") }
+  ${ "Eric" must not(contain("ra")) }
 
   It is possible to check if one string starts with another one
   ${ "Eric" must startWith("Er") }
-  ${ "Eric" must not startWith("Eu") }
+  ${ "Eric" must not(startWith("Eu")) }
 
   It is possible to check if one string ends with another one
   ${ "Eric" must endWith("ic") }
-  ${ "Eric" must not endWith("rac") }
+  ${ "Eric" must not(endWith("rac")) }
                                                                                                                         """
-  
+
   def e3 = ("eric".aka must beEqualTo("Xric").ignoreCase) returns "ignoring case"
   def e4 = ("eric".aka must beEqualTo("a eric ").ignoreSpace) returns "ignoring space"
   def e5 = ("eric".aka must beEqualTo("a eric ").trimmed) returns "trimmed"

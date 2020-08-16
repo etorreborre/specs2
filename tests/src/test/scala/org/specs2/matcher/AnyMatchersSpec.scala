@@ -9,15 +9,15 @@ class AnyMatchersSpec extends Specification with ResultMatchers with AnyMatchers
 
   beTheSameAs checks if a value is eq to another one
   ${ aValue must beTheSameAs(aValue) }
-  ${ "a" must not beTheSameAs("b") }
+  ${ "a" must not(beTheSameAs("b")) }
 
   be is an alias for beTheSameAs
   ${ aValue must be(aValue) }
-  ${ "a" must not be("b") }
+  ${ "a" must not(be("b")) }
 
   be_==~ checks the equality of 2 objects, up to an implicit conversion
   ${ 1L must be_==~(1) }
-  ${ 2L must not be_==~(1) }
+  ${ 2L must not(be_==~(1)) }
   ${ (2L must be_==~(1)).message must contain("2 != 1") }
 
   beTrue matches true values
@@ -59,39 +59,38 @@ class AnyMatchersSpec extends Specification with ResultMatchers with AnyMatchers
   beNull matches null values
   ${ (null:String) must beNull }
   ${ (null:String) must be(null) }
-  ${ "" must not beNull }
-  ${ "" must not be null }
+  ${ "" must not(beNull) }
 
   beAsNullAs checks if two values are null at the same time
   ${ (null:String) must beAsNullAs(null) }
-  ${ 1 must not be asNullAs(null) }
-  ${ (null:String) must not be asNullAs(1) }
+  ${ 1 must not(beAsNullAs(null)) }
+  ${ (null:String) must not(beAsNullAs(1)) }
   ${ 1 must be asNullAs(1) }
 
   beOneOf checks if a value is amongst others
   ${ 1 must beOneOf(1, 2, 3) }
-  ${ 4 must not be oneOf(1, 2, 3) }
+  ${ 4 must not(beOneOf(1, 2, 3)) }
 
   haveClass checks if a value has a given class as its type
   ${ (1: java.lang.Integer) must haveClass[java.lang.Integer] }
-  ${ BigInt(1) must not have klass[String] }
+  ${ BigInt(1) must not(haveClass[String]) }
 
   haveSuperclass checks if a value has a given class as one of its ancestors
   ${ new BufferedInputStream(null) must haveSuperclass[InputStream] }
-  ${ BigInt(1) must not have superClass[String] }
+  ${ BigInt(1) must not(haveSuperclass[String]) }
 
   haveInterface checks if a value has a given interface in the list of its interfaces
   ${ AsResult(new java.util.ArrayList() must haveInterface[java.util.List[_]]) }
-  ${ AsResult(BigInt(1) must not have interface[java.util.List[_]]) }
+  ${ AsResult(BigInt(1) must not(haveInterface[java.util.List[_]])) }
 
   beAssignableFrom checks if a class is assignable from another
   ${ classOf[OutputStream] must beAssignableFrom[FileOutputStream] }
 
   beAnInstanceOf checks if an object is an instance of a given type
   ${ type1 must beAnInstanceOf[Type1] }
-  ${ type1 must not be anInstanceOf[Type2] }
+  ${ type1 must not(beAnInstanceOf[Type2]) }
   ${ (type1 must beAnInstanceOf[Type2]).message must_== s"'type1: ${type1.getClass.getName}' is not an instance of 'org.specs2.matcher.Type2'" }
-  
+
 Implicits
 =========
 

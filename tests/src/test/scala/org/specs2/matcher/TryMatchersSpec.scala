@@ -19,16 +19,16 @@ class TryMatchersSpec extends Spec with TryMatchers with ResultMatchers { def is
 
   ${ Succeeded(1) must beASuccessfulTry[Int].like { case a if a > 0 => ok } }
   ${ (Succeeded(1) must not(beASuccessfulTry[Int].like { case a => a must be_>=(0) })) returns "Success(1) is a Success and 1 is not less than 0" }
-  ${ Succeeded(1) must not be aSuccessfulTry.withValue(2) }
-  ${ Failed[I](e) must not be successfulTry }
-  ${ Failed[I](e) must not be successfulTry.withValue(2) }
+  ${ Succeeded(1) must not(beASuccessfulTry.withValue(2)) }
+  ${ Failed[I](e) must not(beASuccessfulTry) }
+  ${ Failed[I](e) must not(beASuccessfulTry.withValue(2)) }
   ${ (Failed[I](e) must beSuccessfulTry) returns "Failure(boom) is not a Success" }
   ${ (Succeeded(1) must beSuccessfulTry.withValue(2)) returns "Success(1) is a Success but 1 != 2" }
 
   beAFailure checks if an element is Failure(_)
   ${ Failed[I](e) must beFailedTry(e) }
   ${ Failed[I](e) must beFailedTry }
-  ${ Succeeded(1) must not be failedTry }
+  ${ Succeeded(1) must not(beAFailedTry) }
   ${ (Succeeded(1) must be failedTry) returns "Success(1) is not a Failure" }
   ${ Failed[I](e) must be aFailedTry }
   ${ Failed[I](e) must beFailedTry.withThrowable[MyException] }
@@ -37,9 +37,9 @@ class TryMatchersSpec extends Spec with TryMatchers with ResultMatchers { def is
      s"Failure(boom) is a Failure but '$e: ${classOf[MyException].getName}' is not an instance of '${classOf[OtherException].getName}'" }
   ${ Failed[I](e) must beAFailedTry.withThrowable[MyException](".*oo.*") }
   ${ Failed[I](e) must beFailedTry.like { case e: MyException => e.getMessage must startWith("b") }}
-  ${ Failed[I](e) must not be aFailedTry.withThrowable[MyException]("bang") }
+  ${ Failed[I](e) must not(beAFailedTry.withThrowable[MyException]("bang")) }
   ${ (Failed[I](e) must beAFailedTry.withThrowable[MyException]("bang")) returns "Failure(boom) is a Failure but 'boom' doesn't match 'bang'" }
-  ${ Failed[I](e) must not be aFailedTry.withThrowable[OtherException] }
+  ${ Failed[I](e) must not(beAFailedTry.withThrowable[OtherException]) }
 
   """
 

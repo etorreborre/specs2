@@ -15,7 +15,7 @@ import org.specs2.fp.syntax._
 trait ContentMatchers extends LinesContentMatchers with FilesContentMatchers
 object ContentMatchers extends ContentMatchers
 
-trait LinesContentMatchers extends LinesContentBaseMatchers with LinesContentBeHaveMatchers
+trait LinesContentMatchers extends LinesContentBaseMatchers
 object LinesContentMatchers extends LinesContentMatchers
 
 private[specs2]
@@ -116,21 +116,5 @@ trait SeqsContents {
   // default implementation for reading seq lines
   implicit protected def seqContentForMatchers[T, CC[_] <: Traversable[_]]: LinesContent[CC[T]] =
     SeqLinesContent[T, CC]()
-
-}
-
-private[specs2]
-trait LinesContentBeHaveMatchers extends BeHaveMatchers { this: LinesContentBaseMatchers =>
-  /**
-   * matcher aliases and implicits to use with BeVerb and HaveVerb
-   */
-  implicit def toLinesContentResultMatcher[L1 : LinesContent](result: MatchResult[L1]): LinesContentResultMatcher[L1] =
-    new LinesContentResultMatcher(result)
-
-  class LinesContentResultMatcher[L1 : LinesContent](result: MatchResult[L1]) {
-    def sameLinesAs[L2: LinesContent](ls2: L2) = result(haveSameLinesAs[L1, L2](ls2))
-  }
-
-  def sameLinesAs[L1 : LinesContent, L2 : LinesContent](ls2: L2) = haveSameLinesAs[L1, L2](ls2)
 
 }

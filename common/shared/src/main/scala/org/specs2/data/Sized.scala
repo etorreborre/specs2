@@ -13,9 +13,9 @@ trait Sized[T] {
 }
 
 object Sized extends SizedLowPriority1 {
-  /** a regular string has a size, without having to be converted to an Traversable */
-  implicit def stringIsSized: Sized[String] = new Sized[String] {
-    def size(t: String) = t.length
+    /** any scala collection has a size */
+  implicit def scalaTraversableIsSized[I <: Traversable[_]]: Sized[I] = new Sized[I] {
+    def size(t: I) = t.size
   }
 }
 
@@ -33,8 +33,9 @@ trait SizedLowPriority1 extends SizedLowPriority2 {
 
 trait SizedLowPriority2 {
 
-  /** any scala collection has a size */
-  implicit def scalaTraversableIsSized[I <: Traversable[_]]: Sized[I] = new Sized[I] {
-    def size(t: I) = t.size
+  /** a regular string has a size, without having to be converted to an Traversable */
+  implicit def stringIsSized: Sized[String] = new Sized[String] {
+    def size(t: String) = t.length
   }
+
 }

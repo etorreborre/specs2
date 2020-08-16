@@ -42,7 +42,7 @@ class ReporterSpec(val env: Env) extends Specification with ThrownExpectations w
     val logger = stringPrinterLogger
     reported(ownEnv.setArguments(Arguments.split("ex ex3")).setPrinterLogger(logger))
     logger.messages.mkString("\n") must contain("ex3")
-    logger.messages.mkString("\n") must not contain("ex1")
+    logger.messages.mkString("\n") must not(contain("ex1"))
   }
 
   def a2 = {
