@@ -9,7 +9,6 @@ package matcher
 private[specs2]
 trait BeHaveMatchers {
   def be: NeutralMatcher[Any] = new NeutralMatcher[Any]
-  def have: NeutralMatcher[Any] = be
   def not: NotMatcher[Any] = new NotMatcher[Any]
 }
 /**
