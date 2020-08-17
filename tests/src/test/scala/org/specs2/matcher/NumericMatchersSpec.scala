@@ -10,7 +10,7 @@ types and more generally with Ordered types.
   ${ 1 must be_<=(2) }
   ${ 2 must be <=(2) }
   ${ 1 must beLessThanOrEqualTo(2) }
-  ${ 2 must not beLessThanOrEqualTo(1) }
+  ${ 2 must not(beLessThanOrEqualTo(1)) }
   ${ 2 must not(be <=(1)) }
   ${ 2 must not(be_<=(1)) }
   ${ 1 must be lessThanOrEqualTo(2) }

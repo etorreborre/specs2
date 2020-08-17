@@ -88,7 +88,7 @@ class ScalaCheckMatchersApiSpec extends Specification with ScalaCheck { def is =
 
   val positiveInts = Arbitrary(Gen.choose(1, 5))
 
-  val shrinkInts = Shrink[Int](x => Stream.empty)
+  val shrinkInts = Shrink.shrinkAny[Int]
 
   val prettyInts = (i: Int) => Pretty(_ => i.toString)
   val prettyStrings = (s: String) => Pretty(_ => s)

@@ -3,6 +3,7 @@ package reporter
 
 import fp.syntax._
 import io._
+import FileName._
 import main.Arguments
 import specification.core.{OwnEnv, Env, SpecificationStructure}
 import matcher._

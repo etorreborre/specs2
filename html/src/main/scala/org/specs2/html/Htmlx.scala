@@ -8,6 +8,7 @@ import org.specs2.fp._, Tree._
 import xml.Nodex._
 import java.net.URLDecoder
 import data.UniqueNames
+import matcher.describe._
 
 /**
  * This trait provide additional methods on a NodeSeq or a Node representing an html document
@@ -164,6 +165,9 @@ trait Htmlx { outer =>
     }
     (ns \\ "a").flatMap(a => a.attribute("href").map(href => decode(href.mkString))).toList
   }
+
+  implicit def nodeSeqDiffable: Diffable[NodeSeq] =
+    new FallbackDiffable[NodeSeq]
 
 }
 

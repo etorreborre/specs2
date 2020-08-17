@@ -116,24 +116,24 @@ Messages
   }
 
   def convert3 = {
-    def beEven: Matcher[Int] = (i: Int) => (i % 2 == 0, "is even", "'"+i+"' is odd")
+    def beEven: Matcher[Int] = (i: Int) => (i % 2 == 0, "is even", "'"+i.toString+"' is odd")
     (3 must beEven) returns "'3' is odd"
   }
 
   def convert4 = {
-    def beEven: Matcher[Int] = (i: Int) => (i % 2 == 0, "'"+i+"' is odd")
+    def beEven: Matcher[Int] = (i: Int) => (i % 2 == 0, "'"+i.toString+"' is odd")
     (3 must beEven) returns "'3' is odd"
     (2 must beEven) returns "'2' is not odd"
   }
 
   def convert5 = {
-    def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i+" is odd")
+    def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i.toString+" is odd")
     (3 must beEven) returns "3 is odd"
     (2 must beEven) returns "2 is not odd"
   }
 
   def convert6 = {
-    def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i+" is even", (i: Int) => i+" is odd")
+    def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i.toString+" is even", (i: Int) => i.toString+" is odd")
     (3 must beEven) returns "3 is odd"
   }
 
@@ -141,7 +141,7 @@ Messages
     (1 must be_==("1").mute) returns ""
 
   def convert8 = {
-    def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i+" is even", (i: Int) => i+" is odd")
+    def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i.toString+" is even", (i: Int) => i.toString+" is odd")
     def beOdd: Matcher[Int] = (i: Int) => beEven.apply(theValue(i)).not
     (2 must beOdd) returns "2 is even"
   }
@@ -157,17 +157,17 @@ Messages
   }
 
   def collection1 = {
-    def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i+" is even", (i: Int) => i+" is odd")
+    def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i.toString+" is even", (i: Int) => i.toString+" is odd")
     ((i: Int) => beEven).forall(Seq(1, 2, 3)) returns "1 is odd"
   }
 
   def collection2 = {
-    def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i+" is even", (i: Int) => i+" is odd")
+    def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i.toString+" is even", (i: Int) => i.toString+" is odd")
     ((i: Int) => beEven).foreach(Seq(1, 2, 3)) returns "There are 2 failures\n1 is odd\n3 is odd\n"
   }
 
   def messages1 = {
-    def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i+" is even", (i: Int) => i+" is odd")
+    def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i.toString+" is even", (i: Int) => i.toString+" is odd")
     (3 must beEven.setMessage("is not even")).message === "is not even"
   }
 

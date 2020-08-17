@@ -148,7 +148,7 @@ A form can be added to another
 
    def execution5 = Form.tr(prop("a")("b")).
      tr(prop("a")("a")).
-     tr(prop("c")("d")).executeForm.rows.filter(_.execute.isFailure) must have size(2)
+     tr(prop("c")("d")).executeForm.rows.filter(_.execute.isFailure) must haveSize(2)
 
    def methods1 = Row.tr(TextCell("a")) must_== Row.tr(TextCell("a"))
    def methods2 = TextCell("a") must_== TextCell("a")

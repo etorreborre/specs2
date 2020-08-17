@@ -21,6 +21,12 @@ object IsEmpty extends IsEmptyLowPriority1 {
       def isEmpty(t: Seq[T]): Boolean =
         t.isEmpty
     }
+
+  implicit def arrayIsEmpty[T]: IsEmpty[Array[T]] =
+    new IsEmpty[Array[T]] {
+      def isEmpty(t: Array[T]): Boolean =
+        t.isEmpty
+    }
 }
 
 trait IsEmptyLowPriority1 extends IsEmptyLowPriority2 {

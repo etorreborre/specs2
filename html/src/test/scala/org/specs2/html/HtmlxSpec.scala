@@ -3,6 +3,7 @@ package html
 
 import Htmlx._
 import matcher._
+import scala.xml._
 
 class HtmlxSpec extends Spec with HtmlDocuments with TypedEqual { def is = s2"""
 
@@ -15,7 +16,7 @@ class HtmlxSpec extends Spec with HtmlDocuments with TypedEqual { def is = s2"""
   ${ <h2>hello</h2>.addHeadersAnchors.toString must beMatching("<a name=\"hello\"><h2>hello</h2></a>") }
 
   the headers methods
-    collects all headers of a document  $headers1
+    collects all headers of a document $headers1
 
   nodeText extracts the text from a Node
   ${ nodeText(<h2>Hello</h2>) must_== "Hello"}
@@ -46,7 +47,9 @@ class HtmlxSpec extends Spec with HtmlDocuments with TypedEqual { def is = s2"""
        .|
        .`- a h2 header""".stripMargin('.').replace("\r", "")
 
-  def headers1 = headers(<body><h1>title1</h1>Some text <h2>title2</h2>Some other text</body>).toList must_=== List(<h1>title1</h1>, <h2>title2</h2>)
+  def headers1 = {
+    headers(<body><h1>title1</h1>Some text <h2>title2</h2>Some other text</body>).toList must_=== List(<h1>title1</h1>, <h2>title2</h2>)
+  }
 
   def anchors1 = {
     val body = <body><h1>Welcome</h1><h2>hello</h2></body>

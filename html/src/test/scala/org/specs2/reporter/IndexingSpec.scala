@@ -3,6 +3,7 @@ package reporter
 
 import fp.syntax._
 import io._
+import FileName._
 import matcher.OperationMatchers._
 import html._
 import Indexing._
