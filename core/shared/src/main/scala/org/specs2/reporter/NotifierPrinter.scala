@@ -68,7 +68,7 @@ case class NotifierPrinter(commandLineArguments: Arguments) {
 
   def printFragment(n: Notifier, f: Fragment, notified: Notified, args: Arguments): Action[Unit] =
     f.executedResult.map { er =>
-        val location = f.location.map(_.show).getOrElse("no location")
+        val location = f.location.show
 
         if (!notified.hide) {
           if (notified.start) n.contextStart(notified.context.trim, location)
@@ -82,7 +82,7 @@ case class NotifierPrinter(commandLineArguments: Arguments) {
 
   private def notifyExample(n: Notifier, f: Fragment, executedResult: ExecutedResult, args: Arguments) = {
     val description = f.description.show.trim
-    val location = f.location.map(_.show).getOrElse("no location")
+    val location = f.location.show
 
     n.exampleStarted(description, location)
 
@@ -112,7 +112,7 @@ case class NotifierPrinter(commandLineArguments: Arguments) {
 
   private def notifyStep(n: Notifier, f: Fragment, executedResult: ExecutedResult, args: Arguments) = {
     try {
-      val location = f.location.map(_.show).getOrElse("no location")
+      val location = f.location.show
       n.stepStarted(location)
 
       def notifyResult(result: Result, timer: SimpleTimer): Unit =
@@ -134,7 +134,7 @@ case class NotifierPrinter(commandLineArguments: Arguments) {
 
   def notifyText(n: Notifier, f: Fragment, args: Arguments) = {
     val description = f.description.show.trim
-    val location = f.location.map(_.show).getOrElse("no location")
+    val location = f.location.show
 
     n.text(description, location)
   }

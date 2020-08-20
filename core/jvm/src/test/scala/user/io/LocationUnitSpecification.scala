@@ -24,20 +24,3 @@ class LocationUnitSpecification(ee: ExecutionEnv) extends Specification with Wit
   def fragmentsList: List[Fragment] =
     is.fragmentsList(ee)
 }
-
-class LocationUnitSpecificationSpec(ee: ExecutionEnv) extends Specification with WithFragments {
-  "this block" should {
-    "have one example" in ok
-    "have another example" in ko
-  }
-
-  "this other block should" >> {
-    "have one ok example" >>
-      ok
-    "have one ko example" >>
-      ko
-  }
-
-  def fragmentsList: List[Fragment] =
-    is.fragmentsList(ee)
-}

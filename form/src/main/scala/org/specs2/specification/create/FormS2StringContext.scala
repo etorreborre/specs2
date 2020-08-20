@@ -16,7 +16,7 @@ trait FormS2StringContext extends S2StringContext { this: FormFragmentsFactory =
   import formFactory._
 
   implicit def formIsInterpolated(f: =>Form): Interpolated = new Interpolated {
-    override def append(text: String): Fragments = {
+    override def prepend(text: String): Fragments = {
       val formFragment = FormFragment(f.executeForm)
 
       Fragments(fragmentFactory.text(text)).append(formFragment.updateDescription {

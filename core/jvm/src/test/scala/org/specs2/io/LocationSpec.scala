@@ -11,52 +11,52 @@ import org.specs2.concurrent.ExecutionEnv
 class LocationSpec extends org.specs2.mutable.Spec with TypedEqual {
   implicit lazy val ee: ExecutionEnv = Env().executionEnv
 
-  "A unit specification must have correct locations for its fragments" >> {
-    implicit def spec: LocationUnitSpecification = new LocationUnitSpecification(ee)
+    "A unit specification must have correct locations for its fragments" >> {
+      implicit def spec: LocationUnitSpecification = new LocationUnitSpecification(ee)
 
-    "for the first piece of text, with 'should'" >> {
-      textAt(index = 0)(spec) === Some(12)
+      "for the first piece of text, with 'should'" >> {
+        textAt(index = 0)(spec) ==== 15
+      }
+      "for the first example, with 'in'" >> {
+        exampleAt(index = 0) ==== 13
+      }
+      "for the second example, with 'in'" >> {
+        exampleAt(index = 1) ==== 14
+      }
+      "for the second piece of text, with '>>'" >> {
+        textAt(index = 1) ==== 22
+      }
+      "for the 3rd example, with '>>'" >> {
+        exampleAt(index = 2) ==== 19
+      }
+      "for the 4th example, with '>>'" >> {
+        exampleAt(index = 3) ==== 21
+      }
     }
-    "for the first example, with 'in'" >> {
-      exampleAt(index = 0) === Some(13)
-    }
-    "for the second example, with 'in'" >> {
-      exampleAt(index = 1) === Some(14)
-    }
-    "for the second piece of text, with '>>'" >> {
-      textAt(index = 1) === Some(17)
-    }
-    "for the 3rd example, with '>>'" >> {
-      exampleAt(index = 2) === Some(18)
-    }
-    "for the 4th example, with '>>'" >> {
-      exampleAt(index = 3) === Some(20)
-    }
-  }
 
   "An acceptance specification must have correct locations for its fragments" >> {
     implicit def spec: LocationSpecification = new LocationSpecification(ee)
 
     "for the first piece of text, 'presentation''" >> {
-      textAt(index = 0) === Some(7)
+      textAt(index = 0) ==== 7
     }
     "for the second piece of text, with 'should'" >> {
-      textAt(index = 1) === Some(10)
+      textAt(index = 1) ==== 10
     }
     "for the first example" >> {
-      exampleAt(index = 0) === Some(10)
+      exampleAt(index = 0) ==== 10
     }
     "for the second example" >> {
-      exampleAt(index = 1) === Some(11)
+      exampleAt(index = 1) ==== 11
     }
     "for the third piece of text" >> {
-      textAt(index = 2) === Some(11)
+      textAt(index = 2) ==== 11
     }
     "for the 3rd example" >> {
-      exampleAt(index = 2) === Some(14)
+      exampleAt(index = 2) ==== 14
     }
     "for the 4th example" >> {
-      exampleAt(index = 3) === Some(15)
+      exampleAt(index = 3) ==== 15
     }
   }
 
@@ -74,7 +74,7 @@ class LocationSpec extends org.specs2.mutable.Spec with TypedEqual {
 
     val fragmentLocation = fragments(spec).filter(selector).apply(index).location
 
-    fragmentLocation.map(_.lineNumber).getOrElse(0)
+    fragmentLocation.lineNumber
   }
 
   def fragments(implicit spec: WithFragments): List[Fragment] =

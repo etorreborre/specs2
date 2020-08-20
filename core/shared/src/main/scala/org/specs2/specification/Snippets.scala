@@ -39,7 +39,7 @@ object Snippets {
          private val start = PositionLocation(${Expr(rootPosition.sourceFile.jpath.toString)}, ${Expr(rootPosition.startLine)}, ${Expr(rootPosition.startColumn)})
          private val end = PositionLocation(${Expr(rootPosition.sourceFile.jpath.toString)}, ${Expr(rootPosition.endLine)}, ${Expr(rootPosition.endColumn)})
 
-         def append(text: String): Fragments =
+         def prepend(text: String): Fragments =
            Fragments(factory.text(text).setLocation(start)).append(snippetFragments(snippet, end, expression))
 
          def snippetFragments(snippet: Snippet[$t], location: Location, expression: String): Fragments = {

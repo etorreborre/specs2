@@ -29,7 +29,7 @@ object Scripts {
   def createInterpolatedFragment(script: Expr[Script], factory: Expr[FragmentFactory])(using qctx: QuoteContext): Expr[Interpolated] = {
     '{
       new Interpolated {
-        def append(text: String): Fragments = {
+        def prepend(text: String): Fragments = {
           if ($script.isStart)
             Fragments(${factory}.section(${script}.title)).append(${factory}.text(text))
           else

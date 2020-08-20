@@ -12,8 +12,13 @@ import scala.concurrent.duration.FiniteDuration
  *
  * It has a description (generally text but sometimes not, for a step for example)
  * It has an execution which might do or don't do anything (for examples it runs some code)
+ *
+ * By default its location is provided by a stacktrace containing the user file with line number
+ * which triggered this fragment creation. The location is however provided by a macro in the case
+ * of s2 interpolated strings
+ *
  */
-case class Fragment(description: Description, execution: Execution, location: Option[Location] = None) {
+case class Fragment(description: Description, execution: Execution, location: Location = StacktraceLocation()) {
 
   /** @return the result of this fragment and its execution time */
   def executedResult: Action[ExecutedResult] =
@@ -77,15 +82,10 @@ case class Fragment(description: Description, execution: Execution, location: Op
   def setPreviousResult(r: Option[Result]) = copy(execution = execution.setPreviousResult(r))
   def was(statusCheck: String => Boolean) = execution.was(statusCheck)
 
-  def setLocation(location: Location) = copy(location = Some(location))
+  def setLocation(location: Location) = copy(location = location)
 
-  override def toString = {
-    val fragmentLocation = location match {
-      case Some(l) => s" ($l)"
-      case None => ""
-    }
-    s"Fragment($description, $execution)$fragmentLocation"
-  }
+  override def toString =
+    s"Fragment($description, $execution) ($location)"
 }
 
 object Fragment {

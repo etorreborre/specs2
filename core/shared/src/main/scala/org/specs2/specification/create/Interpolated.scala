@@ -8,9 +8,9 @@ import org.specs2.specification.core._
  * It takes the current piece of text preceding it to create Fragments
  * to be appended to the already created Fragments
  *
- * For example if the interpolated element is a String and the last created fragment is a Text,
- * then we can modify that fragment to append the `text`
+ * For example if the interpolated element is an execution then prepend will take the text
+ * to create an Example
  */
 trait Interpolated {
-  def append(text: String): Fragments
+  def prepend(text: String): Fragments
 }
