@@ -52,7 +52,6 @@ class FutureMatchersSpec extends Specification with ResultMatchers with specific
 
  In a mutable spec with a negated matcher $e1
  In a mutable spec with a negated matcher - and a timeout $e2
- In a mutable spec with a scope $e3
 
  A Future should be retried the specified number of times in case of a timeout $e4
  A Future should not be called more than the expected number of times $e5
@@ -70,19 +69,6 @@ class FutureMatchersSpec extends Specification with ResultMatchers with specific
       def result = Future { Thread.sleep(2000); 10} must beGreaterThan(100).awaitFor(1 second)
     }
     Spec1().result must throwA[FailureException]
-  }
-
-  def e3 = {
-    case class Spec1() extends mutable.Specification with FutureMatchers {
-      "timeout ko" in {
-        Future {
-          try sleep(100) catch { case _: InterruptedException => () }
-          1 must_== 2
-        }.awaitFor(50.millis)
-      }
-    }
-
-    ClassRunner.createClassRunner(env).toAction.flatMap(_.run(Spec1()   )).runOption(env.specs2ExecutionEnv).get.failures === 1
   }
 
   def e4 = {
