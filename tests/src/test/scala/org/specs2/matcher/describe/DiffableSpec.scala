@@ -111,11 +111,6 @@ Compare result
   Comparing failure with success will return type difference    ${ Diffable.diff(Try("abc"), Failure[String](ex2)) must_=== TryTypeDifferent(isActualSuccess = true) }
   todo: handle non explicit types for Failure !!!
 
-  Case Classes
-  ============
-
-  Allow using custom Diffable for case class fields $ccFieldDiffable
-
 """
 
   sealed case class ExampleFailure(message: String, stacktrace: List[StackTraceElement] = Nil) extends RuntimeException(message) {
@@ -141,19 +136,6 @@ Compare result
 
   def seqDiffable[T : Diffable]: SeqDiffable[T] =
     new SeqDiffable[T]
-
-  def ccFieldDiffable = {
-    case class A(value: Int)
-    case class B(name: String, value: List[A])
-    implicit val diffableA: Diffable[A] = new Diffable[A] {
-      def diff(actual: A, expected: A): ComparisonResult = CaseClassIdentical("A")
-    }
-    diffableA == diffableA
-    val name = "name"
-    val b1 = B(name, List(A(5)))
-    val b2 = B(name, List(A(6)))
-    Diffable.diff(b1, b2) must_== CaseClassIdentical("B")
-  }
 }
 
 

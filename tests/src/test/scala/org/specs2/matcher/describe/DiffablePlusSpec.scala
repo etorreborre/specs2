@@ -7,12 +7,6 @@ import scala.util.Failure
 /** special cases which can not be executed with scala 2.10 */
 class DiffablePlusSpec extends Spec { def is = s2"""
 
-  Case classes
-  ============
-    case classes without any members will return CaseClassIdentical ${ Diffable.diff(EmptyCaseClass(), EmptyCaseClass()) must_== CaseClassIdentical("EmptyCaseClass") }
-    two identical case classes will return CaseClassIdentical       ${ Diffable.diff(Goo("a", "b"), Goo("a", "b")) must_== CaseClassIdentical("Goo") }
-    two different case classes will return CaseClassDifferent       ${ Diffable.diff(Goo(c = "a", d = "b"), Goo(c = "x", d = "b")) must_== CaseClassDifferent("Goo", Seq(CaseClassPropertyComparison("c", PrimitiveDifference("a", "x"), identical = false), CaseClassPropertyComparison("d", PrimitiveIdentical("b"), identical = true))) }
-
   Scala Objects: Either
   =====================
 

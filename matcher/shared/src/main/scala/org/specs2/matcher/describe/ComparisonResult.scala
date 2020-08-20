@@ -184,28 +184,6 @@ case class OptionTypeDifferent(isActualSome: Boolean, isExpectedSome: Boolean) e
   private def render(some: Boolean) = if (some) "Some(...)" else "None"
 }
 
-
-case class CaseClassPropertyComparison(fieldName: String, result: ComparisonResult, identical: Boolean)
-
-case class CaseClassIdentical(className: String) extends IdenticalComparisonResult {
-  val render: String =
-    "...".wrapWith(className)
-}
-
-case class CaseClassDifferent(className: String,
-                              result:    Seq[CaseClassPropertyComparison])
-  extends UnorderedCollectionDifferent(result.filter(_.identical), result.filterNot(_.identical), Seq.empty, Seq.empty) {
-
-  protected def renderElement(indent: String)(element: CaseClassPropertyComparison): String =
-    renderProperty(indent)(element)
-
-  protected def renderChange(indent: String)(change: CaseClassPropertyComparison): String =
-    renderProperty(indent)(change)
-
-  private def renderProperty(indent: String)(r: CaseClassPropertyComparison): String =
-    r.result.render(indent + " " * (r.fieldName.length + 2)).tagWith(r.fieldName)
-}
-
 case class OtherIdentical(actual: Any) extends IdenticalComparisonResult {
   def render: String =
     actual.render

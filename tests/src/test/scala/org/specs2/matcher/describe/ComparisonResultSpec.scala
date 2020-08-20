@@ -37,7 +37,6 @@ class ComparisonResultSpec extends Spec { def is = s2"""
   different array should print removed values with prefix removed: b                      $arr5
   print order should be Array(identical, added: added, removed: removed)                  $arr6
 
-
   Set render:
   ===========
 
@@ -87,7 +86,6 @@ class ComparisonResultSpec extends Spec { def is = s2"""
   different throwable with different message    $th2
   different throwable with different stacktrace $th3
 
-
   Try render:
   ===========
 
@@ -97,13 +95,6 @@ class ComparisonResultSpec extends Spec { def is = s2"""
   different failure will return Failure(...)                              ${ TryDifferent(PrimitiveDifference(1, 2), isSuccess = false).render must_=== "Failure(1 != 2)" }
   different success failure type will be Success(...) ==> Failure(...)    ${ TryTypeDifferent(isActualSuccess = true).render must_=== "Success(...) ==> Failure(...)" }
   different failure success type will be Success(...) ==> Failure(...)    ${ TryTypeDifferent(isActualSuccess = false).render must_=== "Failure(...) ==> Success(...)" }
-
-
-  Case Class Render:
-  ==================
-
-  Identical will show the class name SomeClass(...)                   $c1
-  Different will show the class name and list of changes in order     $c2
 
   Other Render:
   =============
@@ -174,11 +165,6 @@ class ComparisonResultSpec extends Spec { def is = s2"""
                                added   = Seq("d", "e"),
                                removed = Seq("f")).render must_== "Array('a', 'b' != 'c',\n      added: 'd', 'e',\n      removed: 'f')" }
 
-
-  def c1 = { CaseClassIdentical("ClassName").render must_=== "ClassName(...)" }
-  def c2 = { CaseClassDifferent("ClassName", Seq(CaseClassPropertyComparison("prop2", PrimitiveIdentical("val"), identical = true),
-                                                 CaseClassPropertyComparison("prop", PrimitiveDifference("val1", "val2"), identical = false))).render must_=== "ClassName(prop2: 'val',\n          prop: 'val1' != 'val2')" }
-
   def se1 = { StackElementIdentical(stackTraceElement).render must_=== stackTraceElement.toString }
   def se2 = { StackElementDifferent(PrimitiveDifference("class", "class1"),
                                     PrimitiveDifference("method", "method1"),
@@ -196,7 +182,7 @@ class ComparisonResultSpec extends Spec { def is = s2"""
                      |
                      |- m1
                      |+ m2""".stripMargin }
-                  
+
   def ot1 = { OtherIdentical(5).render must_=== "5" }
   def ot2 = { OtherDifferent(5, "5").render must_=== "5 != '5'" }
   def ot3 = { OtherDifferent(Hello(), "hello").render must_=== "hello: org.specs2.matcher.Hello != hello: java.lang.String" }
