@@ -85,7 +85,7 @@ case class Fragment(description: Description, execution: Execution, location: Lo
   def setLocation(location: Location) = copy(location = location)
 
   override def toString =
-    s"Fragment($description, $execution) ($location)"
+    s"Fragment($description, $execution) (${location.path}/${location.lineNumber}:${location.columnNumber}})"
 }
 
 object Fragment {

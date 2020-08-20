@@ -167,7 +167,7 @@ trait Htmlx { outer =>
   }
 
   implicit def nodeSeqDiffable: Diffable[NodeSeq] =
-      nnew FallbackDiffable[NodeSeq]
+      new FallbackDiffable[NodeSeq]
 
 }
 
