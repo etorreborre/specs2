@@ -17,54 +17,54 @@ The JUnitXmlPrinter allows to execute specifications and output xml files in a t
 is formatted for JUnit reporting tools.
 
  The output directory
-   is target/test-reports by default                                                                                    ${outputDir.e1}
-   can be changed to a user defined directory with -Dspecs2.junit.outputDir                                             ${outputDir.e1}
+   is target/test-reports by default                                         ${outputDir.e1}
+   can be changed to a user defined directory with -Dspecs2.junit.outputDir  ${outputDir.e1}
 
  The xml file
-   must have a xml header                                                                                               $header
+   must have a xml header                                                    $header
    must have an outer <testsuite> tag with
-     the hostname of the executing machine                                                                              ${suite.e1}
-     the name of the suite                                                                                              ${suite.e2}
-     the number of tests                                                                                                ${suite.e3}
-     the number of errors                                                                                               ${suite.e4}
-     the number of failures                                                                                             ${suite.e5}
-     the number of skipped                                                                                              ${suite.e6}
-     the total time (in seconds)                                                                                        ${suite.e7}
+     the hostname of the executing machine                                   ${suite.e1}
+     the name of the suite                                                   ${suite.e2}
+     the number of tests                                                     ${suite.e3}
+     the number of errors                                                    ${suite.e4}
+     the number of failures                                                  ${suite.e5}
+     the number of skipped                                                   ${suite.e6}
+     the total time (in seconds)                                             ${suite.e7}
 
-   must have a <system-out> tag                                                                                         ${suite.e8}
-   must have a <system-err> tag                                                                                         ${suite.e9}
+   must have a <system-out> tag                                              ${suite.e8}
+   must have a <system-err> tag                                              ${suite.e9}
 
   Inside the <testsuite> there is
-    a <properties> tag for all system properties                                                                        ${suite.e10}
+    a <properties> tag for all system properties                             ${suite.e10}
     a <testcase> tag with
-      the class name                                                                                                    ${test.e1}
-      the test name                                                                                                     ${test.e2}
-      the test duration                                                                                                 ${test.e3}
+      the class name                                                         ${test.e1}
+      the test name                                                          ${test.e2}
+      the test duration                                                      ${test.e3}
 
   Inside the <testcase> tag there is
-    the error message                                                                                                   ${message.e1}
-    the error type                                                                                                      ${message.e2}
-    the error trace                                                                                                     ${message.e3}
-    the failure message                                                                                                 ${message.e4}
-    the failure type                                                                                                    ${message.e5}
-    the failure trace                                                                                                   ${message.e6}
-    the skipped tag                                                                                                     ${message.e7}
-    names must be escaped                                                                                               ${message.e8}
+    the error message                                                        ${message.e1}
+    the error type                                                           ${message.e2}
+    the error trace                                                          ${message.e3}
+    the failure message                                                      ${message.e4}
+    the failure type                                                         ${message.e5}
+    the failure trace                                                        ${message.e6}
+    the skipped tag                                                          ${message.e7}
+    names must be escaped                                                    ${message.e8}
   """
 
   private val factory = fragmentFactory; import factory._
 
-  val printer = JUnitXmlPrinter(env)
+  def printer(e: Env) = JUnitXmlPrinter(e)
 
   object outputDir {
 
     def e1 = {
-      printer.outputDirectory(Arguments()).path must endWith("target/test-reports")
+      printer(env).outputDirectory(Arguments()).path must endWith("target/test-reports")
     }
 
     def e2 = {
       System.setProperty("specs2.junit.outDir", "target/reports/junit")
-      printer.outputDirectory(Arguments()).path must endWith("target/reports/junit")
+      printer(env).outputDirectory(Arguments()).path must endWith("target/reports/junit")
     }
   }
 
@@ -115,14 +115,15 @@ is formatted for JUnit reporting tools.
         Operation.ok(this.output = content)
     }
     val env = env1.copy(fileSystem = mockFs)
-    val reporter = Reporter.create(List(printer), env)
+    val reporter = Reporter.create(List(printer(env)), env)
 
     reporter.report(SpecStructure(SpecHeader(getClass)).setFragments(fs)).runOption(env1.specs2ExecutionEnv)
     mockFs.out
   }
 
-  def print(env: Env)(fs: Fragments): NodeSeq =
+  def print(env: Env)(fs: Fragments): NodeSeq = {
     scala.xml.XML.loadString(printString(env)(fs))
+  }
 }
 
 case class JUnitXmlSpecification(fs: Fragments) extends Specification { def is = fs }

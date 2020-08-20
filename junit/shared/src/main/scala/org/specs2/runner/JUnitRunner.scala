@@ -63,8 +63,14 @@ class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterab
     for {
       printers <- printerFactory.createPrinters.toAction
       reporter <- Reporter.createCustomInstance(customInstances).map(_.getOrElse(Reporter.create(junitPrinter +: printers, env))).toAction
-      stats    <- reporter.report(specStructure)
-     } yield stats
+      stats <- if (arguments.isSet("all")) {
+        for {
+          ss     <- SpecFactory.default.createLinkedSpecs(specStructure).toAction
+          sorted <- Action.pure(SpecStructure.topologicalSort(ss)(env.specs2ExecutionEnv).getOrElse(ss))
+          stats  <- reporter.report(sorted.toList)
+        } yield stats
+      } else reporter.report(specStructure)
+    } yield stats
   }
 
   /**

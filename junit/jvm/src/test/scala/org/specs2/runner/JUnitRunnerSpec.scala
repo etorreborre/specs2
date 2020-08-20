@@ -13,13 +13,13 @@ import scala.collection.mutable.ListBuffer
 
 class JUnitRunnerSpec(val env: Env) extends Specification with OwnEnv { def is = s2"""
 
-      The Junit runner must run all linked specifications if 'all' is set on the command line $allSpecifications
-      The Junit runner must run only examples $onlyExamples
-      The Junit runner must ignore pending example $pendingExample
-      The Junit runner must show error in step $errorInStepExample
-      The Junit runner must shutdown if error happened during initialization $errorInInitialization
+  The Junit runner must run all linked specifications if 'all' is set on the command line $allSpecifications
+  The Junit runner must run only examples $onlyExamples
+  The Junit runner must ignore pending example $pendingExample
+  The Junit runner must show error in step $errorInStepExample
+  The Junit runner must shutdown if error happened during initialization $errorInInitialization
 
-      """
+"""
 
   def allSpecifications = {
     runSpecification(new JUnitRunner(classOf[MainJUnitSpecification])) { messages =>
