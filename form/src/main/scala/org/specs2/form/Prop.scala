@@ -131,6 +131,10 @@ object Prop {
   def apply[T, S](label: String, act: =>T, exp: =>S, c: Matcher[T]): Prop[T, S] = {
     new Prop[T, S](label, actual = Property(act), expected = Property(exp), constraint = (t: T, s: S) => c(Expectable(t)).toResult)
   }
+  /** create a Prop with a label */
+  def apply[T](label: String): Prop[T, T] =
+    new Prop[T, T](label = label)
+
   /** create a Prop with an empty label and an actual value */
   def apply[T](act: =>T): Prop[T, T] =
     new Prop[T, T](actual = Property(act))
