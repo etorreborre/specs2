@@ -64,7 +64,8 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
    ${ check(complexProp) must beFailing(withMessage("result sum")) }
 
    Nested ScalaCheck properties must be labelled
-   ${ check(new Properties("equal") { property("commutativity") = Prop.falsified}) must beFailing(withMessage("equal")) }
+   uncomment for testing, otherwise there's a println for the seed
+   $${ check(new Properties("equal") { property("commutativity") = Prop.falsified}) must beFailing(withMessage("equal")) }
 
    Collected data is reported
    ${ check(prop((i: Int) => true).collect.verbose).expected must haveMessage("Collected test data") }
