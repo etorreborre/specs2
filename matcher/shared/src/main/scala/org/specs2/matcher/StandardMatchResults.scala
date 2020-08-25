@@ -9,7 +9,7 @@ import text.Sentences._
  * List(1, 2) must be like { case List(a, b) => ok }
  * List(1, 2) must be like { case List(a, b) => ko("unexpected") }
  */
-trait StandardMatchResults extends ExpectationsCreation {
+trait StandardMatchResults extends ExpectationsCreation:
   def ok(m: String): MatchResult[Any] =
     checkFailure(Matcher.result(true, m, negateSentence(m), createExpectable(None)))
 
@@ -21,6 +21,5 @@ trait StandardMatchResults extends ExpectationsCreation {
 
   lazy val ko: MatchResult[Any] =
     checkFailure(Matcher.result(false, "ok", "ko", createExpectable(None)))
-}
 
 object StandardMatchResults extends StandardMatchResults

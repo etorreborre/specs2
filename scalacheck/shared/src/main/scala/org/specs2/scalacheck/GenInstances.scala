@@ -7,7 +7,7 @@ import org.specs2.fp._
 /**
  * Scalaz instances for the Gen datatype
  */
-trait GenInstances {
+trait GenInstances:
 
   implicit def genMonad: Monad[Gen] = new Monad[Gen] {
     def point[A](a: =>A): Gen[A] =
@@ -17,4 +17,3 @@ trait GenInstances {
       fa flatMap f
   }
 
-}

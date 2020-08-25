@@ -12,42 +12,38 @@ import org.specs2.specification.script.StepParser
 /**
  * Dsl for creating examples in a mutable specification
  */
-trait ExampleDsl extends ExampleDsl1 with dsl.ExampleDsl {
+trait ExampleDsl extends ExampleDsl1 with dsl.ExampleDsl:
 
   override implicit def bangExample(d: String): BangExample =
     new MutableBangExample(d)
 
-  class MutableBangExample(d: String) extends BangExample(d) {
+  class MutableBangExample(d: String) extends BangExample(d):
     override def !(execution: Execution): Fragment                                       = addFragment(fragmentFactory.example(Text(d), execution))
     override def ![R : AsResult](r: => R): Fragment                                      = addFragment(fragmentFactory.example(d, r))
     override def ![R : AsResult](r: String => R): Fragment                               = addFragment(fragmentFactory.example(d, r))
     override def ![R](r: Env => R)(implicit as: AsResult[R], p: ImplicitParam): Fragment = addFragment(fragmentFactory.example(d, r)(as, p))
-  }
-}
 
 private[specs2]
-trait ExampleDsl1 extends BlockDsl with ExampleDsl0 {
+trait ExampleDsl1 extends BlockDsl with ExampleDsl0:
   // deactivate block0
   override def blockExample0(d: String) = super.blockExample0(d)
 
   implicit def blockExample(d: String): BlockExample =
     new BlockExample(d)
 
-  class BlockExample(d: String) extends BlockExample0(d) {
+  class BlockExample(d: String) extends BlockExample0(d):
     def >>[R](f: String => R)(implicit asExecution: AsExecution[R]): Fragment =
       >>(asExecution.execute(f(d)))
 
-   def >>(execution: Execution): Fragment = {
+    def >>(execution: Execution): Fragment =
       addFragment(fragmentFactory.example(Text(d), execution))
       addFragment(fragmentFactory.break)
-    }
 
-    def >>[R: AsResult](parser: StepParser[R]): Fragment = {
+    def >>[R: AsResult](parser: StepParser[R]): Fragment =
       addFragment(
         fragmentFactory.example(Text(parser.strip(d)),
                                 Execution.executed(parser.run(d).fold(execute.Error.apply, AsResult(_)))))
       addFragment(fragmentFactory.break)
-    }
 
     def in[R](f: String => R)(implicit ar: AsExecution[R]): Fragment =
       >>(f)(ar)
@@ -63,27 +59,24 @@ trait ExampleDsl1 extends BlockDsl with ExampleDsl0 {
 
     def in(execution: Execution): Fragment =
       d >> execution
-  }
-}
 
 /**
  * Lightweight ExampleDsl trait
  */
 private[specs2]
-trait ExampleDsl0 extends BlockCreation {
+trait ExampleDsl0 extends BlockCreation:
   implicit def blockExample0(d: String): BlockExample0 = new BlockExample0(d)
 
-  class BlockExample0(d: String) {
+  class BlockExample0(d: String):
     def >>(f: =>Fragment): Fragment =
       addBlock(d, f)
 
     def >>(fs: =>Fragments)(implicit p1: ImplicitParam1): Fragments =
       Use.ignoring(p1) { addBlock(d, fs) }
 
-    def >>[R : AsExecution](r: =>R): Fragment = {
+    def >>[R : AsExecution](r: =>R): Fragment =
       addFragment(fragmentFactory.example(Text(d), AsExecution.apply[R].execute(r)))
       addFragment(fragmentFactory.break)
-    }
 
     def should(f: => Fragment): Fragment =
       addBlock(s"$d should", f)
@@ -98,10 +91,7 @@ trait ExampleDsl0 extends BlockCreation {
       addBlock(s"$d can", f)
 
     def in[R : AsExecution](r: =>R): Fragment = d >> r
-  }
-}
 
 /** deactivate the ExampleDsl implicits */
-trait NoExampleDsl extends ExampleDsl {
+trait NoExampleDsl extends ExampleDsl:
   override def blockExample(d: String) = super.blockExample(d)
-}

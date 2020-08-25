@@ -49,12 +49,12 @@ trait MatchResultImplicits { outer =>
 
 object MatchResultImplicits extends MatchResultImplicits
 
-trait ResultImplicits extends ExpectationsCreation {
+trait ResultImplicits extends ExpectationsCreation:
   /**
    * Add functionalities to functions returning matchers so that they can be combined before taking a value and
    * returning actual matchers
    */
-  implicit class resultFunction[T, R : AsResult](f: T => R) {
+  implicit class resultFunction[T, R : AsResult](f: T => R):
     private val cc: ContainWithResult[T] = ContainWithResult(ValueChecks.functionIsValueCheck(f))
 
     def forall                          : ContainWithResult[T] = cc.forall
@@ -74,20 +74,17 @@ trait ResultImplicits extends ExpectationsCreation {
     def foreach(values: Traversable[T])     = createExpectable(values).applyMatcher(cc.foreach)
     def atLeastOnce(values: Traversable[T]) = createExpectable(values).applyMatcher(cc.atLeastOnce)
     def atMostOnce(values: Traversable[T])  = createExpectable(values).applyMatcher(cc.atMostOnce)
-  }
-}
 
 object ResultImplicits extends ResultImplicits
 
 trait SequenceMatchersCreation extends ExpectationsCreation with ResultImplicits { outer =>
-  implicit class InvariantMatcherFunction[T](f: T => Matcher[T]) {
+  implicit class InvariantMatcherFunction[T](f: T => Matcher[T]):
     /** @return a function which will return the composition of a matcher and a function */
     def ^^^[A](g: A => T) = (a: A) =>
       new Matcher[A] {
-        def apply[B <: A](b: Expectable[B]) = {
+        def apply[B <: A](b: Expectable[B]) =
           val originalValues = s"\nOriginal values\n  Expected: '$a'\n  Actual  : '${b.value}'"
           result(f(g(a)).apply(b.map(g)), b).updateMessage(_+originalValues)
-        }
       }
 
     private def applyMatcher = (t: T) => f(t)(createExpectable(t))
@@ -96,7 +93,6 @@ trait SequenceMatchersCreation extends ExpectationsCreation with ResultImplicits
     def foreach(values: Traversable[T])     = outer.foreach    (values)(applyMatcher)
     def atLeastOnce(values: Traversable[T]) = outer.atLeastOnce(values)(applyMatcher)
     def atMostOnce(values: Traversable[T])  = outer.atMostOnce (values)(applyMatcher)
-  }
 
   /** verify the function f for all the values, stopping after the first failure */
   def forall[T, R : AsResult](values: Traversable[T])(f: T => R) = f.forall(values)
@@ -126,7 +122,7 @@ trait SequenceMatchersCreation extends ExpectationsCreation with ResultImplicits
 
 object SequenceMatchersCreation extends SequenceMatchersCreation
 
-trait MatchersCreation {
+trait MatchersCreation:
 
   /**
    * This method transforms a function to a Matcher
@@ -148,53 +144,46 @@ trait MatchersCreation {
    * This method transforms a function, with function descriptors to a Matcher
    */
   implicit def functionAndMessagesToMatcher[T](f: (T => Boolean, T => String, T => String)): Matcher[T] = new Matcher[T] {
-    def apply[S <: T](s: Expectable[S]) = {
+    def apply[S <: T](s: Expectable[S]) =
       val functionResult = f._1(s.value)
       result(functionResult,  f._2(s.value), f._3(s.value), s)
-    }
   }
   /**
    * This method transforms a function returning a pair (Boolean, String for ko message) to a Matcher
    */
   implicit def pairFunctionToMatcher[T](f: T =>(Boolean, String)): Matcher[T] = new Matcher[T] {
-    def apply[S <: T](s: Expectable[S]) = {
+    def apply[S <: T](s: Expectable[S]) =
       val functionResult = f(s.value)
       result(functionResult._1, negateSentence(functionResult._2), functionResult._2, s)
-    }
   }
   /**
    * This method transforms a function returning a triplet (Boolean, String for ok message, String for ko message) to a Matcher
    */
   implicit def tripletFunctionToMatcher[T](f: T =>(Boolean, String, String)): Matcher[T] = new Matcher[T] {
-    def apply[S <: T](s: Expectable[S]) = {
+    def apply[S <: T](s: Expectable[S]) =
       val functionResult = f(s.value)
       result(functionResult._1, functionResult._2,  functionResult._3, s)
-    }
   }
   /**
    * This method transforms a function returning a Result to a Matcher
    */
   implicit def matchResultFunctionToMatcher[T, R : AsResult](f: T => R): Matcher[T] = new Matcher[T] {
-    def apply[S <: T](s: Expectable[S]) = {
+    def apply[S <: T](s: Expectable[S]) =
       val r = ResultExecution.execute(AsResult(f(s.value)))
       result(r, s)
-    }
   }
 
   /** this allows a function returning a matcher to be used where the same function with a byname parameter is expected */
-  implicit def stringMatcherFunctionToBynameMatcherFunction[T, R](f: T => Matcher[R]): (=>T) => Matcher[R] = {
+  implicit def stringMatcherFunctionToBynameMatcherFunction[T, R](f: T => Matcher[R]): (=>T) => Matcher[R] =
     def f1(t: =>T) = f(t)
     f1
-  }
 
   /**
    * this implicit provides an inverted syntax to adapt matchers to make the adaptation more readable in some cases:
    * - def haveExtension(extension: =>String) = ((_:File).getPath) ^^ endWith(extension)
    */
-  implicit class AdaptFunction[T, S](f: T => S) {
+  implicit class AdaptFunction[T, S](f: T => S):
     def ^^(m: Matcher[S]): Matcher[T] = m ^^ f
-  }
 
-}
 
 object MatchersCreation extends MatchersCreation

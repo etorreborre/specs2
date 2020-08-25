@@ -10,7 +10,7 @@ import Quote._
  * There are also methods to make sure that the toString or mkString methods don't throw exceptions when being evaluated
  */
 private[specs2]
-trait NotNullStrings {
+trait NotNullStrings:
 
   /**
    * @return the string evaluation of an object
@@ -20,18 +20,15 @@ trait NotNullStrings {
    * - if this is another type of object   => calls the toString method
    */
   implicit def anyToNotNull(a: Any): NotNullAny = new NotNullAny(a)
-  class NotNullAny(a: Any) {
-    def notNull: String = {
+  class NotNullAny(a: Any):
+    def notNull: String =
       if (a == null) "null"
-      else {
-        a match {
+      else
+        a match
           case ar: Array[_]    => ar.notNullMkString(", ", "Array(", ")")
           case map: Map[_,_]   => new NotNullMap(map).notNullMkStringWith(addQuotes = false)
           case it: Iterable[_] => it.notNullMkStringWith(addQuotes = false)
           case _               => evaluate(a)
-        }
-      }
-    }
 
     /**
      * @return the string evaluation of an object + its class name
@@ -43,16 +40,16 @@ trait NotNullStrings {
      *
      * The classes of nested values are not shown unless `showAll` is true
      */
-    def notNullWithClass(showAll: Boolean): String = {
+    def notNullWithClass(showAll: Boolean): String =
       if (a == null) "null"
-      else {
+      else
         def sameElementTypes(ts: Iterable[_]) =
           ts.nonEmpty && (ts.toSeq.collect { case t if t != null => t.getClass.getName }.distinct.size == 1)
 
         def sameKeyValueTypes(map: Map[_,_]) = sameElementTypes(map.keys) && sameElementTypes(map.values)
 
         tryOrElse {
-          a match {
+          a match
             case ar: Array[_] =>
               if (!showAll && sameElementTypes(ar))
                 ar.map(a => quote(a.notNull)).mkString("Array(", ", ", "): Array["+ar(0).getClass.getName+"]")
@@ -73,64 +70,50 @@ trait NotNullStrings {
                 it.map(_.notNullWithClass(showAll)).toString+": "+it.getClass.getName
 
             case _ => evaluate(a)+": "+a.getClass.getName
-          }
         }(evaluate(a)+": "+a.getClass.getName) // in case the collection throws an exception during its traversal
-      }
-    }
     /** default case for the notNullWithClass method */
     def notNullWithClass: String = notNullWithClass(showAll = false)
-  }
 
-  private def evaluate(value: =>Any, msg: String = "Exception when evaluating toString: ") = {
+  private def evaluate(value: =>Any, msg: String = "Exception when evaluating toString: ") =
     val string = catchAllOr(value.toString) { (t: Throwable) => msg + t.getMessage }
     if (string == null) "null"
     else                string
-  }
 
-  trait NotNullMkString {
+  trait NotNullMkString:
     def notNullMkString(sep: String, start: String = "", end: String = ""): String
-  }
   implicit def arrayToNotNull[T](a: Array[T]): NotNullMkString = if (a == null) new NullMkString else new NotNullIterable(a.toSeq)
 
-  class NullMkString extends NotNullMkString {
+  class NullMkString extends NotNullMkString:
     def notNullMkString(sep: String, start: String = "", end: String = ""): String = "null"
-  }
 
   implicit def iterableToNotNull[T](a: =>Iterable[T]): NotNullIterable[T] = new NotNullIterable(a)
-  class NotNullIterable[T](values: =>Iterable[T]) extends NotNullMkString {
-    def notNullMkString(sep: String, start: String = "", end: String = ""): String = {
+  class NotNullIterable[T](values: =>Iterable[T]) extends NotNullMkString:
+    def notNullMkString(sep: String, start: String = "", end: String = ""): String =
       if (values == null)
         "null"
       else
         evaluate(catchAllOrElse(values.iterator.mkString(start, sep, end))(evaluate(values.toString)))
-    }
-    def notNullMkStringWith(addQuotes: Boolean = false): String = {
+    def notNullMkStringWith(addQuotes: Boolean = false): String =
       def iterableWithQuotedElements = values.map(v => quote(evaluate(v), addQuotes)).toString
       def quotedIterable             = quote(evaluate(values.toString))
 
       if (values == null) quote("null", addQuotes)
       else if (addQuotes) evaluate(catchAllOrElse(iterableWithQuotedElements)(quotedIterable))
       else                evaluate(catchAllOrElse(evaluate(values.toString))(values.map(v => evaluate(v)).toString))
-    }
-  }
 
-  implicit class NotNullMap[K, V](map: =>Map[K,V]) {
-    def notNullMkStringWith(addQuotes: Boolean = false): String = {
+  implicit class NotNullMap[K, V](map: =>Map[K,V]):
+    def notNullMkStringWith(addQuotes: Boolean = false): String =
       def mapWithQuotedElements = map.map { case (k, v) => (quote(evaluate(k), addQuotes), quote(evaluate(v), addQuotes)) }.toString
       def quotedMap             = quote(evaluate(map.toString))
 
       if (map == null)    quote("null", addQuotes)
       else if (addQuotes) evaluate(catchAllOrElse(mapWithQuotedElements)(quotedMap))
       else                evaluate(catchAllOrElse(evaluate(map.toString))(map.map { case (k, v) => (evaluate(k), evaluate(v)) }.toString))
-    }
-  }
 
   // display pairs nicely
-  val notNullPair: Any => String = {
+  val notNullPair: Any => String =
     case (k, v) => s"$k -> $v"
     case a      => a.notNull
-  }
-}
 
 private[specs2]
 object NotNullStrings extends NotNullStrings

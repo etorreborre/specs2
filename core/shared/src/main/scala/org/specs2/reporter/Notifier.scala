@@ -9,7 +9,7 @@ import org.specs2.execute.Details
  *
  * A pair of contextStart/contextEnd calls delimits a sequence of children in that tree.
  */
-trait Notifier {
+trait Notifier:
   def specStart(title: String, location: String): Unit
   def specEnd(title: String, location: String): Unit
   def contextStart(text: String, location: String): Unit
@@ -25,12 +25,11 @@ trait Notifier {
   def stepStarted(location: String): Unit
   def stepSuccess(duration: Long): Unit
   def stepError(message: String, location: String, f: Throwable, duration: Long): Unit
-}
 
 /**
  * Notifier that prints out to the console
  */
-class ConsoleNotifier extends Notifier {
+class ConsoleNotifier extends Notifier:
   def specStart(title: String, location: String)                                                                      = Console.println(s"[start]   $title")
   def specEnd(title: String, location: String)                                                                        = Console.println(s"[end]     $title")
   def contextStart(text: String, location: String)                                                                    = Console.println(s"[open]    $text")
@@ -45,14 +44,13 @@ class ConsoleNotifier extends Notifier {
   def stepStarted(location: String)                                                                                   = Console.println(s"[step]")
   def stepSuccess(duration: Long)                                                                                     = Console.println(s"[success]")
   def stepError  (message: String, location: String, f: Throwable, duration: Long)                                    = Console.println(s"[error]   $message")
-}
 
 /**
  * Notifier which does not notify at all
  *
  * It can be subclassed so that just one method is overridden
  */
-trait SilentNotifier extends Notifier {
+trait SilentNotifier extends Notifier:
   def specStart(title: String, location: String)                                                                      = ()
   def specEnd(title: String, location: String)                                                                        = ()
   def contextStart(text: String, location: String)                                                                    = ()
@@ -67,5 +65,4 @@ trait SilentNotifier extends Notifier {
   def stepStarted(location: String)                                                                                   = ()
   def stepSuccess(duration: Long)                                                                                     = ()
   def stepError(message: String, location: String, f: Throwable, duration: Long)                                      = ()
-}
 

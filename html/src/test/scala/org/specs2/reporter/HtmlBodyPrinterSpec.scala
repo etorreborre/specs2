@@ -25,27 +25,24 @@ class HtmlBodyPrinterSpec(ee: ExecutionEnv) extends Specification with Forms wit
  Fragments from nonmutable spec must have proper levels in html body $nonmutableHtmlBody
 """
 
-  def hidden = {
+  def hidden =
     print(link(new nonmutableSpec { def is = s2"""
         Explanation Text.
        example no. one $ok"""}).hide) must beEmpty
-  }
 
-  def printForm = {
+  def printForm =
     val ns: NodeSeq = print(formFragmentFactory.FormFragment(form("hey").tr(prop("test", 1, 2))))
     ns must \\(<form></form>)
-  }
 
-  def ansiColors = {
+  def ansiColors =
     print(fragmentFactory.text(AnsiColors.color("text", AnsiColors.red))).toString must_== "text"
-  }
 
   def print(f: Fragment): NodeSeq =
     HtmlBodyPrinter.printFragment(f, success, Arguments(), Level.Root, DirectoryPath.Root, pandoc = true)
 
   trait mutableSpec extends org.specs2.mutable.Specification
 
-  def mutableHtmlBody = {
+  def mutableHtmlBody =
     val fragments = new mutableSpec {
       "t1" >> {
         br
@@ -106,11 +103,10 @@ class HtmlBodyPrinterSpec(ee: ExecutionEnv) extends Specification with Forms wit
         |   <message class="skipped"></message>
         |</li>
         |<br/>""".stripMargin.trim.replaceAll("\\s+",""))
-  }
 
   trait nonmutableSpec extends org.specs2.Specification
 
-  def nonmutableHtmlBody = {
+  def nonmutableHtmlBody =
     val fragments = new nonmutableSpec { def is = s2"""
         Explanation Text.
 
@@ -177,16 +173,14 @@ class HtmlBodyPrinterSpec(ee: ExecutionEnv) extends Specification with Forms wit
         |</li>
         |<br/>
       """.stripMargin.trim.replaceAll("\\s+",""))
-  }
 
   private def fragments1 = fragments("first")
   private def fragments2 = fragments("second")
 
-  private def fragments(description: String) = {
+  private def fragments(description: String) =
     p^
       s"example no. one from $description set"  ! success ^br^
       s"example no. two from $description set"  ! success ^br
-  }
 
   private def makeBody(specStructure: SpecStructure)(executionEnv: ExecutionEnv) =
     HtmlBodyPrinter.makeBody(specStructure, Stats(), new SimpleTimer(), options, Arguments(), pandoc = false)(executionEnv)

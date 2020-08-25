@@ -11,7 +11,7 @@ import specification.core._
  * Create printers based on their class names and the arguments passed by the user
  * Note that this operation might fail if the corresponding printer classes are not on the class path
  */
-case class PrinterFactory(arguments: Arguments, customInstances: CustomInstances, logger: Logger) {
+case class PrinterFactory(arguments: Arguments, customInstances: CustomInstances, logger: Logger):
 
   /** accepted printers created from the list of arguments */
   def createPrinters: Operation[List[Printer]] =
@@ -22,10 +22,9 @@ case class PrinterFactory(arguments: Arguments, customInstances: CustomInstances
       createPrinter,
       createNotifierPrinter).sequence.map(_.flatten)
 
-  def createTextPrinter: Operation[Option[Printer]] = {
+  def createTextPrinter: Operation[Option[Printer]] =
     if (!printerNames.map(_.name).exists(arguments.isSet) || arguments.isSet(CONSOLE.name)) Operation.ok(Some(TextPrinter.default))
     else customInstances.noInstance[Printer]("no console printer defined")
-  }
 
   def createJUnitXmlPrinter: Operation[Option[Printer]] =
    customInstances.createPrinterInstance(
@@ -59,9 +58,8 @@ case class PrinterFactory(arguments: Arguments, customInstances: CustomInstances
       (className: String) => s"cannot create a $className notifier. Please check that this class can be instantiated",
       s"no custom notifier defined").map(_.map(NotifierPrinter(arguments).printer))
 
-}
 
-object PrinterFactory {
+object PrinterFactory:
 
   def default: PrinterFactory =
     create(EnvDefault.default)
@@ -69,4 +67,3 @@ object PrinterFactory {
   def create(env: Env): PrinterFactory =
     PrinterFactory(env.arguments, CustomInstances.create(env.arguments, env.systemLogger), env.systemLogger)
 
-}

@@ -5,7 +5,7 @@ import mutable.Specification
 import org.specs2.matcher.ResultMatchers
 import scala.concurrent._, duration._
 
-class EventuallyResultsSpec extends Specification with ResultMatchers {
+class EventuallyResultsSpec extends Specification with ResultMatchers:
   """
   `eventually` can be used to retry any result until a maximum number of times is reached
     or until it succeeds.
@@ -37,4 +37,3 @@ class EventuallyResultsSpec extends Specification with ResultMatchers {
     eventually(retries = 3, sleep = 100.millis)(r) must beFailing
     eval must_== 3
   }
-}

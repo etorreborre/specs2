@@ -10,7 +10,7 @@ import specification.AllExpectations
  * all these examples works in a mutable specification which means that FailureExceptions are caught before being
  * combined with the logical combinator
  */
-class MatchResultCombinatorsSpec extends mutable.Spec with ResultMatchers with MatchResultCombinators with TypedEqual {
+class MatchResultCombinatorsSpec extends mutable.Spec with ResultMatchers with MatchResultCombinators with TypedEqual:
 
   "Match results can be combined with and" >> {
     (1 must_== 1) and (2 must_== 2)
@@ -87,4 +87,3 @@ class MatchResultCombinatorsSpec extends mutable.Spec with ResultMatchers with M
     "there is only one stored expectation (see #320)" ==> { stored must haveSize(1) }
     stored.map(_.message).head must_== "'hello world' doesn't have size 10 but size 11"
   }
-}

@@ -15,7 +15,7 @@ import org.specs2._
  *  - how create references to other specifications or include them
  *
  */
-class UnitSpec extends mutable.Specification {
+class UnitSpec extends mutable.Specification:
 
   // A title can be added at the beginning of the specification
   "MutableSpec".title
@@ -57,4 +57,3 @@ class UnitSpec extends mutable.Specification {
   }
 
   class IncludedSpecification extends Specification { def is = "introduction" ^ "example" ! success }
-}

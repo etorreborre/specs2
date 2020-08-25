@@ -11,7 +11,7 @@ case class Select(
                    _include:       Option[String]           = None,
                    _exclude:       Option[String]           = None,
                    _was:           Option[String]           = None,
-                   _selector:      Option[String]           = None) extends ShowArgs {
+                   _selector:      Option[String]           = None) extends ShowArgs:
 
   import Arguments._
 
@@ -25,7 +25,7 @@ case class Select(
   def wasIsDefined: Boolean         = _was.isDefined
   def selector                      = _selector.getOrElse("")
 
-  def overrideWith(other: Select) = {
+  def overrideWith(other: Select) =
     new Select(
       other._ex              .orElse(_ex),
       other._include         .orElse(_include),
@@ -33,7 +33,6 @@ case class Select(
       other._was             .orElse(_was),
       other._selector        .orElse(_selector)
     )
-  }
 
   override def toString = List(
     "ex"             -> _ex         ,
@@ -41,10 +40,9 @@ case class Select(
     "exclude"        -> _exclude    ,
     "was"            -> _was        ,
     "selector"       -> _selector  ).flatMap(showArg).mkString("Select(", ", ", ")")
-}
 
-object Select extends Extract {
-  def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): Select = {
+object Select extends Extract:
+  def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): Select =
     new Select (
       _ex            = value("ex", ".*"+(_:String)+".*"),
       _include       = value("include"),
@@ -52,6 +50,4 @@ object Select extends Extract {
       _was           = value("was"),
       _selector      = value("selector")
     )
-  }
   val allValueNames = Seq("ex", "include", "exclude", "was", "selector")
-}

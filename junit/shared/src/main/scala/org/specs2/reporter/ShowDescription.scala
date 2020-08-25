@@ -9,15 +9,13 @@ import scala.collection.JavaConverters._
 /**
  * Implementation of the Show trait to allow the drawing of Tree[Description]
  */
-trait ShowDescription {
+trait ShowDescription:
 
-  implicit object show extends Show[Description] {
+  implicit object show extends Show[Description]:
     def show(d: Description) = d.getDisplayName
-  }
 
   implicit def toTree(desc: Description): Tree[Description] =
     unfoldTree(desc)((d: Description) => (d, () => d.getChildren.asScala.to(LazyList)))
 
-}
 
 object ShowDescription extends ShowDescription

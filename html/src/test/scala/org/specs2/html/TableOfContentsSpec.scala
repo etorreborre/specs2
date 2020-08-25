@@ -31,10 +31,9 @@ class TableOfContentsSpec(val env: Env) extends Specification with HtmlDocuments
   def toc3 = addToc(aBodyWithHeaders) must \\ ("li") \ ("a", "href" -> "UserGuide.html")
   def toc4 = addToc(aBodyWithHeaders) must \\ ("li", "id")
 
-  def addToc(body: NodeSeq) = {
+  def addToc(body: NodeSeq) =
     val page = SpecHtmlPage(SpecStructure.empty(getClass), outDir | "UserGuide.html", outDir, body.toString)
     createToc(List(page), outDir, entryMaxSize = 18).apply(page)
-  }
 
   val outDir = DirectoryPath.unsafe("guide")
 }

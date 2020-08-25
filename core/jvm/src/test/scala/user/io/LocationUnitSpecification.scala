@@ -1,4 +1,4 @@
-  package user.io
+package user.io
 
 import org.specs2.concurrent.ExecutionEnv
 import org.specs2.io.WithFragments
@@ -8,7 +8,9 @@ import org.specs2.specification.core.Fragment
 /**
  * This specification is used to check if the line numbers are correct when creating fragments locations
  */
-class LocationUnitSpecification(ee: ExecutionEnv) extends Specification with WithFragments {
+class LocationUnitSpecification(ee: ExecutionEnv) extends Specification with WithFragments:
+  def fragmentsList: List[Fragment] = is.fragmentsList(ee)
+
   "this block" should {
     "have one example" in ok
     "have another example" in ko
@@ -20,7 +22,3 @@ class LocationUnitSpecification(ee: ExecutionEnv) extends Specification with Wit
     "have one ko example" >>
       ko
   }
-
-  def fragmentsList: List[Fragment] =
-    is.fragmentsList(ee)
-}

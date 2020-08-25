@@ -7,19 +7,18 @@ import io._
 import specification.core.Env
 
 /** Representation of the Pandoc executable */
-case class Pandoc(verbose: Boolean, executable: FilePath, inputFormat: String, outputFormat: String) {
+case class Pandoc(verbose: Boolean, executable: FilePath, inputFormat: String, outputFormat: String):
   def isExecutableAvailable: Action[Unit] =
     Executable.run(executable, Seq("--version")).toAction
 
-}
 
-object Pandoc {
+object Pandoc:
   val executable   = FilePath("pandoc")
   val inputFormat  = "markdown+pipe_tables+auto_identifiers+header_attributes+inline_code_attributes+markdown_attribute"
   val outputFormat = "html"
 
   /** build command-line arguments for Pandoc */
-  def arguments(bodyPath: FilePath, templatePath: FilePath, variables: Map[String, String], outputFile: FilePath, options: Pandoc): Seq[String] = {
+  def arguments(bodyPath: FilePath, templatePath: FilePath, variables: Map[String, String], outputFile: FilePath, options: Pandoc): Seq[String] =
     val variablesOption = variables.flatMap { case (k, v) => Seq("-V", s"$k=$v") }
 
     Seq(bodyPath.path,
@@ -29,14 +28,13 @@ object Pandoc {
       "--indented-code-classes=prettyprint",
       "-o", outputFile.path) ++
       variablesOption
-  }
 
   /** @return the Pandoc executable if available */
-  def getPandoc(env: Env): Action[Option[Pandoc]] = {
+  def getPandoc(env: Env): Action[Option[Pandoc]] =
     import env.arguments.commandLine._
     val markdown = boolOr("pandoc", true)
 
-    if (markdown) {
+    if (markdown)
       val pandoc = Pandoc(
         verbose      = boolOr("pandoc.verbose", false),
         executable   = fileOr("pandoc.exec", Pandoc.executable),
@@ -45,9 +43,6 @@ object Pandoc {
 
       pandoc.isExecutableAvailable.map(_ => Option(pandoc)).orElse(
         Action.fail[Option[Pandoc]]("the pandoc executable is not available at: "+pandoc.executable.path))
-    }
 
     else Action.pure(None)
-  }
 
-}

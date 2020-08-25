@@ -4,7 +4,7 @@ import Markdown._
 import org.specs2.main.Arguments
 import org.specs2.mutable._
 
-class MarkdownSpec extends Spec {
+class MarkdownSpec extends Spec:
   implicit val defaultArg: Arguments = Arguments()
 
   "Emphasized text" >>
@@ -51,4 +51,3 @@ This is a paragraph presenting some code:
 
 and no more code here"""
 
-}

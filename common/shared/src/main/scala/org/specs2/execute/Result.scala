@@ -27,25 +27,22 @@ import text.NotNullStrings._
  *    when it is the outcome of several checks (this is used for the reporting of ScalaCheck properties).
  *
  */
-sealed abstract class Result(val message: String = "", val expected: String = "", val expectationsNb: Int = 1) {
+sealed abstract class Result(val message: String = "", val expected: String = "", val expectationsNb: Int = 1):
   type SelfType <: Result
   /**
    * @return the colored textual status of the result
    */
-  def coloredStatus(implicit args: Arguments = Arguments()): String = {
+  def coloredStatus(implicit args: Arguments = Arguments()): String =
     if (args.plan)
       args.pendingColor("*")
-    else {
-      this match {
+    else
+      this match
         case Success(_,_)          => args.successColor("+")
         case Failure(_, _, _, _)   => args.failureColor("x")
         case Error(_, _)           => args.errorColor  ("!")
         case Pending(_)            => args.pendingColor("*")
         case Skipped(_, _)         => args.skippedColor("o")
         case DecoratedResult(_, r) => r.coloredStatus(args)
-      }
-    }
-  }
 
   private lazy val nocolor = Arguments("nocolor")
 
@@ -58,27 +55,24 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
   def statusName(implicit args: Arguments = Arguments()): String =
     if (args.plan)
       "info"
-    else {
-      this match {
+    else
+      this match
         case Success(_,_)          => "success"
         case Failure(_, _, _, _)   => "failure"
         case Error(_, _)           => "error"
         case Pending(_)            => "pending"
         case Skipped(_, _)         => "skipped"
         case DecoratedResult(_, r) => r.statusName(args)
-      }
-    }
 
   /** update the message of a result, keeping the subclass type */
   def updateMessage(msg: String): Result =
-    this match {
+    this match
       case Success(m, e)         => Success(msg,e)
       case Failure(m, e, st, d)  => Failure(msg, e, st, d)
       case Error(m, st)          => Error(msg, st)
       case Skipped(m, e)         => Skipped(msg, e)
       case Pending(m)            => Pending(msg)
       case DecoratedResult(t, r) => DecoratedResult(t, r.updateMessage(msg))
-    }
 
   /** change this result's message */
   def mapMessage(f: String => String): Result = updateMessage(f(message))
@@ -88,13 +82,12 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
 
   /** update the expected of a result, keeping the subclass type */
   def updateExpected(exp: String): Result =
-    this match {
+    this match
       case Success(m, e)         => Success(m,exp, expectationsNb)
       case Failure(m, e, st, d)  => Failure(m, exp, st, d).setExpectationsNb(expectationsNb)
       case Skipped(m, e)         => Skipped(m, exp)
       case DecoratedResult(t, r) => DecoratedResult(t, r.updateExpected(exp))
       case other                 => this
-    }
 
   /** change this result's expected */
   def mapExpected(f: String => String): Result = updateExpected(f(expected))
@@ -144,9 +137,8 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
    * @return the result with no message
    */
   def mute: Result
-}
 
-object Result {
+object Result:
 
   /**
    * @return the accumulation of all results, without success messages
@@ -159,7 +151,7 @@ object Result {
    */
   val ResultMonoid: Monoid[Result] = new Monoid[Result] {
     val zero = Success()
-    def append(mr1: Result, mr2: =>Result) = {
+    def append(mr1: Result, mr2: =>Result) =
       val (m1, m2) = (mr1, mr2)
       ((m1, m2) match {
         case (Success(msg1, e1),           Success(msg2, e2))          => Success(msg1+"; "+msg2, concat(e1, e2))
@@ -189,7 +181,6 @@ object Result {
         case (_,                           Failure(msg1, e1, st, d))   => m2
         case (_,                           Error(msg1, st))            => m2
       }).setExpectationsNb(m1.expectationsNb + m2.expectationsNb)
-    }
   }
 
   /**
@@ -200,7 +191,7 @@ object Result {
   def ResultFailuresMonoid(separator: String): Monoid[Result] = new Monoid[Result] {
     val zero = Success()
 
-    def append(mr1: Result, mr2: =>Result) = {
+    def append(mr1: Result, mr2: =>Result) =
       val (m1, m2) = (mr1, mr2)
       ((m1, m2) match {
         case (Success(msg1, e1), Success(msg2, e2)) => Success("", concat(e1, e2))
@@ -222,7 +213,6 @@ object Result {
         case (_, Failure(msg1, e1, st, d)) => m2
         case (_, Error(msg1, st)) => m2
       }).setExpectationsNb(m1.expectationsNb + m2.expectationsNb)
-    }
   }
 
   /**
@@ -232,10 +222,9 @@ object Result {
   val ResultShortCircuitMonoid: Monoid[Result] = new Monoid[Result] {
     val zero = Success()
 
-    def append(mr1: Result, mr2: =>Result): Result = {
+    def append(mr1: Result, mr2: =>Result): Result =
       if (mr1.isIssue) mr1
       else ResultFailureMonoid.append(mr1, mr2)
-    }
   }
 
   /** the result of a side-effecting block */
@@ -246,10 +235,9 @@ object Result {
     def asResult(t: =>R): Result = ResultExecution.execute(t)
   }
 
-  def resultOrSuccess(t: Any): Result = t match {
+  def resultOrSuccess(t: Any): Result = t match
     case r: Result => r
     case _         => Success()
-  }
 
   def disjunctionErrorToResult(error: Throwable Either String): Result =
     error.fold(t => Error(t), m => Error(m))
@@ -267,9 +255,8 @@ object Result {
    */
   def forall[T, R : AsResult](seq: Seq[T])(f: T => R): Result =
     seq.toList.foldMap((t: T) => AsResult(f(t)))(ResultFailureMonoid)
-}
 
-trait Results {
+trait Results:
   /**
    * implicit definition to accept any boolean value as a Result
    * This avoids writing b must beTrue
@@ -280,22 +267,20 @@ trait Results {
   def booleanToSimpleResult(b: Boolean): Result =
     if (b) org.specs2.execute.Success("true") else org.specs2.execute.Failure("false", "", Nil, NoDetails)
 
-  def negate(r: Result) = {
+  def negate(r: Result) =
     if (r.isSuccess)      Failure(negateSentence(r.message), r.expected).setExpectationsNb(r.expectationsNb)
     else if (r.isFailure) Success(negateSentence(r.message), r.expected).setExpectationsNb(r.expectationsNb)
     else r
-  }
 
   def negateWhen(condition: Boolean)(r: Result) =
     if (condition) negate(r) else r
-}
 
 object Results extends Results
 
 /**
  * This class represents the success of an execution
  */
-case class Success(m: String = "", exp: String = "")  extends Result(m, exp) {
+case class Success(m: String = "", exp: String = "")  extends Result(m, exp):
   type SelfType = Success
 
   override def isSuccess = true
@@ -305,26 +290,22 @@ case class Success(m: String = "", exp: String = "")  extends Result(m, exp) {
   def mute = Success()
 
   override def toString = m
-  override def equals(o: Any) = {
-    o match {
+  override def equals(o: Any) =
+    o match
       case Success(m2, e2) => m == m2 && exp == e2
       case _ => false
-    }
-  }
   override def hashCode = m.hashCode + exp.hashCode
-}
 /**
  * Companion object to the Success class providing
  * a method to set the expectations number
  */
-object Success {
+object Success:
   def apply(m: String, exp: String, expNb: Int) = new Success(m, exp) {
     override val expectationsNb = expNb
   }
   def apply(m: String, expNb: Int) = new Success(m) {
     override val expectationsNb = expNb
   }
-}
 /**
  * This class represents the failure of an execution.
  * It has a message and a stacktrace
@@ -343,12 +324,10 @@ case class Failure(m: String = "", e: String = "", stackTrace: List[StackTraceEl
   def mute = copy(m = "",  e = "")
 
   override def toString = m
-  override def equals(o: Any) = {
-    o match {
+  override def equals(o: Any) =
+    o match
       case Failure(m2, e2, _, _) => m == m2 && e == e2
       case _ => false
-    }
-  }
   override def hashCode = m.hashCode + e.hashCode
   override def isFailure: Boolean = true
   override def isThrownFailure: Boolean =
@@ -383,12 +362,10 @@ case class Error(m: String, t: Throwable) extends Result(s"${t.getClass.getName}
   def exception = t
   def stackTrace = t.getFullStackTrace
 
-  override def equals(o: Any) = {
-    o match {
+  override def equals(o: Any) =
+    o match
       case Error(m2, t2) => m == m2 && t.getMessage.notNull == t2.getMessage.notNull
       case _ => false
-    }
-  }
 
   def setExpectationsNb(n: Int) = new Error(m, t) {
     override val expectationsNb = n
@@ -401,10 +378,9 @@ case class Error(m: String, t: Throwable) extends Result(s"${t.getClass.getName}
 /**
  * This object allows to create an Error from an exception
  */
-case object Error {
+case object Error:
   def apply(t: Throwable) = new Error(t.getMessage.notNull, t)
   def apply(m: String = "") = new Error(m, new Exception(m))
-}
 /**
  * Pending result
  * @see Result for description

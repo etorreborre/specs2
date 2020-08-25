@@ -15,10 +15,9 @@ private[specs2]
 trait FpMatchers extends ScalaCheck { outer =>
 
   implicit def semigroupProperty[T](implicit s: Semigroup[T]): SemigroupProperty[T] = new SemigroupProperty[T]()(s)
-  class SemigroupProperty[T]()(implicit sg: Semigroup[T]) {
+  class SemigroupProperty[T]()(implicit sg: Semigroup[T]):
     def isAssociative(implicit a: Arbitrary[T], s: Shrink[T]) = outer.isAssociative(sg, a, s)
     def isSemigroup(implicit a: Arbitrary[T], s: Shrink[T]) = outer.isAssociative(sg, a, s)
-  }
 
   def isAssociative[T](implicit sg: Semigroup[T], a: Arbitrary[T], s: Shrink[T]): Prop =
     prop { (b1: T, b2: T, b3: T) =>
@@ -26,10 +25,9 @@ trait FpMatchers extends ScalaCheck { outer =>
     }.set(minTestsOk = 20, maxSize = 10)
 
   implicit def monoidProperty[T](m: Monoid[T]): MonoidProperty[T] = new MonoidProperty[T]()(m)
-  class MonoidProperty[T]()(implicit m: Monoid[T]) extends SemigroupProperty()(m) {
+  class MonoidProperty[T]()(implicit m: Monoid[T]) extends SemigroupProperty()(m):
     def isMonoid(implicit a: Arbitrary[T], s: Shrink[T]) = outer.isMonoid(m, a, s)
     def hasNeutralElement(implicit a: Arbitrary[T], s: Shrink[T]) = outer.hasNeutralElement(m, a, s)
-  }
 
   def hasNeutralElement[T](implicit m: Monoid[T], a: Arbitrary[T], s: Shrink[T]): Prop =
     prop { (t: T) =>

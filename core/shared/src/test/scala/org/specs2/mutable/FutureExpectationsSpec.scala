@@ -16,7 +16,7 @@ class FutureExpectationsImmutableSpec extends org.specs2.Specification { def is 
 
 }
 
-class FutureExpectationsMutableSpec extends org.specs2.mutable.Specification {
+class FutureExpectationsMutableSpec extends org.specs2.mutable.Specification:
 
   "A specification can return future results" >> {
     "For example here" in {
@@ -28,4 +28,3 @@ class FutureExpectationsMutableSpec extends org.specs2.mutable.Specification {
 
   }
 
-}

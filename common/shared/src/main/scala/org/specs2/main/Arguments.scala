@@ -25,7 +25,7 @@ case class Arguments (
   store:         Store            = Store(),
   report:        Report           = Report(),
   commandLine:   CommandLine      = CommandLine()
- ) extends ShowArgs {
+ ) extends ShowArgs:
   def ex: String                      = select.ex
   def include: String                 = select.include
   def exclude: String                 = select.exclude
@@ -71,7 +71,7 @@ case class Arguments (
   /**
    * @return a new Arguments object where the values of this are overridden with the values of other if defined
    */
-  def overrideWith(other: Arguments): Arguments = {
+  def overrideWith(other: Arguments): Arguments =
     new Arguments(
       select.overrideWith(other.select),
       execute.overrideWith(other.execute),
@@ -79,7 +79,6 @@ case class Arguments (
       report.overrideWith(other.report),
       commandLine.overrideWith(other.commandLine)
     )
-  }
 
   /**
    * shortcut methods to add ansi colors to some text depending on its status
@@ -106,9 +105,8 @@ case class Arguments (
 
   override def toString = Seq(select, execute, report, commandLine).mkString("Arguments(", ", ", ")")
 
-}
 
-object Arguments extends Extract {
+object Arguments extends Extract:
 
   /** @return new arguments from command-line arguments */
   def apply(arguments: String*): Arguments =
@@ -118,7 +116,7 @@ object Arguments extends Extract {
   def split(arguments: String): Arguments =
     Arguments(arguments.split(" "):_*)
 
-  private[specs2] def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): Arguments = {
+  private[specs2] def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): Arguments =
     new Arguments (
        select        = Select.extract,
        execute       = Execute.extract,
@@ -126,7 +124,6 @@ object Arguments extends Extract {
        report        = Report.extract,
        commandLine   = CommandLine.extract
     )
-  }
 
   implicit def ArgumentsMonoid: Monoid[Arguments] = new Monoid[Arguments] {
     def append(a1: Arguments, a2: =>Arguments) = a1 overrideWith a2
@@ -136,12 +133,9 @@ object Arguments extends Extract {
   /**
    * @return true if the flagList is empty or if it has
    */
-  def hasFlags(s: String, flagList: Option[String]) = flagList match {
+  def hasFlags(s: String, flagList: Option[String]) = flagList match
     case None        => true
     case Some(flags) => s.split("") forall flags.contains
-  }
-}
 
-trait ShowArgs {
+trait ShowArgs:
   def showArg(a: (String, Option[_])) = a._2.map(a._1 +" = "+_)
-}

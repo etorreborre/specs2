@@ -32,47 +32,39 @@ class JUnitReporterSpec(val env: Env) extends Specification with OwnEnv {  def i
    steps must be correctly sequenced with examples                               ${notified().e9}
 """
 
-  case class notified() extends WithNotifier with ReporterExamples {
+  case class notified() extends WithNotifier with ReporterExamples:
     def desc(s: String) = =~(s) ^^ ((_:Description).getDisplayName)
 
-    def e1 = {
+    def e1 =
       run(ex1)(Env())
       notifier.messages must contain(
         "fireTestStarted ex1(notified)", "fireTestFinished ex1(notified)")
-    }
-    def e2 = {
+    def e2 =
       run(level1)(Env())
       notifier.messages must contain(
         "fireTestStarted level1::ex1(notified)", "fireTestFinished level1::ex1(notified)",
         "fireTestStarted level1::ex2(notified)", "fireTestFinished level1::ex2(notified)")
-    }
-    def e3 = {
+    def e3 =
       run(ex1Failure)(Env())
       notifier.messages must contain(
         "fireTestStarted ex1(notified)", "fireTestFailure ex1(notified): failure")
-    }
-    def e4 = {
+    def e4 =
       run(ex1Failure)(Env())
       notifier.messages must contain("fireTestFailure ex1(notified): failure")
-    }
-    def e5 = {
+    def e5 =
       run(ex1Error)(Env())
       notifier.messages must contain("fireTestFailure ex1(notified): error")
-    }
-    def e6 = {
+    def e6 =
       run(ex1Skipped)(Env())
       notifier.messages must contain("fireTestIgnored ex1(notified)")
-    }
-    def e7 = {
+    def e7 =
       run(ex1Pending)(Env())
       notifier.messages must contain("fireTestIgnored ex1(notified)")
-    }
-    def e8 = {
+    def e8 =
       run(ex1BeEqualToFailure)(Env())
       notifier.messages must contain(
         "fireTestStarted ex1(notified)", "fireTestFailure ex1(notified): 1 != 2 expected:<[2]> but was:<[1]>")
-    }
-    def e9 = {
+    def e9 =
       val messages = new ListBuffer[String]
       run {
         step {
@@ -84,8 +76,6 @@ class JUnitReporterSpec(val env: Env) extends Specification with OwnEnv {  def i
         }
       }(Env())
       messages.toList === Seq("before", "ex1", "after")
-    }
-  }
 
   /**
    * TEST METHODS
@@ -104,12 +94,11 @@ class JUnitReporterSpec(val env: Env) extends Specification with OwnEnv {  def i
     def run(f: Fragment)(env: Env): Unit = run(Fragments(f))(env)
     def run(fs: Fragments)(env: Env): Unit = run(SpecStructure.create(SpecHeader(getClass), Arguments(), fs))(env)
 
-    def run(spec: SpecStructure)(env: Env): Unit = {
+    def run(spec: SpecStructure)(env: Env): Unit =
       val junitPrinter: Printer = JUnitPrinter(env, outer.notifier)
       val reporter = Reporter.create(List(junitPrinter), env)
       reporter.report(spec) must beOk
       ()
-    }
   }
 
 }

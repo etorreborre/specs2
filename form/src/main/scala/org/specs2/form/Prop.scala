@@ -39,7 +39,7 @@ case class Prop[T, S](
               actual: Property[T] = Property[T](),
               expected: Property[S] = Property[S](),
               constraint: (T, S) => Result = Prop.checkProp,
-              decorator: Decorator = Decorator().bkGreyLabel) extends Executable with DecoratedProperty[Prop[T, S]] {
+              decorator: Decorator = Decorator().bkGreyLabel) extends Executable with DecoratedProperty[Prop[T, S]]:
 
   /**
    * The apply method sets the expected value and returns the Prop
@@ -53,13 +53,12 @@ case class Prop[T, S](
   lazy val expectedValue = ResultExecution.executeProperty(expected, Pending("No expected value"))
 
   /** execute the constraint set on this property, with the expected value */
-  def execute: Result = {
+  def execute: Result =
     val result = for {
       a <- actualValue.toOption
       e <- expectedValue.toOption
     } yield ResultExecution.execute(constraint(a, e))
     result.getOrElse(expectedValue.left.toOption.getOrElse(actualValue.left.toOption.get))
-  }
 
   /**
    * set a specific result on the property
@@ -78,38 +77,33 @@ case class Prop[T, S](
    *
    * label: "this" (actual: "that")
    */
-  override def toString = {
+  override def toString =
     (if (label.isEmpty) "" else label + ": ") +
     valueToString(actualValue) +
     (if (expected.toOption.isEmpty || expectedValue.toOption == actualValue.toOption) ""
      else " (expected: " + valueToString(expectedValue) + ")")
-  }
 
   /**
    * @return the string for the expected/actual value depending on its existence and execution result
    */
-  private def valueToString(executed: Either[Result, _]) = {
-    executed match {
+  private def valueToString(executed: Either[Result, _]) =
+    executed match
       case Right(r)          => r.notNull
       case Left(Pending(_))  => "_"
       case Left(r)           => r.toString
-    }
-  }
   /** set a new Decorator */
   def decoratorIs(d: Decorator) = copy(decorator = d)
 
-  override def equals(other: Any) = other match {
+  override def equals(other: Any) = other match
     case Prop(l, a, e, c, d) => label == l && actual == a && expected == e
     case _                   => false
-  }
 
   override def hashCode = label.hashCode + actual.hashCode + expected.hashCode
-}
 
 /**
  * Companion object with factory methods
  */
-object Prop {
+object Prop:
   /** create a Prop with a label and an actual value */
   def apply[T](label: String, actual: =>T): Prop[T, T] =
     new Prop(label, Property(actual), Property[T](), checkProp)
@@ -123,14 +117,12 @@ object Prop {
     new Prop[T, S](label, actual = Property(act), constraint = (t: T, s: S) => c(s).apply(Expectable(t)).toResult)
 
   /** create a Prop with a label, an actual value, and a matcher on the actual value */
-  def apply[T](label: String, act: =>T, c: Matcher[T]): Prop[T, T] = {
+  def apply[T](label: String, act: =>T, c: Matcher[T]): Prop[T, T] =
     lazy val a = act
     Prop[T, T](label, a, a, c)
-  }
   /** create a Prop with a label, an actual value, an expected value, and a constraint on the actual value*/
-  def apply[T, S](label: String, act: =>T, exp: =>S, c: Matcher[T]): Prop[T, S] = {
+  def apply[T, S](label: String, act: =>T, exp: =>S, c: Matcher[T]): Prop[T, S] =
     new Prop[T, S](label, actual = Property(act), expected = Property(exp), constraint = (t: T, s: S) => c(Expectable(t)).toResult)
-  }
   /** create a Prop with a label */
   def apply[T](label: String): Prop[T, T] =
     new Prop[T, T](label = label)
@@ -141,11 +133,10 @@ object Prop {
 
   /** default constraint function */
   private[Prop] def checkProp[T, S]: (T, T) => Result = (t: T, s: T) => new BeTypedEqualTo(s).apply(Expectable(t)).toResult
-}
 
-trait PropSyntax {
+trait PropSyntax:
 
-  implicit class PropOps[T](p: Prop[T, T]) {
+  implicit class PropOps[T](p: Prop[T, T]):
     /**
      * check the actual value with a function
      */
@@ -157,12 +148,9 @@ trait PropSyntax {
      */
     def must(m: Matcher[T]): Prop[T, T] =
       p.matchWith((t, _) => m.apply(createExpectable(t)).toResult)
-  }
-}
 
 /**
  * generic trait for anything having a label, to unify Props and Forms
  */
-trait HasLabel {
+trait HasLabel:
   val label: String
-}

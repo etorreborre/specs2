@@ -21,7 +21,7 @@ case class More[F[_], A](as: List[A], next: Producer[F, A]) extends LazyList[F, 
 /**
  * Simple streaming data structure for elements of type A and effects F
  */
-case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]) {
+case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]):
 
   /**
    * Catamorphism on the LazyList data type to produce another stream
@@ -83,7 +83,7 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]) {
         if (n < as.size) emit[F, A](as.drop(n)) append next
         else next.drop(n - as.size))
 
-  def dropRight(n: Int): Producer[F, A] = {
+  def dropRight(n: Int): Producer[F, A] =
       def go(p: Producer[F, A], elements: Vector[A]): Producer[F, A] =
         Producer(p.peek.flatMap {
           case (Some(a), as) =>
@@ -97,9 +97,8 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]) {
 
         })
       go(this, Vector.empty[A])
-    }
 
-  def take(n: Int): Producer[F, A] ={
+  def take(n: Int): Producer[F, A] =
     def go(p: Producer[F, A], i: Int): Producer[F, A] =
       if (i <= 0) done
       else
@@ -111,7 +110,6 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]) {
             else              emit[F, A](as take i).run
         })
     go(this, n)
-  }
 
   def takeWhile(f: A => Boolean): Producer[F, A] =
     cata(
@@ -123,15 +121,14 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]) {
           case some => emit[F, A](some) append next.takeWhile(f)
         })
 
-  def first: Producer[F, A] ={
+  def first: Producer[F, A] =
     Producer(run flatMap {
       case Done() => done[F, A].run
       case One(a) => one[F, A](a).run
       case More(as, next) => as.headOption.map(fr => one[F, A](fr)).getOrElse(done[F, A]).run
     })
-  }
 
-  def last: Producer[F, A] = {
+  def last: Producer[F, A] =
     def go(p: Producer[F, A], previous: Option[A]): Producer[F, A] =
       Producer(p.run flatMap {
         case Done() => previous.map(pr => one[F, A](pr)).getOrElse(done[F, A]).run
@@ -140,7 +137,6 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]) {
       })
 
     go(this, None)
-  }
 
   /**
    * TRANSDUCER OPERATIONS
@@ -184,7 +180,7 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]) {
    */
 
   /** run a stream with a Fold */
-  def fold[B, S](start: F[S], f: (S, A) => F[S], end: S => F[B]): F[B] = {
+  def fold[B, S](start: F[S], f: (S, A) => F[S], end: S => F[B]): F[B] =
     run flatMap {
       case Done() => start.flatMap(end)
       case One(a) => start.flatMap(s1 => f(s1, a).flatMap(end))
@@ -195,7 +191,6 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]) {
           }
         }
     }
-  }
 
   /** run a stream with a Fold */
   def fold[B](aFold: Fold[F, A, B]): F[B] =
@@ -253,7 +248,7 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]) {
    */
 
   /** accumulate chunks of size n inside More nodes */
-  def chunk(size: Int): Producer[F, A] = {
+  def chunk(size: Int): Producer[F, A] =
     def go(p: Producer[F, A], elements: Vector[A]): Producer[F, A] =
       Producer[F, A](
         p.run flatMap {
@@ -267,10 +262,9 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]) {
         })
 
     go(this, Vector.empty)
-  }
 
   /** produce non overlapping windows of 'size' elements */
-  def sliding(size: Int): Producer[F, List[A]] = {
+  def sliding(size: Int): Producer[F, List[A]] =
 
     def go(p: Producer[F, A], elements: Vector[A]): Producer[F, List[A]] =
       Producer[F, List[A]](
@@ -285,7 +279,6 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]) {
         })
 
     go(this, Vector.empty)
-  }
 
   /** produce the next element if there is one + the remaining of the stream */
   def peek: F[(Option[A], Producer[F, A])] =
@@ -296,7 +289,7 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]) {
     }
 
   /** produce the first n elements + the remaining of the stream */
-  def peekN(n: Int): F[(List[A], Producer[F, A])] = {
+  def peekN(n: Int): F[(List[A], Producer[F, A])] =
     def go(p: Producer[F, A], collected: Vector[A]): F[(List[A], Producer[F, A])] =
       p.run flatMap {
         case Done() => Monad[F].pure((collected.toList, done[F, A]))
@@ -310,7 +303,6 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]) {
       }
 
     go(this, Vector.empty)
-  }
 
   /** run some state changes on each element and run an action on the last state */
   def observe[S](start: F[S], f: (S, A) => S, onLastState: S => F[Unit]): Producer[F, A] =
@@ -382,7 +374,7 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]) {
    * which will not exist for the first element, but we take as
    * many elements to fill the "previous" list as we can
    */
-  def zipWithPreviousN(n: Int): Producer[F, (List[A], A)] = {
+  def zipWithPreviousN(n: Int): Producer[F, (List[A], A)] =
       def go(p: Producer[F, A], previous: Vector[A]): Producer[F, (List[A], A)] =
         Producer(p.peek flatMap {
           case (Some(a), as) =>
@@ -393,7 +385,6 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]) {
         })
 
       go(this, Vector.empty)
-    }
 
   /** zip each element with the next one in the stream (which will not exist for the last element) */
   def zipWithNext: Producer[F, (A, Option[A])] =
@@ -404,7 +395,7 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]) {
    * which will not exist for the last element, but we take as
    * many elements to fill the "next" list as we can
    */
-  def zipWithNextN(n: Int): Producer[F, (A, List[A])] = {
+  def zipWithNextN(n: Int): Producer[F, (A, List[A])] =
       Producer[F, (A, List[A])](peekN(n + 1).flatMap { case (next, as) =>
         if (next.isEmpty)
           done[F, (A, List[A])].run
@@ -413,7 +404,6 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]) {
           (one[F, (A, List[A])]((next.head, rest)) append (emit[F, A](rest) append as).zipWithNextN(n)).run
         }
       })
-    }
 
   /** zip each element with the previous and next one in the stream (which will not exist for the first and last element */
   def zipWithPreviousAndNext: Producer[F, (Option[A], A, Option[A])] =
@@ -428,23 +418,21 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]) {
     zipWithState[Int](0)((_, n: Int) => n + 1)
 
   /** zip each element with a running state computed from a function */
-  def zipWithState[B](b: B)(f: (A, B) => B): Producer[F, (A, B)] = {
+  def zipWithState[B](b: B)(f: (A, B) => B): Producer[F, (A, B)] =
     Producer[F, (A, B)] {
       run flatMap {
         case Done() => done[F, (A, B)].run
         case One(a) => one[F, (A, B)]((a, b)).run
         case More(as, next) =>
           val (zipped, newState) =
-            as match {
+            as match
               case Nil => (Vector.empty, b)
               case a :: rest => rest.foldLeft((Vector((a, b)), f(a, b))) { case ((ls, s), cur) =>
                 (ls :+ ((cur, s)), f(cur, s))
               }
-            }
           emit[F, (A, B)](zipped.toList).append(next.zipWithState(newState)(f)).run
       }
     }
-  }
 
   /** insert an element in between every element of the stream */
   def intersperse(in: A): Producer[F, A] =
@@ -468,7 +456,7 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]) {
    */
 
   /** run a stateful function on each element and stream the new state */
-  def scan[B](start: B)(f: (B, A) => B): Producer[F, B] = {
+  def scan[B](start: B)(f: (B, A) => B): Producer[F, B] =
     def go(p: Producer[F, A], previous: B): Producer[F, B] =
       Producer(p.run flatMap {
         case Done() => done[F, B].run
@@ -479,10 +467,9 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]) {
       })
 
     one[F, B](start) append go(this, start)
-  }
 
   /** map the stream elements with a stateful function and return the mapped elements */
-  def state[B, S](start: S)(f: (A, S) => (B, S)): Producer[F, B] = {
+  def state[B, S](start: S)(f: (A, S) => (B, S)): Producer[F, B] =
     def go(p: Producer[F, A], s: S): Producer[F, B] =
       Producer(p.run flatMap {
         case Done() => done[F, B].run
@@ -495,7 +482,6 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]) {
           (emit[F, B](bs) append go(next, news)).run
       })
     go(this, start)
-  }
 
   /** scan without an initial state */
   def scan1(f: (A, A) => A): Producer[F, A] =
@@ -522,7 +508,7 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]) {
     mapEval(f).reduceMonoid
 
   /** map the stream elements with a stateful and effectful function */
-  def stateF[B, S](start: S)(f: (A, S) => (F[B], S)): Producer[F, F[B]] = {
+  def stateF[B, S](start: S)(f: (A, S) => (F[B], S)): Producer[F, F[B]] =
     def go(p: Producer[F, A], s: S): Producer[F, F[B]] =
       Producer(p.run flatMap {
         case Done() => done[F, F[B]].run
@@ -537,13 +523,12 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]) {
       })
 
     go(this, start)
-  }
 
   /**
    * map the stream elements with a stateful and effectful function returning a full stream
    * Then run one last function based on the latest state
    */
-  def producerStateF[B, S](start: S, last: Option[S => Producer[F, B]] = None)(f: (A, S) => F[(Producer[F, B], S)]): Producer[F, B] = {
+  def producerStateF[B, S](start: S, last: Option[S => Producer[F, B]] = None)(f: (A, S) => F[(Producer[F, B], S)]): Producer[F, B] =
     def go(p: Producer[F, A], s: S): Producer[F, B] =
       Producer(p.run flatMap {
         case Done() =>
@@ -572,13 +557,12 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]) {
       })
 
     go(this, start)
-  }
 
   /**
    * map the stream elements with a stateful function returning a full stream
    * Then run one last function based on the latest state
    */
-  def producerState[B, S](start: S, last: Option[S => Producer[F, B]] = None)(f: (A, S) => (Producer[F, B], S)): Producer[F, B] = {
+  def producerState[B, S](start: S, last: Option[S => Producer[F, B]] = None)(f: (A, S) => (Producer[F, B], S)): Producer[F, B] =
     def go(p: Producer[F, A], s: S): Producer[F, B] =
       Producer(p.run.flatMap {
         case Done() =>
@@ -599,15 +583,13 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]) {
           (bs append go(next, news)).run
       })
     go(this, start)
-  }
 
-}
 
 
 /**
  * List of common producers
  */
-object Producer extends Producers {
+object Producer extends Producers:
 
   implicit def MonoidProducer[F[_] : Monad : Safe, A]: Monoid[Producer[F, A]] = new Monoid[Producer[F, A]] {
     def zero: Producer[F, A] = done[F, A]
@@ -624,16 +606,14 @@ object Producer extends Producers {
   }
 
   def flattenProducers[F[_] : Monad : Safe, A](producers: List[Producer[F, A]]): Producer[F, A] =
-    producers match {
+    producers match
       case Nil => done
       case p :: rest => p append flattenProducers(rest)
-    }
-}
 
 /**
  * List of common producers or functions creating producers
  */
-trait Producers {
+trait Producers:
 
   def done[F[_] : Monad : Safe, A]: Producer[F, A] =
     Producer[F, A](Monad[F].pure(Done()))
@@ -669,11 +649,10 @@ trait Producers {
     Producer(e.map(a => More(List(a), repeatEval(e))))
 
   def emit[F[_] : Monad : Safe, A](elements: List[A]): Producer[F, A] =
-    elements match {
+    elements match
       case Nil      => done[F, A]
       case a :: Nil => one[F, A](a)
       case a :: as  => oneOrMore(a, as)
-    }
 
   def emitAsync[A](elements: List[A]): Producer[Action, A] =
     emit[Action, A](elements)
@@ -682,10 +661,9 @@ trait Producers {
     emit[Operation, A](elements)
 
   def emitSeq[F[_] : Monad : Safe, A](elements: Seq[A]): Producer[F, A] =
-    elements.headOption match {
+    elements.headOption match
       case None    => done[F, A]
       case Some(a) => Producer(Monad[F].pure(More[F, A](elements.headOption.toList, emitSeq(elements.tail))))
-    }
 
   def emitSeqAsync[A](elements: Seq[A]): Producer[Action, A] =
     emitSeq[Action, A](elements)
@@ -725,10 +703,8 @@ trait Producers {
       }
     }
 
-  implicit class TransducerOps[F[_], A, B](transducer: Transducer[F, A, B]) {
+  implicit class TransducerOps[F[_], A, B](transducer: Transducer[F, A, B]):
     def |>[C](other: Transducer[F, B, C]): Transducer[F, A, C] = (p: Producer[F, A]) =>
       other(transducer(p))
-  }
-}
 
 object Producers extends Producers

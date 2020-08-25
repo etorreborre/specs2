@@ -15,18 +15,18 @@ class TextPrinterIndentationSpec(val env: Env) extends Specification with OwnEnv
  The specified indentation defines the number of spaces to use to indent text $indentationSpaces
 """
 
-  def indentationSpaces = {
+  def indentationSpaces =
     val logger = PrinterLogger.stringPrinterLogger
     val spec: SpecStructure =
-s2"""
-text$t
-other text
-"""
+      s2"""
+      |text$t
+      |other text
+      |""".stripMargin
+      
     val printer = TextPrinter(ownEnv.setArguments(Arguments("indentation", "4")).setPrinterLogger(logger))
     printer.print(spec).runOption(ownEnv.executionEnv)
     (logger.messages(1), logger.messages(2)) must_==
       (("[info] text    ",
         "[info]     other text"))
-  }
 
 }

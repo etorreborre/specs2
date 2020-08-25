@@ -3,7 +3,7 @@ package control
 
 import fp._
 
-package object origami {
+package object origami:
 
   /** alias for a non-effectful Fold */
   type FoldId[A, U] = Fold[Id, A, U]
@@ -20,4 +20,3 @@ package object origami {
   /** alias for a Sink with async actions */
   type AsyncSink[A] = Fold[Action, A, Unit]
 
-}

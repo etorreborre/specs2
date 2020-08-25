@@ -20,10 +20,9 @@ trait AdaptableMatcher[T] extends Matcher[T] { outer =>
       def adapt(g: T => T, okFunction: String => String, koFunction: String => String): AdaptableMatcher[T] =
         outer.adapt(g compose f, okFunction compose ok, koFunction compose ko)
 
-      def apply[U <: T](a: Expectable[U]) = {
+      def apply[U <: T](a: Expectable[U]) =
         val result = outer.adapt(f, ok, ko).apply(a.map(f))
         result.map((t: T) => a.value)
-      }
     }
   /**
    * Adapts a matcher by changing the actual value before doing the match
@@ -33,9 +32,8 @@ trait AdaptableMatcher[T] extends Matcher[T] { outer =>
     def adapt(f2: T => T, ok: String => String = identity, ko: String => String = identity) =
       outer.adapt(f2, ok, ko)
 
-    def apply[U <: T](a: Expectable[U]) = {
+    def apply[U <: T](a: Expectable[U]) =
       val result = outer.apply(a.map(f))
       result.map((t: T) => a.value)
-    }
   }
 }

@@ -21,37 +21,32 @@ class FormsFragmentsSpec(val env: Env) extends Specification with Forms with Thr
    returning a failure if one property in the form fails                             ${frags.e3}
                                                                                      """
 
-  object frags extends Customers {
+  object frags extends Customers:
     def e1_1 = execute("This is the expected customer" ^ form).size must_== 2
     def e1_2 = execute("This is the expected customer" ^ form).map(_.description.show).apply(1) must_== s"$formText"
     def e1_3 = execute(s2"This is the expected customer $form").map(_.description.show).apply(1) must_== s"$formText"
 
-    def e1_4 = {
+    def e1_4 =
       val spec = execute(s2"This is the expected customer $eric").map(_.description.show)
       spec(0).toString must_== "This is the expected customer "
       spec(1).toString must_== s"$formText"
-    }
 
-    def e2 = {
+    def e2 =
       val example = "the customer must be as expected" ! form
       example.startExecution(ownEnv).executionResult.map(_.isSuccess) must beOkWithValue(true)
-    }
-    def e3 = {
+    def e3 =
       val example = DefaultExecutor.execute("the customer must be as expected" ! failedForm)(ownEnv)
       example.executionResult.map(_.message) must beOkWithValue("20 != 18")
-    }
 
     def execute(spec: SpecStructure) =
       DefaultExecutor.executeFragments(spec.fragments)(ownEnv)
-  }
 
-  trait Customers {
-    trait Customer {
+  trait Customers:
+    trait Customer:
       val name: String
       val age: Int
       def form = Form("Customer").
         tr(prop("name", "eric")(name), prop("age", 20)(age))
-    }
 
     val eric = new Customer { val name = "eric"; val age = 20 }
 
@@ -65,5 +60,4 @@ class FormsFragmentsSpec(val env: Env) extends Specification with Forms with Thr
       val name = "eric"
       val age = 18
     }.form
-  }
 }

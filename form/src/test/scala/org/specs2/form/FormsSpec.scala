@@ -72,8 +72,7 @@ The Forms object provides several utility functions for creating forms
   def ko(f: Seq[Form]) = f.map(_.setFailure)
 }
 
-object FormsExamples extends FormsBuilder {
+object FormsExamples extends FormsBuilder:
   val (a, b, c, d)     = (List(Form.tr("a")), List(Form.tr("b")), List(Form.tr("c")), List(Form.tr("d")))
   val (ab, ba, bc, cd) = (List(Form.tr("a"), Form.tr("b")), List(Form.tr("b"), Form.tr("a")), List(Form.tr("b"), Form.tr("c")), List(Form.tr("c"), Form.tr("d")))
   val (abc, bac)       = (List(Form.tr("a"), Form.tr("b"), Form.tr("c")), List(Form.tr("b"), Form.tr("a"), Form.tr("c")))
-} 

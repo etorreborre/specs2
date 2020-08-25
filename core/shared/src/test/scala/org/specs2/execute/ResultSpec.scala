@@ -120,27 +120,24 @@ more precisely:
       (r.isSuccess, r.isFailure, r.isError, r.isSkipped, r.isPending) must_== ((s, f, e, sk, p))
     }
 
-  def monoidAppendOnce = {
+  def monoidAppendOnce =
     var count = 0
     def a: Result = { count += 1; Success() }
     def b: Result = { count += 1; Success() }
     Result.ResultMonoid.append(a, b)
     count must be_==(2)
-  }
 
-  def failureMonoidAppendOnce = {
+  def failureMonoidAppendOnce =
     var count = 0
     def a: Result = { count += 1; Success() }
     def b: Result = { count += 1; Success() }
     Result.ResultFailureMonoid.append(a, b)
     count must be_==(2)
-  }
 
-  def shortCircuitMonoid = {
+  def shortCircuitMonoid =
     Result.ResultShortCircuitMonoid.append(Failure("wrong"), throw new Exception("boom")) must beFailing[Result]
-  }
 
-  def foreachFails = {
+  def foreachFails =
     var count = 0
 
     val result =
@@ -152,9 +149,8 @@ more precisely:
 
     (result must beFailing("boom")) and
     (count === 5)
-  }
 
-  def forallFails = {
+  def forallFails =
     var count = 0
 
     val result =
@@ -166,7 +162,6 @@ more precisely:
 
     (result must beFailing("boom")) and
       (count === 10)
-  }
 
   val success1: Result = Success("s1")
   val success2 = Success("s2")                                                                                          

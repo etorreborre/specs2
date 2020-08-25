@@ -21,7 +21,7 @@ import org.specs2.concurrent.ExecutionEnv
  * In mutable specifications text fragments add one level to the following fragments,
  * Otherwise should and can blocks create Start/End fragments indicating that the level should go up then down
  */
-trait Levels {
+trait Levels:
 
   def levelsProcess: AsyncTransducer[Fragment, (Fragment, Int)] = (p: AsyncStream[Fragment]) =>
     levelsProcess1(p).map { case (f, level) => (f, level.l) }
@@ -39,7 +39,7 @@ trait Levels {
     }
   }
 
-  def fold(fragment: Fragment, level: Level): Level = fragment match {
+  def fold(fragment: Fragment, level: Level): Level = fragment match
     // level goes +1 when a new block starts
     case f @ Fragment(Start,_ ,_) => level.copy(start = true, incrementNext = false)
     case f if Fragment.isText(f)  => level.copy(start = true, incrementNext = true)
@@ -47,7 +47,6 @@ trait Levels {
     case f                        =>
       if (level.incrementNext) level.copy(start = false, incrementNext = false, l = level.l + 1)
       else                     level
-  }
 
 
   def levelsToTreeLoc(mapper: Mapper): AsyncTransducer[(Fragment, Int), TreeLoc[Fragment]] = { (p: AsyncStream[(Fragment, Int)]) =>
@@ -57,17 +56,15 @@ trait Levels {
       case ((f, level), treeLoc) =>
 
         val parent = if (level == 0) treeLoc.root else (treeLoc.parentLocs :+ treeLoc).takeWhile(_.getLabel._2 < level).lastOption.getOrElse(treeLoc)
-        val newTree = mapper(f) match {
+        val newTree = mapper(f) match
           case Some(fragment) => parent.insertDownLast(Leaf((fragment, level)))
           case None           => treeLoc
-        }
         (newTree, newTree)
     }.map(_.map(_._1))
   }
 
-}
 
-object Levels extends Levels {
+object Levels extends Levels:
 
   def treeLoc(fs: Fragments)(ee: ExecutionEnv): Option[TreeLoc[Fragment]] =
     treeLocMap(fs)(identityMapper)(ee)
@@ -83,10 +80,8 @@ object Levels extends Levels {
   type Mapper = Fragment => Option[Fragment]
   val identityMapper: Mapper = (f: Fragment) => Some(f)
 
-}
 
 case class Level(start: Boolean = false, incrementNext: Boolean = false, l: Int = 0)
 
-object Level {
+object Level:
   val Root = Level()
-}

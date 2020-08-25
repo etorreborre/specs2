@@ -16,14 +16,13 @@ trait FormS2StringContext extends S2StringContext { this: FormFragmentsFactory =
   import formFactory._
 
   implicit def formIsInterpolated(f: =>Form): Interpolated = new Interpolated {
-    override def prepend(text: String): Fragments = {
+    override def prepend(text: String): Fragments =
       val formFragment = FormFragment(f.executeForm)
 
       Fragments(fragmentFactory.text(text)).append(formFragment.updateDescription {
         case fd: FormDescription => fd.indent(lastLineIndentation(text))
         case _ => formFragment.description
       })
-    }
   }
 
   implicit def toFormIsInterpolatedFragment(f: HasForm): Interpolated =

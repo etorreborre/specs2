@@ -7,19 +7,17 @@ import PrimitiveDiffable.primitive
 /**
  * Typeclass for values which can be compared and return a comparison result
  */
-trait Diffable[-T] {
+trait Diffable[-T]:
 
   def diff(actual: T, expected: T): ComparisonResult
 
-}
 
-object Diffable extends DiffableLowPriority1 {
+object Diffable extends DiffableLowPriority1:
 
   def diff[T](actual: T, expected: T)(implicit di: Diffable[T]): ComparisonResult =
     di.diff(actual, expected)
-}
 
-trait DiffableLowPriority1 extends DiffableLowPriority2 {
+trait DiffableLowPriority1 extends DiffableLowPriority2:
   // Needed to avoid ambiguous implicits with Dotty when looking for a Diffable
   // for `Either[Int, Nothing]` for example.
   implicit val nothingDiffable: Diffable[Nothing] = NothingDiffable
@@ -51,16 +49,14 @@ trait DiffableLowPriority1 extends DiffableLowPriority2 {
   implicit def setDiffable[E : Diffable]: Diffable[Set[E]] = new SetDiffable
   implicit def seqDiffable[E : Diffable]: Diffable[Seq[E]] = new SeqLinesDiffable[E]
   implicit def arrayDiffable[E : Diffable]: Diffable[Array[E]] = new ArrayDiffable
-}
 
-trait DiffableLowPriority2 {
+trait DiffableLowPriority2:
   implicit def optionDiffable[T : Diffable]: Diffable[Option[T]] = new OptionDiffable[T]
   implicit def eitherDiffable[L : Diffable, R : Diffable]: Diffable[Either[L, R]] = new EitherDiffable[L, R]
   implicit def fallbackDiffable[T]: Diffable[T] = new FallbackDiffable[T]
-}
 
-trait Diffables {
-  implicit class DiffableOps[T](diffable: Diffable[T]) {
+trait Diffables:
+  implicit class DiffableOps[T](diffable: Diffable[T]):
     def compareWith(compare: (T, T) => Boolean): Diffable[T] =
       new Diffable[T] {
         def diff(actual: T, expected: T): ComparisonResult = new ComparisonResult {
@@ -69,7 +65,5 @@ trait Diffables {
           override def render(indent: String): String = diffable.diff(actual, expected).render(indent)
         }
       }
-  }
-}
 
 object Diffables extends Diffables

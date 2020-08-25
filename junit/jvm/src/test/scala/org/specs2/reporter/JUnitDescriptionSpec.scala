@@ -128,7 +128,7 @@ class JUnitDescriptionSpec(val env: Env) extends Specification with JUnitDescrip
     "   |",
     "   `- level1::ex2(org.specs2.reporter.JUnitDescriptionSpec)\n")
 
-  def a10 = {
+  def a10 =
     val ex1fst = "ex1" ! ok
     val ex1snd = "ex1" ! ok
 
@@ -137,9 +137,8 @@ class JUnitDescriptionSpec(val env: Env) extends Specification with JUnitDescrip
         createDescription(titled(start ^ "level1" ^ break ^ ex1fst ^ ex1snd ^ end))(ee)).flatten.toList
 
     ds.map(_.hashCode).distinct must haveSize(4)
-  }
 
-  def a11 = {
+  def a11 =
     val fs: Fragments =
       Fragments.foreach(Seq("ex1", "ex2", "ex3")) { ex => ex ! success }
 
@@ -149,7 +148,6 @@ class JUnitDescriptionSpec(val env: Env) extends Specification with JUnitDescrip
 
     // header + 3 examples
     ds.map(_.hashCode).distinct must haveSize(4)
-  }
 
   def b1 = details (
     description   = toDescription(ex1).getChildren.get(0),
@@ -187,28 +185,26 @@ class JUnitDescriptionSpec(val env: Env) extends Specification with JUnitDescrip
   def descriptionIs(fs: Fragments, fromIDE: Boolean = false)(tree: String*): Result =
     showDescriptionTree(titled(fs), fromIDE) must_== tree.toList.mkString("\n")
 
-  def showDescriptionTree(spec: SpecStructure, fromIDE: Boolean = false): String = {
+  def showDescriptionTree(spec: SpecStructure, fromIDE: Boolean = false): String =
     // set the header to the main specification class
     val newHeader = spec.header.copy(specClass = classOf[JUnitDescriptionSpec])
     descriptions(fromIDE).createDescription(spec.copy(header = newHeader))(ee).drawTree
-  }
 
   def toDescription(f: Fragment): Description   = toDescription(Fragments(f))
 
-  def toDescription(fs: Fragments): Description = {
+  def toDescription(fs: Fragments): Description =
     val spec = titled(fs)
 
     // set the header to the main specification class
     val newHeader = spec.header.copy(specClass = classOf[JUnitDescriptionSpec])
     descriptions().createDescription(spec.copy(header = newHeader))(ee)
-  }
 
   def descriptions(fromIDE: Boolean = false) = new JUnitDescriptions {
     override lazy val isExecutedFromAnIDE = fromIDE
   }
 }
 
-trait ReporterExamples extends MustMatchers with StandardResults with StandardMatchResults with FragmentsFactory with AcceptanceDsl {
+trait ReporterExamples extends MustMatchers with StandardResults with StandardMatchResults with FragmentsFactory with AcceptanceDsl:
   private val factory = fragmentFactory; import factory._
 
   lazy val text = factory.text("text")
@@ -236,26 +232,22 @@ trait ReporterExamples extends MustMatchers with StandardResults with StandardMa
 
   def titled(fs: Fragments) = "JUnitDescriptionSpec".title ^ fs
 
-}
 
 object ReporterExamples extends ReporterExamples
 
-trait JUnitDescriptionSpecTest extends Specification {
+trait JUnitDescriptionSpecTest extends Specification:
 
-  def details(description: Description, className: String, methodName: String, testClass: Class[_], displayName: String, isTest: Boolean) = {
+  def details(description: Description, className: String, methodName: String, testClass: Class[_], displayName: String, isTest: Boolean) =
       p^
       "the className must be filled"    ! desc(description).e1(className)   ^br^
       "the methodName must be correct"  ! desc(description).e2(methodName)  ^br^
       "the testClass must be correct"   ! desc(description).e3(testClass)   ^br^
       "the displayName must be filled"  ! desc(description).e4(displayName) ^br^
       "the isTest flag must be correct" ! desc(description).e5(isTest)      ^br
-  }
 
-  case class desc(description: Description) {
+  case class desc(description: Description):
     def e1(name: String)     = description.getClassName must_== name
     def e2(name: String)     = description.getMethodName must_== name
     def e3(klass: Class[_])  = (description.getTestClass:Any) must_== klass
     def e4(name: String)     = description.getDisplayName must_== name
     def e5(isTest: Boolean)  = description.isTest must_== isTest
-  }
-}

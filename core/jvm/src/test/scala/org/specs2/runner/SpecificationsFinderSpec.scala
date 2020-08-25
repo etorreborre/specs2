@@ -30,7 +30,7 @@ class SpecificationsFinderSpec extends Spec { def is = s2"""
     filterWithPattern(globToPattern("**/*.scala"))(FilePath.unsafe(new File("T:/"+new File("src/test/scala/org/specs2/runner/SpecificationsFinderSpec.scala").getAbsolutePath))) must
       beTrue
 
-  def e4 = {
+  def e4 =
     val filter = (s: String) =>
       s.contains("SourceFileSpec") || // SourceFileSpec cannot be instantiated
       s.contains("SpecificationsFinderSpec")
@@ -39,7 +39,6 @@ class SpecificationsFinderSpec extends Spec { def is = s2"""
       basePath = DirectoryPath.unsafe(base) / "src" / "test" / "scala",
       filter = filter
     ).runOption must beSome((l: List[_]) => l must haveSize(1))
-  }
 
   def findFiles: Matcher[Operation[List[FilePath]]] = (operation: Operation[List[FilePath]]) =>
     operation must beOk((_: List[FilePath]) must not(beEmpty))

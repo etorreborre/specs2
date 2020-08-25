@@ -20,7 +20,7 @@ import concurrent.ExecutionEnv
  * Note that the fragments have to be lazy in order to avoid cycles when 2 specifications are referencing
  * each other with links
  */
-case class SpecStructure(header: SpecHeader, arguments: Arguments, lazyFragments: () => Fragments) {
+case class SpecStructure(header: SpecHeader, arguments: Arguments, lazyFragments: () => Fragments):
   lazy val fragments = lazyFragments()
 
   def contents: AsyncStream[Fragment]                               = fragments.contents
@@ -63,12 +63,11 @@ case class SpecStructure(header: SpecHeader, arguments: Arguments, lazyFragments
 
   def dependsOn(spec2: SpecStructure)(ee: ExecutionEnv): Boolean =
     SpecStructure.dependsOn(ee)(this, spec2)
-}
 
 /**
  * Create SpecStructures from header, arguments, fragments
  */
-object SpecStructure {
+object SpecStructure:
   def apply(header: SpecHeader): SpecStructure =
     new SpecStructure(header, Arguments(), () => Fragments())
 
@@ -120,7 +119,7 @@ object SpecStructure {
 
   /** @return all the referenced spec structures */
   def specStructuresRefs(spec: SpecStructure, env: Env,
-                         classLoader: ClassLoader)(refs: SpecStructure => List[SpecificationRef]): Operation[Seq[SpecStructure]] = {
+                         classLoader: ClassLoader)(refs: SpecStructure => List[SpecificationRef]): Operation[Seq[SpecStructure]] =
 
     val byName = (ss: List[SpecStructure]) => ss.foldLeft(Vector[(String, SpecStructure)]()) { (res, cur) =>
       val name = cur.specClassName
@@ -136,18 +135,15 @@ object SpecStructure {
        .filterNot { case (n, _) => visited.map(_._1).contains(n) }
 
     Operation.delayed {
-      def getAll(seed: Vector[SpecStructure], visited: Vector[(String, SpecStructure)]): Vector[SpecStructure] = {
+      def getAll(seed: Vector[SpecStructure], visited: Vector[(String, SpecStructure)]): Vector[SpecStructure] =
         if (seed.isEmpty) visited.map(_._2)
-        else {
+        else
           val toVisit: Vector[(String, SpecStructure)] = seed.flatMap(s => getRefs(s, visited))
           getAll(toVisit.map(_._2), visited ++ toVisit)
-        }
-      }
       val name = spec.specClassName
       val linked = getRefs(spec, Vector((name, spec)))
       getAll(linked.map(_._2), linked :+ ((name, spec)))
     }
-  }
 
   /** @return the class names of all the referenced specifications */
   def referencedSpecStructuresRefs(env: Env)(spec: SpecStructure): List[SpecificationRef] =
@@ -168,7 +164,7 @@ object SpecStructure {
   private def selected(env: Env)(spec: SpecStructure): List[Fragment] =
     select(env)(spec).fragments.fragments.runMonoid(env.specs2ExecutionEnv)
 
-  implicit class SpecStructureOps(s: SpecStructure)(implicit ee: ExecutionEnv) {
+  implicit class SpecStructureOps(s: SpecStructure)(implicit ee: ExecutionEnv):
     def textsList: List[Fragment] =
       s.texts.run(ee)
 
@@ -190,5 +186,3 @@ object SpecStructure {
     def linkReferencesList: List[SpecificationRef] =
       s.linkReferences.run(ee)
 
-  }
-}

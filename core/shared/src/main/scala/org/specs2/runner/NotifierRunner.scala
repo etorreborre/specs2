@@ -6,9 +6,8 @@ import reporter._
 /**
  * This runner can be used with any class implementing the Notifier trait
  */
-case class NotifierRunner(notifier: Notifier) {
+case class NotifierRunner(notifier: Notifier):
   def main(arguments: Array[String])  =
-    try {
+    try
       ClassRunner.run(Array(arguments ++ Seq("notifier", notifier.getClass.getName):_*))
-    } catch { case t: Throwable => t.printStackTrace }
-}
+    catch { case t: Throwable => t.printStackTrace }

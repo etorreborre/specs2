@@ -10,7 +10,7 @@ import ResultLogicalCombinators._
  *
  * A Row can be executed by executing each Cell and collecting the results.
  */
-case class Row(private val cellList: List[Cell]) extends Executable {
+case class Row(private val cellList: List[Cell]) extends Executable:
   /** @return all the cells */
   def cells = cellList
 
@@ -37,35 +37,29 @@ case class Row(private val cellList: List[Cell]) extends Executable {
   def executeRow = Row(cellList.map(_.executeCell))
 
   /** @return print the row with a padding space size to use for each cell, given cell by cell */
-  def text(maxSizes: Seq[Int]) = {
-    def pad(cells: Seq[Cell], sizes: Seq[Int], result: Seq[String]): Seq[String] = {
-      cells.toList match {
+  def text(maxSizes: Seq[Int]) =
+    def pad(cells: Seq[Cell], sizes: Seq[Int], result: Seq[String]): Seq[String] =
+      cells.toList match
         case Nil => result
         case c :: Nil => (result :+ c.text.padTo(sizes.sum + (sizes.size - 1)*3, ' ')).toList
-        case c :: rest => sizes match {
+        case c :: rest => sizes match
           case Nil => (result :+ c.text).toList
           case s :: Nil => pad(rest, Nil, (result :+ c.text.padTo(s, ' ')).toList)
           case s :: ss => pad(rest, ss, (result :+ c.text.padTo(s, ' ')).toList)
-        }
-      }
-    }
     pad(cells, maxSizes, Nil).mkString("| ", " | ", " |")
-  }
 
   /** append a new Cell */
   def add(cell: Cell) =
     copy(cellList = cellList :+ cell)
 
-  override def equals(a: Any) = a match {
+  override def equals(a: Any) = a match
     case Row(c) => cells == c
     case other => false
-  }
   override def hashCode = cells.map(_.hashCode).sum
-}
 /**
  * Companion object of a Row to create a Row with at least one cell
  */
-case object Row {
+case object Row:
   /**
    * create a row from cells
    */
@@ -74,4 +68,3 @@ case object Row {
    * create a row from cells
    */
   def tr(cs: Seq[Cell]) = Row(cs.toList)
-}

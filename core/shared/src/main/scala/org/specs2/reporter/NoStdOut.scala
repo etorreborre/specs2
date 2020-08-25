@@ -12,38 +12,32 @@ import java.io.{FileDescriptor, FileOutputStream, OutputStream, PrintStream}
  * executing specifications and examples concurrently
  *
  */
-trait NoStdOut extends Around {
-  def around[T : AsResult](t: =>T): Result = {
-    try {
+trait NoStdOut extends Around:
+  def around[T : AsResult](t: =>T): Result =
+    try
       // both System.out and Console.out must be swapped because Console keeps
       // a variable containing System.out
       System.setOut(noOut)
       Console.withOut(noOut) {
         AsResult(t)
       }
-    } finally {
+    finally
       System.setOut(stdOut)
-    }
-  }
 
-}
 
 object NoStdOut extends NoStdOut
 
-object noOut extends PrintStream(NullOutputStream) {
+object noOut extends PrintStream(NullOutputStream):
   override def print(s: String) = ()
-}
 
 object stdOut extends PrintStream(new FileOutputStream(FileDescriptor.out))
 
-object NullOutputStream extends OutputStream {
+object NullOutputStream extends OutputStream:
   def write(b: Int) = ()
-}
 
 /**
  * This trait allows to remove any console display during the execution of the examples
  * of a Specification
  */
-trait NoStdOutAroundEach extends AroundEach {
+trait NoStdOutAroundEach extends AroundEach:
   def around[T : AsResult](t: =>T): Result = NoStdOut(t)
-}

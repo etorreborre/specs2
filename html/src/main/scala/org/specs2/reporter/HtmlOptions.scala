@@ -14,7 +14,7 @@ case class HtmlOptions(
   search:             Boolean,
   warnMissingSeeRefs: Boolean,
   tocEntryMaxSize:    Int,
-  toc:                Boolean) {
+  toc:                Boolean):
 
   def javascriptDir = outDir / "javascript"
   def indexDir      = javascriptDir / "tipuesearch"
@@ -31,17 +31,15 @@ case class HtmlOptions(
       .updateWhenTrue("search",  search)
       .updateWhenTrue("toc",     toc)
 
-  implicit class Update(map: Map[String, String]) {
+  implicit class Update(map: Map[String, String]):
     def updateWhenTrue(name: String, value: String, condition: Boolean): Map[String, String] =
       if (condition) map.updated(name, value)
       else map
 
     def updateWhenTrue(name: String, value: Boolean): Map[String, String] =
       map.updateWhenTrue(name, value.toString, value)
-  }
-}
 
-object HtmlOptions {
+object HtmlOptions:
 
   val outDir             = DirectoryPath.unsafe(new File("target", "specs2-reports").getAbsoluteFile)
   val baseDir            = DirectoryPath.unsafe(".")
@@ -55,5 +53,4 @@ object HtmlOptions {
 
   def template(outDir: DirectoryPath): FilePath =
     outDir / "templates" | "specs2.html"
-}
 

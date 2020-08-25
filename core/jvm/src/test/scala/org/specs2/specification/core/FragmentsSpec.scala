@@ -11,7 +11,7 @@ class FragmentsSpec(ee: ExecutionEnv) extends Spec with Tables with TypedEqual {
 """
   val factory = fragmentFactory; import factory._
 
-  def a1 = {
+  def a1 =
     def t(s: String) = text(s)
     def e(s: String) = example(s, success)
     def toFragment(s: String) =
@@ -27,5 +27,4 @@ class FragmentsSpec(ee: ExecutionEnv) extends Spec with Tables with TypedEqual {
     "e(e1), t(a1), t(a2), e(e2)" ! Seq("e1", "a1a2", "e2")             |
     "e(e1), t(a1), e(e2), t(a2)" ! Seq("e1", "a1", "e2", "a2")         |
     { (fs, r) => Fragments(fs.split(",").map(toFragment): _*).compact.fragmentsList(ee).map(_.description.show) === r }
-  }
 }

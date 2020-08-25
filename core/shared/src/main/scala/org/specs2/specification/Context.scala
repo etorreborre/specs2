@@ -9,15 +9,13 @@ import scala.reflect.Selectable.reflectiveSelectable
 /**
  * generic trait for Before, After, Around
  */
-trait Context {
+trait Context:
   def apply[T : AsResult](a: =>T): Result
-}
 
-object Context {
+object Context:
   def compose(c1: Context, c2: Context): Context = new Context {
     def apply[T : AsResult](a: =>T): Result = c1(c2(a))
   }
-}
 
 /**
  * The Before trait can be inherited by classes representing a context
@@ -54,11 +52,10 @@ trait Before extends Context { outer =>
 
 }
 
-object Before {
+object Before:
   def create(action: =>Any) = new Before {
     def before: Any = action
   }
-}
 
 /**
  * The After trait can be inherited by classes representing a context
@@ -74,10 +71,9 @@ trait After extends Context { outer =>
    * execute an action returning a Result
    * and finally the after action
    */
-  def apply[T : AsResult](a: =>T): Result = {
+  def apply[T : AsResult](a: =>T): Result =
     try { AsResult(a) }
     finally { after; ()  }
-  }
 
   /** compose the actions of 2 After traits */
   def compose(a: After): After = new After {
@@ -91,17 +87,15 @@ trait After extends Context { outer =>
 
 }
 
-object After {
+object After:
   def create(action: =>Any) = new After {
     def after: Any = action
   }
-}
 
 trait BeforeAfter extends Before with After { outer =>
-  override def apply[T : AsResult](a: =>T): Result = {
+  override def apply[T : AsResult](a: =>T): Result =
     lazy val result = super[Before].apply(a)
     super[After].apply(result)
-  }
 
   /** compose the actions of 2 BeforeAfter traits */
   def compose(b: BeforeAfter): BeforeAfter = new BeforeAfter {
@@ -116,12 +110,11 @@ trait BeforeAfter extends Before with After { outer =>
   }
 }
 
-object BeforeAfter {
+object BeforeAfter:
   def create(beforeAction: =>Any, afterAction: =>Any) = new BeforeAfter {
     def before: Any = beforeAction
     def after: Any = afterAction
   }
-}
 
 /**
  * The Around trait can be inherited by classes which will
@@ -138,34 +131,30 @@ trait Around extends Context { outer =>
 
   /** compose the actions of 2 Around traits */
   def compose(a: Around): Around = new Around {
-    def around[T : AsResult](t: =>T): Result = {
+    def around[T : AsResult](t: =>T): Result =
       a.around(outer.around(t))
-    }
   }
 
   /** sequence the actions of 2 Around traits */
   def andThen(a: Around): Around = new Around {
-    def around[T : AsResult](t: =>T): Result = {
+    def around[T : AsResult](t: =>T): Result =
       outer.around(a.around(t))
-    }
   }
 }
 
-object Around {
+object Around:
   def create(aroundAction: Result => Result) = new Around {
     def around[T : AsResult](t: =>T): Result = aroundAction(AsResult(t))
   }
-}
 /**
  * A Fixture can be implicitly passed to a set of examples taking a function as an input.
  *
  * It can effectively act as a parameterized Around context
  */
-trait Fixture[T] {
+trait Fixture[T]:
   def apply[R : AsResult](f: T => R): Result
-}
 
-object Fixture {
+object Fixture:
   implicit def fixtureHasMonad: Monad[Fixture] = new Monad[Fixture] {
     def point[A](a: =>A) = new Fixture[A] {
       def apply[R : AsResult](f: A => R): Result = AsResult(f(a))
@@ -175,16 +164,14 @@ object Fixture {
       def apply[R : AsResult](fb: B => R): Result = fixture((a: A) => fa(a)(fb))
     }
   }
-}
 
 /**
  * This class is used to evaluate a Context as a sequence of results by side-effects.
  *
  * @see the AllExpectations trait for its use
  */
-class ResultsContext(results: => scala.collection.Seq[Result]) extends StoredResultsContext {
+class ResultsContext(results: => scala.collection.Seq[Result]) extends StoredResultsContext:
   def storedResults = results
-}
 
 /**
  * This trait is a context which will use the results provided by the class inheriting that trait.
@@ -192,7 +179,7 @@ class ResultsContext(results: => scala.collection.Seq[Result]) extends StoredRes
  * and returns the 'storedResults' as the summary of all results
  */
 trait StoredResultsContext extends Context { this: { def storedResults: scala.collection.Seq[Result]} =>
-  def apply[T : AsResult](r: =>T): Result = {
+  def apply[T : AsResult](r: =>T): Result =
     // evaluate r, triggering side effects
     val asResult = AsResult(r)
     val results = storedResults
@@ -201,5 +188,4 @@ trait StoredResultsContext extends Context { this: { def storedResults: scala.co
     // then add the result as a new issue
     if (asResult.isError || asResult.isThrownFailure) issues(results :+ asResult, "\n")
     else                                              issues(results, "\n")
-  }
 }

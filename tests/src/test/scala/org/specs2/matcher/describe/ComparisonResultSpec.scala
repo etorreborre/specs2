@@ -118,13 +118,12 @@ class ComparisonResultSpec extends Spec { def is = s2"""
   def m3 = { MapDifference(Seq.empty, changed = Seq("k" -> PrimitiveDifference("x", "y")), Seq.empty, Seq.empty).render must_== "Map('k' -> {'x' != 'y'})" }
   def m4 = { MapDifference(Seq.empty, Seq.empty, added = Seq("x" -> "y"), Seq.empty).render must_== "Map(added: 'x' -> 'y')" }
   def m5 = { MapDifference(Seq.empty, Seq.empty, Seq.empty, removed = Seq("x" -> "y")).render must_== "Map(removed: 'x' -> 'y')" }
-  def m6 = {
+  def m6 =
     MapDifference(same    = Seq("a" -> "b"),
                   changed = Seq("c" -> PrimitiveDifference("d", "x")),
                   added   = Seq("g" -> "h"),
                   removed = Seq("e" -> "f")).render must_==
       "Map('a' -> 'b',\n    'c' -> {'d' != 'x'},\n    added: 'g' -> 'h',\n    removed: 'e' -> 'f')"
-  }
 
   def o1 = { OptionIdentical(Some(PrimitiveIdentical("abc"))).render must_== "Some('abc')" }
   def o2 = { OptionIdentical(None).render must_== "None" }

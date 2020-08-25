@@ -4,7 +4,7 @@ package text
 /**
  * Any type T with a name and representable as a sequence of Strings
  */
-trait LinesContent[L1] {
+trait LinesContent[L1]:
 
   /** @return a name for this content */
   def name(t: L1): String
@@ -17,12 +17,10 @@ trait LinesContent[L1] {
                                     all:     Boolean = true,
                                     ordered: Boolean = true): LinesContentDifference =
     LinesContentDifference(lines(ls1), implicitly[LinesContent[L2]].lines(ls2), all, ordered)
-}
 
 /**
  * Default implementation for reading lines out of a Seq
  */
-case class SeqLinesContent[A, CC[_] <: Traversable[_]]() extends LinesContent[CC[A]] {
+case class SeqLinesContent[A, CC[_] <: Traversable[_]]() extends LinesContent[CC[A]]:
   def name(seq: CC[A]) = "sequence"
   def lines(seq: CC[A]): Seq[String] = seq.toList.map(_.toString)
-}

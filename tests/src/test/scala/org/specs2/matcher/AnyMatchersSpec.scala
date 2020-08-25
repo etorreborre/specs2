@@ -98,31 +98,25 @@ Implicits
   the must implicits can be deactivated with the NoMustExpectations trait $implicits2
 """
 
-  def implicits1 = {
+  def implicits1 =
     // if this specification compiles and if result is ok, this means that the === implicit could be redefined
     // thanks to the NoCanBeEqual trait
-    case class Spec1() extends Specification with NoTypedEqual {
-      implicit class otherTripleEqualUse[T](t: =>T) {
+    case class Spec1() extends Specification with NoTypedEqual:
+      implicit class otherTripleEqualUse[T](t: =>T):
         def ===[S](other: S) = other
-      }
       val result = (1 === 2) must_== 2
       def is = result
-    }
     Spec1().result
-  }
 
-  def implicits2 = {
+  def implicits2 =
     // if this specification compiles and if result is ok, this means that the must implicit could be redefined
     // thanks to the NoMustExpectations trait
-    case class Spec1() extends org.specs2.mutable.Specification with NoMustExpectations {
-      implicit class aValue[T](t: =>T) {
+    case class Spec1() extends org.specs2.mutable.Specification with NoMustExpectations:
+      implicit class aValue[T](t: =>T):
         def must(other: Int) = other
-      }
       val result = (1 must 2) === 2
       "an example" >> result
-    }
     Spec1().result
-  }
 
   val aValue: String = "a value"
 

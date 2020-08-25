@@ -24,32 +24,28 @@ trait AnsiColors { outer =>
   lazy val all = allColors :+ reset
 
   /** @return a string with no color codes */
-  def removeColors(s: String, doIt: Boolean = true): String = {
+  def removeColors(s: String, doIt: Boolean = true): String =
     if (doIt) all.foldLeft (s.notNull) { (res, cur) => res.replace(cur.color, "") }
     else      s.notNull
-  }
 
   /**
    * @return a colored string (if args.color == true)
    * color markers are inserted at the beginning and end of each line so that newlines are preserved
    */
-  def color(s: String, color: AnsiColor, doIt: Boolean = true) = {
-    if (doIt) {
+  def color(s: String, color: AnsiColor, doIt: Boolean = true) =
+    if (doIt)
       val colored = s.foldLeft(color.color) { (res, cur) =>
         if (cur == '\n') res + reset.color + cur + color.color
         else             res + cur
       } + reset.color
       colored
-    }
     else removeColors(s, true)
-  }
 
   override def toString = all.map(_.color).mkString("AnsiColors(",",",")")
 
-  implicit class AnsiColorOps(s: String) {
+  implicit class AnsiColorOps(s: String):
     def removeColors: String =
       outer.removeColors(s)
-  }
 }
 
 object AnsiColors extends AnsiColors

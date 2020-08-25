@@ -17,10 +17,9 @@ class StatisticsSpec(ee: ExecutionEnv) extends Specification { def is = s2"""
     (emptyStats("ex" ! skipped).examples ==== 1) and
     (emptyStats(step("")).examples ==== 0)
 
-  def e2 = {
+  def e2 =
     def foldStats(r: Result): Stats =
       Statistics.fold.run(List(Fragment(NoText, Execution.executed(r)))).run(ee)
 
     Seq(success, failure, pending, skipped) must contain((r: Result) => foldStats(r) === Stats.empty.withResult(r)).forall
-  }
 }

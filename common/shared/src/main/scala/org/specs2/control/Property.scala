@@ -8,7 +8,7 @@ import Exceptions._
  *
  * It has Option-like function and can be also converted to an Either object
  */
-case class Property[T](value: () => Option[T], evaluated: Boolean = false, evaluatedValue: Option[T] = None) {
+case class Property[T](value: () => Option[T], evaluated: Boolean = false, evaluatedValue: Option[T] = None):
   /** change the value */
   def updateValue(init: =>Option[T]) = new Property(value = () => init)
   /** change the value */
@@ -58,18 +58,15 @@ case class Property[T](value: () => Option[T], evaluated: Boolean = false, evalu
     tryOr(optionalValue.hashCode)((_:Throwable).hashCode)
 
   override def toString = optionalValue.fold("")(_.toString)
-}
 
 /**
  * Companion object to create properties with possibly no initial value
  */
-object Property {
+object Property:
   def apply[T](i: =>T) = new Property(() => Some(i))
   def apply[T]() = new Property[T](() => None)
-}
 
-trait Properties {
+trait Properties:
   implicit def aProperty[T](t: T): Property[T] = Property(t)
-}
 
 object Properties extends Properties

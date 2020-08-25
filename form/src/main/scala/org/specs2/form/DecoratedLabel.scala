@@ -4,7 +4,7 @@ package form
 /**
  * A DecoratedLabel holds a decorator and delegates decoration and styling operations to that Decorator
  */
-trait DecoratedLabel[T] {
+trait DecoratedLabel[T]:
   val decorator: Decorator
   /** set a new Decorator */
   def decoratorIs(d: Decorator): T
@@ -16,4 +16,3 @@ trait DecoratedLabel[T] {
   def decorateLabel(ns: Any) = decorator.label(ns)
   /** return the label styles */
   def labelStyles = decorator.labelStyles.mkString("; ")
-}

@@ -11,10 +11,10 @@ import io.ConsoleOutput
  *  will print 'this string' and pass it to the rest of the expectation
  *
  */
-trait Debug extends ImplicitParameters {
+trait Debug extends ImplicitParameters:
   
   implicit def debug[T](t: =>T): Debuggable[T] = new Debuggable(t)
-  class Debuggable[T](t: =>T) extends ConsoleOutput {
+  class Debuggable[T](t: =>T) extends ConsoleOutput:
     lazy val value = t
 
     /** print the object to the console and return it */
@@ -30,15 +30,12 @@ trait Debug extends ImplicitParameters {
     /** print the object to the console with a small message before */
     def pp(pre: String): T = { println(pre+" "+value); value }
 
-  }
 
-}
 
 /**
  * Use this trait to disable the `pp` method on objects
  */
-trait NoDebug extends Debug {
+trait NoDebug extends Debug:
   override def debug[T](t: =>T) = super.debug(t)
-}
 
 object Debug extends Debug

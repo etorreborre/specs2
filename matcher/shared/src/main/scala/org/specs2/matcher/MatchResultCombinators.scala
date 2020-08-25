@@ -10,21 +10,20 @@ import org.specs2.execute.{Result, ResultLogicalCombinators}
 trait MatchResultCombinators extends MatchResultLogicalCombinators with ResultLogicalCombinators
 object MatchResultCombinators extends MatchResultCombinators
 
-trait MatchResultLogicalCombinators extends Expectations {
+trait MatchResultLogicalCombinators extends Expectations:
 
   implicit def combineMatchResult[T](m: =>MatchResult[T]): MatchResultCombinator[T] = new MatchResultCombinator[T](m)
 
-  class MatchResultCombinator[T](mr: =>MatchResult[T]) {
+  class MatchResultCombinator[T](mr: =>MatchResult[T]):
     /**
      * Either  Left(exception) => in case of an error
      *     or  Right(result)   => normal result
      */
     lazy val result: Either[Exception, MatchResult[T]] =
       try Right(sandboxMatchResult(mr))
-      catch {
+      catch
         case failure: MatchResultException[_] => Right[Exception, MatchResult[T]](failure.matchResult.asInstanceOf[MatchResult[T]])
         case other: Exception                 => Left[Exception, MatchResult[T]](other)
-      }
 
     /** if there was an exception on evaluating the result, no expectable can be accessed */
     lazy val expectable = 
@@ -83,8 +82,6 @@ trait MatchResultLogicalCombinators extends Expectations {
     /** when the condition is true the result it taken as is, when it's false, take its negation */
     def iff(condition: Boolean): MatchResult[T] = if (condition) mr else mr.not
 
-  }
 
-}
 
 object MatchResultLogicalCombinators extends MatchResultLogicalCombinators

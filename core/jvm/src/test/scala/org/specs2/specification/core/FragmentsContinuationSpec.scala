@@ -20,16 +20,14 @@ class FragmentsContinuationSpec(val env: Env) extends Specification with ActionM
   def continuationAfterFailure =
     runContinuation(ko, continuation = "continuation" ! ok) must haveSize(1)
 
-  def continuationError = {
+  def continuationError =
     val fragments = runContinuation(ok, continuation = {sys.error("boom"); "continuation" ! ok})
     (fragments must haveSize(2)) and
     (fragments(1).description.show must beMatching("Could not create fragments after the previous successful result"))
-  }
 
   /** HELPERS */
-  def runContinuation[R : AsResult](r1: =>R, continuation: =>Fragments): List[Fragment] = {
+  def runContinuation[R : AsResult](r1: =>R, continuation: =>Fragments): List[Fragment] =
     Fragments(DefaultExecutor(ownEnv).execute(ownEnv.arguments)(
       Fragments("test" ! FragmentsContinuation.continueWith(r1, continuation)).contents)).
       fragmentsList(ownEnv.executionEnv)
-  }
 }

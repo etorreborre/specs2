@@ -5,7 +5,7 @@ import scala.concurrent.{ExecutionContext, Future}
 /**
  * Inspired from the scalaz (https://github.com/scalaz/scalaz) project
  */
-trait Monad[F[_]] extends Applicative[F] {
+trait Monad[F[_]] extends Applicative[F]:
 
   def bind[A, B](fa: F[A])(f: A => F[B]): F[B]
 
@@ -37,9 +37,8 @@ trait Monad[F[_]] extends Applicative[F] {
    */
   def iterateUntil[A](f: F[A])(p: A => Boolean): F[A] =
     bind(f)(y => if (p(y)) point(y) else iterateUntil(f)(p))
-}
 
-object Monad {
+object Monad:
 
   @inline def apply[F[_]](implicit F: Monad[F]): Monad[F] = F
 
@@ -54,34 +53,30 @@ object Monad {
     def point[A](a: =>A): Option[A] = Some(a)
 
     def bind[A,B](fa: Option[A])(f: A => Option[B]): Option[B] =
-      fa match {
+      fa match
         case None => None
         case Some(a) => f(a)
-      }
 
     override def tailrecM[A, B](a: A)(f: A => Option[A Either B]): Option[B] =
-      f(a) match {
+      f(a) match
         case None => None
         case Some(Left(a1)) => tailrecM(a1)(f)
         case Some(Right(b)) => Some(b)
-      }
   }
 
   implicit def eitherMonad[L]: Monad[Either[L, *]] = new Monad[Either[L, *]] {
     def point[A](a: =>A): Either[L, A] = Right(a)
 
     def bind[A,B](fa: Either[L, A])(f: A => Either[L, B]): Either[L, B] =
-      fa match {
+      fa match
         case Left(l) => Left(l)
         case Right(a) => f(a)
-      }
 
     override def tailrecM[A, B](a: A)(f: A => Either[L, A Either B]): Either[L, B] =
-      f(a) match {
+      f(a) match
         case Left(l) => Left(l)
         case Right(Left(a1)) => tailrecM(a1)(f)
         case Right(Right(b)) => Right(b)
-      }
   }
 
   implicit def futureMonad(implicit ec: ExecutionContext): Monad[Future] = new Monad[Future] {
@@ -90,11 +85,10 @@ object Monad {
     def bind[A,B](fa: Future[A])(f: A => Future[B]): Future[B] =
       fa.flatMap(f)
   }
-}
 
-trait MonadSyntax {
+trait MonadSyntax:
 
-  implicit class MonadOps[F[_] : Monad, A](fa: F[A]) {
+  implicit class MonadOps[F[_] : Monad, A](fa: F[A]):
     val monad = Monad.apply[F]
 
     def flatMap[B](f: A => F[B]): F[B] =
@@ -108,13 +102,10 @@ trait MonadSyntax {
 
     def >>[B](fb: F[B]): F[B] =
       bind(_ => fb)
-  }
 
-  implicit class MonadOps1[F[_] : Monad, A](fa: F[F[A]]) {
+  implicit class MonadOps1[F[_] : Monad, A](fa: F[F[A]]):
     val monad = Monad.apply[F]
 
     def flatten: F[A] =
       monad.flatMap(fa)(identity)
-  }
 
-}

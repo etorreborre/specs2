@@ -12,7 +12,7 @@ import scala.util.control.NonFatal
  *
  * @see org.specs2.control.ExceptionsSpec for examples
  */
-trait Exceptions {
+trait Exceptions:
 
   /**
    * try to evaluate an expression, returning an Option
@@ -21,10 +21,9 @@ trait Exceptions {
    *
    * @return None if there is an exception, or Some(value)
    */
-  def tryo[T](a: =>T): Option[T] = {
+  def tryo[T](a: =>T): Option[T] =
     try Some(a)
     catch { case NonFatal(e) => None }
-  }
 
   /**
    * try to evaluate an expression, returning a value T
@@ -41,10 +40,9 @@ trait Exceptions {
    * If the expression throws a Throwable a function f is used to return a value
    * of the expected type.
    */
-  def catchAllOr[T](a: =>T)(f: Throwable => T): T = {
+  def catchAllOr[T](a: =>T)(f: Throwable => T): T =
     try a
     catch { case e: Throwable => f(e) }
-  }
   /**
    * try to evaluate an expression, returning a value T
    *
@@ -81,10 +79,9 @@ trait Exceptions {
    * If the expression throws an Exception a function f is used to return the left value
    * of the Either returned value.
    */
-  def trye[T, S](a: =>T)(f: Throwable => S): Either[S, T] = {
+  def trye[T, S](a: =>T)(f: Throwable => S): Either[S, T] =
     try Right(a)
     catch { case NonFatal(e) => Left(f(e)) }
-  }
 
   /**
    * try to evaluate an expression, returning Either
@@ -92,10 +89,9 @@ trait Exceptions {
    * If the expression throws an Exception a function f is used to return the left value
    * of the Either returned value.
    */
-  def try_Either[T, S](a: =>T)(f: Throwable => S): Either[S, T] = {
+  def try_Either[T, S](a: =>T)(f: Throwable => S): Either[S, T] =
     try Right(a)
     catch { case NonFatal(e) => Left(f(e)) }
-  }
 
   /** try to apply a partial function to a value */
   def tryCollect[T](a: =>T)(partialFunction: PartialFunction[T, Boolean]): Boolean =
@@ -111,10 +107,9 @@ trait Exceptions {
    * If the expression throws any Throwable a function f is used to return the left value
    * of the Either returned value.
    */
-  def catchAll[T, S](a: =>T)(f: Throwable => S): Either[S, T] = {
+  def catchAll[T, S](a: =>T)(f: Throwable => S): Either[S, T] =
     try Right(a)
     catch { case e: Throwable => Left(f(e)) }
-  }
 
   /**
    * try to evaluate an expression, returning Either
@@ -122,10 +117,8 @@ trait Exceptions {
    * If the expression throws an Exception a function f is used to return the left value
    * of the Either returned value.
    */
-  def catchAll_Either[T, S](a: =>T)(f: Throwable => S): Either[S, T] = {
+  def catchAll_Either[T, S](a: =>T)(f: Throwable => S): Either[S, T] =
     try Right(a)
     catch { case e: Throwable => Left(f(e)) }
-  }
-}
 
 object Exceptions extends Exceptions

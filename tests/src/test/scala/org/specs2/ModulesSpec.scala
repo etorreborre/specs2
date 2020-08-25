@@ -20,8 +20,8 @@ object Core     extends Specification { def is = Module.specifications(getClass)
 object JUnit    extends Specification { def is = Module.specifications(getClass) }
 object Examples extends Specification { def is = Module.specifications(getClass) }
 
-object Module extends SpecificationCreation {
-  def specifications(klass: Class[_], filter: String => Boolean = (s: String) => true) = {
+object Module extends SpecificationCreation:
+  def specifications(klass: Class[_], filter: String => Boolean = (s: String) => true) =
     val name = klass.getSimpleName.replace("$", "")
     val base = DirectoryPath.unsafe(new java.io.File(".").getAbsolutePath) / FileName.unsafe(name.toLowerCase) / "src" / "test" / "scala"
     val specs = SpecificationsFinder.default.findSpecifications(basePath = base, verbose = false, filter = filter).unsafeRun.take(3)
@@ -29,5 +29,3 @@ object Module extends SpecificationCreation {
     name.title.copy(specClass = klass) ^
     br ^
     Fragments.foreach(specs)(s => link(showOnly("!x") ^ s.is) ^ br)
-  }
-}

@@ -15,7 +15,7 @@ class BeforeAfterAllSpec extends Specification { def is = s2"""
 
 """
 
-  def beforeAfter = {
+  def beforeAfter =
     val messages = new ArrayBuffer[String]
     val spec = new Spec with BeforeAfterAll {
       def is = sequential ^
@@ -31,9 +31,8 @@ class BeforeAfterAllSpec extends Specification { def is = s2"""
 
     runSpec(spec)
     messages.toList ==== List("before all", "e1", "e2", "after all")
-  }
 
-  def withTags1 = {
+  def withTags1 =
     val messages = new ArrayBuffer[String]
     val spec = new Spec with BeforeAfterAll {
       def is =
@@ -52,9 +51,8 @@ class BeforeAfterAllSpec extends Specification { def is = s2"""
 
     runSpec(spec, arguments = Arguments("include", "s"))
     messages.toList ==== List("before all", "e1", "after all")
-  }
 
-  def withTags2 = {
+  def withTags2 =
     val messages = new ArrayBuffer[String]
     val spec = new Spec with BeforeAfterAll {
       def is =
@@ -73,13 +71,11 @@ class BeforeAfterAllSpec extends Specification { def is = s2"""
 
     runSpec(spec, arguments = Arguments("exclude", "s"))
     messages.toList ==== List("before all", "e2", "after all")
-  }
 
-  def runSpec(s: SpecificationStructure, arguments: Arguments = Arguments()) = {
+  def runSpec(s: SpecificationStructure, arguments: Arguments = Arguments()) =
     val env = Env(arguments = arguments, printerLogger = NoPrinterLogger)
     try Reporter.create(Nil, env).report(s.structure(env)).runVoid(env.executionEnv)
     finally env.shutdown()
-  }
 
 
 }

@@ -10,10 +10,9 @@ class ProducerSpec extends Specification { def is = s2"""
 
 """
 
-  def stackOverflow = {
+  def stackOverflow =
     Producer.emitSeq[Operation, Int](List.range(1, 10000))
     Producer.emitSeq[Action, Int](List.range(1, 10000))
     ok
-  }
 
 }

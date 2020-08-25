@@ -19,7 +19,7 @@ trait LinesContentMatchers extends LinesContentBaseMatchers
 object LinesContentMatchers extends LinesContentMatchers
 
 private[specs2]
-trait LinesContentBaseMatchers extends DifferenceFilters with Expectations with SeqsContents {
+trait LinesContentBaseMatchers extends DifferenceFilters with Expectations with SeqsContents:
 
   /** matches if 2 contents, as a pair, have the same lines */
   def haveSameLines[L1 : LinesContent, L2 : LinesContent]: LinesPairComparisonMatcher[L1, L2] =
@@ -44,9 +44,9 @@ trait LinesContentBaseMatchers extends DifferenceFilters with Expectations with 
     all: Boolean = true,
     ordered: Boolean = true,
     colors: Boolean = true,
-    filter: DifferenceFilter = DifferencesClips()) extends Matcher[L1] {
+    filter: DifferenceFilter = DifferencesClips()) extends Matcher[L1]:
 
-    def apply[S <: L1](t: Expectable[S]): MatchResult[S] = {
+    def apply[S <: L1](t: Expectable[S]): MatchResult[S] =
       val ls1 = t.value
       val (content1, content2) = (implicitly[LinesContent[L1]], implicitly[LinesContent[L2]])
 
@@ -60,7 +60,6 @@ trait LinesContentBaseMatchers extends DifferenceFilters with Expectations with 
              n1+" "+koMessage+" "+n2+"\n"+
              showDiffs(filter(diffs.show))+"\n",
              t)
-    }
 
     def showWith(show: DifferenceFilter) = copy[L1, L2](filter = show)
     def unordered                        = copy[L1, L2](ordered = false)
@@ -80,31 +79,26 @@ trait LinesContentBaseMatchers extends DifferenceFilters with Expectations with 
       if (all) "is the same as"
       else     "contains"
 
-    protected def koMessage = {
+    protected def koMessage =
       if (all) "is not the same as"
       else     "does not contain"
-    }
 
-  }
 
   case class LinesPairComparisonMatcher[L1 : LinesContent, L2 : LinesContent](all: Boolean = true,
                                                                               ordered: Boolean = true,
                                                                               colors: Boolean = true,
                                                                               filter: DifferenceFilter = DifferencesClips())
-    extends Matcher[(L1, L2)] {
+    extends Matcher[(L1, L2)]:
 
-    def apply[S <: (L1, L2)](t: Expectable[S]): MatchResult[S] = {
+    def apply[S <: (L1, L2)](t: Expectable[S]): MatchResult[S] =
       val (ls1, ls2) = t.value
       new LinesComparisonMatcher[L1, L2](ls2, all, ordered, colors, filter).
         apply(createExpectable(ls1)).map((_:L1) => t.value)
-    }
 
     def showOnly(show: DifferenceFilter) = copy[L1, L2](filter = show)
     def unordered                        = copy[L1, L2](ordered = false)
     def nocolors                         = copy[L1, L2](colors = false)
-  }
 
-}
 
 /**
  * This trait is mostly extracted for implicit search reasons.
@@ -112,9 +106,8 @@ trait LinesContentBaseMatchers extends DifferenceFilters with Expectations with 
  * Otherwise in the expression (f1, f2) must haveSameLines, the implicit for Se[String] would conflict with this one
  */
 private[specs2]
-trait SeqsContents {
+trait SeqsContents:
   // default implementation for reading seq lines
   implicit protected def seqContentForMatchers[T, CC[_] <: Traversable[_]]: LinesContent[CC[T]] =
     SeqLinesContent[T, CC]()
 
-}

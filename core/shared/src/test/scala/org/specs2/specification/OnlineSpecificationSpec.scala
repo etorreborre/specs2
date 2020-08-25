@@ -16,7 +16,7 @@ class OnlineSpecificationSpec extends Specification { def is = s2"""
 """
   val factory = fragmentFactory; import factory._
 
-  def e1 = {
+  def e1 =
     def continue(n: Int): FragmentsContinuation = FragmentsContinuation { (r: Result) =>
       if (n == 1) None
       else        Some(core.Fragments(oneAsync(break) append createExample(n - 1).contents))
@@ -30,7 +30,6 @@ class OnlineSpecificationSpec extends Specification { def is = s2"""
       """|[info] + an online example
          |[info] + an online example
          |[info] + an online example""".stripMargin
-  }
 
 }
 
@@ -38,14 +37,13 @@ class WikipediaBddSpec extends Specification with Online { def is = s2"""
  All the pages mentioning the term BDD must contain a reference to specs2 $e1
 """
 
-  def e1 = {
+  def e1 =
     val pages = Wikipedia.getPages("BDD")
 
     { pages must contain((_:Page) must mention("specs2")) } continueWith
       pagesSpec(pages)
-  }
 
-  def pagesSpec(pages: Seq[Page]): Fragments = {
+  def pagesSpec(pages: Seq[Page]): Fragments =
     val specs2Links = pages.flatMap(_.getLinks).filter(_.getName.contains("specs2"))
 
     s2"""
@@ -53,7 +51,6 @@ class WikipediaBddSpec extends Specification with Online { def is = s2"""
  The specs2 links must all contain a reference to the author of specs2
  ${Fragments.foreach(specs2Links)(authorExample)}
     """
-  }
 
   def authorExample(link: HtmlLink) =
     s2"""
@@ -62,16 +59,13 @@ class WikipediaBddSpec extends Specification with Online { def is = s2"""
 
   def mention(name: String): Matcher[Page] = (page: Page) => (true, "ok")
 
-  object Wikipedia {
+  object Wikipedia:
     def getPages(searchTerm: String): Seq[Page] = Seq(new Page {}, new Page {})
-  }
 
-  trait Page {
+  trait Page:
     def getLinks: Seq[HtmlLink] = Seq(new HtmlLink { def getName = "specs2-1" }, new HtmlLink { def getName = "specs2-2" })
-  }
 
-  trait HtmlLink {
+  trait HtmlLink:
     def getName: String
     def getLinkedPage: Page = new Page {}
-  }
 }

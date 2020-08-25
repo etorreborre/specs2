@@ -28,12 +28,11 @@ class SbtPrinterSpec(val env: Env) extends Specification with OwnEnv { def is = 
 
   case class printer1() { outer =>
 
-    def e1 = {
+    def e1 =
       printer.print((new HelloWorldSpec { override def is = "title".title ^ "\ntext" }).structure(ownEnv)).runAction(ownEnv.specs2ExecutionEnv)
       eventually(logger.messages must contain (beMatching("\\[INFO\\].*title.*")))
-    }
 
-    def e2 = {
+    def e2 =
       val executed = DefaultExecutor.executeSpec((new HelloWorldSpec).is, ownEnv)
 
       print(executed).replaceAll("""(\d+ seconds?, )?\d+ ms""", "0 ms").replaceAll(" ", "_") ===
@@ -50,13 +49,11 @@ class SbtPrinterSpec(val env: Env) extends Specification with OwnEnv { def is = 
            |Finished in 0 ms
            |3 examples, 0 failure, 0 error
            |""".stripMargin.replaceAll(" ", "_")
-    }
 
-    def print(spec: SpecStructure) = {
+    def print(spec: SpecStructure) =
       printer.print(spec).runAction(ownEnv.specs2ExecutionEnv)
       stringOutputLogger.flush()
       stringOutputLogger.messages.mkString("\n")
-    }
 
     val handler = createHandler
     val logger = createLogger
@@ -83,53 +80,46 @@ class SbtPrinterSpec(val env: Env) extends Specification with OwnEnv { def is = 
     val logger = createLogger
     val handler = createHandler
     lazy val events = MySbtEvents()
-    case class MySbtEvents() extends SbtEvents {
+    case class MySbtEvents() extends SbtEvents:
       lazy val handler = outer.handler
       lazy val taskDef = new TaskDef("", Fingerprints.fp1, true, Array())
-    }
 
     val printer = SbtPrinter(env, Array(logger), events)
 
-    def e1 = {
+    def e1 =
       executeAndPrintHelloWorldUnitSpec
       handler.events must contain(eventWithStatus(Status.Success))
-    }
 
-    def e2 = {
+    def e2 =
       executeAndPrintHelloWorldUnitSpec
       handler.events must contain(eventWithDurationGreaterThanOrEqualTo(0))
-    }
 
-    def e3 = {
+    def e3 =
       executeAndPrintHelloWorldUnitSpec
       handler.events must contain(eventWithNameMatching("HW::The 'Hello world' string should::contain 11 characters"))
-    }
 
-    def executeAndPrintHelloWorldUnitSpec = {
+    def executeAndPrintHelloWorldUnitSpec =
       val executed = DefaultExecutor.executeSpec((new HelloWorldUnitSpec).is.fragments, env)
       printer.print(executed).runAction(env.specs2ExecutionEnv)
-    }
 
   }
 
   def createHandler = MyEventHandler()
 
-  case class MyEventHandler() extends EventHandler {
+  case class MyEventHandler() extends EventHandler:
     val events = new ListBuffer[Event]
     def handle(event: Event): Unit =
       events.append(event)
-  }
 
   def createLogger = MyLogger()
     
-  case class MyLogger() extends Logger with StringOutput {
+  case class MyLogger() extends Logger with StringOutput:
     def ansiCodesSupported = false
     def warn(msg: String): Unit =  { append("[WARN] "+msg) }
     def error(msg: String): Unit = { append("[ERROR] "+msg) }
     def debug(msg: String): Unit = { append("[DEBUG] "+msg) }
     def trace(t: Throwable): Unit ={ append("[TRACE] "+t.getMessage) }
     def info(msg: String): Unit =  { append("[INFO] "+msg) }
-  }
 
 
   def eventWithStatus(s: Status): Matcher[Event] =

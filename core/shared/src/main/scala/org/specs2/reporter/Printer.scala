@@ -14,23 +14,21 @@ import specification.core._
  *
  *  See TextPrinter for an example of such a Printer
  */
-trait Printer {
+trait Printer:
   def prepare(specifications: List[SpecStructure]): Action[Unit]
   def finalize(specifications: List[SpecStructure]): Action[Unit]
 
   def sink(spec: SpecStructure): AsyncSink[Fragment]
 
   /** convenience method to print a SpecStructure using the printer's Fold */
-  def print(spec: SpecStructure): Action[Unit] = {
+  def print(spec: SpecStructure): Action[Unit] =
     val printSink = sink(spec)
     spec.contents.fold(printSink.start, printSink.fold, printSink.end)
-  }
-}
 
 /**
  * specs2 built-in printers and creation methods based on the command line arguments
  */
-object Printer {
+object Printer:
   val CONSOLE  = PrinterName("console")
   val HTML     = PrinterName("html")
   val JUNIT    = PrinterName("junit")
@@ -42,4 +40,3 @@ object Printer {
   val printerNames = Seq(CONSOLE, HTML, JUNIT, JUNITXML, MARKDOWN, PRINTER, NOTIFIER)
 
   case class PrinterName(name: String) extends AnyVal
-}

@@ -5,7 +5,7 @@ import mutable.Spec
 import HtmlTemplate._
 import matcher.OperationMatchers._
 
-class HtmlTemplateSpec extends Spec {
+class HtmlTemplateSpec extends Spec:
   "replace variables in a template" >> {
     runTemplate(
       "hello $name$, I'm $me$ and this is not defined $undefined$",
@@ -30,4 +30,3 @@ class HtmlTemplateSpec extends Spec {
       beOkWithValue("hello you!")
   }
 
-}

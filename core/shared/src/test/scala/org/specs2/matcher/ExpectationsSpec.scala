@@ -8,7 +8,7 @@ class ExpectationsSpec extends Specification { def is = s2"""
 
 """
 
-  def e1 = {
+  def e1 =
     val expectations = new StoredExpectations1 {}
     expectations.check(ok)
     expectations.sandboxMatchResult(ko)
@@ -16,21 +16,17 @@ class ExpectationsSpec extends Specification { def is = s2"""
     "ko has not been stored" ==> {
       expectations.storedResults must contain(exactly(ok.toResult))
     }
-  }
 
-  def e2 = {
+  def e2 =
     val expectations = new ThrownExpectations1 {}
     expectations.sandboxMatchResult(expectations.check(ko)) must_== ko
-  }
 
-  trait StoredExpectations1 extends StoredExpectations {
+  trait StoredExpectations1 extends StoredExpectations:
     def check[T](m: MatchResult[T]):
       MatchResult[T] = checkMatchResultFailure(m)
-  }
 
-  trait ThrownExpectations1 extends ThrownExpectations {
+  trait ThrownExpectations1 extends ThrownExpectations:
     def check[T](m: MatchResult[T]): MatchResult[T] = checkMatchResultFailure(m)
-  }
 
 
 }

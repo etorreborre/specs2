@@ -12,7 +12,7 @@ package control
  *  - function of the Command line
  *  - ...
  */
-trait ImplicitParameters {
+trait ImplicitParameters:
 
   trait ImplicitParam
   implicit lazy val implicitParameter: ImplicitParam = new ImplicitParam {}
@@ -46,13 +46,10 @@ trait ImplicitParameters {
 
   trait ImplicitParam10
   implicit lazy val implicitParameter10: ImplicitParam10 = new ImplicitParam10 {}
-}
 
-object ImplicitParameters extends ImplicitParameters {
+object ImplicitParameters extends ImplicitParameters:
 
   // to avoid unused parameters
-  def use[T](a: Any)(other: T): T = {
+  def use[T](a: Any)(other: T): T =
     if (false) a else a
     other
-  }
-}

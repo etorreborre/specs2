@@ -10,7 +10,7 @@ import MatchersImplicits._
 /**
  * Matchers for Action values
  */
-trait ActionMatchers extends ValueChecks {
+trait ActionMatchers extends ValueChecks:
 
   private val ee: ExecutionEnv =
     ExecutionEnv.fromGlobalExecutionContext
@@ -39,6 +39,5 @@ trait ActionMatchers extends ValueChecks {
       ok => Failure(s"a failure with message $message was expected")
     )
 
-}
 
 object ActionMatchers extends ActionMatchers

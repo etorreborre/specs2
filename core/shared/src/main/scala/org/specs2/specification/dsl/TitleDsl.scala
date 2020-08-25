@@ -12,14 +12,12 @@ trait TitleDsl { outer =>
   implicit def title(s: String): TitleOps =
     new TitleOps(s)
     
-  class TitleOps(s: String) {
+  class TitleOps(s: String):
     def title: SpecHeader = SpecHeader(outer.getClass, Some(s))
-  }
 
 }
 
 /** deactivate the TitleDsl implicits */
-trait NoTitleDsl extends TitleDsl {
+trait NoTitleDsl extends TitleDsl:
   override def title(s: String) =
     super.title(s)
-}

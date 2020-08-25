@@ -6,7 +6,7 @@ import Listx._
 import org.scalacheck._
 import Iterablex._
 
-class IterablexSpec extends Specification with IterableData with ScalaCheckResult {
+class IterablexSpec extends Specification with IterableData with ScalaCheckResult:
 
   "Specification for Iterables extensions".title
 
@@ -52,12 +52,11 @@ class IterablexSpec extends Specification with IterableData with ScalaCheckResul
   "mapLast maps the last element with a function if it exists" in
   { Seq(1, 2).mapLast(_ + 1) must_== Seq(1, 3) }
 
-}
 
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen._
 
-trait IterableData {
+trait IterableData:
 
   def arbitraryIterable: Arbitrary[Iterable[Any]] = Arbitrary {
     for {
@@ -73,4 +72,3 @@ trait IterableData {
       i1 <- listOfN(3, oneOf(1, 2, 3, i0))
     } yield (LazyList(i1:_*), i1.scramble)
   }
-}

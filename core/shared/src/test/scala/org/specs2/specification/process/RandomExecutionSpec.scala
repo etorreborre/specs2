@@ -18,7 +18,7 @@ class RandomExecutionSpec(val env: Env) extends Specification with ThrownExpecta
 """
 
 
-  def random1 = {
+  def random1 =
     val results = Results(); import results._
 
     val n = 10
@@ -34,9 +34,8 @@ class RandomExecutionSpec(val env: Env) extends Specification with ThrownExpecta
         messages must not (contain(allExamples).inOrder)
       }
     }.fold(execute.Error(_), identity)
-  }
 
-  def random2 = {
+  def random2 =
     val results = Results(); import results._
 
     val n = 10
@@ -58,11 +57,9 @@ class RandomExecutionSpec(val env: Env) extends Specification with ThrownExpecta
         messages.indexOf("ex"+i) must be_<(messages.indexOf("ex"+(i+5)))
       }
     }.fold(execute.Error(_), identity)
-  }
 
-  case class Results() {
+  case class Results():
     val messagesList = new ListBuffer[String]
     def messages = messagesList.toList
     def print(m: String) = synchronized { messagesList.append(m) }
-  }
 }

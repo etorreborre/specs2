@@ -26,42 +26,35 @@ trait Snippets extends org.specs2.execute.Snippets { outer: S2StringContextCreat
     ${Snippets.createInterpolatedFragment('{snippet}, '{outer.fragmentFactory})}
 }
 
-object Snippets {
+object Snippets:
 
   def createInterpolatedFragment[T](snippetExpr: Expr[Snippet[T]], factoryExpr: Expr[FragmentFactory])(
-    using qctx: QuoteContext, t: Type[T]): Expr[Interpolated] = {
-    import qctx.tasty._
-    '{
-       new Interpolated {
-         private val expression = ${Expr(rootPosition.sourceCode)}
-         private val snippet: Snippet[$t] = ${snippetExpr}
-         private val factory = ${factoryExpr}
-         private val start = PositionLocation(${Expr(rootPosition.sourceFile.jpath.toString)}, ${Expr(rootPosition.startLine)}, ${Expr(rootPosition.startColumn)})
-         private val end = PositionLocation(${Expr(rootPosition.sourceFile.jpath.toString)}, ${Expr(rootPosition.endLine)}, ${Expr(rootPosition.endColumn)})
+    using qctx: QuoteContext, t: Type[T]): Expr[Interpolated] =
+      import qctx.tasty._
+      '{ new Interpolated {
+           private val expression = ${Expr(rootPosition.sourceCode)}
+           private val snippet: Snippet[$t] = ${snippetExpr}
+           private val factory = ${factoryExpr}
+           private val start = PositionLocation(${Expr(rootPosition.sourceFile.jpath.toString)}, ${Expr(rootPosition.startLine)}, ${Expr(rootPosition.startColumn)})
+           private val end = PositionLocation(${Expr(rootPosition.sourceFile.jpath.toString)}, ${Expr(rootPosition.endLine)}, ${Expr(rootPosition.endColumn)})
 
-         def prepend(text: String): Fragments =
-           Fragments(factory.text(text).setLocation(start)).append(snippetFragments(snippet, end, expression))
+           def prepend(text: String): Fragments =
+             Fragments(factory.text(text).setLocation(start)).append(snippetFragments(snippet, end, expression))
 
-         def snippetFragments(snippet: Snippet[$t], location: Location, expression: String): Fragments = {
-           Fragments(
-             Seq(factory.text(snippet.show(expression)).setLocation(location)) ++
-               resultFragments(snippet, location) ++
-               checkFragments(snippet, location):_*)
-         }
-         def resultFragments(snippet: Snippet[$t], location: Location) = {
-           if (snippet.showResult.isEmpty)
-             Seq()
-           else
-             Seq(factory.text("\n"+snippet.showResult).setLocation(location))
-         }
-         def checkFragments(snippet: Snippet[$t], location: Location) = {
-           if (snippet.mustBeVerified)
-             Seq(factory.step(snippet.verify.mapMessage("Snippet failure: "+_)).setLocation(location))
-           else
-             Seq()
+           def snippetFragments(snippet: Snippet[$t], location: Location, expression: String): Fragments =
+             Fragments(
+               Seq(factory.text(snippet.show(expression)).setLocation(location)) ++
+                 resultFragments(snippet, location) ++
+                 checkFragments(snippet, location):_*)
+           def resultFragments(snippet: Snippet[$t], location: Location) =
+             if (snippet.showResult.isEmpty)
+               Seq()
+             else
+               Seq(factory.text("\n"+snippet.showResult).setLocation(location))
+           def checkFragments(snippet: Snippet[$t], location: Location) =
+             if (snippet.mustBeVerified)
+               Seq(factory.step(snippet.verify.mapMessage("Snippet failure: "+_)).setLocation(location))
+             else
+               Seq()
          }
        }
-    }
-  }
-
-}

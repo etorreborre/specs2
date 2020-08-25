@@ -11,6 +11,5 @@ import org.specs2.specification.core._
  * For example if the interpolated element is an execution then prepend will take the text
  * to create an Example
  */
-trait Interpolated {
+trait Interpolated:
   def prepend(text: String): Fragments
-}

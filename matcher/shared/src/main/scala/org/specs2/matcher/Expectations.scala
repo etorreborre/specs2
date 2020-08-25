@@ -12,7 +12,7 @@ object Expectations extends Expectations
 /**
  * Base trait to create expectations
  */
-trait ExpectationsCreation extends MatchResultStackTrace {
+trait ExpectationsCreation extends MatchResultStackTrace:
   /** @return an Expectable */
   def createExpectable[T](t: =>T): Expectable[T] = createExpectable(t, None)
   /** @return an Expectable with a description */
@@ -33,9 +33,8 @@ trait ExpectationsCreation extends MatchResultStackTrace {
   }
 
   /** this method can be overridden to throw exceptions when checking the match result */
-  protected def checkFailure[T](m: MatchResult[T]): MatchResult[T] = {
+  protected def checkFailure[T](m: MatchResult[T]): MatchResult[T] =
     checkMatchResultFailure(mapMatchResult(setStacktrace(m)))
-  }
   /** this method can be overridden to intercept a MatchResult and change its message before it is thrown */
   protected def mapMatchResult[T](m: MatchResult[T]): MatchResult[T] = m
 
@@ -47,20 +46,15 @@ trait ExpectationsCreation extends MatchResultStackTrace {
 
   /** @return the match result without any side-effects */
   protected def sandboxMatchResult[T](mr: =>MatchResult[T]): MatchResult[T] = mr
-}
 
 /** this trait allows to fill-in stack traces on match results for precise location */
-trait MatchResultStackTrace {
+trait MatchResultStackTrace:
   /** this method can be overridden to avoid filling-in a stacktrace indicating the location of the result */
-  protected def setStacktrace[T](m: MatchResult[T]): MatchResult[T] = {
-    m match {
+  protected def setStacktrace[T](m: MatchResult[T]): MatchResult[T] =
+    m match
       case f: MatchFailure[_] if f.trace.isEmpty => f.copy(trace = (new Exception).getStackTrace.toList)
       case other => other
-    }
-  }
-}
 
 /** this trait doesn't fill-in stack traces */
-trait NoMatchResultStackTrace extends MatchResultStackTrace {
+trait NoMatchResultStackTrace extends MatchResultStackTrace:
   override def setStacktrace[T](m: MatchResult[T]): MatchResult[T] = m
-}

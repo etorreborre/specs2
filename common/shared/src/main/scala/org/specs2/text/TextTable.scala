@@ -10,13 +10,12 @@ import collection.Seqx._
  *
  * The main purpose of this class is to display equal-length cells on each column
  */
-case class TextTable(header: Seq[String], lines: Seq[Seq[String]], separator: String = "|") {
+case class TextTable(header: Seq[String], lines: Seq[Seq[String]], separator: String = "|"):
 
   /** show the table with equal-length cells */
-  def show = {
+  def show =
     val maxByColumn = maximumsByColumn(Seq(header) ++ lines)
     formatWithMaxSize(Seq(header) ++ lines, maxByColumn).mkString("\n")
-  }
 
   /**
    * @return a seq of lines where each cell is right-padded with the maximum size of the column cells
@@ -34,7 +33,6 @@ case class TextTable(header: Seq[String], lines: Seq[Seq[String]], separator: St
   private def maximumsByColumn(lines: Seq[Seq[String]]): Seq[Int] =
     transpose(lines).map(column => column.map(_.length).max)
 
-}
 
 object TextTable {
   def apply(header: Seq[String], lines: Seq[String]*): TextTable = new TextTable(header, lines)

@@ -12,45 +12,39 @@ case class ExecutorServices(executorServiceEval:          () => ExecutorService,
                             executionContextEval:         () => ExecutionContext,
                             scheduledExecutorServiceEval: () => ScheduledExecutorService,
                             schedulerEval:                () => Scheduler,
-                            shutdown:                     () => Unit) {
+                            shutdown:                     () => Unit):
 
   private val started = new AtomicBoolean(false)
 
-  implicit lazy val executorService: ExecutorService = {
+  implicit lazy val executorService: ExecutorService =
     started.set(true)
     executorServiceEval()
-  }
 
-  implicit lazy val scheduledExecutorService: ScheduledExecutorService = {
+  implicit lazy val scheduledExecutorService: ScheduledExecutorService =
     started.set(true)
     scheduledExecutorServiceEval()
-  }
 
-  implicit lazy val executionContext: ExecutionContext = {
+  implicit lazy val executionContext: ExecutionContext =
     started.set(true)
     executionContextEval()
-  }
 
-  implicit lazy val scheduler: Scheduler = {
+  implicit lazy val scheduler: Scheduler =
     started.set(true)
     schedulerEval()
-  }
 
   def shutdownNow(): Unit =
     if (started.get) shutdown()
 
   /** convenience method to shutdown the services when the final future has completed */
-  def shutdownOnComplete[A](future: scala.concurrent.Future[A]): ExecutorServices = {
+  def shutdownOnComplete[A](future: scala.concurrent.Future[A]): ExecutorServices =
     future.onComplete(_ => shutdown())
     this
-  }
 
   def schedule(action: =>Unit, duration: FiniteDuration): () => Unit =
     scheduler.schedule(action, duration)
 
-}
 
-object ExecutorServices {
+object ExecutorServices:
 
   def create(arguments: Arguments, systemLogger: Logger, tag: Option[String] = None): ExecutorServices =
     createExecutorServices(arguments, systemLogger, tag, isSpecs2 = false)
@@ -58,7 +52,7 @@ object ExecutorServices {
   def createSpecs2(arguments: Arguments, systemLogger: Logger, tag: Option[String] = None): ExecutorServices =
     createExecutorServices(arguments, systemLogger, tag, isSpecs2 = true)
 
-  private def createExecutorServices(arguments: Arguments, systemLogger: Logger, tag: Option[String], isSpecs2: Boolean): ExecutorServices = {
+  private def createExecutorServices(arguments: Arguments, systemLogger: Logger, tag: Option[String], isSpecs2: Boolean): ExecutorServices =
     val threadFactoryName: String =
       if (isSpecs2) "specs2"+tag.map("-"+_).getOrElse("")
       else          "specs2.user"+tag.map("-"+_).getOrElse("")
@@ -80,7 +74,6 @@ object ExecutorServices {
       () => Schedulers.schedulerFromScheduledExecutorService(scheduledExecutorService),
       () => { try executorService.shutdown finally scheduledExecutorService.shutdown }
     )
-  }
 
   def fromExecutionContext(ec: ExecutionContext): ExecutorServices =
     ExecutorServices(
@@ -106,4 +99,3 @@ object ExecutorServices {
    */
   def scheduledExecutor(scheduledThreadsNb: Int, name: String): ScheduledExecutorService =
     Executors.newScheduledThreadPool(scheduledThreadsNb, NamedThreadFactory("specs2.scheduled."+name))
-}

@@ -62,7 +62,7 @@ trait PathBeHaveMatchers extends BeHaveMatchers { outer: PathBaseMatchers =>
   implicit def toPathResultMatcher(result: MatchResult[String]): PathResultMatcher =
     new PathResultMatcher(result)
 
-  class PathResultMatcher(result: MatchResult[String]) {
+  class PathResultMatcher(result: MatchResult[String]):
     def anExistingPath = result(outer.beAnExistingPath)
     def aHiddenPath = result(outer.beAHiddenPath)
     def aReadablePath = result(outer.beAReadablePath)
@@ -76,7 +76,6 @@ trait PathBeHaveMatchers extends BeHaveMatchers { outer: PathBaseMatchers =>
     def asCanonicalPath(path: String) = result(haveAsCanonicalPath(path))
     def parentPath(path: String) = result(haveParentPath(path))
     def equalToIgnoringSep(other: String) = result(beEqualToIgnoringSep(other))
-  }
   def anExistingPath = beAnExistingPath
   def aHiddenPath = beAHiddenPath
   def aReadablePath = beAReadablePath
@@ -96,12 +95,10 @@ trait PathBeHaveMatchers extends BeHaveMatchers { outer: PathBaseMatchers =>
 trait FileMatchers extends FileBaseMatchers with FileBeHaveMatchers
 object FileMatchers extends FileMatchers
 
-type HasPath = {
-  def getPath(): String
-}
+type HasPath = { def getPath(): String }
 
 private[specs2]
-trait FileBaseMatchers extends PathMatchers {
+trait FileBaseMatchers extends PathMatchers:
   /** matches if file.exists */
   def exist: Matcher[HasPath] = (beAnExistingPath) ^^ ((_:HasPath).getPath())
   /** matches if file.canRead */
@@ -126,16 +123,14 @@ trait FileBaseMatchers extends PathMatchers {
   def haveParent(path: String): Matcher[HasPath] = (haveParentPath(path)) ^^ ((_:HasPath).getPath())
   /** matches if file.list == list */
   def haveList(list: String): Matcher[HasPath] = (listPaths(list)) ^^ ((_:HasPath).getPath())
-}
 /**
  * This case class is used to provide the getPath() method,
  * so that all FileMatchers can be used on Strings.
  */
 private[specs2]
-case class Path(p: String) {
+case class Path(p: String):
   def path = this
   def getPath(): String = p
-}
 
 private[specs2]
 trait FileBeHaveMatchers extends BeHaveMatchers { outer: FileBaseMatchers =>
@@ -145,7 +140,7 @@ trait FileBeHaveMatchers extends BeHaveMatchers { outer: FileBaseMatchers =>
   implicit def toFileResultMatcher(result: MatchResult[HasPath]): FileResultMatcher =
     new FileResultMatcher(result)
 
-  class FileResultMatcher(result: MatchResult[HasPath]) {
+  class FileResultMatcher(result: MatchResult[HasPath]):
     def hidden = result(beHidden)
     def readable = result(beReadable)
     def writable = result(beWritable)
@@ -158,7 +153,6 @@ trait FileBeHaveMatchers extends BeHaveMatchers { outer: FileBaseMatchers =>
     def absolutePath(path: String) = result(haveAbsolutePath(path))
     def canonicalPath(path: String) = result(haveCanonicalPath(path))
     def parent(path: String) = result(haveParent(path))
-  }
   def hidden = beHidden
   def readable = beReadable
   def writable = beWritable
@@ -172,11 +166,9 @@ trait FileBeHaveMatchers extends BeHaveMatchers { outer: FileBaseMatchers =>
   def parent(path: String) = haveParent(path)
 }
 private[specs2]
-class PathMatcher(test: String => Boolean, ok: String, ko: String) extends Matcher[String] {
-  def apply[S <: String](path: Expectable[S]) = {
+class PathMatcher(test: String => Boolean, ok: String, ko: String) extends Matcher[String]:
+  def apply[S <: String](path: Expectable[S]) =
     result(path.value != null && test(path.value),
            path.description + " " + ok,
            path.description  + " " + ko,
            path)
-  }
-}

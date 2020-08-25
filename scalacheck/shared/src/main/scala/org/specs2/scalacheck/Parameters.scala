@@ -27,7 +27,7 @@ case class Parameters(minTestsOk: Int                 = Test.Parameters.default.
   def setVerbosity(v: Int): Parameters =
     copy(prettyParams = prettyParams.copy(verbosity = v))
 
-  def testParameters: Test.Parameters = {
+  def testParameters: Test.Parameters =
     Test.Parameters.default.
       withMinSuccessfulTests(outer.minTestsOk).
       withMaxDiscardRatio(outer.maxDiscardRatio).
@@ -36,9 +36,8 @@ case class Parameters(minTestsOk: Int                 = Test.Parameters.default.
       withWorkers(outer.workers).
       withTestCallback(outer.testCallback).
       withCustomClassLoader(outer.loader)
-  }
 
-  def overrideWith(commandLine: CommandLine): Parameters = {
+  def overrideWith(commandLine: CommandLine): Parameters =
     val updated =
       copy(
         minTestsOk      = commandLine.intOr  ("scalacheck.mintestsok",      minTestsOk),
@@ -51,14 +50,11 @@ case class Parameters(minTestsOk: Int                 = Test.Parameters.default.
 
     if (commandLine.boolOr("scalacheck.verbose", false)) updated.verbose
     else                                                 updated
-  }
 }
 
-object Parameters {
+object Parameters:
   def makeSeed(seed: String): Option[Seed] =
-    Seed.fromBase64(seed).toOption match {
+    Seed.fromBase64(seed).toOption match
       case None => throw new Exception(s"incorrect seed passed from the command-line $seed, this should be a Base64 " +
         s"encoded string")
       case ok => ok
-    }
-}

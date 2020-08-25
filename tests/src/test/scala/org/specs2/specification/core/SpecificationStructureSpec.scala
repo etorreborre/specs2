@@ -47,26 +47,23 @@ class SpecificationStructureSpec(val env: Env) extends Specification with ScalaC
 
   }.setArbitrary(ArbitraryLinks).set(maxSize = 5)
 
-  def report = {
+  def report =
     SpecificationStructure.create("org.specs2.specification.core.BrokenSpecification").runOperation must beLeft((t: Throwable) =>
        t.getCause.getCause.getMessage === "boom")
-  }
 
-  def companion = {
+  def companion =
     SpecificationStructure.create("org.specs2.specification.core.SpecWithCompanion", getClass.getClassLoader, None).
       // the cast is necessary to really show that the right instance has been built
       // see #477
       map(_.asInstanceOf[SpecificationStructure]) must
       beOk
-  }
 
-  def companionSpec = {
+  def companionSpec =
     SpecificationStructure.create("org.specs2.specification.core.SpecObject", getClass.getClassLoader, None).
       // the cast is necessary to really show that the right instance has been built
       // see #477
       map(_.asInstanceOf[SpecificationStructure]) must
       beOk
-  }
 
   def dependOn(s2: SpecStructure): Matcher[SpecStructure] = (s1: SpecStructure) =>
     (s1.dependsOn(s2)(ee), s"${s1.specClassName} doesn't depend on ${s2.specClassName}")

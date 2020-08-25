@@ -21,13 +21,12 @@ class JUnitRunnerSpec(val env: Env) extends Specification with OwnEnv { def is =
 
 """
 
-  def allSpecifications = {
+  def allSpecifications =
     runSpecification(new JUnitRunner(classOf[MainJUnitSpecification])) { messages =>
       messages must contain("run started LinkedJUnitSpec", "run started MainJUnitSpecification")
     }
-  }
 
-  def onlyExamples = {
+  def onlyExamples =
     runSpecification(new JUnitRunner(classOf[JUnitWithBeforeAfterAllSpecification])) { messages =>
       messages.toList === List(
         "run started JUnitWithBeforeAfterAllSpecification",
@@ -35,9 +34,8 @@ class JUnitRunnerSpec(val env: Env) extends Specification with OwnEnv { def is =
         "test finished one example(org.specs2.runner.JUnitWithBeforeAfterAllSpecification)",
         "run finished")
     }
-  }
 
-  def pendingExample = {
+  def pendingExample =
     runSpecification(new JUnitRunner(classOf[JUnitPendingSpecification])) { messages =>
       messages.toList === List(
         "run started JUnitPendingSpecification",
@@ -47,9 +45,8 @@ class JUnitRunnerSpec(val env: Env) extends Specification with OwnEnv { def is =
         "test ignored Below examples should::be pending(org.specs2.runner.JUnitPendingSpecification)",
         "run finished")
     }
-  }
 
-  def errorInStepExample = {
+  def errorInStepExample =
     runSpecification(new JUnitRunner(classOf[JUnitErrorInBeforeAllSpecification])) { messages =>
       messages.toList === List(
         "run started JUnitErrorInBeforeAllSpecification",
@@ -57,9 +54,8 @@ class JUnitRunnerSpec(val env: Env) extends Specification with OwnEnv { def is =
         "test ignored one example(org.specs2.runner.JUnitErrorInBeforeAllSpecification)",
         "run finished")
     }
-  }
 
-  def errorInInitialization = {
+  def errorInInitialization =
     val runner = new JUnitRunner(classOf[JUnitWithErrorInInitialization])
     val testEnv = env.copy(
       executionEnv =       ExecutionEnv.create(env.arguments, env.systemLogger),
@@ -69,15 +65,13 @@ class JUnitRunnerSpec(val env: Env) extends Specification with OwnEnv { def is =
 
     runner.getDescription(testEnv) must throwA[UserException]
     testEnv.executionEnv.isShutdown must beTrue
-  }
 
-  private def runSpecification[T](runner: JUnitRunner)(assertMessages: ListBuffer[String] => T): T = {
+  private def runSpecification[T](runner: JUnitRunner)(assertMessages: ListBuffer[String] => T): T =
     val (notifier, messages) = createNotifier()
     runner.runWithEnv(notifier, ownEnv.copy(arguments = Arguments("all", "junit"))).runOption(ee)
     assertMessages(messages)
-  }
 
-  private def createNotifier() = {
+  private def createNotifier() =
     val messages = new scala.collection.mutable.ListBuffer[String]
     val listener: RunListener = new RunListener {
       override def testRunStarted(description: Description): Unit =
@@ -101,7 +95,6 @@ class JUnitRunnerSpec(val env: Env) extends Specification with OwnEnv { def is =
     val notifier = new RunNotifier
     notifier.addListener(listener)
     (notifier, messages)
-  }
 
 }
 
@@ -113,10 +106,9 @@ class MainJUnitSpecification extends Specification { def is = s2"""
 }
 
 @RunWith(classOf[JUnitRunner])
-object LinkedJUnitSpec extends mutable.Specification {
+object LinkedJUnitSpec extends mutable.Specification:
 
   "ok" >> ok
-}
 
 @RunWith(classOf[JUnitRunner])
 class JUnitWithBeforeAfterAllSpecification extends Specification with BeforeAfterAll { def is = s2"""
@@ -129,7 +121,7 @@ class JUnitWithBeforeAfterAllSpecification extends Specification with BeforeAfte
 }
 
 @RunWith(classOf[JUnitRunner])
-class JUnitPendingSpecification extends mutable.Specification {
+class JUnitPendingSpecification extends mutable.Specification:
   "Below examples" should {
     "fail" in {
       1 must_== 2
@@ -138,7 +130,6 @@ class JUnitPendingSpecification extends mutable.Specification {
       1 must_== 2
     }.pendingUntilFixed
   }
-}
 
 @RunWith(classOf[JUnitRunner])
 class JUnitErrorInBeforeAllSpecification extends Specification with BeforeAfterAll { def is = s2"""
@@ -150,8 +141,7 @@ class JUnitErrorInBeforeAllSpecification extends Specification with BeforeAfterA
   def afterAll(): Unit = ()
 }
 
-class JUnitWithErrorInInitialization extends mutable.Specification {
+class JUnitWithErrorInInitialization extends mutable.Specification:
   val boom = { throw new RuntimeException("Error.") }
 
   "example" >> ok
-}

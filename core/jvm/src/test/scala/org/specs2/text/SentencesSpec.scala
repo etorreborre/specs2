@@ -4,7 +4,7 @@ import org.specs2.matcher.{ExpectationsDescription, TypedEqual}
 import org.specs2.mutable.{Spec, Tables}
 import org.specs2.matcher.MatchersImplicits._
 
-class SentencesSpec extends Spec with Tables with Sentences with TypedEqual with ExpectationsDescription {
+class SentencesSpec extends Spec with Tables with Sentences with TypedEqual with ExpectationsDescription:
 
   "It is possible to create the negation of a sentence" >> {
     "sentence"             | "negated"               | "reversible" |>
@@ -42,4 +42,3 @@ class SentencesSpec extends Spec with Tables with Sentences with TypedEqual with
       "the sentence can be double-negated" ==> (negateSentence(negateSentence(sentence)) === sentence).when(isReversible)
     }
   }
-}

@@ -58,125 +58,103 @@ Messages
   def adapt2 =
     (new UserExpectations).failure1.location must endWith("UserExpectations.scala:11")
 
-  def adapt3 = {
+  def adapt3 =
     val expectable: MustExpectable[Exception] = theValue(new Exception("message"))
     val result = expectable.must(be_==("message") ^^ ((_:Exception).getMessage))
     result.expectable === expectable
-  }
 
-  def adapt4 = {
+  def adapt4 =
     val result = new Exception("message")  must be_>(2) ^^ ((e:Exception) => e.getMessage.length aka "the message size")
     result.message must_== "the message size '7' is greater than 2"
-  }
 
-  def adapt5 = {
+  def adapt5 =
     val result = new Exception("message")  must be_===(8) ^^ ((e:Exception) => e.getMessage.length aka "the message size")
     result.message must_=== "the message size '7 != 8'"
-  }
 
-  def adapt6 = {
+  def adapt6 =
     case class Human(age: Int, wealth: Int)
     def beMostlyEqualTo = (be_==(_:Human)) ^^^ ((_:Human).copy(wealth = 0))
     Human(age = 20, wealth=1000) must beMostlyEqualTo(Human(age = 20, wealth=1)) toResult
-  }
 
-  def adapt7 = {
+  def adapt7 =
     def beEqualTrimmed = (be_==(_:String)) ^^^ ((_:String).trim)
     val message = (" abc" must beEqualTrimmed("abc   ")).message
     (message must contain(" abc")) and
     (message must contain("abc  ")) and
     (message must contain("abc"))
-  }
 
-  def adapt8 = {
+  def adapt8 =
     def haveExtension(extension: =>String) = ((_:File).getPath) ^^ endWith(extension)
     new File("spec.scala") must haveExtension(".scala")
-  }
 
-  def adapt9 = {
+  def adapt9 =
     def beThree: Matcher[Int] = be_===(3)
     val beStringThree = beThree ^^ ( (_: String).toInt aka s"the value")
     ("3" must beStringThree).message === "the value '3' == '3'"
-  }
 
-  def adapt10 = {
+  def adapt10 =
     def beThree: Matcher[Int] = be_==(3)
     val beStringThree = beThree ^^ ( (_: String).toInt aka s"the value")
     ("3" must beStringThree).message === "the value '3' is equal to '3'"
-  }
 
-  def convert1 = {
+  def convert1 =
     def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, "is odd")
     (3 must beEven) returns "'3' is odd"
-  }
 
-  def convert2 = {
+  def convert2 =
     def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, "is even", "is odd")
     (3 must beEven) returns "'3' is odd"
-  }
 
-  def convert3 = {
+  def convert3 =
     def beEven: Matcher[Int] = (i: Int) => (i % 2 == 0, "is even", "'"+i.toString+"' is odd")
     (3 must beEven) returns "'3' is odd"
-  }
 
-  def convert4 = {
+  def convert4 =
     def beEven: Matcher[Int] = (i: Int) => (i % 2 == 0, "'"+i.toString+"' is odd")
     (3 must beEven) returns "'3' is odd"
     (2 must beEven) returns "'2' is not odd"
-  }
 
-  def convert5 = {
+  def convert5 =
     def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i.toString+" is odd")
     (3 must beEven) returns "3 is odd"
     (2 must beEven) returns "2 is not odd"
-  }
 
-  def convert6 = {
+  def convert6 =
     def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i.toString+" is even", (i: Int) => i.toString+" is odd")
     (3 must beEven) returns "3 is odd"
-  }
 
   def convert7 =
     (1 must be_==("1").mute) returns ""
 
-  def convert8 = {
+  def convert8 =
     def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i.toString+" is even", (i: Int) => i.toString+" is odd")
     def beOdd: Matcher[Int] = (i: Int) => beEven.apply(theValue(i)).not
     (2 must beOdd) returns "2 is even"
-  }
 
-  def convert9 = {
+  def convert9 =
     def beOneTwoThreeList: Matcher[List[Int]] = (list: List[Int]) => list must be_==(List(1, 2, 3))
     Matcher.details((List(1, 2) must beOneTwoThreeList).toResult) must_== FailureSeqDetails(List(1, 2), List(1, 2, 3))
-  }
 
-  def convert10 = {
+  def convert10 =
     val result = forallWhen(List(1, 2)) { case i if i == 1 => List(1) must be_===(List(2)) }.toResult
     Matcher.details(result) must_== FailureSeqDetails(List(1), List(2))
-  }
 
-  def collection1 = {
+  def collection1 =
     def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i.toString+" is even", (i: Int) => i.toString+" is odd")
     ((i: Int) => beEven).forall(Seq(1, 2, 3)) returns "1 is odd"
-  }
 
-  def collection2 = {
+  def collection2 =
     def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i.toString+" is even", (i: Int) => i.toString+" is odd")
     ((i: Int) => beEven).foreach(Seq(1, 2, 3)) returns "There are 2 failures\n1 is odd\n3 is odd\n"
-  }
 
-  def messages1 = {
+  def messages1 =
     def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i.toString+" is even", (i: Int) => i.toString+" is odd")
     (3 must beEven.setMessage("is not even")).message === "is not even"
-  }
 
-  def messages2 = {
-    class Spec1() extends org.specs2.mutable.Specification {
+  def messages2 =
+    class Spec1() extends org.specs2.mutable.Specification:
       def test: Result =
         true must beFalse.setMessage("is not ok")
-    }
     ResultExecution.execute(Spec1().test).message === "is not ok"
-  }
 
 }

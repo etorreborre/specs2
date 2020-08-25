@@ -14,7 +14,7 @@ trait TerminationMatchers extends TerminationBaseMatchers with TerminationNotMat
 object TerminationMatchers extends TerminationMatchers
 
 private[specs2]
-trait TerminationBaseMatchers {
+trait TerminationBaseMatchers:
 
   /**
    * this matchers will check if a block of code terminates within a given duration, after just one try
@@ -25,15 +25,14 @@ trait TerminationBaseMatchers {
    * this matchers will check if a block of code terminates within a given duration, and a given number of retries
    */
   def terminate[T](retries: Int = 1, sleep: Duration = 100.millis)(implicit ee: ExecutionEnv) = new TerminationMatcher[T](retries, sleep)(ee)
-}
 
-class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[() => Any] = None, whenDesc: Option[String] = None, onlyWhen: Boolean = false)(implicit ee: ExecutionEnv) extends Matcher[T] {
+class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[() => Any] = None, whenDesc: Option[String] = None, onlyWhen: Boolean = false)(implicit ee: ExecutionEnv) extends Matcher[T]:
 
   def apply[S <: T](a: Expectable[S]) =
     retry(retries, retries, sleep * ee.timeFactor.toDouble, a, createFuture(a.value))
 
   @tailrec
-  private final def retry[S <: T](originalRetries: Int, retries: Int, sleep: Duration, a: Expectable[S], future: Future[S], whenActionExecuted: Boolean = false): MatchResult[S] = {
+  private final def retry[S <: T](originalRetries: Int, retries: Int, sleep: Duration, a: Expectable[S], future: Future[S], whenActionExecuted: Boolean = false): MatchResult[S] =
     val parameters = "with retries="+originalRetries+" and sleep="+sleep.toMillis
     val evenWhenAction = whenDesc.fold("")(w => " even when " + w)
     val onlyWhenAction = whenDesc.getOrElse("the second action")
@@ -41,45 +40,38 @@ class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[(
     def terminates =
       result(true, "the action terminates", "the action is blocking "+parameters+evenWhenAction, a)
 
-    def blocks = {
+    def blocks =
       cancelled.set(true)
       result(false, "the action terminates", "the action is blocking "+parameters+evenWhenAction, a)
-    }
 
-    if (whenAction.isDefined) {
-      if (terminated.get) {
-        if (onlyWhen) {
+    if (whenAction.isDefined)
+      if (terminated.get)
+        if (onlyWhen)
           result(whenActionExecuted,
                  "the action terminates only when "+onlyWhenAction+" terminates",
                  "the action terminated before "+onlyWhenAction+" ("+parameters+")", a)
-        } else terminates
-      } else {
+        else terminates
+      else
         if (retries <= 0) blocks
-        else {
+        else
           // leave the action a chance to finish
           Thread.sleep(sleep.toMillis)
           // if still not finished, try to execute the when action
-          if (!terminated.get && !whenActionExecuted) {
+          if (!terminated.get && !whenActionExecuted)
             whenAction.map(_())
             // leave again the action a chance to finish
             Thread.sleep(sleep.toMillis)
             retry(originalRetries, retries - 1, sleep, a, future, whenActionExecuted = true)
-          } else
+          else
             retry(originalRetries, retries - 1, sleep, a, future)
-        }
-      }
-    } else {
+    else
       if (terminated.get) terminates
-      else {
+      else
         if (retries <= 0) blocks
-        else {
+        else
           Thread.sleep(sleep.toMillis)
           retry(originalRetries, retries - 1, sleep, a, future)
-        }
-      }
-    }
 
-  }
 
   /**
    * use a variable to determine if the future has finished executing
@@ -87,14 +79,13 @@ class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[(
   private val terminated = new AtomicBoolean(false)
   private val cancelled = new AtomicBoolean(false)
 
-  private def createFuture[A](a: =>A)(implicit ee: ExecutionEnv): Future[A] = {
+  private def createFuture[A](a: =>A)(implicit ee: ExecutionEnv): Future[A] =
     val future = Future(a)(ee.executionContext)
     future.onComplete {
       case scala.util.Success(_) => terminated.set(true)
       case scala.util.Failure(_) => terminated.set(true)
     }(ee.executionContext)
     future
-  }
 
   private def withAWhenAction[S](whenAction: Option[() => S], whenDesc: =>Option[String], onlyWhen: Boolean) =
     new TerminationMatcher(retries, sleep, whenAction, whenDesc, onlyWhen)
@@ -108,7 +99,6 @@ class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[(
   def when[S](action: =>S): TerminationMatcher[T] = withAWhenAction(Some(() => action), None, onlyWhen=false)
 
   def onlyWhen[S](action: =>S): TerminationMatcher[T] = withAWhenAction(Some(() => action), None, onlyWhen=true)
-}
 
 /**
  * This trait adds the necessary implicit to write 'action must not terminate'
@@ -116,8 +106,7 @@ class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[(
 private[specs2]
 trait TerminationNotMatchers { outer: TerminationBaseMatchers =>
 
-   implicit class TerminationResultMatcher[T](result: MatchResult[T])(implicit ee: ExecutionEnv) {
+   implicit class TerminationResultMatcher[T](result: MatchResult[T])(implicit ee: ExecutionEnv):
      def terminate = result(outer.terminate)
      def terminate(retries: Int = 0, sleep: Duration = 100.millis) = result(outer.terminate(retries, sleep))
-   }
 }

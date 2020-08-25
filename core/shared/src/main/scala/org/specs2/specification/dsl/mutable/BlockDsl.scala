@@ -12,8 +12,8 @@ import org.specs2.control.ImplicitParameters._
 /**
  * Create blocks of examples in a mutable specification
  */
-trait BlockDsl extends BlockCreation {
-  implicit class describe(d: String) {
+trait BlockDsl extends BlockCreation:
+  implicit class describe(d: String):
     def >>(f: => Fragment): Fragment     = addFragmentBlockWithText(d, f)
     def should(f: => Fragment): Fragment = addFragmentBlockWithText(s"$d should", f)
     def can(f: => Fragment): Fragment    = addFragmentBlockWithText(s"$d can", f)
@@ -26,7 +26,6 @@ trait BlockDsl extends BlockCreation {
 
     def can(fs: => Fragments)(implicit p1: ImplicitParam1): Fragments =
       addFragmentsBlockWithText(s"$d can", fs)(p1)
-  }
 
   def addFragmentBlockWithText(text: String, f: =>Fragment): Fragment =
     addBlock(text, f)
@@ -39,16 +38,14 @@ trait BlockDsl extends BlockCreation {
    */
   implicit def `***If you see this message this means that you've forgotten an operator after the description string: you should write "example" >> result ***`(s: String):
   WarningForgottenOperator = new WarningForgottenOperator(s)
-  class WarningForgottenOperator(s: String) {
+  class WarningForgottenOperator(s: String):
     def apply[T : AsResult](r: =>T): Fragment = ???
-  }
-}
 
 private[specs2]
-trait BlockCreation extends FragmentBuilder with FragmentsFactory {
+trait BlockCreation extends FragmentBuilder with FragmentsFactory:
   private val factory = fragmentFactory
 
-  private[specs2] def addBlock[T](text: String, t: =>T, location: StacktraceLocation = StacktraceLocation()): T = {
+  private[specs2] def addBlock[T](text: String, t: =>T, location: StacktraceLocation = StacktraceLocation()): T =
 
     addStart
     if (hasSectionsForBlocks) addFragment(factory.section(text))
@@ -63,7 +60,6 @@ trait BlockCreation extends FragmentBuilder with FragmentsFactory {
     result
 
 
-  }
 
   private def addText(text: String, location: StacktraceLocation) =
     addFragment(factory.text(text).setLocation(location))
@@ -72,4 +68,3 @@ trait BlockCreation extends FragmentBuilder with FragmentsFactory {
   private def addStart = addFragment(factory.start)
   private def addEnd   = addFragment(factory.end)
 
-}

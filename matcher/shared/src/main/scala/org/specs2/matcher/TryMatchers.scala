@@ -14,7 +14,7 @@ trait TryMatchers extends TryBaseMatchers with TryBeHaveMatchers
 object TryMatchers extends TryMatchers
 
 private[specs2]
-trait TryBaseMatchers {
+trait TryBaseMatchers:
 
   def beSuccessfulTry[T]  = TrySuccessMatcher[T]()
   def beASuccessfulTry[T] = beSuccessfulTry[T]
@@ -41,13 +41,12 @@ trait TryBaseMatchers {
 
   def failedTry[T]   (t: Throwable) = beFailedTry[T](t)
   def aFailedTry[T]  (t: Throwable) = beFailedTry[T](t)
-}
 
 private[specs2]
 trait TryBeHaveMatchers extends BeHaveMatchers { outer: TryBaseMatchers =>
 
   implicit def toTryResultMatcher[T](result: MatchResult[Try[T]]): TryResultMatcher[T] = new TryResultMatcher(result)
-  class TryResultMatcher[T](result: MatchResult[Try[T]]) {
+  class TryResultMatcher[T](result: MatchResult[Try[T]]):
     def beSuccessfulTry = result(outer.beSuccessfulTry)
     def beASuccessfulTry = result(outer.beSuccessfulTry)
     def successfulTry = result(outer.beSuccessfulTry)
@@ -56,15 +55,13 @@ trait TryBeHaveMatchers extends BeHaveMatchers { outer: TryBaseMatchers =>
     def beAFailedTry = result(outer.beFailedTry)
     def aFailedTry = result(outer.beFailedTry)
     def failedTry = result(outer.beFailedTry)
-  }
 }
 
-case class TrySuccessMatcher[T]() extends OptionLikeMatcher[Try, T, T]("a Success", (_:Try[T]).toOption) {
+case class TrySuccessMatcher[T]() extends OptionLikeMatcher[Try, T, T]("a Success", (_:Try[T]).toOption):
   def withValue(t: ValueCheck[T]) = TrySuccessCheckedMatcher(t)
-}
 case class TrySuccessCheckedMatcher[T](check: ValueCheck[T]) extends OptionLikeCheckedMatcher[Try, T, T]("a Success", (_:Try[T]).toOption, check)
 
-case class TryFailureMatcher[T]() extends OptionLikeMatcher[Try, T, Throwable]("a Failure", (_:Try[T]).failed.toOption) {
+case class TryFailureMatcher[T]() extends OptionLikeMatcher[Try, T, Throwable]("a Failure", (_:Try[T]).failed.toOption):
   def withValue(t: ValueCheck[Throwable]) = TryFailureCheckedMatcher(t)
 
   def withThrowable[E <: Throwable : ClassTag] = TryFailureCheckedMatcher[T](ValueChecks.functionIsValueCheck { (t: Throwable) =>
@@ -75,5 +72,4 @@ case class TryFailureMatcher[T]() extends OptionLikeMatcher[Try, T, Throwable]("
     (Expectations.createExpectable(t).applyMatcher(AnyMatchers.haveClass[E]) and
      Expectations.createExpectable(t.getMessage.notNull).applyMatcher(StringMatchers.beMatching(pattern))).toResult
   })
-}
 case class TryFailureCheckedMatcher[T](check: ValueCheck[Throwable]) extends OptionLikeCheckedMatcher[Try, T, Throwable]("a Failure", (_:Try[T]).failed.toOption, check)

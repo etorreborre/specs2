@@ -14,15 +14,14 @@ import scala.annotation.tailrec
  *
  * It is essentially the same as an Action without the asynchronicity
  */
-case class Operation[A](operation: () => A, last: Vector[Finalizer] = Vector.empty) {
+case class Operation[A](operation: () => A, last: Vector[Finalizer] = Vector.empty):
   private def run: A =
     operation()
 
-  def runOperation: Throwable Either A = {
+  def runOperation: Throwable Either A =
     val attempted = attempt
     Finalizer.runFinalizers(attempted.last)
     attempted.run
-  }
 
   def unsafeRun: A =
     runOption.get
@@ -33,9 +32,8 @@ case class Operation[A](operation: () => A, last: Vector[Finalizer] = Vector.emp
   def runMonoid(implicit m: Monoid[A]): A =
     runOption.getOrElse(m.zero)
 
-  def runVoid(): Unit = {
+  def runVoid(): Unit =
     runOption; ()
-  }
 
   def addLast(finalizer: Finalizer): Operation[A] =
     copy(last = last :+ finalizer)
@@ -62,17 +60,15 @@ case class Operation[A](operation: () => A, last: Vector[Finalizer] = Vector.emp
     }
 
   def attempt: Operation[Throwable Either A] =
-    try {
+    try
       val value = operation()
       Operation(() => Right(value), last)
-    }
     catch { case t: Throwable => Operation(() => Left(t), last) }
 
   def toAction: Action[A] =
     Action.pure(run).copy(last = last)
-}
 
-object Operation {
+object Operation:
 
   def ok[A](a: A): Operation[A] =
     pure(a)
@@ -114,14 +110,13 @@ object Operation {
     override def ap[A, B](fa: =>Operation[A])(ff: =>Operation[A => B]): Operation[B] =
       Operation(() => ff.run(fa.run))
 
-   override def tailrecM[A, B](a: A)(f: A => Operation[Either[A, B]]): Operation[B] =
+    override def tailrecM[A, B](a: A)(f: A => Operation[Either[A, B]]): Operation[B] =
       Operation[B] { () =>
         @tailrec
         def loop(va: A): B =
-          f(va).run match {
+          f(va).run match
             case Right(b) => b
             case Left(a) => loop(a)
-          }
         loop(a)
       }
 
@@ -158,4 +153,3 @@ object Operation {
     def asResult(operation: =>Operation[T]): Result =
       operation.runOperation.fold(err => Error(err),  ok => AsResult(ok))
   }
-}

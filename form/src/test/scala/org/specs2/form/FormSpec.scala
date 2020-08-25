@@ -195,7 +195,7 @@ A form can be added to another
   def quote(s: String) = "\n"+s+"\n"
 }
 
-trait datatables extends DataTables with MustMatchers {
+trait datatables extends DataTables with MustMatchers:
   val okDataTable =
     "a" | "b" |>
       1  ! 1   | { (a, b) => a must_== b }
@@ -203,6 +203,5 @@ trait datatables extends DataTables with MustMatchers {
   val koDataTable =
     "a" | "b" |>
       1  ! 2   | { (a, b) => a must_== b }
-}
 
 object datables extends datatables

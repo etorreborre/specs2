@@ -14,7 +14,7 @@ class AnsiColorsSpec extends Spec with Tables { def is = s2"""
   def colors1 =
     removeColors("hello" + AnsiColors.red.color) must_== "hello"
 
-  def colors2 = {
+  def colors2 =
     val ^ = reset.color
     "string to color"        | "result"                                  |>
     "\nhello\n"              ! s"*${^}\n*hello${^}\n*${^}"               |
@@ -24,6 +24,5 @@ class AnsiColorsSpec extends Spec with Tables { def is = s2"""
     ""                       ! s"*${^}"                                  |
     "\nhello\nworld\n"       ! s"*${^}\n*hello${^}\n*world${^}\n*${^}"   |
     { (s, r) => color(s, AnsiColor("*")).replace("\n", "_").replace(^, "^") must_==  r.replace("\n", "_").replace(^, "^") }
-  }
 
 }

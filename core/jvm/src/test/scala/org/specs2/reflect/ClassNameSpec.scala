@@ -5,7 +5,7 @@ import mutable.{Tables, Spec}
 import ClassName._
 import matcher.TypedEqual
 
-class ClassNameSpec extends Spec with Tables with TypedEqual {
+class ClassNameSpec extends Spec with Tables with TypedEqual:
 
   "Class names must be decoded" in {
     "name"                   | "decoded"                |>
@@ -42,4 +42,3 @@ class ClassNameSpec extends Spec with Tables with TypedEqual {
 
   class ThisClassName
 
-}

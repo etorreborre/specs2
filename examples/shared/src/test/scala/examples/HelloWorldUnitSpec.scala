@@ -2,7 +2,7 @@ package examples
 
 import org.specs2._
 
-class HelloWorldUnitSpec extends mutable.Specification {
+class HelloWorldUnitSpec extends mutable.Specification:
   "HW" >> {
     "The 'Hello world' string" should {
       "contain 11 characters" in {
@@ -16,4 +16,3 @@ class HelloWorldUnitSpec extends mutable.Specification {
       }
     }
   }
-}

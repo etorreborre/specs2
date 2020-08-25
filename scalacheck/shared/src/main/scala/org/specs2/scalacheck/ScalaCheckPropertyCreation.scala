@@ -6,7 +6,7 @@ import org.scalacheck.util.{FreqMap, Pretty}
 import execute.AsResult
 import ScalaCheckProperty._
 
-trait ScalaCheckPropertyCreation {
+trait ScalaCheckPropertyCreation:
 
   /** create a ScalaCheck property from a function */
   def prop[T, R](result: T => R)(
@@ -90,9 +90,8 @@ trait ScalaCheckPropertyCreation {
       prettyFreqMap = prettyFreqMap,
       asResult, context = None, parameters)
   
-}
 
-object ScalaCheckPropertyCreation {
+object ScalaCheckPropertyCreation:
   def allPropMethods(n: Int): String =
     (2 to n).map(propMethod).mkString("\n")
 
@@ -109,4 +108,3 @@ object ScalaCheckPropertyCreation {
       asResult, context = None, parameters)
      """
 
-}

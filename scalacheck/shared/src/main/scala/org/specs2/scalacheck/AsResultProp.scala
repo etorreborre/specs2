@@ -9,10 +9,10 @@ import scala.annotation.tailrec
 /**
  * Implicits to convert Prop to AsResult and AsResult to Prop
  */
-trait AsResultProp extends ScalaCheckPropertyCheck with AsResultPropLowImplicits {
+trait AsResultProp extends ScalaCheckPropertyCheck with AsResultPropLowImplicits:
 
-  implicit def asResultToProp[R : AsResult](r: R): Prop = {
-    r match {
+  implicit def asResultToProp[R : AsResult](r: R): Prop =
+    r match
       case p: Prop => p
       case _ =>
         Prop.apply { (params: Gen.Parameters) =>
@@ -20,7 +20,7 @@ trait AsResultProp extends ScalaCheckPropertyCheck with AsResultPropLowImplicits
 
           @tailrec
           def resultToProp(r: execute.Result): Prop =
-            r match {
+            r match
               case f : execute.Failure            => Prop.exception(new FailureException(f))
               case s : execute.Skipped            => Prop.exception(new SkipException(s))
               case p : execute.Pending            => Prop.exception(new PendingException(p))
@@ -31,31 +31,25 @@ trait AsResultProp extends ScalaCheckPropertyCheck with AsResultPropLowImplicits
                 resultToProp(r1.mapMessage("\n"+_))
 
               case other => Prop.passed
-            }
 
           val prop = resultToProp(result)
 
-          result match {
+          result match
             case f: execute.Failure if f.details != NoDetails =>
               prop.apply(params).collect(f.details)
 
             case _ =>
               prop.apply(params)
-          }
         }
-     }
-  }
 
   /** implicit typeclass instance to create examples from a Prop */
   implicit def propAsResult(implicit p: Parameters, pfq: FreqMap[Set[Any]] => Pretty): AsResult[Prop] = new AsResult[Prop] {
-    def asResult(prop: =>Prop): Result = {
+    def asResult(prop: =>Prop): Result =
       check(prop, p, pfq)
-    }
   }
 
-}
 
-trait AsResultPropLowImplicits extends ScalaCheckPropertyCheck with ScalaCheckParameters {
+trait AsResultPropLowImplicits extends ScalaCheckPropertyCheck with ScalaCheckParameters:
   /** implicit typeclass instance to create examples from Properties */
   implicit def propertiesAsResult(implicit p: Parameters, pfq: FreqMap[Set[Any]] => Pretty): AsResult[Properties] = new AsResult[Properties] {
     def asResult(properties: =>Properties): Result =
@@ -63,20 +57,17 @@ trait AsResultPropLowImplicits extends ScalaCheckPropertyCheck with ScalaCheckPa
   }
 
   implicit def scalaCheckPropertyAsResult[S <: ScalaCheckProperty]: AsResult[S] = new AsResult[S] {
-    def asResult(prop: =>S): Result = {
-      try {
+    def asResult(prop: =>S): Result =
+      try
         lazy val p = prop
         check(p.prop, p.parameters, p.prettyFreqMap)
-      } catch {
+      catch
         // this is necessary in case of thrown expectations inside the property
         case FailureException(f) =>
           f
 
         case t: Throwable =>
           AsResultProp.propAsResult(defaultParameters, defaultFreqMapPretty).asResult(Prop.exception(t))
-      }
-    }
   }
-}
 
 object AsResultProp extends AsResultProp

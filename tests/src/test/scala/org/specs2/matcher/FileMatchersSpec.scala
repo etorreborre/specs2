@@ -98,7 +98,7 @@ class FileMatchersSpec extends Spec with TestFiles with FileMatchers {  def is =
 
 }
 
-case class fs() extends MustMatchers with TestFiles with FileMatchers with StandardResults with Debug {
+case class fs() extends MustMatchers with TestFiles with FileMatchers with StandardResults with Debug:
   def e1 = okPath must beAnExistingPath
   def e2 = missingPath must not(beAnExistingPath)
   def e3 = setReadable(okPath, true) must beAReadablePath
@@ -112,10 +112,9 @@ case class fs() extends MustMatchers with TestFiles with FileMatchers with Stand
   def e11 = file(setWritable(okPath, true)) must beWritable
   def e12 = file(dirPath) must haveList("file.txt")
 
-}
 
 
-trait TestFiles extends BeforeAfterEach {
+trait TestFiles extends BeforeAfterEach:
   val fileSystem = FileSystem(NoLogger)
 
   lazy val directoryPath: DirectoryPath = "target" / "test" / "fs"
@@ -130,15 +129,12 @@ trait TestFiles extends BeforeAfterEach {
   def after =
     fileSystem.delete(directoryPath).runOption
 
-  def setReadable(path: String, r: Boolean) = {
+  def setReadable(path: String, r: Boolean) =
     new File(path).setReadable(r)
     path
-  }
 
-  def setWritable(path: String, r: Boolean) = {
+  def setWritable(path: String, r: Boolean) =
     new File(path).setWritable(r)
     path
-  }
 
   def file(s: String) = new File(s)
-}

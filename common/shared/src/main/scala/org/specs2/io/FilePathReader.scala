@@ -14,7 +14,7 @@ import Paths._
 /**
  * Methods to read files on the FileSystem
  */
-trait FilePathReader {
+trait FilePathReader:
 
   /**
    * @return the list of file paths accessible from dir
@@ -33,7 +33,7 @@ trait FilePathReader {
   /**
    * @return the regular expression equivalent to a glob pattern (see the specs for Fragments)
    */
-  def globToPattern(glob: String): String = {
+  def globToPattern(glob: String): String =
     val star = "<STAR>"
     val authorizedNamePattern = "[^\\/\\?<>\\|\\" + star + ":\"]" + star
     glob.replace("\\", "/")
@@ -41,7 +41,6 @@ trait FilePathReader {
       .replace("**/", "(" + authorizedNamePattern + "/)" + star)
       .replace("*", authorizedNamePattern)
       .replace(star, "*")
-  }
 
   /**
    * @return the files accessible recursively from a directory
@@ -67,14 +66,12 @@ trait FilePathReader {
       .filter(_.isDirectory)
       .map(DirectoryPath.unsafe))
 
-  private def filePathsProcess(directory: DirectoryPath): Producer[Operation, FilePath] = {
-    def go(dir: DirectoryPath): Producer[Operation, FilePath] = {
+  private def filePathsProcess(directory: DirectoryPath): Producer[Operation, FilePath] =
+    def go(dir: DirectoryPath): Producer[Operation, FilePath] =
       val (files, directories) = Option(dir.toFile.listFiles).map(_.toList).getOrElse(List()).partition(_.isFile)
       Producer.emitSync(files.map(FilePath.unsafe)) append
        Producer.emitSync(directories.map(DirectoryPath.unsafe).map(go)).flatten
-    }
     go(directory)
-  }
 
   /** @return the content of a file encoded as UTF8 */
   def readFile(path: FilePath): Operation[String] =
@@ -139,6 +136,5 @@ trait FilePathReader {
       if (isDirectory) Operation.fail(s"$file is a directory")
       else             Operation.ok(())
     }
-}
 
 object FilePathReader extends FilePathReader

@@ -11,7 +11,7 @@ import text.RegexExtractor
  * StepParsers are using delimiters or regular expressions with groups to extract values from a piece of text
  * and possibly strip it from delimiters if necessary
  */
-trait StepParsers extends ImplicitParameters {
+trait StepParsers extends ImplicitParameters:
   implicit lazy val stepParserRegex: Regex = """\{([^}]+)\}""".r
 
   def apply[T](f: String => T)(implicit fpr: Regex = stepParserRegex): DelimitedStepParser[T] = new DelimitedStepParser1[T](f).withRegex(fpr)
@@ -34,7 +34,7 @@ trait StepParsers extends ImplicitParameters {
   import RegexExtractor._
 
   /** This class creates Given or Then extractors from a regular expression and a function */
-  class ReadAs(regex: Regex = "".r, groups: Regex = stepParserRegex) {
+  class ReadAs(regex: Regex = "".r, groups: Regex = stepParserRegex):
     def apply(f: String => Unit) = and[Unit](f)
 
     def apply(f: (String, String) => Unit) = and[Unit](f)
@@ -48,12 +48,11 @@ trait StepParsers extends ImplicitParameters {
     def apply(f: (String, String, String, String, String, String, String, String, String, String) => Unit) = and[Unit](f)
     def apply(f: Seq[String] => Unit)(implicit p: ImplicitParam) = and[Unit](f)(p,p)
 
-    trait ReadAsParser[T] extends StepParser[T] {
+    trait ReadAsParser[T] extends StepParser[T]:
       def parse(text: String) = trye((text, parse1(text)))(identity)
       def run(text: String) = trye(parse1(text))(identity)
       def strip(text: String) = text
       def parse1(text: String): T
-    }
 
     def and[T](f: String => T) = new ReadAsParser [T] {
       def parse1(text: String) = f(extract1(text, regex, groups))
@@ -89,17 +88,15 @@ trait StepParsers extends ImplicitParameters {
       Use(p1, p2)
       def parse1(text: String) = f(extractAll(text, regex, groups))
     }
-  }
 
   val extract = StepParser
-}
 
 object StepParsers extends StepParsers
 
 /**
  * a few delimited parsers (with `{}`) to extract ints, doubles and strings
  */
-trait StandardDelimitedStepParsers {
+trait StandardDelimitedStepParsers:
   import StepParsers._
 
   def anInt     = StepParser((_: String).trim.toInt)
@@ -113,12 +110,11 @@ trait StandardDelimitedStepParsers {
   def aString      = StepParser((s:String) => s)
   def twoStrings   = StepParser((s1:String, s2: String) => (s1, s2))
   def threeStrings = StepParser((s1:String, s2: String, s3: String) => (s1, s2, s3))
-}
 object StandardDelimitedStepParsers extends StandardDelimitedStepParsers
 /**
  * a few regular expression parsers to extract ints, doubles and strings (strings are delimited with `"`)
  */
-trait StandardRegexStepParsers {
+trait StandardRegexStepParsers:
   import StepParsers._
 
   // definitions taken from the JavaTokenParsers trait
@@ -137,5 +133,4 @@ trait StandardRegexStepParsers {
   def aString      = groupAs(string).and((s:String) => s)
   def twoStrings   = groupAs(string).and((s1:String, s2: String) => (s1, s2))
   def threeStrings = groupAs(string).and((s1:String, s2: String, s3: String) => (s1, s2, s3))
-}
 object StandardRegexStepParsers extends StandardRegexStepParsers

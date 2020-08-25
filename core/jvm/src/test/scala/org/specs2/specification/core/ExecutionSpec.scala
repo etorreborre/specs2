@@ -15,7 +15,7 @@ class ExecutionSpec(val env: Env) extends Specification with OwnEnv { def is = s
 
 """
 
-  def linkExecution = {
+  def linkExecution =
     val store = StatisticsRepositoryCreation.memory
     val env1 = ownEnv.setStatisticRepository(store)
     val stats =  Stats(specs = 2, failures = 1, examples = 1)
@@ -27,19 +27,16 @@ class ExecutionSpec(val env: Env) extends Specification with OwnEnv { def is = s
           (r.isSuccess must beFalse)
     }
 
-  }
 
-  def withFailureException = {
+  def withFailureException =
     val failure = Failure("ko")
     Execution.withEnv(_ => {throw new FailureException(failure); success}).result(env) === failure
-  }
 
   /**
    * HELPERS
    */
 
-  implicit class ExecutionOps(e: Execution) {
+  implicit class ExecutionOps(e: Execution):
     def result(env: Env): Result =
       Await.result(e.startExecution(env).executedResult.runFuture(env.executionEnv), 10.seconds).result
-  }
 }

@@ -11,20 +11,19 @@ import org.scalacheck.rng.Seed
 
 import scala.util.control.NonFatal
 
-trait ScalaCheckPropertyCheck extends ExpectationsCreation {
+trait ScalaCheckPropertyCheck extends ExpectationsCreation:
 
-  def checkProperties(properties: Properties, parameters: Parameters, prettyFreqMap: FreqMap[Set[Any]] => Pretty): Result = {
+  def checkProperties(properties: Properties, parameters: Parameters, prettyFreqMap: FreqMap[Set[Any]] => Pretty): Result =
     val prop = Prop { (params: Gen.Parameters) =>
       Prop.all(properties.properties.toList.map { case (n, p) => p :| n }:_*)(params)
     }
     check(prop, parameters, prettyFreqMap)
-  }
 
   /**
    * checks if the property is true for each generated value, and with the specified
    * parameters
    */
-  def check(prop: Prop, parameters: Parameters, prettyFreqMap: FreqMap[Set[Any]] => Pretty): Result = {
+  def check(prop: Prop, parameters: Parameters, prettyFreqMap: FreqMap[Set[Any]] => Pretty): Result =
     // this should not happen but the impossible is known to happen
     var capturedSeed: Seed = null
 
@@ -32,16 +31,15 @@ trait ScalaCheckPropertyCheck extends ExpectationsCreation {
       throw new Exception("A seed could not be captured for a ScalaCheck property and no seed was set on the prop or " +
         "set on the command line. Please report this issue to http://github.com/etorreborre/specs2/issues"))
 
-    val prop1 = parameters.seed match {
+    val prop1 = parameters.seed match
       case None =>
         Prop { prms0 =>
-          val (prms, seed) = prms0.initialSeed match {
+          val (prms, seed) = prms0.initialSeed match
             case Some(sd) =>
               (prms0, sd)
             case None =>
               val sd = Seed.random()
               (prms0.withInitialSeed(sd), sd)
-          }
           val res = prop(prms)
           capturedSeed = seed
           res
@@ -49,7 +47,6 @@ trait ScalaCheckPropertyCheck extends ExpectationsCreation {
 
       case Some(s) =>
         prop.useSeed("specs2", s)
-    }
 
     val result = Test.check(parameters.testParameters, prop1)
 
@@ -57,7 +54,7 @@ trait ScalaCheckPropertyCheck extends ExpectationsCreation {
     val testResult = if (parameters.prettyParams.verbosity == 0) "" else prettyTestResult
 
     val checkResult =
-      result match {
+      result match
         case Test.Result(Test.Passed, succeeded, discarded, fq, _)     =>
           Success(prettyTestResult, testResult, succeeded)
 
@@ -74,7 +71,7 @@ trait ScalaCheckPropertyCheck extends ExpectationsCreation {
           }
 
         case Test.Result(Test.PropException(args, ex, labels), n, _, fq, _) =>
-          ex match {
+          ex match
             case FailureException(f) =>
               // in that case we want to represent a normal failure
               val failedResult =
@@ -97,21 +94,17 @@ trait ScalaCheckPropertyCheck extends ExpectationsCreation {
             case SkipException(s)    => s
             case PendingException(p) => p
             case NonFatal(t)         => Error(prettyTestResult + showCause(t), t)
-          }
-      }
 
     checkResultFailure(checkResult)
-  }
 
   /** @return the cause of the exception as a String if there is one */
   def showCause(t: Throwable) =
     Option(t.getCause).map(s"\n> caused by "+_).getOrElse("")
 
-  def frequencies(fq: FreqMap[Set[Any]], parameters: Parameters, prettyFreqMap: FreqMap[Set[Any]] => Pretty) = {
+  def frequencies(fq: FreqMap[Set[Any]], parameters: Parameters, prettyFreqMap: FreqMap[Set[Any]] => Pretty) =
     val noCollectedValues = parameters.prettyParams.verbosity <= 0 || fq.getRatios.map(_._1).forall(_.toSet == Set(()))
     if (noCollectedValues) ""
     else "\n" ++ prettyFreqMap(removeDetails(fq))(parameters.prettyParams)
-  }
 
   /** copied from ScalaCheck to be able to inject the proper freqMap pretty */
   def prettyResult(res: Test.Result, parameters: Parameters, initialSeed: =>Seed,
@@ -129,7 +122,7 @@ trait ScalaCheckPropertyCheck extends ExpectationsCreation {
       if(ls.isEmpty) ""
       else s"> Labels of failing property:${ls.mkString("\n")}"
 
-    val s = res.status match {
+    val s = res.status match
       case Test.Proved(args) =>
         s"OK, proved property.${prettyArgs(args)(prms)}" +
         (if (prms.verbosity > 1) displaySeed else "")
@@ -149,11 +142,9 @@ trait ScalaCheckPropertyCheck extends ExpectationsCreation {
       case Test.PropException(args,e,l) =>
         s"Exception raised on property evaluation.${labels(l)}${prettyArgs(args)(prms)}> Exception: "+pretty(e,prms) +
           displaySeed
-    }
     val t = if(prms.verbosity <= 1) "" else "Elapsed time: "+prettyTime(res.time)
     val map = freqMapPretty(res.freqMap).apply(prms)
     s"$s$t$map"
   }
 
 
-}

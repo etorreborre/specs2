@@ -9,11 +9,10 @@ trait ScalaInterpreterMatchers extends Expectations { outer =>
     def interpret = outer.interpret(s)
   }
 
-  abstract class InterpretedScript(s: String) {
+  abstract class InterpretedScript(s: String):
     protected def interpret: String
     /** execute the script and use the expected result to as a regular expression to check the validity of the actual result */
     def >|(result: String) = BeMatching.withPart(result).apply(createExpectable(interpret))
-  }
 }
 
 

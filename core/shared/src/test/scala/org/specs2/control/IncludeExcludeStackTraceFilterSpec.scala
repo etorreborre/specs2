@@ -35,7 +35,7 @@ Filtering
 """
 }
 
-trait IncludeExcludeStackTraceFilterExamples extends IncludeExcludeStackTraceFilterImplementation {
+trait IncludeExcludeStackTraceFilterExamples extends IncludeExcludeStackTraceFilterImplementation:
 
   def exclude1 = filter(stacktrace("t1", "a", "com.t1.other"))      (excludeTrace("t1", "t2")) must not(containMatch("t1"))
   def exclude2 = filter(stacktrace("t1", "t3", "a", "com.t1.other"))(excludeTrace("t1", "t2")) must containMatch("t3")
@@ -52,20 +52,17 @@ trait IncludeExcludeStackTraceFilterExamples extends IncludeExcludeStackTraceFil
   def includeExclude3 = filter(stacktrace("org.specs2", "t1"))(defaultFilter.excludeAlso("t1"))       must not(containMatch("t1"))
 
 
-  def filter1 = {
+  def filter1 =
     val cause = new Exception("bang")
     DefaultStackTraceFilter.apply(new Exception("boom", cause)).getCause must_== cause
-  }
 
   def filter2 = DefaultStackTraceFilter.apply(new IllegalArgumentException("ohnoes")).getClass.getName ===
     "java.lang.IllegalArgumentException"
 
-}
 
-trait IncludeExcludeStackTraceFilterImplementation extends Specification {
+trait IncludeExcludeStackTraceFilterImplementation extends Specification:
   def stacktrace(st: String*) =  st.map(stackTraceElement(_))
 
   /** filter a stacktrace */
   def filter(stacktrace: Seq[StackTraceElement])(f: IncludeExcludeStackTraceFilter) =
     f(stacktrace).map(_.toString)
-}

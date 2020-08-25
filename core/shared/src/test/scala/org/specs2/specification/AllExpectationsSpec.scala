@@ -9,7 +9,7 @@ import org.specs2.specification.process._
 import user.specification._
 import fp.syntax._
 
-class AllExpectationsSpec(val env: Env) extends Spec with OwnEnv {
+class AllExpectationsSpec(val env: Env) extends Spec with OwnEnv:
 
   "A specification with the AllExpectations trait should" >> {
     "evaluate all its expectations" >> {
@@ -59,18 +59,16 @@ class AllExpectationsSpec(val env: Env) extends Spec with OwnEnv {
     }
   }
 
-  def stats(spec: ContextualSpecificationStructure)(args: Arguments): Stats = {
+  def stats(spec: ContextualSpecificationStructure)(args: Arguments): Stats =
     // all the executions need to be sequential
     val executed = DefaultExecutor.executeSpec(spec.structure(ownEnv) |> DefaultSelector(ownEnv.arguments).select(args), ownEnv)
     Statistics.runStats(executed)(ownEnv.executionEnv)
-  }
 
-  def results(spec: ContextualSpecificationStructure)(args: Arguments): List[Result] = {
+  def results(spec: ContextualSpecificationStructure)(args: Arguments): List[Result] =
     // all the executions need to be sequential
     val env1 = ownEnv.setArguments(args <| sequential)
     DefaultExecutor.executeSpec(spec.structure(env1), env1).fragments.fragments.
       flatMap(_.traverse(_.executionResult)).run(env1.executionEnv)
-  }
 
   def issues(spec: ContextualSpecificationStructure)(args: Arguments): List[Result] =
     results(spec)(args).filter(r => r.isError || r.isFailure)
@@ -87,4 +85,3 @@ class AllExpectationsSpec(val env: Env) extends Spec with OwnEnv {
   def executedWithScopeIssues = issues(new AllExpectationsSpecificationWithScope)(args())
   def executedWithNotImplementedError = stats(new AllExpectationsSpecificationWithNotImplementedError)(args())
   def executedWithSkipped = stats(new AllExpectationsSpecificationWithSkipped)(args())
-}

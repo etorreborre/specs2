@@ -9,9 +9,8 @@ class ActionsSpec extends Specification { def is = s2"""
 
 """
 
-  def guard = {
+  def guard =
     val operation = FileSystem(NoLogger).readFile(FilePath("missing")).orElse(Operation.ok("ok"))
     operation.runOption === Some("ok")
-  }
 
 }

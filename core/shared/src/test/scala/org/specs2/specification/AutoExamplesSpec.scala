@@ -30,7 +30,7 @@ class AutoExamplesSpec(implicit ee: ExecutionEnv) extends org.specs2.Spec with D
      |2    ! 2   ! 4   |
      |1    ! 1   ! 2   | { (a, b, c) =>  a + b must_== c }""".stripMargin)
 
-  def m1 = {
+  def m1 =
     val spec = new org.specs2.mutable.Specification with DataTables {
       eg { 1 must_== 1 }
 
@@ -45,7 +45,6 @@ class AutoExamplesSpec(implicit ee: ExecutionEnv) extends org.specs2.Spec with D
       }
     }
     spec.is.fragmentsList(ee).filter(Fragment.isExample) must haveSize(4)
-  }
 
   def firstExampleDescription(fs: Fragments) =
     fs.fragmentsList(ee).filter(Fragment.isExample).head.description.show

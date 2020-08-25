@@ -14,54 +14,46 @@ trait FragmentsDsl extends FragmentsFactory with AcceptanceDsl1 { outer =>
   implicit def fragmentToFragments(f: Fragment): Fragments =
     Fragments(f)
 
-  implicit class appendToString(s: String) {
+  implicit class appendToString(s: String):
     def ^(others: Fragments)        : Fragments     = fragmentFactory.text(s) ^ others
     def ^(others: Seq[Fragment])    : Fragments     = ^(Fragments(others:_*))
     def ^(other: Fragment)          : Fragments     = s ^ Fragments(other)
     def ^(other: String)            : Fragments     = s ^ fragmentFactory.text(other)
-  }
 
-  implicit class appendToFragment(f: Fragment) {
+  implicit class appendToFragment(f: Fragment):
     def ^(others: Fragments)        : Fragments      = Fragments(Fragments(f).contents append others.contents)
     def ^(others: Seq[Fragment])    : Fragments      = ^(Fragments(others:_*))
     def ^(other: Fragment)          : Fragments      = Fragments(f, other)
     def ^(other: String)            : Fragments      = f ^ fragmentFactory.text(other)
-  }
 
-  implicit class appendToFragments(fs: Fragments) {
+  implicit class appendToFragments(fs: Fragments):
     def ^(others: Fragments)        : Fragments     = fs.append(others)
     def ^(others: Seq[Fragment])    : Fragments     = ^(Fragments(others:_*))
     def ^(other: Fragment)          : Fragments     = fs.append(other)
     def ^(other: String)            : Fragments     = fs ^ fragmentFactory.text(other)
-  }
 
-  implicit class HiddenFragment(fragment: Fragment) {
+  implicit class HiddenFragment(fragment: Fragment):
     def hide: Fragment =
-      fragment.description match {
+      fragment.description match
         case r: SpecificationRef => fragment.copy(description = r.hide)
         case other               => fragment.copy(description = NoText)
-      }
-  }
 
-  implicit class MutedFragment(fragment: Fragment) {
+  implicit class MutedFragment(fragment: Fragment):
     def mute: Fragment =
-      fragment.description match {
+      fragment.description match
         case r: SpecificationRef => fragment.copy(description = r.mute)
         case other               => fragment.copy(description = NoText)
-      }
-  }
 
   /**
    * create a block of new fragments where each of them is separated
    * by a newline and there is a specific offset from the left margin
    */
-  def fragmentsBlock(fragments: Seq[Fragment], offset: Int = 2): Fragments = {
+  def fragmentsBlock(fragments: Seq[Fragment], offset: Int = 2): Fragments =
     val newLine = Vector(fragmentFactory.break, fragmentFactory.text(" "*offset))
     (newLine ++ fragments.toList)
       .map(Fragments(_))
       .intersperse(Fragments(newLine:_*))
       .reduce(_ append _)
-  }
 
 }
 

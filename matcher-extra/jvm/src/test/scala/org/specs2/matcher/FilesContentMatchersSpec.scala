@@ -37,7 +37,7 @@ class FilesContentMatchersSpec extends Spec
 
   val fs = FileSystem(NoLogger)
 
-  def e1 = {
+  def e1 =
     val action =
       fs.createFile(targetDir / actual    | f1)       >>
       fs.createFile(targetDir / actual    / sub | f2) >>
@@ -53,9 +53,8 @@ class FilesContentMatchersSpec extends Spec
          |      1. f1
          |    + 2. sub/f2
          |    - 2. sub/f3""".stripMargin
-  }
 
-  def e2 = {
+  def e2 =
 
     val action =
       fs.createFile(targetDir / actual    | f1)         >>
@@ -69,9 +68,8 @@ class FilesContentMatchersSpec extends Spec
     val notF3 = (f: File) => !f.getPath.endsWith("f3")
 
     (targetDir / actual).toFile must haveSamePathsAs((targetDir / expected2).toFile).withFilter(notF3)
-  }
 
-  def e3 = {
+  def e3 =
     val action =
       fs.writeFile(targetDir / actual    | f1,         "text1")        >>
       fs.writeFile(targetDir / actual    / sub | f2, "text2\ntext3") >>
@@ -94,9 +92,8 @@ class FilesContentMatchersSpec extends Spec
             |    - 2. text4""".stripMargin
     }
 
-  }
 
-  def e4 = {
+  def e4 =
     val action =
       fs.writeFile(targetDir / actual    | f1,          "text1")        >>
       fs.writeFile(targetDir / actual    / sub | f2,  "text2\ntext3") >>
@@ -116,7 +113,6 @@ class FilesContentMatchersSpec extends Spec
           |${(targetDir / actual / sub | f2).path}    | 4392ebd49e53e2cfe36abb22e39601db
           |${(targetDir / expected2 / sub | f2).path} | 1b7b2f1969fee054225ad6bbf7f6bdd7
           |""".stripMargin.replace(" ", "")
-  }
 
   val targetDir: DirectoryPath = "target" / "test" / FileName.unsafe("fcm-"+hashCode)
 

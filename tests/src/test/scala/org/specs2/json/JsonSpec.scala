@@ -6,20 +6,19 @@ import org.scalacheck._
 import JsonGen._
 import Json._
 
-class JsonSpec extends Specification with ScalaCheck {
+class JsonSpec extends Specification with ScalaCheck:
 
   "showJson must be robust against null values" >> prop { (json: JSONType) =>
     parse(showJson(json)) must beSome
   }.set(maxSize = 10)
 
-}
 
 import Gen._
 
 /**
  * Generator of JSONType objects with a given tree depth
  */
-trait JsonGen {
+trait JsonGen:
   implicit def arbitraryJsonType: Arbitrary[JSONType] = Arbitrary { sized(depth => jsonType(depth)) }
 
   def jsonType(depth: Int): Gen[JSONType] = oneOf(jsonArray(depth), jsonObject(depth))
@@ -39,5 +38,4 @@ trait JsonGen {
   def values(n: Int, depth: Int) = listOfN(n, value(depth))
   def value(depth: Int) = if (depth <= 0) terminalType else oneOf(jsonType(depth - 1), terminalType)
   def terminalType = oneOf(1, 2, "m", "n", "o", null)
-}
 object JsonGen extends JsonGen

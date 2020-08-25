@@ -80,7 +80,7 @@ val evenNumbers = new Fixture[Int] {
 
 s2"even numbers can be divided by 2  $e1"
 
-def e1 = evenNumbers { i: Int => i % 2 === 0 }
+def e1 = evenNumbers { (i: Int) => i % 2 === 0 }
 }}
 
 """

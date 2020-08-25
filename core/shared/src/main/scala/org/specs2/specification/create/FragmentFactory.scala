@@ -12,7 +12,7 @@ import specification.core.Text
 /**
  * Interface for creating specification fragments
  */
-trait FragmentFactory {
+trait FragmentFactory:
   def example(description: Description, execution: Execution): Fragment
   def example(text: String, execution: Execution): Fragment
   def example[T : AsResult](text: String, result: =>T): Fragment
@@ -49,12 +49,11 @@ trait FragmentFactory {
 
   def link(link: SpecificationRef): Fragment
   def see(link: SpecificationRef): Fragment
-}
 
 /**
  * Default implementation of the FragmentFactory
  */
-trait DefaultFragmentFactory extends FragmentFactory {
+trait DefaultFragmentFactory extends FragmentFactory:
   def example(description: Description, execution: Execution): Fragment = Fragment(description, execution)
   def example(text: String, execution: Execution): Fragment = example(Text(text), execution)
   def example[T : AsResult](description: Description, r: =>T): Fragment    = Fragment(description, result(r))
@@ -92,7 +91,6 @@ trait DefaultFragmentFactory extends FragmentFactory {
   def link(link: SpecificationRef)  = Fragment(link, Execution.specificationStats(link.specClassName))
   def see(link: SpecificationRef)   = Fragment(link, Execution.NoExecution)
 
-}
 
 import execute.{Result, AsResult}
 import control.ImplicitParameters._
@@ -101,7 +99,7 @@ import control.ImplicitParameters._
  * Fragment factory that is creating examples with a given context
  * and delegating to another factory all the rest
  */
-class ContextualFragmentFactory(factory: FragmentFactory, context: Env => Context) extends FragmentFactory {
+class ContextualFragmentFactory(factory: FragmentFactory, context: Env => Context) extends FragmentFactory:
   def example(description: Description, execution: Execution): Fragment =
     factory.example(description, execution.updateRun(run => (env: Env) => run(env).map(r => () => context(env)(r()))(env.executionContext)))
 
@@ -147,13 +145,12 @@ class ContextualFragmentFactory(factory: FragmentFactory, context: Env => Contex
   def link(link: SpecificationRef): Fragment      = factory.link(link)
   def see(link: SpecificationRef): Fragment       = factory.see(link)
 
-}
 
 /**
  * FragmentFactory trait which can be mixed in a Specification to create
  * Fragments but which will delegate the creation to a factory member
  */
-trait DelegatedFragmentFactory extends FragmentsFactory with FragmentFactory {
+trait DelegatedFragmentFactory extends FragmentsFactory with FragmentFactory:
   private val factory = fragmentFactory
 
   def example(description: Description, execution: Execution): Fragment = factory.example(description, execution)
@@ -188,13 +185,11 @@ trait DelegatedFragmentFactory extends FragmentsFactory with FragmentFactory {
   def link(link: SpecificationRef): Fragment   = factory.link(link)
   def see(link: SpecificationRef)              = factory.see(link)
 
-}
 
 /**
  * Trait for anything requiring a fragment factory
  */
-trait FragmentsFactory {
+trait FragmentsFactory:
   protected def fragmentFactory: FragmentFactory = DefaultFragmentFactory
-}
 
 object DefaultFragmentFactory extends DefaultFragmentFactory

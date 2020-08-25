@@ -43,7 +43,7 @@ class TagSpec extends Specification with DataTables { def is = s2"""
     }.forall
   }.forall
 
-  def add1 = {
+  def add1 =
     "t1"     | "t2"  | "args"           | "result" |>
     tag1     ! tag2  ! "include 1"      ! true     |
     tag1     ! tag2  ! "include 2"      ! true     |
@@ -52,7 +52,6 @@ class TagSpec extends Specification with DataTables { def is = s2"""
       { (t1: NamedTag, t2: NamedTag, args: String, result: Boolean) =>
       (t1 |+| t2).keep(Arguments.split(args)) must_== result
     }
-  }
 
   def remove1 = data.Tag("1", "2", "3").removeNames(Seq("2")) must_== data.Tag("1", "3")
 

@@ -15,14 +15,11 @@ class HamcrestSpec extends Spec with Hamcrest with TypedEqual { def is = s2"""
   def matcher2 = (3 must beEven).message === "\nExpected: an even Int\n     but: <3> is odd"
 
   // a Hamcrest matcher for even numbers
-  object beEven extends BaseMatcher[Int] {
+  object beEven extends BaseMatcher[Int]:
     def matches(item: Object): Boolean = item.toString.toInt % 2 == 0
-    def describeTo(description: Description): Unit = {
+    def describeTo(description: Description): Unit =
       description.appendText("an even Int"); ()
-    }
-    override def describeMismatch(item: Object, description: Description): Unit = {
+    override def describeMismatch(item: Object, description: Description): Unit =
       description.appendValue(item).appendText(" is odd"); ()
-    }
-  }
 
 }

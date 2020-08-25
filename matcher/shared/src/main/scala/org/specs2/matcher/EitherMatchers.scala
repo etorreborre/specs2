@@ -11,7 +11,7 @@ trait EitherMatchers extends EitherBaseMatchers with EitherBeHaveMatchers
 object EitherMatchers extends EitherMatchers
 
 private[specs2]
-trait EitherBaseMatchers {
+trait EitherBaseMatchers:
 
   def beRight[T](t: ValueCheck[T]) = RightCheckedMatcher(t)
   def beRight[T](implicit p: ImplicitParam = implicitParameter) = use(p)(new RightMatcher[T])
@@ -26,11 +26,10 @@ trait EitherBaseMatchers {
   def left[T : Diffable](t: T) = beLeft(ValueChecks.valueIsTypedValueCheck(t))
   def left[T](t: ValueCheck[T]) = beLeft(t)
   def left[T](implicit p: ImplicitParam = implicitParameter) = beLeft(p)
-}
 
 private[specs2]
 trait EitherBeHaveMatchers extends BeHaveMatchers { outer: EitherBaseMatchers =>
-  implicit class EitherResultMatcher[L : Diffable, R : Diffable](result: MatchResult[Either[L, R]]) {
+  implicit class EitherResultMatcher[L : Diffable, R : Diffable](result: MatchResult[Either[L, R]]):
     def right(r: =>R) = result(outer.beRight(r))
     def left(l: =>L) = result(outer.beLeft(l))
     def beRight(r: =>R) = result(outer.beRight(r))
@@ -40,7 +39,6 @@ trait EitherBeHaveMatchers extends BeHaveMatchers { outer: EitherBaseMatchers =>
     def left = result(outer.beLeft)
     def beRight = result(outer.beRight)
     def beLeft = result(outer.beLeft)
-  }
 }
 
 case class RightMatcher[T]() extends OptionLikeMatcher[({type l[a]=Either[_, a]})#l, T, T]("Right", (_:Either[Any, T]).toOption)

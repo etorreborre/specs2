@@ -13,12 +13,10 @@ class FormDslSpec(val env: Env) extends org.specs2.Spec with TypedEqual with Own
 
 """
 
-  def e1 = {
-    DefaultExecutor.executeAll(dsl.insert(Form("test")))(ownEnv).head.description match {
+  def e1 =
+    DefaultExecutor.executeAll(dsl.insert(Form("test")))(ownEnv).head.description match
       case f @ FormDescription(_) => f.show === "| test |"
       case other                  => ko("not a form "+other)
-    }
-  }
 
   val dsl = new FormDsl with MutableFragmentBuilder with DefaultFormFragmentFactory {}
 }

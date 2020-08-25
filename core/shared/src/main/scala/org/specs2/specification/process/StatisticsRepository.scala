@@ -14,7 +14,7 @@ import scala.collection.mutable.HashMap
  *
  * The actual store might be on disk on in-memory
  */
-trait StatisticsRepository {
+trait StatisticsRepository:
   /** get the latest statistics for a given specification */
   def getStatistics(specClassName: String): Operation[Option[Stats]]
 
@@ -31,9 +31,8 @@ trait StatisticsRepository {
 
   /** remove all previously stored statistics */
   def resetStatistics: Operation[Unit]
-}
 
-case class DefaultStatisticsRepository(store: Store) extends StatisticsRepository {
+case class DefaultStatisticsRepository(store: Store) extends StatisticsRepository:
   /** get the latest statistics for a given specification */
   def getStatistics(specClassName: String): Operation[Option[Stats]] =
     store.get(SpecificationStatsKey(specClassName))
@@ -56,35 +55,31 @@ case class DefaultStatisticsRepository(store: Store) extends StatisticsRepositor
   /** remove all previously stored statistics */
   def resetStatistics: Operation[Unit] =
     store.reset
-}
 
 /**
  * In memory store for statistics
  */
 case class StatisticsMemoryStore(statistics: HashMap[String, Stats] = new HashMap[String, Stats],
-                       results: HashMap[(String, Long), Result] = new HashMap[(String, Long), Result]) extends Store {
-  def get[A](key: Key[A]): Operation[Option[A]] = key match {
+                       results: HashMap[(String, Long), Result] = new HashMap[(String, Long), Result]) extends Store:
+  def get[A](key: Key[A]): Operation[Option[A]] = key match
     case SpecificationStatsKey(specClassName) =>
       Operation.ok(statistics.get(specClassName))
 
     case SpecificationResultKey(specClassName, description) =>
       Operation.ok(results.get((specClassName, description.hashCode.toLong)))
-  }
 
-  def set[A](key: Key[A], a: A): Operation[Unit] = key match {
+  def set[A](key: Key[A], a: A): Operation[Unit] = key match
     case SpecificationStatsKey(specClassName) =>
       Operation.ok(statistics.put(specClassName, a)).map(_ => ())
 
     case SpecificationResultKey(specClassName, description) =>
       Operation.ok(results.put((specClassName, description.hashCode.toLong), a)).map(_ => ())
-  }
 
   def reset: Operation[Unit] = Operation.ok {
     statistics.clear
     results.clear
   }
 
-}
 
 case class SpecificationStatsKey(specClassName: String) extends Key[Stats]
 case class SpecificationResultKey(specClassName: String, description: Description) extends Key[Result]

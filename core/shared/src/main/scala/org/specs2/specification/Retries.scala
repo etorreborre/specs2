@@ -5,7 +5,7 @@ import org.specs2.execute.{AsResult, EventuallyResults}
 import EventuallyResults._
 import scala.concurrent.duration._
 
-trait Retries extends AroundEach {
+trait Retries extends AroundEach:
   def retries: Int = 5
   def sleep: Duration = 100.millis
 
@@ -13,4 +13,3 @@ trait Retries extends AroundEach {
   def around[R : AsResult](r: =>R) =
     AsResult(eventually(retries = retries, sleep = sleep)(r))
 
-}

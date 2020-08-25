@@ -7,7 +7,7 @@ import control._
 /**
  * This trait provides functions to instantiate classes
  */
-trait ClassOperations {
+trait ClassOperations:
 
   /**
    * Try to create an instance of a given class by using whatever constructor is available
@@ -34,4 +34,3 @@ trait ClassOperations {
   /** @return true if a class can be loaded */
   def existsClass(className: String, loader: ClassLoader): Operation[Boolean]
 
-}

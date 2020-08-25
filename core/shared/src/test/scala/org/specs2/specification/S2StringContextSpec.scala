@@ -35,7 +35,7 @@ ${step(ee.shutdown())}
   implicit val ee: ExecutionEnv =
     Env().executionEnv
 
-  object exs extends MustMatchers with StandardResults with S2StringContext with ThrownExpectations {
+  object exs extends MustMatchers with StandardResults with S2StringContext with ThrownExpectations:
 
     import DefaultFragmentFactory._
 
@@ -43,13 +43,12 @@ ${step(ee.shutdown())}
 
     def e2 = s2"""this is ${text("some text")}""".fragmentsList(ee) must haveSize(2)
 
-    def e3 = {
+    def e3 =
       val fragments =
         s2"""this is
             $ok""".fragmentsList(ee)
       fragments must haveSize(2)
       fragments(1).description.show must_== "`ok`"
-    }
 
     def e4 = s2"""this is ${new Function0Result(() => Success())}""".fragmentsList(ee) must haveSize(1)
 
@@ -63,15 +62,14 @@ ${step(ee.shutdown())}
     create example 1 $ok
     create example 2 $ok""".fragmentsList(ee) must haveSize(4)
 
-    def e8 = {
+    def e8 =
       val fragments = s2""" ${`a method call`}""".fragmentsList(ee)
       fragments must haveSize(1)
       fragments.head.description.show must_== "`a method call`"
-    }
 
     def e9 = s2"""this is ${"some text"} $ok""".fragmentsList(ee) must haveSize(2)
 
-    def e10 = {
+    def e10 =
       val fragments =
         s2"""
 Intro
@@ -81,7 +79,6 @@ Intro
 
       fragments.map(_.description.show.replace(" ", "-").replace("\n", "*")) ====
         List("*Intro*--", "test1", "*--", "test2")
-    }
 
     def `a method call` = ok
 
@@ -90,9 +87,8 @@ Intro
       def is = SpecStructure.create(SpecHeader(outer.getClass), Arguments(), Fragments(text("the"), text(" world")))
     }
 
-  }
 
-  object desc extends MustMatchers with StandardResults with StandardMatchResults with S2StringContext {
+  object desc extends MustMatchers with StandardResults with StandardMatchResults with S2StringContext:
 
     def e1 =
       getDescription(
@@ -120,7 +116,6 @@ s2"""
 
     def getDescription(fs: Fragments): Description =
       fs.examples.runMonoid(ee).head.description
-  }
 }
 trait dsl1 extends S2StringContext with FragmentsDsl
 object dsl1 extends dsl1

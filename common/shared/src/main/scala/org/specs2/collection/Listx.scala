@@ -7,35 +7,32 @@ import scala.annotation.tailrec
  * This trait provides additional methods on Lists and nested Lists
  */
 private[specs2]
-trait Listx { outer =>
+trait Listx:
+  outer =>
 
   /**
    * Additional methods for nested lists
    */
-  implicit class ExtendedNestedList[T](list: List[List[T]]) {
+  implicit class ExtendedNestedList[T](list: List[List[T]]):
     def safeTranspose = outer.transpose(list)
-  }
 
   /**
    * Additional methods for lists
    */
-  implicit class ExtendedList[T](list: List[T]) {
+  implicit class ExtendedList[T](list: List[T]):
     /**
      * @return a randomly mixed list
      */
     def scramble = list.sortWith((a, b) => (new java.util.Random).nextInt(2) > 0)
 
-    def intersperse[A](a: T): List[T] = {
+    def intersperse[A](a: T): List[T] =
       @tailrec
-      def intersperse0(accum: List[T], rest: List[T]): List[T] = rest match {
+      def intersperse0(accum: List[T], rest: List[T]): List[T] = rest match
         case Nil      => accum
         case x :: Nil => x :: accum
         case h :: t   => intersperse0(a :: h :: accum, t)
-      }
       intersperse0(Nil, list).reverse
-    }
 
-  }
 
   /**
    * This methods works like the transpose method defined on Traversable
@@ -47,12 +44,10 @@ trait Listx { outer =>
    *       List("e",  "bb")
    *       List("ccc",  "fff"))
    */
-  def transpose[T](xs: List[List[T]]): List[List[T]] = {
+  def transpose[T](xs: List[List[T]]): List[List[T]] =
     val filtered = xs.filter(_.nonEmpty)
     if (filtered.isEmpty) Nil
     else filtered.map(_.head) :: transpose(filtered.map(_.tail))
-  }
-}
 
 private[specs2]
 object Listx extends Listx

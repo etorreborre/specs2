@@ -7,7 +7,7 @@ package text
  * The textColor ... statsColor define the AnsiColor to use
  * The text ... stats methods taking a String as a parameter are inserting control characters to change the string color
  */
-trait Colors {
+trait Colors:
   def textColor   : AnsiColor
   def successColor: AnsiColor
   def failureColor: AnsiColor
@@ -25,5 +25,4 @@ trait Colors {
   def stats  (s: String, doIt: Boolean = true): String
 
   def removeColors(s: String): String
-}
 

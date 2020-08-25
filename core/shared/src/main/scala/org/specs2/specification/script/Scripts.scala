@@ -24,18 +24,14 @@ trait Scripts { outer: FragmentsFactory =>
     ${Scripts.createInterpolatedFragment('{script}, '{outer.fragmentFactory})}
 }
 
-object Scripts {
+object Scripts:
 
-  def createInterpolatedFragment(script: Expr[Script], factory: Expr[FragmentFactory])(using qctx: QuoteContext): Expr[Interpolated] = {
-    '{
-      new Interpolated {
-        def prepend(text: String): Fragments = {
-          if ($script.isStart)
-            Fragments(${factory}.section(${script}.title)).append(${factory}.text(text))
-          else
-            ${script}.fragments(text).toFragments.append(${factory}.asSection(${script}.title))
-        }
-      }
-    }
-  }
-}
+  def createInterpolatedFragment(script: Expr[Script], factory: Expr[FragmentFactory])(using qctx: QuoteContext): Expr[Interpolated] =
+    import qctx.tasty._
+    '{ new Interpolated {
+         def prepend(text: String): Fragments =
+           if ($script.isStart)
+             Fragments(${factory}.section(${script}.title)).append(${factory}.text(text))
+           else
+             ${script}.fragments(text).toFragments.append(${factory}.asSection(${script}.title))
+       }}

@@ -5,7 +5,7 @@ import mutable._
 import execute.FailureException
 import scala.language.postfixOps
 
-class ExpectableSpec extends Spec with ResultMatchers with MustMatchers {
+class ExpectableSpec extends Spec with ResultMatchers with MustMatchers:
 
   "An expectable can have a precise description with aka(description)" in {
     ("a" aka "the string").description must_== "the string 'a'"
@@ -42,9 +42,8 @@ class ExpectableSpec extends Spec with ResultMatchers with MustMatchers {
     }
   }
   "An expectable must match without an exception if the underlying value returns null for its toString value" in {
-    case class NullString() {
+    case class NullString():
       override def toString = null
-    }
     NullString() must_== NullString()
   }
   "the description of an Expectable can be updated with another description" in {
@@ -52,4 +51,3 @@ class ExpectableSpec extends Spec with ResultMatchers with MustMatchers {
   }
 
   trait ListOf[T]
-}

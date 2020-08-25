@@ -8,7 +8,7 @@ import execute.StandardResults._
 import FormattingFragments._
 import DefaultFragmentFactory._
 
-object Arbitraries {
+object Arbitraries:
 
   implicit def FragmentArbitrary: Arbitrary[Fragment] = Arbitrary {
     Gen.oneOf(
@@ -36,4 +36,3 @@ object Arbitraries {
     Gen.oneOf(
       Seq(br, t, t(2), bt, bt(2), FormattingFragments.end)
     )
-}

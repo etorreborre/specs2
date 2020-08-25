@@ -4,7 +4,7 @@ package control
 /**
  * Utility methods to determine the origin of the execution of the current code
  */
-trait Stacktraces {
+trait Stacktraces:
   /**
    * This method is used to determine for example if the JUnit runner is executed from Maven or within Eclipse.
    * In the first the test case names don't need to have the hashcode example.
@@ -25,6 +25,5 @@ trait Stacktraces {
   /** @return true if there is a stacktrace element satisfying the predicate */
   def isFromClass(classNamePredicate: String => Boolean, st: Seq[StackTraceElement]): Boolean =
     st.exists(t => classNamePredicate(t.getClassName))
-}
 
 object Stacktraces extends Stacktraces

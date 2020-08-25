@@ -8,7 +8,7 @@ import sbt.testing.{Fingerprint, Framework}
  * Implementation of the Framework interface for the sbt tool.
  * It declares the classes which can be executed by the specs2 library.
  */
-class Specs2Framework extends Framework {
+class Specs2Framework extends Framework:
   def name = "specs2"
 
   def fingerprints = Array[Fingerprint](fp1, fp1m)
@@ -18,5 +18,4 @@ class Specs2Framework extends Framework {
 
   def slaveRunner(args: Array[String], remoteArgs: Array[String], loader: ClassLoader, send: String => Unit) =
     new SlaveSbtRunner(args, remoteArgs, loader, send)
-}
 

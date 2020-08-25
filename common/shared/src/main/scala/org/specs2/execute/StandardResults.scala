@@ -4,7 +4,7 @@ package execute
 /**
  * This trait provides standard results which can be used in Fragments bodies
  */
-trait StandardResults {
+trait StandardResults:
   def done = Success("DONE")
   def wontdo = Success("WONT DO")
   def todo = pending("TODO")
@@ -21,6 +21,5 @@ trait StandardResults {
   def skipped(message: String): Skipped = Skipped(message)
   def skipped: Skipped = skipped("skipped")
   def skipped[R : AsResult](r: =>R): Skipped = skipped
-}
 
 object StandardResults extends StandardResults

@@ -25,7 +25,7 @@ import Folds._
 /**
  * The JUnitXmlPrinter creates an xml file with the specification execution results
  */
-case class JUnitXmlPrinter(env: Env) extends Printer {
+case class JUnitXmlPrinter(env: Env) extends Printer:
   def prepare(specs: List[SpecStructure]): Action[Unit]  = Action.unit
   def finalize(specs: List[SpecStructure]): Action[Unit] = Action.unit
 
@@ -39,7 +39,7 @@ case class JUnitXmlPrinter(env: Env) extends Printer {
     }
   }
 
-  def descriptionFold(spec: SpecStructure, stats: Stats): AsyncFold[(Fragment, Description), TestSuite] = {
+  def descriptionFold(spec: SpecStructure, stats: Stats): AsyncFold[(Fragment, Description), TestSuite] =
     val suite = TestSuite(specDescription(spec), spec.specClassName, stats.errors, stats.failures, stats.skipped, stats.timer.totalMillis)
     fromFoldLeft[Action, (Fragment, Description), TestSuite](suite) { case (res, (f, d)) =>
       if (Fragment.isExample(f))
@@ -48,7 +48,6 @@ case class JUnitXmlPrinter(env: Env) extends Printer {
         }
       else Action.pure(res)
     }
-  }
 
   def descriptions(spec: SpecStructure, fragments: List[Fragment])(ee: ExecutionEnv) =
     JUnitDescriptions.fragmentDescriptions(spec.setFragments(Fragments(fragments:_*)))(ee)
@@ -56,7 +55,7 @@ case class JUnitXmlPrinter(env: Env) extends Printer {
   def outputDirectory(arguments: Arguments): DirectoryPath =
     arguments.commandLine.directoryOr("junit.outdir", "target" / "test-reports")
 
-  case class TestSuite(description: Description, className: String, errors: Int, failures: Int, skipped: Int, time: Long = 0, tests: Seq[TestCase] = Seq()) {
+  case class TestSuite(description: Description, className: String, errors: Int, failures: Int, skipped: Int, time: Long = 0, tests: Seq[TestCase] = Seq()):
     def addTest(t: TestCase) = copy(tests = tests :+ t)
 
     def xml =
@@ -81,37 +80,30 @@ case class JUnitXmlPrinter(env: Env) extends Printer {
       s"""<properties>
             ${System.getProperties.entrySet.asScala.toSeq.map(p => s"""<property name="${escape(p.getKey.toString)}" value="${escape(p.getValue.toString)}" ></property>""").mkString("\n")}
           </properties>"""
-  }
 
-  case class TestCase(desc: Description, result: Result, time: Long)(implicit args: Arguments) {
+  case class TestCase(desc: Description, result: Result, time: Long)(implicit args: Arguments):
     def xml =
       s"""<testcase name="${escape(desc.getMethodName)}" classname="${escape(desc.getClassName)}" time="${escape(formatTime(time))}">
             $testError$testFailure$testSkipped$testPending
           </testcase>"""
 
-    def testError = result match {
+    def testError = result match
       case er @ Error(m, e) => s"""<error message="${escape(m)}" type="${escape(e.getClass.getName)}">${escape(args.traceFilter(er.stackTrace).mkString("\n"))}</error>"""
       case _ => ""
-    }
 
-    def testFailure = result match {
+    def testFailure = result match
       case f @ Failure(m, e, st, d) => s"""<failure message="${escape(m)}" type="${escape(f.exception.getClass.getName)}">${escape(args.traceFilter(st).mkString("\n"))}</failure>"""
       case _ => ""
-    }
 
-    def testPending = result match {
+    def testPending = result match
       case Pending(m) => "<skipped/>"
       case _ => ""
-    }
 
-    def testSkipped = result match {
+    def testSkipped = result match
       case Skipped(m, e) => """<skipped/>"""
       case _ => ""
-    }
-  }
 
   private def escape(s: =>String): String =
     scala.xml.Utility.escape(s.notNull)
 
   private def formatTime(t: Long) = "%.3f" format (t / 1000.0)
-}

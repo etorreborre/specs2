@@ -20,7 +20,7 @@ import reflect.Selectable.reflectiveSelectable
  *
  * A Form can be executed by executing each row and collecting the results.
  */
-class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val result: Option[Result] = None) extends Executable with Text {
+class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val result: Option[Result] = None) extends Executable with Text:
 
   /** @return all rows, including the header */
   lazy val allRows = title.map(t => Row.tr(TextCell(t))).toSeq ++ rows
@@ -61,10 +61,9 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
   def trs[T](values: Seq[T])(f: T => Row) = values.foldLeft(this) { (res, cur) => res.tr(f(cur)) }
 
   /** add the rows of a form */
-  private def addRows(f: Form): Form = {
+  private def addRows(f: Form): Form =
     val oldRowsAndTitle = f.title.map(th(_)).getOrElse(this).rows
     newForm(title, oldRowsAndTitle ++ f.rows, result)
-  }
 
   /**
    * execute all rows
@@ -76,13 +75,11 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
    * execute all rows
    * @return an executed Form
    */
-  def executeForm = {
+  def executeForm =
     if (result.isDefined) this
-    else {
+    else
       val executedRows = executeRows
       newForm(title, executedRows, Some(executedRows.map(_.execute).foldLeft(success: Result) { (res, cur) => res and cur }))
-    }
-  }
 
   /** @return the printed form with a padding space size to use for each cell */
   def text: String = allRows.map(_.text(maxSizes)).mkString("\n")
@@ -92,30 +89,22 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
   /** @return an xml description of this form, to be embedded in a Cell */
   def toCellXml(implicit args: Arguments = Arguments()) = <td class="info">{Form.toXml(this)(args)}</td>
 
-  def subset(f1: Traversable[Form], f2: Traversable[Form]): Form = {
+  def subset(f1: Traversable[Form], f2: Traversable[Form]): Form =
     addLines(FormDiffs.subset(f1.toSeq, f2.toSeq))
-  }
-  def subsequence(f1: Traversable[Form], f2: Traversable[Form]): Form = {
+  def subsequence(f1: Traversable[Form], f2: Traversable[Form]): Form =
     addLines(FormDiffs.subsequence(f1.toSeq, f2.toSeq))
-  }
-  def set(f1: Traversable[Form], f2: Traversable[Form]): Form = {
+  def set(f1: Traversable[Form], f2: Traversable[Form]): Form =
     addLines(FormDiffs.set(f1.toSeq, f2.toSeq))
-  }
-  def sequence(f1: Traversable[Form], f2: Traversable[Form]): Form = {
+  def sequence(f1: Traversable[Form], f2: Traversable[Form]): Form =
     addLines(FormDiffs.sequence(f1.toSeq, f2.toSeq))
-  }
-  def subset(f1: Seq[HasForm], f2: Seq[HasForm]): Form = {
+  def subset(f1: Seq[HasForm], f2: Seq[HasForm]): Form =
     addLines(FormDiffs.subset(f1.map(_.form), f2.map(_.form)))
-  }
-  def subsequence[T <: HasForm](f1: Seq[T], f2: Seq[T]): Form = {
+  def subsequence[T <: HasForm](f1: Seq[T], f2: Seq[T]): Form =
     addLines(FormDiffs.subsequence(f1.map(_.form), f2.map(_.form)))
-  }
-  def set[T <: HasForm](f1: Seq[T], f2: Seq[T]): Form = {
+  def set[T <: HasForm](f1: Seq[T], f2: Seq[T]): Form =
     addLines(FormDiffs.set(f1.map(_.form), f2.map(_.form)))
-  }
-  def sequence[T <: HasForm](f1: Seq[T], f2: Seq[T]): Form = {
+  def sequence[T <: HasForm](f1: Seq[T], f2: Seq[T]): Form =
     addLines(FormDiffs.sequence(f1.map(_.form), f2.map(_.form)))
-  }
 
   /**
    * encapsulate this form into an effect
@@ -125,21 +114,19 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
   /**
    * encapsulate this form into a Prop
    */
-  def toProp(label: String) = {
+  def toProp(label: String) =
     lazy val executed = executeForm
-    lazy val executedResult = executed.execute match {
+    lazy val executedResult = executed.execute match
       case s @ Success(_,_) => s
       case Failure(_,_,_,_) => Failure("failed")
       case Error(_,_)       => Error("error")
       case other            => other
-    }
     Prop[Form, Any](label, executed, (f: Form, s: Any) => executedResult) {
       if (executedResult.isSuccess)
         "success"
       else
         Form.toXml(executed)(Arguments())
     }
-  }
 
   /**
    * transform this form to a form that will be added as a <td> element inside another form
@@ -148,14 +135,12 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
 
   private def addLines(fs: Seq[Form]) = fs.foldLeft(this) { (res, cur) =>  res.addRows(cur) }
 
-  override def equals(a: Any) = a match {
+  override def equals(a: Any) = a match
     case f: Form => f.title == title && rows == f.rows
     case _       => false
-  }
 
   override def hashCode =
     title.hashCode
-}
 
 /**
  *  Companion object of a Form to create:
@@ -164,13 +149,13 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
  *   - a Form with no title but one row
  *
  */
-case object Form {
+case object Form:
   /** @return an empty form */
   def apply(): Form = new Form()
   /** @return an empty form with a title */
   def apply(title: String): Form = new Form(Some(title))
   /** create a Form from a DataTable */
-  def apply(table: DataTable): Form = {
+  def apply(table: DataTable): Form =
     def firstField[A](as: Seq[A]) = Field(as.headOption.getOrElse(""))
     def otherFields[A](as: Seq[A]) = as.drop(1).map(Field(_))
 
@@ -183,7 +168,6 @@ case object Form {
         else                           values.add(FieldCell(Field("error").bold).setResult(cur.result))
       }
     }
-  }
   /** @return a Form with one row */
   def tr(c1: Cell, cs: Cell*): Form = new Form().tr(c1, cs:_*)
   /** @return a Form with one row */
@@ -204,59 +188,49 @@ case object Form {
    *
    * @return the xml representation of a Form
    */
-  def toXml(form: Form)(implicit args: Arguments) = {
+  def toXml(form: Form)(implicit args: Arguments) =
     <form>
     <table>{titleAndRows(form)}</table>{formStacktraces(form)}</form>
-  }
   /**
    * This method creates an xml representation of a Form as an Html table rows,
    * ready to be embedded in a table
    *
    * @return the xml representation of a Form
    */
-  def titleAndRows(form: Form)(implicit args: Arguments = Arguments()) = {
+  def titleAndRows(form: Form)(implicit args: Arguments = Arguments()) =
     val colnumber = Xml.colnumber(new FormCell(form))
     title(form, colnumber) ++
     rows(form, colnumber)
-  }
   /**
    * This method creates a div to display the exceptions of a form
    * ready to be embedded in a table
    *
    */
-  def formStacktraces(form: Form)(implicit args: Arguments = Arguments()) = {
+  def formStacktraces(form: Form)(implicit args: Arguments = Arguments()) =
     val traces = Xml.stacktraces(new FormCell(form))
     if (traces.isEmpty) NodeSeq.Empty
     else <pre><i>[click on failed cells to see the stacktraces]</i>{traces}</pre>
-  }
 
   /**
    * Private methods for building the Form xml
    */
   private def title(form: Form, colnumber: Int) = form.title.map(t => <tr><th colspan={(colnumber+1).toString}>{t}</th></tr>).toList.reduceNodes
   private def rows(form: Form, colnumber: Int)(implicit args: Arguments) = form.rows.map(row(_, colnumber)).reduceNodes
-  private def row(r: Row, colnumber: Int)(implicit args: Arguments) = {
+  private def row(r: Row, colnumber: Int)(implicit args: Arguments) =
     val spanned = r.cells.dropRight(1).map(cell(_)) ++ cell(r.cells.last, colnumber - r.cells.size + 1)
     <tr>{spanned}</tr>
-  }
 
-  private def cell(c: Cell, colnumber: Int = 0)(implicit args: Arguments) = {
-    if (colnumber > 1) {
-      c.xml(args).toList match {
+  private def cell(c: Cell, colnumber: Int = 0)(implicit args: Arguments) =
+    if (colnumber > 1)
+      c.xml(args).toList match
       case start :+ (e: Elem) => start ++ (e % ("colspan" -> colnumber.toString))
         case other                         => other
-      }
-    } else
+    else
       c.xml(args).toList
-  }
 
   /** a Form can be implicitly transformed to results */
   implicit def formAsResult: AsResult[Form] = new AsResult[Form] {
     def asResult(f: =>Form): Result = f.execute
   }
-
-}
-
-type HasForm = {
-  def form: Form
-}
+  
+type HasForm = { def form: Form }

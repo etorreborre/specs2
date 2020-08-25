@@ -15,7 +15,7 @@ trait TypedEqual { this: ExpectationsCreation =>
   implicit def typedEqualExpectation[T](t: =>T): TypedEqualExpectation[T] =
     new TypedEqualExpectation(t)
 
-  class TypedEqualExpectation[T](t: =>T) {
+  class TypedEqualExpectation[T](t: =>T):
     /** equality matcher on Expectables */
     def ===[S >: T](other: =>S) = createExpectable(t).applyMatcher[S](new BeEqualTo(other))
     /** ! equality matcher on Expectables */
@@ -24,7 +24,6 @@ trait TypedEqual { this: ExpectationsCreation =>
     def ====(other: =>T)(implicit di: Diffable[T]): MatchResult[T] = createExpectable(t).applyMatcher(new EqualityMatcher(other))
     /** ! typed equality matcher on Expectables */
     def !===(other: =>T)(implicit di: Diffable[T]): MatchResult[T] = createExpectable(t).applyMatcher(new EqualityMatcher(other).not)
-  }
 }
 
 object TypedEqual extends TypedEqual with ExpectationsCreation

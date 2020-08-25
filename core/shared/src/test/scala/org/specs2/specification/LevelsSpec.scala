@@ -26,7 +26,7 @@ class LevelsSpec(ee: ExecutionEnv) extends Spec { def is = s2"""
 
   trait mutableSpec extends org.specs2.mutable.Specification
   trait spec extends org.specs2.Specification
-  case class tree() extends AcceptanceDsl {
+  case class tree() extends AcceptanceDsl:
     def e0: MatchResult[Option[Tree[Fragment]]] = treeMap(new mutableSpec { "e1" in ok; "e2" in ok }.is.fragments)(mapper)(ee) must beDrawnAs(
       "Fragment(root)",
       "|",
@@ -143,22 +143,19 @@ class LevelsSpec(ee: ExecutionEnv) extends Spec { def is = s2"""
     private def fragments1 = fragments("first")
     private def fragments2 = fragments("second")
 
-    private def fragments(description: String) = {
+    private def fragments(description: String) =
       p^
         s"example no. one from $description set"  ! success ^br^
         s"example no. two from $description set"  ! success ^br
-    }
 
     // use this mapper to keep only text and examples
     private val mapper = (f: Fragment) => {
-      f match {
+      f match
         case Fragment(Text(t), _, _) if t.trim.isEmpty  => None
         case Fragment(Text(t), e, l)                    => Some(Fragment(Text(t.trim.replaceAll("\\s+"," ")), e, l))
         case _                                          => None
-      }
     }
     private def beDrawnAs(lines: String*) = be_==(lines.mkString("", "\n", "\n")) ^^ {
       (tree: Option[Tree[Fragment]]) => tree.map(_.drawTree).getOrElse("no tree!")
     }
-  }
 }

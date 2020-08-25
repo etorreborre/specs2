@@ -14,7 +14,7 @@ import main.Arguments
 /**
  * Compute the statistics for executed fragments
  */
-trait Statistics {
+trait Statistics:
 
   /**
    * read the stats for each Fragment of the specifications if
@@ -27,11 +27,10 @@ trait Statistics {
    */
   def readStats(className: String)(fragment: Fragment): Operation[Fragment]
 
-}
 
-case class DefaultStatistics(arguments: Arguments, statisticsRepository: StatisticsRepository) extends Statistics {
+case class DefaultStatistics(arguments: Arguments, statisticsRepository: StatisticsRepository) extends Statistics:
 
-  def readStats(spec: SpecStructure): SpecStructure = {
+  def readStats(spec: SpecStructure): SpecStructure =
     // we need to use the arguments passed on the command line and override them with the spec arguments
     val args = arguments.overrideWith(spec.arguments)
 
@@ -39,7 +38,6 @@ case class DefaultStatistics(arguments: Arguments, statisticsRepository: Statist
       spec.flatMap(f => eval[Action, Fragment](readStats(spec.specClassName)(f).toAction))
     else
       spec
-  }
 
   /**
    * read the stats for one Fragment from the statistics repository
@@ -48,9 +46,8 @@ case class DefaultStatistics(arguments: Arguments, statisticsRepository: Statist
     statisticsRepository.previousResult(className, fragment.description).
       map(r => fragment.setPreviousResult(r))
 
-}
 
-object Statistics {
+object Statistics:
 
   /** get the stats for each fragment of a specification */
   def statsProcess: AsyncTransducer[Fragment, Stats] =
@@ -70,10 +67,9 @@ object Statistics {
     else                              Stats.empty
 
   def fromFragment(fragment: Fragment): Action[Stats] =
-    if (fragment.isExecutable) {
+    if (fragment.isExecutable)
       fragment.executedResult.map { case ExecutedResult(result, timer) =>
         emptyStats(fragment).withResult(result).copy(timer = timer)
       }
-    } else Action.pure(Stats.empty)
+    else Action.pure(Stats.empty)
 
-}

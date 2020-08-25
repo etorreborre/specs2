@@ -15,7 +15,7 @@ trait ArgumentsArgs extends ArgumentsCreation with ArgProperties
 /**
  * Methods with default Property values to create Arguments instances
  */
-trait ArgumentsCreation {
+trait ArgumentsCreation:
 
   lazy val args: ArgumentsNamespace = new ArgumentsNamespace
 
@@ -63,7 +63,7 @@ trait ArgumentsCreation {
               color      = color)
 
 
-  private[specs2] class ArgumentsNamespace {
+  private[specs2] class ArgumentsNamespace:
     /** shorthand method to create an Arguments object */
     def select(
       ex:            ArgProperty[String]            = ArgProperty[String](),
@@ -150,33 +150,27 @@ trait ArgumentsCreation {
                        notifier.toOption,
                        exporter.toOption))
 
-  }
 
-}
 
 object ArgumentsArgs extends ArgumentsArgs
 
-trait ArgProperties {
+trait ArgProperties:
   implicit def anyToArgProperty[T](t: =>T): ArgProperty[T] = ArgProperty(t)
-}
 
 /**
  * This trait can be used to deactivate the conversion of any value to an ArgsProperty
  */
-trait NoArgProperties extends ArgProperties {
+trait NoArgProperties extends ArgProperties:
   override def anyToArgProperty[T](t: =>T): ArgProperty[T] = super.anyToArgProperty(t)
-}
 
 object ArgProperties extends ArgProperties
 
-class ArgProperty[T](aProperty: Property[T] = Property[T]()) {
+class ArgProperty[T](aProperty: Property[T] = Property[T]()):
   def toOption: Option[T] = aProperty.toOption
-}
 
-object ArgProperty {
+object ArgProperty:
   def apply[T](): ArgProperty[T] =
     new ArgProperty()
 
   def apply[T](t: => T): ArgProperty[T] =
     new ArgProperty(Property(t))
-}

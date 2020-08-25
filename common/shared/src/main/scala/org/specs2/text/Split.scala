@@ -7,7 +7,7 @@ import collection.Seqx._
 private[specs2]
 trait Split { outer =>
 
-  implicit class Splitted(s: String) {
+  implicit class Splitted(s: String):
     def splitDashed(names: Seq[String]) =
       outer.splitDashed(s.split("\\s").toIndexedSeq, names)
 
@@ -16,25 +16,22 @@ trait Split { outer =>
 
     def splitToSize(n: Int): List[String] = splitToSize(s, n, Nil)
 
-    private def splitToSize(string: String, n: Int, result: List[String]): List[String] = {
+    private def splitToSize(string: String, n: Int, result: List[String]): List[String] =
       if (string.length <= n) (string :: result).reverse
       else
       // new Strings are necessary to avoid memory errors because substring is just a view on the underlying string
         splitToSize(new String(string.drop(n)), n, new String(string.take(n)) :: result)
-    }
 
-  }
 
-  implicit class SplittedSeq(seq: Seq[String]) {
+  implicit class SplittedSeq(seq: Seq[String]):
     def splitDashed(names: Seq[String]) = outer.splitDashed(seq, names)
-  }
 
   /**
    * split a string along some names which start with a dash:
    *
    * "-include hello world -with me".splitDashed(Seq("include", "with")) === ("include", "hello world", "with", "me")
    */
-  def splitDashed(seq: Seq[String], names: Seq[String]) = {
+  def splitDashed(seq: Seq[String], names: Seq[String]) =
     val dashedNames = names.map("-"+_.toLowerCase)
     def isDashedName(name: String) = dashedNames.contains(name.toLowerCase)
 
@@ -47,7 +44,6 @@ trait Split { outer =>
       case (name, values) if name == "--"       => values
       case (name, values)                       => Seq(name) ++ values
     }
-  }
 
 }
 private[specs2]

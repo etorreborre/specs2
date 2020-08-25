@@ -12,7 +12,7 @@ import ValueChecks._
  * This trait provides matchers to check the presence of some expected files vs the actual ones
  * and also ways to verify the contents of these files
  */
-trait FilesContentMatchers extends FileMatchers with LinesContentMatchers with TraversableMatchers with ExpectationsCreation {
+trait FilesContentMatchers extends FileMatchers with LinesContentMatchers with TraversableMatchers with ExpectationsCreation:
   /**
    * check that all the paths in `expectedDir` are the same as the ones in `actualDir`
    */
@@ -41,10 +41,9 @@ trait FilesContentMatchers extends FileMatchers with LinesContentMatchers with T
       _     <- FilePathReader.mustNotBeADirectory(expected)
       md5_1 <- FilePathReader.md5(FilePath.unsafe(actual))
       md5_2 <- FilePathReader.md5(FilePath.unsafe(expected))
-    } yield {
+    } yield
       val message = TextTable(header = Seq("file", "MD5"), lines = Seq(Seq(actual.getPath, md5_1), Seq(expected.getPath, md5_2))).show
       (md5_1 == md5_2, s"MD5 mismatch:\n$message")
-    }
     operation.runOperation.fold(
       error => (false, execute.Error(error).message),
       identity)
@@ -58,52 +57,44 @@ trait FilesContentMatchers extends FileMatchers with LinesContentMatchers with T
   private def filePathFilter(filter: File => Boolean) =
     (f: FilePath) => filter(f.toFile)
 
-  case class LocalPathsMatcher(expectedDir: File, filter: File => Boolean = (f: File) => true) extends Matcher[File] {
-    def apply[S <: File](actualDir: Expectable[S]) = {
+  case class LocalPathsMatcher(expectedDir: File, filter: File => Boolean = (f: File) => true) extends Matcher[File]:
+    def apply[S <: File](actualDir: Expectable[S]) =
       result(haveSameLinesAs(LocalPaths(DirectoryPath.unsafe(expectedDir), filePathFilter(filter)))
         .apply(createExpectable(LocalPaths(DirectoryPath.unsafe(actualDir.value), filePathFilter(filter)))), actualDir)
-    }
 
     def withFilter(f: File => Boolean) = copy(filter = f)
-  }
 
   case class LocalFilesContentMatcher(expectedDir: File,
                                       filter: File => Boolean = (f: File) => true,
-                                      filesMatcher: Matcher[(File, File)] = haveSameLines[File, File]) extends Matcher[File] {
+                                      filesMatcher: Matcher[(File, File)] = haveSameLines[File, File]) extends Matcher[File]:
 
-    def apply[S <: File](actualDir: Expectable[S]) = {
+    def apply[S <: File](actualDir: Expectable[S]) =
       val expectedFiles = LocalPaths(DirectoryPath.unsafe(expectedDir), filePathFilter(filter))
       val pairs = expectedFiles.files.map { p =>
         ((DirectoryPath.unsafe(actualDir.value) / p).toFile,
          (DirectoryPath.unsafe(expectedDir) / p).toFile)
       }.filter(_._1.exists)
       result(contain(filesMatcher).forall.apply(createExpectable(pairs)), actualDir)
-    }
 
     def withFilter(filter: File => Boolean) = copy(filter = filter)
     def withMatcher(m: Matcher[(File, File)]) = copy(filesMatcher = m)
-  }
 
   case class LocalPathsAndFilesContentMatcher(expectedDir: File,
                                               filter: File => Boolean = (f: File) => true,
-                                              filesMatcher: Matcher[(File, File)] = haveSameLines[File, File]) extends Matcher[File] {
-    def apply[S <: File](actualDir: Expectable[S]) = {
+                                              filesMatcher: Matcher[(File, File)] = haveSameLines[File, File]) extends Matcher[File]:
+    def apply[S <: File](actualDir: Expectable[S]) =
       haveSamePathsAs(expectedDir).withFilter(filter)(actualDir) and
       haveSameFilesContentAs(expectedDir).withFilter(filter).withMatcher(filesMatcher)(actualDir)
-    }
 
     def withFilter(filter: File => Boolean) = copy(filter = filter)
     def withMatcher(m: Matcher[(File, File)]) = copy(filesMatcher = m)
-  }
 
   private implicit def LocalPathsLinesContent: LinesContent[LocalPaths] = new LinesContent[LocalPaths] {
     def name(lp: LocalPaths) = lp.base.path
     def lines(lp: LocalPaths) = lp.localPaths
   }
 
-  private case class LocalPaths(base: DirectoryPath, filter: FilePath => Boolean) {
+  private case class LocalPaths(base: DirectoryPath, filter: FilePath => Boolean):
     def files = FilePathReader.listFilePaths(base).map(_.filter(filter).map(_.relativeTo(base)).sortBy(_.path)).runMonoid
     def localPaths = files.map(_.path).sorted
-  }
 
-}

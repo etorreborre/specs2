@@ -8,29 +8,29 @@ import user.io.{LocationSpecification, LocationUnitSpecification}
 import Fragment._
 import org.specs2.concurrent.ExecutionEnv
 
-class LocationSpec extends org.specs2.mutable.Spec with TypedEqual {
+class LocationSpec extends org.specs2.mutable.Spec with TypedEqual:
   implicit lazy val ee: ExecutionEnv = Env().executionEnv
 
     "A unit specification must have correct locations for its fragments" >> {
       implicit def spec: LocationUnitSpecification = new LocationUnitSpecification(ee)
 
       "for the first piece of text, with 'should'" >> {
-        textAt(index = 0)(spec) ==== 15
+        textAt(index = 0)(spec) ==== 17
       }
       "for the first example, with 'in'" >> {
-        exampleAt(index = 0) ==== 13
+        exampleAt(index = 0) ==== 15
       }
       "for the second example, with 'in'" >> {
-        exampleAt(index = 1) ==== 14
+        exampleAt(index = 1) ==== 16
       }
       "for the second piece of text, with '>>'" >> {
-        textAt(index = 1) ==== 22
+        textAt(index = 1) ==== 24
       }
       "for the 3rd example, with '>>'" >> {
-        exampleAt(index = 2) ==== 19
+        exampleAt(index = 2) ==== 21
       }
       "for the 4th example, with '>>'" >> {
-        exampleAt(index = 3) ==== 21
+        exampleAt(index = 3) ==== 23
       }
     }
 
@@ -64,7 +64,7 @@ class LocationSpec extends org.specs2.mutable.Spec with TypedEqual {
   def exampleAt(index: Int)(implicit spec: WithFragments) = fragmentLine(isExample, index)
   def brAt(index: Int)(implicit spec: WithFragments) = fragmentLine(isFormatting, index)
 
-  def fragmentLine(selector: Function[Fragment, Boolean], index: Int)(implicit spec: WithFragments) = {
+  def fragmentLine(selector: Function[Fragment, Boolean], index: Int)(implicit spec: WithFragments) =
 
     val filter = StackTraceFilter(trace =>
       !Seq("scala.",
@@ -75,14 +75,11 @@ class LocationSpec extends org.specs2.mutable.Spec with TypedEqual {
     val fragmentLocation = fragments(spec).filter(selector).apply(index).location
 
     fragmentLocation.lineNumber
-  }
 
   def fragments(implicit spec: WithFragments): List[Fragment] =
     spec.fragmentsList
 
   step(ee.shutdown())
-}
 
-trait WithFragments {
+trait WithFragments:
   def fragmentsList: List[Fragment]
-}

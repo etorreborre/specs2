@@ -10,13 +10,12 @@ import reflect.ClassName
  *
  * It can hold a user-defined title for better presentation
  */
-case class SpecHeader(specClass: Class[_], title: Option[String] = None) {
+case class SpecHeader(specClass: Class[_], title: Option[String] = None):
   def show = title.getOrElse(simpleName)
   def showWords = title.getOrElse(wordsTitle)
   def className = ClassName.className(specClass)
   def simpleName = ClassName.simpleName(specClass)
   def wordsTitle = simpleName.camelCaseToWordsCapitalized
-}
 
 object SpecHeader {
   def create(specClass: Class[_]): SpecHeader =

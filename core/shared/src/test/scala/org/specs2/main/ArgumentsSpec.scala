@@ -87,18 +87,16 @@ Creation
 
   def values9 = Arguments("ex", "this test").select.ex must_== ".*this test.*"
 
-  def values10 = {
+  def values10 =
     List("nocolor", "color", "nocolor true", "nocolor false", "color true", "color false").map(a => Arguments.split(a).color) must_==
     List(false, true, false, true, true, false)
-  }
 
   def overriding1 = (args(xonly = true) <| args(plan = false)).xonly must_== true
   def overriding2 = args(xonly = true).overrideWith(args(xonly = false)).xonly must_== false
   def overriding3 = (args(xonly = true) <| args(plan = true)).plan must_== true
 
-  case class properties(properties: (String, String)*) extends SystemProperties {
+  case class properties(properties: (String, String)*) extends SystemProperties:
     override def systemGetProperty(p: String) = Map(properties: _*).get(p)
-  }
 
   def properties1 = Arguments.extract(Seq(""), properties("plan" -> "")).plan must_== true
   def properties2 = Arguments.extract(Seq(""), properties("plan" -> "true")).plan must_== true
@@ -106,12 +104,11 @@ Creation
   def properties4 = Arguments.extract(Seq(""), properties("ex"   -> "spec")).ex must_== ".*spec.*"
   def properties5 = Arguments.extract(Seq(""), properties("specs2.ex" -> "spec")).ex must_== ".*spec.*"
 
-  def properties6 = {
+  def properties6 =
     List(("nocolor", ""), ("color", ""), ("nocolor", "true"), ("nocolor", "false"), ("color", "true"), ("color", "false")).map { case (k, v) =>
       Arguments.extract(Seq(""), properties(k -> v)).color
     } must_==
       List(false, true, false, true, true, false)
-  }
 
   def execution1 =
     "args"                      | "status" | "canShow"    |>

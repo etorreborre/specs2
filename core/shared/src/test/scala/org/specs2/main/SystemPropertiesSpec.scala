@@ -47,9 +47,8 @@ Get as
   def getIfElse1 = sp(colors).getIfElse("whitebg", 1)(2) must_== 1
   def getIfElse2 = sp(colors).getIfElse("whitebgxxx", 1)(2) must_== 2
 
-  case class props(properties: (String, String)*) extends SystemProperties {
+  case class props(properties: (String, String)*) extends SystemProperties:
     override def systemGetProperty(p: String) = Map(properties: _*).get(p)
-  }
 
   def getAs1 =
     props("specs2.color" -> null).getPropertyAs[Boolean]("color") must beNone
@@ -67,6 +66,5 @@ Get as
 /**
   * This class is used in specifications to mock the system properties
   */
-case class sp(properties: Map[String, String]) extends SystemProperties {
+case class sp(properties: Map[String, String]) extends SystemProperties:
   override def systemGetProperty(p: String) = properties.get(p)
-}

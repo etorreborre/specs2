@@ -20,7 +20,7 @@ import specification.create._
  *
  * If the specification is not sequential we force it to be
  */
-trait AllExpectations extends StoredExpectations with FragmentsFactory with SpecificationStructure with ArgumentsCreation with StandardResults {
+trait AllExpectations extends StoredExpectations with FragmentsFactory with SpecificationStructure with ArgumentsCreation with StandardResults:
   /**
    * @return an example factory which will take the stored results and make them the example result
    */
@@ -43,24 +43,20 @@ trait AllExpectations extends StoredExpectations with FragmentsFactory with Spec
     structure.setArguments(structure.arguments <| args(sequential = ArgProperty(true)))
 
   /** use a side-effect to register a standard result */
-  override def skipped(message: String): Skipped = {
+  override def skipped(message: String): Skipped =
     val r = Skipped(message)
     checkResultFailure(r)
     r
-  }
 
   /** use a side-effect to register a standard result */
-  override def anError: Error = {
+  override def anError: Error =
     val r = Error("error")
     checkResultFailure(r)
     r
-  }
 
   /** use a side-effect to register a standard result */
-  override def failure(message: String): Failure = {
+  override def failure(message: String): Failure =
     val r = Failure(message)
     checkResultFailure(r)
     r
-  }
 
-}

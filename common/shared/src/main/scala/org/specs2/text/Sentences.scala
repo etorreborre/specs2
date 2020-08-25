@@ -9,7 +9,7 @@ import BiMap._
 *
 * For example: the cat must sleep => the cat must not sleep
 */
-trait Sentences {
+trait Sentences:
 
   protected lazy val negationsTable: BiMap[String, String] =
     Seq(
@@ -56,7 +56,7 @@ trait Sentences {
    *
    * We first try to negate an existing negation
    */
-  def negateSentence(sentence: String): String = {
+  def negateSentence(sentence: String): String =
     def removeRegex(s: String) = s.replaceAll("\\[.+\\]", "")
 
     // try to match the negations first
@@ -69,7 +69,5 @@ trait Sentences {
     }}.
     // default to not(sentence)
     getOrElse("not("+sentence+")")
-  }
-}
 
 object Sentences extends Sentences

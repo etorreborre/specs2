@@ -2,7 +2,7 @@ package org.specs2.io
 
 import FileName.ToFileName
 
-class DirectoryPathSpec {
+class DirectoryPathSpec:
 
  val description: String =
    """
@@ -11,4 +11,3 @@ class DirectoryPathSpec {
 
  val fileName1: FileName = "fileName1"
 
-}

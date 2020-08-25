@@ -16,14 +16,13 @@ import Exceptions._
  *
  * Note that the values are really evaluated once, unlike a by-name parameter.
  */
-trait LazyParameters {
+trait LazyParameters:
   /** transform a value to a zero-arg function returning that value */
   implicit def lazyParameter[T](value: =>T): LazyParameter[T] = new LazyParameter(() => value)
-}
 object LazyParameters extends LazyParameters
 
 /** class holding a value to be evaluated lazily */
-class LazyParameter[+T](private val v: () => T) {
+class LazyParameter[+T](private val v: () => T):
   private lazy val evaluated = v.apply()
   /**
    * @return the evaluated value. This method is private to specs2 to avoid the implicit to leak to client
@@ -36,4 +35,3 @@ class LazyParameter[+T](private val v: () => T) {
   override def hashCode = value.hashCode
 
   def map[S >: T](f: T => S) = LazyParameters.lazyParameter(f(value))
-}

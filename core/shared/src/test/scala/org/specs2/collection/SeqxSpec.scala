@@ -5,7 +5,7 @@ import Seqx._
 import matcher.DataTables
 import org.scalacheck.Prop
 
-class SeqxSpec extends mutable.Specification with DataTables with ScalaCheckResult {
+class SeqxSpec extends mutable.Specification with DataTables with ScalaCheckResult:
 
   "updateLast modifies the last element".p
     eg { Seq(1).updateLast(i => i+1) must_== Seq(2) }
@@ -49,21 +49,17 @@ class SeqxSpec extends mutable.Specification with DataTables with ScalaCheckResu
     Seq(A(i = 1), A(i = 2)).difference(Seq(A(i = 2, j = 2)), equality) === Seq(A(i = 1))
   }
 
-}
 
 import org.scalacheck._
 import Test._
 import execute._
 
-trait ScalaCheckResult {
+trait ScalaCheckResult:
   implicit def propAsResult: AsResult[Prop] = new AsResult[Prop] {
-    def asResult(prop: =>Prop) = {
-      Test.check(Parameters.default, prop).status match {
+    def asResult(prop: =>Prop) =
+      Test.check(Parameters.default, prop).status match
         case `Passed` | Proved(_)           => Success()
         case Failed(args, labels)           => Failure("Property failed with args: "+args.mkString(", ")+" and labels "+labels.mkString(", "))
         case PropException(args, e, labels) => Error(e).updateMessage("Property failed with args: "+args.mkString(", ")+" and labels "+labels.mkString(", "))
         case `Exhausted`                    => Error("exhausted")
-      }
-    }
   }
-}

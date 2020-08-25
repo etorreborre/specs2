@@ -8,7 +8,7 @@ import ColorsMap._
 * This class defines the colors to use to print out text on the Console
 * with defaults as AnsiColors for a dark background console
 */
-class ConsoleColors extends AnsiColors with Colors {
+class ConsoleColors extends AnsiColors with Colors:
 
   def textColor    = white
   def successColor = green
@@ -36,12 +36,11 @@ class ConsoleColors extends AnsiColors with Colors {
                               ("skipped",skippedColor),
                               ("stats",  statsColor)
                               ).map(p => p._1+": "+p._2)mkString("Colors(", ",", "}")
-}
 
 /**
  * This color scheme can be used with a white background
  */
-class InvertedColors extends ConsoleColors {
+class InvertedColors extends ConsoleColors:
 
   override def textColor    = black
   override def successColor = green
@@ -51,7 +50,6 @@ class InvertedColors extends ConsoleColors {
   override def skippedColor = cyan
   override def statsColor   = blue
 
-}
 
 /**
  * This class takes colors from a map, using default colors if some values are missing
@@ -71,8 +69,8 @@ case class MappedColors(colors: Map[String, AnsiColor] = Map()) extends ConsoleC
 /**
  * Factory method to create MappedColors 'colors' attribute
  */
-object MappedColors {
-  def fromArgs(args: String) = {
+object MappedColors:
+  def fromArgs(args: String) =
     val map = args.split(",").flatMap { s =>
       val keyValue = s.trim.split(":")
       if (keyValue.size == 2) getColor(keyValue(1).trim).map(c => keyValue(0) -> c)
@@ -81,13 +79,11 @@ object MappedColors {
 
     if (args.contains("whitebg")) new MappedColors(Map(map:_*)) { override lazy val defaultColors = new InvertedColors }
     else                          new MappedColors(Map(map:_*))
-  }
-}
 
 /**
  * Definition of abbreviated color names
  */
-trait ColorsMap {
+trait ColorsMap:
   val abbreviatedColors = Map (
     "w" -> white,
     "g" -> green,
@@ -110,6 +106,5 @@ trait ColorsMap {
   )
 
   def getColor(s: String) = colors.get(s).orElse(abbreviatedColors.get(s))
-}
 
 object ColorsMap extends ColorsMap

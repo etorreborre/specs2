@@ -13,7 +13,7 @@ import html.Htmlx._
 import execute.{Success, Failure, Result}
 import Result.ResultFailureMonoid
 
-trait HtmlUrls {
+trait HtmlUrls:
 
   /**
    * check all the urls referenced in <a href="..."/> nodes of a html document having a given filePath.
@@ -58,13 +58,12 @@ trait HtmlUrls {
   /**
    * @return true if the url can be accessed through http
    */
-  protected def isAliveHttp(url: String) = {
+  protected def isAliveHttp(url: String) =
     tryo {
       val huc = new URL(url).openConnection.asInstanceOf[HttpURLConnection]
       huc.connect()
       Seq(HttpURLConnection.HTTP_OK, HttpURLConnection.HTTP_MOVED_TEMP).contains(huc.getResponseCode)
     } getOrElse false
-  }
 
   /**@return true if the url can be accessed on the file system */
   def isAliveFile(url: String, others: Map[String, NodeSeq], rootDirectory: DirectoryPath) =
@@ -84,12 +83,10 @@ trait HtmlUrls {
    * look for the anchor in another file to be written to disk by specs2 or a static file already generated
    * @return true if the url is found
    */
-  def isAliveAnchorInFile(url: String, others: Map[String, NodeSeq], rootDirectory: DirectoryPath) = {
+  def isAliveAnchorInFile(url: String, others: Map[String, NodeSeq], rootDirectory: DirectoryPath) =
     val (file, anchor) = (url.split("#")(0), url.split("#")(1))
     isAliveFile(file, others, rootDirectory) &&
       (isAliveAnchor(anchor, others.find { case (k, v) => k == file }.fold(NodeSeq.Empty)(_._2)) ||
         isAliveAnchor(anchor, readFile(rootDirectory / FilePath.unsafe(file)).runMonoid))
-  }
-}
 
 object HtmlUrls extends HtmlUrls

@@ -7,17 +7,15 @@ import control._
 /**
  * String template for HTML files using the Pandoc templating approach where variables to replace are enclosed with $$
  */
-object HtmlTemplate {
-  def runTemplate(template: String, variables: Map[String, String]): Operation[String] = {
+object HtmlTemplate:
+  def runTemplate(template: String, variables: Map[String, String]): Operation[String] =
     val parser = pandocParser(variables)
 
-    parser.parse(template) match {
+    parser.parse(template) match
       case parser.Success(s, _) => Operation.ok(s)
       case parser.Failure(e, _) => Operation.fail(e+" for template \n"+template)
       case parser.Error(e, _)   => Operation.fail(e+" for template \n"+template)
-    }
 
-  }
 
   /**
    * Variables replacement parser for Pandoc-like templates
@@ -25,7 +23,7 @@ object HtmlTemplate {
   def pandocParser(variables: Map[String, String]) =
     PandocParser(variables)
 
-  case class PandocParser(variables: Map[String, String]) extends RegexParsers {
+  case class PandocParser(variables: Map[String, String]) extends RegexParsers:
     override def skipWhitespace = false
 
     lazy val template: Parser[String] =
@@ -50,6 +48,4 @@ object HtmlTemplate {
     }
 
     def parse(string: String) = parseAll(template, string)
-  }
 
-}

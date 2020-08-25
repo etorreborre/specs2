@@ -65,7 +65,7 @@ case class Env(
   executionEnv:         ExecutionEnv,
 
   /** execution environment for the specs2 own reporting */
-  specs2ExecutionEnv:   ExecutionEnv) {
+  specs2ExecutionEnv:   ExecutionEnv):
 
   lazy val executionContext =
     executionEnv.executionContext
@@ -120,9 +120,8 @@ case class Env(
    */
   def setContextClassLoader(): Unit =
     customClassLoader.foreach(classLoading.setContextClassLoader)
-}
 
-object Env {
+object Env:
 
   def apply(
     arguments:            Arguments            = EnvDefault.default.arguments,
@@ -145,9 +144,7 @@ object Env {
       executionEnv =       ExecutionEnv.create(arguments, systemLogger),
       specs2ExecutionEnv = ExecutionEnv.createSpecs2(arguments, systemLogger))
 
-  def executeResult[R : AsResult](r: Env => R) = {
+  def executeResult[R : AsResult](r: Env => R) =
     lazy val env = Env()
     AsResult(r(env))
-  }
 
-}

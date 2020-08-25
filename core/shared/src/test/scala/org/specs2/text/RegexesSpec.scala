@@ -3,7 +3,7 @@ package text
 
 import org.specs2.text.Regexes._
 
-class RegexesSpec extends mutable.Spec {
+class RegexesSpec extends mutable.Spec:
 
   "`matchesSafely` can be used to match with string which might be malformed regular expression" >> {
     "if the expression is well formed" >> {
@@ -29,5 +29,4 @@ class RegexesSpec extends mutable.Spec {
     }
   }
 
-}
 

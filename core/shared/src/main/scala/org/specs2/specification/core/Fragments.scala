@@ -15,7 +15,7 @@ import concurrent.ExecutionEnv
  * It is implemented as a Process of Fragment in order to produce fragments
  * dynamically if necessary
  */
-case class Fragments(contents: AsyncStream[Fragment]) {
+case class Fragments(contents: AsyncStream[Fragment]):
   /** append one or several fragments to this process */
 
   def append(other: Fragment): Fragments       = append(oneAsync(other))
@@ -32,10 +32,9 @@ case class Fragments(contents: AsyncStream[Fragment]) {
 
   /** filter, map or flatMap the fragments */
 
-  def when(condition: =>Boolean) = {
+  def when(condition: =>Boolean) =
     lazy val c = condition
     copy(contents = contents filter (_ => c))
-  }
 
   def map(f: Fragment => Fragment): Fragments =
     copy(contents = contents map f)
@@ -66,10 +65,9 @@ case class Fragments(contents: AsyncStream[Fragment]) {
 
   /** run the process to get all fragments as a list */
   def fragmentsList(ee: ExecutionEnv): List[Fragment] =
-    contents.runList.runAction(ee) match {
+    contents.runList.runAction(ee) match
       case Left(e) => List(Fragment(Text("ERROR WHILE CREATING THE SPECIFICATION! "+e.getMessage)))
       case Right(fs) => fs
-    }
 
   /** run the process to filter all texts */
   def texts = filter(isText).fragments
@@ -110,22 +108,19 @@ case class Fragments(contents: AsyncStream[Fragment]) {
 
     contents.producerState[Fragment, S](None, Some(s => s.fold(done[Action, Fragment])(t => one(Fragment(Text(t)))))) {
       case (f, text) =>
-        f match {
+        f match
           case Fragment(Text(t),l, e) if isText(f) =>
             (done, text.map(_+t).orElse(Some(t)))
 
           case other =>
-            text match {
+            text match
               case Some(t1) => (Producer.emit(List(Fragment(Text(t1)), other)), None)
               case None     => (one(other), None)
-            }
-        }
     }
   }
 
-}
 
-object Fragments {
+object Fragments:
 
   /** empty sequence of fragments */
   val empty = Fragments()
@@ -148,4 +143,3 @@ object Fragments {
   /** iterate over elements to create a Fragments object */
   def reduce[T](seq: Seq[T])(f: (Fragments, T) => Fragments): Fragments =
     seq.foldLeft(Fragments.empty)((res, cur) => f(res, cur))
-}

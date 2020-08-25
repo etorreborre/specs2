@@ -35,7 +35,7 @@ case class Stats(specs:        Int = 0,
                  pending:      Int = 0,
                  skipped:      Int = 0,
                  trend:        Option[Stats] = None,
-                 timer:        SimpleTimer = new SimpleTimer) {
+                 timer:        SimpleTimer = new SimpleTimer):
 
   /** @return true if there are errors or failures */
   def hasFailuresOrErrors = failures + errors > 0
@@ -67,7 +67,7 @@ case class Stats(specs:        Int = 0,
 
   /** set a specific result on this Stats object */
   def withResult(result: Result): Stats =
-    result match {
+    result match
       case s @ Success(_,_)             => copy(expectations = result.expectationsNb, successes = 1)
       case f @ Failure(_,_,_,_)         => copy(expectations = result.expectationsNb, failures = 1)
       case e @ Error(_,_)               => copy(expectations = result.expectationsNb, errors = 1)
@@ -75,12 +75,11 @@ case class Stats(specs:        Int = 0,
       case Skipped(_, _)                => copy(expectations = result.expectationsNb, skipped = 1)
       case DecoratedResult(t: Stats, _) => t
       case DecoratedResult(_, r)        => withResult(r)
-    }
 
   /**
    * @return the xml representation of the statistics. Omit the attributes with 0 as a value for conciseness
    */
-  def toXml: Elem = {
+  def toXml: Elem =
     val stats = <stats>{trend.map(t => <trend>{t.toXml}</trend>).getOrElse(NodeSeq.Empty)}</stats>
     val attributes = Map(
       "specs"        -> specs.toString,
@@ -96,7 +95,6 @@ case class Stats(specs:        Int = 0,
       if (cur._2 == "0") res
       else            res % new UnprefixedAttribute(cur._1, cur._2, Null)
     }
-  }
 
   override def toString =
     "Stats("+
@@ -132,40 +130,36 @@ case class Stats(specs:        Int = 0,
   /**
    * @return this Statistics object with some trend if relevant
    */
-  def updateFrom(previous: Stats): Stats = {
+  def updateFrom(previous: Stats): Stats =
     implicit val monoid = Stats.StatsMonoid
     val newTrend = this |+| previous.negate
     if (newTrend == monoid.zero) this
     else                         copy(trend = Some(newTrend))
-  }
 
   /**
    * display the statistics on 2 lines, with the time and trend
    */
-  def display(implicit args: Arguments) = {
+  def display(implicit args: Arguments) =
     args.colors.stats("Finished in "+timer.time+"\n", args.color) +
       displayResults
-  }
 
   /**
    * display the results on one line, always displaying examples/failures/errors
    * and only displaying expectations/pending/skipped if necessary
    */
-  def displayResults(implicit args: Arguments) = {
+  def displayResults(implicit args: Arguments) =
     def trendIsDefined(f: Stats => Int) = trend map (t => f(t) != 0) getOrElse false
 
-    def displayTrendValue(f: Stats => Int): String = {
+    def displayTrendValue(f: Stats => Int): String =
       val i = trend map (t => f(t)) getOrElse 0
       if (i == 0) "" else if (i > 0) " (+"+i+")" else " ("+i+")"
-    }
 
-    def displayValue(f: Stats => Int, label: String, optional: Boolean = false, invariant: Boolean = false): Option[String] = {
+    def displayValue(f: Stats => Int, label: String, optional: Boolean = false, invariant: Boolean = false): Option[String] =
       val base =
         if (optional && invariant) f(this) optInvariantQty label
         else if (optional)         f(this) optQty label
         else                       Some(f(this) qty label)
       base map (_ + displayTrendValue(f))
-    }
 
     args.colors.stats(
       Seq(
@@ -181,9 +175,7 @@ case class Stats(specs:        Int = 0,
         displayValue((_:Stats).skipped, "skipped", optional = true, invariant = true)
       ).flatten.mkString(", "), args.color)
 
-  }
 
-}
 
 /**
  * The Stats class store results for the number of:
@@ -197,12 +189,12 @@ case class Stats(specs:        Int = 0,
  *  for each example
  *
  */
-case object Stats {
+case object Stats:
 
   def empty = Stats()
 
-  implicit object StatsMonoid extends Monoid[Stats] {
-    def append(s1: Stats, s2: =>Stats) = {
+  implicit object StatsMonoid extends Monoid[Stats]:
+    def append(s1: Stats, s2: =>Stats) =
       s1.copy(
         specs        = s1.specs           + s2.specs,
         examples     = s1.examples        + s2.examples,
@@ -215,13 +207,11 @@ case object Stats {
         trend        = Applicative[Option].apply2(s1.trend, s2.trend)(_ |+| _),
         timer        = s1.timer           add s2.timer
       )
-    }
 
     val zero = empty
-  }
 
   def apply(result: Result): Stats =
-    result match {
+    result match
       case s @ Success(_,_)             => Stats(examples = 1).withResult(result)
       case f @ Failure(_,_,_,_)         => Stats(examples = 1).withResult(result)
       case e @ Error(_,_)               => Stats(examples = 1).withResult(result)
@@ -229,12 +219,11 @@ case object Stats {
       case Skipped(_, _)                => Stats(examples = 1).withResult(result)
       case DecoratedResult(t: Stats, _) => t
       case DecoratedResult(_, r)        => Stats(r)
-    }
 
-  def fromXml(stats: scala.xml.Node): Option[Stats] = {
+  def fromXml(stats: scala.xml.Node): Option[Stats] =
     if (stats.label != Stats.empty.toXml.label)
       None
-    else {
+    else
       val map = stats.attributes.asAttrMap
       def asInt(key: String, defaultValue: Int = 0) = tryOrElse(Integer.parseInt(map(key)))(defaultValue)
 
@@ -249,8 +238,5 @@ case object Stats {
         asInt("skipped"     ),
         (stats \ "trend" \ "stats").headOption.flatMap(fromXml),
         map.get("time").map(SimpleTimer.fromString).getOrElse(new SimpleTimer)))
-    }
-  }
-}
 
 

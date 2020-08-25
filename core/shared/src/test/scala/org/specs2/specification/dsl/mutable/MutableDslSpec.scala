@@ -2,7 +2,7 @@ package org.specs2
 package specification
 package dsl.mutable
 
-class MutableDslSpec extends org.specs2.mutable.Specification {
+class MutableDslSpec extends org.specs2.mutable.Specification:
   "All those examples" should {
     "compile" >> ok
 
@@ -19,4 +19,3 @@ class MutableDslSpec extends org.specs2.mutable.Specification {
   "A block" >> {
     "with some examples" >> ok
   }
-}

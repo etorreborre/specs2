@@ -16,14 +16,12 @@ import StandardResults._
  * The value is stored in a Property object so it will not be evaluated until explicitly queried
  *
  */
-case class Field[T](label: String, value: Property[T], decorator: Decorator = Decorator().bkGreyLabel) extends Executable with DecoratedProperty[Field[T]] {
+case class Field[T](label: String, value: Property[T], decorator: Decorator = Decorator().bkGreyLabel) extends Executable with DecoratedProperty[Field[T]]:
   /** executing a field execute the value and returns success unless there is an Error */
-  override def execute = {
-    valueOrResult match {
+  override def execute =
+    valueOrResult match
       case Left(e)  => e
       case Right(v) => skipped
-    }
-  }
 
   lazy val valueOrResult: Either[Result, T] = ResultExecution.executeProperty(value)
 
@@ -35,14 +33,12 @@ case class Field[T](label: String, value: Property[T], decorator: Decorator = De
   /** @return the field value as an Option */
   def optionalValue = value.optionalValue
 
-  override def toString = {
-    val valueString = valueOrResult match {
+  override def toString =
+    val valueString = valueOrResult match
       case Left(Success(_,_)) => "_"
       case Left(result)       => result.toString
       case Right(v)           => v.notNull
-    }
     (if (label.nonEmpty) label + ": " else "") + valueString
-  }
   /** transforms this typed Field as a Field containing the toString value of the Fields value*/
   def toStringField = new Field(label, value.map(_.toString), decorator)
   /** set a new Decorator */
@@ -51,12 +47,10 @@ case class Field[T](label: String, value: Property[T], decorator: Decorator = De
   /** use this Field as a header in a table */
   def header = this.center.bold.bkGrey
 
-  override def equals(a: Any) = a match {
+  override def equals(a: Any) = a match
     case Field(l, v, _) => label == l && value == v
     case other          => false
-  }
   override def hashCode = label.hashCode + value.hashCode
-}
 /**
  * Factory methods for creating Fields. Fields values can also be concatenated to produce
  * "summary" fields.
@@ -69,7 +63,7 @@ case class Field[T](label: String, value: Property[T], decorator: Decorator = De
  * val concatenatedFields2 = Field(label, ", ", f1, f2)
  * concatenatedFields2.toString == label: hello, world
  */
-case object Field {
+case object Field:
   /** create a Field with no label */
   def apply[T](value: =>T): Field[T] = new Field("", Property(value))
 
@@ -82,5 +76,4 @@ case object Field {
   /** create a Field with a label and other fields values, concatenated as strings */
   def apply(label: String, separator: String, value1: Field[_], values: Field[_]*): Field[String] =
     Field(label, if (values.isEmpty) value1.toString else (value1 :: values.toList).map(_.value).mkString(separator))
-}
 

@@ -9,7 +9,7 @@ import org.specs2.execute.{ResultExecution, EventuallyResults}
  *
  * This was contributed by @robey (http://robey.lag.net)
  */
-trait EventuallyMatchers extends EventuallyResults {
+trait EventuallyMatchers extends EventuallyResults:
   /**
    * @param sleep the function applied on the retry number (first is 1)
    * @return a matcher that will retry the nested matcher a given number of times
@@ -18,18 +18,16 @@ trait EventuallyMatchers extends EventuallyResults {
     def apply[S <: T](a: Expectable[S]) = retry(0, a)
 
     @annotation.tailrec
-    def retry[S <: T](retried: Int, a: Expectable[S]): MatchResult[S] = {
+    def retry[S <: T](retried: Int, a: Expectable[S]): MatchResult[S] =
       lazy val matchResult = nested(a.evaluateOnce)
       val result = ResultExecution.execute(matchResult.toResult)
 
-      if ((result.isSuccess || retries <= 1) || retried == retries) {
+      if ((result.isSuccess || retries <= 1) || retried == retries)
         matchResult
-      } else {
+      else
         val pause = sleep(retried).toMillis
         Thread.sleep(pause)
         retry(retried + 1, a)
-      }
-    }
   }
   
   /**
@@ -39,6 +37,5 @@ trait EventuallyMatchers extends EventuallyResults {
 
   /** @return a matcher that will retry the nested matcher 40 times  */
   def eventually[T](nested: =>Matcher[T]): Matcher[T] = eventually(nested, 40, (_: Int) => 100.millis)
-}
 
 object EventuallyMatchers extends EventuallyMatchers 

@@ -15,14 +15,12 @@ trait ExampleDsl extends FragmentsFactory { outer =>
   implicit def bangExample(d: String): BangExample =
     new BangExample(d)
 
-  class BangExample(d: String) {
+  class BangExample(d: String):
     def !(execution: Execution): Fragment                                       = fragmentFactory.example(Text(d), execution)
     def ![R : AsResult](r: => R): Fragment                                      = fragmentFactory.example(d, r)
     def ![R : AsResult](r: String => R): Fragment                               = fragmentFactory.example(d, r)
     def ![R](r: Env => R)(implicit as: AsResult[R], p: ImplicitParam): Fragment = fragmentFactory.example(d, r)(as, p)
-  }
 }
 
-trait NoBangExamples extends ExampleDsl {
+trait NoBangExamples extends ExampleDsl:
   override def bangExample(d: String) = super.bangExample(d)
-}

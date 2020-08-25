@@ -10,7 +10,7 @@ import util.matching.Regex.Match
  * Utility methods for trimming text
  */
 private[specs2]
-trait Trim {
+trait Trim:
 
   /** add trimming methods to a String */
   implicit def trimmed(s: String): Trimmed = new Trimmed(s)
@@ -19,7 +19,7 @@ trait Trim {
   /** utility conversion for StringBuffers */
   implicit def stringWriterToString(sb: StringWriter): Trimmed = Trimmed(sb.toString)
 
-  case class Trimmed(s: String) {
+  case class Trimmed(s: String):
 
     def trimStart(start: String) =
       if (s.trim.startsWith(start)) s.trim.drop(start.length) else s.trim
@@ -32,9 +32,9 @@ trait Trim {
 
     def trimEnclosing(start: String): String = trimEnclosing(start, start)
 
-    def trimEnclosing(start: String, end: String): String = if (s.trim.startsWith(start) && s.trim.endsWith(end)) {
+    def trimEnclosing(start: String, end: String): String = if (s.trim.startsWith(start) && s.trim.endsWith(end))
       trimStart(start).trimEnd(end).trim
-    } else s
+    else s
 
     def trimEnclosingXmlTag(t: String) = trimFirst("<"+t+".*?>").trimEnd("</"+t+">")
 
@@ -68,14 +68,12 @@ trait Trim {
 
     def removeFirst(exp: String) = new Regex(exp).replaceFirstIn(s, "")
 
-    def removeLast(exp: String) = {
+    def removeLast(exp: String) =
       val matches = exp.r.findAllIn(s).matchData.toSeq
       if (matches.isEmpty) s
-      else {
+      else
         val last = matches.last
         s.substring(0, last.start) + s.substring(last.end, s.length)
-      }
-    }
 
     /** trim the string of everything that is before the start substring if there is one */
     def startFrom(start: String) = if (s.startsWith(start) || !s.contains(start)) s else new String(s.substring(s.indexOf(start)))
@@ -103,22 +101,19 @@ trait Trim {
       res.replaceAll(cur._1, cur._2)
     }
 
-    def replaceInsideTag(tag: String, p: (String, String)*) = {
+    def replaceInsideTag(tag: String, p: (String, String)*) =
       replaceAll(tagPattern(tag), (s: String) => java.util.regex.Matcher.quoteReplacement(s.replaceAll(p:_*)))
-    }
 
-    def replaceInsideTags(tags: String*)(p: (String, String)*) = {
+    def replaceInsideTags(tags: String*)(p: (String, String)*) =
       tags.foldLeft(s) { (res, tag) =>
         res.replaceAll(tagPattern(tag), (s: String) => java.util.regex.Matcher.quoteReplacement(s.replaceAll(p:_*)))
       }
-    }
 
     private def tagPattern(tag: String) = "<"+tag+">(.(.|\n)*?)</"+tag+">"
 
     /** replace each group with something else */
-    def replaceAll(exp: String, f: String => String) = {
+    def replaceAll(exp: String, f: String => String) =
       new Regex(exp).replaceAllIn(s, (m: Match) => f(m.group(0).replace("\\", "\\\\")))
-    }
 
     /** @return a sequence of lines by splitting on newlines */
     def lines: Seq[String] =
@@ -146,9 +141,8 @@ trait Trim {
     def truncate(length: Int): String =
       if (s.length > length) s.take(length - 3)+"..."
       else s
-  }
 
-  implicit class offSettable(s: String) {
+  implicit class offSettable(s: String):
     def offset(n: Int) =
       if (n == 0) s
       else        s.split("\n", -1).map(l => offsetLine(l, n)).mkString("\n")
@@ -156,8 +150,6 @@ trait Trim {
     private def offsetLine(l: String, n: Int) =
       if (n > 0 ) " " * n + l
       else        l.takeWhile(_ == ' ').drop(-n).mkString + l.dropWhile(_ == ' ').mkString
-  }
-}
 
 private[specs2]
 object Trim extends Trim

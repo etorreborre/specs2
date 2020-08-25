@@ -38,7 +38,7 @@ class MutableFragmentsDslSpec(ee: ExecutionEnv) extends org.specs2.Spec with Typ
   // def e2 = fragments(new dsl { "e1" in Result.foreach(1 to 2)(i => i === i) }) must
   //   beTheSameFragments(break, break, example("e1", ok), break)
 
-  def e3 = {
+  def e3 =
     val expectedDescriptions: List[ValueCheck[Description]] = List(
       break,
       start, fragmentFactory.section("this should"), break,
@@ -55,7 +55,7 @@ class MutableFragmentsDslSpec(ee: ExecutionEnv) extends org.specs2.Spec with Typ
       }).map(_.description)
 
     actualDescriptions must contain(exactly(expectedDescriptions:_*))
-  }
+  end e3
 
 
   // def e4 = fragments(new dsl {
@@ -109,9 +109,8 @@ class MutableFragmentsDslSpec(ee: ExecutionEnv) extends org.specs2.Spec with Typ
     def structure(dsl1: dsl): SpecStructure =
       dsl1.is
 
-    trait dsl extends MutableFragmentBuilder with MutableDsl {
+    trait dsl extends MutableFragmentBuilder with MutableDsl:
       addSections()
-    }
 
     // def beTheSameFragments(fs: Fragment*): Matcher[Seq[Fragment]] = { (actual: Seq[Fragment]) =>
     //   val location = StacktraceLocation()

@@ -21,7 +21,7 @@ trait SpecLike extends org.specs2.Spec with Scripts
  * List of fragments with utility functions to manipulate it
  * @param fs
  */
-case class FragmentsSeq(fs: Vector[Fragment]) {
+case class FragmentsSeq(fs: Vector[Fragment]):
 
   def toFragments: Fragments =
     Fragments.apply(fs:_*)
@@ -46,13 +46,11 @@ case class FragmentsSeq(fs: Vector[Fragment]) {
 
   def compact: FragmentsSeq =
     this
-}
 
-object FragmentsSeq {
+object FragmentsSeq:
 
   val empty: FragmentsSeq =
     FragmentsSeq(Vector.empty)
 
   def apply(f: Fragment, fs: Fragment*): FragmentsSeq =
     FragmentsSeq(f +: fs.toVector)
-}

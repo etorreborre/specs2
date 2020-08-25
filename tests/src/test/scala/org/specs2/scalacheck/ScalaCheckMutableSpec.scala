@@ -11,7 +11,7 @@ import org.specs2.specification.core.{Env, OwnEnv}
 import org.specs2.specification.process.DefaultExecutor
 import org.specs2.matcher.ActionMatchers._
 
-class ScalaCheckMutableSpec(val env: Env) extends Specification with ScalaCheck with ResultMatchers with OwnEnv {
+class ScalaCheckMutableSpec(val env: Env) extends Specification with ScalaCheck with ResultMatchers with OwnEnv:
 
   "this property must fail (see #581)" >> {
     val action: Action[Result] =
@@ -26,4 +26,3 @@ class ScalaCheckMutableSpec(val env: Env) extends Specification with ScalaCheck 
       forAll(Gen.choose(0, 10))((i: Int) => i ==== i + 1)
   }
 
-}

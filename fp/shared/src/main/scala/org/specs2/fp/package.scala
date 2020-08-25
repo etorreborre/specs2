@@ -5,7 +5,7 @@ package org.specs2
  *
  * Please refer to http://github.com/scalaz/scalaz and http://github.com/typelevel/cats for more information
  */
-package object fp {
+package object fp:
 
   object syntax extends
          FunctorSyntax
@@ -20,4 +20,3 @@ package object fp {
   type Id[X] = X
 
   type ~>[-F[_], +G[_]] = NaturalTransformation[F, G]
-}

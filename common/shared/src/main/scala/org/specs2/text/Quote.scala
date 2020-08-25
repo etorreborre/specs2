@@ -8,27 +8,23 @@ import scala.collection.Traversable
  * Quote and unquote strings
  */
 private[specs2]
-trait Quote {
+trait Quote:
 
   /** quote a value, unless it is a collection of objects */
-  def q(a: Any): String = {
+  def q(a: Any): String =
     if (a == null) quote("null")
-    else {
-      a match {
+    else
+      a match
         case ar: Array[_]           => ar.notNull
         case map: Map[_,_]          => map.notNull
         case it: TraversableOnce[_] => it.notNull
         case _                      => quote(a.notNull)
-      }
-    }
-  }
 
   /** quote a sequence, with commas if short, with newlines otherwise */
-  def qseq(seq: Traversable[_]): String = {
+  def qseq(seq: Traversable[_]): String =
     val withCommas = q(seq.mkString(", "))
     if (withCommas.length < 30) withCommas
     else seq.mkString("\n", "\n  ", "\n")
-  }
 
   /** quote a string */
   def quote(s: String, addQuotes: Boolean = true) = if (addQuotes) "'"+s+"'" else s
@@ -37,10 +33,8 @@ trait Quote {
   def unq(a: Any)  = a.notNull
 
   implicit def prefixed(s: String): Prefixed = new Prefixed(s)
-  class Prefixed(s: String) {
+  class Prefixed(s: String):
     def prefix(separator: String, other: String) = Seq(s, other).filter(_.nonEmpty).mkString(separator)
-  }
-}
 
 private[specs2]
 object Quote extends Quote

@@ -10,9 +10,9 @@ import execute._
  *
  * It is involved when reusing Matchers with JUnit
  */
-trait JUnitExpectations extends ThrownExpectations {
-  override protected def checkFailure[T](m: MatchResult[T]) = {
-    m match {
+trait JUnitExpectations extends ThrownExpectations:
+  override protected def checkFailure[T](m: MatchResult[T]) =
+    m match
       case f @ MatchFailure(ok, ko, _, _, FailureDetails(actual, expected)) => throw new ComparisonFailure(ko(), expected, actual) {
         override def getStackTrace = f.exception.getStackTrace
         override def getCause = f.exception.getCause
@@ -28,10 +28,7 @@ trait JUnitExpectations extends ThrownExpectations {
         override def printStackTrace(w: java.io.PrintWriter) = f.exception.printStackTrace(w)
       }
       case _ => ()
-    }
     m
-  }
-}
 
 /**
  * This trait can be imported to use MustMatchers in JUnit

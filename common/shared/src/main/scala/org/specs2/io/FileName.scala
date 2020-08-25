@@ -10,14 +10,13 @@ import scala.quoted._
  * The component of a path name according to the unix definition
  *   http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap03.html#tag_03_267
  */
-case class FileName private(name: String) {
+case class FileName private(name: String):
   def /(other: DirectoryPath) : DirectoryPath  = DirectoryPath(this +: other.dirs, absolute = false)
   def /(other: FilePath): FilePath = FilePath(DirectoryPath(this +: other.dir.dirs, absolute = false), other.name)
   def /(other: FileName): DirectoryPath  = DirectoryPath(Vector(this), absolute = false) / other
   def |(other: FileName): FilePath = DirectoryPath(Vector(this), absolute = false) | other
-}
 
-object FileName {
+object FileName:
   def unsafe(s: String) = new FileName(s)
   def apply(uuid: UUID) = new FileName(uuid.toString)
 
@@ -37,16 +36,15 @@ object FileName {
       Right(FileName.unsafe(s))
 
   def createFileName(fileName: Expr[String])(using qctx: QuoteContext): Expr[FileName] =
-    fileName match {
+    fileName match
       case e@Const(s) =>
-      FileName.fileNameFromString(s) match {
-        case Left(m) => report.throwError(m, fileName)
-        case Right(fn) => '{FileName.unsafe($e)}
-      }
+        FileName.fileNameFromString(s) match
+          case Left(m) =>
+            report.throwError(m, fileName)
+          case Right(fn) =>
+            '{FileName.unsafe($e)}
 
       case other =>
         report.throwError(s"Not a valid file name. It must be a literal string without any /", fileName)
-    }
 
   val isWindows = sys.props("os.name").startsWith("Windows")
-}

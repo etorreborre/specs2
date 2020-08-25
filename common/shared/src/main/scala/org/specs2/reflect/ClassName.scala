@@ -21,25 +21,23 @@ trait ClassName { outer =>
   /**
    * @return the outer class name for a given class
    */
-  def getOuterClassName(c: Class[_]): String = {
+  def getOuterClassName(c: Class[_]): String =
     c.getDeclaredConstructors.head.getParameterTypes.head.getName
-  }
 
   /**
    * @return the decoded class name, with its package
    */
-  def className(name: String): String = {
+  def className(name: String): String =
     val decoded = NameTransformer.decode(name)
     val remainingDollarNames = decoded.split("\\$")
-    val result = if (remainingDollarNames.size > 1) {
+    val result = if (remainingDollarNames.size > 1)
       val lastName = remainingDollarNames(remainingDollarNames.size - 1)
       if (lastName.matches("\\d") || lastName == "class")
         remainingDollarNames(remainingDollarNames.size - 2)
       else
         lastName
-    } else remainingDollarNames(0)
+    else remainingDollarNames(0)
     result
-  }
 
   /**
    * @return the package name from the decoded class name
@@ -54,7 +52,7 @@ trait ClassName { outer =>
   /**
    * @return the class name without the package name
    */
-  def simpleName(klass: Class[_]): String = {
+  def simpleName(klass: Class[_]): String =
     // klass.getSimpleName can throw an error in the REPL
     val result = catchAllOrElse {
       val name = className(klass.getSimpleName)
@@ -67,21 +65,18 @@ trait ClassName { outer =>
     }(klass.getName)
     if (result.contains("anon") && klass.getSuperclass != null) simpleName(klass.getSuperclass)
     else result
-  }
 
   /**
    * @return the uncamelcased name of the class (or its parent if it is an anonymous class)
    */
-  def humanName(c: Class[_]): String = {
+  def humanName(c: Class[_]): String =
     val name = simpleName(c)
     if (name.contains("$") && c.getSuperclass != null) humanName(c.getSuperclass)
     else name.camelCaseToWords
-  }
 
-  implicit class ClassOps(klass: Class[_]) {
+  implicit class ClassOps(klass: Class[_]):
     def simpleName = outer.simpleName(klass)
     def humanName  = outer.humanName(klass)
-  }
 
 }
 

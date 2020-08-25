@@ -4,10 +4,10 @@ package org.specs2.matcher.describe
  * Import the implicit Diffable contained in this object to get a colored output
  * showing line differences in Strings containing lots of lines
  */
-object LinesDiffable {
+object LinesDiffable:
 
   implicit val largeStringDiffable: Diffable[String] = new Diffable[String] {
-    def diff(actual: String, expected: String): ComparisonResult = {
+    def diff(actual: String, expected: String): ComparisonResult =
       val (actualLines, expectedLines) =
         (actual.toString.split("\n").toList,
           expected.toString.split("\n").toList)
@@ -16,7 +16,6 @@ object LinesDiffable {
         linesDiffable[String].diff(actualLines, expectedLines)
       else
         Diffable.stringDiffable.diff(actual, expected)
-    }
   }
 
   implicit def linesDiffable[T : Diffable]: Diffable[List[T]] = new Diffable[List[T]] {
@@ -24,9 +23,8 @@ object LinesDiffable {
       LinesComparisonResult(actual, expected)
   }
 
-}
 
-case class LinesComparisonResult[T : Diffable](actual: List[T], expected: List[T]) extends ComparisonResult {
+case class LinesComparisonResult[T : Diffable](actual: List[T], expected: List[T]) extends ComparisonResult:
   import org.specs2.data._
   import EditDistance._
   import org.specs2.text.AnsiColors._
@@ -50,4 +48,3 @@ case class LinesComparisonResult[T : Diffable](actual: List[T], expected: List[T
     case Subst(line1, line2) => List(color("- "+line1, red), color("+ "+line2, green))
   }.mkString("\n", "\n", "\n")
 
-}

@@ -121,7 +121,7 @@ n = 0
        |n = 1
        |```""".stripMargin
 
-  def offset3 = {
+  def offset3 =
     "code"                   || "result" |>
     "snippet{ hello }"       !! "hello"  |
     " snippet{ hello }"      !! "hello"  |
@@ -130,15 +130,13 @@ n = 0
     " snippet{\n hello \n} " !! "hello"  |
     " snippet{ hello \n} "   !! "hello"  |
     { (c, r) => trimApproximatedSnippet(c) === r }
-  }
 
-  def offset4 = {
+  def offset4 =
     "code"                                      || "result" |>
     " snippet{ hello \n}.set(eval = true) "     !! "hello"  |
     " snippet{ hello \n}.eval "                 !! "hello"  |
     " snippet{ hello \n}.offsetIs(2) "          !! "hello"  |
       { (c, r) => trimApproximatedSnippet(c) === r }
-  }
 
   def results1 = s2""" code: ${ snippet {
   var n = 1
@@ -152,25 +150,22 @@ n = 0
        |```
        |`> 2`""".stripMargin
 
-  def names1 = {
+  def names1 =
     "code"                                         || "markdown"             |>
     s"""the trait `${simpleName[Snippets]}`"""     !! "the trait `Snippets`" |
     { (code, markdown) => code === markdown}
-  }
 
-  def names2 = {
+  def names2 =
     "code"                                   || "markdown"                                      |>
     s"""the trait `${fullName[Snippets]}`""" !! "the trait `org.specs2.specification.Snippets`" |
     { (code, markdown) => code === markdown}
-  }
 
-  def names3 = {
+  def names3 =
     "code"                              || "markdown"        |>
     s"""the method `${termName(is)}`""" !! "the method `is`" |
       { (code, markdown) => code === markdown}
-  }
 
-  def names4 = {
+  def names4 =
     def function[T, S](t: T, s: S) = ""
     Use(function(1, 1))
 
@@ -178,30 +173,26 @@ n = 0
     s"""the method `${termName(function(1, ""))}`"""              !! "the method `function`" |
     s"""the method `${termName(function[Int, String](1, ""))}`""" !! "the method `function`" |
     { (code, markdown) => code === markdown}
-  }
 
-  def names5 = {
+  def names5 =
     "code"                                         || "markdown"                   |>
     s"""the attribute `${termName(attribute1)}`""" !! "the attribute `attribute1`" |
       { (code, markdown) => code === markdown}
-  }
 
   def effects1 =
     snippet[Unit](sys.error("boom")) must not(throwAn[Exception])
 
-  def effects2 = {
+  def effects2 =
     var i = 0
     s2""" start ${snippet { i = 1; i }} end """
     i === 0
-  }
 
   // HELPERS
 
   def got[T](t: T) = t
 
-  implicit class fragmentsTexts(fs: Fragments) {
+  implicit class fragmentsTexts(fs: Fragments):
     def trimmedTexts = fs.fragmentsList(ee).filter(Fragment.isText).map(_.description.show.trim)
-  }
 
   val attribute1 = 1
 }

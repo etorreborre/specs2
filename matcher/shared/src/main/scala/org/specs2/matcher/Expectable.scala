@@ -50,10 +50,9 @@ class Expectable[+T] private[specs2] (t: () => T) { outer =>
   /**
    * apply a matcher on the value and return a MatchResult which can later on be transformed to a simple Result
    */
-  def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = {
+  def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] =
     if (m == null) throw new IllegalArgumentException(s"You cannot use a null matcher on '$description'")
     check(m.apply(this))
-  }
 
   /** additional checks can be done on the result, such as throwing an exception */
   def check[S >: T](result: MatchResult[S]) = result
@@ -91,7 +90,7 @@ class Expectable[+T] private[specs2] (t: () => T) { outer =>
 /**
  * Factory methods for creating Expectables
  */
-object Expectable {
+object Expectable:
   /** @return an Expectable with t as a value */
   private[specs2] def apply[T](t: =>T) = new Expectable(() => t)
   /** @return an Expectable with t as a value, and a constant string for its description */
@@ -119,21 +118,16 @@ object Expectable {
   }
 
   /** @return the description of the matched value, quoted. */
-  private[specs2] def d(value: =>Any, desc: Option[String => String]) = {
-    desc match {
-      case None => value match {
+  private[specs2] def d(value: =>Any, desc: Option[String => String]) =
+    desc match
+      case None => value match
         case b: Boolean   => "the value"
         case _            => value.notNull ///q(value)
-      }
       case Some(de)       => de(value.notNull)
-    }
-  }
 
   /** @return the description of the matched value, unquoted. */
-  private[specs2] def dUnquoted[T](value: T, desc: Option[String => String]) = desc match {
+  private[specs2] def dUnquoted[T](value: T, desc: Option[String => String]) = desc match
     case None     => unq(value)
     case Some(de) => de(unq(value))
-  }
 
 
-}

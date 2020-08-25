@@ -21,17 +21,15 @@ class PrinterFactorySpec extends Specification with ActionMatchers { def is = s2
 
 """
 
-  def console1 = {
+  def console1 =
     val args = Arguments.split("")
     val factory = PrinterFactory.create(Env(args))
     factory.createTextPrinter.runOption.flatten must beSome
-  }
 
-  def console2 = {
+  def console2 =
     val args = Arguments.split("html console")
     val factory = PrinterFactory.create(Env(args))
     factory.createTextPrinter.runOption.flatten must beSome
-  }
 
   def instantiationFailure =
     createPrintersAndExpectMessage(Arguments.split("notifier missing"), "cannot create a missing notifier")
@@ -42,13 +40,12 @@ class PrinterFactorySpec extends Specification with ActionMatchers { def is = s2
   def missingHtmlJar =
     createPrintersAndExpectMessage(Arguments.split("html"), "cannot create a HTML printer. Please check that specs2-html.jar")
 
-  def createPrintersAndExpectMessage(arguments: Arguments, message: String) = {
+  def createPrintersAndExpectMessage(arguments: Arguments, message: String) =
     val output = new StringOutput {}
     val logger = StringOutputLogger(output)
     val factory = PrinterFactory.create(Env(arguments).setSystemLogger(logger))
     factory.createPrinters.runVoid()
     output.messages must contain(contain(message))
-  }
 
   val loader = getClass.getClassLoader
 }

@@ -15,11 +15,10 @@ trait SpecificationCreation extends specification.create.SpecificationCreation
   with AutoExamples
   with MutableDsl
   with ArgumentsShortcuts
-  with ArgumentsDsl {
+  with ArgumentsDsl:
 
   /** add fragments created with the s2 interpolated string */
   override def postProcessS2Fragments(fs: Fragments): Fragments =
     addFragments(fs.append(fragmentFactory.break))
 
 
-}

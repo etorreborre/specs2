@@ -4,7 +4,7 @@ package io
 /**
  * This trait represents an output with standard print functions
  */
-trait Output {
+trait Output:
   /**
    * print several objects according to a format string (see Console.printf)
    */
@@ -27,4 +27,3 @@ trait Output {
   def printStackTrace(t: Throwable) = t.printStackTrace(new java.io.PrintWriter(System.err) {
     override def println(s: String) = Output.this.println(s)
   })
-}

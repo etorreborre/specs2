@@ -16,7 +16,7 @@ import text.Trim._
  *   - it is excluded if the exclude list is not empty and the element matches an excluding tag
  *
  */
-trait IncludedExcluded[T] {
+trait IncludedExcluded[T]:
   def include: Seq[String]
   def exclude: Seq[String]
 
@@ -31,7 +31,6 @@ trait IncludedExcluded[T] {
 
   def isIncludedTag(t: T) = include.isEmpty  || containFunction(t, include)
   def isExcludedTag(t: T) = exclude.nonEmpty && containFunction(t, exclude)
-}
 
 /**
  * specialization of the IncludedExcluded trait for string separated tags
@@ -39,7 +38,7 @@ trait IncludedExcluded[T] {
  * 2 tags t1, t2 separated by a "," means that t1 OR t2 must be included (/excluded)
  * 2 tags t1, t2 separated by a "&&" means that t1 AND t2 must be included (/excluded)
  */
-case class SeparatedTags(included: String, excluded: String, orSeparator: String = ",", andSeparator: String = "&&") extends IncludedExcluded[Seq[String]] {
+case class SeparatedTags(included: String, excluded: String, orSeparator: String = ",", andSeparator: String = "&&") extends IncludedExcluded[Seq[String]]:
   val include = included.splitTrim(orSeparator)
   val exclude = excluded.splitTrim(orSeparator)
 
@@ -50,4 +49,3 @@ case class SeparatedTags(included: String, excluded: String, orSeparator: String
   override val containFunction = (n: Seq[String], tags: Seq[String]) => {
     tags.exists(wanted => wanted.splitTrim(andSeparator).exists(n.map(_.trim).contains))
   }
-}

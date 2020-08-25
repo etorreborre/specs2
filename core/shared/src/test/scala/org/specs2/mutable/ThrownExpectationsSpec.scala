@@ -6,7 +6,7 @@ import control.Debug
 import execute._
 import ThrownExpectationsSpecData._
 
-class ThrownExpectationsSpec extends Spec with ResultMatchers {
+class ThrownExpectationsSpec extends Spec with ResultMatchers:
 
   "An acceptance spec using" >> {
     "ThrownExpectations should fail when the first must matcher fails in an Example" in {
@@ -33,8 +33,7 @@ class ThrownExpectationsSpec extends Spec with ResultMatchers {
   }
 
   def execute[T](t: =>T) = ResultExecution.execute(t)(_ => Success())
-}
-object ThrownExpectationsSpecData {
+object ThrownExpectationsSpecData:
   def body1 = new MustThrownExpectations {
     1 must_== 2; success
   }
@@ -55,11 +54,9 @@ object ThrownExpectationsSpecData {
 
   def body6 = new Body6 {}
 
-  trait Body6 extends MustThrownExpectations {
+  trait Body6 extends MustThrownExpectations:
     var i = 0
     checkResultFailure { i += 1; success }
 
     def getCallsNb: Int = i
-  }
 
-}

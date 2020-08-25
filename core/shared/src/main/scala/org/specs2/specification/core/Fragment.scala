@@ -18,7 +18,7 @@ import scala.concurrent.duration.FiniteDuration
  * of s2 interpolated strings
  *
  */
-case class Fragment(description: Description, execution: Execution, location: Location = StacktraceLocation()) {
+case class Fragment(description: Description, execution: Execution, location: Location = StacktraceLocation()):
 
   /** @return the result of this fragment and its execution time */
   def executedResult: Action[ExecutedResult] =
@@ -69,10 +69,9 @@ case class Fragment(description: Description, execution: Execution, location: Lo
 
   /** start the execution of this fragment when the other one has finished executing */
   def startExecutionAfter(other: Option[Fragment])(env: Env): Fragment =
-    other match {
+    other match
       case Some(o) => startExecutionAfter(o)(env)
       case None    => startExecution(env)
-    }
 
   /** start the execution of this fragment when the other ones has finished executing */
   def startExecutionAfter(others: List[Fragment])(env: Env): Fragment =
@@ -86,9 +85,8 @@ case class Fragment(description: Description, execution: Execution, location: Lo
 
   override def toString =
     s"Fragment($description, $execution) (${location.path}/${location.lineNumber}:${location.columnNumber}})"
-}
 
-object Fragment {
+object Fragment:
 
   def apply(d: Description): Fragment =
     Fragment(d, Execution.NoExecution)
@@ -124,55 +122,45 @@ object Fragment {
   def isExampleOrStep(f: Fragment) =
     isExample(f) || isStep(f)
 
-  def isMarker(f: Fragment) = f.description match {
+  def isMarker(f: Fragment) = f.description match
     case m: Marker => true
     case _         => false
-  }
 
-  def isTab(f: Fragment) = f.description match {
+  def isTab(f: Fragment) = f.description match
     case Tab(_) => true
     case _      => false
-  }
 
-  def isBacktab(f: Fragment) = f.description match {
+  def isBacktab(f: Fragment) = f.description match
     case Backtab(_) => true
     case _          => false
-  }
 
-  def isBr(f: Fragment) = f.description match {
+  def isBr(f: Fragment) = f.description match
     case Br         => true
     case _          => false
-  }
 
-  def isSpecificationRef(f: Fragment) = f.description match {
+  def isSpecificationRef(f: Fragment) = f.description match
     case l: SpecificationRef => true
     case _                   => false
-  }
 
-  def specificationRef: PartialFunction[Fragment, SpecificationRef] = {
+  def specificationRef: PartialFunction[Fragment, SpecificationRef] =
     case Fragment(l: SpecificationRef,_,_) => l
-  }
 
-  def marker: PartialFunction[Fragment, Marker] = {
+  def marker: PartialFunction[Fragment, Marker] =
     case Fragment(m: Marker,_,_) => m
-  }
 
-  def linkReference: PartialFunction[Fragment, SpecificationRef] = {
+  def linkReference: PartialFunction[Fragment, SpecificationRef] =
     case f @ Fragment(l: SpecificationRef,_,_) if f.isExecutable => l
-  }
 
-  def seeReference: PartialFunction[Fragment, SpecificationRef] = {
+  def seeReference: PartialFunction[Fragment, SpecificationRef] =
     case f @ Fragment(l: SpecificationRef,_,_) if !f.isExecutable => l
-  }
 
-  def isFormatting(f: Fragment) = f.description match {
+  def isFormatting(f: Fragment) = f.description match
     case Start    => true
     case End      => true
     case Br       => true
     case Tab(_)     => true
     case Backtab(_) => true
     case _          => false
-  }
 
   def fragmentType(f: Fragment) =
     if (isExample(f))     "Example"
@@ -184,4 +172,3 @@ object Fragment {
   def foreach[T](seq: Seq[T])(f: T => Fragment): Fragments =
     seq.foldLeft(Fragments.empty) { (res, cur) => res.append(f(cur)) }
 
-}

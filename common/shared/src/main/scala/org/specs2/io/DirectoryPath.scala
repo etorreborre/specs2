@@ -13,7 +13,7 @@ import FileName._
  * It is a list of FileNames and we can append other DirectoryPaths or FilePaths to it
  * If the list is empty, this means we are at the root
  */
-case class DirectoryPath(dirs: Vector[FileName], absolute: Boolean) {
+case class DirectoryPath(dirs: Vector[FileName], absolute: Boolean):
 
   /** @return either the parent directory or the root if we already are at the root */
   def dir: DirectoryPath  = parent.getOrElse(this)
@@ -26,10 +26,9 @@ case class DirectoryPath(dirs: Vector[FileName], absolute: Boolean) {
 
   /** @return the parent directory for this directory, none if we are at the root */
   def parent: Option[DirectoryPath] =
-    dirs match {
+    dirs match
       case h +: tail => Some(copy(dirs = dirs.dropRight(1)))
       case _         => None
-    }
 
   /** @return the path for this file as a / separated string */
   def path: String = (if (absolute) "/" else "") + dirs.map(_.name).toList.mkString("/")
@@ -46,11 +45,10 @@ case class DirectoryPath(dirs: Vector[FileName], absolute: Boolean) {
    * DirectoryPath.Root plays the role an empty element for this operation
    */
   def /(other: DirectoryPath): DirectoryPath =
-    (this, other) match {
+    (this, other) match
       case (_, DirectoryPath.EMPTY) => this
       case (DirectoryPath.EMPTY, _) => other
       case _                        => copy(dirs = dirs ++ other.dirs)
-    }
 
   /**
    * append a FilePath to this directory
@@ -102,18 +100,16 @@ case class DirectoryPath(dirs: Vector[FileName], absolute: Boolean) {
 
   /** @return true if this directory path is absolute */
   def isAbsolute = absolute
-}
 
-object DirectoryPath {
+object DirectoryPath:
   def apply(n: FileName): DirectoryPath = DirectoryPath(Vector(n), absolute = false)
 
   def apply(uuid: UUID): DirectoryPath = apply(FileName(uuid))
 
-  def unsafe(s: String): DirectoryPath = {
+  def unsafe(s: String): DirectoryPath =
     val withoutScheme = removeScheme(if (isWindows) s.replaceAll("\\\\", "/") else s)
     val isAbsolute = withoutScheme.startsWith("/") || isWindows && new File(withoutScheme).isAbsolute
     DirectoryPath(withoutScheme.split("/").filter(_.nonEmpty).map(FileName.unsafe).toVector, isAbsolute)
-  }
 
   def unsafe(f: File): DirectoryPath = unsafe(f.getPath)
   def unsafe(uri: URI): DirectoryPath = unsafe(uri.toString)
@@ -122,4 +118,3 @@ object DirectoryPath {
 
   val Root = DirectoryPath(dirs = Vector(), absolute = true)
   val EMPTY = DirectoryPath(dirs = Vector(), absolute = false)
-}

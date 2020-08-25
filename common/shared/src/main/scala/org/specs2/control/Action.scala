@@ -2,7 +2,7 @@ package org.specs2
 package control
 
 import fp._, syntax._
-import concurrent.{ExecutionEnv, ExecuteActions}
+import concurrent.{ExecutionEnv, _}
 import scala.concurrent._
 import scala.concurrent.duration._
 import scala.util._
@@ -16,7 +16,7 @@ import execute._
  *   whether it has timed-out or thrown an exception. This allows resources to be safely disposed of
  *
  */
-case class Action[A](private[control] runNow: ExecutionEnv => Future[A], timeout: Option[FiniteDuration] = None, last: Vector[Finalizer] = Vector.empty) {
+case class Action[A](private[control] runNow: ExecutionEnv => Future[A], timeout: Option[FiniteDuration] = None, last: Vector[Finalizer] = Vector.empty):
 
   /** add a finalizer */
   def addLast(finalizer: Finalizer): Action[A] =
@@ -46,14 +46,14 @@ case class Action[A](private[control] runNow: ExecutionEnv => Future[A], timeout
    * NOTE: this does not execute the finalizers!!!
    */
   def runFuture(ee: ExecutionEnv): Future[A] =
-    ExecuteActions.runActionToFuture(runNow, timeout, ee)
+    runActionToFuture(runNow, timeout, ee)
 
   /**
    * Run the action and return an exception if it fails
    * Whatever happens run the finalizers
    */
   def runAction(ee: ExecutionEnv): Throwable Either A =
-    ExecuteActions.awaitAction(runNow, timeout, Finalizer.runFinalizers(last), ee)
+    awaitAction(runNow, timeout, Finalizer.runFinalizers(last), ee)
 
   /** run the action and return Nothing is case of an error */
   def runOption(ee: ExecutionEnv): Option[A] =
@@ -74,10 +74,9 @@ case class Action[A](private[control] runNow: ExecutionEnv => Future[A], timeout
   // for backwards compatibility
   def run(ee: ExecutionEnv): A =
     unsafeRunAction(ee)
-}
 
 
-object Action {
+object Action:
 
   def pure[A](a: =>A): Action[A] =
     ActionMonad.point(a)
@@ -113,12 +112,11 @@ object Action {
         fa.runNow(ee).flatMap { case a => f(a).runNow(ee) }
     }
 
-    override def ap[A, B](fa: =>Action[A])(ff: =>Action[A => B]): Action[B] = {
+    override def ap[A, B](fa: =>Action[A])(ff: =>Action[A => B]): Action[B] =
       Action { ee =>
         implicit val ec = ee.executionContext
         fa.runNow(ee).zip(ff.runNow(ee)).map { case (a, f) => f(a) }
       }
-    }
 
     override def toString: String =
       "Monad[Action]"
@@ -128,12 +126,11 @@ object Action {
     def point[A](a: =>A): Action[A] =
       Action(_ => Future.successful(a))
 
-    def ap[A, B](fa: =>Action[A])(ff: =>Action[A => B]): Action[B] = {
+    def ap[A, B](fa: =>Action[A])(ff: =>Action[A => B]): Action[B] =
       Action { ee =>
         implicit val ec = ee.executionContext
         fa.runNow(ee).zip(ff.runNow(ee)).map { case (a, f) => f(a) }
       }
-    }
 
     override def toString: String =
       "Applicative[Action]"
@@ -154,4 +151,3 @@ object Action {
       action.runAction(ExecutionEnv.fromGlobalExecutionContext).fold(err => Error(err),  ok => AsResult(ok))
   }
 
-}

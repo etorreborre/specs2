@@ -11,7 +11,7 @@ import org.specs2.fp.{Id, Monad}
 /**
  * This trait provides Timer functionalities based on the Java Calendar milliseconds
  */
-trait HmsTimer[T <: HmsTimer[T]] {
+trait HmsTimer[T <: HmsTimer[T]]:
   /** elapsed times since for each stop */
   protected val elapsedTimes: List[Long] = Nil
   /** each time the timer is started we add the current time to this list of times number of millis when instantiating the object using this Trait */
@@ -53,7 +53,7 @@ trait HmsTimer[T <: HmsTimer[T]] {
   /**
    * @return a tuple with the elapsed hours, minutes, seconds and millis
    */
-  def hourMinutesSecondsMillis = {
+  def hourMinutesSecondsMillis =
     val hours = totalMillis / 1000 / 3600
     val totalMillis1 = totalMillis - hours * 3600 * 1000
     val minutes = totalMillis1 / 1000 / 60
@@ -61,34 +61,30 @@ trait HmsTimer[T <: HmsTimer[T]] {
     val seconds = totalMillis2 / 1000
     val millis = totalMillis2 - seconds * 1000
     (hours, minutes, seconds, millis)
-  }
 
   /**
    * @return a formatted string showing the hours, minutes and seconds
    */
-  def hms: String = {
+  def hms: String =
     val (hours, minutes, seconds, millis) = hourMinutesSecondsMillis
     List(hours.toInt.strictlyPositiveOrEmpty("hour"),
       minutes.toInt.strictlyPositiveOrEmpty("minute"),
       seconds.toInt.qty("second")).filter(_.nonEmpty).mkString(" ")
-  }
 
   /**
    * @return a formatted string showing the hours, minutes, seconds and millis
    */
-  def time: String = {
+  def time: String =
     val (_, _, _, millis) = hourMinutesSecondsMillis
     (if (hms != "0 second") hms + ", " else "") +
       millis + " ms"
-  }
 
   /**
    * this method can be overridden for testing
    */
   protected def getTime = new Date().getTime
-}
 
-class SimpleTimer extends HmsTimer[SimpleTimer] {
+class SimpleTimer extends HmsTimer[SimpleTimer]:
   def copy(e: List[Long] = Nil, m: List[Long] = Nil) =
     new SimpleTimer {
       override protected val elapsedTimes = e
@@ -97,16 +93,14 @@ class SimpleTimer extends HmsTimer[SimpleTimer] {
 
   override def toString = hms
 
-  override def equals(a: Any) = a match {
+  override def equals(a: Any) = a match
     case s: SimpleTimer => true
     case other          => false
-  }
 
   override def hashCode =
     elapsedTimes.hashCode
-}
 
-object SimpleTimer {
+object SimpleTimer:
   def fromString(s: String) = new SimpleTimer {
     override protected val elapsedTimes = tryOrElse(List(java.lang.Long.parseLong(s)))(Nil)
   }
@@ -119,9 +113,7 @@ object SimpleTimer {
     def end(s: S) = s.stop
   }
 
-  def startSimpleTimer: SimpleTimer = {
+  def startSimpleTimer: SimpleTimer =
     val timer = new SimpleTimer
     timer.start
-  }
 
-}

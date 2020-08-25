@@ -9,7 +9,7 @@ import Seqx._
  *
  * It is made public so that users can reuse the sameElementsAs method
  */
-trait Iterablex {
+trait Iterablex:
   /**
    * implicit definition to transform an Iterable to an ExtendedIterable
    */
@@ -18,21 +18,19 @@ trait Iterablex {
   /**
    * Additional methods for Iterable objects
    */
-  class ExtendedIterable[T](xs: GenIterable[T]) {
+  class ExtendedIterable[T](xs: GenIterable[T]):
 
     /**
      * @return true if the 2 iterables contain the same elements, in the same order,
      *         according to a function f
      */
-    def isSimilar[S >: T](that: GenIterable[S], f: Function2[T, S, Boolean]): Boolean = {
+    def isSimilar[S >: T](that: GenIterable[S], f: Function2[T, S, Boolean]): Boolean =
       val it1 = xs.iterator
       val it2 = that.iterator
       var res = true
-      while (res && it1.hasNext && it2.hasNext) {
+      while (res && it1.hasNext && it2.hasNext)
         res = f(it1.next, it2.next)
-      }
       !it1.hasNext && !it2.hasNext && res
-    }
     /**
      * @return true if the 2 iterables contain the same elements recursively, in any order
      */
@@ -47,18 +45,16 @@ trait Iterablex {
      *
      * @return true if the 2 iterables contain the same elements (according to a comparison function f) recursively, in any order
      */
-    def sameElementsAs(that: GenIterable[T], f: (T, T) => Boolean): Boolean = {
+    def sameElementsAs(that: GenIterable[T], f: (T, T) => Boolean): Boolean =
       def isNotItsOwnIterable(a: GenIterable[_]) = a.isEmpty || a.iterator.next != a
-      def matchTwo(x: T, y: T): Boolean = {
-        (x, y) match {
+      def matchTwo(x: T, y: T): Boolean =
+        (x, y) match
           case (a: GenIterable[_], b: GenIterable[_]) if isNotItsOwnIterable(a) =>
             x.asInstanceOf[GenIterable[T]].sameElementsAs(y.asInstanceOf[GenIterable[T]], f)
           case _ => f(x, y)
-        }
-      }
       val ita = xs.iterator.toList
       val itb = that.iterator.toList
-      (ita, itb) match {
+      (ita, itb) match
         case (Nil, Nil) => true
         case (a: GenIterable[_], b: GenIterable[_]) =>
            (a.nonEmpty && b.nonEmpty) && {
@@ -69,15 +65,13 @@ trait Iterablex {
           }
 
         case (_, _) => ita == itb
-      }
-    }
     /**
      * @return true if the second iterable elements are contained in the first, in order
      */
-    def containsInOrder(l: T*): Boolean = {
+    def containsInOrder(l: T*): Boolean =
       val firstList = xs.toList
       val secondList = l.toList
-      (firstList, secondList) match {
+      (firstList, secondList) match
          case (_, Nil) => true
          case (Nil, _) => false
          case (a :: Nil, b :: Nil) => a == b
@@ -87,12 +81,10 @@ trait Iterablex {
            else
              firstRest.containsInOrder(secondRest:_*)
          }
-      }
-    }
     /**
      * @return the representation of the elements of the iterable using the toString method recursively
      */
-    def toDeepString: String = {
+    def toDeepString: String =
       if (xs.nonEmpty && xs == xs.iterator.next)
         xs.toString
       else
@@ -100,7 +92,6 @@ trait Iterablex {
           case i: GenIterable[_] => i.toDeepString
           case x => x.toString
         }.mkString(", ") + "]"
-    }
     /** map the first element with a function */
     def mapFirst(f: T => T): GenSeq[T] = (xs.take(1).map(f) ++ xs.drop(1)).toSeq
     /** map the last element with a function */
@@ -115,7 +106,5 @@ trait Iterablex {
       // rotate arbitrarily the sequence first then sort randomly
       xs.rotate(random.nextInt(xs.size+1)).toSeq.sortWith((_,_) => random.nextInt(2) > 0)
 
-  }
-}
 
 object Iterablex extends Iterablex

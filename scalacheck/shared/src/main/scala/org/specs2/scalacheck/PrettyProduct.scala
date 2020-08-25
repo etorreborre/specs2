@@ -16,7 +16,7 @@ import org.scalacheck.util.Pretty
  *   }
  *
  */
-object PrettyProduct {
+object PrettyProduct:
 
   def toString[P <: Product](p: P): String =
     p.productIterator.map {
@@ -27,5 +27,4 @@ object PrettyProduct {
 
   def apply[P <: Product] = (p: P) => Pretty(_ => toString(p))
 
-}
 

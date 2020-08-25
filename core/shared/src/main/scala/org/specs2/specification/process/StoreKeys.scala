@@ -10,7 +10,7 @@ import org.specs2.fp.syntax._
 import org.specs2.fp.syntax._
 import org.specs2.fp.syntax._
 
-object StoreKeys {
+object StoreKeys:
   def resolve[A](key: Key[A]): String =
     (key match {
       case SpecificationStatsKey(name) => name
@@ -18,7 +18,7 @@ object StoreKeys {
     }) + ".stats"
 
   def encode[A](key: Key[A], value: A): String =
-    key match {
+    key match
       case SpecificationStatsKey(_) =>
         val s: Stats = value
         statsToString(s)+
@@ -27,10 +27,9 @@ object StoreKeys {
       case SpecificationResultKey(_, _) =>
         val r: Result = value
         statsToString(Stats(r))
-    }
 
   def decode[A](key: Key[A], data: String): Option[A] =
-    key match {
+    key match
       case SpecificationStatsKey(_) =>
         val lines = data.split("\n").toList
         lines.map(statsFromString).sequence.map { stats =>
@@ -41,22 +40,18 @@ object StoreKeys {
       case SpecificationResultKey(_, _) =>
         statsFromString(data).map(_.result)
 
-    }
 
 
-  private def statsToString(s: Stats) = {
+  private def statsToString(s: Stats) =
     import s._
     s"specs=$specs,examples=$examples,successes=$successes,expectations=$expectations,failures=$failures,errors=$errors,pending=$pending,skipped=$skipped,time=${timer.totalMillis}"
-  }
 
   private def statsFromString(s: String): Option[Stats] = Try {
-    s.split(",").map(_.split("=")(1)).toList match {
+    s.split(",").map(_.split("=")(1)).toList match
       case List(specs,examples,successes,expectations,failures,errors,pending,skipped,time) =>
         Stats(specs.toInt, examples.toInt, successes.toInt, expectations.toInt, failures.toInt, errors.toInt, pending.toInt, skipped.toInt, trend = None, SimpleTimer.fromString(time))
 
       case otherwise =>
         throw new Exception(s"$s is not a well formatted Stats object")
-    }
   }.toOption
 
-}

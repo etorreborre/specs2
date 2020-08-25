@@ -17,7 +17,7 @@ import org.specs2.specification.create.DefaultFragmentFactory.link
  * This trait loads specifications found on a given source directory based
  * on a regular expression representing the Specification name, usually .*Spec
  */
-trait SpecificationsFinder {
+trait SpecificationsFinder:
 
   /**
    * @param glob a path to a directory containing scala files (it can be a glob: i.e. "dir/**/*spec.scala")
@@ -43,17 +43,15 @@ trait SpecificationsFinder {
                      filter: String => Boolean      = { (name: String) => true },
                      basePath: DirectoryPath        = DirectoryPath.unsafe(new java.io.File("src/test/scala").getAbsolutePath),
                      verbose: Boolean               = false,
-                     classLoader: ClassLoader       = Thread.currentThread.getContextClassLoader): Seq[SpecificationStructure] = {
+                     classLoader: ClassLoader       = Thread.currentThread.getContextClassLoader): Seq[SpecificationStructure] =
     val specs = findSpecifications(glob, pattern, filter, basePath, verbose, classLoader)
     val result = specs.runOperation
 
     result.fold(e => { e.printStackTrace; Seq() }, seq => seq)
-  }
-
-}
 
 
-case class DefaultSpecificationsFinder(env: Env) extends SpecificationsFinder {
+
+case class DefaultSpecificationsFinder(env: Env) extends SpecificationsFinder:
 
   val logger: Logger =
     env.systemLogger
@@ -92,7 +90,7 @@ case class DefaultSpecificationsFinder(env: Env) extends SpecificationsFinder {
                          filter: String => Boolean      = { (name: String) => true },
                          basePath: DirectoryPath        = DirectoryPath.unsafe(new java.io.File("src/test/scala").getAbsolutePath),
                          verbose: Boolean               = false,
-                         classLoader: ClassLoader       = Thread.currentThread.getContextClassLoader): Seq[Fragment] = {
+                         classLoader: ClassLoader       = Thread.currentThread.getContextClassLoader): Seq[Fragment] =
     import DefaultFragmentFactory._
 
     val links: Operation[List[Fragment]] = specificationNames(glob, pattern, basePath, verbose).flatMap { names =>
@@ -104,12 +102,10 @@ case class DefaultSpecificationsFinder(env: Env) extends SpecificationsFinder {
       }
     }
 
-    links.runOperation match {
+    links.runOperation match
       case Left(t) => println(t); Seq()
       case Right(ss) => ss
-    }
 
-  }
 
   /**
    * @param pathGlob a path to a directory containing scala files (it can be a glob: i.e. "dir/**/*spec.scala")
@@ -121,17 +117,15 @@ case class DefaultSpecificationsFinder(env: Env) extends SpecificationsFinder {
     pattern: String,
     basePath: DirectoryPath,
     verbose: Boolean) : Operation[List[String]] = {
-    lazy val specClassPattern = {
+    lazy val specClassPattern =
       val p = specPattern("class", pattern)
       logger.info("  the pattern used to match specification classes is: "+p, verbose) >>
         Operation.delayed(Pattern.compile(p))
-    }
 
-    lazy val specObjectPattern = {
+    lazy val specObjectPattern =
       val p = specPattern("object", pattern)
       logger.info("  the pattern used to match specification objects is: "+p, verbose) >>
         Operation.delayed(Pattern.compile(p))
-    }
 
     for {
       objectPattern <- specObjectPattern
@@ -161,9 +155,8 @@ case class DefaultSpecificationsFinder(env: Env) extends SpecificationsFinder {
    * pattern to use to get specification names from file contents
    */
   def specPattern(specType: String, pattern: String) = "\\s*"+specType+"\\s*" + pattern
-}
 
-object SpecificationsFinder {
+object SpecificationsFinder:
 
   val default: SpecificationsFinder =
     DefaultSpecificationsFinder(EnvDefault.default)
@@ -179,4 +172,3 @@ object SpecificationsFinder {
   /** Regex pattern used to capture a specification name in an object/class declaration */
   val specificationsPattern: String =
     "(.*Spec)\\s*extends\\s*.*"
-}

@@ -7,7 +7,7 @@ import fp._, syntax._
 /**
  * specs2 logger support
  */
-trait Logger {
+trait Logger:
   def warn(message: String, doIt: Boolean = true): Operation[Unit]
   def info(message: String, doIt: Boolean = true): Operation[Unit]
   def exception(t: Throwable, doIt: Boolean = true): Operation[Unit]
@@ -15,12 +15,11 @@ trait Logger {
   // derived operations
   def warnAndFail[A](warnMessage: String, failureMessage: String, doIt: Boolean = true): Operation[A] =
     warn(warnMessage, doIt) >> Operation.fail[A](failureMessage)
-}
 
 /**
  * Logger implementation directing messages to the console
  */
-case class ConsoleLogger() extends Logger {
+case class ConsoleLogger() extends Logger:
 
   def exception(t: Throwable, verbose: Boolean = false): Operation[Unit] =
     Operation.delayed(println("[ERROR] "+t.getMessage)) >>
@@ -34,15 +33,13 @@ case class ConsoleLogger() extends Logger {
     if (doIt) Operation.delayed((println("[INFO] "+message)))
     else Operation.unit
 
-}
 
-object NoLogger extends Logger {
+object NoLogger extends Logger:
   def warn(message: String, doIt: Boolean = true): Operation[Unit] = Operation.unit
   def info(message: String, doIt: Boolean = true): Operation[Unit] = Operation.unit
   def exception(t: Throwable, doIt: Boolean = true): Operation[Unit] = Operation.unit
-}
 
-case class StringOutputLogger(output: StringOutput) extends Logger {
+case class StringOutputLogger(output: StringOutput) extends Logger:
   def warn(message: String, doIt: Boolean = true): Operation[Unit] =
     Operation.ok(if (doIt) output.printf(message))
 
@@ -51,4 +48,3 @@ case class StringOutputLogger(output: StringOutput) extends Logger {
 
   def exception(t: Throwable, doIt: Boolean = true): Operation[Unit] =
     Operation.ok(if (doIt) output.printf(t.getMessage))
-}

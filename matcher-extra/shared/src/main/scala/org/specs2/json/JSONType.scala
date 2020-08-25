@@ -15,7 +15,7 @@ import scala.util.parsing.input.CharArrayReader._
  *  @author Derek Chen-Becker <"java"+@+"chen-becker"+"."+"org">
  */
 private[specs2]
-sealed abstract class JSONType {
+sealed abstract class JSONType:
   /**
    * This version of toString allows you to provide your own value
    * formatter.
@@ -28,7 +28,6 @@ sealed abstract class JSONType {
    */
   override def toString: String =
     toString(JSONFormat.defaultFormatter)
-}
 
 /**
  * This object defines functions that are used when converting JSONType
@@ -38,7 +37,7 @@ sealed abstract class JSONType {
  * @author Derek Chen-Becker <"java"+@+"chen-becker"+"."+"org">
  */
 private[specs2]
-object JSONFormat {
+object JSONFormat:
   /**
    * This type defines a function that can be used to
    * format values into JSON format.
@@ -50,12 +49,11 @@ object JSONFormat {
    * provide your own with the toString calls on
    * JSONObject and JSONArray instances.
    */
-  val defaultFormatter : ValueFormatter = {
+  val defaultFormatter : ValueFormatter =
     case s : String => "\"" + quoteString(s) + "\""
     case jo : JSONObject => jo.toString(defaultFormatter)
     case ja : JSONArray => ja.toString(defaultFormatter)
     case other => if (other == null) "null" else other.toString
-  }
 
   /**
    * This function can be used to properly quote Strings
@@ -83,7 +81,6 @@ object JSONFormat {
       case c if ((c >= '\u0000' && c <= '\u001f') || (c >= '\u007f' && c <= '\u009f')) => "\\u%04x".format(c.toInt)
       case c => c
     }.mkString
-}
 
 /**
  *  Represents a JSON Object (map).
@@ -91,20 +88,18 @@ object JSONFormat {
  *  @author Derek Chen-Becker <"java"+@+"chen-becker"+"."+"org">
  */
 private[specs2]
-case class JSONObject (obj : Map[String,Any]) extends JSONType {
+case class JSONObject (obj : Map[String,Any]) extends JSONType:
   def toString (formatter : JSONFormat.ValueFormatter) =
     "{" + obj.map({ case (k,v) => formatter(k.toString) + " : " + formatter(v) }).mkString(", ") + "}"
-}
 
 /**
  *  Represents a JSON Array (list).
  *  @author Derek Chen-Becker <"java"+@+"chen-becker"+"."+"org">
  */
 private[specs2]
-case class JSONArray (list : List[Any]) extends JSONType {
+case class JSONArray (list : List[Any]) extends JSONType:
   def toString (formatter : JSONFormat.ValueFormatter) =
     "[" + list.map(formatter).mkString(", ") + "]"
-}
 
 /**
  *  The main JSON Parser.
@@ -112,7 +107,7 @@ case class JSONArray (list : List[Any]) extends JSONType {
  *  @author Derek Chen-Becker <"java"+@+"chen-becker"+"."+"org">
  */
 private[specs2]
-class Parser extends StdTokenParsers with ImplicitConversions {
+class Parser extends StdTokenParsers with ImplicitConversions:
   // Fill in abstract defs
   type Tokens = Lexer
   val lexical = new Tokens
@@ -140,10 +135,9 @@ class Parser extends StdTokenParsers with ImplicitConversions {
   def value: Parser[Any] = (jsonObj | jsonArray | number | "true" ^^^ true | "false" ^^^ false | "null" ^^^ null | stringVal)
   def stringVal  = accept("string", { case lexical.StringLit(n) => n} )
   def number     = accept("number", { case lexical.NumericLit(n) => numberParser.get.apply(n)} )
-}
 
 private[specs2]
-class Lexer extends StdLexical with ImplicitConversions {
+class Lexer extends StdLexical with ImplicitConversions:
 
   override def token: Parser[Token] =
   //( '\"' ~ rep(charSeq | letter) ~ '\"' ^^ lift(StringLit)
@@ -159,10 +153,9 @@ class Lexer extends StdLexical with ImplicitConversions {
       | failure("Illegal character")
       )
 
-  def checkKeyword(xs : List[Any]) = {
+  def checkKeyword(xs : List[Any]) =
     val strRep = xs mkString ""
     if (reserved contains strRep) Keyword(strRep) else ErrorToken("Not a keyword: " + strRep)
-  }
 
   /** A string is a collection of zero or more Unicode characters, wrapped in
     *  double quotes, using backslash escapes (cf. http://www.json.org/).
@@ -181,10 +174,9 @@ class Lexer extends StdLexical with ImplicitConversions {
     e.toString + optString("", s) + d.mkString("")
   }
 
-  private def optString[A](pre: String, a: Option[A]) = a match {
+  private def optString[A](pre: String, a: Option[A]) = a match
     case Some(x) => pre + (if (x == null) "null" else x.toString)
     case None => ""
-  }
 
   def zero: Parser[String] = '0' ^^^ "0"
   def nonzero = elem("nonzero digit", d => d.isDigit && d != '0')
@@ -209,4 +201,3 @@ class Lexer extends StdLexical with ImplicitConversions {
     case a ~ b ~ c ~ d =>
       new String(Array(Integer.parseInt(List(a, b, c, d) mkString "", 16)), 0, 1)
   }
-}

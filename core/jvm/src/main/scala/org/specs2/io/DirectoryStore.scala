@@ -5,7 +5,7 @@ import control._
 import specification.process._
 import fp._, syntax._
 
-case class DirectoryStore(baseDirectory: DirectoryPath, fileSystem: FileSystem) extends Store {
+case class DirectoryStore(baseDirectory: DirectoryPath, fileSystem: FileSystem) extends Store:
 
   def set[A](key: Key[A], fact: A): Operation[Unit] =
     fileSystem.writeFile(filepath(key), StoreKeys.encode(key, fact))
@@ -21,4 +21,3 @@ case class DirectoryStore(baseDirectory: DirectoryPath, fileSystem: FileSystem) 
   private def filepath[A](key: Key[A]): FilePath =
     baseDirectory / FilePath.unsafe(StoreKeys.resolve(key))
 
-}

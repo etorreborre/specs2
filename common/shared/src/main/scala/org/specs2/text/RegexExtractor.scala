@@ -16,7 +16,7 @@ import control.Exceptions
  * It provides methods to extract either all the groups as a list, or a number of values as a tuple
  *
  */
-abstract class RegexExtractor[P, T](private var fullRegex: String = "", private var groupRegex: String = RegexExtractor.DEFAULT_REGEX) {
+abstract class RegexExtractor[P, T](private var fullRegex: String = "", private var groupRegex: String = RegexExtractor.DEFAULT_REGEX):
 
   private def full: Regex = fullRegex.r
   private def group: Regex = groupRegex.r
@@ -24,11 +24,10 @@ abstract class RegexExtractor[P, T](private var fullRegex: String = "", private 
   protected def regexToUse = if (full.toString.isEmpty) group else full
 
   /** change the regexps */
-  def withRegex(full: String = "", group: String = RegexExtractor.DEFAULT_REGEX): this.type = {
+  def withRegex(full: String = "", group: String = RegexExtractor.DEFAULT_REGEX): this.type =
     fullRegex = full
     groupRegex = group
     this
-  }
   /** remove value markers `${}` from the text */
   def strip(text: String): String = RegexExtractor.strip(text, full, group)
 
@@ -44,13 +43,12 @@ abstract class RegexExtractor[P, T](private var fullRegex: String = "", private 
   def extract9(t: String) = RegexExtractor.extract9(t, full, group)
   def extract10(t: String)= RegexExtractor.extract10(t, full, group)
   def extractAll(t: String) = RegexExtractor.extractAll(t, full, group)
-}
 
-object RegexExtractor {
+object RegexExtractor:
   val DEFAULT_REGEX = """\$\{([^}]+)\}"""
 
   def extract[R](text: String, f: PartialFunction[Any, R], regexToUse: =>Regex = DEFAULT_REGEX.r): R = tryWithRegex(text, regexToUse) {
-    regexToUse.findAllIn(text).size match {
+    regexToUse.findAllIn(text).size match
       case 1 => f(extract1(text))
       case 2 => f(extract2(text))
       case 3 => f(extract3(text))
@@ -61,7 +59,6 @@ object RegexExtractor {
       case 8 => f(extract8(text))
       case 9 => f(extract9(text))
       case 10 => f(extract10(text))
-    }
   }
   /** extract all groups and return a list of strings */
   def extractAll(text: String, full: =>Regex = "".r, group: =>Regex = DEFAULT_REGEX.r): List[String] = tryWithRegex(text, regexToUse(full, group)) {
@@ -105,4 +102,3 @@ object RegexExtractor {
       case e: MatchError       => throw e
       case other               => throw new ErrorException(new Error(s"could not extract the regex from $text: ${other.getMessage}", other))
     }
-}

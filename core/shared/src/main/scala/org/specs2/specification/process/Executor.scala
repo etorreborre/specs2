@@ -18,7 +18,7 @@ import main.Arguments
  * "join" points
  *
  */
-trait Executor {
+trait Executor:
 
   /**
    * execute fragments:
@@ -30,7 +30,6 @@ trait Executor {
    * for example
    */
   def execute(specArguments: Arguments): AsyncTransducer[Fragment, Fragment]
-}
 
 /**
  * Default execution for specifications:
@@ -38,7 +37,7 @@ trait Executor {
  *  - concurrent by default
  *  - using steps for synchronisation points
  */
-case class DefaultExecutor(env: Env) extends Executor {
+case class DefaultExecutor(env: Env) extends Executor:
 
   /**
    * execute fragments:
@@ -65,20 +64,18 @@ case class DefaultExecutor(env: Env) extends Executor {
     val init: S = (Vector.empty, Vector.empty, None)
     val arguments = env.arguments.overrideWith(specArguments)
 
-    val last: S => AsyncStream[Fragment] = {
+    val last: S => AsyncStream[Fragment] =
       case (toStart, _, previousStep) =>
         emit(toStart.toList.map(_.startExecutionAfter(previousStep)(env)))
-    }
 
     p.producerState(init, Option(last)) { case (fragment, (previous, previousStarted, previousStep)) =>
       if (arguments.skipAll)
         (one(if (fragment.isExecutable) fragment.skip else fragment), init)
-      else if (arguments.sequential) {
+      else if (arguments.sequential)
         val started = fragment.startExecutionAfter(previousStarted.toList)(env)
         (one(started), (previous, previousStarted :+ started, None))
-      }
-      else {
-        if (fragment.execution.mustJoin) {
+      else
+        if (fragment.execution.mustJoin)
           val started = previous.map(_.startExecutionAfter(previousStep)(env))
           val step =
             fragment.
@@ -86,14 +83,11 @@ case class DefaultExecutor(env: Env) extends Executor {
               startExecutionAfter((previousStarted ++ started).toList)(env)
 
           (emit((started :+ step).toList), (Vector.empty, Vector.empty, Some(step)))
-        }
-        else if ((previous :+ fragment).count(_.isExecutable) >= arguments.batchSize) {
+        else if ((previous :+ fragment).count(_.isExecutable) >= arguments.batchSize)
           val started = (previous :+ fragment).map(_.startExecutionAfter(previousStep)(env))
           (emit(started.toList), (Vector.empty, previousStarted ++ started, previousStep))
-        }
         else
           (done[Action, Fragment], (previous :+ fragment, previousStarted, previousStep))
-      }
     }
 
   }
@@ -107,7 +101,7 @@ case class DefaultExecutor(env: Env) extends Executor {
     timeout.fold(execution)(t => execution.setTimeout(t)).startExecution(env)
 
   def executeOnline(specArguments: Arguments)(fragment: Fragment): AsyncStream[Fragment] =
-    fragment.execution.continuation match {
+    fragment.execution.continuation match
       case Some(continue) =>
         Producer.evalProducer(fragment.executionResult.map { result =>
           continue(result).fold(oneDelayed[Action, Fragment](fragment))(
@@ -115,39 +109,33 @@ case class DefaultExecutor(env: Env) extends Executor {
         })
 
       case None => oneDelayed(fragment)
-    }
-}
 
 /**
  * helper functions for executing fragments
  */
-object DefaultExecutor {
+object DefaultExecutor:
 
-  def executeSpec(spec: SpecStructure, env: Env): SpecStructure = {
+  def executeSpec(spec: SpecStructure, env: Env): SpecStructure =
     spec.|>((contents: AsyncStream[Fragment]) => contents |> DefaultExecutor(env).sequencedExecution(spec.arguments))
-  }
 
   def runSpec(spec: SpecStructure, env: Env): List[Fragment] =
     executeSpec(spec, env).contents.runList.runMonoid(env.specs2ExecutionEnv)
 
-  def runSpecification(spec: SpecificationStructure, env: Env): List[Fragment] = {
+  def runSpecification(spec: SpecificationStructure, env: Env): List[Fragment] =
     lazy val structure = spec.structure(env)
     executeSpec(structure, env.copy(arguments = env.arguments <| structure.arguments)).contents.runList.
       runMonoid(env.specs2ExecutionEnv)
-  }
 
-  def runSpecificationFuture(spec: SpecificationStructure, env: Env): Future[List[Fragment]] = {
+  def runSpecificationFuture(spec: SpecificationStructure, env: Env): Future[List[Fragment]] =
     lazy val structure = spec.structure(env)
     val env1 = env.copy(arguments = env.arguments <| structure.arguments)
     executeSpec(structure, env1).contents.runList.runFuture(env.specs2ExecutionEnv)
-  }
 
-  def runSpecificationAction(spec: SpecificationStructure, env: Env): Action[List[Fragment]] = {
+  def runSpecificationAction(spec: SpecificationStructure, env: Env): Action[List[Fragment]] =
     lazy val structure = spec.structure(env)
     val env1 = env.copy(arguments = env.arguments <| structure.arguments)
     executeSpec(structure, env1).contents.runList.
       flatMap { fs => fs.traverse(_.executionResult).as(fs) }
-  }
 
   /** only to be used in tests */
   def executeFragments(fs: Fragments)(env: Env): List[Fragment] =
@@ -166,4 +154,3 @@ object DefaultExecutor {
   /** synchronous execution with a specific environment */
   def executeFragments1(env: Env): AsyncTransducer[Fragment, Fragment] = (p: AsyncStream[Fragment]) =>
     p.map(DefaultExecutor(env).executeFragment())
-}

@@ -8,7 +8,7 @@ import scala.concurrent.duration._
  *
  * This was adapted from a contribution by @robey (http://robey.lag.net)
  */
-trait EventuallyResults {
+trait EventuallyResults:
 
   /**
    * @param sleep the function applied on the retry number (first is 1)
@@ -20,32 +20,27 @@ trait EventuallyResults {
    * }
    * }}}
    */
-  def eventually[T : AsResult](retries: Int, sleep: Int => Duration)(result: =>T): T = {
+  def eventually[T : AsResult](retries: Int, sleep: Int => Duration)(result: =>T): T =
     val max = retries - 1
 
-    @annotation.tailrec def retry(retried: Int): T = {
-      if (retried == max) {
+    @annotation.tailrec def retry(retried: Int): T =
+      if (retried == max)
         result
-      } else {
+      else
         lazy val t = result
         val check = ResultExecution.execute(t)(AsResult(_))
 
-        if (check.isSuccess) {
+        if (check.isSuccess)
           t
-        } else {
+        else
           val pause = sleep(retried).toMillis
           Thread.sleep(pause)
           retry(retried + 1)
-        }
-      }
-    }
 
-    if (retries <= 1) {
+    if (retries <= 1)
       result
-    } else {
+    else
       retry(0)
-    }
-  }
 
   /**
    * @return a matcher that will retry the nested matcher a given number of times
@@ -56,6 +51,5 @@ trait EventuallyResults {
   /** @return a result that is retried at least 40 times until it's ok */
   def eventually[T : AsResult](result: =>T): T =
     eventually(40, (_: Int) => 100.millis)(result)
-}
 
 object EventuallyResults extends EventuallyResults

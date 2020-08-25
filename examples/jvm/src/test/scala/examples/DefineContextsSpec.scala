@@ -10,7 +10,7 @@ import org.specs2.execute._
 /**
  * This specification shows various ways to setup contexts for examples.
  */
-class DefineContextsSpec extends Specification {
+class DefineContextsSpec extends Specification:
 
   /**
    * This specification uses the `BeforeEach` trait to execute some code before each example
@@ -28,14 +28,13 @@ class DefineContextsSpec extends Specification {
   /**
    * This mutable specification also uses the `BeforeEach` trait
    */
-  class BeforeEachMutableSpecification extends org.specs2.mutable.Specification with BeforeEach {
+  class BeforeEachMutableSpecification extends org.specs2.mutable.Specification with BeforeEach:
     "This is a list of examples" >> {
       "example1"                 >> success
       "example2"                 >> success
     }
 
     def before = println("clean up before each example")
-  }
 
   /**
    * This specification shows how to create an Around context that will measure the execution time of
@@ -46,20 +45,18 @@ class DefineContextsSpec extends Specification {
     example 2 ${ Thread.sleep(10); ok }
     """
 
-    def around[T : AsResult](t: =>T): Result = {
+    def around[T : AsResult](t: =>T): Result =
       // use `ResultExecution.execute` to catch possible exceptions
       val (result, timer) = withTimer(ResultExecution.execute(AsResult(t)))
 
       // update the result with a piece of text which will be displayed in the console
       result.updateExpected("Execution time: "+timer.time)
-    }
 
     /** mesure the execution time of a piece of code */
-    def withTimer[T](t: =>T): (T, SimpleTimer) = {
+    def withTimer[T](t: =>T): (T, SimpleTimer) =
       val timer = (new SimpleTimer).start
       val result = t
       (result, timer.stop)
-    }
 
   }
 
@@ -82,23 +79,19 @@ class DefineContextsSpec extends Specification {
   /**
    * This trait provides an Around context to a trait measure an example execution time
    */
-  trait TimedContext {
+  trait TimedContext:
     def context(exampleDescription: String) = new Timed(exampleDescription)
 
-    case class Timed(exampleDescription: String) extends Around {
-      def around[T : AsResult](t: =>T): Result = {
+    case class Timed(exampleDescription: String) extends Around:
+      def around[T : AsResult](t: =>T): Result =
         val (result, timer) = withTimer(ResultExecution.execute(AsResult(t)))
         result.updateExpected(s"Execution time for example $exampleDescription: ${timer.time}")
-      }
 
       /** mesure the execution time of a piece of code */
-      def withTimer[T](t: =>T): (T, SimpleTimer) = {
+      def withTimer[T](t: =>T): (T, SimpleTimer) =
         val timer = (new SimpleTimer).start
         val result = t
         (result, timer.stop)
-      }
-    }
-  }
 
   def println(s: String) = s // change this definition to see messages in the console
 
@@ -107,4 +100,3 @@ class DefineContextsSpec extends Specification {
     new BeforeEachMutableSpecification ^
     new TimedExecutionSpecification ^
     new TimedDescribedSpecification
-}

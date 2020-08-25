@@ -1,11 +1,10 @@
 package org.specs2.fp
 
-sealed abstract class Memo[@specialized(Int) K, @specialized(Int, Long, Double) V] {
+sealed abstract class Memo[@specialized(Int) K, @specialized(Int, Long, Double) V]:
   def apply(z: K => V): K => V
-}
 
 
-object Memo {
+object Memo:
   def memo[@specialized(Int) K, @specialized(Int, Long, Double) V](f: (K => V) => K => V): Memo[K, V] = new Memo[K, V] {
     def apply(z: K => V) = f(z)
   }
@@ -21,7 +20,7 @@ object Memo {
   def weakHashMapMemo[K, V]: Memo[K, V] =
     mutableMapMemo(new collection.mutable.WeakHashMap[K, V])
 
-  def immutableMapMemo[K, V](m: Map[K, V]): Memo[K, V] = {
+  def immutableMapMemo[K, V](m: Map[K, V]): Memo[K, V] =
     var a = m
 
     memo[K, V](f =>
@@ -32,7 +31,6 @@ object Memo {
           v
         })
       })
-  }
 
   import collection.immutable.{HashMap, ListMap, TreeMap}
 
@@ -41,4 +39,3 @@ object Memo {
   def immutableListMapMemo[K, V]: Memo[K, V] = immutableMapMemo(ListMap.empty[K, V])
 
   def immutableTreeMapMemo[K: scala.Ordering, V]: Memo[K, V] = immutableMapMemo(TreeMap.empty[K, V])
-}

@@ -5,7 +5,7 @@ import org.scalacheck.util._
 import org.scalacheck.Test
 import PrettyDetails._
 
-trait ScalaCheckParameters {
+trait ScalaCheckParameters:
   /**
    * default parameters. Uses ScalaCheck default values and doesn't print anything to the console
    */
@@ -33,5 +33,4 @@ trait ScalaCheckParameters {
               callback: Test.TestCallback                  = defaultParameters.testCallback,
               loader: Option[ClassLoader]                  = defaultParameters.loader): Parameters =
     Parameters(minTestsOk, minSize, maxDiscardRatio, maxSize, workers, callback, loader).verbose
-}
 

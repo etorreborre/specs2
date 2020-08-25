@@ -105,10 +105,9 @@ trait Applicative[F[_]] extends Functor[F] { self =>
 
   /** Filter `l` according to an applicative predicate. */
   def filterM[A](l: List[A])(f: A => F[Boolean]): F[List[A]] =
-    l match {
+    l match
       case Nil => point(List())
       case h :: t => ap(filterM(t)(f))(map(f(h))(b => t => if (b) h :: t else t))
-    }
 
   /**
    * Returns the given argument if `cond` is `false`, otherwise, unit lifted into F.
@@ -121,7 +120,7 @@ trait Applicative[F[_]] extends Functor[F] { self =>
   def when[A](cond: Boolean)(f: => F[A]): F[Unit] = if (cond) void(f) else point(())
 }
 
-object Applicative {
+object Applicative:
   @inline def apply[F[_]](implicit F: Applicative[F]): Applicative[F] = F
 
   implicit def optionApplicative[L]: Applicative[Option] =
@@ -146,11 +145,10 @@ object Applicative {
         "Applicative[Future]"
     }
 
-}
 
-trait ApplicativeSyntax {
+trait ApplicativeSyntax:
 
-  implicit class ApplicativeOps[F[_] : Applicative, A](fa: F[A]) {
+  implicit class ApplicativeOps[F[_] : Applicative, A](fa: F[A]):
     val applicative = Applicative.apply[F]
 
     def ap[B](f: F[A => B]): F[B] =
@@ -170,7 +168,6 @@ trait ApplicativeSyntax {
 
     def unless(condition: Boolean): F[Unit] =
       applicative.unless(condition)(fa)
-  }
 
   def when[F[_], A](condition: Boolean)(fa: F[A])(implicit applicative: Applicative[F]): F[Unit] =
     applicative.when(condition)(fa)
@@ -178,9 +175,7 @@ trait ApplicativeSyntax {
   def unless[F[_], A](condition: Boolean)(fa: F[A])(implicit applicative: Applicative[F]): F[Unit] =
     applicative.unless(condition)(fa)
 
-  implicit class ListApplicativeOps[A](fa: List[A]) {
+  implicit class ListApplicativeOps[A](fa: List[A]):
     def filterM[F[_] : Applicative](f: A => F[Boolean]): F[List[A]] =
       Applicative.apply[F].filterM(fa)(f)
-  }
 
-}

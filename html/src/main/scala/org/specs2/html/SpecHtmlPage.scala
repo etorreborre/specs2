@@ -7,7 +7,7 @@ import io._
 import specification.core._
 import scala.xml._
 
-case class SpecHtmlPage(specification: SpecStructure, path: FilePath, outDir: DirectoryPath, content: String) {
+case class SpecHtmlPage(specification: SpecStructure, path: FilePath, outDir: DirectoryPath, content: String):
 
   /** @return the class name of the specification */
   def className = specification.header.className
@@ -21,10 +21,9 @@ case class SpecHtmlPage(specification: SpecStructure, path: FilePath, outDir: Di
   /** @return the title of the specification */
   def showWords = specification.header.showWords
 
-  def addToc(toc: NodeSeq): SpecHtmlPage = {
+  def addToc(toc: NodeSeq): SpecHtmlPage =
     val replacedToc = content.replace("<toc/>", toc.toString)
     copy(content = replacedToc)
-  }
 
   def relativePath: FilePath =
     path.relativeTo(outDir)
@@ -35,9 +34,8 @@ case class SpecHtmlPage(specification: SpecStructure, path: FilePath, outDir: Di
   private def parse(string: String): NodeSeq =
     XML.withSAXParser((new org.ccil.cowan.tagsoup.jaxp.SAXFactoryImpl).newSAXParser)
       .load(new scala.xml.InputSource(new StringReader(string)))
-}
 
-object SpecHtmlPage {
+object SpecHtmlPage:
   
   def outputPath(outDir: DirectoryPath, spec: SpecStructure): FilePath =
     outputPath(outDir, spec.specClassName)
@@ -45,4 +43,3 @@ object SpecHtmlPage {
   def outputPath(outDir: DirectoryPath, specClassName: String): FilePath =
     outDir | FileName.unsafe(specClassName+".html")
 
-}

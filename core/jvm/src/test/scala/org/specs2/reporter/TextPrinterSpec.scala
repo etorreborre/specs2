@@ -122,40 +122,38 @@ presentation
   """|[info] + e1
      |[info]   example1""".stripMargin
 
-  def b7 = {
+  def b7 =
     def ex1 = AsResult { Thread.sleep(30); ok }
     Arguments("showtimes") ^ s2"""e1 $ex1""" matches """(?s).*\[info\] \+ e1 \(\d\d.+\).*"""
-  }
 
   def c1 =
-s2"""e1 $ok
-e2 $ko
-e3 $ko
-""" contains(
-    """|[info] Total for specification TextPrinterSpec
-       |[info] Finished in x ms
-       |[info] x examples, x failures, x error""", (_:String).replaceAll("\\d+", "x"))
+    s2"""e1 $ok
+    |e2 $ko
+    |e3 $ko
+    |""".stripMargin contains(
+        """|[info] Total for specification TextPrinterSpec
+           |[info] Finished in x ms
+           |[info] x examples, x failures, x error""", (_:String).replaceAll("\\d+", "x"))
 
   def d1 =
-s2"""e1 ${1 must_== 2}""" contains
-      """|[error] x e1
-         |[error]  1 != 2"""
+    s2"""e1 ${1 must_== 2}""" contains
+         """|[error] x e1
+            |[error]  1 != 2"""
 
   def d2 = Arguments.split("failtrace fullstacktrace") ^
-s2"""e1 ${1 must_== 2}""" contains
-     """|[error]_org.specs2.report"""
+    s2"""e1 ${1 must_== 2}""" contains
+    """|[error]_org.specs2.report"""
 
   def d3 =
-s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" contains
-    """|[error] Actual:   a[b]cdea[b]cdea[b]cdea[b]cdea[b]cde
-       |[error] Expected: a[d]cdea[d]cdea[d]cdea[d]cdea[d]cde"""
+    s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" contains
+        """|[error] Actual:   a[b]cdea[b]cdea[b]cdea[b]cdea[b]cde
+           |[error] Expected: a[d]cdea[d]cdea[d]cdea[d]cdea[d]cde"""
 
   case class A(s: String) { override def equals(a: Any) = false }
 
-  def d4 = {
+  def d4 =
     s2"""e1 ${A("a"*100) must_== A("a"*100)}""" doesntContain
       """|[error] Actual"""
-  }
 
   def e1 = Arguments("fullstacktrace") ^
     s2"""e1 $error1""" contains
@@ -204,14 +202,13 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
   def j2 = s2"""the ${SpecificationRef(SpecHeader(classOf[String], Some("STRING")), Arguments())} spec""" contains
     """|[info] the * STRING spec"""
 
-  def j3 = {
+  def j3 =
     val repository = StatisticsRepositoryCreation.memory
     repository.storeStatistics(classOf[String].getName, Stats(examples = 1, failures = 1)).runOption
     val env1 = ownEnv.setArguments(Arguments()).setStatisticRepository(repository)
     (s2"""the ${SpecificationRef(SpecHeader(classOf[String], Some("STRING")), Arguments())} spec""", env1) contains
     """|[info] the x STRING spec"""
 
-  }
 
   def j4 = s2"""the ${SpecificationRef(SpecHeader(classOf[String], Some("STRING")), Arguments(), hidden = true)} spec""" contains
     """|[info] the  spec"""
@@ -229,7 +226,7 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
     s2"""e1 $ok
          e2 $ok""" containsOnly """|[info] title"""
 
-  def l1 = {
+  def l1 =
     val logger = new TestLogger
 
     val fragments = Fragments.foreach(1 to 100)(i =>
@@ -258,9 +255,8 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
       val (l1, l2) = logger.messages.filter(s => s.contains("executed") || s.contains("+")).span(_.contains("executed"))
       l1.size aka (l1, l2).toString must not(be_==(l2.size))
     }
-  }
 
-  def l2 = {
+  def l2 =
     val logger = new TestLogger
 
     val fragments = Fragments.foreach(1 to 100)(i =>
@@ -288,7 +284,6 @@ s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" co
       val (l1, l2) = logger.messages.filter(s => s.contains("executed") || s.contains("+")).span(_.contains("executed"))
       l1.size aka (l1, l2).toString must not(be_==(l2.size))
     }
-  }
 
   import specification.Tables._
 
@@ -313,47 +308,42 @@ table ${
   def error2 = { throw new Exception("wrong", new IllegalArgumentException("boom")); ok }
 }
 
-object TextPrinterSpecification extends MustMatchers with FragmentsDsl {
+object TextPrinterSpecification extends MustMatchers with FragmentsDsl:
 
-  implicit class fragmentOutputContains(fragment: Fragment) {
+  implicit class fragmentOutputContains(fragment: Fragment):
     def contains(contained: String, f: String => String = identity) = Fragments(fragment).contains(contained, f)
-  }
 
-  implicit class fragmentsOutputContains(fragments: Fragments) {
+  implicit class fragmentsOutputContains(fragments: Fragments):
     def contains(contained: String, f: String => String = identity) =
       SpecStructure.create(SpecHeader(classOf[TextPrinterSpec]), Arguments(), fragments).contains(contained, f)
 
     def doesntContain(contained: String, f: String => String = identity) =
       SpecStructure.create(SpecHeader(classOf[TextPrinterSpec]), Arguments(), fragments).contains(contained, f).not
-  }
 
-  implicit class outputContains(spec: SpecStructure) {
+  implicit class outputContains(spec: SpecStructure):
     lazy val optionalEnv: Option[Env] = None
 
-    lazy val printed = {
+    lazy val printed =
       val logger = stringPrinterLogger
       lazy val env1 =
-        optionalEnv match {
+        optionalEnv match
           case Some(ownEnv) =>
             ownEnv.copy(printerLogger = logger)
 
           case None =>
             Env(printerLogger = logger,
               arguments = spec.arguments.overrideWith(Arguments.split("sequential fullstacktrace")))
-        }
 
-      try {
+      try
         val printer = TextPrinter(env1)
         printer.run(spec.setFragments(spec.fragments
           .prepend(DefaultFragmentFactory.break) // add a newline after the title
           .update(DefaultExecutor(env1).execute(spec.arguments))))
-      } finally {
+      finally
         if (optionalEnv.isEmpty) env1.shutdown()
-      }
 
       val messages = logger.messages
       messages.map(_.removeEnd(" ")).mkString("\n").replace(" ", "_")
-    }
 
     def doesntContain(contained: String, f: String => String = identity) =
       contains(contained, f).not
@@ -369,16 +359,12 @@ object TextPrinterSpecification extends MustMatchers with FragmentsDsl {
 
     def matches(pattern: String) =
       printed must beMatching(pattern.stripMargin.replace(" ", "_"))
-  }
 
-  implicit class outputContainsForEnv(spec: (Fragments, Env)) extends outputContains(spec._1) {
+  implicit class outputContainsForEnv(spec: (Fragments, Env)) extends outputContains(spec._1):
     override lazy val optionalEnv = Some(spec._2)
-  }
-}
 
-class TestLogger extends BufferedPrinterLogger with StringOutput {
+class TestLogger extends BufferedPrinterLogger with StringOutput:
   def infoLine(msg: String)    = super.append(AnsiColors.removeColors(msg))
   def errorLine(msg: String)   = ()
   def failureLine(msg: String) = ()
   def warnLine(msg: String) = ()
-}

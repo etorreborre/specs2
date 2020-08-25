@@ -23,7 +23,7 @@ class IndexingSpec(val env: Env) extends Specification with OwnExecutionEnv { de
   def index = html.Index.createIndex(pages(0)) must_==
            html.Index(Vector(IndexEntry(title = "page 1", text = "content1", tags = Vector("tag1", "tag2"), path = FilePath("page1"))))
 
-  def save = {
+  def save =
     val path = "target" / "test" / "IndexingSpec" | "index.js"
     emitSeq[Action, IndexedPage](pages).fold(indexFold(path).into[Action]).runAction(ee)
 
@@ -32,7 +32,6 @@ class IndexingSpec(val env: Env) extends Specification with OwnExecutionEnv { de
         |{"title":"page 2", "text":"content2", "tags":"tag3", "loc":"page2"}]};""".stripMargin
 
     FileSystem(NoLogger).readFile(path).map(_.trim) must beOk(===(expected))
-  }
 
   def quoted =
     html.Index.page(IndexEntry("title", "text \"here\"", Vector(), FilePath("path"))) must contain("text \\\"here\\\"")

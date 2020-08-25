@@ -11,7 +11,7 @@ import org.specs2.reflect.ClassLoading
 import org.specs2.reporter.PrinterLogger.consolePrinterLogger
 import org.specs2.specification.process._
 
-object EnvDefault {
+object EnvDefault:
 
   val statsDirectoryPath: DirectoryPath =
     "target" / "specs2-reports" / "stats"
@@ -38,4 +38,3 @@ object EnvDefault {
          env.arguments,
          env)
 
-}

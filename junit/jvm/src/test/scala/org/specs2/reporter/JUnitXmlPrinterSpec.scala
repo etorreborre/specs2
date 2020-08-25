@@ -56,21 +56,18 @@ is formatted for JUnit reporting tools.
 
   def printer(e: Env) = JUnitXmlPrinter(e)
 
-  object outputDir {
+  object outputDir:
 
-    def e1 = {
+    def e1 =
       printer(env).outputDirectory(Arguments()).path must endWith("target/test-reports")
-    }
 
-    def e2 = {
+    def e2 =
       System.setProperty("specs2.junit.outDir", "target/reports/junit")
       printer(env).outputDirectory(Arguments()).path must endWith("target/reports/junit")
-    }
-  }
 
   def header = { printString(ownEnv)("e1" ! success) must startWith("<?xml version='1.0' encoding='utf-8'?>") }
 
-  object suite {
+  object suite:
     def xml(env: Env) =
       print(env)("t1" ^ br ^
       "e1<>&\"" ! success^ br^    // for testing, this name includes special characters that are escaped in xml
@@ -88,15 +85,13 @@ is formatted for JUnit reporting tools.
     def e8  = { xml(ownEnv) must \\("system-out") }
     def e9  = { xml(ownEnv) must \\("system-err") }
     def e10 = { xml(ownEnv) must (\\("properties") and \\("property")) }
-  }
 
-  object test {
+  object test:
     def e1 = { print(ownEnv)("t1" ^ br ^ "e1<>&\"" ! success) must \\("testcase", "classname" -> "org.specs2.reporter.JUnitXmlPrinterSpec") }
     def e2 = { print(ownEnv)(start ^ "t1" ^ br ^ "e1<>&" ! success ^ end) must \\("testcase", "name" -> "t1::e1&lt;&gt;&amp;") }
     def e3 = { print(ownEnv)("t1" ^ br ^ "e1<>&\"" ! success) must \\("testcase", "time") }
-  }
 
-  object message {
+  object message:
     def e1 = { print(ownEnv)("t1" ^ br ^ "e2" ! anError) must \\("error", "message" -> anError.exception.getMessage) }
     def e2 = { print(ownEnv)("t1" ^ br ^ "e2" ! anError) must \\("error", "type" -> anError.exception.getClass.getName) }
     def e3 = { print(ownEnv)("t1" ^ br ^ "e2" ! anError).toString must contain("JUnitXmlPrinterSpec.scala") }
@@ -105,9 +100,8 @@ is formatted for JUnit reporting tools.
     def e6 = { print(ownEnv)("t1" ^ br ^ "e3" ! failure).toString must contain("JUnitXmlPrinterSpec.scala") }
     def e7 = { print(ownEnv)("t1" ^ br ^ "e2" ! skipped) must \\("skipped") }
     def e8 = { print(ownEnv)(start ^ "t1" ^ br ^ "<node.1/>" ! ok ^ end).toString must contain("t1::&lt;node.1/&gt;") }
-  }
 
-  def printString(env1: Env)(fs: Fragments): String = {
+  def printString(env1: Env)(fs: Fragments): String =
     val mockFs = new FileSystem(NoLogger) with Selectable {
       var output: String = ""
       def out: String = output
@@ -119,11 +113,9 @@ is formatted for JUnit reporting tools.
 
     reporter.report(SpecStructure(SpecHeader(getClass)).setFragments(fs)).runOption(env1.specs2ExecutionEnv)
     mockFs.out
-  }
 
-  def print(env: Env)(fs: Fragments): NodeSeq = {
+  def print(env: Env)(fs: Fragments): NodeSeq =
     scala.xml.XML.loadString(printString(env)(fs))
-  }
 }
 
 case class JUnitXmlSpecification(fs: Fragments) extends Specification { def is = fs }

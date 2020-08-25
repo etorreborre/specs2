@@ -13,9 +13,8 @@ import java.util.regex.Pattern
 trait ResultExecution { outer =>
   /** this implicit allows the execution of a Result with an `execute` method */
   implicit def resultIsExecutable(r: =>Result): ExecutableResult = new ExecutableResult(r)
-  class ExecutableResult(r: =>Result) {
+  class ExecutableResult(r: =>Result):
     def execute = outer.execute(r)
-  }
 
   /** execute a Result and return a Result even if there are specs2 exceptions */
   def execute(result: =>Result) =
@@ -23,7 +22,7 @@ trait ResultExecution { outer =>
     catch handleExceptionsPurely
 
   /** handle result exceptions and do not rethrow them */
-  def handleExceptionsPurely: PartialFunction[Throwable, Result] = {
+  def handleExceptionsPurely: PartialFunction[Throwable, Result] =
       case FailureException(f)                                               => f
       case SkipException(f)                                                  => f
       case PendingException(f)                                               => f
@@ -34,12 +33,11 @@ trait ResultExecution { outer =>
       case e: java.lang.Error if simpleClassName(e) == "NotImplementedError" => Failure(e.getMessage.notNull, "", e.getStackTrace.toList, details = FromJUnitAssertionError)
       case e: java.lang.Error if simpleClassName(e) == "ExpectationError"    => Failure(e.toString, "", e.getStackTrace.toList, details = FromExpectationError)
       case t: Exception                                                      => Error(t)
-    }
 
   /** execute a Result and rethrow any exception or throws an exception if it is not a success */
   def effectively(result: =>Result): Result =
-    try {
-      result match {
+    try
+      result match
         case e: Error   => throw new ErrorException(e)
         case f: Failure => throw new FailureException(f)
         case p: Pending => throw new PendingException(p)
@@ -49,8 +47,7 @@ trait ResultExecution { outer =>
         case r @ DecoratedResult(_, e: Pending) => throw new DecoratedResultException(r)
         case r @ DecoratedResult(_, e: Skipped) => throw new DecoratedResultException(r)
         case other      => other
-      }
-    } catch {
+    catch
       case e: FailureException                                               => throw e
       case e: SkipException                                                  => throw e
       case e: PendingException                                               => throw e
@@ -61,7 +58,6 @@ trait ResultExecution { outer =>
       case e: java.lang.Error if simpleClassName(e) == "NotImplementedError" => throw FailureException(Failure(e.getMessage.notNull, "", e.getStackTrace.toList, details = FromJUnitAssertionError))
       case e: java.lang.Error if simpleClassName(e) == "ExpectationError"    => throw FailureException(Failure(e.toString, "", e.getStackTrace.toList, details = FromExpectationError))
       case t: Exception                                                      => throw ErrorException(Error(t))
-    }
 
   /**
    * execute a piece of code and return a result:
@@ -70,17 +66,16 @@ trait ResultExecution { outer =>
    *  - if the code throws an Exception return an Error
    *  - if the code returns a value of type T, convert it to a result
    */
-  def execute[T, R : AsResult](code: =>T)(convert: T => R): Result = executeEither(code)(convert) match {
+  def execute[T, R : AsResult](code: =>T)(convert: T => R): Result = executeEither(code)(convert) match
     case Left(r)  => AsResult(r)
     case Right(r) => AsResult(r)
-  }
 
   /**
    * execute a piece of code and return a result, either as a Left(failure) or a Right(value)
    */
-  def executeEither[T, R](code: =>T)(implicit convert: T => R): Either[Result, R] = {
+  def executeEither[T, R](code: =>T)(implicit convert: T => R): Either[Result, R] =
     val executed = trye(code)(identity)
-    executed match {
+    executed match
       case Left(FailureException(f))                         => Left(f)
       case Left(SkipException(f))                            => Left(f)
       case Left(PendingException(f))                         => Left(f)
@@ -90,8 +85,6 @@ trait ResultExecution { outer =>
       case Right(m: ResultLike)     if !m.toResult.isSuccess => Left(m.toResult)
       case Right(r: Result)         if !r.isSuccess          => Left(r)
       case Right(other)                                      => Right(convert(other))
-    }
-  }
 
   /**
    * execute a result and return either as a Left(result) if something was thrown or a Right(result)
@@ -108,11 +101,10 @@ trait ResultExecution { outer =>
   /**
    * execute a Property returning the value if it exists and a Success result otherwise
    */
-  def executeProperty[T](prop: Property[T], default: Result = Success("no value")) = executeEither(prop.optionalValue) match {
+  def executeProperty[T](prop: Property[T], default: Result = Success("no value")) = executeEither(prop.optionalValue) match
     case Right(Some(v)) => Right(v)
     case Right(None)    => Left(default)
     case Left(r)        => Left(r)
-  }
 
   /** determine if an AssertionError has been thrown from JUnit or not */
   private def fromJUnit(e: AssertionError) =

@@ -3,7 +3,7 @@ package data
 
 import mutable.Tables
 
-class SeparatedTagsSpec extends mutable.Spec with Tables {
+class SeparatedTagsSpec extends mutable.Spec with Tables:
 
   "tagged elements can be included / excluded by tags" >> {
     "element tags" | "include"    | "exclude"  | "keep" |>
@@ -38,4 +38,3 @@ class SeparatedTagsSpec extends mutable.Spec with Tables {
         SeparatedTags(included, excluded).contain(elementTags.split(",").toIndexedSeq) must_== contain
       }
   }
-}

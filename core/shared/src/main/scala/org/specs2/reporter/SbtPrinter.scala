@@ -16,7 +16,7 @@ import SbtPrinter._
  * It delegates the console printing to a normal text printer but using the Sbt loggers
  * It also publishes events (success, error, skipped, pending) to Sbt
  */
-case class SbtPrinter(env: Env, loggers: Array[Logger], events: SbtEvents) extends Printer {
+case class SbtPrinter(env: Env, loggers: Array[Logger], events: SbtEvents) extends Printer:
   def prepare(specifications: List[SpecStructure]): Action[Unit] = Action.unit
   def finalize(specifications: List[SpecStructure]): Action[Unit] = Action.unit
 
@@ -38,9 +38,8 @@ case class SbtPrinter(env: Env, loggers: Array[Logger], events: SbtEvents) exten
 
   def eventSink(spec: SpecStructure): AsyncSink[Fragment] =
     sbtNotifierPrinter(env.arguments).sink(spec)
-}
 
-object SbtPrinter {
+object SbtPrinter:
   def sbtNotifier(events: SbtEvents, args: Arguments) = new Notifier {
     private val context: scala.collection.mutable.Stack[String] =
       new scala.collection.mutable.Stack[String]
@@ -81,12 +80,11 @@ object SbtPrinter {
       events.error("step", duration, args.traceFilter(f))
 
   }
-}
 
 /**
  * Sbt events for a given TaskDef and event handler
  */
-trait SbtEvents {
+trait SbtEvents:
   /** sbt event handler to notify of successes/failures */
   def handler: EventHandler
   /** sbt task definition for this run */
@@ -103,25 +101,22 @@ trait SbtEvents {
   def ignored  (name: String, durationInMillis: Long)                       = handler.handle(SpecTestEvent(name, Status.Ignored , Some(durationInMillis)))
   def canceled (name: String)                                               = handler.handle(SpecTestEvent(name, Status.Canceled, None))
 
-  case class SpecTestEvent(name: String, status: Status, durationInMillis: Option[Long], throwable: OptionalThrowable = new OptionalThrowable) extends Event {
+  case class SpecTestEvent(name: String, status: Status, durationInMillis: Option[Long], throwable: OptionalThrowable = new OptionalThrowable) extends Event:
     val fullyQualifiedName = taskDef.fullyQualifiedName
     val fingerprint        = taskDef.fingerprint
     val selector           = new TestSelector(name)
     val duration           = durationInMillis.getOrElse(-1L)
-  }
 
-  case class SpecSuiteEvent(status: Status, throwable: OptionalThrowable = new OptionalThrowable) extends Event {
+  case class SpecSuiteEvent(status: Status, throwable: OptionalThrowable = new OptionalThrowable) extends Event:
     val fullyQualifiedName = taskDef.fullyQualifiedName
     val fingerprint        = taskDef.fingerprint
     val selector           = new SuiteSelector
     val duration           = -1L
-  }
-}
 
 /**
  * Line logger using sbt's loggers
  */
-case class SbtPrinterLogger(loggers: Array[Logger]) extends BufferedPrinterLogger {
+case class SbtPrinterLogger(loggers: Array[Logger]) extends BufferedPrinterLogger:
   def infoLine(msg: String) = loggers.foreach { logger =>
     logger.info(removeColors(msg, !logger.ansiCodesSupported))
   }
@@ -137,4 +132,3 @@ case class SbtPrinterLogger(loggers: Array[Logger]) extends BufferedPrinterLogge
   def warnLine(msg: String) =  loggers.foreach { logger =>
     logger.warn(removeColors(msg, !logger.ansiCodesSupported))
   }
-}

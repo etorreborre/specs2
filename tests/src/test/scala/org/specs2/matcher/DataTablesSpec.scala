@@ -84,16 +84,15 @@ class DataTablesSpec(val env: Env) extends Specification with DataTables with Re
     0           ! "0"       |
     List("a")   ! "List(a)" | { (a, b) =>  a.toString must_== b }
 
-  def e9 = {
+  def e9 =
     "a successful table must not throw an exception" ==> {
       (new InAMutableContext).resultOk must not (throwA[DecoratedResultException])
     } and
     "a failed table must throw an exception" ==> {
       (new InAMutableContext).resultKo must throwA[DecoratedResultException]
     }
-  }
 
-  def e10 = {
+  def e10 =
     val table =
       "a"     || "b"     | "c"         |>
       "hello" !! "you"   ! "hello you" |
@@ -105,9 +104,8 @@ class DataTablesSpec(val env: Env) extends Specification with DataTables with Re
       "+ | hello | you   | hello you | "+"\n"+
       "+ | you   | hello | you hello | "+"\n"+
       "+ | y     | h     | y h       | "
-  }
 
-  def e11 = {
+  def e11 =
     val table =
       "a"     || "b"     | "c"          |>
       "hello" !! "you"   ! "hello you"  |
@@ -119,9 +117,8 @@ class DataTablesSpec(val env: Env) extends Specification with DataTables with Re
       "+ | hello | you   | hello you  |                            "+"\n"+
       "x | you   | hello | you hello2 | 'you hello' != 'you hello2'"+"\n"+
       "+ | y     | h     | y h        |                            "
-  }
 
-  def e12 = {
+  def e12 =
     val t1 =
       "a"   | "b" | "c" |>
        2    !  2  !  4  |
@@ -134,45 +131,39 @@ class DataTablesSpec(val env: Env) extends Specification with DataTables with Re
     (t1 and t2).message ===
       "  | a | b | c |       "+"\n"+
       "x | 2 | 2 | 5 | 4 != 5"
-  }
 
   def e13 =
     "a"            || "b"    |>
     "a"            !! "b"    |
     (null: String) !! ""     | { (a, b) =>  ok }
 
-  def applicative1 = {
+  def applicative1 =
     "a" | "b" |>
     1   ! "1" |
     2   ! "2" |* { (a: Int, b: String) => a ==== b.toInt }
-  }
 
-  def applicative2 = {
+  def applicative2 =
     "a" | "b" |
     1   ! "1" |
     2   ! "2" |*> { (a: Int, b: String) => a ==== b.toInt }
-  }
 
 
-  def applicative3 = {
+  def applicative3 =
     "a" | "b" |>
     1   ! "1" |
     2   ! "2" |@ { (a: Int, b: String) => Future(a ==== b.toInt) } await
-  }
 
-  def applicative4 = {
+  def applicative4 =
     "a" | "b" |
     1   ! "1" |
     2   ! "2" |@> { (a: Int, b: String) => Future(a ==== b.toInt) } await
-  }
 
-  def applicative5 = {
+  def applicative5 =
     "a" | "b" |>
     1   ! "1" |
     2   ! "2" |* { (a: Int, b: String) => a ==== b.toInt }
-  }
 
-  def applicative6 = {
+  def applicative6 =
     val table =
       "a" | "b" |>
       1   ! "1" |
@@ -185,11 +176,10 @@ class DataTablesSpec(val env: Env) extends Specification with DataTables with Re
       "x | 2 | 0 | 2 != 0"+"\n"+
       "+ | 3 | 3 |       "
 
-  }
 
 }
 
-class InAMutableContext extends MustThrownMatchers with DataTables {
+class InAMutableContext extends MustThrownMatchers with DataTables:
   lazy val resultOk =
       "a" | "b"    |>
        1  ! 1      | { (a, b) =>  a must_== b }
@@ -197,4 +187,3 @@ class InAMutableContext extends MustThrownMatchers with DataTables {
   lazy val resultKo =
     "a" | "b"    |>
      1  ! 2      | { (a, b) =>  a must_== b }
-}

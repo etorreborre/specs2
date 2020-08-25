@@ -49,13 +49,12 @@ trait System3 extends System
 /** this class can be instantiated */
 class System1(system2: System2) extends System
 
-class FromClassNameWithArg(system: System) extends Specification  {
+class FromClassNameWithArg(system: System) extends Specification :
 
   /** only this constructor can be instantiated */
   def this(system: System1) = this(system: System)
   def this(system: System3) = this(system: System)
 
   def is = ok
-}
 
 object FromObjectName extends Specification { def is = ok }

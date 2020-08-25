@@ -14,7 +14,7 @@ package script
  *
  * See the GWTSpec in the examples module
  */
-trait Script {
+trait Script:
   /** @return the title of the script */
   def title: String
 
@@ -23,7 +23,6 @@ trait Script {
 
   /** @return true if this object marks the beginning of the script */
   def isStart: Boolean
-}
 
 /**
  * set of lines returned by a ScriptTemplate
@@ -33,6 +32,5 @@ trait ScriptLines
 /**
  * A ScriptTemplate parses some text to create ScriptLines that the associated script knows how to translate to Fragments.
  */
-trait ScriptTemplate[T <: Script, L <: ScriptLines] {
+trait ScriptTemplate[T <: Script, L <: ScriptLines]:
   def lines(text: String, script: T): L
-}

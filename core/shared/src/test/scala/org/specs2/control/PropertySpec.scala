@@ -46,11 +46,10 @@ A property can be transformed to an Either instance
   p1.toOption.get must_== 1
 }
 
- def execution2 = {
+ def execution2 =
    val p = prop(); import p._
    Property { print("one"); 1 }.toOption.get
    messages.size must_== 1
- }
 
  def option1 = { val p = prop(); p.p1.map(_.toString).toOption must_== Some("1") }
  def option2 = { val p = prop(); p.p1.flatMap(i => Some(i.toString)).toOption must_== Some("1") }
@@ -64,7 +63,6 @@ A property can be transformed to an Either instance
  def toEither1 = { val p = prop(); p.p1.toLeft(2) must_== Left(1) }
  def toEither2 = { val p = prop(); p.p1.toRight(2) must_== Right(1) }
 
-  case class prop() extends StringOutput {
+  case class prop() extends StringOutput:
     lazy val p1 = Property(1)
-  }
 }

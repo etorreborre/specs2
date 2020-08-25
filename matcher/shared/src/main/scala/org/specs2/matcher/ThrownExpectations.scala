@@ -31,7 +31,7 @@ trait ThrownExpectations extends ThrownExpectationsCreation with ThrownStandardR
  */
 trait ThrownExpectationsCreation extends ThrownExpectables
 
-trait ThrownExpectables extends ExpectationsCreation {
+trait ThrownExpectables extends ExpectationsCreation:
 
   override def createExpectable[T](t: => T, alias: Option[String => String]): Expectable[T] =
     new Expectable(() => t) {
@@ -42,10 +42,9 @@ trait ThrownExpectables extends ExpectationsCreation {
       override def map[S](f: T => S): Expectable[S] = createExpectable(f(value), desc)
       override def mapDescription(d: Option[String => String]): Expectable[T] = createExpectable(value, d)
 
-      override def evaluateOnce = {
+      override def evaluateOnce =
         val v = t
         createExpectable(v, desc)
-      }
     }
 
   override def createExpectableWithShowAs[T](t: =>T, show: =>String): Expectable[T] =
@@ -58,38 +57,32 @@ trait ThrownExpectables extends ExpectationsCreation {
       override def map[S](f: T => S): Expectable[S] = createExpectableWithShowAs(f(value), show)
       override def mapDescription(d: Option[String => String]): Expectable[T] = createExpectable(value, d)
 
-      override def evaluateOnce = {
+      override def evaluateOnce =
         val (v, s) = (value, show)
         createExpectableWithShowAs(v, s)
-      }
     }
 
-  override protected def checkResultFailure(result: =>Result) = {
+  override protected def checkResultFailure(result: =>Result) =
     lazy val r = result
-    r match {
+    r match
       case f@Failure(_, _, _, _) => throw new FailureException(f)
       case s@Skipped(_, _) => throw new SkipException(s)
       case s@Pending(_) => throw new PendingException(s)
       case e@Error(_, _) => throw new ErrorException(e)
       case d@DecoratedResult(_, r) => if (!r.isSuccess) throw new DecoratedResultException(d) else ()
       case _ => ()
-    }
     r
-  }
 
   /** this method can be overridden to throw exceptions when checking the match result */
-  override protected def checkMatchResultFailure[T](m: MatchResult[T]) = {
-    m match {
+  override protected def checkMatchResultFailure[T](m: MatchResult[T]) =
+    m match
       case f@MatchFailure(_, _, _, _, _) => throw new MatchFailureException(f)
       case s@MatchSkip(_, _) => throw new MatchSkipException(s)
       case p@MatchPending(_, _) => throw new MatchPendingException(p)
       case _ => ()
-    }
     m
-  }
-}
 
-trait ThrownStandardResults extends StandardResults with ExpectationsCreation {
+trait ThrownStandardResults extends StandardResults with ExpectationsCreation:
   override def failure: Failure = { checkResultFailure(throw new FailureException(super.failure)); super.failure }
   override def todo: Pending = { checkResultFailure(throw new PendingException(super.todo)); super.todo }
   override def anError: Error = { checkResultFailure(throw new ErrorException(super.anError)); super.anError }
@@ -108,9 +101,8 @@ trait ThrownStandardResults extends StandardResults with ExpectationsCreation {
   override def skipped: Skipped = skipped("skipped")
   override def skipped(m: String): Skipped = skipped(Skipped(m))
   protected def skipped(s: Skipped): Skipped = { checkResultFailure(throw new SkipException(s)); s }
-}
 
-trait ThrownStandardMatchResults extends StandardMatchResults with ExpectationsCreation {
+trait ThrownStandardMatchResults extends StandardMatchResults with ExpectationsCreation:
   override lazy val ko: MatchResult[Any] =
     checkMatchResultFailure(throw new MatchFailureException(
       MatchFailure("ok", "ko", createExpectable(None))))
@@ -118,14 +110,12 @@ trait ThrownStandardMatchResults extends StandardMatchResults with ExpectationsC
   /** @return the value without any side-effects for expectations */
   override def sandboxMatchResult[T](mr: =>MatchResult[T]): MatchResult[T] =
     try mr
-    catch {
+    catch
       case MatchFailureException(e) => e.asInstanceOf[MatchResult[T]]
       case MatchSkipException(e)    => e.asInstanceOf[MatchResult[T]]
       case MatchPendingException(e) => e.asInstanceOf[MatchResult[T]]
       case other: Throwable         => throw other
-    }
 
-}
 
 object ThrownExpectations extends ThrownExpectations
 
@@ -134,10 +124,9 @@ object ThrownExpectations extends ThrownExpectations
  *
  * For example it can be mixed-in a mutable.Specification so that no exception is thrown on failure
  */
-trait NoThrownExpectations extends Expectations {
+trait NoThrownExpectations extends Expectations:
   override protected def checkResultFailure(r: =>Result) = r
   override protected def checkMatchResultFailure[T](m: MatchResult[T]): MatchResult[T] = m
-}
 
 /**
  * This trait can be used to integrate failures and skip messages into specs2
@@ -148,32 +137,25 @@ trait ThrownMessages { this: ThrownExpectations =>
 }
 
 /** this class allows to throw a match failure result in an Exception */
-class MatchFailureException[T](val failure: MatchFailure[T]) extends FailureException(failure.toFailure) with MatchResultException[T] {
+class MatchFailureException[T](val failure: MatchFailure[T]) extends FailureException(failure.toFailure) with MatchResultException[T]:
   lazy val matchResult = failure
 
   override def getMessage = f.message
   override def getCause = f.exception
   override def getStackTrace = f.exception.getStackTrace
-}
-object MatchFailureException {
+object MatchFailureException:
   def unapply[T](m: MatchFailureException[T]): Option[MatchFailure[T]] = Some(m.failure)
-}
 /** this class allows to throw a skipped match result in an Exception */
-class MatchSkipException[T](val s: MatchSkip[T]) extends SkipException(s.toSkipped) with MatchResultException[T] {
+class MatchSkipException[T](val s: MatchSkip[T]) extends SkipException(s.toSkipped) with MatchResultException[T]:
   lazy val matchResult = s
-}
-object MatchSkipException {
+object MatchSkipException:
   def unapply[T](m: MatchSkipException[T]): Option[MatchSkip[T]] = Some(m.s)
-}
 
 /** this class allows to throw a pending result in an Exception */
-class MatchPendingException[T](val p: MatchPending[T]) extends PendingException(p.toPending) with MatchResultException[T] {
+class MatchPendingException[T](val p: MatchPending[T]) extends PendingException(p.toPending) with MatchResultException[T]:
   lazy val matchResult = p
-}
-object MatchPendingException {
+object MatchPendingException:
   def unapply[T](m: MatchPendingException[T]): Option[MatchPending[T]] = Some(m.p)
-}
 
-trait MatchResultException[T] {
+trait MatchResultException[T]:
   def matchResult: MatchResult[T]
-}

@@ -18,14 +18,12 @@ import StandardResults._
  * 
  * The value is stored in a Property object so it will not be evaluated until explicitly queried.
  */
-case class Effect[T](label: String, value: Property[T], decorator: Decorator = Decorator()) extends Executable with DecoratedProperty[Effect[T]] {
+case class Effect[T](label: String, value: Property[T], decorator: Decorator = Decorator()) extends Executable with DecoratedProperty[Effect[T]]:
   /** executing an effect executes the value and returns success unless there is an Error */
-  override def execute = {
-    valueOrResult match {
+  override def execute =
+    valueOrResult match
       case Left(e)  => e
       case Right(v) => success
-    }
-  }
 
   def valueOrResult: Either[Result, T] =
     value.toRight[Result](skipped).fold(r => Left(r), v => trye(v)(Error(_)))
@@ -44,13 +42,11 @@ case class Effect[T](label: String, value: Property[T], decorator: Decorator = D
 
   override def toString = label
 
-  override def equals(a: Any) = a match {
+  override def equals(a: Any) = a match
     case Effect(l, v, _) => label == l && value == v
     case other           => false
-  }
 
   override def hashCode = label.hashCode + value.hashCode
-}
 /**
  * Factory methods for creating Effects. Effects values can also be concatenated to produce
  * "summary" effects.
@@ -63,7 +59,7 @@ case class Effect[T](label: String, value: Property[T], decorator: Decorator = D
  * val concatenatedEffect = Effect(", ", e1, e2)
  * concatenatedEffects2.toString == hello, world
  */
-case object Effect {
+case object Effect:
   /** create an Effect from a value */
   def apply[T](value: =>T): Effect[T] = new Effect("", Property(value))
 
@@ -76,4 +72,3 @@ case object Effect {
   /** create an Effect from several other ones concatenating the labels */
   def apply(separator: String, e1: Effect[_], es: Effect[_]*): Effect[Any] =
     Effect((e1 :: es.toList).map(_.label).mkString(separator), (e1 :: es.toList).foreach((e: Effect[_]) => e.execute))
-}

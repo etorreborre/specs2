@@ -4,7 +4,7 @@ package org.specs2.fp
 /**
  * Inspired from the scalaz (https://github.com/scalaz/scalaz) project
  */
-trait Foldable[F[_]]  {
+trait Foldable[F[_]] :
 
   /** Map each element of the structure to a Monoid, and combine the results. */
   def foldMap[A,B](fa: F[A])(f: A => B)(implicit F: Monoid[B]): B
@@ -99,9 +99,8 @@ trait Foldable[F[_]]  {
       Some(A.append(l, oa map (A.append(a, _)) getOrElse A.zero))
     }.getOrElse(A.zero)
 
-}
 
-object Foldable {
+object Foldable:
   @inline def apply[F[_]](implicit F: Foldable[F]): Foldable[F] = F
 
   implicit def listInstance: Foldable[List] = new Foldable[List] {
@@ -136,11 +135,10 @@ object Foldable {
     def foldLeft[A, B](fa: LazyList[A], z: B)(f: (B, A) => B): B =
       fa.foldLeft(z)(f)
   }
-}
 
-trait FoldableSyntax {
+trait FoldableSyntax:
 
-  implicit class FoldableOps[F[_] : Foldable, A](fa: F[A]) {
+  implicit class FoldableOps[F[_] : Foldable, A](fa: F[A]):
     val foldable = Foldable.apply[F]
 
     def toList: List[A] =
@@ -166,10 +164,7 @@ trait FoldableSyntax {
 
     def foldRightM[M[_] : Monad, B](z: B)(f: (A, =>B) => M[B]): M[B] =
       foldable.foldRightM(fa, z)(f)
-  }
 
-  implicit class FoldableMonoidOps[F[_] : Foldable, A : Monoid](fa: F[A]) {
+  implicit class FoldableMonoidOps[F[_] : Foldable, A : Monoid](fa: F[A]):
     def sumAll: A =
       Foldable.apply[F].foldMap(fa)(identity)
-  }
-}

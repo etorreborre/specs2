@@ -98,7 +98,7 @@ Fourth example: 1-n relationship
    if the expected rows are the same, in the same order, it succeeds                                  ${components.e10}
    if the expected rows are the same, in an other order, it fails                                     ${components.e11}
                                                                                                       """
-  object components extends ComponentsDefinitions {
+  object components extends ComponentsDefinitions:
     val address = Address(street = "Rose Crescent", number = 2)
     val customer = Customer(name = "Eric", address = Address(street = "Rose Crescent", number = 2))
     
@@ -116,18 +116,16 @@ Fourth example: 1-n relationship
                            customer.address.fill("Rose Crescent", 5)).execute.message must_== "5 != 2"
                              
     def e3 = initialsTable.form.execute.message must_== "'H.W.' != 'H.Wo.'"
-    def e4 = {
+    def e4 =
       order.hasSubset(
         OrderLine("PIS", 1),
         OrderLine("PS", 2)
       ).execute must_== success
-    }
-    def e5 = {
+    def e5 =
       order.hasSubset( 
         OrderLine("PS", 2),
         OrderLine("BS", 3)
       ).execute.isSuccess must beFalse
-    }
     def e6 = order.hasSubsequence(
         OrderLine("PS", 2),
         OrderLine("Beginning Scala", 3)
@@ -160,5 +158,4 @@ Fourth example: 1-n relationship
         OrderLine("PS", 2)
       ).execute.isSuccess must beFalse
 
-  }
 }

@@ -9,19 +9,17 @@ import util.matching.Regex
 /**
  * The `StringMatchers` trait provides matchers which are applicable to String objects
  */
-trait StringMatchers extends StringBaseMatchers with StringBeHaveMatchers {
+trait StringMatchers extends StringBaseMatchers with StringBeHaveMatchers:
   /** adapt the BeEqualTo matcher to provide ignoreCase and ignoreSpace matcher */
   implicit def stringMatcher(m: AdaptableMatcher[Any]): StringMatcher = new StringMatcher(m)
-}
 
-case class StringMatcher(m: AdaptableMatcher[Any]) {
+case class StringMatcher(m: AdaptableMatcher[Any]):
   private val ignoringCase = (_:Any).toString + ", ignoring case"
   private val ignoringSpace = (_:Any).toString + ", ignoring space"
   private val isTrimmed = (_:Any).toString + ", trimmed"
   def ignoreCase: AdaptableMatcher[Any] = m.^^^((s: Any) => s.toString.toLowerCase, ignoringCase, ignoringCase)
   def ignoreSpace: AdaptableMatcher[Any] = m.^^^((s: Any) => s.toString.replaceAll("\\s", ""), ignoringSpace, ignoringSpace)
   def trimmed: AdaptableMatcher[Any] = m.^^^((s: Any) => s.toString.trim, isTrimmed, isTrimmed)
-}
 
 object StringMatchers extends StringMatchers
 
@@ -43,21 +41,19 @@ trait StringBaseMatchers { outer =>
   def !=/(s: String) = be_!=/(s)
   /** matches if (b contains a) */
   def contain(t: String): Matcher[String] = new Matcher[String] {
-    def apply[S <: String](b: Expectable[S]) = {
+    def apply[S <: String](b: Expectable[S]) =
       val a = t
       result(a != null && b.value != null && b.value.contains(a),
              b.description + " contains " + q(a),
              b.description + " doesn't contain " + q(a), b)
-    }
   }
   /** matches if (b contains a) */
   def contain(t: Char): Matcher[String] = new Matcher[String] {
-    def apply[S <: String](b: Expectable[S]) = {
+    def apply[S <: String](b: Expectable[S]) =
       val a = t
       result(b.value != null && b.value.contains(a),
              b.description + " contains " + q(a),
              b.description + " doesn't contain " + q(a), b)
-    }
   }
   /** matches if b matches the regular expression a */
   def beMatching(a: =>String): BeMatching = new BeMatching(a)
@@ -80,12 +76,11 @@ trait StringBaseMatchers { outer =>
   }
   /** matches if b.endsWith(a) */
   def endWith(t: =>String): Matcher[String] = new Matcher[String] {
-    def apply[S <: String](b: Expectable[S]) = {
+    def apply[S <: String](b: Expectable[S]) =
       val a = t
       result(b.value!= null && a!= null && b.value.endsWith(a),
              b.description  + " ends with " + q(a),
              b.description  + " doesn't end with " + q(a), b)
-    }
   }
   /** matches if the regexp a is found inside b */
   def find(a: =>String) = new FindMatcher(a)
@@ -98,27 +93,24 @@ trait StringBaseMatchers { outer =>
    * Matcher to find if the regexp a is found inside b.
    * This matcher can be specialized to a FindMatcherWithGroups which will also check the found groups
    */
-  class FindMatcher(t: =>String) extends Matcher[String] {
+  class FindMatcher(t: =>String) extends Matcher[String]:
     lazy val pattern = Pattern.compile(t)
 
     def withGroup(group: String) = new FindMatcherWithGroups(t, group)
     def withGroups(groups: String*) = new FindMatcherWithGroups(t, groups:_*)
-    def apply[S <: String](b: Expectable[S]) = {
+    def apply[S <: String](b: Expectable[S]) =
       val a = t
       result(a != null && b.value != null && pattern.matcher(b.value).find,
              q(a) + " is found in " + b.description,
              q(a) + " isn't found in " + b.description, b)
-      }
-  }
 
   /**
    * Matcher to find if the pattern p is found inside b.
    */
-  class FindMatcherPattern(p: Pattern) extends FindMatcher(p.toString) {
+  class FindMatcherPattern(p: Pattern) extends FindMatcher(p.toString):
     override lazy val pattern = p
     override def withGroup(group: String) = new FindMatcherPatternWithGroups(p, group)
     override def withGroups(groups: String*) = new FindMatcherPatternWithGroups(p, groups:_*)
-  }
   /**
    * Matcher to find if the Regex r is found inside b.
    */
@@ -128,10 +120,10 @@ trait StringBaseMatchers { outer =>
    * Matcher to find if the regexp a is found inside b.
    * This matcher checks if the found groups are really the ones expected
    */
-  class FindMatcherWithGroups(t: =>String, groups: String*) extends Matcher[String] {
+  class FindMatcherWithGroups(t: =>String, groups: String*) extends Matcher[String]:
     lazy val pattern = Pattern.compile(t)
 
-    def found(b: String) = {
+    def found(b: String) =
       val matcher = pattern.matcher(b)
       val groupsFound = new scala.collection.mutable.ListBuffer[String]()
       (1 to matcher.groupCount).foreach { i =>
@@ -139,36 +131,31 @@ trait StringBaseMatchers { outer =>
         while (matcher.find) { groupsFound += matcher.group(i) }
       }
       groupsFound.toList
-    }
-    def apply[S <: String](b: Expectable[S]) = {
+    def apply[S <: String](b: Expectable[S]) =
       val a = t
       val groupsFound = found(b.value)
       val withGroups = if (groups.size > 1) " with groups " else " with group "
-      def foundText = {
+      def foundText =
         if (groupsFound.isEmpty)
           ". Found nothing"
         else
            ". Found: " + q(groupsFound.mkString(", "))
-      }
       val groupsToFind = if (groups == null) Nil else groups.toList
       result(a != null && b.value != null && groupsFound == groupsToFind,
              q(a) + " is found in " + b.description  + withGroups + q(groupsToFind.mkString(", ")),
              q(a) + " isn't found in " + b.description  + withGroups + q(groupsToFind.mkString(", ")) + foundText, b)
-    }
-  }
   /**
    * Matcher to find if the pattern p is found inside b.
    */
-  class FindMatcherPatternWithGroups(p: Pattern, groups: String*) extends FindMatcherWithGroups(p.toString, groups:_*) {
+  class FindMatcherPatternWithGroups(p: Pattern, groups: String*) extends FindMatcherWithGroups(p.toString, groups:_*):
     override lazy val pattern = p
-  }
 
 }
 
 private[specs2]
 trait StringBeHaveMatchers extends BeHaveMatchers { outer: StringBaseMatchers =>
   implicit def toStringResultMatcher(result: MatchResult[String]): StringResultMatcher = new StringResultMatcher(result)
-  class StringResultMatcher(result: MatchResult[String]) {
+  class StringResultMatcher(result: MatchResult[String]):
     def matching(s: =>String) = result(beMatching(s))
     def matching(s: Pattern) = result(beMatching(s))
     def matching(s: Regex) = result(beMatching(s))
@@ -179,21 +166,18 @@ trait StringBeHaveMatchers extends BeHaveMatchers { outer: StringBaseMatchers =>
     def startingWith(s: =>String) = result(outer.startWith(s))
     def endingWith(s: =>String) = result(outer.endWith(s))
     def ==/(s: String) = result(outer.be_==/(s))
-  }
   implicit def toNeutralStringMatcher(result: NeutralMatcher[Any]) : NeutralStringMatcher = new NeutralStringMatcher(result)
-  class NeutralStringMatcher(result: NeutralMatcher[Any]) {
+  class NeutralStringMatcher(result: NeutralMatcher[Any]):
     def ==/(s: String) = outer.be_==/(s)
     def =~(s: =>String) = outer.=~(s)
     def =~(s: Pattern) = outer.=~(s)
     def =~(s: Regex) = outer.=~(s)
-  }
   implicit def toNotStringMatcher(result: NotMatcher[Any]) : NotStringMatcher = new NotStringMatcher(result)
-  class NotStringMatcher(result: NotMatcher[Any]) {
+  class NotStringMatcher(result: NotMatcher[Any]):
     def ==/(s: String) = outer.be_==/(s).not
     def =~(s: =>String) = outer.=~(s).not
     def =~(s: Pattern) = outer.=~(s).not
     def =~(s: Regex) = outer.=~(s).not
-  }
 
   def matching(t: =>String) = beMatching(t)
   def matching(t: Pattern) = beMatching(t)
@@ -205,24 +189,19 @@ trait StringBeHaveMatchers extends BeHaveMatchers { outer: StringBaseMatchers =>
 }
 
 protected[specs2]
-class BeMatching(t: =>String) extends Matcher[String] {
+class BeMatching(t: =>String) extends Matcher[String]:
   lazy val pattern = Pattern.compile(t)
 
-  def apply[S <: String](b: Expectable[S]) = {
+  def apply[S <: String](b: Expectable[S]) =
     val a = t
     result(tryOrElse(pattern.matcher(b.value).matches)(false),
            s"${b.description} matches ${q(a)}",
            s"'${b.description}' doesn't match ${q(a)}", b)
-  }
-}
 
-object BeMatching {
+object BeMatching:
   def withPart(expression: String) = new BeMatching(expression.regexPart)
-}
 protected[specs2]
-class BeMatchingPattern(p: Pattern) extends BeMatching(p.toString) {
+class BeMatchingPattern(p: Pattern) extends BeMatching(p.toString):
   override lazy val pattern = p
-}
-class BeMatchingRegex(r: Regex) extends BeMatching(r.toString) {
+class BeMatchingRegex(r: Regex) extends BeMatching(r.toString):
     override lazy val pattern = r.pattern
-}

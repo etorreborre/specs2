@@ -3,7 +3,7 @@ package data
 
 import mutable.Spec
 
-class UniqueNamesSpec extends Spec {
+class UniqueNamesSpec extends Spec:
 
   "Returned names must be unique" >> {
     val namer = UniqueNames()
@@ -15,4 +15,3 @@ class UniqueNamesSpec extends Spec {
 
   }
 
-}

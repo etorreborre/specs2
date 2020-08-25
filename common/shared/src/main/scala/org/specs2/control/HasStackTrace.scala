@@ -8,9 +8,8 @@ package control
  *
  *  This is used to provide a common interface to execute.Failure and execute.Error
  */
-trait HasStackTrace {
+trait HasStackTrace:
   def stackTrace: List[StackTraceElement]
 
   /** @return the location of the first element of the stacktrace */
   def location: String
-}

@@ -4,7 +4,7 @@ package org.specs2.control
  * Utility object to show a parameter as used
  * In particular this is useful to avoid warnings with ImplicitParameters
  */
-object Use {
+object Use:
 
   def apply(t: Any, ts: Any*): Unit =
     if (false && t == ts) ()
@@ -13,4 +13,3 @@ object Use {
     if (false && t == ts) a
     else a
 
-}

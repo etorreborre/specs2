@@ -10,17 +10,16 @@ import main.Arguments
 import fp.syntax._
 import Runner._
 
-trait ClassRunner {
+trait ClassRunner:
   def run(className: String): Action[Stats]
   def run(spec: SpecificationStructure): Action[Stats]
   def run(spec: SpecStructure): Action[Stats]
-}
 
 /**
  * A runner for Specification classes based on their names
  */
 
-case class DefaultClassRunner(env: Env, reporter: Reporter, specFactory: SpecFactory) extends ClassRunner {
+case class DefaultClassRunner(env: Env, reporter: Reporter, specFactory: SpecFactory) extends ClassRunner:
 
   val arguments: Arguments =
     env.arguments
@@ -35,18 +34,17 @@ case class DefaultClassRunner(env: Env, reporter: Reporter, specFactory: SpecFac
     run(spec.structure(env))
 
   def run(specStructure: SpecStructure): Action[Stats] = for {
-    stats <- if (arguments.isSet("all")) {
+    stats <- if (arguments.isSet("all"))
         for {
           ss       <- specFactory.createLinkedSpecs(specStructure).toAction
           sorted   <- Action.pure(SpecStructure.topologicalSort(ss)(env.specs2ExecutionEnv).getOrElse(ss))
           stats    <- reporter.report(sorted.toList)
         } yield stats
-      } else reporter.report(specStructure)
+      else reporter.report(specStructure)
     } yield stats
 
-}
 
-trait ClassRunnerMain {
+trait ClassRunnerMain:
   /**
    * run a specification but don't exit with System.exit
    */
@@ -58,11 +56,11 @@ trait ClassRunnerMain {
    * The class runner expects the first command-line argument to be the class name of
    * a specification to execute
    */
-  def run(args: Array[String], exit: Boolean): Unit = {
+  def run(args: Array[String], exit: Boolean): Unit =
     val arguments = Arguments(args.drop(1): _*)
     val env = EnvDefault.create(arguments)
 
-    val actions: Action[Stats] = args.toList match {
+    val actions: Action[Stats] = args.toList match
       case Nil =>
         Action.fail("there must be at least one argument, the fully qualified class name") >>
         Action.pure(Stats.empty)
@@ -71,16 +69,14 @@ trait ClassRunnerMain {
           classRunner <- createClassRunner(env).toAction
           stats <- classRunner.run(className)
         } yield stats
-      }
 
     try execute(actions, env, exit)
     finally env.shutdown()
-  }
 
   /**
    * Create a ClassRunner from the default environment containing the command line arguments
    */
-  def createClassRunner(env: Env): Operation[ClassRunner] = {
+  def createClassRunner(env: Env): Operation[ClassRunner] =
     val arguments = env.arguments
     val loader = Thread.currentThread.getContextClassLoader
     val customInstances = CustomInstances(arguments, loader, env.systemLogger)
@@ -92,22 +88,19 @@ trait ClassRunnerMain {
       reporter <- Reporter.createCustomInstance(customInstances).map(_.getOrElse(Reporter.create(printers, env)))
      } yield DefaultClassRunner(env, reporter, specFactory)
 
-  }
-}
 
 object ClassRunner extends ClassRunnerMain
 
-object consoleRunner extends ClassRunnerMain {
+object consoleRunner extends ClassRunnerMain:
   def main(args: Array[String]) =
     run(args, exit = true)
-}
 
 /**
  * Test runner to simulate a console run
  */
-object TextRunner extends ClassRunnerMain {
+object TextRunner extends ClassRunnerMain:
 
-  def run(spec: SpecificationStructure, arguments: Arguments = Arguments())(env: Env): PrinterLogger with StringOutput = {
+  def run(spec: SpecificationStructure, arguments: Arguments = Arguments())(env: Env): PrinterLogger with StringOutput =
     val logger = PrinterLogger.stringPrinterLogger
     val env1 = env.setPrinterLogger(logger).setArguments(env.arguments.overrideWith(arguments))
     val loader = Thread.currentThread.getContextClassLoader
@@ -123,6 +116,4 @@ object TextRunner extends ClassRunnerMain {
 
     action.runAction(env1.specs2ExecutionEnv)
     logger
-  }
 
-}

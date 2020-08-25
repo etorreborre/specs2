@@ -12,7 +12,7 @@ class LineComparisonSpec extends Specification with ContentMatchers { def is = s
 
 """
 
-  def clipped = {
+  def clipped =
     val list1 = List(
       "hello",
       "hello",
@@ -55,7 +55,6 @@ class LineComparisonSpec extends Specification with ContentMatchers { def is = s
         |      10. you
         |
         |""".stripMargin
-  }
 
 
 }

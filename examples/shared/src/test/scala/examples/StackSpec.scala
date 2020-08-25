@@ -54,65 +54,53 @@ class StackSpec extends Specification { def is =  "Specification for a Stack wit
   def newFullStack   = SizedStack(maxCapacity = 10, size = 10)
 
   /** stacks examples */
-  case class empty() {
+  case class empty():
     val stack = newEmptyStack
 
     def e1 = stack.size must_== 0
     def e2 = stack.top must throwA[NoSuchElementException]
     def e3 = stack.pop must throwA[NoSuchElementException]
-  }
 
-  case class nonEmpty(createStack: SizedStack) {
+  case class nonEmpty(createStack: SizedStack):
     val stack = createStack
 
     def size = stack.size > 0
 
     def top1 = stack.top must_== stack.size
-    def top2 = {
+    def top2 =
       stack.top
       stack.top must_== stack.size
-    }
 
-    def pop1 = {
+    def pop1 =
       val topElement = stack.size
       stack.pop must_== topElement
-    }
 
-    def pop2 = {
+    def pop2 =
       stack.pop
       stack.top must_== stack.size
-    }
-  }
 
-  case class nonFullStack() {
+  case class nonFullStack():
     val stack = newNormalStack
 
-    def e1 = {
+    def e1 =
       stack push (stack.size + 1)
       stack.top must_== stack.size
-    }
-  }
-  case class fullStack() {
+  case class fullStack():
     val stack = newFullStack
 
     def e1 = stack push (stack.size + 1) must throwAn[Error]
-  }
 }
 
 /**
  * SizedStack definition
  */
-object SizedStack {
+object SizedStack:
   def apply(maxCapacity: Int, size: Int) = new SizedStack(maxCapacity).fill(1 to size)
-}
 
-class SizedStack(val capacity: Int) extends scala.collection.mutable.Stack[Int] {
-  override def push(a: Int) = {
+class SizedStack(val capacity: Int) extends scala.collection.mutable.Stack[Int]:
+  override def push(a: Int) =
     if (size == capacity) throw new Error("full stack")
     super.push(a)
-  }
-  def fill(range: Range) = {
+  def fill(range: Range) =
     range.foreach(push(_))
     this
-  }
-}

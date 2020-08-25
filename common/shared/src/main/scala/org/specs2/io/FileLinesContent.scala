@@ -9,10 +9,9 @@ import text._
  *
  * This is used in FileContentMatchers
  */
-object FileLinesContent extends LinesContent[File] {
+object FileLinesContent extends LinesContent[File]:
   def lines(f: File): Seq[String] =
     if (f.isDirectory) Seq()
     else FilePathReader.readLines(FilePath.unsafe(f)).runOption.getOrElse(Seq())
 
   def name(f: File) = f.getPath
-}

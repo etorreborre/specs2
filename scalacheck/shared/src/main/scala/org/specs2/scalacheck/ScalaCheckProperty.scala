@@ -13,7 +13,7 @@ import org.specs2.specification.core.{AsExecution, Execution}
 /**
  * A ScalaCheckProperty encapsulates a ScalaCheck Prop and its parameters
  */
-trait ScalaCheckProperty {
+trait ScalaCheckProperty:
   type SelfType <: ScalaCheckProperty
 
   def prop: Prop
@@ -76,7 +76,6 @@ trait ScalaCheckProperty {
 
   def prettyFreqMap(f: FreqMap[Set[Any]] => String): SelfType =
     setPrettyFreqMap((fq: FreqMap[Set[Any]]) => Pretty(_ => f(fq)))
-}
 
 /**
  * A ScalaCheckFunction adds the possibility to select various typeclass instances for a given property:
@@ -88,7 +87,7 @@ trait ScalaCheckProperty {
  *
  *  A Context can be added to setup/teardown state before/after/around each property execution
  */
-trait ScalaCheckFunction extends ScalaCheckProperty {
+trait ScalaCheckFunction extends ScalaCheckProperty:
   def noShrink: SelfType
 
   def context: Option[Context]
@@ -107,16 +106,13 @@ trait ScalaCheckFunction extends ScalaCheckProperty {
   def around(action: Result => Result): SelfType =
     setContext(Around.create(action))
 
-  protected def executeInContext[R : AsResult](result: =>R) = {
+  protected def executeInContext[R : AsResult](result: =>R) =
     lazy val executed = result
     context.foreach(_(executed))
-    executed match {
+    executed match
       case p: Prop => p
       case other   => AsResultProp.asResultToProp(other)
-    }
-  }
 
-}
 
 case class ScalaCheckFunction1[T, R](
   execute:       T => R,
@@ -127,7 +123,7 @@ case class ScalaCheckFunction1[T, R](
   prettyFreqMap: FreqMap[Set[Any]] => Pretty,
   asResult:      AsResult[R],
   context:       Option[Context],
-  parameters:    Parameters) extends ScalaCheckFunction {
+  parameters:    Parameters) extends ScalaCheckFunction:
 
   type SelfType = ScalaCheckFunction1[T, R]
 
@@ -185,7 +181,6 @@ case class ScalaCheckFunction1[T, R](
   def setSeed(seed: String): SelfType =
     copy(parameters = parameters.copy(seed = Parameters.makeSeed(seed)), pretty = pretty1)
 
-}
 
 
 case class ScalaCheckFunction2[T1, T2, R]( execute: (T1, T2) => R,
@@ -193,7 +188,7 @@ case class ScalaCheckFunction2[T1, T2, R]( execute: (T1, T2) => R,
                                            prettyFreqMap: FreqMap[Set[Any]] => Pretty,
                                            asResult: AsResult[R],
                                            context: Option[Context],
-                                           parameters: Parameters) extends ScalaCheckFunction {
+                                           parameters: Parameters) extends ScalaCheckFunction:
 
   type SelfType = ScalaCheckFunction2[T1, T2, R]
 
@@ -263,7 +258,6 @@ case class ScalaCheckFunction2[T1, T2, R]( execute: (T1, T2) => R,
 
   def setSeed(seed: String): SelfType =
     copy(parameters = parameters.copy(seed = Parameters.makeSeed(seed)))
-}
 
 
 case class ScalaCheckFunction3[T1, T2, T3, R](
@@ -272,7 +266,7 @@ case class ScalaCheckFunction3[T1, T2, T3, R](
                                                prettyFreqMap: FreqMap[Set[Any]] => Pretty,
                                                asResult: AsResult[R],
                                                context: Option[Context],
-                                               parameters: Parameters) extends ScalaCheckFunction {
+                                               parameters: Parameters) extends ScalaCheckFunction:
 
   type SelfType = ScalaCheckFunction3[T1, T2, T3, R]
 
@@ -349,7 +343,6 @@ case class ScalaCheckFunction3[T1, T2, T3, R](
 
   def setSeed(seed: String): SelfType =
     copy(parameters = parameters.copy(seed = Parameters.makeSeed(seed)))
-}
 
 
 case class ScalaCheckFunction4[T1, T2, T3, T4, R](
@@ -358,7 +351,7 @@ case class ScalaCheckFunction4[T1, T2, T3, T4, R](
                                                    prettyFreqMap: FreqMap[Set[Any]] => Pretty,
                                                    asResult: AsResult[R],
                                                    context: Option[Context],
-                                                   parameters: Parameters) extends ScalaCheckFunction {
+                                                   parameters: Parameters) extends ScalaCheckFunction:
 
   type SelfType = ScalaCheckFunction4[T1, T2, T3, T4, R]
 
@@ -441,7 +434,6 @@ case class ScalaCheckFunction4[T1, T2, T3, T4, R](
 
   def setSeed(seed: String): SelfType =
     copy(parameters = parameters.copy(seed = Parameters.makeSeed(seed)))
-}
 
 
 case class ScalaCheckFunction5[T1, T2, T3, T4, T5, R](
@@ -450,7 +442,7 @@ case class ScalaCheckFunction5[T1, T2, T3, T4, T5, R](
                                                        prettyFreqMap: FreqMap[Set[Any]] => Pretty,
                                                        asResult: AsResult[R],
                                                        context: Option[Context],
-                                                       parameters: Parameters) extends ScalaCheckFunction {
+                                                       parameters: Parameters) extends ScalaCheckFunction:
 
   type SelfType = ScalaCheckFunction5[T1, T2, T3, T4, T5, R]
 
@@ -540,7 +532,6 @@ case class ScalaCheckFunction5[T1, T2, T3, T4, T5, R](
 
   def setSeed(seed: String): SelfType =
     copy(parameters = parameters.copy(seed = Parameters.makeSeed(seed)))
-}
 
 
 case class ScalaCheckFunction6[T1, T2, T3, T4, T5, T6, R](
@@ -549,7 +540,7 @@ case class ScalaCheckFunction6[T1, T2, T3, T4, T5, T6, R](
                                                            prettyFreqMap: FreqMap[Set[Any]] => Pretty,
                                                            asResult: AsResult[R],
                                                            context: Option[Context],
-                                                           parameters: Parameters) extends ScalaCheckFunction {
+                                                           parameters: Parameters) extends ScalaCheckFunction:
 
   type SelfType = ScalaCheckFunction6[T1, T2, T3, T4, T5, T6, R]
 
@@ -647,7 +638,6 @@ case class ScalaCheckFunction6[T1, T2, T3, T4, T5, T6, R](
 
   def setSeed(seed: String): SelfType =
     copy(parameters = parameters.copy(seed = Parameters.makeSeed(seed)))
-}
 
 
 case class ScalaCheckFunction7[T1, T2, T3, T4, T5, T6, T7, R](
@@ -656,7 +646,7 @@ case class ScalaCheckFunction7[T1, T2, T3, T4, T5, T6, T7, R](
                                                                prettyFreqMap: FreqMap[Set[Any]] => Pretty,
                                                                asResult: AsResult[R],
                                                                context: Option[Context],
-                                                               parameters: Parameters) extends ScalaCheckFunction {
+                                                               parameters: Parameters) extends ScalaCheckFunction:
 
   type SelfType = ScalaCheckFunction7[T1, T2, T3, T4, T5, T6, T7, R]
 
@@ -760,7 +750,6 @@ case class ScalaCheckFunction7[T1, T2, T3, T4, T5, T6, T7, R](
 
   def setSeed(seed: String): SelfType =
     copy(parameters = parameters.copy(seed = Parameters.makeSeed(seed)))
-}
 
 
 case class ScalaCheckFunction8[T1, T2, T3, T4, T5, T6, T7, T8, R](
@@ -769,7 +758,7 @@ case class ScalaCheckFunction8[T1, T2, T3, T4, T5, T6, T7, T8, R](
                                                                    prettyFreqMap: FreqMap[Set[Any]] => Pretty,
                                                                    asResult: AsResult[R],
                                                                    context: Option[Context],
-                                                                   parameters: Parameters) extends ScalaCheckFunction {
+                                                                   parameters: Parameters) extends ScalaCheckFunction:
 
   type SelfType = ScalaCheckFunction8[T1, T2, T3, T4, T5, T6, T7, T8, R]
 
@@ -881,14 +870,12 @@ case class ScalaCheckFunction8[T1, T2, T3, T4, T5, T6, T7, T8, R](
 
   def setSeed(seed: String): SelfType =
     copy(parameters = parameters.copy(seed = Parameters.makeSeed(seed)))
-}
 
-case class ScalaCheckArgInstances[T](arbitrary: Arbitrary[T], shrink: Option[Shrink[T]], collectors: List[T => Any], pretty: T => Pretty) {
+case class ScalaCheckArgInstances[T](arbitrary: Arbitrary[T], shrink: Option[Shrink[T]], collectors: List[T => Any], pretty: T => Pretty):
   def collect(t: T, p: Prop) =
     collectors.foldLeft(p)((res, cur) => Prop.collect(t)(p))
-}
 
-object ScalaCheckProperty {
+object ScalaCheckProperty:
 
   implicit def ScalaCheckPropertyAsExecution[S <: ScalaCheckProperty]: AsExecution[S] = new AsExecution[S] {
     def execute(s: => S): Execution =
@@ -898,12 +885,10 @@ object ScalaCheckProperty {
   }
 
   def makeProp[T](f: T => Prop, shrink: Option[Shrink[T]], parameters: Parameters)(
-    implicit a: Arbitrary[T], p: T => Pretty): Prop = {
-    shrink match {
+    implicit a: Arbitrary[T], p: T => Pretty): Prop =
+    shrink match
       case None    => Prop.forAllNoShrink(f)
       case Some(s) => Prop.forAll(f)(identity, a, s, p)
-    }
-  }
 
 
   def TNList(n: Int) = (1 to n).map("T"+_).mkString(", ")
@@ -990,4 +975,3 @@ case class ScalaCheckFunction$n[${TNList(n)}, R](
 }""".stripMargin
 
 
-}

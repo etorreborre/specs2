@@ -9,7 +9,7 @@ import specification.core.Fragment
 /**
  * Dsl to create actions in a mutable spec
  */
-trait ActionDsl extends FragmentBuilder with org.specs2.specification.dsl.ActionDsl {
+trait ActionDsl extends FragmentBuilder with org.specs2.specification.dsl.ActionDsl:
   override def action(a: =>Any) = addFragment(super.action(a))
   override def step(a: =>Any) = step(a, global = true)
   override def step(a: =>Any, global: Boolean) = addFragment(super.step(a).makeGlobal(global))
@@ -28,5 +28,4 @@ trait ActionDsl extends FragmentBuilder with org.specs2.specification.dsl.Action
   private def mustStop(when: =>Boolean) =
     try Right(when) catch { case e: Throwable => Left(Error(e)) }
 
-}
 

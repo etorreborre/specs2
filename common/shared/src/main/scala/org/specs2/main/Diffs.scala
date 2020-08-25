@@ -9,7 +9,7 @@ import NotNullStrings._
 /**
  * Define and compute the differences between strings (used by the printers)
  */
-trait Diffs {
+trait Diffs:
   /** @return true if the differences must be shown */
   def show: Boolean
   /** @return true if the differences must be shown for 2 different values */
@@ -26,7 +26,6 @@ trait Diffs {
   def showMapDiffs(actual: Map[Any, Any], expected: Map[Any, Any]): (Seq[String], Seq[String], Seq[String])
   /** @return true if the full strings must also be shown */
   def showFull: Boolean
-}
 
 /**
  * The SmartDiffs class holds all the required parameters to show differences between 2 values
@@ -40,7 +39,7 @@ case class SmartDiffs(show: Boolean       = true,
                       showFull: Boolean   = false,
                       seqTriggerSize: Int = 0,    // Parameters for sequences
                       seqMaxSize: Int     = 1000000
-                       ) extends Diffs {
+                       ) extends Diffs:
   import StringEditDistance._
 
   def show(actual: Any, expected: Any): Boolean =
@@ -52,37 +51,33 @@ case class SmartDiffs(show: Boolean       = true,
   def showMap(actual: Map[Any, Any], expected: Map[Any, Any]): Boolean =
     showSeq(actual.toSeq, expected.toSeq, ordered = false)
 
-  def showDiffs(actualValue: Any, expectedValue: Any) = {
+  def showDiffs(actualValue: Any, expectedValue: Any) =
     val (actual, expected) = (actualValue.notNull, expectedValue.notNull)
     if (editDistance(actual, expected).doubleValue / (actual.length + expected.length) < diffRatio.doubleValue / 100)
       showDistance(actual, expected, separators, shortenSize)
     else
       (actual, expected)
-  }
 
   /** @return the diffs for sequences */
-  def showSeqDiffs(actual: Seq[Any], expected: Seq[Any], ordered: Boolean): (Seq[String], Seq[String]) = {
+  def showSeqDiffs(actual: Seq[Any], expected: Seq[Any], ordered: Boolean): (Seq[String], Seq[String]) =
     val (matched, missing) = BestMatching.findBestMatch(actual, expected, (t: Any, v: Any) => v == t, eachCheck = true)(AsResult.booleanAsResult)
     val (_, koValues)      = matched.partition(_._3.isSuccess)
     val added              = koValues.map(_._1)
 
     (added.map(_.notNull), missing.map(_.notNull))
-  }
 
   /** @return the diffs for maps */
-  def showMapDiffs(actual: Map[Any, Any], expected: Map[Any, Any]): (Seq[String], Seq[String], Seq[String]) = {
+  def showMapDiffs(actual: Map[Any, Any], expected: Map[Any, Any]): (Seq[String], Seq[String], Seq[String]) =
     val (added, missing) = (actual.keySet.diff(expected.keySet), expected.keySet.diff(actual.keySet))
     val different        = actual.toSeq.collect { case (k,v) if expected.contains(k) && v != expected(k) =>
       s"  x key = $k\n    actual value\n    $v\n    expected value\n    ${expected(k)}"
     }
 
     (added.map(k => (k, actual(k))).map(notNullPair).toSeq, missing.map(k => (k, expected(k))).map(notNullPair).toSeq, different.map(notNullPair))
-  }
-
-}
 
 
-object SmartDiffs {
+
+object SmartDiffs:
   def fromString(s: String): Either[Throwable, Diffs] = trye {
     val values = s.split(",")
     SmartDiffs(
@@ -101,5 +96,4 @@ object SmartDiffs {
     else if (Seq("false", "f").contains(s.trim.toLowerCase)) false
     else throw new Exception(s+" is not a boolean value")
 
-}
 

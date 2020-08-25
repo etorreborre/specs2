@@ -3,15 +3,14 @@ package org.specs2.fp
 /**
  * Inspired from the scalaz (https://github.com/scalaz/scalaz) project
  */
-trait Monoid[F] extends Semigroup[F] {
+trait Monoid[F] extends Semigroup[F]:
 
   def zero: F
 
   def multiply(value: F, n: Int): F =
     if (n <= 0) zero else multiply1(value, n - 1)
-}
 
-object Monoid {
+object Monoid:
   @inline def apply[F](implicit F: Monoid[F]): Monoid[F] = F
 
   /** Make an append and zero into an instance. */
@@ -39,12 +38,10 @@ object Monoid {
   implicit def streamMonoid[A]: Monoid[LazyList[A]] =
     instance((s1, s2) => s1 ++ s2, LazyList.empty[A])
 
-  implicit def mapMonoid[K, V : Monoid]: Monoid[Map[K, V]] = {
+  implicit def mapMonoid[K, V : Monoid]: Monoid[Map[K, V]] =
     def merge(m1: Map[K, V], m2: Map[K, V]): Map[K, V] =
       m2.foldLeft(m1) { case (res, (k, v)) => res.updated(k, res.get(k).map(Monoid[V].append(_, v)).getOrElse(v)) }
 
     instance((s1, s2) => merge(s1, s2), Map())
-  }
 
 
-}

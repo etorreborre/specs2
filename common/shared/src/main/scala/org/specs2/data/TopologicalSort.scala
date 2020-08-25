@@ -7,7 +7,7 @@ import scala.collection.mutable.ListBuffer
  * Topological sorting is used to define the order of execution of dependent specifications
  * when they form an acyclic graph
  */
-object TopologicalSort {
+object TopologicalSort:
   /**
    * sort elements topologically so that element at position i doesn't depend on element at position j if i < j
    * dependsOn(e1, e2) returns true if e1 depends on e2
@@ -28,38 +28,31 @@ object TopologicalSort {
    *          mark n permanently
    *          add n to head of L
    */
-  def sort[T](elements: Seq[T], dependsOn: (T, T) => Boolean): Option[Vector[T]] = {
+  def sort[T](elements: Seq[T], dependsOn: (T, T) => Boolean): Option[Vector[T]] =
     // simple node structure to tag if a node has been visited or not
-    class Node(val t: T, var permanent: Boolean = false, var temp: Boolean = false) {
+    class Node(val t: T, var permanent: Boolean = false, var temp: Boolean = false):
       override def toString = t.toString+"-"+(if (unmarked) "u" else if (temp) "t" else "p")
       def unmarked     = !permanent && !temp
 
       def setTemp()      = { temp = true }
       def setPermanent() = { permanent = true; temp = false }
-    }
     class CycleException extends Exception
 
     val processed = elements.map(t => new Node(t))
     val result    = new ListBuffer[T]
 
-    def visit(n: Node): Unit = {
+    def visit(n: Node): Unit =
       if (n.temp) throw new CycleException
-      else if (!n.permanent) {
+      else if (!n.permanent)
         n.setTemp()
         processed.filter(m => dependsOn(n.t, m.t)).foreach(visit)
         n.setPermanent()
         result.prepend(n.t)
-      }
-    }
 
-    def run: Option[Vector[T]] = {
-      try {
-        processed.find(_.unmarked) match {
+    def run: Option[Vector[T]] =
+      try
+        processed.find(_.unmarked) match
           case Some(e) => visit(e); run
           case None    => Some(result.toVector)
-        }
-      } catch { case e: CycleException => None }
-    }
+      catch { case e: CycleException => None }
     run
-  }
-}

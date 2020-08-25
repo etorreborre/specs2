@@ -13,7 +13,7 @@ import scala.concurrent.ExecutionContext
  *
  * class MySpec(env: Env) extends Specification with OwnEnv
  */
-trait OwnEnv extends AfterAll {
+trait OwnEnv extends AfterAll:
 
   def env: Env
 
@@ -34,4 +34,3 @@ trait OwnEnv extends AfterAll {
   def afterAll(): Unit =
     ownEnv.shutdown()
 
-}

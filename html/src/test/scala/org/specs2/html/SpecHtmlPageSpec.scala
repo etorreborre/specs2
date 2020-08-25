@@ -10,7 +10,7 @@ class SpecHtmlPageSpec extends Spec { def is = s2"""
 
 """
 
-  def toc = {
+  def toc =
     val specPage =
       page(
         """
@@ -21,7 +21,6 @@ class SpecHtmlPageSpec extends Spec { def is = s2"""
         """.stripMargin).addToc(<ul><li>section 1</li></ul>)
 
     specPage.content must contain("li")
-  }
 
   def page(content: String): SpecHtmlPage =
     SpecHtmlPage(SpecStructure.empty(getClass), FilePath.unsafe("here"), DirectoryPath.unsafe("out"), content)

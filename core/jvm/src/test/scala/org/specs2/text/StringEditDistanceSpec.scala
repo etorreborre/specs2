@@ -91,13 +91,11 @@ class StringEditDistanceSpec extends Spec with StringEditDistance with DataTable
   def diff9 = shorten("abcdefg[zz]abcdefghijklmno[xx]abcdefg") === "...cdefg[zz]ab...no[xx]abcde..."
 
   val factor = 1000
-  def memory1 = {
+  def memory1 =
     (editDistance("kitten\n" * factor, "kitsin\n" * factor) must be_>(0)) and
     (showDistance("kitten\n" * factor, "kitsin\n" * factor)._1.length must be_>(0))
-  }
 
-  def memory2 = {
+  def memory2 =
     (editDistance("kitten" * factor, "kitsin" * factor) must be_>(0)) and
     (showDistance("kitten" * factor, "kitsin" * factor)._1.length must be_>(0))
-  }
 }

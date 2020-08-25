@@ -9,8 +9,8 @@ import scala.concurrent._, duration._
  * implicit methods to await a future values with a given timeout and
  * number of retries
  */
-trait FutureAwait {
-  implicit class AwaitFuture[T](f: => Future[T])(implicit ee: ExecutionEnv) {
+trait FutureAwait:
+  implicit class AwaitFuture[T](f: => Future[T])(implicit ee: ExecutionEnv):
     def await: TimeoutFailure Either T =
       await(retries = 0, timeout = 1.second)
 
@@ -20,25 +20,20 @@ trait FutureAwait {
     def awaitFor(timeout: FiniteDuration): TimeoutFailure Either T =
       await(retries = 0, timeout)
 
-    def await(retries: Int, timeout: FiniteDuration): TimeoutFailure Either T = {
+    def await(retries: Int, timeout: FiniteDuration): TimeoutFailure Either T =
       val tf = ee.timeFactor
       val appliedTimeout = timeout * tf.toLong
 
-      def awaitFuture(remainingRetries: Int, totalDuration: FiniteDuration): TimeoutFailure Either T = {
+      def awaitFuture(remainingRetries: Int, totalDuration: FiniteDuration): TimeoutFailure Either T =
         try Right(Await.result(f, appliedTimeout))
-        catch {
+        catch
           case e if e.getClass == classOf[TimeoutException] =>
             if (remainingRetries <= 0) Left(TimeoutFailure(appliedTimeout, totalDuration, tf))
             else                       awaitFuture(remainingRetries - 1, totalDuration + appliedTimeout)
 
           case other: Throwable  => throw other
-        }
-      }
       awaitFuture(retries, 0.second)
-    }
-  }
 
-}
 
 case class TimeoutFailure(appliedTimeout: FiniteDuration, totalDuration: FiniteDuration, timeFactor: Int)
 

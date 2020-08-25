@@ -22,7 +22,7 @@ trait ValueCheck[T] { outer =>
   }
 }
 
-object ValueCheck {
+object ValueCheck:
   implicit def typedValueCheck[T : Diffable](expected: T): BeEqualTypedValueCheck[T] =
     new BeEqualTypedValueCheck[T](expected)
 
@@ -38,11 +38,10 @@ object ValueCheck {
     def checkNot = (t: Option[T]) =>
       ResultLogicalCombinators.combineResult(check(t)).not
   }
-}
 /**
  * implicit conversions used to create ValueChecks
  */
-trait ValueChecks extends ValueChecksBase {
+trait ValueChecks extends ValueChecksBase:
   /** a partial function returning an object having an AsResult instance can check a value */
   implicit def partialfunctionIsValueCheck[T, R : AsResult](f: PartialFunction[T, R]): ValueCheck[T] = new ValueCheck[T] {
     def check    = (t: T) => {
@@ -54,9 +53,8 @@ trait ValueChecks extends ValueChecksBase {
 
   /** a check of type T can be downcasted implicitly to a check of type S >: T */
   implicit def downcastBeEqualTypedValueCheck[T, S >: T](check: BeEqualTypedValueCheck[T]): ValueCheck[S] = check.downcast[S]
-}
 
-trait ValueChecksBase extends ValueChecksLowImplicits {
+trait ValueChecksBase extends ValueChecksLowImplicits:
 
   /** a Matcher[T] can check a value */
   implicit def matcherIsValueCheck[T](m: Matcher[T]): ValueCheck[T] = new ValueCheck[T] {
@@ -67,9 +65,8 @@ trait ValueChecksBase extends ValueChecksLowImplicits {
   /** an expected value can be used to check another value */
   def valueIsTypedValueCheck[T](expected: T)(implicit di: Diffable[T]): BeEqualTypedValueCheck[T] =
     ValueCheck.typedValueCheck(expected)
-}
 
-trait ValueChecksLowImplicits {
+trait ValueChecksLowImplicits:
   /** a function returning an object having an AsResult instance can check a value */
   implicit def functionIsValueCheck[T, R : AsResult](f: T => R): ValueCheck[T] = new ValueCheck[T] {
     def check    = (t: T) => functionResult(AsResult.safely(f(t)), t)
@@ -80,23 +77,20 @@ trait ValueChecksLowImplicits {
     if (Seq("true", "false").contains(result.message)) result.mapMessage(m => s"the function returns ${q(m)} on ${q(t)}")
     else result
 
-}
 
 object ValueChecks extends ValueChecks
 
 /** ValueCheck for a typed expected value. It uses the BeTypedEqualTo matcher */
-case class BeEqualTypedValueCheck[T : Diffable](expected: T) extends ValueCheck[T] {
+case class BeEqualTypedValueCheck[T : Diffable](expected: T) extends ValueCheck[T]:
   private lazy val matcher = new EqualityMatcher(expected)
   def check    = (t: T) => AsResult.safely(matcher(Expectable(t)))
   def checkNot = (t: T) => AsResult.safely(matcher.not(Expectable(t)))
 
   def downcast[S] = new BeEqualValueCheck[S](expected)
 
-}
 
 /** ValueCheck for an untyped expected value. It uses the BeEqualTo matcher */
-case class BeEqualValueCheck[T](expected: Any) extends ValueCheck[T] {
+case class BeEqualValueCheck[T](expected: Any) extends ValueCheck[T]:
   private lazy val matcher = new BeEqualTo(expected)
   def check    = (t: T) => AsResult.safely(matcher(Expectable(t)))
   def checkNot = (t: T) => AsResult.safely(matcher.not(Expectable(t)))
-}

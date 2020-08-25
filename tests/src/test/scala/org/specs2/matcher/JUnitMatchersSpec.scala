@@ -11,13 +11,11 @@ The specs2 matchers can be reused in JUnit test cases
    if there is a MatchFailure then an AssertionError is thrown                                      ${c.e2}
                                                                                                     """
 
-  trait expectations extends JUnitMustMatchers {
+  trait expectations extends JUnitMustMatchers:
     def successExpectation = 1 must_== 1
     def failedExpectation = 1 must_== 2
-  }
-  object c extends expectations {
+  object c extends expectations:
     def e1 =  successExpectation
     def e2 =  failedExpectation must throwAn[AssertionError]
-  }
 
 }

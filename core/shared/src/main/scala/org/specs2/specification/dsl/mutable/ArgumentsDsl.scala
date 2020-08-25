@@ -19,7 +19,7 @@ trait ArgumentsDsl extends ArgumentsCreation with ArgProperties
  * current content
  *
  */
-trait ArgumentsCreation extends org.specs2.main.ArgumentsCreation with MutableArgumentsBuilder {
+trait ArgumentsCreation extends org.specs2.main.ArgumentsCreation with MutableArgumentsBuilder:
   override lazy val args: ArgumentsNamespaceMutable = new ArgumentsNamespaceMutable
 
   /** shorthand method to create an Arguments object */
@@ -64,7 +64,7 @@ trait ArgumentsCreation extends org.specs2.main.ArgumentsCreation with MutableAr
       color))
 
 
-  private[specs2] class ArgumentsNamespaceMutable extends ArgumentsNamespace {
+  private[specs2] class ArgumentsNamespaceMutable extends ArgumentsNamespace:
     /** shorthand method to create an Arguments object */
     override def select(
                          ex:            ArgProperty[String]            = ArgProperty[String](),
@@ -150,7 +150,5 @@ trait ArgumentsCreation extends org.specs2.main.ArgumentsCreation with MutableAr
       notoc,
       notifier,
       exporter))
-  }
 
 
-}

@@ -15,12 +15,11 @@ import main.Arguments
 /**
  * Selection function for Fragment processes
  */
-trait Selector {
+trait Selector:
 
   /** select fragments by name, markers and previous execution */
   def select(args: Arguments): AsyncTransducer[Fragment, Fragment]
 
-}
 
 /**
  * Default selection for specification fragments:
@@ -29,7 +28,7 @@ trait Selector {
  *  - filter based on the tags
  *  - filter based on previous execution
  */
-case class DefaultSelector(commandLineArguments: Arguments) extends Selector {
+case class DefaultSelector(commandLineArguments: Arguments) extends Selector:
 
   /** select fragments by name, markers and previous execution */
   def select(specArguments: Arguments): AsyncTransducer[Fragment, Fragment] =
@@ -126,11 +125,10 @@ case class DefaultSelector(commandLineArguments: Arguments) extends Selector {
     go(p.zipWithNext)
   }
 
-  def updateSections(sections: List[NamedTag], tag: NamedTag): List[NamedTag] = {
+  def updateSections(sections: List[NamedTag], tag: NamedTag): List[NamedTag] =
     val endTags     = sections.filter(_.names.exists(tag.names.contains))
     val startTags   = sections.map(t => t.removeNames(tag.names)).filterNot(_.names.isEmpty)
     if (endTags.isEmpty) startTags :+ tag else startTags
-  }
 
   def isEndTag(sections: List[NamedTag], tag: NamedTag): Boolean =
     sections.exists(_.names.exists(tag.names.contains))
@@ -198,10 +196,8 @@ case class DefaultSelector(commandLineArguments: Arguments) extends Selector {
     else p
   }
 
-}
 
-object Selector {
+object Selector:
 
   val default: Selector =
     DefaultSelector(Arguments())
-}

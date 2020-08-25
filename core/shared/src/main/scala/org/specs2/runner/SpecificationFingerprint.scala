@@ -2,15 +2,14 @@ package org.specs2.runner
 
 import sbt.testing.SubclassFingerprint
 
-trait SpecificationFingerprint extends SubclassFingerprint {
+trait SpecificationFingerprint extends SubclassFingerprint:
   def isModule = true
 
   def superclassName = "org.specs2.specification.core.SpecificationStructure"
 
   def requireNoArgConstructor = false
-}
 
-object Fingerprints {
+object Fingerprints:
   val fp1 = new SpecificationFingerprint {
     override def toString = "specs2 Specification fingerprint"
   }
@@ -19,5 +18,4 @@ object Fingerprints {
 
     override def isModule = false
   }
-}
 

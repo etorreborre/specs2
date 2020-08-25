@@ -10,7 +10,6 @@ class ExecutableSpec extends Specification with OperationMatchers { def is = sec
 
 """
 
-  def tags = {
+  def tags =
     Executable.execute(FilePath("git"), Seq("tag")) must beOk((_: String) must not(beEmpty[String]))  
-  }
 }

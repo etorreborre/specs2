@@ -4,7 +4,7 @@ package control
 /**
  * This trait is used primarily to change the junit behavior depending on the execution environment
  */
-trait ExecutionOrigin extends Stacktraces {
+trait ExecutionOrigin extends Stacktraces:
   /** return true if the current test is executed with Maven */
   lazy val isExecutedFromMaven = isExecutedFrom("org.apache.maven.surefire.Surefire.run")
   /** return true if the current test is executed with sbt */
@@ -27,7 +27,7 @@ trait ExecutionOrigin extends Stacktraces {
   lazy val excludeFromReporting: Boolean = isExecutedFromJUnitCore || isExecutedFromBazel
 
   /** try to approximate if a specification is a specs2 by passing name = org.specs2 */
-  def isSpecificationFromSpecs2(st: Seq[StackTraceElement]) = {
+  def isSpecificationFromSpecs2(st: Seq[StackTraceElement]) =
     isFromClass({ (fullClassName: String) =>
       val className = fullClassName.takeWhile(_ != '$').mkString
       // this is a fix for #533 to properly recognize org.specs2.mutable.Spec
@@ -35,8 +35,6 @@ trait ExecutionOrigin extends Stacktraces {
       !className.split("\\.").last.equals("Spec") &&
       className.endsWith("Spec") && fromSpecs2(className)
     }, st.takeWhile(t => fromSpecs2(t.getClassName)))
-  }
   def fromSpecs2 = (className: String) => className.startsWith("org.specs2.")
-}
 
 object ExecutionOrigin extends ExecutionOrigin

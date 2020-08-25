@@ -7,16 +7,15 @@ import text.AnsiColors
 /**
  * Logger with info, failure, error where each new message is displayed on a new line
  */
-trait PrinterLogger {
+trait PrinterLogger:
   def infoLog(msg: String): Unit
   def failureLog(msg: String): Unit
   def errorLog(msg: String): Unit
   def warnLog(msg: String): Unit
   def newline(): Unit
   def close(): Unit
-}
 
-object PrinterLogger {
+object PrinterLogger:
 
   /** line logger implementation for the console */
   lazy val consolePrinterLogger = new BufferedPrinterLogger with ConsoleOutput {
@@ -47,4 +46,3 @@ object PrinterLogger {
     override def append(m: String) = super.append(AnsiColors.removeColors(m))
     override def toString = "stringPrinterLogger"
   }
-}

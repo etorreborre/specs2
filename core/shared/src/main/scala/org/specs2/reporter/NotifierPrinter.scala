@@ -14,7 +14,7 @@ import main.Arguments
 /**
  * A Printer can be created from a Notifier implementation
  */
-case class NotifierPrinter(commandLineArguments: Arguments) {
+case class NotifierPrinter(commandLineArguments: Arguments):
 
   /**
    * create a printer from a notifier
@@ -23,13 +23,12 @@ case class NotifierPrinter(commandLineArguments: Arguments) {
     def prepare(specifications: List[SpecStructure]): Action[Unit]  = Action.unit
     def finalize(specifications: List[SpecStructure]): Action[Unit] = Action.unit
 
-    def sink(spec: SpecStructure): AsyncSink[Fragment] = {
+    def sink(spec: SpecStructure): AsyncSink[Fragment] =
       val nf: Fold[Action, Fragment, Notified] { type S = Notified } =
-        notifyFold.into[Action]
-      	.startWith(Action.pure(notifier.specStart(spec.name, "")))
-      	.endWith(Action.pure(notifier.specEnd(spec.name, "")))
+            notifyFold.into[Action].startWith(Action.pure(notifier.specStart(spec.name, ""))).
+              endWith(Action.pure(notifier.specEnd(spec.name, "")))
+
       nf.observeWithNextState(notifySink(spec, notifier)).void
-    }
   }
 
   def notifyFold: FoldState[Fragment, Notified] = new Fold[Id, Fragment, Notified] {
@@ -42,7 +41,7 @@ case class NotifierPrinter(commandLineArguments: Arguments) {
       // if the previous state was defining the closing of a block
       // the new state must not define a close action
       val s = if (ps.close) ps.copy(close = false) else ps
-      f match {
+      f match
         // a block start. The next text is the "context" name
         case Fragment(Start,_,_) => s.copy(start = true, close = false, hide = true)
         // a block start. The "context" name is the current block name
@@ -55,42 +54,38 @@ case class NotifierPrinter(commandLineArguments: Arguments) {
         case f1 if Fragment.isExample(f1) => s.copy(start = false, hide = false)
         case f1 if Fragment.isStep(f1)    => s.copy(start = false, hide = false)
         case _                            => s.copy(hide = true)
-      }
     }
 
     def end(s: S) = s
   }
 
-  def notifySink(spec: SpecStructure, notifier: Notifier): AsyncSink[(Fragment, Notified)] = {
+  def notifySink(spec: SpecStructure, notifier: Notifier): AsyncSink[(Fragment, Notified)] =
     val arguments = commandLineArguments.overrideWith(spec.arguments)
     Folds.fromSink { case (f, n) => printFragment(notifier, f, n, arguments) }
-  }
 
   def printFragment(n: Notifier, f: Fragment, notified: Notified, args: Arguments): Action[Unit] =
     f.executedResult.map { er =>
         val location = f.location.show
 
-        if (!notified.hide) {
+        if (!notified.hide)
           if (notified.start) n.contextStart(notified.context.trim, location)
-          else {
+          else
             if (Fragment.isExample(f))   notifyExample(n, f, er, args)
             else if (Fragment.isStep(f)) notifyStep(n, f, er, args)
             else if (Fragment.isText(f)) notifyText(n, f, args)
-          }
-        } else if (notified.close) n.contextEnd(notified.context.trim, location)
+        else if (notified.close) n.contextEnd(notified.context.trim, location)
     }
 
-  private def notifyExample(n: Notifier, f: Fragment, executedResult: ExecutedResult, args: Arguments) = {
+  private def notifyExample(n: Notifier, f: Fragment, executedResult: ExecutedResult, args: Arguments) =
     val description = f.description.show.trim
     val location = f.location.show
 
     n.exampleStarted(description, location)
 
     notifyResult(executedResult.result, n, description, location, executedResult.timer.totalMillis)
-  }
 
   private def notifyResult(result: Result, n: Notifier, description: String, location: String, duration: Long): Unit =
-    result match {
+    result match
       case r: execute.Success =>
         n.exampleSuccess(description, duration)
 
@@ -108,36 +103,30 @@ case class NotifierPrinter(commandLineArguments: Arguments) {
 
       case execute.DecoratedResult(_, r2) =>
         notifyResult(r2, n, description, location, duration)
-    }
 
-  private def notifyStep(n: Notifier, f: Fragment, executedResult: ExecutedResult, args: Arguments) = {
-    try {
+  private def notifyStep(n: Notifier, f: Fragment, executedResult: ExecutedResult, args: Arguments) =
+    try
       val location = f.location.show
       n.stepStarted(location)
 
       def notifyResult(result: Result, timer: SimpleTimer): Unit =
-        result match {
+        result match
           case r: execute.Success => n.stepSuccess(timer.totalMillis)
           case r: execute.Failure => n.stepError(r.message, location, r.exception, timer.totalMillis)
           case r: execute.Error   => n.stepError(r.message, location, r.exception, timer.totalMillis)
           case _ => ()
-        }
 
       notifyResult(executedResult.result, executedResult.timer)
       // catch AbstractMethod errors coming from Intellij since adding
       // calling new "step" methods on the Notifier interface is not supported yet
-    } catch {
+    catch
       case e: AbstractMethodError if e.getMessage.notNull.contains("JavaSpecs2Notifier") => ()
       case other: Throwable => throw other
-    }
-  }
 
-  def notifyText(n: Notifier, f: Fragment, args: Arguments) = {
+  def notifyText(n: Notifier, f: Fragment, args: Arguments) =
     val description = f.description.show.trim
     val location = f.location.show
 
     n.text(description, location)
-  }
 
   case class Notified(context: String = "", start: Boolean = false, close: Boolean = false, hide: Boolean = false)
-}

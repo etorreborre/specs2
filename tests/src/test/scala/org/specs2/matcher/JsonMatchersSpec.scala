@@ -94,7 +94,7 @@ class JsonMatchersSpec extends Specification with JsonMatchers { def is = s2"""
 
 """
 
- def andHave = {
+ def andHave =
    val json =
      """|{"products":[
         |{"name":"shirt","price":10,"visible":false,"collectionIds":["coll1"]},
@@ -118,7 +118,6 @@ class JsonMatchersSpec extends Specification with JsonMatchers { def is = s2"""
      /("name").andHave("pants") and /("price").andHave(5.0),
      /("name").andHave("tie") and /("price").andHave(BigDecimal(5.0))
    )
- }
 
   // this example is taken from the liftweb project
   val person = """

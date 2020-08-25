@@ -8,7 +8,7 @@ import text.Indent._
 /**
  * Description of a Form to be used in a Fragment
  */
-case class FormDescription(form: () => Form) extends Description {
+case class FormDescription(form: () => Form) extends Description:
 
   lazy val cell = new FormCell(form())
   lazy val show = cell.text
@@ -20,6 +20,5 @@ case class FormDescription(form: () => Form) extends Description {
       override lazy val show =
         indentAllButFirstLine(cell.text, spaces)
     }
-}
 
 

@@ -8,7 +8,7 @@ import text.FromString
 /**
  * Get systems properties prefixed with specs2
  */
-trait SystemProperties {
+trait SystemProperties:
   val specs2Prefix = "specs2."
 
   /** copy system properties on first access to avoid possible concurrent modification exceptions later */
@@ -40,6 +40,5 @@ trait SystemProperties {
 
   /** @return true if a property is defined */
   def isDefined(p: String) = getProperty(p).isDefined
-}
 
 object SystemProperties extends SystemProperties

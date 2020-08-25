@@ -24,7 +24,7 @@ import HtmlPrinter._
 /**
  * Printer for html files
  */
-case class HtmlPrinter(env: Env, searchPage: SearchPage, logger: Logger = ConsoleLogger()) extends Printer {
+case class HtmlPrinter(env: Env, searchPage: SearchPage, logger: Logger = ConsoleLogger()) extends Printer:
 
   def prepare(specifications: List[SpecStructure]): Action[Unit]  = Action.unit
 
@@ -38,7 +38,7 @@ case class HtmlPrinter(env: Env, searchPage: SearchPage, logger: Logger = Consol
   }.toAction
 
   /** @return a SinkTask for the Html output */
-  def sink(spec: SpecStructure): AsyncSink[Fragment] = {
+  def sink(spec: SpecStructure): AsyncSink[Fragment] =
     ((Statistics.fold zip list[Fragment].into[Action] zip SimpleTimer.timerFold.into[Action]) <*
      fromStart((getHtmlOptions(env.arguments) >>= (options => copyResources(env, options))).void.toAction)).mapFlatten { case ((stats, fragments), timer) =>
       val executedSpec = spec.copy(lazyFragments = () => Fragments(fragments:_*))
@@ -47,7 +47,6 @@ case class HtmlPrinter(env: Env, searchPage: SearchPage, logger: Logger = Consol
         case Some(pandoc) => printHtmlWithPandoc(env, executedSpec, stats, timer, pandoc).toAction
       }
     }
-  }
 
   /**
    * WITHOUT PANDOC
@@ -60,7 +59,7 @@ case class HtmlPrinter(env: Env, searchPage: SearchPage, logger: Logger = Consol
    *  - create the file content using the template
    *  - output the file
    */
-  def printHtml(env: Env, spec: SpecStructure, stats: Stats, timer: SimpleTimer): Operation[Unit] = {
+  def printHtml(env: Env, spec: SpecStructure, stats: Stats, timer: SimpleTimer): Operation[Unit] =
     import env.{fileSystem => fs}
     for {
       options  <- getHtmlOptions(env.arguments)
@@ -68,12 +67,11 @@ case class HtmlPrinter(env: Env, searchPage: SearchPage, logger: Logger = Consol
       content  <- makeHtml(template, spec, stats, timer, options, env.arguments)(env.specs2ExecutionEnv)
       _        <- fs.writeFile(outputPath(options.outDir, spec), content)
     } yield ()
-  }
 
   /**
    * Get html options, possibly coming from the command line
    */
-  def getHtmlOptions(arguments: Arguments): Operation[HtmlOptions] = {
+  def getHtmlOptions(arguments: Arguments): Operation[HtmlOptions] =
     import arguments.commandLine._
     val out = directoryOr("html.outdir", HtmlOptions.outDir)
     Operation.ok(HtmlOptions(
@@ -87,7 +85,6 @@ case class HtmlPrinter(env: Env, searchPage: SearchPage, logger: Logger = Consol
       tocEntryMaxSize      = intOr(      "html.toc.entrymaxsize",      HtmlOptions.tocEntryMaxSize),
       warnMissingSeeRefs   = boolOr(     "html.warn.missingseerefs",   HtmlOptions.warnMissingSeeRefs))
     )
-  }
 
 
   /**
@@ -117,7 +114,7 @@ case class HtmlPrinter(env: Env, searchPage: SearchPage, logger: Logger = Consol
    *  - copy resources: css, javascript, template
    *  - create the file content using the template and Pandoc (as an external process)
    */
-  def printHtmlWithPandoc(env: Env, spec: SpecStructure, stats: Stats, timer: SimpleTimer, pandoc: Pandoc): Operation[Unit] = {
+  def printHtmlWithPandoc(env: Env, spec: SpecStructure, stats: Stats, timer: SimpleTimer, pandoc: Pandoc): Operation[Unit] =
     import env.{fileSystem => fs}
     for {
       options  <- getHtmlOptions(env.arguments)
@@ -127,12 +124,11 @@ case class HtmlPrinter(env: Env, searchPage: SearchPage, logger: Logger = Consol
                     makePandocHtml(spec, stats, timer, pandoc, options, env)
                   }
     } yield ()
-  }
 
   /**
    * Create the Html file by invoking Pandoc
    */
-  def makePandocHtml(spec: SpecStructure, stats: Stats, timer: SimpleTimer, pandoc: Pandoc, options: HtmlOptions, env: Env): Operation[Unit] =  {
+  def makePandocHtml(spec: SpecStructure, stats: Stats, timer: SimpleTimer, pandoc: Pandoc, options: HtmlOptions, env: Env): Operation[Unit] = 
     import env.{fileSystem => fs}
 
     val variables1 =
@@ -153,7 +149,6 @@ case class HtmlPrinter(env: Env, searchPage: SearchPage, logger: Logger = Consol
           fs.replaceInFile(outputPath(options.outDir, spec), "<code>", "<code class=\"prettyprint\">")
       }
     }
-  }
 
   def copyResources(env: Env, options: HtmlOptions): Operation[List[Unit]] =
     env.fileSystem.mkdirs(options.outDir) >> {
@@ -169,8 +164,8 @@ case class HtmlPrinter(env: Env, searchPage: SearchPage, logger: Logger = Consol
         }
     }
 
-  def copySpecResourcesDir(env: Env, base: DirectoryPath, outputDir: DirectoryPath, loader: ClassLoader)(src: DirectoryPath): Operation[Unit] = {
-    Option(loader.getResource((base / src).path)) match {
+  def copySpecResourcesDir(env: Env, base: DirectoryPath, outputDir: DirectoryPath, loader: ClassLoader)(src: DirectoryPath): Operation[Unit] =
+    Option(loader.getResource((base / src).path)) match
       case None =>
         val message = s"no resource found for path ${(base / src).path}"
         logger.warnAndFail(message, message)
@@ -181,8 +176,6 @@ case class HtmlPrinter(env: Env, searchPage: SearchPage, logger: Logger = Consol
           fs.unjar(jarOf(url), outputDir, s"^${quote(base.path)}(/${quote(src.path)}/.*)$$")
         else
           fs.copyDir(DirectoryPath.unsafe(url.toURI), outputDir / src)
-    }
-  }
 
   def reportMissingSeeRefs(specs: List[SpecStructure], outDir: DirectoryPath)(implicit ee: ExecutionEnv): Operation[Unit] = for {
     missingSeeRefs <- specs.flatMap(_.seeReferencesList).distinct.filterM(ref => FilePathReader.doesNotExist(SpecHtmlPage.outputPath(outDir, ref.specClassName)))
@@ -191,10 +184,8 @@ case class HtmlPrinter(env: Env, searchPage: SearchPage, logger: Logger = Consol
   } yield ()
 
   private def jarOf(url: URL): URL = url.openConnection.asInstanceOf[JarURLConnection].getJarFileURL
-}
 
-object HtmlPrinter {
+object HtmlPrinter:
 
   val RunAborted =
     "\nHtml run aborted!\n "
-}

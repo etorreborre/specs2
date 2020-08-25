@@ -102,7 +102,7 @@ case class ContextSpec(env: Env) extends Spec with ResultMatchers with OwnEnv { 
   def after5 =  { val d = data(); d.executeBodies(d.ex1_beforeFail).map(_.message) must_== List("java.lang.RuntimeException: error") }
   def around1 = { val d = data(); d.executing(d.ex1Around).prints("around", "e1") }
 
-  def combined1 = {
+  def combined1 =
     val d = data(); import d._
 
     abstract class ParentSpecification extends Specification with BeforeAfterEach { def before = println("before"); def after = println("after") }
@@ -111,34 +111,29 @@ case class ContextSpec(env: Env) extends Spec with ResultMatchers with OwnEnv { 
       "e1" ! {println("e1"); ok}
     }
     executing(child.fragments(env)).prints("before", "around", "e1", "after")
-  }
 
   def step1 = { val d = data(); d.executing(d.firstThenEx1).prints("first", "e1") }
   def step2 = { val d = data(); d.executeBodies(d.silentFirstThenEx1).map(_.message) must_== List("", "success") }
   def step3 = { val d = data(); d.executeBodies(d.failingFirstThenEx1).map(_.message) must_== List("java.lang.RuntimeException: error", "success") }
 
-  case class data() extends StringOutput with ContextData {
+  case class data() extends StringOutput with ContextData:
     def executeBodies(ex: Fragment): List[Result] =
       executeBodies(Fragments(ex))
 
-    def executeBodies(exs: Fragments): List[Result] = {
+    def executeBodies(exs: Fragments): List[Result] =
       val env = Env(arguments = Arguments("sequential"))
       try DefaultExecutor.executeFragments(exs)(env).traverse(_.executionResult).run(env.executionEnv)
       finally env.shutdown()
-    }
 
     def executing(exs: Fragments): Executed = Executed(executeBodies(exs))
     def executing(ex: Fragment): Executed = Executed(executeBodies(ex))
 
-    case class Executed(results: Seq[Result]) {
-      def prints(ms: String*): Result = {
+    case class Executed(results: Seq[Result]):
+      def prints(ms: String*): Result =
         (messages must_== ms.toList).toResult
-      }
-    }
-  }
 }
 
-trait ContextData extends StandardResults with FragmentsFactory with ContextsForFragments with AcceptanceDsl {
+trait ContextData extends StandardResults with FragmentsFactory with ContextsForFragments with AcceptanceDsl:
   val factory = fragmentFactory
 
   def okValue(name: String) = { println(name); success }
@@ -163,64 +158,45 @@ trait ContextData extends StandardResults with FragmentsFactory with ContextsFor
   def ex1_afterFail = "ex1" ! afterWithError(ok1)
   def ex1_2After = ex1After ^ "ex2" ! after1(ok2)
 
-  trait beforeContext extends Before {
+  trait beforeContext extends Before:
     def before = println("before")
-  }
-  trait afterContext extends After {
+  trait afterContext extends After:
     def after = println("after")
-  }
-  trait aroundContext extends Around {
+  trait aroundContext extends Around:
     def around[R : AsResult](r: =>R) = { println("before"); try { AsResult(r) } finally { println("after") }}
-  }
 
   def ex1Around: Fragments = "ex1" ! around1(ok1)
 
   def firstThenEx1 = step(println("first")) ^ ex1
   def silentFirstThenEx1 =  step("first") ^ ex1
   def failingFirstThenEx1 = step { error("error"); 1 } ^ ex1
-}
 
-trait ContextsForFragments extends StringOutput {
-  object before1 extends Before {
+trait ContextsForFragments extends StringOutput:
+  object before1 extends Before:
     def before = println("before")
-  }
-  object before2 extends Before {
+  object before2 extends Before:
     def before = println("before2")
-  }
-  object beforeWithError extends Before with StringOutput {
+  object beforeWithError extends Before with StringOutput:
     def before = error("error")
-  }
-  object beforeWithSkipped extends Before with StringOutput {
+  object beforeWithSkipped extends Before with StringOutput:
     def before = Skipped("skipped")
-  }
-  object beforeWithSkippedThrown extends Before with StringOutput with MustThrownMatchers {
+  object beforeWithSkippedThrown extends Before with StringOutput with MustThrownMatchers:
     def before = skipped("skipped")
-  }
-  object beforeWithMatchFailed extends Before with StringOutput with MustThrownMatchers {
+  object beforeWithMatchFailed extends Before with StringOutput with MustThrownMatchers:
     def before = 1 must_== 2
-  }
-  object beforeWithMatchFailedThrown extends Before with StringOutput with MustThrownMatchers {
+  object beforeWithMatchFailedThrown extends Before with StringOutput with MustThrownMatchers:
     def before = 1 must_== 2
-  }
-  object after1 extends After {
+  object after1 extends After:
     def after = println("after")
-  }
-  object after2 extends After {
+  object after2 extends After:
     def after = println("after2")
-  }
-  object afterWithError extends After {
+  object afterWithError extends After:
     def after = error("error")
-  }
-  object around1 extends Around {
+  object around1 extends Around:
     def around[T : AsResult](a: =>T) = { println("around"); AsResult(a) }
-  }
-  object around2 extends Around {
+  object around2 extends Around:
     def around[T : AsResult](a: =>T) = { println("around2"); AsResult(a) }
-  }
-  object fixtureInt extends Fixture[Int] {
-    def apply[R : AsResult](f: Int => R) = {
+  object fixtureInt extends Fixture[Int]:
+    def apply[R : AsResult](f: Int => R) =
       println("fixture")
       AsResult(f(1))
-    }
-  }
-}

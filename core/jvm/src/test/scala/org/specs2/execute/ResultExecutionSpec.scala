@@ -47,7 +47,6 @@ Executing a Result
 
 
   case class NotImplementedError(msg: String) extends java.lang.Error(msg)
-  case class ExpectationError(m: String)      extends java.lang.Error(m) {
+  case class ExpectationError(m: String)      extends java.lang.Error(m):
     override def toString = "<expectation error>"
-  }
 }

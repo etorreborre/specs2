@@ -113,9 +113,8 @@ Compare result
 
 """
 
-  sealed case class ExampleFailure(message: String, stacktrace: List[StackTraceElement] = Nil) extends RuntimeException(message) {
+  sealed case class ExampleFailure(message: String, stacktrace: List[StackTraceElement] = Nil) extends RuntimeException(message):
     override def getStackTrace = stacktrace.toArray
-  }
 
   val se = new StackTraceElement("class", "method", "filename", 666)
   val se2 = new StackTraceElement("class1", "method1", "filename1", 777)
@@ -125,14 +124,13 @@ Compare result
   val ex3 = ExampleFailure("m", List(se))
   val ex4 = ExampleFailure("m", List(se2))
 
-  def m1 = {
+  def m1 =
     Diffable.diff(Map("a" -> "b", "c" -> "d", "e" -> "f"),
       Map("a" -> "b", "c" -> "x", "g" -> "h")) must_==
       MapDifference(same    = Seq("a" -> "b"),
                     changed = Seq("c" -> PrimitiveDifference("d", "x")),
                     added   = Seq("g" -> "h"),
                     removed = Seq("e" -> "f"))
-  }
 
   def seqDiffable[T : Diffable]: SeqDiffable[T] =
     new SeqDiffable[T]

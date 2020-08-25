@@ -3,7 +3,7 @@ package org.specs2.fp
 /**
  * Inspired from the scalaz (https://github.com/scalaz/scalaz) project
  */
-trait Functor[F[_]] {
+trait Functor[F[_]]:
 
   def map[A, B](fa: F[A])(f: A => B): F[B]
 
@@ -13,9 +13,8 @@ trait Functor[F[_]] {
   def void[A](fa: F[A]): F[Unit] = as(fa)(())
 
   def as[A, B](fa: F[A])(b: =>B): F[B] = map(fa)(_ => b)
-}
 
-object Functor {
+object Functor:
   @inline def apply[F[_]](implicit F: Functor[F]): Functor[F] = F
 
   implicit val OptionFunctor: Functor[Option[*]] = new Functor[Option[*]] {
@@ -26,10 +25,9 @@ object Functor {
     def map[A, B](fa: Either[E, A])(f: A => B): Either[E, B] =
       fa.map(f)
   }
-}
 
-trait FunctorSyntax {
-  implicit class FunctorOps[F[_] : Functor, A](fa: F[A]) {
+trait FunctorSyntax:
+  implicit class FunctorOps[F[_] : Functor, A](fa: F[A]):
     def map[B](f: A => B): F[B] =
       Functor.apply[F].map(fa)(f)
 
@@ -38,7 +36,5 @@ trait FunctorSyntax {
 
     def void: F[Unit] =
       Functor.apply[F].void(fa)
-  }
-}
 
 object FunctorSyntax extends FunctorSyntax

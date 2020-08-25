@@ -59,7 +59,7 @@ trait TraversableBaseMatchers { outer =>
   /** does a containAll comparison in both ways */
   def containTheSameElementsAs[T](seq: Seq[T], equality: (T, T) => Boolean = (_:T) == (_:T)): Matcher[Traversable[T]] = new Matcher[Traversable[T]] {
 
-    def apply[S <: Traversable[T]](t: Expectable[S]) = {
+    def apply[S <: Traversable[T]](t: Expectable[S]) =
       val missing = seq.difference(t.value.toSeq, equality)
       val added   = t.value.toSeq.difference(seq, equality)
       def message(diffs: scala.collection.Seq[_], msg: String) =
@@ -69,7 +69,6 @@ trait TraversableBaseMatchers { outer =>
              t.description + "\n  contains the same elements as\n"+ seq,
              t.description + message(missing, "is missing") + message(added, "must not contain"),
              t)
-    }
   }
 
   /**
@@ -147,92 +146,79 @@ trait TraversableBeHaveMatchers extends LazyParameters with BeHaveMatchers  { ou
   implicit def traversable[T](s: MatchResult[Traversable[T]]): TraversableBeHaveMatchers[T] =
     new TraversableBeHaveMatchers(s)
 
-  class TraversableBeHaveMatchers[T](s: MatchResult[Traversable[T]]) {
+  class TraversableBeHaveMatchers[T](s: MatchResult[Traversable[T]]):
     def contain(check: ValueCheck[T]) = s(outer.contain(check))
     def containPattern(t: =>String) = s(outer.containPattern(t))
     def containMatch(t: =>String) = containPattern(t.regexPart)
-  }
 
   implicit def sized[T : Sized](s: MatchResult[T]): HasSize[T] =
     new HasSize(s)
 
-  class HasSize[T : Sized](s: MatchResult[T]) {
+  class HasSize[T : Sized](s: MatchResult[T]):
     def size(n: Int) : MatchResult[T] = s(outer.haveSize[T](n))
     def length(n: Int) : MatchResult[T] = size(n)
     def size(check: ValueCheck[Int]) : MatchResult[T] = s(outer.haveSize[T](check))
     def length(check: ValueCheck[Int]) : MatchResult[T] = size(check)
-  }
 
   implicit def orderedSeqMatchResult[T : Ordering](result: MatchResult[Seq[T]]): OrderedSeqMatchResult[T] =
     new OrderedSeqMatchResult(result)
 
-  class OrderedSeqMatchResult[T : Ordering](result: MatchResult[Seq[T]]) {
+  class OrderedSeqMatchResult[T : Ordering](result: MatchResult[Seq[T]]):
     def sorted = result(outer.beSorted[T])
     def beSorted = result(outer.beSorted[T])
-  }
 
 }
 
-class SizedMatcher[T : Sized](n: Int, sizeWord: String) extends Matcher[T] {
-  def apply[S <: T](traversable: Expectable[S]) = {
+class SizedMatcher[T : Sized](n: Int, sizeWord: String) extends Matcher[T]:
+  def apply[S <: T](traversable: Expectable[S]) =
     val s = implicitly[Sized[T]]
     val valueSize = s.size(traversable.value)
     result(valueSize == n,
            traversable.description + " has "+sizeWord+" "+ n,
            s"'${traversable.description}' doesn't have $sizeWord $n but $sizeWord $valueSize", traversable)
-  }
-}
 
-class SizedCheckedMatcher[T : Sized](check: ValueCheck[Int], sizeWord: String) extends Matcher[T] {
-  def apply[S <: T](traversable: Expectable[S]) = {
+class SizedCheckedMatcher[T : Sized](check: ValueCheck[Int], sizeWord: String) extends Matcher[T]:
+  def apply[S <: T](traversable: Expectable[S]) =
     val s = implicitly[Sized[T]]
     val valueSize = s.size(traversable.value)
     val checked = check.check(valueSize)
     result(checked.isSuccess,
       traversable.description + " has the right "+sizeWord+": "+ checked.message,
       traversable.description + " doesn't have the right "+sizeWord+": "+ checked.message, traversable)
-  }
-}
 
-class OrderingMatcher[T : Ordering] extends Matcher[Seq[T]] {
-  def apply[S <: Seq[T]](traversable: Expectable[S]) = {
+class OrderingMatcher[T : Ordering] extends Matcher[Seq[T]]:
+  def apply[S <: Seq[T]](traversable: Expectable[S]) =
     result(traversable.value == traversable.value.sorted,
       traversable.description + " is sorted",
       traversable.description + " is not sorted", traversable)
-  }
-}
 import control.NumberOfTimes._
 import text.Plural._
 
-case class ContainWithResult[T](check: ValueCheck[T], timesMin: Option[Times] = Some(1.times), timesMax: Option[Times] = None, checkAll: Boolean = true) extends Matcher[Traversable[T]] {
-  def apply[S <: Traversable[T]](t: Expectable[S]) = {
+case class ContainWithResult[T](check: ValueCheck[T], timesMin: Option[Times] = Some(1.times), timesMax: Option[Times] = None, checkAll: Boolean = true) extends Matcher[Traversable[T]]:
+  def apply[S <: Traversable[T]](t: Expectable[S]) =
     val seq = Vector(t.value.toSeq:_*)
 
     // stop after the first failure if !checkAll
     val (successes, failures) = seq.foldLeft((Seq[Result](), Seq[Result]())) { (res, cur) =>
       val (ss, fs) = res
       if (!checkAll && fs.nonEmpty) res
-      else {
-        check.check(cur) match {
+      else
+        check.check(cur) match
           case e: Error         => throw new ErrorException(e)
           case r if r.isSuccess => (ss :+ r, fs)
           case r                => (ss, fs :+ r)
-        }
-      }
     }
 
     failures.collect { case s: Skipped => MatchSkip(s.message, t) }.headOption.getOrElse {
       val (okMessage, koMessage) = messages(t.description, successes, failures)
       val details: Details = failures.collect { case Failure(_,_,_,d) if d != NoDetails => d }.headOption.getOrElse(NoDetails)
 
-      (timesMin, timesMax) match {
+      (timesMin, timesMax) match
         case (None,             None)             => Matcher.result(successes.size == seq.size,                     okMessage, koMessage, t, details)
         case (Some(Times(min)), None)             => Matcher.result(successes.size >= min,                          okMessage, koMessage, t, details)
         case (None,             Some(Times(max))) => Matcher.result(successes.size <= max,                          okMessage, koMessage, t, details)
         case (Some(Times(min)), Some(Times(max))) => Matcher.result(successes.size >= min && successes.size <= max, okMessage, koMessage, t, details)
-      }
     }
-  }
 
   def atLeastOnce                    : ContainWithResult[T] = atLeast(1.times)
   def atLeast(times: Times)          : ContainWithResult[T] = copy(timesMin = Option(times))
@@ -252,14 +238,13 @@ case class ContainWithResult[T](check: ValueCheck[T], timesMin: Option[Times] = 
   def foreach = copy(timesMin = None, timesMax = None)
 
   private
-  def messages[S <: Traversable[T]](expectable: String, successes: Seq[Result], failures: Seq[Result]) = check match {
+  def messages[S <: Traversable[T]](expectable: String, successes: Seq[Result], failures: Seq[Result]) = check match
     case BeEqualTypedValueCheck(expected) => (s"$expectable contains $expected", s"$expectable does not contain $expected")
     case BeEqualValueCheck(expected)      => (s"$expectable contains $expected", s"$expectable does not contain $expected")
     case _                                => genericMessages(expectable, successes, failures)
-  }
 
   private
-  def genericMessages(expectable: String, successes: scala.collection.Seq[Result], failures: scala.collection.Seq[Result]) = {
+  def genericMessages(expectable: String, successes: scala.collection.Seq[Result], failures: scala.collection.Seq[Result]) =
     def elementsAre(results: scala.collection.Seq[Result], success: Boolean) =
       if   (results.isEmpty)      s"There are no matches"
       else if (results.size <= 1) s"There is ${results.size} ${if (success) "success" else "failure"}"
@@ -271,18 +256,16 @@ case class ContainWithResult[T](check: ValueCheck[T], timesMin: Option[Times] = 
 
     (elementsAre(successes, success = true) + messages(successes),
      elementsAre(failures, success = false) + messages(failures))
-  }
 
-}
 
 case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
                                    containsAtLeast: Boolean = true,
                                    containsAtMost: Boolean = false,
                                    eachCheck: Boolean = false,
                                    checkOrder: Boolean = false,
-                                   negate: Boolean = false) extends Matcher[Traversable[T]] {
+                                   negate: Boolean = false) extends Matcher[Traversable[T]]:
 
-  def apply[S <: Traversable[T]](t: Expectable[S]) = {
+  def apply[S <: Traversable[T]](t: Expectable[S]) =
     val seq = t.value.toSeq
 
     // results for each element, either checked in order or
@@ -296,45 +279,39 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
     val missingValues = remainingChecks.collect(expectedValue).flatten
     val failedValues  = failures.map(_._1)
 
-    def makeResult(constraint: String, success: Boolean): MatchResult[S] = {
+    def makeResult(constraint: String, success: Boolean): MatchResult[S] =
       val equalChecks = checks.forall(isEqualCheck)
       val order = if (checkOrder) " in order" else ""
-      if (equalChecks) {
+      if (equalChecks)
         val missingValues = remainingChecks.collect(expectedValue).flatten
         val addedValues   = seq.diff(successes.map(_._1))
         val failedValues  = failures.map(_._1)
         if (failedValues.isEmpty)
-          if (missingValues.isEmpty){
+          if (missingValues.isEmpty)
             if (addedValues.isEmpty)
               Matcher.result(success, s"${t.description} contains all expected values", t)
             else
               Matcher.result(success, s"${t.description} contains ${addedValues.mkString(",")}", t)
-          }
-          else {
+          else
             if (eachCheck && seq.exists(missingValues.contains))
               Matcher.result(success, s"${t.description} is missing the ${"value".plural(missingValues)}: ${missingValues.mkString(", ")}", t)
-            else if (checkOrder) {
+            else if (checkOrder)
               val verb = if (missingValues.size > 1) "are" else "is"
               Matcher.result(success, s"the ${"value".plural(missingValues)} ${missingValues.mkString(", ")} $verb not in order", t)
-            }
             else
               Matcher.result(success, s"${t.description} does not contain ${missingValues.mkString(", ")}", t)
-          }
         else
-        if (missingValues.isEmpty) {
+        if (missingValues.isEmpty)
           Matcher.result(success, s"${t.description} contains ${failedValues.mkString(", ")}", t)
-        }
-        else {
+        else
           if (eachCheck && seq.exists(missingValues.contains))
             Matcher.result(success, s"${t.description} is missing the ${"value".plural(missingValues)}: ${missingValues.mkString(", ")} but contains ${failedValues.mkString(", ")}", t)
-          else if (checkOrder) {
+          else if (checkOrder)
             val verb = if (missingValues.size > 1) "are" else "is"
             Matcher.result(success, s"the ${"value".plural(missingValues)} ${missingValues.mkString(", ")} $verb not in order", t)
-          }
           else
             Matcher.result(success, s"${t.description} does not contain ${missingValues.mkString(", ")} but contains ${failedValues.mkString(", ")}", t)
-        }
-      } else {
+      else
         val qty     = s"$constraint ${checks.size}"
         val values  = s"correct ${"value".plural(checks.size)}$order"
 
@@ -342,11 +319,9 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
           s"${t.description} does not contain $qty $values" +
             (if (failures.isEmpty) ""
             else failures.map { case (value, rs) => "- "+value+"\n"+rs.map(" * "+_).mkString("\n") }.mkString("\n", "\n", "\n")), t)
-      }
-    }
 
     val r =
-      (containsAtLeast, containsAtMost) match {
+      (containsAtLeast, containsAtMost) match
         case (true,  false) =>
           makeResult("at least",
             missingValues.isEmpty &&
@@ -364,11 +339,9 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
 
         case (false, false) =>
           makeResult("", successes.size <= checks.size && checks.size <= seq.size)
-      }
 
     if (negate) Matcher.result(!r.isSuccess, r.message, r.message, t)
     else r
-  }
 
 
 
@@ -380,8 +353,8 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
    * @return (the list of all the results for each tested value, the list of remaining checks if any)
    */
   @tailrec
-  private def checkValuesInOrder(values: Seq[T], checks: Seq[ValueCheck[T]], eachCheck: Boolean, results: Seq[(T, Seq[Result])] = Seq()): (Seq[(T, Seq[Result])], Seq[ValueCheck[T]]) = {
-    (values, checks) match {
+  private def checkValuesInOrder(values: Seq[T], checks: Seq[ValueCheck[T]], eachCheck: Boolean, results: Seq[(T, Seq[Result])] = Seq()): (Seq[(T, Seq[Result])], Seq[ValueCheck[T]]) =
+    (values, checks) match
       case (v +: vs, c +: cs) if eachCheck =>
         val r = c.check(v)
         if (r.isSuccess) checkValuesInOrder(vs, cs, eachCheck, results :+ (v -> Seq(r)))
@@ -397,8 +370,6 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
 
       case (v +: vs, nil) => (results :+ (v -> Seq(Failure("is unexpected", v.notNull))), checks)
       case _              => (results, checks)
-    }
-  }
 
   /**
    * take each value in order and try to apply the checks of the list of checks
@@ -407,21 +378,20 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
    * @return (the list of each result for each tested value, the list of remaining checks if any)
    */
 //  @tailrec
-  private def checkValues(values: Seq[T], checks: Seq[ValueCheck[T]], eachCheck: Boolean, results: Seq[(T, Seq[Result])] = Seq()): (Seq[(T, Seq[Result])], Seq[ValueCheck[T]]) = {
+  private def checkValues(values: Seq[T], checks: Seq[ValueCheck[T]], eachCheck: Boolean, results: Seq[(T, Seq[Result])] = Seq()): (Seq[(T, Seq[Result])], Seq[ValueCheck[T]]) =
     val (results: Seq[(T, ValueCheck[T], Result)], unchecked) =
       BestMatching.findBestMatch(values, checks, (t: T, check: ValueCheck[T]) => check.check(t), eachCheck)
 
     val resultsAsSeq = results.map { case (t, v, r) => (t, Seq(r)) }
     (resultsAsSeq, unchecked)
-  }
 
 
   /**
    * @return (the result of evaluating value with uncheckedChecks, unchecked and failed checks)
    */
   @tailrec
-  private def checkValue(value: T, uncheckedChecks: Seq[ValueCheck[T]], checkedChecks: Seq[ValueCheck[T]], eachCheck: Boolean, results: Seq[Result]) : (Seq[Result], Seq[ValueCheck[T]]) = {
-    uncheckedChecks match {
+  private def checkValue(value: T, uncheckedChecks: Seq[ValueCheck[T]], checkedChecks: Seq[ValueCheck[T]], eachCheck: Boolean, results: Seq[Result]) : (Seq[Result], Seq[ValueCheck[T]]) =
+    uncheckedChecks match
       case currentCheck +: remainingUncheckedChecks if eachCheck =>
         val result = currentCheck.check(value)
         if (result.isSuccess) (Seq(result), checkedChecks ++ remainingUncheckedChecks)
@@ -433,20 +403,16 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
         else                    (Nil, checkedChecks ++ allChecks)
 
       case _ => (results, checkedChecks)
-    }
-  }
 
-  private def isEqualCheck = (c: ValueCheck[T]) => c match {
+  private def isEqualCheck = (c: ValueCheck[T]) => c match
     case _:BeEqualTypedValueCheck[T] => true
     case _:BeEqualValueCheck[T]      => true
     case _                           => false
-  }
 
-  private def expectedValue: PartialFunction[ValueCheck[T], Option[Any]] = {
+  private def expectedValue: PartialFunction[ValueCheck[T], Option[Any]] =
     case BeEqualTypedValueCheck(e) => Some(e)
     case BeEqualValueCheck(e)      => Some(e)
     case _                         => None
-  }
 
   def atLeast = copy(containsAtLeast = true, containsAtMost = false, eachCheck = true)
   def atMost  = copy(containsAtLeast = false, containsAtMost = true, eachCheck = true)
@@ -457,4 +423,3 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
   def onDistinctValues(distinct: Boolean): ContainWithResultSeq[T] = copy(eachCheck = distinct)
 
   override def not = copy(negate = !negate)
-}

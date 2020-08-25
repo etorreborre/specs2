@@ -13,7 +13,7 @@ import scala.xml.NodeSeq
  * Fragments.
  */
 private[specs2]
-trait FormsBuilder {
+trait FormsBuilder:
 
   /** anything can be added on a Form row as a Field */
   implicit def anyIsField[T](t: =>T): Field[T] = Field(t)
@@ -78,10 +78,9 @@ trait FormsBuilder {
   def prop[T, S](label: String, actual: =>T, expected: =>S, c: Matcher[T]): Prop[T, S] = Prop[T, S](label, actual, expected, c)
 
   /** @return a new Prop with a label, which has the same actual and expected value to test the result of an action */
-  def action[T](label: String, a: =>T): Prop[T, T] = {
+  def action[T](label: String, a: =>T): Prop[T, T] =
     lazy val act = a
     prop(label, act)(act)
-  }
 
   /** @return a new Tabs object */
   def tabs = new Tabs()
@@ -89,6 +88,5 @@ trait FormsBuilder {
   /** @return a new Tabs object with a first tab */
   def tab(label: String, form: Form) = tabs.tab(label, form)
 
-}
 private[specs2]
 object FormsBuilder extends FormsBuilder

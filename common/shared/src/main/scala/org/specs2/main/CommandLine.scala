@@ -9,7 +9,7 @@ import text.Split._
 /**
  * Command-line arguments
  */
-case class CommandLine(_arguments: Seq[String] = Seq()) extends ShowArgs {
+case class CommandLine(_arguments: Seq[String] = Seq()) extends ShowArgs:
 
   def arguments: Seq[String] = _arguments
   def contains(a: String) = arguments contains a
@@ -64,9 +64,8 @@ case class CommandLine(_arguments: Seq[String] = Seq()) extends ShowArgs {
   def overrideWith(other: CommandLine) = copy(_arguments = if (other.arguments.isEmpty) this._arguments else other.arguments)
 
   override def toString = _arguments.mkString("CommandLine(", ", ", ")")
-}
 
-object CommandLine extends Extract {
+object CommandLine extends Extract:
   def create(values: String*): CommandLine =
     new CommandLine(values)
 
@@ -81,4 +80,3 @@ object CommandLine extends Extract {
   def splitValues(arguments: Seq[String]): Seq[String] =
     arguments.splitDashed(allValueNames)
 
-}

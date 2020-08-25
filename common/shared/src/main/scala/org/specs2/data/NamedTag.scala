@@ -33,10 +33,9 @@ trait NamedTag { outer =>
   }
 
   override def equals(o: Any) =
-    o match {
+    o match
       case t: NamedTag => names.distinct.toSet == t.names.distinct.toSet
       case _           => false
-    }
 
   override def hashCode =
     names.hashCode
@@ -59,23 +58,21 @@ trait IncludeExcludeTag extends NamedTag { outer =>
  * It is used to keep setup/teardown behaviour in specification whether examples are tagged or not and
  * whatever is passed on the command line
  */
-object AlwaysTag extends NamedTag {
+object AlwaysTag extends NamedTag:
   def keep(args: Arguments, names: Seq[String]) = true
   def names = Seq("specs2.internal.always")
-}
 
 /**
  * Similar to the AlwaysTag this tag is keeping elements only if there is no included tags
  */
-object AlwaysWhenNoIncludeTag extends NamedTag {
+object AlwaysWhenNoIncludeTag extends NamedTag:
   def keep(args: Arguments, names: Seq[String]) = args.include.isEmpty
   def names = Seq("specs2.internal.alwaysWhenNoInclude")
-}
 
 /** tags the next element */
 case class Tag(names: String*) extends IncludeExcludeTag
 
-object NamedTag {
+object NamedTag:
   /**
    * define a very coarse Monoid for NamedTags where appending 2 NamedTags returns a Tag object
    * with both list of tags
@@ -87,4 +84,3 @@ object NamedTag {
       else if (t2 == zero) t1
       else t1 overrideWith t2
   }
-}

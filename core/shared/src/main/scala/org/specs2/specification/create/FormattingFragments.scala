@@ -8,7 +8,7 @@ import core.Fragments
  * Fragments which can be used to change the display
  * of the Specification: paragraphs, breaks, tabs
  */
-trait FormattingFragments extends FragmentsFactory {
+trait FormattingFragments extends FragmentsFactory:
   private val factory = fragmentFactory
 
   def p          = Fragments(br, br, bt)
@@ -18,6 +18,5 @@ trait FormattingFragments extends FragmentsFactory {
   def bt         = factory.backtab
   def bt(n: Int) = factory.backtab(n)
   def end        = factory.end
-}
 
 object FormattingFragments extends FormattingFragments

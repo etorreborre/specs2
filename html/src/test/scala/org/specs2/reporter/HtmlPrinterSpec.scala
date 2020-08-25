@@ -18,7 +18,7 @@ class HtmlPrinterSpec(val env: Env) extends Specification with ActionMatchers wi
 
 """
 
-  def index = {
+  def index =
     val spec = new Specification { def is = s2""" one example $ok """}
     val env1 = env.setArguments(searchArguments)
 
@@ -26,25 +26,22 @@ class HtmlPrinterSpec(val env: Env) extends Specification with ActionMatchers wi
 
     finalize(env1, spec) must beOk
     FilePathReader.exists(outDir / "javascript" / "tipuesearch" | "tipuesearch_contents.js").runOption must beSome(true)
-  }
 
 
-  def searchPage = {
+  def searchPage =
     val spec = new Specification { def is = s2""" one example $ok """}
     val env1 = env.setArguments(searchArguments)
 
     finalize(env1, spec) must beOk
     FilePathReader.exists(outDir | "search.html").runOption must beSome(true)
-  }
 
-  def finalize(env: Env, spec: SpecificationStructure): Action[Unit] = {
+  def finalize(env: Env, spec: SpecificationStructure): Action[Unit] =
     val htmlPrinter = printer(env)
     for {
       options <- htmlPrinter.getHtmlOptions(env.arguments).toAction
       _       <- htmlPrinter.copyResources(env, options).toAction
       _       <- htmlPrinter.finalize(List(spec.structure(env)))
     } yield ()
-  }
 
 
   def printer(env: Env) = HtmlPrinter(env, SearchPage())

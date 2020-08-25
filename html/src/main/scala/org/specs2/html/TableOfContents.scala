@@ -18,10 +18,10 @@ import text.Trim._
  * This trait checks for the presence of a <toc/> tag at the beginning of a xml document and replaces it
  * by a list of links to the headers of the document
  */
-trait TableOfContents {
+trait TableOfContents:
 
   /** create a table of contents for all the specifications */
-  def createToc(env: Env, specifications: List[SpecStructure], outDir: DirectoryPath, entryMaxSize: Int, fileSystem: FileSystem): Operation[Unit] = {
+  def createToc(env: Env, specifications: List[SpecStructure], outDir: DirectoryPath, entryMaxSize: Int, fileSystem: FileSystem): Operation[Unit] =
     // sort specifications a, b, c so that a depends on b and c
     val sorted = SpecStructure.reverseTopologicalSort(specifications)(env.specs2ExecutionEnv).map(_.toList).getOrElse(List())
     for {
@@ -29,7 +29,6 @@ trait TableOfContents {
       toc     =  createToc(pages, outDir, entryMaxSize)(env.specs2ExecutionEnv)
       _       <- saveHtmlPages(pages.map(page => page.addToc(toc(page))), fileSystem)
     } yield ()
-  }
 
   /** read the generated html pages and return them as a tree, based on the links relationships between them */
   def readHtmlPages(specifications: List[SpecStructure], outDir: DirectoryPath, fileSystem: FileSystem): Operation[List[SpecHtmlPage]] =
@@ -38,16 +37,15 @@ trait TableOfContents {
       pages <- createSpecPages(paths, specifications, outDir, fileSystem)
     } yield pages
 
-  def createSpecPages(paths: List[FilePath], specifications: List[SpecStructure], outDir: DirectoryPath, fileSystem: FileSystem): Operation[List[SpecHtmlPage]] = {
+  def createSpecPages(paths: List[FilePath], specifications: List[SpecStructure], outDir: DirectoryPath, fileSystem: FileSystem): Operation[List[SpecHtmlPage]] =
     specifications.flatMap { spec =>
       val path = SpecHtmlPage.outputPath(outDir, spec)
       if (paths contains path) Some(fileSystem.readFile(path).map(content => SpecHtmlPage(spec, path, outDir, content)))
       else None
     }.sequence
-  }
 
-  def createToc(pages: List[SpecHtmlPage], outDir: DirectoryPath, entryMaxSize: Int)(implicit ee: ExecutionEnv): SpecHtmlPage => NodeSeq = {
-    pages match {
+  def createToc(pages: List[SpecHtmlPage], outDir: DirectoryPath, entryMaxSize: Int)(implicit ee: ExecutionEnv): SpecHtmlPage => NodeSeq =
+    pages match
       case Nil => (page: SpecHtmlPage) => NodeSeq.Empty
       case main :: rest =>
         val treeLoc = pagesTree(main, pages)
@@ -70,8 +68,6 @@ trait TableOfContents {
               <script>{s"$$(function () { $$('#tree').jstree({'core':{'initially_open':[$parentNames], 'animation':200}, 'themes' : {'theme': 'default','url': './css/themes/default/style.css'}, 'plugins':['themes', 'html_data']}); });"}</script>
           result
         }
-    }
-  }
 
   def pagesTree(page: SpecHtmlPage, pages: List[SpecHtmlPage])(implicit ee: ExecutionEnv): TreeLoc[SpecHtmlPage] =
     Tree.unfoldTree((page, (pages, List[SpecHtmlPage]()))) { current =>
@@ -94,7 +90,7 @@ trait TableOfContents {
     </li>
 
 
-  def createHeadersSubtoc(page: SpecHtmlPage, entryMaxSize: Int): NodeSeq = {
+  def createHeadersSubtoc(page: SpecHtmlPage, entryMaxSize: Int): NodeSeq =
     page.body.headersTree.
       bottomUp { (h: Header, s: LazyList[NodeSeq]) =>
       if (h.isRoot)
@@ -108,11 +104,9 @@ trait TableOfContents {
         <ul>{s}</ul> unless s.isEmpty
 
     }.rootLabel
-  }
 
   def saveHtmlPages(pages: List[SpecHtmlPage], fileSystem: FileSystem): Operation[Unit] =
     pages.map(page => fileSystem.writeFile(page.path, page.content)).sequence.void
 
-}
 
 object TableOfContents extends TableOfContents

@@ -21,11 +21,10 @@ class HtmlLinksSpec extends Spec with TypedEqual with ReferenceDsl { def is = s2
   ${ a("user guide" ~ (userGuide, "this one"))      === "<a href='org.specs2.specification.UserGuideSpecification.html' tip='this one'>user guide</a>" }
   """
 
-  def a(f: Fragment) = f match {
+  def a(f: Fragment) = f match
     case Fragment(link : SpecificationRef, _, _) =>
       s"""<a href='${link.url}'${if (link.tooltip.isEmpty) "" else s" tip='${link.tooltip}'"}>${link.linkText}</a>""".trim
     case other => "not a link"
-  }
 
   lazy val userGuide = new UserGuideSpecification
 

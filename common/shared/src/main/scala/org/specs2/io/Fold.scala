@@ -8,7 +8,7 @@ import origami._
 import fp.Show
 import fp.syntax._
 
-object FoldIo {
+object FoldIo:
 
   /** create a fold sink to output lines to a file */
   def showToFilePath[T : Show](path: FilePath): Sink[Action, T] =
@@ -19,4 +19,3 @@ object FoldIo {
     Folds.bracket(Action.pure(new PrintWriter(path.path)))(
       (p: PrintWriter, t: T) => print(t).map(p.write).as(p))(
       (p: PrintWriter) => Finalizer(() => p.close()))
-}

@@ -12,12 +12,11 @@ import org.specs2.fp.syntax._
 // import scala.scalajs.reflect.annotation.EnableReflectiveInstantiation
 // @EnableReflectiveInstantiation
 
-trait ContextualSpecificationStructure {
+trait ContextualSpecificationStructure:
   def structure: Env => SpecStructure
   def fragments = (env: Env) => structure(env).fragments
-}
 
-trait SpecificationStructure extends ContextualSpecificationStructure {
+trait SpecificationStructure extends ContextualSpecificationStructure:
   def is: SpecStructure
   def structure = (env: Env) => decorate(is, env)
   def decorate(is: SpecStructure, env: Env) = map(is.map(fs => map(map(fs, env))))
@@ -28,14 +27,13 @@ trait SpecificationStructure extends ContextualSpecificationStructure {
   def map(fs: =>Fragments): Fragments = fs
   /** modify the fragments, using the current environment */
   def map(fs: =>Fragments, env: Env): Fragments = fs
-}
 
-object SpecificationStructure {
+object SpecificationStructure:
 
   /**
    * create a SpecificationStructure from a class name
    */
-  def create(className: String, classLoader: ClassLoader = Thread.currentThread.getContextClassLoader, env: Option[Env] = None): Operation[SpecificationStructure] = {
+  def create(className: String, classLoader: ClassLoader = Thread.currentThread.getContextClassLoader, env: Option[Env] = None): Operation[SpecificationStructure] =
     lazy val defaultInstances = env.toList.flatMap(_.defaultInstances)
 
     // make sure the instantiated class is a Specification Structure (see #477)
@@ -53,7 +51,6 @@ object SpecificationStructure {
         // try to create the specification from a class name
         createInstance[SpecificationStructure](className, classLoader, defaultInstances).flatMap(asSpecificationStructure)
     }
-  }
 
   /**
    * sort the specifications in topological order where specification i doesn't depend on specification j if i > j
@@ -88,7 +85,7 @@ object SpecificationStructure {
   /** @return all the referenced specifications */
   def specificationsRefs(spec: SpecificationStructure,
                          env: Env,
-                         classLoader: ClassLoader)(refs: (SpecificationStructure, Env) => List[SpecificationRef]): Operation[Seq[SpecificationStructure]] = {
+                         classLoader: ClassLoader)(refs: (SpecificationStructure, Env) => List[SpecificationRef]): Operation[Seq[SpecificationStructure]] =
 
     val byName = (ss: List[SpecificationStructure]) => ss.foldLeft(Vector[(String, SpecificationStructure)]()) { (res, cur) =>
       val name = cur.structure(env).specClassName
@@ -101,18 +98,15 @@ object SpecificationStructure {
         .filterNot { case (n, _) => visited.map(_._1).contains(n) }
 
     Operation.delayed {
-      def getAll(seed: Vector[SpecificationStructure], visited: Vector[(String, SpecificationStructure)]): Vector[SpecificationStructure] = {
+      def getAll(seed: Vector[SpecificationStructure], visited: Vector[(String, SpecificationStructure)]): Vector[SpecificationStructure] =
         if (seed.isEmpty) visited.map(_._2)
-        else {
+        else
           val toVisit: Vector[(String, SpecificationStructure)] = seed.flatMap(s => getRefs(s, visited))
           getAll(toVisit.map(_._2), visited ++ toVisit)
-        }
-      }
       val name = spec.structure(env).specClassName
       val linked = getRefs(spec, Vector((name, spec)))
       getAll(linked.map(_._2), linked :+ ((name, spec)))
     }
-  }
 
   /** @return the class names of all the referenced specifications */
   def referencedSpecificationsRefs(spec: SpecificationStructure, env: Env): List[SpecificationRef] =
@@ -125,4 +119,3 @@ object SpecificationStructure {
   /** @return the class names of all the see specifications */
   def seeSpecificationsRefs(spec: SpecificationStructure, env: Env): List[SpecificationRef] =
     SpecStructure.seeSpecStructuresRefs(env)(spec.structure(env))
-}

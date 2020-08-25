@@ -10,7 +10,7 @@ import quoted._
  *
  * This is currently implemented using stacktraces which is very brittle
  */
-trait Location {
+trait Location:
   /** the file path */
   def path: String
 
@@ -23,33 +23,29 @@ trait Location {
   /** display this location */
   def show: String
 
-}
 
 /**
  * Location created from a Tasty position
  */
-case class PositionLocation(path: String, lineNumber: Int, columnNumber: Int) extends Location {
+case class PositionLocation(path: String, lineNumber: Int, columnNumber: Int) extends Location:
   def show: String =
     s"""$path (line: $lineNumber, column: $columnNumber)"""
-}
 
-object PositionLocation {
+object PositionLocation:
 
     implicit def PositionLiftable: Liftable[PositionLocation] = new Liftable[PositionLocation] {
       def toExpr(location: PositionLocation): (QuoteContext) ?=> Expr[PositionLocation] = { (using qctx: QuoteContext) =>
-        location match {
+        location match
           case PositionLocation(path, line, column) =>
             val pathExpr: Expr[String] = Expr(path)
             val lineExpr: Expr[Int] = Expr(line)
             val columnExpr: Expr[Int] = Expr(column)
             Expr.betaReduce('{PositionLocation.apply})(pathExpr, lineExpr, columnExpr)
-      }
     }
   }
 
-}
 
-case class StacktraceLocation(trace: Seq[StackTraceElement] = (new Exception).getStackTrace.toIndexedSeq) extends Location {
+case class StacktraceLocation(trace: Seq[StackTraceElement] = (new Exception).getStackTrace.toIndexedSeq) extends Location:
   def path: String =
     traceLocation(DefaultStackTraceFilter).map(_.path).getOrElse("no path")
 
@@ -68,4 +64,3 @@ case class StacktraceLocation(trace: Seq[StackTraceElement] = (new Exception).ge
   def show: String =
     s"${getClass.getSimpleName}(${traceLocation(DefaultStackTraceFilter)}})"
 
-}

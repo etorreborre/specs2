@@ -8,9 +8,8 @@ import control.Exceptions._
  *
  * It can be used to pass string properties in SystemProperties and decode them in a specific way
  */
-trait FromString[T] {
+trait FromString[T]:
   def fromString(s: String): Option[T]
-}
 
 object FromString {
 

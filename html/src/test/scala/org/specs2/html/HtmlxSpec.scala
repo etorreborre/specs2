@@ -47,11 +47,10 @@ class HtmlxSpec extends Spec with HtmlDocuments with TypedEqual { def is = s2"""
        .|
        .`- a h2 header""".stripMargin('.').replace("\r", "")
 
-  def headers1 = {
+  def headers1 =
     headers(<body><h1>title1</h1>Some text <h2>title2</h2>Some other text</body>).toList must_=== List(<h1>title1</h1>, <h2>title2</h2>)
-  }
 
-  def anchors1 = {
+  def anchors1 =
     val body = <body><h1>Welcome</h1><h2>hello</h2></body>
     val anchorRegex = "hello_(\\d*)".r
     // anchor id for the "hello" header
@@ -59,5 +58,4 @@ class HtmlxSpec extends Spec with HtmlDocuments with TypedEqual { def is = s2"""
     // anchor id for the "hello" header in the tree
     val id2 = anchorRegex.findFirstIn(body.headersTree.flatten.toSeq(1).anchorName(".").toString)
     id1 === id2
-  }
 }

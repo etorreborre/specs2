@@ -20,13 +20,13 @@ import scala.quoted._
  * It is also possible to check that the result value is correct by using the `check` method.
  *
  */
-trait Snippets {
+trait Snippets:
   /** implicit parameters selected for the creation of Snippets */
   implicit def defaultSnippetParameters[T]: SnippetParams[T] =
     Snippet.defaultParams[T]
 
   /** implicit function modify the Snippet parameters */
-  implicit class SettableSnippet[T](s: Snippet[T]) {
+  implicit class SettableSnippet[T](s: Snippet[T]):
     def set(
        trimExpression: String => String   = defaultParams.trimExpression,
        cutter: String => String           = defaultParams.cutter,
@@ -41,11 +41,9 @@ trait Snippets {
     def offsetIs(offset: Int) = s.copy(params = s.params.offsetIs(offset))
     def eval = s.copy(params = s.params.eval)
     def check[R : AsResult](f: T => R) = s.copy(params = s.params.check(f))
-  }
 
-  implicit class SettableSnippet1[T : AsResult](s: Snippet[T]) {
+  implicit class SettableSnippet1[T : AsResult](s: Snippet[T]):
     def checkOk = s.copy(params = s.params.copy(verify = Some((t: T) => AsResult(t))))
-  }
 
   inline def snippet[T](inline code: =>T)(implicit params: SnippetParams[T]): Snippet[T] =
     ${ Snippets.create[T]('{() => code}, 'params) }
@@ -59,44 +57,37 @@ trait Snippets {
   inline def termName[T](inline t: =>T): String =
     ${ Snippets.termFullName[T]('t) }
 
-}
 
-object Snippets extends Snippets {
+object Snippets extends Snippets:
 
-  def create[T](code: Expr[() => T], params: Expr[SnippetParams[T]])(using qctx: QuoteContext)(using t: Type[T], t1: Type[() => T]): Expr[Snippet[T]] = {
+  def create[T](code: Expr[() => T], params: Expr[SnippetParams[T]])(using qctx: QuoteContext)(using t: Type[T], t1: Type[() => T]): Expr[Snippet[T]] =
     import qctx.tasty._
     val expression = Expr(rootPosition.sourceCode)
     // we need to pass () => T here because betaReduce would evaluate the code here otherwise
     Expr.betaReduce('{(ex: String, c: $t1, ps: SnippetParams[$t]) => createSnippet[$t](ex, c, ps)})(expression, code, params)
-  }
 
   def createSnippet[T](expression: String, code: () => T, params: SnippetParams[T]): Snippet[T] =
     new Snippet[T](code, codeExpression = Some(expression), params)
 
-  def typeSimpleName[T](using qctx: QuoteContext)(using t: Type[T]): Expr[String] = {
+  def typeSimpleName[T](using qctx: QuoteContext)(using t: Type[T]): Expr[String] =
     import qctx.tasty._
     Expr(t.unseal.symbol.name)
-  }
 
-  def typeFullName[T](using qctx: QuoteContext)(using t: Type[T]): Expr[String] = {
+  def typeFullName[T](using qctx: QuoteContext)(using t: Type[T]): Expr[String] =
     import qctx.tasty._
     Expr(t.unseal.symbol.fullName)
-  }
 
-  def termFullName[T](e: Expr[T])(using qctx: QuoteContext): Expr[String] = {
+  def termFullName[T](e: Expr[T])(using qctx: QuoteContext): Expr[String] =
     import qctx.tasty._
-    val name = e.unseal match {
+    val name = e.unseal match
       case Ident(termName)                                    => termName
       case Select(_, termName)                                => termName.toString
       case Inlined(_,_,Apply(Ident(termName),_))              => termName.toString
       case Inlined(_,_,Apply(TypeApply(Ident(termName),_),_)) => termName.toString
       case Inlined(_,_,Select(_,termName))                    => termName.toString
       case other                                              => report.error("The code must be a member selection, or a function application", e);""
-    }
     Expr(name)
-  }
 
-}
 
 /**
  * Captured snippet of code with: a value of type T, a string representing the expression, captured by a macro,
@@ -104,7 +95,7 @@ object Snippets extends Snippets {
  */
 case class Snippet[T](code: () => T,
                       codeExpression: Option[String] = None,
-                      params: SnippetParams[T] = SnippetParams[T]()) {
+                      params: SnippetParams[T] = SnippetParams[T]()):
 
   lazy val execute = code()
 
@@ -114,25 +105,22 @@ case class Snippet[T](code: () => T,
    * show the snippet either taking the expression captured by the macro or another expression passed by the caller
    * (for example in an interpolated s2 string when -Yrangepos is disabled)
    */
-  def show(expression: String = "") = {
+  def show(expression: String = "") =
     val exp     = codeExpression.getOrElse(expression)
     val trimmed = params.trimExpression(exp)
     val cut     = params.cutter(trimmed)
     params.asCode(exp, cut)
-  }
 
-  lazy val result: String = {
+  lazy val result: String =
     val resultAsString = tryOr(execute.notNull)(e => e.getMessage.notNull)
     if (resultAsString == "()") ""
     else                        params.prompt(resultAsString)
-  }
 
   lazy val showResult =
     if (!params.evalCode || result.isEmpty) ""
     else                                    params.asCode(result, result)
 
   def verify = ResultExecution.execute(params.verify.map(f => f(execute)).getOrElse(Success()))
-}
 
 /**
  * Evaluation and display parameters for a Snippet.
@@ -152,26 +140,23 @@ case class SnippetParams[T](
   asCode: (String, String) => String = markdownCode(offset = 0),
   prompt: String => String           = greaterThanPrompt,
   evalCode: Boolean                  = false,
-  verify: Option[T => Result]        = None) {
+  verify: Option[T => Result]        = None):
   def offsetIs(offset: Int) = copy(asCode = markdownCode(offset = offset))
   def eval = copy(evalCode = true)
   def check[R : AsResult](f: T => R) = copy(verify = Some((t: T) => AsResult(f(t))))
-}
 /**
  * Implementation of a function to cut pieces of code by using some comments as markers
  */
 case class ScissorsCutter(cutMarker: String       = scissorsMarker,
-                          cutMarkerFormat: String = scissorsMarkerFormat) extends (String => String) {
-  def apply(text: String) = {
+                          cutMarkerFormat: String = scissorsMarkerFormat) extends (String => String):
+  def apply(text: String) =
     val split = text.split(cutMarkerFormat)
 
     split.zipWithIndex.
       collect { case (s, i) if i % 2 == 0 => s.removeStart("\n").removeEnd("\n") }.
       filter(_.trim.nonEmpty).mkString("\n")
-  }
-}
 
-object Snippet {
+object Snippet:
 
   def defaultParams[T] = SnippetParams[T]()
 
@@ -230,4 +215,3 @@ object Snippet {
 
   lazy val ls = "[ \t\\x0B\f]"
   lazy val parameters = "(\\([^\\)]+\\))*"
-}

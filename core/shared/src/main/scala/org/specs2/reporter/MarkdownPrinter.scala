@@ -13,7 +13,7 @@ import specification.core._
 /**
  * This trait is not a full fledged markdown printer yet
  */
-case class MarkdownPrinter(env: Env) extends Printer {
+case class MarkdownPrinter(env: Env) extends Printer:
 
   def prepare(specifications: List[SpecStructure]): Action[Unit] =
     env.fileSystem.mkdirs(MarkdownOptions.create(env.arguments).outDir).toAction
@@ -22,15 +22,14 @@ case class MarkdownPrinter(env: Env) extends Printer {
     Action.unit
 
   /** @return a Fold for the markdown output */
-  def sink(spec: SpecStructure): AsyncSink[Fragment] = {
+  def sink(spec: SpecStructure): AsyncSink[Fragment] =
     val env1 = env.setArguments(env.arguments.overrideWith(spec.arguments))
     val options = MarkdownOptions.create(env1.arguments)
     val path = options.outDir / FilePath.unsafe(spec.header.className+"."+options.extension)
     FoldIo.printToFilePath[Fragment](path)(f => fragmentToLine(options)(f))
-  }
 
-  def fragmentToLine(options: MarkdownOptions)(fragment: Fragment): Action[String] = {
-    fragment match {
+  def fragmentToLine(options: MarkdownOptions)(fragment: Fragment): Action[String] =
+    fragment match
       case t if Fragment.isText(t) => Action.protect(t.description.show)
 
       case e if Fragment.isExample(e) =>
@@ -54,8 +53,6 @@ case class MarkdownPrinter(env: Env) extends Printer {
 
       case Fragment(ref: SpecificationRef,_,_) => Action.protect(toMarkdown(ref, options))
       case _                                   => Action.pure("")
-    }
-  }
 
   def showDescription(description: String, result: Result): String =
     if (Seq("*", "-").exists(description.trim.startsWith))
@@ -66,18 +63,16 @@ case class MarkdownPrinter(env: Env) extends Printer {
   def toMarkdown(ref: SpecificationRef, options: MarkdownOptions) =
     s"[${ref.linkText}](${options.outDir / FilePath.unsafe(ref.url)})"
 
-}
 
-object MarkdownPrinter {
+object MarkdownPrinter:
   val default = MarkdownPrinter(Env())
-}
 
 case class MarkdownOptions(
   outDir: DirectoryPath,
   extension: String
 )
 
-object MarkdownOptions {
+object MarkdownOptions:
 
   /** create markdown options from arguments */
   def create(arguments: Arguments): MarkdownOptions =
@@ -88,4 +83,3 @@ object MarkdownOptions {
 
   val outDir: DirectoryPath = "target" / "specs2-reports"
   val extension = "md"
-}

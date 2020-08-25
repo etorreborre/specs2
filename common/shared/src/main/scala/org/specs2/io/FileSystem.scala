@@ -14,7 +14,7 @@ import java.util.regex.Matcher.quoteReplacement
 /**
  * Interface for the FileSystem where effects are denoted with the "Operation" type
  */
-case class FileSystem(logger: Logger) extends FilePathReader {
+case class FileSystem(logger: Logger) extends FilePathReader:
 
   /** delete a file */
   def deleteFile(filePath: FilePath): Operation[Boolean] =
@@ -67,55 +67,47 @@ case class FileSystem(logger: Logger) extends FilePathReader {
    *                    an entry as group 1 which will then be used relative
    *                    to dirPath as target path for that entry
    */
-  def unjar(jarUrl: URL, dest: DirectoryPath, regexFilter: String): Operation[Unit] = {
+  def unjar(jarUrl: URL, dest: DirectoryPath, regexFilter: String): Operation[Unit] =
     val regex = compile(regexFilter)
     val uis = jarUrl.openStream()
     val zis = new ZipInputStream(new BufferedInputStream(uis))
 
     @annotation.tailrec
-    def extractEntry(entry: ZipEntry): Unit = {
-      if (entry != null) {
+    def extractEntry(entry: ZipEntry): Unit =
+      if (entry != null)
         val matcher = regex.matcher(entry.getName)
-        if (matcher.matches) {
+        if (matcher.matches)
           val target = matcher.replaceFirst(s"${quoteReplacement(dest.path)}$$1")
-          if (!entry.isDirectory) {
+          if (!entry.isDirectory)
             new File(target).getParentFile.mkdirs
             new File(target).createNewFile
             val fos = new FileOutputStream(target)
             val dest = new BufferedOutputStream(fos, 2048)
-            try {
+            try
               copy(zis, dest)
               dest.flush
-            } finally dest.close
-          }
+            finally dest.close
 
-        }
         extractEntry(zis.getNextEntry)
-      }
-    }
 
     Operation.delayed {
       try     extractEntry(zis.getNextEntry)
       finally zis.close
     }
-  }
 
   /**
    * Copy an input stream to an output stream.
    * @param input input stream
    * @param output output stream
    */
-  private def copy(input: InputStream, output: OutputStream): Unit = {
+  private def copy(input: InputStream, output: OutputStream): Unit =
     val data = new Array[Byte](2048)
-    def readData(count: Int): Unit = {
-      if (count != -1) {
+    def readData(count: Int): Unit =
+      if (count != -1)
         output.write(data, 0, count)
         output.flush
         readData(input.read(data, 0, 2048))
-      }
-    }
     readData(input.read(data, 0, 2048))
-  }
 
   /**
    * copy the content of a directory to another.
@@ -165,4 +157,3 @@ case class FileSystem(logger: Logger) extends FilePathReader {
   def delete(dir: DirectoryPath): Operation[Unit] =
     listFilePaths(dir).flatMap(_.map(delete).toList.sequence.void) >>
     delete(dir.toFilePath) // delete the directory once it is empty
-}

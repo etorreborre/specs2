@@ -80,23 +80,21 @@ class XmlMatchersSpec extends Spec with XmlMatchers with MustExpectations { def 
    when the attribute is ko, but the value is ok $deepPath3
    when the attribute is ko, and the value is ko $deepPath4
    when matching exactly and an attribute is missing $deepPath5
-   when the searched node contains unmatching Podes $deepPath6
+   when the searched node contains unmatching nodes $deepPath6
    when it doesn't contain the same text $deepPath7
-   when it doen't contain the same text even when one is an Atom and the other a Text $deepPath8
+   when it doesn't contain the same text even when one is an Atom and the other a Text $deepPath8
 """
 
-   def match1 = <a> <b/></a> must ==/ {<a>
-             <b/>
-           </a>}
+  def match1 = <a> <b/></a> must ==/ {<a>
+            <b/>
+          </a>}
+  def match2 = <a><b n1="n1" n2="n2"/></a> must ==/(<a><b n2="n2" n1="n1"/></a>)
 
-   def match2 = <a><b n1="n1" n2="n2"/></a> must ==/(<a><b n2="n2" n1="n1"/></a>)
+  def match3 = (<a><b/></a> must ==/(<a> <c/></a>)) returns
+       "<a><b/></a> is not equal to <a> <c/></a>"
 
-   def match3 = (<a><b/></a> must ==/(<a> <c/></a>)) returns
-        "<a><b/></a> is not equal to <a> <c/></a>"
-
-   def match4 = (new Atom("hello").toSeq aka "the seq" must ==/(new Text("world").toSeq)) returns
-        "the seq 'hello' is not equal to world"
-
+  def match4 = (new Atom("hello").toSeq aka "the seq" must ==/(new Text("world").toSeq)) returns
+       "the seq 'hello' is not equal to world"
 
   def path1 = (<a></a> must \("a")) returns "<a></a> doesn't contain subnode 'a'"
 

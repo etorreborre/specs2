@@ -19,7 +19,7 @@ case class Report(
                    _checkUrls :        Option[Boolean]          = None,
                    _notoc:             Option[Boolean]          = None,
                    _notifier:          Option[String]           = None,
-                   _exporter:          Option[String]           = None) extends ShowArgs {
+                   _exporter:          Option[String]           = None) extends ShowArgs:
 
   import Arguments._
 
@@ -38,7 +38,7 @@ case class Report(
   def notifier: String               = _notifier.getOrElse("")
   def exporter: String               = _exporter.getOrElse("")
 
-  def overrideWith(other: Report) = {
+  def overrideWith(other: Report) =
     new Report(
       other._showOnly         .orElse(_showOnly),
       other._failtrace        .orElse(_failtrace),
@@ -53,7 +53,6 @@ case class Report(
       other._notifier         .orElse(_notifier),
       other._exporter         .orElse(_exporter)
     )
-  }
 
   override def toString = List(
     "showOnly"          -> _showOnly,
@@ -69,10 +68,9 @@ case class Report(
     "notifier"          -> _notifier,
     "exporter"          -> _exporter).flatMap(showArg).mkString("Report(", ", ", ")")
 
-}
 
-object Report extends Extract {
-  def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): Report = {
+object Report extends Extract:
+  def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): Report =
     new Report (
       _showOnly          = value("showOnly").orElse(bool("xOnly").map(_ => xonlyFlags)),
       _failtrace         = bool("failTrace"),
@@ -89,11 +87,9 @@ object Report extends Extract {
       _notifier          = value("notifier"),
       _exporter          = value("exporter")
     )
-  }
 
   val xonlyFlags = "#x!"
   val allFlags = "#1x!+-o*"
 
   val allValueNames = Seq("showOnly", "xOnly", "failTrace", "color", "noColor", "colors", "offset", "showTimes",
     "fullStackTrace", "traceFilter", "checkUrls", "noToc", "notifier", "exporter")
-}

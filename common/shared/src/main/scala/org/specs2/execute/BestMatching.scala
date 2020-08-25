@@ -6,7 +6,7 @@ import org.specs2.data.HopcroftKarp._
  * Use of the Hopcroft-Karp (https://en.wikipedia.org/wiki/Hopcroft%E2%80%93Karp_algorithm) algorithm for
  * specs2, to the minimum set of mismatched elements, and corresponding failures
  */
-object BestMatching {
+object BestMatching:
 
   /**
    * This function indexes values of type T and V, and the result of their matching
@@ -14,7 +14,7 @@ object BestMatching {
    *
    * @return matched values with their result and missing values
    */
-  def findBestMatch[T, V, R : AsResult](ts: Seq[T], vs: Seq[V], matchingFunction: (T, V) => R, eachCheck: Boolean = true): (Seq[(T, V, Result)], Seq[V]) = {
+  def findBestMatch[T, V, R : AsResult](ts: Seq[T], vs: Seq[V], matchingFunction: (T, V) => R, eachCheck: Boolean = true): (Seq[(T, V, Result)], Seq[V]) =
     // perform n^2 matches
     val matches: List[(T, Int, V, Int, Result)] =
       ts.zipWithIndex.foldLeft(List[(T, Int, V, Int, Result)]()) { case (res, (t, i)) =>
@@ -46,13 +46,10 @@ object BestMatching {
       (i, (t, v, r))
     }.groupBy(_._1).view.mapValues(_.head._2).values.toList
 
-    def isUnchecked(j: Int) = {
+    def isUnchecked(j: Int) =
       !best.exists(_._2 == j) && (eachCheck || !allResults.exists { case ((i, j1), (_, _, r)) => j1 == j && r.isSuccess })
-    }
 
     val unchecked = vs.zipWithIndex.collect { case (v, j) if isUnchecked(j+ts.size)  => v }
 
     (successes ++ failures.reverse, unchecked)
-  }
 
-}

@@ -11,7 +11,7 @@ import text.AnsiColors
  *
  * Then there will be only 2 lines displayed and not 3 (2 for the first infoLog, 1 for the second one)
  */
-trait BufferedPrinterLogger extends PrinterLogger {
+trait BufferedPrinterLogger extends PrinterLogger:
   def infoLog(msg: String)   : Unit = { val rest = flushText(); add(rest+msg) }
   def errorLog(msg: String)  : Unit = { val rest = flushText(); errorLine(rest+msg)  }
   def failureLog(msg: String): Unit = { val rest = flushText(); failureLine(rest+msg) }
@@ -27,31 +27,26 @@ trait BufferedPrinterLogger extends PrinterLogger {
   private val buffer = new StringBuilder
   private def add(msg: String): Unit = { buffer.append(msg); () }
 
-  private def flushText(force: Boolean = false): String = {
-    if (force) {
+  private def flushText(force: Boolean = false): String =
+    if (force)
       if (!buffer.isEmpty) infoLine(buffer.toString)
       buffer.clear
       ""
-    } else if (endsWith(buffer.toString, "\n")) {
+    else if (endsWith(buffer.toString, "\n"))
       val lines = buffer.toString.split("\n")
       buffer.clear
-      if (lines.size == 1) {
+      if (lines.size == 1)
         infoLine(lines.mkString)
         ""
-      }
-      else {
+      else
         lines.dropRight(1).foreach(infoLine)
         lines.lastOption.getOrElse("")
-      }
-    } else ""
-  }
+    else ""
 
-  private def endsWith(message: String, string: String) = {
+  private def endsWith(message: String, string: String) =
     val nocolor = AnsiColors.removeColors(message)
     nocolor.nonEmpty &&
       nocolor.reverse.
         dropWhile(_ == ' ').
         startsWith(string)
-  }
 
-}

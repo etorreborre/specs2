@@ -6,12 +6,7 @@ import org.specs2.control.Logger
 import java.util.concurrent._
 import scala.concurrent.ExecutionContext
 
-case class ExecutionEnv(executorServices: ExecutorServices,
-                        timeFactor: Int) {
-
-  def shutdown(): Unit =
-    executorServices.shutdownNow()
-
+case class ExecutionEnv(executorServices: ExecutorServices, timeFactor: Int):
   lazy val executionContext         = executorServices.executionContext
   lazy val executorService          = executorServices.executorService
   lazy val scheduledExecutorService = executorServices.scheduledExecutorService
@@ -21,14 +16,16 @@ case class ExecutionEnv(executorServices: ExecutorServices,
   implicit lazy val ses: ScheduledExecutorService = scheduledExecutorService
   implicit lazy val ec: ExecutionContext = executionContext
 
+  def shutdown(): Unit =
+    executorServices.shutdownNow()
+
   def setTimeFactor(tf: Int): ExecutionEnv =
     copy(timeFactor = tf)
 
   def isShutdown: Boolean =
     executorService.isShutdown
-}
 
-object ExecutionEnv {
+object ExecutionEnv:
 
   /** create an ExecutionEnv from an execution context only */
   def fromExecutionContext(ec: =>ExecutionContext): ExecutionEnv =
@@ -36,20 +33,17 @@ object ExecutionEnv {
       ExecutorServices.fromExecutionContext(ec),
       timeFactor = 1)
 
-  def create(arguments: Arguments, systemLogger: Logger, tag: Option[String] = None): ExecutionEnv = {
+  def create(arguments: Arguments, systemLogger: Logger, tag: Option[String] = None): ExecutionEnv =
     ExecutionEnv(
       ExecutorServices.create(arguments, systemLogger, tag),
       timeFactor = arguments.execute.timeFactor)
-  }
 
-  def createSpecs2(arguments: Arguments, systemLogger: Logger, tag: Option[String] = None): ExecutionEnv = {
+  def createSpecs2(arguments: Arguments, systemLogger: Logger, tag: Option[String] = None): ExecutionEnv =
     ExecutionEnv(
       ExecutorServices.createSpecs2(arguments, systemLogger, tag),
       timeFactor = arguments.execute.timeFactor)
-  }
 
   /** create an ExecutionEnv from Scala global execution context */
   def fromGlobalExecutionContext: ExecutionEnv =
     fromExecutionContext(scala.concurrent.ExecutionContext.global)
 
-}

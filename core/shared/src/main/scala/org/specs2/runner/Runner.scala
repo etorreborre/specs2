@@ -12,15 +12,15 @@ import main.Arguments
 /**
  * reusable actions for Runners
  */
-object Runner {
+object Runner:
 
   /**
    * Execute some actions and exit with the proper code if 'exit' is true
    */
-  def execute(action: Action[Stats], env: Env, exit: Boolean): Unit = {
+  def execute(action: Action[Stats], env: Env, exit: Boolean): Unit =
     val logger = env.systemLogger
 
-    action.attempt.runAction(env.specs2ExecutionEnv) match {
+    action.attempt.runAction(env.specs2ExecutionEnv) match
       case Left(t) =>
         logger.exception(t).runVoid()
 
@@ -33,21 +33,17 @@ object Runner {
            exitSystem(0, exit)
         else
           exitSystem(1, exit)
-    }
-  }
 
 
 
   /**
    * Exit the JVM with a given status
    */
-  def exitSystem(status: Int, exit: Boolean): Unit = {
+  def exitSystem(status: Int, exit: Boolean): Unit =
     if (exit) System.exit(status)
-  }
 
-}
 
-case class RunnerLogger(env: Env) {
+case class RunnerLogger(env: Env):
 
   val arguments: Arguments =
     env.arguments
@@ -58,10 +54,10 @@ case class RunnerLogger(env: Env) {
   /**
    * Use the console logging to log exceptions
    */
-  def logThrowable(t: Throwable): Operation[Unit] = {
+  def logThrowable(t: Throwable): Operation[Unit] =
 
     when (!arguments.commandLine.boolOr("silent", false)) {
-      t match {
+      t match
       case UserException(m, throwable) => logException(m, throwable)
 
       case ActionException(warnings, message, exception) =>
@@ -78,9 +74,7 @@ case class RunnerLogger(env: Env) {
         print("\n\nThis looks like a specs2 exception...\nPlease report it with the preceding stacktrace at http://github.com/etorreborre/specs2/issues") >>
           print(" ")
 
-      }
     }
-  }
 
   def logStack(exception: Throwable) =
     exception.chainedExceptions.traverse_(s => print("  caused by " + s.toString)) >>
@@ -98,12 +92,10 @@ case class RunnerLogger(env: Env) {
   /**
    * Log the issues which might have been caused by the user
    */
-  def logUserWarnings(warnings: List[String]): Operation[Unit] = {
+  def logUserWarnings(warnings: List[String]): Operation[Unit] =
     when(warnings.nonEmpty)(print("Warnings:\n")) >>
       warnings.traverse(print).void
-  }
 
   private def print(m: String): Operation[Unit] =
     Operation.delayed(logger.errorLog(m))
 
-}

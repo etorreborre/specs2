@@ -3,13 +3,12 @@ package org.specs2.fp
 /**
  * Inspired from the scalaz (https://github.com/scalaz/scalaz) project
  */
-trait Show[F] {
+trait Show[F]:
 
   def show(f: F): String
 
-}
 
-object Show {
+object Show:
 
   @inline def apply[F](implicit F: Show[F]): Show[F] = F
 
@@ -24,13 +23,10 @@ object Show {
   implicit def intShow: Show[Int] =
     showFromToString[Int]
 
-}
 
-trait ShowSyntax {
+trait ShowSyntax:
 
-  implicit class ShowOps[A : Show](a: A) {
+  implicit class ShowOps[A : Show](a: A):
     def show: String =
       Show.apply[A].show(a)
-  }
 
-}

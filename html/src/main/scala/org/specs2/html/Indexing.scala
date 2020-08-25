@@ -12,7 +12,7 @@ import origami._, Folds._
 /**
  * Fold functions to create index files
  */
-object Indexing {
+object Indexing:
 
   implicit def executionEnv: ExecutionEnv =
     ExecutionEnv.fromGlobalExecutionContext
@@ -42,24 +42,21 @@ object Indexing {
   /** remove quotes from names in order to add as json values */
   def sanitize(name: String): String =
     name.replace("\"", "\\\"")
-}
 
 case class IndexedPage(path: FilePath, title: String, contents: String, tags: IndexedSeq[String])
 
-case class Index(entries: Vector[IndexEntry]) {
+case class Index(entries: Vector[IndexEntry]):
   def add(entry: IndexEntry) = copy(entries :+ entry)
   def add(other: Seq[IndexEntry]) = copy(entries ++ other)
-}
 
-object Index {
+object Index:
 
   val empty = Index(Vector())
 
-  def toJson(index: Index): String = {
+  def toJson(index: Index): String =
     s"""
        |var tipuesearch = {"pages": ${pages(index).mkString("[", ",\n", "]")}};
      """.stripMargin
-  }
 
   def pages(index: Index): Seq[String] =
     index.entries.map(page)
@@ -92,6 +89,5 @@ object Index {
   }
 
   val createIndex = (page: IndexedPage) => Index(Indexing.createEntries(page))
-}
 
 case class IndexEntry(title: String, text: String, tags: IndexedSeq[String], path: FilePath)

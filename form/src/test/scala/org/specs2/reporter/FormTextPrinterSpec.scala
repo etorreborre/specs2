@@ -11,7 +11,7 @@ class FormTextPrinterSpec(val env: Env) extends Specification with specification
 
 """
 
-  def printed = {
+  def printed =
     val logger = PrinterLogger.stringPrinterLogger
     val env1 = ownEnv.setPrinterLogger(logger).setArguments(Arguments())
     Reporter.create(List(TextPrinter(env1)), env1).report(addressFormSpecStructure).runOption(env1.executionEnv)
@@ -20,7 +20,6 @@ class FormTextPrinterSpec(val env: Env) extends Specification with specification
        |[info]   + | Address           |
        |[info]     | street: Oxford St |
        |[info]     | number: 20        |""".stripMargin)
-  }
 
   val addressFormSpecStructure = s2"""
 

@@ -7,7 +7,7 @@ import org.specs2.execute.{Result, StandardResults}
 /**
  * This trait provides implicit definitions to transform any value into a ShouldExpectable
  */
-trait ShouldExpectations extends Expectations {
+trait ShouldExpectations extends Expectations:
   implicit def akaShould[T](tm: Expectable[T]): ShouldExpectable[T] = new ShouldExpectable(() => tm.valueDefinition()) {
     override private[specs2] val desc = tm.desc
     override private[specs2] val showValueAs = tm.showValueAs
@@ -24,15 +24,13 @@ trait ShouldExpectations extends Expectations {
     override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = super.applyMatcher(m)
     override def check[S >: T](r: MatchResult[S]): MatchResult[S] = checkFailure(r)
   }
-}
 /**
  * This trait can be used to remove aka and should methods on any value
  */
-trait NoShouldExpectations extends ShouldExpectations {
+trait NoShouldExpectations extends ShouldExpectations:
   override def akaShould[T](tm: Expectable[T]) = super.akaShould(tm)
   override def thisValue[T](t: =>T): ShouldExpectable[T] = super.thisValue(t)
   override def thisBlock(t: =>Nothing): ShouldExpectable[Nothing] = super.thisBlock(t)
-}
 
 object ShouldExpectations extends ShouldExpectations
 
@@ -42,7 +40,7 @@ object ShouldExpectations extends ShouldExpectations
  */
 trait ShouldThrownExpectations extends ShouldThrownExpectables with StandardResults with StandardMatchResults
 
-trait ShouldThrownExpectables extends ThrownExpectations with ShouldExpectations {
+trait ShouldThrownExpectables extends ThrownExpectations with ShouldExpectations:
   override implicit def akaShould[T](tm: Expectable[T]): ShouldExpectable[T] = new ShouldExpectable(() => tm.valueDefinition()) {
     override private[specs2] val desc = tm.desc
     override private[specs2] val showValueAs = tm.showValueAs
@@ -56,6 +54,5 @@ trait ShouldThrownExpectables extends ThrownExpectations with ShouldExpectations
     override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = super.applyMatcher(m)
     override def check[S >: T](r: MatchResult[S]): MatchResult[S] = checkFailure(r)
   }
-}
 
 object ShouldThrownExpectations extends ShouldThrownExpectations

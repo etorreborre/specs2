@@ -102,23 +102,20 @@ Details
 
   def d1 = List(1, 2) must be_===( List("1", "2") ) must beFailing
 
-  def d2 = {
+  def d2 =
     ("hello" must_== Hello()) must beFailing(
         "\\Qhello: java.lang.String != hello: org.specs2.matcher.Hello\\E")
-  }
 
   def d3 = { List("1, 2") must be_===( List("1", "2") ) must beFailing }
 
   def d4= { Map(1 -> "2") must be_===( Map(1 -> 2) ) must beFailing( "\\QMap(1 -> {'2' != 2})\\E" ) }
 
-  def mutableMap(kv: (Int, Int)*): scala.collection.mutable.Map[Int, Int] = {
+  def mutableMap(kv: (Int, Int)*): scala.collection.mutable.Map[Int, Int] =
     val map = new scala.collection.mutable.HashMap[Int, Int]
     kv.foreach { case (k, v) => map.put(k, v) }
     map
-  }
 
-  implicit class NormalizeOps(m: MatchResult[_]) {
+  implicit class NormalizeOps(m: MatchResult[_]):
     def normalized: String =
       m.message.removeColors.trim
-  }
 }

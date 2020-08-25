@@ -9,18 +9,16 @@ import text.Regexes._
 /**
  * This trait filters an Exception stacktrace
  */
-trait StackTraceFilter {
+trait StackTraceFilter:
   /** @return the filtered stacktrace */
   def apply(e: Seq[StackTraceElement]): Seq[StackTraceElement]
   /** @return an exception with a filtered stacktrace */
   def apply[T <: Throwable](t: T): T = t.filter((st: Seq[StackTraceElement]) => apply(st))
-}
 
-object StackTraceFilter {
+object StackTraceFilter:
   def apply(f: StackTraceElement => Boolean) = new StackTraceFilter {
     override def apply(e: Seq[StackTraceElement]): Seq[StackTraceElement] = e.filter(f)
   }
-}
 
 /**
  * Implementation of the StackTraceFilter trait with a list of include/exclude patterns
@@ -49,8 +47,8 @@ case class IncludeExcludeStackTraceFilter(include: Seq[String], exclude: Seq[Str
  * .*specs2,eclipse  ==> include .*specs2,scala traces and eclipse traces
  *
  */
-object IncludeExcludeStackTraceFilter {
-  def fromString(s: String): StackTraceFilter = {
+object IncludeExcludeStackTraceFilter:
+  def fromString(s: String): StackTraceFilter =
     val split = s.split("/").toSeq
     if (split.size == 0)
       new IncludeExcludeStackTraceFilter(Seq[String](), Seq[String]())
@@ -60,8 +58,6 @@ object IncludeExcludeStackTraceFilter {
       new IncludeExcludeStackTraceFilter(split(0).splitTrim(","), split(1).splitTrim(","))
     else
       new IncludeExcludeStackTraceFilter(split(0).splitTrim(","), split.drop(1).mkString(",").splitTrim(","))
-  }
-}
 
 /**
  * default filter for specs2 runs
@@ -75,18 +71,17 @@ object DefaultStackTraceFilter extends
         // originated from the user specification class
         // and doesn't get filtered out
         "setStacktrace\\(", "checkFailure\\(",
-        "^sbt\\.", "^com.intellij", "^org.junit", "^org.eclipse.jdt")) with ExecutionOrigin {
+        "^sbt\\.", "^com.intellij", "^org.junit", "^org.eclipse.jdt")) with ExecutionOrigin:
 
-  override def apply(e: Seq[StackTraceElement]): Seq[StackTraceElement] = {
+  override def apply(e: Seq[StackTraceElement]): Seq[StackTraceElement] =
     val filtered =
       if (isSpecificationFromSpecs2(e)) e.dropWhile(t => !isSpecificationFromSpecs2(Seq(t)))
       else                                      super.apply(e)
 
     if (filtered.size >= 1000) filtered.take(200) ++ truncated(filtered.size) ++ filtered.takeRight(200)
     else filtered
-  }
 
-  private def truncated(size: Int): Seq[StackTraceElement] = {
+  private def truncated(size: Int): Seq[StackTraceElement] =
     def trace(message: String) = new StackTraceElement(message, " "*(70 - message.length), "", 0)
     Seq(trace("="*70)) ++
     Seq.fill(10)(trace("...")) ++
@@ -94,12 +89,9 @@ object DefaultStackTraceFilter extends
     Seq(trace("....    re-run with 'fullstacktrace' to see the complete stacktrace")) ++
     Seq.fill(10)(trace("...")) ++
     Seq(trace("="*70))
-  }
-}
 /**
  * This filter doesn't do anything
  */
-object NoStackTraceFilter extends StackTraceFilter {
+object NoStackTraceFilter extends StackTraceFilter:
   /** @return the filtered stacktrace */
   def apply(e: Seq[StackTraceElement]) = e
-}

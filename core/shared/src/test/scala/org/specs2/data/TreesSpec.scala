@@ -40,13 +40,12 @@ class TreesSpec extends Specification with DataTables with Expectations { def is
   def pruning3 = pruneAndDraw(tree3, prune) must beTree("0")
   def pruning4 = pruneAndDraw(tree4, prune) must beTree("None")
 
-  def treeLoc1 = {
+  def treeLoc1 =
    "tree"  | "size" |>
     tree   ! 6      |
     tree1  ! 3      |
     tree2  ! 3      |
     tree3  ! 3      | { (tree, size) => tree.loc.size must_== size }
-  }
 
   // note that the TreeLoc stays at the root after the addition of the child Node
   def treeLoc2 = tree1.loc.addChild(3).tree.drawTree must beTree(
@@ -58,10 +57,9 @@ class TreesSpec extends Specification with DataTables with Expectations { def is
     "|",
     "`- 3")
 
-  def flattenTree1 = {
+  def flattenTree1 =
     val tree = tree3.loc.addChild(4).tree
     tree.flattenLeft aka "flattenLeft" must_== tree.flatten
-  }
 
 
  /**

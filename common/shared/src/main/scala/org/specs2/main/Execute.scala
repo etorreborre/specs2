@@ -23,7 +23,7 @@ case class Execute(
                     _batchSize:            Option[Int]              = None,
                     _timeFactor:           Option[Int]              = None,
                     _timeout:              Option[FiniteDuration]   = None,
-                    _executor:             Option[String]           = None) extends ShowArgs {
+                    _executor:             Option[String]           = None) extends ShowArgs:
 
   def plan: Boolean                   = _plan.getOrElse(false)
   def skipAll: Boolean                = _skipAll.getOrElse(false)
@@ -43,7 +43,7 @@ case class Execute(
   def setTimeout(t: FiniteDuration)   = copy(_timeout = Some(t))
   def executor: String                = _executor.getOrElse("")
 
-  def overrideWith(other: Execute) = {
+  def overrideWith(other: Execute) =
     new Execute(
       other._plan                .orElse(_plan),
       other._skipAll             .orElse(_skipAll),
@@ -62,7 +62,6 @@ case class Execute(
       other._timeout             .orElse(_timeout),
       other._executor            .orElse(_executor)
     )
-  }
 
   override def toString =
     List(
@@ -83,10 +82,9 @@ case class Execute(
       "timeout"              -> _timeout             ,
       "executor"             -> _executor            ).flatMap(showArg).mkString("Execute(", ", ", ")")
 
-}
 
-object Execute extends Extract {
-  def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): Execute = {
+object Execute extends Extract:
+  def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): Execute =
     new Execute (
       _plan                 = bool("plan"),
       _skipAll              = bool("skipAll"),
@@ -105,7 +103,5 @@ object Execute extends Extract {
       _timeout              = int("timeout").map(_.millis),
       _executor             = value("executor")
     )
-  }
   val allValueNames = Seq("plan", "skipAll", "stopOnFail", "stopOnError", "stopOnIssue", "stopOnSkip", "sequential",
     "asap", "useCustomClassLoader", "threadsNb", "specs2ThreadsNb", "scheduledThreadsNb", "batchSize", "timeFactor", "timeout", "executor")
-}

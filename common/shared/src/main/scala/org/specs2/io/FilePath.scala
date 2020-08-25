@@ -10,7 +10,7 @@ import java.util.UUID
  *
  * It has a parent directory and a name
  */
-case class FilePath(dir: DirectoryPath, name: FileName) {
+case class FilePath(dir: DirectoryPath, name: FileName):
 
   /** @return the root directory containing this file */
   def root: DirectoryPath = dir.root
@@ -50,13 +50,11 @@ case class FilePath(dir: DirectoryPath, name: FileName) {
   /** @return true if this file path is relative */
   def isRelative = !isAbsolute
 
-}
 
-object FilePath {
+object FilePath:
   def apply(n: FileName): FilePath = FilePath(DirectoryPath.Root, n)
   def apply(uuid: UUID): FilePath = apply(FileName(uuid))
 
   def unsafe(s: String): FilePath = DirectoryPath.unsafe(s).toFilePath
   def unsafe(f: File): FilePath   = DirectoryPath.unsafe(f).toFilePath
   def unsafe(uri: URI): FilePath  = DirectoryPath.unsafe(uri).toFilePath
-}

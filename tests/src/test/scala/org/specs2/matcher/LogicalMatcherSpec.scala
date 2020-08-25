@@ -91,7 +91,7 @@ Custom
 """
 
   def not1 = "eric" must not(beMatching("c.*"))
-  def not2 = {
+  def not2 =
     // see #684
     MustThrownMatchers.theValue("eric") must
       // the matcher does not throw an exception
@@ -99,7 +99,6 @@ Custom
       // setMessage will catch it, change the message, rethrow the exception
       // the second 'not' will catch the exception and turn it to a success
       beMatching("e.*").not.setMessage("wrong").not
-  }
 
   def or1 = "eric" must (beMatching("e.*") or beMatching(".*c"))
   def or2 = "eric" must (beMatching("a.*") or beMatching(".*z")).not
@@ -108,17 +107,15 @@ Custom
   def or5 = ("eric" must (beMatching("a.*") or beMatching("z.*"))) returns
             "'eric' doesn't match 'a.*'; 'eric' doesn't match 'z.*'"
 
-  def or6 = {
+  def or6 =
     import MustThrownMatchers._
     createMustExpectable("eric").must(MustThrownMatchers.beMatching("a.*") or MustThrownMatchers.beMatching("e.*"))
-  }
 
   def or7 = ("eric" must be matching("e.*")) or ("eric" must be matching(".*d"))
-  def or8 = {
+  def or8 =
     val out = new StringOutput {}
     ("eric" must be matching("e.*")) or { out.println("DON'T"); "torreborre" must be matching(".*tor.*") }
     out.messages must not(contain("DON'T"))
-  }
 
   def or9 = ((true === false) or (true === true) or (true === false)) must beSuccessful
 
@@ -130,11 +127,10 @@ Custom
 
   def and1 = "eric" must be matching("e.*") and be matching(".*c")
   def and2 = ("eric" must be matching("e.*")) and ("torreborre" must be matching(".*tor.*"))
-  def and3 = {
+  def and3 =
     val out = new StringOutput {}
     ("eric" must be matching("x.*")) and { out.println("DON'T"); "torreborre" must be matching(".*tor.*") }
     out.messages must not(contain("DON'T"))
-  }
   def and4 = ((true === true) and (true === false) and (true === true)) must beFailing
 
   def skip1 = 1 must be_==(1).orSkip
@@ -161,17 +157,15 @@ Custom
           (-12 must not(bePositive))
 
   // HELPERS
-  case class CustomMatcher[T : Numeric]() extends Matcher[T] {
+  case class CustomMatcher[T : Numeric]() extends Matcher[T]:
     def apply[S <: T](e: Expectable[S]) =
       result(implicitly[Numeric[T]].abs(e.value) == e.value, s"${e.value} is positive", s"${e.value}   is negative", e)
-  }
   /** this allows to write "a must not bePositive" or "a must be positive" */
   lazy val outer = this
   implicit def anyBePositive[T : Numeric](result: MatchResult[T]): AnyBePositive[T] = new AnyBePositive(result)
-  class AnyBePositive[T : Numeric](result: MatchResult[T]) {
+  class AnyBePositive[T : Numeric](result: MatchResult[T]):
     def bePositive: MatchResult[T] = result(outer.bePositive)
     def positive: MatchResult[T] = result(outer.bePositive)
-  }
 
   /** custom matcher */
   def bePositive[T : Numeric]: Matcher[T] = CustomMatcher[T]()

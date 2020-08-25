@@ -20,7 +20,7 @@ import main.Arguments
  * according to the needs of each Printer (see the Printer doc)
  */
 
-trait Reporter {
+trait Reporter:
 
   def report(specs: List[SpecStructure]): Action[Stats]
 
@@ -28,12 +28,11 @@ trait Reporter {
   def report(specs: SpecStructure*): Action[Stats] =
     report(specs.toList)
 
-}
 
 /**
  * Default implementation of a Reporter using specs2 Printers
  */
-case class DefaultReporter(statistics: Statistics, statisticsRepository: StatisticsRepository, selector: Selector, executor: Executor, printers: List[Printer], env: Env) extends Reporter {
+case class DefaultReporter(statistics: Statistics, statisticsRepository: StatisticsRepository, selector: Selector, executor: Executor, printers: List[Printer], env: Env) extends Reporter:
 
   def report(specs: List[SpecStructure]): Action[Stats] = for {
     _     <- prepare(specs)
@@ -51,7 +50,7 @@ case class DefaultReporter(statistics: Statistics, statisticsRepository: Statist
    * report 1 spec structure with the given printers
    * first find and sort the referenced specifications and report them
    */
-  def reportOne(spec: SpecStructure): Action[Stats] = {
+  def reportOne(spec: SpecStructure): Action[Stats] =
     val executing =
       statistics.readStats(spec) |>
       selector.select(spec.arguments) |>
@@ -66,12 +65,11 @@ case class DefaultReporter(statistics: Statistics, statisticsRepository: Statist
     val reportFold = sinks *> Statistics.fold
 
     contents.fold(reportFold)
-  }
 
   /**
    * Use a Fold to store the stats of each example + the stats of the specification
    */
-  private def statsStoreSink(spec: SpecStructure): AsyncSink[Fragment] = {
+  private def statsStoreSink(spec: SpecStructure): AsyncSink[Fragment] =
     val arguments = env.arguments.overrideWith(spec.arguments)
     val neverStore = arguments.store.never
     val resetStore = arguments.store.reset
@@ -90,20 +88,16 @@ case class DefaultReporter(statistics: Statistics, statisticsRepository: Statist
       unless(neverStore)(statisticsRepository.storeStatistics(spec.specClassName, stats)).toAction
 
     (Statistics.fold <* fromStart(prepare) <* sink).mapFlatten(last)
-  }
 
-}
 
-object Reporter {
+object Reporter:
 
-  def create(printers: List[Printer], env: Env): Reporter = {
+  def create(printers: List[Printer], env: Env): Reporter =
     val arguments = env.arguments
     val statistics = DefaultStatistics(arguments, env.statisticsRepository)
     val selector = Arguments.instance[Selector](arguments.select.selector).getOrElse(DefaultSelector(arguments))
     val executor = Arguments.instance[Executor](arguments.execute.executor).getOrElse(DefaultExecutor(env))
     DefaultReporter(statistics, env.statisticsRepository, selector, executor, printers, env)
-  }
 
   def createCustomInstance(customInstances: CustomInstances): Operation[Option[Reporter]] =
     customInstances.createCustomInstance[Reporter]("reporter", (m: String) => "a custom reporter can not be instantiated " + m, "no custom reporter defined, using the default one")
-}

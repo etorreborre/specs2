@@ -37,23 +37,19 @@ class DebugSpec extends Specification { def is = s2"""
   case class Value(i: Int)
 }
 
-trait output extends MustThrownMatchers {
+trait output extends MustThrownMatchers:
   private val msgs = ListBuffer[String]()
    def messages = msgs.toList
 
   // this implicit intercepts appended messages from the calls to 'pp'
   implicit def debug[T](t: =>T): Debuggable[T] = new DebuggableMock(t)
-  class DebuggableMock[T](t: =>T) extends Debuggable(t) with StringOutput {
+  class DebuggableMock[T](t: =>T) extends Debuggable(t) with StringOutput:
     override def append(msg: String): Unit = { msgs += msg; () }
-  }
 
   implicit def printable[T](t: =>T): Printable[T] = new Printable(t)
-  class Printable[T](t: =>T) {
-    def prints(results: String*) = {
+  class Printable[T](t: =>T):
+    def prints(results: String*) =
       t
       if (results == Seq("nothing")) messages must beEmpty
       else                           messages must be_==(results)
-    }
-  }
   val nothing = "nothing"
-}

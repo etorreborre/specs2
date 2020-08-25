@@ -4,7 +4,7 @@ import java.util.concurrent.{Executors, ScheduledExecutorService, TimeUnit}
 
 import scala.concurrent.duration.FiniteDuration
 
-object Schedulers {
+object Schedulers:
 
   lazy val threadsNb = Runtime.getRuntime.availableProcessors
 
@@ -20,10 +20,9 @@ object Schedulers {
 
   def schedulerFromScheduledExecutorService(s: ScheduledExecutorService): Scheduler =
     new Scheduler {
-      def schedule(action: =>Unit, duration: FiniteDuration): () => Unit = {
+      def schedule(action: =>Unit, duration: FiniteDuration): () => Unit =
         val scheduled = s.schedule(new Runnable { def run(): Unit = action }, duration.toNanos, TimeUnit.NANOSECONDS)
         () => { scheduled.cancel(false); () }
-      }
 
       def shutdown(): Unit =
         s.shutdown
@@ -32,4 +31,3 @@ object Schedulers {
     }
 
 
-}

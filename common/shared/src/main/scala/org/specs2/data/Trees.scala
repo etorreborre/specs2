@@ -12,7 +12,7 @@ trait Trees { outer =>
   /**
    * Implicit definition to add more functionalities to the Tree trait
    */
-  implicit class Treex[A](t: Tree[A]) {
+  implicit class Treex[A](t: Tree[A]):
     def bottomUp[B](f: ((A, LazyList[B]) => B)) = outer.bottomUp(t, f)
     def prune[B](f: A => Option[B]): Option[Tree[B]] = outer.prune(t, f)
     def prune(f: Tree[A] => Option[A])(implicit initial: A): Tree[A] = outer.prune(t, f)(initial)
@@ -20,14 +20,12 @@ trait Trees { outer =>
     def flattenLeft       = outer.flattenLeft(t)
     def size              = t.flatten.size
     def allPaths          = outer.allPaths(t)
-  }
 
   /**
    * This implicit can be used to remove None nodes in a Tree
    */
-  implicit class CleanedTree[A](t: Tree[Option[A]]) {
+  implicit class CleanedTree[A](t: Tree[Option[A]]):
     def clean(implicit initial: A): Tree[A] = outer.clean(t)(initial)
-  }
 
   /**
    * map a Tree from leaves to root by replacing each node with the result of a function taking
@@ -36,10 +34,9 @@ trait Trees { outer =>
    * This is used in JUnit to map a Tree[Description] where no Description objects are related to a Tree[Description]
    * where each node returns the children nodes on the "getChildren" method
    */
-  def bottomUp[A, B](t: Tree[A], f: ((A, LazyList[B]) => B)): Tree[B] = {
+  def bottomUp[A, B](t: Tree[A], f: ((A, LazyList[B]) => B)): Tree[B] =
     val tbs = t.subForest.map(t => bottomUp(t, f))
     Node(f(t.rootLabel, tbs.map(_.rootLabel)), tbs)
-  }
 
   /**
    * remove None nodes from a tree
@@ -50,12 +47,11 @@ trait Trees { outer =>
   /**
    * remove nodes from a tree if they are None according to a function f
    */
-  def prune[A, B](t: Tree[A], f: A => Option[B]): Option[Tree[B]] = {
+  def prune[A, B](t: Tree[A], f: A => Option[B]): Option[Tree[B]] =
     val tbs = t.subForest.flatMap(t => prune(t, f))
     f(t.rootLabel).map { root =>
       Node(root, tbs)
     }
-  }
 
   /**
    * remove nodes from a tree if they are None according to a function f
@@ -76,7 +72,7 @@ trait Trees { outer =>
   /**
    * Implicit definition to add more functionalities to the TreeLoc class
    */
-  implicit class TreeLocx[T](t: TreeLoc[T]) {
+  implicit class TreeLocx[T](t: TreeLoc[T]):
     def parentLocs = outer.parentLocs(t)
     def size = outer.size(t)
     def getParent = t.parent.getOrElse(t)
@@ -84,7 +80,6 @@ trait Trees { outer =>
     def addChild(c: T) = t.insertDownLast(Leaf(c)).getParent
     def addFirstChild(c: T) = t.insertDownFirst(Leaf(c)).getParent
     def insertDownLast(c: T) = t.insertDownLast(Leaf(c))
-  }
 
   /**
    * @return the number of nodes in a TreeLoc
@@ -95,18 +90,16 @@ trait Trees { outer =>
    * @return all the paths from root to leaves
    */
   def allPaths[A](tree: Tree[A]): List[List[A]] =
-    tree.subForest.toList match {
+    tree.subForest.toList match
       case Nil => List(List(tree.rootLabel))
       case subForests => subForests.flatMap(subTree => allPaths(subTree).map(p => tree.rootLabel :: p))
-    }
 
   /**
    * @return the list of all parent locs from a given TreeLoc
    */
-  def parentLocs[T](t: TreeLoc[T], ps: Seq[TreeLoc[T]] = Vector()): Seq[TreeLoc[T]] = t.parent match {
+  def parentLocs[T](t: TreeLoc[T], ps: Seq[TreeLoc[T]] = Vector()): Seq[TreeLoc[T]] = t.parent match
     case Some(p) => parentLocs(p, p +: ps)
     case None    => ps
-  }
 
   implicit def treeLocIsSized[T]: Sized[TreeLoc[T]] = new Sized[TreeLoc[T]] {
     def size(t: TreeLoc[T]) : Int = t.size

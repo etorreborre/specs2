@@ -86,16 +86,14 @@ trait XmlBaseMatchers { outer =>
 private[specs2]
 trait XmlBeHaveMatchers extends BeHaveMatchers { outer: XmlBaseMatchers =>
   implicit def toXmlResultMatcher(result: MatchResult[Seq[Node]]) : XmlResultMatcher = new XmlResultMatcher(result)
-  class XmlResultMatcher(result: MatchResult[Seq[Node]]) {
+  class XmlResultMatcher(result: MatchResult[Seq[Node]]):
     def equalToIgnoringSpace(node: Seq[Node]) = result(outer.equalToIgnoringSpace(node))
     def ==/(node: Seq[Node]) = result(outer.==/(node))
-  }
   implicit def toNeutralMatcherElem(result: NeutralMatcher[Any]) : NeutralMatcherElem = new NeutralMatcherElem(result)
-  class NeutralMatcherElem(result: NeutralMatcher[Any]) {
+  class NeutralMatcherElem(result: NeutralMatcher[Any]):
     def ==/(node: Seq[Node]) = outer.==/(node) ^^ { (e: Elem) => e.toSeq }
-  }
   implicit def toNotMatcherElem(result: NotMatcher[Any]) : NotMatcherElem = new NotMatcherElem(result)
-  class NotMatcherElem(result: NotMatcher[Any]) {
+  class NotMatcherElem(result: NotMatcher[Any]):
     def ==/(node: Seq[Node]) = (outer.==/(node) ^^ { (e: Elem) => e.toSeq }).not
     def \\(node: Node, attributes: String*) = outer.\\(node, attributes:_*).not
     def \\(node: Node) = outer.\\(node).not
@@ -112,37 +110,31 @@ trait XmlBeHaveMatchers extends BeHaveMatchers { outer: XmlBaseMatchers =>
       outer.\(node, attributeValues1, attributeValues:_*).not
     def \(label: String, attributeValues1: (String, String), attributeValues: (String, String)*) =
       outer.\(label, attributeValues1, attributeValues:_*).not
-  }
 }
 /**
  * Matcher for equalIgnoreSpace comparison, ignoring the nodes order
  */   
-class EqualIgnoringSpaceMatcher(node: Seq[Node]) extends Matcher[Seq[Node]] with XmlMatcherKoMessage {
-  def apply[S <: Seq[Node]](n: Expectable[S]) = {
+class EqualIgnoringSpaceMatcher(node: Seq[Node]) extends Matcher[Seq[Node]] with XmlMatcherKoMessage:
+  def apply[S <: Seq[Node]](n: Expectable[S]) =
 
     result(isEqualIgnoringSpace(node.toList, n.value.toList),
            n.description + " is equal to " + q(node),
            koMessage(n, node), n)
-  }
   def ordered = new EqualIgnoringSpaceMatcherOrdered(node)
-}
 /**
  * Matcher for equalIgnoreSpace comparison, considering the node order
  */   
-class EqualIgnoringSpaceMatcherOrdered(node: Seq[Node]) extends Matcher[Seq[Node]] with XmlMatcherKoMessage {
-  def apply[S <: Seq[Node]](n: Expectable[S]) = {
+class EqualIgnoringSpaceMatcherOrdered(node: Seq[Node]) extends Matcher[Seq[Node]] with XmlMatcherKoMessage:
+  def apply[S <: Seq[Node]](n: Expectable[S]) =
     result(isEqualIgnoringSpaceOrdered(node.toList, n.value.toList),
            n.description + " is equal to " + q(node),
            koMessage(n, node), n)
-  }
-}
 
-trait XmlMatcherKoMessage {
+trait XmlMatcherKoMessage:
   def koMessage[S <: Seq[Node]](n: Expectable[S], node: Seq[Node]) =
     (n.description + " is not equal to " + q(node)) +
       (if (n.value.toString() == node.toString)
         "\nThe nodes have the same representation but contain different elements like <n>{\"a\"} b</n> (which is <n>Text(\"a\") b</n>) and <n>a b</n>" else "")
-}
 
 /**
  * The XmlMatcher class matches an xml Node, or a list of Nodes against a list of search functions, which can either search for:<ul>
@@ -154,19 +146,18 @@ trait XmlMatcherKoMessage {
  * search function which tries to match the result of the preceding function. For example<pre>
  * <a><b><c><d></d></c></b></a> must \\("c").\("d")</pre> will be ok.
 */
-case class XmlMatcher(functions: Seq[PathFunction]) extends Matcher[Seq[Node]] {
+case class XmlMatcher(functions: Seq[PathFunction]) extends Matcher[Seq[Node]]:
   /** do an exact match on attributes and attributes values */
   def exactly = XmlMatcher(functions.map(_.exactly))
   /**
    * checks that the `nodes` satisfy the `functions`
    */
-  def apply[S <: Seq[Node]](n: Expectable[S]) = {
+  def apply[S <: Seq[Node]](n: Expectable[S]) =
     val nodes = n
     val (success, okMessage, koMessage) = checkFunctions(functions, nodes.value, (true, "", ""))
     result(success, 
            nodes.description + okMessage, 
            nodes.description + koMessage, nodes) 
-  }
 
   def \(node: Node, attributeNames: String*): XmlMatcher = 
     new XmlMatcher(functions :+ new PathFunction(node, firstNodeSearch _, attributeNames.toList))
@@ -201,10 +192,10 @@ case class XmlMatcher(functions: Seq[PathFunction]) extends Matcher[Seq[Node]] {
    * checks that the `nodes` satisfy the `functions`
    * @return a MatcherResult
    */
-  def checkFunctions(pathFunctions: Seq[PathFunction], nodes: Seq[Node], messages: (Boolean, String, String)): (Boolean, String, String) = {
+  def checkFunctions(pathFunctions: Seq[PathFunction], nodes: Seq[Node], messages: (Boolean, String, String)): (Boolean, String, String) =
     // check the rest of the functions, with the nodes returned by the current function
     // and build a MatcherResult being a success if the function retrieves some node
-    pathFunctions match {
+    pathFunctions match
       case search :: functions => {
          val nextNodes = search(nodes)
          val searched  = search.searchedElements
@@ -217,16 +208,13 @@ case class XmlMatcher(functions: Seq[PathFunction]) extends Matcher[Seq[Node]] {
          else checkFunctions(functions, nextNodes, (true, newOk, newKo))
       }
       case _ => messages
-    }
-  }
-}  
 
 /**
  * This object provides XPath functions in order to use them as parameters
  */
 private[specs2]
 object XPathFunctions extends XPathFunctions
-trait XPathFunctions {
+trait XPathFunctions:
   type XPathFunction = Function2[Node, String, NodeSeq]
   /**
    * @return the \ XPath function
@@ -237,7 +225,6 @@ trait XPathFunctions {
    * @return the \\ XPath function
    */
   def deepNodeSearch(node: Node, label: String) = node \\ label  
-}
 
 /**
  * The PathFunction object encapsulate a search for a node and/or attributes or attributeValues with an XPath function
@@ -249,7 +236,7 @@ case class PathFunction(val node: Node,
                         val attributeValues: Map[String, String] = Map(),
                         exactMatch: Boolean = false,
                         textMessage: Option[String] = None,
-                        textMatcher: Matcher[String] = AlwaysMatcher[String]()) extends Function1[Seq[Node], Seq[Node]] with XPathFunctions {
+                        textMatcher: Matcher[String] = AlwaysMatcher[String]()) extends Function1[Seq[Node], Seq[Node]] with XPathFunctions:
 
   /**
    * @return the node if it is found and matching the searched attributes and/or attribute values when specified
@@ -277,7 +264,7 @@ case class PathFunction(val node: Node,
   /**
    * @return a string representing the searched nodes, attributes, attribute values
    */
-  def searchedElements = {
+  def searchedElements =
     val n = if (node.child.isEmpty) nodeLabel
             else node.toString
 
@@ -286,11 +273,8 @@ case class PathFunction(val node: Node,
                 else Some("with "+exactly+"attributes: " + searchedAttributes)
 
     Seq(Some(n), attrs, textMessage).flatten.mkString(" ")
-  }
 
-}
-private[specs2] object StringToElem {
+private[specs2] object StringToElem:
   implicit def toElement(s: String): ToElem = new ToElem(s)
   class ToElem(s: String) { def toElem: Elem = Elem(null, s, Null, TopScope, true) }
   implicit def toNode(s: String): Elem = Elem(null, s, Null, TopScope, true)
-}

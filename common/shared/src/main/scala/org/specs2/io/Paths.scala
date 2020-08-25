@@ -7,9 +7,8 @@ package io
  */
 private[specs2]
 trait Paths { outer =>
-  implicit class Path(s: String) {
+  implicit class Path(s: String):
     def unixize = s.replace("\\", "/")
-  }
 }
 
 private[specs2]
