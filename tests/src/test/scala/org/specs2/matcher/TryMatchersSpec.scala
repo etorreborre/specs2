@@ -54,9 +54,8 @@ class TryMatchersSpec extends Spec with TryMatchers with ResultMatchers { def is
   type I = Int
 
   trait ExceptionTrait extends Exception
-  object ExceptionTrait {
+  object ExceptionTrait:
     def apply(message: String): ExceptionTrait = new ExceptionTrait {
       override def getMessage: String = message
     }
-  }
 }
