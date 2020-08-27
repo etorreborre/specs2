@@ -114,7 +114,7 @@ case class ContextSpec(env: Env) extends Spec with ResultMatchers with OwnEnv { 
 
   def step1 = { val d = data(); d.executing(d.firstThenEx1).prints("first", "e1") }
   def step2 = { val d = data(); d.executeBodies(d.silentFirstThenEx1).map(_.message) must_== List("", "success") }
-  def step3 = { val d = data(); d.executeBodies(d.failingFirstThenEx1).map(_.message) must_== List("java.lang.RuntimeException: error", "success") }
+  def step3 = { val d = data(); d.executeBodies(d.failingFirstThenEx1).map(_.message) must_== List("org.specs2.specification.core.FatalExecution: error", "") }
 
   case class data() extends StringOutput with ContextData:
     def executeBodies(ex: Fragment): List[Result] =
