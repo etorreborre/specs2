@@ -44,20 +44,20 @@ class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[(
       cancelled.set(true)
       result(false, "the action terminates", "the action is blocking "+parameters+evenWhenAction, a)
 
-    if (whenAction.isDefined)
-      if (terminated.get)
-        if (onlyWhen)
+    if whenAction.isDefined then
+      if terminated.get then
+        if onlyWhen then
           result(whenActionExecuted,
                  "the action terminates only when "+onlyWhenAction+" terminates",
                  "the action terminated before "+onlyWhenAction+" ("+parameters+")", a)
         else terminates
       else
-        if (retries <= 0) blocks
+        if retries <= 0 then blocks
         else
           // leave the action a chance to finish
           Thread.sleep(sleep.toMillis)
           // if still not finished, try to execute the when action
-          if (!terminated.get && !whenActionExecuted)
+          if !terminated.get && !whenActionExecuted then
             whenAction.map(_())
             // leave again the action a chance to finish
             Thread.sleep(sleep.toMillis)
@@ -65,9 +65,9 @@ class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[(
           else
             retry(originalRetries, retries - 1, sleep, a, future)
     else
-      if (terminated.get) terminates
+      if terminated.get then terminates
       else
-        if (retries <= 0) blocks
+        if retries <= 0 then blocks
         else
           Thread.sleep(sleep.toMillis)
           retry(originalRetries, retries - 1, sleep, a, future)

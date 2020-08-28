@@ -50,11 +50,11 @@ case class IncludeExcludeStackTraceFilter(include: Seq[String], exclude: Seq[Str
 object IncludeExcludeStackTraceFilter:
   def fromString(s: String): StackTraceFilter =
     val split = s.split("/").toSeq
-    if (split.size == 0)
+    if split.size == 0 then
       new IncludeExcludeStackTraceFilter(Seq[String](), Seq[String]())
-    else if (split.size == 1)
+    else if split.size == 1 then
       new IncludeExcludeStackTraceFilter(split(0).splitTrim(","), Seq[String]())
-    else if (split.size == 2)
+    else if split.size == 2 then
       new IncludeExcludeStackTraceFilter(split(0).splitTrim(","), split(1).splitTrim(","))
     else
       new IncludeExcludeStackTraceFilter(split(0).splitTrim(","), split.drop(1).mkString(",").splitTrim(","))
@@ -75,10 +75,10 @@ object DefaultStackTraceFilter extends
 
   override def apply(e: Seq[StackTraceElement]): Seq[StackTraceElement] =
     val filtered =
-      if (isSpecificationFromSpecs2(e)) e.dropWhile(t => !isSpecificationFromSpecs2(Seq(t)))
+      if isSpecificationFromSpecs2(e) then e.dropWhile(t => !isSpecificationFromSpecs2(Seq(t)))
       else                                      super.apply(e)
 
-    if (filtered.size >= 1000) filtered.take(200) ++ truncated(filtered.size) ++ filtered.takeRight(200)
+    if filtered.size >= 1000 then filtered.take(200) ++ truncated(filtered.size) ++ filtered.takeRight(200)
     else filtered
 
   private def truncated(size: Int): Seq[StackTraceElement] =

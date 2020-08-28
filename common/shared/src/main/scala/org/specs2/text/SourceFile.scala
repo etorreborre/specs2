@@ -21,9 +21,9 @@ case class SourceFile(logger: Logger):
    */
   def classNames(packageName: String, content: String, pattern: Pattern, suffix: String, verbose: Boolean): Operation[List[String]] =
     def result(m: Matcher): LazyList[String] =
-      if (m.find && m.groupCount >= 1)
+      if m.find && m.groupCount >= 1 then
         val fullName =
-          if (packageName.isEmpty) m.group(1).trim + suffix
+          if packageName.isEmpty then m.group(1).trim + suffix
           else                     List(packageName, m.group(1).trim).mkString(".") + suffix
         LazyList.cons(fullName, result(m))
       else LazyList.empty
@@ -35,7 +35,7 @@ case class SourceFile(logger: Logger):
   /** @return the package name corresponding to the package declarations at the beginning of a file */
   def packageName(content: String): String =
     def result(m: Matcher): LazyList[String] =
-      if (m.find) LazyList.cons(m.group(1).replace(";", "").trim, result(m))
+      if m.find then LazyList.cons(m.group(1).replace(";", "").trim, result(m))
       else LazyList.empty
 
     val pattern = "\\s*package\\s*?([^\\s/]+).*"

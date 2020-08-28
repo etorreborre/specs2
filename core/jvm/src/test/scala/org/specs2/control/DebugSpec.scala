@@ -50,6 +50,6 @@ trait output extends MustThrownMatchers:
   class Printable[T](t: =>T):
     def prints(results: String*) =
       t
-      if (results == Seq("nothing")) messages must beEmpty
+      if results == Seq("nothing") then messages must beEmpty
       else                           messages must be_==(results)
   val nothing = "nothing"

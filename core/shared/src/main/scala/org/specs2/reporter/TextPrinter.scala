@@ -21,11 +21,11 @@ import org.specs2.fp.syntax._
  *
  * At the end of the run the specification statistics are displayed as well.
  */
-case class TextPrinter(env: Env) extends Printer:
+case class TextPrinter(env: Env) extends Printer {
   def prepare(specifications: List[SpecStructure]): Action[Unit]  = Action.unit
   def finalize(specifications: List[SpecStructure]): Action[Unit] = Action.unit
 
-  def sink(spec: SpecStructure): AsyncSink[Fragment] =
+  def sink(spec: SpecStructure): AsyncSink[Fragment] = {
     // statistics and indentation
     type S = ((Stats, Int), SimpleTimer)
 
@@ -41,6 +41,7 @@ case class TextPrinter(env: Env) extends Printer:
           contraflatMap[(Fragment, S)](printFragment(args))
 
     (values observeWithState sink).mapFlatten(printFinalStats(spec, args, logger))
+  }
 
   /** run a specification */
   def run(spec: SpecStructure): Unit =
@@ -59,13 +60,14 @@ case class TextPrinter(env: Env) extends Printer:
   }
 
   def printHeader(args: Arguments): SpecHeader => List[LogLine] = { (header: SpecHeader) =>
-    if (args.canShow("#")) List(header.show.info)
+    if args.canShow("#") then List(header.show.info)
     else Nil
   }
 
   def printStats(header: SpecHeader, args: Arguments, stats: Stats, timer: SimpleTimer): List[LogLine] =
-    if ((args.xonly && stats.hasFailuresOrErrors || !args.xonly) && args.canShow("1"))
-      val title = if (header.show.isEmpty) "" else " "+header.show.trim
+    val mustShowStats = (args.xonly && stats.hasFailuresOrErrors) || (!args.xonly && args.canShow("1"))
+    if mustShowStats then {
+      val title = if header.show.isEmpty then "" else " "+header.show.trim
 
       printNewLine ++
       printNewLine ++
@@ -74,20 +76,21 @@ case class TextPrinter(env: Env) extends Printer:
         stats.copy(timer = timer).display(args).info) ++
       printNewLine ++
       printNewLine
+    }
     else Nil
 
   /** transform a stream of fragments into a stream of strings for printing */
-  def printFragment(args: Arguments): ((Fragment, ((Stats, Int), SimpleTimer))) => Action[List[LogLine]] =
+  def printFragment(args: Arguments): ((Fragment, ((Stats, Int), SimpleTimer))) => Action[List[LogLine]] = {
     case (fragment, ((stats, indentation), _)) =>
       fragment.executedResult.map { case ExecutedResult(result, timer) =>
-        fragment match
+        fragment match {
           // only print steps and actions if there are issues
           case Fragment(NoText, e, l) if e.isExecutable && !result.isSuccess =>
             printExecutable(NoText, result, timer, args, indentation)
 
           case Fragment(d @ SpecificationRef(_, _, _, _, hidden, muted), e, l)  =>
-            if (!hidden)
-              if (e.isExecutable && !muted) printExecutable(d, result, timer, args, indentation)
+            if !hidden then
+              if e.isExecutable && !muted then printExecutable(d, result, timer, args, indentation)
               else                          List(d.show.info)
             else Nil
 
@@ -95,53 +98,58 @@ case class TextPrinter(env: Env) extends Printer:
             printExecutable(d, result, timer, args, indentation)
 
           case Fragment(Br, e, l) =>
-            if (args.canShow("-")) printNewLine
+            if args.canShow("-") then printNewLine
             else Nil
 
           case Fragment(Code(text), e, l) =>
-            if (args.canShow("-")) List(indentText(text, indentation, indentationSize(args)).info)
+            if args.canShow("-") then List(indentText(text, indentation, indentationSize(args)).info)
             else Nil
 
           case Fragment(d, e, l) =>
-            if (args.canShow("-")) List(indentText(d.show, indentation, indentationSize(args)).info)
+            if args.canShow("-") then List(indentText(d.show, indentation, indentationSize(args)).info)
             else Nil
+        }
       }
+  }
 
   /** print an executed fragment: example, step, action */
   def printExecutable(description: Description, result: Result, timer: SimpleTimer, args: Arguments, indentation: Int): List[LogLine] =
 
-    if (args.canShow(result.status))
+    if args.canShow(result.status) then {
       val text = description.show
       val show = indentText(showTime(statusAndDescription(text, result)(args), timer, args), indentation, indentationSize(args))
 
       def printResult(desc: String, r: Result): List[LogLine] =
-        r match
+        r match {
           case err: execute.Error        => printError(desc, err, args)
           case failure: execute.Failure  => printFailure(desc, failure, args)
           case success: execute.Success  => printSuccess(desc, success, args)
           case pending: execute.Pending  => printPending(desc, pending, args)
           case skipped: execute.Skipped  => printSkipped(desc, skipped, args)
           case DecoratedResult(_, r)     => printResult(desc, r)
+        }
 
-      result match
+      result match {
         // special case for SpecificationRefs
         case DecoratedResult(t: Stats, r) =>
           printOther(show, r, args)
         case DecoratedResult(t: DataTable, r) =>
           // display the full table if it is an auto-example
-          if (Description.isCode(description))
+          if Description.isCode(description) then
             printResult(indentText(r.message, indentation, indentationSize(args)), r.updateMessage(""))
           else
             printResult(show, r)
 
         case other => printResult(show, other)
+      }
+    }
     else Nil
 
   def printError(show: String, err: execute.Error, args: Arguments): List[LogLine] =
     List(show.error) ++
     printMessage(args, show, ErrorLine.apply)(err) ++
     printStacktrace(args, print = true, ErrorLine.apply)(err) ++
-    (if (err.exception.getCause != null) printError("CAUSED BY", execute.Error(err.exception.getCause), args)
+    (if err.exception.getCause != null then printError("CAUSED BY", execute.Error(err.exception.getCause), args)
      else List())
 
   def printFailure(show: String, failure: execute.Failure, args: Arguments): List[LogLine] =
@@ -150,44 +158,49 @@ case class TextPrinter(env: Env) extends Printer:
     printStacktrace(args, print = args.failtrace, FailureLine.apply)(failure) ++
     printFailureDetails(args)(failure.details)
 
-  def printSuccess(show: String, success: execute.Success, args: Arguments): List[LogLine] =
-    val expected = if (success.exp.nonEmpty) "\n"+success.exp else ""
-    if (expected.trim.nonEmpty) List((show+expected).info)
+  def printSuccess(show: String, success: execute.Success, args: Arguments): List[LogLine] = {
+    val expected = if success.exp.nonEmpty then "\n"+success.exp else ""
+    if expected.trim.nonEmpty then List((show+expected).info)
     else                        List(show.info)
+  }
 
-  def printPending(show: String, pending: execute.Pending, args: Arguments): List[LogLine] =
-    val reason = if (pending.message.isEmpty) "PENDING" else pending.message
+  def printPending(show: String, pending: execute.Pending, args: Arguments): List[LogLine] = {
+    val reason = if pending.message.isEmpty then "PENDING" else pending.message
 
-    if (reason.trim.nonEmpty) List((show+" "+reason).info)
+    if reason.trim.nonEmpty then List((show+" "+reason).info)
     else                      List(show.info)
+  }
 
 
-  def printSkipped(show: String, skipped: execute.Skipped, args: Arguments): List[LogLine] =
+  def printSkipped(show: String, skipped: execute.Skipped, args: Arguments): List[LogLine] = {
     val reason =
-      if (skipped.message != StandardResults.skipped.message)
-        if (skipped.message.isEmpty) "SKIPPED" else skipped.message
+      if skipped.message != StandardResults.skipped.message then
+        if skipped.message.isEmpty then "SKIPPED" else skipped.message
       else skipped.message
 
-    if (reason.trim.nonEmpty) List((show+"\n"+reason).info)
+    if reason.trim.nonEmpty then List((show+"\n"+reason).info)
     else                      List(show.info)
+  }
 
   def printOther(show: String, other: execute.Result, args: Arguments): List[LogLine] =
     List(show.info)
 
   /** show execution times if the showtimes argument is true */
-  def showTime(description: String, timer: SimpleTimer, args: Arguments) =
-    val time = if (args.showtimes) " ("+timer.time+")" else ""
+  def showTime(description: String, timer: SimpleTimer, args: Arguments) = {
+    val time = if args.showtimes then " ("+timer.time+")" else ""
     description + time
+  }
 
-  def statusAndDescription(text: String, result: Result)(args: Arguments) =
+  def statusAndDescription(text: String, result: Result)(args: Arguments) = {
     val textLines = text.trimEnclosing("`").trimEnclosing("```").split("\n", -1) // trim markdown code marking
     val firstLine = textLines.headOption.getOrElse("")
     val (indentation, line) = firstLine.span(_ == ' ')
     val status = result.coloredStatus(args) + " "
-    val decoratedFirstLine = indentation + status + (if (Seq("*", "-").exists(line.startsWith)) line.drop(2) else line)
+    val decoratedFirstLine = indentation + status + (if Seq("*", "-").exists(line.startsWith) then line.drop(2) else line)
 
     val rest = textLines.drop(1).map(l => s"  $l")
     (decoratedFirstLine +: rest).mkString("\n")
+  }
 
   def indentationSize(args: Arguments): Int =
     args.commandLine.int("indentation").getOrElse(2)
@@ -198,24 +211,24 @@ case class TextPrinter(env: Env) extends Printer:
   }
 
   def printStacktrace(args: Arguments, print: Boolean, as: String => LogLine): Result with ResultStackTrace => List[LogLine] = { (result: Result with ResultStackTrace) =>
-    if (print) args.traceFilter(result.stackTrace).map(t => as(t.toString)).toList
+    if print then args.traceFilter(result.stackTrace).map(t => as(t.toString)).toList
     else Nil
   }
 
   /**
    * If the failure contains the expected and actual values, display them
    */
-  def printFailureDetails(args: Arguments):  Details => List[LogLine] =
+  def printFailureDetails(args: Arguments):  Details => List[LogLine] = {
     case FailureDetails(actual, expected) if args.diffs.show(actual, expected) =>
       val (actualDiff, expectedDiff) = args.diffs.showDiffs(actual, expected)
       val shortDiff =
-        if (actualDiff != expectedDiff)
+        if actualDiff != expectedDiff then
           List(("Actual:   " + actualDiff).failure,
                ("Expected: " + expectedDiff).failure)
         else List()
 
       val fullDiff =
-        (if (args.diffs.showFull)
+        (if args.diffs.showFull then
           List(("Actual (full):   " + actual).failure,
                ("Expected (full): " + expected).failure)
         else Nil)
@@ -248,28 +261,31 @@ case class TextPrinter(env: Env) extends Printer:
       printSummary(("Added", added), ("Missing", missing), ("Different", different))
 
     case _ => Nil
+  }
 
   def printNewLine =
     List(EmptyLine)
 
   /** show values as a string with a description */
   def printValues(description: String, values: Seq[Any]) =
-    if (values.nonEmpty) List((s"$description (${values.size})${values.map(notNullPair).mkString("\n", "\n", "\n\n")}").failure)
+    if values.nonEmpty then List((s"$description (${values.size})${values.map(notNullPair).mkString("\n", "\n", "\n\n")}").failure)
     else Nil
 
   /** print a short summary of differences between Seqs, Sets or Maps */
   def printSummary(descriptions: (String, Seq[String])*) =
-    if (descriptions.flatMap(_._2).mkString("\n").split("\n").length >= 50)
+    if descriptions.flatMap(_._2).mkString("\n").split("\n").length >= 50 then
       List((descriptions.map { case (name, values) => s"$name = ${values.size}" }.mkString(", ")).failure)
     else Nil
 
   def location(r: ResultStackTrace, args: Arguments) = " ("+r.location(args.traceFilter)+")" unless r.location.isEmpty
 
   def indentText(text: String, indentation: Int, indentationSize: Int) =
-    if (text.isEmpty) text
+    if text.isEmpty then text
     else text.split("\n").map((" " * (indentation * indentationSize)) + _).mkString("\n")
+}
 
 
-object TextPrinter:
+object TextPrinter {
   val default: TextPrinter =
     TextPrinter(Env())
+}

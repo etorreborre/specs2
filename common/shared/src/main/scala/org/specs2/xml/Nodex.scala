@@ -47,10 +47,10 @@ trait Nodex { outer =>
    * Otherwise NodeSeq.Empty is returned
    */
   implicit class NodeSeqOps(ns: =>NodeSeq):
-    def unless(b: Boolean): NodeSeq = if (b) NodeSeq.Empty else ns
+    def unless(b: Boolean): NodeSeq = if b then NodeSeq.Empty else ns
 
   implicit class NodeOps(n: =>Node):
-    def unless(b: Boolean) = if (b) NodeSeq.Empty else n
+    def unless(b: Boolean) = if b then NodeSeq.Empty else n
 
   /** @return an unprefixed attribute from pair */
   implicit def pairToUnprefixedAttribute(pair: (Any, Any)): UnprefixedAttribute =

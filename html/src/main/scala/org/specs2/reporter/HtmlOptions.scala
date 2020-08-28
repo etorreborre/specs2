@@ -33,7 +33,7 @@ case class HtmlOptions(
 
   implicit class Update(map: Map[String, String]):
     def updateWhenTrue(name: String, value: String, condition: Boolean): Map[String, String] =
-      if (condition) map.updated(name, value)
+      if condition then map.updated(name, value)
       else map
 
     def updateWhenTrue(name: String, value: Boolean): Map[String, String] =

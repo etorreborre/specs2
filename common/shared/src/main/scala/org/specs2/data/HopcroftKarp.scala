@@ -21,28 +21,28 @@ object HopcroftKarp:
 
     def bfs: Boolean =
       vertex1.foreach { v =>
-        if (pair1(v) == nil)
+        if pair1(v) == nil then
           dist.put(v, 0)
           queue.enqueue(v)
         else dist.put(v, Int.MaxValue)
       }
       dist.put(nil, Int.MaxValue)
 
-      while (queue.nonEmpty)
+      while queue.nonEmpty do
         val v = queue.dequeue
 
-        if (dist(v) < dist(nil))
+        if dist(v) < dist(nil) then
           edges.get(v).toSeq.flatten.foreach { u =>
-            if (dist(pair2(u)) == Int.MaxValue)
+            if dist(pair2(u)) == Int.MaxValue then
               dist.put(pair2(u), dist(v) + 1)
               queue.enqueue(pair2(u))
           }
       dist(nil) != Int.MaxValue
 
     def dfs(v: Int): Boolean =
-      if (v != -1)
+      if v != -1 then
         edges.get(v).toSeq.flatten.foreach { u =>
-          if (dist(pair2(u)) == dist(v) + 1 && dfs(pair2(u)))
+          if dist(pair2(u)) == dist(v) + 1 && dfs(pair2(u)) then
             pair2.put(u, v)
             pair1.put(v, u)
             return true
@@ -56,9 +56,9 @@ object HopcroftKarp:
       pair2.put(v, nil)
     }
     var matching = 0
-    while (bfs)
+    while bfs do
       vertex1.foreach { v =>
-        if (pair1(v) == nil && dfs(v))
+        if pair1(v) == nil && dfs(v) then
           matching = matching + 1
       }
     pair1.toList.filterNot(_._2 == nil)

@@ -17,7 +17,7 @@ trait Split { outer =>
     def splitToSize(n: Int): List[String] = splitToSize(s, n, Nil)
 
     private def splitToSize(string: String, n: Int, result: List[String]): List[String] =
-      if (string.length <= n) (string :: result).reverse
+      if string.length <= n then (string :: result).reverse
       else
       // new Strings are necessary to avoid memory errors because substring is just a view on the underlying string
         splitToSize(new String(string.drop(n)), n, new String(string.take(n)) :: result)
@@ -36,7 +36,7 @@ trait Split { outer =>
     def isDashedName(name: String) = dashedNames.contains(name.toLowerCase)
 
     val grouped = seq.foldLeft(Seq[(String, Seq[String])]()) { (res, cur) =>
-      if (isDashedName(cur) || cur == "--") res :+ (cur -> Seq[String]())
+      if isDashedName(cur) || cur == "--" then res :+ (cur -> Seq[String]())
       else                                  res.updateLastOr { case (name, values) => (name, values :+ cur) }((cur, Seq[String]()))
     }
     grouped.flatMap {

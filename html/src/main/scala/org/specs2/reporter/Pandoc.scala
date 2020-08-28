@@ -34,7 +34,7 @@ object Pandoc:
     import env.arguments.commandLine._
     val markdown = boolOr("pandoc", true)
 
-    if (markdown)
+    if markdown then
       val pandoc = Pandoc(
         verbose      = boolOr("pandoc.verbose", false),
         executable   = fileOr("pandoc.exec", Pandoc.executable),

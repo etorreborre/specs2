@@ -173,9 +173,9 @@ object S2StringContext:
     // we have an auto-example when the last line is empty
     val isAutoExample = texts.lastOption.exists(_.trim.isEmpty)
 
-    if (isAutoExample)
+    if isAutoExample then
       val example = ff.example(Description.code(sourceCode.removeEnclosing("`")), execution).setLocation(start)
-      if (texts.size == 1)
+      if texts.size == 1 then
         Fragments(example)
       else
         // the text position is calculated relatively to the execution location
@@ -192,8 +192,8 @@ object S2StringContext:
       val (descriptionLines, beforeLines) = texts.reverse.span(_.takeWhile(_ == ' ') == lastIndent)
 
       val description =
-        if (descriptionLines.size > 1)
-          if (lastLine.trim.startsWith("|")) descriptionLines.reverse.map(_.removeFirst("\\|")).mkString("\n")
+        if descriptionLines.size > 1 then
+          if lastLine.trim.startsWith("|") then descriptionLines.reverse.map(_.removeFirst("\\|")).mkString("\n")
           else descriptionLines.reverse.mkString("\n")
         else
           descriptionLines.map(_.dropWhile(_ == ' ')).reverse.mkString("\n")
@@ -201,7 +201,7 @@ object S2StringContext:
       val example =
             ff.example(Description.text(description.removeStart(lastIndent).trimEndSpace), execution).setLocation(start)
 
-      if (beforeLines.isEmpty)
+      if beforeLines.isEmpty then
         Fragments(example)
       else
         // the text position is calculated relatively to the execution location

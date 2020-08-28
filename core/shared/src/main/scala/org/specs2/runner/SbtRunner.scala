@@ -74,12 +74,12 @@ object sbtRun extends MasterSbtRunner(Array(), Array(), Thread.currentThread.get
   def exit(action: Action[Stats])(implicit ee: ExecutionEnv): Unit =
     action.runFuture(ee).onComplete {
       case scala.util.Failure(_)     => System.exit(100)
-      case scala.util.Success(stats) => if (stats.isSuccess) System.exit(0) else System.exit(1)
+      case scala.util.Success(stats) => if stats.isSuccess then System.exit(0) else System.exit(1)
     }(ee.executionContext)
 
   def start(arguments: String*): Action[Stats] = {
     val logger = ConsoleLogger()
-    if (arguments.isEmpty)
+    if arguments.isEmpty then
       logger.info("The first argument should at least be the specification class name").toAction >>
         Action.unit
     else
@@ -117,7 +117,7 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
     lazy val tags: List[NamedTag] =
       spec.flatMap(s => s.tags.runOption(env.specs2ExecutionEnv)).getOrElse(Nil)
 
-    if (env.arguments.commandLine.isSet("sbt.tags"))
+    if env.arguments.commandLine.isSet("sbt.tags") then
       tags.flatMap(_.names).toArray
     else
       Array()
@@ -162,18 +162,18 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
   private def specificationRun(taskDef: TaskDef, spec: SpecStructure, env: Env, handler: EventHandler, loggers: Array[Logger]): Action[Stats] =
     val customInstances = CustomInstances(arguments, loader, env.systemLogger)
 
-    for {
+    for
       printers <- createPrinters(customInstances, taskDef, handler, loggers, arguments).toAction
       reporter <- Reporter.createCustomInstance(customInstances).map(_.getOrElse(Reporter.create(printers, env))).toAction
       stats    <- reporter.report(spec)
-    } yield stats
+    yield stats
 
   /** create a spec structure from the task definition containing the class name */
   private def createSpecStructure(taskDef: TaskDef, loader: ClassLoader, env: Env): Operation[Option[SpecStructure]] =
     taskDef.fingerprint match
       case f: SubclassFingerprint =>
-        if (f.superclassName.endsWith("SpecificationStructure"))
-          val className = taskDef.fullyQualifiedName + (if (f.isModule) "$" else "")
+        if f.superclassName.endsWith("SpecificationStructure") then
+          val className = taskDef.fullyQualifiedName + (if f.isModule then "$" else "")
           Classes.createInstance[SpecificationStructure](className, loader, EnvDefault.defaultInstances(env)).
             map(ss => Option(ss.structure(env)))
         else Operation.ok(None)
@@ -192,7 +192,7 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
       printerFactory.createNotifierPrinter).map(_.map(_.toList)).sequence.map(_.flatten)
 
   private def createSbtPrinter(loggers: Array[Logger], sbtEvents: SbtEvents, customInstances: CustomInstances) =
-    if (!printerNames.map(_.name).exists(arguments.isSet) || arguments.isSet(CONSOLE.name))
+    if !printerNames.map(_.name).exists(arguments.isSet) || arguments.isSet(CONSOLE.name) then
       Operation.ok(Some(SbtPrinter(env, loggers, sbtEvents)))
     else
       customInstances.noInstance("no console printer defined")

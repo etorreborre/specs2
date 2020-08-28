@@ -53,7 +53,7 @@ class TerminationMatchersSpec(val env: Env) extends Specification with Terminati
   def termination8 =
     val queue1 = new ArrayBlockingQueue[Int](1)
     var stop = true
-    def action1 = Await.result(Future({ while (stop) { sleepFor(10) }; queue1.add(1) }), Duration.Inf)
+    def action1 = Await.result(Future({ while stop do { sleepFor(10) }; queue1.add(1) }), Duration.Inf)
     def action2 = Await.result(Future({ sleepFor(10); stop = false; 1 }), Duration.Inf)
     action1 must terminate.onlyWhen(action2)
 

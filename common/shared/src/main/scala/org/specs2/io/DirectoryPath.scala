@@ -31,10 +31,10 @@ case class DirectoryPath(dirs: Vector[FileName], absolute: Boolean):
       case _         => None
 
   /** @return the path for this file as a / separated string */
-  def path: String = (if (absolute) "/" else "") + dirs.map(_.name).toList.mkString("/")
+  def path: String = (if absolute then "/" else "") + dirs.map(_.name).toList.mkString("/")
 
   /** @return the path for this file as a / separated string, with a final / */
-  def dirPath: String = if (isRoot) path else path + "/"
+  def dirPath: String = if isRoot then path else path + "/"
 
   /** @return a File for this path */
   def toFile: File = new File(path)
@@ -73,7 +73,7 @@ case class DirectoryPath(dirs: Vector[FileName], absolute: Boolean):
    * @return the portion of a dir path that is relative to another
    */
   def relativeTo(other: DirectoryPath): DirectoryPath =
-    if (dirs.take(other.dirs.size) == other.dirs)
+    if dirs.take(other.dirs.size) == other.dirs then
       copy(dirs = dirs.drop(other.dirs.size), absolute = false)
     else
       this
@@ -107,7 +107,7 @@ object DirectoryPath:
   def apply(uuid: UUID): DirectoryPath = apply(FileName(uuid))
 
   def unsafe(s: String): DirectoryPath =
-    val withoutScheme = removeScheme(if (isWindows) s.replaceAll("\\\\", "/") else s)
+    val withoutScheme = removeScheme(if isWindows then s.replaceAll("\\\\", "/") else s)
     val isAbsolute = withoutScheme.startsWith("/") || isWindows && new File(withoutScheme).isAbsolute
     DirectoryPath(withoutScheme.split("/").filter(_.nonEmpty).map(FileName.unsafe).toVector, isAbsolute)
 

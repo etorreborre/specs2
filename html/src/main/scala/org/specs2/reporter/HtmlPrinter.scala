@@ -61,12 +61,12 @@ case class HtmlPrinter(env: Env, searchPage: SearchPage, logger: Logger = Consol
    */
   def printHtml(env: Env, spec: SpecStructure, stats: Stats, timer: SimpleTimer): Operation[Unit] =
     import env.{fileSystem => fs}
-    for {
+    for
       options  <- getHtmlOptions(env.arguments)
       template <- fs.readFile(options.template) ||| logger.warnAndFail[String]("No template file found at "+options.template.path, RunAborted)
       content  <- makeHtml(template, spec, stats, timer, options, env.arguments)(env.specs2ExecutionEnv)
       _        <- fs.writeFile(outputPath(options.outDir, spec), content)
-    } yield ()
+    yield ()
 
   /**
    * Get html options, possibly coming from the command line
@@ -116,14 +116,14 @@ case class HtmlPrinter(env: Env, searchPage: SearchPage, logger: Logger = Consol
    */
   def printHtmlWithPandoc(env: Env, spec: SpecStructure, stats: Stats, timer: SimpleTimer, pandoc: Pandoc): Operation[Unit] =
     import env.{fileSystem => fs}
-    for {
+    for
       options  <- getHtmlOptions(env.arguments)
       _        <- fs.withEphemeralFile(options.outDir | options.template.name) {
                    (fs.copyFile(options.outDir)(options.template) |||
                       logger.warnAndFail("No template file found at "+options.template.path, RunAborted)) >>
                     makePandocHtml(spec, stats, timer, pandoc, options, env)
                   }
-    } yield ()
+    yield ()
 
   /**
    * Create the Html file by invoking Pandoc
@@ -172,16 +172,16 @@ case class HtmlPrinter(env: Env, searchPage: SearchPage, logger: Logger = Consol
 
       case Some(url) =>
         val fs = env.fileSystem
-        if (url.getProtocol.equalsIgnoreCase("jar"))
+        if url.getProtocol.equalsIgnoreCase("jar") then
           fs.unjar(jarOf(url), outputDir, s"^${quote(base.path)}(/${quote(src.path)}/.*)$$")
         else
           fs.copyDir(DirectoryPath.unsafe(url.toURI), outputDir / src)
 
-  def reportMissingSeeRefs(specs: List[SpecStructure], outDir: DirectoryPath)(implicit ee: ExecutionEnv): Operation[Unit] = for {
+  def reportMissingSeeRefs(specs: List[SpecStructure], outDir: DirectoryPath)(implicit ee: ExecutionEnv): Operation[Unit] = for
     missingSeeRefs <- specs.flatMap(_.seeReferencesList).distinct.filterM(ref => FilePathReader.doesNotExist(SpecHtmlPage.outputPath(outDir, ref.specClassName)))
     _              <- logger.warn("The following specifications are being referenced but haven't been reported\n"+
                            missingSeeRefs.map(_.specClassName).distinct.mkString("\n")).unless(missingSeeRefs.isEmpty)
-  } yield ()
+  yield ()
 
   private def jarOf(url: URL): URL = url.openConnection.asInstanceOf[JarURLConnection].getJarFileURL
 

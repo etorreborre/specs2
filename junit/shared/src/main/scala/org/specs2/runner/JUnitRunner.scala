@@ -56,17 +56,17 @@ class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterab
     val printerFactory = PrinterFactory(arguments, customInstances, env.systemLogger)
     val junitPrinter = JUnitPrinter(env, runNotifier)
 
-    for {
+    for
       printers <- printerFactory.createPrinters.toAction
       reporter <- Reporter.createCustomInstance(customInstances).map(_.getOrElse(Reporter.create(junitPrinter +: printers, env))).toAction
-      stats <- if (arguments.isSet("all"))
-        for {
+      stats <- if arguments.isSet("all") then
+        for
           ss     <- SpecFactory.default.createLinkedSpecs(specStructure).toAction
           sorted <- Action.pure(SpecStructure.topologicalSort(ss)(env.specs2ExecutionEnv).getOrElse(ss))
           stats  <- reporter.report(sorted.toList)
-        } yield stats
+        yield stats
       else reporter.report(specStructure)
-    } yield stats
+    yield stats
 
   /**
    * This is used to filter out the entire specification based
@@ -75,5 +75,5 @@ class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterab
    * if the more fine-grained filtering is needed tags must be used
    */
   def filter(filter: org.junit.runner.manipulation.Filter): Unit =
-    if (!filter.shouldRun(getDescription)) throw new NoTestsRemainException
+    if !filter.shouldRun(getDescription) then throw new NoTestsRemainException
 }

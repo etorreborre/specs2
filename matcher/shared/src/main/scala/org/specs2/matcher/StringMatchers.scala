@@ -128,19 +128,19 @@ trait StringBaseMatchers { outer =>
       val groupsFound = new scala.collection.mutable.ListBuffer[String]()
       (1 to matcher.groupCount).foreach { i =>
         matcher.reset()
-        while (matcher.find) { groupsFound += matcher.group(i) }
+        while matcher.find do { groupsFound += matcher.group(i) }
       }
       groupsFound.toList
     def apply[S <: String](b: Expectable[S]) =
       val a = t
       val groupsFound = found(b.value)
-      val withGroups = if (groups.size > 1) " with groups " else " with group "
+      val withGroups = if groups.size > 1 then " with groups " else " with group "
       def foundText =
-        if (groupsFound.isEmpty)
+        if groupsFound.isEmpty then
           ". Found nothing"
         else
            ". Found: " + q(groupsFound.mkString(", "))
-      val groupsToFind = if (groups == null) Nil else groups.toList
+      val groupsToFind = if groups == null then Nil else groups.toList
       result(a != null && b.value != null && groupsFound == groupsToFind,
              q(a) + " is found in " + b.description  + withGroups + q(groupsToFind.mkString(", ")),
              q(a) + " isn't found in " + b.description  + withGroups + q(groupsToFind.mkString(", ")) + foundText, b)

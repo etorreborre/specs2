@@ -55,8 +55,8 @@ sealed abstract class Tree[A]:
 
     def shift(first: String, other: String, s: Vector[StringBuilder]): Vector[StringBuilder] =
       var i = 0
-      while (i < s.length)
-        if (i == 0) s(i).append(first)
+      while i < s.length do
+        if i == 0 then s(i).append(first)
         else s(i).append(other)
         i += 1
       s

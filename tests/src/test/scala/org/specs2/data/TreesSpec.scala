@@ -35,11 +35,11 @@ class TreesSpec extends Specification with ScalaCheck with ThrownExpectations { 
     nodes match
       case Nil => Gen.const(Nil)
       case n :: rest =>
-        for {
+        for
           i <- Gen.choose(0, nodes.size - 1)
           t <- genTree(n, rest.take(i))
           r <- genTreeList(rest.drop(i))
-        } yield t :: r
+        yield t :: r
 
   case class TreeAndPaths(tree: Tree[Int], paths: List[List[Int]]):
     override def toString =

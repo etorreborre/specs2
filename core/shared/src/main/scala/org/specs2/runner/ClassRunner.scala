@@ -33,15 +33,16 @@ case class DefaultClassRunner(env: Env, reporter: Reporter, specFactory: SpecFac
   def run(spec: SpecificationStructure): Action[Stats] =
     run(spec.structure(env))
 
-  def run(specStructure: SpecStructure): Action[Stats] = for {
-    stats <- if (arguments.isSet("all"))
-        for {
-          ss       <- specFactory.createLinkedSpecs(specStructure).toAction
-          sorted   <- Action.pure(SpecStructure.topologicalSort(ss)(env.specs2ExecutionEnv).getOrElse(ss))
-          stats    <- reporter.report(sorted.toList)
-        } yield stats
-      else reporter.report(specStructure)
-    } yield stats
+  def run(specStructure: SpecStructure): Action[Stats] =
+    val allSpecs = arguments.isSet("all")
+    if allSpecs then
+      for
+        ss     <- specFactory.createLinkedSpecs(specStructure).toAction
+        sorted <- Action.pure(SpecStructure.topologicalSort(ss)(env.specs2ExecutionEnv).getOrElse(ss))
+        stats  <- reporter.report(sorted.toList)
+      yield stats
+    else
+      reporter.report(specStructure)
 
 
 trait ClassRunnerMain:
@@ -65,10 +66,11 @@ trait ClassRunnerMain:
         Action.fail("there must be at least one argument, the fully qualified class name") >>
         Action.pure(Stats.empty)
 
-      case className :: rest => for {
+      case className :: rest =>
+          for
           classRunner <- createClassRunner(env).toAction
           stats <- classRunner.run(className)
-        } yield stats
+        yield stats
 
     try execute(actions, env, exit)
     finally env.shutdown()
@@ -83,10 +85,10 @@ trait ClassRunnerMain:
     val printerFactory = PrinterFactory(arguments, customInstances, env.systemLogger)
     val specFactory = DefaultSpecFactory(env, loader)
 
-    for {
+    for
       printers <- printerFactory.createPrinters
       reporter <- Reporter.createCustomInstance(customInstances).map(_.getOrElse(Reporter.create(printers, env)))
-     } yield DefaultClassRunner(env, reporter, specFactory)
+    yield DefaultClassRunner(env, reporter, specFactory)
 
 
 object ClassRunner extends ClassRunnerMain
@@ -107,13 +109,12 @@ object TextRunner extends ClassRunnerMain:
     val customInstances = CustomInstances(arguments, loader, StringOutputLogger(logger))
 
     val action =
-      for {
+      for
         reporter <- customInstances.createCustomInstance[Reporter]( "reporter",
           (m: String) => "a custom reporter can not be instantiated " + m, "no custom reporter defined, using the default one")
           .map(_.getOrElse(Reporter.create(List(TextPrinter(env1)), env1))).toAction
         stats <- reporter.report(spec.structure(env1))
-       } yield stats
+      yield stats
 
     action.runAction(env1.specs2ExecutionEnv)
     logger
-

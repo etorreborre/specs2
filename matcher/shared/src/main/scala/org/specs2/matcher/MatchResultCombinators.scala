@@ -76,11 +76,11 @@ trait MatchResultLogicalCombinators extends Expectations:
         m1 => expectable.check(m1.negate))
 
     /** only consider this result if the condition is true */
-    def when(condition: Boolean, m: String= ""): MatchResult[T] = if (condition) mr else MatchSuccess(m, m, expectable)
+    def when(condition: Boolean, m: String= ""): MatchResult[T] = if condition then mr else MatchSuccess(m, m, expectable)
     /** only consider this result if the condition is false */
     def unless(condition: Boolean, m: String= ""): MatchResult[T] = mr.when(!condition, m)
     /** when the condition is true the result it taken as is, when it's false, take its negation */
-    def iff(condition: Boolean): MatchResult[T] = if (condition) mr else mr.not
+    def iff(condition: Boolean): MatchResult[T] = if condition then mr else mr.not
 
 
 

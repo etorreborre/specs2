@@ -46,7 +46,7 @@ trait Listx:
    */
   def transpose[T](xs: List[List[T]]): List[List[T]] =
     val filtered = xs.filter(_.nonEmpty)
-    if (filtered.isEmpty) Nil
+    if filtered.isEmpty then Nil
     else filtered.map(_.head) :: transpose(filtered.map(_.tail))
 
 private[specs2]

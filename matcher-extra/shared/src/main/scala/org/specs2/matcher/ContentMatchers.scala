@@ -51,7 +51,7 @@ trait LinesContentBaseMatchers extends DifferenceFilters with Expectations with 
       val (content1, content2) = (implicitly[LinesContent[L1]], implicitly[LinesContent[L2]])
 
       val (name1, name2) = (content1.name(ls1), content2.name(ls2))
-      val (n1, n2) = if (name1 == name2) ("the first "+name1, "the second "+name1) else (name1, name2)
+      val (n1, n2) = if name1 == name2 then ("the first "+name1, "the second "+name1) else (name1, name2)
 
       val diffs = content1.differences(ls1, ls2, all, ordered)
 
@@ -76,11 +76,11 @@ trait LinesContentBaseMatchers extends DifferenceFilters with Expectations with 
       }.map("    "+_).mkString("", "\n", "\n")
 
     protected def okMessage =
-      if (all) "is the same as"
+      if all then "is the same as"
       else     "contains"
 
     protected def koMessage =
-      if (all) "is not the same as"
+      if all then "is not the same as"
       else     "does not contain"
 
 

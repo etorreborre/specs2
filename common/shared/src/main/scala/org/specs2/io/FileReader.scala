@@ -43,7 +43,7 @@ trait FileReader:
   def getParent(path: String) = new File(path).getParent
 
   /** @return the files of that directory */
-  def listFiles(path: String): List[String] = if (new File(path).list == null) List() else new File(path).list.toList
+  def listFiles(path: String): List[String] = if new File(path).list == null then List() else new File(path).list.toList
 
 object FileReader extends FileReader
 

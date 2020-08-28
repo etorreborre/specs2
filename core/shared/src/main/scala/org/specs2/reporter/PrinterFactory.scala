@@ -23,7 +23,7 @@ case class PrinterFactory(arguments: Arguments, customInstances: CustomInstances
       createNotifierPrinter).sequence.map(_.flatten)
 
   def createTextPrinter: Operation[Option[Printer]] =
-    if (!printerNames.map(_.name).exists(arguments.isSet) || arguments.isSet(CONSOLE.name)) Operation.ok(Some(TextPrinter.default))
+    if !printerNames.map(_.name).exists(arguments.isSet) || arguments.isSet(CONSOLE.name) then Operation.ok(Some(TextPrinter.default))
     else customInstances.noInstance[Printer]("no console printer defined")
 
   def createJUnitXmlPrinter: Operation[Option[Printer]] =

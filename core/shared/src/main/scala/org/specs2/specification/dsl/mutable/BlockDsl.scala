@@ -48,14 +48,14 @@ trait BlockCreation extends FragmentBuilder with FragmentsFactory:
   private[specs2] def addBlock[T](text: String, t: =>T, location: StacktraceLocation = StacktraceLocation()): T =
 
     addStart
-    if (hasSectionsForBlocks) addFragment(factory.section(text))
+    if hasSectionsForBlocks then addFragment(factory.section(text))
     //print((text, location.trace.map(t => println((text, t)))))
     addText(text, location)
     addFragment(factory.tab)
     addBreak
     val result = t
     addFragment(factory.backtab)
-    if (hasSectionsForBlocks) addFragment(factory.section(text))
+    if hasSectionsForBlocks then addFragment(factory.section(text))
     addEnd
     result
 

@@ -172,7 +172,7 @@ class BeLessThanOrEqualTo[T : Ordering](n: T) extends Matcher[T]:
     val r = value <= n
     val isEqual = value == n
     result(r,
-           if (isEqual) description(a) + " is equal to " + n.toString else description(a) + " is less than " + n.toString,
+           if isEqual then description(a) + " is equal to " + n.toString else description(a) + " is less than " + n.toString,
            description(a) + " is greater than " + n.toString,
            a)
 class BeLessThan[T : Ordering](n: T) extends Matcher[T]:
@@ -212,7 +212,7 @@ case class BetweenMatcher[T : Ordering](t1: T, t2: T, includeStart: Boolean = tr
     val included = (includeStart && (value >= t1) || !includeStart && (value > t1)) &&
                    (includeEnd   && (value <= t2) || !includeEnd   && (value < t2))
 
-    def bracket(b: Boolean) = if (b) "[" else "]"
+    def bracket(b: Boolean) = if b then "[" else "]"
     val (start, end) = (bracket(includeStart), bracket(!includeEnd))
 
     val (ok, ko) = (s.description+" is in "+start+t1+", "+t2+end,

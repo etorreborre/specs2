@@ -19,7 +19,7 @@ trait Throwablex:
    * See the ExtendedExceptions object description
    */
   class ExtendedThrowable[T <: Throwable](t: T):
-    private val topTrace = TraceLocation(if (t.getStackTrace.isEmpty) stackTraceElement("specs2") else t.getStackTrace()(0))
+    private val topTrace = TraceLocation(if t.getStackTrace.isEmpty then stackTraceElement("specs2") else t.getStackTrace()(0))
     /** @return the file name and the line number where the Throwable was created */
     def location = topTrace.location
     /** @return the class name and the line number where the Throwable was created */
@@ -55,7 +55,7 @@ trait Throwablex:
       t.getStackTrace.toList.exists(patternMatches(pattern))
     /** @return the list of chained exceptions */
     def chainedExceptions: List[Throwable] =
-      if (t.getCause == null) List()
+      if t.getCause == null then List()
       else t.getCause :: t.getCause.chainedExceptions
     /** @return the list of all stacktrace elements */
     def getFullStackTrace: List[java.lang.StackTraceElement] = (t :: chainedExceptions).flatMap(_.getStackTrace)
@@ -77,7 +77,7 @@ trait Throwablex:
       t
 
     /** @return the exception message and its cause if any */
-    def messageAndCause = t.getMessage.notNull + (if (t.getCause != null) ". Cause: "+t.getCause.getMessage.notNull else "")
+    def messageAndCause = t.getMessage.notNull + (if t.getCause != null then ". Cause: "+t.getCause.getMessage.notNull else "")
 
   /** utility method to create a default stacktrace element */
   def stackTraceElement(m: String, className: String = "internals", fileName: String = "file", lineNumber: Int = 1) =

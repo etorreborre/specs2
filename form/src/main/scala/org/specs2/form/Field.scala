@@ -38,7 +38,7 @@ case class Field[T](label: String, value: Property[T], decorator: Decorator = De
       case Left(Success(_,_)) => "_"
       case Left(result)       => result.toString
       case Right(v)           => v.notNull
-    (if (label.nonEmpty) label + ": " else "") + valueString
+    (if label.nonEmpty then label + ": " else "") + valueString
   /** transforms this typed Field as a Field containing the toString value of the Fields value*/
   def toStringField = new Field(label, value.map(_.toString), decorator)
   /** set a new Decorator */
@@ -75,5 +75,5 @@ case object Field:
 
   /** create a Field with a label and other fields values, concatenated as strings */
   def apply(label: String, separator: String, value1: Field[_], values: Field[_]*): Field[String] =
-    Field(label, if (values.isEmpty) value1.toString else (value1 :: values.toList).map(_.value).mkString(separator))
+    Field(label, if values.isEmpty then value1.toString else (value1 :: values.toList).map(_.value).mkString(separator))
 

@@ -7,12 +7,14 @@ import java.util.concurrent._
 import scala.concurrent.ExecutionContext
 
 case class ExecutionEnv(executorServices: ExecutorServices, timeFactor: Int):
+
   lazy val executionContext         = executorServices.executionContext
-  lazy val executorService          = executorServices.executorService
+  lazy val executorService: ExecutorService          = executorServices.executorService
   lazy val scheduledExecutorService = executorServices.scheduledExecutorService
   lazy val scheduler                = executorServices.scheduler
 
-  implicit lazy val es: ExecutorService  = executorService
+  implicit lazy val es: ExecutorService = executorService
+
   implicit lazy val ses: ScheduledExecutorService = scheduledExecutorService
   implicit lazy val ec: ExecutionContext = executionContext
 
@@ -46,4 +48,3 @@ object ExecutionEnv:
   /** create an ExecutionEnv from Scala global execution context */
   def fromGlobalExecutionContext: ExecutionEnv =
     fromExecutionContext(scala.concurrent.ExecutionContext.global)
-

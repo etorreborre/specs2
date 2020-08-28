@@ -110,7 +110,7 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
   def propFailureExceptionProp =
     scalaCheckPropertyAsResult.asResult {
       prop { (b: Boolean) =>
-        if (!doneOnce) doneOnce = true
+        if !doneOnce then doneOnce = true
         else            throw new execute.FailureException(failure)
         true
       }.setGen(Gen.const(true)).setVerbosity(-1)

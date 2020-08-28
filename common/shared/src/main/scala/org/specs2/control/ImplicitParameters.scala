@@ -51,5 +51,5 @@ object ImplicitParameters extends ImplicitParameters:
 
   // to avoid unused parameters
   def use[T](a: Any)(other: T): T =
-    if (false) a else a
+    if false then a else a
     other

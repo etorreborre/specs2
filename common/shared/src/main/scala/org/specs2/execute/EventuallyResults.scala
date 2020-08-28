@@ -24,20 +24,20 @@ trait EventuallyResults:
     val max = retries - 1
 
     @annotation.tailrec def retry(retried: Int): T =
-      if (retried == max)
+      if retried == max then
         result
       else
         lazy val t = result
         val check = ResultExecution.execute(t)(AsResult(_))
 
-        if (check.isSuccess)
+        if check.isSuccess then
           t
         else
           val pause = sleep(retried).toMillis
           Thread.sleep(pause)
           retry(retried + 1)
 
-    if (retries <= 1)
+    if retries <= 1 then
       result
     else
       retry(0)

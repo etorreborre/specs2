@@ -28,14 +28,14 @@ trait BufferedPrinterLogger extends PrinterLogger:
   private def add(msg: String): Unit = { buffer.append(msg); () }
 
   private def flushText(force: Boolean = false): String =
-    if (force)
-      if (!buffer.isEmpty) infoLine(buffer.toString)
+    if force then
+      if !buffer.isEmpty then infoLine(buffer.toString)
       buffer.clear
       ""
-    else if (endsWith(buffer.toString, "\n"))
+    else if endsWith(buffer.toString, "\n") then
       val lines = buffer.toString.split("\n")
       buffer.clear
-      if (lines.size == 1)
+      if lines.size == 1 then
         infoLine(lines.mkString)
         ""
       else

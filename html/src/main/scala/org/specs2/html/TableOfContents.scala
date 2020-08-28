@@ -24,23 +24,23 @@ trait TableOfContents:
   def createToc(env: Env, specifications: List[SpecStructure], outDir: DirectoryPath, entryMaxSize: Int, fileSystem: FileSystem): Operation[Unit] =
     // sort specifications a, b, c so that a depends on b and c
     val sorted = SpecStructure.reverseTopologicalSort(specifications)(env.specs2ExecutionEnv).map(_.toList).getOrElse(List())
-    for {
+    for
       pages   <- readHtmlPages(sorted, outDir, fileSystem)
       toc     =  createToc(pages, outDir, entryMaxSize)(env.specs2ExecutionEnv)
       _       <- saveHtmlPages(pages.map(page => page.addToc(toc(page))), fileSystem)
-    } yield ()
+    yield ()
 
   /** read the generated html pages and return them as a tree, based on the links relationships between them */
   def readHtmlPages(specifications: List[SpecStructure], outDir: DirectoryPath, fileSystem: FileSystem): Operation[List[SpecHtmlPage]] =
-    for {
+    for
       paths <- fileSystem.listFilePaths(outDir)
       pages <- createSpecPages(paths, specifications, outDir, fileSystem)
-    } yield pages
+    yield pages
 
   def createSpecPages(paths: List[FilePath], specifications: List[SpecStructure], outDir: DirectoryPath, fileSystem: FileSystem): Operation[List[SpecHtmlPage]] =
     specifications.flatMap { spec =>
       val path = SpecHtmlPage.outputPath(outDir, spec)
-      if (paths contains path) Some(fileSystem.readFile(path).map(content => SpecHtmlPage(spec, path, outDir, content)))
+      if paths contains path then Some(fileSystem.readFile(path).map(content => SpecHtmlPage(spec, path, outDir, content)))
       else None
     }.sequence
 
@@ -93,10 +93,10 @@ trait TableOfContents:
   def createHeadersSubtoc(page: SpecHtmlPage, entryMaxSize: Int): NodeSeq =
     page.body.headersTree.
       bottomUp { (h: Header, s: LazyList[NodeSeq]) =>
-      if (h.isRoot)
+      if h.isRoot then
         // 'id' is the name of the attribute expected by jstree to "open" the tree on a specific node
         s.reduceNodes.updateHeadAttribute("id", page.path.name.name)
-      else if (h.level > 1)
+      else if h.level > 1 then
         <li><a href={page.relativePath.path+"#"+h.pandocName} title={h.name}>{h.name.truncate(entryMaxSize)}</a>
           { <ul>{s}</ul> unless s.isEmpty }
         </li>

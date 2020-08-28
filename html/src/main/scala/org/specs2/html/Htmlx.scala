@@ -51,20 +51,20 @@ trait Htmlx { outer =>
   /** collect all the headers as a Tree */
   def headersToTree(body: NodeSeq, headers: TreeLoc[Header] = Leaf(Header()).loc): TreeLoc[Header] =
     def goUpUntil(headers: TreeLoc[Header], level: Int): TreeLoc[Header] =
-      if (headers.tree.rootLabel.level > level) headers.parent.map(goUpUntil(_, level)).getOrElse(headers)
+      if headers.tree.rootLabel.level > level then headers.parent.map(goUpUntil(_, level)).getOrElse(headers)
       else headers
 
     lazy val currentLevel = headers.tree.rootLabel.level
 
     def insertHeader(eLevel: Int, e: Node, rest: NodeSeq): TreeLoc[Header] =
       val header = Leaf(Header(eLevel, e, headers.getLabel.namer))
-      val newHeaders = if (eLevel == currentLevel)
+      val newHeaders = if eLevel == currentLevel then
         headers.insertRight(header)
-      else if (eLevel > currentLevel)
+      else if eLevel > currentLevel then
         headers.insertDownLast(header)
       else
         val parent = goUpUntil(headers, eLevel)
-        if (parent.tree.rootLabel.level == 1)
+        if parent.tree.rootLabel.level == 1 then
           parent.insertDownLast(header)
         else
           parent.insertRight(header)
@@ -119,7 +119,7 @@ trait Htmlx { outer =>
 
   case class NodeRewriteRule(pf: PartialFunction[Node, Seq[Node]]) extends RewriteRule:
     def applyTransformation(ns: Seq[Node]): Seq[Node] =
-      if (ns.isEmpty) ns
+      if ns.isEmpty then ns
       else            applyTransformation(ns.head) ++ applyTransformation(ns.tail)
 
     def applyTransformation(n: Node): Seq[Node] = n match
@@ -128,7 +128,7 @@ trait Htmlx { outer =>
       case other                  =>
         val ch = n.child
         val nch = applyTransformation(ch)
-        if (ch eq nch) n
+        if ch eq nch then n
         else           Elem(n.prefix, n.label, n.attributes, n.scope, true, nch: _*)
 
     def rewrite(n: NodeSeq) = applyTransformation(n)

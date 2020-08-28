@@ -113,11 +113,11 @@ case class Snippet[T](code: () => T,
 
   lazy val result: String =
     val resultAsString = tryOr(execute.notNull)(e => e.getMessage.notNull)
-    if (resultAsString == "()") ""
+    if resultAsString == "()" then ""
     else                        params.prompt(resultAsString)
 
   lazy val showResult =
-    if (!params.evalCode || result.isEmpty) ""
+    if !params.evalCode || result.isEmpty then ""
     else                                    params.asCode(result, result)
 
   def verify = ResultExecution.execute(params.verify.map(f => f(execute)).getOrElse(Success()))
@@ -180,7 +180,7 @@ object Snippet:
 
     val expression = Trimmed(call).removeStart("snippet")
     val trimmed =
-      if (s"$ls*\\{$ls*.*".r.findPrefixOf(expression).isDefined) Trimmed(Trimmed(expression).removeFirst(s"\\{")).removeLast(s"\\}")
+      if s"$ls*\\{$ls*.*".r.findPrefixOf(expression).isDefined then Trimmed(Trimmed(expression).removeFirst(s"\\{")).removeLast(s"\\}")
       else                                                       expression
 
     Trimmed(trimmed).removeAll("/**/;1/**/").trim
@@ -200,8 +200,8 @@ object Snippet:
 
   /** display a cut piece of code as markdown depending on the existence of newlines in the original piece */
   def markdownCode(multilineQuotes: String => String = defaultMultilineMarkdownQuotes, singleLineQuotes: String => String = defaultSingleLineQuotes, offset: Int = 0) = (original: String, cut: String) => {
-    if (original.startsWith("\n"))    "\n\n"+multilineQuotes(cut.removeStart("\n").offset(offset))
-    else if (original.contains("\n")) "\n\n"+multilineQuotes(cut.offset(offset))+"\n"
+    if original.startsWith("\n") then    "\n\n"+multilineQuotes(cut.removeStart("\n").offset(offset))
+    else if original.contains("\n") then "\n\n"+multilineQuotes(cut.offset(offset))+"\n"
     else                              singleLineQuotes(cut)
   }
 

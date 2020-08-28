@@ -76,7 +76,7 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
    * @return an executed Form
    */
   def executeForm =
-    if (result.isDefined) this
+    if result.isDefined then this
     else
       val executedRows = executeRows
       newForm(title, executedRows, Some(executedRows.map(_.execute).foldLeft(success: Result) { (res, cur) => res and cur }))
@@ -122,7 +122,7 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
       case Error(_,_)       => Error("error")
       case other            => other
     Prop[Form, Any](label, executed, (f: Form, s: Any) => executedResult) {
-      if (executedResult.isSuccess)
+      if executedResult.isSuccess then
         "success"
       else
         Form.toXml(executed)(Arguments())
@@ -159,12 +159,12 @@ case object Form:
     def firstField[A](as: Seq[A]) = Field(as.headOption.getOrElse(""))
     def otherFields[A](as: Seq[A]) = as.drop(1).map(Field(_))
 
-    val headerRest = otherFields(table.titles) ++ (if (table.isSuccess) Seq[Field[_]]() else Seq(Field("message")))
+    val headerRest = otherFields(table.titles) ++ (if table.isSuccess then Seq[Field[_]]() else Seq(Field("message")))
     table.rows.foldLeft(th(firstField(table.titles), headerRest:_*)) { (res, cur) =>
       val values = Row.tr(FieldCell(firstField(cur.cells)), otherFields(cur.cells).map(FieldCell(_)):_*)
       res.tr {
-        if (cur.result.isSuccess)      values
-        else if (cur.result.isFailure) values.add(FieldCell(Field(cur.result.message)).setResult(cur.result))
+        if cur.result.isSuccess then      values
+        else if cur.result.isFailure then values.add(FieldCell(Field(cur.result.message)).setResult(cur.result))
         else                           values.add(FieldCell(Field("error").bold).setResult(cur.result))
       }
     }
@@ -208,7 +208,7 @@ case object Form:
    */
   def formStacktraces(form: Form)(implicit args: Arguments = Arguments()) =
     val traces = Xml.stacktraces(new FormCell(form))
-    if (traces.isEmpty) NodeSeq.Empty
+    if traces.isEmpty then NodeSeq.Empty
     else <pre><i>[click on failed cells to see the stacktraces]</i>{traces}</pre>
 
   /**
@@ -221,7 +221,7 @@ case object Form:
     <tr>{spanned}</tr>
 
   private def cell(c: Cell, colnumber: Int = 0)(implicit args: Arguments) =
-    if (colnumber > 1)
+    if colnumber > 1 then
       c.xml(args).toList match
       case start :+ (e: Elem) => start ++ (e % ("colspan" -> colnumber.toString))
         case other                         => other

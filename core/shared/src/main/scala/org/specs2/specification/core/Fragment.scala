@@ -163,9 +163,9 @@ object Fragment:
     case _          => false
 
   def fragmentType(f: Fragment) =
-    if (isExample(f))     "Example"
-    else if (isText(f))   "Text"
-    else if (isMarker(f)) "Marker"
+    if isExample(f) then     "Example"
+    else if isText(f) then   "Text"
+    else if isMarker(f) then "Marker"
     else                  "Other"
 
   /** iterate over elements to create a Fragments object */

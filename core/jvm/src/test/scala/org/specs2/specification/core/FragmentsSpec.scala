@@ -15,7 +15,7 @@ class FragmentsSpec(ee: ExecutionEnv) extends Spec with Tables with TypedEqual {
     def t(s: String) = text(s)
     def e(s: String) = example(s, success)
     def toFragment(s: String) =
-      if (s.trim.startsWith("t")) t(s.trim.drop(1).toString.trimEnclosing("(", ")"))
+      if s.trim.startsWith("t") then t(s.trim.drop(1).toString.trimEnclosing("(", ")"))
       else e(s.trim.drop(1).toString.trimEnclosing("(", ")"))
 
     "Fragments"                  | "result"                            |>

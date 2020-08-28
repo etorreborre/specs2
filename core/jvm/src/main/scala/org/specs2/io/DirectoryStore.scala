@@ -12,7 +12,7 @@ case class DirectoryStore(baseDirectory: DirectoryPath, fileSystem: FileSystem) 
 
   def get[A](key: Key[A]): Operation[Option[A]] =
     fileSystem.exists(filepath(key)).flatMap { e =>
-      if (e) fileSystem.readFile(filepath(key)).map(content => StoreKeys.decode(key, content))
+      if e then fileSystem.readFile(filepath(key)).map(content => StoreKeys.decode(key, content))
       else   Operation.ok(None)
     }
 

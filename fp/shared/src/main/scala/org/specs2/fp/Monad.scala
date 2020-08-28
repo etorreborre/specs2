@@ -29,14 +29,14 @@ trait Monad[F[_]] extends Applicative[F]:
 
 
   def iterateWhile[A](f: F[A])(p: A => Boolean): F[A] =
-    bind(f)(y => if (p(y)) iterateWhile(f)(p) else point(y))
+    bind(f)(y => if p(y) then iterateWhile(f)(p) else point(y))
 
   /**
    * Execute an action repeatedly until its result satisfies the given predicate
    * and return that result, discarding all others.
    */
   def iterateUntil[A](f: F[A])(p: A => Boolean): F[A] =
-    bind(f)(y => if (p(y)) point(y) else iterateUntil(f)(p))
+    bind(f)(y => if p(y) then point(y) else iterateUntil(f)(p))
 
 object Monad:
 
@@ -108,4 +108,3 @@ trait MonadSyntax:
 
     def flatten: F[A] =
       monad.flatMap(fa)(identity)
-

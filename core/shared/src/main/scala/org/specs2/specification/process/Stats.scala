@@ -43,11 +43,11 @@ case class Stats(specs:        Int = 0,
   def hasExpectations = expectations > 0
   /** @return an equivalent result for display */
   def result =
-    if (failures + errors == 0)
-      if (successes > 0 || skipped + pending == 0) StandardResults.success
-      else if (pending > skipped)                  StandardResults.pending
+    if failures + errors == 0 then
+      if successes > 0 || skipped + pending == 0 then StandardResults.success
+      else if pending > skipped then                  StandardResults.pending
       else                                         StandardResults.skipped
-    else if (errors > 0)           StandardResults.anError
+    else if errors > 0 then           StandardResults.anError
     else                           StandardResults.failure
 
   /** @return true if there are no issues at all */
@@ -92,7 +92,7 @@ case class Stats(specs:        Int = 0,
       "skipped"      -> skipped.toString,
       "time"         -> timer.totalMillis.toString)
     attributes.foldLeft(stats) { (res, cur) =>
-      if (cur._2 == "0") res
+      if cur._2 == "0" then res
       else            res % new UnprefixedAttribute(cur._1, cur._2, Null)
     }
 
@@ -133,7 +133,7 @@ case class Stats(specs:        Int = 0,
   def updateFrom(previous: Stats): Stats =
     implicit val monoid = Stats.StatsMonoid
     val newTrend = this |+| previous.negate
-    if (newTrend == monoid.zero) this
+    if newTrend == monoid.zero then this
     else                         copy(trend = Some(newTrend))
 
   /**
@@ -152,12 +152,12 @@ case class Stats(specs:        Int = 0,
 
     def displayTrendValue(f: Stats => Int): String =
       val i = trend map (t => f(t)) getOrElse 0
-      if (i == 0) "" else if (i > 0) " (+"+i+")" else " ("+i+")"
+      if i == 0 then "" else if i > 0 then " (+"+i+")" else " ("+i+")"
 
     def displayValue(f: Stats => Int, label: String, optional: Boolean = false, invariant: Boolean = false): Option[String] =
       val base =
-        if (optional && invariant) f(this) optInvariantQty label
-        else if (optional)         f(this) optQty label
+        if optional && invariant then f(this) optInvariantQty label
+        else if optional then         f(this) optQty label
         else                       Some(f(this) qty label)
       base map (_ + displayTrendValue(f))
 
@@ -165,7 +165,7 @@ case class Stats(specs:        Int = 0,
       Seq(
         displayValue((_:Stats).specs, "specification", optional = true),
         displayValue((_:Stats).examples, "example"),
-        if (expectations != examples || trendIsDefined((_:Stats).expectations))
+        if expectations != examples || trendIsDefined((_:Stats).expectations) then
           displayValue((_:Stats).expectations, "expectation")
         else
           None,
@@ -221,7 +221,7 @@ case object Stats:
       case DecoratedResult(_, r)        => Stats(r)
 
   def fromXml(stats: scala.xml.Node): Option[Stats] =
-    if (stats.label != Stats.empty.toXml.label)
+    if stats.label != Stats.empty.toXml.label then
       None
     else
       val map = stats.attributes.asAttrMap

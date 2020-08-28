@@ -24,7 +24,7 @@ trait Debug extends ImplicitParameters:
     def pp(condition: Boolean): T = pp((t: T) => condition)
 
     /** print the object to the console and return it, if the condition is satisfied */
-    def pp(condition: T => Boolean): T = if (condition(value)) pp else value
+    def pp(condition: T => Boolean): T = if condition(value) then pp else value
     /** print the object to the console with a specific function and return it */
     def pp(show: T => String)(implicit p: ImplicitParam): T = { Use(p); println(show(value)); value }
     /** print the object to the console with a small message before */

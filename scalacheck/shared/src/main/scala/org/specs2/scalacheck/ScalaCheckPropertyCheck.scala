@@ -51,7 +51,7 @@ trait ScalaCheckPropertyCheck extends ExpectationsCreation:
     val result = Test.check(parameters.testParameters, prop1)
 
     val prettyTestResult = prettyResult(result, parameters, initialSeed, prettyFreqMap)(parameters.prettyParams)
-    val testResult = if (parameters.prettyParams.verbosity == 0) "" else prettyTestResult
+    val testResult = if parameters.prettyParams.verbosity == 0 then "" else prettyTestResult
 
     val checkResult =
       result match
@@ -103,7 +103,7 @@ trait ScalaCheckPropertyCheck extends ExpectationsCreation:
 
   def frequencies(fq: FreqMap[Set[Any]], parameters: Parameters, prettyFreqMap: FreqMap[Set[Any]] => Pretty) =
     val noCollectedValues = parameters.prettyParams.verbosity <= 0 || fq.getRatios.map(_._1).forall(_.toSet == Set(()))
-    if (noCollectedValues) ""
+    if noCollectedValues then ""
     else "\n" ++ prettyFreqMap(removeDetails(fq))(parameters.prettyParams)
 
   /** copied from ScalaCheck to be able to inject the proper freqMap pretty */
@@ -113,23 +113,23 @@ trait ScalaCheckPropertyCheck extends ExpectationsCreation:
     prms =>
 
     def displaySeed: String =
-      if (prms.verbosity >= 0)
+      if prms.verbosity >= 0 then
         s"\nThe seed is ${initialSeed.toBase64}\n"
       else
         ""
 
     def labels(ls: scala.collection.immutable.Set[String]) =
-      if(ls.isEmpty) ""
+      if ls.isEmpty then ""
       else s"> Labels of failing property:${ls.mkString("\n")}"
 
     val s = res.status match
       case Test.Proved(args) =>
         s"OK, proved property.${prettyArgs(args)(prms)}" +
-        (if (prms.verbosity > 1) displaySeed else "")
+        (if prms.verbosity > 1 then displaySeed else "")
 
       case Test.Passed =>
         "OK, passed "+res.succeeded+" tests."+
-          (if (prms.verbosity > 1) displaySeed else "")
+          (if prms.verbosity > 1 then displaySeed else "")
 
       case Test.Failed(args, l) =>
         s"Falsified after "+res.succeeded+s" passed tests.\n${labels(l)}${prettyArgs(args)(prms)}"+
@@ -142,7 +142,7 @@ trait ScalaCheckPropertyCheck extends ExpectationsCreation:
       case Test.PropException(args,e,l) =>
         s"Exception raised on property evaluation.${labels(l)}${prettyArgs(args)(prms)}> Exception: "+pretty(e,prms) +
           displaySeed
-    val t = if(prms.verbosity <= 1) "" else "Elapsed time: "+prettyTime(res.time)
+    val t = if prms.verbosity <= 1 then "" else "Elapsed time: "+prettyTime(res.time)
     val map = freqMapPretty(res.freqMap).apply(prms)
     s"$s$t$map"
   }

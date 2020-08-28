@@ -61,7 +61,7 @@ case class CommandLine(_arguments: Seq[String] = Seq()) extends ShowArgs:
 
   def filter(included: String*) = copy(_arguments = arguments.filter(included.toSet.contains))
   def filterNot(excluded: String*) = copy(_arguments = arguments.filterNot(excluded.toSet.contains))
-  def overrideWith(other: CommandLine) = copy(_arguments = if (other.arguments.isEmpty) this._arguments else other.arguments)
+  def overrideWith(other: CommandLine) = copy(_arguments = if other.arguments.isEmpty then this._arguments else other.arguments)
 
   override def toString = _arguments.mkString("CommandLine(", ", ", ")")
 

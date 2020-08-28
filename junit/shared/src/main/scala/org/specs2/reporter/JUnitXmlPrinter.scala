@@ -42,7 +42,7 @@ case class JUnitXmlPrinter(env: Env) extends Printer:
   def descriptionFold(spec: SpecStructure, stats: Stats): AsyncFold[(Fragment, Description), TestSuite] =
     val suite = TestSuite(specDescription(spec), spec.specClassName, stats.errors, stats.failures, stats.skipped, stats.timer.totalMillis)
     fromFoldLeft[Action, (Fragment, Description), TestSuite](suite) { case (res, (f, d)) =>
-      if (Fragment.isExample(f))
+      if Fragment.isExample(f) then
         f.executedResult.map { case ExecutedResult(result, timer) =>
           res.addTest(new TestCase(d, result, timer.totalMillis)(env.arguments))
         }

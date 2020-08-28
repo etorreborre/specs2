@@ -21,6 +21,6 @@ object FragmentsContinuation:
                  Execution.result(Error(e))))
 
     Execution(result, FragmentsContinuation { (r: Result) =>
-      if (r.isSuccess) Some(tryOr(fs)(fragmentsCreationError))
+      if r.isSuccess then Some(tryOr(fs)(fragmentsCreationError))
       else None
     })

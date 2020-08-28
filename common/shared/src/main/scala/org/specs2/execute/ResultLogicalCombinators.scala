@@ -29,7 +29,7 @@ trait ResultLogicalCombinators extends Results:
           case s @ Success(_,_) =>
             o match
               case Success(m, e) =>
-                if (r.message == m || r.message.isEmpty) Success(m, concat(s.exp, e), r.expectationsNb + o.expectationsNb)
+                if r.message == m || r.message.isEmpty then Success(m, concat(s.exp, e), r.expectationsNb + o.expectationsNb)
                 else                                     Success(r.message+" and "+m, concat(s.exp, e), r.expectationsNb + o.expectationsNb)
               case DecoratedResult(d, r1) =>
                 DecoratedResult(d, r.and(r1))
@@ -50,7 +50,7 @@ trait ResultLogicalCombinators extends Results:
             o match
               case DecoratedResult(d2, r2) =>
                 val andResult = d.result and r2
-                if (andResult.isSuccess) DecoratedResult(d.decorator, andResult)
+                if andResult.isSuccess then DecoratedResult(d.decorator, andResult)
                 else                     DecoratedResult(d2, andResult)
               case another                 => DecoratedResult(d.decorator, d.result and another)
 
@@ -71,7 +71,7 @@ trait ResultLogicalCombinators extends Results:
         case f @ Failure(_,_,_,_) =>
           o match
             case s @ Success(m, exp)    =>
-              if (r.message == m) r.addExpectationsNb(s.expectationsNb)
+              if r.message == m then r.addExpectationsNb(s.expectationsNb)
               else Success(r.message+" and "+m, exp, r.expectationsNb + s.expectationsNb)
             case Failure(m, e, st, d)   =>
               Failure(r.message+" and "+m, e, f.stackTrace ::: st, d).addExpectationsNb(r.expectationsNb)
@@ -91,7 +91,7 @@ trait ResultLogicalCombinators extends Results:
           o match
             case DecoratedResult(d2, r2) =>
               val orResult = d.result or r2
-              if (orResult.isSuccess) DecoratedResult(d.decorator, orResult)
+              if orResult.isSuccess then DecoratedResult(d.decorator, orResult)
               else                    DecoratedResult(d2, orResult)
             case other1                   => DecoratedResult(d.decorator, d.result or other1)
         case Error(_, _) => other
@@ -105,10 +105,10 @@ trait ResultLogicalCombinators extends Results:
       case other            => other
 
     /** only consider this result if the condition is true */
-    def when(condition: Boolean, message: String= ""): Result= if (condition) res else Success(message)
+    def when(condition: Boolean, message: String= ""): Result= if condition then res else Success(message)
     /** only consider this result if the condition is false */
     def unless(condition: Boolean, message: String= ""): Result = res.when(!condition, message)
     /** when the condition is true the result it taken as is, when it's false, take its negation */
-    def iff(condition: Boolean): Result = if (condition) res else res.not
+    def iff(condition: Boolean): Result = if condition then res else res.not
 
 object ResultLogicalCombinators extends ResultLogicalCombinators

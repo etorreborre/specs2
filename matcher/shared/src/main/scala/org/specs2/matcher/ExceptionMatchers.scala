@@ -87,7 +87,7 @@ trait ExceptionBaseMatchers extends ExpectationsCreation:
 
   /** re-throw an Error if an Exception was expected */
   private def errorMustBeThrownIfExceptionIsExpected(e: Throwable, klass: Class[_]) =
-    if (classOf[Exception].isAssignableFrom(klass) && classOf[Error].isAssignableFrom(e.getClass)) throw e
+    if classOf[Exception].isAssignableFrom(klass) && classOf[Error].isAssignableFrom(e.getClass) then throw e
 
   /**
    * This matchers matches exception instances.
@@ -135,7 +135,7 @@ trait ExceptionBaseMatchers extends ExpectationsCreation:
    * expr must not(throw[ExceptionX])
     */
   private def rethrowFinally[T](e: Throwable, andFinally: Throwable => Unit)(r: MatchResult[T]): MatchResult[T] =
-    if (!r.isSuccess) andFinally(e)
+    if !r.isSuccess then andFinally(e)
     r
 
   private def checkExceptionValue[T](expectable: Expectable[T], f: Throwable => Boolean, expectedAsString: String, andFinally: Throwable => Unit) =
@@ -185,7 +185,7 @@ trait ExceptionBaseMatchers extends ExpectationsCreation:
     getException(expectable.value) match
       case Some(e) =>
         rethrowFinally(e, andFinally) {
-          if (ef(e))
+          if ef(e) then
             val likeResult = f(e.asInstanceOf[E])
             Matcher.result(ef(e) && likeResult.isSuccess,
                            s"""${someOk(e)} and ${likeResult.message}""",

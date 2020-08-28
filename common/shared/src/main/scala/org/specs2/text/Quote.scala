@@ -12,7 +12,7 @@ trait Quote:
 
   /** quote a value, unless it is a collection of objects */
   def q(a: Any): String =
-    if (a == null) quote("null")
+    if a == null then quote("null")
     else
       a match
         case option: Option[_]      => quote(option.notNull)
@@ -24,11 +24,11 @@ trait Quote:
   /** quote a sequence, with commas if short, with newlines otherwise */
   def qseq(seq: Traversable[_]): String =
     val withCommas = q(seq.mkString(", "))
-    if (withCommas.length < 30) withCommas
+    if withCommas.length < 30 then withCommas
     else seq.mkString("\n", "\n  ", "\n")
 
   /** quote a string */
-  def quote(s: String, addQuotes: Boolean = true) = if (addQuotes) "'"+s+"'" else s
+  def quote(s: String, addQuotes: Boolean = true) = if addQuotes then "'"+s+"'" else s
 
   /** @return an object.toString() without quotes (used in messages creation) */
   def unq(a: Any)  = a.notNull

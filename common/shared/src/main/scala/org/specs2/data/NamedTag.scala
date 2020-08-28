@@ -80,7 +80,7 @@ object NamedTag:
   implicit val NamedTagsAreMonoid: Monoid[NamedTag] = new Monoid[NamedTag] {
     val zero: NamedTag = AlwaysWhenNoIncludeTag
     def append(t1: NamedTag, t2: =>NamedTag): NamedTag =
-      if (t1 == zero) t2
-      else if (t2 == zero) t1
+      if t1 == zero then t2
+      else if t2 == zero then t1
       else t1 overrideWith t2
   }

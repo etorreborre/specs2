@@ -51,7 +51,7 @@ class Expectable[+T] private[specs2] (t: () => T) { outer =>
    * apply a matcher on the value and return a MatchResult which can later on be transformed to a simple Result
    */
   def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] =
-    if (m == null) throw new IllegalArgumentException(s"You cannot use a null matcher on '$description'")
+    if m == null then throw new IllegalArgumentException(s"You cannot use a null matcher on '$description'")
     check(m.apply(this))
 
   /** additional checks can be done on the result, such as throwing an exception */
@@ -97,7 +97,7 @@ object Expectable:
   private[specs2] def apply[T](t: =>T, d1: =>String) = new Expectable(() => t) {
     override val desc: Option[String => String] = Some(aliasDisplay(d1))
   }
-  private[specs2] def aliasDisplay(d1: =>String) = (s: String) => d1 + (if (!s.isEmpty && !Seq("true", "false").contains(s)) " " + q(s) else "")
+  private[specs2] def aliasDisplay(d1: =>String) = (s: String) => d1 + (if !s.isEmpty && !Seq("true", "false").contains(s) then " " + q(s) else "")
   /** @return an Expectable with t as a value, and a description function */
   private[specs2] def apply[T](t: =>T, d1: Option[String => String]) = new Expectable(() => t) {
     override val desc: Option[String => String] = d1

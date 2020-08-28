@@ -30,9 +30,9 @@ trait ClassName { outer =>
   def className(name: String): String =
     val decoded = NameTransformer.decode(name)
     val remainingDollarNames = decoded.split("\\$")
-    val result = if (remainingDollarNames.size > 1)
+    val result = if remainingDollarNames.size > 1 then
       val lastName = remainingDollarNames(remainingDollarNames.size - 1)
-      if (lastName.matches("\\d") || lastName == "class")
+      if lastName.matches("\\d") || lastName == "class" then
         remainingDollarNames(remainingDollarNames.size - 2)
       else
         lastName
@@ -59,11 +59,11 @@ trait ClassName { outer =>
 
       // the simpleName is empty for an anonymous class when jdk >= 9
       // in that case we use the full mangled name
-      if (name.isEmpty) klass.getName
+      if name.isEmpty then klass.getName
       else              name
 
     }(klass.getName)
-    if (result.contains("anon") && klass.getSuperclass != null) simpleName(klass.getSuperclass)
+    if result.contains("anon") && klass.getSuperclass != null then simpleName(klass.getSuperclass)
     else result
 
   /**
@@ -71,7 +71,7 @@ trait ClassName { outer =>
    */
   def humanName(c: Class[_]): String =
     val name = simpleName(c)
-    if (name.contains("$") && c.getSuperclass != null) humanName(c.getSuperclass)
+    if name.contains("$") && c.getSuperclass != null then humanName(c.getSuperclass)
     else name.camelCaseToWords
 
   implicit class ClassOps(klass: Class[_]):

@@ -45,7 +45,7 @@ trait ValueChecks extends ValueChecksBase:
   /** a partial function returning an object having an AsResult instance can check a value */
   implicit def partialfunctionIsValueCheck[T, R : AsResult](f: PartialFunction[T, R]): ValueCheck[T] = new ValueCheck[T] {
     def check    = (t: T) => {
-      if (f.isDefinedAt(t)) functionResult(AsResult.safely(f(t)), t)
+      if f.isDefinedAt(t) then functionResult(AsResult.safely(f(t)), t)
       else                  Failure("undefined function for "+q(t))
     }
     def checkNot = (t: T) => Results.negate(check(t))
@@ -74,7 +74,7 @@ trait ValueChecksLowImplicits:
   }
 
   private[matcher] def functionResult[T](result: Result, t: T) =
-    if (Seq("true", "false").contains(result.message)) result.mapMessage(m => s"the function returns ${q(m)} on ${q(t)}")
+    if Seq("true", "false").contains(result.message) then result.mapMessage(m => s"the function returns ${q(m)} on ${q(t)}")
     else result
 
 

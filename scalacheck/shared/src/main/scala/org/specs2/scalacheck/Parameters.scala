@@ -48,7 +48,7 @@ case class Parameters(minTestsOk: Int                 = Test.Parameters.default.
         seed            = commandLine.value  ("scalacheck.seed").flatMap(Parameters.makeSeed).orElse(seed)
       ).setVerbosity(commandLine.intOr  ("scalacheck.verbosity",       prettyParams.verbosity))
 
-    if (commandLine.boolOr("scalacheck.verbose", false)) updated.verbose
+    if commandLine.boolOr("scalacheck.verbose", false) then updated.verbose
     else                                                 updated
 }
 

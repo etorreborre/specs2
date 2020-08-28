@@ -34,7 +34,7 @@ case class DefaultStatistics(arguments: Arguments, statisticsRepository: Statist
     // we need to use the arguments passed on the command line and override them with the spec arguments
     val args = arguments.overrideWith(spec.arguments)
 
-    if (args.wasIsDefined)
+    if args.wasIsDefined then
       spec.flatMap(f => eval[Action, Fragment](readStats(spec.specClassName)(f).toAction))
     else
       spec
@@ -63,11 +63,11 @@ object Statistics:
 
   /** create an empty Stats object for a given fragment, counting 1 for an example */
   def emptyStats(fragment: Fragment): Stats =
-    if (Fragment.isExample(fragment)) Stats(examples = 1)
+    if Fragment.isExample(fragment) then Stats(examples = 1)
     else                              Stats.empty
 
   def fromFragment(fragment: Fragment): Action[Stats] =
-    if (fragment.isExecutable)
+    if fragment.isExecutable then
       fragment.executedResult.map { case ExecutedResult(result, timer) =>
         emptyStats(fragment).withResult(result).copy(timer = timer)
       }

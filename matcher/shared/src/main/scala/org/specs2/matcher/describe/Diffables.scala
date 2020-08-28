@@ -11,7 +11,7 @@ object PrimitiveDiffable:
 
   def primitive[T]: Diffable[T] = new Diffable[T] {
     def diff(left: T, right: T) =
-      if (left == right) PrimitiveIdentical(left)
+      if left == right then PrimitiveIdentical(left)
       else PrimitiveDifference(left, right)
   }
 
@@ -25,7 +25,7 @@ class EitherDiffable[L : Diffable, R : Diffable]
 
   def valdiff[A](a: A, e: A, isRight: Boolean)(implicit di: Diffable[A]) =
     val result = di.diff(a, e)
-    if (result.identical) EitherIdentical(result, isRight = isRight)
+    if result.identical then EitherIdentical(result, isRight = isRight)
     else EitherDifferent(result, isRight = isRight)
 
   def diff(actual: Either[L, R], expected: Either[L, R]) =
@@ -40,7 +40,7 @@ class EitherRightDiffable[R](implicit rdi: Diffable[R]) extends Diffable[Right[N
     (actual, expected) match
       case (Right(a), Right(e)) =>
         val result = rdi.diff(a, e)
-        if (result.identical) EitherIdentical(result, isRight = true)
+        if result.identical then EitherIdentical(result, isRight = true)
         else EitherDifferent(result, isRight = true)
 
 class EitherLeftDiffable[L](implicit ldi: Diffable[L]) extends Diffable[Left[L, Nothing]]:
@@ -48,7 +48,7 @@ class EitherLeftDiffable[L](implicit ldi: Diffable[L]) extends Diffable[Left[L, 
     (actual, expected) match
     case (Left(a), Left(e)) =>
       val result = ldi.diff(a, e)
-      if (result.identical) EitherIdentical(result, isRight = false)
+      if result.identical then EitherIdentical(result, isRight = false)
       else EitherDifferent(result, isRight = true)
 
 class OptionDiffable[T : Diffable](implicit di: Diffable[T]) extends Diffable[Option[T]]:
@@ -56,7 +56,7 @@ class OptionDiffable[T : Diffable](implicit di: Diffable[T]) extends Diffable[Op
     (actual, expected) match
       case (Some(a), Some(e)) =>
         val result = di.diff(a, e)
-        if (result.identical) OptionIdentical(Some(result))
+        if result.identical then OptionIdentical(Some(result))
         else OptionDifferent(result)
       case (None, None) => OptionIdentical(None)
       case _ => OptionTypeDifferent(actual.isDefined, expected.isDefined)
@@ -67,7 +67,7 @@ case object OptionNoneDiffable extends Diffable[Option[Nothing]]:
 class TryDiffable[T : Diffable](implicit tdi: Diffable[Throwable]) extends Diffable[Try[T]]:
   def valdiff[A](a: A, e: A, isSuccess: Boolean)(implicit di: Diffable[A]) =
     val result = di.diff(a, e)
-    if (result.identical) TryIdentical(a, isSuccess = isSuccess)
+    if result.identical then TryIdentical(a, isSuccess = isSuccess)
     else TryDifferent(result, isSuccess = isSuccess)
 
   def diff(actual: Try[T], expected: Try[T]) =
@@ -80,7 +80,7 @@ class FailureDiffable(implicit di: Diffable[Throwable]) extends Diffable[Failure
   def diff(actual: Failure[Nothing], expected: Failure[Nothing]) =
     val (a, e) = (actual.exception, expected.exception)
     val result = di.diff(a, e)
-    if (result.identical) TryIdentical(a, isSuccess = false)
+    if result.identical then TryIdentical(a, isSuccess = false)
     else TryDifferent(result, isSuccess = false)
 
 
@@ -92,17 +92,17 @@ class MapDiffable[K, V](implicit diff: Diffable[V]) extends Diffable[Map[K, V]]:
     val removed = findRemoved(actual, expected)
     val keys = (changed ++ added ++ removed).map(_._1)
     val identical = actual.view.filterKeys(k => !keys.contains(k)).toSeq
-    if (keys.isEmpty) MapIdentical(actual)
+    if keys.isEmpty then MapIdentical(actual)
     else MapDifference(identical, changed, added, removed)
 
   private def findChanged(actual: Map[K, V], expected: Map[K, V]) =
-    for {
+    for
       k <- actual.keySet.intersect(expected.keySet).toSeq
       v1 <- actual.get(k)
       v2 <- expected.get(k)
       result = diff.diff(v1, v2)
       if !result.identical
-    } yield (k, result)
+    yield (k, result)
 
   private def findAdded(actual: Map[K, V], expected: Map[K, V]) =
     expected.view.filterKeys(k => !actual.contains(k)).toSeq
@@ -113,7 +113,7 @@ class MapDiffable[K, V](implicit diff: Diffable[V]) extends Diffable[Map[K, V]]:
 class StackTraceElementDiffable(implicit nameDiffable: Diffable[String], lineDiffable: Diffable[Int]) extends Diffable[StackTraceElement]:
 
   def diff(actual: StackTraceElement, expected: StackTraceElement) =
-    if (actual == expected)
+    if actual == expected then
       StackElementIdentical(actual)
     else
       StackElementDifferent(
@@ -126,16 +126,16 @@ class ThrowableDiffable(implicit sdi: Diffable[String], adi: Diffable[List[Stack
 
     def diff(actual: Throwable, expected: Throwable) =
       val messageResult = sdi.diff(actual.getMessage, expected.getMessage)
-      if (messageResult.identical)
+      if messageResult.identical then
         val stacktraceResult = adi.diff(actual.getStackTrace.toList, expected.getStackTrace.toList)
-        if (stacktraceResult.identical) ThrowableIdentical(actual)
+        if stacktraceResult.identical then ThrowableIdentical(actual)
         else ThrowableDifferentStackTrace(stacktraceResult)
       else ThrowableDifferentMessage(messageResult)
 
 class SetDiffable[E] extends Diffable[Set[E]]:
 
   def diff(actual: Set[E], expected: Set[E]): ComparisonResult =
-    if (actual == expected) SetIdentical(actual)
+    if actual == expected then SetIdentical(actual)
     else SetDifference(same = findSame(actual, expected),
       added = findAdded(actual, expected),
       removed = findRemoved(actual, expected))
@@ -165,7 +165,7 @@ class SeqDiffable[E](implicit di: Diffable[E]) extends Diffable[Seq[E]]:
 
   def diff(actual: Seq[E], expected: Seq[E]) =
     val diffs = compareExisting(actual, expected)
-    if (actual.length == expected.length && diffs.forall(_.identical)) SeqIdentical(actual)
+    if actual.length == expected.length && diffs.forall(_.identical) then SeqIdentical(actual)
     else SeqDifference(result = diffs,
       added = expected.drop(actual.length),
       removed = actual.drop(expected.length))
@@ -178,7 +178,7 @@ class ArrayDiffable[E](implicit di: Diffable[E]) extends Diffable[Array[E]]:
 
   def diff(actual: Array[E], expected: Array[E]) =
     val result = compareExisting(actual, expected)
-    if (actual.length == expected.length && result.toSeq.forall(_.identical))
+    if actual.length == expected.length && result.toSeq.forall(_.identical) then
       ArrayIdentical(actual.toIndexedSeq)
     else
       ArrayDifference(

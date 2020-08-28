@@ -18,7 +18,7 @@ trait Json:
         case _ => None
     val parser = new Parser
     // give the parser a chance to parse singly-quoted json
-    parseRaw(parser, s).orElse(if (s.contains("'")) parseRaw(parser, s.replace("'", "\"")) else None)
+    parseRaw(parser, s).orElse(if s.contains("'") then parseRaw(parser, s.replace("'", "\"")) else None)
 
   /** show JSON objects with null values shown as 'null' */
 

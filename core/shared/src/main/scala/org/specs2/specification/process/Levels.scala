@@ -45,7 +45,7 @@ trait Levels:
     case f if Fragment.isText(f)  => level.copy(start = true, incrementNext = true)
     case f @ Fragment(End,_ ,_)   => level.copy(start = false, incrementNext = false, max(0, level.l - 1))
     case f                        =>
-      if (level.incrementNext) level.copy(start = false, incrementNext = false, l = level.l + 1)
+      if level.incrementNext then level.copy(start = false, incrementNext = false, l = level.l + 1)
       else                     level
 
 
@@ -55,7 +55,7 @@ trait Levels:
     p.state[TreeLoc[(Fragment, Int)], TreeLoc[(Fragment, Int)]](init) {
       case ((f, level), treeLoc) =>
 
-        val parent = if (level == 0) treeLoc.root else (treeLoc.parentLocs :+ treeLoc).takeWhile(_.getLabel._2 < level).lastOption.getOrElse(treeLoc)
+        val parent = if level == 0 then treeLoc.root else (treeLoc.parentLocs :+ treeLoc).takeWhile(_.getLabel._2 < level).lastOption.getOrElse(treeLoc)
         val newTree = mapper(f) match
           case Some(fragment) => parent.insertDownLast(Leaf((fragment, level)))
           case None           => treeLoc

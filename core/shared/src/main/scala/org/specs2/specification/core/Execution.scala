@@ -180,7 +180,7 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
               case Some(r) =>
                 // if this execution is a step we still execute it
                 // to allow for clean up actions
-                if (mustJoin)
+                if mustJoin then
                   startExecution(env).executionResult.map(_ => (Error(FatalExecution(new Exception("stopped"))), timer.stop))
                 // otherwise we skip
                 else
@@ -226,7 +226,7 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
         executions.flatMap(_.futureResult(env).map(_.map(_._1)))
 
       lazy val before: Future[Result] =
-        if (sequential) runs.foldLeftM[Future, Result](Success())((res, cur) => cur.map(r => res and r))
+        if sequential then runs.foldLeftM[Future, Result](Success())((res, cur) => cur.map(r => res and r))
         else            Future.sequence(runs).map(_.suml)
 
       executing match
@@ -236,8 +236,8 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
             case _ =>
               updateRun { r => (env: Env) =>
                 before.flatMap { rs =>
-                  if (checkResult)
-                    if (rs.isSuccess) r(env)
+                  if checkResult then
+                    if rs.isSuccess then r(env)
                     else Future.successful(() => rs)
                   else r(env)
                 }
@@ -249,8 +249,8 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
         case Started(f) =>
 
           val future = before.flatMap { rs =>
-            if (checkResult)
-              if (rs.isSuccess) f
+            if checkResult then
+              if rs.isSuccess then f
               else              Future.successful((rs, new SimpleTimer))
             else f
           }
@@ -276,8 +276,8 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
 
   override def toString =
     "Execution("+
-      (if (run.isDefined) "executable" else "no run")+
-      (if (!isolable) ", global" else "") +
+      (if run.isDefined then "executable" else "no run")+
+      (if !isolable then ", global" else "") +
       previousResult.fold("")(", previous " + _) +
      ")"
 
@@ -379,7 +379,7 @@ object Execution:
   /** get the execution statistics of a specification as a Decorated result */
   def getStatistics(env: Env, specClassName: String): Result =
     AsResult.safely(env.statisticsRepository.getStatisticsOr(specClassName, Stats.empty).map { s =>
-      if (s.examples == 0) Pending(" "): Result // use a space to avoid PENDING to be appended after the spec name
+      if s.examples == 0 then Pending(" "): Result // use a space to avoid PENDING to be appended after the spec name
       else                 DecoratedResult(s.copy(specs = s.specs + 1), s.result): Result
     })
 

@@ -23,22 +23,22 @@ case class DefaultFilesRunner(env: Env, specificationsFinder: SpecificationsFind
   def run: Action[Stats] =
     val base = arguments.commandLine.valueOr("filesrunner.basepath", new java.io.File(specificationsBasePath).getAbsolutePath)
 
-    val specs = for {
+    val specs = for
       basePath <- Action.checkThat(base, new java.io.File(base).isDirectory, s"$base must be a directory")
       ss <- specificationsFinder.findSpecifications(
         glob = arguments.commandLine.valueOr("filesrunner.path", specificationsPath),
         pattern = arguments.commandLine.valueOr("filesrunner.pattern", specificationsPattern),
         basePath = DirectoryPath.unsafe(basePath),
         verbose = isVerbose).toAction
-    } yield ss
+    yield ss
 
-    for {
+    for
       _     <- beforeExecution.toAction
       ss    <- specs.map(sort)
       cr    <- ClassRunner.createClassRunner(env).toAction
       stats <- ss.toList.traverse(cr.run)
       _     <- afterExecution(ss).toAction
-    } yield stats.suml
+    yield stats.suml
 
   /** sort the specifications in topological order where specification i doesn't depend on specification j if i > j == dependents first */
   def sort = { (specifications: Seq[SpecificationStructure]) =>
@@ -50,16 +50,16 @@ case class DefaultFilesRunner(env: Env, specificationsFinder: SpecificationsFind
     arguments.isSet("filesrunner.verbose")
 
   /** print a message before the execution */
-  protected def beforeExecution: Operation[Unit] = for {
+  protected def beforeExecution: Operation[Unit] = for
     _        <- logger.info("\nExecuting specifications", isVerbose)
     printers <- PrinterFactory.create(env).createPrinters
     _        <- logger.info("printers are " + printers.mkString(", "), isVerbose)
-  } yield ()
+  yield ()
 
 
   /** print a message after the execution based on the number of specifications */
   protected def afterExecution(specs: Seq[SpecificationStructure]): Operation[Unit] =
-    if (specs.isEmpty) logger.info("No specification found\n", isVerbose)
+    if specs.isEmpty then logger.info("No specification found\n", isVerbose)
     else               logger.info("Finished the execution of " + specs.size + " specifications\n", isVerbose)
 
 /**

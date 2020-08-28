@@ -34,11 +34,11 @@ trait Reporter:
  */
 case class DefaultReporter(statistics: Statistics, statisticsRepository: StatisticsRepository, selector: Selector, executor: Executor, printers: List[Printer], env: Env) extends Reporter:
 
-  def report(specs: List[SpecStructure]): Action[Stats] = for {
+  def report(specs: List[SpecStructure]): Action[Stats] = for
     _     <- prepare(specs)
     stats <- specs.traverse(reportOne)
     _     <- finalize(specs)
-  } yield stats.suml
+  yield stats.suml
 
   def prepare(specs: List[SpecStructure]): Action[Unit] =
     printers.traverse(_.prepare(specs)).void
@@ -58,7 +58,7 @@ case class DefaultReporter(statistics: Statistics, statisticsRepository: Statist
 
     val contents: AsyncStream[Fragment] =
       // evaluate all fragments before reporting if required
-      if (env.arguments.execute.asap) Producer.emitAction(executing.contents.runList)
+      if env.arguments.execute.asap then Producer.emitAction(executing.contents.runList)
       else                            executing.contents
 
     val sinks = (printers.map(_.sink(spec)) :+ statsStoreSink(spec)).sumAll

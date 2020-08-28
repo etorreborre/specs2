@@ -31,14 +31,14 @@ object BestMatching:
       Map[Int, Seq[Int]]().withDefault(_ => Vector.empty)
 
     val edges = matches.foldLeft(startMap) { case (res, (t, i, v, j, r)) =>
-      if (r.isSuccess) res + (i -> (res(i) :+ j).sorted) else res
+      if r.isSuccess then res + (i -> (res(i) :+ j).sorted) else res
     }
 
     // find the maximal matching
     val best = findMaximalMatching(0 until ts.size, (0 until vs.size).map(_ + ts.size), edges)
     val successfulIndices = best.map(_._1)
     val successes =
-      if (!eachCheck) allResults.collect { case ((i, j), (t, v, r)) if best.exists(_._1 == i) && r.isSuccess => (t, v, r) }.toList
+      if !eachCheck then allResults.collect { case ((i, j), (t, v, r)) if best.exists(_._1 == i) && r.isSuccess => (t, v, r) }.toList
       else best.sorted.map(allResults)
 
     // collect one failure per unmatched value

@@ -33,7 +33,7 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
    * @return the colored textual status of the result
    */
   def coloredStatus(implicit args: Arguments = Arguments()): String =
-    if (args.plan)
+    if args.plan then
       args.pendingColor("*")
     else
       this match
@@ -53,7 +53,7 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
 
   /** @return the textual status of the result */
   def statusName(implicit args: Arguments = Arguments()): String =
-    if (args.plan)
+    if args.plan then
       "info"
     else
       this match
@@ -78,7 +78,7 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
   def mapMessage(f: String => String): Result = updateMessage(f(message))
 
   /** prepend another message and a conjunction depending on the status of this result */
-  def prependMessage(pre: String): Result = mapMessage(m => s"$pre ${if (isSuccess) "and" else "but"} "+m)
+  def prependMessage(pre: String): Result = mapMessage(m => s"$pre ${if isSuccess then "and" else "but"} "+m)
 
   /** update the expected of a result, keeping the subclass type */
   def updateExpected(exp: String): Result =
@@ -223,7 +223,7 @@ object Result:
     val zero = Success()
 
     def append(mr1: Result, mr2: =>Result): Result =
-      if (mr1.isIssue) mr1
+      if mr1.isIssue then mr1
       else ResultFailureMonoid.append(mr1, mr2)
   }
 
@@ -262,18 +262,18 @@ trait Results:
    * This avoids writing b must beTrue
    */
   implicit def toResult(b: Boolean): Result =
-    if (b) org.specs2.execute.Success("true") else org.specs2.execute.Failure("false", "true", Nil)
+    if b then org.specs2.execute.Success("true") else org.specs2.execute.Failure("false", "true", Nil)
 
   def booleanToSimpleResult(b: Boolean): Result =
-    if (b) org.specs2.execute.Success("true") else org.specs2.execute.Failure("false", "", Nil, NoDetails)
+    if b then org.specs2.execute.Success("true") else org.specs2.execute.Failure("false", "", Nil, NoDetails)
 
   def negate(r: Result) =
-    if (r.isSuccess)      Failure(negateSentence(r.message), r.expected).setExpectationsNb(r.expectationsNb)
-    else if (r.isFailure) Success(negateSentence(r.message), r.expected).setExpectationsNb(r.expectationsNb)
+    if r.isSuccess then      Failure(negateSentence(r.message), r.expected).setExpectationsNb(r.expectationsNb)
+    else if r.isFailure then Success(negateSentence(r.message), r.expected).setExpectationsNb(r.expectationsNb)
     else r
 
   def negateWhen(condition: Boolean)(r: Result) =
-    if (condition) negate(r) else r
+    if condition then negate(r) else r
 
 object Results extends Results
 

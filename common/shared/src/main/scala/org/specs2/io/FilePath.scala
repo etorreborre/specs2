@@ -16,7 +16,7 @@ case class FilePath(dir: DirectoryPath, name: FileName):
   def root: DirectoryPath = dir.root
 
   /** @return the path for this file as a / separated string */
-  def path: String = if (dir.isRoot) name.name else dir.path + "/" + name.name
+  def path: String = if dir.isRoot then name.name else dir.path + "/" + name.name
 
   /** @return a File for this path */
   def toFile: File = new File(path)

@@ -15,23 +15,27 @@ object IsEmpty extends IsEmptyLowPriority1:
       IsEmpty[T].isEmpty(t)
 
   implicit def seqIsEmpty[T]: IsEmpty[Seq[T]] =
-    new IsEmpty[Seq[T]]:
+    new IsEmpty[Seq[T]] {
       def isEmpty(t: Seq[T]): Boolean =
         t.isEmpty
+    }
 
   implicit def arrayIsEmpty[T]: IsEmpty[Array[T]] =
-    new IsEmpty[Array[T]]:
+    new IsEmpty[Array[T]] {
       def isEmpty(t: Array[T]): Boolean =
         t.isEmpty
+    }
 
 trait IsEmptyLowPriority1 extends IsEmptyLowPriority2:
   implicit def listIsEmpty[T]: IsEmpty[List[T]] =
-    new IsEmpty[List[T]]:
+    new IsEmpty[List[T]] {
       def isEmpty(t: List[T]): Boolean =
         t.isEmpty
+    }
 
 trait IsEmptyLowPriority2:
   implicit def stringIsEmpty: IsEmpty[String] =
-    new IsEmpty[String]:
+    new IsEmpty[String] {
       def isEmpty(t: String): Boolean =
         t.isEmpty
+    }

@@ -8,7 +8,7 @@ trait Monoid[F] extends Semigroup[F]:
   def zero: F
 
   def multiply(value: F, n: Int): F =
-    if (n <= 0) zero else multiply1(value, n - 1)
+    if n <= 0 then zero else multiply1(value, n - 1)
 
 object Monoid:
   @inline def apply[F](implicit F: Monoid[F]): Monoid[F] = F
@@ -43,5 +43,3 @@ object Monoid:
       m2.foldLeft(m1) { case (res, (k, v)) => res.updated(k, res.get(k).map(Monoid[V].append(_, v)).getOrElse(v)) }
 
     instance((s1, s2) => merge(s1, s2), Map())
-
-

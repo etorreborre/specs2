@@ -41,7 +41,7 @@ case class DefaultSelector(commandLineArguments: Arguments) extends Selector:
     val arguments = commandLineArguments.overrideWith(specArguments)
 
     val regex = arguments.ex
-    if (regex !=".*")
+    if regex !=".*" then
       p.filter {
         case Fragment(Text(t),e,_) if e.isExecutable => t matchesSafely regex
         case Fragment(Code(t),e,_) if e.isExecutable => t matchesSafely regex
@@ -76,7 +76,8 @@ case class DefaultSelector(commandLineArguments: Arguments) extends Selector:
           (Option(fragment), sections)
       } flatMap (f => emit(f.toList))
 
-    if ((arguments.include + arguments.exclude).nonEmpty) (normalize |> go |> removeMarkers)(p)
+    val hasFilter = (arguments.include + arguments.exclude).nonEmpty
+    if hasFilter then (normalize |> go |> removeMarkers)(p)
     else p
   }
 
@@ -128,7 +129,7 @@ case class DefaultSelector(commandLineArguments: Arguments) extends Selector:
   def updateSections(sections: List[NamedTag], tag: NamedTag): List[NamedTag] =
     val endTags     = sections.filter(_.names.exists(tag.names.contains))
     val startTags   = sections.map(t => t.removeNames(tag.names)).filterNot(_.names.isEmpty)
-    if (endTags.isEmpty) startTags :+ tag else startTags
+    if endTags.isEmpty then startTags :+ tag else startTags
 
   def isEndTag(sections: List[NamedTag], tag: NamedTag): Boolean =
     sections.exists(_.names.exists(tag.names.contains))
@@ -138,7 +139,7 @@ case class DefaultSelector(commandLineArguments: Arguments) extends Selector:
       p1.producerState[Fragment, Option[Fragment]](None) {
         // tag or section for before
         case ((m @ Fragment(Marker(t, _, false),_,_), _), previous)  =>
-          if (previous.exists(isEmptyText))
+          if previous.exists(isEmptyText) then
             (emit(m +: previous.toList), None)
           else
             (emit(previous.toList :+ m), None)
@@ -192,7 +193,7 @@ case class DefaultSelector(commandLineArguments: Arguments) extends Selector:
    */
   def filterByPrevious(specArguments: Arguments): AsyncTransducer[Fragment, Fragment] = { (p: AsyncStream[Fragment]) =>
     val arguments = commandLineArguments.overrideWith(specArguments)
-    if (arguments.wasIsDefined) p.filter((_: Fragment).was(arguments.was))
+    if arguments.wasIsDefined then p.filter((_: Fragment).was(arguments.was))
     else p
   }
 

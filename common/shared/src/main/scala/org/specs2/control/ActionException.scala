@@ -6,7 +6,7 @@ package control
  */
 case class ActionException(warnings: List[String], message: Option[String], throwable: Option[Throwable]) extends Exception:
   override def getMessage: String =
-    (if (warnings.nonEmpty) warnings.mkString("Warnings:\n", "\n", "\n") else "") +
+    (if warnings.nonEmpty then warnings.mkString("Warnings:\n", "\n", "\n") else "") +
     message.map(_ + "\n").getOrElse("") +
     throwable.map(t => t.getStackTrace.mkString(t.getMessage+"\n", "\n", "")).getOrElse("")
 

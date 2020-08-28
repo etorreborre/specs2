@@ -23,9 +23,9 @@ trait SeqGenerators:
         val (i, j) = (cur.head, cur.last)
         res :+ ts.slice(i, j)
       }
-    for {
+    for
       indices <- Gen.someOf(ts.indices)
-    } yield slice(indices.toList.sorted)
+    yield slice(indices.toList.sorted)
 
 
 

@@ -180,13 +180,13 @@ trait Matcher[-T] { outer =>
 
   /** only apply this matcher if the condition is true */
   def when(b: Boolean, m: String= ""): Matcher[T] = new Matcher[T] {
-    def apply[U <: T](a: Expectable[U]) = if (b) outer(a) else MatchSuccess(m, "ko", a)
+    def apply[U <: T](a: Expectable[U]) = if b then outer(a) else MatchSuccess(m, "ko", a)
   }
   /** only apply this matcher if the condition is false */
   def unless(b: Boolean, m: String= ""): Matcher[T] = when(!b, m)
   /** when the condition is true the matcher is applied, when it's false, the matcher must fail */
   def iff(b: Boolean): Matcher[T] = new Matcher[T] {
-    def apply[U <: T](a: Expectable[U]) = if (b) outer(a) else outer(a).not
+    def apply[U <: T](a: Expectable[U]) = if b then outer(a) else outer(a).not
   }
   /**
    *  The `lazily` operator returns a Matcher which will match a function returning the expected value
@@ -249,12 +249,12 @@ object Matcher:
 
   /** @return a MatchResult[T] from a condition, 2 messages and details, and a trace when there is a failure */
   def result[T](test: Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[T], trace: List[StackTraceElement], details: Details): MatchResult[T] =
-    if (test) MatchSuccess(okMessage.notNull, koMessage.notNull, value)
+    if test then MatchSuccess(okMessage.notNull, koMessage.notNull, value)
     else      MatchFailure.create(okMessage.notNull, koMessage.notNull, value, trace, details)
 
   /** @return a MatchResult[T] from a condition, 2 messages and details */
   def result[T](test: Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[T], details: Details): MatchResult[T] =
-    if (test) MatchSuccess(okMessage.notNull, koMessage.notNull, value)
+    if test then MatchSuccess(okMessage.notNull, koMessage.notNull, value)
     else      MatchFailure.create(okMessage.notNull, koMessage.notNull, value, details)
 
   /** @return a MatchResult[T] from a condition and 2 messages */

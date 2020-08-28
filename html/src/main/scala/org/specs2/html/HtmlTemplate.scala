@@ -43,7 +43,7 @@ object HtmlTemplate:
     lazy val endif: Parser[String] = "$endif$"
 
     lazy val conditional = if1.flatMap { variable =>
-      if (variables.contains(variable)) block <~ (else1 ~> block <~ endif)
+      if variables.contains(variable) then block <~ (else1 ~> block <~ endif)
       else                              (block ~ else1) ~> block <~ endif
     }
 

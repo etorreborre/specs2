@@ -33,9 +33,9 @@ trait HtmlUrls:
 
   /**@return a Success if the url can be accessed, a Failure otherwise */
   def isAliveResult(url: String, html: NodeSeq, others: Map[String, NodeSeq] = Map(), rootDirectory: DirectoryPath = DirectoryPath.EMPTY): Result =
-    if (url.startsWith("http")) isAliveHttpResult(url)
-    else if (url.startsWith("#")) isAliveAnchorResult(url, html)
-    else if (url.contains("#")) isAliveAnchorInFileResult(url, others, rootDirectory)
+    if url.startsWith("http") then isAliveHttpResult(url)
+    else if url.startsWith("#") then isAliveAnchorResult(url, html)
+    else if url.contains("#") then isAliveAnchorInFileResult(url, others, rootDirectory)
     else isAliveFileResult(url, others, rootDirectory)
 
 
@@ -52,7 +52,7 @@ trait HtmlUrls:
     aliveResult(url, isAliveAnchorInFile(url, others, rootDirectory))
 
   protected def aliveResult(url: String, condition: Boolean): Result =
-    if (condition) Success(url + " is alive")
+    if condition then Success(url + " is alive")
     else           Failure(url + " is dead")
 
   /**

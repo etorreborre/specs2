@@ -59,16 +59,16 @@ import org.scalacheck.Gen._
 trait IterableData:
 
   def arbitraryIterable: Arbitrary[Iterable[Any]] = Arbitrary {
-    for {
+    for
       i0 <- listOfN(3, oneOf(1, 2, 3))
       i1 <- listOfN(3, oneOf[Any](1, 4, 5, i0))
       i2 <- listOfN(3, oneOf[Any](i0, i1, 2, 3))
-    } yield i2
+    yield i2
   }
 
   val sameIterablesOfDifferentTypes: Arbitrary[(Iterable[Any], Iterable[Any])] = Arbitrary {
-    for {
+    for
       i0 <- listOfN(3, oneOf(1, 2, 3))
       i1 <- listOfN(3, oneOf(1, 2, 3, i0))
-    } yield (LazyList(i1:_*), i1.scramble)
+    yield (LazyList(i1:_*), i1.scramble)
   }

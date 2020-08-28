@@ -22,36 +22,36 @@ trait Trim:
   case class Trimmed(s: String):
 
     def trimStart(start: String) =
-      if (s.trim.startsWith(start)) s.trim.drop(start.length) else s.trim
+      if s.trim.startsWith(start) then s.trim.drop(start.length) else s.trim
 
     def trimEnd(end: String) =
-      if (s.trim.endsWith(end)) s.trim.dropRight(end.length)  else s.trim
+      if s.trim.endsWith(end) then s.trim.dropRight(end.length)  else s.trim
 
     def trimEndSpace =
       s.takeWhile(_ == ' ') + s.trim
 
     def trimEnclosing(start: String): String = trimEnclosing(start, start)
 
-    def trimEnclosing(start: String, end: String): String = if (s.trim.startsWith(start) && s.trim.endsWith(end))
+    def trimEnclosing(start: String, end: String): String = if s.trim.startsWith(start) && s.trim.endsWith(end) then
       trimStart(start).trimEnd(end).trim
     else s
 
     def trimEnclosingXmlTag(t: String) = trimFirst("<"+t+".*?>").trimEnd("</"+t+">")
 
     def removeStart(start: String) =
-      if (s.startsWith(start)) s.drop(start.length) else s
+      if s.startsWith(start) then s.drop(start.length) else s
 
     def removeEnd(end: String) =
-      if (s.endsWith(end)) s.dropRight(end.length)  else s
+      if s.endsWith(end) then s.dropRight(end.length)  else s
 
     def removeEnclosing(toRemove: String):String = removeEnclosing(toRemove, toRemove)
 
     def removeEnclosing(start: String, end: String):String =
-      if (isEnclosing(start, end)) removeStart(start).removeEnd(end)
+      if isEnclosing(start, end) then removeStart(start).removeEnd(end)
       else                                 s
 
     def removeEnclosingXmlTag(t: String) =
-      if (isEnclosing("<"+t, "</"+t+">")) removeFirst("<"+t+".*?>").trimEnd("</"+t+">")
+      if isEnclosing("<"+t, "</"+t+">") then removeFirst("<"+t+".*?>").trimEnd("</"+t+">")
       else                                s
 
     def isEnclosing(start: String, end: String) = s.startsWith(start) && s.endsWith(end)
@@ -70,13 +70,13 @@ trait Trim:
 
     def removeLast(exp: String) =
       val matches = exp.r.findAllIn(s).matchData.toSeq
-      if (matches.isEmpty) s
+      if matches.isEmpty then s
       else
         val last = matches.last
         s.substring(0, last.start) + s.substring(last.end, s.length)
 
     /** trim the string of everything that is before the start substring if there is one */
-    def startFrom(start: String) = if (s.startsWith(start) || !s.contains(start)) s else new String(s.substring(s.indexOf(start)))
+    def startFrom(start: String) = if s.startsWith(start) || !s.contains(start) then s else new String(s.substring(s.indexOf(start)))
 
     def trimReplace(pairs: (String, String)*) = pairs.foldLeft(s.trim) { (res, cur) =>
       res.replace(cur._1, cur._2)
@@ -135,20 +135,20 @@ trait Trim:
     def splitTrim(separator: String): Seq[String] = s.split(separator).collect { case t if !t.trim.isEmpty => t.trim}.toSeq
 
     /** @return the string or empty if the condition is true */
-    def unless(condition: Boolean) = if (condition) "" else s
+    def unless(condition: Boolean) = if condition then "" else s
 
     /** truncate a string to a given number of characters and ellide the missing characters with ... */
     def truncate(length: Int): String =
-      if (s.length > length) s.take(length - 3)+"..."
+      if s.length > length then s.take(length - 3)+"..."
       else s
 
   implicit class offSettable(s: String):
     def offset(n: Int) =
-      if (n == 0) s
+      if n == 0 then s
       else        s.split("\n", -1).map(l => offsetLine(l, n)).mkString("\n")
 
     private def offsetLine(l: String, n: Int) =
-      if (n > 0 ) " " * n + l
+      if n > 0  then " " * n + l
       else        l.takeWhile(_ == ' ').drop(-n).mkString + l.dropWhile(_ == ' ').mkString
 
 private[specs2]

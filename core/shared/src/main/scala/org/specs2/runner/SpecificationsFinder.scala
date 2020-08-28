@@ -127,11 +127,11 @@ case class DefaultSpecificationsFinder(env: Env) extends SpecificationsFinder:
       logger.info("  the pattern used to match specification objects is: "+p, verbose) >>
         Operation.delayed(Pattern.compile(p))
 
-    for {
+    for
       objectPattern <- specObjectPattern
       classPattern  <- specClassPattern
       paths         <- fileSystem.filePaths(basePath, pathGlob, verbose)
-    } yield paths.traverse(path => readClassNames(path, objectPattern, classPattern, verbose)).map(_.flatten)
+    yield paths.traverse(path => readClassNames(path, objectPattern, classPattern, verbose)).map(_.flatten)
   }.flatten
 
   /**
@@ -144,11 +144,11 @@ case class DefaultSpecificationsFinder(env: Env) extends SpecificationsFinder:
     classPattern: Pattern,
     verbose: Boolean): Operation[List[String]] = {
     val sourceFile = SourceFile(logger)
-    for {
+    for
       fileContent <- fileSystem.readFile(path)
       packName    =  sourceFile.packageName(fileContent)
       _           <- logger.info("Searching for specifications in file: "+path.path, verbose)
-    } yield (sourceFile.classNames(packName, fileContent, objectPattern, "$", verbose) |@| sourceFile.classNames(packName, fileContent, classPattern, "", verbose))(_ ++ _)
+    yield (sourceFile.classNames(packName, fileContent, objectPattern, "$", verbose) |@| sourceFile.classNames(packName, fileContent, classPattern, "", verbose))(_ ++ _)
   }.flatten
 
   /**

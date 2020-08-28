@@ -82,7 +82,7 @@ trait MatchResult[+T] extends ResultLike:
 
   /** apply the matcher */
   def be[S >: T](m: Matcher[T]): MatchResult[S] =
-    if (m == null) apply(new BeNull)
+    if m == null then apply(new BeNull)
     else apply(m)
 
   def be[S >: T <: AnyRef](s: S): MatchResult[S] =

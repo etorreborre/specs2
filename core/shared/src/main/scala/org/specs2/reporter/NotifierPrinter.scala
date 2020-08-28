@@ -40,7 +40,7 @@ case class NotifierPrinter(commandLineArguments: Arguments):
     def fold = (ps: S, f: Fragment) => {
       // if the previous state was defining the closing of a block
       // the new state must not define a close action
-      val s = if (ps.close) ps.copy(close = false) else ps
+      val s = if ps.close then ps.copy(close = false) else ps
       f match
         // a block start. The next text is the "context" name
         case Fragment(Start,_,_) => s.copy(start = true, close = false, hide = true)
@@ -48,7 +48,7 @@ case class NotifierPrinter(commandLineArguments: Arguments):
         case Fragment(End,_ ,_) => s.copy(start = false, close = true, hide = true)
 
         case f1 if Fragment.isText(f1) =>
-          if (s.start) s.copy(context = f1.description.show, start = true, hide = false)
+          if s.start then s.copy(context = f1.description.show, start = true, hide = false)
           else         s.copy(context = f1.description.show, start = false, hide = false)
 
         case f1 if Fragment.isExample(f1) => s.copy(start = false, hide = false)
@@ -67,13 +67,13 @@ case class NotifierPrinter(commandLineArguments: Arguments):
     f.executedResult.map { er =>
         val location = f.location.show
 
-        if (!notified.hide)
-          if (notified.start) n.contextStart(notified.context.trim, location)
+        if !notified.hide then
+          if notified.start then n.contextStart(notified.context.trim, location)
           else
-            if (Fragment.isExample(f))   notifyExample(n, f, er, args)
-            else if (Fragment.isStep(f)) notifyStep(n, f, er, args)
-            else if (Fragment.isText(f)) notifyText(n, f, args)
-        else if (notified.close) n.contextEnd(notified.context.trim, location)
+            if Fragment.isExample(f) then   notifyExample(n, f, er, args)
+            else if Fragment.isStep(f) then notifyStep(n, f, er, args)
+            else if Fragment.isText(f) then notifyText(n, f, args)
+        else if notified.close then n.contextEnd(notified.context.trim, location)
     }
 
   private def notifyExample(n: Notifier, f: Fragment, executedResult: ExecutedResult, args: Arguments) =

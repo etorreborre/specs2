@@ -64,10 +64,10 @@ trait Classes extends ClassOperations:
                                                                    defaultInstances: =>List[AnyRef]): Operation[T] =
 
     constructor.setAccessible(true)
-    if (constructor.getParameterTypes.isEmpty)
+    if constructor.getParameterTypes.isEmpty then
       newInstance(klass, constructor.newInstance())
 
-    else if (constructor.getParameterTypes.size == 1)
+    else if constructor.getParameterTypes.size == 1 then
       defaultInstances.find(i => constructor.getParameterTypes.apply(0) isAssignableFrom i.getClass) match
         case None =>
           // if the specification has a constructor with one parameter, it is either because

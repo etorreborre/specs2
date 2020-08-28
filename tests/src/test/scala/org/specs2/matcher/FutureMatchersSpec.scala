@@ -73,7 +73,7 @@ class FutureMatchersSpec extends Specification with ResultMatchers with specific
     val duration = 50l
     def future = Future {
       times += 1
-      if (retries != times)
+      if retries != times then
         try Thread.sleep(duration * 4) catch { case _: Throwable => 0 }
       else
         0

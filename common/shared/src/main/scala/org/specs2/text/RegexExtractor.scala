@@ -21,7 +21,7 @@ abstract class RegexExtractor[P, T](private var fullRegex: String = "", private 
   private def full: Regex = fullRegex.r
   private def group: Regex = groupRegex.r
   /** regex to use for a step with a partial function */
-  protected def regexToUse = if (full.toString.isEmpty) group else full
+  protected def regexToUse = if full.toString.isEmpty then group else full
 
   /** change the regexps */
   def withRegex(full: String = "", group: String = RegexExtractor.DEFAULT_REGEX): this.type =
@@ -62,18 +62,18 @@ object RegexExtractor:
   }
   /** extract all groups and return a list of strings */
   def extractAll(text: String, full: =>Regex = "".r, group: =>Regex = DEFAULT_REGEX.r): List[String] = tryWithRegex(text, regexToUse(full, group)) {
-    if (full.toString.isEmpty) group.findAllIn(text.trim).matchData.collect { case Regex.Groups(g) => g }.toList
+    if full.toString.isEmpty then group.findAllIn(text.trim).matchData.collect { case Regex.Groups(g) => g }.toList
     else                       full.unapplySeq(text.trim).getOrElse(throw new FailureException(Failure(s"could not extract '$full' from $text")))
   }
 
-  private def regexToUse(full: =>Regex, group: =>Regex) = if (full.toString.isEmpty) group else full
+  private def regexToUse(full: =>Regex, group: =>Regex) = if full.toString.isEmpty then group else full
 
   def strip(text: String): String = strip(text, "".r, DEFAULT_REGEX.r)
   /**
    * Apparently, the expression to replace can have any regex special character except '\'
    */
   def strip(text: String, full: =>Regex, group: =>Regex): String = tryWithRegex(text, regexToUse(full, group)) {
-    if (full.toString.isEmpty) group.replaceAllIn(text, (_:Regex.Match) match { case Regex.Groups(v) => v.replace("\\", "\\\\") })
+    if full.toString.isEmpty then group.replaceAllIn(text, (_:Regex.Match) match { case Regex.Groups(v) => v.replace("\\", "\\\\") })
     else                       text
   }
   def extract1(t: String , full: =>Regex = "".r, group: =>Regex = DEFAULT_REGEX.r) = check(1, t, (extractAll(t, full, group): @unchecked) match { case s1::_ => s1 }                                                                   )
@@ -92,7 +92,7 @@ object RegexExtractor:
    * string. Otherwise return a Failure explaining how many variables we were trying to extract
    */
   private def check[T](variablesNb: Int, string: String, extract: =>T) = tryOr(extract) {
-    case e: MatchError => if (variablesNb == 1) string.asInstanceOf[T] else throw new FailureException(Failure("couldn't extract "+variablesNb+" variables from: "+string))
+    case e: MatchError => if variablesNb == 1 then string.asInstanceOf[T] else throw new FailureException(Failure("couldn't extract "+variablesNb+" variables from: "+string))
     case other         => throw other
   }
 

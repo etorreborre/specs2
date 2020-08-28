@@ -107,17 +107,17 @@ trait Applicative[F[_]] extends Functor[F] { self =>
   def filterM[A](l: List[A])(f: A => F[Boolean]): F[List[A]] =
     l match
       case Nil => point(List())
-      case h :: t => ap(filterM(t)(f))(map(f(h))(b => t => if (b) h :: t else t))
+      case h :: t => ap(filterM(t)(f))(map(f(h))(b => t => if b then h :: t else t))
 
   /**
    * Returns the given argument if `cond` is `false`, otherwise, unit lifted into F.
    */
-  def unless[A](cond: Boolean)(f: => F[A]): F[Unit] = if (cond) point(()) else void(f)
+  def unless[A](cond: Boolean)(f: => F[A]): F[Unit] = if cond then point(()) else void(f)
 
   /**
    * Returns the given argument if `cond` is `true`, otherwise, unit lifted into F.
    */
-  def when[A](cond: Boolean)(f: => F[A]): F[Unit] = if (cond) void(f) else point(())
+  def when[A](cond: Boolean)(f: => F[A]): F[Unit] = if cond then void(f) else point(())
 }
 
 object Applicative:
@@ -178,4 +178,3 @@ trait ApplicativeSyntax:
   implicit class ListApplicativeOps[A](fa: List[A]):
     def filterM[F[_] : Applicative](f: A => F[Boolean]): F[List[A]] =
       Applicative.apply[F].filterM(fa)(f)
-

@@ -54,10 +54,10 @@ case class Prop[T, S](
 
   /** execute the constraint set on this property, with the expected value */
   def execute: Result =
-    val result = for {
+    val result = for
       a <- actualValue.toOption
       e <- expectedValue.toOption
-    } yield ResultExecution.execute(constraint(a, e))
+    yield ResultExecution.execute(constraint(a, e))
     result.getOrElse(expectedValue.left.toOption.getOrElse(actualValue.left.toOption.get))
 
   /**
@@ -78,9 +78,9 @@ case class Prop[T, S](
    * label: "this" (actual: "that")
    */
   override def toString =
-    (if (label.isEmpty) "" else label + ": ") +
+    (if label.isEmpty then "" else label + ": ") +
     valueToString(actualValue) +
-    (if (expected.toOption.isEmpty || expectedValue.toOption == actualValue.toOption) ""
+    (if expected.toOption.isEmpty || expectedValue.toOption == actualValue.toOption then ""
      else " (expected: " + valueToString(expectedValue) + ")")
 
   /**

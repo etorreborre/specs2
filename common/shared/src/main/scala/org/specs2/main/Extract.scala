@@ -28,7 +28,7 @@ trait Extract:
       args.find(_.toLowerCase == name.toLowerCase).map(_ => true) orElse // if the flag is defined as a switch on the commandline
       boolSystemProperty(name).map(_ => true)                            // if the flag is defined as a switch in sys. properties
 
-    if (negate) booleanValue.map(b => !b)
+    if negate then booleanValue.map(b => !b)
     else        booleanValue
 
   def bool(name: String)(implicit args: Seq[String], sp: SystemProperties): Option[Boolean] =

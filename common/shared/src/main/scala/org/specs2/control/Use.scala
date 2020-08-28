@@ -7,9 +7,9 @@ package org.specs2.control
 object Use:
 
   def apply(t: Any, ts: Any*): Unit =
-    if (false && t == ts) ()
+    if false && t == ts then ()
 
   def ignoring[A](t: Any, ts: Any*)(a: A): A =
-    if (false && t == ts) a
+    if false && t == ts then a
     else a
 

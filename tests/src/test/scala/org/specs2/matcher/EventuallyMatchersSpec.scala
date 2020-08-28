@@ -38,7 +38,7 @@ or until it succeeds.
   }
   "It is possible to use await + eventually" in {
     var i = 0
-    def op = if (i == 0) { i += 1; Future(0) } else Future(1)
+    def op = if i == 0 then { i += 1; Future(0) } else Future(1)
 
     op must be_==(1).await(retries = 0, timeout = 200.millis).eventually(retries = 2, sleep = 100.millis)
   }

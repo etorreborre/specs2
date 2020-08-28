@@ -68,7 +68,7 @@ trait DataTables extends ExpectationsCreation:
       results.foldLeft(Success("", results.size): Result)((res, cur) => res and AsResult(cur._2))
     /** @return the status of the row + the values + the failure message if any */
     private def resultLine(line: Seq[String], result: Result): Seq[String] =
-      val message = if (result.isSuccess) "" else result.message
+      val message = if result.isSuccess then "" else result.message
       result.status +: line :+ message
   /** GENERATED */
   case class TableHeader(titles: List[String]):
@@ -100,7 +100,7 @@ trait DataTables extends ExpectationsCreation:
     def |[R : AsResult](f: (T1) => R) = executeRow(f, execute)
     def |>[R : AsResult](f: (T1) => R) = executeRow(f, true)
     def executeRow[R : AsResult](f: (T1) => R, exec: Boolean): DecoratedResult[DataTable] =
-      if (exec)
+      if exec then
         collect(rows map { (d: DataRow1[T1]) => (show1.showList(d.t1), AsResult(f(d.t1)).execute) })
       else DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok"))
     def |@[M[_], R](f: (T1) => M[R])(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
@@ -112,7 +112,7 @@ trait DataTables extends ExpectationsCreation:
     def |*>[R](f: (T1) => R)(implicit asResult: AsResult[R], ec: ExecutionContext): DecoratedResult[DataTable] =
       executeRowApply((t1: T1) => Future(f(t1))(ec), true)(asResult, Applicative.futureApplicative(ec)).run
     def executeRowApply[R, M[_]](f: (T1) => M[R], exec: Boolean)(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
-      if (exec)
+      if exec then
         app.map(app.traverse(rows) { (d: DataRow1[T1]) =>
           app.map(f(d.t1))(r => (show1.showList(d.t1), AsResult(r).execute))
         })(rs => collect(rs))
@@ -123,7 +123,7 @@ trait DataTables extends ExpectationsCreation:
     def |[R : AsResult](f: (T1, T2) => R) = executeRow(f, execute)
     def |>[R : AsResult](f: (T1, T2) => R) = executeRow(f, true)
     def executeRow[R : AsResult](f: (T1, T2) => R, exec: Boolean): DecoratedResult[DataTable] =
-      if (exec)
+      if exec then
         collect(rows map { (d: DataRow2[T1, T2]) => (show2.showList(d.t1,d.t2), AsResult(f(d.t1,d.t2)).execute) })
       else DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok"))
     def |@[M[_], R](f: (T1, T2) => M[R])(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
@@ -135,7 +135,7 @@ trait DataTables extends ExpectationsCreation:
     def |*>[R](f: (T1, T2) => R)(implicit asResult: AsResult[R], ec: ExecutionContext): DecoratedResult[DataTable] =
       executeRowApply((t1: T1, t2: T2) => Future(f(t1,t2))(ec), true)(asResult, Applicative.futureApplicative(ec)).run
     def executeRowApply[R, M[_]](f: (T1, T2) => M[R], exec: Boolean)(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
-      if (exec)
+      if exec then
         app.map(app.traverse(rows) { (d: DataRow2[T1, T2]) =>
           app.map(f(d.t1,d.t2))(r => (show2.showList(d.t1,d.t2), AsResult(r).execute))
         })(rs => collect(rs))
@@ -146,7 +146,7 @@ trait DataTables extends ExpectationsCreation:
     def |[R : AsResult](f: (T1, T2, T3) => R) = executeRow(f, execute)
     def |>[R : AsResult](f: (T1, T2, T3) => R) = executeRow(f, true)
     def executeRow[R : AsResult](f: (T1, T2, T3) => R, exec: Boolean): DecoratedResult[DataTable] =
-      if (exec)
+      if exec then
         collect(rows map { (d: DataRow3[T1, T2, T3]) => (show3.showList(d.t1,d.t2,d.t3), AsResult(f(d.t1,d.t2,d.t3)).execute) })
       else DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok"))
     def |@[M[_], R](f: (T1, T2, T3) => M[R])(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
@@ -158,7 +158,7 @@ trait DataTables extends ExpectationsCreation:
     def |*>[R](f: (T1, T2, T3) => R)(implicit asResult: AsResult[R], ec: ExecutionContext): DecoratedResult[DataTable] =
       executeRowApply((t1: T1, t2: T2, t3: T3) => Future(f(t1,t2,t3))(ec), true)(asResult, Applicative.futureApplicative(ec)).run
     def executeRowApply[R, M[_]](f: (T1, T2, T3) => M[R], exec: Boolean)(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
-      if (exec)
+      if exec then
         app.map(app.traverse(rows) { (d: DataRow3[T1, T2, T3]) =>
           app.map(f(d.t1,d.t2,d.t3))(r => (show3.showList(d.t1,d.t2,d.t3), AsResult(r).execute))
         })(rs => collect(rs))
@@ -169,7 +169,7 @@ trait DataTables extends ExpectationsCreation:
     def |[R : AsResult](f: (T1, T2, T3, T4) => R) = executeRow(f, execute)
     def |>[R : AsResult](f: (T1, T2, T3, T4) => R) = executeRow(f, true)
     def executeRow[R : AsResult](f: (T1, T2, T3, T4) => R, exec: Boolean): DecoratedResult[DataTable] =
-      if (exec)
+      if exec then
         collect(rows map { (d: DataRow4[T1, T2, T3, T4]) => (show4.showList(d.t1,d.t2,d.t3,d.t4), AsResult(f(d.t1,d.t2,d.t3,d.t4)).execute) })
       else DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok"))
     def |@[M[_], R](f: (T1, T2, T3, T4) => M[R])(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
@@ -181,7 +181,7 @@ trait DataTables extends ExpectationsCreation:
     def |*>[R](f: (T1, T2, T3, T4) => R)(implicit asResult: AsResult[R], ec: ExecutionContext): DecoratedResult[DataTable] =
       executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4) => Future(f(t1,t2,t3,t4))(ec), true)(asResult, Applicative.futureApplicative(ec)).run
     def executeRowApply[R, M[_]](f: (T1, T2, T3, T4) => M[R], exec: Boolean)(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
-      if (exec)
+      if exec then
         app.map(app.traverse(rows) { (d: DataRow4[T1, T2, T3, T4]) =>
           app.map(f(d.t1,d.t2,d.t3,d.t4))(r => (show4.showList(d.t1,d.t2,d.t3,d.t4), AsResult(r).execute))
         })(rs => collect(rs))
@@ -192,7 +192,7 @@ trait DataTables extends ExpectationsCreation:
     def |[R : AsResult](f: (T1, T2, T3, T4, T5) => R) = executeRow(f, execute)
     def |>[R : AsResult](f: (T1, T2, T3, T4, T5) => R) = executeRow(f, true)
     def executeRow[R : AsResult](f: (T1, T2, T3, T4, T5) => R, exec: Boolean): DecoratedResult[DataTable] =
-      if (exec)
+      if exec then
         collect(rows map { (d: DataRow5[T1, T2, T3, T4, T5]) => (show5.showList(d.t1,d.t2,d.t3,d.t4,d.t5), AsResult(f(d.t1,d.t2,d.t3,d.t4,d.t5)).execute) })
       else DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok"))
     def |@[M[_], R](f: (T1, T2, T3, T4, T5) => M[R])(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
@@ -204,7 +204,7 @@ trait DataTables extends ExpectationsCreation:
     def |*>[R](f: (T1, T2, T3, T4, T5) => R)(implicit asResult: AsResult[R], ec: ExecutionContext): DecoratedResult[DataTable] =
       executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5) => Future(f(t1,t2,t3,t4,t5))(ec), true)(asResult, Applicative.futureApplicative(ec)).run
     def executeRowApply[R, M[_]](f: (T1, T2, T3, T4, T5) => M[R], exec: Boolean)(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
-      if (exec)
+      if exec then
         app.map(app.traverse(rows) { (d: DataRow5[T1, T2, T3, T4, T5]) =>
           app.map(f(d.t1,d.t2,d.t3,d.t4,d.t5))(r => (show5.showList(d.t1,d.t2,d.t3,d.t4,d.t5), AsResult(r).execute))
         })(rs => collect(rs))
@@ -215,7 +215,7 @@ trait DataTables extends ExpectationsCreation:
     def |[R : AsResult](f: (T1, T2, T3, T4, T5, T6) => R) = executeRow(f, execute)
     def |>[R : AsResult](f: (T1, T2, T3, T4, T5, T6) => R) = executeRow(f, true)
     def executeRow[R : AsResult](f: (T1, T2, T3, T4, T5, T6) => R, exec: Boolean): DecoratedResult[DataTable] =
-      if (exec)
+      if exec then
         collect(rows map { (d: DataRow6[T1, T2, T3, T4, T5, T6]) => (show6.showList(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6), AsResult(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6)).execute) })
       else DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok"))
     def |@[M[_], R](f: (T1, T2, T3, T4, T5, T6) => M[R])(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
@@ -227,7 +227,7 @@ trait DataTables extends ExpectationsCreation:
     def |*>[R](f: (T1, T2, T3, T4, T5, T6) => R)(implicit asResult: AsResult[R], ec: ExecutionContext): DecoratedResult[DataTable] =
       executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6) => Future(f(t1,t2,t3,t4,t5,t6))(ec), true)(asResult, Applicative.futureApplicative(ec)).run
     def executeRowApply[R, M[_]](f: (T1, T2, T3, T4, T5, T6) => M[R], exec: Boolean)(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
-      if (exec)
+      if exec then
         app.map(app.traverse(rows) { (d: DataRow6[T1, T2, T3, T4, T5, T6]) =>
           app.map(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6))(r => (show6.showList(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6), AsResult(r).execute))
         })(rs => collect(rs))
@@ -238,7 +238,7 @@ trait DataTables extends ExpectationsCreation:
     def |[R : AsResult](f: (T1, T2, T3, T4, T5, T6, T7) => R) = executeRow(f, execute)
     def |>[R : AsResult](f: (T1, T2, T3, T4, T5, T6, T7) => R) = executeRow(f, true)
     def executeRow[R : AsResult](f: (T1, T2, T3, T4, T5, T6, T7) => R, exec: Boolean): DecoratedResult[DataTable] =
-      if (exec)
+      if exec then
         collect(rows map { (d: DataRow7[T1, T2, T3, T4, T5, T6, T7]) => (show7.showList(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7), AsResult(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7)).execute) })
       else DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok"))
     def |@[M[_], R](f: (T1, T2, T3, T4, T5, T6, T7) => M[R])(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
@@ -250,7 +250,7 @@ trait DataTables extends ExpectationsCreation:
     def |*>[R](f: (T1, T2, T3, T4, T5, T6, T7) => R)(implicit asResult: AsResult[R], ec: ExecutionContext): DecoratedResult[DataTable] =
       executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7) => Future(f(t1,t2,t3,t4,t5,t6,t7))(ec), true)(asResult, Applicative.futureApplicative(ec)).run
     def executeRowApply[R, M[_]](f: (T1, T2, T3, T4, T5, T6, T7) => M[R], exec: Boolean)(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
-      if (exec)
+      if exec then
         app.map(app.traverse(rows) { (d: DataRow7[T1, T2, T3, T4, T5, T6, T7]) =>
           app.map(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7))(r => (show7.showList(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7), AsResult(r).execute))
         })(rs => collect(rs))
@@ -261,7 +261,7 @@ trait DataTables extends ExpectationsCreation:
     def |[R : AsResult](f: (T1, T2, T3, T4, T5, T6, T7, T8) => R) = executeRow(f, execute)
     def |>[R : AsResult](f: (T1, T2, T3, T4, T5, T6, T7, T8) => R) = executeRow(f, true)
     def executeRow[R : AsResult](f: (T1, T2, T3, T4, T5, T6, T7, T8) => R, exec: Boolean): DecoratedResult[DataTable] =
-      if (exec)
+      if exec then
         collect(rows map { (d: DataRow8[T1, T2, T3, T4, T5, T6, T7, T8]) => (show8.showList(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8), AsResult(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8)).execute) })
       else DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok"))
     def |@[M[_], R](f: (T1, T2, T3, T4, T5, T6, T7, T8) => M[R])(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
@@ -273,7 +273,7 @@ trait DataTables extends ExpectationsCreation:
     def |*>[R](f: (T1, T2, T3, T4, T5, T6, T7, T8) => R)(implicit asResult: AsResult[R], ec: ExecutionContext): DecoratedResult[DataTable] =
       executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8) => Future(f(t1,t2,t3,t4,t5,t6,t7,t8))(ec), true)(asResult, Applicative.futureApplicative(ec)).run
     def executeRowApply[R, M[_]](f: (T1, T2, T3, T4, T5, T6, T7, T8) => M[R], exec: Boolean)(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
-      if (exec)
+      if exec then
         app.map(app.traverse(rows) { (d: DataRow8[T1, T2, T3, T4, T5, T6, T7, T8]) =>
           app.map(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8))(r => (show8.showList(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8), AsResult(r).execute))
         })(rs => collect(rs))
@@ -284,7 +284,7 @@ trait DataTables extends ExpectationsCreation:
     def |[R : AsResult](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9) => R) = executeRow(f, execute)
     def |>[R : AsResult](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9) => R) = executeRow(f, true)
     def executeRow[R : AsResult](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9) => R, exec: Boolean): DecoratedResult[DataTable] =
-      if (exec)
+      if exec then
         collect(rows map { (d: DataRow9[T1, T2, T3, T4, T5, T6, T7, T8, T9]) => (show9.showList(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8,d.t9), AsResult(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8,d.t9)).execute) })
       else DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok"))
     def |@[M[_], R](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9) => M[R])(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
@@ -296,7 +296,7 @@ trait DataTables extends ExpectationsCreation:
     def |*>[R](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9) => R)(implicit asResult: AsResult[R], ec: ExecutionContext): DecoratedResult[DataTable] =
       executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8, t9: T9) => Future(f(t1,t2,t3,t4,t5,t6,t7,t8,t9))(ec), true)(asResult, Applicative.futureApplicative(ec)).run
     def executeRowApply[R, M[_]](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9) => M[R], exec: Boolean)(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
-      if (exec)
+      if exec then
         app.map(app.traverse(rows) { (d: DataRow9[T1, T2, T3, T4, T5, T6, T7, T8, T9]) =>
           app.map(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8,d.t9))(r => (show9.showList(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8,d.t9), AsResult(r).execute))
         })(rs => collect(rs))
@@ -307,7 +307,7 @@ trait DataTables extends ExpectationsCreation:
     def |[R : AsResult](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10) => R) = executeRow(f, execute)
     def |>[R : AsResult](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10) => R) = executeRow(f, true)
     def executeRow[R : AsResult](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10) => R, exec: Boolean): DecoratedResult[DataTable] =
-      if (exec)
+      if exec then
         collect(rows map { (d: DataRow10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]) => (show10.showList(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8,d.t9,d.t10), AsResult(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8,d.t9,d.t10)).execute) })
       else DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok"))
     def |@[M[_], R](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10) => M[R])(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
@@ -319,7 +319,7 @@ trait DataTables extends ExpectationsCreation:
     def |*>[R](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10) => R)(implicit asResult: AsResult[R], ec: ExecutionContext): DecoratedResult[DataTable] =
       executeRowApply((t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8, t9: T9, t10: T10) => Future(f(t1,t2,t3,t4,t5,t6,t7,t8,t9,t10))(ec), true)(asResult, Applicative.futureApplicative(ec)).run
     def executeRowApply[R, M[_]](f: (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10) => M[R], exec: Boolean)(implicit asResult: AsResult[R], app: Applicative[M]): M[DecoratedResult[DataTable]] =
-      if (exec)
+      if exec then
         app.map(app.traverse(rows) { (d: DataRow10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]) =>
           app.map(f(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8,d.t9,d.t10))(r => (show10.showList(d.t1,d.t2,d.t3,d.t4,d.t5,d.t6,d.t7,d.t8,d.t9,d.t10), AsResult(r).execute))
         })(rs => collect(rs))
@@ -439,8 +439,8 @@ object DataTablesGenerator:
     (1 to n).map { i =>
       List(
         "case class "+dataRowDecl(i)+parametersList(i)+" extends DataRow["+typesList(i, n)+"] {",
-        if (i < n) "  def ![S"+(i+1)+"](t"+(i+1)+": S"+(i+1)+") = "+"DataRow"+(i+1)+parameters(i+1) else "",
-        if (i < n) "  def !![S"+(i+1)+"](t"+(i+1)+": S"+(i+1)+") = "+"DataRow"+(i+1)+parameters(i+1) else "",
+        if i < n then "  def ![S"+(i+1)+"](t"+(i+1)+": S"+(i+1)+") = "+"DataRow"+(i+1)+parameters(i+1) else "",
+        if i < n then "  def !![S"+(i+1)+"](t"+(i+1)+": S"+(i+1)+") = "+"DataRow"+(i+1)+parameters(i+1) else "",
         "}").mkString("\n")
     }.mkString("\n")
   def parametersList(i: Int) = (1 to i).map(j => "t"+j+": T"+j).mkString("(",", ", ")")

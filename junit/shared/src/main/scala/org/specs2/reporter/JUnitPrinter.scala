@@ -33,17 +33,17 @@ case class JUnitPrinter(env: Env, notifier: RunNotifier) extends Printer:
 
     val shouldNotify = !excludeFromReporting
     bracket[Fragment, RunNotifier](
-      open = Action.protect { if (shouldNotify) notifier.fireTestRunStarted(description); notifier })(
+      open = Action.protect { if shouldNotify then notifier.fireTestRunStarted(description); notifier })(
       step = (notifier: RunNotifier, fragment: Fragment) => notifyJUnit(env.arguments, descriptionsTree.descriptions)(fragment).as(notifier))(
-      close = (notifier: RunNotifier) => Finalizer.create(if (shouldNotify) notifier.fireTestRunFinished(new org.junit.runner.Result) else ())
+      close = (notifier: RunNotifier) => Finalizer.create(if shouldNotify then notifier.fireTestRunFinished(new org.junit.runner.Result) else ())
     )
 
   private def notifyJUnit(args: Arguments, descriptions: Map[Fragment, Description]): Fragment => Action[Unit] = { fragment =>
-    if (Fragment.isExampleOrStep(fragment))
+    if Fragment.isExampleOrStep(fragment) then
       val description = findDescription(descriptions, fragment)
       fragment.executionResult.map { result =>
         description.foreach { (description: Description) =>
-          if (Fragment.isExample(fragment))
+          if Fragment.isExample(fragment) then
             notifyTestResult(description, result)(args)
           else
             notifyStepError(description, result)(args)
@@ -112,7 +112,7 @@ case class JUnitPrinter(env: Env, notifier: RunNotifier) extends Printer:
 
     case Failure(m, e, st, FailureSeqDetails(actual, expected)) =>
       val details =
-        if (args.diffs.showSeq(actual, expected, ordered = true))
+        if args.diffs.showSeq(actual, expected, ordered = true) then
           val (added, missing) = args.diffs.showSeqDiffs(actual, expected, ordered = true)
           List(showValues("Added", added), showValues("Missing", missing)).mkString(" / ")
         else ""
@@ -128,7 +128,7 @@ case class JUnitPrinter(env: Env, notifier: RunNotifier) extends Printer:
 
     case Failure(m, e, st, details @ FailureSetDetails(actual, expected)) =>
       val details =
-        if (args.diffs.showSeq(actual.toSeq, expected.toSeq, ordered = false))
+        if args.diffs.showSeq(actual.toSeq, expected.toSeq, ordered = false) then
           val (added, missing) = args.diffs.showSeqDiffs(actual.toSeq, expected.toSeq, ordered = false)
           List(showValues("Added", added), showValues("Missing", missing)).mkString(" / ")
         else ""
@@ -144,7 +144,7 @@ case class JUnitPrinter(env: Env, notifier: RunNotifier) extends Printer:
 
     case Failure(m, e, st, details @ FailureMapDetails(actual, expected)) =>
       val details =
-        if (args.diffs.showMap(actual, expected))
+        if args.diffs.showMap(actual, expected) then
           val (added, missing, different) = args.diffs.showMapDiffs(actual, expected)
           List(showValues("Added", added), showValues("Missing", missing), showValues("Different", different)).mkString(" / ")
         else ""
@@ -160,7 +160,7 @@ case class JUnitPrinter(env: Env, notifier: RunNotifier) extends Printer:
 
   /** show values as a string with a description */
   def showValues(description: String, values: Seq[Any]): String =
-    if (values.nonEmpty) s"$description ${values.map(notNullPair).mkString("\n", "\n", "\n\n")}" else ""
+    if values.nonEmpty then s"$description ${values.map(notNullPair).mkString("\n", "\n", "\n\n")}" else ""
 
 
 /**

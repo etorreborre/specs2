@@ -33,7 +33,7 @@ case class ExecutorServices(executorServiceEval:          () => ExecutorService,
     schedulerEval()
 
   def shutdownNow(): Unit =
-    if (started.get) shutdown()
+    if started.get then shutdown()
 
   /** convenience method to shutdown the services when the final future has completed */
   def shutdownOnComplete[A](future: scala.concurrent.Future[A]): ExecutorServices =
@@ -54,12 +54,14 @@ object ExecutorServices:
 
   private def createExecutorServices(arguments: Arguments, systemLogger: Logger, tag: Option[String], isSpecs2: Boolean): ExecutorServices =
     val threadFactoryName: String =
-      if (isSpecs2) "specs2"+tag.map("-"+_).getOrElse("")
+      if isSpecs2 then "specs2"+tag.map("-"+_).getOrElse("")
       else          "specs2.user"+tag.map("-"+_).getOrElse("")
 
     lazy val executorService =
-      if (isSpecs2) fixedExecutor(arguments.specs2ThreadsNb, threadFactoryName)
-      else          fixedExecutor(arguments.threadsNb, threadFactoryName)
+      if isSpecs2 then
+        fixedExecutor(arguments.specs2ThreadsNb, threadFactoryName)
+      else
+        fixedExecutor(arguments.threadsNb, threadFactoryName)
 
     lazy val scheduledExecutorService =
       scheduledExecutor(arguments.scheduledThreadsNb, threadFactoryName)

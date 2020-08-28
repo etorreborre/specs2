@@ -119,21 +119,21 @@ trait FilePathReader:
   /** succeeds if the file exists */
   def mustExist(file: File): Operation[Unit] =
     Operation.delayed(file.exists).flatMap { exists =>
-      if (exists) Operation.ok(())
+      if exists then Operation.ok(())
       else        Operation.fail(s"$file does not exist")
     }
 
   /** succeeds if the file is a directory */
   def mustBeADirectory(file: File): Operation[Unit] =
     Operation.delayed(file.isDirectory).flatMap { isDirectory =>
-      if (isDirectory) Operation.ok(())
+      if isDirectory then Operation.ok(())
       else             Operation.fail(s"$file is a directory")
     }
 
   /** succeeds if the file is not a directory */
   def mustNotBeADirectory(file: File): Operation[Unit] =
     Operation.delayed(file.isDirectory).flatMap { isDirectory =>
-      if (isDirectory) Operation.fail(s"$file is a directory")
+      if isDirectory then Operation.fail(s"$file is a directory")
       else             Operation.ok(())
     }
 

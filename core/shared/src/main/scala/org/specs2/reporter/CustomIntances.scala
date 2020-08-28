@@ -12,7 +12,7 @@ case class CustomInstances(arguments: Arguments, loader: ClassLoader, logger: Lo
 
   /** create a built-in specs2 printer */
   def createPrinterInstance(name: PrinterName, className: String, failureMessage: String, noRequiredMessage: String): Operation[Option[Printer]] =
-    if (arguments.isSet(name.name)) createInstance[Printer](name.name, className, _ => failureMessage, noRequiredMessage)
+    if arguments.isSet(name.name) then createInstance[Printer](name.name, className, _ => failureMessage, noRequiredMessage)
     else noInstance(noRequiredMessage)
 
   /** create a custom instance */
@@ -22,13 +22,13 @@ case class CustomInstances(arguments: Arguments, loader: ClassLoader, logger: Lo
       case None => noInstance(noRequiredMessage)
 
   private def createInstance[T <: AnyRef](name: String, className: String, failureMessage: String => String, noRequiredMessage: String)(implicit m: ClassTag[T]): Operation[Option[T]] =
-    for {
+    for
       instance <- Classes.createInstanceEither[T](className, loader)(m)
       result <-
         instance match
           case Right(i) => Operation.ok(Some(i))
           case Left(t) => noInstanceWithException(failureMessage(t.getMessage), t, forceVerbose = Some(true))
-    } yield result
+    yield result
 
   /** print a message if a class can not be instantiated */
   def noInstanceWithException[T](message: String, t: Throwable, forceVerbose: Option[Boolean] = None): Operation[Option[T]] =

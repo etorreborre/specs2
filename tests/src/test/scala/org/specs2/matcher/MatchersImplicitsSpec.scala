@@ -28,7 +28,7 @@ class MatchersImplicitsSpec extends Specification with ResultMatchers:
   "An implicit matcher defined with a Result must retain its stacktrace" >> {
 
     val beZero: Matcher[Int] = { (i: Int) =>
-      if (i != 0) Failure(s"must be 0, got $i", "0", exception.getStackTrace.toList) else Success("ok")
+      if i != 0 then Failure(s"must be 0, got $i", "0", exception.getStackTrace.toList) else Success("ok")
     }
 
     AsResult(1 must beZero) must beLike {

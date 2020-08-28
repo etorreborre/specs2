@@ -24,7 +24,7 @@ object Executable:
     lazy val logger = new StringProcessLogger
     attempt {
       ok[Int](sys.process.Process(executable.path, arguments).!(logger)).flatMap { code =>
-        if (code == 0) ok(logger.lines)
+        if code == 0 then ok(logger.lines)
         else           fail[String](logger.lines)
       }
     }.flatMap {

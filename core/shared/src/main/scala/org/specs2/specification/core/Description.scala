@@ -27,7 +27,7 @@ case class Text(text: String) extends Description:
 
 case class Code(text: String) extends Description:
   def show: String =
-    if (text.contains("\n")) "```\n"+text+"\n```"
+    if text.contains("\n") then "```\n"+text+"\n```"
     else                     s"`$text`"
 
   override def matches(s: String) = text matches s
@@ -48,7 +48,7 @@ case class SpecificationRef(header: SpecHeader, arguments: Arguments, alias: Str
   def url = specClassName+".html"
 
   def linkText =
-    if (alias.nonEmpty) alias else header.showWords
+    if alias.nonEmpty then alias else header.showWords
 
   def show = linkText
 

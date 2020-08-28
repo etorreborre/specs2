@@ -35,7 +35,7 @@ class MatchResultSpec extends Specification with ScalaCheck { def is = s2"""
   }
 
   implicit def MatchResultArbitrary[T : Arbitrary]: Arbitrary[MatchResult[T]] = Arbitrary {
-    for {
+    for
       t <- arbitrary[T]
       b <- arbitrary[Boolean]
       m <- arbitrary[String]
@@ -44,15 +44,15 @@ class MatchResultSpec extends Specification with ScalaCheck { def is = s2"""
         Matcher.result(b, m, negateSentence(m), e),
         MatchPending(m, e),
         MatchSkip(m, e))
-    } yield r
+    yield r
   }
 
   implicit def MatchFailureArbitrary[T : Arbitrary]: Arbitrary[MatchFailure[T]] = Arbitrary {
-    for {
+    for
       t <- arbitrary[T]
       m <- arbitrary[String]
       d <- arbitrary[Details]
-    } yield MatchFailure(() => m, () => negateSentence(m), createExpectable(t), details = d)
+    yield MatchFailure(() => m, () => negateSentence(m), createExpectable(t), details = d)
   }
 
   implicit def DetailsArbitrary: Arbitrary[Details] = Arbitrary {

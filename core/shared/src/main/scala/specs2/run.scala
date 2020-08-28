@@ -16,10 +16,10 @@ object run extends ClassRunnerMain:
   def apply(specifications: SpecificationStructure*)(implicit arguments: Arguments = Arguments()) =
     val env = EnvDefault.create(arguments)
 
-    val action = for {
+    val action = for
       classRunner <- ClassRunner.createClassRunner(env).toAction
       result <- specifications.toList.traverse(s => classRunner.run(s)).map(_.suml)
-    } yield result
+    yield result
 
     try Runner.execute(action, env, exit = false)
     finally env.shutdown()

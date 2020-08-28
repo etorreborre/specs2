@@ -84,7 +84,7 @@ trait AnyBaseMatchers:
       val x = a
       result(x == null && y.value == null || x != null && y.value != null,
              "both values are null",
-             if (x == null) "the actual value " +y.description + " is not null"
+             if x == null then "the actual value " +y.description + " is not null"
              else "the expected value " + q(x) + " is not null but the actual value is null",
              y)
   }
@@ -97,7 +97,7 @@ trait AnyBaseMatchers:
   /** matches if the value returns a successful result when applied to a PartialFunction */
   def beLike[T](pattern: PartialFunction[T, MatchResult[_]]): Matcher[T] = new Matcher[T] {
     def apply[S <: T](a: Expectable[S]) =
-      val r = if (pattern.isDefinedAt(a.value)) pattern.apply(a.value) else MatchFailure("", "", a)
+      val r = if pattern.isDefinedAt(a.value) then pattern.apply(a.value) else MatchFailure("", "", a)
       result(r.isSuccess,
              a.description + " is correct: " + r.message,
              a.description + " is incorrect: " + r.message,

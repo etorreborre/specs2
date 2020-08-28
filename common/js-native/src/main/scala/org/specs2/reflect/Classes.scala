@@ -34,7 +34,7 @@ trait Classes extends ClassOperations {
       .loadModule
 
   def createInstanceFromName[T <: AnyRef](className: String, defaultInstances: =>List[AnyRef] = Nil)(implicit m: ClassTag[T]): Operation[T] =
-    if (className.endsWith("$"))
+    if className.endsWith("$") then
       Operation.delayed(loadModule(className).asInstanceOf[T])
     else
       Operation.delayed(newInstance(className).asInstanceOf[T])

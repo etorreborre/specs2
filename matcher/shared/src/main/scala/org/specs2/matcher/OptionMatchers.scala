@@ -38,7 +38,7 @@ trait OptionBaseMatchers:
       val b = other
       result(a.value == None && b == None || a.value != None && b != None,
              a.description + " is None as well",
-             if (a.value == None) b.toString + " is not None" else a.description + " is not None",
+             if a.value == None then b.toString + " is not None" else a.description + " is not None",
              a)
   }
 

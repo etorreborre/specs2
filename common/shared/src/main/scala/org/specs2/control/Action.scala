@@ -98,7 +98,7 @@ object Action:
 
   def checkThat[A](a: =>A, condition: Boolean, failureMessage: String): Action[A] =
     pure(a).flatMap { value =>
-      if (condition) pure(value)
+      if condition then pure(value)
       else           fail(failureMessage)
     }
 

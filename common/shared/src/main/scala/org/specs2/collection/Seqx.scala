@@ -49,7 +49,7 @@ trait Seqx:
         ls1 match
           case Seq()        => result
           case head +: rest =>
-            if  (ls2.exists(compare(head, _))) notFound(rest, ls2.removeFirst(l => compare(head, l)), result)
+            if  ls2.exists(compare(head, _)) then notFound(rest, ls2.removeFirst(l => compare(head, l)), result)
             else                               notFound(rest, ls2, result :+ head)
       notFound(seq, other)
 
@@ -60,8 +60,8 @@ trait Seqx:
     def difference(other: Seq[T], equality: (T, T) => Boolean = (_:T) == (_:T)): scala.collection.Seq[T] =
       val occurrences = occurrenceCounts(other, equality)
       val result = new ListBuffer[T]
-      for (x <- seq)
-        if (occurrences(D(x, equality)) == 0) result += x
+      for x <- seq do
+        if occurrences(D(x, equality)) == 0 then result += x
         else                                  occurrences(D(x, equality)) -= 1
       result.toSeq
 
@@ -74,7 +74,7 @@ trait Seqx:
       override def hashCode = 1
     private def occurrenceCounts(sq: Seq[T], equality: (T, T) => Boolean): scala.collection.mutable.Map[D, Int] =
       val occurrences = new scala.collection.mutable.HashMap[D, Int] { override def default(k: D) = 0 }
-      for (y <- sq) occurrences(D(y, equality)) += 1
+      for y <- sq do occurrences(D(y, equality)) += 1
       occurrences
 
 
@@ -90,13 +90,14 @@ trait Seqx:
    */
   def transpose[T](xs: Seq[Seq[T]]): Seq[Seq[T]] =
     val filtered = xs.filter(_.nonEmpty)
-    if (filtered.isEmpty) Seq()
+    if filtered.isEmpty then Seq()
     else filtered.map(_.head) +: transpose(filtered.map(_.tail))
 
-  implicit def seqIsFoldable: Foldable[Seq] = new Foldable[Seq]:
+  implicit def seqIsFoldable: Foldable[Seq] = new Foldable[Seq] {
     def foldLeft[A, B](fa: Seq[A], z: B)(f: (B, A) => B) = Foldable.listInstance.foldLeft(fa.toList, z)(f)
     def foldRight[A, B](fa: Seq[A], z: => B)(f: (A, =>B) => B) = Foldable.listInstance.foldRight(fa.toList, z)(f)
     def foldMap[A, B](fa: Seq[A])(f: (A) => B)(implicit F: Monoid[B]) = Foldable.listInstance.foldMap(fa.toList)(f)
+  }
 
 private[specs2]
 object Seqx extends Seqx

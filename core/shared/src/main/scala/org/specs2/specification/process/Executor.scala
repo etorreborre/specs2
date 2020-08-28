@@ -69,14 +69,14 @@ case class DefaultExecutor(env: Env) extends Executor:
         emit(toStart.toList.map(_.startExecutionAfter(previousStep)(env)))
 
     p.producerState(init, Option(last)) { case (fragment, (previous, previousStarted, previousStep)) =>
-      if (arguments.skipAll)
-        (one(if (fragment.isExecutable) fragment.skip else fragment), init)
-      else if (arguments.sequential)
-        val f = if (Fragment.isStep(fragment)) fragment.updateExecution(_.setErrorAsFatal) else fragment
+      if arguments.skipAll then
+        (one(if fragment.isExecutable then fragment.skip else fragment), init)
+      else if arguments.sequential then
+        val f = if Fragment.isStep(fragment) then fragment.updateExecution(_.setErrorAsFatal) else fragment
         val started = f.startExecutionAfter(previousStarted.toList)(env)
         (one(started), (previous, previousStarted :+ started, None))
       else
-        if (fragment.execution.mustJoin)
+        if fragment.execution.mustJoin then
           val started = previous.map(_.startExecutionAfter(previousStep)(env))
           val step =
             fragment.
@@ -84,11 +84,13 @@ case class DefaultExecutor(env: Env) extends Executor:
               startExecutionAfter((previousStarted ++ started).toList)(env)
 
           (emit((started :+ step).toList), (Vector.empty, Vector.empty, Some(step)))
-        else if ((previous :+ fragment).count(_.isExecutable) >= arguments.batchSize)
-          val started = (previous :+ fragment).map(_.startExecutionAfter(previousStep)(env))
-          (emit(started.toList), (Vector.empty, previousStarted ++ started, previousStep))
         else
-          (done[Action, Fragment], (previous :+ fragment, previousStarted, previousStep))
+          val moreThanBatchSize = (previous :+ fragment).count(_.isExecutable) >= arguments.batchSize
+          if moreThanBatchSize then
+            val started = (previous :+ fragment).map(_.startExecutionAfter(previousStep)(env))
+            (emit(started.toList), (Vector.empty, previousStarted ++ started, previousStep))
+          else
+            (done[Action, Fragment], (previous :+ fragment, previousStarted, previousStep))
     }
 
   }

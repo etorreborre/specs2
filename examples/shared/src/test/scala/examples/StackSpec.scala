@@ -99,7 +99,7 @@ object SizedStack:
 
 class SizedStack(val capacity: Int) extends scala.collection.mutable.Stack[Int]:
   override def push(a: Int) =
-    if (size == capacity) throw new Error("full stack")
+    if size == capacity then throw new Error("full stack")
     super.push(a)
   def fill(range: Range) =
     range.foreach(push(_))

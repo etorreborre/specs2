@@ -28,7 +28,7 @@ trait StoredExpectations extends Expectations:
 
   def addLocation(message: String, location: String): String =
     val locationMessage = s" [$location]"
-    message + (if (!message.endsWith(locationMessage)) locationMessage else "")
+    message + (if !message.endsWith(locationMessage) then locationMessage else "")
 
   override protected def checkMatchResultFailure[T](m: MatchResult[T]): MatchResult[T] =
     matchResults.append(m)

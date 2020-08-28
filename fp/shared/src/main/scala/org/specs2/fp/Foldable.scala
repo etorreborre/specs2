@@ -4,7 +4,7 @@ package org.specs2.fp
 /**
  * Inspired from the scalaz (https://github.com/scalaz/scalaz) project
  */
-trait Foldable[F[_]] :
+trait Foldable[F[_]]:
 
   /** Map each element of the structure to a Monoid, and combine the results. */
   def foldMap[A,B](fa: F[A])(f: A => B)(implicit F: Monoid[B]): B
@@ -39,10 +39,10 @@ trait Foldable[F[_]] :
     traverse_(fa)(x => x)
 
   def findLeft[A](fa: F[A])(f: A => Boolean): Option[A] =
-    foldLeft[A, Option[A]](fa, None)((b, a) => b.orElse(if(f(a)) Some(a) else None))
+    foldLeft[A, Option[A]](fa, None)((b, a) => b.orElse(if f(a) then  Some(a) else None))
 
   def findRight[A](fa: F[A])(f: A => Boolean): Option[A] =
-    foldRight[A, Option[A]](fa, None)((a, b) => b.orElse(if(f(a)) Some(a) else None))
+    foldRight[A, Option[A]](fa, None)((a, b) => b.orElse(if f(a) then Some(a) else None))
 
   /** Alias for `length`. */
   final def count[A](fa: F[A]): Int = length(fa)
@@ -56,7 +56,7 @@ trait Foldable[F[_]] :
   def index[A](fa: F[A], i: Int): Option[A] =
     foldLeft[A, (Int, Option[A])](fa, (0, None)) {
       case ((idx, elem), curr) =>
-        (idx + 1, elem orElse { if (idx == i) Some(curr) else None })
+        (idx + 1, elem orElse { if idx == i then Some(curr) else None })
     }._2
 
   /**
@@ -75,14 +75,14 @@ trait Foldable[F[_]] :
 
   /** `all` with monadic traversal. */
   def allM[G[_], A](fa: F[A])(p: A => G[Boolean])(implicit G: Monad[G]): G[Boolean] =
-    foldRight(fa, G.point(true))((a, b) => G.bind(p(a))(q => if(q) b else G.point(false)))
+    foldRight(fa, G.point(true))((a, b) => G.bind(p(a))(q => if q then b else G.point(false)))
 
   /** Whether any `A`s in `fa` yield true from `p`. */
   def any[A](fa: F[A])(p: A => Boolean): Boolean = foldRight(fa, false)(p(_) || _)
 
   /** `any` with monadic traversal. */
   def anyM[G[_], A](fa: F[A])(p: A => G[Boolean])(implicit G: Monad[G]): G[Boolean] =
-    foldRight(fa, G.point(false))((a, b) => G.bind(p(a))(q => if(q) G.point(true) else b))
+    foldRight(fa, G.point(false))((a, b) => G.bind(p(a))(q => if q then G.point(true) else b))
 
   def sumr[A](fa: F[A])(implicit A: Monoid[A]): A =
     foldRight(fa, A.zero)(A.append)

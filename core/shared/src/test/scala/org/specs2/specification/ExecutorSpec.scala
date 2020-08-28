@@ -233,6 +233,6 @@ class ExecutorSpec(val env: Env) extends Specification with ThrownExpectations w
     def slow(timeFactor: Int)         : Result = { Thread.sleep(400 * timeFactor.toLong); messages.append("slow");   success }
     def verySlow(timeFactor: Int)     : Result = { Thread.sleep(600 * timeFactor.toLong); messages.append("very slow"); success }
     def step1                         : Result = { messages.append("step");   success }
-    def fatalStep                     : Result = { messages.append("fatal");  if (true) throw new java.lang.Error("fatal error!"); success }
+    def fatalStep                     : Result = { messages.append("fatal");  if true then throw new java.lang.Error("fatal error!"); success }
 
 }

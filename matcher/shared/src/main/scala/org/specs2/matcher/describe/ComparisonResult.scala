@@ -118,27 +118,27 @@ case class OptionIdentical(same: Option[ComparisonResult]) extends IdenticalComp
 
 case class EitherIdentical(same: ComparisonResult, isRight: Boolean) extends IdenticalComparisonResult:
   def render: String =
-    same.render.wrapWith(if (isRight) "Right" else "Left")
+    same.render.wrapWith(if isRight then "Right" else "Left")
 
 case class TryIdentical(same: Any, isSuccess: Boolean) extends IdenticalComparisonResult:
   def render: String =
-    same.render.wrapWith(if (isSuccess) "Success" else "Failure")
+    same.render.wrapWith(if isSuccess then "Success" else "Failure")
 
 case class TryDifferent(value: ComparisonResult, isSuccess: Boolean) extends DifferentComparisonResult:
   def render: String =
-    value.render.wrapWith(if (isSuccess) "Success" else "Failure")
+    value.render.wrapWith(if isSuccess then "Success" else "Failure")
 
 case class TryTypeDifferent(isActualSuccess: Boolean) extends DifferentComparisonResult:
   def render: String =
     s"${render(isActualSuccess)} ==> ${render(!isActualSuccess)}"
 
   private def render(success: Boolean): String =
-    "...".wrapWith(if (success) "Success" else "Failure")
+    "...".wrapWith(if success then "Success" else "Failure")
 
 
 case class EitherDifferent(changed: ComparisonResult, isRight: Boolean) extends DifferentComparisonResult:
   def render: String =
-    changed.render.wrapWith(if (isRight) "Right" else "Left")
+    changed.render.wrapWith(if isRight then "Right" else "Left")
 
 
 case class EitherTypeDifferent(isActualRight: Boolean) extends DifferentComparisonResult:
@@ -146,7 +146,7 @@ case class EitherTypeDifferent(isActualRight: Boolean) extends DifferentComparis
     s"${render(isActualRight)} ==> ${render(!isActualRight)}"
 
   private def render(right: Boolean): String =
-    "...".wrapWith(if (right) "Right" else "Left")
+    "...".wrapWith(if right then "Right" else "Left")
 
 case class OptionDifferent(changed: ComparisonResult) extends DifferentComparisonResult:
   def render: String =
@@ -156,7 +156,7 @@ case class OptionTypeDifferent(isActualSome: Boolean, isExpectedSome: Boolean) e
   def render: String =
     s"${render(isActualSome)} ==> ${render(isExpectedSome)}"
 
-  private def render(some: Boolean) = if (some) "Some(...)" else "None"
+  private def render(some: Boolean) = if some then "Some(...)" else "None"
 
 case class OtherIdentical(actual: Any) extends IdenticalComparisonResult:
   def render: String =
@@ -269,4 +269,4 @@ object ComparisonResultOps:
       s"$tag: $values"
 
   implicit class SeqOps[T](val s: Seq[T]) extends AnyVal:
-    final def toOption: Option[Seq[T]] = if (s.isEmpty) None else Some(s)
+    final def toOption: Option[Seq[T]] = if s.isEmpty then None else Some(s)

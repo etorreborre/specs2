@@ -25,7 +25,7 @@ trait RandomSequentialExecution extends SpecificationStructure:
       val concurrentSequences = fragments.foldLeft(Vector(Vector[Fragment]())) { (res, cur) =>
       res.updateLast(_ :+ cur).toVector ++
         // start a new section if there is a step
-        (if (Fragment.isStep(cur)) Vector(Vector[Fragment]()) else Vector())
+        (if Fragment.isStep(cur) then Vector(Vector[Fragment]()) else Vector())
       }
       val withConstraints = concurrentSequences.map(addExecutionConstraints(env))
       withConstraints.reduce(_ ++ _).toList
@@ -42,7 +42,7 @@ trait RandomSequentialExecution extends SpecificationStructure:
     scrambled.foreach { case (pf, i) => executions.putIfAbsent(i, pf.execution) }
 
     fragments.zipWithIndex.map { case (f, i) =>
-      if (Fragment.isExample(f))
+      if Fragment.isExample(f) then
         val f1 = f.setExecution(executions(i).after(executions.toList.collect { case (j, e) if j < i => e }))
         executions.remove(i)
         f1

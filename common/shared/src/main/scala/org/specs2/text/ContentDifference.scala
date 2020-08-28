@@ -40,9 +40,9 @@ case class LinesContentDifference(
     show.forall { case SameLine(_) => true; case _ => false }
 
   lazy val show: Diffs =
-    if      (all  && ordered)  showNotEqual
-    else if (all  && !ordered) showNotOrdered
-    else if (!all && ordered)  showNotIncluded
+    if      all  && ordered then  showNotEqual
+    else if all  && !ordered then showNotOrdered
+    else if !all && ordered then  showNotIncluded
     else                       showNotContained
 
   // all && ordered

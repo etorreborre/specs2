@@ -58,7 +58,7 @@ class HopcroftKarpSpec extends Spec { def is = s2"""
                    List(1),
                    List(4),
                    List(1, 5)),
-                  (i: Int, list: List[Int]) => if (list.contains(i)) ok(s"$list contains $i") else ko(s"$list does not contain $i"))
+                  (i: Int, list: List[Int]) => if list.contains(i) then ok(s"$list contains $i") else ko(s"$list does not contain $i"))
 
     matches.map { case (i, j, r) => r.message } must contain(exactly(
       "List(1) contains 1",

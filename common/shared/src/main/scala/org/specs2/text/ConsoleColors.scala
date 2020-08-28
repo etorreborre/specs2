@@ -73,11 +73,11 @@ object MappedColors:
   def fromArgs(args: String) =
     val map = args.split(",").flatMap { s =>
       val keyValue = s.trim.split(":")
-      if (keyValue.size == 2) getColor(keyValue(1).trim).map(c => keyValue(0) -> c)
+      if keyValue.size == 2 then getColor(keyValue(1).trim).map(c => keyValue(0) -> c)
       else                    None
     }
 
-    if (args.contains("whitebg")) new MappedColors(Map(map:_*)) { override lazy val defaultColors = new InvertedColors }
+    if args.contains("whitebg") then new MappedColors(Map(map:_*)) { override lazy val defaultColors = new InvertedColors }
     else                          new MappedColors(Map(map:_*))
 
 /**

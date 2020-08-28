@@ -45,7 +45,7 @@ trait Vectorx:
    */
   def transpose[T](xs: Vector[Vector[T]]): Vector[Vector[T]] =
     val filtered = xs.filter(_.nonEmpty)
-    if (filtered.isEmpty) Vector()
+    if filtered.isEmpty then Vector()
     else filtered.map(_.head) +: transpose(filtered.map(_.tail))
 
 private[specs2]

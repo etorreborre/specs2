@@ -53,7 +53,7 @@ case class SmartDiffs(show: Boolean       = true,
 
   def showDiffs(actualValue: Any, expectedValue: Any) =
     val (actual, expected) = (actualValue.notNull, expectedValue.notNull)
-    if (editDistance(actual, expected).doubleValue / (actual.length + expected.length) < diffRatio.doubleValue / 100)
+    if editDistance(actual, expected).doubleValue / (actual.length + expected.length) < diffRatio.doubleValue / 100 then
       showDistance(actual, expected, separators, shortenSize)
     else
       (actual, expected)
@@ -92,8 +92,8 @@ object SmartDiffs:
   }(identity)
 
   private def boolean(s: String) =
-    if (Seq("true", "t").contains(s.trim.toLowerCase)) true
-    else if (Seq("false", "f").contains(s.trim.toLowerCase)) false
+    if Seq("true", "t").contains(s.trim.toLowerCase) then true
+    else if Seq("false", "f").contains(s.trim.toLowerCase) then false
     else throw new Exception(s+" is not a boolean value")
 
 

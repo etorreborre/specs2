@@ -25,8 +25,8 @@ object FromString {
 
   implicit def BooleanFromString: FromString[Boolean] = new FromString[Boolean] {
     def fromString(s: String): Option[Boolean] =
-      if ("false".equals(s))     Some(false)
-      else if ("true".equals(s)) Some(true)
+      if "false".equals(s) then     Some(false)
+      else if "true".equals(s) then Some(true)
       else                       None
   }
 }

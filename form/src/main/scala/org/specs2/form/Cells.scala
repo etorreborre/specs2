@@ -74,7 +74,7 @@ object Xml:
     case FieldCell(_, _)  => 3 // label + value + optional error
     case PropCell(_, _)   => 3 // label + value + optional error/failure
     case EffectCell(_, _) => 2 // label + optional error
-    case FormCell(form)   => if (form.rows.isEmpty) 1 else form.rows.map(_.cells.map(c => colnumber(c)).sum).max
+    case FormCell(form)   => if form.rows.isEmpty then 1 else form.rows.map(_.cells.map(c => colnumber(c)).sum).max
     case LazyCell(c)      => colnumber(c)
     case _                => 100 // not known by default, so a max value is chosen
 

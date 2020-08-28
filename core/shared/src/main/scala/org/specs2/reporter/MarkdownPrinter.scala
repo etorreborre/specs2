@@ -55,7 +55,7 @@ case class MarkdownPrinter(env: Env) extends Printer:
       case _                                   => Action.pure("")
 
   def showDescription(description: String, result: Result): String =
-    if (Seq("*", "-").exists(description.trim.startsWith))
+    if Seq("*", "-").exists(description.trim.startsWith) then
       description
     else
       result.status+" "+description

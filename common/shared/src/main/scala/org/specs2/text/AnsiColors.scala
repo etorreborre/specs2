@@ -25,7 +25,7 @@ trait AnsiColors { outer =>
 
   /** @return a string with no color codes */
   def removeColors(s: String, doIt: Boolean = true): String =
-    if (doIt) all.foldLeft (s.notNull) { (res, cur) => res.replace(cur.color, "") }
+    if doIt then all.foldLeft (s.notNull) { (res, cur) => res.replace(cur.color, "") }
     else      s.notNull
 
   /**
@@ -33,9 +33,9 @@ trait AnsiColors { outer =>
    * color markers are inserted at the beginning and end of each line so that newlines are preserved
    */
   def color(s: String, color: AnsiColor, doIt: Boolean = true) =
-    if (doIt)
+    if doIt then
       val colored = s.foldLeft(color.color) { (res, cur) =>
-        if (cur == '\n') res + reset.color + cur + color.color
+        if cur == '\n' then res + reset.color + cur + color.color
         else             res + cur
       } + reset.color
       colored

@@ -69,7 +69,7 @@ trait ThrownExpectables extends ExpectationsCreation:
       case s@Skipped(_, _) => throw new SkipException(s)
       case s@Pending(_) => throw new PendingException(s)
       case e@Error(_, _) => throw new ErrorException(e)
-      case d@DecoratedResult(_, r) => if (!r.isSuccess) throw new DecoratedResultException(d) else ()
+      case d@DecoratedResult(_, r) => if !r.isSuccess then throw new DecoratedResultException(d) else ()
       case _ => ()
     r
 

@@ -38,7 +38,7 @@ trait Markdown:
    */
   def toHtmlNoPar(text: String, options: MarkdownOptions = MarkdownOptions()) =
     val html = toHtml(text, options)
-    if (!text.contains("\n") || text.trim.isEmpty) html.removeEnclosingXmlTag("p") else html
+    if !text.contains("\n") || text.trim.isEmpty then html.removeEnclosingXmlTag("p") else html
 
   /**
    * parse the markdown string and return xml (unless the arguments deactivate the markdown rendering)
@@ -67,12 +67,12 @@ case class Specs2Visitor(text: String, options: MarkdownOptions = MarkdownOption
 
   override def visit(node: SimpleNode): Unit =
     super.visit(node)
-    if (node.getType == SimpleNode.Type.Linebreak)
+    if node.getType == SimpleNode.Type.Linebreak then
       val indent = text.drop(node.getEndIndex).takeWhile(_ == ' ').length
       (1 to indent) foreach { i => super.visit(new SimpleNode(SimpleNode.Type.Nbsp)) }
   override def visit(node: VerbatimNode): Unit =
     // render verbatim nodes as simple text if the verbatim option is false
-    if (!options.verbatim && node.getType.isEmpty && node.getText.contains("\n"))
+    if !options.verbatim && node.getType.isEmpty && node.getText.contains("\n") then
       val indents = text.split("\n").filter(_.nonEmpty).map(line => line.takeWhile(_ == ' ').length)
       val verbatim = node.getText.split("\n").map(line => line.trim)
       val lines = (indents zip verbatim).map { case (indent, line) => "&nbsp;"*indent + line }.mkString("<br/>")
@@ -81,7 +81,7 @@ case class Specs2Visitor(text: String, options: MarkdownOptions = MarkdownOption
 
   private def printCode(node: TextNode): Unit =
     val text = node.getText
-    if (text.contains("\n"))
+    if text.contains("\n") then
       printer.print("<pre>").
         print("""<code class="prettyprint">""").
         printEncoded(text.removeFirst("\n")).

@@ -23,19 +23,19 @@ trait JsonGen:
 
   def jsonType(depth: Int): Gen[JSONType] = oneOf(jsonArray(depth), jsonObject(depth))
 
-  def jsonArray(depth: Int): Gen[JSONArray] = for {
+  def jsonArray(depth: Int): Gen[JSONArray] = for
     n    <- choose(1, 4)
     vals <- values(n, depth)
-  } yield JSONArray(vals)
+  yield JSONArray(vals)
 
-  def jsonObject(depth: Int): Gen[JSONObject] = for {
+  def jsonObject(depth: Int): Gen[JSONObject] = for
     n    <- choose(1, 4)
     ks   <- keys(n)
     vals <- values(n, depth)
-  } yield JSONObject(Map(ks zip vals:_*))
+  yield JSONObject(Map(ks zip vals:_*))
 
   def keys(n: Int) = listOfN(n, oneOf("a", "b", "c"))
   def values(n: Int, depth: Int) = listOfN(n, value(depth))
-  def value(depth: Int) = if (depth <= 0) terminalType else oneOf(jsonType(depth - 1), terminalType)
+  def value(depth: Int) = if depth <= 0 then terminalType else oneOf(jsonType(depth - 1), terminalType)
   def terminalType = oneOf(1, 2, "m", "n", "o", null)
 object JsonGen extends JsonGen

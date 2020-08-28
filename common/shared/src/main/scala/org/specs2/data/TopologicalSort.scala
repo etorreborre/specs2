@@ -31,7 +31,7 @@ object TopologicalSort:
   def sort[T](elements: Seq[T], dependsOn: (T, T) => Boolean): Option[Vector[T]] =
     // simple node structure to tag if a node has been visited or not
     class Node(val t: T, var permanent: Boolean = false, var temp: Boolean = false):
-      override def toString = t.toString+"-"+(if (unmarked) "u" else if (temp) "t" else "p")
+      override def toString = t.toString+"-"+(if unmarked then "u" else if temp then "t" else "p")
       def unmarked     = !permanent && !temp
 
       def setTemp()      = { temp = true }
@@ -42,8 +42,8 @@ object TopologicalSort:
     val result    = new ListBuffer[T]
 
     def visit(n: Node): Unit =
-      if (n.temp) throw new CycleException
-      else if (!n.permanent)
+      if n.temp then throw new CycleException
+      else if !n.permanent then
         n.setTemp()
         processed.filter(m => dependsOn(n.t, m.t)).foreach(visit)
         n.setPermanent()

@@ -18,7 +18,7 @@ trait ReturnsSyntax extends ExpectationsCreation:
 
     def returnsResult(m: String) =
       lazy val r = AsResult(t)
-      (contain(m) ^^ { (m: Result) => if (r.isSuccess) "success: "+m.message else "failure: "+m.message })(createExpectable(ResultExecution.execute(r)))
+      (contain(m) ^^ { (m: Result) => if r.isSuccess then "success: "+m.message else "failure: "+m.message })(createExpectable(ResultExecution.execute(r)))
 
 object ReturnsSyntax extends ReturnsSyntax with Expectations
 

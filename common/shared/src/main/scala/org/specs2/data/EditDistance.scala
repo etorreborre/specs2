@@ -22,10 +22,10 @@ trait EditDistance:
     private def createDistanceMatrix(s1: IndexedSeq[T], s2: IndexedSeq[T]): DistanceMatrix =
       val matrix = Array.ofDim[EditDistanceOp](s1.length + 1, s2.length + 1)
 
-      for (i <- 0 to s1.length;
-           j <- 0 to s2.length)
-        if (i == 0)      matrix(i)(j) = InsOp(j)                   // j insertions
-        else if (j == 0) matrix(i)(j) = DelOp(i)                   // i suppressions
+      for i <- 0 to s1.length;
+           j <- 0 to s2.length do
+        if i == 0 then      matrix(i)(j) = InsOp(j)                   // j insertions
+        else if j == 0 then matrix(i)(j) = DelOp(i)                   // i suppressions
         else             matrix(i)(j) = cost(s1, s2, i, j, matrix) // otherwise
 
       matrix
@@ -51,15 +51,15 @@ trait EditDistance:
     /** show the differences between 2 sequences as a list of operations from one to the other */
     def operations: IndexedSeq[EditDistanceOperation[T]] =
       def allOperations(i: Int, j: Int, operations: IndexedSeq[EditDistanceOperation[T]]): IndexedSeq[EditDistanceOperation[T]] =
-        if (i == 0 && j == 0) IndexedSeq()
+        if i == 0 && j == 0 then IndexedSeq()
         else
           val op = matrix(i)(j)
           val dist = op.cost
-          if (i == 1 && j == 1)
-            if (dist == 0) Same(s1(0)) +: operations
+          if i == 1 && j == 1 then
+            if dist == 0 then Same(s1(0)) +: operations
             else           Subst(s1(0), s2(0)) +: operations
-          else if (j < 1) s1.slice(0, i).map(Del.apply) ++ operations
-          else if (i < 1) s2.slice(0, j).map(Add.apply) ++ operations
+          else if j < 1 then s1.slice(0, i).map(Del.apply) ++ operations
+          else if i < 1 then s2.slice(0, j).map(Add.apply) ++ operations
           else op match
             case InsOp(_)   => allOperations(i,     j - 1, Add(s2(j - 1)) +: operations             )
             case DelOp(_)   => allOperations(i - 1, j,     Del(s1(i - 1)) +: operations             )
@@ -117,7 +117,7 @@ trait LevenhsteinCosts[T] extends EditDistanceCosts[T]:
   def equiv: Equiv[T]
 
   /** @return the cost of a substitution */
-  def substitutionCost(a: T, b: T): Int = if (equiv.equiv(a, b)) 0 else 1
+  def substitutionCost(a: T, b: T): Int = if equiv.equiv(a, b) then 0 else 1
 
   /** @return the cost of an insertion or deletion */
   def insertionDeletionCost(c: T) = 1
@@ -131,13 +131,13 @@ trait LevenhsteinCosts[T] extends EditDistanceCosts[T]:
    */
   def lowerCost(a: T, b: T, del: Int, subst: Int, ins: Int): EditDistanceOp =
     val (opDel, opSubst, opIns) = (DelOp(del), SubstOp(subst), InsOp(ins))
-    if (ins < del)
-      if (ins < subst) opIns
-      else if (ins == subst && equiv.equiv(a, b)) opIns
+    if ins < del then
+      if ins < subst then opIns
+      else if ins == subst && equiv.equiv(a, b) then opIns
       else opSubst
     else
-      if (del < subst) opDel
-      else if (del == subst && equiv.equiv(a, b)) opDel
+      if del < subst then opDel
+      else if del == subst && equiv.equiv(a, b) then opDel
       else opSubst
 
 

@@ -45,7 +45,7 @@ trait HmsTimer[T <: HmsTimer[T]]:
   def neverStarted = !isStarted && elapsedTimes.isEmpty
 
   def totalMillis =
-    if (isStarted) lastTimestamp - firstTimestamp
+    if isStarted then lastTimestamp - firstTimestamp
     else           elapsedTimes.sorted.lastOption.getOrElse(0L)
 
   private def lastTimestamp = startedTimestamps.sorted.lastOption.getOrElse(0L)
@@ -76,7 +76,7 @@ trait HmsTimer[T <: HmsTimer[T]]:
    */
   def time: String =
     val (_, _, _, millis) = hourMinutesSecondsMillis
-    (if (hms != "0 second") hms + ", " else "") +
+    (if hms != "0 second" then hms + ", " else "") +
       millis + " ms"
 
   /**

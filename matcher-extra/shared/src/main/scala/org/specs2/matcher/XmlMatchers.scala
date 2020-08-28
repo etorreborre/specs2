@@ -133,7 +133,7 @@ class EqualIgnoringSpaceMatcherOrdered(node: Seq[Node]) extends Matcher[Seq[Node
 trait XmlMatcherKoMessage:
   def koMessage[S <: Seq[Node]](n: Expectable[S], node: Seq[Node]) =
     (n.description + " is not equal to " + q(node)) +
-      (if (n.value.toString() == node.toString)
+      (if n.value.toString() == node.toString then
         "\nThe nodes have the same representation but contain different elements like <n>{\"a\"} b</n> (which is <n>Text(\"a\") b</n>) and <n>a b</n>" else "")
 
 /**
@@ -204,7 +204,7 @@ case class XmlMatcher(functions: Seq[PathFunction]) extends Matcher[Seq[Node]]:
              (ok + " contains " + searched, 
               ok + " doesn't contain " + searched)
               
-         if (nextNodes.isEmpty) (false, newOk, newKo)
+         if nextNodes.isEmpty then (false, newOk, newKo)
          else checkFunctions(functions, nextNodes, (true, newOk, newKo))
       }
       case _ => messages
@@ -242,8 +242,8 @@ case class PathFunction(val node: Node,
    * @return the node if it is found and matching the searched attributes and/or attribute values when specified
    */
   def apply(nodes: Seq[Node]): Seq[Node] = 
-    for { n     <- nodes
-          found <- function(n, node.label) if (found.matchNode(node, attributes, attributeValues, exactMatch, textMatcher.test)) }
+    for  n     <- nodes
+          found <- function(n, node.label) if (found.matchNode(node, attributes, attributeValues, exactMatch, textMatcher.test)) 
     yield found 
 
   def exactly = copy(exactMatch = true)
@@ -254,7 +254,7 @@ case class PathFunction(val node: Node,
   /**
    * @return "subnode" or "node" depending on the type of search a direct child search or a general search
    */
-  def nodeLabel: String = (if (!function(<a/>, "a").isEmpty) "node " else "subnode " )+ q(node.label)
+  def nodeLabel: String = (if !function(<a/>, "a").isEmpty then "node " else "subnode " )+ q(node.label)
 
   /**
    * @return a string representation of attributes or attributeValues (one of them being empty by construction)
@@ -265,11 +265,11 @@ case class PathFunction(val node: Node,
    * @return a string representing the searched nodes, attributes, attribute values
    */
   def searchedElements =
-    val n = if (node.child.isEmpty) nodeLabel
+    val n = if node.child.isEmpty then nodeLabel
             else node.toString
 
     val exactly = "exactly the " unless exactMatch
-    val attrs = if (attributes.isEmpty && attributeValues.isEmpty) None
+    val attrs = if attributes.isEmpty && attributeValues.isEmpty then None
                 else Some("with "+exactly+"attributes: " + searchedAttributes)
 
     Seq(Some(n), attrs, textMessage).flatten.mkString(" ")

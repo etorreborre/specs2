@@ -50,10 +50,10 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersImplicits { outer =
         (value, rest) match
           case (_, Nil)         => check(Expectable(anyValueToJsonType(value))).toResult
           case ((k, v), q :: _) =>
-            if (q.selector.select(Map((k.notNull, v))).isDefined) Success()
+            if q.selector.select(Map((k.notNull, v))).isDefined then Success()
             else                                                  Failure(s"found '${value.notNull}' but no value to select for ${q.name}")
           case (v, q :: _) =>
-            if (q.selector.select(List(v)).isDefined) Success()
+            if q.selector.select(List(v)).isDefined then Success()
             else                                      Failure(s"found '${value.notNull}' but no value to select for ${q.name}")
 
       (json, queries) match
@@ -72,7 +72,7 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersImplicits { outer =
         case (Some(JSONObject(map)), JsonQuery(First, selector) :: rest) =>
           selector.select(map) match
             case Some((k,v: JSONType)) => find(Some(v), rest)
-            case Some((k,v))           => val r = checkRest((k, v), rest); if (r.isSuccess) r else checkRest(v, rest)
+            case Some((k,v))           => val r = checkRest((k, v), rest); if r.isSuccess then r else checkRest(v, rest)
             case None                  => selectorNotFound(selector, map)
 
         // DEEP

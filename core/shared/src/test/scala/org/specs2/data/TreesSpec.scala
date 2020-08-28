@@ -23,7 +23,7 @@ class TreesSpec extends Specification with DataTables with Expectations { def is
 
 """
 
-  val prune = (i: Int) => if (i % 2 == 0) Some(i) else None
+  val prune = (i: Int) => if i % 2 == 0 then Some(i) else None
 
   def pruning1 = pruneAndDraw(tree1, prune) must beTree(
     "0",

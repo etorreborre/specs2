@@ -143,7 +143,7 @@ more precisely:
     val result =
       Result.foreach(1 to 10) { i =>
         count += 1
-        if (i == 5) Failure("boom")
+        if i == 5 then Failure("boom")
         else        Success()
       }
 
@@ -156,7 +156,7 @@ more precisely:
     val result =
       Result.forall(1 to 10) { i =>
         count += 1
-        if (i == 5) Failure("boom")
+        if i == 5 then Failure("boom")
         else        Success()
       }
 

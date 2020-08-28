@@ -48,7 +48,7 @@ case class Property[T](value: () => Option[T], evaluated: Boolean = false, evalu
 
   /** @return execute the property */
   private def execute: Property[T] =
-    if (!evaluated) copy(value, evaluated = true, evaluatedValue = value())
+    if !evaluated then copy(value, evaluated = true, evaluatedValue = value())
     else            this
 
   override def equals(other: Any) =

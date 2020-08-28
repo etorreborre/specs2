@@ -41,7 +41,7 @@ object SpecificationStructure:
       Operation.delayed(classOf[SpecificationStructure].cast(i))
 
     existsClass(className+"$", classLoader) flatMap { e =>
-      if (e)
+      if e then
         // try to create the specification from the object name
         createInstance[SpecificationStructure](className+"$", classLoader, defaultInstances).flatMap(asSpecificationStructure).orElse(
           // fallback to the class if this is just a companion object
@@ -89,7 +89,7 @@ object SpecificationStructure:
 
     val byName = (ss: List[SpecificationStructure]) => ss.foldLeft(Vector[(String, SpecificationStructure)]()) { (res, cur) =>
       val name = cur.structure(env).specClassName
-      if (res.map(_._1).contains(name)) res
+      if res.map(_._1).contains(name) then res
       else (name, cur) +: res
     }
 
@@ -99,7 +99,7 @@ object SpecificationStructure:
 
     Operation.delayed {
       def getAll(seed: Vector[SpecificationStructure], visited: Vector[(String, SpecificationStructure)]): Vector[SpecificationStructure] =
-        if (seed.isEmpty) visited.map(_._2)
+        if seed.isEmpty then visited.map(_._2)
         else
           val toVisit: Vector[(String, SpecificationStructure)] = seed.flatMap(s => getRefs(s, visited))
           getAll(toVisit.map(_._2), visited ++ toVisit)

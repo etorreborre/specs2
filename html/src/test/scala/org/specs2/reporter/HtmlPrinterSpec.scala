@@ -37,11 +37,11 @@ class HtmlPrinterSpec(val env: Env) extends Specification with ActionMatchers wi
 
   def finalize(env: Env, spec: SpecificationStructure): Action[Unit] =
     val htmlPrinter = printer(env)
-    for {
+    for
       options <- htmlPrinter.getHtmlOptions(env.arguments).toAction
       _       <- htmlPrinter.copyResources(env, options).toAction
       _       <- htmlPrinter.finalize(List(spec.structure(env)))
-    } yield ()
+    yield ()
 
 
   def printer(env: Env) = HtmlPrinter(env, SearchPage())

@@ -30,7 +30,7 @@ object Scripts:
     import qctx.tasty._
     '{ new Interpolated {
          def prepend(text: String): Fragments =
-           if ($script.isStart)
+           if $script.isStart then
              Fragments(${factory}.section(${script}.title)).append(${factory}.text(text))
            else
              ${script}.fragments(text).toFragments.append(${factory}.asSection(${script}.title))

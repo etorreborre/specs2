@@ -29,7 +29,7 @@ object Runner:
         exitSystem(1, exit)
 
       case Right(Right(result)) =>
-        if (result.isSuccess)
+        if result.isSuccess then
            exitSystem(0, exit)
         else
           exitSystem(1, exit)
@@ -40,7 +40,7 @@ object Runner:
    * Exit the JVM with a given status
    */
   def exitSystem(status: Int, exit: Boolean): Unit =
-    if (exit) System.exit(status)
+    if exit then System.exit(status)
 
 
 case class RunnerLogger(env: Env):
@@ -61,7 +61,7 @@ case class RunnerLogger(env: Env):
       case UserException(m, throwable) => logException(m, throwable)
 
       case ActionException(warnings, message, exception) =>
-        if (warnings.nonEmpty) print("Warnings:\n") >> print(warnings.mkString("", "\n", "\n"))
+        if warnings.nonEmpty then print("Warnings:\n") >> print(warnings.mkString("", "\n", "\n"))
         else Operation.unit >>
           message.traverse(print).void >>
           exception.traverse(e => logException(e.getMessage, e)).void

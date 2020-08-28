@@ -71,14 +71,14 @@ trait JUnitDescriptions extends ExecutionOrigin:
 
   def createDescription(className: String, suiteName: String = "", testName: String = "", label: String = "", id: String = "", annotations: Array[Annotation] = Array()): Description =
     val origin =
-      if (isExecutedFromAnIDE && !label.isEmpty) label
+      if isExecutedFromAnIDE && !label.isEmpty then label
       else className
 
     val description =
-      if (testName.isEmpty) (if (suiteName.isEmpty) className else suiteName)
+      if testName.isEmpty then (if suiteName.isEmpty then className else suiteName)
       else sanitize(testName) + "(" + origin + ")"
 
-    if (id.nonEmpty)
+    if id.nonEmpty then
       Description.createSuiteDescription(description, id, annotations:_*)
     else
       Description.createSuiteDescription(description, annotations:_*)
@@ -91,14 +91,14 @@ trait JUnitDescriptions extends ExecutionOrigin:
 
   /** @return a test name with no newlines */
   def testName(s: String, parentNodes: Seq[String] = Seq()): String =
-    (if (parentNodes.isEmpty || isExecutedFromAnIDE) "" else parentNodes.map(_.replace("\n", "")).mkString("", "::", "::")) +
-      (if (isExecutedFromAnIDE) Trimmed(s).removeNewLines else Trimmed(s).trimNewLines)
+    (if parentNodes.isEmpty || isExecutedFromAnIDE then "" else parentNodes.map(_.replace("\n", "")).mkString("", "::", "::")) +
+      (if isExecutedFromAnIDE then Trimmed(s).removeNewLines else Trimmed(s).trimNewLines)
 
 
   /** @return replace () with [] because it cause display issues in JUnit plugins */
   private def sanitize(s: String) =
     val trimmed = Trimmed(s).trimReplace("(" -> "[",  ")" -> "]")
-    if (trimmed.isEmpty) " "
+    if trimmed.isEmpty then " "
     else trimmed
 
 

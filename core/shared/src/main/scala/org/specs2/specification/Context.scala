@@ -186,6 +186,6 @@ trait StoredResultsContext extends Context { this: { def storedResults: scala.co
     // if the execution returns an Error or a Failure that was created for a thrown
     // exception, like a JUnit assertion error or a NotImplementedError
     // then add the result as a new issue
-    if (asResult.isError || asResult.isThrownFailure) issues(results :+ asResult, "\n")
+    if asResult.isError || asResult.isThrownFailure then issues(results :+ asResult, "\n")
     else                                              issues(results, "\n")
 }

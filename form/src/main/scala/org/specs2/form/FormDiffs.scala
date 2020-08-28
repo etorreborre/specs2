@@ -12,7 +12,7 @@ trait FormDiffs:
   def subset(form1: Seq[Form], form2: Seq[Form]): Seq[Form] =
     val intersection = form1.toSet intersect form2.toSet
     form1.map { f =>
-      if  (intersection contains f)  f.setSuccess
+      if  intersection contains f then  f.setSuccess
       else f
     } ++
     form2.collect { case f if !(intersection contains f) => f.setFailure }
@@ -35,7 +35,7 @@ trait FormDiffs:
   def set(form1: Seq[Form], form2: Seq[Form]): Seq[Form] =
     val intersection = form1.toSet intersect form2.toSet
     form1.collect { case f =>
-      if  (intersection contains f)  f.setSuccess
+      if  intersection contains f then  f.setSuccess
       else f.setFailure
     } ++
     form2.collect { case f if !(intersection contains f) => f.setFailure }

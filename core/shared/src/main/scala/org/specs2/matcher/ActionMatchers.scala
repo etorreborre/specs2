@@ -35,7 +35,7 @@ trait ActionMatchers extends ValueChecks:
 
   def beKo[T](message: String): Matcher[Action[T]] = (action: Action[T]) =>
     action.runAction(ee).fold(
-      throwable => if (throwable.getMessage matchesSafely message) Success() else Failure(s"the action failed with message ${throwable.getMessage}. Expected: $message"),
+      throwable => if throwable.getMessage matchesSafely message then Success() else Failure(s"the action failed with message ${throwable.getMessage}. Expected: $message"),
       ok => Failure(s"a failure with message $message was expected")
     )
 

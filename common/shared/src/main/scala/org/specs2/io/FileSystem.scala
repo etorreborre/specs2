@@ -74,11 +74,11 @@ case class FileSystem(logger: Logger) extends FilePathReader:
 
     @annotation.tailrec
     def extractEntry(entry: ZipEntry): Unit =
-      if (entry != null)
+      if entry != null then
         val matcher = regex.matcher(entry.getName)
-        if (matcher.matches)
+        if matcher.matches then
           val target = matcher.replaceFirst(s"${quoteReplacement(dest.path)}$$1")
-          if (!entry.isDirectory)
+          if !entry.isDirectory then
             new File(target).getParentFile.mkdirs
             new File(target).createNewFile
             val fos = new FileOutputStream(target)
@@ -103,7 +103,7 @@ case class FileSystem(logger: Logger) extends FilePathReader:
   private def copy(input: InputStream, output: OutputStream): Unit =
     val data = new Array[Byte](2048)
     def readData(count: Int): Unit =
-      if (count != -1)
+      if count != -1 then
         output.write(data, 0, count)
         output.flush
         readData(input.read(data, 0, 2048))

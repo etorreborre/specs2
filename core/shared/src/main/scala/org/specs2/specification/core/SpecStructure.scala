@@ -123,7 +123,7 @@ object SpecStructure:
 
     val byName = (ss: List[SpecStructure]) => ss.foldLeft(Vector[(String, SpecStructure)]()) { (res, cur) =>
       val name = cur.specClassName
-      if (res.map(_._1).contains(name)) res
+      if res.map(_._1).contains(name) then res
       else (name, cur) +: res
     }
 
@@ -136,7 +136,7 @@ object SpecStructure:
 
     Operation.delayed {
       def getAll(seed: Vector[SpecStructure], visited: Vector[(String, SpecStructure)]): Vector[SpecStructure] =
-        if (seed.isEmpty) visited.map(_._2)
+        if seed.isEmpty then visited.map(_._2)
         else
           val toVisit: Vector[(String, SpecStructure)] = seed.flatMap(s => getRefs(s, visited))
           getAll(toVisit.map(_._2), visited ++ toVisit)

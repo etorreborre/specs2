@@ -30,7 +30,7 @@ object FileName:
    * create a file name from a String
    */
   def fileNameFromString(s: String): Either[String, FileName] =
-    if (s.contains(File.separator) || isWindows && s.contains("/"))
+    if s.contains(File.separator) || isWindows && s.contains("/") then
       Left(s"$s is not a valid file name. It must not contain a /")
     else
       Right(FileName.unsafe(s))

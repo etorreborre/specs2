@@ -47,12 +47,12 @@ object Snippets:
                  resultFragments(snippet, location) ++
                  checkFragments(snippet, location):_*)
            def resultFragments(snippet: Snippet[$t], location: Location) =
-             if (snippet.showResult.isEmpty)
+             if snippet.showResult.isEmpty then
                Seq()
              else
                Seq(factory.text("\n"+snippet.showResult).setLocation(location))
            def checkFragments(snippet: Snippet[$t], location: Location) =
-             if (snippet.mustBeVerified)
+             if snippet.mustBeVerified then
                Seq(factory.step(snippet.verify.mapMessage("Snippet failure: "+_)).setLocation(location))
              else
                Seq()

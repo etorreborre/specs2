@@ -33,7 +33,7 @@ object StoreKeys:
       case SpecificationStatsKey(_) =>
         val lines = data.split("\n").toList
         lines.map(statsFromString).sequence.map { stats =>
-          if (stats.size == 2) stats(0).copy(trend = Some(stats(1)))
+          if stats.size == 2 then stats(0).copy(trend = Some(stats(1)))
           else stats(0)
         }
 

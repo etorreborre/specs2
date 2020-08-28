@@ -53,14 +53,14 @@ object JSONFormat:
     case s : String => "\"" + quoteString(s) + "\""
     case jo : JSONObject => jo.toString(defaultFormatter)
     case ja : JSONArray => ja.toString(defaultFormatter)
-    case other => if (other == null) "null" else other.toString
+    case other => if other == null then "null" else other.toString
 
   /**
    * This function can be used to properly quote Strings
    * for JSON output.
    */
   def quoteString (s : String) : String =
-    if (s == null) "null"
+    if s == null then "null"
     else s.map {
       case '"'  => "\\\""
       case '\\' => "\\\\"
@@ -155,7 +155,7 @@ class Lexer extends StdLexical with ImplicitConversions:
 
   def checkKeyword(xs : List[Any]) =
     val strRep = xs mkString ""
-    if (reserved contains strRep) Keyword(strRep) else ErrorToken("Not a keyword: " + strRep)
+    if reserved contains strRep then Keyword(strRep) else ErrorToken("Not a keyword: " + strRep)
 
   /** A string is a collection of zero or more Unicode characters, wrapped in
     *  double quotes, using backslash escapes (cf. http://www.json.org/).
@@ -175,7 +175,7 @@ class Lexer extends StdLexical with ImplicitConversions:
   }
 
   private def optString[A](pre: String, a: Option[A]) = a match
-    case Some(x) => pre + (if (x == null) "null" else x.toString)
+    case Some(x) => pre + (if x == null then "null" else x.toString)
     case None => ""
 
   def zero: Parser[String] = '0' ^^^ "0"

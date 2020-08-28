@@ -37,7 +37,7 @@ trait StringEditDistance extends DiffShortener:
       val operations1 = matrix.operations
       val operations2 = operations1.map(_.inverse)
       val (diffs1, diffs2) = (showDiffs(operations1, sep, shortenSize), showDiffs(operations2, sep, shortenSize))
-      def skipLine(s: String) = if (s.isEmpty) s else s+"\n"
+      def skipLine(s: String) = if s.isEmpty then s else s+"\n"
       (skipLine(r._1) + diffs1, skipLine(r._2) + diffs2)
     })
 
@@ -45,7 +45,7 @@ trait StringEditDistance extends DiffShortener:
     val delimiter = StringDelimiter(sep)
 
     val (isDifferent, result) = operations.foldLeft((false, new StringBuilder)) { case ((different, res), op) =>
-      if (different)
+      if different then
         op match
           case Add(t)     => (true,  res)
           case Del(t)     => (true,  res.append(t))
@@ -59,7 +59,7 @@ trait StringEditDistance extends DiffShortener:
           case Same(t)    => (false, res.append(t))
     }
     val fullResult =
-      if (isDifferent) result.append(delimiter.second).toString
+      if isDifferent then result.append(delimiter.second).toString
       else             result.toString
 
     shorten(fullResult, delimiter.first, delimiter.second, shortenSize)
@@ -87,8 +87,8 @@ trait StringEditDistance extends DiffShortener:
    */
   case class StringDelimiter(separator: String):
     val middle = separator.size / 2 + separator.size % 2
-    val first =  if (separator.isEmpty) "" else separator.substring(0, middle)
-    val second = if (separator.size < 2) first else separator.substring(middle, separator.size)
+    val first =  if separator.isEmpty then "" else separator.substring(0, middle)
+    val second = if separator.size < 2 then first else separator.substring(middle, separator.size)
     val separators = (first, second)
 
 /**
@@ -96,16 +96,16 @@ trait StringEditDistance extends DiffShortener:
  */
 trait DiffShortener:
   def shorten(s: String, firstSep: String = "[", secondSep: String = "]", size: Int = 5): String =
-    def shortenLeft(s: String) = if (s.size > size) ("..." + s.slice(s.size - size, s.size)) else s
-    def shortenRight(s: String) = if (s.size > size) (s.slice(0, size) + "...") else s
-    def shortenCenter(s: String) = if (s.size > size) (s.slice(0, size / 2) + "..." + s.slice(s.size - size / 2, s.size)) else s
+    def shortenLeft(s: String) = if s.size > size then ("..." + s.slice(s.size - size, s.size)) else s
+    def shortenRight(s: String) = if s.size > size then (s.slice(0, size) + "...") else s
+    def shortenCenter(s: String) = if s.size > size then (s.slice(0, size / 2) + "..." + s.slice(s.size - size / 2, s.size)) else s
     val list = sepList(s, firstSep, secondSep)
     list.foldLeft("") { (res, cur) =>
-      if (cur.startsWith(firstSep) && cur.endsWith(secondSep))
+      if cur.startsWith(firstSep) && cur.endsWith(secondSep) then
         res + cur
-      else if (list.head eq cur)
+      else if list.head eq cur then
         res + shortenLeft(cur)
-      else if (list.last eq cur)
+      else if list.last eq cur then
         res + shortenRight(cur)
       else
         res + shortenCenter(cur)
@@ -113,18 +113,18 @@ trait DiffShortener:
 
   private def sepList(s: String, firstSep: String, secondSep: String) =
     def split(s: String, sep: String): Array[String] =
-      if (List("[", "]" ,"(", ")", "-", "+", "?", "*").contains(sep)) split(s, "\\" + sep) else s.split(sep)
+      if List("[", "]" ,"(", ")", "-", "+", "?", "*").contains(sep) then split(s, "\\" + sep) else s.split(sep)
 
     val splitStr = split(s, firstSep)
-    if (splitStr.size == 1) List(s)
+    if splitStr.size == 1 then List(s)
     else
       splitStr.foldLeft(List[String]()) { (res, cur) =>
-        if (!cur.contains(secondSep)) res :+ cur
+        if !cur.contains(secondSep) then res :+ cur
         else
           lazy val diff = split(cur, secondSep)(0)
-          if (split(cur, secondSep).size == 0)
+          if split(cur, secondSep).size == 0 then
             res :+ (firstSep + secondSep)
-          else if (split(cur, secondSep).size > 1)
+          else if split(cur, secondSep).size > 1 then
             res ++ List(firstSep + diff + secondSep, split(cur, secondSep)(1))
           else
             res :+ (firstSep + diff + secondSep)

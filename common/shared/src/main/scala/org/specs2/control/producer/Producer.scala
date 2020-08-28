@@ -53,7 +53,7 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]):
 
   def collect[B](pf: PartialFunction[A, B]): Producer[F, B] =
     flatMap { a =>
-      if (pf.isDefinedAt(a)) one(pf(a))
+      if pf.isDefinedAt(a) then one(pf(a))
       else done
     }
 
@@ -67,7 +67,7 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]):
   def filter(f: A => Boolean): Producer[F, A] =
     Producer(run flatMap {
       case Done() => done[F, A].run
-      case One(a) => Monad[F].pure(a).as(if (f(a)) One(a) else Done())
+      case One(a) => Monad[F].pure(a).as(if f(a) then One(a) else Done())
       case More(as, next) =>
         as filter f match {
           case Nil => next.filter(f).run
@@ -78,9 +78,9 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]):
   def drop(n: Int): Producer[F, A] =
     cata(
       done[F, A],
-      (a: A) => if (n <= 0) one(a) else done,
+      (a: A) => if n <= 0 then one(a) else done,
       (as: List[A], next: Producer[F, A]) =>
-        if (n < as.size) emit[F, A](as.drop(n)) append next
+        if n < as.size then emit[F, A](as.drop(n)) append next
         else next.drop(n - as.size))
 
   def dropRight(n: Int): Producer[F, A] =
@@ -88,11 +88,11 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]):
         Producer(p.peek.flatMap {
           case (Some(a), as) =>
             val es = elements :+ a
-            if (es.size >= n) (emit[F, A](es.toList) append go(as, Vector.empty[A])).run
+            if es.size >= n then (emit[F, A](es.toList) append go(as, Vector.empty[A])).run
             else go(as, es).run
 
           case (None, _) =>
-            if (elements.size <= n) done[F, A].run
+            if elements.size <= n then done[F, A].run
             else emit[F, A](elements.toList).run
 
         })
@@ -100,13 +100,13 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]):
 
   def take(n: Int): Producer[F, A] =
     def go(p: Producer[F, A], i: Int): Producer[F, A] =
-      if (i <= 0) done
+      if i <= 0 then done
       else
         Producer(p.run flatMap {
           case Done() => done[F, A].run
           case One(a) => one[F, A](a).run
           case More(as, next) =>
-            if (as.size <= i) (emit[F, A](as) append go(next, i - as.size)).run
+            if as.size <= i then (emit[F, A](as) append go(next, i - as.size)).run
             else              emit[F, A](as take i).run
         })
     go(this, n)
@@ -114,7 +114,7 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]):
   def takeWhile(f: A => Boolean): Producer[F, A] =
     cata(
       done[F,A],
-      (a: A) => if (f(a)) one(a) else done,
+      (a: A) => if f(a) then one(a) else done,
       (as: List[A], next: Producer[F, A]) =>
         as.takeWhile(f) match {
           case Nil => done
@@ -212,7 +212,7 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]):
    * REPEAT ELEMENTS
    */
   def fill(n: Int): Producer[F, A] =
-    if (n <= 0) done[F, A]
+    if n <= 0 then done[F, A]
     else append(fill(n - 1))
 
   def repeat: Producer[F, A] =
@@ -257,7 +257,7 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]):
 
           case More(as, next) =>
             val es = elements ++ as
-            if (es.size == size) (emit[F, A](es.toList) append go(next, Vector.empty)).run
+            if es.size == size then (emit[F, A](es.toList) append go(next, Vector.empty)).run
             else                 go(next, es).run
         })
 
@@ -271,7 +271,7 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]):
         peek.flatMap {
           case (Some(a), as) =>
             val es = elements :+ a
-            if (es.size == size) (one[F, List[A]](es.toList) append go(as, Vector.empty)).run
+            if es.size == size then (one[F, List[A]](es.toList) append go(as, Vector.empty)).run
             else                 go(as, es).run
 
           case (None, _) =>
@@ -296,7 +296,7 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]):
         case One(a) => Monad[F].pure(((collected :+ a).take(n).toList, done[F, A]))
         case More(as, next) =>
           val all = collected ++ as
-          if (all.size >= n)
+          if all.size >= n then
           Monad[F].pure((all.take(n).toList, emit[F, A](all.drop(n).toList) append next))
           else
             go(next, all)
@@ -356,9 +356,9 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]):
           case One(b) => as.headOption.map(a => one[F, (A, B)]((a, b))).getOrElse(done[F, (A, B)]).run
 
           case More(bs, nextb) =>
-            if (as.size == bs.size)
+            if as.size == bs.size then
               (emit[F, (A, B)](as zip bs) append (nexta zip nextb)).run
-            else if (as.size < bs.size)
+            else if as.size < bs.size then
               (emit[F, (A, B)](as zip bs) append (nexta zip (emit[F, B](bs.drop(as.size)) append nextb))).run
             else
               (emit[F, (A, B)](as zip bs) append ((emit[F, A](as.drop(bs.size)) append nexta) zip nextb)).run
@@ -378,7 +378,7 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]):
       def go(p: Producer[F, A], previous: Vector[A]): Producer[F, (List[A], A)] =
         Producer(p.peek flatMap {
           case (Some(a), as) =>
-            val ps = if (previous.size < n) previous else previous.drop(1)
+            val ps = if previous.size < n then previous else previous.drop(1)
             (one[F, (List[A], A)]((previous.take(n).toList, a)) append go(as, ps :+ a)).run
           case (None, _) =>
             done[F, (List[A], A)].run
@@ -397,7 +397,7 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]):
    */
   def zipWithNextN(n: Int): Producer[F, (A, List[A])] =
       Producer[F, (A, List[A])](peekN(n + 1).flatMap { case (next, as) =>
-        if (next.isEmpty)
+        if next.isEmpty then
           done[F, (A, List[A])].run
         else {
           val rest = next.drop(1)

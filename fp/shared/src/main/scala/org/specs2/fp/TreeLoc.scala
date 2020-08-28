@@ -44,19 +44,19 @@ final case class TreeLoc[A](tree: Tree[A], lefts: TreeForest[A],
 
   /** Select the nth child of the current node. */
   def getChild(n: Int): Option[TreeLoc[A]] =
-    for {
+    for
       lr <- splitChildren(LazyList.empty, tree.subForest, n)
       ls = lr._1
-    } yield loc(ls.head, ls.tail, lr._2, downParents)
+    yield loc(ls.head, ls.tail, lr._2, downParents)
 
   /** Select the first immediate child of the current node that satisfies the given predicate. */
   def findChild(p: Tree[A] => Boolean): Option[TreeLoc[A]] =
     @tailrec
     def split(acc: TreeForest[A], xs: TreeForest[A]): Option[(TreeForest[A], Tree[A], TreeForest[A])] =
       (acc, xs) match
-        case (acc, LazyList.cons(x, xs)) => if (p(x)) Some((acc, x, xs)) else split(LazyList.cons(x, acc), xs)
+        case (acc, LazyList.cons(x, xs)) => if p(x) then Some((acc, x, xs)) else split(LazyList.cons(x, acc), xs)
         case _                         => None
-    for (ltr <- split(LazyList.empty, tree.subForest)) yield loc(ltr._2, ltr._1, ltr._3, downParents)
+    for ltr <- split(LazyList.empty, tree.subForest) yield loc(ltr._2, ltr._1, ltr._3, downParents)
 
   /** Select the first descendant node of the current node that satisfies the given predicate. */
   def find(p: TreeLoc[A] => Boolean): Option[TreeLoc[A]] =
@@ -115,14 +115,14 @@ final case class TreeLoc[A](tree: Tree[A], lefts: TreeForest[A],
 
   /** Insert the given node as the nth child of the current node and give it focus. */
   def insertDownAt(n: Int, t: Tree[A]): Option[TreeLoc[A]] =
-    for (lr <- splitChildren(LazyList.empty, tree.subForest, n)) yield loc(t, lr._1, lr._2, downParents)
+    for lr <- splitChildren(LazyList.empty, tree.subForest, n) yield loc(t, lr._1, lr._2, downParents)
 
   /** Delete the current node and all its children. */
   def delete: Option[TreeLoc[A]] = rights match
     case LazyList.cons(t, ts) => Some(loc(t, lefts, ts, parents))
     case _                  => lefts match
       case LazyList.cons(t, ts) => Some(loc(t, ts, rights, parents))
-      case _                  => for (loc1 <- parent) yield loc1.modifyTree((t: Tree[A]) => Node(t.rootLabel, LazyList.empty))
+      case _                  => for loc1 <- parent yield loc1.modifyTree((t: Tree[A]) => Node(t.rootLabel, LazyList.empty))
 
   /**
    * The path from the focus to the root.
@@ -143,16 +143,16 @@ final case class TreeLoc[A](tree: Tree[A], lefts: TreeForest[A],
     val rgt = (_: TreeLoc[A]).right
     def dwn[X](tz: TreeLoc[X]): (TreeLoc[X], () => LazyList[TreeLoc[X]]) =
       val f = () => unfold(tz.firstChild) {
-        (o: Option[TreeLoc[X]]) => for (c <- o) yield (c, c.right)
+        (o: Option[TreeLoc[X]]) => for c <- o yield (c, c.right)
       }
       (tz, f)
     def uf[X](a: TreeLoc[X], f: TreeLoc[X] => Option[TreeLoc[X]]): LazyList[Tree[TreeLoc[X]]] =
       unfold(f(a)) {
-        (o: Option[TreeLoc[X]]) => for (c <- o) yield (Tree.unfoldTree(c)(dwn[X](_: TreeLoc[X])), f(c))
+        (o: Option[TreeLoc[X]]) => for c <- o yield (Tree.unfoldTree(c)(dwn[X](_: TreeLoc[X])), f(c))
       }
 
     val p = unfold(parent) {
-      (o: Option[TreeLoc[A]]) => for (z <- o) yield ((uf(z, lft), z, uf(z, rgt)), z.parent)
+      (o: Option[TreeLoc[A]]) => for z <- o yield ((uf(z, lft), z, uf(z, rgt)), z.parent)
     }
     TreeLoc.loc(Tree.unfoldTree(this)(dwn(_: TreeLoc[A])), uf(this, lft), uf(this, rgt), p)
 
