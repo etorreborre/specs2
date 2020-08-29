@@ -18,6 +18,13 @@ case class Operation[A](operation: () => A, last: Vector[Finalizer] = Vector.emp
   private def run: A =
     operation()
 
+  def map[B](f: A => B): Operation[B] =
+   Operation[B](() => f(run), last)
+
+  def flatMap[B](f: A => Operation[B]): Operation[B] =
+    lazy val Operation(b, last1) = f(run)
+    Operation[B](b , last ++ last1)
+
   def runOperation: Throwable Either A =
     val attempted = attempt
     Finalizer.runFinalizers(attempted.last)
@@ -105,7 +112,7 @@ object Operation:
       Operation(() => a)
 
     def bind[A, B](fa: Operation[A])(f: A => Operation[B]): Operation[B] =
-      Operation[B](() => f(fa.run).run)
+      fa.flatMap(f)
 
     override def ap[A, B](fa: =>Operation[A])(ff: =>Operation[A => B]): Operation[B] =
       Operation(() => ff.run(fa.run))

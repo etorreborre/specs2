@@ -102,10 +102,11 @@ trait ResultExecution { outer =>
   /**
    * execute a Property returning the value if it exists and a Success result otherwise
    */
-  def executeProperty[T](prop: Property[T], default: Result = Success("no value")) = executeEither(prop.optionalValue) match
-    case Right(Some(v)) => Right(v)
-    case Right(None)    => Left(default)
-    case Left(r)        => Left(r)
+  def executeProperty[T](prop: Property[T], default: Result = Success("no value")): Either[Result, T] =
+    executeEither[Option[T], Option[T]](prop.optionalValue) match
+      case Right(Some(v)) => Right(v)
+      case Right(None)    => Left(default)
+      case Left(r)        => Left(r)
 
   /** determine if an AssertionError has been thrown from JUnit or not */
   private def fromJUnit(e: AssertionError) =

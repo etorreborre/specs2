@@ -18,6 +18,18 @@ import execute._
  */
 case class Action[A](private[control] runNow: ExecutionEnv => Future[A], timeout: Option[FiniteDuration] = None, last: Vector[Finalizer] = Vector.empty):
 
+  def map[B](f: A => B): Action[B] =
+    Action[B] { ee =>
+      implicit val ec = ee.executionContext
+      this.runNow(ee).map(f)
+    }
+
+  def flatMap[B](f: A => Action[B]): Action[B] =
+    Action[B] { ee =>
+      implicit val ec = ee.executionContext
+      this.runNow(ee).flatMap { case a => f(a).runNow(ee) }
+    }
+
   /** add a finalizer */
   def addLast(finalizer: Finalizer): Action[A] =
     copy(last = last :+ finalizer)
@@ -107,10 +119,7 @@ object Action:
       Action(_ => Future.successful(a))
 
     def bind[A, B](fa: Action[A])(f: A => Action[B]): Action[B] =
-      Action[B] { ee =>
-        implicit val ec = ee.executionContext
-        fa.runNow(ee).flatMap { case a => f(a).runNow(ee) }
-    }
+      fa.flatMap(f)
 
     override def ap[A, B](fa: =>Action[A])(ff: =>Action[A => B]): Action[B] =
       Action { ee =>
@@ -150,4 +159,3 @@ object Action:
     def asResult(action: =>Action[T]): Result =
       action.runAction(ExecutionEnv.fromGlobalExecutionContext).fold(err => Error(err),  ok => AsResult(ok))
   }
-

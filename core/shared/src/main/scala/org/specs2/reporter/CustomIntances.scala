@@ -26,8 +26,8 @@ case class CustomInstances(arguments: Arguments, loader: ClassLoader, logger: Lo
       instance <- Classes.createInstanceEither[T](className, loader)(m)
       result <-
         instance match
-          case Right(i) => Operation.ok(Some(i))
-          case Left(t) => noInstanceWithException(failureMessage(t.getMessage), t, forceVerbose = Some(true))
+          case Right(i) => Operation.ok(Option(i))
+          case Left(t) => noInstanceWithException[T](failureMessage(t.getMessage), t, forceVerbose = Some(true))
     yield result
 
   /** print a message if a class can not be instantiated */

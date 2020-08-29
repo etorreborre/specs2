@@ -26,7 +26,7 @@ trait Fold[M[_], A, B]:
   /** map the output value */
   def map[C](f: B => C) = new Fold[M, A, C] {
     type S = self.S
-    implicit val monad: Monad[M] = self.monad
+    given monad as Monad[M] = self.monad
 
     def start = self.start
     def fold = self.fold
@@ -36,7 +36,7 @@ trait Fold[M[_], A, B]:
   /** flatMap the output value */
   def mapFlatten[C](f: B => M[C]) = new Fold[M, A, C] {
     type S = self.S
-    implicit val monad: Monad[M] = self.monad
+    given monad as Monad[M] = self.monad
 
     def start = self.start
     def fold = self.fold

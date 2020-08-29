@@ -88,7 +88,8 @@ sealed abstract class Tree[A]:
     val uz = Need(subForest.map(_.unzip))
     val fst = Need(uz.value map (_._1))
     val snd = Need(uz.value map (_._2))
-    (Node(rootLabel._1, fst.value), Node(rootLabel._2, snd.value))
+    val root = p(rootLabel)
+    (Node(root._1, fst.value), Node(root._2, snd.value))
 
   def foldNode[Z](f: A => LazyList[Tree[A]] => Z): Z =
     f(rootLabel)(subForest)

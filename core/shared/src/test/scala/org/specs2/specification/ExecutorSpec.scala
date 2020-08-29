@@ -11,7 +11,7 @@ import main.Arguments
 import concurrent.ExecutionEnv
 import specification.core._
 import specification.process.DefaultExecutor
-import fp.syntax._
+import fp._, syntax._
 import ResultMatchers._
 import scala.concurrent._
 
@@ -206,17 +206,18 @@ class ExecutorSpec(val env: Env) extends Specification with ThrownExpectations w
 
   final lazy val factory = fragmentFactory
 
-  def execute(fragments: Fragments, env: Env): List[Result] =
+  def runFragments(fragments: Fragments, env: Env): List[Fragment] =
     DefaultExecutor(env).execute(env.arguments)(fragments.contents).runList.
-      runOption(env.executionEnv).toList.flatten.traverse(_.executionResult).run(env.executionEnv)
+      runOption(env.executionEnv).toList.flatten
+
+  def execute(fragments: Fragments, env: Env): List[Result] =
+    runFragments(fragments, env).traverse(_.executionResult).run(env.executionEnv)
 
   def executionTimes(fragments: Fragments, env: Env): List[String] =
-    DefaultExecutor(env).execute(env.arguments)(fragments.contents).runList.
-      runOption(env.executionEnv).toList.flatten.traverse(_.executedResult.map(_.timer.time)).run(env.executionEnv)
+    Traverse.listInstance.traverse(runFragments(fragments, env))((f: Fragment) => f.executedResult.map(_.timer.time)).run(env.executionEnv)
 
   def executions(fragments: Fragments, env: Env): List[Execution] =
-    DefaultExecutor(env).execute(env.arguments)(fragments.contents).runList.
-      runOption(env.executionEnv).toList.flatten.map(_.execution)
+    runFragments(fragments, env).map(_.execution)
 
   case class Results():
     val messages = new ListBuffer[String]

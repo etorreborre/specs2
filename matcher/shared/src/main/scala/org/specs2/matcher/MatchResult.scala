@@ -261,7 +261,7 @@ class OrMatch[T] private[specs2](first: MatchResult[T], second: =>MatchResult[T]
   override def evaluate[S >: T] =
     m1 match
       // see MatchResultLogicalCombinatorsSpec for a case where OrMatches are nested together. see #233
-      case om: OrMatch[_] if om.m1.isSuccess => new OrMatch(om.m1, MatchSkip("", expectable))
+      case om: OrMatch[_] if om.m1.isSuccess => new OrMatch(om.m1.asInstanceOf[MatchResult[S]], MatchSkip("", expectable))
       case MatchSuccess(_, _, _)             => new OrMatch(m1, MatchSkip("", expectable))
       case _ => {
         (m1, m2) match
