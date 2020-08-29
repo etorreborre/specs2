@@ -65,8 +65,7 @@ case class TextPrinter(env: Env) extends Printer {
   }
 
   def printStats(header: SpecHeader, args: Arguments, stats: Stats, timer: SimpleTimer): List[LogLine] =
-    val mustShowStats = (args.xonly && stats.hasFailuresOrErrors) || (!args.xonly && args.canShow("1"))
-    if mustShowStats then {
+    if (args.xonly && stats.hasFailuresOrErrors) || (!args.xonly && args.canShow("1"))   then {
       val title = if header.show.isEmpty then "" else " "+header.show.trim
 
       printNewLine ++

@@ -64,7 +64,7 @@ object Snippets extends Snippets:
     import qctx.tasty._
     val expression = Expr(rootPosition.sourceCode)
     // we need to pass () => T here because betaReduce would evaluate the code here otherwise
-    Expr.betaReduce('{(ex: String, c: $t1, ps: SnippetParams[$t]) => createSnippet[$t](ex, c, ps)})(expression, code, params)
+    Expr.betaReduce('{createSnippet[$t]($expression, $code, $params)})
 
   def createSnippet[T](expression: String, code: () => T, params: SnippetParams[T]): Snippet[T] =
     new Snippet[T](code, codeExpression = Some(expression), params)

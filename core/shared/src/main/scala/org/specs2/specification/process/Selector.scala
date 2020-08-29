@@ -76,8 +76,7 @@ case class DefaultSelector(commandLineArguments: Arguments) extends Selector:
           (Option(fragment), sections)
       } flatMap (f => emit(f.toList))
 
-    val hasFilter = (arguments.include + arguments.exclude).nonEmpty
-    if hasFilter then (normalize |> go |> removeMarkers)(p)
+    if (arguments.include + arguments.exclude).nonEmpty then (normalize |> go |> removeMarkers)(p)
     else p
   }
 

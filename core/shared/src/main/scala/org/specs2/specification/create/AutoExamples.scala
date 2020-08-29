@@ -26,9 +26,7 @@ object AutoExamples extends AutoExamples:
 
     import qctx.tasty._
     val expression = Expr(rootPosition.sourceCode)
-    // we need to pass () => T here because betaReduce would evaluate the code here otherwise
-    Expr.betaReduce('{(ex: String, c: $t1, as: AsResult[$t], post: Fragments => Fragments) =>
-      post(createExample[$t](ex, c, as))})(expression, code, asResult, postProcess)
+    Expr.betaReduce('{$postProcess(createExample[$t]($expression, $code, $asResult))})
 
   def createExample[T](expression: String, code: () => T, asResult: AsResult[T]): Fragments =
     Fragments(AutoExamples.makeExample(expression, code(), asResult))
@@ -43,4 +41,3 @@ object AutoExamples extends AutoExamples:
       trimEnclosing("{", "}").
       trimEnclosing("`", "`").
       removeFirst("`\\(.*\\)").trimFirst("`").split("\n", -1).map(_.trim).mkString("\n")
-

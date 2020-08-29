@@ -19,7 +19,8 @@ class RandomExecutionSpec(val env: Env) extends Specification with ThrownExpecta
 
 
   def random1 =
-    val results = Results(); import results._
+    val results = Results()
+    import results._
 
     val n = 10
     val spec = new Specification with RandomSequentialExecution { def is =
@@ -31,12 +32,13 @@ class RandomExecutionSpec(val env: Env) extends Specification with ThrownExpecta
       messages must haveSize(10)
       messages must contain(allExamples)
       "the examples are executed randomly" ==> {
-        messages must not (contain(allExamples).inOrder)
+        messages must not(contain(allExamples).inOrder)
       }
     }.fold(execute.Error(_), identity)
 
   def random2 =
-    val results = Results(); import results._
+    val results = Results()
+    import results._
 
     val n = 10
     def ex(i: =>Int) = { print("ex"+i); ok }
@@ -51,7 +53,7 @@ class RandomExecutionSpec(val env: Env) extends Specification with ThrownExpecta
       messages must haveSize(10)
        messages must contain(allExamples)
        "the examples are executed randomly" ==> {
-        messages must not (contain(allExamples).inOrder)
+        messages must not(contain(allExamples).inOrder)
       }
       Result.foreach(1 to 5) { i =>
         messages.indexOf("ex"+i) must be_<(messages.indexOf("ex"+(i+5)))

@@ -40,7 +40,7 @@ object PositionLocation:
             val pathExpr: Expr[String] = Expr(path)
             val lineExpr: Expr[Int] = Expr(line)
             val columnExpr: Expr[Int] = Expr(column)
-            Expr.betaReduce('{PositionLocation.apply})(pathExpr, lineExpr, columnExpr)
+            Expr.betaReduce('{PositionLocation($pathExpr, $lineExpr, $columnExpr)})
     }
   }
 
@@ -63,4 +63,3 @@ case class StacktraceLocation(trace: Seq[StackTraceElement] = (new Exception).ge
 
   def show: String =
     s"${getClass.getSimpleName}(${traceLocation(DefaultStackTraceFilter)}})"
-
