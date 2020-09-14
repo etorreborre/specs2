@@ -73,6 +73,9 @@ final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal:
     case l @ Left(_) => EitherUtil.rightCast(l)
     case Right(b)    => Right(f(b))
 
+  def as[C](c: =>C): Either[A, C] =
+    map(_ => c)
+
   def leftMap[C](f: A => C): Either[C, B] = eab match
     case Left(a)      => Left(f(a))
     case r @ Right(_) => EitherUtil.leftCast(r)

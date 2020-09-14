@@ -2,15 +2,14 @@ package org.specs2
 package matcher
 
 import text.Sentences._
-import execute.{ResultExecution, AsResult}
+import execute.{ResultExecution, AsResult, Result}
 
 trait ExpectationsDescription extends ExpectationsCreation:
 
-  implicit def describeExpectation(description: String): ExpectationDescription = new ExpectationDescription(description)
 
-  class ExpectationDescription(description: String):
-    def ==>[T : AsResult](result: =>T) = <==>(result)
-    def <==>[T : AsResult](result: =>T) = checkResultFailure {
+  extension [T : AsResult](description: String):
+    def ==>(result: =>T): Result = <==>(result)
+    def <==>(result: =>T): Result = checkResultFailure {
       val r = ResultExecution.execute(AsResult(result))
       r match
         case i if i.isError || i.isFailure => i.mapMessage(m => negateSentence(description)+" because "+m)
@@ -44,7 +43,3 @@ trait ExpectationsDescription extends ExpectationsCreation:
 
 
 object ExpectationsDescription extends ExpectationsDescription
-
-trait NoExpectationsDescription extends ExpectationsDescription:
-  override def describeExpectation(description: String): ExpectationDescription = super.describeExpectation(description)
-

@@ -9,10 +9,10 @@ import StandardResults._
 
 /**
  * A Field is a property which is used only to display input values or output values.
- * 
+ *
  * The apply method can be used to retrieve the Field value:
  *   `Field(label, 1).apply() must_== 1`
- * 
+ *
  * The value is stored in a Property object so it will not be evaluated until explicitly queried
  *
  */
@@ -54,12 +54,12 @@ case class Field[T](label: String, value: Property[T], decorator: Decorator = De
 /**
  * Factory methods for creating Fields. Fields values can also be concatenated to produce
  * "summary" fields.
- * 
+ *
  * val f1 = Field(label, "hello")
  * val f2 = Field(label, "world")
  * val concatenatedFields = Field(label, f1, f2)
  * concatenatedFields.toString == label: hello/world
- * 
+ *
  * val concatenatedFields2 = Field(label, ", ", f1, f2)
  * concatenatedFields2.toString == label: hello, world
  */
@@ -76,4 +76,3 @@ case object Field:
   /** create a Field with a label and other fields values, concatenated as strings */
   def apply(label: String, separator: String, value1: Field[_], values: Field[_]*): Field[String] =
     Field(label, if values.isEmpty then value1.toString else (value1 :: values.toList).map(_.value).mkString(separator))
-

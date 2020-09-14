@@ -3,7 +3,6 @@ package specification
 package process
 
 import scala.collection.mutable.ListBuffer
-import fp.syntax._
 import matcher._
 import execute.{Result}
 import specification.dsl.ExampleDsl
@@ -16,7 +15,7 @@ class RandomExecutionSpec(val env: Env) extends Specification with ThrownExpecta
    the randomisation only happens in between steps $random2
 
 """
-
+  import fp.syntax._
 
   def random1 =
     val results = Results()
@@ -27,13 +26,15 @@ class RandomExecutionSpec(val env: Env) extends Specification with ThrownExpecta
       s2"""${Fragments((1 to n).map(i => "e"+i ! ex(i)):_*)}"""
       def ex(i: =>Int) = { print("ex"+i); ok }
     }
+
     DefaultExecutor.runSpecificationAction(spec, ownEnv).runAction(ownEnv.executionEnv).as {
-      val allExamples = allOf((1 to n).map("ex"+_):_*)
-      messages must haveSize(10)
-      messages must contain(allExamples)
-      "the examples are executed randomly" ==> {
-        messages must not(contain(allExamples).inOrder)
-      }
+        val allExamples = allOf((1 to n).map("ex"+_):_*)
+
+        messages must haveSize(10)
+        messages must contain(allExamples)
+        "the examples are executed randomly" ==> {
+          messages must not (contain(allExamples).inOrder)
+        }
     }.fold(execute.Error(_), identity)
 
   def random2 =
@@ -51,10 +52,12 @@ class RandomExecutionSpec(val env: Env) extends Specification with ThrownExpecta
       val allExamples = allOf[String]((1 to n).map("ex"+_):_*)
 
       messages must haveSize(10)
-       messages must contain(allExamples)
-       "the examples are executed randomly" ==> {
+      messages must contain(allExamples)
+
+      "the examples are executed randomly" ==> {
         messages must not(contain(allExamples).inOrder)
       }
+
       Result.foreach(1 to 5) { i =>
         messages.indexOf("ex"+i) must be_<(messages.indexOf("ex"+(i+5)))
       }

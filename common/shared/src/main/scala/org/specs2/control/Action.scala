@@ -24,9 +24,6 @@ case class Action[A](private[control] runNow: ExecutionEnv => Future[A], timeout
       this.runNow(ee).map(f)
     }
 
-  def as[B](b: =>B): Action[B] =
-    map(_ => b)
-
   def flatMap[B](f: A => Action[B]): Action[B] =
     Action[B] { ee =>
       implicit val ec = ee.executionContext

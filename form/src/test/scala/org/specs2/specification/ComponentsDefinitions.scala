@@ -3,6 +3,7 @@ package specification
 
 import form._
 import Forms._
+import control.ImplicitParameters._
 
 trait ComponentsDefinitions:
   case class Address(street: String = "", number: Int = 0):
@@ -19,7 +20,7 @@ trait ComponentsDefinitions:
           tr(a)
 
   case class initials(form: Form = Form.tr("First name", "Last name", "Initials")):
-    def computeInitials(f: String, l: String) = f(0).toUpper.toString+"."+l(0).toUpper.toString+"."
+    def computeInitials(f: String, l: String): String = f.charAt(0).toUpper.toString+"."+l.charAt(0).toUpper.toString+"."
 
     def tr(firstName: String, lastName: String, expected: String) = initials {
       form.tr(firstName, lastName, prop(computeInitials(firstName, lastName))(expected))
@@ -32,5 +33,6 @@ trait ComponentsDefinitions:
     def hasSubsequence(ls: OrderLine*) = Form("Order").subsequence(lines, ls.toList)
     def hasSet(ls: OrderLine*) = Form("Order").set(lines, ls.toList)
     def hasSequence(ls: OrderLine*) = Form("Order").sequence(lines, ls.toList)
+
   case class OrderLine(name: String, quantity: Int):
     def form = Form.tr(field("name", name), field("qty", quantity))
