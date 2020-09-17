@@ -45,7 +45,7 @@ trait FutureBaseMatchers extends ExpectationsCreation:
       await(retries = 0, timeout)
 
     def await(retries: Int, timeout: FiniteDuration): Result =
-      AwaitFuture(f).await(retries, timeout).fold(
+      f.await(retries, timeout).fold(
         timedout => checkResultFailure(Failure(s"Timeout after ${timedout.totalDuration + timedout.appliedTimeout} (retries = $retries, timeout = $timeout), timeFactor = ${timedout.timeFactor}")),
         t => asResult.asResult(t)
       )

@@ -3,7 +3,7 @@ package specification
 package script
 
 import matcher._
-import StepParsers._
+import StepParsers.{given _, _}
 import scala.util.matching.Regex
 
 class StepParsersSpec extends Spec with TypedEqual { def is = s2"""

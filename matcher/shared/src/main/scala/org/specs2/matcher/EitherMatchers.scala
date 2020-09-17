@@ -1,8 +1,9 @@
 package org.specs2
 package matcher
 
-import org.specs2.control.ImplicitParameters._
-import org.specs2.matcher.describe.Diffable
+import control._
+import ImplicitParameters.{given _, _}
+import describe.Diffable
 
 /**
  * Matchers for the Either datatype
@@ -14,7 +15,7 @@ private[specs2]
 trait EitherBaseMatchers:
 
   def beRight[T](t: ValueCheck[T]) = RightCheckedMatcher(t)
-  def beRight[T](implicit p: ImplicitParam = implicitParameter) = use(p)(new RightMatcher[T])
+  def beRight[T](using p: ImplicitParam = implicitParameter) = use(p)(new RightMatcher[T])
 
   def right[T : Diffable](t: T) = beRight(ValueChecks.valueIsTypedValueCheck(t))
   def right[T](t: ValueCheck[T]) = beRight(t)

@@ -6,8 +6,7 @@ trait ImplicitExecutionContextFromExecutionEnv {
   /**
    * if an implicit execution environment is in scope, it can be used as an execution context
    */
-  implicit def executionEnvToExecutionContext(implicit ee: ExecutionEnv): ExecutionContext =
-    ee.executionContext
+  given executionEnvToExecutionContext(using ee: ExecutionEnv) as ee.executionContext
 }
 
 /**

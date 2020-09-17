@@ -106,7 +106,7 @@ iterator.next must be_==(3).eventually
   // 8<--
   import scala.concurrent._
   import scala.concurrent.duration._
-  implicit lazy val ee: ExecutionEnv = ???
+  given ee as ExecutionEnv = ???
   // 8<--
 Future(1) must be_>(0).await
 Future { Thread.sleep(100); 1 } must be_>(0).await(retries = 2, timeout = 100.millis)

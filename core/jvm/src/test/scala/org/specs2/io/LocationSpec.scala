@@ -9,7 +9,7 @@ import Fragment._
 import org.specs2.concurrent.ExecutionEnv
 
 class LocationSpec extends org.specs2.mutable.Spec with TypedEqual:
-  implicit lazy val ee: ExecutionEnv = Env().executionEnv
+  given ee as ExecutionEnv = Env().executionEnv
 
     "A unit specification must have correct locations for its fragments" >> {
       implicit def spec: LocationUnitSpecification = new LocationUnitSpecification(ee)

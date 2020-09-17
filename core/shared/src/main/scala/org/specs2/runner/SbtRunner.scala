@@ -108,8 +108,8 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
 
   private val arguments = env.arguments
 
-  private implicit lazy val ec: ExecutionContext =
-      env.specs2ExecutionContext
+  private given ec as ExecutionContext =
+    env.specs2ExecutionContext
 
   /** @return the specification tags */
   def tags: Array[String] =
@@ -212,4 +212,3 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
     logger.errorLine(t.getMessage)
     RunnerLogger(env).logThrowable(t).unsafeRun
     logger.close()
-

@@ -16,19 +16,19 @@ case class ExecutorServices(executorServiceEval:          () => ExecutorService,
 
   private val started = new AtomicBoolean(false)
 
-  implicit lazy val executorService: ExecutorService =
+  given executorService as  ExecutorService =
     started.set(true)
     executorServiceEval()
 
-  implicit lazy val scheduledExecutorService: ScheduledExecutorService =
+  given scheduledExecutorService as ScheduledExecutorService =
     started.set(true)
     scheduledExecutorServiceEval()
 
-  implicit lazy val executionContext: ExecutionContext =
+  given executionContext as ExecutionContext =
     started.set(true)
     executionContextEval()
 
-  implicit lazy val scheduler: Scheduler =
+  given scheduler as Scheduler =
     started.set(true)
     schedulerEval()
 

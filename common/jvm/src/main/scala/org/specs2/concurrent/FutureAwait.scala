@@ -10,7 +10,7 @@ import scala.concurrent._, duration._
  * number of retries
  */
 trait FutureAwait:
-  implicit class AwaitFuture[T](f: => Future[T])(implicit ee: ExecutionEnv):
+  extension [T](f: =>Future[T])(using ee: ExecutionEnv)
     def await: TimeoutFailure Either T =
       await(retries = 0, timeout = 1.second)
 

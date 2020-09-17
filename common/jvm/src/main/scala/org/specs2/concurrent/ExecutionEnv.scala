@@ -13,10 +13,9 @@ case class ExecutionEnv(executorServices: ExecutorServices, timeFactor: Int):
   lazy val scheduledExecutorService = executorServices.scheduledExecutorService
   lazy val scheduler                = executorServices.scheduler
 
-  implicit lazy val es: ExecutorService = executorService
-
-  implicit lazy val ses: ScheduledExecutorService = scheduledExecutorService
-  implicit lazy val ec: ExecutionContext = executionContext
+  given es as ExecutorService = executorService
+  given ses as ScheduledExecutorService = scheduledExecutorService
+  given ec as ExecutionContext = executionContext
 
   def shutdown(): Unit =
     executorServices.shutdownNow()

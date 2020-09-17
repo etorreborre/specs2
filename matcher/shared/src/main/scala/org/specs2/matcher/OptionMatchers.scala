@@ -3,7 +3,7 @@ package matcher
 
 import execute._
 import ValueChecks._
-import org.specs2.control.ImplicitParameters._
+import org.specs2.control._, ImplicitParameters._
 import org.specs2.matcher.describe.Diffable
 
 /**
@@ -20,7 +20,7 @@ trait OptionBaseMatchers:
   def some[T : Diffable](t: T): SomeCheckedMatcher[T] = beSome(ValueChecks.valueIsTypedValueCheck(t))
   def some[T](check: ValueCheck[T]): SomeCheckedMatcher[T] = beSome(check)
 
-  def beSome[T](implicit p: ImplicitParam = implicitParameter): SomeMatcher[T] = use(p)(new SomeMatcher[T])
+  def beSome[T](implicit p: ImplicitParam = ImplicitParameters.implicitParameter): SomeMatcher[T] = use(p)(new SomeMatcher[T])
   def some[T]: SomeMatcher[T] = beSome[T]
 
   def beNone: Matcher[Option[Any]] = new Matcher[Option[Any]] {

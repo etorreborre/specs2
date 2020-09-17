@@ -12,7 +12,7 @@ import text.RegexExtractor
  * and possibly strip it from delimiters if necessary
  */
 trait StepParsers extends ImplicitParameters:
-  implicit lazy val stepParserRegex: Regex = """\{([^}]+)\}""".r
+  given stepParserRegex as Regex = """\{([^}]+)\}""".r
 
   def apply[T](f: String => T)(implicit fpr: Regex = stepParserRegex): DelimitedStepParser[T] = new DelimitedStepParser1[T](f).withRegex(fpr)
   def apply[T](f: (String, String) => T)(implicit fpr: Regex): DelimitedStepParser[T] = new DelimitedStepParser2[T](f).withRegex(fpr)
@@ -97,7 +97,7 @@ object StepParsers extends StepParsers
  * a few delimited parsers (with `{}`) to extract ints, doubles and strings
  */
 trait StandardDelimitedStepParsers:
-  import StepParsers._
+  import StepParsers.{given _, _}
 
   def anInt     = StepParser((_: String).trim.toInt)
   def twoInts   = StepParser((s1: String, s2: String) => (s1.trim.toInt, s2.trim.toInt))
@@ -110,6 +110,7 @@ trait StandardDelimitedStepParsers:
   def aString      = StepParser((s:String) => s)
   def twoStrings   = StepParser((s1:String, s2: String) => (s1, s2))
   def threeStrings = StepParser((s1:String, s2: String, s3: String) => (s1, s2, s3))
+
 object StandardDelimitedStepParsers extends StandardDelimitedStepParsers
 /**
  * a few regular expression parsers to extract ints, doubles and strings (strings are delimited with `"`)

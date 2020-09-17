@@ -33,23 +33,23 @@ trait Classes extends ClassOperations {
       .getOrElse(throw new ClassNotFoundException(name))
       .loadModule
 
-  def createInstanceFromName[T <: AnyRef](className: String, defaultInstances: =>List[AnyRef] = Nil)(implicit m: ClassTag[T]): Operation[T] =
+  def createInstanceFromName[T <: AnyRef](className: String, defaultInstances: =>List[AnyRef] = Nil)(using m: ClassTag[T]): Operation[T] =
     if className.endsWith("$") then
       Operation.delayed(loadModule(className).asInstanceOf[T])
     else
       Operation.delayed(newInstance(className).asInstanceOf[T])
 
-  def createInstance[T <: AnyRef](className: String, loader: ClassLoader, defaultInstances: =>List[AnyRef] = Nil)(implicit m: ClassTag[T]): Operation[T] =
+  def createInstance[T <: AnyRef](className: String, loader: ClassLoader, defaultInstances: =>List[AnyRef] = Nil)(using m: ClassTag[T]): Operation[T] =
     createInstance(className, defaultInstances)(m)
 
-  def createInstanceFromClass[T <: AnyRef](klass: Class[T], defaultInstances: =>List[AnyRef])(implicit m: ClassTag[T]): Operation[T] =
+  def createInstanceFromClass[T <: AnyRef](klass: Class[T], defaultInstances: =>List[AnyRef])(using m: ClassTag[T]): Operation[T] =
     createInstance(klass.getName, defaultInstances)(m)
 
-  def createInstanceFromClass[T <: AnyRef](klass: Class[T], loader: ClassLoader, defaultInstances: =>List[AnyRef] = Nil)(implicit m: ClassTag[T]): Operation[T] =
+  def createInstanceFromClass[T <: AnyRef](klass: Class[T], loader: ClassLoader, defaultInstances: =>List[AnyRef] = Nil)(using m: ClassTag[T]): Operation[T] =
     createInstance(klass.getName)(m)
 
   /** try to create an instance but return an exception if this is not possible */
-  def createInstanceEither[T <: AnyRef](className: String, loader: ClassLoader, defaultInstances: =>List[AnyRef] = Nil)(implicit m: ClassTag[T]): Operation[Throwable Either T] =
+  def createInstanceEither[T <: AnyRef](className: String, loader: ClassLoader, defaultInstances: =>List[AnyRef] = Nil)(using m: ClassTag[T]): Operation[Throwable Either T] =
     try createInstance(className, defaultInstances)(m).map(Right(_))
     catch {
       case e: Throwable => Operation.pure(Left(e))

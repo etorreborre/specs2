@@ -12,11 +12,9 @@ import scala.concurrent.duration.FiniteDuration
 case class ExecutorServices(executionContextEval: () => ExecutionContext,
                             schedulerEval: () =>  Scheduler) {
 
-  implicit lazy val executionContext: ExecutionContext =
-    executionContextEval()
+  given executionContext as executionContextEval()
 
-  implicit lazy val scheduler: Scheduler =
-    schedulerEval()
+  given scheduler as schedulerEval()
 
   def shutdownNow(): Unit =
     ()

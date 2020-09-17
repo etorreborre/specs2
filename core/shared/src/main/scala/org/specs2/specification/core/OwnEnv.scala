@@ -22,7 +22,7 @@ trait OwnEnv extends AfterAll:
       executionEnv =       ExecutionEnv.create(env.arguments, env.systemLogger, tag = Some(getClass.getName)),
       specs2ExecutionEnv = ExecutionEnv.createSpecs2(env.arguments, env.systemLogger, tag = Some(getClass.getName)))
 
-  implicit lazy val ee: ExecutionEnv =
+  given ee as ExecutionEnv =
     ownEnv.executionEnv
 
   lazy val es: ExecutorServices =
@@ -33,4 +33,3 @@ trait OwnEnv extends AfterAll:
 
   def afterAll(): Unit =
     ownEnv.shutdown()
-
