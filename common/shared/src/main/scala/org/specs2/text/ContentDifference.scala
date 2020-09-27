@@ -6,6 +6,7 @@ import Seqx._
 import LineComparison._
 import control._
 import producer._, Producer._
+import scala.implicits.Not
 
 /**
  * This trait represents the difference between 2 "contents"
@@ -149,8 +150,7 @@ trait DifferenceFilter extends Function1[Seq[LineComparison], Seq[LineComparison
  *  10.differences == FirstNDifferencesFilter(10)
  */
 trait DifferenceFilters:
-  implicit def toDifferenceFilter(n: Int): FirstNDifferencesFilter = FirstNDifferencesFilter(n)
-  case class FirstNDifferencesFilter(n: Int):
+  extension (n: Int)(using not: Not[NoDifferenceFilters])
     def difference = FirstDifferences(n: Int)
     def differences = FirstDifferences(n: Int)
 
@@ -158,7 +158,7 @@ trait DifferenceFilters:
  * mix-in this trait to remove the implicit provided by the DifferenceFilters trait
  */
 trait NoDifferenceFilters extends DifferenceFilters:
-  override def toDifferenceFilter(n: Int): FirstNDifferencesFilter = super.toDifferenceFilter(n)
+  given NoDifferenceFilters = ???
 
 /**
  * return all the differences

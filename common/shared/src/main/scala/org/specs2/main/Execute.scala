@@ -41,7 +41,7 @@ case class Execute(
   def timeFactor: Int                 = _timeFactor.getOrElse(1)
   def timeout: Option[FiniteDuration] = _timeout
   def setTimeout(t: FiniteDuration)   = copy(_timeout = Some(t))
-  def executor: String                = _executor.getOrElse("")
+  def executor: Option[String]        = _executor
 
   def overrideWith(other: Execute) =
     new Execute(

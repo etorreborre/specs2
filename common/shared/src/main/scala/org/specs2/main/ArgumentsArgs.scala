@@ -4,6 +4,7 @@ package main
 import control._
 import text._
 import scala.concurrent.duration._
+import scala.implicits.Not
 
 /**
  * Methods with default Property values to create Arguments instances
@@ -155,13 +156,14 @@ trait ArgumentsCreation:
 object ArgumentsArgs extends ArgumentsArgs
 
 trait ArgProperties:
-  implicit def anyToArgProperty[T](t: =>T): ArgProperty[T] = ArgProperty(t)
+  implicit def toArgProperty [T](t: =>T)(using not: Not[NoArgProperties]): ArgProperty[T] =
+    ArgProperty(t)
 
 /**
  * This trait can be used to deactivate the conversion of any value to an ArgsProperty
  */
 trait NoArgProperties extends ArgProperties:
-  override def anyToArgProperty[T](t: =>T): ArgProperty[T] = super.anyToArgProperty(t)
+  given NoArgProperties = ???
 
 object ArgProperties extends ArgProperties
 

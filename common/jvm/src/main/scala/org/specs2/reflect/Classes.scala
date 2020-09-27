@@ -94,9 +94,8 @@ trait Classes extends ClassOperations:
    * Load a class, given the class name
    */
   def loadClassEither[T <: AnyRef](className: String, loader: ClassLoader): Operation[Throwable Either Class[T]] = Operation.delayed {
-    try Right(loader.loadClass(className).asInstanceOf[Class[T]])
-    catch { case NonFatal(t) => Left(t) }
-  }
+    loader.loadClass(className).asInstanceOf[Class[T]]
+  }.attempt
 
   def loadClass[T <: AnyRef](className: String, loader: ClassLoader): Operation[Class[T]] =
     loadClassEither(className, loader).flatMap((tc: Throwable Either Class[T]) => tc.fold(Operation.exception[Class[T]], Operation.ok[Class[T]]))

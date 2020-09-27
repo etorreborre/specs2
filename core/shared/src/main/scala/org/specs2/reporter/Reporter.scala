@@ -95,8 +95,8 @@ object Reporter:
   def create(printers: List[Printer], env: Env): Reporter =
     val arguments = env.arguments
     val statistics = DefaultStatistics(arguments, env.statisticsRepository)
-    val selector = Arguments.instance[Selector](arguments.select.selector).getOrElse(DefaultSelector(arguments))
-    val executor = Arguments.instance[Executor](arguments.execute.executor).getOrElse(DefaultExecutor(env))
+    val selector = arguments.select.selector.flatMap(Arguments.instance[Selector]).getOrElse(DefaultSelector(arguments))
+    val executor = arguments.execute.executor.flatMap(Arguments.instance[Executor]).getOrElse(DefaultExecutor(env))
     DefaultReporter(statistics, env.statisticsRepository, selector, executor, printers, env)
 
   def createCustomInstance(customInstances: CustomInstances): Operation[Option[Reporter]] =

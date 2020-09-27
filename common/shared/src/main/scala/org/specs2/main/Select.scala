@@ -23,7 +23,7 @@ case class Select(
   def hasFilter                     = Seq(_include, _exclude, _ex, _was).exists(_.isDefined)
   def was(s: String): Boolean       = hasFlags(s, _was)
   def wasIsDefined: Boolean         = _was.isDefined
-  def selector                      = _selector.getOrElse("")
+  def selector                      = _selector
 
   def overrideWith(other: Select) =
     new Select(

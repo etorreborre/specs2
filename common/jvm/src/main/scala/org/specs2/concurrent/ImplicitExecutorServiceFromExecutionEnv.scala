@@ -1,18 +1,17 @@
 package org.specs2.concurrent
 
 import java.util.concurrent._
+import scala.implicits.Not
 
 trait ImplicitExecutorServiceFromExecutionEnv:
   /**
    * if an implicit execution environment is in scope, it can be used as an executor service
    */
-  implicit def executionEnvToExecutorService(implicit ee: ExecutionEnv): ExecutorService =
+  given executionEnvToExecutorService(using ee: ExecutionEnv, not: Not[NoImplicitExecutorServiceFromExecutionEnv]) as ExecutorService =
     ee.executorService
 
 /**
  * deactivate the conversion between an implicit execution environment to an executor service
  */
 trait NoImplicitExecutorServiceFromExecutionEnv extends ImplicitExecutorServiceFromExecutionEnv:
-  override def executionEnvToExecutorService(implicit ee: ExecutionEnv): ExecutorService =
-    super.executionEnvToExecutorService(ee)
-
+  given NoImplicitExecutorServiceFromExecutionEnv = ??? 

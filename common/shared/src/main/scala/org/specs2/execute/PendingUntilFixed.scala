@@ -2,6 +2,7 @@ package org.specs2
 package execute
 
 import text.Quote._
+import scala.implicits.Not
 
 /**
  * This function allows to mark the body of an example as pending until it is fixed.
@@ -11,12 +12,11 @@ import text.Quote._
  */
 trait PendingUntilFixed:
 
-  implicit def toPendingUntilFixed[T : AsResult](t: =>T): PendingUntilFixed[T] =
-    new PendingUntilFixed(t)
-
-  class PendingUntilFixed[T : AsResult](t: =>T):
+  extension [T : AsResult](t: =>T)(using not: Not[NoPendingUntilFixed])
     /** @return Pending unless the result is a success */
-    def pendingUntilFixed: Result = pendingUntilFixed("")
+    def pendingUntilFixed: Result =
+      pendingUntilFixed("")
+
     /** @return Pending unless the result is a success */
     def pendingUntilFixed(m: String = ""): Result = ResultExecution.execute(AsResult(t)) match
       case s @ Success(_,_) => Failure(m.prefix(". ", "Fixed now, you should remove the 'pendingUntilFixed' marker"))
@@ -26,9 +26,6 @@ trait PendingUntilFixed:
  * use this trait to remove the pending until fixed implicit conversion
  */
 trait NoPendingUntilFixed extends PendingUntilFixed:
-  override def toPendingUntilFixed[T : AsResult](t: =>T) = super.toPendingUntilFixed(t)
+  given NoPendingUntilFixed = ???
 
 object PendingUntilFixed extends PendingUntilFixed
-
-
-
