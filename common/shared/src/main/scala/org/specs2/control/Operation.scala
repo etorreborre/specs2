@@ -4,6 +4,7 @@ package control
 import fp._, syntax._
 import execute._
 import scala.annotation.tailrec
+import scala.util.control.NonFatal
 
 /**
  *
@@ -14,21 +15,29 @@ import scala.annotation.tailrec
  *
  * It is essentially the same as an Action without the asynchronicity
  */
-case class Operation[A](operation: () => A, last: Vector[Finalizer] = Vector.empty):
-  private def run: A =
+case class Operation[A](operation: () => Throwable Either A, last: Vector[Finalizer] = Vector.empty):
+  private def run: Throwable Either A =
     operation()
 
   def map[B](f: A => B): Operation[B] =
-   Operation[B](() => f(run), last)
+   Operation[B](() => run.map(f), last)
 
   def flatMap[B](f: A => Operation[B]): Operation[B] =
-    lazy val Operation(b, last1) = f(run)
+    lazy val Operation(b, last1) =
+          run match {
+            case Right(a) => f(a)
+            case Left(t) => Operation.exception[B](t)
+          }
     Operation[B](b , last ++ last1)
 
+  /** run this operation, to get back a result (possibly an exception)
+   * and run the finalizers when the operation has been executed
+   */
   def runOperation: Throwable Either A =
-    val attempted = attempt
-    Finalizer.runFinalizers(attempted.last)
-    attempted.run
+    val Operation(op, last) = attempt
+    val result = op().flatten
+    Finalizer.runFinalizers(last)
+    result
 
   def unsafeRun: A =
     runOption.get
@@ -50,8 +59,10 @@ case class Operation[A](operation: () => A, last: Vector[Finalizer] = Vector.emp
 
   def orElse(other: Operation[A]): Operation[A] =
     attempt.flatMap {
-      case Left(_) => other.copy(last = other.last ++ this.last)
-      case Right(a) => Operation(() => a, last)
+      case Left(t) =>
+        other.copy(last = other.last ++ this.last)
+      case Right(a) =>
+        Operation(() => Right(a), last)
     }
 
   def |||(other: Operation[A]): Operation[A] =
@@ -67,13 +78,14 @@ case class Operation[A](operation: () => A, last: Vector[Finalizer] = Vector.emp
     }
 
   def attempt: Operation[Throwable Either A] =
-    try
-      val value = operation()
-      Operation(() => Right(value), last)
-    catch { case t: Throwable => Operation(() => Left(t), last) }
+    Operation(() =>
+      try Right(run)
+      catch {
+        case NonFatal(t) => Right(Left(t))
+      }, last)
 
   def toAction: Action[A] =
-    Action.pure(run).copy(last = last)
+    Action.either(attempt.run.flatten).copy(last = last)
 
 object Operation:
 
@@ -87,7 +99,7 @@ object Operation:
   exception[A](new Exception(a.toString))
 
   def exception[A](e: Throwable): Operation[A] =
-    Operation[A](() => throw e)
+    Operation[A](() => Left(e))
 
   def pure[A](a: =>A): Operation[A] =
     OperationMonad.point(a)
@@ -109,21 +121,22 @@ object Operation:
 
   implicit val OperationMonad: Monad[Operation[*]] = new Monad[Operation[*]] {
     def point[A](a: =>A): Operation[A] =
-      Operation(() => a)
+      Operation(() => Right(a))
 
     def bind[A, B](fa: Operation[A])(f: A => Operation[B]): Operation[B] =
       fa.flatMap(f)
 
     override def ap[A, B](fa: =>Operation[A])(ff: =>Operation[A => B]): Operation[B] =
-      Operation(() => ff.run(fa.run))
+      Operation(() => ff.run.flatMap(fa.run.map))
 
     override def tailrecM[A, B](a: A)(f: A => Operation[Either[A, B]]): Operation[B] =
       Operation[B] { () =>
         @tailrec
-        def loop(va: A): B =
+        def loop(va: A): Throwable Either B =
           f(va).run match
-            case Right(b) => b
-            case Left(a) => loop(a)
+            case Right(Right(b)) => Right(b)
+            case Right(Left(a)) => loop(a)
+            case Left(t) => Left(t)
         loop(a)
       }
 
@@ -133,10 +146,10 @@ object Operation:
 
   implicit val OperationApplicative: Applicative[Operation[*]] = new Applicative[Operation[*]] {
     def point[A](a: =>A): Operation[A] =
-      Operation(() => a)
+      Operation(() => Right(a))
 
     def ap[A, B](fa: =>Operation[A])(ff: =>Operation[A => B]): Operation[B] =
-      Operation(() => ff.run(fa.run))
+      Operation(() => ff.run.flatMap(f => fa.run.map(f)))
 
     override def toString: String =
       "Applicative[Operation]"

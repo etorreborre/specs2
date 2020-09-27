@@ -3,7 +3,7 @@ package org.specs2.control
 import org.specs2._
 import io._
 
-class ActionsSpec extends Specification { def is = s2"""
+class OperationSpec extends Specification { def is = s2"""
 
   guarding an operation throwing an exception $guard
 

@@ -5,6 +5,7 @@ import fp._, syntax._
 import concurrent.{ExecutionEnv, _}
 import scala.concurrent._
 import scala.concurrent.duration._
+import scala.util.control.NonFatal
 import scala.util._
 import execute._
 
@@ -101,6 +102,16 @@ object Action:
 
   def fail[A](message: String): Action[A] =
     exception(new UserException(message, new Exception))
+
+  def either[A](ta: =>Throwable Either A): Action[A] =
+    try
+        ta match {
+          case Left(t) => Action.exception(t)
+          case Right(a) => Action.pure(a)
+        }
+    catch {
+      case NonFatal(t) => Action.exception(t)
+    }
 
   def exception[A](t: Throwable): Action[A] =
     Action(_ => Future.failed[A](t))
