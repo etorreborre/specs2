@@ -76,11 +76,11 @@ class AcceptanceDslSpec extends Spec with AcceptanceDsl { def is = s2"""
   def e5 = (xonly ^ header ^ (f1 ^ f2)).fragments.fragmentsList(ee) must haveSize(2)
   def e6 = (header ^ xonly ^ (f1 ^ f2)).fragments.fragmentsList(ee) must haveSize(2)
 
-  def g1 = ((bangExample("text") ! ok) ^ f1).fragmentsList(ee) must haveSize(2)
-  def g2 = ((bangExample("text") ! ((s: String) => ok)) ^ f1).fragmentsList(ee) must haveSize(2)
-  def g3 = ((bangExample("text") ! ((e: Env) => ok)) ^ f1).fragmentsList(ee) must haveSize(2)
+  def g1 = (("text" ! ok) ^ f1).fragmentsList(ee) must haveSize(2)
+  def g2 = (("text" ! ((s: String) => ok)) ^ f1).fragmentsList(ee) must haveSize(2)
+  def g3 = (("text" ! ((e: Env) => ok)) ^ f1).fragmentsList(ee) must haveSize(2)
 
 
   val (f1, f2, f3) = (text("t1"), text("t2"), text("t3"))
-  val header = title("t").title
+  val header = title("t")
 }

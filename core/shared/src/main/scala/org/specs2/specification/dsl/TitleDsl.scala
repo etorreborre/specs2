@@ -3,21 +3,21 @@ package specification
 package dsl
 
 import core.SpecHeader
+import scala.implicits.Not
 
 /**
  * Dsl for creating a specification title
  */
 trait TitleDsl { outer =>
 
-  implicit def title(s: String): TitleOps =
-    new TitleOps(s)
-    
-  class TitleOps(s: String):
+  def title(s: String): SpecHeader =
+    extension_title(s)
+
+  extension (s: String)(using not: Not[NoTitleDsl])
     def title: SpecHeader = SpecHeader(outer.getClass, Some(s))
 
 }
 
 /** deactivate the TitleDsl implicits */
 trait NoTitleDsl extends TitleDsl:
-  override def title(s: String) =
-    super.title(s)
+  given NoTitleDsl = ???

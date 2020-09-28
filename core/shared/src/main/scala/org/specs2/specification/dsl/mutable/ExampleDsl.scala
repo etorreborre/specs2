@@ -8,20 +8,27 @@ import control.{ImplicitParameters, Use}
 import ImplicitParameters._
 import org.specs2.specification.core._
 import org.specs2.specification.script.StepParser
+import scala.implicits.Not
 
 /**
  * Dsl for creating examples in a mutable specification
  */
 trait ExampleDsl extends ExampleDsl1 with dsl.ExampleDsl:
 
-  override implicit def bangExample(d: String): BangExample =
-    new MutableBangExample(d)
+  extension (d: String)(using not: Not[NoBangExamples])
+    override def !(execution: Execution): Fragment =
+      addFragment(fragmentFactory.example(Text(d), execution))
 
-  class MutableBangExample(d: String) extends BangExample(d):
-    override def !(execution: Execution): Fragment                                       = addFragment(fragmentFactory.example(Text(d), execution))
-    override def ![R : AsResult](r: => R): Fragment                                      = addFragment(fragmentFactory.example(d, r))
-    override def ![R : AsResult](r: String => R): Fragment                               = addFragment(fragmentFactory.example(d, r))
-    override def ![R](r: Env => R)(implicit as: AsResult[R], p: ImplicitParam): Fragment = addFragment(fragmentFactory.example(d, r)(as, p))
+  extension [R : AsResult](d: String)(using not: Not[NoBangExamples])
+    override def !(r: => R): Fragment =
+      addFragment(fragmentFactory.example(d, r))
+
+    override def !(r: String => R): Fragment =
+      addFragment(fragmentFactory.example(d, r))
+
+  extension [R : AsResult](d: String)(using not: Not[NoBangExamples])
+    override def !(r: Env => R)(using p: ImplicitParam): Fragment =
+      addFragment(fragmentFactory.example(d, r)(summon[AsResult[R]], p))
 
 private[specs2]
 trait ExampleDsl1 extends BlockDsl with ExampleDsl0:
@@ -94,4 +101,4 @@ trait ExampleDsl0 extends BlockCreation:
 
 /** deactivate the ExampleDsl implicits */
 trait NoExampleDsl extends ExampleDsl:
-  override def blockExample(d: String) = super.blockExample(d)
+  given NoExampleDsl = ???
