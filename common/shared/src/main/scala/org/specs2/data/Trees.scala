@@ -10,12 +10,14 @@ import Tree._
 trait Trees { outer =>
 
   /**
-   * Implicit definition to add more functionalities to the Tree trait
+   * extension methods for the Tree trait
    */
-  implicit class Treex[A](t: Tree[A]):
-    def bottomUp[B](f: ((A, LazyList[B]) => B)) = outer.bottomUp(t, f)
-    def prune[B](f: A => Option[B]): Option[Tree[B]] = outer.prune(t, f)
-    def prune(f: Tree[A] => Option[A])(implicit initial: A): Tree[A] = outer.prune(t, f)(initial)
+  extension [A, B](t: Tree[A])
+    def bottomUp(f: ((A, LazyList[B]) => B)) = outer.bottomUp(t, f)
+    def prune(f: A => Option[B]): Option[Tree[B]] = outer.prune(t, f)
+
+  extension [A](t: Tree[A])
+    def prune(f: Tree[A] => Option[A])(using initial: A): Tree[A] = outer.prune(t, f)(initial)
     def flattenSubForests = outer.flattenSubForests(t)
     def flattenLeft       = outer.flattenLeft(t)
     def size              = t.flatten.size
@@ -24,7 +26,7 @@ trait Trees { outer =>
   /**
    * This implicit can be used to remove None nodes in a Tree
    */
-  implicit class CleanedTree[A](t: Tree[Option[A]]):
+  extension [A](t: Tree[Option[A]])
     def clean(implicit initial: A): Tree[A] = outer.clean(t)(initial)
 
   /**
@@ -72,7 +74,7 @@ trait Trees { outer =>
   /**
    * Implicit definition to add more functionalities to the TreeLoc class
    */
-  implicit class TreeLocx[T](t: TreeLoc[T]):
+  extension [T](t: TreeLoc[T])
     def parentLocs = outer.parentLocs(t)
     def size = outer.size(t)
     def getParent = t.parent.getOrElse(t)
@@ -101,11 +103,11 @@ trait Trees { outer =>
     case Some(p) => parentLocs(p, p +: ps)
     case None    => ps
 
-  implicit def treeLocIsSized[T]: Sized[TreeLoc[T]] = new Sized[TreeLoc[T]] {
+  given treeLocIsSized[T] as Sized[TreeLoc[T]] = new Sized[TreeLoc[T]] {
     def size(t: TreeLoc[T]) : Int = t.size
   }
 
-  implicit def treeIsSized[T]: Sized[Tree[T]] = new Sized[Tree[T]] {
+  given treeIsSized[T] as Sized[Tree[T]] = new Sized[Tree[T]] {
     def size(t: Tree[T]) : Int = t.size
   }
 }
