@@ -20,6 +20,7 @@ Compare result
     two different floats should return PrimitiveDifference      ${ Diffable.diff(0.5f, 0.6f) must_=== PrimitiveDifference(0.5f, 0.6f) }
     two different longs should return PrimitiveDifference       ${ Diffable.diff(1l, 2l) must_== PrimitiveDifference(1l, 2l) }
     two different doubles should return PrimitiveDifference     ${ Diffable.diff(0.5d, 0.6d) must_=== PrimitiveDifference(0.5d, 0.6d) }
+    the equality must still be decided based on equals even if the Diffable says otherwise $equalityVsDiffable
 
   Exceptions
     two identical exceptions will return ThrowableIdentical                 ${ Diffable.diff(ex, ex) must_=== ThrowableIdentical(ex) }
@@ -31,7 +32,6 @@ Compare result
                                                                                                                                      methodName = PrimitiveDifference("method", "method1"),
                                                                                                                                      fileName = Some(PrimitiveDifference("filename", "filename1")),
                                                                                                                                      lineNumber = PrimitiveDifference(666, 777)) }
-
   Fallback
   =========
 
@@ -156,10 +156,14 @@ Compare result
     val b2 = B(name, List(A(6)))
     Diffable.diff(b1, b2) must_== CaseClassIdentical("B")
   }
+
+  def equalityVsDiffable = {
+    case class AnException(data: String) extends Exception
+    AnException("data") ==== AnException("data")
+  }
 }
 
 
 sealed trait Animal
 case class Cat() extends Animal
 case class Dog() extends Animal
-
