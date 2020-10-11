@@ -15,7 +15,7 @@ import execute.FailureException
  * This trait can be extended to be used in another framework like ScalaTest:
  *
  *   trait ScalaTestExpectations extends ThrownExpectations {
- *     override protected def checkFailure[T](m: =>MatchResult[T]) = {
+ *     override protected def checkMatchResultFailure[T](m: =>MatchResult[T]) = {
  *       m match {
  *         case f @ MatchFailure(ok, ko, _, _, _) => throw new TestFailedException(f.message, f.exception, 0)
  *         case _ => ()
@@ -33,34 +33,13 @@ trait ThrownExpectationsCreation extends ThrownExpectables
 
 trait ThrownExpectables extends ExpectationsCreation:
 
-  override def createExpectable[T](t: => T, alias: Option[String => String]): Expectable[T] =
-    new Expectable(() => t) {
-      // overriding this method is necessary to include the ThrownExpectation trait into the stacktrace of the created match result
-      override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = super.applyMatcher(m)
-      override def check[S >: T](r: MatchResult[S]): MatchResult[S] = checkFailure(r)
-      override val desc = alias
-      override def map[S](f: T => S): Expectable[S] = createExpectable(f(value), desc)
-      override def mapDescription(d: Option[String => String]): Expectable[T] = createExpectable(value, d)
+  /** @return an Expectable with a description function */
+  override def createExpectable[T](t: =>T, alias: Option[String => String]): Expectable[T] =
+    val checker = new Checker:
+      def check[T](result: MatchResult[T]): MatchResult[T] =
+        checkMatchResultFailure(result)
 
-      override def evaluateOnce =
-        val v = t
-        createExpectable(v, desc)
-    }
-
-  override def createExpectableWithShowAs[T](t: =>T, show: =>String): Expectable[T] =
-    new Expectable(() => t) {
-      override val showValueAs = Some(() => show)
-
-      // overriding this method is necessary to include the ThrownExpectation trait into the stacktrace of the created match result
-      override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = super.applyMatcher(m)
-      override def check[S >: T](r: MatchResult[S]): MatchResult[S] = checkFailure(r)
-      override def map[S](f: T => S): Expectable[S] = createExpectableWithShowAs(f(value), show)
-      override def mapDescription(d: Option[String => String]): Expectable[T] = createExpectable(value, d)
-
-      override def evaluateOnce =
-        val (v, s) = (value, show)
-        createExpectableWithShowAs(v, s)
-    }
+    Expectable(() => t, checker, alias)
 
   override protected def checkResultFailure(result: =>Result) =
     lazy val r = result

@@ -6,7 +6,6 @@ import execute.{ResultExecution, AsResult, Result}
 
 trait ExpectationsDescription extends ExpectationsCreation:
 
-
   extension [T : AsResult](description: String):
     def ==>(result: =>T): Result = <==>(result)
     def <==>(result: =>T): Result = checkResultFailure {
@@ -17,9 +16,7 @@ trait ExpectationsDescription extends ExpectationsCreation:
     }
 
   /** describe a value with the aka method */
-  implicit def describe[T](t: => T): Descriptible[T] = new Descriptible(t)
-
-  class Descriptible[T](value: => T):
+  extension [T](value: => T)
     /**
      * @return an expectable with its toString method as an alias description
      *         this is useful to preserve the original value when the matcher using

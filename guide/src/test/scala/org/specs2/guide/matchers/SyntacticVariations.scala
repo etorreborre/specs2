@@ -17,7 +17,7 @@ List(1) must not have size (1)
 }}
 
 Finally there are some shortcuts for the equality matcher:${snippet{
-1 must_== 1
+1 must ==(1)
 1 mustEqual 1
 1 === 1
 

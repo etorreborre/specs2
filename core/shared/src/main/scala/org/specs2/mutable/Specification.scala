@@ -33,8 +33,6 @@ trait SpecLike extends SpecificationStructure
   with ArgumentsShortcuts
   with TextCreation
   with ActionDsl
-  with MustThrownMatchers1
+  with MustThrownMatchers
   with FormattingFragments
   with StandardResults
-
-

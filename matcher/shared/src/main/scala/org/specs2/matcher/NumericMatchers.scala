@@ -150,21 +150,9 @@ trait NumericBeHaveMatchers extends BeHaveMatchers { outer: NumericBaseMatchers 
     def ~[S : Numeric](delta: PlusOrMinus[S]) = beCloseTo(delta)
 }
 
-object NumericMatchers extends NumericMatchers:
-  import text.NotNullStrings._
+object NumericMatchers extends NumericMatchers
 
-  private[specs2] def description[S](e: Expectable[S]) =
-    e.desc match
-      case Some(d) => d(e.value.notNull)
-      case None    => e.value.notNull
-
-object NumericMatchersDescription:
-  import text.NotNullStrings._
-
-  private[specs2] def description[S](e: Expectable[S]) =
-    e.desc match
-      case Some(d) => d(e.value.notNull)
-      case None    => e.value.notNull
+object NumericMatchersDescription
 
 class BeLessThanOrEqualTo[T : Ordering](n: T) extends Matcher[T]:
   def apply[S <: T](a: Expectable[S]) =
@@ -172,23 +160,23 @@ class BeLessThanOrEqualTo[T : Ordering](n: T) extends Matcher[T]:
     val r = value <= n
     val isEqual = value == n
     result(r,
-           if isEqual then description(a) + " is equal to " + n.toString else description(a) + " is less than " + n.toString,
-           description(a) + " is greater than " + n.toString,
+           if isEqual then a.description + " is equal to " + n.toString else a.description + " is less than " + n.toString,
+           a.description + " is greater than " + n.toString,
            a)
 class BeLessThan[T : Ordering](n: T) extends Matcher[T]:
   def apply[S <: T](a: Expectable[S]) =
     val value: T = a.value
     val r = value < n
     result(r,
-           description(a) + " is less than " + n.toString,
-           description(a) + " is not less than " + n.toString,
+           a.description + " is less than " + n.toString,
+           a.description + " is not less than " + n.toString,
            a)
 class BeCloseTo[T : Numeric](n: T, delta: T) extends Matcher[T]:
   def apply[S <: T](x: Expectable[S]) =
     val num = implicitly[Numeric[T]]
     result(num.lteq(num.minus(n, delta), x.value) && num.lteq(x.value, num.plus(n, delta)),
-           description(x) + " is close to " + n.toString + " +/- " + delta,
-           description(x) + " is not close to " + n.toString + " +/- " + delta, x)
+           x.description + " is close to " + n.toString + " +/- " + delta,
+           x.description + " is not close to " + n.toString + " +/- " + delta, x)
 
 class BeSignificantlyCloseTo[T : Numeric](target: T, sf: SignificantFigures) extends Matcher[T]:
   def apply[S <: T](x: Expectable[S]) =
@@ -200,8 +188,8 @@ class BeSignificantlyCloseTo[T : Numeric](target: T, sf: SignificantFigures) ext
     val expected = BigDecimal.valueOf(num.toDouble(target)).setScale(newScale, RoundingMode.HALF_UP)
 
     result(actual == expected,
-      s"${description(x)} is close to $target with ${sf.number.qty("significant digit")}",
-      s"${description(x)} is not close to $target with ${sf.number.qty("significant digit")}", x)
+      s"${x.description} is close to $target with ${sf.number.qty("significant digit")}",
+      s"${x.description} is not close to $target with ${sf.number.qty("significant digit")}", x)
 
 case class SignificantTarget[T : Numeric](target: T, significantFigures: SignificantFigures)
 case class SignificantFigures(number: Int)

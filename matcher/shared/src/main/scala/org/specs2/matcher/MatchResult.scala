@@ -60,7 +60,7 @@ trait MatchResult[+T] extends ResultLike:
    * For example in that case:
    *
    *    "string" must not beNull
-   *    1 must_== 1
+   *    1 must ==(1)
    *
    * There will be a compilation error as if the apply method was used between the first and second line:
    *    ("string" must not beNull).apply(1)

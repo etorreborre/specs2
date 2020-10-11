@@ -11,15 +11,15 @@ import text.Sentences._
  */
 trait StandardMatchResults extends ExpectationsCreation:
   def ok(m: String): MatchResult[Any] =
-    checkFailure(Matcher.result(true, m, negateSentence(m), createExpectable(None)))
+    checkMatchResultFailure(Matcher.result(true, m, negateSentence(m), createExpectable(None)))
 
   def ko(m: String): MatchResult[Any] =
-    checkFailure(Matcher.result(false, negateSentence(m), m, createExpectable(None)))
+    checkMatchResultFailure(Matcher.result(false, negateSentence(m), m, createExpectable(None)))
 
   lazy val ok: MatchResult[Any] =
-    checkFailure(Matcher.result(true, "ok", "ko", createExpectable(None)))
+    checkMatchResultFailure(Matcher.result(true, "ok", "ko", createExpectable(None)))
 
   lazy val ko: MatchResult[Any] =
-    checkFailure(Matcher.result(false, "ok", "ko", createExpectable(None)))
+    checkMatchResultFailure(Matcher.result(false, "ok", "ko", createExpectable(None)))
 
 object StandardMatchResults extends StandardMatchResults

@@ -86,7 +86,7 @@ trait MapBaseMatchers:
     def apply[S <: PartialFunction[K, Any]](f: Expectable[S]) =
       val isDefined = values.map(v => (v, f.value.isDefinedAt(v)))
       val undefined = isDefined.filter(!_._2).map(_._1)
-      val functionDescription = f.optionalDescription.map(_(f.value.toString)).getOrElse("the function")
+      val functionDescription = f.showValue.map(_(f.value.toString)).getOrElse("the function")
       result(isDefined.map(_._2).forall(_ == true),
              functionDescription + Noun(" is defined for the value").plural(values.size) +
                " " + q(values.mkString(", ")),
@@ -99,7 +99,7 @@ trait MapBaseMatchers:
     def apply[S <: PartialFunction[K, V]](f: Expectable[S]) =
       val isDefined = values.map(v => (v, f.value.isDefinedAt(v._1) && f.value(v._1) == v._2))
       val undefined = isDefined.filter(!_._2).map(_._1)
-      val functionDescription = f.optionalDescription.map(_(f.value.toString)).getOrElse("the function")
+      val functionDescription = f.showValue.map(_(f.value.toString)).getOrElse("the function")
       result(isDefined.map(_._2).forall(_ == true),
              functionDescription + Noun(" is defined by the value").plural(values.size) + " " + q(values.mkString(", ")),
              functionDescription + Noun(" is not defined by the value").plural(undefined.size) + " " + q(undefined.mkString(", ")),

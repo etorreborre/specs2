@@ -33,10 +33,9 @@ abstract class Spec extends SpecLike
 trait SpecLike extends ImmutableSpecificationStructure
   with S2StringContext1
   with AcceptanceDsl1
-  with MustMatchers1
+  with MustMatchers
   with ArgumentsCreation
   with ArgumentsShortcuts
   with FormattingFragments
   with StandardResults
   with StandardMatchResults
-

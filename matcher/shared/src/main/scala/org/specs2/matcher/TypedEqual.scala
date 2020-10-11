@@ -10,7 +10,7 @@ import scala.implicits.Not
 trait TypedEqual { this: ExpectationsCreation =>
   /**
    * A value can be tested against another with the === operator.
-   * It is equivalent to writing a must_== b
+   * It is equivalent to writing a must ==(b)
    */
   extension [T](t: =>T)(using not: Not[NoTypedEqual])
     /** typed equality matcher on Expectables */

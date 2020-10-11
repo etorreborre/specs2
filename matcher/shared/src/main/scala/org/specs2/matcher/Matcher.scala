@@ -110,7 +110,7 @@ trait Matcher[-T] { outer =>
    */
   def ^^[S](f: S => Expectable[T], dummy: Int = 0) = new Matcher[S] {
     def apply[U <: S](a: Expectable[U]) =
-      val result = outer(a.flatMap(f))
+      val result = f(a.value).applyMatcher(outer)
       result.map(_ => a.value).setExpectable(a)
   }
   /**
@@ -123,7 +123,7 @@ trait Matcher[-T] { outer =>
         try outer(a)
         catch
           case FailureException(f: Failure) => MatchFailure(f.message, f.message, a)
-      a.check(result.not)
+      a.checker.check(result.not)
   }
   /**
    * the logical and between 2 matchers
@@ -193,7 +193,7 @@ trait Matcher[-T] { outer =>
    */
   def lazily = new Matcher[() => T]() { self =>
     def apply[S <: () => T](function: Expectable[S]) =
-      val r = outer(Expectable(function.value()))
+      val r = outer(createExpectable(function.value()))
       self.result(r, function)
   }
   /**
@@ -242,7 +242,7 @@ trait Matcher[-T] { outer =>
   /**
    * @return a test function corresponding to this matcher
    */
-  def test = (t: T) => apply(Expectable(t)).isSuccess
+  def test = (t: T) => apply(Expectations.createExpectable(t)).isSuccess
 }
 
 object Matcher:
@@ -286,4 +286,3 @@ object Matcher:
   def details(r: Result): Details = r match
     case f : Failure => f.details
     case _           => NoDetails
-

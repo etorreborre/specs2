@@ -26,33 +26,33 @@ trait MatchResultLogicalCombinators extends Expectations:
         case other: Exception                 => Left[Exception, MatchResult[T]](other)
 
     /** if there was an exception on evaluating the result, no expectable can be accessed */
-    lazy val expectable = 
+    lazy val expectable =
       result.fold(e => throw e, _.expectable)
 
     /** @return the logical or of two results */
     def or[S >: T](other: =>MatchResult[S]): MatchResult[S] =
       result.fold(
         _  => other,   // error, evaluate the other result
-        m1 => expectable.check(new OrMatch(m1, other).evaluate)) // otherwise use the OrMatch rules to evaluate m1 or other
+        m1 => checkMatchResultFailure(new OrMatch(m1, other).evaluate)) // otherwise use the OrMatch rules to evaluate m1 or other
 
     /** @return the logical or of a MatchResult and a Result */
     def or(other: =>Result): Result =
       result.fold(
         _  => other, // error, evaluate the other result
-        m1 => expectable.checkResult(ResultLogicalCombinators.combineResult(m1.toResult) or other)) // otherwise combine both results
+        m1 => checkResultFailure(ResultLogicalCombinators.combineResult(m1.toResult) or other)) // otherwise combine both results
 
     /** @return the logical and of two results */
     def and[S >: T](other: =>MatchResult[S]): MatchResult[S] =
       result.fold(
         e  => throw e, // error, rethrow it
-        m1 => expectable.check(new AndMatch(m1, other).evaluate)) // otherwise use the AndMatch rules to evaluate m1 and other
+        m1 => checkMatchResultFailure(new AndMatch(m1, other).evaluate)) // otherwise use the AndMatch rules to evaluate m1 and other
 
     /** @return the logical and of a MatchResult and a Result */
     def and(other: =>Result): Result =
       result.fold(
         e => throw e, // error, rethrow it
         // otherwise, use the result combinators
-        m1 => expectable.checkResult(ResultLogicalCombinators.combineResult(m1.toResult) and other))
+        m1 => checkResultFailure(ResultLogicalCombinators.combineResult(m1.toResult) and other))
 
     /** apply the matcher and return the logical or of two results */
     def or(other: Matcher[T]): MatchResult[T] =
@@ -60,20 +60,20 @@ trait MatchResultLogicalCombinators extends Expectations:
         result.fold(
           e  => throw e,
           m1 => combineMatchResult(m1).or(other(expectable)))
-      } { e => Expectable({ throw e; expectable.value }).applyMatcher(other) }
+      } { e => Expectable(() => { throw e; expectable.value }).applyMatcher(other) }
 
     /** apply the matcher and return the logical and of two results */
     def and(other: Matcher[T]): MatchResult[T] =
       result.fold(
         e  => throw e, // error, rethrow it
         // otherwise apply the other matcher and use the AndMatch rules to evaluate m1 and the other result
-        m1 => expectable.check(new AndMatch(m1, expectable.applyMatcher(other)).evaluate))
+        m1 => checkMatchResultFailure(new AndMatch(m1, expectable.applyMatcher(other)).evaluate))
 
     /** @return the negation of this result */
-    def not: MatchResult[T] = 
+    def not: MatchResult[T] =
       result.fold(
         e  => throw e, // error, rethrow it
-        m1 => expectable.check(m1.negate))
+        m1 => checkMatchResultFailure(m1.negate))
 
     /** only consider this result if the condition is true */
     def when(condition: Boolean, m: String= ""): MatchResult[T] = if condition then mr else MatchSuccess(m, m, expectable)

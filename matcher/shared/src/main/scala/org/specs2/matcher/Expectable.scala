@@ -16,118 +16,114 @@ import Expectable._
  * and an additional description.
  *
  */
-class Expectable[+T] private[specs2] (t: () => T) { outer =>
+case class Expectable[+T] private[specs2](
+  actual: () => T,
+  checker: Checker = Checker.pass,
+  showValue: Option[String => String] = None) { outer =>
+
   /** the value is only evaluated if necessary */
-  lazy val value = t()
+  lazy val value = actual()
 
   /** definition of the value, possibly evaluating to different results each time it is invoked */
-  lazy val valueDefinition = t
+  lazy val valueDefinition = actual
 
-  /**
-   * optional additional description: it is a function which takes value.toString and returns a String
-   */
-  private[specs2] val desc: Option[String => String] = None
-  /**
-   * optional user description for the value
-   */
-  private[specs2] val showValueAs: Option[() => String] = None
   /**
    * @return a description of the value provided by the user
    *         a combination of the value show by specs2 and an optional description
    */
   def description: String =
     describe(value)
-    
+
   /**
    * @return a description of any value with the custom description
    */
   def describe(v: Any): String =
-    showValueAs.map(_()).getOrElse(d(v, desc))
-
-  /** @return the optional description function */
-  def optionalDescription: Option[String => String] = desc
+    describeValue(v, showValue)
 
   /**
    * apply a matcher on the value and return a MatchResult which can later on be transformed to a simple Result
    */
   def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] =
     if m == null then throw new IllegalArgumentException(s"You cannot use a null matcher on '$description'")
-    check(m.apply(this))
-
-  /** additional checks can be done on the result, such as throwing an exception */
-  def check[S >: T](result: MatchResult[S]) = result
-
-  /** additional checks can be done on a result, such as throwing an exception */
-  def checkResult(result: Result) = result
+    checker.check(m.apply(this))
 
   /** evaluate the value and return the same expectable */
   def evaluate = { value; this }
 
   /** evaluate the value once and return an expectable with the same expression, ready to be evaluated again */
-  def evaluateOnce = Expectable(t(), desc, showValueAs)
+  def evaluateOnce: Expectable[T] =
+    copy(actual = () => value)
+
   /**
    * apply a function to the expectable value
    */
-  def map[S](f: T => S): Expectable[S] = Expectable(f(value), desc)
-  /**
-   * apply a function to the value
-   */
-  def flatMap[S](f: T => Expectable[S]): Expectable[S] = f(value)
+  def map[S](f: T => S): Expectable[S] =
+    copy(actual = () => f(value))
+
   /**
    * change the expectable value
    */
-  def map[S](other: S): Expectable[S] = map(t => other)
+  def map[S](other: S): Expectable[S] =
+    Expectable[S](() => other, checker, showValue)
+
   /**
    * apply a function to the description function
    */
-  def mapDescription(d: Option[String => String]): Expectable[T] = Expectable(value, d)
+  def mapDescription(d: Option[String => String]): Expectable[T] = copy(showValue = d)
   def mapDescription(d: String => String): Expectable[T] = mapDescription(Some(d))
   def mapDescription(d: String): Expectable[T] = mapDescription((_:String) => d)
+
   /** update the description with another description */
   def updateDescription(d: String => String): Expectable[T] = mapDescription(d(description))
 }
+
+trait Checker:
+  /** additional checks can be done on the result, such as throwing an exception */
+  def check[T](result: MatchResult[T]): MatchResult[T]
+
+object Checker:
+
+  def pass: Checker =
+    new Checker:
+      def check[T](result: MatchResult[T]) = result
 
 /**
  * Factory methods for creating Expectables
  */
 object Expectable:
-  /** @return an Expectable with t as a value */
-  private[specs2] def apply[T](t: =>T) = new Expectable(() => t)
+
   /** @return an Expectable with t as a value, and a constant string for its description */
-  private[specs2] def apply[T](t: =>T, d1: =>String) = new Expectable(() => t) {
-    override val desc: Option[String => String] = Some(aliasDisplay(d1))
-  }
-  private[specs2] def aliasDisplay(d1: =>String) = (s: String) => d1 + (if !s.isEmpty && !Seq("true", "false").contains(s) then " " + q(s) else "")
+  private[specs2] def apply[T](t: =>T, d1: =>String): Expectable[T] =
+    Expectable(() => t).mapDescription(aliasDisplay(d1))
+
   /** @return an Expectable with t as a value, and a description function */
-  private[specs2] def apply[T](t: =>T, d1: Option[String => String]) = new Expectable(() => t) {
-    override val desc: Option[String => String] = d1
-  }
-  /** @return an Expectable with t as a value, and a description function */
-  private[specs2] def apply[T](t: =>T, d1: Option[String => String], show: Option[() => String]) = new Expectable(() => t) {
-    override val desc: Option[String => String] = d1
-    override val showValueAs: Option[() => String] = show
-  }
+  private[specs2] def apply[T](t: =>T, d1: Option[String => String]): Expectable[T] =
+    Expectable(() => t).mapDescription(d1)
+
   /** @return an Expectable with t as a value, and string showing the element t */
-  private[specs2] def createWithShowAs[T](t: =>T, show: =>String) = new Expectable(() => t) {
-    override val showValueAs: Option[() => String] = Some(() => show)
-  }
+  private[specs2] def createWithShowAs[T](t: =>T, show: =>String): Expectable[T] =
+    Expectable(() => t).mapDescription(show)
 
   /** Expectable is a Functor and can use the fmap function to modify its value */
-  implicit val ExpectableFunctor: Functor[Expectable] = new Functor[Expectable] {
-    def map[A, B](r: Expectable[A])(f: A => B) = r.map(f)
-  }
+  given ExpectableFunctor as Functor[Expectable] = new Functor[Expectable]:
+    def map[A, B](r: Expectable[A])(f: A => B): Expectable[B] = r.map(f)
 
   /** @return the description of the matched value, quoted. */
-  private[specs2] def d(value: =>Any, desc: Option[String => String]) =
-    desc match
-      case None => value match
-        case b: Boolean   => "the value"
-        case _            => value.notNull ///q(value)
-      case Some(de)       => de(value.notNull)
+  private[specs2] def describeValue(value: =>Any, showValue: Option[String => String]) =
+    showValue match
+      case None =>
+        value match
+          case b: Boolean => "the value"
+          case _          => value.notNull
+
+      case Some(show) =>
+        show(value.notNull)
+
+  /** @return display a value plus its alias (unless the alias is redundant with the value itself for boolean values). */
+  private[specs2] def aliasDisplay(d1: =>String)(s: String): String =
+    d1 + (if !s.isEmpty && !Seq("true", "false").contains(s) then " " + q(s) else "")
 
   /** @return the description of the matched value, unquoted. */
   private[specs2] def dUnquoted[T](value: T, desc: Option[String => String]) = desc match
     case None     => unq(value)
     case Some(de) => de(unq(value))
-
-

@@ -1,58 +1,32 @@
 package org.specs2
 package matcher
 
-import org.specs2.execute.{Result, StandardResults}
-
+import execute.{Result, StandardResults}
+import scala.implicits.Not
 
 /**
- * This trait provides implicit definitions to transform any value into a ShouldExpectable
+ * This trait provides implicit definitions to check values with matchers
+ * by using a "should" syntax: value should matcher
  */
-trait ShouldExpectations extends Expectations:
-  implicit def akaShould[T](tm: Expectable[T]): ShouldExpectable[T] = new ShouldExpectable(() => tm.valueDefinition()) {
-    override private[specs2] val desc = tm.desc
-    override private[specs2] val showValueAs = tm.showValueAs
-    // overriding this method is necessary to include the ThrownExpectation trait into the stacktrace of the created match result
-    override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = super.applyMatcher(m)
-    override def check[S >: T](r: MatchResult[S]): MatchResult[S] = checkFailure(r)
-    override def checkResult(r: Result): Result = checkResultFailure(r)
-  }
-  implicit def thisValue[T](t: =>T): ShouldExpectable[T] = createShouldExpectable(t)
-  implicit def thisBlock(t: =>Nothing): ShouldExpectable[Nothing] = createShouldExpectable(t)
+trait ShouldExpectations extends ExpectationsCreation with TypedEqual:
 
-  protected def createShouldExpectable[T](t: =>T) = new ShouldExpectable(() => t) {
-    // overriding this method is necessary to include the ThrownExpectation trait into the stacktrace of the created match result
-    override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = super.applyMatcher(m)
-    override def check[S >: T](r: MatchResult[S]): MatchResult[S] = checkFailure(r)
-  }
-/**
- * This trait can be used to remove aka and should methods on any value
- */
-trait NoShouldExpectations extends ShouldExpectations:
-  override def akaShould[T](tm: Expectable[T]) = super.akaShould(tm)
-  override def thisValue[T](t: =>T): ShouldExpectable[T] = super.thisValue(t)
-  override def thisBlock(t: =>Nothing): ShouldExpectable[Nothing] = super.thisBlock(t)
+  extension [T](tm: =>T)(using not: Not[NoShouldExpectations])
+    def should(m: =>Matcher[T]) =
+      createExpectable(tm).applyMatcher(m)
+
+  extension [T](tm: Expectable[T])(using not: Not[NoShouldExpectations])
+    def should(m: =>Matcher[T]) =
+      tm.applyMatcher(m)
 
 object ShouldExpectations extends ShouldExpectations
 
-/**
- * This trait provides implicit definitions to transform any value into a ShouldExpectable, throwing exceptions when
- * a match fails
- */
-trait ShouldThrownExpectations extends ShouldThrownExpectables with StandardResults with StandardMatchResults
+trait NoShouldExpectations:
+  given NoShouldExpectations = ???
 
-trait ShouldThrownExpectables extends ThrownExpectations with ShouldExpectations:
-  override implicit def akaShould[T](tm: Expectable[T]): ShouldExpectable[T] = new ShouldExpectable(() => tm.valueDefinition()) {
-    override private[specs2] val desc = tm.desc
-    override private[specs2] val showValueAs = tm.showValueAs
-    // overriding this method is necessary to include the ThrownExpectation trait into the stacktrace of the created match result
-    override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = super.applyMatcher(m)
-    override def check[S >: T](r: MatchResult[S]): MatchResult[S] = checkFailure(r)
-    override def checkResult(r: Result): Result = checkResultFailure(r)
-  }
-  override protected def createShouldExpectable[T](t: =>T) = new ShouldExpectable(() => t) {
-    // overriding this method is necessary to include the ThrownExpectation trait into the stacktrace of the created match result
-    override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = super.applyMatcher(m)
-    override def check[S >: T](r: MatchResult[S]): MatchResult[S] = checkFailure(r)
-  }
+/**
+ * This trait provides implicit definitions to transform any value into an Expectable
+ * which throws exceptions when a match fails
+ */
+trait ShouldThrownExpectations extends ShouldExpectations with StandardResults with StandardMatchResults
 
 object ShouldThrownExpectations extends ShouldThrownExpectations

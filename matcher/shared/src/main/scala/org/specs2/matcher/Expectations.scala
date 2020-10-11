@@ -9,40 +9,58 @@ import execute._
 trait Expectations extends ExpectationsCreation with TypedEqual with ExpectationsDescription
 
 object Expectations extends Expectations
+
 /**
- * Base trait to create expectations
+ * Base trait to create expectations.
+ *
+ * An expectation is a value which can have an optional description and which
+ * can be matched to produce a result (for example against an expected value)
+ *
+ * When a result is produced it can possibly be thrown as an exception
+ * based on the behaviour of the ResultChecks trait
  */
-trait ExpectationsCreation extends MatchResultStackTrace:
+trait ExpectationsCreation extends ResultChecks:
+
+  /** @return an Expectable with a description function */
+  def createExpectable[T](t: =>T, alias: Option[String => String]): Expectable[T] =
+    Expectable(() => t, Checker.pass, alias)
+
   /** @return an Expectable */
-  def createExpectable[T](t: =>T): Expectable[T] = createExpectable(t, None)
+  def createExpectable[T](t: =>T): Expectable[T] =
+    createExpectable(t, None)
+
   /** @return an Expectable with a description */
-  def createExpectable[T](t: =>T, alias: =>String): Expectable[T] = createExpectable(t, Some(Expectable.aliasDisplay(alias)))
+  def createExpectable[T](t: =>T, alias: =>String): Expectable[T] =
+    createExpectable(t, Some(Expectable.aliasDisplay(alias)))
+
   /** @return an Expectable with a description function */
-  def createExpectable[T](t: =>T, alias: String => String): Expectable[T] = createExpectable(t, Some(alias))
-  /** @return an Expectable with a description function */
-  def createExpectable[T](t: =>T, alias: Option[String => String]): Expectable[T] = new Expectable(() => t) {
-    override val desc: Option[String => String] = alias
-    override def check[S >: T](r: MatchResult[S]): MatchResult[S] = checkFailure(r)
-    override def checkResult(r: Result): Result = checkResultFailure(r)
-  }
+  def createExpectable[T](t: =>T, alias: String => String): Expectable[T] =
+    createExpectable(t, Some(alias))
+
   /** @return an Expectable with a function to show the element T */
-  def createExpectableWithShowAs[T](t: =>T, showAs: =>String): Expectable[T] = new Expectable(() => t) {
-    override val showValueAs: Option[() => String] = Some(() => showAs)
-    override def check[S >: T](r: MatchResult[S]): MatchResult[S] = checkFailure(r)
-    override def checkResult(r: Result): Result = checkResultFailure(r)
-  }
+  def createExpectableWithShowAs[T](t: =>T, showAs: =>String): Expectable[T] =
+    createExpectable(t).mapDescription(showAs)
 
-  /** this method can be overridden to throw exceptions when checking the match result */
-  protected def checkFailure[T](m: MatchResult[T]): MatchResult[T] =
-    checkMatchResultFailure(mapMatchResult(setStacktrace(m)))
-  /** this method can be overridden to intercept a MatchResult and change its message before it is thrown */
-  protected def mapMatchResult[T](m: MatchResult[T]): MatchResult[T] = m
+  def theValue[T](t: =>T): Expectable[T] =
+    createExpectable(t)
 
-  /** this method can be overridden to throw exceptions when checking the result */
+  def theBlock(t: =>Nothing): Expectable[Nothing] =
+    createExpectable(t)
+
+trait ResultChecks extends MatchResultStackTrace:
+
+  /** this method can be overridden to throw exceptions when checking a result */
   protected def checkResultFailure(r: =>Result): Result = r
 
-  /** this method can be overridden to throw exceptions when checking the match result */
-  protected def checkMatchResultFailure[T](m: MatchResult[T]): MatchResult[T] = m
+  /** this method can be overridden to throw exceptions when checking a match result */
+  protected def checkMatchResultFailure[T](m: MatchResult[T]): MatchResult[T] =
+    mapMatchResult(setStacktrace(m))
+
+  /** this method can be overridden to intercept a MatchResult and modify it.
+   *  It is used for example to set a stacktrace providing the location of a
+   *  failure
+   */
+  protected def mapMatchResult[T](m: MatchResult[T]): MatchResult[T] = m
 
   /** @return the match result without any side-effects */
   protected def sandboxMatchResult[T](mr: =>MatchResult[T]): MatchResult[T] = mr

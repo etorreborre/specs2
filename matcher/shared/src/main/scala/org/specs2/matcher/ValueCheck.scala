@@ -1,9 +1,11 @@
 package org.specs2
 package matcher
 
-import org.specs2.execute._
-import org.specs2.matcher.describe.Diffable
-import org.specs2.text.Quote._
+import execute._
+import org.specs2.execute.AsResult
+import describe._
+import text.Quote._
+import Expectations._
 
 /**
  * Common interface for checks of a value of type T:
@@ -58,8 +60,8 @@ trait ValueChecksBase extends ValueChecksLowImplicits:
 
   /** a Matcher[T] can check a value */
   implicit def matcherIsValueCheck[T](m: Matcher[T]): ValueCheck[T] = new ValueCheck[T] {
-    def check    = (t: T) => AsResult.safely(m(Expectable(t)))
-    def checkNot = (t: T) => AsResult.safely(m.not(Expectable(t)))
+    def check    = (t: T) => AsResult.safely(m(createExpectable(t)))
+    def checkNot = (t: T) => AsResult.safely(m.not(createExpectable(t)))
   }
 
   /** an expected value can be used to check another value */
@@ -83,8 +85,8 @@ object ValueChecks extends ValueChecks
 /** ValueCheck for a typed expected value. It uses the BeTypedEqualTo matcher */
 case class BeEqualTypedValueCheck[T : Diffable](expected: T) extends ValueCheck[T]:
   private lazy val matcher = new EqualityMatcher(expected)
-  def check    = (t: T) => AsResult.safely(matcher(Expectable(t)))
-  def checkNot = (t: T) => AsResult.safely(matcher.not(Expectable(t)))
+  def check    = (t: T) => AsResult.safely(matcher(createExpectable(t)))
+  def checkNot = (t: T) => AsResult.safely(matcher.not(createExpectable(t)))
 
   def downcast[S] = new BeEqualValueCheck[S](expected)
 
@@ -92,5 +94,5 @@ case class BeEqualTypedValueCheck[T : Diffable](expected: T) extends ValueCheck[
 /** ValueCheck for an untyped expected value. It uses the BeEqualTo matcher */
 case class BeEqualValueCheck[T](expected: Any) extends ValueCheck[T]:
   private lazy val matcher = new BeEqualTo(expected)
-  def check    = (t: T) => AsResult.safely(matcher(Expectable(t)))
-  def checkNot = (t: T) => AsResult.safely(matcher.not(Expectable(t)))
+  def check    = (t: T) => AsResult.safely(matcher(createExpectable(t)))
+  def checkNot = (t: T) => AsResult.safely(matcher.not(createExpectable(t)))
