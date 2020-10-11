@@ -6,7 +6,7 @@ There are many ways to define expectations in $specs2:
 
   * Boolean (`true, false`)
   * Standard result (`success, failure`)
-  * Matcher result (`1 must_== 1`)
+  * Matcher result (`1 must ===(1`))
   * Scalacheck property
   * DataTable
   * Forms
@@ -63,4 +63,3 @@ $vid
   case class Failure(override val message: String) extends Result(message, "")
   case class Error(e: Throwable) extends Result(e.getMessage, "")
 }
-

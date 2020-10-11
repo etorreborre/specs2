@@ -59,17 +59,17 @@ Messages
     (new UserExpectations).failure1.location must endWith("UserExpectations.scala:11")
 
   def adapt3 =
-    val expectable: MustExpectable[Exception] = theValue(new Exception("message"))
+    val expectable: Expectable[Exception] = theValue(new Exception("message"))
     val result = expectable.must(be_==("message") ^^ ((_:Exception).getMessage))
     result.expectable === expectable
 
   def adapt4 =
     val result = new Exception("message")  must be_>(2) ^^ ((e:Exception) => e.getMessage.length aka "the message size")
-    result.message must_== "the message size '7' is greater than 2"
+    result.message must ===("the message size '7' is greater than 2")
 
   def adapt5 =
     val result = new Exception("message")  must be_===(8) ^^ ((e:Exception) => e.getMessage.length aka "the message size")
-    result.message must_=== "the message size '7 != 8'"
+    result.message must ===("the message size '7 != 8'")
 
   def adapt6 =
     case class Human(age: Int, wealth: Int)
@@ -133,11 +133,11 @@ Messages
 
   def convert9 =
     def beOneTwoThreeList: Matcher[List[Int]] = (list: List[Int]) => list must be_==(List(1, 2, 3))
-    Matcher.details((List(1, 2) must beOneTwoThreeList).toResult) must_== FailureSeqDetails(List(1, 2), List(1, 2, 3))
+    Matcher.details((List(1, 2) must beOneTwoThreeList).toResult) must ===(FailureSeqDetails(List(1, 2), List(1, 2, 3)))
 
   def convert10 =
     val result = forallWhen(List(1, 2)) { case i if i == 1 => List(1) must be_===(List(2)) }.toResult
-    Matcher.details(result) must_== FailureSeqDetails(List(1), List(2))
+    Matcher.details(result) must ===(FailureSeqDetails(List(1), List(2)))
 
   def collection1 =
     def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i.toString+" is even", (i: Int) => i.toString+" is odd")

@@ -18,8 +18,8 @@ class ShouldItFail extends Specification { def is = s2"""
   Should this example fail? $e1
 """
   def e1 = {
-    1 must_== 100000 // do you expect this to fail
-    10 must_== 10
+    1 must ===(100000 // do you expect this to fail)
+    10 must ===(10)
   }
 }
 }}
@@ -36,7 +36,7 @@ Here is a mysterious `AsResult` message
 ```
 class MysteriousAsResult extends mutable.Specification {
   "Try this" in {
-    1 must_== 1
+    1 must ===(1)
     println("this is ok, right?")
   }
 }
@@ -94,4 +94,3 @@ You created a custom `Notifier` or another class for reporting and when you use 
 
 """
 }
-

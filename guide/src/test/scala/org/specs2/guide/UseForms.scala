@@ -101,7 +101,7 @@ Most of the time, the display of Fields and Properties can be left as it is but 
   tr(field("field(\"label\", \"value\").boldValue").code, field("label", "value").boldValue).
   tr(field("field(\"label\", \"value\").italics").code,      field("label", "value").italics).
   tr(field("field(\"label\", \"value\").italics.bold").code,      field("label", "value").italics.bold).
-  tr(field("field(\"1 must_== 1\").code").code, field("1 must_== 1").code).
+  tr(field("field(\"1 must ===(1\")).code").code, field("1 must ===(1")).code).
   tr(field("style with").bkGrey.bold).
   tr(field("field(\"label\", \"value\").styleWith(\"color\"->\"#FF1493\")").code, field("label", "value").styleWith("color"->"#FF1493")).
   tr(field("field(\"label\", \"value\").color(\"#FF1493\")").code, field("label", "value").color("#FF1493")).

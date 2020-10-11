@@ -57,7 +57,7 @@ class StackSpec extends Specification { def is =  "Specification for a Stack wit
   case class empty():
     val stack = newEmptyStack
 
-    def e1 = stack.size must_== 0
+    def e1 = stack.size must ===(0)
     def e2 = stack.top must throwA[NoSuchElementException]
     def e3 = stack.pop must throwA[NoSuchElementException]
 
@@ -66,25 +66,25 @@ class StackSpec extends Specification { def is =  "Specification for a Stack wit
 
     def size = stack.size > 0
 
-    def top1 = stack.top must_== stack.size
+    def top1 = stack.top must ===(stack.size)
     def top2 =
       stack.top
-      stack.top must_== stack.size
+      stack.top must ===(stack.size)
 
     def pop1 =
       val topElement = stack.size
-      stack.pop must_== topElement
+      stack.pop must ===(topElement)
 
     def pop2 =
       stack.pop
-      stack.top must_== stack.size
+      stack.top must ===(stack.size)
 
   case class nonFullStack():
     val stack = newNormalStack
 
     def e1 =
       stack push (stack.size + 1)
-      stack.top must_== stack.size
+      stack.top must ===(stack.size)
   case class fullStack():
     val stack = newFullStack
 

@@ -118,13 +118,13 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
 
   def assertionErrorProp = forAll((b: Boolean) => {assert(1 == 2, "1 is not equal to 2"); true})
 
-  def failureWithStacktraceProp = forAll((b: Boolean) => 1 must_== 2)
+  def failureWithStacktraceProp = forAll((b: Boolean) => 1 must ===(2))
 
   import DataTables._
   def datatableFailureProp = forAll { (b: Boolean) =>
     "a" | "b" |>
      1  ! 1   |
-     1  ! 2   | { (a, b) => a must_== b }
+     1  ! 2   | { (a, b) => a must ===(b) }
    }
 
   def datatableThrownProp = forAll(Gen.const(true)) { (b: Boolean) =>

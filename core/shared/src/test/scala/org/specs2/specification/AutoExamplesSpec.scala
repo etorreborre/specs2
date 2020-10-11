@@ -21,18 +21,18 @@ class AutoExamplesSpec(implicit ee: ExecutionEnv) extends org.specs2.Spec with D
 
 """
 
-  def e1 = trimExpression("`method`") must_== "method"
-  def e2 = trimExpression("`method`(p1)") must_== "method"
-  def e3 = trimExpression("`method`(p1, p2)") must_== "method"
+  def e1 = trimExpression("`method`") must ===("method")
+  def e2 = trimExpression("`method`(p1)") must ===("method")
+  def e3 = trimExpression("`method`(p1, p2)") must ===("method")
 
   def dt1 = firstExampleDescription("text" ^ datatableOk) must contain(
   """|"a"  | "b" | "c" |>
      |2    ! 2   ! 4   |
-     |1    ! 1   ! 2   | { (a, b, c) =>  a + b must_== c }""".stripMargin)
+     |1    ! 1   ! 2   | { (a, b, c) =>  a + b must ===(c) }""".stripMargin)
 
   def m1 =
     val spec = new org.specs2.mutable.Specification with DataTables {
-      eg { 1 must_== 1 }
+      eg { 1 must ===(1) }
 
       eg { true }
 
@@ -41,7 +41,7 @@ class AutoExamplesSpec(implicit ee: ExecutionEnv) extends org.specs2.Spec with D
       eg {
         "a"  | "b" | "c" |>
         2    ! 2   ! 4   |
-        1    ! 1   ! 2   | { (a, b, c) =>  a + b must_== c }
+        1    ! 1   ! 2   | { (a, b, c) =>  a + b must ===(c) }
       }
     }
     spec.is.fragmentsList(ee).filter(Fragment.isExample) must haveSize(4)
@@ -52,7 +52,7 @@ class AutoExamplesSpec(implicit ee: ExecutionEnv) extends org.specs2.Spec with D
   def datatableOk = eg {
     "a"  | "b" | "c" |>
     2    ! 2   ! 4   |
-    1    ! 1   ! 2   | { (a, b, c) =>  a + b must_== c }
+    1    ! 1   ! 2   | { (a, b, c) =>  a + b must ===(c) }
   }
 
 }

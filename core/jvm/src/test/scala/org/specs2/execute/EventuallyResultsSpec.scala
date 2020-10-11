@@ -32,8 +32,8 @@ class EventuallyResultsSpec extends Specification with ResultMatchers:
   }
   "Even if a result throws an exception it must be evaluated 'retries' times only" in {
     var eval = 0
-    def r = { eval += 1; 1 must_== 2 }
+    def r = { eval += 1; 1 must ===(2) }
 
     eventually(retries = 3, sleep = 100.millis)(r) must beFailing
-    eval must_== 3
+    eval must ===(3)
   }

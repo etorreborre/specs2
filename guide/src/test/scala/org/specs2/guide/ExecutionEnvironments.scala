@@ -18,7 +18,7 @@ A Scala `Future` needs an implicit `ExecutionContext` to be created. You can get
 specifications by declaring it as a class member: ${snippet{
 class MyFutureSpec(implicit ec: ExecutionContext) extends Specification { def is = s2"""
  Let's check this scala future ${
-   Await.result(Future(1), Duration.Inf) must_== 1
+   Await.result(Future(1), Duration.Inf) must ===(1)
  }
 """
 }
@@ -26,7 +26,7 @@ class MyFutureSpec(implicit ec: ExecutionContext) extends Specification { def is
 // in a mutable specification
 class MyMutableFutureSpec(implicit ec: ExecutionContext) extends mutable.Specification {
   "Let's check this scala future" >> {
-    Await.result(Future(1), Duration.Inf) must_== 1
+    Await.result(Future(1), Duration.Inf) must ===(1)
   }
 }
 }}
@@ -34,7 +34,7 @@ class MyMutableFutureSpec(implicit ec: ExecutionContext) extends mutable.Specifi
 You can also use an `ExecutionEnv` (from now on code examples are provided for immutable specifications only but are transposable to mutable ones): ${snippet{
 class MyFutureSpec(implicit ee: ExecutionEnv) extends Specification { def is = s2"""
  Let's check this scala future ${
-   Await.result(Future(1), Duration.Inf) must_== 1
+   Await.result(Future(1), Duration.Inf) must ===(1)
  }
 """
 }

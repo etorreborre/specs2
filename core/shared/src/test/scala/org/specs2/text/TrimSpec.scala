@@ -4,7 +4,7 @@ import Trim._
 
 class TrimSpec extends Specification { def is = s2"""
 ### Trait for trimming strings
- 
+
   The *Trim* trait can be used to trim all sorts of strings.
 
   Trim lines and replace characters
@@ -51,9 +51,9 @@ class TrimSpec extends Specification { def is = s2"""
 
   string unless condition
     returns the string if the condition is false
-    ${eg{ "hello" unless false must_== "hello" }}
+    ${eg{ "hello" unless false must ===("hello") }}
     returns an empty string if the condition is true
-    ${eg{ "hello" unless true must_== "" }}
+    ${eg{ "hello" unless true must ===("") }}
 
   ${"Last block returns the last block when lines are separated by empty lines"  ! e2}
 
@@ -94,6 +94,6 @@ class TrimSpec extends Specification { def is = s2"""
            replaceAll("<p>[\\S\\s]*</p>", (s: String) => s.replace("\n", "<br/>")) ===
            "<li><p>hello<br/>dear<br/>world</p></li>"
 
-  def e2 = "hello\nworld\n   \nhow are\nyou\n".lastBlock must_== "how are\nyou"
+  def e2 = "hello\nworld\n   \nhow are\nyou\n".lastBlock must ===("how are\nyou")
 
 }

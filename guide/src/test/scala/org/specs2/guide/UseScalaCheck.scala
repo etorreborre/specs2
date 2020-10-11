@@ -22,10 +22,10 @@ The function that is checked can either return: ${snippet{
 s2"addition and multiplication are related ${ prop { (a: Int) => a + a == 2 * a } }"
 
 // a MatchResult
-s2"addition and multiplication are related ${ prop { (a: Int) => a + a must_== 2 * a } }"
+s2"addition and multiplication are related ${ prop { (a: Int) => a + a must ===(2 * a } }")
 
 // a Prop
-s2"addition and multiplication are related ${ prop { (a: Int) => (a > 0) ==> (a + a must_== 2 * a) } }"
+s2"addition and multiplication are related ${ prop { (a: Int) => (a > 0) ==> (a + a must ===(2 * a)) } }"
 }}
 
 Note that if you pass functions using `MatchResult`s you will get better failure messages than just using boolean expressions.
@@ -176,7 +176,7 @@ Note that `minTestsOk` in `specs2` corresponds to the `minSuccessfulTests` param
 It is also possible to specifically set the execution parameters on a given property: ${snippet{
 class ScalaCheckSpec extends mutable.Specification with ScalaCheck {
   "this is a specific property" >> prop { (a: Int, b: Int) =>
-    (a + b) must_== (b + a)
+    (a + b) must ===((b + a))
   }.set(minTestsOk = 200, workers = 3) // use "display" instead of "set" for additional console printing
 }
 }}

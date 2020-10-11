@@ -33,15 +33,15 @@ class MySpecification extends org.specs2.Specification { def is = s2"""
    where example 2 must be true           $e2
                                           """
 
-  def e1 = 1 must_== 1
-  def e2 = 2 must_== 2
+  def e1 = 1 must ===(1)
+  def e2 = 2 must ===(2)
 }
 }}
 
 The `s2` string contains the text of your specification as well as some references to methods (`e1` and `e2`) defining *`Results`*. When the Specification is executed, the `s2` string is analysed and 2 `Examples` are created then executed:
 
- - one `Example` with the description "where example 1 must be true" and the code `1 must_== 1`
- - another `Example` with the description "where example 2 must be true" and the code `2 must_== 2`
+ - one `Example` with the description "where example 1 must be true" and the code `1 must ===(1`)
+ - another `Example` with the description "where example 2 must be true" and the code `2 must ===(2`)
 
 <p/>
 All the rest, `"this is my specification"`, is parsed as `Text` and is not executed.
@@ -52,10 +52,10 @@ A unit specification extends `org.specs2.mutable.Specification` and uses the `>>
 class MySpecification extends org.specs2.mutable.Specification {
   "this is my specification" >> {
     "where example 1 must be true" >> {
-      1 must_== 1
+      1 must ===(1)
     }
     "where example 2 must be true" >> {
-      2 must_== 2
+      2 must ===(2)
     }
   }
 }
@@ -107,8 +107,8 @@ If you want to declare several expectations per example, you can mix-in the `org
 With a unit specification you get "thrown expectations" by default. When an expectation fails, it throws an exception and the rest of the example is not executed: ${snippet {
 class MySpecification extends org.specs2.mutable.Specification {
   "This is my example" >> {
-    1 must_== 2 // this fails
-    1 must_== 1 // this is not executed
+    1 must ===(2 // this fails)
+    1 must ===(1 // this is not executed)
   }
 }
 }}

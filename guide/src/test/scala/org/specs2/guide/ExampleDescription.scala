@@ -42,7 +42,7 @@ s2"""
   }
 
   def addition = extract { (a: String, b: String, c: String) =>
-    a.toInt + b.toInt must_== c.toInt
+    a.toInt + b.toInt must ===(c.toInt)
   }
 }}
 
@@ -58,7 +58,7 @@ s2"""
   import org.specs2.specification.script.StandardDelimitedStepParsers._
 
   def addition = threeInts.map { case (a, b, c) =>
-    a + b must_== c
+    a + b must ===(c)
   }
 }}
 
@@ -94,7 +94,7 @@ s2"""
   }
 
   def addition = groupAs("\\d+").and { (a: String, b: String, c: String) =>
-    a.toInt + b.toInt must_== c.toInt
+    a.toInt + b.toInt must ===(c.toInt)
   }
 }}
 
@@ -108,7 +108,7 @@ s2"""
   import org.specs2.specification.script.StandardRegexStepParsers._
 
   def addition = threeInts.map { case (a, b, c) =>
-    a + b must_== c
+    a + b must ===(c)
   }
 }}
 """

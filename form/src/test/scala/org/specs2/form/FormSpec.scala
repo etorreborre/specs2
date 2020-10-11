@@ -85,17 +85,17 @@ A form can be added to another
 
 """
 
-  def creation1 = Form("title").title must_== Some("title")
-  def creation2 = Form.tr(field("name", "eric")).rows.size must_== 1
-  def creation3 = Form.tr(field("name", "eric"), field("age", 18)).rows.size must_== 1
+  def creation1 = Form("title").title must ===(Some("title"))
+  def creation2 = Form.tr(field("name", "eric")).rows.size must ===(1)
+  def creation3 = Form.tr(field("name", "eric"), field("age", 18)).rows.size must ===(1)
   def creation4 = Form.tr(field("name", "eric")).
-                tr(field("age", 18)).rows.size must_== 2
-  def creation5 = Form("title").tr(prop("name", "eric")).rows.size must_== 1
-  def creation6 = Form("title").tr(form("title")).rows.size must_== 1
-  def creation7 = Form("title").tr(Row.tr(field(1), field(2))).rows(0).cells.size must_== 2
-  def creation8 = Form.tr(Row.tr(field(1), field(2))).rows(0).cells.size must_== 2
-  def creation9 = Form.tabs(Seq("name")) { (s: String) => Tabs().tab(s, Form("title")) }.rows.size must_== 1
-  def creation10 = Form.trs(Seq("a", "b")) { (s: String) => Row.tr(field(s)) }.rows.size must_== 2
+                tr(field("age", 18)).rows.size must ===(2)
+  def creation5 = Form("title").tr(prop("name", "eric")).rows.size must ===(1)
+  def creation6 = Form("title").tr(form("title")).rows.size must ===(1)
+  def creation7 = Form("title").tr(Row.tr(field(1), field(2))).rows(0).cells.size must ===(2)
+  def creation8 = Form.tr(Row.tr(field(1), field(2))).rows(0).cells.size must ===(2)
+  def creation9 = Form.tabs(Seq("name")) { (s: String) => Tabs().tab(s, Form("title")) }.rows.size must ===(1)
+  def creation10 = Form.trs(Seq("a", "b")) { (s: String) => Row.tr(field(s)) }.rows.size must ===(2)
 
   import datables._
 
@@ -106,18 +106,18 @@ A form can be added to another
   val name = field("name", "eric")
   val age  = field("age", 18)
 
-  def display1 = form("title").text must_== "| title |"
-  def display2 = Form().text must_== ""
-  def display3 = Form.tr(name).text must_== "| name: eric |"
-  def display4 = Form.tr(name, age).text must_== "| name: eric | age: 18 |"
+  def display1 = form("title").text must ===("| title |")
+  def display2 = Form().text must ===("")
+  def display3 = Form.tr(name).text must ===("| name: eric |")
+  def display4 = Form.tr(name, age).text must ===("| name: eric | age: 18 |")
 
-  def display5 = form("title").tr(name).text must_==
+  def display5 = form("title").tr(name).text must ===(
     "| title      |\n" +
-    "| name: eric |"
+    "| name: eric |")
 
-  def display6 = form("title").tr(name, age).text must_==
+  def display6 = form("title").tr(name, age).text must ===(
     "| title                |\n" +
-    "| name: eric | age: 18 |"
+    "| name: eric | age: 18 |")
 
   def display7 = compare(address1,
     "| Address               |",
@@ -140,24 +140,24 @@ A form can be added to another
     "| street: Rose Crescent |",
     "| number: 2             |")
 
-   def execution1 = Form.tr("a").setSuccess.execute must_== success
+   def execution1 = Form.tr("a").setSuccess.execute must ===(success)
    def execution2 = Form.tr("a").setSuccess.rows.forall(_.execute.isSuccess) must beTrue
 
-   def execution3 = Form.tr("a").setFailure.execute.message must_== failure.message
+   def execution3 = Form.tr("a").setFailure.execute.message must ===(failure.message)
    def execution4 = Form.tr("a").setFailure.rows.forall(_.execute.isSuccess) must beFalse
 
    def execution5 = Form.tr(prop("a")("b")).
      tr(prop("a")("a")).
      tr(prop("c")("d")).executeForm.rows.filter(_.execute.isFailure) must haveSize(2)
 
-   def methods1 = Row.tr(TextCell("a")) must_== Row.tr(TextCell("a"))
-   def methods2 = TextCell("a") must_== TextCell("a")
+   def methods1 = Row.tr(TextCell("a")) must ===(Row.tr(TextCell("a")))
+   def methods2 = TextCell("a") must ===(TextCell("a"))
 
    // count 3 per prop or field
    def asHtml1 = Xml.colnumber(new FormCell(Form.th("title").
      tr(field(1)).
      tr(field("n", "v"), field("n", "v")).
-     tr(prop("p", 1)(2)))) must_== 6
+     tr(prop("p", 1)(2)))) must ===(6)
 
    def inlined1 = Form("title").tr(Form.tr("hello").inline).toXml must ==/(
      <form>
@@ -167,7 +167,7 @@ A form can be added to another
      </form>)
 
   // HELPERS
-  def compare(form: String, expected: String*) = form must_== expected.mkString("\n", "\n", "\n")
+  def compare(form: String, expected: String*) = form must ===(expected.mkString("\n", "\n", "\n"))
 
   lazy val street = field("street", "Rose Crescent")
   lazy val number = field("number", 2)
@@ -198,10 +198,10 @@ A form can be added to another
 trait datatables extends DataTables with MustMatchers:
   val okDataTable =
     "a" | "b" |>
-      1  ! 1   | { (a, b) => a must_== b }
+      1  ! 1   | { (a, b) => a must ===(b) }
 
   val koDataTable =
     "a" | "b" |>
-      1  ! 2   | { (a, b) => a must_== b }
+      1  ! 2   | { (a, b) => a must ===(b) }
 
 object datables extends datatables

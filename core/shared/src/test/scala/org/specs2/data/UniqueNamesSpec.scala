@@ -8,10 +8,9 @@ class UniqueNamesSpec extends Spec:
   "Returned names must be unique" >> {
     val namer = UniqueNames()
 
-    namer.uniqueName("hello") must_== "hello"
-    namer.uniqueName("hello") must_== "hello_1"
-    namer.uniqueName("world") must_== "world"
-    namer.uniqueName("hello") must_== "hello_2"
+    namer.uniqueName("hello") must ===("hello")
+    namer.uniqueName("hello") must ===("hello_1")
+    namer.uniqueName("world") must ===("world")
+    namer.uniqueName("hello") must ===("hello_2")
 
   }
-

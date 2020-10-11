@@ -43,7 +43,7 @@ class SpecificationStructureSpec(val env: Env) extends Specification with ScalaC
     val linked = SpecificationStructure.linkedSpecifications(specification, env, getClass.getClassLoader).runMonoid
     val sorted = SpecificationStructure.topologicalSort(env)(linked).get.map(_.structure(env))
 
-    sorted.dropRight(1).map(_.specClassName) must_== specification.structure(env).linkReferencesList.map(_.specClassName).distinct
+    sorted.dropRight(1).map(_.specClassName) must ===(specification.structure(env).linkReferencesList.map(_.specClassName).distinct)
 
   }.setArbitrary(ArbitraryLinks).set(maxSize = 5)
 

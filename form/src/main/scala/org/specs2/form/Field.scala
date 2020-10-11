@@ -11,7 +11,7 @@ import StandardResults._
  * A Field is a property which is used only to display input values or output values.
  *
  * The apply method can be used to retrieve the Field value:
- *   `Field(label, 1).apply() must_== 1`
+ *   `Field(label, 1).apply() must ===(1`)
  *
  * The value is stored in a Property object so it will not be evaluated until explicitly queried
  *

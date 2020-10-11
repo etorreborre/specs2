@@ -19,7 +19,7 @@ class DataTableSpec extends Specification with org.specs2.specification.Tables {
 "a" | "b" | "c" |>
 2   !  2  !  4  |                   // an example row
 1   !  1  !  2  |                   // another example row
-  { (a, b, c) => a + b must_== c }  // the expectation to check on each row
+  { (a, b, c) => a + b must ===(c }  // the expectation to check on each row)
 }
 """
 }
@@ -33,7 +33,7 @@ class DataTableSpec extends Specification with Tables { def is = s2"""
      "a"   | "b" | "c" |>
       2    !  2  !  4  |
       1    !  1  !  2  |
-      { (a, b, c) => a + b must_== c }
+      { (a, b, c) => a + b must ===(c })
    }
 """
   }
@@ -82,7 +82,7 @@ implicit val ec = scala.concurrent.ExecutionContext.Implicits.global
 
   "a"   | "b" | "c" |>
    2    !  2  !  4  |
-   1    !  1  !  2  |* { (a, b, c) => a + b must_== c }
+   1    !  1  !  2  |* { (a, b, c) => a + b must ===(c })
 }}
 
 This returns a function `ExecutorService => Result` which can be used directly as the body of an example. You can also pass it your own thread pool by creating, for example, `java.util.concurrent.Executors.newFixedThreadPool(4)`.
@@ -93,7 +93,7 @@ More generally, you can use the "Applicative" operator `|@` to pass anything hav
   def result: scala.concurrent.Future[DecoratedResult[DataTable]] =
     "a" | "b" | "c" |>
      2  !  2  ! 4   |
-     1  !  1  ! 2   |@ { (a, b, c) => Future(a + b must_== c) }
+     1  !  1  ! 2   |@ { (a, b, c) => Future(a + b must ===(c)) }
 
   // then you need to get an implicit execution environment and
   // await on the Future result

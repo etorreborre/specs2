@@ -43,8 +43,8 @@ trait IncludeExcludeStackTraceFilterExamples extends IncludeExcludeStackTraceFil
   def include1 = filter(stacktrace("t1", "a", "com.t1.other"))      (includeTrace("t1", "t2")) must containMatch("t1")
   def include2 = filter(stacktrace("t1", "t3", "a", "com.t1.other"))(includeTrace("t1", "t2")) must not(containMatch("t3"))
 
-  def includeExclude1 = IncludeExcludeStackTraceFilter.fromString("i1,i2/e1,e2") must_==
-    IncludeExcludeStackTraceFilter(Seq("i1", "i2"), Seq("e1", "e2"))
+  def includeExclude1 = IncludeExcludeStackTraceFilter.fromString("i1,i2/e1,e2") must ===(
+    IncludeExcludeStackTraceFilter(Seq("i1", "i2"), Seq("e1", "e2")))
 
   val defaultFilter = DefaultStackTraceFilter
 
@@ -54,7 +54,7 @@ trait IncludeExcludeStackTraceFilterExamples extends IncludeExcludeStackTraceFil
 
   def filter1 =
     val cause = new Exception("bang")
-    DefaultStackTraceFilter.apply(new Exception("boom", cause)).getCause must_== cause
+    DefaultStackTraceFilter.apply(new Exception("boom", cause)).getCause must ===(cause)
 
   def filter2 = DefaultStackTraceFilter.apply(new IllegalArgumentException("ohnoes")).getClass.getName ===
     "java.lang.IllegalArgumentException"

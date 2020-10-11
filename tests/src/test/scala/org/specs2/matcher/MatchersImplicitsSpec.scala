@@ -11,7 +11,7 @@ class MatchersImplicitsSpec extends Specification with ResultMatchers:
   }
 
   "A matcher can be built from a function returning a MatchResult" >> {
-    val beZero: Matcher[Int] = (i: Int) => { i must_== 0 }
+    val beZero: Matcher[Int] = (i: Int) => { i must ===(0) }
     1 must not(beZero)
   }
 
@@ -42,4 +42,3 @@ class MatchersImplicitsSpec extends Specification with ResultMatchers:
   }
 
   val exception = new Exception
-

@@ -19,11 +19,11 @@ class MatchResultSpec extends Specification with ScalaCheck { def is = s2"""
 """
 
   def fold = prop { (results: List[MatchResult[Int]]) =>
-    MatchResult.sequence(results).toResult.isSuccess must_== results.map(_.toResult).foldLeft(success: Result)(_ and _).isSuccess
+    MatchResult.sequence(results).toResult.isSuccess must ===(results.map(_.toResult).foldLeft(success: Result)(_ and _).isSuccess)
   }
 
   def expectables = prop { (results: List[MatchResult[Int]]) =>
-    MatchResult.sequence(results).expectable.value must_== results.map(_.expectable.value)
+    MatchResult.sequence(results).expectable.value must ===(results.map(_.expectable.value))
   }
 
   def mute = prop { (result: MatchResult[Int]) =>
@@ -31,7 +31,7 @@ class MatchResultSpec extends Specification with ScalaCheck { def is = s2"""
   }
 
   def muteFailure = prop { (result: MatchFailure[Int]) =>
-    result.mute.details must_== NoDetails
+    result.mute.details must ===(NoDetails)
   }
 
   implicit def MatchResultArbitrary[T : Arbitrary]: Arbitrary[MatchResult[T]] = Arbitrary {

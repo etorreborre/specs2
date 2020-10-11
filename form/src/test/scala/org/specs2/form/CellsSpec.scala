@@ -8,11 +8,11 @@ Cells are responsible for the formatting of Fields, Props and Form added to a Fo
 
   Field cells can format fields as text
     to display the label and value of the Field
-    ${ fieldCell.text must_== "name: 3" }
+    ${ fieldCell.text must ===("name: 3") }
 
   Prop cells can format props as text
     to display the label and expected value of the Prop
-    ${ propCell.text must_== "name: 3" }
+    ${ propCell.text must ===("name: 3") }
                                                                                                                         """
 
   val fieldCell = FieldCell(field("name", 3))

@@ -7,12 +7,12 @@ import org.specs2.text.AnsiColors._
 class BeEqualToMatcherSpec extends Spec with ResultMatchers with ShouldMatchers { def is = s2"""
 
   be_== checks the equality of 2 objects
-  ${ "a" must_== "a" }
+  ${ "a" must ===("a") }
   ${ "a" must not(be_==(null)) }
   ${ (null: String) must not(be_==("a")) }
-  ${ "a" must_!= "b" }
-  ${ "a" should_== "a" }
-  ${ "a" should_!= "b" }
+  ${ "a" must !==("b") }
+  ${ "a" should ===("a") }
+  ${ "a" should !==("b") }
   ${ "a" must be_==("a") }
   ${ "a" must not(be_==("b")) }
   ${ "a" must be_!=("b") }
@@ -25,8 +25,8 @@ class BeEqualToMatcherSpec extends Spec with ResultMatchers with ShouldMatchers 
   ${ "a" ==== "a" }
   ${ "a" must not(be_===("b")) }
   ${ "a" must be_!==("b") }
-  ${ "a" must_=== "a" }
-  ${ "a" must_!== "b" }
+  ${ "a" must ===("a") }
+  ${ "a" must not(be_===("b")) }
   // doesn't compile
   // { "a" ==== 1 }
   ${ "a" must not(be_===("b")) }
@@ -46,7 +46,7 @@ class BeEqualToMatcherSpec extends Spec with ResultMatchers with ShouldMatchers 
 
   Set equality
   ${ Set(1, 2) must be_==(Set(2, 1)) }
-  ${ (Set(1) must_== Set.empty[Int]) returns "Set(1) != Set()"}
+  ${ (Set(1) must ===(Set.empty[Int])) returns "Set(1) != Set()"}
   ${ (Set(1, 2) must be_==(Set(2, 3))) returns
       """Set(1, 2) != Set(2, 3)""" }
   ${ (Set(1, 2) must be_===(Set(2, 3))) returns
@@ -72,12 +72,12 @@ class BeEqualToMatcherSpec extends Spec with ResultMatchers with ShouldMatchers 
           |+ 3""".stripMargin.trim }
 
   Expected values are kept in the failure details
-  ${ (1 must_== 2).toResult must beLike { case Failure(_,_,_,FailureDetails(a, e)) => e must_== "2" } }
+  ${ (1 must ===(2)).toResult must beLike { case Failure(_,_,_,FailureDetails(a, e)) => e must ===("2") } }
 
   the actual value must be evaluated before the expected one
   ${ var result = "";
-     {{ result = result + "a" }; 1} must_== {{ result = result + "b" }; 1}
-     result must_== "ab"
+     {{ result = result + "a" }; 1} must ===({{ result = result + "b" }; 1})
+     result must ===("ab")
   }
 
 Robustness
@@ -97,13 +97,13 @@ Details
     with Map(1 -> "2") and Map(1 -> 2)         $d4
 """
 
-  def r1 = ((null: String) must_== "1") must not(throwAn[Exception])
+  def r1 = ((null: String) must ===("1")) must not(throwAn[Exception])
   def r11 = (null: String) must be_===("1") must not(throwAn[Exception])
 
   def d1 = List(1, 2) must be_===( List("1", "2") ) must beFailing
 
   def d2 =
-    ("hello" must_== Hello()) must beFailing(
+    ("hello" must ===(Hello())) must beFailing(
         "\\Qhello: java.lang.String != hello: org.specs2.matcher.Hello\\E")
 
   def d3 = { List("1, 2") must be_===( List("1", "2") ) must beFailing }

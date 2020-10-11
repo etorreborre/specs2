@@ -65,7 +65,7 @@ class StringEditDistanceSpec extends Spec with StringEditDistance with DataTable
     "a"  !! ""      ! "[a]" -> "[]"   |
     ""   !! "ab"    ! "[]" -> "[ab]"  |
     "ab" !! ""      ! "[ab]" -> "[]"  | { (a: String, b: String, result: (String, String)) =>
-      showDistance(a, b) must_== result
+      showDistance(a, b) must ===(result)
     }
 
   def show10 =
@@ -74,7 +74,7 @@ class StringEditDistanceSpec extends Spec with StringEditDistance with DataTable
     "a"  !! "b"    ! "[a]" -> "[b]"  |
     "a"  !! "bc"   ! "[a]" -> "[bc]" |
     "a"  !! "ab"   ! "a[]" -> "a[b]" | { (a: String, b: String, result: (String, String)) =>
-      showDistance(a, b) must_== result
+      showDistance(a, b) must ===(result)
     }
 
   def show11 =

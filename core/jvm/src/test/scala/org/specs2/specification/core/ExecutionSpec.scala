@@ -27,7 +27,7 @@ class ExecutionSpec(val env: Env) extends Specification with OwnEnv { def is = s
 
     Execution.specificationStats(getClass.getName).result(env1) must beLike {
       case DecoratedResult(s: Stats, r) =>
-        (s must_== Stats(specs = 3, failures = 1, examples = 1)) and
+        (s must ===(Stats(specs = 3, failures = 1, examples = 1))) and
           (r.isSuccess must beFalse)
     }
 

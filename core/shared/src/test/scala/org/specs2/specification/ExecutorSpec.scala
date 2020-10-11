@@ -57,7 +57,7 @@ class ExecutorSpec(val env: Env) extends Specification with ThrownExpectations w
       step(step1),
       example("fast", fast(tf)))
     execute(fragments, ownEnv) must not(contain(beSkipped[Result]))
-    messages.toList must_== Seq("medium", "slow", "step", "fast")
+    messages.toList must ===(Seq("medium", "slow", "step", "fast"))
 
   def e2 =
     val results = Results(); import results._
@@ -68,7 +68,7 @@ class ExecutorSpec(val env: Env) extends Specification with ThrownExpectations w
       step(step1).stopOnFail,
       example("fast", fast(tf)))
     execute(fragments, ownEnv) must contain(beSkipped[Result])
-    messages.toList must_== Seq("medium", "slow", "step")
+    messages.toList must ===(Seq("medium", "slow", "step"))
 
   def e3 =
     val results = Results(); import results._
@@ -79,7 +79,7 @@ class ExecutorSpec(val env: Env) extends Specification with ThrownExpectations w
       step(step1).stopOnError,
       example("fast", fast(tf)))
     execute(fragments, ownEnv) must contain(beSkipped[Result])
-    messages.toList must_== Seq("medium", "slow", "step")
+    messages.toList must ===(Seq("medium", "slow", "step"))
 
   def e4 =
     val results = Results(); import results._
@@ -90,7 +90,7 @@ class ExecutorSpec(val env: Env) extends Specification with ThrownExpectations w
       step(step1),
       example("fast", fast(tf)))
     execute(fragments, ownEnv.setArguments(Arguments("stopOnSkip"))) must contain(beSkipped[Result])
-    messages.toList must_== Seq("medium", "slow", "step")
+    messages.toList must ===(Seq("medium", "slow", "step"))
 
   def e5 =
     val results = Results(); import results._
@@ -100,7 +100,7 @@ class ExecutorSpec(val env: Env) extends Specification with ThrownExpectations w
       example("medium", mediumFail(tf)),
       example("fast", fast(tf)))
     execute(fragments, ownEnv.setArguments(Arguments("stopOnFail", "sequential"))) must contain(beFailing[Result])
-    messages.toList must_== Seq("slow", "medium")
+    messages.toList must ===(Seq("slow", "medium"))
 
   def e6 =
     val results = Results(); import results._
@@ -120,7 +120,7 @@ class ExecutorSpec(val env: Env) extends Specification with ThrownExpectations w
       step(step1),
       example("fast", fast(tf)))
     execute(fragments, ownEnv.setArguments(Arguments("sequential"))) must not(contain(beSkipped[Result]))
-    messages.toList must_== Seq("slow", "medium", "step", "fast")
+    messages.toList must ===(Seq("slow", "medium", "step", "fast"))
 
   def e8 =
     val results = Results(); import results._
@@ -131,7 +131,7 @@ class ExecutorSpec(val env: Env) extends Specification with ThrownExpectations w
       step(step1),
       example("fast", fast(tf)))
     execute(fragments, ownEnv.setArguments(Arguments("sequential")))
-    messages.toList must_== Seq("slow", "medium", "step", "fast")
+    messages.toList must ===(Seq("slow", "medium", "step", "fast"))
 
   def e9 =
     val results = Results()
@@ -140,7 +140,7 @@ class ExecutorSpec(val env: Env) extends Specification with ThrownExpectations w
       step(results.fatalStep),
       example("fast2", results.ok("ok2")))
     execute(fragments, ownEnv)
-    results.messages.toList must_== Seq("ok1", "fatal")
+    results.messages.toList must ===(Seq("ok1", "fatal"))
 
   def e10 =
     val fragments = Fragments(

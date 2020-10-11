@@ -44,7 +44,7 @@ class AllExpectationsSpecificationWithNotImplementedError extends mutable.Specif
   def notImplementedYet: Int = ???
   "In this example the exception is caught" >> {
     1 === 2
-    notImplementedYet must_== 1
+    notImplementedYet must ===(1)
     3 === 4
   }
 

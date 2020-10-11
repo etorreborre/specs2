@@ -79,7 +79,7 @@ Execution
   def display2 = Prop("name", actual = Property("eric")).toString          === "name: eric"
   def display3 = Prop("name", Property("eric"), Property("eric")).toString === "name: eric"
 
-  def update1 = Prop("name", "eric")("paolo").expected.toOption must_== Some("paolo")
+  def update1 = Prop("name", "eric")("paolo").expected.toOption must ===(Some("paolo"))
 
   def execute1  = noValues.execute                             === Pending("No expected value")
   def execute2  = actualOnly.execute                           === Pending("No expected value")

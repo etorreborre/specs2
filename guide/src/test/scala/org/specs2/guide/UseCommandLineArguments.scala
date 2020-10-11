@@ -21,16 +21,16 @@ class SpecificationWithArgs(args: CommandLine) extends Specification { def is = 
 """
 
   def e1 =
-    if (args.isSet("isOk")) 1 must_== 1
-    else                    1 must_== 2
+    if (args.isSet("isOk")) 1 must ===(1)
+    else                    1 must ===(2)
 }
 }}
 
 With a mutable specification the code is similar:${snippet{
 class SpecificationWithArgs(args: CommandLine) extends mutable.Specification {
  "This example is controlled from the command line" in {
-   if (args.isSet("isOk")) 1 must_== 1
-   else                    1 must_== 2
+   if (args.isSet("isOk")) 1 must ===(1)
+   else                    1 must ===(2)
  }
 }
 }}
@@ -106,7 +106,7 @@ class SpecificationWithArgs extends Specification with ContextWithCommandLineArg
 The final situation where you would need to use command-line arguments is with a `ForEach` trait. If you want to influence the injection of data with the command line, the `ForEachWithCommandLineArguments` trait needs to be mixed in:${snippet{
 class SpecificationWithArgs extends Specification with ForEachWithCommandLineArguments[Int] { def is = s2"""
  This is a specification
-  with one example using injected data ${ (i: Int) => i must_== i }
+  with one example using injected data ${ (i: Int) => i must ===(i })
 """
   /** you need to define this method */
   def foreach[R : AsResult](commandLine: CommandLine)(f: Int => R) =
@@ -118,7 +118,7 @@ And for a mutable specification:${snippet{
 class SpecificationWithArgs extends mutable.Specification with specification.mutable.ForEachWithCommandLine[Int] {
   "This is a specification" >> {
     "with one example using injected data" >> { (i: Int) =>
-      i must_== i
+      i must ===(i)
     }
    }
 

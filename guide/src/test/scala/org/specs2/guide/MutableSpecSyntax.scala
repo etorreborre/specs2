@@ -6,10 +6,10 @@ The $Structure page presents one syntax for declaring examples in a mutable spec
 class MySpecification extends org.specs2.mutable.Specification {
   "this is my specification" >> {
     "where example 1 must be true" >> {
-      1 must_== 1
+      1 must ===(1)
     }
     "where example 2 must be true" >> {
-      2 must_== 2
+      2 must ===(2)
     }
   }
 }
@@ -19,10 +19,10 @@ You can also use the `should/in` syntax:${snippet {
 class MySpecification extends org.specs2.mutable.Specification {
   "this is my specification" should {
     "have one example" in {
-      1 must_== 1
+      1 must ===(1)
     }
     "and another one" in {
-      2 must_== 2
+      2 must ===(2)
     }
   }
 }

@@ -17,20 +17,20 @@ class SmartDiffsSpec extends Spec { def is = s2"""
                                                                                                                      """
 
   def set =
-    smart.showSeqDiffs(Seq(1, 2), Seq(1, 3), ordered = false) must_== ((Seq("2"), Seq("3")))
+    smart.showSeqDiffs(Seq(1, 2), Seq(1, 3), ordered = false) must ===(((Seq("2")), Seq("3")))
 
   def list =
-    smart.showSeqDiffs(Seq(1, 2), Seq(1, 3), ordered = true) must_== ((Seq("2"), Seq("3")))
+    smart.showSeqDiffs(Seq(1, 2), Seq(1, 3), ordered = true) must ===(((Seq("2")), Seq("3")))
 
   def map =
     val diff = "  x key = 2\n    actual value\n    3\n    expected value\n    4"
-    smart.showMapDiffs(Map(1 -> 2, 2 -> 3, 3 -> 4), Map(1 -> 2, 2 -> 4, 5 -> 6)) must_== ((Seq("3 -> 4"), Seq("5 -> 6"), Seq(diff)))
+    smart.showMapDiffs(Map(1 -> 2, 2 -> 3, 3 -> 4), Map(1 -> 2, 2 -> 4, 5 -> 6)) must ===(((Seq("3 -> 4")), Seq("5 -> 6"), Seq(diff)))
 
   def null1 =
     List(true, true) must equalTo(List(true, null))
 
   def nullValues =
-    smart.showSeqDiffs(List(true), List(null), ordered = true) must_== ((List("true"), List("null")))
+    smart.showSeqDiffs(List(true), List(null), ordered = true) must ===(((List("true")), List("null")))
 
   val a_to_z = "abcdefghijklmnopqrstuvwxyz"
   val a_to_j = "abcdefghij"

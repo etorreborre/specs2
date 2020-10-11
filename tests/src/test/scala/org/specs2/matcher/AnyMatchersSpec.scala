@@ -22,17 +22,17 @@ class AnyMatchersSpec extends Specification with ResultMatchers with AnyMatchers
 
   beTrue matches true values
   ${ true must beTrue }
-  ${ (false must beTrue).message must_==  "the value is false" }
+  ${ (false must beTrue).message must ===("the value is false") }
 
   beFalse matches false values
   ${ false must beFalse }
-  ${ (true must beFalse).message must_== "the value is true" }
+  ${ (true must beFalse).message must ===("the value is true") }
 
   beLike matches objects against a pattern
   ${ List(1, 2) must beLike { case List(a, b) => ok } }
-  ${ List(1, 2) must beLike { case List(a, b) => (a + b) must_== 3 } }
+  ${ List(1, 2) must beLike { case List(a, b) => (a + b) must ===(3) } }
   if the match succeeds but the condition after match fails, a precise failure message can be returned
-  ${ (List(1, 2) must beLike { case List(a, b) => (a + b) must_== 2 }) returns "3 != 2" }
+  ${ (List(1, 2) must beLike { case List(a, b) => (a + b) must ===(2) }) returns "3 != 2" }
 
  forall allows to transform a single matcher to a matcher checking that all elements of a Seq are matching
   ${ Seq(2, 3, 4) must contain(be_>=(2)).forall }
@@ -89,7 +89,7 @@ class AnyMatchersSpec extends Specification with ResultMatchers with AnyMatchers
   beAnInstanceOf checks if an object is an instance of a given type
   ${ type1 must beAnInstanceOf[Type1] }
   ${ type1 must not(beAnInstanceOf[Type2]) }
-  ${ (type1 must beAnInstanceOf[Type2]).message must_== s"'type1: ${type1.getClass.getName}' is not an instance of 'org.specs2.matcher.Type2'" }
+  ${ (type1 must beAnInstanceOf[Type2]).message must ===(s"'type1: ${type1.getClass.getName}' is not an instance of 'org.specs2.matcher.Type2'") }
 
 Implicits
 =========
@@ -104,7 +104,7 @@ Implicits
     case class Spec1() extends Specification with NoTypedEqual:
       implicit class otherTripleEqualUse[T](t: =>T):
         def ===[S](other: S) = other
-      val result = (1 === 2) must_== 2
+      val result = (1 === 2) must ===(2)
       def is = result
     Spec1().result
 

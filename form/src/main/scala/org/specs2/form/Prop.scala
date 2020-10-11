@@ -31,7 +31,7 @@ import text.NotNullStrings._
  * However the Prop companion object provides a method to create a Property with a constraint
  * using a beEqualTo matcher:
  *
- * `Prop("Name", "Eric")("Eric") must_== Success("'Eric' is equal to 'Eric'")`
+ * `Prop("Name", "Eric")("Eric") must ===(Success("'Eric' is equal to 'Eric'"))`
  *
  */
 case class Prop[T, S](
@@ -114,7 +114,7 @@ object Prop:
 
   /** create a Prop with a label, an expected value, and a constraint */
   def apply[T, S](label: String, act: =>T, c: S => Matcher[T]): Prop[T, S] =
-    new Prop[T, S](label, actual = Property(act), constraint = (t: T, s: S) => c(s).apply(Expectable(t)).toResult)
+    new Prop[T, S](label, actual = Property(act), constraint = (t: T, s: S) => c(s).apply(createExpectable(t)).toResult)
 
   /** create a Prop with a label, an actual value, and a matcher on the actual value */
   def apply[T](label: String, act: =>T, c: Matcher[T]): Prop[T, T] =
@@ -122,7 +122,7 @@ object Prop:
     Prop[T, T](label, a, a, c)
   /** create a Prop with a label, an actual value, an expected value, and a constraint on the actual value*/
   def apply[T, S](label: String, act: =>T, exp: =>S, c: Matcher[T]): Prop[T, S] =
-    new Prop[T, S](label, actual = Property(act), expected = Property(exp), constraint = (t: T, s: S) => c(Expectable(t)).toResult)
+    new Prop[T, S](label, actual = Property(act), expected = Property(exp), constraint = (t: T, s: S) => c(createExpectable(t)).toResult)
   /** create a Prop with a label */
   def apply[T](label: String): Prop[T, T] =
     new Prop[T, T](label = label)
@@ -132,7 +132,7 @@ object Prop:
     new Prop[T, T](actual = Property(act))
 
   /** default constraint function */
-  private[Prop] def checkProp[T, S]: (T, T) => Result = (t: T, s: T) => new BeTypedEqualTo(s).apply(Expectable(t)).toResult
+  private[Prop] def checkProp[T, S]: (T, T) => Result = (t: T, s: T) => new BeTypedEqualTo(s).apply(createExpectable(t)).toResult
 
 trait PropSyntax:
 

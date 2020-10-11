@@ -74,7 +74,7 @@ Support Functions
   def byTag4 =
     val fragments = Fragments(ex("e1"), text(" "), taggedAs("x"), ex("e2"))
     checkSelection(fragments, "x", expected = Seq("e1"), unexpected = Seq("e2"))
-    
+
   def byTag5 =
     val fragments = Fragments(ex("e1"),
                               ff.section("x"),
@@ -178,20 +178,20 @@ Support Functions
   def support1 =
     val original = Fragments(ex("e1"), ex("e2"), text(" "), taggedAs("t1"))
     val swapped = original |> DefaultSelector(Arguments()).swapBeforeMarkerAndEmptyText
-    swapped.fragmentsList(ee).map(_.description.show) must_== List(ex("e1"), ex("e2"),
-      ff.tag("t1"), text(" ")).map(_.description.show)
+    (swapped.fragmentsList(ee).map(_.description.show) must ===(List(ex("e1"), ex("e2"),
+      ff.tag("t1"), text(" ")).map(_.description.show)))
 
   def support2 =
     val original = Fragments(ex("e1"), ex("e2"), taggedAs("t1"))
     val swapped = original |> DefaultSelector(Arguments()).transformBeforeMarkersToAfterMarkers
-    swapped.fragmentsList(ee).map(_.description.show) must_==
-      List(ex("e1"), ff.tag("t1"), ex("e2")).map(_.description.show)
+    swapped.fragmentsList(ee).map(_.description.show) must ===(
+      List(ex("e1"), ff.tag("t1"), ex("e2")).map(_.description.show))
 
   def support3 =
     val original = Fragments(ex("e1"), tag("t1"), ex("e2"))
     val swapped = original |> DefaultSelector(Arguments()).transformTagsToSections
-    swapped.fragmentsList(ee).map(_.description.show) must_==
-      List(ex("e1"), ff.section("t1"), ex("e2"), ff.section("t1")).map(_.description.show)
+    swapped.fragmentsList(ee).map(_.description.show) must ===(
+      List(ex("e1"), ff.section("t1"), ex("e2"), ff.section("t1")).map(_.description.show))
 
   // test methods
   def ex(desc: String) = example(desc, success)

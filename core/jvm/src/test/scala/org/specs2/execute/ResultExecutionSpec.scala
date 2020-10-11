@@ -8,41 +8,41 @@ class ResultExecutionSpec extends Spec { def is = s2"""
 Executing a Result
 
  a failure exception must return a Failure
- ${ execute { throw new FailureException(Failure("failed")); success } must_== Failure("failed") }
+ ${ execute { throw new FailureException(Failure("failed")); success } must ===(Failure("failed")) }
 
  a decorated result exception must return a DecoratedResult
- ${ execute { throw new DecoratedResultException(DecoratedResult("", Failure("failed"))); success } must_==
-   DecoratedResult("", Failure("failed")) }
+ ${ execute { throw new DecoratedResultException(DecoratedResult("", Failure("failed"))); success } must ===(
+   DecoratedResult("", Failure("failed"))) }
 
  an exception must return an Error
- ${ execute { throw new IllegalArgumentException("exception"); success } must_== Error("exception") }
+ ${ execute { throw new IllegalArgumentException("exception"); success } must ===(Error("exception")) }
 
  an exception must return an Error
- ${ execute { throw new IllegalArgumentException("exception"); success } must_== Error("exception") }
+ ${ execute { throw new IllegalArgumentException("exception"); success } must ===(Error("exception")) }
 
  an AssertionError must return a Failure when thrown from JUnit
- ${ execute { Assert.fail("assertFalse"); success } must_== Failure("assertFalse") }
+ ${ execute { Assert.fail("assertFalse"); success } must ===(Failure("assertFalse")) }
 
  an AssertionError must return a Failure, even with a null message
- ${ execute { junit.framework.Assert.fail(null); success } must_== Failure("null") }
+ ${ execute { junit.framework.Assert.fail(null); success } must ===(Failure("null")) }
 
  an AssertionError must return an Error when not thrown from JUnit
- ${ execute { throw new AssertionError("false"); success } must_== Error(new AssertionError("false")) }
+ ${ execute { throw new AssertionError("false"); success } must ===(Error(new AssertionError("false"))) }
 
  a NotImplementedError must return a Failure
- ${ execute { throw NotImplementedError("???"); success } must_== Failure("???") }
+ ${ execute { throw NotImplementedError("???"); success } must ===(Failure("???")) }
 
  an ExpectationError must return a Failure
- ${ execute { throw ExpectationError("???"); success } must_== Failure("<expectation error>") }
+ ${ execute { throw ExpectationError("???"); success } must ===(Failure("<expectation error>")) }
 
  fatal exceptions must not be caught
  ${ execute { throw new OutOfMemoryError("oome"); success } must throwAn[OutOfMemoryError] }
 
  any other type of Result must return itself
- ${ execute(success) must_== success }
- ${ execute(failure) must_== failure }
- ${ execute(skipped) must_== skipped }
- ${ execute(pending) must_== pending }
+ ${ execute(success) must ===(success) })
+ ${ execute(failure) must ===(failure) })
+ ${ execute(skipped) must ===(skipped) })
+ ${ execute(pending) must ===(pending) })
                                                                                                                         """
 
 

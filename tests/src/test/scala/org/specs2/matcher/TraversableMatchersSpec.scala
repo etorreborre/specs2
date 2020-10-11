@@ -144,7 +144,7 @@ class TraversableMatchersSpec(val env: Env) extends Spec with ResultMatchers wit
 
  We can check the size of an Array
     ${ Array(1, 2) must haveSize(2) }
-    ${ (Array(1, 2) must haveSize(1)).message must_== "'Array(1, 2)' doesn't have size 1 but size 2" }
+    ${ (Array(1, 2) must haveSize(1)).message must ===("'Array(1, 2)' doesn't have size 1 but size 2") }
 
  Sorting
  =======

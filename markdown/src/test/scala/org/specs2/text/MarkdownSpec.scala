@@ -8,9 +8,9 @@ class MarkdownSpec extends Spec:
   implicit val defaultArg: Arguments = Arguments()
 
   "Emphasized text" >>
-  { toHtmlNoPar("_hello_") must_== "<em>hello</em>" }
+  { toHtmlNoPar("_hello_") must ===("<em>hello</em>") }
   "Bold-italics text" >>
-  { toHtmlNoPar("***hello***") must_== "<strong><em>hello</em></strong>" }
+  { toHtmlNoPar("***hello***") must ===("<strong><em>hello</em></strong>") }
   "Multi-line text must preserve newlines" >>
   { toHtmlNoPar("hello\nworld") must contain("hello<br/>world") }
 
@@ -50,4 +50,3 @@ This is a paragraph presenting some code:
  * and another one
 
 and no more code here"""
-

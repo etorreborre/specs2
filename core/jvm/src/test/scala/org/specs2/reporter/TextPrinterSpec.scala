@@ -137,23 +137,23 @@ presentation
            |[info] x examples, x failures, x error""", (_:String).replaceAll("\\d+", "x"))
 
   def d1 =
-    s2"""e1 ${1 must_== 2}""" contains
+    s2"""e1 ${1 must ===(2)}""" contains
          """|[error] x e1
             |[error]  1 != 2"""
 
   def d2 = Arguments.split("failtrace fullstacktrace") ^
-    s2"""e1 ${1 must_== 2}""" contains
+    s2"""e1 ${1 must ===(2)}""" contains
     """|[error]_org.specs2.report"""
 
   def d3 =
-    s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must_== "adcdeadcdeadcdeadcdeadcde"}""" contains
+    s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must ===("adcdeadcdeadcdeadcdeadcde")}""" contains
         """|[error] Actual:   a[b]cdea[b]cdea[b]cdea[b]cdea[b]cde
            |[error] Expected: a[d]cdea[d]cdea[d]cdea[d]cdea[d]cde"""
 
   case class A(s: String) { override def equals(a: Any) = false }
 
   def d4 =
-    s2"""e1 ${A("a"*100) must_== A("a"*100)}""" doesntContain
+    s2"""e1 ${A("a"*100) must ===(A("a"*100))}""" doesntContain
       """|[error] Actual"""
 
   def e1 = Arguments("fullstacktrace") ^
@@ -247,7 +247,7 @@ presentation
     val printed = logger.messages.filter(_.contains("+")).map(_.replace("+", "").replace("ex", "").trim.toInt)
 
     "printed is sorted" ==> {
-      printed must_== printed.sorted
+      printed must ===(printed.sorted)
     } and
     "executed is unsorted" ==> {
       executed must not(be_==(executed.sorted))
@@ -276,7 +276,7 @@ presentation
     val printed = logger.messages.filter(_.contains("+")).map(_.replace("+", "").replace("ex", "").trim.toInt)
 
     "printed is sorted" ==> {
-      printed must_== printed.sorted
+      printed must ===(printed.sorted)
     } and
     "executed is sorted too" ==> {
       executed must be_==(executed.sorted)

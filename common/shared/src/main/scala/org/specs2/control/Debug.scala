@@ -7,7 +7,7 @@ import scala.implicits.Not
 /**
  * This trait provides simple a way to print out any object to the console:
  *
- *  "this string".pp must_== "this string"
+ *  "this string".pp must ===("this string")
  *
  *  will print 'this string' and pass it to the rest of the expectation
  *

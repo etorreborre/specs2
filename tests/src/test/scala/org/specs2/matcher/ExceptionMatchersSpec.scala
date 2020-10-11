@@ -73,10 +73,10 @@ class ExceptionMatchersSpec extends Specification with ResultMatchers { def is =
 
   type IAE = IllegalArgumentException
 
-  def byType1 = ("hello" must throwAn[Error]).message must_== "Expected: java.lang.Error. Got nothing"
+  def byType1 = ("hello" must throwAn[Error]).message must ===("Expected: java.lang.Error. Got nothing")
 
-  def byType2 = (theBlock(error("boom")) must throwA[RuntimeException]).message must_==
-    "Got the exception java.lang.RuntimeException: boom"
+  def byType2 = (theBlock(error("boom")) must throwA[RuntimeException]).message must ===(
+    "Got the exception java.lang.RuntimeException: boom")
 
   def byType3 = (theBlock(error("boom")) must throwAn[IAE]).message must startWith(
     "Expected: java.lang.IllegalArgumentException. Got: java.lang.RuntimeException: boom instead")
@@ -124,8 +124,8 @@ class ExceptionMatchersSpec extends Specification with ResultMatchers { def is =
     // todo: figure how to quote only the value
     //      s"Got the exception java.lang.RuntimeException: bang\nboom\nbong and 'bang\nboom\nbong' matches '${"bang".regexPart}'")
 
-  def specific1 = ("hello" must throwA(new RuntimeException("boom"))).message must_==
-    "Expected: java.lang.RuntimeException: boom. Got nothing"
+  def specific1 = ("hello" must throwA(new RuntimeException("boom"))).message must ===(
+    "Expected: java.lang.RuntimeException: boom. Got nothing")
 
   def specific2 = (theBlock(error("boom")) must throwAn(new RuntimeException("boom"))).message must startWith(
     "Got the exception java.lang.RuntimeException: boom")
@@ -146,7 +146,7 @@ class ExceptionMatchersSpec extends Specification with ResultMatchers { def is =
   def specific6 = (theBlock(throw UserError("me", "boom")) must throwAn(UserError("me2", "boom")).
     like { case UserError(name, _) => name must startWith("m") }).message must beMatching("Got the exception .*")
 
-  def combinators1 = (1 must not(throwAn[Exception])).toResult.message must_== "Expected: java.lang.Exception. Got nothing"
+  def combinators1 = (1 must not(throwAn[Exception])).toResult.message must ===("Expected: java.lang.Exception. Got nothing")
 
   def stacktrace1= (theBlock(error("boom")) must throwAn[IllegalArgumentException]).message must contain(
     "The  RuntimeException stacktrace is")

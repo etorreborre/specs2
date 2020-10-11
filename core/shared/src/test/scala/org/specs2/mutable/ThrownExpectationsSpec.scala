@@ -3,6 +3,7 @@ package mutable
 
 import matcher._
 import control.Debug
+import AnyMatchers._
 import execute._
 import ThrownExpectationsSpecData._
 
@@ -35,21 +36,21 @@ class ThrownExpectationsSpec extends Spec with ResultMatchers:
   def execute[T](t: =>T) = ResultExecution.execute(t)(_ => Success())
 object ThrownExpectationsSpecData:
   def body1 = new MustThrownExpectations {
-    1 must_== 2; success
+    1 must beEqualTo(2); success
   }
   def body2 = new ShouldThrownExpectations {
-    1 should_== 2; success
+    1 should beEqualTo(2); success
   }
   def body3 = new MustThrownExpectations {
-    1 must_== 2; success
+    1 must beEqualTo(2); success
   }
   def body4 = new ShouldThrownExpectations {
-    1 should_== 2; success
+    1 should beEqualTo(2); success
   }
   def body5 = new MustThrownExpectations with DataTables with Debug {
     "a" | "b" | "c" |>
     1   ! 1   ! 2   |
-    1   ! 1   ! 3   | { (a, b, c) => (a+b) must_== c }
+    1   ! 1   ! 3   | { (a, b, c) => (a+b) must beEqualTo(c) }
   }
 
   def body6 = new Body6 {}
@@ -59,4 +60,3 @@ object ThrownExpectationsSpecData:
     checkResultFailure { i += 1; success }
 
     def getCallsNb: Int = i
-

@@ -4,6 +4,7 @@ package process
 
 import scala.collection.mutable.ListBuffer
 import matcher._
+import ExpectationsDescription._
 import execute.{Result}
 import specification.dsl.ExampleDsl
 import specification.core.{Env, Fragments, OwnEnv}
@@ -15,7 +16,7 @@ class RandomExecutionSpec(val env: Env) extends Specification with ThrownExpecta
    the randomisation only happens in between steps $random2
 
 """
-  import fp.syntax._
+  import fp.syntax.{given _}
 
   def random1 =
     val results = Results()
@@ -27,7 +28,7 @@ class RandomExecutionSpec(val env: Env) extends Specification with ThrownExpecta
       def ex(i: =>Int) = { print("ex"+i); ok }
     }
 
-    DefaultExecutor.runSpecificationAction(spec, ownEnv).runAction(ownEnv.executionEnv).as {
+    DefaultExecutor.runSpecificationAction(spec, ownEnv).runAction(ownEnv.executionEnv).map { _ =>
         val allExamples = allOf((1 to n).map("ex"+_):_*)
 
         messages must haveSize(10)
@@ -48,7 +49,7 @@ class RandomExecutionSpec(val env: Env) extends Specification with ThrownExpecta
     val spec = new Specification with RandomSequentialExecution { def is =
       s2"""${fs_1_to_5.append(step("stop")).append(fs_6_to_10)}"""
     }
-    DefaultExecutor.runSpecificationAction(spec, ownEnv).runAction(ownEnv.executionEnv).as {
+    DefaultExecutor.runSpecificationAction(spec, ownEnv).runAction(ownEnv.executionEnv).map { _ =>
       val allExamples = allOf[String]((1 to n).map("ex"+_):_*)
 
       messages must haveSize(10)

@@ -48,7 +48,7 @@ ${step(ee.shutdown())}
         s2"""this is
             $ok""".fragmentsList(ee)
       fragments must haveSize(2)
-      fragments(1).description.show must_== "`ok`"
+      fragments(1).description.show must ===("`ok`")
 
     def e4 = s2"""this is ${new Function0Result(() => Success())}""".fragmentsList(ee) must haveSize(1)
 
@@ -65,7 +65,7 @@ ${step(ee.shutdown())}
     def e8 =
       val fragments = s2""" ${`a method call`}""".fragmentsList(ee)
       fragments must haveSize(1)
-      fragments.head.description.show must_== "`a method call`"
+      fragments.head.description.show must ===("`a method call`")
 
     def e9 = s2"""this is ${"some text"} $ok""".fragmentsList(ee) must haveSize(2)
 
@@ -93,26 +93,26 @@ Intro
     def e1 =
       getDescription(
         s2"""this is
-           an example $ok""") must_== Description.text("an example")
+           an example $ok""") must ===(Description.text("an example"))
 
     def e2 =
       getDescription(
         s2"""
   this is
     a multi-line
-    example $ok""") must_== Description.text("a multi-line\n    example")
+    example $ok""") must ===(Description.text("a multi-line\n    example"))
 
     def e3 =
       getDescription(
 s2"""
   this is
     |a multi-line
-    |  margin example $ok""") must_== Description.text("a multi-line\n      margin example")
+    |  margin example $ok""") must ===(Description.text("a multi-line\n      margin example"))
 
     def e4 =
       getDescription(
         s2"""this is an auto-example
-             $ok""") must_== Description.code("ok")
+             $ok""") must ===(Description.code("ok"))
 
     def getDescription(fs: Fragments): Description =
       fs.examples.runMonoid(ee).head.description

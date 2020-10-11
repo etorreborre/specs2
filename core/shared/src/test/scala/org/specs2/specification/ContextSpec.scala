@@ -86,20 +86,20 @@ case class ContextSpec(env: Env) extends Spec with ResultMatchers with OwnEnv { 
   def before1  = { val d = data(); d.executing(d.ex1Before).prints("before", "e1") }
   def before2  = { val d = data(); d.executing(d.ex1_2Before).prints("before", "e1", "before", "e2") }
   def before3  = { val d = data(); d.executing(d.ex1_beforeFail).prints() }
-  def before4  = { val d = data(); d.executeBodies(d.ex1_beforeFail).map(_.message) must_== List("java.lang.RuntimeException: error") }
+  def before4  = { val d = data(); d.executeBodies(d.ex1_beforeFail).map(_.message) must ===(List("java.lang.RuntimeException: error")) }
   def before5  = { val d = data(); d.executing(d.ex1_beforeSkipped).prints() }
-  def before6  = { val d = data(); d.executeBodies(d.ex1_beforeSkipped).map(_.message) must_== List("skipped") }
+  def before6  = { val d = data(); d.executeBodies(d.ex1_beforeSkipped).map(_.message) must ===(List("skipped")) }
   def before7  = { val d = data(); d.executing(d.ex1_beforeSkippedThrown).prints() }
-  def before8  = { val d = data(); d.executeBodies(d.ex1_beforeSkippedThrown).map(_.message) must_== List("skipped") }
+  def before8  = { val d = data(); d.executeBodies(d.ex1_beforeSkippedThrown).map(_.message) must ===(List("skipped")) }
   def before9  = { val d = data(); d.executing(d.ex1_beforeMatchFailed).prints() }
-  def before10 = { val d = data(); d.executeBodies(d.ex1_beforeMatchFailed).map(_.message) must_== List("1 != 2") }
+  def before10 = { val d = data(); d.executeBodies(d.ex1_beforeMatchFailed).map(_.message) must ===(List("1 != 2")) }
   def before11 = { val d = data(); d.executing(d.ex1_beforeMatchFailedThrown).prints() }
-  def before12 = { val d = data(); d.executeBodies(d.ex1_beforeMatchFailedThrown).map(_.message) must_== List("1 != 2") }
+  def before12 = { val d = data(); d.executeBodies(d.ex1_beforeMatchFailedThrown).map(_.message) must ===(List("1 != 2")) }
   def after1 =  { val d = data(); d.executing(d.ex1After).prints("e1", "after") }
   def after2 =  { val d = data(); d.executing(d.ex1_2After).prints("e1", "after", "e2", "after") }
   def after3 =  { val d = data(); d.executeBodies(d.ex1FailAfter).head must beFailing }
   def after4 =  { val d = data(); d.executing(d.ex1_afterFail).prints("e1") }
-  def after5 =  { val d = data(); d.executeBodies(d.ex1_beforeFail).map(_.message) must_== List("java.lang.RuntimeException: error") }
+  def after5 =  { val d = data(); d.executeBodies(d.ex1_beforeFail).map(_.message) must ===(List("java.lang.RuntimeException: error")) }
   def around1 = { val d = data(); d.executing(d.ex1Around).prints("around", "e1") }
 
   def combined1 =
@@ -113,8 +113,8 @@ case class ContextSpec(env: Env) extends Spec with ResultMatchers with OwnEnv { 
     executing(child.fragments(env)).prints("before", "around", "e1", "after")
 
   def step1 = { val d = data(); d.executing(d.firstThenEx1).prints("first", "e1") }
-  def step2 = { val d = data(); d.executeBodies(d.silentFirstThenEx1).map(_.message) must_== List("", "success") }
-  def step3 = { val d = data(); d.executeBodies(d.failingFirstThenEx1).map(_.message) must_== List("org.specs2.specification.core.FatalExecution: error", "") }
+  def step2 = { val d = data(); d.executeBodies(d.silentFirstThenEx1).map(_.message) must ===(List("", "success")) }
+  def step3 = { val d = data(); d.executeBodies(d.failingFirstThenEx1).map(_.message) must ===(List("org.specs2.specification.core.FatalExecution: error", "")) }
 
   case class data() extends StringOutput with ContextData:
     def executeBodies(ex: Fragment): List[Result] =
@@ -130,7 +130,7 @@ case class ContextSpec(env: Env) extends Spec with ResultMatchers with OwnEnv { 
 
     case class Executed(results: Seq[Result]):
       def prints(ms: String*): Result =
-        (messages must_== ms.toList).toResult
+        (messages must ===(ms.toList)).toResult
 }
 
 trait ContextData extends StandardResults with FragmentsFactory with ContextsForFragments with AcceptanceDsl:
@@ -183,9 +183,9 @@ trait ContextsForFragments extends StringOutput:
   object beforeWithSkippedThrown extends Before with StringOutput with MustThrownMatchers:
     def before = skipped("skipped")
   object beforeWithMatchFailed extends Before with StringOutput with MustThrownMatchers:
-    def before = 1 must_== 2
+    def before = 1 must ===(2)
   object beforeWithMatchFailedThrown extends Before with StringOutput with MustThrownMatchers:
-    def before = 1 must_== 2
+    def before = 1 must ===(2)
   object after1 extends After:
     def after = println("after")
   object after2 extends After:

@@ -68,7 +68,7 @@ Monoid[Plane].zero
 #### Interpolated string
 
 Another way of checking if a piece of code typechecks is to use the `tc` string interpolator: ${snippet{
-  tc" 1 must_== 1"
+  tc" 1 must ===(1")
 }}
 
 The code above uses a macros which will
@@ -103,7 +103,7 @@ Here is how to do it:
 
 Finally you can also use a string interpolator and pass parameters:
 ```
-  tcw" 1 must_== 1"(parsingAtRuntime)
+  tcw" 1 must ===(1"(parsingAtRuntime))
 ```
 
 """ ^ br ^ Fragments.foreach(Seq(tc1, tc2, tc3))(_ ^ br)

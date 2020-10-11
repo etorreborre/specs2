@@ -36,8 +36,8 @@ class TagSpec extends Specification with DataTables { def is = s2"""
           val arguments = Arguments.split("include "+names)
           val values = (t1, t2, t3, names).toString
 
-          (((t1 |+| t2) |+| t3)                             must_== (t1 |+| (t2 |+| t3))) and
-          (((t1 |+| t2) |+| t3).keep(arguments).aka(values) must_== (t1 |+| (t2 |+| t3)).keep(arguments))
+          (((t1 |+| t2) |+| t3)                             must ===((t1 |+| (t2 |+| t3)))) and
+          (((t1 |+| t2) |+| t3).keep(arguments).aka(values) must ===((t1 |+| (t2 |+| t3)).keep(arguments)))
         }.forall
       }.forall
     }.forall
@@ -50,10 +50,10 @@ class TagSpec extends Specification with DataTables { def is = s2"""
     tag1     ! tag1  ! "include 1&&2"   ! false    |
     tag1     ! tag2  ! "include 1&&2"   ! true     |
       { (t1: NamedTag, t2: NamedTag, args: String, result: Boolean) =>
-      (t1 |+| t2).keep(Arguments.split(args)) must_== result
+      (t1 |+| t2).keep(Arguments.split(args)) must ===(result)
     }
 
-  def remove1 = data.Tag("1", "2", "3").removeNames(Seq("2")) must_== data.Tag("1", "3")
+  def remove1 = data.Tag("1", "2", "3").removeNames(Seq("2")) must ===(data.Tag("1", "3"))
 
   val tag1: NamedTag = data.Tag("1")
   val tag2: NamedTag = data.Tag("2")

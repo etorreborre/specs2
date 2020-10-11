@@ -35,7 +35,7 @@ class HtmlBodyPrinterSpec(ee: ExecutionEnv) extends Specification with Forms wit
     ns must \\(<form></form>)
 
   def ansiColors =
-    print(fragmentFactory.text(AnsiColors.color("text", AnsiColors.red))).toString must_== "text"
+    print(fragmentFactory.text(AnsiColors.color("text", AnsiColors.red))).toString must ===("text")
 
   def print(f: Fragment): NodeSeq =
     HtmlBodyPrinter.printFragment(f, success, Arguments(), Level.Root, DirectoryPath.Root, pandoc = true)

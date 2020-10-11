@@ -42,11 +42,11 @@ The Forms object provides several utility functions for creating forms
   val set1 = List(Form.tr("a"), Form.tr("b"))
   val set2 = List(Form.tr("c"), Form.tr("d"))
 
-  def subset1 = FormDiffs.subset(set1 ++ set2, set2) must_== set1 ++ ok(set2)
-  def subset2 = FormDiffs.subset(set1, set2) must_== set1 ++ ko(set2)
-  def subset3 = FormDiffs.subset(set1, set1 ++ set2) must_== ok(set1) ++ ko(set2)
+  def subset1 = FormDiffs.subset(set1 ++ set2, set2) must ===(set1 ++ ok(set2))
+  def subset2 = FormDiffs.subset(set1, set2) must ===(set1 ++ ko(set2))
+  def subset3 = FormDiffs.subset(set1, set1 ++ set2) must ===(ok(set1) ++ ko(set2))
   def subset4 = FormDiffs.subset(set1 ++ set2, set1).forall(_.isSuccess) must beTrue
-  def subset5 = FormDiffs.subset(set1, set2).forall(_.isSuccess)  must_== false
+  def subset5 = FormDiffs.subset(set1, set2).forall(_.isSuccess)  must ===(false)
   def subset6 = FormDiffs.subset(set1, set1 ++ set2).exists(_.isSuccess) &&
     FormDiffs.subset(set1, set1 ++ set2).exists(!_.isSuccess) must beTrue
 
@@ -66,7 +66,7 @@ The Forms object provides several utility functions for creating forms
   def checkSequence3 = sameExecution(FormDiffs.sequence(ab, ba ++ c), ko(a) ++ ok(b) ++ ko(c))
   def checkSequence4 = sameExecution(FormDiffs.sequence(abc, ba), ko(a) ++ ok(b) ++ ko(c))
 
-  def sameExecution(f1: Seq[Form], f2: Seq[Form]) = f1.map(_.execute.message) must_== f2.map(_.execute.message)
+  def sameExecution(f1: Seq[Form], f2: Seq[Form]) = f1.map(_.execute.message) must ===(f2.map(_.execute.message))
 
   def ok(f: Seq[Form]) = f.map(_.setSuccess)
   def ko(f: Seq[Form]) = f.map(_.setFailure)

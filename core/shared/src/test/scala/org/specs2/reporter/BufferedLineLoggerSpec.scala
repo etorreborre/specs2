@@ -15,5 +15,5 @@ class BufferedPrinterLoggerSpec extends Spec { def is = s2"""
     logger.infoLog("How are you?")
     logger.close()
 
-    logger.messages must_== Seq("[info] Hello world", "[info] How are you?")
+    logger.messages must ===(Seq("[info] Hello world", "[info] How are you?"))
 }

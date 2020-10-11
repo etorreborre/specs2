@@ -58,26 +58,26 @@ class DirectoryPathSpec extends Spec with TypedEqual { def is = s2"""
    ${ ("test" / "hello" / "world").name === FileName.unsafe("world") }
 
    get the rootname
-   ${ ("test" / "hello" / "world").root must_== DirectoryPath("test") }
+   ${ ("test" / "hello" / "world").root must ===(DirectoryPath("test")) }
 
    get the path as a string
-   ${ DirectoryPath.Root.path must_== "/" }
-   ${ DirectoryPath.EMPTY.path must_== "" }
-   ${ DirectoryPath("test").path must_== "test" }
-   ${ DirectoryPath("test").asAbsolute.path must_== "/test" }
-   ${ ("test" / "hello" / "world").path must_== "test/hello/world" }
+   ${ DirectoryPath.Root.path must ===("/") }
+   ${ DirectoryPath.EMPTY.path must ===("") }
+   ${ DirectoryPath("test").path must ===("test") }
+   ${ DirectoryPath("test").asAbsolute.path must ===("/test") }
+   ${ ("test" / "hello" / "world").path must ===("test/hello/world") }
 
    get the path as a string, with a last slash
-   ${ DirectoryPath.Root.dirPath must_== "/" }
-   ${ DirectoryPath("test").dirPath must_== "test/" }
-   ${ ("test" / "hello" / "world").dirPath must_== "test/hello/world/" }
+   ${ DirectoryPath.Root.dirPath must ===("/") }
+   ${ DirectoryPath("test").dirPath must ===("test/") }
+   ${ ("test" / "hello" / "world").dirPath must ===("test/hello/world/") }
 
    get a portion of the path
    ${ ("test" / "hello" / "world" / "eric").relativeTo("test" / "hello")  === "world" / "eric" }
    ${ ("test" / "hello" / "world" / "eric").relativeTo("other" / "hello") === "test" / "hello" / "world" / "eric" }
    ${ ("test" / "hello" / "world" / "eric").relativeTo("test" / "other") === "test" / "hello" / "world" / "eric" }
-   ${ ("test" / "hello" / "world" / "eric").relativeTo("test" / "hello")  must beRelative }
-   ${ ("test" / "hello" / "world" | "eric").relativeTo("test" / "hello")  must beRelative }
+   ${ ("test" / "hello" / "world" / "eric").relativeTo("test" / "hello") must beRelative }
+   ${ ("test" / "hello" / "world" | "eric").relativeTo("test" / "hello") must beRelative }
    ${ ("test" / "hello" / "world").fromRoot === "hello" / "world" }
 
  FilePaths
@@ -92,8 +92,8 @@ class DirectoryPathSpec extends Spec with TypedEqual { def is = s2"""
    ${ FilePath.unsafe(new URI("hello/world")).path === "hello/world"  }
 
    get the path as a string
-   ${ FilePath("test").path must_== "test" }
-   ${ ("test" / "hello" | "world").path must_== "test/hello/world" }
+   ${ FilePath("test").path must ===("test") })
+   ${ ("test" / "hello" | "world").path must ===("test/hello/world") })
 
 """
 

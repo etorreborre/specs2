@@ -47,7 +47,7 @@ class ReporterSpec(val env: Env) extends Specification with ThrownExpectations w
   def a2 =
     val repository = StatisticsRepositoryCreation.memory
     reported(ownEnv.setArguments(Arguments()).setStatisticRepository(repository))
-    repository.getStatistics(spec().specClassName) must beOk(beSome((_: Stats).examples must_== 3))
+    repository.getStatistics(spec().specClassName) must beOk(beSome((_: Stats).examples must ===(3)))
 
   def a3 =
     val repository = StatisticsRepositoryCreation.memory
@@ -113,4 +113,3 @@ object reporterSpecSupport extends MustMatchers with StandardMatchResults with S
 
   def indexOf(messages: Seq[String], element: String): Int =
     indexOf(messages)((_: String).contains(element))
-

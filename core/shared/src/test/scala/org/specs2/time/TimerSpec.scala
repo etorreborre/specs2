@@ -37,14 +37,14 @@ class TimerSpec extends Spec with TypedEqual {  def is = sequential ^ s2"""
 
   def timer1 = timer.neverStarted must beTrue
   def timer2 = timer.isStarted must beFalse
-  def timer3 = timer.hms must_== "0 second"
-  def timer4 = timer.time must_== "0 ms"
+  def timer3 = timer.hms must ===("0 second")
+  def timer4 = timer.time must ===("0 ms")
 
   val started = TestTimer().start
 
   def started1 = started.neverStarted must beFalse
   def started2 = started.isStarted must beTrue
-  def started3 = started.time must_== "0 ms"
+  def started3 = started.time must ===("0 ms")
 
   val stopped = TestTimer().set(currentTime = 0L).start.
                             set(currentTime = 500L).stop
@@ -52,7 +52,7 @@ class TimerSpec extends Spec with TypedEqual {  def is = sequential ^ s2"""
   def stopped1 = stopped.neverStarted must beFalse
   def stopped2 = stopped.isStarted must beFalse
   def stopped3 = TestTimer().set(currentTime = 1000L).start.
-                    set(currentTime = 2000L).stop.hms must_== "1 second"
+                    set(currentTime = 2000L).stop.hms must ===("1 second")
 
   def stopped4 = TestTimer().set(currentTime = 1000L).start.
                              set(currentTime = 2500L).stop.time must beMatching("1 second, 500 ms")

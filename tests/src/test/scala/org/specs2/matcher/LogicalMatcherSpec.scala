@@ -108,8 +108,7 @@ Custom
             "'eric' doesn't match 'a.*'; 'eric' doesn't match 'z.*'"
 
   def or6 =
-    import MustThrownMatchers._
-    createMustExpectable("eric").must(MustThrownMatchers.beMatching("a.*") or MustThrownMatchers.beMatching("e.*"))
+    MustThrownMatchers.createExpectable("eric").must(MustThrownMatchers.beMatching("a.*") or MustThrownMatchers.beMatching("e.*"))
 
   def or7 = ("eric" must be matching("e.*")) or ("eric" must be matching(".*d"))
   def or8 =
@@ -134,18 +133,18 @@ Custom
   def and4 = ((true === true) and (true === false) and (true === true)) must beFailing
 
   def skip1 = 1 must be_==(1).orSkip
-  def skip2 = (1 must be_==(2).orSkip).toResult                                  must_== Skipped("1 != 2")
-  def skip3 = (1 must be_==({sys.error("boom");2}).orSkip("skip this")).toResult must_== Skipped("skip this: boom")
-  def skip4 = (1 must be_==(2).orSkip("precondition failed")).toResult           must_== Skipped("precondition failed: 1 != 2")
+  def skip2 = (1 must be_==(2).orSkip).toResult                                  must ===(Skipped("1 != 2"))
+  def skip3 = (1 must be_==({sys.error("boom");2}).orSkip("skip this")).toResult must ===(Skipped("skip this: boom"))
+  def skip4 = (1 must be_==(2).orSkip("precondition failed")).toResult           must ===(Skipped("precondition failed: 1 != 2"))
 
   def pending1 = 1 must be_==(1).orPending
-  def pending2 = (1 must be_==(2).orPending).toResult                             must_== Pending("1 != 2")
-  def pending3 = (1 must be_==({sys.error("boom");2}).orPending("todo")).toResult must_== Pending("todo: boom")
-  def pending4 = (1 must be_==(2).orPending("precondition failed")).toResult      must_== Pending("precondition failed: 1 != 2")
+  def pending2 = (1 must be_==(2).orPending).toResult                             must ===(Pending("1 != 2"))
+  def pending3 = (1 must be_==({sys.error("boom");2}).orPending("todo")).toResult must ===(Pending("todo: boom"))
+  def pending4 = (1 must be_==(2).orPending("precondition failed")).toResult      must ===(Pending("precondition failed: 1 != 2"))
 
   def conditions1 = (1 must be_==(1).when(true)).toResult               must beSuccessful
   def conditions2 = (1 must be_==(2).when(false)).toResult              must beSuccessful
-  def conditions3 = (1 must be_==(2).when(false, "no worries")).message must_== "no worries"
+  def conditions3 = (1 must be_==(2).when(false, "no worries")).message must ===("no worries")
   def conditions4 = (1 must be_==(2).unless(true)).toResult             must beSuccessful
   def conditions5 = (1 must be_==(1).iff(true)).toResult  must beSuccessful
   def conditions6 = (1 must be_==(2).iff(true)).toResult  must beFailing

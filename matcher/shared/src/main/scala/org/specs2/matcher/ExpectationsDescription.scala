@@ -3,10 +3,11 @@ package matcher
 
 import text.Sentences._
 import execute.{ResultExecution, AsResult, Result}
+import scala.implicits.Not
 
 trait ExpectationsDescription extends ExpectationsCreation:
 
-  extension [T : AsResult](description: String):
+  extension [T : AsResult](description: String)(using not: Not[NoExpectationsDescription]):
     def ==>(result: =>T): Result = <==>(result)
     def <==>(result: =>T): Result = checkResultFailure {
       val r = ResultExecution.execute(AsResult(result))
@@ -16,7 +17,7 @@ trait ExpectationsDescription extends ExpectationsCreation:
     }
 
   /** describe a value with the aka method */
-  extension [T](value: => T)
+  extension [T](value: => T)(using not: Not[NoValueDescription])
     /**
      * @return an expectable with its toString method as an alias description
      *         this is useful to preserve the original value when the matcher using
@@ -40,3 +41,9 @@ trait ExpectationsDescription extends ExpectationsCreation:
 
 
 object ExpectationsDescription extends ExpectationsDescription
+
+trait NoExpectationsDescription:
+  given NoExpectationsDescription = ???
+
+trait NoValueDescription:
+  given NoValueDescription = ???

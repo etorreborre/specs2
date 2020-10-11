@@ -76,39 +76,38 @@ Creation
 
   def values1 = Arguments("xonly").xonly must beTrue
   def values2 = Arguments("!pandoc").commandLine.boolOr("pandoc", true) must beFalse
-  def values3 = Arguments("ex", "Hello").ex must_== ".*Hello.*"
+  def values3 = Arguments("ex", "Hello").ex must ===(".*Hello.*")
 
   def values4 = Arguments("").xonly must beFalse
-  def values5 = Arguments("").ex must_== ".*"
+  def values5 = Arguments("").ex must ===(".*")
 
   def values6 = Arguments("xOnly").xonly must beTrue
-  def values7 = Arguments("colorClass", classOf[MappedColors].getName).colors must_== MappedColors()
-  def values8 = Arguments("exclude", "spec").ex must_== Arguments().ex
+  def values7 = Arguments("colorClass", classOf[MappedColors].getName).colors must ===(MappedColors())
+  def values8 = Arguments("exclude", "spec").ex must ===(Arguments().ex)
 
-  def values9 = Arguments("ex", "this test").select.ex must_== ".*this test.*"
+  def values9 = Arguments("ex", "this test").select.ex must ===(".*this test.*")
 
   def values10 =
-    List("nocolor", "color", "nocolor true", "nocolor false", "color true", "color false").map(a => Arguments.split(a).color) must_==
-    List(false, true, false, true, true, false)
+    List("nocolor", "color", "nocolor true", "nocolor false", "color true", "color false").map(a => Arguments.split(a).color) must ===(
+    List(false, true, false, true, true, false))
 
-  def overriding1 = (args(xonly = true) <| args(plan = false)).xonly must_== true
-  def overriding2 = args(xonly = true).overrideWith(args(xonly = false)).xonly must_== false
-  def overriding3 = (args(xonly = true) <| args(plan = true)).plan must_== true
+  def overriding1 = (args(xonly = true) <| args(plan = false)).xonly must ===(true)
+  def overriding2 = args(xonly = true).overrideWith(args(xonly = false)).xonly must ===(false)
+  def overriding3 = (args(xonly = true) <| args(plan = true)).plan must ===(true)
 
   case class properties(properties: (String, String)*) extends SystemProperties:
     override def systemGetProperty(p: String) = Map(properties: _*).get(p)
 
-  def properties1 = Arguments.extract(Seq(""), properties("plan" -> "")).plan must_== true
-  def properties2 = Arguments.extract(Seq(""), properties("plan" -> "true")).plan must_== true
-  def properties3 = Arguments.extract(Seq(""), properties("plan" -> "false")).plan must_== false
-  def properties4 = Arguments.extract(Seq(""), properties("ex"   -> "spec")).ex must_== ".*spec.*"
-  def properties5 = Arguments.extract(Seq(""), properties("specs2.ex" -> "spec")).ex must_== ".*spec.*"
+  def properties1 = Arguments.extract(Seq(""), properties("plan" -> "")).plan must ===(true)
+  def properties2 = Arguments.extract(Seq(""), properties("plan" -> "true")).plan must ===(true)
+  def properties3 = Arguments.extract(Seq(""), properties("plan" -> "false")).plan must ===(false)
+  def properties4 = Arguments.extract(Seq(""), properties("ex"   -> "spec")).ex must ===(".*spec.*")
+  def properties5 = Arguments.extract(Seq(""), properties("specs2.ex" -> "spec")).ex must ===(".*spec.*")
 
   def properties6 =
     List(("nocolor", ""), ("color", ""), ("nocolor", "true"), ("nocolor", "false"), ("color", "true"), ("color", "false")).map { case (k, v) =>
       Arguments.extract(Seq(""), properties(k -> v)).color
-    } must_==
-      List(false, true, false, true, true, false)
+    } must ===(List(false, true, false, true, true, false))
 
   def execution1 =
     "args"                      | "status" | "canShow"    |>
@@ -132,7 +131,7 @@ Creation
     Arguments("showonly","o")   ! "o"      ! true         |
     Arguments("showonly","o")   ! "+"      ! false        |
     Arguments("showonly","o")   ! "-"      ! false        |
-    { (a, s, r) =>  a.canShow(s) must_== r }
+    { (a, s, r) =>  a.canShow(s) must ===(r) }
 
   def execution2 =
     "args"                     | "status"            | "canShow"    |>
@@ -148,7 +147,7 @@ Creation
     showOnly("o")              ! anError             ! false        |
     showOnly("o")              ! skipped             ! true         |
     showOnly("o")              ! success             ! false        |
-    { (a, s, r) =>  a.canShow(s.status) must_== r }
+    { (a, s, r) =>  a.canShow(s.status) must ===(r) }
 
   def execution3 =
     Arguments("this", "is", "cool").commandLineFilter("this", "cool").commandLine.arguments === Seq("this", "cool")

@@ -124,10 +124,10 @@ class JUnitWithBeforeAfterAllSpecification extends Specification with BeforeAfte
 class JUnitPendingSpecification extends mutable.Specification:
   "Below examples" should {
     "fail" in {
-      1 must_== 2
+      1 must ===(2)
     }
     "be pending" in {
-      1 must_== 2
+      1 must ===(2)
     }.pendingUntilFixed
   }
 

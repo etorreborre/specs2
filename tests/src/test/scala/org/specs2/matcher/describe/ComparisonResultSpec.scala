@@ -89,12 +89,12 @@ class ComparisonResultSpec extends Spec { def is = s2"""
   Try render:
   ===========
 
-  identical success will return Success(...)                              ${ TryIdentical(1, isSuccess = true).render must_=== "Success(1)" }
-  identical failure will return Failure(...)                              ${ TryIdentical(1, isSuccess = false).render must_=== "Failure(1)" }
-  different success will return Success(...)                              ${ TryDifferent(PrimitiveDifference(1, 2), isSuccess = true).render must_=== "Success(1 != 2)" }
-  different failure will return Failure(...)                              ${ TryDifferent(PrimitiveDifference(1, 2), isSuccess = false).render must_=== "Failure(1 != 2)" }
-  different success failure type will be Success(...) ==> Failure(...)    ${ TryTypeDifferent(isActualSuccess = true).render must_=== "Success(...) ==> Failure(...)" }
-  different failure success type will be Success(...) ==> Failure(...)    ${ TryTypeDifferent(isActualSuccess = false).render must_=== "Failure(...) ==> Success(...)" }
+  identical success will return Success(...)                              ${ TryIdentical(1, isSuccess = true).render must ===("Success(1)") }
+  identical failure will return Failure(...)                              ${ TryIdentical(1, isSuccess = false).render must ===("Failure(1)") }
+  different success will return Success(...)                              ${ TryDifferent(PrimitiveDifference(1, 2), isSuccess = true).render must ===("Success(1 != 2)") }
+  different failure will return Failure(...)                              ${ TryDifferent(PrimitiveDifference(1, 2), isSuccess = false).render must ===("Failure(1 != 2)") }
+  different success failure type will be Success(...) ==> Failure(...)    ${ TryTypeDifferent(isActualSuccess = true).render must ===("Success(...) ==> Failure(...)") }
+  different failure success type will be Success(...) ==> Failure(...)    ${ TryTypeDifferent(isActualSuccess = false).render must ===("Failure(...) ==> Success(...)") }
 
   Other Render:
   =============
@@ -106,86 +106,86 @@ class ComparisonResultSpec extends Spec { def is = s2"""
 
   """
 
-  def p1 = { PrimitiveIdentical(5l).render must_=== "5" }
-  def p2 = { PrimitiveIdentical("str").render must_=== "'str'" }
+  def p1 = { PrimitiveIdentical(5l).render must ===("5") }
+  def p2 = { PrimitiveIdentical("str").render must ===("'str'") }
 
-  def p3 = { PrimitiveDifference(5l, 6l).render must_=== "5 != 6" }
-  def p4 = { PrimitiveDifference("str", "anotherStr").render must_=== s"'str' != 'anotherStr'" }
-  def p5 = { PrimitiveIdentical(null).render must_=== "null" }
+  def p3 = { PrimitiveDifference(5l, 6l).render must ===("5 != 6") }
+  def p4 = { PrimitiveDifference("str", "anotherStr").render must ===(s"'str' != 'anotherStr'") }
+  def p5 = { PrimitiveIdentical(null).render must ===("null") }
 
-  def m1 = { MapIdentical(Map("x" -> "y")).render must_== s"Map('x' -> 'y')" }
-  def m2 = { MapDifference(same = Seq("x" -> "y"), Seq.empty, Seq.empty, Seq.empty).render must_== "Map('x' -> 'y')" }
-  def m3 = { MapDifference(Seq.empty, changed = Seq("k" -> PrimitiveDifference("x", "y")), Seq.empty, Seq.empty).render must_== "Map('k' -> {'x' != 'y'})" }
-  def m4 = { MapDifference(Seq.empty, Seq.empty, added = Seq("x" -> "y"), Seq.empty).render must_== "Map(added: 'x' -> 'y')" }
-  def m5 = { MapDifference(Seq.empty, Seq.empty, Seq.empty, removed = Seq("x" -> "y")).render must_== "Map(removed: 'x' -> 'y')" }
+  def m1 = { MapIdentical(Map("x" -> "y")).render must ===(s"Map('x' -> 'y')") }
+  def m2 = { MapDifference(same = Seq("x" -> "y"), Seq.empty, Seq.empty, Seq.empty).render must ===("Map('x' -> 'y')") }
+  def m3 = { MapDifference(Seq.empty, changed = Seq("k" -> PrimitiveDifference("x", "y")), Seq.empty, Seq.empty).render must ===("Map('k' -> {'x' != 'y'})") }
+  def m4 = { MapDifference(Seq.empty, Seq.empty, added = Seq("x" -> "y"), Seq.empty).render must ===("Map(added: 'x' -> 'y')") }
+  def m5 = { MapDifference(Seq.empty, Seq.empty, Seq.empty, removed = Seq("x" -> "y")).render must ===("Map(removed: 'x' -> 'y')") }
   def m6 =
     MapDifference(same    = Seq("a" -> "b"),
                   changed = Seq("c" -> PrimitiveDifference("d", "x")),
                   added   = Seq("g" -> "h"),
-                  removed = Seq("e" -> "f")).render must_==
-      "Map('a' -> 'b',\n    'c' -> {'d' != 'x'},\n    added: 'g' -> 'h',\n    removed: 'e' -> 'f')"
+                  removed = Seq("e" -> "f")).render must ===(
+      "Map('a' -> 'b',\n    'c' -> {'d' != 'x'},\n    added: 'g' -> 'h',\n    removed: 'e' -> 'f')")
 
-  def o1 = { OptionIdentical(Some(PrimitiveIdentical("abc"))).render must_== "Some('abc')" }
-  def o2 = { OptionIdentical(None).render must_== "None" }
-  def o3 = { OptionDifferent(PrimitiveDifference("abc", "def")).render must_== "Some('abc' != 'def')" }
-  def o4 = { OptionTypeDifferent(isActualSome = false, isExpectedSome = true).render must_== "None ==> Some(...)" }
-  def o5 = { OptionTypeDifferent(isActualSome = true, isExpectedSome = false).render must_== "Some(...) ==> None" }
+  def o1 = { OptionIdentical(Some(PrimitiveIdentical("abc"))).render must ===("Some('abc')") }
+  def o2 = { OptionIdentical(None).render must ===("None") }
+  def o3 = { OptionDifferent(PrimitiveDifference("abc", "def")).render must ===("Some('abc' != 'def')") }
+  def o4 = { OptionTypeDifferent(isActualSome = false, isExpectedSome = true).render must ===("None ==> Some(...)") }
+  def o5 = { OptionTypeDifferent(isActualSome = true, isExpectedSome = false).render must ===("Some(...) ==> None") }
 
-  def e1 = { EitherIdentical(PrimitiveIdentical("abc"), isRight = false).render must_=== "Left('abc')" }
-  def e2 = { EitherIdentical(PrimitiveIdentical("abc"), isRight = true).render must_=== "Right('abc')" }
-  def e3 = { EitherDifferent(PrimitiveDifference("abc", "def"), isRight = true).render must_=== "Right('abc' != 'def')" }
-  def e4 = { EitherDifferent(PrimitiveDifference("abc", "def"), isRight = false).render must_=== "Left('abc' != 'def')" }
-  def e5 = { EitherTypeDifferent(isActualRight = true).render must_=== "Right(...) ==> Left(...)" }
-  def e6 = { EitherTypeDifferent(isActualRight = false).render must_=== "Left(...) ==> Right(...)" }
-
-
-  def set1 = { SetIdentical(Set("a", "b")).render must_== "Set('a', 'b')" }
-  def set2 = { SetDifference(same = Seq("a", "b"), Seq.empty, Seq.empty).render must_== "Set('a',\n    'b')" }
-  def set3 = { SetDifference(Seq.empty, added = Seq("c", "d"), Seq.empty).render must_== "Set(added: 'c',\n    'd')" }
-  def set4 = { SetDifference(Seq.empty, Seq.empty, removed = Seq("e") ).render must_== "Set(removed: 'e')" }
-  def set5 = { SetDifference(same = Seq("a", "b"), added = Seq("c", "d"), removed = Seq("e")).render must_== "Set('a',\n    'b',\n    added: 'c',\n    'd',\n    removed: 'e')" }
+  def e1 = { EitherIdentical(PrimitiveIdentical("abc"), isRight = false).render must ===("Left('abc')") }
+  def e2 = { EitherIdentical(PrimitiveIdentical("abc"), isRight = true).render must ===("Right('abc')") }
+  def e3 = { EitherDifferent(PrimitiveDifference("abc", "def"), isRight = true).render must ===("Right('abc' != 'def')") }
+  def e4 = { EitherDifferent(PrimitiveDifference("abc", "def"), isRight = false).render must ===("Left('abc' != 'def')") }
+  def e5 = { EitherTypeDifferent(isActualRight = true).render must ===("Right(...) ==> Left(...)") }
+  def e6 = { EitherTypeDifferent(isActualRight = false).render must ===("Left(...) ==> Right(...)") }
 
 
-  def seq1 = { SeqIdentical(Seq("a", "b")).render must_== "List('a', 'b')" }
-  def seq2 = { SeqDifference(Seq(PrimitiveIdentical("a")), Seq.empty, Seq.empty).render must_== "List('a')" }
-  def seq3 = { SeqDifference(Seq(PrimitiveDifference("b", "c")), Seq.empty, Seq.empty).render must_== "List('b' != 'c')" }
-  def seq4 = { SeqDifference(Seq.empty, added = Seq("d", "e"), Seq.empty).render must_== "List(added: 'd', 'e')" }
-  def seq5 = { SeqDifference(Seq.empty, Seq.empty, removed = Seq("f")).render must_== "List(removed: 'f')" }
+  def set1 = { SetIdentical(Set("a", "b")).render must ===("Set('a', 'b')") }
+  def set2 = { SetDifference(same = Seq("a", "b"), Seq.empty, Seq.empty).render must ===("Set('a',\n    'b')") }
+  def set3 = { SetDifference(Seq.empty, added = Seq("c", "d"), Seq.empty).render must ===("Set(added: 'c',\n    'd')") }
+  def set4 = { SetDifference(Seq.empty, Seq.empty, removed = Seq("e") ).render must ===("Set(removed: 'e')" )}
+  def set5 = { SetDifference(same = Seq("a", "b"), added = Seq("c", "d"), removed = Seq("e")).render must ===("Set('a',\n    'b',\n    added: 'c',\n    'd',\n    removed: 'e')") }
+
+
+  def seq1 = { SeqIdentical(Seq("a", "b")).render must ===("List('a', 'b')") }
+  def seq2 = { SeqDifference(Seq(PrimitiveIdentical("a")), Seq.empty, Seq.empty).render must ===("List('a')") }
+  def seq3 = { SeqDifference(Seq(PrimitiveDifference("b", "c")), Seq.empty, Seq.empty).render must ===("List('b' != 'c')") }
+  def seq4 = { SeqDifference(Seq.empty, added = Seq("d", "e"), Seq.empty).render must ===("List(added: 'd', 'e')") }
+  def seq5 = { SeqDifference(Seq.empty, Seq.empty, removed = Seq("f")).render must ===("List(removed: 'f')") }
   def seq6 = { SeqDifference(result = Seq(PrimitiveIdentical("a"), PrimitiveDifference("b", "c")),
                              added = Seq("d", "e"),
-                             removed = Seq("f")).render must_== "List('a', 'b' != 'c',\n     added: 'd', 'e',\n     removed: 'f')" }
+                             removed = Seq("f")).render must ===("List('a', 'b' != 'c',\n     added: 'd', 'e',\n     removed: 'f')") }
 
-  def arr1 = { ArrayIdentical(Seq("a", "b")).render must_== "Array('a', 'b')" }
-  def arr2 = { ArrayDifference(Seq(PrimitiveIdentical("a")), Seq.empty, Seq.empty).render must_== "Array('a')" }
-  def arr3 = { ArrayDifference(Seq(PrimitiveDifference("b", "c")), Seq.empty, Seq.empty).render must_== "Array('b' != 'c')" }
-  def arr4 = { ArrayDifference(Seq.empty, added = Seq("d", "e"), Seq.empty).render must_== "Array(added: 'd', 'e')" }
-  def arr5 = { ArrayDifference(Seq.empty, Seq.empty, removed = Seq("f")).render must_== "Array(removed: 'f')" }
+  def arr1 = { ArrayIdentical(Seq("a", "b")).render must ===("Array('a', 'b')") }
+  def arr2 = { ArrayDifference(Seq(PrimitiveIdentical("a")), Seq.empty, Seq.empty).render must ===("Array('a')") }
+  def arr3 = { ArrayDifference(Seq(PrimitiveDifference("b", "c")), Seq.empty, Seq.empty).render must ===("Array('b' != 'c')") }
+  def arr4 = { ArrayDifference(Seq.empty, added = Seq("d", "e"), Seq.empty).render must ===("Array(added: 'd', 'e')") }
+  def arr5 = { ArrayDifference(Seq.empty, Seq.empty, removed = Seq("f")).render must ===("Array(removed: 'f')") }
   def arr6 = { ArrayDifference(results = Seq(PrimitiveIdentical("a"), PrimitiveDifference("b", "c")),
                                added   = Seq("d", "e"),
-                               removed = Seq("f")).render must_== "Array('a', 'b' != 'c',\n      added: 'd', 'e',\n      removed: 'f')" }
+                               removed = Seq("f")).render must ===("Array('a', 'b' != 'c',\n      added: 'd', 'e',\n      removed: 'f')") }
 
-  def se1 = { StackElementIdentical(stackTraceElement).render must_=== stackTraceElement.toString }
+  def se1 = { StackElementIdentical(stackTraceElement).render must ===(stackTraceElement.toString) }
   def se2 = { StackElementDifferent(PrimitiveDifference("class", "class1"),
                                     PrimitiveDifference("method", "method1"),
                                     Some(PrimitiveDifference("file", "file1")),
-                                    PrimitiveDifference(666, 777)).render must_=== "'class' != 'class1'.'method' != 'method1'('file' != 'file1':666 != 777)" }
+                                    PrimitiveDifference(666, 777)).render must ===("'class' != 'class1'.'method' != 'method1'('file' != 'file1':666 != 777)") }
   def se3 = { StackElementDifferent(PrimitiveDifference("class", "class1"),
                                     PrimitiveDifference("method", "method1"),
                                     None,
-                                    PrimitiveDifference(666, 777)).render must_=== "'class' != 'class1'.'method' != 'method1'(Unknown Source)" }
+                                    PrimitiveDifference(666, 777)).render must ===("'class' != 'class1'.'method' != 'method1'(Unknown Source)") }
 
-  def th1 = { ThrowableIdentical(ex).render must_=== { val w = new StringWriter(); ex.printStackTrace(new PrintWriter(w)); w.toString } }
-  def th2 = { ThrowableDifferentMessage(PrimitiveDifference("m1", "m2")).render must_=== "\nthe message is incorrect\n'm1' != 'm2'" }
-  def th3 = { removeColors(ThrowableDifferentStackTrace(LinesComparisonResult(List("m1"), List("m2"))).render).trim must_===
+  def th1 = { ThrowableIdentical(ex).render must ===({ val w = new StringWriter(); ex.printStackTrace(new PrintWriter(w)); w.toString }) }
+  def th2 = { ThrowableDifferentMessage(PrimitiveDifference("m1", "m2")).render must ===("\nthe message is incorrect\n'm1' != 'm2'") }
+  def th3 = { removeColors(ThrowableDifferentStackTrace(LinesComparisonResult(List("m1"), List("m2"))).render).trim must ===(
                   """|the stacktrace is incorrect
                      |
                      |- m1
-                     |+ m2""".stripMargin }
+                     |+ m2""".stripMargin) }
 
-  def ot1 = { OtherIdentical(5).render must_=== "5" }
-  def ot2 = { OtherDifferent(5, "5").render must_=== "5 != '5'" }
-  def ot3 = { OtherDifferent(Hello(), "hello").render must_=== "hello: org.specs2.matcher.Hello != hello: java.lang.String" }
-  def ot4 = { OtherDifferent(Set(1), Set.empty[Int]).render must_=== "Set(1) != Set()" }
+  def ot1 = { OtherIdentical(5).render must ===("5") }
+  def ot2 = { OtherDifferent(5, "5").render must ===("5 != '5'") }
+  def ot3 = { OtherDifferent(Hello(), "hello").render must ===("hello: org.specs2.matcher.Hello != hello: java.lang.String") }
+  def ot4 = { OtherDifferent(Set(1), Set.empty[Int]).render must ===("Set(1)) != Set()") }
 
   val stackTraceElement = new StackTraceElement("class", "method", "file", 666)
   val ex = new Exception

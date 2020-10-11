@@ -183,7 +183,7 @@ class JUnitDescriptionSpec(val env: Env) extends Specification with JUnitDescrip
     descriptionIs(Fragments(f))(tree:_*)
 
   def descriptionIs(fs: Fragments, fromIDE: Boolean = false)(tree: String*): Result =
-    showDescriptionTree(titled(fs), fromIDE) must_== tree.toList.mkString("\n")
+    showDescriptionTree(titled(fs), fromIDE) must ===(tree.toList.mkString("\n"))
 
   def showDescriptionTree(spec: SpecStructure, fromIDE: Boolean = false): String =
     // set the header to the main specification class
@@ -216,7 +216,7 @@ trait ReporterExamples extends MustMatchers with StandardResults with StandardMa
   lazy val ex3 = "ex3" ! success
   lazy val empty1 = factory.text("     ")
   lazy val ex1Failure = "ex1" ! failure
-  lazy val ex1BeEqualToFailure = "ex1" ! { 1 must_== 2 }
+  lazy val ex1BeEqualToFailure = "ex1" ! { 1 must ===(2) }
   lazy val ex1Error = "ex1" ! anError
   lazy val ex1Skipped  = "ex1" ! skipped
   lazy val ex1Pending  = "ex1" ! pending
@@ -246,8 +246,8 @@ trait JUnitDescriptionSpecTest extends Specification:
       "the isTest flag must be correct" ! desc(description).e5(isTest)      ^br
 
   case class desc(description: Description):
-    def e1(name: String)     = description.getClassName must_== name
-    def e2(name: String)     = description.getMethodName must_== name
-    def e3(klass: Class[_])  = (description.getTestClass:Any) must_== klass
-    def e4(name: String)     = description.getDisplayName must_== name
-    def e5(isTest: Boolean)  = description.isTest must_== isTest
+    def e1(name: String)     = description.getClassName must ===(name)
+    def e2(name: String)     = description.getMethodName must ===(name)
+    def e3(klass: Class[_])  = (description.getTestClass:Any) must ===(klass)
+    def e4(name: String)     = description.getDisplayName must ===(name)
+    def e5(isTest: Boolean)  = description.isTest must ===(isTest)

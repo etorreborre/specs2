@@ -8,11 +8,11 @@ class MutableDslSpec extends org.specs2.mutable.Specification:
 
     "in" >> {
       "ok" in ok
-      "description" in { (s: String) => s must_== "description" }
+      "description" in { (s: String) => s must ===("description") }
     }
     ">>" >> {
       "ok" >> ok
-      "description" >> { (s: String) => s must_== "description" }
+      "description" >> { (s: String) => s must ===("description") }
     }
   }
 

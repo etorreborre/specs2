@@ -48,7 +48,7 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersImplicits { outer =
     private def find(json: Option[JSONType], queries: List[JsonQuery]): Result =
       def checkRest(value: Any, rest: List[JsonQuery]) =
         (value, rest) match
-          case (_, Nil)         => check(Expectable(anyValueToJsonType(value))).toResult
+          case (_, Nil)         => check(createExpectable(anyValueToJsonType(value))).toResult
           case ((k, v), q :: _) =>
             if q.selector.select(Map((k.notNull, v))).isDefined then Success()
             else                                                  Failure(s"found '${value.notNull}' but no value to select for ${q.name}")
@@ -58,8 +58,8 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersImplicits { outer =
 
       (json, queries) match
         case (None,    Nil)             => Success("ok")
-        case (Some(JSONArray(a)), Nil)  => check(Expectable(JsonType.array(a))).toResult
-        case (Some(JSONObject(o)), Nil) => check(Expectable(JsonType.map(o))).toResult
+        case (Some(JSONArray(a)), Nil)  => check(createExpectable(JsonType.array(a))).toResult
+        case (Some(JSONObject(o)), Nil) => check(createExpectable(JsonType.map(o))).toResult
         case (None,    q :: _)          => Failure(q.selector.name + " not found")
 
         // FIRST
@@ -207,14 +207,14 @@ object JsonType:
   }
 
   implicit def JsonTypeMatcherTraversable(m: ContainWithResultSeq[String]): Matcher[JsonType] = (actual: JsonType) => actual match
-    case JsonArray(list) => m(Expectable(list.map(showJson)))
-    case JsonMap(map)    => m(Expectable(map.toList.map(showJson)))
-    case other           => Matcher.result(false, s"$other is not an array", Expectable(other))
+    case JsonArray(list) => m(createExpectable(list.map(showJson)))
+    case JsonMap(map)    => m(createExpectable(map.toList.map(showJson)))
+    case other           => Matcher.result(false, s"$other is not an array", createExpectable(other))
 
   implicit def JsonTypeMatcherTraversable(m: ContainWithResult[String]): Matcher[JsonType] = (actual: JsonType) => actual match
-    case JsonArray(list) => m(Expectable(list.map(showJson)))
-    case JsonMap(map)    => m(Expectable(map.toList.map(showJson)))
-    case other           => Matcher.result(false, s"$other is not an array", Expectable(other))
+    case JsonArray(list) => m(createExpectable(list.map(showJson)))
+    case JsonMap(map)    => m(createExpectable(map.toList.map(showJson)))
+    case other           => Matcher.result(false, s"$other is not an array", createExpectable(other))
 
   implicit def JsonTypeMatcherInt(expected: Int): Matcher[JsonType] = (actual: JsonType) => actual match
     case JsonNumber(n) => (n.toDouble == expected.toDouble, s"$n is not equal to $expected")
@@ -256,6 +256,7 @@ trait JsonSelectors:
     def select(map: Map[String, Any]) = None
     def name = s"'${v.notNull}'"
     def description: String = s"value $name"
+    
   case class JsonIntSelector(n: Int) extends JsonValueSelector:
     def select(values: List[Any]) =
       values.find {
@@ -266,6 +267,7 @@ trait JsonSelectors:
     def select(map: Map[String, Any]) = None
     def name = n.toString
     def description: String = s"value $name"
+
   case class JsonDoubleSelector(d: Double) extends JsonValueSelector:
     def select(values: List[Any]) =
       values.find {
@@ -277,28 +279,32 @@ trait JsonSelectors:
     def select(map: Map[String, Any]) = None
     def name = d.toString
     def description: String = s"value $name"
+
   case class JsonIndexSelector(n: Int) extends JsonSelector:
     def select(names: List[Any]) = names.zipWithIndex.find { case (_, i) => i == n }.map(_._1)
     def select(map: Map[String, Any]) = map.zipWithIndex.find { case (_, i) => i == n }.map(_._1)
     def name = s"index $n'"
     def description: String = s"value $name"
+
   case class JsonRegexSelector(r: Regex) extends JsonValueSelector:
     def select(names: List[Any]) = names.find(_.notNull matches r.toString).map(_.notNull)
     def select(map: Map[String, Any]) = None
     def name = s"'$r'"
     def description: String = s"regex $name"
+
   case class JsonMatcherSelector(m: Matcher[String]) extends JsonValueSelector:
-    def select(names: List[Any])      = names.find(n => m(Expectable(n.notNull)).isSuccess)
+    def select(names: List[Any]) = names.find(n => m(createExpectable(n.notNull)).isSuccess)
     def select(map: Map[String, Any]) = None
     def name = "matcher"
     def description: String = s"specified $name"
+
   case class JsonPairSelector(_1: JsonSelector, _2: JsonSelector) extends JsonSelector:
     def select(list: List[Any]): Option[Any] = None
     def select(map: Map[String, Any]): Option[(String, Any)] =
       _1.select(map.keys.toList).flatMap(k => map.find { case (k1, v) => k.notNull == k1 && _2.select(List(v)).isDefined })
-
     def name = s"${_1.name}:${_2.description}"
     def description: String = s"pair $name"
+
   case class JsonValueOrKeySelector(selector: JsonSelector) extends JsonSelector:
     def select(list: List[Any]): Option[Any] = selector.select(list)
     def select(map: Map[String, Any]): Option[(String, Any)] =

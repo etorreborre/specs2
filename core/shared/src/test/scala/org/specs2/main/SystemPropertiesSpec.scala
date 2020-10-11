@@ -44,8 +44,8 @@ Get as
 
   def getIf1 = sp(colors).getIf("whitebg", 1) must beSome(1)
   def getIf2 = sp(colors).getIf("whitebgxxx", 1) must beNone
-  def getIfElse1 = sp(colors).getIfElse("whitebg", 1)(2) must_== 1
-  def getIfElse2 = sp(colors).getIfElse("whitebgxxx", 1)(2) must_== 2
+  def getIfElse1 = sp(colors).getIfElse("whitebg", 1)(2) must ===(1)
+  def getIfElse2 = sp(colors).getIfElse("whitebgxxx", 1)(2) must ===(2)
 
   case class props(properties: (String, String)*) extends SystemProperties:
     override def systemGetProperty(p: String) = Map(properties: _*).get(p)
