@@ -12,9 +12,9 @@ import scala.util.control.NonFatal
 * This trait executes a Result and returns an appropriate value when a specs2 exception is thrown
 */
 trait ResultExecution { outer =>
-  /** this implicit allows the execution of a Result with an `execute` method */
-  implicit def resultIsExecutable(r: =>Result): ExecutableResult = new ExecutableResult(r)
-  class ExecutableResult(r: =>Result):
+
+  /** this extension allows the execution of a Result with an `execute` method */
+  extension (r: =>Result):
     def execute = outer.execute(r)
 
   /** execute a Result and return a Result even if there are specs2 exceptions */

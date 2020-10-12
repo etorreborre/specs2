@@ -25,7 +25,7 @@ case class Expectable[+T] private[specs2](
   lazy val value = actual()
 
   /** definition of the value, possibly evaluating to different results each time it is invoked */
-  lazy val valueDefinition = actual
+  def valueDefinition = actual()
 
   /**
    * @return a description of the value provided by the user
@@ -52,7 +52,7 @@ case class Expectable[+T] private[specs2](
 
   /** evaluate the value once and return an expectable with the same expression, ready to be evaluated again */
   def evaluateOnce: Expectable[T] =
-    copy(actual = () => value)
+    copy(actual = () => valueDefinition)
 
   /**
    * apply a function to the expectable value

@@ -1,8 +1,9 @@
 package org.specs2
 package matcher
 
+import execute._
+import execute.ResultExecution.execute
 import scala.concurrent.duration._
-import org.specs2.execute.{ResultExecution, EventuallyResults}
 
 /**
  * This trait adds the possibility to retry a given matcher until it succeeds.
@@ -20,7 +21,7 @@ trait EventuallyMatchers extends EventuallyResults:
     @annotation.tailrec
     def retry[S <: T](retried: Int, a: Expectable[S]): MatchResult[S] =
       lazy val matchResult = nested(a.evaluateOnce)
-      val result = ResultExecution.execute(matchResult.toResult)
+      val result = matchResult.toResult.execute
 
       if result.isSuccess || retries <= 1 || retried == retries then
         matchResult

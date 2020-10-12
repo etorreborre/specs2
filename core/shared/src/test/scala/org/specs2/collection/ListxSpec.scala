@@ -8,10 +8,10 @@ class ListxSpec extends Specification {
 
   "A safeTranspose function" should {
     "transpose columns and rows of a list of lists" in {
-      List(List(1, 2), List(3, 4)).safeTranspose must ===(List(List(1, 3)), List(2, 4))
+      List(List(1, 2), List(3, 4)).safeTranspose must ===(List(List(1, 3), List(2, 4)))
     }
     "work even if the input is not a matrix" in {
-      List(List(1, 2), List(3, 4, 5)).safeTranspose must ===(List(List(1, 3)), List(2, 4), List(5))
+      List(List(1, 2), List(3, 4, 5)).safeTranspose must ===(List(List(1, 3), List(2, 4), List(5)))
     }
     "work when the input list is empty" in {
       (Nil: List[List[Int]]).safeTranspose must ===((Nil: List[List[Int]]))

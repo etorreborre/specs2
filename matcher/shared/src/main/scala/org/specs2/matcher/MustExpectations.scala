@@ -27,6 +27,6 @@ trait NoMustExpectations:
  * This trait provides implicit definitions to transform any value into an Expectable
  * which throws exceptions when a match fails
  */
-trait MustThrownExpectations extends MustExpectations with StandardResults with StandardMatchResults
+trait MustThrownExpectations extends MustExpectations with ThrownExpectations
 
 object MustThrownExpectations extends MustThrownExpectations
