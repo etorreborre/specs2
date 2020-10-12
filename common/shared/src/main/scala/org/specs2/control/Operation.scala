@@ -11,7 +11,7 @@ import scala.util.control.NonFatal
  * Synchronous action with:
  *
  * - an optional list of "finalization" actions to be executed when this action is done
- *   whether it has timed-out or thrown an exception. This allows resources to be safely disposed of
+ *   if it throws an exception. This allows resources to be safely disposed of
  *
  * It is essentially the same as an Action without the asynchronicity
  */
@@ -23,12 +23,12 @@ case class Operation[A](operation: () => Throwable Either A, last: Vector[Finali
    Operation[B](() => run.map(f), last)
 
   def flatMap[B](f: A => Operation[B]): Operation[B] =
-    lazy val Operation(b, last1) =
-          run match {
-            case Right(a) => f(a)
-            case Left(t) => Operation.exception[B](t)
-          }
-    Operation[B](b , last ++ last1)
+    Operation.fromEither[B] {
+      runOperation match {
+        case Right(a) => f(a).runOperation
+        case Left(t) => Left(t)
+      }
+    }
 
   /** run this operation, to get back a result (possibly an exception)
    * and run the finalizers when the operation has been executed
@@ -100,6 +100,9 @@ object Operation:
 
   def exception[A](e: Throwable): Operation[A] =
     Operation[A](() => Left(e))
+
+  def fromEither[A](ea: =>Throwable Either A): Operation[A] =
+    Operation(() => ea)
 
   def pure[A](a: =>A): Operation[A] =
     OperationMonad.point(a)

@@ -16,8 +16,8 @@ case class DirectoryStore(baseDirectory: DirectoryPath, fileSystem: FileSystem) 
       else   Operation.ok(None)
     }
 
-  def reset: Operation[Unit] = fileSystem.delete(baseDirectory)
+  def reset: Operation[Unit] =
+    fileSystem.delete(baseDirectory)
 
   private def filepath[A](key: Key[A]): FilePath =
     baseDirectory / FilePath.unsafe(StoreKeys.resolve(key))
-

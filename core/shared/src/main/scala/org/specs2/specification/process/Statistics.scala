@@ -44,7 +44,7 @@ case class DefaultStatistics(arguments: Arguments, statisticsRepository: Statist
    */
   def readStats(className: String)(fragment: Fragment): Operation[Fragment] =
     statisticsRepository.previousResult(className, fragment.description).
-      map(r => fragment.setPreviousResult(r))
+      map(fragment.setPreviousResult)
 
 
 object Statistics:
@@ -72,4 +72,3 @@ object Statistics:
         emptyStats(fragment).withResult(result).copy(timer = timer)
       }
     else Action.pure(Stats.empty)
-

@@ -2,7 +2,7 @@ package org.specs2
 package io
 
 import control._
-import org.specs2.fp.syntax._
+import fp.syntax._
 import java.io._
 import java.util.regex.Pattern._
 import java.util.regex.Matcher._
@@ -155,5 +155,8 @@ case class FileSystem(logger: Logger) extends FilePathReader:
 
   /** delete a directory */
   def delete(dir: DirectoryPath): Operation[Unit] =
-    listFilePaths(dir).flatMap(_.map(delete).toList.sequence.void) >>
-    delete(dir.toFilePath) // delete the directory once it is empty
+    for {
+      files <- listFilePaths(dir)
+      _ <- files.traverse_(delete)
+      _ <- delete(dir.toFilePath) // delete the directory once it is empty
+    } yield ()
