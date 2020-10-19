@@ -91,10 +91,9 @@ object Fragment:
   def apply(d: Description): Fragment =
     Fragment(d, Execution.NoExecution)
 
-  implicit val showInstance: Show[Fragment] = new Show[Fragment] {
+  given showInstance as Show[Fragment] = new Show[Fragment]:
     def show(f: Fragment): String =
       s"Fragment(${f.description.show})"
-  }
 
   def isText(f: Fragment) = (f.description match {
     case t: Text => true
@@ -171,4 +170,3 @@ object Fragment:
   /** iterate over elements to create a Fragments object */
   def foreach[T](seq: Seq[T])(f: T => Fragment): Fragments =
     seq.foldLeft(Fragments.empty) { (res, cur) => res.append(f(cur)) }
-

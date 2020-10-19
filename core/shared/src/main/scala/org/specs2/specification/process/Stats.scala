@@ -131,7 +131,7 @@ case class Stats(specs:        Int = 0,
    * @return this Statistics object with some trend if relevant
    */
   def updateFrom(previous: Stats): Stats =
-    implicit val monoid = Stats.StatsMonoid
+    given monoid as Monoid[Stats] = Stats.StatsMonoid
     val newTrend = this |+| previous.negate
     if newTrend == monoid.zero then this
     else                         copy(trend = Some(newTrend))
@@ -238,5 +238,3 @@ case object Stats:
         asInt("skipped"     ),
         (stats \ "trend" \ "stats").headOption.flatMap(fromXml),
         map.get("time").map(SimpleTimer.fromString).getOrElse(new SimpleTimer)))
-
-

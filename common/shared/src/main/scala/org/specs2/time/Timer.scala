@@ -106,7 +106,8 @@ object SimpleTimer:
   }
 
   def timerFold[T] = new Fold[Id, T, SimpleTimer] {
-    implicit val monad = Monad.idMonad
+    given monad as Monad[Id] = Monad.idMonad
+    
     type S = SimpleTimer
     def start = (new SimpleTimer).start
     def fold = (s, t) => s
@@ -116,4 +117,3 @@ object SimpleTimer:
   def startSimpleTimer: SimpleTimer =
     val timer = new SimpleTimer
     timer.start
-

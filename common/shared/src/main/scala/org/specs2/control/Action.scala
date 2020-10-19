@@ -21,13 +21,13 @@ case class Action[A](private[control] runNow: ExecutionEnv => Future[A], timeout
 
   def map[B](f: A => B): Action[B] =
     Action[B] { ee =>
-      implicit val ec = ee.executionContext
+      given ExecutionContext = ee.executionContext
       this.runNow(ee).map(f)
     }
 
   def flatMap[B](f: A => Action[B]): Action[B] =
     Action[B] { ee =>
-      implicit val ec = ee.executionContext
+      given ExecutionContext = ee.executionContext
       this.runNow(ee).flatMap { case a => f(a).runNow(ee) }
     }
 
@@ -125,7 +125,7 @@ object Action:
       else           fail(failureMessage)
     }
 
-  implicit val ActionMonad: Monad[Action[*]] = new Monad[Action[*]] {
+  given ActionMonad as Monad[Action[*]] = new Monad[Action[*]]:
     def point[A](a: =>A): Action[A] =
       Action(_ => Future.successful(a))
 
@@ -134,39 +134,36 @@ object Action:
 
     override def ap[A, B](fa: =>Action[A])(ff: =>Action[A => B]): Action[B] =
       Action { ee =>
-        implicit val ec = ee.executionContext
+        given ExecutionContext = ee.executionContext
         fa.runNow(ee).zip(ff.runNow(ee)).map { case (a, f) => f(a) }
       }
 
     override def toString: String =
       "Monad[Action]"
-  }
 
-  implicit val ActionApplicative: Applicative[Action[*]] = new Applicative[Action[*]] {
+  given ActionApplicative as Applicative[Action[*]] = new Applicative[Action[*]]:
     def point[A](a: =>A): Action[A] =
       Action(_ => Future.successful(a))
 
     def ap[A, B](fa: =>Action[A])(ff: =>Action[A => B]): Action[B] =
       Action { ee =>
-        implicit val ec = ee.executionContext
+        given ExecutionContext = ee.executionContext
         fa.runNow(ee).zip(ff.runNow(ee)).map { case (a, f) => f(a) }
       }
 
     override def toString: String =
       "Applicative[Action]"
-  }
-  implicit val idToAction: NaturalTransformation[Id, Action] =
+
+  given NaturalTransformation[Id, Action] =
     NaturalTransformation.naturalId[Action]
 
-  implicit def FinalizedAction: Safe[Action] = new Safe[Action] {
+  implicit def FinalizedAction: Safe[Action] = new Safe[Action]:
     def finalizeWith[A](fa: Action[A], f: Finalizer): Action[A] =
       fa.addLast(f)
 
     def attempt[A](action: Action[A]): Action[Throwable Either A] =
       action.attempt
-  }
 
-  implicit def actionAsResult[T : AsResult]: AsResult[Action[T]] = new AsResult[Action[T]] {
+  given actionAsResult[T : AsResult] as AsResult[Action[T]] = new AsResult[Action[T]]:
     def asResult(action: =>Action[T]): Result =
       action.runAction(ExecutionEnv.fromGlobalExecutionContext).fold(err => Error(err),  ok => AsResult(ok))
-  }

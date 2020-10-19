@@ -129,7 +129,7 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
       case Some(r) =>
         val to = env.arguments.timeout |+| timeout
         try
-          implicit val ec = env.specs2ExecutionContext
+          given ec as ExecutionContext = env.specs2ExecutionContext
 
           // this sets any custom classloader, like the one passed from SBT
           // as the context classloader this thread
@@ -220,7 +220,7 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
   /** run this execution after the previous executions are finished */
   private def afterExecutions(executions: List[Execution], sequential: Boolean, checkResult: Boolean): Execution =
     Execution.withEnvFlatten { (env: Env) =>
-      implicit val ec = env.executionContext
+      given ec as ExecutionContext = env.executionContext
 
       lazy val runs: List[Future[Result]] =
         executions.flatMap(_.futureResult(env).map(_.map(_._1)))
@@ -331,7 +331,7 @@ object Execution:
   /** create an execution using the Env and Flatten the execution */
   def withEnvFlatten(f: Env => Execution): Execution =
     Execution(Some { (env: Env) =>
-      implicit val ec = env.executionContext
+      given ec as ExecutionContext = env.executionContext
       Future {
         () =>
         f(env).startExecution(env).executionResult.runFuture(env.executionEnv).map(r => () => r)

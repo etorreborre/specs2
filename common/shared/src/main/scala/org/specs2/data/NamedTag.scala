@@ -77,10 +77,9 @@ object NamedTag:
    * define a very coarse Monoid for NamedTags where appending 2 NamedTags returns a Tag object
    * with both list of tags
    */
-  implicit val NamedTagsAreMonoid: Monoid[NamedTag] = new Monoid[NamedTag] {
+  given NamedTagsAreMonoid as Monoid[NamedTag] = new Monoid[NamedTag]:
     val zero: NamedTag = AlwaysWhenNoIncludeTag
     def append(t1: NamedTag, t2: =>NamedTag): NamedTag =
       if t1 == zero then t2
       else if t2 == zero then t1
       else t1 overrideWith t2
-  }

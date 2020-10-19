@@ -46,7 +46,7 @@ trait Fold[M[_], A, B]:
   /** run another fold on the end result */
   def pipe[C](f: Fold[M, B, C]) = new Fold[M, A, C] {
     type S = self.S
-    implicit val monad: Monad[M] = self.monad
+    given monad as Monad[M] = self.monad
 
     def start = self.start
     def fold = self.fold
@@ -94,7 +94,7 @@ trait Fold[M[_], A, B]:
   /** zip 2 folds to return a pair of values. alias for <*> */
   def zip[C](f: Fold[M, A, C]) = new Fold[M, A, (B, C)] {
     type S = (self.S, f.S)
-    implicit val monad: Monad[M] = self.monad
+    given monad as Monad[M] = self.monad
 
     def start = monad.tuple2(self.start, f.start)
     def fold = (s, a) => monad.tuple2(self.fold(s._1, a), f.fold(s._2, a))
@@ -120,7 +120,7 @@ trait Fold[M[_], A, B]:
   /** observe both the input value and the current state */
   def observeWithState(sink: Sink[M, (A, S)]) = new Fold[M, A, B] {
     type S = (self.S, sink.S)
-    implicit val monad: Monad[M] = self.monad
+    given monad as Monad[M] = self.monad
 
     def start = monad.tuple2(self.start , sink.start)
     def fold = (s: S, a: A) => monad.tuple2(self.fold(s._1, a), sink.fold(s._2, (a, s._1)))
@@ -134,7 +134,7 @@ trait Fold[M[_], A, B]:
   /** observe the current state */
   def observeState(sink: Sink[M, S]) = new Fold[M, A, B] {
     type S = (self.S, sink.S)
-    implicit val monad: Monad[M] = self.monad
+    given monad as Monad[M] = self.monad
 
     def start = monad.tuple2(self.start , sink.start)
     def fold = (s: S, a: A) => monad.tuple2(self.fold(s._1, a), sink.fold(s._2, s._1))
@@ -148,7 +148,7 @@ trait Fold[M[_], A, B]:
   /** observe both the input value and the next state */
   def observeWithNextState(sink: Sink[M, (A, S)]) = new Fold[M, A, B] {
     type S = (self.S, sink.S)
-    implicit val monad: Monad[M] = self.monad
+    given monad as Monad[M] = self.monad
 
     def start = monad.tuple2(self.start , sink.start)
     def fold = (s: S, a: A) => self.fold(s._1, a).flatMap(next => sink.fold(s._2, (a, next)).map((next, _)))
@@ -162,7 +162,7 @@ trait Fold[M[_], A, B]:
   /** observe the next state */
   def observeNextState(sink: Sink[M, S]) = new Fold[M, A, B] {
     type S = (self.S, sink.S)
-    implicit val monad: Monad[M] = self.monad
+    given monad as Monad[M] = self.monad
 
     def start = monad.tuple2(self.start , sink.start)
     def fold = (s: S, a: A) => self.fold(s._1, a).flatMap(next => sink.fold(s._2, next).map((next, _)))
@@ -189,7 +189,7 @@ trait Fold[M[_], A, B]:
   /** pipe the output of this fold into another fold */
   def compose[C](f2: Fold[M, B, C]) = new Fold[M, A, C] {
     type S = (self.S, f2.S)
-    implicit val monad: Monad[M] = self.monad
+    given monad as Monad[M] = self.monad
 
     def start = monad.tuple2(self.start, f2.start)
 
@@ -203,7 +203,7 @@ trait Fold[M[_], A, B]:
   /** create a fold that will run this fold repeatedly on input elements and collect all results */
   def nest[F[_], C](f: C => F[A])(implicit monoid: Monoid[B], foldable: Foldable[F]) = new Fold[M, C, B] {
     type S = B
-    implicit val monad: Monad[M] = self.monad
+    given monad as Monad[M] = self.monad
 
     def start = monad.pure(monoid.zero)
 
@@ -223,7 +223,7 @@ trait Fold[M[_], A, B]:
 
   def startWith(action: M[Unit]): Fold[M, A, B] { type S = self.S } = new Fold[M, A, B] {
     type S = self.S
-    implicit val monad: Monad[M] = self.monad
+    given monad as Monad[M] = self.monad
 
     def start = action >> self.start
     def fold = (s, a) => self.fold(s, a)
@@ -232,7 +232,7 @@ trait Fold[M[_], A, B]:
 
   def endWith(action: M[Unit]): Fold[M, A, B] { type S = self.S } = new Fold[M, A, B] {
     type S = self.S
-    implicit val monad: Monad[M] = self.monad
+    given monad as Monad[M] = self.monad
 
     def start = self.start
     def fold = (s, a) => self.fold(s, a)

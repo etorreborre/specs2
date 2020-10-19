@@ -7,12 +7,9 @@ import org.specs2.fp._
  * This class provides the possibility to execute a function on an object if a condition is true
  * If not, the object is returned
  */
-private[specs2]
-class Identityx[T](t: =>T):
-  def ?>(f: T => T)(implicit condition: Boolean = true) = when(condition)(f)
-  def when(condition: Boolean)(f: T => T) = if condition then f(t) else t
-  def unless(condition: Boolean)(implicit m: Monoid[T]) = if condition then t else m.zero
+extension [T](t: =>T)
+  def when(condition: Boolean)(f: T => T) =
+    if condition then f(t) else t
 
-private[specs2]
-object Identityx:
-  implicit def identityx[T](f: =>T): Identityx[T] = new Identityx(f)
+  def unless(condition: Boolean)(using m: Monoid[T]) =
+    if condition then t else m.zero

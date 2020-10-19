@@ -186,7 +186,7 @@ object Result:
   /**
    * This monoids "absorbs" success messages if the result of the |+| is not a success
    */
-  implicit val ResultFailureMonoid: Monoid[Result] = ResultFailuresMonoid("; ")
+  given ResultFailureMonoid as Monoid[Result] = ResultFailuresMonoid("; ")
 
   def ResultFailuresMonoid(separator: String): Monoid[Result] = new Monoid[Result] {
     val zero = Success()

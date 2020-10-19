@@ -78,7 +78,7 @@ trait S2StringContext1 extends S2StringContextCreation:
 
 trait S2StringContextCreation extends FragmentsFactory:
   /** The FragmentFactory has to be passed as an implicit in order to be inlined in macros */
-  implicit val _fragmentFactory: FragmentFactory = fragmentFactory
+  given _fragmentFactory as FragmentFactory = fragmentFactory
 
   /**
    * String interpolation for specs2 fragments

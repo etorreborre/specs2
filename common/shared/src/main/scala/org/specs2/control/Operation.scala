@@ -122,7 +122,7 @@ object Operation:
   def thenFinally[A](operation: Operation[A], last: Finalizer): Operation[A] =
     operation.addLast(last)
 
-  implicit val OperationMonad: Monad[Operation[*]] = new Monad[Operation[*]] {
+  given OperationMonad as Monad[Operation[*]] = new Monad[Operation[*]]:
     def point[A](a: =>A): Operation[A] =
       Operation(() => Right(a))
 
@@ -145,9 +145,8 @@ object Operation:
 
     override def toString: String =
       "Monad[Operation]"
-  }
 
-  implicit val OperationApplicative: Applicative[Operation[*]] = new Applicative[Operation[*]] {
+  given OperationApplicative as Applicative[Operation[*]] = new Applicative[Operation[*]]:
     def point[A](a: =>A): Operation[A] =
       Operation(() => Right(a))
 
@@ -156,23 +155,19 @@ object Operation:
 
     override def toString: String =
       "Applicative[Operation]"
-  }
 
-  implicit val operationToAction: NaturalTransformation[Operation, Action] =
-    new NaturalTransformation[Operation, Action] {
+  given operationToAction as NaturalTransformation[Operation, Action] =
+    new NaturalTransformation[Operation, Action]:
       def apply[A](operation: Operation[A]): Action[A] =
         operation.toAction
-    }
 
-  implicit def SafeOperation: Safe[Operation] = new Safe[Operation] {
+  given SafeOperation as Safe[Operation] = new Safe[Operation]:
     def finalizeWith[A](fa: Operation[A], f: Finalizer): Operation[A] =
       fa.addLast(f)
 
     def attempt[A](fa: Operation[A]): Operation[Throwable Either A] =
       fa.attempt
-  }
 
-  implicit def operationAsResult[T : AsResult]: AsResult[Operation[T]] = new AsResult[Operation[T]] {
+  given operationAsResult[T : AsResult] as AsResult[Operation[T]] = new AsResult[Operation[T]]:
     def asResult(operation: =>Operation[T]): Result =
       operation.runOperation.fold(err => Error(err),  ok => AsResult(ok))
-  }
