@@ -20,6 +20,10 @@ class BeEqualToMatcherSpec extends Spec with ResultMatchers with ShouldMatchers 
   ${ "a" === "a" }
   ${ "a" !== "b" }
 
+  This comparison works because === is implemented with ==
+  It wouldn't work if === was implemented with equals()
+  ${ (1:Long) === 1 }
+
   Typed equality
   ${ "a" must be_===("a") }
   ${ "a" ==== "a" }

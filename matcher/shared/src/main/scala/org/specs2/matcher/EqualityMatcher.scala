@@ -25,19 +25,18 @@ class EqualityMatcher[T : Diffable](t: =>T) extends AdaptableMatcher[T] { outer 
     val (actual, expected) = (b.value, t)
     val diff = Diffable.diff(actual, expected)
 
-    // we make sure that values are not null and then we use the actual equality with `.equals`
+    // we make sure that values are not null and then we use the actual equality with `==`
     // to determine if values are equal. In principle diff.identical` should return the same value
     // as equals but if it is not the case `equals` should take precedence.
     // The only exception is arrays where we use the Diffable instance to do an element by element
-    // comparison where equals only does an array reference comparison.
+    // comparison where == only does an array reference comparison.
     // Note that if diff.identical differs from equals, it is still possible to intercept the MatchResult and
     // inspect the detail field to get the difference according to the Diffable instance
     val isEqual =
-          if (actual == null) expected == null
-          else (actual, expected) match {
-                    case (a1: Array[_], a2: Array[_]) => diff.identical
-                    case _ => actual.equals(expected)
-               }
+          (actual, expected) match {
+            case (a1: Array[_], a2: Array[_]) => diff.identical
+            case _ => actual == expected
+          }
 
     failureDetailsFor(actual, expected) match {
       case Some(failureDetail) =>
