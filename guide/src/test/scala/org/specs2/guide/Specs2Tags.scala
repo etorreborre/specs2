@@ -64,8 +64,9 @@ case class VersionTag(number: DotNumber, timestamp: Option[String], commit: Opti
     (List("SPECS2", number.render) ++ timestamp.toList ++ commit.toList).mkString("-")
 }
 
-object VersionTag {
-  def fromString(s: String): Option[VersionTag] = {
+object VersionTag:
+
+  def fromString(s: String): Option[VersionTag]:
     s.split("\\-").toList match {
       case _ :: number :: timestamp :: commit :: Nil =>
         DotNumber.fromString(number).map(dotNumber => VersionTag(dotNumber, Some(timestamp), Some(commit)))
@@ -75,30 +76,24 @@ object VersionTag {
 
       case _ => None
     }
-  }
-
-  implicit def VersionTagOrdering: Ordering[VersionTag] = new Ordering[VersionTag] {
+  
+  given Ordering[VersionTag] = new Ordering[VersionTag]:
     def compare(x: VersionTag, y: VersionTag): Int =
       Ordering[(DotNumber, Option[String])].compare((x.number, x.timestamp), (y.number, y.timestamp))
-  }
-}
 
-case class DotNumber(values: List[Int]) {
+case class DotNumber(values: List[Int]):
   def render: String =
     values.mkString(".")
-}
 
 
 import Exceptions._
 
-object DotNumber {
+object DotNumber:
   def fromString(s: String): Option[DotNumber] =
     tryo(DotNumber(s.split("\\.").toList.map(_.toInt)))
 
-  implicit val DotNumberOrdering: Ordering[DotNumber] = new Ordering[DotNumber] {
+  given Ordering[DotNumber] = new Ordering[DotNumber]:
     def compare(x: DotNumber, y: DotNumber): Int =
       if (x.values.zip(y.values).forall { case (n1, n2) => n1 > n2 }) 1
       else if (x.values == y.values) 0
       else -1
-  }
-}

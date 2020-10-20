@@ -53,7 +53,7 @@ The display of elements can be modified by using an implicit `org.specs2.text.Sh
 the number of columns in the table. For example: ${snippet{
 import org.specs2.text._
 
-implicit val s3 =
+given Show3[Int, Double, String] =
   Show3[Int, Double, String]().copy(show2 = (d: Double) => "x" * d.toInt)
 
 val table =
@@ -78,7 +78,7 @@ You can solve this conflict by either:
 By default the execution of a datatable is sequential, one row after another. This might not be very practical if you have long-running computations on each row.
 If this is the case you can use the `|*` operator (instead of just `|`) to define your execution function:${snippet{
 
-implicit val ec = scala.concurrent.ExecutionContext.Implicits.global
+given ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
 
   "a"   | "b" | "c" |>
    2    !  2  !  4  |

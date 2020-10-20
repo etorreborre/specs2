@@ -47,7 +47,7 @@ Or you can set implicit arguments which will be used for any specification execu
 
 ```
 scala> import specs2.arguments._
-scala> implicit val myargs = nocolor
+scala> given Arguments = nocolor
 
 scala> specs2.run(spec1)
 ```

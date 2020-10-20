@@ -54,7 +54,7 @@ Future $Matchers (see the "Future" tab) require an implicit `ExecutionEnv`. This
 The `terminate` matcher (see the "Termination" tab in the optional $Matchers section) also needs an `ExecutionEnv` to run a piece of code and periodically check if it has terminated or not: ${snippet{
   s2"""
   this code must be fast enough ${
-    implicit val ee = ExecutionEnv.fromGlobalExecutionContext
+    given ExecutionEnv = ExecutionEnv.fromGlobalExecutionContext
     Thread.sleep(100) must terminate(retries = 1, sleep = 60.millis)
   }
 """

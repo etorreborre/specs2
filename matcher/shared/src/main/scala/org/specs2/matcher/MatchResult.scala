@@ -296,7 +296,7 @@ class OrNotMatch[T] private[specs2](first: MatchResult[T], second: =>MatchResult
  */
 object MatchResult:
 
-  implicit val MatchResultFunctor: Functor[MatchResult] = new Functor[MatchResult] {
+  given Functor[MatchResult] = new Functor[MatchResult]:
     def map[A, B](m: MatchResult[A])(f: A => B) = m match
       case success: MatchSuccess[_] => success.map(f)
       case failure: MatchFailure[_] => failure.map(f)
@@ -308,47 +308,46 @@ object MatchResult:
       case andnot: AndNotMatch[_]   => andnot.map(f)
       case or: OrMatch[_]           => or.map(f)
       case ornot: OrNotMatch[_]     => ornot.map(f)
-  }
-  implicit val MatchSuccessFunctor: Functor[MatchSuccess] = new Functor[MatchSuccess] {
+
+
+  given MatchSuccessFunctor as Functor[MatchSuccess] = new Functor[MatchSuccess]:
     def map[A, B](m: MatchSuccess[A])(f: A => B) =
       MatchSuccess(m.okMessage, m.koMessage, m.expectable.map(f))
-  }
-  implicit val MatchFailureFunctor: Functor[MatchFailure] = new Functor[MatchFailure] {
-    def map[A, B](m: MatchFailure[A])(f: A => B) = MatchFailure(m.okMessage, m.koMessage, m.expectable.map(f))
-  }
-  implicit val MatchSkipFunctor: Functor[MatchSkip] = new Functor[MatchSkip] {
-    def map[A, B](m: MatchSkip[A])(f: A => B) = new MatchSkip(m.message, m.expectable.map(f))
-  }
-  implicit val MatchPendingFunctor: Functor[MatchPending] = new Functor[MatchPending] {
-    def map[A, B](m: MatchPending[A])(f: A => B) = new MatchPending(m.message, m.expectable.map(f))
-  }
-  implicit val NotMatchFunctor: Functor[NotMatch] = new Functor[NotMatch] {
-    def map[A, B](n: NotMatch[A])(f: A => B) = new NotMatch(n.m.map(f))
-  }
-  implicit val NeutralMatchFunctor: Functor[NeutralMatch] = new Functor[NeutralMatch] {
-    def map[A, B](n: NeutralMatch[A])(f: A => B) = new NeutralMatch(n.m.map(f))
-  }
-  implicit val AndMatchFunctor: Functor[AndMatch] = new Functor[AndMatch] {
-    def map[A, B](m: AndMatch[A])(f: A => B) = new AndMatch(m.m1.map(f), m.m2.map(f))
-  }
-  implicit val AndNotMatchFunctor: Functor[AndNotMatch] = new Functor[AndNotMatch] {
-    def map[A, B](m: AndNotMatch[A])(f: A => B) = new AndNotMatch(m.m1.map(f), m.m2.map(f))
-  }
-  implicit val OrMatchFunctor: Functor[OrMatch] = new Functor[OrMatch] {
-    def map[A, B](m: OrMatch[A])(f: A => B) = new OrMatch(m.m1.map(f), m.m2.map(f))
-  }
-  implicit val OrNotMatchFunctor: Functor[OrNotMatch] = new Functor[OrNotMatch] {
-    def map[A, B](m: OrNotMatch[A])(f: A => B) = new OrNotMatch(m.m1.map(f), m.m2.map(f))
-  }
 
-  implicit def matchResultAsResult[M[_] <: MatchResult[_], T]: AsResult[M[T]] = new AsResult[M[T]] {
+  given MatchFailureFunctor as Functor[MatchFailure] = new Functor[MatchFailure]:
+    def map[A, B](m: MatchFailure[A])(f: A => B) = MatchFailure(m.okMessage, m.koMessage, m.expectable.map(f))
+
+  given MatchSkipFunctor as Functor[MatchSkip] = new Functor[MatchSkip]:
+    def map[A, B](m: MatchSkip[A])(f: A => B) = new MatchSkip(m.message, m.expectable.map(f))
+
+  given MatchPendingFunctor as Functor[MatchPending] = new Functor[MatchPending]:
+    def map[A, B](m: MatchPending[A])(f: A => B) = new MatchPending(m.message, m.expectable.map(f))
+
+  given NotMatchFunctor as Functor[NotMatch] = new Functor[NotMatch]:
+    def map[A, B](n: NotMatch[A])(f: A => B) = new NotMatch(n.m.map(f))
+
+  given NeutralMatchFunctor as Functor[NeutralMatch] = new Functor[NeutralMatch]:
+    def map[A, B](n: NeutralMatch[A])(f: A => B) = new NeutralMatch(n.m.map(f))
+
+  given AndMatchFunctor as Functor[AndMatch] = new Functor[AndMatch]:
+    def map[A, B](m: AndMatch[A])(f: A => B) = new AndMatch(m.m1.map(f), m.m2.map(f))
+
+  given AndNotMatchFunctor as Functor[AndNotMatch] = new Functor[AndNotMatch]:
+    def map[A, B](m: AndNotMatch[A])(f: A => B) = new AndNotMatch(m.m1.map(f), m.m2.map(f))
+
+  given OrMatchFunctor as Functor[OrMatch] = new Functor[OrMatch]:
+    def map[A, B](m: OrMatch[A])(f: A => B) = new OrMatch(m.m1.map(f), m.m2.map(f))
+
+  given OrNotMatchFunctor as Functor[OrNotMatch] = new Functor[OrNotMatch]:
+    def map[A, B](m: OrNotMatch[A])(f: A => B) = new OrNotMatch(m.m1.map(f), m.m2.map(f))
+
+
+  given matchResultAsResult[M[_] <: MatchResult[_], T] as AsResult[M[T]] = new AsResult[M[T]]:
     def asResult(t: =>M[T]): Result = AsResult(t.toResult)
-  }
 
   /** implicit typeclass instance to create examples from a sequence of MatchResults */
-  implicit def matchResultSeqAsResult[T]: AsResult[Seq[MatchResult[T]]] = new AsResult[Seq[MatchResult[T]]] {
+  given matchResultSeqAsResult[T] as AsResult[Seq[MatchResult[T]]] = new AsResult[Seq[MatchResult[T]]]:
     def asResult(t: =>Seq[MatchResult[T]]): Result = t.foldLeft(StandardResults.success: Result)(_ and _.toResult)
-  }
 
   /** sequence a list of MatchResults into a MatchResult of a list */
   def sequence[T](seq: Seq[MatchResult[T]]): MatchResult[Seq[T]] =

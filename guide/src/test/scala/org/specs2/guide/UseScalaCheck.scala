@@ -114,7 +114,7 @@ prop((s1: String, s2: String) => s1.nonEmpty or s2.nonEmpty).noShrink
 
 ScalaCheck properties are sometimes used to test stateful applications rather than pure functions. For example you want to test that a function is writing files somewhere and you would like those files to be deleted after each property execution: ${snippet{
 // 8<---
-implicit val arbitraryFile: Arbitrary[File] = ???
+given Arbitrary[File] = ???
 // 8<---
 def createFile(f: File): Unit = ???
 def deleteTmpDir(): Unit = ???
@@ -127,9 +127,9 @@ prop { (f: File) =>
 }}
 
 You can also "prepare" the property to be tested based on the generated arguments: ${snippet {
-  // 8<---
-  implicit val arbitraryFile: Arbitrary[File] = ???
-  // 8<---
+// 8<---
+given Arbitrary[File] = ???
+// 8<---
 
 def createFile(directory: File, f: File): Unit = ???
 // this method will keep the arguments intact but can
@@ -150,7 +150,7 @@ Note that there is a way to [model stateful systems](https://github.com/rickynil
 #### Default values
 
 ScalaCheck test generation can be tuned with a few properties. If you want to change the default settings, you have to use implicit values: ${snippet{
-  implicit val params = Parameters(minTestsOk = 20) // add ".verbose" to get additional console printing
+  given Parameters = Parameters(minTestsOk = 20) // add ".verbose" to get additional console printing
 }}
 
 The parameters you can modify are:

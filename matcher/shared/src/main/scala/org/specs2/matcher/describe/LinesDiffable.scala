@@ -6,7 +6,7 @@ package org.specs2.matcher.describe
  */
 object LinesDiffable:
 
-  implicit val largeStringDiffable: Diffable[String] = new Diffable[String] {
+  given largeStringDiffable as Diffable[String] = new Diffable[String]:
     def diff(actual: String, expected: String): ComparisonResult =
       val (actualLines, expectedLines) =
         (actual.toString.split("\n").toList,
@@ -16,12 +16,10 @@ object LinesDiffable:
         linesDiffable[String].diff(actualLines, expectedLines)
       else
         Diffable.stringDiffable.diff(actual, expected)
-  }
 
-  implicit def linesDiffable[T : Diffable]: Diffable[List[T]] = new Diffable[List[T]] {
+  given linesDiffable[T : Diffable] as Diffable[List[T]] = new Diffable[List[T]]:
     def diff(actual: List[T], expected: List[T]): ComparisonResult =
       LinesComparisonResult(actual, expected)
-  }
 
 
 case class LinesComparisonResult[T : Diffable](actual: List[T], expected: List[T]) extends ComparisonResult:
@@ -33,9 +31,9 @@ case class LinesComparisonResult[T : Diffable](actual: List[T], expected: List[T
     implicitly[Diffable[T]]
 
   private lazy val operations: IndexedSeq[EditDistanceOperation[T]] =
-    levenhsteinDistance[T](actual.toIndexedSeq, expected.toIndexedSeq)(new Equiv[T] {
-      def equiv(a: T, b: T) = diffable.diff(a, b).identical
-    })
+    levenhsteinDistance[T](actual.toIndexedSeq, expected.toIndexedSeq)(
+      new Equiv[T]:
+        def equiv(a: T, b: T) = diffable.diff(a, b).identical)
 
   def identical: Boolean =
     actual.size == expected.size &&
@@ -47,4 +45,3 @@ case class LinesComparisonResult[T : Diffable](actual: List[T], expected: List[T
     case Del(line)           => List(color("- "+line, red))
     case Subst(line1, line2) => List(color("- "+line1, red), color("+ "+line2, green))
   }.mkString("\n", "\n", "\n")
-

@@ -17,7 +17,7 @@ class Website(env: Env) extends Specification with Specs2Variables with Specs2Ta
 
 """
 
-  implicit val ee = env.executionEnv
+  given ExecutionEnv = env.executionEnv
 
   val outputDir = "target" / "specs2-reports" / "site"
   val versionDirName = FileName.unsafe("SPECS2-"+VERSION)

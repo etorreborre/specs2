@@ -11,7 +11,7 @@ object TerminationMatchers extends UserGuideCard with matcher.TerminationMatcher
 
 Sometimes you just want to specify that a block of code is going to terminate. The `${fullName[matcher.TerminationMatchers]}` trait is here to help. If you mix in that trait, you can write: ${snippet{
 // 8<----
-implicit val ee: ExecutionEnv = ??? // import your own
+given ExecutionEnv = ??? // import your own
 // 8<----
 Thread.sleep(100) must terminate
 
@@ -24,7 +24,7 @@ Note that the behaviour of this matcher is a bit different from the `eventually`
 
 In a further scenario, we might want to check that triggering another action is able to unblock the first one: ${snippet{
 // 8<----
-implicit val ee: ExecutionEnv = ??? // import your own
+given ExecutionEnv = ??? // import your own
 // 8<----
 action must terminate.when(action2)
 action must terminate.when("starting the second action", action2)
@@ -33,7 +33,7 @@ action must terminate(retries=3, sleep=100.millis).when(action2)
 
 When a second action is specified like that, `Action` will be started and `action2` will be started on the first retry. Otherwise, if you want to specify that `Action` can *only* terminate when `action2` is started, you write: ${snippet{
 // 8<----
-implicit val ee: ExecutionEnv = ??? // import your own
+given ExecutionEnv = ??? // import your own
 // 8<----
 action must terminate.onlyWhen(action2)
 }}

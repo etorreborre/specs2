@@ -5,7 +5,7 @@ import org.specs2.main.Arguments
 import org.specs2.mutable._
 
 class MarkdownSpec extends Spec:
-  implicit val defaultArg: Arguments = Arguments()
+  given Arguments = Arguments()
 
   "Emphasized text" >>
   { toHtmlNoPar("_hello_") must ===("<em>hello</em>") }
