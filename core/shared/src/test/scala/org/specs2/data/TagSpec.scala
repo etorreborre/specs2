@@ -1,11 +1,9 @@
 package org.specs2
 package data
 
-import org.specs2.fp.syntax._
-import org.specs2.fp.syntax._
-import org.specs2.main.Arguments
-import NamedTag._
-import NamedTagsAreMonoid._
+import fp.syntax._
+import main.Arguments
+import NamedTag.{given _,_}
 import matcher._
 
 class TagSpec extends Specification with DataTables { def is = s2"""
@@ -19,6 +17,9 @@ class TagSpec extends Specification with DataTables { def is = s2"""
   It is possible to remove tags from a tag       $remove1
 
  """
+
+  val monoid = NamedTag.NamedTagsAreMonoid
+  import monoid._
 
   def zeroTag = allTags must contain { (t: NamedTag) =>
     allNames must contain { (names: String) =>

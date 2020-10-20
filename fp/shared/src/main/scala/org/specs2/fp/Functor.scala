@@ -17,23 +17,23 @@ trait Functor[F[_]]:
 object Functor:
   @inline def apply[F[_]](implicit F: Functor[F]): Functor[F] = F
 
-  implicit val OptionFunctor: Functor[Option[*]] = new Functor[Option[*]] {
+  given OptionFunctor as Functor[Option[*]] = new Functor[Option[*]]:
     def map[A, B](fa: Option[A])(f: A => B): Option[B] =
       fa.map(f)
-  }
-  implicit def EitherFunctor[E]: Functor[Either[E, *]] = new Functor[Either[E, *]] {
+
+  given EitherFunctor[E] as Functor[Either[E, *]] = new Functor[Either[E, *]]:
     def map[A, B](fa: Either[E, A])(f: A => B): Either[E, B] =
       fa.map(f)
-  }
 
 trait FunctorSyntax:
-  implicit class FunctorOps[F[_] : Functor, A](fa: F[A]):
-    def map[B](f: A => B): F[B] =
+  extension [F[_] : Functor, A, B](fa: F[A]):
+    def map(f: A => B): F[B] =
       Functor.apply[F].map(fa)(f)
 
-    def as[B](b: => B): F[B] =
+    def as(b: => B): F[B] =
       Functor.apply[F].as(fa)(b)
 
+  extension [F[_] : Functor, A](fa: F[A]):
     def void: F[Unit] =
       Functor.apply[F].void(fa)
 

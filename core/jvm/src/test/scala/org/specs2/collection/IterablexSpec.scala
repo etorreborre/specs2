@@ -27,7 +27,7 @@ class IterablexSpec extends Specification with IterableData with ScalaCheckResul
       }
     }
     "for 2 iterables created with same elements in a different order, even with different types like LazyList and List" >> {
-      given Arbitrary[Iterable[Any]] = sameIterablesOfDifferentTypes
+      given Arbitrary[(Iterable[Any], Iterable[Any])] = sameIterablesOfDifferentTypes
       Prop.forAll { (t: (Iterable[Any], Iterable[Any])) => val (i1, i2) = t
         i1.sameElementsAs(i2)
       }

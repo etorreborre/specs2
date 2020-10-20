@@ -34,7 +34,7 @@ class StepParsersSpec extends Spec with TypedEqual { def is = s2"""
   def brackets1 = StepParser((_:String).toInt).withRegex("""\[([^\]]+)\]""".r).parse("a value [1]") === Right(("a value 1", 1))
   def brackets2 = StepParser((s: String) => s).withRegex("""\[([^\]]+)\]""".r).parse("a value [{1}]") === Right(("a value {1}", "{1}"))
   def brackets3 =
-    implicit val stepParserRegex: Regex =
+    given stepParserRegex as Regex =
       """\[([^\]]+)\]""".r
 
     StepParser((_:String).toInt).parse("a value [1]") === Right(("a value 1", 1))

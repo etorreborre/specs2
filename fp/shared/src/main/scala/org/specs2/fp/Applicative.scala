@@ -125,14 +125,14 @@ trait Applicative[F[_]] extends Functor[F] { self =>
 object Applicative:
   @inline def apply[F[_]](implicit F: Applicative[F]): Applicative[F] = F
 
-  implicit def optionApplicative[L]: Applicative[Option] =
+  given optionApplicative[L] as Applicative[Option] =
     Monad.optionMonad
 
-  implicit def eitherApplicative[L]: Applicative[Either[L, *]] =
+  given eitherApplicative[L] as Applicative[Either[L, *]] =
     Monad.eitherMonad[L]
 
-  implicit def futureApplicative(implicit ec: ExecutionContext): Applicative[Future] =
-    new Applicative[Future] {
+  given futureApplicative(using ec: ExecutionContext) as Applicative[Future] =
+    new Applicative[Future]:
       def point[A](a: =>A): Future[A] =
         Future(a)
 
@@ -145,38 +145,41 @@ object Applicative:
 
       override def toString: String =
         "Applicative[Future]"
-    }
 
 
 trait ApplicativeSyntax:
 
-  implicit class ApplicativeOps[F[_] : Applicative, A](fa: F[A]):
-    val applicative = Applicative.apply[F]
+  extension [F[_] : Applicative, A, B, C](fa: F[A]):
 
-    def ap[B](f: F[A => B]): F[B] =
-      applicative.ap(fa)(f)
+    def |@|(fb: F[B])(f: (A, B) => C): F[C] =
+      summon[Applicative[F]].apply2(fa, fb)(f)
 
-    def tuple2[B](fb: F[B]): F[(A, B)] =
-      applicative.tuple2(fa, fb)
+  extension [F[_] : Applicative, A, B](fa: F[A]):
 
-    def |@|[B, C](fb: F[B])(f: (A, B) => C): F[C] =
-      applicative.apply2(fa, fb)(f)
+    def ap(f: F[A => B]): F[B] =
+      summon[Applicative[F]].ap(fa)(f)
 
-    def *>[B](fb: F[B]): F[B] =
-      applicative.apply2(fa, fb)((_, b) => b)
+    def tuple2(fb: F[B]): F[(A, B)] =
+      summon[Applicative[F]].tuple2(fa, fb)
+
+    def *>(fb: F[B]): F[B] =
+      summon[Applicative[F]].apply2(fa, fb)((_, b) => b)
+
+  extension [F[_] : Applicative, A](fa: F[A]):
 
     def when(condition: Boolean): F[Unit] =
-      applicative.when(condition)(fa)
+      summon[Applicative[F]].when(condition)(fa)
 
     def unless(condition: Boolean): F[Unit] =
-      applicative.unless(condition)(fa)
+      summon[Applicative[F]].unless(condition)(fa)
 
-  def when[F[_], A](condition: Boolean)(fa: =>F[A])(using applicative: Applicative[F]): F[Unit] =
-    applicative.when(condition)(fa)
+  extension [F[_] : Applicative, A](fa: List[A]):
 
-  def unless[F[_], A](condition: Boolean)(fa: =>F[A])(using applicative: Applicative[F]): F[Unit] =
-    applicative.unless(condition)(fa)
+    def filterM(f: A => F[Boolean]): F[List[A]] =
+      summon[Applicative[F]].filterM(fa)(f)
 
-  implicit class ListApplicativeOps[A](fa: List[A]):
-    def filterM[F[_] : Applicative](f: A => F[Boolean]): F[List[A]] =
-      Applicative.apply[F].filterM(fa)(f)
+  def when[F[_] : Applicative, A](condition: Boolean)(fa: =>F[A]): F[Unit] =
+    summon[Applicative[F]].when(condition)(fa)
+
+  def unless[F[_] : Applicative, A](condition: Boolean)(fa: =>F[A]): F[Unit] =
+    summon[Applicative[F]].unless(condition)(fa)

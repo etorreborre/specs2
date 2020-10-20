@@ -1,7 +1,7 @@
 package org.specs2
 package html
 
-import control._
+import control._, Identityx._
 import specification.core._
 
 import scala.xml.NodeSeq

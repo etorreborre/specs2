@@ -2,9 +2,9 @@ package org.specs2
 package reporter
 
 import matcher.DataTable
-import control._
+import control._, Identityx._
 import origami._
-import fp._, syntax._
+import fp._, syntax.{given _, _}
 import specification.core._
 import specification.process._
 import text.NotNullStrings._
@@ -191,7 +191,7 @@ case class TextPrinter(env: Env) extends Printer {
   }
 
   def statusAndDescription(text: String, result: Result)(args: Arguments) = {
-    val textLines = text.trimEnclosing("`").trimEnclosing("```").split("\n", -1) // trim markdown code marking
+    val textLines = text.trimEnclosing("`").trimEnclosing("```").split("\n", -1).toList // trim markdown code marking
     val firstLine = textLines.headOption.getOrElse("")
     val (indentation, line) = firstLine.span(_ == ' ')
     val status = result.coloredStatus(args) + " "
@@ -280,7 +280,7 @@ case class TextPrinter(env: Env) extends Printer {
 
   def indentText(text: String, indentation: Int, indentationSize: Int) =
     if text.isEmpty then text
-    else text.split("\n").map((" " * (indentation * indentationSize)) + _).mkString("\n")
+    else text.split("\n").toIndexedSeq.map((" " * (indentation * indentationSize)) + _).mkString("\n")
 }
 
 

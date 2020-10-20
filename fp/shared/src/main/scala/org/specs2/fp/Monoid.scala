@@ -11,7 +11,7 @@ trait Monoid[F] extends Semigroup[F]:
     if n <= 0 then zero else multiply1(value, n - 1)
 
 object Monoid:
-  @inline def apply[F](implicit F: Monoid[F]): Monoid[F] = F
+  @inline def apply[F](using F: Monoid[F]): Monoid[F] = F
 
   /** Make an append and zero into an instance. */
   def instance[A](f: (A, => A) => A, z: A): Monoid[A] =
@@ -20,25 +20,25 @@ object Monoid:
       def append(f1: A, f2: => A): A = f(f1,f2)
     }
 
-  implicit val intMonoid: Monoid[Int] =
+  given intMonoid as Monoid[Int] =
     instance((s1, s2) => s1 + s2, 0)
 
-  implicit def listMonoid[A]: Monoid[List[A]] =
+  given listMonoid[A] as Monoid[List[A]] =
     instance((s1, s2) => s1 ++ s2, List.empty[A])
 
-  implicit def seqMonoid[A]: Monoid[Seq[A]] =
+  given seqMonoid[A] as Monoid[Seq[A]] =
     instance((s1, s2) => s1 ++ s2, Seq.empty[A])
 
-  implicit def vectorMonoid[A]: Monoid[Vector[A]] =
+  given vectorMonoid[A] as Monoid[Vector[A]] =
     instance((s1, s2) => s1 ++ s2, Vector.empty[A])
 
-  implicit val stringMonoid: Monoid[String] =
+  given stringMonoid as Monoid[String] =
     instance((s1, s2) => s1 + s2, "")
 
-  implicit def streamMonoid[A]: Monoid[LazyList[A]] =
+  given streamMonoid[A] as Monoid[LazyList[A]] =
     instance((s1, s2) => s1 ++ s2, LazyList.empty[A])
 
-  implicit def mapMonoid[K, V : Monoid]: Monoid[Map[K, V]] =
+  given mapMonoid[K, V : Monoid] as Monoid[Map[K, V]] =
     def merge(m1: Map[K, V], m2: Map[K, V]): Map[K, V] =
       m2.foldLeft(m1) { case (res, (k, v)) => res.updated(k, res.get(k).map(Monoid[V].append(_, v)).getOrElse(v)) }
 

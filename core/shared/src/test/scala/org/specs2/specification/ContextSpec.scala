@@ -81,7 +81,7 @@ case class ContextSpec(env: Env) extends Spec with ResultMatchers with OwnEnv { 
 
 """
 
-  implicit val arguments: Arguments = main.Arguments()
+  given arguments as Arguments = main.Arguments()
 
   def before1  = { val d = data(); d.executing(d.ex1Before).prints("before", "e1") }
   def before2  = { val d = data(); d.executing(d.ex1_2Before).prints("before", "e1", "before", "e2") }

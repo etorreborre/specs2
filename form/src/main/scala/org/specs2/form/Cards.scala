@@ -26,7 +26,7 @@ trait Card extends Specification with Snippets { def is = text
   def text: SpecStructure
 
   def texts: List[Fragment] =
-    implicit val executionEnv: ExecutionEnv =
+    given executionEnv as ExecutionEnv =
       ExecutionEnv.fromGlobalExecutionContext
 
     text.textsList

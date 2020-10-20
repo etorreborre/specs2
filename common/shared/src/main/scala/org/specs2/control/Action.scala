@@ -157,7 +157,7 @@ object Action:
   given NaturalTransformation[Id, Action] =
     NaturalTransformation.naturalId[Action]
 
-  implicit def FinalizedAction: Safe[Action] = new Safe[Action]:
+  given FinalizedAction as Safe[Action] = new Safe[Action]:
     def finalizeWith[A](fa: Action[A], f: Finalizer): Action[A] =
       fa.addLast(f)
 

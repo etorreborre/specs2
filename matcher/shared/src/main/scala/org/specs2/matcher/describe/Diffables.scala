@@ -182,16 +182,19 @@ class ArrayDiffable[E](implicit di: Diffable[E]) extends Diffable[Array[E]]:
       ArrayIdentical(actual.toIndexedSeq)
     else
       ArrayDifference(
-        results = result.toIndexedSeq,
+        results = result,
         added   = expected.drop(actual.length).toIndexedSeq,
         removed = actual.drop(expected.length).toIndexedSeq)
 
   private def compareExisting(actual: Array[E], expected: Array[E]) =
-    actual.zip(expected).map { case (a, e) => di.diff(a, e) }
+    actual.zip(expected).toIndexedSeq.map { case (a, e) => di.diff(a, e) }
 
 class FallbackDiffable[T] extends Diffable[T]:
   def diff(actual: T, expected: T) =
     (actual, expected) match
-      case (e1: Array[_], e2: Array[_]) =>  Diffable.diff(e1.map(a => a:Any), e2.map(a => a:Any))
-      case (a, e) if a == e =>              OtherIdentical(a)
-      case (a, e) =>                        OtherDifferent(a, e)
+      case (e1: Array[_], e2: Array[_]) =>
+        Diffable.diff(e1.toIndexedSeq.map(a => a:Any), e2.toIndexedSeq.map(a => a:Any))
+      case (a, e) if a == e =>
+        OtherIdentical(a)
+      case (a, e) =>
+        OtherDifferent(a, e)
