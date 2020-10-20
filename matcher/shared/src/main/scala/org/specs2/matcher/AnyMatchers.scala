@@ -4,7 +4,6 @@ package matcher
 import matcher.describe.Diffable
 import text.Quote._
 import collection.IsEmpty
-import collection.IsEmpty.IsEmptyOps
 import scala.reflect.ClassTag
 
 /**
@@ -70,7 +69,7 @@ trait AnyBaseMatchers:
             iterable.description + " is not empty", iterable)
 
         case _ =>
-            result((iterable.value: T).isEmpty,
+            result(summon[IsEmpty[T]].isEmpty(iterable.value),
             iterable.description + " is empty",
             iterable.description + " is not empty", iterable)
   }

@@ -22,22 +22,20 @@ trait BiMap[K, V]:
 
 private[specs2]
 object BiMap:
-  implicit def keySemiEntry[K](key: K): SemiEntry[K] = new SemiEntry[K] {
-    def k = key
-  }
 
-  implicit def fromSeq[K, V](s: Seq[BiMapEntry[K, V]]): BiMap[K, V] = new BiMap[K, V] {
+  extension[K, V](k: K)
+    def <->(v: V): BiMapEntry[K, V] =
+      new BiMapEntry[K,  V]:
+       val key = k
+       val value = v
+
+  def fromSeq[K, V](s: BiMapEntry[K, V]*): BiMap[K, V] = new BiMap[K, V]:
     lazy val keys: Seq[K]   = s.map(_.key)
     lazy val values: Seq[V] = s.map(_.value)
 
     def fromKey(k: K): Option[V]   = s.find(_.key == k).map(_.value)
     def fromValue(v: V): Option[K] = s.find(_.value == v).map(_.key)
-  }
 
 trait BiMapEntry[K, V]:
   def key:K
   def value:V
-
-trait SemiEntry[K]:
-  def k: K
-  def <->[V](v: V): BiMapEntry[K, V] = new BiMapEntry[K,  V]() { val key = k; val value = v}

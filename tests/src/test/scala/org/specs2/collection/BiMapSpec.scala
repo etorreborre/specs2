@@ -16,7 +16,7 @@ Bimaps define bijection relationships between values
 
 """
 
-  val bimap = Seq("one" <-> 1, "two" <-> 2, "three" <-> 3)
+  val bimap = BiMap.fromSeq("one" <-> 1, "two" <-> 2, "three" <-> 3)
 
   def bimap1 = bimap.values === Seq(1, 2, 3)
   def bimap2 = bimap.fromKey("one") === Some(1)
@@ -26,7 +26,7 @@ Bimaps define bijection relationships between values
 
   def bimap6 = prop { (keys: List[String], values: List[Int]) =>
     val zipped = keys.distinct.zip(values.distinct)
-    val bimap: BiMap[String, Int] = zipped.map { case (k, v) => k <-> v }
+    val bimap: BiMap[String, Int] = BiMap.fromSeq(zipped.map { case (k, v) => k <-> v }:_*)
 
     zipped must contain { (kv: (String, Int)) => kv match {
       case (k, v) =>

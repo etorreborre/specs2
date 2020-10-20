@@ -2,7 +2,7 @@ package org.specs2
 package text
 
 import collection.BiMap
-import BiMap._
+import BiMap.{given _, _}
 
 /**
 * This does some simple replacements in sentences to negate them.
@@ -12,7 +12,7 @@ import BiMap._
 trait Sentences:
 
   protected lazy val negationsTable: BiMap[String, String] =
-    Seq(
+    BiMap.fromSeq(
       " contains "  <-> " does not contain ",
       " must "      <-> " must not ",
       " must "      <-> " mustn't ",
