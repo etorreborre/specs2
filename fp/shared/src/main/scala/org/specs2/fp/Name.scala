@@ -14,18 +14,18 @@ object Name:
 
   def unapply[A](v: Name[A]): Option[A] = Some(v.value)
 
-  implicit val name: Monad[Name] = new Monad[Name] {
+  given name as Monad[Name] = new Monad[Name]:
     def point[A](a: => A): Name[A] = Name(a)
 
     def bind[A, B](fa: Name[A])(f: A => Name[B]): Name[B] =
       f(fa.value)
-  }
-
 
 object Need:
+
   def apply[A](a: => A): Need[A] =
     new Need[A] {
       private lazy val value0: A = a
       def value = value0
     }
+    
   def unapply[A](x: Need[A]): Option[A] = Some(x.value)

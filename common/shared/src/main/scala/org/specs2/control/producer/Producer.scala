@@ -59,15 +59,15 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]):
 
   def append(other: Producer[F, A]): Producer[F, A] =
     Producer(run.flatMap {
-      case Done()         => Monad[F].pure(other.run).flatten
-      case One(a1)        => Monad[F].pure(More(List(a1), other))
-      case More(as, next) => Monad[F].pure(More(as, next append other))
+      case Done()         => summon[Monad[F]].pure(other.run).flatten
+      case One(a1)        => summon[Monad[F]].pure(More(List(a1), other))
+      case More(as, next) => summon[Monad[F]].pure(More(as, next append other))
     })
 
   def filter(f: A => Boolean): Producer[F, A] =
     Producer(run flatMap {
       case Done() => done[F, A].run
-      case One(a) => Monad[F].pure(a).as(if f(a) then One(a) else Done())
+      case One(a) => summon[Monad[F]].pure(a).as(if f(a) then One(a) else Done())
       case More(as, next) =>
         as filter f match {
           case Nil => next.filter(f).run
@@ -187,7 +187,7 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]):
       case More(as, next) =>
         start.flatMap { s1 =>
           as.foldLeftM(s1)(f).flatMap { s =>
-            next.fold(Monad[F].pure(s), f, end)
+            next.fold(summon[Monad[F]].pure(s), f, end)
           }
         }
     }
@@ -198,13 +198,16 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]):
 
   /** get all the elements as a List */
   def runList: F[List[A]] =
-    fold(Monad[F].pure(Vector[A]()), (vs: Vector[A], a: A) => Monad[F].pure(vs :+ a), (vs:Vector[A]) => Monad[F].pure(vs.toList))
+    fold(
+      summon[Monad[F]].pure(Vector[A]()),
+      (vs: Vector[A], a: A) => summon[Monad[F]].pure(vs :+ a),
+      (vs:Vector[A]) => summon[Monad[F]].pure(vs.toList))
 
   /** get the last element  */
   def runLast: F[Option[A]] =
     run flatMap {
-      case One(a) => Monad[F].pure[Option[A]](Option(a))
-      case Done() => Monad[F].pure[Option[A]](None)
+      case One(a) => summon[Monad[F]].pure[Option[A]](Option(a))
+      case Done() => summon[Monad[F]].pure[Option[A]](None)
       case More(as, next) => next.runLast.map(_.orElse(as.lastOption))
     }
 
@@ -217,30 +220,30 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]):
 
   def repeat: Producer[F, A] =
     Producer(run flatMap {
-      case Done() => Monad[F].pure(Done())
-      case One(a) => Monad[F].pure(More(List(a), repeat))
-      case More(as, next) => Monad[F].pure(More(as, next append repeat))
+      case Done() => summon[Monad[F]].pure(Done())
+      case One(a) => summon[Monad[F]].pure(More(List(a), repeat))
+      case More(as, next) => summon[Monad[F]].pure(More(as, next append repeat))
     })
 
   /**
    * SPECIALIZED OPERATIONS BASED ON THE STREAM ELEMENTS
    */
-  def flattenList[B](implicit ev: A <:< List[B]): Producer[F, B] =
+  def flattenList[B](using ev: A <:< List[B]): Producer[F, B] =
     flatMap(a => emit[F, B](ev(a)))
 
-  def flattenSeq[B](implicit ev: A <:< Seq[B]): Producer[F, B] =
+  def flattenSeq[B](using ev: A <:< Seq[B]): Producer[F, B] =
     flatMap(a => emitSeq[F, B](ev(a)))
 
-  def flatten[B](implicit ev: A <:< Producer[F, B]): Producer[F, B] =
+  def flatten[B](using ev: A <:< Producer[F, B]): Producer[F, B] =
     Producer(run flatMap {
       case Done() => done[F, B].run
-      case One(p) => p.run
+      case One(p) => ev(p).run
       case More(ps, next) => (flattenProducers(ps.map(ev)) append next.flatten).run
     })
 
-  def sequence[B](n: Int)(implicit ev: A <:< F[B]): Producer[F, B] =
+  def sequence[B](n: Int)(using ev: A <:< F[B]): Producer[F, B] =
     sliding(n).flatMap { actions =>
-      Producer.emitAction(Traverse[List].sequence(actions.map(ev)))
+      Producer.emitAction(summon[Traverse[List]].sequence(actions.map(ev)))
     }
 
   /**
@@ -292,12 +295,12 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]):
   def peekN(n: Int): F[(List[A], Producer[F, A])] =
     def go(p: Producer[F, A], collected: Vector[A]): F[(List[A], Producer[F, A])] =
       p.run flatMap {
-        case Done() => Monad[F].pure((collected.toList, done[F, A]))
-        case One(a) => Monad[F].pure(((collected :+ a).take(n).toList, done[F, A]))
+        case Done() => summon[Monad[F]].pure((collected.toList, done[F, A]))
+        case One(a) => summon[Monad[F]].pure(((collected :+ a).take(n).toList, done[F, A]))
         case More(as, next) =>
           val all = collected ++ as
           if all.size >= n then
-          Monad[F].pure((all.take(n).toList, emit[F, A](all.drop(n).toList) append next))
+          summon[Monad[F]].pure((all.take(n).toList, emit[F, A](all.drop(n).toList) append next))
           else
             go(next, all)
       }
@@ -616,10 +619,10 @@ object Producer extends Producers:
 trait Producers:
 
   def done[F[_] : Monad : Safe, A]: Producer[F, A] =
-    Producer[F, A](Monad[F].pure(Done()))
+    Producer[F, A](summon[Monad[F]].pure(Done()))
 
   def one[F[_] : Monad : Safe, A](a: A): Producer[F, A] =
-    Producer[F, A](Monad[F].pure(One(a)))
+    Producer[F, A](summon[Monad[F]].pure(One(a)))
 
   def oneAsync[A](a: A): Producer[Action, A] =
     one[Action, A](a)
@@ -628,7 +631,7 @@ trait Producers:
     one[Operation, A](a)
 
   def oneDelayed[F[_] : Monad : Safe, A](e: =>A): Producer[F, A] =
-    oneEval(Monad[F].pure(e))
+    oneEval(summon[Monad[F]].pure(e))
 
   def oneDelayedAsync[A](e: =>A): Producer[Action, A] =
     oneDelayed[Action, A](e)
@@ -640,10 +643,10 @@ trait Producers:
     Producer[F, A](e.flatMap(a => one[F, A](a).run))
 
   def oneOrMore[F[_] : Monad : Safe, A](a: A, as: List[A]): Producer[F, A] =
-    Producer[F, A](Monad[F].pure(More(a +: as, done[F, A])))
+    Producer[F, A](summon[Monad[F]].pure(More(a +: as, done[F, A])))
 
   def repeatValue[F[_] : Monad : Safe, A](a: A): Producer[F, A] =
-    Producer(Monad[F].pure(More(List(a), repeatValue[F, A](a))))
+    Producer(summon[Monad[F]].pure(More(List(a), repeatValue[F, A](a))))
 
   def repeatEval[F[_] : Monad : Safe, A](e: F[A]): Producer[F, A] =
     Producer(e.map(a => More(List(a), repeatEval(e))))
@@ -663,7 +666,7 @@ trait Producers:
   def emitSeq[F[_] : Monad : Safe, A](elements: Seq[A]): Producer[F, A] =
     elements.headOption match
       case None    => done[F, A]
-      case Some(a) => Producer(Monad[F].pure(More[F, A](elements.headOption.toList, emitSeq(elements.tail))))
+      case Some(a) => Producer(summon[Monad[F]].pure(More[F, A](elements.headOption.toList, emitSeq(elements.tail))))
 
   def emitSeqAsync[A](elements: Seq[A]): Producer[Action, A] =
     emitSeq[Action, A](elements)

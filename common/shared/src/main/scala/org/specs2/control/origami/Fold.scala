@@ -15,7 +15,10 @@ import org.specs2.fp.syntax._
  */
 trait Fold[M[_], A, B]:
   self =>
-  implicit def monad: Monad[M]
+
+  def monad: Monad[M]
+
+  given Monad[M] = monad
 
   type S
 
@@ -257,10 +260,10 @@ object Fold:
 
   implicit def MonoidSink[M[_] : Monad, A]: Monoid[Fold[M, A, Unit]] = new Monoid[Fold[M, A, Unit]] {
     def zero =
-      Folds.fromStart(Monad[M].point(()))
+      Folds.fromStart(summon[Monad[M]].point(()))
 
     def append(s1: Fold[M, A, Unit], s2: =>Fold[M, A, Unit]): Fold[M, A, Unit] = new Fold[M, A, Unit] {
-      val monad: Monad[M] = Monad[M]
+      val monad: Monad[M] = summon[Monad[M]]
 
       lazy val s2_ = s2
       type S = (s1.S, s2_.S)
@@ -288,7 +291,7 @@ object Fold:
     def point[A](a: =>A): Fold[M, T, A] =
       new Fold[M, T, A] {
         type S = Unit
-        val monad: Monad[M] = Monad[M]
+        val monad: Monad[M] = summon[Monad[M]]
 
         def start: M[S] = monad.point(())
         def fold: (S, T) => M[S] = (s, t) => monad.point(s)
@@ -310,7 +313,7 @@ trait Folds:
   /** @return a fold which uses a Monoid to accumulate elements */
   def fromMonoidMap[M[_] : Monad, A, O : Monoid](f: A => O): Fold[M, A, O] { type S = O } = new Fold[M, A, O] {
     type S = O
-    val monad: Monad[M] = Monad[M]
+    val monad: Monad[M] = summon[Monad[M]]
 
     def start = monad.point(Monoid[O].zero)
     def fold = (s: S, a: A) => monad.point(Monoid[O].append(s, f(a)))
@@ -320,7 +323,7 @@ trait Folds:
   /** @return a fold from arguments of a fold left */
   def fromFoldLeft[M[_] : Monad, A, B](b: B)(f: (B, A) => M[B]): Fold[M, A, B] { type S = B } = new Fold[M, A, B] {
     type S = B
-    val monad: Monad[M] = Monad[M]
+    val monad: Monad[M] = summon[Monad[M]]
 
     def start = monad.point(b)
     def fold = (s: S, a: A) => f(s, a)
@@ -330,7 +333,7 @@ trait Folds:
   /** @return a fold with just a start action */
   def fromStart[M[_] : Monad, A, S1](action: M[S1]) = new Fold[M, A, S1] {
     type S = S1
-    val monad: Monad[M] = Monad[M]
+    val monad: Monad[M] = summon[Monad[M]]
 
     def start = action
     def fold = (s: S, a: A) => monad.point(s)
@@ -339,7 +342,7 @@ trait Folds:
 
   def bracket[A, C](open: Action[C])(step: (C, A) => Action[C])(close: C => Finalizer): Fold[Action, A, Unit] = new Fold[Action, A, Unit] {
     type S = C
-    val monad: Monad[Action] = Monad[Action]
+    val monad: Monad[Action] = summon[Monad[Action]]
 
     def start = open
     def fold = (s: S, a: A) => step(s, a).addLast(close(s))
@@ -348,7 +351,7 @@ trait Folds:
 
   def fromSink[M[_] : Monad, A](action: A => M[Unit]): Fold[M, A, Unit] = new Fold[M, A, Unit] {
     type S = Unit
-    val monad: Monad[M] = Monad[M]
+    val monad: Monad[M] = summon[Monad[M]]
 
     def start = monad.point(())
     def fold = (s: S, a: A) => action(a)
@@ -358,7 +361,7 @@ trait Folds:
   /** @return a fold which uses a Monoid to accumulate elements */
   def fromMonoidMapEval[M[_] : Monad, A, O : Monoid](f: A => M[O]): Fold[M, A, O] { type S = O } = new Fold[M, A, O] {
     type S = O
-    val monad: Monad[M] = Monad[M]
+    val monad: Monad[M] = summon[Monad[M]]
 
     def start = monad.point(Monoid[O].zero)
     def fold = (s: S, a: A) => f(a).map(a1 => Monoid[O].append(s, a1))

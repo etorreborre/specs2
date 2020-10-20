@@ -40,16 +40,13 @@ trait Monad[F[_]] extends Applicative[F]:
 
 object Monad:
 
-  @inline def apply[F[_]](implicit F: Monad[F]): Monad[F] = F
-
-  implicit val idMonad: Monad[Id] = new Monad[Id] {
+  given idMonad as Monad[Id] = new Monad[Id]:
     def point[A](a: =>A): Id[A] = a
 
     def bind[A,B](fa: Id[A])(f: A => Id[B]): Id[B] =
       f(fa)
-  }
 
-  implicit val optionMonad: Monad[Option] = new Monad[Option] {
+  given optionMonad as Monad[Option] = new Monad[Option]:
     def point[A](a: =>A): Option[A] = Some(a)
 
     def bind[A,B](fa: Option[A])(f: A => Option[B]): Option[B] =
@@ -62,9 +59,8 @@ object Monad:
         case None => None
         case Some(Left(a1)) => tailrecM(a1)(f)
         case Some(Right(b)) => Some(b)
-  }
 
-  implicit def eitherMonad[L]: Monad[Either[L, *]] = new Monad[Either[L, *]] {
+  given eitherMonad[L] as Monad[Either[L, *]] = new Monad[Either[L, *]]:
     def point[A](a: =>A): Either[L, A] = Right(a)
 
     def bind[A,B](fa: Either[L, A])(f: A => Either[L, B]): Either[L, B] =
@@ -77,34 +73,30 @@ object Monad:
         case Left(l) => Left(l)
         case Right(Left(a1)) => tailrecM(a1)(f)
         case Right(Right(b)) => Right(b)
-  }
 
-  implicit def futureMonad(implicit ec: ExecutionContext): Monad[Future] = new Monad[Future] {
+  given futureMonad(using ec: ExecutionContext) as Monad[Future] = new Monad[Future]:
     def point[A](a: =>A): Future[A] = Future.successful(a)
 
     def bind[A,B](fa: Future[A])(f: A => Future[B]): Future[B] =
       fa.flatMap(f)
-  }
 
 trait MonadSyntax:
 
-  implicit class MonadOps[F[_] : Monad, A](fa: F[A]):
-    val monad = Monad.apply[F]
+  extension [F[_] : Monad, A, B](fa: F[A]):
 
-    def flatMap[B](f: A => F[B]): F[B] =
-      monad.flatMap(fa)(f)
+    def flatMap(f: A => F[B]): F[B] =
+      summon[Monad[F]].flatMap(fa)(f)
 
-    def bind[B](f: A => F[B]): F[B] =
-      monad.bind(fa)(f)
+    def bind(f: A => F[B]): F[B] =
+      summon[Monad[F]].bind(fa)(f)
 
-    def >>=[B](f: A => F[B]): F[B] =
-      bind(f)
+    def >>=(f: A => F[B]): F[B] =
+      summon[Monad[F]].bind(fa)(f)
 
-    def >>[B](fb: F[B]): F[B] =
-      bind(_ => fb)
+    def >>(fb: F[B]): F[B] =
+      summon[Monad[F]].bind(fa)(_ => fb)
 
-  implicit class MonadOps1[F[_] : Monad, A](fa: F[F[A]]):
-    val monad = Monad.apply[F]
+  extension [F[_] : Monad, A](fa: F[F[A]]):
 
     def flatten: F[A] =
-      monad.flatMap(fa)(identity)
+      summon[Monad[F]].flatMap(fa)(identity)
