@@ -231,9 +231,10 @@ object Result:
   def unit(u: =>Unit) = ResultExecution.effectively { u; Success() }
 
   /** implicit typeclass instance to create examples from Results */
-  implicit def resultAsResult[R <: Result]: AsResult[R] = new AsResult[R] {
-    def asResult(t: =>R): Result = ResultExecution.execute(t)
-  }
+  given resultAsResult[R <: Result] as AsResult[R] =
+    new AsResult[R]:
+      def asResult(t: =>R): Result =
+        ResultExecution.execute(t)
 
   def resultOrSuccess(t: Any): Result = t match
     case r: Result => r
@@ -261,11 +262,14 @@ trait Results:
    * implicit definition to accept any boolean value as a Result
    * This avoids writing b must beTrue
    */
-  implicit def toResult(b: Boolean): Result =
-    if b then org.specs2.execute.Success("true") else org.specs2.execute.Failure("false", "true", Nil)
+  given Conversion[Boolean, Result] {
+    def apply(b: Boolean): Result =
+      toResult(b)
+  }
 
-  def booleanToSimpleResult(b: Boolean): Result =
-    if b then org.specs2.execute.Success("true") else org.specs2.execute.Failure("false", "", Nil, NoDetails)
+  def toResult(b: Boolean): Result =
+    if b then org.specs2.execute.Success("true")
+    else org.specs2.execute.Failure("false", "true", Nil, NoDetails)
 
   def negate(r: Result) =
     if r.isSuccess then      Failure(negateSentence(r.message), r.expected).setExpectationsNb(r.expectationsNb)
