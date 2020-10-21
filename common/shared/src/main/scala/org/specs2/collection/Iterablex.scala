@@ -11,26 +11,25 @@ import Seqx._
  */
 trait Iterablex:
   /**
-   * implicit definition to transform an Iterable to an ExtendedIterable
+   * Extension methods for Iterables
    */
-  implicit def extendIterable[T](xs : GenIterable[T]): ExtendedIterable[T] = new ExtendedIterable(xs)
-
-  /**
-   * Additional methods for Iterable objects
-   */
-  class ExtendedIterable[T](xs: GenIterable[T]):
+  extension [T, S >: T](xs : GenIterable[T])
 
     /**
      * @return true if the 2 iterables contain the same elements, in the same order,
      *         according to a function f
      */
-    def isSimilar[S >: T](that: GenIterable[S], f: Function2[T, S, Boolean]): Boolean =
+    def isSimilar(that: GenIterable[S], f: Function2[T, S, Boolean]): Boolean =
       val it1 = xs.iterator
       val it2 = that.iterator
       var res = true
       while res && it1.hasNext && it2.hasNext do
         res = f(it1.next, it2.next)
       !it1.hasNext && !it2.hasNext && res
+
+
+  extension [T](xs : GenIterable[T])
+
     /**
      * @return true if the 2 iterables contain the same elements recursively, in any order
      */
@@ -81,6 +80,7 @@ trait Iterablex:
            else
              firstRest.containsInOrder(secondRest:_*)
          }
+
     /**
      * @return the representation of the elements of the iterable using the toString method recursively
      */
@@ -92,12 +92,16 @@ trait Iterablex:
           case i: GenIterable[_] => i.toDeepString
           case x => x.toString
         }.mkString(", ") + "]"
+
     /** map the first element with a function */
     def mapFirst(f: T => T): GenSeq[T] = (xs.take(1).map(f) ++ xs.drop(1)).toSeq
+
     /** map the last element with a function */
     def mapLast(f: T => T): Seq[T] = (xs.dropRight(1) ++ xs.takeRight(1).map(f)).toSeq
+
     /** @return a sequence rotated of a number of elements */
     def rotate(n: Int) = xs.slice(n, xs.size) ++ xs.slice(0, n)
+    
     /** @return a randomly mixed sequence */
     def scramble: Seq[T] = scramble(new scala.util.Random)
 

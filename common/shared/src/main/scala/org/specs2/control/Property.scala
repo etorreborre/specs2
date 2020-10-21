@@ -67,6 +67,8 @@ object Property:
   def apply[T]() = new Property[T](() => None)
 
 trait Properties:
-  implicit def aProperty[T](t: T): Property[T] = Property(t)
+  given [T] as Conversion[T, Property[T]] {
+    def apply(t: T): Property[T] = Property(t)
+  }
 
 object Properties extends Properties

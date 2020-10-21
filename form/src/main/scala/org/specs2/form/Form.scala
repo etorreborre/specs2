@@ -9,7 +9,7 @@ import StandardResults._
 import org.specs2.matcher._
 import DecoratedProperties._
 import ResultLogicalCombinators._
-import org.specs2.control.Properties._
+import org.specs2.control.Properties.{given _, _}
 import org.specs2.control.ImplicitParameters._
 import org.specs2.control.Use
 import reflect.Selectable.reflectiveSelectable
@@ -232,5 +232,5 @@ case object Form:
   implicit def formAsResult: AsResult[Form] = new AsResult[Form] {
     def asResult(f: =>Form): Result = f.execute
   }
-  
+
 type HasForm = { def form: Form }

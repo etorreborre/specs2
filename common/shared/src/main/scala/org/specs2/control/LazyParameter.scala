@@ -19,6 +19,7 @@ import Exceptions._
 trait LazyParameters:
   /** transform a value to a zero-arg function returning that value */
   implicit def lazyParameter[T](value: =>T): LazyParameter[T] = new LazyParameter(() => value)
+
 object LazyParameters extends LazyParameters
 
 /** class holding a value to be evaluated lazily */

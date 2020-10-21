@@ -594,19 +594,17 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]):
  */
 object Producer extends Producers:
 
-  implicit def MonoidProducer[F[_] : Monad : Safe, A]: Monoid[Producer[F, A]] = new Monoid[Producer[F, A]] {
+  given [F[_] : Monad : Safe, A] as Monoid[Producer[F, A]] = new Monoid[Producer[F, A]]:
     def zero: Producer[F, A] = done[F, A]
     def append(p1: Producer[F, A], p2: =>Producer[F, A]): Producer[F, A] =
       p1 append p2
-  }
 
-  implicit def ProducerMonad[F[_] : Monad : Safe]: Monad[Producer[F, *]] = new Monad[Producer[F, *]] {
+  given [F[_] : Monad : Safe] as Monad[Producer[F, *]] = new Monad[Producer[F, *]]:
     def bind[A, B](fa: Producer[F, A])(f: A => Producer[F, B]): Producer[F, B] =
       fa.flatMap(f)
 
     def point[A](a: =>A): Producer[F, A] =
       one[F, A](a)
-  }
 
   def flattenProducers[F[_] : Monad : Safe, A](producers: List[Producer[F, A]]): Producer[F, A] =
     producers match

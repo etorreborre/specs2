@@ -258,7 +258,7 @@ end Fold
 
 object Fold:
 
-  implicit def MonoidSink[M[_] : Monad, A]: Monoid[Fold[M, A, Unit]] = new Monoid[Fold[M, A, Unit]] {
+  given [M[_] : Monad, A] as Monoid[Fold[M, A, Unit]] = new Monoid[Fold[M, A, Unit]]:
     def zero =
       Folds.fromStart(summon[Monad[M]].point(()))
 
@@ -272,7 +272,6 @@ object Fold:
       def fold = (s: S, a: A) => s1.fold(s._1, a).flatMap(s11 => s2_.fold(s._2, a).map(s22 => (s11, s22)))
       def end(s: S) = s1.end(s._1) >> s2_.end(s._2)
     }
-  }
 
   /**
    * Applicative instance
@@ -285,7 +284,7 @@ object Fold:
    *
    *   val meanTimes2 = mean.map(_ * 2)
    */
-  implicit def ApplicativeFold[M[_] : Monad, T]: Applicative[Fold[M, T, *]] = new Applicative[Fold[M, T, *]] {
+  given A[M[_] : Monad, T] as Applicative[Fold[M, T, *]] = new Applicative[Fold[M, T, *]]:
     type F[U] = Fold[M, T, U]
 
     def point[A](a: =>A): Fold[M, T, A] =
@@ -303,7 +302,6 @@ object Fold:
 
     def ap[A, B](fa: =>F[A])(f: =>F[A => B]): F[B] =
       map(fa zip f) { case (a, b) => b(a) }
-  }
 
 /**
  * Typeclass instances and creation methods for folds
