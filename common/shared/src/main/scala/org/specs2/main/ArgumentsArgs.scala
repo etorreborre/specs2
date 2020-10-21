@@ -156,7 +156,7 @@ trait ArgumentsCreation:
 object ArgumentsArgs extends ArgumentsArgs
 
 trait ArgProperties:
-  implicit def toArgProperty [T](t: =>T)(using not: Not[NoArgProperties]): ArgProperty[T] =
+  implicit def toArgProperty[T](t: =>T)(using not: Not[NoArgProperties]): ArgProperty[T] =
     ArgProperty(t)
 
 /**

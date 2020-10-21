@@ -4,15 +4,22 @@ package execute
 import text.Message._
 
 /**
- * This trait provides logical combinators to Results: and, or, not
+ * This trait provides logical combinators for Booleans and Results: and, or, not
  *
- * A Result expression can throw an exception which will be changed into a failure or an error before being used
+ * Note that a Result expression can throw an exception which will be changed into a failure or an error before being used
  * with and/or/not
+ *
+ * The implicit definitions can not be easily replaced with extension methods otherwise this
+ * brings too many conflicts with the synthetized method names, like extension_and for
+ * both the extension for a Boolean value and a Result
  */
 trait ResultLogicalCombinators extends Results:
 
-  implicit def combineBoolean(b: =>Boolean): ResultLogicalCombinator = new ResultLogicalCombinator(Results.toResult(b))
-  implicit def combineResult(r: =>Result)  : ResultLogicalCombinator = new ResultLogicalCombinator(r)
+  implicit def combineBoolean(b: =>Boolean): ResultLogicalCombinator =
+    new ResultLogicalCombinator(Results.toResult(b))
+
+  implicit def combineResult(r: =>Result): ResultLogicalCombinator =
+    new ResultLogicalCombinator(r)
 
   class ResultLogicalCombinator(res: =>Result):
     private lazy val result = ResultExecution.executeThrowable(res)

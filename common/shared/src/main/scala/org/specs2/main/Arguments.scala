@@ -125,10 +125,9 @@ object Arguments extends Extract:
        commandLine   = CommandLine.extract
     )
 
-  implicit def ArgumentsMonoid: Monoid[Arguments] = new Monoid[Arguments] {
+  given ArgumentsMonoid as Monoid[Arguments] = new Monoid[Arguments]:
     def append(a1: Arguments, a2: =>Arguments) = a1 overrideWith a2
     val zero = Arguments()
-  }
 
   /**
    * @return true if the flagList is empty or if it has

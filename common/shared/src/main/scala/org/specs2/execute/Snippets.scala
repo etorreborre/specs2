@@ -22,30 +22,41 @@ import scala.quoted._
  */
 trait Snippets:
   /** implicit parameters selected for the creation of Snippets */
-  implicit def defaultSnippetParameters[T]: SnippetParams[T] =
+  given defaultSnippetParameters[T] as SnippetParams[T] =
     Snippet.defaultParams[T]
 
   /** implicit function modify the Snippet parameters */
-  implicit class SettableSnippet[T](s: Snippet[T]):
+  extension [T](s: Snippet[T])
+
     def set(
        trimExpression: String => String   = defaultParams.trimExpression,
        cutter: String => String           = defaultParams.cutter,
        asCode: (String, String) => String = defaultParams.asCode,
-       prompt: String => String           = defaultParams.prompt) =
+       prompt: String => String           = defaultParams.prompt): Snippet[T] =
       s.copy(params = s.params.copy(trimExpression = trimExpression,
                                     cutter = cutter,
                                     asCode = asCode,
                                     prompt = prompt))
 
-    def promptIs(p: String) = s.copy(params = s.params.copy(prompt = simplePrompt(p)))
-    def offsetIs(offset: Int) = s.copy(params = s.params.offsetIs(offset))
-    def eval = s.copy(params = s.params.eval)
-    def check[R : AsResult](f: T => R) = s.copy(params = s.params.check(f))
+    def promptIs(p: String): Snippet[T] =
+      s.copy(params = s.params.copy(prompt = simplePrompt(p)))
 
-  implicit class SettableSnippet1[T : AsResult](s: Snippet[T]):
-    def checkOk = s.copy(params = s.params.copy(verify = Some((t: T) => AsResult(t))))
+    def offsetIs(offset: Int): Snippet[T] =
+      s.copy(params = s.params.offsetIs(offset))
 
-  inline def snippet[T](inline code: =>T)(implicit params: SnippetParams[T]): Snippet[T] =
+    def eval: Snippet[T] =
+      s.copy(params = s.params.eval)
+
+
+  extension [T, R : AsResult](s: Snippet[T])
+    def check(f: T => R): Snippet[T] =
+      s.copy(params = s.params.check(f))
+
+  extension [T : AsResult](s: Snippet[T])
+    def checkOk: Snippet[T] =
+      s.copy(params = s.params.copy(verify = Some((t: T) => AsResult(t))))
+
+  inline def snippet[T](inline code: =>T)(using params: SnippetParams[T]): Snippet[T] =
     ${ Snippets.create[T]('{() => code}, 'params) }
 
   inline def simpleName[T]: String =

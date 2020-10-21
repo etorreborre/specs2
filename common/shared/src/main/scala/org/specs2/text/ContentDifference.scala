@@ -78,10 +78,10 @@ case class LinesContentDifference(
 
 object LinesContentDifference:
 
-  implicit def LinesContentDifferenceIsEmpty: IsEmpty[LinesContentDifference] = new IsEmpty[LinesContentDifference] {
-    def isEmpty(diff: LinesContentDifference): Boolean =
-      diff.isEmpty
-  }
+  given LinesContentDifferenceIsEmpty as IsEmpty[LinesContentDifference] =
+    new IsEmpty[LinesContentDifference]:
+      def isEmpty(diff: LinesContentDifference): Boolean =
+        diff.isEmpty
 
 
 /**
@@ -99,10 +99,10 @@ case class DifferentLine(line1: NumberedLine, line2: NumberedLine) extends LineC
 
 object LineComparison:
 
-  implicit def lineComparisonOrdering: Ordering[LineComparison] = new Ordering[LineComparison] {
-    def compare(x: LineComparison, y: LineComparison): Int =
-      NumberedLine.numberedLineOrdering.compare(x.line, y.line)
-  }
+  given lineComparisonOrdering as Ordering[LineComparison] =
+    new Ordering[LineComparison]:
+      def compare(x: LineComparison, y: LineComparison): Int =
+        NumberedLine.numberedLineOrdering.compare(x.line, y.line)
 
   def sameLine(line: NumberedLine): LineComparison = SameLine(line)
   def addedLine(line: NumberedLine): LineComparison = AddedLine(line)
@@ -134,11 +134,12 @@ case class NumberedLine(lineNumber: Int, line: String):
   override def hashCode = line.hashCode
 
 object NumberedLine:
-  implicit def numberedLineOrdering: Ordering[NumberedLine] = new Ordering[NumberedLine] {
-    def compare(x: NumberedLine, y: NumberedLine): Int =
-      x.lineNumber.compare(y.lineNumber)
-  }
 
+  given numberedLineOrdering as Ordering[NumberedLine] =
+    new Ordering[NumberedLine]:
+      def compare(x: NumberedLine, y: NumberedLine): Int =
+        x.lineNumber.compare(y.lineNumber)
+  
 /**
  * A trait to filter results of a difference check
  */

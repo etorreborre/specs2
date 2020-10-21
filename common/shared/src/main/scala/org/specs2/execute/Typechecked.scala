@@ -10,7 +10,8 @@ case class Typechecked(code: String, result: TypecheckResult):
     result == TypecheckSuccess
 
 object Typechecked:
-  implicit def TypecheckedAsResult: AsResult[Typechecked] = new AsResult[Typechecked] {
+
+  given TypecheckedAsResult as AsResult[Typechecked] = new AsResult[Typechecked]:
     def asResult(t: =>Typechecked): Result =
       t.result match
         case TypecheckSuccess            => Success()
@@ -18,7 +19,6 @@ object Typechecked:
         case TypecheckError(m)           => Failure("typecheck error: "+m)
         case ParseError(m)               => Failure("parse error: "+m)
         case UnexpectedTypecheckError(m) => Failure("unexpected error: "+m)
-  }
 
 sealed trait TypecheckResult
 

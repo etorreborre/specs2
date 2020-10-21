@@ -15,18 +15,15 @@ object FromString {
 
   def apply[T](implicit fs: FromString[T]): FromString[T] = fs
 
-  implicit def StringFromString: FromString[String] = new FromString[String] {
+  given FromString[String]:
     def fromString(s: String): Option[String] = Option(s)
-  }
 
-  implicit def IntFromString: FromString[Int] = new FromString[Int] {
+  given FromString[Int]:
     def fromString(s: String): Option[Int] = tryo(s.toInt)
-  }
 
-  implicit def BooleanFromString: FromString[Boolean] = new FromString[Boolean] {
+  given FromString[Boolean]:
     def fromString(s: String): Option[Boolean] =
       if "false".equals(s) then     Some(false)
       else if "true".equals(s) then Some(true)
       else                       None
-  }
 }
