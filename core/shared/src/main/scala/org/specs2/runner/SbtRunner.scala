@@ -67,7 +67,8 @@ case class SlaveSbtRunner(args:       Array[String],
 object sbtRun extends MasterSbtRunner(Array(), Array(), Thread.currentThread.getContextClassLoader):
   def main(arguments: Array[String]): Unit =
     val env = Env(Arguments(arguments:_*))
-    implicit def ee: ExecutionEnv = env.specs2ExecutionEnv
+    given ExecutionEnv = env.specs2ExecutionEnv
+    
     try exit(start(arguments: _*))
     finally env.shutdown()
 

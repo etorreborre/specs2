@@ -13,9 +13,10 @@ trait Context:
   def apply[T : AsResult](a: =>T): Result
 
 object Context:
-  def compose(c1: Context, c2: Context): Context = new Context {
-    def apply[T : AsResult](a: =>T): Result = c1(c2(a))
-  }
+
+  def compose(c1: Context, c2: Context): Context =
+    new Context:
+      def apply[T : AsResult](a: =>T): Result = c1(c2(a))
 
 /**
  * The Before trait can be inherited by classes representing a context
@@ -23,7 +24,8 @@ object Context:
  *
  * @see Example to understand why the type T must : AsResult
  */
-trait Before extends Context { outer =>
+trait Before extends Context:
+  private val outer = this
 
   /** override this method to provide the before behavior */
   def before: Any
@@ -41,21 +43,20 @@ trait Before extends Context { outer =>
     ResultExecution.execute(before)((any: Any) => AsResult(a))
 
   /** compose the actions of 2 Before traits */
-  def compose(b: Before): Before = new Before {
-    def before = { b.before; outer.before }
-  }
+  def compose(b: Before): Before =
+    new Before:
+      def before = { b.before; outer.before }
 
   /** sequence the actions of 2 Before traits */
-  def andThen(b: Before): Before = new Before {
-    def before = { outer.before; b.before }
-  }
-
-}
+  def andThen(b: Before): Before =
+    new Before:
+      def before = { outer.before; b.before }
 
 object Before:
-  def create(action: =>Any) = new Before {
-    def before: Any = action
-  }
+
+  def create(action: =>Any) =
+    new Before:
+      def before: Any = action
 
 /**
  * The After trait can be inherited by classes representing a context
@@ -63,10 +64,12 @@ object Before:
  *
  * @see Example to understand why the type T must : AsResult
  */
-trait After extends Context { outer =>
+trait After extends Context:
+  private val outer = this
 
   /** override this method to provide the after behavior */
   def after: Any
+
   /**
    * execute an action returning a Result
    * and finally the after action
@@ -76,45 +79,45 @@ trait After extends Context { outer =>
     finally { after; ()  }
 
   /** compose the actions of 2 After traits */
-  def compose(a: After): After = new After {
-    def after = { a.after; outer.after }
-  }
+  def compose(a: After): After =
+    new After:
+      def after = { a.after; outer.after }
 
   /** sequence the actions of 2 After traits */
-  def andThen(a: After): After = new After {
-    def after = { outer.after; a.after }
-  }
+  def andThen(a: After): After =
+    new After:
+      def after = { outer.after; a.after }
 
-}
 
 object After:
-  def create(action: =>Any) = new After {
-    def after: Any = action
-  }
+  def create(action: =>Any) =
+    new After:
+      def after: Any = action
 
-trait BeforeAfter extends Before with After { outer =>
+trait BeforeAfter extends Before with After:
+  private val outer = this
   override def apply[T : AsResult](a: =>T): Result =
     lazy val result = super[Before].apply(a)
     super[After].apply(result)
 
   /** compose the actions of 2 BeforeAfter traits */
-  def compose(b: BeforeAfter): BeforeAfter = new BeforeAfter {
-    def before = { b.before; outer.before }
-    def after = { b.after; outer.after}
-  }
+  def compose(b: BeforeAfter): BeforeAfter =
+    new BeforeAfter:
+      def before = { b.before; outer.before }
+      def after = { b.after; outer.after}
 
   /** sequence the actions of 2 BeforeAfter traits */
-  def andThen(b: BeforeAfter): BeforeAfter = new BeforeAfter {
-    def before = { outer.before; b.before }
-    def after = { outer.after; b.after}
-  }
-}
+  def andThen(b: BeforeAfter): BeforeAfter =
+    new BeforeAfter:
+      def before = { outer.before; b.before }
+      def after = { outer.after; b.after}
 
 object BeforeAfter:
-  def create(beforeAction: =>Any, afterAction: =>Any) = new BeforeAfter {
-    def before: Any = beforeAction
-    def after: Any = afterAction
-  }
+
+  def create(beforeAction: =>Any, afterAction: =>Any): BeforeAfter =
+    new BeforeAfter:
+      def before: Any = beforeAction
+      def after: Any = afterAction
 
 /**
  * The Around trait can be inherited by classes which will
@@ -124,28 +127,32 @@ object BeforeAfter:
  *
  * @see Example to understand why the type T must : AsResult
  */
-trait Around extends Context { outer =>
+trait Around extends Context:
+  private val outer = this
 
   def around[T : AsResult](t: =>T): Result
-  def apply[T : AsResult](a: =>T) = around(a)
+
+  def apply[T : AsResult](a: =>T): Result =
+    around(a)
 
   /** compose the actions of 2 Around traits */
-  def compose(a: Around): Around = new Around {
-    def around[T : AsResult](t: =>T): Result =
-      a.around(outer.around(t))
-  }
+  def compose(a: Around): Around =
+    new Around:
+      def around[T : AsResult](t: =>T): Result =
+        a.around(outer.around(t))
 
   /** sequence the actions of 2 Around traits */
-  def andThen(a: Around): Around = new Around {
-    def around[T : AsResult](t: =>T): Result =
-      outer.around(a.around(t))
-  }
-}
+  def andThen(a: Around): Around =
+    new Around:
+      def around[T : AsResult](t: =>T): Result =
+        outer.around(a.around(t))
 
 object Around:
-  def create(aroundAction: Result => Result) = new Around {
-    def around[T : AsResult](t: =>T): Result = aroundAction(AsResult(t))
-  }
+
+  def create(aroundAction: Result => Result): Around =
+    new Around:
+      def around[T : AsResult](t: =>T): Result = aroundAction(AsResult(t))
+
 /**
  * A Fixture can be implicitly passed to a set of examples taking a function as an input.
  *
@@ -155,15 +162,15 @@ trait Fixture[T]:
   def apply[R : AsResult](f: T => R): Result
 
 object Fixture:
-  implicit def fixtureHasMonad: Monad[Fixture] = new Monad[Fixture] {
-    def point[A](a: =>A) = new Fixture[A] {
-      def apply[R : AsResult](f: A => R): Result = AsResult(f(a))
-    }
 
-    def bind[A, B](fixture: Fixture[A])(fa: A => Fixture[B]): Fixture[B] = new Fixture[B] {
-      def apply[R : AsResult](fb: B => R): Result = fixture((a: A) => fa(a)(fb))
-    }
-  }
+  given Monad[Fixture] = new Monad[Fixture]:
+    def point[A](a: =>A) =
+      new Fixture[A]:
+        def apply[R : AsResult](f: A => R): Result = AsResult(f(a))
+
+    def bind[A, B](fixture: Fixture[A])(fa: A => Fixture[B]): Fixture[B] =
+      new Fixture[B]:
+        def apply[R : AsResult](fb: B => R): Result = fixture((a: A) => fa(a)(fb))
 
 /**
  * This class is used to evaluate a Context as a sequence of results by side-effects.

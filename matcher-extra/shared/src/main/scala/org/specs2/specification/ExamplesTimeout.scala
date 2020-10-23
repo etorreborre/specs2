@@ -18,23 +18,21 @@ import scala.concurrent.{Await, Future}
  */
 trait ExamplesTimeout extends EachContext with AroundTimeout:
 
-  def context: Env => Context = { (env: Env) =>
+  def context(env: Env): Context =
     val timeout = env.arguments.commandLine.intOr("timeout", 1000 * 60).millis
-    aroundTimeout(timeout)(env.executionEnv)
-  }
+    aroundTimeout(timeout)(using env.executionEnv)
 
 object ExamplesTimeout extends ExamplesTimeout
 
 trait AroundTimeout:
 
-  def upTo[T](to: Duration)(t: => T)(implicit asResult: AsResult[T], ee: ExecutionEnv) =
-    aroundTimeout(to)(ee).apply(t)
+  def upTo[T](to: Duration)(t: =>T)(using asResult: AsResult[T], ee: ExecutionEnv) =
+    aroundTimeout(to)(using ee)(t)
 
-  def aroundTimeout(to: Duration)(implicit ee: ExecutionEnv): Around =
-    new Around {
+  def aroundTimeout(to: Duration)(using ee: ExecutionEnv): Around =
+    new Around:
       def around[T : AsResult](t: =>T) =
         try Await.result(Future(AsResult(t))(ee.executionContext), to)
         catch { case e: Exception => Skipped("TIMEOUT!!! "+to.toString) }
-    }
 
 object AroundTimeout extends AroundTimeout

@@ -12,7 +12,7 @@ class LocationSpec extends org.specs2.mutable.Spec with TypedEqual:
   given ee as ExecutionEnv = Env().executionEnv
 
     "A unit specification must have correct locations for its fragments" >> {
-      implicit def spec: LocationUnitSpecification = new LocationUnitSpecification(ee)
+      given spec as LocationUnitSpecification = new LocationUnitSpecification(ee)
 
       "for the first piece of text, with 'should'" >> {
         textAt(index = 0)(spec) ==== 17
@@ -35,7 +35,7 @@ class LocationSpec extends org.specs2.mutable.Spec with TypedEqual:
     }
 
   "An acceptance specification must have correct locations for its fragments" >> {
-    implicit def spec: LocationSpecification = new LocationSpecification(ee)
+    given LocationSpecification = new LocationSpecification(ee)
 
     "for the first piece of text, 'presentation''" >> {
       textAt(index = 0) ==== 7
