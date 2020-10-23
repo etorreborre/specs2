@@ -9,36 +9,57 @@ import org.specs2.collection.Vectorx._
 /**
  * Creation of Fragments with the ^ syntax
  */
-trait FragmentsDsl extends FragmentsFactory with AcceptanceDsl1 { outer =>
+trait FragmentsDsl extends FragmentsFactory with AcceptanceDsl1:
 
   implicit def fragmentToFragments(f: Fragment): Fragments =
     Fragments(f)
 
-  implicit class appendToString(s: String):
-    def ^(others: Fragments)        : Fragments     = fragmentFactory.text(s) ^ others
-    def ^(others: Seq[Fragment])    : Fragments     = ^(Fragments(others:_*))
-    def ^(other: Fragment)          : Fragments     = s ^ Fragments(other)
-    def ^(other: String)            : Fragments     = s ^ fragmentFactory.text(other)
+  extension (s: String):
+    def ^(others: Fragments): Fragments =
+      fragmentFactory.text(s) ^ others
 
-  implicit class appendToFragment(f: Fragment):
-    def ^(others: Fragments)        : Fragments      = Fragments(Fragments(f).contents append others.contents)
-    def ^(others: Seq[Fragment])    : Fragments      = ^(Fragments(others:_*))
-    def ^(other: Fragment)          : Fragments      = Fragments(f, other)
-    def ^(other: String)            : Fragments      = f ^ fragmentFactory.text(other)
+    def ^(others: Seq[Fragment]): Fragments =
+      ^(Fragments(others:_*))
 
-  implicit class appendToFragments(fs: Fragments):
-    def ^(others: Fragments)        : Fragments     = fs.append(others)
-    def ^(others: Seq[Fragment])    : Fragments     = ^(Fragments(others:_*))
-    def ^(other: Fragment)          : Fragments     = fs.append(other)
-    def ^(other: String)            : Fragments     = fs ^ fragmentFactory.text(other)
+    def ^(other: Fragment): Fragments =
+      s ^ Fragments(other)
 
-  implicit class HiddenFragment(fragment: Fragment):
+    def ^(other: String): Fragments =
+      s ^ fragmentFactory.text(other)
+
+  extension (f: Fragment):
+    def ^(others: Fragments): Fragments =
+      Fragments(Fragments(f).contents append others.contents)
+
+    def ^(others: Seq[Fragment]): Fragments =
+      ^(Fragments(others:_*))
+
+    def ^(other: Fragment): Fragments =
+      Fragments(f, other)
+
+    def ^(other: String): Fragments =
+      f ^ fragmentFactory.text(other)
+
+  extension (fs: Fragments):
+    def ^(others: Fragments): Fragments =
+      fs.append(others)
+
+    def ^(others: Seq[Fragment]): Fragments =
+      ^(Fragments(others:_*))
+
+    def ^(other: Fragment): Fragments =
+      fs.append(other)
+
+    def ^(other: String): Fragments =
+      fs ^ fragmentFactory.text(other)
+
+  extension (fragment: Fragment)
     def hide: Fragment =
       fragment.description match
         case r: SpecificationRef => fragment.copy(description = r.hide)
         case other               => fragment.copy(description = NoText)
 
-  implicit class MutedFragment(fragment: Fragment):
+  extension (fragment: Fragment)
     def mute: Fragment =
       fragment.description match
         case r: SpecificationRef => fragment.copy(description = r.mute)
@@ -55,6 +76,5 @@ trait FragmentsDsl extends FragmentsFactory with AcceptanceDsl1 { outer =>
       .intersperse(Fragments(newLine:_*))
       .reduce(_ append _)
 
-}
 
 object FragmentsDsl extends FragmentsDsl

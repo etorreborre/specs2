@@ -15,35 +15,44 @@ import org.specs2.control.Use
 trait FormDsl extends FragmentsDsl with SpecStructureDsl with FormFragmentsFactory:
   private val factory = formFragmentFactory
 
-  implicit class appendFormToString(s: String) extends appendToString(s):
-    def ^(form: =>Form)                                          : Fragments = appendToString(s) ^ factory.FormFragment(form)
-    def ^(aForm: =>{ def form: Form })(implicit p: ImplicitParam): Fragments = appendToString(s) ^ factory.FormFragment(aForm)(p)
+  extension (s: String)
+    def ^(form: =>Form): Fragments =
+      s ^ factory.FormFragment(form)
 
-  implicit class appendFormToFragment(f: Fragment) extends appendToFragment(f):
-    def ^(form: =>Form)                                          : Fragments = appendToFragment(f) ^ factory.FormFragment(form)
-    def ^(aForm: =>{ def form: Form })(implicit p: ImplicitParam): Fragments = appendToFragment(f) ^ factory.FormFragment(aForm)(p)
+    def ^(aForm: =>{ def form: Form })(implicit p: ImplicitParam): Fragments =
+      s ^ factory.FormFragment(aForm)(p)
 
-  implicit class appendFormToFragments(fs: Fragments) extends appendToFragments(fs):
-    def ^(form: =>Form)                                          : Fragments = appendToFragments(fs) ^ factory.FormFragment(form)
-    def ^(aForm: =>{ def form: Form })(implicit p: ImplicitParam): Fragments = appendToFragments(fs) ^ factory.FormFragment(aForm)(p)
+  extension (f: Fragment)
+    def ^(form: =>Form): Fragments =
+      f ^ factory.FormFragment(form)
 
-  implicit class appendFormToArguments(args: Arguments) extends appendToArguments(args):
-    def ^(form: =>Form)(implicit p1: ImplicitParam1) : SpecStructure =
-      Use.ignoring(p1)(appendToArguments(args) ^ factory.FormFragment(form))
+    def ^(aForm: =>{ def form: Form })(implicit p: ImplicitParam): Fragments =
+      f ^ factory.FormFragment(aForm)(p)
 
-    def ^(aForm: =>{ def form: Form })(implicit p: ImplicitParam): SpecStructure =
-      appendToArguments(args) ^ factory.FormFragment(aForm)(p)
+  extension (fs: Fragments)
+    def ^(form: =>Form): Fragments =
+      fs ^ factory.FormFragment(form)
+      
+    def ^(aForm: =>{ def form: Form })(implicit p: ImplicitParam): Fragments =
+      fs ^ factory.FormFragment(aForm)(p)
 
-  implicit class appendFormToSpecHeader(header: SpecHeader) extends appendSpecStructureToSpecHeader(header):
-    def ^(form: =>Form)(implicit p1: ImplicitParam1) : SpecStructure =
-      Use.ignoring(p1)(appendSpecStructureToSpecHeader(header) ^ factory.FormFragment(form))
-
-    def ^(aForm: =>{ def form: Form })(implicit p: ImplicitParam): SpecStructure =
-      appendSpecStructureToSpecHeader(header) ^ factory.FormFragment(aForm)(p)
-
-  implicit class appendFormToSpecStructure(structure: SpecStructure) extends appendSpecStructureToSpecStructure(structure):
+  extension (args: Arguments)
     def ^(form: =>Form)(implicit p1: ImplicitParam1): SpecStructure =
-      Use.ignoring(p1)(appendSpecStructureToSpecStructure(structure) ^ factory.FormFragment(form))
+      Use.ignoring(p1)(args ^ factory.FormFragment(form))
 
     def ^(aForm: =>{ def form: Form })(implicit p: ImplicitParam): SpecStructure =
-      appendSpecStructureToSpecStructure(structure) ^ factory.FormFragment(aForm)(p)
+      args ^ factory.FormFragment(aForm)(p)
+
+  extension (header: SpecHeader)
+    def ^(form: =>Form)(implicit p1: ImplicitParam1) : SpecStructure =
+      Use.ignoring(p1)(header ^ factory.FormFragment(form))
+
+    def ^(aForm: =>{ def form: Form })(implicit p: ImplicitParam): SpecStructure =
+      header ^ factory.FormFragment(aForm)(p)
+
+  extension (structure: SpecStructure)
+    def ^(form: =>Form)(implicit p1: ImplicitParam1): SpecStructure =
+      Use.ignoring(p1)(structure ^ factory.FormFragment(form))
+
+    def ^(aForm: =>{ def form: Form })(implicit p: ImplicitParam): SpecStructure =
+      structure ^ factory.FormFragment(aForm)(p)
