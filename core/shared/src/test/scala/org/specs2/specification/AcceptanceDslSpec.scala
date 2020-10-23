@@ -61,7 +61,7 @@ class AcceptanceDslSpec extends Spec with AcceptanceDsl { def is = s2"""
   def b6 = ("s" ^ (f2 ^ f3)).fragmentsList(ee) must haveSize(3)
   def b7 = (f1 ^ f2 ^ "s").fragmentsList(ee) must haveSize(3)
 
-  def c1 = (appendToArguments(xonly) ^ "s").fragments.fragmentsList(ee) must haveSize(1)
+  def c1 = (xonly ^ "s").fragments.fragmentsList(ee) must haveSize(1)
   def c2 = (xonly ^ f1).fragments.fragmentsList(ee) must haveSize(1)
   def c3 = (xonly ^ (f1 ^ f2)).fragments.fragmentsList(ee) must haveSize(2)
 

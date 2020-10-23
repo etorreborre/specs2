@@ -11,8 +11,8 @@ import org.specs2.collection.Vectorx._
  */
 trait FragmentsDsl extends FragmentsFactory with AcceptanceDsl1:
 
-  implicit def fragmentToFragments(f: Fragment): Fragments =
-    Fragments(f)
+  given Conversion[Fragment, Fragments]:
+    def apply(f: Fragment): Fragments = Fragments(f)
 
   extension (s: String):
     def ^(others: Fragments): Fragments =
