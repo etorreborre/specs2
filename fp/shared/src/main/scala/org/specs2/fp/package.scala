@@ -16,6 +16,7 @@ package object fp:
     with SemigroupSyntax
     with ShowSyntax
     with EitherSyntax
+    with Identityx
 
   type Id[X] = X
 

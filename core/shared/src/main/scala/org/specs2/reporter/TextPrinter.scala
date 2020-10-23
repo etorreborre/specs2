@@ -2,7 +2,7 @@ package org.specs2
 package reporter
 
 import matcher.DataTable
-import control._, Identityx._
+import control._
 import origami._
 import fp._, syntax.{given _, _}
 import specification.core._
@@ -14,7 +14,6 @@ import Trim._
 import execute._
 import main.Arguments
 import LogLine._
-import org.specs2.fp.syntax._
 
 /**
  * Prints the result of a specification execution to the console (using the line logger provided by the environment)
@@ -276,7 +275,8 @@ case class TextPrinter(env: Env) extends Printer {
       List((descriptions.map { case (name, values) => s"$name = ${values.size}" }.mkString(", ")).failure)
     else Nil
 
-  def location(r: ResultStackTrace, args: Arguments) = " ("+r.location(args.traceFilter)+")" unless r.location.isEmpty
+  def location(r: ResultStackTrace, args: Arguments): String =
+    " ("+r.location(args.traceFilter)+")" orEmptyWhen r.location.isEmpty
 
   def indentText(text: String, indentation: Int, indentationSize: Int) =
     if text.isEmpty then text

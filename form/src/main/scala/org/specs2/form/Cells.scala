@@ -2,12 +2,13 @@ package org.specs2
 package form
 
 import scala.xml._
-import xml.Nodex._
+import xml.Nodex.{given _, _}
 import text.NotNullStrings._
 import main.Arguments
 import execute._
 import StandardResults._
 import text.Markdown
+import fp.syntax._
 
 /**
  * A Cell is the Textual or Xml representation of a Form element: Field, Prop or Form.
@@ -115,9 +116,9 @@ case class FieldCell(f: Field[_], result: Option[Result] = None) extends Cell:
       case Left(e)  => e
       case Right(e) => e
     val executedResult = execute
-    (<td style={f.labelStyles}>{f.decorateLabel(f.label)}</td> unless f.label.isEmpty) ++
+    ((<td style={f.labelStyles}>{f.decorateLabel(f.label)}</td> : NodeSeq) orEmptyWhen f.label.isEmpty) ++
      <td class={statusName(executedResult)} style={f.valueStyles}>{f.decorateValue(executedValue)}</td> ++
-    (<td class={executedResult.statusName} onclick={"showHide("+System.identityHashCode(executedResult).toString+")"}>{executedResult.message}</td> unless
+    (<td class={executedResult.statusName} onclick={"showHide("+System.identityHashCode(executedResult).toString+")"}>{executedResult.message}</td> orEmptyWhen
       !executedResult.isError)
 
   private def statusName(r: Result) = r match
@@ -137,7 +138,7 @@ case class EffectCell(e: Effect[_], result: Option[Result] = None) extends Cell:
   def xml(implicit args: Arguments) =
     val executedResult = execute
     <td style={e.labelStyles} class="info">{e.decorateLabel(e.label)}</td> ++
-    (<td class={executedResult.statusName} onclick={"showHide("+System.identityHashCode(executedResult).toString+")"}>{executedResult.message}</td> unless executedResult.isSuccess)
+    (<td class={executedResult.statusName} onclick={"showHide("+System.identityHashCode(executedResult).toString+")"}>{executedResult.message}</td> orEmptyWhen executedResult.isSuccess)
 
   def execute = result.getOrElse(e.execute)
   def setResult(r: Result) = EffectCell(e, Some(r))
@@ -156,9 +157,11 @@ case class PropCell(p: Prop[_,_], result: Option[Result] = None) extends Cell:
 
   def xml(implicit args: Arguments): NodeSeq =
     val executed = result.getOrElse(skipped)
-    (<td style={p.labelStyles}>{p.decorateLabel(p.label)}</td> unless p.label.isEmpty) ++
-    (<td class={executed.statusName}>{p.decorateValue(p.actualValue.toOption.getOrElse(""))}</td> unless p.actualValue.toOption.isEmpty) ++
-    (<td class={executed.statusName} onclick={"showHide("+System.identityHashCode(executed).toString+")"}>{executed.message}</td> unless (executed.isSuccess || executed.message.isEmpty))
+    (<td style={p.labelStyles}>{p.decorateLabel(p.label)}</td> orEmptyWhen p.label.isEmpty) ++
+    (<td class={executed.statusName}>{p.decorateValue(p.actualValue.toOption.getOrElse(""))}</td> orEmptyWhen p.actualValue.toOption.isEmpty) ++
+    (<td class={executed.statusName} onclick={"showHide("+System.identityHashCode(executed).toString+")"}>{executed.message}</td>
+      orEmptyWhen (executed.isSuccess || executed.message.isEmpty))
+
 /**
  * Cell embedding a Form
  */
@@ -170,18 +173,22 @@ class FormCell(_form: =>Form, result: Option[Result] = None) extends Cell:
   def xml(implicit args: Arguments) = form.toCellXml(args)
 
   def execute = result.getOrElse(form.execute)
+
   def executeCell =
     lazy val executed = result.map(r => form).getOrElse(form.executeForm)
     new FormCell(executed, result.orElse(Some(executed.execute)))
+
   def setResult(r: Result) = new FormCell(form.setResult(r), Some(r))
 
   /**
    * @return the width of a form when inlined.
    *         It is the width of its text size minus 4, which is the size of the borders "| " and " |"
    */
-  override def width = text.split("\n").map((_: String).length).max[Int] - 4
+  override def width = text.split("\n").toList.map((_: String).length).max[Int] - 4
+
 object FormCell:
   def unapply(cell: FormCell): Option[Form] = Some(cell.form)
+
 /** Proxy to a cell that's not evaluated right away when added to a row */
 class LazyCell(_cell: =>Cell) extends Cell:
   lazy val cell = _cell
@@ -190,8 +197,10 @@ class LazyCell(_cell: =>Cell) extends Cell:
   def execute = cell.execute
   def executeCell = cell.executeCell
   def setResult(r: Result) = cell.setResult(r)
+
 object LazyCell:
   def unapply(cell: LazyCell): Option[Cell] = Some(cell.cell)
+
 /** This cell can contain any xml */
 class XmlCell(_theXml: =>NodeSeq) extends Cell:
   lazy val theXml = _theXml
@@ -200,6 +209,7 @@ class XmlCell(_theXml: =>NodeSeq) extends Cell:
   def execute = success
   def executeCell = this
   def setResult(r: Result) = this
+
 object XmlCell:
   def unapply(cell: XmlCell): Option[NodeSeq] = Some(cell.theXml)
   def apply(xml: =>NodeSeq) = new XmlCell(xml)

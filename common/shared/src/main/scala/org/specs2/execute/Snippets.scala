@@ -189,12 +189,14 @@ object Snippet:
    */
   def trimRangePosSnippet = (call: String) => {
 
-    val expression = Trimmed(call).removeStart("snippet")
+    val expression = call.removeStart("snippet")
     val trimmed =
-      if s"$ls*\\{$ls*.*".r.findPrefixOf(expression).isDefined then Trimmed(Trimmed(expression).removeFirst(s"\\{")).removeLast(s"\\}")
-      else                                                       expression
+      if s"$ls*\\{$ls*.*".r.findPrefixOf(expression).isDefined then
+        expression.removeFirst(s"\\{").removeLast(s"\\}")
+      else
+        expression
 
-    Trimmed(trimmed).removeAll("/**/;1/**/").trim
+    trimmed.removeAll("/**/;1/**/").trim
   }
 
   /**

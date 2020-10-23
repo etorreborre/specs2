@@ -1,17 +1,15 @@
 package org.specs2
 package html
 
-import control._, Identityx._
+import scala.xml._
 import specification.core._
-
-import scala.xml.NodeSeq
+import control._
 import io._
-import xml.Nodex._
+import xml.Nodex.{given _, _}
 import Htmlx._
-import org.specs2.fp._
-import org.specs2.fp.syntax._
+import fp._, syntax._
 import data.Trees._
-import org.specs2.concurrent.ExecutionEnv
+import concurrent.ExecutionEnv
 import text.Trim._
 
 /**
@@ -25,9 +23,9 @@ trait TableOfContents:
     // sort specifications a, b, c so that a depends on b and c
     val sorted = SpecStructure.reverseTopologicalSort(specifications)(env.specs2ExecutionEnv).map(_.toList).getOrElse(List())
     for
-      pages   <- readHtmlPages(sorted, outDir, fileSystem)
-      toc     =  createToc(pages, outDir, entryMaxSize)(env.specs2ExecutionEnv)
-      _       <- saveHtmlPages(pages.map(page => page.addToc(toc(page))), fileSystem)
+      pages <- readHtmlPages(sorted, outDir, fileSystem)
+      toc   =  createToc(pages, outDir, entryMaxSize)(env.specs2ExecutionEnv)
+      _     <- saveHtmlPages(pages.map(page => page.addToc(toc(page))), fileSystem)
     yield ()
 
   /** read the generated html pages and return them as a tree, based on the links relationships between them */
@@ -93,16 +91,15 @@ trait TableOfContents:
   def createHeadersSubtoc(page: SpecHtmlPage, entryMaxSize: Int): NodeSeq =
     page.body.headersTree.
       bottomUp { (h: Header, s: LazyList[NodeSeq]) =>
-      if h.isRoot then
-        // 'id' is the name of the attribute expected by jstree to "open" the tree on a specific node
-        s.reduceNodes.updateHeadAttribute("id", page.path.name.name)
-      else if h.level > 1 then
-        <li><a href={page.relativePath.path+"#"+h.pandocName} title={h.name}>{h.name.truncate(entryMaxSize)}</a>
-          { <ul>{s}</ul> unless s.isEmpty }
-        </li>
-      else
-        <ul>{s}</ul> unless s.isEmpty
-
+        if h.isRoot then
+          // 'id' is the name of the attribute expected by jstree to "open" the tree on a specific node
+          s.reduceNodes.updateHeadAttribute("id", page.path.name.name)
+        else if h.level > 1 then
+          <li><a href={page.relativePath.path+"#"+h.pandocName} title={h.name}>{h.name.truncate(entryMaxSize)}</a>
+            { <ul>{s}</ul> orEmptyWhen s.isEmpty }
+          </li>
+        else
+          <ul>{s}</ul> orEmptyWhen s.isEmpty
     }.rootLabel
 
   def saveHtmlPages(pages: List[SpecHtmlPage], fileSystem: FileSystem): Operation[Unit] =

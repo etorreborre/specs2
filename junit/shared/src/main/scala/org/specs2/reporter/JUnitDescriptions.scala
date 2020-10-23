@@ -92,12 +92,12 @@ trait JUnitDescriptions extends ExecutionOrigin:
   /** @return a test name with no newlines */
   def testName(s: String, parentNodes: Seq[String] = Seq()): String =
     (if parentNodes.isEmpty || isExecutedFromAnIDE then "" else parentNodes.map(_.replace("\n", "")).mkString("", "::", "::")) +
-      (if isExecutedFromAnIDE then Trimmed(s).removeNewLines else Trimmed(s).trimNewLines)
+      (if isExecutedFromAnIDE then s.removeNewLines else s.trimNewLines)
 
 
   /** @return replace () with [] because it cause display issues in JUnit plugins */
   private def sanitize(s: String) =
-    val trimmed = Trimmed(s).trimReplace("(" -> "[",  ")" -> "]")
+    val trimmed = s.trimReplace("(" -> "[",  ")" -> "]")
     if trimmed.isEmpty then " "
     else trimmed
 
