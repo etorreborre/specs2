@@ -9,8 +9,7 @@ import concurrent.ExecutionEnv
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
-import fp.{Monoid, Show}
-import fp.syntax._
+import fp.{given _, _}, syntax._
 import specification.process.Stats
 import time.SimpleTimer, SimpleTimer.startSimpleTimer
 import text.NotNullStrings._
@@ -226,8 +225,10 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
         executions.flatMap(_.futureResult(env).map(_.map(_._1)))
 
       lazy val before: Future[Result] =
-        if sequential then runs.foldLeftM[Future, Result](Success())((res, cur) => cur.map(r => res and r))
-        else            Future.sequence(runs).map(_.suml)
+        if sequential then
+          runs.foldLeftM(Success(): Result)((res, cur) => cur.map(r => res and r))
+        else
+          Future.sequence(runs).map(_.suml)
 
       executing match
         case NotExecuting =>

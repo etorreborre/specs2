@@ -144,7 +144,8 @@ object Result:
    * @return the accumulation of all results, without success messages
    */
   def issues(results: scala.collection.Seq[Result], separator: String = "; ") =
-    results.toList.suml(ResultFailuresMonoid(separator)).addExpectationsNb(-1)
+    given Monoid[Result] = ResultFailuresMonoid(separator)
+    results.toList.suml.addExpectationsNb(-1)
 
   /**
    * This monoids keeps success messages if the result of the |+| is not a success
@@ -248,14 +249,16 @@ object Result:
    * it returns the first result which is an issue or the last success
    */
   def foreach[T, R : AsResult](seq: Seq[T])(f: T => R): Result =
-    seq.toList.foldMap((t: T) => AsResult(f(t)))(ResultShortCircuitMonoid)
+    given Monoid[Result] = ResultShortCircuitMonoid
+    seq.toList.foldMap((t: T) => AsResult(f(t)))
 
   /**
    * this returns a result which is a summary of all the results
    * according to the ResultFailureMonoid
    */
   def forall[T, R : AsResult](seq: Seq[T])(f: T => R): Result =
-    seq.toList.foldMap((t: T) => AsResult(f(t)))(ResultFailureMonoid)
+    given Monoid[Result] = ResultFailureMonoid
+    seq.toList.foldMap((t: T) => AsResult(f(t)))
 
 trait Results:
   /**

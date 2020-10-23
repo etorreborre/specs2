@@ -93,10 +93,15 @@ trait Seqx:
     if filtered.isEmpty then Seq()
     else filtered.map(_.head) +: transpose(filtered.map(_.tail))
 
-  given seqIsFoldable as Foldable[Seq] = new Foldable[Seq]:
-    def foldLeft[A, B](fa: Seq[A], z: B)(f: (B, A) => B) = Foldable.listInstance.foldLeft(fa.toList, z)(f)
-    def foldRight[A, B](fa: Seq[A], z: => B)(f: (A, =>B) => B) = Foldable.listInstance.foldRight(fa.toList, z)(f)
-    def foldMap[A, B](fa: Seq[A])(f: (A) => B)(implicit F: Monoid[B]) = Foldable.listInstance.foldMap(fa.toList)(f)
+  given Foldable[Seq]:
+    def foldLeft[A, B](fa: Seq[A], z: B)(f: (B, A) => B) =
+      summon[Foldable[List]].foldLeft(fa.toList, z)(f)
+
+    def foldRight[A, B](fa: Seq[A], z: => B)(f: (A, =>B) => B) =
+      summon[Foldable[List]].foldRight(fa.toList, z)(f)
+
+    def foldMap[A, B](fa: Seq[A])(f: (A) => B)(using F: Monoid[B]) =
+      summon[Foldable[List]].foldMap(fa.toList)(f)
 
 private[specs2]
 object Seqx extends Seqx
