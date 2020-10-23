@@ -6,8 +6,8 @@ package form
  */
 private[specs2]
 trait DecoratedProperties:
-  implicit def toDecorated[T <: DecoratedProperty[T]](d: T): Decorated[T] = new Decorated(d)
-  class Decorated[T <: DecoratedProperty[T]](d: T):
+
+  extension [T <: DecoratedProperty[T]] (d: T)
 
     def code      = d.decoratorIs(d.decorator.code)
     def codeLabel = d.decoratorIs(d.decorator.codeLabel)
@@ -84,5 +84,6 @@ trait DecoratedProperties:
     def italics      = d.decoratorIs(d.decorator.italics)
     def italicsLabel = d.decoratorIs(d.decorator.italicsLabel)
     def italicsValue = d.decoratorIs(d.decorator.italicsValue)
+    
 private[specs2]
 object DecoratedProperties extends DecoratedProperties

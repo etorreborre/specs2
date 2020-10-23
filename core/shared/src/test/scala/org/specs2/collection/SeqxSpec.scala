@@ -55,11 +55,11 @@ import Test._
 import execute._
 
 trait ScalaCheckResult:
-  implicit def propAsResult: AsResult[Prop] = new AsResult[Prop] {
+
+  given AsResult[Prop]:
     def asResult(prop: =>Prop) =
       Test.check(Parameters.default, prop).status match
         case `Passed` | Proved(_)           => Success()
         case Failed(args, labels)           => Failure("Property failed with args: "+args.mkString(", ")+" and labels "+labels.mkString(", "))
         case PropException(args, e, labels) => Error(e).updateMessage("Property failed with args: "+args.mkString(", ")+" and labels "+labels.mkString(", "))
         case `Exhausted`                    => Error("exhausted")
-  }
