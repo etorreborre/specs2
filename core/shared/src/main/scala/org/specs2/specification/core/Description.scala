@@ -130,10 +130,8 @@ object Description:
       case Code(_) => true
       case _       => false
 
-  implicit def showInstance: Show[Description] = new Show[Description] {
+  given Show[Description]:
     def show(d: Description): String =
       d match
         case Text(t) => t
         case _ => d.toString
-  }
-

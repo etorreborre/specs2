@@ -3,12 +3,12 @@ package scalacheck
 
 import org.scalacheck._
 import org.scalacheck.util.{FreqMap, Pretty}
+import org.scalacheck.rng.Seed
 import execute._
 import specification._
+import core.{AsExecution, Execution}
 import AsResultProp._
 import ScalaCheckProperty._
-import org.scalacheck.rng.Seed
-import org.specs2.specification.core.{AsExecution, Execution}
 
 /**
  * A ScalaCheckProperty encapsulates a ScalaCheck Prop and its parameters

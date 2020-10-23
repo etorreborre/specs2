@@ -18,7 +18,7 @@ import control._
 
 import scala.util.control.NonFatal
 import ResultLogicalCombinators._
-import Execution._
+import Execution.{given _, _}
 
 /**
  * Execution of a Fragment
@@ -362,12 +362,11 @@ object Execution:
       executing = Started(f)
     )
 
-  implicit def showInstance: Show[Execution] = new Show[Execution] {
+  given Show[Execution]:
     def show(e: Execution): String =
       e.executing match
         case NotExecuting => "no execution"
         case _ => "executing"
-  }
 
   /** nothing to execute */
   val NoExecution = Execution(run = None)
@@ -383,7 +382,7 @@ object Execution:
       else                 DecoratedResult(s.copy(specs = s.specs + 1), s.result): Result
     })
 
-  implicit def finiteDurationMonoid: Monoid[Option[FiniteDuration]] = new Monoid[Option[FiniteDuration]] {
+  given Monoid[Option[FiniteDuration]]:
     val zero: Option[FiniteDuration] =
       None
 
@@ -394,11 +393,8 @@ object Execution:
         case (None,     Some(t2)) => Some(t2)
         case _                    => None
 
-  }
-
-  implicit def executionAsExecution: AsExecution[Execution] = new AsExecution[Execution] {
+  given AsExecution[Execution]:
     def execute(r: =>Execution): Execution = r
-  }
 
 
 case class FatalExecution(t: Throwable) extends Exception(t):

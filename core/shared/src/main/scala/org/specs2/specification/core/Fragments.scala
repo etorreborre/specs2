@@ -129,12 +129,11 @@ object Fragments:
   def apply(fragments: Fragment*): Fragments =
     new Fragments(emitSeq[Action, Fragment](fragments))
 
-  implicit def FragmentsMonoid: Monoid[Fragments] = new Monoid[Fragments] {
+  given Monoid[Fragments]:
     def zero : Fragments = Fragments.empty
 
     def append(fs1: Fragments, fs2: =>Fragments): Fragments =
       fs1.append(fs2)
-  }
 
   /** iterate over elements to create a Fragments object */
   def foreach[T](seq: Seq[T])(f: T => Fragments): Fragments =
