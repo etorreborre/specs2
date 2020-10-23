@@ -6,138 +6,119 @@ import scala.util.{Failure, Success, Try}
  * Inspired from the cats (https://github.com/typelevel/cats project
  */
 trait EitherSyntax:
-  implicit def syntaxEither[A, B](eab: Either[A, B]): EitherOps[A, B] = new EitherOps(eab)
 
-  implicit def syntaxEitherObject(either: Either.type): EitherObjectOps = new EitherObjectOps(either)
+  extension [A, B](eab: Either[A, B])
 
-  implicit def syntaxLeft[A, B](left: Left[A, B]): LeftOps[A, B] = new LeftOps(left)
+    def foreach(f: B => Unit): Unit = eab match
+      case Left(_)  => ()
+      case Right(b) => f(b)
 
-  implicit def syntaxRight[A, B](right: Right[A, B]): RightOps[A, B] = new RightOps(right)
+    def forall(f: B => Boolean): Boolean = eab match
+      case Left(_)  => true
+      case Right(b) => f(b)
 
-  implicit def syntaxEitherId[A](a: A): EitherIdOps[A] = new EitherIdOps(a)
+    def exists(f: B => Boolean): Boolean = eab match
+      case Left(_)  => false
+      case Right(b) => f(b)
 
-final class EitherOps[A, B](val eab: Either[A, B]) extends AnyVal:
-  def foreach(f: B => Unit): Unit = eab match
-    case Left(_)  => ()
-    case Right(b) => f(b)
+    def toOption: Option[B] = eab match
+      case Left(_)  => None
+      case Right(b) => Some(b)
 
-  def getOrElse[BB >: B](default: => BB): BB = eab match
-    case Left(_)  => default
-    case Right(b) => b
+    def toList: List[B] = eab match
+      case Left(_)  => Nil
+      case Right(b) => List(b)
 
-  def orElse[C, BB >: B](fallback: => Either[C, BB]): Either[C, BB] = eab match
-    case Left(_)      => fallback
-    case r @ Right(_) => EitherUtil.leftCast(r)
+  extension [A, B, AA >: A, BB >: B, C](eab: Either[A, B])
+    def getOrElse(default: => BB): BB = eab match
+      case Left(_)  => default
+      case Right(b) => b
 
-  def recover[BB >: B](pf: PartialFunction[A, BB]): Either[A, BB] = eab match
-    case Left(a) if pf.isDefinedAt(a) => Right(pf(a))
-    case _                            => eab
+    def orElse(fallback: => Either[C, BB]): Either[C, BB] = eab match
+      case Left(_)      => fallback
+      case r @ Right(_) => EitherUtil.leftCast(r)
 
-  def recoverWith[AA >: A, BB >: B](pf: PartialFunction[A, Either[AA, BB]]): Either[AA, BB] = eab match
-    case Left(a) if pf.isDefinedAt(a) => pf(a)
-    case _                            => eab
+    def recover(pf: PartialFunction[A, BB]): Either[A, BB] = eab match
+      case Left(a) if pf.isDefinedAt(a) => Right(pf(a))
+      case _                            => eab
 
-  def valueOr[BB >: B](f: A => BB): BB = eab match
-    case Left(a)  => f(a)
-    case Right(b) => b
+    def recoverWith(pf: PartialFunction[A, Either[AA, BB]]): Either[AA, BB] = eab match
+      case Left(a) if pf.isDefinedAt(a) => pf(a)
+      case _                            => eab
 
-  def forall(f: B => Boolean): Boolean = eab match
-    case Left(_)  => true
-    case Right(b) => f(b)
+    def valueOr(f: A => BB): BB = eab match
+      case Left(a)  => f(a)
+      case Right(b) => b
 
-  def exists(f: B => Boolean): Boolean = eab match
-    case Left(_)  => false
-    case Right(b) => f(b)
+    def ensure(onFailure: => AA)(f: B => Boolean): Either[AA, B] = eab match
+      case Left(_)  => eab
+      case Right(b) => if f(b) then eab else Left(onFailure)
 
-  def ensure[AA >: A](onFailure: => AA)(f: B => Boolean): Either[AA, B] = eab match
-    case Left(_)  => eab
-    case Right(b) => if f(b) then eab else Left(onFailure)
+    def toTry(implicit ev: A <:< Throwable): Try[B] = eab match
+      case Left(a)  => Failure(ev(a))
+      case Right(b) => Success(b)
 
-  def toOption: Option[B] = eab match
-    case Left(_)  => None
-    case Right(b) => Some(b)
+    def map(f: B => C): Either[A, C] = eab match
+      case l @ Left(_) => EitherUtil.rightCast(l)
+      case Right(b)    => Right(f(b))
 
-  def toList: List[B] = eab match
-    case Left(_)  => Nil
-    case Right(b) => List(b)
+    def as(c: =>C): Either[A, C] =
+      eab.map(_ => c)
 
-  def toTry(implicit ev: A <:< Throwable): Try[B] = eab match
-    case Left(a)  => Failure(ev(a))
-    case Right(b) => Success(b)
+    def leftMap(f: A => C): Either[C, B] = eab match
+      case Left(a)      => Left(f(a))
+      case r @ Right(_) => EitherUtil.leftCast(r)
 
-  def bimap[C, D](fa: A => C, fb: B => D): Either[C, D] = eab match
-    case Left(a)  => Left(fa(a))
-    case Right(b) => Right(fb(b))
-
-  def map[C](f: B => C): Either[A, C] = eab match
-    case l @ Left(_) => EitherUtil.rightCast(l)
-    case Right(b)    => Right(f(b))
-
-  def as[C](c: =>C): Either[A, C] =
-    map(_ => c)
-
-  def leftMap[C](f: A => C): Either[C, B] = eab match
-    case Left(a)      => Left(f(a))
-    case r @ Right(_) => EitherUtil.leftCast(r)
-
-  def flatMap[AA >: A, D](f: B => Either[AA, D]): Either[AA, D] = eab match
-    case l @ Left(_) => EitherUtil.rightCast(l)
-    case Right(b)    => f(b)
-
-  def traverse[F[_], AA >: A, D](f: B => F[D])(implicit F: Applicative[F]): F[Either[AA, D]] = eab match
-    case l @ Left(_) => F.pure(EitherUtil.rightCast(l))
-    case Right(b)    => F.map(f(b))(Right(_))
-
-  def foldLeft[C](c: C)(f: (C, B) => C): C = eab match
-    case Left(_)  => c
-    case Right(b) => f(c, b)
-
-  final def append[AA >: A, BB >: B](that: Either[AA, BB])(implicit BB: Semigroup[BB]): Either[AA, BB] = eab match
-    case left @ Left(_) => left
-    case Right(b1) => that match
+    def append(that: Either[AA, BB])(implicit BB: Semigroup[BB]): Either[AA, BB] = eab match
       case left @ Left(_) => left
-      case Right(b2) => Right(BB.append(b1, b2))
+      case Right(b1) => that match
+        case left @ Left(_) => left
+        case Right(b2) => Right(BB.append(b1, b2))
 
-  def show[AA >: A, BB >: B](implicit AA: Show[AA], BB: Show[BB]): String = eab match
-    case Left(a)  => s"Left(${AA.show(a)})"
-    case Right(b) => s"Right(${BB.show(b)})"
+    def show(implicit AA: Show[AA], BB: Show[BB]): String = eab match
+      case Left(a)  => s"Left(${AA.show(a)})"
+      case Right(b) => s"Right(${BB.show(b)})"
 
-  def ap[AA >: A, BB >: B, C](that: Either[AA, BB => C]): Either[AA, C] = new EitherOps(that).flatMap(this.map)
+    def ap(that: Either[AA, BB => C]): Either[AA, C] =
+      that.flatMap(eab.map)
 
+    def flatMap(f: B => Either[AA, C]): Either[AA, C] = eab match
+      case l @ Left(_) => EitherUtil.rightCast(l)
+      case Right(b)    => f(b)
 
-final class EitherObjectOps(val either: Either.type) extends AnyVal: // scalastyle:off ensure.single.space.after.token
-  def left[A, B](a: A): Either[A, B] = Left(a)
+    def foldLeft(c: C)(f: (C, B) => C): C = eab match
+      case Left(_)  => c
+      case Right(b) => f(c, b)
 
-  def right[A, B](b: B): Either[A, B] = Right(b)
+  extension [A, B, C, D](eab: Either[A, B]):
+    def bimap(fa: A => C, fb: B => D): Either[C, D] = eab match
+      case Left(a)  => Left(fa(a))
+      case Right(b) => Right(fb(b))
 
-  def catchNonFatal[A](f: => A): Either[Throwable, A] =
-    try
-      right(f)
-    catch
-      case scala.util.control.NonFatal(t) => left(t)
-
-  def fromTry[A](t: Try[A]): Either[Throwable, A] =
-    t match
-      case Failure(e) => left(e)
-      case Success(v) => right(v)
-
-  def fromOption[A, B](o: Option[B], ifNone: => A): Either[A, B] = o match
-    case None    => left[A, B](ifNone)
-    case Some(a) => right(a)
-
-final class LeftOps[A, B](val left: Left[A, B]) extends AnyVal:
-  def rightCast[C]: Either[A, C] = left.asInstanceOf[Either[A, C]]
-
-final class RightOps[A, B](val right: Right[A, B]) extends AnyVal:
-  def leftCast[C]: Either[C, B] = right.asInstanceOf[Either[C, B]]
-
-final class EitherIdOps[A](val obj: A) extends AnyVal:
-  def asLeft[B]: Either[A, B] = Left(obj)
-  def asRight[B]: Either[B, A] = Right(obj)
+  extension [F[_], A, B, AA >: A, C](eab: Either[A, B]):
+    def traverse(f: B => F[C])(using F: Applicative[F]): F[Either[AA, C]] = eab match
+      case l @ Left(_) => F.pure(EitherUtil.rightCast(l))
+      case Right(b)    => F.map(f(b))(Right(_))
 
 private[fp] object EitherUtil:
+
   def leftCast[A, B, C](right: Right[A, B]): Either[C, B] =
     right.asInstanceOf[Either[C, B]]
 
   def rightCast[A, B, C](left: Left[A, B]): Either[A, C] =
     left.asInstanceOf[Either[A, C]]
+
+  def catchNonFatal[A](f: => A): Either[Throwable, A] =
+    try
+      Right(f)
+    catch
+      case scala.util.control.NonFatal(t) => Left(t)
+
+  def fromTry[A](t: Try[A]): Either[Throwable, A] =
+    t match
+      case Failure(e) => Left(e)
+      case Success(v) => Right(v)
+
+  def fromOption[A, B](o: Option[B], ifNone: => A): Either[A, B] = o match
+    case None    => Left[A, B](ifNone)
+    case Some(a) => Right(a)

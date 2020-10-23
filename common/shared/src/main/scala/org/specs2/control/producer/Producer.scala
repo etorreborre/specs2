@@ -170,9 +170,9 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]):
     Producer[F, Throwable Either A](Safe[F].attempt(run) map {
       case Right(Done()) => Done()
       case Right(One(a)) => One(Right(a))
-      case Right(More(as, next)) => More(as.map(Either.right), next.map(Either.right))
+      case Right(More(as, next)) => More(as.map(Right.apply), next.map(Right.apply))
 
-      case Left(t) => One(Either.left(t))
+      case Left(t) => One(Left(t))
     })
 
   /**
