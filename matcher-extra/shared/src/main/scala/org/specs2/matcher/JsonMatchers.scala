@@ -10,7 +10,7 @@ import org.specs2.text.NotNullStrings._
 import text.NotNullStrings._
 import json.Json._
 import util.matching.Regex
-import MatchersImplicits._
+import MatchersImplicits.{given _}
 import Results.negateWhen
 
 /**
@@ -256,7 +256,7 @@ trait JsonSelectors:
     def select(map: Map[String, Any]) = None
     def name = s"'${v.notNull}'"
     def description: String = s"value $name"
-    
+
   case class JsonIntSelector(n: Int) extends JsonValueSelector:
     def select(values: List[Any]) =
       values.find {

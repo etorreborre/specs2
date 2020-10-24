@@ -3,7 +3,7 @@ package matcher
 
 import execute._
 import control._
-import MatchersCreation._
+import MatchersCreation.{given _}
 import text.Regexes._
 import fp._, syntax._
 

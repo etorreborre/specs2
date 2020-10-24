@@ -28,16 +28,20 @@ object MatchersImplicits extends MatchersImplicits
 /**
  * Implicit conversions for MatchResults
  */
-trait MatchResultImplicits { outer =>
+trait MatchResultImplicits:
   /**
    * implicit definition to transform a Seq of MatchResults to a Result
    */
-  implicit def seqToResult[T](r: Seq[MatchResult[T]]): Result = r.foldLeft(StandardResults.success: Result)(_ and _.toResult)
+  given [T] as Conversion[Seq[MatchResult[T]], Result]:
+    def apply(r: Seq[MatchResult[T]]): Result =
+      r.foldLeft(StandardResults.success: Result)(_ and _.toResult)
 
   /**
    * implicit definition to transform any MatchResult to a Result
    */
-  implicit def asResult[T](r: MatchResult[T]): Result = ResultExecution.execute(r.toResult)
+  given [T] as Conversion[MatchResult[T], Result]:
+    def apply(r: MatchResult[T]): Result =
+      ResultExecution.execute(r.toResult)
 
   /**
    * implicit definition to accept any MatchResult as a Boolean value.
@@ -45,7 +49,6 @@ trait MatchResultImplicits { outer =>
    */
   implicit def fromMatchResult(r: =>MatchResult[_]): Boolean = r.isSuccess || r.toResult.isSkipped || r.toResult.isPending
 
-}
 
 object MatchResultImplicits extends MatchResultImplicits
 
@@ -127,63 +130,77 @@ trait MatchersCreation:
   /**
    * This method transforms a function to a Matcher
    */
-  implicit def functionToMatcher[T](f: (T => Boolean, String)): Matcher[T] =
-    functionAndMessagesToMatcher[T]((f._1, (t:T) => negateSentence(q(t)+" "+f._2), (t:T) => q(t)+" "+f._2))
+  given [T] as Conversion[(T => Boolean, String), Matcher[T]]:
+    def apply(f: (T => Boolean, String)): Matcher[T] =
+      (f._1, (t:T) => negateSentence(q(t)+" "+f._2), (t:T) => q(t)+" "+f._2)
 
   /**
    * This method transforms a function to a Matcher
    */
-  implicit def functionToMatcher2[T](f: (T => Boolean, String, String)): Matcher[T] =
-    functionAndMessagesToMatcher[T]((f._1, (t:T) => q(t)+" "+f._2, (t:T) => q(t)+" "+f._3))
+  given [T] as Conversion[(T => Boolean, String, String), Matcher[T]]:
+    def apply(f: (T => Boolean, String, String)): Matcher[T] =
+      (f._1, (t:T) => q(t)+" "+f._2, (t:T) => q(t)+" "+f._3)
+
   /**
    * This method transforms a function to a Matcher
    */
-  implicit def functionAndKoMessageToMatcher[T](f: (T => Boolean, T => String)): Matcher[T] =
-    functionAndMessagesToMatcher[T]((f._1, (t:T) => negateSentence(f._2(t)), f._2))
+  given [T] as Conversion[(T => Boolean, T => String), Matcher[T]]:
+    def apply(f: (T => Boolean, T => String)): Matcher[T] =
+      (f._1, (t:T) => negateSentence(f._2(t)), f._2)
+
   /**
    * This method transforms a function, with function descriptors to a Matcher
    */
-  implicit def functionAndMessagesToMatcher[T](f: (T => Boolean, T => String, T => String)): Matcher[T] = new Matcher[T] {
-    def apply[S <: T](s: Expectable[S]) =
-      val functionResult = f._1(s.value)
-      result(functionResult,  f._2(s.value), f._3(s.value), s)
-  }
+  given [T] as Conversion[(T => Boolean, T => String, T => String), Matcher[T]]:
+   def apply(f: (T => Boolean, T => String, T => String)): Matcher[T] =
+     new Matcher[T]:
+       def apply[S <: T](s: Expectable[S]) =
+         val functionResult = f._1(s.value)
+         result(functionResult,  f._2(s.value), f._3(s.value), s)
+
   /**
    * This method transforms a function returning a pair (Boolean, String for ko message) to a Matcher
    */
-  implicit def pairFunctionToMatcher[T](f: T =>(Boolean, String)): Matcher[T] = new Matcher[T] {
-    def apply[S <: T](s: Expectable[S]) =
-      val functionResult = f(s.value)
-      result(functionResult._1, negateSentence(functionResult._2), functionResult._2, s)
-  }
+  given pairFunctionToMatcher[T] as Conversion[T => (Boolean, String), Matcher[T]]:
+   def apply(f: T => (Boolean, String)): Matcher[T] =
+     new Matcher[T]:
+       def apply[S <: T](s: Expectable[S]) =
+         val functionResult = f(s.value)
+         result(functionResult._1, negateSentence(functionResult._2), functionResult._2, s)
+
   /**
    * This method transforms a function returning a triplet (Boolean, String for ok message, String for ko message) to a Matcher
    */
-  implicit def tripletFunctionToMatcher[T](f: T =>(Boolean, String, String)): Matcher[T] = new Matcher[T] {
-    def apply[S <: T](s: Expectable[S]) =
-      val functionResult = f(s.value)
-      result(functionResult._1, functionResult._2,  functionResult._3, s)
-  }
+  given [T] as Conversion[T => (Boolean, String, String), Matcher[T]]:
+    def apply(f: T => (Boolean, String, String)): Matcher[T] =
+      new Matcher[T]:
+        def apply[S <: T](s: Expectable[S]) =
+          val functionResult = f(s.value)
+          result(functionResult._1, functionResult._2,  functionResult._3, s)
+
   /**
    * This method transforms a function returning a Result to a Matcher
    */
-  implicit def matchResultFunctionToMatcher[T, R : AsResult](f: T => R): Matcher[T] = new Matcher[T] {
-    def apply[S <: T](s: Expectable[S]) =
-      val r = ResultExecution.execute(AsResult(f(s.value)))
-      result(r, s)
-  }
+  given resultFunctionToMatcher[T, R : AsResult] as Conversion[T => R, Matcher[T]]:
+    def apply(f: T => R): Matcher[T] =
+      new Matcher[T]:
+        def apply[S <: T](s: Expectable[S]) =
+          val r = ResultExecution.execute(AsResult(f(s.value)))
+          result(r, s)
 
   /** this allows a function returning a matcher to be used where the same function with a byname parameter is expected */
-  implicit def stringMatcherFunctionToBynameMatcherFunction[T, R](f: T => Matcher[R]): (=>T) => Matcher[R] =
-    def f1(t: =>T) = f(t)
-    f1
+  given matcherFunctionToMatcher[T, R] as Conversion[T => Matcher[R], (=>T) => Matcher[R]]:
+    def apply(f: T => Matcher[R]): (=>T) => Matcher[R] =
+      def f1(t: =>T) = f(t)
+      f1
 
   /**
    * this implicit provides an inverted syntax to adapt matchers to make the adaptation more readable in some cases:
    * - def haveExtension(extension: =>String) = ((_:File).getPath) ^^ endWith(extension)
    */
-  implicit class AdaptFunction[T, S](f: T => S):
-    def ^^(m: Matcher[S]): Matcher[T] = m ^^ f
+  extension [T, S](f: T => S)
+    def ^^(m: Matcher[S]): Matcher[T] =
+      m ^^ f
 
 
 object MatchersCreation extends MatchersCreation

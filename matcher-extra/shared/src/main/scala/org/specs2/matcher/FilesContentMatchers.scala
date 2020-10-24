@@ -5,7 +5,7 @@ import java.io.File
 import text._
 import io._
 import fp.syntax._
-import MatchersImplicits._
+import MatchersImplicits.{given _}
 import ValueChecks._
 
 /**

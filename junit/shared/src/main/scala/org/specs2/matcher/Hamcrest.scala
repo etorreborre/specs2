@@ -2,7 +2,7 @@ package org.specs2
 package matcher
 
 import org.hamcrest._
-import MatchersImplicits._
+import MatchersImplicits.{given _}
 
 /**
  * This trait adds implicit conversions to be able to use [Hamcrest matchers](http://code.google.com/p/hamcrest) as specs2 matchers.

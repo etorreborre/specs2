@@ -5,7 +5,7 @@ import control._
 import execute._
 import text.Regexes._
 import concurrent._
-import MatchersImplicits._
+import MatchersImplicits.{given _}
 
 /**
  * Matchers for Action values

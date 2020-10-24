@@ -120,7 +120,8 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
 
   def failureWithStacktraceProp = forAll((b: Boolean) => 1 must ===(2))
 
-  import DataTables._
+  import DataTables.{given _}
+  
   def datatableFailureProp = forAll { (b: Boolean) =>
     "a" | "b" |>
      1  ! 1   |

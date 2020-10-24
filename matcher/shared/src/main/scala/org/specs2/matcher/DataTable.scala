@@ -38,9 +38,14 @@ import scala.concurrent._, duration._
 trait DataTables extends ExpectationsCreation:
 
   /** @return a TableHeader with one heading only */
-  implicit def toTableHeader(a: String): TableHeader = new TableHeader(List(a))
+  given Conversion[String, TableHeader]:
+    def apply(a: String): TableHeader =
+      new TableHeader(List(a))
+
   /** @return a DataRow with one value only */
-  implicit def toDataRow[T](a: T): DataRow1[T] = DataRow1(a)
+  given [T] as Conversion[T, DataRow1[T]]:
+    def apply(a: T): DataRow1[T] =
+      DataRow1(a)
 
   /**
    * A DataTable with its header
