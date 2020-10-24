@@ -7,11 +7,11 @@ import fp._
 /**
  * Extension methods for NodeSeqs and Nodes
  */
-trait Nodex { outer =>
+trait Nodex:
   /**
    * This class adds more methods to the NodeSeq class
    */
-  extension (ns: NodeSeq)
+  extension (ns: NodeSeq):
     def ==/(n: NodeSeq): Boolean =
       NodeFunctions.isEqualIgnoringSpace(ns, n)
 
@@ -23,10 +23,11 @@ trait Nodex { outer =>
 
     def filterNodes(condition: Node => Boolean, recurse: Node => Boolean = (e: Node) => true) =
       NodeFunctions.filter(ns, condition, recurse)
+
   /**
    * This class adds more methods to the Node class
    */
-  extension (n: Node)
+  extension (n: Node):
     /**
      * @return true if the Node represents some empty text (containing spaces or newlines)
      */
@@ -40,29 +41,28 @@ trait Nodex { outer =>
                   textTest: String => Boolean = (s:String) => true): Boolean =
       NodeFunctions.matchNode(n, other, attributes, attributeValues, exactMatch, textTest)
 
-  extension (ns: Seq[NodeSeq])
+  extension (ns: Seq[NodeSeq]):
     def reduceNodes: NodeSeq =
       ns.flatMap(_.theSeq).reduceNodes
 
   /**
    * reduce a sequence of T's with a function transforming T's to NodeSeq
    */
-  extension [T](ns: Seq[T])
+  extension [T](ns: Seq[T]):
     def reduceNodesWith(f: T => NodeSeq): NodeSeq =
       ns.foldLeft(NodeSeq.Empty) { (res, cur) => res ++ f(cur) }
 
-  given Monoid[NodeSeq] {
+  given Monoid[NodeSeq]:
     val zero: NodeSeq =
       NodeSeq.Empty
 
     def append(ns1: NodeSeq, ns2: =>NodeSeq): NodeSeq =
       ns1 ++ ns2
-  }
 
   /** @return an unprefixed attribute from pair */
-  implicit def pairToUnprefixedAttribute(pair: (Any, Any)): UnprefixedAttribute =
-    new UnprefixedAttribute(pair._1.toString, pair._2.toString, Null)
+  given Conversion[(Any, Any), UnprefixedAttribute]:
+    def apply(pair: (Any, Any)): UnprefixedAttribute =
+      new UnprefixedAttribute(pair._1.toString, pair._2.toString, Null)
 
-}
 
 object Nodex extends Nodex

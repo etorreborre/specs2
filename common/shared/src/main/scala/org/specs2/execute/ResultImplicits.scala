@@ -5,10 +5,12 @@ import Result.ResultFailureMonoid
 import text.Quote._
 import text.Plural._
 import org.specs2.fp.syntax._
+import control._
+
 /**
  * This trait adds some implicits to easily fold sequences of results
  */
-trait ResultImplicits:
+trait ResultImplicits extends ResultLogicalCombinators:
 
   extension [T, R : AsResult](t: T => R)
 
@@ -67,9 +69,10 @@ trait ResultImplicits:
   extension [R1 : AsResult, R2 : AsResult](r1: =>R1)
     def <==>(r2: =>R2): Result =
       val (result1, result2) = (AsResult(r1), AsResult(r2))
-      ResultLogicalCombinators.combineResult(Success()).iff(result1.isSuccess == result2.isSuccess).mapMessage { _ =>
-        result1.message+"\nis not equivalent to\n"+result2.message
-      }
+      if result1.isSuccess == result2.isSuccess then
+        Success()
+      else
+        Failure(result1.message+"\nis not equivalent to\n"+result2.message)
 
 
 object ResultImplicits extends ResultImplicits

@@ -2,12 +2,11 @@ package org.specs2
 package matcher
 
 import execute._
-import fp.{given _, _}
+import fp.{given _, _}, syntax._
 import ResultExecution._
 import text.{NotNullStrings, Show1, Show10, Show2, Show3, Show4, Show5, Show6, Show7, Show8, Show9, TextTable, Trim}
 import Trim._
 import NotNullStrings._
-import ResultLogicalCombinators._
 import scala.concurrent._, duration._
 
 /**
@@ -68,9 +67,11 @@ trait DataTables extends ExpectationsCreation:
         })
       checkResultFailure(decorated)
       decorated
+
     /** @return the logical and combination of all the results */
     private def allSuccess[R : AsResult](results: List[(Seq[String], R)]): Result =
-      results.foldLeft(Success("", results.size): Result)((res, cur) => res and AsResult(cur._2))
+      results.foldMap(r => AsResult(r._2))
+
     /** @return the status of the row + the values + the failure message if any */
     private def resultLine(line: Seq[String], result: Result): Seq[String] =
       val message = if result.isSuccess then "" else result.message

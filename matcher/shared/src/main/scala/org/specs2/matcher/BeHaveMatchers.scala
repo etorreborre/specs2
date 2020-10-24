@@ -1,6 +1,8 @@
 package org.specs2
 package matcher
 
+import MatchResultCombinators._
+
 /**
  * This trait provides special matchers to be used in expressions like
  *
@@ -30,5 +32,4 @@ class NotMatcher[T] extends Matcher[T]:
     NotMatch(MatchSuccess("ok", "ko", s))
 
   def apply[S <: T](r: MatchResult[S]): MatchResult[S] =
-    MatchResultCombinators.combineMatchResult(r).not
-
+    r.not

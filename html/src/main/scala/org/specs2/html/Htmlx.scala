@@ -5,7 +5,7 @@ import io._
 import scala.xml._
 import transform.RewriteRule
 import org.specs2.fp._, Tree._
-import xml.Nodex._
+import xml.Nodex.{given _, _}
 import java.net.URLDecoder
 import data.UniqueNames
 import matcher.describe._

@@ -1,6 +1,8 @@
 package org.specs2
 package execute
 
+import control._
+
 /**
  * This class is used to delay the execution of a result
  */
@@ -10,10 +12,12 @@ class Function0Result(var t: () => Result):
     this
 
 object Function0Result:
+
   given anyResultAsResult[T] as AsResult[Function0Result] =
     new AsResult[Function0Result]:
       def asResult(code: =>Function0Result): Result =
         code.t()
 
-  implicit def anyToAnyResult[T : AsResult](t: =>T): Function0Result =
-    new Function0Result(() => AsResult(t))
+  given [T : AsResult] as Conversion[Lazy[T], Function0Result]:
+    def apply(t: Lazy[T]): Function0Result =
+      new Function0Result(() => AsResult(t.value))

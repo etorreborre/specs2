@@ -242,8 +242,8 @@ case class PathFunction(val node: Node,
    * @return the node if it is found and matching the searched attributes and/or attribute values when specified
    */
   def apply(nodes: Seq[Node]): Seq[Node] =
-    for  n     <- nodes
-          found <- function(n, node.label) if (found.matchNode(node, attributes, attributeValues, exactMatch, textMatcher.test))
+    for n     <- nodes
+        found <- function(n, node.label) if (found.matchNode(node, attributes, attributeValues, exactMatch, textMatcher.test))
     yield found
 
   def exactly = copy(exactMatch = true)

@@ -2,7 +2,7 @@ package org.specs2.form
 
 import scala.xml.{Text=>_,_}
 import org.specs2.collection.Seqx._
-import org.specs2.xml.Nodex._
+import org.specs2.xml.Nodex.{given _, _}
 import org.specs2.execute._
 import org.specs2.main.Arguments
 import StandardResults._
@@ -12,6 +12,7 @@ import ResultLogicalCombinators._
 import org.specs2.control.Properties.{given _, _}
 import org.specs2.control.ImplicitParameters._
 import org.specs2.control.Use
+import org.specs2.control.LazyConversions._
 import reflect.Selectable.reflectiveSelectable
 
 /**

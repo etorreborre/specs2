@@ -125,6 +125,7 @@ trait Matcher[-T] { outer =>
           case FailureException(f: Failure) => MatchFailure(f.message, f.message, a)
       a.checker.check(result.not)
   }
+
   /**
    * the logical and between 2 matchers
    * @see MatchResult.and
@@ -132,6 +133,7 @@ trait Matcher[-T] { outer =>
   def and[S <: T](m: =>Matcher[S]): Matcher[S] = new Matcher[S] {
     def apply[U <: S](a: Expectable[U]) = outer(a).and(m(a))
   }
+
   /**
    * the logical or between 2 matchers
    * @see MatchResult.or
@@ -139,6 +141,7 @@ trait Matcher[-T] { outer =>
   def or[S <: T](m: =>Matcher[S]) = new Matcher[S] {
     def apply[U <: S](a: Expectable[U]) = outer(a).or(m(a))
   }
+  
   /**
    * @return a Skip MatchResult if this matcher fails
    */

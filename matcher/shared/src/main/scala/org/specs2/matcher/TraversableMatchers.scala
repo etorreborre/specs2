@@ -21,7 +21,6 @@ import org.specs2.matcher.describe.Diffable
  */
 trait TraversableMatchers extends TraversableBaseMatchers
   with TraversableBeHaveMatchers
-  with LazyParameters
   with TraversableBaseMatchersLowImplicits
   with ImplicitParameters
   with NumberOfTimes
@@ -141,7 +140,7 @@ trait TraversableBaseMatchersLowImplicits extends ValueChecksLowImplicits { this
 }
 
 private[specs2]
-trait TraversableBeHaveMatchers extends LazyParameters with BeHaveMatchers  { outer: TraversableMatchers =>
+trait TraversableBeHaveMatchers extends BeHaveMatchers  { outer: TraversableMatchers =>
 
   implicit def traversable[T](s: MatchResult[Traversable[T]]): TraversableBeHaveMatchers[T] =
     new TraversableBeHaveMatchers(s)

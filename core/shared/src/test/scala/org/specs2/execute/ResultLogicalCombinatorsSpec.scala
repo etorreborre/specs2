@@ -2,8 +2,8 @@ package org.specs2
 package execute
 
 import matcher.ResultMatchers
-import execute.ResultLogicalCombinators._
 import matcher.TypedEqual
+import matcher.Matcher
 
 class ResultLogicalCombinatorsSpec extends Spec with ResultMatchers with TypedEqual { def is = s2"""
 

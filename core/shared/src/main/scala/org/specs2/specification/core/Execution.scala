@@ -16,7 +16,7 @@ import text.NotNullStrings._
 import control._
 
 import scala.util.control.NonFatal
-import ResultLogicalCombinators._
+import ResultLogicalCombinators.{given _, _ }
 import Execution.{given _, _}
 
 /**

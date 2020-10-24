@@ -4,9 +4,9 @@ package matcher
 import execute._
 import text.Quote._
 import scala.collection.Traversable
-import ResultLogicalCombinators._
+import ResultLogicalCombinators.{given _, _}
 import text.Sentences._
-import control.Times
+import control._
 
 /**
 * This trait provides implicit definitions from MatchResults and Booleans to Results.
@@ -17,9 +17,8 @@ import control.Times
 * - create matchers for seqs and sets from single matchers
 */
 trait MatchersImplicits extends
-       MatchResultCombinators
+       ResultImplicits
   with MatchResultImplicits
-  with ResultImplicits
   with MatchersCreation
   with SequenceMatchersCreation
 
@@ -28,7 +27,7 @@ object MatchersImplicits extends MatchersImplicits
 /**
  * Implicit conversions for MatchResults
  */
-trait MatchResultImplicits:
+trait MatchResultImplicits extends MatchResultCombinators:
   /**
    * implicit definition to transform a Seq of MatchResults to a Result
    */
@@ -47,7 +46,10 @@ trait MatchResultImplicits:
    * implicit definition to accept any MatchResult as a Boolean value.
    * It is true if the MatchResult is not an Error or a Failure
    */
-  implicit def fromMatchResult(r: =>MatchResult[_]): Boolean = r.isSuccess || r.toResult.isSkipped || r.toResult.isPending
+  given Conversion[Lazy[MatchResult[_]], Boolean]:
+    def apply(res: Lazy[MatchResult[_]]): Boolean =
+      val r = res.value
+      r.isSuccess || r.toResult.isSkipped || r.toResult.isPending
 
 
 object MatchResultImplicits extends MatchResultImplicits

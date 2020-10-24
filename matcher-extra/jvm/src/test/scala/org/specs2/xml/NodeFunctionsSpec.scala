@@ -32,7 +32,7 @@ class NodeFunctionsSpec extends Spec with XmlMatchers { def is = s2"""
 
 """
 
-  def matchNode1 = <a/>.matchNode(<a/>)
+  def matchNode1 = <a/> matchNode <a/>
   def matchNode2 = <a n="v" n2="v2"/>.matchNode(<a/>, List("n"))
   def matchNode3 = <a n="v" n2="v2"/>.matchNode(<a/>, List("n", "n2"))
   def matchNode4 = <a n="v" n2="v2"/>.matchNode(<a/>, attributeValues = Map("n" -> "v"))

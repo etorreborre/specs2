@@ -62,7 +62,7 @@ trait ThrownExpectables extends ExpectationsCreation:
     m
 
 trait ThrownStandardResults extends StandardResults with ExpectationsCreation:
-  override def failure: Failure = { checkResultFailure(throw new FailureException(super.failure)); super.failure }
+  override val failure: Failure = { checkResultFailure(throw new FailureException(StandardResults.failure)); StandardResults.failure }
   override def todo: Pending = { checkResultFailure(throw new PendingException(super.todo)); super.todo }
   override def anError: Error = { checkResultFailure(throw new ErrorException(super.anError)); super.anError }
 

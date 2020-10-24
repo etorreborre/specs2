@@ -6,6 +6,8 @@ import org.specs2.execute.AsResult
 import describe._
 import text.Quote._
 import Expectations._
+import control._
+import ResultLogicalCombinators.{given _, _}
 
 /**
  * Common interface for checks of a value of type T:
@@ -38,7 +40,7 @@ object ValueCheck:
       t.map(valueCheck.check).getOrElse(Failure("Expected a value, got None"))
 
     def checkNot = (t: Option[T]) =>
-      ResultLogicalCombinators.combineResult(check(t)).not
+      check(t).not
   }
 /**
  * implicit conversions used to create ValueChecks

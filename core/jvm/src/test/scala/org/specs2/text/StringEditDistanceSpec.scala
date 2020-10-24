@@ -47,8 +47,9 @@ class StringEditDistanceSpec extends Spec with StringEditDistance with DataTable
   def edit3 = editDistance("kitten", "kit")    === 3
   def edit4 = editDistance("kitten", "kitsin") === 2
 
-  def show1 = (showDistance("kitte", "kittei")         === "kitte[]" -> "kitte[i]") and
-    (showDistance("kitten", "kittein")       === "kitte[]n" -> "kitte[i]n")
+  def show1 =
+    (showDistance("kitte", "kittei")   === "kitte[]" -> "kitte[i]") and
+    (showDistance("kitten", "kittein") === "kitte[]n" -> "kitte[i]n")
 
   def show2 = showDistance("kitten", "kit")            === "kit[ten]" -> "kit[]"
   def show3 = showDistance("kit", "kitten")            === "kit[]" -> "kit[ten]"

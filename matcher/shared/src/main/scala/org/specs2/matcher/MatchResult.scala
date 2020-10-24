@@ -1,11 +1,11 @@
 package org.specs2
 package matcher
 
-import org.specs2.fp._
-import org.specs2.fp.syntax._
+import fp._, syntax._
+import collection.Seqx.{given _}
 import execute._
-import MatchResultLogicalCombinators._
-import ResultLogicalCombinators._
+import MatchResultLogicalCombinators.{given _, _}
+import control.ImplicitParameters.{given _}
 
 /**
  * Result of a Match.
@@ -79,6 +79,10 @@ trait MatchResult[+T] extends ResultLike:
 
   /** @return the negation of this result */
   def negate: MatchResult[T]
+
+  /** @return the negation of this result */
+  def not: MatchResult[T] =
+    negate
 
   /** apply the matcher */
   def be[S >: T](m: Matcher[T]): MatchResult[S] =
@@ -220,6 +224,7 @@ case class NeutralMatch[T] private[specs2](m: MatchResult[T]) extends MatchResul
   def apply(matcher: Matcher[T]): MatchResult[T] = m(matcher)
   def setExpectable[S >: T](e: Expectable[S]): MatchResult[S] =
     m.setExpectable(e)
+
 class AndMatch[T] private[specs2](first: MatchResult[T], second: =>MatchResult[T]) extends MatchResult[T]:
   val expectable = m1.expectable
   lazy val m1 = first
@@ -243,7 +248,8 @@ class AndMatch[T] private[specs2](first: MatchResult[T], second: =>MatchResult[T
   def setExpectable[S >: T](e: Expectable[S]): MatchResult[S] =
     new AndMatch(first.setExpectable(e), second.setExpectable(e))
 
-  override def toResult = m1.toResult and m2.toResult
+  override def toResult = (m1 and m2).toResult
+
 class AndNotMatch[T] private[specs2](first: MatchResult[T], second: =>MatchResult[T]) extends MatchResult[T]:
   val expectable = m1.expectable
   lazy val m1 = first
@@ -278,7 +284,7 @@ class OrMatch[T] private[specs2](first: MatchResult[T], second: =>MatchResult[T]
   def apply(matcher: Matcher[T]): MatchResult[T] = m1 or m2(matcher)
   def setExpectable[S >: T](e: Expectable[S]): MatchResult[S] =
     new OrMatch(first.setExpectable(e), second.setExpectable(e))
-  override def toResult = m1.toResult or m2.toResult
+  override def toResult = (m1 or m2).toResult
 class OrNotMatch[T] private[specs2](first: MatchResult[T], second: =>MatchResult[T]) extends MatchResult[T]:
   lazy val m1 = first
   lazy val m2 = second
@@ -347,7 +353,7 @@ object MatchResult:
 
   /** implicit typeclass instance to create examples from a sequence of MatchResults */
   given matchResultSeqAsResult[T] as AsResult[Seq[MatchResult[T]]] = new AsResult[Seq[MatchResult[T]]]:
-    def asResult(t: =>Seq[MatchResult[T]]): Result = t.foldLeft(StandardResults.success: Result)(_ and _.toResult)
+    def asResult(t: =>Seq[MatchResult[T]]): Result = t.foldMap(_.toResult)
 
   /** sequence a list of MatchResults into a MatchResult of a list */
   def sequence[T](seq: Seq[MatchResult[T]]): MatchResult[Seq[T]] =

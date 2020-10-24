@@ -93,8 +93,10 @@ class ExceptionMatchersSpec extends Specification with ResultMatchers { def is =
 
   def byType9 = AsResult { 1  must not(throwAn[IAE]) } must beSuccessful
 
-  def pf1 = (theBlock(error("boom")) must throwA[RuntimeException].like { case NonFatal(e) => e.getMessage()(0) === 'b' }).message must startWith(
-    "Got the exception java.lang.RuntimeException: boom and b == 'b'")
+  def pf1 = (theBlock(error("boom")) must throwA[RuntimeException].like { case NonFatal(e) =>
+    e.getMessage()(0) === 'b'
+  }).message must startWith(
+      "Got the exception java.lang.RuntimeException: boom and b == 'b'")
   // todo: figure how to quote only the value
   //      "Got the exception java.lang.RuntimeException: boom and 'b' == 'b'")
 

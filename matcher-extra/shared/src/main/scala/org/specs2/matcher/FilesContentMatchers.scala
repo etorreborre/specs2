@@ -6,6 +6,7 @@ import text._
 import io._
 import fp.syntax._
 import MatchersImplicits.{given _}
+import MatchResultCombinators._
 import ValueChecks._
 
 /**
