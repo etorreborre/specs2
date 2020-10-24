@@ -30,18 +30,16 @@ trait ClusterExecution {
   def errorMessage: String
 }
 
-object ClusterExecution {
-  implicit def clusterExecutionAsResult: AsResult[ClusterExecution] =
-    new AsResult[ClusterExecution] {
-      def asResult(t: =>ClusterExecution): Result = {
+object ClusterExecution:
+  given AsResult[ClusterExecution] =
+    new AsResult[ClusterExecution]:
+      def asResult(t: =>ClusterExecution): Result =
         try {
           val result = t
           if (result.succeeded) Success()
           else                  Failure(t.errorMessage)
         } catch { case e: Throwable => Error(e) }
-      }
-   }
-}
+
 }}
 
 #### Decorated results

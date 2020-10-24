@@ -97,7 +97,7 @@ More generally, you can use the "Applicative" operator `|@` to pass anything hav
 
   // then you need to get an implicit execution environment and
   // await on the Future result
-  implicit def ee: ExecutionEnv = ???
+  given ExecutionEnv = ???
   result.await
 }}
 

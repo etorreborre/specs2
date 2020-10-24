@@ -74,7 +74,7 @@ s2"""
 
 def abStringGen = (Gen.oneOf("a", "b") |@| Gen.oneOf("a", "b"))(_+_)
 
-implicit def abStrings: Arbitrary[String] =
+given Arbitrary[String] =
   Arbitrary(abStringGen)
 
 def ex1 = prop((s: String) => s must contain("a") or contain("b")).setArbitrary(abStrings)

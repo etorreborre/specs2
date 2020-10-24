@@ -11,11 +11,14 @@ import scala.collection.JavaConverters._
  */
 trait ShowDescription:
 
-  implicit object show extends Show[Description]:
-    def show(d: Description) = d.getDisplayName
+  given Show[Description]:
+    def show(d: Description): String =
+      d.getDisplayName
 
-  implicit def toTree(desc: Description): Tree[Description] =
-    unfoldTree(desc)((d: Description) => (d, () => d.getChildren.asScala.to(LazyList)))
+
+  extension (desc: Description)
+    def toTree: Tree[Description] =
+      unfoldTree(desc)((d: Description) => (d, () => d.getChildren.asScala.to(LazyList)))
 
 
 object ShowDescription extends ShowDescription

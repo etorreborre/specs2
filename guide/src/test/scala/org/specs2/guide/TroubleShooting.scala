@@ -53,10 +53,9 @@ To fix this you can either:
  - add an `AsResult[Unit]` instance like this
 <p/>
 ${snippet{
-implicit def unitAsResult: AsResult[Unit] = new AsResult[Unit] {
+given AsResult[Unit]:
   def asResult(r: =>Unit) =
     ResultExecution.execute(r)(_ => Success())
-}
 }}
 
 ### Type mismatch

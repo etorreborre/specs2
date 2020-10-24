@@ -27,10 +27,9 @@ object IO {
 
   // this converts an IO value into a specs2 Execution with the
   // withEnvAsync function which takes a Future
-  implicit def ioAsExecution[R : AsResult]: AsExecution[IO[R]] = new AsExecution[IO[R]] {
+  given [R : AsResult] as AsExecution[IO[R]]:
     def execute(io: =>IO[R]): Execution =
       Execution.withEnvAsync(env => io.run(env.executionContext))
-  }
 
   // create a successful IO value (used in the example below)
   def successful[T](t: =>T): IO[T] =
@@ -46,14 +45,13 @@ case class IO[T](run: ExecutionContext => Future[T])
 import org.specs2.execute.{AsResult}
 import org.specs2.specification.core.{AsExecution, Execution}
 
-object IO {
-  implicit def ioAsExecution[R : AsResult]: AsExecution[IO[R]] = new AsExecution[IO[R]] {
+object IO:
+  given [R : AsResult] as AsExecution[IO[R]]:
     def execute(io: =>IO[R]): Execution =
       Execution.withEnvAsync(env => io.run(env.executionContext))
-  }
+
   def successful[T](t: =>T): IO[T] =
     IO(_ => Future.successful(t))
-}
 // 8<----
 
 class TestMutableSpec extends mutable.Specification {

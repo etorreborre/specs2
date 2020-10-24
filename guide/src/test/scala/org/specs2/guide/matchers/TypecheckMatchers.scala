@@ -137,10 +137,9 @@ case class Text(s: String)
 object Text {
   import fp.Monoid
 
-  implicit def TextMonoid: Monoid[Text] = new Monoid[Text] {
+  given Monoid[Text]:
     def zero = Text("")
     def append(t1: Text, t2: =>Text) = Text(t1.s+t2.s)
-  }
 }
 
 case class Plane()

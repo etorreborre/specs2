@@ -113,11 +113,11 @@ factorial(3)
 
 #### Parameters
 
-All of the settings above: cuts, offset,... are coming from an implicit `SnippetParams` object that is changing the
+All of the settings above: cuts, offset,... are coming from an given `SnippetParams` instance that is changing the
 behavior of the created Snippets. You can choose, for a given scope, to replace these parameters with other ones and
 simply shadow the default parameters with your own, for example to always evaluate the snippets results:
 ```
-implicit def snippetParams[T]: SnippetParams[T] = SnippetParams(evalCode = true)
+given SnippetParams[T] = SnippetParams(evalCode = true)
 ```
 The parameters you can set are:
 

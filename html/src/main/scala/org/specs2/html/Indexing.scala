@@ -14,7 +14,7 @@ import origami._, Folds._
  */
 object Indexing:
 
-  implicit def executionEnv: ExecutionEnv =
+  given ExecutionEnv =
     ExecutionEnv.fromGlobalExecutionContext
 
   /**
@@ -83,10 +83,9 @@ object Index:
       .replace("<s2>", "")
       .replace("</s2>", "")
 
-  implicit def IndexMonoid: Monoid[Index] = new Monoid[Index] {
+  given Monoid[Index]:
     def zero = Index(Vector())
     def append(a: Index, b: =>Index) = Index(a.entries ++ b.entries)
-  }
 
   val createIndex = (page: IndexedPage) => Index(Indexing.createEntries(page))
 

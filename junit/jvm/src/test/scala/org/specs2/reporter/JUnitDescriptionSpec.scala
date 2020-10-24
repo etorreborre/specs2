@@ -7,7 +7,7 @@ import specification.core._
 import matcher.{MustMatchers, StandardMatchResults}
 import org.junit.runner.Description
 import execute.{Result, StandardResults, Success}
-import ShowDescription._
+import ShowDescription.{given _, _}
 
 class JUnitDescriptionSpec(val env: Env) extends Specification with JUnitDescriptionSpecTest with OwnExecutionEnv { def is = s2"""
 
@@ -133,8 +133,8 @@ class JUnitDescriptionSpec(val env: Env) extends Specification with JUnitDescrip
     val ex1snd = "ex1" ! ok
 
     val ds =
-      ShowDescription.toTree(descriptions(false).
-        createDescription(titled(start ^ "level1" ^ break ^ ex1fst ^ ex1snd ^ end))(ee)).flatten.toList
+      descriptions(false).
+        createDescription(titled(start ^ "level1" ^ break ^ ex1fst ^ ex1snd ^ end))(ee).toTree.flatten.toList
 
     ds.map(_.hashCode).distinct must haveSize(4)
 
@@ -143,8 +143,8 @@ class JUnitDescriptionSpec(val env: Env) extends Specification with JUnitDescrip
       Fragments.foreach(Seq("ex1", "ex2", "ex3")) { ex => ex ! success }
 
     val ds =
-      ShowDescription.toTree(descriptions(false).
-        createDescription(fs)(ee)).flatten.toList
+      descriptions(false).
+        createDescription(fs)(ee).toTree.flatten.toList
 
     // header + 3 examples
     ds.map(_.hashCode).distinct must haveSize(4)
@@ -188,9 +188,10 @@ class JUnitDescriptionSpec(val env: Env) extends Specification with JUnitDescrip
   def showDescriptionTree(spec: SpecStructure, fromIDE: Boolean = false): String =
     // set the header to the main specification class
     val newHeader = spec.header.copy(specClass = classOf[JUnitDescriptionSpec])
-    descriptions(fromIDE).createDescription(spec.copy(header = newHeader))(ee).drawTree
+    descriptions(fromIDE).createDescription(spec.copy(header = newHeader))(ee).toTree.drawTree
 
-  def toDescription(f: Fragment): Description   = toDescription(Fragments(f))
+  def toDescription(f: Fragment): Description =
+    toDescription(Fragments(f))
 
   def toDescription(fs: Fragments): Description =
     val spec = titled(fs)

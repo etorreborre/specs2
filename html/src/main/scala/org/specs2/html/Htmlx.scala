@@ -148,8 +148,8 @@ trait Htmlx { outer =>
       url.path + anchor
     (ns \\ "a").flatMap(a => a.attribute("href").map(href => decode(href.mkString))).toList
 
-  implicit def nodeSeqDiffable: Diffable[NodeSeq] =
-      new FallbackDiffable[NodeSeq]
+  given Diffable[NodeSeq] =
+    new FallbackDiffable[NodeSeq]
 
 }
 

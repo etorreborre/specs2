@@ -10,8 +10,9 @@ import MatchersImplicits._
 trait Hamcrest:
 
   /** convert a Hamcrest matcher to a specs2 matcher */
-  implicit def asSpecs2Matcher[T](hamcrest: org.hamcrest.Matcher[T]): matcher.Matcher[T] =
-    (t: T) => (hamcrest.matches(t), createKoMessageFromHamcrest(t, hamcrest))
+  given [T] as Conversion[org.hamcrest.Matcher[T], matcher.Matcher[T]]:
+    def apply(hamcrest: org.hamcrest.Matcher[T]): matcher.Matcher[T] =
+      (t: T) => (hamcrest.matches(t), createKoMessageFromHamcrest(t, hamcrest))
 
   /**
    * @return a string showing the matched value and the failure message from the Hamcrest matcher
