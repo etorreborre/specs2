@@ -10,18 +10,20 @@ import DefaultFragmentFactory._
 
 object Arbitraries:
 
-  implicit def FragmentArbitrary: Arbitrary[Fragment] = Arbitrary {
-    Gen.oneOf(
-      genExample,
-      genText,
-      genStep,
-      genFormatting
-    )
-  }
+  given FragmentArbitrary as Arbitrary[Fragment] =
+    Arbitrary {
+      Gen.oneOf(
+          genExample,
+          genText,
+          genStep,
+          genFormatting
+        )
+    }
 
-  implicit def FragmentsArbitrary: Arbitrary[Fragments] = Arbitrary {
-    Gen.listOf(arbitrary[Fragment]).map(fs => Fragments(fs:_*))
-  }
+  given FragmentsArbitrary as Arbitrary[Fragments] =
+    Arbitrary {
+      Gen.listOf(arbitrary[Fragment]).map(fs => Fragments(fs:_*))
+    }
 
   def genExample: Gen[Fragment] =
     alphaStr.map(text => example(text, Execution.executed(success)))

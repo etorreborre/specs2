@@ -134,38 +134,28 @@ trait TraversableBaseMatchersLowImplicits extends ValueChecksLowImplicits:
   implicit def checkableSeqIsContainCheckSeq[T](seq: Seq[T])(using to: T => ValueCheck[T]): Seq[ValueCheck[T]] =
     seq.map(to)
 
-  given [T] as Conversion[Seq[Matcher[T]], Seq[ValueCheck[T]]]:
+  given matchersToValueChecks[T] as Conversion[Seq[Matcher[T]], Seq[ValueCheck[T]]]:
     def apply(seq: Seq[Matcher[T]]): Seq[ValueCheck[T]] =
       seq.map(matcherIsValueCheck[T])
 
 private[specs2]
-trait TraversableBeHaveMatchers extends BeHaveMatchers  { outer: TraversableMatchers =>
+trait TraversableBeHaveMatchers extends BeHaveMatchers:
+  private val outer = TraversableMatchers
 
-  implicit def traversable[T](s: MatchResult[Traversable[T]]): TraversableBeHaveMatchers[T] =
-    new TraversableBeHaveMatchers(s)
-
-  class TraversableBeHaveMatchers[T](s: MatchResult[Traversable[T]]):
+  extension [T](s: MatchResult[Traversable[T]]):
     def contain(check: ValueCheck[T]) = s(outer.contain(check))
     def containPattern(t: =>String) = s(outer.containPattern(t))
     def containMatch(t: =>String) = containPattern(t.regexPart)
 
-  implicit def sized[T : Sized](s: MatchResult[T]): HasSize[T] =
-    new HasSize(s)
-
-  class HasSize[T : Sized](s: MatchResult[T]):
+  extension [T : Sized](s: MatchResult[T]):
     def size(n: Int) : MatchResult[T] = s(outer.haveSize[T](n))
     def length(n: Int) : MatchResult[T] = size(n)
     def size(check: ValueCheck[Int]) : MatchResult[T] = s(outer.haveSize[T](check))
     def length(check: ValueCheck[Int]) : MatchResult[T] = size(check)
 
-  implicit def orderedSeqMatchResult[T : Ordering](result: MatchResult[Seq[T]]): OrderedSeqMatchResult[T] =
-    new OrderedSeqMatchResult(result)
-
-  class OrderedSeqMatchResult[T : Ordering](result: MatchResult[Seq[T]]):
+  extension [T : Ordering](result: MatchResult[Seq[T]]):
     def sorted = result(outer.beSorted[T])
     def beSorted = result(outer.beSorted[T])
-
-}
 
 class SizedMatcher[T : Sized](n: Int, sizeWord: String) extends Matcher[T]:
   def apply[S <: T](traversable: Expectable[S]) =

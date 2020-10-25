@@ -4,7 +4,7 @@ package process
 
 import core._
 import fp.syntax._
-import Arbitraries._
+import Arbitraries.{given _}
 import Fragment._
 import control._
 import producer._, Producer._
@@ -19,7 +19,6 @@ class IndentationSpec(implicit ee: ExecutionEnv) extends Specification with Scal
   must never be negative                            $positive
   must be less than or equal to the number of tabs  $lessThanOrEqualTabs
   must be exactly the sum of tabs if no backtabs    $equalTabsWhenNoBacktabs
-
 """
 
   def positive = prop { (fs: Fragments) =>
