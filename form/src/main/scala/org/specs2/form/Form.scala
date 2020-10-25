@@ -12,7 +12,6 @@ import ResultLogicalCombinators._
 import org.specs2.control.Properties.{given _, _}
 import org.specs2.control.ImplicitParameters._
 import org.specs2.control.Use
-import org.specs2.control.LazyConversions._
 import reflect.Selectable.reflectiveSelectable
 
 /**

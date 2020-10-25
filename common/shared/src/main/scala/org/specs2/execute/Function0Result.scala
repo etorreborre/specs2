@@ -18,6 +18,5 @@ object Function0Result:
       def asResult(code: =>Function0Result): Result =
         code.t()
 
-  given [T : AsResult] as Conversion[Lazy[T], Function0Result]:
-    def apply(t: Lazy[T]): Function0Result =
-      new Function0Result(() => AsResult(t.value))
+  implicit def toFunction0Result[T : AsResult](t: =>T): Function0Result =
+    new Function0Result(() => AsResult(t))

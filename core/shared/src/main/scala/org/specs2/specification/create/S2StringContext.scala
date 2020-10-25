@@ -30,10 +30,11 @@ trait S2StringContext extends S2StringContext1:
   implicit inline def asExecutionIsInterpolated[R : AsExecution](inline r: =>R)(implicit inline factory: FragmentFactory): Interpolated =
     ${executionInterpolated('{AsExecution[R].execute(r)}, 'factory)}
 
-  implicit def specificationRefIsInterpolated(ref: SpecificationRef): Interpolated =
-    new Interpolated:
-      def prepend(text: String): Fragments =
-        Fragments(fragmentFactory.text(text), fragmentFactory.link(ref))
+  given Conversion[SpecificationRef, Interpolated]:
+    def apply(ref: SpecificationRef): Interpolated =
+      new Interpolated:
+        def prepend(text: String): Fragments =
+          Fragments(fragmentFactory.text(text), fragmentFactory.link(ref))
 
   implicit def specificationStructureIsInterpolated(s: SpecificationStructure): Interpolated =
     new Interpolated:

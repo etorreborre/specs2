@@ -2,6 +2,7 @@ package org.specs2
 package control
 
 import Exceptions._
+import scala.implicits.Not
 
 /**
  * These functions can be used to allow some function to be called with varargs, with values being
@@ -23,8 +24,10 @@ trait LazyConversions:
     new Lazy(() => value)
 
   /** allow byname parameters to be used with conversions */
-  implicit def convertByName[T, S](t: =>T)(using convert: Conversion[Lazy[T], S]): S =
+  implicit def convertByName[T, S](t: =>T)(using convert: Conversion[Lazy[T], S], not: Not[DontConvertTo[S]]): S =
     convert(t)
+
+trait DontConvertTo[T]
 
 object LazyConversions extends LazyConversions
 

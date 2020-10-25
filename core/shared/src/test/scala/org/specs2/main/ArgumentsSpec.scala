@@ -4,6 +4,7 @@ package main
 import matcher.{TypedEqual, DataTables}
 import execute.Result
 import text.MappedColors
+import control._
 
 class ArgumentsSpec extends Spec with DataTables with TypedEqual with ArgProperties { def is = s2"""
 

@@ -46,10 +46,9 @@ trait MatchResultImplicits extends MatchResultCombinators:
    * implicit definition to accept any MatchResult as a Boolean value.
    * It is true if the MatchResult is not an Error or a Failure
    */
-  given Conversion[Lazy[MatchResult[_]], Boolean]:
-    def apply(res: Lazy[MatchResult[_]]): Boolean =
-      val r = res.value
-      r.isSuccess || r.toResult.isSkipped || r.toResult.isPending
+  implicit def matchResultToBoolean(res: =>MatchResult[_]): Boolean =
+    val r = res
+    r.isSuccess || r.toResult.isSkipped || r.toResult.isPending
 
 
 object MatchResultImplicits extends MatchResultImplicits
