@@ -130,14 +130,13 @@ trait TraversableBaseMatchers { outer =>
 }
 
 private[specs2]
-trait TraversableBaseMatchersLowImplicits extends ValueChecksLowImplicits { this: TraversableBaseMatchers =>
-  implicit def checkableSeqIsContainCheckSeq[T](seq: Seq[T])(implicit to: T => ValueCheck[T]): Seq[ValueCheck[T]] =
+trait TraversableBaseMatchersLowImplicits extends ValueChecksLowImplicits:
+  implicit def checkableSeqIsContainCheckSeq[T](seq: Seq[T])(using to: T => ValueCheck[T]): Seq[ValueCheck[T]] =
     seq.map(to)
 
-  implicit def matcherSeqIsContainCheckSeq[T](seq: Seq[Matcher[T]]): Seq[ValueCheck[T]] =
-    seq.map(matcherIsValueCheck[T])
-
-}
+  given [T] as Conversion[Seq[Matcher[T]], Seq[ValueCheck[T]]]:
+    def apply(seq: Seq[Matcher[T]]): Seq[ValueCheck[T]] =
+      seq.map(matcherIsValueCheck[T])
 
 private[specs2]
 trait TraversableBeHaveMatchers extends BeHaveMatchers  { outer: TraversableMatchers =>

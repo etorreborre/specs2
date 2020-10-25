@@ -36,18 +36,20 @@ trait S2StringContext extends S2StringContext1:
         def prepend(text: String): Fragments =
           Fragments(fragmentFactory.text(text), fragmentFactory.link(ref))
 
-  implicit def specificationStructureIsInterpolated(s: SpecificationStructure): Interpolated =
-    new Interpolated:
-      val specStructure = s.is
-      val ref = SpecificationRef(specStructure.header, specStructure.arguments, alias = specStructure.header.show)
+  given Conversion[SpecificationStructure, Interpolated]:
+    def apply(s: SpecificationStructure): Interpolated =
+      new Interpolated:
+        val specStructure = s.is
+        val ref = SpecificationRef(specStructure.header, specStructure.arguments, alias = specStructure.header.show)
 
-      def prepend(text: String): Fragments =
-        Fragments(fragmentFactory.text(text), fragmentFactory.see(ref))
+        def prepend(text: String): Fragments =
+          Fragments(fragmentFactory.text(text), fragmentFactory.see(ref))
 
-  implicit def specStructureIsInterpolated(s: SpecStructure): Interpolated =
-    new Interpolated:
-      def prepend(text: String): Fragments =
-        Fragments(fragmentFactory.text(text)).append(s.fragments)
+  given Conversion[SpecStructure, Interpolated]:
+    def apply(s: SpecStructure): Interpolated =
+      new Interpolated:
+        def prepend(text: String): Fragments =
+          Fragments(fragmentFactory.text(text)).append(s.fragments)
 
   implicit def stringIsInterpolated(s: =>String): Interpolated =
     new Interpolated:
@@ -57,10 +59,11 @@ trait S2StringContext extends S2StringContext1:
           catch { case e: Throwable => s"[${e.getMessage.notNull}]" }
         Fragments(fragmentFactory.text(text + s1))
 
-  implicit def fragmentsAreInterpolated(fragments: Fragments): Interpolated =
-    new Interpolated:
-      def prepend(text: String): Fragments =
-        Fragments(fragmentFactory.text(text)).append(fragments)
+  given Conversion[Fragments, Interpolated]:
+    def apply(fragments: Fragments): Interpolated =
+      new Interpolated:
+        def prepend(text: String): Fragments =
+          Fragments(fragmentFactory.text(text)).append(fragments)
 
 /**
  * Lightweight methods to interpolate fragments where only results and fragment can be interpolated
@@ -83,7 +86,7 @@ trait S2StringContextCreation extends FragmentsFactory:
   /**
    * String interpolation for specs2 fragments
    */
-  implicit class StringContextOps(sc: StringContext)(implicit factory: FragmentFactory):
+  extension (sc: StringContext)(using factory: FragmentFactory):
     inline def s2(inline variables: Interpolated*): Fragments =
       ${s2Implementation('sc)('variables, 'factory, 'postProcessS2Fragments)}
 

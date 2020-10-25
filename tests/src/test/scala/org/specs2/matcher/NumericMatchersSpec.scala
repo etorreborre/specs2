@@ -56,7 +56,7 @@ types and more generally with Ordered types.
 
   beCloseTo tests if 2 Numerics are close to each other
   ${ 1.0 must beCloseTo(1.0, 0.5) }
-  ${ 4 must be ~(5 +/- 2) }
+  ${ 4 must be_~(5 +/- 2) }
   ${ 2 must not(beCloseTo(4 +/- 1)) }
   ${ 2 must not(beCloseTo(4 +/- 1)) }
   and return a failure if the comparison fails                                                                     $e5

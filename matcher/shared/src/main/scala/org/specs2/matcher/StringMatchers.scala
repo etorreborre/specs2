@@ -5,21 +5,28 @@ import org.specs2.text.Quote._
 import org.specs2.control.Exceptions._
 import org.specs2.text.Regexes._
 import util.matching.Regex
+import StringMatchers._
 
 /**
  * The `StringMatchers` trait provides matchers which are applicable to String objects
  */
 trait StringMatchers extends StringBaseMatchers with StringBeHaveMatchers:
-  /** adapt the BeEqualTo matcher to provide ignoreCase and ignoreSpace matcher */
-  implicit def stringMatcher(m: AdaptableMatcher[Any]): StringMatcher = new StringMatcher(m)
 
-case class StringMatcher(m: AdaptableMatcher[Any]):
-  private val ignoringCase = (_:Any).toString + ", ignoring case"
-  private val ignoringSpace = (_:Any).toString + ", ignoring space"
-  private val isTrimmed = (_:Any).toString + ", trimmed"
-  def ignoreCase: AdaptableMatcher[Any] = m.^^^((s: Any) => s.toString.toLowerCase, ignoringCase, ignoringCase)
-  def ignoreSpace: AdaptableMatcher[Any] = m.^^^((s: Any) => s.toString.replaceAll("\\s", ""), ignoringSpace, ignoringSpace)
-  def trimmed: AdaptableMatcher[Any] = m.^^^((s: Any) => s.toString.trim, isTrimmed, isTrimmed)
+  /** adapt the BeEqualTo matcher to provide ignoreCase and ignoreSpace matcher */
+  extension (m: AdaptableMatcher[Any]):
+
+    def ignoreCase: AdaptableMatcher[Any] =
+      m.^^^((s: Any) => s.toString.toLowerCase, ignoringCase, ignoringCase)
+
+    def ignoreSpace: AdaptableMatcher[Any] =
+      m.^^^((s: Any) => s.toString.replaceAll("\\s", ""), ignoringSpace, ignoringSpace)
+
+    def trimmed: AdaptableMatcher[Any] =
+      m.^^^((s: Any) => s.toString.trim, isTrimmed, isTrimmed)
+
+  private[specs2] val ignoringCase = (_:Any).toString + ", ignoring case"
+  private[specs2] val ignoringSpace = (_:Any).toString + ", ignoring space"
+  private[specs2] val isTrimmed = (_:Any).toString + ", trimmed"
 
 object StringMatchers extends StringMatchers
 
@@ -29,40 +36,58 @@ object StringMatchers extends StringMatchers
  * IgnoreCase and ignoreSpace matchers are created by adapting the BeEqualTo matcher.
  */
 private[specs2]
-trait StringBaseMatchers { outer =>
+trait StringBaseMatchers:
 
   /** matches if a.toLowerCase.trim = b.toLowerCase.trim */
-  def ==/(s: String) = be_==/(s)
+  def ==/(s: String): Matcher[String] =
+    be_==/(s)
+
   /** matches if a.toLowerCase.trim = b.toLowerCase.trim */
-  def be_==/(a: String) = StringMatcher(StringMatcher(new BeEqualTo(a)).ignoreCase).ignoreSpace
+  def be_==/(a: String): Matcher[String] =
+    new BeEqualTo(a).ignoreCase.ignoreSpace
+
   /** matches if a.toLowerCase.trim != b.toLowerCase.trim */
-  def be_!=/(a: String) = be_==/(a).not
+  def be_!=/(a: String): Matcher[String] =
+    be_==/(a).not
+
   /** matches if a.toLowerCase.trim != b.toLowerCase.trim */
-  def !=/(s: String) = be_!=/(s)
+  def !=/(s: String): Matcher[String] =
+    be_!=/(s)
+
   /** matches if (b contains a) */
-  def contain(t: String): Matcher[String] = new Matcher[String] {
-    def apply[S <: String](b: Expectable[S]) =
-      val a = t
-      result(a != null && b.value != null && b.value.contains(a),
-             b.description + " contains " + q(a),
-             b.description + " doesn't contain " + q(a), b)
-  }
+  def contain(t: String): Matcher[String] =
+    new Matcher[String]:
+      def apply[S <: String](b: Expectable[S]) =
+        val a = t
+        result(a != null && b.value != null && b.value.contains(a),
+               b.description + " contains " + q(a),
+               b.description + " doesn't contain " + q(a), b)
+
   /** matches if (b contains a) */
-  def contain(t: Char): Matcher[String] = new Matcher[String] {
-    def apply[S <: String](b: Expectable[S]) =
-      val a = t
-      result(b.value != null && b.value.contains(a),
-             b.description + " contains " + q(a),
-             b.description + " doesn't contain " + q(a), b)
-  }
+  def contain(t: Char): Matcher[String] =
+    new Matcher[String]:
+      def apply[S <: String](b: Expectable[S]) =
+        val a = t
+        result(b.value != null && b.value.contains(a),
+               b.description + " contains " + q(a),
+               b.description + " doesn't contain " + q(a), b)
+
   /** matches if b matches the regular expression a */
-  def beMatching(a: =>String): BeMatching = new BeMatching(a)
+  def beMatching(a: =>String): Matcher[String] =
+    new BeMatching(a)
+
   /** matches if b matches the pattern a */
-  def beMatching(a: Pattern): BeMatchingPattern = new BeMatchingPattern(a)
+  def beMatching(a: Pattern): Matcher[String] =
+    new BeMatchingPattern(a)
+
   /** matches if b matches the regex a */
-  def beMatching(a: Regex): BeMatchingRegex = new BeMatchingRegex(a)
+  def beMatching(a: Regex): Matcher[String] =
+    new BeMatchingRegex(a)
+
   /** alias for beMatching but matching just a fragment of the string */
-  def =~(t: =>String) = BeMatching.withPart(t)
+  def =~(t: =>String): Matcher[String] =
+    BeMatching.withPart(t)
+
   /** alias for beMatching but matching just a fragment of the string */
   def =~(p: Pattern) = new BeMatchingPattern(Pattern.compile(p.toString.regexPart, p.flags()))
   /** alias for beMatching but matching just a fragment of the string */
@@ -150,12 +175,13 @@ trait StringBaseMatchers { outer =>
   class FindMatcherPatternWithGroups(p: Pattern, groups: String*) extends FindMatcherWithGroups(p.toString, groups:_*):
     override lazy val pattern = p
 
-}
+object StringBaseMatchers extends StringBaseMatchers
 
 private[specs2]
-trait StringBeHaveMatchers extends BeHaveMatchers { outer: StringBaseMatchers =>
-  implicit def toStringResultMatcher(result: MatchResult[String]): StringResultMatcher = new StringResultMatcher(result)
-  class StringResultMatcher(result: MatchResult[String]):
+trait StringBeHaveMatchers extends BeHaveMatchers:
+  private val outer = StringBaseMatchers
+
+  extension (result: MatchResult[String]):
     def matching(s: =>String) = result(beMatching(s))
     def matching(s: Pattern) = result(beMatching(s))
     def matching(s: Regex) = result(beMatching(s))
@@ -165,16 +191,16 @@ trait StringBeHaveMatchers extends BeHaveMatchers { outer: StringBaseMatchers =>
     def endWith(s: =>String) = result(outer.endWith(s))
     def startingWith(s: =>String) = result(outer.startWith(s))
     def endingWith(s: =>String) = result(outer.endWith(s))
-    def ==/(s: String) = result(outer.be_==/(s))
-  implicit def toNeutralStringMatcher(result: NeutralMatcher[Any]) : NeutralStringMatcher = new NeutralStringMatcher(result)
-  class NeutralStringMatcher(result: NeutralMatcher[Any]):
-    def ==/(s: String) = outer.be_==/(s)
+    def be_==/(s: String): MatchResult[String] = result(outer.be_==/(s))
+
+  extension (result: NeutralMatcher[Any]):
+    def be_==/(s: String) = outer.be_==/(s)
     def =~(s: =>String) = outer.=~(s)
     def =~(s: Pattern) = outer.=~(s)
     def =~(s: Regex) = outer.=~(s)
-  implicit def toNotStringMatcher(result: NotMatcher[Any]) : NotStringMatcher = new NotStringMatcher(result)
-  class NotStringMatcher(result: NotMatcher[Any]):
-    def ==/(s: String) = outer.be_==/(s).not
+
+  extension (result: NotMatcher[Any]):
+    def be_==/(s: String) = outer.be_==/(s).not
     def =~(s: =>String) = outer.=~(s).not
     def =~(s: Pattern) = outer.=~(s).not
     def =~(s: Regex) = outer.=~(s).not
@@ -186,7 +212,6 @@ trait StringBeHaveMatchers extends BeHaveMatchers { outer: StringBaseMatchers =>
   def containing(s: String) = outer.contain(s)
   def startingWith(s: =>String) = outer.startWith(s)
   def endingWith(s: =>String) = outer.endWith(s)
-}
 
 protected[specs2]
 class BeMatching(t: =>String) extends Matcher[String]:
@@ -199,9 +224,12 @@ class BeMatching(t: =>String) extends Matcher[String]:
            s"'${b.description}' doesn't match ${q(a)}", b)
 
 object BeMatching:
-  def withPart(expression: String) = new BeMatching(expression.regexPart)
+  def withPart(expression: String): BeMatching =
+    new BeMatching(expression.regexPart)
+
 protected[specs2]
 class BeMatchingPattern(p: Pattern) extends BeMatching(p.toString):
   override lazy val pattern = p
+
 class BeMatchingRegex(r: Regex) extends BeMatching(r.toString):
     override lazy val pattern = r.pattern

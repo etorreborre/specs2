@@ -15,7 +15,6 @@ class XmlMatchersSpec extends Spec with XmlMatchers with MustExpectations { def 
    ${ <a><b/><c/></a> must ==/(<a> <c/><b/></a>) }
    ${ (<a><b/><c/></a>:NodeSeq) must ==/(<a> <c/><b/></a>) }
    ${ <a><b/><c/></a> must be_==/(<a> <c/><b/></a>) }
-   ${ <a><b/><c/></a> must be ==/(<a> <c/><b/></a>) }
 
    match if the attributes are not in the same order
    ${ <a><b t="1" s="2"/><c/></a> must ==/(<a> <c/><b s="2" t="1"/></a>) }
@@ -31,8 +30,8 @@ class XmlMatchersSpec extends Spec with XmlMatchers with MustExpectations { def 
 
    provide be + matchers forms
    ${ <a><b/></a> must be equalToIgnoringSpace(<a> <b/></a>) }
-   ${ <a><b/></a> must be ==/(<a> <b/></a>) }
-   ${ <n a="1" b="2"/> must be ==/(<n b="2" a="1"/>) }
+   ${ <a><b/></a> must be_==/(<a> <b/></a>) }
+   ${ <n a="1" b="2"/> must be_==/(<n b="2" a="1"/>) }
    ${ <a><b/></a> must not(==/(<b></b>)) }
 
  A \\ matcher should match if a node is a direct child of another

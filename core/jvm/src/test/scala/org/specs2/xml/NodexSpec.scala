@@ -1,11 +1,13 @@
 package org.specs2
 package xml
 
-import Nodex._
 import scala.xml._
 import scala.xml.NodeSeq._
 
-class NodexSpec extends Spec { def is = s2"""
+class NodexSpec extends Spec {
+  import Nodex._
+
+  def is = s2"""
 
   isSpaceNode function returns true if a node only contains spaces
     ${ ! <a/>.isSpaceNode }

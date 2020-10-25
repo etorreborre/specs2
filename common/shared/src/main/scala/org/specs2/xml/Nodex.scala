@@ -8,9 +8,7 @@ import fp._
  * Extension methods for NodeSeqs and Nodes
  */
 trait Nodex:
-  /**
-   * This class adds more methods to the NodeSeq class
-   */
+
   extension (ns: NodeSeq):
     def ==/(n: NodeSeq): Boolean =
       NodeFunctions.isEqualIgnoringSpace(ns, n)
