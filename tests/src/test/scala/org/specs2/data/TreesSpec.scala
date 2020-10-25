@@ -18,7 +18,7 @@ class TreesSpec extends Specification with ScalaCheck with ThrownExpectations { 
     tree.allPaths must ===(paths)
   }
 
-  implicit def ArbitraryTree: Arbitrary[TreeAndPaths] = Arbitrary {
+  given Arbitrary[TreeAndPaths] = Arbitrary {
     Gen.choose(1, 5).flatMap(n => genTree(0, (1 to n).toList))
   }
 

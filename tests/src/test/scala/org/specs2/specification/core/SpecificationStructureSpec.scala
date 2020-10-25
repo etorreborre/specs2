@@ -68,26 +68,26 @@ class SpecificationStructureSpec(val env: Env) extends Specification with ScalaC
   def dependOn(s2: SpecStructure): Matcher[SpecStructure] = (s1: SpecStructure) =>
     (s1.dependsOn(s2)(ee), s"${s1.specClassName} doesn't depend on ${s2.specClassName}")
 
-  implicit def ArbitrarySpecificationStructure: Arbitrary[SpecificationStructure] =
+  given Arbitrary[SpecificationStructure] =
     Arbitrary(arbitrary[SpecStructure].map(spec => new SpecificationStructure { def is = spec }))
 
-  implicit def ArbitrarySpecStructure: Arbitrary[SpecStructure] = Arbitrary {
+  given Arbitrary[SpecStructure] = Arbitrary {
     (ArbitrarySpecHeader.arbitrary |@| ArbitraryFragments.arbitrary)((sh, fs) => SpecStructure.create(sh, fs))
   }
 
-  implicit def ArbitraryFragments: Arbitrary[Fragments] =
+  given ArbitraryFragments as Arbitrary[Fragments] =
     Arbitrary(listOf(ArbitraryFragment.arbitrary).map(fs => Fragments.apply(fs:_*)))
 
-  implicit def ArbitraryFragment: Arbitrary[Fragment] =
+  given ArbitraryFragment as Arbitrary[Fragment] =
     Arbitrary(Gen.oneOf(Arbitraries.FragmentArbitrary.arbitrary, ArbitraryLink.arbitrary))
 
-  implicit def ArbitraryLinks: Arbitrary[List[Fragment]] =
+  given ArbitraryLinks as Arbitrary[List[Fragment]] =
     Arbitrary(Gen.nonEmptyListOf(ArbitraryLink.arbitrary))
 
-  implicit def ArbitraryLink: Arbitrary[Fragment] =
+  given ArbitraryLink as Arbitrary[Fragment] =
     Arbitrary(arbitrary[SpecHeader].map(ss => link(SpecStructure(ss))))
 
-  implicit def ArbitrarySpecHeader: Arbitrary[SpecHeader] =
+  given ArbitrarySpecHeader as Arbitrary[SpecHeader] =
     Arbitrary(Gen.oneOf(Seq(SS1, SS2, SS3, SS4, SS4).map(s => SpecHeader.create(s.getClass))))
 }
 

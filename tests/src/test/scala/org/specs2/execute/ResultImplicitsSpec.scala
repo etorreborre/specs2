@@ -14,7 +14,7 @@ class ResultImplicitsSpec extends Specification with ScalaCheck with ResultImpli
     (r1 <==> r1.not).not
   }.set(minTestsOk = 5)
 
-  implicit def ArbitrarySuccessOrFailure: Arbitrary[Result] = Arbitrary {
+  given Arbitrary[Result] = Arbitrary {
     Gen.oneOf(success, failure)
   }
 

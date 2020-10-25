@@ -34,7 +34,7 @@ class MatchResultSpec extends Specification with ScalaCheck { def is = s2"""
     result.mute.details must ===(NoDetails)
   }
 
-  implicit def MatchResultArbitrary[T : Arbitrary]: Arbitrary[MatchResult[T]] = Arbitrary {
+  given MatchResultArbitrary[T : Arbitrary] as Arbitrary[MatchResult[T]] = Arbitrary {
     for
       t <- arbitrary[T]
       b <- arbitrary[Boolean]
@@ -47,7 +47,7 @@ class MatchResultSpec extends Specification with ScalaCheck { def is = s2"""
     yield r
   }
 
-  implicit def MatchFailureArbitrary[T : Arbitrary]: Arbitrary[MatchFailure[T]] = Arbitrary {
+  given [T : Arbitrary] as Arbitrary[MatchFailure[T]] = Arbitrary {
     for
       t <- arbitrary[T]
       m <- arbitrary[String]
@@ -55,7 +55,7 @@ class MatchResultSpec extends Specification with ScalaCheck { def is = s2"""
     yield MatchFailure(() => m, () => negateSentence(m), createExpectable(t), details = d)
   }
 
-  implicit def DetailsArbitrary: Arbitrary[Details] = Arbitrary {
+  given DetailsArbitrary as Arbitrary[Details] = Arbitrary {
     Gen.oneOf[Details](
       NoDetails,
       FailureDetails("abc", "bca"),
