@@ -8,8 +8,9 @@ import org.specs2.specification.core.Fragments
 import org.specs2.specification.create.FragmentsFactory
 
 trait ScalaCheckPropertyDsl extends FragmentsFactory with AsResultProp:
-  implicit def propToScalaCheckProperty(prop: Prop)(implicit parameters: Parameters, prettyFreqMap: FreqMap[Set[Any]] => Pretty): ScalaCheckProp =
-    ScalaCheckProp(prop, parameters, prettyFreqMap)
+  given propToScalaCheckProperty(using parameters: Parameters, prettyFreqMap: FreqMap[Set[Any]] => Pretty) as Conversion[Prop, ScalaCheckProp]:
+    def apply(prop: Prop): ScalaCheckProp =
+      ScalaCheckProp(prop, parameters, prettyFreqMap)
 
   /** display properties as examples */
   def properties(ps: Properties): Fragments =

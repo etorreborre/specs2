@@ -7,8 +7,8 @@ import org.scalacheck.rng.Seed
 import execute._
 import specification._
 import core.{AsExecution, Execution}
-import AsResultProp._
-import ScalaCheckProperty._
+import AsResultProp.{given _, _}
+import ScalaCheckProperty.{given _, _}
 
 /**
  * A ScalaCheckProperty encapsulates a ScalaCheck Prop and its parameters
@@ -111,7 +111,7 @@ trait ScalaCheckFunction extends ScalaCheckProperty:
     context.foreach(_(executed))
     executed match
       case p: Prop => p
-      case other   => AsResultProp.asResultToProp(other)
+      case other   => other
 
 
 case class ScalaCheckFunction1[T, R](
@@ -134,7 +134,7 @@ case class ScalaCheckFunction1[T, R](
   lazy val propFunction = (t: T) => {
     lazy val executed = execute(t)
     executeInContext(executed)
-    collectors.foldLeft(asResultToProp(executed))((p, c) => Prop.collect(c(t))(p))
+    collectors.foldLeft(executed: Prop)((p, c) => Prop.collect(c(t))(p))
   }
 
   lazy val prop: Prop =
@@ -200,7 +200,7 @@ case class ScalaCheckFunction2[T1, T2, R](
   lazy val propFunction = (t1: T1, t2: T2) => {
     lazy val executed = execute(t1, t2)
     executeInContext(executed)
-    argInstances1.collect(t1, argInstances2.collect(t2, asResultToProp(executed)))
+    argInstances1.collect(t1, argInstances2.collect(t2, executed))
   }
 
   lazy val prop: Prop =
@@ -282,7 +282,7 @@ case class ScalaCheckFunction3[T1, T2, T3, R](
   lazy val propFunction = (t1: T1, t2: T2, t3: T3) => {
     lazy val executed = execute(t1, t2, t3)
     executeInContext(executed)
-    argInstances1.collect(t1, argInstances2.collect(t2, argInstances3.collect(t3, asResultToProp(executed))))
+    argInstances1.collect(t1, argInstances2.collect(t2, argInstances3.collect(t3, executed)))
   }
 
   lazy val prop: Prop =
@@ -373,7 +373,7 @@ case class ScalaCheckFunction4[T1, T2, T3, T4, R](
   lazy val propFunction = (t1: T1, t2: T2, t3: T3, t4: T4) => {
     lazy val executed = execute(t1, t2, t3, t4)
     executeInContext(executed)
-    argInstances1.collect(t1, argInstances2.collect(t2, argInstances3.collect(t3, argInstances4.collect(t4, asResultToProp(executed)))))
+    argInstances1.collect(t1, argInstances2.collect(t2, argInstances3.collect(t3, argInstances4.collect(t4, executed))))
   }
 
   lazy val prop: Prop =
@@ -473,7 +473,7 @@ case class ScalaCheckFunction5[T1, T2, T3, T4, T5, R](
   lazy val propFunction = (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5) => {
     lazy val executed = execute(t1, t2, t3, t4, t5)
     executeInContext(executed)
-    argInstances1.collect(t1, argInstances2.collect(t2, argInstances3.collect(t3, argInstances4.collect(t4, argInstances5.collect(t5, asResultToProp(executed))))))
+    argInstances1.collect(t1, argInstances2.collect(t2, argInstances3.collect(t3, argInstances4.collect(t4, argInstances5.collect(t5, executed)))))
   }
 
   lazy val prop: Prop =
@@ -582,7 +582,7 @@ case class ScalaCheckFunction6[T1, T2, T3, T4, T5, T6, R](
   lazy val propFunction = (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6) => {
     lazy val executed = execute(t1, t2, t3, t4, t5, t6)
     executeInContext(executed)
-    argInstances1.collect(t1, argInstances2.collect(t2, argInstances3.collect(t3, argInstances4.collect(t4, argInstances5.collect(t5, argInstances6.collect(t6, asResultToProp(executed)))))))
+    argInstances1.collect(t1, argInstances2.collect(t2, argInstances3.collect(t3, argInstances4.collect(t4, argInstances5.collect(t5, argInstances6.collect(t6, executed))))))
   }
 
   lazy val prop: Prop =
@@ -700,7 +700,7 @@ case class ScalaCheckFunction7[T1, T2, T3, T4, T5, T6, T7, R](
   lazy val propFunction = (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7) => {
     lazy val executed = execute(t1, t2, t3, t4, t5, t6, t7)
     executeInContext(executed)
-    argInstances1.collect(t1, argInstances2.collect(t2, argInstances3.collect(t3, argInstances4.collect(t4, argInstances5.collect(t5, argInstances6.collect(t6, argInstances7.collect(t7, asResultToProp(executed))))))))
+    argInstances1.collect(t1, argInstances2.collect(t2, argInstances3.collect(t3, argInstances4.collect(t4, argInstances5.collect(t5, argInstances6.collect(t6, argInstances7.collect(t7, executed)))))))
   }
 
   lazy val prop: Prop =
@@ -827,7 +827,7 @@ case class ScalaCheckFunction8[T1, T2, T3, T4, T5, T6, T7, T8, R](
   lazy val propFunction = (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8) => {
     lazy val executed = execute(t1, t2, t3, t4, t5, t6, t7, t8)
     executeInContext(executed)
-    argInstances1.collect(t1, argInstances2.collect(t2, argInstances3.collect(t3, argInstances4.collect(t4, argInstances5.collect(t5, argInstances6.collect(t6, argInstances7.collect(t7, argInstances8.collect(t8, asResultToProp(executed)))))))))
+    argInstances1.collect(t1, argInstances2.collect(t2, argInstances3.collect(t3, argInstances4.collect(t4, argInstances5.collect(t5, argInstances6.collect(t6, argInstances7.collect(t7, argInstances8.collect(t8, executed))))))))
   }
 
   lazy val prop: Prop =
@@ -935,12 +935,11 @@ case class ScalaCheckArgInstances[T](arbitrary: Arbitrary[T], shrink: Option[Shr
 
 object ScalaCheckProperty:
 
-  implicit def ScalaCheckPropertyAsExecution[S <: ScalaCheckProperty]: AsExecution[S] = new AsExecution[S] {
+  given ScalaCheckPropertyAsExecution[S <: ScalaCheckProperty] as AsExecution[S]:
     def execute(s: => S): Execution =
       Execution.withEnv { env =>
         AsResultProp.check(s.prop, s.parameters.overrideWith(env.commandLine), s.prettyFreqMap)
       }
-  }
 
   def makeProp[T](f: T => Prop, shrink: Option[Shrink[T]], parameters: Parameters)(
     implicit a: Arbitrary[T], p: T => Pretty): Prop =
@@ -976,7 +975,7 @@ case class ScalaCheckFunction$n[${TNList(n)}, R](
   lazy val propFunction = (${TNParamList(n)}) => {
     lazy val executed = execute(${NParamList(n)})
     executeInContext(executed)
-    ${(1 to n).reverse.foldLeft("asResultToProp(executed)"){ (res, i) => s"argInstances$i.collect(t$i, $res)"}}
+    ${(1 to n).reverse.foldLeft("executed"){ (res, i) => s"argInstances$i.collect(t$i, $res)"}}
   }
 
   lazy val prop: Prop =

@@ -11,52 +11,51 @@ import scala.annotation.tailrec
  */
 trait AsResultProp extends ScalaCheckPropertyCheck with AsResultPropLowImplicits:
 
-  implicit def asResultToProp[R : AsResult](r: R): Prop =
-    r match
-      case p: Prop => p
-      case _ =>
-        Prop.apply { (params: Gen.Parameters) =>
-          lazy val result = ResultExecution.execute(AsResult(r))
+  given asResultToProp[R : AsResult] as Conversion[R, Prop]:
+    def apply(r: R): Prop =
+      r match
+        case p: Prop => p
+        case _ =>
+          Prop.apply { (params: Gen.Parameters) =>
+            lazy val result = ResultExecution.execute(AsResult(r))
 
-          @tailrec
-          def resultToProp(r: execute.Result): Prop =
-            r match
-              case f : execute.Failure            => Prop.exception(new FailureException(f))
-              case s : execute.Skipped            => Prop.exception(new SkipException(s))
-              case p : execute.Pending            => Prop.exception(new PendingException(p))
-              case e : execute.Error              => Prop.exception(e.exception)
+            @tailrec
+            def resultToProp(r: execute.Result): Prop =
+              r match
+                case f : execute.Failure            => Prop.exception(new FailureException(f))
+                case s : execute.Skipped            => Prop.exception(new SkipException(s))
+                case p : execute.Pending            => Prop.exception(new PendingException(p))
+                case e : execute.Error              => Prop.exception(e.exception)
 
-              case execute.DecoratedResult(_, r1) =>
-                // display the datatables on a new line
-                resultToProp(r1.mapMessage("\n"+_))
+                case execute.DecoratedResult(_, r1) =>
+                  // display the datatables on a new line
+                  resultToProp(r1.mapMessage("\n"+_))
 
-              case other => Prop.passed
+                case other => Prop.passed
 
-          val prop = resultToProp(result)
+            val prop = resultToProp(result)
 
-          result match
-            case f: execute.Failure if f.details != NoDetails =>
-              prop.apply(params).collect(f.details)
+            result match
+              case f: execute.Failure if f.details != NoDetails =>
+                prop.apply(params).collect(f.details)
 
-            case _ =>
-              prop.apply(params)
-        }
+              case _ =>
+                prop.apply(params)
+          }
 
   /** implicit typeclass instance to create examples from a Prop */
-  implicit def propAsResult(implicit p: Parameters, pfq: FreqMap[Set[Any]] => Pretty): AsResult[Prop] = new AsResult[Prop] {
+  given propAsResult(using p: Parameters, pfq: FreqMap[Set[Any]] => Pretty) as AsResult[Prop]:
     def asResult(prop: =>Prop): Result =
       check(prop, p, pfq)
-  }
 
 
 trait AsResultPropLowImplicits extends ScalaCheckPropertyCheck with ScalaCheckParameters:
   /** implicit typeclass instance to create examples from Properties */
-  implicit def propertiesAsResult(implicit p: Parameters, pfq: FreqMap[Set[Any]] => Pretty): AsResult[Properties] = new AsResult[Properties] {
+  given propertiesAsResult(using p: Parameters, pfq: FreqMap[Set[Any]] => Pretty) as AsResult[Properties]:
     def asResult(properties: =>Properties): Result =
       checkProperties(properties, p, pfq)
-  }
 
-  implicit def scalaCheckPropertyAsResult[S <: ScalaCheckProperty]: AsResult[S] = new AsResult[S] {
+  given scalaCheckPropertyAsResult[S <: ScalaCheckProperty] as AsResult[S]:
     def asResult(prop: =>S): Result =
       try
         lazy val p = prop
@@ -67,7 +66,6 @@ trait AsResultPropLowImplicits extends ScalaCheckPropertyCheck with ScalaCheckPa
           f
 
         case t: Throwable =>
-          AsResultProp.propAsResult(defaultParameters, defaultFreqMapPretty).asResult(Prop.exception(t))
-  }
+          AsResultProp.propAsResult.asResult(Prop.exception(t))
 
 object AsResultProp extends AsResultProp

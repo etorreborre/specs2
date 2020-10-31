@@ -3,7 +3,7 @@ package json
 
 import mutable.Specification
 import org.scalacheck._
-import JsonGen._
+import JsonGen.{given _}
 import Json._
 
 class JsonSpec extends Specification with ScalaCheck:
@@ -19,7 +19,7 @@ import Gen._
  * Generator of JSONType objects with a given tree depth
  */
 trait JsonGen:
-  implicit def arbitraryJsonType: Arbitrary[JSONType] = Arbitrary { sized(depth => jsonType(depth)) }
+  given Arbitrary[JSONType] = Arbitrary { sized(depth => jsonType(depth)) }
 
   def jsonType(depth: Int): Gen[JSONType] = oneOf(jsonArray(depth), jsonObject(depth))
 

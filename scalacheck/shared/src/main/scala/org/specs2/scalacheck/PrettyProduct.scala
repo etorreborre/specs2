@@ -11,8 +11,8 @@ import org.scalacheck.util.Pretty
  *   case class MyInt(i: Int, s: String = "hey")
  *
  *   object MyInt {
- *     implicit def ArbInt: Arbitrary[MyInt] = Arbitrary(Gen.const(MyInt(1)))
- *     implicit def pretty: MyInt => Pretty = PrettyProduct[MyInt]
+ *     given Arbitrary[MyInt] = Arbitrary(Gen.const(MyInt(1)))
+ *     given MyInt => Pretty = PrettyProduct[MyInt]
  *   }
  *
  */
@@ -26,5 +26,3 @@ object PrettyProduct:
     }.mkString(p.productPrefix+"(", ", ", ")")
 
   def apply[P <: Product] = (p: P) => Pretty(_ => toString(p))
-
-

@@ -121,7 +121,7 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
   def failureWithStacktraceProp = forAll((b: Boolean) => 1 must ===(2))
 
   import DataTables.{given _}
-  
+
   def datatableFailureProp = forAll { (b: Boolean) =>
     "a" | "b" |>
      1  ! 1   |
@@ -150,9 +150,10 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
 
 
   case class MyInt(i: Int, s: String = "hey")
+
   object MyInt:
-    implicit def ArbInt: Arbitrary[MyInt] = Arbitrary(Gen.const(MyInt(1)))
-    implicit def pretty: MyInt => Pretty = PrettyProduct[MyInt]
+    given Arbitrary[MyInt] = Arbitrary(Gen.const(MyInt(1)))
+    given (MyInt => Pretty) = PrettyProduct[MyInt]
 }
 
 class TSpec extends mutable.Specification with ScalaCheck:

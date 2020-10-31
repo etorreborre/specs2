@@ -10,6 +10,7 @@ import text.Quote._
 import StringToElem._
 import collection.Seqx._
 import fp.syntax._
+import StringToElem.{given _}
 
 /**
  * The XmlMatchers trait provides matchers which are applicaborderle to xml nodes
@@ -18,7 +19,7 @@ trait XmlMatchers extends XmlBaseMatchers with XmlBeHaveMatchers
 object XmlMatchers extends XmlMatchers
 
 private[specs2]
-trait XmlBaseMatchers { outer =>
+trait XmlBaseMatchers:
 
   /**
    * match if `node` is contained anywhere inside the tested node
@@ -81,19 +82,21 @@ trait XmlBaseMatchers { outer =>
     new XmlMatcher(Seq(new PathFunction(node, firstNodeSearch _, attributes)))
   private def firstMatch(node: Node, attributes: Map[String, String]) =
     new XmlMatcher(Seq(new PathFunction(node, firstNodeSearch _, attributeValues = attributes)))
-}
+
+object XmlBaseMatchers extends XmlBaseMatchers
 
 private[specs2]
-trait XmlBeHaveMatchers extends BeHaveMatchers { outer: XmlBaseMatchers =>
-  implicit def toXmlResultMatcher(result: MatchResult[Seq[Node]]) : XmlResultMatcher = new XmlResultMatcher(result)
-  class XmlResultMatcher(result: MatchResult[Seq[Node]]):
+trait XmlBeHaveMatchers extends BeHaveMatchers:
+  private val outer = XmlBaseMatchers
+
+  extension (result: MatchResult[Seq[Node]]):
     def equalToIgnoringSpace(node: Seq[Node]) = result(outer.equalToIgnoringSpace(node))
     def ==/(node: Seq[Node]) = result(outer.==/(node))
-  implicit def toNeutralMatcherElem(result: NeutralMatcher[Any]) : NeutralMatcherElem = new NeutralMatcherElem(result)
-  class NeutralMatcherElem(result: NeutralMatcher[Any]):
+
+  extension (result: NeutralMatcher[Any]):
     def ==/(node: Seq[Node]) = outer.==/(node) ^^ { (e: Elem) => e.toSeq }
-  implicit def toNotMatcherElem(result: NotMatcher[Any]) : NotMatcherElem = new NotMatcherElem(result)
-  class NotMatcherElem(result: NotMatcher[Any]):
+
+  extension (result: NotMatcher[Any]):
     def ==/(node: Seq[Node]) = (outer.==/(node) ^^ { (e: Elem) => e.toSeq }).not
     def \\(node: Node, attributes: String*) = outer.\\(node, attributes:_*).not
     def \\(node: Node) = outer.\\(node).not
@@ -110,7 +113,7 @@ trait XmlBeHaveMatchers extends BeHaveMatchers { outer: XmlBaseMatchers =>
       outer.\(node, attributeValues1, attributeValues:_*).not
     def \(label: String, attributeValues1: (String, String), attributeValues: (String, String)*) =
       outer.\(label, attributeValues1, attributeValues:_*).not
-}
+
 /**
  * Matcher for equalIgnoreSpace comparison, ignoring the nodes order
  */
@@ -275,6 +278,10 @@ case class PathFunction(val node: Node,
     Seq(Some(n), attrs, textMessage).flatten.mkString(" ")
 
 private[specs2] object StringToElem:
-  implicit def toElement(s: String): ToElem = new ToElem(s)
-  class ToElem(s: String) { def toElem: Elem = Elem(null, s, Null, TopScope, true) }
-  implicit def toNode(s: String): Elem = Elem(null, s, Null, TopScope, true)
+
+  extension (s: String):
+    def toElem: Elem = Elem(null, s, Null, TopScope, true)
+
+  given Conversion[String, Elem]:
+    def apply(s: String): Elem =
+      Elem(null, s, Null, TopScope, true)

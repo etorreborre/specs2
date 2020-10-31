@@ -9,11 +9,9 @@ import org.specs2.fp._
  */
 trait GenInstances:
 
-  implicit def genMonad: Monad[Gen] = new Monad[Gen] {
+  given Monad[Gen]:
     def point[A](a: =>A): Gen[A] =
       Gen.const(a)
 
     def bind[A, B](fa: Gen[A])(f: A => Gen[B]): Gen[B] =
       fa flatMap f
-  }
-
