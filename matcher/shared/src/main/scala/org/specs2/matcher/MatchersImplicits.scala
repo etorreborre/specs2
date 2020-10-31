@@ -7,6 +7,7 @@ import scala.collection.Traversable
 import ResultLogicalCombinators.{given _, _}
 import text.Sentences._
 import control._
+import ValueChecks.{given _}
 
 /**
 * This trait provides implicit definitions from MatchResults and Booleans to Results.
@@ -59,7 +60,7 @@ trait ResultImplicits extends ExpectationsCreation:
    * returning actual matchers
    */
   implicit class resultFunction[T, R : AsResult](f: T => R):
-    private val cc: ContainWithResult[T] = ContainWithResult(ValueChecks.functionIsValueCheck(f))
+    private val cc: ContainWithResult[T] = ContainWithResult(f)
 
     def forall                          : ContainWithResult[T] = cc.forall
     def foreach                         : ContainWithResult[T] = cc.foreach

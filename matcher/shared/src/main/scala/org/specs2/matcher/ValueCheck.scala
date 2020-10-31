@@ -27,54 +27,69 @@ trait ValueCheck[T] { outer =>
 }
 
 object ValueCheck:
-  implicit def typedValueCheck[T : Diffable](expected: T): BeEqualTypedValueCheck[T] =
-    new BeEqualTypedValueCheck[T](expected)
 
-  def alwaysOk[T] = new ValueCheck[T] {
-    def check:    T => Result = (t: T) => StandardResults.success
-    def checkNot: T => Result = (t: T) => StandardResults.failure
+  given typedValueCheck[T : Diffable] as Conversion[T, BeEqualTypedValueCheck[T]] {
+    def apply(expected: T): BeEqualTypedValueCheck[T] =
+      new BeEqualTypedValueCheck[T](expected)
   }
 
-  def toOptionCheck[T](valueCheck: ValueCheck[T]): ValueCheck[Option[T]] = new ValueCheck[Option[T]] {
-    def check = (t: Option[T]) =>
-      t.map(valueCheck.check).getOrElse(Failure("Expected a value, got None"))
+  def alwaysOk[T]: ValueCheck[T] =
+    new ValueCheck[T]:
+      def check:    T => Result = (t: T) => StandardResults.success
+      def checkNot: T => Result = (t: T) => StandardResults.failure
 
-    def checkNot = (t: Option[T]) =>
-      check(t).not
-  }
+  def toOptionCheck[T](valueCheck: ValueCheck[T]): ValueCheck[Option[T]] =
+    new ValueCheck[Option[T]]:
+      def check = (t: Option[T]) =>
+        t.map(valueCheck.check).getOrElse(Failure("Expected a value, got None"))
+
+      def checkNot = (t: Option[T]) =>
+        check(t).not
+
 /**
  * implicit conversions used to create ValueChecks
  */
 trait ValueChecks extends ValueChecksBase:
+
   /** a partial function returning an object having an AsResult instance can check a value */
-  implicit def partialfunctionIsValueCheck[T, R : AsResult](f: PartialFunction[T, R]): ValueCheck[T] = new ValueCheck[T] {
-    def check    = (t: T) => {
-      if f.isDefinedAt(t) then functionResult(AsResult.safely(f(t)), t)
-      else                  Failure("undefined function for "+q(t))
-    }
-    def checkNot = (t: T) => Results.negate(check(t))
+  given partialfunctionIsValueCheck[T, R : AsResult] as Conversion[PartialFunction[T, R], ValueCheck[T]] {
+    def apply(f: PartialFunction[T, R]): ValueCheck[T] =
+      new ValueCheck[T]:
+       def check = (t: T) => {
+         if f.isDefinedAt(t) then functionResult(AsResult.safely(f(t)), t)
+         else                  Failure("undefined function for "+q(t))
+       }
+
+       def checkNot = (t: T) => Results.negate(check(t))
   }
 
   /** a check of type T can be downcasted implicitly to a check of type S >: T */
-  implicit def downcastBeEqualTypedValueCheck[T, S >: T](check: BeEqualTypedValueCheck[T]): ValueCheck[S] = check.downcast[S]
+  given downcastBeEqualTypedValueCheck[T, S >: T] as Conversion[BeEqualTypedValueCheck[T], ValueCheck[S]] {
+    def apply(check: BeEqualTypedValueCheck[T]): ValueCheck[S] =
+      check.downcast[S]
+  }
 
 trait ValueChecksBase extends ValueChecksLowImplicits:
 
   /** a Matcher[T] can check a value */
-  implicit def matcherIsValueCheck[T](m: Matcher[T]): ValueCheck[T] = new ValueCheck[T] {
-    def check    = (t: T) => AsResult.safely(m(createExpectable(t)))
-    def checkNot = (t: T) => AsResult.safely(m.not(createExpectable(t)))
+  given matcherIsValueCheck[T] as Conversion[Matcher[T], ValueCheck[T]]{
+    def apply(m: Matcher[T]): ValueCheck[T] =
+      new ValueCheck[T]:
+        def check    = (t: T) => AsResult.safely(m(createExpectable(t)))
+        def checkNot = (t: T) => AsResult.safely(m.not(createExpectable(t)))
   }
 
   /** an expected value can be used to check another value */
-  def valueIsTypedValueCheck[T](expected: T)(implicit di: Diffable[T]): BeEqualTypedValueCheck[T] =
-    ValueCheck.typedValueCheck(expected)
+  def valueIsTypedValueCheck[T](expected: T)(using di: Diffable[T]): BeEqualTypedValueCheck[T] =
+    expected
 
 trait ValueChecksLowImplicits:
   /** a function returning an object having an AsResult instance can check a value */
-  implicit def functionIsValueCheck[T, R : AsResult](f: T => R): ValueCheck[T] = new ValueCheck[T] {
-    def check    = (t: T) => functionResult(AsResult.safely(f(t)), t)
-    def checkNot = (t: T) => Results.negate(check(t))
+  given functionIsValueCheck[T, R : AsResult] as Conversion[T => R, ValueCheck[T]] {
+    def apply(f: T => R): ValueCheck[T] =
+      new ValueCheck[T]:
+        def check    = (t: T) => functionResult(AsResult.safely(f(t)), t)
+        def checkNot = (t: T) => Results.negate(check(t))
   }
 
   private[matcher] def functionResult[T](result: Result, t: T) =

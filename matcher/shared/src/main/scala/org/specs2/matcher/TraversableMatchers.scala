@@ -53,7 +53,7 @@ trait TraversableBaseMatchers { outer =>
   /** match if traversable contains (x matches .*+t+.*) */
   def containMatch[T](t: =>String) = containPattern[T](t.regexPart)
   /** match if traversable contains (x matches p) */
-  def containPattern[T](t: =>String) = ContainWithResult(matcherIsValueCheck(new BeMatching(t))) ^^ ((ts: Traversable[T]) => ts.toSeq.map(_.toString))
+  def containPattern[T](t: =>String) = ContainWithResult(new BeMatching(t)) ^^ ((ts: Traversable[T]) => ts.toSeq.map(_.toString))
 
   /** does a containAll comparison in both ways */
   def containTheSameElementsAs[T](seq: Seq[T], equality: (T, T) => Boolean = (_:T) == (_:T)): Matcher[Traversable[T]] = new Matcher[Traversable[T]] {
@@ -131,8 +131,11 @@ trait TraversableBaseMatchers { outer =>
 
 private[specs2]
 trait TraversableBaseMatchersLowImplicits extends ValueChecksLowImplicits:
-  implicit def checkableSeqIsContainCheckSeq[T](seq: Seq[T])(using to: T => ValueCheck[T]): Seq[ValueCheck[T]] =
-    seq.map(to)
+
+  given seqToValueChecks[T](using to: T => ValueCheck[T]) as Conversion[Seq[T], Seq[ValueCheck[T]]] =
+    new Conversion[Seq[T], Seq[ValueCheck[T]]]:
+      def apply(seq: Seq[T]): Seq[ValueCheck[T]] =
+        seq.map(to)
 
   given matchersToValueChecks[T] as Conversion[Seq[Matcher[T]], Seq[ValueCheck[T]]]:
     def apply(seq: Seq[Matcher[T]]): Seq[ValueCheck[T]] =
