@@ -12,6 +12,7 @@ import json.Json._
 import util.matching.Regex
 import MatchersImplicits.{given _}
 import Results.negateWhen
+import JsonBaseMatchers._
 
 /**
  * Matchers for Json expressions (entered as strings)
@@ -196,7 +197,7 @@ object JsonType:
     def apply[S <: JsonType](s: Expectable[S]) = result(true, "ok", "ko", s)
   }
 
-  implicit def JsonTypeIsSized: Sized[JsonType] = new Sized[JsonType] {
+  given Sized[JsonType]:
     def size(json: JsonType): Int = json match
       case JsonArray(list) => list.size
       case JsonMap(map)    => map.size
@@ -204,37 +205,50 @@ object JsonType:
       case JsonNumber(_)   => 1
       case JsonBoolean(_)  => 1
       case JsonNull        => 0
-  }
 
-  implicit def JsonTypeMatcherTraversable(m: ContainWithResultSeq[String]): Matcher[JsonType] = (actual: JsonType) => actual match
-    case JsonArray(list) => m(createExpectable(list.map(showJson)))
-    case JsonMap(map)    => m(createExpectable(map.toList.map(showJson)))
-    case other           => Matcher.result(false, s"$other is not an array", createExpectable(other))
+  given Conversion[ContainWithResultSeq[String], Matcher[JsonType]]:
+    def apply(m: ContainWithResultSeq[String]): Matcher[JsonType] =
+      (actual: JsonType) => actual match
+        case JsonArray(list) => m(createExpectable(list.map(showJson)))
+        case JsonMap(map)    => m(createExpectable(map.toList.map(showJson)))
+        case other           => Matcher.result(false, s"$other is not an array", createExpectable(other))
 
-  implicit def JsonTypeMatcherTraversable(m: ContainWithResult[String]): Matcher[JsonType] = (actual: JsonType) => actual match
-    case JsonArray(list) => m(createExpectable(list.map(showJson)))
-    case JsonMap(map)    => m(createExpectable(map.toList.map(showJson)))
-    case other           => Matcher.result(false, s"$other is not an array", createExpectable(other))
+  given Conversion[ContainWithResult[String], Matcher[JsonType]]:
+    def apply(m: ContainWithResult[String]): Matcher[JsonType] =
+     (actual: JsonType) => actual match
+       case JsonArray(list) => m(createExpectable(list.map(showJson)))
+       case JsonMap(map)    => m(createExpectable(map.toList.map(showJson)))
+       case other           => Matcher.result(false, s"$other is not an array", createExpectable(other))
 
-  implicit def JsonTypeMatcherInt(expected: Int): Matcher[JsonType] = (actual: JsonType) => actual match
-    case JsonNumber(n) => (n.toDouble == expected.toDouble, s"$n is not equal to $expected")
-    case other         => (false, s"not a Number: $other")
+  given Conversion[Int, Matcher[JsonType]]:
+    def apply(expected: Int): Matcher[JsonType] =
+      (actual: JsonType) => actual match
+        case JsonNumber(n) => (n.toDouble == expected.toDouble, s"$n is not equal to $expected")
+        case other         => (false, s"not a Number: $other")
 
-  implicit def JsonTypeMatcherDouble(expected: Double): Matcher[JsonType] = (actual: JsonType) => actual match
-    case JsonNumber(n) => (n.toDouble == expected.toDouble, s"$n is not equal to $expected")
-    case other         => (false, s"not a Number: $other")
+  given Conversion[Double, Matcher[JsonType]]:
+    def apply(expected: Double): Matcher[JsonType] =
+      (actual: JsonType) => actual match
+        case JsonNumber(n) => (n.toDouble == expected.toDouble, s"$n is not equal to $expected")
+        case other         => (false, s"not a Number: $other")
 
-  implicit def JsonTypeMatcherBigDecimal(expected: BigDecimal): Matcher[JsonType] = (actual: JsonType) => actual match
-    case JsonNumber(n) => (n.toDouble == expected.toDouble, s"$n is not equal to $expected")
-    case other         => (false, s"not a Number: $other")
+  given Conversion[BigDecimal, Matcher[JsonType]]:
+    def apply(expected: BigDecimal): Matcher[JsonType] =
+      (actual: JsonType) => actual match
+        case JsonNumber(n) => (n.toDouble == expected.toDouble, s"$n is not equal to $expected")
+        case other         => (false, s"not a Number: $other")
 
-  implicit def JsonTypeMatcherBoolean(expected: Boolean): Matcher[JsonType] = (actual: JsonType) => actual match
-    case JsonBoolean(b) => (b == expected, s"$b is not equal to $expected")
-    case other          => (false, s"$other is not a Boolean")
+  given Conversion[Boolean, Matcher[JsonType]]:
+    def apply(expected: Boolean): Matcher[JsonType] =
+      (actual: JsonType) => actual match
+        case JsonBoolean(b) => (b == expected, s"$b is not equal to $expected")
+        case other          => (false, s"$other is not a Boolean")
 
-  implicit def JsonTypeMatcherString(expected: String): Matcher[JsonType] = (actual: JsonType) => actual match
-    case JsonString(a) => (a == expected, s"$a is not equal to $expected")
-    case other         => (false, s"not a String: $other")
+  given Conversion[String, Matcher[JsonType]]:
+    def apply(expected: String): Matcher[JsonType] =
+      (actual: JsonType) => actual match
+        case JsonString(a) => (a == expected, s"$a is not equal to $expected")
+        case other         => (false, s"not a String: $other")
 
 
 /**
@@ -323,60 +337,81 @@ trait JsonSelectors:
   val anyValue: Matcher[Any] =
     new NeutralMatcher[Any]
 
-
 private[specs2]
-trait JsonMatchersImplicits extends JsonMatchersLowImplicits { this: JsonBaseMatchers =>
+trait JsonMatchersImplicits extends JsonMatchersLowImplicits:
+
   /** datatype to specify how json values must be checked */
-  implicit def toJsonValueSelectorStringMatcher[M <: Matcher[String]](m: M): JsonSelector = JsonMatcherSelector(m)
-  implicit def toJsonValueSelectorStringValue(s: String): JsonSelector                    = JsonEqualValueSelector(s)
-  implicit def toJsonValueSelectorRegex(r: Regex): JsonSelector                           = JsonRegexSelector(r)
-  implicit def toJsonValueSelectorDoubleValue(d: Double): JsonSelector                    = JsonDoubleSelector(d)
-  implicit def toJsonValueSelectorIntValue(i: Int): JsonSelector                          = JsonIntSelector(i)
-  implicit def toJsonValueSelectorBooleanValue(b: Boolean): JsonSelector                  = JsonEqualValueSelector(b.toString)
+  given [M <: Matcher[String]] as Conversion[M, JsonSelector]:
+    def apply(m: M): JsonSelector =
+      JsonMatcherSelector(m)
 
-  implicit def regexToJsonSelector: ToJsonSelector[Regex] = new ToJsonSelector[Regex] {
-    def toJsonSelector(r: Regex): JsonSelector = r
-  }
-  implicit def matcherToJsonSelector[M <: Matcher[String]]: ToJsonSelector[M] = new ToJsonSelector[M] {
+  given Conversion[String, JsonSelector]:
+    def apply(s: String): JsonSelector =
+      JsonEqualValueSelector(s)
+
+  given Conversion[Regex, JsonSelector]:
+    def apply(r: Regex): JsonSelector =
+      JsonRegexSelector(r)
+
+  given Conversion[Double, JsonSelector]:
+    def apply(d: Double): JsonSelector =
+      JsonDoubleSelector(d)
+
+  given Conversion[Int, JsonSelector]:
+    def apply(i: Int): JsonSelector =
+      JsonIntSelector(i)
+
+  given Conversion[Boolean, JsonSelector]:
+    def apply(b: Boolean): JsonSelector =
+      JsonEqualValueSelector(b.toString)
+
+  given ToJsonSelector[Regex] =
+    new ToJsonSelector[Regex]:
+      def toJsonSelector(r: Regex): JsonSelector = r
+
+  given [M <: Matcher[String]] as ToJsonSelector[M]:
     def toJsonSelector(m: M): JsonSelector = m
-  }
-  implicit def stringMatcherToJsonSelector: ToJsonSelector[Matcher[String]] = new ToJsonSelector[Matcher[String]] {
-    def toJsonSelector(m: Matcher[String]): JsonSelector = m
-  }
-  object ToJsonSelector:
-    def apply[T : ToJsonSelector](t: T) = implicitly[ToJsonSelector[T]].toJsonSelector(t)
 
-  implicit def toJsonSelectorPair[K : ToJsonSelector, V : ToJsonSelector](kv: (K, V)): JsonPairSelector =
-    JsonPairSelector(implicitly[ToJsonSelector[K]].toJsonSelector(kv._1), implicitly[ToJsonSelector[V]].toJsonSelector(kv._2))
-}
+  given ToJsonSelector[Matcher[String]]:
+    def toJsonSelector(m: Matcher[String]): JsonSelector = m
+
+  object ToJsonSelector:
+    def apply[T : ToJsonSelector](t: T) = summon[ToJsonSelector[T]].toJsonSelector(t)
+
+  given [K : ToJsonSelector, V : ToJsonSelector] as Conversion[(K, V), JsonPairSelector]:
+    def apply(kv: (K, V)): JsonPairSelector =
+      JsonPairSelector(summon[ToJsonSelector[K]].toJsonSelector(kv._1), summon[ToJsonSelector[V]].toJsonSelector(kv._2))
 
 private[specs2]
-trait JsonMatchersLowImplicits extends JsonSelectors { this: JsonBaseMatchers =>
+trait JsonMatchersLowImplicits extends JsonSelectors:
   trait ToJsonSelector[T]:
     def toJsonSelector(t: T): JsonSelector
 
-  implicit def stringToJsonSelector: ToJsonSelector[String] = new ToJsonSelector[String] {
-    def toJsonSelector(a: String): JsonSelector = JsonEqualValueSelector(a)
-  }
-  implicit def doubleToJsonSelector: ToJsonSelector[Double] = new ToJsonSelector[Double] {
-    def toJsonSelector(a: Double): JsonSelector = JsonDoubleSelector(a)
-  }
-  implicit def intToJsonSelector: ToJsonSelector[Int] = new ToJsonSelector[Int] {
-    def toJsonSelector(a: Int): JsonSelector = JsonIntSelector(a)
-  }
-  implicit def booleanToJsonSelector: ToJsonSelector[Boolean] = new ToJsonSelector[Boolean] {
-    def toJsonSelector(a: Boolean): JsonSelector = JsonEqualValueSelector(a.toString)
-  }
-}
+  given ToJsonSelector[String]:
+    def toJsonSelector(a: String): JsonSelector =
+      JsonEqualValueSelector(a)
+
+  given ToJsonSelector[Double]:
+    def toJsonSelector(a: Double): JsonSelector =
+      JsonDoubleSelector(a)
+
+  given ToJsonSelector[Int]:
+    def toJsonSelector(a: Int): JsonSelector =
+      JsonIntSelector(a)
+
+  given ToJsonSelector[Boolean]:
+    def toJsonSelector(a: Boolean): JsonSelector =
+      JsonEqualValueSelector(a.toString)
+
 
 private[specs2]
-trait JsonBaseBeHaveMatchers extends BeHaveMatchers { outer: JsonBaseMatchers =>
+trait JsonBaseBeHaveMatchers extends BeHaveMatchers:
+  private val outer = JsonBaseMatchers
 
-  implicit def toNotMatcherJson(result: NotMatcher[Any]): NotMatcherJson = new NotMatcherJson(result)
-
-  class NotMatcherJson(result: NotMatcher[Any]):
+  extension (result: NotMatcher[Any]):
     def have(m: Matcher[JsonType]): JsonMatcher = outer.have(m).negate
     def /#(i: Int): JsonMatcher = outer./#(i).negate
     def /(selector: JsonSelector): JsonMatcher = outer./(selector).negate
     def */(selector: JsonSelector): JsonMatcher = outer.*/(selector).negate
-}
+
+object JsonBaseMatchers extends JsonBaseMatchers
