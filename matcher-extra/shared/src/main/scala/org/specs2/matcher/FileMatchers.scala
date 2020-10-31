@@ -54,15 +54,16 @@ trait PathBaseMatchers { outer =>
   private def isEqualIgnoringSep(path: String, other: String) = path != null && other != null&& getCanonicalPath(path).replaceAll("\\\\", "/") == getCanonicalPath(other).replaceAll("\\\\", "/")
 }
 
+object PathBaseMatchers extends PathBaseMatchers
+
 private[specs2]
-trait PathBeHaveMatchers extends BeHaveMatchers { outer: PathBaseMatchers =>
+trait PathBeHaveMatchers extends BeHaveMatchers:
+  private val outer = PathBaseMatchers
+
   /**
    * matcher aliases and implicits to use with be / have + matcher
    */
-  implicit def toPathResultMatcher(result: MatchResult[String]): PathResultMatcher =
-    new PathResultMatcher(result)
-
-  class PathResultMatcher(result: MatchResult[String]):
+  extension (result: MatchResult[String]):
     def anExistingPath = result(outer.beAnExistingPath)
     def aHiddenPath = result(outer.beAHiddenPath)
     def aReadablePath = result(outer.beAReadablePath)
@@ -70,25 +71,26 @@ trait PathBeHaveMatchers extends BeHaveMatchers { outer: PathBaseMatchers =>
     def anAbsolutePath = result(outer.beAnAbsolutePath)
     def aFilePath = result(outer.beAFilePath)
     def aDirectoryPath = result(outer.beADirectoryPath)
-    def pathName(name: String) = result(havePathName(name))
+    def pathName(name: String) = result(outer.havePathName(name))
     def listPaths(list: String*) = result(outer.listPaths(list:_*))
-    def asAbsolutePath(path: String) = result(haveAsAbsolutePath(path))
-    def asCanonicalPath(path: String) = result(haveAsCanonicalPath(path))
-    def parentPath(path: String) = result(haveParentPath(path))
-    def equalToIgnoringSep(other: String) = result(beEqualToIgnoringSep(other))
-  def anExistingPath = beAnExistingPath
-  def aHiddenPath = beAHiddenPath
-  def aReadablePath = beAReadablePath
-  def aWritablePath = beAWritablePath
-  def anAbsolutePath = beAnAbsolutePath
-  def aFilePath = beAFilePath
-  def aDirectoryPath = beADirectoryPath
-  def pathName(name: String) = havePathName(name)
-  def asAbsolutePath(name: String) = haveAsAbsolutePath(name)
-  def asCanonicalPath(name: String) = haveAsCanonicalPath(name)
-  def parentPath(parent: String) = haveParentPath(parent)
-  def equalToIgnoringSep(other: String) = beEqualToIgnoringSep(other)
-}
+    def asAbsolutePath(path: String) = result(outer.haveAsAbsolutePath(path))
+    def asCanonicalPath(path: String) = result(outer.haveAsCanonicalPath(path))
+    def parentPath(path: String) = result(outer.haveParentPath(path))
+    def equalToIgnoringSep(other: String) = result(outer.beEqualToIgnoringSep(other))
+
+  def anExistingPath = outer.beAnExistingPath
+  def aHiddenPath = outer.beAHiddenPath
+  def aReadablePath = outer.beAReadablePath
+  def aWritablePath = outer.beAWritablePath
+  def anAbsolutePath = outer.beAnAbsolutePath
+  def aFilePath = outer.beAFilePath
+  def aDirectoryPath = outer.beADirectoryPath
+  def pathName(name: String) = outer.havePathName(name)
+  def asAbsolutePath(name: String) = outer.haveAsAbsolutePath(name)
+  def asCanonicalPath(name: String) = outer.haveAsCanonicalPath(name)
+  def parentPath(parent: String) = outer.haveParentPath(parent)
+  def equalToIgnoringSep(other: String) = outer.beEqualToIgnoringSep(other)
+
 /**
  * The FileMatchers trait provides matchers which are applicable to files
  */
@@ -123,6 +125,9 @@ trait FileBaseMatchers extends PathMatchers:
   def haveParent(path: String): Matcher[HasPath] = (haveParentPath(path)) ^^ ((_:HasPath).getPath())
   /** matches if file.list == list */
   def haveList(list: String): Matcher[HasPath] = (listPaths(list)) ^^ ((_:HasPath).getPath())
+
+object FileBaseMatchers extends FileBaseMatchers
+
 /**
  * This case class is used to provide the getPath() method,
  * so that all FileMatchers can be used on Strings.
@@ -133,37 +138,36 @@ case class Path(p: String):
   def getPath(): String = p
 
 private[specs2]
-trait FileBeHaveMatchers extends BeHaveMatchers { outer: FileBaseMatchers =>
+trait FileBeHaveMatchers extends BeHaveMatchers {
+  private val outer = FileBaseMatchers
   /**
    * matcher aliases and implicits to use with BeVerb and HaveVerb
    */
-  implicit def toFileResultMatcher(result: MatchResult[HasPath]): FileResultMatcher =
-    new FileResultMatcher(result)
-
-  class FileResultMatcher(result: MatchResult[HasPath]):
-    def hidden = result(beHidden)
-    def readable = result(beReadable)
-    def writable = result(beWritable)
-    def absolute = result(beAbsolute)
-    def aFile = result(beAFile)
+  extension (result: MatchResult[HasPath]):
+    def hidden = result(outer.beHidden)
+    def readable = result(outer.beReadable)
+    def writable = result(outer.beWritable)
+    def absolute = result(outer.beAbsolute)
+    def aFile = result(outer.beAFile)
     def exist = result(outer.exist)
-    def aDirectory = result(beADirectory)
-    def name(name: String) = result(haveName(name))
-    def paths(list: String) = result(haveList(list))
-    def absolutePath(path: String) = result(haveAbsolutePath(path))
-    def canonicalPath(path: String) = result(haveCanonicalPath(path))
-    def parent(path: String) = result(haveParent(path))
-  def hidden = beHidden
-  def readable = beReadable
-  def writable = beWritable
-  def absolute = beAbsolute
-  def aFile = beAFile
-  def aDirectory = beADirectory
-  def name(name: String) = haveName(name)
-  def paths(list: String) = haveList(list)
-  def absolutePath(path: String) = haveAbsolutePath(path)
-  def canonicalPath(path: String) = haveCanonicalPath(path)
-  def parent(path: String) = haveParent(path)
+    def aDirectory = result(outer.beADirectory)
+    def name(name: String) = result(outer.haveName(name))
+    def paths(list: String) = result(outer.haveList(list))
+    def absolutePath(path: String) = result(outer.haveAbsolutePath(path))
+    def canonicalPath(path: String) = result(outer.haveCanonicalPath(path))
+    def parent(path: String) = result(outer.haveParent(path))
+
+  def hidden = outer.beHidden
+  def readable = outer.beReadable
+  def writable = outer.beWritable
+  def absolute = outer.beAbsolute
+  def aFile = outer.beAFile
+  def aDirectory = outer.beADirectory
+  def name(name: String) = outer.haveName(name)
+  def paths(list: String) = outer.haveList(list)
+  def absolutePath(path: String) = outer.haveAbsolutePath(path)
+  def canonicalPath(path: String) = outer.haveCanonicalPath(path)
+  def parent(path: String) = outer.haveParent(path)
 }
 private[specs2]
 class PathMatcher(test: String => Boolean, ok: String, ko: String) extends Matcher[String]:

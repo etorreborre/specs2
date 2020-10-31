@@ -90,10 +90,9 @@ trait FilesContentMatchers extends FileMatchers with LinesContentMatchers with T
     def withFilter(filter: File => Boolean) = copy(filter = filter)
     def withMatcher(m: Matcher[(File, File)]) = copy(filesMatcher = m)
 
-  private implicit def LocalPathsLinesContent: LinesContent[LocalPaths] = new LinesContent[LocalPaths] {
+  private given LinesContent[LocalPaths]:
     def name(lp: LocalPaths) = lp.base.path
     def lines(lp: LocalPaths) = lp.localPaths
-  }
 
   private case class LocalPaths(base: DirectoryPath, filter: FilePath => Boolean):
     def files = FilePathReader.listFilePaths(base).map(_.filter(filter).map(_.relativeTo(base)).sortBy(_.path)).runMonoid
