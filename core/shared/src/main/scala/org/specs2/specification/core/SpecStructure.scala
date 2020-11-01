@@ -164,7 +164,7 @@ object SpecStructure:
   private def selected(env: Env)(spec: SpecStructure): List[Fragment] =
     select(env)(spec).fragments.fragments.runMonoid(env.specs2ExecutionEnv)
 
-  implicit class SpecStructureOps(s: SpecStructure)(implicit ee: ExecutionEnv):
+  implicit class SpecStructureOps(s: SpecStructure)(using ee: ExecutionEnv):
     def textsList: List[Fragment] =
       s.texts.run(ee)
 
@@ -185,4 +185,3 @@ object SpecStructure:
 
     def linkReferencesList: List[SpecificationRef] =
       s.linkReferences.run(ee)
-

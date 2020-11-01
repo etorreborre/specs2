@@ -8,7 +8,7 @@ trait Traverse[F[_]] extends Functor[F]:
   /** Transform `fa` using `f`, collecting all the `G`s with `ap`. */
   def traverseImpl[G[_]: Applicative,A,B](fa: F[A])(f: A => G[B]): G[F[B]]
 
-  class Traversal[G[_]](implicit G: Applicative[G]):
+  class Traversal[G[_]](using G: Applicative[G]):
     def run[A,B](fa: F[A])(f: A => G[B]): G[F[B]] = traverseImpl[G,A,B](fa)(f)
 
   def traversal[G[_]:Applicative]: Traversal[G] =
@@ -18,7 +18,7 @@ trait Traverse[F[_]] extends Functor[F]:
     traversal[G].run(fa)(f)
 
   final def traverseM[A, G[_], B](fa: F[A])(f: A => G[F[B]])(using G: Applicative[G], F: Monad[F]): G[F[B]] =
-    G.map(G.traverse(fa)(f)(this))(F.join)
+    G.map(G.traverse(fa)(f)(using this))(F.join)
 
   /** Traverse with the identity function. */
   def sequence[G[_]: Applicative,A](fga: F[G[A]]): G[F[A]] =

@@ -10,7 +10,7 @@ trait Safe[F[_]]:
   def attempt[A](fa: F[A]): F[Throwable Either A]
 
 object Safe:
-  def apply[F[_]](implicit f: Safe[F]): Safe[F] =
+  def apply[F[_]](using f: Safe[F]): Safe[F] =
     f
 
 /**

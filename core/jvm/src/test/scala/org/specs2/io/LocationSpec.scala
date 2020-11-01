@@ -15,7 +15,7 @@ class LocationSpec extends org.specs2.mutable.Spec with TypedEqual:
       given spec as LocationUnitSpecification = new LocationUnitSpecification(ee)
 
       "for the first piece of text, with 'should'" >> {
-        textAt(index = 0)(spec) ==== 17
+        textAt(index = 0) ==== 17
       }
       "for the first example, with 'in'" >> {
         exampleAt(index = 0) ==== 15
@@ -60,11 +60,11 @@ class LocationSpec extends org.specs2.mutable.Spec with TypedEqual:
     }
   }
 
-  def textAt(index: Int)(implicit spec: WithFragments) = fragmentLine(isText, index)
-  def exampleAt(index: Int)(implicit spec: WithFragments) = fragmentLine(isExample, index)
-  def brAt(index: Int)(implicit spec: WithFragments) = fragmentLine(isFormatting, index)
+  def textAt(index: Int)(using spec: WithFragments) = fragmentLine(isText, index)
+  def exampleAt(index: Int)(using spec: WithFragments) = fragmentLine(isExample, index)
+  def brAt(index: Int)(using spec: WithFragments) = fragmentLine(isFormatting, index)
 
-  def fragmentLine(selector: Function[Fragment, Boolean], index: Int)(implicit spec: WithFragments) =
+  def fragmentLine(selector: Function[Fragment, Boolean], index: Int)(using spec: WithFragments) =
 
     val filter = StackTraceFilter(trace =>
       !Seq("scala.",
@@ -72,11 +72,11 @@ class LocationSpec extends org.specs2.mutable.Spec with TypedEqual:
            "org.specs2.specification.",
            "org.specs2.mutable.").exists(trace.getClassName.startsWith))
 
-    val fragmentLocation = fragments(spec).filter(selector).apply(index).location
+    val fragmentLocation = fragments(using spec).filter(selector).apply(index).location
 
     fragmentLocation.lineNumber
 
-  def fragments(implicit spec: WithFragments): List[Fragment] =
+  def fragments(using spec: WithFragments): List[Fragment] =
     spec.fragmentsList
 
   step(ee.shutdown())

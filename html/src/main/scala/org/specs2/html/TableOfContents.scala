@@ -24,7 +24,7 @@ trait TableOfContents:
     val sorted = SpecStructure.reverseTopologicalSort(specifications)(env.specs2ExecutionEnv).map(_.toList).getOrElse(List())
     for
       pages <- readHtmlPages(sorted, outDir, fileSystem)
-      toc   =  createToc(pages, outDir, entryMaxSize)(env.specs2ExecutionEnv)
+      toc   =  createToc(pages, outDir, entryMaxSize)(using env.specs2ExecutionEnv)
       _     <- saveHtmlPages(pages.map(page => page.addToc(toc(page))), fileSystem)
     yield ()
 
@@ -42,7 +42,7 @@ trait TableOfContents:
       else None
     }.sequence
 
-  def createToc(pages: List[SpecHtmlPage], outDir: DirectoryPath, entryMaxSize: Int)(implicit ee: ExecutionEnv): SpecHtmlPage => NodeSeq =
+  def createToc(pages: List[SpecHtmlPage], outDir: DirectoryPath, entryMaxSize: Int)(using ee: ExecutionEnv): SpecHtmlPage => NodeSeq =
     pages match
       case Nil => (page: SpecHtmlPage) => NodeSeq.Empty
       case main :: rest =>
@@ -67,7 +67,7 @@ trait TableOfContents:
           result
         }
 
-  def pagesTree(page: SpecHtmlPage, pages: List[SpecHtmlPage])(implicit ee: ExecutionEnv): TreeLoc[SpecHtmlPage] =
+  def pagesTree(page: SpecHtmlPage, pages: List[SpecHtmlPage])(using ee: ExecutionEnv): TreeLoc[SpecHtmlPage] =
     Tree.unfoldTree((page, (pages, List[SpecHtmlPage]()))) { current =>
       val (p1: SpecHtmlPage, (remaining, visited)) = current
       val (dependents, others) = remaining.partition(p2 => p1.specification.dependsOn(p2.specification)(ee) && !visited.contains(p2))

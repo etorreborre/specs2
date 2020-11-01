@@ -48,7 +48,7 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
   /** add a new Header, with at least one Field */
   def th(h1: Field[_], hs: Field[_]*): Form = tr(Row.tr(FieldCell(h1.header), hs.map((f: Field[_]) => FieldCell(f.header)):_*))
   /** add a new Header */
-  def th(hs: Seq[String])(implicit p: ImplicitParam): Form = Use.ignoring(p)(th(hs.map(Field(_))))
+  def th(hs: Seq[String])(using p: ImplicitParam): Form = Use.ignoring(p)(th(hs.map(Field(_))))
   /** add a new Header, with at least one Field */
   def th(h1: String, hs: String*): Form = th(Field(h1), hs.map(Field(_)):_*)
   /** add a new Row, with at least one Cell */
@@ -85,9 +85,12 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
   def text: String = allRows.map(_.text(maxSizes)).mkString("\n")
 
   /** @return an xml description of this form */
-  def toXml(implicit args: Arguments = Arguments()) = Form.toXml(this)(args)
+  def toXml(using args: Arguments = Arguments()): NodeSeq =
+    Form.toXml(this)
+
   /** @return an xml description of this form, to be embedded in a Cell */
-  def toCellXml(implicit args: Arguments = Arguments()) = <td class="info">{Form.toXml(this)(args)}</td>
+  def toCellXml(using args: Arguments = Arguments()): NodeSeq =
+    <td class="info">{Form.toXml(this)(args)}</td>
 
   def subset(f1: Traversable[Form], f2: Traversable[Form]): Form =
     addLines(FormDiffs.subset(f1.toSeq, f2.toSeq))
@@ -125,7 +128,7 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
       if executedResult.isSuccess then
         "success"
       else
-        Form.toXml(executed)(Arguments())
+        Form.toXml(executed)(using Arguments())
     }
 
   /**
@@ -188,7 +191,7 @@ case object Form:
    *
    * @return the xml representation of a Form
    */
-  def toXml(form: Form)(implicit args: Arguments) =
+  def toXml(form: Form)(using args: Arguments) =
     <form>
     <table>{titleAndRows(form)}</table>{formStacktraces(form)}</form>
   /**
@@ -197,7 +200,7 @@ case object Form:
    *
    * @return the xml representation of a Form
    */
-  def titleAndRows(form: Form)(implicit args: Arguments = Arguments()) =
+  def titleAndRows(form: Form)(using args: Arguments = Arguments()) =
     val colnumber = Xml.colnumber(new FormCell(form))
     title(form, colnumber) ++
     rows(form, colnumber)
@@ -206,7 +209,7 @@ case object Form:
    * ready to be embedded in a table
    *
    */
-  def formStacktraces(form: Form)(implicit args: Arguments = Arguments()) =
+  def formStacktraces(form: Form)(using args: Arguments = Arguments()) =
     val traces = Xml.stacktraces(new FormCell(form))
     if traces.isEmpty then NodeSeq.Empty
     else <pre><i>[click on failed cells to see the stacktraces]</i>{traces}</pre>
@@ -215,12 +218,12 @@ case object Form:
    * Private methods for building the Form xml
    */
   private def title(form: Form, colnumber: Int) = form.title.map(t => <tr><th colspan={(colnumber+1).toString}>{t}</th></tr>).toList.reduceNodes
-  private def rows(form: Form, colnumber: Int)(implicit args: Arguments) = form.rows.map(row(_, colnumber)).reduceNodes
-  private def row(r: Row, colnumber: Int)(implicit args: Arguments) =
+  private def rows(form: Form, colnumber: Int)(using args: Arguments) = form.rows.map(row(_, colnumber)).reduceNodes
+  private def row(r: Row, colnumber: Int)(using args: Arguments) =
     val spanned = r.cells.dropRight(1).map(cell(_)) ++ cell(r.cells.last, colnumber - r.cells.size + 1)
     <tr>{spanned}</tr>
 
-  private def cell(c: Cell, colnumber: Int = 0)(implicit args: Arguments) =
+  private def cell(c: Cell, colnumber: Int = 0)(using args: Arguments) =
     if colnumber > 1 then
       c.xml(args).toList match
       case start :+ (e: Elem) => start ++ (e % ("colspan" -> colnumber.toString))

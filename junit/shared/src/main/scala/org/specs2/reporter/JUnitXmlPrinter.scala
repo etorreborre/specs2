@@ -44,7 +44,7 @@ case class JUnitXmlPrinter(env: Env) extends Printer:
     fromFoldLeft[Action, (Fragment, Description), TestSuite](suite) { case (res, (f, d)) =>
       if Fragment.isExample(f) then
         f.executedResult.map { case ExecutedResult(result, timer) =>
-          res.addTest(new TestCase(d, result, timer.totalMillis)(env.arguments))
+          res.addTest(new TestCase(d, result, timer.totalMillis)(using env.arguments))
         }
       else Action.pure(res)
     }
@@ -81,7 +81,7 @@ case class JUnitXmlPrinter(env: Env) extends Printer:
             ${System.getProperties.entrySet.asScala.toSeq.map(p => s"""<property name="${escape(p.getKey.toString)}" value="${escape(p.getValue.toString)}" ></property>""").mkString("\n")}
           </properties>"""
 
-  case class TestCase(desc: Description, result: Result, time: Long)(implicit args: Arguments):
+  case class TestCase(desc: Description, result: Result, time: Long)(using args: Arguments):
     def xml =
       s"""<testcase name="${escape(desc.getMethodName)}" classname="${escape(desc.getClassName)}" time="${escape(formatTime(time))}">
             $testError$testFailure$testSkipped$testPending

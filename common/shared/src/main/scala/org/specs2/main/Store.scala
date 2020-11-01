@@ -23,11 +23,10 @@ case class Store(_reset:         Option[Boolean]          = None,
 
 
 object Store extends Extract:
-  def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): Store =
+  def extract(using arguments: Seq[String], systemProperties: SystemProperties): Store =
     new Store (
       _reset = bool("resetStore"),
       _never = bool("neverStore")
     )
 
   val allValueNames = Seq("resetStore", "neverStore")
-

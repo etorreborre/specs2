@@ -19,7 +19,7 @@ trait FragmentFactory:
   def example[T : AsResult](description: Description, result: =>T): Fragment
   def example[T : AsResult](text: String, withDescription: String => T): Fragment
   def example[T : AsResult](text: String, withDescriptionAndEnv: (String, Env) => T): Fragment
-  def example[T](text: String, withEnv: Env => T)(implicit as: AsResult[T], p: ImplicitParam): Fragment
+  def example[T](text: String, withEnv: Env => T)(using as: AsResult[T], p: ImplicitParam): Fragment
 
   def tag(names: String*): Fragment
   def taggedAs(names: String*): Fragment
@@ -61,7 +61,7 @@ trait DefaultFragmentFactory extends FragmentFactory:
   def example[T : AsResult](text: String, withText: String => T): Fragment = example(text, withText(text))
   def example[T : AsResult](text: String, withDescriptionAndEnv: (String, Env) => T): Fragment =
     example(text, Execution.withEnv((env: Env) => withDescriptionAndEnv(text, env)))
-  def example[T](text: String, withEnv: Env => T)(implicit as: AsResult[T], p: ImplicitParam): Fragment =
+  def example[T](text: String, withEnv: Env => T)(using as: AsResult[T], p: ImplicitParam): Fragment =
     example(text, Execution.withEnv(withEnv))
 
   def tag(names: String*): Fragment       = Fragment(Description.tag(names:_*), Execution.NoExecution)
@@ -118,8 +118,8 @@ class ContextualFragmentFactory(factory: FragmentFactory, context: Env => Contex
   def example[T : AsResult](s: String, withDescriptionAndEnv: (String, Env) => T): Fragment =
     factory.example(s, (s: String, e: Env) => context(e)(withDescriptionAndEnv(s, e)))
 
-  def example[T](text: String, withEnv: Env => T)(implicit as: AsResult[T], p: ImplicitParam): Fragment =
-  factory.example(text, (e: Env) => context(e)(withEnv(e)))(Result.resultAsResult, p)
+  def example[T](text: String, withEnv: Env => T)(using as: AsResult[T], p: ImplicitParam): Fragment =
+  factory.example(text, (e: Env) => context(e)(withEnv(e)))
 
   def tag(names: String*): Fragment                = factory.tag(names:_*)
   def taggedAs(names: String*): Fragment           = factory.taggedAs(names:_*)
@@ -159,7 +159,7 @@ trait DelegatedFragmentFactory extends FragmentsFactory with FragmentFactory:
   def example[T : AsResult](description: Description, result: =>T): Fragment = factory.example(description, result)
   def example[T : AsResult](s: String, withDescription: String => T): Fragment = factory.example(s, withDescription)
   def example[T : AsResult](text: String, withDescriptionAndEnv: (String, Env) => T): Fragment = factory.example(text, withDescriptionAndEnv)
-  def example[T](text: String, withEnv: Env => T)(implicit as: AsResult[T], p: ImplicitParam): Fragment = factory.example(text, withEnv)(as, p)
+  def example[T](text: String, withEnv: Env => T)(using as: AsResult[T], p: ImplicitParam): Fragment = factory.example(text, withEnv)
 
   def tag(names: String*): Fragment             = factory.tag(names:_*)
   def taggedAs(names: String*): Fragment        = factory.taggedAs(names:_*)

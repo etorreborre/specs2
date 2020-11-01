@@ -31,7 +31,7 @@ case class CommandLine(_arguments: Seq[String] = Seq()) extends ShowArgs:
    * values can also be retrieved from system properties set with the regular jvm syntax `-Dname=value`
    */
   def value(name: String): Option[String] =
-    Arguments.value(name)(_arguments, SystemProperties)
+    Arguments.value(name)(using _arguments, SystemProperties)
 
   def valueOr(name: String, defaultValue: String) = value(name).getOrElse(defaultValue)
 
@@ -44,19 +44,19 @@ case class CommandLine(_arguments: Seq[String] = Seq()) extends ShowArgs:
   def file(name: String) = value(name).map(n => FilePath.unsafe(new File(n).getAbsolutePath).asAbsolute)
   def fileOr(name: String, defaultValue: FilePath) = file(name).getOrElse(defaultValue)
 
-  def int(name: String) = Arguments.int(name)(_arguments, SystemProperties)
+  def int(name: String) = Arguments.int(name)(using _arguments, SystemProperties)
   def intOr(name: String, defaultValue: Int) = int(name).getOrElse(defaultValue)
 
-  def long(name: String) = Arguments.long(name)(_arguments, SystemProperties)
+  def long(name: String) = Arguments.long(name)(using _arguments, SystemProperties)
   def longOr(name: String, defaultValue: Long) = long(name).getOrElse(defaultValue)
 
-  def double(name: String) = Arguments.double(name)(_arguments, SystemProperties)
+  def double(name: String) = Arguments.double(name)(using _arguments, SystemProperties)
   def doubleOr(name: String, defaultValue: Double) = double(name).getOrElse(defaultValue)
 
-  def float(name: String) = Arguments.float(name)(_arguments, SystemProperties)
+  def float(name: String) = Arguments.float(name)(using _arguments, SystemProperties)
   def floatOr(name: String, defaultValue: Float) = float(name).getOrElse(defaultValue)
 
-  def bool(name: String) = Arguments.bool(name)(_arguments, SystemProperties)
+  def bool(name: String) = Arguments.bool(name)(using _arguments, SystemProperties)
   def boolOr(name: String, defaultValue: Boolean) = bool(name).getOrElse(defaultValue)
 
   def filter(included: String*) = copy(_arguments = arguments.filter(included.toSet.contains))
@@ -69,7 +69,7 @@ object CommandLine extends Extract:
   def create(values: String*): CommandLine =
     new CommandLine(values)
 
-  def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): CommandLine =
+  def extract(using arguments: Seq[String], systemProperties: SystemProperties): CommandLine =
     new CommandLine(_arguments = value("commandline").map(splitValues).getOrElse(Seq()) ++ arguments)
 
   val allValueNames = Select.allValueNames ++ Store.allValueNames ++ Execute.allValueNames ++ Report.allValueNames
@@ -79,4 +79,3 @@ object CommandLine extends Extract:
 
   def splitValues(arguments: Seq[String]): Seq[String] =
     arguments.splitDashed(allValueNames)
-

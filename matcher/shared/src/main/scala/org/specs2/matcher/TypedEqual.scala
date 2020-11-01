@@ -14,9 +14,9 @@ trait TypedEqual { this: ExpectationsCreation =>
    */
   extension [T](t: =>T)(using not: Not[NoTypedEqual])
     /** typed equality matcher on Expectables */
-    def ====(other: =>T)(implicit di: Diffable[T]): MatchResult[T] = createExpectable(t).applyMatcher(new EqualityMatcher(other))
+    def ====(other: =>T)(using di: Diffable[T]): MatchResult[T] = createExpectable(t).applyMatcher(new EqualityMatcher(other))
     /** ! typed equality matcher on Expectables */
-    def !===(other: =>T)(implicit di: Diffable[T]): MatchResult[T] = createExpectable(t).applyMatcher(new EqualityMatcher(other).not)
+    def !===(other: =>T)(using di: Diffable[T]): MatchResult[T] = createExpectable(t).applyMatcher(new EqualityMatcher(other).not)
 
   extension [T, S >: T](t: =>T)(using not: Not[NoTypedEqual])
     /** equality matcher on Expectables */

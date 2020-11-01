@@ -27,7 +27,7 @@ trait S2StringContext extends S2StringContext1:
 
   /** create an example based on an execution.
    */
-  implicit inline def asExecutionIsInterpolated[R : AsExecution](inline r: =>R)(implicit inline factory: FragmentFactory): Interpolated =
+  implicit inline def asExecutionIsInterpolated[R : AsExecution](inline r: =>R)(using inline factory: FragmentFactory): Interpolated =
     ${executionInterpolated('{AsExecution[R].execute(r)}, 'factory)}
 
   given Conversion[SpecificationRef, Interpolated]:

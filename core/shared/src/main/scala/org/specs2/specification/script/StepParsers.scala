@@ -14,17 +14,17 @@ import text.RegexExtractor
 trait StepParsers extends ImplicitParameters:
   given stepParserRegex as Regex = """\{([^}]+)\}""".r
 
-  def apply[T](f: String => T)(implicit fpr: Regex = stepParserRegex): DelimitedStepParser[T] = new DelimitedStepParser1[T](f).withRegex(fpr)
-  def apply[T](f: (String, String) => T)(implicit fpr: Regex): DelimitedStepParser[T] = new DelimitedStepParser2[T](f).withRegex(fpr)
-  def apply[T](f: (String, String, String) => T)(implicit fpr: Regex): DelimitedStepParser[T] = new DelimitedStepParser3[T](f).withRegex(fpr)
-  def apply[T](f: (String, String, String, String) => T)(implicit fpr: Regex): DelimitedStepParser[T] = new DelimitedStepParser4[T](f).withRegex(fpr)
-  def apply[T](f: (String, String, String, String, String) => T)(implicit fpr: Regex): DelimitedStepParser[T] = new DelimitedStepParser5[T](f).withRegex(fpr)
-  def apply[T](f: (String, String, String, String, String, String) => T)(implicit fpr: Regex): DelimitedStepParser[T] = new DelimitedStepParser6[T](f).withRegex(fpr)
-  def apply[T](f: (String, String, String, String, String, String, String) => T)(implicit fpr: Regex): DelimitedStepParser[T] = new DelimitedStepParser7[T](f).withRegex(fpr)
-  def apply[T](f: (String, String, String, String, String, String, String, String) => T)(implicit fpr: Regex): DelimitedStepParser[T] = new DelimitedStepParser8[T](f).withRegex(fpr)
-  def apply[T](f: (String, String, String, String, String, String, String, String, String) => T)(implicit fpr: Regex): DelimitedStepParser[T] = new DelimitedStepParser9[T](f).withRegex(fpr)
-  def apply[T](f:(String, String, String, String, String, String, String, String, String, String) => T)(implicit fpr: Regex): DelimitedStepParser[T] = new DelimitedStepParser10[T](f).withRegex(fpr)
-  def seq[T](f: Seq[String] => T)(implicit fpr: Regex = stepParserRegex): DelimitedStepParser[T] = new DelimitedStepParserSeq[T](f).withRegex(fpr)
+  def apply[T](f: String => T)(using fpr: Regex = stepParserRegex): DelimitedStepParser[T] = new DelimitedStepParser1[T](f).withRegex(fpr)
+  def apply[T](f: (String, String) => T)(using fpr: Regex): DelimitedStepParser[T] = new DelimitedStepParser2[T](f).withRegex(fpr)
+  def apply[T](f: (String, String, String) => T)(using fpr: Regex): DelimitedStepParser[T] = new DelimitedStepParser3[T](f).withRegex(fpr)
+  def apply[T](f: (String, String, String, String) => T)(using fpr: Regex): DelimitedStepParser[T] = new DelimitedStepParser4[T](f).withRegex(fpr)
+  def apply[T](f: (String, String, String, String, String) => T)(using fpr: Regex): DelimitedStepParser[T] = new DelimitedStepParser5[T](f).withRegex(fpr)
+  def apply[T](f: (String, String, String, String, String, String) => T)(using fpr: Regex): DelimitedStepParser[T] = new DelimitedStepParser6[T](f).withRegex(fpr)
+  def apply[T](f: (String, String, String, String, String, String, String) => T)(using fpr: Regex): DelimitedStepParser[T] = new DelimitedStepParser7[T](f).withRegex(fpr)
+  def apply[T](f: (String, String, String, String, String, String, String, String) => T)(using fpr: Regex): DelimitedStepParser[T] = new DelimitedStepParser8[T](f).withRegex(fpr)
+  def apply[T](f: (String, String, String, String, String, String, String, String, String) => T)(using fpr: Regex): DelimitedStepParser[T] = new DelimitedStepParser9[T](f).withRegex(fpr)
+  def apply[T](f:(String, String, String, String, String, String, String, String, String, String) => T)(using fpr: Regex): DelimitedStepParser[T] = new DelimitedStepParser10[T](f).withRegex(fpr)
+  def seq[T](f: Seq[String] => T)(using fpr: Regex = stepParserRegex): DelimitedStepParser[T] = new DelimitedStepParserSeq[T](f).withRegex(fpr)
 
   /** factory method to create a Given or a Then element from a regex */
   def readAs(regex: String) = new ReadAs(regex.r)
@@ -46,7 +46,7 @@ trait StepParsers extends ImplicitParameters:
     def apply(f: (String, String, String, String, String, String, String, String) => Unit) = and[Unit](f)
     def apply(f: (String, String, String, String, String, String, String, String, String) => Unit) = and[Unit](f)
     def apply(f: (String, String, String, String, String, String, String, String, String, String) => Unit) = and[Unit](f)
-    def apply(f: Seq[String] => Unit)(implicit p: ImplicitParam) = and[Unit](f)(p,p)
+    def apply(f: Seq[String] => Unit)(using p: ImplicitParam) = and[Unit](f)
 
     trait ReadAsParser[T] extends StepParser[T]:
       def parse(text: String) = trye((text, parse1(text)))(identity)
@@ -84,7 +84,7 @@ trait StepParsers extends ImplicitParameters:
     def and[T](f: (String, String, String, String, String, String, String, String, String, String) => T) = new ReadAsParser [T] {
       def parse1(text: String) = f.tupled(extract10(text, regex, groups))
     }
-    def and[T](f: Seq[String] => T)(implicit p1: ImplicitParam, p2: ImplicitParam) = new ReadAsParser[T] {
+    def and[T](f: Seq[String] => T)(using p1: ImplicitParam, p2: ImplicitParam) = new ReadAsParser[T] {
       Use(p1, p2)
       def parse1(text: String) = f(extractAll(text, regex, groups))
     }

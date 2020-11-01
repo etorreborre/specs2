@@ -33,7 +33,7 @@ case class HtmlPrinter(env: Env, searchPage: SearchPage, logger: Logger = Consol
     getHtmlOptions(env.arguments) >>= { (options: HtmlOptions) =>
       searchPage.createIndex(env, specifications, options).when(options.search) >>
       createToc(env, specifications, options.outDir, options.tocEntryMaxSize, env.fileSystem).when(options.toc) >>
-      reportMissingSeeRefs(specifications, options.outDir)(env.specs2ExecutionEnv).when(options.warnMissingSeeRefs)
+      reportMissingSeeRefs(specifications, options.outDir)(using env.specs2ExecutionEnv).when(options.warnMissingSeeRefs)
     }
   }.toAction
 
@@ -128,7 +128,7 @@ case class HtmlPrinter(env: Env, searchPage: SearchPage, logger: Logger = Consol
   /**
    * Create the Html file by invoking Pandoc
    */
-  def makePandocHtml(spec: SpecStructure, stats: Stats, timer: SimpleTimer, pandoc: Pandoc, options: HtmlOptions, env: Env): Operation[Unit] = 
+  def makePandocHtml(spec: SpecStructure, stats: Stats, timer: SimpleTimer, pandoc: Pandoc, options: HtmlOptions, env: Env): Operation[Unit] =
     import env.{fileSystem => fs}
 
     val variables1 =
@@ -177,7 +177,7 @@ case class HtmlPrinter(env: Env, searchPage: SearchPage, logger: Logger = Consol
         else
           fs.copyDir(DirectoryPath.unsafe(url.toURI), outputDir / src)
 
-  def reportMissingSeeRefs(specs: List[SpecStructure], outDir: DirectoryPath)(implicit ee: ExecutionEnv): Operation[Unit] = for
+  def reportMissingSeeRefs(specs: List[SpecStructure], outDir: DirectoryPath)(using ee: ExecutionEnv): Operation[Unit] = for
     missingSeeRefs <- specs.flatMap(_.seeReferencesList).distinct.filterM(ref => FilePathReader.doesNotExist(SpecHtmlPage.outputPath(outDir, ref.specClassName)))
     _              <- logger.warn("The following specifications are being referenced but haven't been reported\n"+
                            missingSeeRefs.map(_.specClassName).distinct.mkString("\n")).unless(missingSeeRefs.isEmpty)

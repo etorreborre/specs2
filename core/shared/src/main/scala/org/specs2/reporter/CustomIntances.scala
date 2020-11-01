@@ -16,14 +16,14 @@ case class CustomInstances(arguments: Arguments, loader: ClassLoader, logger: Lo
     else noInstance(noRequiredMessage)
 
   /** create a custom instance */
-  def createCustomInstance[T <: AnyRef](name: String, failureMessage: String => String, noRequiredMessage: String)(implicit m: ClassTag[T]): Operation[Option[T]] =
+  def createCustomInstance[T <: AnyRef](name: String, failureMessage: String => String, noRequiredMessage: String)(using m: ClassTag[T]): Operation[Option[T]] =
     arguments.commandLine.value(name) match
       case Some(className) => createInstance[T](name, className, failureMessage, noRequiredMessage)
       case None => noInstance(noRequiredMessage)
 
-  private def createInstance[T <: AnyRef](name: String, className: String, failureMessage: String => String, noRequiredMessage: String)(implicit m: ClassTag[T]): Operation[Option[T]] =
+  private def createInstance[T <: AnyRef](name: String, className: String, failureMessage: String => String, noRequiredMessage: String)(using m: ClassTag[T]): Operation[Option[T]] =
     for
-      instance <- Classes.createInstanceEither[T](className, loader)(m)
+      instance <- Classes.createInstanceEither[T](className, loader)
       result <-
         instance match
           case Right(i) => Operation.ok(Option(i))

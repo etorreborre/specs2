@@ -139,7 +139,7 @@ case class Stats(specs:        Int = 0,
   /**
    * display the statistics on 2 lines, with the time and trend
    */
-  def display(implicit args: Arguments) =
+  def display(using args: Arguments) =
     args.colors.stats("Finished in "+timer.time+"\n", args.color) +
       displayResults
 
@@ -147,7 +147,7 @@ case class Stats(specs:        Int = 0,
    * display the results on one line, always displaying examples/failures/errors
    * and only displaying expectations/pending/skipped if necessary
    */
-  def displayResults(implicit args: Arguments) =
+  def displayResults(using args: Arguments) =
     def trendIsDefined(f: Stats => Int) = trend map (t => f(t) != 0) getOrElse false
 
     def displayTrendValue(f: Stats => Int): String =

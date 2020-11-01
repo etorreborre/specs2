@@ -77,7 +77,7 @@ case class Action[A](private[control] runNow: ExecutionEnv => Future[A], timeout
     runOption(ee).void.getOrElse(())
 
   /** run the action and the return an empty value in case of an error */
-  def runMonoid(ee: ExecutionEnv)(implicit m: Monoid[A]): A =
+  def runMonoid(ee: ExecutionEnv)(using m: Monoid[A]): A =
     runOption(ee).getOrElse(m.zero)
 
   /** run the action and throw any exception */

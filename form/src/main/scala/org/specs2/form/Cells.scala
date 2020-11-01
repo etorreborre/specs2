@@ -47,23 +47,23 @@ trait Text:
  */
 trait Xml:
   /** @return an xml representation */
-  def xml(implicit args: Arguments): NodeSeq
+  def xml(using args: Arguments): NodeSeq
 
 /**
  * utility functions for creating xml for Cells
  */
 object Xml:
   /** @return the stacktraces of a Cell depending on its type and execution result */
-  def stacktraces(cell: Cell)(implicit args: Arguments): NodeSeq = cell match
+  def stacktraces(cell: Cell)(using args: Arguments): NodeSeq = cell match
     case FormCell(f: Form)                           => f.rows.map(stacktraces).reduceNodes
     case PropCell(_, Some(e @ Error(_, _)))          => stacktraces(e)
     case PropCell(_, Some(f @ Failure(_, _, _, _)))  => stacktraces(f)
     case FieldCell(_, Some(e @ Error(_, _)))         => stacktraces(e)
     case other                                       => NodeSeq.Empty
 
-  private def stacktraces(row: Row)(implicit args: Arguments): NodeSeq = row.cells.map(stacktraces).reduceNodes
+  private def stacktraces(row: Row)(using args: Arguments): NodeSeq = row.cells.map(stacktraces).reduceNodes
 
-  private def stacktraces(e: Result with ResultStackTrace)(implicit args: Arguments): NodeSeq =
+  private def stacktraces(e: Result with ResultStackTrace)(using args: Arguments): NodeSeq =
     <div class="formstacktrace details" id={System.identityHashCode(e).toString}>
       {e.message.notNull+" ("+e.location(args.traceFilter)+")"}
       {e.stackTrace.map(st => <div>{st}</div>)}
@@ -86,7 +86,7 @@ case class TextCell(s: String, result: Option[Result] = None, decorator: Decorat
 
   def text = s
 
-  def xml(implicit args: Arguments) = <td class={result.fold("none")(_.statusName)} style="info">{decorateValue(Markdown.toXhtml(text))}</td>
+  def xml(using args: Arguments) = <td class={result.fold("none")(_.statusName)} style="info">{decorateValue(Markdown.toXhtml(text))}</td>
 
   def execute = result.getOrElse(Skipped())
   def setResult(r: Result) = TextCell(s, result)
@@ -111,7 +111,7 @@ object TextCell:
 case class FieldCell(f: Field[_], result: Option[Result] = None) extends Cell:
   def text = f.toString
 
-  def xml(implicit args: Arguments) =
+  def xml(using args: Arguments) =
     val executedValue = f.valueOrResult match
       case Left(e)  => e
       case Right(e) => e
@@ -135,7 +135,7 @@ case class FieldCell(f: Field[_], result: Option[Result] = None) extends Cell:
 case class EffectCell(e: Effect[_], result: Option[Result] = None) extends Cell:
   def text = e.toString
 
-  def xml(implicit args: Arguments) =
+  def xml(using args: Arguments) =
     val executedResult = execute
     <td style={e.labelStyles} class="info">{e.decorateLabel(e.label)}</td> ++
     (<td class={executedResult.statusName} onclick={"showHide("+System.identityHashCode(executedResult).toString+")"}>{executedResult.message}</td> orEmptyWhen executedResult.isSuccess)
@@ -155,7 +155,7 @@ case class PropCell(p: Prop[_,_], result: Option[Result] = None) extends Cell:
   def executeCell = PropCell(p, result.orElse(Some(p.execute)))
   def setResult(r: Result) = PropCell(p, Some(r))
 
-  def xml(implicit args: Arguments): NodeSeq =
+  def xml(using args: Arguments): NodeSeq =
     val executed = result.getOrElse(skipped)
     (<td style={p.labelStyles}>{p.decorateLabel(p.label)}</td> orEmptyWhen p.label.isEmpty) ++
     (<td class={executed.statusName}>{p.decorateValue(p.actualValue.toOption.getOrElse(""))}</td> orEmptyWhen p.actualValue.toOption.isEmpty) ++
@@ -170,7 +170,8 @@ class FormCell(_form: =>Form, result: Option[Result] = None) extends Cell:
 
   def text: String = form.text
 
-  def xml(implicit args: Arguments) = form.toCellXml(args)
+  def xml(using args: Arguments): NodeSeq =
+    form.toCellXml
 
   def execute = result.getOrElse(form.execute)
 
@@ -193,7 +194,7 @@ object FormCell:
 class LazyCell(_cell: =>Cell) extends Cell:
   lazy val cell = _cell
   def text: String = cell.text
-  def xml(implicit args: Arguments) = cell.xml(args)
+  def xml(using args: Arguments) = cell.xml
   def execute = cell.execute
   def executeCell = cell.executeCell
   def setResult(r: Result) = cell.setResult(r)
@@ -205,7 +206,7 @@ object LazyCell:
 class XmlCell(_theXml: =>NodeSeq) extends Cell:
   lazy val theXml = _theXml
   def text: String = theXml.text
-  def xml(implicit args: Arguments) = theXml
+  def xml(using args: Arguments) = theXml
   def execute = success
   def executeCell = this
   def setResult(r: Result) = this

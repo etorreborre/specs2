@@ -70,7 +70,7 @@ case class Report(
 
 
 object Report extends Extract:
-  def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): Report =
+  def extract(using arguments: Seq[String], systemProperties: SystemProperties): Report =
     new Report (
       _showOnly          = value("showOnly").orElse(bool("xOnly").map(_ => xonlyFlags)),
       _failtrace         = bool("failTrace"),

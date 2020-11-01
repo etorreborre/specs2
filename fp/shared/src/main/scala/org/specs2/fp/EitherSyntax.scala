@@ -54,7 +54,7 @@ trait EitherSyntax:
       case Left(_)  => eab
       case Right(b) => if f(b) then eab else Left(onFailure)
 
-    def toTry(implicit ev: A <:< Throwable): Try[B] = eab match
+    def toTry(using ev: A <:< Throwable): Try[B] = eab match
       case Left(a)  => Failure(ev(a))
       case Right(b) => Success(b)
 
@@ -69,13 +69,13 @@ trait EitherSyntax:
       case Left(a)      => Left(f(a))
       case r @ Right(_) => EitherUtil.leftCast(r)
 
-    def append(that: Either[AA, BB])(implicit BB: Semigroup[BB]): Either[AA, BB] = eab match
+    def append(that: Either[AA, BB])(using BB: Semigroup[BB]): Either[AA, BB] = eab match
       case left @ Left(_) => left
       case Right(b1) => that match
         case left @ Left(_) => left
         case Right(b2) => Right(BB.append(b1, b2))
 
-    def show(implicit AA: Show[AA], BB: Show[BB]): String = eab match
+    def show(using AA: Show[AA], BB: Show[BB]): String = eab match
       case Left(a)  => s"Left(${AA.show(a)})"
       case Right(b) => s"Right(${BB.show(b)})"
 

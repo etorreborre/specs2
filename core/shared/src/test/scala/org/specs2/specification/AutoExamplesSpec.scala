@@ -7,7 +7,7 @@ import org.specs2.specification.core.{Fragment, Fragments}
 import org.specs2.specification.create.AutoExamples, AutoExamples._
 import org.specs2.specification.dsl.FragmentsDsl
 
-class AutoExamplesSpec(implicit ee: ExecutionEnv) extends org.specs2.Spec with DataTables with AutoExamples with FragmentsDsl { def is = s2"""
+class AutoExamplesSpec(using ee: ExecutionEnv) extends org.specs2.Spec with DataTables with AutoExamples with FragmentsDsl { def is = s2"""
 
  The trimExpression function should
    remove backticks

@@ -26,7 +26,7 @@ trait ExampleDsl extends FragmentsFactory { outer =>
 
   extension [R : AsResult](d: String)(using not: Not[NoBangExamples])
     def !(r: Env => R)(using p: ImplicitParam): Fragment =
-      fragmentFactory.example(d, r)(summon[AsResult[R]], p)
+      fragmentFactory.example(d, r)
 }
 
 trait NoBangExamples extends ExampleDsl:

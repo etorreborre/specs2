@@ -84,7 +84,7 @@ case class Execute(
 
 
 object Execute extends Extract:
-  def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): Execute =
+  def extract(using arguments: Seq[String], systemProperties: SystemProperties): Execute =
     new Execute (
       _plan                 = bool("plan"),
       _skipAll              = bool("skipAll"),

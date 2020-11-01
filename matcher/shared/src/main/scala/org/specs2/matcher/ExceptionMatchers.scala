@@ -17,7 +17,7 @@ trait ExceptionBaseMatchers extends ExpectationsCreation:
   /**
    * @return a matcher checking the type of an Exception
    */
-  def throwA[E <: Throwable](implicit m: ClassTag[E]): ExceptionClassMatcher =
+  def throwA[E <: Throwable](using m: ClassTag[E]): ExceptionClassMatcher =
     m.toString match
       case "Nothing" => new ExceptionClassMatcher(classOf[Throwable])
       case _         => new ExceptionClassMatcher(m.runtimeClass)
@@ -25,8 +25,8 @@ trait ExceptionBaseMatchers extends ExpectationsCreation:
   /**
    * @return a matcher checking the type of an Exception and its message (as a regexp)
    */
-  def throwA[E <: Throwable](message: String = ".*")(implicit m: ClassTag[E]): Matcher[Any] =
-    throwA(m).like { case e: Throwable => createExpectable(e.getMessage.notNull).applyMatcher(BeMatching.withPart(message)) }
+  def throwA[E <: Throwable](message: String = ".*")(using m: ClassTag[E]): Matcher[Any] =
+    throwA.like { case e: Throwable => createExpectable(e.getMessage.notNull).applyMatcher(BeMatching.withPart(message)) }
   /**
    * @return a matcher checking the value of an Exception
    */
@@ -34,11 +34,11 @@ trait ExceptionBaseMatchers extends ExpectationsCreation:
   /**
    * alias for throwA
    */
-  def throwAn[E <: Throwable](implicit m: ClassTag[E]) = throwA[E](m)
+  def throwAn[E <: Throwable](using m: ClassTag[E]) = throwA[E]
   /**
    * alias for throwA
    */
-  def throwAn[E <: Throwable](message: String = ".*")(implicit m: ClassTag[E]): Matcher[Any] = throwA(message)(m)
+  def throwAn[E <: Throwable](message: String = ".*")(using m: ClassTag[E]): Matcher[Any] = throwA(message)
   /**
    * alias for throwA
    */
@@ -211,11 +211,11 @@ trait ExceptionBaseMatchers extends ExpectationsCreation:
 private[specs2]
 trait ExceptionBeHaveMatchers extends BeHaveMatchers { outer: ExceptionBaseMatchers =>
   implicit class ExceptionMatcherResult[T](result: MatchResult[T]):
-    def throwA[E <: Throwable](implicit m: ClassTag[E]): MatchResult[T]        = result(outer.throwA(m))
-    def throwA[E <: Throwable](message: String = ".*")(implicit m: ClassTag[E]): MatchResult[T] = result(outer.throwA(message)(m))
+    def throwA[E <: Throwable](using m: ClassTag[E]): MatchResult[T] = result(outer.throwA)
+    def throwA[E <: Throwable](message: String = ".*")(using m: ClassTag[E]): MatchResult[T] = result(outer.throwA(message))
     def throwA[E <: Throwable](e: E): MatchResult[T] = result(outer.throwA(e))
 
-    def throwAn[E <: Throwable](implicit m: ClassTag[E]): MatchResult[T] = result(outer.throwA(m))
-    def throwAn[E <: Throwable](message: String = ".*")(implicit m: ClassTag[E]): MatchResult[T] = result(outer.throwA(message)(m))
+    def throwAn[E <: Throwable](using m: ClassTag[E]): MatchResult[T] = result(outer.throwA)
+    def throwAn[E <: Throwable](message: String = ".*")(using m: ClassTag[E]): MatchResult[T] = result(outer.throwA(message))
     def throwAn[E <: Throwable](e: E): MatchResult[T] = result(outer.throwA(e))
 }

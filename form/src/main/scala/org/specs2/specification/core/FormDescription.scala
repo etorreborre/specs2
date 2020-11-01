@@ -13,12 +13,11 @@ case class FormDescription(form: () => Form) extends Description:
   lazy val cell = new FormCell(form())
   lazy val show = cell.text
 
-  def xml(implicit args: Arguments) = cell.xml(args)
+  def xml(using args: Arguments) =
+    cell.xml
 
-  def indent(spaces: String) =
+  def indent(spaces: String): FormDescription =
     new FormDescription(form) {
       override lazy val show =
         indentAllButFirstLine(cell.text, spaces)
     }
-
-

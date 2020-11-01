@@ -491,7 +491,7 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]):
     first.flatMap(a => drop(1).scan(a)(f))
 
   /** scan with a semigroup operation */
-  def reduceSemigroup(implicit s: Semigroup[A]): Producer[F, A] =
+  def reduceSemigroup(using s: Semigroup[A]): Producer[F, A] =
     reduce(s.append(_, _))
 
   /** scan with a semigroup operation */
@@ -499,15 +499,15 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]):
     scan1(f).last
 
   /** scan with a Monoid operation */
-  def reduceMonoid(implicit s: Monoid[A]): Producer[F, A] =
+  def reduceMonoid(using s: Monoid[A]): Producer[F, A] =
     reduceSemigroup
 
   /** map and scan with a Monoid operation */
-  def reduceMap[B](f: A => B)(implicit m: Monoid[B]): Producer[F, B] =
+  def reduceMap[B](f: A => B)(using m: Monoid[B]): Producer[F, B] =
     map(f).reduceMonoid
 
   /** map with an effectful function and scan with a Monoid operation */
-  def reduceMapEval[B](f: A => F[B])(implicit m: Monoid[B]): Producer[F, B] =
+  def reduceMapEval[B](f: A => F[B])(using m: Monoid[B]): Producer[F, B] =
     mapEval(f).reduceMonoid
 
   /** map the stream elements with a stateful and effectful function */

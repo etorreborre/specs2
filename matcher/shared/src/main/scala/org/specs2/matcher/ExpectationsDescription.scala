@@ -4,6 +4,7 @@ package matcher
 import text.Sentences._
 import execute.{ResultExecution, AsResult, Result}
 import scala.implicits.Not
+import control.ImplicitParameters.{given _, _}
 
 trait ExpectationsDescription extends ExpectationsCreation:
 
@@ -35,9 +36,16 @@ trait ExpectationsDescription extends ExpectationsCreation:
     def as(alias: String => String): Expectable[T] = createExpectable(value, alias)
 
     /** @return an expectable with a function to show the element T */
-    def showAs(implicit show: T => String): Expectable[T] =
+    def showAs(show: T => String, p: ImplicitParam = implicitParameter): Expectable[T] =
       lazy val v = value
       createExpectableWithShowAs(v, show(v))
+
+  /** describe a value with the aka method */
+  extension [T](value: =>T)(using not: Not[NoValueDescription], show: T => String)
+
+    /** @return an expectable with a function to show the element T */
+    def showAs: Expectable[T] =
+      value.showAs(using not, show)
 
 
 object ExpectationsDescription extends ExpectationsDescription

@@ -18,19 +18,19 @@ trait BlockDsl extends BlockCreation:
     def should(f: => Fragment): Fragment = addFragmentBlockWithText(s"$d should", f)
     def can(f: => Fragment): Fragment    = addFragmentBlockWithText(s"$d can", f)
 
-    def >>(fs: => Fragments)(implicit p1: ImplicitParam1): Fragments =
-      addFragmentsBlockWithText(d, fs)(p1)
+    def >>(fs: => Fragments)(using p1: ImplicitParam1): Fragments =
+      addFragmentsBlockWithText(d, fs)
 
-    def should(fs: => Fragments)(implicit p1: ImplicitParam1): Fragments =
-      addFragmentsBlockWithText(s"$d should", fs)(p1)
+    def should(fs: => Fragments)(using p1: ImplicitParam1): Fragments =
+      addFragmentsBlockWithText(s"$d should", fs)
 
-    def can(fs: => Fragments)(implicit p1: ImplicitParam1): Fragments =
-      addFragmentsBlockWithText(s"$d can", fs)(p1)
+    def can(fs: => Fragments)(using p1: ImplicitParam1): Fragments =
+      addFragmentsBlockWithText(s"$d can", fs)
 
   def addFragmentBlockWithText(text: String, f: =>Fragment): Fragment =
     addBlock(text, f)
 
-  def addFragmentsBlockWithText(text: String, fs: =>Fragments)(implicit p1: ImplicitParam1): Fragments =
+  def addFragmentsBlockWithText(text: String, fs: =>Fragments)(using p1: ImplicitParam1): Fragments =
     Use.ignoring(p1)(addBlock(text, fs))
 
   /**
@@ -67,4 +67,3 @@ trait BlockCreation extends FragmentBuilder with FragmentsFactory:
   private def addBreak = addFragment(factory.break)
   private def addStart = addFragment(factory.start)
   private def addEnd   = addFragment(factory.end)
-

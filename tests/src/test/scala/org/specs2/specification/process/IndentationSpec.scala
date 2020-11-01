@@ -10,7 +10,7 @@ import control._
 import producer._, Producer._
 import concurrent.ExecutionEnv
 
-class IndentationSpec(implicit ee: ExecutionEnv) extends Specification with ScalaCheck { def is = s2"""
+class IndentationSpec(using ee: ExecutionEnv) extends Specification with ScalaCheck { def is = s2"""
 
  The Indentation fold is responsible for computing the indentation level in a specification
  based on the presence of tab fragments

@@ -42,7 +42,7 @@ Future(1 === 1).await(retries = 2, timeout = 100.millis)
 
 The `await` method require an implicit `org.specs2.concurrent.ExecutionEnv` (see [here](org.specs2.guide.ExecutionEnvironments.html) for more details). You can pass one in the body of your examples:${snippet{
 
-class MyFutureSpec(implicit ee: ExecutionEnv) extends Specification { def is = s2"""
+class MyFutureSpec(using ee: ExecutionEnv) extends Specification { def is = s2"""
 
  Let's check this scala future ${
    Future(1) must be_>(0).await
@@ -52,7 +52,7 @@ class MyFutureSpec(implicit ee: ExecutionEnv) extends Specification { def is = s
 }
 
 // in a mutable specification
-class MyMutableFutureSpec(implicit ee: ExecutionEnv) extends mutable.Specification {
+class MyMutableFutureSpec(using ee: ExecutionEnv) extends mutable.Specification {
 
   "Let's check this scala future" >> {
     Future(1) must be_>(0).await

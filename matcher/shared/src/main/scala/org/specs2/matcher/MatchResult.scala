@@ -118,7 +118,7 @@ trait MatchResult[+T] extends ResultLike:
  *
  * This is actually here to avoid overloading conflicts with the apply method in the companion object
  */
-case class MatchSuccess[T] private[specs2](ok: () => String, ko: () => String, expectable: Expectable[T])(implicit p: Int = 0) extends MatchResult[T]:
+case class MatchSuccess[T] private[specs2](ok: () => String, ko: () => String, expectable: Expectable[T])(using p: Int = 0) extends MatchResult[T]:
   lazy val okMessage = ok()
   lazy val koMessage = ko()
   override def toResult = Success(okMessage)

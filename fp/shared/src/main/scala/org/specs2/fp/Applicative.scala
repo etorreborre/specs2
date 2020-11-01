@@ -97,7 +97,7 @@ trait Applicative[F[_]] extends Functor[F] { self =>
 
   // impls of sequence, traverse, etc
 
-  def traverse[A, G[_], B](value: G[A])(f: A => F[B])(implicit G: Traverse[G]): F[G[B]] =
+  def traverse[A, G[_], B](value: G[A])(f: A => F[B])(using G: Traverse[G]): F[G[B]] =
     G.traverse(value)(f)(this)
 
   def sequence[A, G[_]: Traverse](as: G[F[A]]): F[G[A]] =
@@ -123,7 +123,7 @@ trait Applicative[F[_]] extends Functor[F] { self =>
 }
 
 object Applicative:
-  @inline def apply[F[_]](implicit F: Applicative[F]): Applicative[F] = F
+  @inline def apply[F[_]](using F: Applicative[F]): Applicative[F] = F
 
   given optionApplicative[L] as Applicative[Option] =
     Monad.optionMonad

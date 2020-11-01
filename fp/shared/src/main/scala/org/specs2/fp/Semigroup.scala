@@ -17,7 +17,7 @@ trait Semigroup[F]:
 
 
 object Semigroup:
-  @inline def apply[F](implicit F: Semigroup[F]): Semigroup[F] = F
+  @inline def apply[F](using F: Semigroup[F]): Semigroup[F] = F
 
   /** Make an associative binary function into an instance. */
   def instance[A](f: (A, => A) => A): Semigroup[A] =
@@ -27,11 +27,11 @@ object Semigroup:
 
   /** A purely left-biased semigroup. */
   /** `point(a) append (point(a) append (point(a)...` */
-  def repeat[F[_], A](a: A)(implicit F: Applicative[F], m: Semigroup[F[A]]): F[A] =
+  def repeat[F[_], A](a: A)(using F: Applicative[F], m: Semigroup[F[A]]): F[A] =
     m.append(F.point(a), repeat[F, A](a))
 
   /** `point(a) append (point(f(a)) append (point(f(f(a)))...` */
-  def iterate[F[_], A](a: A)(f: A => A)(implicit F: Applicative[F], m: Semigroup[F[A]]): F[A] =
+  def iterate[F[_], A](a: A)(f: A => A)(using F: Applicative[F], m: Semigroup[F[A]]): F[A] =
     m.append(F.point(a), iterate[F, A](f(a))(f))
 
 

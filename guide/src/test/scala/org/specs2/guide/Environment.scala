@@ -40,7 +40,7 @@ class MySpec(env: Env) extends Specification { def is = s2"""
 }}
 
 Or if you want to access an `ExecutionContext`:${snippet{
-class MySpec(implicit ec: ExecutionContext) extends Specification { def is = s2"""
+class MySpec(using ec: ExecutionContext) extends Specification { def is = s2"""
   Use a future
   ${ Await.result(Future(1), 1.seconds) must ===(1 })
 """

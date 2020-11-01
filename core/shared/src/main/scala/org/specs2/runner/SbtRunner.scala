@@ -68,11 +68,11 @@ object sbtRun extends MasterSbtRunner(Array(), Array(), Thread.currentThread.get
   def main(arguments: Array[String]): Unit =
     val env = Env(Arguments(arguments:_*))
     given ExecutionEnv = env.specs2ExecutionEnv
-    
+
     try exit(start(arguments: _*))
     finally env.shutdown()
 
-  def exit(action: Action[Stats])(implicit ee: ExecutionEnv): Unit =
+  def exit(action: Action[Stats])(using ee: ExecutionEnv): Unit =
     action.runFuture(ee).onComplete {
       case scala.util.Failure(_)     => System.exit(100)
       case scala.util.Success(stats) => if stats.isSuccess then System.exit(0) else System.exit(1)

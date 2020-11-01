@@ -44,9 +44,9 @@ case class JUnitPrinter(env: Env, notifier: RunNotifier) extends Printer:
       fragment.executionResult.map { result =>
         description.foreach { (description: Description) =>
           if Fragment.isExample(fragment) then
-            notifyTestResult(description, result)(args)
+            notifyTestResult(description, result)(using args)
           else
-            notifyStepError(description, result)(args)
+            notifyStepError(description, result)(using args)
         }
       }
     else Action.unit
@@ -58,7 +58,7 @@ case class JUnitPrinter(env: Env, notifier: RunNotifier) extends Printer:
       f.description == fragment.description && f.location == fragment.location
     }.map(_._2)
 
-  private def notifyTestResult(description: Description, result: Result)(implicit args: Arguments) =
+  private def notifyTestResult(description: Description, result: Result)(using args: Arguments) =
     result match
       case f @ Failure(m, e, st, d)                     => failWith(description, junitFailure(f))
       case e @ Error(m, st)                             => failWith(description, args.traceFilter(e.exception))
@@ -67,7 +67,7 @@ case class JUnitPrinter(env: Env, notifier: RunNotifier) extends Printer:
       case Pending(_) | Skipped(_, _)                   => notifier.fireTestIgnored(description)
       case Success(_, _) | DecoratedResult(_, _)        => successWith(description)
 
-  private def notifyStepError(description: Description, result: Result)(implicit args: Arguments) =
+  private def notifyStepError(description: Description, result: Result)(using args: Arguments) =
     result match
       case f @ Failure(m, e, st, d)                     => specFailWith(description, junitFailure(f))
       case e @ Error(m, st)                             => specFailWith(description, args.traceFilter(e.exception))
@@ -88,7 +88,7 @@ case class JUnitPrinter(env: Env, notifier: RunNotifier) extends Printer:
     notifier.fireTestFailure(new org.junit.runner.notification.Failure(description, failure))
 
   /** @return a Throwable expected by JUnit Failure object */
-  private def junitFailure(f: Failure)(implicit args: Arguments): Throwable = f match
+  private def junitFailure(f: Failure)(using args: Arguments): Throwable = f match
     case Failure(m, e, st, NoDetails) =>
       new SpecFailureAssertionFailedError(Throwablex.exception(AnsiColors.removeColors(m), args.traceFilter(st)))
 

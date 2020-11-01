@@ -19,14 +19,14 @@ trait EitherBaseMatchers:
 
   def right[T : Diffable](t: T) = beRight(ValueChecks.valueIsTypedValueCheck(t))
   def right[T](t: ValueCheck[T]) = beRight(t)
-  def right[T](implicit p: ImplicitParam = implicitParameter) = beRight(p)
+  def right[T](using p: ImplicitParam = implicitParameter) = beRight(p)
 
   def beLeft[T](t: ValueCheck[T]): LeftCheckedMatcher[T] = LeftCheckedMatcher(t)
-  def beLeft[T](implicit p: ImplicitParam = implicitParameter): LeftMatcher[T] = use(p)(LeftMatcher[T]())
+  def beLeft[T](using p: ImplicitParam = implicitParameter): LeftMatcher[T] = use(p)(LeftMatcher[T]())
 
   def left[T : Diffable](t: T) = beLeft(ValueChecks.valueIsTypedValueCheck(t))
   def left[T](t: ValueCheck[T]) = beLeft(t)
-  def left[T](implicit p: ImplicitParam = implicitParameter) = beLeft(p)
+  def left[T](using p: ImplicitParam = implicitParameter) = beLeft(p)
 
 private[specs2]
 trait EitherBeHaveMatchers extends BeHaveMatchers { outer: EitherBaseMatchers =>

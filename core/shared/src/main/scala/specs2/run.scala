@@ -13,7 +13,7 @@ object run extends ClassRunnerMain:
   /**
    * Run one or more specifications with `specs2.run(spec1, spec2)` from a terminal
    */
-  def apply(specifications: SpecificationStructure*)(implicit arguments: Arguments = Arguments()) =
+  def apply(specifications: SpecificationStructure*)(using arguments: Arguments = Arguments()) =
     val env = EnvDefault.create(arguments)
 
     val action = for

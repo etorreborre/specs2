@@ -17,7 +17,7 @@ class Shared1Spec extends mutable.Specification:
     }
   }
 
-class Shared2Spec(implicit ee: ExecutionEnv) extends mutable.Specification:
+class Shared2Spec(using ee: ExecutionEnv) extends mutable.Specification:
   "This must work with an implicit execution env" should {
     "match a future using both jvm + scalajs" in {
       Future(ok)

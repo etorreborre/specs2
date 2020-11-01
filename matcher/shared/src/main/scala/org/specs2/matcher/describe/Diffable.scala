@@ -14,7 +14,7 @@ trait Diffable[-T]:
 
 object Diffable extends DiffableLowPriority1:
 
-  def diff[T](actual: T, expected: T)(implicit di: Diffable[T]): ComparisonResult =
+  def diff[T](actual: T, expected: T)(using di: Diffable[T]): ComparisonResult =
     di.diff(actual, expected)
 
 trait DiffableLowPriority1 extends DiffableLowPriority2:

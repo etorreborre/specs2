@@ -15,7 +15,7 @@ trait Functor[F[_]]:
   def as[A, B](fa: F[A])(b: =>B): F[B] = map(fa)(_ => b)
 
 object Functor:
-  @inline def apply[F[_]](implicit F: Functor[F]): Functor[F] = F
+  @inline def apply[F[_]](using F: Functor[F]): Functor[F] = F
 
   given OptionFunctor as Functor[Option[*]] = new Functor[Option[*]]:
     def map[A, B](fa: Option[A])(f: A => B): Option[B] =

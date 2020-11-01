@@ -204,7 +204,7 @@ trait Fold[M[_], A, B]:
   }
 
   /** create a fold that will run this fold repeatedly on input elements and collect all results */
-  def nest[F[_], C](f: C => F[A])(implicit monoid: Monoid[B], foldable: Foldable[F]) = new Fold[M, C, B] {
+  def nest[F[_], C](f: C => F[A])(using monoid: Monoid[B], foldable: Foldable[F]) = new Fold[M, C, B] {
     type S = B
     given monad as Monad[M] = self.monad
 
@@ -242,10 +242,10 @@ trait Fold[M[_], A, B]:
     def end(s: S) = self.end(s).flatMap(b => action.as(b))
   }
 
-  def into[M1[_]](implicit nat: M ~> M1, m: Monad[M1]) =
-    monadic[M1](nat, m)
+  def into[M1[_]](using nat: M ~> M1, m: Monad[M1]) =
+    monadic[M1](using nat, m)
 
-  def monadic[M1[_]](implicit nat: M ~> M1, m: Monad[M1]) = new Fold[M1, A, B] {
+  def monadic[M1[_]](using nat: M ~> M1, m: Monad[M1]) = new Fold[M1, A, B] {
     type S = self.S
     val monad: Monad[M1] = m
 

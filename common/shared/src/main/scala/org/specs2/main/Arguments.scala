@@ -110,13 +110,13 @@ object Arguments extends Extract:
 
   /** @return new arguments from command-line arguments */
   def apply(arguments: String*): Arguments =
-    extract(CommandLine.splitValues(arguments), sysProperties)
+    extract(using CommandLine.splitValues(arguments), sysProperties)
 
   /** create Arguments from a string by splitting it on spaces */
   def split(arguments: String): Arguments =
     Arguments(arguments.split(" "):_*)
 
-  private[specs2] def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): Arguments =
+  private[specs2] def extract(using arguments: Seq[String], systemProperties: SystemProperties): Arguments =
     new Arguments (
        select        = Select.extract,
        execute       = Execute.extract,

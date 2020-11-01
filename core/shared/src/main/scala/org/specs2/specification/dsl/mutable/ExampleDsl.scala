@@ -28,7 +28,7 @@ trait ExampleDsl extends ExampleDsl1 with dsl.ExampleDsl:
 
   extension [R : AsResult](d: String)(using not: Not[NoBangExamples])
     override def !(r: Env => R)(using p: ImplicitParam): Fragment =
-      addFragment(fragmentFactory.example(d, r)(summon[AsResult[R]], p))
+      addFragment(fragmentFactory.example(d, r))
 
 private[specs2]
 trait ExampleDsl1 extends BlockDsl with ExampleDsl0:
@@ -58,7 +58,7 @@ trait ExampleDsl1 extends BlockDsl with ExampleDsl0:
       describe(d) >> f
 
     def in(fs: =>Fragments)(using p1: ImplicitParam1): Fragments =
-      describe(d).>>(fs)(p1)
+      describe(d).>>(fs)
 
     def in(execution: Execution): Fragment =
       d >> execution
@@ -79,7 +79,7 @@ trait ExampleDsl0 extends BlockCreation:
     def >>(f: =>Fragment): Fragment =
       addBlock(d, f)
 
-    def >>(fs: =>Fragments)(using p1: ImplicitParam1): Fragments =
+    def >>(fs: =>Fragments)(implicit p1: ImplicitParam1): Fragments =
       Use.ignoring(p1) { addBlock(d, fs) }
 
     def should(f: => Fragment): Fragment =

@@ -15,44 +15,44 @@ import org.specs2.control.Use
 trait FormDsl extends FragmentsDsl with SpecStructureDsl with FormFragmentsFactory:
   private val factory = formFragmentFactory
 
-  extension (s: String)
+  extension (s: String):
     def ^(form: =>Form): Fragments =
       s ^ factory.FormFragment(form)
 
-    def ^(aForm: =>{ def form: Form })(implicit p: ImplicitParam): Fragments =
-      s ^ factory.FormFragment(aForm)(p)
+    def ^(aForm: =>{ def form: Form })(using p: ImplicitParam): Fragments =
+      s ^ factory.FormFragment(aForm)
 
-  extension (f: Fragment)
+  extension (f: Fragment):
     def ^(form: =>Form): Fragments =
       f ^ factory.FormFragment(form)
 
-    def ^(aForm: =>{ def form: Form })(implicit p: ImplicitParam): Fragments =
-      f ^ factory.FormFragment(aForm)(p)
+    def ^(aForm: =>{ def form: Form })(using p: ImplicitParam): Fragments =
+      f ^ factory.FormFragment(aForm)
 
-  extension (fs: Fragments)
+  extension (fs: Fragments):
     def ^(form: =>Form): Fragments =
       fs ^ factory.FormFragment(form)
-      
-    def ^(aForm: =>{ def form: Form })(implicit p: ImplicitParam): Fragments =
-      fs ^ factory.FormFragment(aForm)(p)
 
-  extension (args: Arguments)
-    def ^(form: =>Form)(implicit p1: ImplicitParam1): SpecStructure =
+    def ^(aForm: =>{ def form: Form })(using p: ImplicitParam): Fragments =
+      fs ^ factory.FormFragment(aForm)
+
+  extension (args: Arguments):
+    def ^(form: =>Form)(using p1: ImplicitParam1): SpecStructure =
       Use.ignoring(p1)(args ^ factory.FormFragment(form))
 
-    def ^(aForm: =>{ def form: Form })(implicit p: ImplicitParam): SpecStructure =
-      args ^ factory.FormFragment(aForm)(p)
+    def ^(aForm: =>{ def form: Form })(using p: ImplicitParam): SpecStructure =
+      args ^ factory.FormFragment(aForm)
 
-  extension (header: SpecHeader)
-    def ^(form: =>Form)(implicit p1: ImplicitParam1) : SpecStructure =
+  extension (header: SpecHeader):
+    def ^(form: =>Form)(using p1: ImplicitParam1) : SpecStructure =
       Use.ignoring(p1)(header ^ factory.FormFragment(form))
 
-    def ^(aForm: =>{ def form: Form })(implicit p: ImplicitParam): SpecStructure =
-      header ^ factory.FormFragment(aForm)(p)
+    def ^(aForm: =>{ def form: Form })(using p: ImplicitParam): SpecStructure =
+      header ^ factory.FormFragment(aForm)
 
-  extension (structure: SpecStructure)
-    def ^(form: =>Form)(implicit p1: ImplicitParam1): SpecStructure =
+  extension (structure: SpecStructure):
+    def ^(form: =>Form)(using p1: ImplicitParam1): SpecStructure =
       Use.ignoring(p1)(structure ^ factory.FormFragment(form))
 
-    def ^(aForm: =>{ def form: Form })(implicit p: ImplicitParam): SpecStructure =
-      structure ^ factory.FormFragment(aForm)(p)
+    def ^(aForm: =>{ def form: Form })(using p: ImplicitParam): SpecStructure =
+      structure ^ factory.FormFragment(aForm)

@@ -99,7 +99,7 @@ class DirectoryPathSpec extends Spec with TypedEqual { def is = s2"""
 
   def beRelative: Matcher[DirectoryPath] = { (dirPath: DirectoryPath) => (dirPath.isRelative, s"$dirPath is not relative") }
   def beAbsolute: Matcher[DirectoryPath] = { (dirPath: DirectoryPath) => (dirPath.isAbsolute, s"$dirPath is not absolute") }
-  def beRelative(implicit p1: ImplicitParam1): Matcher[FilePath] = Use.ignoring(p1)({ (filePath: FilePath) => (filePath.isRelative, s"$filePath is not relative") })
-  def beAbsolute(implicit p1: ImplicitParam1): Matcher[FilePath] = Use.ignoring(p1)({ (filePath: FilePath) => (filePath.isAbsolute, s"$filePath is not absolute") })
+  def beRelative(using p1: ImplicitParam1): Matcher[FilePath] = Use.ignoring(p1)({ (filePath: FilePath) => (filePath.isRelative, s"$filePath is not relative") })
+  def beAbsolute(using p1: ImplicitParam1): Matcher[FilePath] = Use.ignoring(p1)({ (filePath: FilePath) => (filePath.isAbsolute, s"$filePath is not absolute") })
 
 }

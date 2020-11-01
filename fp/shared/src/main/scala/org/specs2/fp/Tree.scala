@@ -22,7 +22,7 @@ sealed abstract class Tree[A]:
     Foldable[LazyList].foldRight(flatten, z)(f)
 
   /** A 2D String representation of this Tree. */
-  def drawTree(implicit sh: Show[A]): String =
+  def drawTree(using sh: Show[A]): String =
     val reversedLines = draw
     val first = new StringBuilder(reversedLines.head.toString.reverse)
     val rest = reversedLines.tail
@@ -42,7 +42,7 @@ sealed abstract class Tree[A]:
    * Uses reversed StringBuilders for performance, because they are
    * prepended to.
    **/
-  private def draw(implicit sh: Show[A]): Vector[StringBuilder] =
+  private def draw(using sh: Show[A]): Vector[StringBuilder] =
     val branch = " -+" // "+- ".reverse
     val stem = " -`" // "`- ".reverse
     val trunk = "  |" // "|  ".reverse
@@ -84,7 +84,7 @@ sealed abstract class Tree[A]:
   def loc: TreeLoc[A] = TreeLoc.loc(this, LazyList.empty, LazyList.empty, LazyList.empty)
 
   /** Turns a tree of pairs into a pair of trees. */
-  def unzip[A1, A2](implicit p: A => (A1, A2)): (Tree[A1], Tree[A2]) =
+  def unzip[A1, A2](using p: A => (A1, A2)): (Tree[A1], Tree[A2]) =
     val uz = Need(subForest.map(_.unzip))
     val fst = Need(uz.value map (_._1))
     val snd = Need(uz.value map (_._2))

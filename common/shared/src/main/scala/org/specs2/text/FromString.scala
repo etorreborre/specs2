@@ -13,7 +13,7 @@ trait FromString[T]:
 
 object FromString {
 
-  def apply[T](implicit fs: FromString[T]): FromString[T] = fs
+  def apply[T](using fs: FromString[T]): FromString[T] = fs
 
   given FromString[String]:
     def fromString(s: String): Option[String] = Option(s)

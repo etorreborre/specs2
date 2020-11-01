@@ -60,13 +60,13 @@ Compare result
 
   Seq (diff)
   ==========
-    equal Seqs should return SeqIdentical                        ${ Diffable.diff(Seq("a", "b"),Seq("a", "b"))(seqDiffable) must ===(SeqIdentical(Seq("a", "b"))) }
-    different Seqs should show which elements were changed       ${ Diffable.diff(Seq("a"), Seq("b"))(seqDiffable) must ===(SeqDifference(Seq(PrimitiveDifference("a", "b")), Seq.empty, Seq.empty)) }
-    different Seqs should show which elements were added         ${ Diffable.diff(Seq("a"), Seq("a", "b"))(seqDiffable) must ===(SeqDifference(Seq(PrimitiveIdentical("a")), Seq("b"), Seq.empty)) }
-    different Seqs should show which elements were removed       ${ Diffable.diff(Seq("a", "b"), Seq("a"))(seqDiffable) must ===(SeqDifference(Seq(PrimitiveIdentical("a")), Seq.empty, Seq("b"))) }
-    different Seqs should show changed and added with null       ${ Diffable.diff(Seq("a"), Seq(null))(seqDiffable) must ===(SeqDifference(Seq(PrimitiveDifference("a", null)), Seq.empty, Seq.empty)) }
+    equal Seqs should return SeqIdentical                        ${ Diffable.diff(Seq("a", "b"),Seq("a", "b"))(using seqDiffable) must ===(SeqIdentical(Seq("a", "b"))) }
+    different Seqs should show which elements were changed       ${ Diffable.diff(Seq("a"), Seq("b"))(using seqDiffable) must ===(SeqDifference(Seq(PrimitiveDifference("a", "b")), Seq.empty, Seq.empty)) }
+    different Seqs should show which elements were added         ${ Diffable.diff(Seq("a"), Seq("a", "b"))(using seqDiffable) must ===(SeqDifference(Seq(PrimitiveIdentical("a")), Seq("b"), Seq.empty)) }
+    different Seqs should show which elements were removed       ${ Diffable.diff(Seq("a", "b"), Seq("a"))(using seqDiffable) must ===(SeqDifference(Seq(PrimitiveIdentical("a")), Seq.empty, Seq("b"))) }
+    different Seqs should show changed and added with null       ${ Diffable.diff(Seq("a"), Seq(null))(using seqDiffable) must ===(SeqDifference(Seq(PrimitiveDifference("a", null)), Seq.empty, Seq.empty)) }
     be able to compare Seq[Any] ${
-      Diffable.diff(Seq("a", 1, 2l, 3.3d, 4.4f), Seq("b", 2, 3l, 4.4d, 5.5f))(seqDiffable) must ===(
+      Diffable.diff(Seq("a", 1, 2l, 3.3d, 4.4f), Seq("b", 2, 3l, 4.4d, 5.5f))(using seqDiffable) must ===(
         SeqDifference(
           Seq(OtherDifferent("a", "b"),
           OtherDifferent(1, 2),

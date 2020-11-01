@@ -25,7 +25,7 @@ trait OptionBaseMatchers:
   def some[T](check: ValueCheck[T]): SomeCheckedMatcher[T] =
     beSome(check)
 
-  def beSome[T](implicit p: ImplicitParam = ImplicitParameters.implicitParameter): SomeMatcher[T] =
+  def beSome[T](using p: ImplicitParam = ImplicitParameters.implicitParameter): SomeMatcher[T] =
     use(p)(new SomeMatcher[T])
 
   def some[T]: SomeMatcher[T] = beSome[T]

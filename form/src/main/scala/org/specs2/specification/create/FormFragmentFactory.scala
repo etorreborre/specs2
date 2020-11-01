@@ -16,13 +16,13 @@ import FormsBuilder._
  */
 trait FormFragmentFactory:
   def FormFragment(form: =>Form): Fragment
-  def FormFragment(aForm: =>{ def form: Form })(implicit p: ImplicitParam): Fragment
+  def FormFragment(aForm: =>{ def form: Form })(using p: ImplicitParam): Fragment
 
 /**
  * Default implementation for the FormFragment Factory
  */
 trait DefaultFormFragmentFactory extends FormFragmentFactory:
-  def FormFragment(aForm: =>HasForm)(implicit p: ImplicitParam): Fragment = addForm(aForm.form)
+  def FormFragment(aForm: =>HasForm)(using p: ImplicitParam): Fragment = addForm(aForm.form)
 
   def FormFragment(aForm: =>Form): Fragment = addForm(aForm)
 

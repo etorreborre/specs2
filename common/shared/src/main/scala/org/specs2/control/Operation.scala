@@ -45,7 +45,7 @@ case class Operation[A](operation: () => Throwable Either A, last: Vector[Finali
   def runOption: Option[A] =
     runOperation.toOption
 
-  def runMonoid(implicit m: Monoid[A]): A =
+  def runMonoid(using m: Monoid[A]): A =
     runOption.getOrElse(m.zero)
 
   def runVoid(): Unit =

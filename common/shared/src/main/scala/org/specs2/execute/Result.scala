@@ -32,7 +32,7 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
   /**
    * @return the colored textual status of the result
    */
-  def coloredStatus(implicit args: Arguments = Arguments()): String =
+  def coloredStatus(using args: Arguments = Arguments()): String =
     if args.plan then
       args.pendingColor("*")
     else
@@ -42,17 +42,17 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
         case Error(_, _)           => args.errorColor  ("!")
         case Pending(_)            => args.pendingColor("*")
         case Skipped(_, _)         => args.skippedColor("o")
-        case DecoratedResult(_, r) => r.coloredStatus(args)
+        case DecoratedResult(_, r) => r.coloredStatus
 
   private lazy val nocolor = Arguments("nocolor")
 
   /**
    * @return the uncolored textual status of the result
    */
-  def status: String = coloredStatus(nocolor)
+  def status: String = coloredStatus(using nocolor)
 
   /** @return the textual status of the result */
-  def statusName(implicit args: Arguments = Arguments()): String =
+  def statusName(using args: Arguments = Arguments()): String =
     if args.plan then
       "info"
     else
@@ -62,7 +62,7 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
         case Error(_, _)           => "error"
         case Pending(_)            => "pending"
         case Skipped(_, _)         => "skipped"
-        case DecoratedResult(_, r) => r.statusName(args)
+        case DecoratedResult(_, r) => r.statusName
 
   /** update the message of a result, keeping the subclass type */
   def updateMessage(msg: String): Result =

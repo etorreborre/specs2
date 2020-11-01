@@ -81,7 +81,7 @@ trait HtmlBodyPrinter:
         else NodeSeq.Empty
 
       case Fragment(form @ FormDescription(_),_,_) =>
-        form.xml(arguments)
+        form.xml(using arguments)
 
       case e if Fragment.isExample(e) =>
         val example =
@@ -107,14 +107,14 @@ trait HtmlBodyPrinter:
 
             // if it is a data table as an auto-example
             case DecoratedResult(table: DataTable, res) if Description.isCode(fragment.description) =>
-              <div class={"example "+res.statusName(arguments)}>
-                {Form(table).toXml(arguments)}<br/>
+              <div class={"example "+res.statusName(using arguments)}>
+                {Form(table).toXml(using arguments)}<br/>
               </div>
 
             // if it is a failed data table
             case DecoratedResult(table: DataTable, res) if !res.isSuccess =>
-              <li class={"example "+res.statusName(arguments)}>{show(e)}
-                {Form(table).toXml(arguments)}<br/>
+              <li class={"example "+res.statusName(using arguments)}>{show(e)}
+                {Form(table).toXml(using arguments)}<br/>
               </li>
 
             case DecoratedResult(table: DataTable, res) =>
@@ -125,8 +125,10 @@ trait HtmlBodyPrinter:
                 <message class="info">{r.message}</message>
               </li>
 
-        if level.incrementNext then <ul>{example}</ul>
-        else                     example
+        if level.incrementNext then
+          <ul>{example}</ul>
+        else
+          example
 
       case f if Fragment.isStepOrAction(f) =>
         result match
@@ -142,13 +144,15 @@ trait HtmlBodyPrinter:
         if ref.muted then
           <link class="ok"><a href={FilePath.unsafe(ref.url).relativeTo(baseDir).path} tooltip={ref.tooltip} class="ok">{ref.linkText}</a></link>
         else
-          val status = result.statusName(arguments)+" ok"
+          val status = result.statusName(using arguments)+" ok"
           val image = if fragment.isExecutable then <span class={status}> </span> else NodeSeq.Empty
           <link class="ok">{image}  <a href={FilePath.unsafe(ref.url).relativeTo(baseDir).path} tooltip={ref.tooltip} class="ok">{ref.linkText}</a></link>
 
-      case Fragment(Br,_,_) => <br/>
+      case Fragment(Br,_,_) =>
+        <br/>
 
-      case other => NodeSeq.Empty
+      case other =>
+        NodeSeq.Empty
 
   def toggleElement(a: Any) = "toggleImage(this); showHide('"+id(a)+"')"
   def id(a: Any) = System.identityHashCode(a).toString
@@ -235,7 +239,7 @@ trait HtmlBodyPrinter:
         <tr><th colSpan="2">{s"Total for specification ${title.trim}"}</th></tr>
         <tr><td>Finished in</td><td class="info">{stats.copy(timer = timer).time}</td></tr>
         <tr><td>Results</td><td class={statsClass}>
-          {stats.displayResults(Arguments("nocolor"))}</td></tr>
+          {stats.displayResults(using Arguments("nocolor"))}</td></tr>
       </table>
 
 object HtmlBodyPrinter extends HtmlBodyPrinter

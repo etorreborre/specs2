@@ -9,7 +9,7 @@ trait Show[F]:
 
 object Show:
 
-  @inline def apply[F](implicit F: Show[F]): Show[F] = F
+  @inline def apply[F](using F: Show[F]): Show[F] = F
 
   def showFromToString[A]: Show[A] =
     new Show[A]:

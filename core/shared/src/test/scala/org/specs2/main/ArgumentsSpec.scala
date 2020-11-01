@@ -99,15 +99,15 @@ Creation
   case class properties(properties: (String, String)*) extends SystemProperties:
     override def systemGetProperty(p: String) = Map(properties: _*).get(p)
 
-  def properties1 = Arguments.extract(Seq(""), properties("plan" -> "")).plan must ===(true)
-  def properties2 = Arguments.extract(Seq(""), properties("plan" -> "true")).plan must ===(true)
-  def properties3 = Arguments.extract(Seq(""), properties("plan" -> "false")).plan must ===(false)
-  def properties4 = Arguments.extract(Seq(""), properties("ex"   -> "spec")).ex must ===(".*spec.*")
-  def properties5 = Arguments.extract(Seq(""), properties("specs2.ex" -> "spec")).ex must ===(".*spec.*")
+  def properties1 = Arguments.extract(using   Seq(""), properties("plan" -> "")).plan must ===(true)
+  def properties2 = Arguments.extract(using   Seq(""), properties("plan" -> "true")).plan must ===(true)
+  def properties3 = Arguments.extract(using   Seq(""), properties("plan" -> "false")).plan must ===(false)
+  def properties4 = Arguments.extract(using   Seq(""), properties("ex"   -> "spec")).ex must ===(".*spec.*")
+  def properties5 = Arguments.extract(using   Seq(""), properties("specs2.ex" -> "spec")).ex must ===(".*spec.*")
 
   def properties6 =
     List(("nocolor", ""), ("color", ""), ("nocolor", "true"), ("nocolor", "false"), ("color", "true"), ("color", "false")).map { case (k, v) =>
-      Arguments.extract(Seq(""), properties(k -> v)).color
+      Arguments.extract(using Seq(""), properties(k -> v)).color
     } must ===(List(false, true, false, true, true, false))
 
   def execution1 =

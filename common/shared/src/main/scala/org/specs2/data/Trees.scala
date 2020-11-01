@@ -17,7 +17,7 @@ trait Trees { outer =>
     def prune(f: A => Option[B]): Option[Tree[B]] = outer.prune(t, f)
 
   extension [A](t: Tree[A])
-    def prune(f: Tree[A] => Option[A])(using initial: A): Tree[A] = outer.prune(t, f)(initial)
+    def prune(f: Tree[A] => Option[A])(using initial: A): Tree[A] = outer.prune(t, f)
     def flattenSubForests = outer.flattenSubForests(t)
     def flattenLeft       = outer.flattenLeft(t)
     def size              = t.flatten.size
@@ -27,7 +27,7 @@ trait Trees { outer =>
    * This implicit can be used to remove None nodes in a Tree
    */
   extension [A](t: Tree[Option[A]])
-    def clean(implicit initial: A): Tree[A] = outer.clean(t)(initial)
+    def clean(using initial: A): Tree[A] = outer.clean(t)
 
   /**
    * map a Tree from leaves to root by replacing each node with the result of a function taking
@@ -43,7 +43,7 @@ trait Trees { outer =>
   /**
    * remove None nodes from a tree
    */
-  def clean[A](t: Tree[Option[A]])(implicit initial: A): Tree[A] =
+  def clean[A](t: Tree[Option[A]])(using initial: A): Tree[A] =
     prune(t, (a: Option[A]) => a).getOrElse(Leaf(initial))
 
   /**
@@ -58,7 +58,7 @@ trait Trees { outer =>
   /**
    * remove nodes from a tree if they are None according to a function f
    */
-  def prune[A](t: Tree[A], f: Tree[A] => Option[A])(implicit initial: A): Tree[A] = t.cobind(f).clean
+  def prune[A](t: Tree[A], f: Tree[A] => Option[A])(using initial: A): Tree[A] = t.cobind(f).clean
 
   def flattenSubForests[A](tree: Tree[A]): Tree[A] = Node(tree.rootLabel, tree.flattenLeft.drop(1).map(Leaf(_)))
 

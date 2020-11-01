@@ -42,7 +42,7 @@ case class Select(
     "selector"       -> _selector  ).flatMap(showArg).mkString("Select(", ", ", ")")
 
 object Select extends Extract:
-  def extract(implicit arguments: Seq[String], systemProperties: SystemProperties): Select =
+  def extract(using arguments: Seq[String], systemProperties: SystemProperties): Select =
     new Select (
       _ex            = value("ex", ".*"+(_:String)+".*"),
       _include       = value("include"),

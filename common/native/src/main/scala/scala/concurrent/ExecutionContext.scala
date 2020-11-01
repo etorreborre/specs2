@@ -36,7 +36,7 @@ import scala.annotation.implicitNotFound
  * which `ExecutionContext` to use. That is, you might want to avoid
  * hardcoding `scala.concurrent.ExecutionContext.Implicits.global` all
  * over the place in your code.
- * One approach is to add `(implicit ec: ExecutionContext)`
+ * One approach is to add `(using ec: ExecutionContext)`
  * to methods which need an `ExecutionContext`. Then import a specific
  * context in one place for the entire application or module,
  * passing it implicitly to individual methods.
@@ -55,7 +55,7 @@ import scala.annotation.implicitNotFound
  * Application callback execution can be configured separately.
  */
 @implicitNotFound("""Cannot find an implicit ExecutionContext. You might pass
-an (implicit ec: ExecutionContext) parameter to your method
+an (using ec: ExecutionContext) parameter to your method
 or import scala.concurrent.ExecutionContext.Implicits.global.""")
 trait ExecutionContext {
 

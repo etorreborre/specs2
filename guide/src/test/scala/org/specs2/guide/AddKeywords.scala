@@ -40,10 +40,10 @@ trait ToKeyword extends BlockDsl {
 
     // this implementation of `to` uses an implicit parameter. This is used to overload
     // the method for different arguments: Fragment and Fragments
-    def to(fs: =>Fragments)(implicit p1: ImplicitParameters.ImplicitParam1): Fragments =
+    def to(fs: =>Fragments)(using p1: ImplicitParameters.ImplicitParam1): Fragments =
       addFragmentsBlockWithText(description + " to", fs)
   }
-}  
+}
 
 class MySpecification extends mutable.Specification with ToKeyword {
 

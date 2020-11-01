@@ -21,7 +21,7 @@ case class Tabs(tabs: Seq[Tab] = Vector(), result: Option[Result] = None) extend
 
   def text: String = tabs.map(_.text).mkString("\n")
 
-  def xml(implicit args: Arguments) = <td class="info"><div class="tabber">{tabs.map(_.xml).reduceNodes}</div></td>
+  def xml(using args: Arguments) = <td class="info"><div class="tabber">{tabs.map(_.xml).reduceNodes}</div></td>
 
   def executeTabs = tabs.foldLeft(success: Result){ (res, cur) => res and cur.execute }
 
@@ -35,6 +35,6 @@ case class Tab(title: String, form: Form, result: Option[Result] = None) extends
 
   def text: String = title + "\n" + new FormCell(form).text
 
-  def xml(implicit args: Arguments) = <div class="tabbertab" title={title}>{Form.toXml(form.executeForm)}</div>
+  def xml(using args: Arguments) = <div class="tabbertab" title={title}>{Form.toXml(form.executeForm)}</div>
 
 }

@@ -10,23 +10,42 @@ import scala.concurrent._, duration._
 /**
  * This trait provides matchers to check if a block of code is terminating or not
  */
-trait TerminationMatchers extends TerminationBaseMatchers with TerminationNotMatchers
+trait TerminationMatchers extends TerminationBaseMatchers
 object TerminationMatchers extends TerminationMatchers
 
 private[specs2]
 trait TerminationBaseMatchers:
 
   /**
-   * this matchers will check if a block of code terminates within a given duration, after just one try
+   * this matcher will check if a block of code terminates
    */
-  def terminate[T](implicit ee: ExecutionEnv): TerminationMatcher[T] = terminate()(ee)
+  def terminate[T](using ee: ExecutionEnv): TerminationMatcher[T] =
+    new TerminationMatcher[T]()
 
   /**
-   * this matchers will check if a block of code terminates within a given duration, and a given number of retries
+   * this matcher will check if a block of code terminates within a given duration, and a given number of retries
    */
-  def terminate[T](retries: Int = 1, sleep: Duration = 100.millis)(implicit ee: ExecutionEnv) = new TerminationMatcher[T](retries, sleep)(ee)
+  def terminate[T](retries: Int)(using ee: ExecutionEnv): TerminationMatcher[T] =
+    new TerminationMatcher[T](retries)
 
-class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[() => Any] = None, whenDesc: Option[String] = None, onlyWhen: Boolean = false)(implicit ee: ExecutionEnv) extends Matcher[T]:
+  /**
+   * this matcher will check if a block of code terminates within a given duration, and a given number of retries
+   */
+  def terminate[T](sleep: Duration)(using ee: ExecutionEnv): TerminationMatcher[T] =
+    new TerminationMatcher[T](sleep = sleep)
+
+  /**
+   * this matcher will check if a block of code terminates within a given duration, and a given number of retries
+   */
+  def terminate[T](retries: Int, sleep: Duration)(using ee: ExecutionEnv): TerminationMatcher[T] =
+    new TerminationMatcher[T](retries, sleep)
+
+class TerminationMatcher[-T](
+  retries: Int = 1,
+  sleep: Duration = 100.millis,
+  whenAction: Option[() => Any] = None,
+  whenDesc: Option[String] = None,
+  onlyWhen: Boolean = false)(using ee: ExecutionEnv) extends Matcher[T]:
 
   def apply[S <: T](a: Expectable[S]) =
     retry(retries, retries, sleep * ee.timeFactor.toDouble, a, createFuture(a.value))
@@ -79,7 +98,7 @@ class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[(
   private val terminated = new AtomicBoolean(false)
   private val cancelled = new AtomicBoolean(false)
 
-  private def createFuture[A](a: =>A)(implicit ee: ExecutionEnv): Future[A] =
+  private def createFuture[A](a: =>A)(using ee: ExecutionEnv): Future[A] =
     val future = Future(a)(ee.executionContext)
     future.onComplete {
       case scala.util.Success(_) => terminated.set(true)
@@ -99,14 +118,3 @@ class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[(
   def when[S](action: =>S): TerminationMatcher[T] = withAWhenAction(Some(() => action), None, onlyWhen=false)
 
   def onlyWhen[S](action: =>S): TerminationMatcher[T] = withAWhenAction(Some(() => action), None, onlyWhen=true)
-
-/**
- * This trait adds the necessary implicit to write 'action must not terminate'
- */
-private[specs2]
-trait TerminationNotMatchers { outer: TerminationBaseMatchers =>
-
-   implicit class TerminationResultMatcher[T](result: MatchResult[T])(implicit ee: ExecutionEnv):
-     def terminate = result(outer.terminate)
-     def terminate(retries: Int = 0, sleep: Duration = 100.millis) = result(outer.terminate(retries, sleep))
-}

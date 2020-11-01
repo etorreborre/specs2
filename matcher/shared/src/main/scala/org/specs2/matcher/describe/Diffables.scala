@@ -23,7 +23,7 @@ object NothingDiffable extends Diffable[Nothing]:
 class EitherDiffable[L : Diffable, R : Diffable]
   extends Diffable[Either[L, R]]:
 
-  def valdiff[A](a: A, e: A, isRight: Boolean)(implicit di: Diffable[A]) =
+  def valdiff[A](a: A, e: A, isRight: Boolean)(using di: Diffable[A]) =
     val result = di.diff(a, e)
     if result.identical then EitherIdentical(result, isRight = isRight)
     else EitherDifferent(result, isRight = isRight)
@@ -35,7 +35,7 @@ class EitherDiffable[L : Diffable, R : Diffable]
       case (a, e) => EitherTypeDifferent(a.isRight)
 
 
-class EitherRightDiffable[R](implicit rdi: Diffable[R]) extends Diffable[Right[Nothing, R]]:
+class EitherRightDiffable[R](using rdi: Diffable[R]) extends Diffable[Right[Nothing, R]]:
   def diff(actual: Right[Nothing, R], expected: Right[Nothing, R]) =
     (actual, expected) match
       case (Right(a), Right(e)) =>
@@ -43,7 +43,7 @@ class EitherRightDiffable[R](implicit rdi: Diffable[R]) extends Diffable[Right[N
         if result.identical then EitherIdentical(result, isRight = true)
         else EitherDifferent(result, isRight = true)
 
-class EitherLeftDiffable[L](implicit ldi: Diffable[L]) extends Diffable[Left[L, Nothing]]:
+class EitherLeftDiffable[L](using ldi: Diffable[L]) extends Diffable[Left[L, Nothing]]:
   def diff(actual: Left[L, Nothing], expected: Left[L, Nothing]) =
     (actual, expected) match
     case (Left(a), Left(e)) =>
@@ -51,7 +51,7 @@ class EitherLeftDiffable[L](implicit ldi: Diffable[L]) extends Diffable[Left[L, 
       if result.identical then EitherIdentical(result, isRight = false)
       else EitherDifferent(result, isRight = true)
 
-class OptionDiffable[T : Diffable](implicit di: Diffable[T]) extends Diffable[Option[T]]:
+class OptionDiffable[T : Diffable](using di: Diffable[T]) extends Diffable[Option[T]]:
   def diff(actual: Option[T], expected: Option[T]): ComparisonResult =
     (actual, expected) match
       case (Some(a), Some(e)) =>
@@ -64,8 +64,8 @@ class OptionDiffable[T : Diffable](implicit di: Diffable[T]) extends Diffable[Op
 case object OptionNoneDiffable extends Diffable[Option[Nothing]]:
   def diff(actual: Option[Nothing], expected: Option[Nothing]) = OptionIdentical(None)
 
-class TryDiffable[T : Diffable](implicit tdi: Diffable[Throwable]) extends Diffable[Try[T]]:
-  def valdiff[A](a: A, e: A, isSuccess: Boolean)(implicit di: Diffable[A]) =
+class TryDiffable[T : Diffable](using tdi: Diffable[Throwable]) extends Diffable[Try[T]]:
+  def valdiff[A](a: A, e: A, isSuccess: Boolean)(using di: Diffable[A]) =
     val result = di.diff(a, e)
     if result.identical then TryIdentical(a, isSuccess = isSuccess)
     else TryDifferent(result, isSuccess = isSuccess)
@@ -76,7 +76,7 @@ class TryDiffable[T : Diffable](implicit tdi: Diffable[Throwable]) extends Diffa
       case (Success(a), Success(e)) => valdiff(a, e, true)
       case (a, e) => TryTypeDifferent(a.isSuccess)
 
-class FailureDiffable(implicit di: Diffable[Throwable]) extends Diffable[Failure[Nothing]]:
+class FailureDiffable(using di: Diffable[Throwable]) extends Diffable[Failure[Nothing]]:
   def diff(actual: Failure[Nothing], expected: Failure[Nothing]) =
     val (a, e) = (actual.exception, expected.exception)
     val result = di.diff(a, e)
@@ -84,7 +84,7 @@ class FailureDiffable(implicit di: Diffable[Throwable]) extends Diffable[Failure
     else TryDifferent(result, isSuccess = false)
 
 
-class MapDiffable[K, V](implicit diff: Diffable[V]) extends Diffable[Map[K, V]]:
+class MapDiffable[K, V](using diff: Diffable[V]) extends Diffable[Map[K, V]]:
 
   def diff(actual: Map[K, V], expected: Map[K, V]) =
     val changed = findChanged(actual, expected)
@@ -110,7 +110,7 @@ class MapDiffable[K, V](implicit diff: Diffable[V]) extends Diffable[Map[K, V]]:
   private def findRemoved(actual: Map[K, V], expected: Map[K, V]) =
     actual.view.filterKeys(k => !expected.contains(k)).toSeq
 
-class StackTraceElementDiffable(implicit nameDiffable: Diffable[String], lineDiffable: Diffable[Int]) extends Diffable[StackTraceElement]:
+class StackTraceElementDiffable(using nameDiffable: Diffable[String], lineDiffable: Diffable[Int]) extends Diffable[StackTraceElement]:
 
   def diff(actual: StackTraceElement, expected: StackTraceElement) =
     if actual == expected then
@@ -122,7 +122,7 @@ class StackTraceElementDiffable(implicit nameDiffable: Diffable[String], lineDif
         (Option(actual.getFileName) |@| Option(expected.getFileName))(nameDiffable.diff),
         lineDiffable.diff(actual.getLineNumber, expected.getLineNumber))
 
-class ThrowableDiffable(implicit sdi: Diffable[String], adi: Diffable[List[StackTraceElement]]) extends Diffable[Throwable]:
+class ThrowableDiffable(using sdi: Diffable[String], adi: Diffable[List[StackTraceElement]]) extends Diffable[Throwable]:
 
     def diff(actual: Throwable, expected: Throwable) =
       val messageResult = sdi.diff(actual.getMessage, expected.getMessage)
@@ -153,7 +153,7 @@ class SetDiffable[E] extends Diffable[Set[E]]:
  * This diffable uses the Lines diffables to show differences between 2 sequences
  * as a unified sequence with inlined differences
  */
-class SeqLinesDiffable[E](implicit di: Diffable[E]) extends Diffable[Seq[E]]:
+class SeqLinesDiffable[E](using di: Diffable[E]) extends Diffable[Seq[E]]:
 
   def diff(actual: Seq[E], expected: Seq[E]) =
     LinesDiffable.linesDiffable[E].diff(actual.toList, expected.toList)
@@ -161,7 +161,7 @@ class SeqLinesDiffable[E](implicit di: Diffable[E]) extends Diffable[Seq[E]]:
 /**
  * This diffable displays elements missing or added from a Seq
  */
-class SeqDiffable[E](implicit di: Diffable[E]) extends Diffable[Seq[E]]:
+class SeqDiffable[E](using di: Diffable[E]) extends Diffable[Seq[E]]:
 
   def diff(actual: Seq[E], expected: Seq[E]) =
     val diffs = compareExisting(actual, expected)
@@ -174,7 +174,7 @@ class SeqDiffable[E](implicit di: Diffable[E]) extends Diffable[Seq[E]]:
     actual.zip(expected)
       .map { case (a, e) => di.diff(a, e) }
 
-class ArrayDiffable[E](implicit di: Diffable[E]) extends Diffable[Array[E]]:
+class ArrayDiffable[E](using di: Diffable[E]) extends Diffable[Array[E]]:
 
   def diff(actual: Array[E], expected: Array[E]) =
     val result = compareExisting(actual, expected)
