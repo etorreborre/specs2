@@ -8,24 +8,25 @@ import scala.annotation.tailrec
  */
 private[specs2]
 trait Listx:
-  outer =>
 
   /**
    * Additional methods for nested lists
    */
-  implicit class ExtendedNestedList[T](list: List[List[T]]):
-    def safeTranspose = outer.transpose(list)
+  extension [T](list: List[List[T]]):
+    def safeTranspose: List[List[T]] =
+      transpose(list)
 
   /**
    * Additional methods for lists
    */
-  implicit class ExtendedList[T](list: List[T]):
+  extension [T](list: List[T]):
     /**
      * @return a randomly mixed list
      */
-    def scramble = list.sortWith((a, b) => (new java.util.Random).nextInt(2) > 0)
+    def scramble: List[T] =
+      list.sortWith((a, b) => (new java.util.Random).nextInt(2) > 0)
 
-    def intersperse[A](a: T): List[T] =
+    def intersperse(a: T): List[T] =
       @tailrec
       def intersperse0(accum: List[T], rest: List[T]): List[T] = rest match
         case Nil      => accum

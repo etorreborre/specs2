@@ -6,10 +6,10 @@ package io
  * setting all the separators as UNIX separators.
  */
 private[specs2]
-trait Paths { outer =>
-  implicit class Path(s: String):
-    def unixize = s.replace("\\", "/")
-}
+trait Paths:
+  extension (s: String):
+    def unixize: String =
+      s.replace("\\", "/")
 
 private[specs2]
 object Paths extends Paths

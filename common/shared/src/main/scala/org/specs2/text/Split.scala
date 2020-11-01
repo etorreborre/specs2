@@ -3,35 +3,42 @@ package text
 
 import Trim._
 import collection.Seqx._
+import util.matching.Regex
 
 private[specs2]
-trait Split { outer =>
+trait Split:
 
-  implicit class Splitted(s: String):
-    def splitDashed(names: Seq[String]) =
-      outer.splitDashed(s.split("\\s").toIndexedSeq, names)
+  extension (s: String):
+    def splitDashed(names: Seq[String]): Seq[String] =
+      splitDashed(s.split("\\s").toIndexedSeq, names)
 
-    private val quoted = "\"[^\"]*\"|[^\\s]+".r
-    def splitQuoted = quoted.findAllIn(s).toSeq.map(_.trimEnclosing("\""))
+    def splitQuoted: Seq[String] =
+      quoted.findAllIn(s).toSeq.map(_.trimEnclosing("\""))
 
-    def splitToSize(n: Int): List[String] = splitToSize(s, n, Nil)
+    def splitToSize(n: Int): List[String] =
+      splitToSize(s, n, Nil)
 
-    private def splitToSize(string: String, n: Int, result: List[String]): List[String] =
-      if string.length <= n then (string :: result).reverse
-      else
+  private val quoted: Regex =
+    "\"[^\"]*\"|[^\\s]+".r
+
+  private def splitToSize(string: String, n: Int, result: List[String]): List[String] =
+    if string.length <= n then
+      (string :: result).reverse
+    else
       // new Strings are necessary to avoid memory errors because substring is just a view on the underlying string
-        splitToSize(new String(string.drop(n)), n, new String(string.take(n)) :: result)
+      splitToSize(new String(string.drop(n)), n, new String(string.take(n)) :: result)
 
 
-  implicit class SplittedSeq(seq: Seq[String]):
-    def splitDashed(names: Seq[String]) = outer.splitDashed(seq, names)
+  extension (seq: Seq[String]):
+    def splitDashed(names: Seq[String]): Seq[String] =
+      splitDashed(seq, names)
 
   /**
    * split a string along some names which start with a dash:
    *
    * "-include hello world -with me".splitDashed(Seq("include", "with")) === ("include", "hello world", "with", "me")
    */
-  def splitDashed(seq: Seq[String], names: Seq[String]) =
+  def splitDashed(seq: Seq[String], names: Seq[String]): Seq[String] =
     val dashedNames = names.map("-"+_.toLowerCase)
     def isDashedName(name: String) = dashedNames.contains(name.toLowerCase)
 
@@ -45,6 +52,5 @@ trait Split { outer =>
       case (name, values)                       => Seq(name) ++ values
     }
 
-}
 private[specs2]
 object Split extends Split

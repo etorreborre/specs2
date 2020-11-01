@@ -9,18 +9,18 @@ import scala.collection.mutable.ListBuffer
  */
 private[specs2]
 trait Seqx:
-  outer =>
 
   /**
    * Additional methods for nested seqs
    */
-  implicit class ExtendedNestedSeq[T](seq: Seq[Seq[T]]):
-    def safeTranspose = outer.transpose(seq)
+  extension [T](seq: Seq[Seq[T]]):
+    def safeTranspose: Seq[Seq[T]] =
+      transpose(seq)
 
   /**
    * Additional methods for seqs
    */
-  implicit class ExtendedSeq[T](seq: Seq[T]):
+  extension [T](seq: Seq[T]):
 
     /** update the last element if there is one */
     def updateLast(f: T => T) = seq match
@@ -41,41 +41,47 @@ trait Seqx:
       withoutElement ++ startWithElement.drop(1)
 
     /**
-     * @return all the elements in seq which are not in other, even if they are duplicates: Seq(1, 1).delta(Seq(1)) == Seq(1)
-     *         this uses a user given comparison function
-     */
-    def delta[S](other: Seq[S], compare: (T, S) => Boolean): Seq[T] =
-      def notFound(ls1: Seq[T], ls2: Seq[S], result: Seq[T] = Seq()): Seq[T] =
-        ls1 match
-          case Seq()        => result
-          case head +: rest =>
-            if  ls2.exists(compare(head, _)) then notFound(rest, ls2.removeFirst(l => compare(head, l)), result)
-            else                               notFound(rest, ls2, result :+ head)
-      notFound(seq, other)
-
-    /**
      * This implementation reuses the Seq.diff implementation but with a user-defined equality
      * @return remove all the elements of other from seq with a user-defined equality function
      */
     def difference(other: Seq[T], equality: (T, T) => Boolean = (_:T) == (_:T)): scala.collection.Seq[T] =
+      case class D(t: T, equality: (T, T) => Boolean):
+        override def equals(o: Any) = o match
+          case other: D => equality(t, other.t)
+          case _        => false
+        // always return the same hashcode because we can't guarantee that if equality(t1, t2) == true then t1.hashCode == t2.hashCode
+        // this however makes the search much less efficient
+        override def hashCode = 1
+
+      def occurrenceCounts(sq: Seq[T], equality: (T, T) => Boolean): scala.collection.mutable.Map[D, Int] =
+        val occurrences = new scala.collection.mutable.HashMap[D, Int] { override def default(k: D) = 0 }
+        for y <- sq do occurrences(D(y, equality)) += 1
+        occurrences
+
       val occurrences = occurrenceCounts(other, equality)
       val result = new ListBuffer[T]
       for x <- seq do
-        if occurrences(D(x, equality)) == 0 then result += x
-        else                                  occurrences(D(x, equality)) -= 1
+        if occurrences(D(x, equality)) == 0 then
+          result += x
+        else
+          occurrences(D(x, equality)) -= 1
       result.toSeq
 
-    private case class D(t: T, equality: (T, T) => Boolean):
-      override def equals(o: Any) = o match
-        case other: D => equality(t, other.t)
-        case _        => false
-      // always return the same hashcode because we can't guarantee that if equality(t1, t2) == true then t1.hashCode == t2.hashCode
-      // this however makes the search much less efficient
-      override def hashCode = 1
-    private def occurrenceCounts(sq: Seq[T], equality: (T, T) => Boolean): scala.collection.mutable.Map[D, Int] =
-      val occurrences = new scala.collection.mutable.HashMap[D, Int] { override def default(k: D) = 0 }
-      for y <- sq do occurrences(D(y, equality)) += 1
-      occurrences
+  extension [T, S](seq: Seq[T]):
+    /**
+     * @return all the elements in seq which are not in other, even if they are duplicates: Seq(1, 1).delta(Seq(1)) == Seq(1)
+     *         this uses a user given comparison function
+     */
+    def delta(other: Seq[S], compare: (T, S) => Boolean): Seq[T] =
+      def notFound(ls1: Seq[T], ls2: Seq[S], result: Seq[T] = Seq()): Seq[T] =
+        ls1 match
+          case Seq()        => result
+          case head +: rest =>
+            if  ls2.exists(compare(head, _)) then
+              notFound(rest, ls2.removeFirst(l => compare(head, l)), result)
+            else
+              notFound(rest, ls2, result :+ head)
+      notFound(seq, other)
 
 
   /**

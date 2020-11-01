@@ -704,8 +704,8 @@ trait Producers:
       }
     }
 
-  implicit class TransducerOps[F[_], A, B](transducer: Transducer[F, A, B]):
-    def |>[C](other: Transducer[F, B, C]): Transducer[F, A, C] = (p: Producer[F, A]) =>
+  extension [F[_], A, B, C](transducer: Transducer[F, A, B]):
+    def |>(other: Transducer[F, B, C]): Transducer[F, A, C] = (p: Producer[F, A]) =>
       other(transducer(p))
 
 object Producers extends Producers

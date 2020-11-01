@@ -11,7 +11,7 @@ import Trim._
  */
 trait Regexes:
 
-  implicit class Regexed(s: String):
+  extension (s: String):
 
     /**
      * matchesSafely a pattern p. If p cannot be compiled, then it is quoted
@@ -22,9 +22,10 @@ trait Regexes:
       pattern.matcher(s).matches
 
     /** @return a regular expression String matching 's' inside another string, possibly multi-string */
-    def regexPart = s"(?s).*$s.*"
+    def regexPart: String =
+      s"(?s).*$s.*"
 
-  implicit class RegexMatch(r: Regex):
+  extension (r: Regex):
     def matches(s: String): Boolean = r.pattern.matcher(s).matches
 
 

@@ -8,7 +8,7 @@ import text.CamelCase._
 /**
  * Reflection methods for Class names
  */
-trait ClassName { outer =>
+trait ClassName:
 
   /** @return the class name of an instance */
   def simpleClassName(any: AnyRef): String =
@@ -74,10 +74,8 @@ trait ClassName { outer =>
     if name.contains("$") && c.getSuperclass != null then humanName(c.getSuperclass)
     else name.camelCaseToWords
 
-  implicit class ClassOps(klass: Class[_]):
-    def simpleName = outer.simpleName(klass)
-    def humanName  = outer.humanName(klass)
-
-}
+  extension (klass: Class[_]):
+    def simpleName = simpleName(klass)
+    def humanName  = humanName(klass)
 
 object ClassName extends ClassName

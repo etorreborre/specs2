@@ -86,9 +86,9 @@ trait MapBaseMatchers:
       val undefined = isDefined.filter(!_._2).map(_._1)
       val functionDescription = f.showValue.map(_(f.value.toString)).getOrElse("the function")
       result(isDefined.map(_._2).forall(_ == true),
-             functionDescription + Noun(" is defined for the value").plural(values.size) +
+             functionDescription + " is defined for the value".plural(values.size) +
                " " + q(values.mkString(", ")),
-             functionDescription + Noun(" is not defined for the value").plural(undefined.size) +
+             functionDescription + " is not defined for the value".plural(undefined.size) +
                " " + q(undefined.mkString(", ")), f)
   }
 
@@ -99,8 +99,8 @@ trait MapBaseMatchers:
       val undefined = isDefined.filter(!_._2).map(_._1)
       val functionDescription = f.showValue.map(_(f.value.toString)).getOrElse("the function")
       result(isDefined.map(_._2).forall(_ == true),
-             functionDescription + Noun(" is defined by the value").plural(values.size) + " " + q(values.mkString(", ")),
-             functionDescription + Noun(" is not defined by the value").plural(undefined.size) + " " + q(undefined.mkString(", ")),
+             functionDescription + " is defined by the value".plural(values.size) + " " + q(values.mkString(", ")),
+             functionDescription + " is not defined by the value".plural(undefined.size) + " " + q(undefined.mkString(", ")),
              f)
   }
 

@@ -13,6 +13,7 @@ case class FailureLine(s: String) extends LogLine { def log(logger: PrinterLogge
 case object EmptyLine             extends LogLine { def log(logger: PrinterLogger) = logger.newline() }
 
 object LogLine:
-  implicit class toInfoLine(s: String)    { def info = InfoLine(s) }
-  implicit class toErrorLine(s: String)   { def error = ErrorLine(s) }
-  implicit class toFailureLine(s: String) { def failure = FailureLine(s) }
+  extension (s: String):
+    def info = InfoLine(s)
+    def error = ErrorLine(s)
+    def failure = FailureLine(s)

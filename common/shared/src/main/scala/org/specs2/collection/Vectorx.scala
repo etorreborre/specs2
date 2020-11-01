@@ -7,24 +7,24 @@ import scala.annotation.tailrec
  */
 private[specs2]
 trait Vectorx:
-  outer =>
 
   /**
    * Additional methods for nested vectors
    */
-  implicit class ExtendedNestedVector[T](vector: Vector[Vector[T]]):
-    def safeTranspose = outer.transpose(vector)
+  extension [T](vector: Vector[Vector[T]]):
+    def safeTranspose: Vector[Vector[T]] =
+      transpose(vector)
 
   /**
    * Additional methods for vectors
    */
-  implicit class ExtendedVector[T](vector: Vector[T]):
+  extension [T](vector: Vector[T]):
     /**
      * @return a randomly mixed vector
      */
     def scramble = vector.sortWith((a, b) => (new java.util.Random).nextInt(1) > 0)
 
-    def intersperse[A](a: T): Vector[T] =
+    def intersperse(a: T): Vector[T] =
       @tailrec
       def intersperse0(accum: Vector[T], rest: Vector[T]): Vector[T] = rest match
         case Vector()  => accum

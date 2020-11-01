@@ -1,15 +1,16 @@
 package org.specs2
 package reporter
 
-import matcher.MustMatchers
-import specification._
-import dsl.FragmentsDsl
-import specification.create.DefaultFragmentFactory
-import text.Trim._
+import matcher._
 import execute._
-import main.{Report, Arguments}
-import PrinterLogger._
+import specification._
+import specification.create.DefaultFragmentFactory
 import core._
+import dsl.FragmentsDsl
+import text.Trim._
+import PrinterLogger._
+
+import main.{Report, Arguments}
 import process.{Stats, DefaultExecutor, StatisticsRepositoryCreation}
 import io.StringOutput
 import text.AnsiColors
@@ -128,10 +129,10 @@ presentation
     Arguments("showtimes") ^ s2"""e1 $ex1""" matches """(?s).*\[info\] \+ e1 \(\d\d.+\).*"""
 
   def c1 =
-    s2"""e1 $ok
+    extension_contains(s2"""e1 $ok
     |e2 $ko
     |e3 $ko
-    |""".stripMargin contains(
+    |""".stripMargin)(
         """|[info] Total for specification TextPrinterSpec
            |[info] Finished in x ms
            |[info] x examples, x failures, x error""", (_:String).replaceAll("\\d+", "x"))
@@ -329,58 +330,71 @@ table ${
 
 object TextPrinterSpecification extends MustMatchers with FragmentsDsl:
 
-  implicit class fragmentOutputContains(fragment: Fragment):
-    def contains(contained: String, f: String => String = identity) = Fragments(fragment).contains(contained, f)
+  extension (fragment: Fragment):
+    def contains(contained: String): Boolean =
+      Fragments(fragment).contains(contained, identity)
 
-  implicit class fragmentsOutputContains(fragments: Fragments):
-    def contains(contained: String, f: String => String = identity) =
+    def contains(contained: String, f: String => String): Boolean =
+      Fragments(fragment).contains(contained, f)
+
+  extension (fragments: Fragments):
+    def contains(contained: String): Boolean =
+      SpecStructure.create(SpecHeader(classOf[TextPrinterSpec]), Arguments(), fragments).contains(contained, identity)
+
+    def contains(contained: String, f: String => String): Boolean =
       SpecStructure.create(SpecHeader(classOf[TextPrinterSpec]), Arguments(), fragments).contains(contained, f)
 
-    def doesntContain(contained: String, f: String => String = identity) =
+    def doesntContain(contained: String, f: String => String = identity): Boolean =
       SpecStructure.create(SpecHeader(classOf[TextPrinterSpec]), Arguments(), fragments).contains(contained, f).not
 
-  implicit class outputContains(spec: SpecStructure):
-    lazy val optionalEnv: Option[Env] = None
+  extension (spec: SpecStructure):
+    def doesntContain(contained: String): Boolean =
+      spec.contains(contained).not
 
-    lazy val printed =
-      val logger = stringPrinterLogger
-      lazy val env1 =
-        optionalEnv match
-          case Some(ownEnv) =>
-            ownEnv.copy(printerLogger = logger)
+    def doesntContain(contained: String, f: String => String): Boolean =
+      spec.contains(contained, f).not
 
-          case None =>
-            Env(printerLogger = logger,
-              arguments = spec.arguments.overrideWith(Arguments.split("sequential fullstacktrace")))
+    def contains(contained: String): MatchResult[String] =
+      printed(spec) must contain(contained.stripMargin.replace(" ", "_"))
 
-      try
-        val printer = TextPrinter(env1)
-        printer.run(spec.setFragments(spec.fragments
-          .prepend(DefaultFragmentFactory.break) // add a newline after the title
-          .update(DefaultExecutor(env1).execute(spec.arguments))))
-      finally
-        if optionalEnv.isEmpty then env1.shutdown()
+    def contains(contained: String, f: String => String): MatchResult[String] =
+      f(printed(spec)) must contain(contained.stripMargin.replace(" ", "_"))
 
-      val messages = logger.messages
-      messages.map(_.removeEnd(" ")).mkString("\n").replace(" ", "_")
+    def containsOnly(contained: String): MatchResult[String]  =
+      printed(spec) must be_==(contained.stripMargin.replace(" ", "_"))
 
-    def doesntContain(contained: String, f: String => String = identity) =
-      contains(contained, f).not
+    def startsWith(start: String): MatchResult[String]  =
+      printed(spec) must startWith(start.stripMargin.replace(" ", "_"))
 
-    def contains(contained: String, f: String => String = identity) =
-      f(printed) must contain(contained.stripMargin.replace(" ", "_"))
+    def matches(pattern: String): MatchResult[String]  =
+      printed(spec) must beMatching(pattern.stripMargin.replace(" ", "_"))
 
-    def containsOnly(contained: String) =
-      printed must be_==(contained.stripMargin.replace(" ", "_"))
+  private def printed(s: SpecStructure, optionalEnv: Option[Env] = None) =
+    val logger = stringPrinterLogger
+    lazy val env1 =
+      optionalEnv match
+        case Some(ownEnv) =>
+          ownEnv.copy(printerLogger = logger)
+        case None =>
+          Env(printerLogger = logger,
+            arguments = s.arguments.overrideWith(Arguments.split("sequential fullstacktrace")))
+    try
+      val printer = TextPrinter(env1)
+      printer.run(s.setFragments(s.fragments
+        .prepend(DefaultFragmentFactory.break) // add a newline after the title
+        .update(DefaultExecutor(env1).execute(s.arguments))))
+    finally
+      if optionalEnv.isEmpty then env1.shutdown()
 
-    def startsWith(start: String) =
-      printed must startWith(start.stripMargin.replace(" ", "_"))
+    val messages = logger.messages
+     messages.map(_.removeEnd(" ")).mkString("\n").replace(" ", "_")
 
-    def matches(pattern: String) =
-      printed must beMatching(pattern.stripMargin.replace(" ", "_"))
+  extension (spec: (Fragments, Env)):
+    def contains(contained: String): MatchResult[String]  =
+      printed(spec._1, Some(spec._2)) must contain(contained.stripMargin.replace(" ", "_"))
 
-  implicit class outputContainsForEnv(spec: (Fragments, Env)) extends outputContains(spec._1):
-    override lazy val optionalEnv = Some(spec._2)
+    def contains(contained: String, f: String => String): MatchResult[String]  =
+      f(printed(spec._1, Some(spec._2))) must contain(contained.stripMargin.replace(" ", "_"))
 
 class TestLogger extends BufferedPrinterLogger with StringOutput:
   def infoLine(msg: String)    = super.append(AnsiColors.removeColors(msg))

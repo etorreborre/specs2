@@ -17,9 +17,9 @@ trait AnsiColors { outer =>
   lazy val magenta = AnsiColor("\u001b[35m")
   lazy val cyan    = AnsiColor("\u001b[36m")
   lazy val white   = AnsiColor("\u001b[37m")
-    
+
   lazy val reset   = AnsiColor("\u001b[0m")
-    
+
   lazy val allColors = Seq(black, red, green, yellow, blue, magenta, cyan, white)
   lazy val all = allColors :+ reset
 
@@ -43,7 +43,7 @@ trait AnsiColors { outer =>
 
   override def toString = all.map(_.color).mkString("AnsiColors(",",",")")
 
-  implicit class AnsiColorOps(s: String):
+  extension (s: String):
     def removeColors: String =
       outer.removeColors(s)
 }

@@ -71,7 +71,7 @@ case class TextPrinter(env: Env) extends Printer {
       printNewLine ++
       List(
         s"Total for specification$title\n".info,
-        stats.copy(timer = timer).display(args).info) ++
+        stats.copy(timer = timer).display(using args).info) ++
       printNewLine ++
       printNewLine
     }
@@ -193,7 +193,7 @@ case class TextPrinter(env: Env) extends Printer {
     val textLines = text.trimEnclosing("`").trimEnclosing("```").split("\n", -1).toList // trim markdown code marking
     val firstLine = textLines.headOption.getOrElse("")
     val (indentation, line) = firstLine.span(_ == ' ')
-    val status = result.coloredStatus(args) + " "
+    val status = result.coloredStatus(using args) + " "
     val decoratedFirstLine = indentation + status + (if Seq("*", "-").exists(line.startsWith) then line.drop(2) else line)
 
     val rest = textLines.drop(1).map(l => s"  $l")

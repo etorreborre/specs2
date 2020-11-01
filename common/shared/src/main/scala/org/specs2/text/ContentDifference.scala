@@ -64,8 +64,8 @@ case class LinesContentDifference(
   // all && unordered
   private lazy val showNotOrdered: Diffs =
     (numberedLines1.intersect(numberedLines2).                  map(l => sameLine(l)) ++
-     numberedLines1.delta[NumberedLine](numberedLines2, _ == _).map(l => addedLine(l)) ++
-     numberedLines2.delta[NumberedLine](numberedLines1, _ == _).map(l => deletedLine(l))).sorted
+     numberedLines1.delta(numberedLines2, _ == _).map(l => addedLine(l)) ++
+     numberedLines2.delta(numberedLines1, _ == _).map(l => deletedLine(l))).sorted
 
   // partial && ordered
   private lazy val showNotIncluded: Diffs =
@@ -139,7 +139,7 @@ object NumberedLine:
     new Ordering[NumberedLine]:
       def compare(x: NumberedLine, y: NumberedLine): Int =
         x.lineNumber.compare(y.lineNumber)
-  
+
 /**
  * A trait to filter results of a difference check
  */

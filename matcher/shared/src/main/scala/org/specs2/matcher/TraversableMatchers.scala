@@ -56,19 +56,19 @@ trait TraversableBaseMatchers { outer =>
   def containPattern[T](t: =>String) = ContainWithResult(new BeMatching(t)) ^^ ((ts: Traversable[T]) => ts.toSeq.map(_.toString))
 
   /** does a containAll comparison in both ways */
-  def containTheSameElementsAs[T](seq: Seq[T], equality: (T, T) => Boolean = (_:T) == (_:T)): Matcher[Traversable[T]] = new Matcher[Traversable[T]] {
+  def containTheSameElementsAs[T](seq: Seq[T], equality: (T, T) => Boolean = (_:T) == (_:T)): Matcher[Traversable[T]] =
+    new Matcher[Traversable[T]]:
 
-    def apply[S <: Traversable[T]](t: Expectable[S]) =
-      val missing = seq.difference(t.value.toSeq, equality)
-      val added   = t.value.toSeq.difference(seq, equality)
-      def message(diffs: scala.collection.Seq[_], msg: String) =
-        if diffs.isEmpty then "" else diffs.mkString("\n  "+msg+": ", ", ", "")
+      def apply[S <: Traversable[T]](t: Expectable[S]) =
+        val missing = seq.difference(t.value.toSeq, equality)
+        val added   = t.value.toSeq.difference(seq, equality)
+        def message(diffs: scala.collection.Seq[_], msg: String) =
+          if diffs.isEmpty then "" else diffs.mkString("\n  "+msg+": ", ", ", "")
 
-      result(missing.isEmpty && added.isEmpty,
-             t.description + "\n  contains the same elements as\n"+ seq,
-             t.description + message(missing, "is missing") + message(added, "must not contain"),
-             t)
-  }
+        result(missing.isEmpty && added.isEmpty,
+               t.description + "\n  contains the same elements as\n"+ seq,
+               t.description + message(missing, "is missing") + message(added, "must not contain"),
+               t)
 
   /**
    * SIZE MATCHERS

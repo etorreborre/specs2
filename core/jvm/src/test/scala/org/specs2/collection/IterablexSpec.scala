@@ -2,7 +2,6 @@ package org.specs2
 package collection
 
 import mutable.Specification
-import Listx._
 import org.scalacheck._
 import Iterablex._
 
