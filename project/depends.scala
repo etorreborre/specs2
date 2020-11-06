@@ -56,7 +56,7 @@ object depends {
   lazy val tagsoup = "org.ccil.cowan.tagsoup" % "tagsoup" % "1.2.1"
 
   lazy val scalacheck = Def.setting {
-    "org.scalacheck" %%% "scalacheck" % "1.14.3"
+    "org.scalacheck" %%% "scalacheck" % "1.15.1"
   }
 
   def paradise(scalaVersion: String) =
