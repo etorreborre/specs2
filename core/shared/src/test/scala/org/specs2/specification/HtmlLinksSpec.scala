@@ -18,7 +18,7 @@ class HtmlLinksSpec extends Spec with TypedEqual with ReferenceDsl { def is = s2
   ${ a("learn" ~ howTo)                             === "<a href='org.specs2.specification.HowTo.html'>learn</a>" }
 
   with a tooltip
-  ${ a("user guide" ~ (userGuide, "this one"))      === "<a href='org.specs2.specification.UserGuideSpecification.html' tip='this one'>user guide</a>" }
+  ${ a("user guide".~(userGuide, "this one"))       === "<a href='org.specs2.specification.UserGuideSpecification.html' tip='this one'>user guide</a>" }
   """
 
   def a(f: Fragment) = f match

@@ -39,6 +39,6 @@ object AsResult:
  */
 class AnyValueAsResult[T] extends AsResult[T]:
   def asResult(t: =>T) =
-    executeEither(t)(_.toString) match
+    executeEither(t)(using _.toString) match
       case Left(e)  => new DecoratedResult((), e)
       case Right(v) => new DecoratedResult(v, Success())
