@@ -6,6 +6,7 @@ import collection.Seqx.{given _}
 import execute._
 import MatchResultLogicalCombinators.{given _, _}
 import control.ImplicitParameters.{given _}
+import ResultLogicalCombinators.combineResult
 
 /**
  * Result of a Match.
@@ -248,7 +249,8 @@ class AndMatch[T] private[specs2](first: MatchResult[T], second: =>MatchResult[T
   def setExpectable[S >: T](e: Expectable[S]): MatchResult[S] =
     new AndMatch(first.setExpectable(e), second.setExpectable(e))
 
-  override def toResult = (m1 and m2).toResult
+  override def toResult: Result =
+    m1.toResult and m2.toResult
 
 class AndNotMatch[T] private[specs2](first: MatchResult[T], second: =>MatchResult[T]) extends MatchResult[T]:
   val expectable = m1.expectable
@@ -260,6 +262,7 @@ class AndNotMatch[T] private[specs2](first: MatchResult[T], second: =>MatchResul
   def apply(matcher: Matcher[T]): MatchResult[T] = m1 and m2(matcher.not)
   def setExpectable[S >: T](e: Expectable[S]): MatchResult[S] =
     new AndNotMatch(first.setExpectable(e), second.setExpectable(e))
+
 class OrMatch[T] private[specs2](first: MatchResult[T], second: =>MatchResult[T]) extends MatchResult[T]:
   val expectable = m1.expectable
   lazy val m1 = first
@@ -284,7 +287,10 @@ class OrMatch[T] private[specs2](first: MatchResult[T], second: =>MatchResult[T]
   def apply(matcher: Matcher[T]): MatchResult[T] = m1 or m2(matcher)
   def setExpectable[S >: T](e: Expectable[S]): MatchResult[S] =
     new OrMatch(first.setExpectable(e), second.setExpectable(e))
-  override def toResult = (m1 or m2).toResult
+
+  override def toResult: Result =
+    m1.toResult or m2.toResult
+
 class OrNotMatch[T] private[specs2](first: MatchResult[T], second: =>MatchResult[T]) extends MatchResult[T]:
   lazy val m1 = first
   lazy val m2 = second
