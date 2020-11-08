@@ -53,7 +53,8 @@ trait TraversableBaseMatchers { outer =>
   /** match if traversable contains (x matches .*+t+.*) */
   def containMatch[T](t: =>String) = containPattern[T](t.regexPart)
   /** match if traversable contains (x matches p) */
-  def containPattern[T](t: =>String) = ContainWithResult(new BeMatching(t)) ^^ ((ts: Traversable[T]) => ts.toSeq.map(_.toString))
+  def containPattern[T](t: =>String): Matcher[Traversable[T]] =
+    contain(atLeast(ValueChecks.matcherIsValueCheck(new BeMatching(t)))) ^^ (_.map(_.toString))
 
   /** does a containAll comparison in both ways */
   def containTheSameElementsAs[T](seq: Seq[T], equality: (T, T) => Boolean = (_:T) == (_:T)): Matcher[Traversable[T]] =
@@ -148,7 +149,7 @@ trait TraversableBeHaveMatchers extends BeHaveMatchers:
   extension [T](s: MatchResult[Traversable[T]]):
     def contain(check: ValueCheck[T]) = s(outer.contain(check))
     def containPattern(t: =>String) = s(outer.containPattern(t))
-    def containMatch(t: =>String) = containPattern(t.regexPart)
+    def containMatch(t: =>String) = s.containPattern(t.regexPart)
 
   extension [T : Sized](s: MatchResult[T]):
     def size(n: Int) : MatchResult[T] = s(outer.haveSize[T](n))

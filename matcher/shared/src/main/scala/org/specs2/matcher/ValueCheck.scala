@@ -16,22 +16,22 @@ import ResultLogicalCombinators.{given _, _}
  *  - a Matcher[T]
  *  - a function returning a type R having an AsResult instance
  */
-trait ValueCheck[T] { outer =>
+trait ValueCheck[T]:
+  outer =>
+
   def check:    T => Result
   def checkNot: T => Result
 
-  def negate = new ValueCheck[T] {
-    def check: T => Result = outer.checkNot
-    def checkNot: T => Result = outer.check
-  }
-}
+  def negate: ValueCheck[T] =
+    new ValueCheck[T]:
+      def check: T => Result = outer.checkNot
+      def checkNot: T => Result = outer.check
 
 object ValueCheck:
 
-  given typedValueCheck[T : Diffable] as Conversion[T, BeEqualTypedValueCheck[T]] {
+  given typedValueCheck[T : Diffable] as Conversion[T, BeEqualTypedValueCheck[T]]:
     def apply(expected: T): BeEqualTypedValueCheck[T] =
       new BeEqualTypedValueCheck[T](expected)
-  }
 
   def alwaysOk[T]: ValueCheck[T] =
     new ValueCheck[T]:
@@ -52,7 +52,7 @@ object ValueCheck:
 trait ValueChecks extends ValueChecksBase:
 
   /** a partial function returning an object having an AsResult instance can check a value */
-  given partialfunctionIsValueCheck[T, R : AsResult] as Conversion[PartialFunction[T, R], ValueCheck[T]] {
+  given partialfunctionIsValueCheck[T, R : AsResult] as Conversion[PartialFunction[T, R], ValueCheck[T]]:
     def apply(f: PartialFunction[T, R]): ValueCheck[T] =
       new ValueCheck[T]:
        def check = (t: T) => {
@@ -61,23 +61,20 @@ trait ValueChecks extends ValueChecksBase:
        }
 
        def checkNot = (t: T) => Results.negate(check(t))
-  }
 
   /** a check of type T can be downcasted implicitly to a check of type S >: T */
-  given downcastBeEqualTypedValueCheck[T, S >: T] as Conversion[BeEqualTypedValueCheck[T], ValueCheck[S]] {
+  given downcastBeEqualTypedValueCheck[T, S >: T] as Conversion[BeEqualTypedValueCheck[T], ValueCheck[S]]:
     def apply(check: BeEqualTypedValueCheck[T]): ValueCheck[S] =
       check.downcast[S]
-  }
 
 trait ValueChecksBase extends ValueChecksLowImplicits:
 
   /** a Matcher[T] can check a value */
-  given matcherIsValueCheck[T] as Conversion[Matcher[T], ValueCheck[T]]{
+  given matcherIsValueCheck[T] as Conversion[Matcher[T], ValueCheck[T]]:
     def apply(m: Matcher[T]): ValueCheck[T] =
       new ValueCheck[T]:
         def check    = (t: T) => AsResult.safely(m(createExpectable(t)))
         def checkNot = (t: T) => AsResult.safely(m.not(createExpectable(t)))
-  }
 
   /** an expected value can be used to check another value */
   def valueIsTypedValueCheck[T](expected: T)(using di: Diffable[T]): BeEqualTypedValueCheck[T] =
@@ -85,12 +82,11 @@ trait ValueChecksBase extends ValueChecksLowImplicits:
 
 trait ValueChecksLowImplicits:
   /** a function returning an object having an AsResult instance can check a value */
-  given functionIsValueCheck[T, R : AsResult] as Conversion[T => R, ValueCheck[T]] {
+  given functionIsValueCheck[T, R : AsResult] as Conversion[T => R, ValueCheck[T]]:
     def apply(f: T => R): ValueCheck[T] =
       new ValueCheck[T]:
         def check    = (t: T) => functionResult(AsResult.safely(f(t)), t)
         def checkNot = (t: T) => Results.negate(check(t))
-  }
 
   private[matcher] def functionResult[T](result: Result, t: T) =
     if Seq("true", "false").contains(result.message) then result.mapMessage(m => s"the function returns ${q(m)} on ${q(t)}")
