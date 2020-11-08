@@ -13,9 +13,9 @@ trait Identityx:
 
   extension [S <: T, T : Monoid](t: =>S)
     def orEmptyUnless(condition: Boolean): T =
-      if condition then t else summon[Monoid[T]].zero
+      t orEmptyWhen !condition
 
     def orEmptyWhen(condition: Boolean): T =
-      if condition then t else summon[Monoid[T]].zero
+      if condition then summon[Monoid[T]].zero else t
 
 object Identityx extends Identityx
