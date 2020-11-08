@@ -41,7 +41,7 @@ trait Nodex:
 
   extension (ns: Seq[NodeSeq]):
     def reduceNodes: NodeSeq =
-      ns.flatMap(_.theSeq).reduceNodes
+      ns.flatMap(_.theSeq).reduceNodesWith(identity)
 
   /**
    * reduce a sequence of T's with a function transforming T's to NodeSeq
