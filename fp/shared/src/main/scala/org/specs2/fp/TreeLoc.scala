@@ -65,6 +65,9 @@ final case class TreeLoc[A](tree: Tree[A], lefts: TreeForest[A],
   /** Get the entire tree represented by this zipper. */
   def toTree: Tree[A] = root.tree
 
+  /** Get the size of the whole tree */
+  def size: Int = toTree.size
+
   /** Get the entire forest represented by this zipper. */
   def toForest: TreeForest[A] = combChildren(root.lefts, root.tree, root.rights)
 

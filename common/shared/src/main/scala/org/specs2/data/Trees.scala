@@ -7,7 +7,8 @@ import Tree._
 /**
  * Utility methods for Trees
  */
-trait Trees { outer =>
+trait Trees:
+  outer =>
 
   /**
    * extension methods for the Tree trait
@@ -99,17 +100,18 @@ trait Trees { outer =>
   /**
    * @return the list of all parent locs from a given TreeLoc
    */
-  def parentLocs[T](t: TreeLoc[T], ps: Seq[TreeLoc[T]] = Vector()): Seq[TreeLoc[T]] = t.parent match
-    case Some(p) => parentLocs(p, p +: ps)
-    case None    => ps
+  def parentLocs[T](t: TreeLoc[T], ps: Seq[TreeLoc[T]] = Vector()): Seq[TreeLoc[T]] =
+    t.parent match
+      case Some(p) => parentLocs(p, p +: ps)
+      case None    => ps
 
-  given treeLocIsSized[T] as Sized[TreeLoc[T]] = new Sized[TreeLoc[T]] {
-    def size(t: TreeLoc[T]) : Int = t.size
-  }
+  given treeLocIsSized[T] as Sized[TreeLoc[T]]:
+    def size(t: TreeLoc[T]): Int =
+      t.size
 
-  given treeIsSized[T] as Sized[Tree[T]] = new Sized[Tree[T]] {
-    def size(t: Tree[T]) : Int = t.size
-  }
-}
+  given treeIsSized[T] as Sized[Tree[T]]:
+    def size(t: Tree[T]): Int =
+      t.size
+
 
 object Trees extends Trees

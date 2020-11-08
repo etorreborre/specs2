@@ -77,11 +77,19 @@ sealed abstract class Tree[A]:
     }
     LazyList.iterate(LazyList(this))(f) takeWhile (_.nonEmpty) map (_ map (_.rootLabel))
 
+  /** return the size of the tree == the number of labels */
+  def size: Int =
+    flatten.size
+
   /** Binds the given function across all the subtrees of this tree. */
   def cobind[B](f: Tree[A] => B): Tree[B] = unfoldTree(this)(t => (f(t), () => t.subForest))
 
   /** A TreeLoc zipper of this tree, focused on the root node. */
-  def loc: TreeLoc[A] = TreeLoc.loc(this, LazyList.empty, LazyList.empty, LazyList.empty)
+  def loc: TreeLoc[A] =
+    TreeLoc.loc(this,
+      LazyList.empty,
+      LazyList.empty,
+      LazyList.empty)
 
   /** Turns a tree of pairs into a pair of trees. */
   def unzip[A1, A2](using p: A => (A1, A2)): (Tree[A1], Tree[A2]) =
