@@ -8,6 +8,7 @@
 .metals
 .bloop
 project/project
+.bsp
 
 **/*.hydra
 hydra.log
