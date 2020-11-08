@@ -83,12 +83,12 @@ trait SpecStructureDsl extends SpecStructureDsl1 with SpecStructureDslLowImplici
   // allow writing: def is = ""
   given Conversion[String, SpecStructure]:
     def apply(s: String): SpecStructure =
-      SpecHeader(getClass) ^ s
+      SpecHeader(outer.getClass) ^ s
 
   // allow writing: def is = "test" ! ok
   given Conversion[Fragment, SpecStructure]:
     def apply(f: Fragment): SpecStructure =
-      SpecHeader(getClass) ^ f
+      SpecHeader(outer.getClass) ^ f
 
   given Conversion[SpecStructure, Fragments]:
     def apply(spec: SpecStructure): Fragments =
