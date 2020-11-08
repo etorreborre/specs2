@@ -29,7 +29,7 @@ trait XmlBaseMatchers:
   /** match if `node` is contained anywhere inside the tested node */
   def \\(node: Node): XmlMatcher = deepMatch(node, Nil)
   /** alias for `\\(node)` with the node label only */
-  def \\(label: String, attributes: String*) = deepMatch(label, attributes.toList)
+  def \\(label: String, attributes: String*): XmlMatcher = deepMatch(label, attributes.toList)
   /**
    * match if `node` is contained anywhere inside the tested node and has exactly the `attributeValues`
    * as names and values for its attributes
@@ -271,7 +271,7 @@ case class PathFunction(val node: Node,
     val n = if node.child.isEmpty then nodeLabel
             else node.toString
 
-    val exactly = "exactly the " orEmptyWhen exactMatch
+    val exactly = "exactly the " orEmptyUnless exactMatch
     val attrs = if attributes.isEmpty && attributeValues.isEmpty then None
                 else Some("with "+exactly+"attributes: " + searchedAttributes)
 
