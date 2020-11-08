@@ -2,7 +2,7 @@ package org.specs2
 package matcher
 
 import execute._
-import ValueChecks._
+import ValueChecks.{given _, _}
 import org.specs2.control._, ImplicitParameters._
 import org.specs2.matcher.describe.Diffable
 
@@ -75,8 +75,11 @@ class OptionLikeMatcher[F[_], T, U](typeName: String, toOption: F[T] => Option[U
   def apply[S <: F[T]](value: Expectable[S]) =
     result(toOption(value.value).isDefined, s"${value.description} is $typeName", s"${value.description} is not $typeName", value)
 
-  def which[R : AsResult](f: U => R) = new OptionLikeCheckedMatcher(typeName, toOption, f)
-  def like[R : AsResult](f: PartialFunction[U, R]) = new OptionLikeCheckedMatcher(typeName, toOption, f)
+  def which[R : AsResult](f: U => R): OptionLikeCheckedMatcher[F, T, U] =
+    new OptionLikeCheckedMatcher(typeName, toOption, f)
+
+  def like[R : AsResult](f: PartialFunction[U, R]): OptionLikeCheckedMatcher[F, T, U] =
+    new OptionLikeCheckedMatcher(typeName, toOption, f)
 
 class OptionLikeCheckedMatcher[F[_], T, U](typeName: String, toOption: F[T] => Option[U], check: ValueCheck[U]) extends Matcher[F[T]]:
   def apply[S <: F[T]](value: Expectable[S]) =
