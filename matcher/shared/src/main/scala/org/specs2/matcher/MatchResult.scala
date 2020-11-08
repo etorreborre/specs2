@@ -81,10 +81,6 @@ trait MatchResult[+T] extends ResultLike:
   /** @return the negation of this result */
   def negate: MatchResult[T]
 
-  /** @return the negation of this result */
-  def not: MatchResult[T] =
-    negate
-
   /** apply the matcher */
   def be[S >: T](m: Matcher[T]): MatchResult[S] =
     if m == null then apply(new BeNull)
@@ -359,7 +355,8 @@ object MatchResult:
 
   /** implicit typeclass instance to create examples from a sequence of MatchResults */
   given matchResultSeqAsResult[T] as AsResult[Seq[MatchResult[T]]] = new AsResult[Seq[MatchResult[T]]]:
-    def asResult(t: =>Seq[MatchResult[T]]): Result = t.foldMap(_.toResult)
+    def asResult(t: =>Seq[MatchResult[T]]): Result =
+      t.foldLeft(Success(): Result)(_ and _.toResult)
 
   /** sequence a list of MatchResults into a MatchResult of a list */
   def sequence[T](seq: Seq[MatchResult[T]]): MatchResult[Seq[T]] =

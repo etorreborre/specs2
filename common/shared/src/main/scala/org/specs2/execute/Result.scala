@@ -388,11 +388,12 @@ case class Error(m: String, t: Throwable) extends Result(s"${t.getClass.getName}
 case object Error:
   def apply(t: Throwable) = new Error(t.getMessage.notNull, t)
   def apply(m: String = "") = new Error(m, new Exception(m))
+
 /**
  * Pending result
  * @see Result for description
  */
-case class Pending(m: String = "")  extends Result(m) { outer =>
+case class Pending(m: String = "") extends Result(m) { outer =>
   type SelfType = Pending
 
   def mute = Pending()
@@ -406,7 +407,7 @@ case class Pending(m: String = "")  extends Result(m) { outer =>
  * Skipped result
  * @see Result for description
  */
-case class Skipped(m: String = "", e: String = "")  extends Result(m, e) { outer =>
+case class Skipped(m: String = "", e: String = "") extends Result(m, e) { outer =>
   type SelfType = Skipped
 
   def mute = Skipped()
@@ -430,11 +431,11 @@ case class DecoratedResult[+T](decorator: T, result: Result) extends Result(resu
     override val expectationsNb = n
   }
 
-  override def isSuccess: Boolean       = result.isSuccess
-  override def isError: Boolean         = result.isError
-  override def isSkipped: Boolean       = result.isSkipped
-  override def isPending: Boolean       = result.isPending
-  override def isFailure: Boolean       = result.isFailure
+  override def isSuccess: Boolean = result.isSuccess
+  override def isError: Boolean   = result.isError
+  override def isSkipped: Boolean = result.isSkipped
+  override def isPending: Boolean = result.isPending
+  override def isFailure: Boolean = result.isFailure
 
   /** use another decorator */
   def decorate[S](otherDecorator: S) = DecoratedResult(otherDecorator, result)
