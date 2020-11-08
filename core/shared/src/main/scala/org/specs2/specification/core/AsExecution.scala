@@ -8,7 +8,7 @@ import scala.concurrent.Future
 trait AsExecution[T]:
   def execute(t: =>T): Execution
 
-object AsExecution:
+object AsExecution extends AsExecutionLowImplicits:
 
   def apply[T](using t: AsExecution[T]): AsExecution[T] =
     t
@@ -16,6 +16,9 @@ object AsExecution:
   given [R : AsResult] as AsExecution[R]:
     def execute(r: => R): Execution =
       Execution.result(AsResult(r))
+
+
+trait AsExecutionLowImplicits:
 
   given [R : AsResult] as AsExecution[Future[R]]:
     def execute(r: =>Future[R]): Execution =
