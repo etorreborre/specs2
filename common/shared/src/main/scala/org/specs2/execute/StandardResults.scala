@@ -11,7 +11,7 @@ trait StandardResults:
   def anError = Error("error")
   def success = Success("success")
 
-  val failure: Failure = failure("failure")
+  def failure: Failure = failure("failure")
   def failure(message: String): Failure = Failure(message)
 
   def pending: Pending = pending("PENDING")
