@@ -20,16 +20,26 @@ import execute._
 case class Action[A](private[control] runNow: ExecutionEnv => Future[A], timeout: Option[FiniteDuration] = None, last: Vector[Finalizer] = Vector.empty):
 
   def map[B](f: A => B): Action[B] =
-    Action[B] { ee =>
-      given ExecutionContext = ee.executionContext
-      this.runNow(ee).map(f)
-    }
+    Action[B](
+      runNow = ee => this.runNow(ee).map(f)(using ee.executionContext),
+      timeout = timeout,
+      last = last)
 
   def flatMap[B](f: A => Action[B]): Action[B] =
-    Action[B] { ee =>
-      given ExecutionContext = ee.executionContext
-      this.runNow(ee).flatMap { case a => f(a).runNow(ee) }
-    }
+    var otherTimeout: Option[FiniteDuration] = None
+    var otherLast: Vector[Finalizer] = Vector.empty
+
+    Action[B](
+      runNow = ee => {
+        given ExecutionContext = ee.executionContext
+        runFuture(ee).flatMap { a =>
+          val otherAction = f(a)
+          otherTimeout = otherAction.timeout
+          otherLast = otherAction.last
+          otherAction.runNow(ee)
+        }},
+      timeout = otherTimeout,
+      last = last ++ otherLast)
 
   /** add a finalizer */
   def addLast(finalizer: Finalizer): Action[A] =
