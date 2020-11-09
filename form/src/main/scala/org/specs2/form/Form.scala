@@ -76,7 +76,8 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
    * @return an executed Form
    */
   def executeForm =
-    if result.isDefined then this
+    if result.isDefined then
+      this
     else
       val executedRows = executeRows
       newForm(title, executedRows, Some(executedRows.map(_.execute).foldLeft(success: Result) { (res, cur) => res and cur }))
@@ -225,11 +226,11 @@ case object Form:
 
   private def cell(c: Cell, colnumber: Int = 0)(using args: Arguments) =
     if colnumber > 1 then
-      c.xml(args).toList match
-      case start :+ (e: Elem) => start ++ (e % ("colspan" -> colnumber.toString))
+      c.xml(using args).toList match
+        case start :+ (e: Elem) => start ++ (e % ("colspan" -> colnumber.toString))
         case other                         => other
     else
-      c.xml(args).toList
+      c.xml(using args).toList
 
   /** a Form can be implicitly transformed to results */
   given AsResult[Form]:

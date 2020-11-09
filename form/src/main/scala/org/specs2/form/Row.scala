@@ -29,15 +29,18 @@ case class Row(private val cellList: List[Cell]) extends Executable:
    * execute all cells
    * @return a logical `and` on all results
    */
-  def execute = cellList.foldLeft(success: Result) { (res, cur) =>  res and cur.execute }
+  def execute: Result =
+    cellList.foldLeft(success: Result) { (res, cur) =>  res and cur.execute }
+
   /**
    * execute the row
    * @return a new Row with executed cells
    */
-  def executeRow = Row(cellList.map(_.executeCell))
+  def executeRow: Row =
+    Row(cellList.map(_.executeCell))
 
   /** @return print the row with a padding space size to use for each cell, given cell by cell */
-  def text(maxSizes: Seq[Int]) =
+  def text(maxSizes: Seq[Int]): String =
     def pad(cells: Seq[Cell], sizes: Seq[Int], result: Seq[String]): Seq[String] =
       cells.toList match
         case Nil => result

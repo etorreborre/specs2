@@ -1,6 +1,5 @@
-package org.specs2.specification
-
-import org.specs2.Specification
+package org.specs2
+package specification
 
 class FormComponentsSpec extends Specification with Forms { def is = s2"""
 
@@ -111,7 +110,9 @@ Fourth example: 1-n relationship
       line(OrderLine("PS", 2)).
       line(OrderLine("Beginning Scala", 3))
 
-    def e1 = address.fill("Rose Crescent", 5).execute.message must ===("5 != 2")
+    def e1 =
+      address.fill("Rose Crescent", 5).execute.message must ===("5 != 2")
+
     def e2 = customer.fill("Eric",
                            customer.address.fill("Rose Crescent", 5)).execute.message must ===("5 != 2")
 

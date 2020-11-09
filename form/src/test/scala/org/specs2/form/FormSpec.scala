@@ -2,7 +2,7 @@ package org.specs2
 package form
 
 import specification._
-import Forms._
+import Forms.{given _, _}
 import matcher._
 
 class FormSpec extends Specification with ResultMatchers with XmlMatchers { def is = s2"""
@@ -146,9 +146,10 @@ A form can be added to another
    def execution3 = Form.tr("a").setFailure.execute.message must ===(failure.message)
    def execution4 = Form.tr("a").setFailure.rows.forall(_.execute.isSuccess) must beFalse
 
-   def execution5 = Form.tr(prop("a")("b")).
-     tr(prop("a")("a")).
-     tr(prop("c")("d")).executeForm.rows.filter(_.execute.isFailure) must haveSize(2)
+   def execution5 =
+     Form.tr(prop("a")("b")).
+       tr(prop("a")("a")).
+       tr(prop("c")("d")).executeForm.rows.filter(_.execute.isFailure) must haveSize(2)
 
    def methods1 = Row.tr(TextCell("a")) must ===(Row.tr(TextCell("a")))
    def methods2 = TextCell("a") must ===(TextCell("a"))

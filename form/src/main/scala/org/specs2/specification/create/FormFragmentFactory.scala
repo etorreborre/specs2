@@ -9,7 +9,7 @@ import text.NotNullStrings._
 import execute._
 import control.Exceptions._
 import scala.reflect.Selectable.reflectiveSelectable
-import FormsBuilder._
+import FormsBuilder.{given _, _}
 
 /**
  * Factory for creating Form fragments

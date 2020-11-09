@@ -2,7 +2,7 @@ package org.specs2
 package specification
 
 import form._
-import Forms._
+import Forms.{given _, _}
 import control.ImplicitParameters._
 
 trait ComponentsDefinitions:

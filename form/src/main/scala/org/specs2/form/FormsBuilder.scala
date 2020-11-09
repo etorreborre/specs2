@@ -13,11 +13,11 @@ import scala.xml.NodeSeq
  * Fragments.
  */
 private[specs2]
-trait FormsBuilder:
+trait FormsBuilder extends FormsBuilderLowPriorityImplicits:
 
   /** a Field can be added on a Form row as a FieldCell */
-  given Conversion[Field[_], FieldCell]:
-    def apply(t: Field[_]): FieldCell =
+  given [T] as Conversion[Field[T], FieldCell]:
+    def apply(t: Field[T]): FieldCell =
       new FieldCell(t)
 
   /** a Effect can be added on a Form row as a EffectCell */
@@ -26,8 +26,8 @@ trait FormsBuilder:
       new EffectCell(t)
 
   /** a Prop can be added on a Form row as a PropCell */
-  given Conversion[Prop[_, _], PropCell]:
-    def apply(t: Prop[_, _]): PropCell =
+  given [T, S] as Conversion[Prop[T, S], PropCell]:
+    def apply(t: Prop[T, S]): PropCell =
       new PropCell(t)
 
   /** a Form can be implicitly executed if necessary */
@@ -38,22 +38,6 @@ trait FormsBuilder:
   given [T : ToCell] as Conversion[Seq[T], Seq[Cell]]:
     def apply(seq: Seq[T]): Seq[Cell] =
       seq.map(summon[ToCell[T]].toCell)
-
-  /** anything can be added on a Form row as a Field */
-  implicit def anyIsField[T](t: =>T): Field[T] =
-    Field(t)
-
-  /** anything can be added on a Form row as a TextCell */
-  implicit def anyIsFieldCell(t: =>Any): FieldCell =
-    Field(t)
-
-  /** any xml can be injected as a cell */
-  implicit def xmlIsACell[T](xml: =>NodeSeq): XmlCell =
-    new XmlCell(xml)
-
-  /** a Form can be added on a Form row as a FormCell */
-  implicit def formIsCell(t: =>Form): FormCell =
-    new FormCell(t)
 
   /** a cell can be added lazily to a row. It will only be evaluated when necessary */
   def lazify(c: =>Cell): LazyCell =
@@ -125,3 +109,20 @@ trait FormsBuilder:
 
 private[specs2]
 object FormsBuilder extends FormsBuilder
+
+trait FormsBuilderLowPriorityImplicits:
+  /** anything can be added on a Form row as a Field */
+  implicit def anyIsField[T](t: =>T): Field[T] =
+    Field(t)
+
+  /** anything can be added on a Form row as a TextCell */
+  implicit def anyIsFieldCell(t: =>Any): FieldCell =
+    FieldCell(Field(t))
+
+  /** any xml can be injected as a cell */
+  implicit def xmlIsACell(xml: =>NodeSeq): XmlCell =
+    new XmlCell(xml)
+
+  /** a Form can be added on a Form row as a FormCell */
+  implicit def formIsCell(t: =>Form): FormCell =
+    new FormCell(t)
