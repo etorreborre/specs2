@@ -91,7 +91,7 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
 
   /** @return an xml description of this form, to be embedded in a Cell */
   def toCellXml(using args: Arguments = Arguments()): NodeSeq =
-    <td class="info">{Form.toXml(this)(args)}</td>
+    <td class="info">{Form.toXml(this)(using args)}</td>
 
   def subset(f1: Traversable[Form], f2: Traversable[Form]): Form =
     addLines(FormDiffs.subset(f1.toSeq, f2.toSeq))
