@@ -10,7 +10,6 @@ lazy val specs2 = project.in(file(".")).
   settings(
     commonSettings,
     siteSettings,
-    apiSettings,
     name := "specs2",
     packagedArtifacts := Map.empty
   ).aggregate(
@@ -25,8 +24,8 @@ val scalaDotty = "0.27.0-RC1"
 lazy val specs2Settings = Seq(
   organization := "org.specs2",
   specs2ShellPrompt,
-  scalaVersion := scalaDotty
-  )
+  scalaVersion := scalaDotty,
+  sources in (Compile, doc) := Seq())
 
 lazy val commonJsSettings = Seq(
   scalacOptions += {
@@ -60,7 +59,7 @@ lazy val common = crossProject(JVMPlatform).in(file("common")).
   settings(
     depends.reflect,
     depends.scalaXML,
-    depends.scalacheckTest,
+    libraryDependencies += depends.scalacheck % Test,
     commonSettings,
     name := "specs2-common"
   ).
@@ -175,7 +174,7 @@ lazy val scalacheck = crossProject(JVMPlatform).
   settings(
     commonSettings,
     name := "specs2-scalacheck",
-    depends.scalacheck
+    libraryDependencies += depends.scalacheck,
   ).
   jvmSettings(depends.jvmTest, commonJvmSettings).
   dependsOn(core)
@@ -205,17 +204,14 @@ def scalaSourceVersion(scalaBinaryVersion: String) =
 
 lazy val compilationSettings = Seq(
   maxErrors := 20,
-  scalacOptions in Compile ++= (if (isDotty.value) Seq("-language:implicitConversions,postfixOps", "-new-syntax", "-indent", "-Ykind-projector") else Nil),
-  scalacOptions in Compile ++= Seq("-deprecation:false", "-unchecked", "-feature"),
-  scalacOptions in Compile ++= {
-    CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, v)) if v <= 12 => Seq("-Ywarn-unused-import", "-Yno-adapted-args", "-Ypartial-unification")
-      case _ => Nil
-    }
-  },
-  scalacOptions in (Compile, doc)    ++= Seq("-feature", "-language:_"),
-  scalacOptions in (Compile, console) := Seq("-Yrangepos", "-feature", "-language:_"),
-  scalacOptions in (Test, console)    := Seq("-Yrangepos", "-feature", "-language:_")//,
+  scalacOptions in Compile ++= Seq(
+    "-language:implicitConversions,postfixOps",
+    "-new-syntax",
+    "-indent",
+    "-Ykind-projector",
+    "-deprecation:false",
+    "-unchecked",
+    "-feature")
 )
 
 lazy val testingSettings = Seq(
@@ -238,8 +234,6 @@ lazy val testingJvmSettings = Seq(
 lazy val siteSettings = GhpagesPlugin.projectSettings ++ SitePlugin.projectSettings ++
   Seq(
     siteSourceDirectory := target.value / "specs2-reports" / "site",
-    // copy the api files to a versioned directory
-    siteMappings ++= { (mappings in packageDoc in Compile).value.map { case (f, d) => (f, s"api/SPECS2-${version.value}/$d") } },
     includeFilter in makeSite := AllPassFilter,
     // override the synchLocal task to avoid removing the existing files
     ghpagesSynchLocal := {
@@ -249,20 +243,6 @@ lazy val siteSettings = GhpagesPlugin.projectSettings ++ SitePlugin.projectSetti
     },
     git.remoteRepo := "git@github.com:etorreborre/specs2.git"
   )
-
-lazy val apiSettings = Seq(
-  sources in (Compile, doc) := sources.all(aggregateCompile).value.flatten,
-  unmanagedSources in (Compile, doc) := unmanagedSources.all(aggregateCompile).value.flatten,
-  libraryDependencies := libraryDependencies.all(aggregateTest).value.flatten) ++
-  Seq(scalacOptions in (Compile, doc) += "-Ymacro-expand:none")
-
-lazy val aggregateCompile = ScopeFilter(
-  inProjects(fpJVM, commonJVM, matcherJVM, matcherExtraJVM, coreJVM, html, formJVM, markdownJVM, junitJVM, scalacheckJVM),
-  inConfigurations(Compile))
-
-lazy val aggregateTest = ScopeFilter(
-  inProjects(fpJVM, commonJVM, matcherJVM, matcherExtraJVM, coreJVM, html, formJVM, markdownJVM, junitJVM, scalacheckJVM),
-  inConfigurations(Test))
 
 /**
  * PUBLICATION

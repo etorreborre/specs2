@@ -9,6 +9,7 @@
 .bloop
 project/project
 .bsp
+_site
 
 **/*.hydra
 hydra.log
