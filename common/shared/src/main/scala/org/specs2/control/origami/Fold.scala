@@ -310,73 +310,73 @@ object Fold:
 trait Folds:
 
   /** @return a fold which uses a Monoid to accumulate elements */
-  def fromMonoidMap[M[_], A, O : Monoid](f: A => O)(using m: Monad[M]): Fold[M, A, O] { type S = O } = new Fold[M, A, O] {
-    type S = O
-    val monad: Monad[M] = m
+  def fromMonoidMap[M[_], A, O : Monoid](f: A => O)(using m: Monad[M]): Fold[M, A, O] { type S = O } =
+    new Fold[M, A, O]:
+      type S = O
+      val monad: Monad[M] = m
 
-    def start = monad.point(Monoid[O].zero)
-    def fold = (s: S, a: A) => monad.point(Monoid[O].append(s, f(a)))
-    def end(s: S) = monad.point(s)
-  }
+      def start = monad.point(Monoid[O].zero)
+      def fold = (s: S, a: A) => monad.point(Monoid[O].append(s, f(a)))
+      def end(s: S) = monad.point(s)
 
   /** @return a fold from arguments of a fold left */
-  def fromFoldLeft[M[_], A, B](b: B)(f: (B, A) => M[B])(using m: Monad[M]): Fold[M, A, B] { type S = B } = new Fold[M, A, B] {
-    type S = B
-    val monad: Monad[M] = m
+  def fromFoldLeft[M[_], A, B](b: B)(f: (B, A) => M[B])(using m: Monad[M]): Fold[M, A, B] { type S = B } =
+    new Fold[M, A, B]:
+      type S = B
+      val monad: Monad[M] = m
 
-    def start = monad.point(b)
-    def fold = (s: S, a: A) => f(s, a)
-    def end(s: S) = monad.point(s)
-  }
+      def start = monad.point(b)
+      def fold = (s: S, a: A) => f(s, a)
+      def end(s: S) = monad.point(s)
 
   /** @return a fold with just a start action */
-  def fromStart[M[_], A, S1](action: M[S1])(using m: Monad[M]) = new Fold[M, A, S1] {
-    type S = S1
-    val monad: Monad[M] = m
+  def fromStart[M[_], A, S1](action: M[S1])(using m: Monad[M]) =
+    new Fold[M, A, S1]:
+      type S = S1
+      val monad: Monad[M] = m
 
-    def start = action
-    def fold = (s: S, a: A) => monad.point(s)
-    def end(s: S) = monad.point(s)
-  }
+      def start = action
+      def fold = (s: S, a: A) => monad.point(s)
+      def end(s: S) = monad.point(s)
 
-  def bracket[A, C](open: Action[C])(step: (C, A) => Action[C])(close: C => Finalizer): Fold[Action, A, Unit] = new Fold[Action, A, Unit] {
-    type S = C
-    val monad: Monad[Action] = summon[Monad[Action]]
+  def bracket[A, C](open: Action[C])(step: (C, A) => Action[C])(close: C => Finalizer): Fold[Action, A, Unit] =
+    new Fold[Action, A, Unit]:
+      type S = C
+      val monad: Monad[Action] = Action.ActionMonad
 
-    def start = open
-    def fold = (s: S, a: A) => step(s, a).addLast(close(s))
-    def end(s: S) = monad.point(close(s).run())
-  }
+      def start = open
+      def fold = (s: S, a: A) => step(s, a).addLast(close(s))
+      def end(s: S) = monad.point(close(s).run())
 
-  def fromSink[M[_], A](action: A => M[Unit])(using m: Monad[M]): Fold[M, A, Unit] = new Fold[M, A, Unit] {
-    type S = Unit
-    val monad: Monad[M] = m
+  def fromSink[M[_], A](action: A => M[Unit])(using m: Monad[M]): Fold[M, A, Unit] =
+    new Fold[M, A, Unit]:
+      type S = Unit
+      val monad: Monad[M] = m
 
-    def start = monad.point(())
-    def fold = (s: S, a: A) => action(a)
-    def end(s: S) = monad.point(())
-  }
+      def start = monad.point(())
+      def fold = (s: S, a: A) => action(a)
+      def end(s: S) = monad.point(())
 
   /** @return a fold which uses a Monoid to accumulate elements */
-  def fromMonoidMapEval[M[_], A, O : Monoid](f: A => M[O])(using m: Monad[M]): Fold[M, A, O] { type S = O } = new Fold[M, A, O] {
-    type S = O
-    val monad: Monad[M] = m
+  def fromMonoidMapEval[M[_], A, O : Monoid](f: A => M[O])(using m: Monad[M]): Fold[M, A, O] { type S = O } =
+    new Fold[M, A, O]:
+      type S = O
+      val monad: Monad[M] = m
 
-    def start = monad.point(Monoid[O].zero)
-    def fold = (s: S, a: A) => f(a).map(a1 => Monoid[O].append(s, a1))
-    def end(s: S) = monad.point(s)
-  }
+      def start = monad.point(Monoid[O].zero)
+      def fold = (s: S, a: A) => f(a).map(a1 => Monoid[O].append(s, a1))
+      def end(s: S) = monad.point(s)
 
   /** @return a Fold which simply accumulates elements into a List */
-  def list[A]: Fold[Id, A, List[A]] = new Fold[Id, A, List[A]] {
-    // a ListBuffer is used for efficient appends
-    val monad: Monad[Id] = Monad.idMonad
+  def list[A]: Fold[Id, A, List[A]] =
+    new Fold[Id, A, List[A]]:
+      // a ListBuffer is used for efficient appends
+      val monad: Monad[Id] = Monad.idMonad
 
-    type S = scala.collection.mutable.ListBuffer[A]
-    def start = monad.point(new scala.collection.mutable.ListBuffer[A])
-    def fold = (s: S, a: A) => monad.point { s.append(a); s }
-    def end(s: S) = monad.point(s.toList)
-  }
+      type S = scala.collection.mutable.ListBuffer[A]
+      def start = monad.point(new scala.collection.mutable.ListBuffer[A])
+      def fold = (s: S, a: A) => monad.point { s.append(a); s }
+      def end(s: S) = monad.point(s.toList)
 
 end Folds
 
