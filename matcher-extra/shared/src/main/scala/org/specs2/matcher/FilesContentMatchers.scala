@@ -7,7 +7,7 @@ import io._
 import fp.syntax._
 import MatchersImplicits.{given _}
 import MatchResultCombinators._
-import ValueChecks._
+import ValueChecks.{given _}
 
 /**
  * This trait provides matchers to check the presence of some expected files vs the actual ones

@@ -14,8 +14,9 @@ import control.Times
 import execute.Failure
 
 import scala.annotation.tailrec
-import ValueChecks._
+import ValueChecks.{given _, _}
 import org.specs2.matcher.describe.Diffable
+
 /**
  * Matchers for traversables
  */
