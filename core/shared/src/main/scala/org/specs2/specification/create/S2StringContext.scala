@@ -88,7 +88,7 @@ trait S2StringContextCreation extends FragmentsFactory:
    */
   extension (sc: StringContext)(using factory: FragmentFactory):
     inline def s2(inline variables: Interpolated*): Fragments =
-      ${s2Implementation('sc)('variables, 'factory, 'postProcessS2Fragments)}
+      ${s2Implementation('sc)('{variables.toSeq}, 'factory, 'postProcessS2Fragments)}
 
   /** this function is exposed so that it can be overridden with side-effects when using s2 strings in mutable specs */
   def postProcessS2Fragments(fs: Fragments): Fragments =
@@ -104,11 +104,10 @@ object S2StringContext:
         ff: Expr[FragmentFactory],
         postProcess: Expr[Fragments => Fragments])(using qctx: QuoteContext) : Expr[Fragments] =
 
-    val args = variables match
-      case Varargs(args) => args
-      case _ => report.throwError("Expected a statically known argument list", variables)
-
-    '{s2(${sc}.parts, ${variables}, ${ff}, ${postProcess})}
+    '{s2(${sc}.parts,
+         ${variables},
+         ${ff},
+         ${postProcess})}
 
   /**
    * Create fragments based on captured texts + "interpolated fragments"
