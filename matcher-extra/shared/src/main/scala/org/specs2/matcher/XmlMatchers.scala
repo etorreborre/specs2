@@ -10,7 +10,7 @@ import text.Quote._
 import StringToElem._
 import collection.Seqx._
 import fp.syntax._
-import StringToElem.{given _}
+import StringToElem.{given}
 
 /**
  * The XmlMatchers trait provides matchers which are applicaborderle to xml nodes

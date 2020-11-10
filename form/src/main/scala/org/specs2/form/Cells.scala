@@ -2,7 +2,7 @@ package org.specs2
 package form
 
 import scala.xml._
-import xml.Nodex.{given _, _}
+import xml.Nodex.{given, _}
 import text.NotNullStrings._
 import main.Arguments
 import execute._

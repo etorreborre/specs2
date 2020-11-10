@@ -4,10 +4,10 @@ package matcher
 import execute._
 import text.Quote._
 import scala.collection.Traversable
-import ResultLogicalCombinators.{given _, _}
+import ResultLogicalCombinators.{given, _}
 import text.Sentences._
 import control._
-import ValueChecks.{given _}
+import ValueChecks.{given}
 
 /**
 * This trait provides implicit definitions from MatchResults and Booleans to Results.

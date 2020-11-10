@@ -1,6 +1,6 @@
 package org.specs2
 package form
-import FormsBuilder.{given _, _}
+import FormsBuilder.{given, _}
 
 class CellsSpec extends Spec { def is = s2"""
 

@@ -2,7 +2,7 @@ package org.specs2
 package execute
 
 import ResultExecution._
-import Results.{given _}
+import Results.{given}
 
 /**
  * Typeclass trait for anything that can be transformed to a Result

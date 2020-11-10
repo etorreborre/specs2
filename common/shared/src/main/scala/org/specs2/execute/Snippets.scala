@@ -72,24 +72,24 @@ trait Snippets:
 object Snippets extends Snippets:
 
   def create[T](code: Expr[() => T], params: Expr[SnippetParams[T]])(using qctx: QuoteContext)(using t: Type[T], t1: Type[() => T]): Expr[Snippet[T]] =
-    import qctx.tasty._
+    import qctx.reflect._
     val expression = Expr(rootPosition.sourceCode)
     // we need to pass () => T here because betaReduce would evaluate the code here otherwise
-    Expr.betaReduce('{createSnippet[$t]($expression, $code, $params)})
+    Expr.betaReduce('{createSnippet[t.Underlying]($expression, $code, $params)})
 
   def createSnippet[T](expression: String, code: () => T, params: SnippetParams[T]): Snippet[T] =
     new Snippet[T](code, codeExpression = Some(expression), params)
 
   def typeSimpleName[T](using qctx: QuoteContext)(using t: Type[T]): Expr[String] =
-    import qctx.tasty._
+    import qctx.reflect._
     Expr(t.unseal.symbol.name)
 
   def typeFullName[T](using qctx: QuoteContext)(using t: Type[T]): Expr[String] =
-    import qctx.tasty._
+    import qctx.reflect._
     Expr(t.unseal.symbol.fullName)
 
   def termFullName[T](e: Expr[T])(using qctx: QuoteContext): Expr[String] =
-    import qctx.tasty._
+    import qctx.reflect._
     val name = e.unseal match
       case Ident(termName)                                    => termName
       case Select(_, termName)                                => termName.toString

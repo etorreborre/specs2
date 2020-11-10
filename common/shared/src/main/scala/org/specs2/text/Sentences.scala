@@ -2,7 +2,7 @@ package org.specs2
 package text
 
 import collection.BiMap
-import BiMap.{given _, _}
+import BiMap.{given, _}
 
 /**
 * This does some simple replacements in sentences to negate them.

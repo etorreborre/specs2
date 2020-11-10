@@ -2,10 +2,10 @@ package org.specs2
 package matcher
 
 import fp._, syntax._
-import collection.Seqx.{given _}
+import collection.Seqx.{given}
 import execute._
-import MatchResultLogicalCombinators.{given _, _}
-import control.ImplicitParameters.{given _}
+import MatchResultLogicalCombinators.{given, _}
+import control.ImplicitParameters.{given}
 import ResultLogicalCombinators.combineResult
 
 /**

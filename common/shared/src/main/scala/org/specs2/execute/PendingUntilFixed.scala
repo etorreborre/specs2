@@ -2,7 +2,7 @@ package org.specs2
 package execute
 
 import text.Quote._
-import scala.implicits.Not
+import scala.util.Not
 
 /**
  * This function allows to mark the body of an example as pending until it is fixed.

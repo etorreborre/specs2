@@ -4,7 +4,7 @@ package process
 
 import core._
 import fp.syntax._
-import Arbitraries.{given _}
+import Arbitraries.{given}
 import Fragment._
 import control._
 import producer._, Producer._

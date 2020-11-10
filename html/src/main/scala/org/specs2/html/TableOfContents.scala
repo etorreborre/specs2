@@ -5,7 +5,7 @@ import scala.xml._
 import specification.core._
 import control._
 import io._
-import xml.Nodex.{given _, _}
+import xml.Nodex.{given, _}
 import Htmlx._
 import fp._, syntax._
 import data.Trees._

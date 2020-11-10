@@ -4,7 +4,7 @@ package dsl
 package mutable
 
 import specification.core.SpecHeader
-import scala.implicits.Not
+import scala.util.Not
 
 /**
  * Dsl for creating a title in a mutable specification

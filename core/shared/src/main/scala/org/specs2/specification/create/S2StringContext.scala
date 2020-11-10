@@ -81,7 +81,7 @@ trait S2StringContext1 extends S2StringContextCreation:
 
 trait S2StringContextCreation extends FragmentsFactory:
   /** The FragmentFactory has to be passed as an implicit in order to be inlined in macros */
-  given _fragmentFactory as FragmentFactory = fragmentFactory
+  given FragmentFactory = fragmentFactory
 
   /**
    * String interpolation for specs2 fragments
@@ -129,7 +129,7 @@ object S2StringContext:
     postProcess(fragments append Fragments(last:_*))
 
   def executionInterpolated(execution: Expr[Execution], ff: Expr[FragmentFactory])(using qctx: QuoteContext): Expr[Interpolated] =
-    import qctx.tasty._
+    import qctx.reflect._
     '{ new Interpolated {
           def prepend(text: String): Fragments =
             createExample($ff,

@@ -10,7 +10,7 @@ import org.specs2.text.NotNullStrings._
 import text.NotNullStrings._
 import json.Json._
 import util.matching.Regex
-import MatchersImplicits.{given _}
+import MatchersImplicits.{given}
 import Results.negateWhen
 import JsonBaseMatchers._
 

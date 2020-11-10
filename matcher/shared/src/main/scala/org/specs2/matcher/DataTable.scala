@@ -2,7 +2,7 @@ package org.specs2
 package matcher
 
 import execute._
-import fp.{given _, _}, syntax._
+import fp.{given, _}, syntax._
 import ResultExecution._
 import text.{NotNullStrings, Show1, Show10, Show2, Show3, Show4, Show5, Show6, Show7, Show8, Show9, TextTable, Trim}
 import Trim._

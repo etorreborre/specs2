@@ -5,9 +5,9 @@ import java.io.File
 import text._
 import io._
 import fp.syntax._
-import MatchersImplicits.{given _}
+import MatchersImplicits.{given}
 import MatchResultCombinators._
-import ValueChecks.{given _}
+import ValueChecks.{given}
 
 /**
  * This trait provides matchers to check the presence of some expected files vs the actual ones

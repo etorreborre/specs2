@@ -7,7 +7,7 @@ import specification.core._
 import matcher.{MustMatchers, StandardMatchResults}
 import org.junit.runner.Description
 import execute.{Result, StandardResults, Success}
-import ShowDescription.{given _, _}
+import ShowDescription.{given, _}
 
 class JUnitDescriptionSpec(val env: Env) extends Specification with JUnitDescriptionSpecTest with OwnExecutionEnv { def is = s2"""
 

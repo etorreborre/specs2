@@ -6,7 +6,7 @@ import specification.create.FragmentsFactory
 import execute.AsResult
 import org.specs2.specification.core.{Text, Execution, Env, Fragment}
 import control.ImplicitParameters.ImplicitParam
-import scala.implicits.Not
+import scala.util.Not
 
 /**
  * Example Dsl for mutable specifications

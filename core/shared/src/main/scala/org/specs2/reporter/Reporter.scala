@@ -1,7 +1,7 @@
 package org.specs2
 package reporter
 
-import fp.{given _, _}, syntax.{given _, _}
+import fp.{given, _}, syntax.{given, _}
 import control._
 import producer._
 import origami._, Folds._

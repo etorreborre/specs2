@@ -2,7 +2,7 @@ package org.specs2
 package form
 
 import specification._
-import Forms.{given _, _}
+import Forms.{given, _}
 import matcher._
 
 class FormSpec extends Specification with ResultMatchers with XmlMatchers { def is = s2"""

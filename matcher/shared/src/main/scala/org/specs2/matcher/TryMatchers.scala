@@ -6,7 +6,7 @@ import scala.reflect.ClassTag
 import MatchersImplicits._
 import org.specs2.matcher.describe.Diffable
 import text.NotNullStrings._
-import ValueChecks.{given _}
+import ValueChecks.{given}
 
 /**
  * Matchers for util.Try instances

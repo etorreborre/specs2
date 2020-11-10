@@ -4,7 +4,7 @@ package reporter
 import matcher.DataTable
 import control._
 import origami._
-import fp._, syntax.{given _, _}
+import fp._, syntax.{given, _}
 import specification.core._
 import specification.process._
 import text.NotNullStrings._

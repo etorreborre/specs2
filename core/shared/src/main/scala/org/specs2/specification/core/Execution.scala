@@ -9,15 +9,15 @@ import concurrent.ExecutionEnv
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
-import fp.{given _, _}, syntax._
+import fp.{given, _}, syntax._
 import specification.process.Stats
 import time.SimpleTimer, SimpleTimer.startSimpleTimer
 import text.NotNullStrings._
 import control._
 
 import scala.util.control.NonFatal
-import ResultLogicalCombinators.{given _, _ }
-import Execution.{given _, _}
+import ResultLogicalCombinators.{given, _ }
+import Execution.{given, _}
 
 /**
  * Execution of a Fragment

@@ -2,7 +2,7 @@ package org.specs2
 package control
 
 import Exceptions._
-import scala.implicits.Not
+import scala.util.Not
 
 /**
  * These functions can be used to allow some function to be called with varargs, with values being

@@ -7,8 +7,8 @@ import org.scalacheck.rng.Seed
 import execute._
 import specification._
 import core.{AsExecution, Execution}
-import AsResultProp.{given _, _}
-import ScalaCheckProperty.{given _, _}
+import AsResultProp.{given, _}
+import ScalaCheckProperty.{given, _}
 
 /**
  * A ScalaCheckProperty encapsulates a ScalaCheck Prop and its parameters

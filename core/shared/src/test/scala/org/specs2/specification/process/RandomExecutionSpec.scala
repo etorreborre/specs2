@@ -16,7 +16,7 @@ class RandomExecutionSpec(val env: Env) extends Specification with ThrownExpecta
    the randomisation only happens in between steps $random2
 
 """
-  import fp.syntax.{given _}
+  import fp.syntax.{given}
 
   def random1 =
     val results = Results()

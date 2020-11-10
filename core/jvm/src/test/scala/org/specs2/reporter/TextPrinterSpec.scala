@@ -287,7 +287,7 @@ presentation
       l1.size aka (l1, l2).toString must not(be_==(l2.size))
     }
 
-  import specification.Tables.{given _}
+  import specification.Tables.{given}
 
   def m1 =
     s2"""

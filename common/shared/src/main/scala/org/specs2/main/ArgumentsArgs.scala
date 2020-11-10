@@ -4,7 +4,7 @@ package main
 import control._
 import text._
 import scala.concurrent.duration._
-import scala.implicits.Not
+import scala.util.Not
 
 /**
  * Methods with default Property values to create Arguments instances

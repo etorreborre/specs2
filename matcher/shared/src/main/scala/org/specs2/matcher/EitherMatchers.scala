@@ -2,7 +2,7 @@ package org.specs2
 package matcher
 
 import control._
-import ImplicitParameters.{given _, _}
+import ImplicitParameters.{given, _}
 import describe.Diffable
 
 /**

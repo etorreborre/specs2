@@ -2,14 +2,14 @@ package org.specs2.form
 
 import scala.xml.{Text=>_,_}
 import org.specs2.collection.Seqx._
-import org.specs2.xml.Nodex.{given _, _}
+import org.specs2.xml.Nodex.{given, _}
 import org.specs2.execute._
 import org.specs2.main.Arguments
 import StandardResults._
 import org.specs2.matcher._
 import DecoratedProperties._
 import ResultLogicalCombinators._
-import org.specs2.control.Properties.{given _, _}
+import org.specs2.control.Properties.{given, _}
 import org.specs2.control.ImplicitParameters._
 import org.specs2.control.Use
 import reflect.Selectable.reflectiveSelectable

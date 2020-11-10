@@ -2,7 +2,7 @@ package org.specs2
 package matcher
 
 import execute.{Result, StandardResults}
-import scala.implicits.Not
+import scala.util.Not
 
 /**
  * This trait provides implicit definitions to check values with matchers

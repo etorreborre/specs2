@@ -3,8 +3,8 @@ package matcher
 
 import text.Sentences._
 import execute.{ResultExecution, AsResult, Result}
-import scala.implicits.Not
-import control.ImplicitParameters.{given _, _}
+import scala.util.Not
+import control.ImplicitParameters.{given, _}
 
 trait ExpectationsDescription extends ExpectationsCreation:
 

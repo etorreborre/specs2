@@ -97,7 +97,7 @@ object StepParsers extends StepParsers
  * a few delimited parsers (with `{}`) to extract ints, doubles and strings
  */
 trait StandardDelimitedStepParsers:
-  import StepParsers.{given _, _}
+  import StepParsers.{given, _}
 
   def anInt     = StepParser((_: String).trim.toInt)
   def twoInts   = StepParser((s1: String, s2: String) => (s1.trim.toInt, s2.trim.toInt))

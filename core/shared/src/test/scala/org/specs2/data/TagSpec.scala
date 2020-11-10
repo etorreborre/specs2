@@ -3,7 +3,7 @@ package data
 
 import fp.syntax._
 import main.Arguments
-import NamedTag.{given _,_}
+import NamedTag.{given,_}
 import matcher._
 
 class TagSpec extends Specification with DataTables { def is = s2"""

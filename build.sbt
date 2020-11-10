@@ -19,12 +19,13 @@ lazy val specs2 = project.in(file(".")).
   )
 
 val scalaDotty = "0.27.0-RC1"
+val scala3 = "3.0.0-M1-bin-20201029-1f433d5-NIGHTLY"
 
 /** COMMON SETTINGS */
 lazy val specs2Settings = Seq(
   organization := "org.specs2",
   specs2ShellPrompt,
-  scalaVersion := scalaDotty,
+  scalaVersion := scala3,
   sources in (Compile, doc) := Seq())
 
 lazy val commonJsSettings = Seq(
@@ -57,7 +58,6 @@ def commonJvmSettings =
 
 lazy val common = crossProject(JVMPlatform).in(file("common")).
   settings(
-    depends.reflect,
     depends.scalaXML,
     libraryDependencies += depends.scalacheck % Test,
     commonSettings,

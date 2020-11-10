@@ -6,7 +6,7 @@ import specification.core.Fragment
 import specification.dsl.mutable.NoExampleDsl
 import specification.dsl.mutable.ExampleDsl
 import specification.create.S2StringContext
-import scala.implicits.Not
+import scala.util.Not
 
 /**
  * ForEachWithCommandLine trait, adapted for mutable specifications

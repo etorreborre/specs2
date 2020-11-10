@@ -2,7 +2,7 @@ package org.specs2
 package matcher
 
 import execute._
-import ValueChecks.{given _, _}
+import ValueChecks.{given, _}
 import org.specs2.control._, ImplicitParameters._
 import org.specs2.matcher.describe.Diffable
 

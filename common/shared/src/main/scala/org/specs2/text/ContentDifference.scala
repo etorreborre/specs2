@@ -6,7 +6,7 @@ import Seqx._
 import LineComparison._
 import control._
 import producer._, Producer._
-import scala.implicits.Not
+import scala.util.Not
 
 /**
  * This trait represents the difference between 2 "contents"

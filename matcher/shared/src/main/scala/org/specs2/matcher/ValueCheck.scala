@@ -7,7 +7,7 @@ import describe._
 import text.Quote._
 import Expectations._
 import control._
-import ResultLogicalCombinators.{given _, _}
+import ResultLogicalCombinators.{given, _}
 
 /**
  * Common interface for checks of a value of type T:

@@ -5,7 +5,7 @@ import execute._
 import MatchResultLogicalCombinators._
 import control.Exceptions._
 import text.Regexes._
-import ValueChecks.{given _}
+import ValueChecks.{given}
 
 /**
  * Matchers for Results

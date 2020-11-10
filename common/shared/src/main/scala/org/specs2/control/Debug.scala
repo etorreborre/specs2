@@ -2,7 +2,7 @@ package org.specs2
 package control
 
 import io.ConsoleOutput
-import scala.implicits.Not
+import scala.util.Not
 
 /**
  * This trait provides simple a way to print out any object to the console:

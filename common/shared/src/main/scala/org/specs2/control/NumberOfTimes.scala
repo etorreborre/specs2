@@ -1,7 +1,7 @@
 package org.specs2
 package control
 
-import scala.implicits.Not
+import scala.util.Not
 
 /**
  * Syntactic sugar to execute an action a given number of times

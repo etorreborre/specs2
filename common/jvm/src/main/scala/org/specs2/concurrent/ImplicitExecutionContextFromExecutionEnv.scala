@@ -1,7 +1,7 @@
 package org.specs2.concurrent
 
 import scala.concurrent.ExecutionContext
-import scala.implicits.Not
+import scala.util.Not
 
 trait ImplicitExecutionContextFromExecutionEnv:
   /**

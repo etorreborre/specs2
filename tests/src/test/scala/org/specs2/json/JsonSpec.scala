@@ -3,7 +3,7 @@ package json
 
 import mutable.Specification
 import org.scalacheck._
-import JsonGen.{given _}
+import JsonGen.{given}
 import Json._
 
 class JsonSpec extends Specification with ScalaCheck:
