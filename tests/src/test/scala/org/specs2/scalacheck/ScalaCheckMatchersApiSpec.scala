@@ -80,11 +80,17 @@ class ScalaCheckMatchersApiSpec extends Specification with ScalaCheck { def is =
 
  Test parameters can also be specified
    the minimum number of ok tests
-   ${ prop { (i:Int) => propBoolean(i > 0) ==> (i > 0) }.set(minTestsOk = 50) }
+   $minTestsOk1
+
    the verbosity of a property can be turned on and off
-   ${ prop { (i:Int) => propBoolean(i > 0) ==> (i > 0) }.set(minTestsOk = 50).verbose }
+   $verbose1
 
   """
+  def minTestsOk1: Prop =
+   prop { (i:Int) => propBoolean(i > 0) ==> (i > 0) }.set(minTestsOk = 50)
+
+  def verbose1: Prop =
+    prop { (i:Int) => propBoolean(i > 0) ==> (i > 0) }.verbose
 
   val positiveInts = Arbitrary(Gen.choose(1, 5))
 

@@ -38,7 +38,7 @@ trait ScalaCheckProperty:
           workers: Int                = parameters.workers,
           callback: Test.TestCallback = parameters.testCallback,
           loader: Option[ClassLoader] = parameters.loader
-           ):SelfType =
+           ): SelfType =
     setParameters(
       parameters.copy(
         minTestsOk = minTestsOk,
@@ -57,7 +57,7 @@ trait ScalaCheckProperty:
                workers: Int                = parameters.workers,
                callback: Test.TestCallback = parameters.testCallback,
                loader: Option[ClassLoader] = parameters.loader
-                ):SelfType =
+                ): SelfType =
     setParameters(
       parameters.copy(
         minTestsOk = minTestsOk,
