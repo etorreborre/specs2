@@ -9,9 +9,10 @@ import org.specs2.specification.core.{Fragments, Fragment}
 /**
  * Dsl for creating text and formatting fragments in a mutable specification
  */
-trait TextDsl extends TextCreation { outer =>
+trait TextDsl extends TextCreation:
+  outer =>
 
-  implicit class textFragment(s: String):
+  extension (s: String):
     def txt = outer.addText(s)
 
     def br: Fragment  = s.txt.br
@@ -20,8 +21,10 @@ trait TextDsl extends TextCreation { outer =>
     def p: Fragment = s.txt.p
     def p(n: Int): Fragment = s.txt.p(n)
 
-  implicit class fragmentFormatting(f: =>Fragment):
-    def br: Fragment  = br(1)
+  extension (f: =>Fragment):
+    def br: Fragment =
+      br(1)
+
     def br(n: Int): Fragment  =
       val result = f
       (1 to n).map(_ => addFragment(fragmentFactory.break))
@@ -45,7 +48,7 @@ trait TextDsl extends TextCreation { outer =>
       f
       addFragment(fragmentFactory.backtab(n))
 
-  implicit class fragmentsFormatting(fs: =>Fragments):
+  extension (fs: =>Fragments):
     def br: Fragments  = br(1)
     def br(n: Int): Fragments  =
       val result = fs
@@ -73,9 +76,8 @@ trait TextDsl extends TextCreation { outer =>
       addFragment(fragmentFactory.backtab(n))
       result
 
-}
-
-trait TextCreation extends FragmentBuilder with FragmentsFactory { outer =>
+trait TextCreation extends FragmentBuilder with FragmentsFactory:
+  outer =>
 
   def addText(s: String): Fragment =
     addFragment(fragmentFactory.text(s))
@@ -102,5 +104,3 @@ trait TextCreation extends FragmentBuilder with FragmentsFactory { outer =>
 
   def addBacktab(n: Int): Fragment =
     addFragment(fragmentFactory.backtab(n))
-
-}
