@@ -136,13 +136,14 @@ object Prop:
 
 trait PropSyntax:
 
-  implicit class PropOps[T](p: Prop[T, T]):
+  extension [T, R : AsResult](p: Prop[T, T]):
     /**
      * check the actual value with a function
      */
-    def checkWith[R : AsResult](f: T => R): Prop[T, T] =
+    def checkWith(f: T => R): Prop[T, T] =
       p.matchWith((t, _) => AsResult(f(t)))
 
+  extension [T](p: Prop[T, T]):
     /**
      * check the actual value with a matcher
      */

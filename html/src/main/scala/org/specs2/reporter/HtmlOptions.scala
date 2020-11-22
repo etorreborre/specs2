@@ -31,7 +31,7 @@ case class HtmlOptions(
       .updateWhenTrue("search",  search)
       .updateWhenTrue("toc",     toc)
 
-  implicit class Update(map: Map[String, String]):
+  extension (map: Map[String, String]):
     def updateWhenTrue(name: String, value: String, condition: Boolean): Map[String, String] =
       if condition then map.updated(name, value)
       else map
@@ -53,4 +53,3 @@ object HtmlOptions:
 
   def template(outDir: DirectoryPath): FilePath =
     outDir / "templates" | "specs2.html"
-

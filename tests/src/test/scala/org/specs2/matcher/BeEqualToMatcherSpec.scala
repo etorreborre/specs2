@@ -115,7 +115,7 @@ Details
     kv.foreach { case (k, v) => map.put(k, v) }
     map
 
-  implicit class NormalizeOps(m: MatchResult[_]):
+  extension (m: MatchResult[_]):
     def normalized: String =
       m.message.removeColors.trim
 }

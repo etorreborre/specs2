@@ -141,7 +141,7 @@ trait Matcher[-T] { outer =>
   def or[S <: T](m: =>Matcher[S]) = new Matcher[S] {
     def apply[U <: S](a: Expectable[U]) = outer(a).or(m(a))
   }
-  
+
   /**
    * @return a Skip MatchResult if this matcher fails
    */
@@ -217,7 +217,7 @@ trait Matcher[-T] { outer =>
    * and a sleep time
    *
    * {{{
-   * aResult mustEqual(expected).eventually(retries = 2, _ * 100.milliseconds)
+   * (aResult === expected).eventually(retries = 2, _ * 100.milliseconds)
    * }}}
    */
   def eventually(retries: Int, sleep: Int => Duration): Matcher[T] = EventuallyMatchers.eventually(this, retries, sleep)

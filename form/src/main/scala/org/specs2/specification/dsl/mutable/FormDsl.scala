@@ -22,8 +22,8 @@ trait FormDsl extends FragmentBuilder with FormFragmentFactory:
   def insert(aForm: =>HasForm)(using p: ImplicitParam): Fragment =
     Use.ignoring(p)(insert(aForm.form))
 
-  implicit class insertForm(aForm: => Form):
-    def insert = outer.insert(aForm)
+  extension (aForm: => Form):
+    def insert: Fragment = outer.insert(aForm)
 
-  implicit class insertFormHolder(aForm: =>HasForm):
-    def insert = outer.insert(aForm)
+  extension (aForm: =>HasForm)(using p: ImplicitParam):
+    def insert: Fragment = outer.insert(aForm)

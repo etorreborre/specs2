@@ -191,7 +191,7 @@ n = 0
 
   def got[T](t: T) = t
 
-  implicit class fragmentsTexts(fs: Fragments):
+  extension (fs: Fragments):
     def trimmedTexts = fs.fragmentsList(ee).filter(Fragment.isText).map(_.description.show.trim)
 
   val attribute1 = 1

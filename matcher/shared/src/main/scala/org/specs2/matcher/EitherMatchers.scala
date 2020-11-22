@@ -30,7 +30,7 @@ trait EitherBaseMatchers:
 
 private[specs2]
 trait EitherBeHaveMatchers extends BeHaveMatchers { outer: EitherBaseMatchers =>
-  implicit class EitherResultMatcher[L : Diffable, R : Diffable](result: MatchResult[Either[L, R]]):
+  extension [L : Diffable, R : Diffable](result: MatchResult[Either[L, R]]):
     def right(r: =>R) = result(outer.beRight(r))
     def left(l: =>L) = result(outer.beLeft(l))
     def beRight(r: =>R) = result(outer.beRight(r))

@@ -37,18 +37,18 @@ class FutureMatchersSpec extends Specification with ResultMatchers with specific
  ${ Future { sleep(sleepTime); 1 } must be_>(0).awaitFor(200.millis) }
 
  timeout applies only to `TimeoutException` itself, not subclasses
- ${ (Future { throw new TimeoutException } must throwA[TimeoutException].await) returns "Timeout" }
- ${ Future { throw new MyTimeout } must throwA[MyTimeout].await }
+ ${ (Future { throw new TimeoutException } must throwA[TimeoutException]().await) returns "Timeout" }
+ ${ Future { throw new MyTimeout } must throwA[MyTimeout]().await }
 
  A `Future` returning a `Matcher[T]` can be transformed into a `Result`
  ${ Future(1 === 1).await }
 
  A `throwA[T]` matcher can be used to match a failed future with the `await` method
- ${ Future.failed[Int](new RuntimeException) must throwA[RuntimeException].await }
+ ${ Future.failed[Int](new RuntimeException) must throwA[RuntimeException]().await }
  ${ { Future.failed[Int](new RuntimeException) must be_===(1).await } must throwA[RuntimeException] }
 
  A Future expression throwing an exception must not be matched
- ${ ({ throw new Exception("boom"); Future(1) } must throwAn[Exception].await) must throwAn[Exception] }
+ ${ ({ throw new Exception("boom"); Future(1) } must throwAn[Exception]().await) must throwAn[Exception] }
 
  In a mutable spec with a negated matcher $e1
  In a mutable spec with a negated matcher - and a timeout $e2

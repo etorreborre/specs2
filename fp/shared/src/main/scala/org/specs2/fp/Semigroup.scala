@@ -37,7 +37,7 @@ object Semigroup:
 
 trait SemigroupSyntax:
 
-  implicit class SemigroupOps[M : Semigroup](a: M):
+  extension [M : Semigroup](a: M):
     def append(b: =>M): M =
       Semigroup.apply[M].append(a, b)
 

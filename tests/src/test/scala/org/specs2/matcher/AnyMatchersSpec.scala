@@ -38,19 +38,19 @@ class AnyMatchersSpec extends Specification with ResultMatchers with AnyMatchers
   ${ Seq(2, 3, 4) must contain(be_>=(2)).forall }
   ${ forall(Seq((1, 2), (3, 4))) { case (a, b) => a must be_<(b) } }
   ${ forallWhen(Seq((2, 1), (3, 4))) { case (a, b) if a > 2 => a must be_<(b) } }
-  ${ (Seq(2, 3, 4) must contain(_:Int)).forall(Seq(2, 4)) }
+  ${ Seq(2, 3, 4).forall(i => Seq(2, 4) must contain(i)) }
 
   foreach is like forall but will execute all matchers and collect the results
   ${ Seq(2, 3, 4) must contain(be_>=(2)).foreach }
   ${ foreach(Seq((1, 2), (3, 4))) { case (a, b) => a must be_<(b) } }
   ${ foreachWhen(Seq((2, 1), (3, 4))) { case (a, b) if a > 2 => a must be_<(b) } }
-  ${ ((_:Int) must be_>=(2)).foreach(Seq(2, 3, 4)) }
+  ${ foreach(Seq(2, 3, 4))(i => i must be_>=(2)) }
   if all expectations throws are Skipped then the whole result must be skipped $skipForeach
 
   atLeastOnce allows to transform a single matcher to a matcher checking that one element of a Seq is matching
   ${ Seq(2, 3, 4) must contain(be_>(2)).atLeastOnce }
-  ${ ((_:Int) must be_>(2)).atLeastOnce(Seq(2, 3, 4)) }
-  ${ ((i:Int) => MustExpectations.theValue(i) must be_>(2)).atLeastOnce(Seq(2, 3, 4)) }
+  ${ Seq(2, 3, 4).atLeastOnce(i => i must be_>(2)) }
+  ${ Seq(2, 3, 4).atLeastOnce(i => MustExpectations.theValue(i) must be_>(2)) }
   ${ atLeastOnce(Seq((4, 2), (3, 4))) { case (a, b) => a must be_<(b) } }
   ${ atLeastOnceWhen(Seq((2, 1), (3, 4))) { case (a, b) if a > 2 => a must be_<(b) } }
   ${ atLeastOnce(Seq(Some(1), None)) { _ must beSome(1) } }
@@ -102,8 +102,8 @@ Implicits
     // if this specification compiles and if result is ok, this means that the === implicit could be redefined
     // thanks to the NoCanBeEqual trait
     case class Spec1() extends Specification with NoTypedEqual:
-      implicit class otherTripleEqualUse[T](t: =>T):
-        def ===[S](other: S) = other
+      extension [S, T](t: =>T) def ===(other: S) = other
+
       val result = (1 === 2) must ===(2)
       def is = result
     Spec1().result
@@ -112,8 +112,8 @@ Implicits
     // if this specification compiles and if result is ok, this means that the must implicit could be redefined
     // thanks to the NoMustExpectations trait
     case class Spec1() extends org.specs2.mutable.Specification with NoMustExpectations:
-      implicit class aValue[T](t: =>T):
-        def must(other: Int) = other
+      extension [T](t: =>T) def must(other: Int) = other
+
       val result = (1 must 2) === 2
       "an example" >> result
     Spec1().result

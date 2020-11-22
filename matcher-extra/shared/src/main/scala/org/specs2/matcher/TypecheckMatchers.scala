@@ -17,10 +17,10 @@ trait TypecheckMatchers extends TypecheckBeHaveMatchers:
 
 object TypecheckMatchers extends TypecheckMatchers
 
-trait TypecheckBeHaveMatchers { outer: TypecheckMatchers =>
-  implicit class ToTypecheckResultMatcher(result: MatchResult[Typechecked]):
+trait TypecheckBeHaveMatchers:
+  outer: TypecheckMatchers =>
+  extension (result: MatchResult[Typechecked]):
     def succeed = result(outer.succeed)
-}
 
 class TypecheckMatcher extends Matcher[Typechecked]:
   def apply[S <: Typechecked](actual: Expectable[S]): MatchResult[S] =
@@ -58,5 +58,3 @@ case class FailTypecheckMatcher(expected: String) extends Matcher[Typechecked]:
       case TypecheckError(m)           => s"$m\n doesn't match\n$expected"
       case ParseError(m)               => s"$m\n doesn't match\n$expected"
       case UnexpectedTypecheckError(m) => s"$m\n doesn't match\n$expected"
-
-

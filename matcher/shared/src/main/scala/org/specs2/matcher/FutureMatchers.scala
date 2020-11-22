@@ -12,9 +12,10 @@ import concurrent.FutureAwait._
  */
 trait FutureMatchers extends FutureBaseMatchers:
   /**
-   * add an `await` method to any matcher `Matcher[T]` so that it can be transformed into a `Matcher[Future[T]]`
+   * add an `await` method to any matcher `Matcher[T]` so that it can be transformed into a `Matcher[Future[T]]
+   * making this implicit an extension method does not work out of the box`
    */
-  implicit class FutureMatchable[T](m: Matcher[T])(using ee: ExecutionEnv):
+  extension [T](m: Matcher[T])(using ee: ExecutionEnv):
     def await: Matcher[Future[T]]                                        = awaitMatcher(m)(retries = 0, timeout = 1.second)
     def await(retries: Int, timeout: FiniteDuration): Matcher[Future[T]] = awaitMatcher(m)(retries, timeout)
     def retryAwait(retries: Int): Matcher[Future[T]]                     = awaitMatcher(m)(retries, timeout = 1.second)

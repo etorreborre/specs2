@@ -34,7 +34,7 @@ import org.specs2.specification.dsl.mutable._
 import org.specs2.control.ImplicitParameters
 
 trait ToKeyword extends BlockDsl {
-  implicit class DescribeTo(description: String) {
+  extension (description: String) {
     def to(f: =>Fragment): Fragment =
       addFragmentBlockWithText(description + " to", f)
 

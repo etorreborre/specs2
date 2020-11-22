@@ -18,14 +18,14 @@ trait ResultImplicits extends ResultLogicalCombinators:
     def applied(value: T): Result =
       AsResult(t(value))
 
-  extension [T, R : AsResult, S <: Traversable[T]](t: T => R)
+  extension [T, R : AsResult](t: T => R)
 
     /** @return the "and" of all results, stopping after the first failure */
-    def forall(seq: S): Result =
+    def forall(seq: Traversable[T]): Result =
       if seq.isEmpty then
         StandardResults.success
       else
-        val (index, r) = seq.drop(1).foldLeft((0, t.applied(seq.head))) { case ((i, res), cur) =>
+        val (index, r): (Int, Result) = seq.drop(1).foldLeft((0, t.applied(seq.head))) { case ((i, res), cur) =>
           if AsResult(res).isSuccess then
             (i + 1, t.applied(cur))
           else
@@ -44,7 +44,7 @@ trait ResultImplicits extends ResultLogicalCombinators:
     /**
      * @return the aggregation of all results
      */
-    def foreach(seq: S): Result =
+    def foreach(seq: Traversable[T]): Result =
       if seq.isEmpty then
         StandardResults.success
       else
@@ -53,7 +53,7 @@ trait ResultImplicits extends ResultLogicalCombinators:
     /**
      * @return success if at least one result is a success
      */
-    def atLeastOnce(seq: S) =
+    def atLeastOnce(seq: Traversable[T]) =
       if seq.isEmpty then
         Failure("no result")
       else

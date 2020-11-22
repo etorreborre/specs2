@@ -9,8 +9,8 @@ import StringMatchers._
  */
 trait ReturnsSyntax extends ExpectationsCreation:
 
-  implicit class Returns[T : AsResult](t: =>T):
-    def returns(m: String) =
+  extension [T : AsResult](t: =>T):
+    def returns(m: String): MatchResult[Result] =
       (contain(m) ^^ ((_: Result).message))(createExpectable(ResultExecution.execute(AsResult(t))))
 
     def returnsMatch(m: String) =
@@ -21,4 +21,3 @@ trait ReturnsSyntax extends ExpectationsCreation:
       (contain(m) ^^ { (m: Result) => if r.isSuccess then "success: "+m.message else "failure: "+m.message })(createExpectable(ResultExecution.execute(r)))
 
 object ReturnsSyntax extends ReturnsSyntax with Expectations
-

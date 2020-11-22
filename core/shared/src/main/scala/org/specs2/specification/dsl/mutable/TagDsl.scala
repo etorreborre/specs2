@@ -24,17 +24,33 @@ trait TagDsl extends org.specs2.specification.dsl.TagDsl with MutableFragmentBui
   /**
    * This implicit allows to add tags and sections _after_ the examples
    */
-  implicit class FragmentTaggedAs(f: =>Fragment):
-    def tag(tag: String)     = { outer.tag(tag); f }
-    def section(tag: String) = { outer.section(tag); f }
-    def tag(tag: NamedTag)     = { outer.tag(tag); f }
-    def section(tag: NamedTag) = { outer.section(tag); f }
+  extension (f: =>Fragment):
+    def tag(tag: String): Fragment =
+      outer.tag(tag)
+      f
+
+    def section(tag: String): Fragment =
+      outer.section(tag)
+      f
+
+    def tag(tag: NamedTag): Fragment =
+      outer.tag(tag)
+      f
+
+    def section(tag: NamedTag): Fragment =
+      outer.section(tag)
+      f
 
   /**
    * This implicit allows to add tags and sections _after_ the examples
    */
-  implicit class FragmentsTaggedAs(fs: =>Fragments):
-    def tag(tag: NamedTag)     = { outer.tag(tag); fs }
-    def section(tag: NamedTag) = { outer.section(tag); fs }
+  extension (fs: =>Fragments):
+    def tag(tag: NamedTag): Fragments =
+      outer.tag(tag)
+      fs
+
+    def section(tag: NamedTag): Fragments =
+      outer.section(tag)
+      fs
 
 }

@@ -332,7 +332,7 @@ trait DataTables extends ExpectationsCreation:
       else app.pure(DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok")))
   }
 
-  implicit class FutureOps[A](f: Future[A]):
+  extension [A](f: Future[A]):
     def run: A =
       Await.result(f, Duration.Inf)
 

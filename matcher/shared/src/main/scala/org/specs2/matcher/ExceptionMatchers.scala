@@ -27,32 +27,37 @@ trait ExceptionBaseMatchers extends ExpectationsCreation:
    */
   def throwA[E <: Throwable](message: String = ".*")(using m: ClassTag[E]): Matcher[Any] =
     throwA.like { case e: Throwable => createExpectable(e.getMessage.notNull).applyMatcher(BeMatching.withPart(message)) }
+
   /**
    * @return a matcher checking the value of an Exception
    */
   def throwA[E <: Throwable](e: E): ExceptionMatcher[E] = new ExceptionMatcher(e)
+  
   /**
    * alias for throwA
    */
-  def throwAn[E <: Throwable](using m: ClassTag[E]) = throwA[E]
+  def throwAn[E <: Throwable](using m: ClassTag[E]): ExceptionClassMatcher = throwA[E]
+
   /**
    * alias for throwA
    */
   def throwAn[E <: Throwable](message: String = ".*")(using m: ClassTag[E]): Matcher[Any] = throwA(message)
+
   /**
    * alias for throwA
    */
-  def throwAn[E <: Throwable](e: E) = throwA(e)
+  def throwAn[E <: Throwable](e: E): ExceptionMatcher[E] = throwA(e)
 
   /**
    * Exception matcher checking the type of a thrown exception.
    */
-  class ExceptionClassMatcher(klass: Class[_]) extends Matcher[Any] { outer =>
+  class ExceptionClassMatcher(klass: Class[_]) extends Matcher[Any]:
+    outer =>
 
     def apply[S <: Any](value: Expectable[S]) =
       checkBoolean(value, checkClassType, andFinally = dropException)
 
-    def like[T](f: PartialFunction[Throwable, MatchResult[Any]]) = new Matcher[T] {
+    def like[T](f: PartialFunction[Throwable, MatchResult[Any]]): Matcher[T] = new Matcher[T] {
       def apply[S <: T](value: Expectable[S]) =
         checkMatchResult(value, checkClassType, f, dropException)
 
@@ -83,7 +88,6 @@ trait ExceptionBaseMatchers extends ExpectationsCreation:
       def apply[S <: Any](value: Expectable[S]) =
         checkBoolean(value, checkClassType, rethrowException).negate
     }
-  }
 
   /** re-throw an Error if an Exception was expected */
   private def errorMustBeThrownIfExceptionIsExpected(e: Throwable, klass: Class[_]) =
@@ -209,13 +213,14 @@ trait ExceptionBaseMatchers extends ExpectationsCreation:
     }(identity).left.toOption
 
 private[specs2]
-trait ExceptionBeHaveMatchers extends BeHaveMatchers { outer: ExceptionBaseMatchers =>
-  implicit class ExceptionMatcherResult[T](result: MatchResult[T]):
-    def throwA[E <: Throwable](using m: ClassTag[E]): MatchResult[T] = result(outer.throwA)
-    def throwA[E <: Throwable](message: String = ".*")(using m: ClassTag[E]): MatchResult[T] = result(outer.throwA(message))
-    def throwA[E <: Throwable](e: E): MatchResult[T] = result(outer.throwA(e))
+trait ExceptionBeHaveMatchers extends BeHaveMatchers:
+  outer: ExceptionBaseMatchers =>
 
-    def throwAn[E <: Throwable](using m: ClassTag[E]): MatchResult[T] = result(outer.throwA)
-    def throwAn[E <: Throwable](message: String = ".*")(using m: ClassTag[E]): MatchResult[T] = result(outer.throwA(message))
-    def throwAn[E <: Throwable](e: E): MatchResult[T] = result(outer.throwA(e))
-}
+  extension [T, E <: Throwable](result: MatchResult[T]):
+    def throwA(using m: ClassTag[E]): MatchResult[T] = result(outer.throwA)
+    def throwA(message: String = ".*")(using m: ClassTag[E]): MatchResult[T] = result(outer.throwA(message))
+    def throwA(e: E): MatchResult[T] = result(outer.throwA(e))
+
+    def throwAn(using m: ClassTag[E]): MatchResult[T] = result(outer.throwA)
+    def throwAn(message: String = ".*")(using m: ClassTag[E]): MatchResult[T] = result(outer.throwA(message))
+    def throwAn(e: E): MatchResult[T] = result(outer.throwA(e))

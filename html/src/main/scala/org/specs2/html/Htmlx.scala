@@ -15,17 +15,17 @@ import matcher.describe._
  */
 trait Htmlx { outer =>
 
-  implicit class HtmlOps(ns: NodeSeq):
+  extension (ns: NodeSeq):
     def headers = outer.headers(ns)
     def headersTree = outer.headersToTree(ns.headers).toTree
     def addHeadersAnchors: NodeSeq =
       outer.headersAnchors.rewrite(ns).reduceNodes
 
-  implicit class HtmlNodeOps(n: Node):
+  extension (n: Node):
     def addHeadersAnchors: NodeSeq =
       outer.headersAnchors.rewrite(n).headOption.getOrElse(NodeSeq.Empty)
 
-  implicit class HtmlSeqNodeOps(ns: Seq[Node]):
+  extension (ns: Seq[Node]):
     def updateHead(f: PartialFunction[Node, Node]) = outer.updateHead(ns)(f)
     def updateHeadAttribute(name: String, value: String): NodeSeq = outer.updateHeadAttribute(ns, name, value)
     def updateHeadAttribute(name: String, value: Int): NodeSeq = outer.updateHeadAttribute(ns, name, value)
@@ -79,7 +79,7 @@ trait Htmlx { outer =>
       case HeaderTag(i) => Integer.valueOf(i).intValue
       case _            => -1
 
-  implicit class HRef(s: String):
+  extension (s: String):
     def sanitize: String = outer.sanitize(s)
     def anchorName: String = outer.anchorName(s)
 
