@@ -4,20 +4,20 @@ import org.specs2.execute._
 import org.specs2.matcher.describe._
 import org.specs2.text.NotNullStrings._
 
-class EqualityMatcher[T : Diffable](t: =>T) extends AdaptableMatcher[T] { outer =>
+class EqualityMatcher[T : Diffable](t: =>T) extends AdaptableMatcher[T]:
+  outer =>
 
   protected val ok: String => String = identity
   protected val ko: String => String = identity
 
-  def adapt(f: T => T, okFunction: String => String, koFunction: String => String) =
-    new EqualityMatcher(f(t)) {
+  def adapt(f: T => T, okFunction: String => String, koFunction: String => String): EqualityMatcher[T] =
+    new EqualityMatcher(f(t)):
       override def apply[S <: T](s: Expectable[S]): MatchResult[S] =
         val checkedValues = s"\n\nChecked values\n  Actual:   '${s.value}'\n  Expected: '$t'"
         result(super.apply(s.map(f)).updateMessage(_ + checkedValues), s)
 
       override protected val ok: String => String = okFunction compose outer.ok
       override protected val ko: String => String = koFunction compose outer.ko
-    }
 
   def apply[S <: T](b: Expectable[S]): MatchResult[S] =
     val (actual, expected) = (b.value, t)
@@ -47,5 +47,5 @@ class EqualityMatcher[T : Diffable](t: =>T) extends AdaptableMatcher[T] { outer 
     try { seq.foreach(identity); true }
     catch { case _: Exception => false }
 
-  def expected = t
-}
+  def expected: T =
+    t
