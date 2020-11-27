@@ -8,56 +8,42 @@ types and more generally with Ordered types.
 
   beLessThanOrEqualTo compares any Ordering type with <=
   ${ 1 must be_<=(2) }
-  ${ 2 must be <=(2) }
   ${ 1 must beLessThanOrEqualTo(2) }
   ${ 2 must not(beLessThanOrEqualTo(1)) }
-  ${ 2 must not(be <=(1)) }
   ${ 2 must not(be_<=(1)) }
-  ${ 1 must be lessThanOrEqualTo(2) }
   and return a failure if the comparison fails                                                                    $e1
   and return a failure if the comparison fails - with aka                                                         $e1_1
 
   beLessThan compares any Ordered type with <
   ${ 1 must be_<(2) }
-  ${ 1 must be <(2) }
-  ${ 2 must not(be <(1)) }
   ${ 2 must not(be_<(1)) }
   ${ 2 must not(beLessThan(1)) }
   ${ 1 must beLessThan(2) }
-  ${ 1 must be lessThan(2) }
   and return a failure if the comparison fails                                                                     $e2
   and return a failure if the comparison fails - with aka                                                          $e2_1
 
   beGreaterThanOrEqualTo compares any Ordered type with >=
   ${ 2 must be_>=(1) }
-  ${ 2 must be >=(1) }
   ${ 2 must not(be_>=(3)) }
-  ${ 2 must not(be >=(3)) }
   ${ 2 must not(beGreaterThanOrEqualTo(3)) }
   ${ 2 must beGreaterThanOrEqualTo(1) }
-  ${ 2 must be greaterThanOrEqualTo(1) }
    and return a failure if the comparison fails                                                                    $e3
    and return a failure if the comparison fails - with aka                                                         $e3_1
 
   beGreaterThan compares any Ordered type with >
   ${ 2 must be_>(1) }
-  ${ 2 must be >(1) }
-  ${ 2 must not(be >(3)) }
   ${ 2 must not(be_>(3)) }
   ${ 2 must not(beGreaterThan(3)) }
   ${ 2 must beGreaterThan(1) }
-  ${ 2 must be greaterThan(1) }
   and return a failure if the comparison fails                                                                     $e4
   and return a failure if the comparison fails - with aka                                                          $e4_1
 
   the comparison matchers also work with doubles
   ${ 2.0 must be_>(1.0) }
-  ${ 2.0 must be >=(1.0) }
 
   beCloseTo tests if 2 Numerics are close to each other
   ${ 1.0 must beCloseTo(1.0, 0.5) }
   ${ 4 must be_~(5 +/- 2) }
-  ${ 2 must not(beCloseTo(4 +/- 1)) }
   ${ 2 must not(beCloseTo(4 +/- 1)) }
   and return a failure if the comparison fails                                                                     $e5
   and return a failure if the comparison fails - with aka                                                          $e5_1

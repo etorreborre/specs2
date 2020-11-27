@@ -13,8 +13,8 @@ class StringMatchersSpec extends Spec with StringMatchers with MustExpectations 
     ${ "eric\nme\nmyself" must =~("me") }
     ${ "eric\nme\nmyself" must =~(Pattern.compile("me", Pattern.DOTALL)) }
 
-    "or 'be matching'
-    ${ "eric" aka "ETO" must be matching("e.*") }
+    "or 'beMatching'
+    ${ "eric" aka "ETO" must beMatching("e.*") }
     ${ "a" must not(beMatching("{\"a\":\"b\"}")) }
 
     find ... withGroups, to check for groups

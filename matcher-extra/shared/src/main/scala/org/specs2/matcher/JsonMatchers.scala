@@ -12,15 +12,13 @@ import json.Json._
 import util.matching.Regex
 import MatchersImplicits.{given}
 import Results.negateWhen
-import JsonBaseMatchers._
+import JsonMatchers._
 
 /**
  * Matchers for Json expressions (entered as strings)
  */
-trait JsonMatchers extends JsonBaseMatchers with JsonBaseBeHaveMatchers
-
-private[specs2]
-trait JsonBaseMatchers extends Expectations with JsonMatchersImplicits { outer =>
+trait JsonMatchers extends Expectations with JsonMatchersImplicits:
+  outer =>
 
   def have(m: Matcher[JsonType]): JsonMatcher = JsonMatcher.create(check = m)
   def /(selector: JsonSelector) : JsonSelectorMatcher = JsonMatcher.create(JsonQuery(First, selector))
@@ -120,7 +118,8 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersImplicits { outer =
   /**
    * This matcher can be chained to select further elements in the Json object
    */
-  case class JsonSelectorMatcher(queries: Seq[JsonQuery], negated: Boolean = false) extends JsonMatcher { parent =>
+  case class JsonSelectorMatcher(queries: Seq[JsonQuery], negated: Boolean = false) extends JsonMatcher:
+    parent =>
     val check: Matcher[JsonType] = JsonType.anyMatch
 
     def /(selector: JsonSelector) : JsonSelectorMatcher = append(JsonQuery(First, selector))
@@ -156,7 +155,6 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersImplicits { outer =
       queries match
         case start :+ JsonQuery(qt, s) => start :+ JsonQuery(qt, s.toValueOrKey)
         case _ => queries
-  }
 
   /**
    * This matcher can not be chained anymore with selections
@@ -169,14 +167,12 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersImplicits { outer =
     def create(path: JsonQuery*): JsonSelectorMatcher = JsonSelectorMatcher(path)
     def create(check: Matcher[JsonType]): JsonFinalMatcher = JsonFinalMatcher(Nil, check)
 
-  def beJsonNull: Matcher[JsonType] = new Matcher[JsonType] {
-    def apply[S <: JsonType](actual: Expectable[S]) =
-      actual.value match
-        case JsonNull => result(true, s"the value is null", s"the value is not null", actual)
-        case other    => result(false, s"$other is not a null value", s"$other is not a null value", actual)
-  }
-
-}
+  def beJsonNull: Matcher[JsonType] =
+    new Matcher[JsonType]:
+      def apply[S <: JsonType](actual: Expectable[S]) =
+        actual.value match
+          case JsonNull => result(true, s"the value is null", s"the value is not null", actual)
+          case other    => result(false, s"$other is not a null value", s"$other is not a null value", actual)
 
 /**
  * abstract JSON types for specs2
@@ -403,15 +399,4 @@ trait JsonMatchersLowImplicits extends JsonSelectors:
     def toJsonSelector(a: Boolean): JsonSelector =
       JsonEqualValueSelector(a.toString)
 
-
-private[specs2]
-trait JsonBaseBeHaveMatchers extends BeHaveMatchers:
-  private val outer = JsonBaseMatchers
-
-  extension (result: NotMatcher[Any]):
-    def have(m: Matcher[JsonType]): JsonMatcher = outer.have(m).negate
-    def /#(i: Int): JsonMatcher = outer./#(i).negate
-    def /(selector: JsonSelector): JsonMatcher = outer./(selector).negate
-    def */(selector: JsonSelector): JsonMatcher = outer.*/(selector).negate
-
-object JsonBaseMatchers extends JsonBaseMatchers
+object JsonMatchers extends JsonMatchers

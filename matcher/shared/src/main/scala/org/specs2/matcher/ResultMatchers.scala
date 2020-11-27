@@ -10,19 +10,15 @@ import ValueChecks.{given}
 /**
  * Matchers for Results
  */
-trait ResultMatchers extends ResultBaseMatchers with ResultBeHaveMatchers
-object ResultMatchers extends ResultMatchers
+trait ResultMatchers:
 
-private[specs2]
-trait ResultBaseMatchers:
-
-  def beSuccessful[T : AsResult] = new Matcher[T] {
-    def apply[S <: T](value: Expectable[S]) =
-      result(ResultExecution.execute(AsResult[T](value.value)).isSuccess,
-             value.description + " is a success",
-             value.description + " is not a success",
-             value)
-  }
+  def beSuccessful[T : AsResult]: Matcher[T] =
+    new Matcher[T]:
+      def apply[S <: T](value: Expectable[S]) =
+        result(ResultExecution.execute(AsResult[T](value.value)).isSuccess,
+               value.description + " is a success",
+               value.description + " is not a success",
+               value)
 
   def beFailing[T : AsResult]: Matcher[T] =
     beFailing(ValueCheck.alwaysOk[String])
@@ -92,25 +88,4 @@ trait ResultBaseMatchers:
           value) and
         result(check.check(r.message), value)
 
-object ResultBaseMatchers extends ResultBaseMatchers
-
-private[specs2]
-trait ResultBeHaveMatchers extends BeHaveMatchers:
-  private val outer = ResultBaseMatchers
-
-  extension [T : AsResult](result: MatchResult[T]):
-    def successful = result(outer.beSuccessful[T])
-    def beSuccessful = result(outer.beSuccessful[T])
-
-    def failing = result(outer.beFailing[T](".*"))
-    def failing(m: String) = result(outer.beFailing[T](m))
-    def beFailing = result(outer.beFailing[T](".*"))
-    def beFailing(m: String) = result(outer.beFailing[T](m))
-
-  def successful = outer.beSuccessful[Result]
-  def successful[T : AsResult] = outer.beSuccessful[T]
-
-  def failing = outer.beFailing[Result](".*")
-  def failing[T : AsResult] = outer.beFailing[T](".*")
-
-  def failing[T : AsResult](m: String = ".*") = outer.beFailing[T](".*")
+object ResultMatchers extends ResultMatchers

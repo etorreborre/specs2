@@ -110,10 +110,12 @@ Custom
   def or6 =
     MustThrownMatchers.createExpectable("eric").must(MustThrownMatchers.beMatching("a.*") or MustThrownMatchers.beMatching("e.*"))
 
-  def or7 = ("eric" must be matching("e.*")) or ("eric" must be matching(".*d"))
+  def or7 =
+    ("eric" must beMatching("e.*")) or ("eric" must beMatching(".*d"))
+
   def or8 =
     val out = new StringOutput {}
-    ("eric" must be matching("e.*")) or { out.println("DON'T"); "torreborre" must be matching(".*tor.*") }
+    ("eric" must beMatching("e.*")) or { out.println("DON'T"); "torreborre" must beMatching(".*tor.*") }
     out.messages must not(contain("DON'T"))
 
   def or9 = ((true === false) or (true === true) or (true === false)) must beSuccessful
@@ -124,11 +126,11 @@ Custom
   def or13 = {                              1 } must be_==(1) or throwAn[Exception]
   def or14 = { throw new Exception("ouch"); 1 } must be_==(1) or throwAn[Exception] or throwAn[Exception]
 
-  def and1 = "eric" must be matching("e.*") and be matching(".*c")
-  def and2 = ("eric" must be matching("e.*")) and ("torreborre" must be matching(".*tor.*"))
+  def and1 = "eric" must beMatching("e.*") and beMatching(".*c")
+  def and2 = ("eric" must beMatching("e.*")) and ("torreborre" must beMatching(".*tor.*"))
   def and3 =
     val out = new StringOutput {}
-    ("eric" must be matching("x.*")) and { out.println("DON'T"); "torreborre" must be matching(".*tor.*") }
+    ("eric" must beMatching("x.*")) and { out.println("DON'T"); "torreborre" must beMatching(".*tor.*") }
     out.messages must not(contain("DON'T"))
   def and4 = ((true === true) and (true === false) and (true === true)) must beFailing
 
@@ -152,23 +154,19 @@ Custom
   def conditions8 = (1 must be_==(1).iff(false)).toResult must beFailing
 
   def custom1 = (12 must bePositive) and
-          (12 must be positive) and
           (-12 must not(bePositive))
 
   // HELPERS
   case class CustomMatcher[T : Numeric]() extends Matcher[T]:
     def apply[S <: T](e: Expectable[S]) =
       result(implicitly[Numeric[T]].abs(e.value) == e.value, s"${e.value} is positive", s"${e.value}   is negative", e)
-  /** this allows to write "a must not bePositive" or "a must be positive" */
-  lazy val outer = this
-
-  extension [T : Numeric](result: MatchResult[T]):
-    def bePositive: MatchResult[T] = result(outer.bePositive)
-    def positive: MatchResult[T] = result(outer.bePositive)
 
   /** custom matcher */
-  def bePositive[T : Numeric]: Matcher[T] = CustomMatcher[T]()
+  def bePositive[T : Numeric]: Matcher[T] =
+    CustomMatcher[T]()
+
   /** this allows to write "a must not be positive" */
-  def positive[T : Numeric]: Matcher[T] = bePositive[T]
+  def positive[T : Numeric]: Matcher[T] =
+    bePositive[T]
 
 }

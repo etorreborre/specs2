@@ -32,5 +32,4 @@ class BeHaveMatchersSpec extends Specification { def is = s2"""
                                                                                                                         """
   def e1 =
     Some("") must not(beSome);
-    Some("") must be some
 }

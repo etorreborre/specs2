@@ -29,7 +29,7 @@ class XmlMatchersSpec extends Spec with XmlMatchers with MustExpectations { def 
    fail if 2 nodes are a Text and an Atom with different data $match4
 
    provide be + matchers forms
-   ${ <a><b/></a> must be equalToIgnoringSpace(<a> <b/></a>) }
+   ${ <a><b/></a> must beEqualToIgnoringSpace(<a> <b/></a>) }
    ${ <a><b/></a> must be_==/(<a> <b/></a>) }
    ${ <n a="1" b="2"/> must be_==/(<n b="2" a="1"/>) }
    ${ <a><b/></a> must not(==/(<b></b>)) }

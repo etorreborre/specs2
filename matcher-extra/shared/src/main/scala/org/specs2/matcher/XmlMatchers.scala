@@ -16,104 +16,101 @@ import StringToElem.{given}
 /**
  * The XmlMatchers trait provides matchers which are applicaborderle to xml nodes
  */
-trait XmlMatchers extends XmlBaseMatchers with XmlBeHaveMatchers
-object XmlMatchers extends XmlMatchers
-
-private[specs2]
-trait XmlBaseMatchers:
+trait XmlMatchers :
 
   /**
    * match if `node` is contained anywhere inside the tested node
    * an exact match on is required on attributes
    */
-  def \\(node: Node, attributes: String*): XmlMatcher = deepMatch(node, attributes.toList)
+  def \\(node: Node, attributes: String*): XmlMatcher =
+    deepMatch(node, attributes.toList)
+
   /** match if `node` is contained anywhere inside the tested node */
-  def \\(node: Node): XmlMatcher = deepMatch(node, Nil)
+  def \\(node: Node): XmlMatcher =
+    deepMatch(node, Nil)
+
   /** alias for `\\(node)` with the node label only */
-  def \\(label: String, attributes: String*): XmlMatcher = deepMatch(label, attributes.toList)
+  def \\(label: String, attributes: String*): XmlMatcher =
+    deepMatch(label, attributes.toList)
+
   /**
    * match if `node` is contained anywhere inside the tested node and has exactly the `attributeValues`
    * as names and values for its attributes
    */
-  def \\(node: Node, attributeValues1: (String, String), attributeValues: (String, String)*) =
+  def \\(node: Node, attributeValues1: (String, String), attributeValues: (String, String)*): XmlMatcher =
     deepMatch(node, Map((attributeValues1 :: attributeValues.toList): _*))
+
   /** alias for `\\(node, attributeValues)` with the node label only */
-  def \\(label: String, attributeValues1: (String, String), attributeValues: (String, String)*) =
+  def \\(label: String, attributeValues1: (String, String), attributeValues: (String, String)*): XmlMatcher =
     deepMatch(label, Map((attributeValues1 :: attributeValues.toList): _*))
 
   /**
    * match if `node` is the first node of the tested node
    * an exact match on is required on attributes
    */
-  def \(node: Node, attributes: String*): XmlMatcher = firstMatch(node, attributes.toList)
+  def \(node: Node, attributes: String*): XmlMatcher =
+    firstMatch(node, attributes.toList)
+
   /** match if `node` is the first node of the tested node */
-  def \(node: Node): XmlMatcher = firstMatch(node, Nil)
+  def \(node: Node): XmlMatcher =
+    firstMatch(node, Nil)
+
   /** alias for `\(node)` with the node label only */
-  def \(label: String, attributes: String*) = firstMatch(label, attributes.toList)
+  def \(label: String, attributes: String*): XmlMatcher =
+    firstMatch(label, attributes.toList)
+
   /**
    * match if `node` is the first node of the tested node and has exactly the `attributeValues`
    * as names and values for its attributes
    */
-  def \(node: Node, attributeValues1: (String, String), attributeValues: (String, String)*) =
+  def \(node: Node, attributeValues1: (String, String), attributeValues: (String, String)*): XmlMatcher =
     firstMatch(node, Map((attributeValues1 :: attributeValues.toList): _*))
+
   /** alias for `\\(node, attributeValues)` with the node label only */
-  def \(label: String, attributeValues1: (String, String), attributeValues: (String, String)*) =
+  def \(label: String, attributeValues1: (String, String), attributeValues: (String, String)*): XmlMatcher =
     firstMatch(label, Map((attributeValues1 :: attributeValues.toList): _*))
 
   /** match if `node` is equal to the tested node without testing empty text */
-  def beEqualToIgnoringSpace(node: Seq[Node]) = new EqualIgnoringSpaceMatcher(node)
+  def beEqualToIgnoringSpace(node: Seq[Node]): EqualIgnoringSpaceMatcher =
+    new EqualIgnoringSpaceMatcher(node)
+
   /** alias for beEqualToIgnoringSpace */
-  def be_==/(node: Seq[Node]): EqualIgnoringSpaceMatcher = beEqualToIgnoringSpace(node)
+  def be_==/(node: Seq[Node]): EqualIgnoringSpaceMatcher =
+    beEqualToIgnoringSpace(node)
+
   /** alias for beEqualToIgnoringSpace */
-  def ==/(node: Seq[Node]): EqualIgnoringSpaceMatcher = beEqualToIgnoringSpace(node)
+  def ==/(node: Seq[Node]): EqualIgnoringSpaceMatcher =
+    beEqualToIgnoringSpace(node)
+
   /** alias for beEqualToIgnoringSpace */
-  def ==/(node: Elem): EqualIgnoringSpaceMatcher = beEqualToIgnoringSpace(node)
+  def ==/(node: Elem): EqualIgnoringSpaceMatcher =
+    beEqualToIgnoringSpace(node)
+
   /** alias for beEqualToIgnoringSpace */
-  def be_==/(node: Elem): EqualIgnoringSpaceMatcher = beEqualToIgnoringSpace(node)
+  def be_==/(node: Elem): EqualIgnoringSpaceMatcher =
+    beEqualToIgnoringSpace(node)
+
   /** alias for beEqualToIgnoringSpace */
-  def equalToIgnoringSpace(node: Seq[Node]) = beEqualToIgnoringSpace(node)
+  def equalToIgnoringSpace(node: Seq[Node]): EqualIgnoringSpaceMatcher =
+    beEqualToIgnoringSpace(node)
+
   /** alias for beEqualToIgnoringSpace */
-  def equalToIgnoringSpace(node: Elem) = beEqualToIgnoringSpace(node)
+  def equalToIgnoringSpace(node: Elem): EqualIgnoringSpaceMatcher =
+    beEqualToIgnoringSpace(node)
 
   private def deepMatch(node: Node, attributes: List[String]) =
     new XmlMatcher(Seq(new PathFunction(node, deepNodeSearch _, attributes)))
+
   private def deepMatch(node: Node, attributes: Map[String, String]) =
     new XmlMatcher(Seq(new PathFunction(node, deepNodeSearch _, attributeValues = attributes)))
+
   private def firstMatch(node: Node, attributes: List[String]) =
     new XmlMatcher(Seq(new PathFunction(node, firstNodeSearch _, attributes)))
+
   private def firstMatch(node: Node, attributes: Map[String, String]) =
     new XmlMatcher(Seq(new PathFunction(node, firstNodeSearch _, attributeValues = attributes)))
 
-object XmlBaseMatchers extends XmlBaseMatchers
-
-private[specs2]
-trait XmlBeHaveMatchers extends BeHaveMatchers:
-  private val outer = XmlBaseMatchers
-
-  extension (result: MatchResult[Seq[Node]]):
-    def equalToIgnoringSpace(node: Seq[Node]) = result(outer.equalToIgnoringSpace(node))
-    def ==/(node: Seq[Node]) = result(outer.==/(node))
-
-  extension (result: NeutralMatcher[Any]):
-    def ==/(node: Seq[Node]) = outer.==/(node) ^^ { (e: Elem) => e.toSeq }
-
-  extension (result: NotMatcher[Any]):
-    def ==/(node: Seq[Node]) = (outer.==/(node) ^^ { (e: Elem) => e.toSeq }).not
-    def \\(node: Node, attributes: String*) = outer.\\(node, attributes:_*).not
-    def \\(node: Node) = outer.\\(node).not
-    def \\(label: String, attributes: String*) = outer.\\(label, attributes:_*).not
-    def \\(node: Node, attributeValues1: (String, String), attributeValues: (String, String)*) =
-      outer.\\(node, attributeValues1, attributeValues:_*).not
-    def \\(label: String, attributeValues1: (String, String), attributeValues: (String, String)*) =
-      outer.\\(label, attributeValues1, attributeValues:_*).not
-
-    def \(node: Node, attributes: String*) = outer.\(node, attributes:_*).not
-    def \(node: Node) = outer.\(node).not
-    def \(label: String, attribute1: String, attributes: String*) = outer.\(label, (attribute1 +: attributes):_*).not
-    def \(node: Node, attributeValues1: (String, String), attributeValues: (String, String)*) =
-      outer.\(node, attributeValues1, attributeValues:_*).not
-    def \(label: String, attributeValues1: (String, String), attributeValues: (String, String)*) =
-      outer.\(label, attributeValues1, attributeValues:_*).not
+object XmlMatchers extends XmlMatchers
 
 /**
  * Matcher for equalIgnoreSpace comparison, ignoring the nodes order
@@ -124,7 +121,9 @@ class EqualIgnoringSpaceMatcher(node: Seq[Node]) extends Matcher[Seq[Node]] with
     result(NodeFunctions.isEqualIgnoringSpace(node.toList, n.value.toList),
            n.description + " is equal to " + q(node),
            koMessage(n, node), n)
+           
   def ordered = new EqualIgnoringSpaceMatcherOrdered(node)
+
 /**
  * Matcher for equalIgnoreSpace comparison, considering the node order
  */

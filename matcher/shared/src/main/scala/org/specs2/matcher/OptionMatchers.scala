@@ -9,12 +9,7 @@ import org.specs2.matcher.describe.Diffable
 /**
  * Matchers for Options
  */
-trait OptionMatchers extends OptionBaseMatchers with OptionBeHaveMatchers with ValueChecks
-
-object OptionMatchers extends OptionMatchers
-
-private[specs2]
-trait OptionBaseMatchers:
+trait OptionMatchers extends ValueChecks:
 
   def beSome[T](check: ValueCheck[T]): SomeCheckedMatcher[T] =
     SomeCheckedMatcher(check)
@@ -53,20 +48,7 @@ trait OptionBaseMatchers:
   def asNoneAs[T](other: =>Option[T]): Matcher[Option[T]] =
     beAsNoneAs(other)
 
-object OptionBaseMatchers extends OptionBaseMatchers
-
-private[specs2]
-trait OptionBeHaveMatchers extends BeHaveMatchers:
-  private val outer = OptionBaseMatchers
-
-  extension [T](result: MatchResult[Option[T]]):
-    def beSome = result(outer.beSome)
-    def beSome(check: ValueCheck[T]) = result(outer.beSome(check))
-    def beNone = result(outer.beNone)
-    def some = result(outer.beSome)
-    def some(check: ValueCheck[T]) = result(outer.beSome(check))
-    def none = result(outer.beNone)
-    def asNoneAs(other: =>Option[T]) = result(outer.beAsNoneAs(other))
+object OptionMatchers extends OptionMatchers
 
 case class SomeMatcher[T]() extends OptionLikeMatcher[Option, T, T]("Some", identity)
 case class SomeCheckedMatcher[T](check: ValueCheck[T]) extends OptionLikeCheckedMatcher[Option, T, T]("Some", identity, check)

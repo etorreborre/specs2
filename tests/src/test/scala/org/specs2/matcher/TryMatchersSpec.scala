@@ -29,8 +29,8 @@ class TryMatchersSpec extends Spec with TryMatchers with ResultMatchers { def is
   ${ Failed[I](e) must beFailedTry(e) }
   ${ Failed[I](e) must beFailedTry }
   ${ Succeeded(1) must not(beAFailedTry) }
-  ${ (Succeeded(1) must be failedTry) returns "Success(1) is not a Failure" }
-  ${ Failed[I](e) must be aFailedTry }
+  ${ (Succeeded(1) must beFailedTry) returns "Success(1) is not a Failure" }
+  ${ Failed[I](e) must beFailedTry }
   ${ Failed[I](e) must beFailedTry.withThrowable[MyException] }
   ${ Failed[I](e) must beFailedTry.withThrowable[Exception] }
   ${ (Failed[I](e) must beFailedTry.withThrowable[OtherException]) returns

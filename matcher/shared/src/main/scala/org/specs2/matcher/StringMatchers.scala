@@ -10,7 +10,7 @@ import StringMatchers._
 /**
  * The `StringMatchers` trait provides matchers which are applicable to String objects
  */
-trait StringMatchers extends StringBaseMatchers with StringBeHaveMatchers:
+trait StringMatchers:
 
   /** adapt the BeEqualTo matcher to provide ignoreCase and ignoreSpace matcher */
   extension (m: AdaptableMatcher[Any]):
@@ -27,16 +27,6 @@ trait StringMatchers extends StringBaseMatchers with StringBeHaveMatchers:
   private[specs2] val ignoringCase = (_:Any).toString + ", ignoring case"
   private[specs2] val ignoringSpace = (_:Any).toString + ", ignoring space"
   private[specs2] val isTrimmed = (_:Any).toString + ", trimmed"
-
-object StringMatchers extends StringMatchers
-
-/**
- * This trait provides base matchers for strings.
- *
- * IgnoreCase and ignoreSpace matchers are created by adapting the BeEqualTo matcher.
- */
-private[specs2]
-trait StringBaseMatchers:
 
   /** matches if a.toLowerCase.trim = b.toLowerCase.trim */
   def ==/(s: String): Matcher[String] =
@@ -76,12 +66,24 @@ trait StringBaseMatchers:
   def beMatching(a: =>String): Matcher[String] =
     new BeMatching(a)
 
+  /** alias to use with contain */
+  def matching(a: =>String): Matcher[String] =
+    new BeMatching(a)
+
   /** matches if b matches the pattern a */
   def beMatching(a: Pattern): Matcher[String] =
     new BeMatchingPattern(a)
 
+  /** alias to use with contain */
+  def matching(a: Pattern): Matcher[String] =
+    new BeMatchingPattern(a)
+
   /** matches if b matches the regex a */
   def beMatching(a: Regex): Matcher[String] =
+    new BeMatchingRegex(a)
+
+  /** alias to use with contain */
+  def matching(a: Regex): Matcher[String] =
     new BeMatchingRegex(a)
 
   /** alias for beMatching but matching just a fragment of the string */
@@ -89,30 +91,40 @@ trait StringBaseMatchers:
     BeMatching.withPart(t)
 
   /** alias for beMatching but matching just a fragment of the string */
-  def =~(p: Pattern) = new BeMatchingPattern(Pattern.compile(p.toString.regexPart, p.flags()))
+  def =~(p: Pattern): BeMatchingPattern =
+    new BeMatchingPattern(Pattern.compile(p.toString.regexPart, p.flags()))
+
   /** alias for beMatching but matching just a fragment of the string */
-  def =~(r: Regex) = new BeMatchingRegex(r.toString.regexPart.r)
+  def =~(r: Regex): BeMatchingRegex =
+    new BeMatchingRegex(r.toString.regexPart.r)
+
   /** matches if b.startsWith(a) */
-  def startWith(a: String): Matcher[String] = new Matcher[String] {
-    def apply[S <: String](b: Expectable[S]) =
-      result(b.value != null && a != null && b.value.startsWith(a),
-             s"${b.description} starts with ${q(a)}",
-             s"${b.description} doesn't start with ${q(a)}", b)
-  }
+  def startWith(a: String): Matcher[String] =
+    new Matcher[String]:
+      def apply[S <: String](b: Expectable[S]) =
+        result(b.value != null && a != null && b.value.startsWith(a),
+               s"${b.description} starts with ${q(a)}",
+               s"${b.description} doesn't start with ${q(a)}", b)
+
   /** matches if b.endsWith(a) */
-  def endWith(t: =>String): Matcher[String] = new Matcher[String] {
-    def apply[S <: String](b: Expectable[S]) =
-      val a = t
-      result(b.value!= null && a!= null && b.value.endsWith(a),
-             b.description  + " ends with " + q(a),
-             b.description  + " doesn't end with " + q(a), b)
-  }
+  def endWith(t: =>String): Matcher[String] =
+    new Matcher[String]:
+      def apply[S <: String](b: Expectable[S]) =
+        val a = t
+        result(b.value!= null && a!= null && b.value.endsWith(a),
+               b.description  + " ends with " + q(a),
+               b.description  + " doesn't end with " + q(a), b)
   /** matches if the regexp a is found inside b */
-  def find(a: =>String) = new FindMatcher(a)
+  def find(a: =>String): FindMatcher =
+    new FindMatcher(a)
+
   /** matches if the pattern p is found inside b */
-  def find(p: Pattern) = new FindMatcherPattern(p)
+  def find(p: Pattern): FindMatcherPattern =
+    new FindMatcherPattern(p)
+
   /** matches if the regexp r is found inside b */
-  def find(r: Regex) = new FindMatcherRegex(r)
+  def find(r: Regex): FindMatcherRegex =
+    new FindMatcherRegex(r)
 
   /**
    * Matcher to find if the regexp a is found inside b.
@@ -175,43 +187,7 @@ trait StringBaseMatchers:
   class FindMatcherPatternWithGroups(p: Pattern, groups: String*) extends FindMatcherWithGroups(p.toString, groups:_*):
     override lazy val pattern = p
 
-object StringBaseMatchers extends StringBaseMatchers
-
-private[specs2]
-trait StringBeHaveMatchers extends BeHaveMatchers:
-  private val outer = StringBaseMatchers
-
-  extension (result: MatchResult[String]):
-    def matching(s: =>String) = result(beMatching(s))
-    def matching(s: Pattern) = result(beMatching(s))
-    def matching(s: Regex) = result(beMatching(s))
-    def contain(s: String) = result(outer.contain(s))
-    def containing(s: String) = result(outer.contain(s))
-    def startWith(s: =>String) = result(outer.startWith(s))
-    def endWith(s: =>String) = result(outer.endWith(s))
-    def startingWith(s: =>String) = result(outer.startWith(s))
-    def endingWith(s: =>String) = result(outer.endWith(s))
-    def be_==/(s: String): MatchResult[String] = result(outer.be_==/(s))
-
-  extension (result: NeutralMatcher[Any]):
-    def be_==/(s: String) = outer.be_==/(s)
-    def =~(s: =>String) = outer.=~(s)
-    def =~(s: Pattern) = outer.=~(s)
-    def =~(s: Regex) = outer.=~(s)
-
-  extension (result: NotMatcher[Any]):
-    def be_==/(s: String) = outer.be_==/(s).not
-    def =~(s: =>String) = outer.=~(s).not
-    def =~(s: Pattern) = outer.=~(s).not
-    def =~(s: Regex) = outer.=~(s).not
-
-  def matching(t: =>String) = beMatching(t)
-  def matching(t: Pattern) = beMatching(t)
-  def matching(r: Regex) = beMatching(r)
-
-  def containing(s: String) = outer.contain(s)
-  def startingWith(s: =>String) = outer.startWith(s)
-  def endingWith(s: =>String) = outer.endWith(s)
+object StringMatchers extends StringMatchers
 
 protected[specs2]
 class BeMatching(t: =>String) extends Matcher[String]:

@@ -230,3 +230,13 @@ case class BeOneOf[T](t: Seq[T]) extends Matcher[T]:
       s"${q(y.description)} is contained in ${q(x.mkString(", "))}",
       s"${q(y.description)} is not contained in ${q(x.mkString(", "))}",
       y)
+
+/**
+ * This special matcher always return a NeutralMatch MatchResult (an implicit Success)
+ */
+class NeutralMatcher[T] extends Matcher[T]:
+  def apply[S <: T](s: Expectable[S]): MatchResult[S] =
+    NeutralMatch(MatchSuccess("ok", "ko", s))
+
+  def apply[S <: T](r: MatchResult[S]): MatchResult[S] =
+    NeutralMatch(r)

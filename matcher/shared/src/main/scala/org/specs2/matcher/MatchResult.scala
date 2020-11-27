@@ -22,7 +22,7 @@ import ResultLogicalCombinators.combineResult
  * There are different kinds of MatchResults, some of them being only created to support
  * English-like combination of Matchers:
  *
- * `1 must be equalTo(1) and not be equalTo(2)`
+ * `1 must be equalTo(1) and not(beEqualTo(2))`
  *
  * In an Expectation like the one above, there is a left to right evaluation:
  *
@@ -80,11 +80,6 @@ trait MatchResult[+T] extends ResultLike:
 
   /** @return the negation of this result */
   def negate: MatchResult[T]
-
-  /** apply the matcher */
-  def be[S >: T](m: Matcher[T]): MatchResult[S] =
-    if m == null then apply(new BeNull)
-    else apply(m)
 
   def be[S >: T <: AnyRef](s: S): MatchResult[S] =
     apply(new BeTheSameAs(s))
