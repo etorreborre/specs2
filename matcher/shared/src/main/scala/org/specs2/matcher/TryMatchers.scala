@@ -7,16 +7,20 @@ import MatchersImplicits._
 import org.specs2.matcher.describe.Diffable
 import text.NotNullStrings._
 import ValueChecks.{given}
+import StringMatchers.{given, _}
 
 /**
  * Matchers for util.Try instances
  */
 trait TryMatchers:
 
-  def beSuccessfulTry[T]  = TrySuccessMatcher[T]()
-  def beASuccessfulTry[T] = beSuccessfulTry[T]
-  def successfulTry[T]    = beSuccessfulTry[T]
-  def aSuccessfulTry[T]   = beSuccessfulTry[T]
+  def beSuccessfulTry[T]: TrySuccessMatcher[T] =
+    TrySuccessMatcher[T]()
+  def beASuccessfulTry[T]: TrySuccessMatcher[T] =
+    beSuccessfulTry[T]
+
+  def aSuccessfulTry[T]: TrySuccessMatcher[T] =
+    beSuccessfulTry[T]
 
   def beSuccessfulTry[T] (check: ValueCheck[T]) = TrySuccessCheckedMatcher[T](check)
   def beASuccessfulTry[T](check: ValueCheck[T]) = beSuccessfulTry[T]         (check)
@@ -43,6 +47,7 @@ object TryeMatchers extends TryMatchers
 
 case class TrySuccessMatcher[T]() extends OptionLikeMatcher[Try, T, T]("a Success", (_:Try[T]).toOption):
   def withValue(t: ValueCheck[T]) = TrySuccessCheckedMatcher(t)
+
 case class TrySuccessCheckedMatcher[T](check: ValueCheck[T]) extends OptionLikeCheckedMatcher[Try, T, T]("a Success", (_:Try[T]).toOption, check)
 
 case class TryFailureMatcher[T]() extends OptionLikeMatcher[Try, T, Throwable]("a Failure", (_:Try[T]).failed.toOption):

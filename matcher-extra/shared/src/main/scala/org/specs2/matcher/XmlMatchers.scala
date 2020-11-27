@@ -11,12 +11,13 @@ import text.Quote._
 import StringToElem._
 import collection.Seqx._
 import fp.syntax._
-import StringToElem.{given}
+import StringToElem.{given, _}
+import StringMatchers.{given, _}
 
 /**
- * The XmlMatchers trait provides matchers which are applicaborderle to xml nodes
+ * The XmlMatchers trait provides matchers which are applicable to xml nodes
  */
-trait XmlMatchers :
+trait XmlMatchers:
 
   /**
    * match if `node` is contained anywhere inside the tested node
@@ -121,7 +122,7 @@ class EqualIgnoringSpaceMatcher(node: Seq[Node]) extends Matcher[Seq[Node]] with
     result(NodeFunctions.isEqualIgnoringSpace(node.toList, n.value.toList),
            n.description + " is equal to " + q(node),
            koMessage(n, node), n)
-           
+
   def ordered = new EqualIgnoringSpaceMatcherOrdered(node)
 
 /**
@@ -164,33 +165,49 @@ case class XmlMatcher(functions: Seq[PathFunction]) extends Matcher[Seq[Node]]:
 
   def \(node: Node, attributeNames: String*): XmlMatcher =
     new XmlMatcher(functions :+ new PathFunction(node, firstNodeSearch _, attributeNames.toList))
+
   def \(node: Node, attributeValues: (String, String), attributeValues2: (String, String)*): XmlMatcher =
     new XmlMatcher(functions :+ new PathFunction(node, firstNodeSearch _, Nil, Map((attributeValues :: attributeValues2.toList):_*)))
+
   def \\(node: Node, attributeNames: String*): XmlMatcher =
     new XmlMatcher(functions :+ new PathFunction(node, deepNodeSearch _, attributeNames.toList))
+
   def \\(node: Node, attributeValues: (String, String), attributeValues2: (String, String)*): XmlMatcher =
     new XmlMatcher(functions :+ new PathFunction(node, deepNodeSearch _, Nil, Map((attributeValues :: attributeValues2.toList):_*)))
+
   /** alias for \ using the node label only */
-  def \(label: String, attributeNames: String*): XmlMatcher = \(label.toElem, attributeNames:_*)
+  def \(label: String, attributeNames: String*): XmlMatcher =
+    \(label.toElem, attributeNames:_*)
+
   def \(label: String, attributeValues: (String, String), attributeValues2: (String, String)*): XmlMatcher =
     \(label.toElem, attributeValues, attributeValues2:_*)
   /** alias for \\ using the node label only */
-  def \\(label: String, attributeNames: String*): XmlMatcher = \\(label.toElem, attributeNames:_*)
+  def \\(label: String, attributeNames: String*): XmlMatcher =
+    \\(label.toElem, attributeNames:_*)
+
   def \\(label: String, attributeValues: (String, String), attributeValues2: (String, String)*): XmlMatcher =
     \\(label.toElem, attributeValues, attributeValues2:_*)
 
   /**
    * specify the value of the node text
    */
-  def textIs(t: String) = XmlMatcher(functions.updateLast(f => f.textIs(t)))
+  def textIs(t: String): XmlMatcher =
+    XmlMatcher(functions.updateLast(f => f.textIs(t)))
+
   /** alias for textIs */
-  def \>(t: String) = textIs(t)
+  def \>(t: String): XmlMatcher =
+    textIs(t)
+
   /**
    * specify the value of the node text
    */
-  def textMatches(regexp: String) = XmlMatcher(functions.updateLast(f => f.textMatches(regexp)))
+  def textMatches[T : MatchingExpression](t: T): XmlMatcher =
+    XmlMatcher(functions.updateLast(f => f.textMatches(t)))
+
   /** alias for textMatches */
-  def \>~(t: String) = textMatches(t)
+  def \>~[T : MatchingExpression](t: T): XmlMatcher =
+    textMatches(t)
+
   /**
    * checks that the `nodes` satisfy the `functions`
    * @return a MatcherResult
@@ -249,25 +266,33 @@ case class PathFunction(val node: Node,
         found <- function(n, node.label) if (found.matchNode(node, attributes, attributeValues, exactMatch, textMatcher.test))
     yield found
 
-  def exactly = copy(exactMatch = true)
+  def exactly: PathFunction =
+    copy(exactMatch = true)
+
   /** add a matcher for the node text */
-  def textIs(t: String) = copy(textMessage = Some("with text: "+t), textMatcher = new BeEqualTo(t))
+  def textIs(t: String): PathFunction =
+    copy(textMessage = Some("with text: "+t), textMatcher = new BeEqualTo(t))
+
   /** add a matcher for the node text with a regular exp */
-  def textMatches(regexp: String) = copy(textMessage = Some("with text matching: "+regexp), textMatcher = new BeMatching(regexp))
+  def textMatches[T : MatchingExpression](t: T): PathFunction =
+    copy(textMessage = Some("with text matching: "+t.toString), textMatcher = beMatching(t))
+
   /**
    * @return "subnode" or "node" depending on the type of search a direct child search or a general search
    */
-  def nodeLabel: String = (if !function(<a/>, "a").isEmpty then "node " else "subnode " )+ q(node.label)
+  def nodeLabel: String =
+    (if !function(<a/>, "a").isEmpty then "node " else "subnode " )+ q(node.label)
 
   /**
    * @return a string representation of attributes or attributeValues (one of them being empty by construction)
    */
-  def searchedAttributes = attributes.mkString(", ") + attributeValues.map(a=> a._1 + "=\"" + a._2 + "\"").mkString(" ")
+  def searchedAttributes: String =
+    attributes.mkString(", ") + attributeValues.map(a=> a._1 + "=\"" + a._2 + "\"").mkString(" ")
 
   /**
    * @return a string representing the searched nodes, attributes, attribute values
    */
-  def searchedElements =
+  def searchedElements: String =
     val n = if node.child.isEmpty then nodeLabel
             else node.toString
 

@@ -1,10 +1,11 @@
 package org.specs2
 package matcher
 
+import StringMatchers.given
 
 trait ScalaInterpreterMatchers extends Expectations:
   private val outer = this
-  
+
   /** use your own interpreter implementation to interpret a Scala script */
   def interpret(s: String): String
 

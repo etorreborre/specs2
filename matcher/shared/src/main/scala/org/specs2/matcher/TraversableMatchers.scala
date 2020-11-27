@@ -15,6 +15,7 @@ import execute.Failure
 
 import scala.annotation.tailrec
 import ValueChecks.{given, _}
+import StringMatchers.{given, _}
 import org.specs2.matcher.describe.Diffable
 
 /**
@@ -33,7 +34,8 @@ trait TraversableBaseMatchers:
   /**
    * ELEMENTS MATCHERS
    */
-  def contain[T](check: ValueCheck[T]): ContainWithResult[T] = new ContainWithResult(check)
+  def contain[T](check: ValueCheck[T]): ContainWithResult[T] =
+    new ContainWithResult(check)
 
   /**
    * COLLECTION MATCHERS
@@ -47,14 +49,20 @@ trait TraversableBaseMatchers:
   def atMost[T](checks: ValueCheck[T]*) : ContainWithResultSeq[T] = new ContainWithResultSeq(checks).atMost
 
   /** match if a traversable contains all the elements of seq (and maybe more) */
-  def containAllOf[T : Diffable](seq: Seq[T]) = contain(atLeast(seq.map(v => valueIsTypedValueCheck(v)):_*))
+  def containAllOf[T : Diffable](seq: Seq[T]) =
+    contain(atLeast(seq.map(v => valueIsTypedValueCheck(v)):_*))
+
   /** match if a traversable contains one of (t1, t2) */
-  def containAnyOf[T](seq: Seq[T]) = contain(new BeOneOf(seq))
+  def containAnyOf[T](seq: Seq[T]): ContainWithResult[T] =
+    contain(new BeOneOf(seq))
+
   /** match if traversable contains (x matches .*+t+.*) */
-  def containMatch[T](t: =>String) = containPattern[T](t.regexPart)
+  def containMatch[T](s: =>String): Matcher[Traversable[T]] =
+    containPattern(s.regexPart)
+
   /** match if traversable contains (x matches p) */
-  def containPattern[T](t: =>String): Matcher[Traversable[T]] =
-    contain(atLeast(ValueChecks.matcherIsValueCheck(new BeMatching(t)))) ^^ (_.map(_.toString))
+  def containPattern[T, S : MatchingExpression](s: S): Matcher[Traversable[T]] =
+    contain(atLeast(ValueChecks.matcherIsValueCheck(beMatching(s)))) ^^ (_.map(_.toString))
 
   /** does a containAll comparison in both ways */
   def containTheSameElementsAs[T](seq: Seq[T], equality: (T, T) => Boolean = (_:T) == (_:T)): Matcher[Traversable[T]] =
@@ -164,7 +172,7 @@ class OrderingMatcher[T : Ordering] extends Matcher[Seq[T]]:
     result(traversable.value == traversable.value.sorted,
       traversable.description + " is sorted",
       traversable.description + " is not sorted", traversable)
-      
+
 import control.NumberOfTimes._
 import text.Plural._
 

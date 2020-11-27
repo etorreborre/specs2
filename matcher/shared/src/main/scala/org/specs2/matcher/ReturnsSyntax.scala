@@ -2,7 +2,7 @@ package org.specs2
 package matcher
 
 import execute._
-import StringMatchers._
+import StringMatchers.{given, _}
 
 /**
  * Those definitions help specifying the result messages for matchers

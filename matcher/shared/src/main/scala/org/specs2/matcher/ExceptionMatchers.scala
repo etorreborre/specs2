@@ -5,6 +5,7 @@ import control.Exceptions._
 import scala.reflect.ClassTag
 import reflect.ClassName._
 import text.NotNullStrings._
+import BeMatching.{given, _}
 
 /**
  * These matchers can be used to check if exceptions are thrown or not
@@ -22,7 +23,7 @@ trait ExceptionMatchers extends ExpectationsCreation:
    * @return a matcher checking the type of an Exception and its message (as a regexp)
    */
   def throwA[E <: Throwable](message: String = ".*")(using m: ClassTag[E]): Matcher[Any] =
-    throwA.like { case e: Throwable => createExpectable(e.getMessage.notNull).applyMatcher(BeMatching.withPart(message)) }
+    throwA.like { case e: Throwable => createExpectable(e.getMessage.notNull).applyMatcher(withPart(message)) }
 
   /**
    * @return a matcher checking the value of an Exception

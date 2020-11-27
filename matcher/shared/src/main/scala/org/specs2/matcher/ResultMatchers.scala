@@ -6,6 +6,7 @@ import MatchResultLogicalCombinators._
 import control.Exceptions._
 import text.Regexes._
 import ValueChecks.{given}
+import StringMatchers.{given, _}
 
 /**
  * Matchers for Results
@@ -24,7 +25,7 @@ trait ResultMatchers:
     beFailing(ValueCheck.alwaysOk[String])
 
   def beFailing[T : AsResult](message: String): Matcher[T] =
-    beFailing(new BeMatching(message.regexPart))
+    beFailing(beMatching(message.regexPart))
 
   def beFailing[T : AsResult](check: ValueCheck[String]): Matcher[T] =
     new Matcher[T]:
@@ -41,7 +42,7 @@ trait ResultMatchers:
     beError(ValueCheck.alwaysOk[String])
 
   def beError[T : AsResult](message: String): Matcher[T] =
-    beError(new BeMatching(message.regexPart))
+    beError(beMatching(message.regexPart))
 
   def beError[T : AsResult](check: ValueCheck[String]): Matcher[T] =
     new Matcher[T]:
@@ -58,7 +59,7 @@ trait ResultMatchers:
     beSkipped(ValueCheck.alwaysOk[String])
 
   def beSkipped[T : AsResult](message: String): Matcher[T] =
-    beSkipped(new BeMatching(message.regexPart))
+    beSkipped(beMatching(message.regexPart))
 
   def beSkipped[T : AsResult](check: ValueCheck[String]): Matcher[T] =
     new Matcher[T]:
@@ -75,7 +76,7 @@ trait ResultMatchers:
     bePending(ValueCheck.alwaysOk[String])
 
   def bePending[T : AsResult](message: String): Matcher[T] =
-    bePending(new BeMatching(message.regexPart))
+    bePending(beMatching(message.regexPart))
 
   def bePending[T : AsResult](check: ValueCheck[String]): Matcher[T] =
     new Matcher[T]:

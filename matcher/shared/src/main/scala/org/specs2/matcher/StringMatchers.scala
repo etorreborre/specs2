@@ -63,40 +63,16 @@ trait StringMatchers:
                b.description + " doesn't contain " + q(a), b)
 
   /** matches if b matches the regular expression a */
-  def beMatching(a: =>String): Matcher[String] =
-    new BeMatching(a)
+  def beMatching[T : MatchingExpression](t: T): Matcher[String] =
+    new BeMatching(summon[MatchingExpression[T]].toPattern(t))
 
   /** alias to use with contain */
-  def matching(a: =>String): Matcher[String] =
-    new BeMatching(a)
-
-  /** matches if b matches the pattern a */
-  def beMatching(a: Pattern): Matcher[String] =
-    new BeMatchingPattern(a)
-
-  /** alias to use with contain */
-  def matching(a: Pattern): Matcher[String] =
-    new BeMatchingPattern(a)
-
-  /** matches if b matches the regex a */
-  def beMatching(a: Regex): Matcher[String] =
-    new BeMatchingRegex(a)
-
-  /** alias to use with contain */
-  def matching(a: Regex): Matcher[String] =
-    new BeMatchingRegex(a)
+  def matching[T : MatchingExpression](t: T): Matcher[String] =
+    beMatching(t)
 
   /** alias for beMatching but matching just a fragment of the string */
-  def =~(t: =>String): Matcher[String] =
-    BeMatching.withPart(t)
-
-  /** alias for beMatching but matching just a fragment of the string */
-  def =~(p: Pattern): BeMatchingPattern =
-    new BeMatchingPattern(Pattern.compile(p.toString.regexPart, p.flags()))
-
-  /** alias for beMatching but matching just a fragment of the string */
-  def =~(r: Regex): BeMatchingRegex =
-    new BeMatchingRegex(r.toString.regexPart.r)
+  def =~[T : MatchingExpression](t: T): Matcher[String] =
+    BeMatching.withPart[T](t)(using summon[MatchingExpression[T]])
 
   /** matches if b.startsWith(a) */
   def startWith(a: String): Matcher[String] =
@@ -187,25 +163,33 @@ trait StringMatchers:
   class FindMatcherPatternWithGroups(p: Pattern, groups: String*) extends FindMatcherWithGroups(p.toString, groups:_*):
     override lazy val pattern = p
 
+  given MatchingExpression[String]:
+    def toPattern(s: String): Pattern =
+      Pattern.compile(s)
+
+  given MatchingExpression[Pattern]:
+    def toPattern(p: Pattern): Pattern =
+      p
+
+  given MatchingExpression[Regex]:
+    def toPattern(r: Regex): Pattern =
+      r.pattern
+
 object StringMatchers extends StringMatchers
 
+trait MatchingExpression[T]:
+  def toPattern(t: T): Pattern
+
 protected[specs2]
-class BeMatching(t: =>String) extends Matcher[String]:
-  lazy val pattern = Pattern.compile(t)
+class BeMatching(pattern: Pattern) extends Matcher[String]:
 
   def apply[S <: String](b: Expectable[S]) =
-    val a = t
     result(tryOrElse(pattern.matcher(b.value).matches)(false),
-           s"${b.description} matches ${q(a)}",
-           s"'${b.description}' doesn't match ${q(a)}", b)
+           s"${b.description} matches ${q(pattern)}",
+           s"'${b.description}' doesn't match ${q(pattern)}", b)
 
-object BeMatching:
-  def withPart(expression: String): BeMatching =
-    new BeMatching(expression.regexPart)
+object BeMatching extends StringMatchers:
 
-protected[specs2]
-class BeMatchingPattern(p: Pattern) extends BeMatching(p.toString):
-  override lazy val pattern = p
-
-class BeMatchingRegex(r: Regex) extends BeMatching(r.toString):
-    override lazy val pattern = r.pattern
+  def withPart[T : MatchingExpression](t: T): BeMatching =
+    val pattern = summon[MatchingExpression[T]].toPattern(t)
+    new BeMatching(Pattern.compile(pattern.toString.regexPart, pattern.flags()))

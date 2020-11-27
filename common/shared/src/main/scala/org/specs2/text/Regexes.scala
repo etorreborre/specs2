@@ -28,5 +28,9 @@ trait Regexes:
   extension (r: Regex):
     def matches(s: String): Boolean = r.pattern.matcher(s).matches
 
+  extension (p: Pattern):
+    def regexPart: String =
+      p.toString.regexPart
+
 
 object Regexes extends Regexes
