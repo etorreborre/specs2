@@ -3,32 +3,49 @@ package data
 
 import org.specs2.fp._
 import Tree._
+import annotation._
 
 /**
  * Utility methods for Trees
  */
 trait Trees:
-  outer =>
+  outer: Trees =>
 
   /**
    * extension methods for the Tree trait
    */
   extension [A, B](t: Tree[A])
-    def bottomUp(f: ((A, LazyList[B]) => B)) = outer.bottomUp(t, f)
-    def prune(f: A => Option[B]): Option[Tree[B]] = outer.prune(t, f)
+    @targetName("bottomUpPostfix")
+    def bottomUp(f: ((A, LazyList[B]) => B)): Tree[B] =
+      outer.bottomUp(t, f)
+
+    @targetName("prunePostfix")
+    def prune(f: A => Option[B]): Option[Tree[B]] =
+      outer.prune(t, f)
 
   extension [A](t: Tree[A])
-    def prune(f: Tree[A] => Option[A])(using initial: A): Tree[A] = outer.prune(t, f)
-    def flattenSubForests = outer.flattenSubForests(t)
-    def flattenLeft       = outer.flattenLeft(t)
-    def size              = t.flatten.size
-    def allPaths          = outer.allPaths(t)
+    @targetName("prunePostfix")
+    def prune(f: Tree[A] => Option[A])(using initial: A): Tree[A] =
+     outer.prune(t, f)
+
+    def flattenSubForests(using nothing: Int = 0): Tree[A] =
+     outer.flattenSubForests(t)
+
+    def flattenLeft(using nothing: Int = 0): LazyList[A]=
+     outer.flattenLeft(t)
+
+    def size: Int =
+      t.flatten.size
+
+    def allPaths(using nothing: Int = 0): List[List[A]] =
+      outer.allPaths(t)
 
   /**
    * This implicit can be used to remove None nodes in a Tree
    */
   extension [A](t: Tree[Option[A]])
-    def clean(using initial: A): Tree[A] = outer.clean(t)
+    def clean(using initial: A, nothing: Int =0): Tree[A] =
+      outer.clean(t)
 
   /**
    * map a Tree from leaves to root by replacing each node with the result of a function taking
@@ -76,13 +93,32 @@ trait Trees:
    * Implicit definition to add more functionalities to the TreeLoc class
    */
   extension [T](t: TreeLoc[T])
-    def parentLocs = outer.parentLocs(t)
-    def size = outer.size(t)
-    def getParent = t.parent.getOrElse(t)
-    def updateLabel(f: T => T) = t.setLabel(f(t.getLabel))
-    def addChild(c: T) = t.insertDownLast(Leaf(c)).getParent
-    def addFirstChild(c: T) = t.insertDownFirst(Leaf(c)).getParent
-    def insertDownLast(c: T) = t.insertDownLast(Leaf(c))
+    @targetName("parentLocsPostfix")
+    def parentLocs: Seq[TreeLoc[T]] =
+      outer.parentLocs(t)
+
+    def size(using nothing: Int = 0): Int =
+      outer.size(t)
+
+    @targetName("getParentPostfix")
+    def getParent: TreeLoc[T] =
+      t.parent.getOrElse(t)
+
+    @targetName("updateLabelPostfix")
+    def updateLabel(f: T => T): TreeLoc[T] =
+      t.setLabel(f(t.getLabel))
+
+    @targetName("addChildPostfix")
+    def addChild(c: T): TreeLoc[T] =
+      t.insertDownLast(Leaf(c)).getParent
+
+    @targetName("addFirstChildPostfix")
+    def addFirstChild(c: T): TreeLoc[T] =
+      t.insertDownFirst(Leaf(c)).getParent
+
+    @targetName("insertDownLastPostfix")
+    def insertDownLast(c: T): TreeLoc[T] =
+      t.insertDownLast(Leaf(c))
 
   /**
    * @return the number of nodes in a TreeLoc

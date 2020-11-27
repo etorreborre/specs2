@@ -71,26 +71,26 @@ trait Snippets:
 
 object Snippets extends Snippets:
 
-  def create[T](code: Expr[() => T], params: Expr[SnippetParams[T]])(using qctx: QuoteContext)(using t: Type[T], t1: Type[() => T]): Expr[Snippet[T]] =
-    import qctx.reflect._
-    val expression = Expr(rootPosition.sourceCode)
+  def create[T](code: Expr[() => T], params: Expr[SnippetParams[T]])(using quotes: Quotes)(using t: Type[T], t1: Type[() => T]): Expr[Snippet[T]] =
+    import quotes.reflect._
+    val expression = Expr(Position.ofMacroExpansion.sourceCode)
     // we need to pass () => T here because betaReduce would evaluate the code here otherwise
     Expr.betaReduce('{createSnippet[t.Underlying]($expression, $code, $params)})
 
   def createSnippet[T](expression: String, code: () => T, params: SnippetParams[T]): Snippet[T] =
     new Snippet[T](code, codeExpression = Some(expression), params)
 
-  def typeSimpleName[T](using qctx: QuoteContext)(using t: Type[T]): Expr[String] =
-    import qctx.reflect._
-    Expr(t.unseal.symbol.name)
+  def typeSimpleName[T](using quotes: Quotes)(using t: Type[T]): Expr[String] =
+    import quotes.reflect._
+    Expr(TypeTree.of[T].symbol.name)
 
-  def typeFullName[T](using qctx: QuoteContext)(using t: Type[T]): Expr[String] =
-    import qctx.reflect._
-    Expr(t.unseal.symbol.fullName)
+  def typeFullName[T](using quotes: Quotes)(using t: Type[T]): Expr[String] =
+    import quotes.reflect._
+    Expr(TypeTree.of[T].symbol.fullName)
 
-  def termFullName[T](e: Expr[T])(using qctx: QuoteContext): Expr[String] =
-    import qctx.reflect._
-    val name = e.unseal match
+  def termFullName[T](e: Expr[T])(using quotes: Quotes): Expr[String] =
+    import quotes.reflect._
+    val name = Term.of(e) match
       case Ident(termName)                                    => termName
       case Select(_, termName)                                => termName.toString
       case Inlined(_,_,Apply(Ident(termName),_))              => termName.toString

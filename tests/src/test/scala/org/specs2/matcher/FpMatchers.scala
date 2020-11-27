@@ -7,6 +7,7 @@ import org.specs2.fp._
 import org.specs2.fp.syntax._
 import MatchResultLogicalCombinators._
 import AnyMatchers._
+import annotation._
 
 /**
  * This trait provides matchers for some Scalaz (http://github/scalaz/scalaz) datatypes.
@@ -15,17 +16,23 @@ private[specs2]
 trait FpMatchers extends ScalaCheck:
   private val outer = this
 
-  extension [T](sg: Semigroup[T]):
+  extension [T](sg: Semigroup[T])(using nothing: Int = 0):
+
+    @targetName("sgIsAssociative")
     def isAssociative(using a: Arbitrary[T], s: Shrink[T]): Prop =
       outer.isAssociative(using sg, a, s)
 
+    @targetName("sgIsSemigroup")
     def isSemigroup(using a: Arbitrary[T], s: Shrink[T]): Prop =
       outer.isAssociative(using sg, a, s)
 
   extension [T](m: Monoid[T]):
+
+    @targetName("mIsMonoid")
     def isMonoid(using a: Arbitrary[T], s: Shrink[T]): Prop =
       outer.isMonoid(using m, a, s)
 
+    @targetName("mHasNeutralElement")
     def hasNeutralElement(using a: Arbitrary[T], s: Shrink[T]): Prop =
       outer.hasNeutralElement(using m, a, s)
 

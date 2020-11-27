@@ -11,6 +11,7 @@ import util.matching.Regex.Match
  */
 private[specs2]
 trait Trim:
+  outer: Trim =>
 
   /** add trimming methods to a String */
   extension (s: String)
@@ -138,7 +139,7 @@ trait Trim:
 
     /** @return split on newlines and remove empty ones */
     def nonEmptyLines: Seq[String] =
-      extension_lines(s).filterNot(_.isTrimEmpty)
+      outer.lines(s).filter(l => !l.isTrimEmpty).toList
 
     /** @return only the last block of lines when there's separated by a newline */
     def lastBlock: String =

@@ -15,16 +15,15 @@ import FormsBuilder.{given, _}
  * Factory for creating Form fragments
  */
 trait FormFragmentFactory:
-  def FormFragment(form: =>Form): Fragment
-  def FormFragment(aForm: =>{ def form: Form })(using p: ImplicitParam): Fragment
+  def FormFragment[T : HasForm](aForm: =>T): Fragment
 
 /**
  * Default implementation for the FormFragment Factory
  */
 trait DefaultFormFragmentFactory extends FormFragmentFactory:
-  def FormFragment(aForm: =>HasForm)(using p: ImplicitParam): Fragment = addForm(aForm.form)
 
-  def FormFragment(aForm: =>Form): Fragment = addForm(aForm)
+  def FormFragment[T : HasForm](aForm: =>T): Fragment =
+    addForm(aForm.form)
 
   private def addForm(aForm: =>Form): Fragment =
     lazy val form: Form =
@@ -33,8 +32,10 @@ trait DefaultFormFragmentFactory extends FormFragmentFactory:
       }
 
     Fragment(FormDescription(() => form), Execution.result(form.result.getOrElse(Success(""))))
+
 object DefaultFormFragmentFactory extends DefaultFormFragmentFactory
 
 
 trait FormFragmentsFactory:
-  protected def formFragmentFactory: FormFragmentFactory = DefaultFormFragmentFactory
+  protected def formFragmentFactory: FormFragmentFactory =
+    DefaultFormFragmentFactory

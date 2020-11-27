@@ -18,8 +18,7 @@ lazy val specs2 = project.in(file(".")).
     tests
   )
 
-val scalaDotty = "0.27.0-RC1"
-val scala3 = "3.0.0-M1-bin-20201029-1f433d5-NIGHTLY"
+val scala3 = "3.0.0-M2"
 
 /** COMMON SETTINGS */
 lazy val specs2Settings = Seq(

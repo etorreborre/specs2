@@ -8,7 +8,7 @@ import text.Trim._
 /**
  * Matchers for checking if a piece of code compiles or not
  */
-trait TypecheckMatchers extends TypecheckBeHaveMatchers:
+trait TypecheckMatchers:
   def succeed: Matcher[Typechecked] =
     new TypecheckMatcher
 
@@ -16,11 +16,6 @@ trait TypecheckMatchers extends TypecheckBeHaveMatchers:
     FailTypecheckMatcher(message)
 
 object TypecheckMatchers extends TypecheckMatchers
-
-trait TypecheckBeHaveMatchers:
-  outer: TypecheckMatchers =>
-  extension (result: MatchResult[Typechecked]):
-    def succeed = result(outer.succeed)
 
 class TypecheckMatcher extends Matcher[Typechecked]:
   def apply[S <: Typechecked](actual: Expectable[S]): MatchResult[S] =

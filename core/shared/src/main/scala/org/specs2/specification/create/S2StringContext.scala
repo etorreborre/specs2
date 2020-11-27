@@ -102,7 +102,7 @@ object S2StringContext:
   def s2Implementation(sc: Expr[StringContext])(
         variables: Expr[Seq[Interpolated]],
         ff: Expr[FragmentFactory],
-        postProcess: Expr[Fragments => Fragments])(using qctx: QuoteContext) : Expr[Fragments] =
+        postProcess: Expr[Fragments => Fragments])(using qctx: Quotes) : Expr[Fragments] =
 
     '{s2(${sc}.parts,
          ${variables},
@@ -127,15 +127,15 @@ object S2StringContext:
 
     postProcess(fragments append Fragments(last:_*))
 
-  def executionInterpolated(execution: Expr[Execution], ff: Expr[FragmentFactory])(using qctx: QuoteContext): Expr[Interpolated] =
+  def executionInterpolated(execution: Expr[Execution], ff: Expr[FragmentFactory])(using qctx: Quotes): Expr[Interpolated] =
     import qctx.reflect._
     '{ new Interpolated {
           def prepend(text: String): Fragments =
             createExample($ff,
               text,
               $execution,
-              ${Expr(rootPosition.sourceCode)},
-              ${Expr(PositionLocation(rootPosition.sourceFile.jpath.toString, rootPosition.startLine+1, rootPosition.startColumn))})
+              ${Expr(Position.ofMacroExpansion.sourceCode)},
+              ${Expr(PositionLocation(Position.ofMacroExpansion.sourceFile.jpath.toString, Position.ofMacroExpansion.startLine+1, Position.ofMacroExpansion.startColumn))})
         }}
 
   private[specs2] def fragmentInterpolated(fragment: Fragment, start: PositionLocation, ff: FragmentFactory): Interpolated =

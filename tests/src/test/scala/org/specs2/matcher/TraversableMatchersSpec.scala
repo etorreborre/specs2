@@ -36,7 +36,7 @@ class TraversableMatchersSpec(val env: Env) extends Spec with ResultMatchers wit
 
  We can compare a collection to another by using matchers
 
-   ${ Seq[Int]() must contain(exactly(Seq[Int]():_*))                                                }
+   ${ Seq[Int]() must contain(exactly(Seq[Int]().map(valueIsTypedValueCheck):_*)) }
    ${ Seq(1, 2, 3) must contain(exactly(1, 2, 3))                                                    }
    ${ (Seq(1, 2, 3) must contain(exactly(1, 2, 3, 4))) returns "List(1, 2, 3) does not contain 4"    }
    ${ Seq(1, 2, 3) must contain(exactly(be_>=(0), be_>=(1), be_>=(2)))                               }
@@ -62,7 +62,7 @@ class TraversableMatchersSpec(val env: Env) extends Spec with ResultMatchers wit
    ${ Seq(1, 2, 3) must contain(allOf(1, 3).inOrder)                           }
    ${ Seq(1, 1, 3) must contain(allOf(1, 3).inOrder)                           }
    ${ (Seq(1) must contain(eachOf(1, 1).inOrder)) returns "List(1) is missing the value: 1" }
-   ${ Seq(1, 2, 3) must contain(atLeast(Seq[Int]():_*))                        }
+   ${ Seq(1, 2, 3) must contain(atLeast(Seq[Int]().map(valueIsTypedValueCheck):_*)) }
    ${ Seq(1, 2, 3) must contain(atLeast(3, 1))                                 }
    ${ Seq(1, 2, 3) must contain(atLeast(be_>=(0), be_>=(1), be_>=(2)))         }
 
@@ -135,7 +135,6 @@ class TraversableMatchersSpec(val env: Env) extends Spec with ResultMatchers wit
 
  We can check the size of an traversable
     ${ Seq() must beEmpty }
-    ${ Seq() must be empty }
     ${ (Seq() must not(beEmpty)) must beFailing }
     ${ Seq(1, 2) must haveSize(2) }
     ${ Seq(1, 2) must haveSize(be_>=(1)) }
@@ -151,7 +150,6 @@ class TraversableMatchersSpec(val env: Env) extends Spec with ResultMatchers wit
 
  We can check if a sequence is sorted
     ${ Seq(1, 2, 3) must beSorted }
-    ${ Seq(1, 2, 3) must be sorted }
     ${ Seq(2, 1, 3) must not(beSorted) }
     // this doesn't compile because of 'diverging implicit'
     //{ Seq(2, 1, 3) must not(beSorted) }

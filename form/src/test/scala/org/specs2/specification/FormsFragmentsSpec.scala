@@ -1,7 +1,7 @@
 package org.specs2
 package specification
 
-import form._
+import form.{given, _}
 import fp.syntax._
 import matcher._
 import org.specs2.specification.core.{Env, OwnEnv, SpecStructure}

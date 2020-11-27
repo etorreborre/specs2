@@ -67,7 +67,8 @@ trait HtmlUrls:
 
   /**@return true if the url can be accessed on the file system */
   def isAliveFile(url: String, others: Map[String, NodeSeq], rootDirectory: DirectoryPath) =
-    others.keys.exists(o => o == url) || exists(rootDirectory / FilePath.unsafe(url)).runOption.getOrElse(false)
+    others.keys.exists(o => o == url) ||
+    FilePathReader.exists(rootDirectory / FilePath.unsafe(url)).runOption.getOrElse(false)
 
   /**@return true if the url is an anchor in the document */
   def isAliveAnchor(url: String, html: NodeSeq) =

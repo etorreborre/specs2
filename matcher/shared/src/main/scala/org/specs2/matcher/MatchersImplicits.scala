@@ -96,7 +96,9 @@ trait ResultImplicits extends ExpectationsCreation:
 
 object ResultImplicits extends ResultImplicits
 
-trait SequenceMatchersCreation extends ExpectationsCreation with ResultImplicits { outer =>
+trait SequenceMatchersCreation extends ExpectationsCreation with ResultImplicits:
+  outer: SequenceMatchersCreation =>
+
   extension [T, A](f: T => Matcher[T]):
 
     /** @return a function which will return the composition of a matcher and a function */
@@ -107,14 +109,8 @@ trait SequenceMatchersCreation extends ExpectationsCreation with ResultImplicits
           result(f(g(a)).apply(b.map(g)), b).updateMessage(_+originalValues)
       }
 
-    def forall(values: Traversable[T])      = outer.forall     (values)((t: T) => f(t)(createExpectable(t)))
-    def foreach(values: Traversable[T])     = outer.foreach    (values)((t: T) => f(t)(createExpectable(t)))
-    def atLeastOnce(values: Traversable[T]) = outer.atLeastOnce(values)((t: T) => f(t)(createExpectable(t)))
-    def atMostOnce(values: Traversable[T])  = outer.atMostOnce (values)((t: T) => f(t)(createExpectable(t)))
-
-  /** verify the function f for all the values, stopping after the first failure */
-  def forall[T, R : AsResult](values: Traversable[T])(f: T => R): MatchResult[Traversable[T]] =
-    createExpectable(values).applyMatcher(ContainWithResult(f).forall)
+    def foreach(values: Traversable[T]): MatchResult[Traversable[T]] =
+      outer.foreach(values)((t: T) => f(t)(createExpectable(t)))
 
   /** verify the function f for all the values, stopping after the first failure, where the PartialFunction is defined */
   def forallWhen[T, U](values: Traversable[T])(f: PartialFunction[T, MatchResult[U]]): MatchResult[Traversable[T]] =
@@ -128,14 +124,6 @@ trait SequenceMatchersCreation extends ExpectationsCreation with ResultImplicits
   def foreachWhen[T, R : AsResult](values: Traversable[T])(f: PartialFunction[T, R]): MatchResult[Traversable[T]] =
     foreach(values.filter(f.isDefinedAt))(f)
 
-  /** verify the function f for at least one value */
-  def atLeastOnce[T, R : AsResult](values: Traversable[T])(f: T => R): MatchResult[Traversable[T]] =
-    values.atLeastOnce(f)
-
-  /** verify the function f for at least one value */
-  def atMostOnce[T, R : AsResult](values: Traversable[T])(f: T => R): MatchResult[Traversable[T]] =
-    values.atMostOnce(f)
-
   /** verify the function f for at least one value, where the PartialFunction is defined */
   def atLeastOnceWhen[T, R : AsResult](values: Traversable[T])(f: PartialFunction[T, R]): MatchResult[Traversable[T]] =
     atLeastOnce(values.filter(f.isDefinedAt))(f)
@@ -143,7 +131,6 @@ trait SequenceMatchersCreation extends ExpectationsCreation with ResultImplicits
   /** verify the function f for at least one value, where the PartialFunction is defined */
   def atMostOnceWhen[T, R : AsResult](values: Traversable[T])(f: PartialFunction[T, R]): MatchResult[Traversable[T]] =
     atMostOnce(values.filter(f.isDefinedAt))(f)
-}
 
 object SequenceMatchersCreation extends SequenceMatchersCreation
 

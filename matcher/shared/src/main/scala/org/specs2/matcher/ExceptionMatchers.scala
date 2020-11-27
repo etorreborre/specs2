@@ -9,11 +9,7 @@ import text.NotNullStrings._
 /**
  * These matchers can be used to check if exceptions are thrown or not
  */
-trait ExceptionMatchers extends ExceptionBaseMatchers with ExceptionBeHaveMatchers
-object ExceptionMatchers extends ExceptionMatchers
-
-private[specs2]
-trait ExceptionBaseMatchers extends ExpectationsCreation:
+trait ExceptionMatchers extends ExpectationsCreation:
   /**
    * @return a matcher checking the type of an Exception
    */
@@ -32,7 +28,7 @@ trait ExceptionBaseMatchers extends ExpectationsCreation:
    * @return a matcher checking the value of an Exception
    */
   def throwA[E <: Throwable](e: E): ExceptionMatcher[E] = new ExceptionMatcher(e)
-  
+
   /**
    * alias for throwA
    */
@@ -212,15 +208,4 @@ trait ExceptionBaseMatchers extends ExpectationsCreation:
         case _ => value
     }(identity).left.toOption
 
-private[specs2]
-trait ExceptionBeHaveMatchers extends BeHaveMatchers:
-  outer: ExceptionBaseMatchers =>
-
-  extension [T, E <: Throwable](result: MatchResult[T]):
-    def throwA(using m: ClassTag[E]): MatchResult[T] = result(outer.throwA)
-    def throwA(message: String = ".*")(using m: ClassTag[E]): MatchResult[T] = result(outer.throwA(message))
-    def throwA(e: E): MatchResult[T] = result(outer.throwA(e))
-
-    def throwAn(using m: ClassTag[E]): MatchResult[T] = result(outer.throwA)
-    def throwAn(message: String = ".*")(using m: ClassTag[E]): MatchResult[T] = result(outer.throwA(message))
-    def throwAn(e: E): MatchResult[T] = result(outer.throwA(e))
+object ExceptionMatchers extends ExceptionMatchers

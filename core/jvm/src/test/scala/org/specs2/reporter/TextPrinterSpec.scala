@@ -129,7 +129,7 @@ presentation
     Arguments("showtimes") ^ s2"""e1 $ex1""" matches """(?s).*\[info\] \+ e1 \(\d\d.+\).*"""
 
   def c1 =
-    extension_contains(s2"""e1 $ok
+    contains(s2"""e1 $ok
     |e2 $ko
     |e3 $ko
     |""".stripMargin)(

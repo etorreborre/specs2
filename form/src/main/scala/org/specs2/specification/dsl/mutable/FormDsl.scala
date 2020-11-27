@@ -3,9 +3,9 @@ package specification
 package dsl
 package mutable
 
-import control.ImplicitParameters.ImplicitParam
+import control.ImplicitParameters._
 import core.Fragment
-import form._
+import form.{given, _}
 import create._
 import org.specs2.control.Use
 import scala.reflect.Selectable.reflectiveSelectable
@@ -14,16 +14,11 @@ import scala.reflect.Selectable.reflectiveSelectable
  * Dsl for creating Forms in a mutable specification
  */
 trait FormDsl extends FragmentBuilder with FormFragmentFactory:
-  outer: FormDsl =>
+  outer =>
 
-  def insert(aForm: =>Form): Fragment =
-    addFragment(FormFragment(aForm))
+  def insert[T : HasForm](aForm: =>T)(using nothing: Int = 0): Fragment =
+    addFragment(FormFragment(aForm.form))
 
-  def insert(aForm: =>HasForm)(using p: ImplicitParam): Fragment =
-    Use.ignoring(p)(insert(aForm.form))
-
-  extension (aForm: => Form):
-    def insert: Fragment = outer.insert(aForm)
-
-  extension (aForm: =>HasForm)(using p: ImplicitParam):
-    def insert: Fragment = outer.insert(aForm)
+  extension [T : HasForm](aForm: =>T):
+    def insert: Fragment =
+      outer.insert(aForm)

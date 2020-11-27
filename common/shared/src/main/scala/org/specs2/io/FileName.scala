@@ -35,7 +35,7 @@ object FileName:
     else
       Right(FileName.unsafe(s))
 
-  def createFileName(fileName: Expr[String])(using qctx: QuoteContext): Expr[FileName] =
+  def createFileName(fileName: Expr[String])(using Quotes): Expr[FileName] =
     fileName match
       case e@Const(s) =>
         FileName.fileNameFromString(s) match

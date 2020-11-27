@@ -4,11 +4,13 @@ package reflect
 import scala.reflect.NameTransformer
 import control.Exceptions._
 import text.CamelCase._
+import annotation._
 
 /**
  * Reflection methods for Class names
  */
 trait ClassName:
+  outer: ClassName =>
 
   /** @return the class name of an instance */
   def simpleClassName(any: AnyRef): String =
@@ -75,7 +77,11 @@ trait ClassName:
     else name.camelCaseToWords
 
   extension (klass: Class[_]):
-    def simpleName = simpleName(klass)
-    def humanName  = humanName(klass)
+
+    def simpleName(using nothing: Int = 0): String =
+      outer.simpleName(klass)
+
+    def humanName(using nothing: Int = 0): String =
+      outer.humanName(klass)
 
 object ClassName extends ClassName

@@ -8,15 +8,15 @@ import scala.util.Not
 /**
  * Dsl for creating a specification title
  */
-trait TitleDsl { outer =>
+trait TitleDsl:
+  outer =>
 
-  def title(s: String): SpecHeader =
-    extension_title(s)
+  def title(s: String)(using nothing: Int = 0): SpecHeader =
+    s.title
 
   extension (s: String)(using not: Not[NoTitleDsl])
     def title: SpecHeader = SpecHeader(outer.getClass, Some(s))
 
-}
 
 /** deactivate the TitleDsl implicits */
 trait NoTitleDsl extends TitleDsl:

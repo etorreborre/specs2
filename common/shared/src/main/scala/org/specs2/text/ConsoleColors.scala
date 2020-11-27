@@ -26,8 +26,6 @@ class ConsoleColors extends AnsiColors with Colors:
   def skipped(s: String, doIt: Boolean = true) = color(s, skippedColor, doIt)
   def stats  (s: String, doIt: Boolean = true) = color(s, statsColor,   doIt)
 
-  def removeColors(s: String): String = AnsiColors.removeColors(s)
-
   override def toString = Seq(("text",   textColor),
                               ("success",successColor),
                               ("failure",failureColor),

@@ -1,6 +1,7 @@
 package org.specs2
 package matcher
 
+import xml.NodeFunctions
 import xml.NodeFunctions._
 import xml.Nodex._
 import scala.xml._
@@ -120,7 +121,7 @@ trait XmlBeHaveMatchers extends BeHaveMatchers:
 class EqualIgnoringSpaceMatcher(node: Seq[Node]) extends Matcher[Seq[Node]] with XmlMatcherKoMessage:
   def apply[S <: Seq[Node]](n: Expectable[S]) =
 
-    result(isEqualIgnoringSpace(node.toList, n.value.toList),
+    result(NodeFunctions.isEqualIgnoringSpace(node.toList, n.value.toList),
            n.description + " is equal to " + q(node),
            koMessage(n, node), n)
   def ordered = new EqualIgnoringSpaceMatcherOrdered(node)
@@ -129,7 +130,7 @@ class EqualIgnoringSpaceMatcher(node: Seq[Node]) extends Matcher[Seq[Node]] with
  */
 class EqualIgnoringSpaceMatcherOrdered(node: Seq[Node]) extends Matcher[Seq[Node]] with XmlMatcherKoMessage:
   def apply[S <: Seq[Node]](n: Expectable[S]) =
-    result(isEqualIgnoringSpaceOrdered(node.toList, n.value.toList),
+    result(NodeFunctions.isEqualIgnoringSpaceOrdered(node.toList, n.value.toList),
            n.description + " is equal to " + q(node),
            koMessage(n, node), n)
 

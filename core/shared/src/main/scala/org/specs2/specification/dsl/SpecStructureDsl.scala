@@ -13,67 +13,88 @@ import create.FragmentsFactory
 trait SpecStructureDsl extends SpecStructureDsl1 with SpecStructureDslLowImplicits:
   private val outer = this
 
-  extension (s: String)
-    def ^(spec: SpecificationStructure): SpecStructure =
-      extension_^(s)(spec.is)
+  trait ToSpecStructure[T1, T2]:
+    def toSpecStructure(t1: T1, t2: =>T2): SpecStructure
 
-    def ^(structure: SpecStructure) : SpecStructure =
+  given ToSpecStructure[String, SpecStructure]:
+    def toSpecStructure(s: String, structure: =>SpecStructure): SpecStructure =
       structure.map(_.prepend(fragmentFactory.text(s)))
 
-  extension (f: Fragment)
-    def ^(s: SpecificationStructure): SpecStructure =
-      f ^ s.is
+  given ToSpecStructure[String, SpecificationStructure]:
+    def toSpecStructure(s: String, spec: =>SpecificationStructure): SpecStructure =
+      summon[ToSpecStructure[String, SpecStructure]].toSpecStructure(s, spec.is)
 
-    def ^(structure: SpecStructure): SpecStructure =
+  given ToSpecStructure[Fragment, SpecStructure]:
+    def toSpecStructure(f: Fragment, structure: =>SpecStructure): SpecStructure =
       structure.map(_.prepend(f))
 
-    def ^(arguments: Arguments): SpecStructure =
-      (f : SpecStructure) ^ arguments
+  given ToSpecStructure[Fragment, SpecificationStructure]:
+    def toSpecStructure(f: Fragment, spec: =>SpecificationStructure): SpecStructure =
+      summon[ToSpecStructure[Fragment, SpecStructure]].toSpecStructure(f, spec.is)
 
-  extension (header: SpecHeader)
-    def ^(s: SpecificationStructure): SpecStructure =
-      header ^ s.is
+  given ToSpecStructure[Fragment, Arguments]:
+    def toSpecStructure(f: Fragment, arguments: =>Arguments): SpecStructure =
+      summon[ToSpecStructure[SpecStructure, Arguments]].toSpecStructure(f, arguments)
 
-    def ^(structure: SpecStructure) : SpecStructure =
+  given ToSpecStructure[SpecHeader, SpecificationStructure]:
+    def toSpecStructure(header: SpecHeader, spec: =>SpecificationStructure): SpecStructure =
+      summon[ToSpecStructure[SpecHeader, SpecStructure]].toSpecStructure(header, spec.is)
+
+  given ToSpecStructure[SpecHeader, SpecStructure]:
+    def toSpecStructure(header: SpecHeader, structure: =>SpecStructure): SpecStructure =
       structure.copy(header = header)
 
-    def ^(args: Arguments): SpecStructure =
-      SpecStructure(header, args)
+  given ToSpecStructure[SpecHeader, Arguments]:
+    def toSpecStructure(header: SpecHeader, arguments: =>Arguments): SpecStructure =
+      SpecStructure(header, arguments)
 
-    def ^(others: =>Fragments): SpecStructure =
-      SpecStructure.create(header, Arguments(), others)
+  given ToSpecStructure[SpecHeader, Fragments]:
+    def toSpecStructure(header: SpecHeader, fragments: =>Fragments): SpecStructure =
+      SpecStructure.create(header, Arguments(), fragments)
 
-    def ^(others: Seq[Fragment]): SpecStructure =
-      header ^ Fragments(others:_*)
+  given ToSpecStructure[SpecHeader, Seq[Fragment]]:
+    def toSpecStructure(header: SpecHeader, fragments: =>Seq[Fragment]): SpecStructure =
+      SpecStructure.create(header, Arguments(), Fragments(fragments:_*))
 
-    def ^(other: Fragment): SpecStructure =
-      header ^ Fragments(other)
+  given ToSpecStructure[SpecHeader, Fragment]:
+    def toSpecStructure(header: SpecHeader, fragment: =>Fragment): SpecStructure =
+      SpecStructure.create(header, Arguments(), Fragments(fragment))
 
-    def ^(other: String): SpecStructure =
-      header ^ fragmentFactory.text(other)
+  given ToSpecStructure[SpecHeader, String]:
+    def toSpecStructure(header: SpecHeader, s: =>String): SpecStructure =
+      SpecStructure.create(header, Arguments(), Fragments(fragmentFactory.text(s)))
 
-  extension (structure: SpecStructure)
-    def ^(others: Fragments): SpecStructure =
-      structure.copy(lazyFragments = () => structure.fragments.append(others))
+  given ToSpecStructure[SpecStructure, Fragments]:
+    def toSpecStructure(structure: SpecStructure, fragments: =>Fragments): SpecStructure =
+      structure.copy(lazyFragments = () => structure.fragments.append(fragments))
 
-    def ^(others: Seq[Fragment]): SpecStructure =
-      structure ^ Fragments(others:_*)
+  given ToSpecStructure[SpecStructure, Seq[Fragment]]:
+    def toSpecStructure(structure: SpecStructure, fragments: =>Seq[Fragment]): SpecStructure =
+      structure.copy(lazyFragments = () => structure.fragments.append(Fragments(fragments:_*)))
 
-    def ^(other: String): SpecStructure =
-      structure ^ fragmentFactory.text(other)
+  given ToSpecStructure[SpecStructure, String]:
+    def toSpecStructure(structure: SpecStructure, s: =>String): SpecStructure =
+      structure.copy(lazyFragments = () => structure.fragments.append(Fragments(fragmentFactory.text(s))))
 
-    def ^(other: Fragment): SpecStructure =
-      structure ^ Fragments(other)
+  given ToSpecStructure[SpecStructure, Fragment]:
+    def toSpecStructure(structure: SpecStructure, f: =>Fragment): SpecStructure =
+      structure.copy(lazyFragments = () => structure.fragments.append(Fragments(f)))
 
-    /** warning: if other contains arguments or a title they will be lost! */
-    def ^(s: SpecificationStructure): SpecStructure =
-      structure ^ s.is
+  given ToSpecStructure[SpecStructure, SpecStructure]:
+    def toSpecStructure(structure1: SpecStructure, structure2: =>SpecStructure): SpecStructure =
+      structure1.copy(arguments = structure1.arguments.overrideWith(structure2.arguments)).append(structure2.fragments)
 
-    def ^(other: SpecStructure): SpecStructure =
-      structure.copy(arguments = structure.arguments.overrideWith(other.arguments)) ^ other.fragments
+  given ToSpecStructure[SpecStructure, SpecificationStructure]:
+    def toSpecStructure(structure: SpecStructure, spec: =>SpecificationStructure): SpecStructure =
+      summon[ToSpecStructure[SpecStructure, SpecStructure]].toSpecStructure(structure, spec.is)
 
-    def ^(arguments: Arguments): SpecStructure =
+  given ToSpecStructure[SpecStructure, Arguments]:
+    def toSpecStructure(structure: SpecStructure, arguments: =>Arguments): SpecStructure =
       structure.copy(arguments = structure.arguments.overrideWith(arguments))
+
+  implicit class appendSpecStructure[T1, T2](t1: T1)(using tss: ToSpecStructure[T1, T2]):
+    def ^(t2: =>T2): SpecStructure =
+      tss.toSpecStructure(t1, t2)
 
   // allow writing: def is = "my spec".title
   given Conversion[SpecHeader, SpecStructure]:
@@ -83,12 +104,12 @@ trait SpecStructureDsl extends SpecStructureDsl1 with SpecStructureDslLowImplici
   // allow writing: def is = ""
   given Conversion[String, SpecStructure]:
     def apply(s: String): SpecStructure =
-      SpecHeader(outer.getClass) ^ s
+      SpecStructure.create(SpecHeader(outer.getClass), Arguments(), Fragments(fragmentFactory.text(s)))
 
   // allow writing: def is = "test" ! ok
   given Conversion[Fragment, SpecStructure]:
     def apply(f: Fragment): SpecStructure =
-      SpecHeader(outer.getClass) ^ f
+      SpecStructure.create(SpecHeader(outer.getClass), Arguments(), Fragments(f))
 
   given Conversion[SpecStructure, Fragments]:
     def apply(spec: SpecStructure): Fragments =
@@ -99,13 +120,6 @@ trait SpecStructureDslLowImplicits:
   // allow writing: def is = ok
   implicit def resultAsSpecStructure[R : AsResult](r: =>R): SpecStructure =
     SpecStructure.create(SpecHeader(getClass), Arguments(), Fragments(Fragment(NoText, Execution.result(r))))
-
-  extension (fs: =>Fragments)
-    def ^(s: SpecificationStructure): SpecStructure =
-      fs ^ s.is
-
-    def ^(structure: SpecStructure): SpecStructure =
-      structure.map(_.prepend(fs))
 
 private[specs2]
 trait SpecStructureDsl1 extends FragmentsFactory:

@@ -4,19 +4,24 @@ package text
 import Trim._
 import collection.Seqx._
 import util.matching.Regex
+import annotation._
 
 private[specs2]
 trait Split:
+  outer: Split =>
 
   extension (s: String):
+    @targetName("stringSplitDashed")
     def splitDashed(names: Seq[String]): Seq[String] =
-      splitDashed(s.split("\\s").toIndexedSeq, names)
+      outer.splitDashed(s.split("\\s").toIndexedSeq, names)
 
+    @targetName("stringSplitQuoted")
     def splitQuoted: Seq[String] =
       quoted.findAllIn(s).toSeq.map(_.trimEnclosing("\""))
 
+    @targetName("stringSplitToSize")
     def splitToSize(n: Int): List[String] =
-      splitToSize(s, n, Nil)
+      outer.splitToSize(s, n, Nil)
 
   private val quoted: Regex =
     "\"[^\"]*\"|[^\\s]+".r
@@ -30,8 +35,9 @@ trait Split:
 
 
   extension (seq: Seq[String]):
+    @targetName("seqSplitDashed")
     def splitDashed(names: Seq[String]): Seq[String] =
-      splitDashed(seq, names)
+      outer.splitDashed(seq, names)
 
   /**
    * split a string along some names which start with a dash:

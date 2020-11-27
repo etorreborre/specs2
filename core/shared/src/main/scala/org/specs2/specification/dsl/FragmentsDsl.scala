@@ -11,47 +11,32 @@ import org.specs2.collection.Vectorx._
  */
 trait FragmentsDsl extends FragmentsFactory with AcceptanceDsl1:
 
+  trait ToFragments[T]:
+    def toFragments(t: T): Fragments
+
+  given ToFragments[Fragment]:
+    def toFragments(f: Fragment): Fragments =
+      f
+
+  given ToFragments[Fragments]:
+    def toFragments(fs: Fragments): Fragments =
+      fs
+
+  given ToFragments[String]:
+    def toFragments(s: String): Fragments =
+      fragmentFactory.text(s)
+
+  given ToFragments[Seq[Fragment]]:
+    def toFragments(fs: Seq[Fragment]): Fragments =
+      Fragments(fs:_*)
+
+  implicit class appendFragments[T1 : ToFragments, T2 : ToFragments](t1: T1):
+    def ^(t2: T2): Fragments =
+      summon[ToFragments[T1]].toFragments(t1).append(summon[ToFragments[T2]].toFragments(t2))
+
   given Conversion[Fragment, Fragments]:
-    def apply(f: Fragment): Fragments = Fragments(f)
-
-  extension (s: String):
-    def ^(others: Fragments): Fragments =
-      fragmentFactory.text(s) ^ others
-
-    def ^(others: Seq[Fragment]): Fragments =
-      ^(Fragments(others:_*))
-
-    def ^(other: Fragment): Fragments =
-      s ^ Fragments(other)
-
-    def ^(other: String): Fragments =
-      s ^ fragmentFactory.text(other)
-
-  extension (f: Fragment):
-    def ^(others: Fragments): Fragments =
-      Fragments(Fragments(f).contents append others.contents)
-
-    def ^(others: Seq[Fragment]): Fragments =
-      ^(Fragments(others:_*))
-
-    def ^(other: Fragment): Fragments =
-      Fragments(f, other)
-
-    def ^(other: String): Fragments =
-      f ^ fragmentFactory.text(other)
-
-  extension (fs: Fragments):
-    def ^(others: Fragments): Fragments =
-      fs.append(others)
-
-    def ^(others: Seq[Fragment]): Fragments =
-      ^(Fragments(others:_*))
-
-    def ^(other: Fragment): Fragments =
-      fs.append(other)
-
-    def ^(other: String): Fragments =
-      fs ^ fragmentFactory.text(other)
+    def apply(f: Fragment): Fragments =
+      Fragments(f)
 
   extension (fragment: Fragment)
     def hide: Fragment =

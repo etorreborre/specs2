@@ -34,7 +34,7 @@ case class PositionLocation(path: String, lineNumber: Int, columnNumber: Int) ex
 object PositionLocation:
 
     given Liftable[PositionLocation]:
-      def toExpr(location: PositionLocation): (QuoteContext) ?=> Expr[PositionLocation] = { (using qctx: QuoteContext) =>
+      def toExpr(location: PositionLocation): (Quotes) ?=> Expr[PositionLocation] = { (using qctx: Quotes) =>
         location match
           case PositionLocation(path, line, column) =>
             val pathExpr: Expr[String] = Expr(path)

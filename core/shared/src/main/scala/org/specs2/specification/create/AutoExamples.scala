@@ -22,10 +22,10 @@ trait AutoExamples extends FragmentsFactory:
 object AutoExamples extends AutoExamples:
 
   def create[T](code: Expr[() => T], asResult: Expr[AsResult[T]], postProcess: Expr[Fragments => Fragments])(
-    using qctx: QuoteContext)(using t: Type[T], t1: Type[() => T]): Expr[Fragments] =
+    using qctx: Quotes)(using t: Type[T], t1: Type[() => T]): Expr[Fragments] =
 
     import qctx.reflect._
-    val expression = Expr(rootPosition.sourceCode)
+    val expression = Expr(Position.ofMacroExpansion.sourceCode)
     Expr.betaReduce('{$postProcess(createExample[t.Underlying]($expression, $code, $asResult))})
 
   def createExample[T](expression: String, code: () => T, asResult: AsResult[T]): Fragments =

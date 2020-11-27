@@ -3,14 +3,15 @@ package specification
 package create
 
 import core._
-import form._
+import form.{given, _}
 import text.Indent._
 import scala.reflect.Selectable.reflectiveSelectable
 
 /**
  * Allow to use forms inside interpolated strings starting with s2 in order to build the specification content
  */
-trait FormS2StringContext extends S2StringContext { this: FormFragmentsFactory =>
+trait FormS2StringContext extends S2StringContext:
+  this: FormFragmentsFactory =>
 
   private val formFactory = formFragmentFactory
   import formFactory._
@@ -25,8 +26,6 @@ trait FormS2StringContext extends S2StringContext { this: FormFragmentsFactory =
           case _ => formFragment.description
         })
 
-  given Conversion[HasForm, Interpolated]:
-    def apply(f: HasForm): Interpolated =
+  given [T : HasForm] as Conversion[T, Interpolated]:
+    def apply(f: T): Interpolated =
       formIsInterpolated(f.form)
-
-}

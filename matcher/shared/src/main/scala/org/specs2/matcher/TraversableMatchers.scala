@@ -21,15 +21,14 @@ import org.specs2.matcher.describe.Diffable
  * Matchers for traversables
  */
 trait TraversableMatchers extends TraversableBaseMatchers
-  with TraversableBeHaveMatchers
   with TraversableBaseMatchersLowImplicits
   with ImplicitParameters
   with NumberOfTimes
 
 object TraversableMatchers extends TraversableMatchers
 
-private[specs2]
-trait TraversableBaseMatchers { outer =>
+trait TraversableBaseMatchers:
+  outer =>
 
   /**
    * ELEMENTS MATCHERS
@@ -129,7 +128,7 @@ trait TraversableBaseMatchers { outer =>
   // 21 to 22
   def contain[T](t1: ValueCheck[T], t2: ValueCheck[T], t3: ValueCheck[T], t4: ValueCheck[T], t5: ValueCheck[T], t6: ValueCheck[T], t7: ValueCheck[T], t8: ValueCheck[T], t9: ValueCheck[T], t10: ValueCheck[T], t11: ValueCheck[T], t12: ValueCheck[T], t13: ValueCheck[T], t14: ValueCheck[T], t15: ValueCheck[T], t16: ValueCheck[T], t17: ValueCheck[T], t18: ValueCheck[T], t19: ValueCheck[T], t20: ValueCheck[T], t21: ValueCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18, t19, t21, t21))
   def contain[T](t1: ValueCheck[T], t2: ValueCheck[T], t3: ValueCheck[T], t4: ValueCheck[T], t5: ValueCheck[T], t6: ValueCheck[T], t7: ValueCheck[T], t8: ValueCheck[T], t9: ValueCheck[T], t10: ValueCheck[T], t11: ValueCheck[T], t12: ValueCheck[T], t13: ValueCheck[T], t14: ValueCheck[T], t15: ValueCheck[T], t16: ValueCheck[T], t17: ValueCheck[T], t18: ValueCheck[T], t19: ValueCheck[T], t20: ValueCheck[T], t21: ValueCheck[T], t22: ValueCheck[T]): ContainWithResultSeq[T] = contain(allOf(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18, t19, t21, t22))
-}
+
 
 private[specs2]
 trait TraversableBaseMatchersLowImplicits extends ValueChecksLowImplicits:
@@ -142,25 +141,6 @@ trait TraversableBaseMatchersLowImplicits extends ValueChecksLowImplicits:
   given matchersToValueChecks[T] as Conversion[Seq[Matcher[T]], Seq[ValueCheck[T]]]:
     def apply(seq: Seq[Matcher[T]]): Seq[ValueCheck[T]] =
       seq.map(matcherIsValueCheck[T])
-
-private[specs2]
-trait TraversableBeHaveMatchers extends BeHaveMatchers:
-  private val outer = TraversableMatchers
-
-  extension [T](s: MatchResult[Traversable[T]]):
-    def contain(check: ValueCheck[T]) = s(outer.contain(check))
-    def containPattern(t: =>String) = s(outer.containPattern(t))
-    def containMatch(t: =>String) = s.containPattern(t.regexPart)
-
-  extension [T : Sized](s: MatchResult[T]):
-    def size(n: Int) : MatchResult[T] = s(outer.haveSize[T](n))
-    def length(n: Int) : MatchResult[T] = size(n)
-    def size(check: ValueCheck[Int]) : MatchResult[T] = s(outer.haveSize[T](check))
-    def length(check: ValueCheck[Int]) : MatchResult[T] = size(check)
-
-  extension [T : Ordering](result: MatchResult[Seq[T]]):
-    def sorted = result(outer.beSorted[T])
-    def beSorted = result(outer.beSorted[T])
 
 class SizedMatcher[T : Sized](n: Int, sizeWord: String) extends Matcher[T]:
   def apply[S <: T](traversable: Expectable[S]) =
@@ -184,6 +164,7 @@ class OrderingMatcher[T : Ordering] extends Matcher[Seq[T]]:
     result(traversable.value == traversable.value.sorted,
       traversable.description + " is sorted",
       traversable.description + " is not sorted", traversable)
+      
 import control.NumberOfTimes._
 import text.Plural._
 

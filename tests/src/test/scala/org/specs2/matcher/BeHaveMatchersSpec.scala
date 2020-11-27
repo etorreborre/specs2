@@ -14,10 +14,6 @@ class BeHaveMatchersSpec extends Specification { def is = s2"""
    using not to negate match results
    ${ (List(0, 1) must contain(2)).not.isSuccess }
 
-   using be before using a matcher
-   ${ (Nil:List[Int]) must be empty }
-   ${ !(List(1) must be empty).isSuccess }
-
    using not and be in combination
    ${ List(1) must not(beEmpty) }
    ${ !((Nil:List[Int]) must not(beEmpty)).isSuccess }
@@ -28,16 +24,9 @@ class BeHaveMatchersSpec extends Specification { def is = s2"""
    ${ !(1 must beEqualTo(1) and beEqualTo(2)).isSuccess }
 
    using and, not and be in combination
-   ${ (1 must be equalTo(1) and not(beEqualTo(2))).isSuccess }
+   ${ (1 must beEqualTo(1) and not(beEqualTo(2))).isSuccess }
    ${ (1 must not(beEqualTo(2)) and beEqualTo(1)).isSuccess }
    ${ !(1 must not(beEqualTo(1)) and not(beEqualTo(2))).isSuccess }
-   ${ !(true must be.not).isSuccess} // #458
-
-   using or, not and be in combination
-   ${ (1 must be equalTo(1) or be equalTo(2)).isSuccess }
-   ${ (1 must be equalTo(2) or be equalTo(1)).isSuccess }
-   ${ (1 must not(beEqualTo(2)) or not(beEqualTo(1))).isSuccess }
-   ${ (1 must not(beEqualTo(1)) or not(beEqualTo(2))).isSuccess }
 
    some matchers can be put on 2 lines, but they may have to be ; separated $e1
                                                                                                                         """

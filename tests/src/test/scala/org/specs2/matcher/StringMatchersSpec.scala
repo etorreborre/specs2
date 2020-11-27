@@ -31,7 +31,6 @@ class StringMatchersSpec extends Spec with StringMatchers with MustExpectations 
 
     or with beEmpty because a String is also an Iterable[Char]
     ${ "" must beEmpty }
-    ${ "" must be empty }
 
   2 strings can be checked for equality
     ignoring case

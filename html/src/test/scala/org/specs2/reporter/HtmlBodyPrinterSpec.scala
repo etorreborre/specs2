@@ -6,12 +6,12 @@ import concurrent.ExecutionEnv
 import io.DirectoryPath
 import main.Arguments
 import matcher.XmlMatchers
+import form.given
 import specification.Forms
 import specification.core.{Fragment, SpecStructure}
 import specification.process.{Level, Stats}
 import text.AnsiColors
 import time.SimpleTimer
-
 import scala.xml.NodeSeq
 
 class HtmlBodyPrinterSpec(ee: ExecutionEnv) extends Specification with Forms with XmlMatchers { def is = s2"""

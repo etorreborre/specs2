@@ -54,7 +54,7 @@ class AnyMatchersSpec extends Specification with ResultMatchers with AnyMatchers
   ${ atLeastOnce(Seq((4, 2), (3, 4))) { case (a, b) => a must be_<(b) } }
   ${ atLeastOnceWhen(Seq((2, 1), (3, 4))) { case (a, b) if a > 2 => a must be_<(b) } }
   ${ atLeastOnce(Seq(Some(1), None)) { _ must beSome(1) } }
-  ${ (new org.specs2.mutable.Specification { atLeastOnce(Seq(1))(_ must be_<(0)) }) must throwA[FailureException] } ${tag("issue #169")}
+  ${ (new org.specs2.mutable.Specification { Seq(1).atLeastOnce(_ must be_<(0)) }: Any) must throwA[FailureException] } ${tag("issue #169")}
 
   beNull matches null values
   ${ (null:String) must beNull }
@@ -65,7 +65,6 @@ class AnyMatchersSpec extends Specification with ResultMatchers with AnyMatchers
   ${ (null:String) must beAsNullAs(null) }
   ${ 1 must not(beAsNullAs(null)) }
   ${ (null:String) must not(beAsNullAs(1)) }
-  ${ 1 must be asNullAs(1) }
 
   beOneOf checks if a value is amongst others
   ${ 1 must beOneOf(1, 2, 3) }

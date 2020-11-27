@@ -24,5 +24,4 @@ trait Colors:
   def skipped(s: String, doIt: Boolean = true): String
   def stats  (s: String, doIt: Boolean = true): String
 
-  def removeColors(s: String): String
-
+  def removeColors(s: String, doIt: Boolean = true): String

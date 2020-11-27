@@ -9,11 +9,7 @@ import scala.util.Not
 /**
  * Dsl for creating a title in a mutable specification
  */
-trait TitleDsl extends MutableHeaderBuilder with specification.dsl.TitleDsl {
-
-  override def title(s: String): SpecHeader =
-    extension_title(s)
+trait TitleDsl extends MutableHeaderBuilder with specification.dsl.TitleDsl:
 
   extension (s: String)(using not: Not[NoTitleDsl])
     override def title: SpecHeader = setTitle(s)
-}

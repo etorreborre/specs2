@@ -16,7 +16,7 @@ trait ReturnsSyntax extends ExpectationsCreation:
     def returnsMatch(m: String) =
       (beMatching(m) ^^ ((_: Result).message))(createExpectable(ResultExecution.execute(AsResult(t))))
 
-    def returnsResult(m: String) =
+    def returnsResult(m: String): MatchResult[Result] =
       lazy val r = AsResult(t)
       (contain(m) ^^ { (m: Result) => if r.isSuccess then "success: "+m.message else "failure: "+m.message })(createExpectable(ResultExecution.execute(r)))
 

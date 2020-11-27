@@ -5,7 +5,6 @@ package matcher
  * Trait aggregating the most common specs2 matchers
  */
 trait Matchers extends AnyMatchers
-                  with BeHaveMatchers
                   with TraversableMatchers
                   with MapMatchers
                   with StringMatchers
@@ -18,19 +17,6 @@ trait Matchers extends AnyMatchers
                   with FutureMatchers
                   with MatchersImplicits
                   with ValueChecks
-
-trait Matchers1 extends
-       AnyBaseMatchers
-  with TraversableBaseMatchers
-  with StringBaseMatchers
-  with ExceptionBaseMatchers
-  with NumericBaseMatchers
-  with OptionBaseMatchers
-  with EitherBaseMatchers
-  with TryBaseMatchers
-  with EventuallyMatchers
-  with FutureBaseMatchers
-  with ValueChecksBase
 
 object Matchers extends Matchers
 

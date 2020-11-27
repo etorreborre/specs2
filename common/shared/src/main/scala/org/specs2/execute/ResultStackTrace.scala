@@ -13,6 +13,6 @@ trait ResultStackTrace extends HasStackTrace:
 
   def location(filter: StackTraceFilter) =
     val filtered = Throwablex.exception(filter(stackTrace)).getStackTrace
-    Throwablex.exception(filtered.toIndexedSeq).location
+    Throwablex.location(Throwablex.exception(filtered.toIndexedSeq))
 
   def exception: Throwable

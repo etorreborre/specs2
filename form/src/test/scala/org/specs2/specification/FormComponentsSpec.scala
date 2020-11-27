@@ -1,6 +1,8 @@
 package org.specs2
 package specification
 
+import form.given
+
 class FormComponentsSpec extends Specification with Forms { def is = s2"""
 
 Forms can be used to represent domain objects or service, relating expected values to actual ones. Forms are also
@@ -111,7 +113,7 @@ Fourth example: 1-n relationship
       line(OrderLine("Beginning Scala", 3))
 
     def e1 =
-      address.fill("Rose Crescent", 5).execute.message must ===("5 != 2")
+      address.form.execute.message must ===("5 != 2")
 
     def e2 = customer.fill("Eric",
                            customer.address.fill("Rose Crescent", 5)).execute.message must ===("5 != 2")

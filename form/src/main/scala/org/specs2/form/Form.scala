@@ -29,7 +29,7 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
   lazy val maxSizes = allRows.map(_.cells).safeTranspose.map(l => l.map(_.width).max[Int])
 
   /** @return a new Form. This method can be overridden to return a more accurate subtype */
-  protected def newForm(title: Option[String] = None, rows: Seq[Row] = Vector(), result: Option[Result] = None) =
+  protected def newForm(title: Option[String] = None, rows: Seq[Row] = Vector(), result: Option[Result] = None): Form =
     new Form(title, rows, result)
   /** @return a Form where every Row is executed with a Success */
   def setSuccess = setResult(success)
@@ -71,11 +71,12 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
    */
   def execute = result getOrElse (executeForm.result getOrElse success)
   def executeRows = rows.map(_.executeRow)
+
   /**
    * execute all rows
    * @return an executed Form
    */
-  def executeForm =
+  def executeForm: Form =
     if result.isDefined then
       this
     else
@@ -95,19 +96,26 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
 
   def subset(f1: Traversable[Form], f2: Traversable[Form]): Form =
     addLines(FormDiffs.subset(f1.toSeq, f2.toSeq))
+
   def subsequence(f1: Traversable[Form], f2: Traversable[Form]): Form =
     addLines(FormDiffs.subsequence(f1.toSeq, f2.toSeq))
+
   def set(f1: Traversable[Form], f2: Traversable[Form]): Form =
     addLines(FormDiffs.set(f1.toSeq, f2.toSeq))
+
   def sequence(f1: Traversable[Form], f2: Traversable[Form]): Form =
     addLines(FormDiffs.sequence(f1.toSeq, f2.toSeq))
-  def subset(f1: Seq[HasForm], f2: Seq[HasForm]): Form =
+
+  def subset[T1 : HasForm, T2 : HasForm](f1: Seq[T1], f2: Seq[T2]): Form =
     addLines(FormDiffs.subset(f1.map(_.form), f2.map(_.form)))
-  def subsequence[T <: HasForm](f1: Seq[T], f2: Seq[T]): Form =
+
+  def subsequence[T : HasForm](f1: Seq[T], f2: Seq[T]): Form =
     addLines(FormDiffs.subsequence(f1.map(_.form), f2.map(_.form)))
-  def set[T <: HasForm](f1: Seq[T], f2: Seq[T]): Form =
+
+  def set[T : HasForm](f1: Seq[T], f2: Seq[T]): Form =
     addLines(FormDiffs.set(f1.map(_.form), f2.map(_.form)))
-  def sequence[T <: HasForm](f1: Seq[T], f2: Seq[T]): Form =
+
+  def sequence[T : HasForm](f1: Seq[T], f2: Seq[T]): Form =
     addLines(FormDiffs.sequence(f1.map(_.form), f2.map(_.form)))
 
   /**
@@ -237,4 +245,17 @@ case object Form:
     def asResult(f: =>Form): Result =
       f.execute
 
-type HasForm = { def form: Form }
+trait HasForm[T]:
+  def getForm(t: T): Form
+
+  extension (t: T):
+    def form: Form =
+      getForm(t)
+
+given HasForm[Form]:
+  def getForm(f: Form): Form =
+    f
+
+given [T <: {def form: Form}] as HasForm[T]:
+  def getForm(t: T): Form =
+    t.form

@@ -7,7 +7,8 @@ import NotNullStrings._
  * This trait provides AnsiColors codes for the OutputReporter
  * @see http://en.wikipedia.org/wiki/ANSI_escape_code
  */
-trait AnsiColors { outer =>
+trait AnsiColors:
+  outer =>
 
   lazy val black   = AnsiColor("\u001b[30m")
   lazy val red     = AnsiColor("\u001b[31m")
@@ -46,7 +47,7 @@ trait AnsiColors { outer =>
   extension (s: String):
     def removeColors: String =
       outer.removeColors(s)
-}
+
 
 object AnsiColors extends AnsiColors
 

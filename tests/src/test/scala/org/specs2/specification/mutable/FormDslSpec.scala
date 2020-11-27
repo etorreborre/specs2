@@ -1,7 +1,7 @@
 package org.specs2.specification
 package mutable
 
-import org.specs2.form.Form
+import org.specs2.form.{given, _}
 import org.specs2.matcher.TypedEqual
 import org.specs2.specification.create.DefaultFormFragmentFactory
 import org.specs2.specification.process.DefaultExecutor

@@ -26,7 +26,7 @@ trait Scripts { outer: FragmentsFactory =>
 
 object Scripts:
 
-  def createInterpolatedFragment(script: Expr[Script], factory: Expr[FragmentFactory])(using qctx: QuoteContext): Expr[Interpolated] =
+  def createInterpolatedFragment(script: Expr[Script], factory: Expr[FragmentFactory])(using qctx: Quotes): Expr[Interpolated] =
     import qctx.reflect._
     '{ new Interpolated {
          def prepend(text: String): Fragments =

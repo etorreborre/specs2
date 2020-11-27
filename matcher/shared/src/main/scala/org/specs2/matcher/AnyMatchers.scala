@@ -9,12 +9,7 @@ import scala.reflect.ClassTag
 /**
  * This trait provides matchers which are applicable to any type of value
  */
-trait AnyMatchers extends AnyBaseMatchers with AnyBeHaveMatchers
-
-object AnyMatchers extends AnyMatchers
-
-private[specs2]
-trait AnyBaseMatchers:
+trait AnyMatchers:
 
   /** matches if a == true */
   def beTrue = new BeTrueMatcher
@@ -91,8 +86,12 @@ trait AnyBaseMatchers:
 
   /** matches if t.toSeq.exists(_ == v) */
   def beOneOf[T](t: T*): Matcher[T] = BeOneOf(t)
+
   /** alias for beOneOf */
   def beAnyOf[T](t: T*): Matcher[T] = BeOneOf(t)
+
+  /** alias for beOneOf */
+  def anyOf[T](t: T*): Matcher[T] = BeOneOf(t)
 
   /** matches if the value returns a successful result when applied to a PartialFunction */
   def beLike[T](pattern: PartialFunction[T, MatchResult[_]]): Matcher[T] = new Matcher[T] {
@@ -156,6 +155,8 @@ trait AnyBaseMatchers:
              xWithClass)
   }
 
+object AnyMatchers extends AnyMatchers
+
 /**
  * Matcher for a boolean value which must be true
  */
@@ -177,61 +178,6 @@ case class AlwaysMatcher[T]() extends Matcher[T]:
  */
 case class NeverMatcher[T]() extends Matcher[T]:
   def apply[S <: T](e: Expectable[S]) = result(false, "ok", "ko", e)
-/**
- * This trait allows to write expressions like
- *
- *  `1 must be equalTo(1)`
- */
-trait AnyBeHaveMatchers extends BeHaveMatchers:
-  private val outer = AnyMatchers
-
-  extension [T](result: MatchResult[T])
-    def be_==(t: T) = result(outer.be_==(t))
-    def be_!=(t: T) = result(outer.be_!=(t))
-    def be_===(t: T)(using di: Diffable[T]) = result(outer.be_===(t))
-    def be_!==(t: T)(using di: Diffable[T]) = result(outer.be_!==(t))
-    def equalTo(t: T) = result(outer.be_==(t))
-    def asNullAs(a: =>T) = result(outer.beAsNullAs(a))
-    def beAnyOf(t: T*) = result(outer.beAnyOf(t:_*))
-    def beOneOf(t: T*) = result(outer.beOneOf(t:_*))
-    def anyOf(t: T*) = result(outer.beAnyOf(t:_*))
-    def oneOf(t: T*) = result(outer.beOneOf(t:_*))
-    def beNull = result(outer.beNull)
-
-  extension [T,S](result: MatchResult[T])
-    def be_==~(s: =>S)(using convert: S => T, di: Diffable[T]) = result(outer.be_==~[T, S](s))
-
-  extension [T <: AnyRef](result: MatchResult[T])
-    def beTheSameAs(t: T) = result(outer.beTheSameAs(t))
-
-  extension [T : ClassTag](result: MatchResult[AnyRef])
-    def haveClass = result(outer.haveClass[T])
-    def anInstanceOf = result(anInstanceOf[T])
-
-  extension [T : ClassTag](result: MatchResult[Class[_]])
-    def assignableFrom =
-      result(outer.beAssignableFrom[T])
-
-  extension [T : IsEmpty](result: MatchResult[T])
-    def empty: MatchResult[T] = result(outer.beEmpty[T])
-    def beEmpty: MatchResult[T] = result(outer.beEmpty[T])
-
-  extension [T](result: MatchResult[T])
-    def like(pattern: =>PartialFunction[T, MatchResult[_]]) = result(outer.beLike(pattern))
-    def likeA(pattern: =>PartialFunction[T, MatchResult[_]]) = result(outer.beLike(pattern))
-
-  def asNullAs[T](a: =>T) = outer.beAsNullAs(a)
-  def like[T](pattern: =>PartialFunction[T, MatchResult[_]]) = outer.beLike(pattern)
-  def beLikeA[T](pattern: =>PartialFunction[T, MatchResult[_]]) = outer.beLike(pattern)
-  def likeA[T](pattern: =>PartialFunction[T, MatchResult[_]]) = outer.beLike(pattern)
-  def empty[T : IsEmpty] = outer.beEmpty[T]
-  def oneOf[T](t: T*) = outer.beOneOf(t:_*)
-  def anyOf[T](t: T*) = outer.beAnyOf(t:_*)
-  def klass[T : ClassTag]: Matcher[AnyRef] = outer.haveClass[T]
-  def superClass[T : ClassTag]: Matcher[AnyRef] = outer.haveSuperclass[T]
-  def interface[T : ClassTag]: Matcher[AnyRef] = outer.haveInterface[T]
-  def assignableFrom[T : ClassTag] = outer.beAssignableFrom[T]
-  def anInstanceOf[T : ClassTag] = outer.beAnInstanceOf[T]
 
 class BeTheSameAs[T <: AnyRef](t: =>T) extends Matcher[T]:
   def apply[S <: T](a: Expectable[S]) =

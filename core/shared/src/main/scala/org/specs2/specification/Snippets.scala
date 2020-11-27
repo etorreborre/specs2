@@ -29,14 +29,14 @@ trait Snippets extends org.specs2.execute.Snippets { outer: S2StringContextCreat
 object Snippets:
 
   def createInterpolatedFragment[T](snippetExpr: Expr[Snippet[T]], factoryExpr: Expr[FragmentFactory])(
-    using qctx: QuoteContext, t: Type[T]): Expr[Interpolated] =
+    using qctx: Quotes, t: Type[T]): Expr[Interpolated] =
       import qctx.reflect._
       '{ new Interpolated {
-           private val expression = ${Expr(rootPosition.sourceCode)}
+           private val expression = ${Expr(Position.ofMacroExpansion.sourceCode)}
            private val snippet: Snippet[t.Underlying] = ${snippetExpr}
            private val factory = ${factoryExpr}
-           private val start = PositionLocation(${Expr(rootPosition.sourceFile.jpath.toString)}, ${Expr(rootPosition.startLine)}, ${Expr(rootPosition.startColumn)})
-           private val end = PositionLocation(${Expr(rootPosition.sourceFile.jpath.toString)}, ${Expr(rootPosition.endLine)}, ${Expr(rootPosition.endColumn)})
+           private val start = PositionLocation(${Expr(Position.ofMacroExpansion.sourceFile.jpath.toString)}, ${Expr(Position.ofMacroExpansion.startLine)}, ${Expr(Position.ofMacroExpansion.startColumn)})
+           private val end = PositionLocation(${Expr(Position.ofMacroExpansion.sourceFile.jpath.toString)}, ${Expr(Position.ofMacroExpansion.endLine)}, ${Expr(Position.ofMacroExpansion.endColumn)})
 
            def prepend(text: String): Fragments =
              Fragments(factory.text(text).setLocation(start)).append(snippetFragments(snippet, end, expression))

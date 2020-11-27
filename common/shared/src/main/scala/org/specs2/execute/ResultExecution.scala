@@ -7,18 +7,23 @@ import reflect.ClassName._
 import text.NotNullStrings._
 import java.util.regex.Pattern
 import scala.util.control.NonFatal
+import annotation._
 
 /**
 * This trait executes a Result and returns an appropriate value when a specs2 exception is thrown
 */
-trait ResultExecution { outer =>
+trait ResultExecution:
+  outer: ResultExecution =>
 
   /** this extension allows the execution of a Result with an `execute` method */
   extension (r: =>Result):
-    def execute = outer.execute(r)
+    @targetName("execute_postfix") def execute(using n: Int = 0): Result =
+      outer.execute(r)
+
+  (Success() : Result).execute.isSuccess
 
   /** execute a Result and return a Result even if there are specs2 exceptions */
-  def execute(result: =>Result) =
+   def execute(result: =>Result): Result =
     try  result
     catch handleExceptionsPurely
 
@@ -114,5 +119,5 @@ trait ResultExecution { outer =>
     e.getStackTrace.exists((st: StackTraceElement) => JUNIT_ASSERT.matcher(st.getClassName).matches)
 
   private lazy val JUNIT_ASSERT = Pattern.compile("org.junit.*|junit.framework.*")
-}
+
 object ResultExecution extends ResultExecution

@@ -1,20 +1,25 @@
 package org.specs2
 package specification
 
-import form._
+import form.{given, _}
 import Forms.{given, _}
 import control.ImplicitParameters._
 
 trait ComponentsDefinitions:
   case class Address(street: String = "", number: Int = 0):
-    def form = fill(street, number)
-    def fill(s: String, n: Int) =
+    def form =
+      fill(street, number)
+
+    def fill(s: String, n: Int): Form =
       Form("Address").
           tr(prop("street", s)(street)).
           tr(prop("number", n)(number))
+
   case class Customer(name: String = "", address: Address = Address()):
-    def form = fill(name, address.form)
-    def fill(na: String, a: Form) =
+    def form =
+      fill(name, address.form)
+
+    def fill(na: String, a: Form): Form =
       Form("Customer").
           tr(prop("name", na)(name)).
           tr(a)
@@ -28,11 +33,12 @@ trait ComponentsDefinitions:
 
   case class Order(lines: List[OrderLine] = Nil):
     def line(orderLine: OrderLine) = Order(lines :+ orderLine)
-    def form: Form = hasSubset(lines:_*)
     def hasSubset(ls: OrderLine*) = Form("Order").subset(lines, ls.toList)
     def hasSubsequence(ls: OrderLine*) = Form("Order").subsequence(lines, ls.toList)
     def hasSet(ls: OrderLine*) = Form("Order").set(lines, ls.toList)
     def hasSequence(ls: OrderLine*) = Form("Order").sequence(lines, ls.toList)
+    def form = hasSubset(lines:_*)
 
   case class OrderLine(name: String, quantity: Int):
-    def form = Form.tr(field("name", name), field("qty", quantity))
+    def form =
+      Form.tr(field("name", name), field("qty", quantity))

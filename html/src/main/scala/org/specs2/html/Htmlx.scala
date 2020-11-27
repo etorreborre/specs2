@@ -13,11 +13,16 @@ import matcher.describe._
 /**
  * This trait provide additional methods on a NodeSeq or a Node representing an html document
  */
-trait Htmlx { outer =>
+trait Htmlx:
+  outer =>
 
-  extension (ns: NodeSeq):
-    def headers = outer.headers(ns)
-    def headersTree = outer.headersToTree(ns.headers).toTree
+  extension (ns: NodeSeq)(using nothing: Int = 0):
+    def headers: NodeSeq =
+     outer.headers(ns)
+
+    def headersTree: Tree[Header] =
+     outer.headersToTree(ns.headers).toTree
+
     def addHeadersAnchors: NodeSeq =
       outer.headersAnchors.rewrite(ns).reduceNodes
 
@@ -25,22 +30,27 @@ trait Htmlx { outer =>
     def addHeadersAnchors: NodeSeq =
       outer.headersAnchors.rewrite(n).headOption.getOrElse(NodeSeq.Empty)
 
-  extension (ns: Seq[Node]):
-    def updateHead(f: PartialFunction[Node, Node]) = outer.updateHead(ns)(f)
-    def updateHeadAttribute(name: String, value: String): NodeSeq = outer.updateHeadAttribute(ns, name, value)
-    def updateHeadAttribute(name: String, value: Int): NodeSeq = outer.updateHeadAttribute(ns, name, value)
+  extension (ns: Seq[Node])(using nothing: Int = 0):
+    def updateHead(f: PartialFunction[Node, Node]): NodeSeq =
+      outer.updateHead(ns)(f)
+
+    def updateHeadAttribute(name: String, value: String): NodeSeq =
+     outer.updateHeadAttribute(ns, name, value)
 
   /** @return a NodeSeq where the first Node is updated with a partial function */
-  def updateHead(ns: NodeSeq)(f: PartialFunction[Node, Node]) =
+  def updateHead(ns: NodeSeq)(f: PartialFunction[Node, Node]): NodeSeq =
     (ns.toList match {
       case (e:Node) :: rest if f.isDefinedAt(e) => f(e) :: rest
       case other                                => other
     }).reduceNodes
 
   /** @return a NodeSeq where the first Node attribute named 'named' has a new value */
-  def updateHeadAttribute(ns: NodeSeq, name: String, value: String): NodeSeq = updateHead(ns) { case (e: Elem) => e % (name -> value) }
+  def updateHeadAttribute(ns: NodeSeq, name: String, value: String): NodeSeq =
+    updateHead(ns) { case (e: Elem) => e % (name -> value) }
+
   /** @return a NodeSeq where the first Node attribute named 'named' has a new value, from an Int */
-  def updateHeadAttribute(ns: NodeSeq, name: String, value: Int): NodeSeq = updateHeadAttribute(ns, name, value.toString)
+  def updateHeadAttribute(ns: NodeSeq, name: String, value: Int): NodeSeq =
+    updateHeadAttribute(ns, name, value.toString)
 
   /**
    * @return all the headers and all the subtoc elements of a document
@@ -79,14 +89,16 @@ trait Htmlx { outer =>
       case HeaderTag(i) => Integer.valueOf(i).intValue
       case _            => -1
 
-  extension (s: String):
+  extension (s: String)(using nothing: Int = 0):
     def sanitize: String = outer.sanitize(s)
     def anchorName: String = outer.anchorName(s)
 
   /** sanitize a string so that it can be used as a href */
-  def sanitize(s: String) = java.net.URLEncoder.encode(s, "UTF-8")
+  def sanitize(s: String): String =
+    java.net.URLEncoder.encode(s, "UTF-8")
   /** create a sanitized anchor name */
-  def anchorName(name: String) = "#"+sanitize(name)
+  def anchorName(name: String): String =
+    "#"+sanitize(name)
 
   case class Header(level: Int = 1, node: Node = new Atom("first level"), namer: UniqueNames = uniqueNamer):
     def name = nodeText(node)
@@ -151,6 +163,5 @@ trait Htmlx { outer =>
   given Diffable[NodeSeq] =
     new FallbackDiffable[NodeSeq]
 
-}
 
 object Htmlx extends Htmlx
