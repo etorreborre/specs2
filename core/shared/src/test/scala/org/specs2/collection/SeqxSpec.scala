@@ -23,8 +23,8 @@ class SeqxSpec extends mutable.Specification with DataTables with ScalaCheckResu
       Seq((1, "a"), (2, "b"), (3, "c"), (4, "b"), (5, "e")).delta(Seq("c", "b", "a"), compare) must ===(Seq((4, "b"), (5, "e")))
     }
 
-  "A removeFirst function" should {
-    "remove the first element satisfying a predicate" in {
+  "A removeFirst function should" >> {
+    "remove the first element satisfying a predicate" >> {
 
       "Seq"           | "Element to remove"  | "Result"        |>
       (Nil:Seq[Int])  ! 2                    ! (Nil:Seq[Int])  |

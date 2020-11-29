@@ -16,13 +16,13 @@ class FutureExpectationsImmutableSpec extends org.specs2.Specification { def is 
 
 }
 
-class FutureExpectationsMutableSpec extends org.specs2.mutable.Specification:
+class FutureExpectationsMutableSpec extends org.specs2.mutable.Spec:
 
   "A specification can return future results" >> {
     "For example here" >> {
       Future.apply(1 === 1)
     }
-    "For example there" in { (withTitle: String) =>
+    "For example there" >> { (withTitle: String) =>
       Future.apply(withTitle === "For example there")
     }
 

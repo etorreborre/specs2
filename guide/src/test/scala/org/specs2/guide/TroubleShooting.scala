@@ -34,8 +34,8 @@ In that case you can either:
 
 Here is a mysterious `AsResult` message
 ```
-class MysteriousAsResult extends mutable.Specification {
-  "Try this" in {
+class MysteriousAsResult extends mutable.Spec {
+  "Try this" >> {
     1 must ===(1)
     println("this is ok, right?")
   }

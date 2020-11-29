@@ -5,13 +5,13 @@ object PendingUntilFixedExamples extends UserGuidePage { def is = "Pending until
 
 Some examples may be temporarily failing but you may not want the entire test suite to fail just for those examples. Instead of commenting them out and then forgetting about those examples when the code is fixed, you can append `pendingUntilFixed` to the example: ${snippet{
 
-class SpecificationWithPendingExamples extends mutable.Specification {
-  "this example fails for now" in {
+class SpecificationWithPendingExamples extends mutable.Spec {
+  "this example fails for now" >> {
     1 must ===(2)
   }.pendingUntilFixed
 
   // or, with a more specific message
-  "this example fails for now" in {
+  "this example fails for now" >> {
     1 must ===(2)
   }.pendingUntilFixed("ISSUE-123")
 }

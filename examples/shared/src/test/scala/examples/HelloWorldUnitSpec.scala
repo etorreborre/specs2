@@ -2,16 +2,16 @@ package examples
 
 import org.specs2._
 
-class HelloWorldUnitSpec extends mutable.Specification:
+class HelloWorldUnitSpec extends mutable.Spec:
   "HW" >> {
-    "The 'Hello world' string" should {
-      "contain 11 characters" in {
+    "The 'Hello world' string should" >> {
+      "contain 11 characters" >> {
         "Hello world" must haveSize(11)
       }
-      "start with 'Hello'" in {
+      "start with 'Hello'" >> {
         "Hello world" must startWith("Hello")
       }
-      "end with 'world'" in {
+      "end with 'world'" >> {
         "Hello world" must endWith("world")
       }
     }

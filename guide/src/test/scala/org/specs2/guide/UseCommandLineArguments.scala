@@ -27,8 +27,8 @@ class SpecificationWithArgs(args: CommandLine) extends Specification { def is = 
 }}
 
 With a mutable specification the code is similar:${snippet{
-class SpecificationWithArgs(args: CommandLine) extends mutable.Specification {
- "This example is controlled from the command line" in {
+class SpecificationWithArgs(args: CommandLine) extends mutable.Spec {
+ "This example is controlled from the command line" >> {
    if (args.isSet("isOk")) 1 must ===(1)
    else                    1 must ===(2)
  }

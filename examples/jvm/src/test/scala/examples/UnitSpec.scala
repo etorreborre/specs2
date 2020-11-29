@@ -29,17 +29,17 @@ class UnitSpec extends mutable.Specification:
     success
   }
 
-  "'Hello world'" should {
-    "contain 11 characters" in {
+  "'Hello world'  should" >> {
+    "contain 11 characters" >> {
       "Hello world" must haveSize(11)
     }
-    "start with 'Hello'" in {
+    "start with 'Hello'" >> {
       "Hello world" must startWith("Hello")
     }
     /**
      * a failing example will stop right away, without having to "chain" expectations
      */
-    "with 'world'" in {
+    "with 'world'" >> {
       // Expectations are throwing exception by default so un-commenting this line will
       // stop the execution right away with a Failure
       // "Hello world" must startWith("Hi")

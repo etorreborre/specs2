@@ -1,36 +1,40 @@
 package org.specs2
 package execute
 
-import mutable.Specification
+import mutable.Spec
 import org.specs2.matcher.ResultMatchers
 import scala.concurrent._, duration._
 
-class EventuallyResultsSpec extends Specification with ResultMatchers:
-  """
+class EventuallyResultsSpec extends Spec with ResultMatchers:
+  addText("""
   `eventually` can be used to retry any result until a maximum number of times is reached
     or until it succeeds.
-  """.txt
+  """)
 
-  "A success succeeds right away with eventually" in {
+  "A success succeeds right away with eventually" >> {
     eventually(Success())
   }
-  "A failure will always fail" in {
+
+  "A failure will always fail" >> {
     eventually(Failure()).not
   }
-  "A result will be retried automatically until it succeeds" in {
+
+  "A result will be retried automatically until it succeeds" >> {
     val iterator = List(Failure(), Failure(), Success()).iterator
     eventually(iterator.next)
   }
 
-  "If all retries fail, the result will eventually fail" in {
+  "If all retries fail, the result will eventually fail" >> {
     val iterator = Iterator.continually(Failure())
     eventually(iterator.next).not
   }
-  "Any object convertible to a result can be used with eventually" in {
+
+  "Any object convertible to a result can be used with eventually" >> {
     val iterator = List(false, false, true).iterator
     eventually(iterator.next) must beSuccessful
   }
-  "Even if a result throws an exception it must be evaluated 'retries' times only" in {
+
+  "Even if a result throws an exception it must be evaluated 'retries' times only" >> {
     var eval = 0
     def r = { eval += 1; 1 must ===(2) }
 

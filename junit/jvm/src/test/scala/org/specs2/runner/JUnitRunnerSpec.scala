@@ -122,19 +122,19 @@ class JUnitWithBeforeAfterAllSpecification extends Specification with BeforeAfte
 
 @RunWith(classOf[JUnitRunner])
 class JUnitPendingSpecification extends mutable.Specification:
-  "Below examples" should {
-    "fail" in {
+  "Below examples should" >> {
+    "fail" >> {
       1 must ===(2)
     }
-    "be pending" in {
+    "be pending" >> {
       1 must ===(2)
     }.pendingUntilFixed
   }
 
 @RunWith(classOf[JUnitRunner])
 class JUnitErrorInBeforeAllSpecification extends Specification with BeforeAfterAll { def is = s2"""
-      one example $ok
-      """
+   one example $ok
+"""
 
   def beforeAll(): Unit = throw new RuntimeException("Error.")
 
