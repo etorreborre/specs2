@@ -9,7 +9,7 @@ trait AcceptanceDsl extends
        FragmentsDsl
   with SpecStructureDsl
   with TitleDsl
-  with ExampleDsl
+  with ExtendedExampleDsl
   with ReferenceDsl
   with TagDsl
   with ActionDsl
@@ -22,8 +22,8 @@ trait AcceptanceDsl extends
  *  - use s2 string directly in "def is = ..."
  */
 private[specs2]
-trait AcceptanceDsl1 extends 
-       SpecStructureDsl1 
+trait AcceptanceDsl1 extends
+       SpecStructureDsl1
   with ReferenceCreation
   with TagDsl
   with ActionDsl

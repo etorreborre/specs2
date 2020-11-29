@@ -5,8 +5,8 @@ import mutable.{Tables, Spec}
 import matcher.TypedEqual
 
 class PluralSpec extends Spec with Plural with Tables with TypedEqual {
-  
-  "A string can be pluralized: 'apple'.plural(n)" in {
+
+  "A string can be pluralized: 'apple'.plural(n)" >> {
 
     "word"   | "quantity"  | "result"  |>
     "apple"  ! 0           ! "apple"   |
@@ -17,10 +17,10 @@ class PluralSpec extends Spec with Plural with Tables with TypedEqual {
     }
   }
 
-  "A integer can be described by a pluralized string: 3 qty 'apple' == 3 apples" in {
+  "A integer can be described by a pluralized string: 3 qty 'apple' == 3 apples" >> {
 
     "quantity"   | "description"   | "result"   |>
-     0           ! "apple"         ! "0 apple"  | 
+     0           ! "apple"         ! "0 apple"  |
      1           ! "apple"         ! "1 apple"  |
      2           ! "apple"         ! "2 apples" |
      3           ! "apple"         ! "3 apples" | { (q, desc, result) =>
@@ -28,10 +28,10 @@ class PluralSpec extends Spec with Plural with Tables with TypedEqual {
     }
   }
 
-  "A integer can be optionally described by a pluralized string: 3 optQty 'apple' == Some(3 apples)" in {
+  "A integer can be optionally described by a pluralized string: 3 optQty 'apple' == Some(3 apples)" >> {
 
     "quantity"   | "description"   | "result"                               |>
-     0           ! "apple"         ! (None:Option[String])                  | 
+     0           ! "apple"         ! (None:Option[String])                  |
      1           ! "apple"         ! (Some("1 apple"):Option[String])       |
      2           ! "apple"         ! (Some("2 apples"):Option[String])      |
      3           ! "apple"         ! (Some("3 apples"):Option[String])      | { (q, desc, result) =>
@@ -39,7 +39,7 @@ class PluralSpec extends Spec with Plural with Tables with TypedEqual {
     }
   }
 
-  "A integer can be optionally described by a invariant string: 3 OptInvariantQty 'skipped' == Some(3 skipped)" in {
+  "A integer can be optionally described by a invariant string: 3 OptInvariantQty 'skipped' == Some(3 skipped)" >> {
 
     "quantity"   | "description"   | "result"                               |>
      0           ! "skipped"       ! (None:Option[String])                  |
@@ -49,7 +49,7 @@ class PluralSpec extends Spec with Plural with Tables with TypedEqual {
       (q optInvariantQty desc) === result
     }
   }
-  "A integer can be an ordinal: 3 th == '3rd'" in {
+  "A integer can be an ordinal: 3 th == '3rd'" >> {
     "quantity" | "ordinal"  |>
       0        ! "0th"      |
       1        ! "1st"      |

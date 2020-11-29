@@ -20,5 +20,6 @@ class ShouldExpectable[T] private[specs2] (tm: () => T) extends Expectable[T](tm
   def should_!==(other: =>T)(using di: Diffable[T])  = applyMatcher(new EqualityMatcher(other).not)
   def should_===(other: =>T)(using di: Diffable[T])  = applyMatcher(new EqualityMatcher(other))
   def should_!=(other: =>Any)      = applyMatcher[Any](new BeEqualTo(other).not)
+  
 object ShouldExpectable:
   def apply[T](t: =>T) = new ShouldExpectable(() => t)

@@ -11,7 +11,7 @@ import scala.util.Not
 /**
  * Example Dsl for mutable specifications
  */
-trait ExampleDsl extends FragmentsFactory { outer =>
+trait ExtendedExampleDsl extends FragmentsFactory { outer =>
 
   extension (d: String)(using not: Not[NoBangExamples])
     def !(execution: Execution): Fragment =
@@ -29,5 +29,5 @@ trait ExampleDsl extends FragmentsFactory { outer =>
       fragmentFactory.example(d, r)
 }
 
-trait NoBangExamples extends ExampleDsl:
+trait NoBangExamples extends ExtendedExampleDsl:
   given NoBangExamples = ???

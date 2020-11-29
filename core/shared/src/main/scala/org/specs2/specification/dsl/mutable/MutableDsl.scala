@@ -8,8 +8,8 @@ package mutable
  */
 trait MutableDsl extends
        FragmentsDsl
-  with ExampleDsl
-  with BlockDsl
+  with ExtendedExampleDsl
+  with ExtendedBlockDsl
   with TextDsl
   with ActionDsl
   with TitleDsl

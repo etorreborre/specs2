@@ -34,21 +34,21 @@ class IterablexSpec extends Specification with IterableData with ScalaCheckResul
   }
 
   "The containsInOrder function should" >> {
-    "check that some values are contained inside an Iterable, in the same order" in {
+    "check that some values are contained inside an Iterable, in the same order" >> {
       List(1, 2, 3).containsInOrder(1, 3)
     }
-    "detect if some values are contained inside an Iterable in a different order" in {
+    "detect if some values are contained inside an Iterable in a different order" >> {
       ! List(1, 2, 3).containsInOrder(2, 1)
     }
   }
 
-  "toDeepString uses recursively the toString method to display iterables in brackets" in
+  "toDeepString uses recursively the toString method to display iterables in brackets" >>
   { List(List(1, 2), 3, List(4, 5)).toDeepString must ===("[[1, 2], 3, [4, 5]]") }
 
-  "mapFirst maps the first element with a function if it exists" in
+  "mapFirst maps the first element with a function if it exists" >>
   { Seq(1, 2).mapFirst(_ + 1) must ===(Seq(2, 2)) }
 
-  "mapLast maps the last element with a function if it exists" in
+  "mapLast maps the last element with a function if it exists" >>
   { Seq(1, 2).mapLast(_ + 1) must ===(Seq(1, 3)) }
 
 

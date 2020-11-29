@@ -10,30 +10,31 @@ import ThrownExpectationsSpecData._
 class ThrownExpectationsSpec extends Spec with ResultMatchers:
 
   "An acceptance spec using" >> {
-    "ThrownExpectations should fail when the first must matcher fails in an Example" in {
+    "ThrownExpectations should fail when the first must matcher fails in an Example" >> {
       execute(body1) must beFailing
     }
-    "ThrownExpectations should fail when the first should matcher fails in an Example" in {
+    "ThrownExpectations should fail when the first should matcher fails in an Example" >> {
       execute(body2) must beFailing
     }
-    "MustThrownExpectations should fail when the first matcher fails in an Example" in {
+    "MustThrownExpectations should fail when the first matcher fails in an Example" >> {
       execute(body3) must beFailing
     }
-    "ShouldThrownExpectations should fail when the first matcher fails in an Example" in {
+    "ShouldThrownExpectations should fail when the first matcher fails in an Example" >> {
       execute(body4) must beFailing
     }
   }
-  "If a DataTable fails it must throw a DecoratedResultException containing the table data" in {
+  "If a DataTable fails it must throw a DecoratedResultException containing the table data" >> {
     execute(body5) must beLike { case DecoratedResult(_, Failure(_,_,_,_)) => ok }
   }
 
-  "Results must only be checked once" in {
+  "Results must only be checked once" >> {
     val body = body6
     execute(body)
     body.getCallsNb must be_==(1)
   }
 
   def execute[T](t: =>T) = ResultExecution.execute(t)(_ => Success())
+  
 object ThrownExpectationsSpecData:
   def body1 = new MustThrownExpectations {
     1 must beEqualTo(2); success

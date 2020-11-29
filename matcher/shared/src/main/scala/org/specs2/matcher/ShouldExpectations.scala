@@ -10,11 +10,11 @@ import scala.util.Not
  */
 trait ShouldExpectations extends ExpectationsCreation with TypedEqual:
 
-  extension [T](tm: =>T)(using not: Not[NoShouldExpectations])
+  implicit class expectShould[T](tm: =>T)(using not: Not[NoShouldExpectations]):
     def should(m: =>Matcher[T]) =
       createExpectable(tm).applyMatcher(m)
 
-  extension [T](tm: Expectable[T])(using not: Not[NoShouldExpectations])
+  implicit class expectedShould [T](tm: Expectable[T])(using not: Not[NoShouldExpectations]):
     def should(m: =>Matcher[T]) =
       tm.applyMatcher(m)
 

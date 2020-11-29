@@ -6,10 +6,10 @@ import scala.collection.mutable.ListBuffer
 import matcher._
 import ExpectationsDescription._
 import execute.{Result}
-import specification.dsl.ExampleDsl
+import specification.dsl.ExtendedExampleDsl
 import specification.core.{Env, Fragments, OwnEnv}
 
-class RandomExecutionSpec(val env: Env) extends Specification with ThrownExpectations with ExampleDsl with OwnEnv { def is = section("travis") ^ s2"""
+class RandomExecutionSpec(val env: Env) extends Specification with ThrownExpectations with ExtendedExampleDsl with OwnEnv { def is = section("travis") ^ s2"""
 
  It is possible to force the order of execution of a specification so that
    the execution is sequential but with a random order on the examples $random1

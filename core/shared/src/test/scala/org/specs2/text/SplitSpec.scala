@@ -4,7 +4,7 @@ package text
 import Split._
 import matcher._
 
-class SplitSpec extends mutable.Spec with TypedEqual {
+class SplitSpec extends mutable.Spec with TypedEqual:
 
   "a command line can be split" >> {
     "around spaces" >> {
@@ -18,4 +18,3 @@ class SplitSpec extends mutable.Spec with TypedEqual {
         Seq("nocolor", "include", "hello world", "with", "me", "other", "arguments")
     }
   }
-}

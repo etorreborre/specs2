@@ -33,7 +33,7 @@ import org.specs2.specification.core.{Fragment, Fragments}
 import org.specs2.specification.dsl.mutable._
 import org.specs2.control.ImplicitParameters
 
-trait ToKeyword extends BlockDsl {
+trait ToKeyword extends ExtendedBlockDsl {
   extension (description: String) {
     def to(f: =>Fragment): Fragment =
       addFragmentBlockWithText(description + " to", f)

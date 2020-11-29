@@ -12,26 +12,25 @@ import org.specs2.control.ImplicitParameters._
 /**
  * Create blocks of examples in a mutable specification
  */
-trait BlockDsl extends BlockCreation:
-  implicit class describe(d: String):
-    def >>(f: => Fragment): Fragment     = addFragmentBlockWithText(d, f)
-    def should(f: => Fragment): Fragment = addFragmentBlockWithText(s"$d should", f)
-    def can(f: => Fragment): Fragment    = addFragmentBlockWithText(s"$d can", f)
+trait ExtendedBlockDsl extends BlockDsl:
+  implicit class extendedDescribeBlock(d: String):
+    def should(f: =>Fragment): Fragment =
+      addBlock(s"$d should", f)
 
-    def >>(fs: => Fragments)(using p1: ImplicitParam1): Fragments =
-      addFragmentsBlockWithText(d, fs)
+    def can(f: =>Fragment): Fragment =
+      addBlock(s"$d can", f)
 
-    def should(fs: => Fragments)(using p1: ImplicitParam1): Fragments =
-      addFragmentsBlockWithText(s"$d should", fs)
+    def should(fs: =>Fragments)(using p1: ImplicitParam1): Fragments =
+      addBlock(s"$d should", fs)
 
-    def can(fs: => Fragments)(using p1: ImplicitParam1): Fragments =
-      addFragmentsBlockWithText(s"$d can", fs)
+    def can(fs: =>Fragments)(using p1: ImplicitParam1): Fragments =
+      addBlock(s"$d can", fs)
 
-  def addFragmentBlockWithText(text: String, f: =>Fragment): Fragment =
-    addBlock(text, f)
+    def in(f: =>Fragment): Fragment =
+      addBlock(d, f)
 
-  def addFragmentsBlockWithText(text: String, fs: =>Fragments)(using p1: ImplicitParam1): Fragments =
-    Use.ignoring(p1)(addBlock(text, fs))
+    def in(fs: =>Fragments)(using p1: ImplicitParam1): Fragments =
+      addBlock(d, fs)
 
   /**
    * adding a conflicting implicit to warn the user when a `>>` was forgotten
@@ -41,12 +40,19 @@ trait BlockDsl extends BlockCreation:
   class WarningForgottenOperator(s: String):
     def apply[T : AsResult](r: =>T): Fragment = ???
 
+trait BlockDsl extends BlockCreation:
+  implicit class describeBlock(d: String):
+    def >>(f: =>Fragment): Fragment =
+      addBlock(d, f)
+
+    def >>(fs: =>Fragments)(using p1: ImplicitParam1): Fragments =
+      addBlock(d, fs)
+
 private[specs2]
 trait BlockCreation extends FragmentBuilder with FragmentsFactory:
   private val factory = fragmentFactory
 
   private[specs2] def addBlock[T](text: String, t: =>T, location: StacktraceLocation = StacktraceLocation()): T =
-
     addStart
     if hasSectionsForBlocks then addFragment(factory.section(text))
     //print((text, location.trace.map(t => println((text, t)))))
@@ -58,8 +64,6 @@ trait BlockCreation extends FragmentBuilder with FragmentsFactory:
     if hasSectionsForBlocks then addFragment(factory.section(text))
     addEnd
     result
-
-
 
   private def addText(text: String, location: StacktraceLocation) =
     addFragment(factory.text(text).setLocation(location))

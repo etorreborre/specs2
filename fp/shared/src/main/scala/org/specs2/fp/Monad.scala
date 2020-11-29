@@ -82,7 +82,7 @@ object Monad:
 
 trait MonadSyntax:
 
-  extension [F[_] : Monad, A, B](fa: F[A]):
+  implicit class MonadOps[F[_] : Monad, A, B](fa: F[A]):
 
     def flatMap(f: A => F[B]): F[B] =
       summon[Monad[F]].flatMap(fa)(f)
@@ -96,7 +96,7 @@ trait MonadSyntax:
     def >>(fb: F[B]): F[B] =
       summon[Monad[F]].bind(fa)(_ => fb)
 
-  extension [F[_] : Monad, A](fa: F[F[A]]):
+  implicit class MonadFlattenOps[F[_] : Monad, A](fa: F[F[A]]):
 
     def flatten: F[A] =
       summon[Monad[F]].flatMap(fa)(identity)
