@@ -9,20 +9,20 @@ class SmartDiffsSpec extends Spec { def is = s2"""
  ${ smart.showDiffs(a_to_j + m_to_z, a_to_z)._1 must contain("[") }
 
  The difference between two sequences must be show
-   with added and missing elements in a set  $set
-   with added and missing elements in a list $list
-   with added and missing elements in a map $map
+   with added and missing elements in a set  $set1
+   with added and missing elements in a list $list1
+   with added and missing elements in a map $map1
 
  Differences must be robust to null values $nullValues
                                                                                                                      """
 
-  def set =
+  def set1 =
     smart.showSeqDiffs(Seq(1, 2), Seq(1, 3), ordered = false) must ===(((Seq("2")), Seq("3")))
 
-  def list =
+  def list1 =
     smart.showSeqDiffs(Seq(1, 2), Seq(1, 3), ordered = true) must ===(((Seq("2")), Seq("3")))
 
-  def map =
+  def map1 =
     val diff = "  x key = 2\n    actual value\n    3\n    expected value\n    4"
     smart.showMapDiffs(Map(1 -> 2, 2 -> 3, 3 -> 4), Map(1 -> 2, 2 -> 4, 5 -> 6)) must ===(((Seq("3 -> 4")), Seq("5 -> 6"), Seq(diff)))
 

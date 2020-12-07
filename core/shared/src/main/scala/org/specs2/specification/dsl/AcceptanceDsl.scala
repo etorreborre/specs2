@@ -9,7 +9,7 @@ trait AcceptanceDsl extends
        FragmentsDsl
   with SpecStructureDsl
   with TitleDsl
-  with ExtendedExampleDsl
+  with ExampleDsl
   with ReferenceDsl
   with TagDsl
   with ActionDsl
@@ -23,7 +23,7 @@ trait AcceptanceDsl extends
  */
 private[specs2]
 trait AcceptanceDsl1 extends
-       SpecStructureDsl1
+       SpecStructureDsl
   with ReferenceCreation
   with TagDsl
   with ActionDsl

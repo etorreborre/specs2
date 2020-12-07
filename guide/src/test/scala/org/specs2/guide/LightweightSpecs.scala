@@ -79,11 +79,11 @@ When creating acceptance specifications
  Feature                                                      | Trait                                                  | Comment
  ------------------------------------------------------------ | ------------------------------------------------------ | ----------------------
  Interpolate anything else than a `Result` in a `s2` string   | `org.specs2.specification.create.S2StringContext`      |
- Use "bang" examples: `"example" ! ok`                        | `org.specs2.specification.dsl.ExtendedExampleDsl`              |
+ Use "bang" examples: `"example" ! ok`                        | `org.specs2.specification.dsl.ExampleDsl`              |
  Create and append `Fragments` with `^`                       | `org.specs2.specification.dsl.FragmentsDsl`            |
  Add arguments and a title to `Fragments` with `^`            | `org.specs2.specification.dsl.SpecStructureDsl`        |
  Create a title with `"A title".title"`                       | `org.specs2.specification.dsl.TitleDsl`                |
- Create references to other specifications                    | `org.specs2.specification.dsl.ReferenceDsl`                 |
+ Create references to other specifications                    | `org.specs2.specification.dsl.ReferenceDsl`            |
  Create steps and actions                                     | `org.specs2.specification.dsl.ActionDsl`               |
  Use tags                                                     | `org.specs2.specification.dsl.TagDsl`                  | To use all of the `Dsl` traits use `AcceptanceDsl`
 
@@ -91,10 +91,10 @@ When creating mutable specifications
 
  Feature                                                      | Trait                                                  | Comment
  ------------------------------------------------------------ | ------------------------------------------------------ | ----------------------
- Use "bang" examples: `"example" ! ok`                        | `org.specs2.specification.dsl.mutable.ExtendedExampleDsl`      |
+ Use "bang" examples: `"example" ! ok`                        | `org.specs2.specification.dsl.mutable.ExampleDsl`      |
  Create a title with `"A title".title"`                       | `org.specs2.specification.dsl.mutable.TitleDsl`        |
  Set arguments                                                | `org.specs2.specification.dsl.mutable.ArgumentsDsl`    |
- Create references to other specifications                    | `org.specs2.specification.dsl.mutable.ReferenceDsl`         |
+ Create references to other specifications                    | `org.specs2.specification.dsl.mutable.ReferenceDsl`    |
  Create steps and actions                                     | `org.specs2.specification.dsl.mutable.ActionDsl`       |
  Add text and paragraphs                                      | `org.specs2.specification.dsl.mutable.TextDsl`         |
  Use tags                                                     | `org.specs2.specification.dsl.mutable.TagDsl`          | To use all of the `Dsl` traits use `MutableDsl`

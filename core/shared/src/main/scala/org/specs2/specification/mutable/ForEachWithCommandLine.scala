@@ -3,21 +3,19 @@ package specification.mutable
 
 import execute._
 import specification.core.Fragment
-import specification.dsl.mutable.NoExampleDsl
-import specification.dsl.mutable.ExtendedExampleDsl
+import specification.dsl.mutable._
 import specification.create.S2StringContext
 import scala.util.Not
 
 /**
  * ForEachWithCommandLine trait, adapted for mutable specifications
  */
-trait ForEachWithCommandLine[T] extends specification.ForEachWithCommandLineArguments[T] with ExtendedExampleDsl { outer: S2StringContext =>
+trait ForEachWithCommandLine[T] extends specification.ForEachWithCommandLineArguments[T] with ExampleDsl:
+  self: S2StringContext =>
 
-  extension [R : AsResult](d: String)(using not: Not[NoExampleDsl])
+  extension [R : AsResult](d: String)(using not: Not[NoBlockDsl])
     def >>(f: T => R): Fragment =
       addExample(d, foreachFunctionToExecution(f))
 
     def in(f: T => R): Fragment =
       d >> f
-
-}

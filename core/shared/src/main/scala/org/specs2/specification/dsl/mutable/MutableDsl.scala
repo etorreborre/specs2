@@ -8,7 +8,7 @@ package mutable
  */
 trait MutableDsl extends
        FragmentsDsl
-  with ExtendedExampleDsl
+  with ExampleDsl
   with ExtendedBlockDsl
   with TextDsl
   with ActionDsl

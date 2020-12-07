@@ -10,7 +10,7 @@ class MutableDslSpec extends org.specs2.mutable.Specification:
       "ok" in ok
       "description" in { (s: String) => s must ===("description") }
     }
-    describeBlock(">>") >> {
+    ">>" >> {
       "ok" >> ok
       "description" >> { (s: String) => s must ===("description") }
     }

@@ -3,34 +3,55 @@ package specification
 package dsl
 package mutable
 
-import execute.AsResult
-import org.specs2.control.Use
-import org.specs2.specification.core.{Fragment, Fragments, StacktraceLocation}
-import specification.create.FragmentsFactory
-import org.specs2.control.ImplicitParameters._
+import execute._
+import specification.script._
+import specification.core._
+import specification.create._
+import scala.util.Not
 
 /**
  * Create blocks of examples in a mutable specification
  */
+trait BlockDsl extends BlockCreation:
+
+  given ToBlock[Fragment, Fragment]:
+    def toBlock(s: String, f: =>Fragment): Fragment =
+      addBlock(s, f)
+
+  given ToBlock[Fragments, Fragments]:
+    def toBlock(s: String, fs: =>Fragments): Fragments =
+      addBlock(s, fs)
+
+  given [R : AsResult] as ToBlock[StepParser[R], Fragment]:
+    def toBlock(s: String, parser: =>StepParser[R]): Fragment =
+      addExample(parser.strip(s), Execution.executed(parser.run(s).fold(execute.Error.apply, AsResult(_))))
+
+  given [R : AsExecution] as ToBlock[R, Fragment]:
+    def toBlock(s: String, r: =>R): Fragment =
+      addExample(s, r)
+
+  given [R : AsExecution] as ToBlock[String => R, Fragment]:
+    def toBlock(s: String, f: =>(String => R)): Fragment =
+      addExample(s, f(s))
+
+  extension [S, R] (d: String)(using not: Not[NoBlockDsl]):
+    def >>(s: S)(using t: ToBlock[S, R]): R =
+     summon[ToBlock[S, R]].toBlock(d, s)
+
+/**
+ * Additional syntax for blocks
+ */
 trait ExtendedBlockDsl extends BlockDsl:
-  implicit class extendedDescribeBlock(d: String):
-    def should(f: =>Fragment): Fragment =
-      addBlock(s"$d should", f)
 
-    def can(f: =>Fragment): Fragment =
-      addBlock(s"$d can", f)
+  extension [S, R] (d: String)(using not: Not[NoExtendedBlockDsl]):
+    def should(s: S)(using t: ToBlock[S, R]): R =
+     summon[ToBlock[S, R]].toBlock(s"$d should", s)
 
-    def should(fs: =>Fragments)(using p1: ImplicitParam1): Fragments =
-      addBlock(s"$d should", fs)
+    def can(s: S)(using t: ToBlock[S, R]): R =
+     summon[ToBlock[S, R]].toBlock(s"$d can", s)
 
-    def can(fs: =>Fragments)(using p1: ImplicitParam1): Fragments =
-      addBlock(s"$d can", fs)
-
-    def in(f: =>Fragment): Fragment =
-      addBlock(d, f)
-
-    def in(fs: =>Fragments)(using p1: ImplicitParam1): Fragments =
-      addBlock(d, fs)
+    def in(s: S)(using t: ToBlock[S, R]): R =
+     summon[ToBlock[S, R]].toBlock(d, s)
 
   /**
    * adding a conflicting implicit to warn the user when a `>>` was forgotten
@@ -40,16 +61,12 @@ trait ExtendedBlockDsl extends BlockDsl:
   class WarningForgottenOperator(s: String):
     def apply[T : AsResult](r: =>T): Fragment = ???
 
-trait BlockDsl extends BlockCreation:
-  implicit class describeBlock(d: String):
-    def >>(f: =>Fragment): Fragment =
-      addBlock(d, f)
-
-    def >>(fs: =>Fragments)(using p1: ImplicitParam1): Fragments =
-      addBlock(d, fs)
-
 private[specs2]
 trait BlockCreation extends FragmentBuilder with FragmentsFactory:
+
+  trait ToBlock[S, R]:
+    def toBlock(d: String, s: =>S): R
+
   private val factory = fragmentFactory
 
   private[specs2] def addBlock[T](text: String, t: =>T, location: StacktraceLocation = StacktraceLocation()): T =
@@ -65,9 +82,23 @@ trait BlockCreation extends FragmentBuilder with FragmentsFactory:
     addEnd
     result
 
+  protected[specs2] def addExample[R : AsExecution](d: String, r: R) =
+    addFragment(fragmentFactory.example(Text(d), summon[AsExecution[R]].execute(r)))
+    addFragment(fragmentFactory.break)
+
   private def addText(text: String, location: StacktraceLocation) =
     addFragment(factory.text(text).setLocation(location))
 
   private def addBreak = addFragment(factory.break)
   private def addStart = addFragment(factory.start)
   private def addEnd   = addFragment(factory.end)
+
+/** deactivate the BlockDsl implicits */
+trait NoBlockDsl:
+  self: BlockDsl =>
+  given NoBlockDsl = ???
+
+/** deactivate the ExtendedBlockDsl implicits */
+trait NoExtendedBlockDsl:
+  self: ExtendedBlockDsl =>
+  given NoExtendedBlockDsl = ???

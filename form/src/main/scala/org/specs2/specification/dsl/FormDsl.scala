@@ -23,3 +23,7 @@ trait FormDsl extends FragmentsDsl with SpecStructureDsl with FormFragmentsFacto
   given [T : HasForm, T2](using ToSpecStructure[T2, Fragment]) as ToSpecStructure[T, T2]:
     def toSpecStructure(form: T, t2: =>T2): SpecStructure =
       t2 ^ factory.FormFragment(form)
+
+  given appendFormToString[T : HasForm] as ToSpecStructure[String, T]:
+    def toSpecStructure(s: String, form: =>T): SpecStructure =
+      fragmentFactory.text(s) ^ factory.FormFragment(form)
