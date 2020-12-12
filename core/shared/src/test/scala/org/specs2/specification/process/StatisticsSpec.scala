@@ -15,7 +15,7 @@ class StatisticsSpec(ee: ExecutionEnv) extends Specification { def is = s2"""
 
   def e1 =
     (emptyStats("ex" ! skipped).examples ==== 1) and
-    (emptyStats(step("")).examples ==== 0)
+    (emptyStats(step(ok)).examples ==== 0)
 
   def e2 =
     def foldStats(r: Result): Stats =

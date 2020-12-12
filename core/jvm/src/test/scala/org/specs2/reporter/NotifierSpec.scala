@@ -97,7 +97,7 @@ class NotifierSpecWithTables extends Specification with Tables {def is = s2"""
   """
 }
 class NotifierSpec1 extends org.specs2.mutable.Specification:
-  step("a step")
+  step(ok)
   "group1" >> {
     "ex1" >> ok
     "ex2" >> ok

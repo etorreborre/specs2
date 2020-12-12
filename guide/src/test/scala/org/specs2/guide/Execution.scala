@@ -19,7 +19,7 @@ A `Step` is an action which can be executed anywhere in a specification. When yo
 class StepSpec extends Specification { def is = s2"""
   this is example 1 $ok
   this is example 2 $ok
-  ${step("stop here for a second")}
+  ${step(success("stop here for a second"))}
 
   this is example 3 $ok
   this is example 4 $ok

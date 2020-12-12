@@ -10,17 +10,22 @@ import Results.{given}
 trait AsResult[T]:
   def asResult(t: =>T): Result
 
-object AsResult:
+object AsResult extends AsResultLowImplicits:
   /** implicit typeclass instance to create results from Booleans */
-  given booleanAsResult as AsResult[Boolean] =
-    new AsResult[Boolean]:
-      def asResult(t: =>Boolean): Result =
-        summon[Conversion[Boolean, Result]](t)
+  given booleanAsResult as AsResult[Boolean]:
+    def asResult(t: =>Boolean): Result =
+      summon[Conversion[Boolean, Result]](t)
 
   /** typeclass instance for types which are convertible to Result */
-  given asResult[R](using convert: R => Result) as AsResult[R] =
-    new AsResult[R]:
-      def asResult(r: =>R): Result = ResultExecution.execute(convert(r))
+  given asResult[R](using convert: R => Result) as AsResult[R]:
+    def asResult(r: =>R): Result =
+      ResultExecution.execute(convert(r))
+
+trait AsResultLowImplicits:
+  /** typeclass instance for types which are convertible to Result */
+  given AsResult[Unit]:
+    def asResult(r: =>Unit): Result =
+      Result.resultOrSuccess(r)
 
   /** nicer syntax to use the AsResult syntax: AsResult(r) */
   def apply[R : AsResult](r: =>R): Result =

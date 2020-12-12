@@ -31,29 +31,13 @@ trait FutureMatchers extends ExpectationsCreation:
   /**
    * when a Future contains a result, it can be awaited to return this result
    */
-  implicit class futureAsResult[T](f: => Future[T])(using ee: ExecutionEnv, asResult: AsResult[T]) extends FutureAsResult[T](f)
+  implicit def futureToResult[T](f: => Future[T])(using ee: ExecutionEnv, asResult: AsResult[T]): FutureAsResult[T] =
+    FutureAsResult[T](f)
 
   def await[T](m: Matcher[T])(using ee: ExecutionEnv, nothing: Int = 0): Matcher[Future[T]] = awaitMatcher(m)(retries = 0, timeout = 1.second)
   def await[T](m: Matcher[T])(retries: Int, timeout: FiniteDuration)(using ee: ExecutionEnv): Matcher[Future[T]] = awaitMatcher(m)(retries, timeout)
   def awaitFor[T](m: Matcher[T])(timeout: FiniteDuration)(using ee: ExecutionEnv): Matcher[Future[T]] = awaitMatcher(m)(retries = 0, timeout)
   def retry[T](m: Matcher[T])(retries: Int)(using ee: ExecutionEnv): Matcher[Future[T]] = awaitMatcher(m)(retries, timeout = 1.second)
-
-  private[specs2]
-  class FutureAsResult[T](f: =>Future[T])(using ee: ExecutionEnv, asResult: AsResult[T]):
-    def await: Result =
-      await(retries = 0, timeout = 1.second)
-
-    def retry(retries: Int): Result =
-      await(retries, timeout = 1.second)
-
-    def awaitFor(timeout: FiniteDuration): Result =
-      await(retries = 0, timeout)
-
-    def await(retries: Int, timeout: FiniteDuration): Result =
-      futureAwait(f)(retries, timeout).fold(
-        timedout => checkResultFailure(Failure(s"Timeout after ${timedout.totalDuration + timedout.appliedTimeout} (retries = $retries, timeout = $timeout), timeFactor = ${timedout.timeFactor}")),
-        t => asResult.asResult(t)
-      )
 
   private[specs2] def awaitMatcher[T](m: Matcher[T])(retries: Int, timeout: FiniteDuration)(using ee: ExecutionEnv): Matcher[Future[T]] =
     new Matcher[Future[T]]:
@@ -76,3 +60,20 @@ trait FutureMatchers extends ExpectationsCreation:
             result(r.isSuccess, r.message, r.message, a)
 
 object FutureMatchers extends FutureMatchers
+
+private[specs2]
+class FutureAsResult[T](f: =>Future[T])(using ee: ExecutionEnv, asResult: AsResult[T]):
+  def await: Result =
+    await(retries = 0, timeout = 1.second)
+
+  def retry(retries: Int): Result =
+    await(retries, timeout = 1.second)
+
+  def awaitFor(timeout: FiniteDuration): Result =
+    await(retries = 0, timeout)
+
+  def await(retries: Int, timeout: FiniteDuration): Result =
+    futureAwait(f)(retries, timeout).fold(
+      timedout => checkResultFailure(Failure(s"Timeout after ${timedout.totalDuration + timedout.appliedTimeout} (retries = $retries, timeout = $timeout), timeFactor = ${timedout.timeFactor}")),
+      t => asResult.asResult(t)
+    )

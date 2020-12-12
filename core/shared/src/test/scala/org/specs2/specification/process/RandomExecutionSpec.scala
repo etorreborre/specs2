@@ -47,7 +47,7 @@ class RandomExecutionSpec(val env: Env) extends Specification with ThrownExpecta
     val fs_1_to_5 = Fragments((1 to 5).map(i => "e"+i ! ex(i)):_*)
     val fs_6_to_10 = Fragments((6 to 10).map(i => "e"+i ! ex(i)):_*)
     val spec = new Specification with RandomSequentialExecution { def is =
-      s2"""${fs_1_to_5.append(step("stop")).append(fs_6_to_10)}"""
+      s2"""${fs_1_to_5.append(step(ok)).append(fs_6_to_10)}"""
     }
     DefaultExecutor.runSpecificationAction(spec, ownEnv).runAction(ownEnv.executionEnv).map { _ =>
       val allExamples = allOf[String]((1 to n).map("ex"+_):_*)

@@ -67,13 +67,9 @@ class JUnitReporterSpec(val env: Env) extends Specification with OwnEnv {  def i
     def e9 =
       val messages = new ListBuffer[String]
       run {
-        step {
-          messages += "before"
-        } ^
+        step { messages += "before"; ok } ^
         "ex1" ! { messages += "ex1"; ok } ^
-        step {
-          messages += "after"
-        }
+        step { messages += "after"; ok}
       }(Env())
       messages.toList === Seq("before", "ex1", "after")
 

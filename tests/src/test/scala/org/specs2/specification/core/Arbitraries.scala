@@ -32,7 +32,7 @@ object Arbitraries:
     alphaStr.map(text)
 
   def genStep: Gen[Fragment] =
-    Gen.const(step(1 + 1))
+    Gen.const(step(success))
 
   def genFormatting: Gen[Fragment] =
     Gen.oneOf(

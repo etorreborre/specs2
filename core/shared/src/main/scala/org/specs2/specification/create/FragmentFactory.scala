@@ -31,8 +31,8 @@ trait FragmentFactory:
   def markSection(tag: NamedTag): Fragment
   def markSectionAs(tag: NamedTag): Fragment
 
-  def action[T](t: =>T): Fragment
-  def step[T](t: =>T): Fragment
+  def action[T : AsExecution](t: =>T): Fragment
+  def step[T : AsExecution](t: =>T): Fragment
 
   def text(t: String): Fragment
   def code(t: String): Fragment
@@ -74,8 +74,8 @@ trait DefaultFragmentFactory extends FragmentFactory:
   def markSection(tag: NamedTag): Fragment   = Fragment(Description.markSection(tag), Execution.NoExecution)
   def markSectionAs(tag: NamedTag): Fragment = Fragment(Description.markSectionAs(tag), Execution.NoExecution)
 
-  def action[T](t: =>T): Fragment = Fragment(NoText, result { Result.resultOrSuccess(t) })
-  def step[T](t: =>T): Fragment   = Fragment(NoText, result { Result.resultOrSuccess(t) }.join)
+  def action[T : AsExecution](t: =>T): Fragment = Fragment(NoText, AsExecution[T].execute(t))
+  def step[T : AsExecution](t: =>T): Fragment   = Fragment(NoText, AsExecution[T].execute(t).join)
 
   def text(t: String)           = Fragment(Text(t), Execution.NoExecution)
   def code(t: String)           = Fragment(Description.code(t), Execution.NoExecution)
@@ -131,8 +131,8 @@ class ContextualFragmentFactory(factory: FragmentFactory, context: Env => Contex
   def markSection(tag: NamedTag): Fragment         = factory.markSection(tag)
   def markSectionAs(tag: NamedTag): Fragment       = factory.markSectionAs(tag)
 
-  def action[T](t: =>T): Fragment                  = factory.action[T](t)
-  def step[T](t: =>T): Fragment                    = factory.step[T](t)
+  def action[T : AsExecution](t: =>T): Fragment    = factory.action[T](t)
+  def step[T : AsExecution](t: =>T): Fragment      = factory.step[T](t)
   def text(t: String): Fragment                    = factory.text(t)
   def code(t: String): Fragment                    = factory.code(t)
   def break: Fragment                              = factory.break
@@ -171,8 +171,8 @@ trait DelegatedFragmentFactory extends FragmentsFactory with FragmentFactory:
   def markSection(tag: NamedTag): Fragment      = factory.markSection(tag)
   def markSectionAs(tag: NamedTag): Fragment    = factory.markSectionAs(tag)
 
-  def action[T](t: =>T): Fragment               = factory.action[T](t)
-  def step[T](t: =>T): Fragment                 = factory.step[T](t)
+  def action[T : AsExecution](t: =>T): Fragment = factory.action[T](t)
+  def step[T : AsExecution](t: =>T): Fragment   = factory.step[T](t)
   def text(t: String): Fragment                 = factory.text(t)
   def code(t: String): Fragment                 = factory.code(t)
   def break: Fragment                           = factory.break

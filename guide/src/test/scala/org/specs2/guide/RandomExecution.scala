@@ -21,7 +21,7 @@ class RandomSequentialSpec extends Specification with RandomSequentialExecution 
  example1 $e1
  example2 $e2
  example3 $e3
- ${step("here".pp)}
+ ${step(success("here").pp)}
  example4 $e4
  example5 $e5
  example6 $e6

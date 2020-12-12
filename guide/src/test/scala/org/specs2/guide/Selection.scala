@@ -126,9 +126,9 @@ If you want you can execute only example 3 and 4 by running `sbt> testOnly *Sect
 Some specifications need to have `Steps` which will always be included whatever tags are specified on the command line. This is the case when defining a ${""""template" specification""" ~/ SpecificationTemplate} with setup/teardown steps: ${snippet{
 trait DatabaseSpec extends Specification {
   override def map(fs: =>Fragments) =
-    step("startDb") ^ tag(AlwaysTag) ^
+    step(success("startDb")) ^ tag(AlwaysTag) ^
     fs ^
-    step("cleanDb") ^ tag(AlwaysTag)
+    step(success("cleanDb")) ^ tag(AlwaysTag)
 }
 }}
 
