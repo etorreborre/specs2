@@ -2,7 +2,7 @@ package org.specs2
 package matcher
 
 import io._
-import FileName._ 
+import FileName._
 import specification.BeforeAfterEach
 import control._
 import text.LinesContent
@@ -26,7 +26,7 @@ class ContentMatchersSpec extends Spec with LinesContentMatchers with BeforeAfte
 
   lazy val dir = "target" / "test" / "contents"
 
-  def before =
+  def before = step {
     val action =
       fs.writeFile(dir | f1, "hello\nbeautiful\nworld")         >>
       fs.writeFile(dir | f2, "hello\nbeautiful\nworld")         >>
@@ -37,9 +37,10 @@ class ContentMatchersSpec extends Spec with LinesContentMatchers with BeforeAfte
       fs.writeFile(dir | f7, "good\nday\ncrazy\nworld")         >>
       fs.writeFile(dir | f8, "good\nday\ncrazy\nworld\nworld")
 
-    action.runOption
+    action.runVoid
+  }
 
-  def after = fs.delete(dir).runOption
+  def after = step(fs.delete(dir).runVoid)
 
 }
 
@@ -76,4 +77,3 @@ trait TestFileNames:
   import FileName._
 
   lazy val (f1, f2, f3, f4, f5, f6, f7, f8) = (unsafe("f1"), unsafe("f2"), unsafe("f3"), unsafe("f3"), unsafe("f5"), unsafe("f6"), unsafe("f7"), unsafe("f8"))
-

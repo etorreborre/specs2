@@ -12,7 +12,7 @@ import java.io.{FileDescriptor, FileOutputStream, OutputStream, PrintStream}
  * executing specifications and examples concurrently
  *
  */
-trait NoStdOut extends Around:
+trait NoStdOut:
   def around[T : AsResult](t: =>T): Result =
     try
       // both System.out and Console.out must be swapped because Console keeps
@@ -40,4 +40,5 @@ object NullOutputStream extends OutputStream:
  * of a Specification
  */
 trait NoStdOutAroundEach extends AroundEach:
-  def around[T : AsResult](t: =>T): Result = NoStdOut(t)
+  def around[T : AsResult](t: =>T): Result =
+    NoStdOut.around(t)

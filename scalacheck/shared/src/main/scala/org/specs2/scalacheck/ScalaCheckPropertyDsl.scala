@@ -19,7 +19,6 @@ trait ScalaCheckPropertyDsl extends FragmentsFactory with AsResultProp:
       Fragments(fragmentFactory.break, fragmentFactory.example(name, prop))
     }
 
-
 case class ScalaCheckProp(prop: Prop, parameters: Parameters, prettyFreqMap: FreqMap[Set[Any]] => Pretty) extends ScalaCheckProperty:
   type SelfType = ScalaCheckProp
 

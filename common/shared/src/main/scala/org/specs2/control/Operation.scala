@@ -48,14 +48,14 @@ case class Operation[A](operation: () => Throwable Either A, last: Vector[Finali
   def runMonoid(using m: Monoid[A]): A =
     runOption.getOrElse(m.zero)
 
-  def runVoid(): Unit =
+  def runVoid: Unit =
     runOption; ()
 
   def addLast(finalizer: Finalizer): Operation[A] =
     copy(last = last :+ finalizer)
 
   def thenFinally(operation: Operation[A]): Operation[A] =
-    addLast(Finalizer(() => operation.runVoid()))
+    addLast(Finalizer(() => operation.runVoid))
 
   def orElse(other: Operation[A]): Operation[A] =
     attempt.flatMap {

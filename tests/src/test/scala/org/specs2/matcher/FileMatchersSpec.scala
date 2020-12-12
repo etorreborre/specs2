@@ -5,10 +5,10 @@ import java.io.File
 import io._
 import FileName._
 import execute.StandardResults
-import org.specs2.specification._
+import specification._
 import control._
 
-class FileMatchersSpec extends Spec with TestFiles with FileMatchers {  def is = sequential ^ s2"""
+class FileMatchersSpec extends Specification with TestFiles with FileMatchers {  def is = sequential ^ s2"""
 
  The FileMatchers trait provides matchers to check files and paths.
 
@@ -98,7 +98,8 @@ class FileMatchersSpec extends Spec with TestFiles with FileMatchers {  def is =
 
 }
 
-case class fs() extends MustMatchers with TestFiles with FileMatchers with StandardResults with Debug:
+case class fs() extends TestFiles with FileMatchers:
+  def is = ""
   def e1 = okPath must beAnExistingPath
   def e2 = missingPath must not(beAnExistingPath)
   def e3 = setReadable(okPath, true) must beAReadablePath
@@ -114,7 +115,7 @@ case class fs() extends MustMatchers with TestFiles with FileMatchers with Stand
 
 
 
-trait TestFiles extends BeforeAfterEach:
+trait TestFiles extends Specification with BeforeAfterEach:
   val fileSystem = FileSystem(NoLogger)
 
   lazy val directoryPath: DirectoryPath = "target" / "test" / "fs"
@@ -124,10 +125,10 @@ trait TestFiles extends BeforeAfterEach:
   lazy val missingPath = "absent"
 
   def before =
-    fileSystem.writeFile(okFilePath, "").runOption
+    step(fileSystem.writeFile(okFilePath, "").runVoid)
 
   def after =
-    fileSystem.delete(directoryPath).runOption
+    step(fileSystem.delete(directoryPath).runVoid)
 
   def setReadable(path: String, r: Boolean) =
     new File(path).setReadable(r)

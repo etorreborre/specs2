@@ -3,151 +3,81 @@ package specification
 
 import core._
 import execute._
-import specification.create.{Interpolated, S2StringContext, ContextualFragmentFactory, FragmentFactory, FragmentsFactory}
+import specification.create._
 import data.AlwaysTag
-import main.CommandLine
 
 /**
- * For each created example use a given context
+ * Run a given fragment before each fragment
  */
-trait EachContext extends FragmentsFactory:
+trait BeforeEach extends SpecificationStructure:
+  protected def before: Fragments
 
-  protected def context(env: Env): Context
-
-  override protected def fragmentFactory: FragmentFactory =
-    new ContextualFragmentFactory(super.fragmentFactory, context)
+  override def flatMap(f: Fragment): Fragments =
+    before.append(f)
 
 /**
- * For each created example use a context using the command line arguments
+ * Run a given fragment after each fragment
  */
-trait ContextWithCommandLineArguments extends FragmentsFactory:
-  protected def context(env: CommandLine): Context
+trait AfterEach extends SpecificationStructure:
+  protected def after: Fragments
 
-  override protected def fragmentFactory: FragmentFactory =
-    new ContextualFragmentFactory(super.fragmentFactory, (env: Env) => context(env.arguments.commandLine))
+  override def flatMap(f: Fragment): Fragments =
+    after.prepend(f)
 
 /**
- * For each created example use a given before action
+ * Run a given fragment before and after each fragment
  */
-trait BeforeEach extends FragmentsFactory:
-  private val outer = this
+trait BeforeAfterEach extends SpecificationStructure:
+  protected def before: Fragments
+  protected def after: Fragments
 
-  protected def before: Any
-
-  protected def beforeContext(env: Env): Context =
-    new Before:
-      def before = outer.before
-
-  override protected def fragmentFactory: FragmentFactory =
-    new ContextualFragmentFactory(super.fragmentFactory, beforeContext)
+  override def flatMap(f: Fragment): Fragments =
+    before.append(f).append(after)
 
 /**
- * For each created example use a given after action
+ * Run a function around each execution result
  */
-trait AfterEach extends FragmentsFactory:
-  private val outer = this
+trait AroundEach extends SpecificationStructure:
+  protected def around[T : AsResult](t: =>T): Result
 
-  protected def after: Any
-
-  protected def afterContext(env: Env): Context =
-    new After:
-      def after = outer.after
-
-  override protected def fragmentFactory: FragmentFactory =
-    new ContextualFragmentFactory(super.fragmentFactory, afterContext)
-
-/**
- * For each created example use a given before action
- */
-trait BeforeAfterEach extends FragmentsFactory:
-  private val outer = this
-
-  protected def before: Any
-  protected def after: Any
-
-  protected def beforeAfterContext(env: Env): Context =
-    new BeforeAfter:
-      def before = outer.before
-      def after = outer.after
-
-  override protected def fragmentFactory: FragmentFactory =
-    new ContextualFragmentFactory(super.fragmentFactory, beforeAfterContext)
-
-/**
- * For each created example use a given around action
- */
-trait AroundEach extends FragmentsFactory:
-  private val outer = this
-
-  protected def around[R : AsResult](r: =>R): Result
-
-  protected def aroundContext(env: Env): Context =
-    new Around:
-      def around[R : AsResult](r: =>R): Result = outer.around(r)
-
-  override protected def fragmentFactory: FragmentFactory =
-    new ContextualFragmentFactory(super.fragmentFactory, aroundContext)
+  override def flatMap(f: Fragment): Fragments =
+    f.updateResult(around)
 
 /**
  * For each created example use a given fixture object
  */
-trait ForEach[T] extends FragmentsFactory:
+trait ForEach[T]:
 
-  protected def foreach[R : AsResult](f: T => R): Result
+  protected def foreach[R : AsExecution](f: T => R): R
 
-  protected def foreachContext(env: Env): Context =
-    new Around:
-      def around[R : AsResult](r: =>R) = AsResult(r)
-
-  given [R : AsResult] as AsResult[T => R] =
-    new AsResult[T => R]:
-      def asResult(f: =>(T => R)) = foreach(f)
-
-  override protected def fragmentFactory: FragmentFactory =
-    new ContextualFragmentFactory(super.fragmentFactory, foreachContext)
-
-/**
- * For each example but inject data depending on command line arguments
- */
-trait ForEachWithCommandLineArguments[T] extends FragmentsFactory { outer: S2StringContext =>
-
-  protected def foreach[R : AsResult](commandLine: CommandLine)(f: T => R): Result
-
-  protected def foreachWithCommandLineContext(env: Env): Context =
-    new Around:
-      def around[R : AsResult](r: =>R) = AsResult(r)
-
-  def foreachFunctionToExecution[R : AsResult](f: T => R): Execution =
-    Execution.withEnv((env: Env) => foreach(env.arguments.commandLine)(f))
-
-  inline def foreachFunctionIsInterpolated[R : AsResult](f: =>(T => R)): Interpolated =
-    ${S2StringContext.executionInterpolated('{foreachFunctionToExecution(f)}, '{outer.fragmentFactory})}
-
-  override protected def fragmentFactory: FragmentFactory =
-    new ContextualFragmentFactory(super.fragmentFactory, foreachWithCommandLineContext)
-
-}
+  given [R : AsExecution] as AsExecution[T => R]:
+    def execute(f: =>(T => R)): Execution =
+      AsExecution[R].execute(foreach(f))
 
 /**
  * Execute some fragments before all others
  */
 trait BeforeSpec extends SpecificationStructure:
-  def beforeSpec: core.Fragments
-  override def map(fs: =>core.Fragments) = super.map(fs).prepend(beforeSpec)
+  def beforeSpec: Fragments
+
+  override def map(fs: =>Fragments): Fragments =
+    super.map(fs).prepend(beforeSpec)
 
 /**
  * Execute some fragments after all others
  */
 trait AfterSpec extends SpecificationStructure:
-  def afterSpec: core.Fragments
+  def afterSpec: Fragments
 
-  override def map(fs: =>core.Fragments): core.Fragments =
+  override def map(fs: =>Fragments): Fragments =
     super.map(fs).append(afterSpec)
 
 /**
  * Execute some fragments before and after all others
  */
 trait BeforeAfterSpec extends SpecificationStructure:
-  def beforeSpec: core.Fragments
-  def afterSpec: core.Fragments
-  override def map(fs: =>core.Fragments) = super.map(fs).prepend(beforeSpec).append(afterSpec)
+  def beforeSpec: Fragments
+  def afterSpec: Fragments
+
+  override def map(fs: =>Fragments): Fragments =
+    super.map(fs).prepend(beforeSpec).append(afterSpec)

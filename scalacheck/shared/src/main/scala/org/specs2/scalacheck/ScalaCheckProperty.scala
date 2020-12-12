@@ -84,35 +84,9 @@ trait ScalaCheckProperty:
  *  - Shrink to shrink counter-examples
  *  - Show to display arguments in case of a counter-example
  *  - Collector to collect values and provide a summary as string (to show frequencies for example)
- *
- *  A Context can be added to setup/teardown state before/after/around each property execution
  */
 trait ScalaCheckFunction extends ScalaCheckProperty:
   def noShrink: SelfType
-
-  def context: Option[Context]
-
-  def setContext(context: Context): SelfType
-
-  def before(action: =>Any): SelfType =
-    setContext(Before.create(action))
-
-  def after(action: =>Any): SelfType =
-    setContext(After.create(action))
-
-  def beforeAfter(beforeAction: =>Any, afterAction: =>Any): SelfType =
-    setContext(BeforeAfter.create(beforeAction, afterAction))
-
-  def around(action: Result => Result): SelfType =
-    setContext(Around.create(action))
-
-  protected def executeInContext[R : AsResult](result: =>R) =
-    lazy val executed = result
-    context.foreach(_(executed))
-    executed match
-      case p: Prop => p
-      case other   => other
-
 
 case class ScalaCheckFunction1[T, R](
   execute:       T => R,
@@ -122,7 +96,6 @@ case class ScalaCheckFunction1[T, R](
   pretty:        T => Pretty,
   prettyFreqMap: FreqMap[Set[Any]] => Pretty,
   asResult:      AsResult[R],
-  context:       Option[Context],
   parameters:    Parameters) extends ScalaCheckFunction:
 
   type SelfType = ScalaCheckFunction1[T, R]
@@ -133,7 +106,6 @@ case class ScalaCheckFunction1[T, R](
 
   lazy val propFunction = (t: T) => {
     lazy val executed = execute(t)
-    executeInContext(executed)
     collectors.foldLeft(executed: Prop)((p, c) => Prop.collect(c(t))(p))
   }
 
@@ -169,12 +141,6 @@ case class ScalaCheckFunction1[T, R](
   def collectArg(f: T => Any): SelfType =
     copy(collectors = collectors :+ f, pretty = pretty1)
 
-  def prepare(action: T => T): SelfType =
-    copy(execute = (t: T) => execute(action(t)), pretty = pretty1)
-
-  def setContext(context: Context): SelfType =
-    copy(context = Some(context), pretty = pretty1)
-
   def setSeed(seed: Seed): SelfType =
     copy(parameters = parameters.copy(seed = Some(seed)), pretty = pretty1)
 
@@ -186,7 +152,6 @@ case class ScalaCheckFunction2[T1, T2, R](
   argInstances1: ScalaCheckArgInstances[T1], argInstances2: ScalaCheckArgInstances[T2],
   prettyFreqMap: FreqMap[Set[Any]] => Pretty,
   asResult: AsResult[R],
-  context: Option[Context],
   parameters: Parameters) extends ScalaCheckFunction {
 
   type SelfType = ScalaCheckFunction2[T1, T2, R]
@@ -199,7 +164,6 @@ case class ScalaCheckFunction2[T1, T2, R](
 
   lazy val propFunction = (t1: T1, t2: T2) => {
     lazy val executed = execute(t1, t2)
-    executeInContext(executed)
     argInstances1.collect(t1, argInstances2.collect(t2, executed))
   }
 
@@ -246,11 +210,6 @@ case class ScalaCheckFunction2[T1, T2, R](
   def collectAll: SelfType =
     collect1.collect2
 
-  def prepare(action: (T1, T2) => (T1, T2)): SelfType =
-    copy(execute = (t1: T1, t2: T2) => execute.tupled(action(t1, t2)))
-
-  def setContext(context: Context): SelfType = copy(context = Some(context))
-
   def setParameters(ps: Parameters): SelfType = copy(parameters = ps)
 
   def setSeed(seed: Seed): SelfType =
@@ -266,7 +225,6 @@ case class ScalaCheckFunction3[T1, T2, T3, R](
   argInstances1: ScalaCheckArgInstances[T1], argInstances2: ScalaCheckArgInstances[T2], argInstances3: ScalaCheckArgInstances[T3],
   prettyFreqMap: FreqMap[Set[Any]] => Pretty,
   asResult: AsResult[R],
-  context: Option[Context],
   parameters: Parameters) extends ScalaCheckFunction {
 
   type SelfType = ScalaCheckFunction3[T1, T2, T3, R]
@@ -281,7 +239,6 @@ case class ScalaCheckFunction3[T1, T2, T3, R](
 
   lazy val propFunction = (t1: T1, t2: T2, t3: T3) => {
     lazy val executed = execute(t1, t2, t3)
-    executeInContext(executed)
     argInstances1.collect(t1, argInstances2.collect(t2, argInstances3.collect(t3, executed)))
   }
 
@@ -335,11 +292,6 @@ case class ScalaCheckFunction3[T1, T2, T3, R](
   def collectAll: SelfType =
     collect1.collect2.collect3
 
-  def prepare(action: (T1, T2, T3) => (T1, T2, T3)): SelfType =
-    copy(execute = (t1: T1, t2: T2, t3: T3) => execute.tupled(action(t1, t2, t3)))
-
-  def setContext(context: Context): SelfType = copy(context = Some(context))
-
   def setParameters(ps: Parameters): SelfType = copy(parameters = ps)
 
   def setSeed(seed: Seed): SelfType =
@@ -355,7 +307,6 @@ case class ScalaCheckFunction4[T1, T2, T3, T4, R](
   argInstances1: ScalaCheckArgInstances[T1], argInstances2: ScalaCheckArgInstances[T2], argInstances3: ScalaCheckArgInstances[T3], argInstances4: ScalaCheckArgInstances[T4],
   prettyFreqMap: FreqMap[Set[Any]] => Pretty,
   asResult: AsResult[R],
-  context: Option[Context],
   parameters: Parameters) extends ScalaCheckFunction {
 
   type SelfType = ScalaCheckFunction4[T1, T2, T3, T4, R]
@@ -372,7 +323,6 @@ case class ScalaCheckFunction4[T1, T2, T3, T4, R](
 
   lazy val propFunction = (t1: T1, t2: T2, t3: T3, t4: T4) => {
     lazy val executed = execute(t1, t2, t3, t4)
-    executeInContext(executed)
     argInstances1.collect(t1, argInstances2.collect(t2, argInstances3.collect(t3, argInstances4.collect(t4, executed))))
   }
 
@@ -433,11 +383,6 @@ case class ScalaCheckFunction4[T1, T2, T3, T4, R](
   def collectAll: SelfType =
     collect1.collect2.collect3.collect4
 
-  def prepare(action: (T1, T2, T3, T4) => (T1, T2, T3, T4)): SelfType =
-    copy(execute = (t1: T1, t2: T2, t3: T3, t4: T4) => execute.tupled(action(t1, t2, t3, t4)))
-
-  def setContext(context: Context): SelfType = copy(context = Some(context))
-
   def setParameters(ps: Parameters): SelfType = copy(parameters = ps)
 
   def setSeed(seed: Seed): SelfType =
@@ -453,7 +398,6 @@ case class ScalaCheckFunction5[T1, T2, T3, T4, T5, R](
   argInstances1: ScalaCheckArgInstances[T1], argInstances2: ScalaCheckArgInstances[T2], argInstances3: ScalaCheckArgInstances[T3], argInstances4: ScalaCheckArgInstances[T4], argInstances5: ScalaCheckArgInstances[T5],
   prettyFreqMap: FreqMap[Set[Any]] => Pretty,
   asResult: AsResult[R],
-  context: Option[Context],
   parameters: Parameters) extends ScalaCheckFunction {
 
   type SelfType = ScalaCheckFunction5[T1, T2, T3, T4, T5, R]
@@ -472,7 +416,6 @@ case class ScalaCheckFunction5[T1, T2, T3, T4, T5, R](
 
   lazy val propFunction = (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5) => {
     lazy val executed = execute(t1, t2, t3, t4, t5)
-    executeInContext(executed)
     argInstances1.collect(t1, argInstances2.collect(t2, argInstances3.collect(t3, argInstances4.collect(t4, argInstances5.collect(t5, executed)))))
   }
 
@@ -540,11 +483,6 @@ case class ScalaCheckFunction5[T1, T2, T3, T4, T5, R](
   def collectAll: SelfType =
     collect1.collect2.collect3.collect4.collect5
 
-  def prepare(action: (T1, T2, T3, T4, T5) => (T1, T2, T3, T4, T5)): SelfType =
-    copy(execute = (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5) => execute.tupled(action(t1, t2, t3, t4, t5)))
-
-  def setContext(context: Context): SelfType = copy(context = Some(context))
-
   def setParameters(ps: Parameters): SelfType = copy(parameters = ps)
 
   def setSeed(seed: Seed): SelfType =
@@ -560,7 +498,6 @@ case class ScalaCheckFunction6[T1, T2, T3, T4, T5, T6, R](
   argInstances1: ScalaCheckArgInstances[T1], argInstances2: ScalaCheckArgInstances[T2], argInstances3: ScalaCheckArgInstances[T3], argInstances4: ScalaCheckArgInstances[T4], argInstances5: ScalaCheckArgInstances[T5], argInstances6: ScalaCheckArgInstances[T6],
   prettyFreqMap: FreqMap[Set[Any]] => Pretty,
   asResult: AsResult[R],
-  context: Option[Context],
   parameters: Parameters) extends ScalaCheckFunction {
 
   type SelfType = ScalaCheckFunction6[T1, T2, T3, T4, T5, T6, R]
@@ -581,7 +518,6 @@ case class ScalaCheckFunction6[T1, T2, T3, T4, T5, T6, R](
 
   lazy val propFunction = (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6) => {
     lazy val executed = execute(t1, t2, t3, t4, t5, t6)
-    executeInContext(executed)
     argInstances1.collect(t1, argInstances2.collect(t2, argInstances3.collect(t3, argInstances4.collect(t4, argInstances5.collect(t5, argInstances6.collect(t6, executed))))))
   }
 
@@ -656,11 +592,6 @@ case class ScalaCheckFunction6[T1, T2, T3, T4, T5, T6, R](
   def collectAll: SelfType =
     collect1.collect2.collect3.collect4.collect5.collect6
 
-  def prepare(action: (T1, T2, T3, T4, T5, T6) => (T1, T2, T3, T4, T5, T6)): SelfType =
-    copy(execute = (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6) => execute.tupled(action(t1, t2, t3, t4, t5, t6)))
-
-  def setContext(context: Context): SelfType = copy(context = Some(context))
-
   def setParameters(ps: Parameters): SelfType = copy(parameters = ps)
 
   def setSeed(seed: Seed): SelfType =
@@ -676,7 +607,6 @@ case class ScalaCheckFunction7[T1, T2, T3, T4, T5, T6, T7, R](
   argInstances1: ScalaCheckArgInstances[T1], argInstances2: ScalaCheckArgInstances[T2], argInstances3: ScalaCheckArgInstances[T3], argInstances4: ScalaCheckArgInstances[T4], argInstances5: ScalaCheckArgInstances[T5], argInstances6: ScalaCheckArgInstances[T6], argInstances7: ScalaCheckArgInstances[T7],
   prettyFreqMap: FreqMap[Set[Any]] => Pretty,
   asResult: AsResult[R],
-  context: Option[Context],
   parameters: Parameters) extends ScalaCheckFunction {
 
   type SelfType = ScalaCheckFunction7[T1, T2, T3, T4, T5, T6, T7, R]
@@ -699,7 +629,6 @@ case class ScalaCheckFunction7[T1, T2, T3, T4, T5, T6, T7, R](
 
   lazy val propFunction = (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7) => {
     lazy val executed = execute(t1, t2, t3, t4, t5, t6, t7)
-    executeInContext(executed)
     argInstances1.collect(t1, argInstances2.collect(t2, argInstances3.collect(t3, argInstances4.collect(t4, argInstances5.collect(t5, argInstances6.collect(t6, argInstances7.collect(t7, executed)))))))
   }
 
@@ -781,11 +710,6 @@ case class ScalaCheckFunction7[T1, T2, T3, T4, T5, T6, T7, R](
   def collectAll: SelfType =
     collect1.collect2.collect3.collect4.collect5.collect6.collect7
 
-  def prepare(action: (T1, T2, T3, T4, T5, T6, T7) => (T1, T2, T3, T4, T5, T6, T7)): SelfType =
-    copy(execute = (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7) => execute.tupled(action(t1, t2, t3, t4, t5, t6, t7)))
-
-  def setContext(context: Context): SelfType = copy(context = Some(context))
-
   def setParameters(ps: Parameters): SelfType = copy(parameters = ps)
 
   def setSeed(seed: Seed): SelfType =
@@ -801,7 +725,6 @@ case class ScalaCheckFunction8[T1, T2, T3, T4, T5, T6, T7, T8, R](
   argInstances1: ScalaCheckArgInstances[T1], argInstances2: ScalaCheckArgInstances[T2], argInstances3: ScalaCheckArgInstances[T3], argInstances4: ScalaCheckArgInstances[T4], argInstances5: ScalaCheckArgInstances[T5], argInstances6: ScalaCheckArgInstances[T6], argInstances7: ScalaCheckArgInstances[T7], argInstances8: ScalaCheckArgInstances[T8],
   prettyFreqMap: FreqMap[Set[Any]] => Pretty,
   asResult: AsResult[R],
-  context: Option[Context],
   parameters: Parameters) extends ScalaCheckFunction {
 
   type SelfType = ScalaCheckFunction8[T1, T2, T3, T4, T5, T6, T7, T8, R]
@@ -826,7 +749,6 @@ case class ScalaCheckFunction8[T1, T2, T3, T4, T5, T6, T7, T8, R](
 
   lazy val propFunction = (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8) => {
     lazy val executed = execute(t1, t2, t3, t4, t5, t6, t7, t8)
-    executeInContext(executed)
     argInstances1.collect(t1, argInstances2.collect(t2, argInstances3.collect(t3, argInstances4.collect(t4, argInstances5.collect(t5, argInstances6.collect(t6, argInstances7.collect(t7, argInstances8.collect(t8, executed))))))))
   }
 
@@ -915,11 +837,6 @@ case class ScalaCheckFunction8[T1, T2, T3, T4, T5, T6, T7, T8, R](
   def collectAll: SelfType =
     collect1.collect2.collect3.collect4.collect5.collect6.collect7.collect8
 
-  def prepare(action: (T1, T2, T3, T4, T5, T6, T7, T8) => (T1, T2, T3, T4, T5, T6, T7, T8)): SelfType =
-    copy(execute = (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8) => execute.tupled(action(t1, t2, t3, t4, t5, t6, t7, t8)))
-
-  def setContext(context: Context): SelfType = copy(context = Some(context))
-
   def setParameters(ps: Parameters): SelfType = copy(parameters = ps)
 
   def setSeed(seed: Seed): SelfType =
@@ -963,7 +880,6 @@ case class ScalaCheckFunction$n[${TNList(n)}, R](
   ${(1 to n).map(i => s"argInstances$i: ScalaCheckArgInstances[T$i]").mkString(", ") },
   prettyFreqMap: FreqMap[Set[Any]] => Pretty,
   asResult: AsResult[R],
-  context: Option[Context],
   parameters: Parameters) extends ScalaCheckFunction {
 
   type SelfType = ScalaCheckFunction$n[${TNList(n)}, R]
@@ -974,7 +890,6 @@ case class ScalaCheckFunction$n[${TNList(n)}, R](
 
   lazy val propFunction = (${TNParamList(n)}) => {
     lazy val executed = execute(${NParamList(n)})
-    executeInContext(executed)
     ${(1 to n).reverse.foldLeft("executed"){ (res, i) => s"argInstances$i.collect(t$i, $res)"}}
   }
 
@@ -1015,11 +930,6 @@ case class ScalaCheckFunction$n[${TNList(n)}, R](
 
   def collectAll: SelfType =
     ${(1 to n).map(i => s"collect$i").mkString(".")}
-
-  def prepare(action: (${TNList(n)}) => (${TNList(n)})): SelfType =
-    copy(execute = (${TNParamList(n)}) => execute.tupled(action(${NParamList(n)})))
-
-  def setContext(context: Context): SelfType = copy(context = Some(context))
 
   def setParameters(ps: Parameters): SelfType = copy(parameters = ps)
 

@@ -4,7 +4,7 @@ package guide
 import main._
 import execute.AsResult
 import org.specs2.specification.core.Fragment
-import org.specs2.specification.{BeforeAfterSpec, ContextWithCommandLineArguments, ForEachWithCommandLineArguments, Before}
+import org.specs2.specification.{BeforeAfterSpec, Before}
 
 object UseCommandLineArguments extends UserGuidePage { def is = "Use command-line arguments".title ^ s2"""
 
@@ -85,47 +85,5 @@ trait DbSpec extends Specification with BeforeAfterSpec {
 }
 }}
 
-
-### Control a context
-
-The next thing you might want to control is contexts. Instead of using the `BeforeEach` / `AfterEach` / `AroundEach` traits directly you will need to implement the `ContextWithCommandLineArguments` trait and provide the appropriate context object:${snippet{
-class SpecificationWithArgs extends Specification with ContextWithCommandLineArguments { def is = s2"""
- This is a specification with a context depending on command line arguments
-  with one example $ok
-"""
-  /** you need to define this method */
-  def context = (commandLine: CommandLine) =>
-    new Before {
-      def before = if (commandLine.isSet("dobefore")) println("before!")
-    }
-}
-}}
-
-### Control data injection
-
-The final situation where you would need to use command-line arguments is with a `ForEach` trait. If you want to influence the injection of data with the command line, the `ForEachWithCommandLineArguments` trait needs to be mixed in:${snippet{
-class SpecificationWithArgs extends Specification with ForEachWithCommandLineArguments[Int] { def is = s2"""
- This is a specification
-  with one example using injected data ${ (i: Int) => i must ===(i })
-"""
-  /** you need to define this method */
-  def foreach[R : AsResult](commandLine: CommandLine)(f: Int => R) =
-    AsResult(f(commandLine.int("value").getOrElse(0)))
-}
-}}
-
-And for a mutable specification:${snippet{
-class SpecificationWithArgs extends mutable.Specification with specification.mutable.ForEachWithCommandLine[Int] {
-  "This is a specification" >> {
-    "with one example using injected data" >> { (i: Int) =>
-      i must ===(i)
-    }
-   }
-
-   /** you need to define this method */
-   def foreach[R : AsResult](commandLine: CommandLine)(f: Int => R) =
-     AsResult(f(commandLine.int("value").getOrElse(0)))
-}
-}}
 """
 }

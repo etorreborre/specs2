@@ -24,41 +24,41 @@ Applicative effects must be evaluated in the right order
 
   def ap2Order =
     val evaluated = new ListBuffer[Int]
-    ap2(doIt(1, evaluated), doIt(2, evaluated))(Operation.ok((_:Int,_:Int) => 0)).runVoid()
+    ap2(doIt(1, evaluated), doIt(2, evaluated))(Operation.ok((_:Int,_:Int) => 0)).runVoid
     evaluated.toList === List(1, 2)
 
   def ap3Order =
     val evaluated = new ListBuffer[Int]
-    ap3(doIt(1, evaluated), doIt(2, evaluated), doIt(3, evaluated))(Operation.ok((_:Int,_:Int,_:Int) => 0)).runVoid()
+    ap3(doIt(1, evaluated), doIt(2, evaluated), doIt(3, evaluated))(Operation.ok((_:Int,_:Int,_:Int) => 0)).runVoid
     evaluated.toList === List(1, 2, 3)
 
   def ap4Order =
     val evaluated = new ListBuffer[Int]
-    ap4(doIt(1, evaluated), doIt(2, evaluated), doIt(3, evaluated), doIt(4, evaluated))(Operation.ok((_:Int,_:Int,_:Int,_:Int) => 0)).runVoid()
+    ap4(doIt(1, evaluated), doIt(2, evaluated), doIt(3, evaluated), doIt(4, evaluated))(Operation.ok((_:Int,_:Int,_:Int,_:Int) => 0)).runVoid
     evaluated.toList === List(1, 2, 3, 4)
 
   def ap5Order =
     val evaluated = new ListBuffer[Int]
     ap5(doIt(1, evaluated), doIt(2, evaluated), doIt(3, evaluated), doIt(4, evaluated),
-      doIt(5, evaluated))(Operation.ok((_:Int,_:Int,_:Int,_:Int,_:Int) => 0)).runVoid()
+      doIt(5, evaluated))(Operation.ok((_:Int,_:Int,_:Int,_:Int,_:Int) => 0)).runVoid
     evaluated.toList === List(1, 2, 3, 4, 5)
 
   def ap6Order =
     val evaluated = new ListBuffer[Int]
     ap6(doIt(1, evaluated), doIt(2, evaluated), doIt(3, evaluated), doIt(4, evaluated),
-      doIt(5, evaluated), doIt(6, evaluated))(Operation.ok((_:Int,_:Int,_:Int,_:Int,_:Int,_:Int) => 0)).runVoid()
+      doIt(5, evaluated), doIt(6, evaluated))(Operation.ok((_:Int,_:Int,_:Int,_:Int,_:Int,_:Int) => 0)).runVoid
     evaluated.toList === List(1, 2, 3, 4, 5, 6)
 
   def ap7Order =
     val evaluated = new ListBuffer[Int]
     ap7(doIt(1, evaluated), doIt(2, evaluated), doIt(3, evaluated), doIt(4, evaluated),
-      doIt(5, evaluated), doIt(6, evaluated), doIt(7, evaluated))(Operation.ok((_:Int,_:Int,_:Int,_:Int,_:Int,_:Int,_:Int) => 0)).runVoid()
+      doIt(5, evaluated), doIt(6, evaluated), doIt(7, evaluated))(Operation.ok((_:Int,_:Int,_:Int,_:Int,_:Int,_:Int,_:Int) => 0)).runVoid
     evaluated.toList === List(1, 2, 3, 4, 5, 6, 7)
 
   def ap8Order =
     val evaluated = new ListBuffer[Int]
     ap8(doIt(1, evaluated), doIt(2, evaluated), doIt(3, evaluated), doIt(4, evaluated),
-      doIt(5, evaluated), doIt(6, evaluated), doIt(7, evaluated), doIt(8, evaluated))(Operation.ok((_:Int,_:Int,_:Int,_:Int,_:Int,_:Int,_:Int,_:Int) => 0)).runVoid()
+      doIt(5, evaluated), doIt(6, evaluated), doIt(7, evaluated), doIt(8, evaluated))(Operation.ok((_:Int,_:Int,_:Int,_:Int,_:Int,_:Int,_:Int,_:Int) => 0)).runVoid
     evaluated.toList === List(1, 2, 3, 4, 5, 6, 7, 8)
 
   def listTraverse =

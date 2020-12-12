@@ -23,10 +23,6 @@ trait LazyConversions:
   implicit def lazyParameter[T](value: =>T): Lazy[T] =
     new Lazy(() => value)
 
-  /** allow byname parameters to be used with conversions */
-  implicit def convertByName[T, S](t: =>T)(using convert: Conversion[Lazy[T], S], not: Not[DontConvertTo[S]]): S =
-    convert(t)
-
 trait DontConvertTo[T]
 
 object LazyConversions extends LazyConversions
