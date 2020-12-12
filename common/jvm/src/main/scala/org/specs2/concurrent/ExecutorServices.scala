@@ -90,7 +90,7 @@ object ExecutorServices:
 
   def createExecutionContext(executorService: ExecutorService, verbose: Boolean, systemLogger: Logger): ExecutionContext =
     ExecutionContext.fromExecutorService(executorService,
-      (t: Throwable) => { systemLogger.exception(t, verbose).runVoid() })
+      (t: Throwable) => { systemLogger.exception(t, verbose).runVoid })
 
   def fixedExecutor(threadsNb: Int, name: String): ExecutorService =
     Executors.newFixedThreadPool(threadsNb, NamedThreadFactory(name))

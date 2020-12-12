@@ -9,30 +9,12 @@ import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
 
 /**
- * This trait can be used to add a global time out to each example or for a specific one:
- *
- *  - for each example mix-in the trait
- *  - for a single example import the object and use the upTo context:
- *
- *   my example must terminate in a reasonable amount of time \${upTo(3.seconds)(e1)}
+ * This trait can be used to add a global time out to each example
  */
-trait ExamplesTimeout extends EachContext with AroundTimeout:
+trait ExamplesTimeout extends SpecificationStructure:
 
-  def context(env: Env): Context =
-    val timeout = env.arguments.commandLine.intOr("timeout", 1000 * 60).millis
-    aroundTimeout(timeout)(using env.executionEnv)
-
-object ExamplesTimeout extends ExamplesTimeout
-
-trait AroundTimeout:
-
-  def upTo[T](to: Duration)(t: =>T)(using asResult: AsResult[T], ee: ExecutionEnv) =
-    aroundTimeout(to)(using ee)(t)
-
-  def aroundTimeout(to: Duration)(using ee: ExecutionEnv): Around =
-    new Around:
-      def around[T : AsResult](t: =>T) =
-        try Await.result(Future(AsResult(t))(ee.executionContext), to)
-        catch { case e: Exception => Skipped("TIMEOUT!!! "+to.toString) }
-
-object AroundTimeout extends AroundTimeout
+  override def flatMap(f: Fragment): Fragments =
+    f.updateExecutionWithEnv { (execution, env) =>
+      val timeout = env.arguments.commandLine.intOr("timeout", 1000 * 60).millis
+      execution.setTimeout(timeout)
+    }

@@ -6,6 +6,7 @@ import execute._
 import main._
 import specification.core._
 import specification.create._
+import scala.reflect.Selectable.reflectiveSelectable
 
 /**
  * This trait can be mixed-in a specification to allow examples to have all of their expectations being evaluated (unless
@@ -20,19 +21,7 @@ import specification.create._
  *
  * If the specification is not sequential we force it to be
  */
-trait AllExpectations extends StoredExpectations with FragmentsFactory with SpecificationStructure with ArgumentsCreation with StandardResults:
-  /**
-   * @return an example factory which will take the stored results and make them the example result
-   */
-  override protected def fragmentFactory: FragmentFactory =
-    new ContextualFragmentFactory(super.fragmentFactory, (env: Env) => resultsContext(storedResults))
-
-  /**
-   * create a new Context with the list of captured results.
-   *
-   * This method could be overridden to filter the captured results and remove the skipped results for example
-   */
-  def resultsContext(results: => scala.collection.Seq[Result]): Context = new ResultsContext(results)
+trait AllExpectations extends SpecificationStructure with StoredExpectations with ArgumentsCreation with StandardResults:
 
   /**
    * we force the specification to be sequential if it's not already
@@ -41,6 +30,47 @@ trait AllExpectations extends StoredExpectations with FragmentsFactory with Spec
   /** modify the specification structure */
   override def map(structure: SpecStructure): SpecStructure =
     structure.setArguments(structure.arguments <| args(sequential = ArgProperty(true)))
+
+  override def flatMap(f: Fragment): Fragments =
+    f.updateResult { r =>
+      // evaluate r, triggering side effects
+      val asResult = AsResult(r)
+      val results = storedResults
+      // if the execution returns an Error or a Failure that was created for a thrown
+      // exception, like a JUnit assertion error or a NotImplementedError
+      // then add the result as a new issue
+      if asResult.isError || asResult.isThrownFailure then
+        Result.issues(results :+ asResult, "\n")
+      else
+        Result.issues(results, "\n")
+    }
+
+/**
+ * This trait evaluates expectations and stores them in a local variable for further usage
+ */
+trait StoredExpectations extends Expectations with StandardResults:
+  private[specs2] lazy val matchResults = new scala.collection.mutable.ListBuffer[MatchResult[_]]
+  private[specs2] lazy val results = new scala.collection.mutable.ListBuffer[Result]
+
+  def storedResults: scala.collection.Seq[Result] =
+    val failures = matchResults.filterNot(_.isSuccess)
+
+    // if there are several failures, indicate the location of each one
+    val rs: Seq[Result] = matchResults.toSeq.map {
+      case f: MatchFailure[_] if failures.size > 1 =>
+        f.copy(
+          ok = () => addLocation(f.okMessage, f.toFailure.location),
+          ko = () => addLocation(f.koMessage, f.toFailure.location))
+
+      case other => other
+    }.map(_.toResult) ++ results.toSeq
+    matchResults.clear()
+    results.clear()
+    rs
+
+  private def addLocation(message: String, location: String): String =
+    val locationMessage = s" [$location]"
+    message + (if !message.endsWith(locationMessage) then locationMessage else "")
 
   /** use a side-effect to register a standard result */
   override def skipped(message: String): Skipped =
@@ -60,3 +90,20 @@ trait AllExpectations extends StoredExpectations with FragmentsFactory with Spec
     checkResultFailure(r)
     r
 
+  override protected def checkMatchResultFailure[T](m: MatchResult[T]): MatchResult[T] =
+    matchResults.append(m)
+    m
+
+  override protected def checkResultFailure(r: =>Result): Result =
+    results.append(r)
+    r
+
+  override def sandboxMatchResult[T](mr: =>MatchResult[T]): MatchResult[T] = synchronized {
+    val matchResultsCopy = new scala.collection.mutable.ListBuffer[MatchResult[_]]
+    matchResultsCopy ++= matchResults
+    try mr
+    finally
+      matchResults.clear
+      matchResults ++= matchResultsCopy
+      ()
+  }

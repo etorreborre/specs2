@@ -1,5 +1,7 @@
 package org.specs2
-package matcher
+
+import matcher._
+import specification._
 
 class ExpectationsSpec extends Specification { def is = s2"""
 

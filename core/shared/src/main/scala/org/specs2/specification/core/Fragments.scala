@@ -12,19 +12,17 @@ import concurrent.ExecutionEnv
 /**
  * Fragments of a specification
  *
- * It is implemented as a Process of Fragment in order to produce fragments
+ * It is implemented as an async Producer[Fragment] in order to produce fragments
  * dynamically if necessary
  */
 case class Fragments(contents: AsyncStream[Fragment]):
-  /** append one or several fragments to this process */
-
+  /** append one or several fragments */
   def append(other: Fragment): Fragments       = append(oneAsync(other))
   def append(others: Seq[Fragment]): Fragments = append(Fragments(others:_*))
   def append(others: Fragments): Fragments     = append(others.contents)
   def appendLazy(other: =>Fragment): Fragments = append(oneDelayedAsync(other))
 
   /** prepend one or several fragments to this process */
-
   def prepend(other: Fragment): Fragments       = prepend(oneAsync(other))
   def prepend(others: Fragments): Fragments     = prepend(others.contents)
   def prepend(others: Seq[Fragment]): Fragments = prepend(Fragments(others:_*))

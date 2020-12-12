@@ -116,8 +116,8 @@ class FilesContentMatchersSpec extends Spec
 
   val targetDir: DirectoryPath = "target" / "test" / FileName.unsafe("fcm-"+hashCode)
 
-  def before = fs.mkdirs(targetDir).runOption
-  def after  = fs.delete(targetDir).runOption
+  def before = step(fs.mkdirs(targetDir).runVoid)
+  def after  = step(fs.delete(targetDir).runVoid)
 
   def matcherMessage(m: MatchResult[_]): String =
     removeColors(m.message.trim)

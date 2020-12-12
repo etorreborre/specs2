@@ -305,6 +305,7 @@ case object NotExecuting extends Executing:
   def setResult(r: =>Result): Executing =
     val timer = startSimpleTimer
     Started(Future.successful((r, timer.stop)))
+
 case class Failed(failure: Throwable) extends Executing:
   def setResult(r: =>Result): Executing =
     val timer = startSimpleTimer
