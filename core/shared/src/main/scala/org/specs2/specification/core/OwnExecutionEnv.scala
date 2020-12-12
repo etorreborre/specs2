@@ -1,7 +1,9 @@
-package org.specs2.specification.core
+package org.specs2
+package specification
+package core
 
-import org.specs2.concurrent.ExecutionEnv
-import org.specs2.specification.AfterAll
+import concurrent.ExecutionEnv
+import dsl._
 
 import scala.concurrent.ExecutionContext
 
@@ -13,7 +15,8 @@ import scala.concurrent.ExecutionContext
  *
  * class MySpec(env: Env) extends Specification with OwnExecutionEnv
  */
-trait OwnExecutionEnv extends AfterAll:
+trait OwnExecutionEnv extends AfterSpec:
+  self: FragmentsDsl =>
 
   def env: Env
 
@@ -28,5 +31,5 @@ trait OwnExecutionEnv extends AfterAll:
   lazy val ec: ExecutionContext =
     ownEnv.executionContext
 
-  def afterAll(): Unit =
-    ownEnv.shutdown()
+  def afterSpec: Fragments =
+    step(ownEnv.shutdown())

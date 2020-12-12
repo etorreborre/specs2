@@ -4,7 +4,7 @@ package guide
 import main._
 import execute.AsResult
 import org.specs2.specification.core.Fragment
-import org.specs2.specification.{BeforeAfterAll, ContextWithCommandLineArguments, ForEachWithCommandLineArguments, Before}
+import org.specs2.specification.{BeforeAfterSpec, ContextWithCommandLineArguments, ForEachWithCommandLineArguments, Before}
 
 object UseCommandLineArguments extends UserGuidePage { def is = "Use command-line arguments".title ^ s2"""
 
@@ -68,11 +68,11 @@ case class MyDbSpec(commandLine: CommandLine) extends Specification with DbSpec 
 // this trait can be controlled from command line arguments
 // and it takes care of the setup of the database before and after all
 // the examples
-trait DbSpec extends Specification with BeforeAfterAll {
+trait DbSpec extends Specification with BeforeAfterSpec {
   def commandLine: CommandLine
 
-  def beforeAll = println("start db here")
-  def afterAll  = println("stop db here")
+  def beforeSpec = step(println("start db here"))
+  def afterSpec  = step(println("stop db here"))
 
   lazy val client = {
     if (commandLine.contains("prod")) DbClient("production")

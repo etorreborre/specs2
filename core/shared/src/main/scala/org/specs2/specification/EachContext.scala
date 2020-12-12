@@ -129,32 +129,6 @@ trait ForEachWithCommandLineArguments[T] extends FragmentsFactory { outer: S2Str
 }
 
 /**
- * Execute a step before all fragments
- */
-trait BeforeAll extends SpecificationStructure with FragmentsFactory:
-  def beforeAll(): Unit
-  override def map(fs: =>core.Fragments) = super.map(fs).prepend(
-    Seq(fragmentFactory.step(beforeAll()), fragmentFactory.markAs(AlwaysTag)))
-
-/**
- * Execute a step after all fragments
- */
-trait AfterAll extends SpecificationStructure with FragmentsFactory:
-  def afterAll(): Unit
-  override def map(fs: =>core.Fragments) = super.map(fs).append(
-    Seq(fragmentFactory.step(afterAll()), fragmentFactory.markAs(AlwaysTag)))
-
-/**
- * Execute a step before and after all fragments
- */
-trait BeforeAfterAll extends SpecificationStructure with FragmentsFactory:
-  def beforeAll(): Unit
-  def afterAll(): Unit
-  override def map(fs: =>core.Fragments) = super.map(fs).
-    prepend(Seq(fragmentFactory.step(beforeAll()), fragmentFactory.markAs(AlwaysTag))).
-    append(Seq(fragmentFactory.step(afterAll()), fragmentFactory.markAs(AlwaysTag)))
-
-/**
  * Execute some fragments before all others
  */
 trait BeforeSpec extends SpecificationStructure:
@@ -166,7 +140,9 @@ trait BeforeSpec extends SpecificationStructure:
  */
 trait AfterSpec extends SpecificationStructure:
   def afterSpec: core.Fragments
-  override def map(fs: =>core.Fragments) = super.map(fs).append(afterSpec)
+
+  override def map(fs: =>core.Fragments): core.Fragments =
+    super.map(fs).append(afterSpec)
 
 /**
  * Execute some fragments before and after all others

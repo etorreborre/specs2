@@ -34,10 +34,6 @@ trait FragmentsDsl extends FragmentsFactory with AcceptanceDsl1:
     def ^(t2: T2): Fragments =
       summon[ToFragments[T1]].toFragments(t1).append(summon[ToFragments[T2]].toFragments(t2))
 
-  given Conversion[Fragment, Fragments]:
-    def apply(f: Fragment): Fragments =
-      Fragments(f)
-
   extension (fragment: Fragment)
     def hide: Fragment =
       fragment.description match

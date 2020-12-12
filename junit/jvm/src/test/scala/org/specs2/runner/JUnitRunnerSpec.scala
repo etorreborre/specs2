@@ -6,8 +6,8 @@ import org.junit.runner.{Description, Result, RunWith}
 import org.specs2.concurrent.ExecutionEnv
 import org.specs2.control.UserException
 import org.specs2.main.Arguments
-import org.specs2.specification.BeforeAfterAll
-import org.specs2.specification.core.{Env, OwnEnv}
+import org.specs2.specification.BeforeAfterSpec
+import org.specs2.specification.core.{Env, OwnEnv, Fragments}
 
 import scala.collection.mutable.ListBuffer
 
@@ -27,11 +27,11 @@ class JUnitRunnerSpec(val env: Env) extends Specification with OwnEnv { def is =
     }
 
   def onlyExamples =
-    runSpecification(new JUnitRunner(classOf[JUnitWithBeforeAfterAllSpecification])) { messages =>
+    runSpecification(new JUnitRunner(classOf[JUnitWithBeforeAfterSpecSpecification])) { messages =>
       messages.toList === List(
-        "run started JUnitWithBeforeAfterAllSpecification",
-        "test started one example(org.specs2.runner.JUnitWithBeforeAfterAllSpecification)",
-        "test finished one example(org.specs2.runner.JUnitWithBeforeAfterAllSpecification)",
+        "run started JUnitWithBeforeAfterSpecSpecification",
+        "test started one example(org.specs2.runner.JUnitWithBeforeAfterSpecSpecification)",
+        "test finished one example(org.specs2.runner.JUnitWithBeforeAfterSpecSpecification)",
         "run finished")
     }
 
@@ -111,13 +111,15 @@ object LinkedJUnitSpec extends mutable.Specification:
   "ok" >> ok
 
 @RunWith(classOf[JUnitRunner])
-class JUnitWithBeforeAfterAllSpecification extends Specification with BeforeAfterAll { def is = s2"""
+class JUnitWithBeforeAfterSpecSpecification extends Specification with BeforeAfterSpec { def is = s2"""
       one example $ok
       """
 
-  def beforeAll(): Unit = ()
+  def beforeSpec: Fragments =
+   step(())
 
-  def afterAll(): Unit = ()
+  def afterSpec: Fragments =
+    step(())
 }
 
 @RunWith(classOf[JUnitRunner])
@@ -132,13 +134,15 @@ class JUnitPendingSpecification extends mutable.Specification:
   }
 
 @RunWith(classOf[JUnitRunner])
-class JUnitErrorInBeforeAllSpecification extends Specification with BeforeAfterAll { def is = s2"""
+class JUnitErrorInBeforeAllSpecification extends Specification with BeforeAfterSpec { def is = s2"""
    one example $ok
 """
 
-  def beforeAll(): Unit = throw new RuntimeException("Error.")
+  def beforeSpec: Fragments =
+    throw new RuntimeException("Error.")
 
-  def afterAll(): Unit = ()
+  def afterSpec: Fragments =
+   step(())
 }
 
 class JUnitWithErrorInInitialization extends mutable.Specification:

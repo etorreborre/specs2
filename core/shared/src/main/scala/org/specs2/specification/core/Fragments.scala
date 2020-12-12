@@ -142,3 +142,7 @@ object Fragments:
   /** iterate over elements to create a Fragments object */
   def reduce[T](seq: Seq[T])(f: (Fragments, T) => Fragments): Fragments =
     seq.foldLeft(Fragments.empty)((res, cur) => f(res, cur))
+
+  given Conversion[Fragment, Fragments]:
+    def apply(f: Fragment): Fragments =
+      Fragments(f)

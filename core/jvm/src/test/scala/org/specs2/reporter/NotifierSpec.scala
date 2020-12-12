@@ -4,7 +4,7 @@ package reporter
 import main._
 import execute._
 import io.StringOutput
-import org.specs2.specification.{AfterAll, Tables}
+import org.specs2.specification.{AfterSpec, Tables}
 import specification.core.{Env, SpecificationStructure}
 import runner._
 
@@ -116,11 +116,13 @@ class NotifierSpec2 extends org.specs2.mutable.Specification:
     "ex2" >> ok
   }
 
-class NotifierSpec3 extends org.specs2.mutable.Specification with AfterAll:
+class NotifierSpec3 extends org.specs2.mutable.Specification with AfterSpec:
   "group1" >> {
     "ex1" >> ok
   }
-  def afterAll = sys.error("boom")
+
+  def afterSpec =
+    step(sys.error("boom"))
 
 class TestNotifier extends Notifier with StringOutput:
   def specStart(title: String, location: String) = append(s"[start  ] $title")

@@ -5,7 +5,7 @@ import java.util.Arrays._
 import scala.collection.JavaConverters._
 import org.specs2.specification.core.{Env, OwnEnv}
 
-class TraversableMatchersSpec(val env: Env) extends Spec with ResultMatchers with MustMatchers with OwnEnv { def is = s2"""
+class TraversableMatchersSpec(val env: Env) extends Specification with ResultMatchers with MustMatchers with OwnEnv { def is = s2"""
 
  We can check the elements of a collection by using matchers
    ${ Seq(1, 2, 3) must contain(2) }

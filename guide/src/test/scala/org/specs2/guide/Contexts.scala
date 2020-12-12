@@ -154,13 +154,13 @@ class FixtureSpecification extends mutable.Specification with DatabaseContext {
 }
 }}
 
-### BeforeAll / AfterAll
+### BeforeSpec / AfterSpec
 
 Some setups are very expensive and can be shared across all examples. For example you might want to start an application server just at the beginning of the specification and then close it at the end. You can use 3 traits to do this:
 
- * `BeforeAll` inserts a `Step` before all the examples
- * `AfterAll` inserts a `Step` after all the examples
- * `BeforeAfterAll` inserts one `Step` before all the examples and one `Step` after all of them
+ * `BeforeSpec` inserts any `Fragments`, for example a `Step`, before all the examples
+ * `AfterSpec` inserts any `Fragments`, for example a `Step`,` after all the examples
+ * `BeforeAfterSpec` inserts `Fragments` before all the examples and after all of them
 
 $AndIfYouWantToKnowMore
 

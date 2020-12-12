@@ -8,7 +8,7 @@ import org.specs2.specification.process.DefaultExecutor
 import org.specs2.specification.core.{Env, FormDescription, OwnEnv}
 import org.specs2.specification.dsl.mutable.{FormDsl, MutableFragmentBuilder}
 
-class FormDslSpec(val env: Env) extends org.specs2.Spec with TypedEqual with OwnEnv { def is = s2"""
+class FormDslSpec(val env: Env) extends org.specs2.Specification with TypedEqual with OwnEnv { def is = s2"""
   simple test for the form dsl $e1
 
 """

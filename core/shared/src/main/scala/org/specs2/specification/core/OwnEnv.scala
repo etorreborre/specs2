@@ -1,9 +1,12 @@
-package org.specs2.specification.core
+package org.specs2
+package specification
+package core
 
-import org.specs2.concurrent.{ExecutorServices, ExecutionEnv}
-import org.specs2.specification.AfterAll
-
+import execute.StandardResults._
+import concurrent.{ExecutorServices, ExecutionEnv}
+import specification._
 import scala.concurrent.ExecutionContext
+import dsl._
 
 /**
  * This trait copies the inherited env: Env for a Specification and makes sure it is shutdown
@@ -13,7 +16,8 @@ import scala.concurrent.ExecutionContext
  *
  * class MySpec(env: Env) extends Specification with OwnEnv
  */
-trait OwnEnv extends AfterAll:
+trait OwnEnv extends AfterSpec:
+  self: FragmentsDsl =>
 
   def env: Env
 
@@ -31,5 +35,5 @@ trait OwnEnv extends AfterAll:
   lazy val ec: ExecutionContext =
     ownEnv.executionContext
 
-  def afterAll(): Unit =
-    ownEnv.shutdown()
+  def afterSpec: Fragments =
+    step(ownEnv.shutdown())

@@ -12,7 +12,7 @@ import execute._
 import matcher._
 import fp.syntax._
 
-case class ContextSpec(env: Env) extends Spec with ResultMatchers with OwnEnv { def is = s2"""
+case class ContextSpec(env: Env) extends Specification with ResultMatchers with OwnEnv { def is = s2"""
 
  It is sometimes necessary to provide functions to "prepare" the specification before executing the Fragments
  and clean it up afterwards. This may be for example:

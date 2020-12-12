@@ -7,9 +7,9 @@ import reporter.PrinterLogger._
 import specification.core.{SpecificationStructure, Env}
 import scala.collection.mutable.ArrayBuffer
 
-class BeforeAfterAllSpec extends Specification { def is = s2"""
+class BeforeAfterSpecSpec extends Specification { def is = s2"""
 
- Before and after all steps can be executed with the BeforeAfterAll trait $beforeAfter ${tag("travis")}
+ Before and after all steps can be executed with the BeforeAfterSpec trait $beforeAfter ${tag("travis")}
  Before and after all steps can be executed even if tags are included     $withTags1
  Before and after all steps can be executed even if tags are excluded     $withTags2
 
@@ -17,7 +17,7 @@ class BeforeAfterAllSpec extends Specification { def is = s2"""
 
   def beforeAfter =
     val messages = new ArrayBuffer[String]
-    val spec = new Spec with BeforeAfterAll {
+    val spec = new Spec with BeforeAfterSpec {
       def is = sequential ^
         s2""" e1 $e1
             | e2 $e2
@@ -25,8 +25,8 @@ class BeforeAfterAllSpec extends Specification { def is = s2"""
 
       def e1 = { messages.append("e1"); ok }
       def e2 = { messages.append("e2"); ok }
-      def beforeAll() = messages.append("before all")
-      def afterAll() = messages.append("after all")
+      def beforeSpec = step { messages.append("before all"); ok }
+      def afterSpec = step { messages.append("after all"); ok }
     }
 
     runSpec(spec)
@@ -34,7 +34,7 @@ class BeforeAfterAllSpec extends Specification { def is = s2"""
 
   def withTags1 =
     val messages = new ArrayBuffer[String]
-    val spec = new Spec with BeforeAfterAll {
+    val spec = new Spec with BeforeAfterSpec {
       def is =
         sequential ^ s2"""
             | ${section("s")}
@@ -45,8 +45,9 @@ class BeforeAfterAllSpec extends Specification { def is = s2"""
 
       def e1 = { messages.append("e1"); ok }
       def e2 = { messages.append("e2"); ok }
-      def beforeAll() = messages.append("before all")
-      def afterAll() = messages.append("after all")
+
+      def beforeSpec = step { messages.append("before all"); ok }
+      def afterSpec = step { messages.append("after all"); ok }
     }
 
     runSpec(spec, arguments = Arguments("include", "s"))
@@ -54,7 +55,7 @@ class BeforeAfterAllSpec extends Specification { def is = s2"""
 
   def withTags2 =
     val messages = new ArrayBuffer[String]
-    val spec = new Spec with BeforeAfterAll {
+    val spec = new Spec with BeforeAfterSpec {
       def is =
         sequential ^ s2"""
             | ${section("s")}
@@ -65,8 +66,8 @@ class BeforeAfterAllSpec extends Specification { def is = s2"""
 
       def e1 = { messages.append("e1"); ok }
       def e2 = { messages.append("e2"); ok }
-      def beforeAll() = messages.append("before all")
-      def afterAll() = messages.append("after all")
+      def beforeSpec = step { messages.append("before all"); ok }
+      def afterSpec = step { messages.append("after all"); ok }
     }
 
     runSpec(spec, arguments = Arguments("exclude", "s"))
