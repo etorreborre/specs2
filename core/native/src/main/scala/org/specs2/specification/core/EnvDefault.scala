@@ -18,6 +18,7 @@ object EnvDefault {
   def create(arguments: Arguments): Env =
     Env(
       arguments            = arguments,
+      resource             = Ref.empty,
       systemLogger         = ConsoleLogger(),
       printerLogger        = consolePrinterLogger,
       statisticsRepository = StatisticsRepositoryCreation.file(arguments.commandLine.directoryOr("stats.outdir", "target" / "specs2-reports" / "stats")),

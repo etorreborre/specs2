@@ -157,7 +157,6 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
   /** start this execution when the other ones are finished */
   def startAfter(others: List[Execution])(env: Env): Execution =
     val arguments = env.arguments
-
     val timer = startSimpleTimer
 
     val started: Action[(Result, SimpleTimer)] =
@@ -196,8 +195,11 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
       try r match
         case Error(m, t) =>
           Error(m, FatalExecution(t))
-        case other => other
-      catch { case t: Throwable => Error(t.getMessage, FatalExecution(t)) }
+        case other =>
+          other
+      catch { case t: Throwable =>
+        Error(t.getMessage, FatalExecution(t))
+      }
     }
 
   /** run this execution after the previous executions are finished */
@@ -397,6 +399,10 @@ object Execution:
 
   given AsExecution[Execution]:
     def execute(r: =>Execution): Execution = r
+
+  given [T : AsExecution] as Conversion[T, Execution]:
+    def apply(t: T): Execution =
+      AsExecution[T].execute(t)
 
 
 case class FatalExecution(t: Throwable) extends Exception(t):

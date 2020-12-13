@@ -45,3 +45,24 @@ class Lazy[+T](private val v: () => T):
 
   def map[S >: T](f: T => S): Lazy[S] =
     new Lazy(() => f(value))
+
+/** class holding an optional mutable value */
+class Ref[T](var toOption: Option[T] = None):
+  def get: T =
+    toOption.get
+
+  def set(t: T): Unit =
+    toOption = Some(t)
+    ()
+
+  def update(f: T => T): Ref[T] =
+    toOption = toOption.map(f)
+    this
+
+object Ref:
+
+  def apply[T](t: T): Ref[T] =
+    new Ref(Some(t))
+
+  def empty[T]: Ref[T] =
+    new Ref(None)

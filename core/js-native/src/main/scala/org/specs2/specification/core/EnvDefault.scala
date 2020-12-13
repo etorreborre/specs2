@@ -17,6 +17,7 @@ object EnvDefault {
   def create(arguments: Arguments): Env =
     Env(
       arguments            = arguments,
+      resource             = Ref.empty,
       systemLogger         = ConsoleLogger(),
       printerLogger        = NoPrinterLogger,
       statisticsRepository = StatisticsRepositoryCreation.memory,

@@ -11,20 +11,24 @@ import Exceptions._
 case class Property[T](value: () => Option[T], evaluated: Boolean = false, evaluatedValue: Option[T] = None):
   /** change the value */
   def updateValue(init: =>Option[T]) = new Property(value = () => init)
+  /** change the value and return Unit */
+  def setValue(init: =>T): Unit =
+    withValue(init)
+    ()
   /** change the value */
-  def withValue(init: =>T) = Property(init)
+  def withValue(init: =>T): Property[T] = Property(init)
   /** @return the option(value) */
   def optionalValue: Option[T] = execute.evaluatedValue
   /** alias for optionalValue */
   def toOption: Option[T] = optionalValue
   /** update the value */
-  def update(newValue: =>T) = withValue(newValue)
+  def update(newValue: =>T): Property[T] = withValue(newValue)
   /** alias for update */
-  def apply(newValue: =>T) = update(newValue)
+  def apply(newValue: =>T): Property[T] = update(newValue)
   /** @return an iterator containing the value if present */
   def iterator = optionalValue.iterator
   /** return the property with the value being filtered according to a predicate */
-  def filter(p: T => Boolean) = new Property(() => value().filter(p))
+  def filter(p: T => Boolean): Property[T] = new Property(() => value().filter(p))
   /** option-like flatMap */
   def flatMap[U](f: T => Option[U]): Property[U] = new Property(() => optionalValue.flatMap(f))
   /** option-like foreach */

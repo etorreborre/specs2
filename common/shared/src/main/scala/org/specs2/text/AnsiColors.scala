@@ -46,7 +46,7 @@ trait AnsiColors:
 
   extension (s: String):
     def removeColors: String =
-      outer.removeColors(s)
+      outer.removeColors(s, doIt = true)
 
 
 object AnsiColors extends AnsiColors

@@ -27,6 +27,10 @@ trait ResultExecution:
     try  result
     catch handleExceptionsPurely
 
+  /** turn an exception into a result */
+  def exception(t: Throwable): Result =
+    handleExceptionsPurely(t)
+
   /** handle result exceptions and do not rethrow them */
   def handleExceptionsPurely: PartialFunction[Throwable, Result] =
       case FailureException(f)                                               => f

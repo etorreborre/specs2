@@ -5,6 +5,7 @@ import core._
 import execute._
 import specification.create._
 import data.AlwaysTag
+import scala.concurrent.{Future, ExecutionContext}
 
 /**
  * Run a given fragment before each fragment
@@ -53,6 +54,34 @@ trait ForEach[T]:
   given [R : AsExecution] as AsExecution[T => R]:
     def execute(f: =>(T => R)): Execution =
       AsExecution[R].execute(foreach(f))
+
+/**
+ * Acquire a resource for the whole spec and release it at the end
+ */
+trait Resource[T] extends BeforeAfterSpec with FragmentsFactory with StandardResults:
+
+  protected def acquire: Future[T]
+
+  protected def release(resource: T): Execution
+
+  def beforeSpec =
+    fragmentFactory.step(Execution.withEnvAsync { env =>
+      implicit val ec = env.executionContext
+      acquire.map(r => env.resource.set(r))
+    }.setErrorAsFatal)
+
+  def afterSpec =
+    Fragments(fragmentFactory.break, fragmentFactory.step(release))
+
+  given [R : AsExecution] as AsExecution[T => R]:
+    def execute(f: =>(T => R)): Execution =
+      Execution.withEnvFlatten { env =>
+        env.resource.toOption match
+          case Some(t) =>
+            AsExecution[R].execute(f(t.asInstanceOf[T]))
+          case None =>
+            Execution.result(skipped("resource unavailable"))
+      }
 
 /**
  * Execute some fragments before all others

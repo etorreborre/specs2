@@ -24,7 +24,10 @@ import scala.concurrent.duration.FiniteDuration
  */
 case class Env(
   /** arguments passed on the command line */
-  arguments:            Arguments,
+  arguments: Arguments,
+
+  /** dynamically (and untyped!) acquired resource */
+  resource: DynamicResource,
 
   /** specs2 logger to report the overall execution of a specification
    * including warnings and errors prior to the execution itself
@@ -32,10 +35,10 @@ case class Env(
    * This way a specification run can be made verbose if necessary by using
    * this logger
    */
-  systemLogger:         Logger,
+  systemLogger: Logger,
 
   /** specification logger to print out the execution results */
-  printerLogger:        PrinterLogger,
+  printerLogger: PrinterLogger,
 
   /** the StatisticsRepository contains the result of previous executions
    * in case they are needed to drive the current execution */
@@ -44,28 +47,28 @@ case class Env(
   /** the random object is only invoked when using the RandomSequentialExecution
    * to execute examples randomly in a specification
    */
-  random:               scala.util.Random,
+  random: scala.util.Random,
 
   /** the FileSystem gives access to reading/writing files,
    *  copying directories and so on...
    */
-  fileSystem:           FileSystem,
+  fileSystem: FileSystem,
 
   /** a custom classloader can set on the environment when specifications must be
    * executed in a specific one, for example when running inside SBT
    */
-  customClassLoader:    Option[ClassLoader],
+  customClassLoader: Option[ClassLoader],
 
   /** this is an indirection allowing Thread.setContextClassLoader with the custom class loader when
    * the platform permits it
    */
-  classLoading:         ClassLoading,
+  classLoading: ClassLoading,
 
   /** execution environment for the code *inside* the specification examples */
-  executionEnv:         ExecutionEnv,
+  executionEnv: ExecutionEnv,
 
   /** execution environment for the specs2 own reporting */
-  specs2ExecutionEnv:   ExecutionEnv):
+  specs2ExecutionEnv: ExecutionEnv):
 
   lazy val executionContext =
     executionEnv.executionContext
@@ -121,10 +124,13 @@ case class Env(
   def setContextClassLoader(): Unit =
     customClassLoader.foreach(classLoading.setContextClassLoader)
 
+type DynamicResource = Ref[Any]
+
 object Env:
 
   def apply(
     arguments:            Arguments            = EnvDefault.default.arguments,
+    resource:             DynamicResource      = EnvDefault.default.resource,
     systemLogger:         Logger               = EnvDefault.default.systemLogger,
     printerLogger:        PrinterLogger        = EnvDefault.default.printerLogger,
     statisticsRepository: StatisticsRepository = EnvDefault.default.statisticsRepository,
@@ -134,6 +140,7 @@ object Env:
     classLoading:         ClassLoading         = EnvDefault.default.classLoading): Env =
     Env(
       arguments,
+      resource,
       systemLogger,
       printerLogger,
       statisticsRepository,
@@ -147,4 +154,3 @@ object Env:
   def executeResult[R : AsResult](r: Env => R) =
     lazy val env = Env()
     AsResult(r(env))
-
