@@ -275,7 +275,7 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
               Result.result(success, s"${t.description} is missing the ${"value".plural(missingValues)}: ${missingValues.mkString(", ")}")
             else if checkOrder then
               val verb = if missingValues.size > 1 then "are" else "is"
-              Result.result(success, s"the ${"value".plural(missingValues)} ${missingValues.mkString(", ")} $verb not in order")
+              Result.result(success, s"the ${"value".plural(missingValues)} ${missingValues.mkString(", ")} $verb missing or not in order\nGot: "+seq)
             else
               Result.result(success, s"${t.description} does not contain ${missingValues.mkString(", ")}")
         else
@@ -286,7 +286,7 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
             Result.result(success, s"${t.description} is missing the ${"value".plural(missingValues)}: ${missingValues.mkString(", ")} but contains ${failedValues.mkString(", ")}")
           else if checkOrder then
             val verb = if missingValues.size > 1 then "are" else "is"
-            Result.result(success, s"the ${"value".plural(missingValues)} ${missingValues.mkString(", ")} $verb not in order")
+            Result.result(success, s"the ${"value".plural(missingValues)} ${missingValues.mkString(", ")} $verb missing or not in order\nGot: "+seq)
           else
             Result.result(success, s"${t.description} does not contain ${missingValues.mkString(", ")} but contains ${failedValues.mkString(", ")}")
       else

@@ -15,6 +15,7 @@ case class Execute(
                     _stopOnIssue:          Option[Boolean]          = None,
                     _stopOnSkip:           Option[Boolean]          = None,
                     _sequential:           Option[Boolean]          = None,
+                    _sequentialRandom:     Option[Boolean]          = None,
                     _asap:                 Option[Boolean]          = None,
                     _useCustomClassLoader: Option[Boolean]          = None,
                     _threadsNb:            Option[Int]              = None,
@@ -32,6 +33,7 @@ case class Execute(
   def stopOnIssue: Boolean            = _stopOnIssue.getOrElse(false)
   def stopOnSkip: Boolean             = _stopOnSkip.getOrElse(false)
   def sequential: Boolean             = _sequential.getOrElse(false)
+  def sequentialRandom: Boolean       = _sequentialRandom.getOrElse(false)
   def asap: Boolean                   = _asap.getOrElse(false)
   def useCustomClassLoader: Boolean   = _useCustomClassLoader.getOrElse(false)
   def threadsNb: Int                  = _threadsNb.getOrElse(ExecuteArguments.threadsNb)
@@ -52,6 +54,7 @@ case class Execute(
       other._stopOnIssue         .orElse(_stopOnIssue),
       other._stopOnSkip          .orElse(_stopOnSkip),
       other._sequential          .orElse(_sequential),
+      other._sequentialRandom    orElse(_sequentialRandom),
       other._asap                .orElse(_asap),
       other._useCustomClassLoader.orElse(_useCustomClassLoader),
       other._threadsNb           .orElse(_threadsNb),
@@ -72,6 +75,7 @@ case class Execute(
       "stopOnIssue"          -> _stopOnIssue         ,
       "stopOnSkip"           -> _stopOnSkip          ,
       "sequential"           -> _sequential          ,
+      "sequentialRandom"     -> _sequentialRandom    ,
       "asap"                 -> _asap                ,
       "useCustomClassLoader" -> _useCustomClassLoader,
       "threadsNb"            -> _threadsNb           ,
@@ -93,6 +97,7 @@ object Execute extends Extract:
       _stopOnIssue          = bool("stopOnIssue"),
       _stopOnSkip           = bool("stopOnSkip"),
       _sequential           = bool("sequential"),
+      _sequentialRandom     = bool("sequentialRandom"),
       _asap                 = bool("asap"),
       _useCustomClassLoader = bool("useCustomClassLoader"),
       _threadsNb            = int("threadsNb"),
@@ -103,5 +108,6 @@ object Execute extends Extract:
       _timeout              = int("timeout").map(_.millis),
       _executor             = value("executor")
     )
-  val allValueNames = Seq("plan", "skipAll", "stopOnFail", "stopOnError", "stopOnIssue", "stopOnSkip", "sequential",
+
+  val allValueNames = Seq("plan", "skipAll", "stopOnFail", "stopOnError", "stopOnIssue", "stopOnSkip", "sequential", "sequentialRandom",
     "asap", "useCustomClassLoader", "threadsNb", "specs2ThreadsNb", "scheduledThreadsNb", "batchSize", "timeFactor", "timeout", "executor")

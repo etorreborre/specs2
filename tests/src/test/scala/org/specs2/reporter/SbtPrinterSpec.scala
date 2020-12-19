@@ -29,7 +29,7 @@ class SbtPrinterSpec(val env: Env) extends Specification with OwnEnv { def is = 
   case class printer1() { outer =>
 
     def e1 =
-      printer.print((new HelloWorldSpec { override def is = "title".title ^ "\ntext" }).structure(ownEnv)).runAction(ownEnv.specs2ExecutionEnv)
+      printer.print((new HelloWorldSpec { override def is = "title".title ^ "\ntext" }).structure).runAction(ownEnv.specs2ExecutionEnv)
       eventually(logger.messages must contain (beMatching("\\[INFO\\].*title.*")))
 
     def e2 =
@@ -112,7 +112,7 @@ class SbtPrinterSpec(val env: Env) extends Specification with OwnEnv { def is = 
       events.append(event)
 
   def createLogger = MyLogger()
-    
+
   case class MyLogger() extends Logger with StringOutput:
     def ansiCodesSupported = false
     def warn(msg: String): Unit =  { append("[WARN] "+msg) }

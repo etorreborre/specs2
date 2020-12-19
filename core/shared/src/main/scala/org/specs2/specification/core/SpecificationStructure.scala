@@ -12,17 +12,17 @@ import org.specs2.fp.syntax._
 // import scala.scalajs.reflect.annotation.EnableReflectiveInstantiation
 // @EnableReflectiveInstantiation
 
-trait ContextualSpecificationStructure:
-  def structure: Env => SpecStructure
-  def fragments = (env: Env) => structure(env).fragments
-
-trait SpecificationStructure extends ContextualSpecificationStructure:
+trait SpecificationStructure:
   def is: SpecStructure
-  def structure = (env: Env) => decorate(is, env)
-  def decorate(is: SpecStructure, env: Env) = map(is.map(fs => map(map(fs.flatMap(f => flatMap(f).contents), env))))
+
+  def structure = decorate(is)
+
+  def decorate(is: SpecStructure): SpecStructure =
+    map(is.map(fs => map(fs.flatMap(f => flatMap(f).contents))))
 
   /** modify the specification structure */
-  def map(structure: SpecStructure): SpecStructure = structure
+  def map(structure: SpecStructure): SpecStructure =
+    structure
 
   /** modify the fragments */
   def map(fs: =>Fragments): Fragments = fs
@@ -30,9 +30,6 @@ trait SpecificationStructure extends ContextualSpecificationStructure:
   /** modify the fragments */
   def flatMap(f: Fragment): Fragments =
     Fragments(f)
-
-  /** modify the fragments, using the current environment */
-  def map(fs: =>Fragments, env: Env): Fragments = fs
 
 object SpecificationStructure:
 
@@ -65,7 +62,7 @@ object SpecificationStructure:
    */
   def topologicalSort(env: Env) = (specifications: Seq[SpecificationStructure]) =>
     TopologicalSort.sort(specifications, (s1: SpecificationStructure, s2: SpecificationStructure) =>
-      SpecStructure.dependsOn(env.specs2ExecutionEnv)(s2.structure(env), s1.structure(env)))
+      SpecStructure.dependsOn(env.specs2ExecutionEnv)(s2.structure, s1.structure))
 
   /**
    * sort the specifications in topological order where specification i doesn't depend on specification j if i < j
@@ -74,7 +71,7 @@ object SpecificationStructure:
    */
   def reverseTopologicalSort(env: Env) = (specifications: Seq[SpecificationStructure]) =>
     TopologicalSort.sort(specifications, (s1: SpecificationStructure, s2: SpecificationStructure) =>
-        SpecStructure.dependsOn(env.specs2ExecutionEnv)(s1.structure(env), s2.structure(env)))
+        SpecStructure.dependsOn(env.specs2ExecutionEnv)(s1.structure, s2.structure))
 
   /** @return all the referenced specifications */
   def referencedSpecifications(spec: SpecificationStructure, env: Env, classLoader: ClassLoader): Operation[Seq[SpecificationStructure]] =
@@ -94,7 +91,7 @@ object SpecificationStructure:
                          classLoader: ClassLoader)(refs: (SpecificationStructure, Env) => List[SpecificationRef]): Operation[Seq[SpecificationStructure]] =
 
     val byName = (ss: List[SpecificationStructure]) => ss.foldLeft(Vector[(String, SpecificationStructure)]()) { (res, cur) =>
-      val name = cur.structure(env).specClassName
+      val name = cur.structure.specClassName
       if res.map(_._1).contains(name) then res
       else (name, cur) +: res
     }
@@ -109,19 +106,19 @@ object SpecificationStructure:
         else
           val toVisit: Vector[(String, SpecificationStructure)] = seed.flatMap(s => getRefs(s, visited))
           getAll(toVisit.map(_._2), visited ++ toVisit)
-      val name = spec.structure(env).specClassName
+      val name = spec.structure.specClassName
       val linked = getRefs(spec, Vector((name, spec)))
       getAll(linked.map(_._2), linked :+ ((name, spec)))
     }
 
   /** @return the class names of all the referenced specifications */
   def referencedSpecificationsRefs(spec: SpecificationStructure, env: Env): List[SpecificationRef] =
-    SpecStructure.referencedSpecStructuresRefs(env)(spec.structure(env))
+    SpecStructure.referencedSpecStructuresRefs(env)(spec.structure)
 
   /** @return the class names of all the linked specifications */
   def linkedSpecificationsRefs(spec: SpecificationStructure, env: Env): List[SpecificationRef] =
-    SpecStructure.linkedSpecStructuresRefs(env)(spec.structure(env))
+    SpecStructure.linkedSpecStructuresRefs(env)(spec.structure)
 
   /** @return the class names of all the see specifications */
   def seeSpecificationsRefs(spec: SpecificationStructure, env: Env): List[SpecificationRef] =
-    SpecStructure.seeSpecStructuresRefs(env)(spec.structure(env))
+    SpecStructure.seeSpecStructuresRefs(env)(spec.structure)

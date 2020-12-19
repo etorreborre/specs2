@@ -35,7 +35,7 @@ trait BlockDsl extends BlockCreation:
       addExample(s, f(s))
 
   extension [S, R] (d: String)(using not: Not[NoBlockDsl]):
-    def >>(s: S)(using t: ToBlock[S, R]): R =
+    def >>(s: =>S)(using t: ToBlock[S, R]): R =
      summon[ToBlock[S, R]].toBlock(d, s)
 
 /**
@@ -44,14 +44,14 @@ trait BlockDsl extends BlockCreation:
 trait ExtendedBlockDsl extends BlockDsl:
 
   extension [S, R] (d: String)(using not: Not[NoExtendedBlockDsl]):
-    def should(s: S)(using t: ToBlock[S, R]): R =
-     summon[ToBlock[S, R]].toBlock(s"$d should", s)
+    def should(s: =>S)(using t: ToBlock[S, R]): R =
+      summon[ToBlock[S, R]].toBlock(s"$d should", s)
 
-    def can(s: S)(using t: ToBlock[S, R]): R =
-     summon[ToBlock[S, R]].toBlock(s"$d can", s)
+    def can(s: =>S)(using t: ToBlock[S, R]): R =
+      summon[ToBlock[S, R]].toBlock(s"$d can", s)
 
-    def in(s: S)(using t: ToBlock[S, R]): R =
-     summon[ToBlock[S, R]].toBlock(d, s)
+    def in(s: =>S)(using t: ToBlock[S, R]): R =
+      summon[ToBlock[S, R]].toBlock(d, s)
 
   /**
    * adding a conflicting implicit to warn the user when a `>>` was forgotten
@@ -72,7 +72,6 @@ trait BlockCreation extends FragmentBuilder with FragmentsFactory:
   private[specs2] def addBlock[T](text: String, t: =>T, location: StacktraceLocation = StacktraceLocation()): T =
     addStart
     if hasSectionsForBlocks then addFragment(factory.section(text))
-    //print((text, location.trace.map(t => println((text, t)))))
     addText(text, location)
     addFragment(factory.tab)
     addBreak
@@ -82,7 +81,7 @@ trait BlockCreation extends FragmentBuilder with FragmentsFactory:
     addEnd
     result
 
-  protected[specs2] def addExample[R : AsExecution](d: String, r: R) =
+  protected[specs2] def addExample[R : AsExecution](d: String, r: =>R) =
     addFragment(fragmentFactory.example(Text(d), summon[AsExecution[R]].execute(r)))
     addFragment(fragmentFactory.break)
 

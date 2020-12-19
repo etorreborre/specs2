@@ -29,7 +29,6 @@ import Execution.{given, _}
  *  - once executed the result is kept
  *  - if mustJoin is true this means that all previous executions must be finished before this one can start
  *  - it has a condition deciding if the next execution can proceed or not depending on the current result
- *  - if isolable is true this means that it should be executed in its own specification instance
  *  - the result of a similar execution can be stored to decide if this one needs to be executed or not
  *  - it can store a continuation that will create more fragments, possibly containing more executions, based on the
  *    current result
@@ -39,7 +38,6 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
                      timeout:        Option[FiniteDuration]              = None,
                      mustJoin:       Boolean                             = false,
                      nextMustStopIf: Result => Boolean                   = (r: Result) => false,
-                     isolable:       Boolean                             = true,
                      previousResult: Option[Result]                      = None,
                      continuation:   Option[FragmentsContinuation]       = None):
 
@@ -90,12 +88,6 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
     copy(nextMustStopIf = f)
 
   def skip = setResult(Skipped())
-
-  def makeGlobal: Execution =
-    makeGlobal(when = true)
-
-  def makeGlobal(when: Boolean): Execution =
-    copy(isolable = !when)
 
   def setTimeout(timeout: FiniteDuration): Execution =
     copy(timeout = Some(timeout))
@@ -280,7 +272,6 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
   override def toString =
     "Execution("+
       (if run.isDefined then "executable" else "no run")+
-      (if !isolable then ", global" else "") +
       previousResult.fold("")(", previous " + _) +
      ")"
 
@@ -288,8 +279,7 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
     case other: Execution =>
       other.run.isDefined == run.isDefined &&
       other.timeout == timeout &&
-      other.mustJoin == mustJoin &&
-      other.isolable == isolable
+      other.mustJoin == mustJoin
 
     case _ => false
 
@@ -297,8 +287,7 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
     run.hashCode +
     executing.hashCode +
     timeout.hashCode +
-    mustJoin.hashCode +
-    isolable.hashCode
+    mustJoin.hashCode
 
 trait Executing:
   def setResult(r: =>Result): Executing

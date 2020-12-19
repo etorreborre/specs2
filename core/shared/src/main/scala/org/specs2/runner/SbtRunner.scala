@@ -176,7 +176,7 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
         if f.superclassName.endsWith("SpecificationStructure") then
           val className = taskDef.fullyQualifiedName + (if f.isModule then "$" else "")
           Classes.createInstance[SpecificationStructure](className, loader, EnvDefault.defaultInstances(env)).
-            map(ss => Option(ss.structure(env)))
+            map(ss => Option(ss.structure))
         else Operation.ok(None)
       case _ => Operation.ok(None)
 

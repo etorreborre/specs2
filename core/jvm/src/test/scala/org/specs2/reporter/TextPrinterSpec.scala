@@ -1,6 +1,7 @@
 package org.specs2
 package reporter
 
+import control._
 import execute._
 import ResultImplicits._
 import matcher._
@@ -143,9 +144,10 @@ presentation
          """|[error] x e1
             |[error]  1 != 2"""
 
-  def d2 = Arguments.split("failtrace fullstacktrace") ^
-    s2"""e1 ${1 must ===(2)}""" contains
-    """|[error]_org.specs2.report"""
+  def d2 =
+    Arguments.split("failtrace fullstacktrace") ^
+      s2"""e1 ${1 must ===(2)}""" contains
+      """|[error]_org.specs2.report"""
 
   def d3 =
     s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must ===("adcdeadcdeadcdeadcdeadcde")}""" contains
@@ -329,7 +331,7 @@ table ${
   def error2 = { throw new Exception("wrong", new IllegalArgumentException("boom")); ok }
 }
 
-object TextPrinterSpecification extends MustMatchers with FragmentsDsl:
+object TextPrinterSpecification extends MustMatchers with FragmentsDsl with Debug:
 
   extension (fragment: Fragment):
     def contains(contained: String): Boolean =
@@ -388,10 +390,10 @@ object TextPrinterSpecification extends MustMatchers with FragmentsDsl:
       if optionalEnv.isEmpty then env1.shutdown()
 
     val messages = logger.messages
-     messages.map(_.removeEnd(" ")).mkString("\n").replace(" ", "_")
+    messages.map(_.removeEnd(" ")).mkString("\n").replace(" ", "_")
 
   extension (spec: (Fragments, Env)):
-    def contains(contained: String): Result  =
+    def contains(contained: String): Result =
       printed(spec._1, Some(spec._2)) must contain(contained.stripMargin.replace(" ", "_"))
 
     def contains(contained: String, f: String => String): Result  =

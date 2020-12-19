@@ -16,9 +16,9 @@ import scala.reflect.Selectable.reflectiveSelectable
 trait FormDsl extends FragmentBuilder with FormFragmentFactory:
   outer =>
 
-  def insert[T : HasForm](aForm: =>T)(using nothing: Int = 0): Fragment =
+  def insertForm[T : HasForm](aForm: =>T): Fragment =
     addFragment(FormFragment(aForm.form))
 
   extension [T : HasForm](aForm: =>T):
     def insert: Fragment =
-      outer.insert(aForm)
+      outer.insertForm(aForm)

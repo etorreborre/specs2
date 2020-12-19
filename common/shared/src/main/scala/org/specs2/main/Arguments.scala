@@ -43,6 +43,7 @@ case class Arguments (
   def stopOnIssue: Boolean            = execute.stopOnIssue
   def stopOnSkip: Boolean             = execute.stopOnSkip
   def sequential: Boolean             = execute.sequential
+  def sequentialRandom: Boolean       = execute.sequentialRandom
   def threadsNb: Int                  = execute.threadsNb
   def specs2ThreadsNb: Int            = execute.specs2ThreadsNb
   def timeFactor: Int                 = execute.timeFactor

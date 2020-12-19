@@ -19,8 +19,11 @@ trait PendingUntilFixed:
 
     /** @return Pending unless the result is a success */
     def pendingUntilFixed(m: String = ""): Result = ResultExecution.execute(AsResult(t)) match
-      case s @ Success(_,_) => Failure(m.prefix(". ", "Fixed now, you should remove the 'pendingUntilFixed' marker"))
-      case other            => Pending(m.prefix(". ", "Pending until fixed"))
+      case s @ Success(_,_) =>
+        Failure(m.prefix(". ", "Fixed now, you should remove the 'pendingUntilFixed' marker"))
+        
+      case other =>
+        Pending(m.prefix(". ", "Pending until fixed"))
 
 /**
  * use this trait to remove the pending until fixed implicit conversion

@@ -38,7 +38,7 @@ class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterab
 
   /** specification structure for the environment */
   lazy val specStructure: SpecStructure =
-    specification.structure(env)
+    specification.structure
 
   /** run the specification with a Notifier */
   def run(n: RunNotifier): Unit =

@@ -86,27 +86,28 @@ trait Resource[T] extends BeforeAfterSpec with FragmentsFactory with StandardRes
 /**
  * Execute some fragments before all others
  */
-trait BeforeSpec extends SpecificationStructure:
+trait BeforeSpec extends SpecificationStructure with FragmentsFactory:
   def beforeSpec: Fragments
 
   override def map(fs: =>Fragments): Fragments =
-    super.map(fs).prepend(beforeSpec)
+    super.map(fs).prepend(beforeSpec.append(fragmentFactory.markAs(AlwaysTag)))
 
 /**
  * Execute some fragments after all others
  */
-trait AfterSpec extends SpecificationStructure:
+trait AfterSpec extends SpecificationStructure with FragmentsFactory:
   def afterSpec: Fragments
 
   override def map(fs: =>Fragments): Fragments =
-    super.map(fs).append(afterSpec)
+    super.map(fs).append(afterSpec.append(fragmentFactory.markAs(AlwaysTag)))
 
 /**
  * Execute some fragments before and after all others
  */
-trait BeforeAfterSpec extends SpecificationStructure:
+trait BeforeAfterSpec extends SpecificationStructure with FragmentsFactory:
   def beforeSpec: Fragments
   def afterSpec: Fragments
 
   override def map(fs: =>Fragments): Fragments =
-    super.map(fs).prepend(beforeSpec).append(afterSpec)
+    super.map(fs).prepend(beforeSpec.append(fragmentFactory.markAs(AlwaysTag))).
+      append(afterSpec.append(fragmentFactory.markAs(AlwaysTag)))

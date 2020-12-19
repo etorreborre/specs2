@@ -13,28 +13,26 @@ import scala.collection.concurrent.{TrieMap, Map => CMap}
  *
  * As a result they will be executed in a random sequence
  */
-trait RandomSequentialExecution extends SpecificationStructure:
-  override def map(fs: =>Fragments, env: Env): Fragments =
-    super.map(addExecutionConstraints(fs, env))
-
+trait RandomSequentialExecution
   /**
-   * find sequences of concurrent examples
+   * find sequences of concurrent examples in between steps
+   * and scramble them
    */
-  private def addExecutionConstraints(fs: Fragments, env: Env): Fragments =
+  def forceRandomSequentialExecution(fs: Fragments, env: Env): Fragments =
     fs.mapFragments { fragments =>
       val concurrentSequences = fragments.foldLeft(Vector(Vector[Fragment]())) { (res, cur) =>
       res.updateLast(_ :+ cur).toVector ++
         // start a new section if there is a step
         (if Fragment.isStep(cur) then Vector(Vector[Fragment]()) else Vector())
       }
-      val withConstraints = concurrentSequences.map(addExecutionConstraints(env))
+      val withConstraints = concurrentSequences.map(scrambleExecution(env))
       withConstraints.reduce(_ ++ _).toList
     }
 
   /**
    * Define a random order and enforce the new execution order using a map of previous executions
    */
-  private def addExecutionConstraints(env: Env)(fragments: Vector[Fragment]): Vector[Fragment] =
+  private def scrambleExecution(env: Env)(fragments: Vector[Fragment]): Vector[Fragment] =
     // scramble all fragments
     val scrambled = fragments.zipWithIndex.scramble(env.random)
     // map of all executions
@@ -48,3 +46,5 @@ trait RandomSequentialExecution extends SpecificationStructure:
         f1
       else f
     }
+
+object RandomSequentialExecution extends RandomSequentialExecution

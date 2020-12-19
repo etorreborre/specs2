@@ -40,7 +40,7 @@ class HtmlPrinterSpec(val env: Env) extends Specification with ActionMatchers wi
     for
       options <- htmlPrinter.getHtmlOptions(env.arguments).toAction
       _       <- htmlPrinter.copyResources(env, options).toAction
-      _       <- htmlPrinter.finalize(List(spec.structure(env)))
+      _       <- htmlPrinter.finalize(List(spec.structure))
     yield ()
 
 

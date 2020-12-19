@@ -9,9 +9,9 @@ import scala.collection.mutable.ArrayBuffer
 
 class BeforeAfterSpecSpec extends Specification { def is = s2"""
 
- Before and after all steps can be executed with the BeforeAfterSpec trait $beforeAfter ${tag("travis")}
- Before and after all steps can be executed even if tags are included     $withTags1
- Before and after all steps can be executed even if tags are excluded     $withTags2
+ Before and after all steps can be executed with the BeforeAfterSpec trait $beforeAfter
+ Before and after all steps can be executed even if tags are included $withTags1
+ Before and after all steps can be executed even if tags are excluded $withTags2
 
 """
 
@@ -34,6 +34,7 @@ class BeforeAfterSpecSpec extends Specification { def is = s2"""
 
   def withTags1 =
     val messages = new ArrayBuffer[String]
+
     val spec = new Spec with BeforeAfterSpec {
       def is =
         sequential ^ s2"""
@@ -75,7 +76,7 @@ class BeforeAfterSpecSpec extends Specification { def is = s2"""
 
   def runSpec(s: SpecificationStructure, arguments: Arguments = Arguments()) =
     val env = Env(arguments = arguments, printerLogger = NoPrinterLogger)
-    try Reporter.create(Nil, env).report(s.structure(env)).runVoid(env.executionEnv)
+    try Reporter.create(Nil, env).report(s.structure).runVoid(env.executionEnv)
     finally env.shutdown()
 
 

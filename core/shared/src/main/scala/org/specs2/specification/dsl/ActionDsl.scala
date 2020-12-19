@@ -14,7 +14,7 @@ trait ActionDsl extends FragmentsFactory:
     fragmentFactory.step(a)
 
   def step[T : AsExecution](a: =>T, global: Boolean): Fragment =
-    fragmentFactory.step(a).makeGlobal(global)
+    fragmentFactory.step(a)
 
   def action[T : AsExecution](a: =>T): Fragment =
     fragmentFactory.action(a)

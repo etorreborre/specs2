@@ -164,15 +164,15 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
 object Result:
 
   /** @return a Success or a Failure */
-  def result(test: Boolean, message: =>String, expected: =>String, trace: List[StackTraceElement], details: Details): Result =
+  def result(test: Boolean, message: =>String, expected: =>String, details: Details): Result =
     if test then
       Success()
     else
-      Failure(message.notNull, expected, trace, details)
+      Failure(m = message.notNull, e = expected, details = details)
 
   /** @return a Success or a Failure */
   def result(test: Boolean, message: =>String, details: Details): Result =
-    result(test, message, "", Nil, details)
+    result(test, message, "", details)
 
   /** @return a Success or a Failure */
   def result(test: Boolean, message: =>String, expected: String, actual: String): Result =

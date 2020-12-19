@@ -44,9 +44,6 @@ case class Fragment(description: Description, execution: Execution, location: Lo
 
   /** various methods to stop the execution of the next fragment */
   def join              = updateExecution(_.join)
-  def isolate           = updateExecution(_.makeGlobal)
-
-  def makeGlobal(when: Boolean)           = updateExecution(_.makeGlobal(when))
   def setTimeout(timeout: FiniteDuration) = updateExecution(_.setTimeout(timeout))
 
   /** skip this fragment */

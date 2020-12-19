@@ -82,7 +82,7 @@ class NotifierSpec extends Specification { def is = s2"""
     val notifier = new TestNotifier
     val reporter = Reporter.create(List(NotifierPrinter(arguments).printer(notifier)), env1)
 
-    try     reporter.report(spec.structure(env1)).runOption(env1.executionEnv)
+    try     reporter.report(spec.structure).runOption(env1.executionEnv)
     finally env1.shutdown()
 
     notifier

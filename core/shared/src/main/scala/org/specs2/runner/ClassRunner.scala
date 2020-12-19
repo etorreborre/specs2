@@ -28,10 +28,10 @@ case class DefaultClassRunner(env: Env, reporter: Reporter, specFactory: SpecFac
    * execute it and report results
    */
   def run(className: String): Action[Stats] =
-    specFactory.createSpecification(className).toAction.flatMap(spec => run(spec.structure(env)))
+    specFactory.createSpecification(className).toAction.flatMap(spec => run(spec.structure))
 
   def run(spec: SpecificationStructure): Action[Stats] =
-    run(spec.structure(env))
+    run(spec.structure)
 
   def run(specStructure: SpecStructure): Action[Stats] =
     val allSpecs = arguments.isSet("all")
@@ -113,7 +113,7 @@ object TextRunner extends ClassRunnerMain:
         reporter <- customInstances.createCustomInstance[Reporter]( "reporter",
           (m: String) => "a custom reporter can not be instantiated " + m, "no custom reporter defined, using the default one")
           .map(_.getOrElse(Reporter.create(List(TextPrinter(env1)), env1))).toAction
-        stats <- reporter.report(spec.structure(env1))
+        stats <- reporter.report(spec.structure)
       yield stats
 
     action.runAction(env1.specs2ExecutionEnv)

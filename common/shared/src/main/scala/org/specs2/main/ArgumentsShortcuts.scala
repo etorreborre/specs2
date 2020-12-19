@@ -14,6 +14,10 @@ trait ArgumentsShortcuts { this: ArgumentsCreation =>
    */
   def sequential: Arguments = args(sequential = ArgProperty(true))
   /**
+   * @return arguments for a specification where examples must be executed sequentially but in a random order
+   */
+  def sequentialRandom: Arguments = args(sequentialRandom = ArgProperty(true))
+  /**
    * @return arguments for a specification where examples must in a given batch size
    */
   def batchSize(n: Int): Arguments = args(batchSize = ArgProperty(n))

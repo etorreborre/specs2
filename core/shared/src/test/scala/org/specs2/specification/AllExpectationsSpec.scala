@@ -4,7 +4,7 @@ package specification
 import _root_.org.specs2.mutable.{Specification => Spec}
 import org.specs2.execute.Result
 import org.specs2.main.Arguments
-import org.specs2.specification.core.{ContextualSpecificationStructure, Env, OwnEnv}
+import org.specs2.specification.core.{SpecificationStructure, Env, OwnEnv}
 import org.specs2.specification.process._
 import user.specification._
 import fp.syntax._
@@ -59,21 +59,21 @@ class AllExpectationsSpec(val env: Env) extends Spec with OwnEnv:
     }
   }
 
-  def stats(spec: ContextualSpecificationStructure)(args: Arguments): Stats =
+  def stats(spec: SpecificationStructure)(args: Arguments): Stats =
     // all the executions need to be sequential
-    val executed = DefaultExecutor.executeSpec(spec.structure(ownEnv) |> DefaultSelector(ownEnv.arguments).select(args), ownEnv)
+    val executed = DefaultExecutor.executeSpec(spec.structure |> DefaultSelector(ownEnv.arguments).select(args), ownEnv)
     Statistics.runStats(executed)(ownEnv.executionEnv)
 
-  def results(spec: ContextualSpecificationStructure)(args: Arguments): List[Result] =
+  def results(spec: SpecificationStructure)(args: Arguments): List[Result] =
     // all the executions need to be sequential
     val env1 = ownEnv.setArguments(args <| sequential)
-    DefaultExecutor.executeSpec(spec.structure(env1), env1).fragments.fragments.
+    DefaultExecutor.executeSpec(spec.structure, env1).fragments.fragments.
       flatMap(_.traverse(_.executionResult)).run(env1.executionEnv)
 
-  def issues(spec: ContextualSpecificationStructure)(args: Arguments): List[Result] =
+  def issues(spec: SpecificationStructure)(args: Arguments): List[Result] =
     results(spec)(args).filter(r => r.isError || r.isFailure)
 
-  def suspended(spec: ContextualSpecificationStructure)(args: Arguments): List[Result] =
+  def suspended(spec: SpecificationStructure)(args: Arguments): List[Result] =
     results(spec)(args).filter(r => r.isSkipped || r.isPending)
 
   def executed = stats(new AllExpectationsSpecification)(args())

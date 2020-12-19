@@ -14,7 +14,7 @@ import scala.util.Not
 trait ExampleDsl extends FragmentsFactory:
 
   extension (d: String)(using not: Not[NoBangExamples])
-    def !(execution: Execution): Fragment =
+    def !(execution: =>Execution): Fragment =
       fragmentFactory.example(Text(d), execution)
 
   extension [R : AsResult](d: String)(using not: Not[NoBangExamples])
@@ -27,6 +27,9 @@ trait ExampleDsl extends FragmentsFactory:
   extension [R : AsResult](d: String)(using not: Not[NoBangExamples])
     def !(r: Env => R)(using p: ImplicitParam): Fragment =
       fragmentFactory.example(d, r)
+
+  def addExample(d: String, execution: =>Execution): Fragment =
+    fragmentFactory.example(Text(d), execution)
 
 
 trait NoBangExamples:

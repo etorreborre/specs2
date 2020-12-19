@@ -129,7 +129,7 @@ object SpecStructure:
 
     def getRefs(s: SpecStructure, visited: Vector[(String, SpecStructure)]): Vector[(String, SpecStructure)] =
       refs(s).map { ref =>
-        SpecificationStructure.create(ref.header.specClass.getName, classLoader, Some(env)).map(_.structure(env).setArguments(ref.arguments))
+        SpecificationStructure.create(ref.header.specClass.getName, classLoader, Some(env)).map(_.structure.setArguments(ref.arguments))
       }.sequence.map(byName)
        .runMonoid
        .filterNot { case (n, _) => visited.map(_._1).contains(n) }

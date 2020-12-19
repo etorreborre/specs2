@@ -95,7 +95,7 @@ trait Trees:
   extension [T](t: TreeLoc[T])
     @targetName("parentLocsPostfix")
     def parentLocs: Seq[TreeLoc[T]] =
-      outer.parentLocs(t)
+      outer.parentLocs(t, Vector.empty)
 
     def size(using nothing: Int = 0): Int =
       outer.size(t)

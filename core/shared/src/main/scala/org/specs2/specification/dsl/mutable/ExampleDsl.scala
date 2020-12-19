@@ -15,6 +15,6 @@ import scala.util.Not
  */
 trait ExampleDsl extends dsl.ExampleDsl with BlockCreation:
 
-  extension [S : AsExecution, R] (d: String)(using not: Not[NoBangExamples]):
-    def !(s: S)(using t: ToBlock[S, R]): R =
-     summon[ToBlock[S, R]].toBlock(d, s)
+  override def addExample(d: String, execution: =>Execution): Fragment =
+    addFragment(super.addExample(d, execution))
+    addFragment(fragmentFactory.break)

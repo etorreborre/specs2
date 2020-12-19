@@ -2,14 +2,14 @@ package org.specs2
 package specification
 package process
 
-import specification.core._
-
 import scala.concurrent._
+import core._
 import duration._
 import control._
 import producer._, Producer._
 import fp.syntax._
 import main.Arguments
+import process.RandomSequentialExecution._
 
 /**
  * Functions for executing fragments.
@@ -46,7 +46,13 @@ case class DefaultExecutor(env: Env) extends Executor:
    *  - sequence the execution so that only parts in between steps are executed concurrently
    */
   def execute(specArguments: Arguments): AsyncTransducer[Fragment, Fragment] = { (contents: AsyncStream[Fragment]) =>
-    sequencedExecution(specArguments)(contents).flatMap(executeOnline(specArguments))
+    val toExecute =
+          if env.arguments.sequentialRandom then
+            forceRandomSequentialExecution(Fragments(contents), env).contents
+          else
+            contents
+
+    sequencedExecution(specArguments)(toExecute).flatMap(executeOnline(specArguments))
   }
 
   /**
@@ -71,7 +77,7 @@ case class DefaultExecutor(env: Env) extends Executor:
     p.producerState(init, Option(last)) { case (fragment, (previous, previousStarted, previousStep)) =>
       if arguments.skipAll then
         (one(if fragment.isExecutable then fragment.skip else fragment), init)
-      else if arguments.sequential then
+      else if arguments.sequential || arguments.sequentialRandom then
         val f = if Fragment.isStep(fragment) then fragment.updateExecution(_.setErrorAsFatal) else fragment
         val started = f.startExecutionAfter(previousStarted.toList)(env)
         (one(started), (previous, previousStarted :+ started, None))
@@ -125,17 +131,17 @@ object DefaultExecutor:
     executeSpec(spec, env).contents.runList.runMonoid(env.specs2ExecutionEnv)
 
   def runSpecification(spec: SpecificationStructure, env: Env): List[Fragment] =
-    lazy val structure = spec.structure(env)
+    lazy val structure = spec.structure
     executeSpec(structure, env.copy(arguments = env.arguments <| structure.arguments)).contents.runList.
       runMonoid(env.specs2ExecutionEnv)
 
   def runSpecificationFuture(spec: SpecificationStructure, env: Env): Future[List[Fragment]] =
-    lazy val structure = spec.structure(env)
+    lazy val structure = spec.structure
     val env1 = env.copy(arguments = env.arguments <| structure.arguments)
     executeSpec(structure, env1).contents.runList.runFuture(env.specs2ExecutionEnv)
 
   def runSpecificationAction(spec: SpecificationStructure, env: Env): Action[List[Fragment]] =
-    lazy val structure = spec.structure(env)
+    lazy val structure = spec.structure
     val env1 = env.copy(arguments = env.arguments <| structure.arguments)
     executeSpec(structure, env1).contents.runList.
       flatMap { fs => fs.traverse(_.executionResult).as(fs) }

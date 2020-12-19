@@ -3,6 +3,7 @@ package specification
 package dsl
 package mutable
 
+import data._
 import execute.{Error, Result}
 import core._
 
@@ -15,10 +16,7 @@ trait ActionDsl extends FragmentBuilder with org.specs2.specification.dsl.Action
     addFragment(super.action(a))
 
   override def step[T : AsExecution](a: =>T): Fragment =
-    step(a, global = true)
-
-  override def step[T : AsExecution](a: =>T, global: Boolean): Fragment =
-    addFragment(super.step(a).makeGlobal(global))
+    addFragment(super.step(a))
 
   def stopWhen(r: Result): Fragment = addFragment(fragmentFactory.step(()).stopOn(r))
   def stopWhen(f: Result => Boolean): Fragment = addFragment(fragmentFactory.step(()).stopWhen(f))
