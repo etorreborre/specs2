@@ -6,8 +6,8 @@ import java.io.File
 import text._
 import AnsiColors._
 import io._
-import MatchResult._
-import org.specs2.fp.syntax._
+import execute._, Result._
+import fp.syntax._
 
 /**
  * The ContentMatchers trait provides matchers to make comparisons between files, sequences,...
@@ -34,7 +34,8 @@ trait LinesContentBaseMatchers extends DifferenceFilters with Expectations with 
     LinesComparisonMatcher[L1, L2](ls2, all = false)
 
   // default implementation for reading file lines
-  implicit protected val fileContentForMatchers: LinesContent[File] = FileLinesContent
+  implicit protected val fileContentForMatchers: LinesContent[File] =
+    FileLinesContent
 
   /**
    * Matcher to compare the contents of line contents
@@ -46,7 +47,7 @@ trait LinesContentBaseMatchers extends DifferenceFilters with Expectations with 
     colors: Boolean = true,
     filter: DifferenceFilter = DifferencesClips()) extends Matcher[L1]:
 
-    def apply[S <: L1](t: Expectable[S]): MatchResult[S] =
+    def apply[S <: L1](t: Expectable[S]): Result =
       val ls1 = t.value
       val (content1, content2) = (implicitly[LinesContent[L1]], implicitly[LinesContent[L2]])
 
@@ -56,14 +57,11 @@ trait LinesContentBaseMatchers extends DifferenceFilters with Expectations with 
       val diffs = content1.differences(ls1, ls2, all, ordered)
 
       result(diffs.isEmpty,
-             n1+" "+okMessage+" "+n2,
-             n1+" "+koMessage+" "+n2+"\n"+
-             showDiffs(filter(diffs.show))+"\n",
-             t)
+             n1+" "+koMessage+" "+n2+"\n"+ showDiffs(filter(diffs.show))+"\n")
 
     def showWith(show: DifferenceFilter) = copy[L1, L2](filter = show)
     def unordered                        = copy[L1, L2](ordered = false)
-    def nocolors                         = copy[L1, L2](colors = false)
+    def noColors                         = copy[L1, L2](colors = false)
 
     protected def showDiffs(s: Seq[_]): String =
       s.flatMap {
@@ -90,14 +88,14 @@ trait LinesContentBaseMatchers extends DifferenceFilters with Expectations with 
                                                                               filter: DifferenceFilter = DifferencesClips())
     extends Matcher[(L1, L2)]:
 
-    def apply[S <: (L1, L2)](t: Expectable[S]): MatchResult[S] =
+    def apply[S <: (L1, L2)](t: Expectable[S]): Result =
       val (ls1, ls2) = t.value
       new LinesComparisonMatcher[L1, L2](ls2, all, ordered, colors, filter).
-        apply(createExpectable(ls1)).map((_:L1) => t.value)
+        apply(createExpectable(ls1))
 
     def showOnly(show: DifferenceFilter) = copy[L1, L2](filter = show)
     def unordered                        = copy[L1, L2](ordered = false)
-    def nocolors                         = copy[L1, L2](colors = false)
+    def noColors                         = copy[L1, L2](colors = false)
 
 
 /**
@@ -110,4 +108,3 @@ trait SeqsContents:
   // default implementation for reading seq lines
   implicit protected def seqContentForMatchers[T, CC[_] <: Traversable[_]]: LinesContent[CC[T]] =
     SeqLinesContent[T, CC]()
-

@@ -1,5 +1,6 @@
 package org.specs2
 
+import execute._
 import matcher._
 import specification._
 
@@ -13,22 +14,23 @@ class ExpectationsSpec extends Specification { def is = s2"""
   def e1 =
     val expectations = new StoredExpectations1 {}
     expectations.check(ok)
-    expectations.sandboxMatchResult(ko)
+    expectations.sandboxResult(ko)
 
     "ko has not been stored" ==> {
-      expectations.storedResults must contain(exactly(ok.toResult))
+      expectations.storedResults must contain(exactly(ok))
     }
 
   def e2 =
     val expectations = new ThrownExpectations1 {}
-    expectations.sandboxMatchResult(expectations.check(ko)) must ===(ko)
+    expectations.sandboxResult(expectations.check(ko)) must ===(ko)
 
   trait StoredExpectations1 extends StoredExpectations:
-    def check[T](m: MatchResult[T]):
-      MatchResult[T] = checkMatchResultFailure(m)
+    def check(r: Result): Result =
+      checkResultFailure(r)
 
   trait ThrownExpectations1 extends ThrownExpectations:
-    def check[T](m: MatchResult[T]): MatchResult[T] = checkMatchResultFailure(m)
+    def check(r: Result): Result =
+      checkResultFailure(r)
 
 
 }

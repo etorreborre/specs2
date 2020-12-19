@@ -2,7 +2,8 @@ package org.specs2
 package execute
 
 import mutable.Spec
-import org.specs2.matcher.ResultMatchers
+import matcher.ResultMatchers
+import ResultImplicits._
 import scala.concurrent._, duration._
 
 class EventuallyResultsSpec extends Spec with ResultMatchers:

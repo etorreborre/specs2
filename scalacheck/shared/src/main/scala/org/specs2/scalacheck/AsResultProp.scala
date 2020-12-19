@@ -29,7 +29,7 @@ trait AsResultProp extends ScalaCheckPropertyCheck with AsResultPropLowImplicits
 
                 case execute.DecoratedResult(_, r1) =>
                   // display the datatables on a new line
-                  resultToProp(r1.mapMessage("\n"+_))
+                  resultToProp(r1.updateMessage("\n"+_))
 
                 case other => Prop.passed
 

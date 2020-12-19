@@ -111,8 +111,8 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
     updateResult(r => f(r))
 
   /** force a message */
-  def mapMessage(f: String => String): Execution =
-    mapResult(_.mapMessage(f))
+  def updateMessage(f: String => String): Execution =
+    mapResult(_.updateMessage(f))
 
   def setPreviousResult(r: Option[Result]): Execution =
     copy(previousResult = r)

@@ -61,5 +61,5 @@ trait ScalaCheckResult:
       Test.check(Parameters.default, prop).status match
         case `Passed` | Proved(_)           => Success()
         case Failed(args, labels)           => Failure("Property failed with args: "+args.mkString(", ")+" and labels "+labels.mkString(", "))
-        case PropException(args, e, labels) => Error(e).updateMessage("Property failed with args: "+args.mkString(", ")+" and labels "+labels.mkString(", "))
+        case PropException(args, e, labels) => Error(e).setMessage("Property failed with args: "+args.mkString(", ")+" and labels "+labels.mkString(", "))
         case `Exhausted`                    => Error("exhausted")

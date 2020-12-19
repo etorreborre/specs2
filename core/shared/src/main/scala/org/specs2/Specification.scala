@@ -2,7 +2,7 @@ package org.specs2
 
 import matcher._
 import main._
-import org.specs2.execute.StandardResults
+import execute._
 import specification.dsl.AcceptanceDsl1
 import specification._
 import specification.core.ImmutableSpecificationStructure
@@ -30,12 +30,14 @@ trait SpecificationLike extends ImmutableSpecificationStructure
  *  - 1 implicit to add arguments to the specification
  */
 abstract class Spec extends SpecLike
+
 trait SpecLike extends ImmutableSpecificationStructure
   with S2StringContext1
   with AcceptanceDsl1
   with MustMatchers
+  with Expectations
   with ArgumentsCreation
   with ArgumentsShortcuts
   with FormattingFragments
   with StandardResults
-  with StandardMatchResults
+  with ExpectedResults

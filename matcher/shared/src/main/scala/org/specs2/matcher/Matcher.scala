@@ -2,15 +2,16 @@ package org.specs2
 package matcher
 
 import org.specs2.control.Exceptions._
-import org.specs2.execute._
-import org.specs2.matcher.MatchResultLogicalCombinators._
-import org.specs2.matcher.MatchResultMessages._
+import org.specs2.execute._, Result._
+import execute.ResultImplicits._
+import execute.ResultLogicalCombinators._
 import org.specs2.text.NotNullStrings._
 import org.specs2.text.Quote._
 import org.specs2.text.Sentences._
 
 import scala.concurrent.duration._
 import org.specs2.fp.syntax._
+import annotation._
 
 /**
  * The `Matcher` trait is the base trait for any Matcher.
@@ -18,7 +19,7 @@ import org.specs2.fp.syntax._
  * This trait can be extended to provide an appropriate `apply` method that
  * will check an expectable value `a: Expectable[T]`.
  *
- * The result of a match is a MatchResult object (@see MatchResult).
+ * The result of a match is a Result
  *
  * Matchers can be composed.
  *
@@ -29,187 +30,180 @@ import org.specs2.fp.syntax._
  *   - However in the implementation of the apply function, it must be taken care of not
  *     evaluating the parameter twice. Assigning it to a val is the solution to this issue.
  */
-trait Matcher[-T] { outer =>
+trait Matcher[-T]:
+  outer =>
 
   /**
    * apply this matcher to an Expectable
-   * @return a MatchResult describing the outcome of the match
+   * @return a Result describing the outcome of the match
    */
-  def apply[S <: T](t: Expectable[S]): MatchResult[S]
-
-  /**
-   * @return a MatchResult with an okMessage, a koMessage and the expectable value
-   */
-  protected def result[S <: T](test: =>Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[S]): MatchResult[S] =
-    Matcher.result(test, okMessage, koMessage, value)
-  /**
-   * @return a MatchResult with an okMessage, a koMessage and the expectable value
-   */
-  protected def result[S <: T](triplet: =>(Boolean, String, String), value: Expectable[S]): MatchResult[S] =
-    Matcher.result(triplet._1, triplet._2, triplet._3, value)
-  /**
-   * @return a MatchResult with an okMessage, a koMessage, the expectable value and the expected/actual values as string
-   *         to display a failure comparison if necessary
-   */
-  protected def result[S <: T](test: =>Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[S], expected: String, actual: String): MatchResult[S] =
-    Matcher.result(test, okMessage, koMessage, value, expected, actual)
-
-  /**
-   * @return a MatchResult with an okMessage, a koMessage, the expectable value and details about the failure if any
-   */
-  protected def result[S <: T](test: =>Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[S], details: Details): MatchResult[S] =
-    Matcher.result(test, okMessage, koMessage, value, details)
-
-  /** This  method can be used to create a successful match result */
-  protected def success[S <: T](message: =>String, value: Expectable[S]): MatchResult[S] =
-    Matcher.success(message, value)
-
-  /** This  method can be used to create a failed match result */
-  protected def failure[S <: T](message: =>String, value: Expectable[S]): MatchResult[S] =
-    Matcher.failure(message, value)
-
-  /**
-   * @return a MatchResult copied on another one, but with a different expectable
-   */
-  protected def result[S <: T](other: MatchResult[_], value: Expectable[S]): MatchResult[S] =
-    other match
-      case MatchSuccess(ok, ko, _)                                      => Matcher.result(true,  ok(), ko(), value)
-      case MatchFailure(ok, ko, _, _, FailureDetails(actual, expected)) => Matcher.result(false, ok(), ko(), value, expected, actual)
-      case MatchFailure(ok, ko, _, _, _)                                => Matcher.result(false, ok(), ko(), value)
-      case _                                                            => Matcher.result(other.isSuccess, other.message, value)
-
-  /** @return a Match Result from another result */
-  protected def result[S <: T](other: Result, value: Expectable[S]): MatchResult[S] =
-    Matcher.result(other, value)
-
-  /**
-   * @return a MatchResult using the messages embedded in a MatchResultMessage (i.e. an accumulation of messages from other matches)
-   */
-  protected def result[S <: T](other: MatchResultMessage, value: Expectable[S]): MatchResult[S] =
-    lazy val messages = other match
-      case SuccessMessage(ok, ko)  => (ok(), ko())
-      case FailureMessage(ok, ko)  => (ok(), ko())
-      case NeutralMessage(message) => (message, message)
-      case EmptySuccessMessage()   => ("", "")
-    Matcher.result(other.isSuccess, messages._1, messages._2, value)
+  def apply[S <: T](t: Expectable[S]): Result
 
   /**
    * Adapt a matcher to another.
    * ex: `be_==("message") ^^ (_.getMessage)` can be applied to an exception
    */
-  def ^^[S](f: S => T) = new Matcher[S] {
-    def apply[U <: S](a: Expectable[U]) =
-      val result = outer(a.map(f))
-      result.map(_ => a.value).setExpectable(a)
-  }
+  def ^^[S](f: S => T): Matcher[S] =
+    new Matcher[S]:
+      def apply[U <: S](a: Expectable[U]): Result =
+        outer(a.map(f))
+
   /**
    * Adapt a matcher to another.
    * ex: `be_==("message") ^^ (_.getMessage aka "trimmed")` can be applied to an exception
    *
    * The dummy value is used to help to disambiguate with the overloaded ^^ function
    */
-  def ^^[S](f: S => Expectable[T], dummy: Int = 0) = new Matcher[S] {
-    def apply[U <: S](a: Expectable[U]) =
-      val result = f(a.value).applyMatcher(outer)
-      result.map(_ => a.value).setExpectable(a)
-  }
+  def ^^[S](f: S => Expectable[T], dummy: Int = 0): Matcher[S] =
+    new Matcher[S]:
+      def apply[U <: S](a: Expectable[U]): Result =
+        f(a.value).applyMatcher(outer)
+
   /**
    * negate a Matcher
-   * @see MatchResult.not
+   * @see Result.not
    */
-  def not = new Matcher[T] {
-    def apply[U <: T](a: Expectable[U]) =
-      val result =
-        try outer(a)
-        catch
-          case FailureException(f: Failure) => MatchFailure(f.message, f.message, a)
-      a.checker.check(result.not)
-  }
+  def not: Matcher[T] =
+    new Matcher[T]:
+      def apply[U <: T](a: Expectable[U]): Result =
+        val result =
+          try outer(a)
+          catch
+            case FailureException(f: Failure) => f
+        a.checker.check(result.not)
 
   /**
    * the logical and between 2 matchers
-   * @see MatchResult.and
+   * @see Result.and
    */
-  def and[S <: T](m: =>Matcher[S]): Matcher[S] = new Matcher[S] {
-    def apply[U <: S](a: Expectable[U]) = outer(a).and(m(a))
-  }
+  def and[S <: T](m: =>Matcher[S]): Matcher[S] =
+    new Matcher[S]:
+      def apply[U <: S](a: Expectable[U]): Result =
+        outer(a).and(m(a))
 
   /**
    * the logical or between 2 matchers
-   * @see MatchResult.or
+   * @see Result.or
    */
-  def or[S <: T](m: =>Matcher[S]) = new Matcher[S] {
-    def apply[U <: S](a: Expectable[U]) = outer(a).or(m(a))
-  }
+  def or[S <: T](m: =>Matcher[S]): Matcher[S] =
+    new Matcher[S]:
+      def apply[U <: S](a: Expectable[U]): Result =
+        outer(a).or(m(a))
 
   /**
-   * @return a Skip MatchResult if this matcher fails
+   * @return a Skipped result if this matcher fails
    */
-  def orSkip: Matcher[T] = orSkip("")
+  def orSkip: Matcher[T] =
+    orSkip("")
+
   /**
-   * @return a Skip MatchResult if this matcher fails, prefixing the failure message with a skip message.
+   * @return a Skipped Result if this matcher fails, prefixing the failure message with a skip message.
    * If the skip message is empty, only the failure message is printed
    */
-  def orSkip(m: String): Matcher[T] = orSkip((ko: String) => m prefix(": ", ko))
+  def orSkip(m: String): Matcher[T] =
+    orSkip((ko: String) => m prefix(": ", ko))
 
   /**
-   * @return a Skip MatchResult if this matcher fails, modifying the failure message with a skip message.
+   * @return a Skipped Result if this matcher fails, modifying the failure message with a skip message.
    */
-  def orSkip(message: String => String): Matcher[T] = new Matcher[T] {
-    def apply[U <: T](a: Expectable[U]) =
-      tryOr(outer(a)) { t => MatchSkip(message(t.getMessage.notNull), a) } match
-        case f: MatchFailure[_]      => MatchSkip(message(f.koMessage), a)
-        case other                   => other
-  }
+  def orSkip(message: String => String): Matcher[T] =
+    new Matcher[T]:
+      def apply[U <: T](a: Expectable[U]) =
+        tryOr(outer(a)) { t => Skipped(message(t.getMessage.notNull)) } match
+            case f: Failure =>
+              Skipped(message(f.message))
+            case other =>
+              other
   /**
-   * @return a Pending MatchResult if this matcher fails
+   * throw a FailureException if this matcher fails
    */
-  def orPending: Matcher[T] = orPending("")
+  def orThrow: Matcher[T] =
+    orThrow("")
+
   /**
-   * @return a Pending MatchResult if this matcher fails, prefixing the failure message with a pending message.
+   * throw a FailureException if this matcher fails prefixing the failure message with a message.
+   * If the message is empty, only the failure message is printed
+   */
+  def orThrow(m: String): Matcher[T] =
+    orThrow((ko: String) => m prefix(": ", ko))
+
+  /**
+   * throw a FailureException if this matcher fails, modifying the failure message with a message.
+   */
+  def orThrow(message: String => String): Matcher[T] =
+    new Matcher[T]:
+      def apply[U <: T](a: Expectable[U]): Result =
+        tryOr(outer(a)) { t => throw new FailureException(Failure(message(t.getMessage.notNull))) } match
+          case f: Failure =>
+            throw new FailureException(f)
+          case other =>
+            other
+
+  /**
+   * @return a Pending Result if this matcher fails
+   */
+  def orPending: Matcher[T] =
+    orPending("")
+
+  /**
+   * @return a Pending Result if this matcher fails, prefixing the failure message with a pending message.
    * If the pending message is empty, only the failure message is printed
    */
-  def orPending(m: String): Matcher[T] = orPending((ko: String) => m prefix(": ", ko))
+  def orPending(m: String): Matcher[T] =
+    orPending((ko: String) => m prefix(": ", ko))
 
   /**
-   * @return a Pending MatchResult if this matcher fails, modifying the failure message with a pending message.
+   * @return a Pending Result if this matcher fails, modifying the failure message with a pending message.
    */
-  def orPending(message: String => String): Matcher[T] = new Matcher[T] {
-    def apply[U <: T](a: Expectable[U]) =
-      tryOr(outer(a)) { t => MatchPending(message(t.getMessage.notNull), a) } match
-        case f: MatchFailure[_]        => MatchPending(message(f.koMessage), a)
-        case other                     => other
-  }
+  def orPending(message: String => String): Matcher[T] =
+    new Matcher[T] {
+      def apply[U <: T](a: Expectable[U]) =
+        tryOr(outer(a)) { t => Pending(message(t.getMessage.notNull)) } match
+          case f: Failure =>
+            Pending(message(f.message))
+          case other =>
+            other
+    }
 
   /** only apply this matcher if the condition is true */
-  def when(b: Boolean, m: String= ""): Matcher[T] = new Matcher[T] {
-    def apply[U <: T](a: Expectable[U]) = if b then outer(a) else MatchSuccess(m, "ko", a)
-  }
+  def when(b: Boolean, m: String = ""): Matcher[T] =
+    new Matcher[T]:
+      def apply[U <: T](a: Expectable[U]): Result =
+        if b then outer(a) else Success(m)
+
+
   /** only apply this matcher if the condition is false */
-  def unless(b: Boolean, m: String= ""): Matcher[T] = when(!b, m)
+  def unless(b: Boolean, m: String= ""): Matcher[T] =
+    when(!b, m)
+
   /** when the condition is true the matcher is applied, when it's false, the matcher must fail */
-  def iff(b: Boolean): Matcher[T] = new Matcher[T] {
-    def apply[U <: T](a: Expectable[U]) = if b then outer(a) else outer(a).not
-  }
+  def iff(b: Boolean): Matcher[T] =
+    new Matcher[T]:
+      def apply[U <: T](a: Expectable[U]) =
+        if b then outer(a) else outer(a).not
+
   /**
    *  The `lazily` operator returns a Matcher which will match a function returning the expected value
    */
-  def lazily = new Matcher[() => T]() { self =>
-    def apply[S <: () => T](function: Expectable[S]) =
-      val r = outer(createExpectable(function.value()))
-      self.result(r, function)
-  }
+  def lazily: Matcher[() => T] =
+    new Matcher[() => T]:
+      self =>
+      def apply[S <: () => T](function: Expectable[S]) =
+        outer(createExpectable(function.value()))
+
   /**
    * @return a matcher that needs to eventually match, after 40 retries and a sleep time
    * of 100 milliseconds
    */
-  def eventually: Matcher[T] = EventuallyMatchers.eventually(this)
+  def eventually: Matcher[T] =
+    EventuallyMatchers.eventually(this)
 
   /**
    * @return a matcher that needs to eventually match, after a given number of retries
    * and a sleep time
    */
-  def eventually(retries: Int, sleep: Duration): Matcher[T] = EventuallyMatchers.eventually(this, retries, sleep)
+  def eventually(retries: Int, sleep: Duration): Matcher[T] =
+    EventuallyMatchers.eventually(this, retries, sleep)
 
   /**
    * @param sleep the function applied on the retry number (first is 1)
@@ -220,7 +214,8 @@ trait Matcher[-T] { outer =>
    * (aResult === expected).eventually(retries = 2, _ * 100.milliseconds)
    * }}}
    */
-  def eventually(retries: Int, sleep: Int => Duration): Matcher[T] = EventuallyMatchers.eventually(this, retries, sleep)
+  def eventually(retries: Int, sleep: Int => Duration): Matcher[T] =
+    EventuallyMatchers.eventually(this, retries, sleep)
 
   /**
    * @return a Matcher with no messages
@@ -230,62 +225,115 @@ trait Matcher[-T] { outer =>
   /**
    * @return update the failure message of a matcher
    */
-  def updateMessage(f: String => String) = new Matcher[T] {
-    def apply[S <: T](s: Expectable[S]) =
-      try outer.apply(s).updateMessage(f)
-      catch { case FailureException(Failure(m, e, st, d)) =>
-        throw FailureException(Failure(f(m), e, st, d)) }
-  }
+  def updateMessage(f: String => String): Matcher[T] =
+    new Matcher[T] {
+      def apply[S <: T](s: Expectable[S]) =
+        try outer.apply(s).updateMessage(f)
+        catch { case FailureException(Failure(m, e, st, d)) =>
+          throw FailureException(Failure(f(m), e, st, d)) }
+    }
 
   /**
    * @return set a new failure message of a matcher
    */
-  def setMessage(message: String) = updateMessage((s: String) => message)
+  def setMessage(message: String): Matcher[T] =
+    updateMessage(_ => message)
 
   /**
    * @return a test function corresponding to this matcher
    */
-  def test = (t: T) => apply(Expectations.createExpectable(t)).isSuccess
-}
+  def test: T => Boolean =
+    (t: T) => apply(Expectations.createExpectable(t)).isSuccess
 
-object Matcher:
+end Matcher
 
-  /** @return a MatchResult[T] from a condition, 2 messages and details, and a trace when there is a failure */
-  def result[T](test: Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[T], trace: List[StackTraceElement], details: Details): MatchResult[T] =
-    if test then MatchSuccess(okMessage.notNull, koMessage.notNull, value)
-    else      MatchFailure.create(okMessage.notNull, koMessage.notNull, value, trace, details)
+object Matcher extends MatcherCreation:
 
-  /** @return a MatchResult[T] from a condition, 2 messages and details */
-  def result[T](test: Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[T], details: Details): MatchResult[T] =
-    if test then MatchSuccess(okMessage.notNull, koMessage.notNull, value)
-    else      MatchFailure.create(okMessage.notNull, koMessage.notNull, value, details)
+  @targetName("fromCondition")
+  def apply[T](f: (T => Boolean, String)): Matcher[T] = f
+  @targetName("fromConditionActualExpected")
+  def apply[T](f: (T => Boolean, String, String, String)): Matcher[T] = f
+  @targetName("fromFunctions")
+  def apply[T](f: (T => Boolean, T => String)): Matcher[T] = f
+  @targetName("fromFunctionsActualExpected")
+  def apply[T](f: (T => Boolean, T => String, T => String, T => String)): Matcher[T] = f
+  @targetName("fromFunction")
+  def apply[T](f: T => (Boolean, String)): Matcher[T] = f
+  @targetName("fromFunctionActualExpected")
+  def apply[T](f: T => (Boolean, String, String, String)): Matcher[T] = f
+  def apply[T, R : AsResult](f: T => R): Matcher[T] = f
+  def apply[T, R : AsResult](f: T => Matcher[R]): (=>T) => Matcher[R] = f
 
-  /** @return a MatchResult[T] from a condition and 2 messages */
-  def result[T](test: Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[T]): MatchResult[T] =
-     result(test, okMessage, koMessage, value, NoDetails)
+trait MatcherCreation:
 
-  /** @return a MatchResult[T] from a condition, 2 messages and expected/actual values */
-  def result[T](test: Boolean, okMessage: =>String, koMessage: =>String, value: Expectable[T], expected: String, actual: String): MatchResult[T] =
-    result(test, okMessage, koMessage, value, FailureDetails(actual, expected))
+  /**
+   * This method transforms a function to a Matcher
+   */
+  given [T] as Conversion[(T => Boolean, String), Matcher[T]]:
+    def apply(f: (T => Boolean, String)): Matcher[T] =
+      (f._1, (t:T) => q(t)+" "+f._2)
 
-  /** @return a MatchResult[T] from a result */
-  def result[T](r: Result, value: Expectable[T]): MatchResult[T] =
-    r match
-      case Failure(m, e, trace, details) => result(false, m, m, value, trace, details)
-      case _ => result(r.isSuccess, r.message, r.message, value)
+  /**
+   * This method transforms a function to a Matcher
+   */
+  given [T] as Conversion[(T => Boolean, String, String, String), Matcher[T]]:
+    def apply(f: (T => Boolean, String, String, String)): Matcher[T] =
+      (f._1, (t:T) => q(t)+" "+f._2, (_:T) => f._3, (_:T) => f._4)
 
-  /** @return a MatchResult[T] from a condition and just one message */
-  def result[T](test: Boolean, message: =>String, value: Expectable[T]): MatchResult[T] =
-    result(test, message, message, value)
+  /**
+   * This method transforms a function to a Matcher
+   */
+  given [T] as Conversion[(T => Boolean, T => String), Matcher[T]]:
+    def apply(f: (T => Boolean, T => String)): Matcher[T] =
+      new Matcher[T]:
+        def apply[S <: T](s: Expectable[S]) =
+          val (condition, message) = (f._1(s.value), f._2(s.value))
+          Result.result(condition, message)
 
-  def success[T](message: =>String, value: Expectable[T]): MatchResult[T] =
-    result(true, message, negateSentence(message), value)
+  /**
+   * This method transforms a function, with function descriptors to a Matcher
+   */
+  given [T] as Conversion[(T => Boolean, T => String, T => String, T => String), Matcher[T]]:
+   def apply(f: (T => Boolean, T => String, T => String, T => String)): Matcher[T] =
+     new Matcher[T]:
+       def apply[S <: T](s: Expectable[S]) =
+         val (condition, message, actual, expected) = (f._1(s.value), f._2(s.value), f._3(s.value), f._4(s.value))
+         Result.result(condition, message, actual, expected)
 
-  /** This  method can be used to create a failed match result */
-  def failure[T](message: =>String, value: Expectable[T]): MatchResult[T] =
-    result(false, negateSentence(message), message, value)
+  /**
+   * This method transforms a function returning a pair (condition, message) to a Matcher
+   */
+  given pairFunctionToMatcher[T] as Conversion[T => (Boolean, String), Matcher[T]]:
+   def apply(f: T => (Boolean, String)): Matcher[T] =
+     new Matcher[T]:
+       def apply[S <: T](s: Expectable[S]) =
+          val (condition, message) = f(s.value)
+          Result.result(condition, message)
 
-  /** extract failure details from a Result if it is a Failure */
-  def details(r: Result): Details = r match
-    case f : Failure => f.details
-    case _           => NoDetails
+  /**
+   * This method transforms a function returning a triplet (condition, message, actual, expected) to a Matcher
+   */
+  given [T] as Conversion[T => (Boolean, String, String, String), Matcher[T]]:
+    def apply(f: T => (Boolean, String, String, String)): Matcher[T] =
+      new Matcher[T]:
+        def apply[S <: T](s: Expectable[S]) =
+          val (condition, message, actual, expected) = f(s.value)
+          Result.result(condition, message, actual, expected)
+
+  /**
+   * This method transforms a function returning a Result to a Matcher
+   */
+  given resultFunctionToMatcher[T, R : AsResult] as Conversion[T => R, Matcher[T]]:
+    def apply(f: T => R): Matcher[T] =
+      new Matcher[T]:
+        def apply[S <: T](s: Expectable[S]) =
+          ResultExecution.execute(AsResult(f(s.value)))
+
+  /** this allows a function returning a matcher to be used where the same function with a byname parameter is expected */
+  given matcherFunctionToMatcher[T, R] as Conversion[T => Matcher[R], (=>T) => Matcher[R]]:
+    def apply(f: T => Matcher[R]): (=>T) => Matcher[R] =
+      def f1(t: =>T) = f(t)
+      f1
+
+
+object MatcherCreation extends MatcherCreation

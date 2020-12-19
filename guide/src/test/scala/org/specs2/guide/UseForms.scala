@@ -59,7 +59,7 @@ A `Prop` is like a `Field`, it has a label. But you can give it 2 values, an "ac
  `prop(label, actual)`                                                    | a property with a label and an actual value
  `prop(label, actual, expected)`                                          | a property with a label, an actual value and an expected one
  `prop(label, actual, constraint)`                                        | a property with a label, an actual value and a function taking the actual value, an expected one and returning a `Result`
- `prop("label", "actual", (a: String, b: String) => (a === b).toResult)`  | a property with a label, an actual value and a function taking the expected value, returning a Matcher that will be applied to the actual one
+ `prop("label", "actual", (a: String, b: String) => (a === b))`           | a property with a label, an actual value and a function taking the expected value, returning a Matcher that will be applied to the actual one
  `prop("label", "expected", (expected: String) => beEqualTo(expected))`   | a property with a label, an actual value and function applying a matcher to that value
  `prop(label, actual, matcher)`                                           | a property with a label, an actual value and a matcher to apply to that value
 
@@ -83,7 +83,7 @@ Let's look at a few examples:
   tr(field("prop(\"label\", \"expected\")(\"expected\")").code, prop("label", "expected")("expected")).
   tr(field("prop(\"label\", \"actual\")(\"expected\")").code, prop("label", "actual")("expected")).
   tr(field("prop(\"label\", { error(\"but got an error\"); \"actual\" })(\"expected\")").code, prop("label", { error("but got an error"); "actual" })("expected")).
-  tr(field("prop(\"label\", \"actual\", (a: String, b: String) => (a === b).toResult)(\"expected\")").code, prop("label", "expected", (a: String, b: String) => (a === b).toResult)("expected")).
+  tr(field("prop(\"label\", \"actual\", (a: String, b: String) => (a === b))(\"expected\")").code, prop("label", "expected", (a: String, b: String) => (a === b))("expected")).
   tr(field("prop(\"label\", \"actual\", (s: String) => beEqualTo(s))(\"expected\")").code, prop("label", "expected", (s: String) => beEqualTo(s))("expected")).
   tr(field("prop(\"label\", \"actual\", beEqualTo(\"expected\"))").code, prop("label", "actual", beEqualTo("expected"))).
   tr(field("prop(\"label\", \"actual\", beEqualTo(\"expected\").mute)").code, prop("label", "actual", beEqualTo("expected").mute)).executeForm.toXml.toString}

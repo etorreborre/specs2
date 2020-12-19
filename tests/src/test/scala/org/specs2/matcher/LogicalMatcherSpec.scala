@@ -4,9 +4,9 @@ package matcher
 import execute._
 import sys._
 import io.StringOutput
-import MatchResultCombinators._
+import Result._
 
-class LogicalMatcherSpec extends Spec with ResultMatchers with StringMatchers with TraversableMatchers with TypedEqual { def is = s2"""
+class LogicalMatcherSpec extends Specification with ResultMatchers with StringMatchers { def is = s2"""
 
 Not matches
 ===========
@@ -54,15 +54,15 @@ Succeed or skip, or pending
 ===========================
 
  a matcher can be ok or be skipped
-   if it is ok, it returns a MatchSuccess result                                                  $skip1
-   if it is ko, it returns a MatchSkip result                                                     $skip2
-   if it throws an exception, it returns a MatchSkip result                                       $skip3
+   if it is ok, it returns a Success result                                                       $skip1
+   if it is ko, it returns a Skipped result                                                       $skip2
+   if it throws an exception, it returns a Skipped result                                         $skip3
    a skipped message can also be added in front of the failure message                            $skip4
 
  a matcher can be ok or be pending
-   if it is ok, it returns a MatchSuccess result                                                  $pending1
-   if it is ko, it returns a MatchPending result                                                  $pending2
-   if it throws an exception, it returns a MatchPending result                                    $pending3
+   if it is ok, it returns a Success result                                                       $pending1
+   if it is ko, it returns a Pending result                                                       $pending2
+   if it throws an exception, it returns a Pending result                                         $pending3
    a pending message can also be added in front of the failure message                            $pending4
 
 Conditions
@@ -120,13 +120,13 @@ Custom
 
   def or9 = ((true === false) or (true === true) or (true === false)) must beSuccessful
 
-  def or10 = { throw new Exception("ouch"); 1 } must be_==(1) or throwAn[Exception]
-  def or11 = { throw new Exception("ouch"); 1 } must throwAn[Exception] or be_==(1)
-  def or12 = {                              1 } must throwAn[Exception] or be_==(1)
-  def or13 = {                              1 } must be_==(1) or throwAn[Exception]
-  def or14 = { throw new Exception("ouch"); 1 } must be_==(1) or throwAn[Exception] or throwAn[Exception]
+  def or10 = { throw new Exception("ouch"); 1 } must (be_==(1) or throwAn[Exception])
+  def or11 = { throw new Exception("ouch"); 1 } must (throwAn[Exception] or be_==(1))
+  def or12 = {                              1 } must (throwAn[Exception] or be_==(1))
+  def or13 = {                              1 } must (be_==(1) or throwAn[Exception])
+  def or14 = { throw new Exception("ouch"); 1 } must (be_==(1) or throwAn[Exception] or throwAn[Exception])
 
-  def and1 = "eric" must beMatching("e.*") and beMatching(".*c")
+  def and1 = "eric" must (beMatching("e.*") and beMatching(".*c"))
   def and2 = ("eric" must beMatching("e.*")) and ("torreborre" must beMatching(".*tor.*"))
   def and3 =
     val out = new StringOutput {}
@@ -135,23 +135,23 @@ Custom
   def and4 = ((true === true) and (true === false) and (true === true)) must beFailing
 
   def skip1 = 1 must be_==(1).orSkip
-  def skip2 = (1 must be_==(2).orSkip).toResult                                  must ===(Skipped("1 != 2"))
-  def skip3 = (1 must be_==({sys.error("boom");2}).orSkip("skip this")).toResult must ===(Skipped("skip this: boom"))
-  def skip4 = (1 must be_==(2).orSkip("precondition failed")).toResult           must ===(Skipped("precondition failed: 1 != 2"))
+  def skip2 = (1 must be_==(2).orSkip)                                  must ===(Skipped("1 != 2"))
+  def skip3 = (1 must be_==({sys.error("boom");2}).orSkip("skip this")) must ===(Skipped("skip this: boom"))
+  def skip4 = (1 must be_==(2).orSkip("precondition failed"))           must ===(Skipped("precondition failed: 1 != 2"))
 
   def pending1 = 1 must be_==(1).orPending
-  def pending2 = (1 must be_==(2).orPending).toResult                             must ===(Pending("1 != 2"))
-  def pending3 = (1 must be_==({sys.error("boom");2}).orPending("todo")).toResult must ===(Pending("todo: boom"))
-  def pending4 = (1 must be_==(2).orPending("precondition failed")).toResult      must ===(Pending("precondition failed: 1 != 2"))
+  def pending2 = (1 must be_==(2).orPending)                             must ===(Pending("1 != 2"))
+  def pending3 = (1 must be_==({sys.error("boom");2}).orPending("todo")) must ===(Pending("todo: boom"))
+  def pending4 = (1 must be_==(2).orPending("precondition failed"))      must ===(Pending("precondition failed: 1 != 2"))
 
-  def conditions1 = (1 must be_==(1).when(true)).toResult               must beSuccessful
-  def conditions2 = (1 must be_==(2).when(false)).toResult              must beSuccessful
+  def conditions1 = (1 must be_==(1).when(true)) must beSuccessful
+  def conditions2 = (1 must be_==(2).when(false)) must beSuccessful
   def conditions3 = (1 must be_==(2).when(false, "no worries")).message must ===("no worries")
-  def conditions4 = (1 must be_==(2).unless(true)).toResult             must beSuccessful
-  def conditions5 = (1 must be_==(1).iff(true)).toResult  must beSuccessful
-  def conditions6 = (1 must be_==(2).iff(true)).toResult  must beFailing
-  def conditions7 = (1 must be_==(2).iff(false)).toResult must beSuccessful
-  def conditions8 = (1 must be_==(1).iff(false)).toResult must beFailing
+  def conditions4 = (1 must be_==(2).unless(true)) must beSuccessful
+  def conditions5 = (1 must be_==(1).iff(true)) must beSuccessful
+  def conditions6 = (1 must be_==(2).iff(true)) must beFailing
+  def conditions7 = (1 must be_==(2).iff(false)) must beSuccessful
+  def conditions8 = (1 must be_==(1).iff(false)) must beFailing
 
   def custom1 = (12 must bePositive) and
           (-12 must not(bePositive))
@@ -159,7 +159,7 @@ Custom
   // HELPERS
   case class CustomMatcher[T : Numeric]() extends Matcher[T]:
     def apply[S <: T](e: Expectable[S]) =
-      result(implicitly[Numeric[T]].abs(e.value) == e.value, s"${e.value} is positive", s"${e.value}   is negative", e)
+      result(implicitly[Numeric[T]].abs(e.value) == e.value, s"${e.value} is negative")
 
   /** custom matcher */
   def bePositive[T : Numeric]: Matcher[T] =

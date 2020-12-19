@@ -5,6 +5,7 @@ import java.math._
 import text.Plural._
 import NumericMatchersDescription._
 import math.Ordering.Implicits.infixOrderingOps
+import execute._, Result._
 
 /**
  * Matchers for Numerical values
@@ -113,26 +114,19 @@ class BeLessThanOrEqualTo[T : Ordering](n: T) extends Matcher[T]:
     val value: T = a.value
     val r = value <= n
     val isEqual = value == n
-    result(r,
-           if isEqual then a.description + " is equal to " + n.toString else a.description + " is less than " + n.toString,
-           a.description + " is greater than " + n.toString,
-           a)
+    result(r, a.description + " is greater than " + n.toString)
 
 class BeLessThan[T : Ordering](n: T) extends Matcher[T]:
   def apply[S <: T](a: Expectable[S]) =
     val value: T = a.value
     val r = value < n
-    result(r,
-           a.description + " is less than " + n.toString,
-           a.description + " is not less than " + n.toString,
-           a)
+    result(r, a.description + " is not less than " + n.toString)
 
 class BeCloseTo[T : Numeric](n: T, delta: T) extends Matcher[T]:
   def apply[S <: T](x: Expectable[S]) =
     val num = implicitly[Numeric[T]]
     result(num.lteq(num.minus(n, delta), x.value) && num.lteq(x.value, num.plus(n, delta)),
-           x.description + " is close to " + n.toString + " +/- " + delta,
-           x.description + " is not close to " + n.toString + " +/- " + delta, x)
+           x.description + " is not close to " + n.toString + " +/- " + delta)
 
 class BeSignificantlyCloseTo[T : Numeric](target: T, sf: SignificantFigures) extends Matcher[T]:
   def apply[S <: T](x: Expectable[S]) =
@@ -144,8 +138,7 @@ class BeSignificantlyCloseTo[T : Numeric](target: T, sf: SignificantFigures) ext
     val expected = BigDecimal.valueOf(num.toDouble(target)).setScale(newScale, RoundingMode.HALF_UP)
 
     result(actual == expected,
-      s"${x.description} is close to $target with ${sf.number.qty("significant digit")}",
-      s"${x.description} is not close to $target with ${sf.number.qty("significant digit")}", x)
+      s"${x.description} is not close to $target with ${sf.number.qty("significant digit")}")
 
 case class SignificantTarget[T : Numeric](target: T, significantFigures: SignificantFigures)
 case class SignificantFigures(number: Int)
@@ -161,7 +154,7 @@ case class BetweenMatcher[T : Ordering](t1: T, t2: T, includeStart: Boolean = tr
 
     val (ok, ko) = (s.description+" is in "+start+t1+", "+t2+end,
       s.description+" is not in "+start+t1+", "+t2+end)
-    result(included, ok, ko, s)
+    result(included, ko)
 
   def `]` = copy(includeEnd = true)
   def `[` = copy(includeEnd = false)

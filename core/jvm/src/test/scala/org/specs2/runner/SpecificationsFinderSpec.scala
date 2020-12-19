@@ -8,7 +8,7 @@ import org.specs2.io._
 import org.specs2.control._
 import org.specs2.matcher.Matcher
 import org.specs2.matcher.OperationMatchers.beOk
-import org.specs2.matcher.MatchersImplicits._
+import Matcher.{given}
 
 class SpecificationsFinderSpec extends Spec { def is = s2"""
   It is possible to find specifications in the local test directory           $e1

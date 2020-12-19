@@ -26,6 +26,7 @@ trait ResultLogicalCombinators extends Results:
     private lazy val r = result match
       case Left(r1)  => r1
       case Right(r1) => r1
+
     /**
      * @return the logical and combination of 2 results
      */
@@ -106,10 +107,8 @@ trait ResultLogicalCombinators extends Results:
     /**
      * @return Success if it is a failure and vice-versa
      */
-    def not: Result = r match
-      case Success(m,e)     => Failure(m, e)
-      case Failure(m,e,_,_) => Success(m)
-      case other            => other
+    def not: Result =
+      r.negate
 
     /** only consider this result if the condition is true */
     def when(condition: Boolean, message: String= ""): Result= if condition then res else Success(message)

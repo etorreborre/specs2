@@ -13,7 +13,7 @@ object TryMatchers extends UserGuideCard {
  * `beSuccessfulTry.withValue(function: A => AsResult[B])` check if an element is `Success(a)` where `function(a)` returns a successful `Result`
     (note that a `Seq[A]` is also a function `Int => A` so if you want to check that a sequence is contained in `Success` you need to use a matcher: `beSuccessfulTry.withValue(===(Seq(1))`)
  * `beSuccessfulTry.which(function)` check if an element is `Success(_)` and satisfies a function returning a boolean
- * `beSuccessfulTry.like(partial function)` check if an element is `Success(_)` and satisfies a partial function returning a `MatchResult`
+ * `beSuccessfulTry.like(partial function)` check if an element is `Success(_)` and satisfies a partial function returning a `Result`
  * `beFailedTry` check if an element is `Failure(_)`
  * `beFailedTry.withThrowable[T]` check if an element is `Failure(t: T)`
  * `beFailedTry.withThrowable[T](pattern)` check if an element is `Failure(t: T)` and `t.getMessage` matches `pattern`

@@ -13,8 +13,10 @@ trait ExpectationsDescription extends ExpectationsCreation:
     def <==>(result: =>T): Result = checkResultFailure {
       val r = ResultExecution.execute(AsResult(result))
       r match
-        case i if i.isError || i.isFailure => i.mapMessage(m => negateSentence(description)+" because "+m)
-        case other                         => other.mapMessage(m => description+" <=> "+m)
+        case i if i.isError || i.isFailure =>
+          i.updateMessage(m => negateSentence(description)+" because "+m)
+        case other =>
+          other.updateMessage(m => description+" <=> "+m)
     }
 
   /** describe a value with the aka method */

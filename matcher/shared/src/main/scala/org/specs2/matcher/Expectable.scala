@@ -41,11 +41,11 @@ case class Expectable[+T] private[specs2](
     describeValue(v, showValue)
 
   /**
-   * apply a matcher on the value and return a MatchResult which can later on be transformed to a simple Result
+   * apply a matcher on the value and return a Result
    */
-  def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] =
+  def applyMatcher[S >: T](m: =>Matcher[S]): Result =
     if m == null then throw new IllegalArgumentException(s"You cannot use a null matcher on '$description'")
-    checker.check(m.apply(this))
+    checker.check(m(this))
 
   /** evaluate the value and return the same expectable */
   def evaluate = { value; this }
@@ -79,13 +79,14 @@ case class Expectable[+T] private[specs2](
 
 trait Checker:
   /** additional checks can be done on the result, such as throwing an exception */
-  def check[T](result: MatchResult[T]): MatchResult[T]
+  def check[T](result: Result): Result
 
 object Checker:
 
   def pass: Checker =
     new Checker:
-      def check[T](result: MatchResult[T]) = result
+      def check[T](result: Result): Result =
+        result
 
 /**
  * Factory methods for creating Expectables

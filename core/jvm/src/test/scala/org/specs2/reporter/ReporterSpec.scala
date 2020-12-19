@@ -88,7 +88,7 @@ class FakeJUnitPrinter(logger: PrinterLogger) extends Printer:
   def sink(spec: SpecStructure) =
     Folds.fromSink((f: Fragment) => Action.pure(logger.infoLog("junit\n")))
 
-object reporterSpecSupport extends MustMatchers with StandardMatchResults with S2StringContext with FragmentsDsl:
+object reporterSpecSupport extends MustMatchers with ExpectedResults with S2StringContext with FragmentsDsl:
   /**
    * TEST METHODS
    */

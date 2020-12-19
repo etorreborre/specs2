@@ -7,7 +7,7 @@ import org.specs2.matcher.{Matcher, TraversableMatchers, TypedEqual, ValueCheck}
 import org.specs2.specification.core.{Description, Fragment, SpecStructure, StacktraceLocation}
 import org.specs2.specification.create.DefaultFragmentFactory._
 import org.specs2.specification.dsl.mutable.{ArgumentsCreation, MutableDsl, MutableFragmentBuilder}
-import org.specs2.matcher.MatchersImplicits._
+import org.specs2.matcher.Matcher.{given}
 
 class MutableFragmentsDslSpec(ee: ExecutionEnv) extends org.specs2.Spec with TypedEqual with TraversableMatchers { def is = s2"""
 

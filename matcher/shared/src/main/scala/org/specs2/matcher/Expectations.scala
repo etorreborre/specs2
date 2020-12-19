@@ -52,27 +52,24 @@ trait ResultChecks extends MatchResultStackTrace:
   /** this method can be overridden to throw exceptions when checking a result */
   protected def checkResultFailure(r: =>Result): Result = r
 
-  /** this method can be overridden to throw exceptions when checking a match result */
-  protected def checkMatchResultFailure[T](m: MatchResult[T]): MatchResult[T] =
-    mapMatchResult(setStacktrace(m))
-
-  /** this method can be overridden to intercept a MatchResult and modify it.
+  /** this method can be overridden to intercept a Result and modify it.
    *  It is used for example to set a stacktrace providing the location of a
    *  failure
    */
-  protected def mapMatchResult[T](m: MatchResult[T]): MatchResult[T] = m
+  protected def mapResult(r: Result): Result = r
 
-  /** @return the match result without any side-effects */
-  protected def sandboxMatchResult[T](mr: =>MatchResult[T]): MatchResult[T] = mr
+  /** @return the result without any side-effects */
+  protected def sandboxResult(r: =>Result): Result = r
 
 /** this trait allows to fill-in stack traces on match results for precise location */
 trait MatchResultStackTrace:
+
   /** this method can be overridden to avoid filling-in a stacktrace indicating the location of the result */
-  protected def setStacktrace[T](m: MatchResult[T]): MatchResult[T] =
+  protected def setStacktrace(m: Result): Result =
     m match
-      case f: MatchFailure[_] if f.trace.isEmpty => f.copy(trace = (new Exception).getStackTrace.toList)
+      case f: Failure if f.trace.isEmpty => f.copy(trace = (new Exception).getStackTrace.toList)
       case other => other
 
 /** this trait doesn't fill-in stack traces */
 trait NoMatchResultStackTrace extends MatchResultStackTrace:
-  override def setStacktrace[T](m: MatchResult[T]): MatchResult[T] = m
+  override def setStacktrace(r: Result): Result = r

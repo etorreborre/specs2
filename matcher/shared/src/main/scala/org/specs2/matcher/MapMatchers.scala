@@ -3,6 +3,7 @@ package matcher
 
 import text.Quote._
 import text.Plural._
+import execute.Result._
 
 /**
  * Matchers for Maps
@@ -20,9 +21,7 @@ trait MapMatchers:
         lazy val missing = keys.filterNot(map.value.map(_._1).toSeq.contains)
 
         result(missing.isEmpty,
-               map.description+s" has the ${"key".plural(keys)} "+q(keys.mkString(", ")),
-               map.description+s" doesn't have the ${"key".plural(missing)} "+q(missing.mkString(", ")),
-               map)
+               map.description+s" doesn't have the ${"key".plural(missing)} "+q(missing.mkString(", ")))
 
       override def not: Matcher[Iterable[(K, Any)]] =
         new Matcher[Iterable[(K, Any)]]:
@@ -30,9 +29,7 @@ trait MapMatchers:
             lazy val existing = map.value.map(_._1).filter(keys.contains)
 
             result(existing.isEmpty,
-                   map.description+s" doesn't have the ${"key".plural(keys)}"+q(keys),
-                   map.description+s" has the ${"key".plural(existing)} "+q(existing.mkString(", ")),
-                   map)
+                   map.description+s" has the ${"key".plural(existing)} "+q(existing.mkString(", ")))
 
   /** matches if map contains a pair (key, value) with value == v */
   def haveValue[V](v: V): Matcher[Iterable[(Any, V)]] =
@@ -45,9 +42,7 @@ trait MapMatchers:
         lazy val missing = values.filterNot(map.value.map(_._2).toSeq.contains)
 
         result(missing.isEmpty,
-               map.description+s" has the ${"value".plural(values)} "+q(values.mkString(", ")),
-               map.description+s" doesn't have the ${"value".plural(missing)} "+q(missing.mkString(", ")),
-               map)
+               map.description+s" doesn't have the ${"value".plural(missing)} "+q(missing.mkString(", ")))
 
       override def not: Matcher[Iterable[(Any, V)]] =
         new Matcher[Iterable[(Any, V)]]:
@@ -55,9 +50,7 @@ trait MapMatchers:
             lazy val existing = map.value.map(_._2).filter(values.contains)
 
             result(existing.isEmpty,
-                   map.description+s" doesn't have the ${"value".plural(values)} "+q(values.mkString(", ")),
-                   map.description+s" has the ${"value".plural(existing)} "+q(existing.mkString(", ")),
-                   map)
+                   map.description+s" has the ${"value".plural(existing)} "+q(existing.mkString(", ")))
 
   /** matches if map contains a pair (key, value) == (k, v) */
   def havePair[K, V](p: (K, V)): Matcher[Iterable[(K, V)]] =
@@ -69,18 +62,14 @@ trait MapMatchers:
       def apply[S <: Iterable[(K, V)]](map: Expectable[S]) =
         lazy val missing = pairs.filterNot(map.value.toSeq.contains)
         result(missing.isEmpty,
-               map.description+s" has the ${"pair".plural(pairs)} "+q(pairs.mkString(", ")),
-               map.description+s" doesn't have the ${"pair".plural(missing)} "+q(missing.mkString(", ")),
-               map)
+               map.description+s" doesn't have the ${"pair".plural(missing)} "+q(missing.mkString(", ")))
 
       override def not: Matcher[Iterable[(K, V)]] =
         new Matcher[Iterable[(K, V)]]:
           def apply[S <: Iterable[(K, V)]](map: Expectable[S]) =
             lazy val existing = map.value.filter(pairs.contains)
             result(existing.isEmpty,
-                   map.description+s" doesn't have the ${"pair".plural(pairs)} "+q(pairs.mkString(", ")),
-                   map.description+s" has the ${"pair".plural(existing)} "+q(existing.mkString(", ")),
-                   map)
+                   map.description+s" has the ${"pair".plural(existing)} "+q(existing.mkString(", ")))
 
 
   /** matches if the partial function is defined at those values */
@@ -91,10 +80,8 @@ trait MapMatchers:
         val undefined = isDefined.filter(!_._2).map(_._1)
         val functionDescription = f.showValue.map(_(f.value.toString)).getOrElse("the function")
         result(isDefined.map(_._2).forall(_ == true),
-               functionDescription + " is defined for the value".plural(values.size) +
-                 " " + q(values.mkString(", ")),
                functionDescription + " is not defined for the value".plural(undefined.size) +
-                 " " + q(undefined.mkString(", ")), f)
+                 " " + q(undefined.mkString(", ")))
 
   /** matches if the partial function is defined at those values and return expected values */
   def beDefinedBy[K, V](values: (K, V)*): Matcher[PartialFunction[K, V]] =
@@ -104,8 +91,6 @@ trait MapMatchers:
         val undefined = isDefined.filter(!_._2).map(_._1)
         val functionDescription = f.showValue.map(_(f.value.toString)).getOrElse("the function")
         result(isDefined.map(_._2).forall(_ == true),
-               functionDescription + " is defined by the value".plural(values.size) + " " + q(values.mkString(", ")),
-               functionDescription + " is not defined by the value".plural(undefined.size) + " " + q(undefined.mkString(", ")),
-               f)
+               functionDescription + " is not defined by the value".plural(undefined.size) + " " + q(undefined.mkString(", ")))
 
 object MapMatchers extends MapMatchers

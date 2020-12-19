@@ -74,5 +74,4 @@ trait ResultImplicits extends ResultLogicalCombinators:
       else
         Failure(result1.message+"\nis not equivalent to\n"+result2.message)
 
-
 object ResultImplicits extends ResultImplicits

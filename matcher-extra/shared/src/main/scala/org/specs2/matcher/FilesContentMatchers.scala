@@ -5,9 +5,9 @@ import java.io.File
 import text._
 import io._
 import fp.syntax._
-import MatchersImplicits.{given}
-import MatchResultCombinators._
+import Matcher.{given}
 import ValueChecks.{given}
+import execute.ResultImplicits._
 
 /**
  * This trait provides matchers to check the presence of some expected files vs the actual ones
@@ -60,8 +60,8 @@ trait FilesContentMatchers extends FileMatchers with LinesContentMatchers with T
 
   case class LocalPathsMatcher(expectedDir: File, filter: File => Boolean = (f: File) => true) extends Matcher[File]:
     def apply[S <: File](actualDir: Expectable[S]) =
-      result(haveSameLinesAs(LocalPaths(DirectoryPath.unsafe(expectedDir), filePathFilter(filter)))
-        .apply(createExpectable(LocalPaths(DirectoryPath.unsafe(actualDir.value), filePathFilter(filter)))), actualDir)
+      haveSameLinesAs(LocalPaths(DirectoryPath.unsafe(expectedDir), filePathFilter(filter)))
+        .apply(createExpectable(LocalPaths(DirectoryPath.unsafe(actualDir.value), filePathFilter(filter))))
 
     def withFilter(f: File => Boolean) = copy(filter = f)
 
@@ -75,7 +75,7 @@ trait FilesContentMatchers extends FileMatchers with LinesContentMatchers with T
         ((DirectoryPath.unsafe(actualDir.value) / p).toFile,
          (DirectoryPath.unsafe(expectedDir) / p).toFile)
       }.filter(_._1.exists)
-      result(contain(filesMatcher).forall.apply(createExpectable(pairs)), actualDir)
+      contain(filesMatcher).forall.apply(createExpectable(pairs))
 
     def withFilter(filter: File => Boolean) = copy(filter = filter)
     def withMatcher(m: Matcher[(File, File)]) = copy(filesMatcher = m)

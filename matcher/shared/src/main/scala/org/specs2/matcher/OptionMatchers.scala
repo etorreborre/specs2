@@ -5,6 +5,7 @@ import execute._
 import ValueChecks.{given, _}
 import org.specs2.control._, ImplicitParameters._
 import org.specs2.matcher.describe.Diffable
+import Result._
 
 /**
  * Matchers for Options
@@ -28,10 +29,7 @@ trait OptionMatchers extends ValueChecks:
   def beNone: Matcher[Option[Any]] =
     new Matcher[Option[Any]]:
       def apply[S <: Option[Any]](value: Expectable[S]) =
-        result(value.value == None,
-               value.description + " is None",
-               value.description + " is not None",
-               value)
+        result(value.value == None, value.description + " is not None")
 
   def none: Matcher[Option[Any]] =
     beNone
@@ -41,9 +39,7 @@ trait OptionMatchers extends ValueChecks:
       def apply[S <: Option[T]](a: Expectable[S]) =
         val b = other
         result(a.value == None && b == None || a.value != None && b != None,
-               a.description + " is None as well",
-               if a.value == None then b.toString + " is not None" else a.description + " is not None",
-               a)
+               if a.value == None then b.toString + " is not None" else a.description + " is not None")
 
   def asNoneAs[T](other: =>Option[T]): Matcher[Option[T]] =
     beAsNoneAs(other)
@@ -55,7 +51,7 @@ case class SomeCheckedMatcher[T](check: ValueCheck[T]) extends OptionLikeChecked
 
 class OptionLikeMatcher[F[_], T, U](typeName: String, toOption: F[T] => Option[U]) extends Matcher[F[T]]:
   def apply[S <: F[T]](value: Expectable[S]) =
-    result(toOption(value.value).isDefined, s"${value.description} is $typeName", s"${value.description} is not $typeName", value)
+    result(toOption(value.value).isDefined, s"${value.description} is not $typeName")
 
   def which[R : AsResult](f: U => R): OptionLikeCheckedMatcher[F, T, U] =
     new OptionLikeCheckedMatcher(typeName, toOption, f)
@@ -68,9 +64,10 @@ class OptionLikeCheckedMatcher[F[_], T, U](typeName: String, toOption: F[T] => O
     toOption(value.value) match
       case Some(v) =>
         val r = check.check(v)
-        val (okMessage, koMessage) = (s"${value.description} is $typeName and ${r.message}", s"${value.description} is $typeName but ${r.message}")
+        val koMessage = s"${value.description} is $typeName but ${r.message}"
         r match
-          case f @ Failure(_,_,_,details) => result(r.isSuccess, okMessage, koMessage, value, details)
-          case _ =>                          result(r.isSuccess, okMessage, koMessage, value)
+          case f @ Failure(_,_,_,details) => result(r.isSuccess, koMessage, details)
+          case _ =>                          result(r.isSuccess, koMessage)
 
-      case None => result(false, s"${value.description} is $typeName", s"${value.description} is not $typeName", value)
+      case None =>
+        result(false, s"${value.description} is not $typeName")

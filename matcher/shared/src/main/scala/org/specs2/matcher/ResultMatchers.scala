@@ -1,8 +1,8 @@
 package org.specs2
 package matcher
 
-import execute._
-import MatchResultLogicalCombinators._
+import execute._, Result._
+import ResultLogicalCombinators._
 import control.Exceptions._
 import text.Regexes._
 import ValueChecks.{given}
@@ -17,9 +17,7 @@ trait ResultMatchers:
     new Matcher[T]:
       def apply[S <: T](value: Expectable[S]) =
         result(ResultExecution.execute(AsResult[T](value.value)).isSuccess,
-               value.description + " is a success",
-               value.description + " is not a success",
-               value)
+               value.description + " is not a success")
 
   def beFailing[T : AsResult]: Matcher[T] =
     beFailing(ValueCheck.alwaysOk[String])
@@ -32,11 +30,8 @@ trait ResultMatchers:
       def apply[S <: T](value: Expectable[S]) =
         val r = ResultExecution.execute(AsResult[T](value.value))
         def description = tryOrElse(value.description)(r.toString)
-        result(r.isFailure,
-               description + " is a failure",
-               description + " is not a failure",
-               value) and
-        result(check.check(r.message), value)
+        result(r.isFailure, description + " is not a failure") and
+        check.check(r.message)
 
   def beError[T : AsResult]: Matcher[T] =
     beError(ValueCheck.alwaysOk[String])
@@ -49,11 +44,8 @@ trait ResultMatchers:
       def apply[S <: T](value: Expectable[S]) =
         val r = ResultExecution.execute(AsResult[T](value.value))
         def description = tryOrElse(value.description)(r.toString)
-        result(r.isError,
-               description + " is an error",
-               description + " is not an error",
-               value) and
-        result(check.check(r.message), value)
+        result(r.isError, description + " is not an error") and
+        check.check(r.message)
 
   def beSkipped[T : AsResult]: Matcher[T] =
     beSkipped(ValueCheck.alwaysOk[String])
@@ -66,11 +58,8 @@ trait ResultMatchers:
       def apply[S <: T](value: Expectable[S]) =
         val r = ResultExecution.execute(AsResult[T](value.value))
         def description = tryOrElse(value.description)(r.toString)
-        result(r.isSkipped,
-               description + " is skipped",
-               description + " is not skipped",
-               value) and
-        result(check.check(r.message), value)
+        result(r.isSkipped, description + " is not skipped") and
+        check.check(r.message)
 
   def bePending[T : AsResult]: Matcher[T] =
     bePending(ValueCheck.alwaysOk[String])
@@ -83,10 +72,7 @@ trait ResultMatchers:
       def apply[S <: T](value: Expectable[S]) =
         val r = ResultExecution.execute(AsResult[T](value.value))
         def description = tryOrElse(value.description)(r.toString)
-        result(r.isPending,
-          description + " is pending",
-          description + " is not pending",
-          value) and
-        result(check.check(r.message), value)
+        result(r.isPending, description + " is pending") and
+        check.check(r.message)
 
 object ResultMatchers extends ResultMatchers

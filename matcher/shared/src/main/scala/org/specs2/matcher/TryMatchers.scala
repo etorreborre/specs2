@@ -3,7 +3,7 @@ package matcher
 
 import util._
 import scala.reflect.ClassTag
-import MatchersImplicits._
+import execute.ResultImplicits._
 import org.specs2.matcher.describe.Diffable
 import text.NotNullStrings._
 import ValueChecks.{given}
@@ -16,6 +16,7 @@ trait TryMatchers:
 
   def beSuccessfulTry[T]: TrySuccessMatcher[T] =
     TrySuccessMatcher[T]()
+    
   def beASuccessfulTry[T]: TrySuccessMatcher[T] =
     beSuccessfulTry[T]
 
@@ -54,11 +55,11 @@ case class TryFailureMatcher[T]() extends OptionLikeMatcher[Try, T, Throwable]("
   def withValue(t: ValueCheck[Throwable]) = TryFailureCheckedMatcher(t)
 
   def withThrowable[E <: Throwable : ClassTag] = TryFailureCheckedMatcher[T]({ (t: Throwable) =>
-    Expectations.createExpectable(t).applyMatcher(AnyMatchers.beAnInstanceOf[E]).toResult
+    Expectations.createExpectable(t).applyMatcher(AnyMatchers.beAnInstanceOf[E])
   })
 
   def withThrowable[E <: Throwable : ClassTag](pattern: String) = TryFailureCheckedMatcher[T]({ (t: Throwable) =>
     (Expectations.createExpectable(t).applyMatcher(AnyMatchers.beAnInstanceOf[E]) and
-     Expectations.createExpectable(t.getMessage.notNull).applyMatcher(StringMatchers.beMatching(pattern))).toResult
+     Expectations.createExpectable(t.getMessage.notNull).applyMatcher(StringMatchers.beMatching(pattern)))
   })
 case class TryFailureCheckedMatcher[T](check: ValueCheck[Throwable]) extends OptionLikeCheckedMatcher[Try, T, Throwable]("a Failure", (_:Try[T]).failed.toOption, check)

@@ -71,7 +71,7 @@ When creating expectations:
  Create matchers from functions                   | `org.specs2.matcher.MatchersCreation`           |
  Combine `MatchResults` with `and/or`             | `org.specs2.matcher.MatchResultsCombinators`    |
  Transform a `Matcher[T]` to `Matcher[Seq[T]]`    | `org.specs2.matcher.SequenceMatchersCreation`   |
- Use `forall(values)(t => t must xxx)`            | `org.specs2.matcher.SequenceMatchersCreation`   | You can combine all matchers features by using the `org.specs2.matcher.MatchersImplicits` trait
+ Use `forall(values)(t => t must xxx)`            | `org.specs2.matcher.SequenceMatchersCreation`   |
  Set failed expectations as Pending               | `org.specs2.execute.PendingUntilFixed`          |
 
 When creating acceptance specifications

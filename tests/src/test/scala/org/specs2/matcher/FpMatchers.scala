@@ -3,9 +3,9 @@ package matcher
 
 import org.scalacheck.{ Arbitrary, Shrink, Prop }
 
-import org.specs2.fp._
-import org.specs2.fp.syntax._
-import MatchResultLogicalCombinators._
+import fp._
+import fp.syntax._
+import execute.ResultImplicits._
 import AnyMatchers._
 import annotation._
 

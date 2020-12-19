@@ -6,7 +6,7 @@ import control.Properties._
 import execute._
 import sys.error
 import matcher._
-import MatchersImplicits._
+import Matcher.{given}
 
 class PropSpec extends Spec with TypedEqual {  def is = s2"""
 

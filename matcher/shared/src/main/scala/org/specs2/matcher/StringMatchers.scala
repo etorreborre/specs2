@@ -1,9 +1,11 @@
-package org.specs2.matcher
+package org.specs2
+package matcher
 
-import java.util.regex.{Matcher => _, MatchResult =>_, Pattern}
-import org.specs2.text.Quote._
-import org.specs2.control.Exceptions._
-import org.specs2.text.Regexes._
+import java.util.regex.{Matcher => _, Pattern}
+import text.Quote._
+import text.Regexes._
+import control.Exceptions._
+import execute.Result._
 import util.matching.Regex
 import StringMatchers._
 
@@ -50,8 +52,7 @@ trait StringMatchers:
       def apply[S <: String](b: Expectable[S]) =
         val a = t
         result(a != null && b.value != null && b.value.contains(a),
-               b.description + " contains " + q(a),
-               b.description + " doesn't contain " + q(a), b)
+               b.description + " doesn't contain " + q(a))
 
   /** matches if (b contains a) */
   def contain(t: Char): Matcher[String] =
@@ -59,8 +60,7 @@ trait StringMatchers:
       def apply[S <: String](b: Expectable[S]) =
         val a = t
         result(b.value != null && b.value.contains(a),
-               b.description + " contains " + q(a),
-               b.description + " doesn't contain " + q(a), b)
+               b.description + " doesn't contain " + q(a))
 
   /** matches if b matches the regular expression a */
   def beMatching[T : MatchingExpression](t: T): Matcher[String] =
@@ -79,8 +79,7 @@ trait StringMatchers:
     new Matcher[String]:
       def apply[S <: String](b: Expectable[S]) =
         result(b.value != null && a != null && b.value.startsWith(a),
-               s"${b.description} starts with ${q(a)}",
-               s"${b.description} doesn't start with ${q(a)}", b)
+               s"${b.description} doesn't start with ${q(a)}")
 
   /** matches if b.endsWith(a) */
   def endWith(t: =>String): Matcher[String] =
@@ -88,8 +87,7 @@ trait StringMatchers:
       def apply[S <: String](b: Expectable[S]) =
         val a = t
         result(b.value!= null && a!= null && b.value.endsWith(a),
-               b.description  + " ends with " + q(a),
-               b.description  + " doesn't end with " + q(a), b)
+               b.description  + " doesn't end with " + q(a))
   /** matches if the regexp a is found inside b */
   def find(a: =>String): FindMatcher =
     new FindMatcher(a)
@@ -114,8 +112,7 @@ trait StringMatchers:
     def apply[S <: String](b: Expectable[S]) =
       val a = t
       result(a != null && b.value != null && pattern.matcher(b.value).find,
-             q(a) + " is found in " + b.description,
-             q(a) + " isn't found in " + b.description, b)
+             q(a) + " isn't found in " + b.description)
 
   /**
    * Matcher to find if the pattern p is found inside b.
@@ -155,8 +152,7 @@ trait StringMatchers:
            ". Found: " + q(groupsFound.mkString(", "))
       val groupsToFind = if groups == null then Nil else groups.toList
       result(a != null && b.value != null && groupsFound == groupsToFind,
-             q(a) + " is found in " + b.description  + withGroups + q(groupsToFind.mkString(", ")),
-             q(a) + " isn't found in " + b.description  + withGroups + q(groupsToFind.mkString(", ")) + foundText, b)
+             q(a) + " isn't found in " + b.description  + withGroups + q(groupsToFind.mkString(", ")) + foundText)
   /**
    * Matcher to find if the pattern p is found inside b.
    */
@@ -185,8 +181,7 @@ class BeMatching(pattern: Pattern) extends Matcher[String]:
 
   def apply[S <: String](b: Expectable[S]) =
     result(tryOrElse(pattern.matcher(b.value).matches)(false),
-           s"${b.description} matches ${q(pattern)}",
-           s"'${b.description}' doesn't match ${q(pattern)}", b)
+           s"'${b.description}' doesn't match ${q(pattern)}")
 
 object BeMatching extends StringMatchers:
 

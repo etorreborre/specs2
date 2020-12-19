@@ -13,6 +13,7 @@ import collection.Seqx._
 import fp.syntax._
 import StringToElem.{given, _}
 import StringMatchers.{given, _}
+import execute._, Result._
 
 /**
  * The XmlMatchers trait provides matchers which are applicable to xml nodes
@@ -120,8 +121,7 @@ class EqualIgnoringSpaceMatcher(node: Seq[Node]) extends Matcher[Seq[Node]] with
   def apply[S <: Seq[Node]](n: Expectable[S]) =
 
     result(NodeFunctions.isEqualIgnoringSpace(node.toList, n.value.toList),
-           n.description + " is equal to " + q(node),
-           koMessage(n, node), n)
+           koMessage(n, node))
 
   def ordered = new EqualIgnoringSpaceMatcherOrdered(node)
 
@@ -131,8 +131,7 @@ class EqualIgnoringSpaceMatcher(node: Seq[Node]) extends Matcher[Seq[Node]] with
 class EqualIgnoringSpaceMatcherOrdered(node: Seq[Node]) extends Matcher[Seq[Node]] with XmlMatcherKoMessage:
   def apply[S <: Seq[Node]](n: Expectable[S]) =
     result(NodeFunctions.isEqualIgnoringSpaceOrdered(node.toList, n.value.toList),
-           n.description + " is equal to " + q(node),
-           koMessage(n, node), n)
+           koMessage(n, node))
 
 trait XmlMatcherKoMessage:
   def koMessage[S <: Seq[Node]](n: Expectable[S], node: Seq[Node]) =
@@ -159,9 +158,7 @@ case class XmlMatcher(functions: Seq[PathFunction]) extends Matcher[Seq[Node]]:
   def apply[S <: Seq[Node]](n: Expectable[S]) =
     val nodes = n
     val (success, okMessage, koMessage) = checkFunctions(functions, nodes.value, (true, "", ""))
-    result(success,
-           nodes.description + okMessage,
-           nodes.description + koMessage, nodes)
+    result(success, nodes.description + koMessage)
 
   def \(node: Node, attributeNames: String*): XmlMatcher =
     new XmlMatcher(functions :+ new PathFunction(node, firstNodeSearch _, attributeNames.toList))

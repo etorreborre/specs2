@@ -114,7 +114,7 @@ object Prop:
 
   /** create a Prop with a label, an expected value, and a constraint */
   def apply[T, S](label: String, act: =>T, c: S => Matcher[T]): Prop[T, S] =
-    new Prop[T, S](label, actual = Property(act), constraint = (t: T, s: S) => c(s).apply(createExpectable(t)).toResult)
+    new Prop[T, S](label, actual = Property(act), constraint = (t: T, s: S) => c(s).apply(createExpectable(t)))
 
   /** create a Prop with a label, an actual value, and a matcher on the actual value */
   def apply[T](label: String, act: =>T, c: Matcher[T]): Prop[T, T] =
@@ -122,7 +122,7 @@ object Prop:
     Prop[T, T](label, a, a, c)
   /** create a Prop with a label, an actual value, an expected value, and a constraint on the actual value*/
   def apply[T, S](label: String, act: =>T, exp: =>S, c: Matcher[T]): Prop[T, S] =
-    new Prop[T, S](label, actual = Property(act), expected = Property(exp), constraint = (t: T, s: S) => c(createExpectable(t)).toResult)
+    new Prop[T, S](label, actual = Property(act), expected = Property(exp), constraint = (t: T, s: S) => c(createExpectable(t)))
   /** create a Prop with a label */
   def apply[T](label: String): Prop[T, T] =
     new Prop[T, T](label = label)
@@ -132,7 +132,7 @@ object Prop:
     new Prop[T, T](actual = Property(act))
 
   /** default constraint function */
-  private[Prop] def checkProp[T, S]: (T, T) => Result = (t: T, s: T) => new BeTypedEqualTo(s).apply(createExpectable(t)).toResult
+  private[Prop] def checkProp[T, S]: (T, T) => Result = (t: T, s: T) => new BeTypedEqualTo(s).apply(createExpectable(t))
 
 trait PropSyntax:
 
@@ -148,7 +148,7 @@ trait PropSyntax:
      * check the actual value with a matcher
      */
     def must(m: Matcher[T]): Prop[T, T] =
-      p.matchWith((t, _) => m.apply(createExpectable(t)).toResult)
+      p.matchWith((t, _) => m.apply(createExpectable(t)))
 
 /**
  * generic trait for anything having a label, to unify Props and Forms

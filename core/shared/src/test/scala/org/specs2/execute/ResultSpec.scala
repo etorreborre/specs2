@@ -1,10 +1,10 @@
 package org.specs2
 package execute
 
-import matcher.{ResultMatchers, DataTables}
-import matcher.MatchersImplicits._
+import matcher.{ResultMatchers, DataTables, Matcher}
+import Matcher.{given}
 
-class ResultSpec extends Spec with DataTables with ResultMatchers { def is = s2"""
+class ResultSpec extends Specification with DataTables with ResultMatchers { def is = s2"""
 
 Results are the outcome of some execution. There are several kinds of Results, all having a message describing them
 more precisely:
@@ -81,8 +81,8 @@ more precisely:
  in case of a failure of the first $shortCircuitMonoid
 
  A result message can be updated or mapped
- ${ success1.updateMessage("ok").message must ===("ok") }
- ${ success1.mapMessage(_.capitalize).message must ===("S1") }
+ ${ success1.setMessage("ok").message must ===("ok") }
+ ${ success1.updateMessage(_.capitalize).message must ===("S1") }
 
  A result expected can be updated or mapped
  ${ success1.updateExpected("ok").expected must ===("ok") }

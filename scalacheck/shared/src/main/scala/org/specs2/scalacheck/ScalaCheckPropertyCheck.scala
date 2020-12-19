@@ -77,19 +77,19 @@ trait ScalaCheckPropertyCheck extends ExpectationsCreation:
               val failedResult =
                 prettyResult(result.copy(status = Test.Failed(args, labels)),
                   parameters, initialSeed, prettyFreqMap)(parameters.prettyParams)
-              Failure(failedResult + "\n> " + f.message, details = f.details, stackTrace = f.stackTrace)
+              Failure(failedResult + "\n> " + f.message, details = f.details, trace = f.trace)
 
             case DecoratedResultException(DecoratedResult(_, f)) =>
               // in that case we want to represent a normal failure
               val failedResult =
                 prettyResult(result.copy(status = Test.Failed(args, labels)),
                   parameters, initialSeed, prettyFreqMap)(parameters.prettyParams)
-              f.updateMessage(failedResult + "\n>\n" + f.message)
+              f.setMessage(failedResult + "\n>\n" + f.message)
 
             case e: AssertionError =>
               val failedResult = prettyResult(result.copy(status = Test.Failed(args, labels)),
                 parameters, initialSeed, prettyFreqMap)(parameters.prettyParams)
-              Failure(failedResult + "\n> " + e.getMessage, stackTrace = e.getStackTrace.toList)
+              Failure(failedResult + "\n> " + e.getMessage, trace = e.getStackTrace.toList)
 
             case SkipException(s)    => s
             case PendingException(p) => p
@@ -146,5 +146,3 @@ trait ScalaCheckPropertyCheck extends ExpectationsCreation:
     val map = freqMapPretty(res.freqMap).apply(prms)
     s"$s$t$map"
   }
-
-

@@ -1,7 +1,7 @@
 package org.specs2
 package specification
 
-import org.specs2.matcher.{MustMatchers, StandardMatchResults, ThrownExpectations}
+import org.specs2.matcher.{MustMatchers, ExpectedResults, ThrownExpectations}
 import org.specs2.execute.{Function0Result, StandardResults, Success}
 import org.specs2.concurrent.ExecutionEnv
 import org.specs2.main.Arguments
@@ -88,7 +88,7 @@ Intro
     }
 
 
-  object desc extends MustMatchers with StandardResults with StandardMatchResults with S2StringContext:
+  object desc extends MustMatchers with StandardResults with ExpectedResults with S2StringContext:
 
     def e1 =
       getDescription(

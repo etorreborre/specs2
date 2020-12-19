@@ -53,7 +53,7 @@ object Snippets:
                Seq(factory.text("\n"+snippet.showResult).setLocation(location))
            def checkFragments(snippet: Snippet[t.Underlying], location: Location) =
              if snippet.mustBeVerified then
-               Seq(factory.step(snippet.verify.mapMessage("Snippet failure: "+_)).setLocation(location))
+               Seq(factory.step(snippet.verify.updateMessage("Snippet failure: "+_)).setLocation(location))
              else
                Seq()
          }

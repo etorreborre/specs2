@@ -3,9 +3,9 @@ package execute
 
 import matcher._
 import org.scalacheck.Prop
-import MatchersImplicits._
+import Matcher.{given}
 
-class AsResultSpec extends Spec with ScalaCheck with TypedEqual { def is = s2"""
+class AsResultSpec extends Specification with ScalaCheck with TypedEqual { def is = s2"""
 
  Different types have an AsResult typeclass instance
   ${ hasAsResultInstance(true) }

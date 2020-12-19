@@ -31,7 +31,7 @@ Then you can check the elements which are contained in the Traversable
  * if a value matching a specific matcher is contained
  ${snippet{Seq(1, 2, 3) must contain(be_>=(2))}}
 
- * if a value passing a function returning a `Result` is contained (`MatchResult`, ScalaCheck `Prop`,...)
+ * if a value passing a function returning a `Result` is contained
  ${snippet{Seq(1, 2, 3) must contain((i: Int) => i must be_>=(2))}}
 
  * note that a `Seq[A]` is also a function `Int => A` so if you want to check that a sequence is contained in another you need to use a matcher

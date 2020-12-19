@@ -5,7 +5,7 @@ import java.io.File
 import java.net.URI
 
 import matcher._
-import matcher.MatchersImplicits._
+import Matcher.{given}
 import control.ImplicitParameters._
 import control.Use
 import FileName._

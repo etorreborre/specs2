@@ -21,7 +21,7 @@ trait HtmlUrls:
    * @return a Result, Success or Failure summarizing all checks. In the case of a Failure, only the failure messages are kept
    */
   def check(html: NodeSeq, others: Map[String, NodeSeq] = Map(), rootDirectory: DirectoryPath = DirectoryPath.EMPTY, filePath: FilePath = DirectoryPath.EMPTY.toFilePath): Result =
-    urls(html, filePath).foldMap(isAliveResult(_, html, others, rootDirectory)).mapMessage(_.replace("; ", "\n"))
+    urls(html, filePath).foldMap(isAliveResult(_, html, others, rootDirectory)).updateMessage(_.replace("; ", "\n"))
 
   /** @return true if it is possible to connect to this url through http or locally */
   def isAlive(url: String, html: NodeSeq = NodeSeq.Empty, others: Map[String, NodeSeq] = Map(), rootDirectory: DirectoryPath = DirectoryPath.EMPTY): Boolean =

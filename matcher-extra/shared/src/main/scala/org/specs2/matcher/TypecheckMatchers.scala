@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-import execute._
+import execute._, Result._
 import text.Regexes._
 import text.Trim._
 
@@ -18,10 +18,8 @@ trait TypecheckMatchers:
 object TypecheckMatchers extends TypecheckMatchers
 
 class TypecheckMatcher extends Matcher[Typechecked]:
-  def apply[S <: Typechecked](actual: Expectable[S]): MatchResult[S] =
-    result(actual.value.isSuccess,
-      s"no typecheck error",
-      message(actual.value.result), actual)
+  def apply[S <: Typechecked](actual: Expectable[S]): Result =
+    result(actual.value.isSuccess, message(actual.value.result))
 
   private def message(r: TypecheckResult): String =
     r match
@@ -32,11 +30,10 @@ class TypecheckMatcher extends Matcher[Typechecked]:
       case UnexpectedTypecheckError(m) => "unexpected error: "+m
 
 case class FailTypecheckMatcher(expected: String) extends Matcher[Typechecked]:
-  def apply[S <: Typechecked](actual: Expectable[S]): MatchResult[S] =
+  def apply[S <: Typechecked](actual: Expectable[S]): Result =
     result(!actual.value.isSuccess && resultMessage(actual.value.result)
       .map(_.removeAll("\n").removeAll("\r")).exists(_ matchesSafely ".*"+expected+".*"),
-      s"no compilation error",
-      message(actual.value.result, expected), actual)
+      message(actual.value.result, expected))
 
   private def resultMessage(r: TypecheckResult): Option[String] =
     r match

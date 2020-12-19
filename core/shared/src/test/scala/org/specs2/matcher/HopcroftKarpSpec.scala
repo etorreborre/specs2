@@ -2,9 +2,8 @@ package org.specs2
 package matcher
 
 import data.HopcroftKarp._
-import execute.BestMatching
+import execute._
 import BestMatching._
-import MatchResult._
 
 class HopcroftKarpSpec extends Spec { def is = s2"""
 
@@ -51,7 +50,7 @@ class HopcroftKarpSpec extends Spec { def is = s2"""
     // 4 matches with List(4)
     // 5 matches with List(1, 5)
     val (matches, remaining) =
-    findBestMatch[Int, List[Int], MatchResult[_]](
+    findBestMatch[Int, List[Int], Result](
       1 to 5, List(
                    List(1, 2, 3),
                    List[Int](),
@@ -68,4 +67,3 @@ class HopcroftKarpSpec extends Spec { def is = s2"""
       "List() does not contain 3"))
 
 }
-

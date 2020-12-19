@@ -89,7 +89,7 @@ trait ValueChecksLowImplicits:
         def checkNot = (t: T) => Results.negate(check(t))
 
   private[matcher] def functionResult[T](result: Result, t: T) =
-    if Seq("true", "false").contains(result.message) then result.mapMessage(m => s"the function returns ${q(m)} on ${q(t)}")
+    if Seq("true", "false").contains(result.message) then result.updateMessage(m => s"the function returns ${q(m)} on ${q(t)}")
     else result
 
 

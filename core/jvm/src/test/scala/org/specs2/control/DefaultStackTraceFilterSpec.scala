@@ -29,7 +29,7 @@ class DefaultStackTraceFilterSpec extends Spec with ThrownExpectations { def is 
     filtered.getStackTrace.toSeq must containMatch("TRUNCATED")
 
   def e3 =
-    (new UserExpectationsLike).failure1.toResult match
+    (new UserExpectationsLike).failure1 match
 
       // the right line must be set as the failure
       // location

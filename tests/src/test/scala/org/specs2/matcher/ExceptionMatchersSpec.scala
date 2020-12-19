@@ -81,9 +81,9 @@ class ExceptionMatchersSpec extends Specification with ResultMatchers { def is =
   def byType3 = (theBlock(error("boom")) must throwAn[IAE]).message must startWith(
     "Expected: java.lang.IllegalArgumentException. Got: java.lang.RuntimeException: boom instead")
 
-  def byType4 = (1 must not(throwA(new Exception))).toResult must beSuccessful
+  def byType4 = (1 must not(throwA(new Exception))) must beSuccessful
 
-  def byType5 = ({sys.error("boom"); 1} must not(throwAn[Exception])).toResult must beFailing
+  def byType5 = ({sys.error("boom"); 1} must not(throwAn[Exception])) must beFailing
 
   def byType6 = { throw new StackOverflowError("play again"); 1 } must throwAn[Error]
 
@@ -148,7 +148,7 @@ class ExceptionMatchersSpec extends Specification with ResultMatchers { def is =
   def specific6 = (theBlock(throw UserError("me", "boom")) must throwAn(UserError("me2", "boom")).
     like { case UserError(name, _) => name must startWith("m") }).message must beMatching("Got the exception .*")
 
-  def combinators1 = (1 must not(throwAn[Exception])).toResult.message must ===("Expected: java.lang.Exception. Got nothing")
+  def combinators1 = (1 must not(throwAn[Exception])).message must ===("Expected: java.lang.Exception. Got nothing")
 
   def stacktrace1= (theBlock(error("boom")) must throwAn[IllegalArgumentException]).message must contain(
     "The  RuntimeException stacktrace is")

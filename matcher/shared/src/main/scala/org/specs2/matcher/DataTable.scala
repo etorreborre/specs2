@@ -13,7 +13,7 @@ import scala.concurrent._, duration._
  * This trait provides implicit definitions and types to create DataTables.
  *
  * A DataTable has a header defining column names and rows holding values.
- * It is possible to apply a function taking the row values and returning a MatchResult.
+ * It is possible to apply a function taking the row values and returning a Result.
  *
  * A TableHeader is defined by separating the column names with '|':
  * ` "a" | "b" | "c"`
@@ -62,7 +62,7 @@ trait DataTables extends ExpectationsCreation:
     protected def collect[R : AsResult](results: List[(Seq[String], R)]): DecoratedResult[DataTable] =
       val result = allSuccess(results)
       val decorated =
-        DecoratedResult(DataTable(titles, results), result.updateMessage {
+        DecoratedResult(DataTable(titles, results), result.setMessage {
            TextTable("" +: titles :+ "", results.map { case (line, r) => resultLine(line, AsResult(r)) }:_*).show
         })
       checkResultFailure(decorated)

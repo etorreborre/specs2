@@ -14,7 +14,7 @@ object FutureMatchers extends UserGuideCard {
   def title = "Future"
   def text = s2"""
 Testing `Futures` is quite easy with $specs2. You can simply return a value that is `Future[R]` where `R` has a `AsResult`
-instance (meaning that `R` is some kind of result like: `Boolean`, `Result`, `MatchResult`,...).
+instance (meaning that `R` is some kind of result like: `Boolean`, `Result`,...).
 Then your future will be executed when $specs2 executes your example and the result will be collected.
 
 However you will not get the possibility to specify retries or timeouts. For retries and timeouts
@@ -32,7 +32,7 @@ Future { Thread.sleep(100); 1 } must be_>(0).retryAwait(retries = 2)
 Future { Thread.sleep(100); 1 } must be_>(0).awaitFor(100.millis)
 }}
 
-Another possibility is for you to obtain a `Future[MatchResult[T]]` (or any `Future[R]` where `R` has an `AsResult` typeclass instance).
+Another possibility is for you to obtain a `Future[Result]` (or any `Future[R]` where `R` has an `AsResult` typeclass instance).
 In that case you can use `await` directly on the `Future` to get a `Result`${snippet{
 Future(1 === 1).await
 Future(1 === 1).await(retries = 2, timeout = 100.millis)

@@ -66,10 +66,10 @@ Similarly you can mark the example as `Pending`:${snippet{
 
 ### Standard `MatchResults`
 
-When combining matchers you might be expected to return a `MatchResult[_]`. There are predefined values for those too:
+When combining matchers you might be expected to return a `Result`. There are predefined values for those too:
 
- * `ok` or `ok(message)` for a successful `MatchResult`
- * `ko` or `ko(message)` for a failed `MatchResult`
+ * `ok` or `ok(message)` for a Success
+ * `ko` or `ko(message)` for a Failure
 
 """
 }

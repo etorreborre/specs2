@@ -134,7 +134,7 @@ case class TextPrinter(env: Env) extends Printer {
         case DecoratedResult(t: DataTable, r) =>
           // display the full table if it is an auto-example
           if Description.isCode(description) then
-            printResult(indentText(r.message, indentation, indentationSize(args)), r.updateMessage(""))
+            printResult(indentText(r.message, indentation, indentationSize(args)), r.setMessage(""))
           else
             printResult(show, r)
 

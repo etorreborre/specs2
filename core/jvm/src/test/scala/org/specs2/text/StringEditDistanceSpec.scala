@@ -1,10 +1,10 @@
 package org.specs2
 package text
 
-import matcher.{DataTables, TypedEqual}
-import matcher.MatchersImplicits._
+import matcher.{DataTables, TypedEqual, Matcher}
+import Matcher._
 
-class StringEditDistanceSpec extends Spec with StringEditDistance with DataTables with TypedEqual { def is = s2"""
+class StringEditDistanceSpec extends Specification with StringEditDistance with DataTables with TypedEqual { def is = s2"""
 
  The edit distance should
    return 0 if there's no insertions                                                                      $edit1

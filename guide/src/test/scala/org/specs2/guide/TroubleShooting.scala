@@ -44,7 +44,7 @@ class MysteriousAsResult extends mutable.Spec {
 [error] could not find implicit value for evidence parameter of type org.specs2.execute.AsResult[Unit]
 ```
 
-What's happening? Each example must return a value of type `T` where `T` has an `AsResult` instance. This is the case if `T` is a `Boolean`, a `MatchResult`, a ScalaCheck `Prop` etc... (see ${see(AsResultTypeclass)}). In the class above the return value is `Unit` which doesn't have an `AsResult` instance.
+What's happening? Each example must return a value of type `T` where `T` has an `AsResult` instance. This is the case if `T` is a `Boolean`, a `Result`, a ScalaCheck `Prop` etc... (see ${see(AsResultTypeclass)}). In the class above the return value is `Unit` which doesn't have an `AsResult` instance.
 
 To fix this you can either:
 

@@ -2,14 +2,14 @@ package org.specs2
 package matcher
 
 import java.io.File
-import execute.AsResult
+import fp.syntax._
 import io._
-import specification.BeforeAfterEach
+import FileName.ToFileName
 import control._
-import org.specs2.fp.syntax._
 import text.AnsiColors._
-import org.specs2.matcher.MatchResultLogicalCombinators._
-import org.specs2.io.FileName.ToFileName
+import execute._
+import execute.ResultImplicits._
+import specification.BeforeAfterEach
 
 class FilesContentMatchersSpec extends Spec
   with FilesContentMatchers with BeforeAfterEach { def is = sequential ^ diffs(show = true, triggerSize = 0, diffRatio = 100)^ s2"""
@@ -29,7 +29,7 @@ class FilesContentMatchersSpec extends Spec
  It is possible to check if the files contained in 2 directories
    contain the same lines $e3
    have the same MD5 hash $e4
-                          """
+"""
 
   val (actual, expected, expected2, sub, f1, f2, f3) =
     (FileName.unsafe("actual"), FileName.unsafe("expected"), FileName.unsafe("expected2"),
@@ -119,7 +119,7 @@ class FilesContentMatchersSpec extends Spec
   def before = step(fs.mkdirs(targetDir).runVoid)
   def after  = step(fs.delete(targetDir).runVoid)
 
-  def matcherMessage(m: MatchResult[_]): String =
-    removeColors(m.message.trim)
+  def matcherMessage(r: Result): String =
+    removeColors(r.message.trim)
 
 }

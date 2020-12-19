@@ -72,7 +72,7 @@ class BeEqualToMatcherSpec extends Spec with ResultMatchers with ShouldMatchers 
           |+ 3""".stripMargin.trim }
 
   Expected values are kept in the failure details
-  ${ (1 must ===(2)).toResult must beLike { case Failure(_,_,_,FailureDetails(a, e)) => e must ===("2") } }
+  ${ (1 must ===(2)) must beLike { case Failure(_,_,_,FailureDetails(a, e)) => e must ===("2") } }
 
   the actual value must be evaluated before the expected one
   ${ var result = "";
@@ -115,7 +115,7 @@ Details
     kv.foreach { case (k, v) => map.put(k, v) }
     map
 
-  extension (m: MatchResult[_]):
+  extension (r: Result):
     def normalized: String =
-      m.message.removeColors.trim
+      r.message.removeColors.trim
 }

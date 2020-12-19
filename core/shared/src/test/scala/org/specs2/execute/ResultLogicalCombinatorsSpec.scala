@@ -4,6 +4,7 @@ package execute
 import matcher.ResultMatchers
 import matcher.TypedEqual
 import matcher.Matcher
+import ResultImplicits._
 
 class ResultLogicalCombinatorsSpec extends Spec with ResultMatchers with TypedEqual { def is = s2"""
 

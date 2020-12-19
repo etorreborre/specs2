@@ -122,9 +122,9 @@ object MatcherMacros extends MatcherMacros {
   //         val parameterName = TermName(fieldName)
 
   //         val valueBody = q"""(fieldValue: $fieldType) =>
-  //         addMatcher((t :$typeOfT) => new org.specs2.matcher.BeTypedEqualTo[$fieldType](fieldValue)(theValue[$fieldType](t.$parameterName).updateDescription(d => "  "+$fieldName+": "+d)).toResult)"""
+  //         addMatcher((t :$typeOfT) => new org.specs2.matcher.BeTypedEqualTo[$fieldType](fieldValue)(theValue[$fieldType](t.$parameterName).updateDescription(d => "  "+$fieldName+": "+d)))"""
   //         val matcherBody = q"""(matcherValue: org.specs2.matcher.Matcher[$fieldType]) =>
-  //         addMatcher((t :$typeOfT) => matcherValue[$fieldType](theValue[$fieldType](t.$parameterName).updateDescription(d => "  "+$fieldName+": "+d)).toResult) """
+  //         addMatcher((t :$typeOfT) => matcherValue[$fieldType](theValue[$fieldType](t.$parameterName).updateDescription(d => "  "+$fieldName+": "+d))) """
   //         val functionBody = q"""(f: $fieldType => org.specs2.execute.Result) => addMatcher((t :$typeOfT) => f(t.$parameterName)) """
 
 
@@ -146,8 +146,8 @@ object MatcherMacros extends MatcherMacros {
 
   //         def apply[S <: $typeOfT](s: org.specs2.matcher.Expectable[S]) = {
   //           val r = matcherFunction(s.value)
-  //           val message = r.mapMessage(m => "For "+s.description+"\n"+m).message
-  //           result(r.isSuccess, message, message, s)
+  //           val message = r.updateMessage(m => "For "+s.description+"\n"+m).message
+  //           result(r.isSuccess, message)
   //         }
 
   //         ..$fieldMatchers

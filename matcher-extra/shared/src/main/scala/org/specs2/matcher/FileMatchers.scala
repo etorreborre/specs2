@@ -4,6 +4,8 @@ package matcher
 import text.Quote._
 import io._
 import scala.reflect.Selectable.reflectiveSelectable
+import execute._, Result._
+import Matcher.{given}
 
 /**
  * The PathMatchers trait provides matchers which are applicable to strings representing paths
@@ -16,56 +18,56 @@ trait PathMatchers:
 
   /** matches if new File(path).exists */
   def beAnExistingPath: PathMatcher =
-    new PathMatcher((s: String) => exists(s), "exists", "doesn't exist")
+    new PathMatcher((s: String) => exists(s), "doesn't exist")
 
   /** matches if new File(path).canRead */
   def beAReadablePath: PathMatcher =
-    new PathMatcher((s: String) => canRead(s), "is readable", "can't be read")
+    new PathMatcher((s: String) => canRead(s), "can't be read")
 
   /** matches if new File(path).canWrite */
   def beAWritablePath: PathMatcher =
-    new PathMatcher((s: String) => canWrite(s), "is writable", "can't be written")
+    new PathMatcher((s: String) => canWrite(s), "can't be written")
 
   /** matches if new File(path).isAbsolute */
   def beAnAbsolutePath: PathMatcher =
-    new PathMatcher((s: String) => isAbsolute(s), "is absolute", "is not absolute")
+    new PathMatcher((s: String) => isAbsolute(s), "is not absolute")
 
   /** matches if new File(path).isHidden */
   def beAHiddenPath: PathMatcher =
-    new PathMatcher((s: String) => isHidden(s), "is hidden", "is not hidden")
+    new PathMatcher((s: String) => isHidden(s), "is not hidden")
 
   /** matches if new File(path).isFile */
   def beAFilePath: PathMatcher =
-    new PathMatcher((s: String) => isFile(s), "is a file", "is not a file")
+    new PathMatcher((s: String) => isFile(s), "is not a file")
 
   /** matches if new File(path).isDirectory  */
   def beADirectoryPath: PathMatcher =
-    new PathMatcher((s: String) => isDirectory(s), "is a directory", "is not a directory")
+    new PathMatcher((s: String) => isDirectory(s), "is not a directory")
 
   /** matches if new File(path).getName == name */
   def havePathName(name: String): PathMatcher =
-    new PathMatcher((s: String) => isEqualIgnoringSep(getName(s), name), "is named " + q(name), "is not named " + q(name))
+    new PathMatcher((s: String) => isEqualIgnoringSep(getName(s), name), "is not named " + q(name))
 
   /** matches if new File(path).getAbsolutePath == absolutePath */
   def haveAsAbsolutePath(path: String): PathMatcher =
-    new PathMatcher((s: String) => isEqualIgnoringSep(s, path), "has absolute path " + q(path), "doesn't have absolute path " + q(path))
+    new PathMatcher((s: String) => isEqualIgnoringSep(s, path), "doesn't have absolute path " + q(path))
 
   /** matches if new File(path).getCanonicalPath == canonicalPath */
   def haveAsCanonicalPath(path: String): PathMatcher =
-    new PathMatcher((s: String) => isEqualIgnoringSep(getCanonicalPath(s), path), "has canonical path " + q(path), "doesn't have canonical path " + q(path))
+    new PathMatcher((s: String) => isEqualIgnoringSep(getCanonicalPath(s), path), "doesn't have canonical path " + q(path))
 
   /** matches if new File(path).getParent == parent */
   def haveParentPath(parent: String): PathMatcher =
-    new PathMatcher((s: String) => isEqualIgnoringSep(getParent(s), parent), "has parent path " + q(parent), "doesn't have parent path " + q(parent))
+    new PathMatcher((s: String) => isEqualIgnoringSep(getParent(s), parent), "doesn't have parent path " + q(parent))
 
   /** matches if new File(path).list == list(files) */
   def listPaths(list: String*): PathMatcher =
-    new PathMatcher((s: String) => list != null && listFiles(s).toList == list.toList, "has files " + q(list.mkString(", ")),
+    new PathMatcher((s: String) => list != null && listFiles(s).toList == list.toList,
         "doesn't have files " + q(list.toList.mkString(", ")))
 
   /** matches if 2 paths are the same regardless of their separators */
   def beEqualToIgnoringSep(other: String): PathMatcher =
-    new PathMatcher((s: String) => isEqualIgnoringSep(getCanonicalPath(s), other), "is equal ignoring separators to " + q(other),
+    new PathMatcher((s: String) => isEqualIgnoringSep(getCanonicalPath(s), other),
         "is not equal ignoring separators to " + q(other))
 
   /** @return true if the 2 paths are equal, ignoring separators */
@@ -141,9 +143,7 @@ case class Path(p: String):
   def getPath(): String = p
 
 private[specs2]
-class PathMatcher(test: String => Boolean, ok: String, ko: String) extends Matcher[String]:
+class PathMatcher(test: String => Boolean, ko: String) extends Matcher[String]:
   def apply[S <: String](path: Expectable[S]) =
     result(path.value != null && test(path.value),
-           path.description + " " + ok,
-           path.description  + " " + ko,
-           path)
+           path.description  + " " + ko)

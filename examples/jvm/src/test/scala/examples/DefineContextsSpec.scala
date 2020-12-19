@@ -51,7 +51,7 @@ class DefineContextsSpec extends Specification:
     override def flatMap(f: Fragment) =
       f.updateResult { r =>
         val (result, timer) = withTimer(ResultExecution.execute(r))
-        // update the result with a piece of text which will be displayed in the consol
+        // update the result with a piece of text which will be displayed in the console
         result.updateExpected("Execution time: "+timer.time)
       }
 

@@ -1,14 +1,14 @@
 package org.specs2
 package specification
 
-import org.specs2.fp._
+import fp._
 import core._
+import execute._
 import Fragment._
 import process._
 import Levels._
-import org.specs2.concurrent.ExecutionEnv
-import org.specs2.matcher.MatchResult
-import org.specs2.specification.dsl.AcceptanceDsl
+import concurrent.ExecutionEnv
+import specification.dsl.AcceptanceDsl
 
 class LevelsSpec(ee: ExecutionEnv) extends Spec { def is = s2"""
 
@@ -27,14 +27,14 @@ class LevelsSpec(ee: ExecutionEnv) extends Spec { def is = s2"""
   trait mutableSpec extends org.specs2.mutable.Specification
   trait spec extends org.specs2.Specification
   case class tree() extends AcceptanceDsl:
-    def e0: MatchResult[Option[Tree[Fragment]]] = treeMap(new mutableSpec { "e1" in ok; "e2" in ok }.is.fragments)(mapper)(ee) must beDrawnAs(
+    def e0: Result = treeMap(new mutableSpec { "e1" in ok; "e2" in ok }.is.fragments)(mapper)(ee) must beDrawnAs(
       "Fragment(root)",
       "|",
       "+- Fragment(e1)",
       "|",
       "`- Fragment(e2)")
 
-    def e1: MatchResult[Option[Tree[Fragment]]] = treeMap(new mutableSpec { "t1" >> { "e1" in ok; "e2" >> ok } }.is.fragments)(mapper)(ee) must beDrawnAs(
+    def e1: Result = treeMap(new mutableSpec { "t1" >> { "e1" in ok; "e2" >> ok } }.is.fragments)(mapper)(ee) must beDrawnAs(
       "Fragment(root)",
       "|",
       "`- Fragment(t1)",
@@ -43,7 +43,7 @@ class LevelsSpec(ee: ExecutionEnv) extends Spec { def is = s2"""
       "   |",
       "   `- Fragment(e2)")
 
-    def e2: MatchResult[Option[Tree[Fragment]]] = treeMap(new mutableSpec { "t1" >> { "e1" in ok }; "t2" >> { "e2" in ok } }.is.fragments)(mapper)(ee) must beDrawnAs(
+    def e2: Result = treeMap(new mutableSpec { "t1" >> { "e1" in ok }; "t2" >> { "e2" in ok } }.is.fragments)(mapper)(ee) must beDrawnAs(
       "Fragment(root)",
       "|",
       "+- Fragment(t1)",
@@ -54,7 +54,7 @@ class LevelsSpec(ee: ExecutionEnv) extends Spec { def is = s2"""
       "   |",
       "   `- Fragment(e2)")
 
-    def e3: MatchResult[Option[Tree[Fragment]]] = treeMap(new mutableSpec {
+    def e3: Result = treeMap(new mutableSpec {
       "t1" >> {
         br
         "t2" >> {
@@ -91,7 +91,7 @@ class LevelsSpec(ee: ExecutionEnv) extends Spec { def is = s2"""
       "   |",
       "   `- Fragment(e6)")
 
-    def e4: MatchResult[Option[Tree[Fragment]]] = treeMap(new spec { def is = s2"""
+    def e4: Result = treeMap(new spec { def is = s2"""
         t11
           e11 $ok
           e22 $ok
@@ -106,7 +106,7 @@ class LevelsSpec(ee: ExecutionEnv) extends Spec { def is = s2"""
       "`- Fragment(e22)"
     )
 
-    def e5: MatchResult[Option[Tree[Fragment]]] = treeMap(new spec { def is = s2"""
+    def e5: Result = treeMap(new spec { def is = s2"""
         Explanation Text.
 
         First starting test line
@@ -155,6 +155,7 @@ class LevelsSpec(ee: ExecutionEnv) extends Spec { def is = s2"""
         case Fragment(Text(t), e, l)                    => Some(Fragment(Text(t.trim.replaceAll("\\s+"," ")), e, l))
         case _                                          => None
     }
+    
     private def beDrawnAs(lines: String*) = be_==(lines.mkString("", "\n", "\n")) ^^ {
       (tree: Option[Tree[Fragment]]) => tree.map(_.drawTree).getOrElse("no tree!")
     }

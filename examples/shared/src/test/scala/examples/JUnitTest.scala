@@ -1,4 +1,5 @@
 package examples
+
 import org.junit._
 import org.specs2.matcher._
 
@@ -24,6 +25,6 @@ class JUnitTest extends JUnitMustMatchers:
     "Hello world" must endWithWorld; ()
 
   // custom matchers can be created by coercing a function T => (Boolean, String, String) to Matcher[T]
-  def endWithWorld: Matcher[String] = { (s: String) =>
-    (s.endsWith("world"), s+" ends with world", s+" doesn't end with world")
+  def endWithWorld: Matcher[String] = Matcher { (s: String) =>
+    (s.endsWith("world"), s+" doesn't end with world")
   }

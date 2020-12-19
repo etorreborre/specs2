@@ -29,7 +29,7 @@ The `aka` (*also known as*) method has a few variations:
 
 #### Update the failure message
 
-On a `Matcher`, a `MatchResult` or a `Result` you can use `updateMessage(f: String => String)` or `setMessage(m: String)` to change the failure message.
+On a `Matcher` or a `Result` you can use `updateMessage(f: String => String)` or `setMessage(m: String)` to change the failure message.
 
 #### Describe an expectation
 

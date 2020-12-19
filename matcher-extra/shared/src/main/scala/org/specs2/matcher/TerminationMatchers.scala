@@ -2,7 +2,9 @@ package org.specs2
 package matcher
 
 import java.util.concurrent.atomic.AtomicBoolean
-import org.specs2.concurrent.ExecutionEnv
+import concurrent.ExecutionEnv
+import Matcher.{given}
+import execute._, Result._
 
 import scala.annotation.tailrec
 import scala.concurrent._, duration._
@@ -51,24 +53,23 @@ class TerminationMatcher[-T](
     retry(retries, retries, sleep * ee.timeFactor.toDouble, a, createFuture(a.value))
 
   @tailrec
-  private final def retry[S <: T](originalRetries: Int, retries: Int, sleep: Duration, a: Expectable[S], future: Future[S], whenActionExecuted: Boolean = false): MatchResult[S] =
+  private final def retry[S <: T](originalRetries: Int, retries: Int, sleep: Duration, a: Expectable[S], future: Future[S], whenActionExecuted: Boolean = false): Result =
     val parameters = "with retries="+originalRetries+" and sleep="+sleep.toMillis
     val evenWhenAction = whenDesc.fold("")(w => " even when " + w)
     val onlyWhenAction = whenDesc.getOrElse("the second action")
 
     def terminates =
-      result(true, "the action terminates", "the action is blocking "+parameters+evenWhenAction, a)
+      result(true, "the action is blocking "+parameters+evenWhenAction)
 
     def blocks =
       cancelled.set(true)
-      result(false, "the action terminates", "the action is blocking "+parameters+evenWhenAction, a)
+      result(false, "the action is blocking "+parameters+evenWhenAction)
 
     if whenAction.isDefined then
       if terminated.get then
         if onlyWhen then
           result(whenActionExecuted,
-                 "the action terminates only when "+onlyWhenAction+" terminates",
-                 "the action terminated before "+onlyWhenAction+" ("+parameters+")", a)
+                 "the action terminated before "+onlyWhenAction+" ("+parameters+")")
         else terminates
       else
         if retries <= 0 then blocks

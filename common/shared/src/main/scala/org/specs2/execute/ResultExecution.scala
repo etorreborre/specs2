@@ -93,7 +93,6 @@ trait ResultExecution:
       case Left(ErrorException(f))                           => Left(f)
       case Left(DecoratedResultException(f))                 => Left(f)
       case Left(e)                                           => Left(Error(e))
-      case Right(m: ResultLike)     if !m.toResult.isSuccess => Left(m.toResult)
       case Right(r: Result)         if !r.isSuccess          => Left(r)
       case Right(other)                                      => Right(convert(other))
 

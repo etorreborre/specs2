@@ -13,7 +13,7 @@ object UseScalaCheck extends UserGuidePage with ScalaCheck with ResultImplicits 
 
 A clever way of creating expectations in $specs2 is to use the [ScalaCheck](https://github.com/rickynils/scalacheck) library.
 
-To declare ScalaCheck properties you first need to extend the `org.specs2.ScalaCheck` trait. Then you can pass functions returning any kind of `Result` (`Boolean`, `Result`, `MatchResult` or a ScalaCheck `Prop`) to the `prop` method and use the resulting `Prop` as your example body: ${snippet{
+To declare ScalaCheck properties you first need to extend the `org.specs2.ScalaCheck` trait. Then you can pass functions returning any kind of `Result` (`Boolean`, `Result`, or a ScalaCheck `Prop`) to the `prop` method and use the resulting `Prop` as your example body: ${snippet{
 s2"addition and multiplication are related ${ prop { (a: Int) => a + a == 2 * a } }"
 }}
 
@@ -21,14 +21,14 @@ The function that is checked can either return: ${snippet{
 // a Boolean
 s2"addition and multiplication are related ${ prop { (a: Int) => a + a == 2 * a } }"
 
-// a MatchResult
+// a Result
 s2"addition and multiplication are related ${ prop { (a: Int) => a + a must ===(2 * a } }")
 
 // a Prop
 s2"addition and multiplication are related ${ prop { (a: Int) => (a > 0) ==> (a + a must ===(2 * a)) } }"
 }}
 
-Note that if you pass functions using `MatchResult`s you will get better failure messages than just using boolean expressions.
+Note that if you pass functions using `Result`s you will get better failure messages than just using boolean expressions.
 
 By default the properties created with `prop` will be shrinking counter-examples. But as you will see below there lots of different ways to parameterize ScalaCheck properties in specs2, including declaring if shrinking must be done.
 

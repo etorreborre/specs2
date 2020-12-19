@@ -26,7 +26,7 @@ There are also other notions of equality
  `beTheSameAs      `| reference equality: check if `a eq b` (`a must be(b)` also works)
  `be               `| `a must be(b)`: synonym for `beTheSameAs`
  `beTrue, beFalse  `| shortcuts for Boolean equality
- `beLike           `| partial equality, using a `PartialFunction[T, MatchResult[_]]`: `(1, 2) must beLike { case (1, _) => ok }`
+ `beLike           `| partial equality, using a `PartialFunction[T, Result]`: `(1, 2) must beLike { case (1, _) => ok }`
 
 _Note_: the `beEqualTo` matcher is using the regular `==` Scala equality. However in the case of `Arrays`, Scala `==` is just using reference equality, `eq`.
 So the `beEqualTo` matcher has been adapted to use the `.deep` method on `Arrays`, transforming them to `IndexedSeqs` (possibly nested),

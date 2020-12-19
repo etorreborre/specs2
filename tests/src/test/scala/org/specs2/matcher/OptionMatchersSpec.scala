@@ -1,10 +1,9 @@
 package org.specs2
 package matcher
 
-import MatchersCreation._
 import execute._
 
-class OptionMatchersSpec extends Spec with ResultMatchers with OptionMatchers { def is = s2"""
+class OptionMatchersSpec extends Specification with ResultMatchers { def is = s2"""
 
  The OptionMatchers trait provides matchers to check Option instances.
 

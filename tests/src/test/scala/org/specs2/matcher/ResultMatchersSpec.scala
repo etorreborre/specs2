@@ -16,11 +16,11 @@ The ResultMatchers trait provides matchers to check Result instances.
   ${ Failure("msg") must beFailing(message = "m.*") }
   ${ success must not(beFailing) }
 
-  beSuccessful checks if a MatchResult is a Success
+  beSuccessful checks if a Result is a Success
   ${ (1 === 1) must beSuccessful }
   ${ (1 !== 1) must not(beSuccessful) }
 
-  beFailing checks if a MatchResult is a Failure
+  beFailing checks if a Result is a Failure
   ${ (1 !== 1) must beFailing }
   ${ (1 !== 1) must beFailing(message = "1 == '1'") }
   ${ (1 === 1) must not(beFailing) }

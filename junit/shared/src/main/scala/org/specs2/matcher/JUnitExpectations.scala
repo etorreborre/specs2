@@ -11,16 +11,16 @@ import execute._
  * It is involved when reusing Matchers with JUnit
  */
 trait JUnitExpectations extends ThrownExpectations:
-  override protected def checkMatchResultFailure[T](m: MatchResult[T]) =
-    m match
-      case f @ MatchFailure(ok, ko, _, _, FailureDetails(actual, expected)) => throw new ComparisonFailure(ko(), expected, actual) {
+  override protected def checkResultFailure(r: =>Result) =
+    r match
+      case f @ Failure(ko, _, _, FailureDetails(actual, expected)) => throw new ComparisonFailure(ko, expected, actual) {
         override def getStackTrace = f.exception.getStackTrace
         override def getCause = f.exception.getCause
         override def printStackTrace = f.exception.printStackTrace
         override def printStackTrace(w: java.io.PrintStream) = f.exception.printStackTrace(w)
         override def printStackTrace(w: java.io.PrintWriter) = f.exception.printStackTrace(w)
       }
-      case f @ MatchFailure(ok, ko, _, _, _) => throw new AssertionFailedError(ko()) {
+      case f @ Failure(ko, _, _, _) => throw new AssertionFailedError(ko) {
         override def getStackTrace = f.exception.getStackTrace
         override def getCause = f.exception.getCause
         override def printStackTrace = f.exception.printStackTrace
@@ -28,7 +28,7 @@ trait JUnitExpectations extends ThrownExpectations:
         override def printStackTrace(w: java.io.PrintWriter) = f.exception.printStackTrace(w)
       }
       case _ => ()
-    m
+    r
 
 /**
  * This trait can be imported to use MustMatchers in JUnit

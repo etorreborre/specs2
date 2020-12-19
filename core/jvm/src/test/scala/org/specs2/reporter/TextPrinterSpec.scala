@@ -1,8 +1,9 @@
 package org.specs2
 package reporter
 
-import matcher._
 import execute._
+import ResultImplicits._
+import matcher._
 import specification._
 import specification.create.DefaultFragmentFactory
 import core._
@@ -339,34 +340,34 @@ object TextPrinterSpecification extends MustMatchers with FragmentsDsl:
 
   extension (fragments: Fragments):
     def contains(contained: String): Boolean =
-      SpecStructure.create(SpecHeader(classOf[TextPrinterSpec]), Arguments(), fragments).contains(contained, identity)
+      SpecStructure.create(SpecHeader(classOf[TextPrinterSpec]), Arguments(), fragments).contains(contained, identity).isSuccess
 
     def contains(contained: String, f: String => String): Boolean =
-      SpecStructure.create(SpecHeader(classOf[TextPrinterSpec]), Arguments(), fragments).contains(contained, f)
+      SpecStructure.create(SpecHeader(classOf[TextPrinterSpec]), Arguments(), fragments).contains(contained, f).isSuccess
 
     def doesntContain(contained: String, f: String => String = identity): Boolean =
-      SpecStructure.create(SpecHeader(classOf[TextPrinterSpec]), Arguments(), fragments).contains(contained, f).not
+      SpecStructure.create(SpecHeader(classOf[TextPrinterSpec]), Arguments(), fragments).contains(contained, f).not.isSuccess
 
   extension (spec: SpecStructure):
     def doesntContain(contained: String): Boolean =
-      spec.contains(contained).not
+      spec.contains(contained).not.isSuccess
 
     def doesntContain(contained: String, f: String => String): Boolean =
-      spec.contains(contained, f).not
+      spec.contains(contained, f).not.isSuccess
 
-    def contains(contained: String): MatchResult[String] =
+    def contains(contained: String): Result =
       printed(spec) must contain(contained.stripMargin.replace(" ", "_"))
 
-    def contains(contained: String, f: String => String): MatchResult[String] =
+    def contains(contained: String, f: String => String): Result =
       f(printed(spec)) must contain(contained.stripMargin.replace(" ", "_"))
 
-    def containsOnly(contained: String): MatchResult[String]  =
+    def containsOnly(contained: String): Result  =
       printed(spec) must be_==(contained.stripMargin.replace(" ", "_"))
 
-    def startsWith(start: String): MatchResult[String]  =
+    def startsWith(start: String): Result  =
       printed(spec) must startWith(start.stripMargin.replace(" ", "_"))
 
-    def matches(pattern: String): MatchResult[String]  =
+    def matches(pattern: String): Result  =
       printed(spec) must beMatching(pattern.stripMargin.replace(" ", "_"))
 
   private def printed(s: SpecStructure, optionalEnv: Option[Env] = None) =
@@ -390,10 +391,10 @@ object TextPrinterSpecification extends MustMatchers with FragmentsDsl:
      messages.map(_.removeEnd(" ")).mkString("\n").replace(" ", "_")
 
   extension (spec: (Fragments, Env)):
-    def contains(contained: String): MatchResult[String]  =
+    def contains(contained: String): Result  =
       printed(spec._1, Some(spec._2)) must contain(contained.stripMargin.replace(" ", "_"))
 
-    def contains(contained: String, f: String => String): MatchResult[String]  =
+    def contains(contained: String, f: String => String): Result  =
       f(printed(spec._1, Some(spec._2))) must contain(contained.stripMargin.replace(" ", "_"))
 
 class TestLogger extends BufferedPrinterLogger with StringOutput:

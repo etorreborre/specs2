@@ -1,11 +1,11 @@
 package org.specs2
 package specification
 
-import matcher.{StandardMatchResults, ShouldMatchers, MustMatchers}
-import execute.{PendingUntilFixed, StandardResults}
+import matcher._
+import execute._
 import control.Debug
 import control.ImplicitParameters
-import org.specs2.concurrent.ImplicitExecutionContexts
+import concurrent.ImplicitExecutionContexts
 
 /**
  * List of all the features which are being included the default Specification class:
@@ -20,8 +20,11 @@ import org.specs2.concurrent.ImplicitExecutionContexts
 trait SpecificationFeatures extends
        MustMatchers
   with ShouldMatchers
+  with Expectations
   with StandardResults
-  with StandardMatchResults
+  with ExpectedResults
+  with MatcherImplicits
+  with ResultLogicalCombinators
   with PendingUntilFixed
   with ImplicitParameters
   with Debug

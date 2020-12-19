@@ -167,7 +167,7 @@ t1 must beMatching(t2)
 The easiest way to create a new matcher is to create it from a function returning a tuple with a boolean and one or more messages: ${snippet{
 
 // import the necessary implicit conversions if you are outside of a Specification
-// import org.specs2.matcher.MatchersImplicits._
+// import org.specs2.matcher.Matcher.{given}
 
 // annotate the return type so that implicit conversions can transform your function into a Matcher object
 // here just return a boolean and a failure message
@@ -202,7 +202,6 @@ If you want absolute power over matching, you can define your own matcher extend
 case class BeMyOwnEmpty() extends Matcher[String] {
   def apply[S <: String](s: Expectable[S]) = {
     result(s.value.isEmpty,
-      s.description + " is empty",
       s.description + " is not empty",
       s)
   }

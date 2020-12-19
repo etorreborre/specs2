@@ -20,13 +20,13 @@ class BeHaveMatchersSpec extends Specification { def is = s2"""
    ${ !((Array.empty[Int]) must not(beEmpty)).isSuccess }
 
    using and and be in combination
-   ${ (1 must beEqualTo(1) and beEqualTo(1)).isSuccess }
-   ${ !(1 must beEqualTo(1) and beEqualTo(2)).isSuccess }
+   ${ (1 must (beEqualTo(1) and beEqualTo(1))).isSuccess }
+   ${ !(1 must (beEqualTo(1) and beEqualTo(2))).isSuccess }
 
    using and, not and be in combination
-   ${ (1 must beEqualTo(1) and not(beEqualTo(2))).isSuccess }
-   ${ (1 must not(beEqualTo(2)) and beEqualTo(1)).isSuccess }
-   ${ !(1 must not(beEqualTo(1)) and not(beEqualTo(2))).isSuccess }
+   ${ (1 must (beEqualTo(1) and not(beEqualTo(2)))).isSuccess }
+   ${ (1 must (not(beEqualTo(2)) and beEqualTo(1))).isSuccess }
+   ${ !(1 must (not(beEqualTo(1)) and not(beEqualTo(2)))).isSuccess }
 
    some matchers can be put on 2 lines, but they may have to be ; separated $e1
                                                                                                                         """

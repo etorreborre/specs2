@@ -10,7 +10,8 @@ import org.specs2.text.NotNullStrings._
 import text.NotNullStrings._
 import json.Json._
 import util.matching.Regex
-import MatchersImplicits.{given}
+import Matcher.{given}
+import Result._
 import Results.negateWhen
 import JsonMatchers._
 
@@ -28,8 +29,8 @@ trait JsonMatchers extends Expectations with JsonMatchersImplicits:
   abstract class JsonMatcher extends Matcher[String]:
     def apply[S <: String](s: Expectable[S]) =
       parse(s.value.notNull) match
-        case None       => result(negated, "ok", "Could not parse\n" + s.value.notNull, s)
-        case Some(json) => result(negateWhen(negated)(find(Some(json), queries.toList)), s)
+        case None       => result(negated, "Could not parse\n" + s.value.notNull)
+        case Some(json) => negateWhen(negated)(find(Some(json), queries.toList))
 
     def negate: JsonMatcher
     def negated: Boolean
@@ -47,18 +48,23 @@ trait JsonMatchers extends Expectations with JsonMatchersImplicits:
     private def find(json: Option[JSONType], queries: List[JsonQuery]): Result =
       def checkRest(value: Any, rest: List[JsonQuery]) =
         (value, rest) match
-          case (_, Nil)         => check(createExpectable(anyValueToJsonType(value))).toResult
+          case (_, Nil)         => check(createExpectable(anyValueToJsonType(value)))
           case ((k, v), q :: _) =>
-            if q.selector.select(Map((k.notNull, v))).isDefined then Success()
-            else                                                  Failure(s"found '${value.notNull}' but no value to select for ${q.name}")
+            if q.selector.select(Map((k.notNull, v))).isDefined then
+              Success()
+            else
+              Failure(s"found '${value.notNull}' but no value to select for ${q.name}")
+
           case (v, q :: _) =>
-            if q.selector.select(List(v)).isDefined then Success()
-            else                                      Failure(s"found '${value.notNull}' but no value to select for ${q.name}")
+            if q.selector.select(List(v)).isDefined then
+              Success()
+            else
+              Failure(s"found '${value.notNull}' but no value to select for ${q.name}")
 
       (json, queries) match
         case (None,    Nil)             => Success("ok")
-        case (Some(JSONArray(a)), Nil)  => check(createExpectable(JsonType.array(a))).toResult
-        case (Some(JSONObject(o)), Nil) => check(createExpectable(JsonType.map(o))).toResult
+        case (Some(JSONArray(a)), Nil)  => check(createExpectable(JsonType.array(a)))
+        case (Some(JSONObject(o)), Nil) => check(createExpectable(JsonType.map(o)))
         case (None,    q :: _)          => Failure(q.selector.name + " not found")
 
         // FIRST
@@ -171,8 +177,8 @@ trait JsonMatchers extends Expectations with JsonMatchersImplicits:
     new Matcher[JsonType]:
       def apply[S <: JsonType](actual: Expectable[S]) =
         actual.value match
-          case JsonNull => result(true, s"the value is null", s"the value is not null", actual)
-          case other    => result(false, s"$other is not a null value", s"$other is not a null value", actual)
+          case JsonNull => result(true, s"the value is not null")
+          case other    => result(false, s"$other is not a null value")
 
 /**
  * abstract JSON types for specs2
@@ -190,7 +196,7 @@ object JsonType:
   def map(map: Map[String, Any]) = JsonMap(map)
 
   val anyMatch = new  Matcher[JsonType] {
-    def apply[S <: JsonType](s: Expectable[S]) = result(true, "ok", "ko", s)
+    def apply[S <: JsonType](s: Expectable[S]) = result(true, "ko")
   }
 
   given Sized[JsonType]:
@@ -207,14 +213,14 @@ object JsonType:
       (actual: JsonType) => actual match
         case JsonArray(list) => m(createExpectable(list.map(showJson)))
         case JsonMap(map)    => m(createExpectable(map.toList.map(showJson)))
-        case other           => Matcher.result(false, s"$other is not an array", createExpectable(other))
+        case other           => result(false, s"$other is not an array")
 
   given Conversion[ContainWithResult[String], Matcher[JsonType]]:
     def apply(m: ContainWithResult[String]): Matcher[JsonType] =
      (actual: JsonType) => actual match
        case JsonArray(list) => m(createExpectable(list.map(showJson)))
        case JsonMap(map)    => m(createExpectable(map.toList.map(showJson)))
-       case other           => Matcher.result(false, s"$other is not an array", createExpectable(other))
+       case other           => result(false, s"$other is not an array")
 
   given Conversion[Int, Matcher[JsonType]]:
     def apply(expected: Int): Matcher[JsonType] =
@@ -331,7 +337,7 @@ trait JsonSelectors:
     def name = selector.name
 
   val anyValue: Matcher[Any] =
-    new NeutralMatcher[Any]
+    new AlwaysMatcher[Any]
 
 private[specs2]
 trait JsonMatchersImplicits extends JsonMatchersLowImplicits:

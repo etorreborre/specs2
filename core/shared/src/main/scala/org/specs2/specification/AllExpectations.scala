@@ -1,11 +1,11 @@
 package org.specs2
 package specification
 
-import matcher._
 import execute._
 import main._
-import specification.core._
-import specification.create._
+import matcher._
+import core._
+import create._
 import scala.reflect.Selectable.reflectiveSelectable
 
 /**
@@ -49,22 +49,18 @@ trait AllExpectations extends SpecificationStructure with StoredExpectations wit
  * This trait evaluates expectations and stores them in a local variable for further usage
  */
 trait StoredExpectations extends Expectations with StandardResults:
-  private[specs2] lazy val matchResults = new scala.collection.mutable.ListBuffer[MatchResult[_]]
   private[specs2] lazy val results = new scala.collection.mutable.ListBuffer[Result]
 
   def storedResults: scala.collection.Seq[Result] =
-    val failures = matchResults.filterNot(_.isSuccess)
+    val failures = results.filterNot(_.isSuccess)
 
     // if there are several failures, indicate the location of each one
-    val rs: Seq[Result] = matchResults.toSeq.map {
-      case f: MatchFailure[_] if failures.size > 1 =>
-        f.copy(
-          ok = () => addLocation(f.okMessage, f.toFailure.location),
-          ko = () => addLocation(f.koMessage, f.toFailure.location))
-
-      case other => other
-    }.map(_.toResult) ++ results.toSeq
-    matchResults.clear()
+    val rs: Seq[Result] = results.toSeq.map {
+      case f: Failure if failures.size > 1 =>
+        f.copy(m = addLocation(f.message, f.location))
+      case other =>
+        other
+    }
     results.clear()
     rs
 
@@ -90,20 +86,16 @@ trait StoredExpectations extends Expectations with StandardResults:
     checkResultFailure(r)
     r
 
-  override protected def checkMatchResultFailure[T](m: MatchResult[T]): MatchResult[T] =
-    matchResults.append(m)
-    m
-
   override protected def checkResultFailure(r: =>Result): Result =
     results.append(r)
     r
 
-  override def sandboxMatchResult[T](mr: =>MatchResult[T]): MatchResult[T] = synchronized {
-    val matchResultsCopy = new scala.collection.mutable.ListBuffer[MatchResult[_]]
-    matchResultsCopy ++= matchResults
-    try mr
+  override def sandboxResult(r: =>Result): Result = synchronized {
+    val resultsCopy = new scala.collection.mutable.ListBuffer[Result]
+    resultsCopy ++= results
+    try r
     finally
-      matchResults.clear
-      matchResults ++= matchResultsCopy
+      results.clear
+      results ++= resultsCopy
       ()
   }

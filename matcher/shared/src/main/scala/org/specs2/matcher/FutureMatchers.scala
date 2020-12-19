@@ -6,6 +6,7 @@ import scala.concurrent.duration._
 import scala.concurrent._
 import execute._
 import concurrent.FutureAwait.{await => futureAwait}
+import Result._
 
 /**
  * This trait is for transforming matchers of values to matchers of Futures
@@ -48,16 +49,15 @@ trait FutureMatchers extends ExpectationsCreation:
         val syncFailCapture = a.value
         try
           val futures = Iterator(syncFailCapture) ++ Iterator.continually(a.valueDefinition)
-          val r = new FutureAsResult(futures.next.map(v => AsResult(createExpectable(v).applyMatcher(m)))(ee.executionContext)).await(retries, timeout)
-          result(r.isSuccess, r.message, r.message, a)
+          new FutureAsResult(futures.next.map(v => AsResult(createExpectable(v).applyMatcher(m)))(ee.executionContext)).await(retries, timeout)
+          
         catch
           case f: FailureException =>
             throw f
           // if awaiting on the future throws an exception because it was a failed future
           // there try to match again because the matcher can be a `throwA` matcher
           case t: Throwable =>
-            val r = createExpectable(throw t).applyMatcher(m).toResult
-            result(r.isSuccess, r.message, r.message, a)
+            createExpectable(throw t).applyMatcher(m)
 
 object FutureMatchers extends FutureMatchers
 

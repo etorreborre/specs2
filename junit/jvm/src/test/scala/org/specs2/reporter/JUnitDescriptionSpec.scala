@@ -4,7 +4,7 @@ package reporter
 import specification.create.FragmentsFactory
 import specification.dsl.AcceptanceDsl
 import specification.core._
-import matcher.{MustMatchers, StandardMatchResults}
+import matcher.{MustMatchers, ExpectedResults}
 import org.junit.runner.Description
 import execute.{Result, StandardResults, Success}
 import ShowDescription.{given, _}
@@ -205,7 +205,7 @@ class JUnitDescriptionSpec(val env: Env) extends Specification with JUnitDescrip
   }
 }
 
-trait ReporterExamples extends MustMatchers with StandardResults with StandardMatchResults with FragmentsFactory with AcceptanceDsl:
+trait ReporterExamples extends MustMatchers with StandardResults with ExpectedResults with FragmentsFactory with AcceptanceDsl:
   private val factory = fragmentFactory; import factory._
 
   lazy val text = factory.text("text")
