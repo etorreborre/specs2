@@ -14,9 +14,9 @@ class AllExpectationsSpec(val env: Env) extends Spec with OwnEnv:
   "A specification with the AllExpectations trait should" >> {
     "evaluate all its expectations" >> {
       executed.hasIssues must beTrue
-      executed.expectations === 10
-      executed.examples === 4
-      executed.failures === 4
+      executed.expectations === 8
+      executed.examples === 3
+      executed.failures === 3
       executedIssues.head.message === "1 != 2 [AllExpectationsSpecification.scala:8]\n"+
                                       "1 != 3 [AllExpectationsSpecification.scala:9]"
     }
@@ -30,8 +30,8 @@ class AllExpectationsSpec(val env: Env) extends Spec with OwnEnv:
     }
     "work ok on a specification with selected fragments" >> {
       executedSelected.hasIssues must beTrue
-      executedSelected.expectations === 4
-      executedSelected.failures === 2
+      executedSelected.expectations === 2
+      executedSelected.failures === 1
     }
     "evaluate an exception" >> {
       executedException.hasIssues must beTrue
@@ -61,7 +61,7 @@ class AllExpectationsSpec(val env: Env) extends Spec with OwnEnv:
 
   def stats(spec: SpecificationStructure)(args: Arguments): Stats =
     // all the executions need to be sequential
-    val executed = DefaultExecutor.executeSpec(spec.structure |> DefaultSelector(ownEnv.arguments).select(args), ownEnv)
+    val executed = DefaultExecutor.executeSpec(spec.structure |> DefaultSelector(Arguments()).select(args), ownEnv)
     Statistics.runStats(executed)(ownEnv.executionEnv)
 
   def results(spec: SpecificationStructure)(args: Arguments): List[Result] =

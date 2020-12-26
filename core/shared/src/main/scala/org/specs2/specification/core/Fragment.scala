@@ -49,8 +49,8 @@ case class Fragment(description: Description, execution: Execution, location: Lo
   /** skip this fragment */
   def skip = updateExecution(_.skip)
 
-  def updateResult(a: (=>Result) => Result): Fragment =
-    updateExecution(_.updateResult(a))
+  def updateResult(f: (=>Result) => Result): Fragment =
+    updateExecution(_.updateResult(f))
 
   def updateExecution(f: Execution => Execution): Fragment =
     copy(execution = f(execution))

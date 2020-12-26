@@ -166,7 +166,7 @@ object Result:
   /** @return a Success or a Failure */
   def result(test: Boolean, message: =>String, expected: =>String, details: Details): Result =
     if test then
-      Success()
+      Success(message.notNull)
     else
       Failure(m = message.notNull, e = expected, details = details)
 
@@ -417,8 +417,8 @@ case class FailureSetDetails(actual: Set[Any], expected: Set[Any]) extends Detai
 case class FailureMapDetails(actual: Map[Any, Any], expected: Map[Any, Any]) extends Details
 case object NoDetails extends Details
 
-case object FromNotImplementedError       extends Details
-case object FromJUnitAssertionError       extends Details
+case object FromNotImplementedError extends Details
+case object FromJUnitAssertionError extends Details
 
 // This error type can be found in a library like JMock
 case object FromExpectationError extends Details

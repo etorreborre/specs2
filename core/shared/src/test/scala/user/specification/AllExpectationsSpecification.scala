@@ -3,7 +3,7 @@ package user.specification
 import org.specs2.mutable
 import org.specs2.specification.{AllExpectations}
 
-class AllExpectationsSpecification extends mutable.Specification with AllExpectations { sequential
+class AllExpectationsSpecification extends mutable.Specification with AllExpectations {
   "In this example all the expectations are evaluated" >> {
     1 === 2
     1 === 3
@@ -19,11 +19,6 @@ class AllExpectationsSpecification extends mutable.Specification with AllExpecta
     51 must be_==(52).orThrow
     13 === 14
   }
-  "It is possible to short-circuit the rest of the evaluation with 'orSkip'" >> {
-    10 === 10
-    51 must be_==(52).orSkip
-    15 === 16
-  }
 }
 
 class AllExpectationsSpecificationWithScope extends mutable.Specification with AllExpectations:
@@ -32,7 +27,6 @@ class AllExpectationsSpecificationWithScope extends mutable.Specification with A
     1 === 3
     1 === 1
   }
-
 
 class AllExpectationsSpecificationWithException extends mutable.Specification with AllExpectations:
   "In this example the exception is caught" >> {

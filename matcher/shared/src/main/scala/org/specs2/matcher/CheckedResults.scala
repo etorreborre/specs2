@@ -15,7 +15,7 @@ trait ExpectedResults extends ExpectationsCreation:
     checkResultFailure(result(true, m))
 
   def ko(m: String): Result =
-    checkResultFailure(result(false, negateSentence(m)))
+    checkResultFailure(result(false, m))
 
   lazy val ok: Result =
     checkResultFailure(result(true, "ko"))

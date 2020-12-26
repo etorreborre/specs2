@@ -29,21 +29,22 @@ trait AllExpectations extends SpecificationStructure with StoredExpectations wit
    */
   /** modify the specification structure */
   override def map(structure: SpecStructure): SpecStructure =
-    structure.setArguments(structure.arguments <| args(sequential = ArgProperty(true)))
+    super.map(structure.setArguments(structure.arguments <| args(sequential = ArgProperty(true))))
 
   override def flatMap(f: Fragment): Fragments =
-    f.updateResult { r =>
+    super.flatMap(f.updateResult { r =>
       // evaluate r, triggering side effects
       val asResult = AsResult(r)
+
       val results = storedResults
-      // if the execution returns an Error or a Failure that was created for a thrown
-      // exception, like a JUnit assertion error or a NotImplementedError
-      // then add the result as a new issue
-      if asResult.isError || asResult.isThrownFailure then
+      // if the execution catches an issue which was not stored as a side-effect
+      // this is the case with a must be_==(b).orThrow for example
+      // then we need to add this failure as well to the list
+      if asResult.isIssue && !results.contains(asResult)then
         Result.issues(results :+ asResult, "\n")
       else
         Result.issues(results, "\n")
-    }
+    })
 
 /**
  * This trait evaluates expectations and stores them in a local variable for further usage
