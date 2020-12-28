@@ -20,7 +20,7 @@ trait ExpectationsDescription extends ExpectationsCreation:
     }
 
   /** describe a value with the aka method */
-  extension [T](value: => T)(using not: Not[NoValueDescription])
+  extension [T](value: =>T)(using not: Not[NoValueDescription])
     /**
      * @return an expectable with its toString method as an alias description
      *         this is useful to preserve the original value when the matcher using
@@ -29,10 +29,10 @@ trait ExpectationsDescription extends ExpectationsCreation:
     def aka: Expectable[T] = aka(value.toString)
 
     /** @return an expectable with an alias description */
-    def aka(alias: => String): Expectable[T] = createExpectable(value, alias)
+    def aka(alias: =>String): Expectable[T] = createExpectable(value, alias)
 
     /** @return an expectable with an alias description, after the value string */
-    def post(alias: => String): Expectable[T] = as((_: String) + " " + alias)
+    def post(alias: =>String): Expectable[T] = as((_: String) + " " + alias)
 
     /** @return an expectable with an alias description, after the value string */
     def as(alias: String => String): Expectable[T] = createExpectable(value, alias)
