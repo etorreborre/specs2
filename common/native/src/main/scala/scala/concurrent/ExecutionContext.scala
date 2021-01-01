@@ -126,7 +126,7 @@ object ExecutionContext {
      * the thread pool uses a target number of worker threads equal to the number of
      * [[https://docs.oracle.com/javase/8/docs/api/java/lang/Runtime.html#availableProcessors-- available processors]].
      */
-    given global as ExecutionContextExecutor =
+    given global ExecutionContextExecutor =
       new ExecutionContextExecutor {
         override def execute(runnable: Runnable): Unit = runnable.run()
 

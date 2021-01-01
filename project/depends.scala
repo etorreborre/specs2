@@ -5,7 +5,7 @@ import dotty.tools.sbtplugin.DottyPlugin.autoImport._
 
 object depends {
 
-  lazy val scalaCheckVersion = "1.15.1"
+  lazy val scalaCheckVersion = "1.15.2"
 
   lazy val reflect =
     libraryDependencies += (scalaOrganization.value % "scala-reflect" % scalaVersion.value).withDottyCompat(scalaVersion.value)

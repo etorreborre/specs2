@@ -25,7 +25,7 @@ object AutoExamples extends AutoExamples:
     using qctx: Quotes)(using t: Type[T], t1: Type[() => T]): Expr[Fragments] =
 
     import qctx.reflect._
-    val expression = Expr(Position.ofMacroExpansion.sourceCode)
+    val expression = Expr(Position.ofMacroExpansion.sourceCode.getOrElse("no source code found"))
     Expr.betaReduce('{$postProcess(createExample[t.Underlying]($expression, $code, $asResult))})
 
   def createExample[T](expression: String, code: () => T, asResult: AsResult[T]): Fragments =

@@ -13,10 +13,9 @@ class Function0Result(var t: () => Result):
 
 object Function0Result:
 
-  given anyResultAsResult[T] as AsResult[Function0Result] =
-    new AsResult[Function0Result]:
-      def asResult(code: =>Function0Result): Result =
-        code.t()
+  given anyResultAsResult[T]: AsResult[Function0Result] with
+    def asResult(code: =>Function0Result): Result =
+      code.t()
 
   implicit def toFunction0Result[T : AsResult](t: =>T): Function0Result =
     new Function0Result(() => AsResult(t))

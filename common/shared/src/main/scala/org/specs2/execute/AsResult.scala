@@ -13,17 +13,17 @@ trait AsResult[T]:
 
 object AsResult extends AsResultLowImplicits:
   /** implicit typeclass instance to create results from Booleans */
-  given booleanAsResult as AsResult[Boolean]:
+  given booleanAsResult: AsResult[Boolean] with
     def asResult(t: =>Boolean): Result =
       summon[Conversion[Boolean, Result]](t)
 
   /** typeclass instance for types which are convertible to Result */
-  given asResult[R](using convert: R => Result) as AsResult[R]:
+  given asResult[R](using convert: R => Result): AsResult[R] with
     def asResult(r: =>R): Result =
       ResultExecution.execute(convert(r))
 
   /** typeclass instance for lists of results */
-  given resultSeq[R : AsResult] as AsResult[List[R]]:
+  given resultSeq[R : AsResult]: AsResult[List[R]] with
     def asResult(rs: =>List[R]): Result =
       given Monoid[Result] = Result.ResultFailureMonoid
       rs.foldMap(r => AsResult[R](r))
@@ -31,7 +31,7 @@ object AsResult extends AsResultLowImplicits:
 
 trait AsResultLowImplicits:
   /** typeclass instance for types which are convertible to Result */
-  given AsResult[Unit]:
+  given AsResult[Unit] with
     def asResult(r: =>Unit): Result =
       Result.resultOrSuccess(r)
 

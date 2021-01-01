@@ -5,7 +5,7 @@ import ThrowableExamples._
 
 class ThrowablexSpec extends Specification with Throwablex { def is = s2"""
 
-The Throwablex trait provides extensions to regular throwables:
+The Throwablex trait provides extensions to regular throwables
 
 It provides methods to access chained exceptions
  chainedExceptions returns a list of chained exceptions $chained1

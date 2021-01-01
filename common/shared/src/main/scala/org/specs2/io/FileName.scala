@@ -36,8 +36,10 @@ object FileName:
       Right(FileName.unsafe(s))
 
   def createFileName(fileName: Expr[String])(using Quotes): Expr[FileName] =
+    import quotes.reflect._
+
     fileName match
-      case e@Const(s) =>
+      case e@Expr(s) =>
         FileName.fileNameFromString(s) match
           case Left(m) =>
             report.throwError(m, fileName)

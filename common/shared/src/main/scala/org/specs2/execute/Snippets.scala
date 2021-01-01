@@ -22,7 +22,7 @@ import scala.quoted._
  */
 trait Snippets:
   /** implicit parameters selected for the creation of Snippets */
-  given defaultSnippetParameters[T] as SnippetParams[T] =
+  given defaultSnippetParameters[T]: SnippetParams[T] with
     Snippet.defaultParams[T]
 
   /** implicit function modify the Snippet parameters */
@@ -73,7 +73,7 @@ object Snippets extends Snippets:
 
   def create[T](code: Expr[() => T], params: Expr[SnippetParams[T]])(using quotes: Quotes)(using t: Type[T], t1: Type[() => T]): Expr[Snippet[T]] =
     import quotes.reflect._
-    val expression = Expr(Position.ofMacroExpansion.sourceCode)
+    val expression = Expr(Position.ofMacroExpansion.sourceCode.getOrElse("no source code found"))
     // we need to pass () => T here because betaReduce would evaluate the code here otherwise
     Expr.betaReduce('{createSnippet[t.Underlying]($expression, $code, $params)})
 
@@ -90,7 +90,7 @@ object Snippets extends Snippets:
 
   def termFullName[T](e: Expr[T])(using quotes: Quotes): Expr[String] =
     import quotes.reflect._
-    val name = Term.of(e) match
+    val name = e.asTerm match
       case Ident(termName)                                    => termName
       case Select(_, termName)                                => termName.toString
       case Inlined(_,_,Apply(Ident(termName),_))              => termName.toString

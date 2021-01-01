@@ -11,7 +11,7 @@ case class Typechecked(code: String, result: TypecheckResult):
 
 object Typechecked:
 
-  given TypecheckedAsResult as AsResult[Typechecked] = new AsResult[Typechecked]:
+  given TypecheckedAsResult: AsResult[Typechecked] with
     def asResult(t: =>Typechecked): Result =
       t.result match
         case TypecheckSuccess            => Success()

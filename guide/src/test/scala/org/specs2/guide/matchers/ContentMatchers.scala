@@ -93,7 +93,7 @@ This is because those 2 types implement the `org.specs2.text.LinesContent` trait
 
 So if you have a specific type `T` which you can represent as a `Seq[String]`, you can create an implicit `LinesContent` and then you'll be able to use the `ContentMatchers`: ${snippet{
 
-given [T] as LinesContent[T]:
+given [T]: LinesContent[T] with
   def name(t: T) = "My list of lines"
   def lines(t: T): Seq[String] = Seq()// your implementation goes here
 

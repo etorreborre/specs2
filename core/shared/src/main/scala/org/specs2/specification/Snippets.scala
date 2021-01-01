@@ -32,7 +32,7 @@ object Snippets:
     using qctx: Quotes, t: Type[T]): Expr[Interpolated] =
       import qctx.reflect._
       '{ new Interpolated {
-           private val expression = ${Expr(Position.ofMacroExpansion.sourceCode)}
+           private val expression = ${Expr(Position.ofMacroExpansion.sourceCode.getOrElse("no source code found"))}
            private val snippet: Snippet[t.Underlying] = ${snippetExpr}
            private val factory = ${factoryExpr}
            private val start = PositionLocation(${Expr(Position.ofMacroExpansion.sourceFile.jpath.toString)}, ${Expr(Position.ofMacroExpansion.startLine)}, ${Expr(Position.ofMacroExpansion.startColumn)})

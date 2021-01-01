@@ -64,7 +64,8 @@ class StringMatchersSpec extends Spec with StringMatchers with MustExpectations 
   It is possible to check if one string ends with another one
   ${ "Eric" must endWith("ic") }
   ${ "Eric" must not(endWith("rac")) }
-                                                                                                                        """
+
+"""
 
   def e3 = ("eric".aka must beEqualTo("Xric").ignoreCase) returns "ignoring case"
   def e4 = ("eric".aka must beEqualTo("a eric ").ignoreSpace) returns "ignoring space"

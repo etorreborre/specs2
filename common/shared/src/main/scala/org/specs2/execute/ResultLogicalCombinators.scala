@@ -114,7 +114,7 @@ trait ResultLogicalCombinators extends Results:
     def when(condition: Boolean, message: String= ""): Result= if condition then res else Success(message)
     /** only consider this result if the condition is false */
     def unless(condition: Boolean, message: String= ""): Result = res.when(!condition, message)
-    /** when the condition is true the result it taken as is, when it's false, take its negation */
+    /** when the condition is true the result it taken:  is, when it's false, take its negation */
     def iff(condition: Boolean): Result = if condition then res else res.not
 
 object ResultLogicalCombinators extends ResultLogicalCombinators

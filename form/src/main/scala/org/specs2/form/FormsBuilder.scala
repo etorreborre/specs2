@@ -16,26 +16,26 @@ private[specs2]
 trait FormsBuilder extends FormsBuilderLowPriorityImplicits:
 
   /** a Field can be added on a Form row as a FieldCell */
-  given [T] as Conversion[Field[T], FieldCell]:
+  given [T]: Conversion[Field[T], FieldCell] with
     def apply(t: Field[T]): FieldCell =
       new FieldCell(t)
 
   /** a Effect can be added on a Form row as a EffectCell */
-  given Conversion[Effect[_], EffectCell]:
+  given Conversion[Effect[_], EffectCell] with
     def apply(t: Effect[_]): EffectCell =
       new EffectCell(t)
 
   /** a Prop can be added on a Form row as a PropCell */
-  given [T, S] as Conversion[Prop[T, S], PropCell]:
+  given [T, S]: Conversion[Prop[T, S], PropCell] with
     def apply(t: Prop[T, S]): PropCell =
       new PropCell(t)
 
   /** a Form can be implicitly executed if necessary */
-  given Conversion[Form, Result]:
+  given Conversion[Form, Result] with
     def apply(f: Form): Result = f.execute
 
   /** any seq of object convertible to cells */
-  given [T : ToCell] as Conversion[Seq[T], Seq[Cell]]:
+  given [T : ToCell]: Conversion[Seq[T], Seq[Cell]] with
     def apply(seq: Seq[T]): Seq[Cell] =
       seq.map(summon[ToCell[T]].toCell)
 

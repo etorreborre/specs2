@@ -75,19 +75,19 @@ class SpecificationStructureSpec(val env: Env) extends Specification with ScalaC
     (ArbitrarySpecHeader.arbitrary |@| ArbitraryFragments.arbitrary)((sh, fs) => SpecStructure.create(sh, fs))
   }
 
-  given ArbitraryFragments as Arbitrary[Fragments] =
+  given ArbitraryFragments: Arbitrary[Fragments] =
     Arbitrary(listOf(ArbitraryFragment.arbitrary).map(fs => Fragments.apply(fs:_*)))
 
-  given ArbitraryFragment as Arbitrary[Fragment] =
+  given ArbitraryFragment: Arbitrary[Fragment] =
     Arbitrary(Gen.oneOf(Arbitraries.FragmentArbitrary.arbitrary, ArbitraryLink.arbitrary))
 
-  given ArbitraryLinks as Arbitrary[List[Fragment]] =
+  given ArbitraryLinks: Arbitrary[List[Fragment]] =
     Arbitrary(Gen.nonEmptyListOf(ArbitraryLink.arbitrary))
 
-  given ArbitraryLink as Arbitrary[Fragment] =
+  given ArbitraryLink: Arbitrary[Fragment] =
     Arbitrary(arbitrary[SpecHeader].map(ss => link(SpecStructure(ss))))
 
-  given ArbitrarySpecHeader as Arbitrary[SpecHeader] =
+  given ArbitrarySpecHeader: Arbitrary[SpecHeader] =
     Arbitrary(Gen.oneOf(Seq(SS1, SS2, SS3, SS4, SS4).map(s => SpecHeader.create(s.getClass))))
 }
 

@@ -9,7 +9,7 @@ import fp._
  */
 trait Nodex:
 
-  extension (ns: NodeSeq):
+  extension (ns: NodeSeq)
     def ==/(n: NodeSeq): Boolean =
       NodeFunctions.isEqualIgnoringSpace(ns, n)
 
@@ -25,7 +25,7 @@ trait Nodex:
   /**
    * This class adds more methods to the Node class
    */
-  extension (n: Node):
+  extension (n: Node)
     /**
      * @return true if the Node represents some empty text (containing spaces or newlines)
      */
@@ -39,18 +39,18 @@ trait Nodex:
                   textTest: String => Boolean = (s:String) => true): Boolean =
       NodeFunctions.matchNode(n, other, attributes, attributeValues, exactMatch, textTest)
 
-  extension (ns: Seq[NodeSeq]):
+  extension (ns: Seq[NodeSeq])
     def reduceNodes: NodeSeq =
       ns.flatMap(_.theSeq).reduceNodesWith(identity)
 
   /**
    * reduce a sequence of T's with a function transforming T's to NodeSeq
    */
-  extension [T](ns: Seq[T]):
+  extension [T](ns: Seq[T])
     def reduceNodesWith(f: T => NodeSeq): NodeSeq =
       ns.foldLeft(NodeSeq.Empty) { (res, cur) => res ++ f(cur) }
 
-  given Monoid[NodeSeq]:
+  given Monoid[NodeSeq] with
     val zero: NodeSeq =
       NodeSeq.Empty
 
@@ -58,7 +58,7 @@ trait Nodex:
       ns1 ++ ns2
 
   /** @return an unprefixed attribute from pair */
-  given Conversion[(Any, Any), UnprefixedAttribute]:
+  given Conversion[(Any, Any), UnprefixedAttribute] with
     def apply(pair: (Any, Any)): UnprefixedAttribute =
       new UnprefixedAttribute(pair._1.toString, pair._2.toString, Null)
 

@@ -126,7 +126,7 @@ object Arguments extends Extract:
        commandLine   = CommandLine.extract
     )
 
-  given ArgumentsMonoid as Monoid[Arguments] = new Monoid[Arguments]:
+  given ArgumentsMonoid: Monoid[Arguments] with
     def append(a1: Arguments, a2: =>Arguments) = a1 overrideWith a2
     val zero = Arguments()
 

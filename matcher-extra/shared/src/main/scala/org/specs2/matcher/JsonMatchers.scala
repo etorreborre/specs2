@@ -199,7 +199,7 @@ object JsonType:
     def apply[S <: JsonType](s: Expectable[S]) = result(true, "ko")
   }
 
-  given Sized[JsonType]:
+  given Sized[JsonType] with
     def size(json: JsonType): Int = json match
       case JsonArray(list) => list.size
       case JsonMap(map)    => map.size
@@ -208,45 +208,45 @@ object JsonType:
       case JsonBoolean(_)  => 1
       case JsonNull        => 0
 
-  given Conversion[ContainWithResultSeq[String], Matcher[JsonType]]:
+  given Conversion[ContainWithResultSeq[String], Matcher[JsonType]] with
     def apply(m: ContainWithResultSeq[String]): Matcher[JsonType] =
       (actual: JsonType) => actual match
         case JsonArray(list) => m(createExpectable(list.map(showJson)))
         case JsonMap(map)    => m(createExpectable(map.toList.map(showJson)))
         case other           => result(false, s"$other is not an array")
 
-  given Conversion[ContainWithResult[String], Matcher[JsonType]]:
+  given Conversion[ContainWithResult[String], Matcher[JsonType]] with
     def apply(m: ContainWithResult[String]): Matcher[JsonType] =
      (actual: JsonType) => actual match
        case JsonArray(list) => m(createExpectable(list.map(showJson)))
        case JsonMap(map)    => m(createExpectable(map.toList.map(showJson)))
        case other           => result(false, s"$other is not an array")
 
-  given Conversion[Int, Matcher[JsonType]]:
+  given Conversion[Int, Matcher[JsonType]] with
     def apply(expected: Int): Matcher[JsonType] =
       (actual: JsonType) => actual match
         case JsonNumber(n) => (n.toDouble == expected.toDouble, s"$n is not equal to $expected")
         case other         => (false, s"not a Number: $other")
 
-  given Conversion[Double, Matcher[JsonType]]:
+  given Conversion[Double, Matcher[JsonType]] with
     def apply(expected: Double): Matcher[JsonType] =
       (actual: JsonType) => actual match
         case JsonNumber(n) => (n.toDouble == expected.toDouble, s"$n is not equal to $expected")
         case other         => (false, s"not a Number: $other")
 
-  given Conversion[BigDecimal, Matcher[JsonType]]:
+  given Conversion[BigDecimal, Matcher[JsonType]] with
     def apply(expected: BigDecimal): Matcher[JsonType] =
       (actual: JsonType) => actual match
         case JsonNumber(n) => (n.toDouble == expected.toDouble, s"$n is not equal to $expected")
         case other         => (false, s"not a Number: $other")
 
-  given Conversion[Boolean, Matcher[JsonType]]:
+  given Conversion[Boolean, Matcher[JsonType]] with
     def apply(expected: Boolean): Matcher[JsonType] =
       (actual: JsonType) => actual match
         case JsonBoolean(b) => (b == expected, s"$b is not equal to $expected")
         case other          => (false, s"$other is not a Boolean")
 
-  given Conversion[String, Matcher[JsonType]]:
+  given Conversion[String, Matcher[JsonType]] with
     def apply(expected: String): Matcher[JsonType] =
       (actual: JsonType) => actual match
         case JsonString(a) => (a == expected, s"$a is not equal to $expected")
@@ -343,44 +343,43 @@ private[specs2]
 trait JsonMatchersImplicits extends JsonMatchersLowImplicits:
 
   /** datatype to specify how json values must be checked */
-  given [M <: Matcher[String]] as Conversion[M, JsonSelector]:
+  given [M <: Matcher[String]]: Conversion[M, JsonSelector] with
     def apply(m: M): JsonSelector =
       JsonMatcherSelector(m)
 
-  given Conversion[String, JsonSelector]:
+  given Conversion[String, JsonSelector] with
     def apply(s: String): JsonSelector =
       JsonEqualValueSelector(s)
 
-  given Conversion[Regex, JsonSelector]:
+  given Conversion[Regex, JsonSelector] with
     def apply(r: Regex): JsonSelector =
       JsonRegexSelector(r)
 
-  given Conversion[Double, JsonSelector]:
+  given Conversion[Double, JsonSelector] with
     def apply(d: Double): JsonSelector =
       JsonDoubleSelector(d)
 
-  given Conversion[Int, JsonSelector]:
+  given Conversion[Int, JsonSelector] with
     def apply(i: Int): JsonSelector =
       JsonIntSelector(i)
 
-  given Conversion[Boolean, JsonSelector]:
+  given Conversion[Boolean, JsonSelector] with
     def apply(b: Boolean): JsonSelector =
       JsonEqualValueSelector(b.toString)
 
-  given ToJsonSelector[Regex] =
-    new ToJsonSelector[Regex]:
-      def toJsonSelector(r: Regex): JsonSelector = r
+  given ToJsonSelector[Regex] with
+    def toJsonSelector(r: Regex): JsonSelector = r
 
-  given [M <: Matcher[String]] as ToJsonSelector[M]:
+  given [M <: Matcher[String]]: ToJsonSelector[M] with
     def toJsonSelector(m: M): JsonSelector = m
 
-  given ToJsonSelector[Matcher[String]]:
+  given ToJsonSelector[Matcher[String]] with
     def toJsonSelector(m: Matcher[String]): JsonSelector = m
 
   object ToJsonSelector:
     def apply[T : ToJsonSelector](t: T) = summon[ToJsonSelector[T]].toJsonSelector(t)
 
-  given [K : ToJsonSelector, V : ToJsonSelector] as Conversion[(K, V), JsonPairSelector]:
+  given [K : ToJsonSelector, V : ToJsonSelector]: Conversion[(K, V), JsonPairSelector] with
     def apply(kv: (K, V)): JsonPairSelector =
       JsonPairSelector(summon[ToJsonSelector[K]].toJsonSelector(kv._1), summon[ToJsonSelector[V]].toJsonSelector(kv._2))
 
@@ -389,19 +388,19 @@ trait JsonMatchersLowImplicits extends JsonSelectors:
   trait ToJsonSelector[T]:
     def toJsonSelector(t: T): JsonSelector
 
-  given ToJsonSelector[String]:
+  given ToJsonSelector[String] with
     def toJsonSelector(a: String): JsonSelector =
       JsonEqualValueSelector(a)
 
-  given ToJsonSelector[Double]:
+  given ToJsonSelector[Double] with
     def toJsonSelector(a: Double): JsonSelector =
       JsonDoubleSelector(a)
 
-  given ToJsonSelector[Int]:
+  given ToJsonSelector[Int] with
     def toJsonSelector(a: Int): JsonSelector =
       JsonIntSelector(a)
 
-  given ToJsonSelector[Boolean]:
+  given ToJsonSelector[Boolean] with
     def toJsonSelector(a: Boolean): JsonSelector =
       JsonEqualValueSelector(a.toString)
 

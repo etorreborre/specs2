@@ -25,7 +25,7 @@ trait OwnExecutionEnv extends AfterSpec:
       executionEnv =       ExecutionEnv.create(env.arguments, env.systemLogger, tag = Some(getClass.getName)),
       specs2ExecutionEnv = ExecutionEnv.createSpecs2(env.arguments, env.systemLogger, tag = Some(getClass.getName)))
 
-  given ee as ExecutionEnv =
+  given ee: ExecutionEnv =
     ownEnv.executionEnv
 
   lazy val ec: ExecutionContext =

@@ -3,12 +3,12 @@ package matcher
 
 import text.Sentences._
 import execute.{ResultExecution, AsResult, Result}
-import scala.util.Not
+import scala.util.NotGiven
 import control.ImplicitParameters.{given, _}
 
 trait ExpectationsDescription extends ExpectationsCreation:
 
-  extension [T : AsResult](description: String)(using not: Not[NoExpectationsDescription]):
+  extension [T : AsResult](description: String)(using not: NotGiven[NoExpectationsDescription])
     def ==>(result: =>T): Result = <==>(result)
     def <==>(result: =>T): Result = checkResultFailure {
       val r = ResultExecution.execute(AsResult(result))
@@ -20,7 +20,7 @@ trait ExpectationsDescription extends ExpectationsCreation:
     }
 
   /** describe a value with the aka method */
-  extension [T](value: =>T)(using not: Not[NoValueDescription])
+  extension [T](value: =>T)(using not: NotGiven[NoValueDescription])
     /**
      * @return an expectable with its toString method as an alias description
      *         this is useful to preserve the original value when the matcher using
@@ -43,7 +43,7 @@ trait ExpectationsDescription extends ExpectationsCreation:
       createExpectableWithShowAs(v, show(v))
 
   /** describe a value with the aka method */
-  extension [T](value: =>T)(using not: Not[NoValueDescription], show: T => String)
+  extension [T](value: =>T)(using not: NotGiven[NoValueDescription], show: T => String)
 
     /** @return an expectable with a function to show the element T */
     def showAs: Expectable[T] =

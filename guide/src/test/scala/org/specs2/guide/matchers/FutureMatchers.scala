@@ -8,8 +8,8 @@ import scala.concurrent._
 import scala.concurrent.duration._
 
 object FutureMatchers extends UserGuideCard {
-  given ee as ExecutionEnv = Env().executionEnv
-  given ec as ExecutionContext = ee.ec
+  given ee: ExecutionEnv = Env().executionEnv
+  given ec: ExecutionContext = ee.ec
 
   def title = "Future"
   def text = s2"""

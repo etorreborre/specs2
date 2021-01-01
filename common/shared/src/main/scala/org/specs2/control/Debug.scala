@@ -2,7 +2,7 @@ package org.specs2
 package control
 
 import io.ConsoleOutput
-import scala.util.Not
+import scala.util.NotGiven
 
 /**
  * This trait provides simple a way to print out any object to the console:
@@ -14,9 +14,9 @@ import scala.util.Not
  */
 trait Debug extends ImplicitParameters:
 
-  given DebugConsoleOutput as ConsoleOutput = ConsoleOutput
+  given DebugConsoleOutput:  ConsoleOutput = ConsoleOutput
 
-  extension [T](t: =>T)(using not: Not[NoDebug], output: ConsoleOutput)
+  extension [T](t: =>T)(using not: NotGiven[NoDebug], output: ConsoleOutput)
     /** print the object to the console and return it */
     def pp: T =
       lazy val value = t

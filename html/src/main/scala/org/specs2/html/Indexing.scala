@@ -83,7 +83,7 @@ object Index:
       .replace("<s2>", "")
       .replace("</s2>", "")
 
-  given Monoid[Index]:
+  given Monoid[Index] with
     def zero = Index(Vector())
     def append(a: Index, b: =>Index) = Index(a.entries ++ b.entries)
 

@@ -13,7 +13,7 @@ import scala.collection.concurrent.{TrieMap, Map => CMap}
  *
  * As a result they will be executed in a random sequence
  */
-trait RandomSequentialExecution
+trait RandomSequentialExecution:
   /**
    * find sequences of concurrent examples in between steps
    * and scramble them

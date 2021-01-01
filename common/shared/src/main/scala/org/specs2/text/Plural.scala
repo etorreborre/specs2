@@ -9,7 +9,7 @@ private[specs2]
 trait Plural:
 
   /** @return a Noun object which can be pluralized */
-  extension (s: String):
+  extension (s: String)
     def plural(vs: Iterable[Any]): String = s.plural(vs.size)
     def plural(v: Int): String     = if v > 1 then s+"s" else s
     def plural(v: Long): String    = if v > 1 then s+"s" else s
@@ -21,7 +21,7 @@ trait Plural:
   def beVerbPlural(v: Long): String = if v > 1 then "are" else "is"
 
   /** @return a Quantity which can be applied to a string to pluralize it */
-  extension (i: Int):
+  extension (i: Int)
     /** @return a pluralized string describing this quantity */
     def qty(s: String): String = i.toString + " " + s.plural(i)
     /** @return a pluralized string describing this quantity with the be verb */

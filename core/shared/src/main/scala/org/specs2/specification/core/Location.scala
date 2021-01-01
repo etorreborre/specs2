@@ -33,15 +33,14 @@ case class PositionLocation(path: String, lineNumber: Int, columnNumber: Int) ex
 
 object PositionLocation:
 
-    given Liftable[PositionLocation]:
-      def toExpr(location: PositionLocation): (Quotes) ?=> Expr[PositionLocation] = { (using qctx: Quotes) =>
+    given ToExpr[PositionLocation] with
+      def apply(location: PositionLocation)(using Quotes): Expr[PositionLocation] =
         location match
           case PositionLocation(path, line, column) =>
             val pathExpr: Expr[String] = Expr(path)
             val lineExpr: Expr[Int] = Expr(line)
             val columnExpr: Expr[Int] = Expr(column)
             Expr.betaReduce('{PositionLocation($pathExpr, $lineExpr, $columnExpr)})
-    }
 
 case class StacktraceLocation(trace: Seq[StackTraceElement] = (new Exception).getStackTrace.toIndexedSeq) extends Location:
   def path: String =

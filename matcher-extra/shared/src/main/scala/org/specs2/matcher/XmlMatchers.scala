@@ -301,9 +301,9 @@ case class PathFunction(val node: Node,
 
 private[specs2] object StringToElem:
 
-  extension (s: String):
+  extension (s: String)
     def toElem: Elem = Elem(null, s, Null, TopScope, true)
 
-  given Conversion[String, Elem]:
+  given Conversion[String, Elem] with
     def apply(s: String): Elem =
       Elem(null, s, Null, TopScope, true)

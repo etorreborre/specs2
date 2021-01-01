@@ -9,10 +9,10 @@ import Fragment._
 import org.specs2.concurrent.ExecutionEnv
 
 class LocationSpec extends org.specs2.mutable.Spec with TypedEqual:
-  given ee as ExecutionEnv = Env().executionEnv
+  given ee: ExecutionEnv = Env().executionEnv
 
     "A unit specification must have correct locations for its fragments" >> {
-      given spec as LocationUnitSpecification = new LocationUnitSpecification(ee)
+      given spec: LocationUnitSpecification = new LocationUnitSpecification(ee)
 
       "for the first piece of text, with 'should'" >> {
         textAt(index = 0) ==== 17

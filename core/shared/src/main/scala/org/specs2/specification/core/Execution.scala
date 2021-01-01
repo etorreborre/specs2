@@ -120,7 +120,7 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
       case Some(r) =>
         val to = env.arguments.timeout |+| timeout
         try
-          given ec as ExecutionContext = env.specs2ExecutionContext
+          given ec: ExecutionContext = env.specs2ExecutionContext
 
           // this sets any custom classloader, like the one passed from SBT
           // as the context classloader this thread
@@ -213,7 +213,7 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
   /** run this execution after the previous executions are finished */
   private def afterExecutions(executions: List[Execution], sequential: Boolean, checkResult: Boolean): Execution =
     Execution.withEnvFlatten { (env: Env) =>
-      given ec as ExecutionContext = env.executionContext
+      given ec: ExecutionContext = env.executionContext
 
       lazy val runs: List[Future[Result]] =
         executions.flatMap(_.futureResult(env).map(_.map(_._1)))
@@ -324,7 +324,7 @@ object Execution:
   /** create an execution using the Env and Flatten the execution */
   def withEnvFlatten(f: Env => Execution): Execution =
     Execution(Some { (env: Env) =>
-      given ec as ExecutionContext = env.executionContext
+      given ec: ExecutionContext = env.executionContext
       Future {
         () =>
         f(env).startExecution(env).executionResult.runFuture(env.executionEnv).map(r => () => r)
@@ -355,7 +355,7 @@ object Execution:
       executing = Started(f)
     )
 
-  given Show[Execution]:
+  given Show[Execution] with
     def show(e: Execution): String =
       e.executing match
         case NotExecuting => "no execution"
@@ -375,7 +375,7 @@ object Execution:
       else                 DecoratedResult(s.copy(specs = s.specs + 1), s.result): Result
     })
 
-  given Monoid[Option[FiniteDuration]]:
+  given Monoid[Option[FiniteDuration]] with
     val zero: Option[FiniteDuration] =
       None
 
@@ -386,10 +386,10 @@ object Execution:
         case (None,     Some(t2)) => Some(t2)
         case _                    => None
 
-  given AsExecution[Execution]:
+  given AsExecution[Execution] with
     def execute(r: =>Execution): Execution = r
 
-  given [T : AsExecution] as Conversion[T, Execution]:
+  given [T : AsExecution]: Conversion[T, Execution] with
     def apply(t: T): Execution =
       AsExecution[T].execute(t)
 

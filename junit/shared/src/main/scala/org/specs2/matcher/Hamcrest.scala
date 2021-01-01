@@ -10,7 +10,7 @@ import Matcher.{given}
 trait Hamcrest:
 
   /** convert a Hamcrest matcher to a specs2 matcher */
-  given [T] as Conversion[org.hamcrest.Matcher[T], matcher.Matcher[T]]:
+  given [T]: Conversion[org.hamcrest.Matcher[T], matcher.Matcher[T]] with
     def apply(hamcrest: org.hamcrest.Matcher[T]): matcher.Matcher[T] =
       (t: T) => (hamcrest.matches(t), createKoMessageFromHamcrest(t, hamcrest))
 

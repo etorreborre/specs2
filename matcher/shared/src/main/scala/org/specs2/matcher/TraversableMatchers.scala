@@ -140,12 +140,11 @@ trait TraversableBaseMatchers:
 private[specs2]
 trait TraversableBaseMatchersLowImplicits extends ValueChecksLowImplicits:
 
-  given seqToValueChecks[T](using to: T => ValueCheck[T]) as Conversion[Seq[T], Seq[ValueCheck[T]]] =
-    new Conversion[Seq[T], Seq[ValueCheck[T]]]:
-      def apply(seq: Seq[T]): Seq[ValueCheck[T]] =
-        seq.map(to)
+  given seqToValueChecks[T](using to: T => ValueCheck[T]): Conversion[Seq[T], Seq[ValueCheck[T]]] with
+    def apply(seq: Seq[T]): Seq[ValueCheck[T]] =
+      seq.map(to)
 
-  given matchersToValueChecks[T] as Conversion[Seq[Matcher[T]], Seq[ValueCheck[T]]]:
+  given matchersToValueChecks[T]: Conversion[Seq[Matcher[T]], Seq[ValueCheck[T]]] with
     def apply(seq: Seq[Matcher[T]]): Seq[ValueCheck[T]] =
       seq.map(matcherIsValueCheck[T])
 

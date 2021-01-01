@@ -9,7 +9,7 @@ trait ScalaInterpreterMatchers extends Expectations:
   /** use your own interpreter implementation to interpret a Scala script */
   def interpret(s: String): String
 
-  given Conversion[String, InterpretedScript]:
+  given Conversion[String, InterpretedScript] with
     def apply(s: String): InterpretedScript =
       new InterpretedScript(s):
         def interpret = outer.interpret(s)

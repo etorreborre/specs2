@@ -109,7 +109,7 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
 
   private val arguments = env.arguments
 
-  private given ec as ExecutionContext =
+  private given ec: ExecutionContext =
     env.specs2ExecutionContext
 
   /** @return the specification tags */

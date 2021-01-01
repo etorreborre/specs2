@@ -9,7 +9,7 @@ import StringMatchers.{given, _}
  */
 trait ReturnsSyntax extends ExpectationsCreation:
 
-  extension [T : AsResult](t: =>T):
+  extension [T : AsResult](t: =>T)
     def returns(m: String): Result =
       (contain(m) ^^ ((_: Result).message))(createExpectable(ResultExecution.execute(AsResult(t))))
 

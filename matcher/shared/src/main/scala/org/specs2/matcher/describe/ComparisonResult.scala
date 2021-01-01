@@ -246,7 +246,7 @@ object ComparisonResultOps:
 
   case class PropertyDifference[A, E](actual: A, expected: E)
 
-  extension (value: Any):
+  extension (value: Any)
     def renderAny(showAll: Boolean = false): String =
       value match
         case v if showAll => v.notNullWithClass(showAll = true)
@@ -256,17 +256,17 @@ object ComparisonResultOps:
 
     def render: String = renderAny(false)
 
-  extension (diff: (Any, Any)):
+  extension (diff: (Any, Any))
     def renderDiff: String =
       s"${diff._1.render} != ${diff._2.render}"
 
-  extension (values: String):
+  extension (values: String)
     def wrapWith(`type`: String): String =
       s"${`type`}($values)"
 
     def tagWith(tag: String): String =
       s"$tag: $values"
 
-  extension [T](s: Seq[T]):
+  extension [T](s: Seq[T])
     def toOption: Option[Seq[T]] =
       if s.isEmpty then None else Some(s)

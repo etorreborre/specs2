@@ -76,7 +76,7 @@ trait ClassName:
     if name.contains("$") && c.getSuperclass != null then humanName(c.getSuperclass)
     else name.camelCaseToWords
 
-  extension (klass: Class[_]):
+  extension (klass: Class[_])
 
     def simpleName(using nothing: Int = 0): String =
       outer.simpleName(klass)

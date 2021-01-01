@@ -2,7 +2,7 @@ package org.specs2
 package matcher
 
 import execute.{Result, StandardResults}
-import scala.util.Not
+import scala.util.NotGiven
 
 /**
  * This trait provides implicit definitions to check values with matchers
@@ -10,11 +10,11 @@ import scala.util.Not
  */
 trait MustExpectations extends ExpectationsCreation with TypedEqual:
 
-  extension [T](tm: =>T)(using not: Not[NoMustExpectations])
+  extension [T](tm: =>T)(using not: NotGiven[NoMustExpectations])
     def must(m: =>Matcher[T]) =
       createExpectable(tm).applyMatcher(m)
 
-  extension [T](tm: Expectable[T])(using not: Not[NoMustExpectations])
+  extension [T](tm: Expectable[T])(using not: NotGiven[NoMustExpectations])
     def must(m: =>Matcher[T]) =
       tm.applyMatcher(m)
 

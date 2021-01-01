@@ -32,7 +32,7 @@ class S2StringContextSpec extends Spec { def is = s2"""
 ${step(ee.shutdown())}
 """
 
-  given ee as ExecutionEnv =
+  given ee: ExecutionEnv =
     Env().executionEnv
 
   object exs extends MustMatchers with StandardResults with S2StringContext with ThrownExpectations:

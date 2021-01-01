@@ -16,7 +16,7 @@ trait ResultExecution:
   outer: ResultExecution =>
 
   /** this extension allows the execution of a Result with an `execute` method */
-  extension (r: =>Result):
+  extension (r: =>Result)
     @targetName("execute_postfix") def execute(using n: Int = 0): Result =
       outer.execute(r)
 
@@ -82,7 +82,7 @@ trait ResultExecution:
       case Right(r) => AsResult(r)
 
   /**
-   * execute a piece of code and return a result, either as a Left(failure) or a Right(value)
+   * execute a piece of code and return a result, either:  a Left(failure) or a Right(value)
    */
   def executeEither[T, R](code: =>T)(using convert: T => R): Either[Result, R] =
     val executed = trye(code)(identity)
@@ -97,7 +97,7 @@ trait ResultExecution:
       case Right(other)                                      => Right(convert(other))
 
   /**
-   * execute a result and return either as a Left(result) if something was thrown or a Right(result)
+   * execute a result and return either:  a Left(result) if something was thrown or a Right(result)
    */
   def executeThrowable(res: =>Result): Either[Result, Result] =
     trye(res) { (e: Throwable) => e match {

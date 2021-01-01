@@ -15,7 +15,7 @@ import StringMatchers._
 trait StringMatchers:
 
   /** adapt the BeEqualTo matcher to provide ignoreCase and ignoreSpace matcher */
-  extension (m: AdaptableMatcher[Any]):
+  extension (m: AdaptableMatcher[Any])
 
     def ignoreCase: AdaptableMatcher[Any] =
       m.^^^((s: Any) => s.toString.toLowerCase, ignoringCase, ignoringCase)
@@ -159,15 +159,15 @@ trait StringMatchers:
   class FindMatcherPatternWithGroups(p: Pattern, groups: String*) extends FindMatcherWithGroups(p.toString, groups:_*):
     override lazy val pattern = p
 
-  given MatchingExpression[String]:
+  given MatchingExpression[String] with
     def toPattern(s: String): Pattern =
       Pattern.compile(s)
 
-  given MatchingExpression[Pattern]:
+  given MatchingExpression[Pattern] with
     def toPattern(p: Pattern): Pattern =
       p
 
-  given MatchingExpression[Regex]:
+  given MatchingExpression[Regex] with
     def toPattern(r: Regex): Pattern =
       r.pattern
 

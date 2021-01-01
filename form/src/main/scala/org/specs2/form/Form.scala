@@ -126,14 +126,15 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
   /**
    * encapsulate this form into a Prop
    */
-  def toProp(label: String) =
+  def toProp(label: String): Prop[Form, Any] =
     lazy val executed = executeForm
-    lazy val executedResult = executed.execute match
+    lazy val executedResult: Result = executed.execute match
       case s @ Success(_,_) => s
       case Failure(_,_,_,_) => Failure("failed")
       case Error(_,_)       => Error("error")
       case other            => other
-    Prop[Form, Any](label, executed, (f: Form, s: Any) => executedResult) {
+
+    Prop[Form, Any, Result](label, executed, (f: Form, s: Any) => executedResult).apply {
       if executedResult.isSuccess then
         "success"
       else
@@ -241,21 +242,21 @@ case object Form:
       c.xml(using args).toList
 
   /** a Form can be implicitly transformed to results */
-  given AsResult[Form]:
+  given AsResult[Form] with
     def asResult(f: =>Form): Result =
       f.execute
 
 trait HasForm[T]:
   def getForm(t: T): Form
 
-  extension (t: T):
+  extension (t: T)
     def form: Form =
       getForm(t)
 
-given HasForm[Form]:
+given HasForm[Form] with
   def getForm(f: Form): Form =
     f
 
-given [T <: {def form: Form}] as HasForm[T]:
+given [T <: {def form: Form}]: HasForm[T] with
   def getForm(t: T): Form =
     t.form

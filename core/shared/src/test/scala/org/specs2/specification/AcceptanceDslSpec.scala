@@ -47,7 +47,7 @@ class AcceptanceDslSpec extends Spec with AcceptanceDsl { def is = s2"""
 
  ${step(ee.shutdown())}
 """
-  given ee as ExecutionEnv =
+  given ee: ExecutionEnv =
     Env().executionEnv
 
   val factory = fragmentFactory; import factory._

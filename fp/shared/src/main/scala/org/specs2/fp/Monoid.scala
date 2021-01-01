@@ -20,25 +20,25 @@ object Monoid:
       def append(f1: A, f2: => A): A = f(f1,f2)
     }
 
-  given intMonoid as Monoid[Int] =
+  given intMonoid:  Monoid[Int] =
     instance((s1, s2) => s1 + s2, 0)
 
-  given listMonoid[A] as Monoid[List[A]] =
+  given listMonoid[A]:  Monoid[List[A]] =
     instance((s1, s2) => s1 ++ s2, List.empty[A])
 
-  given seqMonoid[A] as Monoid[Seq[A]] =
+  given seqMonoid[A]:  Monoid[Seq[A]] =
     instance((s1, s2) => s1 ++ s2, Seq.empty[A])
 
-  given vectorMonoid[A] as Monoid[Vector[A]] =
+  given vectorMonoid[A]:  Monoid[Vector[A]] =
     instance((s1, s2) => s1 ++ s2, Vector.empty[A])
 
-  given stringMonoid as Monoid[String] =
+  given stringMonoid:  Monoid[String] =
     instance((s1, s2) => s1 + s2, "")
 
-  given streamMonoid[A] as Monoid[LazyList[A]] =
+  given streamMonoid[A]:  Monoid[LazyList[A]] =
     instance((s1, s2) => s1 ++ s2, LazyList.empty[A])
 
-  given mapMonoid[K, V : Monoid] as Monoid[Map[K, V]] =
+  given mapMonoid[K, V : Monoid]:  Monoid[Map[K, V]] =
     def merge(m1: Map[K, V], m2: Map[K, V]): Map[K, V] =
       m2.foldLeft(m1) { case (res, (k, v)) => res.updated(k, res.get(k).map(Monoid[V].append(_, v)).getOrElse(v)) }
 

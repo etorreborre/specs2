@@ -90,12 +90,12 @@ trait EitherSyntax:
       case Left(_)  => c
       case Right(b) => f(c, b)
 
-  extension [A, B, C, D](eab: Either[A, B]):
+  extension [A, B, C, D](eab: Either[A, B])
     def bimap(fa: A => C, fb: B => D): Either[C, D] = eab match
       case Left(a)  => Left(fa(a))
       case Right(b) => Right(fb(b))
 
-  extension [F[_], A, B, AA >: A, C](eab: Either[A, B]):
+  extension [F[_], A, B, AA >: A, C](eab: Either[A, B])
     def traverse(f: B => F[C])(using F: Applicative[F]): F[Either[AA, C]] = eab match
       case l @ Left(_) => F.pure(EitherUtil.rightCast(l))
       case Right(b)    => F.map(f(b))(Right(_))

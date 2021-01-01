@@ -127,7 +127,7 @@ object Fragments:
   def apply(fragments: Fragment*): Fragments =
     new Fragments(emitSeq[Action, Fragment](fragments))
 
-  given Monoid[Fragments]:
+  given Monoid[Fragments] with
     def zero : Fragments = Fragments.empty
 
     def append(fs1: Fragments, fs2: =>Fragments): Fragments =
@@ -141,6 +141,6 @@ object Fragments:
   def reduce[T](seq: Seq[T])(f: (Fragments, T) => Fragments): Fragments =
     seq.foldLeft(Fragments.empty)((res, cur) => f(res, cur))
 
-  given Conversion[Fragment, Fragments]:
+  given Conversion[Fragment, Fragments] with
     def apply(f: Fragment): Fragments =
       Fragments(f)

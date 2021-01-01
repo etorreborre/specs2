@@ -12,17 +12,17 @@ import execute._, Result._
  */
 trait NumericMatchers:
   /** implicit definition to create delta for the beCloseTo matcher */
-  given [S : Numeric] as Conversion[S, CanHaveDelta[S]]:
+  given [S : Numeric]: Conversion[S, CanHaveDelta[S]] with
     def apply(n: S): CanHaveDelta[S] =
       CanHaveDelta(n)
 
   /** implicit definition to create significant figures for the beCloseTo matcher */
-  extension (value: Int):
+  extension (value: Int)
     def significantFigures = SignificantFigures(value)
     def significantFigure = SignificantFigures(value)
 
   /** implicit definition to create significant figures for the beCloseTo matcher */
-  extension [N : Numeric](target: N):
+  extension [N : Numeric](target: N)
     def within(significant: SignificantFigures): SignificantTarget[N] =
       SignificantTarget(target, significant)
 

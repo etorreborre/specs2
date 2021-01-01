@@ -16,19 +16,19 @@ case class ExecutorServices(executorServiceEval:          () => ExecutorService,
 
   private val started = new AtomicBoolean(false)
 
-  given executorService as  ExecutorService =
+  given executorService:   ExecutorService =
     started.set(true)
     executorServiceEval()
 
-  given scheduledExecutorService as ScheduledExecutorService =
+  given scheduledExecutorService:  ScheduledExecutorService =
     started.set(true)
     scheduledExecutorServiceEval()
 
-  given executionContext as ExecutionContext =
+  given executionContext:  ExecutionContext =
     started.set(true)
     executionContextEval()
 
-  given scheduler as Scheduler =
+  given scheduler:  Scheduler =
     started.set(true)
     schedulerEval()
 
