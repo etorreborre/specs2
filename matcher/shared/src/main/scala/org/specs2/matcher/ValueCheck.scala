@@ -60,7 +60,7 @@ trait ValueChecks extends ValueChecksBase:
          else                  Failure("undefined function for "+q(t))
        }
 
-       def checkNot = (t: T) => Results.negate(check(t))
+       def checkNot = (t: T) => check(t).negate
 
   /** a check of type T can be downcasted implicitly to a check of type S >: T */
   given downcastBeEqualTypedValueCheck[T, S >: T]: Conversion[BeEqualTypedValueCheck[T], ValueCheck[S]] with
@@ -86,7 +86,7 @@ trait ValueChecksLowImplicits:
     def apply(f: T => R): ValueCheck[T] =
       new ValueCheck[T]:
         def check    = (t: T) => functionResult(AsResult.safely(f(t)), t)
-        def checkNot = (t: T) => Results.negate(check(t))
+        def checkNot = (t: T) => check(t).negate
 
   private[matcher] def functionResult[T](result: Result, t: T) =
     if Seq("true", "false").contains(result.message) then result.updateMessage(m => s"the function returns ${q(m)} on ${q(t)}")

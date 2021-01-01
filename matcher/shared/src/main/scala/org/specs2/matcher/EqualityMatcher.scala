@@ -8,19 +8,22 @@ import Result._
 class EqualityMatcher[T : Diffable](t: =>T) extends AdaptableMatcher[T]:
   outer =>
 
+  lazy val expected: T =
+    t
+
   protected val ko: String => String = identity
 
   def adapt(f: T => T, okFunction: String => String, koFunction: String => String): EqualityMatcher[T] =
-    new EqualityMatcher(f(t)):
+    new EqualityMatcher(f(expected)):
       override def apply[S <: T](s: Expectable[S]): Result =
-        val checkedValues = s"\n\nChecked values\n  Actual:   '${s.value}'\n  Expected: '$t'"
+        val checkedValues = s"\n\nChecked values\n  Actual:   '${s.value}'\n  Expected: '$expected'"
         super.apply(s.map(f)).updateMessage(_ + checkedValues)
 
       override protected val ko: String => String =
         koFunction compose outer.ko
 
   def apply[S <: T](b: Expectable[S]): Result =
-    val (actual, expected) = (b.value, t)
+    val actual = b.value
     val diff = Diffable.diff(actual, expected)
 
     failureDetailsFor(actual, expected) match
@@ -29,6 +32,11 @@ class EqualityMatcher[T : Diffable](t: =>T) extends AdaptableMatcher[T]:
 
       case None =>
         result(diff.identical, ko(b.describe(diff.render)), expected.notNull, actual.notNull)
+
+  override def not: Matcher[T] =
+    new Matcher[T]:
+      def apply[S <: T](b: Expectable[S]): Result =
+        result(!outer(b).isSuccess, b.description + " === " +outer.expected)
 
   private def failureDetailsFor(actual: Any, expected: Any): Option[Details] =
     (actual, expected) match
@@ -42,6 +50,3 @@ class EqualityMatcher[T : Diffable](t: =>T) extends AdaptableMatcher[T]:
   private def foreachIsDefined(seq: Traversable[_]): Boolean =
     try { seq.foreach(identity); true }
     catch { case _: Exception => false }
-
-  def expected: T =
-    t

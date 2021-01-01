@@ -16,10 +16,10 @@ class OptionMatchersSpec extends Specification with ResultMatchers { def is = s2
   ${ Some(1) must beSome.which(_ > 0) }
   ${ ((None: Option[Int]) must beSome.which(_ > 0)) returns "None is not Some" }
   ${ ((None: Option[Int]) must beSome.like { case i => i must be_>(0) }) returns "None is not Some" }
-  ${ (Some(1) must beSome.which(_ > 0)) returns "Some(1) is Some and the function returns 'true' on '1'" }
+  ${ (Some(1) must beSome.which(_ > 0)) }
   ${ (Some(1) must beSome.which(_ < 0)) returns "Some(1) is Some but the function returns 'false' on '1'" }
   ${ Some(1) must beSome.like { case a if a > 0 => ok } }
-  ${ (Some(1) must not(beSome[Int].like { case a => a must be_>=(0) })) returns "Some(1) is Some and 1 is not less than 0" }
+  ${ (Some(1) must not(beSome[Int].like { case a => a must be_<(0) })) returns "Some(1) is Some but 1 is not less than 0" }
   ${ Some(1) must not(beSome(2)) }
   ${ None must not(beSome) }
   ${ None must not(beSome(2)) }

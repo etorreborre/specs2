@@ -7,6 +7,7 @@ import text.Quote._
 import text.Plural._
 import org.specs2.fp.syntax._
 import control._
+import ValueChecks.given
 
 /**
  * This trait adds some implicits to easily fold sequences of results
@@ -57,7 +58,7 @@ trait MatcherImplicits extends ExpectationsCreation:
 
   /** verify the function f for all the values, and collect all failures */
   def foreach[T, R : AsResult](values: Traversable[T])(f: T => R): Result =
-    createExpectable(values).applyMatcher(ContainWithResult(f).foreach)
+    createExpectable(values).applyMatcher(ContainWithResult(f: ValueCheck[T]).foreach)
 
   /** verify the function f for all the values, and collect all failures, where the PartialFunction is defined */
   def foreachWhen[T, R : AsResult](values: Traversable[T])(f: PartialFunction[T, R]): Result =

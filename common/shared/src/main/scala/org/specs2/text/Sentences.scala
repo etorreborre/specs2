@@ -11,7 +11,7 @@ import BiMap.{given, _}
 */
 trait Sentences:
 
-  protected lazy val negationsTable: BiMap[String, String] =
+  protected lazy val negationVerbs: BiMap[String, String] =
     BiMap.fromSeq(
       " contains "  <-> " does not contain ",
       " must "      <-> " must not ",
@@ -31,8 +31,8 @@ trait Sentences:
       " shall "     <-> " shall not ",
       " shall "     <-> " shan't ",
 
-      " has "+pr   <-> " does not have "+pr,
-      " have "+pr  <-> " do not have "+pr,
+      " has "+pr    <-> " does not have "+pr,
+      " have "+pr   <-> " do not have "+pr,
       " has "       <-> " has not ",
       " have "      <-> " have not ",
       " has "       <-> " doesn't have ",
@@ -48,6 +48,12 @@ trait Sentences:
       " have "      <-> " haven't "
     )
 
+  protected lazy val negationWords: BiMap[String, String] =
+    BiMap.fromSeq(
+      "success"  <-> "failure",
+      "ok"       <-> "ko"
+    )
+
   /** prefix for a name */
   private lazy val pr = "[a|an|no|the|some|one|two|three|four|five|six|seven|eight|nine|ten|\\d+]"
 
@@ -60,14 +66,38 @@ trait Sentences:
     def removeRegex(s: String) = s.replaceAll("\\[.+\\]", "")
 
     // try to match the negations first
-    negationsTable.values.find(v => sentence.matches("(?s).*"+v+".*")).flatMap { negationToReplace =>
-      negationsTable.fromValue(negationToReplace).map(key => sentence.replace(removeRegex(negationToReplace), removeRegex(key)))
+    negationVerbs.values.find(v => sentence.matches("(?s).*"+v+".*")).flatMap { negationToReplace =>
+      negationVerbs.fromValue(negationToReplace).map(key => sentence.replace(removeRegex(negationToReplace), removeRegex(key)))
     }.orElse {
     // then the positive affirmations
-    negationsTable.keys.find(k =>sentence.matches("(?s).*"+k+".*")).flatMap { toReplace =>
-     negationsTable.fromKey(toReplace).map(value => sentence.replace(removeRegex(toReplace), removeRegex(value)))
+    negationVerbs.keys.find(k =>sentence.matches("(?s).*"+k+".*")).flatMap { toReplace =>
+     negationVerbs.fromKey(toReplace).map(value => sentence.replace(removeRegex(toReplace), removeRegex(value)))
     }}.
-    // default to not(sentence)
-    getOrElse("not("+sentence+")")
+    // default negated sentence
+    getOrElse(defaultNegate(sentence))
+
+  /**
+   * replace a word by its negation if found in the dictionary
+   */
+  def negateWord(word: String): String =
+    negationWords.fromKey(word).getOrElse(word)
+
+  /**
+   * find the negation of a message by either negating it as a word
+   * or a short sentence. If the sentence contains a conjonctive word: or, and, but
+   * or if it is a sentence spanning several lines
+   * then don't try to negate it
+   */
+  def negateMessage(message: String): String =
+    if List(" and ", " or ", " but ", "\n").exists(w => message.contains(w)) then
+      defaultNegate(message)
+    else
+      negationWords.fromKey(message).getOrElse(negateSentence(message))
+
+  def defaultNegate(sentence: String): String =
+    if sentence.startsWith("Expectation unsatisfied: ") then
+      sentence.drop("Expectation unsatisfied: ".size)
+    else
+      s"Expectation unsatisfied: $sentence"
 
 object Sentences extends Sentences

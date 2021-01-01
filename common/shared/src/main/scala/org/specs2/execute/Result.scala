@@ -156,31 +156,42 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
    * but a neutral result stays the same
    */
   def negate: Result =
-   this match
-      case Success(m,e)     => Failure(m, e)
-      case Failure(m,e,_,_) => Success(m)
+    this match
+      case Success(m,e)     => Failure(negateMessage(m), e).setExpectationsNb(expectationsNb)
+      case Failure(m,e,_,_) => Success(negateMessage(m)).setExpectationsNb(expectationsNb)
       case other            => other
+
+  def negateWhen(condition: Boolean): Result =
+    if condition then negate else this
 
 object Result:
 
   /** @return a Success or a Failure */
-  def result(test: Boolean, message: =>String, expected: =>String, details: Details): Result =
+  def result(test: Boolean, ok: =>String, ko: =>String, expected: =>String, details: Details): Result =
     if test then
-      Success(message.notNull)
+      Success(ok.notNull, expected)
     else
-      Failure(m = message.notNull, e = expected, details = details)
+      Failure(m = ko.notNull, e = expected, details = details)
 
   /** @return a Success or a Failure */
-  def result(test: Boolean, message: =>String, details: Details): Result =
-    result(test, message, "", details)
+  def result(test: Boolean, ok: =>String, ko: =>String): Result =
+    result(test, ok, ko, "", NoDetails)
 
   /** @return a Success or a Failure */
-  def result(test: Boolean, message: =>String, expected: String, actual: String): Result =
-    result(test, message, FailureDetails(actual, expected))
+  def result(test: Boolean, ko: =>String, expected: =>String, details: Details): Result =
+    result(test, "success", ko, expected, details)
 
   /** @return a Success or a Failure */
-  def result(test: Boolean, message: =>String): Result =
-    result(test, message, NoDetails)
+  def result(test: Boolean, ko: =>String, details: Details): Result =
+    result(test, ko, "", details)
+
+  /** @return a Success or a Failure */
+  def result(test: Boolean, ko: =>String, expected: String, actual: String): Result =
+    result(test, ko, FailureDetails(actual, expected))
+
+  /** @return a Success or a Failure */
+  def result(test: Boolean, ko: =>String): Result =
+    result(test, ko, NoDetails)
 
   /** extract failure details from a Result if it is a Failure */
   def details(r: Result): Details = r match
@@ -329,13 +340,6 @@ trait Results:
     if b then org.specs2.execute.Success("true")
     else org.specs2.execute.Failure("false", "true", Nil, NoDetails)
 
-  def negate(r: Result) =
-    if r.isSuccess then      Failure(negateSentence(r.message), r.expected).setExpectationsNb(r.expectationsNb)
-    else if r.isFailure then Success(negateSentence(r.message), r.expected).setExpectationsNb(r.expectationsNb)
-    else r
-
-  def negateWhen(condition: Boolean)(r: Result) =
-    if condition then negate(r) else r
 
 object Results extends Results
 
@@ -357,6 +361,7 @@ case class Success(m: String = "", exp: String = "")  extends Result(m, exp):
       case Success(m2, e2) => m == m2 && exp == e2
       case _ => false
   override def hashCode = m.hashCode + exp.hashCode
+
 /**
  * Companion object to the Success class providing
  * a method to set the expectations number

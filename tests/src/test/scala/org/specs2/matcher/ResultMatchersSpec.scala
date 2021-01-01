@@ -3,7 +3,8 @@ package matcher
 
 import execute._
 
-class ResultMatchersSpec extends Spec with ResultMatchers with TypedEqual { def is = s2"""
+class ResultMatchersSpec extends Spec with ResultMatchers with TypedEqual:
+  def is = s2"""
 
 The ResultMatchers trait provides matchers to check Result instances.
 
@@ -22,7 +23,7 @@ The ResultMatchers trait provides matchers to check Result instances.
 
   beFailing checks if a Result is a Failure
   ${ (1 !== 1) must beFailing }
-  ${ (1 !== 1) must beFailing(message = "1 == '1'") }
+  ${ (1 !== 1) must beFailing(message = "1 === 1") }
   ${ (1 === 1) must not(beFailing) }
-                                                                                                                        """
-}
+
+"""

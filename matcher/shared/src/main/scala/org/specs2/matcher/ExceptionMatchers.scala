@@ -66,10 +66,9 @@ trait ExceptionMatchers extends ExpectationsCreation:
             def apply[S <: Any](value: Expectable[S]) =
               checkResult(value, checkClassType, f, rethrowException).not
 
-    private val checkClassType = (e: Throwable) => {
+    private val checkClassType = (e: Throwable) =>
       errorMustBeThrownIfExceptionIsExpected(e, klass)
       klass.isAssignableFrom(e.getClass)
-    }
 
     private def checkBoolean[T, R](expectable: Expectable[T], f: Throwable => Boolean, andFinally: Throwable => Unit) =
       checkExceptionValue(expectable, f, asString(klass), andFinally)
@@ -146,8 +145,14 @@ trait ExceptionMatchers extends ExpectationsCreation:
   private def checkExceptionValue[T](expectable: Expectable[T], f: Throwable => Boolean, expectedAsString: String, andFinally: Throwable => Unit) =
     checkException(expectable,
                    f,
-                   (e: Throwable) => s"Expected: $expectedAsString. Got: $e instead \n\n The  ${e.getClass.simpleName} stacktrace is\n\n${e.getStackTrace.mkString("\n")}",
-                   "Expected: "+ expectedAsString + ". Got nothing",
+                   (e: Throwable) =>
+                      // don't repeat the expected exception if it was caught
+                      (if e.toString.contains(expectedAsString) then
+                        s"Got $e"
+                       else
+                         s"Expected $expectedAsString. Got $e instead")
+                      + s" \n\n The  ${e.getClass.simpleName} stacktrace is\n\n${e.getStackTrace.mkString("\n")}",
+                   "Expected "+ expectedAsString + ". Got nothing",
                    andFinally)
 
   private def checkExceptionValueWithMatcher[T, E <: Throwable](
@@ -159,8 +164,13 @@ trait ExceptionMatchers extends ExpectationsCreation:
 
     checkExceptionWithMatcher(expectable,
                    e, f,
-                   (e: Throwable) => s"Expected: $expectedAsString. Got: $e",
-                   "Expected: "+ expectedAsString + ". Got nothing",
+                   (e: Throwable) =>
+                      // don't repeat the expected exception if it was caught
+                      if e.toString.contains(expectedAsString) then
+                        s"Got $e"
+                      else
+                        s"Expected $expectedAsString. Got $e instead",
+                   "Expected "+ expectedAsString + ". Got nothing",
                    (e: Throwable) => e.getStackTrace.toSeq,
                    andFinally)
 
@@ -188,8 +198,9 @@ trait ExceptionMatchers extends ExpectationsCreation:
         rethrowFinally(e, andFinally) {
           if ef(e) then
             val likeResult = f(e.asInstanceOf[E])
+            val likeResultMessage = if likeResult.isSuccess then "" else s"but ${likeResult.message}"
             Result.result(ef(e) && likeResult.isSuccess,
-                           s"""${someKo(e)} and ${likeResult.message}\n\n The ${e.getClass.simpleName} stacktrace is\n\n${stacktrace(e).mkString("\n")}""")
+                           s"""${someKo(e)} $likeResultMessage \n\n The ${e.getClass.simpleName} stacktrace is\n\n${stacktrace(e).mkString("\n")}""")
           else Result.result(false, someKo(e))
         }
 

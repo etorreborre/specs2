@@ -92,12 +92,12 @@ Messages
 
   def adapt9 =
     def beThree: Matcher[Int] = be_===(3)
-    val beStringThree = beThree ^^ ( (_: String).toInt aka s"the value")
-    ("3" must beStringThree).message === "the value '3' == '3'"
+    val beStringThree = beThree ^^ ((_: String).toInt aka s"the value")
+    ("4" must beStringThree).message === "the value '4' != '3'"
 
   def adapt10 =
     def beThree: Matcher[Int] = be_==(3)
-    val beStringThree = beThree ^^ ( (_: String).toInt aka s"the value")
+    val beStringThree = beThree ^^ ((_: String).toInt aka s"the value")
     ("3" must beStringThree).message === "the value '3' is equal to '3'"
 
   def convert1 =
@@ -107,12 +107,12 @@ Messages
   def convert2 =
     def beEven: Matcher[Int] = (i: Int) => (i % 2 == 0, "'"+i.toString+"' is odd")
     (3 must beEven) returns "'3' is odd"
-    (2 must beEven) returns "'2' is not odd"
+    2 must beEven
 
   def convert3 =
     def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i.toString+" is odd")
     (3 must beEven) returns "3 is odd"
-    (2 must beEven) returns "2 is not odd"
+    2 must beEven
 
   def convert4 =
     (1 must be_==("1").mute) returns ""
@@ -120,7 +120,7 @@ Messages
   def convert5 =
     def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i.toString+" is odd")
     def beOdd: Matcher[Int] = (i: Int) => beEven.apply(theValue(i)).not
-    (2 must beOdd) returns "2 is even"
+    (2 must beOdd) returns "failure"
 
   def convert6 =
     def beOneTwoThreeList: Matcher[List[Int]] = (list: List[Int]) => list must be_==(List(1, 2, 3))

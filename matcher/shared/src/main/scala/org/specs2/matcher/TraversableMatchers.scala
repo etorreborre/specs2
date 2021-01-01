@@ -5,6 +5,7 @@ import control._
 import data.Sized
 import text.Regexes._
 import text.Plural._
+import text.Sentences._
 import text.NotNullStrings._
 import collection.Seqx._
 
@@ -36,18 +37,18 @@ trait TraversableBaseMatchers:
    * ELEMENTS MATCHERS
    */
   def contain[T](check: ValueCheck[T]): ContainWithResult[T] =
-    new ContainWithResult(check)
+    ContainWithResult(check)
 
   /**
    * COLLECTION MATCHERS
    */
   def contain[T](cm: ContainWithResultSeq[T]): ContainWithResultSeq[T] = cm
 
-  def allOf[T](checks: ValueCheck[T]*)  : ContainWithResultSeq[T] = new ContainWithResultSeq(checks).atLeast.onDistinctValues(false)
-  def eachOf[T](checks: ValueCheck[T]*)  : ContainWithResultSeq[T] = new ContainWithResultSeq(checks).atLeast
-  def exactly[T](checks: ValueCheck[T]*): ContainWithResultSeq[T] = new ContainWithResultSeq(checks).exactly
-  def atLeast[T](checks: ValueCheck[T]*): ContainWithResultSeq[T] = new ContainWithResultSeq(checks).atLeast
-  def atMost[T](checks: ValueCheck[T]*) : ContainWithResultSeq[T] = new ContainWithResultSeq(checks).atMost
+  def allOf[T](checks: ValueCheck[T]*)  : ContainWithResultSeq[T] = ContainWithResultSeq(checks).atLeast.onDistinctValues(false)
+  def eachOf[T](checks: ValueCheck[T]*)  : ContainWithResultSeq[T] = ContainWithResultSeq(checks).atLeast
+  def exactly[T](checks: ValueCheck[T]*): ContainWithResultSeq[T] = ContainWithResultSeq(checks).exactly
+  def atLeast[T](checks: ValueCheck[T]*): ContainWithResultSeq[T] = ContainWithResultSeq(checks).atLeast
+  def atMost[T](checks: ValueCheck[T]*) : ContainWithResultSeq[T] = ContainWithResultSeq(checks).atMost
 
   /** match if a traversable contains all the elements of seq (and maybe more) */
   def containAllOf[T : Diffable](seq: Seq[T]) =
@@ -55,7 +56,7 @@ trait TraversableBaseMatchers:
 
   /** match if a traversable contains one of (t1, t2) */
   def containAnyOf[T](seq: Seq[T]): ContainWithResult[T] =
-    contain(new BeOneOf(seq))
+    contain(BeOneOf(seq))
 
   /** match if traversable contains (x matches .*+t+.*) */
   def containMatch[T](s: =>String): Matcher[Traversable[T]] =
@@ -189,12 +190,11 @@ case class ContainWithResult[T](check: ValueCheck[T], timesMin: Option[Times] = 
     failures.collect { case s: Skipped => s }.headOption.getOrElse {
       val (okMessage, koMessage) = messages(t.description, successes, failures)
       val details: Details = failures.collect { case Failure(_,_,_,d) if d != NoDetails => d }.headOption.getOrElse(NoDetails)
-
       (timesMin, timesMax) match
-        case (None,             None)             => Result.result(successes.size == seq.size, koMessage, details)
-        case (Some(Times(min)), None)             => Result.result(successes.size >= min, koMessage, details)
-        case (None,             Some(Times(max))) => Result.result(successes.size <= max, koMessage, details)
-        case (Some(Times(min)), Some(Times(max))) => Result.result(successes.size >= min && successes.size <= max, koMessage, details)
+        case (None,             None)             => Result.result(successes.size == seq.size, okMessage, koMessage, "", details)
+        case (Some(Times(min)), None)             => Result.result(successes.size >= min, okMessage, koMessage, "", details)
+        case (None,             Some(Times(max))) => Result.result(successes.size <= max, okMessage, koMessage, "", details)
+        case (Some(Times(min)), Some(Times(max))) => Result.result(successes.size >= min && successes.size <= max, okMessage, koMessage, "", details)
     }
 
   def atLeastOnce                    : ContainWithResult[T] = atLeast(1.times)
@@ -223,13 +223,18 @@ case class ContainWithResult[T](check: ValueCheck[T], timesMin: Option[Times] = 
   private
   def genericMessages(expectable: String, successes: scala.collection.Seq[Result], failures: scala.collection.Seq[Result]) =
     def elementsAre(results: scala.collection.Seq[Result], success: Boolean) =
-      if   results.isEmpty then      s"There are no matches"
-      else if results.size <= 1 then s"There is ${results.size} ${if success then "success" else "failure"}"
-      else                        s"There are ${results.size} ${if success then "successes" else "failures"}"
+      if results.isEmpty then
+        s"There are no matches"
+      else if results.size <= 1 then
+        s"There is ${results.size} ${if success then "success" else "failure"}"
+      else
+        s"There are ${results.size} ${if success then "successes" else "failures"}"
 
     def messages(results: scala.collection.Seq[Result]) =
-      if results.isEmpty then ""
-      else                 results.map(_.message).mkString("\n", "\n", "\n")
+      if results.isEmpty then
+        ""
+      else
+        results.map(_.message).mkString("\n", "\n", "\n")
 
     (elementsAre(successes, success = true) + messages(successes),
      elementsAre(failures, success = false) + messages(failures))
@@ -317,7 +322,7 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
         case (false, false) =>
           makeResult("", successes.size <= checks.size && checks.size <= seq.size)
 
-    if negate then Result.result(!r.isSuccess, "Falsified: " + r.message)
+    if negate then Result.result(!r.isSuccess, negateMessage(r.message))
     else r
 
 
@@ -403,4 +408,5 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
   def onDistinctValues: ContainWithResultSeq[T]                    = onDistinctValues(true)
   def onDistinctValues(distinct: Boolean): ContainWithResultSeq[T] = copy(eachCheck = distinct)
 
-  override def not = copy(negate = !negate)
+  override def not: ContainWithResultSeq[T] =
+    copy(negate = !negate)

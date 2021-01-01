@@ -75,6 +75,6 @@ trait ResultMatchers:
         val (r, description) = ResultExecution.executeEither(AsResult[T](value.value)) match
           case Left(r) => (r, "the value is not pending: ")
           case Right(r) => (r, value.description + " is not pending")
-        result(r.isSkipped, description+ r.message) and check.check(r.message)
+        result(r.isPending, description+ r.message) and check.check(r.message)
 
 object ResultMatchers extends ResultMatchers

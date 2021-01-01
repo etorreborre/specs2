@@ -12,7 +12,6 @@ import json.Json._
 import util.matching.Regex
 import Matcher.{given}
 import Result._
-import Results.negateWhen
 import JsonMatchers._
 
 /**
@@ -30,7 +29,7 @@ trait JsonMatchers extends Expectations with JsonMatchersImplicits:
     def apply[S <: String](s: Expectable[S]) =
       parse(s.value.notNull) match
         case None       => result(negated, "Could not parse\n" + s.value.notNull)
-        case Some(json) => negateWhen(negated)(find(Some(json), queries.toList))
+        case Some(json) => find(Some(json), queries.toList).negateWhen(negated)
 
     def negate: JsonMatcher
     def negated: Boolean

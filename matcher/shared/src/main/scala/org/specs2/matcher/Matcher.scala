@@ -66,11 +66,7 @@ trait Matcher[-T]:
   def not: Matcher[T] =
     new Matcher[T]:
       def apply[U <: T](a: Expectable[U]): Result =
-        val result =
-          try outer(a)
-          catch
-            case FailureException(f: Failure) => f
-        a.checker.check(result.not)
+        a.checker.check(outer(a).not)
 
   /**
    * the logical and between 2 matchers
@@ -294,21 +290,21 @@ trait MatcherCreation:
    * This method transforms a function, with function descriptors to a Matcher
    */
   given [T]: Conversion[(T => Boolean, T => String, T => String, T => String), Matcher[T]] with
-   def apply(f: (T => Boolean, T => String, T => String, T => String)): Matcher[T] =
-     new Matcher[T]:
-       def apply[S <: T](s: Expectable[S]) =
-         val (condition, message, actual, expected) = (f._1(s.value), f._2(s.value), f._3(s.value), f._4(s.value))
-         Result.result(condition, message, actual, expected)
+    def apply(f: (T => Boolean, T => String, T => String, T => String)): Matcher[T] =
+      new Matcher[T]:
+        def apply[S <: T](s: Expectable[S]) =
+          val (condition, message, actual, expected) = (f._1(s.value), f._2(s.value), f._3(s.value), f._4(s.value))
+          Result.result(condition, message, actual, expected)
 
   /**
    * This method transforms a function returning a pair (condition, message) to a Matcher
    */
   given pairFunctionToMatcher[T]: Conversion[T => (Boolean, String), Matcher[T]] with
-   def apply(f: T => (Boolean, String)): Matcher[T] =
-     new Matcher[T]:
-       def apply[S <: T](s: Expectable[S]) =
-          val (condition, message) = f(s.value)
-          Result.result(condition, message)
+    def apply(f: T => (Boolean, String)): Matcher[T] =
+      new Matcher[T]:
+        def apply[S <: T](s: Expectable[S]) =
+           val (condition, message) = f(s.value)
+           Result.result(condition, message)
 
   /**
    * This method transforms a function returning a triplet (condition, message, actual, expected) to a Matcher

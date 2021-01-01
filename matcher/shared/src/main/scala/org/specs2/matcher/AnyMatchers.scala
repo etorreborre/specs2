@@ -14,15 +14,15 @@ trait AnyMatchers:
 
   /** matches if a == true */
   def beTrue: Matcher[Boolean] =
-    new BeTrueMatcher
+    BeTrueMatcher()
 
   /** matches if a == false */
   def beFalse: Matcher[Boolean] =
-    (new BeTrueMatcher).not
+    BeFalseMatcher()
 
   /** matches if a eq b */
   def beTheSameAs[T <: AnyRef](t: =>T): BeTheSameAs[T] =
-    new BeTheSameAs(t)
+    BeTheSameAs(t)
 
   /** alias for beTheSameAs */
   def be[T <: AnyRef](t: =>T): BeTheSameAs[T] =
@@ -62,7 +62,7 @@ trait AnyMatchers:
 
   /** matches if a == b */
   def beTypedEqualTo[T : Diffable](t: =>T): EqualityMatcher[T] =
-    new EqualityMatcher(t)
+    EqualityMatcher(t)
 
   /** matches if a == b */
   def typedEqualTo[T](t: =>T): EqualityMatcher[T] =
@@ -180,6 +180,13 @@ class BeTrueMatcher extends Matcher[Boolean]:
     result(v.value, v.description + " is false")
 
 /**
+ * Matcher for a boolean value which must be false
+ */
+class BeFalseMatcher extends Matcher[Boolean]:
+  def apply[S <: Boolean](v: Expectable[S]) =
+    result(!v.value, v.description + " is true")
+
+/**
  * Equality Matcher
  */
 class BeEqualTo(t: =>Any) extends EqualityMatcher(t)
@@ -211,4 +218,6 @@ class BeNull[T] extends Matcher[T]:
 case class BeOneOf[T](t: Seq[T]) extends Matcher[T]:
   def apply[S <: T](y: Expectable[S]) =
     val x = t
-    result(x.contains(y.value), s"${q(y.description)} is not contained in ${q(x.mkString(", "))}")
+    result(x.contains(y.value),
+      s"${q(y.description)} is contained in ${q(x.mkString(", "))}",
+      s"${q(y.description)} is not contained in ${q(x.mkString(", "))}")

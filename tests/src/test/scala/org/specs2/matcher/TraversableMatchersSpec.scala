@@ -19,6 +19,8 @@ class TraversableMatchersSpec(val env: Env) extends Specification with ResultMat
    ${ Seq(1, 2, 3) must contain(be_>=(0)).forall }
    ${ Seq(1, 2, 3) must contain(be_>=(0)).foreach }
    ${ Seq(1, 2) must contain(anyOf(1, 4)) }
+   ${ Seq(1, 2, 3) must contain(anyOf(1, 2, 4)) }
+   ${ (Seq(1, 2, 3) must contain(anyOf(1, 2, 4))) returns "There are 2 successes\n'1' is contained in '1, 2, 4'\n'2' is contained in '1, 2, 4'\n" }
    ${ (Seq(1, 2, 3) must not(contain(anyOf(1, 2, 4)))) returns "There are 2 successes\n'1' is contained in '1, 2, 4'\n'2' is contained in '1, 2, 4'\n" }
    ${ Seq("hello", "world") must contain(matching(".*orld")) }
    ${ Seq("hello", "world") must contain((s: String) => s.length > 2) }
@@ -79,7 +81,7 @@ class TraversableMatchersSpec(val env: Env) extends Specification with ResultMat
       "List(1, 2, 3) does not contain exactly 3 correct values\n"+
       "- 3\n"+
       " * 3 is less than 5\n" }
-   ${ (Seq(1, 2, 3) must contain(allOf(3, 2).inOrder)) returns "the value 2 is not in order" }
+   ${ (Seq(1, 2, 3) must contain(allOf(3, 2).inOrder)) returns "the value 2 is missing or not in order" }
    ${ (Seq(1, 2, 3) must contain(exactly(be_>=(0), be_>=(2), be_<=(1)).inOrder)) returns
       "List(1, 2, 3) does not contain exactly 3 correct values in order\n"+
         "- 3\n"+
@@ -110,8 +112,9 @@ class TraversableMatchersSpec(val env: Env) extends Specification with ResultMat
    ${ (Seq(1, 2)    must not(contain(exactly(1, 2)))                           ) returnsResult "failure: List(1, 2) contains all expected values" }
    ${ (Seq[Int]()   must not(contain(exactly(1)))                              ) returnsResult "success: List() does not contain 1" }
    ${ (Seq(1, 2, 3) must not(contain(exactly(1, 2)))                           ) returnsResult "success: List(1, 2, 3) contains 3" }
-   ${ (Seq(1, 2)    must not(contain(atLeast(4, 1)))                           ) returnsResult "success: List(1, 2) does not contain 4" }
-   ${ (Seq(1, 2)    must not(contain(atMost(1, 3)))                            ) returnsResult "success: List(1, 2) does not contain 3 but contains 2" }
+   ${ (Seq(1, 2)    must contain(atLeast(4, 1))                                ) returnsResult "failure: List(1, 2) does not contain 4" }
+   ${ (Seq(1, 2)    must not(contain(atLeast(4, 1)))                           ) returnsResult "success: Expectation unsatisfied: List(1, 2) contains 4" }
+   ${ (Seq(1, 2)    must contain(atMost(1, 3))                                 ) returnsResult "failure: List(1, 2) does not contain 3 but contains 2" }
    ${ (Seq(1, 2)    must not(contain(atMost(1)))                               ) returnsResult "success: List(1, 2) contains 2" }
    ${ (Seq(1, 2)    must not(contain(allOf(1, 2)))                             ) returnsResult "failure: List(1, 2) contains all expected values" }
    ${ (Seq(1, 2, 3) must not(contain(exactly(1, 2, 3, 4)))                     ) returnsResult "success: List(1, 2, 3) does not contain 4" }

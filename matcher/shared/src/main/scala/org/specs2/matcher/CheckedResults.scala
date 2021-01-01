@@ -12,15 +12,15 @@ import execute._, Result._
  */
 trait ExpectedResults extends ExpectationsCreation:
   def ok(m: String): Result =
-    checkResultFailure(result(true, m))
+    checkResultFailure(Success(m))
 
   def ko(m: String): Result =
-    checkResultFailure(result(false, m))
+    checkResultFailure(Failure(m))
 
   lazy val ok: Result =
-    checkResultFailure(result(true, "ko"))
+    checkResultFailure(Success("ok"))
 
   lazy val ko: Result =
-    checkResultFailure(result(false, "ko"))
+    checkResultFailure(Failure("ko"))
 
 object ExpectedResults extends ExpectedResults

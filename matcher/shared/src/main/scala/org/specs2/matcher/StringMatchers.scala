@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-import java.util.regex.{Matcher => _, Pattern}
+import java.util.regex.{Matcher => _, Pattern, PatternSyntaxException}
 import text.Quote._
 import text.Regexes._
 import control.Exceptions._
@@ -161,7 +161,8 @@ trait StringMatchers:
 
   given MatchingExpression[String] with
     def toPattern(s: String): Pattern =
-      Pattern.compile(s)
+      try Pattern.compile(s)
+      catch { case e: PatternSyntaxException => Pattern.compile(Pattern.quote(s)) }
 
   given MatchingExpression[Pattern] with
     def toPattern(p: Pattern): Pattern =

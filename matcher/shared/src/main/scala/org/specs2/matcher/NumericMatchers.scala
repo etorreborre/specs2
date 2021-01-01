@@ -28,7 +28,7 @@ trait NumericMatchers:
 
   /** matches if actual <= n */
   def beLessThanOrEqualTo[S : Ordering](n: S): BeLessThanOrEqualTo[S] =
-    new BeLessThanOrEqualTo(n)
+    BeLessThanOrEqualTo(n)
 
   /** matches if actual <= n */
   def lessThanOrEqualTo[S : Ordering](n: S): BeLessThanOrEqualTo[S] =
@@ -39,21 +39,21 @@ trait NumericMatchers:
   /** alias for beLessThanOrEqualTo */
   def <=[S : Ordering](n: S) = beLessThanOrEqualTo(n)
   /** matches if actual < n */
-  def beLessThan[S : Ordering](n: S) = new BeLessThan(n)
+  def beLessThan[S : Ordering](n: S) = BeLessThan(n)
   def lessThan[S : Ordering](n: S) = beLessThan(n)
   /** alias for beLessThan */
   def be_<[S : Ordering](n: S) = beLessThan(n)
   /** alias for beLessThan */
   def <[S : Ordering](n: S) = beLessThan(n)
   /** matches if actual >= n */
-  def beGreaterThanOrEqualTo[S : Ordering](n: S) = new BeLessThan(n).not
+  def beGreaterThanOrEqualTo[S : Ordering](n: S) = BeLessThan(n).not
   def greaterThanOrEqualTo[S : Ordering](n: S) = beGreaterThanOrEqualTo(n)
   /** alias for beGreaterThanOrEqualTo */
   def be_>=[S : Ordering](n: S) = beGreaterThanOrEqualTo(n)
   /** alias for beGreaterThanOrEqualTo */
   def >=[S : Ordering](n: S) = beGreaterThanOrEqualTo(n)
   /** matches if actual > n */
-  def beGreaterThan[S : Ordering](n: S) = new BeLessThanOrEqualTo(n).not
+  def beGreaterThan[S : Ordering](n: S) = BeLessThanOrEqualTo(n).not
   def greaterThan[S : Ordering](n: S) = beGreaterThan(n)
   /** alias for beGreaterThan */
   def be_>[S : Ordering](n: S) = beGreaterThan(n)
@@ -61,7 +61,7 @@ trait NumericMatchers:
   def >[S : Ordering](n: S) = beGreaterThan(n)
 
   /** matches if actual = n +/- delta */
-  def beCloseTo[S : Numeric](n: S, delta: S): Matcher[S] = new BeCloseTo(n, delta)
+  def beCloseTo[S : Numeric](n: S, delta: S): Matcher[S] = BeCloseTo(n, delta)
   def closeTo[S : Numeric](n: S, delta: S): Matcher[S] = beCloseTo(n, delta)
   /** matches if actual = n +/- delta */
   def beCloseTo[S : Numeric](delta: PlusOrMinus[S]): Matcher[S] = beCloseTo(delta.n, delta.delta)
@@ -77,10 +77,10 @@ trait NumericMatchers:
 
   /** matches if target - actual < 10 pow (log actual - significantDigits) */
   def beCloseTo[S : Numeric](target: S, figures: SignificantFigures): Matcher[S] =
-    new BeSignificantlyCloseTo[S](target, figures)
+    BeSignificantlyCloseTo[S](target, figures)
 
   def beCloseTo[S : Numeric](target: SignificantTarget[S]): Matcher[S] =
-    new BeSignificantlyCloseTo[S](target.target, target.significantFigures)
+    BeSignificantlyCloseTo[S](target.target, target.significantFigures)
 
   def closeTo[S : Numeric](target: S, figures: SignificantFigures): Matcher[S] =
     beCloseTo(target, figures)
@@ -110,17 +110,34 @@ case class PlusOrMinus[S](n: S, delta: S)
 object NumericMatchersDescription
 
 class BeLessThanOrEqualTo[T : Ordering](n: T) extends Matcher[T]:
+  outer =>
   def apply[S <: T](a: Expectable[S]) =
     val value: T = a.value
     val r = value <= n
     val isEqual = value == n
     result(r, a.description + " is greater than " + n.toString)
 
+  override def not: Matcher[T] =
+    new Matcher[T]:
+      def apply[S <: T](a: Expectable[S]) =
+        result(!outer(a).isSuccess, a.description + " is less than " + n.toString)
+
 class BeLessThan[T : Ordering](n: T) extends Matcher[T]:
+  outer =>
+
   def apply[S <: T](a: Expectable[S]) =
     val value: T = a.value
     val r = value < n
-    result(r, a.description + " is not less than " + n.toString)
+    result(r,
+           a.description + " is less than " + n.toString,
+           a.description + " is not less than " + n.toString)
+
+  override def not: Matcher[T] =
+    new Matcher[T]:
+      def apply[S <: T](a: Expectable[S]) =
+        result(!outer(a).isSuccess,
+          a.description + " is not less than " + n.toString,
+          a.description + " is less than " + n.toString)
 
 class BeCloseTo[T : Numeric](n: T, delta: T) extends Matcher[T]:
   def apply[S <: T](x: Expectable[S]) =
