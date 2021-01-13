@@ -18,7 +18,7 @@ When you use a build tool you generally only need to specify the main dependenci
  `"org.scalacheck" %% "scalacheck" % "1.14.0"`                                          | if using ScalaCheck
  `"org.mockito" % "mockito-core" % "3.7.0"`                                             | if using Mockito. Note: specs2.jar must be placed before mockito.jar on the classpath
  `"org.hamcrest" % "hamcrest-core" % "2.2"`                                             | if using Hamcrest matchers with Mockito
- `"junit" % "junit" % "4.13"`                                                           | if using JUnit
+ `"junit" % "junit" % "4.13.1"`                                                           | if using JUnit
  `"org.specs2" % "classycle" % "1.4.1"`                                                 | if using the `org.specs2.specification.Analysis` trait
  `"org.scala-lang" % "scala-reflect" % scalaVersion.value`                              | if using interpolated specifications and/or macro matchers
 

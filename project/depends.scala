@@ -48,7 +48,7 @@ object depends {
   def scalaXML = "org.scala-lang.modules" %% "scala-xml" % "1.3.0"
 
   lazy val mockito  = "org.mockito"  % "mockito-core"  % "3.7.0"
-  lazy val junit    = "junit"        % "junit"         % "4.13"
+  lazy val junit    = "junit"        % "junit"         % "4.13.1"
   lazy val hamcrest = "org.hamcrest" % "hamcrest-core" % "2.2"
 
   lazy val pegdown = "org.pegdown" % "pegdown" % "1.6.0"
@@ -56,7 +56,7 @@ object depends {
   lazy val tagsoup = "org.ccil.cowan.tagsoup" % "tagsoup" % "1.2.1"
 
   lazy val scalacheck = Def.setting {
-    "org.scalacheck" %%% "scalacheck" % "1.14.3"
+    "org.scalacheck" %%% "scalacheck" % "1.15.2"
   }
 
   def paradise(scalaVersion: String) =
