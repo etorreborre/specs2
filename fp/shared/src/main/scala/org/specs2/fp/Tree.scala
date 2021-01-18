@@ -69,13 +69,15 @@ sealed abstract class Tree[A] {
     new StringBuilder(sh.show(rootLabel).reverse) +: drawSubTrees(subForest)
   }
 
-  /** Pre-order traversal. */
-  def flatten: Stream[A] = {
-    def squish(tree: Tree[A], xs: Stream[A]): Stream[A] =
-      Stream.cons(tree.rootLabel, Foldable[Stream].foldRight(tree.subForest, xs)(squish(_, _)))
+  /**
+   * Pre-order traversal. Flatten the tree using a foldLeft to avoid SOF
+   */
+  def flatten: Stream[A] = 
+    squishLeft(this, Stream.Empty)
 
-    squish(this, Stream.Empty)
-  }
+  /** reimplementation of squish from scalaz, using a foldLeft */
+  private def squishLeft(tree: Tree[A], xs: Stream[A]): Stream[A] =
+    Stream.cons(tree.rootLabel, tree.subForest.reverse.foldLeft(xs)((s, t) => squishLeft(t, s)))
 
   /** Breadth-first traversal. */
   def levels: Stream[Stream[A]] = {

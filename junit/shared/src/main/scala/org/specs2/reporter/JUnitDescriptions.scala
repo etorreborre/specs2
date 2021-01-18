@@ -66,7 +66,7 @@ trait JUnitDescriptions extends ExecutionOrigin {
 
   /** Map of each fragment to its description */
   def fragmentDescriptions(spec: SpecStructure)(ee: ExecutionEnv): Map[Fragment, Description] =
-    createDescriptionTree(spec)(ee).root.toTree.flattenLeft.toMap
+    createDescriptionTree(spec)(ee).root.toTree.flatten.toMap
 
   /** filter out the fragments which don't need to be represented in the JUnit descriptions */
   def keep: Levels.Mapper = {
@@ -116,6 +116,6 @@ object JUnitDescriptions extends JUnitDescriptions
 
 case class JUnitDescriptionsTree(spec: SpecStructure, ee: ExecutionEnv) {
   lazy val descriptionTree = JUnitDescriptions.createDescriptionTree(spec)(ee)
-  lazy val descriptions = descriptionTree.root.toTree.flattenLeft.toMap
+  lazy val descriptions = descriptionTree.root.toTree.flatten.toMap
   lazy val description = JUnitDescriptions.createDescription(descriptionTree.map(_._2))
 }

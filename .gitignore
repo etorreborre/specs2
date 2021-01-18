@@ -1,12 +1,13 @@
 .DS_Store
 
+.bsp
 .idea
 **/target
 *.iml
 .jvmopts
 .vscode
 .metals
-project/metals.sbt
+**/metals.sbt
 .bloop
 
 **/*.hydra
