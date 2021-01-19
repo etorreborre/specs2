@@ -39,7 +39,7 @@ object depends {
     Seq("org.scala-lang.modules" %%% "scala-parser-combinators" % "1.1.2")
   }
   def scalaParserNative = Def.setting {
-    if(nativeVersion == "0.4.0-M2")
+    if(nativeVersion == "0.4.0")
       Seq("com.github.lolgab" %%% "scala-parser-combinators" % "1.1.2")
     else
       scalaParser.value
