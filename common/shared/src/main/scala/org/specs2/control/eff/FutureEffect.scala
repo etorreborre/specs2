@@ -70,7 +70,7 @@ object TimedFuture {
       TimedFuture(newCallback)
     }
 
-    override def tailrecM[A, B](a: A)(f: A => TimedFuture[Either[A, B]]): TimedFuture[B] =
+    override def tailrecM[A, B](f: A => TimedFuture[Either[A, B]])(a: A): TimedFuture[B] =
       TimedFuture[B] { es =>
         def loop(va: A): Future[B] = f(va).runNow(es).flatMap {
           case Left(na) => loop(na)
