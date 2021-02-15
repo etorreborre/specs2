@@ -44,7 +44,7 @@ case class Env(
    * in case they are needed to drive the current execution */
   statisticsRepository: StatisticsRepository,
 
-  /** the random object is only invoked when using the RandomSequentialExecution
+  /** the random object is only invoked when using the RandomSequentialExecutor
    * to execute examples randomly in a specification
    */
   random: scala.util.Random,

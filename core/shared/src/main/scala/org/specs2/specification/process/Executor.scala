@@ -9,7 +9,7 @@ import control._
 import producer._, Producer._
 import fp.syntax._
 import main.Arguments
-import process.RandomSequentialExecution._
+import process.RandomSequentialExecutor._
 
 /**
  * Functions for executing fragments.
@@ -40,19 +40,23 @@ trait Executor:
 case class DefaultExecutor(env: Env) extends Executor:
 
   /**
-   * execute fragments:
-   *
-   *  - filter the ones that the user wants to keep
-   *  - sequence the execution so that only parts in between steps are executed concurrently
+   * Depending on the arguments use the default strategy which is to execute
+   * fragments concurrently between steps or with the random sequential execution order with necessitates
+   * to materialize all the fragments first (so that we cannot stream them)
    */
-  def execute(specArguments: Arguments): AsyncTransducer[Fragment, Fragment] = { (contents: AsyncStream[Fragment]) =>
-    val toExecute =
-          if env.arguments.sequentialRandom then
-            forceRandomSequentialExecution(Fragments(contents), env).contents
-          else
-            contents
+  def execute(specArguments: Arguments): AsyncTransducer[Fragment, Fragment] =
+      if env.arguments.sequentialRandom then
+        RandomSequentialExecutor(env).execute(specArguments)
+      else
+        SteppedExecutor(env).execute(specArguments)
 
-    sequencedExecution(specArguments)(toExecute).flatMap(executeOnline(specArguments))
+/**
+ * Concurrent execution of fragments in between steps
+ */
+case class SteppedExecutor(env: Env) extends Executor:
+  def execute(specArguments: Arguments): AsyncTransducer[Fragment, Fragment] = { (contents: AsyncStream[Fragment]) =>
+    val executed = sequencedExecution(specArguments)(contents)
+    executed.flatMap(executeOnline(specArguments))
   }
 
   /**
@@ -65,7 +69,7 @@ case class DefaultExecutor(env: Env) extends Executor:
    *
    *  - the execution stops if one fragment indicates that the result of the previous executions is not correct
    */
-  def sequencedExecution(specArguments: Arguments): AsyncTransducer[Fragment, Fragment] = { (p: AsyncStream[Fragment]) =>
+  private def sequencedExecution(specArguments: Arguments): AsyncTransducer[Fragment, Fragment] = { (p: AsyncStream[Fragment]) =>
     type S = (Vector[Fragment], Vector[Fragment], Option[Fragment])
     val init: S = (Vector.empty, Vector.empty, None)
     val arguments = env.arguments.overrideWith(specArguments)
@@ -77,7 +81,7 @@ case class DefaultExecutor(env: Env) extends Executor:
     p.producerState(init, Option(last)) { case (fragment, (previous, previousStarted, previousStep)) =>
       if arguments.skipAll then
         (one(if fragment.isExecutable then fragment.skip else fragment), init)
-      else if arguments.sequential || arguments.sequentialRandom then
+      else if arguments.sequential then
         val f = if Fragment.isStep(fragment) then fragment.updateExecution(_.setErrorAsFatal) else fragment
         val started = f.startExecutionAfter(previousStarted.toList)(env)
         (one(started), (previous, previousStarted :+ started, None))
@@ -125,7 +129,7 @@ case class DefaultExecutor(env: Env) extends Executor:
 object DefaultExecutor:
 
   def executeSpec(spec: SpecStructure, env: Env): SpecStructure =
-    spec.|>((contents: AsyncStream[Fragment]) => contents |> DefaultExecutor(env).sequencedExecution(spec.arguments))
+    spec.|>((contents: AsyncStream[Fragment]) => contents |> DefaultExecutor(env).execute(spec.arguments))
 
   def runSpec(spec: SpecStructure, env: Env): List[Fragment] =
     executeSpec(spec, env).contents.runList.runMonoid(env.specs2ExecutionEnv)
@@ -141,7 +145,9 @@ object DefaultExecutor:
     executeSpec(structure, env1).contents.runList.runFuture(env.specs2ExecutionEnv)
 
   def runSpecificationAction(spec: SpecificationStructure, env: Env): Action[List[Fragment]] =
-    lazy val structure = spec.structure
+    runSpecStructureAction(spec.structure, env)
+
+  def runSpecStructureAction(structure: =>SpecStructure, env: Env): Action[List[Fragment]] =
     val env1 = env.copy(arguments = env.arguments <| structure.arguments)
     executeSpec(structure, env1).contents.runList.
       flatMap { fs => fs.traverse(_.executionResult).as(fs) }
@@ -158,8 +164,8 @@ object DefaultExecutor:
 
   /** only to be used in tests */
   def executeSeq(seq: Seq[Fragment])(env: Env): List[Fragment] =
-    (emitSeq[Action, Fragment](seq) |> DefaultExecutor(env).sequencedExecution(Arguments())).runList.runMonoid(env.specs2ExecutionEnv)
+    (emitSeq[Action, Fragment](seq) |> DefaultExecutor(env).execute(Arguments())).runList.runMonoid(env.specs2ExecutionEnv)
 
   /** synchronous execution with a specific environment */
   def executeFragments1(env: Env): AsyncTransducer[Fragment, Fragment] = (p: AsyncStream[Fragment]) =>
-    p.map(DefaultExecutor(env).executeFragment())
+    p.map(SteppedExecutor(env).executeFragment())

@@ -227,7 +227,8 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
       executing match
         case NotExecuting =>
           run match
-            case None => this
+            case None =>
+              this
             case _ =>
               updateRun { r => (env: Env) =>
                 before.flatMap { rs =>
@@ -242,11 +243,10 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
           this
 
         case Started(f) =>
-
           val future = before.flatMap { rs =>
             if checkResult then
               if rs.isSuccess then f
-              else              Future.successful((rs, new SimpleTimer))
+              else Future.successful((rs, new SimpleTimer))
             else f
           }
 

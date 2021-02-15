@@ -1,7 +1,7 @@
 package org.specs2
 package guide
 
-import specification.process.RandomSequentialExecution
+import specification.process.RandomSequentialExecutor
 
 object RandomExecution extends UserGuidePage { def is = s2"""
  The ${"execution" ~/ Execution} page describes the most frequent modes of execution:
@@ -14,10 +14,10 @@ Executing the specification concurrently in particular can be a good way to test
 
 ### Random sequential execution
 
-In this case you can use another mode of execution. By mixing-in the `org.specs2.specification.process.RandomSequentialExecution` trait some execution constraints will be randomly added to your examples so that they will force your examples to execute in a random order, one after the other. This randomization is only being done for examples in between steps so if you have steps inside the specification guaranteeing some kind of checkpoints during the execution, they will be preserved.
+In this case you can use another mode of execution. By mixing-in the `org.specs2.specification.process.RandomSequentialExecutor` trait some execution constraints will be randomly added to your examples so that they will force your examples to execute in a random order, one after the other. This randomization is only being done for examples in between steps so if you have steps inside the specification guaranteeing some kind of checkpoints during the execution, they will be preserved.
 
 Let's see this on an example:${snippet{
-class RandomSequentialSpec extends Specification with RandomSequentialExecution { def is = s2"""
+class RandomSequentialSpec extends Specification with RandomSequentialExecutor { def is = s2"""
  example1 $e1
  example2 $e2
  example3 $e3
@@ -50,7 +50,7 @@ With such a specification you might see in the console:
 
 ### Using ScalaCheck
 
-The `RandomSequentialExecution` trait is actually a very naive way to test random commands on a system. A much better approach is to use ScalaCheck and its notion of [stateful property-based testing](http://www.scalacheck.org/files/scaladays2014/index.html).
+The `RandomSequentialExecutor` trait is actually a very naive way to test random commands on a system. A much better approach is to use ScalaCheck and its notion of [stateful property-based testing](http://www.scalacheck.org/files/scaladays2014/index.html).
 
 """
 }
