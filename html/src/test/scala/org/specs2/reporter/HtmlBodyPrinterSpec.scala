@@ -1,7 +1,7 @@
 package org.specs2
 package reporter
 
-import fp.syntax._
+import fp.syntax.*
 import concurrent.ExecutionEnv
 import io.DirectoryPath
 import main.Arguments
@@ -28,14 +28,14 @@ class HtmlBodyPrinterSpec(ee: ExecutionEnv) extends Specification with Forms wit
   def hidden =
     print(link(new nonmutableSpec { def is = s2"""
         Explanation Text.
-       example no. one $ok"""}).hide) must beEmpty
+       example no. one $ok"""}).hide) `must` beEmpty
 
   def printForm =
     val ns: NodeSeq = print(formFragmentFactory.FormFragment(form("hey").tr(prop("test", 1, 2))))
-    ns must \\(<form></form>)
+    ns `must` \\(<form></form>)
 
   def ansiColors =
-    print(fragmentFactory.text(AnsiColors.color("text", AnsiColors.red))).toString must ===("text")
+    print(fragmentFactory.text(AnsiColors.color("text", AnsiColors.red))).toString `must` ===("text")
 
   def print(f: Fragment): NodeSeq =
     HtmlBodyPrinter.printFragment(f, success, Arguments(), Level.Root, DirectoryPath.Root, pandoc = true)
@@ -49,15 +49,15 @@ class HtmlBodyPrinterSpec(ee: ExecutionEnv) extends Specification with Forms wit
         "t2" >> {
           ok
           Fragment.foreach(1 to 3) { i =>
-            "e" + i in ok
+            "e" + i `in` ok
           }
           "t3" >> {
-            "e4" in ok
+            "e4" `in` ok
           }
 
-          "e5" in ok
+          "e5" `in` ok
         }
-        "e6" in ok
+        "e6" `in` ok
       }
     }.is.fragments
 

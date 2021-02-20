@@ -2,13 +2,13 @@ package org.specs2
 package matcher
 
 import java.io.File
-import fp.syntax._
-import io._
+import fp.syntax.*
+import io.*
 import FileName.ToFileName
-import control._
-import text.AnsiColors._
-import execute._
-import execute.ResultImplicits._
+import control.*
+import text.AnsiColors.*
+import execute.*
+import execute.ResultImplicits.*
 import specification.BeforeAfterEach
 
 class FilesContentMatchersSpec extends Spec
@@ -48,7 +48,7 @@ class FilesContentMatchersSpec extends Spec
 
     action.runOption
 
-    matcherMessage((targetDir / actual).toFile must haveSamePathsAs((targetDir / "expected2").toFile)) ====
+    matcherMessage((targetDir / actual).toFile `must` haveSamePathsAs((targetDir / "expected2").toFile)) ====
      s"""|${(targetDir / actual).path} is not the same as ${(targetDir / expected2).path}
          |      1. f1
          |    + 2. sub/f2
@@ -67,7 +67,7 @@ class FilesContentMatchersSpec extends Spec
 
     val notF3 = (f: File) => !f.getPath.endsWith("f3")
 
-    (targetDir / actual).toFile must haveSamePathsAs((targetDir / expected2).toFile).withFilter(notF3)
+    (targetDir / actual).toFile `must` haveSamePathsAs((targetDir / expected2).toFile).withFilter(notF3)
 
   def e3 =
     val action =
@@ -80,8 +80,8 @@ class FilesContentMatchersSpec extends Spec
 
     action.runOption
 
-    val result1 = (targetDir / actual).toFile must haveSameFilesContentAs((targetDir / expected).toFile)
-    val result2 = (targetDir / actual).toFile must haveSameFilesContentAs((targetDir / expected2).toFile)
+    val result1 = (targetDir / actual).toFile `must` haveSameFilesContentAs((targetDir / expected).toFile)
+    val result2 = (targetDir / actual).toFile `must` haveSameFilesContentAs((targetDir / expected2).toFile)
 
     result1 and  {
       matcherMessage(result2) ====
@@ -104,9 +104,9 @@ class FilesContentMatchersSpec extends Spec
 
     action.runOption
 
-    (targetDir | actual).toFile must haveSameFilesContentAs((targetDir | expected).toFile).withMatcher(haveSameMD5)
+    (targetDir | actual).toFile `must` haveSameFilesContentAs((targetDir | expected).toFile).withMatcher(haveSameMD5)
 
-    AsResult((targetDir | actual).toFile must haveSameFilesContentAs((targetDir | expected2).toFile).withMatcher(haveSameMD5)).message.replace(" ", "") ===
+    AsResult((targetDir | actual).toFile `must` haveSameFilesContentAs((targetDir | expected2).toFile).withMatcher(haveSameMD5)).message.replace(" ", "") ===
       s"""|There is 1 failure
           |MD5 mismatch:
           |file                        | MD5

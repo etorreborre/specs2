@@ -2,12 +2,12 @@ package org.specs2
 package html
 
 import io.{DirectoryPath, FilePath, FileSystem}
-import specification.core._
-import org.specs2.fp._
-import org.specs2.fp.syntax._
-import control._
+import specification.core.*
+import org.specs2.fp.*
+import org.specs2.fp.syntax.*
+import control.*
 import org.specs2.concurrent.ExecutionEnv
-import origami._, Folds._
+import origami.*, Folds.*
 
 /**
  * Fold functions to create index files

@@ -1,11 +1,11 @@
 package org.specs2
 package matcher
 
-import execute._
-import ValueChecks.{given, _}
-import org.specs2.control._, ImplicitParameters._
+import execute.*
+import ValueChecks.{given, *}
+import org.specs2.control.*, ImplicitParameters.*
 import org.specs2.matcher.describe.Diffable
-import Result._
+import Result.*
 
 /**
  * Matchers for Options

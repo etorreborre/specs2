@@ -2,7 +2,7 @@ package org
 package specs2
 package specification.core
 
-import execute._
+import execute.*
 import scala.concurrent.Future
 
 trait AsExecution[T]:

@@ -3,13 +3,13 @@ package specification
 package create
 
 import control.ImplicitParameters.ImplicitParam
-import core._
-import form._
-import text.NotNullStrings._
-import execute._
-import control.Exceptions._
+import core.*
+import form.*
+import text.NotNullStrings.*
+import execute.*
+import control.Exceptions.*
 import scala.reflect.Selectable.reflectiveSelectable
-import FormsBuilder.{given, _}
+import FormsBuilder.{given, *}
 
 /**
  * Factory for creating Form fragments

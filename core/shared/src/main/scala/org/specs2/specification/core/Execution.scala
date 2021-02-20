@@ -2,22 +2,22 @@ package org.specs2
 package specification
 package core
 
-import java.util.concurrent._
+import java.util.concurrent.*
 
-import execute._
+import execute.*
 import concurrent.ExecutionEnv
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.concurrent.duration._
-import fp.{given, _}, syntax._
+import scala.concurrent.duration.*
+import fp.{given, *}, syntax.*
 import specification.process.Stats
 import time.SimpleTimer, SimpleTimer.startSimpleTimer
-import text.NotNullStrings._
-import control._
+import text.NotNullStrings.*
+import control.*
 
 import scala.util.control.NonFatal
-import ResultLogicalCombinators.{given, _ }
-import Execution.{given, _}
+import ResultLogicalCombinators.{given, * }
+import Execution.{given, *}
 
 /**
  * Execution of a Fragment
@@ -220,7 +220,7 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
 
       lazy val before: Future[Result] =
         if sequential then
-          runs.foldLeftM(Success(): Result)((res, cur) => cur.map(r => res and r))
+          runs.foldLeftM(Success(): Result)((res, cur) => cur.map(r => res `and` r))
         else
           Future.sequence(runs).map(_.suml)
 

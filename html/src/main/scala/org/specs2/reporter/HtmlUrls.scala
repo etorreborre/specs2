@@ -1,15 +1,15 @@
 package org.specs2
 package reporter
 
-import io._
-import FilePathReader._
+import io.*
+import FilePathReader.*
 import scala.xml.NodeSeq
 import java.net.{HttpURLConnection, URL}
-import control._
-import org.specs2.fp.syntax._
-import Exceptions._
-import text.Trim._
-import html.Htmlx._
+import control.*
+import org.specs2.fp.syntax.*
+import Exceptions.*
+import text.Trim.*
+import html.Htmlx.*
 import execute.{Success, Failure, Result}
 import Result.ResultFailureMonoid
 

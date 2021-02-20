@@ -1,7 +1,7 @@
 package org.specs2
 package text
 
-import NotNullStrings._
+import NotNullStrings.*
 
 /**
  * This trait provides AnsiColors codes for the OutputReporter

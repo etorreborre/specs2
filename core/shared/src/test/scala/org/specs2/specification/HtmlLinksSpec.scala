@@ -1,8 +1,8 @@
 package org.specs2
 package specification
 
-import core._
-import matcher._
+import core.*
+import matcher.*
 import dsl.ReferenceDsl
 
 class HtmlLinksSpec extends Spec with TypedEqual with ReferenceDsl { def is = s2"""

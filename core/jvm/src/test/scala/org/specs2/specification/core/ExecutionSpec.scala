@@ -2,9 +2,9 @@ package org.specs2
 package specification
 package core
 
-import execute._
-import process._
-import scala.concurrent._, duration._
+import execute.*
+import process.*
+import scala.concurrent.*, duration.*
 
 class ExecutionSpec(val env: Env) extends Specification with OwnEnv { def is = s2"""
 
@@ -25,10 +25,10 @@ class ExecutionSpec(val env: Env) extends Specification with OwnEnv { def is = s
     val stats =  Stats(specs = 2, failures = 1, examples = 1)
     store.storeStatistics(getClass.getName, stats).runOption
 
-    Execution.specificationStats(getClass.getName).result(env1) must beLike {
+    Execution.specificationStats(getClass.getName).result(env1) `must` beLike {
       case DecoratedResult(s: Stats, r) =>
-        (s must ===(Stats(specs = 3, failures = 1, examples = 1))) and
-          (r.isSuccess must beFalse)
+        (s `must` ===(Stats(specs = 3, failures = 1, examples = 1))) `and`
+          (r.isSuccess `must` beFalse)
     }
 
   def withFailureException =
@@ -36,7 +36,7 @@ class ExecutionSpec(val env: Env) extends Specification with OwnEnv { def is = s
     Execution.withEnv(_ => {throw new FailureException(failure); success}).result(env) === failure
 
   def withFatalException =
-    Execution.withEnv(_ => {throw new java.lang.NoSuchMethodError("boom"); success}).result(env) must throwAn[ExecutionException]
+    Execution.withEnv(_ => {throw new java.lang.NoSuchMethodError("boom"); success}).result(env) `must` throwAn[ExecutionException]
 
   /**
    * HELPERS

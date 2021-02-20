@@ -1,10 +1,10 @@
 package org.specs2
 package control
 
-import Throwablex._
+import Throwablex.*
 import data.IncludedExcluded
-import text.Trim._
-import text.Regexes._
+import text.Trim.*
+import text.Regexes.*
 
 /**
  * This trait filters an Exception stacktrace
@@ -28,7 +28,7 @@ case class IncludeExcludeStackTraceFilter(include: Seq[String], exclude: Seq[Str
     val include = outer.include
     val exclude = outer.exclude
 
-    val keepFunction = (st: StackTraceElement, patterns: Seq[String]) => patterns.exists(p => st.toString matchesSafely (".*"+p+".*"))
+    val keepFunction = (st: StackTraceElement, patterns: Seq[String]) => patterns.exists(p => st.toString `matchesSafely` (".*"+p+".*"))
   }
   /** add include patterns */
   def includeAlso(patterns: String*) = copy(include = this.include ++ patterns)

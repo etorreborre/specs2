@@ -3,7 +3,7 @@ package specification
 package core
 
 import org.specs2.execute.{Error, AsResult, Result}
-import control.Exceptions._
+import control.Exceptions.*
 
 /**
  * Function creating more fragments (to be added to the specification)

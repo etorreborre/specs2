@@ -2,10 +2,10 @@ package org.specs2
 package reflect
 
 import scala.reflect.ClassTag
-import ClassName._
-import control._
+import ClassName.*
+import control.*
 import scala.util.control.NonFatal
-import org.specs2.fp.syntax._
+import org.specs2.fp.syntax.*
 import java.lang.reflect.Constructor
 
 /**
@@ -44,7 +44,7 @@ trait Classes extends ClassOperations:
             klass.getDeclaredConstructors.toList.filter(_.getParameterTypes.size <= 1).sortBy(_.getParameterTypes.size)).map(Right(_))
     }
 
-  private def findInstance[T <: AnyRef : ClassTag](klass: Class[T], loader: ClassLoader, defaultInstances: =>List[AnyRef], cs: List[Constructor[_]], error: Option[Throwable] = None): Operation[T] =
+  private def findInstance[T <: AnyRef : ClassTag](klass: Class[T], loader: ClassLoader, defaultInstances: =>List[AnyRef], cs: List[Constructor[?]], error: Option[Throwable] = None): Operation[T] =
     cs match
       case Nil =>
         error.map(Operation.exception[T]).getOrElse(Operation.fail[T]("Can't find a suitable constructor with 0 or 1 parameter for class "+klass.getName))
@@ -58,8 +58,8 @@ trait Classes extends ClassOperations:
   /**
    * Given a class, a zero or one-parameter constructor, return an instance of that class
    */
-  private def createInstanceForConstructor[T <: AnyRef : ClassTag](klass: Class[_],
-                                                                   constructor: Constructor[_],
+  private def createInstanceForConstructor[T <: AnyRef : ClassTag](klass: Class[?],
+                                                                   constructor: Constructor[?],
                                                                    loader: ClassLoader,
                                                                    defaultInstances: =>List[AnyRef]): Operation[T] =
 
@@ -68,7 +68,7 @@ trait Classes extends ClassOperations:
       newInstance(klass, constructor.newInstance())
 
     else if constructor.getParameterTypes.size == 1 then
-      defaultInstances.find(i => constructor.getParameterTypes.apply(0) isAssignableFrom i.getClass) match
+      defaultInstances.find(i => constructor.getParameterTypes.apply(0) `isAssignableFrom` i.getClass) match
         case None =>
           // if the specification has a constructor with one parameter, it is either because
           // it is a nested class
@@ -84,7 +84,7 @@ trait Classes extends ClassOperations:
     else Operation.fail[T]("Can't find a suitable constructor for class "+klass.getName)
 
   /** create a new instance for a given class and return a proper error if this fails */
-  private def newInstance[T](klass: Class[_], instance: =>Any): Operation[T] =
+  private def newInstance[T](klass: Class[?], instance: =>Any): Operation[T] =
     try Operation.ok(instance.asInstanceOf[T])
     catch { case NonFatal(t) =>
       Operation.exception(UserException("cannot create an instance for class " + klass.getName, t))

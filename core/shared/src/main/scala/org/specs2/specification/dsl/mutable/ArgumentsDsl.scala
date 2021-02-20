@@ -3,7 +3,7 @@ package specification
 package dsl
 package mutable
 
-import main._
+import main.*
 import scala.concurrent.duration.FiniteDuration
 import control.StackTraceFilter
 import text.Colors

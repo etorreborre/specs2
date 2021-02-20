@@ -2,18 +2,18 @@ package org.specs2
 package reporter
 
 import matcher.DataTable
-import control._
-import origami._
-import fp._, syntax.{given, _}
-import specification.core._
-import specification.process._
-import text.NotNullStrings._
+import control.*
+import origami.*
+import fp.*, syntax.{given, *}
+import specification.core.*
+import specification.process.*
+import text.NotNullStrings.*
 import text.Trim
-import time._
-import Trim._
-import execute._
+import time.*
+import Trim.*
+import execute.*
 import main.Arguments
-import LogLine._
+import LogLine.*
 
 /**
  * Prints the result of a specification execution to the console (using the line logger provided by the environment)
@@ -29,7 +29,7 @@ case class TextPrinter(env: Env) extends Printer {
     type S = ((Stats, Int), SimpleTimer)
 
     val values: Fold[Action, Fragment, S] { type S = ((Stats, Int), SimpleTimer) } =
-      Statistics.fold zip Indentation.fold.into[Action] zip SimpleTimer.timerFold.into[Action]
+      Statistics.fold `zip` Indentation.fold.into[Action] `zip` SimpleTimer.timerFold.into[Action]
 
     lazy val logger = env.printerLogger
     lazy val args   = env.arguments <| spec.arguments
@@ -39,7 +39,7 @@ case class TextPrinter(env: Env) extends Printer {
         linesLoggerSink(logger, spec.header, args).
           contraflatMap[(Fragment, S)](printFragment(args))
 
-    (values observeWithState sink).mapFlatten(printFinalStats(spec, args, logger))
+    (values `observeWithState` sink).mapFlatten(printFinalStats(spec, args, logger))
   }
 
   /** run a specification */
@@ -276,7 +276,7 @@ case class TextPrinter(env: Env) extends Printer {
     else Nil
 
   def location(r: ResultStackTrace, args: Arguments): String =
-    " ("+r.location(args.traceFilter)+")" orEmptyWhen r.location.isEmpty
+    " ("+r.location(args.traceFilter)+")" `orEmptyWhen` r.location.isEmpty
 
   def indentText(text: String, indentation: Int, indentationSize: Int) =
     if text.isEmpty then text

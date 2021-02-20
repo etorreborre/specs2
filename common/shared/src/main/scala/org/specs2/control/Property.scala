@@ -1,7 +1,7 @@
 package org.specs2
 package control
 
-import Exceptions._
+import Exceptions.*
 
 /**
  * This class represents values which are evaluated lazily and which may even be missing.
@@ -56,7 +56,7 @@ case class Property[T](value: () => Option[T], evaluated: Boolean = false, evalu
     else            this
 
   override def equals(other: Any) =
-    tryCollect(other) { case o: Property[_] => o.optionalValue == optionalValue }
+    tryCollect(other) { case o: Property[?] => o.optionalValue == optionalValue }
 
   override def hashCode =
     tryOr(optionalValue.hashCode)((_:Throwable).hashCode)

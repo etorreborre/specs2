@@ -1,9 +1,9 @@
 package org.specs2
 package matcher
 
-import execute._, Result._
-import text.Regexes._
-import text.Trim._
+import execute.*, Result.*
+import text.Regexes.*
+import text.Trim.*
 
 /**
  * Matchers for checking if a piece of code compiles or not
@@ -32,7 +32,7 @@ class TypecheckMatcher extends Matcher[Typechecked]:
 case class FailTypecheckMatcher(expected: String) extends Matcher[Typechecked]:
   def apply[S <: Typechecked](actual: Expectable[S]): Result =
     result(!actual.value.isSuccess && resultMessage(actual.value.result)
-      .map(_.removeAll("\n").removeAll("\r")).exists(_ matchesSafely ".*"+expected+".*"),
+      .map(_.removeAll("\n").removeAll("\r")).exists(_ `matchesSafely` ".*"+expected+".*"),
       message(actual.value.result, expected))
 
   private def resultMessage(r: TypecheckResult): Option[String] =

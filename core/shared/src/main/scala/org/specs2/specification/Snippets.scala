@@ -1,10 +1,10 @@
 package org.specs2
 package specification
 
-import scala.quoted._
-import org.specs2.execute._
-import specification.core._
-import specification.create._
+import scala.quoted.*
+import org.specs2.execute.*
+import specification.core.*
+import specification.create.*
 
 /**
  * Snippets of code can be extracted from interpolated specification strings.
@@ -30,10 +30,10 @@ object Snippets:
 
   def createInterpolatedFragment[T](snippetExpr: Expr[Snippet[T]], factoryExpr: Expr[FragmentFactory])(
     using qctx: Quotes, t: Type[T]): Expr[Interpolated] =
-      import qctx.reflect._
+      import qctx.reflect.*
       '{ new Interpolated {
            private val expression = ${Expr(Position.ofMacroExpansion.sourceCode.getOrElse("no source code found to interpolate a Snippet"))}
-           private val snippet: Snippet[_] = ${snippetExpr}
+           private val snippet: Snippet[?] = ${snippetExpr}
            private val factory = ${factoryExpr}
            private val start = PositionLocation(${Expr(Position.ofMacroExpansion.sourceFile.jpath.toString)}, ${Expr(Position.ofMacroExpansion.startLine)}, ${Expr(Position.ofMacroExpansion.startColumn)})
            private val end = PositionLocation(${Expr(Position.ofMacroExpansion.sourceFile.jpath.toString)}, ${Expr(Position.ofMacroExpansion.endLine)}, ${Expr(Position.ofMacroExpansion.endColumn)})

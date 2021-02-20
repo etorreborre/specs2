@@ -3,10 +3,10 @@ package specification
 package dsl
 
 import main.Arguments
-import core._
-import form.{given, _}
-import create._
-import control.ImplicitParameters._
+import core.*
+import form.{given, *}
+import create.*
+import control.ImplicitParameters.*
 import org.specs2.control.Use
 
 /**

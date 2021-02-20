@@ -3,7 +3,7 @@ package concurrent
 
 import org.specs2.main.Arguments
 import org.specs2.control.Logger
-import java.util.concurrent._
+import java.util.concurrent.*
 import scala.concurrent.ExecutionContext
 
 case class ExecutionEnv(executorServices: ExecutorServices, timeFactor: Int):

@@ -1,6 +1,6 @@
 package user.reporter
 
-import org.specs2._
+import org.specs2.*
 
 class AcceptanceSpecification extends Specification { def is =
 

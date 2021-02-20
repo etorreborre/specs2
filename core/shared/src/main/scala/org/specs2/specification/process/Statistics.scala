@@ -2,13 +2,13 @@ package org.specs2
 package specification
 package process
 
-import fp._, syntax._
-import control._
-import origami._
-import specification.core._
+import fp.*, syntax.*
+import control.*
+import origami.*
+import specification.core.*
 import concurrent.ExecutionEnv
-import producer._
-import Producer._
+import producer.*
+import Producer.*
 import main.Arguments
 
 /**

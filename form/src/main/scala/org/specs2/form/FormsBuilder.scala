@@ -2,9 +2,9 @@ package org.specs2
 package form
 
 import control.Property
-import control.Properties._
-import execute._
-import matcher._
+import control.Properties.*
+import execute.*
+import matcher.*
 
 import scala.xml.NodeSeq
 
@@ -21,8 +21,8 @@ trait FormsBuilder extends FormsBuilderLowPriorityImplicits:
       new FieldCell(t)
 
   /** a Effect can be added on a Form row as a EffectCell */
-  given Conversion[Effect[_], EffectCell] with
-    def apply(t: Effect[_]): EffectCell =
+  given Conversion[Effect[?], EffectCell] with
+    def apply(t: Effect[?]): EffectCell =
       new EffectCell(t)
 
   /** a Prop can be added on a Form row as a PropCell */
@@ -60,7 +60,7 @@ trait FormsBuilder extends FormsBuilderLowPriorityImplicits:
     Effect(label, value)
 
   /** @return a new Field with a label and several values */
-  def field(label: String, value1: Field[_], values: Field[_]*): Field[String] =
+  def field(label: String, value1: Field[?], values: Field[?]*): Field[String] =
     Field(label, value1, values*)
 
   /** @return a new Prop with an actual value only */

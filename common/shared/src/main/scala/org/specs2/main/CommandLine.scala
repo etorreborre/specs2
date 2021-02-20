@@ -3,8 +3,8 @@ package main
 
 import java.io.File
 
-import io._
-import text.Split._
+import io.*
+import text.Split.*
 
 /**
  * Command-line arguments

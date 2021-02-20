@@ -1,11 +1,11 @@
 package org.specs2
 package execute
 
-import control.Exceptions._
-import text.NotNullStrings._
-import text.Trim._
-import Snippet._
-import scala.quoted._
+import control.Exceptions.*
+import text.NotNullStrings.*
+import text.Trim.*
+import Snippet.*
+import scala.quoted.*
 
 /**
  * Snippets of code can be extracted from interpolated specification strings.
@@ -72,7 +72,7 @@ trait Snippets:
 object Snippets extends Snippets:
 
   def create[T](code: Expr[() => T], params: Expr[SnippetParams[T]])(using quotes: Quotes)(using t: Type[T], t1: Type[() => T]): Expr[Snippet[T]] =
-    import quotes.reflect._
+    import quotes.reflect.*
     val expression = Expr(Position.ofMacroExpansion.sourceCode.getOrElse("no source code found"))
     // we need to pass () => T here because betaReduce would evaluate the code here otherwise
     Expr.betaReduce('{createSnippet[t.Underlying]($expression, $code, $params)})
@@ -81,15 +81,15 @@ object Snippets extends Snippets:
     new Snippet[T](code, codeExpression = Some(expression), params)
 
   def typeSimpleName[T](using quotes: Quotes)(using t: Type[T]): Expr[String] =
-    import quotes.reflect._
+    import quotes.reflect.*
     Expr(TypeTree.of[T].symbol.name)
 
   def typeFullName[T](using quotes: Quotes)(using t: Type[T]): Expr[String] =
-    import quotes.reflect._
+    import quotes.reflect.*
     Expr(TypeTree.of[T].symbol.fullName)
 
   def termFullName[T](e: Expr[T])(using quotes: Quotes): Expr[String] =
-    import quotes.reflect._
+    import quotes.reflect.*
     val name = e.asTerm match
       case Ident(termName)                                    => termName
       case Select(_, termName)                                => termName.toString

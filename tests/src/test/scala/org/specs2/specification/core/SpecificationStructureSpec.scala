@@ -3,15 +3,15 @@ package specification
 package core
 
 import org.junit.runner.RunWith
-import org.scalacheck._
-import Gen._
-import Arbitrary._
+import org.scalacheck.*
+import Gen.*
+import Arbitrary.*
 import org.specs2.runner.JUnitRunner
 
 import scala.IllegalArgumentException
-import fp.syntax._
-import matcher._
-import OperationMatchers._
+import fp.syntax.*
+import matcher.*
+import OperationMatchers.*
 
 class SpecificationStructureSpec(val env: Env) extends Specification with ScalaCheck with OwnEnv { def is = s2"""
 
@@ -32,9 +32,9 @@ class SpecificationStructureSpec(val env: Env) extends Specification with ScalaC
     val linked = SpecificationStructure.linkedSpecifications(specification, env, getClass.getClassLoader).runMonoid
     val sorted = SpecificationStructure.topologicalSort(env)(linked).getOrElse(Vector()).map(_.structure)
 
-    sorted must contain { (s: SpecStructure) =>
+    sorted `must` contain { (s: SpecStructure) =>
       val (before, after) = sorted.splitAt(sorted.indexOf(s))
-      before must contain((b: SpecStructure) => b must not(dependOn(s))).forall
+      before `must` contain((b: SpecStructure) => b `must` not(dependOn(s))).forall
     }.forall
   }.set(maxSize = 5)
 
@@ -43,26 +43,26 @@ class SpecificationStructureSpec(val env: Env) extends Specification with ScalaC
     val linked = SpecificationStructure.linkedSpecifications(specification, env, getClass.getClassLoader).runMonoid
     val sorted = SpecificationStructure.topologicalSort(env)(linked).get.map(_.structure)
 
-    sorted.dropRight(1).map(_.specClassName) must ===(specification.structure.linkReferencesList.map(_.specClassName).distinct)
+    sorted.dropRight(1).map(_.specClassName) `must` ===(specification.structure.linkReferencesList.map(_.specClassName).distinct)
 
   }.setArbitrary(ArbitraryLinks).set(maxSize = 5)
 
   def report =
-    SpecificationStructure.create("org.specs2.specification.core.BrokenSpecification").runOperation must beLeft((t: Throwable) =>
+    SpecificationStructure.create("org.specs2.specification.core.BrokenSpecification").runOperation `must` beLeft((t: Throwable) =>
        t.getCause.getCause.getMessage === "boom")
 
   def companion =
     SpecificationStructure.create("org.specs2.specification.core.SpecWithCompanion", getClass.getClassLoader, None).
       // the cast is necessary to really show that the right instance has been built
       // see #477
-      map(_.asInstanceOf[SpecificationStructure]) must
+      map(_.asInstanceOf[SpecificationStructure]) `must`
       beOk
 
   def companionSpec =
     SpecificationStructure.create("org.specs2.specification.core.SpecObject", getClass.getClassLoader, None).
       // the cast is necessary to really show that the right instance has been built
       // see #477
-      map(_.asInstanceOf[SpecificationStructure]) must
+      map(_.asInstanceOf[SpecificationStructure]) `must`
       beOk
 
   def dependOn(s2: SpecStructure): Matcher[SpecStructure] = (s1: SpecStructure) =>

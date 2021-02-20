@@ -1,10 +1,10 @@
 package org.specs2
 package matcher
 
-import control._
-import execute._
-import text.Regexes._
-import concurrent._
+import control.*
+import execute.*
+import text.Regexes.*
+import concurrent.*
 
 /**
  * Matchers for Action values
@@ -43,7 +43,7 @@ trait ActionMatchers extends ValueChecks:
   def beKo[T](message: String): Matcher[Action[T]] =
     Matcher { (action: Action[T]) =>
       action.runAction(ee).fold(
-        throwable => if throwable.getMessage matchesSafely message then Success() else Failure(s"the action failed with message ${throwable.getMessage}. Expected: $message"),
+        throwable => if throwable.getMessage `matchesSafely` message then Success() else Failure(s"the action failed with message ${throwable.getMessage}. Expected: $message"),
         ok => Failure(s"a failure with message $message was expected")
       )
     }

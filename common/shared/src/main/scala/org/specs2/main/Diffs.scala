@@ -2,9 +2,9 @@ package org.specs2
 package main
 
 import execute.{AsResult, BestMatching}
-import control.Exceptions._
-import text._
-import NotNullStrings._
+import control.Exceptions.*
+import text.*
+import NotNullStrings.*
 
 /**
  * Define and compute the differences between strings (used by the printers)
@@ -40,7 +40,7 @@ case class SmartDiffs(show: Boolean       = true,
                       seqTriggerSize: Int = 0,    // Parameters for sequences
                       seqMaxSize: Int     = 1000000
                        ) extends Diffs:
-  import StringEditDistance._
+  import StringEditDistance.*
 
   def show(actual: Any, expected: Any): Boolean =
     show && Seq(actual, expected).exists(_.notNull.size >= triggerSize)
@@ -60,7 +60,7 @@ case class SmartDiffs(show: Boolean       = true,
 
   /** @return the diffs for sequences */
   def showSeqDiffs(actual: Seq[Any], expected: Seq[Any], ordered: Boolean): (Seq[String], Seq[String]) =
-    val (matched, missing) = BestMatching.findBestMatch(actual, expected, (t: Any, v: Any) => v == t, eachCheck = true)(AsResult.booleanAsResult)
+    val (matched, missing) = BestMatching.findBestMatch(actual, expected, (t: Any, v: Any) => v == t, eachCheck = true)(using AsResult.booleanAsResult)
     val (_, koValues)      = matched.partition(_._3.isSuccess)
     val added              = koValues.map(_._1)
 

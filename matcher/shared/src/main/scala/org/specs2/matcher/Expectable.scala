@@ -1,11 +1,11 @@
 package org.specs2
 package matcher
 
-import org.specs2.fp._
-import text.Quote._
-import text.NotNullStrings._
+import org.specs2.fp.*
+import text.Quote.*
+import text.NotNullStrings.*
 import execute.Result
-import Expectable._
+import Expectable.*
 
 /**
  * The Expectable class models anything which can be checked by applying a Matcher

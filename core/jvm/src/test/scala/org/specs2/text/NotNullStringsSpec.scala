@@ -1,7 +1,7 @@
 package org.specs2
 package text
 
-import NotNullStrings._
+import NotNullStrings.*
 
 class NotNullStringsSpec extends Specification { def is = s2"""
 
@@ -20,7 +20,7 @@ It is also possible to display the class of elements in a collection
   for a Map $withClass5
 
 """
-  def nullString = (null: String).notNull must ===("null")
+  def nullString = (null: String).notNull `must` ===("null")
 
   def noToStringDefined =
     case class L(values: Seq[Int]) extends Seq[Int]:
@@ -28,7 +28,7 @@ It is also possible to display the class of elements in a collection
       def iterator = values.iterator
       def apply(i: Int) = values(i)
       def length = values.length
-    L(Seq(1, 2)).notNull must ===("Exception when evaluating toString: an implementation is missing")
+    L(Seq(1, 2)).notNull `must` ===("Exception when evaluating toString: an implementation is missing")
 
   def aMap = Map(1 -> "2").notNull === "Map(1 -> 2)"
 

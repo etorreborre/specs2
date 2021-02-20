@@ -1,8 +1,8 @@
 package org.specs2
 package main
 
-import control._
-import text._
+import control.*
+import text.*
 
 /**
  * Reporting arguments
@@ -21,7 +21,7 @@ case class Report(
                    _notifier:          Option[String]           = None,
                    _exporter:          Option[String]           = None) extends ShowArgs:
 
-  import Arguments._
+  import Arguments.*
 
   def xonly: Boolean                 = Report.xonlyFlags.forall(c => canShow(c.toString)) && !canShow("o*+")
   def canShow(s: String)             = hasFlags(s, _showOnly)

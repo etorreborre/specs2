@@ -2,8 +2,8 @@ package org.specs2
 package scalacheck
 
 import org.scalacheck.{Properties, Gen, Prop}
-import org.scalacheck.util._
-import execute._
+import org.scalacheck.util.*
+import execute.*
 import scala.annotation.tailrec
 
 /**

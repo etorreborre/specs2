@@ -1,6 +1,6 @@
 package org.specs2.specification.create
 
-import org.specs2.specification.core._
+import org.specs2.specification.core.*
 
 /**
  * An interpolated element of a S2 string.

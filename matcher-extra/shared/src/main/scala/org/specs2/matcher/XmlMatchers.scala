@@ -2,18 +2,18 @@ package org.specs2
 package matcher
 
 import xml.NodeFunctions
-import xml.NodeFunctions._
-import xml.Nodex._
-import scala.xml._
-import scala.xml.NodeSeq._
-import XPathFunctions._
-import text.Quote._
-import StringToElem._
-import collection.Seqx._
-import fp.syntax._
-import StringToElem.{given, _}
-import StringMatchers.{given, _}
-import execute._, Result._
+import xml.NodeFunctions.*
+import xml.Nodex.*
+import scala.xml.*
+import scala.xml.NodeSeq.*
+import XPathFunctions.*
+import text.Quote.*
+import StringToElem.*
+import collection.Seqx.*
+import fp.syntax.*
+import StringToElem.{given, *}
+import StringMatchers.{given, *}
+import execute.*, Result.*
 
 /**
  * The XmlMatchers trait provides matchers which are applicable to xml nodes
@@ -101,16 +101,16 @@ trait XmlMatchers:
     beEqualToIgnoringSpace(node)
 
   private def deepMatch(node: Node, attributes: List[String]) =
-    new XmlMatcher(Seq(new PathFunction(node, deepNodeSearch _, attributes)))
+    new XmlMatcher(Seq(new PathFunction(node, deepNodeSearch, attributes)))
 
   private def deepMatch(node: Node, attributes: Map[String, String]) =
-    new XmlMatcher(Seq(new PathFunction(node, deepNodeSearch _, attributeValues = attributes)))
+    new XmlMatcher(Seq(new PathFunction(node, deepNodeSearch, attributeValues = attributes)))
 
   private def firstMatch(node: Node, attributes: List[String]) =
-    new XmlMatcher(Seq(new PathFunction(node, firstNodeSearch _, attributes)))
+    new XmlMatcher(Seq(new PathFunction(node, firstNodeSearch, attributes)))
 
   private def firstMatch(node: Node, attributes: Map[String, String]) =
-    new XmlMatcher(Seq(new PathFunction(node, firstNodeSearch _, attributeValues = attributes)))
+    new XmlMatcher(Seq(new PathFunction(node, firstNodeSearch, attributeValues = attributes)))
 
 object XmlMatchers extends XmlMatchers
 
@@ -161,16 +161,16 @@ case class XmlMatcher(functions: Seq[PathFunction]) extends Matcher[Seq[Node]]:
     result(success, nodes.description + koMessage)
 
   def \(node: Node, attributeNames: String*): XmlMatcher =
-    new XmlMatcher(functions :+ new PathFunction(node, firstNodeSearch _, attributeNames.toList))
+    new XmlMatcher(functions :+ new PathFunction(node, firstNodeSearch, attributeNames.toList))
 
   def \(node: Node, attributeValues: (String, String), attributeValues2: (String, String)*): XmlMatcher =
-    new XmlMatcher(functions :+ new PathFunction(node, firstNodeSearch _, Nil, Map((attributeValues :: attributeValues2.toList)*)))
+    new XmlMatcher(functions :+ new PathFunction(node, firstNodeSearch, Nil, Map((attributeValues :: attributeValues2.toList)*)))
 
   def \\(node: Node, attributeNames: String*): XmlMatcher =
-    new XmlMatcher(functions :+ new PathFunction(node, deepNodeSearch _, attributeNames.toList))
+    new XmlMatcher(functions :+ new PathFunction(node, deepNodeSearch, attributeNames.toList))
 
   def \\(node: Node, attributeValues: (String, String), attributeValues2: (String, String)*): XmlMatcher =
-    new XmlMatcher(functions :+ new PathFunction(node, deepNodeSearch _, Nil, Map((attributeValues :: attributeValues2.toList)*)))
+    new XmlMatcher(functions :+ new PathFunction(node, deepNodeSearch, Nil, Map((attributeValues :: attributeValues2.toList)*)))
 
   /** alias for \ using the node label only */
   def \(label: String, attributeNames: String*): XmlMatcher =
@@ -293,7 +293,7 @@ case class PathFunction(val node: Node,
     val n = if node.child.isEmpty then nodeLabel
             else node.toString
 
-    val exactly = "exactly the " orEmptyUnless exactMatch
+    val exactly = "exactly the " `orEmptyUnless` exactMatch
     val attrs = if attributes.isEmpty && attributeValues.isEmpty then None
                 else Some("with "+exactly+"attributes: " + searchedAttributes)
 

@@ -1,7 +1,7 @@
 package org.specs2
 package data
 
-import text.Trim._
+import text.Trim.*
 
 /**
  * This trait provides a keep function which will determine if a element T must be kept with regards to:

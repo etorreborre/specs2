@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-import org.hamcrest._
+import org.hamcrest.*
 
 class HamcrestSpec extends Spec with Hamcrest with TypedEqual { def is = s2"""
 
@@ -11,8 +11,8 @@ class HamcrestSpec extends Spec with Hamcrest with TypedEqual { def is = s2"""
 
 """
 
-  def matcher1 = 2 must beEven
-  def matcher2 = (3 must beEven).message === "\nExpected: an even Int\n     but: <3> is odd"
+  def matcher1 = 2 `must` beEven
+  def matcher2 = (3 `must` beEven).message === "\nExpected: an even Int\n     but: <3> is odd"
 
   // a Hamcrest matcher for even numbers
   object beEven extends BaseMatcher[Int]:

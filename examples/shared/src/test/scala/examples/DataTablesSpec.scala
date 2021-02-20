@@ -1,6 +1,6 @@
 package examples
 
-import org.specs2._
+import org.specs2.*
 import matcher.DataTables
 
 /**

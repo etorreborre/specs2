@@ -5,8 +5,8 @@ package mutable
 
 import org.specs2.execute.AsResult
 import control.{ImplicitParameters, Use}
-import ImplicitParameters._
-import org.specs2.specification.core._
+import ImplicitParameters.*
+import org.specs2.specification.core.*
 import org.specs2.specification.script.StepParser
 import scala.util.NotGiven
 

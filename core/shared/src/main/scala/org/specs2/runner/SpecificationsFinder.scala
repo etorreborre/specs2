@@ -1,15 +1,15 @@
 package org.specs2
 package runner
 
-import java.util.regex._
+import java.util.regex.*
 
-import control._
-import specification.core._
-import text._
-import io._
-import org.specs2.fp.syntax._
-import SpecificationsFinder._
-import control._
+import control.*
+import specification.core.*
+import text.*
+import io.*
+import org.specs2.fp.syntax.*
+import SpecificationsFinder.*
+import control.*
 import org.specs2.specification.create.DefaultFragmentFactory
 import org.specs2.specification.create.DefaultFragmentFactory.link
 
@@ -91,7 +91,7 @@ case class DefaultSpecificationsFinder(env: Env) extends SpecificationsFinder:
                          basePath: DirectoryPath        = DirectoryPath.unsafe(new java.io.File("src/test/scala").getAbsolutePath),
                          verbose: Boolean               = false,
                          classLoader: ClassLoader       = Thread.currentThread.getContextClassLoader): Seq[Fragment] =
-    import DefaultFragmentFactory._
+    import DefaultFragmentFactory.*
 
     val links: Operation[List[Fragment]] = specificationNames(glob, pattern, basePath, verbose).flatMap { names =>
       names.filter(filter).traverse { name =>

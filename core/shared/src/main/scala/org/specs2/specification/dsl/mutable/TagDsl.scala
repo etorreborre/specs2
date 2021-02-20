@@ -3,7 +3,7 @@ package specification
 package dsl
 package mutable
 
-import data._
+import data.*
 import core.{Fragments, Fragment}
 
 /**

@@ -1,10 +1,10 @@
 package org.specs2
 package specification
 
-import core._
-import process._
-import control._
-import producer._, Producer._
+import core.*
+import process.*
+import control.*
+import producer.*, Producer.*
 import execute.Result
 import main.Arguments
 import org.specs2.concurrent.ExecutionEnv
@@ -45,19 +45,19 @@ Support Functions
 """
 
   val ff = fragmentFactory
-  import ff._
+  import ff.*
 
   def byName1 =
     val fragments = Fragments(ex("e1"), ex("e2"))
     val arguments = Arguments.split("ex e1")
     val executed = fragments |> DefaultSelector(arguments).select(arguments)
-    executed.fragmentsList(ee) must haveSize(1)
+    executed.fragmentsList(ee) `must` haveSize(1)
 
   def byName2 =
     val fragments = Fragments(code("e1"), code("e2"))
     val arguments = Arguments.split("ex e1")
     val executed = fragments |> DefaultSelector(arguments).select(arguments)
-    executed.fragmentsList(ee) must haveSize(1)
+    executed.fragmentsList(ee) `must` haveSize(1)
 
   def byTag1 =
     val fragments = Fragments(ff.tag("x"), ex("e1"), ex("e2"))
@@ -116,8 +116,8 @@ Support Functions
       ex("e8"), asSection("y"),
       ex("e9")
     )
-    checkSelection(fragments, "x",           expected = Seq("e2", "e3", "e4", "e5", "e6"), unexpected = Seq("e1", "e7", "e8", "e9")) and
-    checkSelection(fragments, "x&&y",        expected = Seq("e4", "e5", "e6"),             unexpected = Seq("e1", "e2", "e3", "e7", "e8", "e9")) and
+    checkSelection(fragments, "x",           expected = Seq("e2", "e3", "e4", "e5", "e6"), unexpected = Seq("e1", "e7", "e8", "e9")) `and`
+    checkSelection(fragments, "x&&y",        expected = Seq("e4", "e5", "e6"),             unexpected = Seq("e1", "e2", "e3", "e7", "e8", "e9")) `and`
     checkSelection(fragments, Seq("x", "y"), expected = (2 to 8).map("e" + _),             unexpected = Seq("e1", "e9"))
 
   def byTag9 =
@@ -133,8 +133,8 @@ Support Functions
       ff.section("y"),
       ex("e6")
     )
-    checkSelection(fragments, "x",           expected = Seq("e2", "e3"),             unexpected = Seq("e1", "e4", "e5", "e6")) and
-    checkSelection(fragments, "x&&y",        expected = Seq(),                       unexpected = Seq("e1", "e2", "e3", "e4", "e5", "e6")) and
+    checkSelection(fragments, "x",           expected = Seq("e2", "e3"),             unexpected = Seq("e1", "e4", "e5", "e6")) `and`
+    checkSelection(fragments, "x&&y",        expected = Seq(),                       unexpected = Seq("e1", "e2", "e3", "e4", "e5", "e6")) `and`
     checkSelection(fragments, Seq("x", "y"), expected = Seq("e2", "e3", "e4", "e5"), unexpected = Seq("e1", "e6"))
 
   def byTag10 =
@@ -171,26 +171,26 @@ Support Functions
   def check(fragments: Fragments, expected: Seq[String], unexpected: Seq[String])(env: Env): Result =
     val executed = fragments |> DefaultSelector(env.arguments).filterByPrevious(env.arguments)
     val descriptions = executed.fragmentsList(ee).map(_.description.toString)
-    expected.foreach(e => descriptions aka "expected for exclude" must contain(beMatching(".*"+e+".*")))
-    unexpected.foreach(e => descriptions aka "unexpected for exclude"  must not(contain(beMatching(".*"+e+".*"))))
+    expected.foreach(e => descriptions `aka` "expected for exclude" `must` contain(beMatching(".*"+e+".*")))
+    unexpected.foreach(e => descriptions `aka` "unexpected for exclude"  `must` not(contain(beMatching(".*"+e+".*"))))
     ok
 
   def support1 =
     val original = Fragments(ex("e1"), ex("e2"), text(" "), taggedAs("t1"))
     val swapped = original |> DefaultSelector(Arguments()).swapBeforeMarkerAndEmptyText
-    (swapped.fragmentsList(ee).map(_.description.show) must ===(List(ex("e1"), ex("e2"),
+    (swapped.fragmentsList(ee).map(_.description.show) `must` ===(List(ex("e1"), ex("e2"),
       ff.tag("t1"), text(" ")).map(_.description.show)))
 
   def support2 =
     val original = Fragments(ex("e1"), ex("e2"), taggedAs("t1"))
     val swapped = original |> DefaultSelector(Arguments()).transformBeforeMarkersToAfterMarkers
-    swapped.fragmentsList(ee).map(_.description.show) must ===(
+    swapped.fragmentsList(ee).map(_.description.show) `must` ===(
       List(ex("e1"), ff.tag("t1"), ex("e2")).map(_.description.show))
 
   def support3 =
     val original = Fragments(ex("e1"), tag("t1"), ex("e2"))
     val swapped = original |> DefaultSelector(Arguments()).transformTagsToSections
-    swapped.fragmentsList(ee).map(_.description.show) must ===(
+    swapped.fragmentsList(ee).map(_.description.show) `must` ===(
       List(ex("e1"), ff.section("t1"), ex("e2"), ff.section("t1")).map(_.description.show))
 
   // test methods
@@ -199,7 +199,7 @@ Support Functions
 
   // expected / unexpected is in the point of view of including the tag
   def checkSelection(fragments: Fragments, tags: Seq[String], expected: Seq[String], unexpected: Seq[String]): Result =
-    includeContains(fragments, tags, expected, unexpected) and
+    includeContains(fragments, tags, expected, unexpected) `and`
     excludeContains(fragments, tags, expected, unexpected)
 
   def checkSelection(fragments: Fragments, tag: String, expected: Seq[String], unexpected: Seq[String]): Result =
@@ -210,8 +210,8 @@ Support Functions
     val descriptions = executed.map(_.description.toString)
 
     s"${descriptions.mkString(",")} contains ${expected.mkString(",")} but not ${unexpected.mkString(",")} for tags ${tags.mkString(",")}" ==> {
-      Result.foreach(expected)  (e => descriptions aka "expected for include" must contain(beMatching(".*"+e+".*"))) and
-      Result.foreach(unexpected)(e => descriptions aka "unexpected for include" must not(contain(beMatching(".*"+e+".*"))))
+      Result.foreach(expected)  (e => descriptions `aka` "expected for include" `must` contain(beMatching(".*"+e+".*"))) `and`
+      Result.foreach(unexpected)(e => descriptions `aka` "unexpected for include" `must` not(contain(beMatching(".*"+e+".*"))))
     }
 
   def excludeContains(fragments: Fragments, tags: Seq[String], unexpected: Seq[String], expected: Seq[String]): Result =
@@ -219,8 +219,8 @@ Support Functions
     val descriptions = executed.fragmentsList(ee).map(_.description.show)
 
     s"${descriptions.mkString(",")} does not contain ${unexpected.mkString(",")} but contains ${expected.mkString(",")} for tags ${tags.mkString(",")}" ==> {
-      Result.foreach(expected)  (e => descriptions aka "expected for exclude" must contain(beMatching(".*"+e+".*"))) and
-      Result.foreach(unexpected)(e => descriptions aka "unexpected for exclude"  must not(contain(beMatching(".*"+e+".*"))))
+      Result.foreach(expected)  (e => descriptions `aka` "expected for exclude" `must` contain(beMatching(".*"+e+".*"))) `and`
+      Result.foreach(unexpected)(e => descriptions `aka` "unexpected for exclude"  `must` not(contain(beMatching(".*"+e+".*"))))
     }
 
   def filterIncluded(fragments: Fragments, tags: Seq[String]): List[Fragment] =

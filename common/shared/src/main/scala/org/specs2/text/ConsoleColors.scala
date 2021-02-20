@@ -1,8 +1,8 @@
 package org.specs2
 package text
 
-import AnsiColors._
-import ColorsMap._
+import AnsiColors.*
+import ColorsMap.*
 
 /**
 * This class defines the colors to use to print out text on the Console

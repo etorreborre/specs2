@@ -3,8 +3,8 @@ package specification
 package core
 
 import execute.Result
-import fp._
-import org.specs2.control._
+import fp.*
+import org.specs2.control.*
 import scala.concurrent.duration.FiniteDuration
 
 /**

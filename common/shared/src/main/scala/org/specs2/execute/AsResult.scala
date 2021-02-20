@@ -1,9 +1,9 @@
 package org.specs2
 package execute
 
-import ResultExecution._
+import ResultExecution.*
 import Results.{given}
-import fp._, syntax.{given, _}
+import fp.*, syntax.{given, *}
 
 /**
  * Typeclass trait for anything that can be transformed to a Result

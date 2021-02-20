@@ -2,13 +2,13 @@ package org.specs2
 package execute
 
 import control.Throwablex
-import control.Throwablex._
+import control.Throwablex.*
 import main.Arguments
-import org.specs2.fp._
-import org.specs2.fp.syntax._
+import org.specs2.fp.*
+import org.specs2.fp.syntax.*
 import text.Message.concat
-import text.Sentences._
-import text.NotNullStrings._
+import text.Sentences.*
+import text.NotNullStrings.*
 
 /**
  * The result of an execution, either:

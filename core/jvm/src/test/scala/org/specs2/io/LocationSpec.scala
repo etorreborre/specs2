@@ -1,11 +1,11 @@
 package org.specs2
 package io
 
-import control._
+import control.*
 import org.specs2.matcher.TypedEqual
-import specification.core._
+import specification.core.*
 import user.io.{LocationSpecification, LocationUnitSpecification}
-import Fragment._
+import Fragment.*
 import org.specs2.concurrent.ExecutionEnv
 
 class LocationSpec extends org.specs2.mutable.Spec with TypedEqual:

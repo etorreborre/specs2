@@ -1,42 +1,42 @@
 package org.specs2.text
 
-import Markdown._
+import Markdown.*
 import org.specs2.main.Arguments
-import org.specs2.mutable._
+import org.specs2.mutable.*
 
 class MarkdownSpec extends Spec:
   given Arguments = Arguments()
 
   "Emphasized text" >>
-  { toHtmlNoPar("_hello_") must ===("<em>hello</em>") }
+  { toHtmlNoPar("_hello_") `must` ===("<em>hello</em>") }
   "Bold-italics text" >>
-  { toHtmlNoPar("***hello***") must ===("<strong><em>hello</em></strong>") }
+  { toHtmlNoPar("***hello***") `must` ===("<strong><em>hello</em></strong>") }
   "Multi-line text must preserve newlines" >>
-  { toHtmlNoPar("hello\nworld") must contain("hello<br/>world") }
+  { toHtmlNoPar("hello\nworld") `must` contain("hello<br/>world") }
 
   "title and line break" >>
-  { toXhtml("### Title\nline1\n\nline2").toString must not(contain("### Title")) }
+  { toXhtml("### Title\nline1\n\nline2").toString `must` not(contain("### Title")) }
 
 
   "Embedded code" >>
-  { toHtmlNoPar(someCode) must contain("""<code class="prettyprint">""") }
+  { toHtmlNoPar(someCode) `must` contain("""<code class="prettyprint">""") }
 
   "Code with newlines must be enclosed in one code tag only" >>
-  { toHtmlNoPar(someCode).split(" ").filter(_.trim.contains("</code>")) must haveSize(1) }
+  { toHtmlNoPar(someCode).split(" ").filter(_.trim.contains("</code>")) `must` haveSize(1) }
 
   "Inlined code must not have <pre> tags" >>
-    { toHtmlNoPar("this is some `inlined` code") must contain("""this is some <code class="prettyprint">inlined</code> code""") }
+    { toHtmlNoPar("this is some `inlined` code") `must` contain("""this is some <code class="prettyprint">inlined</code> code""") }
 
   "the encoding must be ok with utf-8 characters" >>
-  { toXhtml("⊛").toString must contain("⊛") }
+  { toXhtml("⊛").toString `must` contain("⊛") }
 
   "the encoding must be ok with utf-8 characters" >>
-  { toXhtml("⊛").toString must contain("⊛") }
+  { toXhtml("⊛").toString `must` contain("⊛") }
 
   "verbatim code blocks can also be rendered as simple text" >> {
     toHtml("""
              |     this is some text
-           """.stripMargin, MarkdownOptions(verbatim = false)) must not(contain("code"))
+           """.stripMargin, MarkdownOptions(verbatim = false)) `must` not(contain("code"))
   }
 
   val someCode = """

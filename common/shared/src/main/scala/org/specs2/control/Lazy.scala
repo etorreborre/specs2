@@ -1,7 +1,7 @@
 package org.specs2
 package control
 
-import Exceptions._
+import Exceptions.*
 import scala.util.NotGiven
 
 /**

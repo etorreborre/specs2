@@ -1,9 +1,9 @@
 package org.specs2
 package specification
 
-import form.{given, _}
-import Forms.{given, _}
-import control.ImplicitParameters._
+import form.{given, *}
+import Forms.{given, *}
+import control.ImplicitParameters.*
 
 trait ComponentsDefinitions:
   case class Address(street: String = "", number: Int = 0):

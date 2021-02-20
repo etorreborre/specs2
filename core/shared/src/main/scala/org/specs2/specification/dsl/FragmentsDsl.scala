@@ -2,9 +2,9 @@ package org.specs2
 package specification
 package dsl
 
-import core._
-import create._
-import org.specs2.collection.Vectorx._
+import core.*
+import create.*
+import org.specs2.collection.Vectorx.*
 
 /**
  * Creation of Fragments with the ^ syntax
@@ -55,7 +55,7 @@ trait FragmentsDsl extends FragmentsFactory with AcceptanceDsl1:
     (newLine ++ fragments.toList)
       .map(Fragments(_))
       .intersperse(Fragments(newLine*))
-      .reduce(_ append _)
+      .reduce(_ `append` _)
 
 
 object FragmentsDsl extends FragmentsDsl

@@ -1,7 +1,7 @@
 package org.specs2.control
 
-import org.specs2._
-import io._
+import org.specs2.*
+import io.*
 
 class OperationSpec extends Specification { def is = s2"""
 

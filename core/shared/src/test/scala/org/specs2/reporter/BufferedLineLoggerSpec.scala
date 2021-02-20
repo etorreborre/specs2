@@ -1,7 +1,7 @@
 package org.specs2
 package reporter
 
-import PrinterLogger._
+import PrinterLogger.*
 
 class BufferedPrinterLoggerSpec extends Spec { def is = s2"""
 
@@ -15,5 +15,5 @@ class BufferedPrinterLoggerSpec extends Spec { def is = s2"""
     logger.infoLog("How are you?")
     logger.close()
 
-    logger.messages must ===(Seq("[info] Hello world", "[info] How are you?"))
+    logger.messages `must` ===(Seq("[info] Hello world", "[info] How are you?"))
 }

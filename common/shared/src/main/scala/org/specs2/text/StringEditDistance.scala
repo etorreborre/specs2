@@ -1,9 +1,9 @@
 package org.specs2
 package text
 
-import Split._
-import data._
-import EditDistance._
+import Split.*
+import data.*
+import EditDistance.*
 
 /**
  * The EditDistance trait provides methods to compute and display the shortest distance between 2 strings.

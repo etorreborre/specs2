@@ -5,22 +5,22 @@ import org.junit.runner.Description
 import java.net.InetAddress
 
 import main.Arguments
-import execute._
-import fp.syntax._
+import execute.*
+import fp.syntax.*
 import io.FileName
 import io.FileName.ToFileName
-import control._
-import io._
+import control.*
+import io.*
 
-import scala.collection.JavaConverters._
-import Exceptions._
+import scala.collection.JavaConverters.*
+import Exceptions.*
 import concurrent.ExecutionEnv
-import specification.core._
-import specification.process._
-import text.NotNullStrings._
-import JUnitDescriptions._
-import origami._
-import Folds._
+import specification.core.*
+import specification.process.*
+import text.NotNullStrings.*
+import JUnitDescriptions.*
+import origami.*
+import Folds.*
 
 /**
  * The JUnitXmlPrinter creates an xml file with the specification execution results
@@ -30,7 +30,7 @@ case class JUnitXmlPrinter(env: Env) extends Printer:
   def finalize(specs: List[SpecStructure]): Action[Unit] = Action.unit
 
   def sink(spec: SpecStructure): AsyncSink[Fragment] =
-    (Statistics.fold zip list[Fragment].into[Action]).
+    (Statistics.fold `zip` list[Fragment].into[Action]).
       mapFlatten(saveResults(spec))
 
   def saveResults(spec: SpecStructure): ((Stats, List[Fragment])) =>  Action[Unit] = { case (stats, fs) =>

@@ -1,9 +1,9 @@
 package org.specs2
 package data
 
-import org.specs2.fp._
-import Tree._
-import annotation._
+import org.specs2.fp.*
+import Tree.*
+import annotation.*
 
 /**
  * Utility methods for Trees

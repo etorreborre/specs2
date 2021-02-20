@@ -13,7 +13,7 @@ case class Select(
                    _was:           Option[String]           = None,
                    _selector:      Option[String]           = None) extends ShowArgs:
 
-  import Arguments._
+  import Arguments.*
 
   def ex: String                    = _ex.getOrElse(".*")
   def include: String               = _include.getOrElse("")

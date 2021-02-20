@@ -1,7 +1,7 @@
 package org.specs2
 package form
 
-import execute._
+import execute.*
 
 /**
  * Base class for constraints executed on an optional expected value.

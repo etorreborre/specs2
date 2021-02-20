@@ -3,7 +3,7 @@ package matcher
 
 import org.specs2.matcher.describe.Diffable
 import scala.util.NotGiven
-import execute._
+import execute.*
 
 /**
  * This trait adds some implicits to create expectations with the `===` sign

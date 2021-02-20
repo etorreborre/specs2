@@ -2,7 +2,7 @@ package org.specs2
 package io
 
 import java.io.File
-import text._
+import text.*
 
 /**
  * Default implementation for reading lines out of a file

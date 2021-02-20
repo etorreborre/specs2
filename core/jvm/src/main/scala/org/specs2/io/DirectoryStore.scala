@@ -1,9 +1,9 @@
 package org.specs2
 package io
 
-import control._
-import specification.process._
-import fp._, syntax._
+import control.*
+import specification.process.*
+import fp.*, syntax.*
 
 case class DirectoryStore(baseDirectory: DirectoryPath, fileSystem: FileSystem) extends Store:
 

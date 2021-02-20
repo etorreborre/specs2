@@ -1,16 +1,16 @@
 package org.specs2
 package specification.create
 
-import scala.quoted._
-import execute._
+import scala.quoted.*
+import execute.*
 import control.TraceLocation
 import specification.script.StepParser
-import specification.core._
+import specification.core.*
 import text.{Trim}
-import Trim._
-import text.NotNullStrings._
-import text.Trim._
-import S2StringContext._
+import Trim.*
+import text.NotNullStrings.*
+import text.Trim.*
+import S2StringContext.*
 
 /**
  * These implicit methods declare which kind of object can be interpolated in a s2 string;
@@ -125,10 +125,10 @@ object S2StringContext:
     // to be on column 0 or aligned with examples and still have the same display when using the Text printer
     val last = texts.lastOption.map(_.trimEnd).filterNot(_.isEmpty).map(ff.text).toSeq
 
-    postProcess(fragments append Fragments(last*))
+    postProcess(fragments `append` Fragments(last*))
 
   def executionInterpolated(execution: Expr[Execution], ff: Expr[FragmentFactory])(using qctx: Quotes): Expr[Interpolated] =
-    import qctx.reflect._
+    import qctx.reflect.*
     '{ new Interpolated {
           def prepend(text: String): Fragments =
             createExample($ff,

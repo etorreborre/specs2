@@ -4,9 +4,9 @@ package create
 
 import org.specs2.execute.{AsResult, Result}
 import org.specs2.data.NamedTag
-import specification.core._
-import Execution._
-import control.ImplicitParameters._
+import specification.core.*
+import Execution.*
+import control.ImplicitParameters.*
 import specification.core.Text
 
 /**

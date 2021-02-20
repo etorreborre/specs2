@@ -1,11 +1,11 @@
 package org.specs2
 package text
 
-import collection._
-import Seqx._
-import LineComparison._
-import control._
-import producer._, Producer._
+import collection.*
+import Seqx.*
+import LineComparison.*
+import control.*
+import producer.*, Producer.*
 import scala.util.NotGiven
 
 /**
@@ -48,11 +48,11 @@ case class LinesContentDifference(
 
   // all && ordered
   private lazy val showNotEqual: Diffs =
-    import org.specs2.data._
-    import EditDistance._
+    import org.specs2.data.*
+    import EditDistance.*
 
     val operations: IndexedSeq[EditDistanceOperation[NumberedLine]] =
-      levenhsteinDistance(numberedLines1, numberedLines2)(Equiv.universal)
+      levenhsteinDistance(numberedLines1, numberedLines2)(using Equiv.universal)
 
     operations.flatMap {
       case Same(line)          => List(SameLine(line))

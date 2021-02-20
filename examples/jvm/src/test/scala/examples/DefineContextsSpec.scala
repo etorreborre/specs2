@@ -1,11 +1,11 @@
 package examples
 
 import org.specs2.Specification
-import org.specs2.specification._
-import org.specs2.specification.core._
+import org.specs2.specification.*
+import org.specs2.specification.core.*
 import org.specs2.specification.create.DefaultFragmentFactory
-import org.specs2.time._
-import org.specs2.execute._
+import org.specs2.time.*
+import org.specs2.execute.*
 
 
 /**

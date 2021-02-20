@@ -1,7 +1,7 @@
 package org.specs2
 package text
 
-import NotNullStrings._
+import NotNullStrings.*
 
 case class Show1[T1](show1: T1 => String = (_:T1).notNull):
   def show2[T2](show2: T2 => String): Show2[T1, T2] =

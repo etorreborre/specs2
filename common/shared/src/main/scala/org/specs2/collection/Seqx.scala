@@ -1,7 +1,7 @@
 package org.specs2
 package collection
 
-import org.specs2.fp._
+import org.specs2.fp.*
 import scala.collection.mutable.ListBuffer
 
 /**

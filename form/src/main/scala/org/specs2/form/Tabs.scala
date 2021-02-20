@@ -1,11 +1,11 @@
 package org.specs2
 package form
 
-import xml.Nodex._
-import main._
-import execute._
-import StandardResults._
-import ResultLogicalCombinators._
+import xml.Nodex.*
+import main.*
+import execute.*
+import StandardResults.*
+import ResultLogicalCombinators.*
 
 /**
  * This class allows the creation of tabs to embed several forms at once on a limited html space
@@ -23,7 +23,7 @@ case class Tabs(tabs: Seq[Tab] = Vector(), result: Option[Result] = None) extend
 
   def xml(using args: Arguments) = <td class="info"><div class="tabber">{tabs.map(_.xml).reduceNodes}</div></td>
 
-  def executeTabs = tabs.foldLeft(success: Result){ (res, cur) => res and cur.execute }
+  def executeTabs = tabs.foldLeft(success: Result){ (res, cur) => res `and` cur.execute }
 
 /**
  * Class representing an individual tab

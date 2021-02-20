@@ -1,18 +1,18 @@
 package org.specs2.runner
 
-import org.specs2.specification.core._
+import org.specs2.specification.core.*
 import org.specs2.specification.core.EnvDefault
-import org.specs2.specification.process._
-import sbt.testing.{Runner=>_,_}
-import org.specs2.main._
-import org.specs2.reporter._
-import org.specs2.control.{Logger => _, _}
-import org.specs2.fp._
-import org.specs2.fp.syntax._
+import org.specs2.specification.process.*
+import sbt.testing.{Runner as _,*}
+import org.specs2.main.*
+import org.specs2.reporter.*
+import org.specs2.control.{Logger as _, *}
+import org.specs2.fp.*
+import org.specs2.fp.syntax.*
 import org.specs2.reporter.SbtPrinterLogger
-import org.specs2.reporter.Printer._
-import org.specs2.reflect._
-import org.specs2.fp._, syntax._
+import org.specs2.reporter.Printer.*
+import org.specs2.reflect.*
+import org.specs2.fp.*, syntax.*
 import org.specs2.concurrent.ExecutionEnv
 import org.specs2.data.NamedTag
 

@@ -4,10 +4,10 @@ package matcher
 import java.util.concurrent.atomic.AtomicBoolean
 import concurrent.ExecutionEnv
 import Matcher.{given}
-import execute._, Result._
+import execute.*, Result.*
 
 import scala.annotation.tailrec
-import scala.concurrent._, duration._
+import scala.concurrent.*, duration.*
 
 /**
  * This trait provides matchers to check if a block of code is terminating or not

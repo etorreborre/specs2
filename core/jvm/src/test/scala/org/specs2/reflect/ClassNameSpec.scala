@@ -2,7 +2,7 @@ package org.specs2
 package reflect
 
 import mutable.{Tables, Spec}
-import ClassName._
+import ClassName.*
 import matcher.TypedEqual
 
 class ClassNameSpec extends Spec with Tables with TypedEqual:

@@ -1,6 +1,6 @@
 package org.specs2
 
-import org.specs2.scalacheck._
+import org.specs2.scalacheck.*
 
 trait ScalaCheck extends
        ScalaCheckPropertyCreation

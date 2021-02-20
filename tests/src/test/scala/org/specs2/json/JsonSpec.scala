@@ -2,18 +2,18 @@ package org.specs2
 package json
 
 import mutable.Specification
-import org.scalacheck._
+import org.scalacheck.*
 import JsonGen.{given}
-import Json._
+import Json.*
 
 class JsonSpec extends Specification with ScalaCheck:
 
   "showJson must be robust against null values" >> prop { (json: JSONType) =>
-    parse(showJson(json)) must beSome
+    parse(showJson(json)) `must` beSome
   }.set(maxSize = 10)
 
 
-import Gen._
+import Gen.*
 
 /**
  * Generator of JSONType objects with a given tree depth

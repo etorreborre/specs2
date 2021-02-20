@@ -1,7 +1,7 @@
 package org.specs2
 package specification
 
-import matcher._
+import matcher.*
 import dsl.NoBangExamples
 
 /**

@@ -1,14 +1,14 @@
 package org.specs2
 package scalacheck
 
-import org.scalacheck._
+import org.scalacheck.*
 import org.scalacheck.util.{FreqMap, Pretty}
 import org.scalacheck.rng.Seed
-import execute._
-import specification._
+import execute.*
+import specification.*
 import core.{AsExecution, Execution}
-import AsResultProp.{given, _}
-import ScalaCheckProperty.{given, _}
+import AsResultProp.{given, *}
+import ScalaCheckProperty.{given, *}
 
 /**
  * A ScalaCheckProperty encapsulates a ScalaCheck Prop and its parameters

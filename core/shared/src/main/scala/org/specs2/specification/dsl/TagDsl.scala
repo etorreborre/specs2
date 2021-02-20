@@ -3,7 +3,7 @@ package specification
 package dsl
 
 import data.NamedTag
-import core._
+import core.*
 import create.FragmentsFactory
 
 /**

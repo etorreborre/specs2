@@ -1,8 +1,8 @@
 package org.specs2
 package specification
 
-import create._
-import form._
+import create.*
+import form.*
 import dsl.FormDsl
 
 /**

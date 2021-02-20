@@ -1,10 +1,10 @@
 package org.specs2
 package scalacheck
 
-import org.scalacheck._
+import org.scalacheck.*
 import org.scalacheck.util.{FreqMap, Pretty}
 import execute.AsResult
-import ScalaCheckProperty._
+import ScalaCheckProperty.*
 
 trait ScalaCheckPropertyCreation:
 

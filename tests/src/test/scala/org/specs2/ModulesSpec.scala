@@ -1,9 +1,9 @@
 package org.specs2
 
-import org.specs2.specification.core._
-import org.specs2.specification.create._
+import org.specs2.specification.core.*
+import org.specs2.specification.create.*
 import runner.SpecificationsFinder
-import io._
+import io.*
 
 /**
  * This is an example of running specifications module by module
@@ -21,7 +21,7 @@ object JUnit    extends Specification { def is = Module.specifications(getClass)
 object Examples extends Specification { def is = Module.specifications(getClass) }
 
 object Module extends SpecificationCreation:
-  def specifications(klass: Class[_], filter: String => Boolean = (s: String) => true) =
+  def specifications(klass: Class[?], filter: String => Boolean = (s: String) => true) =
     val name = klass.getSimpleName.replace("$", "")
     val base = DirectoryPath.unsafe(new java.io.File(".").getAbsolutePath) / FileName.unsafe(name.toLowerCase) / "src" / "test" / "scala"
     val specs = SpecificationsFinder.default.findSpecifications(basePath = base, verbose = false, filter = filter).unsafeRun.take(3)

@@ -1,9 +1,9 @@
 package user
 
-import org.specs2._
+import org.specs2.*
 import org.specs2.concurrent.ExecutionEnv
 import scala.concurrent.Future
-import org.specs2.main._
+import org.specs2.main.*
 
 /**
  * the following specifications should be instantiable from both the JVM and ScalaJS

@@ -2,10 +2,10 @@ package org.specs2
 package form
 
 import control.Property
-import execute._
-import DecoratedProperties._
-import text.NotNullStrings._
-import StandardResults._
+import execute.*
+import DecoratedProperties.*
+import text.NotNullStrings.*
+import StandardResults.*
 
 /**
  * A Field is a property which is used only to display input values or output values.
@@ -71,8 +71,8 @@ case object Field:
   def apply[T](label: String, value: =>T): Field[T] = new Field(label, Property(value))
 
   /** create a Field with a label and other fields values, concatenated as strings */
-  def apply(label: String, value1: Field[_], values: Field[_]*): Field[String] = Field(label, "/", value1, values*)
+  def apply(label: String, value1: Field[?], values: Field[?]*): Field[String] = Field(label, "/", value1, values*)
 
   /** create a Field with a label and other fields values, concatenated as strings */
-  def apply(label: String, separator: String, value1: Field[_], values: Field[_]*): Field[String] =
+  def apply(label: String, separator: String, value1: Field[?], values: Field[?]*): Field[String] =
     Field(label, if values.isEmpty then value1.toString else (value1 :: values.toList).map(_.value).mkString(separator))

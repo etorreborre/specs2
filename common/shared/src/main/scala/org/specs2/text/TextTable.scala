@@ -1,7 +1,7 @@
 package org.specs2
 package text
 
-import collection.Seqx._
+import collection.Seqx.*
 
 /**
  * Textual representation of a table with a table and some lines.

@@ -4,7 +4,7 @@ package form
 import scala.xml.NodeSeq
 import main.Arguments
 import execute.Result
-import text.Trim._
+import text.Trim.*
 
 /**
  * This Form overrides the toXml and text methods so that it appears seamlessly included in another Form.

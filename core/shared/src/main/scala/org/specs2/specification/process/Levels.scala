@@ -2,16 +2,16 @@ package org.specs2
 package specification
 package process
 
-import org.specs2.fp._
-import Tree._
-import data.Trees._
-import specification.create._
-import specification.core._
+import org.specs2.fp.*
+import Tree.*
+import data.Trees.*
+import specification.create.*
+import specification.core.*
 
-import scala.math._
-import control._
-import producer._
-import Levels._
+import scala.math.*
+import control.*
+import producer.*
+import Levels.*
 import org.specs2.concurrent.ExecutionEnv
 
 /**

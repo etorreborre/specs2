@@ -1,6 +1,6 @@
 package user
 
-import org.specs2._
+import org.specs2.*
 
 class TestSpec extends Specification with ScalaCheck { def is = s2"""
 

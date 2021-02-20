@@ -1,9 +1,9 @@
 package org.specs2
 package text
 
-import execute.ResultImplicits._
-import matcher._
-import Matcher.{given, _}
+import execute.ResultImplicits.*
+import matcher.*
+import Matcher.{given, *}
 import mutable.{Spec, Tables}
 
 class SentencesSpec extends Spec with Tables with Sentences:

@@ -1,9 +1,9 @@
 package org.specs2
 package xml
 
-import scala.xml._
-import NodeSeq._
-import collection.Iterablex._
+import scala.xml.*
+import NodeSeq.*
+import collection.Iterablex.*
 
 /**
  * This object provides useful functions for Nodes and NodeSeqs
@@ -40,7 +40,7 @@ trait NodeFunctions:
    *               to apply recursively to compare children nodes
    */
   def isEqualIgnoringSpace(node: NodeSeq, n: NodeSeq, iterableComparison: Function2[NodeSeq, NodeSeq, Boolean]): Boolean =
-    def isAtom: Function[Node, Boolean] = { case (n: Atom[_]) => true; case _ => false }
+    def isAtom: Function[Node, Boolean] = { case (n: Atom[?]) => true; case _ => false }
 
     def compareChildren(n1: List[Node], n2: List[Node]) =
       (n1.takeWhile(isAtom), n2) match
@@ -61,9 +61,9 @@ trait NodeFunctions:
 
       // checks for 'leaf' types
       case (n1: Text, n2:Text)       => n1.text.trim == n2.text.trim
-      case (n1: Text, n2:Atom[_])    => n1.text.trim == n2.text.trim
-      case (n1: Atom[_], n2:Text)    => n1.text.trim == n2.text.trim
-      case (n1: Atom[_], n2:Atom[_]) => n1.text.trim == n2.text.trim
+      case (n1: Text, n2:Atom[?])    => n1.text.trim == n2.text.trim
+      case (n1: Atom[?], n2:Text)    => n1.text.trim == n2.text.trim
+      case (n1: Atom[?], n2:Atom[?]) => n1.text.trim == n2.text.trim
 
       // general case
       case (n1: Node, n2:Node) => (isSpaceNode(n1) && isSpaceNode(n2)) ||
@@ -98,7 +98,7 @@ trait NodeFunctions:
 
     def attributesValuesNamesPartialMatch(m: MetaData) =
       val attributesNamesAndValues: Map[String, String] = Map(m.map((a: MetaData) => a.key -> a.value.toString).toList*)
-      attributeValues.forall((pair: (String, String)) =>  attributesNamesAndValues.isDefinedAt(pair._1) && (attributesNamesAndValues(pair._1) matches pair._2))
+      attributeValues.forall((pair: (String, String)) =>  attributesNamesAndValues.isDefinedAt(pair._1) && (attributesNamesAndValues(pair._1) `matches` pair._2))
 
     def attributesNamesMatch(m: MetaData) =
       attributes.isEmpty                            ||

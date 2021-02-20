@@ -2,10 +2,10 @@ package org.specs2
 package matcher
 
 import matcher.describe.Diffable
-import text.Quote._
+import text.Quote.*
 import collection.IsEmpty
 import scala.reflect.ClassTag
-import execute._, Result._
+import execute.*, Result.*
 
 /**
  * This trait provides matchers which are applicable to any type of value
@@ -85,7 +85,7 @@ trait AnyMatchers:
       def apply[S <: T](iterable: Expectable[S]) =
         // we need to pattern match on arrays otherwise we get a reflection exception
         iterable.value match
-          case a: Array[_] =>
+          case a: Array[?] =>
             result(a.isEmpty,
               iterable.description + " is not empty")
 
@@ -154,9 +154,9 @@ trait AnyMatchers:
                x.description + " doesn't have interface " + q(c.getName) + ". It has interface " + xClass.getInterfaces.mkString(", "))
 
   /** matches if v.isAssignableFrom(c) */
-  def beAssignableFrom[T : ClassTag]: Matcher[Class[_]] =
-    new Matcher[Class[_]]:
-      def apply[S <: Class[_]](x: Expectable[S]) =
+  def beAssignableFrom[T : ClassTag]: Matcher[Class[?]] =
+    new Matcher[Class[?]]:
+      def apply[S <: Class[?]](x: Expectable[S]) =
         val c = implicitly[ClassTag[T]].runtimeClass
         result(x.value.isAssignableFrom(c),
                x.description + " is not assignable from " + q(c.getName))

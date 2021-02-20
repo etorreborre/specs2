@@ -1,7 +1,7 @@
 package org.specs2
 package text
 
-import matcher._
+import matcher.*
 
 class TextTableSpec extends mutable.Spec with TypedEqual:
   "a text table must format it content to equal length" >> {

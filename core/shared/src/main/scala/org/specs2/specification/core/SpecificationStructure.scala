@@ -3,10 +3,10 @@ package specification
 package core
 
 import data.TopologicalSort
-import control._
+import control.*
 import reflect.Classes
-import Classes._
-import org.specs2.fp.syntax._
+import Classes.*
+import org.specs2.fp.syntax.*
 
 // to be used for ScalaJS when ready
 // import scala.scalajs.reflect.annotation.EnableReflectiveInstantiation

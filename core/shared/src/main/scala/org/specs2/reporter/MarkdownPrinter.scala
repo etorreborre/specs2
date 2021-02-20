@@ -1,14 +1,14 @@
 package org.specs2
 package reporter
 
-import fp._, syntax._
-import control._
-import origami._
-import io._
-import FileName._
-import execute._
+import fp.*, syntax.*
+import control.*
+import origami.*
+import io.*
+import FileName.*
+import execute.*
 import main.Arguments
-import specification.core._
+import specification.core.*
 
 /**
  * This trait is not a full fledged markdown printer yet

@@ -2,12 +2,12 @@ package org.specs2
 package specification
 
 import main.Arguments
-import reporter._
-import reporter.PrinterLogger._
-import specification.core._
-import control._
+import reporter.*
+import reporter.PrinterLogger.*
+import specification.core.*
+import control.*
 import scala.collection.mutable.ArrayBuffer
-import scala.concurrent._
+import scala.concurrent.*
 
 class ResourceSpec(using ec: ExecutionContext) extends Specification:
  def is = s2"""
@@ -35,7 +35,7 @@ the execution of the specification
     val logger = stringPrinterLogger
     val env = Env(printerLogger = logger)
     runSpec(AcquireErrorExample(), printer = Some(TextPrinter(env)))
-    logger.messages must contain(allOf(=~("resource unavailable"), =~("o e1"), =~("o e2")))
+    logger.messages `must` contain(allOf(=~("resource unavailable"), =~("o e1"), =~("o e2")))
 
   def runSpec(s: SpecificationStructure, printer: Option[Printer] = None) =
     val env: Env = Env(arguments = Arguments(), printerLogger = NoPrinterLogger)

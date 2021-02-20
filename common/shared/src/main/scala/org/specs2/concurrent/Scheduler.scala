@@ -1,6 +1,6 @@
 package org.specs2.concurrent
 
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 
 /**
  * The design of the Scheduler is taken from:

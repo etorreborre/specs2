@@ -1,7 +1,7 @@
 package org.specs2
 package runner
 
-import reporter._
+import reporter.*
 
 /**
  * This runner can be used with any class implementing the Notifier trait

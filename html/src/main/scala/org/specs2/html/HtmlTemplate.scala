@@ -1,8 +1,8 @@
 package org.specs2
 package html
 
-import scala.util.parsing.combinator._
-import control._
+import scala.util.parsing.combinator.*
+import control.*
 
 /**
  * String template for HTML files using the Pandoc templating approach where variables to replace are enclosed with $$

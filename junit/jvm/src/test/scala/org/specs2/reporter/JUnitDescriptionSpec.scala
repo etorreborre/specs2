@@ -3,11 +3,11 @@ package reporter
 
 import specification.create.FragmentsFactory
 import specification.dsl.AcceptanceDsl
-import specification.core._
+import specification.core.*
 import matcher.{MustMatchers, ExpectedResults}
 import org.junit.runner.Description
 import execute.{Result, StandardResults, Success}
-import ShowDescription.{given, _}
+import ShowDescription.{given, *}
 
 class JUnitDescriptionSpec(val env: Env) extends Specification with JUnitDescriptionSpecTest with OwnExecutionEnv { def is = s2"""
 
@@ -38,8 +38,8 @@ class JUnitDescriptionSpec(val env: Env) extends Specification with JUnitDescrip
                                                                                                                     """
 
 
-  import ReporterExamples._
-  val factory = fragmentFactory; import factory._
+  import ReporterExamples.*
+  val factory = fragmentFactory; import factory.*
 
   def a1 = descriptionIs(ex1)(
     "JUnitDescriptionSpec",
@@ -136,7 +136,7 @@ class JUnitDescriptionSpec(val env: Env) extends Specification with JUnitDescrip
       descriptions(false).
         createDescription(titled(start ^ "level1" ^ break ^ ex1fst ^ ex1snd ^ end))(ee).toTree.flatten.toList
 
-    ds.map(_.hashCode).distinct must haveSize(4)
+    ds.map(_.hashCode).distinct `must` haveSize(4)
 
   def a11 =
     val fs: Fragments =
@@ -147,7 +147,7 @@ class JUnitDescriptionSpec(val env: Env) extends Specification with JUnitDescrip
         createDescription(fs)(ee).toTree.flatten.toList
 
     // header + 3 examples
-    ds.map(_.hashCode).distinct must haveSize(4)
+    ds.map(_.hashCode).distinct `must` haveSize(4)
 
   def b1 = details (
     description   = toDescription(ex1).getChildren.get(0),
@@ -183,7 +183,7 @@ class JUnitDescriptionSpec(val env: Env) extends Specification with JUnitDescrip
     descriptionIs(Fragments(f))(tree*)
 
   def descriptionIs(fs: Fragments, fromIDE: Boolean = false)(tree: String*): Result =
-    showDescriptionTree(titled(fs), fromIDE) must ===(tree.toList.mkString("\n"))
+    showDescriptionTree(titled(fs), fromIDE) `must` ===(tree.toList.mkString("\n"))
 
   def showDescriptionTree(spec: SpecStructure, fromIDE: Boolean = false): String =
     // set the header to the main specification class
@@ -206,7 +206,7 @@ class JUnitDescriptionSpec(val env: Env) extends Specification with JUnitDescrip
 }
 
 trait ReporterExamples extends MustMatchers with StandardResults with ExpectedResults with FragmentsFactory with AcceptanceDsl:
-  private val factory = fragmentFactory; import factory._
+  private val factory = fragmentFactory; import factory.*
 
   lazy val text = factory.text("text")
 
@@ -217,7 +217,7 @@ trait ReporterExamples extends MustMatchers with StandardResults with ExpectedRe
   lazy val ex3 = "ex3" ! success
   lazy val empty1 = factory.text("     ")
   lazy val ex1Failure = "ex1" ! failure
-  lazy val ex1BeEqualToFailure = "ex1" ! { 1 must ===(2) }
+  lazy val ex1BeEqualToFailure = "ex1" ! { 1 `must` ===(2) }
   lazy val ex1Error = "ex1" ! anError
   lazy val ex1Skipped  = "ex1" ! skipped
   lazy val ex1Pending  = "ex1" ! pending
@@ -238,7 +238,7 @@ object ReporterExamples extends ReporterExamples
 
 trait JUnitDescriptionSpecTest extends Specification:
 
-  def details(description: Description, className: String, methodName: String, testClass: Class[_], displayName: String, isTest: Boolean) =
+  def details(description: Description, className: String, methodName: String, testClass: Class[?], displayName: String, isTest: Boolean) =
       p^
       "the className must be filled"    ! desc(description).e1(className)   ^br^
       "the methodName must be correct"  ! desc(description).e2(methodName)  ^br^
@@ -247,8 +247,8 @@ trait JUnitDescriptionSpecTest extends Specification:
       "the isTest flag must be correct" ! desc(description).e5(isTest)      ^br
 
   case class desc(description: Description):
-    def e1(name: String)     = description.getClassName must ===(name)
-    def e2(name: String)     = description.getMethodName must ===(name)
-    def e3(klass: Class[_])  = (description.getTestClass:Any) must ===(klass)
-    def e4(name: String)     = description.getDisplayName must ===(name)
-    def e5(isTest: Boolean)  = description.isTest must ===(isTest)
+    def e1(name: String)     = description.getClassName `must` ===(name)
+    def e2(name: String)     = description.getMethodName `must` ===(name)
+    def e3(klass: Class[?])  = (description.getTestClass:Any) `must` ===(klass)
+    def e4(name: String)     = description.getDisplayName `must` ===(name)
+    def e5(isTest: Boolean)  = description.isTest `must` ===(isTest)

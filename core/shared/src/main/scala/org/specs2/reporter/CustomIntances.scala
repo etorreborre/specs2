@@ -1,12 +1,12 @@
 package org.specs2
 package reporter
 
-import main._
-import control._
-import fp.syntax._
+import main.*
+import control.*
+import fp.syntax.*
 import reflect.Classes
 import scala.reflect.ClassTag
-import Printer._
+import Printer.*
 
 case class CustomInstances(arguments: Arguments, loader: ClassLoader, logger: Logger):
 

@@ -1,12 +1,12 @@
 package org.specs2
 package matcher
 
-import execute._, Result._
-import ResultLogicalCombinators._
-import control.Exceptions._
-import text.Regexes._
+import execute.*, Result.*
+import ResultLogicalCombinators.*
+import control.Exceptions.*
+import text.Regexes.*
 import ValueChecks.{given}
-import StringMatchers.{given, _}
+import StringMatchers.{given, *}
 
 /**
  * Matchers for Results
@@ -33,7 +33,7 @@ trait ResultMatchers:
         val (r, description) = ResultExecution.executeEither(AsResult[T](value.value)) match
           case Left(r) => (r, "the value is not a failure: ")
           case Right(r) => (r, value.description + " is not a failure")
-        result(r.isFailure, description+ r.message) and check.check(r.message)
+        result(r.isFailure, description+ r.message) `and` check.check(r.message)
 
   def beError[T : AsResult]: Matcher[T] =
     beError(ValueCheck.alwaysOk[String])
@@ -47,7 +47,7 @@ trait ResultMatchers:
         val (r, description) = ResultExecution.executeEither(AsResult[T](value.value)) match
           case Left(r) => (r, "the value is not an error: ")
           case Right(r) => (r, value.description + " is not an error")
-        result(r.isError, description+ r.message) and check.check(r.message)
+        result(r.isError, description+ r.message) `and` check.check(r.message)
 
   def beSkipped[T : AsResult]: Matcher[T] =
     beSkipped(ValueCheck.alwaysOk[String])
@@ -61,7 +61,7 @@ trait ResultMatchers:
         val (r, description) = ResultExecution.executeEither(AsResult[T](value.value)) match
           case Left(r) => (r, "the value is not skipped: ")
           case Right(r) => (r, value.description + " is not skipped")
-        result(r.isSkipped, description+ r.message) and check.check(r.message)
+        result(r.isSkipped, description+ r.message) `and` check.check(r.message)
 
   def bePending[T : AsResult]: Matcher[T] =
     bePending(ValueCheck.alwaysOk[String])
@@ -75,6 +75,6 @@ trait ResultMatchers:
         val (r, description) = ResultExecution.executeEither(AsResult[T](value.value)) match
           case Left(r) => (r, "the value is not pending: ")
           case Right(r) => (r, value.description + " is not pending")
-        result(r.isSkipped, description+ r.message) and check.check(r.message)
+        result(r.isSkipped, description+ r.message) `and` check.check(r.message)
 
 object ResultMatchers extends ResultMatchers

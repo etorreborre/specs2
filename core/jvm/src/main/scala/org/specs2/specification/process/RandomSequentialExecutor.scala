@@ -2,15 +2,15 @@ package org.specs2
 package specification
 package process
 
-import control._
-import core._
-import collection.Seqx._
-import collection.Iterablex._
-import producer._, Producer._
-import fp.syntax._
+import control.*
+import core.*
+import collection.Seqx.*
+import collection.Iterablex.*
+import producer.*, Producer.*
+import fp.syntax.*
 import main.Arguments
 
-import scala.collection.concurrent.{TrieMap, Map => CMap}
+import scala.collection.concurrent.{TrieMap, Map as CMap}
 
 /**
  * This trait adds random execution constraints between examples.

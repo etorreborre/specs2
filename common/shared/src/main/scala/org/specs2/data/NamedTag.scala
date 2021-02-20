@@ -2,7 +2,7 @@ package org.specs2
 package data
 
 import main.Arguments
-import org.specs2.fp._
+import org.specs2.fp.*
 
 /**
  * A tag with names.
@@ -82,4 +82,4 @@ object NamedTag:
     def append(t1: NamedTag, t2: =>NamedTag): NamedTag =
       if t1 == zero then t2
       else if t2 == zero then t1
-      else t1 overrideWith t2
+      else t1 `overrideWith` t2

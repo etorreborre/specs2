@@ -26,7 +26,7 @@ case class ErrorException(f: Error) extends ExecuteException:
   override def getStackTrace = f.exception.getStackTrace
 
 /** this class allows to throw a result that's decorated with additional information in an Exception */
-case class DecoratedResultException(result: DecoratedResult[_]) extends ExecuteException
+case class DecoratedResultException(result: DecoratedResult[?]) extends ExecuteException
 
 
-case class MyClass(list: List[_])
+case class MyClass(list: List[?])

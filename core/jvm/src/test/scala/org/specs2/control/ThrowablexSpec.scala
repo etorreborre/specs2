@@ -1,7 +1,7 @@
 package org.specs2
 package control
 
-import ThrowableExamples._
+import ThrowableExamples.*
 
 class ThrowablexSpec extends Specification with Throwablex { def is = s2"""
 
@@ -37,9 +37,9 @@ It provides utility functions for stacktrace elements
   def location3 = e.fullLocation            === "org.specs2.control.ThrowableExamples (ThrowableExamples.scala:8)"
   def location4 = TraceLocation(trace).path === "org/specs2/control/ThrowableExamples.scala"
 
-  def filter1 = e.filter("org.specs2.specification.core").getStackTrace.toList.map(_.toString) must containMatch("org.specs2.specification.core")
-  def filter2 = e.filterNot("org.specs2.control").getStackTrace.toList.map(_.toString) must not (containMatch("org.specs2.control"))
+  def filter1 = e.filter("org.specs2.specification.core").getStackTrace.toList.map(_.toString) `must` containMatch("org.specs2.specification.core")
+  def filter2 = e.filterNot("org.specs2.control").getStackTrace.toList.map(_.toString) `must` not (containMatch("org.specs2.control"))
 
-  def stack1 = e(0).toString must beMatching(".*org.specs2.control.ThrowableExamples\\$.e.*")
-  def stack2 = e.headOption.map(_.toString).toIterable must containMatch("ThrowableExamples")
+  def stack1 = e(0).toString `must` beMatching(".*org.specs2.control.ThrowableExamples\\$.e.*")
+  def stack2 = e.headOption.map(_.toString).toIterable `must` containMatch("ThrowableExamples")
 }

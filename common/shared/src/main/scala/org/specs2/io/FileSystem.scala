@@ -1,13 +1,13 @@
 package org.specs2
 package io
 
-import control._
-import fp.syntax._
-import java.io._
-import java.util.regex.Pattern._
-import java.util.regex.Matcher._
+import control.*
+import fp.syntax.*
+import java.io.*
+import java.util.regex.Pattern.*
+import java.util.regex.Matcher.*
 import java.net.URL
-import java.util.zip._
+import java.util.zip.*
 import java.util.regex.Pattern.compile
 import java.util.regex.Matcher.quoteReplacement
 
@@ -132,7 +132,7 @@ case class FileSystem(logger: Logger) extends FilePathReader:
     mkdirs(dest) >>
     Operation.delayed {
       copyLock.synchronized {
-        import java.nio.file._
+        import java.nio.file.*
         Files.copy(Paths.get(filePath.path),
           Paths.get(dest.path).resolve(Paths.get(filePath.name.name)), StandardCopyOption.REPLACE_EXISTING)
       }

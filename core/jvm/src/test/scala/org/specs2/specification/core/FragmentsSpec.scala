@@ -2,14 +2,14 @@ package org.specs2
 package specification
 package core
 
-import text.Trim._
-import matcher._
+import text.Trim.*
+import matcher.*
 import org.specs2.concurrent.ExecutionEnv
 
 class FragmentsSpec(ee: ExecutionEnv) extends Spec with Tables with TypedEqual { def is = s2"""
  Fragments can be compacted    $a1
 """
-  val factory = fragmentFactory; import factory._
+  val factory = fragmentFactory; import factory.*
 
   def a1 =
     def t(s: String) = text(s)

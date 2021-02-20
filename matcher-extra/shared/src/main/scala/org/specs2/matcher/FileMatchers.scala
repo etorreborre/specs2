@@ -1,10 +1,10 @@
 package org.specs2
 package matcher
 
-import text.Quote._
-import io._
+import text.Quote.*
+import io.*
 import scala.reflect.Selectable.reflectiveSelectable
-import execute._, Result._
+import execute.*, Result.*
 import Matcher.{given}
 
 /**
@@ -14,7 +14,7 @@ trait PathMatchers:
   outer =>
 
   private[specs2] val fileReader: FileReader = new org.specs2.io.FileReader {}
-  import fileReader._
+  import fileReader.*
 
   /** matches if new File(path).exists */
   def beAnExistingPath: PathMatcher =

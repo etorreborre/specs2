@@ -2,7 +2,7 @@ package org.specs2
 package specification
 package dsl
 
-import core._
+import core.*
 import create.FragmentsFactory
 
 /**

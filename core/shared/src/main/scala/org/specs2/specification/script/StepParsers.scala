@@ -4,7 +4,7 @@ package script
 
 import util.matching.Regex
 import control.{ImplicitParameters, Use}
-import control.Exceptions._
+import control.Exceptions.*
 import text.RegexExtractor
 
 /**
@@ -31,7 +31,7 @@ trait StepParsers extends ImplicitParameters:
   /** factory method to create a Given or a Then element from a regex, using a regex denoting groups to extract */
   def groupAs(groupRegex: String) = new ReadAs(groups = s"($groupRegex)".r)
 
-  import RegexExtractor._
+  import RegexExtractor.*
 
   /** This class creates Given or Then extractors from a regular expression and a function */
   class ReadAs(regex: Regex = "".r, groups: Regex = stepParserRegex):
@@ -97,7 +97,7 @@ object StepParsers extends StepParsers
  * a few delimited parsers (with `{}`) to extract ints, doubles and strings
  */
 trait StandardDelimitedStepParsers:
-  import StepParsers.{given, _}
+  import StepParsers.{given, *}
 
   def anInt     = StepParser((_: String).trim.toInt)
   def twoInts   = StepParser((s1: String, s2: String) => (s1.trim.toInt, s2.trim.toInt))
@@ -116,7 +116,7 @@ object StandardDelimitedStepParsers extends StandardDelimitedStepParsers
  * a few regular expression parsers to extract ints, doubles and strings (strings are delimited with `"`)
  */
 trait StandardRegexStepParsers:
-  import StepParsers._
+  import StepParsers.*
 
   // definitions taken from the JavaTokenParsers trait
   private val wholeNumber = """-?\d+"""

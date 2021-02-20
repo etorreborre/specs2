@@ -1,8 +1,8 @@
 package org.specs2
 package runner
 
-import control._
-import specification.core._
+import control.*
+import specification.core.*
 
 trait SpecFactory:
 

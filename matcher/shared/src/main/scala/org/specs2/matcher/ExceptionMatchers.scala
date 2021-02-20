@@ -1,13 +1,13 @@
 package org.specs2
 package matcher
 
-import control.Exceptions._
+import control.Exceptions.*
 import scala.reflect.ClassTag
-import reflect.ClassName._
-import text.NotNullStrings._
-import BeMatching.{given, _}
-import execute._, Result._
-import ResultImplicits._
+import reflect.ClassName.*
+import text.NotNullStrings.*
+import BeMatching.{given, *}
+import execute.*, Result.*
+import ResultImplicits.*
 
 /**
  * These matchers can be used to check if exceptions are thrown or not
@@ -50,7 +50,7 @@ trait ExceptionMatchers extends ExpectationsCreation:
   /**
    * Exception matcher checking the type of a thrown exception.
    */
-  class ExceptionClassMatcher(klass: Class[_]) extends Matcher[Any]:
+  class ExceptionClassMatcher(klass: Class[?]) extends Matcher[Any]:
     outer =>
 
     def apply[S <: Any](value: Expectable[S]) =
@@ -79,7 +79,7 @@ trait ExceptionMatchers extends ExpectationsCreation:
 
     private def asString(exception: Any) =
       exception match
-        case e: Class[_]   => e.getName
+        case e: Class[?]   => e.getName
         case ex: Throwable => ex.getClass.getName + ": " + ex.getMessage.notNull
         case other         => other.toString
 
@@ -89,7 +89,7 @@ trait ExceptionMatchers extends ExpectationsCreation:
           checkBoolean(value, checkClassType, rethrowException).not
 
   /** re-throw an Error if an Exception was expected */
-  private def errorMustBeThrownIfExceptionIsExpected(e: Throwable, klass: Class[_]) =
+  private def errorMustBeThrownIfExceptionIsExpected(e: Throwable, klass: Class[?]) =
     if classOf[Exception].isAssignableFrom(klass) && classOf[Error].isAssignableFrom(e.getClass) then throw e
 
   /**
@@ -204,7 +204,7 @@ trait ExceptionMatchers extends ExpectationsCreation:
   private def getException[E <: Throwable](value: =>Any): Option[Throwable] =
     catchAll {
       value match
-        case e: Expectable[_] => e.value
+        case e: Expectable[?] => e.value
         case _ => value
     }(identity).left.toOption
 

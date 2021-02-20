@@ -12,8 +12,8 @@ class LocationUnitSpecification(ee: ExecutionEnv) extends Specification with Wit
   def fragmentsList: List[Fragment] = is.fragmentsList(ee)
 
   "this block" should {
-    "have one example" in ok
-    "have another example" in ko
+    "have one example" `in` ok
+    "have another example" `in` ko
   }
 
   "this other block should" >> {

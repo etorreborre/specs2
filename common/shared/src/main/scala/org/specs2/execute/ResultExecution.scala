@@ -1,13 +1,13 @@
 package org.specs2
 package execute
 
-import control.Exceptions._
+import control.Exceptions.*
 import control.Property
-import reflect.ClassName._
-import text.NotNullStrings._
+import reflect.ClassName.*
+import text.NotNullStrings.*
 import java.util.regex.Pattern
 import scala.util.control.NonFatal
-import annotation._
+import annotation.*
 
 /**
 * This trait executes a Result and returns an appropriate value when a specs2 exception is thrown

@@ -2,7 +2,7 @@ package org.specs2
 package text
 
 import specification.Tables
-import AnsiColors._
+import AnsiColors.*
 
 class AnsiColorsSpec extends Spec with Tables { def is = s2"""
 
@@ -12,7 +12,7 @@ class AnsiColorsSpec extends Spec with Tables { def is = s2"""
 """
 
   def colors1 =
-    removeColors("hello" + AnsiColors.red.color) must ===("hello")
+    removeColors("hello" + AnsiColors.red.color) `must` ===("hello")
 
   def colors2 =
     val ^ = reset.color
@@ -23,6 +23,6 @@ class AnsiColorsSpec extends Spec with Tables { def is = s2"""
     "hello"                  ! s"*hello${^}"                             |
     ""                       ! s"*${^}"                                  |
     "\nhello\nworld\n"       ! s"*${^}\n*hello${^}\n*world${^}\n*${^}"   |
-    { (s, r) => color(s, AnsiColor("*")).replace("\n", "_").replace(^, "^") must ===(r.replace("\n", "_").replace(^, "^")) }
+    { (s, r) => color(s, AnsiColor("*")).replace("\n", "_").replace(^, "^") `must` ===(r.replace("\n", "_").replace(^, "^")) }
 
 }

@@ -2,8 +2,8 @@ package org.specs2
 package text
 
 import util.matching.Regex
-import control.Exceptions._
-import execute._
+import control.Exceptions.*
+import execute.*
 import control.Exceptions
 
 /**

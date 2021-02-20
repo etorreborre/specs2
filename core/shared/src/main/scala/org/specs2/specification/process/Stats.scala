@@ -3,15 +3,15 @@ package specification
 package process
 
 import main.Arguments
-import execute._
-import org.specs2.fp._
-import org.specs2.fp.syntax._
+import execute.*
+import org.specs2.fp.*
+import org.specs2.fp.syntax.*
 import execute.StandardResults
-import text._
-import Plural._
-import control.Exceptions._
+import text.*
+import Plural.*
+import control.Exceptions.*
 import time.SimpleTimer
-import scala.xml._
+import scala.xml.*
 
 /**
  * The Stats class store results for the number of:
@@ -156,9 +156,9 @@ case class Stats(specs:        Int = 0,
 
     def displayValue(f: Stats => Int, label: String, optional: Boolean = false, invariant: Boolean = false): Option[String] =
       val base =
-        if optional && invariant then f(this) optInvariantQty label
-        else if optional then         f(this) optQty label
-        else                       Some(f(this) qty label)
+        if optional && invariant then f(this) `optInvariantQty` label
+        else if optional then         f(this) `optQty` label
+        else                       Some(f(this) `qty` label)
       base map (_ + displayTrendValue(f))
 
     args.colors.stats(
@@ -205,7 +205,7 @@ case object Stats:
         pending      = s1.pending         + s2.pending,
         skipped      = s1.skipped         + s2.skipped,
         trend        = Applicative[Option].apply2(s1.trend, s2.trend)(_ |+| _),
-        timer        = s1.timer           add s2.timer
+        timer        = s1.timer           `add` s2.timer
       )
 
     val zero = empty

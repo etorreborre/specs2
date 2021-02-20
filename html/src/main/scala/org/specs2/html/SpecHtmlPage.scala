@@ -1,11 +1,11 @@
 package org.specs2
 package html
 
-import java.io._
+import java.io.*
 
-import io._
-import specification.core._
-import scala.xml._
+import io.*
+import specification.core.*
+import scala.xml.*
 
 case class SpecHtmlPage(specification: SpecStructure, path: FilePath, outDir: DirectoryPath, content: String):
 

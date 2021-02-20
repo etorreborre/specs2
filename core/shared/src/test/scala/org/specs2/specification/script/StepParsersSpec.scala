@@ -2,8 +2,8 @@ package org.specs2
 package specification
 package script
 
-import matcher._
-import StepParsers.{given, _}
+import matcher.*
+import StepParsers.{given, *}
 import scala.util.matching.Regex
 
 class StepParsersSpec extends Spec with TypedEqual { def is = s2"""
@@ -29,7 +29,7 @@ class StepParsersSpec extends Spec with TypedEqual { def is = s2"""
   def braces2 = StepParser((s1: String, s2: String) => (s1.toInt, s2.toInt)).parse("2 values {1} and {2}") === Right(("2 values 1 and 2", (1, 2)))
   def braces3 = StepParser.seq((seq: Seq[String]) => seq.map(_.toInt).sum).parse("values {1}, {2}, {3}") === Right(("values 1, 2, 3", 6))
   def braces4 = StepParser((s1: String, s2: String) => (s1.toInt, s2.toInt)).parse("3 values {1} and {2} and {3}") === Right(("3 values 1 and 2 and 3", (1, 2)))
-  def braces5 = StepParser((s1: String, s2: String) => (s1.toInt, s2.toInt)).parse("1 value {1}") must beLeft
+  def braces5 = StepParser((s1: String, s2: String) => (s1.toInt, s2.toInt)).parse("1 value {1}") `must` beLeft
 
   def brackets1 = StepParser((_:String).toInt).withRegex("""\[([^\]]+)\]""".r).parse("a value [1]") === Right(("a value 1", 1))
   def brackets2 = StepParser((s: String) => s).withRegex("""\[([^\]]+)\]""".r).parse("a value [{1}]") === Right(("a value {1}", "{1}"))

@@ -1,9 +1,9 @@
 package org.specs2
 package scalacheck
 
-import org.scalacheck.util._
+import org.scalacheck.util.*
 import org.scalacheck.Test
-import PrettyDetails._
+import PrettyDetails.*
 
 trait ScalaCheckParameters:
   /**

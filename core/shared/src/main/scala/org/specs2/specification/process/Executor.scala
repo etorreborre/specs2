@@ -2,14 +2,14 @@ package org.specs2
 package specification
 package process
 
-import scala.concurrent._
-import core._
-import duration._
-import control._
-import producer._, Producer._
-import fp.syntax._
+import scala.concurrent.*
+import core.*
+import duration.*
+import control.*
+import producer.*, Producer.*
+import fp.syntax.*
 import main.Arguments
-import process.RandomSequentialExecutor._
+import process.RandomSequentialExecutor.*
 
 /**
  * Functions for executing fragments.
@@ -118,7 +118,7 @@ case class SteppedExecutor(env: Env) extends Executor:
       case Some(continue) =>
         Producer.evalProducer(fragment.executionResult.map { result =>
           continue(result).fold(oneDelayed[Action, Fragment](fragment))(
-            fs => oneDelayed[Action, Fragment](fragment) append execute(specArguments)(fs.contents))
+            fs => oneDelayed[Action, Fragment](fragment) `append` execute(specArguments)(fs.contents))
         })
 
       case None => oneDelayed(fragment)

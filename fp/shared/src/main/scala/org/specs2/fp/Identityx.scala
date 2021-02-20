@@ -13,7 +13,7 @@ trait Identityx:
 
   extension [S <: T, T : Monoid](t: =>S)
     def orEmptyUnless(condition: Boolean): T =
-      t orEmptyWhen !condition
+      t `orEmptyWhen` !condition
 
     def orEmptyWhen(condition: Boolean): T =
       if condition then summon[Monoid[T]].zero else t

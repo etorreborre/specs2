@@ -37,7 +37,7 @@ class LinesContentDifferenceSpec extends Specification with AllExpectations { s2
     def diff(ls1: Seq[String], ls2: Seq[String]): LinesContentDifference =
       LinesContentDifference(ls1, ls2, all = true, ordered = true)
 
-    diff(lines1, lines2) must not(beEmpty[LinesContentDifference])
+    diff(lines1, lines2) `must` not(beEmpty[LinesContentDifference])
     diff(lines1, lines3).show === Seq(SameLine(line1), SameLine(line2), AddedLine(line3), AddedLine(line4))
     diff(lines3, lines1).show === Seq(SameLine(line1), SameLine(line2), DeletedLine(line3), DeletedLine(line4))
     diff(lines3, lines4).show === Seq(DifferentLine(line1, line2), DifferentLine(line2, line4))
@@ -47,7 +47,7 @@ class LinesContentDifferenceSpec extends Specification with AllExpectations { s2
     def diff(ls1: Seq[String], ls2: Seq[String]): LinesContentDifference =
       LinesContentDifference(ls1, ls2, all = true, ordered = false)
 
-    diff(lines1, lines2) must beEmpty
+    diff(lines1, lines2) `must` beEmpty
     diff(lines1, lines3).show === Seq(SameLine(line1), SameLine(line2), AddedLine(line3), AddedLine(line4))
     diff(lines3, lines1).show === Seq(SameLine(line1), SameLine(line2), DeletedLine(line3), DeletedLine(line4))
     diff(lines3, lines4).show === Seq(AddedLine(line1), SameLine(line2), DeletedLine(line4))
@@ -58,7 +58,7 @@ class LinesContentDifferenceSpec extends Specification with AllExpectations { s2
     def diff(ls1: Seq[String], ls2: Seq[String]): LinesContentDifference =
       LinesContentDifference(ls1, ls2, all = false, ordered = true)
 
-    diff(lines1, lines2) must not(beEmpty[LinesContentDifference])
+    diff(lines1, lines2) `must` not(beEmpty[LinesContentDifference])
     diff(lines1, lines3).show === Seq(SameLine(line1), SameLine(line2))
     diff(lines3, lines1).show === Seq(SameLine(line1), SameLine(line2), DeletedLine(line3), DeletedLine(line4))
     diff(lines3, lines4).show === Seq(SameLine(line2), DeletedLine(line4))
@@ -68,7 +68,7 @@ class LinesContentDifferenceSpec extends Specification with AllExpectations { s2
     def diff(ls1: Seq[String], ls2: Seq[String]): LinesContentDifference =
       LinesContentDifference(ls1, ls2, all = false, ordered = false)
 
-    diff(lines1, lines2) must beEmpty
+    diff(lines1, lines2) `must` beEmpty
     diff(lines1, lines3).show === Seq(SameLine(line1), SameLine(line2))
     diff(lines3, lines1).show === Seq(SameLine(line1), SameLine(line2), DeletedLine(line3), DeletedLine(line4))
     diff(lines3, lines4).show === Seq(SameLine(line2), DeletedLine(line4))

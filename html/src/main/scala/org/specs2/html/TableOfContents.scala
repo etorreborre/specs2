@@ -1,16 +1,16 @@
 package org.specs2
 package html
 
-import scala.xml._
-import specification.core._
-import control._
-import io._
-import xml.Nodex.{given, _}
-import Htmlx._
-import fp._, syntax._
-import data.Trees._
+import scala.xml.*
+import specification.core.*
+import control.*
+import io.*
+import xml.Nodex.{given, *}
+import Htmlx.*
+import fp.*, syntax.*
+import data.Trees.*
 import concurrent.ExecutionEnv
-import text.Trim._
+import text.Trim.*
 
 /**
  * This trait checks for the presence of a <toc/> tag at the beginning of a xml document and replaces it
@@ -96,10 +96,10 @@ trait TableOfContents:
           s.reduceNodes.updateHeadAttribute("id", page.path.name.name)
         else if h.level > 1 then
           <li><a href={page.relativePath.path+"#"+h.pandocName} title={h.name}>{h.name.truncate(entryMaxSize)}</a>
-            { <ul>{s}</ul> orEmptyWhen s.isEmpty }
+            { <ul>{s}</ul> `orEmptyWhen` s.isEmpty }
           </li>
         else
-          <ul>{s}</ul> orEmptyWhen s.isEmpty
+          <ul>{s}</ul> `orEmptyWhen` s.isEmpty
     }.rootLabel
 
   def saveHtmlPages(pages: List[SpecHtmlPage], fileSystem: FileSystem): Operation[Unit] =

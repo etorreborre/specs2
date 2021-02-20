@@ -5,7 +5,7 @@ import org.specs2.execute.Result
 import org.specs2.main.ArgumentsShortcuts
 import org.specs2.matcher.{Matcher, TraversableMatchers, TypedEqual, ValueCheck}
 import org.specs2.specification.core.{Description, Fragment, SpecStructure, StacktraceLocation}
-import org.specs2.specification.create.DefaultFragmentFactory._
+import org.specs2.specification.create.DefaultFragmentFactory.*
 import org.specs2.specification.dsl.mutable.{ArgumentsCreation, MutableDsl, MutableFragmentBuilder}
 import org.specs2.matcher.Matcher.{given}
 
@@ -49,12 +49,12 @@ class MutableFragmentsDslSpec(ee: ExecutionEnv) extends org.specs2.Spec with Typ
 
     val actualDescriptions: List[Description] = fragments(new dsl {
         "this" should {
-          "e1" in ok
-          "e2" in ok
+          "e1" `in` ok
+          "e2" `in` ok
         }
       }).map(_.description)
 
-    actualDescriptions must contain(exactly(expectedDescriptions*))
+    actualDescriptions `must` contain(exactly(expectedDescriptions*))
   end e3
 
 

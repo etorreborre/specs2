@@ -13,12 +13,12 @@ trait Sized[T]:
 
 object Sized extends SizedLowPriority1:
     /** any scala collection has a size */
-  given [I <: Traversable[_]]: Sized[I] with
+  given [I <: Traversable[?]]: Sized[I] with
     def size(t: I) = t.size
 
 trait SizedLowPriority1 extends SizedLowPriority2:
   /** any java collection has a size */
-  given [T <: java.util.Collection[_]]: Sized[T] with
+  given [T <: java.util.Collection[?]]: Sized[T] with
     def size(t: T) = t.size()
 
   /** any scala array has a size */

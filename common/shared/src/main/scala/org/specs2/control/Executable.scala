@@ -3,8 +3,8 @@ package control
 
 import io.FilePath
 import scala.sys.process.ProcessLogger
-import Operation._
-import fp.syntax._
+import Operation.*
+import fp.syntax.*
 
 /**
  * Execute external commands

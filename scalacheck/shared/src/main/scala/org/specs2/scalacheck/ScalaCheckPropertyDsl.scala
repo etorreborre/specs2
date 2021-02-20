@@ -2,7 +2,7 @@ package org.specs2
 package scalacheck
 
 import org.scalacheck.rng.Seed
-import org.scalacheck.util._
+import org.scalacheck.util.*
 import org.scalacheck.{Prop, Properties}
 import org.specs2.specification.core.Fragments
 import org.specs2.specification.create.FragmentsFactory

@@ -2,8 +2,8 @@ package org.specs2
 package specification
 package core
 
-import control._
-import quoted._
+import control.*
+import quoted.*
 
 /**
  * Location of a Fragment

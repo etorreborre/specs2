@@ -2,18 +2,18 @@ package org.specs2
 package matcher
 
 import org.specs2.data.Sized
-import org.specs2.execute.ResultLogicalCombinators._
-import org.specs2.execute._
-import org.specs2.json._
-import Json._
-import org.specs2.text.NotNullStrings._
-import text.NotNullStrings._
-import json.Json._
+import org.specs2.execute.ResultLogicalCombinators.*
+import org.specs2.execute.*
+import org.specs2.json.*
+import Json.*
+import org.specs2.text.NotNullStrings.*
+import text.NotNullStrings.*
+import json.Json.*
 import util.matching.Regex
 import Matcher.{given}
-import Result._
+import Result.*
 import Results.negateWhen
-import JsonMatchers._
+import JsonMatchers.*
 
 /**
  * Matchers for Json expressions (entered as strings)
@@ -303,7 +303,7 @@ trait JsonSelectors:
     def description: String = s"value $name"
 
   case class JsonRegexSelector(r: Regex) extends JsonValueSelector:
-    def select(names: List[Any]) = names.find(_.notNull matches r.toString).map(_.notNull)
+    def select(names: List[Any]) = names.find(_.notNull `matches` r.toString).map(_.notNull)
     def select(map: Map[String, Any]) = None
     def name = s"'$r'"
     def description: String = s"regex $name"

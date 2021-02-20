@@ -1,10 +1,10 @@
 package org.specs2
 package matcher
 
-import text.Sentences._
+import text.Sentences.*
 import execute.{ResultExecution, AsResult, Result}
 import scala.util.NotGiven
-import control.ImplicitParameters.{given, _}
+import control.ImplicitParameters.{given, *}
 
 trait ExpectationsDescription extends ExpectationsCreation:
 

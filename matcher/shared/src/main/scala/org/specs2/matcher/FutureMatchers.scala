@@ -2,11 +2,11 @@ package org.specs2
 package matcher
 
 import org.specs2.concurrent.ExecutionEnv
-import scala.concurrent.duration._
-import scala.concurrent._
-import execute._
-import concurrent.FutureAwait.{await => futureAwait}
-import Result._
+import scala.concurrent.duration.*
+import scala.concurrent.*
+import execute.*
+import concurrent.FutureAwait.{await as futureAwait}
+import Result.*
 
 /**
  * This trait is for transforming matchers of values to matchers of Futures

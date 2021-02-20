@@ -1,11 +1,11 @@
 package org.specs2
 package runner
 
-import fp._, syntax._
-import control._, Throwablex._
-import control._
-import reporter._
-import specification.core._
+import fp.*, syntax.*
+import control.*, Throwablex.*
+import control.*
+import reporter.*
+import specification.core.*
 import specification.process.Stats
 import main.Arguments
 

@@ -1,7 +1,7 @@
 package org.specs2
 package io
 
-import java.io._
+import java.io.*
 import java.net.URI
 import java.util.UUID
 

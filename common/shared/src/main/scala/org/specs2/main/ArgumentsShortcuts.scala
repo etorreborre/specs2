@@ -2,8 +2,8 @@ package org.specs2
 package main
 
 import control.{NoStackTraceFilter, IncludeExcludeStackTraceFilter, DefaultStackTraceFilter, Exceptions}
-import Exceptions._
-import text._
+import Exceptions.*
+import text.*
 
 /**
  * This trait provides shortcuts for frequently used arguments

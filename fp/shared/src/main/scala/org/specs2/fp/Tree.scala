@@ -1,7 +1,7 @@
 package org.specs2.fp
 
-import Tree._
-import syntax._
+import Tree.*
+import syntax.*
 
 /**
  * Inspired from the scalaz (https://github.com/scalaz/scalaz) project
@@ -103,7 +103,7 @@ sealed abstract class Tree[A]:
     f(rootLabel)(subForest)
 
   def map[B](f: A => B): Tree[B] =
-    Node(f(rootLabel), subForest map (_ map f))
+    Node(f(rootLabel), subForest map (_ `map` f))
 
   def flatMap[B](f: A => Tree[B]): Tree[B] =
     val r: Tree[B] = f(rootLabel)

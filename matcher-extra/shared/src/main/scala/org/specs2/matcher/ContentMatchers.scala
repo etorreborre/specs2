@@ -3,11 +3,11 @@ package matcher
 
 import java.io.File
 
-import text._
-import AnsiColors._
-import io._
-import execute._, Result._
-import fp.syntax._
+import text.*
+import AnsiColors.*
+import io.*
+import execute.*, Result.*
+import fp.syntax.*
 
 /**
  * The ContentMatchers trait provides matchers to make comparisons between files, sequences,...
@@ -63,7 +63,7 @@ trait LinesContentBaseMatchers extends DifferenceFilters with Expectations with 
     def unordered                        = copy[L1, L2](ordered = false)
     def noColors                         = copy[L1, L2](colors = false)
 
-    protected def showDiffs(s: Seq[_]): String =
+    protected def showDiffs(s: Seq[?]): String =
       s.flatMap {
         case SameLine(NumberedLine(n, l))    => List(s"  $n. $l")
         case AddedLine(NumberedLine(n, l))   => List(color(s"+ $n. $l", green))
@@ -106,5 +106,5 @@ trait LinesContentBaseMatchers extends DifferenceFilters with Expectations with 
 private[specs2]
 trait SeqsContents:
   // default implementation for reading seq lines
-  implicit protected def seqContentForMatchers[T, CC[_] <: Traversable[_]]: LinesContent[CC[T]] =
+  implicit protected def seqContentForMatchers[T, CC[_] <: Traversable[?]]: LinesContent[CC[T]] =
     SeqLinesContent[T, CC]()

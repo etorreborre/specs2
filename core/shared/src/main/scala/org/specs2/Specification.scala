@@ -1,12 +1,12 @@
 package org.specs2
 
-import matcher._
-import main._
-import execute._
+import matcher.*
+import main.*
+import execute.*
 import specification.dsl.AcceptanceDsl1
-import specification._
+import specification.*
 import specification.core.ImmutableSpecificationStructure
-import specification.create._
+import specification.create.*
 
 /**
  * Immutable Specification class

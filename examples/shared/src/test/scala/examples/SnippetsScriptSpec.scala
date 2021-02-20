@@ -1,7 +1,7 @@
 package examples
 
-import org.specs2._
-import specification._
+import org.specs2.*
+import specification.*
 
 /**
  * This specification shows that it is possible to insert code snippets in some text

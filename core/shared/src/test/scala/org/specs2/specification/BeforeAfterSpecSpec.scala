@@ -2,8 +2,8 @@ package org.specs2
 package specification
 
 import main.Arguments
-import reporter._
-import reporter.PrinterLogger._
+import reporter.*
+import reporter.PrinterLogger.*
 import specification.core.{SpecificationStructure, Env}
 import scala.collection.mutable.ArrayBuffer
 

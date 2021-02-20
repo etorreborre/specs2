@@ -1,14 +1,14 @@
 package org.specs2
 package html
 
-import io._
-import scala.xml._
+import io.*
+import scala.xml.*
 import transform.RewriteRule
-import org.specs2.fp._, Tree._
-import xml.Nodex.{given, _}
+import org.specs2.fp.*, Tree.*
+import xml.Nodex.{given, *}
 import java.net.URLDecoder
 import data.UniqueNames
-import matcher.describe._
+import matcher.describe.*
 
 /**
  * This trait provide additional methods on a NodeSeq or a Node representing an html document

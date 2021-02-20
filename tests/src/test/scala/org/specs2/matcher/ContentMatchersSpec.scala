@@ -1,14 +1,14 @@
 package org.specs2
 package matcher
 
-import io._
-import FileName._
+import io.*
+import FileName.*
 import specification.BeforeAfterEach
-import control._
+import control.*
 import text.LinesContent
 import java.io.File
-import org.specs2.fp.syntax._
-import org.specs2.text.AnsiColors._
+import org.specs2.fp.syntax.*
+import org.specs2.text.AnsiColors.*
 
 class ContentMatchersSpec extends Spec with LinesContentMatchers with BeforeAfterEach with TestFileNames { def is = sequential ^ s2"""
 
@@ -54,26 +54,26 @@ case class comp() extends MustMatchers with TestFileNames with ContentMatchers:
     def lines(f: File) = fs.readLines(FilePath.unsafe(f)).runOption.get
   }
 
-  def e1 =  (dir | f1).toFile must haveSameLinesAs((dir | f2).toFile)
-  def e2 = ((dir | f1).toFile, (dir | f2).toFile) must haveSameLines
-  def e3 = ((dir | f1).toFile, (dir | f2).toFile) must haveSameLines.unordered
+  def e1 =  (dir | f1).toFile `must` haveSameLinesAs((dir | f2).toFile)
+  def e2 = ((dir | f1).toFile, (dir | f2).toFile) `must` haveSameLines
+  def e3 = ((dir | f1).toFile, (dir | f2).toFile) `must` haveSameLines.unordered
 
-  def e4 = (dir | f1).toFile must containLines((dir | f4).toFile)
-  def e5 = (dir | f1).toFile must containLines((dir | f5).toFile).unordered
+  def e4 = (dir | f1).toFile `must` containLines((dir | f4).toFile)
+  def e5 = (dir | f1).toFile `must` containLines((dir | f5).toFile).unordered
 
   def e6 =
-    val message = (((dir | f6).toFile, (dir | f7).toFile) must haveSameLines.showOnly(1.difference).unordered).message
+    val message = (((dir | f6).toFile, (dir | f7).toFile) `must` haveSameLines.showOnly(1.difference).unordered).message
     val lines = message.split("\n").toSeq.map(s => removeColors(s)).mkString("\n")
     lines ====
       s"""|${(dir | f6).path} is not the same as ${(dir | f7).path}
           |    + 2. morning""".stripMargin
 
-  def e7 = ((dir | f1).toFile, Seq("hello", "beautiful", "world")) must haveSameLines
+  def e7 = ((dir | f1).toFile, Seq("hello", "beautiful", "world")) `must` haveSameLines
 
-  def e8 = ((dir | f8).toFile, (dir | f8).toFile) must haveSameLines
+  def e8 = ((dir | f8).toFile, (dir | f8).toFile) `must` haveSameLines
 
 
 trait TestFileNames:
-  import FileName._
+  import FileName.*
 
   lazy val (f1, f2, f3, f4, f5, f6, f7, f8) = (unsafe("f1"), unsafe("f2"), unsafe("f3"), unsafe("f3"), unsafe("f5"), unsafe("f6"), unsafe("f7"), unsafe("f8"))

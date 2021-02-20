@@ -1,7 +1,7 @@
 package org.specs2
 package control
 
-import Throwablex._
+import Throwablex.*
 
 class IncludeExcludeStackTraceFilterSpec extends IncludeExcludeStackTraceFilterExamples { def is = s2"""
 
@@ -37,24 +37,24 @@ Filtering
 
 trait IncludeExcludeStackTraceFilterExamples extends IncludeExcludeStackTraceFilterImplementation:
 
-  def exclude1 = filter(stacktrace("t1", "a", "com.t1.other"))      (excludeTrace("t1", "t2")) must not(containMatch("t1"))
-  def exclude2 = filter(stacktrace("t1", "t3", "a", "com.t1.other"))(excludeTrace("t1", "t2")) must containMatch("t3")
+  def exclude1 = filter(stacktrace("t1", "a", "com.t1.other"))      (excludeTrace("t1", "t2")) `must` not(containMatch("t1"))
+  def exclude2 = filter(stacktrace("t1", "t3", "a", "com.t1.other"))(excludeTrace("t1", "t2")) `must` containMatch("t3")
 
-  def include1 = filter(stacktrace("t1", "a", "com.t1.other"))      (includeTrace("t1", "t2")) must containMatch("t1")
-  def include2 = filter(stacktrace("t1", "t3", "a", "com.t1.other"))(includeTrace("t1", "t2")) must not(containMatch("t3"))
+  def include1 = filter(stacktrace("t1", "a", "com.t1.other"))      (includeTrace("t1", "t2")) `must` containMatch("t1")
+  def include2 = filter(stacktrace("t1", "t3", "a", "com.t1.other"))(includeTrace("t1", "t2")) `must` not(containMatch("t3"))
 
-  def includeExclude1 = IncludeExcludeStackTraceFilter.fromString("i1,i2/e1,e2") must ===(
+  def includeExclude1 = IncludeExcludeStackTraceFilter.fromString("i1,i2/e1,e2") `must` ===(
     IncludeExcludeStackTraceFilter(Seq("i1", "i2"), Seq("e1", "e2")))
 
   val defaultFilter = DefaultStackTraceFilter
 
-  def includeExclude2 = filter(stacktrace("org.specs2", "t1"))(defaultFilter.includeAlso("t1", "t2")) must not(containMatch("specs2"))
-  def includeExclude3 = filter(stacktrace("org.specs2", "t1"))(defaultFilter.excludeAlso("t1"))       must not(containMatch("t1"))
+  def includeExclude2 = filter(stacktrace("org.specs2", "t1"))(defaultFilter.includeAlso("t1", "t2")) `must` not(containMatch("specs2"))
+  def includeExclude3 = filter(stacktrace("org.specs2", "t1"))(defaultFilter.excludeAlso("t1"))       `must` not(containMatch("t1"))
 
 
   def filter1 =
     val cause = new Exception("bang")
-    DefaultStackTraceFilter.apply(new Exception("boom", cause)).getCause must ===(cause)
+    DefaultStackTraceFilter.apply(new Exception("boom", cause)).getCause `must` ===(cause)
 
   def filter2 = DefaultStackTraceFilter.apply(new IllegalArgumentException("ohnoes")).getClass.getName ===
     "java.lang.IllegalArgumentException"

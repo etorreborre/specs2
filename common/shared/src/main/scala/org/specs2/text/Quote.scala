@@ -1,7 +1,7 @@
 package org.specs2
 package text
 
-import NotNullStrings._
+import NotNullStrings.*
 import scala.collection.Traversable
 
 /**
@@ -15,14 +15,14 @@ trait Quote:
     if a == null then quote("null")
     else
       a match
-        case option: Option[_]      => quote(option.notNull)
-        case ar: Array[_]           => ar.notNull
-        case map: Map[_,_]          => map.notNull
-        case it: TraversableOnce[_] => it.notNull
+        case option: Option[?]      => quote(option.notNull)
+        case ar: Array[?]           => ar.notNull
+        case map: Map[?,?]          => map.notNull
+        case it: TraversableOnce[?] => it.notNull
         case _                      => quote(a.notNull)
 
   /** quote a sequence, with commas if short, with newlines otherwise */
-  def qseq(seq: Traversable[_]): String =
+  def qseq(seq: Traversable[?]): String =
     val withCommas = q(seq.mkString(", "))
     if withCommas.length < 30 then withCommas
     else seq.mkString("\n", "\n  ", "\n")

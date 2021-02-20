@@ -1,10 +1,10 @@
 package org.specs2
 package data
 
-import org.scalacheck._
+import org.scalacheck.*
 
-import org.specs2.fp._
-import Trees._
+import org.specs2.fp.*
+import Trees.*
 import org.specs2.matcher.ThrownExpectations
 
 class TreesSpec extends Specification with ScalaCheck with ThrownExpectations { def is = s2"""
@@ -15,7 +15,7 @@ class TreesSpec extends Specification with ScalaCheck with ThrownExpectations { 
 
   def paths = prop { (treeAndPaths: TreeAndPaths) =>
     val TreeAndPaths(tree, paths) = treeAndPaths
-    tree.allPaths must ===(paths)
+    tree.allPaths `must` ===(paths)
   }
 
   given Arbitrary[TreeAndPaths] = Arbitrary {

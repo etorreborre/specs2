@@ -1,17 +1,17 @@
 package org.specs2
 package matcher
 
-import org.specs2.control.Exceptions._
-import org.specs2.execute._, Result._
-import execute.ResultImplicits._
-import execute.ResultLogicalCombinators._
-import org.specs2.text.NotNullStrings._
-import org.specs2.text.Quote._
-import org.specs2.text.Sentences._
+import org.specs2.control.Exceptions.*
+import org.specs2.execute.*, Result.*
+import execute.ResultImplicits.*
+import execute.ResultLogicalCombinators.*
+import org.specs2.text.NotNullStrings.*
+import org.specs2.text.Quote.*
+import org.specs2.text.Sentences.*
 
-import scala.concurrent.duration._
-import org.specs2.fp.syntax._
-import annotation._
+import scala.concurrent.duration.*
+import org.specs2.fp.syntax.*
+import annotation.*
 
 /**
  * The `Matcher` trait is the base trait for any Matcher.
@@ -101,7 +101,7 @@ trait Matcher[-T]:
    * If the skip message is empty, only the failure message is printed
    */
   def orSkip(m: String): Matcher[T] =
-    orSkip((ko: String) => m prefix(": ", ko))
+    orSkip((ko: String) => m `prefix`(": ", ko))
 
   /**
    * @return a Skipped Result if this matcher fails, modifying the failure message with a skip message.
@@ -125,7 +125,7 @@ trait Matcher[-T]:
    * If the message is empty, only the failure message is printed
    */
   def orThrow(m: String): Matcher[T] =
-    orThrow((ko: String) => m prefix(": ", ko))
+    orThrow((ko: String) => m `prefix`(": ", ko))
 
   /**
    * throw a FailureException if this matcher fails, modifying the failure message with a message.
@@ -150,7 +150,7 @@ trait Matcher[-T]:
    * If the pending message is empty, only the failure message is printed
    */
   def orPending(m: String): Matcher[T] =
-    orPending((ko: String) => m prefix(": ", ko))
+    orPending((ko: String) => m `prefix`(": ", ko))
 
   /**
    * @return a Pending Result if this matcher fails, modifying the failure message with a pending message.

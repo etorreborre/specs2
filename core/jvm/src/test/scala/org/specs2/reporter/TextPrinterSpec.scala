@@ -1,16 +1,16 @@
 package org.specs2
 package reporter
 
-import control._
-import execute._
-import ResultImplicits._
-import matcher._
-import specification._
+import control.*
+import execute.*
+import ResultImplicits.*
+import matcher.*
+import specification.*
 import specification.create.DefaultFragmentFactory
-import core._
+import core.*
 import dsl.FragmentsDsl
-import text.Trim._
-import PrinterLogger._
+import text.Trim.*
+import PrinterLogger.*
 
 import main.{Report, Arguments}
 import process.{Stats, DefaultExecutor, StatisticsRepositoryCreation}
@@ -81,20 +81,20 @@ class TextPrinterSpec(val env: Env) extends Specification with OwnEnv { def is =
  Datatable must be properly indented                          $m1
  Nested datatables must be reported                           $m2
 """
-  import TextPrinterSpecification._
-  val factory = fragmentFactory; import factory._
+  import TextPrinterSpecification.*
+  val factory = fragmentFactory; import factory.*
 
   def a1 =
-    "title".title ^ "" contains
+    "title".title ^ "" `contains`
       """|[info] title"""
 
   def a2 =
-    showOnly(Report.allFlags.filterNot(_ == '#')) ^ "title".title ^ "" doesntContain
+    showOnly(Report.allFlags.filterNot(_ == '#')) ^ "title".title ^ "" `doesntContain`
     """|[info] title"""
 
   def a3 = "title".title ^ s2"""
 presentation
-""" contains
+""" `contains`
     """|[info] title
       |[info]
       |[info] presentation"""
@@ -103,7 +103,7 @@ presentation
 presentation
   e1 $ok
   e2 $ok
-""" contains
+""" `contains`
     """|[info] presentation
        |[info]   + e1
        |[info]   + e2"""
@@ -112,23 +112,23 @@ presentation
 presentation
   e1 $ok
   e2 $ko
-""" contains
+""" `contains`
     """|[info] presentation
        |[info]   + e1
        |[error]   x e2"""
 
-  def b3 = s2"""e1 ${Error("ouch")}""" contains """[error] ! e1"""
+  def b3 = s2"""e1 ${Error("ouch")}""" `contains` """[error] ! e1"""
 
-  def b4 = s2"""e1 ${skipped("for now")}""" contains """[info] o e1"""
-  def b5 = s2"""e1 ${pending("for now")}""" contains """[info] * e1"""
+  def b4 = s2"""e1 ${skipped("for now")}""" `contains` """[info] o e1"""
+  def b5 = s2"""e1 ${pending("for now")}""" `contains` """[info] * e1"""
 
-  def b6 = "t".title ^ "e1\nexample1" ! ok contains
+  def b6 = "t".title ^ "e1\nexample1" ! ok `contains`
   """|[info] + e1
      |[info]   example1""".stripMargin
 
   def b7 =
     def ex1 = AsResult { Thread.sleep(30); ok }
-    Arguments("showtimes") ^ s2"""e1 $ex1""" matches """(?s).*\[info\] \+ e1 \(\d\d.+\).*"""
+    Arguments("showtimes") ^ s2"""e1 $ex1""" `matches` """(?s).*\[info\] \+ e1 \(\d\d.+\).*"""
 
   def c1 =
     contains(s2"""e1 $ok
@@ -140,96 +140,96 @@ presentation
            |[info] x examples, x failures, x error""", (_:String).replaceAll("\\d+", "x"))
 
   def d1 =
-    s2"""e1 ${1 must ===(2)}""" contains
+    s2"""e1 ${1 `must` ===(2)}""" `contains`
          """|[error] x e1
             |[error]  1 != 2"""
 
   def d2 =
     Arguments.split("failtrace fullstacktrace") ^
-      s2"""e1 ${1 must ===(2)}""" contains
+      s2"""e1 ${1 `must` ===(2)}""" `contains`
       """|[error]_org.specs2.report"""
 
   def d3 =
-    s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must ===("adcdeadcdeadcdeadcdeadcde")}""" contains
+    s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" `must` ===("adcdeadcdeadcdeadcdeadcde")}""" `contains`
         """|[error] Actual:   a[b]cdea[b]cdea[b]cdea[b]cdea[b]cde
            |[error] Expected: a[d]cdea[d]cdea[d]cdea[d]cdea[d]cde"""
 
   case class A(s: String) { override def equals(a: Any) = false }
 
   def d4 =
-    s2"""e1 ${A("a"*100) must ===(A("a"*100))}""" doesntContain
+    s2"""e1 ${A("a"*100) `must` ===(A("a"*100))}""" `doesntContain`
       """|[error] Actual"""
 
   def e1 = Arguments("fullstacktrace") ^
-    s2"""e1 $error1""" contains
+    s2"""e1 $error1""" `contains`
       """|[error] ! e1
          |[error]  java.lang.RuntimeException: boom"""
 
   def e2 = Arguments("fullstacktrace") ^
-    s2"""e1 $error1""" contains
+    s2"""e1 $error1""" `contains`
     """|[error] ! e1
        |[error]  java.lang.RuntimeException: boom"""
 
-  def e3 = s2"""e1 $error1""" contains """|[error] org.specs2.report"""
+  def e3 = s2"""e1 $error1""" `contains` """|[error] org.specs2.report"""
 
-  def e4 = s2"""e1 $error2""" contains """|[error] CAUSED BY"""
+  def e4 = s2"""e1 $error2""" `contains` """|[error] CAUSED BY"""
 
-  def f1 = s2"""e1 ${Success("ok", "expected")}""" contains
+  def f1 = s2"""e1 ${Success("ok", "expected")}""" `contains`
     """|[info] + e1
        |[info] expected"""
 
-  def g1 = s2"""e1 $pending""" contains
+  def g1 = s2"""e1 $pending""" `contains`
     """|[info] * e1 PENDING"""
 
-  def g2 = s2"""e1 ${Pending("todo")}""" contains
+  def g2 = s2"""e1 ${Pending("todo")}""" `contains`
     """|[info] * e1 todo"""
 
-  def h1 = s2"""e1 ${Skipped("")}""" contains
+  def h1 = s2"""e1 ${Skipped("")}""" `contains`
     """|[info] o e1
        |[info] SKIPPED"""
 
-  def h2 = s2"""e1 $skipped""" contains
+  def h2 = s2"""e1 $skipped""" `contains`
     """|[info] o e1
        |[info] skipped""".stripMargin
 
-  def h3 = s2"""e1 ${Skipped("wontdo")}""" contains
+  def h3 = s2"""e1 ${Skipped("wontdo")}""" `contains`
     """|[info] o e1
        |[info] wontdo"""
 
-  def i1 = SpecStructure.create(SpecHeader(getClass), Arguments(), "e1" ! ok ^ break ^ break ^ "e2" ! ok) contains
+  def i1 = SpecStructure.create(SpecHeader(getClass), Arguments(), "e1" ! ok ^ break ^ break ^ "e2" ! ok) `contains`
     """|[info] + e1
        |[info]
        |[info] + e2"""
 
-  def j1 = s2"""the ${SpecificationRef(SpecHeader(classOf[String]), Arguments())} spec""" contains
+  def j1 = s2"""the ${SpecificationRef(SpecHeader(classOf[String]), Arguments())} spec""" `contains`
     """|[info] the * String spec"""
 
-  def j2 = s2"""the ${SpecificationRef(SpecHeader(classOf[String], Some("STRING")), Arguments())} spec""" contains
+  def j2 = s2"""the ${SpecificationRef(SpecHeader(classOf[String], Some("STRING")), Arguments())} spec""" `contains`
     """|[info] the * STRING spec"""
 
   def j3 =
     val repository = StatisticsRepositoryCreation.memory
     repository.storeStatistics(classOf[String].getName, Stats(examples = 1, failures = 1)).runOption
     val env1 = ownEnv.setArguments(Arguments()).setStatisticRepository(repository)
-    (s2"""the ${SpecificationRef(SpecHeader(classOf[String], Some("STRING")), Arguments())} spec""", env1) contains
+    (s2"""the ${SpecificationRef(SpecHeader(classOf[String], Some("STRING")), Arguments())} spec""", env1) `contains`
     """|[info] the x STRING spec"""
 
 
-  def j4 = s2"""the ${SpecificationRef(SpecHeader(classOf[String], Some("STRING")), Arguments(), hidden = true)} spec""" contains
+  def j4 = s2"""the ${SpecificationRef(SpecHeader(classOf[String], Some("STRING")), Arguments(), hidden = true)} spec""" `contains`
     """|[info] the  spec"""
 
-  def j5 = s2"""the ${SpecificationRef(SpecHeader(classOf[String], Some("STRING")), Arguments(), alias = "beautiful")} spec""" contains
+  def j5 = s2"""the ${SpecificationRef(SpecHeader(classOf[String], Some("STRING")), Arguments(), alias = "beautiful")} spec""" `contains`
     """|[info] the * beautiful spec"""
 
   def k1 = Arguments("xonly") ^ "title\n".title ^
     s2"""e1 $ok
-         e2 $ko""" contains
+         e2 $ko""" `contains`
     """|[info] title
        |[error] x e2"""
 
   def k2 = Arguments("xonly") ^ "title".title ^
     s2"""e1 $ok
-         e2 $ok""" containsOnly """|[info] title"""
+         e2 $ok""" `containsOnly` """|[info] title"""
 
   def l1 =
     val logger = new TestLogger
@@ -251,14 +251,14 @@ presentation
     val printed = logger.messages.filter(_.contains("+")).map(_.replace("+", "").replace("ex", "").trim.toInt)
 
     "printed is sorted" ==> {
-      printed must ===(printed.sorted)
-    } and
+      printed `must` ===(printed.sorted)
+    } `and`
     "executed is unsorted" ==> {
-      executed must not(be_==(executed.sorted))
-    } and
+      executed `must` not(be_==(executed.sorted))
+    } `and`
     "the execution is mixed with the printing" ==> {
       val (l1, l2) = logger.messages.filter(s => s.contains("executed") || s.contains("+")).span(_.contains("executed"))
-      l1.size aka (l1, l2).toString must not(be_==(l2.size))
+      l1.size `aka` (l1, l2).toString `must` not(be_==(l2.size))
     }
 
   def l2 =
@@ -280,14 +280,14 @@ presentation
     val printed = logger.messages.filter(_.contains("+")).map(_.replace("+", "").replace("ex", "").trim.toInt)
 
     "printed is sorted" ==> {
-      printed must ===(printed.sorted)
-    } and
+      printed `must` ===(printed.sorted)
+    } `and`
     "executed is sorted too" ==> {
-      executed must be_==(executed.sorted)
-    } and
+      executed `must` be_==(executed.sorted)
+    } `and`
     "the execution is mixed with the printing" ==> {
       val (l1, l2) = logger.messages.filter(s => s.contains("executed") || s.contains("+")).span(_.contains("executed"))
-      l1.size aka (l1, l2).toString must not(be_==(l2.size))
+      l1.size `aka` (l1, l2).toString `must` not(be_==(l2.size))
     }
 
   import specification.Tables.{given}
@@ -299,7 +299,7 @@ table ${
    1 ! 1   |
    1 ! 2   |
    1 ! 1   | { (i, j) => i === j}
-  }""".stripMargin contains
+  }""".stripMargin `contains`
     """|[error]_x_table
        |[error]____|_a_|_b_|______
        |[error]__+_|_1_|_1_|______
@@ -316,7 +316,7 @@ table ${
    "c" | "d" |>
      i ! j   | { (k, l) => k === l }
    }
-  }""".stripMargin contains
+  }""".stripMargin `contains`
     """|[error]_x_table
        |[error]____|_a_|_b_|__________________
        |[error]__+_|_1_|_1_|__________________
@@ -358,19 +358,19 @@ object TextPrinterSpecification extends MustMatchers with FragmentsDsl with Debu
       spec.contains(contained, f).not.isSuccess
 
     def contains(contained: String): Result =
-      printed(spec) must contain(contained.stripMargin.replace(" ", "_"))
+      printed(spec) `must` contain(contained.stripMargin.replace(" ", "_"))
 
     def contains(contained: String, f: String => String): Result =
-      f(printed(spec)) must contain(contained.stripMargin.replace(" ", "_"))
+      f(printed(spec)) `must` contain(contained.stripMargin.replace(" ", "_"))
 
     def containsOnly(contained: String): Result  =
-      printed(spec) must be_==(contained.stripMargin.replace(" ", "_"))
+      printed(spec) `must` be_==(contained.stripMargin.replace(" ", "_"))
 
     def startsWith(start: String): Result  =
-      printed(spec) must startWith(start.stripMargin.replace(" ", "_"))
+      printed(spec) `must` startWith(start.stripMargin.replace(" ", "_"))
 
     def matches(pattern: String): Result  =
-      printed(spec) must beMatching(pattern.stripMargin.replace(" ", "_"))
+      printed(spec) `must` beMatching(pattern.stripMargin.replace(" ", "_"))
 
   private def printed(s: SpecStructure, optionalEnv: Option[Env] = None) =
     val logger = stringPrinterLogger
@@ -394,10 +394,10 @@ object TextPrinterSpecification extends MustMatchers with FragmentsDsl with Debu
 
   extension (spec: (Fragments, Env))
     def contains(contained: String): Result =
-      printed(spec._1, Some(spec._2)) must contain(contained.stripMargin.replace(" ", "_"))
+      printed(spec._1, Some(spec._2)) `must` contain(contained.stripMargin.replace(" ", "_"))
 
     def contains(contained: String, f: String => String): Result  =
-      f(printed(spec._1, Some(spec._2))) must contain(contained.stripMargin.replace(" ", "_"))
+      f(printed(spec._1, Some(spec._2))) `must` contain(contained.stripMargin.replace(" ", "_"))
 
 class TestLogger extends BufferedPrinterLogger with StringOutput:
   def infoLine(msg: String)    = super.append(AnsiColors.removeColors(msg))

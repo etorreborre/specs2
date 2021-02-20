@@ -1,9 +1,9 @@
 package org.specs2
 package matcher
 
-import execute._
+import execute.*
 import execute.ResultExecution.execute
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 
 /**
  * This trait adds the possibility to retry a given matcher until it succeeds.

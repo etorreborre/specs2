@@ -1,12 +1,12 @@
 package org.specs2
 package scalacheck
 
-import org.scalacheck.util.Pretty._
+import org.scalacheck.util.Pretty.*
 import org.scalacheck.util.{FreqMap, Pretty}
 import org.scalacheck.{Gen, Prop, Properties, Test}
-import execute._
-import matcher._
-import PrettyDetails._
+import execute.*
+import matcher.*
+import PrettyDetails.*
 import org.scalacheck.rng.Seed
 
 import scala.util.control.NonFatal

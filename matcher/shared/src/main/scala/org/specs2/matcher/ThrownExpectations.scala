@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-import execute._
+import execute.*
 import execute.Skipped
 import execute.Pending
 import execute.Failure

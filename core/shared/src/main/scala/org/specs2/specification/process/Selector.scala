@@ -2,14 +2,14 @@ package org.specs2
 package specification
 package process
 
-import text.Regexes._
-import fp.syntax._
-import control._
-import producer._
-import Producer._
-import data._
-import specification.core._
-import Fragment._
+import text.Regexes.*
+import fp.syntax.*
+import control.*
+import producer.*
+import Producer.*
+import data.*
+import specification.core.*
+import Fragment.*
 import main.Arguments
 
 /**
@@ -43,8 +43,8 @@ case class DefaultSelector(commandLineArguments: Arguments) extends Selector:
     val regex = arguments.ex
     if regex !=".*" then
       p.filter {
-        case Fragment(Text(t),e,_) if e.isExecutable => t matchesSafely regex
-        case Fragment(Code(t),e,_) if e.isExecutable => t matchesSafely regex
+        case Fragment(Text(t),e,_) if e.isExecutable => t `matchesSafely` regex
+        case Fragment(Code(t),e,_) if e.isExecutable => t `matchesSafely` regex
         case other                                   => true
       }
     else p
@@ -74,7 +74,7 @@ case class DefaultSelector(commandLineArguments: Arguments) extends Selector:
 
         case (fragment, sections) =>
           (Option(fragment), sections)
-      } flatMap (f => emit(f.toList))
+      } `flatMap` (f => emit(f.toList))
 
     if (arguments.include + arguments.exclude).nonEmpty then (normalize |> go |> removeMarkers)(p)
     else p

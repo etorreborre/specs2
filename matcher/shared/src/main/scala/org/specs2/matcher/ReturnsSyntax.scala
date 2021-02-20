@@ -1,8 +1,8 @@
 package org.specs2
 package matcher
 
-import execute._
-import StringMatchers.{given, _}
+import execute.*
+import StringMatchers.{given, *}
 
 /**
  * Those definitions help specifying the result messages for matchers

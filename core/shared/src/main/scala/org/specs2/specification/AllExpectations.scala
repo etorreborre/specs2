@@ -1,11 +1,11 @@
 package org.specs2
 package specification
 
-import execute._
-import main._
-import matcher._
-import core._
-import create._
+import execute.*
+import main.*
+import matcher.*
+import core.*
+import create.*
 import scala.reflect.Selectable.reflectiveSelectable
 
 /**

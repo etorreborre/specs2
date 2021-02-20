@@ -23,16 +23,16 @@ object LinesDiffable:
 
 
 case class LinesComparisonResult[T : Diffable](actual: List[T], expected: List[T]) extends ComparisonResult:
-  import org.specs2.data._
-  import EditDistance._
-  import org.specs2.text.AnsiColors._
+  import org.specs2.data.*
+  import EditDistance.*
+  import org.specs2.text.AnsiColors.*
 
   private val diffable: Diffable[T] =
     implicitly[Diffable[T]]
 
   private lazy val operations: IndexedSeq[EditDistanceOperation[T]] =
     levenhsteinDistance[T](actual.toIndexedSeq, expected.toIndexedSeq)(
-      new Equiv[T]:
+      using new Equiv[T]:
         def equiv(a: T, b: T) = diffable.diff(a, b).identical)
 
   def identical: Boolean =

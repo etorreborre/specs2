@@ -3,10 +3,10 @@ package io
 
 import java.io.PrintWriter
 
-import control._
-import origami._
+import control.*
+import origami.*
 import fp.Show
-import fp.syntax._
+import fp.syntax.*
 
 object FoldIo:
 

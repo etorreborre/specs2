@@ -2,8 +2,8 @@ package org.specs2
 package specification
 package dsl
 
-import core._
-import main._
+import core.*
+import main.*
 import execute.AsResult
 import create.FragmentsFactory
 

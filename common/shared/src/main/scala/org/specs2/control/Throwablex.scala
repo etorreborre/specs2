@@ -1,9 +1,9 @@
 package org.specs2
 package control
 
-import java.io. _
-import text.NotNullStrings._
-import text.Regexes._
+import java.io. *
+import text.NotNullStrings.*
+import text.Regexes.*
 
 /**
  * This trait adds some utility methods to `Throwable` objects.
@@ -53,7 +53,7 @@ trait Throwablex:
 
     /** match a stacktrace element with a pattern */
     private def patternMatches(p: String): StackTraceElement => Boolean =
-      (_:StackTraceElement).toString matchesSafely (".*"+p+".*")
+      (_:StackTraceElement).toString `matchesSafely` (".*"+p+".*")
 
     /**
      * Select all traces of this exception not matching a given pattern

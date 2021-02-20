@@ -6,7 +6,7 @@ import org.specs2.main.Arguments
 
 import fp.Show
 import org.specs2.data.{NamedTag, Tag}
-import text.Regexes._
+import text.Regexes.*
 
 /**
  * Description of a Fragment
@@ -22,7 +22,7 @@ trait Description:
  */
 case class Text(text: String) extends Description:
   def show: String = text
-  override def matches(s: String) = text matchesSafely s
+  override def matches(s: String) = text `matchesSafely` s
   override def stripMargin(margin: Char) = copy(text.stripMargin(margin))
 
 case class Code(text: String) extends Description:
@@ -30,7 +30,7 @@ case class Code(text: String) extends Description:
     if text.contains("\n") then "```\n"+text+"\n```"
     else                     s"`$text`"
 
-  override def matches(s: String) = text matches s
+  override def matches(s: String) = text `matches` s
   override def stripMargin(margin: Char) = copy(text.stripMargin(margin))
 
 /**

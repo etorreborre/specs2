@@ -1,7 +1,7 @@
 package org.specs2
 package scalacheck
 
-import main._
+import main.*
 
 class CommandLinePropertiesMutableSpec extends mutable.Specification with ScalaCheck:
   "use the command line to drive properties" >> {

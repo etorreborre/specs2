@@ -3,13 +3,13 @@ package io
 
 import java.io.{BufferedInputStream, File, FileInputStream}
 
-import fp._, syntax._
-import control._
-import producer._
+import fp.*, syntax.*
+import control.*
+import producer.*
 import text.MD5
 
 import scala.io.Codec
-import Paths._
+import Paths.*
 
 /**
  * Methods to read files on the FileSystem
@@ -27,7 +27,7 @@ trait FilePathReader:
    */
   def filterWithPattern(pattern: String): FilePath => Boolean = { (filePath: FilePath) =>
     // remove any letter drive on Windows
-    filePath.path.replaceFirst(".:", "").unixize matches pattern
+    filePath.path.replaceFirst(".:", "").unixize `matches` pattern
   }
 
   /**
@@ -69,7 +69,7 @@ trait FilePathReader:
   private def filePathsProcess(directory: DirectoryPath): Producer[Operation, FilePath] =
     def go(dir: DirectoryPath): Producer[Operation, FilePath] =
       val (files, directories) = Option(dir.toFile.listFiles).map(_.toList).getOrElse(List()).partition(_.isFile)
-      Producer.emitSync(files.map(FilePath.unsafe)) append
+      Producer.emitSync(files.map(FilePath.unsafe)) `append`
        Producer.emitSync(directories.map(DirectoryPath.unsafe).map(go)).flatten
     go(directory)
 

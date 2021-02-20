@@ -1,6 +1,6 @@
 package examples
 
-import org.specs2._
+import org.specs2.*
 
 /**
  * This specification shows how to create examples using the "acceptance" style
@@ -15,8 +15,8 @@ class HelloWorldSpec extends Specification { def is = s2"""
    end with 'world'                                  $e3
                                                      """
 
-  def e1 = "Hello world" must haveSize(11)
-  def e2 = "Hello world" must startWith("Hello")
-  def e3 = "Hello world" must endWith("world")
+  def e1 = "Hello world" `must` haveSize(11)
+  def e2 = "Hello world" `must` startWith("Hello")
+  def e3 = "Hello world" `must` endWith("world")
 
 }

@@ -1,11 +1,11 @@
 package org.specs2
 package form
 
-import control.Exceptions._
+import control.Exceptions.*
 import control.Property
-import execute._
-import DecoratedProperties._
-import StandardResults._
+import execute.*
+import DecoratedProperties.*
+import StandardResults.*
 
 /**
  * An Effect is a property which is used to display names corresponding to side-effects.
@@ -67,8 +67,8 @@ case object Effect:
   def apply[T](label: String, value: =>T): Effect[T] = new Effect(label, Property(value))
 
   /** create an Effect from several other ones concatenating the labels */
-  def apply(e1: Effect[_], es: Effect[_]*): Effect[Any] = Effect("/", e1, es*)
+  def apply(e1: Effect[?], es: Effect[?]*): Effect[Any] = Effect("/", e1, es*)
 
   /** create an Effect from several other ones concatenating the labels */
-  def apply(separator: String, e1: Effect[_], es: Effect[_]*): Effect[Any] =
-    Effect((e1 :: es.toList).map(_.label).mkString(separator), (e1 :: es.toList).foreach((e: Effect[_]) => e.execute))
+  def apply(separator: String, e1: Effect[?], es: Effect[?]*): Effect[Any] =
+    Effect((e1 :: es.toList).map(_.label).mkString(separator), (e1 :: es.toList).foreach((e: Effect[?]) => e.execute))

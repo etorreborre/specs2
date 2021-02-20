@@ -1,11 +1,11 @@
 package org.specs2
 package main
 
-import main.{SystemProperties => sysProperties}
-import org.specs2.fp._
-import control._
-import text._
-import scala.Predef._
+import main.{SystemProperties as sysProperties}
+import org.specs2.fp.*
+import control.*
+import text.*
+import scala.Predef.*
 import scala.concurrent.duration.FiniteDuration
 
 /**
@@ -65,7 +65,7 @@ case class Arguments (
   def traceFilter: StackTraceFilter   = report.traceFilter
 
   /** @return true if a switch is present or a flag is set */
-  def isSet(a: String) = commandLine isSet a
+  def isSet(a: String) = commandLine `isSet` a
   /** alias for overrideWith */
   def <|(other: Arguments) = overrideWith(other)
 
@@ -127,7 +127,7 @@ object Arguments extends Extract:
     )
 
   given ArgumentsMonoid: Monoid[Arguments] with
-    def append(a1: Arguments, a2: =>Arguments) = a1 overrideWith a2
+    def append(a1: Arguments, a2: =>Arguments) = a1 `overrideWith` a2
     val zero = Arguments()
 
   /**
@@ -138,4 +138,4 @@ object Arguments extends Extract:
     case Some(flags) => s.split("") forall flags.contains
 
 trait ShowArgs:
-  def showArg(a: (String, Option[_])) = a._2.map(a._1 +" = "+_)
+  def showArg(a: (String, Option[?])) = a._2.map(a._1 +" = "+_)

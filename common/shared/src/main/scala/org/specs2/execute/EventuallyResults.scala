@@ -1,7 +1,7 @@
 package org.specs2
 package execute
 
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 
 /**
  * This trait adds the possibility to retry a given value, convertible to a result, until it succeeds.

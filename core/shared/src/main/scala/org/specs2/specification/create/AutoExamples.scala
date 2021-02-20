@@ -3,9 +3,9 @@ package specification
 package create
 
 import execute.AsResult
-import text.Trim._
+import text.Trim.*
 import core.{Description, Fragment, Fragments}
-import scala.quoted._
+import scala.quoted.*
 
 /**
  * This trait allows to create examples where the description is the code itself
@@ -24,7 +24,7 @@ object AutoExamples extends AutoExamples:
   def create[T](code: Expr[() => T], asResult: Expr[AsResult[T]], postProcess: Expr[Fragments => Fragments])(
     using qctx: Quotes)(using t: Type[T], t1: Type[() => T]): Expr[Fragments] =
 
-    import qctx.reflect._
+    import qctx.reflect.*
     val expression = Expr(Position.ofMacroExpansion.sourceCode.getOrElse("no source code found for an auto-example"))
     Expr.betaReduce('{$postProcess(createExample[t.Underlying]($expression, $code, $asResult))})
 
@@ -32,7 +32,7 @@ object AutoExamples extends AutoExamples:
     Fragments(AutoExamples.makeExample(expression, code(), asResult))
 
   def makeExample[T](expression: String, code: =>T, asResult: AsResult[T]): Fragment =
-    fragmentFactory.example(Description.code(trimExpression(expression)), code)(asResult)
+    fragmentFactory.example(Description.code(trimExpression(expression)), code)(using asResult)
 
   private[specs2] def trimExpression(call: String) =
     call.

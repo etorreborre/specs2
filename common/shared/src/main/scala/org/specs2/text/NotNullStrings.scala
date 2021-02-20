@@ -1,8 +1,8 @@
 package org.specs2
 package text
 
-import control.Exceptions._
-import Quote._
+import control.Exceptions.*
+import Quote.*
 
 /**
  * Methods to replace a null String with "null"
@@ -24,13 +24,13 @@ trait NotNullStrings:
       if a == null then "null"
       else
         a match
-          case ar: Array[_] =>
+          case ar: Array[?] =>
             iterableNotNullMkString(ar.toSeq, ", ", "Array(", ")")
 
-          case map: Map[_,_] =>
+          case map: Map[?,?] =>
             mapNotNullMkStringWith(map, addQuotes = false)
 
-          case it: Iterable[_] =>
+          case it: Iterable[?] =>
             iterableNotNullMkStringWith(it, addQuotes = false)
 
           case _ =>
@@ -49,27 +49,27 @@ trait NotNullStrings:
     def notNullWithClass(showAll: Boolean): String =
       if a == null then "null"
       else
-        def sameElementTypes(ts: Iterable[_]) =
+        def sameElementTypes(ts: Iterable[?]) =
           ts.nonEmpty && (ts.toSeq.collect { case t if t != null => t.getClass.getName }.distinct.size == 1)
 
-        def sameKeyValueTypes(map: Map[_,_]) = sameElementTypes(map.keys) && sameElementTypes(map.values)
+        def sameKeyValueTypes(map: Map[?,?]) = sameElementTypes(map.keys) && sameElementTypes(map.values)
 
         tryOrElse {
           a match
-            case ar: Array[_] =>
+            case ar: Array[?] =>
               if !showAll && sameElementTypes(ar) then
                 ar.map(a => quote(a.notNull)).mkString("Array(", ", ", "): Array["+ar(0).getClass.getName+"]")
               else
                 ar.map(_.notNullWithClass(showAll)).mkString("Array(", ", ", ")")
 
-            case map: Map[_,_] =>
+            case map: Map[?,?] =>
               if !showAll && sameKeyValueTypes(map) then
                 mapNotNullMkStringWith(map, addQuotes = true)+": "+map.getClass.getName+"["+map.head.getClass.getName+"]"
               else
                 map.map { case (k, v) => (k.notNullWithClass(showAll), v.notNullWithClass(showAll)) }.mkString("Map(", ", ", ")")+
                   ": "+map.getClass.getName
 
-            case it: Iterable[_] =>
+            case it: Iterable[?] =>
               if !showAll && sameElementTypes(it) then
                 iterableNotNullMkStringWith(it, addQuotes = true)+": "+it.getClass.getName+"["+it.head.getClass.getName+"]"
               else

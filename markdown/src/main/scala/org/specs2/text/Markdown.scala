@@ -1,13 +1,13 @@
 package org.specs2
 package text
 
-import org.pegdown._
-import ast._
+import org.pegdown.*
+import ast.*
 import scala.io.Source
-import scala.xml._
+import scala.xml.*
 import parsing.XhtmlParser
-import control.Exceptions._
-import Trim._
+import control.Exceptions.*
+import Trim.*
 
 /**
  * This trait can process strings formatted using the Markdown syntax and output html

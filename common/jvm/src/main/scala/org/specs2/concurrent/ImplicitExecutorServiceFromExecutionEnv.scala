@@ -1,6 +1,6 @@
 package org.specs2.concurrent
 
-import java.util.concurrent._
+import java.util.concurrent.*
 import scala.util.NotGiven
 
 trait ImplicitExecutorServiceFromExecutionEnv:

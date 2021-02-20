@@ -24,7 +24,7 @@ class PluralSpec extends Spec with Plural with Tables with TypedEqual {
      1           ! "apple"         ! "1 apple"  |
      2           ! "apple"         ! "2 apples" |
      3           ! "apple"         ! "3 apples" | { (q, desc, result) =>
-      (q qty desc) === result
+      (q `qty` desc) === result
     }
   }
 
@@ -35,7 +35,7 @@ class PluralSpec extends Spec with Plural with Tables with TypedEqual {
      1           ! "apple"         ! (Some("1 apple"):Option[String])       |
      2           ! "apple"         ! (Some("2 apples"):Option[String])      |
      3           ! "apple"         ! (Some("3 apples"):Option[String])      | { (q, desc, result) =>
-      (q optQty desc) === result
+      (q `optQty` desc) === result
     }
   }
 
@@ -46,7 +46,7 @@ class PluralSpec extends Spec with Plural with Tables with TypedEqual {
      1           ! "skipped"       ! (Some("1 skipped"):Option[String])     |
      2           ! "skipped"       ! (Some("2 skipped"):Option[String])     |
      3           ! "skipped"       ! (Some("3 skipped"):Option[String])     | { (q, desc, result) =>
-      (q optInvariantQty desc) === result
+      (q `optInvariantQty` desc) === result
     }
   }
   "A integer can be an ordinal: 3 th == '3rd'" >> {

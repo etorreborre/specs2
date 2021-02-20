@@ -3,13 +3,13 @@ package specification
 package core
 
 import main.{Arguments, CommandLine}
-import execute._
+import execute.*
 import concurrent.ExecutionEnv
 import reporter.PrinterLogger
-import io._
-import control._
+import io.*
+import control.*
 import process.{StatisticsRepository}
-import reflect._
+import reflect.*
 
 import scala.concurrent.duration.FiniteDuration
 

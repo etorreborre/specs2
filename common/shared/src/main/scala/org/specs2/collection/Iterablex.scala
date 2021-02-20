@@ -2,7 +2,7 @@ package org.specs2
 package collection
 
 import scala.collection.{GenSeq, GenIterable}
-import Seqx._
+import Seqx.*
 
 /**
  * This trait provides additional methods on Iterable.
@@ -45,17 +45,17 @@ trait Iterablex:
      * @return true if the 2 iterables contain the same elements (according to a comparison function f) recursively, in any order
      */
     def sameElementsAs(that: GenIterable[T], f: (T, T) => Boolean): Boolean =
-      def isNotItsOwnIterable(a: GenIterable[_]) = a.isEmpty || a.iterator.next != a
+      def isNotItsOwnIterable(a: GenIterable[?]) = a.isEmpty || a.iterator.next != a
       def matchTwo(x: T, y: T): Boolean =
         (x, y) match
-          case (a: GenIterable[_], b: GenIterable[_]) if isNotItsOwnIterable(a) =>
+          case (a: GenIterable[?], b: GenIterable[?]) if isNotItsOwnIterable(a) =>
             x.asInstanceOf[GenIterable[T]].sameElementsAs(y.asInstanceOf[GenIterable[T]], f)
           case _ => f(x, y)
       val ita = xs.iterator.toList
       val itb = that.iterator.toList
       (ita, itb) match
         case (Nil, Nil) => true
-        case (a: GenIterable[_], b: GenIterable[_]) =>
+        case (a: GenIterable[?], b: GenIterable[?]) =>
            (a.nonEmpty && b.nonEmpty) && {
             val (x, y, resta, restb) = (a.head, b.head, a.drop(1), b.drop(1))
             matchTwo(x, y) && resta.sameElementsAs(restb, f) ||
@@ -89,7 +89,7 @@ trait Iterablex:
         xs.toString
       else
         "[" + xs.toList.map {
-          case i: GenIterable[_] => i.toDeepString
+          case i: GenIterable[?] => i.toDeepString
           case x => x.toString
         }.mkString(", ") + "]"
 

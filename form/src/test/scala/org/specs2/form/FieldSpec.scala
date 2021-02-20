@@ -1,9 +1,9 @@
 package org.specs2
 package form
 
-import sys._
-import execute._
-import matcher._
+import sys.*
+import execute.*
+import matcher.*
 
 class FieldSpec extends Spec with TypedEqual { def is = s2"""
 
@@ -31,8 +31,8 @@ A Field is a labelled property with can be embedded in a Form.
   def creation2 = age.toOption                        === Some(18)
   def creation3 = Field("person", name, age).toString === "person: eric/18"
 
-  def execution1 = age.execute      must ===(skipped)
-  def execution2 = ageError.execute must beLike { case Error(_, _) => ok }
+  def execution1 = age.execute      `must` ===(skipped)
+  def execution2 = ageError.execute `must` beLike { case Error(_, _) => ok }
 
-  def modification1 = age.toStringField.toOption must ===(Some("18"))
+  def modification1 = age.toStringField.toOption `must` ===(Some("18"))
 }

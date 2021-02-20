@@ -2,12 +2,12 @@ package org.specs2
 package matcher
 
 import java.io.File
-import text._
-import io._
-import fp.syntax._
+import text.*
+import io.*
+import fp.syntax.*
 import Matcher.{given}
 import ValueChecks.{given}
-import execute.ResultImplicits._
+import execute.ResultImplicits.*
 
 /**
  * This trait provides matchers to check the presence of some expected files vs the actual ones
@@ -84,7 +84,7 @@ trait FilesContentMatchers extends FileMatchers with LinesContentMatchers with T
                                               filter: File => Boolean = (f: File) => true,
                                               filesMatcher: Matcher[(File, File)] = haveSameLines[File, File]) extends Matcher[File]:
     def apply[S <: File](actualDir: Expectable[S]) =
-      haveSamePathsAs(expectedDir).withFilter(filter)(actualDir) and
+      haveSamePathsAs(expectedDir).withFilter(filter)(actualDir) `and`
       haveSameFilesContentAs(expectedDir).withFilter(filter).withMatcher(filesMatcher)(actualDir)
 
     def withFilter(filter: File => Boolean) = copy(filter = filter)

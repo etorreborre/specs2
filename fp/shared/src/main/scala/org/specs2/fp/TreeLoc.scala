@@ -1,7 +1,7 @@
 package org.specs2.fp
 
-import TreeLoc._
-import Tree._
+import TreeLoc.*
+import Tree.*
 import annotation.tailrec
 
 /**
@@ -135,7 +135,7 @@ final case class TreeLoc[A](tree: Tree[A], lefts: TreeForest[A],
   /** Maps the given function over the elements. */
   def map[B](f: A => B): TreeLoc[B] =
     val ff = (_: Tree[A]).map(f)
-    TreeLoc.loc(tree map f, lefts map ff, rights map ff,
+    TreeLoc.loc(tree `map` f, lefts map ff, rights map ff,
       parents.map {
         case (l, t, r) => (l map ff, f(t), r map ff)
       })

@@ -16,7 +16,7 @@ trait Stacktraces:
 
   /* @return true if the stacktrace contains 'name' */
   def isExecutedFrom(name: String, st: Seq[StackTraceElement]): Boolean =
-    st.exists(_.toString contains name)
+    st.exists(_.toString `contains` name)
 
   /** @return true if there is a stacktrace element satisfying the predicate */
   def isFromClass(classNamePredicate: String => Boolean): Boolean =

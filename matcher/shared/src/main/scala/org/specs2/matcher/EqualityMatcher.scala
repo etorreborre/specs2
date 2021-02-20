@@ -1,9 +1,9 @@
 package org.specs2.matcher
 
-import org.specs2.execute._
-import org.specs2.matcher.describe._
-import org.specs2.text.NotNullStrings._
-import Result._
+import org.specs2.execute.*
+import org.specs2.matcher.describe.*
+import org.specs2.text.NotNullStrings.*
+import Result.*
 
 class EqualityMatcher[T : Diffable](t: =>T) extends AdaptableMatcher[T]:
   outer =>
@@ -32,14 +32,14 @@ class EqualityMatcher[T : Diffable](t: =>T) extends AdaptableMatcher[T]:
 
   private def failureDetailsFor(actual: Any, expected: Any): Option[Details] =
     (actual, expected) match
-      case (e1: Map[_, _], e2: Map[_, _]) => Some(FailureMapDetails(e1.toMap[Any, Any], e2.toMap[Any, Any]) )
-      case (e1: Set[_], e2: Set[_]) => Some( FailureSetDetails(e1.toSet[Any], e2.toSet[Any]) )
-      case (e1: Array[_], e2: Array[_]) => Some( FailureSeqDetails(e1.toSeq, e2.toSeq) )
-      case (e1: Traversable[_], e2: Traversable[_]) if foreachIsDefined(e2) => Some( FailureSeqDetails(e1.toSeq, e2.toSeq) )
-      case (e1: Traversable[_], e2: Traversable[_]) => None
+      case (e1: Map[?, ?], e2: Map[?, ?]) => Some(FailureMapDetails(e1.toMap[Any, Any], e2.toMap[Any, Any]) )
+      case (e1: Set[?], e2: Set[?]) => Some( FailureSetDetails(e1.toSet[Any], e2.toSet[Any]) )
+      case (e1: Array[?], e2: Array[?]) => Some( FailureSeqDetails(e1.toSeq, e2.toSeq) )
+      case (e1: Traversable[?], e2: Traversable[?]) if foreachIsDefined(e2) => Some( FailureSeqDetails(e1.toSeq, e2.toSeq) )
+      case (e1: Traversable[?], e2: Traversable[?]) => None
       case (e1, e2) => None
 
-  private def foreachIsDefined(seq: Traversable[_]): Boolean =
+  private def foreachIsDefined(seq: Traversable[?]): Boolean =
     try { seq.foreach(identity); true }
     catch { case _: Exception => false }
 

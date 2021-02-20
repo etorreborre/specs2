@@ -2,9 +2,9 @@ package org.specs2
 package specification
 package script
 
-import scala.quoted._
-import core._
-import create._
+import scala.quoted.*
+import core.*
+import create.*
 
 /**
  * The Scripts trait builds fragments based on Script objects.
@@ -27,7 +27,7 @@ trait Scripts { outer: FragmentsFactory =>
 object Scripts:
 
   def createInterpolatedFragment(script: Expr[Script], factory: Expr[FragmentFactory])(using qctx: Quotes): Expr[Interpolated] =
-    import qctx.reflect._
+    import qctx.reflect.*
     '{ new Interpolated {
          def prepend(text: String): Fragments =
            if $script.isStart then

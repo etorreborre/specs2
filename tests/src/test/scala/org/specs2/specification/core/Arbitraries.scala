@@ -2,11 +2,11 @@ package org.specs2
 package specification
 package core
 
-import org.scalacheck._, Gen._, Arbitrary._
-import create._
-import execute.StandardResults._
-import FormattingFragments._
-import DefaultFragmentFactory._
+import org.scalacheck.*, Gen.*, Arbitrary.*
+import create.*
+import execute.StandardResults.*
+import FormattingFragments.*
+import DefaultFragmentFactory.*
 
 object Arbitraries:
 

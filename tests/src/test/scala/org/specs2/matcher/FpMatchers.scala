@@ -3,11 +3,11 @@ package matcher
 
 import org.scalacheck.{ Arbitrary, Shrink, Prop }
 
-import fp._
-import fp.syntax._
-import execute.ResultImplicits._
-import AnyMatchers._
-import annotation._
+import fp.*
+import fp.syntax.*
+import execute.ResultImplicits.*
+import AnyMatchers.*
+import annotation.*
 
 /**
  * This trait provides matchers for some Scalaz (http://github/scalaz/scalaz) datatypes.
@@ -43,7 +43,7 @@ trait FpMatchers extends ScalaCheck:
 
   def hasNeutralElement[T](using m: Monoid[T], a: Arbitrary[T], s: Shrink[T]): Prop =
     prop { (t: T) =>
-      be_==(t |+| m.zero).apply(createExpectable(t)) and be_==(m.zero |+| t).apply(createExpectable(t))
+      be_==(t |+| m.zero).apply(createExpectable(t)) `and` be_==(m.zero |+| t).apply(createExpectable(t))
     }.set(minTestsOk = 20, maxSize = 10)
 
   def isMonoid[T](using m: Monoid[T], a: Arbitrary[T], s: Shrink[T]): Prop =

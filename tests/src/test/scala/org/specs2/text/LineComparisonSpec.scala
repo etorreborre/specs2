@@ -2,7 +2,7 @@ package org.specs2
 package text
 
 import org.specs2.matcher.ContentMatchers
-import AnsiColors._
+import AnsiColors.*
 
 class LineComparisonSpec extends Specification with ContentMatchers { def is = s2"""
 
@@ -42,7 +42,7 @@ class LineComparisonSpec extends Specification with ContentMatchers { def is = s
       "today?"
     )
 
-    removeColors((list1 must haveSameLinesAs(list2)).message) ====
+    removeColors((list1 `must` haveSameLinesAs(list2)).message) ====
     s"""|the first sequence is not the same as the second sequence
         |      3. hello
         |      4. hello

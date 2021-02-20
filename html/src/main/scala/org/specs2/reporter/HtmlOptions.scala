@@ -2,7 +2,7 @@ package org.specs2
 package reporter
 
 import java.io.File
-import io._
+import io.*
 
 /** Options for the Html generation */
 case class HtmlOptions(

@@ -1,13 +1,13 @@
 package org.specs2
 package matcher
 
-import java.util.regex.{Matcher => _, Pattern}
-import text.Quote._
-import text.Regexes._
-import control.Exceptions._
-import execute.Result._
+import java.util.regex.{Matcher as _, Pattern}
+import text.Quote.*
+import text.Regexes.*
+import control.Exceptions.*
+import execute.Result.*
 import util.matching.Regex
-import StringMatchers._
+import StringMatchers.*
 
 /**
  * The `StringMatchers` trait provides matchers which are applicable to String objects

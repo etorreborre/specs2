@@ -2,7 +2,7 @@ package org.specs2
 package reporter
 
 import execute.{Result, AsResult}
-import org.specs2.specification._
+import org.specs2.specification.*
 import java.io.{FileDescriptor, FileOutputStream, OutputStream, PrintStream}
 
 /**

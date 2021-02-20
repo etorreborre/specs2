@@ -1,14 +1,14 @@
 package org.specs2
 package form
 
-import scala.xml._
-import xml.Nodex.{given, _}
-import text.NotNullStrings._
+import scala.xml.*
+import xml.Nodex.{given, *}
+import text.NotNullStrings.*
 import main.Arguments
-import execute._
-import StandardResults._
+import execute.*
+import StandardResults.*
 import text.Markdown
-import fp.syntax._
+import fp.syntax.*
 
 /**
  * A Cell is the Textual or Xml representation of a Form element: Field, Prop or Form.
@@ -108,7 +108,7 @@ object TextCell:
 /**
  * Cell embedding a Field
  */
-case class FieldCell(f: Field[_], result: Option[Result] = None) extends Cell:
+case class FieldCell(f: Field[?], result: Option[Result] = None) extends Cell:
   def text = f.toString
 
   def xml(using args: Arguments) =
@@ -116,9 +116,9 @@ case class FieldCell(f: Field[_], result: Option[Result] = None) extends Cell:
       case Left(e)  => e
       case Right(e) => e
     val executedResult = execute
-    ((<td style={f.labelStyles}>{f.decorateLabel(f.label)}</td> : NodeSeq) orEmptyWhen f.label.isEmpty) ++
+    ((<td style={f.labelStyles}>{f.decorateLabel(f.label)}</td> : NodeSeq) `orEmptyWhen` f.label.isEmpty) ++
      <td class={statusName(executedResult)} style={f.valueStyles}>{f.decorateValue(executedValue)}</td> ++
-    (<td class={executedResult.statusName} onclick={"showHide("+System.identityHashCode(executedResult).toString+")"}>{executedResult.message}</td> orEmptyWhen
+    (<td class={executedResult.statusName} onclick={"showHide("+System.identityHashCode(executedResult).toString+")"}>{executedResult.message}</td> `orEmptyWhen`
       !executedResult.isError)
 
   private def statusName(r: Result) = r match
@@ -132,13 +132,13 @@ case class FieldCell(f: Field[_], result: Option[Result] = None) extends Cell:
 /**
  * Cell embedding a Eff
  */
-case class EffectCell(e: Effect[_], result: Option[Result] = None) extends Cell:
+case class EffectCell(e: Effect[?], result: Option[Result] = None) extends Cell:
   def text = e.toString
 
   def xml(using args: Arguments) =
     val executedResult = execute
     <td style={e.labelStyles} class="info">{e.decorateLabel(e.label)}</td> ++
-    (<td class={executedResult.statusName} onclick={"showHide("+System.identityHashCode(executedResult).toString+")"}>{executedResult.message}</td> orEmptyWhen executedResult.isSuccess)
+    (<td class={executedResult.statusName} onclick={"showHide("+System.identityHashCode(executedResult).toString+")"}>{executedResult.message}</td> `orEmptyWhen` executedResult.isSuccess)
 
   def execute = result.getOrElse(e.execute)
   def setResult(r: Result) = EffectCell(e, Some(r))
@@ -148,7 +148,7 @@ case class EffectCell(e: Effect[_], result: Option[Result] = None) extends Cell:
 /**
  * Cell embedding a Prop
  */
-case class PropCell(p: Prop[_,_], result: Option[Result] = None) extends Cell:
+case class PropCell(p: Prop[?,?], result: Option[Result] = None) extends Cell:
   def text = p.toString
 
   def execute = result.getOrElse(p.execute)
@@ -157,10 +157,10 @@ case class PropCell(p: Prop[_,_], result: Option[Result] = None) extends Cell:
 
   def xml(using args: Arguments): NodeSeq =
     val executed = result.getOrElse(skipped)
-    (<td style={p.labelStyles}>{p.decorateLabel(p.label)}</td> orEmptyWhen p.label.isEmpty) ++
-    (<td class={executed.statusName}>{p.decorateValue(p.actualValue.toOption.getOrElse(""))}</td> orEmptyWhen p.actualValue.toOption.isEmpty) ++
+    (<td style={p.labelStyles}>{p.decorateLabel(p.label)}</td> `orEmptyWhen` p.label.isEmpty) ++
+    (<td class={executed.statusName}>{p.decorateValue(p.actualValue.toOption.getOrElse(""))}</td> `orEmptyWhen` p.actualValue.toOption.isEmpty) ++
     (<td class={executed.statusName} onclick={"showHide("+System.identityHashCode(executed).toString+")"}>{executed.message}</td>
-      orEmptyWhen (executed.isSuccess || executed.message.isEmpty))
+      `orEmptyWhen` (executed.isSuccess || executed.message.isEmpty))
 
 /**
  * Cell embedding a Form

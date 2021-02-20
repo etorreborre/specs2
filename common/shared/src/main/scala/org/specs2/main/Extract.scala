@@ -1,12 +1,12 @@
 package org.specs2
 package main
 
-import control.Exceptions._
+import control.Exceptions.*
 import org.specs2.text.FromString
 import reflect.Classes
 
 import scala.reflect.ClassTag
-import org.specs2.fp.Memo._
+import org.specs2.fp.Memo.*
 
 /**
  * Extraction functions for command line parameters

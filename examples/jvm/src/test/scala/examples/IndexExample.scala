@@ -1,8 +1,8 @@
 package examples
 
-import org.specs2._
+import org.specs2.*
 import specification.core.Fragments
-import runner.SpecificationsFinder._
+import runner.SpecificationsFinder.*
 
 /**
  * This Specification shows how to create an Index with references to other specifications

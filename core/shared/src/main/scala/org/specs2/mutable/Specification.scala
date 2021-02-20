@@ -1,13 +1,13 @@
 package org.specs2
 package mutable
 
-import matcher._
+import matcher.*
 import main.ArgumentsShortcuts
 import org.specs2.execute.StandardResults
 import specification.create.FormattingFragments
 import specification.core.mutable.SpecificationStructure
-import specification.mutable._
-import specification.dsl.mutable._
+import specification.mutable.*
+import specification.dsl.mutable.*
 
 /**
  * Class for a Specification using the mutable DSL and thrown expectations

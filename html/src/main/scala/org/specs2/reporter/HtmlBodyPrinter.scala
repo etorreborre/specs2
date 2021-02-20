@@ -3,18 +3,18 @@ package reporter
 
 import io.{DirectoryPath, FilePath}
 import main.Arguments
-import specification.core._
-import specification.process._
-import execute._
-import text.NotNullStrings._
+import specification.core.*
+import specification.process.*
+import execute.*
+import text.NotNullStrings.*
 
 import scala.xml.NodeSeq
-import matcher._
-import fp.syntax._
-import form._
-import control._
-import origami._, Folds._
-import control.producer._
+import matcher.*
+import fp.syntax.*
+import form.*
+import control.*
+import origami.*, Folds.*
+import control.producer.*
 import concurrent.ExecutionEnv
 import text.AnsiColors
 import time.SimpleTimer

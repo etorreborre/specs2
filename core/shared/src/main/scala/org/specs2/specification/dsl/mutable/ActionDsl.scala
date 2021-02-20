@@ -3,9 +3,9 @@ package specification
 package dsl
 package mutable
 
-import data._
+import data.*
 import execute.{Error, Result}
-import core._
+import core.*
 
 /**
  * Dsl to create actions in a mutable spec

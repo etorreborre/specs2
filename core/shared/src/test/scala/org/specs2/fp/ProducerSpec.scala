@@ -1,8 +1,8 @@
 package org.specs2
 package fp
 
-import org.specs2.control._
-import org.specs2.control.producer._
+import org.specs2.control.*
+import org.specs2.control.producer.*
 
 class ProducerSpec extends Specification { def is = s2"""
 

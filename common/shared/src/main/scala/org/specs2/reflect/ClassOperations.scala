@@ -2,7 +2,7 @@ package org.specs2
 package reflect
 
 import scala.reflect.ClassTag
-import control._
+import control.*
 
 /**
  * This trait provides functions to instantiate classes

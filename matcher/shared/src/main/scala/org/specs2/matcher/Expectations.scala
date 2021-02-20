@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-import execute._
+import execute.*
 
 /**
  * This trait provides implicit definitions to transform any value into an Expectable

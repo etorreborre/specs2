@@ -4,10 +4,10 @@ package org.specs2.json
  * COPIED from the standard lib for convenience. Internal use only
  */
 
-import scala.util.parsing.combinator._
+import scala.util.parsing.combinator.*
 import scala.util.parsing.combinator.lexical.StdLexical
-import scala.util.parsing.combinator.syntactical._
-import scala.util.parsing.input.CharArrayReader._
+import scala.util.parsing.combinator.syntactical.*
+import scala.util.parsing.input.CharArrayReader.*
 
 /**
  *  A marker class for the JSON result types.
@@ -129,8 +129,8 @@ class Parser extends StdTokenParsers with ImplicitConversions:
 
   // Define the grammar
   def root       = jsonObj | jsonArray
-  def jsonObj    = "{" ~> repsep(objEntry, ",") <~ "}" ^^ { case vals : List[_] => JSONObject(Map(vals*)) }
-  def jsonArray  = "[" ~> repsep(value, ",") <~ "]" ^^ { case vals : List[_] => JSONArray(vals) }
+  def jsonObj    = "{" ~> repsep(objEntry, ",") <~ "}" ^^ { case vals : List[?] => JSONObject(Map(vals*)) }
+  def jsonArray  = "[" ~> repsep(value, ",") <~ "]" ^^ { case vals : List[?] => JSONArray(vals) }
   def objEntry   = stringVal ~ (":" ~> value) ^^ { case x ~ y => (x, y) }
   def value: Parser[Any] = (jsonObj | jsonArray | number | "true" ^^^ true | "false" ^^^ false | "null" ^^^ null | stringVal)
   def stringVal  = accept("string", { case lexical.StringLit(n) => n} )

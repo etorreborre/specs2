@@ -2,10 +2,10 @@ package org.specs2
 package execute
 
 import Result.ResultFailureMonoid
-import text.Quote._
-import text.Plural._
-import org.specs2.fp.syntax._
-import control._
+import text.Quote.*
+import text.Plural.*
+import org.specs2.fp.syntax.*
+import control.*
 
 /**
  * This trait adds some implicits to easily fold sequences of results

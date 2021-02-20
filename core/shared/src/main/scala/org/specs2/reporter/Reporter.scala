@@ -1,14 +1,14 @@
 package org.specs2
 package reporter
 
-import fp.{given, _}, syntax.{given, _}
-import control._
-import producer._
-import origami._, Folds._
-import specification._
-import specification.process._
-import core._
-import control._
+import fp.{given, *}, syntax.{given, *}
+import control.*
+import producer.*
+import origami.*, Folds.*
+import specification.*
+import specification.process.*
+import core.*
+import control.*
 import main.Arguments
 
 /**

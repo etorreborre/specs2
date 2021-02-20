@@ -2,9 +2,9 @@ package org.specs2.matcher.describe
 
 import java.io.{PrintWriter, StringWriter}
 
-import org.specs2.matcher.describe.ComparisonResultOps._
-import org.specs2.text.Quote._
-import org.specs2.text.NotNullStrings._
+import org.specs2.matcher.describe.ComparisonResultOps.*
+import org.specs2.text.Quote.*
+import org.specs2.text.NotNullStrings.*
 
 /**
  * Render the result of a comparison for different types: primitives, throwables, collections,...
@@ -59,7 +59,7 @@ case class PrimitiveDifference(actual: Any, expected: Any) extends DifferentComp
   def render: String =
     (actual, expected).renderDiff
 
-case class SetIdentical(value: Set[_]) extends OrderedCollectionIdentical(value) with SetTypeProvider
+case class SetIdentical(value: Set[?]) extends OrderedCollectionIdentical(value) with SetTypeProvider
 
 case class SetDifference(same:    Seq[Any],
                          added:   Seq[Any],
@@ -93,7 +93,7 @@ case class ArrayDifference(results: Seq[ComparisonResult], added: Seq[Any], remo
 trait ArrayTypeProvider:
   val className = "Array"
 
-case class MapIdentical(m: Map[_, _]) extends OrderedCollectionIdentical(m) with MapTypeProvider
+case class MapIdentical(m: Map[?, ?]) extends OrderedCollectionIdentical(m) with MapTypeProvider
 
 trait MapTypeProvider:
   val className = "Map"

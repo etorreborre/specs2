@@ -3,8 +3,8 @@ package reporter
 
 import org.junit.runner.Description
 
-import org.specs2.fp._, Tree._
-import scala.collection.JavaConverters._
+import org.specs2.fp.*, Tree.*
+import scala.collection.JavaConverters.*
 
 /**
  * Implementation of the Show trait to allow the drawing of Tree[Description]

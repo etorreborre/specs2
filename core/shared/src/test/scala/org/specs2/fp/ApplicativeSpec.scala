@@ -1,9 +1,9 @@
 package org.specs2
 package fp
 
-import syntax._
-import control._
-import scala.collection.mutable._
+import syntax.*
+import control.*
+import scala.collection.mutable.*
 
 class ApplicativeSpec extends Specification { def is = s2"""
 
@@ -20,7 +20,7 @@ Applicative effects must be evaluated in the right order
 """
 
   val applicative = Applicative[Operation]
-  import applicative._
+  import applicative.*
 
   def ap2Order =
     val evaluated = new ListBuffer[Int]

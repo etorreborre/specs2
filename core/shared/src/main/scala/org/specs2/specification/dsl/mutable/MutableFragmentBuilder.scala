@@ -5,7 +5,7 @@ package mutable
 
 import main.Arguments
 import specification.create.FragmentsFactory
-import specification.core._
+import specification.core.*
 
 /**
  * Creation of fragments in a mutable specification

@@ -1,7 +1,7 @@
 package org.specs2
 package io
 
-import control._
+import control.*
 
 /**
  * Key-value store

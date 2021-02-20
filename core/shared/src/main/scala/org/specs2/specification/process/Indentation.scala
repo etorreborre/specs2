@@ -2,11 +2,11 @@ package org.specs2
 package specification
 package process
 
-import scala.math._
-import control.origami._
-import Folds._
+import scala.math.*
+import control.origami.*
+import Folds.*
 import org.specs2.fp.Id
-import specification.core._
+import specification.core.*
 
 /**
  * Fold function to compute the indentation of each fragment based

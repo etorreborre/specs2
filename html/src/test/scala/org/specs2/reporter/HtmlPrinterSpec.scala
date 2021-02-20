@@ -1,13 +1,13 @@
 package org.specs2
 package reporter
 
-import fp.syntax._
-import io._
-import FileName._
+import fp.syntax.*
+import io.*
+import FileName.*
 import main.Arguments
 import specification.core.{OwnEnv, Env, SpecificationStructure}
-import matcher._
-import control._
+import matcher.*
+import control.*
 
 class HtmlPrinterSpec(val env: Env) extends Specification with ActionMatchers with ThrownExpectations with OwnEnv { def is = sequential ^ s2"""
 
@@ -22,18 +22,18 @@ class HtmlPrinterSpec(val env: Env) extends Specification with ActionMatchers wi
     val spec = new Specification { def is = s2""" one example $ok """}
     val env1 = env.setArguments(searchArguments)
 
-    printer(env1).getHtmlOptions(env1.arguments).map(_.search).runOption must beSome(true)
+    printer(env1).getHtmlOptions(env1.arguments).map(_.search).runOption `must` beSome(true)
 
-    finalize(env1, spec) must beOk
-    FilePathReader.exists(outDir / "javascript" / "tipuesearch" | "tipuesearch_contents.js").runOption must beSome(true)
+    finalize(env1, spec) `must` beOk
+    FilePathReader.exists(outDir / "javascript" / "tipuesearch" | "tipuesearch_contents.js").runOption `must` beSome(true)
 
 
   def searchPage =
     val spec = new Specification { def is = s2""" one example $ok """}
     val env1 = env.setArguments(searchArguments)
 
-    finalize(env1, spec) must beOk
-    FilePathReader.exists(outDir | "search.html").runOption must beSome(true)
+    finalize(env1, spec) `must` beOk
+    FilePathReader.exists(outDir | "search.html").runOption `must` beSome(true)
 
   def finalize(env: Env, spec: SpecificationStructure): Action[Unit] =
     val htmlPrinter = printer(env)

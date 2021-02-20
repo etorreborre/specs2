@@ -2,17 +2,17 @@ package org.specs2
 package reporter
 
 import junit.framework.AssertionFailedError
-import text.NotNullStrings._
+import text.NotNullStrings.*
 import org.junit.runner.Description
 import org.junit.runner.notification.RunNotifier
-import specification.core._
+import specification.core.*
 import text.AnsiColors
-import execute._
+import execute.*
 import org.junit.ComparisonFailure
 import main.Arguments
-import control._, ExecutionOrigin._
-import origami._, Folds._
-import fp.syntax._
+import control.*, ExecutionOrigin.*
+import origami.*, Folds.*
+import fp.syntax.*
 
 /**
  * The JUnitPrinter sends notifications to JUnit's RunNotifier

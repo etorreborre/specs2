@@ -1,14 +1,14 @@
 package org.specs2
 package reporter
 
-import control.{Logger =>_,_}
-import origami._
+import control.{Logger  as _,*}
+import origami.*
 import execute.Details
-import sbt.testing._
-import org.specs2.text.AnsiColors._
+import sbt.testing.*
+import org.specs2.text.AnsiColors.*
 import main.Arguments
-import specification.core._
-import SbtPrinter._
+import specification.core.*
+import SbtPrinter.*
 
 /**
  * Text printer for Sbt

@@ -1,11 +1,11 @@
 package org.specs2
 package matcher
 
-import java.math._
-import text.Plural._
-import NumericMatchersDescription._
+import java.math.*
+import text.Plural.*
+import NumericMatchersDescription.*
 import math.Ordering.Implicits.infixOrderingOps
-import execute._, Result._
+import execute.*, Result.*
 
 /**
  * Matchers for Numerical values

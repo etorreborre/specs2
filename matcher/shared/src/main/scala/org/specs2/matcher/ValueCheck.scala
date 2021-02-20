@@ -1,13 +1,13 @@
 package org.specs2
 package matcher
 
-import execute._
+import execute.*
 import org.specs2.execute.AsResult
-import describe._
-import text.Quote._
-import Expectations._
-import control._
-import ResultLogicalCombinators.{given, _}
+import describe.*
+import text.Quote.*
+import Expectations.*
+import control.*
+import ResultLogicalCombinators.{given, *}
 
 /**
  * Common interface for checks of a value of type T:

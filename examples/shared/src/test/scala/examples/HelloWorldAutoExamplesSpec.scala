@@ -1,6 +1,6 @@
 package examples
 
-import org.specs2._
+import org.specs2.*
 
 /**
  * This specification shows that it is possible to use the example code directly in the specification
@@ -11,9 +11,9 @@ class HelloWorldAutoExamplesSpec extends Specification { def is = s2"""
 
   The 'Hello world' string satisfies the following properties:
 
-   ${ "Hello world" must haveSize(11)       }
-   ${ "Hello world" must startWith("Hello") }
-   ${ "Hello world" must endWith("world")   }
+   ${ "Hello world" `must` haveSize(11)       }
+   ${ "Hello world" `must` startWith("Hello") }
+   ${ "Hello world" `must` endWith("world")   }
 
                                                                   """
 

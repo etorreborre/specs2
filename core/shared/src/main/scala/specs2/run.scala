@@ -1,9 +1,9 @@
 package specs2
 
 import org.specs2.main.Arguments
-import org.specs2.runner._
-import org.specs2.fp.syntax._
-import org.specs2.specification.core._
+import org.specs2.runner.*
+import org.specs2.fp.syntax.*
+import org.specs2.specification.core.*
 
 /**
  * Run a specification from the command-line with specs2.run <specification name> <arguments>

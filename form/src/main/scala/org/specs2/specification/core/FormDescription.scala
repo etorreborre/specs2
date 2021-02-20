@@ -1,9 +1,9 @@
 package org.specs2
 package specification.core
 
-import form._
+import form.*
 import main.Arguments
-import text.Indent._
+import text.Indent.*
 
 /**
  * Description of a Form to be used in a Fragment

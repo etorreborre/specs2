@@ -3,10 +3,10 @@ package specification
 package dsl
 package mutable
 
-import execute._
-import specification.script._
-import specification.core._
-import specification.create._
+import execute.*
+import specification.script.*
+import specification.core.*
+import specification.create.*
 import scala.util.NotGiven
 
 /**

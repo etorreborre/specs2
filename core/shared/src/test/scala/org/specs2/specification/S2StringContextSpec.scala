@@ -5,8 +5,8 @@ import org.specs2.matcher.{MustMatchers, ExpectedResults, ThrownExpectations}
 import org.specs2.execute.{Function0Result, StandardResults, Success}
 import org.specs2.concurrent.ExecutionEnv
 import org.specs2.main.Arguments
-import org.specs2.specification.create._
-import org.specs2.specification.core._
+import org.specs2.specification.create.*
+import org.specs2.specification.core.*
 import org.specs2.specification.dsl.FragmentsDsl
 
 class S2StringContextSpec extends Spec { def is = s2"""
@@ -37,37 +37,37 @@ ${step(ee.shutdown())}
 
   object exs extends MustMatchers with StandardResults with S2StringContext with ThrownExpectations:
 
-    import DefaultFragmentFactory._
+    import DefaultFragmentFactory.*
 
-    def e1 = s2"""this is ${"some text"}""".fragmentsList(ee) must haveSize(1)
+    def e1 = s2"""this is ${"some text"}""".fragmentsList(ee) `must` haveSize(1)
 
-    def e2 = s2"""this is ${text("some text")}""".fragmentsList(ee) must haveSize(2)
+    def e2 = s2"""this is ${text("some text")}""".fragmentsList(ee) `must` haveSize(2)
 
     def e3 =
       val fragments =
         s2"""this is
             $ok""".fragmentsList(ee)
-      fragments must haveSize(2)
-      fragments(1).description.show must ===("`ok`")
+      fragments `must` haveSize(2)
+      fragments(1).description.show `must` ===("`ok`")
 
-    def e4 = s2"""this is ${new Function0Result(() => Success())}""".fragmentsList(ee) must haveSize(1)
+    def e4 = s2"""this is ${new Function0Result(() => Success())}""".fragmentsList(ee) `must` haveSize(1)
 
-    def e5 = s2"""this is ${Fragments(text("the"), text(" world"))}""".fragmentsList(ee) must haveSize(3)
+    def e5 = s2"""this is ${Fragments(text("the"), text(" world"))}""".fragmentsList(ee) `must` haveSize(3)
 
-    def e6 = s2"""this is $spec""".fragmentsList(ee) must haveSize(2)
+    def e6 = s2"""this is $spec""".fragmentsList(ee) `must` haveSize(2)
 
     def e7 =
       s2"""
   this should
     create example 1 $ok
-    create example 2 $ok""".fragmentsList(ee) must haveSize(4)
+    create example 2 $ok""".fragmentsList(ee) `must` haveSize(4)
 
     def e8 =
       val fragments = s2""" ${`a method call`}""".fragmentsList(ee)
-      fragments must haveSize(1)
-      fragments.head.description.show must ===("`a method call`")
+      fragments `must` haveSize(1)
+      fragments.head.description.show `must` ===("`a method call`")
 
-    def e9 = s2"""this is ${"some text"} $ok""".fragmentsList(ee) must haveSize(2)
+    def e9 = s2"""this is ${"some text"} $ok""".fragmentsList(ee) `must` haveSize(2)
 
     def e10 =
       val fragments =
@@ -93,26 +93,26 @@ Intro
     def e1 =
       getDescription(
         s2"""this is
-           an example $ok""") must ===(Description.text("an example"))
+           an example $ok""") `must` ===(Description.text("an example"))
 
     def e2 =
       getDescription(
         s2"""
   this is
     a multi-line
-    example $ok""") must ===(Description.text("a multi-line\n    example"))
+    example $ok""") `must` ===(Description.text("a multi-line\n    example"))
 
     def e3 =
       getDescription(
 s2"""
   this is
     |a multi-line
-    |  margin example $ok""") must ===(Description.text("a multi-line\n      margin example"))
+    |  margin example $ok""") `must` ===(Description.text("a multi-line\n      margin example"))
 
     def e4 =
       getDescription(
         s2"""this is an auto-example
-             $ok""") must ===(Description.code("ok"))
+             $ok""") `must` ===(Description.code("ok"))
 
     def getDescription(fs: Fragments): Description =
       fs.examples.runMonoid(ee).head.description

@@ -2,7 +2,7 @@ package org.specs2
 package main
 
 import org.specs2.concurrent.ExecuteArguments
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 
 /**
  * Execution arguments

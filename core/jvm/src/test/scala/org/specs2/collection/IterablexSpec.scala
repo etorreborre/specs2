@@ -2,8 +2,8 @@ package org.specs2
 package collection
 
 import mutable.Specification
-import org.scalacheck._
-import Iterablex._
+import org.scalacheck.*
+import Iterablex.*
 
 class IterablexSpec extends Specification with IterableData with ScalaCheckResult:
 
@@ -43,17 +43,17 @@ class IterablexSpec extends Specification with IterableData with ScalaCheckResul
   }
 
   "toDeepString uses recursively the toString method to display iterables in brackets" >>
-  { List(List(1, 2), 3, List(4, 5)).toDeepString must ===("[[1, 2], 3, [4, 5]]") }
+  { List(List(1, 2), 3, List(4, 5)).toDeepString `must` ===("[[1, 2], 3, [4, 5]]") }
 
   "mapFirst maps the first element with a function if it exists" >>
-  { Seq(1, 2).mapFirst(_ + 1) must ===(Seq(2, 2)) }
+  { Seq(1, 2).mapFirst(_ + 1) `must` ===(Seq(2, 2)) }
 
   "mapLast maps the last element with a function if it exists" >>
-  { Seq(1, 2).mapLast(_ + 1) must ===(Seq(1, 3)) }
+  { Seq(1, 2).mapLast(_ + 1) `must` ===(Seq(1, 3)) }
 
 
 import org.scalacheck.Arbitrary
-import org.scalacheck.Gen._
+import org.scalacheck.Gen.*
 
 trait IterableData:
 

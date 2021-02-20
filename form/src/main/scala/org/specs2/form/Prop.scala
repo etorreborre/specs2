@@ -2,10 +2,10 @@ package org.specs2
 package form
 
 import control.Property
-import control.Properties._
-import execute._
-import matcher._
-import text.NotNullStrings._
+import control.Properties.*
+import execute.*
+import matcher.*
+import text.NotNullStrings.*
 
 /**
  * The Prop class is a named property which holds:
@@ -86,7 +86,7 @@ case class Prop[T, S](
   /**
    * @return the string for the expected/actual value depending on its existence and execution result
    */
-  private def valueToString(executed: Either[Result, _]) =
+  private def valueToString(executed: Either[Result, ?]) =
     executed match
       case Right(r)          => r.notNull
       case Left(Pending(_))  => "_"

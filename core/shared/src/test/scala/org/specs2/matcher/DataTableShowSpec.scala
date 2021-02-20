@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-import text._
+import text.*
 
 class DataTableShowSpec extends Specification with DataTables { def is = s2"""
 

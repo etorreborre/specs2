@@ -1,16 +1,16 @@
 package org.specs2.form
 
-import scala.xml.{Text=>_,_}
-import org.specs2.collection.Seqx._
-import org.specs2.xml.Nodex.{given, _}
-import org.specs2.execute._
+import scala.xml.{Text as _,*}
+import org.specs2.collection.Seqx.*
+import org.specs2.xml.Nodex.{given, *}
+import org.specs2.execute.*
 import org.specs2.main.Arguments
-import StandardResults._
-import org.specs2.matcher._
-import DecoratedProperties._
-import ResultLogicalCombinators._
-import org.specs2.control.Properties.{given, _}
-import org.specs2.control.ImplicitParameters._
+import StandardResults.*
+import org.specs2.matcher.*
+import DecoratedProperties.*
+import ResultLogicalCombinators.*
+import org.specs2.control.Properties.{given, *}
+import org.specs2.control.ImplicitParameters.*
 import org.specs2.control.Use
 import reflect.Selectable.reflectiveSelectable
 
@@ -44,9 +44,9 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
 
 
   /** add a new Header with some fields */
-  def th(hs: Seq[Field[_]]): Form = tr(Row.tr(hs.map((f: Field[_]) => FieldCell(f.header))))
+  def th(hs: Seq[Field[?]]): Form = tr(Row.tr(hs.map((f: Field[?]) => FieldCell(f.header))))
   /** add a new Header, with at least one Field */
-  def th(h1: Field[_], hs: Field[_]*): Form = tr(Row.tr(FieldCell(h1.header), hs.map((f: Field[_]) => FieldCell(f.header))*))
+  def th(h1: Field[?], hs: Field[?]*): Form = tr(Row.tr(FieldCell(h1.header), hs.map((f: Field[?]) => FieldCell(f.header))*))
   /** add a new Header */
   def th(hs: Seq[String])(using p: ImplicitParam): Form = Use.ignoring(p)(th(hs.map(Field(_))))
   /** add a new Header, with at least one Field */
@@ -81,7 +81,7 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
       this
     else
       val executedRows = executeRows
-      newForm(title, executedRows, Some(executedRows.map(_.execute).foldLeft(success: Result) { (res, cur) => res and cur }))
+      newForm(title, executedRows, Some(executedRows.map(_.execute).foldLeft(success: Result) { (res, cur) => res `and` cur }))
 
   /** @return the printed form with a padding space size to use for each cell */
   def text: String = allRows.map(_.text(maxSizes)).mkString("\n")
@@ -172,7 +172,7 @@ case object Form:
     def firstField[A](as: Seq[A]) = Field(as.headOption.getOrElse(""))
     def otherFields[A](as: Seq[A]) = as.drop(1).map(Field(_))
 
-    val headerRest = otherFields(table.titles) ++ (if table.isSuccess then Seq[Field[_]]() else Seq(Field("message")))
+    val headerRest = otherFields(table.titles) ++ (if table.isSuccess then Seq[Field[?]]() else Seq(Field("message")))
     table.rows.foldLeft(th(firstField(table.titles), headerRest*)) { (res, cur) =>
       val values = Row.tr(FieldCell(firstField(cur.cells)), otherFields(cur.cells).map(FieldCell(_))*)
       res.tr {
@@ -186,7 +186,7 @@ case object Form:
   /** @return a Form with one row */
   def tr(row: Row): Form = new Form().tr(row)
   /** @return a Form with one row and cells formatted as header cells */
-  def th(h1: Field[_], hs: Field[_]*): Form = new Form().th(h1, hs*)
+  def th(h1: Field[?], hs: Field[?]*): Form = new Form().th(h1, hs*)
   /** @return a Form with one row and cells formatted as header cells */
   def th(h1: String, hs: String*): Form = new Form().th(h1, hs*)
   /** create new tabs in the Form */

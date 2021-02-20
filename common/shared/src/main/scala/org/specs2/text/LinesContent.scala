@@ -21,6 +21,6 @@ trait LinesContent[L1]:
 /**
  * Default implementation for reading lines out of a Seq
  */
-case class SeqLinesContent[A, CC[_] <: Traversable[_]]() extends LinesContent[CC[A]]:
+case class SeqLinesContent[A, CC[_] <: Traversable[?]]() extends LinesContent[CC[A]]:
   def name(seq: CC[A]) = "sequence"
   def lines(seq: CC[A]): Seq[String] = seq.toList.map(_.toString)

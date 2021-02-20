@@ -1,11 +1,11 @@
 package org.specs2
 package reporter
 
-import control._
-import main._
-import fp.syntax._
-import Printer._
-import specification.core._
+import control.*
+import main.*
+import fp.syntax.*
+import Printer.*
+import specification.core.*
 
 /**
  * Create printers based on their class names and the arguments passed by the user

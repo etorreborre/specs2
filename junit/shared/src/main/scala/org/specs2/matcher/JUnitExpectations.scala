@@ -3,7 +3,7 @@ package matcher
 
 import org.junit.ComparisonFailure
 import junit.framework.AssertionFailedError
-import execute._
+import execute.*
 
 /**
  * This trait throws AssertionFailed errors when a match fails.

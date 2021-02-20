@@ -9,7 +9,7 @@ import org.specs2.matcher.ResultMatchers
 import org.specs2.mutable.Specification
 import org.specs2.specification.core.{Env, OwnEnv}
 import org.specs2.specification.process.DefaultExecutor
-import org.specs2.matcher.ActionMatchers._
+import org.specs2.matcher.ActionMatchers.*
 
 class ScalaCheckMutableSpec(val env: Env) extends Specification with ScalaCheck with ResultMatchers with OwnEnv:
 
@@ -17,7 +17,7 @@ class ScalaCheckMutableSpec(val env: Env) extends Specification with ScalaCheck 
     val action: Action[Result] =
       DefaultExecutor.executeFragments(s2"fail here $failingProperties")(ownEnv).map(_.executionResult).head
 
-    action must beOk((r: Result) => r must beFailing)
+    action `must` beOk((r: Result) => r `must` beFailing)
   }
 
 

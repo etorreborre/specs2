@@ -2,8 +2,8 @@ package org.specs2
 package specification
 package process
 
-import io._
-import control._
+import io.*
+import control.*
 
 object StatisticsRepositoryCreation:
 

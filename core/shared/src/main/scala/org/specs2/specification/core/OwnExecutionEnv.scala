@@ -3,7 +3,7 @@ package specification
 package core
 
 import concurrent.ExecutionEnv
-import dsl._
+import dsl.*
 
 import scala.concurrent.ExecutionContext
 

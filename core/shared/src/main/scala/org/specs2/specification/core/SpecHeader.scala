@@ -2,7 +2,7 @@ package org.specs2
 package specification
 package core
 
-import text.CamelCase._
+import text.CamelCase.*
 import reflect.ClassName
 
 /**
@@ -10,7 +10,7 @@ import reflect.ClassName
  *
  * It can hold a user-defined title for better presentation
  */
-case class SpecHeader(specClass: Class[_], title: Option[String] = None):
+case class SpecHeader(specClass: Class[?], title: Option[String] = None):
   def show = title.getOrElse(simpleName)
   def showWords = title.getOrElse(wordsTitle)
   def className = ClassName.className(specClass)
@@ -18,6 +18,6 @@ case class SpecHeader(specClass: Class[_], title: Option[String] = None):
   def wordsTitle = simpleName.camelCaseToWordsCapitalized
 
 object SpecHeader {
-  def create(specClass: Class[_]): SpecHeader =
+  def create(specClass: Class[?]): SpecHeader =
     SpecHeader(specClass, title = None)
 }

@@ -4,16 +4,16 @@ package reporter
 import java.lang.annotation.Annotation
 
 import org.junit.runner.Description
-import org.specs2.fp._
-import Tree._
-import data.Trees._
-import control.Exceptions._
+import org.specs2.fp.*
+import Tree.*
+import data.Trees.*
+import control.Exceptions.*
 import data.Trees
-import Trees._
-import specification._
-import core._
-import process._
-import control._
+import Trees.*
+import specification.*
+import core.*
+import process.*
+import control.*
 import org.specs2.concurrent.ExecutionEnv
 import specification.core.{Fragment, NoText}
 import specification.create.DefaultFragmentFactory
@@ -83,7 +83,7 @@ trait JUnitDescriptions extends ExecutionOrigin:
     else
       Description.createSuiteDescription(description, annotations*)
 
-  import text.Trim._
+  import text.Trim.*
 
   /** @return a seq containing the path of an example without the root name */
   def parentPath(parentNodes: Seq[Fragment]) =

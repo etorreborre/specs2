@@ -1,6 +1,6 @@
 package examples
 
-import org.specs2._
+import org.specs2.*
 
 /**
  * This specification shows how to use the mutable.Specification trait to create a unit Specification
@@ -31,10 +31,10 @@ class UnitSpec extends mutable.Specification:
 
   "'Hello world'  should" >> {
     "contain 11 characters" >> {
-      "Hello world" must haveSize(11)
+      "Hello world" `must` haveSize(11)
     }
     "start with 'Hello'" >> {
-      "Hello world" must startWith("Hello")
+      "Hello world" `must` startWith("Hello")
     }
     /**
      * a failing example will stop right away, without having to "chain" expectations
@@ -44,7 +44,7 @@ class UnitSpec extends mutable.Specification:
       // stop the execution right away with a Failure
       // "Hello world" must startWith("Hi")
 
-      "Hello world" must endWith("world")
+      "Hello world" `must` endWith("world")
     }
   }
   // you can add references to other specifications

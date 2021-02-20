@@ -3,8 +3,8 @@ package specification
 package script
 
 import util.matching.Regex
-import control.Exceptions._
-import text._
+import control.Exceptions.*
+import text.*
 
 /**
  * A StepParser is a function to extract a value of type `T` from a piece of text

@@ -1,8 +1,8 @@
 package org.specs2
 package execute
 
-import control._
-import Throwablex._
+import control.*
+import Throwablex.*
 
 /**
  * The stacktrace for a Result

@@ -1,7 +1,7 @@
 package org.specs2
 package execute
 
-import text.Quote._
+import text.Quote.*
 import scala.util.NotGiven
 
 /**

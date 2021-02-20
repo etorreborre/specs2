@@ -1,10 +1,10 @@
 package org.specs2
 package io
 
-import java.io._
+import java.io.*
 import java.net.URI
 import java.util.UUID
-import scala.quoted._
+import scala.quoted.*
 
 /**
  * The component of a path name according to the unix definition

@@ -1,8 +1,8 @@
 package org.specs2
 package text
 
-import Trim._
-import fp.syntax._
+import Trim.*
+import fp.syntax.*
 
 class TrimSpec extends Specification { def is = s2"""
 ### Trait for trimming strings
@@ -53,9 +53,9 @@ class TrimSpec extends Specification { def is = s2"""
 
   string unless condition
     returns the string if the condition is false
-    ${eg{ "hello" orEmptyWhen false must ===("hello") }}
+    ${eg{ "hello" `orEmptyWhen` false `must` ===("hello") }}
     returns an empty string if the condition is true
-    ${eg{ "hello" orEmptyWhen true must ===("") }}
+    ${eg{ "hello" `orEmptyWhen` true `must` ===("") }}
 
   ${"Last block returns the last block when lines are separated by empty lines"  ! e2}
 
@@ -96,6 +96,6 @@ class TrimSpec extends Specification { def is = s2"""
            replaceAll("<p>[\\S\\s]*</p>", (s: String) => s.replace("\n", "<br/>")) ===
            "<li><p>hello<br/>dear<br/>world</p></li>"
 
-  def e2 = "hello\nworld\n   \nhow are\nyou\n".lastBlock must ===("how are\nyou")
+  def e2 = "hello\nworld\n   \nhow are\nyou\n".lastBlock `must` ===("how are\nyou")
 
 }

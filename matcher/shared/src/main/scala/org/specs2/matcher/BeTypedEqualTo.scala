@@ -6,4 +6,4 @@ import org.specs2.matcher.describe.Diffable
 /**
  * Typed equality Matcher with fallback comparison results
  */
-class BeTypedEqualTo[T](t: =>T) extends EqualityMatcher[T](t)(Diffable.fallbackDiffable)
+class BeTypedEqualTo[T](t: =>T) extends EqualityMatcher[T](t)(using Diffable.fallbackDiffable)

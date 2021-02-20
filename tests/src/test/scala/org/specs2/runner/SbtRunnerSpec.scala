@@ -13,11 +13,11 @@ class SbtRunnerSpec extends Specification { def is = s2"""
 
   def sbtTags =
     val runner = new MasterSbtRunner(Array("sbt.tags"), Array(""), getClass.getClassLoader)
-    taskTags(runner) must contain("one")
+    taskTags(runner) `must` contain("one")
 
   def noSbtTags =
     val runner = new MasterSbtRunner(Array(""), Array(""), getClass.getClassLoader)
-    taskTags(runner) must not(contain("one"))
+    taskTags(runner) `must` not(contain("one"))
 
   def taskTags(runner: MasterSbtRunner): List[String] =
     val task = runner.newTask(new TaskDef("org.specs2.runner.SbtRunnerSpec", Fingerprints.fp1m, true, Array()))

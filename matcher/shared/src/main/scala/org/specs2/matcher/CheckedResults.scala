@@ -1,8 +1,8 @@
 package org.specs2
 package matcher
 
-import text.Sentences._
-import execute._, Result._
+import text.Sentences.*
+import execute.*, Result.*
 
 /**
  * This trait can be used in conjunction with Pattern matchers:

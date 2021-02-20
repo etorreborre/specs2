@@ -2,10 +2,10 @@ package org.specs2
 package specification
 package process
 
-import fp._, syntax._
-import control._
+import fp.*, syntax.*
+import control.*
 import execute.Result
-import io._
+import io.*
 import specification.core.Description
 import scala.collection.mutable.HashMap
 

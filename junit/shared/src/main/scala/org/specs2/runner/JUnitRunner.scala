@@ -3,18 +3,18 @@ package runner
 
 import org.junit.runner.manipulation.{Filterable, NoTestsRemainException}
 import org.junit.runner.notification.{Failure, RunNotifier}
-import main._
-import fp.syntax._
-import control._
-import specification.core._
-import specification.process._
-import reporter._
+import main.*
+import fp.syntax.*
+import control.*
+import specification.core.*
+import specification.process.*
+import reporter.*
 import scala.util.control.NonFatal
 
 /**
  * Runner for specs2 specifications
  */
-class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterable { outer =>
+class JUnitRunner(klass: Class[?]) extends org.junit.runner.Runner with Filterable { outer =>
 
   /** specification to execute */
   lazy val specification =

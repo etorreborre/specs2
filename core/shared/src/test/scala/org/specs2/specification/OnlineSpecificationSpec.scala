@@ -1,32 +1,32 @@
 package org.specs2
 package specification
 
-import execute._
-import core._
+import execute.*
+import core.*
 import matcher.Matcher
 import specification.dsl.Online
-import reporter.TextPrinterSpecification._
-import control._
-import producer._, Producer._
+import reporter.TextPrinterSpecification.*
+import control.*
+import producer.*, Producer.*
 
 class OnlineSpecificationSpec extends Specification { def is = s2"""
 
  A specification can have examples returning a result and Fragments depending on the result value $e1
 
 """
-  val factory = fragmentFactory; import factory._
+  val factory = fragmentFactory; import factory.*
 
   def e1 =
     def continue(n: Int): FragmentsContinuation = FragmentsContinuation { (r: Result) =>
       if n == 1 then None
-      else        Some(core.Fragments(oneAsync(break) append createExample(n - 1).contents))
+      else        Some(core.Fragments(oneAsync(break) `append` createExample(n - 1).contents))
     }
 
     def online(n: Int) = Execution(success, continue(n))
 
     def createExample(n: Int) = core.Fragments(fragmentFactory.example(Text("an online example"), online(n)))
 
-    createExample(3) contains
+    createExample(3) `contains`
       """|[info] + an online example
          |[info] + an online example
          |[info] + an online example""".stripMargin
@@ -40,7 +40,7 @@ class WikipediaBddSpec extends Specification with Online { def is = s2"""
   def e1 =
     val pages = Wikipedia.getPages("BDD")
 
-    { pages must contain((_:Page) must mention("specs2")) } continueWith
+    { pages `must` contain((_:Page) `must` mention("specs2")) } `continueWith`
       pagesSpec(pages)
 
   def pagesSpec(pages: Seq[Page]): Fragments =
@@ -55,7 +55,7 @@ class WikipediaBddSpec extends Specification with Online { def is = s2"""
   def authorExample(link: HtmlLink) =
     s2"""
   The page at ${link.getName}
-    contains the name torreborre ${ link.getLinkedPage must mention("torreborre") }"""
+    contains the name torreborre ${ link.getLinkedPage `must` mention("torreborre") }"""
 
   def mention(name: String): Matcher[Page] = (page: Page) => (true, "ok")
 

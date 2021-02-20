@@ -2,8 +2,8 @@ package org.specs2
 package control
 package origami
 
-import org.specs2.fp._
-import org.specs2.fp.syntax._
+import org.specs2.fp.*
+import org.specs2.fp.syntax.*
 
 /**
  * A Fold is a "left fold" over a data structure with:
@@ -299,10 +299,10 @@ object Fold:
       }
 
     override def map[A, B](fa: F[A])(f: A => B): F[B] =
-      fa map f
+      fa `map` f
 
     def ap[A, B](fa: =>F[A])(f: =>F[A => B]): F[B] =
-      map(fa zip f) { case (a, b) => b(a) }
+      map(fa `zip` f) { case (a, b) => b(a) }
 
 /**
  * Typeclass instances and creation methods for folds

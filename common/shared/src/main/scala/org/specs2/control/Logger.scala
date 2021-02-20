@@ -1,8 +1,8 @@
 package org.specs2
 package control
 
-import io._
-import fp._, syntax._
+import io.*
+import fp.*, syntax.*
 
 /**
  * specs2 logger support

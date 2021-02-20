@@ -3,7 +3,7 @@ package specification
 package create
 
 import main.{ArgumentsShortcuts, ArgumentsArgs}
-import org.specs2.specification.dsl._
+import org.specs2.specification.dsl.*
 
 trait SpecificationCreation extends
        AcceptanceDsl

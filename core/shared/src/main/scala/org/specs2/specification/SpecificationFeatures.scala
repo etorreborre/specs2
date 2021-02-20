@@ -1,8 +1,8 @@
 package org.specs2
 package specification
 
-import matcher._
-import execute._
+import matcher.*
+import execute.*
 import control.Debug
 import control.ImplicitParameters
 import concurrent.ImplicitExecutionContexts

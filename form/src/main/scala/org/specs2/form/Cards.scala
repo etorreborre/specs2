@@ -1,11 +1,11 @@
 package org.specs2.form
 
-import DecoratedProperties._
-import org.specs2._
-import org.specs2.specification._
-import org.specs2.specification.core.{Tab=>_,_}
+import DecoratedProperties.*
+import org.specs2.*
+import org.specs2.specification.*
+import org.specs2.specification.core.{Tab as _,*}
 import org.specs2.concurrent.ExecutionEnv
-import SpecStructure._
+import SpecStructure.*
 
 /**
  * A set of tabs with a title, where each tab simply contains some text

@@ -1,9 +1,9 @@
 package org.specs2
 package specification
 
-import core._
-import execute._
-import specification.create._
+import core.*
+import execute.*
+import specification.create.*
 import data.AlwaysTag
 import scala.concurrent.{Future, ExecutionContext}
 

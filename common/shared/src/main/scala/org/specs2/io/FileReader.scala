@@ -1,7 +1,7 @@
 package org.specs2
 package io
 
-import java.io._
+import java.io.*
 
 /**
  * The FileReader trait provides most of the File API methods as an interface

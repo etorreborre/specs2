@@ -2,11 +2,11 @@ package org.specs2
 package specification
 
 import io.StringOutput
-import execute._
+import execute.*
 import org.specs2.specification.core.{Env, SpecificationStructure, Fragment}
 import org.specs2.specification.process.DefaultExecutor
-import _root_.org.specs2.mutable.{Specification => Spec}
-import fp.syntax._
+import _root_.org.specs2.mutable.{Specification as Spec}
+import fp.syntax.*
 
 class BeforeAfterAroundSpec extends Specification { def is = s2"""
 
@@ -50,7 +50,7 @@ class BeforeAfterAroundSpec extends Specification { def is = s2"""
     val env = Env()
     try
       DefaultExecutor.executeFragments(s.structure.fragments)(env).traverse(_.executionResult).run(env.executionEnv)
-      s.messages must contain(allOf(messages*)).inOrder
+      s.messages `must` contain(allOf(messages*)).inOrder
     finally env.shutdown()
 
 }

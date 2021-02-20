@@ -1,7 +1,7 @@
 package org.specs2
 package execute
 
-import control._
+import control.*
 
 /**
  * This class is used to delay the execution of a result

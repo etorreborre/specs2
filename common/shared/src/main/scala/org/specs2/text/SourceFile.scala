@@ -2,8 +2,8 @@ package org.specs2
 package text
 
 import java.util.regex.{Matcher, Pattern}
-import control._
-import fp.syntax._
+import control.*
+import fp.syntax.*
 
 /**
  * Utility methods to parse the contents of source files

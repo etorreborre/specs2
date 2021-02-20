@@ -1,10 +1,10 @@
 package org.specs2
 package text
 
-import Trim._
-import collection.Seqx._
+import Trim.*
+import collection.Seqx.*
 import util.matching.Regex
-import annotation._
+import annotation.*
 
 private[specs2]
 trait Split:

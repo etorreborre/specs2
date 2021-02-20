@@ -3,8 +3,8 @@ package time
 
 import java.util.Date
 
-import text.Plural._
-import control.Exceptions._
+import text.Plural.*
+import control.Exceptions.*
 import org.specs2.control.origami.Fold
 import org.specs2.fp.{Id, Monad}
 

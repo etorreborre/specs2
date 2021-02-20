@@ -1,8 +1,8 @@
 package org.specs2
 package matcher
 
-import control._
-import ImplicitParameters.{given, _}
+import control.*
+import ImplicitParameters.{given, *}
 import describe.Diffable
 
 /**
@@ -26,8 +26,8 @@ trait EitherMatchers:
 
 object EitherMatchers extends EitherMatchers
 
-case class RightMatcher[T]() extends OptionLikeMatcher[({type l[a]=Either[_, a]})#l, T, T]("Right", (_:Either[Any, T]).toOption)
-case class RightCheckedMatcher[T](check: ValueCheck[T]) extends OptionLikeCheckedMatcher[({type l[a]=Either[_, a]})#l, T, T]("Right", (_:Either[Any, T]).toOption, check)
+case class RightMatcher[T]() extends OptionLikeMatcher[({type l[a]=Either[?, a]})#l, T, T]("Right", (_:Either[Any, T]).toOption)
+case class RightCheckedMatcher[T](check: ValueCheck[T]) extends OptionLikeCheckedMatcher[({type l[a]=Either[?, a]})#l, T, T]("Right", (_:Either[Any, T]).toOption, check)
 
-case class LeftMatcher[T]() extends OptionLikeMatcher[({type l[a]=Either[a, _]})#l, T, T]("Left", (_:Either[T, Any]).left.toOption)
-case class LeftCheckedMatcher[T](check: ValueCheck[T]) extends OptionLikeCheckedMatcher[({type l[a]=Either[a, _]})#l, T, T]("Left", (_:Either[T, Any]).left.toOption, check)
+case class LeftMatcher[T]() extends OptionLikeMatcher[({type l[a]=Either[a, ?]})#l, T, T]("Left", (_:Either[T, Any]).left.toOption)
+case class LeftCheckedMatcher[T](check: ValueCheck[T]) extends OptionLikeCheckedMatcher[({type l[a]=Either[a, ?]})#l, T, T]("Left", (_:Either[T, Any]).left.toOption, check)

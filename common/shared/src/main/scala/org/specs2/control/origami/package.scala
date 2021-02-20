@@ -1,7 +1,7 @@
 package org.specs2
 package control
 
-import fp._
+import fp.*
 
 package object origami:
 

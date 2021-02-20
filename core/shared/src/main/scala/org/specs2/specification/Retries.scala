@@ -2,8 +2,8 @@ package org.specs2
 package specification
 
 import org.specs2.execute.{AsResult, EventuallyResults}
-import EventuallyResults._
-import scala.concurrent.duration._
+import EventuallyResults.*
+import scala.concurrent.duration.*
 
 trait Retries extends AroundEach:
   def retries: Int = 5

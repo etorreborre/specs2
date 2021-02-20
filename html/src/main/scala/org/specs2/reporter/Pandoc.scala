@@ -1,9 +1,9 @@
 package org.specs2
 package reporter
 
-import fp.syntax._
-import control._
-import io._
+import fp.syntax.*
+import control.*
+import io.*
 import specification.core.Env
 
 /** Representation of the Pandoc executable */
@@ -31,7 +31,7 @@ object Pandoc:
 
   /** @return the Pandoc executable if available */
   def getPandoc(env: Env): Action[Option[Pandoc]] =
-    import env.arguments.commandLine._
+    import env.arguments.commandLine.*
     val markdown = boolOr("pandoc", true)
 
     if markdown then

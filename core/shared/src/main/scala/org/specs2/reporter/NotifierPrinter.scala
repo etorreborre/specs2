@@ -1,13 +1,13 @@
 package org.specs2
 package reporter
 
-import text.NotNullStrings._
+import text.NotNullStrings.*
 import main.Arguments
 import execute.{NoDetails, Result}
-import control._
-import fp._, syntax._
-import control.origami._
-import specification.core._
+import control.*
+import fp.*, syntax.*
+import control.origami.*
+import specification.core.*
 import time.SimpleTimer
 import main.Arguments
 

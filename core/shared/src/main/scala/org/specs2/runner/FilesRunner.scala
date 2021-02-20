@@ -1,15 +1,15 @@
 package org.specs2
 package runner
 
-import main._
-import control._
+import main.*
+import control.*
 import io.DirectoryPath
 import specification.process.Stats
-import specification.core._
-import reporter._
-import runner.Runner._
-import org.specs2.fp.syntax._
-import SpecificationsFinder._
+import specification.core.*
+import reporter.*
+import runner.Runner.*
+import org.specs2.fp.syntax.*
+import SpecificationsFinder.*
 
 trait FilesRunner:
   /** run any specifications found via arguments */

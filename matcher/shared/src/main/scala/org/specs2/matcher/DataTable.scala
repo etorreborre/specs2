@@ -1,13 +1,13 @@
 package org.specs2
 package matcher
 
-import execute._
-import fp.{given, _}, syntax._
-import ResultExecution._
+import execute.*
+import fp.{given, *}, syntax.*
+import ResultExecution.*
 import text.{NotNullStrings, Show1, Show10, Show2, Show3, Show4, Show5, Show6, Show7, Show8, Show9, TextTable, Trim}
-import Trim._
-import NotNullStrings._
-import scala.concurrent._, duration._
+import Trim.*
+import NotNullStrings.*
+import scala.concurrent.*, duration.*
 
 /**
  * This trait provides implicit definitions and types to create DataTables.

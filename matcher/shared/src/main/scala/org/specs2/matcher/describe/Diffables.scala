@@ -1,7 +1,7 @@
 package org.specs2.matcher.describe
 
 import scala.util.{Failure, Success, Try}
-import org.specs2.fp.syntax._
+import org.specs2.fp.syntax.*
 
 /**
  * Diffable instances for various types
@@ -192,7 +192,7 @@ class ArrayDiffable[E](using di: Diffable[E]) extends Diffable[Array[E]]:
 class FallbackDiffable[T] extends Diffable[T]:
   def diff(actual: T, expected: T) =
     (actual, expected) match
-      case (e1: Array[_], e2: Array[_]) =>
+      case (e1: Array[?], e2: Array[?]) =>
         Diffable.diff(e1.toIndexedSeq.map(a => a:Any), e2.toIndexedSeq.map(a => a:Any))
       case (a, e) if a == e =>
         OtherIdentical(a)

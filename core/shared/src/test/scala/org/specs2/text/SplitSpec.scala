@@ -1,8 +1,8 @@
 package org.specs2
 package text
 
-import Split._
-import matcher._
+import Split.*
+import matcher.*
 
 class SplitSpec extends mutable.Spec with TypedEqual:
 

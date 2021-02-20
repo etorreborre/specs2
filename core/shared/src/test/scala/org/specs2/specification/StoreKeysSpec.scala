@@ -1,10 +1,10 @@
 package org.specs2
 package specification
 
-import process._
-import StoreKeys._
+import process.*
+import StoreKeys.*
 import time.SimpleTimer
-import matcher._
+import matcher.*
 
 class StoreKeysSpec extends Spec with TypedEqual { def is = s2"""
 

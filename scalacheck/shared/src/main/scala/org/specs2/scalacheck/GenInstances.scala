@@ -2,7 +2,7 @@ package org.specs2
 package scalacheck
 
 import org.scalacheck.Gen
-import org.specs2.fp._
+import org.specs2.fp.*
 
 /**
  * Scalaz instances for the Gen datatype
@@ -14,4 +14,4 @@ trait GenInstances:
       Gen.const(a)
 
     def bind[A, B](fa: Gen[A])(f: A => Gen[B]): Gen[B] =
-      fa flatMap f
+      fa `flatMap` f

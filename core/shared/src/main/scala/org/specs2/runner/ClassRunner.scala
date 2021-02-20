@@ -1,14 +1,14 @@
 package org.specs2
 package runner
 
-import control._
+import control.*
 import io.StringOutput
-import specification.process._
-import specification.core._
-import reporter._
+import specification.process.*
+import specification.core.*
+import reporter.*
 import main.Arguments
-import fp.syntax._
-import Runner._
+import fp.syntax.*
+import Runner.*
 
 trait ClassRunner:
   def run(className: String): Action[Stats]

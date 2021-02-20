@@ -6,9 +6,9 @@ import execute.Result
 import org.specs2.io.Key
 import time.SimpleTimer
 import scala.util.Try
-import org.specs2.fp.syntax._
-import org.specs2.fp.syntax._
-import org.specs2.fp.syntax._
+import org.specs2.fp.syntax.*
+import org.specs2.fp.syntax.*
+import org.specs2.fp.syntax.*
 
 object StoreKeys:
   def resolve[A](key: Key[A]): String =
@@ -43,7 +43,7 @@ object StoreKeys:
 
 
   private def statsToString(s: Stats) =
-    import s._
+    import s.*
     s"specs=$specs,examples=$examples,successes=$successes,expectations=$expectations,failures=$failures,errors=$errors,pending=$pending,skipped=$skipped,time=${timer.totalMillis}"
 
   private def statsFromString(s: String): Option[Stats] = Try {

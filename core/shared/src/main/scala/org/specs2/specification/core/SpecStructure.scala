@@ -2,10 +2,10 @@ package org.specs2
 package specification
 package core
 
-import fp.syntax._
-import process._
-import control._
-import producer._
+import fp.syntax.*
+import process.*
+import control.*
+import producer.*
 import main.Arguments
 import data.{NamedTag, TopologicalSort}
 import concurrent.ExecutionEnv
@@ -26,7 +26,7 @@ case class SpecStructure(header: SpecHeader, arguments: Arguments, lazyFragments
   def contents: AsyncStream[Fragment]                               = fragments.contents
   def map(f: Fragments => Fragments): SpecStructure                 = copy(lazyFragments = () => f(fragments))
   def |>(p: AsyncTransducer[Fragment, Fragment]): SpecStructure     = copy(lazyFragments = () => fragments |> p)
-  def update(f: AsyncTransducer[Fragment, Fragment]): SpecStructure = copy(lazyFragments = () => fragments update f)
+  def update(f: AsyncTransducer[Fragment, Fragment]): SpecStructure = copy(lazyFragments = () => fragments `update` f)
   def flatMap(f: Fragment => AsyncStream[Fragment]): SpecStructure  = |>(_.flatMap(f))
 
   def setHeader(h: SpecHeader) = copy(header = h)
@@ -102,7 +102,7 @@ object SpecStructure:
     s1Links.contains(s2.specClassName)
   }
 
-  def empty(klass: Class[_]) =
+  def empty(klass: Class[?]) =
     SpecStructure(SpecHeader(klass))
 
   /** @return all the referenced specifications */

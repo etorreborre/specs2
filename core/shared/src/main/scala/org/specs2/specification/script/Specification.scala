@@ -2,7 +2,7 @@ package org.specs2
 package specification
 package script
 
-import core._
+import core.*
 
 /**
  * These classes and traits enrich regular specifications with the possibility to include "scripts" in their definition.

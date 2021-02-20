@@ -1,7 +1,7 @@
 package org.specs2
 package text
 
-import control.Exceptions._
+import control.Exceptions.*
 
 /**
  * This typeclass is used to describe any instance which can be decoded from a String.

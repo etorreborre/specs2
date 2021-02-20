@@ -1,9 +1,9 @@
 package org.specs2
 package form
 
-import execute._
-import StandardResults._
-import ResultLogicalCombinators._
+import execute.*
+import StandardResults.*
+import ResultLogicalCombinators.*
 
 /**
  * A Row is a non-empty list of Cells
@@ -30,7 +30,7 @@ case class Row(private val cellList: List[Cell]) extends Executable:
    * @return a logical `and` on all results
    */
   def execute: Result =
-    cellList.foldLeft(success: Result) { (res, cur) =>  res and cur.execute }
+    cellList.foldLeft(success: Result) { (res, cur) =>  res `and` cur.execute }
 
   /**
    * execute the row

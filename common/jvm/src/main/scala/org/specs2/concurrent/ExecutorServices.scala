@@ -2,11 +2,11 @@ package org.specs2.concurrent
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.FiniteDuration
-import java.util.concurrent._
+import java.util.concurrent.*
 import java.util.concurrent.atomic.AtomicBoolean
 
-import org.specs2.main._
-import org.specs2.control._
+import org.specs2.main.*
+import org.specs2.control.*
 
 case class ExecutorServices(executorServiceEval:          () => ExecutorService,
                             executionContextEval:         () => ExecutionContext,

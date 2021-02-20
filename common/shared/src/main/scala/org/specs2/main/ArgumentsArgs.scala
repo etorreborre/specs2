@@ -1,9 +1,9 @@
 package org.specs2
 package main
 
-import control._
-import text._
-import scala.concurrent.duration._
+import control.*
+import text.*
+import scala.concurrent.duration.*
 import scala.util.NotGiven
 
 /**

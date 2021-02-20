@@ -1,12 +1,12 @@
 package org.specs2
 package reporter
 
-import fp.syntax._
-import control._
-import html._
-import io._
+import fp.syntax.*
+import control.*
+import html.*
+import io.*
 import specification.core.{Env, SpecStructure}
-import producer._
+import producer.*
 
 /**
  * Functions used to create an index and a search page for the generated html pages
@@ -23,7 +23,7 @@ case class SearchPage(logger: Logger = ConsoleLogger()):
 
   /** create a search page, based on the specs2.html template */
   def createSearchPage(env: Env, options: HtmlOptions): Operation[Unit] =
-    import env.{fileSystem => fs}
+    import env.{fileSystem as fs}
     for
       template <- fs.readFile(options.template) ||| logger.warnAndFail("No template file found at "+options.template.path, HtmlPrinter.RunAborted)
       content  <- makeSearchHtml(template, options)

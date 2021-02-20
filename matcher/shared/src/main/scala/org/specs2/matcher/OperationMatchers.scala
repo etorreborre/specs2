@@ -1,10 +1,10 @@
 package org.specs2
 package matcher
 
-import execute._
-import control._
-import text.Regexes._
-import fp._, syntax._
+import execute.*
+import control.*
+import text.Regexes.*
+import fp.*, syntax.*
 
 /**
  * Matchers for Operation values
@@ -39,7 +39,7 @@ trait OperationMatchers extends ValueChecks:
     Matcher { (operation: Operation[T]) =>
       operation.runOperation.fold(
         throwable =>
-          if throwable.getMessage matchesSafely message then
+          if throwable.getMessage `matchesSafely` message then
             Success()
           else
             Failure(s"the operation failed with message ${throwable.getMessage}. Expected: $message"),

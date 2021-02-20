@@ -2,14 +2,14 @@ package org.specs2
 package specification
 package core
 
-import org.specs2.control._
+import org.specs2.control.*
 import org.specs2.io.FileSystem
-import org.specs2.io._
-import org.specs2.io.FileName._
+import org.specs2.io.*
+import org.specs2.io.FileName.*
 import org.specs2.main.Arguments
 import org.specs2.reflect.ClassLoading
 import org.specs2.reporter.PrinterLogger.consolePrinterLogger
-import org.specs2.specification.process._
+import org.specs2.specification.process.*
 
 object EnvDefault:
 

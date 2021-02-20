@@ -1,8 +1,8 @@
 package org.specs2
 package xml
 
-import scala.xml._
-import fp._
+import scala.xml.*
+import fp.*
 
 /**
  * Extension methods for NodeSeqs and Nodes

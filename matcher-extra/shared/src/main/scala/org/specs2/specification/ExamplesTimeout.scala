@@ -1,11 +1,11 @@
 package org.specs2
 package specification
 
-import core._
-import execute._
+import core.*
+import execute.*
 import concurrent.ExecutionEnv
 
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 import scala.concurrent.{Await, Future}
 
 /**

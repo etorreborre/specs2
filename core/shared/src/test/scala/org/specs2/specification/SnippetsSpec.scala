@@ -1,9 +1,9 @@
 package org.specs2
 package specification
 
-import matcher._
-import execute.Snippet._
-import core._
+import matcher.*
+import execute.Snippet.*
+import core.*
 import control.Use
 
 class SnippetsSpec(val env: Env) extends Specification with Snippets with DataTables with TypedEqual with OwnExecutionEnv { def is = s2"""
@@ -180,7 +180,7 @@ n = 0
       { (code, markdown) => code === markdown}
 
   def effects1 =
-    snippet[Unit](sys.error("boom")) must not(throwAn[Exception])
+    snippet[Unit](sys.error("boom")) `must` not(throwAn[Exception])
 
   def effects2 =
     var i = 0

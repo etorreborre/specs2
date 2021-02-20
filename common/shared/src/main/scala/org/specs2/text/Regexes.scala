@@ -1,10 +1,10 @@
 package org.specs2
 package text
 
-import control.Exceptions._
+import control.Exceptions.*
 import java.util.regex.Pattern
 import util.matching.Regex
-import Trim._
+import Trim.*
 
 /**
  * This trait provides utility functions for working with regexes

@@ -1,23 +1,23 @@
 package org.specs2
 package matcher
 
-import control._
+import control.*
 import data.Sized
-import text.Regexes._
-import text.Plural._
-import text.NotNullStrings._
-import collection.Seqx._
+import text.Regexes.*
+import text.Plural.*
+import text.NotNullStrings.*
+import collection.Seqx.*
 
 import scala.collection.Traversable
-import execute._
+import execute.*
 import control.Times
 import execute.Failure
 
 import scala.annotation.tailrec
-import ValueChecks.{given, _}
-import StringMatchers.{given, _}
+import ValueChecks.{given, *}
+import StringMatchers.{given, *}
 import org.specs2.matcher.describe.Diffable
-import Result._
+import Result.*
 
 /**
  * Matchers for traversables
@@ -72,7 +72,7 @@ trait TraversableBaseMatchers:
       def apply[S <: Traversable[T]](t: Expectable[S]) =
         val missing = seq.difference(t.value.toSeq, equality)
         val added   = t.value.toSeq.difference(seq, equality)
-        def message(diffs: scala.collection.Seq[_], msg: String) =
+        def message(diffs: scala.collection.Seq[?], msg: String) =
           if diffs.isEmpty then "" else diffs.mkString("\n  "+msg+": ", ", ", "")
 
         result(missing.isEmpty && added.isEmpty,
@@ -168,8 +168,8 @@ class OrderingMatcher[T : Ordering] extends Matcher[Seq[T]]:
     result(traversable.value == traversable.value.sorted,
       traversable.description + " is not sorted")
 
-import control.NumberOfTimes._
-import text.Plural._
+import control.NumberOfTimes.*
+import text.Plural.*
 
 case class ContainWithResult[T](check: ValueCheck[T], timesMin: Option[Times] = Some(1.times), timesMax: Option[Times] = None, checkAll: Boolean = true) extends Matcher[Traversable[T]]:
   def apply[S <: Traversable[T]](t: Expectable[S]) =

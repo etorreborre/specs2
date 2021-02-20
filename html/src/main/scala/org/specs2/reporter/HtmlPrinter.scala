@@ -1,25 +1,25 @@
 package org.specs2
 package reporter
 
-import specification.core._
+import specification.core.*
 import specification.process.{Statistics, Stats}
-import io._
-import FileName._
+import io.*
+import FileName.*
 import main.Arguments
-import control._
-import java.util.regex.Pattern._
+import control.*
+import java.util.regex.Pattern.*
 import java.net.{JarURLConnection, URL}
 
-import fp.syntax._
-import HtmlBodyPrinter._
-import Pandoc._
-import html._
-import html.TableOfContents._
-import SpecHtmlPage._
+import fp.syntax.*
+import HtmlBodyPrinter.*
+import Pandoc.*
+import html.*
+import html.TableOfContents.*
+import SpecHtmlPage.*
 import concurrent.ExecutionEnv
 import time.SimpleTimer
-import origami._, Folds._
-import HtmlPrinter._
+import origami.*, Folds.*
+import HtmlPrinter.*
 
 /**
  * Printer for html files
@@ -39,7 +39,7 @@ case class HtmlPrinter(env: Env, searchPage: SearchPage, logger: Logger = Consol
 
   /** @return a SinkTask for the Html output */
   def sink(spec: SpecStructure): AsyncSink[Fragment] =
-    ((Statistics.fold zip list[Fragment].into[Action] zip SimpleTimer.timerFold.into[Action]) <*
+    ((Statistics.fold `zip` list[Fragment].into[Action] `zip` SimpleTimer.timerFold.into[Action]) <*
      fromStart((getHtmlOptions(env.arguments) >>= (options => copyResources(env, options))).void.toAction)).mapFlatten { case ((stats, fragments), timer) =>
       val executedSpec = spec.copy(lazyFragments = () => Fragments(fragments*))
       getPandoc(env).flatMap {
@@ -60,7 +60,7 @@ case class HtmlPrinter(env: Env, searchPage: SearchPage, logger: Logger = Consol
    *  - output the file
    */
   def printHtml(env: Env, spec: SpecStructure, stats: Stats, timer: SimpleTimer): Operation[Unit] =
-    import env.{fileSystem => fs}
+    import env.{fileSystem as fs}
     for
       options  <- getHtmlOptions(env.arguments)
       template <- fs.readFile(options.template) ||| logger.warnAndFail[String]("No template file found at "+options.template.path, RunAborted)
@@ -72,7 +72,7 @@ case class HtmlPrinter(env: Env, searchPage: SearchPage, logger: Logger = Consol
    * Get html options, possibly coming from the command line
    */
   def getHtmlOptions(arguments: Arguments): Operation[HtmlOptions] =
-    import arguments.commandLine._
+    import arguments.commandLine.*
     val out = directoryOr("html.outdir", HtmlOptions.outDir)
     Operation.ok(HtmlOptions(
       outDir               = out,
@@ -115,7 +115,7 @@ case class HtmlPrinter(env: Env, searchPage: SearchPage, logger: Logger = Consol
    *  - create the file content using the template and Pandoc (as an external process)
    */
   def printHtmlWithPandoc(env: Env, spec: SpecStructure, stats: Stats, timer: SimpleTimer, pandoc: Pandoc): Operation[Unit] =
-    import env.{fileSystem => fs}
+    import env.{fileSystem as fs}
     for
       options  <- getHtmlOptions(env.arguments)
       _        <- fs.withEphemeralFile(options.outDir | options.template.name) {
@@ -129,7 +129,7 @@ case class HtmlPrinter(env: Env, searchPage: SearchPage, logger: Logger = Consol
    * Create the Html file by invoking Pandoc
    */
   def makePandocHtml(spec: SpecStructure, stats: Stats, timer: SimpleTimer, pandoc: Pandoc, options: HtmlOptions, env: Env): Operation[Unit] =
-    import env.{fileSystem => fs}
+    import env.{fileSystem as fs}
 
     val variables1 =
       options.templateVariables

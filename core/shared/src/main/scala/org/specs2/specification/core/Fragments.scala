@@ -2,11 +2,11 @@ package org.specs2
 package specification
 package core
 
-import fp._, syntax._
-import Fragment._
-import control._
-import producer._
-import Producer._
+import fp.*, syntax.*
+import Fragment.*
+import control.*
+import producer.*
+import Producer.*
 import concurrent.ExecutionEnv
 
 /**
@@ -32,10 +32,10 @@ case class Fragments(contents: AsyncStream[Fragment]):
 
   def when(condition: =>Boolean) =
     lazy val c = condition
-    copy(contents = contents filter (_ => c))
+    copy(contents = contents `filter` (_ => c))
 
   def map(f: Fragment => Fragment): Fragments =
-    copy(contents = contents map f)
+    copy(contents = contents `map` f)
 
   def mapFragments(f: List[Fragment] => List[Fragment]): Fragments =
     copy(contents = Producer.emitAction(contents.runList.map(f)))
@@ -44,16 +44,16 @@ case class Fragments(contents: AsyncStream[Fragment]):
     map(_.updateDescription(f))
 
   def filter(predicate: Fragment => Boolean): Fragments =
-    copy(contents = contents filter predicate)
+    copy(contents = contents `filter` predicate)
 
   def collect[A](predicate: PartialFunction[Fragment, A]): AsyncStream[A] =
-    contents collect predicate
+    contents `collect` predicate
 
   def update(f: AsyncTransducer[Fragment, Fragment])   = copy(contents = f(contents))
-  def flatMap(f: Fragment => AsyncStream[Fragment])    = copy(contents = contents flatMap f)
+  def flatMap(f: Fragment => AsyncStream[Fragment])    = copy(contents = contents `flatMap` f)
   def |> (f: AsyncTransducer[Fragment, Fragment])  = copy(contents = f(contents))
-  def append(other: AsyncStream[Fragment]): Fragments  = copy(contents = contents append other)
-  def prepend(other: AsyncStream[Fragment]): Fragments = copy(contents = other append contents)
+  def append(other: AsyncStream[Fragment]): Fragments  = copy(contents = contents `append` other)
+  def prepend(other: AsyncStream[Fragment]): Fragments = copy(contents = other `append` contents)
   def updateFragments(update: List[Fragment] => Fragments): Fragments =
     copy(Producer.emitAction(contents.runList.flatMap(fs => update(fs).contents.runList)))
 

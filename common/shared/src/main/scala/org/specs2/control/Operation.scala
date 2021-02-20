@@ -1,8 +1,8 @@
 package org.specs2
 package control
 
-import fp._, syntax._
-import execute._
+import fp.*, syntax.*
+import execute.*
 import scala.annotation.tailrec
 import scala.util.control.NonFatal
 

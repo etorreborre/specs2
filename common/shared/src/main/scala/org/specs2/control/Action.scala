@@ -1,13 +1,13 @@
 package org.specs2
 package control
 
-import fp._, syntax._
-import concurrent.{ExecutionEnv, _}
-import scala.concurrent._
-import scala.concurrent.duration._
+import fp.*, syntax.*
+import concurrent.{ExecutionEnv, *}
+import scala.concurrent.*
+import scala.concurrent.duration.*
 import scala.util.control.NonFatal
-import scala.util._
-import execute._
+import scala.util.*
+import execute.*
 
 /**
  * Asynchronous action with:
@@ -50,7 +50,7 @@ case class Action[A](private[control] runNow: ExecutionEnv => Future[A], timeout
     addLast(last)
 
   /** catch any exception resulting from running the action later */
-  def attempt: Action[Throwable Either A] =
+  def attempt: Action[Throwable `Either` A] =
     Action(ee => runFuture(ee).transform(r => scala.util.Success(r.toEither))(ee.executionContext), timeout, last)
 
   /** run another action if this one fails */
@@ -75,7 +75,7 @@ case class Action[A](private[control] runNow: ExecutionEnv => Future[A], timeout
    * Run the action and return an exception if it fails
    * Whatever happens run the finalizers
    */
-  def runAction(ee: ExecutionEnv): Throwable Either A =
+  def runAction(ee: ExecutionEnv): Throwable `Either` A =
     awaitAction(runNow, timeout, Finalizer.runFinalizers(last), ee)
 
   /** run the action and return Nothing is case of an error */
@@ -113,7 +113,7 @@ object Action:
   def fail[A](message: String): Action[A] =
     exception(new UserException(message, new Exception))
 
-  def either[A](ta: =>Throwable Either A): Action[A] =
+  def either[A](ta: =>Throwable `Either` A): Action[A] =
     try
         ta match {
           case Left(t) => Action.exception(t)
@@ -171,7 +171,7 @@ object Action:
     def finalizeWith[A](fa: Action[A], f: Finalizer): Action[A] =
       fa.addLast(f)
 
-    def attempt[A](action: Action[A]): Action[Throwable Either A] =
+    def attempt[A](action: Action[A]): Action[Throwable `Either` A] =
       action.attempt
 
   given actionAsResult[T : AsResult]: AsResult[Action[T]] with

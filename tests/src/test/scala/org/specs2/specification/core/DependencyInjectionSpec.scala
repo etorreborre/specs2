@@ -5,9 +5,9 @@ package core
 import java.util.concurrent.ExecutorService
 
 import concurrent.ExecutionEnv
-import main._
+import main.*
 
-import scala.concurrent._, duration._
+import scala.concurrent.*, duration.*
 import scala.reflect.ClassTag
 
 class DependencyInjectionSpec(environment: Env) extends Specification { def is = s2"""
@@ -31,7 +31,7 @@ class DependencyInjectionSpec(environment: Env) extends Specification { def is =
     the CommandLine       $commandLine_
 
 """
-  import SpecificationStructure._
+  import SpecificationStructure.*
 
   def env              = createSpecOk[Spec1]
   def executionEnv     = createSpecOk[Spec2]
@@ -48,7 +48,7 @@ class DependencyInjectionSpec(environment: Env) extends Specification { def is =
   def commandLine_      = createSpecOk[SpecM6]
 
   def createSpecOk[C : ClassTag] =
-    create(implicitly[ClassTag[C]].runtimeClass.getName, env = Some(environment)) must not(throwAn[Exception])
+    create(implicitly[ClassTag[C]].runtimeClass.getName, env = Some(environment)) `must` not(throwAn[Exception])
 
   case class Spec1(env: Env) extends Specification { def is = "test" ! ok }
   case class Spec2()(using ee: ExecutionEnv) extends Specification { def is = "test" ! { Await.result(Future(ok)(ee.executionContext), 1 second) } }

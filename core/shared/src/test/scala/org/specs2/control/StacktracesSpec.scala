@@ -1,7 +1,7 @@
 package org.specs2
 package control
 
-import Stacktraces._
+import Stacktraces.*
 
 class StacktracesSpec extends Specification { def is = s2"""
 

@@ -1,9 +1,9 @@
 package org.specs2
 package matcher
 
-import text.Quote._
-import text.Plural._
-import execute.Result._
+import text.Quote.*
+import text.Plural.*
+import execute.Result.*
 
 /**
  * Matchers for Maps

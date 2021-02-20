@@ -1,8 +1,8 @@
 package org.specs2
 package text
 
-import Quote._
-import matcher._
+import Quote.*
+import matcher.*
 
 class QuoteSpec extends Spec with TypedEqual { def is = s2"""
 
