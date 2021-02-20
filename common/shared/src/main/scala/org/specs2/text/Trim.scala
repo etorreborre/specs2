@@ -117,11 +117,11 @@ trait Trim:
       }
 
     def replaceInsideTag(tag: String, p: (String, String)*): String =
-      s.replaceAll(tagPattern(tag), (s: String) => java.util.regex.Matcher.quoteReplacement(s.replaceAll(p:_*)))
+      s.replaceAll(tagPattern(tag), (s: String) => java.util.regex.Matcher.quoteReplacement(s.replaceAll(p*)))
 
     def replaceInsideTags(tags: String*)(p: (String, String)*): String =
       tags.foldLeft(s) { (res, tag) =>
-        res.replaceAll(tagPattern(tag), (s: String) => java.util.regex.Matcher.quoteReplacement(s.replaceAll(p:_*)))
+        res.replaceAll(tagPattern(tag), (s: String) => java.util.regex.Matcher.quoteReplacement(s.replaceAll(p*)))
       }
 
     private def tagPattern(tag: String) = "<"+tag+">(.(.|\n)*?)</"+tag+">"

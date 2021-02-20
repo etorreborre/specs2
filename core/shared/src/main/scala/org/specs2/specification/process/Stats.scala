@@ -131,7 +131,7 @@ case class Stats(specs:        Int = 0,
    * @return this Statistics object with some trend if relevant
    */
   def updateFrom(previous: Stats): Stats =
-    given monoid as Monoid[Stats] = Stats.StatsMonoid
+    given monoid: Monoid[Stats] = Stats.StatsMonoid
     val newTrend = this |+| previous.negate
     if newTrend == monoid.zero then this
     else                         copy(trend = Some(newTrend))

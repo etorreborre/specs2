@@ -125,36 +125,35 @@ trait Applicative[F[_]] extends Functor[F] { self =>
 object Applicative:
   @inline def apply[F[_]](using F: Applicative[F]): Applicative[F] = F
 
-  given optionApplicative[L] as Applicative[Option] =
+  given optionApplicative[L]: Applicative[Option] =
     Monad.optionMonad
 
-  given eitherApplicative[L] as Applicative[Either[L, *]] =
+  given eitherApplicative[L]: Applicative[Either[L, *]] =
     Monad.eitherMonad[L]
 
-  given futureApplicative(using ec: ExecutionContext) as Applicative[Future] =
-    new Applicative[Future]:
-      def point[A](a: =>A): Future[A] =
-        Future(a)
+  given futureApplicative(using ec: ExecutionContext): Applicative[Future] with
+    def point[A](a: =>A): Future[A] =
+      Future(a)
 
-      def ap[A,B](fa: =>Future[A])(ff: =>Future[A => B]): Future[B] =
-        Future.sequence(List(fa, ff)).map {
-          case a :: f :: Nil =>
-            f.asInstanceOf[A => B](a.asInstanceOf[A])
-          case _ => sys.error("impossible")
-        }
-
-      override def toString: String =
-        "Applicative[Future]"
+    def ap[A,B](fa: =>Future[A])(ff: =>Future[A => B]): Future[B] =
+      Future.sequence(List(fa, ff)).map {
+        case a :: f :: Nil =>
+          f.asInstanceOf[A => B](a.asInstanceOf[A])
+        case _ => sys.error("impossible")
+      }
+      
+    override def toString: String =
+      "Applicative[Future]"
 
 
 trait ApplicativeSyntax:
 
-  extension [F[_] : Applicative, A, B, C](fa: F[A]):
+  extension [F[_] : Applicative, A, B, C](fa: F[A])
 
     def |@|(fb: F[B])(f: (A, B) => C): F[C] =
       summon[Applicative[F]].apply2(fa, fb)(f)
 
-  extension [F[_] : Applicative, A, B](fa: F[A]):
+  extension [F[_] : Applicative, A, B](fa: F[A])
 
     def ap(f: F[A => B]): F[B] =
       summon[Applicative[F]].ap(fa)(f)
@@ -165,7 +164,7 @@ trait ApplicativeSyntax:
     def *>(fb: F[B]): F[B] =
       summon[Applicative[F]].apply2(fa, fb)((_, b) => b)
 
-  extension [F[_] : Applicative, A](fa: F[A]):
+  extension [F[_] : Applicative, A](fa: F[A])
 
     def when(condition: Boolean): F[Unit] =
       summon[Applicative[F]].when(condition)(fa)
@@ -173,7 +172,7 @@ trait ApplicativeSyntax:
     def unless(condition: Boolean): F[Unit] =
       summon[Applicative[F]].unless(condition)(fa)
 
-  extension [F[_] : Applicative, A](fa: List[A]):
+  extension [F[_] : Applicative, A](fa: List[A])
 
     def filterM(f: A => F[Boolean]): F[List[A]] =
       summon[Applicative[F]].filterM(fa)(f)

@@ -10,7 +10,7 @@ private[specs2]
 trait Split:
   outer: Split =>
 
-  extension (s: String):
+  extension (s: String)
     @targetName("stringSplitDashed")
     def splitDashed(names: Seq[String]): Seq[String] =
       outer.splitDashed(s.split("\\s").toIndexedSeq, names)
@@ -34,7 +34,7 @@ trait Split:
       splitToSize(new String(string.drop(n)), n, new String(string.take(n)) :: result)
 
 
-  extension (seq: Seq[String]):
+  extension (seq: Seq[String])
     @targetName("seqSplitDashed")
     def splitDashed(names: Seq[String]): Seq[String] =
       outer.splitDashed(seq, names)

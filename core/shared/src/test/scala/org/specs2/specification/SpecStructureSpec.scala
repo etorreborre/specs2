@@ -20,7 +20,7 @@ ${step(env.shutdown())}
 
   val env = Env()
 
-  given ee as ExecutionEnv =
+  given ee: ExecutionEnv =
     env.executionEnv
 
   lazy val spec1 = S1.is

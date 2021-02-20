@@ -333,14 +333,14 @@ table ${
 
 object TextPrinterSpecification extends MustMatchers with FragmentsDsl with Debug:
 
-  extension (fragment: Fragment):
+  extension (fragment: Fragment)
     def contains(contained: String): Boolean =
       Fragments(fragment).contains(contained, identity)
 
     def contains(contained: String, f: String => String): Boolean =
       Fragments(fragment).contains(contained, f)
 
-  extension (fragments: Fragments):
+  extension (fragments: Fragments)
     def contains(contained: String): Boolean =
       SpecStructure.create(SpecHeader(classOf[TextPrinterSpec]), Arguments(), fragments).contains(contained, identity).isSuccess
 
@@ -350,7 +350,7 @@ object TextPrinterSpecification extends MustMatchers with FragmentsDsl with Debu
     def doesntContain(contained: String, f: String => String = identity): Boolean =
       SpecStructure.create(SpecHeader(classOf[TextPrinterSpec]), Arguments(), fragments).contains(contained, f).not.isSuccess
 
-  extension (spec: SpecStructure):
+  extension (spec: SpecStructure)
     def doesntContain(contained: String): Boolean =
       spec.contains(contained).not.isSuccess
 
@@ -392,7 +392,7 @@ object TextPrinterSpecification extends MustMatchers with FragmentsDsl with Debu
     val messages = logger.messages
     messages.map(_.removeEnd(" ")).mkString("\n").replace(" ", "_")
 
-  extension (spec: (Fragments, Env)):
+  extension (spec: (Fragments, Env))
     def contains(contained: String): Result =
       printed(spec._1, Some(spec._2)) must contain(contained.stripMargin.replace(" ", "_"))
 

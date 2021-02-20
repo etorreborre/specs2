@@ -56,7 +56,7 @@ import execute._
 
 trait ScalaCheckResult:
 
-  given AsResult[Prop]:
+  given AsResult[Prop] with
     def asResult(prop: =>Prop) =
       Test.check(Parameters.default, prop).status match
         case `Passed` | Proved(_)           => Success()

@@ -100,9 +100,9 @@ case class ScalaCheckFunction1[T, R](
 
   type SelfType = ScalaCheckFunction1[T, R]
 
-  private given asResult1 as AsResult[R]  = asResult
-  private given arbitrary1 as Arbitrary[T] = arbitrary
-  private given pretty1 as (T => Pretty) = pretty
+  private given asResult1: AsResult[R]  = asResult
+  private given arbitrary1: Arbitrary[T] = arbitrary
+  private given pretty1: (T => Pretty) = pretty
 
   lazy val propFunction = (t: T) => {
     lazy val executed = execute(t)
@@ -852,7 +852,7 @@ case class ScalaCheckArgInstances[T](arbitrary: Arbitrary[T], shrink: Option[Shr
 
 object ScalaCheckProperty:
 
-  given ScalaCheckPropertyAsExecution[S <: ScalaCheckProperty] as AsExecution[S]:
+  given ScalaCheckPropertyAsExecution[S <: ScalaCheckProperty]: AsExecution[S] with
     def execute(s: => S): Execution =
       Execution.withEnv { env =>
         AsResultProp.check(s.prop, s.parameters.overrideWith(env.commandLine), s.prettyFreqMap)

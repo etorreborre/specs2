@@ -13,13 +13,13 @@ object AsExecution extends AsExecutionLowImplicits:
   def apply[T](using t: AsExecution[T]): AsExecution[T] =
     t
 
-  given [R : AsResult] as AsExecution[R]:
+  given [R : AsResult]: AsExecution[R] with
     def execute(r: => R): Execution =
       Execution.result(AsResult(r))
 
 
 trait AsExecutionLowImplicits:
 
-  given [R : AsResult] as AsExecution[Future[R]]:
+  given [R : AsResult]: AsExecution[Future[R]] with
     def execute(r: =>Future[R]): Execution =
       Execution.withEnvAsync(_ => r)

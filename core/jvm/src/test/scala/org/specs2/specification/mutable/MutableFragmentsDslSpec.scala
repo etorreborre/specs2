@@ -54,7 +54,7 @@ class MutableFragmentsDslSpec(ee: ExecutionEnv) extends org.specs2.Spec with Typ
         }
       }).map(_.description)
 
-    actualDescriptions must contain(exactly(expectedDescriptions:_*))
+    actualDescriptions must contain(exactly(expectedDescriptions*))
   end e3
 
 
@@ -69,7 +69,7 @@ class MutableFragmentsDslSpec(ee: ExecutionEnv) extends org.specs2.Spec with Typ
   //     text("this should"), tab, break,
   //     example("e1", ok), break,
   //     example("e2", ok),
-  //     break, backtab, fragmentFactory.section("this should"), end).map(_.description):_*))
+  //     break, backtab, fragmentFactory.section("this should"), end).map(_.description)*))
 
   // def e5 = structure(new dsl {
   //   "have a title".title
@@ -92,16 +92,16 @@ class MutableFragmentsDslSpec(ee: ExecutionEnv) extends org.specs2.Spec with Typ
 
   // def breaks1 = fragments(new dsl { "spec".title }).map(_.description) must
   //   contain(exactly(Seq(
-  //     break, break).map(_.description):_*))
+  //     break, break).map(_.description)*))
 
   // def breaks2 = fragments(new dsl { "this" should { "be ok" in ok } }).map(_.description) must
   //   contain(allOf(Seq(
   //     start,
-  //     text("this should"), tab, break).map(_.description):_*)).inOrder
+  //     text("this should"), tab, break).map(_.description)*)).inOrder
 
   // def breaks3 = fragments(new dsl { "this" should { "be ok" in ok } }).map(_.description) must
   //   contain(allOf(Seq(
-  //     example("be ok", ok), break).map(_.description):_*)).inOrder
+  //     example("be ok", ok), break).map(_.description)*)).inOrder
 
     def fragments(dsl1: dsl): List[Fragment] =
       structure(dsl1).fragmentsList(ee)
@@ -114,6 +114,6 @@ class MutableFragmentsDslSpec(ee: ExecutionEnv) extends org.specs2.Spec with Typ
 
     // def beTheSameFragments(fs: Fragment*): Matcher[Seq[Fragment]] = { (actual: Seq[Fragment]) =>
     //   val location = StacktraceLocation()
-    //   actual.map(_.setLocation(location)) must contain(exactly(fs.map(_.setLocation(location)):_*))
+    //   actual.map(_.setLocation(location)) must contain(exactly(fs.map(_.setLocation(location))*))
     // }
 }

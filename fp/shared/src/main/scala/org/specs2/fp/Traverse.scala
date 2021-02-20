@@ -27,7 +27,7 @@ trait Traverse[F[_]] extends Functor[F]:
 
 object Traverse:
 
-  given listInstance as Traverse[List] = new Traverse[List]:
+  given listInstance: Traverse[List] with
     def traverseImpl[G[_]: Applicative, A, B](fa: List[A])(f: A => G[B]): G[List[B]] =
       val g = Applicative.apply[G]
       fa match
@@ -37,7 +37,7 @@ object Traverse:
     def map[A, B](fa: List[A])(f: A => B): List[B] =
       fa.map(f)
 
-  given optionInstance[L] as Traverse[Option] = new Traverse[Option]:
+  given optionInstance[L]: Traverse[Option] with
     def traverseImpl[G[_]: Applicative, A, B](fa: Option[A])(f: A => G[B]): G[Option[B]] =
       val g = Applicative.apply[G]
       fa match
@@ -47,7 +47,7 @@ object Traverse:
     def map[A, B](fa: Option[A])(f: A => B): Option[B] =
       fa.map(f)
 
-  given eitherInstance[L] as Traverse[Either[L, *]] = new Traverse[Either[L, *]]:
+  given eitherInstance[L]: Traverse[Either[L, *]] with
     def traverseImpl[G[_]: Applicative, A, B](fa: Either[L, A])(f: A => G[B]): G[Either[L, B]] =
       val g = Applicative.apply[G]
       fa match
@@ -61,11 +61,11 @@ object Traverse:
 
 trait TraverseSyntax:
 
-  extension [F[_] : Traverse, A, G[_] : Applicative, B](fa: F[A]):
+  extension [F[_] : Traverse, A, G[_] : Applicative, B](fa: F[A])
     def traverse(f: A => G[B]): G[F[B]] =
       summon[Traverse[F]].traverse(fa)(f)
 
-  extension [F[_] : Traverse, G[_] : Applicative, A](fa: F[G[A]]):
+  extension [F[_] : Traverse, G[_] : Applicative, A](fa: F[G[A]])
     def sequence: G[F[A]] =
       summon[Traverse[F]].sequence(fa)
 

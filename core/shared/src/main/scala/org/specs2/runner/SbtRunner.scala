@@ -24,7 +24,7 @@ import scala.concurrent.{Await, Future, ExecutionContext}
  */
 abstract class BaseSbtRunner(args: Array[String], remoteArgs: Array[String], loader: ClassLoader) extends _root_.sbt.testing.Runner:
 
-  lazy val commandLineArguments = Arguments(args ++ remoteArgs: _*)
+  lazy val commandLineArguments = Arguments(args ++ remoteArgs*)
 
   lazy val env = EnvDefault.create(commandLineArguments).setCustomClassLoader(loader)
 
@@ -66,10 +66,10 @@ case class SlaveSbtRunner(args:       Array[String],
  */
 object sbtRun extends MasterSbtRunner(Array(), Array(), Thread.currentThread.getContextClassLoader):
   def main(arguments: Array[String]): Unit =
-    val env = Env(Arguments(arguments:_*))
+    val env = Env(Arguments(arguments*))
     given ExecutionEnv = env.specs2ExecutionEnv
 
-    try exit(start(arguments: _*))
+    try exit(start(arguments*))
     finally env.shutdown()
 
   def exit(action: Action[Stats])(using ee: ExecutionEnv): Unit =
@@ -109,7 +109,7 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
 
   private val arguments = env.arguments
 
-  private given ec as ExecutionContext =
+  private given ec: ExecutionContext =
     env.specs2ExecutionContext
 
   /** @return the specification tags */

@@ -129,7 +129,7 @@ class Parser extends StdTokenParsers with ImplicitConversions:
 
   // Define the grammar
   def root       = jsonObj | jsonArray
-  def jsonObj    = "{" ~> repsep(objEntry, ",") <~ "}" ^^ { case vals : List[_] => JSONObject(Map(vals : _*)) }
+  def jsonObj    = "{" ~> repsep(objEntry, ",") <~ "}" ^^ { case vals : List[_] => JSONObject(Map(vals*)) }
   def jsonArray  = "[" ~> repsep(value, ",") <~ "]" ^^ { case vals : List[_] => JSONArray(vals) }
   def objEntry   = stringVal ~ (":" ~> value) ^^ { case x ~ y => (x, y) }
   def value: Parser[Any] = (jsonObj | jsonArray | number | "true" ^^^ true | "false" ^^^ false | "null" ^^^ null | stringVal)

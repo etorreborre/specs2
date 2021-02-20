@@ -16,7 +16,7 @@ trait MatcherImplicits extends ExpectationsCreation:
   /**
    * Extend collections to check all their elements
    */
-  extension [T, R : AsResult](values: Traversable[T]):
+  extension [T, R : AsResult](values: Traversable[T])
 
     def atLeastOnce(f: T => R): Result =
       createExpectable(values).applyMatcher(ContainWithResult(f).atLeastOnce)
@@ -75,7 +75,7 @@ trait MatcherImplicits extends ExpectationsCreation:
    * this extension provides an inverted syntax to adapt matchers to make the adaptation more readable in some cases:
    * - def haveExtension(extension: =>String) = ((_:File).getPath) ^^ endWith(extension)
    */
-  extension [T, S](f: T => S):
+  extension [T, S](f: T => S)
     def ^^(m: Matcher[S]): Matcher[T] =
       m ^^ f
 

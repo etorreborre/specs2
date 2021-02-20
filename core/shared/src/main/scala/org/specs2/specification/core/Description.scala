@@ -115,10 +115,10 @@ object Description:
   def text(text: String) = Text(text)
   def code(text: String) = Code(text)
 
-  def tag(ts: String*)       = mark(Tag(ts:_*))
-  def taggedAs(ts: String*)  = markAs(Tag(ts:_*))
-  def section(ts: String*)   = markSection(Tag(ts:_*))
-  def asSection(ts: String*) = markSectionAs(Tag(ts:_*))
+  def tag(ts: String*)       = mark(Tag(ts*))
+  def taggedAs(ts: String*)  = markAs(Tag(ts*))
+  def section(ts: String*)   = markSection(Tag(ts*))
+  def asSection(ts: String*) = markSectionAs(Tag(ts*))
 
   def mark(tag: NamedTag)          = Marker(tag, isSection = false)
   def markAs(tag: NamedTag)        = Marker(tag, isSection = false, appliesToNext = false)
@@ -130,7 +130,7 @@ object Description:
       case Code(_) => true
       case _       => false
 
-  given Show[Description]:
+  given Show[Description] with
     def show(d: Description): String =
       d match
         case Text(t) => t

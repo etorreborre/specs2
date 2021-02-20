@@ -476,7 +476,7 @@ case class Calculator(form: Form = Form()) {
   }
 }
 
-def th(title1: String, titles: String*) = Calculator(Form.th(title1, titles:_*))
+def th(title1: String, titles: String*) = Calculator(Form.th(title1, titles*))
 
 }}
 
@@ -566,7 +566,7 @@ Note that the Calculator class is not, in itself an Example. But there is an imp
     }
   }
   object Calculator {
-    def th(title1: String, titles: String*) = Calculator(Form.th(title1, titles:_*))
+    def th(title1: String, titles: String*) = Calculator(Form.th(title1, titles*))
   }
   case class WrongCalculator(form: Form = Form()) {
     def tr(a: Int, b: Int, a_plus_b: Int, a_minus_b: Int) = WrongCalculator {
@@ -576,7 +576,7 @@ Note that the Calculator class is not, in itself an Example. But there is an imp
     }
   }
   object WrongCalculator {
-    def th(title1: String, titles: String*) = WrongCalculator(Form.th(title1, titles:_*))
+    def th(title1: String, titles: String*) = WrongCalculator(Form.th(title1, titles*))
   }
 
   lazy val addresses = Seq(Address("Rose Crescent", 3), Address("Oxfort St", 4))

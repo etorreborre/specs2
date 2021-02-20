@@ -9,9 +9,9 @@ trait ScalaCheckParameters:
   /**
    * default parameters. Uses ScalaCheck default values and doesn't print anything to the console
    */
-  given defaultParameters as Parameters = Parameters()
+  given defaultParameters: Parameters = Parameters()
 
-  given defaultFreqMapPretty as (FreqMap[Set[Any]] => Pretty) = (fq: FreqMap[Set[Any]]) =>
+  given defaultFreqMapPretty: (FreqMap[Set[Any]] => Pretty) = (fq: FreqMap[Set[Any]]) =>
     Pretty.prettyFreqMap(removeDetails(fq))
 
   /** create parameters with verbose = false */

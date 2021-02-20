@@ -11,7 +11,7 @@ import Trim._
  */
 trait Regexes:
 
-  extension (s: String):
+  extension (s: String)
 
     /**
      * matchesSafely a pattern p. If p cannot be compiled, then it is quoted
@@ -25,10 +25,10 @@ trait Regexes:
     def regexPart: String =
       s"(?s).*$s.*"
 
-  extension (r: Regex):
+  extension (r: Regex)
     def matches(s: String): Boolean = r.pattern.matcher(s).matches
 
-  extension (p: Pattern):
+  extension (p: Pattern)
     def regexPart: String =
       p.toString.regexPart
 

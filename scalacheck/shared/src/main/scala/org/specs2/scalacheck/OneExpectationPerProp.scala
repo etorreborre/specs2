@@ -13,9 +13,9 @@ trait OneExpectationPerProp extends AsResultProp:
   private def superPropAsResult = super.propAsResult
   private def superPropertiesAsResult = super.propertiesAsResult
 
-  given propAsResult1(using p: Parameters, pfq: FreqMap[Set[Any]] => Pretty) as AsResult[Prop]:
+  given propAsResult1(using p: Parameters, pfq: FreqMap[Set[Any]] => Pretty): AsResult[Prop] with
     def asResult(prop: =>Prop): Result = superPropAsResult.asResult(prop).setExpectationsNb(1)
 
-  given propertiesAsResult1(using p: Parameters, pfq: FreqMap[Set[Any]] => Pretty) as AsResult[Properties]:
+  given propertiesAsResult1(using p: Parameters, pfq: FreqMap[Set[Any]] => Pretty): AsResult[Properties] with
     def asResult(properties: =>Properties): Result =
       superPropertiesAsResult.asResult(properties).setExpectationsNb(1)

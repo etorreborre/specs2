@@ -10,14 +10,14 @@ import core.{SpecificationStructure, SpecStructure, Fragment}
  */
 trait ReferenceDsl extends FragmentBuilder with dsl.ReferenceDsl:
 
-  extension (alias: String):
+  extension (alias: String)
     override def ~(s: SpecStructure): Fragment =
       addFragment(alias.~(s))
 
     override def ~(s: => SpecificationStructure, tooltip: String): Fragment =
       addFragment(alias.~(s, tooltip))
 
-  extension (alias: String):
+  extension (alias: String)
     override def ~/(s: SpecStructure): Fragment =
       addFragment(alias.~/(s))
 

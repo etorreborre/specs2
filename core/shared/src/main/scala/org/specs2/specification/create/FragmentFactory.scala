@@ -64,10 +64,10 @@ trait DefaultFragmentFactory extends FragmentFactory:
   def example[T](text: String, withEnv: Env => T)(using as: AsResult[T], p: ImplicitParam): Fragment =
     example(text, Execution.withEnv(withEnv))
 
-  def tag(names: String*): Fragment       = Fragment(Description.tag(names:_*), Execution.NoExecution)
-  def taggedAs(names: String*): Fragment  = Fragment(Description.taggedAs(names:_*), Execution.NoExecution)
-  def section(names: String*): Fragment   = Fragment(Description.section(names:_*), Execution.NoExecution)
-  def asSection(names: String*): Fragment = Fragment(Description.asSection(names:_*), Execution.NoExecution)
+  def tag(names: String*): Fragment       = Fragment(Description.tag(names*), Execution.NoExecution)
+  def taggedAs(names: String*): Fragment  = Fragment(Description.taggedAs(names*), Execution.NoExecution)
+  def section(names: String*): Fragment   = Fragment(Description.section(names*), Execution.NoExecution)
+  def asSection(names: String*): Fragment = Fragment(Description.asSection(names*), Execution.NoExecution)
 
   def mark(tag: NamedTag): Fragment          = Fragment(Description.mark(tag), Execution.NoExecution)
   def markAs(tag: NamedTag): Fragment        = Fragment(Description.markAs(tag), Execution.NoExecution)

@@ -12,9 +12,9 @@ import scala.concurrent.duration.FiniteDuration
 case class ExecutorServices(executionContextEval: () => ExecutionContext,
                             schedulerEval: () =>  Scheduler) {
 
-  given executionContext as executionContextEval()
+  given executionContext = executionContextEval()
 
-  given scheduler as schedulerEval()
+  given scheduler = schedulerEval()
 
   def shutdownNow(): Unit =
     ()

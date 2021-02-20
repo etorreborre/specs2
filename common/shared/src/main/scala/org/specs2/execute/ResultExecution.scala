@@ -16,7 +16,7 @@ trait ResultExecution:
   outer: ResultExecution =>
 
   /** this extension allows the execution of a Result with an `execute` method */
-  extension (r: =>Result):
+  extension (r: =>Result)
     @targetName("execute_postfix") def execute(using n: Int = 0): Result =
       outer.execute(r)
 

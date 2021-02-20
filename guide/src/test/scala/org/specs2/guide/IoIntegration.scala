@@ -27,7 +27,7 @@ object IO {
 
   // this converts an IO value into a specs2 Execution with the
   // withEnvAsync function which takes a Future
-  given [R : AsResult] as AsExecution[IO[R]]:
+  given [R : AsResult]: AsExecution[IO[R]] with
     def execute(io: =>IO[R]): Execution =
       Execution.withEnvAsync(env => io.run(env.executionContext))
 
@@ -46,7 +46,7 @@ import org.specs2.execute.{AsResult}
 import org.specs2.specification.core.{AsExecution, Execution}
 
 object IO:
-  given [R : AsResult] as AsExecution[IO[R]]:
+  given [R : AsResult]: AsExecution[IO[R]] with
     def execute(io: =>IO[R]): Execution =
       Execution.withEnvAsync(env => io.run(env.executionContext))
 

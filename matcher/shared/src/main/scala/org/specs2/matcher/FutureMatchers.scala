@@ -16,7 +16,7 @@ trait FutureMatchers extends ExpectationsCreation:
    * add an `await` method to any matcher `Matcher[T]` so that it can be transformed into a `Matcher[Future[T]]
    * making this implicit an extension method does not work out of the box`
    */
-  extension [T](m: Matcher[T])(using ee: ExecutionEnv):
+  extension [T](m: Matcher[T])(using ee: ExecutionEnv)
     def await: Matcher[Future[T]] =
       awaitMatcher(m)(retries = 0, timeout = 1.second)
 
@@ -50,7 +50,7 @@ trait FutureMatchers extends ExpectationsCreation:
         try
           val futures = Iterator(syncFailCapture) ++ Iterator.continually(a.valueDefinition)
           new FutureAsResult(futures.next.map(v => AsResult(createExpectable(v).applyMatcher(m)))(ee.executionContext)).await(retries, timeout)
-          
+
         catch
           case f: FailureException =>
             throw f

@@ -15,7 +15,7 @@ import StringMatchers._
 trait StringMatchers:
 
   /** adapt the BeEqualTo matcher to provide ignoreCase and ignoreSpace matcher */
-  extension (m: AdaptableMatcher[Any]):
+  extension (m: AdaptableMatcher[Any])
 
     def ignoreCase: AdaptableMatcher[Any] =
       m.^^^((s: Any) => s.toString.toLowerCase, ignoringCase, ignoringCase)
@@ -108,7 +108,7 @@ trait StringMatchers:
     lazy val pattern = Pattern.compile(t)
 
     def withGroup(group: String) = new FindMatcherWithGroups(t, group)
-    def withGroups(groups: String*) = new FindMatcherWithGroups(t, groups:_*)
+    def withGroups(groups: String*) = new FindMatcherWithGroups(t, groups*)
     def apply[S <: String](b: Expectable[S]) =
       val a = t
       result(a != null && b.value != null && pattern.matcher(b.value).find,
@@ -120,7 +120,7 @@ trait StringMatchers:
   class FindMatcherPattern(p: Pattern) extends FindMatcher(p.toString):
     override lazy val pattern = p
     override def withGroup(group: String) = new FindMatcherPatternWithGroups(p, group)
-    override def withGroups(groups: String*) = new FindMatcherPatternWithGroups(p, groups:_*)
+    override def withGroups(groups: String*) = new FindMatcherPatternWithGroups(p, groups*)
   /**
    * Matcher to find if the Regex r is found inside b.
    */
@@ -156,18 +156,18 @@ trait StringMatchers:
   /**
    * Matcher to find if the pattern p is found inside b.
    */
-  class FindMatcherPatternWithGroups(p: Pattern, groups: String*) extends FindMatcherWithGroups(p.toString, groups:_*):
+  class FindMatcherPatternWithGroups(p: Pattern, groups: String*) extends FindMatcherWithGroups(p.toString, groups*):
     override lazy val pattern = p
 
-  given MatchingExpression[String]:
+  given MatchingExpression[String] with
     def toPattern(s: String): Pattern =
       Pattern.compile(s)
 
-  given MatchingExpression[Pattern]:
+  given MatchingExpression[Pattern] with
     def toPattern(p: Pattern): Pattern =
       p
 
-  given MatchingExpression[Regex]:
+  given MatchingExpression[Regex] with
     def toPattern(r: Regex): Pattern =
       r.pattern
 

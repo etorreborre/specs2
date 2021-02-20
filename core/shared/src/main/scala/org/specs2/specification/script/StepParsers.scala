@@ -12,7 +12,7 @@ import text.RegexExtractor
  * and possibly strip it from delimiters if necessary
  */
 trait StepParsers extends ImplicitParameters:
-  given stepParserRegex as Regex = """\{([^}]+)\}""".r
+  given stepParserRegex: Regex = """\{([^}]+)\}""".r
 
   def apply[T](f: String => T)(using fpr: Regex = stepParserRegex): DelimitedStepParser[T] = new DelimitedStepParser1[T](f).withRegex(fpr)
   def apply[T](f: (String, String) => T)(using fpr: Regex): DelimitedStepParser[T] = new DelimitedStepParser2[T](f).withRegex(fpr)

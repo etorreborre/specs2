@@ -58,7 +58,7 @@ trait ClassRunnerMain:
    * a specification to execute
    */
   def run(args: Array[String], exit: Boolean): Unit =
-    val arguments = Arguments(args.drop(1): _*)
+    val arguments = Arguments(args.drop(1)*)
     val env = EnvDefault.create(arguments)
 
     val actions: Action[Stats] = args.toList match

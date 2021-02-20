@@ -9,5 +9,5 @@ import reporter._
 case class NotifierRunner(notifier: Notifier):
   def main(arguments: Array[String])  =
     try
-      ClassRunner.run(Array(arguments ++ Seq("notifier", notifier.getClass.getName):_*))
+      ClassRunner.run(Array(arguments ++ Seq("notifier", notifier.getClass.getName)*))
     catch { case t: Throwable => t.printStackTrace }

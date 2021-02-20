@@ -32,7 +32,7 @@ trait JsonGen:
     n    <- choose(1, 4)
     ks   <- keys(n)
     vals <- values(n, depth)
-  yield JSONObject(Map(ks zip vals:_*))
+  yield JSONObject(Map(ks zip vals*))
 
   def keys(n: Int) = listOfN(n, oneOf("a", "b", "c"))
   def values(n: Int, depth: Int) = listOfN(n, value(depth))

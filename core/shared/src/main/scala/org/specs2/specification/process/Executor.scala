@@ -154,7 +154,7 @@ object DefaultExecutor:
 
   /** only to be used in tests */
   def executeFragments(fs: Fragments)(env: Env): List[Fragment] =
-    fs.fragments.map(fs => executeAll(fs:_*)(env)).runMonoid(env.specs2ExecutionEnv)
+    fs.fragments.map(fs => executeAll(fs*)(env)).runMonoid(env.specs2ExecutionEnv)
 
   def executeAll(seq: Fragment*)(env: Env): List[Fragment] =
     executeSeq(seq)(env)

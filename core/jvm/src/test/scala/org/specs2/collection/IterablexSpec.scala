@@ -69,5 +69,5 @@ trait IterableData:
     for
       i0 <- listOfN(3, oneOf(1, 2, 3))
       i1 <- listOfN(3, oneOf(1, 2, 3, i0))
-    yield (LazyList(i1:_*), i1.scramble)
+    yield (LazyList(i1*), i1.scramble)
   }

@@ -73,7 +73,7 @@ trait FilesRunnerMain:
    * Run the specifications found in files based on command-line arguments
    */
   def run(args: Array[String], exit: Boolean = false): Unit =
-    val env = EnvDefault.create(Arguments(args: _*))
+    val env = EnvDefault.create(Arguments(args*))
     val specificationsFinder = DefaultSpecificationsFinder(env)
     try execute(DefaultFilesRunner(env, specificationsFinder).run, env, exit)
     finally env.shutdown()

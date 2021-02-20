@@ -13,14 +13,14 @@ trait Seqx:
   /**
    * Additional methods for nested seqs
    */
-  extension [T](seq: Seq[Seq[T]]):
+  extension [T](seq: Seq[Seq[T]])
     def safeTranspose: Seq[Seq[T]] =
       transpose(seq)
 
   /**
    * Additional methods for seqs
    */
-  extension [T](seq: Seq[T]):
+  extension [T](seq: Seq[T])
 
     /** update the last element if there is one */
     def updateLast(f: T => T) = seq match
@@ -67,7 +67,7 @@ trait Seqx:
           occurrences(D(x, equality)) -= 1
       result.toSeq
 
-  extension [T, S](seq: Seq[T]):
+  extension [T, S](seq: Seq[T])
     /**
      * @return all the elements in seq which are not in other, even if they are duplicates: Seq(1, 1).delta(Seq(1)) == Seq(1)
      *         this uses a user given comparison function
@@ -99,7 +99,7 @@ trait Seqx:
     if filtered.isEmpty then Seq()
     else filtered.map(_.head) +: transpose(filtered.map(_.tail))
 
-  given Foldable[Seq]:
+  given Foldable[Seq] with
     def foldLeft[A, B](fa: Seq[A], z: B)(f: (B, A) => B) =
       summon[Foldable[List]].foldLeft(fa.toList, z)(f)
 

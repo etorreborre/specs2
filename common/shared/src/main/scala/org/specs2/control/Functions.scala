@@ -8,7 +8,7 @@ trait Functions:
   /** transform a byname Function1 into a strict Function1 */
   def toStrictFunction1[T, S](f: (=>T) => S): T => S = (t: T) => f(t)
 
-  extension [A](f: A => Boolean):
+  extension [A](f: A => Boolean)
     def ||(g: A => Boolean) = (a: A) => f(a) || g(a)
     def &&(g: A => Boolean) = (a: A) => f(a) && g(a)
     def unary_!             = (a: A) => !f(a)

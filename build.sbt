@@ -18,7 +18,7 @@ lazy val specs2 = project.in(file(".")).
     tests
   )
 
-val scala3 = "3.0.0-M2"
+val scala3 = "3.0.0-RC1"
 
 /** COMMON SETTINGS */
 lazy val specs2Settings = Seq(

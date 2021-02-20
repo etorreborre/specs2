@@ -71,7 +71,7 @@ case object Field:
   def apply[T](label: String, value: =>T): Field[T] = new Field(label, Property(value))
 
   /** create a Field with a label and other fields values, concatenated as strings */
-  def apply(label: String, value1: Field[_], values: Field[_]*): Field[String] = Field(label, "/", value1, values:_*)
+  def apply(label: String, value1: Field[_], values: Field[_]*): Field[String] = Field(label, "/", value1, values*)
 
   /** create a Field with a label and other fields values, concatenated as strings */
   def apply(label: String, separator: String, value1: Field[_], values: Field[_]*): Field[String] =

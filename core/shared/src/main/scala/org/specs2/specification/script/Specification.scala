@@ -24,7 +24,7 @@ trait SpecLike extends org.specs2.Spec with Scripts
 case class FragmentsSeq(fs: Vector[Fragment]):
 
   def toFragments: Fragments =
-    Fragments.apply(fs:_*)
+    Fragments.apply(fs*)
 
   def map(f: Fragment => Fragment): FragmentsSeq =
     FragmentsSeq(fs map f)

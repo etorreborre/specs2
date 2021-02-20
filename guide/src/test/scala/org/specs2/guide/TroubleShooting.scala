@@ -53,7 +53,7 @@ To fix this you can either:
  - add an `AsResult[Unit]` instance like this
 <p/>
 ${snippet{
-given AsResult[Unit]:
+given AsResult[Unit] with
   def asResult(r: =>Unit) =
     ResultExecution.execute(r)(_ => Success())
 }}

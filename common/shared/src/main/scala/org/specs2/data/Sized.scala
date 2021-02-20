@@ -13,25 +13,20 @@ trait Sized[T]:
 
 object Sized extends SizedLowPriority1:
     /** any scala collection has a size */
-  given [I <: Traversable[_]] as Sized[I] =
-    new Sized[I]:
-      def size(t: I) = t.size
+  given [I <: Traversable[_]]: Sized[I] with
+    def size(t: I) = t.size
 
 trait SizedLowPriority1 extends SizedLowPriority2:
   /** any java collection has a size */
-  given [T <: java.util.Collection[_]] as Sized[T] =
-    new Sized[T]:
-      def size(t: T) = t.size()
+  given [T <: java.util.Collection[_]]: Sized[T] with
+    def size(t: T) = t.size()
 
   /** any scala array has a size */
-  given [T] as Sized[Array[T]] =
-    new Sized[Array[T]]:
-      def size(t: Array[T]) = t.length
+  given [T]: Sized[Array[T]] with
+    def size(t: Array[T]) = t.length
 
 trait SizedLowPriority2:
 
   /** a regular string has a size, without having to be converted to an Traversable */
-  given Sized[String] =
-    new Sized[String]:
-      def size(t: String) = t.length
-  
+  given Sized[String] with
+    def size(t: String) = t.length

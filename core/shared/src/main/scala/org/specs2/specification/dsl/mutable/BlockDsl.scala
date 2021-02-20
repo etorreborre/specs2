@@ -7,34 +7,34 @@ import execute._
 import specification.script._
 import specification.core._
 import specification.create._
-import scala.util.Not
+import scala.util.NotGiven
 
 /**
  * Create blocks of examples in a mutable specification
  */
 trait BlockDsl extends BlockCreation:
 
-  given ToBlock[Fragment, Fragment]:
+  given ToBlock[Fragment, Fragment] with
     def toBlock(s: String, f: =>Fragment): Fragment =
       addBlock(s, f)
 
-  given ToBlock[Fragments, Fragments]:
+  given ToBlock[Fragments, Fragments] with
     def toBlock(s: String, fs: =>Fragments): Fragments =
       addBlock(s, fs)
 
-  given [R : AsResult] as ToBlock[StepParser[R], Fragment]:
+  given [R : AsResult]: ToBlock[StepParser[R], Fragment] with
     def toBlock(s: String, parser: =>StepParser[R]): Fragment =
       addExample(parser.strip(s), Execution.executed(parser.run(s).fold(execute.Error.apply, AsResult(_))))
 
-  given [R : AsExecution] as ToBlock[R, Fragment]:
+  given [R : AsExecution]: ToBlock[R, Fragment] with
     def toBlock(s: String, r: =>R): Fragment =
       addExample(s, r)
 
-  given [R : AsExecution] as ToBlock[String => R, Fragment]:
+  given [R : AsExecution]: ToBlock[String => R, Fragment] with
     def toBlock(s: String, f: =>(String => R)): Fragment =
       addExample(s, f(s))
 
-  extension [S, R] (d: String)(using not: Not[NoBlockDsl]):
+  extension [S, R](d: String)
     def >>(s: =>S)(using t: ToBlock[S, R]): R =
      summon[ToBlock[S, R]].toBlock(d, s)
 
@@ -43,7 +43,7 @@ trait BlockDsl extends BlockCreation:
  */
 trait ExtendedBlockDsl extends BlockDsl:
 
-  extension [S, R] (d: String)(using not: Not[NoExtendedBlockDsl]):
+  extension [S, R] (d: String)(using not: NotGiven[NoExtendedBlockDsl])
     def should(s: =>S)(using t: ToBlock[S, R]): R =
       summon[ToBlock[S, R]].toBlock(s"$d should", s)
 

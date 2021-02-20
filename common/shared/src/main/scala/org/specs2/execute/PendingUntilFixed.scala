@@ -2,7 +2,7 @@ package org.specs2
 package execute
 
 import text.Quote._
-import scala.util.Not
+import scala.util.NotGiven
 
 /**
  * This function allows to mark the body of an example as pending until it is fixed.
@@ -12,7 +12,7 @@ import scala.util.Not
  */
 trait PendingUntilFixed:
 
-  extension [T : AsResult](t: =>T)(using not: Not[NoPendingUntilFixed])
+  extension [T : AsResult](t: =>T)(using not: NotGiven[NoPendingUntilFixed])
     /** @return Pending unless the result is a success */
     def pendingUntilFixed: Result =
       pendingUntilFixed("")
@@ -21,7 +21,7 @@ trait PendingUntilFixed:
     def pendingUntilFixed(m: String = ""): Result = ResultExecution.execute(AsResult(t)) match
       case s @ Success(_,_) =>
         Failure(m.prefix(". ", "Fixed now, you should remove the 'pendingUntilFixed' marker"))
-        
+
       case other =>
         Pending(m.prefix(". ", "Pending until fixed"))
 

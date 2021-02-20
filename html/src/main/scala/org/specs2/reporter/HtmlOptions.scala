@@ -31,7 +31,7 @@ case class HtmlOptions(
       .updateWhenTrue("search",  search)
       .updateWhenTrue("toc",     toc)
 
-  extension (map: Map[String, String]):
+  extension (map: Map[String, String])
     def updateWhenTrue(name: String, value: String, condition: Boolean): Map[String, String] =
       if condition then map.updated(name, value)
       else map

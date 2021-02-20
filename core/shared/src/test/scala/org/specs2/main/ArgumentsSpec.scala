@@ -97,7 +97,7 @@ Creation
   def overriding3 = (args(xonly = true) <| args(plan = true)).plan must ===(true)
 
   case class properties(properties: (String, String)*) extends SystemProperties:
-    override def systemGetProperty(p: String) = Map(properties: _*).get(p)
+    override def systemGetProperty(p: String) = Map(properties*).get(p)
 
   def properties1 = Arguments.extract(using   Seq(""), properties("plan" -> "")).plan must ===(true)
   def properties2 = Arguments.extract(using   Seq(""), properties("plan" -> "true")).plan must ===(true)

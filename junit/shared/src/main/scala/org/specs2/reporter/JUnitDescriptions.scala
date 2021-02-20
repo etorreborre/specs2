@@ -79,9 +79,9 @@ trait JUnitDescriptions extends ExecutionOrigin:
       else sanitize(testName) + "(" + origin + ")"
 
     if id.nonEmpty then
-      Description.createSuiteDescription(description, id, annotations:_*)
+      Description.createSuiteDescription(description, id, annotations*)
     else
-      Description.createSuiteDescription(description, annotations:_*)
+      Description.createSuiteDescription(description, annotations*)
 
   import text.Trim._
 

@@ -96,7 +96,7 @@ object Fragment:
   def apply(d: Description): Fragment =
     Fragment(d, Execution.NoExecution)
 
-  given showInstance as Show[Fragment] = new Show[Fragment]:
+  given showInstance: Show[Fragment] with
     def show(f: Fragment): String =
       s"Fragment(${f.description.show})"
 

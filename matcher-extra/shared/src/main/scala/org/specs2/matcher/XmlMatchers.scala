@@ -40,11 +40,11 @@ trait XmlMatchers:
    * as names and values for its attributes
    */
   def \\(node: Node, attributeValues1: (String, String), attributeValues: (String, String)*): XmlMatcher =
-    deepMatch(node, Map((attributeValues1 :: attributeValues.toList): _*))
+    deepMatch(node, Map((attributeValues1 :: attributeValues.toList)*))
 
   /** alias for `\\(node, attributeValues)` with the node label only */
   def \\(label: String, attributeValues1: (String, String), attributeValues: (String, String)*): XmlMatcher =
-    deepMatch(label, Map((attributeValues1 :: attributeValues.toList): _*))
+    deepMatch(label, Map((attributeValues1 :: attributeValues.toList)*))
 
   /**
    * match if `node` is the first node of the tested node
@@ -66,11 +66,11 @@ trait XmlMatchers:
    * as names and values for its attributes
    */
   def \(node: Node, attributeValues1: (String, String), attributeValues: (String, String)*): XmlMatcher =
-    firstMatch(node, Map((attributeValues1 :: attributeValues.toList): _*))
+    firstMatch(node, Map((attributeValues1 :: attributeValues.toList)*))
 
   /** alias for `\\(node, attributeValues)` with the node label only */
   def \(label: String, attributeValues1: (String, String), attributeValues: (String, String)*): XmlMatcher =
-    firstMatch(label, Map((attributeValues1 :: attributeValues.toList): _*))
+    firstMatch(label, Map((attributeValues1 :: attributeValues.toList)*))
 
   /** match if `node` is equal to the tested node without testing empty text */
   def beEqualToIgnoringSpace(node: Seq[Node]): EqualIgnoringSpaceMatcher =
@@ -164,26 +164,26 @@ case class XmlMatcher(functions: Seq[PathFunction]) extends Matcher[Seq[Node]]:
     new XmlMatcher(functions :+ new PathFunction(node, firstNodeSearch _, attributeNames.toList))
 
   def \(node: Node, attributeValues: (String, String), attributeValues2: (String, String)*): XmlMatcher =
-    new XmlMatcher(functions :+ new PathFunction(node, firstNodeSearch _, Nil, Map((attributeValues :: attributeValues2.toList):_*)))
+    new XmlMatcher(functions :+ new PathFunction(node, firstNodeSearch _, Nil, Map((attributeValues :: attributeValues2.toList)*)))
 
   def \\(node: Node, attributeNames: String*): XmlMatcher =
     new XmlMatcher(functions :+ new PathFunction(node, deepNodeSearch _, attributeNames.toList))
 
   def \\(node: Node, attributeValues: (String, String), attributeValues2: (String, String)*): XmlMatcher =
-    new XmlMatcher(functions :+ new PathFunction(node, deepNodeSearch _, Nil, Map((attributeValues :: attributeValues2.toList):_*)))
+    new XmlMatcher(functions :+ new PathFunction(node, deepNodeSearch _, Nil, Map((attributeValues :: attributeValues2.toList)*)))
 
   /** alias for \ using the node label only */
   def \(label: String, attributeNames: String*): XmlMatcher =
-    \(label.toElem, attributeNames:_*)
+    \(label.toElem, attributeNames*)
 
   def \(label: String, attributeValues: (String, String), attributeValues2: (String, String)*): XmlMatcher =
-    \(label.toElem, attributeValues, attributeValues2:_*)
+    \(label.toElem, attributeValues, attributeValues2*)
   /** alias for \\ using the node label only */
   def \\(label: String, attributeNames: String*): XmlMatcher =
-    \\(label.toElem, attributeNames:_*)
+    \\(label.toElem, attributeNames*)
 
   def \\(label: String, attributeValues: (String, String), attributeValues2: (String, String)*): XmlMatcher =
-    \\(label.toElem, attributeValues, attributeValues2:_*)
+    \\(label.toElem, attributeValues, attributeValues2*)
 
   /**
    * specify the value of the node text
@@ -301,9 +301,9 @@ case class PathFunction(val node: Node,
 
 private[specs2] object StringToElem:
 
-  extension (s: String):
+  extension (s: String)
     def toElem: Elem = Elem(null, s, Null, TopScope, true)
 
-  given Conversion[String, Elem]:
+  given Conversion[String, Elem] with
     def apply(s: String): Elem =
       Elem(null, s, Null, TopScope, true)

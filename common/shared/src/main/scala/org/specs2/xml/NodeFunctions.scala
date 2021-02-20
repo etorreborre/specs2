@@ -94,10 +94,10 @@ trait NodeFunctions:
       attributes.forall(attributesNames.contains(_))
 
     def attributesValuesNamesExactMatch(m: MetaData) =
-      Map(m.map((a: MetaData) => a.key -> a.value.toString).toList: _*) == attributeValues
+      Map(m.map((a: MetaData) => a.key -> a.value.toString).toList*) == attributeValues
 
     def attributesValuesNamesPartialMatch(m: MetaData) =
-      val attributesNamesAndValues: Map[String, String] = Map(m.map((a: MetaData) => a.key -> a.value.toString).toList: _*)
+      val attributesNamesAndValues: Map[String, String] = Map(m.map((a: MetaData) => a.key -> a.value.toString).toList*)
       attributeValues.forall((pair: (String, String)) =>  attributesNamesAndValues.isDefinedAt(pair._1) && (attributesNamesAndValues(pair._1) matches pair._2))
 
     def attributesNamesMatch(m: MetaData) =

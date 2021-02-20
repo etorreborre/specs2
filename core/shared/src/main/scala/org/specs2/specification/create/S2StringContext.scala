@@ -30,13 +30,13 @@ trait S2StringContext extends S2StringContext1:
   implicit inline def asExecutionIsInterpolated[R : AsExecution](inline r: =>R)(using inline factory: FragmentFactory): Interpolated =
     ${executionInterpolated('{AsExecution[R].execute(r)}, 'factory)}
 
-  given Conversion[SpecificationRef, Interpolated]:
+  given Conversion[SpecificationRef, Interpolated] with
     def apply(ref: SpecificationRef): Interpolated =
       new Interpolated:
         def prepend(text: String): Fragments =
           Fragments(fragmentFactory.text(text), fragmentFactory.link(ref))
 
-  given Conversion[SpecificationStructure, Interpolated]:
+  given Conversion[SpecificationStructure, Interpolated] with
     def apply(s: SpecificationStructure): Interpolated =
       new Interpolated:
         val specStructure = s.is
@@ -45,7 +45,7 @@ trait S2StringContext extends S2StringContext1:
         def prepend(text: String): Fragments =
           Fragments(fragmentFactory.text(text), fragmentFactory.see(ref))
 
-  given Conversion[SpecStructure, Interpolated]:
+  given Conversion[SpecStructure, Interpolated] with
     def apply(s: SpecStructure): Interpolated =
       new Interpolated:
         def prepend(text: String): Fragments =
@@ -59,7 +59,7 @@ trait S2StringContext extends S2StringContext1:
           catch { case e: Throwable => s"[${e.getMessage.notNull}]" }
         Fragments(fragmentFactory.text(text + s1))
 
-  given Conversion[Fragments, Interpolated]:
+  given Conversion[Fragments, Interpolated] with
     def apply(fragments: Fragments): Interpolated =
       new Interpolated:
         def prepend(text: String): Fragments =
@@ -86,7 +86,7 @@ trait S2StringContextCreation extends FragmentsFactory:
   /**
    * String interpolation for specs2 fragments
    */
-  extension (sc: StringContext)(using factory: FragmentFactory):
+  extension (sc: StringContext)(using factory: FragmentFactory)
     inline def s2(inline variables: Interpolated*): Fragments =
       ${s2Implementation('sc)('{variables.toSeq}, 'factory, 'postProcessS2Fragments)}
 
@@ -125,7 +125,7 @@ object S2StringContext:
     // to be on column 0 or aligned with examples and still have the same display when using the Text printer
     val last = texts.lastOption.map(_.trimEnd).filterNot(_.isEmpty).map(ff.text).toSeq
 
-    postProcess(fragments append Fragments(last:_*))
+    postProcess(fragments append Fragments(last*))
 
   def executionInterpolated(execution: Expr[Execution], ff: Expr[FragmentFactory])(using qctx: Quotes): Expr[Interpolated] =
     import qctx.reflect._
@@ -134,7 +134,7 @@ object S2StringContext:
             createExample($ff,
               text,
               $execution,
-              ${Expr(Position.ofMacroExpansion.sourceCode)},
+              ${Expr(Position.ofMacroExpansion.sourceCode.getOrElse("no source code found to interpolate a Fragment"))},
               ${Expr(PositionLocation(Position.ofMacroExpansion.sourceFile.jpath.toString, Position.ofMacroExpansion.startLine+1, Position.ofMacroExpansion.startColumn))})
         }}
 

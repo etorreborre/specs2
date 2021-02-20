@@ -14,21 +14,21 @@ trait FragmentsDsl extends FragmentsFactory with AcceptanceDsl1:
   trait ToFragments[T]:
     def toFragments(t: T): Fragments
 
-  given ToFragments[Fragment]:
+  given ToFragments[Fragment] with
     def toFragments(f: Fragment): Fragments =
       f
 
-  given ToFragments[Fragments]:
+  given ToFragments[Fragments] with
     def toFragments(fs: Fragments): Fragments =
       fs
 
-  given ToFragments[String]:
+  given ToFragments[String] with
     def toFragments(s: String): Fragments =
       fragmentFactory.text(s)
 
-  given ToFragments[Seq[Fragment]]:
+  given ToFragments[Seq[Fragment]] with
     def toFragments(fs: Seq[Fragment]): Fragments =
-      Fragments(fs:_*)
+      Fragments(fs*)
 
   implicit class appendFragments[T1 : ToFragments, T2 : ToFragments](t1: T1):
     def ^(t2: T2): Fragments =
@@ -54,7 +54,7 @@ trait FragmentsDsl extends FragmentsFactory with AcceptanceDsl1:
     val newLine = Vector(fragmentFactory.break, fragmentFactory.text(" "*offset))
     (newLine ++ fragments.toList)
       .map(Fragments(_))
-      .intersperse(Fragments(newLine:_*))
+      .intersperse(Fragments(newLine*))
       .reduce(_ append _)
 
 

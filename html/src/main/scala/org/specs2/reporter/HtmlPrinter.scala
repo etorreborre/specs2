@@ -41,7 +41,7 @@ case class HtmlPrinter(env: Env, searchPage: SearchPage, logger: Logger = Consol
   def sink(spec: SpecStructure): AsyncSink[Fragment] =
     ((Statistics.fold zip list[Fragment].into[Action] zip SimpleTimer.timerFold.into[Action]) <*
      fromStart((getHtmlOptions(env.arguments) >>= (options => copyResources(env, options))).void.toAction)).mapFlatten { case ((stats, fragments), timer) =>
-      val executedSpec = spec.copy(lazyFragments = () => Fragments(fragments:_*))
+      val executedSpec = spec.copy(lazyFragments = () => Fragments(fragments*))
       getPandoc(env).flatMap {
         case None         => printHtml(env, executedSpec, stats, timer).toAction
         case Some(pandoc) => printHtmlWithPandoc(env, executedSpec, stats, timer, pandoc).toAction

@@ -75,8 +75,8 @@ object MappedColors:
       else                    None
     }
 
-    if args.contains("whitebg") then new MappedColors(Map(map:_*)) { override lazy val defaultColors = new InvertedColors }
-    else                          new MappedColors(Map(map:_*))
+    if args.contains("whitebg") then new MappedColors(Map(map*)) { override lazy val defaultColors = new InvertedColors }
+    else                          new MappedColors(Map(map*))
 
 /**
  * Definition of abbreviated color names

@@ -8,7 +8,7 @@ import control.{ImplicitParameters, Use}
 import ImplicitParameters._
 import org.specs2.specification.core._
 import org.specs2.specification.script.StepParser
-import scala.util.Not
+import scala.util.NotGiven
 
 /**
  * Dsl for creating examples in a mutable specification

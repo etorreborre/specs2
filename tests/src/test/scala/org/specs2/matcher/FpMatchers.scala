@@ -16,7 +16,7 @@ private[specs2]
 trait FpMatchers extends ScalaCheck:
   private val outer = this
 
-  extension [T](sg: Semigroup[T])(using nothing: Int = 0):
+  extension [T](sg: Semigroup[T])(using nothing: Int = 0)
 
     @targetName("sgIsAssociative")
     def isAssociative(using a: Arbitrary[T], s: Shrink[T]): Prop =
@@ -26,7 +26,7 @@ trait FpMatchers extends ScalaCheck:
     def isSemigroup(using a: Arbitrary[T], s: Shrink[T]): Prop =
       outer.isAssociative(using sg, a, s)
 
-  extension [T](m: Monoid[T]):
+  extension [T](m: Monoid[T])
 
     @targetName("mIsMonoid")
     def isMonoid(using a: Arbitrary[T], s: Shrink[T]): Prop =

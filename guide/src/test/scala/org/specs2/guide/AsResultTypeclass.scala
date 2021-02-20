@@ -31,14 +31,13 @@ trait ClusterExecution {
 }
 
 object ClusterExecution:
-  given AsResult[ClusterExecution] =
-    new AsResult[ClusterExecution]:
-      def asResult(t: =>ClusterExecution): Result =
-        try {
-          val result = t
-          if (result.succeeded) Success()
-          else                  Failure(t.errorMessage)
-        } catch { case e: Throwable => Error(e) }
+  given AsResult[ClusterExecution] with
+    def asResult(t: =>ClusterExecution): Result =
+      try {
+        val result = t
+        if (result.succeeded) Success()
+        else                  Failure(t.errorMessage)
+      } catch { case e: Throwable => Error(e) }
 
 }}
 

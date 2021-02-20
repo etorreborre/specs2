@@ -3,7 +3,7 @@ package specification
 package dsl
 
 import core.SpecHeader
-import scala.util.Not
+import scala.util.NotGiven
 
 /**
  * Dsl for creating a specification title
@@ -14,7 +14,7 @@ trait TitleDsl:
   def title(s: String)(using nothing: Int = 0): SpecHeader =
     s.title
 
-  extension (s: String)(using not: Not[NoTitleDsl])
+  extension (s: String)(using not: NotGiven[NoTitleDsl])
     def title: SpecHeader = SpecHeader(outer.getClass, Some(s))
 
 

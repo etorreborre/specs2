@@ -51,7 +51,7 @@ trait TraversableBaseMatchers:
 
   /** match if a traversable contains all the elements of seq (and maybe more) */
   def containAllOf[T : Diffable](seq: Seq[T]) =
-    contain(atLeast(seq.map(v => valueIsTypedValueCheck(v)):_*))
+    contain(atLeast(seq.map(v => valueIsTypedValueCheck(v))*))
 
   /** match if a traversable contains one of (t1, t2) */
   def containAnyOf[T](seq: Seq[T]): ContainWithResult[T] =
@@ -140,12 +140,11 @@ trait TraversableBaseMatchers:
 private[specs2]
 trait TraversableBaseMatchersLowImplicits extends ValueChecksLowImplicits:
 
-  given seqToValueChecks[T](using to: T => ValueCheck[T]) as Conversion[Seq[T], Seq[ValueCheck[T]]] =
-    new Conversion[Seq[T], Seq[ValueCheck[T]]]:
-      def apply(seq: Seq[T]): Seq[ValueCheck[T]] =
-        seq.map(to)
+  given seqToValueChecks[T](using to: T => ValueCheck[T]): Conversion[Seq[T], Seq[ValueCheck[T]]] with
+    def apply(seq: Seq[T]): Seq[ValueCheck[T]] =
+      seq.map(to)
 
-  given matchersToValueChecks[T] as Conversion[Seq[Matcher[T]], Seq[ValueCheck[T]]]:
+  given matchersToValueChecks[T]: Conversion[Seq[Matcher[T]], Seq[ValueCheck[T]]] with
     def apply(seq: Seq[Matcher[T]]): Seq[ValueCheck[T]] =
       seq.map(matcherIsValueCheck[T])
 
@@ -174,7 +173,7 @@ import text.Plural._
 
 case class ContainWithResult[T](check: ValueCheck[T], timesMin: Option[Times] = Some(1.times), timesMax: Option[Times] = None, checkAll: Boolean = true) extends Matcher[Traversable[T]]:
   def apply[S <: Traversable[T]](t: Expectable[S]) =
-    val seq = Vector(t.value.toSeq:_*)
+    val seq = Vector(t.value.toSeq*)
 
     // stop after the first failure if !checkAll
     val (successes, failures) = seq.foldLeft((Seq[Result](), Seq[Result]())) { (res, cur) =>

@@ -44,7 +44,7 @@ trait AnsiColors:
 
   override def toString = all.map(_.color).mkString("AnsiColors(",",",")")
 
-  extension (s: String):
+  extension (s: String)
     def removeColors: String =
       outer.removeColors(s, doIt = true)
 

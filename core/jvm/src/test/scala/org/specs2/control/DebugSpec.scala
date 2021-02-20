@@ -40,7 +40,7 @@ trait output extends MustThrownMatchers:
   private val msgs = ListBuffer[String]()
   def messages = msgs.toList
 
-  given stringOutput as ConsoleOutput = new ConsoleOutput:
+  given stringOutput: ConsoleOutput = new ConsoleOutput:
     override def println(m: Any) =
       msgs += m.toString; ()
 

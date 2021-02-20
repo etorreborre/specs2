@@ -40,13 +40,13 @@ trait Monad[F[_]] extends Applicative[F]:
 
 object Monad:
 
-  given idMonad as Monad[Id] = new Monad[Id]:
+  given idMonad: Monad[Id] with
     def point[A](a: =>A): Id[A] = a
 
     def bind[A,B](fa: Id[A])(f: A => Id[B]): Id[B] =
       f(fa)
 
-  given optionMonad as Monad[Option] = new Monad[Option]:
+  given optionMonad: Monad[Option] with
     def point[A](a: =>A): Option[A] = Some(a)
 
     def bind[A,B](fa: Option[A])(f: A => Option[B]): Option[B] =
@@ -60,7 +60,7 @@ object Monad:
         case Some(Left(a1)) => tailrecM(a1)(f)
         case Some(Right(b)) => Some(b)
 
-  given eitherMonad[L] as Monad[Either[L, *]] = new Monad[Either[L, *]]:
+  given eitherMonad[L]: Monad[Either[L, *]] with
     def point[A](a: =>A): Either[L, A] = Right(a)
 
     def bind[A,B](fa: Either[L, A])(f: A => Either[L, B]): Either[L, B] =
@@ -74,7 +74,7 @@ object Monad:
         case Right(Left(a1)) => tailrecM(a1)(f)
         case Right(Right(b)) => Right(b)
 
-  given futureMonad(using ec: ExecutionContext) as Monad[Future] = new Monad[Future]:
+  given futureMonad(using ec: ExecutionContext): Monad[Future] with
     def point[A](a: =>A): Future[A] = Future.successful(a)
 
     def bind[A,B](fa: Future[A])(f: A => Future[B]): Future[B] =

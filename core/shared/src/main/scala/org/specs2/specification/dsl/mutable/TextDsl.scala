@@ -12,7 +12,7 @@ import org.specs2.specification.core.{Fragments, Fragment}
 trait TextDsl extends TextCreation:
   outer =>
 
-  extension (s: String):
+  extension (s: String)
     def txt = outer.addText(s)
 
     def br: Fragment  = s.txt.br
@@ -21,7 +21,7 @@ trait TextDsl extends TextCreation:
     def p: Fragment = s.txt.p
     def p(n: Int): Fragment = s.txt.p(n)
 
-  extension (f: =>Fragment):
+  extension (f: =>Fragment)
     def br: Fragment =
       br(1)
 
@@ -48,7 +48,7 @@ trait TextDsl extends TextCreation:
       f
       addFragment(fragmentFactory.backtab(n))
 
-  extension (fs: =>Fragments):
+  extension (fs: =>Fragments)
     def br: Fragments  = br(1)
     def br(n: Int): Fragments  =
       val result = fs

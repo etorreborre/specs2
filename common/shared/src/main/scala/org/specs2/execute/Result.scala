@@ -235,7 +235,7 @@ object Result:
   /**
    * This monoids "absorbs" success messages if the result of the |+| is not a success
    */
-  given ResultFailureMonoid as Monoid[Result] = ResultFailuresMonoid("; ")
+  given ResultFailureMonoid: Monoid[Result] = ResultFailuresMonoid("; ")
 
   def ResultFailuresMonoid(separator: String): Monoid[Result] = new Monoid[Result] {
     val zero = Success()
@@ -280,10 +280,9 @@ object Result:
   def unit(u: =>Unit) = ResultExecution.effectively { u; Success() }
 
   /** implicit typeclass instance to create examples from Results */
-  given resultAsResult[R <: Result] as AsResult[R] =
-    new AsResult[R]:
-      def asResult(t: =>R): Result =
-        ResultExecution.execute(t)
+  given resultAsResult[R <: Result]: AsResult[R] with
+    def asResult(t: =>R): Result =
+      ResultExecution.execute(t)
 
   def resultOrSuccess(t: Any): Result = t match
     case r: Result => r
@@ -321,10 +320,9 @@ trait Results:
    * implicit definition to accept any boolean value as a Result
    * This avoids writing b must beTrue
    */
-  given Conversion[Boolean, Result] {
+  given Conversion[Boolean, Result] with
     def apply(b: Boolean): Result =
       toResult(b)
-  }
 
   def toResult(b: Boolean): Result =
     if b then org.specs2.execute.Success("true")

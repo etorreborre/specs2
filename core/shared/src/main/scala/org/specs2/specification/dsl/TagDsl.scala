@@ -11,8 +11,8 @@ import create.FragmentsFactory
  */
 trait TagDsl extends FragmentsFactory { outer =>
 
-  def tag(names: String*)    : Fragment   = fragmentFactory.taggedAs(names:_*)
-  def section(names: String*)  : Fragment = fragmentFactory.asSection(names:_*)
+  def tag(names: String*)    : Fragment   = fragmentFactory.taggedAs(names*)
+  def section(names: String*)  : Fragment = fragmentFactory.asSection(names*)
 
   def tag(tag: NamedTag)      : Fragment = fragmentFactory.markAs(tag)
   def section(tag: NamedTag)  : Fragment = fragmentFactory.markSectionAs(tag)
@@ -23,4 +23,3 @@ trait TagDsl extends FragmentsFactory { outer =>
   private[specs2] def xsection = fragmentFactory.asSection("x")
 
 }
-

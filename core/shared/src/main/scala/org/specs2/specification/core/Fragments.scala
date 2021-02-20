@@ -18,14 +18,14 @@ import concurrent.ExecutionEnv
 case class Fragments(contents: AsyncStream[Fragment]):
   /** append one or several fragments */
   def append(other: Fragment): Fragments       = append(oneAsync(other))
-  def append(others: Seq[Fragment]): Fragments = append(Fragments(others:_*))
+  def append(others: Seq[Fragment]): Fragments = append(Fragments(others*))
   def append(others: Fragments): Fragments     = append(others.contents)
   def appendLazy(other: =>Fragment): Fragments = append(oneDelayedAsync(other))
 
   /** prepend one or several fragments to this process */
   def prepend(other: Fragment): Fragments       = prepend(oneAsync(other))
   def prepend(others: Fragments): Fragments     = prepend(others.contents)
-  def prepend(others: Seq[Fragment]): Fragments = prepend(Fragments(others:_*))
+  def prepend(others: Seq[Fragment]): Fragments = prepend(Fragments(others*))
   def prependLazy(other: =>Fragment): Fragments = prepend(oneDelayedAsync(other))
 
   /** filter, map or flatMap the fragments */
@@ -127,7 +127,7 @@ object Fragments:
   def apply(fragments: Fragment*): Fragments =
     new Fragments(emitSeq[Action, Fragment](fragments))
 
-  given Monoid[Fragments]:
+  given Monoid[Fragments] with
     def zero : Fragments = Fragments.empty
 
     def append(fs1: Fragments, fs2: =>Fragments): Fragments =
@@ -141,6 +141,6 @@ object Fragments:
   def reduce[T](seq: Seq[T])(f: (Fragments, T) => Fragments): Fragments =
     seq.foldLeft(Fragments.empty)((res, cur) => f(res, cur))
 
-  given Conversion[Fragment, Fragments]:
+  given Conversion[Fragment, Fragments] with
     def apply(f: Fragment): Fragments =
       Fragments(f)

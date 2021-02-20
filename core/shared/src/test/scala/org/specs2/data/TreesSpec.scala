@@ -89,10 +89,10 @@ class TreesSpec extends Specification with DataTables with Expectations { def is
   def pruneAndDraw(tree: Tree[Int], f: Int => Option[Int]) = tree.prune(f).map(_.drawTree).getOrElse("None\n")
   def beTree(s: String*) = be_==(s.mkString("", "\n", "\n"))
 
-  given [A] as Conversion[A, LazyList[A]]:
+  given [A]: Conversion[A, LazyList[A]] with
     def apply(a: A): LazyList[A] = LazyList(a)
 
-  given [A] as Conversion[List[A], LazyList[A]]:
+  given [A]: Conversion[List[A], LazyList[A]] with
     def apply(as: List[A]): LazyList[A] =
-      LazyList(as:_*)
+      LazyList(as*)
 }

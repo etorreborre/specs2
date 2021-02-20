@@ -71,8 +71,7 @@ object Property:
   def apply[T]() = new Property[T](() => None)
 
 trait Properties:
-  given [T] as Conversion[T, Property[T]] {
+  given [T]: Conversion[T, Property[T]] with
     def apply(t: T): Property[T] = Property(t)
-  }
 
 object Properties extends Properties

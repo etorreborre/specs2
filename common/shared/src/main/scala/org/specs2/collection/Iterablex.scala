@@ -76,9 +76,9 @@ trait Iterablex:
          case (a :: Nil, b :: Nil) => a == b
          case (a :: firstRest, b :: secondRest) => {
            if a != b then
-             firstRest.containsInOrder(secondList:_*)
+             firstRest.containsInOrder(secondList*)
            else
-             firstRest.containsInOrder(secondRest:_*)
+             firstRest.containsInOrder(secondRest*)
          }
 
     /**
@@ -101,7 +101,7 @@ trait Iterablex:
 
     /** @return a sequence rotated of a number of elements */
     def rotate(n: Int) = xs.slice(n, xs.size) ++ xs.slice(0, n)
-    
+
     /** @return a randomly mixed sequence */
     def scramble: Seq[T] = scramble(new scala.util.Random)
 

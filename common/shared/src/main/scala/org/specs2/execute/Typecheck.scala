@@ -88,7 +88,7 @@
 
 //   def typecheckCodeImpl(c: Context)(variables: c.Expr[Any]*): c.Tree = {
 //     import c.universe._
-//     typecheckCodeImplementation(c)(variables:_*)(c.Expr(q"org.specs2.execute.TypecheckParams()"))
+//     typecheckCodeImplementation(c)(variables*)(c.Expr(q"org.specs2.execute.TypecheckParams()"))
 //   }
 
 //   implicit class typecheckWithQuote(val sc: StringContext) extends AnyVal {

@@ -50,7 +50,7 @@ case class JUnitXmlPrinter(env: Env) extends Printer:
     }
 
   def descriptions(spec: SpecStructure, fragments: List[Fragment])(ee: ExecutionEnv) =
-    JUnitDescriptions.fragmentDescriptions(spec.setFragments(Fragments(fragments:_*)))(ee)
+    JUnitDescriptions.fragmentDescriptions(spec.setFragments(Fragments(fragments*)))(ee)
 
   def outputDirectory(arguments: Arguments): DirectoryPath =
     arguments.commandLine.directoryOr("junit.outdir", "target" / "test-reports")

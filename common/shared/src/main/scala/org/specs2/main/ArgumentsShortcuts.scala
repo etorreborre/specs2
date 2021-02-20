@@ -99,7 +99,7 @@ trait ArgumentsShortcuts { this: ArgumentsCreation =>
   /**
    * shortcut to add include trace patterns
    */
-  def includeAlsoTrace(patterns: String*) = DefaultStackTraceFilter.includeAlso(patterns:_*)
+  def includeAlsoTrace(patterns: String*) = DefaultStackTraceFilter.includeAlso(patterns*)
   /**
    * shortcut to create a stackTrace filter to exclude only some elements
    */
@@ -107,7 +107,7 @@ trait ArgumentsShortcuts { this: ArgumentsCreation =>
   /**
    * shortcut to add exclude trace patterns
    */
-  def excludeAlsoTrace(patterns: String*) = DefaultStackTraceFilter.excludeAlso(patterns:_*)
+  def excludeAlsoTrace(patterns: String*) = DefaultStackTraceFilter.excludeAlso(patterns*)
   /**
    * shortcut to filter nothing
    */

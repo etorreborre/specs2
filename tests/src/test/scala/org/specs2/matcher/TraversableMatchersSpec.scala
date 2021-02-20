@@ -36,7 +36,7 @@ class TraversableMatchersSpec(val env: Env) extends Specification with ResultMat
 
  We can compare a collection to another by using matchers
 
-   ${ Seq[Int]() must contain(exactly(Seq[Int]().map(valueIsTypedValueCheck):_*)) }
+   ${ Seq[Int]() must contain(exactly(Seq[Int]().map(valueIsTypedValueCheck)*)) }
    ${ Seq(1, 2, 3) must contain(exactly(1, 2, 3))                                                    }
    ${ (Seq(1, 2, 3) must contain(exactly(1, 2, 3, 4))) returns "List(1, 2, 3) does not contain 4"    }
    ${ Seq(1, 2, 3) must contain(exactly(be_>=(0), be_>=(1), be_>=(2)))                               }
@@ -52,17 +52,17 @@ class TraversableMatchersSpec(val env: Env) extends Specification with ResultMat
    ${ Seq(1)       must not(contain(eachOf(1, 1))) }
    ${ Seq(1, 1)    must contain(eachOf(1, 1)) }
    ${ Seq(1, 1, 2) must contain(allOf(1, 1)).inOrder } $xtag
-   ${ Seq(1)       must contain(allOf(List[Int]():_*)) }
+   ${ Seq(1)       must contain(allOf(List[Int]()*)) }
    ${ Seq[Int]()   must contain(atMost(1)) }
    ${ Seq[Int]()   must not (contain(allOf(beTypedEqualTo(1)))) }
    ${ (Seq(1)      must contain(eachOf(1, 1))) returns "List(1) is missing the value: 1" }
-   ${ Seq(1, 2, 3) must contain(allOf(Seq(1, 2).map(be_>=(_)):_*))             }
-   ${ Seq(1, 2, 3) must contain(allOf(Seq(1, 2).map(be_>=(_)):_*)).inOrder     }
-   ${ Seq(1, 2, 3) must not(contain(allOf(Seq(0, 0).map(be_<=(_)):_*)))        }
+   ${ Seq(1, 2, 3) must contain(allOf(Seq(1, 2).map(be_>=(_))*))             }
+   ${ Seq(1, 2, 3) must contain(allOf(Seq(1, 2).map(be_>=(_))*)).inOrder     }
+   ${ Seq(1, 2, 3) must not(contain(allOf(Seq(0, 0).map(be_<=(_))*)))        }
    ${ Seq(1, 2, 3) must contain(allOf(1, 3).inOrder)                           }
    ${ Seq(1, 1, 3) must contain(allOf(1, 3).inOrder)                           }
    ${ (Seq(1) must contain(eachOf(1, 1).inOrder)) returns "List(1) is missing the value: 1" }
-   ${ Seq(1, 2, 3) must contain(atLeast(Seq[Int]().map(valueIsTypedValueCheck):_*)) }
+   ${ Seq(1, 2, 3) must contain(atLeast(Seq[Int]().map(valueIsTypedValueCheck)*)) }
    ${ Seq(1, 2, 3) must contain(atLeast(3, 1))                                 }
    ${ Seq(1, 2, 3) must contain(atLeast(be_>=(0), be_>=(1), be_>=(2)))         }
 
@@ -171,14 +171,11 @@ class TraversableMatchersSpec(val env: Env) extends Specification with ResultMat
    }
 
   A user-defined equality function can also be specified ${
-     case class A(i: Int = 0, j: Int = 1)
      val equality: (A, A) => Boolean = (a1: A, a2: A) => a1.i == a2.i
-
      Seq(A(i = 1), A(i = 2)) must containTheSameElementsAs(Seq(A(i = 2, j = 2), A(i = 1, j = 2)), equality)
   }
 
   type annotations might be necessary in some cases ${
-    case class A(i: Int = 0, j: Int = 1)
     // otherwise "could not find implicit value for evidence parameter of type org.specs2.execute.AsResult[A]"
     Seq(Seq(A(1))) must contain(exactly[Seq[A]](Seq(A(1))))
   }
@@ -195,5 +192,7 @@ class TraversableMatchersSpec(val env: Env) extends Specification with ResultMat
   class Food
   case class Pizza() extends Food
   case class Fruit() extends Food
+
+  case class A(i: Int = 0, j: Int = 1)
 
 }

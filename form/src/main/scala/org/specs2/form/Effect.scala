@@ -67,7 +67,7 @@ case object Effect:
   def apply[T](label: String, value: =>T): Effect[T] = new Effect(label, Property(value))
 
   /** create an Effect from several other ones concatenating the labels */
-  def apply(e1: Effect[_], es: Effect[_]*): Effect[Any] = Effect("/", e1, es:_*)
+  def apply(e1: Effect[_], es: Effect[_]*): Effect[Any] = Effect("/", e1, es*)
 
   /** create an Effect from several other ones concatenating the labels */
   def apply(separator: String, e1: Effect[_], es: Effect[_]*): Effect[Any] =

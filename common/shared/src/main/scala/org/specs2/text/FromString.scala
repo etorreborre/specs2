@@ -11,19 +11,18 @@ import control.Exceptions._
 trait FromString[T]:
   def fromString(s: String): Option[T]
 
-object FromString {
+object FromString:
 
   def apply[T](using fs: FromString[T]): FromString[T] = fs
 
-  given FromString[String]:
+  given FromString[String] with
     def fromString(s: String): Option[String] = Option(s)
 
-  given FromString[Int]:
+  given FromString[Int] with
     def fromString(s: String): Option[Int] = tryo(s.toInt)
 
-  given FromString[Boolean]:
+  given FromString[Boolean] with
     def fromString(s: String): Option[Boolean] =
-      if "false".equals(s) then     Some(false)
+      if "false".equals(s) then Some(false)
       else if "true".equals(s) then Some(true)
-      else                       None
-}
+      else None

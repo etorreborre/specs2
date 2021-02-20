@@ -37,12 +37,12 @@ import scala.concurrent._, duration._
 trait DataTables extends ExpectationsCreation:
 
   /** @return a TableHeader with one heading only */
-  given Conversion[String, TableHeader]:
+  given Conversion[String, TableHeader] with
     def apply(a: String): TableHeader =
       new TableHeader(List(a))
 
   /** @return a DataRow with one value only */
-  given [T] as Conversion[T, DataRow1[T]]:
+  given [T]: Conversion[T, DataRow1[T]] with
     def apply(a: T): DataRow1[T] =
       DataRow1(a)
 
@@ -63,7 +63,7 @@ trait DataTables extends ExpectationsCreation:
       val result = allSuccess(results)
       val decorated =
         DecoratedResult(DataTable(titles, results), result.setMessage {
-           TextTable("" +: titles :+ "", results.map { case (line, r) => resultLine(line, AsResult(r)) }:_*).show
+           TextTable("" +: titles :+ "", results.map { case (line, r) => resultLine(line, AsResult(r)) }*).show
         })
       checkResultFailure(decorated)
       decorated
@@ -332,7 +332,7 @@ trait DataTables extends ExpectationsCreation:
       else app.pure(DecoratedResult(DataTable(titles, Seq[DataTableRow]()), Success("ok")))
   }
 
-  extension [A](f: Future[A]):
+  extension [A](f: Future[A])
     def run: A =
       Await.result(f, Duration.Inf)
 

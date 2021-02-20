@@ -63,7 +63,7 @@ def aProductWith(name: Matcher[JsonType],  price: Matcher[JsonType]): Matcher[St
   /("name").andHave(name) and /("price").andHave(price)
 
 def haveProducts(products: Matcher[String]*): Matcher[String] =
-  /("products").andHave(allOf(products:_*))
+  /("products").andHave(allOf(products*))
 
 json must haveProducts(
   aProductWith(name = "shirt", price = 10) and /("ids").andHave(exactly("1", "2", "3")),

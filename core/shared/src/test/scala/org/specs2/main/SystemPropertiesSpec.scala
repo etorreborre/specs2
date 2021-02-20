@@ -48,7 +48,7 @@ Get as
   def getIfElse2 = sp(colors).getIfElse("whitebgxxx", 1)(2) must ===(2)
 
   case class props(properties: (String, String)*) extends SystemProperties:
-    override def systemGetProperty(p: String) = Map(properties: _*).get(p)
+    override def systemGetProperty(p: String) = Map(properties*).get(p)
 
   def getAs1 =
     props("specs2.color" -> null).getPropertyAs[Boolean]("color") must beNone

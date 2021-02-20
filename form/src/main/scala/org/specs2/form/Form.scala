@@ -46,13 +46,13 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
   /** add a new Header with some fields */
   def th(hs: Seq[Field[_]]): Form = tr(Row.tr(hs.map((f: Field[_]) => FieldCell(f.header))))
   /** add a new Header, with at least one Field */
-  def th(h1: Field[_], hs: Field[_]*): Form = tr(Row.tr(FieldCell(h1.header), hs.map((f: Field[_]) => FieldCell(f.header)):_*))
+  def th(h1: Field[_], hs: Field[_]*): Form = tr(Row.tr(FieldCell(h1.header), hs.map((f: Field[_]) => FieldCell(f.header))*))
   /** add a new Header */
   def th(hs: Seq[String])(using p: ImplicitParam): Form = Use.ignoring(p)(th(hs.map(Field(_))))
   /** add a new Header, with at least one Field */
-  def th(h1: String, hs: String*): Form = th(Field(h1), hs.map(Field(_)):_*)
+  def th(h1: String, hs: String*): Form = th(Field(h1), hs.map(Field(_))*)
   /** add a new Row, with at least one Cell */
-  def tr(c1: Cell, cs: Cell*): Form = tr(Row.tr(c1, cs:_*))
+  def tr(c1: Cell, cs: Cell*): Form = tr(Row.tr(c1, cs*))
   /** add a new Row */
   def tr(row: Row): Form = newForm(title, this.rows :+ row, result)
   /** create new tabs in the Form */
@@ -126,16 +126,17 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
   /**
    * encapsulate this form into a Prop
    */
-  def toProp(label: String) =
+  def toProp(label: String): Prop[Form, Any] =
     lazy val executed = executeForm
     lazy val executedResult = executed.execute match
       case s @ Success(_,_) => s
       case Failure(_,_,_,_) => Failure("failed")
       case Error(_,_)       => Error("error")
       case other            => other
-    Prop[Form, Any](label, executed, (f: Form, s: Any) => executedResult) {
+
+    Prop(label, executed, (f: Form, s: Any) => executedResult).apply {
       if executedResult.isSuccess then
-        "success"
+        "success": Any
       else
         Form.toXml(executed)(using Arguments())
     }
@@ -172,8 +173,8 @@ case object Form:
     def otherFields[A](as: Seq[A]) = as.drop(1).map(Field(_))
 
     val headerRest = otherFields(table.titles) ++ (if table.isSuccess then Seq[Field[_]]() else Seq(Field("message")))
-    table.rows.foldLeft(th(firstField(table.titles), headerRest:_*)) { (res, cur) =>
-      val values = Row.tr(FieldCell(firstField(cur.cells)), otherFields(cur.cells).map(FieldCell(_)):_*)
+    table.rows.foldLeft(th(firstField(table.titles), headerRest*)) { (res, cur) =>
+      val values = Row.tr(FieldCell(firstField(cur.cells)), otherFields(cur.cells).map(FieldCell(_))*)
       res.tr {
         if cur.result.isSuccess then      values
         else if cur.result.isFailure then values.add(FieldCell(Field(cur.result.message)).setResult(cur.result))
@@ -181,13 +182,13 @@ case object Form:
       }
     }
   /** @return a Form with one row */
-  def tr(c1: Cell, cs: Cell*): Form = new Form().tr(c1, cs:_*)
+  def tr(c1: Cell, cs: Cell*): Form = new Form().tr(c1, cs*)
   /** @return a Form with one row */
   def tr(row: Row): Form = new Form().tr(row)
   /** @return a Form with one row and cells formatted as header cells */
-  def th(h1: Field[_], hs: Field[_]*): Form = new Form().th(h1, hs:_*)
+  def th(h1: Field[_], hs: Field[_]*): Form = new Form().th(h1, hs*)
   /** @return a Form with one row and cells formatted as header cells */
-  def th(h1: String, hs: String*): Form = new Form().th(h1, hs:_*)
+  def th(h1: String, hs: String*): Form = new Form().th(h1, hs*)
   /** create new tabs in the Form */
   def tabs[T](values: Seq[T])(f: T => Tabs) = new Form().tabs(values)(f)
   /** create new rows in the Form */
@@ -241,21 +242,21 @@ case object Form:
       c.xml(using args).toList
 
   /** a Form can be implicitly transformed to results */
-  given AsResult[Form]:
+  given AsResult[Form] with
     def asResult(f: =>Form): Result =
       f.execute
 
 trait HasForm[T]:
   def getForm(t: T): Form
 
-  extension (t: T):
+  extension (t: T)
     def form: Form =
       getForm(t)
 
-given HasForm[Form]:
+given HasForm[Form] with
   def getForm(f: Form): Form =
     f
 
-given [T <: {def form: Form}] as HasForm[T]:
+given [T <: {def form: Form}]: HasForm[T] with
   def getForm(t: T): Form =
     t.form

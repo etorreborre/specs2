@@ -16,7 +16,7 @@ import matcher.describe._
 trait Htmlx:
   outer =>
 
-  extension (ns: NodeSeq)(using nothing: Int = 0):
+  extension (ns: NodeSeq)(using nothing: Int = 0)
     def headers: NodeSeq =
      outer.headers(ns)
 
@@ -26,11 +26,11 @@ trait Htmlx:
     def addHeadersAnchors: NodeSeq =
       outer.headersAnchors.rewrite(ns).reduceNodes
 
-  extension (n: Node):
+  extension (n: Node)
     def addHeadersAnchors: NodeSeq =
       outer.headersAnchors.rewrite(n).headOption.getOrElse(NodeSeq.Empty)
 
-  extension (ns: Seq[Node])(using nothing: Int = 0):
+  extension (ns: Seq[Node])(using nothing: Int = 0)
     def updateHead(f: PartialFunction[Node, Node]): NodeSeq =
       outer.updateHead(ns)(f)
 
@@ -89,7 +89,7 @@ trait Htmlx:
       case HeaderTag(i) => Integer.valueOf(i).intValue
       case _            => -1
 
-  extension (s: String)(using nothing: Int = 0):
+  extension (s: String)(using nothing: Int = 0)
     def sanitize: String = outer.sanitize(s)
     def anchorName: String = outer.anchorName(s)
 
@@ -141,7 +141,7 @@ trait Htmlx:
         val ch = n.child
         val nch = applyTransformation(ch)
         if ch eq nch then n
-        else           Elem(n.prefix, n.label, n.attributes, n.scope, true, nch: _*)
+        else           Elem(n.prefix, n.label, n.attributes, n.scope, true, nch*)
 
     def rewrite(n: NodeSeq) = applyTransformation(n)
 

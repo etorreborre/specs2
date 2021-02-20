@@ -5,7 +5,7 @@ package core
 import execute._
 import process._
 import scala.concurrent._, duration._
-  
+
 class ExecutionSpec(val env: Env) extends Specification with OwnEnv { def is = s2"""
 
  A link is executed by getting the corresponding specification ref status in the Statistics store
@@ -42,7 +42,7 @@ class ExecutionSpec(val env: Env) extends Specification with OwnEnv { def is = s
    * HELPERS
    */
 
-  extension (e: Execution):
+  extension (e: Execution)
     def result(env: Env): Result =
       Await.result(e.startExecution(env).executedResult.runFuture(env.executionEnv), 10.seconds).result
 }

@@ -106,8 +106,8 @@ object SimpleTimer:
   }
 
   def timerFold[T] = new Fold[Id, T, SimpleTimer] {
-    given monad as Monad[Id] = Monad.idMonad
-    
+    given monad: Monad[Id] = Monad.idMonad
+
     type S = SimpleTimer
     def start = (new SimpleTimer).start
     def fold = (s, t) => s

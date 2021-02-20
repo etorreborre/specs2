@@ -7,7 +7,7 @@ package io
  */
 private[specs2]
 trait Paths:
-  extension (s: String):
+  extension (s: String)
     def unixize: String =
       s.replace("\\", "/")
 

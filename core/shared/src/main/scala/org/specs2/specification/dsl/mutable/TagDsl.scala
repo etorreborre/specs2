@@ -10,8 +10,8 @@ import core.{Fragments, Fragment}
  * Dsl for creating tags in a mutable specification
  */
 trait TagDsl extends org.specs2.specification.dsl.TagDsl with MutableFragmentBuilder { outer =>
-  override def tag(names: String*)    : Fragment   = addFragment(fragmentFactory.tag(names:_*))
-  override def section(names: String*)  : Fragment = addFragment(fragmentFactory.section(names:_*))
+  override def tag(names: String*)    : Fragment   = addFragment(fragmentFactory.tag(names*))
+  override def section(names: String*)  : Fragment = addFragment(fragmentFactory.section(names*))
 
   override def tag(tag: NamedTag)      : Fragment = addFragment(super.tag(tag))
   override def section(tag: NamedTag)  : Fragment = addFragment(super.section(tag))
@@ -24,7 +24,7 @@ trait TagDsl extends org.specs2.specification.dsl.TagDsl with MutableFragmentBui
   /**
    * This implicit allows to add tags and sections _after_ the examples
    */
-  extension (f: =>Fragment):
+  extension (f: =>Fragment)
     def tag(tag: String): Fragment =
       outer.tag(tag)
       f
@@ -44,7 +44,7 @@ trait TagDsl extends org.specs2.specification.dsl.TagDsl with MutableFragmentBui
   /**
    * This implicit allows to add tags and sections _after_ the examples
    */
-  extension (fs: =>Fragments):
+  extension (fs: =>Fragments)
     def tag(tag: NamedTag): Fragments =
       outer.tag(tag)
       fs

@@ -12,14 +12,14 @@ trait Listx:
   /**
    * Additional methods for nested lists
    */
-  extension [T](list: List[List[T]]):
+  extension [T](list: List[List[T]])
     def safeTranspose: List[List[T]] =
       transpose(list)
 
   /**
    * Additional methods for lists
    */
-  extension [T](list: List[T]):
+  extension [T](list: List[T])
     /**
      * @return a randomly mixed list
      */

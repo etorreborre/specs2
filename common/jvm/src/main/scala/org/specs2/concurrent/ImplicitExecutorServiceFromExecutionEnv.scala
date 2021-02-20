@@ -1,13 +1,13 @@
 package org.specs2.concurrent
 
 import java.util.concurrent._
-import scala.util.Not
+import scala.util.NotGiven
 
 trait ImplicitExecutorServiceFromExecutionEnv:
   /**
    * if an implicit execution environment is in scope, it can be used as an executor service
    */
-  given executionEnvToExecutorService(using ee: ExecutionEnv, not: Not[NoImplicitExecutorServiceFromExecutionEnv]) as ExecutorService =
+  given executionEnvToExecutorService(using ee: ExecutionEnv, not: NotGiven[NoImplicitExecutorServiceFromExecutionEnv]): ExecutorService =
     ee.executorService
 
 /**

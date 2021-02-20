@@ -594,12 +594,12 @@ case class Producer[F[_] : Monad : Safe, A](run: F[LazyList[F, A]]):
  */
 object Producer extends Producers:
 
-  given [F[_] : Monad : Safe, A] as Monoid[Producer[F, A]] = new Monoid[Producer[F, A]]:
+  given [F[_] : Monad : Safe, A]: Monoid[Producer[F, A]] with
     def zero: Producer[F, A] = done[F, A]
     def append(p1: Producer[F, A], p2: =>Producer[F, A]): Producer[F, A] =
       p1 append p2
 
-  given [F[_] : Monad : Safe] as Monad[Producer[F, *]] = new Monad[Producer[F, *]]:
+  given [F[_] : Monad : Safe]: Monad[Producer[F, *]] with
     def bind[A, B](fa: Producer[F, A])(f: A => Producer[F, B]): Producer[F, B] =
       fa.flatMap(f)
 
@@ -704,7 +704,7 @@ trait Producers:
       }
     }
 
-  extension [F[_], A, B, C](transducer: Transducer[F, A, B]):
+  extension [F[_], A, B, C](transducer: Transducer[F, A, B])
     def |>(other: Transducer[F, B, C]): Transducer[F, A, C] = (p: Producer[F, A]) =>
       other(transducer(p))
 

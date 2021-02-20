@@ -25,7 +25,7 @@ trait StringOutput extends Output:
    * otherwise it is added to the last message
    */
   override def printf(s: String, args: Any*): Unit =
-    val formatted = s.format(args:_*)
+    val formatted = s.format(args*)
     if formatted.endsWith("\n") then
       append(formatted.dropRight(1))
     else if msgs.isEmpty then

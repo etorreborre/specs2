@@ -29,8 +29,8 @@ case class Arguments (
   def ex: String                      = select.ex
   def include: String                 = select.include
   def exclude: String                 = select.exclude
-  def keep(tags: String*)             = select.keep(tags:_*)
-  def contain(tags: String*)          = select.contain(tags:_*)
+  def keep(tags: String*)             = select.keep(tags*)
+  def contain(tags: String*)          = select.contain(tags*)
   def hasFilter                       = select.hasFilter
   def was(s: String): Boolean         = select.was(s)
   def wasIsDefined: Boolean           = select.wasIsDefined
@@ -96,11 +96,11 @@ case class Arguments (
   /**
    * @return a new Arguments object with only some arguments on the command line
    */
-  def commandLineFilter(included: String*) = copy(commandLine = commandLine.filter(included:_*))
+  def commandLineFilter(included: String*) = copy(commandLine = commandLine.filter(included*))
   /**
    * @return a new Arguments object with some arguments removed from the command line
    */
-  def commandLineFilterNot(excluded: String*) = copy(commandLine = commandLine.filterNot(excluded:_*))
+  def commandLineFilterNot(excluded: String*) = copy(commandLine = commandLine.filterNot(excluded*))
 
   def verbose = commandLine.bool("verbose").isDefined
 
@@ -115,7 +115,7 @@ object Arguments extends Extract:
 
   /** create Arguments from a string by splitting it on spaces */
   def split(arguments: String): Arguments =
-    Arguments(arguments.split(" "):_*)
+    Arguments(arguments.split(" ")*)
 
   private[specs2] def extract(using arguments: Seq[String], systemProperties: SystemProperties): Arguments =
     new Arguments (
@@ -126,7 +126,7 @@ object Arguments extends Extract:
        commandLine   = CommandLine.extract
     )
 
-  given ArgumentsMonoid as Monoid[Arguments] = new Monoid[Arguments]:
+  given ArgumentsMonoid: Monoid[Arguments] with
     def append(a1: Arguments, a2: =>Arguments) = a1 overrideWith a2
     val zero = Arguments()
 

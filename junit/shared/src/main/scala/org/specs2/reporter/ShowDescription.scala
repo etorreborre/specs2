@@ -11,7 +11,7 @@ import scala.collection.JavaConverters._
  */
 trait ShowDescription:
 
-  given Show[Description]:
+  given Show[Description] with
     def show(d: Description): String =
       d.getDisplayName
 

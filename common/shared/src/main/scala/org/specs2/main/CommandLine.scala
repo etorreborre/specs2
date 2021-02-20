@@ -35,7 +35,7 @@ case class CommandLine(_arguments: Seq[String] = Seq()) extends ShowArgs:
 
   def valueOr(name: String, defaultValue: String) = value(name).getOrElse(defaultValue)
 
-  def map(name: String) = value(name).map(vs => Map(vs.split(",").map(v => (v.split("=")(0), v.split("=")(1))): _*))
+  def map(name: String) = value(name).map(vs => Map(vs.split(",").map(v => (v.split("=")(0), v.split("=")(1)))*))
   def mapOr(name: String, defaultValue: Map[String, String]) = map(name).getOrElse(defaultValue)
 
   def directory(name: String) = value(name).map(n => DirectoryPath.unsafe(new File(n).getAbsolutePath).asAbsolute)

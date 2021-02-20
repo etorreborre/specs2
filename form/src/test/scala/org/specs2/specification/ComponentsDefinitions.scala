@@ -37,7 +37,7 @@ trait ComponentsDefinitions:
     def hasSubsequence(ls: OrderLine*) = Form("Order").subsequence(lines, ls.toList)
     def hasSet(ls: OrderLine*) = Form("Order").set(lines, ls.toList)
     def hasSequence(ls: OrderLine*) = Form("Order").sequence(lines, ls.toList)
-    def form = hasSubset(lines:_*)
+    def form = hasSubset(lines*)
 
   case class OrderLine(name: String, quantity: Int):
     def form =

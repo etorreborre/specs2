@@ -259,7 +259,7 @@ end Fold
 
 object Fold:
 
-  given [M[_], A](using m: Monad[M]) as Monoid[Fold[M, A, Unit]] = new Monoid[Fold[M, A, Unit]]:
+  given [M[_], A](using m: Monad[M]): Monoid[Fold[M, A, Unit]] with
     def zero =
       Folds.fromStart(m.point(()))
 
@@ -285,7 +285,7 @@ object Fold:
    *
    *   val meanTimes2 = mean.map(_ * 2)
    */
-  given A[M[_], T](using m: Monad[M]) as Applicative[Fold[M, T, *]] = new Applicative[Fold[M, T, *]]:
+  given A[M[_], T](using m: Monad[M]): Applicative[Fold[M, T, *]] with
     type F[U] = Fold[M, T, U]
 
     def point[A](a: =>A): Fold[M, T, A] =

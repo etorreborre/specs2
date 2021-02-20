@@ -10,7 +10,7 @@ import create.FragmentsFactory
  */
 trait ReferenceDsl extends ReferenceCreation:
 
-  extension (alias: String):
+  extension (alias: String)
     def ~(s: SpecStructure): Fragment =
       fragmentFactory.link(SpecificationRef(s.header, s.arguments, alias = alias))
 
@@ -25,7 +25,7 @@ trait ReferenceDsl extends ReferenceCreation:
       lazy val spec = s.is
       fragmentFactory.link(SpecificationRef(spec.header, spec.arguments, alias = alias, tooltip = tooltip))
 
-  extension (alias: String):
+  extension (alias: String)
     def ~/(s: SpecStructure): Fragment =
       fragmentFactory.see(SpecificationRef(s.header, s.arguments, alias = alias))
 

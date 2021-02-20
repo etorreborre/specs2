@@ -177,10 +177,10 @@ class JUnitDescriptionSpec(val env: Env) extends Specification with JUnitDescrip
   )
 
   def descriptionIs(f: Fragment, fromIDE: Boolean)(tree: String*): Result =
-    descriptionIs(Fragments(f), fromIDE)(tree:_*)
+    descriptionIs(Fragments(f), fromIDE)(tree*)
 
   def descriptionIs(f: Fragment)(tree: String*): Result =
-    descriptionIs(Fragments(f))(tree:_*)
+    descriptionIs(Fragments(f))(tree*)
 
   def descriptionIs(fs: Fragments, fromIDE: Boolean = false)(tree: String*): Result =
     showDescriptionTree(titled(fs), fromIDE) must ===(tree.toList.mkString("\n"))

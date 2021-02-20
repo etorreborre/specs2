@@ -10,7 +10,7 @@ import DefaultFragmentFactory._
 
 object Arbitraries:
 
-  given FragmentArbitrary as Arbitrary[Fragment] =
+  given FragmentArbitrary: Arbitrary[Fragment] =
     Arbitrary {
       Gen.oneOf(
           genExample,
@@ -20,9 +20,9 @@ object Arbitraries:
         )
     }
 
-  given FragmentsArbitrary as Arbitrary[Fragments] =
+  given FragmentsArbitrary: Arbitrary[Fragments] =
     Arbitrary {
-      Gen.listOf(arbitrary[Fragment]).map(fs => Fragments(fs:_*))
+      Gen.listOf(arbitrary[Fragment]).map(fs => Fragments(fs*))
     }
 
   def genExample: Gen[Fragment] =

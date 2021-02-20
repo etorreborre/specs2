@@ -134,12 +134,12 @@ Monoid[Plane].zero
 
 case class Text(s: String)
 
-object Text {
+object Text:
   import fp.Monoid
 
-  given Monoid[Text]:
+  given Monoid[Text] with
     def zero = Text("")
     def append(t1: Text, t2: =>Text) = Text(t1.s+t2.s)
-}
+
 
 case class Plane()

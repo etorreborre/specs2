@@ -9,7 +9,7 @@ import java.lang.StringBuilder
 private[specs2]
 trait CamelCase:
 
-  extension (s: String):
+  extension (s: String)
     def camelCaseToWords: String =
       s.drop(1).foldLeft(new StringBuilder(s.take(1).map(_.toLower))) { (res, cur) =>
         res.append(if cur.isUpper then " " + cur.toLower else cur)

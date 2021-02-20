@@ -6,7 +6,7 @@ import Seqx._
 import LineComparison._
 import control._
 import producer._, Producer._
-import scala.util.Not
+import scala.util.NotGiven
 
 /**
  * This trait represents the difference between 2 "contents"
@@ -78,10 +78,9 @@ case class LinesContentDifference(
 
 object LinesContentDifference:
 
-  given LinesContentDifferenceIsEmpty as IsEmpty[LinesContentDifference] =
-    new IsEmpty[LinesContentDifference]:
-      def isEmpty(diff: LinesContentDifference): Boolean =
-        diff.isEmpty
+  given LinesContentDifferenceIsEmpty: IsEmpty[LinesContentDifference] with
+    def isEmpty(diff: LinesContentDifference): Boolean =
+      diff.isEmpty
 
 
 /**
@@ -90,6 +89,7 @@ object LinesContentDifference:
 sealed trait LineComparison:
   def line: NumberedLine
   def isDifference: Boolean = true
+
 case class SameLine(line: NumberedLine) extends LineComparison:
   override def isDifference = false
 case class AddedLine(line: NumberedLine) extends LineComparison
@@ -99,10 +99,9 @@ case class DifferentLine(line1: NumberedLine, line2: NumberedLine) extends LineC
 
 object LineComparison:
 
-  given lineComparisonOrdering as Ordering[LineComparison] =
-    new Ordering[LineComparison]:
-      def compare(x: LineComparison, y: LineComparison): Int =
-        NumberedLine.numberedLineOrdering.compare(x.line, y.line)
+  given lineComparisonOrdering: Ordering[LineComparison] with
+    def compare(x: LineComparison, y: LineComparison): Int =
+      NumberedLine.numberedLineOrdering.compare(x.line, y.line)
 
   def sameLine(line: NumberedLine): LineComparison = SameLine(line)
   def addedLine(line: NumberedLine): LineComparison = AddedLine(line)
@@ -135,10 +134,9 @@ case class NumberedLine(lineNumber: Int, line: String):
 
 object NumberedLine:
 
-  given numberedLineOrdering as Ordering[NumberedLine] =
-    new Ordering[NumberedLine]:
-      def compare(x: NumberedLine, y: NumberedLine): Int =
-        x.lineNumber.compare(y.lineNumber)
+  given numberedLineOrdering: Ordering[NumberedLine] with
+    def compare(x: NumberedLine, y: NumberedLine): Int =
+      x.lineNumber.compare(y.lineNumber)
 
 /**
  * A trait to filter results of a difference check
@@ -151,7 +149,7 @@ trait DifferenceFilter extends Function1[Seq[LineComparison], Seq[LineComparison
  *  10.differences == FirstNDifferencesFilter(10)
  */
 trait DifferenceFilters:
-  extension (n: Int)(using not: Not[NoDifferenceFilters])
+  extension (n: Int)(using not: NotGiven[NoDifferenceFilters])
     def difference = FirstDifferences(n: Int)
     def differences = FirstDifferences(n: Int)
 

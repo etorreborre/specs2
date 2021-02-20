@@ -11,14 +11,14 @@ trait Vectorx:
   /**
    * Additional methods for nested vectors
    */
-  extension [T](vector: Vector[Vector[T]]):
+  extension [T](vector: Vector[Vector[T]])
     def safeTranspose: Vector[Vector[T]] =
       transpose(vector)
 
   /**
    * Additional methods for vectors
    */
-  extension [T](vector: Vector[T]):
+  extension [T](vector: Vector[T])
     /**
      * @return a randomly mixed vector
      */
