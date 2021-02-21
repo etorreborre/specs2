@@ -63,7 +63,7 @@ object Xml:
 
   private def stacktraces(row: Row)(using args: Arguments): NodeSeq = row.cells.map(stacktraces).reduceNodes
 
-  private def stacktraces(e: Result with ResultStackTrace)(using args: Arguments): NodeSeq =
+  private def stacktraces(e: Result & ResultStackTrace)(using args: Arguments): NodeSeq =
     <div class="formstacktrace details" id={System.identityHashCode(e).toString}>
       {e.message.notNull+" ("+e.location(args.traceFilter)+")"}
       {e.stackTrace.map(st => <div>{st}</div>)}
@@ -96,7 +96,7 @@ case class TextCell(s: String, result: Option[Result] = None, decorator: Decorat
   def decoratorIs(d: Decorator) = copy(decorator = d)
 
   override def equals(other: Any) =
-    other match
+    other.asInstanceOf[Matchable] match
       case TextCell(s1, result1, _) => s == s1 && result == result1
       case _                        => false
 

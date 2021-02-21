@@ -106,24 +106,26 @@ trait HtmlBodyPrinter:
               </li>
 
             // if it is a data table as an auto-example
-            case DecoratedResult(table: DataTable, res) if Description.isCode(fragment.description) =>
-              <div class={"example "+res.statusName(using arguments)}>
-                {Form(table).toXml(using arguments)}<br/>
-              </div>
+            case r@DecoratedResult(t, res) =>
+              t.asInstanceOf[Matchable] match
+                case table: DataTable if Description.isCode(fragment.description) =>
+                  <div class={"example "+res.statusName(using arguments)}>
+                    {Form(table).toXml(using arguments)}<br/>
+                  </div>
 
-            // if it is a failed data table
-            case DecoratedResult(table: DataTable, res) if !res.isSuccess =>
-              <li class={"example "+res.statusName(using arguments)}>{show(e)}
-                {Form(table).toXml(using arguments)}<br/>
-              </li>
+                // if it is a failed data table
+                case table: DataTable if !res.isSuccess =>
+                  <li class={"example "+res.statusName(using arguments)}>{show(e)}
+                    {Form(table).toXml(using arguments)}<br/>
+                  </li>
 
-            case DecoratedResult(table: DataTable, res) =>
-              <li class="example success ok">{show(e)}</li>
+                case table: DataTable =>
+                  <li class="example success ok">{show(e)}</li>
 
-            case r =>
-              <li class="example info ok">{show(e)}<br/>
-                <message class="info">{r.message}</message>
-              </li>
+                case _ =>
+                  <li class="example info ok">{show(e)}<br/>
+                    <message class="info">{r.message}</message>
+                  </li>
 
         if level.incrementNext then
           <ul>{example}</ul>
@@ -170,7 +172,7 @@ trait HtmlBodyPrinter:
       { arguments.traceFilter(st).map(t => <stacktrace-elt>{t.toString.replace("$", ".")}<br/></stacktrace-elt>).foldLeft(NodeSeq.Empty)(_ ++ _) }
     </stacktrace>
 
-  def failureElement(element: String, f: Result with ResultStackTrace, description: Any, m: String, showTrace: Boolean, details: Details, arguments: Arguments) =
+  def failureElement(element: String, f: Result & ResultStackTrace, description: Any, m: String, showTrace: Boolean, details: Details, arguments: Arguments) =
 
     val message = <message class="failure">{m.notNull+" ("+f.location(arguments.traceFilter)+")"}</message>
     val detailedFailure = details match
@@ -216,7 +218,7 @@ trait HtmlBodyPrinter:
       {fullMessage}
       {trace}</li>
 
-  def errorElement(element: String, er: Result with ResultStackTrace, description: Any, m: String, arguments: Arguments) =
+  def errorElement(element: String, er: Result & ResultStackTrace, description: Any, m: String, arguments: Arguments) =
     <li class={s"$element error"}>{description}<br/>
       <li class ="error toggle" onclick={toggleElement(er)}>
         <message class="error">{m.notNull+" ("+er.location(arguments.traceFilter)+")"}</message>

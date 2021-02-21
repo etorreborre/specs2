@@ -42,7 +42,7 @@ case class Effect[T](label: String, value: Property[T], decorator: Decorator = D
 
   override def toString = label
 
-  override def equals(a: Any) = a match
+  override def equals(a: Any) = a.asInstanceOf[Matchable] match
     case Effect(l, v, _) => label == l && value == v
     case other           => false
 

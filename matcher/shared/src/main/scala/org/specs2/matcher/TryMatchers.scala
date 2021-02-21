@@ -1,8 +1,9 @@
 package org.specs2
 package matcher
 
-import util.*
+import language.adhocExtensions
 import scala.reflect.ClassTag
+import util.*
 import execute.ResultImplicits.*
 import org.specs2.matcher.describe.Diffable
 import text.NotNullStrings.*
@@ -16,7 +17,7 @@ trait TryMatchers:
 
   def beSuccessfulTry[T]: TrySuccessMatcher[T] =
     TrySuccessMatcher[T]()
-    
+
   def beASuccessfulTry[T]: TrySuccessMatcher[T] =
     beSuccessfulTry[T]
 

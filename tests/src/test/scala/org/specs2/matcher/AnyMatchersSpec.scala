@@ -3,7 +3,7 @@ package matcher
 
 import java.io.*
 import execute.*
-import scala.language.postfixOps
+import language.postfixOps
 
 class AnyMatchersSpec extends Specification with ResultMatchers with AnyMatchers with ValueChecks with TypecheckMatchers { def is = s2"""
 

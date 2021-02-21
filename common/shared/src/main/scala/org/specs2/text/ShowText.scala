@@ -3,7 +3,7 @@ package text
 
 import NotNullStrings.*
 
-case class Show1[T1](show1: T1 => String = (_:T1).notNull):
+open case class Show1[T1](show1: T1 => String = (_:T1).notNull):
   def show2[T2](show2: T2 => String): Show2[T1, T2] =
     Show2(show1, show2)
 
@@ -38,7 +38,7 @@ case class Show1[T1](show1: T1 => String = (_:T1).notNull):
     List(show1(t1))
 
 
-case class Show2[T1, T2](show1: T1 => String = (_:T1).notNull, show2: T2 => String = (_:T2).notNull):
+open case class Show2[T1, T2](show1: T1 => String = (_:T1).notNull, show2: T2 => String = (_:T2).notNull):
   def show3[T3](show3: T3 => String): Show3[T1, T2, T3] =
     Show3(show1, show2, show3)
 
@@ -70,7 +70,7 @@ case class Show2[T1, T2](show1: T1 => String = (_:T1).notNull, show2: T2 => Stri
     List(show1(t1), show2(t2))
 
 
-case class Show3[T1, T2, T3](show1: T1 => String = (_:T1).notNull, show2: T2 => String = (_:T2).notNull, show3: T3 => String = (_:T3).notNull):
+open case class Show3[T1, T2, T3](show1: T1 => String = (_:T1).notNull, show2: T2 => String = (_:T2).notNull, show3: T3 => String = (_:T3).notNull):
   def show4[T4](show4: T4 => String): Show4[T1, T2, T3, T4] =
     Show4(show1, show2, show3, show4)
 
@@ -99,7 +99,7 @@ case class Show3[T1, T2, T3](show1: T1 => String = (_:T1).notNull, show2: T2 => 
     List(show1(t1), show2(t2), show3(t3))
 
 
-case class Show4[T1, T2, T3, T4](show1: T1 => String = (_:T1).notNull, show2: T2 => String = (_:T2).notNull, show3: T3 => String = (_:T3).notNull, show4: T4 => String = (_:T4).notNull):
+open case class Show4[T1, T2, T3, T4](show1: T1 => String = (_:T1).notNull, show2: T2 => String = (_:T2).notNull, show3: T3 => String = (_:T3).notNull, show4: T4 => String = (_:T4).notNull):
   def show5[T5](show5: T5 => String): Show5[T1, T2, T3, T4, T5] =
     Show5(show1, show2, show3, show4, show5)
 
@@ -125,7 +125,7 @@ case class Show4[T1, T2, T3, T4](show1: T1 => String = (_:T1).notNull, show2: T2
     List(show1(t1), show2(t2), show3(t3), show4(t4))
 
 
-case class Show5[T1, T2, T3, T4, T5](show1: T1 => String = (_:T1).notNull, show2: T2 => String = (_:T2).notNull, show3: T3 => String = (_:T3).notNull, show4: T4 => String = (_:T4).notNull, show5: T5 => String = (_:T5).notNull):
+open case class Show5[T1, T2, T3, T4, T5](show1: T1 => String = (_:T1).notNull, show2: T2 => String = (_:T2).notNull, show3: T3 => String = (_:T3).notNull, show4: T4 => String = (_:T4).notNull, show5: T5 => String = (_:T5).notNull):
   def show6[T6](show6: T6 => String): Show6[T1, T2, T3, T4, T5, T6] =
     Show6(show1, show2, show3, show4, show5, show6)
 
@@ -148,7 +148,7 @@ case class Show5[T1, T2, T3, T4, T5](show1: T1 => String = (_:T1).notNull, show2
     List(show1(t1), show2(t2), show3(t3), show4(t4), show5(t5))
 
 
-case class Show6[T1, T2, T3, T4, T5, T6](show1: T1 => String = (_:T1).notNull, show2: T2 => String = (_:T2).notNull, show3: T3 => String = (_:T3).notNull, show4: T4 => String = (_:T4).notNull, show5: T5 => String = (_:T5).notNull, show6: T6 => String = (_:T6).notNull):
+open case class Show6[T1, T2, T3, T4, T5, T6](show1: T1 => String = (_:T1).notNull, show2: T2 => String = (_:T2).notNull, show3: T3 => String = (_:T3).notNull, show4: T4 => String = (_:T4).notNull, show5: T5 => String = (_:T5).notNull, show6: T6 => String = (_:T6).notNull):
   def show7[T7](show7: T7 => String): Show7[T1, T2, T3, T4, T5, T6, T7] =
     Show7(show1, show2, show3, show4, show5, show6, show7)
 
@@ -168,7 +168,7 @@ case class Show6[T1, T2, T3, T4, T5, T6](show1: T1 => String = (_:T1).notNull, s
     List(show1(t1), show2(t2), show3(t3), show4(t4), show5(t5), show6(t6))
 
 
-case class Show7[T1, T2, T3, T4, T5, T6, T7](show1: T1 => String = (_:T1).notNull, show2: T2 => String = (_:T2).notNull, show3: T3 => String = (_:T3).notNull, show4: T4 => String = (_:T4).notNull, show5: T5 => String = (_:T5).notNull, show6: T6 => String = (_:T6).notNull, show7: T7 => String = (_:T7).notNull):
+open case class Show7[T1, T2, T3, T4, T5, T6, T7](show1: T1 => String = (_:T1).notNull, show2: T2 => String = (_:T2).notNull, show3: T3 => String = (_:T3).notNull, show4: T4 => String = (_:T4).notNull, show5: T5 => String = (_:T5).notNull, show6: T6 => String = (_:T6).notNull, show7: T7 => String = (_:T7).notNull):
   def show8[T8](show8: T8 => String): Show8[T1, T2, T3, T4, T5, T6, T7, T8] =
     Show8(show1, show2, show3, show4, show5, show6, show7, show8)
 
@@ -185,7 +185,7 @@ case class Show7[T1, T2, T3, T4, T5, T6, T7](show1: T1 => String = (_:T1).notNul
     List(show1(t1), show2(t2), show3(t3), show4(t4), show5(t5), show6(t6), show7(t7))
 
 
-case class Show8[T1, T2, T3, T4, T5, T6, T7, T8](show1: T1 => String = (_:T1).notNull, show2: T2 => String = (_:T2).notNull, show3: T3 => String = (_:T3).notNull, show4: T4 => String = (_:T4).notNull, show5: T5 => String = (_:T5).notNull, show6: T6 => String = (_:T6).notNull, show7: T7 => String = (_:T7).notNull, show8: T8 => String = (_:T8).notNull):
+open case class Show8[T1, T2, T3, T4, T5, T6, T7, T8](show1: T1 => String = (_:T1).notNull, show2: T2 => String = (_:T2).notNull, show3: T3 => String = (_:T3).notNull, show4: T4 => String = (_:T4).notNull, show5: T5 => String = (_:T5).notNull, show6: T6 => String = (_:T6).notNull, show7: T7 => String = (_:T7).notNull, show8: T8 => String = (_:T8).notNull):
   def show9[T9](show9: T9 => String): Show9[T1, T2, T3, T4, T5, T6, T7, T8, T9] =
     Show9(show1, show2, show3, show4, show5, show6, show7, show8, show9)
 
@@ -199,7 +199,7 @@ case class Show8[T1, T2, T3, T4, T5, T6, T7, T8](show1: T1 => String = (_:T1).no
     List(show1(t1), show2(t2), show3(t3), show4(t4), show5(t5), show6(t6), show7(t7), show8(t8))
 
 
-case class Show9[T1, T2, T3, T4, T5, T6, T7, T8, T9](show1: T1 => String = (_:T1).notNull, show2: T2 => String = (_:T2).notNull, show3: T3 => String = (_:T3).notNull, show4: T4 => String = (_:T4).notNull, show5: T5 => String = (_:T5).notNull, show6: T6 => String = (_:T6).notNull, show7: T7 => String = (_:T7).notNull, show8: T8 => String = (_:T8).notNull, show9: T9 => String = (_:T9).notNull):
+open case class Show9[T1, T2, T3, T4, T5, T6, T7, T8, T9](show1: T1 => String = (_:T1).notNull, show2: T2 => String = (_:T2).notNull, show3: T3 => String = (_:T3).notNull, show4: T4 => String = (_:T4).notNull, show5: T5 => String = (_:T5).notNull, show6: T6 => String = (_:T6).notNull, show7: T7 => String = (_:T7).notNull, show8: T8 => String = (_:T8).notNull, show9: T9 => String = (_:T9).notNull):
   def show10[T10](show10: T10 => String): Show10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10] =
     Show10(show1, show2, show3, show4, show5, show6, show7, show8, show9, show10)
 
@@ -264,5 +264,3 @@ object ShowTextGenerator:
 
   def typesAsList(i: Int, letter: String = "T"): Seq[String] =
     (1 to i).map(letter+_)
-
-

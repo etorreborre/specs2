@@ -1,6 +1,7 @@
 package org.specs2
 package matcher
 
+import language.adhocExtensions
 import org.specs2.matcher.describe.Diffable
 
 /**

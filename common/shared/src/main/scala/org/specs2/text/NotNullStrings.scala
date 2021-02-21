@@ -23,7 +23,7 @@ trait NotNullStrings:
     def notNull: String =
       if a == null then "null"
       else
-        a match
+        a.asInstanceOf[Matchable] match
           case ar: Array[?] =>
             iterableNotNullMkString(ar.toSeq, ", ", "Array(", ")")
 
@@ -55,7 +55,7 @@ trait NotNullStrings:
         def sameKeyValueTypes(map: Map[?,?]) = sameElementTypes(map.keys) && sameElementTypes(map.values)
 
         tryOrElse {
-          a match
+          a.asInstanceOf[Matchable] match
             case ar: Array[?] =>
               if !showAll && sameElementTypes(ar) then
                 ar.map(a => quote(a.notNull)).mkString("Array(", ", ", "): Array["+ar(0).getClass.getName+"]")
@@ -109,9 +109,10 @@ trait NotNullStrings:
       else                evaluate(catchAllOrElse(evaluate(map.toString))(map.map { case (k, v) => (evaluate(k), evaluate(v)) }.toString))
 
   // display pairs nicely
-  val notNullPair: Any => String =
-    case (k, v) => s"$k -> $v"
-    case a      => a.notNull
+  val notNullPair: Any => String = (a: Any) =>
+    a.asInstanceOf[Matchable] match
+      case (k, v) => s"$k -> $v"
+      case a      => a.notNull
 
 private[specs2]
 object NotNullStrings extends NotNullStrings

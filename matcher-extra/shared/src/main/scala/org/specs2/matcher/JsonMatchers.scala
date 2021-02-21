@@ -38,28 +38,28 @@ trait JsonMatchers extends Expectations with JsonMatchersImplicits:
     protected def queries: Seq[JsonQuery]
     protected def check: Matcher[JsonType]
 
-    def anyValueToJsonType(value: Any): JsonType = value match
+    def anyValueToJsonType(value: Any): JsonType = value.asInstanceOf[Matchable] match
       case n if n == null => JsonNull
       case s: String      => JsonString(s)
       case d: Double      => JsonNumber(d)
       case b: Boolean     => JsonBoolean(b)
-      case (k: String, v) => JsonMap(Map(k -> v))
+      case (k, v) => JsonMap(Map(k.toString -> v))
 
     private def find(json: Option[JSONType], queries: List[JsonQuery]): Result =
       def checkRest(value: Any, rest: List[JsonQuery]) =
-        (value, rest) match
+        (value.asInstanceOf[Matchable], rest.asInstanceOf[Matchable]) match
           case (_, Nil)         => check(createExpectable(anyValueToJsonType(value)))
           case ((k, v), q :: _) =>
-            if q.selector.select(Map((k.notNull, v))).isDefined then
+            if rest(0).selector.select(Map((k.notNull, v))).isDefined then
               Success()
             else
-              Failure(s"found '${value.notNull}' but no value to select for ${q.name}")
+              Failure(s"found '${value.notNull}' but no value to select for ${rest(0).name}")
 
           case (v, q :: _) =>
-            if q.selector.select(List(v)).isDefined then
+            if rest(0).selector.select(List(v)).isDefined then
               Success()
             else
-              Failure(s"found '${value.notNull}' but no value to select for ${q.name}")
+              Failure(s"found '${value.notNull}' but no value to select for ${rest(0).name}")
 
       (json, queries) match
         case (None,    Nil)             => Success("ok")
@@ -70,36 +70,47 @@ trait JsonMatchers extends Expectations with JsonMatchersImplicits:
         // FIRST
         case (Some(JSONArray(list)), JsonQuery(First, selector) :: rest) =>
           selector.select(list) match
-            case Some(v: JSONType) => find(Some(v), rest)
-            case Some(v)           => checkRest(v, rest)
-            case None              => selectorNotFound(selector, list)
+            case Some(v) =>
+              v.asInstanceOf[Matchable] match
+                case j:JSONType => find(Some(j), rest)
+                case _ => checkRest(v, rest)
+            case None => selectorNotFound(selector, list)
 
         case (Some(JSONObject(map)), JsonQuery(First, selector) :: rest) =>
           selector.select(map) match
-            case Some((k,v: JSONType)) => find(Some(v), rest)
-            case Some((k,v))           => val r = checkRest((k, v), rest); if r.isSuccess then r else checkRest(v, rest)
-            case None                  => selectorNotFound(selector, map)
+            case Some((k, v)) =>
+              v.asInstanceOf[Matchable] match
+                case j: JSONType => find(Some(j), rest)
+                case _ => val r = checkRest((k, v), rest); if r.isSuccess then r else checkRest(v, rest)
+            case None =>
+              selectorNotFound(selector, map)
 
         // DEEP
         case (Some(JSONArray(list)), JsonQuery(Deep, selector) :: rest) =>
           selector.select(list) match
-            case Some(v: JSONType) => find(Some(v), rest)
-            case Some(v)           => checkRest(v, rest)
+            case Some(v) =>
+              v.asInstanceOf[Matchable] match
+                case j: JSONType => find(Some(j), rest)
+                case _ => checkRest(v, rest)
             case None    =>
-              list.to(LazyList).map {
-                case v: JSONType => find(Some(v), queries)
-                case v           => checkRest(v, queries)
+              list.to(LazyList).map { v =>
+                v.asInstanceOf[Matchable] match
+                  case j: JSONType => find(Some(j), queries)
+                  case _=> checkRest(v, queries)
               }.find(_.isSuccess)
                 .getOrElse(selectorNotFound(selector, list))
 
         case (Some(JSONObject(map)), JsonQuery(Deep, selector) :: rest) =>
           selector.select(map) match
-            case Some((k,v: JSONType)) => find(Some(v), rest)
-            case Some((k,v))           => checkRest(v, rest)
-            case None        =>
-              map.values.map {
-                case v: JSONType => find(Some(v), queries)
-                case v           => checkRest(v, queries)
+            case Some((k, v)) =>
+              v.asInstanceOf[Matchable] match
+                case j: JSONType => find(Some(j), rest)
+                case _ => checkRest(v, rest)
+            case None =>
+              map.values.map { v =>
+                v.asInstanceOf[Matchable] match
+                  case j: JSONType => find(Some(j), queries)
+                  case _ => checkRest(v, queries)
               }.find(_.isSuccess)
                 .getOrElse(selectorNotFound(selector, map))
 
@@ -275,10 +286,11 @@ trait JsonSelectors:
 
   case class JsonIntSelector(n: Int) extends JsonValueSelector:
     def select(values: List[Any]) =
-      values.find {
-        case d: Double => d.toInt == n
-        case i: Int    => i == n
-        case other     => false
+      values.find { v =>
+        v.asInstanceOf[Matchable] match
+          case d: Double => d.toInt == n
+          case i: Int    => i == n
+          case other     => false
       }
     def select(map: Map[String, Any]) = None
     def name = n.toString
@@ -286,10 +298,11 @@ trait JsonSelectors:
 
   case class JsonDoubleSelector(d: Double) extends JsonValueSelector:
     def select(values: List[Any]) =
-      values.find {
-        case db: Double => db == d
-        case i: Int     => i == d
-        case other     => false
+      values.find { v =>
+        v.asInstanceOf[Matchable] match
+          case db: Double => db == d
+          case i: Int     => i == d
+          case other     => false
       }
 
     def select(map: Map[String, Any]) = None

@@ -126,7 +126,7 @@ object LineComparison:
 
 case class NumberedLine(lineNumber: Int, line: String):
   override def equals(a: Any): Boolean =
-    a match
+    a.asInstanceOf[Matchable] match
       case NumberedLine(_, l) => l == line
       case _                  => false
 

@@ -11,6 +11,7 @@ import runner.*
 import specification.core.*
 import specification.process.DefaultExecutor
 import scala.collection.mutable.ListBuffer
+import language.adhocExtensions
 
 class SbtPrinterSpec(val env: Env) extends Specification with OwnEnv { def is = s2"""
 

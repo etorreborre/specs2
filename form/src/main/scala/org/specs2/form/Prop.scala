@@ -94,7 +94,7 @@ case class Prop[T, S](
   /** set a new Decorator */
   def decoratorIs(d: Decorator) = copy(decorator = d)
 
-  override def equals(other: Any) = other match
+  override def equals(other: Any) = other.asInstanceOf[Matchable] match
     case Prop(l, a, e, c, d) => label == l && actual == a && expected == e
     case _                   => false
 

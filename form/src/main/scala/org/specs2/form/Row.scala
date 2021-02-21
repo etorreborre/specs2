@@ -55,7 +55,7 @@ case class Row(private val cellList: List[Cell]) extends Executable:
   def add(cell: Cell) =
     copy(cellList = cellList :+ cell)
 
-  override def equals(a: Any) = a match
+  override def equals(a: Any) = a.asInstanceOf[Matchable] match
     case Row(c) => cells == c
     case other => false
   override def hashCode = cells.map(_.hashCode).sum

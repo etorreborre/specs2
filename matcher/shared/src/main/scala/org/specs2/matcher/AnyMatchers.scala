@@ -1,10 +1,11 @@
 package org.specs2
 package matcher
 
+import language.adhocExtensions
+import scala.reflect.ClassTag
 import matcher.describe.Diffable
 import text.Quote.*
 import collection.IsEmpty
-import scala.reflect.ClassTag
 import execute.*, Result.*
 
 /**
@@ -84,7 +85,7 @@ trait AnyMatchers:
     new Matcher[T]:
       def apply[S <: T](iterable: Expectable[S]) =
         // we need to pattern match on arrays otherwise we get a reflection exception
-        iterable.value match
+        iterable.value.asInstanceOf[Matchable] match
           case a: Array[?] =>
             result(a.isEmpty,
               iterable.description + " is not empty")

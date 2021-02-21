@@ -46,7 +46,7 @@ trait Seqx:
      */
     def difference(other: Seq[T], equality: (T, T) => Boolean = (_:T) == (_:T)): scala.collection.Seq[T] =
       case class D(t: T, equality: (T, T) => Boolean):
-        override def equals(o: Any) = o match
+        override def equals(o: Any) = o.asInstanceOf[Matchable] match
           case other: D => equality(t, other.t)
           case _        => false
         // always return the same hashcode because we can't guarantee that if equality(t1, t2) == true then t1.hashCode == t2.hashCode

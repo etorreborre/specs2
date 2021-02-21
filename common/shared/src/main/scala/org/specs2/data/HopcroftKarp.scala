@@ -2,6 +2,7 @@ package org.specs2
 package data
 
 import scala.collection.mutable
+import scala.util.control.NonLocalReturns.*
 
 /**
  * Hopcroft-Karp (https://en.wikipedia.org/wiki/Hopcroft%E2%80%93Karp_algorithm) algorithm for
@@ -39,17 +40,18 @@ object HopcroftKarp:
           }
       dist(nil) != Int.MaxValue
 
-    def dfs(v: Int): Boolean =
+    def dfs(v: Int): Boolean = returning {
       if v != -1 then
         edges.get(v).toSeq.flatten.foreach { u =>
           if dist(pair2(u)) == dist(v) + 1 && dfs(pair2(u)) then
             pair2.put(u, v)
             pair1.put(v, u)
-            return true
+            throwReturn(true)
         }
         dist.put(v, Int.MaxValue)
         false
       else true
+    }
 
     ((vertex1 ++ vertex2) :+ nil).foreach { v =>
       pair1.put(v, nil)
@@ -62,4 +64,3 @@ object HopcroftKarp:
           matching = matching + 1
       }
     pair1.toList.filterNot(_._2 == nil)
-

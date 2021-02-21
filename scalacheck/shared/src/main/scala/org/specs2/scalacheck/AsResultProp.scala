@@ -13,7 +13,7 @@ trait AsResultProp extends ScalaCheckPropertyCheck with AsResultPropLowImplicits
 
   given asResultToProp[R : AsResult]: Conversion[R, Prop] with
     def apply(r: R): Prop =
-      r match
+      r.asInstanceOf[Matchable] match
         case p: Prop => p
         case _ =>
           Prop.apply { (params: Gen.Parameters) =>

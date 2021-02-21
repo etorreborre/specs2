@@ -1,6 +1,7 @@
 package org.specs2
 package scalacheck
 
+import language.adhocExtensions
 import org.scalacheck.util.Pretty.*
 import org.scalacheck.util.{FreqMap, Pretty}
 import org.scalacheck.{Gen, Prop, Properties, Test}

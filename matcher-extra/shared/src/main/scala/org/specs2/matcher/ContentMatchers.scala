@@ -63,14 +63,15 @@ trait LinesContentBaseMatchers extends DifferenceFilters with Expectations with 
     def unordered                        = copy[L1, L2](ordered = false)
     def noColors                         = copy[L1, L2](colors = false)
 
-    protected def showDiffs(s: Seq[?]): String =
-      s.flatMap {
-        case SameLine(NumberedLine(n, l))    => List(s"  $n. $l")
-        case AddedLine(NumberedLine(n, l))   => List(color(s"+ $n. $l", green))
-        case DeletedLine(NumberedLine(n, l)) => List(color(s"- $n. $l", red))
-
-        case DifferentLine(NumberedLine(n1, l1), NumberedLine(n2, l2)) =>
-          List(color(s"+ $n1. $l1", green), color(s"- $n2. $l2", red))
+    protected def showDiffs(seq: Seq[?]): String =
+      seq.flatMap { s =>
+        s.asInstanceOf[Matchable] match
+          case SameLine(NumberedLine(n, l))    => List(s"  $n. $l")
+          case AddedLine(NumberedLine(n, l))   => List(color(s"+ $n. $l", green))
+          case DeletedLine(NumberedLine(n, l)) => List(color(s"- $n. $l", red))
+  
+          case DifferentLine(NumberedLine(n1, l1), NumberedLine(n2, l2)) =>
+            List(color(s"+ $n1. $l1", green), color(s"- $n2. $l2", red))
       }.map("    "+_).mkString("", "\n", "\n")
 
     protected def okMessage =

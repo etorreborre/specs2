@@ -47,7 +47,7 @@ case class Field[T](label: String, value: Property[T], decorator: Decorator = De
   /** use this Field as a header in a table */
   def header = this.center.bold.bkGrey
 
-  override def equals(a: Any) = a match
+  override def equals(a: Any) = a.asInstanceOf[Matchable] match
     case Field(l, v, _) => label == l && value == v
     case other          => false
   override def hashCode = label.hashCode + value.hashCode

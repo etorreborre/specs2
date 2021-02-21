@@ -93,7 +93,7 @@ class SimpleTimer extends HmsTimer[SimpleTimer]:
 
   override def toString = hms
 
-  override def equals(a: Any) = a match
+  override def equals(a: Any) = a.asInstanceOf[Matchable] match
     case s: SimpleTimer => true
     case other          => false
 

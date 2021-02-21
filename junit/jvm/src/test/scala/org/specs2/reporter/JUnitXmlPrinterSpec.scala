@@ -10,6 +10,7 @@ import control.*
 import main.Arguments
 import scala.reflect.*
 import scala.reflect.Selectable.*
+import language.adhocExtensions
 
 class JUnitXmlPrinterSpec(val env: Env) extends Specification with XmlMatchers with OwnEnv { def is = s2"""
 

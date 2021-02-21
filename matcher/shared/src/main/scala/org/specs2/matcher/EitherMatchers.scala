@@ -1,6 +1,7 @@
 package org.specs2
 package matcher
 
+import language.adhocExtensions
 import control.*
 import ImplicitParameters.{given, *}
 import describe.Diffable

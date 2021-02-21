@@ -129,16 +129,17 @@ case class TextPrinter(env: Env) extends Printer {
 
       result match {
         // special case for SpecificationRefs
-        case DecoratedResult(t: Stats, r) =>
-          printOther(show, r, args)
-        case DecoratedResult(t: DataTable, r) =>
-          // display the full table if it is an auto-example
-          if Description.isCode(description) then
-            printResult(indentText(r.message, indentation, indentationSize(args)), r.setMessage(""))
-          else
-            printResult(show, r)
+        case DecoratedResult(t, r) =>
+          t.asInstanceOf[Matchable] match
+            case s: Stats => printOther(show, r, args)
+            case d: DataTable =>
+              // display the full table if it is an auto-example
+              if Description.isCode(description) then
+                printResult(indentText(r.message, indentation, indentationSize(args)), r.setMessage(""))
+              else
+                printResult(show, r)
 
-        case other => printResult(show, other)
+        case other => printResult(show, result)
       }
     }
     else Nil
@@ -203,12 +204,12 @@ case class TextPrinter(env: Env) extends Printer {
   def indentationSize(args: Arguments): Int =
     args.commandLine.int("indentation").getOrElse(2)
 
-  def printMessage(args: Arguments, description: String, as: String => LogLine): Result with ResultStackTrace => List[LogLine] = { (result: Result with ResultStackTrace) =>
+  def printMessage(args: Arguments, description: String, as: String => LogLine): Result & ResultStackTrace => List[LogLine] = { (result: Result & ResultStackTrace) =>
     val margin = description.takeWhile(_ == ' ')+" "
     List(as(result.message.split("\n").mkString(margin, "\n"+margin, "") + location(result, args)))
   }
 
-  def printStacktrace(args: Arguments, print: Boolean, as: String => LogLine): Result with ResultStackTrace => List[LogLine] = { (result: Result with ResultStackTrace) =>
+  def printStacktrace(args: Arguments, print: Boolean, as: String => LogLine): Result & ResultStackTrace => List[LogLine] = { (result: Result & ResultStackTrace) =>
     if print then args.traceFilter(result.stackTrace).map(t => as(t.toString)).toList
     else Nil
   }

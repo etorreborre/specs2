@@ -85,16 +85,16 @@ trait ResultExecution:
    * execute a piece of code and return a result, either as a Left(failure) or a Right(value)
    */
   def executeEither[T, R](code: =>T)(using convert: T => R): Either[Result, R] =
-    val executed = trye(code)(identity)
+    val executed = trye(code.asInstanceOf[Matchable])(identity)
     executed match
-      case Left(FailureException(f))                         => Left(f)
-      case Left(SkipException(f))                            => Left(f)
-      case Left(PendingException(f))                         => Left(f)
-      case Left(ErrorException(f))                           => Left(f)
-      case Left(DecoratedResultException(f))                 => Left(f)
-      case Left(e)                                           => Left(Error(e))
-      case Right(r: Result)         if !r.isSuccess          => Left(r)
-      case Right(other)                                      => Right(convert(other))
+      case Left(FailureException(f))                 => Left(f)
+      case Left(SkipException(f))                    => Left(f)
+      case Left(PendingException(f))                 => Left(f)
+      case Left(ErrorException(f))                   => Left(f)
+      case Left(DecoratedResultException(f))         => Left(f)
+      case Left(e)                                   => Left(Error(e))
+      case Right(r: Result)         if !r.isSuccess  => Left(r)
+      case Right(other)                              => Right(convert(other.asInstanceOf[T]))
 
   /**
    * execute a result and return either as a Left(result) if something was thrown or a Right(result)

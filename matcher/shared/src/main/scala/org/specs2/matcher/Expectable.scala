@@ -115,7 +115,7 @@ object Expectable:
   private[specs2] def describeValue(value: =>Any, showValue: Option[String => String]) =
     showValue match
       case None =>
-        value match
+        value.asInstanceOf[Matchable] match
           case b: Boolean => "the value"
           case _          => value.notNull
 

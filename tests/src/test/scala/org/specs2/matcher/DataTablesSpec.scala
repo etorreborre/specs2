@@ -5,7 +5,7 @@ import scala.concurrent.*
 import sys.*
 import execute.*
 import specification.core.{Env, OwnExecutionEnv}
-import scala.language.postfixOps
+import language.postfixOps
 
 class DataTablesSpec(val env: Env) extends Specification with DataTables with ResultMatchers with OwnExecutionEnv { def is = s2"""
 

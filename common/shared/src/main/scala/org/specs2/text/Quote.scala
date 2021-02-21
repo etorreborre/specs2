@@ -14,7 +14,7 @@ trait Quote:
   def q(a: Any): String =
     if a == null then quote("null")
     else
-      a match
+      a.asInstanceOf[Matchable] match
         case option: Option[?]      => quote(option.notNull)
         case ar: Array[?]           => ar.notNull
         case map: Map[?,?]          => map.notNull

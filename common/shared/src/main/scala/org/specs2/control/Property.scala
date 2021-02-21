@@ -56,7 +56,7 @@ case class Property[T](value: () => Option[T], evaluated: Boolean = false, evalu
     else            this
 
   override def equals(other: Any) =
-    tryCollect(other) { case o: Property[?] => o.optionalValue == optionalValue }
+    tryCollect(other.asInstanceOf[Matchable]) { case o: Property[?] => o.optionalValue == optionalValue }
 
   override def hashCode =
     tryOr(optionalValue.hashCode)((_:Throwable).hashCode)

@@ -46,7 +46,7 @@ class BeforeAfterAroundSpec extends Specification { def is = s2"""
     },"around")
 
 
-  def executeContains(s: SpecificationStructure with StringOutput, messages: String*) =
+  def executeContains(s: SpecificationStructure & StringOutput, messages: String*) =
     val env = Env()
     try
       DefaultExecutor.executeFragments(s.structure.fragments)(env).traverse(_.executionResult).run(env.executionEnv)

@@ -275,7 +275,7 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
       previousResult.fold("")(", previous " + _) +
      ")"
 
-  override def equals(a: Any) = a match
+  override def equals(a: Any) = a.asInstanceOf[Matchable] match
     case other: Execution =>
       other.run.isDefined == run.isDefined &&
       other.timeout == timeout &&

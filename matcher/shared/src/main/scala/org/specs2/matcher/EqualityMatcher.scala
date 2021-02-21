@@ -31,7 +31,7 @@ class EqualityMatcher[T : Diffable](t: =>T) extends AdaptableMatcher[T]:
         result(diff.identical, ko(b.describe(diff.render)), expected.notNull, actual.notNull)
 
   private def failureDetailsFor(actual: Any, expected: Any): Option[Details] =
-    (actual, expected) match
+    (actual.asInstanceOf[Matchable], expected.asInstanceOf[Matchable]) match
       case (e1: Map[?, ?], e2: Map[?, ?]) => Some(FailureMapDetails(e1.toMap[Any, Any], e2.toMap[Any, Any]) )
       case (e1: Set[?], e2: Set[?]) => Some( FailureSetDetails(e1.toSet[Any], e2.toSet[Any]) )
       case (e1: Array[?], e2: Array[?]) => Some( FailureSeqDetails(e1.toSeq, e2.toSeq) )

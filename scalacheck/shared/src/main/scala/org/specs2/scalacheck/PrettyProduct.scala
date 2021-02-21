@@ -18,11 +18,12 @@ import org.scalacheck.util.Pretty
  */
 object PrettyProduct:
 
-  def toString[P <: Product](p: P): String =
-    p.productIterator.map {
-      case prod: Product => PrettyProduct.toString(p)
-      case s: String     => "\""+s+"\""
-      case other         => other.toString
-    }.mkString(p.productPrefix+"(", ", ", ")")
+  def toString[P <: Product](ps: P): String =
+    ps.productIterator.map { p =>
+      p.asInstanceOf[Matchable] match
+        case prod: Product => PrettyProduct.toString(ps)
+        case s: String     => "\""+s+"\""
+        case other         => other.toString
+    }.mkString(ps.productPrefix+"(", ", ", ")")
 
   def apply[P <: Product] = (p: P) => Pretty(_ => toString(p))

@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-import scala.language.postfixOps
+import language.postfixOps
 
 class BeHaveMatchersSpec extends Specification { def is = s2"""
 

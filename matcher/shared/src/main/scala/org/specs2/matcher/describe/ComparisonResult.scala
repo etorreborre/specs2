@@ -248,7 +248,7 @@ object ComparisonResultOps:
 
   extension (value: Any)
     def renderAny(showAll: Boolean = false): String =
-      value match
+      value.asInstanceOf[Matchable] match
         case v if showAll => v.notNullWithClass(showAll = true)
         case (k, v) => s"${k.render} -> ${v.render}"
         case x: String => q(x)

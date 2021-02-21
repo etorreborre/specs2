@@ -1,6 +1,7 @@
 package org.specs2
 package form
 
+import language.adhocExtensions
 import scala.xml.NodeSeq
 import main.Arguments
 import execute.Result

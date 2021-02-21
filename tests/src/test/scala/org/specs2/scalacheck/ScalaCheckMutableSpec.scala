@@ -10,6 +10,7 @@ import org.specs2.mutable.Specification
 import org.specs2.specification.core.{Env, OwnEnv}
 import org.specs2.specification.process.DefaultExecutor
 import org.specs2.matcher.ActionMatchers.*
+import language.adhocExtensions
 
 class ScalaCheckMutableSpec(val env: Env) extends Specification with ScalaCheck with ResultMatchers with OwnEnv:
 
@@ -25,4 +26,3 @@ class ScalaCheckMutableSpec(val env: Env) extends Specification with ScalaCheck 
     property("ints") =
       forAll(Gen.choose(0, 10))((i: Int) => i ==== i + 1)
   }
-

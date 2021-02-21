@@ -49,17 +49,18 @@ object JSONFormat:
    * provide your own with the toString calls on
    * JSONObject and JSONArray instances.
    */
-  val defaultFormatter : ValueFormatter =
-    case s : String => "\"" + quoteString(s) + "\""
-    case jo : JSONObject => jo.toString(defaultFormatter)
-    case ja : JSONArray => ja.toString(defaultFormatter)
-    case other => if other == null then "null" else other.toString
+  val defaultFormatter : ValueFormatter = (a: Any) =>
+    a.asInstanceOf[Matchable] match
+      case s : String => "\"" + quoteString(s) + "\""
+      case jo : JSONObject => jo.toString(defaultFormatter)
+      case ja : JSONArray => ja.toString(defaultFormatter)
+      case other => if other == null then "null" else other.toString
 
   /**
    * This function can be used to properly quote Strings
    * for JSON output.
    */
-  def quoteString (s : String) : String =
+  def quoteString (s : String): String =
     if s == null then "null"
     else s.map {
       case '"'  => "\\\""

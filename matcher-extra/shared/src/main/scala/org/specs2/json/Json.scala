@@ -22,7 +22,7 @@ trait Json:
 
   /** show JSON objects with null values shown as 'null' */
 
-  def showJson(a: Any): String = a match
+  def showJson(a: Any): String = a.asInstanceOf[Matchable] match
     case map: Map[?, ?]  => map.map { case (key, value) => s""""$key":${showJsonValue(value)}"""}.mkString("{", ",", "}")
     case (key, value)    => s"""{"$key":${showJsonValue(value)}}"""
     case JSONObject(map) => showJson(map)
@@ -37,7 +37,7 @@ trait Json:
    * show JSON values in maps or lists
    * if those values are other JSON objects, recurse with the showJson method
    */
-  def showJsonValue(a: Any): String = a match
+  def showJsonValue(a: Any): String = a.asInstanceOf[Matchable] match
     case null            => "null"
     case s: String       => "\""+s+"\""
     case d: Double       => d.toString

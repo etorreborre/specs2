@@ -284,7 +284,7 @@ object Result:
     def asResult(t: =>R): Result =
       ResultExecution.execute(t)
 
-  def resultOrSuccess(t: Any): Result = t match
+  def resultOrSuccess(t: Any): Result = t.asInstanceOf[Matchable] match
     case r: Result => r
     case _         => Success()
 
@@ -352,7 +352,7 @@ case class Success(m: String = "", exp: String = "")  extends Result(m, exp):
 
   override def toString = m
   override def equals(o: Any) =
-    o match
+    o.asInstanceOf[Matchable] match
       case Success(m2, e2) => m == m2 && exp == e2
       case _ => false
   override def hashCode = m.hashCode + exp.hashCode
@@ -394,7 +394,7 @@ case class Failure(m: String = "",
 
   override def toString = m
   override def equals(o: Any) =
-    o match
+    o.asInstanceOf[Matchable] match
       case Failure(m2, e2, _, _) => m == m2 && e == e2
       case _ => false
   override def hashCode = m.hashCode + e.hashCode
@@ -432,7 +432,7 @@ case class Error(m: String, t: Throwable) extends Result(s"${t.getClass.getName}
   def stackTrace = t.getFullStackTrace
 
   override def equals(o: Any) =
-    o match
+    o.asInstanceOf[Matchable] match
       case Error(m2, t2) => m == m2 && t.getMessage.notNull == t2.getMessage.notNull
       case _ => false
 

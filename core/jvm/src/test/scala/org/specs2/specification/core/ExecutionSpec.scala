@@ -26,9 +26,13 @@ class ExecutionSpec(val env: Env) extends Specification with OwnEnv { def is = s
     store.storeStatistics(getClass.getName, stats).runOption
 
     Execution.specificationStats(getClass.getName).result(env1) `must` beLike {
-      case DecoratedResult(s: Stats, r) =>
-        (s `must` ===(Stats(specs = 3, failures = 1, examples = 1))) `and`
-          (r.isSuccess `must` beFalse)
+      case DecoratedResult(t, r) =>
+        t.asInstanceOf[Matchable] match
+          case s: Stats =>
+            (s `must` ===(Stats(specs = 3, failures = 1, examples = 1))) `and`
+              (r.isSuccess `must` beFalse)
+          case other =>
+            ko("expected some stats, got "+other)
     }
 
   def withFailureException =

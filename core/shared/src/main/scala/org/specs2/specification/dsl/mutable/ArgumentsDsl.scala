@@ -3,8 +3,9 @@ package specification
 package dsl
 package mutable
 
-import main.*
 import scala.concurrent.duration.FiniteDuration
+import language.adhocExtensions
+import main.*
 import control.StackTraceFilter
 import text.Colors
 

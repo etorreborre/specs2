@@ -148,7 +148,7 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
 
   private def addLines(fs: Seq[Form]) = fs.foldLeft(this) { (res, cur) =>  res.addRows(cur) }
 
-  override def equals(a: Any) = a match
+  override def equals(a: Any) = a.asInstanceOf[Matchable] match
     case f: Form => f.title == title && rows == f.rows
     case _       => false
 

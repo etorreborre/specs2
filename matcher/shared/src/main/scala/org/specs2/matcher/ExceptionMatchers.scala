@@ -78,10 +78,10 @@ trait ExceptionMatchers extends ExpectationsCreation:
       checkExceptionValueWithMatcher(expectable, e, f, asString(klass), andFinally)
 
     private def asString(exception: Any) =
-      exception match
+      exception.asInstanceOf[Matchable] match
         case e: Class[?]   => e.getName
         case ex: Throwable => ex.getClass.getName + ": " + ex.getMessage.notNull
-        case other         => other.toString
+        case other         => exception.toString
 
     override def not: Matcher[Any] =
       new Matcher[Any]:
@@ -203,7 +203,7 @@ trait ExceptionMatchers extends ExpectationsCreation:
    */
   private def getException[E <: Throwable](value: =>Any): Option[Throwable] =
     catchAll {
-      value match
+      value.asInstanceOf[Matchable] match
         case e: Expectable[?] => e.value
         case _ => value
     }(identity).left.toOption

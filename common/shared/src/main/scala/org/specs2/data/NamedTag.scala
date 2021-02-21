@@ -33,7 +33,7 @@ trait NamedTag { outer =>
   }
 
   override def equals(o: Any) =
-    o match
+    o.asInstanceOf[Matchable] match
       case t: NamedTag => names.distinct.toSet == t.names.distinct.toSet
       case _           => false
 

@@ -102,7 +102,7 @@ object consoleRunner extends ClassRunnerMain:
  */
 object TextRunner extends ClassRunnerMain:
 
-  def run(spec: SpecificationStructure, arguments: Arguments = Arguments())(env: Env): PrinterLogger with StringOutput =
+  def run(spec: SpecificationStructure, arguments: Arguments = Arguments())(env: Env): PrinterLogger & StringOutput =
     val logger = PrinterLogger.stringPrinterLogger
     val env1 = env.setPrinterLogger(logger).setArguments(env.arguments.overrideWith(arguments))
     val loader = Thread.currentThread.getContextClassLoader
