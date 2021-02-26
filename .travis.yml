@@ -54,7 +54,7 @@ notifications:
 
 # matrix:
 #   include:
-#   - scala: 2.11.12
+#   - scala: 2.13.5
 #     jdk: openjdk8
 #     before_script:
 #       - curl https://raw.githubusercontent.com/scala-native/scala-native/master/scripts/travis_setup.sh | bash -

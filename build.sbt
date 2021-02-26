@@ -25,7 +25,7 @@ lazy val specs2 = project.in(file(".")).
     junitJS, scalacheckJS, mockJS
   )
 
-val scala211 = "2.11.12"
+val scala211 = "2.13.5"
 
 /** COMMON SETTINGS */
 lazy val specs2Settings = Seq(
