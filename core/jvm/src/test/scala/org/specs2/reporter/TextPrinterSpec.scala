@@ -114,8 +114,8 @@ presentation
   e2 $ko
 """ `contains`
     """|[info] presentation
-       |[info]   + e1
-       |[error]   x e2"""
+       |[info]  + e1
+       |[error] x e2"""
 
   def b3 = s2"""e1 ${Error("ouch")}""" `contains` """[error] ! e1"""
 
@@ -334,28 +334,28 @@ table ${
 object TextPrinterSpecification extends MustMatchers with FragmentsDsl with Debug:
 
   extension (fragment: Fragment)
-    def contains(contained: String): Boolean =
+    def contains(contained: String): Result =
       Fragments(fragment).contains(contained, identity)
 
-    def contains(contained: String, f: String => String): Boolean =
+    def contains(contained: String, f: String => String): Result =
       Fragments(fragment).contains(contained, f)
 
   extension (fragments: Fragments)
-    def contains(contained: String): Boolean =
-      SpecStructure.create(SpecHeader(classOf[TextPrinterSpec]), Arguments(), fragments).contains(contained, identity).isSuccess
+    def contains(contained: String): Result =
+      SpecStructure.create(SpecHeader(classOf[TextPrinterSpec]), Arguments(), fragments).contains(contained, identity)
 
-    def contains(contained: String, f: String => String): Boolean =
-      SpecStructure.create(SpecHeader(classOf[TextPrinterSpec]), Arguments(), fragments).contains(contained, f).isSuccess
+    def contains(contained: String, f: String => String): Result =
+      SpecStructure.create(SpecHeader(classOf[TextPrinterSpec]), Arguments(), fragments).contains(contained, f)
 
-    def doesntContain(contained: String, f: String => String = identity): Boolean =
-      SpecStructure.create(SpecHeader(classOf[TextPrinterSpec]), Arguments(), fragments).contains(contained, f).not.isSuccess
+    def doesntContain(contained: String, f: String => String = identity): Result =
+      SpecStructure.create(SpecHeader(classOf[TextPrinterSpec]), Arguments(), fragments).contains(contained, f).not
 
   extension (spec: SpecStructure)
-    def doesntContain(contained: String): Boolean =
-      spec.contains(contained).not.isSuccess
+    def doesntContain(contained: String): Result =
+      spec.contains(contained).not
 
-    def doesntContain(contained: String, f: String => String): Boolean =
-      spec.contains(contained, f).not.isSuccess
+    def doesntContain(contained: String, f: String => String): Result =
+      spec.contains(contained, f).not
 
     def contains(contained: String): Result =
       printed(spec) `must` contain(contained.stripMargin.replace(" ", "_"))

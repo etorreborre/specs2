@@ -169,7 +169,6 @@ object S2StringContext:
     execution: Execution,
     sourceCode: String,
     start: PositionLocation): Fragments =
-
     val texts = text.replace("\t", "  ").split("\n", -1).toSeq
 
     // we have an auto-example when the last line is empty

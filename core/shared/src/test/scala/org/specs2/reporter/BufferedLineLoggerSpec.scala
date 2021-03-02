@@ -3,11 +3,12 @@ package reporter
 
 import PrinterLogger.*
 
-class BufferedPrinterLoggerSpec extends Spec { def is = s2"""
+class BufferedPrinterLoggerSpec extends Spec:
+  def is = s2"""
 
- Newlines must be buffered $a1
+  Newlines must be buffered $a1
 
-"""
+  """
 
   def a1 =
     val logger = stringPrinterLogger
@@ -16,4 +17,3 @@ class BufferedPrinterLoggerSpec extends Spec { def is = s2"""
     logger.close()
 
     logger.messages `must` ===(Seq("[info] Hello world", "[info] How are you?"))
-}
