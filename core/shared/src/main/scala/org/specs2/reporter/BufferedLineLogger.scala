@@ -13,10 +13,10 @@ import text.AnsiColors
  */
 trait BufferedPrinterLogger extends PrinterLogger:
   def infoLog(msg: String)   : Unit = { add(msg); flushText() }
-  def errorLog(msg: String)  : Unit = { flushText(); errorLine(msg)  }
-  def failureLog(msg: String): Unit = { flushText(); failureLine(msg) }
-  def warnLog(msg: String)   : Unit = { flushText(); warnLine(msg) }
-  def newline()              : Unit = { infoLine(buffer.toString); buffer.clear }
+  def errorLog(msg: String)  : Unit = { errorLine(buffer.toString + msg)  }
+  def failureLog(msg: String): Unit = { failureLine(buffer.toString + msg) }
+  def warnLog(msg: String)   : Unit = { warnLine(buffer.toString + msg) }
+  def newline()              : Unit = { add("\n"); flushText(force = false) }
   def close()                : Unit = { flushText(force = true); () }
 
   protected def infoLine(msg: String): Unit

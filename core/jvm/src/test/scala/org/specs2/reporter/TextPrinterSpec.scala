@@ -114,8 +114,8 @@ presentation
   e2 $ko
 """ `contains`
     """|[info] presentation
-       |[info]  + e1
-       |[error] x e2"""
+       |[info]   + e1
+       |[error]   x e2"""
 
   def b3 = s2"""e1 ${Error("ouch")}""" `contains` """[error] ! e1"""
 
