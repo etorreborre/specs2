@@ -29,7 +29,7 @@ class DataTableShowSpec extends Specification with DataTables { def is = s2"""
            "+ | x | yy | (three) | ").mkString("\n")
 
   def oneOnly =
-    given s3: Show3[Int, Double, String] with
+    given s3: Show3[Int, Double, String] =
       Show3[Int, Double, String]().copy(show2 = (d: Double) => "y"*d.toInt)
 
     val table =

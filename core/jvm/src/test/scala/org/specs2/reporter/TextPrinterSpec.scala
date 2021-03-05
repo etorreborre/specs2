@@ -80,6 +80,7 @@ class TextPrinterSpec(val env: Env) extends Specification with OwnEnv { def is =
 
  Datatable must be properly indented                          $m1
  Nested datatables must be reported                           $m2
+
 """
   import TextPrinterSpecification.*
   val factory = fragmentFactory; import factory.*

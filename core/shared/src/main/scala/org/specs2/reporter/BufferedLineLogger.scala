@@ -28,18 +28,23 @@ trait BufferedPrinterLogger extends PrinterLogger:
 
   private def add(msg: String): Unit =
     buffer.append(msg)
+    // for debugging
+    // println("msg '"+msg.replace("\n", "_")+"'")
+    // println("buffer '"+buffer.toString.replace("\n", "_")+"'")
 
   private def flushText(force: Boolean = false): Unit =
     if force then
-      val lines = buffer.toString.split("\n")
+      val lines = buffer.toString.split("\n", -1)
       buffer.clear
       lines.foreach(infoLine)
     else
       val lines = buffer.toString.split("\n", -1)
-      if lines.size > 1 then
-        buffer.clear
-        lines.dropRight(1).foreach(infoLine)
-        add(lines.lastOption.getOrElse(""))
+      buffer.clear
+      lines.dropRight(1).foreach(infoLine)
+      lines.lastOption match
+        case Some("") => ()
+        case Some(other) => add(other)
+        case None => ()
 
   private def endsWith(message: String, string: String) =
     val nocolor = AnsiColors.removeColors(message)

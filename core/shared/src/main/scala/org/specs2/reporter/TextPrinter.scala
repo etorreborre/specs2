@@ -68,6 +68,7 @@ case class TextPrinter(env: Env) extends Printer {
       val title = if header.show.isEmpty then "" else " "+header.show.trim
 
       printNewLine ++
+      printNewLine ++
       List(
         s"Total for specification$title\n".info,
         stats.copy(timer = timer).display(using args).info) ++
