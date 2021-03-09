@@ -18,19 +18,19 @@ class ClassesSpec extends Spec { def is = s2"""
 
 
   def fromClass1 =
-    createInstance[Specification]("org.specs2.reflect.FromClassName", getClass.getClassLoader, Nil) `must` beOk
+    createInstance[Specification]("org.specs2.reflect.FromClassName", getClass.getClassLoader, Nil) must beOk
 
   def fromClass2 =
-    createInstance[Specification]("org.specs2.reflect.FromClassNameWithArg", getClass.getClassLoader, Nil) `must` beOk
+    createInstance[Specification]("org.specs2.reflect.FromClassNameWithArg", getClass.getClassLoader, Nil) must beOk
 
   def fromNestedClass =
-    createInstance[Specification]("org.specs2.reflect.ClassesSpec$FromNestedClass", getClass.getClassLoader, Nil) `must` beOk
+    createInstance[Specification]("org.specs2.reflect.ClassesSpec$FromNestedClass", getClass.getClassLoader, Nil) must beOk
 
   def fromObject =
-    createInstance[Specification]("org.specs2.reflect.FromObjectName$", getClass.getClassLoader, Nil) `must` beOk
+    createInstance[Specification]("org.specs2.reflect.FromObjectName$", getClass.getClassLoader, Nil) must beOk
 
   def instantiationError =
-    createInstance[Specification]("org.specs2.reflect.UserErrorSpecification", getClass.getClassLoader, Nil) `must`
+    createInstance[Specification]("org.specs2.reflect.UserErrorSpecification", getClass.getClassLoader, Nil) must
       beKo("cannot create an instance for class org.specs2.reflect.UserErrorSpecification")
 
   class FromNestedClass extends Specification  { def is = ok }

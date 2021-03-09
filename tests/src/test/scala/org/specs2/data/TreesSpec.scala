@@ -15,7 +15,7 @@ class TreesSpec extends Specification with ScalaCheck with ThrownExpectations { 
 
   def paths = prop { (treeAndPaths: TreeAndPaths) =>
     val TreeAndPaths(tree, paths) = treeAndPaths
-    tree.allPaths `must` ===(paths)
+    tree.allPaths must ===(paths)
   }
 
   given Arbitrary[TreeAndPaths] = Arbitrary {

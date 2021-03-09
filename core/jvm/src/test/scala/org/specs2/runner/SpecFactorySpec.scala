@@ -12,13 +12,13 @@ class SpecFactorySpec extends Specification with ActionMatchers { def is = s2"""
 """
 
   def objects1 =
-    SpecFactory.default.createSpecification("org.specs2.runner.RunnerSpecification$").runOption `must` beSome
+    SpecFactory.default.createSpecification("org.specs2.runner.RunnerSpecification$").runOption must beSome
 
   def objects2 =
-    SpecFactory.default.createSpecification("org.specs2.runner.RunnerSpecification").runOption `must` beSome
+    SpecFactory.default.createSpecification("org.specs2.runner.RunnerSpecification").runOption must beSome
 
   def classes =
-    SpecFactory.default.createSpecification("org.specs2.runner.SpecFactorySpec").runOption `must` beSome
+    SpecFactory.default.createSpecification("org.specs2.runner.SpecFactorySpec").runOption must beSome
 
 }
 

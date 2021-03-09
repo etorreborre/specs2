@@ -54,23 +54,23 @@ case class comp() extends MustMatchers with TestFileNames with ContentMatchers:
     def lines(f: File) = fs.readLines(FilePath.unsafe(f)).runOption.get
   }
 
-  def e1 =  (dir | f1).toFile `must` haveSameLinesAs((dir | f2).toFile)
-  def e2 = ((dir | f1).toFile, (dir | f2).toFile) `must` haveSameLines
-  def e3 = ((dir | f1).toFile, (dir | f2).toFile) `must` haveSameLines.unordered
+  def e1 =  (dir | f1).toFile must haveSameLinesAs((dir | f2).toFile)
+  def e2 = ((dir | f1).toFile, (dir | f2).toFile) must haveSameLines
+  def e3 = ((dir | f1).toFile, (dir | f2).toFile) must haveSameLines.unordered
 
-  def e4 = (dir | f1).toFile `must` containLines((dir | f4).toFile)
-  def e5 = (dir | f1).toFile `must` containLines((dir | f5).toFile).unordered
+  def e4 = (dir | f1).toFile must containLines((dir | f4).toFile)
+  def e5 = (dir | f1).toFile must containLines((dir | f5).toFile).unordered
 
   def e6 =
-    val message = (((dir | f6).toFile, (dir | f7).toFile) `must` haveSameLines.showOnly(1.difference).unordered).message
+    val message = (((dir | f6).toFile, (dir | f7).toFile) must haveSameLines.showOnly(1.difference).unordered).message
     val lines = message.split("\n").toSeq.map(s => removeColors(s)).mkString("\n")
     lines ====
       s"""|${(dir | f6).path} is not the same as ${(dir | f7).path}
           |    + 2. morning""".stripMargin
 
-  def e7 = ((dir | f1).toFile, Seq("hello", "beautiful", "world")) `must` haveSameLines
+  def e7 = ((dir | f1).toFile, Seq("hello", "beautiful", "world")) must haveSameLines
 
-  def e8 = ((dir | f8).toFile, (dir | f8).toFile) `must` haveSameLines
+  def e8 = ((dir | f8).toFile, (dir | f8).toFile) must haveSameLines
 
 
 trait TestFileNames:

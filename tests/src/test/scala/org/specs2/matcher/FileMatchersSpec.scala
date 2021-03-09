@@ -18,7 +18,7 @@ class FileMatchersSpec extends Specification with TestFiles with FileMatchers { 
  The PathMatchers trait provides matchers for paths
    beEqualToIgnoringSep checks if 2 paths are the same regardless of
    their separators
-   ${ "c:\\temp\\hello" `must` beEqualToIgnoringSep("c:/temp/hello") }
+   ${ "c:\\temp\\hello" must beEqualToIgnoringSep("c:/temp/hello") }
 
    beAnExistingPath checks if a path exists
      `okPath must beAnExistingPath`                                                                      ${fs().e1}
@@ -33,33 +33,33 @@ class FileMatchersSpec extends Specification with TestFiles with FileMatchers { 
      `setNotWritable(okPath) must not be aWritablePath`                                                  ${fs().e6}
 
    beAnAbsolutePath checks if a path is absolute
-   ${ "/tmp" `must` beAnAbsolutePath }
-   ${ "./tmp" `must` not(beAnAbsolutePath) }
+   ${ "/tmp" must beAnAbsolutePath }
+   ${ "./tmp" must not(beAnAbsolutePath) }
 
    "beAHiddenPath checks if a path is hidden
-   ${ ".tmp" `must` beAHiddenPath }
-   ${ "/tmp" `must` not(beAHiddenPath) }
+   ${ ".tmp" must beAHiddenPath }
+   ${ "/tmp" must not(beAHiddenPath) }
 
    beAFilePath checks if a path is a file
-   ${ okPath `must` beAFilePath }
-   ${ dirPath `must` not(beAFilePath) }
+   ${ okPath must beAFilePath }
+   ${ dirPath must not(beAFilePath) }
 
    beADirectorPath checks if a path is a directory
-   ${ dirPath `must` beADirectoryPath }
-   ${ okPath `must` not(beADirectoryPath) }
+   ${ dirPath must beADirectoryPath }
+   ${ okPath must not(beADirectoryPath) }
 
    havePathName checks if a path has a given name
-   ${ okPath `must` havePathName("file.txt") }
-   ${ okPath `must` not(havePathName("name.txt")) }
+   ${ okPath must havePathName("file.txt") }
+   ${ okPath must not(havePathName("name.txt")) }
 
    haveAsAbsolutePath checks if a path has a given absolute path
-   ${ okPath `must` haveAsAbsolutePath(new File(okPath).getAbsolutePath) }
+   ${ okPath must haveAsAbsolutePath(new File(okPath).getAbsolutePath) }
 
    haveAsCanonicalPath checks if a path has a given canonical path
-   ${ "c:/tmp/../dir" `must` haveAsCanonicalPath("c:/dir") }
+   ${ "c:/tmp/../dir" must haveAsCanonicalPath("c:/dir") }
 
    haveParentPath checks if a path has a given parent path
-   ${ okPath `must` haveParentPath(dirPath) }
+   ${ okPath must haveParentPath(dirPath) }
 
    listPaths checks if a path has a given list of children                                               ${fs().e7}
 
@@ -70,28 +70,28 @@ class FileMatchersSpec extends Specification with TestFiles with FileMatchers { 
    beWritable checks if a file is writable                                                               ${fs().e11}
 
    beAbsolute checks if a file is absolute
-   ${ file("/tmp") `must` beAbsolute }
+   ${ file("/tmp") must beAbsolute }
 
    beHidden checks if a file is hidden
-   ${ file(".tmp") `must` beHidden }
+   ${ file(".tmp") must beHidden }
 
    beAFile checks if a file is a file
-   ${ file(okPath) `must` beAFile }
+   ${ file(okPath) must beAFile }
 
    beADirectory checks if a file is a directory
-   ${ file(dirPath) `must` beADirectory }
+   ${ file(dirPath) must beADirectory }
 
    haveName checks if a file has a given name
-   ${ file(okPath) `must` haveName(new File(okPath).getName) }
+   ${ file(okPath) must haveName(new File(okPath).getName) }
 
    haveAbsolutePath checks if a file has a given absolute path
-   ${ file(okPath) `must` haveAbsolutePath(new File(okPath).getAbsolutePath) }
+   ${ file(okPath) must haveAbsolutePath(new File(okPath).getAbsolutePath) }
 
    haveCanonicalPath checks if a file has a given canonical path
-   ${ file("c:/tmp/../dir/test.txt") `must` haveCanonicalPath("c:/dir/test.txt") }
+   ${ file("c:/tmp/../dir/test.txt") must haveCanonicalPath("c:/dir/test.txt") }
 
    haveParent checks if a file has a given parent path
-   ${ file("c:/tmp/dir/test.txt") `must` haveParent("c:/tmp/dir") }
+   ${ file("c:/tmp/dir/test.txt") must haveParent("c:/tmp/dir") }
 
    haveList checks if a file has a given list of children ${fs().e12}
                                                                                                                         """
@@ -100,18 +100,18 @@ class FileMatchersSpec extends Specification with TestFiles with FileMatchers { 
 
 case class fs() extends TestFiles with FileMatchers:
   def is = ""
-  def e1 = okPath `must` beAnExistingPath
-  def e2 = missingPath `must` not(beAnExistingPath)
-  def e3 = setReadable(okPath, true) `must` beAReadablePath
-  def e4 = setReadable(okPath, false) `must` not(beAReadablePath)
-  def e5 = setWritable(okPath, true) `must` beAWritablePath
-  def e6 = setWritable(okPath, false) `must` not(beAWritablePath)
-  def e7 = dirPath `must` listPaths("file.txt")
-  def e8 = file(okPath) `must` exist
-  def e9 = file(missingPath) `must` not(exist)
-  def e10 = file(setReadable(okPath, true)) `must` beReadable
-  def e11 = file(setWritable(okPath, true)) `must` beWritable
-  def e12 = file(dirPath) `must` haveList("file.txt")
+  def e1 = okPath must beAnExistingPath
+  def e2 = missingPath must not(beAnExistingPath)
+  def e3 = setReadable(okPath, true) must beAReadablePath
+  def e4 = setReadable(okPath, false) must not(beAReadablePath)
+  def e5 = setWritable(okPath, true) must beAWritablePath
+  def e6 = setWritable(okPath, false) must not(beAWritablePath)
+  def e7 = dirPath must listPaths("file.txt")
+  def e8 = file(okPath) must exist
+  def e9 = file(missingPath) must not(exist)
+  def e10 = file(setReadable(okPath, true)) must beReadable
+  def e11 = file(setWritable(okPath, true)) must beWritable
+  def e12 = file(dirPath) must haveList("file.txt")
 
 
 

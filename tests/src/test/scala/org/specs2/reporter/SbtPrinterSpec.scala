@@ -31,7 +31,7 @@ class SbtPrinterSpec(val env: Env) extends Specification with OwnEnv { def is = 
 
     def e1 =
       printer.print((new HelloWorldSpec { override def is = "title".title ^ "\ntext" }).structure).runAction(ownEnv.specs2ExecutionEnv)
-      eventually(logger.messages `must` contain (beMatching("\\[INFO\\].*title.*")))
+      eventually(logger.messages must contain (beMatching("\\[INFO\\].*title.*")))
 
     def e2 =
       val executed = DefaultExecutor.executeSpec((new HelloWorldSpec).is, ownEnv)
@@ -89,15 +89,15 @@ class SbtPrinterSpec(val env: Env) extends Specification with OwnEnv { def is = 
 
     def e1 =
       executeAndPrintHelloWorldUnitSpec
-      handler.events `must` contain(eventWithStatus(Status.Success))
+      handler.events must contain(eventWithStatus(Status.Success))
 
     def e2 =
       executeAndPrintHelloWorldUnitSpec
-      handler.events `must` contain(eventWithDurationGreaterThanOrEqualTo(0))
+      handler.events must contain(eventWithDurationGreaterThanOrEqualTo(0))
 
     def e3 =
       executeAndPrintHelloWorldUnitSpec
-      handler.events `must` contain(eventWithNameMatching("HW::The 'Hello world' string should::contain 11 characters"))
+      handler.events must contain(eventWithNameMatching("HW::The 'Hello world' string should::contain 11 characters"))
 
     def executeAndPrintHelloWorldUnitSpec =
       val executed = DefaultExecutor.executeSpec((new HelloWorldUnitSpec).is.fragments, env)
@@ -130,6 +130,6 @@ class SbtPrinterSpec(val env: Env) extends Specification with OwnEnv { def is = 
     beGreaterThanOrEqualTo(d) ^^ ((_: Event).duration())
 
   def eventWithNameMatching(n: String): Matcher[Event] =
-    beLike[Selector] { case ts: TestSelector => ts.testName `must` beMatching(n) } ^^ ((_: Event).selector())
+    beLike[Selector] { case ts: TestSelector => ts.testName must beMatching(n) } ^^ ((_: Event).selector())
 
 }

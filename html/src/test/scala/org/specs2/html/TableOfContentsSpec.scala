@@ -22,14 +22,14 @@ class TableOfContentsSpec(val env: Env) extends Specification with HtmlDocuments
 
 """
 
-  def toc1 = addToc(aBodyWithHeaders) `must` \\("li") \\ ("ul") \ ("li")
+  def toc1 = addToc(aBodyWithHeaders) must \\("li") \\ ("ul") \ ("li")
   //    <li><a href="http://specs2.org/#title_123456">title</a>
   //      <ul><li><a href="http://specs2.org/#a+header_123456">a header</a></li>
   //      </ul>
   //    </li>
-  def toc2 = addToc(aBodyWithHeaders) `must` \\ ("li") \ ("a") \> "Table of conten..."
-  def toc3 = addToc(aBodyWithHeaders) `must` \\ ("li") \ ("a", "href" -> "UserGuide.html")
-  def toc4 = addToc(aBodyWithHeaders) `must` \\ ("li", "id")
+  def toc2 = addToc(aBodyWithHeaders) must \\ ("li") \ ("a") \> "Table of conten..."
+  def toc3 = addToc(aBodyWithHeaders) must \\ ("li") \ ("a", "href" -> "UserGuide.html")
+  def toc4 = addToc(aBodyWithHeaders) must \\ ("li", "id")
 
   def addToc(body: NodeSeq) =
     val page = SpecHtmlPage(SpecStructure.empty(getClass), outDir | "UserGuide.html", outDir, body.toString)

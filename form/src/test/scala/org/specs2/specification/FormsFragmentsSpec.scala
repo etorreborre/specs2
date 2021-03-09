@@ -22,21 +22,21 @@ class FormsFragmentsSpec(val env: Env) extends Specification with Forms with Thr
                                                                                      """
 
   object frags extends Customers:
-    def e1_1 = execute("This is the expected customer" ^ form).size `must` ===(2)
-    def e1_2 = execute("This is the expected customer" ^ form).map(_.description.show).apply(1) `must` ===(s"$formText")
-    def e1_3 = execute(s2"This is the expected customer $form").map(_.description.show).apply(1) `must` ===(s"$formText")
+    def e1_1 = execute("This is the expected customer" ^ form).size must ===(2)
+    def e1_2 = execute("This is the expected customer" ^ form).map(_.description.show).apply(1) must ===(s"$formText")
+    def e1_3 = execute(s2"This is the expected customer $form").map(_.description.show).apply(1) must ===(s"$formText")
 
     def e1_4 =
       val spec = execute(s2"This is the expected customer $eric").map(_.description.show)
-      spec(0).toString `must` ===("This is the expected customer ")
-      spec(1).toString `must` ===(s"$formText")
+      spec(0).toString must ===("This is the expected customer ")
+      spec(1).toString must ===(s"$formText")
 
     def e2 =
       val example = "the customer must be as expected" ! form
-      example.startExecution(ownEnv).executionResult.map(_.isSuccess) `must` beOkWithValue(true)
+      example.startExecution(ownEnv).executionResult.map(_.isSuccess) must beOkWithValue(true)
     def e3 =
       val example = DefaultExecutor.execute("the customer must be as expected" ! failedForm)(ownEnv)
-      example.executionResult.map(_.message) `must` beOkWithValue("20 != 18")
+      example.executionResult.map(_.message) must beOkWithValue("20 != 18")
 
     def execute(spec: SpecStructure) =
       DefaultExecutor.executeFragments(spec.fragments)(ownEnv)

@@ -12,7 +12,7 @@ class ResultLogicalCombinatorsSpec extends Spec with ResultMatchers with TypedEq
  ${ success `or` success }
  ${ success `or` failure }
  ${ failure `or` success }
- ${ (failure `or` failure) `must` beFailing }
+ ${ (failure `or` failure) must beFailing }
  ${ success `or` failure `or` failure }
  ${ failure `or` success `or` failure }
  ${ failure `or` failure `or` success }
@@ -21,30 +21,30 @@ class ResultLogicalCombinatorsSpec extends Spec with ResultMatchers with TypedEq
  ${ success `or` failure `or` failure }
  ${ failure `or` success `or` success }
  ${ success `or` success `or` success }
- ${ (failure `or` failure `or` failure) `must` beFailing }
- ${ (success `or` Error("")) `must` beSuccessful  }
+ ${ (failure `or` failure `or` failure) must beFailing }
+ ${ (success `or` Error("")) must beSuccessful  }
 
  Even when some of them throw FailureExceptions
- ${ (success `or` failure1) `must` beSuccessful }
- ${ (failure1 `or` success) `must` beSuccessful }
- ${ (failure1 `or` failure1) `must` beFailing }
- ${ (success `or` failure1 `or` failure1) `must` beSuccessful }
- ${ (failure1 `or` success `or` failure1) `must` beSuccessful }
- ${ (failure1 `or` failure1 `or` success) `must` beSuccessful }
- ${ (success `or` success `or` failure1) `must` beSuccessful }
- ${ (success `or` failure1 `or` success) `must` beSuccessful }
- ${ (failure1 `or` success `or` success) `must` beSuccessful }
+ ${ (success `or` failure1) must beSuccessful }
+ ${ (failure1 `or` success) must beSuccessful }
+ ${ (failure1 `or` failure1) must beFailing }
+ ${ (success `or` failure1 `or` failure1) must beSuccessful }
+ ${ (failure1 `or` success `or` failure1) must beSuccessful }
+ ${ (failure1 `or` failure1 `or` success) must beSuccessful }
+ ${ (success `or` success `or` failure1) must beSuccessful }
+ ${ (success `or` failure1 `or` success) must beSuccessful }
+ ${ (failure1 `or` success `or` success) must beSuccessful }
 
  And results
  ${ (pending1 `and` pending2) === pending1 }
 
  A result can be evaluated only when a condition is true
- ${ failure.when(false) `must` beSuccessful }
- ${ var r = success; { r = failure1; r }.when(false); r `must` beSuccessful }
+ ${ failure.when(false) must beSuccessful }
+ ${ var r = success; { r = failure1; r }.when(false); r must beSuccessful }
 
  A result can be evaluated only when a condition is false
- ${ failure.unless(true) `must` beSuccessful }
- ${ var r = success; { r = failure1; r }.unless(true); r `must` beSuccessful }
+ ${ failure.unless(true) must beSuccessful }
+ ${ var r = success; { r = failure1; r }.unless(true); r must beSuccessful }
 
 """
 

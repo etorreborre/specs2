@@ -19,14 +19,14 @@ class DefaultStackTraceFilterSpec extends Spec with ThrownExpectations { def is 
 
   def e1 = {
     val stacktrace = (new UserExpectations).failure1.exception.getStackTrace.toIndexedSeq
-    DefaultStackTraceFilter(stacktrace).map(_.toString) `must` not(containMatch(".*specs2.*")) }
+    DefaultStackTraceFilter(stacktrace).map(_.toString) must not(containMatch(".*specs2.*")) }
 
   def e2 =
     val huge = new Exception
     huge.setStackTrace(Array.fill(1200)(new StackTraceElement("class", "method", "file", 1)))
     val filtered = DefaultStackTraceFilter(huge)
-    filtered.getStackTrace `must` haveSize(be_<(1000))
-    filtered.getStackTrace.toSeq `must` containMatch("TRUNCATED")
+    filtered.getStackTrace must haveSize(be_<(1000))
+    filtered.getStackTrace.toSeq must containMatch("TRUNCATED")
 
   def e3 =
     (new UserExpectationsLike).failure1 match
@@ -34,7 +34,7 @@ class DefaultStackTraceFilterSpec extends Spec with ThrownExpectations { def is 
       // the right line must be set as the failure
       // location
       case f: Failure =>
-        DefaultStackTraceFilter(f.stackTrace).map(_.toString) `must` containMatch("UserExpectations.scala:17")
+        DefaultStackTraceFilter(f.stackTrace).map(_.toString) must containMatch("UserExpectations.scala:17")
       case _ => ok
 
   // see issue #533
@@ -44,7 +44,7 @@ class DefaultStackTraceFilterSpec extends Spec with ThrownExpectations { def is 
       // the right line must be set as the failure
       // location
       case f: Failure =>
-        DefaultStackTraceFilter(f.stackTrace).map(_.toString) `must` containMatch("UserExpectations.scala:20")
+        DefaultStackTraceFilter(f.stackTrace).map(_.toString) must containMatch("UserExpectations.scala:20")
       case _ => ok
 
 

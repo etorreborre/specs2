@@ -40,7 +40,7 @@ class WikipediaBddSpec extends Specification with Online { def is = s2"""
   def e1 =
     val pages = Wikipedia.getPages("BDD")
 
-    { pages `must` contain((_:Page) `must` mention("specs2")) } `continueWith`
+    { pages must contain((_:Page) must mention("specs2")) } `continueWith`
       pagesSpec(pages)
 
   def pagesSpec(pages: Seq[Page]): Fragments =
@@ -55,7 +55,7 @@ class WikipediaBddSpec extends Specification with Online { def is = s2"""
   def authorExample(link: HtmlLink) =
     s2"""
   The page at ${link.getName}
-    contains the name torreborre ${ link.getLinkedPage `must` mention("torreborre") }"""
+    contains the name torreborre ${ link.getLinkedPage must mention("torreborre") }"""
 
   def mention(name: String): Matcher[Page] = (page: Page) => (true, "ok")
 

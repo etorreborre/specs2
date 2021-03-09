@@ -16,4 +16,4 @@ class BufferedPrinterLoggerSpec extends Spec:
     logger.infoLog("How are you?")
     logger.close()
 
-    logger.messages `must` ===(Seq("[info] Hello world", "[info] How are you?"))
+    logger.messages must ===(Seq("[info] Hello world", "[info] How are you?"))

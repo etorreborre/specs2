@@ -19,7 +19,7 @@ class NotifierSpec extends Specification { def is = s2"""
 """
 
   def a1 =
-    report(new NotifierSpec1).messages.mkString("\n") `must` ===(
+    report(new NotifierSpec1).messages.mkString("\n") must ===(
     List(
       "[start  ] NotifierSpec1",
       "[step   ]",
@@ -46,11 +46,11 @@ class NotifierSpec extends Specification { def is = s2"""
 
   def a3 =
     "there is a failure for the table" ==> {
-      report(new NotifierSpecWithTables).messages `must` contain((m: String) => m `must` contain("failure"))
+      report(new NotifierSpecWithTables).messages must contain((m: String) => m must contain("failure"))
     }
 
   def a4 =
-    report(new NotifierSpec2).messages.mkString("\n") `must` ===(
+    report(new NotifierSpec2).messages.mkString("\n") must ===(
       List(
         "[start  ] NotifierSpec2",
         "[open   ] group1",
@@ -64,7 +64,7 @@ class NotifierSpec extends Specification { def is = s2"""
         "[end    ] NotifierSpec2").mkString("\n"))
 
   def a5 =
-    report(new NotifierSpec3).messages.mkString("\n") `must` ===(
+    report(new NotifierSpec3).messages.mkString("\n") must ===(
       List(
         "[start  ] NotifierSpec3",
         "[open   ] group1",
@@ -92,7 +92,7 @@ class NotifierSpec extends Specification { def is = s2"""
 class NotifierSpecWithTables extends Specification with Tables {def is = s2"""
   a table ${
     "a" | "b" | "e"  |>
-    "a" ! "b" ! "AB" | { (a, b, e) => a + b `must` ===(e) }
+    "a" ! "b" ! "AB" | { (a, b, e) => a + b must ===(e) }
   }
   """
 }

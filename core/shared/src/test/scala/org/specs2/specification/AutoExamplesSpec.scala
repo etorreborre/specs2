@@ -21,18 +21,18 @@ class AutoExamplesSpec(using ee: ExecutionEnv) extends org.specs2.Spec with Data
 
 """
 
-  def e1 = trimExpression("`method`") `must` ===("method")
-  def e2 = trimExpression("`method`(p1)") `must` ===("method")
-  def e3 = trimExpression("`method`(p1, p2)") `must` ===("method")
+  def e1 = trimExpression("`method`") must ===("method")
+  def e2 = trimExpression("`method`(p1)") must ===("method")
+  def e3 = trimExpression("`method`(p1, p2)") must ===("method")
 
-  def dt1 = firstExampleDescription("text" ^ datatableOk) `must` contain(
+  def dt1 = firstExampleDescription("text" ^ datatableOk) must contain(
   """|"a"  | "b" | "c" |>
      |2    ! 2   ! 4   |
      |1    ! 1   ! 2   | { (a, b, c) =>  a + b must ===(c) }""".stripMargin)
 
   def m1 =
     val spec = new org.specs2.mutable.Specification with DataTables {
-      eg { 1 `must` ===(1) }
+      eg { 1 must ===(1) }
 
       eg { true }
 
@@ -41,10 +41,10 @@ class AutoExamplesSpec(using ee: ExecutionEnv) extends org.specs2.Spec with Data
       eg {
         "a"  | "b" | "c" |>
         2    ! 2   ! 4   |
-        1    ! 1   ! 2   | { (a, b, c) =>  a + b `must` ===(c) }
+        1    ! 1   ! 2   | { (a, b, c) =>  a + b must ===(c) }
       }
     }
-    spec.is.fragmentsList(ee).filter(Fragment.isExample) `must` haveSize(4)
+    spec.is.fragmentsList(ee).filter(Fragment.isExample) must haveSize(4)
 
   def firstExampleDescription(fs: Fragments) =
     fs.fragmentsList(ee).filter(Fragment.isExample).head.description.show

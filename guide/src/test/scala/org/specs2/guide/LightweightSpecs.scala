@@ -62,9 +62,9 @@ When creating expectations:
 
  Feature                                          | Trait                                           | Comment
  ------------------------------------------------ | ----------------------------------------------- | ----------------------
- Use `should` for expectations                    | `org.specs2.matcher.ShouldMatchers`             |
+ Use should for expectations                    | `org.specs2.matcher.ShouldMatchers`             |
  Describe expectations with `==>`                 | `org.specs2.matcher.ExpectationsDescription`    |
- Describe expectations with `aka` and `must`      | `org.specs2.matcher.MustExpectations`           |
+ Describe expectations with `aka` and must      | `org.specs2.matcher.MustExpectations`           |
  Use `list must have size(3)`                     | `org.specs2.matcher.TraversableMatchers`        | For each matcher you want to use after `be/have/not`, you need to mix-in the corresponding matchers trait
  Use matchers in `contain` or `beSome` matchers   | `org.specs2.matcher.ValueChecks`                |
  Use `===`, `====` to check for equality          | `org.specs2.matcher.TypedEqual`                 |

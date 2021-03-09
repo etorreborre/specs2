@@ -18,7 +18,7 @@ class ScalaCheckMutableSpec(val env: Env) extends Specification with ScalaCheck 
     val action: Action[Result] =
       DefaultExecutor.executeFragments(s2"fail here $failingProperties")(ownEnv).map(_.executionResult).head
 
-    action `must` beOk((r: Result) => r `must` beFailing)
+    action must beOk((r: Result) => r must beFailing)
   }
 
 

@@ -32,13 +32,13 @@ class EventuallyResultsSpec extends Spec with ResultMatchers:
 
   "Any object convertible to a result can be used with eventually" >> {
     val iterator = List(false, false, true).iterator
-    eventually(iterator.next) `must` beSuccessful
+    eventually(iterator.next) must beSuccessful
   }
 
   "Even if a result throws an exception it must be evaluated 'retries' times only" >> {
     var eval = 0
-    def r = { eval += 1; 1 `must` ===(2) }
+    def r = { eval += 1; 1 must ===(2) }
 
-    eventually(retries = 3, sleep = 100.millis)(r) `must` beFailing
-    eval `must` ===(3)
+    eventually(retries = 3, sleep = 100.millis)(r) must beFailing
+    eval must ===(3)
   }

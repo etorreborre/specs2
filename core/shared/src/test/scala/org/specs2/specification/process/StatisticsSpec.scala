@@ -21,5 +21,5 @@ class StatisticsSpec(ee: ExecutionEnv) extends Specification { def is = s2"""
     def foldStats(r: Result): Stats =
       Statistics.fold.run(List(Fragment(NoText, Execution.executed(r)))).run(ee)
 
-    Seq(success, failure, pending, skipped) `must` contain((r: Result) => foldStats(r) === Stats.empty.withResult(r)).forall
+    Seq(success, failure, pending, skipped) must contain((r: Result) => foldStats(r) === Stats.empty.withResult(r)).forall
 }

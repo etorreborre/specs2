@@ -38,10 +38,10 @@ class RandomExecutionSpec(val env: Env) extends Specification with ThrownExpecta
     DefaultExecutor.runSpecificationAction(spec, ownEnv).runAction(ownEnv.executionEnv).map { _ =>
         val allExamples = allOf((0 until n).flatMap(i => List(">>> ex"+i, "<<< ex"+i))*)
 
-        messages `must` haveSize(20)
-        messages `must` contain(allExamples)
+        messages must haveSize(20)
+        messages must contain(allExamples)
         "the examples are executed randomly" ==> {
-          messages `must` not (contain(allExamples).inOrder)
+          messages must not (contain(allExamples).inOrder)
         }
         "the examples are executed sequentially" ==> {
           messages.map(_.take(6)) === (0 until n).flatMap(_ => List(">>> ex", "<<< ex"))
@@ -63,15 +63,15 @@ class RandomExecutionSpec(val env: Env) extends Specification with ThrownExpecta
     DefaultExecutor.runSpecificationAction(spec, ownEnv).runAction(ownEnv.executionEnv).map { _ =>
       val allExamples = allOf[String]((1 to n).map("ex"+_)*)
 
-      messages `must` haveSize(10)
-      messages `must` contain(allExamples)
+      messages must haveSize(10)
+      messages must contain(allExamples)
 
       "the examples are executed randomly" ==> {
-        messages `must` not(contain(allExamples).inOrder)
+        messages must not(contain(allExamples).inOrder)
       }
 
       Result.foreach(1 to 5) { i =>
-        messages.indexOf("ex"+i) `must` be_<(messages.indexOf("ex"+(i+5)))
+        messages.indexOf("ex"+i) must be_<(messages.indexOf("ex"+(i+5)))
       }
     }.fold(execute.Error(_), identity)
 

@@ -180,7 +180,7 @@ n = 0
       { (code, markdown) => code === markdown}
 
   def effects1 =
-    snippet[Unit](sys.error("boom")) `must` not(throwAn[Exception])
+    snippet[Unit](sys.error("boom")) must not(throwAn[Exception])
 
   def effects2 =
     var i = 0

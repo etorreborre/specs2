@@ -9,7 +9,7 @@ import Json.*
 class JsonSpec extends Specification with ScalaCheck:
 
   "showJson must be robust against null values" >> prop { (json: JSONType) =>
-    parse(showJson(json)) `must` beSome
+    parse(showJson(json)) must beSome
   }.set(maxSize = 10)
 
 

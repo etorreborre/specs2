@@ -28,7 +28,7 @@ class MySpecification extends org.specs2.mutable.Specification {
 }
 }}
 
-$warn You might get clashes with `should` which can also be used to declare expectations on strings:
+$warn You might get clashes with should which can also be used to declare expectations on strings:
 ```
 class MySpecification extends org.specs2.mutable.Specification {
   "this" should {
@@ -39,7 +39,7 @@ class MySpecification extends org.specs2.mutable.Specification {
 }
 ```
 
-The easiest work around in that case is to use `must` for the expectation:${snippet{
+The easiest work around in that case is to use must for the expectation:${snippet{
 class MySpecification extends org.specs2.mutable.Specification {
   "this" should {
     "compile now" in {

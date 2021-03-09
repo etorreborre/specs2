@@ -35,7 +35,7 @@ the execution of the specification
     val logger = stringPrinterLogger
     val env = Env(printerLogger = logger)
     runSpec(AcquireErrorExample(), printer = Some(TextPrinter(env)))
-    logger.messages `must` contain(allOf(=~("resource unavailable"), =~("o e1"), =~("o e2")))
+    logger.messages must contain(allOf(=~("resource unavailable"), =~("o e1"), =~("o e2")))
 
   def runSpec(s: SpecificationStructure, printer: Option[Printer] = None) =
     val env: Env = Env(arguments = Arguments(), printerLogger = NoPrinterLogger)

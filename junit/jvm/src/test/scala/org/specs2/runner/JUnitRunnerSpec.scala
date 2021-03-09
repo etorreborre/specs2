@@ -23,7 +23,7 @@ class JUnitRunnerSpec(val env: Env) extends Specification with OwnEnv { def is =
 
   def allSpecifications =
     runSpecification(new JUnitRunner(classOf[MainJUnitSpecification])) { messages =>
-      messages `must` contain("run started LinkedJUnitSpec", "run started MainJUnitSpecification")
+      messages must contain("run started LinkedJUnitSpec", "run started MainJUnitSpecification")
     }
 
   def onlyExamples =
@@ -63,8 +63,8 @@ class JUnitRunnerSpec(val env: Env) extends Specification with OwnEnv { def is =
 
     val _ = testEnv.executionEnv.executorService // simulates starting an environment
 
-    runner.getDescription(testEnv) `must` throwA[UserException]
-    testEnv.executionEnv.isShutdown `must` beTrue
+    runner.getDescription(testEnv) must throwA[UserException]
+    testEnv.executionEnv.isShutdown must beTrue
 
   private def runSpecification[T](runner: JUnitRunner)(assertMessages: ListBuffer[String] => T): T =
     val (notifier, messages) = createNotifier()
@@ -126,10 +126,10 @@ class JUnitWithBeforeAfterSpecSpecification extends Specification with BeforeAft
 class JUnitPendingSpecification extends mutable.Specification:
   "Below examples should" >> {
     "fail" >> {
-      1 `must` ===(2)
+      1 must ===(2)
     }
     "be pending" >> {
-      1 `must` ===(2)
+      1 must ===(2)
     }.pendingUntilFixed
   }
 

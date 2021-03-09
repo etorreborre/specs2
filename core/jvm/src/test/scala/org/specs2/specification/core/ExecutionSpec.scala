@@ -25,12 +25,12 @@ class ExecutionSpec(val env: Env) extends Specification with OwnEnv { def is = s
     val stats =  Stats(specs = 2, failures = 1, examples = 1)
     store.storeStatistics(getClass.getName, stats).runOption
 
-    Execution.specificationStats(getClass.getName).result(env1) `must` beLike {
+    Execution.specificationStats(getClass.getName).result(env1) must beLike {
       case DecoratedResult(t, r) =>
         t.asInstanceOf[Matchable] match
           case s: Stats =>
-            (s `must` ===(Stats(specs = 3, failures = 1, examples = 1))) `and`
-              (r.isSuccess `must` beFalse)
+            (s must ===(Stats(specs = 3, failures = 1, examples = 1))) `and`
+              (r.isSuccess must beFalse)
           case other =>
             ko("expected some stats, got "+other)
     }
@@ -40,7 +40,7 @@ class ExecutionSpec(val env: Env) extends Specification with OwnEnv { def is = s
     Execution.withEnv(_ => {throw new FailureException(failure); success}).result(env) === failure
 
   def withFatalException =
-    Execution.withEnv(_ => {throw new java.lang.NoSuchMethodError("boom"); success}).result(env) `must` throwAn[ExecutionException]
+    Execution.withEnv(_ => {throw new java.lang.NoSuchMethodError("boom"); success}).result(env) must throwAn[ExecutionException]
 
   /**
    * HELPERS

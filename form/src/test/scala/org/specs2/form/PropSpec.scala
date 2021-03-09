@@ -64,7 +64,7 @@ Execution
   val noValues: Prop[String, String] = Prop("name")
   val actualOnly: Prop[Int, Int] = Prop(18)
   val expectedOnly: Prop[Int, Int] = Prop("", Property(), Property(18))
-  val constrained: Prop[String, String] = Prop("name", "eric", (s1: String, s2: String) => s1 `must` contain(s2))
+  val constrained: Prop[String, String] = Prop("name", "eric", (s1: String, s2: String) => s1 must contain(s2))
   val withMatcher: Prop[String, String] = Prop("name", "eric", contain(_:String))
 
   def creation1 = noValues.label                       === "name"
@@ -79,7 +79,7 @@ Execution
   def display2 = Prop("name", actual = Property("eric")).toString          === "name: eric"
   def display3 = Prop("name", Property("eric"), Property("eric")).toString === "name: eric"
 
-  def update1 = Prop("name", "eric")("paolo").expected.toOption `must` ===(Some("paolo"))
+  def update1 = Prop("name", "eric")("paolo").expected.toOption must ===(Some("paolo"))
 
   def execute1  = noValues.execute                             === Pending("No expected value")
   def execute2  = actualOnly.execute                           === Pending("No expected value")

@@ -42,25 +42,25 @@ Get as
 
   val colors = Map("specs2.whitebg" -> "")
 
-  def getIf1 = sp(colors).getIf("whitebg", 1) `must` beSome(1)
-  def getIf2 = sp(colors).getIf("whitebgxxx", 1) `must` beNone
-  def getIfElse1 = sp(colors).getIfElse("whitebg", 1)(2) `must` ===(1)
-  def getIfElse2 = sp(colors).getIfElse("whitebgxxx", 1)(2) `must` ===(2)
+  def getIf1 = sp(colors).getIf("whitebg", 1) must beSome(1)
+  def getIf2 = sp(colors).getIf("whitebgxxx", 1) must beNone
+  def getIfElse1 = sp(colors).getIfElse("whitebg", 1)(2) must ===(1)
+  def getIfElse2 = sp(colors).getIfElse("whitebgxxx", 1)(2) must ===(2)
 
   case class props(properties: (String, String)*) extends SystemProperties:
     override def systemGetProperty(p: String) = Map(properties*).get(p)
 
   def getAs1 =
-    props("specs2.color" -> null).getPropertyAs[Boolean]("color") `must` beNone
+    props("specs2.color" -> null).getPropertyAs[Boolean]("color") must beNone
   def getAs2 =
-    props("specs2.color" -> "true").getPropertyAs[Boolean]("color") `must` beSome(
+    props("specs2.color" -> "true").getPropertyAs[Boolean]("color") must beSome(
       true
     )
   def getAs3 =
     props("specs2.color" -> "false")
-      .getPropertyAs[Boolean]("color") `must` beSome(false)
+      .getPropertyAs[Boolean]("color") must beSome(false)
   def getAs4 =
-    props("specs2.other" -> "false").getPropertyAs[Boolean]("color") `must` beNone
+    props("specs2.other" -> "false").getPropertyAs[Boolean]("color") must beNone
 }
 
 /**

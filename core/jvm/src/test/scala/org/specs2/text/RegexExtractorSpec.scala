@@ -30,6 +30,6 @@ Exceptions are thrown when the extraction doesn't work
   def extraction5 = extract1("hello world")=== "hello world"
   def extraction6 = extract1("hello |{world}", group = "^+?".r) === "hello |{world}"
 
-  def exception1 = extract2("hello |{world}", group = REGEX) `must` throwA[FailureException]
-  def exception2 = extract1("hello |{world}", group = new Regex("][")) `must` throwAn[ErrorException]
+  def exception1 = extract2("hello |{world}", group = REGEX) must throwA[FailureException]
+  def exception2 = extract1("hello |{world}", group = new Regex("][")) must throwAn[ErrorException]
 }

@@ -21,13 +21,13 @@ class SpecificationsFinderSpec extends Spec { def is = s2"""
   val fileSystem = FileSystem(ConsoleLogger()); import fileSystem.*
 
   def e1 =
-    filePaths(DirectoryPath.unsafe(base) / "src" / "test" / "scala", "**/*.scala", verbose = false) `must` findFiles
+    filePaths(DirectoryPath.unsafe(base) / "src" / "test" / "scala", "**/*.scala", verbose = false) must findFiles
 
   def e2 =
-    filePaths(DirectoryPath.unsafe(new File(base+"/src/test/scala")), "**/*.scala", verbose = false) `must` findFiles
+    filePaths(DirectoryPath.unsafe(new File(base+"/src/test/scala")), "**/*.scala", verbose = false) must findFiles
 
   def e3 =
-    filterWithPattern(globToPattern("**/*.scala"))(FilePath.unsafe(new File("T:/"+new File("src/test/scala/org/specs2/runner/SpecificationsFinderSpec.scala").getAbsolutePath))) `must`
+    filterWithPattern(globToPattern("**/*.scala"))(FilePath.unsafe(new File("T:/"+new File("src/test/scala/org/specs2/runner/SpecificationsFinderSpec.scala").getAbsolutePath))) must
       beTrue
 
   def e4 =
@@ -38,8 +38,8 @@ class SpecificationsFinderSpec extends Spec { def is = s2"""
     SpecificationsFinder.default.findSpecifications(
       basePath = DirectoryPath.unsafe(base) / "src" / "test" / "scala",
       filter = filter
-    ).runOption `must` beSome((l: List[?]) => l `must` haveSize(1))
+    ).runOption must beSome((l: List[?]) => l must haveSize(1))
 
   def findFiles: Matcher[Operation[List[FilePath]]] = (operation: Operation[List[FilePath]]) =>
-    operation `must` beOk((_: List[FilePath]) `must` not(beEmpty))
+    operation must beOk((_: List[FilePath]) must not(beEmpty))
 }

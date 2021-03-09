@@ -54,7 +54,7 @@ class MutableFragmentsDslSpec(ee: ExecutionEnv) extends org.specs2.Spec with Typ
         }
       }).map(_.description)
 
-    actualDescriptions `must` contain(exactly(expectedDescriptions*))
+    actualDescriptions must contain(exactly(expectedDescriptions*))
   end e3
 
 

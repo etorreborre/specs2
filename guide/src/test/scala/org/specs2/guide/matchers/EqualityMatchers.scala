@@ -11,7 +11,7 @@ The most common type of matcher is `beEqualTo` to test the equality of 2 values 
  -------------------------- | --------------------------
  `1 must beEqualTo(1)      `| the normal way
  `1 must be_==(1)          `| with a symbol
- `1 should ==(1)           `| for `should` lovers
+ `1 should ==(1)           `| for should lovers
  `1 === 1                  `| the ultimate shortcut
 
 There are also other notions of equality

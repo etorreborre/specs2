@@ -141,24 +141,24 @@ presentation
            |[info] x examples, x failures, x error""", (_:String).replaceAll("\\d+", "x"))
 
   def d1 =
-    s2"""e1 ${1 `must` ===(2)}""" `contains`
+    s2"""e1 ${1 must ===(2)}""" `contains`
          """|[error] x e1
             |[error]  1 != 2"""
 
   def d2 =
     Arguments.split("failtrace fullstacktrace") ^
-      s2"""e1 ${1 `must` ===(2)}""" `contains`
+      s2"""e1 ${1 must ===(2)}""" `contains`
       """|[error]_org.specs2.report"""
 
   def d3 =
-    s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" `must` ===("adcdeadcdeadcdeadcdeadcde")}""" `contains`
+    s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must ===("adcdeadcdeadcdeadcdeadcde")}""" `contains`
         """|[error] Actual:   a[b]cdea[b]cdea[b]cdea[b]cdea[b]cde
            |[error] Expected: a[d]cdea[d]cdea[d]cdea[d]cdea[d]cde"""
 
   case class A(s: String) { override def equals(a: Any) = false }
 
   def d4 =
-    s2"""e1 ${A("a"*100) `must` ===(A("a"*100))}""" `doesntContain`
+    s2"""e1 ${A("a"*100) must ===(A("a"*100))}""" `doesntContain`
       """|[error] Actual"""
 
   def e1 = Arguments("fullstacktrace") ^
@@ -252,14 +252,14 @@ presentation
     val printed = logger.messages.filter(_.contains("+")).map(_.replace("+", "").replace("ex", "").trim.toInt)
 
     "printed is sorted" ==> {
-      printed `must` ===(printed.sorted)
+      printed must ===(printed.sorted)
     } `and`
     "executed is unsorted" ==> {
-      executed `must` not(be_==(executed.sorted))
+      executed must not(be_==(executed.sorted))
     } `and`
     "the execution is mixed with the printing" ==> {
       val (l1, l2) = logger.messages.filter(s => s.contains("executed") || s.contains("+")).span(_.contains("executed"))
-      l1.size `aka` (l1, l2).toString `must` not(be_==(l2.size))
+      l1.size `aka` (l1, l2).toString must not(be_==(l2.size))
     }
 
   def l2 =
@@ -281,14 +281,14 @@ presentation
     val printed = logger.messages.filter(_.contains("+")).map(_.replace("+", "").replace("ex", "").trim.toInt)
 
     "printed is sorted" ==> {
-      printed `must` ===(printed.sorted)
+      printed must ===(printed.sorted)
     } `and`
     "executed is sorted too" ==> {
-      executed `must` be_==(executed.sorted)
+      executed must be_==(executed.sorted)
     } `and`
     "the execution is mixed with the printing" ==> {
       val (l1, l2) = logger.messages.filter(s => s.contains("executed") || s.contains("+")).span(_.contains("executed"))
-      l1.size `aka` (l1, l2).toString `must` not(be_==(l2.size))
+      l1.size `aka` (l1, l2).toString must not(be_==(l2.size))
     }
 
   import specification.Tables.{given}
@@ -359,19 +359,19 @@ object TextPrinterSpecification extends MustMatchers with FragmentsDsl with Debu
       spec.contains(contained, f).not
 
     def contains(contained: String): Result =
-      printed(spec) `must` contain(contained.stripMargin.replace(" ", "_"))
+      printed(spec) must contain(contained.stripMargin.replace(" ", "_"))
 
     def contains(contained: String, f: String => String): Result =
-      f(printed(spec)) `must` contain(contained.stripMargin.replace(" ", "_"))
+      f(printed(spec)) must contain(contained.stripMargin.replace(" ", "_"))
 
     def containsOnly(contained: String): Result  =
-      printed(spec) `must` be_==(contained.stripMargin.replace(" ", "_"))
+      printed(spec) must be_==(contained.stripMargin.replace(" ", "_"))
 
     def startsWith(start: String): Result  =
-      printed(spec) `must` startWith(start.stripMargin.replace(" ", "_"))
+      printed(spec) must startWith(start.stripMargin.replace(" ", "_"))
 
     def matches(pattern: String): Result  =
-      printed(spec) `must` beMatching(pattern.stripMargin.replace(" ", "_"))
+      printed(spec) must beMatching(pattern.stripMargin.replace(" ", "_"))
 
   private def printed(s: SpecStructure, optionalEnv: Option[Env] = None) =
     val logger = stringPrinterLogger
@@ -395,10 +395,10 @@ object TextPrinterSpecification extends MustMatchers with FragmentsDsl with Debu
 
   extension (spec: (Fragments, Env))
     def contains(contained: String): Result =
-      printed(spec._1, Some(spec._2)) `must` contain(contained.stripMargin.replace(" ", "_"))
+      printed(spec._1, Some(spec._2)) must contain(contained.stripMargin.replace(" ", "_"))
 
     def contains(contained: String, f: String => String): Result  =
-      f(printed(spec._1, Some(spec._2))) `must` contain(contained.stripMargin.replace(" ", "_"))
+      f(printed(spec._1, Some(spec._2))) must contain(contained.stripMargin.replace(" ", "_"))
 
 class TestLogger extends BufferedPrinterLogger with StringOutput:
   def infoLine(msg: String)    = super.append(AnsiColors.removeColors(msg))

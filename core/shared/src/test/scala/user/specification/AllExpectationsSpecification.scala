@@ -16,7 +16,7 @@ class AllExpectationsSpecification extends mutable.Specification with AllExpecta
   }
   "It is possible to short-circuit the rest of the evaluation with 'orThrow'" >> {
     10 === 10
-    51 `must` be_==(52).orThrow
+    51 must be_==(52).orThrow
     13 === 14
   }
 }
@@ -38,7 +38,7 @@ class AllExpectationsSpecificationWithNotImplementedError extends mutable.Specif
   def notImplementedYet: Int = ???
   "In this example the exception is caught" >> {
     1 === 2
-    notImplementedYet `must` ===(1)
+    notImplementedYet must ===(1)
     3 === 4
   }
 

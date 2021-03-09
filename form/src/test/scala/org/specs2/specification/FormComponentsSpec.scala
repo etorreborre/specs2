@@ -113,52 +113,52 @@ Fourth example: 1-n relationship
       line(OrderLine("Beginning Scala", 3))
 
     def e1 =
-      address.form.execute.message `must` ===("5 != 2")
+      address.form.execute.message must ===("5 != 2")
 
     def e2 = customer.fill("Eric",
-                           customer.address.fill("Rose Crescent", 5)).execute.message `must` ===("5 != 2")
+                           customer.address.fill("Rose Crescent", 5)).execute.message must ===("5 != 2")
 
-    def e3 = initialsTable.form.execute.message `must` ===("'H.W.' != 'H.Wo.'")
+    def e3 = initialsTable.form.execute.message must ===("'H.W.' != 'H.Wo.'")
     def e4 =
       order.hasSubset(
         OrderLine("PIS", 1),
         OrderLine("PS", 2)
-      ).execute `must` ===(success)
+      ).execute must ===(success)
     def e5 =
       order.hasSubset(
         OrderLine("PS", 2),
         OrderLine("BS", 3)
-      ).execute.isSuccess `must` beFalse
+      ).execute.isSuccess must beFalse
     def e6 = order.hasSubsequence(
         OrderLine("PS", 2),
         OrderLine("Beginning Scala", 3)
-      ).execute `must` ===(success)
+      ).execute must ===(success)
 
     def e7 = order.hasSubsequence(
         OrderLine("Beginning Scala", 3),
         OrderLine("PIS", 1),
         OrderLine("PS", 2)
-      ).execute.isSuccess `must` beFalse
+      ).execute.isSuccess must beFalse
 
     def e8 = order.hasSet(
         OrderLine("Beginning Scala", 3),
         OrderLine("PS", 2),
         OrderLine("PIS", 1)
-      ).execute.isSuccess `must` beTrue
+      ).execute.isSuccess must beTrue
 
     def e9 = order.hasSet(
         OrderLine("Beginning Scala", 3),
         OrderLine("PS", 2)
-      ).execute.isSuccess `must` beFalse
+      ).execute.isSuccess must beFalse
 
     def e10 = order.hasSequence(
         OrderLine("Beginning Scala", 3),
         OrderLine("PIS", 1)
-      ).execute.isSuccess `must` beFalse
+      ).execute.isSuccess must beFalse
 
     def e11 = order.hasSequence(
         OrderLine("Beginning Scala", 3),
         OrderLine("PS", 2)
-      ).execute.isSuccess `must` beFalse
+      ).execute.isSuccess must beFalse
 
 }

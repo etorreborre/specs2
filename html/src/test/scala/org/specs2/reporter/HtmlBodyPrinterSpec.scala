@@ -28,14 +28,14 @@ class HtmlBodyPrinterSpec(ee: ExecutionEnv) extends Specification with Forms wit
   def hidden =
     print(link(new nonmutableSpec { def is = s2"""
         Explanation Text.
-       example no. one $ok"""}).hide) `must` beEmpty
+       example no. one $ok"""}).hide) must beEmpty
 
   def printForm =
     val ns: NodeSeq = print(formFragmentFactory.FormFragment(form("hey").tr(prop("test", 1, 2))))
-    ns `must` \\(<form></form>)
+    ns must \\(<form></form>)
 
   def ansiColors =
-    print(fragmentFactory.text(AnsiColors.color("text", AnsiColors.red))).toString `must` ===("text")
+    print(fragmentFactory.text(AnsiColors.color("text", AnsiColors.red))).toString must ===("text")
 
   def print(f: Fragment): NodeSeq =
     HtmlBodyPrinter.printFragment(f, success, Arguments(), Level.Root, DirectoryPath.Root, pandoc = true)

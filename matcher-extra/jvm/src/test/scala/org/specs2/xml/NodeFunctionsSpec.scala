@@ -19,11 +19,11 @@ class NodeFunctionsSpec extends Spec with XmlMatchers { def is = s2"""
 
   The equalIgnoreSpace function must
     return false if 2 nodes are not equal after evaluation
-    ${ <a>{"a"}</a> `must` not(==/(<a>{"b"}</a>)) }
+    ${ <a>{"a"}</a> must not(==/(<a>{"b"}</a>)) }
     return true if 2 nodes are equal even with spaces
-    ${ <a>{"a"}</a> `must` ==/(<a>{" a "}</a>) }
+    ${ <a>{"a"}</a> must ==/(<a>{" a "}</a>) }
     return true if 2 nodes are in a Group"
-    ${ <u>{scala.xml.Group(<a>{"a"}</a>)}</u> `must` ==/(<u><a>{" a "}</a></u>) }
+    ${ <u>{scala.xml.Group(<a>{"a"}</a>)}</u> must ==/(<u><a>{" a "}</a></u>) }
 
   The equalIgnoreSpaceOrdered function must
     return false if 2 nodes are not in order

@@ -17,33 +17,33 @@ class ScalaCheckMatchersApiSpec extends Specification with ScalaCheck { def is =
     returning a result
     ${ prop { (i: Int) => success} }
     returning a match result
-    ${ prop { (i: Int) => i `must` (be_>(0) `or` be_<=(0)) } }
+    ${ prop { (i: Int) => i must (be_>(0) `or` be_<=(0)) } }
     returning a boolean value
     ${ prop { (i: Int) => i > 0 || i <= 0 } }
     using  an implication and a match result
 
     // propBoolean is used - can be removed when scalacheck 1.15.0 is out
-    ${ prop { (i: Int) => propBoolean(i > 0) ==> (i `must` be_>(0)) } }
-    ${ prop { (i: Int, j: Int) => propBoolean(i > j) ==> (i `must` be_>(j)) } }
+    ${ prop { (i: Int) => propBoolean(i > 0) ==> (i must be_>(0)) } }
+    ${ prop { (i: Int, j: Int) => propBoolean(i > j) ==> (i must be_>(j)) } }
     using an implication and a boolean value
     ${ prop { (i:Int) => propBoolean(i > 0) ==> (i > 0) } }
 
  It is possible to specify typeclass instances for Arbitrary, Shrink, Pretty and collect
    Arbitrary
    to specify a specific arbitrary instance for a parameter
-   ${ prop { (i: Int) => i `must` be_>(0) }.setArbitrary(positiveInts) }
+   ${ prop { (i: Int) => i must be_>(0) }.setArbitrary(positiveInts) }
    to specify a specific arbitrary instance for any parameter
-   ${ prop { (s: String, j: Int) => j `must` be_>(0) }.setArbitrary2(positiveInts) }
+   ${ prop { (s: String, j: Int) => j must be_>(0) }.setArbitrary2(positiveInts) }
    to specify all the arbitrary instances
-   ${ prop { (i:Int, j: Int) => i+j `must` be_>(0) }.setArbitraries(positiveInts, positiveInts) }
+   ${ prop { (i:Int, j: Int) => i+j must be_>(0) }.setArbitraries(positiveInts, positiveInts) }
 
    Gen
    to specify a specific generator for a parameter
-   ${ prop { (i: Int) => i `must` be_>(0) }.setGen(positiveInts.arbitrary) }
+   ${ prop { (i: Int) => i must be_>(0) }.setGen(positiveInts.arbitrary) }
    to specify a specific generator for any parameter
-   ${ prop { (s: String, j: Int) => j `must` be_>(0) }.setGen2(positiveInts.arbitrary) }
+   ${ prop { (s: String, j: Int) => j must be_>(0) }.setGen2(positiveInts.arbitrary) }
    to specify all the generators
-   ${ prop { (i:Int, j: Int) => i+j `must` be_>(0) }.setGens(positiveInts.arbitrary, positiveInts.arbitrary) }
+   ${ prop { (i:Int, j: Int) => i+j must be_>(0) }.setGens(positiveInts.arbitrary, positiveInts.arbitrary) }
 
    Shrink
    to specify a specific shrink instance for a parameter

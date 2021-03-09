@@ -54,32 +54,32 @@ The Exceptions trait provides functional ways to catch exceptions and deal with 
 
  """
 
-  def tryo1 = tryo("a") `must` ===(Some("a"))
-  def tryo2 = tryo(boom) `must` ===(None)
+  def tryo1 = tryo("a") must ===(Some("a"))
+  def tryo2 = tryo(boom) must ===(None)
 
-  def tryOr1 = tryOr("a")(_.getMessage) `must` ===("a")
-  def tryOr2 = tryOr(boom)(_ => "bang") `must` ===("bang")
+  def tryOr1 = tryOr("a")(_.getMessage) must ===("a")
+  def tryOr2 = tryOr(boom)(_ => "bang") must ===("bang")
 
-  def tryOrElse1 = tryOrElse("a")("b") `must` ===("a")
-  def tryOrElse2 = tryOrElse(boom)("bang") `must` ===("bang")
+  def tryOrElse1 = tryOrElse("a")("b") must ===("a")
+  def tryOrElse2 = tryOrElse(boom)("bang") must ===("bang")
 
-  def tryMap1 = tryMap("a")(true)(false) `must` ===(true)
-  def tryMap2 = tryMap(boom)(true)(false) `must` ===(false)
+  def tryMap1 = tryMap("a")(true)(false) must ===(true)
+  def tryMap2 = tryMap(boom)(true)(false) must ===(false)
 
-  def tryOk1 = tryOk("a") `must` ===(true)
-  def tryOk2 = tryOk(boom) `must` ===(false)
+  def tryOk1 = tryOk("a") must ===(true)
+  def tryOk2 = tryOk(boom) must ===(false)
 
-  def trye1 = trye("a")(_.getMessage) `must` ===(Right("a"))
-  def trye2 = trye(boom)(_.getMessage) `must` ===(Left("boom"))
+  def trye1 = trye("a")(_.getMessage) must ===(Right("a"))
+  def trye2 = trye(boom)(_.getMessage) must ===(Left("boom"))
 
-  def catchAll1 = catchAll("a")(_.getMessage) `must` ===(Right("a"))
-  def catchAll2 = catchAll({throw new Error("boom"); "a"})(_.getMessage) `must` ===(Left("boom"))
+  def catchAll1 = catchAll("a")(_.getMessage) must ===(Right("a"))
+  def catchAll2 = catchAll({throw new Error("boom"); "a"})(_.getMessage) must ===(Left("boom"))
 
-  def catchAllOr1 = catchAllOr("a")(_.getMessage) `must` ===("a")
-  def catchAllOr2 = catchAllOr({throw new Error("boom"); "a"})(_ => "bang") `must` ===("bang")
+  def catchAllOr1 = catchAllOr("a")(_.getMessage) must ===("a")
+  def catchAllOr2 = catchAllOr({throw new Error("boom"); "a"})(_ => "bang") must ===("bang")
 
   def tryCollect1 = tryCollect("a") { case x => x == "a" }
-  def tryCollect2 = tryCollectOr("x", 100) { case x => x.toInt } `must` ===(100)
+  def tryCollect2 = tryCollectOr("x", 100) { case x => x.toInt } must ===(100)
 
   def boom = { error("boom"); "a" }
 

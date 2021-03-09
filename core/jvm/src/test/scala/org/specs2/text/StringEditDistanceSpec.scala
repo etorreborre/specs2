@@ -66,7 +66,7 @@ class StringEditDistanceSpec extends Specification with StringEditDistance with 
     "a"  !! ""      ! "[a]" -> "[]"   |
     ""   !! "ab"    ! "[]" -> "[ab]"  |
     "ab" !! ""      ! "[ab]" -> "[]"  | { (a: String, b: String, result: (String, String)) =>
-      showDistance(a, b) `must` ===(result)
+      showDistance(a, b) must ===(result)
     }
 
   def show10 =
@@ -75,7 +75,7 @@ class StringEditDistanceSpec extends Specification with StringEditDistance with 
     "a"  !! "b"    ! "[a]" -> "[b]"  |
     "a"  !! "bc"   ! "[a]" -> "[bc]" |
     "a"  !! "ab"   ! "a[]" -> "a[b]" | { (a: String, b: String, result: (String, String)) =>
-      showDistance(a, b) `must` ===(result)
+      showDistance(a, b) must ===(result)
     }
 
   def show11 =
@@ -93,10 +93,10 @@ class StringEditDistanceSpec extends Specification with StringEditDistance with 
 
   val factor = 1000
   def memory1 =
-    (editDistance("kitten\n" * factor, "kitsin\n" * factor) `must` be_>(0)) `and`
-    (showDistance("kitten\n" * factor, "kitsin\n" * factor)._1.length `must` be_>(0))
+    (editDistance("kitten\n" * factor, "kitsin\n" * factor) must be_>(0)) `and`
+    (showDistance("kitten\n" * factor, "kitsin\n" * factor)._1.length must be_>(0))
 
   def memory2 =
-    (editDistance("kitten" * factor, "kitsin" * factor) `must` be_>(0)) `and`
-    (showDistance("kitten" * factor, "kitsin" * factor)._1.length `must` be_>(0))
+    (editDistance("kitten" * factor, "kitsin" * factor) must be_>(0)) `and`
+    (showDistance("kitten" * factor, "kitsin" * factor)._1.length must be_>(0))
 }

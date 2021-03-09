@@ -47,49 +47,49 @@ class DataTablesSpec(val env: Env) extends Specification with DataTables with Re
   def e1 =
     "a"   | "b" | "c" |>
      2    !  2  !  4  |
-     1    !  1  !  2  | { (a, b, c) =>  a + b `must` ===(c) }
+     1    !  1  !  2  | { (a, b, c) =>  a + b must ===(c) }
 
   def e2 = // if the table was executed, it would go "boom"
     "a"   | "b" | "c" |
      2    !  2  !  4  |
-     1    !  1  !  2  | { (a, b, c) => boom; a + b `must` ===(c) }
+     1    !  1  !  2  | { (a, b, c) => boom; a + b must ===(c) }
 
   def e3 =
    ("a"   | "b" | "c" |
      2    !  2  !  4  |
-     1    !  1  !  3  |> { (a, b, c) => a + b `must` ===(c) }) `must` beFailing
+     1    !  1  !  3  |> { (a, b, c) => a + b must ===(c) }) must beFailing
 
   def e4 =
    ("a"   | "b" | "c" |
      2    !  2  !  4  |
-     1    !  1  !  3  |> { (a, b, c) => boom; a + b `must` ===(c) }) `must` beError
+     1    !  1  !  3  |> { (a, b, c) => boom; a + b must ===(c) }) must beError
 
   def e5 =
     "a"     |  "b"      | "c"             |
-    "Hello" !! "world"  !  "Hello world"  |> { (a, b, c) =>  a+" "+b `must` ===(c) }
+    "Hello" !! "world"  !  "Hello world"  |> { (a, b, c) =>  a+" "+b must ===(c) }
 
   def e6 =
     "a"     ||  "b"      | "c"            |
     "Hello" !! "world"   !  "Hello world" |
-    1       !! "world"   !  "1 world"     |> { (a, b, c) =>  a.toString+" "+b `must` ===(c) }
+    1       !! "world"   !  "1 world"     |> { (a, b, c) =>  a.toString+" "+b must ===(c) }
 
   def e7 =
     "a"   |
      2    |
-     1    |> { (a) =>  a `must` be_>=(0) }
+     1    |> { (a) =>  a must be_>=(0) }
 
 
   def e8 =
     "a"         | "b"       |>
     0           ! "0"       |
-    List("a")   ! "List(a)" | { (a, b) =>  a.toString `must` ===(b) }
+    List("a")   ! "List(a)" | { (a, b) =>  a.toString must ===(b) }
 
   def e9 =
     "a successful table must not throw an exception" ==> {
-      (new InAMutableContext).resultOk `must` not (throwA[DecoratedResultException])
+      (new InAMutableContext).resultOk must not (throwA[DecoratedResultException])
     } `and`
     "a failed table must throw an exception" ==> {
-      (new InAMutableContext).resultKo `must` throwA[DecoratedResultException]
+      (new InAMutableContext).resultKo must throwA[DecoratedResultException]
     }
 
   def e10 =
@@ -97,7 +97,7 @@ class DataTablesSpec(val env: Env) extends Specification with DataTables with Re
       "a"     || "b"     | "c"         |>
       "hello" !! "you"   ! "hello you" |
       "you"   !! "hello" ! "you hello" |
-      "y"     !! "h"     ! "y h"       | { (a, b, c) =>  a+" "+b `must` ===(c) }
+      "y"     !! "h"     ! "y h"       | { (a, b, c) =>  a+" "+b must ===(c) }
 
     table.message ===
       "  | a     | b     | c         | "+"\n"+
@@ -110,7 +110,7 @@ class DataTablesSpec(val env: Env) extends Specification with DataTables with Re
       "a"     || "b"     | "c"          |>
       "hello" !! "you"   ! "hello you"  |
       "you"   !! "hello" ! "you hello2" |
-      "y"     !! "h"     ! "y h"        | { (a, b, c) =>  a+" "+b `must` ===(c) }
+      "y"     !! "h"     ! "y h"        | { (a, b, c) =>  a+" "+b must ===(c) }
 
     table.message ===
       "  | a     | b     | c          |                            "+"\n"+
@@ -122,11 +122,11 @@ class DataTablesSpec(val env: Env) extends Specification with DataTables with Re
     val t1 =
       "a"   | "b" | "c" |>
        2    !  2  !  4  |
-       1    !  1  !  2  | { (a, b, c) =>  a + b `must` ===(c) }
+       1    !  1  !  2  | { (a, b, c) =>  a + b must ===(c) }
 
     val t2 =
       "a"   | "b" | "c" |>
-       2    !  2  !  5  | { (a, b, c) =>  a + b `must` ===(c) }
+       2    !  2  !  5  | { (a, b, c) =>  a + b must ===(c) }
 
     (t1 `and` t2).message ===
       "  | a | b | c |       "+"\n"+
@@ -182,8 +182,8 @@ class DataTablesSpec(val env: Env) extends Specification with DataTables with Re
 class InAMutableContext extends MustThrownMatchers with DataTables:
   lazy val resultOk =
       "a" | "b"    |>
-       1  ! 1      | { (a, b) =>  a `must` ===(b) }
+       1  ! 1      | { (a, b) =>  a must ===(b) }
 
   lazy val resultKo =
     "a" | "b"    |>
-     1  ! 2      | { (a, b) =>  a `must` ===(b) }
+     1  ! 2      | { (a, b) =>  a must ===(b) }

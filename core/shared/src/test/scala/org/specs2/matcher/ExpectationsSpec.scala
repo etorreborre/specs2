@@ -17,12 +17,12 @@ class ExpectationsSpec extends Specification { def is = s2"""
     expectations.sandboxResult(ko)
 
     "ko has not been stored" ==> {
-      expectations.storedResults `must` contain(exactly(ok))
+      expectations.storedResults must contain(exactly(ok))
     }
 
   def e2 =
     val expectations = new ThrownExpectations1 {}
-    expectations.sandboxResult(expectations.check(ko)) `must` ===(ko)
+    expectations.sandboxResult(expectations.check(ko)) must ===(ko)
 
   trait StoredExpectations1 extends StoredExpectations:
     def check(r: Result): Result =

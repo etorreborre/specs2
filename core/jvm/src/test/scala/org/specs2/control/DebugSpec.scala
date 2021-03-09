@@ -48,8 +48,8 @@ trait output extends MustThrownMatchers:
     def prints(results: String*) =
       t
       if results == Seq("nothing") then
-        messages `must` beEmpty
+        messages must beEmpty
       else
-        messages `must` be_==(results)
+        messages must be_==(results)
 
   val nothing = "nothing"
