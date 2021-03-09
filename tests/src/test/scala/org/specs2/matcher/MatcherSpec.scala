@@ -61,11 +61,11 @@ Messages
     expectable.must(be_==("message") ^^ ((_:Exception).getMessage))
 
   def adapt4 =
-    val result = new Exception("message")  must be_>(2) ^^ ((e:Exception) => e.getMessage.length `aka` "the message size")
+    val result = new Exception("message") must be_>(2) ^^ ((e:Exception) => e.getMessage.length `aka` "the message size")
     result.message must ===("the message size '7' is greater than 2")
 
   def adapt5 =
-    val result = new Exception("message")  must be_===(8) ^^ ((e:Exception) => e.getMessage.length `aka` "the message size")
+    val result = new Exception("message") must be_===(8) ^^ ((e:Exception) => e.getMessage.length `aka` "the message size")
     result.message must ===("the message size '7 != 8'")
 
   def adapt6 =
@@ -93,7 +93,7 @@ Messages
   def adapt9 =
     def beThree: Matcher[Int] = be_===(3)
     val beStringThree = beThree ^^ ( (_: String).toInt `aka` s"the value")
-    ("3" must beStringThree).message === "the value '3' == '3'"
+    ("4" must beStringThree).message === "the value '4 != 3'"
 
   def adapt10 =
     def beThree: Matcher[Int] = be_==(3)
@@ -106,20 +106,20 @@ Messages
 
   def convert2 =
     def beEven: Matcher[Int] = (i: Int) => (i % 2 == 0, "'"+i.toString+"' is odd")
-    (3 must beEven) `returns` "'3' is odd"
-    (2 must beEven) `returns` "'2' is not odd"
+    ((3 must beEven) `returns` "'3' is odd") `and`
+    (2 must beEven)
 
   def convert3 =
     def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i.toString+" is odd")
-    (3 must beEven) `returns` "3 is odd"
-    (2 must beEven) `returns` "2 is not odd"
+    ((3 must beEven) `returns` "3 is odd") `and`
+    (2 must beEven)
 
   def convert4 =
     (1 must be_==("1").mute) `returns` ""
 
   def convert5 =
     def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i.toString+" is odd")
-    def beOdd: Matcher[Int] = (i: Int) => beEven.apply(theValue(i)).not
+    def beOdd: Matcher[Int] = ((i: Int) => i % 2 != 0, (i: Int) => i.toString+" is even")
     (2 must beOdd) `returns` "2 is even"
 
   def convert6 =

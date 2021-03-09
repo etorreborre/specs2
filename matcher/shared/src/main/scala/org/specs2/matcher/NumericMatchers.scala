@@ -46,14 +46,14 @@ trait NumericMatchers:
   /** alias for beLessThan */
   def <[S : Ordering](n: S) = beLessThan(n)
   /** matches if actual >= n */
-  def beGreaterThanOrEqualTo[S : Ordering](n: S) = new BeLessThan(n).not
+  def beGreaterThanOrEqualTo[S : Ordering](n: S): Matcher[S] = new BeGreaterThanOrEqualTo(n)
   def greaterThanOrEqualTo[S : Ordering](n: S) = beGreaterThanOrEqualTo(n)
   /** alias for beGreaterThanOrEqualTo */
   def be_>=[S : Ordering](n: S) = beGreaterThanOrEqualTo(n)
   /** alias for beGreaterThanOrEqualTo */
   def >=[S : Ordering](n: S) = beGreaterThanOrEqualTo(n)
   /** matches if actual > n */
-  def beGreaterThan[S : Ordering](n: S) = new BeLessThanOrEqualTo(n).not
+  def beGreaterThan[S : Ordering](n: S) = new BeGreaterThan(n)
   def greaterThan[S : Ordering](n: S) = beGreaterThan(n)
   /** alias for beGreaterThan */
   def be_>[S : Ordering](n: S) = beGreaterThan(n)
@@ -114,13 +114,26 @@ class BeLessThanOrEqualTo[T : Ordering](n: T) extends Matcher[T]:
     val value: T = a.value
     val r = value <= n
     val isEqual = value == n
-    result(r, a.description + " is greater than " + n.toString)
+    result(r, a.description + " is strictly greater than " + n.toString)
 
 class BeLessThan[T : Ordering](n: T) extends Matcher[T]:
   def apply[S <: T](a: Expectable[S]) =
     val value: T = a.value
     val r = value < n
-    result(r, a.description + " is not less than " + n.toString)
+    result(r, a.description + " is greater than " + n.toString)
+
+class BeGreaterThanOrEqualTo[T : Ordering](n: T) extends Matcher[T]:
+  def apply[S <: T](a: Expectable[S]) =
+    val value: T = a.value
+    val r = value >= n
+    val isEqual = value == n
+    result(r, a.description + " is strictly less than " + n.toString)
+
+class BeGreaterThan[T : Ordering](n: T) extends Matcher[T]:
+  def apply[S <: T](a: Expectable[S]) =
+    val value: T = a.value
+    val r = value > n
+    result(r, a.description + " is less than " + n.toString)
 
 class BeCloseTo[T : Numeric](n: T, delta: T) extends Matcher[T]:
   def apply[S <: T](x: Expectable[S]) =

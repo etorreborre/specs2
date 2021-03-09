@@ -7,6 +7,7 @@ import text.Quote.*
 import text.Plural.*
 import org.specs2.fp.syntax.*
 import control.*
+import ValueChecks.{given}
 
 /**
  * This trait adds some implicits to easily fold sequences of results

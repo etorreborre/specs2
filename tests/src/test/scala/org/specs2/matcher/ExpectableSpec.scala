@@ -10,14 +10,6 @@ class ExpectableSpec extends Spec with ResultMatchers with MustMatchers:
     ("a" `aka` "the string").description must ===("the string 'a'")
   }
 
-  "An expectable described with aka will only evaluate the description in case of a failure" >> {
-    var evaluated = false
-    ("a" aka {
-      evaluated = true
-      "the string" }) must ===("a")
-    "the aka description is not evaluated on a success" <==> { evaluated === false }
-  }
-
   "If it is a boolean its value is not displayed, only the description" >> {
     (true `aka` "my boolean").description must ===("my boolean")
   }

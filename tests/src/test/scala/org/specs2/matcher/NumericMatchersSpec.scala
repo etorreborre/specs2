@@ -13,32 +13,32 @@ types and more generally with Ordered types.
   ${ 1 must beLessThanOrEqualTo(2) }
   ${ 2 must not(beLessThanOrEqualTo(1)) }
   ${ 2 must not(be_<=(1)) }
-  and return a failure if the comparison fails                                                                    $e1
-  and return a failure if the comparison fails - with aka                                                         $e1_1
+  and return a failure if the comparison fails $e1
+  and return a failure if the comparison fails - with aka $e1_1
 
   beLessThan compares any Ordered type with <
   ${ 1 must be_<(2) }
   ${ 2 must not(be_<(1)) }
   ${ 2 must not(beLessThan(1)) }
   ${ 1 must beLessThan(2) }
-  and return a failure if the comparison fails                                                                     $e2
-  and return a failure if the comparison fails - with aka                                                          $e2_1
+  and return a failure if the comparison fails $e2
+  and return a failure if the comparison fails - with aka $e2_1
 
   beGreaterThanOrEqualTo compares any Ordered type with >=
   ${ 2 must be_>=(1) }
   ${ 2 must not(be_>=(3)) }
   ${ 2 must not(beGreaterThanOrEqualTo(3)) }
   ${ 2 must beGreaterThanOrEqualTo(1) }
-   and return a failure if the comparison fails                                                                    $e3
-   and return a failure if the comparison fails - with aka                                                         $e3_1
+   and return a failure if the comparison fails $e3
+   and return a failure if the comparison fails - with aka $e3_1
 
   beGreaterThan compares any Ordered type with >
   ${ 2 must be_>(1) }
   ${ 2 must not(be_>(3)) }
   ${ 2 must not(beGreaterThan(3)) }
   ${ 2 must beGreaterThan(1) }
-  and return a failure if the comparison fails                                                                     $e4
-  and return a failure if the comparison fails - with aka                                                          $e4_1
+  and return a failure if the comparison fails $e4
+  and return a failure if the comparison fails - with aka $e4_1
 
   the comparison matchers also work with doubles
   ${ 2.0 must be_>(1.0) }
@@ -47,8 +47,8 @@ types and more generally with Ordered types.
   ${ 1.0 must beCloseTo(1.0, 0.5) }
   ${ 4 must be_~(5 +/- 2) }
   ${ 2 must not(beCloseTo(4 +/- 1)) }
-  and return a failure if the comparison fails                                                                     $e5
-  and return a failure if the comparison fails - with aka                                                          $e5_1
+  and return a failure if the comparison fails $e5
+  and return a failure if the comparison fails - with aka $e5_1
 
   beCloseTo tests if 2 Numerics are close to each other, within some order of magnitude
   ${ 1001.1232455 must beCloseTo(1003.12, 2.significantFigures) }
@@ -80,14 +80,14 @@ types and more generally with Ordered types.
   ${ 5 must (`be[`(4, 7)`]`) }
                                                                                                                         """
 
-  def e1   = (2 must be_<=(1)) `returns` "2 is greater than 1"
-  def e1_1 = (2 `aka` "two" must be_<=(1)) `returns` "two '2' is greater than 1"
+  def e1   = (2 must be_<=(1)) `returns` "2 is strictly greater than 1"
+  def e1_1 = (2 `aka` "two" must be_<=(1)) `returns` "two '2' is strictly greater than 1"
 
-  def e2   = (2 must be_<(1))  `returns` "2 is not less than 1"
-  def e2_1 = (2 `aka` "two" must be_<(1))  `returns` "two '2' is not less than 1"
+  def e2   = (2 must be_<(1))  `returns` "2 is greater than 1"
+  def e2_1 = (2 `aka` "two" must be_<(1))  `returns` "two '2' is greater than 1"
 
-  def e3   = (1 must be_>=(2)) `returns` "1 is less than 2"
-  def e3_1 = (1 `aka` "one" must be_>=(2)) `returns` "one '1' is less than 2"
+  def e3   = (1 must be_>=(2)) `returns` "1 is strictly less than 2"
+  def e3_1 = (1 `aka` "one" must be_>=(2)) `returns` "one '1' is strictly less than 2"
 
   def e4   = (1 must be_>(2))  `returns` "1 is less than 2"
   def e4_1 = (1 `aka` "one" must be_>(2))  `returns` "one '1' is less than 2"

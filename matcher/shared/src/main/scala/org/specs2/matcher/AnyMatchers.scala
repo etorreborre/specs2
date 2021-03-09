@@ -19,7 +19,7 @@ trait AnyMatchers:
 
   /** matches if a == false */
   def beFalse: Matcher[Boolean] =
-    (new BeTrueMatcher).not
+    new BeFalseMatcher
 
   /** matches if a eq b */
   def beTheSameAs[T <: AnyRef](t: =>T): BeTheSameAs[T] =
@@ -179,6 +179,13 @@ object AnyMatchers extends AnyMatchers
 class BeTrueMatcher extends Matcher[Boolean]:
   def apply[S <: Boolean](v: Expectable[S]) =
     result(v.value, v.description + " is false")
+
+/**
+ * Matcher for a boolean value which must be true
+ */
+class BeFalseMatcher extends Matcher[Boolean]:
+  def apply[S <: Boolean](v: Expectable[S]) =
+    result(!v.value, v.description + " is true")
 
 /**
  * Equality Matcher

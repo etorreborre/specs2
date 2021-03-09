@@ -36,7 +36,7 @@ class AnyMatchersSpec extends Specification with ResultMatchers with AnyMatchers
 
  forall allows to transform a single matcher to a matcher checking that all elements of a Seq are matching
   ${ Seq(2, 3, 4) must contain(be_>=(2)).forall }
-  ${ forall(Seq((1, 2), (3, 4))) { case (a, b) => a must be_<(b) } }
+  xxx ${ forall(Seq((1, 2), (3, 4))) { case (a, b) => a must be_<(b) } }
   ${ forallWhen(Seq((2, 1), (3, 4))) { case (a, b) if a > 2 => a must be_<(b) } }
 
   foreach is like forall but will execute all matchers and collect the results
@@ -110,7 +110,7 @@ Implicits
     // if this specification compiles and if result is ok, this means that the must implicit could be redefined
     // thanks to the NoMustExpectations trait
     case class Spec1() extends org.specs2.mutable.Specification with NoMustExpectations:
-      extension [T](t: =>T) def must(other: Int) = other
+      extension [T](t: =>T) infix def must(other: Int) = other
 
       val result = (1 must 2) === 2
       "an example" >> result
