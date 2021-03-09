@@ -105,7 +105,7 @@ Custom
   def or3 = "eric" `must` (beMatching("e.*") `or` beMatching({error("boom");".*z"}))
   def or4 = "eric" `must` not(beMatching("a.*") `or` beMatching(".*z"))
   def or5 = ("eric" `must` (beMatching("a.*") `or` beMatching("z.*"))) `returns`
-            "'eric' doesn't match 'a.*'; 'eric' doesn't match 'z.*'"
+            "'eric' doesn't match 'a.*' and 'eric' doesn't match 'z.*'"
 
   def or6 =
     MustThrownMatchers.createExpectable("eric").must(MustThrownMatchers.beMatching("a.*") `or` MustThrownMatchers.beMatching("e.*"))

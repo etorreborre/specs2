@@ -11,11 +11,11 @@ import scala.util.NotGiven
 trait ShouldExpectations extends ExpectationsCreation with TypedEqual:
 
   implicit class expectShould[T](tm: =>T)(using not: NotGiven[NoShouldExpectations]):
-    def should(m: =>Matcher[T]) =
+    infix def should(m: =>Matcher[T]) =
       createExpectable(tm).applyMatcher(m)
 
   implicit class expectedShould [T](tm: Expectable[T])(using not: NotGiven[NoShouldExpectations]):
-    def should(m: =>Matcher[T]) =
+    infix def should(m: =>Matcher[T]) =
       tm.applyMatcher(m)
 
 object ShouldExpectations extends ShouldExpectations

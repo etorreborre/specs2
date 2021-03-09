@@ -25,7 +25,7 @@ class AnyMatchersSpec extends Specification with ResultMatchers with AnyMatchers
   ${ (false `must` beTrue).message `must` ===("the value is false") }
 
   beFalse matches false values
-  ${ false `must` beFalse }
+  ${ false must beFalse }
   ${ (true `must` beFalse).message `must` ===("the value is true") }
 
   beLike matches objects against a pattern

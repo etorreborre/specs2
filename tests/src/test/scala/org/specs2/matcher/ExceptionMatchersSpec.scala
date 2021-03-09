@@ -75,8 +75,7 @@ class ExceptionMatchersSpec extends Specification with ResultMatchers { def is =
 
   def byType1 = ("hello" `must` throwAn[Error]).message `must` ===("Expected: java.lang.Error. Got nothing")
 
-  def byType2 = (theBlock(error("boom")) `must` throwA[RuntimeException]).message `must` ===(
-    "Got the exception java.lang.RuntimeException: boom")
+  def byType2 = theBlock(error("boom")) `must` throwA[RuntimeException]
 
   def byType3 = (theBlock(error("boom")) `must` throwAn[IAE]).message `must` startWith(
     "Expected: java.lang.IllegalArgumentException. Got: java.lang.RuntimeException: boom instead")
@@ -95,10 +94,7 @@ class ExceptionMatchersSpec extends Specification with ResultMatchers { def is =
 
   def pf1 = (theBlock(error("boom")) `must` throwA[RuntimeException].like { case NonFatal(e) =>
     e.getMessage()(0) === 'b'
-  }).message `must` startWith(
-      "Got the exception java.lang.RuntimeException: boom and b == 'b'")
-  // todo: figure how to quote only the value
-  //      "Got the exception java.lang.RuntimeException: boom and 'b' == 'b'")
+  })
 
   def pf2 = (theBlock(error("boom")) `must` throwA[RuntimeException].like { case NonFatal(e) => e.getMessage()(0) === 'a' }).message `must` startWith(
     "Expected: java.lang.RuntimeException. Got: java.lang.RuntimeException: boom and b != a")
@@ -111,26 +107,16 @@ class ExceptionMatchersSpec extends Specification with ResultMatchers { def is =
 
   def pf6 = AsResult { 1  `must` not(throwAn[IAE].like { case _ => ok }) } `must` beSuccessful
 
-  def regex1 = (theBlock(error("boom")) `must` throwA[RuntimeException](message = "boo")).message `must` startWith(
-    s"Got the exception java.lang.RuntimeException: boom and boom matches '${"boo".regexPart}'")
-    // todo: figure how to quote only the value
-    //      s"Got the exception java.lang.RuntimeException: boom and 'boom' matches '${"boo".regexPart}'")
+  def regex1 = (theBlock(error("boom")) `must` throwA[RuntimeException](message = "boo"))
 
-  def regex2 = (theBlock(error("boom\nbang\nbong")) `must` throwA[RuntimeException](message = "bang")).message `must` startWith(
-      s"Got the exception java.lang.RuntimeException: boom\nbang\nbong and boom\nbang\nbong matches '${"bang".regexPart}'")
-    // todo: figure how to quote only the value
-    //      s"Got the exception java.lang.RuntimeException: boom\nbang\nbong and 'boom\nbang\nbong' matches '${"bang".regexPart}'")
+  def regex2 = (theBlock(error("boom\nbang\nbong")) `must` throwA[RuntimeException](message = "bang"))
 
-  def regex3 = (theBlock(error("bang\nboom\nbong")) `must` throwA[RuntimeException](message = "bang")).message `must` startWith(
-      s"Got the exception java.lang.RuntimeException: bang\nboom\nbong and bang\nboom\nbong matches '${"bang".regexPart}'")
-    // todo: figure how to quote only the value
-    //      s"Got the exception java.lang.RuntimeException: bang\nboom\nbong and 'bang\nboom\nbong' matches '${"bang".regexPart}'")
+  def regex3 = (theBlock(error("bang\nboom\nbong")) `must` throwA[RuntimeException](message = "bang"))
 
   def specific1 = ("hello" `must` throwA(new RuntimeException("boom"))).message `must` ===(
     "Expected: java.lang.RuntimeException: boom. Got nothing")
 
-  def specific2 = (theBlock(error("boom")) `must` throwAn(new RuntimeException("boom"))).message `must` startWith(
-    "Got the exception java.lang.RuntimeException: boom")
+  def specific2 = (theBlock(error("boom")) `must` throwAn(new RuntimeException("boom")))
 
   def specific3 = (theBlock(error("boom")) `must` throwAn(new IAE("boom"))).message `must` startWith(
     "Expected: java.lang.IllegalArgumentException: boom. Got: java.lang.RuntimeException: boom instead")
@@ -141,12 +127,11 @@ class ExceptionMatchersSpec extends Specification with ResultMatchers { def is =
   case class UserError(name: String, message: String) extends RuntimeException(message)
 
   def specific5 = (theBlock(throw UserError("me", "boom")) `must` throwAn(UserError("me2", "boom")).
-    like { case UserError(name, _) => name `must` endWith("2") }).message `must` contain("me doesn't end with '2'")
-    // todo: figure how to quote only the value
-    //      like { case UserError(name, _) => name must endWith("2") }).message must contain("'me' doesn't end with '2'")
+    like { case UserError(name, _) => name `must` endWith("2") }).message `must` startWith(
+    "Expected: org.specs2.matcher.ExceptionMatchersSpec$UserError: boom. Got: org.specs2.matcher.ExceptionMatchersSpec$UserError: boom and me doesn't end with '2'")
 
   def specific6 = (theBlock(throw UserError("me", "boom")) `must` throwAn(UserError("me2", "boom")).
-    like { case UserError(name, _) => name `must` startWith("m") }).message `must` beMatching("Got the exception .*")
+    like { case UserError(name, _) => name `must` startWith("m") })
 
   def combinators1 = (1 `must` not(throwAn[Exception])).message `must` ===("Expected: java.lang.Exception. Got nothing")
 

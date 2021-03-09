@@ -11,11 +11,11 @@ import scala.util.NotGiven
 trait MustExpectations extends ExpectationsCreation with TypedEqual:
 
   extension [T](tm: =>T)(using not: NotGiven[NoMustExpectations])
-    def must(m: =>Matcher[T]) =
+    infix def must(m: =>Matcher[T]) =
       createExpectable(tm).applyMatcher(m)
 
   extension [T](tm: Expectable[T])(using not: NotGiven[NoMustExpectations])
-    def must(m: =>Matcher[T]) =
+    infix def must(m: =>Matcher[T]) =
       tm.applyMatcher(m)
 
 object MustExpectations extends MustExpectations

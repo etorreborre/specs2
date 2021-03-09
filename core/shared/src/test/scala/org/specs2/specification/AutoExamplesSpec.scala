@@ -52,7 +52,7 @@ class AutoExamplesSpec(using ee: ExecutionEnv) extends org.specs2.Spec with Data
   def datatableOk = eg {
     "a"  | "b" | "c" |>
     2    ! 2   ! 4   |
-    1    ! 1   ! 2   | { (a, b, c) =>  a + b `must` ===(c) }
+    1    ! 1   ! 2   | { (a, b, c) =>  a + b must ===(c) }
   }
 
 }

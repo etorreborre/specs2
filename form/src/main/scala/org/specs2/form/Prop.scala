@@ -147,7 +147,7 @@ trait PropSyntax:
     /**
      * check the actual value with a matcher
      */
-    def must(m: Matcher[T]): Prop[T, T] =
+    infix def must(m: Matcher[T]): Prop[T, T] =
       p.matchWith((t, _) => m.apply(createExpectable(t)))
 
 /**
