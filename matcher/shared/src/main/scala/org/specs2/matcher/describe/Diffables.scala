@@ -195,6 +195,6 @@ class FallbackDiffable[T] extends Diffable[T]:
       case (e1: Array[?], e2: Array[?]) =>
         Diffable.diff(e1.toIndexedSeq.map(a => a:Any), e2.toIndexedSeq.map(a => a:Any))
       case (a, e) if a == e =>
-        OtherIdentical(a)
+        OtherIdentical(actual, expected)
       case (a, e) =>
         OtherDifferent(actual, expected)

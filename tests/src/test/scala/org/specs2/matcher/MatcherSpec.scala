@@ -61,7 +61,7 @@ Messages
     expectable.must(be_==("message") ^^ ((_:Exception).getMessage))
 
   def adapt4 =
-    val result = new Exception("message") must be_>(2) ^^ ((e:Exception) => e.getMessage.length `aka` "the message size")
+    val result = new Exception("message") must be_<(2) ^^ ((e:Exception) => e.getMessage.length `aka` "the message size")
     result.message must ===("the message size '7' is greater than 2")
 
   def adapt5 =

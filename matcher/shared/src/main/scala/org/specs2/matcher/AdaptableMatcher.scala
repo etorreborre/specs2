@@ -24,7 +24,7 @@ trait AdaptableMatcher[T] extends Matcher[T]:
         outer.adapt(g compose f, okFunction compose ok, koFunction compose ko)
 
       def apply[U <: T](a: Expectable[U]) =
-        outer.adapt(f, ok, ko).apply(a.map(f))
+        outer.adapt(f, ok, ko).apply(a)
 
   /**
    * Adapts a matcher by changing the actual value before doing the match

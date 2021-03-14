@@ -153,12 +153,11 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
 
   /**
    * @return the negation of this result where a success becomes a failure and vice-versa
-   * but a neutral result stays the same
    */
   def negate: Result =
    this match
-      case Success(m,e)     => Failure(m, e)
-      case Failure(m,e,_,_) => Success(m)
+      case Success(m,e)     => Failure(negateSentence(m), e)
+      case Failure(m,e,_,_) => Success(negateSentence(m))
       case other            => other
 
 object Result:

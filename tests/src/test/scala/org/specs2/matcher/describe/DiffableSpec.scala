@@ -33,9 +33,9 @@ Compare result
   Fallback
   =========
 
-  when giving different type comparison will fallback to default  ${ Diffable.diff(1, 1 : Any) must ===(OtherIdentical(1)) }
+  when giving different type comparison will fallback to default  ${ Diffable.diff(1, 1 : Any) must ===(OtherIdentical(1, 1)) }
   two different case classes will return OtherClassDifferent      ${ Diffable.diff(Cat(), Dog()) must ===(OtherDifferent(Cat(), Dog())) }
-  compare two nulls will return OtherIdentical                    ${ Diffable.diff(null : Any, null : Any) must ===(OtherIdentical(null)) }
+  compare two nulls will return OtherIdentical                    ${ Diffable.diff(null : Any, null : Any) must ===(OtherIdentical(null, null)) }
 
 
   Maps

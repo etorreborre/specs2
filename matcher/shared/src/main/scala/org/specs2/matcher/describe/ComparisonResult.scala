@@ -158,28 +158,27 @@ case class OptionTypeDifferent(isActualSome: Boolean, isExpectedSome: Boolean) e
 
   private def render(some: Boolean) = if some then "Some(...)" else "None"
 
-case class OtherIdentical(actual: Any) extends IdenticalComparisonResult:
+case class OtherIdentical(actual: Any, expected: Any) extends IdenticalComparisonResult:
   def render: String =
-    actual.render
+    s"${actual.renderAny(showAll = comparingPrimitiveWithObject(actual, expected))} == "+
+    s"${expected.renderAny(showAll = comparingPrimitiveWithObject(actual, expected))}"
 
 case class OtherDifferent(actual: Any, expected: Any) extends DifferentComparisonResult:
   def render: String =
     s"${actual.renderAny(showAll = comparingPrimitiveWithObject(actual, expected))} != "+
     s"${expected.renderAny(showAll = comparingPrimitiveWithObject(actual, expected))}"
 
-  private def comparingPrimitiveWithObject(a: Any, e: Any): Boolean =
-    val (classA, classB) = classOf(a) -> classOf(e)
-    classA != classB && (isPrimitive(classA) ^ isPrimitive(classB))
 
-  private def isPrimitive(clazz: String): Boolean =
-    clazz.startsWith("java.lang.")
+private[specs2] def comparingPrimitiveWithObject(a: Any, e: Any): Boolean =
+  val (classA, classB) = classOf(a) -> classOf(e)
+  classA != classB && (isPrimitive(classA) ^ isPrimitive(classB))
 
-  private def classOf(v: Any): String =
-    Option(v).map(_.getClass.getName)
-             .getOrElse("null")
+private[specs2] def isPrimitive(clazz: String): Boolean =
+  clazz.startsWith("java.lang.")
 
-
-
+private[specs2] def classOf(v: Any): String =
+  Option(v).map(_.getClass.getName)
+           .getOrElse("null")
 
 abstract class OrderedCollectionIdentical(value: Iterable[Any]) extends IdenticalComparisonResult:
   def render: String =

@@ -182,7 +182,7 @@ class ComparisonResultSpec extends Spec { def is = s2"""
                      |- m1
                      |+ m2""".stripMargin) }
 
-  def ot1 = { OtherIdentical(5).render must ===("5") }
+  def ot1 = { OtherIdentical(5, 5).render must ===("5 == 5") }
   def ot2 = { OtherDifferent(5, "5").render must ===("5 != '5'") }
   def ot3 = { OtherDifferent(Hello(), "hello").render must ===("hello: org.specs2.matcher.Hello != hello: java.lang.String") }
   def ot4 = { OtherDifferent(Set(1), Set.empty[Int]).render must ===("Set(1) != Set()") }

@@ -118,7 +118,7 @@ trait SbtEvents:
  */
 case class SbtPrinterLogger(loggers: Array[Logger]) extends BufferedPrinterLogger:
   def infoLine(msg: String) = loggers.foreach { logger =>
-    logger.info(if msg == "" then " " else removeColors(msg, !logger.ansiCodesSupported))
+    logger.info(removeColors(msg, !logger.ansiCodesSupported))
   }
 
   /** failures are represented as errors in sbt */

@@ -63,11 +63,11 @@ trait StringMatchers:
                b.description + " doesn't contain " + q(a))
 
   /** matches if b matches the regular expression a */
-  def beMatching[T : MatchingExpression](t: T): Matcher[String] =
-    new BeMatching(summon[MatchingExpression[T]].toPattern(t))
+  def beMatching[T : MatchingExpression](t: =>T): Matcher[String] =
+    new BeMatching(t)
 
   /** alias to use with contain */
-  def matching[T : MatchingExpression](t: T): Matcher[String] =
+  def matching[T : MatchingExpression](t: =>T): Matcher[String] =
     beMatching(t)
 
   /** alias for beMatching but matching just a fragment of the string */
@@ -160,31 +160,35 @@ trait StringMatchers:
     override lazy val pattern = p
 
   given MatchingExpression[String] with
-    def toPattern(s: String): Pattern =
+    def toPattern(s: =>String): Pattern =
       Pattern.compile(s)
 
   given MatchingExpression[Pattern] with
-    def toPattern(p: Pattern): Pattern =
+    def toPattern(p: =>Pattern): Pattern =
       p
 
   given MatchingExpression[Regex] with
-    def toPattern(r: Regex): Pattern =
+    def toPattern(r: =>Regex): Pattern =
       r.pattern
 
 object StringMatchers extends StringMatchers
 
 trait MatchingExpression[T]:
-  def toPattern(t: T): Pattern
+  def toPattern(t: =>T): Pattern
 
 protected[specs2]
-class BeMatching(pattern: Pattern) extends Matcher[String]:
+class BeMatching[T : MatchingExpression](t: =>T) extends Matcher[String]:
+  lazy val pattern = summon[MatchingExpression[T]].toPattern(t)
 
   def apply[S <: String](b: Expectable[S]) =
     result(tryOrElse(pattern.matcher(b.value).matches)(false),
-           s"'${b.description}' doesn't match ${q(pattern)}")
+           s"'${b.description}' doesn't match ${q(t)}")
 
 object BeMatching extends StringMatchers:
 
-  def withPart[T : MatchingExpression](t: T): BeMatching =
-    val pattern = summon[MatchingExpression[T]].toPattern(t)
-    new BeMatching(Pattern.compile(pattern.toString.regexPart, pattern.flags()))
+  def withPart[T : MatchingExpression](t: =>T): BeMatching[T] =
+    lazy val pattern = summon[MatchingExpression[T]].toPattern(t)
+    lazy val part = Pattern.compile(pattern.toString.regexPart, pattern.flags())
+    new BeMatching(t)(using new MatchingExpression[T] {
+      def toPattern(t1: =>T) = part
+    })
