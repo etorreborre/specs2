@@ -42,10 +42,13 @@ case class DefaultSelector(commandLineArguments: Arguments) extends Selector:
 
     val regex = arguments.ex
     if regex !=".*" then
-      p.filter {
-        case Fragment(Text(t),e,_) if e.isExecutable => t `matchesSafely` regex
-        case Fragment(Code(t),e,_) if e.isExecutable => t `matchesSafely` regex
-        case other                                   => true
+      p.flatMap {
+        case f@Fragment(Text(t), e, _) if e.isExecutable && (t matchesSafely regex) =>
+          emitSeq(Seq(newLine, f))
+        case f@Fragment(Code(t), e, _) if e.isExecutable && (t matchesSafely regex) =>
+          emitSeq(Seq(newLine, f))
+        case other =>
+          emitSeq(Seq())
       }
     else p
   }
@@ -63,18 +66,18 @@ case class DefaultSelector(commandLineArguments: Arguments) extends Selector:
     val arguments = commandLineArguments.overrideWith(specArguments)
 
     def go: AsyncTransducer[Fragment, Fragment] = (p1: AsyncStream[Fragment]) =>
-      p1.state[Option[Fragment], List[NamedTag]](Nil) {
+      p1.state[Seq[Fragment], List[NamedTag]](Nil) {
         case (f @ Fragment(m @ Marker(t, _, _),_,_), sections)  =>
-          (Option(f), updateSections(sections, t))
+          (List(f), updateSections(sections, t))
 
         case (fragment, sections) if !Fragment.isFormatting(fragment) && !Fragment.isEmptyText(fragment) =>
           val apply = sections.sumAll
           val keep = apply.keep(arguments, apply.names)
-          (Option(fragment).filter(_ => keep), sections)
+          (List(newLine, fragment).filter(_ => keep), sections)
 
         case (fragment, sections) =>
-          (Option(fragment), sections)
-      } `flatMap` (f => emit(f.toList))
+          (List(), sections)
+      }.flatMap(emitSeq)
 
     if (arguments.include + arguments.exclude).nonEmpty then (normalize |> go |> removeMarkers)(p)
     else p
@@ -85,6 +88,9 @@ case class DefaultSelector(commandLineArguments: Arguments) extends Selector:
     swapAfterMarkerAndEmptyText          |>
     transformBeforeMarkersToAfterMarkers |>
     transformTagsToSections
+
+  val newLine: Fragment =
+    Fragment(Br, Execution.NoExecution)
 
   /**
    * All the "appliesToNext = false" markers must be transformed into "appliesToNext = true"

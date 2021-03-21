@@ -35,6 +35,8 @@ trait ExecutionOrigin extends Stacktraces:
       !className.split("\\.").last.equals("Spec") &&
       className.endsWith("Spec") && fromSpecs2(className)
     }, st.takeWhile(t => fromSpecs2(t.getClassName)))
-  def fromSpecs2 = (className: String) => className.startsWith("org.specs2.")
+
+  def fromSpecs2(className: String): Boolean =
+    className.startsWith("org.specs2.")
 
 object ExecutionOrigin extends ExecutionOrigin

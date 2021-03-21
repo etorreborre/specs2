@@ -118,17 +118,29 @@ trait SbtEvents:
  */
 case class SbtPrinterLogger(loggers: Array[Logger]) extends BufferedPrinterLogger:
   def infoLine(msg: String) = loggers.foreach { logger =>
-    logger.info(removeColors(msg, !logger.ansiCodesSupported))
+    // use a non-empty character when the message is empty otherwise
+    // nothing is printed out
+    if msg.isEmpty then
+      logger.info(" ")
+    else
+      logger.info(removeColors(msg, !logger.ansiCodesSupported))
   }
 
   /** failures are represented as errors in sbt */
   def failureLine(msg: String) = errorLine(msg)
 
   def errorLine(msg: String) = loggers.foreach { logger =>
-    val msg1 = removeColors(msg, !logger.ansiCodesSupported)
-    logger.error(msg1)
+    logger.error(makeLogMessage(msg, logger))
   }
 
-  def warnLine(msg: String) =  loggers.foreach { logger =>
-    logger.warn(removeColors(msg, !logger.ansiCodesSupported))
+  def warnLine(msg: String) = loggers.foreach { logger =>
+    logger.warn(makeLogMessage(msg, logger))
   }
+
+  def makeLogMessage(msg: String, logger: Logger): String =
+    // use a non-empty character when the message is empty otherwise
+    // nothing is printed out
+    if msg.isEmpty then
+      " "
+    else
+      removeColors(msg, !logger.ansiCodesSupported)

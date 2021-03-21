@@ -21,65 +21,67 @@ class TextPrinterSpec(val env: Env) extends Specification with OwnEnv { def is =
 
  The results of a specification can be printed as lines
 
-   the title of the specification must be printed first       $a1
-   the title is not displayed if # can not be shown           $a2
-   regular text must have no status                           $a3
+   the title of the specification must be printed first $a1
+   the title is not displayed if # can not be shown $a2
+   regular text must have no status $a3
 
-   a successful example must be displayed with a +            $b1
-   a failed example must be displayed with a x                $b2
-   an error example must be displayed with a !                $b3
-   a skipped example must be displayed with a o               $b4
-   a pending example must be displayed with a *               $b5
-   a multi-line description must be indented ok               $b6
-   if showtimes is true, each individual time must be shown   $b7 ${tag("travis")}
+   a successful example must be displayed with a + $b1
+   a failed example must be displayed with a x $b2
+   an error example must be displayed with a ! $b3
+   a skipped example must be displayed with a o $b4
+   a pending example must be displayed with a * $b5
+   a multi-line description must be indented ok $b6
+   if showtimes is true, each individual time must be shown $b7 ${tag("travis")}
 
  Statistics must be displayed at the end
-   total stats                                                $c1 ${tag("travis")}
+   total stats $c1 ${tag("travis")}
 
  Failure messages must be shown
-   normal messages                                            $d1
-   if failtrace then the stack trace must be shown            $d2
-   with detailed failure                                      $d3
-   with no failure when string representations are the same   $d4
+   normal messages $d1
+   if failtrace then the stack trace must be shown $d2
+   with detailed failure $d3
+   with no failure when string representations are the same $d4
 
  Error messages must be shown
-   with the exception class                                   $e1
-   with the exception message                                 $e2
-   with the stacktrace                                        $e3
-   with the cause                                             $e4
+   with the exception class $e1
+   with the exception message $e2
+   with the stacktrace $e3
+   with the cause $e4
 
  Expected values must be shown
-   when they are non empty                                    $f1
+   when they are non empty $f1
 
  Pending messages must be shown
-   as PENDING if nothing is specified                         $g1
-   as a specific user message                                 $g2
+   as PENDING if nothing is specified $g1
+   as a specific user message $g2
 
  Skipped messages must be shown
-   as SKIPPED if nothing is specified                         $h1
-   as the standard 'skipped'                                  $h2
-   as a specific user message                                 $h3
+   as SKIPPED if nothing is specified $h1
+   as the standard 'skipped' $h2
+   as a specific user message $h3
 
  Formatting fragments are displayed
-   breaks as 1 newline                                        $i1
+   breaks as 1 newline $i1
 
  Specification links are displayed
-   with no title                                              $j1
-   with a title                                               $j2
-   with results                                               $j3
-   not if hidden                                              $j4
-   with an alias                                              $j5
+   with no title $j1
+   with a title $j2
+   with results $j3
+   not if hidden $j4
+   with an alias $j5
 
  Fragments can be hidden by changing args
-    xonly only shows title and issues                         $k1
-    stats are not displayed with xonly when successful        $k2
+    xonly only shows title and issues $k1
+    stats are not displayed with xonly when successful$k2
 
  Fragments must be displayed in their creation order
-    as soon as computed, without sequential                   $l1 ${tag("travis")}
-    as soon as computed, with sequential                      $l2
+    as soon as computed, without sequential $l1 ${tag("travis")}
+    as soon as computed, with sequential $l2
 
- Datatable must be properly indented                          $m1
- Nested datatables must be reported                           $m2
+ Datatable must be properly indented $m1
+ Nested datatables must be reported $m2
+
+ Whitespaces are respected $n1
 
 """
   import TextPrinterSpecification.*
@@ -116,9 +118,9 @@ presentation
 """ `contains`
     """|[info] presentation
        |[info]   + e1
-       |[error]   x e2"""
+       |[info]   x e2"""
 
-  def b3 = s2"""e1 ${Error("ouch")}""" `contains` """[error] ! e1"""
+  def b3 = s2"""e1 ${Error("ouch")}""" `contains` """[info] ! e1"""
 
   def b4 = s2"""e1 ${skipped("for now")}""" `contains` """[info] o e1"""
   def b5 = s2"""e1 ${pending("for now")}""" `contains` """[info] * e1"""
@@ -142,7 +144,7 @@ presentation
 
   def d1 =
     s2"""e1 ${1 must ===(2)}""" `contains`
-         """|[error] x e1
+         """|[info] x e1
             |[error]  1 != 2"""
 
   def d2 =
@@ -163,12 +165,12 @@ presentation
 
   def e1 = Arguments("fullstacktrace") ^
     s2"""e1 $error1""" `contains`
-      """|[error] ! e1
+      """|[info] ! e1
          |[error]  java.lang.RuntimeException: boom"""
 
   def e2 = Arguments("fullstacktrace") ^
     s2"""e1 $error1""" `contains`
-    """|[error] ! e1
+    """|[info] ! e1
        |[error]  java.lang.RuntimeException: boom"""
 
   def e3 = s2"""e1 $error1""" `contains` """|[error] org.specs2.report"""
@@ -222,11 +224,12 @@ presentation
   def j5 = s2"""the ${SpecificationRef(SpecHeader(classOf[String], Some("STRING")), Arguments(), alias = "beautiful")} spec""" `contains`
     """|[info] the * beautiful spec"""
 
-  def k1 = Arguments("xonly") ^ "title\n".title ^
+  def k1 = Arguments("xonly") ^ "title".title ^
     s2"""e1 $ok
          e2 $ko""" `contains`
     """|[info] title
-       |[error] x e2"""
+       |[info] x e2
+       |[error]  ko"""
 
   def k2 = Arguments("xonly") ^ "title".title ^
     s2"""e1 $ok
@@ -301,7 +304,7 @@ table ${
    1 ! 2   |
    1 ! 1   | { (i, j) => i === j}
   }""".stripMargin `contains`
-    """|[error]_x_table
+    """|[info]_x_table
        |[error]____|_a_|_b_|______
        |[error]__+_|_1_|_1_|______
        |[error]__x_|_1_|_2_|_1_!=_2
@@ -318,12 +321,26 @@ table ${
      i ! j   | { (k, l) => k === l }
    }
   }""".stripMargin `contains`
-    """|[error]_x_table
+    """|[info]_x_table
        |[error]____|_a_|_b_|__________________
        |[error]__+_|_1_|_1_|__________________
        |[error]__x_|_1_|_2_|___|_c_|_d_|______
        |[error]____|___|___|_x_|_1_|_2_|_1_!=_2
        |[error]__+_|_1_|_1_|___________________"""
+
+  def n1 =
+    s2"""
+ example 1 $ok
+ example 2 $ko
+
+""".stripMargin `contains`
+         """|[info]_TextPrinterSpec
+            |[info]
+            |[info]__+_example_1
+            |[info]__x_example 2
+            |[error]__ko_(Result.scala:378)
+            |[info]
+            |[info]_Total_for_specification_TextPrinterSpec"""
 
   /**
    * TEST METHODS
@@ -359,10 +376,16 @@ object TextPrinterSpecification extends MustMatchers with FragmentsDsl with Debu
       spec.contains(contained, f).not
 
     def contains(contained: String): Result =
-      printed(spec) must contain(contained.stripMargin.replace(" ", "_"))
+      checkContained(printed(spec), contained)
+
+    def checkContained(asPrinted: String, contained: String): Result =
+      asPrinted must contain(contained.stripMargin.replace(" ", "_")).updateMessage(m =>
+        val messages = m.split(" doesn't contain '")
+        "\n"+messages(0)+"\n doesn't contain\n"+messages(1)
+      )
 
     def contains(contained: String, f: String => String): Result =
-      f(printed(spec)) must contain(contained.stripMargin.replace(" ", "_"))
+      checkContained(f(printed(spec)), contained)
 
     def containsOnly(contained: String): Result  =
       printed(spec) must be_==(contained.stripMargin.replace(" ", "_"))

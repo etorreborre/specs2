@@ -156,9 +156,12 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
    */
   def negate: Result =
    this match
-      case Success(m,e)     => Failure(negateSentence(m), e)
-      case Failure(m,e,_,_) => Success(negateSentence(m))
-      case other            => other
+      case Success(m,e) =>
+        Failure(s"Expectation failed: '$m'", e)
+      case Failure(m,e,_,_) =>
+        Success(m)
+      case other =>
+        other
 
 object Result:
 

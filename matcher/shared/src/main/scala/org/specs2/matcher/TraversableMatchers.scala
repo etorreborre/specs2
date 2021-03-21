@@ -171,7 +171,13 @@ class OrderingMatcher[T : Ordering] extends Matcher[Seq[T]]:
 import control.NumberOfTimes.*
 import text.Plural.*
 
-case class ContainWithResult[T](check: ValueCheck[T], timesMin: Option[Times] = Some(1.times), timesMax: Option[Times] = None, checkAll: Boolean = true) extends Matcher[Traversable[T]]:
+case class ContainWithResult[T](
+  check: ValueCheck[T],
+  timesMin: Option[Times] = Some(1.times),
+  timesMax: Option[Times] = None,
+  checkAll: Boolean = true,
+  negate: Boolean = false) extends Matcher[Traversable[T]]:
+
   def apply[S <: Traversable[T]](t: Expectable[S]) =
     val seq = Vector(t.value.toSeq*)
 
@@ -186,7 +192,7 @@ case class ContainWithResult[T](check: ValueCheck[T], timesMin: Option[Times] = 
           case r                => (ss, fs :+ r)
     }
 
-    failures.collect { case s: Skipped => s }.headOption.getOrElse {
+    val r = failures.collect { case s: Skipped => s }.headOption.getOrElse {
       val (okMessage, koMessage) = messages(t.description, successes, failures)
       val details: Details = failures.collect { case Failure(_,_,_,d) if d != NoDetails => d }.headOption.getOrElse(NoDetails)
 
@@ -196,6 +202,9 @@ case class ContainWithResult[T](check: ValueCheck[T], timesMin: Option[Times] = 
         case (None,             Some(Times(max))) => Result.result(successes.size <= max, koMessage, details)
         case (Some(Times(min)), Some(Times(max))) => Result.result(successes.size >= min && successes.size <= max, koMessage, details)
     }
+
+    if negate then Result.result(!r.isSuccess, "Expectation failed:\n" + r.message)
+    else r
 
   def atLeastOnce                    : ContainWithResult[T] = atLeast(1.times)
   def atLeast(times: Times)          : ContainWithResult[T] = copy(timesMin = Option(times))
@@ -234,6 +243,8 @@ case class ContainWithResult[T](check: ValueCheck[T], timesMin: Option[Times] = 
     (elementsAre(successes, success = true) + messages(successes),
      elementsAre(failures, success = false) + messages(failures))
 
+  override def not =
+    copy(negate = !negate)
 
 case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
                                    containsAtLeast: Boolean = true,
@@ -317,10 +328,8 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
         case (false, false) =>
           makeResult("", successes.size <= checks.size && checks.size <= seq.size)
 
-    if negate then Result.result(!r.isSuccess, "Falsified: " + r.message)
+    if negate then Result.result(!r.isSuccess, "Expectation failed:\n" + r.message)
     else r
-
-
 
   /**
    * take each value in order and try to apply the first check of the list of checks

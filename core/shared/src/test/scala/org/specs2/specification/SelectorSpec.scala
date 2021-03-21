@@ -15,7 +15,6 @@ Selection by name
 =================
  by example name $byName1
  when the name is some code $byName2
- $br
 
 Selection by tag
 ================
@@ -29,12 +28,10 @@ Selection by tag
  with overlapping sections $byTag8
  with non-overlapping sections $byTag9
  markers must be filtered out $byTag10
- $br
 
 Selection by previous
 =====================
  previous $byPrevious
- $br
 
 Support Functions
 =================
@@ -51,13 +48,17 @@ Support Functions
     val fragments = Fragments(ex("e1"), ex("e2"))
     val arguments = Arguments.split("ex e1")
     val executed = fragments |> DefaultSelector(arguments).select(arguments)
-    executed.fragmentsList(ee) must haveSize(1)
+    // a newline must be added before the example in order to display one
+    // example per line since we don't display text fragments
+    executed.fragmentsList(ee).map(_.fragmentType) === List("Br", "Example")
 
   def byName2 =
     val fragments = Fragments(code("e1"), code("e2"))
     val arguments = Arguments.split("ex e1")
     val executed = fragments |> DefaultSelector(arguments).select(arguments)
-    executed.fragmentsList(ee) must haveSize(1)
+    // a newline must be added before the example in order to display one
+    // example per line since we don't display text fragments
+    executed.fragmentsList(ee).map(_.fragmentType) === List("Br", "Example")
 
   def byTag1 =
     val fragments = Fragments(ff.tag("x"), ex("e1"), ex("e2"))
@@ -150,10 +151,9 @@ Support Functions
       ex("e4")
     )
     filterIncluded(fragments, Seq("x")).map(_.description) ==== List(
-      text("  "),
+      ff.break,
       ex("e2"),
       ff.break,
-      ff.tab,
       ex("e4")
     ).map(_.description)
 
@@ -234,3 +234,12 @@ Support Functions
   def show(fs: Fragments): String =
     fs.fragmentsList(ee).map(_.description).mkString("\n")
 }
+
+extension (f: Fragment)
+  def fragmentType: String =
+    f match
+      case Fragment(Br, _, _) => "Br"
+      case Fragment(_, e, _) =>
+        if e.run == None
+          then "Other"
+          else "Example"

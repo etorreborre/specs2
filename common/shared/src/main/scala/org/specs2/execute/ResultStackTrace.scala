@@ -9,9 +9,10 @@ import Throwablex.*
  */
 trait ResultStackTrace extends HasStackTrace:
   /** @return the location (file and line number) of the topmost stackTraceElement */
-  def location = location(DefaultStackTraceFilter)
+  def location: String =
+    location(DefaultStackTraceFilter)
 
-  def location(filter: StackTraceFilter) =
+  def location(filter: StackTraceFilter): String =
     val filtered = Throwablex.exception(filter(stackTrace)).getStackTrace
     Throwablex.location(Throwablex.exception(filtered.toIndexedSeq))
 

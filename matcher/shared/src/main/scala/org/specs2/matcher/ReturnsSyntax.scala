@@ -2,6 +2,7 @@ package org.specs2
 package matcher
 
 import execute.*
+import text.Whitespace.*
 import StringMatchers.{given, *}
 
 /**
@@ -11,7 +12,8 @@ trait ReturnsSyntax extends ExpectationsCreation:
 
   extension [T : AsResult](t: =>T)
     def returns(m: String): Result =
-      (contain(m) ^^ ((_: Result).message))(createExpectable(ResultExecution.execute(AsResult(t))))
+      (contain(m) ^^ ((_: Result).message))(createExpectable(ResultExecution.execute(AsResult(t)))).
+        setMessage(s"${t.showWhitespaces} does not return ${m.showWhitespaces}")
 
     def returnsMatch(m: String) =
       (beMatching(m) ^^ ((_: Result).message))(createExpectable(ResultExecution.execute(AsResult(t))))

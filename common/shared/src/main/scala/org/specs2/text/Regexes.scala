@@ -17,7 +17,7 @@ trait Regexes:
      * matchesSafely a pattern p. If p cannot be compiled, then it is quoted
      * if the string s is enclosed with characters, they can be excluded before the quotation is done
      */
-    def matchesSafely(p: String, enclosing: String = ""): Boolean =
+    infix def matchesSafely(p: String, enclosing: String = ""): Boolean =
       val pattern = tryOrElse(Pattern.compile(p))(Pattern.compile(enclosing+Pattern.quote(p.trimEnclosing(enclosing))+enclosing))
       pattern.matcher(s).matches
 

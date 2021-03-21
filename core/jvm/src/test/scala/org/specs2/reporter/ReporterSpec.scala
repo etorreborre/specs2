@@ -22,17 +22,17 @@ class ReporterSpec(val env: Env) extends Specification with ThrownExpectations w
    - saving the specification state
 
  A specification is
-   filtered                       $a1
+   filtered $a1
 
  And at the end of the reporting
-   the spec stats are saved       $a2
-   the example stats are saved    $a3
-   the stats are returned         $a4
+   the spec stats are saved $a2
+   the example stats are saved $a3
+   the stats are returned $a4
 
  Different printers can be used with the reporter
-   by default the text printer is used       $b1
+   by default the text printer is used $b1
    other printers (then printer is not used) $b2
-   unless console is in the arguments        $b3
+   unless console is in the arguments $b3
 
 """
 
@@ -77,7 +77,7 @@ class ReporterSpec(val env: Env) extends Specification with ThrownExpectations w
 
     val messages = logger.messages
     messages must contain(beMatching(".*ex1.*"))
-    messages must contain("[info] junit")
+    messages must contain("[info] reporterSpecSupport")
 
 }
 

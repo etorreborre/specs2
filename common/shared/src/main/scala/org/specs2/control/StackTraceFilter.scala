@@ -36,7 +36,8 @@ case class IncludeExcludeStackTraceFilter(include: Seq[String], exclude: Seq[Str
   def excludeAlso(patterns: String*) = copy(exclude = this.exclude ++ patterns)
 
   /** filter an Exception stacktrace */
-  def apply(st: Seq[StackTraceElement]) = st.filter(filter.keep)
+  def apply(st: Seq[StackTraceElement]): Seq[StackTraceElement] =
+    st.filter(filter.keep)
 }
 
 /**
@@ -62,8 +63,7 @@ object IncludeExcludeStackTraceFilter:
 /**
  * default filter for specs2 runs
  */
-object DefaultStackTraceFilter extends
-  IncludeExcludeStackTraceFilter(Seq(),
+object DefaultStackTraceFilter extends IncludeExcludeStackTraceFilter(Seq(),
     Seq("^org.specs2",
         "^java\\.", "^scala\\.",
         // this is a work-around for #415
@@ -75,8 +75,9 @@ object DefaultStackTraceFilter extends
 
   override def apply(e: Seq[StackTraceElement]): Seq[StackTraceElement] =
     val filtered =
-      if isSpecificationFromSpecs2(e) then e.dropWhile(t => !isSpecificationFromSpecs2(Seq(t)))
-      else                                      super.apply(e)
+      if isSpecificationFromSpecs2(e)
+        then e.dropWhile(t => !isSpecificationFromSpecs2(Seq(t)))
+        else super.apply(e)
 
     if filtered.size >= 1000 then filtered.take(200) ++ truncated(filtered.size) ++ filtered.takeRight(200)
     else filtered
@@ -89,6 +90,7 @@ object DefaultStackTraceFilter extends
     Seq(trace("....    re-run with 'fullstacktrace' to see the complete stacktrace")) ++
     Seq.fill(10)(trace("...")) ++
     Seq(trace("="*70))
+
 /**
  * This filter doesn't do anything
  */

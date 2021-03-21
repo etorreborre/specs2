@@ -2,6 +2,8 @@ package org.specs2
 package reporter
 
 import text.AnsiColors
+import text.Whitespace.*
+
 
 /**
  * This line logger tries to respect line breaks in the original text.
@@ -12,12 +14,15 @@ import text.AnsiColors
  * Then there will be only 2 lines displayed and not 3 (2 for the first infoLog, 1 for the second one)
  */
 trait BufferedPrinterLogger extends PrinterLogger:
-  def infoLog(msg: String)   : Unit = { add(msg); flushText() }
-  def errorLog(msg: String)  : Unit = { errorLine(buffer.toString + msg)  }
-  def failureLog(msg: String): Unit = { failureLine(buffer.toString + msg) }
-  def warnLog(msg: String)   : Unit = { warnLine(buffer.toString + msg) }
-  def newline()              : Unit = { add("\n"); flushText(force = false) }
-  def close()                : Unit = { flushText(force = true); () }
+  enum Log:
+    case Info, Failure, Warn, Error
+
+  def infoLog(msg: String)   : Unit = { add(msg); flushText(); logType = Log.Info }
+  def errorLog(msg: String)  : Unit = { add(msg); flushText(); logType = Log.Error }
+  def failureLog(msg: String): Unit = { add(msg); flushText(); logType = Log.Failure }
+  def warnLog(msg: String)   : Unit = { add(msg); flushText(); logType = Log.Warn }
+  def newline()              : Unit = { flushText(force = true); logType = Log.Info; add("") }
+  def close()                : Unit = { flushText(force = true) }
 
   protected def infoLine(msg: String): Unit
   protected def errorLine(msg: String): Unit
@@ -25,30 +30,32 @@ trait BufferedPrinterLogger extends PrinterLogger:
   protected def warnLine(msg: String): Unit
 
   private val buffer = new StringBuilder
+  private var logType: Log = Log.Info
 
   private def add(msg: String): Unit =
     buffer.append(msg)
     // for debugging
-    // println("msg '"+msg.replace("\n", "_")+"'")
-    // println("buffer '"+buffer.toString.replace("\n", "_")+"'")
+    // println("msg '"+msg.showWhitespaces+"'")
+    // println("buffer '"+buffer.toString.showWhitespaces+"'")
+    // println("logType "+logType)
 
   private def flushText(force: Boolean = false): Unit =
     if force then
       val lines = buffer.toString.split("\n", -1)
       buffer.clear
-      lines.foreach(infoLine)
+      lines.foreach(log)
     else
       val lines = buffer.toString.split("\n", -1)
       buffer.clear
-      lines.dropRight(1).foreach(infoLine)
+      lines.dropRight(1).foreach(log)
       lines.lastOption match
         case Some("") => ()
         case Some(other) => add(other)
         case None => ()
 
-  private def endsWith(message: String, string: String) =
-    val nocolor = AnsiColors.removeColors(message)
-    nocolor.nonEmpty &&
-      nocolor.reverse.
-        dropWhile(_ == ' ').
-        startsWith(string)
+  private def log(s: String) =
+    logType match
+      case Log.Info => infoLine(s)
+      case Log.Failure => failureLine(s)
+      case Log.Error => errorLine(s)
+      case Log.Warn => warnLine(s)

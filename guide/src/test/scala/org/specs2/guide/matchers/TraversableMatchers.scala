@@ -8,13 +8,13 @@ object TraversableMatchers extends UserGuideCard {
 Traversables can be checked with several matchers. If you want to check the size of a `Traversable`
 
  * check if it is empty
- ${snippet{Seq() must be empty}}
- ${snippet{Seq(1, 2, 3) must not be empty}}
+ ${snippet{Seq() must beEmpty}}
+ ${snippet{Seq(1, 2, 3) must not(beEmpty)}}
 
  * check its size
- ${snippet{Seq(1, 2) must have size(2)}}
- ${snippet{Seq(1, 2) must have length(2)}} // equivalent to size
- ${snippet{Seq(1, 2) must have size(be_>=(1))}} // with a matcher
+ ${snippet{Seq(1, 2) must haveSize(2)}}
+ ${snippet{Seq(1, 2) must haveLength(2)}} // equivalent to size
+ ${snippet{Seq(1, 2) must haveSize(be_>=(1))}} // with a matcher
 
 _note_: you might have to annotate the `haveSize` matcher when using some combinators. For example: `(futures: Future[Seq[Int]]) must haveSize[Seq[Int]](1).await`
 

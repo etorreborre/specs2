@@ -12,14 +12,15 @@ class TraversableMatchersSpec(val env: Env) extends Specification with ResultMat
    ${ Seq(1, 2, 3) must contain(be_>=(2)) }
    ${ Seq(1, 2, 3) must not(contain(be_>=(4))) }
    ${ Seq(1, 2, 3) must contain(be_>=(2)).atLeastOnce }
-   ${ Seq(1, 2, 3) must contain(be_>=(2)).exactly(2.times)          }
-   ${ Seq(1, 2, 3) must contain(be_>=(2)).atMost(2.times)           }
-   ${ Seq(1, 2, 3) must contain(be_>=(2)).atLeast(1.times)          }
+   ${ Seq(1, 2, 3) must contain(be_>=(2)).exactly(2.times) }
+   ${ Seq(1, 2, 3) must contain(be_>=(2)).atMost(2.times) }
+   ${ Seq(1, 2, 3) must contain(be_>=(2)).atLeast(1.times) }
    ${ Seq(1, 2, 3) must contain(be_>=(2)).between(1.times, 2.times) }
    ${ Seq(1, 2, 3) must contain(be_>=(0)).forall }
    ${ Seq(1, 2, 3) must contain(be_>=(0)).foreach }
    ${ Seq(1, 2) must contain(anyOf(1, 4)) }
-   ${ (Seq(1, 2, 3) must not(contain(anyOf(1, 2, 4)))) `returns` "There are 2 successes\n'1' is contained in '1, 2, 4'\n'2' is contained in '1, 2, 4'\n" }
+   ${ (Seq(1, 2, 3) must not(contain(anyOf(1, 2, 4)))) `returns` "Expectation failed:\nThere is 1 failure\n'3' is not contained in '1, 2, 4'\n" }
+
    ${ Seq("hello", "world") must contain(matching(".*orld")) }
    ${ Seq("hello", "world") must contain((s: String) => s.length > 2) }
    ${ Seq("1", "2", "3") must (contain(===("3")) `and` contain("2")) }

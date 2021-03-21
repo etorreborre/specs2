@@ -71,8 +71,7 @@ case class TextPrinter(env: Env) extends Printer {
       printNewLine ++
       List(
         s"Total for specification$title\n".info,
-        stats.copy(timer = timer).display(using args).info) ++
-      printNewLine
+        stats.copy(timer = timer).display(using args).info)
     }
     else Nil
 
@@ -87,8 +86,9 @@ case class TextPrinter(env: Env) extends Printer {
 
           case Fragment(d @ SpecificationRef(_, _, _, _, hidden, muted), e, l)  =>
             if !hidden then
-              if e.isExecutable && !muted then printExecutable(d, result, timer, args, indentation)
-              else                          List(d.show.info)
+              if e.isExecutable && !muted
+                then printExecutable(d, result, timer, args, indentation)
+                else List(d.show.info)
             else Nil
 
           case Fragment(d, e, l) if e.isExecutable && d != NoText =>
@@ -135,7 +135,7 @@ case class TextPrinter(env: Env) extends Printer {
               // display the full table if it is an auto-example
               if Description.isCode(description) then
                 printResult(indentText(r.message, indentation, indentationSize(args)), r.setMessage(""))
-              else
+                else
                 printResult(show, r)
 
         case other => printResult(show, result)
@@ -143,30 +143,33 @@ case class TextPrinter(env: Env) extends Printer {
     }
     else Nil
 
-  def printError(show: String, err: execute.Error, args: Arguments): List[LogLine] =
-    List(show.error) ++
-    printMessage(args, show, ErrorLine.apply)(err) ++
-    printStacktrace(args, print = true, ErrorLine.apply)(err) ++
-    (if err.exception.getCause != null then printError("CAUSED BY", execute.Error(err.exception.getCause), args)
+  def printError(show: String, result: execute.Error, args: Arguments): List[LogLine] =
+    List((show+"\n").error) ++
+    printMessage(show, result, ErrorLine.apply, args) ++
+    printStacktrace(result.stackTrace, print = true, ErrorLine.apply, args) ++
+    (if result.exception.getCause != null then printError("CAUSED BY", execute.Error(result.exception.getCause), args)
      else List())
 
   def printFailure(show: String, failure: execute.Failure, args: Arguments): List[LogLine] =
-    List(show.failure) ++
-    printMessage(args, show, FailureLine.apply)(failure) ++
-    printStacktrace(args, print = args.failtrace, FailureLine.apply)(failure) ++
+    (if args.xonly then List("\n".info) else List()) ++
+    List((show+"\n").failure) ++
+    printMessage(show, failure, FailureLine.apply, args) ++
+    printStacktrace(failure.stackTrace, print = args.failtrace, FailureLine.apply, args) ++
     printFailureDetails(args)(failure.details)
 
   def printSuccess(show: String, success: execute.Success, args: Arguments): List[LogLine] = {
     val expected = if success.exp.nonEmpty then "\n"+success.exp else ""
-    if expected.trim.nonEmpty then List((show+expected).info)
-    else                        List(show.info)
+    if expected.trim.nonEmpty
+      then List((show+expected).info)
+      else List(show.info)
   }
 
   def printPending(show: String, pending: execute.Pending, args: Arguments): List[LogLine] = {
     val reason = if pending.message.isEmpty then "PENDING" else pending.message
 
-    if reason.trim.nonEmpty then List((show+" "+reason).info)
-    else                      List(show.info)
+    if reason.trim.nonEmpty
+      then List((show+" "+reason).info)
+      else List((show).info)
   }
 
 
@@ -176,8 +179,9 @@ case class TextPrinter(env: Env) extends Printer {
         if skipped.message.isEmpty then "SKIPPED" else skipped.message
       else skipped.message
 
-    if reason.trim.nonEmpty then List((show+"\n"+reason).info)
-    else                      List(show.info)
+    if reason.trim.nonEmpty
+      then List((show+"\n"+reason).info)
+      else List(show.info)
   }
 
   def printOther(show: String, other: execute.Result, args: Arguments): List[LogLine] =
@@ -195,7 +199,6 @@ case class TextPrinter(env: Env) extends Printer {
     val (indentation, line) = firstLine.span(_ == ' ')
     val status = result.coloredStatus(using args) + " "
     val decoratedFirstLine = indentation + status + (if Seq("*", "-").exists(line.startsWith) then line.drop(2) else line)
-
     val rest = textLines.drop(1).map(l => s"  $l")
     (decoratedFirstLine +: rest).mkString("\n")
   }
@@ -203,15 +206,14 @@ case class TextPrinter(env: Env) extends Printer {
   def indentationSize(args: Arguments): Int =
     args.commandLine.int("indentation").getOrElse(2)
 
-  def printMessage(args: Arguments, description: String, as: String => LogLine): Result & ResultStackTrace => List[LogLine] = { (result: Result & ResultStackTrace) =>
+  def printMessage(description: String, result: Result & ResultStackTrace, as: String => LogLine, args: Arguments): List[LogLine] =
     val margin = description.takeWhile(_ == ' ')+" "
     List(as(result.message.split("\n").mkString(margin, "\n"+margin, "") + location(result, args)))
-  }
 
-  def printStacktrace(args: Arguments, print: Boolean, as: String => LogLine): Result & ResultStackTrace => List[LogLine] = { (result: Result & ResultStackTrace) =>
-    if print then args.traceFilter(result.stackTrace).map(t => as(t.toString)).toList
-    else Nil
-  }
+  def printStacktrace(stacktrace: List[StackTraceElement], print: Boolean, as: String => LogLine, args: Arguments): List[LogLine] =
+    if print
+      then args.traceFilter(stacktrace).map(t => as(t.toString+"\n")).toList
+      else Nil
 
   /**
    * If the failure contains the expected and actual values, display them
@@ -221,18 +223,21 @@ case class TextPrinter(env: Env) extends Printer {
       val (actualDiff, expectedDiff) = args.diffs.showDiffs(actual, expected)
       val shortDiff =
         if actualDiff != expectedDiff then
-          List(("Actual:   " + actualDiff).failure,
-               ("Expected: " + expectedDiff).failure)
+          List(s"Actual:   $actualDiff\n".failure,
+               s"Expected: $expectedDiff\n".failure)
         else List()
 
       val fullDiff =
         (if args.diffs.showFull then
-          List(("Actual (full):   " + actual).failure,
-               ("Expected (full): " + expected).failure)
+          List(s"Actual (full):   $actual\n".failure,
+               s"Expected (full): $expected\n".failure)
         else Nil)
 
-      shortDiff ++ fullDiff ++
-      List("".info)
+      List("\n".failure) ++
+      shortDiff ++
+      List("\n".failure) ++
+      fullDiff ++
+      List("\n".info)
 
     case details @ FailureSeqDetails(actual, expected) if args.diffs.showSeq(actual, expected, ordered = true) =>
       val (added, missing) = args.diffs.showSeqDiffs(actual, expected, ordered = true)
