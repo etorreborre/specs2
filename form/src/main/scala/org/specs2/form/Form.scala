@@ -81,7 +81,7 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
       this
     else
       val executedRows = executeRows
-      newForm(title, executedRows, Some(executedRows.map(_.execute).foldLeft(success: Result) { (res, cur) => res `and` cur }))
+      newForm(title, executedRows, Some(executedRows.map(_.execute).foldLeft(success: Result) { (res, cur) => res and cur }))
 
   /** @return the printed form with a padding space size to use for each cell */
   def text: String = allRows.map(_.text(maxSizes)).mkString("\n")

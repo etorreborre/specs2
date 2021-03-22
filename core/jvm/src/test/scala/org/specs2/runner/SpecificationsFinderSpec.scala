@@ -6,6 +6,8 @@ import org.specs2.Spec
 import org.specs2.control.Operation
 import org.specs2.io.*
 import org.specs2.control.*
+import org.specs2.specification.core.*
+import org.specs2.reporter.PrinterLogger.*
 import org.specs2.matcher.Matcher
 import org.specs2.matcher.OperationMatchers.beOk
 import Matcher.{given}
@@ -35,7 +37,7 @@ class SpecificationsFinderSpec extends Spec { def is = s2"""
       s.contains("SourceFileSpec") || // SourceFileSpec cannot be instantiated
       s.contains("SpecificationsFinderSpec")
 
-    SpecificationsFinder.default.findSpecifications(
+    DefaultSpecificationsFinder(EnvDefault.default.setSystemLogger(NoLogger)).findSpecifications(
       basePath = DirectoryPath.unsafe(base) / "src" / "test" / "scala",
       filter = filter
     ).runOption must beSome((l: List[?]) => l must haveSize(1))

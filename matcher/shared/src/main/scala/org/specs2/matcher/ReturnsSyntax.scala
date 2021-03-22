@@ -11,15 +11,20 @@ import StringMatchers.{given, *}
 trait ReturnsSyntax extends ExpectationsCreation:
 
   extension [T : AsResult](t: =>T)
-    def returns(m: String): Result =
-      (contain(m) ^^ ((_: Result).message))(createExpectable(ResultExecution.execute(AsResult(t)))).
-        setMessage(s"${t.showWhitespaces} does not return ${m.showWhitespaces}")
+    infix def returns(m: String): Result =
+      lazy val r = AsResult.safely(t)
+      lazy val resultMessage = r.message
+      contain(m).setMessage(s"${resultMessage.showWhitespaces}\n does not return\n${m.showWhitespaces}")(createExpectable(resultMessage))
 
-    def returnsMatch(m: String) =
-      (beMatching(m) ^^ ((_: Result).message))(createExpectable(ResultExecution.execute(AsResult(t))))
+    infix def returnsMatch(m: String) =
+      lazy val r = AsResult.safely(t)
+      (beMatching(m) ^^ ((_: Result).message))(createExpectable(r))
 
-    def returnsResult(m: String): Result =
-      lazy val r = AsResult(t)
-      (contain(m) ^^ { (m: Result) => if r.isSuccess then "success: "+m.message else "failure: "+m.message })(createExpectable(ResultExecution.execute(r)))
+    infix def returnsResult(m: String): Result =
+      lazy val r = AsResult.safely(t)
+      (contain(m) ^^ { (m: Result) =>
+        if r.isSuccess
+          then "success: "+m.message
+          else "failure: "+m.message })(createExpectable(r))
 
 object ReturnsSyntax extends ReturnsSyntax with Expectations

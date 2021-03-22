@@ -40,7 +40,7 @@ class ReporterSpec(val env: Env) extends Specification with ThrownExpectations w
 
   def a1 =
     val logger = stringPrinterLogger
-    reported(ownEnv.setArguments(Arguments.split("ex ex3")).setPrinterLogger(logger))
+    reported(ownEnv.setArguments(Arguments.split("ex ex3")), logger)
     logger.messages.mkString("\n") must contain("ex3")
     logger.messages.mkString("\n") must not(contain("ex1"))
 
@@ -104,7 +104,7 @@ object reporterSpecSupport extends MustMatchers with ExpectedResults with S2Stri
   def ex3(logger: PrinterLogger) = { logger.infoLog("e3\n "); ok }
 
   def reported(env: Env, logger: PrinterLogger = NoPrinterLogger, printers: List[Printer] = Nil) =
-    val printers1 = if printers.isEmpty then List(TextPrinter(env)) else printers
+    val printers1 = if printers.isEmpty then List(TextPrinter(env.setPrinterLogger(logger))) else printers
     val reporter = Reporter.create(printers1, env.copy(printerLogger = NoPrinterLogger, systemLogger = NoLogger))
     reporter.report(spec(logger)).runOption(env.executionEnv)
 

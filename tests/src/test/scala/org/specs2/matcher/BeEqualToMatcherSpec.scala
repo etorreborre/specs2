@@ -41,29 +41,29 @@ class BeEqualToMatcherSpec extends Spec with ResultMatchers with ShouldMatchers 
   ${ Array(1, 2) must be_===(Array(1, 2)) }
   ${ Array(Array(1, 2)) must be_===(Array(Array(1, 2))) }
   ${ Array(1, 3) must not(be_===(Array(1, 2))) }
-  ${ (Array(1, 3) must be_===(Array(1, 2))) `returns`
+  ${ (Array(1, 3) must be_===(Array(1, 2))) returns
      """Array(1, 3 != 2)""" }
 
   Set equality
   ${ Set(1, 2) must be_==(Set(2, 1)) }
-  ${ (Set(1) must be_==(Set.empty[Int])) `returns` "Set(1) != Set()"}
-  ${ (Set(1, 2) must be_==(Set(2, 3))) `returns`
+  ${ (Set(1) must be_==(Set.empty[Int])) returns "Set(1) != Set()"}
+  ${ (Set(1, 2) must be_==(Set(2, 3))) returns
       """Set(1, 2) != Set(2, 3)""" }
-  ${ (Set(1, 2) must be_===(Set(2, 3))) `returns`
+  ${ (Set(1, 2) must be_===(Set(2, 3))) returns
       """|Set(2,
          |    added: 3,
          |    removed: 1)""".stripMargin }
 
   Map equality
   ${ Map(1 -> 2, 3 -> 4) must be_==(Map(3 -> 4, 1 -> 2)) }
-  ${ Map(1 -> 2, 3 -> 4) must be_===(Map(3 -> 1, 1 -> 4)) `returns`
+  ${ Map(1 -> 2, 3 -> 4) must be_===(Map(3 -> 1, 1 -> 4)) returns
      s"""|Map(1 -> {2 != 4},
          |    3 -> {4 != 1})""".stripMargin }
   ${ mutableMap(1 -> 2, 3 -> 4) must be_==(mutableMap(3 -> 4, 1 -> 2)) }
 
   Other collections use normal equality but display missing elements
   ${ Seq(1, 2) must be_==(Seq(1, 2)) }
-  ${ (Seq(1, 2) must be_==(Seq(2, 3))) `returns` """List(1, 2) != List(2, 3)""" }
+  ${ (Seq(1, 2) must be_==(Seq(2, 3))) returns """List(1, 2) != List(2, 3)""" }
   ${ Seq(1, 2) must be_===(Seq(1, 2)) }
   ${ (Seq(1, 2) must be_===(Seq(2, 3))).normalized ====
        """|- 1

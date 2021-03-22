@@ -11,8 +11,8 @@ class MapMatchersSpec extends Spec with MapMatchers { def is = s2"""
 
  haveKeys checks if a Map has several keys
  ${ Map(1 -> "1", 2 -> "2") must haveKeys(1, 2) }
- ${ (Map(1 -> "1", 2 -> "2") must haveKeys(1, 3)) `returns` "doesn't have the key '3'" }
- ${ (Map(1 -> "1", 2 -> "2") must not(haveKeys(2, 3))) `returns` "has the key '2'" }
+ ${ (Map(1 -> "1", 2 -> "2") must haveKeys(1, 3)) returns "doesn't have the key '3'" }
+ ${ (Map(1 -> "1", 2 -> "2") must not(haveKeys(2, 3))) returns "has the key '2'" }
 
  haveValue checks if a Map has a given value
  ${ Map(1 -> "1") must haveValue("1") }
@@ -20,7 +20,7 @@ class MapMatchersSpec extends Spec with MapMatchers { def is = s2"""
 
  haveValues checks if a Map has several values
  ${ Map(1 -> "1", 2 -> "2") must haveValues("1", "2") }
- ${ (Map(1 -> "1", 2 -> "2") must haveValues("1", "3")) `returns` "doesn't have the value '3'" }
+ ${ (Map(1 -> "1", 2 -> "2") must haveValues("1", "3")) returns "doesn't have the value '3'" }
 
  havePair checks if a Map has a given pair of values
  ${ Map(1 -> "1") must havePair(1 -> "1") }

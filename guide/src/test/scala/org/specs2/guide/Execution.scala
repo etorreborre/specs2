@@ -53,7 +53,7 @@ When this specification is executed examples 3 and 4 will be skipped because the
 
  - `stopOnFail` stop if there is a failure in the previous examples or in the step
  - `stopOnSkipped` stop if there is a skipped result in the previous examples or in the step
- - `stopWhen(Result => Boolean)` stop if the `and`-ed result of the previous examples and the step verifies a given condition
+ - `stopWhen(Result => Boolean)` stop if the and-ed result of the previous examples and the step verifies a given condition
 
 ### Sequential
 

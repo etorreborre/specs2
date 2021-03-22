@@ -84,7 +84,7 @@ trait FilesContentMatchers extends FileMatchers with LinesContentMatchers with T
                                               filter: File => Boolean = (f: File) => true,
                                               filesMatcher: Matcher[(File, File)] = haveSameLines[File, File]) extends Matcher[File]:
     def apply[S <: File](actualDir: Expectable[S]) =
-      haveSamePathsAs(expectedDir).withFilter(filter)(actualDir) `and`
+      haveSamePathsAs(expectedDir).withFilter(filter)(actualDir) and
       haveSameFilesContentAs(expectedDir).withFilter(filter).withMatcher(filesMatcher)(actualDir)
 
     def withFilter(filter: File => Boolean) = copy(filter = filter)

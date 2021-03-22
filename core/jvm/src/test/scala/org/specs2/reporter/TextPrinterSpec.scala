@@ -256,10 +256,10 @@ presentation
 
     "printed is sorted" ==> {
       printed must ===(printed.sorted)
-    } `and`
+    } and
     "executed is unsorted" ==> {
       executed must not(be_==(executed.sorted))
-    } `and`
+    } and
     "the execution is mixed with the printing" ==> {
       val (l1, l2) = logger.messages.filter(s => s.contains("executed") || s.contains("+")).span(_.contains("executed"))
       l1.size `aka` (l1, l2).toString must not(be_==(l2.size))
@@ -285,10 +285,10 @@ presentation
 
     "printed is sorted" ==> {
       printed must ===(printed.sorted)
-    } `and`
+    } and
     "executed is sorted too" ==> {
       executed must be_==(executed.sorted)
-    } `and`
+    } and
     "the execution is mixed with the printing" ==> {
       val (l1, l2) = logger.messages.filter(s => s.contains("executed") || s.contains("+")).span(_.contains("executed"))
       l1.size `aka` (l1, l2).toString must not(be_==(l2.size))

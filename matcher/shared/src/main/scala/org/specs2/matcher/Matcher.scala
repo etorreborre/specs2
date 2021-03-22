@@ -76,7 +76,7 @@ trait Matcher[-T]:
    * the logical and between 2 matchers
    * @see Result.and
    */
-  def and[S <: T](m: =>Matcher[S]): Matcher[S] =
+  infix def and[S <: T](m: =>Matcher[S]): Matcher[S] =
     new Matcher[S]:
       def apply[U <: S](a: Expectable[U]): Result =
         outer(a).and(m(a))
@@ -85,7 +85,7 @@ trait Matcher[-T]:
    * the logical or between 2 matchers
    * @see Result.or
    */
-  def or[S <: T](m: =>Matcher[S]): Matcher[S] =
+  infix def or[S <: T](m: =>Matcher[S]): Matcher[S] =
     new Matcher[S]:
       def apply[U <: S](a: Expectable[U]): Result =
         outer(a).or(m(a))

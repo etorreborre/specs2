@@ -80,8 +80,8 @@ Messages
       ((expected: String) => (actual: String) => actual must be_===(expected) ^^^ ((_:String).trim))
 
     val message = (" abc" must beEqualTrimmed("abc   ")).message
-    (message must contain(" abc")) `and`
-    (message must contain("abc  ")) `and`
+    (message must contain(" abc")) and
+    (message must contain("abc  ")) and
     (message must contain("abc"))
 
   def adapt8 =
@@ -102,25 +102,25 @@ Messages
 
   def convert1 =
     def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, "is odd")
-    (3 must beEven) `returns` "'3' is odd"
+    (3 must beEven) returns "'3' is odd"
 
   def convert2 =
     def beEven: Matcher[Int] = (i: Int) => (i % 2 == 0, "'"+i.toString+"' is odd")
-    ((3 must beEven) `returns` "'3' is odd") `and`
+    ((3 must beEven) returns "'3' is odd") and
     (2 must beEven)
 
   def convert3 =
     def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i.toString+" is odd")
-    ((3 must beEven) `returns` "3 is odd") `and`
+    ((3 must beEven) returns "3 is odd") and
     (2 must beEven)
 
   def convert4 =
-    (1 must be_==("1").mute) `returns` ""
+    (1 must be_==("1").mute) returns ""
 
   def convert5 =
     def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i.toString+" is odd")
     def beOdd: Matcher[Int] = ((i: Int) => i % 2 != 0, (i: Int) => i.toString+" is even")
-    (2 must beOdd) `returns` "2 is even"
+    (2 must beOdd) returns "2 is even"
 
   def convert6 =
     def beOneTwoThreeList: Matcher[List[Int]] = (list: List[Int]) => list must be_==(List(1, 2, 3))
@@ -133,11 +133,11 @@ Messages
 
   def collection1 =
     def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i.toString+" is odd")
-    forall(Seq(1, 2, 3))((i: Int) => i must beEven) `returns` ("1 is odd")
+    forall(Seq(1, 2, 3))((i: Int) => i must beEven) returns ("1 is odd")
 
   def collection2 =
     def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i.toString+" is odd")
-    foreach(Seq(1, 2, 3))((i: Int) => i must beEven) `returns` "There are 2 failures\n1 is odd\n3 is odd\n"
+    foreach(Seq(1, 2, 3))((i: Int) => i must beEven) returns "There are 2 failures\n1 is odd\n3 is odd\n"
 
   def messages1 =
     def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i.toString+" is odd")

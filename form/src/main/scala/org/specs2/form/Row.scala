@@ -27,10 +27,10 @@ case class Row(private val cellList: List[Cell]) extends Executable:
 
   /**
    * execute all cells
-   * @return a logical `and` on all results
+   * @return a logical and on all results
    */
   def execute: Result =
-    cellList.foldLeft(success: Result) { (res, cur) =>  res `and` cur.execute }
+    cellList.foldLeft(success: Result) { (res, cur) =>  res and cur.execute }
 
   /**
    * execute the row

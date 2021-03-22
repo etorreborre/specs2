@@ -23,7 +23,7 @@ case class Tabs(tabs: Seq[Tab] = Vector(), result: Option[Result] = None) extend
 
   def xml(using args: Arguments) = <td class="info"><div class="tabber">{tabs.map(_.xml).reduceNodes}</div></td>
 
-  def executeTabs = tabs.foldLeft(success: Result){ (res, cur) => res `and` cur.execute }
+  def executeTabs = tabs.foldLeft(success: Result){ (res, cur) => res and cur.execute }
 
 /**
  * Class representing an individual tab

@@ -194,7 +194,7 @@ case class TextPrinter(env: Env) extends Printer {
   }
 
   def statusAndDescription(text: String, result: Result)(args: Arguments) = {
-    val textLines = text.trimEnclosing("`").trimEnclosing("```").split("\n", -1).toList // trim markdown code marking
+    val textLines = text.trimEnclosing("```").trimEnclosing("`").split("\n", -1).toList // trim markdown code marking
     val firstLine = textLines.headOption.getOrElse("")
     val (indentation, line) = firstLine.span(_ == ' ')
     val status = result.coloredStatus(using args) + " "

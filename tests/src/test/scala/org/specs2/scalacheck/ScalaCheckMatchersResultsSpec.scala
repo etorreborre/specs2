@@ -13,8 +13,8 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
 
  Reporting for Props
 
-   ${ check(Prop.passed) `returns` "OK, passed 100 tests." }
-   ${ checkVerbose0(Prop.falsified) `returns` "The seed is" }
+   ${ check(Prop.passed) returns "OK, passed 100 tests." }
+   ${ checkVerbose0(Prop.falsified) returns "The seed is" }
    ${ check(Prop.falsified) must beFailing(withMessage("Falsified after 0 passed tests.")) }
    ${ check(Prop.undecided) must beFailing(withMessage("Gave up after only 0 passed tests. 501 tests were discarded")) }
    when there is a conversion exception
@@ -72,7 +72,7 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
 
    Failing arguments are reported
    ${ check(prop((i: Int, s: String) => i.toString == s).setGens(Gen.const(0), Gen.const("1"))).message must
-        (contain("ARG_0: 0") `and` contain("ARG_1_ORIGINAL: \"1\"")) }
+        (contain("ARG_0: 0") and contain("ARG_1_ORIGINAL: \"1\"")) }
 
    The freqmap instance is used to  report frequencies
    ${ check(prop((i: Int) => true).prettyFreqMap(_ => "histogram").collect.verbose).expected must haveMessage("histogram") }
@@ -82,10 +82,10 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
 
 
    Parameters can be passed from the command line
-   ${ check(prop { (i: Int, j: Int) =>  i === i }.setParameters(defaultParameters.overrideWith(CommandLine.create("scalacheck.mintestsok", "10")))) `returns` "OK, passed 10 tests" }
+   ${ check(prop { (i: Int, j: Int) =>  i === i }.setParameters(defaultParameters.overrideWith(CommandLine.create("scalacheck.mintestsok", "10")))) returns "OK, passed 10 tests" }
 
    PrettyProduct better render case classes to replay examples
-   ${ check(prop((i: MyInt) => false)) `returns` """MyInt(1, "hey")""" }
+   ${ check(prop((i: MyInt) => false)) returns """MyInt(1, "hey")""" }
 
 """
 

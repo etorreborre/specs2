@@ -43,7 +43,7 @@ trait FpMatchers extends ScalaCheck:
 
   def hasNeutralElement[T](using m: Monoid[T], a: Arbitrary[T], s: Shrink[T]): Prop =
     prop { (t: T) =>
-      be_==(t |+| m.zero).apply(createExpectable(t)) `and` be_==(m.zero |+| t).apply(createExpectable(t))
+      be_==(t |+| m.zero).apply(createExpectable(t)) and be_==(m.zero |+| t).apply(createExpectable(t))
     }.set(minTestsOk = 20, maxSize = 10)
 
   def isMonoid[T](using m: Monoid[T], a: Arbitrary[T], s: Shrink[T]): Prop =

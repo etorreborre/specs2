@@ -30,7 +30,7 @@ Bimaps define bijection relationships between values
 
     zipped must contain { (kv: (String, Int)) => kv match {
       case (k, v) =>
-        (bimap.fromKey(k) must beSome(v)) `and`
+        (bimap.fromKey(k) must beSome(v)) and
         (bimap.fromValue(v) must beSome(k))
     }}.forall
   }

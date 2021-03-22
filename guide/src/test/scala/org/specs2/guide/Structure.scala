@@ -91,7 +91,7 @@ s2"""
   }
 }}
 
-If you want to get both expectations you will need to use `and` between them: ${snippet{
+If you want to get both expectations you will need to use and between them: ${snippet{
 s2"""
   my example on strings $e1
 """

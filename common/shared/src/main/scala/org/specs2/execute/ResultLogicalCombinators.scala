@@ -30,7 +30,7 @@ trait ResultLogicalCombinators extends Results:
     /**
      * @return the logical and combination of 2 results
      */
-    def and(other: =>Result): Result =
+    infix def and(other: =>Result): Result =
       lazy val o = ResultExecution.execute(other)
       def combine(result: Result, ifFail: Failure => Failure = identity, ifError: Error => Error = identity) =
         result match
@@ -57,10 +57,10 @@ trait ResultLogicalCombinators extends Results:
           case d @ DecoratedResult(_,_)     =>
             o match
               case DecoratedResult(d2, r2) =>
-                val andResult = d.result `and` r2
+                val andResult = d.result and r2
                 if andResult.isSuccess then DecoratedResult(d.decorator, andResult)
                 else                     DecoratedResult(d2, andResult)
-              case another                 => DecoratedResult(d.decorator, d.result `and` another)
+              case another                 => DecoratedResult(d.decorator, d.result and another)
 
           case f @ Failure(_,_,_,_)        => ifFail(f.addExpectationsNb(1)) // re-throw if necessary
           case e @ Error(_,_)              => ifError(e.addExpectationsNb(1)) // re-throw if necessary
@@ -71,7 +71,7 @@ trait ResultLogicalCombinators extends Results:
     /**
      * @return the logical or combination of 2 results
      */
-    def or(other: =>Result): Result =
+    infix def or(other: =>Result): Result =
       lazy val o = ResultExecution.execute(other)
 
       r match
@@ -98,10 +98,10 @@ trait ResultLogicalCombinators extends Results:
         case d @ DecoratedResult(_,_)     =>
           o match
             case DecoratedResult(d2, r2) =>
-              val orResult = d.result `or` r2
+              val orResult = d.result or r2
               if orResult.isSuccess then DecoratedResult(d.decorator, orResult)
               else                    DecoratedResult(d2, orResult)
-            case other1                   => DecoratedResult(d.decorator, d.result `or` other1)
+            case other1                   => DecoratedResult(d.decorator, d.result or other1)
         case Error(_, _) => other
 
     /**

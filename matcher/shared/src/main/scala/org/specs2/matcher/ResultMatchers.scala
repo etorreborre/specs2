@@ -33,7 +33,7 @@ trait ResultMatchers:
         val (r, description) = ResultExecution.executeEither(AsResult[T](value.value)) match
           case Left(r) => (r, "the value is not a failure: ")
           case Right(r) => (r, value.description + " is not a failure")
-        result(r.isFailure, description+ r.message) `and` check.check(r.message)
+        result(r.isFailure, description+ r.message) and check.check(r.message)
 
   def beError[T : AsResult]: Matcher[T] =
     beError(ValueCheck.alwaysOk[String])
@@ -47,7 +47,7 @@ trait ResultMatchers:
         val (r, description) = ResultExecution.executeEither(AsResult[T](value.value)) match
           case Left(r) => (r, "the value is not an error: ")
           case Right(r) => (r, value.description + " is not an error")
-        result(r.isError, description+ r.message) `and` check.check(r.message)
+        result(r.isError, description+ r.message) and check.check(r.message)
 
   def beSkipped[T : AsResult]: Matcher[T] =
     beSkipped(ValueCheck.alwaysOk[String])
@@ -61,7 +61,7 @@ trait ResultMatchers:
         val (r, description) = ResultExecution.executeEither(AsResult[T](value.value)) match
           case Left(r) => (r, "the value is not skipped: ")
           case Right(r) => (r, value.description + " is not skipped")
-        result(r.isSkipped, description+ r.message) `and` check.check(r.message)
+        result(r.isSkipped, description+ r.message) and check.check(r.message)
 
   def bePending[T : AsResult]: Matcher[T] =
     bePending(ValueCheck.alwaysOk[String])
@@ -72,10 +72,9 @@ trait ResultMatchers:
   def bePending[T : AsResult](check: ValueCheck[String]): Matcher[T] =
     new Matcher[T]:
       def apply[S <: T](value: Expectable[S]) =
-       println(value.value)
         val (r, description) = ResultExecution.executeEither(AsResult[T](value.value)) match
           case Left(r) => (r, "the value is not pending: ")
           case Right(r) => (r, value.description + " is not pending")
-        result(r.isPending, description+ r.message) `and` check.check(r.message)
+        result(r.isPending, description+ r.message) and check.check(r.message)
 
 object ResultMatchers extends ResultMatchers

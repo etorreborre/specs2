@@ -22,7 +22,7 @@ class FragmentsContinuationSpec(val env: Env) extends Specification with ActionM
 
   def continuationError =
     val fragments = runContinuation(ok, continuation = {sys.error("boom"); "continuation" ! ok})
-    (fragments must haveSize(2)) `and`
+    (fragments must haveSize(2)) and
     (fragments(1).description.show must beMatching("Could not create fragments after the previous successful result"))
 
   /** HELPERS */

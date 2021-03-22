@@ -117,7 +117,6 @@ Compare result
   Comparing success with failure will return type difference    ${ Diffable.diff(Try("abc"), Failure[String](ex2)) must ===(TryTypeDifferent(isActualSuccess = true)) }
   Comparing success with failure will return type difference    ${ Diffable.diff(Failure[String](ex2), Try("abc")) must ===(TryTypeDifferent(isActualSuccess = false)) }
   Comparing failure with success will return type difference    ${ Diffable.diff(Try("abc"), Failure[String](ex2)) must ===(TryTypeDifferent(isActualSuccess = true)) }
-  todo: handle non explicit types for Failure !!!
 
 """
 

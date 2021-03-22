@@ -39,7 +39,7 @@ class XmlMatchersSpec extends Spec with XmlMatchers with MustExpectations { def 
    ${ <a><b></b></a> must \("b") }
    ${ <a>hello</a> must \\("a").textIs("hello") }
    ${ <a>hello</a> must \\("a") \> ("hello") }
-   ${ (<a>hello</a> must \\("a") \> ("world")) `returns` "<a>hello</a> doesn't contain node 'a' with text: world"}
+   ${ (<a>hello</a> must \\("a") \> ("world")) returns "<a>hello</a> doesn't contain node 'a' with text: world"}
    ${ <a>hello</a> must \\("a").textMatches("h.*") }
    ${ <a>hello</a> must \\("a") \>~ ("h.*") }
    ${ <a><b><c></c></b></a> must \(<b><c></c></b>) }
@@ -89,56 +89,56 @@ class XmlMatchersSpec extends Spec with XmlMatchers with MustExpectations { def 
           </a>}
   def match2 = <a><b n1="n1" n2="n2"/></a> must ==/(<a><b n2="n2" n1="n1"/></a>)
 
-  def match3 = (<a><b/></a> must ==/(<a> <c/></a>)) `returns`
+  def match3 = (<a><b/></a> must ==/(<a> <c/></a>)) returns
        "<a><b/></a> is not equal to <a> <c/></a>"
 
-  def match4 = (new Atom("hello").toSeq `aka` "the seq" must ==/(new Text("world").toSeq)) `returns`
+  def match4 = (new Atom("hello").toSeq `aka` "the seq" must ==/(new Text("world").toSeq)) returns
        "the seq 'hello' is not equal to world"
 
-  def path1 = (<a></a> must \("a")) `returns` "<a></a> doesn't contain subnode 'a'"
+  def path1 = (<a></a> must \("a")) returns "<a></a> doesn't contain subnode 'a'"
 
-  def path2 = (<a><b><c></c></b></a> must \("c")) `returns`
+  def path2 = (<a><b><c></c></b></a> must \("c")) returns
     "<a><b><c></c></b></a> doesn't contain subnode 'c'"
 
-  def path3 = (<a><b name2="value"></b></a> must \("b", "name")) `returns`
+  def path3 = (<a><b name2="value"></b></a> must \("b", "name")) returns
     "<a><b name2=\"value\"></b></a> doesn't contain subnode 'b' with attributes: name"
 
-  def path4 = (<a><b n="v"></b></a> must \("b", "n"->"v1")) `returns`
+  def path4 = (<a><b n="v"></b></a> must \("b", "n"->"v1")) returns
      "<a><b n=\"v\"></b></a> doesn't contain subnode 'b' with attributes: n=\"v1\""
 
-  def path5 =  (<a><b n="v"></b></a> must \("b", "n1"->"v")) `returns`
+  def path5 =  (<a><b n="v"></b></a> must \("b", "n1"->"v")) returns
     "<a><b n=\"v\"></b></a> doesn't contain subnode 'b' with attributes: n1=\"v\""
 
-  def path6= (<a><b n="v"></b></a> must \("b", "n"->"v", "n2"->"v2")) `returns`
+  def path6= (<a><b n="v"></b></a> must \("b", "n"->"v", "n2"->"v2")) returns
     "<a><b n=\"v\"></b></a> doesn't contain subnode 'b' with attributes: n=\"v\" n2=\"v2\""
 
-  def path7 = (<a><b n="v" n2="v"></b></a> must \("b", "n"->"v").exactly) `returns`
+  def path7 = (<a><b n="v" n2="v"></b></a> must \("b", "n"->"v").exactly) returns
     "<a><b n=\"v\" n2=\"v\"></b></a> doesn't contain subnode 'b' with exactly the attributes: n=\"v\""
 
-  def path8 = (<a><b><c></c></b></a> must \(<b><d></d></b>)) `returns`
+  def path8 = (<a><b><c></c></b></a> must \(<b><d></d></b>)) returns
     "<a><b><c></c></b></a> doesn't contain <b><d></d></b>"
 
-  def deepPath1 = (<a><b name2="value"></b></a> must \\("b", "name")) `returns`
+  def deepPath1 = (<a><b name2="value"></b></a> must \\("b", "name")) returns
     "<a><b name2=\"value\"></b></a> doesn't contain node 'b' with attributes: name"
 
-  def deepPath2 = (<a><b n="v"></b></a> must \\("b", "n"->"v1")) `returns`
+  def deepPath2 = (<a><b n="v"></b></a> must \\("b", "n"->"v1")) returns
     "<a><b n=\"v\"></b></a> doesn't contain node 'b' with attributes: n=\"v1\""
 
-  def deepPath3 =  (<a><b n="v"></b></a> must \\("b", "n1"->"v")) `returns`
+  def deepPath3 =  (<a><b n="v"></b></a> must \\("b", "n1"->"v")) returns
       "<a><b n=\"v\"></b></a> doesn't contain node 'b' with attributes: n1=\"v\""
 
-  def deepPath4 = (<a><b n="v"></b></a> must \\("b", "n"->"v", "n2"->"v2")) `returns`
+  def deepPath4 = (<a><b n="v"></b></a> must \\("b", "n"->"v", "n2"->"v2")) returns
     "<a><b n=\"v\"></b></a> doesn't contain node 'b' with attributes: n=\"v\" n2=\"v2\""
 
-  def deepPath5 = (<a><b n="v" n2="v"></b></a> must \\("b", "n"->"v").exactly) `returns`
+  def deepPath5 = (<a><b n="v" n2="v"></b></a> must \\("b", "n"->"v").exactly) returns
     "<a><b n=\"v\" n2=\"v\"></b></a> doesn't contain node 'b' with exactly the attributes: n=\"v\""
 
-  def deepPath6 = (<a><b><c></c></b></a> must \\(<b><d></d></b>)) `returns`
+  def deepPath6 = (<a><b><c></c></b></a> must \\(<b><d></d></b>)) returns
     "<a><b><c></c></b></a> doesn't contain <b><d></d></b>"
 
-  def deepPath7 = (<a><b>hello</b></a> must \\(<b>world</b>)) `returns`
+  def deepPath7 = (<a><b>hello</b></a> must \\(<b>world</b>)) returns
     "<a><b>hello</b></a> doesn't contain <b>world</b>"
 
-  def deepPath8 = (<a><b>{"hello"}</b></a> must \\(<b>world</b>)) `returns`
+  def deepPath8 = (<a><b>{"hello"}</b></a> must \\(<b>world</b>)) returns
     "<a><b>hello</b></a> doesn't contain <b>world</b>"
 }

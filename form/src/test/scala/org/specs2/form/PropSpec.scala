@@ -71,7 +71,7 @@ Execution
   def creation2 = actualOnly.actual.toOption           === Some(18)
   def creation3 = nameProp.actual.toOption             === Some("eric")
   def creation4 = constrained.label                    === "name"
-  def creation5 = withMatcher("e").execute             === Success("eric contains 'e'")
+  def creation5 = withMatcher("f").execute             === Failure("eric doesn't contain 'f'")
   def creation6 = Prop("", 1, be_>(0).mute).execute    === Success("")
   def creation7 = Prop("", 1, 2, be_>(0).mute).execute === Success("")
 
@@ -84,7 +84,7 @@ Execution
   def execute1  = noValues.execute                             === Pending("No expected value")
   def execute2  = actualOnly.execute                           === Pending("No expected value")
   def execute3  = expectedOnly.execute                         === Pending("No actual value")
-  def execute4  = nameProp("eric").execute                     === Success("eric == 'eric'")
+  def execute4  = nameProp("eric").execute                     === Success("'eric' == 'eric'")
   def execute5  = nameProp("eric2").execute.message            === "'eric' != 'eric2'"
   def execute6  = nameProp.apply(error("bad")).execute.message === "java.lang.RuntimeException: bad"
   def execute7  = constrained("e").execute.isSuccess           === true

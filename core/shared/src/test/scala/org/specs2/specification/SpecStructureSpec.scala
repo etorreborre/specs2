@@ -27,7 +27,7 @@ ${step(env.shutdown())}
   lazy val spec2 = S2.is
 
   def a1 =
-    SpecStructure.dependsOn(ee)(spec1, spec2) `and` SpecStructure.dependsOn(ee)(spec2, spec1).not
+    SpecStructure.dependsOn(ee)(spec1, spec2) and SpecStructure.dependsOn(ee)(spec2, spec1).not
 
   def a2 =
     SpecStructure.linkedSpecifications(spec1, env, getClass.getClassLoader).runOption.flatMap(_.lastOption) must beSome((_: SpecStructure).arguments

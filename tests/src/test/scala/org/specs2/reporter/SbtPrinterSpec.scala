@@ -8,6 +8,7 @@ import main.Arguments
 import io.StringOutput
 import sbt.testing.*
 import runner.*
+import text.Whitespace.*
 import specification.core.*
 import specification.process.DefaultExecutor
 import scala.collection.mutable.ListBuffer
@@ -36,20 +37,19 @@ class SbtPrinterSpec(val env: Env) extends Specification with OwnEnv { def is = 
     def e2 =
       val executed = DefaultExecutor.executeSpec((new HelloWorldSpec).is, ownEnv)
 
-      print(executed).replaceAll("""(\d+ seconds?, )?\d+ ms""", "0 ms").replaceAll(" ", "_") ===
+      print(executed).replaceAll("""(\d+ seconds?, )?\d+ ms""", "0 ms").showSpaces ===
         """|HelloWorldSpec
-           |
+           |⎵
            | This is a specification to check the 'Hello world' string
-           |
+           |⎵
            | The 'Hello world' string should
            |   + contain 11 characters
            |   + start with 'Hello'
            |   + end with 'world'
-           |
+           |⎵
            |Total for specification HelloWorldSpec
            |Finished in 0 ms
-           |3 examples, 0 failure, 0 error
-           |""".stripMargin.replaceAll(" ", "_")
+           |3 examples, 0 failure, 0 error""".stripMargin.showSpaces
 
     def print(spec: SpecStructure) =
       printer.print(spec).runAction(ownEnv.specs2ExecutionEnv)

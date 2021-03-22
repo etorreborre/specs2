@@ -85,7 +85,7 @@ is formatted for JUnit reporting tools.
     def e7  = { xml(ownEnv) must \\("testsuite", "time") }
     def e8  = { xml(ownEnv) must \\("system-out") }
     def e9  = { xml(ownEnv) must \\("system-err") }
-    def e10 = { xml(ownEnv) must (\\("properties") `and` \\("property")) }
+    def e10 = { xml(ownEnv) must (\\("properties") and \\("property")) }
 
   object test:
     def e1 = { print(ownEnv)("t1" ^ br ^ "e1<>&\"" ! success) must \\("testcase", "classname" -> "org.specs2.reporter.JUnitXmlPrinterSpec") }

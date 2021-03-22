@@ -66,8 +66,8 @@ class StringMatchersSpec extends Spec with StringMatchers with MustExpectations 
   ${ "Eric" must not(endWith("rac")) }
                                                                                                                         """
 
-  def e3 = ("eric".aka must beEqualTo("Xric").ignoreCase) `returns` "ignoring case"
-  def e4 = ("eric".aka must beEqualTo("a eric ").ignoreSpace) `returns` "ignoring space"
-  def e5 = ("eric".aka must beEqualTo("a eric ").trimmed) `returns` "trimmed"
-  def e6 = ("eric".aka must beEqualTo("xric ").ignoreSpace.ignoreCase) `returns` "ignoring space, ignoring case"
+  def e3 = ("eric".aka must beEqualTo("Xric").ignoreCase) returns "ignoring case"
+  def e4 = ("eric".aka must beEqualTo("a eric ").ignoreSpace) returns "ignoring space"
+  def e5 = ("eric".aka must beEqualTo("a eric ").trimmed) returns "trimmed"
+  def e6 = ("eric".aka must beEqualTo("xric ").ignoreSpace.ignoreCase) returns "ignoring space, ignoring case"
 }

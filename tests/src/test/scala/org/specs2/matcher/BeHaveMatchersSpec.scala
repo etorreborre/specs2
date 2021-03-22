@@ -20,13 +20,13 @@ class BeHaveMatchersSpec extends Specification:
     ${ !((Nil:List[Int]) must not(beEmpty)).isSuccess }
     ${ !((Array.empty[Int]) must not(beEmpty)).isSuccess }
 
-    using matchers with `and`
-    ${ (1 must (beEqualTo(1) `and` beEqualTo(1))).isSuccess }
-    ${ !(1 must (beEqualTo(1) `and` beEqualTo(2))).isSuccess }
+    using matchers with and
+    ${ (1 must (beEqualTo(1) and beEqualTo(1))).isSuccess }
+    ${ !(1 must (beEqualTo(1) and beEqualTo(2))).isSuccess }
 
-    using matchers with `and` and `not`
-    ${ (1 must (beEqualTo(1) `and` not(beEqualTo(2)))).isSuccess }
-    ${ (1 must (not(beEqualTo(2)) `and` beEqualTo(1))).isSuccess }
-    ${ !(1 must (not(beEqualTo(1)) `and` not(beEqualTo(2)))).isSuccess }
+    using matchers with and and `not`
+    ${ (1 must (beEqualTo(1) and not(beEqualTo(2)))).isSuccess }
+    ${ (1 must (not(beEqualTo(2)) and beEqualTo(1))).isSuccess }
+    ${ !(1 must (not(beEqualTo(1)) and not(beEqualTo(2)))).isSuccess }
 
 """

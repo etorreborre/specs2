@@ -60,7 +60,7 @@ case class TryFailureMatcher[T]() extends OptionLikeMatcher[Try, T, Throwable]("
   })
 
   def withThrowable[E <: Throwable : ClassTag](pattern: String) = TryFailureCheckedMatcher[T]({ (t: Throwable) =>
-    (Expectations.createExpectable(t).applyMatcher(AnyMatchers.beAnInstanceOf[E]) `and`
+    (Expectations.createExpectable(t).applyMatcher(AnyMatchers.beAnInstanceOf[E]) and
      Expectations.createExpectable(t.getMessage.notNull).applyMatcher(StringMatchers.beMatching(pattern)))
   })
 case class TryFailureCheckedMatcher[T](check: ValueCheck[Throwable]) extends OptionLikeCheckedMatcher[Try, T, Throwable]("a Failure", (_:Try[T]).failed.toOption, check)

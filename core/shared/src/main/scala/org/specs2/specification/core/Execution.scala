@@ -220,7 +220,7 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
 
       lazy val before: Future[Result] =
         if sequential then
-          runs.foldLeftM(Success(): Result)((res, cur) => cur.map(r => res `and` r))
+          runs.foldLeftM(Success(): Result)((res, cur) => cur.map(r => res and r))
         else
           Future.sequence(runs).map(_.suml)
 

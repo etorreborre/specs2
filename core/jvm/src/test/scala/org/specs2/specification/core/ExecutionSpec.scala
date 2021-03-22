@@ -29,7 +29,7 @@ class ExecutionSpec(val env: Env) extends Specification with OwnEnv { def is = s
       case DecoratedResult(t, r) =>
         t.asInstanceOf[Matchable] match
           case s: Stats =>
-            (s must ===(Stats(specs = 3, failures = 1, examples = 1))) `and`
+            (s must ===(Stats(specs = 3, failures = 1, examples = 1))) and
               (r.isSuccess must beFalse)
           case other =>
             ko("expected some stats, got "+other)

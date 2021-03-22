@@ -80,18 +80,18 @@ types and more generally with Ordered types.
   ${ 5 must (`be[`(4, 7)`]`) }
                                                                                                                         """
 
-  def e1   = (2 must be_<=(1)) `returns` "2 is strictly greater than 1"
-  def e1_1 = (2 `aka` "two" must be_<=(1)) `returns` "two '2' is strictly greater than 1"
+  def e1   = (2 must be_<=(1)) returns "2 is strictly greater than 1"
+  def e1_1 = (2 `aka` "two" must be_<=(1)) returns "two '2' is strictly greater than 1"
 
-  def e2   = (2 must be_<(1))  `returns` "2 is greater than 1"
-  def e2_1 = (2 `aka` "two" must be_<(1))  `returns` "two '2' is greater than 1"
+  def e2   = (2 must be_<(1))  returns "2 is greater than 1"
+  def e2_1 = (2 `aka` "two" must be_<(1))  returns "two '2' is greater than 1"
 
-  def e3   = (1 must be_>=(2)) `returns` "1 is strictly less than 2"
-  def e3_1 = (1 `aka` "one" must be_>=(2)) `returns` "one '1' is strictly less than 2"
+  def e3   = (1 must be_>=(2)) returns "1 is strictly less than 2"
+  def e3_1 = (1 `aka` "one" must be_>=(2)) returns "one '1' is strictly less than 2"
 
-  def e4   = (1 must be_>(2))  `returns` "1 is less than 2"
-  def e4_1 = (1 `aka` "one" must be_>(2))  `returns` "one '1' is less than 2"
+  def e4   = (1 must be_>(2))  returns "1 is less than 2"
+  def e4_1 = (1 `aka` "one" must be_>(2))  returns "one '1' is less than 2"
 
-  def e5   = (1.0 must beCloseTo(3.0, 0.5)) `returns` "1.0 is not close to 3.0 +/- 0.5"
-  def e5_1 = (1.0 `aka` "one" must beCloseTo(3.0, 0.5)) `returns` "one '1.0' is not close to 3.0 +/- 0.5"
+  def e5   = (1.0 must beCloseTo(3.0, 0.5)) returns "1.0 is not close to 3.0 +/- 0.5"
+  def e5_1 = (1.0 `aka` "one" must beCloseTo(3.0, 0.5)) returns "one '1.0' is not close to 3.0 +/- 0.5"
 }

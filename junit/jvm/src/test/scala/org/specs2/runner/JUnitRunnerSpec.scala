@@ -139,10 +139,10 @@ class JUnitErrorInBeforeAllSpecification extends Specification with BeforeAfterS
 """
 
   def beforeSpec: Fragments =
-    throw new RuntimeException("Error.")
+    step(throw new RuntimeException("Error."))
 
   def afterSpec: Fragments =
-   step(())
+    step(())
 }
 
 class JUnitWithErrorInInitialization extends mutable.Specification:

@@ -87,7 +87,7 @@ class DataTablesSpec(val env: Env) extends Specification with DataTables with Re
   def e9 =
     "a successful table must not throw an exception" ==> {
       (new InAMutableContext).resultOk must not (throwA[DecoratedResultException])
-    } `and`
+    } and
     "a failed table must throw an exception" ==> {
       (new InAMutableContext).resultKo must throwA[DecoratedResultException]
     }
@@ -128,7 +128,7 @@ class DataTablesSpec(val env: Env) extends Specification with DataTables with Re
       "a"   | "b" | "c" |>
        2    !  2  !  5  | { (a, b, c) =>  a + b must ===(c) }
 
-    (t1 `and` t2).message ===
+    (t1 and t2).message ===
       "  | a | b | c |       "+"\n"+
       "x | 2 | 2 | 5 | 4 != 5"
 

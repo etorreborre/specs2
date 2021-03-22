@@ -28,7 +28,7 @@ class FutureMatchersSpec extends Specification with ResultMatchers with specific
 
  with a retries number and timeout
  ${ Future { sleep(sleepTime); 1 } must be_>(0).await(retries = 3, timeout = 100.millis) }
- ${ (Future { sleep(sleepTime * 3); 1 } must be_>(0).await(retries = 4, timeout = 10.millis)) `returns` "Timeout" }
+ ${ (Future { sleep(sleepTime * 3); 1 } must be_>(0).await(retries = 4, timeout = 10.millis)) returns "Timeout" }
 
  with a retries number only
  ${ Future { sleep(sleepTime); 1 } must be_>(0).retryAwait(2) }
@@ -37,7 +37,7 @@ class FutureMatchersSpec extends Specification with ResultMatchers with specific
  ${ Future { sleep(sleepTime); 1 } must be_>(0).awaitFor(200.millis) }
 
  timeout applies only to `TimeoutException` itself, not subclasses
- ${ (Future { throw new TimeoutException } must throwA[TimeoutException]().await) `returns` "Timeout" }
+ ${ (Future { throw new TimeoutException } must throwA[TimeoutException]().await) returns "Timeout" }
  ${ Future { throw new MyTimeout } must throwA[MyTimeout]().await }
 
  A `Future` returning a `Matcher[T]` can be transformed into a `Result`

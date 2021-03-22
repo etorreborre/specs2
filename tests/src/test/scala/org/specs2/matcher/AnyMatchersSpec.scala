@@ -32,7 +32,7 @@ class AnyMatchersSpec extends Specification with ResultMatchers with AnyMatchers
   ${ List(1, 2) must beLike { case List(a, b) => ok } }
   ${ List(1, 2) must beLike { case List(a, b) => (a + b) must ===(3) } }
   if the match succeeds but the condition after match fails, a precise failure message can be returned
-  ${ (List(1, 2) must beLike { case List(a, b) => (a + b) must ===(2) }) `returns` "3 != 2" }
+  ${ (List(1, 2) must beLike { case List(a, b) => (a + b) must ===(2) }) returns "3 != 2" }
 
  forall allows to transform a single matcher to a matcher checking that all elements of a Seq are matching
   ${ Seq(2, 3, 4) must contain(be_>=(2)).forall }

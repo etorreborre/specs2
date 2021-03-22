@@ -32,7 +32,7 @@ Or matches
    if the first is not ok, the second is not evaluated                                            $or8
    ko and ok and ko is ok                                                                         $or9
 
- `or` must deal with exceptions
+ or must deal with exceptions
     { throw e; 1 } must m1 or throwAn[Exception]                                                  $or10
     { throw e; 1 } must throwAn[Exception] or m1                                                  $or11
     { 1          } must m1 or throwAn[Exception]                                                  $or12
@@ -100,39 +100,39 @@ Custom
       // the second 'not' will catch the exception and turn it to a success
       beMatching("e.*").not.setMessage("wrong").not
 
-  def or1 = "eric" must (beMatching("e.*") `or` beMatching(".*c"))
-  def or2 = "eric" must (beMatching("a.*") `or` beMatching(".*z")).not
-  def or3 = "eric" must (beMatching("e.*") `or` beMatching({error("boom");".*z"}))
-  def or4 = "eric" must not(beMatching("a.*") `or` beMatching(".*z"))
-  def or5 = ("eric" must (beMatching("a.*") `or` beMatching("z.*"))) `returns`
+  def or1 = "eric" must (beMatching("e.*") or beMatching(".*c"))
+  def or2 = "eric" must (beMatching("a.*") or beMatching(".*z")).not
+  def or3 = "eric" must (beMatching("e.*") or beMatching({error("boom");".*z"}))
+  def or4 = "eric" must not(beMatching("a.*") or beMatching(".*z"))
+  def or5 = ("eric" must (beMatching("a.*") or beMatching("z.*"))) returns
             "'eric' doesn't match 'a.*' and 'eric' doesn't match 'z.*'"
 
   def or6 =
-    MustThrownMatchers.createExpectable("eric").must(MustThrownMatchers.beMatching("a.*") `or` MustThrownMatchers.beMatching("e.*"))
+    MustThrownMatchers.createExpectable("eric").must(MustThrownMatchers.beMatching("a.*") or MustThrownMatchers.beMatching("e.*"))
 
   def or7 =
-    ("eric" must beMatching("e.*")) `or` ("eric" must beMatching(".*d"))
+    ("eric" must beMatching("e.*")) or ("eric" must beMatching(".*d"))
 
   def or8 =
     val out = new StringOutput {}
     ("eric" must beMatching("e.*")) or { out.println("DON'T"); "torreborre" must beMatching(".*tor.*") }
     out.messages must not(contain("DON'T"))
 
-  def or9 = ((true === false) `or` (true === true) `or` (true === false)) must beSuccessful
+  def or9 = ((true === false) or (true === true) or (true === false)) must beSuccessful
 
-  def or10 = { throw new Exception("ouch"); 1 } must (be_==(1) `or` throwAn[Exception])
-  def or11 = { throw new Exception("ouch"); 1 } must (throwAn[Exception] `or` be_==(1))
-  def or12 = {                              1 } must (throwAn[Exception] `or` be_==(1))
-  def or13 = {                              1 } must (be_==(1) `or` throwAn[Exception])
-  def or14 = { throw new Exception("ouch"); 1 } must (be_==(1) `or` throwAn[Exception] `or` throwAn[Exception])
+  def or10 = { throw new Exception("ouch"); 1 } must (be_==(1) or throwAn[Exception])
+  def or11 = { throw new Exception("ouch"); 1 } must (throwAn[Exception] or be_==(1))
+  def or12 = {                              1 } must (throwAn[Exception] or be_==(1))
+  def or13 = {                              1 } must (be_==(1) or throwAn[Exception])
+  def or14 = { throw new Exception("ouch"); 1 } must (be_==(1) or throwAn[Exception] or throwAn[Exception])
 
-  def and1 = "eric" must (beMatching("e.*") `and` beMatching(".*c"))
-  def and2 = ("eric" must beMatching("e.*")) `and` ("torreborre" must beMatching(".*tor.*"))
+  def and1 = "eric" must (beMatching("e.*") and beMatching(".*c"))
+  def and2 = ("eric" must beMatching("e.*")) and ("torreborre" must beMatching(".*tor.*"))
   def and3 =
     val out = new StringOutput {}
     ("eric" must beMatching("x.*")) and { out.println("DON'T"); "torreborre" must beMatching(".*tor.*") }
     out.messages must not(contain("DON'T"))
-  def and4 = ((true === true) `and` (true === false) `and` (true === true)) must beFailing
+  def and4 = ((true === true) and (true === false) and (true === true)) must beFailing
 
   def skip1 = 1 must be_==(1).orSkip
   def skip2 = (1 must be_==(2).orSkip)                                  must ===(Skipped("1 != 2"))
@@ -153,7 +153,7 @@ Custom
   def conditions7 = (1 must be_==(2).iff(false)) must beSuccessful
   def conditions8 = (1 must be_==(1).iff(false)) must beFailing
 
-  def custom1 = (12 must bePositive) `and`
+  def custom1 = (12 must bePositive) and
           (-12 must not(bePositive))
 
   // HELPERS

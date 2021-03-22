@@ -10,7 +10,7 @@ class HtmlOptionsSpec extends Specification { def is = s2"""
 """
 
   def boolean =
-    (options.templateVariables must haveKey("nostats")) `and`
+    (options.templateVariables must haveKey("nostats")) and
     (options.templateVariables must not(haveKey("search")))
 
   def options = HtmlOptions(
