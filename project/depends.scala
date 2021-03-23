@@ -29,7 +29,8 @@ object depends {
 
   // java dependencies
   lazy val junit = "junit" % "junit" % "4.13"
-  lazy val pegdown = "org.pegdown" % "pegdown" % "1.6.0"
+  lazy val flexmark = "com.vladsch.flexmark" % "flexmark-all" % "0.62.2"
+
   lazy val tagsoup = "org.ccil.cowan.tagsoup" % "tagsoup" % "1.2.1"
 
   lazy val resolvers =

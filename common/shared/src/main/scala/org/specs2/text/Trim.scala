@@ -52,7 +52,7 @@ trait Trim:
         s
 
     def removeEnclosingXmlTag(t: String): String =
-      if isEnclosing("<"+t, "</"+t+">") then
+      if s.isEnclosing("<"+t, "</"+t+">") then
         removeFirst("<"+t+".*?>").trimEnd("</"+t+">")
       else
         s
@@ -60,9 +60,10 @@ trait Trim:
     def isEnclosing(start: String, end: String): Boolean =
       s.startsWith(start) && s.endsWith(end)
 
-    def trimNewLines = Seq("\r", "\n").foldLeft(s) { (res, cur) =>
-      res.trimStart(cur).trimEnd(cur)
-    }
+    def trimNewLines: String =
+      Seq("\r", "\n").foldLeft(s) { (res, cur) =>
+        res.trimStart(cur).trimEnd(cur)
+      }
 
     def removeNewLines: String =
       Seq("\r", "\n").foldLeft(s) { (res, cur) =>

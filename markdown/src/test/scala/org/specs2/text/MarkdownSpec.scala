@@ -12,7 +12,7 @@ class MarkdownSpec extends Spec:
   "Bold-italics text" >>
   { toHtmlNoPar("***hello***") must ===("<strong><em>hello</em></strong>") }
   "Multi-line text must preserve newlines" >>
-  { toHtmlNoPar("hello\nworld") must contain("hello<br/>world") }
+  { toHtmlNoPar("hello\nworld") must contain("hello<br />\nworld") }
 
   "title and line break" >>
   { toXhtml("### Title\nline1\n\nline2").toString must not(contain("### Title")) }

@@ -137,7 +137,7 @@ lazy val markdown = crossProject(JVMPlatform).
   crossType(CrossType.Pure).
   in(file("markdown")).
   settings(
-    libraryDependencies += depends.pegdown,
+    libraryDependencies += depends.flexmark,
     commonSettings,
     name := "specs2-markdown").
   jvmSettings(depends.jvmTest, commonJvmSettings).
