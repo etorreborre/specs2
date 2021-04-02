@@ -40,7 +40,7 @@ final case class TreeLoc[A](tree: Tree[A], lefts: TreeForest[A],
   /** Select the rightmost child of the current node. */
   def lastChild: Option[TreeLoc[A]] = tree.subForest.reverse match
     case t #:: ts => Some(loc(t, ts, LazyList.empty, downParents))
-    case LazyList => None
+    case LazyList() => None
 
   /** Select the nth child of the current node. */
   def getChild(n: Int): Option[TreeLoc[A]] =

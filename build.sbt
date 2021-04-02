@@ -18,7 +18,7 @@ lazy val specs2 = project.in(file(".")).
     tests
   )
 
-val scala3 = "3.0.0-RC1"
+val scala3 = "3.0.0-RC2"
 
 /** COMMON SETTINGS */
 lazy val specs2Settings = Seq(
@@ -207,6 +207,7 @@ lazy val compilationSettings = Seq(
     "-source:future-migration",
     "-language:implicitConversions,postfixOps",
     "-Ykind-projector",
+    "-Xcheck-macros",
     "-deprecation:false",
     "-unchecked",
     "-feature")
