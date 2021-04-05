@@ -4,18 +4,40 @@ package text
 import scala.io.Source
 import scala.xml.NodeSeq
 import scala.xml.parsing.XhtmlParser
+import scala.collection.mutable.*
+import scala.collection.JavaConverters.iterableAsScalaIterableConverter
 import control.Exceptions.*
 import Trim.*
 
+import com.vladsch.flexmark.ast.*
+import com.vladsch.flexmark.ast.util.*
+import com.vladsch.flexmark.html.AttributeProvider
+import com.vladsch.flexmark.html.AttributeProviderFactory
 import com.vladsch.flexmark.html.HtmlRenderer
+import com.vladsch.flexmark.html.HtmlWriter
+import com.vladsch.flexmark.html.IndependentAttributeProviderFactory
+import com.vladsch.flexmark.html.renderer.AttributablePart
+import com.vladsch.flexmark.html.renderer.DelegatingNodeRendererFactory
+import com.vladsch.flexmark.html.renderer.LinkResolverContext
+import com.vladsch.flexmark.html.renderer.NodeRenderer
+import com.vladsch.flexmark.html.renderer.NodeRendererContext
+import com.vladsch.flexmark.html.renderer.NodeRenderingHandler
 import com.vladsch.flexmark.parser.Parser
 import com.vladsch.flexmark.parser.PegdownExtensions
 import com.vladsch.flexmark.profile.pegdown.PegdownOptionsAdapter
-import com.vladsch.flexmark.util.data.DataHolder
-import com.vladsch.flexmark.util.ast.Node
-import com.vladsch.flexmark.util.ast.Text
-import com.vladsch.flexmark.util.ast.NodeVisitor
-import com.vladsch.flexmark.util.ast.VisitHandler
+import com.vladsch.flexmark.util.ast.*
+import com.vladsch.flexmark.util.data.*
+import com.vladsch.flexmark.util.data.MutableDataHolder
+import com.vladsch.flexmark.util.data.MutableDataSet
+import com.vladsch.flexmark.util.html.MutableAttributes
+import com.vladsch.flexmark.util.misc.Extension
+import com.vladsch.flexmark.util.sequence.Escaping
+
+import java.util.Arrays
+import java.util.Collection
+import java.util.Collections
+import java.util.HashSet
+import java.util.Set
 
 /**
  * This trait can process strings formatted using the Markdown syntax and output html
@@ -23,10 +45,13 @@ import com.vladsch.flexmark.util.ast.VisitHandler
 private[specs2]
 trait Markdown:
 
-  private val options = PegdownOptionsAdapter.flexmarkOptions(
+  private val pegDownOptions: DataHolder = PegdownOptionsAdapter.flexmarkOptions(
             ~PegdownExtensions.QUOTES &
             ~PegdownExtensions.SMARTS &
             ~PegdownExtensions.EXTANCHORLINKS)
+
+  private val options: DataHolder =
+    MutableDataSet.merge(pegDownOptions, MutableDataSet().set(Parser.EXTENSIONS, Arrays.asList[Extension](new Specs2Extension)))
 
   /**
    * @return a Markdown parser
@@ -38,8 +63,8 @@ trait Markdown:
    * @return an HTML renderer
    * for now QUOTES and SMARTS are not rendered to avoid  <?> characters to appear on html pages
    */
-  private lazy val renderer =
-    HtmlRenderer.builder(options).build
+  private lazy val renderer: HtmlRenderer =
+    HtmlRenderer.builder(options).indentSize(2).build
 
   /**
    * parse the markdown string and return html.
@@ -49,7 +74,6 @@ trait Markdown:
   def toHtml(text: String, options: MarkdownOptions = MarkdownOptions()): String =
     val document = parser.parse(text.replace("\\\\n", "\n"))
     renderer.render(document)
-    //(new Specs2Visitor(text, options)).toHtml(processor.parseMarkdown(text.replace("\\\\n", "\n").toCharArray))
 
   /**
    * parse the markdown string and return html without the enclosing paragraph
@@ -71,52 +95,23 @@ trait Markdown:
     tryo(XhtmlParser(Source.fromString("<text>"+html+"</text>")).head.child)
 
 private[specs2]
-object Markdown extends Markdown //:
-  // private val visitor = new NodeVisitor(
-  //   new VisitHandler(classOf[Text], t => visitText(t)))
-
-  // private def visitText(text: Text): Unit =
-  //   println("hello text "+text)
-  //   visitor.visitChildren(text)
-
-/**
- * specialised pegdown visitor to control the rendering of code blocks
- */
-// case class Specs2Visitor(text: String, options: MarkdownOptions = MarkdownOptions()) extends org.pegdown.ToHtmlSerializer(new LinkRenderer):
-//   override def visit(node: CodeNode): Unit =
-//     printCode(node)
-//   override def visit(node: ParaNode): Unit =
-//     super.visit(node)
-//   override def visit(node: TextNode): Unit =
-//     super.visit(node)
-
-//   override def visit(node: SimpleNode): Unit =
-//     super.visit(node)
-//     if node.getType == SimpleNode.Type.Linebreak then
-//       val indent = text.drop(node.getEndIndex).takeWhile(_ == ' ').length
-//       (1 to indent) foreach { i => super.visit(new SimpleNode(SimpleNode.Type.Nbsp)) }
-//   override def visit(node: VerbatimNode): Unit =
-//     // render verbatim nodes as simple text if the verbatim option is false
-//     if !options.verbatim && node.getType.isEmpty && node.getText.contains("\n") then
-//       val indents = text.split("\n").filter(_.nonEmpty).map(line => line.takeWhile(_ == ' ').length)
-//       val verbatim = node.getText.split("\n").map(line => line.trim)
-//       val lines = (indents zip verbatim).map { case (indent, line) => "&nbsp;"*indent + line }.mkString("<br/>")
-//       super.visit(new TextNode(lines))
-//     else super.visit(new VerbatimNode(node.getText, "prettyprint"))
-
-//   private def printCode(node: TextNode): Unit =
-//     val text = node.getText
-//     if text.contains("\n") then
-//       printer.print("<pre>").
-//         print("""<code class="prettyprint">""").
-//         printEncoded(text.removeFirst("\n")).
-//         print("</code>").
-//         print("</pre>")
-//     else
-//       printer.
-//         print("""<code class="prettyprint">""").
-//         printEncoded(text).
-//         print("</code>")
-//     ()
+object Markdown extends Markdown
 
 case class MarkdownOptions(verbatim: Boolean = true)
+
+class Specs2AttributeProvider extends AttributeProvider:
+  override def setAttributes(node: Node, part: AttributablePart, attributes: MutableAttributes): Unit =
+    if node.isInstanceOf[IndentedCodeBlock] || node.isInstanceOf[Code] then
+      attributes.replaceValue("class", "prettyprint")
+
+object Specs2AttributeProvider:
+  def createFactory: AttributeProviderFactory =
+    new IndependentAttributeProviderFactory:
+      override def apply(context: LinkResolverContext): AttributeProvider =
+        Specs2AttributeProvider()
+
+class Specs2Extension extends HtmlRenderer.HtmlRendererExtension:
+  override def rendererOptions(options: MutableDataHolder) = ()
+
+  override def extend(rendererBuilder: HtmlRenderer.Builder, rendererType: String) =
+    rendererBuilder.attributeProviderFactory(Specs2AttributeProvider.createFactory)

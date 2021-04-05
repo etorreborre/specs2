@@ -7,25 +7,26 @@ import org.specs2.mutable.*
 class MarkdownSpec extends Spec:
   given Arguments = Arguments()
 
-  "Emphasized text" >>
+  "emphasized text" >>
   { toHtmlNoPar("_hello_") must ===("<em>hello</em>") }
-  "Bold-italics text" >>
+
+  "mold-italics text" >>
   { toHtmlNoPar("***hello***") must ===("<strong><em>hello</em></strong>") }
-  "Multi-line text must preserve newlines" >>
+
+  "multi-line text must preserve newlines" >>
   { toHtmlNoPar("hello\nworld") must contain("hello<br />\nworld") }
 
   "title and line break" >>
   { toXhtml("### Title\nline1\n\nline2").toString must not(contain("### Title")) }
 
-
-  "Embedded code" >>
+  "embedded code" >>
   { toHtmlNoPar(someCode) must contain("""<code class="prettyprint">""") }
 
-  "Code with newlines must be enclosed in one code tag only" >>
+  "code with newlines must be enclosed in one code tag only" >>
   { toHtmlNoPar(someCode).split(" ").filter(_.trim.contains("</code>")) must haveSize(1) }
 
-  "Inlined code must not have <pre> tags" >>
-    { toHtmlNoPar("this is some `inlined` code") must contain("""this is some <code class="prettyprint">inlined</code> code""") }
+  "inlined code must not have <pre> tags" >>
+  { toHtmlNoPar("this is some `inlined` code") must contain("""this is some <code class="prettyprint">inlined</code> code""") }
 
   "the encoding must be ok with utf-8 characters" >>
   { toXhtml("⊛").toString must contain("⊛") }
