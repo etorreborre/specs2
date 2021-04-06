@@ -25,7 +25,7 @@ lazy val specs2Settings = Seq(
   organization := "org.specs2",
   specs2ShellPrompt,
   scalaVersion := scala3,
-  sources in (Compile, doc) := Seq())
+  Compile / doc / sources := Seq())
 
 lazy val commonJsSettings = Seq(
   scalacOptions += {
@@ -33,11 +33,11 @@ lazy val commonJsSettings = Seq(
     val tagOrHash =
       if(isSnapshot.value) sys.process.Process("git rev-parse HEAD").lineStream_!.head
       else tag
-    val a = (baseDirectory in LocalRootProject).value.toURI.toString
+    val a = (LocalRootProject / baseDirectory).value.toURI.toString
     val g = "https://raw.githubusercontent.com/etorreborre/specs2/" + tagOrHash
     s"-P:scalajs:mapSourceURI:$a->$g/"
   },
-  parallelExecution in Test := false
+  Test / parallelExecution := false
 )
 
 lazy val specs2Version = settingKey[String]("defines the current specs2 version")
@@ -111,7 +111,7 @@ lazy val guide = project.in(file("guide")).
   settings(
     commonSettings,
     name := "specs2-guide",
-    scalacOptions in Compile --= Seq("-Xlint", "-Ywarn-unused-import")).
+    Compile / scalacOptions --= Seq("-Xlint", "-Ywarn-unused-import")).
   dependsOn(examplesJVM % "compile->compile;test->test")
 
 lazy val html = project.in(file("html")).
@@ -193,7 +193,7 @@ lazy val tests = Project(id = "tests", base = file("tests")).
   matcherExtraJVM,
   html)
 
-lazy val specs2ShellPrompt = shellPrompt in ThisBuild := { state =>
+lazy val specs2ShellPrompt = ThisBuild / shellPrompt := { state =>
   val name = Project.extract(state).currentRef.project
   (if (name == "specs2") "" else name) + "> "
 }
@@ -203,7 +203,7 @@ def scalaSourceVersion(scalaBinaryVersion: String) =
 
 lazy val compilationSettings = Seq(
   maxErrors := 20,
-  scalacOptions in Compile ++= Seq(
+  Compile / scalacOptions ++= Seq(
     "-source:future-migration",
     "-language:implicitConversions,postfixOps",
     "-Ykind-projector",
@@ -224,7 +224,7 @@ lazy val testingSettings = Seq(
 
 lazy val testingJvmSettings = Seq(
   javaOptions ++= Seq("-Xmx3G", "-Xss4M"),
-  fork in Test := true
+  Test / fork := true
 )
 
 /**
@@ -233,7 +233,7 @@ lazy val testingJvmSettings = Seq(
 lazy val siteSettings = GhpagesPlugin.projectSettings ++ SitePlugin.projectSettings ++
   Seq(
     siteSourceDirectory := target.value / "specs2-reports" / "site",
-    includeFilter in makeSite := AllPassFilter,
+    makeSite / includeFilter := AllPassFilter,
     // override the synchLocal task to avoid removing the existing files
     ghpagesSynchLocal := {
       val betterMappings = ghpagesPrivateMappings.value map { case (file, target) => (file, ghpagesUpdatedRepository.value / target) }
@@ -249,7 +249,7 @@ lazy val siteSettings = GhpagesPlugin.projectSettings ++ SitePlugin.projectSetti
 lazy val publicationSettings = Seq(
   publishTo in Global := sonatypePublishToBundle.value,
   publishMavenStyle := true,
-  publishArtifact in Test := false,
+  Test / publishArtifact := false,
   pomIncludeRepository := { x => false },
   pomExtra := (
     <url>http://specs2.org/</url>
