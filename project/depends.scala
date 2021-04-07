@@ -47,7 +47,7 @@ object depends {
 
   def scalaXML = "org.scala-lang.modules" %% "scala-xml" % "1.3.0"
 
-  lazy val mockito  = "org.mockito"  % "mockito-core"  % "3.7.7"
+  lazy val mockito  = "org.mockito"  % "mockito-core"  % "3.9.0"
   lazy val junit    = "junit"        % "junit"         % "4.13.2"
   lazy val hamcrest = "org.hamcrest" % "hamcrest" % "2.2"
 
