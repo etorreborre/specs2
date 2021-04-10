@@ -71,22 +71,22 @@ trait Markdown:
    * code tags are prettified and newlines in paragraphs are
    * transformed to <br/> tags
    */
-  def toHtml(text: String, options: MarkdownOptions = MarkdownOptions()): String =
+  def toHtml(text: String): String =
     val document = parser.parse(text.replace("\\\\n", "\n"))
     renderer.render(document)
 
   /**
    * parse the markdown string and return html without the enclosing paragraph
    */
-  def toHtmlNoPar(text: String, options: MarkdownOptions = MarkdownOptions()): String =
-    val html = toHtml(text, options)
+  def toHtmlNoPar(text: String): String =
+    val html = toHtml(text)
     if !text.contains("\n") || text.trim.isEmpty then html.trimEnd("\n").removeEnclosingXmlTag("p") else html
 
   /**
    * parse the markdown string and return xml (unless the arguments deactivate the markdown rendering)
    */
-  def toXhtml(text: String, options: MarkdownOptions = MarkdownOptions()): NodeSeq =
-    val html = toHtmlNoPar(text, options)
+  def toXhtml(text: String): NodeSeq =
+    val html = toHtmlNoPar(text)
     parse(html) match
       case Some(f) => f
       case None => scala.xml.Text(text)
@@ -96,8 +96,6 @@ trait Markdown:
 
 private[specs2]
 object Markdown extends Markdown
-
-case class MarkdownOptions(verbatim: Boolean = true)
 
 class Specs2AttributeProvider extends AttributeProvider:
   override def setAttributes(node: Node, part: AttributablePart, attributes: MutableAttributes): Unit =

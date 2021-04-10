@@ -34,12 +34,6 @@ class MarkdownSpec extends Spec:
   "the encoding must be ok with utf-8 characters" >>
   { toXhtml("⊛").toString must contain("⊛") }
 
-  "verbatim code blocks can also be rendered as simple text" >> {
-    toHtml("""
-             |     this is some text
-           """.stripMargin, MarkdownOptions(verbatim = false)) must not(contain("code"))
-  }
-
   val someCode = """
 This is a paragraph presenting some code:
 
