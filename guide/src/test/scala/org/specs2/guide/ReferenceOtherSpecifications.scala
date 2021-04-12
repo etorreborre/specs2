@@ -44,10 +44,11 @@ The syntax shown above to create references is using a string for the link alias
 
 Also, for better html rendering, you can add a tooltip:${snippet{
 // 8<--
-object OtherSpec extends Specification { def is = """nothing""" }
-class s extends Specification { def is = s2""" // 8<--
-  ${ "alias" ~/ (OtherSpec, "tooltip") }
-// 8<--
+object OtherSpec extends Specification { def is = ok }
+
+class s extends Specification { def is = s2"""
+  ${ "alias".~/(OtherSpec, "tooltip") }
+
 """
 }
 }}

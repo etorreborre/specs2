@@ -39,15 +39,14 @@ The `${fullName[org.specs2.reporter.Printer]}` trait defines how to output each 
 def fold(env: Env, spec: SpecStructure): Fold[Fragment]
 ```
 
-So what you need to create is a `Fold` over the executing specification. What is it? A `Fold` is composed of 3 operations:${snippet{
-trait Fold[M[_], A, B] {
+So what you need to create is a `Fold` over the executing specification. What is it? A `Fold` is composed of 3 operations:
+```
+trait Fold[M[_], A, B]:
   type S
-
   def start: M[S]
   def fold: (S, A) => S
   def end(s: S): M[B]
-}
-}}
+```
 
  * `start` is an initial state of type `S`. By using some state you can accumulate information about the execution of the whole specification
  * `fold` is the function calculating the next state based on the current `Fragment` and the previous state

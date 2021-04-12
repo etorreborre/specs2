@@ -5,11 +5,13 @@ import io.*
 import matcher.*
 import org.specs2.mutable.*
 import org.specs2.specification.*
+import org.specs2.specification.core.*
 import execute.*
 
 object Contexts extends UserGuidePage with FileMatchers { def is = s2"""
 
-In a specification some examples are very straightforward. They just check that a function is returning expected values when given some inputs. However other examples can be more complex and require to execute in a specific context:
+In a specification some examples are very straightforward. They just check that a function is returning expected values when given some inputs.
+However other examples can be more complex and require to execute in a specific context:
 
  * with some state being setup before the example executes
  * with some state being cleaned up after the example is executed
@@ -130,9 +132,9 @@ trait Transaction
 
 trait DatabaseContext extends ForEach[Transaction] {
   // you need to define the "foreach" method
-  def foreach[R: AsResult](f: Transaction => R): Result = {
+  def foreach[R : AsExecution](f: Transaction => R): R = {
     val transaction = openDatabaseTransaction
-    try AsResult(f(transaction))
+    try f(transaction)
     finally closeDatabaseTransaction(transaction)
   }
 
@@ -156,7 +158,8 @@ class FixtureSpecification extends org.specs2.mutable.Specification with Databas
 
 ### BeforeSpec / AfterSpec
 
-Some setups are very expensive and can be shared across all examples. For example you might want to start an application server just at the beginning of the specification and then close it at the end. You can use 3 traits to do this:
+Some setups are very expensive and can be shared across all examples. For example you might want to start an application server just at the beginning of the specification and then close it at the end.
+You can use 3 traits to do this:
 
  * `BeforeSpec` inserts any `Fragments`, for example a `Step`, before all the examples
  * `AfterSpec` inserts any `Fragments`, for example a `Step`,` after all the examples
@@ -164,7 +167,7 @@ Some setups are very expensive and can be shared across all examples. For exampl
 
 $AndIfYouWantToKnowMore
 
- * read about $specs2 ${"execution model" ~/ Execution} to understand how `Examples` and `Steps` are being executed
+ * read about $specs2 ${"execution model" ~/ org.specs2.guide.Execution} to understand how `Examples` and `Steps` are being executed
 
 $vid
 """

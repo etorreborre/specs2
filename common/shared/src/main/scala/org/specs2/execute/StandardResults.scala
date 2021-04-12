@@ -9,7 +9,8 @@ trait StandardResults:
   def wontdo = Success("WONT DO")
   def todo = pending("TODO")
   def anError = Error("error")
-  def success = Success("success")
+  def success: Success = success("success")
+  def success(message: String): Success = Success(message)
 
   def failure: Failure = failure("failure")
   def failure(message: String): Failure = Failure(message)

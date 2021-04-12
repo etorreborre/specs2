@@ -11,21 +11,28 @@ import core.{SpecificationStructure, SpecStructure, Fragment}
 trait ReferenceDsl extends FragmentBuilder with dsl.ReferenceDsl:
 
   extension (alias: String)
-    override def ~(s: SpecStructure): Fragment =
+    override infix def ~(s: SpecStructure): Fragment =
       addFragment(alias.~(s))
 
-    override def ~(s: => SpecificationStructure, tooltip: String): Fragment =
+    override infix def ~(s: SpecStructure, tooltip: String): Fragment =
       addFragment(alias.~(s, tooltip))
 
+    override infix def ~(s: =>SpecificationStructure): Fragment =
+      addFragment(alias.~(s))
+
+    override infix def ~(s: =>SpecificationStructure, tooltip: String): Fragment =
+      addFragment(alias.~(s, tooltip))
+
+
   extension (alias: String)
-    override def ~/(s: SpecStructure): Fragment =
+    override infix def ~/(s: SpecStructure): Fragment =
       addFragment(alias.~/(s))
 
-    override def ~/(s: SpecStructure, tooltip: String): Fragment =
+    override infix def ~/(s: SpecStructure, tooltip: String): Fragment =
       addFragment(alias.~/(s, tooltip))
 
-    override def ~/(s: =>SpecificationStructure): Fragment =
+    override infix def ~/(s: =>SpecificationStructure): Fragment =
       addFragment(alias.~/(s))
 
-    override def ~/(s: =>SpecificationStructure, tooltip: String): Fragment =
+    override infix def ~/(s: =>SpecificationStructure, tooltip: String): Fragment =
       addFragment(alias.~/(s, tooltip))
