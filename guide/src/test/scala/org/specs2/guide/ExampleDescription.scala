@@ -1,7 +1,7 @@
 package org.specs2
 package guide
 
-import matcher._
+import matcher.*
 
 object ExampleDescription extends UserGuidePage { def is = s2"""
 
@@ -20,7 +20,7 @@ You can avoid this by creating the example body as a function using the descript
 s2"""
  1971-01-01 is a correct date $correct
 """
-  def correct = { date: String =>
+  def correct = { (date: String) =>
     date.split(" ")(0) must beCorrect
   }
 }}
@@ -35,9 +35,10 @@ s2"""
  {1} plus {1} is {2}            $addition
 """
 
-  import org.specs2.specification.script.StepParsers._
+  import org.specs2.specification.script.StepParsers.*
+  import org.specs2.specification.script.StepParsers.given
 
-  def correct = extract { date: String =>
+  def correct = extract { (date: String) =>
     date must beCorrect
   }
 
@@ -52,10 +53,10 @@ The values to be extracted are delimited by `{}` and those curly braces will not
 
 When you parse values with `extract` you get only Strings which you have to transform into `Int` for example. $specs2 comes up with a few predefined parsers to help you with that: ${snippet{
 s2"""
- {1} plus {1} is {2}            $addition
+ {1} plus {1} is {2} $addition
 """
 
-  import org.specs2.specification.script.StandardDelimitedStepParsers._
+  import org.specs2.specification.script.StandardDelimitedStepParsers.*
 
   def addition = threeInts.map { case (a, b, c) =>
     a + b must ===(c)
@@ -85,11 +86,11 @@ s2"""
  1 plus 1 is 2                $addition
 """
 
-  import org.specs2.specification.script.StepParsers._
+  import org.specs2.specification.script.StepParsers.*
 
   // groupAs is equivalent to running 'regexp findAllIn text'
   // and getting one argument per match group found
-  def correct = groupAs("[^ ]+").and { date: String =>
+  def correct = groupAs("[^ ]+").and { (date: String) =>
     date must beCorrect
   }
 
@@ -105,7 +106,7 @@ s2"""
  1 plus 1 is 2            $addition
 """
 
-  import org.specs2.specification.script.StandardRegexStepParsers._
+  import org.specs2.specification.script.StandardRegexStepParsers.*
 
   def addition = threeInts.map { case (a, b, c) =>
     a + b must ===(c)

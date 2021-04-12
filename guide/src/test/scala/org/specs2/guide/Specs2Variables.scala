@@ -3,7 +3,7 @@ package guide
 
 object Specs2Variables extends Specs2Variables
 
-trait Specs2Variables {
+trait Specs2Variables:
 
   lazy val VERSION        = BuildInfo.version
   lazy val GUIDE_DIR      = s"https://etorreborre.github.io/specs2/guide/SPECS2-$VERSION"
@@ -19,12 +19,4 @@ trait Specs2Variables {
       "PROJECT_DIR"       -> PROJECT_DIR,
       "GUIDE_DIR"         -> GUIDE_DIR,
       "EXAMPLES_DIR"      -> EXAMPLES_DIR,
-      "API_DIR"           -> API_DIR
-    )
-
-
-  /** @return true if the version is not timestamped */
-  def isOfficial(version: String): Boolean =
-    !version.contains(BuildInfo.timestamp)
-}
-
+      "API_DIR"           -> API_DIR)

@@ -11,32 +11,32 @@ import create.FragmentsFactory
 trait ReferenceDsl extends ReferenceCreation:
 
   extension (alias: String)
-    def ~(s: SpecStructure): Fragment =
+    infix def ~(s: SpecStructure): Fragment =
       fragmentFactory.link(SpecificationRef(s.header, s.arguments, alias = alias))
 
-    def ~(s: SpecStructure, tooltip: String): Fragment =
+    infix def ~(s: SpecStructure, tooltip: String): Fragment =
       fragmentFactory.link(SpecificationRef(s.header, s.arguments, alias = alias, tooltip = tooltip))
 
-    def ~(s: =>SpecificationStructure): Fragment =
+    infix def ~(s: =>SpecificationStructure): Fragment =
       lazy val spec = s.is
       fragmentFactory.link(SpecificationRef(spec.header, spec.arguments, alias = alias))
 
-    def ~(s: =>SpecificationStructure, tooltip: String): Fragment =
+    infix def ~(s: =>SpecificationStructure, tooltip: String): Fragment =
       lazy val spec = s.is
       fragmentFactory.link(SpecificationRef(spec.header, spec.arguments, alias = alias, tooltip = tooltip))
 
   extension (alias: String)
-    def ~/(s: SpecStructure): Fragment =
+    infix def ~/(s: SpecStructure): Fragment =
       fragmentFactory.see(SpecificationRef(s.header, s.arguments, alias = alias))
 
-    def ~/(s: SpecStructure, tooltip: String): Fragment =
+    infix def ~/(s: SpecStructure, tooltip: String): Fragment =
       fragmentFactory.see(SpecificationRef(s.header, s.arguments, alias = alias, tooltip = tooltip))
 
-    def ~/(s: =>SpecificationStructure): Fragment =
+    infix def ~/(s: =>SpecificationStructure): Fragment =
       lazy val spec = s.is
       fragmentFactory.see(SpecificationRef(spec.header, spec.arguments, alias = alias))
 
-    def ~/(s: =>SpecificationStructure, tooltip: String): Fragment =
+    infix def ~/(s: =>SpecificationStructure, tooltip: String): Fragment =
       lazy val spec = s.is
       fragmentFactory.see(SpecificationRef(spec.header, spec.arguments, alias = alias, tooltip = tooltip))
 

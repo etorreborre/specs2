@@ -3,7 +3,7 @@ package guide
 
 import form.Card
 import specification.core.Fragments
-import specification._
+import specification.*
 /**
  * base class for creating specs2 user guide pages.
  */

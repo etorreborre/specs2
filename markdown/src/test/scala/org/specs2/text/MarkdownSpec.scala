@@ -39,7 +39,7 @@ This is a paragraph presenting some code:
 
  * with a bullet point
 
-        import org.specs2._
+        import org.specs2.*
         Console.println("Hello world")
 
  * and another one

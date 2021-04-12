@@ -25,8 +25,7 @@ import S2StringContext.*
  */
 trait S2StringContext extends S2StringContext1:
 
-  /** create an example based on an execution.
-   */
+  /** create an example based on an execution */
   implicit inline def asExecutionIsInterpolated[R : AsExecution](inline r: =>R)(using inline factory: FragmentFactory): Interpolated =
     ${executionInterpolated('{AsExecution[R].execute(r)}, 'factory)}
 
@@ -65,6 +64,7 @@ trait S2StringContext extends S2StringContext1:
         def prepend(text: String): Fragments =
           Fragments(fragmentFactory.text(text)).append(fragments)
 
+
 /**
  * Lightweight methods to interpolate fragments where only results and fragment can be interpolated
  */
@@ -76,8 +76,22 @@ trait S2StringContext1 extends S2StringContextCreation:
       def prepend(text: String): Fragments =
         Fragments(fragmentFactory.text(text)).appendLazy(f)
 
+  implicit inline def stringResultIsInterpolated[R : AsResult](inline f: String => R): Interpolated =
+    new Interpolated:
+      def prepend(text: String): Fragments =
+        Fragments(fragmentFactory.example(text, AsExecution[R].execute(f(text))))
+
   implicit inline def asResultIsInterpolated[R : AsResult](inline r: =>R): Interpolated =
     ${executionInterpolated('{Execution.result(r)}, 'fragmentFactory)}
+
+  implicit inline def stepParserIsInterpolatedFragment[R : AsResult](f: StepParser[R]): Interpolated =
+    new Interpolated:
+      def prepend(text: String): Fragments =
+        f.parse(text) match
+          case Left(t) =>
+            Fragments(fragmentFactory.example(text, Execution.result(Error(t))))
+          case Right((description, r)) =>
+            Fragments(fragmentFactory.example(description, Execution.result(r)))
 
 trait S2StringContextCreation extends FragmentsFactory:
   /** The FragmentFactory has to be passed as an implicit in order to be inlined in macros */

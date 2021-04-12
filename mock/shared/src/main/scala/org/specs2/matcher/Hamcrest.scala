@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-import org.hamcrest._
+import org.hamcrest.*
 import Matcher.{given}
 
 /**

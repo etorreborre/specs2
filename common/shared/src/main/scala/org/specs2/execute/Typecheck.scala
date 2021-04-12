@@ -8,7 +8,7 @@
  *  - Stefan Zeiger (@StefanZeiger) for the typecheck method
  *  - Jean-Remi Desjardins (@jrdesjardins) for the tc interpolator
  */
-// object Typecheck {
+object Typecheck
 
 //   /**
 //    * Typecheck code and fail at runtime if the code doesn't typecheck
@@ -20,7 +20,7 @@
 //   /** alias for apply */
 //   def typecheck(code: String): Typechecked = macro typecheckImpl
 //   def typecheckImpl(c: Context)(code: c.Expr[String]): c.Tree = {
-//     import c.universe._
+//     import c.universe.*
 //     typecheckImplementation(c)(code, c.Expr(q"org.specs2.execute.TypecheckParams()"))
 //   }
 
@@ -29,7 +29,7 @@
 //     typecheckImplementation(c)(code, params)
 
 //   def typecheckImplementation(c: Context)(code: c.Expr[String], params: c.Expr[TypecheckParams]): c.Tree = {
-//     import c.universe._
+//     import c.universe.*
 //     code match {
 //       case Expr(Literal(Constant(codeString: String))) =>
 //         // evaluate the parameters
@@ -87,7 +87,7 @@
 //   }
 
 //   def typecheckCodeImpl(c: Context)(variables: c.Expr[Any]*): c.Tree = {
-//     import c.universe._
+//     import c.universe.*
 //     typecheckCodeImplementation(c)(variables*)(c.Expr(q"org.specs2.execute.TypecheckParams()"))
 //   }
 

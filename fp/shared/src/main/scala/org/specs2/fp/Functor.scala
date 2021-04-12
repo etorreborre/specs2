@@ -27,10 +27,10 @@ object Functor:
 
 trait FunctorSyntax:
   extension [F[_] : Functor, A, B](fa: F[A])
-    def map(f: A => B): F[B] =
+    infix def map(f: A => B): F[B] =
       Functor.apply[F].map(fa)(f)
 
-    def as(b: => B): F[B] =
+    infix def as(b: => B): F[B] =
       Functor.apply[F].as(fa)(b)
 
   extension [F[_] : Functor, A](fa: F[A])

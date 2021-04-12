@@ -1,7 +1,7 @@
 package org.specs2
 package guide
 
-import collection.Seqx._
+import collection.Seqx.*
 
 object AutoExamples extends UserGuidePage { def is = "Auto-examples".title ^ s2"""
 

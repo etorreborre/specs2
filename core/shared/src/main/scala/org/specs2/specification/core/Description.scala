@@ -115,15 +115,15 @@ object Description:
   def text(text: String) = Text(text)
   def code(text: String) = Code(text)
 
-  def tag(ts: String*)       = mark(Tag(ts*))
-  def taggedAs(ts: String*)  = markAs(Tag(ts*))
-  def section(ts: String*)   = markSection(Tag(ts*))
-  def asSection(ts: String*) = markSectionAs(Tag(ts*))
+  infix def tag(ts: String*)       = mark(Tag(ts*))
+  infix def taggedAs(ts: String*)  = markAs(Tag(ts*))
+  infix def section(ts: String*)   = markSection(Tag(ts*))
+  infix def asSection(ts: String*) = markSectionAs(Tag(ts*))
 
-  def mark(tag: NamedTag)          = Marker(tag, isSection = false)
-  def markAs(tag: NamedTag)        = Marker(tag, isSection = false, appliesToNext = false)
-  def markSection(tag: NamedTag)   = Marker(tag, isSection = true)
-  def markSectionAs(tag: NamedTag) = Marker(tag, isSection = true, appliesToNext = false)
+  infix def mark(tag: NamedTag)          = Marker(tag, isSection = false)
+  infix def markAs(tag: NamedTag)        = Marker(tag, isSection = false, appliesToNext = false)
+  infix def markSection(tag: NamedTag)   = Marker(tag, isSection = true)
+  infix def markSectionAs(tag: NamedTag) = Marker(tag, isSection = true, appliesToNext = false)
 
   def isCode(d: Description): Boolean =
     d match

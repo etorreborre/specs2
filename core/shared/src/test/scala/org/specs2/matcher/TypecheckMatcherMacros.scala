@@ -8,12 +8,11 @@ object DoNothing
 // object TypecheckMatcherMacros {
 //   def produceIncorrectCode: Unit = macro produceIncorrectCodeImpl
 //   def produceIncorrectCodeImpl(c: Context): c.Expr[Unit] = {
-//     import c.universe._
-//     c.Expr(q"4 ++ 5")
+//     import c.universe.*//     c.Expr(q"4 ++ 5")
 //   }
 //   def produceCorrectCode: Unit = macro produceCorrectCodeImpl
 //   def produceCorrectCodeImpl(c: Context): c.Expr[Unit] = {
-//     import c.universe._
+//     import c.universe.*
 //     c.Expr(q"()")
 //   }
 //   def abortMacroExpansion: Unit = macro abortMacroExpansionImpl

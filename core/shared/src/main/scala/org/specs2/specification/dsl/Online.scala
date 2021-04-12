@@ -10,7 +10,7 @@ import org.specs2.specification.core.{Execution, FragmentsContinuation, Fragment
  */
 trait Online:
   extension [R : AsResult](r: =>R)
-    def continueWith(fs: =>Fragments): Execution =
+    infix def continueWith(fs: =>Fragments): Execution =
       FragmentsContinuation.continueWith(r, fs)
 
 object Online extends Online

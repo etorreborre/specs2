@@ -1,8 +1,8 @@
 import sbt._
 import Defaults._
+import libraryDependencies._
 import java.util.{Date, TimeZone}
 import java.text.SimpleDateFormat
-import libraryDependencies._
 
 /** MAIN PROJECT */
 lazy val specs2 = project.in(file(".")).
@@ -63,7 +63,6 @@ lazy val common = crossProject(JVMPlatform).in(file("common")).
     name := "specs2-common"
   ).
   jvmSettings(depends.jvmTest, commonJvmSettings).
-  platformsSettings(JVMPlatform)(depends.scalaParser).
   dependsOn(fp)
 
 lazy val commonJVM = common.jvm
@@ -111,6 +110,8 @@ lazy val guide = project.in(file("guide")).
   settings(
     commonSettings,
     name := "specs2-guide",
+    buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
+    buildInfoPackage := "org.specs2",
     Compile / scalacOptions --= Seq("-Xlint", "-Ywarn-unused-import")).
   dependsOn(examplesJVM % "compile->compile;test->test")
 
@@ -159,6 +160,7 @@ lazy val matcherExtra = crossProject(JVMPlatform).in(file("matcher-extra")).
     commonSettings,
     name := "specs2-matcher-extra").
   jvmSettings(depends.jvmTest, commonJvmSettings).
+  platformsSettings(JVMPlatform)(depends.scalaParser).
   dependsOn(matcher, core, core % "test->test")
 
 lazy val matcherExtraJVM = matcherExtra.jvm
@@ -215,7 +217,7 @@ lazy val compilationSettings = Seq(
 
 lazy val testingSettings = Seq(
   logBuffered := false,
-  cancelable in Global := true,
+  Global / cancelable := true,
   testFrameworks := Seq(TestFramework("org.specs2.runner.Specs2Framework")),
   testOptions := Seq(Tests.Filter(s =>
     (Seq(".guide.").exists(s.contains) || Seq("Spec", "Guide", "Website").exists(s.endsWith)) &&
@@ -247,7 +249,7 @@ lazy val siteSettings = GhpagesPlugin.projectSettings ++ SitePlugin.projectSetti
  * PUBLICATION
  */
 lazy val publicationSettings = Seq(
-  publishTo in Global := sonatypePublishToBundle.value,
+  Global / publishTo := sonatypePublishToBundle.value,
   publishMavenStyle := true,
   Test / publishArtifact := false,
   pomIncludeRepository := { x => false },

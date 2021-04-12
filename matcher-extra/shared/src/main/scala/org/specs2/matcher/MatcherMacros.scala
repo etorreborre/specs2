@@ -25,7 +25,7 @@ trait MatcherMacros {
  */
 object MatcherMacros extends MatcherMacros {
 
-  //   def matcherMacroImpl[T : c.WeakTypeTag](c: Context): c.Expr[Any] = { import c.universe._
+  //   def matcherMacroImpl[T : c.WeakTypeTag](c: Context): c.Expr[Any] = { import c.universe.*
   //     val (matcherClassType, classDefinition) = new MakeMatchers[c.type](c).matchers[T]
 
   //     val block = q"""
@@ -37,7 +37,7 @@ object MatcherMacros extends MatcherMacros {
   //   }
 
   //   def fieldMatcherImplementation[F, T : c.WeakTypeTag](c: Context)(fieldValue: c.Expr[F]) = {
-  //     import c.universe._
+  //     import c.universe.*
 
   //     val (arg, body) = extractBody(c)
   //     val prefixVal = TermName(c.freshName)
@@ -50,7 +50,7 @@ object MatcherMacros extends MatcherMacros {
   //       """})
   //   }
 
-  //   def fieldMatcherImplementation2[F : c.WeakTypeTag, T : c.WeakTypeTag, R](c: Context)(fieldValue: c.Expr[F])(asResult: c.Expr[R]) = { import c.universe._
+  //   def fieldMatcherImplementation2[F : c.WeakTypeTag, T : c.WeakTypeTag, R](c: Context)(fieldValue: c.Expr[F])(asResult: c.Expr[R]) = { import c.universe.*
 
   //     val (arg, body) = extractBody(c)
   //     val prefixVal = TermName(c.freshName)
@@ -67,14 +67,14 @@ object MatcherMacros extends MatcherMacros {
 
   //   def matcherClassName[T : c.WeakTypeTag](c: Context) = c.universe.weakTypeOf[T].typeSymbol.name.encodedName.toString+"Matcher"
 
-  //   private def extractBody(c: Context) = { import c.universe._
+  //   private def extractBody(c: Context) = { import c.universe.*
   //     c.macroApplication.symbol.annotations.find(_.tree.tpe.toString.endsWith("fieldMatcherBody")).
   //       flatMap(_.tree.children.tail.map(arg => c.untypecheck(arg)).collectFirst { case Function(ValDef(_, a, _, _) :: Nil, b) => a -> b }).
   //       getOrElse(c.abort(c.enclosingPosition, "Annotation body not provided!"))
   //   }
 
   //   private def replaceThises(c: Context)(className: String, prefixVal: c.TermName) = {
-  //     import c.universe._
+  //     import c.universe.*
   //     new Transformer {
   //       override def transform(tree: Tree) = tree match {
   //         case This(qualifier) if qualifier.decodedName.toString.startsWith(className) => Ident(prefixVal)
@@ -85,7 +85,7 @@ object MatcherMacros extends MatcherMacros {
 
   //   /** set a specific position to the elements of a tree  */
   //   private def setPosition(c: Context)(position: c.Position) = {
-  //     import c.universe._
+  //     import c.universe.*
 
   //     new Transformer {
   //       override def transform(tree: Tree) = tree match {
@@ -100,7 +100,7 @@ object MatcherMacros extends MatcherMacros {
 
   // class MakeMatchers[C <: Context](val c: C) {
 
-  //   import c.universe._
+  //   import c.universe.*
 
   //   def matchers[T: c.WeakTypeTag] = {
   //     val typeOfT = weakTypeOf[T]
@@ -158,11 +158,11 @@ object MatcherMacros extends MatcherMacros {
   //     (matcherClassType, classDefinition)
   //   }
 
-  //   private def isSynthetic(c: Context) = { import c.universe._
+  //   private def isSynthetic(c: Context) = { import c.universe.*
   //     (s: Symbol) => s.isSynthetic
   //   }
 
-  //   private def isGetter(c: Context) = { import c.universe._
+  //   private def isGetter(c: Context) = { import c.universe.*
   //     (s: Symbol) =>  s match {
   //       case m: c.universe.MethodSymbol => m.isGetter
   //       case other                      => false

@@ -110,7 +110,8 @@ Implicits
     // if this specification compiles and if result is ok, this means that the must implicit could be redefined
     // thanks to the NoMustExpectations trait
     case class Spec1() extends org.specs2.mutable.Specification with NoMustExpectations:
-      extension [T](t: =>T) infix def must(other: Int) = other
+      extension [T](t: =>T)
+        infix def must(other: Int) = other
 
       val result = (1 must 2) === 2
       "an example" >> result

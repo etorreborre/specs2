@@ -2,9 +2,9 @@ package org.specs2
 package reflect
 
 import scala.reflect.ClassTag
-import control._
-import fp.syntax._
-import org.portablescala.reflect._
+import control.*
+import fp.syntax.*
+import org.portablescala.reflect.*
 
 trait Classes extends ClassOperations {
 

@@ -35,7 +35,7 @@ trait BlockDsl extends BlockCreation:
       addExample(s, f(s))
 
   extension [S, R](d: String)
-    def >>(s: =>S)(using t: ToBlock[S, R]): R =
+    infix def >>(s: =>S)(using t: ToBlock[S, R]): R =
      summon[ToBlock[S, R]].toBlock(d, s)
 
 /**
@@ -44,13 +44,13 @@ trait BlockDsl extends BlockCreation:
 trait ExtendedBlockDsl extends BlockDsl:
 
   extension [S, R] (d: String)(using not: NotGiven[NoExtendedBlockDsl])
-    def should(s: =>S)(using t: ToBlock[S, R]): R =
+    infix def should(s: =>S)(using t: ToBlock[S, R]): R =
       summon[ToBlock[S, R]].toBlock(s"$d should", s)
 
-    def can(s: =>S)(using t: ToBlock[S, R]): R =
+    infix def can(s: =>S)(using t: ToBlock[S, R]): R =
       summon[ToBlock[S, R]].toBlock(s"$d can", s)
 
-    def in(s: =>S)(using t: ToBlock[S, R]): R =
+    infix def in(s: =>S)(using t: ToBlock[S, R]): R =
       summon[ToBlock[S, R]].toBlock(d, s)
 
   /**

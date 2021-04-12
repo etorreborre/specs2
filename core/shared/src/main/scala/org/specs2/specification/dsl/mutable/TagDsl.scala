@@ -25,19 +25,19 @@ trait TagDsl extends org.specs2.specification.dsl.TagDsl with MutableFragmentBui
    * This implicit allows to add tags and sections _after_ the examples
    */
   extension (f: =>Fragment)
-    def tag(tag: String): Fragment =
+    infix def tag(tag: String): Fragment =
       outer.tag(tag)
       f
 
-    def section(tag: String): Fragment =
+    infix def section(tag: String): Fragment =
       outer.section(tag)
       f
 
-    def tag(tag: NamedTag): Fragment =
+    infix def tag(tag: NamedTag): Fragment =
       outer.tag(tag)
       f
 
-    def section(tag: NamedTag): Fragment =
+    infix def section(tag: NamedTag): Fragment =
       outer.section(tag)
       f
 
@@ -45,11 +45,11 @@ trait TagDsl extends org.specs2.specification.dsl.TagDsl with MutableFragmentBui
    * This implicit allows to add tags and sections _after_ the examples
    */
   extension (fs: =>Fragments)
-    def tag(tag: NamedTag): Fragments =
+    infix def tag(tag: NamedTag): Fragments =
       outer.tag(tag)
       fs
 
-    def section(tag: NamedTag): Fragments =
+    infix def section(tag: NamedTag): Fragments =
       outer.section(tag)
       fs
 

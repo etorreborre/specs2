@@ -1,5 +1,5 @@
-import scala.io._
-import java.io._
+import scala.io.*
+import java.io.*
 
 def scalaFiles(file: File): List[File] = {
 	println("checking "+file.getName)

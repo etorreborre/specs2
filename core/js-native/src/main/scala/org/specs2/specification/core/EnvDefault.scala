@@ -2,12 +2,12 @@ package org.specs2
 package specification
 package core
 
-import control._
+import control.*
 import io.FileSystem
 import main.Arguments
 import reporter.PrinterLogger.NoPrinterLogger
-import specification.process._
-import reflect._
+import specification.process.*
+import reflect.*
 
 object EnvDefault {
 

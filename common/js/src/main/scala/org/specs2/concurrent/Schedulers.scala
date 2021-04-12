@@ -1,7 +1,7 @@
 package org.specs2.concurrent
 
 import scala.concurrent.duration.FiniteDuration
-import scala.scalajs.js.timers._
+import scala.scalajs.js.timers.*
 
 trait Schedulers {
 

@@ -26,19 +26,19 @@ trait ExpectationsDescription extends ExpectationsCreation:
      *         this is useful to preserve the original value when the matcher using
      *         it is adapting the value
      */
-    def aka: Expectable[T] = aka(value.toString)
+    infix def aka: Expectable[T] = aka(value.toString)
 
     /** @return an expectable with an alias description */
-    def aka(alias: =>String): Expectable[T] = createExpectable(value, alias)
+    infix def aka(alias: =>String): Expectable[T] = createExpectable(value, alias)
 
     /** @return an expectable with an alias description, after the value string */
-    def post(alias: =>String): Expectable[T] = as((_: String) + " " + alias)
+    infix def post(alias: =>String): Expectable[T] = as((_: String) + " " + alias)
 
     /** @return an expectable with an alias description, after the value string */
-    def as(alias: String => String): Expectable[T] = createExpectable(value, alias)
+    infix def as(alias: String => String): Expectable[T] = createExpectable(value, alias)
 
     /** @return an expectable with a function to show the element T */
-    def showAs(show: T => String, p: ImplicitParam = implicitParameter): Expectable[T] =
+    infix def showAs(show: T => String, p: ImplicitParam = implicitParameter): Expectable[T] =
       lazy val v = value
       createExpectableWithShowAs(v, show(v))
 
@@ -46,7 +46,7 @@ trait ExpectationsDescription extends ExpectationsCreation:
   extension [T](value: =>T)(using not: NotGiven[NoValueDescription], show: T => String)
 
     /** @return an expectable with a function to show the element T */
-    def showAs: Expectable[T] =
+    infix def showAs: Expectable[T] =
       value.showAs(using not, show)
 
 

@@ -1,17 +1,17 @@
 package org.specs2
 package guide
 
-import control._
-import io._
-import Functions._
-import org.specs2.fp.syntax._
+import control.*
+import io.*
+import Functions.*
+import org.specs2.fp.syntax.*
 
 /**
  * Functions for finding the most relevant specs2 tags to display on the website
  */
 trait Specs2Tags {
   def allTags: Operation[List[VersionTag]] =
-    Executable.execute(FilePath("git"), Seq("tag")).map(_.trim.split("\n").map(VersionTag.fromString).toList.flatten)
+    Executable.execute(FilePath("git"), Seq("tag")).map(_.trim.split("\n").toList.map(VersionTag.fromString).flatten)
 
   def publishedTags: Operation[List[VersionTag]] =
     allTags.map(filterPublished)
@@ -37,7 +37,7 @@ trait Specs2Tags {
 
 object Specs2Tags extends Specs2Tags
 
-import Specs2Tags._
+import Specs2Tags.*
 
 class Specs2TagsSpec extends Specification { def is = s2"""
 
@@ -66,7 +66,7 @@ case class VersionTag(number: DotNumber, timestamp: Option[String], commit: Opti
 
 object VersionTag:
 
-  def fromString(s: String): Option[VersionTag]:
+  def fromString(s: String): Option[VersionTag] =
     s.split("\\-").toList match {
       case _ :: number :: timestamp :: commit :: Nil =>
         DotNumber.fromString(number).map(dotNumber => VersionTag(dotNumber, Some(timestamp), Some(commit)))
@@ -86,7 +86,7 @@ case class DotNumber(values: List[Int]):
     values.mkString(".")
 
 
-import Exceptions._
+import Exceptions.*
 
 object DotNumber:
   def fromString(s: String): Option[DotNumber] =
