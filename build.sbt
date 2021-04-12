@@ -25,7 +25,7 @@ lazy val specs2 = project.in(file(".")).
     junitJS, scalacheckJS, mockJS
   )
 
-val scala211 = "2.13.5"
+val scala211 = "2.11.12"
 
 /** COMMON SETTINGS */
 lazy val specs2Settings = Seq(
@@ -33,7 +33,7 @@ lazy val specs2Settings = Seq(
   specs2Version in GlobalScope := version.value,
   scalazVersion in GlobalScope := "7.3.3",
   specs2ShellPrompt,
-  scalaVersion := "2.13.2",
+  scalaVersion := "2.13.5",
   SettingKey[Boolean]("ide-skip-project") := platformDepsCrossVersion.value == ScalaNativeCrossVersion.binary,
   crossScalaVersions := Seq(scalaVersion.value, scala211, "2.12.13"))
 

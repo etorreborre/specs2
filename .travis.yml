@@ -4,9 +4,8 @@ dist: trusty
 language: scala
 
 scala:
-  - 2.12.11
-  - 2.11.12
-  - 2.13.2
+  - 2.12.13
+  - 2.13.5
 
 jdk:
   - oraclejdk8
