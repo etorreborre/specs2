@@ -52,10 +52,10 @@ trait Seqx { outer =>
     def delta[S](other: Seq[S], compare: (T, S) => Boolean): Seq[T] = {
       def notFound(ls1: Seq[T], ls2: Seq[S], result: Seq[T] = Seq()): Seq[T] =
         ls1 match {
-          case Seq()        => result
           case head +: rest =>
             if  (ls2.exists(compare(head, _))) notFound(rest, ls2.removeFirst(l => compare(head, l)), result)
             else                               notFound(rest, ls2, result :+ head)
+          case _ => result
         }
       notFound(seq, other)
     }

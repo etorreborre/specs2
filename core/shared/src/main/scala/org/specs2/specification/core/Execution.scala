@@ -137,7 +137,7 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
           env.setContextClassLoader()
 
           val timer = startSimpleTimer
-          
+
           val timedFuture = TimedFuture({ es =>
             r(env).flatMap { action =>
               try Future.successful((action(), timer.stop))
@@ -310,7 +310,7 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
     isolable.hashCode
 }
 
-trait Executing {
+sealed trait Executing {
   def setResult(r: =>Result): Executing
 }
 

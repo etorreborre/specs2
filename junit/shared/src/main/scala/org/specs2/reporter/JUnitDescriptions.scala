@@ -6,7 +6,6 @@ import java.lang.annotation.Annotation
 import org.junit.runner.Description
 import org.specs2.fp._
 import Tree._
-import data.Trees._
 import control.Exceptions._
 import data.Trees
 import Trees._

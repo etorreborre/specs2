@@ -212,7 +212,7 @@ case object Stats {
         errors       = s1.errors          + s2.errors,
         pending      = s1.pending         + s2.pending,
         skipped      = s1.skipped         + s2.skipped,
-        trend        = Applicative[Option].apply2(s1.trend, s2.trend)(_ |+| _),
+        trend        = Applicative[Option].apply2(s1.trend, s2.trend)((stats1, stats2) => StatsMonoid.append(stats1, stats2)),
         timer        = s1.timer           add s2.timer
       )
     }
@@ -252,5 +252,3 @@ case object Stats {
     }
   }
 }
-
-

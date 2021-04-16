@@ -37,7 +37,7 @@ abstract class BaseSbtRunner(args: Array[String], remoteArgs: Array[String], loa
   def newTask(aTaskDef: TaskDef): Task =
     SbtTask(aTaskDef, env, loader)
 
-  def done = {
+  def done() = {
     env.shutdown
     ""
   }
@@ -101,7 +101,7 @@ object NoEventHandler extends EventHandler {
 }
 
 object ConsoleLogger extends Logger {
-  def ansiCodesSupported = false
+  def ansiCodesSupported() = false
 
   def error(message: String) = println("error: " + message)
 
@@ -121,7 +121,7 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
   private implicit lazy val ec = env.specs2ExecutionContext
 
   /** @return the specification tags */
-  def tags: Array[String] = {
+  def tags(): Array[String] = {
     lazy val spec = runOperation(createSpecStructure(taskDef, loader, env)).toOption.flatten
     lazy val tags: List[NamedTag] =
       spec.flatMap(s => runAction(s.tags)(env.specs2ExecutionEnv).toOption).getOrElse(Nil)
@@ -164,7 +164,7 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
   }
 
   /** @return the corresponding task definition */
-  def taskDef = aTaskDef
+  def taskDef() = aTaskDef
 
   /** display errors and warnings */
   private def processResult[A](handler: EventHandler, loggers: Array[Logger])(result: Error Either A, warnings: List[String]): Unit =

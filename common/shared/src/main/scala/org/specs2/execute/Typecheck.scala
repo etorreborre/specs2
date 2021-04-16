@@ -103,7 +103,7 @@ object Typecheck {
     import c.{universe => u}
     import u.{Position => _, _}
 
-    val texts = c.prefix.tree match { case Apply(_, List(Apply(_, ts))) => ts }
+    val texts = c.prefix.tree match { case Apply(_, List(Apply(_, ts))) => ts; case _ => Seq() }
     if (texts.size != 1)
       q"""org.specs2.execute.Typechecked(${texts.mkString}, TypecheckError("can only typecheck an interpolated string with no variables at the moment"))"""
     else {

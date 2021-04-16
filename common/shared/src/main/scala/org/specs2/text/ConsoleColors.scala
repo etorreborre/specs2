@@ -35,7 +35,7 @@ class ConsoleColors extends AnsiColors with Colors {
                               ("pending",pendingColor),
                               ("skipped",skippedColor),
                               ("stats",  statsColor)
-                              ).map(p => p._1+": "+p._2)mkString("Colors(", ",", "}")
+                              ).map(p => p._1+": "+p._2).mkString("Colors(", ",", "}")
 }
 
 /**

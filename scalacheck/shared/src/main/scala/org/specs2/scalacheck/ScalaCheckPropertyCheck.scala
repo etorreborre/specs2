@@ -97,6 +97,7 @@ trait ScalaCheckPropertyCheck extends ExpectationsCreation {
             case SkipException(s)    => s
             case PendingException(p) => p
             case NonFatal(t)         => Error(prettyTestResult + showCause(t), t)
+            case _ => throw ex
           }
       }
 

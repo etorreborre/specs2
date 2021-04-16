@@ -12,5 +12,4 @@ trait Store {
   def reset: Operation[Unit]
 }
 
-trait Key[A]
-
+sealed trait Key[A]

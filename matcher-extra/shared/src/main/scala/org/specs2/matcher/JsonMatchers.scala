@@ -2,11 +2,8 @@ package org.specs2
 package matcher
 
 import org.specs2.data.Sized
-import org.specs2.execute.ResultLogicalCombinators._
 import org.specs2.execute._
 import org.specs2.json._
-import Json._
-import org.specs2.text.NotNullStrings._
 import text.NotNullStrings._
 import json.Json._
 import util.matching.Regex
@@ -41,10 +38,11 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersImplicits { outer =
 
     def anyValueToJsonType(value: Any): JsonType = value match {
       case n if n == null => JsonNull
-      case s: String      => JsonString(s)
       case d: Double      => JsonNumber(d)
       case b: Boolean     => JsonBoolean(b)
       case (k: String, v) => JsonMap(Map(k -> v))
+      case (k, v)         => JsonMap(Map(k.toString -> v))
+      case any            => JsonString(any.toString)
     }
 
     private def find(json: Option[JSONType], queries: List[JsonQuery]): Result = {

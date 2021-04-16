@@ -25,7 +25,7 @@ class MockitoSpec extends script.Spec with Mockito with ResultMatchers with Grou
 
  The following samples are taken from the main documentation which can be found here:
  http://mockito.googlecode.com/svn/tags/latest/javadoc/org/mockito/Mockito.html
-                                                                                                                       
+
  CREATION
  ========
 
@@ -143,7 +143,7 @@ STUBS
 
 ${step(env)}                                                                                                                        ${step(env)}
 """
-  
+
   trait ListOf[T] {
     def add(t: T): Boolean
     def add(i: Int, t: T): Unit
@@ -155,7 +155,7 @@ ${step(env)}                                                                    
   }
 
   lazy val env = Env()
-    
+
   "creation" - new group {
     eg := {
       val list = mock[ListOf[String]].as("list1")
@@ -167,12 +167,12 @@ ${step(env)}                                                                    
     }
     eg := {
       val list = mock[ListOf[String]].settings(name = "list1", defaultReturn = 10, extraInterfaces = classesOf[Cloneable, Serializable])
-      (list.size must_== 10) and 
+      (list.size must_== 10) and
       ((there was one(list).add("one")).message must contain("list1.add(\"one\")"))
     }
     eg := {
       val list = mock[ListOf[String]].defaultAnswer((p1: InvocationOnMock) => "hello")
-      list.get(0) must_== "hello" 
+      list.get(0) must_== "hello"
     }
     eg := {
       val list = mock[ListOf[String]](withSettings.name("list1"))
@@ -480,7 +480,7 @@ ${step(env)}                                                                    
     }
 
     eg := {
-      list.get(anyInt) responds { case i: Int => (i + 1).toString }
+      list.get(anyInt) responds { case i => (i.asInstanceOf[Int] + 1).toString }
       list.get(1) must_== "2"
       list.get(5) must_== "6"
     }
@@ -671,4 +671,3 @@ class TestController(foo: FooComponent) {
   def async(f: =>Int): Int = f
   def test(id: Int) = async { foo.getBar(id) }
 }
-

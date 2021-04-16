@@ -30,7 +30,7 @@ object depends {
     Seq(libraryDependencies ++= Seq(
       "org.scala-js" %% "scalajs-test-interface" % scalaJSVersion,
       "org.portable-scala" %%% "portable-scala-reflect" % "1.1.1"),
-        scalaJSStage in Test := FastOptStage)
+        Test / scalaJSStage := FastOptStage)
 
   def nativeTest =
     Seq(libraryDependencies += "org.scala-native" %%% "test-interface" % nativeVersion)

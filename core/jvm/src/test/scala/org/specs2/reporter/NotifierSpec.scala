@@ -128,7 +128,7 @@ class NotifierSpec3 extends org.specs2.mutable.Specification with AfterAll {
   "group1" >> {
     "ex1" >> ok
   }
-  def afterAll = sys.error("boom")
+  def afterAll() = sys.error("boom")
 }
 
 class TestNotifier extends Notifier with StringOutput {

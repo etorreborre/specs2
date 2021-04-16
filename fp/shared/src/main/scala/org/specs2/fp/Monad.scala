@@ -23,7 +23,7 @@ trait Monad[F[_]] extends Applicative[F] {
 
   def tailrecM[A, B](f: A => F[A Either B])(a: A): F[B] =
     bind(f(a)) {
-      case Left(a1) => tailrecM(a1)(f)
+      case Left(a1) => tailrecM(f)(a1)
       case Right(b) => point(b)
     }
 
@@ -62,7 +62,7 @@ object Monad {
     override def tailrecM[A, B](f: A => Option[A Either B])(a: A): Option[B] =
       f(a) match {
         case None => None
-        case Some(Left(a1)) => tailrecM(a1)(f)
+        case Some(Left(a1)) => tailrecM(f)(a1)
         case Some(Right(b)) => Some(b)
       }
   }
@@ -79,7 +79,7 @@ object Monad {
     override def tailrecM[A, B](f: A => Either[L, A Either B])(a: A): Either[L, B] =
       f(a) match {
         case Left(l) => Left(l)
-        case Right(Left(a1)) => tailrecM(a1)(f)
+        case Right(Left(a1)) => tailrecM(f)(a1)
         case Right(Right(b)) => Right(b)
       }
   }

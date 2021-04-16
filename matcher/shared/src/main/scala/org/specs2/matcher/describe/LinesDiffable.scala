@@ -13,7 +13,7 @@ object LinesDiffable {
           expected.toString.split("\n").toList)
 
       if (actualLines.size + expectedLines.size > 2)
-        linesDiffable[String].diff(actualLines, expectedLines)
+        linesDiffable[String](largeStringDiffable).diff(actualLines, expectedLines)
       else
         Diffable.stringDiffable.diff(actual, expected)
     }

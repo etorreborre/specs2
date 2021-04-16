@@ -40,13 +40,13 @@ case class Row(private val cellList: List[Cell]) extends Executable {
   def text(maxSizes: Seq[Int]) = {
     def pad(cells: Seq[Cell], sizes: Seq[Int], result: Seq[String]): Seq[String] = {
       cells.toList match {
-        case Nil => result
         case c :: Nil => (result :+ c.text.padTo(sizes.sum + (sizes.size - 1)*3, ' ')).toList
         case c :: rest => sizes match {
-          case Nil => (result :+ c.text).toList
           case s :: Nil => pad(rest, Nil, (result :+ c.text.padTo(s, ' ')).toList)
           case s :: ss => pad(rest, ss, (result :+ c.text.padTo(s, ' ')).toList)
+          case _ => (result :+ c.text).toList
         }
+        case _ => result
       }
     }
     pad(cells, maxSizes, Nil).mkString("| ", " | ", " |")

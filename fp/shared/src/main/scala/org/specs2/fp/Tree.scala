@@ -50,10 +50,10 @@ sealed abstract class Tree[A] {
     val trunk = "  |" // "|  ".reverse
 
     def drawSubTrees(s: Stream[Tree[A]]): Vector[StringBuilder] = s match {
-      case ts if ts.isEmpty       => Vector.empty[StringBuilder]
       case t #:: ts if ts.isEmpty => new StringBuilder("|") +: shift(stem, "   ", t.draw)
-      case t #:: ts               =>
+      case t #:: ts =>
         new StringBuilder("|") +: (shift(branch, trunk, t.draw) ++ drawSubTrees(ts))
+      case _ => Vector.empty[StringBuilder]
     }
 
     def shift(first: String, other: String, s: Vector[StringBuilder]): Vector[StringBuilder] = {
@@ -72,7 +72,7 @@ sealed abstract class Tree[A] {
   /**
    * Pre-order traversal. Flatten the tree using a foldLeft to avoid SOF
    */
-  def flatten: Stream[A] = 
+  def flatten: Stream[A] =
     squishLeft(this, Stream.Empty)
 
   /** reimplementation of squish from scalaz, using a foldLeft */

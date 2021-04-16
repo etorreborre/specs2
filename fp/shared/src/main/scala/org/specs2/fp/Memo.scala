@@ -28,7 +28,7 @@ object Memo {
       k => {
         a.getOrElse(k, {
           val v = f(k)
-          a = a updated (k, v)
+          a = a.updated(k, v)
           v
         })
       })

@@ -14,7 +14,6 @@ lazy val specs2 = project.in(file(".")).
     commonSettings,
     siteSettings,
     apiSettings,
-    buildInfoSettings,
     name := "specs2",
     packagedArtifacts := Map.empty
   ).aggregate(
@@ -30,42 +29,11 @@ val scala211 = "2.11.12"
 /** COMMON SETTINGS */
 lazy val specs2Settings = Seq(
   organization := "org.specs2",
-  specs2Version in GlobalScope := version.value,
-  scalazVersion in GlobalScope := "7.3.3",
+  GlobalScope / scalazVersion := "7.2.31",
   specs2ShellPrompt,
   scalaVersion := "2.13.5",
-  SettingKey[Boolean]("ide-skip-project") := platformDepsCrossVersion.value == ScalaNativeCrossVersion.binary,
+  SettingKey[Boolean]("ide-skip-project").withRank(KeyRanks.Invisible) := platformDepsCrossVersion.value == ScalaNativeCrossVersion.binary,
   crossScalaVersions := Seq(scalaVersion.value, scala211, "2.12.13"))
-
-lazy val versionSettings =
-  Seq(
-    version := {
-      import sys.process._
-      if (!"git tag".!!.contains(version.value)) {
-        val commish = "git log --pretty=format:%h -n 1".!!.trim
-        version.value+"-"+commish+"-"+timestamp(new Date)
-      }
-      else
-        version.value
-    }
-  )
-
-
-lazy val latestTag = "git tag"
-
-lazy val buildInfoSettings = Seq(
-  buildInfoKeys :=
-    Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion) ++
-      Seq(BuildInfoKey.action("commit")(sys.process.Process(s"git log --pretty=format:%h -n  1").lineStream.head),
-        BuildInfoKey.action("timestamp")(timestamp(new Date))),
-  buildInfoPackage := "org.specs2"
-)
-
-def timestamp(instant: Date, format: String = "yyyyMMddHHmmss") = {
-  val formatter = new SimpleDateFormat("yyyyMMddHHmmss")
-  formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
-  formatter.format(instant)
-}
 
 lazy val tagName = Def.setting{
   s"specs2-${version.value}"
@@ -77,11 +45,11 @@ lazy val commonJsSettings = Seq(
     val tagOrHash =
       if(isSnapshot.value) sys.process.Process("git rev-parse HEAD").lineStream_!.head
       else tag
-    val a = (baseDirectory in LocalRootProject).value.toURI.toString
+    val a = (LocalRootProject / baseDirectory).value.toURI.toString
     val g = "https://raw.githubusercontent.com/etorreborre/specs2/" + tagOrHash
     s"-P:scalajs:mapSourceURI:$a->$g/"
   },
-  parallelExecution in Test := false
+  Test / parallelExecution := false
 )
 
 lazy val commonNativeSettings = Seq(
@@ -99,17 +67,15 @@ lazy val specs2Version = settingKey[String]("defines the current specs2 version"
 lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
 lazy val shapelessVersion = "2.3.3"
 lazy val catsVersion = "2.5.0"
-lazy val catsEffectVersion = "2.5.0"
+lazy val catsEffectVersion = "2.4.1"
 
 val commonSettings =
-  coreDefaultSettings  ++
-    versionSettings      ++
+    coreDefaultSettings  ++
     depends.resolvers    ++
     specs2Settings       ++
     compilationSettings  ++
     testingSettings      ++
-    publicationSettings  ++
-    notificationSettings
+    publicationSettings
 
 def commonJvmSettings =
   testingJvmSettings
@@ -242,9 +208,8 @@ lazy val guide = project.in(file("guide")).
   enablePlugins(BuildInfoPlugin).
   settings(
     commonSettings,
-    buildInfoSettings,
     name := "specs2-guide",
-    scalacOptions in Compile --= Seq("-Xlint", "-Ywarn-unused-import")).
+    Compile / scalacOptions --= Seq("-Xlint", "-Ywarn-unused-import")).
   dependsOn(examplesJVM % "compile->compile;test->test", scalazJVM, shapelessJVM)
 
 lazy val gwt = crossProject(JSPlatform, JVMPlatform, NativePlatform).
@@ -420,7 +385,7 @@ lazy val tests = Project(id = "tests", base = file("tests")).
   scalazJVM,
   catsJVM)
 
-lazy val specs2ShellPrompt = shellPrompt in ThisBuild := { state =>
+lazy val specs2ShellPrompt = ThisBuild / shellPrompt := { state =>
   val name = Project.extract(state).currentRef.project
   (if (name == "specs2") "" else name) + "> "
 }
@@ -430,21 +395,21 @@ def scalaSourceVersion(scalaBinaryVersion: String) =
 
 lazy val compilationSettings = Seq(
   // https://gist.github.com/djspiewak/976cd8ac65e20e136f05
-  unmanagedSourceDirectories in Compile ++=
-    Seq((sourceDirectory in Compile).value / s"scala-${scalaSourceVersion(scalaBinaryVersion.value)}",
-      (sourceDirectory in Compile).value / s"scala-scalaz-7.1.x",
-      (sourceDirectory in (Test, test)).value / s"scala-scalaz-7.1.x"),
+  Compile / unmanagedSourceDirectories ++=
+    Seq((Compile / sourceDirectory).value / s"scala-${scalaSourceVersion(scalaBinaryVersion.value)}",
+      (Compile / sourceDirectory).value / s"scala-scalaz-7.1.x",
+      (Test / test / sourceDirectory).value / s"scala-scalaz-7.1.x"),
   maxErrors := 20,
-  scalacOptions in Compile ++=
+  Compile / scalacOptions ++=
     Seq(
       //"-Xfatal-warnings",
       "-Xlint",
       "-Ywarn-numeric-widen",
       "-Ywarn-value-discard",
       "-Xlint:-byname-implicit",
-      "-Xlint:-nullary-override",
+      "-Wconf:cat=lint-multiarg-infix:s",
       "-deprecation:false", "-Xcheckinit", "-unchecked", "-feature", "-language:_"),
-  scalacOptions in Compile ++= {
+  Compile / scalacOptions ++= {
     CrossVersion.partialVersion(scalaVersion.value) match {
       case Some((2, v)) if v <= 12 =>
         Seq(
@@ -466,16 +431,16 @@ lazy val compilationSettings = Seq(
     }
   },
   addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3"),
-  scalacOptions in Test               += "-Yrangepos",
-  scalacOptions in (Compile, doc)    ++= Seq("-feature", "-language:_"),
-  scalacOptions in (Compile, console) := Seq("-Yrangepos", "-feature", "-language:_"),
-  scalacOptions in (Test, console)    := Seq("-Yrangepos", "-feature", "-language:_")
+  Test / scalacOptions += "-Yrangepos",
+  Compile / doc / scalacOptions ++= Seq("-feature", "-language:_"),
+  Compile / console / scalacOptions := Seq("-Yrangepos", "-feature", "-language:_"),
+  Test / console / scalacOptions := Seq("-Yrangepos", "-feature", "-language:_")
 )
 
 lazy val testingSettings = Seq(
-  initialCommands in console in test := "import org.specs2._",
+  test / console / initialCommands := "import org.specs2._",
   logBuffered := false,
-  cancelable in Global := true,
+  Global / cancelable := true,
   testFrameworks := Seq(TestFramework("org.specs2.runner.Specs2Framework")),
   testOptions := Seq(Tests.Filter(s =>
     (Seq(".guide.").exists(s.contains) || Seq("Spec", "Guide", "Website").exists(s.endsWith)) &&
@@ -484,7 +449,7 @@ lazy val testingSettings = Seq(
 
 lazy val testingJvmSettings = Seq(
   javaOptions ++= Seq("-Xmx3G", "-Xss4M"),
-  fork in Test := true
+  Test / fork := true
 )
 
 /**
@@ -494,8 +459,8 @@ lazy val siteSettings = GhpagesPlugin.projectSettings ++ SitePlugin.projectSetti
   Seq(
     siteSourceDirectory := target.value / "specs2-reports" / "site",
     // copy the api files to a versioned directory
-    siteMappings ++= { (mappings in packageDoc in Compile).value.map { case (f, d) => (f, s"api/SPECS2-${version.value}/$d") } },
-    includeFilter in makeSite := AllPassFilter,
+    siteMappings ++= { (Compile / packageDoc / mappings).value.map { case (f, d) => (f, s"api/SPECS2-${version.value}/$d") } },
+    makeSite / includeFilter := AllPassFilter,
     // override the synchLocal task to avoid removing the existing files
     ghpagesSynchLocal := {
       val betterMappings = ghpagesPrivateMappings.value map { case (file, target) => (file, ghpagesUpdatedRepository.value / target) }
@@ -506,12 +471,10 @@ lazy val siteSettings = GhpagesPlugin.projectSettings ++ SitePlugin.projectSetti
   )
 
 lazy val apiSettings = Seq(
-  sources                      in (Compile, doc) := sources.all(aggregateCompile).value.flatten,
-  unmanagedSources             in (Compile, doc) := unmanagedSources.all(aggregateCompile).value.flatten,
-  unmanagedSourceDirectories   in (Compile, doc) := unmanagedSourceDirectories.all(aggregateCompile).value.flatten,
-  unmanagedResourceDirectories in (Compile, doc) := unmanagedResourceDirectories.all(aggregateCompile).value.flatten,
-  libraryDependencies                            := libraryDependencies.all(aggregateTest).value.flatten.map(maybeMarkProvided)) ++
-  Seq(scalacOptions in (Compile, doc) += "-Ymacro-expand:none")
+  Compile / doc / sources := sources.all(aggregateCompile).value.flatten,
+  Compile / doc / unmanagedSources := unmanagedSources.all(aggregateCompile).value.flatten,
+  libraryDependencies := libraryDependencies.all(aggregateTest).value.flatten.map(maybeMarkProvided)) ++
+  Seq(Compile / doc / scalacOptions += "-Ymacro-expand:none")
 
 lazy val aggregateCompile = ScopeFilter(
   inProjects(fpJVM, commonJVM, matcherJVM, matcherExtraJVM, coreJVM, html, analysisJVM, formJVM, shapelessJVM, markdownJVM, gwtJVM, junitJVM, scalacheckJVM, mockJVM),
@@ -533,9 +496,9 @@ lazy val providedDependenciesInAggregate = Seq("shapeless")
  * PUBLICATION
  */
 lazy val publicationSettings = Seq(
-  publishTo in Global := sonatypePublishToBundle.value,
+  Global / publishTo := sonatypePublishToBundle.value,
   publishMavenStyle := true,
-  publishArtifact in Test := false,
+  Test / publishArtifact := false,
   pomIncludeRepository := { x => false },
   pomExtra := (
     <url>http://specs2.org/</url>
@@ -557,19 +520,3 @@ lazy val publicationSettings = Seq(
   credentials := Seq(Credentials(Path.userHome / ".sbt" / "specs2.credentials"))
 ) ++
   Sonatype.projectSettings
-
-/**
- * NOTIFICATION
- */
- lazy val notificationSettings = Seq()
-//   ghreleaseRepoOrg := "etorreborre",
-//   ghreleaseRepoName := "specs2",
-//   ghreleaseNotes := { tagName: TagName =>
-//     // find the corresponding release notes
-//     val notesFilePath = s"notes/${tagName.toUpperCase.replace("SPECS2-", "")}.markdown"
-//     try scala.io.Source.fromFile(notesFilePath).mkString
-//     catch { case t: Throwable => throw new Exception(s"the path $notesFilePath not found for tag $tagName") }
-//   },
-//   // just upload the notes
-//   ghreleaseAssets := Seq()
-// )
