@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.org/etorreborre/specs2.png?branch=master)](https://travis-ci.org/etorreborre/specs2)
+[![Build Status](https://github.com/etorreborre/specs2/actions/workflows/ci.yml/badge.svg)](https://github.com/etorreborre/specs2/actions/workflows/ci.yml/badge.svg)
+
 [![Join the chat at https://gitter.im/etorreborre/specs2](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/etorreborre/specs2?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Go to [specs2.org](http://specs2.org) to learn more about ***specs2***!
@@ -14,4 +15,4 @@ Then you can generate the User Guide with:
 ```
 sbt testOnly org.specs2.guide.UserGuide -- html
 ```
-This should create html files in the target/specs2-reports directory. 
+This should create html files in the target/specs2-reports directory.
