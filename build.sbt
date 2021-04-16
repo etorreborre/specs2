@@ -16,6 +16,7 @@ lazy val specs2 = project.in(file(".")).
     apiSettings,
     name := "specs2",
     packagedArtifacts := Map.empty,
+    ThisBuild / githubWorkflowArtifactUpload := false,
     test := {}
   ).aggregate(
     fpJVM, catsJVM, commonJVM, matcherJVM, coreJVM, matcherExtraJVM, scalazJVM, html,
