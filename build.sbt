@@ -15,13 +15,13 @@ lazy val specs2 = project.in(file(".")).
     siteSettings,
     apiSettings,
     name := "specs2",
-    packagedArtifacts := Map.empty
+    packagedArtifacts := Map.empty,
+    test := {}
   ).aggregate(
     fpJVM, catsJVM, commonJVM, matcherJVM, coreJVM, matcherExtraJVM, scalazJVM, html,
     analysisJVM, shapelessJVM, formJVM, markdownJVM, gwtJVM, junitJVM, scalacheckJVM, mockJVM,
     tests, fpJS, catsJS, commonJS, matcherJS, coreJS, matcherExtraJS, scalazJS, analysisJS,
-    shapelessJS, formJS, markdownJS, gwtJS,
-    junitJS, scalacheckJS, mockJS
+    shapelessJS, junitJS, scalacheckJS, mockJS
   )
 
 val scala211 = "2.11.12"
@@ -35,7 +35,7 @@ lazy val specs2Settings = Seq(
   SettingKey[Boolean]("ide-skip-project").withRank(KeyRanks.Invisible) := platformDepsCrossVersion.value == ScalaNativeCrossVersion.binary,
   crossScalaVersions := Seq(scalaVersion.value, scala211, "2.12.13"))
 
-lazy val tagName = Def.setting{
+lazy val tagName = Def.setting {
   s"specs2-${version.value}"
 }
 
