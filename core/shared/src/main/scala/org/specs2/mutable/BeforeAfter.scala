@@ -3,6 +3,7 @@ package mutable
 
 import matcher.Scope
 
+@annotation.nowarn
 trait BeforeAfter extends org.specs2.specification.BeforeAfter with DelayedInit with Scope {
   override def delayedInit(x: => Unit): Unit =
     try {

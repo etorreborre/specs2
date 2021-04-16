@@ -33,6 +33,7 @@ class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[(
     retry(retries, retries, sleep * ee.timeFactor.toDouble, a, createFuture(a.value))
 
   @tailrec
+  @annotation.nowarn
   private final def retry[S <: T](originalRetries: Int, retries: Int, sleep: Duration, a: Expectable[S], future: Future[S], whenActionExecuted: Boolean = false): MatchResult[S] = {
     val parameters = "with retries="+originalRetries+" and sleep="+sleep.toMillis
     val evenWhenAction = whenDesc.fold("")(w => " even when " + w)

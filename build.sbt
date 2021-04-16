@@ -402,12 +402,9 @@ lazy val compilationSettings = Seq(
   maxErrors := 20,
   Compile / scalacOptions ++=
     Seq(
-      //"-Xfatal-warnings",
       "-Xlint",
       "-Ywarn-numeric-widen",
       "-Ywarn-value-discard",
-      "-Xlint:-byname-implicit",
-      "-Wconf:cat=lint-multiarg-infix:s",
       "-deprecation:false", "-Xcheckinit", "-unchecked", "-feature", "-language:_"),
   Compile / scalacOptions ++= {
     CrossVersion.partialVersion(scalaVersion.value) match {
@@ -427,7 +424,9 @@ lazy val compilationSettings = Seq(
           "-Ypartial-unification"
         )
       case _ =>
-        Nil
+        Seq(
+          "-Wconf:cat=lint-multiarg-infix:s",
+          "-Xlint:-byname-implicit")
     }
   },
   addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3"),

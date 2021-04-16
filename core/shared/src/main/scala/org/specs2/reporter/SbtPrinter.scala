@@ -46,6 +46,8 @@ trait SbtPrinter extends Printer {
 }
 
 object SbtPrinter {
+
+  @annotation.nowarn
   def sbtNotifier(events: SbtEvents, args: Arguments) = new Notifier {
     private val context: scala.collection.mutable.Stack[String] =
       new scala.collection.mutable.Stack[String]

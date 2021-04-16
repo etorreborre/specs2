@@ -9,7 +9,7 @@ object S2Macro {
     import c.{universe => u}
     import u.{Position => _, _}
 
-    val texts = c.prefix.tree match { case Apply(_, List(Apply(_, ts))) => ts }
+    val texts = c.prefix.tree match { case Apply(_, List(Apply(_, ts))) => ts; case _ => Seq() }
 
     val macroPos = c.macroApplication.pos
     val fileContent = macroPos.source.content.mkString

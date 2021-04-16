@@ -43,21 +43,27 @@ case class StatisticsRepository(store: Store) {
  */
 case class StatisticsMemoryStore(statistics: HashMap[String, Stats] = new HashMap[String, Stats],
                        results: HashMap[(String, Long), Result] = new HashMap[(String, Long), Result]) extends Store {
-  def get[A](key: Key[A]): Operation[Option[A]] = key match {
-    case SpecificationStatsKey(specClassName) =>
-      Operations.ok(statistics.get(specClassName))
 
-    case SpecificationResultKey(specClassName, description) =>
-      Operations.ok(results.get((specClassName, description.hashCode.toLong)))
-  }
 
-  def set[A](key: Key[A], a: A): Operation[Unit] = key match {
-    case SpecificationStatsKey(specClassName) =>
-      Operations.ok(statistics.put(specClassName, a)).map(_ => ())
+  @annotation.nowarn
+  def get[A](key: Key[A]): Operation[Option[A]] =
+    key match {
+      case SpecificationStatsKey(specClassName) =>
+        Operations.ok(statistics.get(specClassName))
 
-    case SpecificationResultKey(specClassName, description) =>
-      Operations.ok(results.put((specClassName, description.hashCode.toLong), a)).map(_ => ())
-  }
+      case SpecificationResultKey(specClassName, description) =>
+        Operations.ok(results.get((specClassName, description.hashCode.toLong)))
+    }
+
+  @annotation.nowarn
+  def set[A](key: Key[A], a: A): Operation[Unit] =
+    key match {
+      case SpecificationStatsKey(specClassName) =>
+        Operations.ok(statistics.put(specClassName, a)).map(_ => ())
+  
+      case SpecificationResultKey(specClassName, description) =>
+        Operations.ok(results.put((specClassName, description.hashCode.toLong), a)).map(_ => ())
+    }
 
   def reset: Operation[Unit] = Operations.ok {
     statistics.clear
