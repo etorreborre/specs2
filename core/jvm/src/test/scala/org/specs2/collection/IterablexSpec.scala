@@ -16,9 +16,6 @@ class IterablexSpec extends Specification with IterableData with ScalaCheckResul
     "if deeply nested lists have the same elements but in a different order" >> {
       List(1, List(2, 3, List(4)), 5).sameElementsAs(List(5, List(List(4), 2, 3), 1))
     }
-    "when comparing xml nodes in a different order" >> {
-      <a> <b/> <c/> </a>.child.sameElementsAs(<a> <c/> <b/> </a>.child)
-    }
     "for 2 iterables created with same elements in a different order" >> {
       given Arbitrary[Iterable[Any]] = arbitraryIterable
       Prop.forAll { (i1: Iterable[Any]) =>

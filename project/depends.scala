@@ -21,7 +21,7 @@ object depends {
   lazy val scalaParserNative =
       scalaParser
 
-  lazy val scalaXML =
+  lazy val scalaXml =
     libraryDependencies += ("org.scala-lang.modules" %% "scala-xml" % "1.2.0").withDottyCompat(scalaVersion.value)
 
   lazy val scalacheck =

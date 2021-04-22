@@ -14,7 +14,7 @@ lazy val specs2 = project.in(file(".")).
     packagedArtifacts := Map.empty
   ).aggregate(
     fpJVM, commonJVM, matcherJVM, coreJVM, matcherExtraJVM, html,
-    formJVM, markdownJVM, junitJVM, scalacheckJVM,
+    formJVM, markdownJVM, junitJVM, scalacheckJVM, xmlJVM,
     tests
   )
 
@@ -57,7 +57,6 @@ def commonJvmSettings =
 
 lazy val common = crossProject(JVMPlatform).in(file("common")).
   settings(
-    depends.scalaXML,
     libraryDependencies += depends.scalacheck % Test,
     commonSettings,
     name := "specs2-common"
@@ -130,7 +129,7 @@ lazy val junit = crossProject(JVMPlatform).in(file("junit")).
     commonSettings,
     name := "specs2-junit").
   jvmSettings(depends.jvmTest, commonJvmSettings).
-  dependsOn(core, matcherExtra % Test)
+  dependsOn(core, matcherExtra % Test, xml)
 
 lazy val junitJVM = junit.jvm
 
@@ -161,7 +160,7 @@ lazy val matcherExtra = crossProject(JVMPlatform).in(file("matcher-extra")).
     name := "specs2-matcher-extra").
   jvmSettings(depends.jvmTest, commonJvmSettings).
   platformsSettings(JVMPlatform)(depends.scalaParser).
-  dependsOn(matcher, core, core % "test->test")
+  dependsOn(matcher, core, core % "test->test", xml)
 
 lazy val matcherExtraJVM = matcherExtra.jvm
 
@@ -194,6 +193,17 @@ lazy val tests = Project(id = "tests", base = file("tests")).
   examplesJVM  % "test->test",
   matcherExtraJVM,
   html)
+
+lazy val xml = crossProject(JVMPlatform).in(file("xml")).
+  settings(
+    depends.scalaXml,
+    commonSettings,
+    name := "specs2-xml"
+  ).
+  jvmSettings(depends.jvmTest, commonJvmSettings).
+  dependsOn(core)
+
+lazy val xmlJVM = xml.jvm
 
 lazy val specs2ShellPrompt = ThisBuild / shellPrompt := { state =>
   val name = Project.extract(state).currentRef.project
