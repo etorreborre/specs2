@@ -5,6 +5,7 @@ import org.specs2.concurrent.ExecutionEnv
 import specification.Tables
 import execute.*
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 import matcher.DataTable
 import org.specs2.fp.syntax.*
 
@@ -78,7 +79,8 @@ You can solve this conflict by either:
 By default the execution of a datatable is sequential, one row after another. This might not be very practical if you have long-running computations on each row.
 If this is the case you can use the `|*` operator (instead of just `|`) to define your execution function:${snippet{
 
-given ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
+  given executionContext: ExecutionContext =
+    scala.concurrent.ExecutionContext.Implicits.global
 
   "a"   | "b" | "c" |>
    2    !  2  !  4  |

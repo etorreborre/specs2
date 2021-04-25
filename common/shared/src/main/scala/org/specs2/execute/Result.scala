@@ -401,8 +401,9 @@ case class Failure(m: String = "",
       case _ => false
   override def hashCode = m.hashCode + e.hashCode
   override def isFailure: Boolean = true
+
   override def isThrownFailure: Boolean =
-    Seq(FromNotImplementedError, FromJUnitAssertionError, FromExpectationError).contains(details)
+    Seq(FromNotImplementedError, FromJUnitAssertionError, FromExpectationError, FromTimeoutException).contains(details)
 
   def skip: Skipped =
     Skipped(m, e)
@@ -419,6 +420,7 @@ case object NoDetails extends Details
 
 case object FromNotImplementedError extends Details
 case object FromJUnitAssertionError extends Details
+case object FromTimeoutException extends Details
 
 // This error type can be found in a library like JMock
 case object FromExpectationError extends Details

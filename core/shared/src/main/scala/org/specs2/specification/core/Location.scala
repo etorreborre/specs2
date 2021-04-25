@@ -14,6 +14,10 @@ trait Location:
   /** the file path */
   def path: String
 
+  /** the file path */
+  def fileName: String =
+    path.split("/").last
+
   /** the line number */
   def lineNumber: Int
 

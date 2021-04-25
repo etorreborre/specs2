@@ -50,7 +50,7 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
         Action.exception(t)
 
       case Started(f) =>
-        Action.future(f, timeout).map { case (r, timer) => ExecutedResult(r, timer) }
+        Action.future(f).map { case (r, timer) => ExecutedResult(r, timer) }
 
   lazy val executionResult: Action[Result] =
     executedResult.attempt.map {
@@ -132,12 +132,13 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
               catch { case t: Throwable =>
                 Future.failed(t)
               }
-            }, to)
+            })
 
-          val future = timedFuture.runFuture(env.executionEnv).recoverWith { case e: FailureException =>
-            // Future execution could still throw FailureExceptions which can only be
-            // recovered here
-            Future.successful((ResultExecution.handleExceptionsPurely(e), timer.stop))
+          val future = timedFuture.runFuture(env.executionEnv, to).recoverWith {
+            case e =>
+              // Future execution could still throw exceptions: FailureExceptions, TimeoutException,...
+              // which can only be recovered here
+              Future.successful((ResultExecution.handleExceptionsPurely(e), timer.stop))
           }
           setExecuting(future).copy(timeout = to)
         catch { case t: Throwable => setFatal(t) }

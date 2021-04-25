@@ -35,7 +35,8 @@ case class Effect[T](label: String, value: Property[T], decorator: Decorator = D
   def flatMap[S](f: T => Option[S]) = new Effect(label, value.flatMap(f), decorator)
 
   /** set a new Decorator */
-  def decoratorIs(d: Decorator) = copy(decorator = d)
+  def decoratorIs(d: Decorator): Effect[T] =
+    copy(decorator = d)
 
   /** use this Effect as a header in a table */
   def header = this.center.bold.bkGrey

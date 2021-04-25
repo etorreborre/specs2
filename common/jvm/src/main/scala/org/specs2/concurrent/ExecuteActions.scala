@@ -11,7 +11,8 @@ import scala.concurrent.duration.{FiniteDuration, Duration}
 def runActionToFuture[A](runNow: ExecutionEnv => Future[A], timeout: Option[FiniteDuration], ee: ExecutionEnv): Future[A] =
   timeout.fold(runNow(ee)) { t =>
     val promise = Promise[A]
-    ee.executorServices.schedule( { promise.tryFailure(new TimeoutException); () }, t * ee.timeFactor.toLong)
+    val maxTime = t * ee.timeFactor.toLong
+    ee.executorServices.schedule( { promise.tryFailure(new TimeoutException(s"timeout after $maxTime")); () }, maxTime)
     promise.completeWith(runNow(ee))
     promise.future
   }

@@ -9,8 +9,16 @@ import scalacheck.*
 import org.specs2.fp.syntax.*
 import execute.ResultImplicits
 import scala.language.adhocExtensions
+import specification.*
+import org.specs2.specification.Snippets.given
+import org.specs2.specification.Snippets.*
+import org.specs2.execute.Snippets.*
+import org.specs2.execute.Snippets.given
+import org.specs2.guide.AsResultTypeclass.snippetIsInterpolatedFragment
 
-object UseScalaCheck extends UserGuidePage with ScalaCheck with ResultImplicits { def is = "ScalaCheck".title ^ s2"""
+// we can't inherit from both Snippets and ScalaCheck because there are conflicting set
+// methods with default arguments
+object UseScalaCheck extends Specification with ScalaCheck with UserGuideVariables with ResultImplicits { def is = "ScalaCheck".title ^ s2"""
 
 A clever way of creating expectations in $specs2 is to use the [ScalaCheck](https://github.com/rickynils/scalacheck) library.
 
@@ -75,20 +83,20 @@ s2"""
 
 def abStringGen = (Gen.oneOf("a", "b") |@| Gen.oneOf("a", "b"))(_+_)
 
-given Arbitrary[String] =
+given abStrings: Arbitrary[String] =
   Arbitrary(abStringGen)
 
-def ex1 = prop((s: String) => s must contain("a") or contain("b")).setArbitrary(abStrings)
+def ex1 = prop((s: String) => s must (contain("a") or contain("b"))).setArbitrary(abStrings)
 
 // use the setArbitrary<n> method for the nth argument
-def ex2 = prop((s1: String, s2: String) => (s1+s2) must contain("a") or contain("b")).
+def ex2 = prop((s1: String, s2: String) => (s1+s2) must (contain("a") or contain("b"))).
             setArbitrary1(abStrings).setArbitrary2(abStrings)
 }}
 
 It is also possible to pass a `Gen[T]` instance instead of an `Arbitrary[T]`: ${snippet{
 val abStringGen = (Gen.oneOf("a", "b") |@| Gen.oneOf("a", "b"))(_+_)
 
-def ex1 = prop((s: String) => s must contain("a") or contain("b")).setGen(abStringGen)
+def ex1 = prop((s: String) => s must (contain("a") or contain("b"))).setGen(abStringGen)
 }}
 
 ### With Shrink / Pretty
@@ -100,11 +108,11 @@ val shrinkString: Shrink[String] = ???
 prop((s1: String, s2: String) => s1.nonEmpty or s2.nonEmpty).setShrink2(shrinkString)
 
 // set a specific pretty instance
-prop((s: String) => s must contain("a") or contain("b")).setPretty((s: String) =>
+prop((s: String) => s must (contain("a") or contain("b"))).setPretty((s: String) =>
   Pretty((prms: Pretty.Params) => if (prms.verbosity >= 1) s.toUpperCase else s))
 
 // or simply if you don't use the Pretty parameters
-prop((s: String) => s must contain("a") or contain("b")).pretty((_: String).toUpperCase)
+prop((s: String) => s must (contain("a") or contain("b"))).pretty((_: String).toUpperCase)
 }}
 
 Note that it is also possible to _remove_ shrinking by appending `noShrink` to your property: ${snippet{
@@ -123,7 +131,7 @@ def deleteTmpDir(): Unit = ???
 prop { (f: File) =>
   createFile(f)
   f.exists
-}.after(deleteTmpDir) // before and beforeAfter can also be used there
+}.after(deleteTmpDir()) // before and beforeAfter can also be used there
 
 }}
 
@@ -175,7 +183,7 @@ Note that `minTestsOk` in `specs2` corresponds to the `minSuccessfulTests` param
 #### Property level
 
 It is also possible to specifically set the execution parameters on a given property: ${snippet{
-class ScalaCheckSpec extends mutable.Specification with ScalaCheck {
+class ScalaCheckSpec extends org.specs2.mutable.Specification with ScalaCheck {
   "this is a specific property" >> prop { (a: Int, b: Int) =>
     (a + b) must ===((b + a))
   }.set(minTestsOk = 200, workers = 3) // use "display" instead of "set" for additional console printing

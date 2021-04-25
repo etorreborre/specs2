@@ -3,8 +3,10 @@ package guide
 
 import sys.*
 import form.*
+import form.given
 import examples.Address
 import specification.Forms
+import specification.Forms.*
 
 object UseForms extends UserGuidePage with Forms { def is = "Forms".title ^ s2"""
 
@@ -83,7 +85,7 @@ Let's look at a few examples:
   tr(field("prop(\"label\", \"expected\")(\"expected\")").code, prop("label", "expected")("expected")).
   tr(field("prop(\"label\", \"actual\")(\"expected\")").code, prop("label", "actual")("expected")).
   tr(field("prop(\"label\", { error(\"but got an error\"); \"actual\" })(\"expected\")").code, prop("label", { error("but got an error"); "actual" })("expected")).
-  tr(field("prop(\"label\", \"actual\", (a: String, b: String) => (a === b))(\"expected\")").code, prop("label", "expected", (a: String, b: String) => (a === b))("expected")).
+  tr(field("prop(\"label\", \"actual\", (a: String, b: String) => (a === b))(\"expected\")").code, prop("label", "expected", (a: String, b: String) => (a === b)).apply("expected")).
   tr(field("prop(\"label\", \"actual\", (s: String) => beEqualTo(s))(\"expected\")").code, prop("label", "expected", (s: String) => beEqualTo(s))("expected")).
   tr(field("prop(\"label\", \"actual\", beEqualTo(\"expected\"))").code, prop("label", "actual", beEqualTo("expected"))).
   tr(field("prop(\"label\", \"actual\", beEqualTo(\"expected\").mute)").code, prop("label", "actual", beEqualTo("expected").mute)).executeForm.toXml.toString}
@@ -147,7 +149,8 @@ The address must be retrieved from the database with the proper street and numbe
 }
 }}
 
-One way to encapsulate and reuse this Form across specifications is to define a case class: ${snippet{
+One way to encapsulate and reuse this Form across specifications is to define a case class:
+```
 case class Address(street: String, number: Int) {
   def retrieve(addressId: Int) = {
     val address = actualAddress(addressId)
@@ -156,7 +159,6 @@ case class Address(street: String, number: Int) {
       tr(prop("number", address.number, number))
   }
 }
-}}
 
 And then you can use it like this: ${snippet{
 
@@ -282,8 +284,8 @@ Now that we've defined a form for a simple entity, let's see how we can reuse it
  * the Customer form defines a name attribute and embeds an instance of the Address form
  * it is defined by setting the name on one row and the Address form on the second row
 
-*[and for this example, we define a slightly different Address form]* ${snippet{
-
+*[and for this example, we define a slightly different Address form]*
+```
 case class Address(street: String, number: Int) {
   def actualIs(address: Address) = {
     Form("Address").
@@ -301,7 +303,8 @@ case class Customer(name: String, address: Address) {
   }
   def actualCustomer(customerId: Int): Customer = this // fetch from the database
 }
-
+```
+${snippet{
 class CustomerSpecification extends Specification with Forms { def is = s2"""
 The customer must be retrieved from the database with a proper name and address ${
   Customer(name = "Eric",
@@ -345,8 +348,8 @@ For example you can have an "Order" entity, which has several "OrderLines". In t
  * the expected rows are exactly the actual rows, with no specific order
  * the expected rows are exactly the actual rows, in the same order
 
-Let's see how to declare this. The 2 classes we're going to use are:${snippet{
-
+Let's see how to declare this. The 2 classes we're going to use are:
+```
 import Form.*
 
 case class Order(orderId: Int) {
@@ -365,9 +368,10 @@ case class Order(orderId: Int) {
 }
 
 case class OrderLine(name: String, quantity: Int) {
-  def form = tr(field(name), field(quantity))
+  def form: Form =
+    tr(field(name), field(quantity))
 }
-}}
+```
 
 The `OrderLine` class simply creates a form with 2 fields: name and quantity. The `Order` class is able to retrieve the actual order entity (say, from a database) and to extract `OrderLine` instances. It also has several methods to build Forms depending on the kind of comparison that we want to do.
 

@@ -91,13 +91,13 @@ This is because those 2 types implement the `org.specs2.text.LinesContent` trait
  * a method for returning the lines
  * a default method for computing the differences of 2 sequences of lines (in case you need to override this logic)
 
-So if you have a specific type `T` which you can represent as a `Seq[String]`, you can create an implicit `LinesContent` and then you'll be able to use the `ContentMatchers`: ${snippet{
-
+So if you have a specific type `T` which you can represent as a `Seq[String]`, you can create an implicit `LinesContent`
+and then you'll be able to use the `ContentMatchers`:
+```
 given [T]: LinesContent[T] with
   def name(t: T) = "My list of lines"
   def lines(t: T): Seq[String] = Seq()// your implementation goes here
-
-}}
+```
 
 """
   lazy val (file1, file2) = (new File(""), new File(""))

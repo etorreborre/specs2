@@ -41,8 +41,10 @@ case class Field[T](label: String, value: Property[T], decorator: Decorator = De
     (if label.nonEmpty then label + ": " else "") + valueString
   /** transforms this typed Field as a Field containing the toString value of the Fields value*/
   def toStringField = new Field(label, value.map(_.toString), decorator)
+  
   /** set a new Decorator */
-  def decoratorIs(d: Decorator) = copy(decorator = d)
+  def decoratorIs(d: Decorator): Field[T] =
+    copy(decorator = d)
 
   /** use this Field as a header in a table */
   def header = this.center.bold.bkGrey

@@ -144,24 +144,6 @@ iterator.next must be_==(3).eventually
 1 must be_==(2).orPending((ko:String) => "BAD "+ko) // prints "BAD '1' is not equal to '2'"
 }}
 
- * use `zip` operators to match each value of a tuple ${snippet{
-
-type MyTuple = (String, String, String, Seq[(String, Double)])
-
-val t1: MyTuple = ("a", "b", "c", Seq(("d", 1.01), ("e", 2.02)))
-val t2: MyTuple = ("a", "b", "c", Seq(("d", 1.00), ("e", 2.00)))
-
-// create a matcher by zipping matchers to the expected value
-def beMatching(expected: MyTuple) = expected.zip(startWith, ===, ===, matchSequence)
-// match the elements of a sequence with a zipped matcher using string equality for the first field and
-// approximate Double equality for the second field
-TODO
-//def matchSequence(expected: =>Seq[(String, Double)]) = expected.contain(_.zip(===, ==~)).inOrder
-
-// /** type inference doesn't work if this matcher, specialised to Double, is not defined */
-// def ==~(d: =>Double) = beCloseTo(d +/- 0.1)
-
-// t1 must beMatching(t2)
 }}
 
 ### Create your own
@@ -238,7 +220,6 @@ $vid
 $AndIfYouWantToKnowMore
 
  - read the ${"reference card" ~/ ReferenceCard} on all of $specs2 matchers
- - use ${"syntactic variations" ~/ SyntacticVariations} on the `value must matcher` form
  - implement the ${"`AsResult` typeclass" ~/ AsResultTypeclass} to go beyond matchers
  - use $specs2 matchers ${s"outside <s2>specs2</s2>" ~/ OutsideSpecs2}
 

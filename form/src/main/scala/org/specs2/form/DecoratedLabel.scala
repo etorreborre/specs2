@@ -9,10 +9,10 @@ trait DecoratedLabel[T]:
   /** set a new Decorator */
   def decoratorIs(d: Decorator): T
   /** set a new Decorator for the label */
-  def decorateLabelWith(f: Any => Any) = decoratorIs(decorator.decorateLabelWith(f))
+  def decorateLabelWith(f: Any => Any): T = decoratorIs(decorator.decorateLabelWith(f))
   /** set a new style for the label */
-  def styleLabelWith(s: (String, String)) = decoratorIs(decorator.styleLabelWith(s))
+  def styleLabelWith(s: (String, String)): T = decoratorIs(decorator.styleLabelWith(s))
   /** do the decoration */
-  def decorateLabel(ns: Any) = decorator.label(ns)
+  def decorateLabel(ns: Any): Any = decorator.label(ns)
   /** return the label styles */
-  def labelStyles = decorator.labelStyles.mkString("; ")
+  def labelStyles: String = decorator.labelStyles.mkString("; ")

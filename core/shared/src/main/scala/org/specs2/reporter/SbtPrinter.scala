@@ -5,7 +5,8 @@ import control.{Logger  as _,*}
 import origami.*
 import execute.Details
 import sbt.testing.*
-import org.specs2.text.AnsiColors.*
+import text.AnsiColors.*
+import text.NotNullStrings.*
 import main.Arguments
 import specification.core.*
 import SbtPrinter.*
@@ -140,7 +141,7 @@ case class SbtPrinterLogger(loggers: Array[Logger]) extends BufferedPrinterLogge
   def makeLogMessage(msg: String, logger: Logger): String =
     // use a non-empty character when the message is empty otherwise
     // nothing is printed out
-    if msg.isEmpty then
+    if msg == null || msg.isEmpty then
       " "
     else
-      removeColors(msg, !logger.ansiCodesSupported)
+      removeColors(msg.notNull, !logger.ansiCodesSupported)

@@ -82,17 +82,17 @@ case class TextPrinter(env: Env) extends Printer {
         fragment match {
           // only print steps and actions if there are issues
           case Fragment(NoText, e, l) if e.isExecutable && !result.isSuccess =>
-            printExecutable(NoText, result, timer, args, indentation)
+            printExecutable(NoText, result, l, timer, args, indentation)
 
           case Fragment(d @ SpecificationRef(_, _, _, _, hidden, muted), e, l)  =>
             if !hidden then
               if e.isExecutable && !muted
-                then printExecutable(d, result, timer, args, indentation)
+                then printExecutable(d, result, l ,timer, args, indentation)
                 else List(d.show.info)
             else Nil
 
           case Fragment(d, e, l) if e.isExecutable && d != NoText =>
-            printExecutable(d, result, timer, args, indentation)
+            printExecutable(d, result, l, timer, args, indentation)
 
           case Fragment(Br, e, l) =>
             if args.canShow("-") then printNewLine
@@ -110,7 +110,7 @@ case class TextPrinter(env: Env) extends Printer {
   }
 
   /** print an executed fragment: example, step, action */
-  def printExecutable(description: Description, result: Result, timer: SimpleTimer, args: Arguments, indentation: Int): List[LogLine] =
+  def printExecutable(description: Description, result: Result, fragmentLocation: Location, timer: SimpleTimer, args: Arguments, indentation: Int): List[LogLine] =
 
     if args.canShow(result.status) then {
       val text = description.show
@@ -118,8 +118,8 @@ case class TextPrinter(env: Env) extends Printer {
 
       def printResult(desc: String, r: Result): List[LogLine] =
         r match {
-          case err: execute.Error        => printError(desc, err, args)
-          case failure: execute.Failure  => printFailure(desc, failure, args)
+          case err: execute.Error        => printError(desc, err, fragmentLocation, args)
+          case failure: execute.Failure  => printFailure(desc, failure, fragmentLocation, args)
           case success: execute.Success  => printSuccess(desc, success, args)
           case pending: execute.Pending  => printPending(desc, pending, args)
           case skipped: execute.Skipped  => printSkipped(desc, skipped, args)
@@ -143,17 +143,17 @@ case class TextPrinter(env: Env) extends Printer {
     }
     else Nil
 
-  def printError(show: String, result: execute.Error, args: Arguments): List[LogLine] =
+  def printError(show: String, result: execute.Error, fragmentLocation: Location, args: Arguments): List[LogLine] =
     List((show+"\n").error) ++
-    printMessage(show, result, ErrorLine.apply, args) ++
+    printMessage(show, result, fragmentLocation, ErrorLine.apply, args) ++
     printStacktrace(result.stackTrace, print = true, ErrorLine.apply, args) ++
-    (if result.exception.getCause != null then printError("CAUSED BY", execute.Error(result.exception.getCause), args)
+    (if result.exception.getCause != null then printError("CAUSED BY", execute.Error(result.exception.getCause), fragmentLocation, args)
      else List())
 
-  def printFailure(show: String, failure: execute.Failure, args: Arguments): List[LogLine] =
+  def printFailure(show: String, failure: execute.Failure, fragmentLocation: Location, args: Arguments): List[LogLine] =
     (if args.xonly then List("\n".info) else List()) ++
     List((show+"\n").failure) ++
-    printMessage(show, failure, FailureLine.apply, args) ++
+    printMessage(show, failure, fragmentLocation, FailureLine.apply, args) ++
     printStacktrace(failure.stackTrace, print = args.failtrace, FailureLine.apply, args) ++
     printFailureDetails(args)(failure.details)
 
@@ -171,7 +171,6 @@ case class TextPrinter(env: Env) extends Printer {
       then List((show+" "+reason).info)
       else List((show).info)
   }
-
 
   def printSkipped(show: String, skipped: execute.Skipped, args: Arguments): List[LogLine] = {
     val reason =
@@ -206,9 +205,9 @@ case class TextPrinter(env: Env) extends Printer {
   def indentationSize(args: Arguments): Int =
     args.commandLine.int("indentation").getOrElse(2)
 
-  def printMessage(description: String, result: Result & ResultStackTrace, as: String => LogLine, args: Arguments): List[LogLine] =
+  def printMessage(description: String, result: Result & ResultStackTrace, fragmentLocation: Location, as: String => LogLine, args: Arguments): List[LogLine] =
     val margin = description.takeWhile(_ == ' ')+" "
-    List(as(result.message.split("\n").mkString(margin, "\n"+margin, "") + location(result, args)))
+    List(as(result.message.split("\n").mkString(margin, "\n"+margin, " ") + location(result, fragmentLocation, args)))
 
   def printStacktrace(stacktrace: List[StackTraceElement], print: Boolean, as: String => LogLine, args: Arguments): List[LogLine] =
     if print
@@ -280,8 +279,11 @@ case class TextPrinter(env: Env) extends Printer {
       List((descriptions.map { case (name, values) => s"$name = ${values.size}" }.mkString(", ")).failure)
     else Nil
 
-  def location(r: ResultStackTrace, args: Arguments): String =
-    " ("+r.location(args.traceFilter)+")" `orEmptyWhen` r.location.isEmpty
+  def location(r: ResultStackTrace, fragmentLocation: Location, args: Arguments): String =
+    val resultLocation = r.location(args.traceFilter)
+    if resultLocation == "file:1" || resultLocation.isEmpty
+      then s"(${fragmentLocation.fileName}:${fragmentLocation.lineNumber})"
+      else s"($resultLocation)"
 
   def indentText(text: String, indentation: Int, indentationSize: Int) =
     if text.isEmpty then text

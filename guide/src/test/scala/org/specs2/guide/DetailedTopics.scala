@@ -17,7 +17,6 @@ Use $specs2 environment (command-line args, file system...)          | ${link(En
 Execution environment for Futures                                    | ${link(ExecutionEnvironments).mute}
 Create a new type of Result                                          | ${link(AsResultTypeclass).mute}
 Other build tools                                                    | ${link(OtherBuildTools).mute}
-Syntax variations with matchers                                      | ${link(matchers.SyntacticVariations).mute}
 Use $specs2 matchers outside of $specs2                              | ${link(matchers.OutsideSpecs2).mute}
 Matchers reference card                                              | ${link(matchers.ReferenceCard).mute}
 Arguments reference card                                             | ${link(ArgumentsReference).mute}
@@ -38,7 +37,6 @@ Arguments reference card                                             | ${link(Ar
   link(matchers.OutsideSpecs2).hide ^
   link(matchers.ReferenceCard).hide ^
   link(SpecificationFormatting).hide ^
-  link(matchers.SyntacticVariations).hide ^
   link(ReferenceOtherSpecifications).hide
 
 

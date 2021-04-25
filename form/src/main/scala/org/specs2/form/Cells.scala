@@ -93,7 +93,8 @@ case class TextCell(s: String, result: Option[Result] = None, decorator: Decorat
   def executeCell = this
 
   /** set a new Decorator */
-  def decoratorIs(d: Decorator) = copy(decorator = d)
+  def decoratorIs(d: Decorator): TextCell =
+    copy(decorator = d)
 
   override def equals(other: Any) =
     other.asInstanceOf[Matchable] match

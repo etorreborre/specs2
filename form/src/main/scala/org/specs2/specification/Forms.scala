@@ -17,4 +17,3 @@ trait Forms extends FormsBuilder
   with PropSyntax
 
 object Forms extends Forms
-

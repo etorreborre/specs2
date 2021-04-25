@@ -8,7 +8,9 @@ import org.specs2.specification.{BeforeAfterSpec, Before}
 
 object UseCommandLineArguments extends UserGuidePage { def is = "Use command-line arguments".title ^ s2"""
 
-Some specifications need to be fine-tuned and constantly modified. Sometimes to access a specific environment, or to disable some examples, or to execute more ScalaCheck properties. For all those situations it is desirable to modify the specification directly from the command-line without having to recompile it.
+Some specifications need to be fine-tuned and constantly modified. Sometimes to access a specific environment, or to disable some examples,
+or to execute more ScalaCheck properties. For all those situations it is desirable to modify the specification directly from the command-line
+without having to recompile it.
 
 ### Control an example
 
@@ -54,6 +56,12 @@ Any specification with a 1-parameter constructor can be instantiated provided th
 
 In particular this means that you can define a `Specification` with a constructor using a `CommandLine` argument and when
 the specification will be created it will be passed the command line arguments: ${snippet{
+// 8<---
+case class DbClient(env: String):
+  def createUser(name: String): Option[String] = ???
+trait DbSpec extends Specification:
+  lazy val client: DbClient = ???
+// 8<---
 case class MyDbSpec(commandLine: CommandLine) extends Specification with DbSpec { def is = s2"""
 
   create a user $createUser
@@ -63,6 +71,8 @@ case class MyDbSpec(commandLine: CommandLine) extends Specification with DbSpec 
   // arguments and can be used in the examples
   def createUser = client.createUser("xxx") must beSome
 }
+}}
+```
 
 // Template trait for accessing the database
 // this trait can be controlled from command line arguments
@@ -78,12 +88,10 @@ trait DbSpec extends Specification with BeforeAfterSpec {
     if (commandLine.contains("prod")) DbClient("production")
     else                              DbClient("test")
   }
-
-  case class DbClient(env: String) {
-    def createUser(name: String): Option[String] = ???
-  }
 }
-}}
 
+case class DbClient(env: String):
+  def createUser(name: String): Option[String] = ???
+```
 """
 }

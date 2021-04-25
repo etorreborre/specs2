@@ -12,17 +12,15 @@ import execute.*
 /**
  * Asynchronous action with:
  *
- * - an optional timeout
  * - an optional list of "finalization" actions to be executed when this action is done
  *   whether it has timed-out or thrown an exception. This allows resources to be safely disposed of
  *
  */
-case class Action[A](private[control] runNow: ExecutionEnv => Future[A], timeout: Option[FiniteDuration] = None, last: Vector[Finalizer] = Vector.empty):
+case class Action[A](private[control] runNow: ExecutionEnv => Future[A], last: Vector[Finalizer] = Vector.empty):
 
   def map[B](f: A => B): Action[B] =
     Action[B](
       runNow = ee => this.runNow(ee).map(f)(using ee.executionContext),
-      timeout = timeout,
       last = last)
 
   def flatMap[B](f: A => Action[B]): Action[B] =
@@ -34,11 +32,9 @@ case class Action[A](private[control] runNow: ExecutionEnv => Future[A], timeout
         given ExecutionContext = ee.executionContext
         runFuture(ee).flatMap { a =>
           val otherAction = f(a)
-          otherTimeout = otherAction.timeout
           otherLast = otherAction.last
           otherAction.runNow(ee)
         }},
-      timeout = otherTimeout,
       last = last ++ otherLast)
 
   /** add a finalizer */
@@ -51,13 +47,13 @@ case class Action[A](private[control] runNow: ExecutionEnv => Future[A], timeout
 
   /** catch any exception resulting from running the action later */
   def attempt: Action[Throwable `Either` A] =
-    Action(ee => runFuture(ee).transform(r => scala.util.Success(r.toEither))(ee.executionContext), timeout, last)
+    Action(ee => runFuture(ee).transform(r => scala.util.Success(r.toEither))(ee.executionContext), last)
 
   /** run another action if this one fails */
   def orElse(other: Action[A]): Action[A] =
     attempt.flatMap {
       case Left(_) => other.copy(last = other.last ++ this.last)
-      case Right(a) => Action.pure(a).copy(timeout = timeout, last = last)
+      case Right(a) => Action.pure(a).copy(last = last)
     }
 
   /** synonym for orElse */
@@ -68,14 +64,14 @@ case class Action[A](private[control] runNow: ExecutionEnv => Future[A], timeout
    * run as a Future and raise a timeout exception if necessary
    * NOTE: this does not execute the finalizers!!!
    */
-  def runFuture(ee: ExecutionEnv): Future[A] =
+  def runFuture(ee: ExecutionEnv, timeout: Option[FiniteDuration] = None): Future[A] =
     runActionToFuture(runNow, timeout, ee)
 
   /**
    * Run the action and return an exception if it fails
    * Whatever happens run the finalizers
    */
-  def runAction(ee: ExecutionEnv): Throwable `Either` A =
+  def runAction(ee: ExecutionEnv, timeout: Option[FiniteDuration] = None): Throwable `Either` A =
     awaitAction(runNow, timeout, Finalizer.runFinalizers(last), ee)
 
   /** run the action and return Nothing is case of an error */
@@ -126,8 +122,8 @@ object Action:
   def exception[A](t: Throwable): Action[A] =
     Action(_ => Future.failed[A](t))
 
-  def future[A](f: Future[A], timeout: Option[FiniteDuration] = None): Action[A] =
-    Action(_ => f, timeout = timeout)
+  def future[A](f: Future[A]): Action[A] =
+    Action(_ => f)
 
   def checkThat[A](a: =>A, condition: Boolean, failureMessage: String): Action[A] =
     pure(a).flatMap { value =>

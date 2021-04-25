@@ -6,6 +6,7 @@ import control.Property
 import reflect.ClassName.*
 import text.NotNullStrings.*
 import java.util.regex.Pattern
+import java.util.concurrent.TimeoutException
 import scala.util.control.NonFatal
 import annotation.*
 
@@ -38,8 +39,9 @@ trait ResultExecution:
       case PendingException(f)                                               => f
       case ErrorException(f)                                                 => f
       case DecoratedResultException(f)                                       => f
-      case e: AssertionError if fromJUnit(e)                                 => Failure(e.getMessage.notNull, "", e.getStackTrace.toList, details = FromNotImplementedError)
       case e: AssertionError                                                 => Error(e)
+      case e: AssertionError if fromJUnit(e)                                 => Failure(e.getMessage.notNull, "", e.getStackTrace.toList, details = FromNotImplementedError)
+      case e: TimeoutException                                               => Failure(e.getMessage.notNull, "", e.getStackTrace.toList, details = FromTimeoutException)
       case e: java.lang.Error if simpleClassName(e) == "NotImplementedError" => Failure(e.getMessage.notNull, "", e.getStackTrace.toList, details = FromJUnitAssertionError)
       case e: java.lang.Error if simpleClassName(e) == "ExpectationError"    => Failure(e.toString, "", e.getStackTrace.toList, details = FromExpectationError)
       case NonFatal(t)                                                       => Error(t)

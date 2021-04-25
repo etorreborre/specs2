@@ -6,7 +6,7 @@ package form
  */
 trait DecoratedProperty[T] extends DecoratedLabel[T]:
   /** set a new Decorator */
-  def decorateWith(f: Any => Any) = decoratorIs(decorator.decorateWith(f))
+  def decorateWith(f: Any => Any): T = decoratorIs(decorator.decorateWith(f))
   /** set a new Decorator for the value */
   def decorateValueWith(f: Any => Any) = decoratorIs(decorator.decorateValueWith(f))
   /** set a new style */
