@@ -12,7 +12,6 @@ object depends {
 
   def reflect(scalaOrganization: String, scalaVersion: String) = scalaOrganization % "scala-reflect" % scalaVersion
 
-
   def scalaz(scalazVersion: String) =
     Seq("org.scalaz" %% "scalaz-core",
         "org.scalaz" %% "scalaz-effect").map(_ % scalazVersion)
@@ -45,7 +44,7 @@ object depends {
       scalaParser.value
   }
 
-  def scalaXML = "org.scala-lang.modules" %% "scala-xml" % "1.3.0"
+  def scalaXml = "org.scala-lang.modules" %% "scala-xml" % "1.3.0"
 
   lazy val mockito  = "org.mockito"  % "mockito-core"  % "3.9.0"
   lazy val junit    = "junit"        % "junit"         % "4.13.2"

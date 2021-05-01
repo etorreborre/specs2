@@ -4,6 +4,7 @@ package xml
 import Nodex._
 import scala.xml._
 import scala.xml.NodeSeq._
+import collection.Iterablex._
 
 class NodexSpec extends Spec { def is = s2"""
 
@@ -43,5 +44,9 @@ class NodexSpec extends Spec { def is = s2"""
   isEqualIgnoringSpaceOrdered returns true if 2 NodeSeqs are the same regardless of spaces and order
     ${ <a><b/><c/></a> isEqualIgnoringSpaceOrdered <a><b/><c/></a> }
     ${ !(<a><b/><c/></a> isEqualIgnoringSpaceOrdered <a><c/><b/></a>) }
-                                                                                                            """
+
+  when comparing xml nodes in a different order
+    ${ <a> <b/> <c/> </a>.child.sameElementsAs(<a> <c/> <b/> </a>.child) }
+
+"""
 }

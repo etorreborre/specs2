@@ -9,9 +9,7 @@ import org.specs2.fp.syntax._
 import execute.StandardResults
 import text._
 import Plural._
-import control.Exceptions._
 import time.SimpleTimer
-import scala.xml._
 
 /**
  * The Stats class store results for the number of:
@@ -76,27 +74,6 @@ case class Stats(specs:        Int = 0,
       case DecoratedResult(t: Stats, _) => t
       case DecoratedResult(_, r)        => withResult(r)
     }
-
-  /**
-   * @return the xml representation of the statistics. Omit the attributes with 0 as a value for conciseness
-   */
-  def toXml: Elem = {
-    val stats = <stats>{trend.map(t => <trend>{t.toXml}</trend>).getOrElse(NodeSeq.Empty)}</stats>
-    val attributes = Map(
-      "specs"        -> specs.toString,
-      "examples"     -> examples.toString,
-      "successes"    -> successes.toString,
-      "expectations" -> expectations.toString,
-      "failures"     -> failures.toString,
-      "errors"       -> errors.toString,
-      "pending"      -> pending.toString,
-      "skipped"      -> skipped.toString,
-      "time"         -> timer.totalMillis.toString)
-    attributes.foldLeft(stats) { (res, cur) =>
-      if (cur._2 == "0") res
-      else            res % new UnprefixedAttribute(cur._1, cur._2, Null)
-    }
-  }
 
   override def toString =
     "Stats("+
@@ -231,24 +208,4 @@ case object Stats {
       case DecoratedResult(_, r)        => Stats(r)
     }
 
-  def fromXml(stats: scala.xml.Node): Option[Stats] = {
-    if (stats.label != Stats.empty.toXml.label)
-      None
-    else {
-      val map = stats.attributes.asAttrMap
-      def asInt(key: String, defaultValue: Int = 0) = tryOrElse(Integer.parseInt(map(key)))(defaultValue)
-
-      Some(Stats(
-        asInt("specs"       ),
-        asInt("examples"    ),
-        asInt("successes"   ),
-        asInt("expectations", 1),
-        asInt("failures"    ),
-        asInt("errors"      ),
-        asInt("pending"     ),
-        asInt("skipped"     ),
-        (stats \ "trend" \ "stats").headOption.flatMap(fromXml),
-        map.get("time").map(SimpleTimer.fromString).getOrElse(new SimpleTimer)))
-    }
-  }
 }

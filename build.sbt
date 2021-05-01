@@ -17,12 +17,13 @@ lazy val specs2 = project.in(file(".")).
     name := "specs2",
     packagedArtifacts := Map.empty,
     ThisBuild / githubWorkflowArtifactUpload := false,
+    Global / onChangedBuildSource := ReloadOnSourceChanges,
     test := {}
   ).aggregate(
     fpJVM, catsJVM, commonJVM, matcherJVM, coreJVM, matcherExtraJVM, scalazJVM, html,
-    analysisJVM, shapelessJVM, formJVM, markdownJVM, gwtJVM, junitJVM, scalacheckJVM, mockJVM,
+    analysisJVM, shapelessJVM, formJVM, markdownJVM, gwtJVM, junitJVM, scalacheckJVM, mockJVM, xmlJVM,
     tests, fpJS, catsJS, commonJS, matcherJS, coreJS, matcherExtraJS, scalazJS, analysisJS,
-    shapelessJS, junitJS, scalacheckJS, mockJS
+    shapelessJS, junitJS, scalacheckJS, mockJS, xmlJS
   )
 
 val scala211 = "2.11.12"
@@ -119,7 +120,7 @@ lazy val common = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file(
     libraryDependencies ++=
       depends.paradise(scalaVersion.value) ++
       Seq(depends.reflect(scalaOrganization.value, scalaVersion.value),
-        depends.scalaXML, depends.scalacheck.value % Test),
+        depends.scalacheck.value % Test),
     commonSettings,
     name := "specs2-common"
   ).
@@ -199,7 +200,7 @@ lazy val form = crossProject(JSPlatform, JVMPlatform, NativePlatform).
   jvmSettings(depends.jvmTest, commonJvmSettings).
   jsSettings(depends.jsTest, commonJsSettings).
   nativeSettings(depends.nativeTest, commonNativeSettings).
-  dependsOn(core, markdown, matcherExtra, scalacheck % "test->test")
+  dependsOn(core, markdown, matcherExtra, scalacheck % "test->test", xml)
 
 lazy val formJVM = form.jvm
 lazy val formJS = form.js
@@ -235,12 +236,13 @@ lazy val html = project.in(file("html")).
     commonSettings,
     name := "specs2-html").
   settings(depends.jvmTest, commonJvmSettings).
-  dependsOn(formJVM, mockJVM % Test, matcherExtraJVM % Test, scalacheckJVM % Test)
+  dependsOn(formJVM, mockJVM % Test, matcherExtraJVM % Test, scalacheckJVM % Test, xmlJVM)
 
 lazy val junit = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("junit")).
   settings(
     libraryDependencies ++= Seq(
       depends.junit,
+      depends.scalaXml,
       depends.mockito % Test),
     commonSettings,
     name := "specs2-junit").
@@ -256,7 +258,9 @@ lazy val markdown = crossProject(JSPlatform, JVMPlatform, NativePlatform).
   crossType(CrossType.Pure).
   in(file("markdown")).
   settings(
-    libraryDependencies += depends.pegdown,
+    libraryDependencies ++= Seq(
+      depends.pegdown,
+      depends.scalaXml),
     commonSettings,
     name := "specs2-markdown").
   jvmSettings(depends.jvmTest, commonJvmSettings).
@@ -290,7 +294,7 @@ lazy val matcherExtra = crossProject(JSPlatform, JVMPlatform, NativePlatform).in
   jsSettings(depends.jsTest, commonJsSettings).
   jvmSettings(depends.jvmTest, commonJvmSettings).
   nativeSettings(depends.nativeTest, commonNativeSettings).
-  dependsOn(analysis, matcher, core % "test->test")
+  dependsOn(analysis, matcher, xml, core % "test->test")
 
 lazy val matcherExtraJS = matcherExtra.js
 lazy val matcherExtraJVM = matcherExtra.jvm
@@ -385,6 +389,22 @@ lazy val tests = Project(id = "tests", base = file("tests")).
   html,
   scalazJVM,
   catsJVM)
+
+lazy val xml = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("xml")).
+  settings(
+    libraryDependencies += depends.scalaXml,
+    commonSettings,
+    name := "xml"
+  ).
+  jsSettings(depends.jsTest, commonJsSettings).
+  jvmSettings(depends.jvmTest, commonJvmSettings).
+  nativeSettings(commonNativeSettings, depends.nativeTest).
+  platformsSettings(JSPlatform, NativePlatform)(commonJsNativeSettings).
+  dependsOn(core)
+
+lazy val xmlJS = xml.js
+lazy val xmlJVM = xml.jvm
+lazy val xmlNative = xml.native
 
 lazy val specs2ShellPrompt = ThisBuild / shellPrompt := { state =>
   val name = Project.extract(state).currentRef.project
@@ -500,6 +520,7 @@ lazy val publicationSettings = Seq(
   publishMavenStyle := true,
   Test / publishArtifact := false,
   pomIncludeRepository := { x => false },
+  Global / pgpPassphrase := None,
   pomExtra := (
     <url>http://specs2.org/</url>
       <licenses>
