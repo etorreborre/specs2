@@ -520,7 +520,6 @@ lazy val publicationSettings = Seq(
   publishMavenStyle := true,
   Test / publishArtifact := false,
   pomIncludeRepository := { x => false },
-  Global / pgpPassphrase := None,
   pomExtra := (
     <url>http://specs2.org/</url>
       <licenses>
