@@ -23,7 +23,7 @@ lazy val specs2 = project.in(file(".")).
     fpJVM, catsJVM, commonJVM, matcherJVM, coreJVM, matcherExtraJVM, scalazJVM, html,
     analysisJVM, shapelessJVM, formJVM, markdownJVM, gwtJVM, junitJVM, scalacheckJVM, mockJVM, xmlJVM,
     tests, fpJS, catsJS, commonJS, matcherJS, coreJS, matcherExtraJS, scalazJS, analysisJS,
-    shapelessJS, junitJS, scalacheckJS, mockJS, xmlJS
+    shapelessJS, junitJS, scalacheckJS, mockJS
   )
 
 val scala211 = "2.11.12"
@@ -402,9 +402,7 @@ lazy val xml = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("xm
   platformsSettings(JSPlatform, NativePlatform)(commonJsNativeSettings).
   dependsOn(core)
 
-lazy val xmlJS = xml.js
 lazy val xmlJVM = xml.jvm
-lazy val xmlNative = xml.native
 
 lazy val specs2ShellPrompt = ThisBuild / shellPrompt := { state =>
   val name = Project.extract(state).currentRef.project
