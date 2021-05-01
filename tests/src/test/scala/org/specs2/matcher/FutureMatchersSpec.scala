@@ -19,7 +19,7 @@ class FutureMatchersSpec extends Specification with ResultMatchers with specific
   implicit lazy val ec = env.executionContext
   class MyTimeout extends TimeoutException
 
- def is = section("travis") ^ sequential ^ s2"""
+ def is = section("ci") ^ sequential ^ s2"""
 
  In this specification `Future` means `scala.concurrent.Future`
 

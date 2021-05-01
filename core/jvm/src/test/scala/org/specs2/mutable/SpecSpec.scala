@@ -6,7 +6,7 @@ import control.Use
 
 class SpecSpec extends Spec with TagDsl {
   sequential
-  section("travis")
+  section("ci")
 
   "A mutable Spec specification contains very few implicits" >> {
     import scala.reflect.runtime.universe._

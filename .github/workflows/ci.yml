@@ -52,7 +52,7 @@ jobs:
         run: sbt ++${{ matrix.scala }} githubWorkflowCheck
 
       - name: Build project
-        run: sbt ++${{ matrix.scala }} test
+        run: sbt ++${{ matrix.scala }} 'testOnly -- xonly exclude ci'
 
   publish:
     name: Publish Artifacts

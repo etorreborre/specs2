@@ -17,6 +17,7 @@ lazy val specs2 = project.in(file(".")).
     name := "specs2",
     packagedArtifacts := Map.empty,
     ThisBuild / githubWorkflowArtifactUpload := false,
+    ThisBuild / githubWorkflowBuild := Seq(WorkflowStep.Sbt(List("testOnly -- xonly exclude ci"), name = Some("Build project"))),
     Global / onChangedBuildSource := ReloadOnSourceChanges,
     test := {}
   ).aggregate(

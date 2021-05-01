@@ -28,7 +28,7 @@ class DataTablesSpec(val env: Env) extends Specification with DataTables with Re
   2 tables results can be and-ed together                                                                    $e12
   a cell can have null values                                                                                $e13
 
- ${section("travis")}
+ ${section("ci")}
 
  Applicative style
  =================
@@ -39,7 +39,7 @@ class DataTablesSpec(val env: Env) extends Specification with DataTables with Re
    by using an applicative result type, like `Future` and the `|@` operator                                  $applicative3
    `|@>` can be used to specify concurrent execution + `play`                                                $applicative4
    A call to |* with a previous |> will also execute the table                                               $applicative5
-                                                                                                              
+
  Even if the execution is concurrent you will get the errors corresponding to each row                       $applicative6
 
                                                                                                              """
@@ -200,4 +200,3 @@ class InAMutableContext extends MustThrownMatchers with DataTables {
     "a" | "b"    |>
      1  ! 2      | { (a, b) =>  a must_== b }
 }
-

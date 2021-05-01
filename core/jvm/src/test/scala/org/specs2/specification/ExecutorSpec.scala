@@ -19,7 +19,7 @@ import ResultMatchers._
 import scala.concurrent._
 import ExecuteActions._
 
-class ExecutorSpec(val env: Env) extends script.Specification with Groups with ThrownExpectations with OwnEnv { def is = section("travis") ^ s2"""
+class ExecutorSpec(val env: Env) extends script.Specification with Groups with ThrownExpectations with OwnEnv { def is = section("ci") ^ s2"""
 
  Steps
  =====
