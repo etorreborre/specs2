@@ -412,6 +412,7 @@ case class Failure(m: String = "",
  * Trait to model detailed information for failures so that smart differences can be computed
  */
 sealed trait Details
+case class FailureDetailsMessages(messages: List[String]) extends Details
 case class FailureDetails(actual: String, expected: String) extends Details
 case class FailureSeqDetails(actual: Seq[Any], expected: Seq[Any]) extends Details
 case class FailureSetDetails(actual: Set[Any], expected: Set[Any]) extends Details

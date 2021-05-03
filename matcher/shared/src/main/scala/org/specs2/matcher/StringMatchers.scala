@@ -71,8 +71,12 @@ trait StringMatchers:
     beMatching(t)
 
   /** alias for beMatching but matching just a fragment of the string */
-  def =~[T : MatchingExpression](t: T): Matcher[String] =
+  def beMatchingWithPart[T : MatchingExpression](t: T): Matcher[String] =
     BeMatching.withPart[T](t)(using summon[MatchingExpression[T]])
+
+  /** alias for beMatching but matching just a fragment of the string */
+  def =~[T : MatchingExpression](t: T): Matcher[String] =
+    beMatchingWithPart(t)
 
   /** matches if b.startsWith(a) */
   def startWith(a: String): Matcher[String] =
@@ -161,7 +165,7 @@ trait StringMatchers:
 
   given MatchingExpression[String] with
     def toPattern(s: =>String): Pattern =
-      Pattern.compile(s)
+      Pattern.compile(s, Pattern.DOTALL | Pattern.MULTILINE)
 
   given MatchingExpression[Pattern] with
     def toPattern(p: =>Pattern): Pattern =

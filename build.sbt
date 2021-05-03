@@ -18,7 +18,7 @@ lazy val specs2 = project.in(file(".")).
     tests
   )
 
-val scala3 = "3.0.0-RC2"
+val scala3 = "3.0.0-RC3"
 
 /** COMMON SETTINGS */
 lazy val specs2Settings = Seq(
@@ -141,7 +141,7 @@ lazy val markdown = crossProject(JVMPlatform).
     commonSettings,
     name := "specs2-markdown").
   jvmSettings(depends.jvmTest, commonJvmSettings).
-  dependsOn(common, core % "compile->test")
+  dependsOn(common, core % "compile->test", xml)
 
 lazy val markdownJVM = markdown.jvm
 

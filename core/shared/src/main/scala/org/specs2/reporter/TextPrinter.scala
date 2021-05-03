@@ -3,6 +3,7 @@ package reporter
 
 import matcher.DataTable
 import control.*
+import collection.Listx.*
 import origami.*
 import fp.*, syntax.{given, *}
 import specification.core.*
@@ -217,7 +218,10 @@ case class TextPrinter(env: Env) extends Printer {
   /**
    * If the failure contains the expected and actual values, display them
    */
-  def printFailureDetails(args: Arguments):  Details => List[LogLine] = {
+  def printFailureDetails(args: Arguments): Details => List[LogLine] = {
+    case FailureDetailsMessages(messages) =>
+      messages.map(_.failure).intersperse("\n".failure)
+
     case FailureDetails(actual, expected) if args.diffs.show(actual, expected) =>
       val (actualDiff, expectedDiff) = args.diffs.showDiffs(actual, expected)
       val shortDiff =
