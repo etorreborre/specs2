@@ -47,12 +47,12 @@ trait TryMatchers:
 
 object TryeMatchers extends TryMatchers
 
-case class TrySuccessMatcher[T]() extends OptionLikeMatcher[Try, T, T]("a Success", (_:Try[T]).toOption):
+case class TrySuccessMatcher[T]() extends OptionLikeMatcher[Try[T], T]("a Success", (_:Try[T]).toOption):
   def withValue(t: ValueCheck[T]) = TrySuccessCheckedMatcher(t)
 
-case class TrySuccessCheckedMatcher[T](check: ValueCheck[T]) extends OptionLikeCheckedMatcher[Try, T, T]("a Success", (_:Try[T]).toOption, check)
+case class TrySuccessCheckedMatcher[T](check: ValueCheck[T]) extends OptionLikeCheckedMatcher[Try[T], T]("a Success", (_:Try[T]).toOption, check)
 
-case class TryFailureMatcher[T]() extends OptionLikeMatcher[Try, T, Throwable]("a Failure", (_:Try[T]).failed.toOption):
+case class TryFailureMatcher[T]() extends OptionLikeMatcher[Try[T], Throwable]("a Failure", (_:Try[T]).failed.toOption):
   def withValue(t: ValueCheck[Throwable]) = TryFailureCheckedMatcher(t)
 
   def withThrowable[E <: Throwable : ClassTag] = TryFailureCheckedMatcher[T]({ (t: Throwable) =>
@@ -63,4 +63,4 @@ case class TryFailureMatcher[T]() extends OptionLikeMatcher[Try, T, Throwable]("
     (Expectations.createExpectable(t).applyMatcher(AnyMatchers.beAnInstanceOf[E]) and
      Expectations.createExpectable(t.getMessage.notNull).applyMatcher(StringMatchers.beMatching(pattern)))
   })
-case class TryFailureCheckedMatcher[T](check: ValueCheck[Throwable]) extends OptionLikeCheckedMatcher[Try, T, Throwable]("a Failure", (_:Try[T]).failed.toOption, check)
+case class TryFailureCheckedMatcher[T](check: ValueCheck[Throwable]) extends OptionLikeCheckedMatcher[Try[T], Throwable]("a Failure", (_:Try[T]).failed.toOption, check)
