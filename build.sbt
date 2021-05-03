@@ -5,8 +5,6 @@ import java.text.SimpleDateFormat
 // shadow sbt-scalajs' crossProject and CrossType until Scala.js 1.0.0 is released
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
-enablePlugins(ScalaJSPlugin)
-
 /** MAIN PROJECT */
 lazy val specs2 = project.in(file(".")).
   enablePlugins(GitBranchPrompt, SitePlugin, GhpagesPlugin).
