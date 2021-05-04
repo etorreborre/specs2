@@ -23,6 +23,5 @@ object Typecheck:
     import qctx.reflect.*
     '{ if ${typeCheckErrors}.isEmpty
          then org.specs2.execute.TypecheckSuccess
-         else org.specs2.execute.TypecheckErrors(${typeCheckErrors})
-
+         else org.specs2.execute.TypecheckErrors(${typeCheckErrors}.reverse)
     }

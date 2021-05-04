@@ -92,6 +92,7 @@ trait StringMatchers:
         val a = t
         result(b.value!= null && a!= null && b.value.endsWith(a),
                b.description  + " doesn't end with " + q(a))
+
   /** matches if the regexp a is found inside b */
   def find(a: =>String): FindMatcher =
     new FindMatcher(a)
@@ -109,7 +110,7 @@ trait StringMatchers:
    * This matcher can be specialized to a FindMatcherWithGroups which will also check the found groups
    */
   class FindMatcher(t: =>String) extends Matcher[String]:
-    lazy val pattern = Pattern.compile(t)
+    lazy val pattern = summon[MatchingExpression[String]].toPattern(t)
 
     def withGroup(group: String) = new FindMatcherWithGroups(t, group)
     def withGroups(groups: String*) = new FindMatcherWithGroups(t, groups*)
@@ -135,7 +136,7 @@ trait StringMatchers:
    * This matcher checks if the found groups are really the ones expected
    */
   class FindMatcherWithGroups(t: =>String, groups: String*) extends Matcher[String]:
-    lazy val pattern = Pattern.compile(t)
+    lazy val pattern = summon[MatchingExpression[String]].toPattern(t)
 
     def found(b: String) =
       val matcher = pattern.matcher(b)
@@ -145,6 +146,7 @@ trait StringMatchers:
         while matcher.find do { groupsFound += matcher.group(i) }
       }
       groupsFound.toList
+
     def apply[S <: String](b: Expectable[S]) =
       val a = t
       val groupsFound = found(b.value)
@@ -163,9 +165,15 @@ trait StringMatchers:
   class FindMatcherPatternWithGroups(p: Pattern, groups: String*) extends FindMatcherWithGroups(p.toString, groups*):
     override lazy val pattern = p
 
+object StringMatchers extends StringMatchers
+
+trait MatchingExpression[T]:
+  def toPattern(t: =>T): Pattern
+
+object MatchingExpression:
   given MatchingExpression[String] with
     def toPattern(s: =>String): Pattern =
-      Pattern.compile(s, Pattern.DOTALL | Pattern.MULTILINE)
+      tryOrElse(Pattern.compile(s, Pattern.DOTALL | Pattern.MULTILINE))(Pattern.compile(Pattern.quote(s), Pattern.DOTALL | Pattern.MULTILINE))
 
   given MatchingExpression[Pattern] with
     def toPattern(p: =>Pattern): Pattern =
@@ -174,11 +182,6 @@ trait StringMatchers:
   given MatchingExpression[Regex] with
     def toPattern(r: =>Regex): Pattern =
       r.pattern
-
-object StringMatchers extends StringMatchers
-
-trait MatchingExpression[T]:
-  def toPattern(t: =>T): Pattern
 
 protected[specs2]
 class BeMatching[T : MatchingExpression](t: =>T) extends Matcher[String]:
