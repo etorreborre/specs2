@@ -15,7 +15,7 @@ trait TextDsl extends TextCreation:
   extension (s: String)
     def txt = outer.addText(s)
 
-    def br: Fragment  = s.txt.br
+    def br: Fragment  = s.txt.br(2)
     def br(n: Int): Fragment = s.txt.br(n)
 
     def p: Fragment = s.txt.p

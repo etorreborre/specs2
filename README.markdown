@@ -12,6 +12,6 @@ sbt update publishLocal
 ```
 Then you can generate the User Guide with:
 ```
-sbt testOnly org.specs2.guide.UserGuide -- html
+sbt "testOnly org.specs2.guide.UserGuide -- html html.nostats all"
 ```
-This should create html files in the target/specs2-reports directory. 
+This should create html files in the target/specs2-reports directory.

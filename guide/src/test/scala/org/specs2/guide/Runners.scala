@@ -3,11 +3,15 @@ package guide
 
 object Runners extends UserGuidePage { def is = s2"""
 
-The most common way to run $specs2 specifications is to use [sbt](http://scala-sbt.org). In this section we will present the most important options for running specifications
+In this section we present the most important options for running specifications.
 
 ### Via sbt
 
-[Sbt](www.scala-sbt.org) recognizes $specs2 as a ["test framework"](http://www.scala-sbt.org/release/docs/Testing.html). This means that any class or object extending the `Specification` abstract class can be executed by sbt. The `test` command will run all the specifications in your project provided you put them in the `src/test/scala` directory:
+The most common way to run $specs2 specifications is to use [sbt](http://scala-sbt.org).
+
+[Sbt](www.scala-sbt.org) recognizes $specs2 as a ["test framework"](http://www.scala-sbt.org/release/docs/Testing.html).
+This means that any class or object extending the `Specification` class can be executed by sbt.
+The `test` command will run all the specifications in your project provided you put them in the `src/test/scala` directory:
 ```
 sbt> test
 ```
@@ -24,12 +28,12 @@ sbt> testOnly org.acme.secret.KillerAppSpec -- xonly
 
 #### sbt options
 
-Various sbt options can apply to [test execution in sbt](http://www.scala-sbt.org/release/docs/Testing.html) but here are the ones which you are most likely to use:
+Various sbt options can apply to [the execution of tests in sbt](http://www.scala-sbt.org/release/docs/Testing.html) but here are the ones which you are most likely to use:
 
  - exclude some specifications:
    `testOptions := Seq(Tests.Filter(s => Seq("Spec", "Unit").exists(s.endsWith)))`
 
- - don't execute the specifications in parallel
+ - execute specifications one after the other
    `parallelExecution in Test := false`
 
  - pass $specs2 arguments to all specifications
@@ -38,8 +42,12 @@ Various sbt options can apply to [test execution in sbt](http://www.scala-sbt.or
  - display results as soon as they've been executed
    `logBuffered := false`
 
- - [custom tags](http://www.scala-sbt.org/0.13/docs/Parallel-Execution.html#Tagging+Tasks) to restrict the parallel execution of specifications.
-     *** if you want to use sbt tags you will also need to pass the `sbt.tags` argument on the command-line ***
+ - restrict the parallel execution of specifications with [custom tags](https://www.scala-sbt.org/1.x/docs/Parallel-Execution.html#Tagging+Tasks).
+     ***if you want to use sbt tags you will also need to pass the `sbt.tags` argument on the command-line***
+
+### In the Scala console
+
+
 
 ### Output
 
