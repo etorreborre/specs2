@@ -162,11 +162,17 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
   /** run a given spec structure */
   private def specificationRun(taskDef: TaskDef, spec: SpecStructure, env: Env, handler: EventHandler, loggers: Array[Logger]): Action[Stats] =
     val customInstances = CustomInstances(arguments, loader, env.systemLogger)
-
+    val specFactory = DefaultSpecFactory(env, loader)
+    val makeSpecs =
+          if arguments.isSet("all")
+          then specFactory.createLinkedSpecs(spec).map(ss => SpecStructure.topologicalSort(ss)(env.specs2ExecutionEnv).getOrElse(ss))
+          else Operation.pure(Seq(spec))
+    
     for
       printers <- createPrinters(customInstances, taskDef, handler, loggers, arguments).toAction
       reporter <- Reporter.createCustomInstance(customInstances).map(_.getOrElse(Reporter.create(printers, env))).toAction
-      stats    <- reporter.report(spec)
+      allSpecs <- makeSpecs.toAction
+      stats    <- reporter.report(allSpecs*)
     yield stats
 
   /** create a spec structure from the task definition containing the class name */

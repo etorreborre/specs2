@@ -189,3 +189,5 @@ object HtmlPrinter:
 
   val RunAborted =
     "\nHtml run aborted!\n "
+
+class DefaultHtmlPrinter(env: Env) extends HtmlPrinter(env, SearchPage())

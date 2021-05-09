@@ -34,7 +34,7 @@ case class PrinterFactory(arguments: Arguments, customInstances: CustomInstances
 
   def createHtmlPrinter: Operation[Option[Printer]] =
     customInstances.createPrinterInstance(
-      HTML, "org.specs2.reporter.HtmlPrinter$",
+      HTML, "org.specs2.reporter.DefaultHtmlPrinter",
       "cannot create a HTML printer. Please check that specs2-html.jar is on the classpath",
       "no HTML printer defined")
 
@@ -66,4 +66,3 @@ object PrinterFactory:
 
   def create(env: Env): PrinterFactory =
     PrinterFactory(env.arguments, CustomInstances.create(env.arguments, env.systemLogger), env.systemLogger)
-

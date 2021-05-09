@@ -3,6 +3,7 @@ package reporter
 
 import main.*
 import control.*
+import specification.core.*
 import fp.syntax.*
 import reflect.Classes
 import scala.reflect.ClassTag
@@ -23,7 +24,7 @@ case class CustomInstances(arguments: Arguments, loader: ClassLoader, logger: Lo
 
   private def createInstance[T <: AnyRef](name: String, className: String, failureMessage: String => String, noRequiredMessage: String)(using m: ClassTag[T]): Operation[Option[T]] =
     for
-      instance <- Classes.createInstanceEither[T](className, loader)
+      instance <- Classes.createInstanceEither[T](className, loader, EnvDefault.create(arguments).defaultInstances)
       result <-
         instance match
           case Right(i) => Operation.ok(Option(i))
