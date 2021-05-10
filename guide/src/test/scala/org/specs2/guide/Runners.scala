@@ -45,9 +45,17 @@ Various sbt options can apply to [the execution of tests in sbt](http://www.scal
  - restrict the parallel execution of specifications with [custom tags](https://www.scala-sbt.org/1.x/docs/Parallel-Execution.html#Tagging+Tasks).
      ***if you want to use sbt tags you will also need to pass the `sbt.tags` argument on the command-line***
 
-### In the Scala console
+### In a shell
 
-
+A specification can be executed directly with the `scala` interpreter in a shell, provided that you can produce a classpath containing all the dependencies for your project.
+One way to do this is to use sbt:
+```
+sbt> export runtime:fullClasspath
+```
+Then, if you store the output of this command in an environment variable, `$$SCALA_PATH`, you can run a specification with:
+```
+sh> scala -classpath $$SCALA_PATH specs2.run org.acme.secret.KillerAppSpec
+```
 
 ### Output
 

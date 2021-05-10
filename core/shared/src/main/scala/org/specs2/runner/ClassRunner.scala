@@ -28,7 +28,8 @@ case class DefaultClassRunner(env: Env, reporter: Reporter, specFactory: SpecFac
    * execute it and report results
    */
   def run(className: String): Action[Stats] =
-    specFactory.createSpecification(className).toAction.flatMap(spec => run(spec.structure))
+    specFactory.createSpecification(className).toAction.flatMap(spec => run(spec.structure)) |||
+    Action.pure(println("cannot instantiate the specification: " + className + ". Please check your classpath")).as(Stats.empty)
 
   def run(spec: SpecificationStructure): Action[Stats] =
     run(spec.structure)

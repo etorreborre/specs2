@@ -102,7 +102,10 @@ trait Classes extends ClassOperations:
 
   /** @return true if a class can be loaded */
   def existsClass(className: String, loader: ClassLoader): Operation[Boolean] = Operation.delayed {
-    try   { loader.loadClass(className); true }
+    try {
+      loader.loadClass(className)
+      true
+    }
     catch { case NonFatal(t) => false }
   }
 

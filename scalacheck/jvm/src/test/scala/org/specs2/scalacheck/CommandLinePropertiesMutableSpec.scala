@@ -6,7 +6,8 @@ import main.*
 class CommandLinePropertiesMutableSpec extends mutable.Specification with ScalaCheck:
   "use the command line to drive properties" >> {
     val specification = new UserSpecification
-    specs2.run(specification)(using Arguments("scalacheck.mintestsok", "50", "junit"))
+    given Arguments = Arguments("scalacheck.mintestsok", "50", "junit")
+    specs2.run.apply(specification)
     specification.i === 50
   }
 
