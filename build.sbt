@@ -13,18 +13,22 @@ lazy val specs2 = project.in(file(".")).
     name := "specs2",
     packagedArtifacts := Map.empty
   ).aggregate(
-    fpJVM, commonJVM, matcherJVM, coreJVM, matcherExtraJVM, html,
-    formJVM, markdownJVM, junitJVM, scalacheckJVM, xmlJVM,
+    fp, common, matcher, core, matcherExtra, html, guide,
+    form, markdown, junit, scalacheck, xml,
     tests
   )
 
-val scala3 = "3.0.0-RC3"
-
 /** COMMON SETTINGS */
+
+val Scala212 = "2.12.13"
+val Scala213 = "2.13.5"
+val Scala3 = "3.0.0"
+
 lazy val specs2Settings = Seq(
   organization := "org.specs2",
   specs2ShellPrompt,
-  scalaVersion := scala3,
+  ThisBuild / crossScalaVersions := Seq(Scala3),
+  ThisBuild / scalaVersion := Scala3,
   Compile / doc / sources := Seq())
 
 lazy val commonJsSettings = Seq(
@@ -42,67 +46,53 @@ lazy val commonJsSettings = Seq(
 
 lazy val specs2Version = settingKey[String]("defines the current specs2 version")
 
-val commonSettings =
+lazy val commonSettings =
     coreDefaultSettings  ++
     depends.resolvers    ++
     specs2Settings       ++
     compilationSettings  ++
     testingSettings      ++
+    testingJvmSettings   ++
     publicationSettings
-
-def commonJvmSettings =
-  testingJvmSettings
 
 /** MODULES (sorted in alphabetical order) */
 
-lazy val common = crossProject(JVMPlatform).in(file("common")).
+lazy val common = project.in(file("common")).
   settings(
     libraryDependencies += depends.scalacheck % Test,
     commonSettings,
     name := "specs2-common"
   ).
-  jvmSettings(depends.jvmTest, commonJvmSettings).
+  settings(depends.jvmTest).
   dependsOn(fp)
 
-lazy val commonJVM = common.jvm
-
-lazy val core = crossProject(JVMPlatform).in(file("core")).
+lazy val core = project.in(file("core")).
   settings(
     commonSettings,
     name := "specs2-core",
     libraryDependencies += depends.junit % Test
   ).
-  jvmSettings(depends.jvmTest, commonJvmSettings).
+  settings(depends.jvmTest).
   dependsOn(matcher, common, common % "test->test")
 
-lazy val coreJVM = core.jvm
-
-lazy val examples = crossProject(JVMPlatform).in(file("examples")).
+lazy val examples = project.in(file("examples")).
   settings(
     commonSettings,
     name := "specs2-examples").
-  jvmSettings(depends.jvmTest, commonJvmSettings).
-  dependsOn(common, matcher, core, matcherExtra, junit, scalacheck)
+  settings(depends.jvmTest).
+  dependsOn(common, matcher, core, matcherExtra, junit, scalacheck, form, html, markdown)
 
-lazy val examplesJVM = examples.jvm.dependsOn(formJVM, html, markdownJVM)
+lazy val fp = project.in(file("fp")).
+  settings(commonSettings).
+  settings(name := "specs2-fp")
 
-lazy val fp = crossProject(JVMPlatform).in(file("fp")).
-  settings(commonSettings:_*).
-  settings(name := "specs2-fp").
-  jvmSettings(commonJvmSettings)//.
-
-lazy val fpJVM = fp.jvm
-
-lazy val form = crossProject(JVMPlatform).
-  crossType(CrossType.Pure).
+lazy val form = project.
   in(file("form")).
   settings(
     commonSettings,
     name := "specs2-form").
-  jvmSettings(depends.jvmTest, commonJvmSettings).
+  settings(depends.jvmTest).
   dependsOn(core, markdown, matcherExtra, scalacheck % "test->test")
-
-lazy val formJVM = form.jvm
 
 lazy val guide = project.in(file("guide")).
   enablePlugins(BuildInfoPlugin).
@@ -112,98 +102,83 @@ lazy val guide = project.in(file("guide")).
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
     buildInfoPackage := "org.specs2",
     Compile / scalacOptions --= Seq("-Xlint", "-Ywarn-unused-import")).
-  dependsOn(examplesJVM % "compile->compile;test->test")
+  dependsOn(examples % "compile->compile;test->test")
 
 lazy val html = project.in(file("html")).
   settings(
     libraryDependencies += depends.tagsoup,
     commonSettings,
     name := "specs2-html").
-  settings(depends.jvmTest, commonJvmSettings).
-  dependsOn(formJVM, matcherExtraJVM % Test, scalacheckJVM % Test)
+  settings(depends.jvmTest).
+  dependsOn(form, matcherExtra % Test, scalacheck % Test)
 
-lazy val junit = crossProject(JVMPlatform).in(file("junit")).
+lazy val junit = project.in(file("junit")).
   settings(
     libraryDependencies ++= Seq(
       depends.junit),
     commonSettings,
     name := "specs2-junit").
-  jvmSettings(depends.jvmTest, commonJvmSettings).
+  settings(depends.jvmTest).
   dependsOn(core, matcherExtra % Test, xml)
 
-lazy val junitJVM = junit.jvm
-
-lazy val markdown = crossProject(JVMPlatform).
-  crossType(CrossType.Pure).
+lazy val markdown = project.
   in(file("markdown")).
   settings(
     libraryDependencies += depends.flexmark,
     commonSettings,
     name := "specs2-markdown").
-  jvmSettings(depends.jvmTest, commonJvmSettings).
+  settings(depends.jvmTest).
   dependsOn(common, core % "compile->test", xml)
 
-lazy val markdownJVM = markdown.jvm
-
-lazy val matcher = crossProject(JVMPlatform).in(file("matcher")).
+lazy val matcher = project.in(file("matcher")).
   settings(
     commonSettings,
     name := "specs2-matcher").
-  jvmSettings(commonJvmSettings).
   dependsOn(common)
 
-lazy val matcherJVM = matcher.jvm
-
-lazy val matcherExtra = crossProject(JVMPlatform).in(file("matcher-extra")).
+lazy val matcherExtra = project.in(file("matcher-extra")).
   settings(
     commonSettings,
+    depends.scalaParser,
     name := "specs2-matcher-extra").
-  jvmSettings(depends.jvmTest, commonJvmSettings).
-  platformsSettings(JVMPlatform)(depends.scalaParser).
+  settings(depends.jvmTest).
   dependsOn(matcher, core, core % "test->test", xml)
-
-lazy val matcherExtraJVM = matcherExtra.jvm
 
 lazy val pom = Project(id = "pom", base = file("pom")).
   settings(commonSettings).
-  dependsOn(commonJVM, matcherJVM, matcherExtraJVM, coreJVM, html,
-    formJVM, markdownJVM, junitJVM, scalacheckJVM)
+  dependsOn(common, matcher, matcherExtra, core, html,
+    form, markdown, junit, scalacheck)
 
-lazy val scalacheck = crossProject(JVMPlatform).
+lazy val scalacheck = project.
   in(file("scalacheck")).
   settings(
     commonSettings,
     name := "specs2-scalacheck",
     libraryDependencies += depends.scalacheck,
   ).
-  jvmSettings(depends.jvmTest, commonJvmSettings).
+  settings(depends.jvmTest).
   dependsOn(core)
-
-lazy val scalacheckJVM = scalacheck.jvm
 
 lazy val tests = Project(id = "tests", base = file("tests")).
   settings(
     commonSettings,
     name := "specs2-tests",
-    depends.jvmTest,
-    commonJvmSettings
+    depends.jvmTest
   ).dependsOn(
-  coreJVM      % "compile->compile;test->test",
-  junitJVM     % "test->test",
-  examplesJVM  % "test->test",
-  matcherExtraJVM,
+  core      % "compile->compile;test->test",
+  junit     % "test->test",
+  examples  % "test->test",
+  matcherExtra,
   html)
 
-lazy val xml = crossProject(JVMPlatform).in(file("xml")).
+lazy val xml = project.in(file("xml")).
   settings(
     depends.scalaXml,
     commonSettings,
     name := "specs2-xml"
   ).
-  jvmSettings(depends.jvmTest, commonJvmSettings).
+  settings(depends.jvmTest).
   dependsOn(core)
-
-lazy val xmlJVM = xml.jvm
 
 lazy val specs2ShellPrompt = ThisBuild / shellPrompt := { state =>
   val name = Project.extract(state).currentRef.project

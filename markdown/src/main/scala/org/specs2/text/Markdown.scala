@@ -1,13 +1,13 @@
 package org.specs2
 package text
 
+import control.Exceptions.*
+import Trim.*
 import scala.io.Source
 import scala.xml.NodeSeq
 import scala.xml.parsing.XhtmlParser
 import scala.collection.mutable.*
 import scala.collection.JavaConverters.iterableAsScalaIterableConverter
-import control.Exceptions.*
-import Trim.*
 
 import com.vladsch.flexmark.ast.*
 import com.vladsch.flexmark.ast.util.*

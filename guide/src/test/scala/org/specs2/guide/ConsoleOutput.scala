@@ -5,11 +5,11 @@ import main.*
 
 object ConsoleOutput extends UserGuidePage { def is = "Console output".title ^ s2"""
 
-You will get a "console" output whenever you run a specification from ${"sbt" ~/ Runners}, ${"Maven, Gradle" ~/ OtherBuildTools} or a ${"shell session" ~/ RunInShell}. There are arguments you can use to change the output:
+You will get a "console" output whenever you run a specification from ${"sbt" ~/ Runners} or a ${"shell session" ~/ RunInShell}.
+There are arguments you can use to change the output:
 
   Name               | Value format            | Comments
  ------------------- | ----------------------- | ------------------------------------------------------------------------
- `all`               | boolean                 | execute and report linked specifications (default = `false`)
  `xonly`             | boolean                 | only report failures and errors
  `showonly`          | String                  | only report some examples based on their status
  `failtrace`         | boolean                 | show a stack trace for failures
@@ -22,6 +22,7 @@ You will get a "console" output whenever you run a specification from ${"sbt" ~/
  `colors`            | map                     | use different colors
  `colorsclass`       | class name              | use a specific instance of the `Colors` trait
  `showtimes`         | boolean                 | show execution times for examples
+ `all`               | boolean                 | execute and report linked specifications (default = `false`)
  `indentation`       | int                     | number of spaces to use to indent nested examples (default = 2)
 
 Some of these arguments deserve further explanations.

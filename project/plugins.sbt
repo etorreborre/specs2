@@ -1,11 +1,7 @@
-val scalaJSVersion = Option(System.getenv("SCALAJS_VERSION")).getOrElse("1.0.1")
-val scalaNativeVersion = Option(System.getenv("SCALANATIVE_VERSION")).getOrElse("0.4.0-M2")
+val scalaJSVersion = Option(System.getenv("SCALAJS_VERSION")).getOrElse("1.5.1")
+val scalaNativeVersion = Option(System.getenv("SCALANATIVE_VERSION")).getOrElse("0.4.1-SNAPSHOT")
 
-addSbtPlugin("ch.epfl.lamp"       % "sbt-dotty"                     % "0.5.3")
 addSbtPlugin("org.scala-js"       % "sbt-scalajs"                   % scalaJSVersion)
-// addSbtPlugin("org.scala-native"   % "sbt-scala-native"              % scalaNativeVersion)
-addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject"      % "1.0.0")
-//addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "1.0.0")
 addSbtPlugin("org.scalameta"      % "sbt-scalafmt"                  % "2.4.0")
 addSbtPlugin("com.jsuereth"       % "sbt-pgp"                       % "2.0.1")
 addSbtPlugin("com.typesafe.sbt"   % "sbt-ghpages"                   % "0.6.3")
@@ -21,4 +17,4 @@ resolvers += Resolver.url("sonatype", new URL("https://oss.sonatype.org/content/
 libraryDependencies += "com.sun.activation" % "javax.activation" % "1.2.0"
 
 resolvers += Resolver.sonatypeRepo("snapshots")
-addSbtPlugin("ch.epfl.scala" % "sbt-bloop" % "1.4.0-RC1-192-72a856b6")
+//addSbtPlugin("ch.epfl.scala" % "sbt-bloop" % "1.4.0-RC1-192-72a856b6")

@@ -94,7 +94,6 @@ See the $ConsoleOutput page for a more precise description of these options.
 
  Name                    | Default value                  | Description
  ----------------------- | ------------------------------ | ------------------------------
- `all`                   | `false`                        | execute and report linked specifications
  `xonly`                 | `false`                        | only report failures and errors
  `showonly`              | `""`                           | only report some examples based on their status
  `failtrace`             | `false`                        | show a stack trace for failures
@@ -106,6 +105,7 @@ See the $ConsoleOutput page for a more precise description of these options.
  `colors`                | `""`                           | use different colors
  `colorsclass`           | `""`                           | use a specific instance of the `Colors` trait
  `showtimes`             | `false`                        | show execution times for examples
+ `all`                   | `false`                        | execute and report linked specifications
  `notifier`              | `""`                           | name of a class extending the `org.specs2.reporter.Notifier` trait
  `printer`               | `""`                           | name of a class extending the `org.specs2.reporter.Printer` trait
  `reporter`              | `""`                           | name of a class extending the `org.specs2.reporter.Reporter` trait
