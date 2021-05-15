@@ -88,12 +88,10 @@ object SmartDiffs:
       diffRatio      = values(4).toInt,
       showFull       = boolean(values(5)),
       seqTriggerSize = values(6).toInt,
-      seqMaxSize     = values(6).toInt)
+      seqMaxSize     = values(7).toInt)
   }(identity)
 
   private def boolean(s: String) =
     if Seq("true", "t").contains(s.trim.toLowerCase) then true
     else if Seq("false", "f").contains(s.trim.toLowerCase) then false
     else throw new Exception(s+" is not a boolean value")
-
-

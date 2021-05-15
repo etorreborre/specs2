@@ -1,9 +1,11 @@
 package org.specs2
 package text
 
+import java.util.regex.Pattern
 import Split.*
 import data.*
 import EditDistance.*
+import collection.Seqx.*
 
 /**
  * The EditDistance trait provides methods to compute and display the shortest distance between 2 strings.
@@ -24,45 +26,50 @@ trait StringEditDistance extends DiffShortener:
     })
 
   /**
-   * @param sep separators used to highlight differences. If sep is empty, then no separator is used. If sep contains
-   * one character, it is taken as the unique separator. If sep contains 2 or more characters, the first half of the characters are taken as
-   * opening separator and the second half as closing separator.
+   * @param separators separators used to highlight differences. If sep is empty, then no delimiter is used. If sep contains
+   * one character, it is taken as the unique delimiter. If sep contains 2 or more characters, the first half of the characters are taken as
+   * opening delimiter and the second half as closing delimiter.
    *
    * @return a (String, String) displaying the differences between each input strings.
    * The used separators are specified by the caller. The string is shortened before and after differences if necessary. <p>
    */
-  def showDistance(s1: String, s2: String, sep: String = "[]", shortenSize: Int = 20): (String, String) =
-    foldSplittedStrings(s1, s2, ("", ""), (r: (String, String), s1: String, s2: String) => {
+  def showDistance(s1: String, s2: String, separators: String = "[]", shortenSize: Int = 20): (String, String) =
+    val (r1, r2) = foldSplittedStrings(s1, s2, (Nil, Nil), (r: (List[Token], List[Token]), s1: String, s2: String) => {
       val matrix = new data.EditDistance.EditMatrix(s1, s2, StringLevenhsteinCosts)
       val operations1 = matrix.operations
       val operations2 = operations1.map(_.inverse)
-      val (diffs1, diffs2) = (showDiffs(operations1, sep, shortenSize), showDiffs(operations2, sep, shortenSize))
-      def skipLine(s: String) = if s.isEmpty then s else s+"\n"
-      (skipLine(r._1) + diffs1, skipLine(r._2) + diffs2)
+      val (diffs1, diffs2) = (showDiffs(operations1, separators, shortenSize), showDiffs(operations2, separators, shortenSize))
+      (skipLine(r._1) ++ diffs1, skipLine(r._2) ++ diffs2)
     })
+    (r1.showTokens, r2.showTokens)
 
-  def showDiffs(operations: IndexedSeq[EditDistanceOperation[Char]], sep: String, shortenSize: Int): String =
-    val delimiter = StringDelimiter(sep)
+  private def skipLine(s: List[Token]): List[Token] =
+    if s.isEmpty then s else s :+ Keep("\n")
 
-    val (isDifferent, result) = operations.foldLeft((false, new StringBuilder)) { case ((different, res), op) =>
+  def showDiffs(operations: IndexedSeq[EditDistanceOperation[Char]], separators: String, shortenSize: Int): List[Token] =
+    val delimiter = StringDelimiter(separators)
+
+    val (isDifferent, result) = operations.foldLeft((false, Nil: List[Token])) { case ((different, res), op) =>
       if different then
         op match
           case Add(t)     => (true,  res)
-          case Del(t)     => (true,  res.append(t))
-          case Subst(t,_) => (true,  res.append(t))
-          case Same(t)    => (false, res.append(delimiter.second).append(t))
+          case Del(t)     => (true,  res :+ Keep(t.toString))
+          case Subst(t,_) => (true,  res :+ Keep(t.toString))
+          case Same(t)    => (false, res :+ Delimiter(delimiter.second) :+ Keep(t.toString))
       else
         op match
-          case Add(t)     => (true,  res.append(delimiter.first))
-          case Del(t)     => (true,  res.append(delimiter.first).append(t))
-          case Subst(t,_) => (true,  res.append(delimiter.first).append(t))
-          case Same(t)    => (false, res.append(t))
+          case Add(t)     => (true,  res :+ Delimiter(delimiter.first))
+          case Del(t)     => (true,  res :+ Delimiter(delimiter.first) :+ Keep(t.toString))
+          case Subst(t,_) => (true,  res :+ Delimiter(delimiter.first) :+ Keep(t.toString))
+          case Same(t)    => (false, res :+ Keep(t.toString))
     }
     val fullResult =
-      if isDifferent then result.append(delimiter.second).toString
-      else             result.toString
+      if isDifferent then
+        result :+ Delimiter(delimiter.second)
+      else
+        result
 
-    shorten(fullResult, delimiter.first, delimiter.second, shortenSize)
+    shortenTokens(fullResult, Delimiter(delimiter.first), Delimiter(delimiter.second), shortenSize)
 
   /** apply edit distance functions on strings split on newlines so that there are no memory issues */
   def foldSplittedStrings[T](s1: String, s2: String, init: T, f: (T, String, String) => T): T =
@@ -81,55 +88,97 @@ trait StringEditDistance extends DiffShortener:
     def splitToSize(strings: List[String]) = strings.flatMap(_.splitToSize(200))
     (splitToSize(split1), splitToSize(split2))
 
-
   /**
-   * Create separator characters
+   * Create delimiter characters
    */
-  case class StringDelimiter(separator: String):
-    val middle = separator.size / 2 + separator.size % 2
-    val first =  if separator.isEmpty then "" else separator.substring(0, middle)
-    val second = if separator.size < 2 then first else separator.substring(middle, separator.size)
-    val separators = (first, second)
+  case class StringDelimiter(separators: String):
+    val middle = separators.size / 2 + separators.size % 2
+    val first =  if separators.isEmpty then "" else separators.substring(0, middle)
+    val second = if separators.size < 2 then first else separators.substring(middle, separators.size)
 
 /**
  * This object help shortening strings between differences when the strings are too long
  */
 trait DiffShortener:
-  def shorten(s: String, firstSep: String = "[", secondSep: String = "]", size: Int = 5): String =
-    def shortenLeft(s: String) = if s.size > size then ("..." + s.slice(s.size - size, s.size)) else s
-    def shortenRight(s: String) = if s.size > size then (s.slice(0, size) + "...") else s
-    def shortenCenter(s: String) = if s.size > size then (s.slice(0, size / 2) + "..." + s.slice(s.size - size / 2, s.size)) else s
-    val list = sepList(s, firstSep, secondSep)
-    list.foldLeft("") { (res, cur) =>
-      if cur.startsWith(firstSep) && cur.endsWith(secondSep) then
-        res + cur
-      else if list.head eq cur then
-        res + shortenLeft(cur)
-      else if list.last eq cur then
-        res + shortenRight(cur)
+
+  sealed trait Token
+  case class Keep(value: String) extends Token
+  case class Delimiter(value: String) extends Token
+  case class Start() extends Token
+  case class End() extends Token
+
+  def showToken(r: Token): String =
+    r match
+      case Keep(c) => c
+      case Delimiter(d) => d
+      case Start() => ""
+      case End() => ""
+
+  extension (tokens: List[Token]) def showTokens = tokens.map(showToken).mkString
+
+  def shorten(string: String, firstDelimiter: String = "[", secondDelimiter: String = "]", shortenSize: Int = 5): String =
+    val tokens = string.map { c =>
+          if c.toString == firstDelimiter then
+            Delimiter(firstDelimiter)
+          else if c.toString == secondDelimiter then
+            Delimiter(secondDelimiter)
+          else
+            Keep(c.toString)
+        }
+    shortenTokens(tokens.toList, Delimiter(firstDelimiter), Delimiter(secondDelimiter), shortenSize).showTokens
+
+  def shortenTokens(tokens: List[Token], firstDelimiter: Delimiter, secondDelimiter: Delimiter, shortenSize: Int = 5): List[Token] =
+    def shortenLeft(ts: List[Token]): List[Token] =
+      if ts.size > shortenSize
+        then Keep("...") +: ts.slice(ts.size - shortenSize, ts.size)
+        else ts
+
+    def shortenRight(ts: List[Token]): List[Token] =
+      if ts.size > shortenSize
+        then ts.take(shortenSize) :+ Keep("...")
+        else ts
+
+    def shortenCenter(ts: List[Token]): List[Token] =
+      if ts.size > shortenSize
+        then (ts.take(shortenSize / 2) :+ Keep("...")) ++ ts.slice(ts.size - shortenSize / 2, ts.size)
+        else ts
+
+    val delimitedTokens = splitOnDelimiters(Start() +: tokens :+ End(), firstDelimiter, secondDelimiter)
+
+    delimitedTokens.foldLeft(Nil: List[Token]) { (res, cur) =>
+      // [abcdefgh] -> [abcdefgh]
+      if cur.head == firstDelimiter && cur.last == secondDelimiter then
+        res ++ cur
+      // <start>abcdefgh -> ...defgh
+      else if cur.headOption == Some(Start()) then
+        res ++ shortenLeft(cur)
+      // abcdefgh<end> -> abcd...
+      else if cur.lastOption == Some(End()) then
+        res ++ shortenRight(cur)
+      // abcdefgh -> abc...fgh
       else
-        res + shortenCenter(cur)
+        res ++ shortenCenter(cur)
     }
 
-  private def sepList(s: String, firstSep: String, secondSep: String) =
-    def split(s: String, sep: String): Array[String] =
-      if List("[", "]" ,"(", ")", "-", "+", "?", "*").contains(sep) then split(s, "\\" + sep) else s.split(sep)
+  // split a list of tokens into several lists when a delimiter is found
+  // abcd[efgh]ijkl[mnop]qrst -> List(abcd, [efgh], ijkl, [mnop], qrst)
+  private def splitOnDelimiters(tokens: List[Token], firstDelimiter: Delimiter, secondDelimiter: Delimiter): List[List[Token]] =
+    tokens.foldLeft(Nil: List[List[Token]]) { (res, cur) =>
+      if cur == firstDelimiter then
+        res :+ List(firstDelimiter)
+      else if cur == secondDelimiter then
+        res.updateLast(_ :+ secondDelimiter).toList
+      else
+        res.lastOption match
+          case None =>
+            List(List(cur))
+          case Some(ts) =>
+            if ts.lastOption == Option(secondDelimiter)
+              then res :+ List(cur)
+              else res.updateLast(_ :+ cur).toList
+    }
 
-    val splitStr = split(s, firstSep)
-    if splitStr.size == 1 then List(s)
-    else
-      splitStr.foldLeft(List[String]()) { (res, cur) =>
-        if !cur.contains(secondSep) then res :+ cur
-        else
-          lazy val diff = split(cur, secondSep)(0)
-          if split(cur, secondSep).size == 0 then
-            res :+ (firstSep + secondSep)
-          else if split(cur, secondSep).size > 1 then
-            res ++ List(firstSep + diff + secondSep, split(cur, secondSep)(1))
-          else
-            res :+ (firstSep + diff + secondSep)
-      }
+
 object DiffShortener extends DiffShortener
 
 object StringEditDistance extends StringEditDistance
-

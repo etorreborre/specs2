@@ -23,7 +23,7 @@ There are arguments you can use to change the output:
  `colorsclass`       | class name              | use a specific instance of the `Colors` trait
  `showtimes`         | boolean                 | show execution times for examples
  `all`               | boolean                 | execute and report linked specifications (default = `false`)
- `indentation`       | int                     | number of spaces to use to indent nested examples (default = 2)
+ `indentation`       | int                     | number of spaces to use to indent nested examples in unit specifications (default = 2)
 
 Some of these arguments deserve further explanations.
 
@@ -59,19 +59,22 @@ Note also that the default filter also truncates the stacktrace in the middle if
 
 When using the equality matcher $specs2 tries to display the difference between the expected and the actual values using a class: `org.specs2.main.SmartDiffs`. There are several parameters for that class which you can specify from the command line as:
 ```
-sbt> testOnly -- smartdiffs show,separators,triggerSize,shortenSize,diffRatio,full
+sbt> testOnly -- smartdiffs show,separators,triggerSize,shortenSize,diffRatio,full,seqTriggerSize,seqMaxSize
+
+// for example
+sbt> testOnly -- smartdiffs true,[],20,5,30,false,0,1000000
 ```
 
  Parameter          | Description
- ------------------ | -----------
- `show`             | will not show anything (default is true)
- `separators`       | allows to change the separators used to show the differences (default is "[]")
- `triggerSize`      | controls the size above which the differences must be shown (default is 20)
- `shortenSize`      | controls the number of characters to display around each difference (default is 5)
- `diffRatio`        | percentage of differences above which the differences must not be shown (default is 30)
- `full`             | displays the full original expected and actual strings
- `seqTriggerSize`   | the minimum size to compute differences on Seq, Set and Maps
- `seqMaxSize`       | the maximum size to compute differences on Seq, Set and Maps
+ -----------        | ----------------------------------------------------
+ `show`             | will not show anything (default = true)
+ `separators`       | allows to change the separators used to show the differences (default = "[]")
+ `triggerSize`      | controls the size above which the differences must be shown (default = 20)
+ `shortenSize`      | controls the number of characters to display around each difference (default = 5)
+ `diffRatio`        | percentage of differences above which the differences must not be shown (default = 30)
+ `full`             | displays the full original expected and actual strings (default = false)
+ `seqTriggerSize`   | the minimum size to compute differences on Seq, Set and Maps (default = 0)
+ `seqMaxSize`       | the maximum size to compute differences on Seq, Set and Maps (default = 1000000)
 
 
 You can also specify your own enhanced algorithm for displaying the difference by providing an instance of the `${fullName[Diffs]}` trait:
@@ -94,6 +97,10 @@ trait Diffs {
   /** @return true if the full strings must also be shown */
   def showFull: Boolean
 }
+```
+Here is an example:
+```
+sbt> testOnly -- diffsclass org.acme.MyDiffClass
 ```
 
 ### Colors
