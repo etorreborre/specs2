@@ -177,7 +177,7 @@ class Lexer extends StdLexical with ImplicitConversions:
 
   private def optString[A](pre: String, a: Option[A]) = a match
     case Some(x) => pre + (if x == null then "null" else x.toString)
-    case None => ""
+    case _ => ""
 
   def zero: Parser[String] = '0' ^^^ "0"
   def nonzero = elem("nonzero digit", d => d.isDigit && d != '0')

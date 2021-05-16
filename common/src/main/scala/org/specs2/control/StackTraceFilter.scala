@@ -94,6 +94,6 @@ object DefaultStackTraceFilter extends IncludeExcludeStackTraceFilter(Seq(),
 /**
  * This filter doesn't do anything
  */
-object NoStackTraceFilter extends StackTraceFilter:
+object NoStackTraceFilter extends StackTraceFilter derives CanEqual:
   /** @return the filtered stacktrace */
   def apply(e: Seq[StackTraceElement]) = e

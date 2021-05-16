@@ -58,7 +58,7 @@ trait Levels:
         val parent = if level == 0 then treeLoc.root else (treeLoc.parentLocs :+ treeLoc).takeWhile(_.getLabel._2 < level).lastOption.getOrElse(treeLoc)
         val newTree = mapper(f) match
           case Some(fragment) => parent.insertDownLast(Leaf((fragment, level)))
-          case None           => treeLoc
+          case _ => treeLoc
         (newTree, newTree)
     }.map(_.map(_._1))
   }

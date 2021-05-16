@@ -130,7 +130,7 @@ trait Trees:
    */
   def allPaths[A](tree: Tree[A]): List[List[A]] =
     tree.subForest.toList match
-      case Nil => List(List(tree.rootLabel))
+      case List() => List(List(tree.rootLabel))
       case subForests => subForests.flatMap(subTree => allPaths(subTree).map(p => tree.rootLabel :: p))
 
   /**
@@ -139,7 +139,7 @@ trait Trees:
   def parentLocs[T](t: TreeLoc[T], ps: Seq[TreeLoc[T]] = Vector()): Seq[TreeLoc[T]] =
     t.parent match
       case Some(p) => parentLocs(p, p +: ps)
-      case None    => ps
+      case _ => ps
 
   given treeLocIsSized[T]: Sized[TreeLoc[T]] with
     def size(t: TreeLoc[T]): Int =

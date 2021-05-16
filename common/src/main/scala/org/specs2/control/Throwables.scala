@@ -3,9 +3,9 @@ package control
 
 object Throwables:
   def render(t: Throwable): String =
-    s"${t.getClass.getName}" + (Option(t.getMessage) match {
-      case None          => ""
+  s"${t.getClass.getName}" + (Option(t.getMessage) match {
       case Some(message) => s": $message"
+      case _ => ""
     })
 
   def renderWithStack(t: Throwable): String =
@@ -16,7 +16,7 @@ object Throwables:
        |============================================================
        |""".stripMargin
 
-  def trace(t: Throwable): String = 
+  def trace(t: Throwable): String =
     val out = new java.io.StringWriter
     t.printStackTrace(new java.io.PrintWriter(out))
     out.toString

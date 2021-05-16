@@ -57,7 +57,7 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
       case Left(t: TimeoutException) =>
         timeout match
           case Some(to) => Skipped(s"timed out after $to", t.getMessage)
-          case None => Error(t)
+          case _ => Error(t)
 
       case Left(t) =>
         Error(t)
@@ -115,8 +115,6 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
   /** run the execution */
   def startExecution(env: Env): Execution =
     run match
-      case None => this
-
       case Some(r) =>
         val to = env.arguments.timeout |+| timeout
         try
@@ -142,6 +140,7 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
           }
           setExecuting(future).copy(timeout = to)
         catch { case t: Throwable => setFatal(t) }
+      case _ => this
 
   /** start this execution when the other one is finished */
   def startAfter(other: Execution)(env: Env): Execution =
@@ -159,7 +158,7 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
           case Some(_) =>
             Action.pure((Skipped(): Result, timer.stop))
 
-          case None =>
+          case _ =>
             // if a previous result indicates that we should stop
             results.find { result =>
               arguments.stopOnFail  && result.isFailure  ||
@@ -178,7 +177,7 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
                   Action.pure((Skipped(): Result, timer.stop))
 
               // if everything is fine we run this current execution
-              case None =>
+              case _ =>
                 startExecution(env).executionResult.map(r => (r, timer.stop))
     }
     copy(executing = Started(started.runFuture(env.executionEnv)))
@@ -228,9 +227,7 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
       executing match
         case NotExecuting =>
           run match
-            case None =>
-              this
-            case _ =>
+            case Some(_) =>
               updateRun { r => (env: Env) =>
                 before.flatMap { rs =>
                   if checkResult then
@@ -239,6 +236,8 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
                   else r(env)
                 }
               }
+            case _ =>
+              this
 
         case Failed(_) =>
           this

@@ -20,7 +20,7 @@ final case class TreeLoc[A](tree: Tree[A], lefts: TreeForest[A],
   def root: TreeLoc[A] =
     parent match
       case Some(z) => z.root
-      case None    => this
+      case _ => this
 
   /** Select the left sibling of the current node. */
   def left: Option[TreeLoc[A]] = lefts match
@@ -187,5 +187,5 @@ object TreeLoc:
 
   def unfold[A1, B](seed: A1)(f: A1 => Option[(B, A1)]): LazyList[B] =
     f(seed) match
-      case None         => LazyList.empty
       case Some((b, a)) => LazyList.cons(b, unfold(a)(f))
+      case _ => LazyList.empty

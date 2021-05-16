@@ -55,6 +55,6 @@ case class Parameters(minTestsOk: Int                 = Test.Parameters.default.
 object Parameters:
   def makeSeed(seed: String): Option[Seed] =
     Seed.fromBase64(seed).toOption match
-      case None => throw new Exception(s"incorrect seed passed from the command-line $seed, this should be a Base64 " +
+      case ok@Some(_) => ok
+      case _ => throw new Exception(s"incorrect seed passed from the command-line $seed, this should be a Base64 " +
         s"encoded string")
-      case ok => ok

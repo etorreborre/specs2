@@ -2,13 +2,14 @@ package org.specs2
 package control
 
 import Exceptions.*
+ import org.specs2.collection.canEqualAny
 
 /**
  * This class represents values which are evaluated lazily and which may even be missing.
  *
  * It has Option-like function and can be also converted to an Either object
  */
-case class Property[T](value: () => Option[T], evaluated: Boolean = false, evaluatedValue: Option[T] = None):
+case class Property[T](value: () => Option[T], evaluated: Boolean = false, evaluatedValue: Option[T] = None)(using CanEqual[T, T]):
   /** change the value */
   def updateValue(init: =>Option[T]) = new Property(value = () => init)
   /** change the value and return Unit */
@@ -30,19 +31,19 @@ case class Property[T](value: () => Option[T], evaluated: Boolean = false, evalu
   /** return the property with the value being filtered according to a predicate */
   def filter(p: T => Boolean): Property[T] = new Property(() => value().filter(p))
   /** option-like flatMap */
-  def flatMap[U](f: T => Option[U]): Property[U] = new Property(() => optionalValue.flatMap(f))
+  def flatMap[U](f: T => Option[U])(using CanEqual[U, U]): Property[U] = new Property(() => optionalValue.flatMap(f))
   /** option-like foreach */
   def foreach(f: T => Unit): Unit = optionalValue.foreach(f)
   /** option-like getOrElse */
-  def getOrElse[U >: T](other: U): U = optionalValue.getOrElse(other)
+  def getOrElse[U >: T](other: U)(using CanEqual[U, U]): U = optionalValue.getOrElse(other)
   /** option-like isDefined */
   def isDefined = optionalValue.isDefined
   /** option-like isEmpty */
   def isEmpty = optionalValue.isEmpty
   /** option-like map */
-  def map[U](f: T => U): Property[U] = new Property(() => optionalValue.map(f))
+  def map[U](f: T => U)(using CanEqual[U, U]): Property[U] = new Property(() => optionalValue.map(f))
   /** option-like orElse */
-  def orElse[U >: T](other: => Property[U]): Property[U] = new Property(() => optionalValue.orElse(other.optionalValue))
+  def orElse[U >: T](other: => Property[U])(using CanEqual[U, U]): Property[U] = new Property(() => optionalValue.orElse(other.optionalValue))
   /** option-like toLeft */
   def toLeft[R](right: R): Either[T, R] = optionalValue.toLeft(right)
   /** option-like toRight */
@@ -56,7 +57,12 @@ case class Property[T](value: () => Option[T], evaluated: Boolean = false, evalu
     else            this
 
   override def equals(other: Any) =
-    tryCollect(other.asInstanceOf[Matchable]) { case o: Property[?] => o.optionalValue == optionalValue }
+    tryCollect(other.asInstanceOf[Matchable]) {
+      case o: Property[?] =>
+        o.optionalValue == optionalValue
+      case _ =>
+        false
+    }
 
   override def hashCode =
     tryOr(optionalValue.hashCode)((_:Throwable).hashCode)
@@ -67,11 +73,11 @@ case class Property[T](value: () => Option[T], evaluated: Boolean = false, evalu
  * Companion object to create properties with possibly no initial value
  */
 object Property:
-  def apply[T](i: =>T) = new Property(() => Some(i))
-  def apply[T]() = new Property[T](() => None)
+  def apply[T](i: =>T)(using CanEqual[T, T]) = new Property(() => Some(i))
+  def apply[T]()(using CanEqual[T, T]) = new Property[T](() => None)
 
 trait Properties:
-  given [T]: Conversion[T, Property[T]] with
+  given [T](using CanEqual[T, T]): Conversion[T, Property[T]] with
     def apply(t: T): Property[T] = Property(t)
 
 object Properties extends Properties

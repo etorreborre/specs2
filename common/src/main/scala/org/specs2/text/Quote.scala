@@ -3,6 +3,7 @@ package text
 
 import NotNullStrings.*
 import scala.collection.Traversable
+import collection.canEqualAny
 
 /**
  * Quote and unquote strings

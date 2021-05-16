@@ -4,6 +4,8 @@ package collection
 import scala.collection.{GenSeq, GenIterable}
 import Seqx.*
 
+given canEqualAny[L, R]: CanEqual[L, R] = CanEqual.derived
+
 /**
  * This trait provides additional methods on Iterable.
  *
@@ -45,16 +47,20 @@ trait Iterablex:
      * @return true if the 2 iterables contain the same elements (according to a comparison function f) recursively, in any order
      */
     def sameElementsAs(that: GenIterable[T], f: (T, T) => Boolean): Boolean =
-      def isNotItsOwnIterable(a: GenIterable[?]) = a.isEmpty || a.iterator.next != a
+      def isNotItsOwnIterable(a: GenIterable[Any]): Boolean =
+        a.isEmpty || (a.iterator.next:Any) != (a:Any)
+
       def matchTwo(x: T, y: T): Boolean =
         (x.asInstanceOf[Matchable], y.asInstanceOf[Matchable]) match
           case (a: GenIterable[?], b: GenIterable[?]) if isNotItsOwnIterable(a) =>
             x.asInstanceOf[GenIterable[T]].sameElementsAs(y.asInstanceOf[GenIterable[T]], f)
           case _ => f(x, y)
+
       val ita = xs.iterator.toList
       val itb = that.iterator.toList
+
       (ita, itb) match
-        case (Nil, Nil) => true
+        case (List(), List()) => true
         case (a: GenIterable[?], b: GenIterable[?]) =>
            (a.nonEmpty && b.nonEmpty) && {
             val (x, y, resta, restb) = (a.head, b.head, a.drop(1), b.drop(1))
@@ -63,7 +69,7 @@ trait Iterablex:
               resta.toSeq.removeFirst(matchTwo(_, y)).sameElementsAs(restb.toSeq.removeFirst(matchTwo(x, _)), f)
           }
 
-        case (_, _) => ita == itb
+        case (_, _) => (ita:Any) == (itb:Any)
     /**
      * @return true if the second iterable elements are contained in the first, in order
      */
@@ -85,7 +91,7 @@ trait Iterablex:
      * @return the representation of the elements of the iterable using the toString method recursively
      */
     def toDeepString: String =
-      if xs.nonEmpty && xs == xs.iterator.next then
+      if xs.nonEmpty && (xs:Any) == (xs.iterator.next:Any) then
         xs.toString
       else
         "[" + xs.toList.map { i =>

@@ -3,6 +3,7 @@ package text
 
 import control.Exceptions.*
 import Quote.*
+import collection.canEqualAny
 
 /**
  * Methods to replace a null String with "null"

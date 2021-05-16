@@ -31,7 +31,7 @@ object Traverse:
     def traverseImpl[G[_]: Applicative, A, B](fa: List[A])(f: A => G[B]): G[List[B]] =
       val g = Applicative.apply[G]
       fa match
-        case Nil => g.point(Nil)
+        case List() => g.point(Nil)
         case h :: t => g.apply2(f(h), traverseImpl(t)(f))((b, r) => b :: r)
 
     def map[A, B](fa: List[A])(f: A => B): List[B] =
@@ -41,8 +41,8 @@ object Traverse:
     def traverseImpl[G[_]: Applicative, A, B](fa: Option[A])(f: A => G[B]): G[Option[B]] =
       val g = Applicative.apply[G]
       fa match
-        case None    => g.point(None)
         case Some(a) => g.map(f(a))(Some.apply)
+        case _ => g.point(None)
 
     def map[A, B](fa: Option[A])(f: A => B): Option[B] =
       fa.map(f)

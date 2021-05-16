@@ -175,7 +175,7 @@ trait ExceptionMatchers extends ExpectationsCreation:
           Result.result(f(e), someKo(e))
         }
 
-      case None =>
+      case _ =>
         Result.result(false, noneKo)
 
   private def checkExceptionWithMatcher[T, E <: Throwable](expectable: Expectable[T], ef: Throwable => Boolean, f: PartialFunction[E, Result],
@@ -193,7 +193,7 @@ trait ExceptionMatchers extends ExpectationsCreation:
           else Result.result(false, someKo(e))
         }
 
-      case None =>
+      case _ =>
         Result.result(false, noneKo)
 
   /**

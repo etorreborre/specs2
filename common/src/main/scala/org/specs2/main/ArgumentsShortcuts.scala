@@ -4,6 +4,7 @@ package main
 import control.{NoStackTraceFilter, IncludeExcludeStackTraceFilter, DefaultStackTraceFilter, Exceptions}
 import Exceptions.*
 import text.*
+import collection.canEqualAny
 
 /**
  * This trait provides shortcuts for frequently used arguments

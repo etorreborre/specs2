@@ -63,7 +63,7 @@ trait ClassRunnerMain:
     val env = EnvDefault.create(arguments)
 
     val actions: Action[Stats] = args.toList match
-      case Nil =>
+      case List() =>
         Action.fail("there must be at least one argument, the fully qualified class name") >>
         Action.pure(Stats.empty)
 

@@ -79,7 +79,7 @@ trait Resource[T] extends BeforeAfterSpec with FragmentsFactory with StandardRes
         env.resource.toOption match
           case Some(t) =>
             AsExecution[R].execute(f(t.asInstanceOf[T]))
-          case None =>
+          case _ =>
             Execution.result(skipped("resource unavailable"))
       }
 

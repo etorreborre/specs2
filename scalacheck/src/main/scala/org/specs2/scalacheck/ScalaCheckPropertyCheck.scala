@@ -33,21 +33,21 @@ trait ScalaCheckPropertyCheck extends ExpectationsCreation:
         "set on the command line. Please report this issue to http://github.com/etorreborre/specs2/issues"))
 
     val prop1 = parameters.seed match
-      case None =>
+      case Some(s) =>
+        prop.useSeed("specs2", s)
+
+      case _ =>
         Prop { prms0 =>
           val (prms, seed) = prms0.initialSeed match
             case Some(sd) =>
               (prms0, sd)
-            case None =>
+            case _ =>
               val sd = Seed.random()
               (prms0.withInitialSeed(sd), sd)
           val res = prop(prms)
           capturedSeed = seed
           res
         }
-
-      case Some(s) =>
-        prop.useSeed("specs2", s)
 
     val result = Test.check(parameters.testParameters, prop1)
 

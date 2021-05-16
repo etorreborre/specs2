@@ -7,7 +7,11 @@ class HelloWorldUnitSpec extends mutable.Specification:
 
   "The 'Hello world' string should" >> {
     "contain 11 characters" >> {
-      "Hello world" must haveSize(11)
+      "contain 11 characters" >> {
+         "contain 11 characters" >> {
+           "Hello world" must haveSize(11)
+         }
+      }
     }
 
     "start with 'Hello'" >> {

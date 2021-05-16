@@ -43,8 +43,8 @@ case class HtmlPrinter(env: Env, searchPage: SearchPage, logger: Logger = Consol
      fromStart((getHtmlOptions(env.arguments) >>= (options => copyResources(env, options))).void.toAction)).mapFlatten { case ((stats, fragments), timer) =>
       val executedSpec = spec.copy(lazyFragments = () => Fragments(fragments*))
       getPandoc(env).flatMap {
-        case None         => printHtml(env, executedSpec, stats, timer).toAction
         case Some(pandoc) => printHtmlWithPandoc(env, executedSpec, stats, timer, pandoc).toAction
+        case _ => printHtml(env, executedSpec, stats, timer).toAction
       }
     }
 
@@ -166,16 +166,15 @@ case class HtmlPrinter(env: Env, searchPage: SearchPage, logger: Logger = Consol
 
   def copySpecResourcesDir(env: Env, base: DirectoryPath, outputDir: DirectoryPath, loader: ClassLoader)(src: DirectoryPath): Operation[Unit] =
     Option(loader.getResource((base / src).path)) match
-      case None =>
-        val message = s"no resource found for path ${(base / src).path}"
-        logger.warnAndFail(message, message)
-
       case Some(url) =>
         val fs = env.fileSystem
         if url.getProtocol.equalsIgnoreCase("jar") then
           fs.unjar(jarOf(url), outputDir, s"^${quote(base.path)}(/${quote(src.path)}/.*)$$")
         else
           fs.copyDir(DirectoryPath.unsafe(url.toURI), outputDir / src)
+      case _ =>
+        val message = s"no resource found for path ${(base / src).path}"
+        logger.warnAndFail(message, message)
 
   def reportMissingSeeRefs(specs: List[SpecStructure], outDir: DirectoryPath)(using ee: ExecutionEnv): Operation[Unit] = for
     missingSeeRefs <- specs.flatMap(_.seeReferencesList).distinct.filterM(ref => FilePathReader.doesNotExist(SpecHtmlPage.outputPath(outDir, ref.specClassName)))

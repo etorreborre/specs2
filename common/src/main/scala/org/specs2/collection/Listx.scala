@@ -29,9 +29,9 @@ trait Listx:
     def intersperse(a: T): List[T] =
       @tailrec
       def intersperse0(accum: List[T], rest: List[T]): List[T] = rest match
-        case Nil      => accum
-        case x :: Nil => x :: accum
-        case h :: t   => intersperse0(a :: h :: accum, t)
+        case List() => accum
+        case List(x) => x :: accum
+        case h :: t => intersperse0(a :: h :: accum, t)
       intersperse0(Nil, list).reverse
 
 

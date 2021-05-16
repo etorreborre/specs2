@@ -29,8 +29,8 @@ trait JsonMatchers extends Expectations with JsonMatchersImplicits:
   abstract class JsonMatcher extends Matcher[String]:
     def apply[S <: String](s: Expectable[S]) =
       parse(s.value.notNull) match
-        case None       => result(negated, "Could not parse\n" + s.value.notNull)
         case Some(json) => negateWhen(negated)(find(Some(json), queries.toList))
+        case _       => result(negated, "Could not parse\n" + s.value.notNull)
 
     def negate: JsonMatcher
     def negated: Boolean
@@ -74,7 +74,7 @@ trait JsonMatchers extends Expectations with JsonMatchersImplicits:
               v.asInstanceOf[Matchable] match
                 case j:JSONType => find(Some(j), rest)
                 case _ => checkRest(v, rest)
-            case None => selectorNotFound(selector, list)
+            case _ => selectorNotFound(selector, list)
 
         case (Some(JSONObject(map)), JsonQuery(First, selector) :: rest) =>
           selector.select(map) match
@@ -82,7 +82,7 @@ trait JsonMatchers extends Expectations with JsonMatchersImplicits:
               v.asInstanceOf[Matchable] match
                 case j: JSONType => find(Some(j), rest)
                 case _ => val r = checkRest((k, v), rest); if r.isSuccess then r else checkRest(v, rest)
-            case None =>
+            case _ =>
               selectorNotFound(selector, map)
 
         // DEEP
@@ -92,7 +92,7 @@ trait JsonMatchers extends Expectations with JsonMatchersImplicits:
               v.asInstanceOf[Matchable] match
                 case j: JSONType => find(Some(j), rest)
                 case _ => checkRest(v, rest)
-            case None    =>
+            case _ =>
               list.to(LazyList).map { v =>
                 v.asInstanceOf[Matchable] match
                   case j: JSONType => find(Some(j), queries)
@@ -106,7 +106,7 @@ trait JsonMatchers extends Expectations with JsonMatchersImplicits:
               v.asInstanceOf[Matchable] match
                 case j: JSONType => find(Some(j), rest)
                 case _ => checkRest(v, rest)
-            case None =>
+            case _ =>
               map.values.map { v =>
                 v.asInstanceOf[Matchable] match
                   case j: JSONType => find(Some(j), queries)

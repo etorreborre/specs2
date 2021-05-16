@@ -113,7 +113,7 @@ case class Fragments(contents: AsyncStream[Fragment]):
           case other =>
             text match
               case Some(t1) => (Producer.emit(List(Fragment(Text(t1)), other)), None)
-              case None     => (one(other), None)
+              case _ => (one(other), None)
     }
   }
 

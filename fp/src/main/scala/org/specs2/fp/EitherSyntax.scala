@@ -120,5 +120,5 @@ private[fp] object EitherUtil:
       case Success(v) => Right(v)
 
   def fromOption[A, B](o: Option[B], ifNone: => A): Either[A, B] = o match
-    case None    => Left[A, B](ifNone)
     case Some(a) => Right(a)
+    case _ => Left[A, B](ifNone)

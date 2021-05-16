@@ -106,7 +106,7 @@ trait Applicative[F[_]] extends Functor[F] { self =>
   /** Filter `l` according to an applicative predicate. */
   def filterM[A](l: List[A])(f: A => F[Boolean]): F[List[A]] =
     l match
-      case Nil => point(List())
+      case List() => point(List())
       case h :: t => ap(filterM(t)(f))(map(f(h))(b => t => if b then h :: t else t))
 
   /**
@@ -137,11 +137,11 @@ object Applicative:
 
     def ap[A,B](fa: =>Future[A])(ff: =>Future[A => B]): Future[B] =
       Future.sequence(List(fa, ff)).map {
-        case a :: f :: Nil =>
+        case a :: f :: List() =>
           f.asInstanceOf[A => B](a.asInstanceOf[A])
         case _ => sys.error("impossible")
       }
-      
+
     override def toString: String =
       "Applicative[Future]"
 

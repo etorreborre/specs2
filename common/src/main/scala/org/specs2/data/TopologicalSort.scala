@@ -53,6 +53,6 @@ object TopologicalSort:
       try
         processed.find(_.unmarked) match
           case Some(e) => visit(e); run
-          case None    => Some(result.toVector)
+          case _ => Some(result.toVector)
       catch { case e: CycleException => None }
     run

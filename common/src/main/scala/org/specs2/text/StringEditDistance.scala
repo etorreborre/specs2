@@ -6,6 +6,7 @@ import Split.*
 import data.*
 import EditDistance.*
 import collection.Seqx.*
+import collection.canEqualAny
 
 /**
  * The EditDistance trait provides methods to compute and display the shortest distance between 2 strings.
@@ -101,11 +102,11 @@ trait StringEditDistance extends DiffShortener:
  */
 trait DiffShortener:
 
-  sealed trait Token
-  case class Keep(value: String) extends Token
-  case class Delimiter(value: String) extends Token
-  case class Start() extends Token
-  case class End() extends Token
+  sealed trait Token derives CanEqual
+  final case class Keep(value: String) extends Token
+  final case class Delimiter(value: String) extends Token
+  final case class Start() extends Token
+  final case class End() extends Token
 
   def showToken(r: Token): String =
     r match
@@ -150,10 +151,10 @@ trait DiffShortener:
       if cur.head == firstDelimiter && cur.last == secondDelimiter then
         res ++ cur
       // <start>abcdefgh -> ...defgh
-      else if cur.headOption == Some(Start()) then
+      else if cur.headOption == Some(Start():Token) then
         res ++ shortenLeft(cur)
       // abcdefgh<end> -> abcd...
-      else if cur.lastOption == Some(End()) then
+      else if cur.lastOption == Some(End():Token) then
         res ++ shortenRight(cur)
       // abcdefgh -> abc...fgh
       else
@@ -170,12 +171,12 @@ trait DiffShortener:
         res.updateLast(_ :+ secondDelimiter).toList
       else
         res.lastOption match
-          case None =>
-            List(List(cur))
           case Some(ts) =>
-            if ts.lastOption == Option(secondDelimiter)
+            if ts.lastOption == Option(secondDelimiter: Token)
               then res :+ List(cur)
               else res.updateLast(_ :+ cur).toList
+          case _ =>
+            List(List(cur))
     }
 
 

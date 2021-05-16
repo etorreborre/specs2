@@ -10,7 +10,7 @@ import scala.quoted.*
  * The component of a path name according to the unix definition
  *   http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap03.html#tag_03_267
  */
-case class FileName private(name: String):
+case class FileName private(name: String) derives CanEqual:
   def /(other: DirectoryPath) : DirectoryPath  = DirectoryPath(this +: other.dirs, absolute = false)
   def /(other: FilePath): FilePath = FilePath(DirectoryPath(this +: other.dir.dirs, absolute = false), other.name)
   def /(other: FileName): DirectoryPath  = DirectoryPath(Vector(this), absolute = false) / other

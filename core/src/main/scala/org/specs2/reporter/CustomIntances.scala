@@ -20,7 +20,7 @@ case class CustomInstances(arguments: Arguments, loader: ClassLoader, logger: Lo
   def createCustomInstance[T <: AnyRef](name: String, failureMessage: String => String, noRequiredMessage: String)(using m: ClassTag[T]): Operation[Option[T]] =
     arguments.commandLine.value(name) match
       case Some(className) => createInstance[T](name, className, failureMessage, noRequiredMessage)
-      case None => noInstance(noRequiredMessage)
+      case _ => noInstance(noRequiredMessage)
 
   private def createInstance[T <: AnyRef](name: String, className: String, failureMessage: String => String, noRequiredMessage: String)(using m: ClassTag[T]): Operation[Option[T]] =
     for

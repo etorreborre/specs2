@@ -89,7 +89,7 @@ trait Markdown:
     val html = toHtmlNoPar(text)
     parse(html) match
       case Some(f) => f
-      case None => scala.xml.Text(text)
+      case _ => scala.xml.Text(text)
 
   private def parse(html: String) =
     tryo(XhtmlParser(Source.fromString("<text>"+html+"</text>")).head.child)

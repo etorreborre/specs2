@@ -190,9 +190,10 @@ def scalaSourceVersion(scalaBinaryVersion: String) =
 
 lazy val compilationSettings = Seq(
   maxErrors := 20,
+  Global / onChangedBuildSource := ReloadOnSourceChanges,
   Compile / scalacOptions ++= Seq(
     "-source:future-migration",
-    "-language:implicitConversions,postfixOps",
+    "-language:implicitConversions,postfixOps,strictEquality",
     "-Ykind-projector",
     "-Xcheck-macros",
     "-deprecation:false",

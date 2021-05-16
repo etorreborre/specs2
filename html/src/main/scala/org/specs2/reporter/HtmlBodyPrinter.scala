@@ -53,7 +53,7 @@ trait HtmlBodyPrinter:
       case Some((html, _)) =>
         html +
         s"""${printStatistics(title, stats, timer, options)}"""
-      case None =>
+      case _ =>
         s"<failed to produce the html for spec $spec>"
     }
 

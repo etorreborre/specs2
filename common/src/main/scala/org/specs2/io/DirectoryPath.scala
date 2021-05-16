@@ -13,7 +13,7 @@ import FileName.*
  * It is a list of FileNames and we can append other DirectoryPaths or FilePaths to it
  * If the list is empty, this means we are at the root
  */
-case class DirectoryPath(dirs: Vector[FileName], absolute: Boolean):
+case class DirectoryPath(dirs: Vector[FileName], absolute: Boolean) derives CanEqual:
 
   /** @return either the parent directory or the root if we already are at the root */
   def dir: DirectoryPath  = parent.getOrElse(this)

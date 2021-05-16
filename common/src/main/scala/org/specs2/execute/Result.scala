@@ -27,7 +27,7 @@ import text.NotNullStrings.*
  *    when it is the outcome of several checks (this is used for the reporting of ScalaCheck properties).
  *
  */
-sealed abstract class Result(val message: String = "", val expected: String = "", val expectationsNb: Int = 1):
+sealed abstract class Result(val message: String = "", val expected: String = "", val expectationsNb: Int = 1) derives CanEqual:
   type SelfType <: Result
 
   /**
@@ -411,7 +411,7 @@ case class Failure(m: String = "",
 /**
  * Trait to model detailed information for failures so that smart differences can be computed
  */
-sealed trait Details
+sealed trait Details derives CanEqual
 case class FailureDetailsMessages(messages: List[String]) extends Details
 case class FailureDetails(actual: String, expected: String) extends Details
 case class FailureSeqDetails(actual: Seq[Any], expected: Seq[Any]) extends Details

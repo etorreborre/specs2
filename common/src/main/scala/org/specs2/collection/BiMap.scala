@@ -29,7 +29,7 @@ object BiMap:
        val key = k
        val value = v
 
-  def fromSeq[K, V](s: BiMapEntry[K, V]*): BiMap[K, V] = new BiMap[K, V]:
+  def fromSeq[K, V](s: BiMapEntry[K, V]*)(using CanEqual[K, K], CanEqual[V, V]): BiMap[K, V] = new BiMap[K, V]:
     lazy val keys: Seq[K]   = s.map(_.key)
     lazy val values: Seq[V] = s.map(_.value)
 

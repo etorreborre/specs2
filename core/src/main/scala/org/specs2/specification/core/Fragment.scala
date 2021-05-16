@@ -76,7 +76,7 @@ case class Fragment(description: Description, execution: Execution, location: Lo
   def startExecutionAfter(other: Option[Fragment])(env: Env): Fragment =
     other match
       case Some(o) => startExecutionAfter(o)(env)
-      case None    => startExecution(env)
+      case _ => startExecution(env)
 
   /** start the execution of this fragment when the other ones has finished executing */
   def startExecutionAfter(others: List[Fragment])(env: Env): Fragment =

@@ -3,6 +3,7 @@ package control
 
 import Exceptions.*
 import scala.util.NotGiven
+import collection.canEqualAny
 
 /**
  * These functions can be used to allow some function to be called with varargs, with values being
@@ -20,7 +21,7 @@ import scala.util.NotGiven
 
 trait LazyConversions:
   /** transform a value to a zero-arg function returning that value */
-  implicit def lazyParameter[T](value: =>T): Lazy[T] =
+  implicit def lazyParameter[T](value: =>T)(using CanEqual[T, T]): Lazy[T] =
     new Lazy(() => value)
 
 trait DontConvertTo[T]
@@ -28,7 +29,7 @@ trait DontConvertTo[T]
 object LazyConversions extends LazyConversions
 
 /** class holding a value to be evaluated lazily */
-class Lazy[+T](private val v: () => T):
+class Lazy[+T](private val v: () => T)(using CanEqual[T, T]):
   private lazy val evaluated: T =
     v.apply()
 
@@ -39,11 +40,18 @@ class Lazy[+T](private val v: () => T):
   private[specs2] def value: T =
     evaluated
 
-  override def toString = tryOrElse(value.toString)("Evaluation error")
-  override def equals(o: Any) = value == o
-  override def hashCode = value.hashCode
+  override def toString: String =
+    tryOrElse(value.toString)("Evaluation error")
 
-  def map[S >: T](f: T => S): Lazy[S] =
+  override def equals(other: Any): Boolean =
+    other.asInstanceOf[Matchable] match
+      case o: Lazy[?] => o.value == value
+      case _ => false
+
+  override def hashCode: Int =
+    value.hashCode
+
+  def map[S >: T](f: T => S)(using CanEqual[S, S]): Lazy[S] =
     new Lazy(() => f(value))
 
 /** class holding an optional mutable value */

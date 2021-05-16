@@ -5,6 +5,7 @@ import execute.{AsResult, BestMatching}
 import control.Exceptions.*
 import text.*
 import NotNullStrings.*
+import collection.canEqualAny
 
 /**
  * Define and compute the differences between strings (used by the printers)

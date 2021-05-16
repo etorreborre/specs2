@@ -2,6 +2,7 @@ package org.specs2
 package text
 
 import collection.*
+import collection.canEqualAny
 import Seqx.*
 import LineComparison.*
 import control.*

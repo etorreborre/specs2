@@ -46,7 +46,7 @@ trait Classes extends ClassOperations:
 
   private def findInstance[T <: AnyRef : ClassTag](klass: Class[T], loader: ClassLoader, defaultInstances: =>List[AnyRef], cs: List[Constructor[?]], error: Option[Throwable] = None): Operation[T] =
     cs match
-      case Nil =>
+      case List() =>
         error.map(Operation.exception[T]).getOrElse(Operation.fail[T]("Can't find a suitable constructor with 0 or 1 parameter for class "+klass.getName))
 
       case c :: rest =>
@@ -69,7 +69,9 @@ trait Classes extends ClassOperations:
 
     else if constructor.getParameterTypes.size == 1 then
       defaultInstances.find(i => constructor.getParameterTypes.apply(0) `isAssignableFrom` i.getClass) match
-        case None =>
+        case Some(instance) =>
+          newInstance(klass, constructor.newInstance(instance))
+        case _ =>
           // if the specification has a constructor with one parameter, it is either because
           // it is a nested class
           // or it might have a parameter that has a 0 args constructor
@@ -79,8 +81,6 @@ trait Classes extends ClassOperations:
 
           constructorParameter.flatMap(p => newInstance(klass, constructor.newInstance(p)))
 
-        case Some(instance) =>
-          newInstance(klass, constructor.newInstance(instance))
     else Operation.fail[T]("Can't find a suitable constructor for class "+klass.getName)
 
   /** create a new instance for a given class and return a proper error if this fails */

@@ -44,7 +44,7 @@ trait TableOfContents:
 
   def createToc(pages: List[SpecHtmlPage], outDir: DirectoryPath, entryMaxSize: Int)(using ee: ExecutionEnv): SpecHtmlPage => NodeSeq =
     pages match
-      case Nil => (page: SpecHtmlPage) => NodeSeq.Empty
+      case List() => (page: SpecHtmlPage) => NodeSeq.Empty
       case main :: rest =>
         val treeLoc = pagesTree(main, pages)
         val tocNodes: NodeSeq =

@@ -5,6 +5,7 @@ import control.*
 import text.*
 import scala.concurrent.duration.*
 import scala.util.NotGiven
+import collection.canEqualAny
 
 /**
  * Methods with default Property values to create Arguments instances
@@ -83,23 +84,23 @@ trait ArgumentsCreation:
 
     /** shorthand method to create an Arguments object */
     def execute(
-      plan:                 ArgProperty[Boolean]           = ArgProperty[Boolean](),
-      skipAll:              ArgProperty[Boolean]           = ArgProperty[Boolean](),
-      stopOnFail:           ArgProperty[Boolean]           = ArgProperty[Boolean](),
-      stopOnError:          ArgProperty[Boolean]           = ArgProperty[Boolean](),
-      stopOnIssue:          ArgProperty[Boolean]           = ArgProperty[Boolean](),
-      stopOnSkip:           ArgProperty[Boolean]           = ArgProperty[Boolean](),
-      sequential:           ArgProperty[Boolean]           = ArgProperty[Boolean](),
-      sequentialRandom:     ArgProperty[Boolean]           = ArgProperty[Boolean](),
-      asap:                 ArgProperty[Boolean]           = ArgProperty[Boolean](),
-      useCustomClassLoader: ArgProperty[Boolean]           = ArgProperty[Boolean](),
-      threadsNb:            ArgProperty[Int]               = ArgProperty[Int](),
-      specs2ThreadsNb:      ArgProperty[Int]               = ArgProperty[Int](),
-      scheduledThreadsNb:   ArgProperty[Int]               = ArgProperty[Int](),
-      batchSize:            ArgProperty[Int]               = ArgProperty[Int](),
-      timeFactor:           ArgProperty[Int]               = ArgProperty[Int](),
-      timeout:              ArgProperty[FiniteDuration]    = ArgProperty[FiniteDuration](),
-      executor:             ArgProperty[String]            = ArgProperty[String]()
+      plan:                 ArgProperty[Boolean]        = ArgProperty[Boolean](),
+      skipAll:              ArgProperty[Boolean]        = ArgProperty[Boolean](),
+      stopOnFail:           ArgProperty[Boolean]        = ArgProperty[Boolean](),
+      stopOnError:          ArgProperty[Boolean]        = ArgProperty[Boolean](),
+      stopOnIssue:          ArgProperty[Boolean]        = ArgProperty[Boolean](),
+      stopOnSkip:           ArgProperty[Boolean]        = ArgProperty[Boolean](),
+      sequential:           ArgProperty[Boolean]        = ArgProperty[Boolean](),
+      sequentialRandom:     ArgProperty[Boolean]        = ArgProperty[Boolean](),
+      asap:                 ArgProperty[Boolean]        = ArgProperty[Boolean](),
+      useCustomClassLoader: ArgProperty[Boolean]        = ArgProperty[Boolean](),
+      threadsNb:            ArgProperty[Int]            = ArgProperty[Int](),
+      specs2ThreadsNb:      ArgProperty[Int]            = ArgProperty[Int](),
+      scheduledThreadsNb:   ArgProperty[Int]            = ArgProperty[Int](),
+      batchSize:            ArgProperty[Int]            = ArgProperty[Int](),
+      timeFactor:           ArgProperty[Int]            = ArgProperty[Int](),
+      timeout:              ArgProperty[FiniteDuration] = ArgProperty[FiniteDuration](),
+      executor:             ArgProperty[String]         = ArgProperty[String]()
     ) = new Arguments(
        execute = Execute(plan.toOption,
                skipAll.toOption,
@@ -160,7 +161,7 @@ trait ArgumentsCreation:
 object ArgumentsArgs extends ArgumentsArgs
 
 trait ArgProperties:
-  implicit def toArgProperty[T](t: =>T)(using not: NotGiven[NoArgProperties]): ArgProperty[T] =
+  implicit def toArgProperty[T](t: =>T)(using NotGiven[NoArgProperties], CanEqual[T, T]): ArgProperty[T] =
     ArgProperty(t)
 
 /**
@@ -171,12 +172,12 @@ trait NoArgProperties extends ArgProperties:
 
 object ArgProperties extends ArgProperties
 
-class ArgProperty[T](aProperty: Property[T] = Property[T]()):
+class ArgProperty[T](aProperty: Property[T] = Property[T]())(using CanEqual[T, T]) derives CanEqual:
   def toOption: Option[T] = aProperty.toOption
 
 object ArgProperty:
-  def apply[T](): ArgProperty[T] =
+  def apply[T]()(using CanEqual[T, T]): ArgProperty[T] =
     new ArgProperty()
 
-  def apply[T](t: => T): ArgProperty[T] =
+  def apply[T](t: => T)(using CanEqual[T, T]): ArgProperty[T] =
     new ArgProperty(Property(t))

@@ -121,7 +121,7 @@ case class SteppedExecutor(env: Env) extends Executor:
             fs => oneDelayed[Action, Fragment](fragment) `append` execute(specArguments)(fs.contents))
         })
 
-      case None => oneDelayed(fragment)
+      case _ => oneDelayed(fragment)
 
 /**
  * helper functions for executing fragments

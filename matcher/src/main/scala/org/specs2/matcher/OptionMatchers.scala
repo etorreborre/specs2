@@ -69,5 +69,5 @@ class OptionLikeCheckedMatcher[T, U](typeName: String, toOption: T => Option[U],
           case f @ Failure(_,_,_,details) => result(r.isSuccess, koMessage, details)
           case _ =>                          result(r.isSuccess, koMessage)
 
-      case None =>
+      case _ =>
         result(false, s"${value.description} is not $typeName")

@@ -3,6 +3,7 @@ package data
 
 import main.Arguments
 import org.specs2.fp.*
+ import org.specs2.collection.canEqualAny
 
 /**
  * A tag with names.
@@ -78,7 +79,9 @@ object NamedTag:
    * with both list of tags
    */
   given NamedTagsAreMonoid: Monoid[NamedTag] with
-    val zero: NamedTag = AlwaysWhenNoIncludeTag
+    val zero: NamedTag =
+       AlwaysWhenNoIncludeTag
+
     def append(t1: NamedTag, t2: =>NamedTag): NamedTag =
       if t1 == zero then t2
       else if t2 == zero then t1

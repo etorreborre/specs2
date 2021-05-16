@@ -114,13 +114,13 @@ object Expectable:
   /** @return the description of the matched value, quoted. */
   private[specs2] def describeValue(value: =>Any, showValue: Option[String => String]) =
     showValue match
-      case None =>
+      case Some(show) =>
+        show(value.notNull)
+
+      case _ =>
         value.asInstanceOf[Matchable] match
           case b: Boolean => "the value"
           case _          => value.notNull
-
-      case Some(show) =>
-        show(value.notNull)
 
   /** @return display a value plus its alias (unless the alias is redundant with the value itself for boolean values). */
   private[specs2] def aliasDisplay(d1: =>String)(s: String): String =
@@ -128,5 +128,5 @@ object Expectable:
 
   /** @return the description of the matched value, unquoted. */
   private[specs2] def dUnquoted[T](value: T, desc: Option[String => String]) = desc match
-    case None     => unq(value)
     case Some(de) => de(unq(value))
+    case _ => unq(value)

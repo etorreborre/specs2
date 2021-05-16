@@ -402,7 +402,7 @@ object TextPrinterSpecification extends MustMatchers with FragmentsDsl with Debu
       optionalEnv match
         case Some(ownEnv) =>
           ownEnv.copy(printerLogger = logger)
-        case None =>
+        case _ =>
           Env(printerLogger = logger,
             arguments = s.arguments.overrideWith(Arguments.split("sequential fullstacktrace")))
     try

@@ -949,8 +949,8 @@ object ScalaCheckProperty:
   def makeProp[T](f: T => Prop, shrink: Option[Shrink[T]], parameters: Parameters)(
     implicit a: Arbitrary[T], p: T => Pretty): Prop =
     shrink match
-      case None    => Prop.forAllNoShrink(f)
       case Some(s) => Prop.forAll(f)(identity, a, s, p)
+      case _ => Prop.forAllNoShrink(f)
 
 
   def TNList(n: Int) = (1 to n).map("T"+_).mkString(", ")

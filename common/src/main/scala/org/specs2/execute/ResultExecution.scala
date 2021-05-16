@@ -116,8 +116,8 @@ trait ResultExecution:
   def executeProperty[T](prop: Property[T], default: Result = Success("no value")): Either[Result, T] =
     executeEither[Option[T], Option[T]](prop.optionalValue) match
       case Right(Some(v)) => Right(v)
-      case Right(None)    => Left(default)
-      case Left(r)        => Left(r)
+      case Right(_) => Left(default)
+      case Left(r) => Left(r)
 
   /** determine if an AssertionError has been thrown from JUnit or not */
   private def fromJUnit(e: AssertionError) =

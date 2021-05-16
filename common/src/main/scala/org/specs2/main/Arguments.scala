@@ -25,7 +25,7 @@ case class Arguments (
   store:         Store            = Store(),
   report:        Report           = Report(),
   commandLine:   CommandLine      = CommandLine()
- ) extends ShowArgs:
+ ) extends ShowArgs derives CanEqual:
   def ex: String                      = select.ex
   def include: String                 = select.include
   def exclude: String                 = select.exclude
@@ -134,8 +134,8 @@ object Arguments extends Extract:
    * @return true if the flagList is empty or if it has
    */
   def hasFlags(s: String, flagList: Option[String]) = flagList match
-    case None        => true
     case Some(flags) => s.split("") forall flags.contains
+    case _ => true
 
 trait ShowArgs:
   def showArg(a: (String, Option[?])) = a._2.map(a._1 +" = "+_)

@@ -51,7 +51,7 @@ trait BufferedPrinterLogger extends PrinterLogger:
       lines.lastOption match
         case Some("") => ()
         case Some(other) => add(other)
-        case None => ()
+        case _ => ()
 
   private def log(s: String) =
     logType match
