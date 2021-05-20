@@ -4,26 +4,28 @@ package guide
 import org.specs2.runner.SpecificationsFinder.*
 
 object RunInShell extends UserGuidePage { def is = s2"""
-It is not necessary to use a build tool to run a specification. You just need to have the right dependencies on the classpath and use of of $specs2 "runners".
+It is not necessary to use a build tool to run a specification. You just need to have the right dependencies on the classpath and use of $specs2 runners.
 
 ### Dependencies
 
 When you use a build tool you generally only need to specify the main dependencies then the transitive dependencies will be fetched for you. In addition to the scala jars and ${"specs2 jars" ~/ Installation} you might need the following jars (in sbt notation):
 
- Dependency                                                                             | Comment
- -------------------------------------------------------------------------------------- | ---------------------------
- `"org.scalaz" %% "scalaz-core" % "7.2.30"`                                             | if using specs2-scalaz
- `"org.scalaz" %% "scalaz-concurrent" % "7.2.30"`                                       | if using specs2-scalaz
- `"com.chuusai" %% "shapeless" % "2.3.3"`                                               | if you use the GWT trait or case class diffs
- `"org.scalacheck" %% "scalacheck" % "1.14.0"`                                          | if using ScalaCheck
- `"junit" % "junit" % "4.13"`                                                           | if using JUnit
- `"org.specs2" % "classycle" % "1.4.1"`                                                 | if using the `org.specs2.specification.Analysis` trait
- `"org.scala-lang" % "scala-reflect" % scalaVersion.value`                              | if using interpolated specifications and/or macro matchers
+ Dependency                                                  | Comment
+ ----------------------------------------------------------- | ---------------------------
+ `"org.scalaz" %% "scalaz-core" % "7.2.31"`                  | if using specs2-scalaz
+ `"org.scalaz" %% "scalaz-concurrent" % "7.2.31"`            | if using specs2-scalaz
+ `"com.chuusai" %% "shapeless" % "2.3.4"`                    | if you use the GWT trait or case class diffs
+ `"org.scalacheck" %% "scalacheck" % "1.15.3"`               | if using ScalaCheck
+ `"org.mockito" % "mockito-core" % "3.9.0"`                  | if using Mockito. Note: specs2.jar must be placed before mockito.jar on the classpath
+ `"org.hamcrest" % "hamcrest" % "2.2"`                       | if using Hamcrest matchers with Mockito
+ `"junit" % "junit" % "4.13.2"`                              | if using JUnit
+ `"org.specs2" % "classycle" % "1.4.3"`                      | if using the `org.specs2.specification.Analysis` trait
+ `"org.scala-lang" % "scala-reflect" % scalaVersion.value`   | if using interpolated specifications and/or macro matchers
 
 
- Resolvers                                                                              | Comment
- -------------------------------------------------------------------------------------- | ---------------------------
- `Resolver.sonatypeRepo("releases")`                                                    | for other Scala libraries
+ Resolvers                                          | Comment
+ -------------------------------------------------- | ---------------------------
+ `Resolver.sonatypeRepo("releases")`                | for other Scala libraries
 
 ### From the shell
 
