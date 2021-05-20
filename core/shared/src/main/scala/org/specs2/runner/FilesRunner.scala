@@ -32,6 +32,7 @@ trait FilesRunner {
 
   def run(env: Env): Action[Stats] = {
     val args = env.arguments
+    val verbose = isVerbose(args)
     val base = args.commandLine.valueOr("filesrunner.basepath", new java.io.File(specificationsBasePath).getAbsolutePath)
     val specs = for {
       basePath <- Actions.checkThat(base, new java.io.File(base).isDirectory, s"$base must be a directory")
@@ -39,14 +40,14 @@ trait FilesRunner {
         glob = args.commandLine.valueOr("filesrunner.path", specificationsPath),
         pattern = args.commandLine.valueOr("filesrunner.pattern", specificationsPattern),
         basePath = DirectoryPath.unsafe(basePath),
-        verbose = isVerbose(args)).toAction
+        verbose = verbose).toAction
     } yield ss
 
     for {
-      _     <- beforeExecution(args, isVerbose(args)).toAction
+      _     <- beforeExecution(args, verbose).toAction
       ss    <- specs.map(sort(env))
       stats <- ss.toList.map(ClassRunner.report(env)).sequence
-      _     <- afterExecution(ss, isVerbose(args)).toAction
+      _     <- afterExecution(ss, verbose).toAction
     } yield stats.foldMap(identity _)
   }
 
@@ -62,7 +63,7 @@ trait FilesRunner {
   protected def beforeExecution(args: Arguments, verbose: Boolean): Operation[Unit] = for {
     _        <- log("\nExecuting specifications", verbose)
     printers <- ClassRunner.createPrinters(args, Thread.currentThread.getContextClassLoader)
-    _        <- log("printers are " + printers.mkString(", "), verbose)
+    _        <- log("printers are " + printers.map(_.getClass).mkString(", "), verbose)
   } yield ()
 
 
@@ -72,4 +73,3 @@ trait FilesRunner {
     else               log("Finished the execution of " + specs.size + " specifications\n", verbose)
   }
 }
-

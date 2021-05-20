@@ -72,6 +72,7 @@ case class DefaultSpecificationsFinder(env: Env) extends SpecificationsFinder:
                          verbose: Boolean               = false,
                          classLoader: ClassLoader       = Thread.currentThread.getContextClassLoader): Operation[List[SpecificationStructure]] =
     specificationNames(glob, pattern, basePath, verbose).flatMap { names =>
+      logger.info("-------------", verbose) >>
       names.filter(filter).traverse { name =>
         SpecificationStructure.create(name, classLoader, Some(env)).map(s => Option(s)).
           orElse(logger.warn("[warn] cannot create specification "+name).as(None: Option[SpecificationStructure]))
@@ -106,7 +107,6 @@ case class DefaultSpecificationsFinder(env: Env) extends SpecificationsFinder:
       case Left(t) => println(t); Seq()
       case Right(ss) => ss
 
-
   /**
    * @param pathGlob a path to a directory containing scala files (it can be a glob: i.e. "dir/**/*spec.scala")
    * @param pattern a regular expression which is supposed to match an object name extending a Specification
@@ -117,6 +117,14 @@ case class DefaultSpecificationsFinder(env: Env) extends SpecificationsFinder:
     pattern: String,
     basePath: DirectoryPath,
     verbose: Boolean) : Operation[List[String]] = {
+    val logMessage =
+            s"""|
+                |Searching for specifications with the following settings
+                |  filesrunner.basepath: ${basePath.path}
+                |  filesrunner.path: $pathGlob
+                |  filesrunner.pattern: $pattern
+                """.stripMargin
+
     lazy val specClassPattern =
       val p = specPattern("class", pattern)
       logger.info("  the pattern used to match specification classes is: "+p, verbose) >>
@@ -128,6 +136,7 @@ case class DefaultSpecificationsFinder(env: Env) extends SpecificationsFinder:
         Operation.delayed(Pattern.compile(p))
 
     for
+      _ <- when(verbose)(logger.info(logMessage))
       objectPattern <- specObjectPattern
       classPattern  <- specClassPattern
       paths         <- fileSystem.filePaths(basePath, pathGlob, verbose)
