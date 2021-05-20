@@ -34,6 +34,7 @@ trait SpecificationsFinder {
                          filePathReader: FilePathReader = FileSystem,
                          env: Env                       = Env()): Operation[List[SpecificationStructure]] =
     specificationNames(glob, pattern, basePath, filePathReader, verbose).flatMap { names =>
+      log("-------------", verbose) >>
       names.filter(filter).map { name =>
         SpecificationStructure.create(name, classLoader, Some(env)).map(s => Option(s)).
           orElse(warn("[warn] cannot create specification "+name).as(None: Option[SpecificationStructure]))
@@ -55,7 +56,6 @@ trait SpecificationsFinder {
                      filePathReader: FilePathReader = FileSystem): Seq[SpecificationStructure] = {
     val logging = if (verbose) consoleLogging else noLogging
     val specs = findSpecifications(glob, pattern, filter, basePath, verbose, classLoader, filePathReader)
-
     val (result, warnings) = executeOperation(specs, logging)
 
     println(warnings.mkString("\n", "\n", "\n"))
@@ -118,10 +118,19 @@ trait SpecificationsFinder {
         Operations.delayed(Pattern.compile(p))
     }
 
+    val logMessage =
+            s"""|
+                |Searching for specifications with the following settings
+                |  filesrunner.basepath: ${basePath.path}
+                |  filesrunner.path: $pathGlob
+                |  filesrunner.pattern: $pattern
+                """.stripMargin
     for {
+      _ <- log(logMessage, verbose)
       objectPattern <- specObjectPattern
       classPattern  <- specClassPattern
-      paths         <- filePathReader.filePaths(basePath, pathGlob, verbose)
+      _ <- log("-------------", verbose)
+      paths <- filePathReader.filePaths(basePath, pathGlob, verbose)
     } yield paths.map(path => readClassNames(path, objectPattern, classPattern, filePathReader, verbose)).sequence.map(_.flatten)
   }.flatMap[List[String]](identity)
 
