@@ -12,6 +12,7 @@ import SpecificationsFinder.*
 import control.*
 import org.specs2.specification.create.DefaultFragmentFactory
 import org.specs2.specification.create.DefaultFragmentFactory.link
+import main.FilesRunnerArguments.*
 
 /**
  * This trait loads specifications found on a given source directory based
@@ -39,7 +40,7 @@ trait SpecificationsFinder:
    * @return specifications created from specification names
    */
   def specifications(glob: String                   = "**/*.scala",
-                     pattern: String                = SpecificationsFinder.specificationsPattern,
+                     pattern: String                = specificationsPattern,
                      filter: String => Boolean      = { (name: String) => true },
                      basePath: DirectoryPath        = DirectoryPath.unsafe(new java.io.File("src/test/scala").getAbsolutePath),
                      verbose: Boolean               = false,
@@ -87,7 +88,7 @@ case class DefaultSpecificationsFinder(env: Env) extends SpecificationsFinder:
    * a failed example is created for it
    */
   def specificationLinks(glob: String                   = "**/*.scala",
-                         pattern: String                = SpecificationsFinder.specificationsPattern,
+                         pattern: String                = specificationsPattern,
                          filter: String => Boolean      = { (name: String) => true },
                          basePath: DirectoryPath        = DirectoryPath.unsafe(new java.io.File("src/test/scala").getAbsolutePath),
                          verbose: Boolean               = false,
@@ -165,7 +166,7 @@ case class DefaultSpecificationsFinder(env: Env) extends SpecificationsFinder:
    */
   def specPattern(specType: String, pattern: String) = "\\s*"+specType+"\\s*" + pattern
 
-object SpecificationsFinder:
+object SpecificationsFinder extends SpecificationsFinder:
 
   val default: SpecificationsFinder =
     DefaultSpecificationsFinder(EnvDefault.default)

@@ -29,4 +29,7 @@ object Store extends Extract:
       _never = bool("neverStore")
     )
 
-  val allValueNames = Seq("resetStore", "neverStore")
+  val allArguments: Seq[ArgumentType] =
+    Seq(BooleanArgument("resetStore"),
+        BooleanArgument("neverStore"))
+}

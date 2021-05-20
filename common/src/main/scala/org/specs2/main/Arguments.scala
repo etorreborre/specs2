@@ -24,8 +24,9 @@ case class Arguments (
   execute:       Execute          = Execute(),
   store:         Store            = Store(),
   report:        Report           = Report(),
-  commandLine:   CommandLine      = CommandLine()
- ) extends ShowArgs derives CanEqual:
+  commandLine:   CommandLine      = CommandLine(),
+  unknown:       List[String]     = List()
+ ) extends ShowArgs {
   def ex: String                      = select.ex
   def include: String                 = select.include
   def exclude: String                 = select.exclude
@@ -106,6 +107,10 @@ case class Arguments (
 
   override def toString = Seq(select, execute, report, commandLine).mkString("Arguments(", ", ", ")")
 
+  def reportUnknown(): Unit =
+    if (verbose && unknown.nonEmpty)
+      println("Unknown argument values: " + unknown.mkString(", "))
+ }
 
 object Arguments extends Extract:
 
@@ -119,15 +124,16 @@ object Arguments extends Extract:
 
   private[specs2] def extract(using arguments: Seq[String], systemProperties: SystemProperties): Arguments =
     new Arguments (
-       select        = Select.extract,
-       execute       = Execute.extract,
-       store         = Store.extract,
-       report        = Report.extract,
-       commandLine   = CommandLine.extract
+       select      = Select.extract,
+       execute     = Execute.extract,
+       store       = Store.extract,
+       report      = Report.extract,
+       commandLine = CommandLine.extract,
+       unknown     = CommandLine.unknownArguments
     )
 
-  given ArgumentsMonoid: Monoid[Arguments] with
-    def append(a1: Arguments, a2: =>Arguments) = a1 `overrideWith` a2
+  implicit def ArgumentsMonoid: Monoid[Arguments] = new Monoid[Arguments] {
+    def append(a1: Arguments, a2: =>Arguments) = a1 overrideWith a2
     val zero = Arguments()
 
   /**

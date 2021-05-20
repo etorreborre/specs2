@@ -73,6 +73,15 @@ Creation
   Arguments can be created from a sequence of strings
     to declare a Notifier                             $creation1
 
+Unknown arguments
+=================
+
+  Unknown arguments can be detected
+    unknown flag $unknown1
+    unknown option $unknown2
+    negated boolean flag $unknown3
+    with filesrunner arguments $unknown4
+
 """
 
   def values1 = Arguments("xonly").xonly must beTrue
@@ -158,4 +167,16 @@ Creation
 
   def creation1 =
     Arguments("MySpec", "notifier", "IntelliJNotifier").report.notifier === "IntelliJNotifier"
+
+  def unknown1 =
+    CommandLine.unknownArguments(Seq("xonly", "was", "x", "flag", "xonly")) === List("flag")
+
+  def unknown2 =
+    CommandLine.unknownArguments(Seq("xonly", "was", "x", "option", "value", "xonly")) === List("option", "value")
+
+  def unknown3 =
+    CommandLine.unknownArguments(Seq("!xonly", "was", "x")) === List()
+
+  def unknown4 =
+    CommandLine.unknownArguments(Seq("filesrunner.basepath", "examples/shared/src/test/scala", "verbose", "plan", "true", "boom")) === List("boom")
 }

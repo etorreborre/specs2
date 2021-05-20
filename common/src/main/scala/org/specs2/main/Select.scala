@@ -50,4 +50,11 @@ object Select extends Extract:
       _was           = value("was"),
       _selector      = value("selector")
     )
-  val allValueNames = Seq("ex", "include", "exclude", "was", "selector")
+
+  val allArguments: Seq[ArgumentType] =
+    Seq(ValuedArgument("ex"),
+        ValuedArgument("include"),
+        ValuedArgument("exclude"),
+        ValuedArgument("was"),
+        ValuedArgument("selector"))
+

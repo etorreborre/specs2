@@ -4,6 +4,7 @@ package main
 import java.io.File
 
 import io.*
+import text.*
 import text.Split.*
 
 /**
@@ -20,7 +21,6 @@ case class CommandLine(_arguments: Seq[String] = Seq()) extends ShowArgs:
    *         or if an attribute with that name (and any value) has been defined
    */
   def isSet(name: String) = contains(name) || isDefined(name)
-
   /**
    * @return the value for a given attribute
    *         attribute names and values are defined in a positional way where an attribute name is always succeeded
@@ -72,10 +72,85 @@ object CommandLine extends Extract:
   def extract(using arguments: Seq[String], systemProperties: SystemProperties): CommandLine =
     new CommandLine(_arguments = value("commandline").map(splitValues).getOrElse(Seq()) ++ arguments)
 
-  val allValueNames = Select.allValueNames ++ Store.allValueNames ++ Execute.allValueNames ++ Report.allValueNames
+  val allArguments: Seq[ArgumentType] =
+        Select.allArguments ++
+        Store.allArguments ++
+        Execute.allArguments ++
+        Report.allArguments ++
+        FilesRunnerArguments.allArguments
+
+  val allArgumentNames = allArguments.map(_.name)
 
   def splitValues(arguments: String): Seq[String] =
     splitValues(arguments.split(" ").toIndexedSeq)
 
   def splitValues(arguments: Seq[String]): Seq[String] =
-    arguments.splitDashed(allValueNames)
+    arguments.splitDashed(allArgumentNames)
+
+  // try to find if incorrect arguments have been passed on the command line
+  def unknownArguments(implicit arguments: Seq[String]): List[String] = {
+    arguments.toList match {
+      case List() =>
+        List()
+      case name :: value :: rest =>
+        findArgument(name) match {
+          case Some(BooleanArgument(_)) =>
+            if (FromString[Boolean].fromString(value).isDefined) unknownArguments(rest)
+            else unknownArguments(value :: rest)
+          case Some(ValuedArgument(_)) =>
+            unknownArguments(rest)
+          case None =>
+            name :: unknownArguments(value :: rest)
+        }
+      case name :: _ =>
+        findArgument(name) match {
+          case Some(_) => List()
+          case None => List(name)
+        }
+    }
+  }
+
+  private def findArgument(name: String): Option[ArgumentType] =
+    allArguments.find {
+      case BooleanArgument(n) =>
+        (name.startsWith("!") && n.toLowerCase == name.drop(1).toLowerCase) ||
+        (n.toLowerCase == name.toLowerCase)
+      case ValuedArgument(n) =>
+        n.toLowerCase == name.toLowerCase
+    }
+
+
+case class FilesRunnerArguments(
+  verbose: Boolean,
+  basePath: String,
+  glob: String,
+  pattern: String
+)
+
+object FilesRunnerArguments:
+  /** base path for the specification files */
+  val specificationsBasePath: String =
+    "src/test/scala"
+
+  /** glob pattern for the file paths inside the base path */
+  val specificationsPath: String =
+    "**/*.scala"
+
+  /** Regex pattern used to capture a specification name in an object/class declaration */
+  val specificationsPattern: String =
+    "(.*Spec)\\s*extends\\s*.*"
+
+  def extract(args: Arguments): FilesRunnerArguments =
+    FilesRunnerArguments(
+      verbose = args.isSet("filesrunner.verbose"),
+      basePath = args.commandLine.valueOr("filesrunner.basepath", new java.io.File(specificationsBasePath).getAbsolutePath),
+      glob = args.commandLine.valueOr("filesrunner.path", specificationsPath),
+      pattern = args.commandLine.valueOr("filesrunner.pattern", specificationsPattern)
+    )
+
+  val allArguments: List[ArgumentType] =
+    List(
+      BooleanArgument("filesrunner.verbose"),
+      ValuedArgument("filesrunner.basepath"),
+      ValuedArgument("filesrunner.path"),
+      ValuedArgument("filesrunner.pattern"))
