@@ -77,10 +77,3 @@ trait FilesRunnerMain:
     val specificationsFinder = DefaultSpecificationsFinder(env)
     try execute(DefaultFilesRunner(env, specificationsFinder).run, env, exit)
     finally env.shutdown()
-
-/**
- * Run specification files from the command line with specs2.files <specification name> <arguments>
- */
-object files extends FilesRunnerMain:
-  def main(args: Array[String]) =
-    run(args, exit = true)
