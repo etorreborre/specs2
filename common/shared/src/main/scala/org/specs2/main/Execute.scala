@@ -104,6 +104,23 @@ object Execute extends Extract {
       _executor             = value("executor")
     )
   }
-  val allValueNames = Seq("plan", "skipAll", "stopOnFail", "stopOnError", "stopOnIssue", "stopOnSkip", "sequential",
-    "asap", "isolated", "useCustomClassLoader", "threadsNb", "specs2ThreadsNb", "scheduledThreadsNb", "batchSize", "timeFactor", "executor")
+  
+  val allArguments: Seq[ArgumentType] =
+    Seq(BooleanArgument("plan"),
+        BooleanArgument("skipAl"),
+        BooleanArgument("stopOnFail"),
+        BooleanArgument("stopOnError"),
+        BooleanArgument("stopOnIssue"),
+        BooleanArgument("stopOnSkip"),
+        BooleanArgument("sequential"),
+        BooleanArgument("asap"),
+        BooleanArgument("isolated"),
+        BooleanArgument("useCustomClassLoader"),
+        ValuedArgument("threadsNb"),
+        ValuedArgument("specs2ThreadsNb"),
+        BooleanArgument("unbatched"),
+        ValuedArgument("batchSize"),
+        ValuedArgument("timeFactor"),
+        ValuedArgument("timeFactor"),
+        ValuedArgument("executor"))
 }

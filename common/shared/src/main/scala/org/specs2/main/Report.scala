@@ -94,6 +94,23 @@ object Report extends Extract {
   val xonlyFlags = "#x!"
   val allFlags = "#1x!+-o*"
 
-  val allValueNames = Seq("showOnly", "xOnly", "failTrace", "color", "noColor", "colors", "offset", "showTimes",
-    "fullStackTrace", "traceFilter", "checkUrls", "noToc", "notifier", "exporter")
+  val allArguments: Seq[ArgumentType] =
+    Seq(ValuedArgument("showOnly"),
+        BooleanArgument("xOnly"),
+        BooleanArgument("failTrace"),
+        BooleanArgument("color"),
+        BooleanArgument("noColor"),
+        BooleanArgument("verbose"),
+        ValuedArgument("colors"),
+        BooleanArgument("showTimes"),
+        ValuedArgument("offset"),
+        ValuedArgument("smartdiffs"),
+        ValuedArgument("diffsclass"),
+        BooleanArgument("fullStackTrace"),
+        ValuedArgument("traceFilter"),
+        BooleanArgument("checkUrls"),
+        BooleanArgument("noToc"),
+        ValuedArgument("notifier"),
+        ValuedArgument("exporter"))
+
 }

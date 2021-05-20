@@ -8,10 +8,10 @@ import specification.core._
 import text.SourceFile._
 import io._
 import org.specs2.fp.syntax._
-import SpecificationsFinder._
 import control.Operations._
 import org.specs2.control.eff.Eff
 import org.specs2.specification.create.DefaultFragmentFactory
+import main.FilesRunnerArguments._
 
 /**
  * This trait loads specifications found on a given source directory based
@@ -48,7 +48,7 @@ trait SpecificationsFinder {
    * @return specifications created from specification names
    */
   def specifications(glob: String                   = "**/*.scala",
-                     pattern: String                = SpecificationsFinder.specificationsPattern,
+                     pattern: String                = specificationsPattern,
                      filter: String => Boolean      = { (name: String) => true },
                      basePath: DirectoryPath        = DirectoryPath.unsafe(new java.io.File("src/test/scala").getAbsolutePath),
                      verbose: Boolean               = false,
@@ -70,7 +70,7 @@ trait SpecificationsFinder {
    * a failed example is created for it
    */
   def specificationLinks(glob: String                   = "**/*.scala",
-                         pattern: String                = SpecificationsFinder.specificationsPattern,
+                         pattern: String                = specificationsPattern,
                          filter: String => Boolean      = { (name: String) => true },
                          basePath: DirectoryPath        = DirectoryPath.unsafe(new java.io.File("src/test/scala").getAbsolutePath),
                          verbose: Boolean               = false,
@@ -152,17 +152,4 @@ trait SpecificationsFinder {
   def specPattern(specType: String, pattern: String) = "\\s*"+specType+"\\s*" + pattern
 }
 
-object SpecificationsFinder extends SpecificationsFinder {
-
-  /** base path for the specification files */
-  val specificationsBasePath: String =
-    "src/test/scala"
-
-  /** glob pattern for the file paths inside the base path */
-  val specificationsPath: String =
-    "**/*.scala"
-
-  /** Regex pattern used to capture a specification name in an object/class declaration */
-  val specificationsPattern: String =
-    "(.*Spec)\\s*extends\\s*.*"
-}
+object SpecificationsFinder extends SpecificationsFinder

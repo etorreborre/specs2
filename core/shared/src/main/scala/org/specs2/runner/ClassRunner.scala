@@ -30,6 +30,8 @@ trait ClassRunner {
    */
   def run(args: Array[String], exit: Boolean): Unit = {
     val arguments = Arguments(args.drop(1): _*)
+    arguments.reportUnknown()
+
     val env = Env(arguments = arguments, lineLogger = consoleLogger)
 
     val actions: Action[Stats] = args.toList match {
@@ -38,6 +40,7 @@ trait ClassRunner {
         Actions.ok(Stats.empty)
 
       case className :: _ =>
+
         runOperation(createSpecification(className, Thread.currentThread.getContextClassLoader, Some(env))) match {
           case Right(spec) => report(env)(spec)
           case Left(e) =>

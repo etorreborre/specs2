@@ -23,8 +23,9 @@ trait FilesRunner {
    * Run the specifications found in files based on command-line arguments
    */
   def run(args: Array[String], exit: Boolean = false): Unit = {
-    val env = Env(arguments = Arguments(args: _*),
-      lineLogger = consoleLogger)
+    val arguments = Arguments(args: _*)
+    arguments.reportUnknown()
+    val env = Env(arguments = arguments, lineLogger = consoleLogger)
 
     try     execute(run(env), env.arguments, exit)(env)
     finally env.shutdown
@@ -32,13 +33,14 @@ trait FilesRunner {
 
   def run(env: Env): Action[Stats] = {
     val args = env.arguments
-    val verbose = isVerbose(args)
-    val base = args.commandLine.valueOr("filesrunner.basepath", new java.io.File(specificationsBasePath).getAbsolutePath)
+    val filesRunnerArguments = FilesRunnerArguments.extract(args)
+    val verbose = filesRunnerArguments.verbose
+    val base = filesRunnerArguments.basePath
     val specs = for {
       basePath <- Actions.checkThat(base, new java.io.File(base).isDirectory, s"$base must be a directory")
       ss <- findSpecifications(
-        glob = args.commandLine.valueOr("filesrunner.path", specificationsPath),
-        pattern = args.commandLine.valueOr("filesrunner.pattern", specificationsPattern),
+        glob = filesRunnerArguments.glob,
+        pattern = filesRunnerArguments.pattern,
         basePath = DirectoryPath.unsafe(basePath),
         verbose = verbose).toAction
     } yield ss
@@ -55,9 +57,6 @@ trait FilesRunner {
   def sort(env: Env) = { specifications: Seq[SpecificationStructure] =>
     SpecificationStructure.topologicalSort(env)(specifications).getOrElse(specifications)
   }
-
-  /** @return true if the output must be verbose for debugging */
-  def isVerbose(args: Arguments) = args.isSet("filesrunner.verbose")
 
   /** print a message before the execution */
   protected def beforeExecution(args: Arguments, verbose: Boolean): Operation[Unit] = for {
