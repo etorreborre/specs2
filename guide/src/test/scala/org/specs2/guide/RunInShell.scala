@@ -1,7 +1,7 @@
 package org.specs2
 package guide
 
-import org.specs2.runner.SpecificationsFinder._
+import org.specs2.main.FilesRunnerArguments._
 
 object RunInShell extends UserGuidePage { def is = s2"""
 It is not necessary to use a build tool to run a specification. You just need to have the right dependencies on the classpath and use one of the $specs2 runners.
@@ -10,12 +10,12 @@ It is not necessary to use a build tool to run a specification. You just need to
 
 When you use a build tool you generally only need to specify the main dependencies then any transitive dependency will be fetched for you.
 However, when you run specifications from the shell you need to specify the classpath yourself. The best way to do this is to use `sbt` to
-make sure your specification compiles with all the required dependencies, then export the classpath with:
+make sure your specification compiles with all the required dependencies, then export the project classpath:
 ```
 sbt> export Runtime / fullClasspath
 sbt> export Test / fullClasspath
 ```
-With the output of both commands you can define an environment variable, $$SPECS2_PATH
+With the output of both commands you can define an environment variable, `$$SPECS2_PATH`
 ```
 sh> export $$SPECS2_PATH=<runtime classpath>:<test classpath>
 ```
@@ -33,7 +33,7 @@ And the other arguments are used to drive the execution of the specification as 
 
 #### Run several specifications
 
-The `specs2.files` object will select and execute all Specifications found in the test source directory according to the following parameters:
+The `specs2.files` object will select and execute all specifications found in the test source directory according to the following parameters:
 
 Name                    | Default value              | Description
 -----------             | ---------------            | -------------------------

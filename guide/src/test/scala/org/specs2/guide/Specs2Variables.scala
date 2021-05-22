@@ -1,6 +1,8 @@
 package org.specs2
 package guide
 
+import buildinfo._
+
 object Specs2Variables extends Specs2Variables
 
 trait Specs2Variables {
@@ -14,17 +16,11 @@ trait Specs2Variables {
 
   lazy val specs2Variables: Map[String, String] =
     Map(
-      "VERSION"           -> VERSION,
-      "SITE_DIR"          -> SITE_DIR,
-      "PROJECT_DIR"       -> PROJECT_DIR,
-      "GUIDE_DIR"         -> GUIDE_DIR,
-      "EXAMPLES_DIR"      -> EXAMPLES_DIR,
-      "API_DIR"           -> API_DIR
+      "VERSION"      -> VERSION,
+      "SITE_DIR"     -> SITE_DIR,
+      "PROJECT_DIR"  -> PROJECT_DIR,
+      "GUIDE_DIR"    -> GUIDE_DIR,
+      "EXAMPLES_DIR" -> EXAMPLES_DIR,
+      "API_DIR"      -> API_DIR
     )
-
-
-  /** @return true if the version is not timestamped */
-  def isOfficial(version: String): Boolean =
-    !version.contains(BuildInfo.timestamp)
 }
-
