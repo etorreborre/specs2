@@ -63,7 +63,7 @@ Execution
   val nameProp: Prop[String, String] = Prop("name", "eric")
   val noValues: Prop[String, String] = Prop("name")
   val actualOnly: Prop[Int, Int] = Prop(18)
-  val expectedOnly: Prop[Int, Int] = Prop("", Property(), Property(18))
+  val expectedOnly: Prop[Int, Int] = Prop("", Property[Int](), Property(18))
   val constrained: Prop[String, String] = Prop("name", "eric", (s1: String, s2: String) => s1 must contain(s2))
   val withMatcher: Prop[String, String] = Prop("name", "eric", contain(_:String))
 

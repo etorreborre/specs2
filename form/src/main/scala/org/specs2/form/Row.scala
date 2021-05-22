@@ -41,15 +41,15 @@ case class Row(private val cellList: List[Cell]) extends Executable:
 
   /** @return print the row with a padding space size to use for each cell, given cell by cell */
   def text(maxSizes: Seq[Int]): String =
-    def pad(cells: Seq[Cell], sizes: Seq[Int], result: Seq[String]): Seq[String] =
-      cells.toList match
+    def pad(cells: List[Cell], sizes: List[Int], result: List[String]): List[String] =
+      cells match
         case List() => result
-        case List(c) => (result :+ c.text.padTo(sizes.sum + (sizes.size - 1)*3, ' ')).toList
+        case List(c) => result :+ c.text.padTo(sizes.sum + (sizes.size - 1)*3, ' ')
         case c :: rest => sizes match
-          case List() => (result :+ c.text).toList
-          case List(s) => pad(rest, Nil, (result :+ c.text.padTo(s, ' ')).toList)
-          case s :: ss => pad(rest, ss, (result :+ c.text.padTo(s, ' ')).toList)
-    pad(cells, maxSizes, Nil).mkString("| ", " | ", " |")
+          case List() => result :+ c.text
+          case List(s) => pad(rest, Nil, result :+ c.text.padTo(s, ' '))
+          case s :: ss => pad(rest, ss, result :+ c.text.padTo(s, ' '))
+    pad(cells.toList, maxSizes.toList, Nil).mkString("| ", " | ", " |")
 
   /** append a new Cell */
   def add(cell: Cell) =

@@ -51,8 +51,8 @@ object Monad:
 
     def bind[A,B](fa: Option[A])(f: A => Option[B]): Option[B] =
       fa match
-        case _ => None
         case Some(a) => f(a)
+        case _ => None
 
     override def tailrecM[A, B](a: A)(f: A => Option[A Either B]): Option[B] =
       f(a) match

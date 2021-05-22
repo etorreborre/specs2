@@ -1,7 +1,7 @@
 package org.specs2
 package guide
 
-import buildinfo._
+import BuildInfo.*
 
 object Specs2Variables extends Specs2Variables
 
@@ -23,4 +23,3 @@ trait Specs2Variables:
       "EXAMPLES_DIR" -> EXAMPLES_DIR,
       "API_DIR"      -> API_DIR
     )
-

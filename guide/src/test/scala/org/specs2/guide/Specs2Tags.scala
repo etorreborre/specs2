@@ -68,7 +68,7 @@ object VersionTag:
 
   def fromString(s: String): Option[VersionTag] =
     s.split("\\-").toList match {
-      case _ :: number :: timestamp :: commit :: LIit() =>
+      case _ :: number :: timestamp :: commit :: List() =>
         DotNumber.fromString(number).map(dotNumber => VersionTag(dotNumber, Some(timestamp), Some(commit)))
 
       case _ :: number :: List() =>

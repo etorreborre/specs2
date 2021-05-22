@@ -193,7 +193,7 @@ lazy val compilationSettings = Seq(
   Global / onChangedBuildSource := ReloadOnSourceChanges,
   Compile / scalacOptions ++= Seq(
     "-source:future-migration",
-    "-language:implicitConversions,postfixOps,strictEquality",
+    "-language:implicitConversions,postfixOps",
     "-Ykind-projector",
     "-Xcheck-macros",
     "-deprecation:false",
