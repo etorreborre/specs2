@@ -18,8 +18,8 @@ case class Store(_reset:         Option[Boolean]          = None,
 
   override def toString =
     List(
-      "reset" -> _reset      ,
-      "never" -> _never      ).flatMap(showArg).mkString("Store(", ", ", ")")
+      "reset" -> _reset,
+      "never" -> _never).flatMap(showArg).mkString("Store(", ", ", ")")
 
 
 object Store extends Extract:
@@ -32,4 +32,3 @@ object Store extends Extract:
   val allArguments: Seq[ArgumentType] =
     Seq(BooleanArgument("resetStore"),
         BooleanArgument("neverStore"))
-}

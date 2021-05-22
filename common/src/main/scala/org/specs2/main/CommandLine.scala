@@ -128,13 +128,13 @@ object CommandLine extends Extract:
             else unknownArguments(value :: rest)
           case Some(ValuedArgument(_)) =>
             unknownArguments(rest)
-          case None =>
+          case _ =>
             name :: unknownArguments(value :: rest)
         }
       case name :: _ =>
         findArgument(name) match {
           case Some(_) => List()
-          case None => List(name)
+          case _ => List(name)
         }
     }
   }

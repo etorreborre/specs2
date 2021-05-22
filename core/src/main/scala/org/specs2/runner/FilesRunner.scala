@@ -10,6 +10,7 @@ import reporter.*
 import runner.Runner.*
 import org.specs2.fp.syntax.*
 import SpecificationsFinder.*
+import main.FilesRunnerArguments.*
 
 trait FilesRunner:
   /** run any specifications found via arguments */

@@ -132,8 +132,8 @@ object Arguments extends Extract:
        unknown     = CommandLine.unknownArguments
     )
 
-  implicit def ArgumentsMonoid: Monoid[Arguments] = new Monoid[Arguments] {
-    def append(a1: Arguments, a2: =>Arguments) = a1 overrideWith a2
+  implicit def ArgumentsMonoid: Monoid[Arguments] = new Monoid[Arguments]:
+    def append(a1: Arguments, a2: =>Arguments) = a1.overrideWith(a2)
     val zero = Arguments()
 
   /**

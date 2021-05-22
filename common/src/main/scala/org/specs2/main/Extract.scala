@@ -60,3 +60,9 @@ trait Extract:
 
   def instance[T <: AnyRef](name: String)(using m: ClassTag[T]): Option[T] =
     Classes.createInstanceFromName[T](name).runOption
+
+sealed trait ArgumentType:
+  def name: String
+
+case class BooleanArgument(name: String) extends ArgumentType
+case class ValuedArgument(name: String) extends ArgumentType

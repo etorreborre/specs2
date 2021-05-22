@@ -26,8 +26,8 @@ trait SpecificationsFinder:
    * @param filter a function to filter out unwanted specifications
    * @return specifications created from specification names
    */
-  def findSpecifications(glob: String                   = SpecificationsFinder.specificationsPath,
-                         pattern: String                = SpecificationsFinder.specificationsPattern,
+  def findSpecifications(glob: String                   = specificationsPath,
+                         pattern: String                = specificationsPattern,
                          filter: String => Boolean      = { (name: String) => true },
                          basePath: DirectoryPath        = DirectoryPath.unsafe(new java.io.File(specificationsBasePath).getAbsolutePath),
                          verbose: Boolean               = false,
@@ -166,19 +166,7 @@ case class DefaultSpecificationsFinder(env: Env) extends SpecificationsFinder:
    */
   def specPattern(specType: String, pattern: String) = "\\s*"+specType+"\\s*" + pattern
 
-object SpecificationsFinder extends SpecificationsFinder:
+object SpecificationsFinder:
 
   val default: SpecificationsFinder =
     DefaultSpecificationsFinder(EnvDefault.default)
-
-  /** base path for the specification files */
-  val specificationsBasePath: String =
-    "src/test/scala"
-
-  /** glob pattern for the file paths inside the base path */
-  val specificationsPath: String =
-    "**/*.scala"
-
-  /** Regex pattern used to capture a specification name in an object/class declaration */
-  val specificationsPattern: String =
-    "(.*Spec)\\s*extends\\s*.*"
