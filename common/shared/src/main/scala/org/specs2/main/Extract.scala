@@ -64,3 +64,9 @@ trait Extract {
     Classes.createInstanceFromName[T](name).runOption
 
 }
+
+sealed trait ArgumentType {
+  def name: String
+}
+final case class BooleanArgument(name: String) extends ArgumentType
+final case class ValuedArgument(name: String) extends ArgumentType

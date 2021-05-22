@@ -30,6 +30,8 @@ trait ClassRunner {
    */
   def run(args: Array[String], exit: Boolean): Unit = {
     val arguments = Arguments(args.drop(1): _*)
+    arguments.reportUnknown()
+
     val env = Env(arguments = arguments, lineLogger = consoleLogger)
 
     val actions: Action[Stats] = args.toList match {
@@ -37,11 +39,15 @@ trait ClassRunner {
         Actions.fail("there must be at least one argument, the fully qualified class name") >>
         Actions.ok(Stats.empty)
 
-      case className :: rest =>
-        for {
-          spec  <- createSpecification(className, Thread.currentThread.getContextClassLoader, Some(env)).toAction
-          stats <- report(env)(spec)
-        } yield stats
+      case className :: _ =>
+
+        runOperation(createSpecification(className, Thread.currentThread.getContextClassLoader, Some(env))) match {
+          case Right(spec) => report(env)(spec)
+          case Left(e) =>
+            val error = e match { case Left(err) => err; case Right(s) => s}
+            Actions.fail(s"the class '$className' could not be instantiated:\n  $error") >>
+            Actions.ok(Stats.empty)
+        }
     }
     try execute(actions, arguments, exit)(env)
     finally env.shutdown
@@ -97,4 +103,3 @@ object TextRunner extends ClassRunner {
   override def createPrinters(args: Arguments, loader: ClassLoader): Operation[List[Printer]] =
     List(createTextPrinter(args, loader)).sequence.map(_.flatten)
 }
-

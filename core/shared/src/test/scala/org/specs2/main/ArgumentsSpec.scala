@@ -15,11 +15,11 @@ Arguments can be passed on the command line as an Array of Strings. There are 2 
 
  * string arguments which have a specific value
    e.g. `srcTestDir src/test` to specify the directory holding the source files
-                                                                                                                        
+
 Definition
 ==========
 
-  If an argument is specified, its value is returned                                                                  
+  If an argument is specified, its value is returned
     + for a boolean argument like xonly the value is true
     + a boolean argument can be negated by adding ! in front of it.
       ex: `Arguments("!pandoc").commandLine.boolOr("pandoc", true) is false`
@@ -73,7 +73,16 @@ Creation
   Arguments can be created from a sequence of strings
     + to declare a Notifier
 
-                                                                                                               """
+Unknown arguments
+=================
+
+  Unknown arguments can be detected
+    unknown flag $unknown1
+    unknown option $unknown2
+    negated boolean flag $unknown3
+    with filesrunner arguments $unknown4
+
+"""
 
 
   "values" - new group {
@@ -167,5 +176,17 @@ Creation
   "creation" - new group {
     eg := Arguments("MySpec", "notifier", "IntelliJNotifier").report.notifier === "IntelliJNotifier"
   }
-}
 
+  def unknown1 =
+    CommandLine.unknownArguments(Seq("xonly", "was", "x", "flag", "xonly")) === List("flag")
+
+  def unknown2 =
+    CommandLine.unknownArguments(Seq("xonly", "was", "x", "option", "value", "xonly")) === List("option", "value")
+
+  def unknown3 =
+    CommandLine.unknownArguments(Seq("!xonly", "was", "x")) === List()
+
+  def unknown4 =
+    CommandLine.unknownArguments(Seq("filesrunner.basepath", "examples/shared/src/test/scala", "verbose", "plan", "true", "boom")) === List("boom")
+
+}
