@@ -25,8 +25,6 @@ lazy val specs2 = project.in(file(".")).
     shapelessJS, junitJS, scalacheckJS, mockJS
   )
 
-val scala211 = "2.11.12"
-
 /** COMMON SETTINGS */
 lazy val specs2Settings = Seq(
   organization := "org.specs2",
@@ -34,7 +32,7 @@ lazy val specs2Settings = Seq(
   specs2ShellPrompt,
   scalaVersion := "2.13.5",
   SettingKey[Boolean]("ide-skip-project").withRank(KeyRanks.Invisible) := platformDepsCrossVersion.value == ScalaNativeCrossVersion.binary,
-  crossScalaVersions := Seq(scalaVersion.value, scala211, "2.12.13"))
+  crossScalaVersions := Seq(scalaVersion.value, "2.12.13"))
 
 lazy val tagName = Def.setting {
   s"specs2-${version.value}"
@@ -54,8 +52,8 @@ lazy val commonJsSettings = Seq(
 )
 
 lazy val commonNativeSettings = Seq(
-  scalaVersion := scala211,
-  crossScalaVersions := Seq(scala211),
+  scalaVersion := "2.13",
+  crossScalaVersions := Seq("2.13"),
   nativeLinkStubs := true
 )
 
