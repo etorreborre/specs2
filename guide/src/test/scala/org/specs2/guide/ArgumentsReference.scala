@@ -1,7 +1,7 @@
 package org.specs2
 package guide
 
-import org.specs2.runner.SpecificationsFinder.*
+import org.specs2.main.FilesRunnerArguments.*
 
 object ArgumentsReference extends UserGuidePage { def is = "Arguments reference".title ^ s2"""
 
@@ -35,27 +35,28 @@ This reference guide for arguments is divided in several sections:
  - "reporting" arguments to control the output
  - API for arguments when used in the code
 
+**Tip!** the `verbose` argument will report any unknown argument passed on the command line
+
 ## Paths
 
  Name                    | Default value                  | Description
  ----------------------- | ------------------------------ | -------------------------------------------------------------------------------------------
  `stats.outdir`          | `target/specs2-reports/stats`  | output directory for run statistics (see $Selection)
  `junit.outdir`          | `target/test-reports/`         | output directory for JUnit XML files (see $JUnitXmlOutput)
+ `html.outdir`           | `target/specs2-reports`        | output directory for html files (see $HtmlOutput)
  `filesrunner.basepath`  | `$specificationsBasePath`      | source directory for test files (see $RunInShell)
  `filesrunner.path`      | `$specificationsPath`          | glob pattern for the file paths (see $RunInShell)
  `filesrunner.pattern`   | `$specificationsPattern`       | regular expression capturing the specification class/object name (see $RunInShell)
  `filesrunner.verbose`   | `false`                        | logs of searched paths and potential classes to instantiate (see $RunInShell)
- `html.outdir`           | `target/specs2-reports`        | output directory for html files (see $HtmlOutput)
-
 
 ## Selection
 
  Name                    | Default value                  | Description
  ----------------------- | ------------------------------ | -------------------------------------------------------------------------------------------
  `ex`                    | `.*`                           | regular expression specifying the examples to execute. Use `ex .*brilliant.*` on the command line
+ `was`                   | `""`                           | select only some previously executed examples based on their status
  `include`               | `""`                           | execute only the fragments tagged with any of the comma-separated list of tags: `t1,t2,...`
  `exclude`               | `""`                           | do not execute the fragments tagged with any of the comma-separated list of tags: `t1,t2,...`
- `was`                   | `""`                           | select only some previously executed examples based on their status
  `selector`              | `""`                           | implementation of the `org.specs2.specification.process.Selector` trait
 
 ## Execution
@@ -108,7 +109,6 @@ See the $ConsoleOutput page for a more precise description of these options.
  `all`                   | `false`                        | execute and report linked specifications
  `notifier`              | `""`                           | name of a class extending the `org.specs2.reporter.Notifier` trait
  `printer`               | `""`                           | name of a class extending the `org.specs2.reporter.Printer` trait
- `reporter`              | `""`                           | name of a class extending the `org.specs2.reporter.Reporter` trait
 
 For ${"the HTML output" ~/ HtmlOutput} the following options can be used:
 

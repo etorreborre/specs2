@@ -19,7 +19,7 @@ case class Report(
                    _checkUrls :        Option[Boolean]          = None,
                    _notoc:             Option[Boolean]          = None,
                    _notifier:          Option[String]           = None,
-                   _exporter:          Option[String]           = None) extends ShowArgs:
+                   _printer:           Option[String]           = None) extends ShowArgs:
 
   import Arguments.*
 
@@ -36,7 +36,7 @@ case class Report(
   def notoc: Boolean                 = _notoc.getOrElse(false)
   def hasToc: Boolean                = !notoc
   def notifier: String               = _notifier.getOrElse("")
-  def exporter: String               = _exporter.getOrElse("")
+  def printer: String                = _printer.getOrElse("")
 
   def overrideWith(other: Report) =
     new Report(
@@ -51,7 +51,7 @@ case class Report(
       other._checkUrls        .orElse(_checkUrls),
       other._notoc            .orElse(_notoc),
       other._notifier         .orElse(_notifier),
-      other._exporter         .orElse(_exporter)
+      other._printer          .orElse(_printer)
     )
 
   override def toString = List(
@@ -66,7 +66,7 @@ case class Report(
     "checkUrls"         -> _checkUrls,
     "notoc"             -> _notoc,
     "notifier"          -> _notifier,
-    "exporter"          -> _exporter).flatMap(showArg).mkString("Report(", ", ", ")")
+    "printer"           -> _printer).flatMap(showArg).mkString("Report(", ", ", ")")
 
 
 object Report extends Extract:
@@ -85,7 +85,7 @@ object Report extends Extract:
       _checkUrls         = bool("checkUrls"),
       _notoc             = bool("noToc"),
       _notifier          = value("notifier"),
-      _exporter          = value("exporter")
+      _printer           = value("printer")
     )
 
   val xonlyFlags = "#x!"
@@ -108,4 +108,4 @@ object Report extends Extract:
         BooleanArgument("checkUrls"),
         BooleanArgument("noToc"),
         ValuedArgument("notifier"),
-        ValuedArgument("exporter"))
+        ValuedArgument("printer"))

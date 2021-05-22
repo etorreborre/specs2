@@ -141,7 +141,7 @@ trait ArgumentsCreation extends org.specs2.main.ArgumentsCreation with MutableAr
                          checkUrls:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
                          notoc:             ArgProperty[Boolean]           = ArgProperty[Boolean](),
                          notifier:          ArgProperty[String]            = ArgProperty[String](),
-                         exporter:          ArgProperty[String]            = ArgProperty[String]()) = updateArguments(super.report(
+                         printer:          ArgProperty[String]            = ArgProperty[String]()) = updateArguments(super.report(
       xonly,
       showOnly,
       failtrace,
@@ -154,4 +154,5 @@ trait ArgumentsCreation extends org.specs2.main.ArgumentsCreation with MutableAr
       checkUrls,
       notoc,
       notifier,
-      exporter))
+      printer))
+  

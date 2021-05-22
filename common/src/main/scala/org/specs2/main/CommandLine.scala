@@ -79,6 +79,35 @@ object CommandLine extends Extract:
         Report.allArguments ++
         FilesRunnerArguments.allArguments
 
+  // other arguments which are not mentioned in Arguments
+  // this is a stop gap measure until a more modular solution is found
+  val extraArguments: Seq[ArgumentType] = List(
+        BooleanArgument("verbose"),
+        BooleanArgument("console"),
+        BooleanArgument("all"),
+        BooleanArgument("silent"),
+        BooleanArgument("pandoc"),
+        ValuedArgument("scalacheck.mintestsok"),
+        ValuedArgument("scalacheck.minsize"),
+        ValuedArgument("scalacheck.maxdiscardratio"),
+        ValuedArgument("scalacheck.maxsize"),
+        ValuedArgument("scalacheck.workers"),
+        ValuedArgument("scalacheck.seed"),
+        ValuedArgument("scalacheck.verbosity"),
+        ValuedArgument("sbt.tags"),
+        ValuedArgument("stats.outdir"),
+        ValuedArgument("junit.outdir"),
+        ValuedArgument("markdown.outdir"),
+        ValuedArgument("markdown.ext"),
+        ValuedArgument("html.outdir"),
+        ValuedArgument("html.template"),
+        ValuedArgument("html.variables"),
+        ValuedArgument("html.nostats"),
+        ValuedArgument("html.search"),
+        ValuedArgument("html.toc"),
+        ValuedArgument("html.toc.entrymaxsize"),
+        ValuedArgument("html.warn.missingref"))
+
   val allArgumentNames = allArguments.map(_.name)
 
   def splitValues(arguments: String): Seq[String] =

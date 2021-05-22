@@ -142,8 +142,8 @@ trait ArgumentsCreation:
       checkUrls:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
       notoc:             ArgProperty[Boolean]           = ArgProperty[Boolean](),
       notifier:          ArgProperty[String]            = ArgProperty[String](),
-      exporter:          ArgProperty[String]            = ArgProperty[String]()) = new Arguments(
-       report = Report(xonly.toOption.map(v => if v then Report.xonlyFlags else Report.allFlags).orElse(showOnly.toOption),
+      printer:          ArgProperty[String]            = ArgProperty[String]()) = new Arguments(
+       report = Report(xonly.toOption.map(v => if (v) Report.xonlyFlags else Report.allFlags).orElse(showOnly.toOption),
                        failtrace.toOption,
                        color.toOption,
                        colors.toOption,
@@ -154,7 +154,7 @@ trait ArgumentsCreation:
                        checkUrls.toOption,
                        notoc.toOption,
                        notifier.toOption,
-                       exporter.toOption))
+                       printer.toOption))
 
 
 
