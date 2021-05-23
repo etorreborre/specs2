@@ -27,6 +27,13 @@ trait IsEmptyLowPriority1 extends IsEmptyLowPriority2:
   given listIsEmpty[T]: IsEmpty[List[T]] with
     def isEmpty(t: List[T]): Boolean =
       t.isEmpty
+  given optionIsEmpty[T]: IsEmpty[Option[T]] with
+    def isEmpty(t: Option[T]): Boolean =
+      !t.isDefined
+
+  given eitherIsEmpty[E, T]: IsEmpty[Either[E, T]] with
+    def isEmpty(t: Either[E, T]): Boolean =
+      !t.toOption.isDefined
 
 trait IsEmptyLowPriority2:
 

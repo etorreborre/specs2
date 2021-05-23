@@ -2,21 +2,18 @@ package org.specs2
 package matcher
 
 import control.*
-import data.Sized
+import collection.*
+import collection.Seqx.*
 import text.Regexes.*
 import text.Plural.*
 import text.NotNullStrings.*
-import collection.Seqx.*
 
 import scala.collection.Traversable
-import execute.*
-import control.Times
-import execute.Failure
-
 import scala.annotation.tailrec
+import execute.*
 import ValueChecks.{given, *}
 import StringMatchers.{given, *}
-import org.specs2.matcher.describe.Diffable
+import describe.Diffable
 import Result.*
 
 /**

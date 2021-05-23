@@ -1,5 +1,5 @@
 package org.specs2
-package data
+package collection
 
 /**
  * A trait for anything that can be sized

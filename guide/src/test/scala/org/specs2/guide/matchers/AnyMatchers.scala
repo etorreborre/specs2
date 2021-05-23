@@ -18,5 +18,14 @@ These matchers can be used with any object, regardless of its type:
  * `beAssignableFrom` check if a class is assignable from another
  * `beAnInstanceOf[T]` check if an object is an instance of type `T`
 
+#### With a typeclass
+
+These matchers can be used with types having a specific typeclass instance:
+
+ Matcher    | Typeclass                       | Description
+ -------    | -------                         | -----
+ `beEmpty`  | `org.specs2.collection.IsEmpty` | matches values which can be described as "empty": string, list, option,...
+ `haveSize` | `org.specs2.collection.Sized`   | matches values which can have a "size": string, list, JSON,...
+
 """
 }

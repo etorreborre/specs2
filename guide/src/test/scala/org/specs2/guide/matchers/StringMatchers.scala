@@ -10,10 +10,9 @@ object StringMatchers extends UserGuideCard {
  Matcher                               | Description
  ---------                             | ------------
  `beMatching`                          | check if a string matches a regular expression
- `=~(s)`                               | shortcut for `beMatching("(.|\\s)*"+s+"(.|\\s)*")`
+ `beMatchingWithPart(s)`               | shortcut for `beMatching("(.|\\s)*"+s+"(.|\\s)*")` (alias: `=~`)
  `find(exp).withGroups(a, b, c)`       | check if some groups are found in a string
- `have length`                         | check the length of a string
- `have size`                           | check the size of a string (seen as an `Iterable[Char]`)
+ `haveSize`                            | check the size of a string (alias `haveLength`)
  `beEmpty`                             | check if a string is empty
  `beEqualTo(b).ignoreCase`             | check if 2 strings are equal regardless of casing
  `beEqualTo(b).ignoreSpace`            | check if 2 strings are equal when you `replaceAll("\\s", "")`
@@ -22,7 +21,5 @@ object StringMatchers extends UserGuideCard {
  `contain(b)`                          | check if a string contains another one
  `startWith(b)`                        | check if a string starts with another one
  `endWith(b)`                          | check if a string ends with another one
-
-
 """
 }

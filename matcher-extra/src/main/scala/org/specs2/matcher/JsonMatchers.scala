@@ -1,14 +1,12 @@
 package org.specs2
 package matcher
 
-import org.specs2.data.Sized
+import org.specs2.collection.Sized
 import org.specs2.execute.ResultLogicalCombinators.*
 import org.specs2.execute.*
 import org.specs2.json.*
-import Json.*
 import org.specs2.text.NotNullStrings.*
-import text.NotNullStrings.*
-import json.Json.*
+import Json.*
 import util.matching.Regex
 import Matcher.{given}
 import Result.*
