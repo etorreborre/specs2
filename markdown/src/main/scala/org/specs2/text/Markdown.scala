@@ -45,13 +45,11 @@ import java.util.Set
 private[specs2]
 trait Markdown:
 
-  private val pegDownOptions: DataHolder = PegdownOptionsAdapter.flexmarkOptions(
-            ~PegdownExtensions.QUOTES &
-            ~PegdownExtensions.SMARTS &
-            ~PegdownExtensions.EXTANCHORLINKS)
-
   private val options: DataHolder =
-    MutableDataSet.merge(pegDownOptions, MutableDataSet().set(Parser.EXTENSIONS, Arrays.asList[Extension](new Specs2Extension)))
+    PegdownOptionsAdapter.flexmarkOptions(
+      ~PegdownExtensions.QUOTES &
+      ~PegdownExtensions.SMARTS &
+      ~PegdownExtensions.EXTANCHORLINKS, new Specs2Extension)
 
   /**
    * @return a Markdown parser
@@ -111,5 +109,5 @@ object Specs2AttributeProvider:
 class Specs2Extension extends HtmlRenderer.HtmlRendererExtension:
   override def rendererOptions(options: MutableDataHolder) = ()
 
-  override def extend(rendererBuilder: HtmlRenderer.Builder, rendererType: String) =
+  override def extend(rendererBuilder: HtmlRenderer.Builder, rendererType: String): Unit =
     rendererBuilder.attributeProviderFactory(Specs2AttributeProvider.createFactory)

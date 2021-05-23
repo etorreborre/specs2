@@ -34,6 +34,15 @@ class MarkdownSpec extends Spec:
   "the encoding must be ok with utf-8 characters" >>
   { toXhtml("⊛").toString must contain("⊛") }
 
+  "a markdown table must be rendered as a html table" >> {
+    val table = """| | Title1 | Title2 |
+                   | | ----   | ----   |
+                   | | value1 | value2 |
+                   |
+                   |""".stripMargin
+    toHtml(table).toString must contain("<table>")
+  }
+
   val someCode = """
 This is a paragraph presenting some code:
 
