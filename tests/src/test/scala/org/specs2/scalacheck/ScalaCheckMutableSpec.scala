@@ -24,5 +24,5 @@ class ScalaCheckMutableSpec(val env: Env) extends Specification with ScalaCheck 
 
   val failingProperties: Properties = new Properties("Hello") {
     property("ints") =
-      forAll(Gen.choose(0, 10))((i: Int) => i ==== i + 1)
+      forAll(Gen.choose(0, 10))((i: Int) => i === i + 1)
   }

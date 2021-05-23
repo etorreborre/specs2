@@ -39,7 +39,7 @@ Compare result
 
 
   Maps
-  ====
+  ===
     equal maps should return MapIdentical                       ${ Diffable.diff(Map("x" -> "y"), Map("x" -> "y")) must ===(MapIdentical(Map("x" -> "y"))) }
     different map should show which elements were changed       ${ Diffable.diff(Map("x" -> "y"), Map("x" -> "z")) must ===(MapDifference(Seq.empty, changed = Seq("x" -> PrimitiveDifference("y", "z")), Seq.empty, Seq.empty)) }
     different map should show which elements were removed       ${ Diffable.diff(Map("x" -> "y"), Map.empty[String, String]) must ===(MapDifference(Seq.empty, Seq.empty, Seq.empty, removed = Seq("x" -> "y"))) }

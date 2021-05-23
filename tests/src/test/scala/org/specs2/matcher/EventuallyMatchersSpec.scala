@@ -23,7 +23,7 @@ or until it succeeds.
     val iterator = List(1, 2, 3).iterator
     iterator.next must be_==(3).eventually
   }
-  "A matcher can work with eventually and be_== but a type annotation is necessary or a be_=== matcher" >> {
+  "A matcher can work with eventually and be_== but a type annotation is necessary or a be_== matcher" >> {
     val option: Option[Int] = Some(3)
     option must be_==(Some(3)).eventually
   }

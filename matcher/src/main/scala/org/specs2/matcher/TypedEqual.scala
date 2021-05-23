@@ -16,22 +16,13 @@ trait TypedEqual:
    * It is equivalent to writing a must ==(b)
    */
   extension [T](t: =>T)(using not: NotGiven[NoTypedEqual])
-    /** typed equality matcher on Expectables */
-    def ====(other: =>T)(using di: Diffable[T]): Result =
-      createExpectable(t).applyMatcher(new EqualityMatcher(other))
-
-    /** ! typed equality matcher on Expectables */
-    def !===(other: =>T)(using di: Diffable[T]): Result =
-      createExpectable(t).applyMatcher(new EqualityMatcher(other).not)
-
-  extension [T, S >: T](t: =>T)(using not: NotGiven[NoTypedEqual])
     /** equality matcher on Expectables */
-    def ===(other: =>S): Result =
-      createExpectable(t).applyMatcher[S](new BeEqualTo(other))
+    def ===(other: =>T): Result =
+      createExpectable(t).applyMatcher[T](new BeEqualTo(other))
 
     /** ! equality matcher on Expectables */
-    def !==(other: =>S): Result =
-      createExpectable(t).applyMatcher[S](new BeEqualTo(other).not)
+    def !==(other: =>T): Result =
+      createExpectable(t).applyMatcher[T](new BeEqualTo(other).not)
 
 object TypedEqual extends TypedEqual with ExpectationsCreation
 

@@ -30,51 +30,35 @@ trait AnyMatchers:
     beTheSameAs(t)
 
   /** matches if a == b */
-  def be_==[T](t: =>T): EqualityMatcher[Any] =
+  def be_==[T : Diffable](t: =>T): EqualityMatcher[T] =
     beEqualTo(t)
 
   /** matches if a != b */
-  def be_!=[T](t: =>T): Matcher[Any] =
+  def be_!=[T : Diffable](t: =>T): Matcher[T] =
     be_==(t).not
 
   /** matches if a == b */
-  def be_===[T : Diffable](t: =>T): EqualityMatcher[T] =
-    beTypedEqualTo(t)
-
-  /** matches if a == b */
   def ===[T : Diffable](t: =>T): EqualityMatcher[T] =
-    be_===(t)
-
-  /** matches if a != b */
-  def be_!==[T : Diffable](t: =>T): Matcher[T] =
-    be_===(t).not
+    be_==[T](t)
 
   /** matches if a != b */
   def !==[T : Diffable](t: =>T): Matcher[T] =
-    be_!==(t)
+    be_!=(t)
 
   /** matches if a == b */
-  def beEqualTo[T](t: =>T): EqualityMatcher[Any] =
-    new BeEqualTo(t)
-
-  /** matches if a == b */
-  def equalTo[T](t: =>T): EqualityMatcher[Any] =
-    beEqualTo(t)
-
-  /** matches if a == b */
-  def beTypedEqualTo[T : Diffable](t: =>T): EqualityMatcher[T] =
+  def beEqualTo[T : Diffable](t: =>T): EqualityMatcher[T] =
     new EqualityMatcher(t)
 
   /** matches if a == b */
-  def typedEqualTo[T](t: =>T): EqualityMatcher[T] =
-    beTypedEqualTo(t)
+  def equalTo[T : Diffable](t: =>T): EqualityMatcher[T] =
+    beEqualTo(t)
 
   /** matches if a == b after an implicit conversion */
-  def be_==~[T : Diffable, S](s: =>S)(using convert: S => T): Matcher[T] =
+  def be_==~[T : Diffable, S](s: =>S)(using convert: Conversion[S, T]): Matcher[T] =
     new EqualityMatcher(convert(s)).adapt(identity, identity)
 
   /** matches if a == b after an implicit conversion */
-  def ==~[T : Diffable, S](s: =>S)(using convert: S => T): Matcher[T] =
+  def ==~[T : Diffable, S](s: =>S)(using convert: Conversion[S, T]): Matcher[T] =
     be_==~(s)
 
   /** negate a matcher */

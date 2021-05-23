@@ -22,13 +22,13 @@ s2"the directoryPath method should return well-formed paths $e1"
 def e1 = Paths.directoryPath("/tmp/path/to/dir") must beEqualTo("/tmp/path/to/dir/")
 }}
 
-The must{.scala} operator takes the actual value returned by `directoryPath` and applies it to a `Matcher` built with the expected value. `beEqualTo` is one of the many matchers defined by $specs2, it just checks if 2 values are equal.
+The `must` operator takes the actual value returned by `directoryPath` and applies it to a `Matcher` built with the expected value. `beEqualTo` is one of the many matchers defined by $specs2, it just checks if 2 values are equal.
 
 In the following sections you will learn:
 
  - the different ways of checking the [equality](#equality) of values
- - to use the matchers for the most [common data types](#out-of-the-box) in Scala, and most notably `Traversable`s
- - to use [other types of matchers](#optional) in less common situations: json, xml, files, parsers combinators...
+ - to use the matchers for the most [common data types](#out-of-the-box) in Scala, and most notably collections
+ - to use [other types of matchers](#optional) in less common situations: json, xml, files,...
  - how to [derive](#derive-matchers) a new matcher from an existing one
  - how to create [your own matchers](#create-your-own)
 
@@ -36,7 +36,7 @@ In the following sections you will learn:
 
 ${EqualityMatchers.text}
 
-Now let's check the other matchers.
+Now let's check out the other matchers.
 
 ### Out of the box
 
@@ -80,7 +80,7 @@ def beShort1 = be_<=(5) ^^ { (t: Any) => t.toString.length }
 def beShort2 = be_<=(5) ^^ { (t: Any) => t.toString.length aka "the string size" }
 
 // !!! note: use a BeTypedEqualTo matcher when using aka and equality, otherwise you will be matching against Expectable[T] !!!
-def beFive = be_===(5) ^^ { (t: Any) => t.toString.length aka "the string size" }
+def beFive = be_==(5) ^^ { (t: Any) => t.toString.length aka "the string size" }
 
 // The adaptation can also be done the other way around when it's more readable
 def haveExtension(extension: =>String) = ((_:File).getPath) ^^ endWith(extension)

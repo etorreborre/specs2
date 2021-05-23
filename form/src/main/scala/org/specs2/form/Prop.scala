@@ -134,7 +134,8 @@ object Prop:
     new Prop[T, T](actual = Property(act))
 
   /** default constraint function */
-  private[Prop] def checkProp[T, S]: (T, T) => Result = (t: T, s: T) => new BeTypedEqualTo(s).apply(createExpectable(t))
+  private[Prop] def checkProp[T, S]: (T, T) => Result = (t: T, s: T) =>
+    new BeEqualTo(s).apply(createExpectable(t))
 
 trait PropSyntax:
 

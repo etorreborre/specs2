@@ -30,7 +30,7 @@ class BeforeAfterSpecSpec extends Specification { def is = s2"""
     }
 
     runSpec(spec)
-    messages.toList ==== List("before all", "e1", "e2", "after all")
+    messages.toList === List("before all", "e1", "e2", "after all")
 
   def withTags1 =
     val messages = new ArrayBuffer[String]
@@ -52,7 +52,7 @@ class BeforeAfterSpecSpec extends Specification { def is = s2"""
     }
 
     runSpec(spec, arguments = Arguments("include", "s"))
-    messages.toList ==== List("before all", "e1", "after all")
+    messages.toList === List("before all", "e1", "after all")
 
   def withTags2 =
     val messages = new ArrayBuffer[String]
@@ -72,7 +72,7 @@ class BeforeAfterSpecSpec extends Specification { def is = s2"""
     }
 
     runSpec(spec, arguments = Arguments("exclude", "s"))
-    messages.toList ==== List("before all", "e2", "after all")
+    messages.toList === List("before all", "e2", "after all")
 
   def runSpec(s: SpecificationStructure, arguments: Arguments = Arguments()) =
     val env = Env(arguments = arguments, printerLogger = NoPrinterLogger)

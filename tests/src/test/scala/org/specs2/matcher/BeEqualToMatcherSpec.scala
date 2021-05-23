@@ -21,27 +21,27 @@ class BeEqualToMatcherSpec extends Spec with ResultMatchers with ShouldMatchers 
   ${ "a" !== "b" }
 
   Typed equality
-  ${ "a" must be_===("a") }
-  ${ "a" ==== "a" }
-  ${ "a" must not(be_===("b")) }
-  ${ "a" must be_!==("b") }
-  ${ "a" must ===("a") }
-  ${ "a" must not(be_===("b")) }
-  // doesn't compile
-  // { "a" ==== 1 }
-  ${ "a" must not(be_===("b")) }
+  ${ "a" must be_==("a") }
+  ${ "a" === "a" }
   ${ "a" must not(be_==("b")) }
-  ${ "a" must be_!==("b") }
-  ${ "a" must not(be_!==("a")) }
+  ${ "a" must be_!=("b") }
+  ${ "a" must ===("a") }
+  ${ "a" must not(be_==("b")) }
+  // doesn't compile
+  // { "a" === 1 }
+  ${ "a" must not(be_==("b")) }
+  ${ "a" must not(be_==("b")) }
+  ${ "a" must be_!=("b") }
+  ${ "a" must not(be_!=("a")) }
 
   Array equality uses deep array comparison, with or without typed equality
   ${ Array(1, 2) must be_==(Array(1, 2)) }
-  ${ Array(1, 2) must be_===(Array(1, 2)) }
-  ${ Array(1, 3) must not(be_===(Array(1, 2))) }
-  ${ Array(1, 2) must be_===(Array(1, 2)) }
-  ${ Array(Array(1, 2)) must be_===(Array(Array(1, 2))) }
-  ${ Array(1, 3) must not(be_===(Array(1, 2))) }
-  ${ (Array(1, 3) must be_===(Array(1, 2))) returns
+  ${ Array(1, 2) must be_==(Array(1, 2)) }
+  ${ Array(1, 3) must not(be_==(Array(1, 2))) }
+  ${ Array(1, 2) must be_==(Array(1, 2)) }
+  ${ Array(Array(1, 2)) must be_==(Array(Array(1, 2))) }
+  ${ Array(1, 3) must not(be_==(Array(1, 2))) }
+  ${ (Array(1, 3) must be_==(Array(1, 2))) returns
      """Array(1, 3 != 2)""" }
 
   Set equality
@@ -49,14 +49,14 @@ class BeEqualToMatcherSpec extends Spec with ResultMatchers with ShouldMatchers 
   ${ (Set(1) must be_==(Set.empty[Int])) returns "Set(1) != Set()"}
   ${ (Set(1, 2) must be_==(Set(2, 3))) returns
       """Set(1, 2) != Set(2, 3)""" }
-  ${ (Set(1, 2) must be_===(Set(2, 3))) returns
+  ${ (Set(1, 2) must be_==(Set(2, 3))) returns
       """|Set(2,
          |    added: 3,
          |    removed: 1)""".stripMargin }
 
   Map equality
   ${ Map(1 -> 2, 3 -> 4) must be_==(Map(3 -> 4, 1 -> 2)) }
-  ${ Map(1 -> 2, 3 -> 4) must be_===(Map(3 -> 1, 1 -> 4)) returns
+  ${ Map(1 -> 2, 3 -> 4) must be_==(Map(3 -> 1, 1 -> 4)) returns
      s"""|Map(1 -> {2 != 4},
          |    3 -> {4 != 1})""".stripMargin }
   ${ mutableMap(1 -> 2, 3 -> 4) must be_==(mutableMap(3 -> 4, 1 -> 2)) }
@@ -64,8 +64,8 @@ class BeEqualToMatcherSpec extends Spec with ResultMatchers with ShouldMatchers 
   Other collections use normal equality but display missing elements
   ${ Seq(1, 2) must be_==(Seq(1, 2)) }
   ${ (Seq(1, 2) must be_==(Seq(2, 3))) returns """List(1, 2) != List(2, 3)""" }
-  ${ Seq(1, 2) must be_===(Seq(1, 2)) }
-  ${ (Seq(1, 2) must be_===(Seq(2, 3))).normalized ====
+  ${ Seq(1, 2) must be_==(Seq(1, 2)) }
+  ${ (Seq(1, 2) must be_==(Seq(2, 3))).normalized ===
        """|- 1
           |+ 2
           |- 2
@@ -98,17 +98,17 @@ Details
 """
 
   def r1 = ((null: String) must ===("1")) must not(throwAn[Exception])
-  def r11 = (null: String) must be_===("1") must not(throwAn[Exception])
+  def r11 = (null: String) must be_==("1") must not(throwAn[Exception])
 
-  def d1 = List(1, 2) must be_===( List("1", "2") ) must beFailing
+  def d1 = List(1, 2) must be_==( List("1", "2") ) must beFailing
 
   def d2 =
     ("hello" must ===(Hello())) must beFailing(
         "\\Qhello: java.lang.String != hello: org.specs2.matcher.Hello\\E")
 
-  def d3 = { List("1, 2") must be_===( List("1", "2") ) must beFailing }
+  def d3 = { List("1, 2") must be_==( List("1", "2") ) must beFailing }
 
-  def d4= { Map(1 -> "2") must be_===( Map(1 -> 2) ) must beFailing( "\\QMap(1 -> {'2' != 2})\\E" ) }
+  def d4= { Map(1 -> "2") must be_==( Map(1 -> 2) ) must beFailing( "\\QMap(1 -> {'2' != 2})\\E" ) }
 
   def mutableMap(kv: (Int, Int)*): scala.collection.mutable.Map[Int, Int] =
     val map = new scala.collection.mutable.HashMap[Int, Int]

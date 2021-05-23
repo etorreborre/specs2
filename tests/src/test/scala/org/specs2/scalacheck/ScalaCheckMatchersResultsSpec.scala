@@ -39,7 +39,7 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
    ${check(datatableFailureProp) must beFailing(withMessage("x \\| 1 \\| 2 \\| 1 != 2"))}
 
    A thrown datatable must report the datatable
-   ${check(datatableThrownProp).message.trimLinesSpaceEnd ====
+   ${check(datatableThrownProp).message.trimLinesSpaceEnd ===
      """|Falsified after 0 passed tests.
         |> ARG_0: true
         |>

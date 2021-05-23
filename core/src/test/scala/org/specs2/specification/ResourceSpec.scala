@@ -29,7 +29,7 @@ the execution of the specification
   def demo =
     val messages = new ArrayBuffer[String]
     runSpec(ResourceExample(messages))
-    messages.toList ==== List("acquired", "e1 0", "e2 1", "released with value 2")
+    messages.toList === List("acquired", "e1 0", "e2 1", "released with value 2")
 
   def acquireError =
     val logger = stringPrinterLogger

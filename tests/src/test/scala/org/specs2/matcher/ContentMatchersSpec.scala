@@ -64,7 +64,7 @@ case class comp() extends MustMatchers with TestFileNames with ContentMatchers:
   def e6 =
     val message = (((dir | f6).toFile, (dir | f7).toFile) must haveSameLines.showOnly(1.difference).unordered).message
     val lines = message.split("\n").toSeq.map(s => removeColors(s)).mkString("\n")
-    lines ====
+    lines ===
       s"""|${(dir | f6).path} is not the same as ${(dir | f7).path}
           |    + 2. morning""".stripMargin
 

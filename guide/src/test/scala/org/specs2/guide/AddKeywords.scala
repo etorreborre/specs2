@@ -9,10 +9,10 @@ class MySpecification extends mutable.Specification {
 
   "the 'and' function" should {
     "return true when passed true, true" >> {
-      (true && true) ==== true
+      (true && true) === true
     }
     "return false when passed true, false" >> {
-      (true && false) ==== false
+      (true && false) === false
     }
   }
 
@@ -48,10 +48,10 @@ class MySpecification extends org.specs2.mutable.Specification with ToKeyword {
 
     "the 'and' function is used" to {
       "return true when passed true, true" >> {
-        (true && true) ==== true
+        (true && true) === true
       }
       "return false when passed true, false" >> {
-        (true && false) ==== false
+        (true && false) === false
       }
     }
   }

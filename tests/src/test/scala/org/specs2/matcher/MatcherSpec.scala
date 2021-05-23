@@ -17,7 +17,7 @@ Adaptation
     the location of match results must be correct after adaptation (#168) $adapt2
     the match result expectable must be set correctly $adapt3
   a matcher can be adapted with a function and a description function for the expectable $adapt4
-  if the matcher is for equality, it has to be the typed equality matcher be_=== $adapt5
+  if the matcher is for equality, it has to be the typed equality matcher be_== $adapt5
   a matcher can be adapted with a function for both expected and actual values $adapt6
   the adapted matcher must show both original and adapted values $adapt7
   a function can be adapted with a matcher to create a matcher $adapt8
@@ -65,19 +65,19 @@ Messages
     result.message must ===("the message size '7' is greater than 2")
 
   def adapt5 =
-    val result = new Exception("message") must be_===(8) ^^ ((e:Exception) => e.getMessage.length `aka` "the message size")
+    val result = new Exception("message") must be_==(8) ^^ ((e:Exception) => e.getMessage.length `aka` "the message size")
     result.message must ===("the message size '7 != 8'")
 
   def adapt6 =
     case class Human(age: Int, wealth: Int)
     def beMostlyEqualTo: Human => Matcher[Human] =
-      ((expected: Human) => (actual: Human) => actual must be_===(expected) ^^^ ((_:Human).copy(wealth = 0)))
+      ((expected: Human) => (actual: Human) => actual must be_==(expected) ^^^ ((_:Human).copy(wealth = 0)))
 
     Human(age = 20, wealth=1000) must beMostlyEqualTo(Human(age = 20, wealth=1))
 
   def adapt7 =
     def beEqualTrimmed: String => Matcher[String] =
-      ((expected: String) => (actual: String) => actual must be_===(expected) ^^^ ((_:String).trim))
+      ((expected: String) => (actual: String) => actual must be_==(expected) ^^^ ((_:String).trim))
 
     val message = (" abc" must beEqualTrimmed("abc   ")).message
     (message must contain(" abc")) and
@@ -91,7 +91,7 @@ Messages
     new File("spec.scala") must haveExtension(".scala")
 
   def adapt9 =
-    def beThree: Matcher[Int] = be_===(3)
+    def beThree: Matcher[Int] = be_==(3)
     val beStringThree = beThree ^^ ( (_: String).toInt `aka` s"the value")
     ("4" must beStringThree).message === "the value '4 != 3'"
 
@@ -128,7 +128,7 @@ Messages
     result must beLike { case f: Failure => f.details must ===(FailureSeqDetails(List(1, 2), List(1, 2, 3))) }
 
   def convert7 =
-    val result = forallWhen(List(1, 2)) { case i if i == 1 => List(1) must be_===(List(2)) }
+    val result = forallWhen(List(1, 2)) { case i if i == 1 => List(1) must be_==(List(2)) }
     result must beLike { case f: Failure => f.details must ===(FailureSeqDetails(List(1), List(2))) }
 
   def collection1 =

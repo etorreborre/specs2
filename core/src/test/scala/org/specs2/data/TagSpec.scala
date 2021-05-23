@@ -25,8 +25,8 @@ class TagSpec extends Specification with DataTables { def is = s2"""
     allNames must contain { (names: String) =>
       val arguments = Arguments.split("include "+names)
 
-      ((t |+| zero) ==== (zero |+| t)) and
-      ((t |+| zero).keep(arguments) ==== (zero |+| t).keep(arguments))
+      ((t |+| zero) === (zero |+| t)) and
+      ((t |+| zero).keep(arguments) === (zero |+| t).keep(arguments))
     }.forall
   }.forall
 

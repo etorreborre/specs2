@@ -128,7 +128,7 @@ class TraversableMatchersSpec(val env: Env) extends Specification with ResultMat
 
 
  Size
- ====
+ ===
 
  We can check the size of an traversable
    ${ Seq() must beEmpty }

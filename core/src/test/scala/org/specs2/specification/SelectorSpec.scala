@@ -150,7 +150,7 @@ Support Functions
       ff.tag("x"),
       ex("e4")
     )
-    filterIncluded(fragments, Seq("x")).map(_.description) ==== List(
+    filterIncluded(fragments, Seq("x")).map(_.description) === List(
       ff.break,
       ex("e2"),
       ff.break,

@@ -140,35 +140,35 @@ class DataTablesSpec(val env: Env) extends Specification with DataTables with Re
   def applicative1 =
     "a" | "b" |>
     1   ! "1" |
-    2   ! "2" |* { (a: Int, b: String) => a ==== b.toInt }
+    2   ! "2" |* { (a: Int, b: String) => a === b.toInt }
 
   def applicative2 =
     "a" | "b" |
     1   ! "1" |
-    2   ! "2" |*> { (a: Int, b: String) => a ==== b.toInt }
+    2   ! "2" |*> { (a: Int, b: String) => a === b.toInt }
 
 
   def applicative3 =
     "a" | "b" |>
     1   ! "1" |
-    2   ! "2" |@ { (a: Int, b: String) => Future(a ==== b.toInt) } await
+    2   ! "2" |@ { (a: Int, b: String) => Future(a === b.toInt) } await
 
   def applicative4 =
     "a" | "b" |
     1   ! "1" |
-    2   ! "2" |@> { (a: Int, b: String) => Future(a ==== b.toInt) } await
+    2   ! "2" |@> { (a: Int, b: String) => Future(a === b.toInt) } await
 
   def applicative5 =
     "a" | "b" |>
     1   ! "1" |
-    2   ! "2" |* { (a: Int, b: String) => a ==== b.toInt }
+    2   ! "2" |* { (a: Int, b: String) => a === b.toInt }
 
   def applicative6 =
     val table =
       "a" | "b" |>
       1   ! "1" |
       2   ! "0" |
-      3   ! "3" |* { (a: Int, b: String) => a ==== b.toInt }
+      3   ! "3" |* { (a: Int, b: String) => a === b.toInt }
 
     table.message ===
       "  | a | b |       "+"\n"+

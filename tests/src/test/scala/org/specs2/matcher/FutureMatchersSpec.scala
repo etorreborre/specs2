@@ -45,7 +45,7 @@ class FutureMatchersSpec extends Specification with ResultMatchers with specific
 
  A `throwA[T]` matcher can be used to match a failed future with the `await` method
  ${ Future.failed[Int](new RuntimeException) must throwA[RuntimeException]().await }
- ${ { Future.failed[Int](new RuntimeException) must be_===(1).await } must throwA[RuntimeException] }
+ ${ { Future.failed[Int](new RuntimeException) must be_==(1).await } must throwA[RuntimeException] }
 
  A Future expression throwing an exception must not be matched
  ${ ({ throw new Exception("boom"); Future(1) } must throwAn[Exception]().await) must throwAn[Exception] }

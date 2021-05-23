@@ -48,7 +48,7 @@ class FilesContentMatchersSpec extends Spec
 
     action.runOption
 
-    matcherMessage((targetDir / actual).toFile must haveSamePathsAs((targetDir / "expected2").toFile)) ====
+    matcherMessage((targetDir / actual).toFile must haveSamePathsAs((targetDir / "expected2").toFile)) ===
      s"""|${(targetDir / actual).path} is not the same as ${(targetDir / expected2).path}
          |      1. f1
          |    + 2. sub/f2
@@ -84,7 +84,7 @@ class FilesContentMatchersSpec extends Spec
     val result2 = (targetDir / actual).toFile must haveSameFilesContentAs((targetDir / expected2).toFile)
 
     result1 and  {
-      matcherMessage(result2) ====
+      matcherMessage(result2) ===
         s"""|There is 1 failure
             |${(targetDir / actual / sub / f2).path} is not the same as ${(targetDir / expected2 / sub / f2).path}
             |      1. text2

@@ -23,7 +23,7 @@ class DataTableShowSpec extends Specification with DataTables { def is = s2"""
        1  ! 2.0 ! "three" |
        1  ! 2.0 ! "three" | { (a: Int, b: Double, c: String) => ok }
 
-    table.message ====
+    table.message ===
       List("  | a | b  | c       | ",
            "+ | x | yy | (three) | ",
            "+ | x | yy | (three) | ").mkString("\n")
@@ -37,7 +37,7 @@ class DataTableShowSpec extends Specification with DataTables { def is = s2"""
        1  ! 2.0 ! "three" |
        1  ! 2.0 ! "three" | { (a: Int, b: Double, c: String) => ok }
 
-    table.message ====
+    table.message ===
       List("  | a | b  | c     | ",
            "+ | 1 | yy | three | ",
            "+ | 1 | yy | three | ").mkString("\n")

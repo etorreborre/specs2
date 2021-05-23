@@ -5,10 +5,10 @@ package matchers
 object StringMatchers extends UserGuideCard {
   def title = "String"
   def text = s2"""
-Matching on strings is very common. Here are the matchers which can help you:
+ Matching on strings is very common. Here are the matchers which can help you:
 
  Matcher                               | Description
- ------------------------------------- | ------------
+ ---------                             | ------------
  `beMatching`                          | check if a string matches a regular expression
  `=~(s)`                               | shortcut for `beMatching("(.|\\s)*"+s+"(.|\\s)*")`
  `find(exp).withGroups(a, b, c)`       | check if some groups are found in a string
@@ -22,5 +22,7 @@ Matching on strings is very common. Here are the matchers which can help you:
  `contain(b)`                          | check if a string contains another one
  `startWith(b)`                        | check if a string starts with another one
  `endWith(b)`                          | check if a string ends with another one
+
+
 """
 }

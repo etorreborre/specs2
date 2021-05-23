@@ -60,7 +60,7 @@ given Show3[Int, Double, String] =
 val table =
 "a" | "b"   | "c" |>
  1  ! 2.0   ! "3" |
- 2  ! 4.0   ! "6" | { (a: Int, b: Double, c: String) => (a + b.toInt).toString ==== c}
+ 2  ! 4.0   ! "6" | { (a: Int, b: Double, c: String) => (a + b.toInt).toString === c}
 
 "table result\n"+table.message
 }.eval}

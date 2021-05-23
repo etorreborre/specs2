@@ -51,7 +51,7 @@ class Specs2TagsSpec extends Specification { def is = s2"""
            "SPECS2-3.0-20150307203418-cdafed1a",
            "SPECS2-3.0.1",
            "SPECS2-3.0.1-20150307203418-cdafed1a",
-           "SPECS2-3.0.1-20150307223251-cdafed1a").flatMap(VersionTag.fromString)) ====
+           "SPECS2-3.0.1-20150307223251-cdafed1a").flatMap(VersionTag.fromString)) ===
       List("SPECS2-2.4.17",
            "SPECS2-3.0",
            "SPECS2-3.0.1").flatMap(VersionTag.fromString)
