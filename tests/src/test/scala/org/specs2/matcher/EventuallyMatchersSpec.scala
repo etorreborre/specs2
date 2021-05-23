@@ -25,7 +25,7 @@ or until it succeeds.
   }
   "A matcher can work with eventually and be_== but a type annotation is necessary or a be_== matcher" >> {
     val option: Option[Int] = Some(3)
-    option must be_==(Some(3)).eventually
+    option must be_==(Option(3)).eventually
   }
   "If all retries fail, the matcher will eventually fail" >> {
     val iterator = LazyList.from(1).iterator

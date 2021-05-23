@@ -55,7 +55,7 @@ class TraversableMatchersSpec(val env: Env) extends Specification with ResultMat
    ${ Seq(1, 1, 2) must contain(allOf(1, 1)).inOrder } $xtag
    ${ Seq(1)       must contain(allOf(List[Int]()*)) }
    ${ Seq[Int]()   must contain(atMost(1)) }
-   ${ Seq[Int]()   must not (contain(allOf(beTypedEqualTo(1)))) }
+   ${ Seq[Int]()   must not (contain(allOf(===(1)))) }
    ${ (Seq(1)      must contain(eachOf(1, 1))) returns "List(1) is missing the value: 1" }
    ${ Seq(1, 2, 3) must contain(allOf(Seq(1, 2).map(be_>=(_))*)) }
    ${ Seq(1, 2, 3) must contain(allOf(Seq(1, 2).map(be_>=(_))*)).inOrder }

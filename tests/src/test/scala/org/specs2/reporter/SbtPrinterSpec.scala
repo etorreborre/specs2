@@ -124,7 +124,7 @@ class SbtPrinterSpec(val env: Env) extends Specification with OwnEnv { def is = 
 
 
   def eventWithStatus(s: Status): Matcher[Event] =
-    beTypedEqualTo(s) ^^ ((_: Event).status())
+    beEqualTo(s) ^^ ((_: Event).status())
 
   def eventWithDurationGreaterThanOrEqualTo(d: Long): Matcher[Event] =
     beGreaterThanOrEqualTo(d) ^^ ((_: Event).duration())

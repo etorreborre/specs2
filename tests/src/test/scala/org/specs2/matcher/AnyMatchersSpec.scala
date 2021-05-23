@@ -5,7 +5,7 @@ import java.io.*
 import execute.*
 import language.postfixOps
 
-class AnyMatchersSpec extends Specification with ResultMatchers with AnyMatchers with ValueChecks with TypecheckMatchers { def is = s2"""
+class AnyMatchersSpec extends Specification with ResultMatchers with AnyMatchers with ValueChecks with TypecheckMatchers with Conversions { def is = s2"""
 
   beTheSameAs checks if a value is eq to another one
   ${ aValue must beTheSameAs(aValue) }
@@ -129,3 +129,7 @@ trait Type1
 trait Type2
 
 case class Hello() { override def toString = "hello" }
+
+trait Conversions:
+  given Conversion[Int, Long] with
+    def apply(n: Int): Long = n

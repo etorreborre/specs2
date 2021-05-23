@@ -115,7 +115,7 @@ Messages
     (2 must beEven)
 
   def convert4 =
-    (1 must be_==("1").mute) returns ""
+    (1 must be_==(1).mute) returns ""
 
   def convert5 =
     def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i.toString+" is odd")

@@ -15,20 +15,20 @@ import StringMatchers.*
 trait StringMatchers:
 
   /** adapt the BeEqualTo matcher to provide ignoreCase and ignoreSpace matcher */
-  extension (m: AdaptableMatcher[Any])
+  extension (m: AdaptableMatcher[String])
 
-    def ignoreCase: AdaptableMatcher[Any] =
-      m.^^^((s: Any) => s.toString.toLowerCase, ignoringCase, ignoringCase)
+    def ignoreCase: AdaptableMatcher[String] =
+      m.^^^((s: String) => s.toString.toLowerCase, ignoringCase, ignoringCase)
 
-    def ignoreSpace: AdaptableMatcher[Any] =
-      m.^^^((s: Any) => s.toString.replaceAll("\\s", ""), ignoringSpace, ignoringSpace)
+    def ignoreSpace: AdaptableMatcher[String] =
+      m.^^^((s: String) => s.toString.replaceAll("\\s", ""), ignoringSpace, ignoringSpace)
 
-    def trimmed: AdaptableMatcher[Any] =
-      m.^^^((s: Any) => s.toString.trim, isTrimmed, isTrimmed)
+    def trimmed: AdaptableMatcher[String] =
+      m.^^^((s: String) => s.toString.trim, isTrimmed, isTrimmed)
 
-  private[specs2] val ignoringCase = (_:Any).toString + ", ignoring case"
-  private[specs2] val ignoringSpace = (_:Any).toString + ", ignoring space"
-  private[specs2] val isTrimmed = (_:Any).toString + ", trimmed"
+  private[specs2] def ignoringCase(s:String): String = s"$s, ignoring case"
+  private[specs2] def ignoringSpace(s:String): String = s"$s, ignoring space"
+  private[specs2] def isTrimmed(s:String): String = s"$s, trimmed"
 
   /** matches if a.toLowerCase.trim = b.toLowerCase.trim */
   def ==/(s: String): Matcher[String] =
@@ -36,7 +36,7 @@ trait StringMatchers:
 
   /** matches if a.toLowerCase.trim = b.toLowerCase.trim */
   def be_==/(a: String): Matcher[String] =
-    new BeEqualTo(a).ignoreCase.ignoreSpace
+    new EqualityMatcher(a).ignoreCase.ignoreSpace
 
   /** matches if a.toLowerCase.trim != b.toLowerCase.trim */
   def be_!=/(a: String): Matcher[String] =
