@@ -13,9 +13,11 @@ In a Specification you generally want to include 2 things:
 <p/>
 With $specs2 you have 2 main ways to do this:
 
- - you can create an *"Acceptance"* specification where all the informal text is written in one place and the code is written somewhere else. The name "acceptance" comes from the fact that it might be easier for a non-developer to just read some text to validate your specification
+ - you can create an **Acceptance** specification where all the informal text is written in one place and the code is written somewhere else.
+   The name "acceptance" comes from the fact that it might be easier for a non-developer to just read some text to validate your specification
 
- - you can create a *"Unit"* specification where the code is interleaved with the text. The name "unit" comes from the fact that Unit specifications have a structure which is close to unit tests in "classical" frameworks such as JUnit
+ - you can create a **Unit** specification where the code is interleaved with the text.
+   The name "unit" comes from the fact that unit specifications have a structure which is close to unit tests in classical frameworks such as JUnit
 
 Both ways of writing specifications have advantages and drawbacks:
 
@@ -26,22 +28,23 @@ Both ways of writing specifications have advantages and drawbacks:
 ### Acceptance specification
 
 An acceptance specification extends `org.specs2.Specification` and defines the `is` method. You can implement this method with an interpolated **`s2`** string: ${snippet {
-class MySpecification extends org.specs2.Specification { def is = s2"""
+class MySpecification extends org.specs2.Specification:
+  def is = s2"""
 
- this is my specification
-   where example 1 must be true           $e1
-   where example 2 must be true           $e2
-                                          """
+  this is my specification
+    where example 1 must be true $e1
+    where example 2 must be true $e2
 
-  def e1 = 1 must ===(1)
-  def e2 = 2 must ===(2)
-}
+  """
+   def e1 = 1 === 1
+   def e2 = 2 === 2
 }}
 
-The `s2` string contains the text of your specification as well as some references to methods (`e1` and `e2`) defining *`Results`*. When the Specification is executed, the `s2` string is analysed and 2 `Examples` are created then executed:
+The `s2` string contains the text of your specification as well as some references to methods (`e1` and `e2`) defining *`Results`*.
+When the Specification is executed, the `s2` string is analysed and 2 `Examples` are created then executed:
 
- - one `Example` with the description "where example 1 must be true" and the code `1 must ===(1`)
- - another `Example` with the description "where example 2 must be true" and the code `2 must ===(2`)
+ - one `Example` with the description "where example 1 must be true" and the code `1 === 1`
+ - another `Example` with the description "where example 2 must be true" and the code `2 === 2`
 
 <p/>
 All the rest, `"this is my specification"`, is parsed as `Text` and is not executed.
@@ -49,7 +52,7 @@ All the rest, `"this is my specification"`, is parsed as `Text` and is not execu
 ### Unit specification
 
 A unit specification extends `org.specs2.mutable.Specification` and uses the `>>` operator to create "blocks" containing `Texts` and `Examples`: ${snippet {
-class MySpecification extends org.specs2.mutable.Specification {
+class MySpecification extends org.specs2.mutable.Specification:
   "this is my specification" >> {
     "where example 1 must be true" >> {
       1 must ===(1)
@@ -58,7 +61,6 @@ class MySpecification extends org.specs2.mutable.Specification {
       2 must ===(2)
     }
   }
-}
 }}
 
 This specification creates one piece of `Text` and 2 `Examples` as before but:
@@ -69,11 +71,15 @@ This specification creates one piece of `Text` and 2 `Examples` as before but:
 <p/>
 However once a specification is created with all its `Texts` and `Examples`, the execution will be the same, whether it is an Acceptance one or a Unit one.
 
-The `>>` blocks can be nested and this allows you to structure your specification so that the outermost blocks describe a general context while the innermost ones describe more specific contexts. A similar effect can be achieved by simply indenting text in an acceptance specification.
+The `>>` blocks can be nested and this allows you to structure your specification so that the outermost blocks describe a general context
+while the innermost ones describe more specific contexts. A similar effect can be achieved by simply indenting text in an acceptance specification.
 
 ### Expectations
 
-There is another major difference between the acceptance specifications and unit specifications. The first style encourages you to write [one expectation per example](http://bit.ly/one_assertion_per_test) while the second allows to use several. One expectation per example is useful because when a specification fails, you know immediately what is wrong. However it is sometimes expensive to setup data for an example. In that case, having several expectations sharing the same setup might be preferable.
+There is another major difference between the acceptance specifications and unit specifications.
+The first style encourages you to write [one expectation per example](http://bit.ly/one_assertion_per_test) while the second allows to use several.
+One expectation per example is useful because when a specification fails, you know immediately what is wrong.
+However it is sometimes expensive to setup data for an example. In that case, having several expectations sharing the same setup might be preferable.
 
 The good news is that for each of the 2 main styles, acceptance and unit, you can choose exactly which "Expectation mode" you prefer if the default mode is not convenient.
 
@@ -84,11 +90,10 @@ In an acceptance specification, by default, the `Result` of an `Example` is alwa
 s2"""
   my example on strings $e1
 """
-  def e1 = {
+  def e1 =
     // because this expectation will not be returned,...
     "hello" must haveSize (10000)
     "hello" must startWith("hell")
-  }
 }}
 
 If you want to get both expectations you will need to use and between them: ${snippet{
@@ -107,8 +112,8 @@ If you want to declare several expectations per example, you can mix-in the `org
 With a unit specification you get "thrown expectations" by default. When an expectation fails, it throws an exception and the rest of the example is not executed: ${snippet {
 class MySpecification extends org.specs2.mutable.Specification {
   "This is my example" >> {
-    1 must ===(2) // this fails
-    1 must ===(1) // this is not executed
+    1 === 2 // this fails
+    1 === 1 // this is not executed
   }
 }
 }}
