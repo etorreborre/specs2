@@ -352,12 +352,17 @@ case class Success(m: String = "", exp: String = "")  extends Result(m, exp):
 
   def mute = Success()
 
-  override def toString = m
-  override def equals(o: Any) =
+  override def toString: String =
+    "Success"
+
+  override def equals(o: Any): Boolean =
     o.asInstanceOf[Matchable] match
       case Success(m2, e2) => m == m2 && exp == e2
       case _ => false
-  override def hashCode = m.hashCode + exp.hashCode
+
+  override def hashCode: Int  =
+    m.hashCode + exp.hashCode
+
 /**
  * Companion object to the Success class providing
  * a method to set the expectations number
@@ -369,6 +374,7 @@ object Success:
   def apply(m: String, expNb: Int) = new Success(m) {
     override val expectationsNb = expNb
   }
+
 /**
  * This class represents the failure of an execution.
  * It has a message and a stacktrace
