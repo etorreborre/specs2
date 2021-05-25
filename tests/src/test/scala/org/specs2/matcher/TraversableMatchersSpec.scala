@@ -73,6 +73,7 @@ class TraversableMatchersSpec(val env: Env) extends Specification with ResultMat
    Failure messages
    ${ (Seq[Int]() must contain(2, 3)) returns "List() does not contain 2, 3" }
    ${ (Seq[Int]() must contain(allOf(2, 3))) returns "List() does not contain 2, 3" }
+   ${ (Seq[Int](1, 2, 3) must contain(allOf(2, 5))) returns "List(1, 2, 3) does not contain 5\nFailures:\n  3: 3 != 5\n  1: 1 != 5" }
    ${ (Seq[Int]() must contain(exactly(1))) returns "List() does not contain 1" }
    ${ (Seq(1, 2, 3) must contain(exactly(1, 2))) returns "List(1, 2, 3) contains 3" }
    ${ (Seq(1, 2, 3) must contain(exactly(be_>=(0), be_>=(1), be_>=(5)))) returns
@@ -86,7 +87,7 @@ class TraversableMatchersSpec(val env: Env) extends Specification with ResultMat
         " * 3 is strictly greater than 1\n" }
 
    ${ (Seq(1, 2, 3) must contain(atLeast(4, 1))) returns "List(1, 2, 3) does not contain 4" }
-   ${ (Seq(1, 2)    must contain(atMost(1, 3))) returns "List(1, 2) does not contain 3 but contains 2" }
+   ${ (Seq(1, 2)    must contain(atMost(1, 3))) returns "List(1, 2) does not contain 3\nFailures:\n  2: 2 != 3" }
    ${ (Seq(1, 2)    must contain(atMost(1))) returns "List(1, 2) contains 2" }
 
    ${ (Seq(1, 2, 3) must contain(exactly(1, 2, 3, 4))) returns "List(1, 2, 3) does not contain 4" }

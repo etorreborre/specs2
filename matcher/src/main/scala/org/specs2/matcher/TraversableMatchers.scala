@@ -270,7 +270,7 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
       if equalChecks then
         val missingValues = remainingChecks.collect(expectedValue).flatten
         val addedValues   = seq.diff(successes.map(_._1))
-        val failedValues  = failures.map(_._1)
+        val failedValues  = failures.map(_._1).reverse
         if failedValues.isEmpty then
           if missingValues.isEmpty then
             if addedValues.isEmpty then
@@ -289,13 +289,12 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
         if missingValues.isEmpty then
           Result.result(success, s"${t.description} contains ${failedValues.mkString(", ")}")
         else
-          if eachCheck && seq.exists(missingValues.contains) then
-            Result.result(success, s"${t.description} is missing the ${"value".plural(missingValues)}: ${missingValues.mkString(", ")} but contains ${failedValues.mkString(", ")}")
-          else if checkOrder then
+          if (eachCheck && seq.exists(missingValues.contains)) || !checkOrder then
+            Result.result(success, s"${t.description} does not contain ${missingValues.mkString(", ")}\nFailures:\n  ${failures.map((v, ms) => s"$v: ${ms.mkString(", ")}").mkString("\n  ")}")
+          else
             val verb = if missingValues.size > 1 then "are" else "is"
             Result.result(success, s"the ${"value".plural(missingValues)} ${missingValues.mkString(", ")} $verb missing or not in order\nGot: "+seq)
-          else
-            Result.result(success, s"${t.description} does not contain ${missingValues.mkString(", ")} but contains ${failedValues.mkString(", ")}")
+
       else
         val qty     = s"$constraint ${checks.size}"
         val values  = s"correct ${"value".plural(checks.size)}$order"
