@@ -150,7 +150,8 @@ object S2StringContext:
               text,
               $execution,
               ${Expr(Position.ofMacroExpansion.sourceCode.getOrElse("no source code found to interpolate a Fragment"))},
-              ${Expr(PositionLocation(Position.ofMacroExpansion.sourceFile.jpath.toString, Position.ofMacroExpansion.startLine+1, Position.ofMacroExpansion.startColumn))})
+              ${Expr(PositionLocation(Option(Position.ofMacroExpansion.sourceFile.jpath).map(_.toString).getOrElse("no source file"),
+                                      Position.ofMacroExpansion.startLine+1, Position.ofMacroExpansion.startColumn))})
      }}
 
   private[specs2] def fragmentInterpolated(fragment: Fragment, start: PositionLocation, ff: FragmentFactory): Interpolated =
