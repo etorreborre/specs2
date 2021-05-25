@@ -110,54 +110,6 @@ case class JUnitPrinter(env: Env, notifier: RunNotifier) extends Printer:
       override def printStackTrace(w: java.io.PrintWriter): Unit = { e.printStackTrace(w) }
     }
 
-    case Failure(m, e, st, FailureSeqDetails(actual, expected)) =>
-      val details =
-        if args.diffs.showSeq(actual, expected, ordered = true) then
-          val (added, missing) = args.diffs.showSeqDiffs(actual, expected, ordered = true)
-          List(showValues("Added", added), showValues("Missing", missing)).mkString(" / ")
-        else ""
-
-      new ComparisonFailure(AnsiColors.removeColors(m+details), expected.mkString("\n"), actual.mkString("\n")) {
-        private val e = args.traceFilter(f.exception)
-        override def getStackTrace = e.getStackTrace
-        override def getCause = e.getCause
-        override def printStackTrace(): Unit = { e.printStackTrace() }
-        override def printStackTrace(w: java.io.PrintStream): Unit = { e.printStackTrace(w) }
-        override def printStackTrace(w: java.io.PrintWriter): Unit = { e.printStackTrace(w) }
-      }
-
-    case Failure(m, e, st, details @ FailureSetDetails(actual, expected)) =>
-      val details =
-        if args.diffs.showSeq(actual.toSeq, expected.toSeq, ordered = false) then
-          val (added, missing) = args.diffs.showSeqDiffs(actual.toSeq, expected.toSeq, ordered = false)
-          List(showValues("Added", added), showValues("Missing", missing)).mkString(" / ")
-        else ""
-
-      new ComparisonFailure(AnsiColors.removeColors(m+details), expected.mkString("\n"), actual.mkString("\n")) {
-        private val e = args.traceFilter(f.exception)
-        override def getStackTrace = e.getStackTrace
-        override def getCause = e.getCause
-        override def printStackTrace(): Unit = { e.printStackTrace() }
-        override def printStackTrace(w: java.io.PrintStream): Unit = { e.printStackTrace(w) }
-        override def printStackTrace(w: java.io.PrintWriter): Unit = { e.printStackTrace(w) }
-      }
-
-    case Failure(m, e, st, details @ FailureMapDetails(actual, expected)) =>
-      val details =
-        if args.diffs.showMap(actual, expected) then
-          val (added, missing, different) = args.diffs.showMapDiffs(actual, expected)
-          List(showValues("Added", added), showValues("Missing", missing), showValues("Different", different)).mkString(" / ")
-        else ""
-
-      new ComparisonFailure(AnsiColors.removeColors(m+details), expected.mkString("\n"), actual.mkString("\n")) {
-        private val e = args.traceFilter(f.exception)
-        override def getStackTrace = e.getStackTrace
-        override def getCause = e.getCause
-        override def printStackTrace(): Unit = { e.printStackTrace() }
-        override def printStackTrace(w: java.io.PrintStream): Unit = { e.printStackTrace(w) }
-        override def printStackTrace(w: java.io.PrintWriter): Unit = { e.printStackTrace(w) }
-      }
-
   /** show values as a string with a description */
   def showValues(description: String, values: Seq[Any]): String =
     if values.nonEmpty then s"$description ${values.map(notNullPair).mkString("\n", "\n", "\n\n")}" else ""

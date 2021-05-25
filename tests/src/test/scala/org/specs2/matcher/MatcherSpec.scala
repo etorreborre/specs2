@@ -31,8 +31,6 @@ Implicit conversions
   a matcher can be defined by a function with a function for the ko message $convert3
   a matcher can be muted and will output no message $convert4
   a matcher can be defined by a function returning a Result $convert5
-  when a matcher is defined by a function returning a Result, it must keep its failure details $convert6
-  failure details can be collected when doing a forall check on a collection $convert7
 
 Collections
 ===========
@@ -121,15 +119,6 @@ Messages
     def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i.toString+" is odd")
     def beOdd: Matcher[Int] = ((i: Int) => i % 2 != 0, (i: Int) => i.toString+" is even")
     (2 must beOdd) returns "2 is even"
-
-  def convert6 =
-    def beOneTwoThreeList: Matcher[List[Int]] = (list: List[Int]) => list must be_==(List(1, 2, 3))
-    val result = List(1, 2) must beOneTwoThreeList
-    result must beLike { case f: Failure => f.details must ===(FailureSeqDetails(List(1, 2), List(1, 2, 3))) }
-
-  def convert7 =
-    val result = forallWhen(List(1, 2)) { case i if i == 1 => List(1) must be_==(List(2)) }
-    result must beLike { case f: Failure => f.details must ===(FailureSeqDetails(List(1), List(2))) }
 
   def collection1 =
     def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i.toString+" is odd")

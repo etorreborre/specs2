@@ -242,30 +242,6 @@ case class TextPrinter(env: Env) extends Printer {
       fullDiff ++
       List("\n".info)
 
-    case details @ FailureSeqDetails(actual, expected) if args.diffs.showSeq(actual, expected, ordered = true) =>
-      val (added, missing) = args.diffs.showSeqDiffs(actual, expected, ordered = true)
-
-      printNewLine ++
-      printValues("Added", added) ++ printNewLine ++
-      printValues("Missing", missing) ++ printNewLine ++
-      printSummary(("Added", added), ("Missing", missing))
-
-
-    case details @ FailureSetDetails(actual, expected) if args.diffs.showSeq(actual.toSeq, expected.toSeq, ordered = false) =>
-      val (added, missing) = args.diffs.showSeqDiffs(actual.toSeq, expected.toSeq, ordered = false)
-      printNewLine ++
-      printValues("Added", added) ++ printNewLine ++
-      printValues("Missing", missing) ++ printNewLine ++
-      printSummary(("Added", added), ("Missing", missing))
-
-    case details @ FailureMapDetails(actual, expected) if args.diffs.showMap(actual, expected) =>
-      val (added, missing, different) = args.diffs.showMapDiffs(actual, expected)
-      printNewLine ++
-      printValues("Added", added) ++ printNewLine ++
-      printValues("Missing", missing); printNewLine ++
-      printValues("Different", different) ++ printNewLine ++
-      printSummary(("Added", added), ("Missing", missing), ("Different", different))
-
     case _ => Nil
   }
 

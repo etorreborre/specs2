@@ -14,7 +14,7 @@ trait ReturnsSyntax extends ExpectationsCreation:
     infix def returns(m: String): Result =
       lazy val r = AsResult.safely(t)
       lazy val resultMessage = r.message
-      contain(m).setMessage(s"${resultMessage.showWhitespaces}\n does not return\n${m.showWhitespaces}")(createExpectable(resultMessage))
+      contain(m.showWhitespaces).setMessage(s"${resultMessage.showWhitespaces}\n does not return\n${m.showWhitespaces}")(createExpectable(resultMessage.showWhitespaces))
 
     infix def returnsMatch(m: String) =
       lazy val r = AsResult.safely(t)

@@ -179,31 +179,6 @@ trait HtmlBodyPrinter:
       case FailureDetails(expected, actual) if arguments.diffs.show(expected, actual) =>
         <details class="failure">"\nExpected:\n"{expected}"\nActual:\n"{actual}</details>
 
-      case FailureSeqDetails(expected, actual) if arguments.diffs.showSeq(expected, actual, ordered = true) =>
-        val (added, missing) = arguments.diffs.showSeqDiffs(actual, expected, ordered = true)
-        val addedValues   = makeDifferencesMessage("Added", added)
-        val missingValues = makeDifferencesMessage("Missing", missing)
-        val details = List(addedValues, missingValues).mkString("\n")
-
-        <details class="failure">{details}</details>
-
-      case FailureSetDetails(expected, actual) if arguments.diffs.showSeq(expected.toSeq, actual.toSeq, ordered = false) =>
-        val (added, missing) = arguments.diffs.showSeqDiffs(actual.toSeq, expected.toSeq, ordered = true)
-        val addedValues   = makeDifferencesMessage("Added", added)
-        val missingValues = makeDifferencesMessage("Missing", missing)
-        val details = List(addedValues, missingValues).mkString("\n")
-
-        <details class="failure">{details}</details>
-
-      case FailureMapDetails(expected, actual) if arguments.diffs.showMap(actual, expected)=>
-        val (added, missing, different) = arguments.diffs.showMapDiffs(actual, expected)
-        val addedValues   = makeDifferencesMessage("Added", added)
-        val missingValues = makeDifferencesMessage("Missing", missing)
-        val differentValues = makeDifferencesMessage("Different", different)
-        val details = List(addedValues, missingValues, differentValues).mkString("\n")
-
-        <details class="failure">{details}</details>
-
       case _ => NodeSeq.Empty
 
     val fullMessage =

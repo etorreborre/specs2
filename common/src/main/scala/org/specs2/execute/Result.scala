@@ -420,9 +420,6 @@ case class Failure(m: String = "",
 sealed trait Details derives CanEqual
 case class FailureDetailsMessages(messages: List[String]) extends Details
 case class FailureDetails(actual: String, expected: String) extends Details
-case class FailureSeqDetails(actual: Seq[Any], expected: Seq[Any]) extends Details
-case class FailureSetDetails(actual: Set[Any], expected: Set[Any]) extends Details
-case class FailureMapDetails(actual: Map[Any, Any], expected: Map[Any, Any]) extends Details
 case object NoDetails extends Details
 
 case object FromNotImplementedError extends Details

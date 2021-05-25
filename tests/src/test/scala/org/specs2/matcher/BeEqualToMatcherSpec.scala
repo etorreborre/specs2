@@ -46,9 +46,9 @@ class BeEqualToMatcherSpec extends Spec with ResultMatchers with ShouldMatchers 
 
   Set equality
   ${ Set(1, 2) must be_==(Set(2, 1)) }
-  ${ (Set(1) must be_==(Set.empty[Int])) returns "Set(1) != Set()"}
+  ${ (Set(1) must be_==(Set.empty[Int])) returns "Set(removed: 1)"}
   ${ (Set(1, 2) must be_==(Set(2, 3))) returns
-      """Set(1, 2) != Set(2, 3)""" }
+      "Set(1,⎵2)⎵!=⎵Set(2,⎵3)↵Set(2,↵⎵⎵⎵⎵added:⎵3,↵⎵⎵⎵⎵removed:⎵1)" }
   ${ (Set(1, 2) must be_==(Set(2, 3))) returns
       """|Set(2,
          |    added: 3,
@@ -66,7 +66,9 @@ class BeEqualToMatcherSpec extends Spec with ResultMatchers with ShouldMatchers 
   ${ (Seq(1, 2) must be_==(Seq(2, 3))) returns """List(1, 2) != List(2, 3)""" }
   ${ Seq(1, 2) must be_==(Seq(1, 2)) }
   ${ (Seq(1, 2) must be_==(Seq(2, 3))).normalized ===
-       """|- 1
+       """|List(1, 2) != List(2, 3)
+          |
+          |- 1
           |+ 2
           |- 2
           |+ 3""".stripMargin.trim }

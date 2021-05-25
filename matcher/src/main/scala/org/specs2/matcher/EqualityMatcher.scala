@@ -21,27 +21,10 @@ class EqualityMatcher[T : Diffable](t: =>T) extends AdaptableMatcher[T]:
 
   def apply[S <: T](b: Expectable[S]): Result =
     val (actual, expected) = (b.value, t)
-    val diff = Diffable.diff(actual, expected)
-
-    failureDetailsFor(actual, expected) match
-      case Some(failureDetail) =>
-        result(diff.identical, ko(b.describe(diff.render)), failureDetail)
-
-      case _ =>
-        result(diff.identical, ko(b.describe(diff.render)), expected.notNull, actual.notNull)
-
-  private def failureDetailsFor(actual: Any, expected: Any): Option[Details] =
-    (actual.asInstanceOf[Matchable], expected.asInstanceOf[Matchable]) match
-      case (e1: Map[?, ?], e2: Map[?, ?]) => Some(FailureMapDetails(e1.toMap[Any, Any], e2.toMap[Any, Any]) )
-      case (e1: Set[?], e2: Set[?]) => Some( FailureSetDetails(e1.toSet[Any], e2.toSet[Any]) )
-      case (e1: Array[?], e2: Array[?]) => Some( FailureSeqDetails(e1.toSeq, e2.toSeq) )
-      case (e1: Traversable[?], e2: Traversable[?]) if foreachIsDefined(e2) => Some( FailureSeqDetails(e1.toSeq, e2.toSeq) )
-      case (e1: Traversable[?], e2: Traversable[?]) => None
-      case (e1, e2) => None
-
-  private def foreachIsDefined(seq: Traversable[?]): Boolean =
-    try { seq.foreach(identity); true }
-    catch { case _: Exception => false }
+    val universalDiff = Diffable.fallbackDiffable.diff(actual, expected)
+    val specificDiff = Diffable.diff(actual, expected)
+    val failureMessage = ko(b.describe(universalDiff.render+"\n"+specificDiff.render))
+    result(specificDiff.identical, failureMessage, expected.notNull, actual.notNull)
 
   def expected: T =
     t
