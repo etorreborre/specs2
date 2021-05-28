@@ -32,7 +32,7 @@ lazy val specs2Settings = Seq(
   specs2ShellPrompt,
   scalaVersion := "2.13.5",
   SettingKey[Boolean]("ide-skip-project").withRank(KeyRanks.Invisible) := platformDepsCrossVersion.value == ScalaNativeCrossVersion.binary,
-  crossScalaVersions := Seq(scalaVersion.value, "2.12.13"))
+  crossScalaVersions := Seq(scalaVersion.value, "2.12.14"))
 
 lazy val tagName = Def.setting {
   s"specs2-${version.value}"
