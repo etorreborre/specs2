@@ -47,20 +47,46 @@ class MySpec extends mutable.Specification {
 }
 }}
 
-### A list of results
+### A list of expectations
 
-The same situation happens when you want to create a list of expectations inside an example:${snippet{
+Similarly, when you want to create a list of expectations inside an example, you should use a variant of `foreach` and `forall` methods:
+
+ - If you need "thrown expectations", use the `foreach` and `forall` methods of `mutable.Specification`:
+
+${snippet{
 class MySpec extends mutable.Specification {
-  "this example has a lot of expectations" >> {
-    Result.foreach(1 to 1000) { i =>
-      i must ===(i)
-    }
+  "this collects results of all expectations and throws an exception" >> {
+    foreach(1 to 10) { i =>
+      i must_== 2
+    } // Collects results of all expectations. Throws an exception.
+    foreach(1 to 10) { i =>
+      i === i
+    } // This is not executed.
+  }
+  "this stops after the first failed expectation and throws an exception" >> {
+    forall(1 to 10) { i =>
+      i === 2
+    } // Stops after the first failed expectation. Throws an exception.
   }
 }
 }}
 
-In that case the `Result.foreach` method is the one to use, it returns a `Result` that is the logical and of all results.
-It will stop after the first issue (error or failure), if you want to collect *all* the results you can use `Result.forall`.
+ - If you need "functional expectations" that return a `Result`, use `Result.foreach` or `Result.forall`:
+
+${snippet{
+class MySpec extends mutable.Specification {
+  "this collects results of all expectations and returns a Result" >> {
+    Result.forall(1 to 10) { i =>
+      i === 2
+    }
+  }
+  "this stops after the first failed expectation and returns a Result" >> {
+    Result.foreach(1 to 10) { i =>
+      i === 2
+    }
+  }
+}
+}}
 
 $AndIfYouWantToKnowMore
 
@@ -68,7 +94,5 @@ $AndIfYouWantToKnowMore
  * understand why the `Result.foreach` method uses the $AsResultTypeclass
 
 $vid
-
-
 """
 }
