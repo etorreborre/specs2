@@ -376,12 +376,16 @@ trait DataTables extends ExpectationsCreation:
 case class DataTable(titles: Seq[String], rows: Seq[DataTableRow]):
   def isSuccess = rows.forall(_.isSuccess)
   def show = TextTable(titles, rows.map(row => row.cells.map(_.toString))).show
+
 object DataTable:
   def apply[R : AsResult](titles: Seq[String], results: Seq[(Seq[String], R)]): DataTable = DataTable(titles, results.collect { case (v, r) => DataTableRow(v, AsResult(r)) })
+
 case class DataTableRow(cells: Seq[String], result: Result):
   def isSuccess = result.isSuccess
+
 object DataTableRow:
-  def apply[R : AsResult](values: String, result: R): DataTableRow = DataTableRow(values.trimEnclosing("|").splitTrim("\\|"), AsResult(result))
+  def apply[R : AsResult](values: String, result: R): DataTableRow =
+    DataTableRow(values.trimEnclosing("|").splitTrim("\\|"), AsResult(result))
 
 private[specs2]
 object DataTables extends DataTables

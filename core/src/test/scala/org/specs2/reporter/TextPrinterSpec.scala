@@ -338,7 +338,7 @@ table ${
             |[info]
             |[info]__+_example_1
             |[info]__x_example 2
-            |[error]__ko_(Result.scala:378)
+            |[error]__ko_(Result.scala:384)
             |[info]
             |[info]_Total_for_specification_TextPrinterSpec"""
 

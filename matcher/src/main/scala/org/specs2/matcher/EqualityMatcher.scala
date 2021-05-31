@@ -23,7 +23,12 @@ class EqualityMatcher[T : Diffable](t: =>T) extends AdaptableMatcher[T]:
     val (actual, expected) = (b.value, t)
     val universalDiff = Diffable.fallbackDiffable.diff(actual, expected)
     val specificDiff = Diffable.diff(actual, expected)
-    val failureMessage = ko(b.describe(universalDiff.render+"\n"+specificDiff.render))
+    val universalMessage = universalDiff.render
+    val specificMessage = specificDiff.render
+    val message =
+          universalDiff.render + (if universalMessage != specificMessage then "\n"+specificDiff.render else "")
+
+    val failureMessage = ko(b.describe(message))
     result(specificDiff.identical, failureMessage, expected.notNull, actual.notNull)
 
   def expected: T =

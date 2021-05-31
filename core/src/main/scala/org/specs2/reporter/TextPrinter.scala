@@ -131,12 +131,13 @@ case class TextPrinter(env: Env) extends Printer {
         // special case for SpecificationRefs
         case DecoratedResult(t, r) =>
           t.asInstanceOf[Matchable] match
-            case s: Stats => printOther(show, r, args)
+            case s: Stats =>
+              printOther(show, r, args)
             case d: DataTable =>
               // display the full table if it is an auto-example
               if Description.isCode(description) then
                 printResult(indentText(r.message, indentation, indentationSize(args)), r.setMessage(""))
-                else
+              else
                 printResult(show, r)
 
         case other => printResult(show, result)
