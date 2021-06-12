@@ -50,9 +50,6 @@ trait RunTimedMatchers[F[_]] {
     def withValue(check: ValueCheck[T]): TimedMatcher[T] =
       new TimedMatcher(check, duration)
 
-    def withValue(t: T)(implicit di: Diffable[T]): TimedMatcher[T] =
-      withValue(valueIsTypedValueCheck(t))
-
     private def timeoutResult[S <: F[T]](e: Expectable[S], d: FiniteDuration): MatchResult[S] = {
       val message = s"Timeout after ${d.toMillis} milliseconds"
       result(false, message, message, e)
@@ -65,6 +62,13 @@ trait RunTimedMatchers[F[_]] {
 
     private def checkResult[S <: F[T]](e: Expectable[S])(t: T): MatchResult[S] =
       result(check.check(t), e)
+  }
+
+  // This withValue method cannot be set directly on the TimedMatcher class
+  // otherwise it is always selected instead of the other withValue method
+  implicit class TimedMatcherWithValue[T](timedMatcher: TimedMatcher[T]) {
+    def withValue(t: T)(implicit di: Diffable[T]): TimedMatcher[T] =
+      timedMatcher.withValue(valueIsTypedValueCheck(t))
   }
 }
 

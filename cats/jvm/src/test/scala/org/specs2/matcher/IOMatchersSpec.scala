@@ -24,6 +24,9 @@ class IOMatchersSpec extends mutable.Specification with IOMatchers with ResultMa
       { IO { Thread.sleep(5); 1 } must returnBefore(10.millis).withValue(1) }
       { IO { Thread.sleep(5); 1 } must returnValue(1).before(10.millis) }
     }
+
+    "check the return value with a timeout and a matcher" >> {
+      { IO { 1 } must returnBefore(100.millis).withValue(===(1)) }
+    }
   }
 }
-
