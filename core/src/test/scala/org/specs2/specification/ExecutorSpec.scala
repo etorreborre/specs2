@@ -183,7 +183,7 @@ class ExecutorSpec(val env: Env) extends Specification with ThrownExpectations w
     times must containMatch("(\\d)+ ms")
 
   def timeout =
-    val timeFactor = 1 //ownEnv.arguments.execute.timeFactor
+    val timeFactor = ownEnv.arguments.execute.timeFactor
 
     val messages = new ListBuffer[String]
     def verySlow: Result = { Thread.sleep(600 * timeFactor.toLong); messages.append("very slow"); success }
@@ -191,7 +191,7 @@ class ExecutorSpec(val env: Env) extends Specification with ThrownExpectations w
     val fragments = Fragments(example("very slow", verySlow))
     val env1 = ownEnv.setTimeout(100.millis * timeFactor.toLong)
 
-    execute(fragments, env1) must contain(beSkipped[Result]("timed out after "+100*timeFactor+" milliseconds"))
+    execute(fragments, env1) must contain(beFailing[Result]("timeout after "+100*timeFactor+" milliseconds"))
 
   def userEnv =
     val fragments =

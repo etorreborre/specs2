@@ -149,7 +149,7 @@ case class TextPrinter(env: Env) extends Printer {
     List((show+"\n").error) ++
     printMessage(show, result, fragmentLocation, ErrorLine.apply, args) ++
     printStacktrace(result.stackTrace, print = true, ErrorLine.apply, args) ++
-    (if result.exception.getCause != null then printError("CAUSED BY", execute.Error(result.exception.getCause), fragmentLocation, args)
+    (if result.exception.getCause != null then printError(" CAUSED BY", execute.Error(result.exception.getCause), fragmentLocation, args)
      else List())
 
   def printFailure(show: String, failure: execute.Failure, fragmentLocation: Location, args: Arguments): List[LogLine] =

@@ -72,32 +72,33 @@ case class SteppedExecutor(env: Env) extends Executor:
   private def sequencedExecution(specArguments: Arguments): AsyncTransducer[Fragment, Fragment] = { (p: AsyncStream[Fragment]) =>
     type S = (Vector[Fragment], Vector[Fragment], Option[Fragment])
     val init: S = (Vector.empty, Vector.empty, None)
-    val arguments = env.arguments.overrideWith(specArguments)
+    val specEnv = env.setArguments(env.arguments.overrideWith(specArguments))
+    val arguments = specEnv.arguments
 
     val last: S => AsyncStream[Fragment] =
       case (toStart, _, previousStep) =>
-        emit(toStart.toList.map(_.startExecutionAfter(previousStep)(env)))
+        emit(toStart.toList.map(_.startExecutionAfter(previousStep)(specEnv)))
 
     p.producerState(init, Option(last)) { case (fragment, (previous, previousStarted, previousStep)) =>
       if arguments.skipAll then
         (one(if fragment.isExecutable then fragment.skip else fragment), init)
       else if arguments.sequential then
         val f = if Fragment.isStep(fragment) then fragment.updateExecution(_.setErrorAsFatal) else fragment
-        val started = f.startExecutionAfter(previousStarted.toList)(env)
+        val started = f.startExecutionAfter(previousStarted.toList)(specEnv)
         (one(started), (previous, previousStarted :+ started, None))
       else
         if fragment.execution.mustJoin then
-          val started = previous.map(_.startExecutionAfter(previousStep)(env))
+          val started = previous.map(_.startExecutionAfter(previousStep)(specEnv))
           val step =
             fragment.
               updateExecution(_.setErrorAsFatal).
-              startExecutionAfter((previousStarted ++ started).toList)(env)
+              startExecutionAfter((previousStarted ++ started).toList)(specEnv)
 
           (emit((started :+ step).toList), (Vector.empty, Vector.empty, Some(step)))
         else
           val moreThanBatchSize = (previous :+ fragment).count(_.isExecutable) >= arguments.batchSize
           if moreThanBatchSize then
-            val started = (previous :+ fragment).map(_.startExecutionAfter(previousStep)(env))
+            val started = (previous :+ fragment).map(_.startExecutionAfter(previousStep)(specEnv))
             (emit(started.toList), (Vector.empty, previousStarted ++ started, previousStep))
           else
             (done[Action, Fragment], (previous :+ fragment, previousStarted, previousStep))
@@ -111,7 +112,7 @@ case class SteppedExecutor(env: Env) extends Executor:
 
   /** execute one Execution */
   def executeExecution(timeout: Option[FiniteDuration] = None)(execution: Execution): Execution =
-    timeout.fold(execution)(t => execution.setTimeout(t)).startExecution(env)
+    timeout.fold(execution)(execution.setTimeout).startExecution(env)
 
   def executeOnline(specArguments: Arguments)(fragment: Fragment): AsyncStream[Fragment] =
     fragment.execution.continuation match
