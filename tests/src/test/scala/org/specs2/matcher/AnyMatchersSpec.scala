@@ -132,4 +132,4 @@ case class Hello() { override def toString = "hello" }
 
 trait Conversions:
   given Conversion[Int, Long] with
-    def apply(n: Int): Long = n
+    def apply(n: Int): Long = n.toLong
