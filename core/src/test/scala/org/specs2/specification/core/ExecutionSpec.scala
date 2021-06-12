@@ -4,9 +4,10 @@ package core
 
 import execute.*
 import process.*
+import matcher.*
 import scala.concurrent.*, duration.*
 
-class ExecutionSpec(val env: Env) extends Specification with OwnEnv { def is = s2"""
+class ExecutionSpec(val env: Env) extends Specification with OwnEnv with ResultMatchers { def is = s2"""
 
  A link is executed by getting the corresponding specification ref status in the Statistics store
    the Stats is the stats of the spec + specs += 1 $linkExecution
@@ -15,7 +16,7 @@ class ExecutionSpec(val env: Env) extends Specification with OwnEnv { def is = s
    it will then create a failed result $withFailureException
 
  An execution can be created from a result throwing a fatal exception
-   it will then throw an ExecutionException exception $withFatalException
+   it will then create an error $withFatalException
 
 """
 
@@ -40,7 +41,7 @@ class ExecutionSpec(val env: Env) extends Specification with OwnEnv { def is = s
     Execution.withEnv(_ => {throw new FailureException(failure); success}).result(env) === failure
 
   def withFatalException =
-    Execution.withEnv(_ => {throw new java.lang.NoSuchMethodError("boom"); success}).result(env) must throwAn[ExecutionException]
+    Execution.withEnv(_ => {throw new java.lang.NoSuchMethodError("boom"); success}).result(env) must beError
 
   /**
    * HELPERS

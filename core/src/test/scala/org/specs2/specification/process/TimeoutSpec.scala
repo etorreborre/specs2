@@ -21,12 +21,9 @@ class TimeoutSpec(env: Env) extends Specification with ResultMatchers:
 
   def timeout =
     val messages = TextRunner.run(TimeoutSpecExample)(env).messages
-    messages must contain (allOf(
-      "[info] TimeoutSpecExample",
-      "[info] ",
-      "[info]   x timeout this example",
-      "[error]  timeout after 100 milliseconds (TimeoutSpec.scala:34)"
-    ))
+    messages must contain (
+      "[error]  timeout after 100 milliseconds (TimeoutSpec.scala:31)"
+    )
 
 object TimeoutSpecExample extends Specification:
   def is = args(timeout = 100.millis) ^ s2"""
@@ -38,4 +35,3 @@ object TimeoutSpecExample extends Specification:
   def tooLong: Result =
     Thread.sleep(500)
     ok
-

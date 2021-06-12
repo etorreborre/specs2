@@ -57,7 +57,7 @@ ${snippet{
 class MySpec extends mutable.Specification {
   "this collects results of all expectations and throws an exception" >> {
     foreach(1 to 10) { i =>
-      i must_== 2
+      i === 2
     } // Collects results of all expectations. Throws an exception.
     foreach(1 to 10) { i =>
       i === i

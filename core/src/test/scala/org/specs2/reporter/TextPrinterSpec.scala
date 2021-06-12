@@ -175,7 +175,7 @@ presentation
 
   def e3 = s2"""e1 $error1""" `contains` """|[error] org.specs2.report"""
 
-  def e4 = s2"""e1 $error2""" `contains` """|[error] CAUSED BY"""
+  def e4 = s2"""e1 $error2""" `contains` """|[error]  CAUSED BY"""
 
   def f1 = s2"""e1 ${Success("ok", "expected")}""" `contains`
     """|[info] + e1
