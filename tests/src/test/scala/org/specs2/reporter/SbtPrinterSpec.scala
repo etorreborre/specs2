@@ -81,6 +81,7 @@ class SbtPrinterSpec(val env: Env) extends Specification with OwnEnv { def is = 
     val logger = createLogger
     val handler = createHandler
     lazy val events = MySbtEvents()
+
     case class MySbtEvents() extends SbtEvents:
       lazy val handler = outer.handler
       lazy val taskDef = new TaskDef("", Fingerprints.fp1, true, Array())
