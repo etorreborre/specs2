@@ -128,19 +128,22 @@ trait DiffShortener:
         }
     shortenTokens(tokens.toList, Delimiter(firstDelimiter), Delimiter(secondDelimiter), shortenSize).showTokens
 
+  def tokensSize(tokens: List[Token]): Int =
+    tokens.map { case Keep(value) => value.size; case _ => 0 }.sum
+
   def shortenTokens(tokens: List[Token], firstDelimiter: Delimiter, secondDelimiter: Delimiter, shortenSize: Int = 5): List[Token] =
     def shortenLeft(ts: List[Token]): List[Token] =
-      if ts.size > shortenSize
+      if tokensSize(ts) > shortenSize
         then Keep("...") +: ts.slice(ts.size - shortenSize, ts.size)
         else ts
 
     def shortenRight(ts: List[Token]): List[Token] =
-      if ts.size > shortenSize
+      if tokensSize(ts) > shortenSize
         then ts.take(shortenSize) :+ Keep("...")
         else ts
 
     def shortenCenter(ts: List[Token]): List[Token] =
-      if ts.size > shortenSize
+      if tokensSize(ts) > shortenSize
         then (ts.take(shortenSize / 2) :+ Keep("...")) ++ ts.slice(ts.size - shortenSize / 2, ts.size)
         else ts
 
