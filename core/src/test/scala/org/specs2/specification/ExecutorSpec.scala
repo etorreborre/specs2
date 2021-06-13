@@ -15,7 +15,7 @@ import fp.*, syntax.*
 import ResultMatchers.*
 import scala.concurrent.*
 
-class ExecutorSpec(val env: Env) extends Specification with ThrownExpectations with OwnEnv { def is = tag("ci") ^ s2"""
+class ExecutorSpec(val env: Env) extends Specification with ThrownExpectations with OwnEnv { def is = section("ci") ^ s2"""
 
  Steps
  =====

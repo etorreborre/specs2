@@ -8,7 +8,7 @@ import matcher.*
 import specification.core.*
 
 class TimeoutSpec(env: Env) extends Specification with ResultMatchers:
-  def is = s2"""
+  def is = section("ci") ^ s2"""
 
   a timeout can be set on an execution $executionTimeout
   a timeout can be set on a specification to timeout its examples $timeout

@@ -12,6 +12,7 @@ on:
     branches: ['**']
   push:
     branches: ['**']
+    tags: [SPECS2_*, SPECS2_*, SPECS2_*, SPECS2_*, SPECS2_*, SPECS2_*, SPECS2_*, SPECS2_*, SPECS2_*, SPECS2_*, SPECS2_*, SPECS2_*, SPECS2_*, SPECS2_*, SPECS2_*, SPECS2_*]
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -52,12 +53,12 @@ jobs:
         run: sbt --client '++${{ matrix.scala }}; githubWorkflowCheck'
 
       - name: Build project
-        run: sbt --client '++${{ matrix.scala }}; testOnly -- xonly exclude ci'
+        run: sbt --client '++${{ matrix.scala }}; testOnly -- xonly exclude ci timefactor 3'
 
   publish:
     name: Publish Artifacts
     needs: [build]
-    if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/main')
+    if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/SPECS2_'))
     strategy:
       matrix:
         os: [ubuntu-latest]
@@ -87,5 +88,9 @@ jobs:
             ~/Library/Caches/Coursier/v1
           key: ${{ runner.os }}-sbt-cache-v2-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
 
-      - name: Publish project
-        run: sbt --client '++${{ matrix.scala }}; +publish'
+      - env:
+          PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
+          PGP_SECRET: ${{ secrets.PGP_SECRET }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+        run: sbt --client '++${{ matrix.scala }}; ci-release'

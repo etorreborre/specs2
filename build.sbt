@@ -6,14 +6,12 @@ import java.text.SimpleDateFormat
 
 /** MAIN PROJECT */
 lazy val specs2 = project.in(file(".")).
-  enablePlugins(GitBranchPrompt, SitePlugin, GhpagesPlugin).
+  enablePlugins(GitBranchPrompt, SitePlugin, GhpagesPlugin, GitVersioning).
   settings(
     commonSettings,
     siteSettings,
     name := "specs2",
     packagedArtifacts := Map.empty,
-    ThisBuild / githubWorkflowArtifactUpload := false,
-    ThisBuild / githubWorkflowBuild := Seq(WorkflowStep.Sbt(List("testOnly -- xonly exclude ci"), name = Some("Build project")))
   ).aggregate(
     fp, common, matcher, core, matcherExtra, html, guide,
     form, markdown, junit, scalacheck, xml,
@@ -31,7 +29,8 @@ lazy val specs2Settings = Seq(
   specs2ShellPrompt,
   ThisBuild / crossScalaVersions := Seq(Scala3),
   ThisBuild / scalaVersion := Scala3,
-  Compile / doc / sources := Seq())
+  Compile / doc / sources := Seq()
+  )
 
 lazy val commonJsSettings = Seq(
   scalacOptions += {
@@ -46,16 +45,14 @@ lazy val commonJsSettings = Seq(
   Test / parallelExecution := false
 )
 
-lazy val specs2Version = settingKey[String]("defines the current specs2 version")
-
 lazy val commonSettings =
-    coreDefaultSettings  ++
-    depends.resolvers    ++
     specs2Settings       ++
+    depends.resolvers    ++
+    coreDefaultSettings  ++
     compilationSettings  ++
     testingSettings      ++
     testingJvmSettings   ++
-    publicationSettings
+    releaseSettings
 
 /** MODULES (sorted in alphabetical order) */
 
@@ -101,9 +98,9 @@ lazy val guide = project.in(file("guide")).
   settings(
     commonSettings,
     name := "specs2-guide",
+    Compile / scalacOptions --= Seq("-Xlint", "-Ywarn-unused-import"),
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
-    buildInfoPackage := "org.specs2",
-    Compile / scalacOptions --= Seq("-Xlint", "-Ywarn-unused-import")).
+    buildInfoPackage := "org.specs2").
   dependsOn(examples % "compile->compile;test->test")
 
 lazy val html = project.in(file("html")).
@@ -234,30 +231,35 @@ lazy val siteSettings = GhpagesPlugin.projectSettings ++ SitePlugin.projectSetti
   )
 
 /**
- * PUBLICATION
+ * RELEASE
  */
-lazy val publicationSettings = Seq(
-  Global / publishTo := sonatypePublishToBundle.value,
-  publishMavenStyle := true,
-  Test / publishArtifact := false,
-  pomIncludeRepository := { x => false },
-  pomExtra := (
-    <url>http://specs2.org/</url>
-      <licenses>
-        <license>
-          <name>MIT-style</name>
-          <url>http://www.opensource.org/licenses/mit-license.php</url>
-          <distribution>repo</distribution>
-        </license>
-      </licenses>
-      <developers>
-        <developer>
-          <id>etorreborre</id>
-          <name>Eric Torreborre</name>
-          <url>http://etorreborre.blogspot.com/</url>
-        </developer>
-      </developers>
-    ),
-  credentials := Seq(Credentials(Path.userHome / ".sbt" / "specs2.credentials"))
-) ++
-  Sonatype.projectSettings
+lazy val releaseSettings: Seq[Setting[_]] = Seq(
+  ThisBuild / githubWorkflowArtifactUpload := false,
+  ThisBuild / githubWorkflowBuild := Seq(WorkflowStep.Sbt(List("testOnly -- xonly exclude ci timefactor 3"), name = Some("Build project"))),
+  ThisBuild / githubWorkflowTargetTags ++= Seq("SPECS2_*"),
+  ThisBuild / githubWorkflowPublishTargetBranches := Seq(RefPredicate.StartsWith(Ref.Tag("SPECS2_"))),
+  ThisBuild / githubWorkflowPublish := Seq(
+    WorkflowStep.Sbt(
+      List("ci-release"),
+      env = Map(
+        "PGP_PASSPHRASE" -> "${{ secrets.PGP_PASSPHRASE }}",
+        "PGP_SECRET" -> "${{ secrets.PGP_SECRET }}",
+        "SONATYPE_PASSWORD" -> "${{ secrets.SONATYPE_PASSWORD }}",
+        "SONATYPE_USERNAME" -> "${{ secrets.SONATYPE_USERNAME }}"
+      )
+    )
+  ),
+  organization := "org.specs2",
+  homepage := Some(url("https://github.com/etorreborre/specs2")),
+  licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
+  developers := List(
+    Developer(
+      "etorreborre",
+      "Eric Torreborre",
+      "etorreborre@yahoo.com",
+      url("https://github.com/etorreborre")
+    )
+  ),
+  ThisBuild / git.gitTagToVersionNumber := { tag: String => if(tag matches "SPECS2_.*") Some(tag) else None },
+  ThisBuild / git.useGitDescribe := true,
+  ThisBuild / dynverTagPrefix := "SPECS2_")

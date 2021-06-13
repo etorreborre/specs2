@@ -10,7 +10,7 @@ import specification.dsl.ExampleDsl
 import specification.core.*
 import org.specs2.text.Trim.*
 
-class RandomExecutionSpec(val env: Env) extends Specification with ThrownExpectations with ExampleDsl with OwnEnv { def is = tag("ci") ^ s2"""
+class RandomExecutionSpec(val env: Env) extends Specification with ThrownExpectations with ExampleDsl with OwnEnv { def is = section("ci") ^ s2"""
 
  It is possible to force the order of execution of a specification so that
    the execution is sequential but with a random order on the examples $random1

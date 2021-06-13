@@ -3,7 +3,7 @@ package control
 
 import ThrowableExamples.*
 
-class ThrowablexSpec extends Specification with Throwablex { def is = s2"""
+class ThrowablexSpec extends Specification with Throwablex { def is = section("ci") ^ s2"""
 
 The Throwablex trait provides extensions to regular throwables:
 
