@@ -19,7 +19,7 @@ class FutureMatchersSpec extends Specification with ResultMatchers with specific
 
   class MyTimeout extends TimeoutException
 
-  def is = section("travis") ^ sequential ^ s2"""
+  def is = tag("ci") ^ sequential ^ s2"""
 
  In this specification `Future` means `scala.concurrent.Future`
 

@@ -31,10 +31,10 @@ class TextPrinterSpec(val env: Env) extends Specification with OwnEnv { def is =
    a skipped example must be displayed with a o $b4
    a pending example must be displayed with a * $b5
    a multi-line description must be indented ok $b6
-   if showtimes is true, each individual time must be shown $b7 ${tag("travis")}
+   if showtimes is true, each individual time must be shown $b7 ${tag("ci")}
 
  Statistics must be displayed at the end
-   total stats $c1 ${tag("travis")}
+   total stats $c1 ${tag("ci")}
 
  Failure messages must be shown
    normal messages $d1
@@ -75,7 +75,7 @@ class TextPrinterSpec(val env: Env) extends Specification with OwnEnv { def is =
     stats are not displayed with xonly when successful$k2
 
  Fragments must be displayed in their creation order
-    as soon as computed, without sequential $l1 ${tag("travis")}
+    as soon as computed, without sequential $l1 ${tag("ci")}
     as soon as computed, with sequential $l2
 
  Datatable must be properly indented $m1

@@ -7,7 +7,7 @@ import scala.concurrent.*, duration.*
 import io.StringOutput
 import specification.core.{Env, OwnExecutionEnv}
 
-class TerminationMatchersSpec(val env: Env) extends Specification with TerminationMatchers with OwnExecutionEnv { def is = section("travis") ^ sequential ^ s2"""
+class TerminationMatchersSpec(val env: Env) extends Specification with TerminationMatchers with OwnExecutionEnv { def is = tag("ci") ^ sequential ^ s2"""
 
  It is possible to check if a block of code terminates
    with a default number of retries and default sleep time

@@ -26,7 +26,7 @@ class DataTablesSpec(val env: Env) extends Specification with DataTables with Re
   2 tables results can be and-ed together                                                                    $e12
   a cell can have null values                                                                                $e13
 
- ${section("travis")}
+ ${tag("ci")}
 
  Applicative style
  =================

@@ -11,7 +11,9 @@ lazy val specs2 = project.in(file(".")).
     commonSettings,
     siteSettings,
     name := "specs2",
-    packagedArtifacts := Map.empty
+    packagedArtifacts := Map.empty,
+    ThisBuild / githubWorkflowArtifactUpload := false,
+    ThisBuild / githubWorkflowBuild := Seq(WorkflowStep.Sbt(List("testOnly -- xonly exclude ci"), name = Some("Build project")))
   ).aggregate(
     fp, common, matcher, core, matcherExtra, html, guide,
     form, markdown, junit, scalacheck, xml,
