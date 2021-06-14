@@ -28,7 +28,7 @@ object depends {
     "org.scalacheck" %% "scalacheck" % scalaCheckVersion
 
   // java dependencies
-  lazy val junit = "junit" % "junit" % "4.13"
+  lazy val junit = "junit" % "junit" % "4.13.2"
   lazy val flexmark = "com.vladsch.flexmark" % "flexmark-all" % "0.62.2"
 
   lazy val tagsoup = "org.ccil.cowan.tagsoup" % "tagsoup" % "1.2.1"
