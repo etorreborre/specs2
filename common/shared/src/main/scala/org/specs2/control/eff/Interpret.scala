@@ -476,7 +476,7 @@ trait Interpret {
    * Using a natural transformation
    */
   def translateNat[R, U, T[_], A](effects: Eff[R, A])
-                                 (nat: T ~> Eff[U, ?])
+                                 (nat: T ~> Eff[U, *])
                                  (implicit m: Member.Aux[T, R, U]): Eff[U, A] =
   translate(effects)(new Translate[T, U] {
     def apply[X](tx: T[X]): Eff[U, X] = nat(tx)

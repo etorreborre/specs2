@@ -130,8 +130,8 @@ trait FutureInterpretation extends FutureTypes {
   import interpret.of
 
   final def futureAttempt[R, A](e: Eff[R, A])(implicit future: TimedFuture /= R): Eff[R, Throwable Either A] =
-    interpret.interceptNatM[R, TimedFuture, Throwable Either ?, A](e,
-      new (TimedFuture ~> (TimedFuture of (Throwable Either ?))#l) {
+    interpret.interceptNatM[R, TimedFuture, Throwable Either *, A](e,
+      new (TimedFuture ~> (TimedFuture of (Throwable Either *))#l) {
         override def apply[X](fa: TimedFuture[X]): TimedFuture[Throwable Either X] = fa.attempt
       })
 
