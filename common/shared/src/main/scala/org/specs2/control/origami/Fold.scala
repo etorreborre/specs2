@@ -281,7 +281,7 @@ object Fold {
    *
    *   val meanTimes2 = mean.map(_ * 2)
    */
-  implicit def ApplicativeFold[M[_] : Monad, T]: Applicative[Fold[M, T, ?]] = new Applicative[Fold[M, T, ?]] {
+  implicit def ApplicativeFold[M[_] : Monad, T]: Applicative[Fold[M, T, *]] = new Applicative[Fold[M, T, *]] {
     type F[U] = Fold[M, T, U]
 
     def point[A](a: =>A): Fold[M, T, A] =
@@ -337,9 +337,9 @@ trait Folds {
     def end(s: S) = monad.point(s)
   }
 
-  def bracket[R :_Safe, A, C](open: Eff[R, C])(step: (C, A) => Eff[R, C])(close: C => Eff[R, Unit]): Fold[Eff[R, ?], A, Unit] = new Fold[Eff[R, ?], A, Unit] {
+  def bracket[R :_Safe, A, C](open: Eff[R, C])(step: (C, A) => Eff[R, C])(close: C => Eff[R, Unit]): Fold[Eff[R, *], A, Unit] = new Fold[Eff[R, *], A, Unit] {
     type S = C
-    val monad: Monad[Eff[R, ?]] = Monad[Eff[R, ?]]
+    val monad: Monad[Eff[R, *]] = Monad[Eff[R, *]]
 
     def start = open
     def fold = (s: S, a: A) => otherwise(step(s, a), close(s).as(s))

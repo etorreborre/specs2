@@ -27,8 +27,8 @@ object WriterEffect extends WriterEffect
 trait WriterCreation {
 
   /** write a given value */
-  def tell[R, O](o: O)(implicit member: Writer[O, ?] |= R): Eff[R, Unit] =
-    send[Writer[O, ?], R, Unit](Writer(o, ()))
+  def tell[R, O](o: O)(implicit member: Writer[O, *] |= R): Eff[R, Unit] =
+    send[Writer[O, *], R, Unit](Writer(o, ()))
 
 }
 
@@ -41,14 +41,14 @@ trait WriterInterpretation {
    *
    * This uses a ListBuffer internally to append values
    */
-  def runWriter[R, U, O, A, B](w: Eff[R, A])(implicit m: Member.Aux[Writer[O, ?], R, U]): Eff[U, (A, List[O])] =
+  def runWriter[R, U, O, A, B](w: Eff[R, A])(implicit m: Member.Aux[Writer[O, *], R, U]): Eff[U, (A, List[O])] =
     runWriterFold(w)(ListFold)
 
   /**
    * More general fold of runWriter where we can use a fold to accumulate values in a mutable buffer
    */
-  def runWriterFold[R, U, O, A, B](w: Eff[R, A])(fold: FoldId[O, B])(implicit m: Member.Aux[Writer[O, ?], R, U]): Eff[U, (A, B)] = {
-    val recurse: StateRecurse[Writer[O, ?], A, (A, B)] = new StateRecurse[Writer[O, ?], A, (A, B)] {
+  def runWriterFold[R, U, O, A, B](w: Eff[R, A])(fold: FoldId[O, B])(implicit m: Member.Aux[Writer[O, *], R, U]): Eff[U, (A, B)] = {
+    val recurse: StateRecurse[Writer[O, *], A, (A, B)] = new StateRecurse[Writer[O, *], A, (A, B)] {
       type S = fold.S
       val init: S = fold.start
 
@@ -67,13 +67,13 @@ trait WriterInterpretation {
       def finalize(a: A, s: S) = (a, fold.end(s))
     }
 
-    interpretState1[R, U, Writer[O, ?], A, (A, B)]((a: A) => (a, fold.end(fold.start)))(recurse)(w)
+    interpretState1[R, U, Writer[O, *], A, (A, B)]((a: A) => (a, fold.end(fold.start)))(recurse)(w)
   }
 
   /**
    * Run a side-effecting fold
    */
-  def runWriterUnsafe[R, U, O, A](w: Eff[R, A])(f: O => Unit)(implicit m: Member.Aux[Writer[O, ?], R, U]): Eff[U, A] =
+  def runWriterUnsafe[R, U, O, A](w: Eff[R, A])(f: O => Unit)(implicit m: Member.Aux[Writer[O, *], R, U]): Eff[U, A] =
     runWriterFold(w)(UnsafeFold(f)).map(_._1)
 
   implicit def ListFold[A]: FoldId[A, List[A]] = new Fold[Id, A, List[A]] {

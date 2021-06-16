@@ -127,7 +127,7 @@ object Applicative {
   implicit def optionApplicative[L]: Applicative[Option] =
     Monad.optionMonad
 
-  implicit def eitherApplicative[L]: Applicative[Either[L, ?]] =
+  implicit def eitherApplicative[L]: Applicative[Either[L, *]] =
     Monad.eitherMonad[L]
 
   implicit def futureApplicative(implicit ec: ExecutionContext): Applicative[Future] =

@@ -13,7 +13,7 @@ import org.specs2.control.eff.Eff
 object FoldIo {
 
   /** create a fold sink to output lines to a file */
-  def showToFilePath[R :_Safe, T : Show](path: FilePath): Sink[Eff[R, ?], T] =
+  def showToFilePath[R :_Safe, T : Show](path: FilePath): Sink[Eff[R, *], T] =
     printToFilePath(path)(t => Eff.pure(Show[T].show(t)))
 
   /** create a fold sink to output lines to a file */
