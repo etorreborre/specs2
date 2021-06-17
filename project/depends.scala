@@ -1,14 +1,13 @@
 import sbt._
 import Defaults._
 import Keys._
-//import dotty.tools.sbtplugin.DottyPlugin.autoImport._
 
 object depends {
 
   lazy val scalaCheckVersion = "1.15.3"
 
   lazy val reflect =
-    libraryDependencies += (scalaOrganization.value % "scala-reflect" % scalaVersion.value)//.withDottyCompat(scalaVersion.value)
+    libraryDependencies += (scalaOrganization.value % "scala-reflect" % scalaVersion.value)
 
   lazy val jvmTest =
     libraryDependencies ++= Seq(
@@ -16,13 +15,13 @@ object depends {
       )
 
   lazy val scalaParser =
-    libraryDependencies += ("org.scala-lang.modules" %% "scala-parser-combinators" % "2.0.0")// .withDottyCompat(scalaVersion.value)
+    libraryDependencies += ("org.scala-lang.modules" %% "scala-parser-combinators" % "2.0.0")
 
   lazy val scalaParserNative =
       scalaParser
 
   lazy val scalaXml =
-    libraryDependencies += ("org.scala-lang.modules" %% "scala-xml" % "2.0.0") //.withDottyCompat(scalaVersion.value)
+    libraryDependencies += ("org.scala-lang.modules" %% "scala-xml" % "2.0.0")
 
   lazy val scalacheck =
     "org.scalacheck" %% "scalacheck" % scalaCheckVersion
@@ -32,10 +31,6 @@ object depends {
   lazy val flexmark = "com.vladsch.flexmark" % "flexmark-all" % "0.62.2"
 
   lazy val tagsoup = "org.ccil.cowan.tagsoup" % "tagsoup" % "1.2.1"
-
-  lazy val resolvers =
-    Seq(sbt.Keys.resolvers ++= Seq(
-      Resolver.sonatypeRepo("releases")))
 
   def scalaMinorVersionAtLeast(scalaVersion: String, n: Int): Boolean =
     CrossVersion.partialVersion(scalaVersion) match {

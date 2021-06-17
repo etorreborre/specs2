@@ -47,7 +47,6 @@ lazy val commonJsSettings = Seq(
 
 lazy val commonSettings =
     specs2Settings       ++
-    depends.resolvers    ++
     coreDefaultSettings  ++
     compilationSettings  ++
     testingSettings      ++
@@ -235,7 +234,10 @@ lazy val siteSettings = GhpagesPlugin.projectSettings ++ SitePlugin.projectSetti
  */
 lazy val releaseSettings: Seq[Setting[_]] = Seq(
   ThisBuild / githubWorkflowArtifactUpload := false,
-  ThisBuild / githubWorkflowBuild := Seq(WorkflowStep.Sbt(List("testOnly -- xonly exclude ci timefactor 3"), name = Some("Build project"))),
+  ThisBuild / githubWorkflowBuild := Seq(
+    WorkflowStep.Sbt(List("testOnly -- xonly exclude ci timefactor 3"), name = Some("Build and test")),
+    WorkflowStep.Sbt(List("guide/testOnly *Website -- xonly"), name = Some("Generate the specs2 website"))
+    ),
   ThisBuild / githubWorkflowTargetTags ++= Seq("SPECS2_*"),
   ThisBuild / githubWorkflowPublishTargetBranches := Seq(RefPredicate.StartsWith(Ref.Tag("SPECS2_"))),
   ThisBuild / githubWorkflowPublish := Seq(

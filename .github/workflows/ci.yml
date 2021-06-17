@@ -52,8 +52,11 @@ jobs:
       - name: Check that workflows are up to date
         run: sbt --client '++${{ matrix.scala }}; githubWorkflowCheck'
 
-      - name: Build project
+      - name: Build and test
         run: sbt --client '++${{ matrix.scala }}; testOnly -- xonly exclude ci timefactor 3'
+
+      - name: Generate the specs2 website
+        run: sbt --client '++${{ matrix.scala }}; guide/testOnly *Website*'
 
   publish:
     name: Publish Artifacts

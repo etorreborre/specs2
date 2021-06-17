@@ -20,7 +20,7 @@ class Website(env: Env) extends Specification with Specs2Variables with Specs2Ta
   given ExecutionEnv = env.executionEnv
 
   val outputDir = "target" / "specs2-reports" / "site"
-  val versionDirName = FileName.unsafe("SPECS2-"+VERSION)
+  val versionDirName = FileName.unsafe(VERSION)
 
   def createWebsite = {
     val fs = env.fileSystem
@@ -58,7 +58,8 @@ class Website(env: Env) extends Specification with Specs2Variables with Specs2Ta
 
   def versionsJavaScript(tags: List[VersionTag], guideDir: String, apiDir: String): String = {
     def makeVersionVar(name: String, file: String) =
-      s"""|var ${name}Versions = [
+      s"""|var ${name}
+          | = [
           | ${tags.map(_.render).map(tag => s"""{id:"../../$name/$tag/$file", text:"${tag.replace("SPECS2-", "")}"}""").mkString(",\n")}
           |];""".stripMargin
 
