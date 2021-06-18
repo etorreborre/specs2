@@ -52,11 +52,16 @@ jobs:
       - name: Check that workflows are up to date
         run: sbt --client '++${{ matrix.scala }}; githubWorkflowCheck'
 
-      - name: Build and test
+      - name: Build and test 🔧
         run: sbt --client '++${{ matrix.scala }}; testOnly -- xonly exclude ci timefactor 3'
 
-      - name: Generate the specs2 website
-        run: sbt --client '++${{ matrix.scala }}; guide/testOnly *Website*'
+      - name: Install Pandoc 🏁
+        uses: r-lib/actions/setup-pandoc@v1
+        with:
+          pandoc-version: 2.7.3
+
+      - name: Generate the specs2 website 📚
+        run: sbt --client '++${{ matrix.scala }}; guide/testOnly *Website -- xonly'
 
   publish:
     name: Publish Artifacts
@@ -91,9 +96,16 @@ jobs:
             ~/Library/Caches/Coursier/v1
           key: ${{ runner.os }}-sbt-cache-v2-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
 
-      - env:
+      - name: Release to Sonatype 📇
+        env:
           PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
           PGP_SECRET: ${{ secrets.PGP_SECRET }}
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
         run: sbt --client '++${{ matrix.scala }}; ci-release'
+
+      - name: Update the website 🚀
+        uses: JamesIves/github-pages-deploy-action@4.1.4
+        with:
+          branch: gh-pages
+          folder: guide/target/specs2-reports/site

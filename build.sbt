@@ -235,21 +235,35 @@ lazy val siteSettings = GhpagesPlugin.projectSettings ++ SitePlugin.projectSetti
 lazy val releaseSettings: Seq[Setting[_]] = Seq(
   ThisBuild / githubWorkflowArtifactUpload := false,
   ThisBuild / githubWorkflowBuild := Seq(
-    WorkflowStep.Sbt(List("testOnly -- xonly exclude ci timefactor 3"), name = Some("Build and test")),
-    WorkflowStep.Sbt(List("guide/testOnly *Website -- xonly"), name = Some("Generate the specs2 website"))
+    WorkflowStep.Sbt(
+      name = Some("Build and test 🔧"),
+      commands = List("testOnly -- xonly exclude ci timefactor 3")),
+    WorkflowStep.Use(
+      name = Some("Install Pandoc 🏁"),
+      ref = UseRef.Public("r-lib/actions", "setup-pandoc", "v1"),
+      params = Map("pandoc-version" -> "2.7.3")),
+    WorkflowStep.Sbt(
+      name = Some("Generate the specs2 website 📚"),
+      commands = List("guide/testOnly *Website -- xonly"))
     ),
   ThisBuild / githubWorkflowTargetTags ++= Seq("SPECS2_*"),
   ThisBuild / githubWorkflowPublishTargetBranches := Seq(RefPredicate.StartsWith(Ref.Tag("SPECS2_"))),
   ThisBuild / githubWorkflowPublish := Seq(
     WorkflowStep.Sbt(
-      List("ci-release"),
+      name = Some("Release to Sonatype 📇"),
+      commands = List("ci-release"),
       env = Map(
         "PGP_PASSPHRASE" -> "${{ secrets.PGP_PASSPHRASE }}",
         "PGP_SECRET" -> "${{ secrets.PGP_SECRET }}",
         "SONATYPE_PASSWORD" -> "${{ secrets.SONATYPE_PASSWORD }}",
         "SONATYPE_USERNAME" -> "${{ secrets.SONATYPE_USERNAME }}"
       )
-    )
+    ),
+    WorkflowStep.Use(
+      name = Some("Update the website 🚀"),
+      ref = UseRef.Public("JamesIves", "github-pages-deploy-action", "4.1.4"),
+      params = Map("branch" -> "gh-pages",
+                   "folder" -> "guide/target/specs2-reports/site"))
   ),
   organization := "org.specs2",
   homepage := Some(url("https://github.com/etorreborre/specs2")),
