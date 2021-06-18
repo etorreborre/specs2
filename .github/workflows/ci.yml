@@ -12,7 +12,7 @@ on:
     branches: ['**']
   push:
     branches: ['**']
-    tags: [SPECS2_*, SPECS2_*, SPECS2_*, SPECS2_*, SPECS2_*, SPECS2_*, SPECS2_*, SPECS2_*, SPECS2_*, SPECS2_*, SPECS2_*, SPECS2_*, SPECS2_*, SPECS2_*, SPECS2_*, SPECS2_*]
+    tags: [SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*]
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -58,7 +58,7 @@ jobs:
   publish:
     name: Publish Artifacts
     needs: [build]
-    if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/SPECS2_'))
+    if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/SPECS2-'))
     strategy:
       matrix:
         os: [ubuntu-latest]

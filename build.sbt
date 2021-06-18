@@ -34,7 +34,7 @@ lazy val specs2Settings = Seq(
 
 lazy val commonJsSettings = Seq(
   scalacOptions += {
-    val tag = s"SPECS2-${version.value}"
+    val tag = "${version.value}"
     val tagOrHash =
       if(isSnapshot.value) sys.process.Process("git rev-parse HEAD").lineStream_!.head
       else tag
@@ -239,8 +239,8 @@ lazy val releaseSettings: Seq[Setting[_]] = Seq(
       name = Some("Build and test 🔧"),
       commands = List("testOnly -- xonly exclude ci,website timefactor 3"))
     ),
-  ThisBuild / githubWorkflowTargetTags ++= Seq("SPECS2_*"),
-  ThisBuild / githubWorkflowPublishTargetBranches := Seq(RefPredicate.StartsWith(Ref.Tag("SPECS2_"))),
+  ThisBuild / githubWorkflowTargetTags ++= Seq(SPECS2+"*"),
+  ThisBuild / githubWorkflowPublishTargetBranches := Seq(RefPredicate.StartsWith(Ref.Tag(SPECS2))),
   ThisBuild / githubWorkflowPublish := Seq(
     // WorkflowStep.Sbt(
     //   name = Some("Release to Sonatype 📇"),
@@ -276,6 +276,8 @@ lazy val releaseSettings: Seq[Setting[_]] = Seq(
       url("https://github.com/etorreborre")
     )
   ),
-  ThisBuild / git.gitTagToVersionNumber := { tag: String => if(tag matches "SPECS2_.*") Some(tag) else None },
+  ThisBuild / git.gitTagToVersionNumber := { tag: String => if(tag matches SPECS2+".*") Some(tag) else None },
   ThisBuild / git.useGitDescribe := true,
-  ThisBuild / dynverTagPrefix := "SPECS2_")
+  ThisBuild / dynverTagPrefix := SPECS2)
+
+val SPECS2 = "SPECS2-"
