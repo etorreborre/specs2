@@ -237,7 +237,7 @@ lazy val releaseSettings: Seq[Setting[_]] = Seq(
   ThisBuild / githubWorkflowBuild := Seq(
     WorkflowStep.Sbt(
       name = Some("Build and test 🔧"),
-      commands = List("testOnly -- xonly exclude ci timefactor 3")),
+      commands = List("testOnly -- xonly exclude ci,website timefactor 3")),
     WorkflowStep.Use(
       name = Some("Install Pandoc 🏁"),
       ref = UseRef.Public("r-lib/actions", "setup-pandoc", "v1"),

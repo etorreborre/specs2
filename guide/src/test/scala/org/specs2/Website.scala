@@ -10,7 +10,7 @@ import main.*
 import concurrent.ExecutionEnv
 import org.specs2.fp.syntax.*
 
-class Website(env: Env) extends Specification with Specs2Variables with Specs2Tags { def is = sequential ^ s2"""
+class Website(env: Env) extends Specification with Specs2Variables with Specs2Tags { def is = section("website") ^ sequential ^ s2"""
 
  create the website    $createWebsite
  create the user guide $createUserGuide
@@ -47,7 +47,7 @@ class Website(env: Env) extends Specification with Specs2Variables with Specs2Ta
 
   def createUserGuide: Action[Boolean] = {
     val guideOutputDir = outputDir / "guide" / versionDirName
-    val env1 = env.copy(arguments = Arguments.split(s"all html console html.search html.toc html.nostats html.outdir ${guideOutputDir.dirPath}"))
+    val env1 = env.copy(arguments = Arguments.split(s"all html html.search html.toc html.nostats html.outdir ${guideOutputDir.dirPath}"))
 
     env1.fileSystem.copyFile(guideOutputDir / "css")(resource("css/specs2-user.css")).toAction >>
       ClassRunner.createClassRunner(env1).toAction.flatMap(_.run(UserGuide).map(_ => true))

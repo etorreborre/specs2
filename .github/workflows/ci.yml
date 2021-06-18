@@ -53,7 +53,7 @@ jobs:
         run: sbt --client '++${{ matrix.scala }}; githubWorkflowCheck'
 
       - name: Build and test 🔧
-        run: sbt --client '++${{ matrix.scala }}; testOnly -- xonly exclude ci timefactor 3'
+        run: sbt --client '++${{ matrix.scala }}; testOnly -- xonly exclude ci,website timefactor 3'
 
       - name: Install Pandoc 🏁
         uses: r-lib/actions/setup-pandoc@v1
