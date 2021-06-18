@@ -237,28 +237,28 @@ lazy val releaseSettings: Seq[Setting[_]] = Seq(
   ThisBuild / githubWorkflowBuild := Seq(
     WorkflowStep.Sbt(
       name = Some("Build and test 🔧"),
-      commands = List("testOnly -- xonly exclude ci,website timefactor 3")),
+      commands = List("testOnly -- xonly exclude ci,website timefactor 3"))
+    ),
+  ThisBuild / githubWorkflowTargetTags ++= Seq("SPECS2_*"),
+  ThisBuild / githubWorkflowPublishTargetBranches := Seq(RefPredicate.StartsWith(Ref.Tag("SPECS2_"))),
+  ThisBuild / githubWorkflowPublish := Seq(
+    // WorkflowStep.Sbt(
+    //   name = Some("Release to Sonatype 📇"),
+    //   commands = List("ci-release"),
+    //   env = Map(
+    //     "PGP_PASSPHRASE" -> "${{ secrets.PGP_PASSPHRASE }}",
+    //     "PGP_SECRET" -> "${{ secrets.PGP_SECRET }}",
+    //     "SONATYPE_PASSWORD" -> "${{ secrets.SONATYPE_PASSWORD }}",
+    //     "SONATYPE_USERNAME" -> "${{ secrets.SONATYPE_USERNAME }}"
+    //   )
+    // ),
     WorkflowStep.Use(
       name = Some("Install Pandoc 🏁"),
       ref = UseRef.Public("r-lib/actions", "setup-pandoc", "v1"),
       params = Map("pandoc-version" -> "2.7.3")),
     WorkflowStep.Sbt(
       name = Some("Generate the specs2 website 📚"),
-      commands = List("guide/testOnly *Website -- xonly"))
-    ),
-  ThisBuild / githubWorkflowTargetTags ++= Seq("SPECS2_*"),
-  ThisBuild / githubWorkflowPublishTargetBranches := Seq(RefPredicate.StartsWith(Ref.Tag("SPECS2_"))),
-  ThisBuild / githubWorkflowPublish := Seq(
-    WorkflowStep.Sbt(
-      name = Some("Release to Sonatype 📇"),
-      commands = List("ci-release"),
-      env = Map(
-        "PGP_PASSPHRASE" -> "${{ secrets.PGP_PASSPHRASE }}",
-        "PGP_SECRET" -> "${{ secrets.PGP_SECRET }}",
-        "SONATYPE_PASSWORD" -> "${{ secrets.SONATYPE_PASSWORD }}",
-        "SONATYPE_USERNAME" -> "${{ secrets.SONATYPE_USERNAME }}"
-      )
-    ),
+      commands = List("guide/testOnly *Website -- xonly")),
     WorkflowStep.Use(
       name = Some("Update the website 🚀"),
       ref = UseRef.Public("JamesIves", "github-pages-deploy-action", "4.1.4"),
