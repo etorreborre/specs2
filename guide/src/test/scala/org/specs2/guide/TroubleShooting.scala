@@ -58,35 +58,6 @@ given AsResult[Unit] with
     ResultExecution.execute(r)(_ => Success())
 }}
 
-### Type mismatch
-
-This is also a tricky one, showing the limitations of embedding a pseudo-natural language into a programming language:
-```
-class Inference extends mutable.Specification {
-  "It doesn't mean what you think it does" >> {
-    List(1, 2, 3) must not beNull
-    List(1, 2) must have size(2)
-  }
-}
-
-[error] type mismatch;
-[error]  found   : List[Int]
-[error]  required: org.specs2.matcher.Matcher[List[Int]]
-[error]     List(1, 2) must have size(2)
-[error]         ^
-```
-
-The first statement is parsed as `issue.must(not).beNull` as if `beNull` was a method expecting an argument on the next line (this is well explained in this [StackOverflow question](http://stackoverflow.com/questions/14336699/specs2-multiple-matcher-expressions-unit-specification)).
-
-The possible fixes are:
-
- - use parentheses around `beNull`, like this: `not(beNull)`
- - use a semi-column after the first line
-
-### Yrangepos
-
-The `Yrangepos` scalac option (see ${see(QuickStart)}) is necessary to get proper Fragment locations when using `s2` interpolated strings. However this option sometimes breaks some macros with messages like [`[info] Unpositioned tree #931`](https://github.com/non/kind-projector/issues/7). In that case you should remove that option from your build. You will still be able to use `s2` interpolation strings but fragment locations will be less precise.
-
 ### Custom output
 
 You created a custom `Notifier` or another class for reporting and when you use it nothing happens. In that case add the `verbose` argument to the command line and you will get more messages including exceptions and stacktraces about what is going on.
