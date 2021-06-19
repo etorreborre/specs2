@@ -68,15 +68,15 @@ There are various sources you can use to learn about <s2>specs2</s2>
  $$(document).ready(function() {
    $$("select").select2();
 
-   $$(".guide").select2({
+   $$(".guide-version").select2({
       placeholder: "User guide versions",
       allowClear: true,
-      data: guideVersions
+      data: guide
     });
-   $$(".api").select2({
+   $$(".api-version").select2({
       placeholder: "ScalaDoc versions",
       allowClear: true,
-      data: apiVersions
+      data: api
     });
  });
 
