@@ -1,0 +1,1227 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Forms</title>
+    <link href="./images/s2.ico"                                   type="image/x-icon" rel="specs2 icon"/>
+    <link href="./css/opensans-fonts.css"                          type="text/css"     rel="stylesheet" />
+    <link href="./css/bootstrap.min.css"                           type="text/css"     rel="stylesheet" />
+    <link href="./css/font-awesome.min.css"                        type="text/css"     rel="stylesheet" />
+    <link href="./css/prettify.css"                                type="text/css"     rel="stylesheet" />
+    <link href="./css/tabber.css"                                  type="text/css"     rel="stylesheet" />
+    <link href="./css/tipuesearch.css"                             type="text/css"     rel="stylesheet" />
+    <link href="./css/specs2.css"                                  type="text/css"     rel="stylesheet" />
+    <link href="./css/specs2-user.css"                             type="text/css"     rel="stylesheet" />
+
+    <script src="./javascript/jquery.js"                           type="text/javascript"></script>
+    <script src="./javascript/jquery.jstree.js"                    type="text/javascript"></script>
+    <script src="./javascript/tabber.js"                           type="text/javascript"></script>
+    <script src="./javascript/tabber_start.js"                     type="text/javascript"></script>
+    <script src="./javascript/prettify.js"                         type="text/javascript"></script>
+    <script src="./javascript/specs2.js"                           type="text/javascript"></script>
+    <script src="./javascript/specs2-user.js"                      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_set.js"      type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch_contents.js" type="text/javascript"></script>
+    <script src="./javascript/tipuesearch/tipuesearch.min.js"      type="text/javascript"></script>
+
+</head>
+<body onload="prettyPrint(); tabberAutomatic([])">
+
+<div class="container">
+
+<div class="col-md-2 col-sm-3 col-xs-3 sidebar-outer">
+<div class="col-md-2 fixed">
+
+<!-- search box -->
+<div class="search-box">
+  <form action="search.html">
+    <input type="text" name="q" id="tipue_search_input" autocomplete="off" required>
+  </form>
+</div>
+
+<!-- table of contents -->
+<div id="tree"><ul>
+                <li id="org-specs2-guide-userguide"><a href="org.specs2.guide.UserGuide.html" title="User Guide">User Guide</a>
+      <ul></ul>
+      <ul>
+                    <ul>
+                <li id="org-specs2-guide-quickstart"><a href="org.specs2.guide.QuickStart.html" title="Quick Start">Quick Start</a>
+      <ul><ul><li><a href="org.specs2.guide.QuickStart.html#unit-specifications" title="Unit specifications">Unit specificat...</a>
+            
+          </li><li><a href="org.specs2.guide.QuickStart.html#execution" title="Execution">Execution</a>
+            
+          </li><li><a href="org.specs2.guide.QuickStart.html#learn-more!" title="Learn more!">Learn more!</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-structure"><a href="org.specs2.guide.Structure.html" title="Structure">Structure</a>
+      <ul><ul><li><a href="org.specs2.guide.Structure.html#styles" title="Styles">Styles</a>
+            
+          </li><li><a href="org.specs2.guide.Structure.html#acceptance-specification" title="Acceptance specification">Acceptance spec...</a>
+            
+          </li><li><a href="org.specs2.guide.Structure.html#unit-specification" title="Unit specification">Unit specification</a>
+            
+          </li><li><a href="org.specs2.guide.Structure.html#expectations" title="Expectations">Expectations</a>
+            <ul><li><a href="org.specs2.guide.Structure.html#functional-expectations" title="Functional expectations">Functional expe...</a>
+            
+          </li><li><a href="org.specs2.guide.Structure.html#thrown-expectations" title="Thrown expectations">Thrown expectat...</a>
+            
+          </li></ul>
+          </li><li><a href="org.specs2.guide.Structure.html#now-learn-how-to..." title="Now learn how to...">Now learn how t...</a>
+            
+          </li><li><a href="org.specs2.guide.Structure.html#and-if-you-want-to-know-more" title="And if you want to know more">And if you want...</a>
+            
+          </li></ul></ul>
+      <ul>
+                    <ul>
+                <li id="org-specs2-guide-mutablespecsyntax"><a href="org.specs2.guide.MutableSpecSyntax.html" title="Mutable specification syntax">Mutable specifi...</a>
+      <ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul>
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-matchers"><a href="org.specs2.guide.Matchers.html" title="Matchers">Matchers</a>
+      <ul><ul><li><a href="org.specs2.guide.Matchers.html#equality" title="Equality">Equality</a>
+            
+          </li><li><a href="org.specs2.guide.Matchers.html#out-of-the-box" title="Out of the box">Out of the box</a>
+            <ul><li><a href="org.specs2.guide.Matchers.html#check-each-element-individually" title="Check each element individually">Check each elem...</a>
+            
+          </li><li><a href="org.specs2.guide.Matchers.html#check-all-elements" title="Check all elements">Check all elements</a>
+            
+          </li><li><a href="org.specs2.guide.Matchers.html#execution" title="Execution">Execution</a>
+            
+          </li><li><a href="org.specs2.guide.Matchers.html#time-factor" title="Time factor">Time factor</a>
+            
+          </li><li><a href="org.specs2.guide.Matchers.html#with-a-typeclass" title="With a typeclass">With a typeclass</a>
+            
+          </li></ul>
+          </li><li><a href="org.specs2.guide.Matchers.html#optional" title="Optional">Optional</a>
+            <ul><li><a href="org.specs2.guide.Matchers.html#executionenv" title="ExecutionEnv">ExecutionEnv</a>
+            <ul><li><a href="org.specs2.guide.Matchers.html#file-contents" title="File contents">File contents</a>
+            
+          </li><li><a href="org.specs2.guide.Matchers.html#directories-contents" title="Directories contents">Directories con...</a>
+            
+          </li><li><a href="org.specs2.guide.Matchers.html#lines-contents" title="Lines contents">Lines contents</a>
+            
+          </li></ul>
+          </li></ul>
+          </li><li><a href="org.specs2.guide.Matchers.html#typecheck-matchers" title="Typecheck matchers">Typecheck matchers</a>
+            <ul><li><a href="org.specs2.guide.Matchers.html#typecheckresult" title="TypecheckResult">TypecheckResult</a>
+            
+          </li></ul>
+          </li><li><a href="org.specs2.guide.Matchers.html#derive-matchers" title="Derive matchers">Derive matchers</a>
+            
+          </li><li><a href="org.specs2.guide.Matchers.html#create-your-own" title="Create your own">Create your own</a>
+            
+          </li><li><a href="org.specs2.guide.Matchers.html#now-learn-how-to..." title="Now learn how to...">Now learn how t...</a>
+            
+          </li><li><a href="org.specs2.guide.Matchers.html#and-if-you-want-to-know-more" title="And if you want to know more">And if you want...</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-runners"><a href="org.specs2.guide.Runners.html" title="Runners">Runners</a>
+      <ul><ul><li><a href="org.specs2.guide.Runners.html#via-sbt" title="Via sbt">Via sbt</a>
+            <ul><li><a href="org.specs2.guide.Runners.html#sbt-options" title="sbt options">sbt options</a>
+            
+          </li></ul>
+          </li><li><a href="org.specs2.guide.Runners.html#in-a-shell" title="In a shell">In a shell</a>
+            
+          </li><li><a href="org.specs2.guide.Runners.html#output" title="Output">Output</a>
+            
+          </li><li><a href="org.specs2.guide.Runners.html#arguments" title="Arguments">Arguments</a>
+            
+          </li><li><a href="org.specs2.guide.Runners.html#now-learn-how-to..." title="Now learn how to...">Now learn how t...</a>
+            
+          </li><li><a href="org.specs2.guide.Runners.html#and-if-you-want-to-know-more" title="And if you want to know more">And if you want...</a>
+            
+          </li></ul></ul>
+      <ul>
+                    <ul>
+                <li id="org-specs2-guide-consoleoutput"><a href="org.specs2.guide.ConsoleOutput.html" title="Console output">Console output</a>
+      <ul><ul><li><a href="org.specs2.guide.ConsoleOutput.html#show-only" title="Show only">Show only</a>
+            
+          </li><li><a href="org.specs2.guide.ConsoleOutput.html#stacktracefilter" title="StackTraceFilter">StackTraceFilter</a>
+            
+          </li><li><a href="org.specs2.guide.ConsoleOutput.html#diffs" title="Diffs">Diffs</a>
+            
+          </li><li><a href="org.specs2.guide.ConsoleOutput.html#colors" title="Colors">Colors</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-junitxmloutput"><a href="org.specs2.guide.JUnitXmlOutput.html" title="JUnit XML output">JUnit XML output</a>
+      <ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-htmloutput"><a href="org.specs2.guide.HtmlOutput.html" title="Html output">Html output</a>
+      <ul><ul><li><a href="org.specs2.guide.HtmlOutput.html#create-html-files" title="Create Html files">Create Html files</a>
+            
+          </li><li><a href="org.specs2.guide.HtmlOutput.html#use-pandoc-for-markdown" title="Use Pandoc for Markdown">Use Pandoc for ...</a>
+            
+          </li><li><a href="org.specs2.guide.HtmlOutput.html#use-a-different-template" title="Use a different template">Use a different...</a>
+            
+          </li><li><a href="org.specs2.guide.HtmlOutput.html#use-other-css/javascript-files" title="Use other CSS/Javascript files">Use other CSS/J...</a>
+            
+          </li><li><a href="org.specs2.guide.HtmlOutput.html#create-an-index" title="Create an index">Create an index</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-markdownoutput"><a href="org.specs2.guide.MarkdownOutput.html" title="Markdown output">Markdown output</a>
+      <ul><ul><li><a href="org.specs2.guide.MarkdownOutput.html#markdown-printer" title="Markdown printer">Markdown printer</a>
+            
+          </li><li><a href="org.specs2.guide.MarkdownOutput.html#arguments" title="Arguments">Arguments</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-customoutput"><a href="org.specs2.guide.CustomOutput.html" title="Custom output">Custom output</a>
+      <ul><ul><li><a href="org.specs2.guide.CustomOutput.html#notifier" title="Notifier">Notifier</a>
+            
+          </li><li><a href="org.specs2.guide.CustomOutput.html#printer" title="Printer">Printer</a>
+            
+          </li><li><a href="org.specs2.guide.CustomOutput.html#reporter" title="Reporter">Reporter</a>
+            
+          </li><li><a href="org.specs2.guide.CustomOutput.html#troubleshooting" title="Troubleshooting">Troubleshooting</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-selection"><a href="org.specs2.guide.Selection.html" title="Selection">Selection</a>
+      <ul><ul><li><a href="org.specs2.guide.Selection.html#use-tags" title="Use tags">Use tags</a>
+            <ul><li><a href="org.specs2.guide.Selection.html#in-a-unit-specification" title="In a unit specification">In a unit speci...</a>
+            <ul><li><a href="org.specs2.guide.Selection.html#automatic-sections" title="Automatic sections">Automatic sections</a>
+            
+          </li></ul>
+          </li><li><a href="org.specs2.guide.Selection.html#always-tag" title="Always tag">Always tag</a>
+            
+          </li></ul>
+          </li><li><a href="org.specs2.guide.Selection.html#select-failed-examples" title="Select failed examples">Select failed e...</a>
+            
+          </li><li><a href="org.specs2.guide.Selection.html#and-if-you-want-to-know-more" title="And if you want to know more">And if you want...</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-execution"><a href="org.specs2.guide.Execution.html" title="Execution">Execution</a>
+      <ul><ul><li><a href="org.specs2.guide.Execution.html#parallel-by-default" title="Parallel by default">Parallel by def...</a>
+            
+          </li><li><a href="org.specs2.guide.Execution.html#steps" title="Steps">Steps</a>
+            
+          </li><li><a href="org.specs2.guide.Execution.html#stop-the-execution" title="Stop the execution">Stop the execution</a>
+            
+          </li><li><a href="org.specs2.guide.Execution.html#sequential" title="Sequential">Sequential</a>
+            
+          </li><li><a href="org.specs2.guide.Execution.html#action" title="Action">Action</a>
+            
+          </li><li><a href="org.specs2.guide.Execution.html#now-learn-how-to..." title="Now learn how to...">Now learn how t...</a>
+            
+          </li><li><a href="org.specs2.guide.Execution.html#and-if-you-want-to-know-more" title="And if you want to know more">And if you want...</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-runinide"><a href="org.specs2.guide.RunInIDE.html" title="Run in IDE">Run in IDE</a>
+      <ul><ul><li><a href="org.specs2.guide.RunInIDE.html#intellij-idea" title="Intellij IDEA">Intellij IDEA</a>
+            
+          </li><li><a href="org.specs2.guide.RunInIDE.html#scalaide" title="ScalaIDE">ScalaIDE</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-runinshell"><a href="org.specs2.guide.RunInShell.html" title="Run in shell">Run in shell</a>
+      <ul><ul><li><a href="org.specs2.guide.RunInShell.html#dependencies" title="Dependencies">Dependencies</a>
+            
+          </li><li><a href="org.specs2.guide.RunInShell.html#from-the-shell" title="From the shell">From the shell</a>
+            <ul><li><a href="org.specs2.guide.RunInShell.html#run-one-specification" title="Run one specification">Run one specifi...</a>
+            
+          </li><li><a href="org.specs2.guide.RunInShell.html#run-several-specifications" title="Run several specifications">Run several spe...</a>
+            
+          </li><li><a href="org.specs2.guide.RunInShell.html#outputs" title="Outputs">Outputs</a>
+            
+          </li></ul>
+          </li><li><a href="org.specs2.guide.RunInShell.html#from-the-scala-console" title="From the scala console">From the scala ...</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul>
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-contexts"><a href="org.specs2.guide.Contexts.html" title="Contexts">Contexts</a>
+      <ul><ul><li><a href="org.specs2.guide.Contexts.html#beforeeach-/-aftereach" title="BeforeEach / AfterEach">BeforeEach / Af...</a>
+            
+          </li><li><a href="org.specs2.guide.Contexts.html#aroundeach" title="AroundEach">AroundEach</a>
+            
+          </li><li><a href="org.specs2.guide.Contexts.html#foreach" title="ForEach">ForEach</a>
+            
+          </li><li><a href="org.specs2.guide.Contexts.html#beforespec-/-afterspec" title="BeforeSpec / AfterSpec">BeforeSpec / Af...</a>
+            
+          </li><li><a href="org.specs2.guide.Contexts.html#and-if-you-want-to-know-more" title="And if you want to know more">And if you want...</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-usescalacheck"><a href="org.specs2.guide.UseScalaCheck.html" title="ScalaCheck">ScalaCheck</a>
+      <ul><ul><li><a href="org.specs2.guide.UseScalaCheck.html#prop-and-properties" title="Prop and Properties">Prop and Proper...</a>
+            
+          </li><li><a href="org.specs2.guide.UseScalaCheck.html#arbitrary-instances" title="Arbitrary instances">Arbitrary insta...</a>
+            
+          </li><li><a href="org.specs2.guide.UseScalaCheck.html#with-shrink-/-pretty" title="With Shrink / Pretty">With Shrink / P...</a>
+            
+          </li><li><a href="org.specs2.guide.UseScalaCheck.html#contexts" title="Contexts">Contexts</a>
+            
+          </li><li><a href="org.specs2.guide.UseScalaCheck.html#test-properties" title="Test properties">Test properties</a>
+            <ul><li><a href="org.specs2.guide.UseScalaCheck.html#default-values" title="Default values">Default values</a>
+            
+          </li><li><a href="org.specs2.guide.UseScalaCheck.html#property-level" title="Property level">Property level</a>
+            
+          </li><li><a href="org.specs2.guide.UseScalaCheck.html#command-line" title="Command-line">Command-line</a>
+            
+          </li><li><a href="org.specs2.guide.UseScalaCheck.html#expectations" title="Expectations">Expectations</a>
+            
+          </li></ul>
+          </li><li><a href="org.specs2.guide.UseScalaCheck.html#collect-values" title="Collect values">Collect values</a>
+            
+          </li><li><a href="org.specs2.guide.UseScalaCheck.html#equivalence" title="Equivalence">Equivalence</a>
+            
+          </li><li><a href="org.specs2.guide.UseScalaCheck.html#working-with-seeds" title="Working with Seeds">Working with Seeds</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-installation"><a href="org.specs2.guide.Installation.html" title="Installation">Installation</a>
+      <ul><ul><li><a href="org.specs2.guide.Installation.html#sbt" title="SBT">SBT</a>
+            
+          </li><li><a href="org.specs2.guide.Installation.html#other-dependencies" title="Other dependencies">Other dependencies</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-howto"><a href="org.specs2.guide.HowTo.html" title="How to">How to</a>
+      <ul></ul>
+      <ul>
+                    <ul>
+                <li id="org-specs2-guide-randomexecution"><a href="org.specs2.guide.RandomExecution.html" title="Random execution">Random execution</a>
+      <ul><ul><li><a href="org.specs2.guide.RandomExecution.html#random-sequential-execution" title="Random sequential execution">Random sequenti...</a>
+            
+          </li><li><a href="org.specs2.guide.RandomExecution.html#using-scalacheck" title="Using ScalaCheck">Using ScalaCheck</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-selection"><a href="org.specs2.guide.Selection.html" title="Selection">Selection</a>
+      <ul><ul><li><a href="org.specs2.guide.Selection.html#use-tags" title="Use tags">Use tags</a>
+            <ul><li><a href="org.specs2.guide.Selection.html#in-a-unit-specification" title="In a unit specification">In a unit speci...</a>
+            <ul><li><a href="org.specs2.guide.Selection.html#automatic-sections" title="Automatic sections">Automatic sections</a>
+            
+          </li></ul>
+          </li><li><a href="org.specs2.guide.Selection.html#always-tag" title="Always tag">Always tag</a>
+            
+          </li></ul>
+          </li><li><a href="org.specs2.guide.Selection.html#select-failed-examples" title="Select failed examples">Select failed e...</a>
+            
+          </li><li><a href="org.specs2.guide.Selection.html#and-if-you-want-to-know-more" title="And if you want to know more">And if you want...</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-specificationtemplate"><a href="org.specs2.guide.SpecificationTemplate.html" title="Specification template">Specification t...</a>
+      <ul><ul><li><a href="org.specs2.guide.SpecificationTemplate.html#and-if-you-want-to-know-more" title="And if you want to know more">And if you want...</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-skipexamples"><a href="org.specs2.guide.SkipExamples.html" title="Skip examples">Skip examples</a>
+      <ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-standardresults"><a href="org.specs2.guide.StandardResults.html" title="Standard results">Standard results</a>
+      <ul><ul><li><a href="org.specs2.guide.StandardResults.html#boolean-results" title="Boolean results">Boolean results</a>
+            
+          </li><li><a href="org.specs2.guide.StandardResults.html#standard-results" title="Standard results">Standard results</a>
+            
+          </li><li><a href="org.specs2.guide.StandardResults.html#skipping-an-example" title="Skipping an example">Skipping an exa...</a>
+            
+          </li><li><a href="org.specs2.guide.StandardResults.html#setting-an-example-as-pending" title="Setting an example as Pending">Setting an exam...</a>
+            
+          </li><li><a href="org.specs2.guide.StandardResults.html#standard-matchresults" title="Standard MatchResults">Standard MatchR...</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-timeoutexamples"><a href="org.specs2.guide.TimeoutExamples.html" title="Timeout examples">Timeout examples</a>
+      <ul><ul><li><a href="org.specs2.guide.TimeoutExamples.html#global-timeout" title="Global timeout">Global timeout</a>
+            
+          </li><li><a href="org.specs2.guide.TimeoutExamples.html#specification-timeout" title="Specification timeout">Specification t...</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-usecommandlinearguments"><a href="org.specs2.guide.UseCommandLineArguments.html" title="Use command-line arguments">Use command-lin...</a>
+      <ul><ul><li><a href="org.specs2.guide.UseCommandLineArguments.html#control-an-example" title="Control an example">Control an example</a>
+            
+          </li><li><a href="org.specs2.guide.UseCommandLineArguments.html#control-a-specification" title="Control a specification">Control a speci...</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-expectationdescription"><a href="org.specs2.guide.ExpectationDescription.html" title="Expectation description">Expectation des...</a>
+      <ul><ul><li><a href="org.specs2.guide.ExpectationDescription.html#enhance-failures-messages" title="Enhance failures messages">Enhance failure...</a>
+            
+          </li><li><a href="org.specs2.guide.ExpectationDescription.html#update-the-failure-message" title="Update the failure message">Update the fail...</a>
+            
+          </li><li><a href="org.specs2.guide.ExpectationDescription.html#describe-an-expectation" title="Describe an expectation">Describe an exp...</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-execution"><a href="org.specs2.guide.Execution.html" title="Execution">Execution</a>
+      <ul><ul><li><a href="org.specs2.guide.Execution.html#parallel-by-default" title="Parallel by default">Parallel by def...</a>
+            
+          </li><li><a href="org.specs2.guide.Execution.html#steps" title="Steps">Steps</a>
+            
+          </li><li><a href="org.specs2.guide.Execution.html#stop-the-execution" title="Stop the execution">Stop the execution</a>
+            
+          </li><li><a href="org.specs2.guide.Execution.html#sequential" title="Sequential">Sequential</a>
+            
+          </li><li><a href="org.specs2.guide.Execution.html#action" title="Action">Action</a>
+            
+          </li><li><a href="org.specs2.guide.Execution.html#now-learn-how-to..." title="Now learn how to...">Now learn how t...</a>
+            
+          </li><li><a href="org.specs2.guide.Execution.html#and-if-you-want-to-know-more" title="And if you want to know more">And if you want...</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-pendinguntilfixedexamples"><a href="org.specs2.guide.PendingUntilFixedExamples.html" title="Pending until fixed">Pending until f...</a>
+      <ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-consoleoutput"><a href="org.specs2.guide.ConsoleOutput.html" title="Console output">Console output</a>
+      <ul><ul><li><a href="org.specs2.guide.ConsoleOutput.html#show-only" title="Show only">Show only</a>
+            
+          </li><li><a href="org.specs2.guide.ConsoleOutput.html#stacktracefilter" title="StackTraceFilter">StackTraceFilter</a>
+            
+          </li><li><a href="org.specs2.guide.ConsoleOutput.html#diffs" title="Diffs">Diffs</a>
+            
+          </li><li><a href="org.specs2.guide.ConsoleOutput.html#colors" title="Colors">Colors</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-forloops"><a href="org.specs2.guide.ForLoops.html" title="For loops">For loops</a>
+      <ul><ul><li><a href="org.specs2.guide.ForLoops.html#a-list-of-examples" title="A list of examples">A list of examples</a>
+            
+          </li><li><a href="org.specs2.guide.ForLoops.html#a-list-of-expectations" title="A list of expectations">A list of expec...</a>
+            
+          </li><li><a href="org.specs2.guide.ForLoops.html#and-if-you-want-to-know-more" title="And if you want to know more">And if you want...</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-capturesnippets"><a href="org.specs2.guide.CaptureSnippets.html" title="Capture snippets">Capture snippets</a>
+      <ul><ul><li><a href="org.specs2.guide.CaptureSnippets.html#snippet" title="Snippet">Snippet</a>
+            
+          </li><li><a href="org.specs2.guide.CaptureSnippets.html#cuts" title="Cuts">Cuts</a>
+            
+          </li><li><a href="org.specs2.guide.CaptureSnippets.html#evaluation" title="Evaluation">Evaluation</a>
+            
+          </li><li><a href="org.specs2.guide.CaptureSnippets.html#offsets" title="Offsets">Offsets</a>
+            
+          </li><li><a href="org.specs2.guide.CaptureSnippets.html#parameters" title="Parameters">Parameters</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-htmloutput"><a href="org.specs2.guide.HtmlOutput.html" title="Html output">Html output</a>
+      <ul><ul><li><a href="org.specs2.guide.HtmlOutput.html#create-html-files" title="Create Html files">Create Html files</a>
+            
+          </li><li><a href="org.specs2.guide.HtmlOutput.html#use-pandoc-for-markdown" title="Use Pandoc for Markdown">Use Pandoc for ...</a>
+            
+          </li><li><a href="org.specs2.guide.HtmlOutput.html#use-a-different-template" title="Use a different template">Use a different...</a>
+            
+          </li><li><a href="org.specs2.guide.HtmlOutput.html#use-other-css/javascript-files" title="Use other CSS/Javascript files">Use other CSS/J...</a>
+            
+          </li><li><a href="org.specs2.guide.HtmlOutput.html#create-an-index" title="Create an index">Create an index</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-debugstatements"><a href="org.specs2.guide.DebugStatements.html" title="Debug statements">Debug statements</a>
+      <ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-junitxmloutput"><a href="org.specs2.guide.JUnitXmlOutput.html" title="JUnit XML output">JUnit XML output</a>
+      <ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-lightweightspecs"><a href="org.specs2.guide.LightweightSpecs.html" title="Lightweight specs">Lightweight specs</a>
+      <ul><ul><li><a href="org.specs2.guide.LightweightSpecs.html#adding-features" title="Adding features">Adding features</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-printexecutiondata"><a href="org.specs2.guide.PrintExecutionData.html" title="Print execution data">Print execution...</a>
+      <ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-multilinedescriptions"><a href="org.specs2.guide.MultilineDescriptions.html" title="Multiline descriptions">Multiline descr...</a>
+      <ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-exampledescription"><a href="org.specs2.guide.ExampleDescription.html" title="Example description">Example descrip...</a>
+      <ul><ul><li><a href="org.specs2.guide.ExampleDescription.html#use-the-example-description" title="Use the example description">Use the example...</a>
+            
+          </li><li><a href="org.specs2.guide.ExampleDescription.html#parse-the-example-description" title="Parse the example description">Parse the examp...</a>
+            <ul><li><a href="org.specs2.guide.ExampleDescription.html#delimited-values" title="Delimited values">Delimited values</a>
+            
+          </li><li><a href="org.specs2.guide.ExampleDescription.html#standard-delimited-parsers" title="Standard delimited parsers">Standard delimi...</a>
+            
+          </li><li><a href="org.specs2.guide.ExampleDescription.html#regular-expressions" title="Regular expressions">Regular express...</a>
+            
+          </li><li><a href="org.specs2.guide.ExampleDescription.html#standard-regexp-parsers" title="Standard regexp parsers">Standard regexp...</a>
+            
+          </li></ul>
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-addkeywords"><a href="org.specs2.guide.AddKeywords.html" title="Add keywords">Add keywords</a>
+      <ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-iointegration"><a href="org.specs2.guide.IoIntegration.html" title="IoIntegration">IoIntegration</a>
+      <ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul>
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-detailedtopics"><a href="org.specs2.guide.DetailedTopics.html" title="Detailed topics">Detailed topics</a>
+      <ul></ul>
+      <ul>
+                    <ul>
+                <li id="org-specs2-guide-asresulttypeclass"><a href="org.specs2.guide.AsResultTypeclass.html" title="AsResult typeclass">AsResult typeclass</a>
+      <ul><ul><li><a href="org.specs2.guide.AsResultTypeclass.html#decorated-results" title="Decorated results">Decorated results</a>
+            
+          </li><li><a href="org.specs2.guide.AsResultTypeclass.html#and-if-you-want-to-know-more" title="And if you want to know more">And if you want...</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-argumentsreference"><a href="org.specs2.guide.ArgumentsReference.html" title="Arguments reference">Arguments refer...</a>
+      <ul><ul><li><a href="org.specs2.guide.ArgumentsReference.html#paths" title="Paths">Paths</a>
+            
+          </li><li><a href="org.specs2.guide.ArgumentsReference.html#selection" title="Selection">Selection</a>
+            
+          </li><li><a href="org.specs2.guide.ArgumentsReference.html#execution" title="Execution">Execution</a>
+            
+          </li><li><a href="org.specs2.guide.ArgumentsReference.html#storing" title="Storing">Storing</a>
+            
+          </li><li><a href="org.specs2.guide.ArgumentsReference.html#reporting" title="Reporting">Reporting</a>
+            
+          </li><li><a href="org.specs2.guide.ArgumentsReference.html#arguments-api" title="Arguments API">Arguments API</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-autoexamples"><a href="org.specs2.guide.AutoExamples.html" title="Auto-examples">Auto-examples</a>
+      <ul><ul><li><a href="org.specs2.guide.AutoExamples.html#in-an-acceptance-specification" title="In an acceptance specification">In an acceptanc...</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-usedatatables"><a href="org.specs2.guide.UseDatatables.html" title="Datatables">Datatables</a>
+      <ul><ul><li><a href="org.specs2.guide.UseDatatables.html#format-columns" title="Format columns">Format columns</a>
+            
+          </li><li><a href="org.specs2.guide.UseDatatables.html#implicit-!" title="Implicit !">Implicit !</a>
+            
+          </li><li><a href="org.specs2.guide.UseDatatables.html#concurrent-execution" title="Concurrent execution">Concurrent exec...</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-useforms"><a href="org.specs2.guide.UseForms.html" title="Forms">Forms</a>
+      <ul><ul><li><a href="org.specs2.guide.UseForms.html#fields" title="Fields">Fields</a>
+            
+          </li><li><a href="org.specs2.guide.UseForms.html#effects" title="Effects">Effects</a>
+            
+          </li><li><a href="org.specs2.guide.UseForms.html#properties" title="Properties">Properties</a>
+            
+          </li><li><a href="org.specs2.guide.UseForms.html#styles" title="Styles">Styles</a>
+            
+          </li><li><a href="org.specs2.guide.UseForms.html#simple-form" title="Simple form">Simple form</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-createonlinespecifications"><a href="org.specs2.guide.CreateOnlineSpecifications.html" title="Create online specifications">Create online s...</a>
+      <ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-environment"><a href="org.specs2.guide.Environment.html" title="Environment">Environment</a>
+      <ul><ul><li><a href="org.specs2.guide.Environment.html#dependency-injection" title="Dependency injection">Dependency inje...</a>
+            
+          </li><li><a href="org.specs2.guide.Environment.html#own-env-/-executionenvironment" title="Own Env / ExecutionEnvironment">Own Env / Execu...</a>
+            
+          </li><li><a href="org.specs2.guide.Environment.html#and-if-you-want-to-know-more" title="And if you want to know more">And if you want...</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-executionenvironments"><a href="org.specs2.guide.ExecutionEnvironments.html" title="Execution environment">Execution envir...</a>
+      <ul><ul><li><a href="org.specs2.guide.ExecutionEnvironments.html#scala-future" title="Scala Future">Scala Future</a>
+            
+          </li><li><a href="org.specs2.guide.ExecutionEnvironments.html#with-matchers" title="With matchers">With matchers</a>
+            
+          </li><li><a href="org.specs2.guide.ExecutionEnvironments.html#one-per-specification" title="One per specification">One per specifi...</a>
+            
+          </li><li><a href="org.specs2.guide.ExecutionEnvironments.html#and-if-you-want-to-know-more" title="And if you want to know more">And if you want...</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-fragmentsapi"><a href="org.specs2.guide.FragmentsApi.html" title="Fragments API">Fragments API</a>
+      <ul><ul><li><a href="org.specs2.guide.FragmentsApi.html#the-fragmentfactory-api" title="The FragmentFactory API">The FragmentFac...</a>
+            
+          </li><li><a href="org.specs2.guide.FragmentsApi.html#the-fragments-api" title="The Fragments API">The Fragments API</a>
+            
+          </li><li><a href="org.specs2.guide.FragmentsApi.html#the-fragments-dsl" title="The Fragments DSL">The Fragments DSL</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-getallexpectations"><a href="org.specs2.guide.GetAllExpectations.html" title="Get all expectations">Get all expecta...</a>
+      <ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-otherbuildtools"><a href="org.specs2.guide.OtherBuildTools.html" title="Other build tools">Other build tools</a>
+      <ul><ul><li><a href="org.specs2.guide.OtherBuildTools.html#maven" title="Maven">Maven</a>
+            
+          </li><li><a href="org.specs2.guide.OtherBuildTools.html#gradle" title="Gradle">Gradle</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-matchers-outsidespecs2"><a href="org.specs2.guide.matchers.OutsideSpecs2.html" title="Outside specs2">Outside specs2</a>
+      <ul><ul><li><a href="org.specs2.guide.matchers.OutsideSpecs2.html#without-any-dependency-on-specs2" title="Without any dependency on specs2">Without any dep...</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-matchers-referencecard"><a href="org.specs2.guide.matchers.ReferenceCard.html" title="Reference card">Reference card</a>
+      <ul><ul><li><a href="org.specs2.guide.matchers.ReferenceCard.html#equality" title="Equality">Equality</a>
+            
+          </li><li><a href="org.specs2.guide.matchers.ReferenceCard.html#out-of-the-box" title="Out of the box">Out of the box</a>
+            <ul><li><a href="org.specs2.guide.matchers.ReferenceCard.html#check-each-element-individually" title="Check each element individually">Check each elem...</a>
+            
+          </li><li><a href="org.specs2.guide.matchers.ReferenceCard.html#check-all-elements" title="Check all elements">Check all elements</a>
+            
+          </li><li><a href="org.specs2.guide.matchers.ReferenceCard.html#execution" title="Execution">Execution</a>
+            
+          </li><li><a href="org.specs2.guide.matchers.ReferenceCard.html#time-factor" title="Time factor">Time factor</a>
+            
+          </li><li><a href="org.specs2.guide.matchers.ReferenceCard.html#with-a-typeclass" title="With a typeclass">With a typeclass</a>
+            
+          </li></ul>
+          </li><li><a href="org.specs2.guide.matchers.ReferenceCard.html#optional" title="Optional">Optional</a>
+            <ul><li><a href="org.specs2.guide.matchers.ReferenceCard.html#executionenv" title="ExecutionEnv">ExecutionEnv</a>
+            
+          </li></ul>
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-specificationformatting"><a href="org.specs2.guide.SpecificationFormatting.html" title="Specification formatting">Specification f...</a>
+      <ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-referenceotherspecifications"><a href="org.specs2.guide.ReferenceOtherSpecifications.html" title="Reference other specifications">Reference other...</a>
+      <ul><ul><li><a href="org.specs2.guide.ReferenceOtherSpecifications.html#reporting" title="Reporting">Reporting</a>
+            
+          </li><li><a href="org.specs2.guide.ReferenceOtherSpecifications.html#execution" title="Execution">Execution</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul>
+                  </ul>
+    </li>
+              </ul><ul>
+                <li id="org-specs2-guide-troubleshooting"><a href="org.specs2.guide.Troubleshooting.html" title="Troubleshooting">Troubleshooting</a>
+      <ul><ul><li><a href="org.specs2.guide.Troubleshooting.html#vals-vs-lazy-vals" title="vals vs lazy vals">vals vs lazy vals</a>
+            
+          </li><li><a href="org.specs2.guide.Troubleshooting.html#lost-expectations" title="Lost expectations">Lost expectations</a>
+            
+          </li><li><a href="org.specs2.guide.Troubleshooting.html#no-evidence-parameter-for-asresult" title="No evidence parameter for AsResult">No evidence par...</a>
+            
+          </li><li><a href="org.specs2.guide.Troubleshooting.html#custom-output" title="Custom output">Custom output</a>
+            
+          </li></ul></ul>
+      <ul>
+                    
+                  </ul>
+    </li>
+              </ul>
+                  </ul>
+    </li>
+              </ul></div><script>$(function () { $('#tree').jstree({'core':{'initially_open':['org-specs2-guide-detailedtopics','org-specs2-guide-userguide','org-specs2-guide-useforms'], 'animation':200}, 'themes' : {'theme': 'default','url': './css/themes/default/style.css'}, 'plugins':['themes', 'html_data']}); });</script>
+
+</div>
+</div>
+
+
+<div class="col-md-10 col-sm-9 col-xs-9">
+<h1>Forms</h1>
+<div id="tipue_search_content"></div>
+
+<p>Forms are a way to represent domain objects or services, and declare expected values in a tabular format. Forms can be designed as reusable pieces of specification where complex forms can be built out of simple ones.</p>
+<p>Forms are built by creating <code class="prettyprint">Fields</code> or <code class="prettyprint">Props</code> and placing them on rows. The following examples show, by order of complexity, the creation of:</p>
+<ol type="1">
+<li>fields</li>
+<li>effects</li>
+<li>properties</li>
+<li>a simple Form using properties</li>
+<li>a simple Address entity encapsulating the above form</li>
+<li>a composite Customer entity using the Address instance</li>
+<li>a decision table having some related columns</li>
+<li>a composite Order - OrderLine entity (1-n) relationship</li>
+</ol>
+<p>For all the code samples below you need to extend the <code class="prettyprint">org.specs2.specification.Forms</code> trait.</p>
+<h3 id="fields">Fields</h3>
+<p>A <code class="prettyprint">Field</code> is simply a label and a value. It is used in forms to display regular information. You can create a <code class="prettyprint">Field</code> with these methods:</p>
+<ul>
+<li><code class="prettyprint">field(value)</code> creates a field for a value, where the label is empty</li>
+<li><code class="prettyprint">field(label, value)</code> creates a field with a label and a value</li>
+<li><code class="prettyprint">field(label, field1, field2, ...)</code> creates a field with a label and values coming from other fields, concatenated as strings</li>
+</ul>
+<p>When the form is displayed, here is how the fields are displayed:</p>
+<td class="info"><form>
+    <table><tr><th colspan="7">Fields</th></tr><tr><td class="info" style="text-align:center"><b>code</b></td><td colspan="5" class="info" style="text-align:center"><b>is displayed as</b></td></tr><tr><td class="info" style=""><code class="prettyprint">field(&quot;value&quot;)</code></td><td colspan="5" class="info" style="">value</td></tr><tr><td class="info" style=""><code class="prettyprint">field(&quot;label&quot;, &quot;value&quot;)</code></td><td style="background-color:#EEEEEE">label</td><td colspan="5" class="info" style="">value</td></tr><tr><td class="info" style=""><code class="prettyprint">field(&quot;label&quot;, field(&quot;value1&quot;), field(&quot;value2&quot;))</code></td><td style="background-color:#EEEEEE">label</td><td colspan="5" class="info" style="">value1/value2</td></tr></table></form></td>
+<p>In terms of execution, the value is only evaluated when the <code class="prettyprint">Field</code> is executed (when executing the parent Form for example). If an exception is thrown during that evaluation, the exception message will be displayed in place of the value.</p>
+<h3 id="effects">Effects</h3>
+<p>An <code class="prettyprint">Effect</code> is almost like a <code class="prettyprint">Field</code> but it never shows its value. The value of an <code class="prettyprint">Effect</code> is supposed to have some kind of side-effect, like clicking on a webpage, and only the effect label will be displayed (except when there is an exception, in that case the exception message is added). You can create an <code class="prettyprint">Effect</code> with these methods:</p>
+<ul>
+<li><code class="prettyprint">effect(value)</code> creates an effect with no label</li>
+<li><code class="prettyprint">effect(label, value)</code> creates an effect with a label and a value that will be evaluated when the <code class="prettyprint">Effect</code> is executed</li>
+<li><code class="prettyprint">effect(effect1, effect2, ...)</code> creates an effect with all the effects labels and a side-effect sequencing all side-effects</li>
+</ul>
+<h3 id="properties">Properties</h3>
+<p>A <code class="prettyprint">Prop</code> is like a <code class="prettyprint">Field</code>, it has a label. But you can give it 2 values, an “actual” one and an “expected” one. When executing the property, both values are compared to get a result. You can create a <code class="prettyprint">Prop</code> with the following functions:</p>
+<table>
+<colgroup>
+<col style="width: 73%" />
+<col style="width: 26%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Expression</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code class="prettyprint">prop(value)</code></td>
+<td>a property with no label</td>
+</tr>
+<tr class="even">
+<td><code class="prettyprint">prop(label, actual)</code></td>
+<td>a property with a label and an actual value</td>
+</tr>
+<tr class="odd">
+<td><code class="prettyprint">prop(label, actual, expected)</code></td>
+<td>a property with a label, an actual value and an expected one</td>
+</tr>
+<tr class="even">
+<td><code class="prettyprint">prop(label, actual, constraint)</code></td>
+<td>a property with a label, an actual value and a function taking the actual value, an expected one and returning a <code class="prettyprint">Result</code></td>
+</tr>
+<tr class="odd">
+<td><code class="prettyprint">prop("label", "actual", (a: String, b: String) =&gt; (a === b))</code></td>
+<td>a property with a label, an actual value and a function taking the expected value, returning a Matcher that will be applied to the actual one</td>
+</tr>
+<tr class="even">
+<td><code class="prettyprint">prop("label", "expected", (expected: String) =&gt; beEqualTo(expected))</code></td>
+<td>a property with a label, an actual value and function applying a matcher to that value</td>
+</tr>
+<tr class="odd">
+<td><code class="prettyprint">prop(label, actual, matcher)</code></td>
+<td>a property with a label, an actual value and a matcher to apply to that value</td>
+</tr>
+</tbody>
+</table>
+<pre class="prettyprint"><code class="prettyprint">If the matcher is `mute`d then no message will be displayed in case of a failure.</code></pre>
+<p>If the expected value is not provided when building the property, it can be given with the <code class="prettyprint">apply</code> method:</p>
+<pre><code class="prettyprint">// apply &quot;sets&quot; the expected value
+prop1.apply(&quot;expected&quot;)
+// or
+prop1(&quot;expected&quot;)</code></pre>
+<p>Let’s look at a few examples:</p>
+<form>
+    <table><tr><th colspan="7">Properties</th></tr><tr><td class="info" style="text-align:center"><b>code</b></td><td colspan="5" class="info" style="text-align:center"><b>is displayed as</b></td></tr><tr><td class="info" style=""><code class="prettyprint">prop(&quot;expected&quot;)(&quot;expected&quot;)</code></td><td colspan="5" class="success">expected</td></tr><tr><td class="info" style=""><code class="prettyprint">prop(&quot;label&quot;, &quot;expected&quot;, &quot;expected&quot;)</code></td><td style="background-color:#EEEEEE">label</td><td colspan="5" class="success">expected</td></tr><tr><td class="info" style=""><code class="prettyprint">prop(&quot;label&quot;, &quot;expected&quot;)(&quot;expected&quot;)</code></td><td style="background-color:#EEEEEE">label</td><td colspan="5" class="success">expected</td></tr><tr><td class="info" style=""><code class="prettyprint">prop(&quot;label&quot;, &quot;actual&quot;)(&quot;expected&quot;)</code></td><td style="background-color:#EEEEEE">label</td><td class="failure">actual</td><td colspan="5" class="failure" onclick="showHide(660632584)">'actual' != 'expected'</td></tr><tr><td class="info" style=""><code class="prettyprint">prop(&quot;label&quot;, { error(&quot;but got an error&quot;); &quot;actual&quot; })(&quot;expected&quot;)</code></td><td style="background-color:#EEEEEE">label</td><td colspan="5" class="error" onclick="showHide(397900598)">java.lang.RuntimeException: but got an error</td></tr><tr><td class="info" style=""><code class="prettyprint">prop(&quot;label&quot;, &quot;actual&quot;, (a: String, b: String) =&gt; (a === b))(&quot;expected&quot;)</code></td><td style="background-color:#EEEEEE">label</td><td colspan="5" class="success">expected</td></tr><tr><td class="info" style=""><code class="prettyprint">prop(&quot;label&quot;, &quot;actual&quot;, (s: String) =&gt; beEqualTo(s))(&quot;expected&quot;)</code></td><td style="background-color:#EEEEEE">label</td><td colspan="5" class="success">expected</td></tr><tr><td class="info" style=""><code class="prettyprint">prop(&quot;label&quot;, &quot;actual&quot;, beEqualTo(&quot;expected&quot;))</code></td><td style="background-color:#EEEEEE">label</td><td class="failure">actual</td><td colspan="5" class="failure" onclick="showHide(1718140852)">'actual' != 'expected'</td></tr><tr><td class="info" style=""><code class="prettyprint">prop(&quot;label&quot;, &quot;actual&quot;, beEqualTo(&quot;expected&quot;).mute)</code></td><td style="background-color:#EEEEEE">label</td><td colspan="5" class="failure">actual</td></tr></table><pre><i>[click on failed cells to see the stacktraces]</i><div class="formstacktrace details" id="660632584">
+      'actual' != 'expected' (file:1)
+      <div>org.specs2.execute.Failure$.$lessinit$greater$default$3(Result.scala:384)</div><div>org.specs2.execute.Result$.result(Result.scala:173)</div><div>org.specs2.execute.Result$.result(Result.scala:177)</div><div>org.specs2.execute.Result$.result(Result.scala:181)</div><div>org.specs2.matcher.EqualityMatcher.apply(EqualityMatcher.scala:32)</div><div>org.specs2.form.Prop$.checkProp$$anonfun$1(Prop.scala:138)</div><div>org.specs2.form.Prop.$anonfun$2$$anonfun$1$$anonfun$1(Prop.scala:60)</div><div>org.specs2.execute.ResultExecution.execute(ResultExecution.scala:28)</div><div>org.specs2.execute.ResultExecution.execute$(ResultExecution.scala:16)</div><div>org.specs2.execute.ResultExecution$.execute(ResultExecution.scala:128)</div><div>org.specs2.form.Prop.$anonfun$3$$anonfun$2(Prop.scala:60)</div><div>scala.Option.map(Option.scala:242)</div><div>org.specs2.form.Prop.$anonfun$1(Prop.scala:60)</div><div>scala.Option.flatMap(Option.scala:283)</div><div>org.specs2.form.Prop.execute(Prop.scala:60)</div><div>org.specs2.form.PropCell.executeCell$$anonfun$1(Cells.scala:156)</div><div>scala.Option.orElse(Option.scala:477)</div><div>org.specs2.form.PropCell.executeCell(Cells.scala:156)</div><div>org.specs2.form.Row.executeRow$$anonfun$1(Row.scala:40)</div><div>scala.collection.immutable.List.map(List.scala:250)</div><div>org.specs2.form.Row.executeRow(Row.scala:40)</div><div>org.specs2.form.Form.executeRows$$anonfun$1(Form.scala:73)</div><div>scala.collection.immutable.Vector1.map(Vector.scala:1886)</div><div>scala.collection.immutable.Vector1.map(Vector.scala:375)</div><div>org.specs2.form.Form.executeRows(Form.scala:73)</div><div>org.specs2.form.Form.executeForm(Form.scala:83)</div><div>org.specs2.guide.UseForms$.is$$anonfun$11$$anonfun$10(UseForms.scala:91)</div><div>org.specs2.specification.create.S2StringContext$$anon$4.prepend(S2StringContext.scala:58)</div><div>org.specs2.specification.create.S2StringContext$.$anonfun$1(S2StringContext.scala:136)</div><div>org.specs2.specification.core.Fragments$.reduce$$anonfun$1(Fragments.scala:142)</div><div>scala.collection.immutable.ArraySeq.foldLeft(ArraySeq.scala:214)</div><div>org.specs2.specification.core.Fragments$.reduce(Fragments.scala:142)</div><div>org.specs2.specification.create.S2StringContext$.s2(S2StringContext.scala:137)</div><div>org.specs2.guide.UseForms$.is$$anonfun$1(UseForms.scala:11)</div><div>org.specs2.specification.core.SpecStructure$.create$$anonfun$2(SpecStructure.scala:81)</div><div>org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:24)</div><div>org.specs2.specification.core.SpecStructure.map$$anonfun$1(SpecStructure.scala:27)</div><div>org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:24)</div><div>org.specs2.specification.core.SpecStructure.map$$anonfun$1(SpecStructure.scala:27)</div><div>org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:24)</div><div>org.specs2.specification.core.SpecStructure$.selected(SpecStructure.scala:165)</div><div>org.specs2.specification.core.SpecStructure$.linkedSpecStructuresRefs(SpecStructure.scala:154)</div><div>org.specs2.specification.core.SpecStructure$.linkedSpecifications$$anonfun$1(SpecStructure.scala:114)</div><div>org.specs2.specification.core.SpecStructure$.getRefs$5(SpecStructure.scala:131)</div><div>org.specs2.specification.core.SpecStructure$.$anonfun$5(SpecStructure.scala:141)</div><div>scala.collection.StrictOptimizedIterableOps.flatMap(StrictOptimizedIterableOps.scala:117)</div><div>scala.collection.StrictOptimizedIterableOps.flatMap$(StrictOptimizedIterableOps.scala:104)</div><div>scala.collection.immutable.Vector.flatMap(Vector.scala:113)</div><div>org.specs2.specification.core.SpecStructure$.getAll$3(SpecStructure.scala:141)</div><div>org.specs2.specification.core.SpecStructure$.specStructuresRefs$$anonfun$1(SpecStructure.scala:145)</div><div>org.specs2.control.Operation$OperationMonad$.point$$anonfun$1(Operation.scala:127)</div><div>org.specs2.control.Operation.org$specs2$control$Operation$$run(Operation.scala:20)</div><div>org.specs2.control.Operation.liftedTree1$1(Operation.scala:82)</div><div>org.specs2.control.Operation.attempt$$anonfun$1(Operation.scala:85)</div><div>org.specs2.control.Operation.org$specs2$control$Operation$$run(Operation.scala:20)</div><div>org.specs2.control.Operation.$anonfun$1(Operation.scala:88)</div><div>org.specs2.control.Action$.either(Action.scala:114)</div><div>org.specs2.control.Operation.toAction(Operation.scala:88)</div><div>org.specs2.runner.DefaultClassRunner.run(ClassRunner.scala:41)</div><div>org.specs2.runner.DefaultClassRunner.run(ClassRunner.scala:35)</div><div>org.specs2.Website.createUserGuide$$anonfun$1(Website.scala:53)</div><div>org.specs2.control.Action.flatMap$$anonfun$2$$anonfun$1(Action.scala:34)</div><div>scala.concurrent.impl.Promise$Transformation.run(Promise.scala:434)</div><div>java.util.concurrent.ForkJoinTask$RunnableExecuteAction.exec(ForkJoinTask.java:1402)</div><div>java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)</div><div>java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1056)</div><div>java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)</div><div>java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:175)</div>
+    </div><div class="formstacktrace details" id="397900598">
+      java.lang.RuntimeException: but got an error (file:1)
+      <div>scala.sys.package$.error(package.scala:27)</div><div>org.specs2.guide.UseForms$.$anonfun$17(UseForms.scala:87)</div><div>org.specs2.control.Property$.apply$$anonfun$1(Property.scala:76)</div><div>org.specs2.control.Property.execute(Property.scala:56)</div><div>org.specs2.control.Property.optionalValue(Property.scala:22)</div><div>org.specs2.execute.ResultExecution.executeProperty$$anonfun$1(ResultExecution.scala:117)</div><div>org.specs2.execute.ResultExecution.$anonfun$1(ResultExecution.scala:90)</div><div>org.specs2.control.Exceptions.trye(Exceptions.scala:83)</div><div>org.specs2.control.Exceptions.trye$(Exceptions.scala:15)</div><div>org.specs2.control.Exceptions$.trye(Exceptions.scala:124)</div><div>org.specs2.execute.ResultExecution.executeEither(ResultExecution.scala:90)</div><div>org.specs2.execute.ResultExecution.executeEither$(ResultExecution.scala:16)</div><div>org.specs2.execute.ResultExecution$.executeEither(ResultExecution.scala:128)</div><div>org.specs2.execute.ResultExecution.executeProperty(ResultExecution.scala:117)</div><div>org.specs2.execute.ResultExecution.executeProperty$(ResultExecution.scala:16)</div><div>org.specs2.execute.ResultExecution$.executeProperty(ResultExecution.scala:128)</div><div>org.specs2.form.Prop.actualValue(Prop.scala:50)</div><div>org.specs2.form.Prop.execute(Prop.scala:58)</div><div>org.specs2.form.PropCell.executeCell$$anonfun$1(Cells.scala:156)</div><div>scala.Option.orElse(Option.scala:477)</div><div>org.specs2.form.PropCell.executeCell(Cells.scala:156)</div><div>org.specs2.form.Row.executeRow$$anonfun$1(Row.scala:40)</div><div>scala.collection.immutable.List.map(List.scala:250)</div><div>org.specs2.form.Row.executeRow(Row.scala:40)</div><div>org.specs2.form.Form.executeRows$$anonfun$1(Form.scala:73)</div><div>scala.collection.immutable.Vector1.map(Vector.scala:1886)</div><div>scala.collection.immutable.Vector1.map(Vector.scala:375)</div><div>org.specs2.form.Form.executeRows(Form.scala:73)</div><div>org.specs2.form.Form.executeForm(Form.scala:83)</div><div>org.specs2.guide.UseForms$.is$$anonfun$11$$anonfun$10(UseForms.scala:91)</div><div>org.specs2.specification.create.S2StringContext$$anon$4.prepend(S2StringContext.scala:58)</div><div>org.specs2.specification.create.S2StringContext$.$anonfun$1(S2StringContext.scala:136)</div><div>org.specs2.specification.core.Fragments$.reduce$$anonfun$1(Fragments.scala:142)</div><div>scala.collection.immutable.ArraySeq.foldLeft(ArraySeq.scala:214)</div><div>org.specs2.specification.core.Fragments$.reduce(Fragments.scala:142)</div><div>org.specs2.specification.create.S2StringContext$.s2(S2StringContext.scala:137)</div><div>org.specs2.guide.UseForms$.is$$anonfun$1(UseForms.scala:11)</div><div>org.specs2.specification.core.SpecStructure$.create$$anonfun$2(SpecStructure.scala:81)</div><div>org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:24)</div><div>org.specs2.specification.core.SpecStructure.map$$anonfun$1(SpecStructure.scala:27)</div><div>org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:24)</div><div>org.specs2.specification.core.SpecStructure.map$$anonfun$1(SpecStructure.scala:27)</div><div>org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:24)</div><div>org.specs2.specification.core.SpecStructure$.selected(SpecStructure.scala:165)</div><div>org.specs2.specification.core.SpecStructure$.linkedSpecStructuresRefs(SpecStructure.scala:154)</div><div>org.specs2.specification.core.SpecStructure$.linkedSpecifications$$anonfun$1(SpecStructure.scala:114)</div><div>org.specs2.specification.core.SpecStructure$.getRefs$5(SpecStructure.scala:131)</div><div>org.specs2.specification.core.SpecStructure$.$anonfun$5(SpecStructure.scala:141)</div><div>scala.collection.StrictOptimizedIterableOps.flatMap(StrictOptimizedIterableOps.scala:117)</div><div>scala.collection.StrictOptimizedIterableOps.flatMap$(StrictOptimizedIterableOps.scala:104)</div><div>scala.collection.immutable.Vector.flatMap(Vector.scala:113)</div><div>org.specs2.specification.core.SpecStructure$.getAll$3(SpecStructure.scala:141)</div><div>org.specs2.specification.core.SpecStructure$.specStructuresRefs$$anonfun$1(SpecStructure.scala:145)</div><div>org.specs2.control.Operation$OperationMonad$.point$$anonfun$1(Operation.scala:127)</div><div>org.specs2.control.Operation.org$specs2$control$Operation$$run(Operation.scala:20)</div><div>org.specs2.control.Operation.liftedTree1$1(Operation.scala:82)</div><div>org.specs2.control.Operation.attempt$$anonfun$1(Operation.scala:85)</div><div>org.specs2.control.Operation.org$specs2$control$Operation$$run(Operation.scala:20)</div><div>org.specs2.control.Operation.$anonfun$1(Operation.scala:88)</div><div>org.specs2.control.Action$.either(Action.scala:114)</div><div>org.specs2.control.Operation.toAction(Operation.scala:88)</div><div>org.specs2.runner.DefaultClassRunner.run(ClassRunner.scala:41)</div><div>org.specs2.runner.DefaultClassRunner.run(ClassRunner.scala:35)</div><div>org.specs2.Website.createUserGuide$$anonfun$1(Website.scala:53)</div><div>org.specs2.control.Action.flatMap$$anonfun$2$$anonfun$1(Action.scala:34)</div><div>scala.concurrent.impl.Promise$Transformation.run(Promise.scala:434)</div><div>java.util.concurrent.ForkJoinTask$RunnableExecuteAction.exec(ForkJoinTask.java:1402)</div><div>java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)</div><div>java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1056)</div><div>java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)</div><div>java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:175)</div>
+    </div><div class="formstacktrace details" id="1718140852">
+      'actual' != 'expected' (file:1)
+      <div>org.specs2.execute.Failure$.$lessinit$greater$default$3(Result.scala:384)</div><div>org.specs2.execute.Result$.result(Result.scala:173)</div><div>org.specs2.execute.Result$.result(Result.scala:177)</div><div>org.specs2.execute.Result$.result(Result.scala:181)</div><div>org.specs2.matcher.EqualityMatcher.apply(EqualityMatcher.scala:32)</div><div>org.specs2.form.Prop$.apply$$anonfun$3(Prop.scala:127)</div><div>org.specs2.form.Prop.$anonfun$2$$anonfun$1$$anonfun$1(Prop.scala:60)</div><div>org.specs2.execute.ResultExecution.execute(ResultExecution.scala:28)</div><div>org.specs2.execute.ResultExecution.execute$(ResultExecution.scala:16)</div><div>org.specs2.execute.ResultExecution$.execute(ResultExecution.scala:128)</div><div>org.specs2.form.Prop.$anonfun$3$$anonfun$2(Prop.scala:60)</div><div>scala.Option.map(Option.scala:242)</div><div>org.specs2.form.Prop.$anonfun$1(Prop.scala:60)</div><div>scala.Option.flatMap(Option.scala:283)</div><div>org.specs2.form.Prop.execute(Prop.scala:60)</div><div>org.specs2.form.PropCell.executeCell$$anonfun$1(Cells.scala:156)</div><div>scala.Option.orElse(Option.scala:477)</div><div>org.specs2.form.PropCell.executeCell(Cells.scala:156)</div><div>org.specs2.form.Row.executeRow$$anonfun$1(Row.scala:40)</div><div>scala.collection.immutable.List.map(List.scala:250)</div><div>org.specs2.form.Row.executeRow(Row.scala:40)</div><div>org.specs2.form.Form.executeRows$$anonfun$1(Form.scala:73)</div><div>scala.collection.immutable.Vector1.map(Vector.scala:1886)</div><div>scala.collection.immutable.Vector1.map(Vector.scala:375)</div><div>org.specs2.form.Form.executeRows(Form.scala:73)</div><div>org.specs2.form.Form.executeForm(Form.scala:83)</div><div>org.specs2.guide.UseForms$.is$$anonfun$11$$anonfun$10(UseForms.scala:91)</div><div>org.specs2.specification.create.S2StringContext$$anon$4.prepend(S2StringContext.scala:58)</div><div>org.specs2.specification.create.S2StringContext$.$anonfun$1(S2StringContext.scala:136)</div><div>org.specs2.specification.core.Fragments$.reduce$$anonfun$1(Fragments.scala:142)</div><div>scala.collection.immutable.ArraySeq.foldLeft(ArraySeq.scala:214)</div><div>org.specs2.specification.core.Fragments$.reduce(Fragments.scala:142)</div><div>org.specs2.specification.create.S2StringContext$.s2(S2StringContext.scala:137)</div><div>org.specs2.guide.UseForms$.is$$anonfun$1(UseForms.scala:11)</div><div>org.specs2.specification.core.SpecStructure$.create$$anonfun$2(SpecStructure.scala:81)</div><div>org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:24)</div><div>org.specs2.specification.core.SpecStructure.map$$anonfun$1(SpecStructure.scala:27)</div><div>org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:24)</div><div>org.specs2.specification.core.SpecStructure.map$$anonfun$1(SpecStructure.scala:27)</div><div>org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:24)</div><div>org.specs2.specification.core.SpecStructure$.selected(SpecStructure.scala:165)</div><div>org.specs2.specification.core.SpecStructure$.linkedSpecStructuresRefs(SpecStructure.scala:154)</div><div>org.specs2.specification.core.SpecStructure$.linkedSpecifications$$anonfun$1(SpecStructure.scala:114)</div><div>org.specs2.specification.core.SpecStructure$.getRefs$5(SpecStructure.scala:131)</div><div>org.specs2.specification.core.SpecStructure$.$anonfun$5(SpecStructure.scala:141)</div><div>scala.collection.StrictOptimizedIterableOps.flatMap(StrictOptimizedIterableOps.scala:117)</div><div>scala.collection.StrictOptimizedIterableOps.flatMap$(StrictOptimizedIterableOps.scala:104)</div><div>scala.collection.immutable.Vector.flatMap(Vector.scala:113)</div><div>org.specs2.specification.core.SpecStructure$.getAll$3(SpecStructure.scala:141)</div><div>org.specs2.specification.core.SpecStructure$.specStructuresRefs$$anonfun$1(SpecStructure.scala:145)</div><div>org.specs2.control.Operation$OperationMonad$.point$$anonfun$1(Operation.scala:127)</div><div>org.specs2.control.Operation.org$specs2$control$Operation$$run(Operation.scala:20)</div><div>org.specs2.control.Operation.liftedTree1$1(Operation.scala:82)</div><div>org.specs2.control.Operation.attempt$$anonfun$1(Operation.scala:85)</div><div>org.specs2.control.Operation.org$specs2$control$Operation$$run(Operation.scala:20)</div><div>org.specs2.control.Operation.$anonfun$1(Operation.scala:88)</div><div>org.specs2.control.Action$.either(Action.scala:114)</div><div>org.specs2.control.Operation.toAction(Operation.scala:88)</div><div>org.specs2.runner.DefaultClassRunner.run(ClassRunner.scala:41)</div><div>org.specs2.runner.DefaultClassRunner.run(ClassRunner.scala:35)</div><div>org.specs2.Website.createUserGuide$$anonfun$1(Website.scala:53)</div><div>org.specs2.control.Action.flatMap$$anonfun$2$$anonfun$1(Action.scala:34)</div><div>scala.concurrent.impl.Promise$Transformation.run(Promise.scala:434)</div><div>java.util.concurrent.ForkJoinTask$RunnableExecuteAction.exec(ForkJoinTask.java:1402)</div><div>java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)</div><div>java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1056)</div><div>java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)</div><div>java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:175)</div>
+    </div><div class="formstacktrace details" id="21573099">
+       (file:1)
+      <div>org.specs2.execute.Failure$.$lessinit$greater$default$3(Result.scala:384)</div><div>org.specs2.execute.Result$.result(Result.scala:173)</div><div>org.specs2.execute.Result$.result(Result.scala:177)</div><div>org.specs2.execute.Result$.result(Result.scala:181)</div><div>org.specs2.matcher.EqualityMatcher.apply(EqualityMatcher.scala:32)</div><div>org.specs2.matcher.Matcher$$anon$12.apply(Matcher.scala:231)</div><div>org.specs2.form.Prop$.apply$$anonfun$3(Prop.scala:127)</div><div>org.specs2.form.Prop.$anonfun$2$$anonfun$1$$anonfun$1(Prop.scala:60)</div><div>org.specs2.execute.ResultExecution.execute(ResultExecution.scala:28)</div><div>org.specs2.execute.ResultExecution.execute$(ResultExecution.scala:16)</div><div>org.specs2.execute.ResultExecution$.execute(ResultExecution.scala:128)</div><div>org.specs2.form.Prop.$anonfun$3$$anonfun$2(Prop.scala:60)</div><div>scala.Option.map(Option.scala:242)</div><div>org.specs2.form.Prop.$anonfun$1(Prop.scala:60)</div><div>scala.Option.flatMap(Option.scala:283)</div><div>org.specs2.form.Prop.execute(Prop.scala:60)</div><div>org.specs2.form.PropCell.executeCell$$anonfun$1(Cells.scala:156)</div><div>scala.Option.orElse(Option.scala:477)</div><div>org.specs2.form.PropCell.executeCell(Cells.scala:156)</div><div>org.specs2.form.Row.executeRow$$anonfun$1(Row.scala:40)</div><div>scala.collection.immutable.List.map(List.scala:250)</div><div>org.specs2.form.Row.executeRow(Row.scala:40)</div><div>org.specs2.form.Form.executeRows$$anonfun$1(Form.scala:73)</div><div>scala.collection.immutable.Vector1.map(Vector.scala:1886)</div><div>scala.collection.immutable.Vector1.map(Vector.scala:375)</div><div>org.specs2.form.Form.executeRows(Form.scala:73)</div><div>org.specs2.form.Form.executeForm(Form.scala:83)</div><div>org.specs2.guide.UseForms$.is$$anonfun$11$$anonfun$10(UseForms.scala:91)</div><div>org.specs2.specification.create.S2StringContext$$anon$4.prepend(S2StringContext.scala:58)</div><div>org.specs2.specification.create.S2StringContext$.$anonfun$1(S2StringContext.scala:136)</div><div>org.specs2.specification.core.Fragments$.reduce$$anonfun$1(Fragments.scala:142)</div><div>scala.collection.immutable.ArraySeq.foldLeft(ArraySeq.scala:214)</div><div>org.specs2.specification.core.Fragments$.reduce(Fragments.scala:142)</div><div>org.specs2.specification.create.S2StringContext$.s2(S2StringContext.scala:137)</div><div>org.specs2.guide.UseForms$.is$$anonfun$1(UseForms.scala:11)</div><div>org.specs2.specification.core.SpecStructure$.create$$anonfun$2(SpecStructure.scala:81)</div><div>org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:24)</div><div>org.specs2.specification.core.SpecStructure.map$$anonfun$1(SpecStructure.scala:27)</div><div>org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:24)</div><div>org.specs2.specification.core.SpecStructure.map$$anonfun$1(SpecStructure.scala:27)</div><div>org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:24)</div><div>org.specs2.specification.core.SpecStructure$.selected(SpecStructure.scala:165)</div><div>org.specs2.specification.core.SpecStructure$.linkedSpecStructuresRefs(SpecStructure.scala:154)</div><div>org.specs2.specification.core.SpecStructure$.linkedSpecifications$$anonfun$1(SpecStructure.scala:114)</div><div>org.specs2.specification.core.SpecStructure$.getRefs$5(SpecStructure.scala:131)</div><div>org.specs2.specification.core.SpecStructure$.$anonfun$5(SpecStructure.scala:141)</div><div>scala.collection.StrictOptimizedIterableOps.flatMap(StrictOptimizedIterableOps.scala:117)</div><div>scala.collection.StrictOptimizedIterableOps.flatMap$(StrictOptimizedIterableOps.scala:104)</div><div>scala.collection.immutable.Vector.flatMap(Vector.scala:113)</div><div>org.specs2.specification.core.SpecStructure$.getAll$3(SpecStructure.scala:141)</div><div>org.specs2.specification.core.SpecStructure$.specStructuresRefs$$anonfun$1(SpecStructure.scala:145)</div><div>org.specs2.control.Operation$OperationMonad$.point$$anonfun$1(Operation.scala:127)</div><div>org.specs2.control.Operation.org$specs2$control$Operation$$run(Operation.scala:20)</div><div>org.specs2.control.Operation.liftedTree1$1(Operation.scala:82)</div><div>org.specs2.control.Operation.attempt$$anonfun$1(Operation.scala:85)</div><div>org.specs2.control.Operation.org$specs2$control$Operation$$run(Operation.scala:20)</div><div>org.specs2.control.Operation.$anonfun$1(Operation.scala:88)</div><div>org.specs2.control.Action$.either(Action.scala:114)</div><div>org.specs2.control.Operation.toAction(Operation.scala:88)</div><div>org.specs2.runner.DefaultClassRunner.run(ClassRunner.scala:41)</div><div>org.specs2.runner.DefaultClassRunner.run(ClassRunner.scala:35)</div><div>org.specs2.Website.createUserGuide$$anonfun$1(Website.scala:53)</div><div>org.specs2.control.Action.flatMap$$anonfun$2$$anonfun$1(Action.scala:34)</div><div>scala.concurrent.impl.Promise$Transformation.run(Promise.scala:434)</div><div>java.util.concurrent.ForkJoinTask$RunnableExecuteAction.exec(ForkJoinTask.java:1402)</div><div>java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)</div><div>java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1056)</div><div>java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)</div><div>java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:175)</div>
+    </div></pre></form>
+<h3 id="styles">Styles</h3>
+<p>Most of the time, the display of Fields and Properties can be left as it is but sometimes you want to style the output of labels and values. You can do this by using <code class="prettyprint">decorateWith</code> and <code class="prettyprint">styleWith</code> methods, or some equivalent shortcuts:</p>
+<td class="info"><form>
+    <table><tr><th colspan="7">Style</th></tr><tr><td class="info" style="text-align:center"><b>code</b></td><td colspan="5" class="info" style="text-align:center"><b>is displayed as</b></td></tr><tr><td colspan="6" class="info" style="background-color:#EEEEEE"><b>decorate with</b></td></tr><tr><td class="info" style=""><code class="prettyprint">field(&quot;label&quot;, &quot;value&quot;).decorateWith(f: Any =&gt; &lt;em&gt;{f}&lt;/em&gt;)</code></td><td style="background-color:#EEEEEE"><em>label</em></td><td colspan="5" class="info" style=""><em>value</em></td></tr><tr><td class="info" style=""><code class="prettyprint">field(&quot;label&quot;, &quot;value&quot;).bold</code></td><td style="background-color:#EEEEEE"><b>label</b></td><td colspan="5" class="info" style=""><b>value</b></td></tr><tr><td class="info" style=""><code class="prettyprint">field(&quot;label&quot;, &quot;value&quot;).boldLabel</code></td><td style="background-color:#EEEEEE"><b>label</b></td><td colspan="5" class="info" style="">value</td></tr><tr><td class="info" style=""><code class="prettyprint">field(&quot;label&quot;, &quot;value&quot;).boldValue</code></td><td style="background-color:#EEEEEE">label</td><td colspan="5" class="info" style=""><b>value</b></td></tr><tr><td class="info" style=""><code class="prettyprint">field(&quot;label&quot;, &quot;value&quot;).italics</code></td><td style="background-color:#EEEEEE"><i>label</i></td><td colspan="5" class="info" style=""><i>value</i></td></tr><tr><td class="info" style=""><code class="prettyprint">field(&quot;label&quot;, &quot;value&quot;).italics.bold</code></td><td style="background-color:#EEEEEE"><b><i>label</i></b></td><td colspan="5" class="info" style=""><b><i>value</i></b></td></tr><tr><td class="info" style=""><code class="prettyprint">field(&quot;1 must ===(1)&quot;).code</code></td><td colspan="5" class="info" style=""><code class="prettyprint">1 must ===(1)</code></td></tr><tr><td colspan="6" class="info" style="background-color:#EEEEEE"><b>style with</b></td></tr><tr><td class="info" style=""><code class="prettyprint">field(&quot;label&quot;, &quot;value&quot;).styleWith(&quot;color&quot;-&gt;&quot;#FF1493&quot;)</code></td><td style="background-color:#EEEEEE; color:#FF1493">label</td><td colspan="5" class="info" style="color:#FF1493">value</td></tr><tr><td class="info" style=""><code class="prettyprint">field(&quot;label&quot;, &quot;value&quot;).color(&quot;#FF1493&quot;)</code></td><td style="background-color:#EEEEEE; color:#FF1493">label</td><td colspan="5" class="info" style="color:#FF1493">value</td></tr><tr><td class="info" style=""><code class="prettyprint">field(&quot;label&quot;, &quot;value&quot;).bkColor(&quot;#FF1493&quot;)</code></td><td style="background-color:#EEEEEE; background-color:#FF1493">label</td><td colspan="5" class="info" style="background-color:#FF1493">value</td></tr><tr><td class="info" style=""><code class="prettyprint">field(&quot;label&quot;, &quot;value&quot;).green</code></td><td style="background-color:#EEEEEE; color:#CCFFCC">label</td><td colspan="5" class="info" style="color:#CCFFCC">value</td></tr><tr><td class="info" style=""><code class="prettyprint">field(&quot;label&quot;, &quot;value&quot;).bkGreen</code></td><td style="background-color:#EEEEEE; background-color:#CCFFCC">label</td><td colspan="5" class="info" style="background-color:#CCFFCC">value</td></tr></table></form></td>
+<p>All the methods above, when named <code class="prettyprint">xxx</code> are available as <code class="prettyprint">xxxLabel</code> and <code class="prettyprint">xxxValue</code> to do the formatting for the label or the value only. The available colors are:</p>
+<td class="info"><form>
+    <table><tr><th colspan="10">Colors</th></tr><tr><td class="info" style="text-align:center"><b>name</b></td><td class="info" style="text-align:center"><b>code</b></td><td colspan="7" class="info" style="text-align:center"><b>color</b></td></tr><tr><td class="info" style="">white</td><td class="info" style="">#FFFFFF</td><td colspan="7" class="info" style="background-color:#FFFFFF"></td></tr><tr><td class="info" style="">blue</td><td class="info" style="">#1E90FF</td><td colspan="7" class="info" style="background-color:#1E90FF"></td></tr><tr><td class="info" style="">red</td><td class="info" style="">#FF9999</td><td colspan="7" class="info" style="background-color:#FF9999"></td></tr><tr><td class="info" style="">green</td><td class="info" style="">#CCFFCC</td><td colspan="7" class="info" style="background-color:#CCFFCC"></td></tr><tr><td class="info" style="">yellow</td><td class="info" style="">#FFFF99</td><td colspan="7" class="info" style="background-color:#FFFF99"></td></tr><tr><td class="info" style="">grey</td><td class="info" style="">#EEEEEE</td><td colspan="7" class="info" style="background-color:#EEEEEE"></td></tr></table></form></td>
+<h3 id="simple-form">Simple form</h3>
+<p>Now that we know how to create Fields and Properties, creating a <code class="prettyprint">Form</code> is as easy as putting them on separate lines:</p>
+<pre><code class="prettyprint">Form(&quot;Address&quot;).
+    tr(prop(&quot;street&quot;, actualStreet(123), &quot;Oxford St&quot;)).
+    tr(prop(&quot;number&quot;, actualNumber(123), 20))</code></pre>
+<p>The form has a title <code class="prettyprint">"Address"</code> and 2 properties, each one on a distinct row. The <code class="prettyprint">actualStreet()</code> and <code class="prettyprint">actualNumber()</code> methods are supposed to retrieve the relevant values from a database.</p>
+<p>In some cases (see the Calculator example below) you can create a header row using the <code class="prettyprint">th</code> method:</p>
+<ul>
+<li><code class="prettyprint">th(field("a"), field("b"))</code></li>
+<li>or <code class="prettyprint">th("a", "b")</code> using an implicit conversion of Any =&gt; Field[Any]</li>
+</ul>
+<p>Inserting the form in a Specification is also very simple:</p>
+<pre><code class="prettyprint">class SpecificationWithForms extends Specification with Forms { def is = s2&quot;&quot;&quot;
+
+The address must be retrieved from the database with the proper street and number
+  ${Form(&quot;Address&quot;).
+  tr(prop(&quot;street&quot;, actualStreet(123), &quot;Oxford St&quot;)).
+  tr(prop(&quot;number&quot;, actualNumber(123), 20))}
+&quot;&quot;&quot;
+}</code></pre>
+<p>One way to encapsulate and reuse this Form across specifications is to define a case class:</p>
+<pre><code class="prettyprint">case class Address(street: String, number: Int) {
+  def retrieve(addressId: Int) = {
+    val address = actualAddress(addressId)
+    Form(&quot;Address&quot;).
+      tr(prop(&quot;street&quot;, address.street, street)).
+      tr(prop(&quot;number&quot;, address.number, number))
+  }
+}
+
+And then you can use it like this: 
+</code></pre>
+<p>class AddressSpecification extends Specification with Forms { def is = s2""" The address must be retrieved from the database with the proper street and number ${Address(“Oxford St”, 20). /** expected values */ retrieve(123) /** actual address id */} """ }</p>
+<pre><code class="prettyprint">
+
+##### Adding several rows at once
+
+A very practical way to add rows programatically is to start from a list of values and have a function creating a Row object for each value: 
+</code></pre>
+<p>Form(“a new Form”).trs(addresses) { (a: Address) =&gt; Row.tr(field(a.number), field(a.street)) }</p>
+<pre><code class="prettyprint">
+
+&lt;td class=&quot;info&quot;&gt;&lt;form&gt;
+    &lt;table&gt;&lt;tr&gt;&lt;th colspan=&quot;7&quot;&gt;a new Form&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;3&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;info&quot; style=&quot;&quot;&gt;Rose Crescent&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;4&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;info&quot; style=&quot;&quot;&gt;Oxfort St&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/form&gt;&lt;/td&gt;
+
+#### Nesting into another Form
+
+Forms can be composed of other Forms to display composite information: 
+</code></pre>
+<p>val address = Form(“Address”). tr(field(“street”, “Rose Crescent”)). tr(field(“number”, 3))</p>
+<p>val person = Form(“Person”). tr(field(“name”, “Eric”)). tr(address)</p>
+<pre><code class="prettyprint">
+
+&lt;td class=&quot;info&quot;&gt;&lt;form&gt;
+    &lt;table&gt;&lt;tr&gt;&lt;th colspan=&quot;4&quot;&gt;Person&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;background-color:#EEEEEE&quot;&gt;name&lt;/td&gt;&lt;td colspan=&quot;3&quot; class=&quot;info&quot; style=&quot;&quot;&gt;Eric&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/form&gt;&lt;/td&gt;
+
+This will be displayed with the address as a nested table inside the main one on the last row. However in some case, it&#39;s preferable to have the rows of that Form to be included directly in the outer table. This can be done by *inlining* the
+nesting Form: 
+</code></pre>
+<p>val person = Form(“Person”). tr(field(“name”, “Eric”)). tr(address.inline) // address is inlined</p>
+<pre><code class="prettyprint">
+
+And the result is:
+
+&lt;td class=&quot;info&quot;&gt;&lt;form&gt;
+    &lt;table&gt;&lt;tr&gt;&lt;th colspan=&quot;4&quot;&gt;Person&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;background-color:#EEEEEE&quot;&gt;name&lt;/td&gt;&lt;td colspan=&quot;3&quot; class=&quot;info&quot; style=&quot;&quot;&gt;Eric&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;div colspan=&quot;3&quot;&gt;&lt;tr&gt;&lt;th colspan=&quot;4&quot;&gt;Address&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;background-color:#EEEEEE&quot;&gt;street&lt;/td&gt;&lt;td colspan=&quot;3&quot; class=&quot;info&quot; style=&quot;&quot;&gt;Rose Crescent&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;background-color:#EEEEEE&quot;&gt;number&lt;/td&gt;&lt;td colspan=&quot;3&quot; class=&quot;info&quot; style=&quot;&quot;&gt;3&lt;/td&gt;&lt;/tr&gt;&lt;/div&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/form&gt;&lt;/td&gt;
+
+#### Nesting into an Effect or a Prop
+
+When using Forms in specifications we can describe different levels of abstraction. If we consider the specification of a website for example, we want to be able to use a Form having 2 rows and describing the exact actions to do on the Login page: 
+</code></pre>
+<p>val loginForm = Form(“login”). tr(effect(“click on login”, clickOn(“login”))). tr(effect(“enter name”, enter(“name”, “me”))). tr(effect(“enter password”, enter(“password”, “pw”))). tr(effect(“submit”, submit()))</p>
+<pre><code class="prettyprint">
+&lt;td class=&quot;info&quot;&gt;&lt;form&gt;
+    &lt;table&gt;&lt;tr&gt;&lt;th colspan=&quot;3&quot;&gt;login&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan=&quot;2&quot; style=&quot;&quot; class=&quot;info&quot;&gt;click on login&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan=&quot;2&quot; style=&quot;&quot; class=&quot;info&quot;&gt;enter name&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan=&quot;2&quot; style=&quot;&quot; class=&quot;info&quot;&gt;enter password&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan=&quot;2&quot; style=&quot;&quot; class=&quot;info&quot;&gt;submit&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/form&gt;&lt;/td&gt;
+
+However in a &quot;purchase&quot; scenario we want all the steps above to represent the login actions as just one step. One way to
+do this is to transform the login Form to an Effect or a Prop: 
+</code></pre>
+<p>Form(“purchase”). tr(loginForm.toEffect(“login”)). tr(selectForm.toEffect(“select goods”)). tr(checkTotalForm.toProp(“the total must be computed ok”).bkWhiteLabel)</p>
+<pre><code class="prettyprint">
+
+If everything goes fine, the detailed nested form is not shown:
+
+&lt;td class=&quot;info&quot;&gt;&lt;form&gt;
+    &lt;table&gt;&lt;tr&gt;&lt;th colspan=&quot;4&quot;&gt;purchase&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan=&quot;3&quot; style=&quot;&quot; class=&quot;info&quot;&gt;login&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan=&quot;3&quot; style=&quot;&quot; class=&quot;info&quot;&gt;select goods&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;background-color:#EEEEEE; background-color:#FFFFFF&quot;&gt;the total must be computed ok&lt;/td&gt;&lt;td colspan=&quot;3&quot; class=&quot;success&quot;&gt;org.specs2.form.Form@193de710&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/form&gt;&lt;/td&gt;
+
+Otherwise:
+
+ * if the Form is embedded into an Effect, Errors will be reported
+ * if the Form is embedded into a Prop, Failures will be reported, like that
+
+&lt;form&gt;
+    &lt;table&gt;&lt;tr&gt;&lt;th colspan=&quot;4&quot;&gt;purchase&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan=&quot;3&quot; style=&quot;&quot; class=&quot;info&quot;&gt;login&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan=&quot;3&quot; style=&quot;&quot; class=&quot;info&quot;&gt;select goods&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;background-color:#EEEEEE; background-color:#FFFFFF&quot;&gt;the total must be computed ok&lt;/td&gt;&lt;td class=&quot;failure&quot;&gt;org.specs2.form.Form@193de710&lt;/td&gt;&lt;td colspan=&quot;3&quot; class=&quot;failure&quot; onclick=&quot;showHide(212854566)&quot;&gt;failed&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;pre&gt;&lt;i&gt;[click on failed cells to see the stacktraces]&lt;/i&gt;&lt;div class=&quot;formstacktrace details&quot; id=&quot;212854566&quot;&gt;
+      failed (file:1)
+      &lt;div&gt;org.specs2.execute.Failure$.$lessinit$greater$default$3(Result.scala:384)&lt;/div&gt;&lt;div&gt;org.specs2.form.Form.executedResult$lzyINIT1$1(Form.scala:133)&lt;/div&gt;&lt;div&gt;org.specs2.form.Form.executedResult$1(Form.scala:135)&lt;/div&gt;&lt;div&gt;org.specs2.form.Form.toProp$$anonfun$3(Form.scala:138)&lt;/div&gt;&lt;div&gt;org.specs2.control.Property$.apply$$anonfun$1(Property.scala:76)&lt;/div&gt;&lt;div&gt;org.specs2.control.Property.execute(Property.scala:56)&lt;/div&gt;&lt;div&gt;org.specs2.control.Property.optionalValue(Property.scala:22)&lt;/div&gt;&lt;div&gt;org.specs2.execute.ResultExecution.executeProperty$$anonfun$1(ResultExecution.scala:117)&lt;/div&gt;&lt;div&gt;org.specs2.execute.ResultExecution.$anonfun$1(ResultExecution.scala:90)&lt;/div&gt;&lt;div&gt;org.specs2.control.Exceptions.trye(Exceptions.scala:83)&lt;/div&gt;&lt;div&gt;org.specs2.control.Exceptions.trye$(Exceptions.scala:15)&lt;/div&gt;&lt;div&gt;org.specs2.control.Exceptions$.trye(Exceptions.scala:124)&lt;/div&gt;&lt;div&gt;org.specs2.execute.ResultExecution.executeEither(ResultExecution.scala:90)&lt;/div&gt;&lt;div&gt;org.specs2.execute.ResultExecution.executeEither$(ResultExecution.scala:16)&lt;/div&gt;&lt;div&gt;org.specs2.execute.ResultExecution$.executeEither(ResultExecution.scala:128)&lt;/div&gt;&lt;div&gt;org.specs2.execute.ResultExecution.executeProperty(ResultExecution.scala:117)&lt;/div&gt;&lt;div&gt;org.specs2.execute.ResultExecution.executeProperty$(ResultExecution.scala:16)&lt;/div&gt;&lt;div&gt;org.specs2.execute.ResultExecution$.executeProperty(ResultExecution.scala:128)&lt;/div&gt;&lt;div&gt;org.specs2.form.Prop.expectedValue(Prop.scala:53)&lt;/div&gt;&lt;div&gt;org.specs2.form.Prop.$anonfun$1(Prop.scala:59)&lt;/div&gt;&lt;div&gt;scala.Option.flatMap(Option.scala:283)&lt;/div&gt;&lt;div&gt;org.specs2.form.Prop.execute(Prop.scala:60)&lt;/div&gt;&lt;div&gt;org.specs2.form.PropCell.executeCell$$anonfun$1(Cells.scala:156)&lt;/div&gt;&lt;div&gt;scala.Option.orElse(Option.scala:477)&lt;/div&gt;&lt;div&gt;org.specs2.form.PropCell.executeCell(Cells.scala:156)&lt;/div&gt;&lt;div&gt;org.specs2.form.Row.executeRow$$anonfun$1(Row.scala:40)&lt;/div&gt;&lt;div&gt;scala.collection.immutable.List.map(List.scala:246)&lt;/div&gt;&lt;div&gt;org.specs2.form.Row.executeRow(Row.scala:40)&lt;/div&gt;&lt;div&gt;org.specs2.form.Form.executeRows$$anonfun$1(Form.scala:73)&lt;/div&gt;&lt;div&gt;scala.collection.immutable.Vector1.map(Vector.scala:1886)&lt;/div&gt;&lt;div&gt;scala.collection.immutable.Vector1.map(Vector.scala:375)&lt;/div&gt;&lt;div&gt;org.specs2.form.Form.executeRows(Form.scala:73)&lt;/div&gt;&lt;div&gt;org.specs2.form.Form.executeForm(Form.scala:83)&lt;/div&gt;&lt;div&gt;org.specs2.guide.UseForms$.is$$anonfun$74$$anonfun$67(UseForms.scala:246)&lt;/div&gt;&lt;div&gt;org.specs2.specification.create.S2StringContext$$anon$4.prepend(S2StringContext.scala:58)&lt;/div&gt;&lt;div&gt;org.specs2.specification.create.S2StringContext$.$anonfun$1(S2StringContext.scala:136)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.Fragments$.reduce$$anonfun$1(Fragments.scala:142)&lt;/div&gt;&lt;div&gt;scala.collection.immutable.ArraySeq.foldLeft(ArraySeq.scala:214)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.Fragments$.reduce(Fragments.scala:142)&lt;/div&gt;&lt;div&gt;org.specs2.specification.create.S2StringContext$.s2(S2StringContext.scala:137)&lt;/div&gt;&lt;div&gt;org.specs2.guide.UseForms$.is$$anonfun$1(UseForms.scala:11)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure$.create$$anonfun$2(SpecStructure.scala:81)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:24)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure.map$$anonfun$1(SpecStructure.scala:27)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:24)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure.map$$anonfun$1(SpecStructure.scala:27)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:24)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure$.selected(SpecStructure.scala:165)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure$.linkedSpecStructuresRefs(SpecStructure.scala:154)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure$.linkedSpecifications$$anonfun$1(SpecStructure.scala:114)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure$.getRefs$5(SpecStructure.scala:131)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure$.$anonfun$5(SpecStructure.scala:141)&lt;/div&gt;&lt;div&gt;scala.collection.StrictOptimizedIterableOps.flatMap(StrictOptimizedIterableOps.scala:117)&lt;/div&gt;&lt;div&gt;scala.collection.StrictOptimizedIterableOps.flatMap$(StrictOptimizedIterableOps.scala:104)&lt;/div&gt;&lt;div&gt;scala.collection.immutable.Vector.flatMap(Vector.scala:113)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure$.getAll$3(SpecStructure.scala:141)&lt;/div&gt;&lt;div&gt;org.specs2.specification.core.SpecStructure$.specStructuresRefs$$anonfun$1(SpecStructure.scala:145)&lt;/div&gt;&lt;div&gt;org.specs2.control.Operation$OperationMonad$.point$$anonfun$1(Operation.scala:127)&lt;/div&gt;&lt;div&gt;org.specs2.control.Operation.org$specs2$control$Operation$$run(Operation.scala:20)&lt;/div&gt;&lt;div&gt;org.specs2.control.Operation.liftedTree1$1(Operation.scala:82)&lt;/div&gt;&lt;div&gt;org.specs2.control.Operation.attempt$$anonfun$1(Operation.scala:85)&lt;/div&gt;&lt;div&gt;org.specs2.control.Operation.org$specs2$control$Operation$$run(Operation.scala:20)&lt;/div&gt;&lt;div&gt;org.specs2.control.Operation.$anonfun$1(Operation.scala:88)&lt;/div&gt;&lt;div&gt;org.specs2.control.Action$.either(Action.scala:114)&lt;/div&gt;&lt;div&gt;org.specs2.control.Operation.toAction(Operation.scala:88)&lt;/div&gt;&lt;div&gt;org.specs2.runner.DefaultClassRunner.run(ClassRunner.scala:41)&lt;/div&gt;&lt;div&gt;org.specs2.runner.DefaultClassRunner.run(ClassRunner.scala:35)&lt;/div&gt;&lt;div&gt;org.specs2.Website.createUserGuide$$anonfun$1(Website.scala:53)&lt;/div&gt;&lt;div&gt;org.specs2.control.Action.flatMap$$anonfun$2$$anonfun$1(Action.scala:34)&lt;/div&gt;&lt;div&gt;scala.concurrent.impl.Promise$Transformation.run(Promise.scala:434)&lt;/div&gt;&lt;div&gt;java.util.concurrent.ForkJoinTask$RunnableExecuteAction.exec(ForkJoinTask.java:1402)&lt;/div&gt;&lt;div&gt;java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)&lt;/div&gt;&lt;div&gt;java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1056)&lt;/div&gt;&lt;div&gt;java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)&lt;/div&gt;&lt;div&gt;java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:175)&lt;/div&gt;
+    &lt;/div&gt;&lt;/pre&gt;&lt;/form&gt;
+
+#### Using tabs
+
+If there are too many fields to be displayed on a Form you can use tabs: 
+</code></pre>
+<p>s2""" A person can have 2 addresses ${ Form(“Addresses”).tr { tab(“home”, Address(“Oxford St”, 12). fill(“Oxford St”, 12)). tab(“work”, Address(“Rose Cr.”, 3). fill(“Rose Cr.”, 3)) } } """</p>
+<pre><code class="prettyprint">
+
+The first `tab` call will create a `Tabs` object containing the a first tab with &quot;home&quot; as the title and an Address form as its content. Then every subsequent `tab` calls on the `Tabs` object will create new tabs:
+
+
+&lt;td class=&quot;info&quot;&gt;&lt;form&gt;
+    &lt;table&gt;&lt;tr&gt;&lt;th colspan=&quot;101&quot;&gt;Addresses&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan=&quot;100&quot; class=&quot;info&quot;&gt;&lt;div class=&quot;tabber&quot;&gt;&lt;div class=&quot;tabbertab&quot; title=&quot;home&quot;&gt;&lt;form&gt;
+    &lt;table&gt;&lt;tr&gt;&lt;th colspan=&quot;4&quot;&gt;Address&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;background-color:#EEEEEE&quot;&gt;street&lt;/td&gt;&lt;td colspan=&quot;3&quot; class=&quot;success&quot;&gt;Oxford St&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;background-color:#EEEEEE&quot;&gt;number&lt;/td&gt;&lt;td colspan=&quot;3&quot; class=&quot;success&quot;&gt;12&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/form&gt;&lt;/div&gt;&lt;div class=&quot;tabbertab&quot; title=&quot;work&quot;&gt;&lt;form&gt;
+    &lt;table&gt;&lt;tr&gt;&lt;th colspan=&quot;4&quot;&gt;Address&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;background-color:#EEEEEE&quot;&gt;street&lt;/td&gt;&lt;td colspan=&quot;3&quot; class=&quot;success&quot;&gt;Rose Cr.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;background-color:#EEEEEE&quot;&gt;number&lt;/td&gt;&lt;td colspan=&quot;3&quot; class=&quot;success&quot;&gt;2&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/form&gt;&lt;/div&gt;&lt;/div&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/form&gt;&lt;/td&gt;
+
+Tabs can also be created from a seq of values. Let&#39;s pretend we have a list of `Address` objects with a name and a Form displaying the `Address` values. You can write: 
+</code></pre>
+<p>Form(“Addresses”).tabs(addresses) { (address: Address) =&gt; tab(address.street, address.form) }</p>
+<pre><code class="prettyprint">
+
+### Aggregating forms
+
+Now that we&#39;ve defined a form for a simple entity, let&#39;s see how we can reuse it with a larger entity:
+
+ * the Customer form defines a name attribute and embeds an instance of the Address form
+ * it is defined by setting the name on one row and the Address form on the second row
+
+*[and for this example, we define a slightly different Address form]*</code></pre>
+<p>case class Address(street: String, number: Int) { def actualIs(address: Address) = { Form(“Address”). tr(prop(“street”, address.street, street)). tr(prop(“number”, address.number, number)) } }</p>
+<p>case class Customer(name: String, address: Address) { def retrieve(customerId: Int) = { val customer = actualCustomer(customerId) Form(“Customer”). tr(prop(“name”, customer.name)(name)). tr(address.actualIs(customer.address)) } def actualCustomer(customerId: Int): Customer = this // fetch from the database }</p>
+<pre><code class="prettyprint">
+</code></pre>
+<p>class CustomerSpecification extends Specification with Forms { def is = s2""" The customer must be retrieved from the database with a proper name and address ${ Customer(name = “Eric”, address = Address(street = “Rose Crescent”, number = 2)). retrieve(123) }""" }</p>
+<pre><code class="prettyprint">
+
+As you also see above, named arguments can bring more readability to the expected values.
+
+#### Lazy cells
+
+Fields, Props and Forms are added right away to a row when building a Form with the `tr` method. If it is necessary to add them with a &quot;call-by-name&quot; behavior, the `lazify` method can be used: 
+</code></pre>
+<p>def address = Address() // build an Address def customer = Customer()</p>
+<p>Form(“Customer”). tr(prop(“name”, customer.name)(“name”)). // the address Form will be built only when the Customer Form is rendered tr(lazify(address.actualIs(customer.address)))</p>
+<pre><code class="prettyprint">
+
+#### Xml cells
+
+Any xml can be &quot;injected&quot; on a row by using an `XmlCell`: 
+</code></pre>
+Form(“Customer”). tr(prop(“name”, Customer().name)(“name”)). tr(XmlCell(
+<div>
+<b>this is a bold statement</b>
+</div>
+<p>))</p>
+<pre><code class="prettyprint">
+
+### 1-n relationships
+
+When there are 1 - n relationships between entities the situation gets bit more complex.
+
+For example you can have an &quot;Order&quot; entity, which has several &quot;OrderLines&quot;. In that case there are several things that we might want to specify:
+
+ * the expected rows are included in the actual rows, with no specific order (this is the usual case)
+ * the expected rows are included in the actual rows, in the same order
+ * the expected rows are exactly the actual rows, with no specific order
+ * the expected rows are exactly the actual rows, in the same order
+
+Let&#39;s see how to declare this. The 2 classes we&#39;re going to use are:</code></pre>
+<p>import Form.*</p>
+<p>case class Order(orderId: Int) { lazy val actualLines = // those should be extracted from the actual order entity retrieved by id OrderLine(“PIS”, 1) :: OrderLine(“PS”, 2) :: OrderLine(“BS”, 3) :: OrderLine(“SIS”, 4) :: Nil</p>
+<p>def base = Forms.form(“Order”).th(“name”, “qty”) def hasSubset(ls: OrderLine<em>) = base.subset(actualLines, ls) def hasSubsequence(ls: OrderLine</em>) = base.subsequence(actualLines, ls) def hasSet(ls: OrderLine<em>) = base.set(actualLines, ls) def hasSequence(ls: OrderLine</em>) = base.sequence(actualLines, ls) }</p>
+<p>case class OrderLine(name: String, quantity: Int) { def form: Form = tr(field(name), field(quantity)) }</p>
+<pre><code class="prettyprint">
+The `OrderLine` class simply creates a form with 2 fields: name and quantity. The `Order` class is able to retrieve the actual order entity (say, from a database) and to extract `OrderLine` instances. It also has several methods to build Forms depending on the kind of comparison that we want to do.
+
+#### Subset
+
+`Form.subset` uses the `FormDiffs.subset(a, b)` method to calculate the differences between the lines of `a` and `b`:
+
+ * lines existing in `a` but not `b` are left untouched
+ * lines existing in `a` and `b` are marked as success
+ * lines existing in `b` and not `a` are marked as failures 
+</code></pre>
+<p>Order(123).hasSubset( OrderLine(“BS”, 3), OrderLine(“PIS”, 1), OrderLine(“TDGL”, 5))</p>
+<pre><code class="prettyprint">
+
+This form returns:
+
+&lt;form&gt;
+    &lt;table&gt;&lt;tr&gt;&lt;th colspan=&quot;7&quot;&gt;Order&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;text-align:center; background-color:#EEEEEE&quot;&gt;&lt;b&gt;name&lt;/b&gt;&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;info&quot; style=&quot;text-align:center; background-color:#EEEEEE&quot;&gt;&lt;b&gt;qty&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;success&quot; style=&quot;&quot;&gt;PIS&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;success&quot; style=&quot;&quot;&gt;1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;PS&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;info&quot; style=&quot;&quot;&gt;2&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;success&quot; style=&quot;&quot;&gt;BS&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;success&quot; style=&quot;&quot;&gt;3&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;SIS&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;info&quot; style=&quot;&quot;&gt;4&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;failure&quot; style=&quot;&quot;&gt;TDGL&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;failure&quot; style=&quot;&quot;&gt;5&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/form&gt;
+
+#### Subsequence
+
+`Form.subsequence` uses the `FormDiffs.subsequence(a, b)` method to calculate the differences and add them to the Form:
+
+ * lines existing in `a` but not `b` are left untouched
+ * lines existing in `a` and `b` in the same order are marked as success
+ * lines existing in `b` and not `a` are marked as failures
+ * lines existing in `b` and `a` but out of order are marked as failures 
+</code></pre>
+<p>Order(123).hasSubsequence( OrderLine(“PS”, 2), OrderLine(“BS”, 3), OrderLine(“PIS”, 1), OrderLine(“TDGL”, 5))</p>
+<pre><code class="prettyprint">
+
+This form returns:
+
+&lt;form&gt;
+    &lt;table&gt;&lt;tr&gt;&lt;th colspan=&quot;7&quot;&gt;Order&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;text-align:center; background-color:#EEEEEE&quot;&gt;&lt;b&gt;name&lt;/b&gt;&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;info&quot; style=&quot;text-align:center; background-color:#EEEEEE&quot;&gt;&lt;b&gt;qty&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;failure&quot; style=&quot;&quot;&gt;PIS&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;failure&quot; style=&quot;&quot;&gt;1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;success&quot; style=&quot;&quot;&gt;PS&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;success&quot; style=&quot;&quot;&gt;2&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;success&quot; style=&quot;&quot;&gt;BS&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;success&quot; style=&quot;&quot;&gt;3&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;&quot;&gt;SIS&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;info&quot; style=&quot;&quot;&gt;4&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;failure&quot; style=&quot;&quot;&gt;TDGL&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;failure&quot; style=&quot;&quot;&gt;5&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/form&gt;
+
+#### Set
+
+`Form.set` uses the `FormDiffs.set(a, b)` method to calculate the differences between the lines of `a` and `b`:
+
+ * lines existing in `a` but not `b` are marked as failures
+ * lines existing in `a` and `b` are marked as success
+ * lines existing in `b` and not `a` are marked as failures 
+</code></pre>
+<p>Order(123).hasSet( OrderLine(“BS”, 3), OrderLine(“PIS”, 1), OrderLine(“TDGL”, 5))</p>
+<pre><code class="prettyprint">
+
+This form returns:
+
+&lt;form&gt;
+    &lt;table&gt;&lt;tr&gt;&lt;th colspan=&quot;7&quot;&gt;Order&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;text-align:center; background-color:#EEEEEE&quot;&gt;&lt;b&gt;name&lt;/b&gt;&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;info&quot; style=&quot;text-align:center; background-color:#EEEEEE&quot;&gt;&lt;b&gt;qty&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;success&quot; style=&quot;&quot;&gt;PIS&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;success&quot; style=&quot;&quot;&gt;1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;failure&quot; style=&quot;&quot;&gt;PS&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;failure&quot; style=&quot;&quot;&gt;2&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;success&quot; style=&quot;&quot;&gt;BS&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;success&quot; style=&quot;&quot;&gt;3&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;failure&quot; style=&quot;&quot;&gt;SIS&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;failure&quot; style=&quot;&quot;&gt;4&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;failure&quot; style=&quot;&quot;&gt;TDGL&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;failure&quot; style=&quot;&quot;&gt;5&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/form&gt;
+
+#### Sequence
+
+`Form.sequence` uses the `FormDiffs.sequence(a, b)` method to calculate the differences between the lines of `a` and `b`:
+
+ * lines existing in `a` but not `b` are marked as failures
+ * lines existing in `a` and `b` in the right order are marked as success
+ * lines existing in `b` and not `a` are marked as failures 
+</code></pre>
+<p>Order(123).hasSequence( OrderLine(“PS”, 2), OrderLine(“BS”, 3), OrderLine(“PIS”, 1), OrderLine(“TDGL”, 5))</p>
+<pre><code class="prettyprint">
+
+This form returns:
+
+&lt;form&gt;
+    &lt;table&gt;&lt;tr&gt;&lt;th colspan=&quot;7&quot;&gt;Order&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;info&quot; style=&quot;text-align:center; background-color:#EEEEEE&quot;&gt;&lt;b&gt;name&lt;/b&gt;&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;info&quot; style=&quot;text-align:center; background-color:#EEEEEE&quot;&gt;&lt;b&gt;qty&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;failure&quot; style=&quot;&quot;&gt;PIS&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;failure&quot; style=&quot;&quot;&gt;1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;success&quot; style=&quot;&quot;&gt;PS&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;success&quot; style=&quot;&quot;&gt;2&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;success&quot; style=&quot;&quot;&gt;BS&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;success&quot; style=&quot;&quot;&gt;3&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;failure&quot; style=&quot;&quot;&gt;SIS&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;failure&quot; style=&quot;&quot;&gt;4&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td class=&quot;failure&quot; style=&quot;&quot;&gt;TDGL&lt;/td&gt;&lt;td colspan=&quot;5&quot; class=&quot;failure&quot; style=&quot;&quot;&gt;5&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/form&gt;
+
+### Decision tables
+
+One very popular type of Forms are *decision tables*. A decision table is a Form where, on each row, several values are used for a computation and the result must be equal to other values on the same row. A very simple example of this is a calculator: 
+</code></pre>
+<p>case class Calculator(form: Form = Form()) { def tr(a: Int, b: Int, a_plus_b: Int, a_minus_b: Int) = Calculator { def plus = prop(a + b)(a_plus_b) def minus = prop(a - b)(a_minus_b) form.tr(a, b, plus, minus) } }</p>
+<p>def th(title1: String, titles: String<em>) = Calculator(Form.th(title1, titles</em>))</p>
+<pre><code class="prettyprint">
+
+The `Calculator` object defines a `th` method to create the first `Calculator` Form, with the proper title. The `th` method:
+
+ * takes the column titles (there must be at least one title)
+ * creates a header row on the form
+ * returns a new Calculator containing this form (note that everything is immutable here)
+
+The `Calculator` case class embeds a Form and defines a `tr` method which
+
+ * takes actual and expected values
+ * creates properties for the computations
+ * creates a form with a new row containing those fields and properties
+ * returns a new Calculator containing this form
+
+And you use the `Calculator` Form like this: 
+</code></pre>
+<p>class CalculatorSpecification extends Specification with Forms { def is = s2""" A calculator must add and subtract Ints ${ Calculator. th(“a”, “b”, “a + b”, “a - b”). tr(1, 2, 3, -1 ). tr(2, 2, 4, 0 ) }""" } ```</p>
+<p>Here is the output:</p>
+<td class="info"><form>
+    <table><tr><td class="info" style="text-align:center; background-color:#EEEEEE"><b>a</b></td><td class="info" style="text-align:center; background-color:#EEEEEE"><b>b</b></td><td class="info" style="text-align:center; background-color:#EEEEEE"><b>a + b</b></td><td colspan="9" class="info" style="text-align:center; background-color:#EEEEEE"><b>a - b</b></td></tr><tr><td class="info" style="">1</td><td class="info" style="">2</td><td class="success">3</td><td colspan="9" class="success">-1</td></tr><tr><td class="info" style="">2</td><td class="info" style="">2</td><td class="success">4</td><td colspan="9" class="success">0</td></tr></table></form></td>
+<p>And if something goes wrong:</p>
+<form>
+    <table><tr><td class="info" style="text-align:center; background-color:#EEEEEE"><b>a</b></td><td class="info" style="text-align:center; background-color:#EEEEEE"><b>b</b></td><td class="info" style="text-align:center; background-color:#EEEEEE"><b>a + b</b></td><td colspan="9" class="info" style="text-align:center; background-color:#EEEEEE"><b>a - b</b></td></tr><tr><td class="info" style="">1</td><td class="info" style="">2</td><td class="success">3</td><td colspan="9" class="success">-1</td></tr><tr><td class="info" style="">2</td><td class="info" style="">2</td><td class="success">4</td><td class="failure">0</td><td colspan="9" class="failure" onclick="showHide(1470428148)">0 != 2</td></tr></table><pre><i>[click on failed cells to see the stacktraces]</i><div class="formstacktrace details" id="1470428148">
+      0 != 2 (file:1)
+      <div>org.specs2.execute.Failure$.$lessinit$greater$default$3(Result.scala:384)</div><div>org.specs2.execute.Result$.result(Result.scala:173)</div><div>org.specs2.execute.Result$.result(Result.scala:177)</div><div>org.specs2.execute.Result$.result(Result.scala:181)</div><div>org.specs2.matcher.EqualityMatcher.apply(EqualityMatcher.scala:32)</div><div>org.specs2.form.Prop$.checkProp$$anonfun$1(Prop.scala:138)</div><div>org.specs2.form.Prop.$anonfun$2$$anonfun$1$$anonfun$1(Prop.scala:60)</div><div>org.specs2.execute.ResultExecution.execute(ResultExecution.scala:28)</div><div>org.specs2.execute.ResultExecution.execute$(ResultExecution.scala:16)</div><div>org.specs2.execute.ResultExecution$.execute(ResultExecution.scala:128)</div><div>org.specs2.form.Prop.$anonfun$3$$anonfun$2(Prop.scala:60)</div><div>scala.Option.map(Option.scala:242)</div><div>org.specs2.form.Prop.$anonfun$1(Prop.scala:60)</div><div>scala.Option.flatMap(Option.scala:283)</div><div>org.specs2.form.Prop.execute(Prop.scala:60)</div><div>org.specs2.form.PropCell.executeCell$$anonfun$1(Cells.scala:156)</div><div>scala.Option.orElse(Option.scala:477)</div><div>org.specs2.form.PropCell.executeCell(Cells.scala:156)</div><div>org.specs2.form.Row.executeRow$$anonfun$1(Row.scala:40)</div><div>scala.collection.immutable.List.map(List.scala:250)</div><div>org.specs2.form.Row.executeRow(Row.scala:40)</div><div>org.specs2.form.Form.executeRows$$anonfun$1(Form.scala:73)</div><div>scala.collection.immutable.Vector1.map(Vector.scala:1886)</div><div>scala.collection.immutable.Vector1.map(Vector.scala:375)</div><div>org.specs2.form.Form.executeRows(Form.scala:73)</div><div>org.specs2.form.Form.executeForm(Form.scala:83)</div><div>org.specs2.guide.UseForms$.is$$anonfun$89$$anonfun$80(UseForms.scala:524)</div><div>org.specs2.specification.create.S2StringContext$$anon$4.prepend(S2StringContext.scala:58)</div><div>org.specs2.specification.create.S2StringContext$.$anonfun$1(S2StringContext.scala:136)</div><div>org.specs2.specification.core.Fragments$.reduce$$anonfun$1(Fragments.scala:142)</div><div>scala.collection.immutable.ArraySeq.foldLeft(ArraySeq.scala:214)</div><div>org.specs2.specification.core.Fragments$.reduce(Fragments.scala:142)</div><div>org.specs2.specification.create.S2StringContext$.s2(S2StringContext.scala:137)</div><div>org.specs2.guide.UseForms$.is$$anonfun$1(UseForms.scala:11)</div><div>org.specs2.specification.core.SpecStructure$.create$$anonfun$2(SpecStructure.scala:81)</div><div>org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:24)</div><div>org.specs2.specification.core.SpecStructure.map$$anonfun$1(SpecStructure.scala:27)</div><div>org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:24)</div><div>org.specs2.specification.core.SpecStructure.map$$anonfun$1(SpecStructure.scala:27)</div><div>org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:24)</div><div>org.specs2.specification.core.SpecStructure$.selected(SpecStructure.scala:165)</div><div>org.specs2.specification.core.SpecStructure$.linkedSpecStructuresRefs(SpecStructure.scala:154)</div><div>org.specs2.specification.core.SpecStructure$.linkedSpecifications$$anonfun$1(SpecStructure.scala:114)</div><div>org.specs2.specification.core.SpecStructure$.getRefs$5(SpecStructure.scala:131)</div><div>org.specs2.specification.core.SpecStructure$.$anonfun$5(SpecStructure.scala:141)</div><div>scala.collection.StrictOptimizedIterableOps.flatMap(StrictOptimizedIterableOps.scala:117)</div><div>scala.collection.StrictOptimizedIterableOps.flatMap$(StrictOptimizedIterableOps.scala:104)</div><div>scala.collection.immutable.Vector.flatMap(Vector.scala:113)</div><div>org.specs2.specification.core.SpecStructure$.getAll$3(SpecStructure.scala:141)</div><div>org.specs2.specification.core.SpecStructure$.specStructuresRefs$$anonfun$1(SpecStructure.scala:145)</div><div>org.specs2.control.Operation$OperationMonad$.point$$anonfun$1(Operation.scala:127)</div><div>org.specs2.control.Operation.org$specs2$control$Operation$$run(Operation.scala:20)</div><div>org.specs2.control.Operation.liftedTree1$1(Operation.scala:82)</div><div>org.specs2.control.Operation.attempt$$anonfun$1(Operation.scala:85)</div><div>org.specs2.control.Operation.org$specs2$control$Operation$$run(Operation.scala:20)</div><div>org.specs2.control.Operation.$anonfun$1(Operation.scala:88)</div><div>org.specs2.control.Action$.either(Action.scala:114)</div><div>org.specs2.control.Operation.toAction(Operation.scala:88)</div><div>org.specs2.runner.DefaultClassRunner.run(ClassRunner.scala:41)</div><div>org.specs2.runner.DefaultClassRunner.run(ClassRunner.scala:35)</div><div>org.specs2.Website.createUserGuide$$anonfun$1(Website.scala:53)</div><div>org.specs2.control.Action.flatMap$$anonfun$2$$anonfun$1(Action.scala:34)</div><div>scala.concurrent.impl.Promise$Transformation.run(Promise.scala:434)</div><div>java.util.concurrent.ForkJoinTask$RunnableExecuteAction.exec(ForkJoinTask.java:1402)</div><div>java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)</div><div>java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1056)</div><div>java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)</div><div>java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:175)</div>
+    </div></pre></form>
+<p>And when it goes <em>very</em> wrong (like throwing an <code class="prettyprint">error("very wrong")</code>), there will be red cells and stacktraces:</p>
+<form>
+    <table><tr><td class="info" style="text-align:center; background-color:#EEEEEE"><b>a</b></td><td class="info" style="text-align:center; background-color:#EEEEEE"><b>b</b></td><td class="info" style="text-align:center; background-color:#EEEEEE"><b>a + b</b></td><td colspan="9" class="info" style="text-align:center; background-color:#EEEEEE"><b>a - b</b></td></tr><tr><td class="info" style="">1</td><td class="info" style="">2</td><td class="success">3</td><td colspan="9" class="success">-1</td></tr><tr><td class="info" style="">2</td><td class="info" style="">2</td><td class="success">4</td><td colspan="9" class="error" onclick="showHide(636066321)">java.lang.RuntimeException: very wrong</td></tr></table><pre><i>[click on failed cells to see the stacktraces]</i><div class="formstacktrace details" id="636066321">
+      java.lang.RuntimeException: very wrong (file:1)
+      <div>scala.sys.package$.error(package.scala:27)</div><div>org.specs2.guide.UseForms$WrongCalculator.minus$4$$anonfun$3(UseForms.scala:578)</div><div>org.specs2.control.Property$.apply$$anonfun$1(Property.scala:76)</div><div>org.specs2.control.Property.execute(Property.scala:56)</div><div>org.specs2.control.Property.optionalValue(Property.scala:22)</div><div>org.specs2.execute.ResultExecution.executeProperty$$anonfun$1(ResultExecution.scala:117)</div><div>org.specs2.execute.ResultExecution.$anonfun$1(ResultExecution.scala:90)</div><div>org.specs2.control.Exceptions.trye(Exceptions.scala:83)</div><div>org.specs2.control.Exceptions.trye$(Exceptions.scala:15)</div><div>org.specs2.control.Exceptions$.trye(Exceptions.scala:124)</div><div>org.specs2.execute.ResultExecution.executeEither(ResultExecution.scala:90)</div><div>org.specs2.execute.ResultExecution.executeEither$(ResultExecution.scala:16)</div><div>org.specs2.execute.ResultExecution$.executeEither(ResultExecution.scala:128)</div><div>org.specs2.execute.ResultExecution.executeProperty(ResultExecution.scala:117)</div><div>org.specs2.execute.ResultExecution.executeProperty$(ResultExecution.scala:16)</div><div>org.specs2.execute.ResultExecution$.executeProperty(ResultExecution.scala:128)</div><div>org.specs2.form.Prop.actualValue(Prop.scala:50)</div><div>org.specs2.form.Prop.execute(Prop.scala:58)</div><div>org.specs2.form.PropCell.executeCell$$anonfun$1(Cells.scala:156)</div><div>scala.Option.orElse(Option.scala:477)</div><div>org.specs2.form.PropCell.executeCell(Cells.scala:156)</div><div>org.specs2.form.Row.executeRow$$anonfun$1(Row.scala:40)</div><div>scala.collection.immutable.List.map(List.scala:250)</div><div>org.specs2.form.Row.executeRow(Row.scala:40)</div><div>org.specs2.form.Form.executeRows$$anonfun$1(Form.scala:73)</div><div>scala.collection.immutable.Vector1.map(Vector.scala:1886)</div><div>scala.collection.immutable.Vector1.map(Vector.scala:375)</div><div>org.specs2.form.Form.executeRows(Form.scala:73)</div><div>org.specs2.form.Form.executeForm(Form.scala:83)</div><div>org.specs2.guide.UseForms$.is$$anonfun$90$$anonfun$81(UseForms.scala:531)</div><div>org.specs2.specification.create.S2StringContext$$anon$4.prepend(S2StringContext.scala:58)</div><div>org.specs2.specification.create.S2StringContext$.$anonfun$1(S2StringContext.scala:136)</div><div>org.specs2.specification.core.Fragments$.reduce$$anonfun$1(Fragments.scala:142)</div><div>scala.collection.immutable.ArraySeq.foldLeft(ArraySeq.scala:214)</div><div>org.specs2.specification.core.Fragments$.reduce(Fragments.scala:142)</div><div>org.specs2.specification.create.S2StringContext$.s2(S2StringContext.scala:137)</div><div>org.specs2.guide.UseForms$.is$$anonfun$1(UseForms.scala:11)</div><div>org.specs2.specification.core.SpecStructure$.create$$anonfun$2(SpecStructure.scala:81)</div><div>org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:24)</div><div>org.specs2.specification.core.SpecStructure.map$$anonfun$1(SpecStructure.scala:27)</div><div>org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:24)</div><div>org.specs2.specification.core.SpecStructure.map$$anonfun$1(SpecStructure.scala:27)</div><div>org.specs2.specification.core.SpecStructure.fragments(SpecStructure.scala:24)</div><div>org.specs2.specification.core.SpecStructure$.selected(SpecStructure.scala:165)</div><div>org.specs2.specification.core.SpecStructure$.linkedSpecStructuresRefs(SpecStructure.scala:154)</div><div>org.specs2.specification.core.SpecStructure$.linkedSpecifications$$anonfun$1(SpecStructure.scala:114)</div><div>org.specs2.specification.core.SpecStructure$.getRefs$5(SpecStructure.scala:131)</div><div>org.specs2.specification.core.SpecStructure$.$anonfun$5(SpecStructure.scala:141)</div><div>scala.collection.StrictOptimizedIterableOps.flatMap(StrictOptimizedIterableOps.scala:117)</div><div>scala.collection.StrictOptimizedIterableOps.flatMap$(StrictOptimizedIterableOps.scala:104)</div><div>scala.collection.immutable.Vector.flatMap(Vector.scala:113)</div><div>org.specs2.specification.core.SpecStructure$.getAll$3(SpecStructure.scala:141)</div><div>org.specs2.specification.core.SpecStructure$.specStructuresRefs$$anonfun$1(SpecStructure.scala:145)</div><div>org.specs2.control.Operation$OperationMonad$.point$$anonfun$1(Operation.scala:127)</div><div>org.specs2.control.Operation.org$specs2$control$Operation$$run(Operation.scala:20)</div><div>org.specs2.control.Operation.liftedTree1$1(Operation.scala:82)</div><div>org.specs2.control.Operation.attempt$$anonfun$1(Operation.scala:85)</div><div>org.specs2.control.Operation.org$specs2$control$Operation$$run(Operation.scala:20)</div><div>org.specs2.control.Operation.$anonfun$1(Operation.scala:88)</div><div>org.specs2.control.Action$.either(Action.scala:114)</div><div>org.specs2.control.Operation.toAction(Operation.scala:88)</div><div>org.specs2.runner.DefaultClassRunner.run(ClassRunner.scala:41)</div><div>org.specs2.runner.DefaultClassRunner.run(ClassRunner.scala:35)</div><div>org.specs2.Website.createUserGuide$$anonfun$1(Website.scala:53)</div><div>org.specs2.control.Action.flatMap$$anonfun$2$$anonfun$1(Action.scala:34)</div><div>scala.concurrent.impl.Promise$Transformation.run(Promise.scala:434)</div><div>java.util.concurrent.ForkJoinTask$RunnableExecuteAction.exec(ForkJoinTask.java:1402)</div><div>java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)</div><div>java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1056)</div><div>java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)</div><div>java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:175)</div>
+    </div></pre></form>
+<p>Note that the Calculator class is not, in itself an Example. But there is an implicit definition automatically transforming <code class="prettyprint">Any { def form: Form }</code> to <code class="prettyprint">Example</code> so that an explicit call to <code class="prettyprint">.form</code> is not necessary in order to include the Form in the specification.</p>
+</div>
+
+<script>
+$(document).ready(function() {
+  $('#tipue_search_input').tipuesearch({
+    'show': 6
+  });
+});
+</script>
+</div>
+
+</body>
+</html>
