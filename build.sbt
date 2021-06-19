@@ -1,21 +1,12 @@
-import sbt._
-import Defaults._
-import libraryDependencies._
-import java.util.{Date, TimeZone}
-import java.text.SimpleDateFormat
-
-/** MAIN PROJECT */
+/** ROOT PROJECT */
 lazy val specs2 = project.in(file(".")).
-  enablePlugins(GitBranchPrompt, SitePlugin, GhpagesPlugin, GitVersioning).
+  enablePlugins(GitBranchPrompt, GitVersioning, ScalaUnidocPlugin).
   settings(
-    commonSettings,
-    siteSettings,
     name := "specs2",
-    packagedArtifacts := Map.empty,
+    rootSettings,
   ).aggregate(
     fp, common, matcher, core, matcherExtra, html, guide,
-    form, markdown, junit, scalacheck, xml,
-    tests
+    form, markdown, junit, scalacheck, xml, tests
   )
 
 /** COMMON SETTINGS */
@@ -28,9 +19,25 @@ lazy val specs2Settings = Seq(
   organization := "org.specs2",
   specs2ShellPrompt,
   ThisBuild / crossScalaVersions := Seq(Scala3),
-  ThisBuild / scalaVersion := Scala3,
-  Compile / doc / sources := Seq()
+  ThisBuild / scalaVersion := Scala3)
+
+lazy val rootSettings =
+  specs2Settings       ++
+  compilationSettings  ++
+  testingSettings      ++
+  testingJvmSettings   ++
+  releaseSettings      ++
+  Seq(
+    Compile / doc / sources := sources.all(aggregateCompile).value.flatten,
+    packagedArtifacts := Map.empty,
+    test := {},
   )
+
+lazy val commonSettings =
+  specs2Settings       ++
+  compilationSettings  ++
+  testingSettings      ++
+  testingJvmSettings
 
 lazy val commonJsSettings = Seq(
   scalacOptions += {
@@ -44,14 +51,6 @@ lazy val commonJsSettings = Seq(
   },
   Test / parallelExecution := false
 )
-
-lazy val commonSettings =
-    specs2Settings       ++
-    coreDefaultSettings  ++
-    compilationSettings  ++
-    testingSettings      ++
-    testingJvmSettings   ++
-    releaseSettings
 
 /** MODULES (sorted in alphabetical order) */
 
@@ -189,7 +188,10 @@ def scalaSourceVersion(scalaBinaryVersion: String) =
 lazy val compilationSettings = Seq(
   maxErrors := 20,
   Global / onChangedBuildSource := ReloadOnSourceChanges,
-  Compile / scalacOptions ++= Seq(
+  Compile / scalacOptions ++= compilationOptions,
+  Compile / doc / scalacOptions ++= compilationOptions)
+
+lazy val compilationOptions =  Seq(
     "-source:future-migration",
     "-language:implicitConversions,postfixOps",
     "-Ykind-projector",
@@ -197,7 +199,6 @@ lazy val compilationSettings = Seq(
     "-deprecation:false",
     "-unchecked",
     "-feature")
-)
 
 lazy val testingSettings = Seq(
   logBuffered := false,
@@ -214,22 +215,6 @@ lazy val testingJvmSettings = Seq(
 )
 
 /**
- * DOCUMENTATION
- */
-lazy val siteSettings = GhpagesPlugin.projectSettings ++ SitePlugin.projectSettings ++
-  Seq(
-    siteSourceDirectory := target.value / "specs2-reports" / "site",
-    makeSite / includeFilter := AllPassFilter,
-    // override the synchLocal task to avoid removing the existing files
-    ghpagesSynchLocal := {
-      val betterMappings = ghpagesPrivateMappings.value map { case (file, target) => (file, ghpagesUpdatedRepository.value / target) }
-      IO.copy(betterMappings)
-      ghpagesUpdatedRepository.value
-    },
-    git.remoteRepo := "git@github.com:etorreborre/specs2.git"
-  )
-
-/**
  * RELEASE
  */
 lazy val releaseSettings: Seq[Setting[_]] = Seq(
@@ -237,7 +222,8 @@ lazy val releaseSettings: Seq[Setting[_]] = Seq(
   ThisBuild / githubWorkflowBuild := Seq(
     WorkflowStep.Sbt(
       name = Some("Build and test 🔧"),
-      commands = List("testOnly -- xonly exclude ci,website timefactor 3"))
+      // commands = List("testOnly -- xonly exclude ci,website timefactor 3")),
+      commands = List(""))
     ),
   ThisBuild / githubWorkflowTargetTags ++= Seq(SPECS2+"*"),
   ThisBuild / githubWorkflowPublishTargetBranches := Seq(RefPredicate.StartsWith(Ref.Tag(SPECS2))),
@@ -282,3 +268,7 @@ lazy val releaseSettings: Seq[Setting[_]] = Seq(
   ThisBuild / dynverTagPrefix := SPECS2)
 
 val SPECS2 = "SPECS2-"
+
+lazy val aggregateCompile = ScopeFilter(
+  inProjects(fp, common, matcher, core, matcherExtra, html, form, markdown, junit, scalacheck, xml),
+  inConfigurations(Compile))

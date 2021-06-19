@@ -12,7 +12,7 @@ on:
     branches: ['**']
   push:
     branches: ['**']
-    tags: [SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*]
+    tags: [SPECS2-*]
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -53,7 +53,7 @@ jobs:
         run: sbt --client '++${{ matrix.scala }}; githubWorkflowCheck'
 
       - name: Build and test 🔧
-        run: sbt --client '++${{ matrix.scala }}; testOnly -- xonly exclude ci,website timefactor 3'
+        run: sbt --client '++${{ matrix.scala }}; '
 
   publish:
     name: Publish Artifacts
