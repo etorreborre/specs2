@@ -58,7 +58,7 @@ class Website(env: Env) extends Specification with Specs2Variables with Specs2Ta
 
   def versionsJavaScript(tags: List[VersionTag], guideDir: String, apiDir: String): String = {
     def makeVersionVar(name: String, file: String) =
-      s"""|var ${name}
+      s"""|var ${name}Versions
           | = [
           | ${tags.map(_.render).map(tag => s"""{id:"../../$name/$tag/$file", text:"${tag.replace("SPECS2-", "")}"}""").mkString(",\n")}
           |];""".stripMargin
