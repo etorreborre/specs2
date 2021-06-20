@@ -29,19 +29,19 @@
         <li>Add specs2 dependencies to your build file
                     <pre><code class="prettyprint tab-code">// Read <a href="$GUIDE_DIR$/org.specs2.guide.Installation.html#other-dependencies">here</a> for optional jars and dependencies
 libraryDependencies ++= Seq("org.specs2" %% "specs2-core" % "$VERSION$" % "test")
-
-scalacOptions in Test ++= Seq("-Yrangepos")</code></pre>
         </li>
 
         <li>Write your first specification
-<pre><code class="prettyprint">import org.specs2._
+<pre><code class="prettyprint">import org.specs2.*
 
-class QuickStartSpec extends Specification { def is = s2"""
+class QuickStartSpec extends Specification:
+  def is = s2"""
 
- This is my first specification
-   it is working                 $$ok
-   really working!               $$ok
-                                 """
+  This is my first specification
+    it is working $$ok
+    really working! $$ok
+
+  """
 }</code></pre>
         </li>
 

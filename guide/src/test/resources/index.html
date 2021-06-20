@@ -33,15 +33,18 @@
       <div class="carousel-inner" role="listbox">
         <div class="item active">
           <div class="caption">Specify your software using both text and Scala code</div>
-          <pre><code class="prettyprint carousel-code">class HelloWorldSpec extends Specification { def is = s2"""
+          <pre><code class="prettyprint carousel-code">class HelloWorldSpec extends Specification:
+  def is = s2"""
 
   This is a specification for the 'Hello world' string
 
   The 'Hello world' string should
-    contain 11 characters                             $$e1
-    start with 'Hello'                                $$e2
-    end with 'world'                                  $$e3
-                                                      """
+    contain 11 characters $$e1
+    start with 'Hello' $$e2
+    end with 'world' $$e3
+
+  """
+
   def e1 = "Hello world" must haveSize(11)
   def e2 = "Hello world" must startWith("Hello")
   def e3 = "Hello world" must endWith("world")
@@ -51,7 +54,7 @@
           <div class="item">
               <div class="caption">Use different styles of specifications</div>
 <pre><code class="prettyprint carousel-code">/** This is the "Unit" style for specifications */
-class HelloWorldSpec extends Specification {
+class HelloWorldSpec extends Specification:
   "This is a specification for the 'Hello world' string".txt
 
   "The 'Hello world' string should" >> {
@@ -64,23 +67,29 @@ class HelloWorldSpec extends Specification {
     "end with 'world'" >> {
       "Hello world" must endWith("world")
     }
-  }
 }</code></pre>
           </div>
             <div class="item">
                 <div class="caption">Test your code with <a href="http://www.scalacheck.org">ScalaCheck</a></div>
-                <pre><code class="prettyprint carousel-code">class IntSumSpec extends Specification with ScalaCheck { def is = s2"""
+                <pre><code class="prettyprint carousel-code">class IntMonoidSpec extends Specification with ScalaCheck:
+  def is = s2"""
 
-  The IntSum Monoid must respect Monoid laws
-    left identity                                     $$leftid
-    right identity                                    $$rightid
-    associativity                                     $$associativity
-                                                      """
-  import scalaz._, Scalaz._
-  import IntSumMonoid._
+  The Int Monoid must respect the Monoid laws
+    left identity $$leftIdentity
+    right identity $$rightIdentity
+    associativity $$associativity
 
-  def leftid  = prop { i: Int => 0 |+| i === i }
-  def rightid = prop { i: Int => i |+| 0 === i }
+"""
+
+  import cats.*, implicits.*
+
+  def leftIdentity = prop { i: Int =>
+    0 |+| i === i
+  }
+
+  def rightIdentity = prop { i: Int =>
+    i |+| 0 === i
+  }
 
   def associativity = prop { (a: Int, b: Int, c: Int) =>
     ((a |+| b) |+| c) === (a |+| (b |+| c))
@@ -90,7 +99,8 @@ class HelloWorldSpec extends Specification {
             </div>
             <div class="item">
                 <div class="caption">Document your APIs with compiler-checked examples</div>
-                <pre><code class="prettyprint carousel-code">class PluralSpec extends Specification { def is = s2"""
+                <pre><code class="prettyprint carousel-code">class PluralSpec extends Specification:
+  def is = s2"""
 
   Names can be pluralized depending on a quantity
   $${ "apple".plural(1) === "apple"  }
@@ -105,28 +115,28 @@ class HelloWorldSpec extends Specification {
             </div>
             <div class="item">
                 <div class="caption">Manage contexts for integration testing</div>
-                <pre><code class="prettyprint carousel-code">class UsersSpec extends Specification with BeforeAll with BeforeEach {
+                <pre><code class="prettyprint carousel-code">class UsersSpec extends Specification with BeforeSpec with BeforeEach:
   def is = sequential ^ s2"""
 
   We can create in the database
-    create a user                                    $$create
-    list all users                                   $$list
-                                                     """
-  import DB._
+    create a user $$create
+    list all users $$list
 
-  def create = {
+  """
+
+  import DB.*
+
+  def create =
     val id = db.createUser("me")
     db.getUser(id).name must_== "me"
-  }
 
-  def list = {
+  def list =
     List("me", "you").foreach(db.createUser)
     db.listAllUsers.map(_.name).toSet must_== Set("me", "you")
-  }
 
   // create a database before running anything
-  def beforeAll = createDatabase(databaseUrl)
-                    
+  def beforeSpec = createDatabase(databaseUrl)
+
   // remove all data before running an example
   def before = cleanDatabase(databaseUrl)
 
