@@ -28,7 +28,7 @@ lazy val specs2 = project.in(file(".")).
 /** COMMON SETTINGS */
 lazy val specs2Settings = Seq(
   organization := "org.specs2",
-  GlobalScope / scalazVersion := "7.2.31",
+  GlobalScope / scalazVersion := "7.2.32",
   specs2ShellPrompt,
   scalaVersion := "2.13.6",
   SettingKey[Boolean]("ide-skip-project").withRank(KeyRanks.Invisible) := platformDepsCrossVersion.value == ScalaNativeCrossVersion.binary,
