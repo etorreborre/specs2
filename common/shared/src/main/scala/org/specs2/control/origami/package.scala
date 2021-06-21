@@ -18,10 +18,10 @@ package object origami {
   type Sink[M[_], A] = Fold[M, A, Unit]
 
   /** alias for a Fold sinking its last value */
-  type SinkEff[R, A] = Fold[Eff[R, ?], A, Unit]
+  type SinkEff[R, A] = Fold[Eff[R, *], A, Unit]
 
   /** alias for a Fold exposing it state type */
-  type Aux[R, A, B, S1] = Fold[Eff[R, ?], A, B] { type S = S1 }
+  type Aux[R, A, B, S1] = Fold[Eff[R, *], A, B] { type S = S1 }
 
 }
 

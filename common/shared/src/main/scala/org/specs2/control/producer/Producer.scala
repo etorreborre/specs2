@@ -82,7 +82,7 @@ object Producer extends Producers {
       p1 append p2
   }
 
-  implicit def FoldableProducer: Foldable[Producer[NoFx, ?]] = new Foldable[Producer[NoFx, ?]] {
+  implicit def FoldableProducer: Foldable[Producer[NoFx, *]] = new Foldable[Producer[NoFx, *]] {
     override def foldLeft[A, B](fa: Producer[NoFx, A], b: B)(f: (B, A) => B): B = {
       var s = b
       fa.run.run match {
@@ -111,7 +111,7 @@ object Producer extends Producers {
 
   }
 
-  implicit def ProducerMonad[R :_Safe]: Monad[Producer[R, ?]] = new Monad[Producer[R, ?]] {
+  implicit def ProducerMonad[R :_Safe]: Monad[Producer[R, *]] = new Monad[Producer[R, *]] {
     def bind[A, B](fa: Producer[R, A])(f: A => Producer[R, B]): Producer[R, B] =
       fa.flatMap(f)
 
@@ -216,7 +216,7 @@ trait Producers {
   def runList[R :_Safe, A](producer: Producer[R, A]): Eff[R, List[A]] =
     producer.fold(pure(Vector[A]()), (vs: Vector[A], a: A) => pure(vs :+ a), (vs:Vector[A]) => pure(vs.toList))
 
-  def collect[R :_Safe, A](producer: Producer[R, A])(implicit m: Member[Writer[A, ?], R]): Eff[R, Unit] =
+  def collect[R :_Safe, A](producer: Producer[R, A])(implicit m: Member[Writer[A, *], R]): Eff[R, Unit] =
     producer.run flatMap {
       case Done() => pure(())
       case One(a) => tell(a)

@@ -169,13 +169,13 @@ trait ErrorInterpretation[F] extends ErrorCreation[F] { outer =>
    * a computation over a "bigger" error (for the full application)
    */
   def runLocalError[R, U, F1, F2, A](r: Eff[R, A], getter: F1 => F2)
-                                    (implicit sr: Member.Aux[Evaluate[F1, ?], R, U], br: Evaluate[F2, ?] |= U): Eff[U, A] =
-  translate[R, U, Evaluate[F1, ?], A](r) { new Translate[Evaluate[F1, ?], U] {
+                                    (implicit sr: Member.Aux[Evaluate[F1, *], R, U], br: Evaluate[F2, *] |= U): Eff[U, A] =
+  translate[R, U, Evaluate[F1, *], A](r) { new Translate[Evaluate[F1, *], U] {
     def apply[X](ex: Evaluate[F1, X]): Eff[U, X] =
       ex.run match {
-        case Left(Left(t))  => send[Evaluate[F2, ?], U, X](Evaluate.exception[F2, X](t))
-        case Left(Right(e1)) => send[Evaluate[F2, ?], U, X](Evaluate.fail[F2, X](getter(e1)))
-        case Right(x)       => send[Evaluate[F2, ?], U, X](Evaluate.eval[F2, X](x))
+        case Left(Left(t))  => send[Evaluate[F2, *], U, X](Evaluate.exception[F2, X](t))
+        case Left(Right(e1)) => send[Evaluate[F2, *], U, X](Evaluate.fail[F2, X](getter(e1)))
+        case Right(x)       => send[Evaluate[F2, *], U, X](Evaluate.eval[F2, X](x))
       }
   }}
 

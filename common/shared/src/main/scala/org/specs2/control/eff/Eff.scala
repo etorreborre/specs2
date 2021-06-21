@@ -136,9 +136,9 @@ object Eff extends EffCreation with
 trait EffImplicits {
 
   /**
-   * Monad implementation for the Eff[R, ?] type
+   * Monad implementation for the Eff[R, *] type
    */
-  implicit final def EffMonad[R]: Monad[Eff[R, ?]] = new Monad[Eff[R, ?]] {
+  implicit final def EffMonad[R]: Monad[Eff[R, *]] = new Monad[Eff[R, *]] {
     def point[A](a: =>A): Eff[R, A] =
       Pure(a)
 
@@ -170,7 +170,7 @@ trait EffImplicits {
       }
   }
 
-  def EffApplicative[R]: Applicative[Eff[R, ?]] = new Applicative[Eff[R, ?]] {
+  def EffApplicative[R]: Applicative[Eff[R, *]] = new Applicative[Eff[R, *]] {
     def point[A](a: =>A): Eff[R, A] =
       Pure(a)
 
@@ -200,8 +200,8 @@ trait EffImplicits {
       }
   }
 
-  implicit def naturalInto[R, U](into: IntoPoly[R, U]): Eff[R, ?] ~> Eff[U, ?] =
-    new (Eff[R, ?] ~> Eff[U, ?]) {
+  implicit def naturalInto[R, U](into: IntoPoly[R, U]): Eff[R, *] ~> Eff[U, *] =
+    new (Eff[R, *] ~> Eff[U, *]) {
       def apply[A](e: Eff[R, A]): Eff[U, A] = into(e)
     }
 
