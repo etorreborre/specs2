@@ -28,11 +28,11 @@ lazy val specs2 = project.in(file(".")).
 /** COMMON SETTINGS */
 lazy val specs2Settings = Seq(
   organization := "org.specs2",
-  GlobalScope / scalazVersion := "7.2.31",
+  GlobalScope / scalazVersion := "7.2.32",
   specs2ShellPrompt,
-  scalaVersion := "2.13.5",
+  scalaVersion := "2.13.6",
   SettingKey[Boolean]("ide-skip-project").withRank(KeyRanks.Invisible) := platformDepsCrossVersion.value == ScalaNativeCrossVersion.binary,
-  crossScalaVersions := Seq(scalaVersion.value, "2.12.13"))
+  crossScalaVersions := Seq(scalaVersion.value, "2.12.14"))
 
 lazy val tagName = Def.setting {
   s"specs2-${version.value}"
@@ -64,9 +64,9 @@ lazy val commonJsNativeSettings = Seq(
 
 lazy val specs2Version = settingKey[String]("defines the current specs2 version")
 lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
-lazy val shapelessVersion = "2.3.3"
-lazy val catsVersion = "2.5.0"
-lazy val catsEffectVersion = "2.4.1"
+lazy val shapelessVersion = "2.3.7"
+lazy val catsVersion = "2.6.1"
+lazy val catsEffectVersion = "2.5.1"
 
 val commonSettings =
     coreDefaultSettings  ++
@@ -445,7 +445,7 @@ lazy val compilationSettings = Seq(
           "-Xlint:-byname-implicit")
     }
   },
-  addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3"),
+  addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.13.0" cross CrossVersion.full),
   Test / scalacOptions += "-Yrangepos",
   Compile / doc / scalacOptions ++= Seq("-feature", "-language:_"),
   Compile / console / scalacOptions := Seq("-Yrangepos", "-feature", "-language:_"),
