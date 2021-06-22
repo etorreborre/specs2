@@ -44,7 +44,7 @@ object depends {
       scalaParser.value
   }
 
-  def scalaXml = "org.scala-lang.modules" %% "scala-xml" % "2.0.0"
+  def scalaXml = "org.scala-lang.modules" %% "scala-xml" % "1.3.0"
 
   lazy val mockito  = "org.mockito"       % "mockito-core"         % "3.11.2"
   lazy val junit    = "org.junit.vintage" % "junit-vintage-engine" % "5.3.1"
