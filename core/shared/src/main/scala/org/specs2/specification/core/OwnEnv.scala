@@ -28,7 +28,7 @@ trait OwnEnv extends AfterAll {
   lazy val ec: ExecutionContext =
     ownEnv.executionContext
 
-  def afterAll: Unit =
+  def afterAll(): Unit =
     ownEnv.shutdown
 
 }

@@ -106,6 +106,10 @@ prop((s: String) => s must contain("a") or contain("b")).setPretty((s: String) =
 prop((s: String) => s must contain("a") or contain("b")).pretty((_: String).toUpperCase)
 }}
 
+Note that it is also possible to _remove_ shrinking by appending `noShrink` to your property: ${snippet{
+prop((s1: String, s2: String) => s1.nonEmpty or s2.nonEmpty).noShrink
+}}
+
 ### Contexts
 
 ScalaCheck properties are sometimes used to test stateful applications rather than pure functions. For example you want to test that a function is writing files somewhere and you would like those files to be deleted after each property execution: ${snippet{
@@ -164,6 +168,8 @@ The parameters you can modify are:
  `prettyParams`    |                        | a `Pretty.Params` instance to set the verbosity level when displaying `Pretty` instances
  `seed`            | `None`                 | a Base64 encoded string which you can get from a previous failed run.
  You can set the seed on the property directly with `setSeed(string)`
+
+Note that `minTestsOk` in `specs2` corresponds to the `minSuccessfulTests` parameter in `ScalaCheck`.
 
 #### Property level
 

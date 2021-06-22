@@ -5,8 +5,7 @@ import execute._
 import control.TraceLocation
 import org.specs2.specification.script.StepParser
 import specification.core._
-import text.{Trim, Interpolated}
-import Trim._
+import text.{Interpolated}
 import text.NotNullStrings._
 import text.Trim._
 
@@ -183,7 +182,7 @@ trait S2StringContextCreation extends FragmentsFactory { outer =>
 
     val expressions = if (Yrangepos) rangeExpressions else new Interpolated(content, texts).expressions
 
-    val (textsStartLocations1, textsEndLocations1) = 
+    val (textsStartLocations1, textsEndLocations1) =
       (positionsToLocation(textsStartPositions), positionsToLocation(textsEndPositions))
 
     val fragments = (texts zip variables zip expressions zip textsStartLocations1 zip textsEndLocations1).foldLeft(Fragments()) { (res, cur) =>
@@ -203,7 +202,7 @@ trait S2StringContextCreation extends FragmentsFactory { outer =>
       macro S2Macro.s2Implementation
   }
 
-  
+
   private def positionsToLocation(positions: Seq[String]): Seq[TraceLocation] =
     positions.map(_.split("\\|").toList).map {
       case path :: fileName :: line :: _ => TraceLocation(path, fileName, "Specification", "s2", line.toInt)
@@ -224,4 +223,3 @@ object S2StringContext extends DefaultFragmentFactory
 trait InterpolatedFragment {
   def append(fragments: Fragments, text: String, start: Location, end: Location, expression: String): Fragments
 }
-

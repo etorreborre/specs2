@@ -23,8 +23,9 @@ trait FilesRunner {
    * Run the specifications found in files based on command-line arguments
    */
   def run(args: Array[String], exit: Boolean = false): Unit = {
-    val env = Env(arguments = Arguments(args: _*),
-      lineLogger = consoleLogger)
+    val arguments = Arguments(args: _*)
+    arguments.reportUnknown()
+    val env = Env(arguments = arguments, lineLogger = consoleLogger)
 
     try     execute(run(env), env.arguments, exit)(env)
     finally env.shutdown
@@ -32,21 +33,23 @@ trait FilesRunner {
 
   def run(env: Env): Action[Stats] = {
     val args = env.arguments
-    val base = args.commandLine.valueOr("filesrunner.basepath", new java.io.File(specificationsBasePath).getAbsolutePath)
+    val filesRunnerArguments = FilesRunnerArguments.extract(args)
+    val verbose = filesRunnerArguments.verbose
+    val base = filesRunnerArguments.basePath
     val specs = for {
       basePath <- Actions.checkThat(base, new java.io.File(base).isDirectory, s"$base must be a directory")
       ss <- findSpecifications(
-        glob = args.commandLine.valueOr("filesrunner.path", specificationsPath),
-        pattern = args.commandLine.valueOr("filesrunner.pattern", specificationsPattern),
+        glob = filesRunnerArguments.glob,
+        pattern = filesRunnerArguments.pattern,
         basePath = DirectoryPath.unsafe(basePath),
-        verbose = isVerbose(args)).toAction
+        verbose = verbose).toAction
     } yield ss
 
     for {
-      _     <- beforeExecution(args, isVerbose(args)).toAction
+      _     <- beforeExecution(args, verbose).toAction
       ss    <- specs.map(sort(env))
       stats <- ss.toList.map(ClassRunner.report(env)).sequence
-      _     <- afterExecution(ss, isVerbose(args)).toAction
+      _     <- afterExecution(ss, verbose).toAction
     } yield stats.foldMap(identity _)
   }
 
@@ -55,14 +58,11 @@ trait FilesRunner {
     SpecificationStructure.topologicalSort(env)(specifications).getOrElse(specifications)
   }
 
-  /** @return true if the output must be verbose for debugging */
-  def isVerbose(args: Arguments) = args.isSet("filesrunner.verbose")
-
   /** print a message before the execution */
   protected def beforeExecution(args: Arguments, verbose: Boolean): Operation[Unit] = for {
     _        <- log("\nExecuting specifications", verbose)
     printers <- ClassRunner.createPrinters(args, Thread.currentThread.getContextClassLoader)
-    _        <- log("printers are " + printers.mkString(", "), verbose)
+    _        <- log("printers are " + printers.map(_.getClass).mkString(", "), verbose)
   } yield ()
 
 
@@ -71,12 +71,4 @@ trait FilesRunner {
     if (specs.isEmpty) log("No specification found\n", verbose)
     else               log("Finished the execution of " + specs.size + " specifications\n", verbose)
   }
-}
-
-/**
- * Run specification files from the command line with specs2.files <specification name> <arguments>
- */
-object files extends FilesRunner {
-  def main(args: Array[String]) =
-    run(args, exit = true)
 }

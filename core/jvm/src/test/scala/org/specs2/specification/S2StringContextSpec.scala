@@ -3,7 +3,6 @@ package specification
 
 import org.specs2.matcher.{MustMatchers, StandardMatchResults, ThrownExpectations}
 import org.specs2.execute.{Function0Result, StandardResults, Success}
-import Function0Result._
 import org.specs2.concurrent.ExecutionEnv
 import org.specs2.main.Arguments
 import org.specs2.specification.create._

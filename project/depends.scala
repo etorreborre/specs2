@@ -2,6 +2,7 @@ import sbt._
 import Keys._
 import org.portablescala.sbtplatformdeps.PlatformDepsPlugin.autoImport._
 import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
+import scala.scalanative.sbtplugin.ScalaNativePlugin.autoImport._
 
 object depends {
 
@@ -9,51 +10,53 @@ object depends {
 
   def compiler(scalaOrganization: String, scalaVersion: String) = Seq(scalaOrganization % "scala-compiler" % scalaVersion)
 
-  def reflect(scalaOrganization: String, scalaVersion: String) = Seq(scalaOrganization % "scala-reflect" % scalaVersion)
+  def reflect(scalaOrganization: String, scalaVersion: String) = scalaOrganization % "scala-reflect" % scalaVersion
 
   def scalaz(scalazVersion: String) =
     Seq("org.scalaz" %% "scalaz-core",
         "org.scalaz" %% "scalaz-effect").map(_ % scalazVersion)
 
   def scalazConcurrent(scalazVersion: String) =
-    Seq("org.scalaz" %% "scalaz-concurrent").map(_ % scalazVersion)
+    "org.scalaz" %% "scalaz-concurrent" % scalazVersion
 
   def jvmTest =
     libraryDependencies ++= Seq(
       "org.scala-sbt" % "test-interface" % "1.0",
-      "org.scala-js" %% "scalajs-stubs" % scalaJSVersion % "provided")
+      "org.portable-scala" %%% "portable-scala-reflect" % "1.1.1",
+      "org.scala-js" %% "scalajs-stubs" % "1.0.0" % "provided")
 
   def jsTest =
-    Seq(libraryDependencies ++= Seq("org.scala-js" %% "scalajs-test-interface" % scalaJSVersion),
-        scalaJSStage in Test := FastOptStage)
+    Seq(libraryDependencies ++= Seq(
+      "org.scala-js" %% "scalajs-test-interface" % scalaJSVersion,
+      "org.portable-scala" %%% "portable-scala-reflect" % "1.1.1"),
+        Test / scalaJSStage := FastOptStage)
+
+  def nativeTest =
+    Seq(libraryDependencies += "org.scala-native" %%% "test-interface" % nativeVersion)
 
   def scalaParser = Def.setting {
-    Seq("org.scala-lang.modules" %%% "scala-parser-combinators" % "1.1.1")
+    Seq("org.scala-lang.modules" %%% "scala-parser-combinators" % "2.0.0")
+  }
+  def scalaParserNative = Def.setting {
+    if(nativeVersion == "0.4.0")
+      Seq("com.github.lolgab" %%% "scala-parser-combinators" % "1.1.2")
+    else
+      scalaParser.value
   }
 
-  def scalaXML = Def.setting {
-    Seq("org.scala-lang.modules" %% "scala-xml" % "1.1.1")
-  }
+  def scalaXml = "org.scala-lang.modules" %% "scala-xml" % "2.0.0"
 
-  def kindp(scalaVersion: String) =
-    "org.spire-math" % "kind-projector" % "0.8.2" cross CrossVersion.binary
+  lazy val mockito  = "org.mockito"       % "mockito-core"         % "3.11.2"
+  lazy val junit    = "org.junit.vintage" % "junit-vintage-engine" % "5.3.1"
+  lazy val hamcrest = "org.hamcrest"      % "hamcrest"             % "2.2"
 
-  lazy val mockito       = Seq("org.mockito"  % "mockito-core"  % "2.23.4")
-  lazy val junit         = Seq("org.junit.vintage" % "junit-vintage-engine" % "5.3.1")
-  lazy val hamcrest      = Seq("org.hamcrest" % "hamcrest-core" % "1.3")
-
-  lazy val pegdown = Seq("org.pegdown" % "pegdown" % "1.6.0")
+  lazy val pegdown = "org.pegdown" % "pegdown" % "1.6.0"
 
   lazy val tagsoup = "org.ccil.cowan.tagsoup" % "tagsoup" % "1.2.1"
 
-  def sbtJvm(scalaJsVersion: String) = Seq(
-    "org.scala-sbt" % "test-interface" % "1.0",
-    "org.scala-js" %% "scalajs-stubs" % scalaJsVersion % "provided"
-  )
-
-  def sbtJs(scalaJsVersion: String) = Seq(
-    "org.scala-js" %% "scalajs-test-interface" % scalaJsVersion
-  )
+  lazy val scalacheck = Def.setting {
+    "org.scalacheck" %%% "scalacheck" % "1.15.4"
+  }
 
   def paradise(scalaVersion: String) =
     if (scalaMinorVersionAtLeast(scalaVersion, 11))

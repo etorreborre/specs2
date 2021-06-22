@@ -1,7 +1,7 @@
 package org.specs2
 package reflect
 
-import scala.reflect.ClassTag
+import scala.reflect.{ClassTag, NameTransformer}
 import ClassName._
 import control._
 import scala.util.control.NonFatal
@@ -14,13 +14,16 @@ import eff._
  */
 trait Classes extends ClassOperations {
 
+  type EnableReflectiveInstantiation =
+    org.portablescala.reflect.annotation.EnableReflectiveInstantiation
+
   /**
    * Try to create an instance of a given class by using whatever constructor is available
    * and trying to instantiate the first parameter recursively if there is a parameter for that constructor.
    *
    * This is useful to instantiate nested classes which are referencing their outer class in their constructor
    */
-  def createInstance[T <: AnyRef](className: String)(implicit m: ClassTag[T]): Operation[T] =
+  def createInstanceFromName[T <: AnyRef](className: String, defaultInstances: =>List[AnyRef] = Nil)(implicit m: ClassTag[T]): Operation[T] =
     createInstance(className, getClass.getClassLoader)
 
   def createInstance[T <: AnyRef](className: String, loader: ClassLoader, defaultInstances: =>List[AnyRef] = Nil)(implicit m: ClassTag[T]): Operation[T] =
@@ -67,9 +70,13 @@ trait Classes extends ClassOperations {
                                                                    defaultInstances: =>List[AnyRef]): Operation[T] = {
 
     constructor.setAccessible(true)
-    if (constructor.getParameterTypes.isEmpty)
-      newInstance(klass, constructor.newInstance())
-
+    if (constructor.getParameterTypes.isEmpty) {
+      if (klass.getName.endsWith("$")) {
+        newInstance(klass, klass.getDeclaredField(NameTransformer.MODULE_INSTANCE_NAME).get(null))
+      } else {
+        newInstance(klass, constructor.newInstance())
+      }
+    }
     else if (constructor.getParameterTypes.size == 1) {
       defaultInstances.find(i => constructor.getParameterTypes.apply(0) isAssignableFrom i.getClass) match {
         case None =>

@@ -20,6 +20,11 @@ class EitherMatchersSpec extends Spec with EitherMatchers with ResultMatchers { 
   ${ Left(1) must beLeft(===(1)) }
   ${ Right(1) must not be left(1) }
   ${ Left(1) must beLeft.like { case i => i must be_>(0) } }
-                                                                                                                        """
+
+  beRight / beLeft must typecheck when composed with other matchers
+  ${ val boomException: Throwable = new Exception("boom")
+     Some(Left(boomException)) must beSome(beLeft(boomException)) }
+
+"""
 
 }

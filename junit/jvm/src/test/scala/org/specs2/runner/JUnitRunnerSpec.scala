@@ -124,9 +124,9 @@ class JUnitWithBeforeAfterAllSpecification extends Specification with BeforeAfte
       one example $ok
       """
 
-  def beforeAll: Unit = ()
+  def beforeAll(): Unit = ()
 
-  def afterAll: Unit = ()
+  def afterAll(): Unit = ()
 }
 
 @RunWith(classOf[JUnitRunner])
@@ -146,9 +146,9 @@ class JUnitErrorInBeforeAllSpecification extends Specification with BeforeAfterA
       one example $ok
       """
 
-  def beforeAll: Unit = throw new RuntimeException("Error.")
+  def beforeAll(): Unit = throw new RuntimeException("Error.")
 
-  def afterAll: Unit = ()
+  def afterAll(): Unit = ()
 }
 
 class JUnitWithErrorInInitialization extends mutable.Specification {

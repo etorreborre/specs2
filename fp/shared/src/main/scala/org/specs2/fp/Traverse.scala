@@ -35,7 +35,7 @@ object Traverse {
       val g = Applicative.apply[G]
       fa match {
         case Nil => g.point(Nil)
-        case h :: t => g.apply2(f(h), traverseImpl(t)(f))((b, r) => b :: r)
+        case h :: t => g.apply2(traverseImpl(t)(f), f(h))((r, b) => b :: r)
       }
     }
 
@@ -56,7 +56,7 @@ object Traverse {
       fa.map(f)
   }
 
-  implicit def eitherInstance[L]: Traverse[Either[L, ?]] = new Traverse[Either[L, ?]] {
+  implicit def eitherInstance[L]: Traverse[Either[L, *]] = new Traverse[Either[L, *]] {
     def traverseImpl[G[_]: Applicative, A, B](fa: Either[L, A])(f: A => G[B]): G[Either[L, B]] = {
       val g = Applicative.apply[G]
       fa match {

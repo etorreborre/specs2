@@ -7,7 +7,7 @@ import scala.concurrent.duration._
 import scalaz.concurrent._
 import FuturezMatchers._
 
-class FuturezMatchersSpec(implicit ee: ExecutionEnv) extends Specification with ResultMatchers { def is = s2""" ${section("travis")}
+class FuturezMatchersSpec(implicit ee: ExecutionEnv) extends Specification with ResultMatchers { def is = s2""" ${section("ci")}
 
  In this specification `Future` means `scalaz.concurrent.Future`
 

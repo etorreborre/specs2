@@ -12,7 +12,7 @@ import scala.concurrent.duration._
 import fp.{Monoid, Show}
 import fp.syntax._
 import specification.process.Stats
-import time.SimpleTimer
+import time.SimpleTimer, SimpleTimer.startSimpleTimer
 import text.NotNullStrings._
 import control._
 
@@ -33,30 +33,28 @@ import Execution._
  *  - it has a condition deciding if the next execution can proceed or not depending on the current result
  *  - if isolable is true this means that it should be executed in its own specification instance
  *  - the result of a similar execution can be stored to decide if this one needs to be executed or not
- *  - it stores its execution time
  *  - it can store a continuation that will create more fragments, possibly containing more executions, based on the
  *    current result
  */
-case class Execution(run:            Option[Env => Future[() => Result]]     = None,
-                     executing:      Option[Throwable Either Future[Result]] = None,
-                     timeout:        Option[FiniteDuration]                  = None,
-                     mustJoin:       Boolean                                 = false,
-                     nextMustStopIf: Result => Boolean                       = (r: Result) => false,
-                     isolable:       Boolean                                 = true,
-                     previousResult: Option[Result]                          = None,
-                     timer:          SimpleTimer                             = new SimpleTimer,
-                     continuation:   Option[FragmentsContinuation]           = None) {
+case class Execution(run:            Option[Env => Future[() => Result]] = None,
+                     executing:      Executing                           = NotExecuting,
+                     timeout:        Option[FiniteDuration]              = None,
+                     mustJoin:       Boolean                             = false,
+                     nextMustStopIf: Result => Boolean                   = (r: Result) => false,
+                     isolable:       Boolean                             = true,
+                     previousResult: Option[Result]                      = None,
+                     continuation:   Option[FragmentsContinuation]       = None) {
 
   lazy val executedResult: TimedFuture[ExecutedResult] =
     executing match {
-      case None =>
-        TimedFuture.successful(ExecutedResult(Skipped(), timer.stop))
+      case NotExecuting =>
+        TimedFuture.successful(ExecutedResult(Skipped(), new SimpleTimer))
 
-      case Some(Left(t)) =>
+      case Failed(t) =>
         TimedFuture.failed(t)
 
-      case Some(Right(f)) =>
-        TimedFuture.future(f).map(r => ExecutedResult(r, timer.stop))
+      case Started(f) =>
+        TimedFuture.future(f).map { case (r, timer) => ExecutedResult(r, timer) }
     }
 
   lazy val executionResult: TimedFuture[Result] =
@@ -74,11 +72,16 @@ case class Execution(run:            Option[Env => Future[() => Result]]     = N
         r
     }
 
-  private def futureResult(env: Env): Option[Future[Result]] =
+  private def futureResult(env: Env): Option[Future[(Result, SimpleTimer)]] =
     executing match {
-      case Some(Left(t))       => Some(Future.successful(Error(t)))
-      case Some(Right(result)) => Some(result)
-      case None                => run.map(_(env).map(_())(env.executionContext))
+      case Failed(t) =>
+        Some(Future.successful((Error(t), new SimpleTimer)))
+
+      case Started(result) =>
+        Some(result)
+
+      case NotExecuting =>
+        Some(Future.successful((Success(), new SimpleTimer)))
     }
 
   /** methods to set the execution */
@@ -133,14 +136,25 @@ case class Execution(run:            Option[Env => Future[() => Result]]     = N
           implicit val ec = env.specs2ExecutionContext
           env.setContextClassLoader()
 
-          val future = TimedFuture(es => r(env).map(_()), to).runNow(env.executorServices).recoverWith { case e: FailureException =>
+          val timer = startSimpleTimer
+
+          val timedFuture = TimedFuture({ es =>
+            r(env).flatMap { action =>
+              try Future.successful((action(), timer.stop))
+              catch { case t: Throwable =>
+                Future.failed(t)
+              }
+            }
+          }, to)
+
+          val future = timedFuture.runNow(env.executorServices).recoverWith { case e: FailureException =>
             // Future execution could still throw FailureExceptions which can only be
             // recovered here
-            Future.successful(ResultExecution.handleExceptionsPurely(e))
+            Future.successful((ResultExecution.handleExceptionsPurely(e), timer.stop))
           }
-          setExecuting(future).copy(timeout = to).startTimer
+          setExecuting(future).copy(timeout = to)
         }
-        catch { case t: Throwable => setFatal(t).stopTimer }
+        catch { case t: Throwable => setFatal(t) }
     }
 
   /** start this execution when the other one is finished */
@@ -151,12 +165,14 @@ case class Execution(run:            Option[Env => Future[() => Result]]     = N
   def startAfter(others: List[Execution])(env: Env): Execution = {
     val arguments = env.arguments
 
-    val started: TimedFuture[Result] =
+    val timer = startSimpleTimer
+
+    val started: TimedFuture[(Result, SimpleTimer)] =
       others.map(_.executionResult).sequence.flatMap { results =>
         results.find(FatalExecution.isFatalResult) match {
           // if a previous fragment was fatal, we skip the current one
           case Some(_) =>
-            TimedFuture.successful(Skipped(): Result)
+            TimedFuture.successful((Skipped(): Result, timer.stop))
 
           case None =>
             // if a previous result indicates that we should stop
@@ -171,18 +187,18 @@ case class Execution(run:            Option[Env => Future[() => Result]]     = N
                 // if this execution is a step we still execute it
                 // to allow for clean up actions
                 if (mustJoin)
-                  startExecution(env).executionResult.map(_ => Error(FatalExecution(new Exception("stopped"))))
+                  startExecution(env).executionResult.map(_ => (Error(FatalExecution(new Exception("stopped"))), timer.stop))
                 // otherwise we skip
                 else
-                  TimedFuture.successful(Skipped(): Result)
+                  TimedFuture.successful((Skipped(): Result, timer.stop))
 
               // if everything is fine we run this current execution
               case None =>
-                startExecution(env).executionResult
+                startExecution(env).executionResult.map(r => (r, timer.stop))
             }
       }
     }
-    copy(executing = Some(Right(started.runNow(env.executorServices)))).startTimer
+    copy(executing = Started(started.runNow(env.executorServices)))
   }
 
   def setErrorAsFatal: Execution =
@@ -216,14 +232,14 @@ case class Execution(run:            Option[Env => Future[() => Result]]     = N
       implicit val ec = env.executionContext
 
       lazy val runs: List[Future[Result]] =
-        executions.flatMap(_.futureResult(env))
+        executions.flatMap(_.futureResult(env).map(_.map(_._1)))
 
       lazy val before: Future[Result] =
         if (sequential) runs.foldLeftM[Future, Result](Success())((res, cur) => cur.map(r => res and r))
         else            Future.sequence(runs).map(_.suml)
 
       executing match {
-        case None =>
+        case NotExecuting =>
           run match {
             case None => this
             case _ =>
@@ -236,15 +252,16 @@ case class Execution(run:            Option[Env => Future[() => Result]]     = N
                 }
               }
           }
-        case Some(Left(t)) =>
+
+        case Failed(_) =>
           this
 
-        case Some(Right(f)) =>
+        case Started(f) =>
 
           val future = before.flatMap { rs =>
             if (checkResult) {
               if (rs.isSuccess) f
-              else              Future.successful(rs)
+              else              Future.successful((rs, new SimpleTimer))
             } else f
           }
 
@@ -257,22 +274,16 @@ case class Execution(run:            Option[Env => Future[() => Result]]     = N
 
   /** @return set an execution result */
   def setResult(r: =>Result) =
-    try copy(executing = Some(Right(Future.successful(r))))
-    catch { case NonFatal(t) => copy(executing = Some(Left(t))) }
+    try copy(executing = executing.setResult(r))
+    catch { case NonFatal(t) => copy(executing = Failed(t)) }
 
   /** @return set an execution result being computed */
-  def setExecuting(r: Future[Result]): Execution =
-    copy(executing = Option(Right(r)))
+  def setExecuting(r: Future[(Result, SimpleTimer)]): Execution =
+    copy(executing = Started(r))
 
   /** @return set a fatal execution error */
   def setFatal(f: Throwable) =
-    copy(executing = Some(Left(FatalExecution(f))))
-
-  /** @return start the timer */
-  def startTimer = copy(timer = timer.start)
-
-  /** @return stop the timer */
-  def stopTimer = copy(timer = timer.stop)
+    copy(executing = Failed(FatalExecution(f)))
 
   override def toString =
     "Execution("+
@@ -297,6 +308,30 @@ case class Execution(run:            Option[Env => Future[() => Result]]     = N
     timeout.hashCode +
     mustJoin.hashCode +
     isolable.hashCode
+}
+
+sealed trait Executing {
+  def setResult(r: =>Result): Executing
+}
+
+case object NotExecuting extends Executing {
+  def setResult(r: =>Result): Executing = {
+    val timer = startSimpleTimer
+    Started(Future.successful((r, timer.stop)))
+  }
+}
+case class Failed(failure: Throwable) extends Executing {
+  def setResult(r: =>Result): Executing = {
+    val timer = startSimpleTimer
+    Started(Future.successful((r, timer.stop)))
+  }
+}
+
+case class Started(future: Future[(Result, SimpleTimer)]) extends Executing {
+  def setResult(r: =>Result): Executing = {
+    val timer = startSimpleTimer
+    Started(Future.successful((r, timer.stop)))
+  }
 }
 
 object Execution {
@@ -341,24 +376,18 @@ object Execution {
 
   /** create an execution which will not execute but directly return a value */
   def executed[T : AsResult](r: T): Execution = {
-    lazy val f = Future.successful(AsResult.safely(r))
+    lazy val f = Future.successful((AsResult.safely(r), new SimpleTimer))
     Execution(
-      run = Some((e: Env) => f.map(res => () => res)(e.executionContext)),
-      executing = Some(Right(f))
+      run = Some((e: Env) => f.map(res => () => res._1)(e.executionContext)),
+      executing = Started(f)
     )
   }
-
-  def sequence(executions: List[Execution])(env: Env): Execution = withEnvAsync { env =>
-    implicit val ec = env.executionContext
-    val executings = executions.flatMap(_.executing.flatMap(_.toOption))
-    Future.sequence(executings).map(_.suml)
-  }.startExecution(env)
 
   implicit def showInstance: Show[Execution] = new Show[Execution] {
     def show(e: Execution): String =
       e.executing match {
-        case None => "no execution"
-        case Some(_) => "executing"
+        case NotExecuting => "no execution"
+        case _ => "executing"
       }
   }
 

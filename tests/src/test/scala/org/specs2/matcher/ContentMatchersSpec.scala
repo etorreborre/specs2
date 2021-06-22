@@ -71,7 +71,8 @@ case class comp() extends MustMatchers with TestFileNames with ContentMatchers w
 
 }
 
-trait TestFileNames {
+@annotation.nowarn trait TestFileNames {
+
   lazy val f1 :: f2 :: f3 :: f4 :: f5 :: f6 :: f7 :: f8 :: _ =
     (1 to 8).toList.map(i => FileName.unsafe("f"+i))
 

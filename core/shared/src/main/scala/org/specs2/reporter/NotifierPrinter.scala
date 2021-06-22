@@ -3,7 +3,7 @@ package reporter
 
 import text.NotNullStrings._
 import main.Arguments
-import execute.Result
+import execute.{NoDetails, Result}
 import control._
 import eff._
 import all._
@@ -69,7 +69,6 @@ object NotifierPrinter {
   def printFragment(n: Notifier, f: Fragment, notified: Notified, args: Arguments): Action[Unit] =
     f.executedResult.map { er =>
         val location = f.location.fullLocation(args.traceFilter).getOrElse("no location")
-
         if (!notified.hide) {
           if (notified.start) n.contextStart(notified.context.trim, location)
           else {
@@ -111,8 +110,8 @@ object NotifierPrinter {
     }
 
   private def notifyStep(n: Notifier, f: Fragment, executedResult: ExecutedResult, args: Arguments) = {
+    val location = f.location.fullLocation(args.traceFilter).getOrElse("no location")
     try {
-      val location = f.location.fullLocation(args.traceFilter).getOrElse("no location")
       n.stepStarted(location)
 
       def notifyResult(result: Result, timer: SimpleTimer): Unit =
@@ -122,12 +121,21 @@ object NotifierPrinter {
           case r: execute.Error   => n.stepError(r.message, location, r.exception, timer.totalMillis)
           case _ => ()
         }
-
       notifyResult(executedResult.result, executedResult.timer)
-      // catch AbstractMethod errors coming from Intellij since adding
+      // catch AbstractMethod errors coming from Intellij since
       // calling new "step" methods on the Notifier interface is not supported yet
     } catch {
-      case e: AbstractMethodError if e.getMessage.notNull.contains("JavaSpecs2Notifier") => ()
+      case e: AbstractMethodError if e.getMessage.notNull.contains("Specs2Notifier") =>
+        // if steps are not supported print failures and errors as examples failures and errors
+        executedResult.result match {
+          case r: execute.Failure =>
+            n.exampleFailure("step", r.message, location, r.exception, NoDetails, executedResult.timer.totalMillis)
+          case r: execute.Error =>
+            n.exampleError("step", r.message, location, r.exception, executedResult.timer.totalMillis)
+          case _ =>
+            ()
+        }
+
       case other: Throwable => throw other
     }
   }

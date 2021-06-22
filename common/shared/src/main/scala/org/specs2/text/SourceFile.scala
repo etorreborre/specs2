@@ -22,7 +22,7 @@ trait SourceFile {
    */
   def classNames(packageName: String, content: String, pattern: Pattern, suffix: String, verbose: Boolean): Operation[List[String]] = {
     def result(m: Matcher): Stream[String] =
-      if (m.find) {
+      if (m.find && m.groupCount >= 1) {
         val fullName =
           if (packageName.isEmpty) m.group(1).trim + suffix
           else                     List(packageName, m.group(1).trim).mkString(".") + suffix
@@ -40,7 +40,7 @@ trait SourceFile {
       if (m.find) Stream.cons(m.group(1).replace(";", "").trim, result(m))
       else Stream.empty
 
-    val pattern = "\\s*package\\s*(.+)\\s*"
+    val pattern = "\\s*package\\s*?([^\\s/]+).*"
 
     // extract the packages section at the beginning of the file
     val packages = content.split("\n").filter(_.trim.startsWith("package")).mkString("\n")
@@ -51,4 +51,3 @@ trait SourceFile {
 
 private[specs2]
 object SourceFile extends SourceFile
-

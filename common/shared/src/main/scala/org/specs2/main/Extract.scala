@@ -61,7 +61,12 @@ trait Extract {
     tryo(value(name)(args, sp).map(_.toFloat)).getOrElse(None)
 
   def instance[T <: AnyRef](name: String)(implicit m: ClassTag[T]): Option[T] =
-    Classes.createInstance[T](name).runOption
+    Classes.createInstanceFromName[T](name).runOption
 
 }
 
+sealed trait ArgumentType {
+  def name: String
+}
+final case class BooleanArgument(name: String) extends ArgumentType
+final case class ValuedArgument(name: String) extends ArgumentType

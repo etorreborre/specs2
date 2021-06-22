@@ -19,7 +19,7 @@ case class Report(
                    _checkUrls :        Option[Boolean]          = None,
                    _notoc:             Option[Boolean]          = None,
                    _notifier:          Option[String]           = None,
-                   _exporter:          Option[String]           = None) extends ShowArgs {
+                   _printer:           Option[String]           = None) extends ShowArgs {
 
   import Arguments._
 
@@ -36,7 +36,7 @@ case class Report(
   def notoc: Boolean                 = _notoc.getOrElse(false)
   def hasToc: Boolean                = !notoc
   def notifier: String               = _notifier.getOrElse("")
-  def exporter: String               = _exporter.getOrElse("")
+  def printer: String                = _printer.getOrElse("")
 
   def overrideWith(other: Report) = {
     new Report(
@@ -51,7 +51,7 @@ case class Report(
       other._checkUrls        .orElse(_checkUrls),
       other._notoc            .orElse(_notoc),
       other._notifier         .orElse(_notifier),
-      other._exporter         .orElse(_exporter)
+      other._printer          .orElse(_printer)
     )
   }
 
@@ -67,7 +67,7 @@ case class Report(
     "checkUrls"         -> _checkUrls,
     "notoc"             -> _notoc,
     "notifier"          -> _notifier,
-    "exporter"          -> _exporter).flatMap(showArg).mkString("Report(", ", ", ")")
+    "printer"           -> _printer).flatMap(showArg).mkString("Report(", ", ", ")")
 
 }
 
@@ -87,13 +87,30 @@ object Report extends Extract {
       _checkUrls         = bool("checkUrls"),
       _notoc             = bool("noToc"),
       _notifier          = value("notifier"),
-      _exporter          = value("exporter")
+      _printer           = value("printer")
     )
   }
 
   val xonlyFlags = "#x!"
   val allFlags = "#1x!+-o*"
 
-  val allValueNames = Seq("showOnly", "xOnly", "failTrace", "color", "noColor", "colors", "offset", "showTimes",
-    "fullStackTrace", "traceFilter", "checkUrls", "noToc", "notifier", "exporter")
+  val allArguments: Seq[ArgumentType] =
+    Seq(ValuedArgument("showOnly"),
+        BooleanArgument("xOnly"),
+        BooleanArgument("failTrace"),
+        BooleanArgument("color"),
+        BooleanArgument("noColor"),
+        BooleanArgument("verbose"),
+        ValuedArgument("colors"),
+        BooleanArgument("showTimes"),
+        ValuedArgument("offset"),
+        ValuedArgument("smartdiffs"),
+        ValuedArgument("diffsclass"),
+        BooleanArgument("fullStackTrace"),
+        ValuedArgument("traceFilter"),
+        BooleanArgument("checkUrls"),
+        BooleanArgument("noToc"),
+        ValuedArgument("notifier"),
+        ValuedArgument("printer"))
+
 }

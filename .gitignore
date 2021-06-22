@@ -1,9 +1,14 @@
 .DS_Store
 
+.bsp
 .idea
 **/target
 *.iml
 .jvmopts
+.vscode
+.metals
+**/metals.sbt
+.bloop
 
 **/*.hydra
 hydra.log
@@ -11,3 +16,9 @@ hydra-timings.csv
 project/hydra.sbt
 
 /out
+
+lowered.hnir
+
+.js
+.jvm
+.native

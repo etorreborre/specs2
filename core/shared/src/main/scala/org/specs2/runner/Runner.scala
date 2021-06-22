@@ -159,7 +159,7 @@ object Runner {
   def createPrinterInstance(args: Arguments, loader: ClassLoader, name: PrinterName, className: String, failureMessage: String, noRequiredMessage: String): Operation[Option[Printer]] =
     if (args.isSet(name.name))
       for {
-        instance <- Classes.createInstanceEither[Printer](className, loader)
+        instance <- Classes.createInstanceEither[Printer](className, loader, EnvDefault.default.defaultInstances)
         result <-
           instance match {
             case Right(i) => Operations.ok(Some(i))
@@ -174,7 +174,7 @@ object Runner {
     args.commandLine.value(name) match {
     case Some(className) =>
       for {
-        instance <- Classes.createInstanceEither[T](className, loader)(m)
+        instance <- Classes.createInstanceEither[T](className, loader, EnvDefault.default.defaultInstances)(m)
         result <-
           instance match {
             case Right(i) => Operations.ok(Some(i))

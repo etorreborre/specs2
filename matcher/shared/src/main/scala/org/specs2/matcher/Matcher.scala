@@ -129,9 +129,12 @@ trait Matcher[-T] { outer =>
    */
   def not = new Matcher[T] {
     def apply[U <: T](a: Expectable[U]) = {
-      val result = try outer(a)
-                   catch { case FailureException(f: Failure) => MatchFailure(f.message, f.message, a) }
-      result.not
+      val result =
+        try outer(a)
+        catch {
+          case FailureException(f: Failure) => MatchFailure(f.message, f.message, a)
+        }
+      a.check(result.not)
     }
   }
   /**
@@ -215,11 +218,23 @@ trait Matcher[-T] { outer =>
    * of 100 milliseconds
    */
   def eventually: Matcher[T] = EventuallyMatchers.eventually(this)
+
   /**
    * @return a matcher that needs to eventually match, after a given number of retries
    * and a sleep time
    */
   def eventually(retries: Int, sleep: Duration): Matcher[T] = EventuallyMatchers.eventually(this, retries, sleep)
+
+  /**
+   * @param sleep the function applied on the retry number (first is 1)
+   * @return a matcher that needs to eventually match, after a given number of retries
+   * and a sleep time
+   * 
+   * {{{
+   * aResult mustEqual(expected).eventually(retries = 2, _ * 100.milliseconds)
+   * }}}
+   */
+  def eventually(retries: Int, sleep: Int => Duration): Matcher[T] = EventuallyMatchers.eventually(this, retries, sleep)
 
   /**
    * @return a Matcher with no messages

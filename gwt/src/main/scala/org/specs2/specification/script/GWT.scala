@@ -192,12 +192,15 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
 
           // Then lines must create examples with previous when values
           case ThenLines(ls) =>
-            val thenExamples: List[Fragment] = (thenExtractorsList zip ls zip verificationsList).map { case ((extractor: StepParser[_], line), verify) =>
-              example(extractor.strip(line),
-                execute(givenResult and whenResult, extractor, line) { t: Any =>
-                  val verifyFunction = verify.asInstanceOf[VerifyFunction[Any, HList, Any, Any]]
-                  verifyFunction(t, if (verifyFunction.f1.isDefined) Left(whenValues) else Right(whenValues.toList))
-                }.asInstanceOf[Result])
+            val thenExamples: List[Fragment] = (thenExtractorsList zip ls zip verificationsList).map {
+              case ((extractor: StepParser[_], line), verify) =>
+                example(extractor.strip(line),
+                  execute(givenResult and whenResult, extractor, line) { t: Any =>
+                    val verifyFunction = verify.asInstanceOf[VerifyFunction[Any, HList, Any, Any]]
+                    verifyFunction(t, if (verifyFunction.f1.isDefined) Left(whenValues) else Right(whenValues.toList))
+                  }.asInstanceOf[Result])
+              case other =>
+                step(Error("pattern match error on: "+other.toString))
             }
             fs append thenExamples.intersperse(factory.break)
         }
@@ -248,6 +251,8 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
       FragmentsSeq((extractors zip lines zip steps).toVector.flatMap {
         case ((extractor: StepParser[_], l: String), s: Fragment) =>
           Vector(factory.text(extractor.strip(l)), break, s)
+        case _ =>
+          Vector()
       })
 
     /** extract values from a line and execute a function */
@@ -299,4 +304,3 @@ trait GWT extends StepParsers with Scripts { outer: FragmentsFactory =>
     case _ => r
   }
 }
-

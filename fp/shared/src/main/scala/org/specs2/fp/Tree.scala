@@ -50,10 +50,10 @@ sealed abstract class Tree[A] {
     val trunk = "  |" // "|  ".reverse
 
     def drawSubTrees(s: Stream[Tree[A]]): Vector[StringBuilder] = s match {
-      case ts if ts.isEmpty       => Vector.empty[StringBuilder]
       case t #:: ts if ts.isEmpty => new StringBuilder("|") +: shift(stem, "   ", t.draw)
-      case t #:: ts               =>
+      case t #:: ts =>
         new StringBuilder("|") +: (shift(branch, trunk, t.draw) ++ drawSubTrees(ts))
+      case _ => Vector.empty[StringBuilder]
     }
 
     def shift(first: String, other: String, s: Vector[StringBuilder]): Vector[StringBuilder] = {
@@ -69,13 +69,15 @@ sealed abstract class Tree[A] {
     new StringBuilder(sh.show(rootLabel).reverse) +: drawSubTrees(subForest)
   }
 
-  /** Pre-order traversal. */
-  def flatten: Stream[A] = {
-    def squish(tree: Tree[A], xs: Stream[A]): Stream[A] =
-      Stream.cons(tree.rootLabel, Foldable[Stream].foldRight(tree.subForest, xs)(squish(_, _)))
+  /**
+   * Pre-order traversal. Flatten the tree using a foldLeft to avoid SOF
+   */
+  def flatten: Stream[A] =
+    squishLeft(this, Stream.Empty)
 
-    squish(this, Stream.Empty)
-  }
+  /** reimplementation of squish from scalaz, using a foldLeft */
+  private def squishLeft(tree: Tree[A], xs: Stream[A]): Stream[A] =
+    Stream.cons(tree.rootLabel, tree.subForest.reverse.foldLeft(xs)((s, t) => squishLeft(t, s)))
 
   /** Breadth-first traversal. */
   def levels: Stream[Stream[A]] = {

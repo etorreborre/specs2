@@ -17,7 +17,7 @@ trait Vectorx { outer =>
   class ExtendedNestedVector[T](vector: Vector[Vector[T]]) {
     def safeTranspose = outer.transpose(vector)
   }
-  
+
   /** @return an extension for a vector */
   implicit def extendVector[T](vector: Vector[T]): ExtendedVector[T] = new ExtendedVector(vector)
   /**
@@ -32,19 +32,19 @@ trait Vectorx { outer =>
     def intersperse[A](a: T): Vector[T] = {
       @tailrec
       def intersperse0(accum: Vector[T], rest: Vector[T]): Vector[T] = rest match {
-        case Vector()  => accum
         case Vector(x) => x +: accum
-        case h +: t    => intersperse0(a +: h +: accum, t)
+        case h +: t => intersperse0(a +: h +: accum, t)
+        case _ => accum
       }
       intersperse0(Vector(), vector).reverse
     }
 
   }
-  
+
   /**
    * This methods works like the transpose method defined on Traversable
    * but it doesn't fail when the input is not formatted like a regular matrix
-   * 
+   *
    *  Vector(Vector("a",  "bb", "ccc"),
    *       Vector("dd", "e",  "fff")) =>
    *  Vector(Vector("a",  "dd"),

@@ -1,0 +1,14 @@
+This version is compatible with both Scala 2.13 should be compatible with Dotty except for features using macros.
+
+## Improvements
+
+ * run on Scala 2.13 thanks to @SethTisue, @rossabaker
+
+## Fixes
+
+ * #751 fix for implicit resolution on Dotty thanks to @smarter
+ * #748 fixed a stack overflow with `Producer.emitSeq` (could happen with large specifications)
+ * #747 rethrow failures with a `not` matcher in mutable specs
+ * fixed a comment on `SimpleTimer` and added a return type
+ * fixed one edge case with implicit resolution on Scala 2.13: `beSome(beLeft)` (reported by @xuwei-k)
+ 

@@ -8,6 +8,8 @@ import org.scalacheck.rng.Seed
 
 /**
  * This class encapsulates ScalaCheck parameters + any additional parameters
+ *
+ * Note that minTestsOk in specs2 corresponds to the minSuccessfulTests parameter in ScalaCheck.
  */
 case class Parameters(minTestsOk: Int                 = Test.Parameters.default.minSuccessfulTests,
                       minSize: Int                    = Test.Parameters.default.minSize,
@@ -45,7 +47,7 @@ case class Parameters(minTestsOk: Int                 = Test.Parameters.default.
         maxSize         = commandLine.intOr  ("scalacheck.maxsize",         maxSize),
         workers         = commandLine.intOr  ("scalacheck.workers",         workers),
         seed            = commandLine.value  ("scalacheck.seed").flatMap(Parameters.makeSeed).orElse(seed)
-      ).setVerbosity(commandLine.intOr  ("scalacheck.verbosity",       prettyParams.verbosity))
+      ).setVerbosity(commandLine.intOr       ("scalacheck.verbosity",       prettyParams.verbosity))
 
     if (commandLine.boolOr("scalacheck.verbose", false)) updated.verbose
     else                                                 updated

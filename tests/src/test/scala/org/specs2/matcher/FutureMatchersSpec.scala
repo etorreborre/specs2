@@ -19,7 +19,7 @@ class FutureMatchersSpec extends Specification with ResultMatchers with specific
   implicit lazy val ec = env.executionContext
   class MyTimeout extends TimeoutException
 
- def is = section("travis") ^ sequential ^ s2"""
+ def is = section("ci") ^ sequential ^ s2"""
 
  In this specification `Future` means `scala.concurrent.Future`
 
@@ -51,10 +51,11 @@ class FutureMatchersSpec extends Specification with ResultMatchers with specific
  ${ ({ throw new Exception("boom"); Future(1) } must throwAn[Exception].await) must throwAn[Exception] }
 
  In a mutable spec with a negated matcher $e1
- In a mutable spec with a scope $e2
+ In a mutable spec with a negated matcher - and a timeout $e2
+ In a mutable spec with a scope $e3
 
- A Future should be retried the specified number of times in case of a timeout $e3
- A Future should not be called more than the expected number of times $e4
+ A Future should be retried the specified number of times in case of a timeout $e4
+ A Future should not be called more than the expected number of times $e5
 """ ^ step(env.shutdown)
 
   def e1 = {
@@ -65,6 +66,13 @@ class FutureMatchersSpec extends Specification with ResultMatchers with specific
   }
 
   def e2 = {
+    val thrown = new FutureMatchers with MustThrownExpectations {
+      def result = Future { Thread.sleep(2000); 10} must beGreaterThan(100).awaitFor(1 second)
+    }
+    thrown.result must throwA[FailureException]
+  }
+
+  def e3 = {
     val thrown = new mutable.Specification with FutureMatchers {
       "timeout ko" in new Scope {
         Future {
@@ -77,7 +85,7 @@ class FutureMatchersSpec extends Specification with ResultMatchers with specific
     ClassRunner.report(env)(thrown).runOption(env.specs2ExecutionEnv).get.failures === 1
   }
 
-  def e3 = {
+  def e4 = {
     val retries = 2
     var times = 0
     val duration = 50l
@@ -90,7 +98,7 @@ class FutureMatchersSpec extends Specification with ResultMatchers with specific
     future must be_==(0).await(retries, duration.millis)
   }
 
-  def e4 = {
+  def e5 = {
     val retries = 0
     var times = 0
     def future = Future {

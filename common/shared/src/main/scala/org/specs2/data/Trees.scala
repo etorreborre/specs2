@@ -17,7 +17,6 @@ trait Trees { outer =>
     def prune[B](f: A => Option[B]): Option[Tree[B]] = outer.prune(t, f)
     def prune(f: Tree[A] => Option[A])(implicit initial: A): Tree[A] = outer.prune(t, f)(initial)
     def flattenSubForests = outer.flattenSubForests(t)
-    def flattenLeft       = outer.flattenLeft(t)
     def size              = t.flatten.size
     def allPaths          = outer.allPaths(t)
   }
@@ -62,16 +61,7 @@ trait Trees { outer =>
    */
   def prune[A](t: Tree[A], f: Tree[A] => Option[A])(implicit initial: A): Tree[A] = t.cobind(f).clean
 
-  def flattenSubForests[A](tree: Tree[A]): Tree[A] = Node(tree.rootLabel, tree.flattenLeft.drop(1).map(Leaf(_)))
-
-  /**
-   * flatten the tree using a foldLeft to avoid SOF
-   */
-  def flattenLeft[A](tree: Tree[A]): Stream[A] = squishLeft(tree, Stream.Empty)
-
-  /** reimplementation of squish from scalaz, using a foldLeft */
-  private def squishLeft[A](tree: Tree[A], xs: Stream[A]): Stream[A] =
-    Stream.cons(tree.rootLabel, tree.subForest.reverse.foldLeft(xs)((s, t) => squishLeft(t, s)))
+  def flattenSubForests[A](tree: Tree[A]): Tree[A] = Node(tree.rootLabel, tree.flatten.drop(1).map(Leaf(_)))
 
   /**
    * Implicit definition to add more functionalities to the TreeLoc class

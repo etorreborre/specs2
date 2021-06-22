@@ -5,9 +5,6 @@ package process
 import execute.Result
 import org.specs2.io.Key
 import time.SimpleTimer
-import scala.util.Try
-import org.specs2.fp.syntax._
-import org.specs2.fp.syntax._
 import org.specs2.fp.syntax._
 
 object StoreKeys {
@@ -49,11 +46,12 @@ object StoreKeys {
     s"specs=$specs,examples=$examples,successes=$successes,expectations=$expectations,failures=$failures,errors=$errors,pending=$pending,skipped=$skipped,time=${timer.totalMillis}"
   }
 
-  private def statsFromString(s: String): Option[Stats] = Try {
+  private def statsFromString(s: String): Option[Stats] =
     s.split(",").map(_.split("=")(1)).toList match {
       case List(specs,examples,successes,expectations,failures,errors,pending,skipped,time) =>
-        Stats(specs.toInt, examples.toInt, successes.toInt, expectations.toInt, failures.toInt, errors.toInt, pending.toInt, skipped.toInt, trend = None, SimpleTimer.fromString(time))
+        Some(Stats(specs.toInt, examples.toInt, successes.toInt, expectations.toInt, failures.toInt, errors.toInt, pending.toInt, skipped.toInt, trend = None, SimpleTimer.fromString(time)))
+      case _ =>
+        None
     }
-  }.toOption
 
 }

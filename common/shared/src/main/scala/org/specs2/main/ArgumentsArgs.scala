@@ -6,8 +6,8 @@ import text._
 
 /**
  * Methods with default Property values to create Arguments instances
- * 
- * There is an implicit conversion from (=> T) to Property[T] to allow the direct passing of parameters 
+ *
+ * There is an implicit conversion from (=> T) to Property[T] to allow the direct passing of parameters
  */
 trait ArgumentsArgs extends ArgumentsCreation with ArgProperties
 
@@ -133,7 +133,7 @@ trait ArgumentsCreation {
       checkUrls:         ArgProperty[Boolean]           = ArgProperty[Boolean](),
       notoc:             ArgProperty[Boolean]           = ArgProperty[Boolean](),
       notifier:          ArgProperty[String]            = ArgProperty[String](),
-      exporter:          ArgProperty[String]            = ArgProperty[String]()) = new Arguments(
+      printer:          ArgProperty[String]            = ArgProperty[String]()) = new Arguments(
        report = Report(xonly.toOption.map(v => if (v) Report.xonlyFlags else Report.allFlags).orElse(showOnly.toOption),
                        failtrace.toOption,
                        color.toOption,
@@ -145,7 +145,7 @@ trait ArgumentsCreation {
                        checkUrls.toOption,
                        notoc.toOption,
                        notifier.toOption,
-                       exporter.toOption))
+                       printer.toOption))
 
   }
 

@@ -35,7 +35,7 @@ class BeforeSpecification extends mutable.Specification with BeforeEach {
 }
 }}
 
-If you execute this specification you may see something like:
+If you execute this specification you may see something like (note that examples and before actions are executed concurrently):
 ```console
 [info] before
 [info] before
@@ -71,6 +71,20 @@ class BeforeAfterSpecification extends mutable.Specification with BeforeAfterEac
   }
 }
 }}
+
+_IMPORTANT_: Mixing traits like `BeforeEach` and `BeforeAfterEach` can lead to surprising behaviour where the `before` action is executed twice.
+You should rather have both traits extends `BeforeAfterEach` to avoid that:
+```
+trait B1 extends BeforeAfterEach {
+  def before = println("before 1")
+  def after = () // do nothing
+}
+
+trait B2 extends BeforeAfterEach {
+  def before = println("before 2")
+  def after = println("after 2")
+}
+```
 
 ### AroundEach
 
@@ -157,5 +171,3 @@ $AndIfYouWantToKnowMore
 $vid
 """
 }
-
-

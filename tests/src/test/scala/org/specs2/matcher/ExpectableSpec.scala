@@ -48,10 +48,12 @@ class ExpectableSpec extends Spec with ResultMatchers with MustMatchers {
     NullString() must_== NullString()
   }
   "An expectable must match without an exception on a mock" in {
-    val l = Mockito.mock[List[Int]]
+    val l = Mockito.mock[ListOf[Int]]
     l must be_==(l)
   }
   "the description of an Expectable can be updated with another description" in {
     ("a" aka "the string").updateDescription(_ + "!").description === "the string 'a'!"
   }
+
+  trait ListOf[T]
 }

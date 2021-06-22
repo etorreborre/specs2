@@ -35,6 +35,16 @@ class SpecificationWithArgs(args: CommandLine) extends mutable.Specification {
 }
 }}
 
+Then you can set the argument, or not in sbt with
+```
+sbt> testOnly *ArgsSpec*
+sbt> testOnly *ArgsSpec* -- !isOk
+sbt> testOnly *ArgsSpec* -- isOk
+```
+
+The first 2 invocations of the specification will report a failure (1st one, the argument is not set and for the second one it is negated)
+ and the 3rd invocation will make the specification pass.
+
 ### Control a specification
 
 Any specification with a 1-parameter constructor can be instantiated provided that:

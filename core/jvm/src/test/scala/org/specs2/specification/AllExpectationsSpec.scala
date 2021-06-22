@@ -60,6 +60,17 @@ class AllExpectationsSpec(val env: Env) extends Spec with AllExpectations with O
       executedWithNotImplementedError.errors === 0
       executedWithNotImplementedError.failures === 1
     }
+    "evaluate an expression which returns skipped" >> {
+      executedWithSkipped.hasIssues must beTrue
+      executedWithSkipped.expectations === 3
+      executedWithSkipped.examples === 2
+      executedWithSkipped.errors === 0
+      // the first example registers a final result = Skipped
+      executedWithSkipped.skipped === 1
+      // the second example registers a final result = Failure
+      // (the skipped value is "absorbed by the failure")
+      executedWithSkipped.failures === 1
+    }
   }
 
   def stats(spec: ContextualSpecificationStructure)(args: Arguments): Stats = {
@@ -89,5 +100,5 @@ class AllExpectationsSpec(val env: Env) extends Spec with AllExpectations with O
   def executedWithScope = stats(new AllExpectationsSpecificationWithScope)(args())
   def executedWithScopeIssues = issues(new AllExpectationsSpecificationWithScope)(args())
   def executedWithNotImplementedError = stats(new AllExpectationsSpecificationWithNotImplementedError)(args())
+  def executedWithSkipped = stats(new AllExpectationsSpecificationWithSkipped)(args())
 }
-

@@ -13,7 +13,7 @@ final case class TreeLoc[A](tree: Tree[A], lefts: TreeForest[A],
   /** Select the parent of the current node. */
   def parent: Option[TreeLoc[A]] = parents match {
     case (pls, v, prs) #:: ps => Some(loc(Node(v, combChildren(lefts, tree, rights)), pls, prs, ps))
-    case Stream.Empty         => None
+    case _ => None
   }
 
   /** Select the root node of the tree. */
@@ -21,31 +21,31 @@ final case class TreeLoc[A](tree: Tree[A], lefts: TreeForest[A],
   def root: TreeLoc[A] =
     parent match {
       case Some(z) => z.root
-      case None    => this
+      case None => this
     }
 
   /** Select the left sibling of the current node. */
   def left: Option[TreeLoc[A]] = lefts match {
-    case t #:: ts     => Some(loc(t, ts, tree #:: rights, parents))
-    case Stream.Empty => None
+    case t #:: ts => Some(loc(t, ts, tree #:: rights, parents))
+    case _ => None
   }
 
   /** Select the right sibling of the current node. */
   def right: Option[TreeLoc[A]] = rights match {
-    case t #:: ts     => Some(loc(t, tree #:: lefts, ts, parents))
-    case Stream.Empty => None
+    case t #:: ts => Some(loc(t, tree #:: lefts, ts, parents))
+    case _ => None
   }
 
   /** Select the leftmost child of the current node. */
   def firstChild: Option[TreeLoc[A]] = tree.subForest match {
-    case t #:: ts     => Some(loc(t, Stream.Empty, ts, downParents))
-    case Stream.Empty => None
+    case t #:: ts => Some(loc(t, Stream.Empty, ts, downParents))
+    case _ => None
   }
 
   /** Select the rightmost child of the current node. */
   def lastChild: Option[TreeLoc[A]] = tree.subForest.reverse match {
-    case t #:: ts     => Some(loc(t, ts, Stream.Empty, downParents))
-    case Stream.Empty => None
+    case t #:: ts => Some(loc(t, ts, Stream.Empty, downParents))
+    case _ => None
   }
 
   /** Select the nth child of the current node. */
@@ -200,6 +200,7 @@ object TreeLoc {
 
   def fromForest[A](ts: TreeForest[A]) = ts match {
     case (Stream.cons(t, ts)) => Some(loc(t, Stream.Empty, ts, Stream.Empty))
+    case _ => None
   }
 
   def unfold[A1, B](seed: A1)(f: A1 => Option[(B, A1)]): Stream[B] =

@@ -131,7 +131,7 @@ class ContextSpec extends script.Spec with ResultMatchers with Groups { def is =
   "other context" - new g4 with FragmentsExecution {
     e1 := executing(firstThenEx1).prints("first", "e1")
     e2 := executeBodies(silentFirstThenEx1).map(_.message) must_== List("", "success")
-    e3 := executeBodies(failingFirstThenEx1).map(_.message) must_== List("java.lang.RuntimeException: error", "success")
+    e3 := executeBodies(failingFirstThenEx1).map(_.message) must_== List("org.specs2.specification.core.FatalExecution: error", "")
   }
 
   "mutable contexts" - new g6 with FragmentsExecution with MustThrownExpectations {
@@ -153,7 +153,7 @@ class ContextSpec extends script.Spec with ResultMatchers with Groups { def is =
     case class Executed(results: Seq[Result]) {
       def prints(ms: String*): Result = {
         (messages must_== ms.toList).toResult
-      }  
+      }
     }
   }
 }
@@ -164,14 +164,14 @@ trait ContextData extends StandardResults with FragmentsFactory with ContextsFor
   def okValue(name: String) = { println(name); success }
   def ok1 = okValue("e1")
   def ok2 = okValue("e2")
-  
-  def ex1 = "ex1" ! ok1  
+
+  def ex1 = "ex1" ! ok1
   def ex1Before = "ex1" ! before1(ok1)
   def ex1BeforeComposeBefore2 = "ex1" ! (before1 compose before2)(ok1)
   def ex1BeforeThenBefore2 = "ex1" ! (before1 andThen before2)(ok1)
   def ex1AfterComposeAfter2 = "ex1" ! (after1 compose after2)(ok1)
 
-  def ex1_beforeFail = "ex1" ! beforeWithError(ok1) 
+  def ex1_beforeFail = "ex1" ! beforeWithError(ok1)
   def ex1_beforeSkipped = "ex1" ! beforeWithSkipped(ok1)
   def ex1_beforeMatchFailed = "ex1" ! beforeWithMatchFailed(ok1)
   def ex1_beforeSkippedThrown = "ex1" ! beforeWithSkippedThrown(ok1)

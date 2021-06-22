@@ -4,7 +4,6 @@ package matcher
 import control._
 import data.Sized
 import text.Regexes._
-import text.Plural._
 import text.NotNullStrings._
 import collection.Seqx._
 
@@ -458,4 +457,3 @@ case class ContainWithResultSeq[T](checks: Seq[ValueCheck[T]],
 
   override def not = copy(negate = !negate)
 }
-

@@ -26,7 +26,8 @@ case class GivenWhenThenLines(lines: Vector[GWTLines] = Vector()) extends Script
     }
 }
 
-trait GWTLines
+sealed trait GWTLines
+
 case class GivenLines(lines: Vector[String]) extends GWTLines
 object GivenLines { def create(line: String): GivenLines = GivenLines(Vector(line)) }
 
@@ -38,6 +39,3 @@ object ThenLines { def create(line: String): ThenLines = ThenLines(Vector(line))
 
 case class TextLines(lines: String) extends GWTLines
 object TextLines { def create(lines: Seq[String]): TextLines = TextLines(lines.mkString("\n")) }
-
-
-

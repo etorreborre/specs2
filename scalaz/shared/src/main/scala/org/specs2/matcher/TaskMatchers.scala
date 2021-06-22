@@ -35,8 +35,8 @@ trait TaskMatchers {
   case class TaskMatcher[T](check: ValueCheck[T], duration: Option[Duration]) extends Matcher[Task[T]] {
     def apply[S <: Task[T]](e: Expectable[S]) = {
       duration match {
-        case Some(d) => e.value.attemptRunFor(d).fold(failedAttemptWithTimeout(e, d), checkResult(e))
-        case None    => e.value.attemptRun.fold(failedAttempt(e), checkResult(e))
+        case Some(d) => e.value.unsafePerformSyncAttemptFor(d).fold(failedAttemptWithTimeout(e, d), checkResult(e))
+        case None    => e.value.unsafePerformSyncAttempt.fold(failedAttempt(e), checkResult(e))
       }
     }
 

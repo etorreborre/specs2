@@ -4,8 +4,6 @@ package io
 import control._
 import org.specs2.fp.syntax._
 import java.io._
-import java.util.regex.Pattern._
-import java.util.regex.Matcher._
 import java.net.URL
 import java.util.zip._
 import java.util.regex.Pattern.compile

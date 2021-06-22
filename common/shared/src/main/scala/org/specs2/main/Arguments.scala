@@ -23,7 +23,8 @@ case class Arguments (
   execute:       Execute          = Execute(),
   store:         Store            = Store(),
   report:        Report           = Report(),
-  commandLine:   CommandLine      = CommandLine()
+  commandLine:   CommandLine      = CommandLine(),
+  unknown:       List[String]     = List()
  ) extends ShowArgs {
   def ex: String                      = select.ex
   def include: String                 = select.include
@@ -64,7 +65,7 @@ case class Arguments (
   def isSet(a: String) = commandLine isSet a
   /** alias for overrideWith */
   def <|(other: Arguments) = overrideWith(other)
-  
+
   /**
    * @return a new Arguments object where the values of this are overridden with the values of other if defined
    */
@@ -103,10 +104,14 @@ case class Arguments (
 
   override def toString = Seq(select, execute, report, commandLine).mkString("Arguments(", ", ", ")")
 
+  def reportUnknown(): Unit =
+    if (verbose && unknown.nonEmpty)
+      println("Unknown argument values: " + unknown.mkString(", "))
+
 }
 
 object Arguments extends Extract {
-  
+
   /** @return new arguments from command-line arguments */
   def apply(arguments: String*): Arguments =
     extract(CommandLine.splitValues(arguments), sysProperties)
@@ -121,10 +126,11 @@ object Arguments extends Extract {
        execute       = Execute.extract,
        store         = Store.extract,
        report        = Report.extract,
-       commandLine   = CommandLine.extract
+       commandLine   = CommandLine.extract,
+       unknown       = CommandLine.unknownArguments
     )
   }
-  
+
   implicit def ArgumentsMonoid: Monoid[Arguments] = new Monoid[Arguments] {
     def append(a1: Arguments, a2: =>Arguments) = a1 overrideWith a2
     val zero = Arguments()

@@ -117,7 +117,7 @@ m.get(argThat(===(123))) returns "one"
 ### Callbacks
 
 In some rare cases, it is necessary to have the return value depend on the parameters passed to the mocked method: ${snippet{
-m.get(anyInt) answers { i => "The parameter is " + i.toString }
+m.get(anyInt).answers { (i: Any) => "The parameter is " + i.toString }
 }}
 
 The function passed to `answers` will be called with each parameter passed to the stubbed method: ${snippet{
@@ -126,7 +126,7 @@ m.get(1)    // the second call returns a different value: "The parameter is 1"
 }}
 
 To use specific a type of argument: ${snippet{
-m.get(anyInt) answers { _ match { case i: Int => (i + 1).toString } }
+m.get(anyInt).answers { (a: Any) => a match { case i: Int => (i + 1).toString } }
 }}
 
 Or more concisely: ${snippet{

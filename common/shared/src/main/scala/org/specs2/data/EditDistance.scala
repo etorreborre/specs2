@@ -82,7 +82,7 @@ trait EditDistance {
     matrix.operations
   }
 
-  trait EditDistanceOperation[T] {
+  sealed trait EditDistanceOperation[T] {
     def t: T
     def inverse: EditDistanceOperation[T]
   }
@@ -172,6 +172,3 @@ object StringLevenhsteinCosts extends LevenhsteinCosts[Char] {
   val equiv: Equiv[Char] =
       Equiv.universal[Char]
 }
-
-
-

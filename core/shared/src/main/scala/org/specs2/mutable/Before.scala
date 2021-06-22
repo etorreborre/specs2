@@ -9,6 +9,7 @@ import matcher.Scope
  * Since the delayedInit method doesn't return a Result, this only works with mutable specifications where results are
  * thrown as exceptions
  */
+@annotation.nowarn
 trait Before extends org.specs2.specification.Before with DelayedInit with Scope {
   override def delayedInit(x: => Unit): Unit = { before; x }
 }

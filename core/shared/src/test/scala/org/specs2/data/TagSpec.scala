@@ -2,7 +2,6 @@ package org.specs2
 package data
 
 import org.specs2.fp.syntax._
-import org.specs2.fp.syntax._
 import org.specs2.main.Arguments
 import NamedTag._
 import NamedTagsAreMonoid._

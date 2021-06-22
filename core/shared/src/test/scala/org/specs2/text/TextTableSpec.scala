@@ -14,7 +14,19 @@ class TextTableSpec extends mutable.Spec with TypedEqual {
       "+ | hello | you   | hello you"+"\n"+
       "+ | you   | hello | you hello"+"\n"+
       "+ | y     | h     | y h      "
-
-
+  }
+  "a text table must allow results to span several lines" >> {
+    "\n"+TextTable(
+      Seq("",   "a"    , "b",    "c"),
+      Seq("+", "hello", "you",  "hello\nyou"),
+      Seq("+", "you",   "hello", "you\nhello"),
+      Seq("+", "y",     "h",     "y h"      )).show.replace(" ", "_") ===
+      s"""|
+          |  | a     | b     | c____
+          |+ | hello | you   | hello
+          |  |       |       | you__
+          |+ | you   | hello | you__
+          |  |       |       | hello
+          |+ | y     | h     | y h  """.stripMargin.replace(" ", "_")
   }
 }

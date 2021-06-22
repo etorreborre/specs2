@@ -1,7 +1,7 @@
 package org.specs2
 package specification
 
-class SpecSpec extends Specification { def is = sequential ^ section("travis") ^ s2"""
+class SpecSpec extends Specification { def is = sequential ^ section("ci") ^ s2"""
 
  An acceptance Spec specification contains very few implicits $e1
  Many matchers can be used in a simple spec                   $e2

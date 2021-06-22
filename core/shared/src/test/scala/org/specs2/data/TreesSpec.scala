@@ -19,8 +19,8 @@ class TreesSpec extends script.Specification with DataTables with Grouped with E
     + return its size
     + be added a new child
 
-  + A Tree can be flattenLeft to avoid SOF
-                                                                                """
+  + A Tree does not stackoverflow when getting its size
+"""
 
   "pruning" - new group {
     val prune = (i: Int) => if (i % 2 == 0) Some(i) else None
@@ -60,8 +60,14 @@ class TreesSpec extends script.Specification with DataTables with Grouped with E
       "`- 3")
 
     eg := {
-      val tree = tree3.loc.addChild(4).tree
-      tree.flattenLeft aka "flattenLeft" must_== tree.flatten
+      def makeLargeTree(size: Int, current: Int = 1, tree: Tree[Int] = Leaf(1)): Tree[Int] =
+        if (current >= size) tree
+        else makeLargeTree(size, current + 1, Node(current, tree))
+
+      val size = 50000
+      val tree = makeLargeTree(size)
+      tree.flatten.toList
+      tree.size ==== size
     }
   }
 

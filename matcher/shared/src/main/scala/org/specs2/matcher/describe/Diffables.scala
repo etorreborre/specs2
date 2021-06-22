@@ -17,6 +17,11 @@ object PrimitiveDiffable {
 
 }
 
+object NothingDiffable extends Diffable[Nothing] {
+  def diff(actual: Nothing, expected: Nothing): Nothing =
+    throw new AssertionError(s"Critical error: attempting to compare values $actual and $expected of type Nothing, this type does not contain any value.")
+}
+
 class EitherDiffable[L : Diffable, R : Diffable]
   extends Diffable[Either[L, R]] {
 

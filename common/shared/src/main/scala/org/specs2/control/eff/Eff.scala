@@ -136,9 +136,9 @@ object Eff extends EffCreation with
 trait EffImplicits {
 
   /**
-   * Monad implementation for the Eff[R, ?] type
+   * Monad implementation for the Eff[R, *] type
    */
-  implicit final def EffMonad[R]: Monad[Eff[R, ?]] = new Monad[Eff[R, ?]] {
+  implicit final def EffMonad[R]: Monad[Eff[R, *]] = new Monad[Eff[R, *]] {
     def point[A](a: =>A): Eff[R, A] =
       Pure(a)
 
@@ -161,16 +161,16 @@ trait EffImplicits {
       fa match {
         case Pure(a, l) =>
           f(a).addLast(l)
-      
+
         case Impure(union, continuation, last) =>
           Impure(union, continuation.append(f), last)
-      
+
         case ImpureAp(unions, continuation, last) =>
           ImpureAp(unions, continuation.append(f), last)
       }
   }
 
-  def EffApplicative[R]: Applicative[Eff[R, ?]] = new Applicative[Eff[R, ?]] {
+  def EffApplicative[R]: Applicative[Eff[R, *]] = new Applicative[Eff[R, *]] {
     def point[A](a: =>A): Eff[R, A] =
       Pure(a)
 
@@ -200,8 +200,8 @@ trait EffImplicits {
       }
   }
 
-  implicit def naturalInto[R, U](into: IntoPoly[R, U]): Eff[R, ?] ~> Eff[U, ?] =
-    new (Eff[R, ?] ~> Eff[U, ?]) {
+  implicit def naturalInto[R, U](into: IntoPoly[R, U]): Eff[R, *] ~> Eff[U, *] =
+    new (Eff[R, *] ~> Eff[U, *]) {
       def apply[A](e: Eff[R, A]): Eff[U, A] = into(e)
     }
 
@@ -271,10 +271,10 @@ trait EffInterpretation {
    * peel-off the only present effect
    */
   def detach[M[_] : Monad, A](eff: Eff[Fx1[M], A]): M[A] =
-    Monad[M].tailrecM[Eff[Fx1[M], A], A](eff) {
+    Monad[M].tailrecM[Eff[Fx1[M], A], A] {
       case Pure(a, Last(Some(l))) => Monad[M].pure(Left(l.value.as(a)))
       case Pure(a, Last(None))    => Monad[M].pure(Right(a))
-    
+
       case Impure(u, continuation, last) =>
         u match {
           case Union1(ta) =>
@@ -283,20 +283,20 @@ trait EffInterpretation {
               case Last(None)    => Monad[M].map(ta)(x => Left(continuation(x)))
             }
         }
-    
+
       case ap @ ImpureAp(u, continuation, last) =>
         Monad[M].point(Left(ap.toMonadic))
-    }
+    }(eff)
 
   /**
    * peel-off the only present effect, using an Applicative instance where possible
    */
   def detachA[M[_], A](eff: Eff[Fx1[M], A])(implicit monad: Monad[M], applicative: Applicative[M]): M[A] =
-    monad.tailrecM[Eff[Fx1[M], A], A](eff) {
+    monad.tailrecM[Eff[Fx1[M], A], A]({
       case Pure(a, Last(Some(l))) => monad.pure(Left(l.value.as(a)))
 
       case Pure(a, Last(None))    => monad.pure(Right(a))
-    
+
       case Impure(u, continuation, last) =>
 
         u match {
@@ -306,7 +306,7 @@ trait EffInterpretation {
               case Last(None)    => Monad[M].map(ta)(x => Left(continuation(x)))
             }
         }
-    
+
       case ap @ ImpureAp(unions, continuation, last) =>
         val effects = unions.unions.collect { case Union1(mx) => mx }
         val sequenced = applicative.sequence(effects)
@@ -315,7 +315,7 @@ trait EffInterpretation {
           case Last(Some(l)) => Monad[M].map(sequenced)(x => Left(continuation(x).addLast(last)))
           case Last(None)    => Monad[M].map(sequenced)(x => Left(continuation(x)))
         }
-    }
+    })(eff)
 
   /**
    * get the pure value if there is no effect
@@ -359,8 +359,8 @@ case class Arrs[R, A, B](functions: Vector[Any => Eff[R, Any]]) extends (A => Ef
   /** map the last returned effect */
   def mapLast[C](f: Eff[R, B] => Eff[R, C]): Arrs[R, A, C] =
     functions match {
-      case v if v.isEmpty => Arrs[R, A, C](v :+ ((a: Any) => f(Eff.pure(a.asInstanceOf[B])).asInstanceOf[Eff[R, Any]]))
       case fs :+ last => Arrs(fs :+ ((x: Any) => f(last(x).asInstanceOf[Eff[R, B]]).asInstanceOf[Eff[R, Any]]))
+      case _ => Arrs[R, A, C](Vector.empty)
     }
 
   /** map the last value */
@@ -376,9 +376,6 @@ case class Arrs[R, A, B](functions: Vector[Any => Eff[R, Any]]) extends (A => Ef
     @tailrec
     def go(fs: Vector[Any => Eff[R, Any]], v: Any, last: Last[R] = Last.none[R]): Eff[R, B] = {
       fs match {
-        case Vector() =>
-          Pure[R, B](v.asInstanceOf[B], last)
-
         case Vector(f) =>
           f(v).asInstanceOf[Eff[R, B]].addLast(last)
 
@@ -393,6 +390,9 @@ case class Arrs[R, A, B](functions: Vector[Any => Eff[R, Any]]) extends (A => Ef
             case ap @ ImpureAp(unions, q, l) =>
               ImpureAp[R, unions.X, B](unions, q.copy(q.functions ++ rest), last *> l)
           }
+          
+        case _ =>
+          Pure[R, B](v.asInstanceOf[B], last)
       }
     }
 
@@ -416,4 +416,3 @@ object Arrs {
   def unit[R, A]: Arrs[R, A, A] =
   Arrs(Vector())
 }
-

@@ -13,4 +13,3 @@ trait Store {
 }
 
 trait Key[A]
-

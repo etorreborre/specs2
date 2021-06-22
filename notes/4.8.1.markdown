@@ -1,0 +1,5 @@
+Maintenance release
+
+## Fixes
+
+ * *core* #783 allow standard results to be registered with `AllExpectations`

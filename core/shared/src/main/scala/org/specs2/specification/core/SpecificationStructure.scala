@@ -4,11 +4,8 @@ package core
 
 import data.TopologicalSort
 import control._
-import reflect.Classes
-import Classes._
+import reflect.Classes._
 import org.specs2.fp.syntax._
-
-import scala.scalajs.reflect.annotation.EnableReflectiveInstantiation
 
 @EnableReflectiveInstantiation
 trait ContextualSpecificationStructure {
@@ -125,4 +122,3 @@ object SpecificationStructure {
   def seeSpecificationsRefs(spec: SpecificationStructure, env: Env): List[SpecificationRef] =
     SpecStructure.seeSpecStructuresRefs(env)(spec.structure(env))
 }
-

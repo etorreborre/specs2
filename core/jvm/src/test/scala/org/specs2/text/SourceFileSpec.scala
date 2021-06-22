@@ -14,6 +14,7 @@ class SourceFileSpec extends Spec with Grouped with SourceFile with TypedEqual {
    with a following semi-column                                          ${g1.e2}
    with several declarations                                             ${g1.e3}
    with a license header                                                 ${g1.e4}
+   with a comment at the end of the line                                 ${g1.e5}
 
  class names can be found
    for a non-empty package                                               ${g2.e1}
@@ -56,6 +57,14 @@ class SourceFileSpec extends Spec with Grouped with SourceFile with TypedEqual {
        */
       package com
       package test
+      class HelloWorld
+      """
+    } === "com.test"
+
+    e5 := packageName {
+      """
+      package com//the com package
+      package test // the test package
       class HelloWorld
       """
     } === "com.test"

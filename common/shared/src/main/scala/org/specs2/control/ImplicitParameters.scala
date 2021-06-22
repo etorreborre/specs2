@@ -51,6 +51,8 @@ trait ImplicitParameters {
 object ImplicitParameters extends ImplicitParameters {
 
   // to avoid unused parameters
-  def use(a: Any, as: Any*): Any =
-    if (false) a else as
+  def use[T](a: Any)(other: T): T = {
+    if (false) a else a
+    other
+  }
 }

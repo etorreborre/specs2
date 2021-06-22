@@ -7,11 +7,11 @@ package execute
 trait StandardResults {
   def done = Success("DONE")
   def wontdo = Success("WONT DO")
-  def todo = Pending("TODO")
+  def todo = pending("TODO")
   def anError = Error("error")
   def success = Success("success")
 
-  def failure: Failure = Failure("failure")
+  def failure: Failure = failure("failure")
   def failure(message: String): Failure = Failure(message)
 
   def pending(message: String): Pending = Pending(message)

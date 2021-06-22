@@ -1,0 +1,6 @@
+Maintenance release
+
+## Fixes
+
+* *project* release a clean 4.9.2 for ScalaJS 1.0
+* more complete implementation of `Classes` for ScalaJS

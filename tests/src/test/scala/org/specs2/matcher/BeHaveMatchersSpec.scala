@@ -21,6 +21,7 @@ class BeHaveMatchersSpec extends Specification { def is = s2"""
    using not and be in combination
    ${ List(1) must not be empty }
    ${ !((Nil:List[Int]) must not be empty).isSuccess }
+   ${ !((Array.empty[Int]) must not be empty).isSuccess }
 
    using and and be in combination
    ${ (1 must be equalTo(1) and be equalTo(1)).isSuccess }
@@ -40,7 +41,6 @@ class BeHaveMatchersSpec extends Specification { def is = s2"""
 
    some matchers can be put on 2 lines, but they may have to be ; separated $e1
                                                                                                                         """
-
   def e1 = {
     Some("") must not beSome;
     Some("") must be some

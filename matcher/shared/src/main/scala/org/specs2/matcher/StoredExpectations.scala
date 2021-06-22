@@ -7,23 +7,24 @@ import execute._
  * This trait evaluates expectations and stores them in a local variable for further usage
  */
 trait StoredExpectations extends Expectations {
-  private[specs2] lazy val results = new scala.collection.mutable.ListBuffer[MatchResult[_]]
-
-  override protected def checkMatchResultFailure[T](m: MatchResult[T]): MatchResult[T] = {
-    results.append(m)
-    m
-  }
+  private[specs2] lazy val matchResults = new scala.collection.mutable.ListBuffer[MatchResult[_]]
+  private[specs2] lazy val results = new scala.collection.mutable.ListBuffer[Result]
 
   def storedResults: scala.collection.Seq[Result] = {
-    val failures = results.filterNot(_.isSuccess)
-    val rs = results.map {
+    val failures = matchResults.filterNot(_.isSuccess)
+    val rs = matchResults.map {
       case f: MatchFailure[_] if failures.size > 1 =>
         f.copy(ok = () => addLocation(f.okMessage, f.toResult.location), ko = () => addLocation(f.koMessage, f.toResult.location))
 
       case other => other
     }.map(_.toResult)
-    results.clear()
-    rs.toSeq
+    matchResults.clear
+
+    val resultsCopy = new scala.collection.mutable.ListBuffer[Result]
+    resultsCopy ++= results
+    results.clear
+
+    rs.toSeq ++ resultsCopy
   }
 
   def addLocation(message: String, location: String): String = {
@@ -31,15 +32,25 @@ trait StoredExpectations extends Expectations {
     message + (if (!message.endsWith(locationMessage)) locationMessage else "")
   }
 
+  override protected def checkMatchResultFailure[T](m: MatchResult[T]): MatchResult[T] = {
+    matchResults.append(m)
+    m
+  }
+
+  override protected def checkResultFailure(r: =>Result): Result = {
+    results.append(r)
+    r
+  }
+
   override def sandboxMatchResult[T](mr: =>MatchResult[T]): MatchResult[T] = synchronized {
-    val resultsCopy = new scala.collection.mutable.ListBuffer[MatchResult[_]]
-    resultsCopy ++= results
+    val matchResultsCopy = new scala.collection.mutable.ListBuffer[MatchResult[_]]
+    matchResultsCopy ++= matchResults
     try mr
     finally {
-      results.clear
-      results ++= resultsCopy
+      matchResults.clear
+      matchResults ++= matchResultsCopy
       ()
     }
   }
-}
 
+}

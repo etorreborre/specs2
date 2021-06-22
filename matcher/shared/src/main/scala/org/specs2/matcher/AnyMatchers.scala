@@ -61,9 +61,18 @@ trait AnyBaseMatchers {
   /** matches if a.isEmpty */
   def beEmpty[T <% Any { def isEmpty: Boolean }] = new Matcher[T] {
     def apply[S <: T](iterable: Expectable[S]) = {
-      result(iterable.value.isEmpty,
-             iterable.description + " is empty",
-             iterable.description + " is not empty", iterable)
+      // we need to pattern match on arrays otherwise we get a reflection exception
+      iterable.value match {
+        case a: Array[_] =>
+          result(a.isEmpty,
+            iterable.description + " is empty",
+            iterable.description + " is not empty", iterable)
+
+        case _ =>
+          result(iterable.value.isEmpty,
+            iterable.description + " is empty",
+            iterable.description + " is not empty", iterable)
+      }
     }
   }
 

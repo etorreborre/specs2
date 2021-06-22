@@ -1,0 +1,13 @@
+ScalaJS 1.0 release
+
+## Improvements
+
+* *core* upgraded ScalaJS to 1.0
+* *core* #809 upgraded scala versions (by @xuwei-k)
+* *mock* #808 upgraded mockito-core to 3.3.0
+* *guide* - added an example on using `noShrink` in the user guide
+
+## Fixes
+
+* *core* #749 special-case `Option` for quoting values
+* *core* #798 proper fix for possible regex match failures in `SpecificationFinder` when trying to find specification class names
