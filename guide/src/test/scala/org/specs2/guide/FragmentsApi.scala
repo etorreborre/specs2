@@ -8,17 +8,20 @@ In $specs2 a specification can simply be viewed as a sequence of "Fragments". A 
 
  - a `Description`
  - an `Execution`
+$p
 
 All the elements encountered in this User Guide fall under this representation:
 
  - an `Example` is a `Fragment` with a `Text` description and an `Execution` returning a `Result`
  - a `Step` is a `Fragment` with no description and a special `Execution` declaring that everything before the step must be executed before the `Step` is executed
  - a `Text` is a `Fragment` with a `Text` description and no `Execution`
+$p
 
 The role of the various DSLs in acceptance and unit specifications is to create those fragments and assemble them into a bigger `Fragments` object. They do this using:
 
  - the `FragmentFactory` API to create individual fragments
  - the `Fragments` API to assemble them
+$p
 
 ### The `FragmentFactory` API
 
@@ -30,6 +33,7 @@ The `org.specs2.specification.create.FragmentFactory` trait possesses different 
  - tags
  - references
  - "formatting" fragments (break, paragraph, tab...)
+$p
 
 Please have a look at the ScalaDoc to see the exact API for the factory and look at the source code for the default implementation in `org.specs2.specification.create.DefaultFragmentFactory`.
 
@@ -72,4 +76,3 @@ f1 ^ f1
 
 """
 }
-

@@ -25,7 +25,7 @@ For all those situations, there is a $specs2 trait which you can mix in your spe
 ### BeforeEach / AfterEach
 
 The `org.specs2.specification.BeforeEach` trait defines an action that will be executed before each example:${snippet {
-class BeforeSpecification extends org.specs2.mutable.Specification with BeforeEach {
+class BeforeSpecification extends org.specs2.mutable.Specification with BeforeEach:
   // you need to define the "before" action
   def before = step(println("before"))
   "example 1" >> {
@@ -34,7 +34,6 @@ class BeforeSpecification extends org.specs2.mutable.Specification with BeforeEa
   "example 2" >> {
     println("example2"); ok
   }
-}
 }}
 
 If you execute this specification you may see something like (note that examples and before actions are executed concurrently):
@@ -46,7 +45,7 @@ If you execute this specification you may see something like (note that examples
 ```
 
 As you can guess, defining a behaviour "after" is very similar:${snippet {
-class AfterSpecification extends org.specs2.mutable.Specification with AfterEach {
+class AfterSpecification extends org.specs2.mutable.Specification with AfterEach:
   // you need to define the "after" action
   def after = step(println("after"))
 
@@ -56,11 +55,10 @@ class AfterSpecification extends org.specs2.mutable.Specification with AfterEach
   "example 2" >> {
     println("example2"); ok
   }
-}
 }}
 
 You might also want to mix the two:${snippet {
-class BeforeAfterSpecification extends org.specs2.mutable.Specification with BeforeAfterEach {
+class BeforeAfterSpecification extends org.specs2.mutable.Specification with BeforeAfterEach:
 
   def before = step(println("before"))
   def after  = step(println("after"))
@@ -71,46 +69,44 @@ class BeforeAfterSpecification extends org.specs2.mutable.Specification with Bef
   "example 2" >> {
     println("example2"); ok
   }
-}
 }}
 
 _IMPORTANT_: Mixing traits like `BeforeEach` and `BeforeAfterEach` can lead to surprising behaviour where the `before` action is executed twice.
 You should rather have both traits extends `BeforeAfterEach` to avoid that:
 ```
-trait B1 extends BeforeAfterEach {
-  def before = println("before 1")
-  def after = () // do nothing
-}
+import org.specs2.specification.dsl.ActionDsl
 
-trait B2 extends BeforeAfterEach {
-  def before = println("before 2")
-  def after = println("after 2")
-}
+trait B1 extends BeforeAfterEach with ActionDsl:
+  def before = step(println("before 1"))
+  def after = step(()) // do nothing
+
+trait B2 extends BeforeAfterEach with ActionDsl:
+  def before = step(println("before 2"))
+  def after = step(println("after 2"))
 ```
 
 ### AroundEach
 
-Another very common situation is when you need to execute in the context of a database transaction or a web request. In this case you can use the `AroundEach` trait to execute each example in the proper context:${snippet {
-trait DatabaseContext extends AroundEach {
+Another very common situation is when you need to execute in the context of a database transaction or a web request.
+In this case you can use the `AroundEach` trait to execute each example in the proper context:${snippet {
+trait DatabaseContext extends AroundEach:
   // you need to define the "around" method
-  def around[R: AsResult](r: => R): Result = {
+  def around[R: AsResult](r: => R): Result =
     openDatabaseTransaction
     try AsResult(r)
     finally closeDatabaseTransaction
-  }
+
   // do what you need to do with the database
   def openDatabaseTransaction = ???
   def closeDatabaseTransaction = ???
-}
 
-class AroundSpecification extends org.specs2.mutable.Specification with DatabaseContext {
+class AroundSpecification extends org.specs2.mutable.Specification with DatabaseContext:
   "example 1" >> {
     println("using the database"); ok
   }
   "example 2" >> {
     println("using the database too"); ok
   }
-}
 }}
 
 The specification above shows a trait `DatabaseContext` extending `AroundEach` (so that trait can be reused for other specifications). It defines a method named `around` taking the body of the example, anything with an ${"AsResult" ~/ AsResultTypeclass} typeclass, and returns a result. Because `r` is a byname parameter, you are free to do whatever you want before or after evaluating it, like opening and closing a database transaction.
@@ -122,29 +118,28 @@ The `AroundEach` trait can be used for lots of different purposes:
  - to run them in different contexts, with different parameters
 
  <p/>
-There is however one thing you cannot do with `AroundExample`. You can't pass the context to the example if it needs it. The `ForEach` trait solves this problem.
+There is however one thing you cannot do with `AroundExample`. You can't pass a specific context to the example. The `ForEach` trait solves this problem.
 
 ### ForEach
 
-Sometimes you need to create a specific context for each example but you also want to make it accessible to each example. Here is a specification having examples using an active database transaction:${snippet {
+Sometimes you need to manage a specific context for each example but you also want to make it accessible to the examples themselves.
+Here is a specification having examples using an active database transaction:${snippet {
 // a transaction with the database
 trait Transaction
 
-trait DatabaseContext extends ForEach[Transaction] {
+trait DatabaseContext extends ForEach[Transaction]:
   // you need to define the "foreach" method
-  def foreach[R : AsExecution](f: Transaction => R): R = {
+  def foreach[R : AsExecution](f: Transaction => R): R =
     val transaction = openDatabaseTransaction
     try f(transaction)
     finally closeDatabaseTransaction(transaction)
-  }
 
   // create and close a transaction
   def openDatabaseTransaction: Transaction = ???
 
   def closeDatabaseTransaction(t: Transaction) = ???
-}
 
-class FixtureSpecification extends org.specs2.mutable.Specification with DatabaseContext {
+class FixtureSpecification extends org.specs2.mutable.Specification with DatabaseContext:
   "example 1" >> { (t: Transaction) =>
     println("use the transaction")
     ok
@@ -153,7 +148,6 @@ class FixtureSpecification extends org.specs2.mutable.Specification with Databas
     println("use it here as well")
     ok
   }
-}
 }}
 
 ### BeforeSpec / AfterSpec
@@ -164,6 +158,9 @@ You can use 3 traits to do this:
  * `BeforeSpec` inserts any `Fragments`, for example a `Step`, before all the examples
  * `AfterSpec` inserts any `Fragments`, for example a `Step`,` after all the examples
  * `BeforeAfterSpec` inserts `Fragments` before all the examples and after all of them
+$p
+
+Fragments are the pieces making a `Specification: examples, text, steps, etc.... You can learn more about the Fragments API in $FragmentsApi.
 
 $AndIfYouWantToKnowMore
 
