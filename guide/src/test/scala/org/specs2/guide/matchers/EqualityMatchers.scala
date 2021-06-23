@@ -21,7 +21,7 @@ Several syntaxes can be used, according to your own taste
  `1 should be_==(1)        `| for should lovers
  `1 === 1                  `| the ultimate shortcut
 
-There are also other notions of equality
+There are also other notions of equality:
 
  Matcher            |  Comment
  ----------         | -----------------------------------------------------

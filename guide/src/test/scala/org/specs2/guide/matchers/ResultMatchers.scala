@@ -8,11 +8,11 @@ object ResultMatchers extends UserGuideCard {
 That's only if you want to check the result of other matchers! ${snippet{
 
 // you need to extend the ResultMatchers trait
-class MatchersSpec extends Specification with matcher.ResultMatchers { def is =
-  "beMatching is using a regexp" ! {
-    ("Hello" must beMatching("h.*")) must beSuccessful
-  }
-}
+class MatchersSpec extends Specification with matcher.ResultMatchers:
+  def is =
+    "beMatching is using a regexp" ! {
+      ("Hello" must beMatching("h.*")) must beSuccessful
+    }
 }}
 """
 }

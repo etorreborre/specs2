@@ -95,7 +95,7 @@ trait ValueChecksLowImplicits:
 
 object ValueChecks extends ValueChecks
 
-/** ValueCheck for a typed expected value. It uses the BeTypedEqualTo matcher */
+/** ValueCheck for a typed expected value. It uses the BeEqualTo matcher */
 case class BeEqualTypedValueCheck[T : Diffable](expected: T) extends ValueCheck[T]:
   private lazy val matcher = new EqualityMatcher(expected)
   def check    = (t: T) => AsResult.safely(matcher(createExpectable(t)))

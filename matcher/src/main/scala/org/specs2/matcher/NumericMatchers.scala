@@ -88,15 +88,9 @@ trait NumericMatchers:
   def closeTo[S : Numeric](target: SignificantTarget[S]): Matcher[S] =
     beCloseTo(target)
 
-
   /** matches if a value is between 2 others according to an Ordering */
   def beBetween[T : Ordering](t1: T, t2: T): BetweenMatcher[T] = BetweenMatcher(t1, t2)
   def between[T : Ordering](t1: T, t2: T): BetweenMatcher[T] = BetweenMatcher(t1, t2)
-
-  /** alias for the adventurous: 5 must (`be[(2, 7)`[`) */
-  def `be[`[T : Ordering](t1: T, t2: T): BetweenMatcher[T] = BetweenMatcher(t1, t2)
-  /** alias for the adventurous: 5 must (`be](2, 7)`[`) */
-  def `be]`[T : Ordering](t1: T, t2: T): BetweenMatcher[T] = BetweenMatcher(t1, t2).excludingStart
 
 object NumericMatchers extends NumericMatchers
 
@@ -168,9 +162,6 @@ case class BetweenMatcher[T : Ordering](t1: T, t2: T, includeStart: Boolean = tr
     val (ok, ko) = (s.description+" is in "+start+t1+", "+t2+end,
       s.description+" is not in "+start+t1+", "+t2+end)
     result(included, ko)
-
-  def `]` = copy(includeEnd = true)
-  def `[` = copy(includeEnd = false)
 
   def excludingStart  = copy(includeStart = false)
   def excludingEnd    = copy(includeEnd = false)

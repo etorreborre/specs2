@@ -27,8 +27,8 @@ The `must` operator takes the actual value returned by `directoryPath` and appli
 In the following sections you will learn:
 
  - the different ways of checking the [equality](#equality) of values
- - to use the matchers for the most [common data types](#out-of-the-box) in Scala, and most notably collections
- - to use [other types of matchers](#optional) in less common situations: json, xml, files,...
+ - how to use the matchers for the most [common data types](#out-of-the-box) in Scala, and most notably collections
+ - how to use [other types of matchers](#optional) in less common situations: json, xml, files,...
  - how to [derive](#derive-matchers) a new matcher from an existing one
  - how to create [your own matchers](#create-your-own)
 
@@ -40,7 +40,7 @@ Now let's check out the other matchers.
 
 ### Out of the box
 
-These are the all the available matchers when you extend `Specification`
+These are the all the available matchers when you extend `Specification`:
 
 ${ MatcherCards.toTabs }
 
@@ -48,11 +48,11 @@ ${ MatcherCards.toTabs }
 
 Those matchers are optional. To use them, you need to add a new trait to your specification.
 
-Those are additional "data" matchers
+Those are additional "data" matchers:
 
 ${ OptionalDataMatcherCards.toTabs }
 
-Those matchers can be used to check "content"
+Those matchers can be used to check "content":
 
 ${ OptionalContentMatcherCards.toTabs }
 
@@ -79,9 +79,6 @@ def beShort1 = be_<=(5) ^^ { (t: Any) => t.toString.length }
 // you can use aka to provide some information about the original value, before adaptation
 def beShort2 = be_<=(5) ^^ { (t: Any) => t.toString.length aka "the string size" }
 
-// !!! note: use a BeTypedEqualTo matcher when using aka and equality, otherwise you will be matching against Expectable[T] !!!
-def beFive = be_==(5) ^^ { (t: Any) => t.toString.length aka "the string size" }
-
 // The adaptation can also be done the other way around when it's more readable
 def haveExtension(extension: =>String) = ((_:File).getPath) ^^ endWith(extension)
 }}
@@ -89,17 +86,16 @@ def haveExtension(extension: =>String) = ((_:File).getPath) ^^ endWith(extension
  * adapt the actual and expected values. This matcher compares 2 `Human` objects but set their `wealth` field to 0
    so that the equals method will not fail on that field: ${snippet{
 
- // TODO
- // def beMostlyEqualTo = (be_==(_:Human)) ^^^ ((_:Human).copy(wealth = 0))
-// then
-// Human(age = 20, wealth=1000) must beMostlyEqualTo(Human(age = 20, wealth=1)) // success
+   def beMostlyEqualTo(h:Human) = be_==(h) ^^^ ((_:Human).copy(wealth = 0))
+   // then
+   Human(age = 20, wealth=1000) must beMostlyEqualTo(Human(age = 20, wealth=1)) // success
 }}
 
- * use `eventually` to try a match a number of times until it succeeds: ${snippet{
+ * use `eventually` to try a matcher a number of times until it succeeds: ${snippet{
 
 val iterator = List(1, 2, 3).iterator
 
-// Use eventually(retries, n.millis) to use another number of tries and waiting time
+// Use eventually(retries, n.millis) to specify the number of tries and waiting time
 iterator.next must be_==(3).eventually
 }}
 
@@ -144,8 +140,6 @@ iterator.next must be_==(3).eventually
 1 must be_==(2).orPending((ko:String) => "BAD "+ko) // prints "BAD '1' is not equal to '2'"
 }}
 
-}}
-
 ### Create your own
 
 The easiest way to create a new matcher is to create it from a function returning a tuple with a boolean and one or more messages: ${snippet{
@@ -159,26 +153,6 @@ def startWithHello: Matcher[String] = { (s: String) =>
   (s.startsWith("hello"), s+" doesn't start with hello")
 }
 
-"hello world" must startWithHello
-
-// with a success message and a failure message
-def endWithWorld: Matcher[String] = { (s: String) =>
-  (s.endsWith("world"), s+" doesn't end with world")
-}
-
-"hello world" must endWithWorld
-
-// with a function taking the actual value for the failure message
-def startWithHi: Matcher[String] =
-  ((_: String).startsWith("hi"), (_:String)+" doesn't start with hi")
-
-"hi universe" must startWithHi
-
-// with 2 functions for the success and failure messages
-def endWithUniverse: Matcher[String] =
-  ((_: String).endsWith("universe"), (s:String) => s+ " doesn't end with universe")
-
-"hi universe" must endWithUniverse
 }}
 
 If you want absolute power over matching, you can define your own matcher extending `Matcher`: ${snippet{
@@ -198,14 +172,10 @@ In the code above you have to:
 
  * define the `apply` method (and its somewhat complex signature)
 
- * use the protected `result` method to return: a Boolean condition, a message when the match is ok, a message when the
-   match is not ok, the "expectable" value. Note that if you change the expectable value you need to use the `map` method
-   on the `s` expectable (`s.map(other)`). This way you preserve the ability of the Expectable to throw an Exception if
-   a subsequent match fails
+ * use the protected `result` method to return a `Boolean` condition and a failure message
 
  * you can use the `description` method on the `Expectable` class to return the full description of the expectable including
    the optional description you setup using the `aka` method
-
 
 $NowLearnTo
 

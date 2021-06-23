@@ -13,7 +13,7 @@ object FutureMatchers extends UserGuideCard {
 
   def title = "Future"
   def text = s2"""
-Testing `Futures` is quite easy with $specs2. You can simply return a value that is `Future[R]` where `R` has a `AsResult`
+Testing `Futures` is quite easy with $specs2. You can simply return a value that is `Future[R]` where `R` has an `AsResult`
 instance (meaning that `R` is some kind of result like: `Boolean`, `Result`,...).
 Then your future will be executed when $specs2 executes your example and the result will be collected.
 
@@ -42,23 +42,22 @@ Future(1 === 1).await(retries = 2, timeout = 100.millis)
 
 The `await` method require an implicit `org.specs2.concurrent.ExecutionEnv` (see [here](org.specs2.guide.ExecutionEnvironments.html) for more details). You can pass one in the body of your examples:${snippet{
 
-class MyFutureSpec(using ee: ExecutionEnv) extends Specification { def is = s2"""
+class MyFutureSpec(using ee: ExecutionEnv) extends Specification:
+  def is = s2"""
 
- Let's check this scala future ${
-   Future(1) must be_>(0).await
- }
+  Let's check this scala future ${
+    Future(1) must be_>(0).await
+  }
 
-"""
-}
+  """
 
 // in a mutable specification
-class MyMutableFutureSpec(using ee: ExecutionEnv) extends mutable.Specification {
+class MyMutableFutureSpec(using ee: ExecutionEnv) extends mutable.Specification:
 
   "Let's check this scala future" >> {
     Future(1) must be_>(0).await
   }
 
-}
 }}
 
 #### Time factor

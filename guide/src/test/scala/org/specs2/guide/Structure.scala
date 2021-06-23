@@ -21,13 +21,15 @@ With $specs2 you have 2 main ways to do this:
 
 Both ways of writing specifications have advantages and drawbacks:
 
- - Acceptance specifications are easier to read as a narrative but require navigation between the text and the code. You also need to define an `is` method holding the body of the specification
+ - Acceptance specifications are easier to read as a narrative but require navigation between the text and the code. You also need to define an `is`
+   method holding the body of the specification
 
  - Unit specifications are easier to navigate but the text tends to be lost in a sea of code
 
 ### Acceptance specification
 
-An acceptance specification extends `org.specs2.Specification` and defines the `is` method. You can implement this method with an interpolated **`s2`** string: ${snippet {
+An acceptance specification extends `org.specs2.Specification` and defines the `is` method. You can implement this method
+with an interpolated **`s2`** string: ${snippet {
 class MySpecification extends org.specs2.Specification:
   def is = s2"""
 
@@ -40,7 +42,10 @@ class MySpecification extends org.specs2.Specification:
    def e2 = 2 === 2
 }}
 
-The `s2` string contains the text of your specification as well as some references to methods (`e1` and `e2`) defining *`Results`*.
+The `s2` string contains the text of your specification as well as some references to methods (`e1` and `e2`)
+defining some code eventually evaluating to a `Result` (this can take many forms, from a simple Boolean, to a `Future[Result]`, or some value
+with an `AsExecution` instance).
+
 When the Specification is executed, the `s2` string is analysed and 2 `Examples` are created then executed:
 
  - one `Example` with the description "where example 1 must be true" and the code `1 === 1`
@@ -85,7 +90,8 @@ The good news is that for each of the 2 main styles, acceptance and unit, you ca
 
 #### Functional expectations
 
-In an acceptance specification, by default, the `Result` of an `Example` is always given by the last statement of its body. For instance, this example will never fail because the first expectation is "lost":${snippet{
+In an acceptance specification, by default, the `Result` of an `Example` is always given by the last statement of its body.
+For instance, this example will never fail because the first expectation is lost:${snippet{
 // this will never fail!
 s2"""
   my example on strings $e1
@@ -96,7 +102,7 @@ s2"""
     "hello" must startWith("hell")
 }}
 
-If you want to get both expectations you will need to use and between them: ${snippet{
+If you want to get both expectations you will need to use `and` between them: ${snippet{
 s2"""
   my example on strings $e1
 """
@@ -110,12 +116,11 @@ If you want to declare several expectations per example, you can mix-in the `org
 #### Thrown expectations
 
 With a unit specification you get "thrown expectations" by default. When an expectation fails, it throws an exception and the rest of the example is not executed: ${snippet {
-class MySpecification extends org.specs2.mutable.Specification {
+class MySpecification extends org.specs2.mutable.Specification:
   "This is my example" >> {
     1 === 2 // this fails
     1 === 1 // this is not executed
   }
-}
 }}
 
 It is also possible to use the "functional" expectation mode with a unit specification by mixing in the `org.specs2.matcher.NoThrownExpectations` trait.

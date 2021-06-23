@@ -249,14 +249,6 @@ end Matcher
 
 object Matcher extends MatcherCreation:
 
-  @targetName("fromCondition")
-  def apply[T](f: (T => Boolean, String)): Matcher[T] = f
-  @targetName("fromConditionActualExpected")
-  def apply[T](f: (T => Boolean, String, String, String)): Matcher[T] = f
-  @targetName("fromFunctions")
-  def apply[T](f: (T => Boolean, T => String)): Matcher[T] = f
-  @targetName("fromFunctionsActualExpected")
-  def apply[T](f: (T => Boolean, T => String, T => String, T => String)): Matcher[T] = f
   @targetName("fromFunction")
   def apply[T](f: T => (Boolean, String)): Matcher[T] = f
   @targetName("fromFunctionActualExpected")
@@ -265,40 +257,6 @@ object Matcher extends MatcherCreation:
   def apply[T, R : AsResult](f: T => Matcher[R]): (=>T) => Matcher[R] = f
 
 trait MatcherCreation:
-
-  /**
-   * This method transforms a function to a Matcher
-   */
-  given [T]: Conversion[(T => Boolean, String), Matcher[T]] with
-    def apply(f: (T => Boolean, String)): Matcher[T] =
-      (f._1, (t:T) => q(t)+" "+f._2)
-
-  /**
-   * This method transforms a function to a Matcher
-   */
-  given [T]: Conversion[(T => Boolean, String, String, String), Matcher[T]] with
-    def apply(f: (T => Boolean, String, String, String)): Matcher[T] =
-      (f._1, (t:T) => q(t)+" "+f._2, (_:T) => f._3, (_:T) => f._4)
-
-  /**
-   * This method transforms a function to a Matcher
-   */
-  given [T]: Conversion[(T => Boolean, T => String), Matcher[T]] with
-    def apply(f: (T => Boolean, T => String)): Matcher[T] =
-      new Matcher[T]:
-        def apply[S <: T](s: Expectable[S]) =
-          val (condition, message) = (f._1(s.value), f._2(s.value))
-          Result.result(condition, message)
-
-  /**
-   * This method transforms a function, with function descriptors to a Matcher
-   */
-  given [T]: Conversion[(T => Boolean, T => String, T => String, T => String), Matcher[T]] with
-   def apply(f: (T => Boolean, T => String, T => String, T => String)): Matcher[T] =
-     new Matcher[T]:
-       def apply[S <: T](s: Expectable[S]) =
-         val (condition, message, actual, expected) = (f._1(s.value), f._2(s.value), f._3(s.value), f._4(s.value))
-         Result.result(condition, message, actual, expected)
 
   /**
    * This method transforms a function returning a pair (condition, message) to a Matcher

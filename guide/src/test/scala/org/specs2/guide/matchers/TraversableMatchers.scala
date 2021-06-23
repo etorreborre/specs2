@@ -37,7 +37,7 @@ Then you can check the elements which are contained in the Traversable
 
  * there are also 2 specialized matchers to check the string representation of the elements
  ${snippet{Seq(1234, 6237) must containMatch("23")     }}   `// matches with ".*23.*"`
- ${snippet{Seq(1234, 6234) must containPattern(".*234")}}   `// matches with !.*234"`
+ ${snippet{Seq(1234, 6234) must containPattern(".*234")}}   `// matches with ".*234"`
 
 For each of the check above you can indicate how many times the check should be satisfied:
 
