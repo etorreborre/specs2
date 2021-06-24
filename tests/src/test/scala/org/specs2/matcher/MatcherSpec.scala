@@ -27,10 +27,7 @@ Implicit conversions
 ====================
 
   a matcher can be defined by a function with 1 message $convert1
-  a matcher can be defined by a function returning a pair $convert2
-  a matcher can be defined by a function with a function for the ko message $convert3
-  a matcher can be muted and will output no message $convert4
-  a matcher can be defined by a function returning a Result $convert5
+  a matcher can be muted and will output no message $convert2
 
 Collections
 ===========
@@ -99,37 +96,23 @@ Messages
     ("3" must beStringThree).message === "the value '3' is equal to '3'"
 
   def convert1 =
-    def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, "is odd")
-    (3 must beEven) returns "'3' is odd"
-
-  def convert2 =
     def beEven: Matcher[Int] = (i: Int) => (i % 2 == 0, "'"+i.toString+"' is odd")
     ((3 must beEven) returns "'3' is odd") and
     (2 must beEven)
 
-  def convert3 =
-    def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i.toString+" is odd")
-    ((3 must beEven) returns "3 is odd") and
-    (2 must beEven)
-
-  def convert4 =
+  def convert2 =
     (1 must be_==(1).mute) returns ""
 
-  def convert5 =
-    def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i.toString+" is odd")
-    def beOdd: Matcher[Int] = ((i: Int) => i % 2 != 0, (i: Int) => i.toString+" is even")
-    (2 must beOdd) returns "2 is even"
-
   def collection1 =
-    def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i.toString+" is odd")
+    def beEven: Matcher[Int] = (i: Int) => (i % 2 == 0, i.toString+" is odd")
     forall(Seq(1, 2, 3))((i: Int) => i must beEven) returns ("1 is odd")
 
   def collection2 =
-    def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i.toString+" is odd")
+    def beEven: Matcher[Int] = (i: Int) => (i % 2 == 0, i.toString+" is odd")
     foreach(Seq(1, 2, 3))((i: Int) => i must beEven) returns "There are 2 failures\n1 is odd\n3 is odd\n"
 
   def messages1 =
-    def beEven: Matcher[Int] = ((i: Int) => i % 2 == 0, (i: Int) => i.toString+" is odd")
+    def beEven: Matcher[Int] = (i: Int) => (i % 2 == 0, i.toString+" is odd")
     (3 must beEven.setMessage("is not even")).message === "is not even"
 
   def messages2 =

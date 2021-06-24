@@ -22,8 +22,9 @@ Forms are built by creating `Fields` or `Props` and placing them on rows. The fo
   1. a composite Customer entity using the Address instance
   1. a decision table having some related columns
   1. a composite Order - OrderLine entity (1-n) relationship
+$p
 
- For all the code samples below you need to extend the `org.specs2.specification.Forms` trait.
+For all the code samples below you need to extend the `org.specs2.specification.Forms` trait.
 
 ### Fields
 
@@ -32,6 +33,7 @@ A `Field` is simply a label and a value. It is used in forms to display regular 
   * `field(value)` creates a field for a value, where the label is empty
   * `field(label, value)` creates a field with a label and a value
   * `field(label, field1, field2, ...)` creates a field with a label and values coming from other fields, concatenated as strings
+$p
 
 When the form is displayed, here is how the fields are displayed:
 
@@ -50,13 +52,14 @@ An `Effect` is almost like a `Field` but it never shows its value. The value of 
  * `effect(value)` creates an effect with no label
  * `effect(label, value)` creates an effect with a label and a value that will be evaluated when the `Effect` is executed
  * `effect(effect1, effect2, ...)` creates an effect with all the effects labels and a side-effect sequencing all side-effects
+$p
 
 ### Properties
 
 A `Prop` is like a `Field`, it has a label. But you can give it 2 values, an "actual" one and an "expected" one. When executing the property, both values are compared to get a result. You can create a `Prop` with the following functions:
 
  Expression                                                               | Description
- ------------------------------------------------------------------------ | --------------------------
+ ---------------------------------                                        | ------------------------------------------------------------
  `prop(value)`                                                            | a property with no label
  `prop(label, actual)`                                                    | a property with a label and an actual value
  `prop(label, actual, expected)`                                          | a property with a label, an actual value and an expected one
@@ -137,6 +140,7 @@ In some cases (see the Calculator example below) you can create a header row usi
 
   * `th(field("a"), field("b"))`
   * or `th("a", "b")` using an implicit conversion of Any => Field[Any]
+$p
 
 Inserting the form in a Specification is also very simple: ${snippet{
 class SpecificationWithForms extends Specification with Forms { def is = s2"""
@@ -151,28 +155,28 @@ The address must be retrieved from the database with the proper street and numbe
 
 One way to encapsulate and reuse this Form across specifications is to define a case class:
 ```
-case class Address(street: String, number: Int) {
-  def retrieve(addressId: Int) = {
+case class Address(street: String, number: Int):
+  def retrieve(addressId: Int) =
     val address = actualAddress(addressId)
     Form("Address").
       tr(prop("street", address.street, street)).
       tr(prop("number", address.number, number))
-  }
-}
+```
 
 And then you can use it like this: ${snippet{
 
-class AddressSpecification extends Specification with Forms { def is = s2"""
-The address must be retrieved from the database with the proper street and number
-  ${Address("Oxford St", 20).     /** expected values */
-      retrieve(123)               /** actual address id */}
-"""
-}
+class AddressSpecification extends Specification with Forms:
+ def is = s2"""
+
+ The address must be retrieved from the database with the proper street and number
+   ${Address("Oxford St", 20).     /** expected values */
+       retrieve(123)               /** actual address id */}
+ """
 }}
 
 ##### Adding several rows at once
 
-A very practical way to add rows programatically is to start from a list of values and have a function creating a Row object for each value: ${snippet{
+A very practical way to add rows programmatically is to start from a list of values and have a function creating a Row object for each value: ${snippet{
   Form("a new Form").trs(addresses) { (a: Address) => Row.tr(field(a.number), field(a.street)) }
 }}
 
@@ -239,6 +243,7 @@ Otherwise:
 
  * if the Form is embedded into an Effect, Errors will be reported
  * if the Form is embedded into a Prop, Failures will be reported, like that
+$p
 
 ${ Form("purchase").
      tr(loginForm.toEffect("login")).
@@ -264,7 +269,6 @@ A person can have 2 addresses ${
 
 The first `tab` call will create a `Tabs` object containing the a first tab with "home" as the title and an Address form as its content. Then every subsequent `tab` calls on the `Tabs` object will create new tabs:
 
-
 ${ Form("Addresses").tr(
   tab("home", Form("Address").
     tr(prop("street", "Oxford St")("Oxford St")).
@@ -283,35 +287,36 @@ Now that we've defined a form for a simple entity, let's see how we can reuse it
 
  * the Customer form defines a name attribute and embeds an instance of the Address form
  * it is defined by setting the name on one row and the Address form on the second row
+$p
 
 *[and for this example, we define a slightly different Address form]*
+
 ```
-case class Address(street: String, number: Int) {
-  def actualIs(address: Address) = {
+case class Address(street: String, number: Int):
+  def actualIs(address: Address) =
     Form("Address").
       tr(prop("street", address.street, street)).
       tr(prop("number", address.number, number))
-  }
-}
 
-case class Customer(name: String, address: Address) {
-  def retrieve(customerId: Int) = {
+case class Customer(name: String, address: Address):
+  def retrieve(customerId: Int) =
     val customer = actualCustomer(customerId)
     Form("Customer").
       tr(prop("name", customer.name)(name)).
       tr(address.actualIs(customer.address))
-  }
+
   def actualCustomer(customerId: Int): Customer = this // fetch from the database
-}
 ```
+
 ${snippet{
-class CustomerSpecification extends Specification with Forms { def is = s2"""
-The customer must be retrieved from the database with a proper name and address ${
-  Customer(name = "Eric",
-    address = Address(street = "Rose Crescent", number = 2)).
-    retrieve(123)
-  }"""
-}
+class CustomerSpecification extends Specification with Forms:
+  def is = s2"""
+  The customer must be retrieved from the database with a proper name and address ${
+    Customer(name = "Eric",
+      address = Address(street = "Rose Crescent", number = 2)).
+      retrieve(123)
+    }
+  """
 }}
 
 As you also see above, named arguments can bring more readability to the expected values.
@@ -347,12 +352,13 @@ For example you can have an "Order" entity, which has several "OrderLines". In t
  * the expected rows are included in the actual rows, in the same order
  * the expected rows are exactly the actual rows, with no specific order
  * the expected rows are exactly the actual rows, in the same order
+$p
 
 Let's see how to declare this. The 2 classes we're going to use are:
 ```
 import Form.*
 
-case class Order(orderId: Int) {
+case class Order(orderId: Int):
   lazy val actualLines = // those should be extracted from the actual order entity retrieved by id
     OrderLine("PIS", 1) ::
       OrderLine("PS", 2) ::
@@ -365,15 +371,14 @@ case class Order(orderId: Int) {
   def hasSubsequence(ls: OrderLine*) = base.subsequence(actualLines, ls)
   def hasSet(ls: OrderLine*)         = base.set(actualLines, ls)
   def hasSequence(ls: OrderLine*)    = base.sequence(actualLines, ls)
-}
 
-case class OrderLine(name: String, quantity: Int) {
+case class OrderLine(name: String, quantity: Int):
   def form: Form =
     tr(field(name), field(quantity))
-}
 ```
 
-The `OrderLine` class simply creates a form with 2 fields: name and quantity. The `Order` class is able to retrieve the actual order entity (say, from a database) and to extract `OrderLine` instances. It also has several methods to build Forms depending on the kind of comparison that we want to do.
+The `OrderLine` class simply creates a form with 2 fields: name and quantity. The `Order` class is able to retrieve the actual order entity (say, from a database) and to extract `OrderLine` instances.
+It also has several methods to build Forms depending on the kind of comparison that we want to do.
 
 #### Subset
 
@@ -381,8 +386,10 @@ The `OrderLine` class simply creates a form with 2 fields: name and quantity. Th
 
  * lines existing in `a` but not `b` are left untouched
  * lines existing in `a` and `b` are marked as success
- * lines existing in `b` and not `a` are marked as failures ${snippet{
+ * lines existing in `b` and not `a` are marked as failures
+$p
 
+${snippet{
 Order(123).hasSubset(
   OrderLine("BS", 3),
   OrderLine("PIS", 1),
@@ -404,8 +411,10 @@ ${ Order(123).hasSubset(
  * lines existing in `a` but not `b` are left untouched
  * lines existing in `a` and `b` in the same order are marked as success
  * lines existing in `b` and not `a` are marked as failures
- * lines existing in `b` and `a` but out of order are marked as failures ${snippet{
+ * lines existing in `b` and `a` but out of order are marked as failures
+$p
 
+${snippet{
 Order(123).hasSubsequence(
   OrderLine("PS", 2),
   OrderLine("BS", 3),
@@ -428,8 +437,10 @@ ${ Order(123).hasSubsequence(
 
  * lines existing in `a` but not `b` are marked as failures
  * lines existing in `a` and `b` are marked as success
- * lines existing in `b` and not `a` are marked as failures ${snippet{
+ * lines existing in `b` and not `a` are marked as failures
+$p
 
+${snippet{
 Order(123).hasSet(
   OrderLine("BS", 3),
   OrderLine("PIS", 1),
@@ -450,8 +461,9 @@ ${ Order(123).hasSet(
 
  * lines existing in `a` but not `b` are marked as failures
  * lines existing in `a` and `b` in the right order are marked as success
- * lines existing in `b` and not `a` are marked as failures ${snippet{
-
+ * lines existing in `b` and not `a` are marked as failures
+$p
+${snippet{
   Order(123).hasSequence(
     OrderLine("PS", 2),
     OrderLine("BS", 3),
@@ -470,15 +482,15 @@ ${ Order(123).hasSequence(
 
 ### Decision tables
 
-One very popular type of Forms are *decision tables*. A decision table is a Form where, on each row, several values are used for a computation and the result must be equal to other values on the same row. A very simple example of this is a calculator: ${snippet{
+One very popular type of Forms are *decision tables*. A decision table is a Form where, on each row, several values are used for a computation and the result must be equal to other values on the same row.
+A very simple example of this is a calculator: ${snippet{
 
-case class Calculator(form: Form = Form()) {
+case class Calculator(form: Form = Form()):
   def tr(a: Int, b: Int, a_plus_b: Int, a_minus_b: Int) = Calculator {
     def plus = prop(a + b)(a_plus_b)
     def minus = prop(a - b)(a_minus_b)
     form.tr(a, b, plus, minus)
   }
-}
 
 def th(title1: String, titles: String*) = Calculator(Form.th(title1, titles*))
 
@@ -489,6 +501,7 @@ The `Calculator` object defines a `th` method to create the first `Calculator` F
  * takes the column titles (there must be at least one title)
  * creates a header row on the form
  * returns a new Calculator containing this form (note that everything is immutable here)
+$p
 
 The `Calculator` case class embeds a Form and defines a `tr` method which
 
@@ -496,17 +509,19 @@ The `Calculator` case class embeds a Form and defines a `tr` method which
  * creates properties for the computations
  * creates a form with a new row containing those fields and properties
  * returns a new Calculator containing this form
+$p
 
 And you use the `Calculator` Form like this: ${snippet{
 
-class CalculatorSpecification extends Specification with Forms { def is  = s2"""
+class CalculatorSpecification extends Specification with Forms:
+ def is  = s2"""
  A calculator must add and subtract Ints ${
    Calculator.
      th("a", "b", "a + b", "a - b").
      tr(1,   2,   3,       -1     ).
      tr(2,   2,   4,       0      )
- }"""
-}
+ }
+ """
 }}
 
 Here is the output:
@@ -530,8 +545,9 @@ ${ WrongCalculator.
   tr(1, 2, 3, -1).
   tr(2, 2, 4, 2).form.executeForm.toXml.toString }
 
-Note that the Calculator class is not, in itself an Example. But there is an implicit definition automatically transforming `Any { def form: Form }` to `Example` so that an explicit call to `.form` is not necessary in order to include the Form in the specification.
-                                                                                                                   """
+Note that the Calculator class is not, in itself an Example. But there is an implicit definition automatically transforming `Any { def form: Form }` to `Example`
+so that an explicit call to `.form` is not necessary in order to include the Form in the specification.
+"""
 
   import Form.*
 

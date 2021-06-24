@@ -3,7 +3,7 @@ package guide
 
 import org.specs2.execute.{Success, ResultExecution, AsResult}
 
-object IoIntegration extends UserGuidePage { def is = "IoIntegration".title ^ s2"""
+object IoIntegration extends UserGuidePage { def is = "IO Integration".title ^ s2"""
 
 Any IO-like data type which can be executed as a `Future` can be integrated in specifications.
 Here is such a data type:
@@ -18,7 +18,7 @@ You can integrate it to any specification by providing an instance of the `AsExe
 import org.specs2.execute.{AsResult}
 import org.specs2.specification.core.{AsExecution, Execution}
 
-object IO {
+object IO:
 
   // this converts an IO value into a specs2 Execution with the
   // withEnvAsync function which takes a Future
@@ -30,16 +30,14 @@ object IO {
   def successful[T](t: =>T): IO[T] =
     IO(_ => Future.successful(t))
 
-}
 ```
 
 You can then use your IO type in a normal specification:
 ```
-class TestMutableSpec extends mutable.Specification {
+class TestMutableSpec extends mutable.Specification:
   "e1" >> {
     IO.successful(ok)
   }
-}
 ```
 """
 }

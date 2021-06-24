@@ -7,11 +7,13 @@ object ArgumentsReference extends UserGuidePage { def is = "Arguments reference"
 
 Arguments can be passed on the command line, or declared inside a specification, using the `args(name=value)` syntax:${snippet {
 
-class MySpec extends Specification { def is = args(xonly=true) ^ s2"""
+class MySpec extends Specification:
+  def is = args(xonly=true) ^ s2"""
+
   Clever spec title
   And some intro text
-  brilliant expectation $success                                   """
-}
+  brilliant expectation $success
+  """
 }}
 
 They can also be passed as system properties: `-Dspecs2.name=value` (`-Dname=value` also works but you might have collisions with other properties).
@@ -25,6 +27,7 @@ Note that boolean properties like `color` can be defined in several ways:
  - `-Dspecs2.color`     => use colors
  - `-Dspecs2.color=true` => use colors
  - `-Dspecs2.color=false` => don't use colors (`-Dspecs2.nocolor` is an alias)
+$p
 
 This reference guide for arguments is divided in several sections:
 
@@ -34,13 +37,14 @@ This reference guide for arguments is divided in several sections:
  - "storing" arguments to store statistics
  - "reporting" arguments to control the output
  - API for arguments when used in the code
+$p
 
 **Tip!** the `verbose` argument will report any unknown argument passed on the command line
 
 ## Paths
 
  Name                    | Default value                  | Description
- ----------------------- | ------------------------------ | -------------------------------------------------------------------------------------------
+ ----------------------- | ------------------------------ | -----------------------------------------------------------------
  `stats.outdir`          | `target/specs2-reports/stats`  | output directory for run statistics (see $Selection)
  `junit.outdir`          | `target/test-reports/`         | output directory for JUnit XML files (see $JUnitXmlOutput)
  `html.outdir`           | `target/specs2-reports`        | output directory for html files (see $HtmlOutput)
@@ -52,7 +56,7 @@ This reference guide for arguments is divided in several sections:
 ## Selection
 
  Name                    | Default value                  | Description
- ----------------------- | ------------------------------ | -------------------------------------------------------------------------------------------
+ ----------------------- | ------------------------       | -------------------------------------------------------------------------------------------
  `ex`                    | `.*`                           | regular expression specifying the examples to execute. Use `ex .*brilliant.*` on the command line
  `was`                   | `""`                           | select only some previously executed examples based on their status
  `include`               | `""`                           | execute only the fragments tagged with any of the comma-separated list of tags: `t1,t2,...`
@@ -62,7 +66,7 @@ This reference guide for arguments is divided in several sections:
 ## Execution
 
  Name                    | Default value                                    | Description
- ----------------------- | ----------------------------------------         | -------------------------------------------------------------------------------------------
+ ----------------------- | ------------------------------------------       | -------------------------------------------------------------------------------------------
  `plan`                  | `false`                                          | only report the text of the specification without executing anything
  `skipAll`               | `false`                                          | skip all the examples
  `skipAllIf(condition)`  |                                                  | skip all the examples if a given condition is met

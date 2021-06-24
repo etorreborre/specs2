@@ -77,9 +77,7 @@ types and more generally with Ordered types.
   ${ 5 must not(beBetween(3, 5).excludingEnd) }
   ${ 5 must not(beBetween(5, 7).excludingStart) }
   ${ 5 must not(beBetween(5, 5).excludingBounds) }
-  ${ 5 must (`be[`(4, 7)`]`) }
                                                                                                                         """
-
   def e1   = (2 must be_<=(1)) returns "2 is strictly greater than 1"
   def e1_1 = (2 `aka` "two" must be_<=(1)) returns "two '2' is strictly greater than 1"
 

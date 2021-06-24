@@ -87,7 +87,7 @@ object extras:
 
   // extend each example in a Specification with a measured time message
   extension (fs: Fragments)
-    def addExampleTimes: Fragments =
+    def showTimes: Fragments =
       fs.map {
         case f if Fragment.isExample(f) =>
           f.updateResult { r =>
@@ -107,24 +107,7 @@ object extras:
       contain 11 characters $$e1
       start with 'Hello' $$e2
       end with 'world' $$e3
-    """.addExampleTimes
+    """.showTimes
 }}
 
 """}
-
-// class TimedSpecification extends Specification with TimedContext { def is = s2"""
-//  Example 1 $$ok
-//  Example 2 $$ok
-// """
-
-//   // create a new DefaultFragmentFactory where the body of the example uses
-//   // the current example description
-//   override lazy val fragmentFactory = new DefaultFragmentFactory {
-//     override def example[T : AsResult](description: String, t: =>T): Fragment =
-//       super.example(description, context(description)(summon[AsResult[T]].apply(t)))
-//   }
-// }
-// }}
-
-// """
-// }

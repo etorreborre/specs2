@@ -10,7 +10,7 @@ s2"""
     the first example has one line $ok
 
     the second example has
-    more than one line             $ok
+    more than one line $ok
 """
 }}
 

@@ -5,7 +5,7 @@ object AddKeywords extends UserGuidePage { def is = s2"""
 Mutable specifications offer a predefined "vocabulary" to define examples: ${snippet{
 import org.specs2.*
 
-class MySpecification extends mutable.Specification {
+class MySpecification extends mutable.Specification:
 
   "the 'and' function" should {
     "return true when passed true, true" >> {
@@ -16,7 +16,6 @@ class MySpecification extends mutable.Specification {
     }
   }
 
-}
 }}
 
 This will print:
@@ -33,7 +32,7 @@ import org.specs2.specification.core.{Fragment, Fragments}
 import org.specs2.specification.dsl.mutable.*
 import org.specs2.control.ImplicitParameters
 
-trait ToKeyword extends ExtendedBlockDsl {
+trait ToKeyword extends ExtendedBlockDsl:
   extension (description: String)
     infix def to(f: =>Fragment): Fragment =
       (description + " to") >> f
@@ -42,9 +41,8 @@ trait ToKeyword extends ExtendedBlockDsl {
     // the method for different arguments: Fragment and Fragments
     infix def to(fs: =>Fragments)(using p1: ImplicitParameters.ImplicitParam1): Fragments =
       (description + " to") >> fs
-}
 
-class MySpecification extends org.specs2.mutable.Specification with ToKeyword {
+class MySpecification extends org.specs2.mutable.Specification with ToKeyword:
 
     "the 'and' function is used" to {
       "return true when passed true, true" >> {
@@ -54,7 +52,6 @@ class MySpecification extends org.specs2.mutable.Specification with ToKeyword {
         (true && false) === false
       }
     }
-  }
 }}
 
 Now this will print

@@ -49,7 +49,7 @@ Fragments(ff.text("introduction"), ff.example("first example", success), ff.brea
 Then you can use the methods of the `org.specs2.specification.core.Fragments` class to add more fragments or to modify existing ones:
 
  Method                                          | Description
- ----------------------------------------------- | -----------
+ --------------------------                      | --------------------------------
  `append(f: Fragment)`                           | to append a single fragment
  `append(fs: Fragments)`                         | to append another `Fragments` object
  `prepend(...)`                                  | to do the same as above but prepending instead of appending

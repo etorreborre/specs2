@@ -10,20 +10,21 @@ object CreateOnlineSpecifications extends UserGuidePage { def is = s2"""
 
   1. all the Wikipedia pages mentioning the term "BDD" are referencing $specs2
   2. if there is a $specs2 link on the page, the linked page must exist
+$p
 
 More precisely we want to create one example for `1.` and if it succeeds, create as many examples as there are links in `2.`.
 This can be done with the `org.specs2.specification.dsl.Online` trait and the `continueWith` method: ${snippet{
-  // fill in the definitions below
-  object Wikipedia:
-    def getPages(searchTerm: String): Seq[Page] = ???
+// fill in the definitions below
+object Wikipedia:
+  def getPages(searchTerm: String): Seq[Page] = ???
 
-  trait Page:
-    def getLinks: Seq[HtmlLink] = ???
-
-  trait HtmlLink:
-    def contains(name: String): Boolean = ???
-    def getName: String = ???
-    def getLinkedPage: Page = ???
+trait Page:
+  def getLinks: Seq[HtmlLink] = ???
+  
+trait HtmlLink:
+  def contains(name: String): Boolean = ???
+  def getName: String = ???
+  def getLinkedPage: Page = ???
 
 // 8<----
 
