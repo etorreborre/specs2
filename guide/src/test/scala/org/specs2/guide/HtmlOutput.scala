@@ -7,12 +7,15 @@ $specs2 can be used to produce HTML documentation to either:
 
  - report the execution of specifications
  - provide a user guide like this one
+$p
 
-If Markdown notation is used in the specification text and you have [Pandoc](http://johnmacfarlane.net/pandoc) installed on the command line then it will rendered in the final output.
+If Markdown notation is used in the specification text and you have [Pandoc](http://johnmacfarlane.net/pandoc) installed on the command line
+then it will rendered in the final output.
 
 ### Create Html files
 
-When you execute a specification with the `html` command-line argument an HTML report is created in the `target/specs2-reports` directory. It will show the status of examples (success, failure,...) and stack traces if there are any errors.
+When you execute a specification with the `html` command-line argument an HTML report is created in the `target/specs2-reports` directory.
+It will show the status of examples (success, failure,...) and stack traces if there are any errors.
 
 You can use the following arguments to change the HTML generation:
 
@@ -31,7 +34,8 @@ You can use the following arguments to change the HTML generation:
 
 ### Use Pandoc for Markdown
 
-[Markdown](http://commonmark.org) text is supported if [Pandoc](http://johnmacfarlane.net/pandoc) is available on the command line and if the `!pandoc` boolean flag is not set.
+[Markdown](http://commonmark.org) text is supported if [Pandoc](http://johnmacfarlane.net/pandoc) is available on the command line and
+if the `!pandoc` boolean flag is not set.
 
 _NOTE!!!_: the currently supported version of Pandoc is `2.3`.
 
@@ -44,7 +48,8 @@ _NOTE!!!_: the currently supported version of Pandoc is `2.3`.
 
 ### Use a different template
 
-You can change the overall structure of the html page for a specification by providing a different template with the `html.template` variable. When using your custom template the following variables will be replaced:
+You can change the overall structure of the html page for a specification by providing a different template with the `html.template` variable.
+When using your custom template the following variables will be replaced:
 
  Name                    | Description
  ----------------------- | ------------------------------
@@ -52,7 +57,8 @@ You can change the overall structure of the html page for a specification by pro
  `$$issues$$`            | true if there are issues in the specification
  `$$body$$`              | the specification body
 
-You can also pass your own variables by passing a map `name1=value1,name2=value2,...` to the `html.variables` argument. Those variables can then be used in the template:
+You can also pass your own variables by passing a map `name1=value1,name2=value2,...` to the `html.variables` argument.
+Those variables can then be used in the template:
 
  - by enclosing them in `$$`: `$$myVariable$$`
 
@@ -77,21 +83,20 @@ import org.specs2.*
 import specification.core.*
 import runner.SpecificationsFinder.default.*
 
-class index extends Specification { def is =
-
-  examplesLinks("Example specifications")
+class index extends Specification:
+  def is =
+    examplesLinks("Example specifications")
 
   // see the SpecificationsFinder trait for the parameters of the 'specifications' method
   def examplesLinks(t: String) =
     t.title ^
     Fragments.foreach(specifications())(s => link(s) ^ br)
-}
 }}
 
 The specification above creates an index.html file in the `target/specs2-reports` directory. The specifications method creates specifications using the following parameters:
 
  Name                    | Default                                       | Description
- ----------------------- | --------------------------------------------  | ----------------
+ ------                  | -------                                       | ---------------------
  `glob`                  | `**/*.scala`                                  | glob pattern to filter specification files
  `pattern`               | `.*Spec`                                      | pattern to use when trying to retrieve the specification names from the source files
  `filter`                | `(name: String) => true`                      | function to keep only some specifications depending on their name
@@ -100,8 +105,7 @@ The specification above creates an index.html file in the `target/specs2-reports
  `classLoader`           | `Thread.currentThread.getContextClassLoader`  | classloader used to load the specification classes
  `filePathReader`        | `org.specs2.io.FileSystem`                    | object used to read source files
 
-
-"""
+ """
 }
 
 class HtmlExampleSpec extends Specification { def is = s2"""

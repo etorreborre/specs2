@@ -7,14 +7,13 @@ object SpecificationTemplate extends UserGuidePage { def is = s2"""
 
 On the ${"Contexts" ~/ Contexts} page we saw that there is a way to define an action which will be executed before all examples with the `BeforeSpec` trait.
 You actually might want to create your own trait extending `BeforeSpec` in order to reuse this action in more than one specification:${snippet{
-trait DatabaseSetup extends BeforeSpec {
+trait DatabaseSetup extends BeforeSpec:
   def beforeSpec = step(println("prepare database"))
-}
 
-class DatabaseSpecification1 extends Specification with DatabaseSetup { def is = s2"""
+class DatabaseSpecification1 extends Specification with DatabaseSetup:
+  def is = s2"""
   // do something with the database
- """
-}
+  """
 }}
 
 How does this work? The `BeforeSpec` trait overrides a method called `map` in the `SpecificationStructure` trait (a parent of `Specification`)

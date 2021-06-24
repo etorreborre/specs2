@@ -20,31 +20,30 @@ When we want to create a list of examples we need to return a `Fragments` object
 }}
 
 Or, a bit fancier with `foldMap`:${snippet{
-  // Fragments has a Monoid instance so you can use the foldMap method
-  (1 to 3).toList.foldMap(i => Fragments("example "+i ! { i must ===(i) }))
+// Fragments has a Monoid instance so you can use the foldMap method
+(1 to 3).toList.foldMap(i => Fragments("example "+i ! { i must ===(i) }))
 }}
 
 Because this is a recurring pattern there are two methods encapsulating it:${snippet{
-  // when the function only returns a Fragment
-  Fragment.foreach(1 to 3)(i => "example "+i ! { i must ===(i) }): Fragments
+// when the function only returns a Fragment
+Fragment.foreach(1 to 3)(i => "example "+i ! { i must ===(i) }): Fragments
 
-  // when the function returns a Fragments object
-  Fragments.foreach(1 to 3) { i =>
-    "examples for "+i ^ br^
-    "1 + "+i ! { (1 + i) must ===((i + 1)) } ^ br^
-    "2 + "+i ! { (2 + i) must ===((i + 2)) }
-  }: Fragments
+// when the function returns a Fragments object
+Fragments.foreach(1 to 3) { i =>
+  "examples for "+i ^ br^
+  "1 + "+i ! { (1 + i) must ===((i + 1)) } ^ br^
+  "2 + "+i ! { (2 + i) must ===((i + 2)) }
+}: Fragments
 }}
 
 Now you can create a list of examples inside a "should" block in a mutable specification:${snippet{
 
-class MySpec extends mutable.Specification {
+class MySpec extends mutable.Specification:
   "this block should have lots of examples" >> {
     Fragment.foreach(1 to 1000) { i =>
       "example "+i ! { i must ===(i) }
     }
   }
-}
 }}
 
 ### A list of expectations
@@ -52,9 +51,10 @@ class MySpec extends mutable.Specification {
 Similarly, when you want to create a list of expectations inside an example, you should use a variant of `foreach` and `forall` methods:
 
  - If you need "thrown expectations", use the `foreach` and `forall` methods of `mutable.Specification`:
+$p
 
 ${snippet{
-class MySpec extends mutable.Specification {
+class MySpec extends mutable.Specification:
   "this collects results of all expectations and throws an exception" >> {
     foreach(1 to 10) { i =>
       i === 2
@@ -68,13 +68,12 @@ class MySpec extends mutable.Specification {
       i === 2
     } // Stops after the first failed expectation. Throws an exception.
   }
-}
 }}
 
  - If you need "functional expectations" that return a `Result`, use `Result.foreach` or `Result.forall`:
 
 ${snippet{
-class MySpec extends mutable.Specification {
+class MySpec extends mutable.Specification:
   "this collects results of all expectations and returns a Result" >> {
     Result.forall(1 to 10) { i =>
       i === 2
@@ -85,7 +84,6 @@ class MySpec extends mutable.Specification {
       i === 2
     }
   }
-}
 }}
 
 $AndIfYouWantToKnowMore

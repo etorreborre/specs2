@@ -7,6 +7,7 @@ object RandomExecution extends UserGuidePage { def is = s2"""
   - fully concurrent
   - concurrent with steps
   - fully sequential
+$p
 
 Executing the specification concurrently in particular can be a good way to test the stability of the system in presence of random commands. However it is sometimes not possible to overlap examples executions because that could break the external state.
 
@@ -18,15 +19,16 @@ one after the other. This randomization is only being done for examples in betwe
 so if you have steps inside the specification guaranteeing some kind of checkpoints during the execution, they will be preserved.
 
 Let's see this on an example:${snippet{
-class RandomSequentialSpec extends Specification { def is = sequentialRandom ^ s2"""
- example1 $e1
- example2 $e2
- example3 $e3
- ${step(ok("here"))}
- example4 $e4
- example5 $e5
- example6 $e6
-"""
+class RandomSequentialSpec extends Specification:
+  def is = sequentialRandom ^ s2"""
+    example1 $e1
+    example2 $e2
+    example3 $e3
+    ${step(ok("here"))}
+    example4 $e4
+    example5 $e5
+    example6 $e6
+  """
 
   def e1 = { "e1".pp; ok }
   def e2 = { "e2".pp; ok }
@@ -35,7 +37,6 @@ class RandomSequentialSpec extends Specification { def is = sequentialRandom ^ s
   def e4 = { "e4".pp; ok }
   def e5 = { "e5".pp; ok }
   def e6 = { "e6".pp; ok }
-}
 }}
 
 With such a specification you might see in the console:

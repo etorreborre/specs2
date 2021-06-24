@@ -39,7 +39,8 @@ s2"addition and multiplication are related ${ prop { (a: Int) => (a > 0) ==> (a 
 
 Note that if you pass functions using `Result`s you will get better failure messages than just using boolean expressions.
 
-By default the properties created with `prop` will be shrinking counter-examples. But as you will see below there lots of different ways to parameterize ScalaCheck properties in specs2, including declaring if shrinking must be done.
+By default the properties created with `prop` will be shrinking counter-examples.
+But as you will see below there lots of different ways to parameterize ScalaCheck properties in $specs2, including declaring if shrinking must be done.
 
 ### Prop and Properties
 
@@ -101,7 +102,7 @@ def ex1 = prop((s: String) => s must (contain("a") or contain("b"))).setGen(abSt
 
 ### With Shrink / Pretty
 
-Specific Shrink and Pretty instances can also be specified at the property level: ${snippet{
+Specific `Shrink` and `Pretty` instances can also be specified at the property level: ${snippet{
 val shrinkString: Shrink[String] = ???
 
 // set a specific shrink instance on the second parameter
@@ -183,16 +184,16 @@ Note that `minTestsOk` in `specs2` corresponds to the `minSuccessfulTests` param
 #### Property level
 
 It is also possible to specifically set the execution parameters on a given property: ${snippet{
-class ScalaCheckSpec extends org.specs2.mutable.Specification with ScalaCheck {
+class ScalaCheckSpec extends org.specs2.mutable.Specification with ScalaCheck:
   "this is a specific property" >> prop { (a: Int, b: Int) =>
     (a + b) must ===((b + a))
-  }.set(minTestsOk = 200, workers = 3) // use "display" instead of "set" for additional console printing
-}
+  }.
+  set(minTestsOk = 200, workers = 3) // use "display" instead of "set" for additional console printing
 }}
 
 #### Command-line
 
-Some properties can be overridden from the command line
+Some properties can be overridden from the command line:
 
  Parameter         | Command line
  ----------------- | ------------
@@ -206,7 +207,9 @@ Some properties can be overridden from the command line
 
 #### Expectations
 
-By default, a successful example using a `Prop` will be reported as 1 success and 100 (or `minTestsOk`) expectations. If you don't want the number of expectations to appear in the specification statistics just mix-in your specification the `org.specs2.scalacheck.OneExpectationPerProp` trait.
+By default, a successful example using a `Prop` will be reported as 1 success and 100 (or `minTestsOk`) expectations.
+ If you don't want the number of expectations to appear in the specification statistics just mix-in your specification
+ the `org.specs2.scalacheck.OneExpectationPerProp` trait.
 
 ### Collect values
 
@@ -230,9 +233,11 @@ Note that, by default, nothing will be printed on screen unless you set the repo
 
 ### Equivalence
 
-The `==>` operator in ScalaCheck helps you specify under which conditions a given property is applicable. However it only works one way, you cannot declare that a property must be true "if and only if" some conditions are respected.
+The `==>` operator in ScalaCheck helps you specify under which conditions a given property is applicable.
+ However it only works one way, you cannot declare that a property must be true "if and only if" some conditions are respected.
 
-With $specs2 and the `org.specs2.execute.ResultImplicits` trait you can use the `<==>` operator to declare the equivalence of 2 `Results`, whether they are properties or booleans or `MatchResults`. So you can write: ${snippet{
+With $specs2 and the `org.specs2.execute.ResultImplicits` trait you can use the `<==>` operator to declare the equivalence of 2 `Results`,
+whether they are properties or booleans or `MatchResults`. So you can write: ${snippet{
 // 8<---
   def isYoung(i: Int): Boolean = true
 // 8<---

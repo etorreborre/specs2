@@ -23,17 +23,19 @@ sbt> testOnly *MySpecification* -- ex "contains hello" sequential
 
 Tags can be used in a Specification to include or exclude some examples or a complete section of fragments from the
 execution. Let's have a look at one example: ${snippet{
-class TaggedSpecification extends Specification { def is = s2"""
+class TaggedSpecification extends Specification:
+ def is = s2"""
+
  this is some introductory text
   and the first group of examples
-  example 1 $success                         ${tag("feature1", "unit")}
-  example 2 $success                         ${tag("integration")}
+  example 1 $success ${tag("feature1", "unit")}
+  example 2 $success ${tag("integration")}
 
-  and the second group of examples           ${section("checkin")}
+  and the second group of examples ${section("checkin")}
   example 3 $success
-  example 4 $success                         ${section("checkin")}
-                                             """
-  }
+  example 4 $success ${section("checkin")}
+"""
+
 }}
 
 In that specification we are defining several tags and sections:
@@ -56,7 +58,7 @@ A _unit_ specification will accept the same `tag` and `section` methods but the 
 
 import org.specs2.mutable.*
 
-class TaggedSpecification extends Specification {
+class TaggedSpecification extends Specification:
   "this is some introductory text" >> {
     "and the first group of examples" >> {
       tag("feature 1", "unit")
@@ -75,7 +77,6 @@ class TaggedSpecification extends Specification {
     "example 5" in success tag "integration"
     "example 6" in success
   } section "slow"
-}
 }}
 
 For that specification above, tags can be applied to fragments following them:
@@ -100,7 +101,9 @@ If you call `addSections` from inside the specification, each "block" will be su
 name as the block text:${snippet{
 import org.specs2.mutable.*
 
-class SectionsSpecification extends Specification { addSections()
+class SectionsSpecification extends Specification:
+  addSections()
+
   "first section" >> {
     "and the first group of examples" >> {
       "example 1" in success
@@ -116,25 +119,25 @@ class SectionsSpecification extends Specification { addSections()
     "example 5" in success
     "example 6" in success
   }
-}
 }}
 
 If you want you can execute only example 3 and 4 by running `sbt> testOnly *SectionsSpecification -- include "second section"`.
 
 #### `Always` tag
 
-Some specifications need to have `Steps` which will always be included whatever tags are specified on the command line. This is the case when defining a ${""""template" specification""" ~/ SpecificationTemplate} with setup/teardown steps: ${snippet{
-trait DatabaseSpec extends Specification {
+Some specifications need to have `Steps` which will always be included whatever tags are specified on the command line.
+This is the case when defining a ${""""template" specification""" ~/ SpecificationTemplate} with setup/teardown steps: ${snippet{
+trait DatabaseSpec extends Specification:
   override def map(fs: =>Fragments) =
     step(success("startDb")) ^ tag(AlwaysTag) ^
     fs ^
     step(success("cleanDb")) ^ tag(AlwaysTag)
-}
 }}
 
 ### Select failed examples
 
-Another frequent mode of selection is the selection based on previous execution. Generally we want to re-execute only what was broken before. For this, using the `was` argument on the command-line:
+Another frequent mode of selection is the selection based on previous execution.
+Generally we want to re-execute only what was broken before. For this, using the `was` argument on the command-line:
 ```
 sbt> testOnly *MyFailedSpecification* -- was x
 ```

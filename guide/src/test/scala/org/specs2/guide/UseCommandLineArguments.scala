@@ -18,23 +18,27 @@ Let's see first how to use the command line to modify the outcome of just one ex
 
 import org.specs2.main.*
 
-class SpecificationWithArgs(args: CommandLine) extends Specification { def is = s2"""
+class SpecificationWithArgs(args: CommandLine) extends Specification:
+ def is = s2"""
+
  This example is controlled from the command line $e1
-"""
+ """
 
   def e1 =
-    if (args.isSet("isOk")) 1 must ===(1)
-    else                    1 must ===(2)
-}
+    if (args.isSet("isOk"))
+      1 must ===(1)
+    else
+      1 must ===(2)
 }}
 
 With a mutable specification the code is similar:${snippet{
-class SpecificationWithArgs(args: CommandLine) extends mutable.Spec {
+class SpecificationWithArgs(args: CommandLine) extends mutable.Spec:
  "This example is controlled from the command line" >> {
-   if (args.isSet("isOk")) 1 must ===(1)
-   else                    1 must ===(2)
+   if (args.isSet("isOk"))
+     1 must ===(1)
+   else
+     1 must ===(2)
  }
-}
 }}
 
 Then you can set the argument, or not in sbt with
@@ -53,6 +57,7 @@ Any specification with a 1-parameter constructor can be instantiated provided th
 
  - the parameter has itself a constructor with no parameters or a 1-parameter constructor which we can instantiate
  - the parameter is of type `Env`, `ExecutionEnv`, `Arguments`, `CommandLine`
+$p
 
 In particular this means that you can define a `Specification` with a constructor using a `CommandLine` argument and when
 the specification will be created it will be passed the command line arguments: ${snippet{
@@ -62,15 +67,15 @@ case class DbClient(env: String):
 trait DbSpec extends Specification:
   lazy val client: DbClient = ???
 // 8<---
-case class MyDbSpec(commandLine: CommandLine) extends Specification with DbSpec { def is = s2"""
+case class MyDbSpec(commandLine: CommandLine) extends Specification with DbSpec:
+  def is = s2"""
 
   create a user $createUser
 
-"""
+  """
   // the database client is created from the command line
   // arguments and can be used in the examples
   def createUser = client.createUser("xxx") must beSome
-}
 }}
 ```
 
@@ -78,7 +83,7 @@ case class MyDbSpec(commandLine: CommandLine) extends Specification with DbSpec 
 // this trait can be controlled from command line arguments
 // and it takes care of the setup of the database before and after all
 // the examples
-trait DbSpec extends Specification with BeforeAfterSpec {
+trait DbSpec extends Specification with BeforeAfterSpec:
   def commandLine: CommandLine
 
   def beforeSpec = step(println("start db here"))
@@ -88,7 +93,6 @@ trait DbSpec extends Specification with BeforeAfterSpec {
     if (commandLine.contains("prod")) DbClient("production")
     else                              DbClient("test")
   }
-}
 
 case class DbClient(env: String):
   def createUser(name: String): Option[String] = ???

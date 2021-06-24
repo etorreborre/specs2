@@ -6,8 +6,9 @@ The $specs2 ${see(QuickStart)} guide introduces matchers to create expectations 
 
 ### Boolean results
 
-This is the simplest kind of result you can define for an expectation but also the least expressive! It can be useful for simple expectations but a failure will give few information on what went wrong: ${snippet{
-new mutable.Specification {
+This is the simplest kind of result you can define for an expectation but also the least expressive!
+It can be useful for simple expectations but a failure will give few information on what went wrong: ${snippet{
+new mutable.Specification:
   "this example is ok" >> {
     1 == 1
   }
@@ -15,7 +16,6 @@ new mutable.Specification {
     // fails with 'the value is false'...
     1 == 2
   }
-}
 }}
 
 Not only that but in unit specification no exception will be thrown so you need to `&&` and `||` operators to connect your assertions if they span several lines.
@@ -29,6 +29,7 @@ Some other results will give you an additional piece of meaning:
   * `anError` when an exception occurs
   * `skipped` when you want to skip the example. You can add a more specific message with `skipped("because it just doesn't work in these conditions")`
   * `pending` usually means "not implemented yet", but you can add a more specific message with `pending("because I don't have time for this")`
+$p
 
 Two additional results are also available to track the progress of features:
 
@@ -41,6 +42,7 @@ If you already have some code for your example, adding `skipped` at the end to s
 
  - there is a possibility that the code throws an exception
  - the code will be executed which will waste resources
+$p
 
 What you want in that case in to skip the whole block:${snippet{
   s2" this example *must* be skipped $e1"
@@ -70,6 +72,6 @@ When combining matchers you might be expected to return a `Result`. There are pr
 
  * `ok` or `ok(message)` for a Success
  * `ko` or `ko(message)` for a Failure
-
+$p
 """
 }
