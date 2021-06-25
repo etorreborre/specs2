@@ -86,7 +86,7 @@ Unknown arguments
 
   def values1 = Arguments("xonly").xonly must beTrue
   def values2 = Arguments("!pandoc").commandLine.boolOr("pandoc", true) must beFalse
-  def values3 = Arguments("ex", "Hello").ex must ===(".*Hello.*")
+  def values3 = Arguments("ex", "Hello").ex must ===("Hello")
 
   def values4 = Arguments("").xonly must beFalse
   def values5 = Arguments("").ex must ===(".*")
@@ -95,7 +95,7 @@ Unknown arguments
   def values7 = Arguments("colorClass", classOf[MappedColors].getName).colors must ===(MappedColors())
   def values8 = Arguments("exclude", "spec").ex must ===(Arguments().ex)
 
-  def values9 = Arguments("ex", "this test").select.ex must ===(".*this test.*")
+  def values9 = Arguments("ex", "this test").select.ex must ===("this test")
 
   def values10 =
     List("nocolor", "color", "nocolor true", "nocolor false", "color true", "color false").map(a => Arguments.split(a).color) must ===(
@@ -111,8 +111,8 @@ Unknown arguments
   def properties1 = Arguments.extract(using   Seq(""), properties("plan" -> "")).plan must ===(true)
   def properties2 = Arguments.extract(using   Seq(""), properties("plan" -> "true")).plan must ===(true)
   def properties3 = Arguments.extract(using   Seq(""), properties("plan" -> "false")).plan must ===(false)
-  def properties4 = Arguments.extract(using   Seq(""), properties("ex"   -> "spec")).ex must ===(".*spec.*")
-  def properties5 = Arguments.extract(using   Seq(""), properties("specs2.ex" -> "spec")).ex must ===(".*spec.*")
+  def properties4 = Arguments.extract(using   Seq(""), properties("ex"   -> "spec")).ex must ===("spec")
+  def properties5 = Arguments.extract(using   Seq(""), properties("specs2.ex" -> "spec")).ex must ===("spec")
 
   def properties6 =
     List(("nocolor", ""), ("color", ""), ("nocolor", "true"), ("nocolor", "false"), ("color", "true"), ("color", "false")).map { case (k, v) =>
