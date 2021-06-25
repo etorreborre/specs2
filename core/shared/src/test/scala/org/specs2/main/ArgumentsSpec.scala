@@ -88,7 +88,7 @@ Unknown arguments
   "values" - new group {
     eg := Arguments("xonly").xonly must beTrue
     eg := Arguments("!pandoc").commandLine.boolOr("pandoc", true) must beFalse
-    eg := Arguments("ex", "Hello").ex must_== ".*Hello.*"
+    eg := Arguments("ex", "Hello").ex must_== "Hello"
 
     eg := Arguments("").xonly must beFalse
     eg := Arguments("").ex must_== ".*"
@@ -97,7 +97,7 @@ Unknown arguments
     eg := Arguments("colorClass", classOf[MappedColors].getName).colors must_== MappedColors()
     eg := Arguments("exclude", "spec").ex must_== Arguments().ex
 
-    eg := Arguments("ex", "this test").select.ex must_== ".*this test.*"
+    eg := Arguments("ex", "this test").select.ex must_== "this test"
     eg := {
       List("nocolor", "color", "nocolor true", "nocolor false", "color true", "color false").map(a => Arguments.split(a).color) must_==
       List(false, true, false, true, true, false)
@@ -118,8 +118,8 @@ Unknown arguments
     eg := Arguments.extract(Seq(""), properties("plan" -> "")).plan must_== true
     eg := Arguments.extract(Seq(""), properties("plan" -> "true")).plan must_== true
     eg := Arguments.extract(Seq(""), properties("plan" -> "false")).plan must_== false
-    eg := Arguments.extract(Seq(""), properties("ex"   -> "spec")).ex must_== ".*spec.*"
-    eg := Arguments.extract(Seq(""), properties("specs2.ex" -> "spec")).ex must_== ".*spec.*"
+    eg := Arguments.extract(Seq(""), properties("ex"   -> "spec")).ex must_== "spec"
+    eg := Arguments.extract(Seq(""), properties("specs2.ex" -> "spec")).ex must_== "spec"
 
     eg := {
       List(("nocolor", ""), ("color", ""), ("nocolor", "true"), ("nocolor", "false"), ("color", "true"), ("color", "false")).map { case (k, v) =>
