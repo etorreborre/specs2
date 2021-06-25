@@ -18,7 +18,7 @@ trait Regexes:
      * if the string s is enclosed with characters, they can be excluded before the quotation is done
      */
     infix def matchesSafely(p: String, enclosing: String = ""): Boolean =
-      val pattern = tryOrElse(Pattern.compile(p))(Pattern.compile(enclosing+Pattern.quote(p.trimEnclosing(enclosing))+enclosing))
+      val pattern = tryOrElse(Pattern.compile(enclosing+p+enclosing))(Pattern.compile(enclosing+Pattern.quote(p.trimEnclosing(enclosing))+enclosing))
       pattern.matcher(s).matches
 
     /** @return a regular expression String matching 's' inside another string, possibly multi-string */

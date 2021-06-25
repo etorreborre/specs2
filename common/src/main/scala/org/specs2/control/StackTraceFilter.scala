@@ -28,7 +28,7 @@ case class IncludeExcludeStackTraceFilter(include: Seq[String], exclude: Seq[Str
     val include = outer.include
     val exclude = outer.exclude
 
-    val keepFunction = (st: StackTraceElement, patterns: Seq[String]) => patterns.exists(p => st.toString `matchesSafely` (".*"+p+".*"))
+    val keepFunction = (st: StackTraceElement, patterns: Seq[String]) => patterns.exists(p => st.toString.matchesSafely(p, enclosing = ".*"))
   }
   /** add include patterns */
   def includeAlso(patterns: String*) = copy(include = this.include ++ patterns)

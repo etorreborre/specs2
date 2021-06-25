@@ -43,9 +43,9 @@ case class DefaultSelector(commandLineArguments: Arguments) extends Selector:
     val regex = arguments.ex
     if regex !=".*" then
       p.flatMap {
-        case f@Fragment(Text(t), e, _) if e.isExecutable && (t matchesSafely regex) =>
+        case f@Fragment(Text(t), e, _) if e.isExecutable && t.matchesSafely(regex, enclosing = ".*") =>
           emitSeq(Seq(newLine, f))
-        case f@Fragment(Code(t), e, _) if e.isExecutable && (t matchesSafely regex) =>
+        case f@Fragment(Code(t), e, _) if e.isExecutable && t.matchesSafely(regex, enclosing = ".*") =>
           emitSeq(Seq(newLine, f))
         case other =>
           emitSeq(Seq())

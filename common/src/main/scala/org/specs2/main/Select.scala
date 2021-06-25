@@ -44,7 +44,7 @@ case class Select(
 object Select extends Extract:
   def extract(using arguments: Seq[String], systemProperties: SystemProperties): Select =
     new Select (
-      _ex            = value("ex", ".*"+(_:String)+".*"),
+      _ex            = value("ex"),
       _include       = value("include"),
       _exclude       = value("exclude"),
       _was           = value("was"),
@@ -57,4 +57,3 @@ object Select extends Extract:
         ValuedArgument("exclude"),
         ValuedArgument("was"),
         ValuedArgument("selector"))
-

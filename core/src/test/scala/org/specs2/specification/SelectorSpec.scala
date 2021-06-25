@@ -15,6 +15,7 @@ Selection by name
 =================
  by example name $byName1
  when the name is some code $byName2
+ when the ex option is not a regular expression $byName3
 
 Selection by tag
 ================
@@ -50,15 +51,19 @@ Support Functions
     val executed = fragments |> DefaultSelector(arguments).select(arguments)
     // a newline must be added before the example in order to display one
     // example per line since we don't display text fragments
-    executed.fragmentsList(ee).map(_.fragmentType) === List("Br", "Example")
+    executed.fragmentsList(ee).map(_.description.show) === List("\n", "e1")
 
   def byName2 =
     val fragments = Fragments(code("e1"), code("e2"))
     val arguments = Arguments.split("ex e1")
     val executed = fragments |> DefaultSelector(arguments).select(arguments)
-    // a newline must be added before the example in order to display one
-    // example per line since we don't display text fragments
-    executed.fragmentsList(ee).map(_.fragmentType) === List("Br", "Example")
+    executed.fragmentsList(ee).map(_.description.show) === List("\n", "`e1`")
+
+  def byName3 =
+    val fragments = Fragments(ex("e(1)"), ex("e(2)"))
+    val arguments = Arguments.split("ex (1")
+    val executed = fragments |> DefaultSelector(arguments).select(arguments)
+    executed.fragmentsList(ee).map(_.description.show) === List("\n", "e(1)")
 
   def byTag1 =
     val fragments = Fragments(ff.tag("x"), ex("e1"), ex("e2"))
