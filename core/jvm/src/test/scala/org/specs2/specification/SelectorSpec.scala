@@ -16,6 +16,7 @@ class SelectorSpec(ee: ExecutionEnv) extends script.Specification with Groups wi
  =================
   + by example name
   + when the name is some code
+  + when the ex option is not a regular expression
 
  Selection by tag
  ================
@@ -33,7 +34,6 @@ class SelectorSpec(ee: ExecutionEnv) extends script.Specification with Groups wi
  Selection by previous
  =====================
   + previous
-
 
  Support Functions
  =================
@@ -55,6 +55,13 @@ class SelectorSpec(ee: ExecutionEnv) extends script.Specification with Groups wi
     eg := {
       val fragments = Fragments(code("e1"), code("e2"))
       val env = Env(arguments = Arguments.split("ex e1"))
+      val executed = fragments |> DefaultSelector.select(env)
+
+      executed.fragmentsList(ee) must haveSize(1)
+    }
+    eg := {
+      val fragments = Fragments(code("e(1)"), code("e2"))
+      val env = Env(arguments = Arguments.split("ex (1"))
       val executed = fragments |> DefaultSelector.select(env)
 
       executed.fragmentsList(ee) must haveSize(1)

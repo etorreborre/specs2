@@ -22,7 +22,7 @@ trait Selector {
 
 /**
  * Default selection for specification fragments:
- * 
+ *
  *  - filter based on the name
  *  - filter based on the tags
  *  - filter based on previous execution
@@ -36,11 +36,11 @@ trait DefaultSelector extends Selector {
   /** filter fragments by name */
   def filterByName(env: Env): AsyncTransducer[Fragment, Fragment] = {
     val regex = env.arguments.ex
-    if (regex !=".*")
+    if (regex != ".*")
       transducers.filter {
-        case Fragment(Text(t),e,_) if e.isExecutable => t matchesSafely regex
-        case Fragment(Code(t),e,_) if e.isExecutable => t matchesSafely regex
-        case other                                   => true
+        case Fragment(Text(t),e,_) if e.isExecutable => t.matchesSafely(regex, enclosing = ".*")
+        case Fragment(Code(t),e,_) if e.isExecutable => t.matchesSafely(regex, enclosing = ".*")
+        case other => true
       }
     else transducers.id
   }

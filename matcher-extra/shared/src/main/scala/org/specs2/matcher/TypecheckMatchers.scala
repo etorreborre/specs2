@@ -44,7 +44,7 @@ class TypecheckMatcher extends Matcher[Typechecked] {
 case class FailTypecheckMatcher(expected: String) extends Matcher[Typechecked] {
   def apply[S <: Typechecked](actual: Expectable[S]): MatchResult[S] = {
     result(!actual.value.isSuccess && resultMessage(actual.value.result)
-      .map(_.removeAll("\n").removeAll("\r")).exists(_ matchesSafely ".*"+expected+".*"),
+      .map(_.removeAll("\n").removeAll("\r")).exists(_.matchesSafely(expected, enclosing = ".*")),
       s"no compilation error",
       message(actual.value.result, expected), actual)
   }
@@ -68,4 +68,3 @@ case class FailTypecheckMatcher(expected: String) extends Matcher[Typechecked] {
     }
 
 }
-

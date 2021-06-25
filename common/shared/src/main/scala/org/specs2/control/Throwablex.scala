@@ -45,7 +45,7 @@ trait Throwablex {
     }
 
     /** match a stacktrace element with a pattern */
-    private def patternMatches(p: String) = (_:StackTraceElement).toString matchesSafely (".*"+p+".*")
+    private def patternMatches(p: String) = (_:StackTraceElement).toString.matchesSafely(p, enclosing = ".*")
     /**
      * Select all traces of this exception not matching a given pattern
      */
