@@ -250,7 +250,7 @@ lazy val releaseSettings: Seq[Setting[_]] = Seq(
       url("https://github.com/etorreborre")
     )
   ),
-  ThisBuild / git.gitTagToVersionNumber := { tag: String => if(tag matches SPECS2+".*") Some(tag) else None },
+  ThisBuild / git.gitTagToVersionNumber := { tag: String => if (tag matches SPECS2+".*") Some(tag.replace(SPECS2, "")) else None },
   ThisBuild / git.useGitDescribe := true,
   ThisBuild / dynverTagPrefix := SPECS2)
 
