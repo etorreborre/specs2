@@ -12,7 +12,7 @@ on:
     branches: ['**']
   push:
     branches: ['**']
-    tags: [SPECS2-*]
+    tags: [SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*, SPECS2-*]
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
