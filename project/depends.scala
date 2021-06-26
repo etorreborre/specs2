@@ -4,33 +4,26 @@ import Keys._
 
 object depends {
 
-  lazy val scalaCheckVersion = "1.15.3"
+  // used in specs2-core for the sbt runner
+  val sbt = "org.scala-sbt" % "test-interface" % "1.0"
 
-  lazy val reflect =
-    libraryDependencies += (scalaOrganization.value % "scala-reflect" % scalaVersion.value)
+  // used in specs2-scalacheck
+  val scalacheck = "org.scalacheck" %% "scalacheck" % "1.15.3"
 
-  lazy val jvmTest =
-    libraryDependencies ++= Seq(
-      "org.scala-sbt" % "test-interface" % "1.0"
-      )
+  // used in specs2-matcher-extra
+  val scalaParser = "org.scala-lang.modules" %% "scala-parser-combinators" % "2.0.0"
 
-  lazy val scalaParser =
-    libraryDependencies += ("org.scala-lang.modules" %% "scala-parser-combinators" % "2.0.0")
+  // used in specs2-xml, and transitively by specs2-junit, specs2-matcher-extra, specs2-markdown
+  val scalaXml = "org.scala-lang.modules" %% "scala-xml" % "2.0.0"
 
-  lazy val scalaParserNative =
-      scalaParser
+  // used in specs2-junit
+  val junit = "org.junit.vintage" % "junit-vintage-engine" % "5.3.1"
 
-  lazy val scalaXml =
-    libraryDependencies += ("org.scala-lang.modules" %% "scala-xml" % "2.0.0")
+  // used in specs2-markdown for the markdown parser
+  val flexmark = "com.vladsch.flexmark" % "flexmark-all" % "0.62.2"
 
-  lazy val scalacheck =
-    "org.scalacheck" %% "scalacheck" % scalaCheckVersion
-
-  // java dependencies
-  lazy val junit = "junit" % "junit" % "4.13.2"
-  lazy val flexmark = "com.vladsch.flexmark" % "flexmark-all" % "0.62.2"
-
-  lazy val tagsoup = "org.ccil.cowan.tagsoup" % "tagsoup" % "1.2.1"
+  // used in specs2-html
+  val tagsoup = "org.ccil.cowan.tagsoup" % "tagsoup" % "1.2.1"
 
   def scalaMinorVersionAtLeast(scalaVersion: String, n: Int): Boolean =
     CrossVersion.partialVersion(scalaVersion) match {
@@ -39,5 +32,4 @@ object depends {
       case _ =>
         false
     }
-
 }

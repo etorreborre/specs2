@@ -56,11 +56,10 @@ lazy val commonJsSettings = Seq(
 
 lazy val common = project.in(file("common")).
   settings(
-    libraryDependencies += depends.scalacheck % Test,
+    libraryDependencies ++= Seq(depends.sbt,depends.scalacheck % Test),
     commonSettings,
     name := "specs2-common"
   ).
-  settings(depends.jvmTest).
   dependsOn(fp)
 
 lazy val core = project.in(file("core")).
@@ -69,14 +68,12 @@ lazy val core = project.in(file("core")).
     name := "specs2-core",
     libraryDependencies += depends.junit % Test
   ).
-  settings(depends.jvmTest).
   dependsOn(matcher, common, common % "test->test")
 
 lazy val examples = project.in(file("examples")).
   settings(
     commonSettings,
     name := "specs2-examples").
-  settings(depends.jvmTest).
   dependsOn(common, matcher, core, matcherExtra, junit, scalacheck, form, html, markdown)
 
 lazy val fp = project.in(file("fp")).
@@ -88,7 +85,6 @@ lazy val form = project.
   settings(
     commonSettings,
     name := "specs2-form").
-  settings(depends.jvmTest).
   dependsOn(core, markdown, matcherExtra, scalacheck % "test->test")
 
 lazy val guide = project.in(file("guide")).
@@ -106,7 +102,6 @@ lazy val html = project.in(file("html")).
     libraryDependencies += depends.tagsoup,
     commonSettings,
     name := "specs2-html").
-  settings(depends.jvmTest).
   dependsOn(form, matcherExtra % Test, scalacheck % Test)
 
 lazy val junit = project.in(file("junit")).
@@ -115,7 +110,6 @@ lazy val junit = project.in(file("junit")).
       depends.junit),
     commonSettings,
     name := "specs2-junit").
-  settings(depends.jvmTest).
   dependsOn(core, matcherExtra % Test, xml)
 
 lazy val markdown = project.
@@ -124,7 +118,6 @@ lazy val markdown = project.
     libraryDependencies += depends.flexmark,
     commonSettings,
     name := "specs2-markdown").
-  settings(depends.jvmTest).
   dependsOn(common, core % "compile->test", xml)
 
 lazy val matcher = project.in(file("matcher")).
@@ -136,9 +129,8 @@ lazy val matcher = project.in(file("matcher")).
 lazy val matcherExtra = project.in(file("matcher-extra")).
   settings(
     commonSettings,
-    depends.scalaParser,
+    libraryDependencies += depends.scalaParser,
     name := "specs2-matcher-extra").
-  settings(depends.jvmTest).
   dependsOn(matcher, core, core % "test->test", xml)
 
 lazy val pom = Project(id = "pom", base = file("pom")).
@@ -153,14 +145,12 @@ lazy val scalacheck = project.
     name := "specs2-scalacheck",
     libraryDependencies += depends.scalacheck,
   ).
-  settings(depends.jvmTest).
   dependsOn(core)
 
 lazy val tests = Project(id = "tests", base = file("tests")).
   settings(
     commonSettings,
     name := "specs2-tests",
-    depends.jvmTest
   ).dependsOn(
   core      % "compile->compile;test->test",
   junit     % "test->test",
@@ -170,11 +160,10 @@ lazy val tests = Project(id = "tests", base = file("tests")).
 
 lazy val xml = project.in(file("xml")).
   settings(
-    depends.scalaXml,
+    libraryDependencies += depends.scalaXml,
     commonSettings,
     name := "specs2-xml"
   ).
-  settings(depends.jvmTest).
   dependsOn(core)
 
 lazy val specs2ShellPrompt = ThisBuild / shellPrompt := { state =>
@@ -222,22 +211,20 @@ lazy val releaseSettings: Seq[Setting[_]] = Seq(
   ThisBuild / githubWorkflowBuild := Seq(
     WorkflowStep.Sbt(
       name = Some("Build and test 🔧"),
-      // commands = List("testOnly -- xonly exclude ci,website timefactor 3")),
-      commands = List(""))
-    ),
+      commands = List("testOnly -- xonly exclude ci,website timefactor 3"))),
   ThisBuild / githubWorkflowTargetTags ++= Seq(SPECS2+"*"),
   ThisBuild / githubWorkflowPublishTargetBranches := Seq(RefPredicate.StartsWith(Ref.Tag(SPECS2))),
   ThisBuild / githubWorkflowPublish := Seq(
-    // WorkflowStep.Sbt(
-    //   name = Some("Release to Sonatype 📇"),
-    //   commands = List("ci-release"),
-    //   env = Map(
-    //     "PGP_PASSPHRASE" -> "${{ secrets.PGP_PASSPHRASE }}",
-    //     "PGP_SECRET" -> "${{ secrets.PGP_SECRET }}",
-    //     "SONATYPE_PASSWORD" -> "${{ secrets.SONATYPE_PASSWORD }}",
-    //     "SONATYPE_USERNAME" -> "${{ secrets.SONATYPE_USERNAME }}"
-    //   )
-    // ),
+    WorkflowStep.Sbt(
+      name = Some("Release to Sonatype 📇"),
+      commands = List("ci-release"),
+      env = Map(
+        "PGP_PASSPHRASE" -> "${{ secrets.PGP_PASSPHRASE }}",
+        "PGP_SECRET" -> "${{ secrets.PGP_SECRET }}",
+        "SONATYPE_PASSWORD" -> "${{ secrets.SONATYPE_PASSWORD }}",
+        "SONATYPE_USERNAME" -> "${{ secrets.SONATYPE_USERNAME }}"
+      )
+    ),
     WorkflowStep.Use(
       name = Some("Install Pandoc 🏁"),
       ref = UseRef.Public("r-lib/actions", "setup-pandoc", "v1"),
