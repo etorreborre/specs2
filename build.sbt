@@ -36,6 +36,7 @@ lazy val rootSettings =
 lazy val commonSettings =
   specs2Settings       ++
   compilationSettings  ++
+  releaseSettings      ++
   testingSettings      ++
   testingJvmSettings
 
@@ -56,18 +57,16 @@ lazy val commonJsSettings = Seq(
 
 lazy val common = project.in(file("common")).
   settings(
-    libraryDependencies ++= Seq(depends.sbt,depends.scalacheck % Test),
+    name := "specs2-common",
     commonSettings,
-    name := "specs2-common"
-  ).
+    libraryDependencies ++= Seq(depends.sbt,depends.scalacheck % Test)).
   dependsOn(fp)
 
 lazy val core = project.in(file("core")).
   settings(
-    commonSettings,
     name := "specs2-core",
-    libraryDependencies += depends.junit % Test
-  ).
+    commonSettings,
+    libraryDependencies += depends.junit % Test).
   dependsOn(matcher, common, common % "test->test")
 
 lazy val examples = project.in(file("examples")).
@@ -77,21 +76,21 @@ lazy val examples = project.in(file("examples")).
   dependsOn(common, matcher, core, matcherExtra, junit, scalacheck, form, html, markdown)
 
 lazy val fp = project.in(file("fp")).
-  settings(commonSettings).
-  settings(name := "specs2-fp")
+settings(
+  name := "specs2-fp",
+  commonSettings)
 
-lazy val form = project.
-  in(file("form")).
+lazy val form = project.in(file("form")).
   settings(
-    commonSettings,
-    name := "specs2-form").
+    name := "specs2-form",
+    commonSettings).
   dependsOn(core, markdown, matcherExtra, scalacheck % "test->test")
 
 lazy val guide = project.in(file("guide")).
   enablePlugins(BuildInfoPlugin).
   settings(
-    commonSettings,
     name := "specs2-guide",
+    commonSettings,
     Compile / scalacOptions --= Seq("-Xlint", "-Ywarn-unused-import"),
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
     buildInfoPackage := "org.specs2").
@@ -99,38 +98,36 @@ lazy val guide = project.in(file("guide")).
 
 lazy val html = project.in(file("html")).
   settings(
-    libraryDependencies += depends.tagsoup,
+    name := "specs2-html",
     commonSettings,
-    name := "specs2-html").
+    libraryDependencies += depends.tagsoup).
   dependsOn(form, matcherExtra % Test, scalacheck % Test)
 
 lazy val junit = project.in(file("junit")).
   settings(
-    libraryDependencies ++= Seq(
-      depends.junit),
+    name := "specs2-junit",
     commonSettings,
-    name := "specs2-junit").
+    libraryDependencies += depends.junit).
   dependsOn(core, matcherExtra % Test, xml)
 
-lazy val markdown = project.
-  in(file("markdown")).
+lazy val markdown = project.in(file("markdown")).
   settings(
-    libraryDependencies += depends.flexmark,
+    name := "specs2-markdown",
     commonSettings,
-    name := "specs2-markdown").
+    libraryDependencies += depends.flexmark).
   dependsOn(common, core % "compile->test", xml)
 
 lazy val matcher = project.in(file("matcher")).
   settings(
-    commonSettings,
-    name := "specs2-matcher").
+    name := "specs2-matcher",
+    commonSettings).
   dependsOn(common)
 
 lazy val matcherExtra = project.in(file("matcher-extra")).
   settings(
+    name := "specs2-matcher-extra",
     commonSettings,
-    libraryDependencies += depends.scalaParser,
-    name := "specs2-matcher-extra").
+    libraryDependencies += depends.scalaParser).
   dependsOn(matcher, core, core % "test->test", xml)
 
 lazy val pom = Project(id = "pom", base = file("pom")).
@@ -178,7 +175,7 @@ lazy val compilationSettings = Seq(
   maxErrors := 20,
   Global / onChangedBuildSource := ReloadOnSourceChanges,
   Compile / scalacOptions ++= compilationOptions,
-  Compile / doc / scalacOptions ++= compilationOptions)
+  Compile / doc / scalacOptions --= compilationOptions)
 
 lazy val compilationOptions =  Seq(
     "-source:future-migration",
@@ -207,6 +204,7 @@ lazy val testingJvmSettings = Seq(
  * RELEASE
  */
 lazy val releaseSettings: Seq[Setting[_]] = Seq(
+  ThisBuild / versionScheme := Some("early-semver"),
   ThisBuild / githubWorkflowArtifactUpload := false,
   ThisBuild / githubWorkflowBuild := Seq(
     WorkflowStep.Sbt(
