@@ -17,7 +17,7 @@ trait FuturezAttempt {
       attempt(retries = 0, timeout = 1.second)
 
     def retry(retries: Int): TimeoutFailure \/ T =
-      attempt(retries, timeout = 1.second)
+      attempt(retries * ee.retriesFactor, timeout = 1.second)
 
     def attemptFor(timeout: FiniteDuration): TimeoutFailure \/ T =
       attempt(retries = 0, timeout)
@@ -29,7 +29,7 @@ trait FuturezAttempt {
       def attemptFuture(remainingRetries: Int, totalDuration: FiniteDuration): TimeoutFailure \/ T = {
         f.timed(appliedTimeout).unsafePerformSync.fold({
           case e if e.getClass == classOf[TimeoutException] =>
-            if (remainingRetries <= 0) TimeoutFailure(appliedTimeout, totalDuration, tf).left
+            if (remainingRetries <= 0) TimeoutFailure(appliedTimeout, totalDuration, tf, ee.retriesFactor).left
             else                       attemptFuture(remainingRetries - 1, totalDuration + appliedTimeout)
 
           case other: Throwable  => throw other

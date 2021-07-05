@@ -80,6 +80,7 @@ This reference guide for arguments is divided in several sections:
  `scheduledThreadsNb`    | `1`                                              | number of threads to use for timing out execution
  `batchSize`             | `min(Runtime.getRuntime.availableProcessors, 4)` | number of examples which start executing concurrently at the time
  `timeFactor`            | `1`                                              | multiply all durations by this factor when waiting for futures
+ `retriesFactor`         | `1`                                              | multiply all retries number by this factor when waiting for futures
  `executor`              | `""`                                             | implementation of the `org.specs2.specification.process.Executor` trait
 
 

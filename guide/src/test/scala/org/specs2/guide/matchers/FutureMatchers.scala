@@ -74,13 +74,19 @@ class MyMutableFutureSpec(implicit ee: ExecutionEnv) extends mutable.Specificati
 }
 }}
 
-#### Time factor
+#### Time factor / Retries factor
 
 Some actions can be a lot slower when executed on a continuous integration server rather than a developer machine and some timeouts will fail.
 You can avoid this by setting the `timeFactor` argument which will multiply the durations used when `awaiting / attempting` by a constant factor.
 
 ```
 sbt> testOnly *MyFuturesSpec* -- timeFactor 3
+```
+
+Alternatively you can increase the number of retries by using a `retriesFactor` which will be used to multiply any specified number of retries:
+
+```
+sbt> testOnly *MyFuturesSpec* -- retriesFactor 3
 ```
 
 $NowLearnTo

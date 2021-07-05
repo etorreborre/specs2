@@ -10,9 +10,16 @@ import scala.concurrent.ExecutionContext
  * Execution environment for javascript
  */
 case class ExecutionEnv(executorServices: ExecutorServices,
-                        timeFactor: Int) {
+                        timeFactor: Int,
+                        retriesFactor: Int) {
 
   def shutdown(): Unit = ()
+
+  def setTimeFactor(tf: Int): ExecutionEnv =
+    copy(timeFactor = tf)
+
+  def setRetriesFactor(tf: Int): ExecutionEnv =
+    copy(retriesFactor = tf)
 
   lazy val executionContext = executorServices.executionContext
   lazy val scheduler = executorServices.scheduler

@@ -32,6 +32,14 @@ class FutureMatchersSpec extends Specification with ResultMatchers with specific
 
  with a retries number only
  ${ Future { sleep(sleepTime); 1 } must be_>(0).retryAwait(2) }
+ with a retries number only and a retries factor
+ ${
+  // sleep 4 times the usual time
+  lazy val sleepTime = 200 * timeFactor.toLong
+  // but there will be twice as much retries
+  implicit lazy val ee = env.executionEnv.setRetriesFactor(2)
+  Future { sleep(sleepTime); 1 } must be_>(0).retryAwait(2)
+}
 
  with a timeout only
  ${ Future { sleep(sleepTime); 1 } must be_>(0).awaitFor(200.millis) }

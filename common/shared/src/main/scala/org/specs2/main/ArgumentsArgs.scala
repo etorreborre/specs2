@@ -92,6 +92,7 @@ trait ArgumentsCreation {
       scheduledThreadsNb:   ArgProperty[Int]               = ArgProperty[Int](),
       batchSize:            ArgProperty[Int]               = ArgProperty[Int](),
       timeFactor:           ArgProperty[Int]               = ArgProperty[Int](),
+      retriesFactor:        ArgProperty[Int]               = ArgProperty[Int](),
       executor:             ArgProperty[String]            = ArgProperty[String]()
     ) = new Arguments(
        execute = Execute(plan.toOption,
@@ -109,6 +110,7 @@ trait ArgumentsCreation {
                scheduledThreadsNb.toOption,
                batchSize.toOption,
                timeFactor.toOption,
+               retriesFactor.toOption,
                executor.toOption))
 
     /** shorthand method to create an Arguments object */

@@ -92,6 +92,7 @@ trait ArgumentsCreation extends org.specs2.main.ArgumentsCreation with MutableAr
                           scheduledThreadsNb:   ArgProperty[Int]               = ArgProperty[Int](),
                           batchSize:            ArgProperty[Int]               = ArgProperty[Int](),
                           timeFactor:           ArgProperty[Int]               = ArgProperty[Int](),
+                          retriesFactor:        ArgProperty[Int]               = ArgProperty[Int](),
                           executor:             ArgProperty[String]            = ArgProperty[String]()
                           ) = updateArguments(super.execute(
       plan,
@@ -109,6 +110,7 @@ trait ArgumentsCreation extends org.specs2.main.ArgumentsCreation with MutableAr
       scheduledThreadsNb,
       batchSize,
       timeFactor,
+      retriesFactor,
       executor))
 
     /** shorthand method to create an Arguments object */

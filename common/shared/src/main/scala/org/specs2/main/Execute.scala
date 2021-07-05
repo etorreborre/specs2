@@ -22,6 +22,7 @@ case class Execute(
                     _scheduledThreadsNb:   Option[Int]              = None,
                     _batchSize:            Option[Int]              = None,
                     _timeFactor:           Option[Int]              = None,
+                    _retriesFactor:        Option[Int]              = None,
                     _executor:             Option[String]           = None) extends ShowArgs {
 
   def plan: Boolean                 = _plan.getOrElse(false)
@@ -39,6 +40,7 @@ case class Execute(
   def scheduledThreadsNb: Int       = _scheduledThreadsNb.getOrElse(1)
   def batchSize: Int                = _batchSize.getOrElse(ExecutorServices.threadsNb)
   def timeFactor: Int               = _timeFactor.getOrElse(1)
+  def retriesFactor: Int            = _retriesFactor.getOrElse(1)
   def executor: String              = _executor.getOrElse("")
 
   def overrideWith(other: Execute) = {
@@ -58,6 +60,7 @@ case class Execute(
       other._scheduledThreadsNb  .orElse(_scheduledThreadsNb),
       other._batchSize           .orElse(_batchSize),
       other._timeFactor          .orElse(_timeFactor),
+      other._retriesFactor       .orElse(_retriesFactor),
       other._executor            .orElse(_executor)
     )
   }
@@ -79,6 +82,7 @@ case class Execute(
       "scheduledThreadsNb"   -> _scheduledThreadsNb  ,
       "batchSize"            -> _batchSize           ,
       "timeFactor"           -> _timeFactor          ,
+      "retriesFactor"        -> _retriesFactor       ,
       "executor"             -> _executor            ).flatMap(showArg).mkString("Execute(", ", ", ")")
 
 }
@@ -101,10 +105,11 @@ object Execute extends Extract {
       _scheduledThreadsNb   = int("scheduledThreadsNb"),
       _batchSize            = bool("unbatched").map(_ => Int.MaxValue).orElse(int("batchSize")),
       _timeFactor           = int("timeFactor"),
+      _retriesFactor        = int("retriesFactor"),
       _executor             = value("executor")
     )
   }
-  
+
   val allArguments: Seq[ArgumentType] =
     Seq(BooleanArgument("plan"),
         BooleanArgument("skipAl"),
@@ -121,6 +126,6 @@ object Execute extends Extract {
         BooleanArgument("unbatched"),
         ValuedArgument("batchSize"),
         ValuedArgument("timeFactor"),
-        ValuedArgument("timeFactor"),
+        ValuedArgument("retriesFactor"),
         ValuedArgument("executor"))
 }

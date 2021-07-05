@@ -30,7 +30,7 @@ trait TerminationBaseMatchers {
 class TerminationMatcher[-T](retries: Int, sleep: Duration, whenAction: Option[() => Any] = None, whenDesc: Option[String] = None, onlyWhen: Boolean = false)(implicit ee: ExecutionEnv) extends Matcher[T] {
 
   def apply[S <: T](a: Expectable[S]) =
-    retry(retries, retries, sleep * ee.timeFactor.toDouble, a, createFuture(a.value))
+    retry(retries * ee.retriesFactor, retries * ee.retriesFactor, sleep * ee.timeFactor.toDouble, a, createFuture(a.value))
 
   @tailrec
   @annotation.nowarn
