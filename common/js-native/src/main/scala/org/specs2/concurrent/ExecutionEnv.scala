@@ -33,7 +33,8 @@ object ExecutionEnv {
   def fromExecutionContext(ec: =>ExecutionContext): ExecutionEnv =
     ExecutionEnv(
       ExecutorServices.fromExecutionContext(ec),
-      timeFactor = 1)
+      timeFactor = 1,
+      retriesFactor = 1)
 
   def create(arguments: Arguments, systemLogger: Logger, tag: Option[String] = None): ExecutionEnv =
     fromGlobalExecutionContext
