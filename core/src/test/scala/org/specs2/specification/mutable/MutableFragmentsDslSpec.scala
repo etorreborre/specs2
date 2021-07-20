@@ -49,8 +49,8 @@ class MutableFragmentsDslSpec(ee: ExecutionEnv) extends org.specs2.Spec with Typ
 
     val actualDescriptions: List[Description] = fragments(new dsl {
         "this" should {
-          "e1" `in` ok
-          "e2" `in` ok
+          "e1" in ok
+          "e2" in ok
         }
       }).map(_.description)
 

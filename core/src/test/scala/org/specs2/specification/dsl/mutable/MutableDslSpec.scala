@@ -7,7 +7,7 @@ class MutableDslSpec extends org.specs2.mutable.Specification:
     "compile" >> ok
 
     "in" >> {
-      "ok" `in` ok
+      "ok" in ok
       "description" in { (s: String) => s must ===("description") }
     }
     ">>" >> {

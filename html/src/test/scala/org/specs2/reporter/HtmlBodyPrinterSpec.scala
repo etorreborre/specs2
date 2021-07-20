@@ -49,15 +49,15 @@ class HtmlBodyPrinterSpec(ee: ExecutionEnv) extends Specification with Forms wit
         "t2" >> {
           ok
           Fragment.foreach(1 to 3) { i =>
-            "e" + i `in` ok
+            "e" + i in ok
           }
           "t3" >> {
-            "e4" `in` ok
+            "e4" in ok
           }
 
-          "e5" `in` ok
+          "e5" in ok
         }
-        "e6" `in` ok
+        "e6" in ok
       }
     }.is.fragments
 

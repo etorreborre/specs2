@@ -34,7 +34,7 @@ class SeqxSpec extends mutable.Specification with DataTables with ScalaCheckResu
         l.removeFirst(_ == a) must ===(r)
       }
     }
-    "this should work for any Seq and any element" `in` Prop.forAll { (l: List[Int], a: Int) =>
+    "this should work for any Seq and any element" in Prop.forAll { (l: List[Int], a: Int) =>
       val removed = l `removeFirst` (_ == a)
 
       val (withoutA, startWithA) = l span (_ != a)

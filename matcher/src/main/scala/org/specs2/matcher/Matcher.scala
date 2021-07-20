@@ -251,9 +251,12 @@ object Matcher extends MatcherCreation:
 
   @targetName("fromFunction")
   def apply[T](f: T => (Boolean, String)): Matcher[T] = f
+
   @targetName("fromFunctionActualExpected")
   def apply[T](f: T => (Boolean, String, String, String)): Matcher[T] = f
+
   def apply[T, R : AsResult](f: T => R): Matcher[T] = f
+
   def apply[T, R : AsResult](f: T => Matcher[R]): (=>T) => Matcher[R] = f
 
 trait MatcherCreation:
@@ -262,11 +265,11 @@ trait MatcherCreation:
    * This method transforms a function returning a pair (condition, message) to a Matcher
    */
   given pairFunctionToMatcher[T]: Conversion[T => (Boolean, String), Matcher[T]] with
-   def apply(f: T => (Boolean, String)): Matcher[T] =
-     new Matcher[T]:
-       def apply[S <: T](s: Expectable[S]) =
-          val (condition, message) = f(s.value)
-          Result.result(condition, message)
+    def apply(f: T => (Boolean, String)): Matcher[T] =
+      new Matcher[T]:
+        def apply[S <: T](s: Expectable[S]) =
+           val (condition, message) = f(s.value)
+           Result.result(condition, message)
 
   /**
    * This method transforms a function returning a triplet (condition, message, actual, expected) to a Matcher
