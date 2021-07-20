@@ -7,11 +7,13 @@ import org.specs2.specification.process.DefaultExecutor
 
 class PendingUntilFixedSpec(val env: Env) extends Specification with OwnEnv:
 
-  "An example can be marked as pending until fixed" `in` e1
-  "with a specific message" `in` e2
-  "it must change to failed when the example succeeds" `in` e3
-  "with a specific message" `in` e4
-  "An AssertionError must be interpreted as non-fixed" `in` e5
+  "An example can be marked as pending until fixed" in e1
+  "with a specific message" in e2
+  "it must change to failed when the example succeeds" in e3
+  "with a specific message" in e4
+  "An AssertionError must be interpreted as non-fixed" in e5
+  "pendingUntilFixed can be called as a prefix method" in e6
+  "pendingUntilFixed can be called as a prefix method with a message" in e7
 
   def e1 =
     val ex = "ex" ! { 1 must ===(2) }.pendingUntilFixed
@@ -32,6 +34,14 @@ class PendingUntilFixedSpec(val env: Env) extends Specification with OwnEnv:
   def e5 =
     val ex = "ex" ! { assert(false); 1 must ===(2) }.pendingUntilFixed
     execute(ex) must ===(Pending("Pending until fixed"))
+
+  def e6 =
+    val ex = "ex" ! (pendingUntilFixed { 1 must ===(2) })
+    execute(ex) must ===(Pending("Pending until fixed"))
+
+  def e7 =
+    val ex = "ex" ! (pendingUntilFixed("ISSUE-123") { 1 must ===(2) })
+    execute(ex) must ===(Pending("ISSUE-123. Pending until fixed"))
 
   def execute(f: Fragment) =
     DefaultExecutor.executeAll(f)(ownEnv).head.executionResult.run(ownEnv.executionEnv)
