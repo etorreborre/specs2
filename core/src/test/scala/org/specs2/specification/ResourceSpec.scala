@@ -42,7 +42,7 @@ the execution of the specification
     try Reporter.create(printer.toList, env).report(s.structure).runVoid(env.executionEnv)
     finally env.shutdown()
 
-class ResourceExample(messages: ArrayBuffer[String]) extends Specification with Resource[Ref[Int]]:
+class ResourceExample(messages: ArrayBuffer[String]) extends Specification, Resource[Ref[Int]]:
   def is = sequential ^ s2"""
     e1 $e1
     e2 $e2
@@ -70,7 +70,7 @@ class ResourceExample(messages: ArrayBuffer[String]) extends Specification with 
     messages.append("released with value "+ref.get)
     ok
 
-class AcquireErrorExample extends Specification with Resource[Ref[Int]]:
+class AcquireErrorExample extends Specification, Resource[Ref[Int]]:
   def is = sequential ^ s2"""
     e1 $e1
     e2 $e2

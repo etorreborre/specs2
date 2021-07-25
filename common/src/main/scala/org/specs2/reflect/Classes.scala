@@ -1,12 +1,12 @@
 package org.specs2
 package reflect
 
-import scala.reflect.ClassTag
-import ClassName.*
-import control.*
+import scala.reflect.{ClassTag, NameTransformer}
 import scala.util.control.NonFatal
-import org.specs2.fp.syntax.*
 import java.lang.reflect.Constructor
+import control.*
+import fp.syntax.*
+import ClassName.*
 
 /**
  * This trait provides functions to instantiate classes
@@ -38,7 +38,8 @@ trait Classes extends ClassOperations:
   def createInstanceEither[T <: AnyRef](className: String, loader: ClassLoader, defaultInstances: =>List[AnyRef] = Nil)(using m: ClassTag[T]): Operation[Throwable Either T] =
     loadClassEither(className, loader) >>= { (tc: Throwable Either Class[T]) =>
       tc match
-        case Left(t) => Operation.pure(Left(t))
+        case Left(t) =>
+          Operation.ok(Left(t))
         case Right(klass) =>
           findInstance[T](klass, loader, defaultInstances,
             klass.getDeclaredConstructors.toList.filter(_.getParameterTypes.size <= 1).sortBy(_.getParameterTypes.size)).map(Right(_))
@@ -46,13 +47,13 @@ trait Classes extends ClassOperations:
 
   private def findInstance[T <: AnyRef : ClassTag](klass: Class[T], loader: ClassLoader, defaultInstances: =>List[AnyRef], cs: List[Constructor[?]], error: Option[Throwable] = None): Operation[T] =
     cs match
-      case List() =>
+      case Nil =>
         error.map(Operation.exception[T]).getOrElse(Operation.fail[T]("Can't find a suitable constructor with 0 or 1 parameter for class "+klass.getName))
 
       case c :: rest =>
         createInstanceForConstructor[T](klass, c, loader, defaultInstances).runOperation.
           fold(e => findInstance[T](klass, loader, defaultInstances, rest, Some(e)),
-            a => Operation.ok[T](a))
+            a => Operation.delayed[T](a))
 
 
   /**
@@ -61,17 +62,19 @@ trait Classes extends ClassOperations:
   private def createInstanceForConstructor[T <: AnyRef : ClassTag](klass: Class[?],
                                                                    constructor: Constructor[?],
                                                                    loader: ClassLoader,
-                                                                   defaultInstances: =>List[AnyRef]): Operation[T] =
+                                                                   defaultInstances: =>List[AnyRef]): Operation[T] = {
 
     constructor.setAccessible(true)
-    if constructor.getParameterTypes.isEmpty then
-      newInstance(klass, constructor.newInstance())
-
-    else if constructor.getParameterTypes.size == 1 then
-      defaultInstances.find(i => constructor.getParameterTypes.apply(0) `isAssignableFrom` i.getClass) match
-        case Some(instance) =>
-          newInstance(klass, constructor.newInstance(instance))
-        case _ =>
+    if (constructor.getParameterTypes.isEmpty) {
+      if (klass.getName.endsWith("$")) {
+        newInstance(klass, klass.getDeclaredField(NameTransformer.MODULE_INSTANCE_NAME).get(null))
+      } else {
+        newInstance(klass, constructor.newInstance())
+      }
+    }
+    else if (constructor.getParameterTypes.size == 1) {
+      defaultInstances.find(i => constructor.getParameterTypes.apply(0).isAssignableFrom(i.getClass)) match {
+        case None =>
           // if the specification has a constructor with one parameter, it is either because
           // it is a nested class
           // or it might have a parameter that has a 0 args constructor
@@ -81,7 +84,11 @@ trait Classes extends ClassOperations:
 
           constructorParameter.flatMap(p => newInstance(klass, constructor.newInstance(p)))
 
-    else Operation.fail[T]("Can't find a suitable constructor for class "+klass.getName)
+        case Some(instance) =>
+          newInstance(klass, constructor.newInstance(instance))
+      }
+    } else Operation.fail[T]("Can't find a suitable constructor for class "+klass.getName)
+  }
 
   /** create a new instance for a given class and return a proper error if this fails */
   private def newInstance[T](klass: Class[?], instance: =>Any): Operation[T] =
@@ -94,20 +101,19 @@ trait Classes extends ClassOperations:
    * Load a class, given the class name
    */
   def loadClassEither[T <: AnyRef](className: String, loader: ClassLoader): Operation[Throwable Either Class[T]] = Operation.delayed {
-    loader.loadClass(className).asInstanceOf[Class[T]]
-  }.attempt
+    try Right(loader.loadClass(className).asInstanceOf[Class[T]])
+    catch { case NonFatal(t) => Left(t) }
+  }
 
   def loadClass[T <: AnyRef](className: String, loader: ClassLoader): Operation[Class[T]] =
-    loadClassEither(className, loader).flatMap((tc: Throwable Either Class[T]) => tc.fold(Operation.exception[Class[T]], Operation.ok[Class[T]]))
+    loadClassEither(className, loader).flatMap((tc: Throwable Either Class[T]) => tc.fold(Operation.exception, Operation.ok))
 
   /** @return true if a class can be loaded */
   def existsClass(className: String, loader: ClassLoader): Operation[Boolean] = Operation.delayed {
-    try {
-      loader.loadClass(className)
-      true
-    }
+    try   { loader.loadClass(className); true }
     catch { case NonFatal(t) => false }
   }
+
 
 /**
  * This object provides simple functions to instantiate classes.

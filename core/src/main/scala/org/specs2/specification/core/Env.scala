@@ -7,10 +7,11 @@ import execute.*
 import concurrent.ExecutionEnv
 import reporter.PrinterLogger
 import io.*
+import fp.*, syntax.*
 import control.*
 import process.{StatisticsRepository}
 import reflect.*
-
+import scala.collection.mutable.{Map as MutableMap}
 import scala.concurrent.duration.FiniteDuration
 
 /**
@@ -26,8 +27,8 @@ case class Env(
   /** arguments passed on the command line */
   arguments: Arguments,
 
-  /** dynamically (and untyped!) acquired resource */
-  resource: DynamicResource,
+  /** dynamically (and untyped!) acquired resources, by resource key */
+  resources: Resources,
 
   /** specs2 logger to report the overall execution of a specification
    * including warnings and errors prior to the execution itself
@@ -94,9 +95,18 @@ case class Env(
   def setTimeout(duration: FiniteDuration): Env =
     copy(arguments = arguments.setTimeout(duration))
 
-  def shutdown(): Unit =
+  def shutdownAll(): Map[String, Result] =
+    val results = resources.toList.traverse { case (key, resource) => resource.execution.startExecution(this).executionResult.map(r => (key, r)) }.runOption(this.executionEnv)
+    val failures = results.toList.flatten.filter(_._2.isIssue).map { case (resourceKey, result) =>
+          (resourceKey, result.updateMessage(m => s"The resource with key '$resourceKey' could not be finalized: $m"))
+        }.toMap
     try     specs2ExecutionEnv.shutdown()
     finally executionEnv.shutdown()
+    failures
+
+  def shutdown(): Unit =
+    shutdownAll()
+    ()
 
   /** set new PrinterLogger */
   def setPrinterLogger(logger: PrinterLogger) =
@@ -124,13 +134,20 @@ case class Env(
   def setContextClassLoader(): Unit =
     customClassLoader.foreach(classLoading.setContextClassLoader)
 
-type DynamicResource = Ref[Any]
+// map of resources with a key possibly shared by several specifications
+type Resources = MutableMap[String, ResourceExecution]
+
+enum ResourceType:
+  case Local
+  case Global
+
+case class ResourceExecution(resourceType: ResourceType, resource: Any, execution: Execution)
 
 object Env:
 
   def apply(
-    arguments:            Arguments            = EnvDefault.default.arguments,
-    resource:             DynamicResource      = EnvDefault.default.resource,
+    arguments:            Arguments             = EnvDefault.default.arguments,
+    resources:            Resources            = EnvDefault.default.resources,
     systemLogger:         Logger               = EnvDefault.default.systemLogger,
     printerLogger:        PrinterLogger        = EnvDefault.default.printerLogger,
     statisticsRepository: StatisticsRepository = EnvDefault.default.statisticsRepository,
@@ -140,7 +157,7 @@ object Env:
     classLoading:         ClassLoading         = EnvDefault.default.classLoading): Env =
     Env(
       arguments,
-      resource,
+      resources,
       systemLogger,
       printerLogger,
       statisticsRepository,

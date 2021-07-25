@@ -6,6 +6,8 @@ import execute.*
 import specification.create.*
 import data.AlwaysTag
 import scala.concurrent.{Future, ExecutionContext}
+import ResourceType.*
+import StandardResults.*
 
 /**
  * Run a given fragment before each fragment
@@ -58,29 +60,57 @@ trait ForEach[T]:
 /**
  * Acquire a resource for the whole spec and release it at the end
  */
-trait Resource[T] extends BeforeAfterSpec with FragmentsFactory with StandardResults:
+trait Resource[T] extends BeforeAfterSpec with FragmentsFactory:
 
   protected def acquire: Future[T]
+
+  protected def resourceKey: Option[String] =
+    None
+
+  private def getResourceKey: String =
+    resourceKey.getOrElse(getClass.getName+"-"+hashCode.toString)
 
   protected def release(resource: T): Execution
 
   def beforeSpec =
     fragmentFactory.step(Execution.withEnvAsync { env =>
       implicit val ec = env.executionContext
-      acquire.map(r => env.resource.set(r))
+      resourceKey match
+        // local resource
+        case None =>
+          acquire.map(r => {env.resources.addOne(getResourceKey -> ResourceExecution(Local, r, release(r))); ()})
+        // global resource, only acquire it if not acquired before
+        case Some(key) =>
+          env.resources.get(key) match
+            case Some(r) =>
+              Future.successful(())
+            case None =>
+              acquire.map(r => {env.resources.addOne(key -> ResourceExecution(Global, r, release(r))); ()})
     }.setErrorAsFatal)
 
   def afterSpec =
-    Fragments(fragmentFactory.break, fragmentFactory.step(release))
+    Fragments(fragmentFactory.step {
+      Execution.withEnvFlatten { env =>
+        implicit val ec = env.executionContext
+        env.resources.get(getResourceKey) match
+          case None =>
+            anError(s"A resource should have been set for the resource key '$getResourceKey'. Please report an issue at https://github.com/etorreborre/specs2/issues")
+          case Some(ResourceExecution(Local, _, finalization)) =>
+            env.resources.remove(getResourceKey)
+            finalization
+          case Some(ResourceExecution(_, _, _)) =>
+            success
+        }
+      })
 
   given [R : AsExecution]: AsExecution[T => R] with
     def execute(f: =>(T => R)): Execution =
       Execution.withEnvFlatten { env =>
-        env.resource.toOption match
-          case Some(t) =>
-            AsExecution[R].execute(f(t.asInstanceOf[T]))
+        env.resources.get(getResourceKey) match
+          case Some(r) =>
+            AsExecution[R].execute(f(r.resource.asInstanceOf[T]))
           case _ =>
-            Execution.result(skipped("resource unavailable"))
+            Execution.result(StandardResults.skipped("resource unavailable"))
       }
 
 /**

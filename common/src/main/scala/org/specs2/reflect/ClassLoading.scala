@@ -1,5 +1,6 @@
 package org.specs2.reflect
 
-trait ClassLoading:
+trait ClassLoading {
   def setContextClassLoader(classLoader: ClassLoader): Unit =
     Thread.currentThread.setContextClassLoader(classLoader)
+}

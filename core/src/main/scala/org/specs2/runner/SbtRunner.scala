@@ -15,7 +15,6 @@ import org.specs2.reflect.*
 import org.specs2.fp.*, syntax.*
 import org.specs2.concurrent.ExecutionEnv
 import org.specs2.data.NamedTag
-
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future, ExecutionContext}
 
@@ -23,6 +22,7 @@ import scala.concurrent.{Await, Future, ExecutionContext}
  * Runner for Sbt
  */
 abstract class BaseSbtRunner(args: Array[String], remoteArgs: Array[String], loader: ClassLoader) extends _root_.sbt.testing.Runner:
+  var loggers: Array[Logger] = Array()
 
   lazy val commandLineArguments = Arguments(args ++ remoteArgs*)
 
@@ -33,10 +33,13 @@ abstract class BaseSbtRunner(args: Array[String], remoteArgs: Array[String], loa
 
   /** create a new test task */
   def newTask(aTaskDef: TaskDef): Task =
-    SbtTask(aTaskDef, env, loader)
+    SbtTask(aTaskDef, env, loader, this)
 
   def done =
-    env.shutdown()
+    val failures = env.shutdownAll()
+    failures.toList.foreach { (resourceKey, result) =>
+      loggers.foreach(_.error(result.message))
+    }
     ""
 
   def deserializeTask(task: String, deserializer: String => TaskDef): Task =
@@ -105,7 +108,7 @@ object ConsoleTestingLogger extends Logger:
 
   def trace(t: Throwable) = println("trace: " + t)
 
-case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt.testing.Task:
+case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader, base: BaseSbtRunner) extends sbt.testing.Task:
 
   private val arguments = env.arguments
 
@@ -128,6 +131,7 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
 
   private def executeFuture(handler: EventHandler, loggers: Array[Logger]): Future[Unit] =
     val ee = env.specs2ExecutionEnv
+    base.loggers = loggers
 
     createSpecStructure(taskDef, loader, env).toAction.attempt.runFuture(ee).flatMap {
       case Left(t) =>
@@ -147,7 +151,6 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
       loggers.foreach(_.trace(t))
     }
 
-
   def execute(handler: EventHandler, loggers: Array[Logger]): Array[Task] =
     Await.result(executeFuture(handler, loggers), Duration.Inf)
     Array()
@@ -161,13 +164,14 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
 
   /** run a given spec structure */
   private def specificationRun(taskDef: TaskDef, spec: SpecStructure, env: Env, handler: EventHandler, loggers: Array[Logger]): Action[Stats] =
+
     val customInstances = CustomInstances(arguments, loader, env.systemLogger)
     val specFactory = DefaultSpecFactory(env, loader)
     val makeSpecs =
           if arguments.isSet("all")
           then specFactory.createLinkedSpecs(spec).map(ss => SpecStructure.topologicalSort(ss)(env.specs2ExecutionEnv).getOrElse(ss))
           else Operation.pure(Seq(spec))
-    
+
     for
       printers <- createPrinters(customInstances, taskDef, handler, loggers, arguments).toAction
       reporter <- Reporter.createCustomInstance(customInstances).map(_.getOrElse(Reporter.create(printers, env))).toAction
@@ -190,6 +194,7 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
   /** accepted printers */
   private def createPrinters(customInstances: CustomInstances, taskDef: TaskDef, handler: EventHandler, loggers: Array[Logger], args: Arguments): Operation[List[Printer]] =
     val printerFactory = PrinterFactory(arguments, customInstances, ConsoleLogger())
+
     List(
       createSbtPrinter(loggers, sbtEvents(taskDef, handler), customInstances),
       printerFactory.createJUnitXmlPrinter,

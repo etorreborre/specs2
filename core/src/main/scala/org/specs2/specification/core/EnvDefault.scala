@@ -10,6 +10,7 @@ import org.specs2.main.Arguments
 import org.specs2.reflect.ClassLoading
 import org.specs2.reporter.PrinterLogger.consolePrinterLogger
 import org.specs2.specification.process.*
+import scala.collection.mutable.{Map as MutableMap}
 
 object EnvDefault:
 
@@ -22,7 +23,7 @@ object EnvDefault:
   def create(arguments: Arguments): Env =
     Env(
       arguments            = arguments,
-      resource             = Ref.empty,
+      resources            = MutableMap(),
       systemLogger         = ConsoleLogger(),
       printerLogger        = consolePrinterLogger,
       statisticsRepository = StatisticsRepositoryCreation.file(arguments.commandLine.directoryOr("stats.outdir", statsDirectoryPath)),

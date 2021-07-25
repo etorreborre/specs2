@@ -9,6 +9,7 @@ import specification.*
 import specification.process.*
 import core.*
 import control.*
+import execute.*
 import main.Arguments
 
 /**
@@ -43,8 +44,9 @@ case class DefaultReporter(statistics: Statistics, statisticsRepository: Statist
   def prepare(specs: List[SpecStructure]): Action[Unit] =
     printers.traverse(_.prepare(specs)).void
 
-  def finalize(specs: List[SpecStructure] ): Action[Unit] =
-    printers.traverse(_.finalize(specs)).void
+  def finalize(specs: List[SpecStructure] ): Action[Unit] = for
+    _ <- printers.traverse(_.finalize(specs)).void
+  yield ()
 
   /**
    * report 1 spec structure with the given printers

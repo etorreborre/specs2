@@ -72,7 +72,8 @@ case class TextPrinter(env: Env) extends Printer {
       printNewLine ++
       List(
         s"Total for specification$title\n".info,
-        stats.copy(timer = timer).display(using args).info)
+        stats.copy(timer = timer).display(using args).info) ++
+      printNewLine
     }
     else Nil
 

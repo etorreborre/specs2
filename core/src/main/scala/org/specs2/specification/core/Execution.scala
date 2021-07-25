@@ -335,6 +335,10 @@ object Execution:
   def withEnvSync[T : AsResult](f: Env => T): Execution =
     Execution(Some((env: Env) => Future.successful(() => AsResult.safely(f(env)))))
 
+  /** create an execution with a future */
+  def future[T : AsResult](f: =>Future[T]): Execution =
+    withEnvAsync(_ => f)
+
   /** create an execution using the Env */
   def withEnvAsync[T : AsResult](f: Env => Future[T]): Execution =
     Execution(Some((env: Env) => f(env).map(r => () => AsResult.safely(r))(env.executionContext)))
@@ -389,9 +393,8 @@ object Execution:
   given AsExecution[Execution] with
     def execute(r: =>Execution): Execution = r
 
-  given [T : AsExecution]: Conversion[T, Execution] with
-    def apply(t: T): Execution =
-      AsExecution[T].execute(t)
+  implicit def asExecutionToExecution[T : AsExecution](t: =>T): Execution  =
+    AsExecution[T].execute(t)
 
 
 case class FatalExecution(t: Throwable) extends Exception(t):

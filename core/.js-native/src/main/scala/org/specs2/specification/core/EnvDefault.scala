@@ -8,7 +8,7 @@ import main.Arguments
 import reporter.PrinterLogger.NoPrinterLogger
 import specification.process.*
 import reflect.*
-
+import scala.collection.mutable.{Map as MutableMap}
 object EnvDefault {
 
   def default: Env =
@@ -17,7 +17,7 @@ object EnvDefault {
   def create(arguments: Arguments): Env =
     Env(
       arguments            = arguments,
-      resource             = Ref.empty,
+      resources            = MutableMap(),
       systemLogger         = ConsoleLogger(),
       printerLogger        = NoPrinterLogger,
       statisticsRepository = StatisticsRepositoryCreation.memory,

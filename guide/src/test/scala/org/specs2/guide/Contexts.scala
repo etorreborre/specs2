@@ -152,7 +152,9 @@ class FixtureSpecification extends org.specs2.mutable.Specification with Databas
 
 ### BeforeSpec / AfterSpec
 
-Some setups are very expensive and can be shared across all examples. For example you might want to start an application server just at the beginning of the specification and then close it at the end.
+Some setups are very expensive and can be shared across all examples. For example you might want to start an application server
+just at the beginning of the specification and then close it at the end.
+
 You can use 3 traits to do this:
 
  * `BeforeSpec` inserts any `Fragments`, for example a `Step`, before all the examples
@@ -161,6 +163,84 @@ You can use 3 traits to do this:
 $p
 
 Fragments are the pieces making a `Specification: examples, text, steps, etc.... You can learn more about the Fragments API in $FragmentsApi.
+
+### Resources
+
+A very common use case for a `BeforeSpec/AfterSpec` behaviour is to acquire an expensive resource and release it at the end of the specification.
+
+You can do this with the `Resource` trait:
+```
+import org.specs2.Specification
+import org.specs2.specification.Resource
+import org.specs2.specification.core.Execution
+import org.specs2.control.Ref
+import scala.collection.mutable.ArrayBuffer
+import scala.concurrent.*
+
+trait LocalRef(using ec: ExecutionContext) extends Resource[Ref[Int]]:
+
+  def acquire: Future[Ref[Int]] =
+    Future.successful(Ref(0))
+
+  def release(ref: Ref[Int]): Execution =
+    Future { true }
+
+class ResourceExample(using ec: ExecutionContext) extends Specification, LocalRef:
+  val messages: ArrayBuffer[String] = ArrayBuffer()
+
+  def is = sequential ^ s2$triple
+    e1 $$e1
+    e2 $$e2
+    $triple
+
+  def e1 = { (ref: Ref[Int]) =>
+    messages.append("e1 "+ref.get)
+    ref.update(v => v + 1)
+    // the resource will be released even if there is an exception here
+    throw Exception("boom")
+    ok
+  }
+
+  def e2 = { (ref: Ref[Int]) =>
+    messages.append("e2 "+ref.get)
+    ref.update(v => v + 1)
+    ok
+  }
+
+```
+
+In this example we use a mutable reference as our "expensive" resource. It is created with the `acquire` method which returns
+a `Future` so that we don't need to block on the acquisition. Then the resource is made available to any example in the
+specification by using it as a parameter as in `e1` for example. And finally the resource is released (the database is shut down,
+some files are closed, ...) with the `release` method. You will need to return anything that can
+be converted to a specs2 `Execution`: a `Result`, a `Future[Result]` or even a simple `Boolean`.
+
+Sometimes it is necessary to keep a resource open across several specifications invocations. In order to do this you need to
+override the `resourceKey` function to provide a unique key for the resource: ${snippet{
+// 8<---
+import org.specs2.Specification
+import org.specs2.specification.Resource
+import org.specs2.specification.core.Execution
+import org.specs2.control.Ref
+import scala.collection.mutable.ArrayBuffer
+import scala.concurrent.*
+// 8<---
+
+trait GlobalRef(using ec: ExecutionContext) extends Resource[Ref[Int]]:
+  override def resourceKey: Option[String] =
+    Some("global reference")
+
+  def acquire: Future[Ref[Int]] =
+    Future.successful(Ref(0))
+
+  def release(ref: Ref[Int]): Execution =
+    Future { true }
+
+}}
+
+Then `specs2` will release all global resources at the end of a run.
+
+</p>
 
 $AndIfYouWantToKnowMore
 
