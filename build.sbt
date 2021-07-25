@@ -66,7 +66,7 @@ lazy val specs2Version = settingKey[String]("defines the current specs2 version"
 lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
 lazy val shapelessVersion = "2.3.7"
 lazy val catsVersion = "2.6.1"
-lazy val catsEffectVersion = "3.1.1"
+lazy val catsEffectVersion = "3.2.0"
 
 val commonSettings =
     coreDefaultSettings  ++
