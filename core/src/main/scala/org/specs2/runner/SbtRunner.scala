@@ -22,6 +22,9 @@ import scala.concurrent.{Await, Future, ExecutionContext}
  * Runner for Sbt
  */
 abstract class BaseSbtRunner(args: Array[String], remoteArgs: Array[String], loader: ClassLoader) extends _root_.sbt.testing.Runner:
+  // loggers are populated when a task is executed
+  // We need the loggers there to be able to report failures
+  // when the environment is shutdown
   var loggers: Array[Logger] = Array()
 
   lazy val commandLineArguments = Arguments(args ++ remoteArgs*)
@@ -131,6 +134,7 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader, base: BaseS
 
   private def executeFuture(handler: EventHandler, loggers: Array[Logger]): Future[Unit] =
     val ee = env.specs2ExecutionEnv
+    // pass the loggers back to the base runner for the final reporting
     base.loggers = loggers
 
     createSpecStructure(taskDef, loader, env).toAction.attempt.runFuture(ee).flatMap {

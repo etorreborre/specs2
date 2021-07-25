@@ -105,8 +105,8 @@ case class Env(
     failures
 
   def shutdown(): Unit =
-    shutdownAll()
-    ()
+    val failures = shutdownAll()
+    failures.foreach(f => println(s"[ERROR] ${f._2}"))
 
   /** set new PrinterLogger */
   def setPrinterLogger(logger: PrinterLogger) =
