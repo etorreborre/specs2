@@ -79,4 +79,3 @@ trait Reporter {
 }
 
 object Reporter extends Reporter
-

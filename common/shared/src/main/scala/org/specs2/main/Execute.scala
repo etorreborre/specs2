@@ -2,46 +2,49 @@ package org.specs2
 package main
 
 import org.specs2.concurrent.ExecutorServices
+import scala.concurrent.ExecutionContext
 
 /**
  * Execution arguments
  */
 case class Execute(
-                    _plan:                 Option[Boolean]          = None,
-                    _skipAll:              Option[Boolean]          = None,
-                    _stopOnFail:           Option[Boolean]          = None,
-                    _stopOnError:          Option[Boolean]          = None,
-                    _stopOnIssue:          Option[Boolean]          = None,
-                    _stopOnSkip:           Option[Boolean]          = None,
-                    _sequential:           Option[Boolean]          = None,
-                    _asap:                 Option[Boolean]          = None,
-                    _isolated:             Option[Boolean]          = None,
-                    _useCustomClassLoader: Option[Boolean]          = None,
-                    _threadsNb:            Option[Int]              = None,
-                    _specs2ThreadsNb:      Option[Int]              = None,
-                    _scheduledThreadsNb:   Option[Int]              = None,
-                    _batchSize:            Option[Int]              = None,
-                    _timeFactor:           Option[Int]              = None,
-                    _retriesFactor:        Option[Int]              = None,
-                    _executor:             Option[String]           = None) extends ShowArgs {
+                    _plan:                Option[Boolean] = None,
+                    _skipAll:             Option[Boolean] = None,
+                    _stopOnFail:          Option[Boolean] = None,
+                    _stopOnError:         Option[Boolean] = None,
+                    _stopOnIssue:         Option[Boolean] = None,
+                    _stopOnSkip:          Option[Boolean] = None,
+                    _sequential:          Option[Boolean] = None,
+                    _asap:                Option[Boolean] = None,
+                    _isolated:            Option[Boolean] = None,
+                    _useCustomClassLoader:Option[Boolean] = None,
+                    _threadsNb:           Option[Int]     = None,
+                    _specs2ThreadsNb:     Option[Int]     = None,
+                    _scheduledThreadsNb:  Option[Int]     = None,
+                    _batchSize:           Option[Int]     = None,
+                    _timeFactor:          Option[Int]     = None,
+                    _retriesFactor:       Option[Int]     = None,
+                    _executor:            Option[String]  = None,
+                    _jsExecutionContext:  Option[ExecutionContext] = None) extends ShowArgs {
 
-  def plan: Boolean                 = _plan.getOrElse(false)
-  def skipAll: Boolean              = _skipAll.getOrElse(false)
-  def stopOnFail: Boolean           = _stopOnFail.getOrElse(false)
-  def stopOnError: Boolean          = _stopOnError.getOrElse(false)
-  def stopOnIssue: Boolean          = _stopOnIssue.getOrElse(false)
-  def stopOnSkip: Boolean           = _stopOnSkip.getOrElse(false)
-  def sequential: Boolean           = _sequential.getOrElse(false)
-  def asap: Boolean                 = _asap.getOrElse(false)
-  def isolated: Boolean             = _isolated.getOrElse(false)
-  def useCustomClassLoader: Boolean = _useCustomClassLoader.getOrElse(false)
-  def threadsNb: Int                = _threadsNb.getOrElse(ExecutorServices.threadsNb)
-  def specs2ThreadsNb: Int          = _specs2ThreadsNb.getOrElse(ExecutorServices.specs2ThreadsNb)
-  def scheduledThreadsNb: Int       = _scheduledThreadsNb.getOrElse(1)
-  def batchSize: Int                = _batchSize.getOrElse(ExecutorServices.threadsNb)
-  def timeFactor: Int               = _timeFactor.getOrElse(1)
-  def retriesFactor: Int            = _retriesFactor.getOrElse(1)
-  def executor: String              = _executor.getOrElse("")
+  def plan: Boolean                  = _plan.getOrElse(false)
+  def skipAll: Boolean               = _skipAll.getOrElse(false)
+  def stopOnFail: Boolean            = _stopOnFail.getOrElse(false)
+  def stopOnError: Boolean           = _stopOnError.getOrElse(false)
+  def stopOnIssue: Boolean           = _stopOnIssue.getOrElse(false)
+  def stopOnSkip: Boolean            = _stopOnSkip.getOrElse(false)
+  def sequential: Boolean            = _sequential.getOrElse(false)
+  def asap: Boolean                  = _asap.getOrElse(false)
+  def isolated: Boolean              = _isolated.getOrElse(false)
+  def useCustomClassLoader: Boolean  = _useCustomClassLoader.getOrElse(false)
+  def threadsNb: Int                 = _threadsNb.getOrElse(ExecutorServices.threadsNb)
+  def specs2ThreadsNb: Int           = _specs2ThreadsNb.getOrElse(ExecutorServices.specs2ThreadsNb)
+  def scheduledThreadsNb: Int        = _scheduledThreadsNb.getOrElse(1)
+  def batchSize: Int                 = _batchSize.getOrElse(ExecutorServices.threadsNb)
+  def timeFactor: Int                = _timeFactor.getOrElse(1)
+  def retriesFactor: Int             = _retriesFactor.getOrElse(1)
+  def executor: String               = _executor.getOrElse("")
+  def jsExecutionContext: Option[ExecutionContext] = _jsExecutionContext
 
   def overrideWith(other: Execute) = {
     new Execute(
@@ -61,7 +64,8 @@ case class Execute(
       other._batchSize           .orElse(_batchSize),
       other._timeFactor          .orElse(_timeFactor),
       other._retriesFactor       .orElse(_retriesFactor),
-      other._executor            .orElse(_executor)
+      other._executor            .orElse(_executor),
+      other._jsExecutionContext  .orElse(_jsExecutionContext)
     )
   }
 
@@ -83,7 +87,8 @@ case class Execute(
       "batchSize"            -> _batchSize           ,
       "timeFactor"           -> _timeFactor          ,
       "retriesFactor"        -> _retriesFactor       ,
-      "executor"             -> _executor            ).flatMap(showArg).mkString("Execute(", ", ", ")")
+      "executor"             -> _executor            ,
+      "jsExecutionContext"   -> _jsExecutionContext    ).flatMap(showArg).mkString("Execute(", ", ", ")")
 
 }
 
@@ -106,7 +111,8 @@ object Execute extends Extract {
       _batchSize            = bool("unbatched").map(_ => Int.MaxValue).orElse(int("batchSize")),
       _timeFactor           = int("timeFactor"),
       _retriesFactor        = int("retriesFactor"),
-      _executor             = value("executor")
+      _executor             = value("executor"),
+      _jsExecutionContext   = instance("jsExecutionContext")
     )
   }
 
@@ -127,5 +133,6 @@ object Execute extends Extract {
         ValuedArgument("batchSize"),
         ValuedArgument("timeFactor"),
         ValuedArgument("retriesFactor"),
-        ValuedArgument("executor"))
+        ValuedArgument("executor"),
+        ValuedArgument("jsExecutionContext"))
 }

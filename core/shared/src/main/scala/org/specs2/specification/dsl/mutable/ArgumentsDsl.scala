@@ -6,6 +6,7 @@ package mutable
 import main._
 import control.StackTraceFilter
 import text.Colors
+import scala.concurrent.ExecutionContext
 
 /**
  * Create arguments in an acceptance specification
@@ -93,7 +94,8 @@ trait ArgumentsCreation extends org.specs2.main.ArgumentsCreation with MutableAr
                           batchSize:            ArgProperty[Int]               = ArgProperty[Int](),
                           timeFactor:           ArgProperty[Int]               = ArgProperty[Int](),
                           retriesFactor:        ArgProperty[Int]               = ArgProperty[Int](),
-                          executor:             ArgProperty[String]            = ArgProperty[String]()
+                          executor:             ArgProperty[String]            = ArgProperty[String](),
+                          jsExecutionContext:   ArgProperty[ExecutionContext]  = ArgProperty[ExecutionContext]()
                           ) = updateArguments(super.execute(
       plan,
       skipAll,
@@ -111,7 +113,8 @@ trait ArgumentsCreation extends org.specs2.main.ArgumentsCreation with MutableAr
       batchSize,
       timeFactor,
       retriesFactor,
-      executor))
+      executor,
+      jsExecutionContext))
 
     /** shorthand method to create an Arguments object */
     override def store(

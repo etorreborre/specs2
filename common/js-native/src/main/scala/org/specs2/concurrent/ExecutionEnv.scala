@@ -37,10 +37,10 @@ object ExecutionEnv {
       retriesFactor = 1)
 
   def create(arguments: Arguments, systemLogger: Logger, tag: Option[String] = None): ExecutionEnv =
-    fromGlobalExecutionContext
+    createSpecs2(arguments, systemLogger, tag)
 
   def createSpecs2(arguments: Arguments, systemLogger: Logger, tag: Option[String] = None): ExecutionEnv =
-    fromGlobalExecutionContext
+    arguments.execute.jsExecutionContext.map(ec => fromExecutionContext(ec)).getOrElse(fromGlobalExecutionContext)
 
   /** create an ExecutionEnv from Scala global execution context */
   def fromGlobalExecutionContext: ExecutionEnv =

@@ -3,6 +3,7 @@ package main
 
 import control._
 import text._
+import scala.concurrent.ExecutionContext
 
 /**
  * Methods with default Property values to create Arguments instances
@@ -93,7 +94,8 @@ trait ArgumentsCreation {
       batchSize:            ArgProperty[Int]               = ArgProperty[Int](),
       timeFactor:           ArgProperty[Int]               = ArgProperty[Int](),
       retriesFactor:        ArgProperty[Int]               = ArgProperty[Int](),
-      executor:             ArgProperty[String]            = ArgProperty[String]()
+      executor:             ArgProperty[String]            = ArgProperty[String](),
+      jsExecutionContext:   ArgProperty[ExecutionContext]  = ArgProperty[ExecutionContext]()
     ) = new Arguments(
        execute = Execute(plan.toOption,
                skipAll.toOption,
@@ -111,7 +113,8 @@ trait ArgumentsCreation {
                batchSize.toOption,
                timeFactor.toOption,
                retriesFactor.toOption,
-               executor.toOption))
+               executor.toOption,
+               jsExecutionContext.toOption))
 
     /** shorthand method to create an Arguments object */
     def store(
