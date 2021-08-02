@@ -12,7 +12,7 @@ import control.*
 import process.{StatisticsRepository}
 import reflect.*
 import scala.collection.mutable.{Map as MutableMap}
-import scala.concurrent.duration.FiniteDuration
+import scala.concurrent.*, duration.FiniteDuration
 
 /**
  * Whole creation / execution / reporting environment for a specification
@@ -103,6 +103,9 @@ case class Env(
     try     specs2ExecutionEnv.shutdown()
     finally executionEnv.shutdown()
     failures
+
+  def shutdownAllFuture(): Future[Map[String, Result]] =
+    Future(shutdownAll())(using specs2ExecutionContext)
 
   def shutdown(): Unit =
     val failures = shutdownAll()

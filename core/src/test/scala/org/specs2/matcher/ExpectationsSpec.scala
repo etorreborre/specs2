@@ -1,4 +1,5 @@
 package org.specs2
+package matcher
 
 import execute.*
 import matcher.*

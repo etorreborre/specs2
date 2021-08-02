@@ -1,20 +1,25 @@
 import sbt._
-import Defaults._
 import Keys._
+import Defaults._
+// necessary for the %%% syntax
+import org.portablescala.sbtplatformdeps.PlatformDepsPlugin.autoImport._
+// necessary for accessing the scalaJSVersion property
+import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
 
 object depends {
 
   // used in specs2-core for the sbt runner
-  val sbt = "org.scala-sbt" % "test-interface" % "1.0"
+  val sbt = libraryDependencies += "org.scala-sbt" % "test-interface" % "1.0"
 
   // used in specs2-scalacheck
-  val scalacheck = "org.scalacheck" %% "scalacheck" % "1.15.3"
+  val scalacheck = libraryDependencies += "org.scalacheck" %%% "scalacheck" % "1.15.3"
+  val scalacheckTest = libraryDependencies += "org.scalacheck" %%% "scalacheck" % "1.15.3" % Test
 
   // used in specs2-matcher-extra
-  val scalaParser = "org.scala-lang.modules" %% "scala-parser-combinators" % "2.0.0"
+  val scalaParser = libraryDependencies += "org.scala-lang.modules" %%% "scala-parser-combinators" % "2.0.0"
 
   // used in specs2-xml, and transitively by specs2-junit, specs2-matcher-extra, specs2-markdown
-  val scalaXml = "org.scala-lang.modules" %% "scala-xml" % "2.0.0"
+  val scalaXml = libraryDependencies += "org.scala-lang.modules" %%% "scala-xml" % "2.0.0"
 
   // used in specs2-junit
   val junit = "org.junit.vintage" % "junit-vintage-engine" % "5.3.1"
@@ -25,11 +30,22 @@ object depends {
   // used in specs2-html
   val tagsoup = "org.ccil.cowan.tagsoup" % "tagsoup" % "1.2.1"
 
-  def scalaMinorVersionAtLeast(scalaVersion: String, n: Int): Boolean =
-    CrossVersion.partialVersion(scalaVersion) match {
-      case Some((2, minor)) if minor >= n =>
-        true
-      case _ =>
-        false
-    }
+  val Scala213 = "2.13.6"
+
+  val isScala3 = Def.setting(CrossVersion.partialVersion(scalaVersion.value).exists(_._1 ==3))
+
+  def sharedTest =
+    Seq(libraryDependencies ++= Seq(
+      "org.scala-lang" % "scala-reflect" % (if (isScala3.value) Scala213 else scalaVersion.value) % Provided))
+
+  def jvmTest =
+    Seq(libraryDependencies ++= Seq(
+      ("org.portable-scala" %%% "portable-scala-reflect" % "1.1.1").cross(CrossVersion.for3Use2_13),
+      "org.scala-sbt" % "test-interface" % "1.0"))
+
+  def jsTest =
+    Seq(libraryDependencies ++=
+      Seq(
+        ("org.portable-scala" %%% "portable-scala-reflect" % "1.1.1").cross(CrossVersion.for3Use2_13),
+        ("org.scala-js" %% "scalajs-test-interface" % scalaJSVersion).cross(CrossVersion.for3Use2_13)))
 }

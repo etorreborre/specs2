@@ -97,4 +97,4 @@ case class RunnerLogger(env: Env):
       warnings.traverse(print).void
 
   private def print(m: String): Operation[Unit] =
-    Operation.delayed(logger.errorLog(m))
+    Operation.delayed(logger.errorLog(m+"\n"))

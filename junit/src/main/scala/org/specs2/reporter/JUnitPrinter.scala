@@ -101,6 +101,12 @@ case class JUnitPrinter(env: Env, notifier: RunNotifier) extends Printer:
     case Failure(m, e, st, FromExpectationError) =>
       new SpecFailureAssertionFailedError(Throwablex.exception(AnsiColors.removeColors(m), args.traceFilter(st)))
 
+    case Failure(m, e, st, FailureDetailsMessages(_)) =>
+      new SpecFailureAssertionFailedError(Throwablex.exception(AnsiColors.removeColors(m), args.traceFilter(st)))
+
+    case Failure(m, e, st, FromTimeoutException) =>
+      new SpecFailureAssertionFailedError(Throwablex.exception(AnsiColors.removeColors(m), args.traceFilter(st)))
+      
     case Failure(m, e, st, FailureDetails(actual, expected)) => new ComparisonFailure(AnsiColors.removeColors(m), expected, actual) {
       private val e = args.traceFilter(f.exception)
       override def getStackTrace = e.getStackTrace

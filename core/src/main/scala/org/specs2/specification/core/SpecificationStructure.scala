@@ -8,10 +8,7 @@ import reflect.Classes
 import Classes.*
 import org.specs2.fp.syntax.*
 
-// to be used for ScalaJS when ready
-// import scala.scalajs.reflect.annotation.EnableReflectiveInstantiation
-// @EnableReflectiveInstantiation
-
+@org.portablescala.reflect.annotation.EnableReflectiveInstantiation
 trait SpecificationStructure:
   def is: SpecStructure
 

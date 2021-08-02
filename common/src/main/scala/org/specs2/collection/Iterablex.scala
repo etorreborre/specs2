@@ -68,8 +68,7 @@ trait Iterablex:
             resta.exists(matchTwo(_, y)) && restb.exists(matchTwo(x, _)) &&
               resta.toSeq.removeFirst(matchTwo(_, y)).sameElementsAs(restb.toSeq.removeFirst(matchTwo(x, _)), f)
           }
-
-        case (_, _) => (ita:Any) == (itb:Any)
+          
     /**
      * @return true if the second iterable elements are contained in the first, in order
      */

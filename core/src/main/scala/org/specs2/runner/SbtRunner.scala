@@ -15,6 +15,7 @@ import org.specs2.reflect.*
 import org.specs2.fp.*, syntax.*
 import org.specs2.concurrent.ExecutionEnv
 import org.specs2.data.NamedTag
+import scala.util.*
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future, ExecutionContext}
 
@@ -39,10 +40,12 @@ abstract class BaseSbtRunner(args: Array[String], remoteArgs: Array[String], loa
     SbtTask(aTaskDef, env, loader, this)
 
   def done =
-    val failures = env.shutdownAll()
-    failures.toList.foreach { (resourceKey, result) =>
-      loggers.foreach(_.error(result.message))
-    }
+    env.shutdownAllFuture().onComplete {
+      case Failure(e) =>
+        loggers.foreach(_.error("error while finalizing resources: "+e.getMessage))
+      case Success(failures) =>
+        failures.toList.foreach { (resourceKey, result) => loggers.foreach(_.error(result.message)) }
+    }(using env.specs2ExecutionContext)
     ""
 
   def deserializeTask(task: String, deserializer: String => TaskDef): Task =
@@ -91,7 +94,7 @@ object sbtRun extends MasterSbtRunner(Array(), Array(), Thread.currentThread.get
         Action.unit
     else
       val taskDef = new TaskDef(arguments(0), Fingerprints.fp1, true, Array())
-      Action.pure(newTask(taskDef).execute(NoEventHandler, Array(ConsoleTestingLogger))).as(())
+      Action.pure(newTask(taskDef).execute(NoEventHandler, Array(ConsoleTestingLogger))).void
   }.as(Stats.empty)
 
 
@@ -132,6 +135,10 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader, base: BaseS
   def execute(handler: EventHandler, loggers: Array[Logger], continuation: Array[Task] => Unit): Unit =
     executeFuture(handler, loggers).onComplete(_ => continuation(Array()))
 
+  def execute(handler: EventHandler, loggers: Array[Logger]): Array[Task] =
+    Await.result(executeFuture(handler, loggers), Duration.Inf)
+    Array()
+
   private def executeFuture(handler: EventHandler, loggers: Array[Logger]): Future[Unit] =
     val ee = env.specs2ExecutionEnv
     // pass the loggers back to the base runner for the final reporting
@@ -154,10 +161,6 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader, base: BaseS
       events.suiteError(t)
       loggers.foreach(_.trace(t))
     }
-
-  def execute(handler: EventHandler, loggers: Array[Logger]): Array[Task] =
-    Await.result(executeFuture(handler, loggers), Duration.Inf)
-    Array()
 
   /** @return the corresponding task definition */
   def taskDef = aTaskDef

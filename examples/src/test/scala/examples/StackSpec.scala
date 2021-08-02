@@ -12,42 +12,48 @@ import specification.core.*
  *
  * Those examples are reused with different data in each case
  */
-class StackSpec extends Specification { def is =  "Specification for a Stack with a limited capacity".title ^ s2"""
+class StackSpec extends Specification:
+  def is = "Specification for a Stack with a limited capacity".title ^ s2"""
 
- A Stack with limited capacity can either be:                             $p
-   1. Empty                                                               $anEmptyStack
-   2. Normal (i.e. not empty but not full)                                $aNormalStack
-   3. Full                                                                $aFullStack
-                                                                          """
+  A Stack with limited capacity can either be:
+    1. Empty $anEmptyStack
+
+    2. Normal (i.e. not empty but not full) $aNormalStack
+
+    3. Full $aFullStack
+  """
 
   /** examples for an empty stack */
-  def anEmptyStack =                                                       s2"""
+  def anEmptyStack = s2"""
     An empty stack should
-      have a size == 0                                                     ${empty().e1}
-      throw an exception when sent #top                                    ${empty().e2}
-      throw an exception when sent #pop                                    ${empty().e3}
-                                                                           """
+      have a size == 0 ${empty().e1}
+      throw an exception when sent #top ${empty().e2}
+      throw an exception when sent #pop ${empty().e3}
+  """
 
   /** examples for a normal stack */
-  def aNormalStack =                                                       p^s2"""
+  def aNormalStack = s2"""
     A normal stack should
-      behave like a non-empty stack                                        ${nonEmptyStack(newNormalStack)}
-      add to the top when sent #push                                       ${nonFullStack().e1}
-                                                                           """
+      behave like a non-empty stack ${nonEmptyStack(newNormalStack)}
+    add to the top when sent #push ${nonFullStack().e1}
+  """
+
   /** examples for a full stack */
-  def aFullStack =                                                         p^s2"""
+  def aFullStack = s2"""
     A full stack should
-      behave like a non-empty stack                                        ${nonEmptyStack(newFullStack)}
-      throw an exception when sent #push                                   ${fullStack().e1}
-                                                                           """
+      behave like a non-empty stack ${nonEmptyStack(newFullStack)}
+    throw an exception when sent #push ${fullStack().e1}
+  """
+
   /** examples for a non-empty stack */
-  def nonEmptyStack(stack: =>SizedStack): Fragments =                      s2"""
-    have a size > 0                                                        ${nonEmpty(stack).size}
-    return the top item when sent #top                                     ${nonEmpty(stack).top1}
-    not remove the top item when sent #top                                 ${nonEmpty(stack).top2}
-    return the top item when sent #pop                                     ${nonEmpty(stack).pop1}
-    remove the top item when sent #pop                                     ${nonEmpty(stack).pop2}
-                                                                           """
+  def nonEmptyStack(stack: =>SizedStack)= t ^ s2"""
+  have a size > 0 ${nonEmpty(stack).size}
+  return the top item when sent #top ${nonEmpty(stack).top1}
+  not remove the top item when sent #top ${nonEmpty(stack).top2}
+  return the top item when sent #pop ${nonEmpty(stack).pop1}
+  remove the top item when sent #pop ${nonEmpty(stack).pop2}
+  """ ^ bt
+
   /** stacks creation */
   def newEmptyStack  = SizedStack(maxCapacity = 10, size = 0)
   def newNormalStack = SizedStack(maxCapacity = 10, size = 2)
@@ -58,7 +64,7 @@ class StackSpec extends Specification { def is =  "Specification for a Stack wit
     val stack = newEmptyStack
 
     def e1 = stack.size must ===(0)
-    def e2 = stack.top must throwA[NoSuchElementException]
+    def e2 = stack.top must throwA[IndexOutOfBoundsException]
     def e3 = stack.pop must throwA[NoSuchElementException]
 
   case class nonEmpty(createStack: SizedStack):
@@ -89,7 +95,8 @@ class StackSpec extends Specification { def is =  "Specification for a Stack wit
     val stack = newFullStack
 
     def e1 = stack `push` (stack.size + 1) must throwAn[Error]
-}
+
+end StackSpec
 
 /**
  * SizedStack definition

@@ -5,15 +5,16 @@ lazy val specs2 = project.in(file(".")).
     name := "specs2",
     rootSettings,
   ).aggregate(
-    fp, common, matcher, core, matcherExtra, html, guide,
-    form, markdown, junit, scalacheck, xml, tests
+    fp.jvm, common.jvm, matcher.jvm, core.jvm, matcherExtra.jvm,
+    junit.jvm, scalacheck.jvm, xml.jvm, examples.jvm,
+    fp.js, common.js, matcher.js, core.js, matcherExtra.js,
+    junit.js, scalacheck.js, xml.js, examples.js,
+    markdown, form, html, tests, guide
   )
 
 /** COMMON SETTINGS */
 
-val Scala212 = "2.12.13"
-val Scala213 = "2.13.5"
-val Scala3 = "3.0.0"
+val Scala3 = "3.0.1"
 
 lazy val specs2Settings = Seq(
   organization := "org.specs2",
@@ -22,11 +23,10 @@ lazy val specs2Settings = Seq(
   ThisBuild / scalaVersion := Scala3)
 
 lazy val rootSettings =
-  specs2Settings       ++
-  compilationSettings  ++
-  testingSettings      ++
-  testingJvmSettings   ++
-  releaseSettings      ++
+  specs2Settings ++
+  compilationSettings ++
+  testSettings ++
+  releaseSettings ++
   Seq(
     Compile / doc / sources := sources.all(aggregateCompile).value.flatten,
     packagedArtifacts := Map.empty,
@@ -34,57 +34,61 @@ lazy val rootSettings =
   )
 
 lazy val commonSettings =
-  specs2Settings       ++
-  compilationSettings  ++
-  releaseSettings      ++
-  testingSettings      ++
-  testingJvmSettings
+  specs2Settings ++
+  compilationSettings ++
+  releaseSettings ++
+  testSettings
 
-lazy val commonJsSettings = Seq(
-  scalacOptions += {
-    val tag = "${version.value}"
-    val tagOrHash =
-      if(isSnapshot.value) sys.process.Process("git rev-parse HEAD").lineStream_!.head
-      else tag
-    val a = (LocalRootProject / baseDirectory).value.toURI.toString
-    val g = "https://raw.githubusercontent.com/etorreborre/specs2/" + tagOrHash
-    s"-P:scalajs:mapSourceURI:$a->$g/"
-  },
-  Test / parallelExecution := false
-)
+lazy val commonJvmSettings =
+  testJvmSettings
+
+lazy val commonJsSettings =
+  testJsSettings
 
 /** MODULES (sorted in alphabetical order) */
 
-lazy val common = project.in(file("common")).
+val platforms = List(JVMPlatform, JSPlatform)
+val jvm = JVMPlatform
+
+lazy val common = crossProject(platforms:_*).withoutSuffixFor(jvm).crossType(CrossType.Pure).in(file("common")).
   settings(
     name := "specs2-common",
     commonSettings,
-    libraryDependencies ++= Seq(depends.sbt,depends.scalacheck % Test)).
+    depends.scalacheckTest,
+    depends.sbt).
+  jvmSettings(commonJvmSettings).
+  jsSettings(commonJsSettings).
   dependsOn(fp)
 
-lazy val core = project.in(file("core")).
+lazy val core = crossProject(platforms:_*).withoutSuffixFor(jvm).crossType(CrossType.Pure).in(file("core")).
   settings(
     name := "specs2-core",
     commonSettings,
     libraryDependencies += depends.junit % Test).
+  jvmSettings(commonJvmSettings).
+  jsSettings(commonJsSettings).
   dependsOn(matcher, common, common % "test->test")
 
-lazy val examples = project.in(file("examples")).
+lazy val examples = crossProject(platforms:_*).withoutSuffixFor(jvm).crossType(CrossType.Pure).in(file("examples")).
   settings(
     commonSettings,
     name := "specs2-examples").
-  dependsOn(common, matcher, core, matcherExtra, junit, scalacheck, form, html, markdown)
+  jvmSettings(commonJvmSettings).
+  jsSettings(commonJsSettings).
+  dependsOn(common, matcher, core, matcherExtra, junit, scalacheck)
 
-lazy val fp = project.in(file("fp")).
-settings(
-  name := "specs2-fp",
-  commonSettings)
+lazy val fp = crossProject(platforms:_*).withoutSuffixFor(jvm).crossType(CrossType.Pure).in(file("fp")).
+  settings(
+    name := "specs2-fp",
+    commonSettings).
+  jvmSettings(commonJvmSettings).
+  jsSettings(commonJsSettings)
 
 lazy val form = project.in(file("form")).
   settings(
     name := "specs2-form",
     commonSettings).
-  dependsOn(core, markdown, matcherExtra, scalacheck % "test->test")
+  dependsOn(core.jvm, markdown, matcherExtra.jvm, scalacheck.jvm % "test->test", xml.jvm)
 
 lazy val guide = project.in(file("guide")).
   enablePlugins(BuildInfoPlugin).
@@ -94,20 +98,22 @@ lazy val guide = project.in(file("guide")).
     Compile / scalacOptions --= Seq("-Xlint", "-Ywarn-unused-import"),
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
     buildInfoPackage := "org.specs2").
-  dependsOn(examples % "compile->compile;test->test")
+  dependsOn(html, examples.jvm % "compile->compile;test->test")
 
 lazy val html = project.in(file("html")).
   settings(
     name := "specs2-html",
     commonSettings,
     libraryDependencies += depends.tagsoup).
-  dependsOn(form, matcherExtra % Test, scalacheck % Test)
+  dependsOn(form, matcherExtra.jvm % Test, scalacheck.jvm % Test)
 
-lazy val junit = project.in(file("junit")).
+lazy val junit = crossProject(platforms:_*).withoutSuffixFor(jvm).crossType(CrossType.Pure).in(file("junit")).
   settings(
     name := "specs2-junit",
     commonSettings,
     libraryDependencies += depends.junit).
+  jvmSettings(commonJvmSettings).
+  jsSettings(commonJsSettings).
   dependsOn(core, matcherExtra % Test, xml)
 
 lazy val markdown = project.in(file("markdown")).
@@ -115,52 +121,59 @@ lazy val markdown = project.in(file("markdown")).
     name := "specs2-markdown",
     commonSettings,
     libraryDependencies += depends.flexmark).
-  dependsOn(common, core % "compile->test", xml)
+  dependsOn(common.jvm, core.jvm, xml.jvm)
 
-lazy val matcher = project.in(file("matcher")).
+lazy val matcher = crossProject(platforms:_*).withoutSuffixFor(jvm).crossType(CrossType.Pure).in(file("matcher")).
   settings(
     name := "specs2-matcher",
     commonSettings).
+  jvmSettings(commonJvmSettings).
+  jsSettings(commonJsSettings).
   dependsOn(common)
 
-lazy val matcherExtra = project.in(file("matcher-extra")).
+lazy val matcherExtra = crossProject(platforms:_*).withoutSuffixFor(jvm).crossType(CrossType.Pure).in(file("matcher-extra")).
   settings(
     name := "specs2-matcher-extra",
     commonSettings,
-    libraryDependencies += depends.scalaParser).
+    depends.scalaParser).
+  jvmSettings(commonJvmSettings).
+  jsSettings(commonJsSettings).
   dependsOn(matcher, core, core % "test->test", xml)
 
-lazy val pom = Project(id = "pom", base = file("pom")).
+lazy val pom = project.in(file("pom")).
   settings(commonSettings).
-  dependsOn(common, matcher, matcherExtra, core, html,
-    form, markdown, junit, scalacheck)
+  dependsOn(common.jvm, matcher.jvm, matcherExtra.jvm, core.jvm,
+    form, markdown, junit.jvm, scalacheck.jvm, html)
 
-lazy val scalacheck = project.
-  in(file("scalacheck")).
+lazy val scalacheck = crossProject(platforms:_*).withoutSuffixFor(jvm).crossType(CrossType.Pure).in(file("scalacheck")).
   settings(
     commonSettings,
     name := "specs2-scalacheck",
-    libraryDependencies += depends.scalacheck,
+    depends.scalacheck,
   ).
+  jvmSettings(commonJvmSettings).
+  jsSettings(commonJsSettings).
   dependsOn(core)
 
-lazy val tests = Project(id = "tests", base = file("tests")).
+lazy val tests = project.in(file("tests")).
   settings(
     commonSettings,
     name := "specs2-tests",
   ).dependsOn(
-  core      % "compile->compile;test->test",
-  junit     % "test->test",
-  examples  % "test->test",
-  matcherExtra,
+  core.jvm % "compile->compile;test->test",
+  junit.jvm % "test->test",
+  examples.jvm % "test->test",
+  matcherExtra.jvm,
   html)
 
-lazy val xml = project.in(file("xml")).
+lazy val xml = crossProject(platforms:_*).withoutSuffixFor(jvm).crossType(CrossType.Pure).in(file("xml")).
   settings(
-    libraryDependencies += depends.scalaXml,
+    name := "specs2-xml",
+    depends.scalaXml,
     commonSettings,
-    name := "specs2-xml"
   ).
+  jvmSettings(commonJvmSettings).
+  jsSettings(commonJsSettings).
   dependsOn(core)
 
 lazy val specs2ShellPrompt = ThisBuild / shellPrompt := { state =>
@@ -186,19 +199,25 @@ lazy val compilationOptions =  Seq(
     "-unchecked",
     "-feature")
 
-lazy val testingSettings = Seq(
+lazy val testSettings = Seq(
   logBuffered := false,
   Global / cancelable := true,
   testFrameworks := Seq(TestFramework("org.specs2.runner.Specs2Framework")),
   testOptions := Seq(Tests.Filter(s =>
     (Seq(".guide.").exists(s.contains) || Seq("Spec", "Guide", "Website").exists(s.endsWith)) &&
       Seq("Specification", "FeaturesSpec").forall(n => !s.endsWith(n))))
-)
+) ++ depends.sharedTest
 
-lazy val testingJvmSettings = Seq(
+lazy val testJvmSettings = Seq(
   javaOptions ++= Seq("-Xmx3G", "-Xss4M"),
-  Test / fork := true
-)
+  Test / fork := true,
+) ++  depends.jvmTest
+
+lazy val testJsSettings = Seq(
+  Test / fork := false,
+  Test / parallelExecution := false,
+  Test / scalaJSStage := FastOptStage,
+) ++ depends.jsTest
 
 /**
  * RELEASE
@@ -255,5 +274,7 @@ lazy val releaseSettings: Seq[Setting[_]] = Seq(
 val SPECS2 = "SPECS2-"
 
 lazy val aggregateCompile = ScopeFilter(
-  inProjects(fp, common, matcher, core, matcherExtra, html, form, markdown, junit, scalacheck, xml),
+  inProjects(
+    fp.jvm, common.jvm, matcher.jvm, core.jvm, matcherExtra.jvm, html,
+    form, markdown, junit.jvm, scalacheck.jvm, xml.jvm, examples.jvm),
   inConfigurations(Compile))
