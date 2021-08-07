@@ -15,7 +15,7 @@ final case class TimedFuture[A](callback: ExecutorServices => Future[A], timeout
       callback(es)
     } { t =>
       val promise = Promise[A]
-      es.schedule( { promise.tryFailure(new TimeoutException); () }, t)
+      es.schedule( { promise.tryFailure(new TimeoutException("timeout after "+t)); () }, t)
       promise.tryCompleteWith(callback(es))
       promise.future
     }
@@ -163,4 +163,3 @@ object FutureInterpretation extends FutureInterpretation
 trait FutureEffect extends FutureCreation with FutureInterpretation
 
 object FutureEffect extends FutureEffect
-
