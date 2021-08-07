@@ -5,6 +5,7 @@ import mutable.Specification
 import org.specs2.specification.core.{Env, Execution, Fragment, OwnEnv}
 import org.specs2.specification.process.DefaultExecutor
 import org.specs2.control.ExecuteActions._
+import scala.concurrent.duration._
 
 class PendingUntilFixedSpec(val env: Env) extends Specification with OwnEnv {
 
@@ -14,6 +15,7 @@ class PendingUntilFixedSpec(val env: Env) extends Specification with OwnEnv {
   "with a specific message" in e4
   "An AssertionError must be interpreted as non-fixed" in e5
   "An Execution can be marked as pending until fixed" in e6
+  "Pending until fixed can be used with an execution timing-out" in e7
 
   def e1 = {
     val ex = "ex" ! { 1 must_== 2 }.pendingUntilFixed
@@ -42,6 +44,12 @@ class PendingUntilFixedSpec(val env: Env) extends Specification with OwnEnv {
 
   def e6 = {
     val ex = "ex" ! pendingUntilFixed { Execution.result(1 must_== 2) }
+    execute(ex) must_== Pending("Pending until fixed")
+  }
+
+  def e7 = {
+    def tooLong: Boolean = { List.range(0, 10000000).reverse; true }
+    val ex = "ex" ! pendingUntilFixed { Execution.result(tooLong).setTimeout(1.seconds) }
     execute(ex) must_== Pending("Pending until fixed")
   }
 

@@ -43,6 +43,7 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
                      nextMustStopIf: Result => Boolean                   = (r: Result) => false,
                      isolable:       Boolean                             = true,
                      previousResult: Option[Result]                      = None,
+                     finalResultMap: Option[Result => Result]            = None,
                      continuation:   Option[FragmentsContinuation]       = None) {
 
   lazy val executedResult: TimedFuture[ExecutedResult] =
@@ -70,6 +71,12 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
 
       case Right(ExecutedResult(r, _)) =>
         r
+    }.map {
+      case r =>
+        finalResultMap match {
+          case Some(f) => f(r)
+          case None => r
+        }
     }
 
   private def futureResult(env: Env): Option[Future[(Result, SimpleTimer)]] =
@@ -114,6 +121,10 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
   /** force a result */
   def mapResult(f: Result => Result): Execution =
     updateResult(r => f(r))
+
+  /** modify the final result */
+  def mapFinalResult(f: Result => Result): Execution =
+    copy(finalResultMap = Some(f))
 
   /** force a message */
   def mapMessage(f: String => String): Execution =

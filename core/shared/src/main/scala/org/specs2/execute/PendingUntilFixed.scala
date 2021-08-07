@@ -18,7 +18,7 @@ trait PendingUntilFixed { outer =>
 
   /** @return Pending unless the result of the execution is a success */
   def pendingUntilFixed[T : AsExecution](m: String = "")(t: =>T): Execution =
-    AsExecution[T].execute(t).mapResult {
+    AsExecution[T].execute(t).mapFinalResult {
     case s @ Success(_,_) => Failure(m.prefix(". ", "Fixed now, you should remove the 'pendingUntilFixed' marker"))
     case other            => Pending(m.prefix(". ", "Pending until fixed"))
   }
