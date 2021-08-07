@@ -78,7 +78,7 @@ trait SpecStructureDsl1 extends FragmentsFactory { outer =>
   implicit class appendToArguments(args: Arguments) {
     def ^(other: Arguments)         : Arguments = args.overrideWith(other)
     def ^(s: SpecificationStructure): SpecStructure = ^(s.is)
-    def ^(structure: SpecStructure) : SpecStructure = structure.copy(arguments = args)
+    def ^(structure: SpecStructure) : SpecStructure = structure.copy(arguments = structure.arguments.overrideWith(args))
     def ^(header: SpecHeader)       : SpecStructure = SpecStructure(header, args)
     def ^(others: =>Fragments)      : SpecStructure = SpecStructure(SpecHeader(specClass = outer.getClass), args, () => others)
     def ^(others: Seq[Fragment])    : SpecStructure = ^(Fragments(others:_*))
