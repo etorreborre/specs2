@@ -2,8 +2,6 @@ package org.specs2
 package specification
 package core
 
-import java.util.concurrent._
-
 import execute._
 import org.specs2.concurrent.ExecutionEnv
 
@@ -19,7 +17,8 @@ import control._
 import scala.util.control.NonFatal
 import ResultLogicalCombinators._
 import org.specs2.control.eff.TimedFuture
-import Execution._
+import java.util.concurrent._
+
 
 /**
  * Execution of a Fragment
@@ -55,29 +54,18 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
         TimedFuture.failed(t)
 
       case Started(f) =>
-        TimedFuture.future(f).map { case (r, timer) => ExecutedResult(r, timer) }
+        TimedFuture.future(f).attempt.map {
+          case Left(t) =>
+            val r = Error(t)
+            ExecutedResult(finalResultMap.map(_(r)).getOrElse(r), new SimpleTimer)
+
+          case Right((r, timer)) =>
+            ExecutedResult(finalResultMap.map(_(r)).getOrElse(r), timer)
+        }
     }
 
   lazy val executionResult: TimedFuture[Result] =
-    executedResult.attempt.map {
-      case Left(t: TimeoutException) =>
-        timeout match {
-          case Some(to) => Skipped(s"timed out after $to", t.getMessage)
-          case None => Error(t)
-        }
-
-      case Left(t) =>
-        Error(t)
-
-      case Right(ExecutedResult(r, _)) =>
-        r
-    }.map {
-      case r =>
-        finalResultMap match {
-          case Some(f) => f(r)
-          case None => r
-        }
-    }
+    executedResult.map(_.result)
 
   private def futureResult(env: Env): Option[Future[(Result, SimpleTimer)]] =
     executing match {
@@ -142,7 +130,8 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
       case None => this
 
       case Some(r) =>
-        val to = env.timeout |+| timeout
+        val to = timeout.orElse(env.arguments.timeout)
+
         try {
           implicit val ec = env.specs2ExecutionContext
           env.setContextClassLoader()
@@ -152,18 +141,24 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
           val timedFuture = TimedFuture({ es =>
             r(env).flatMap { action =>
               try Future.successful((action(), timer.stop))
-              catch { case t: Throwable =>
-                Future.failed(t)
-              }
+              catch { case t: Throwable => Future.failed(t) }
             }
           }, to)
 
-          val future = timedFuture.runNow(env.executorServices).recoverWith { case e: FailureException =>
-            // Future execution could still throw FailureExceptions which can only be
-            // recovered here
-            Future.successful((ResultExecution.handleExceptionsPurely(e), timer.stop))
+          val future = timedFuture.runNow(env.executorServices).recoverWith {
+            // // this exception is thrown if the `action()` code above throws an exception
+            case e: ExecutionException =>
+              if (NonFatal(e.getCause))
+                Future.successful((ResultExecution.handleExceptionsPurely(e.getCause), timer.stop))
+              else
+                Future.failed(FatalExecution(e.getCause))
+
+            case NonFatal(e) =>
+              // Future execution could still throw FailureExceptions or TimeoutExceptions
+              // which can only be recovered here
+              Future.successful((ResultExecution.handleExceptionsPurely(e), timer.stop))
           }
-          setExecuting(future).copy(timeout = to)
+          setExecuting(future)
         }
         catch { case t: Throwable => setFatal(t) }
     }

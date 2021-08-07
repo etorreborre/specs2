@@ -6,6 +6,7 @@ import execute._
 import process._
 import control._
 import scala.concurrent._, duration._
+import matcher.ResultMatchers._
 
 class ExecutionSpec(val env: Env) extends Specification with OwnEnv { def is = s2"""
 
@@ -40,7 +41,7 @@ class ExecutionSpec(val env: Env) extends Specification with OwnEnv { def is = s
   }
 
   def withFatalException = {
-    Execution.withEnv(_ => {throw new java.lang.NoSuchMethodError("boom"); success}).result(env) must throwAn[ExecutionException]
+    Execution.withEnv(_ => {throw new java.lang.NoSuchMethodError("boom"); success}).result(env) must beError(".*NoSuchMethodError.*")
   }
 
   /**

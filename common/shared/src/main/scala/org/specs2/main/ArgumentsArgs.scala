@@ -3,6 +3,7 @@ package main
 
 import control._
 import text._
+import scala.concurrent.duration._
 
 /**
  * Methods with default Property values to create Arguments instances
@@ -92,6 +93,7 @@ trait ArgumentsCreation {
       scheduledThreadsNb:   ArgProperty[Int]               = ArgProperty[Int](),
       batchSize:            ArgProperty[Int]               = ArgProperty[Int](),
       timeFactor:           ArgProperty[Int]               = ArgProperty[Int](),
+      timeout:              ArgProperty[FiniteDuration]    = ArgProperty[FiniteDuration](),
       retriesFactor:        ArgProperty[Int]               = ArgProperty[Int](),
       executor:             ArgProperty[String]            = ArgProperty[String]()
     ) = new Arguments(
@@ -110,6 +112,7 @@ trait ArgumentsCreation {
                scheduledThreadsNb.toOption,
                batchSize.toOption,
                timeFactor.toOption,
+               timeout.toOption,
                retriesFactor.toOption,
                executor.toOption))
 

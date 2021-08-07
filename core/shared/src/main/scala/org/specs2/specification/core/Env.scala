@@ -55,7 +55,7 @@ case class Env(
     specs2ExecutionEnv.executionContext
 
   lazy val timeout =
-    executionParameters.timeout
+    arguments.timeout
 
   lazy val commandLine: CommandLine =
     arguments.commandLine
@@ -64,7 +64,7 @@ case class Env(
     List[AnyRef](arguments.commandLine, executionEnv, executionContext, arguments, this)
 
   def setTimeout(duration: FiniteDuration): Env =
-    copy(executionParameters = executionParameters.setTimeout(duration))
+    copy(arguments = arguments.setTimeout(duration))
 
   def shutdown(): Unit =
     try     specs2ExecutionEnv.shutdown
@@ -138,8 +138,7 @@ object Env {
 
 }
 
-case class ExecutionParameters(timeout:       Option[FiniteDuration] = None,
-                               withIsolation: Boolean = true) {
+case class ExecutionParameters(withIsolation: Boolean = true) {
 
   def withoutIsolation: Boolean =
     !withIsolation
@@ -156,6 +155,4 @@ case class ExecutionParameters(timeout:       Option[FiniteDuration] = None,
   def setWithoutIsolation: ExecutionParameters =
     copy(withIsolation = false)
 
-  def setTimeout(duration: FiniteDuration): ExecutionParameters =
-    copy(timeout = Some(duration))
 }

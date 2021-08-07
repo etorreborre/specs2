@@ -7,6 +7,7 @@ import reflect.ClassName._
 import text.NotNullStrings._
 import java.util.regex.Pattern
 import scala.util.control.NonFatal
+import scala.concurrent.TimeoutException
 
 /**
 * This trait executes a Result and returns an appropriate value when a specs2 exception is thrown
@@ -34,6 +35,7 @@ trait ResultExecution { outer =>
       case e: AssertionError                                                 => Error(e)
       case e: java.lang.Error if simpleClassName(e) == "NotImplementedError" => Failure(e.getMessage.notNull, "", e.getStackTrace.toList, details = FromJUnitAssertionError)
       case e: java.lang.Error if simpleClassName(e) == "ExpectationError"    => Failure(e.toString, "", e.getStackTrace.toList, details = FromExpectationError)
+      case e: TimeoutException                                               => Skipped(e.getMessage)
       case NonFatal(t)                                                       => Error(t)
     }
 

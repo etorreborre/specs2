@@ -6,6 +6,7 @@ import org.specs2.fp._
 import control._
 import text._
 import scala.Predef._
+import scala.concurrent.duration.FiniteDuration
 
 /**
  * This class holds all the options that are relevant for specs2 execution and reporting.
@@ -48,6 +49,10 @@ case class Arguments (
   def specs2ThreadsNb: Int            = execute.specs2ThreadsNb
   def batchSize: Int                  = execute.batchSize
   def scheduledThreadsNb: Int         = execute.scheduledThreadsNb
+  def timeFactor: Int                 = execute.timeFactor
+  def timeout: Option[FiniteDuration] = execute.timeout
+  def setTimeout(t: FiniteDuration)   = copy(execute = execute.setTimeout(t))
+
   def useCustomClassLoader: Boolean   = execute.useCustomClassLoader
 
   def xonly: Boolean                  = report.xonly

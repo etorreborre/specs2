@@ -6,6 +6,7 @@ package mutable
 import main._
 import control.StackTraceFilter
 import text.Colors
+import scala.concurrent.duration._
 
 /**
  * Create arguments in an acceptance specification
@@ -92,6 +93,7 @@ trait ArgumentsCreation extends org.specs2.main.ArgumentsCreation with MutableAr
                           scheduledThreadsNb:   ArgProperty[Int]               = ArgProperty[Int](),
                           batchSize:            ArgProperty[Int]               = ArgProperty[Int](),
                           timeFactor:           ArgProperty[Int]               = ArgProperty[Int](),
+                          timeout:              ArgProperty[FiniteDuration]    = ArgProperty[FiniteDuration](),
                           retriesFactor:        ArgProperty[Int]               = ArgProperty[Int](),
                           executor:             ArgProperty[String]            = ArgProperty[String]()
                           ) = updateArguments(super.execute(
@@ -110,6 +112,7 @@ trait ArgumentsCreation extends org.specs2.main.ArgumentsCreation with MutableAr
       scheduledThreadsNb,
       batchSize,
       timeFactor,
+      timeout,
       retriesFactor,
       executor))
 
