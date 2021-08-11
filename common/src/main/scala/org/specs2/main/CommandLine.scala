@@ -6,6 +6,8 @@ import java.io.File
 import io.*
 import text.*
 import text.Split.*
+import reflect.*
+import scala.reflect.{ClassTag}
 
 /**
  * Command-line arguments
@@ -21,6 +23,7 @@ case class CommandLine(_arguments: Seq[String] = Seq()) extends ShowArgs:
    *         or if an attribute with that name (and any value) has been defined
    */
   def isSet(name: String) = contains(name) || isDefined(name)
+
   /**
    * @return the value for a given attribute
    *         attribute names and values are defined in a positional way where an attribute name is always succeeded
@@ -32,6 +35,10 @@ case class CommandLine(_arguments: Seq[String] = Seq()) extends ShowArgs:
    */
   def value(name: String): Option[String] =
     Arguments.value(name)(using _arguments, SystemProperties)
+
+  /** try to instantiate a class from its name */
+  def instance[T <: AnyRef](name: String)(using t: ClassTag[T]): Option[T] =
+    Arguments.value(name)(using _arguments, SystemProperties).flatMap(n => Classes.createInstanceFromName(n).runOption)
 
   def valueOr(name: String, defaultValue: String) = value(name).getOrElse(defaultValue)
 

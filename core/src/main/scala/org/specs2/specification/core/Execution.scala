@@ -39,10 +39,11 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
                      mustJoin:       Boolean                             = false,
                      nextMustStopIf: Result => Boolean                   = (r: Result) => false,
                      previousResult: Option[Result]                      = None,
+                     finalResultMap: Option[Result => Result]            = None,
                      continuation:   Option[FragmentsContinuation]       = None):
 
   lazy val executedResult: Action[ExecutedResult] =
-    executing match
+    executing match {
       case NotExecuting =>
         Action.pure(ExecutedResult(Skipped(), new SimpleTimer))
 
@@ -50,21 +51,18 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
         Action.exception(t)
 
       case Started(f) =>
-        Action.future(f).map { case (r, timer) => ExecutedResult(r, timer) }
+        Action.future(f).attempt.map {
+          case Left(t) =>
+            val r = Error(t)
+            ExecutedResult(finalResultMap.map(_(r)).getOrElse(r), new SimpleTimer)
+
+          case Right((r, timer)) =>
+            ExecutedResult(finalResultMap.map(_(r)).getOrElse(r), timer)
+        }
+    }
 
   lazy val executionResult: Action[Result] =
-    executedResult.attempt.map {
-      case Left(t: TimeoutException) =>
-        timeout match
-          case Some(to) => Skipped(s"timed out after $to", t.getMessage)
-          case _ => Error(t)
-
-      case Left(t) =>
-        Error(t)
-
-      case Right(ExecutedResult(r, _)) =>
-        r
-    }
+    executedResult.map(_.result)
 
   private def futureResult(env: Env): Option[Future[(Result, SimpleTimer)]] =
     executing match
@@ -98,9 +96,13 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
   def updateResult(newResult: (=>Result) => Result): Execution =
     updateRun(f => e => f(e).map(r => () => newResult(r()))(e.executionContext))
 
-  /** force a result */
+  /** map a result - the passed function can potentially throw an exception */
   def mapResult(f: Result => Result): Execution =
     updateResult(r => f(r))
+
+  /** modify the final result - the passed function cannot throw an exception! */
+  def mapFinalResult(f: Result => Result): Execution =
+    copy(finalResultMap = Some(f))
 
   /** force a message */
   def updateMessage(f: String => String): Execution =
@@ -116,28 +118,35 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
   def startExecution(env: Env): Execution =
     run match
       case Some(r) =>
-        val to = env.arguments.timeout |+| timeout
-        try
-          given ec: ExecutionContext = env.specs2ExecutionContext
+        given ec: ExecutionContext = env.specs2ExecutionContext
+        val to = timeout.orElse(env.arguments.timeout)
 
+        try
           // this sets any custom classloader, like the one passed from SBT
           // as the context classloader this thread
           env.setContextClassLoader()
           val timer = startSimpleTimer
-
-          val timedFuture = Action.future(r(env).flatMap { action =>
+          val timedFuture = Action.future {
+            r(env).flatMap { action =>
               try Future.successful((action(), timer.stop))
-              catch { case t: Throwable =>
-                Future.failed(t)
-              }
-            })
+              catch { case t: Throwable => Future.failed(t) }
+            }
+          }
 
           val future = timedFuture.runFuture(env.executionEnv, to).recoverWith {
-            case e =>
-              // Future execution could still throw exceptions: FailureExceptions, TimeoutException,...
+            // this exception is thrown if the `action()` code above throws an exception
+            case e: ExecutionException =>
+              if (NonFatal(e.getCause))
+                Future.successful((ResultExecution.handleExceptionsPurely(e.getCause), timer.stop))
+              else
+                Future.failed(FatalExecution(e.getCause))
+
+            case NonFatal(e) =>
+              // Future execution could still throw FailureExceptions or TimeoutExceptions
               // which can only be recovered here
               Future.successful((ResultExecution.handleExceptionsPurely(e), timer.stop))
           }
+
           setExecuting(future).copy(timeout = to)
         catch { case t: Throwable => setFatal(t) }
       case _ => this

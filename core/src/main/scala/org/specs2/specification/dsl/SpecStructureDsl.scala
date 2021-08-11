@@ -98,7 +98,7 @@ trait SpecStructureDsl extends FragmentsFactory:
 
   given ToSpecStructure[Arguments, SpecStructure] with
     def toSpecStructure(arguments: Arguments, spec: =>SpecStructure): SpecStructure =
-      spec.copy(arguments = arguments)
+      spec.copy(arguments = arguments.overrideWith(spec.arguments))
 
   given [T <: SpecificationStructure]: ToSpecStructure[Arguments, T] with
     def toSpecStructure(arguments: Arguments, spec: =>T): SpecStructure =

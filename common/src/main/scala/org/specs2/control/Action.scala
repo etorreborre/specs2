@@ -122,7 +122,7 @@ object Action:
   def exception[A](t: Throwable): Action[A] =
     Action(_ => Future.failed[A](t))
 
-  def future[A](f: Future[A]): Action[A] =
+  def future[A](f: =>Future[A]): Action[A] =
     Action(_ => f)
 
   def checkThat[A](a: =>A, condition: Boolean, failureMessage: String): Action[A] =

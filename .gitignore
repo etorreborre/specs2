@@ -20,6 +20,3 @@ project/metals.sbt
 
 lowered.hnir
 
-.js
-.jvm
-.native

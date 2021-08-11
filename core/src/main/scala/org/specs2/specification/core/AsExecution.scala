@@ -14,7 +14,7 @@ object AsExecution extends AsExecutionLowImplicits:
     t
 
   given [R : AsResult]: AsExecution[R] with
-    def execute(r: => R): Execution =
+    def execute(r: =>R): Execution =
       Execution.result(AsResult.safely(r))
 
 
