@@ -49,7 +49,8 @@ class SbtPrinterSpec(val env: Env) extends Specification with OwnEnv { def is = 
            |⎵
            |Total for specification HelloWorldSpec
            |Finished in 0 ms
-           |3 examples, 0 failure, 0 error""".stripMargin.showSpaces
+           |3 examples, 0 failure, 0 error
+           | """.stripMargin.showSpaces
 
     def print(spec: SpecStructure) =
       printer.print(spec).runAction(ownEnv.specs2ExecutionEnv)

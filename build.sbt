@@ -98,7 +98,7 @@ lazy val guide = project.in(file("guide")).
     Compile / scalacOptions --= Seq("-Xlint", "-Ywarn-unused-import"),
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
     buildInfoPackage := "org.specs2").
-  dependsOn(html, examples.jvm % "compile->compile;test->test")
+  dependsOn(html, form % "compile->compile;test->test", examples.jvm % "compile->compile;test->test")
 
 lazy val html = project.in(file("html")).
   settings(

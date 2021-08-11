@@ -31,7 +31,7 @@ object ExecutionEnv:
     createSpecs2(arguments, systemLogger, tag)
 
   def createSpecs2(arguments: Arguments, systemLogger: Logger, tag: Option[String] = None): ExecutionEnv =
-    arguments.execute.jsExecutionContext.map(ec => fromExecutionContext(ec)).getOrElse(fromGlobalExecutionContext)
+    fromGlobalExecutionContext
 
   /** create an ExecutionEnv from Scala global execution context */
   def fromGlobalExecutionContext: ExecutionEnv =

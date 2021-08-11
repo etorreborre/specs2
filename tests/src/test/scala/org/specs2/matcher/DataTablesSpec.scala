@@ -30,7 +30,7 @@ class DataTablesSpec(val env: Env) extends Specification with DataTables with Re
 
  Applicative style
  =================
-
+ ${section("ci")}
  The default execution model for DataTables is sequential. You can however execute the rows of a DataTable
    by using `|*`                                                                                             $applicative1
    `|*>` can be used to specify concurrent execution + `play`                                                $applicative2
@@ -40,7 +40,7 @@ class DataTablesSpec(val env: Env) extends Specification with DataTables with Re
 
  Even if the execution is concurrent you will get the errors corresponding to each row                       $applicative6
 
-                                                                                                             """
+"""
 
   def boom = error("boom")
 

@@ -42,3 +42,5 @@ trait ComponentsDefinitions:
   case class OrderLine(name: String, quantity: Int):
     def form =
       Form.tr(field("name", name), field("qty", quantity))
+
+object ComponentsDefinitions extends ComponentsDefinitions

@@ -7,7 +7,7 @@ import process.*
 import matcher.*
 import scala.concurrent.*, duration.*
 
-class ExecutionSpec(val env: Env) extends Specification with OwnEnv with ResultMatchers { def is = s2"""
+class ExecutionSpec(val env: Env) extends Specification with OwnEnv with ResultMatchers { def is = section("ci") ^ s2"""
 
  A link is executed by getting the corresponding specification ref status in the Statistics store
    the Stats is the stats of the spec + specs += 1 $linkExecution

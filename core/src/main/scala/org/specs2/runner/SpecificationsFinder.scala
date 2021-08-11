@@ -75,8 +75,9 @@ case class DefaultSpecificationsFinder(env: Env) extends SpecificationsFinder:
     specificationNames(glob, pattern, basePath, verbose).flatMap { names =>
       logger.info("-------------", verbose) >>
       names.filter(filter).traverse { name =>
+        lazy val options = s" (glob=$glob, pattern=$pattern, bathPath=$basePath)"
         SpecificationStructure.create(name, classLoader, Some(env)).map(s => Option(s)).
-          orElse(logger.warn("[warn] cannot create specification "+name).as(None: Option[SpecificationStructure]))
+          orElse(logger.warn("cannot create specification "+name+options).as(None: Option[SpecificationStructure]))
       }.map(_.flatten)
     }
 

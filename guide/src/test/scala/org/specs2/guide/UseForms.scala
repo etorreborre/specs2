@@ -4,9 +4,8 @@ package guide
 import sys.*
 import form.*
 import form.given
-import examples.Address
-import specification.Forms
-import specification.Forms.*
+import specification.*, Forms.*
+import Form.*
 
 object UseForms extends UserGuidePage with Forms { def is = "Forms".title ^ s2"""
 
@@ -164,7 +163,9 @@ case class Address(street: String, number: Int):
 ```
 
 And then you can use it like this: ${snippet{
-
+// 8<--
+import Model.*
+// 8<--
 class AddressSpecification extends Specification with Forms:
  def is = s2"""
 
@@ -177,10 +178,10 @@ class AddressSpecification extends Specification with Forms:
 ##### Adding several rows at once
 
 A very practical way to add rows programmatically is to start from a list of values and have a function creating a Row object for each value: ${snippet{
-  Form("a new Form").trs(addresses) { (a: Address) => Row.tr(field(a.number), field(a.street)) }
+  Form("a new Form").trs(addresses) { (a: ComponentsDefinitions.Address) => Row.tr(field(a.number), field(a.street)) }
 }}
 
-${ Form("a new Form").trs(addresses) { (a: Address) => Row.tr(field(a.number), field(a.street)) }  }
+${ Form("a new Form").trs(addresses) { (a: ComponentsDefinitions.Address) => Row.tr(field(a.number), field(a.street)) }  }
 
 #### Nesting into another Form
 
@@ -253,6 +254,9 @@ ${ Form("purchase").
 #### Using tabs
 
 If there are too many fields to be displayed on a Form you can use tabs: ${snippet{
+// 8<---
+import ComponentsDefinitions.*
+// 8<---
 s2"""
 A person can have 2 addresses ${
   Form("Addresses").tr {
@@ -267,7 +271,8 @@ A person can have 2 addresses ${
 """
 }}
 
-The first `tab` call will create a `Tabs` object containing the a first tab with "home" as the title and an Address form as its content. Then every subsequent `tab` calls on the `Tabs` object will create new tabs:
+The first `tab` call will create a `Tabs` object containing the a first tab with "home" as the title and an Address form as its content.
+Then every subsequent `tab` calls on the `Tabs` object will create new tabs:
 
 ${ Form("Addresses").tr(
   tab("home", Form("Address").
@@ -278,6 +283,9 @@ ${ Form("Addresses").tr(
     tr(prop("number", 2)(2)))) }
 
 Tabs can also be created from a seq of values. Let's pretend we have a list of `Address` objects with a name and a Form displaying the `Address` values. You can write: ${snippet{
+// 8<--
+import ComponentsDefinitions.*
+// 8<--
 Form("Addresses").tabs(addresses) { (address: Address) => tab(address.street, address.form) }
 }}
 
@@ -309,6 +317,9 @@ case class Customer(name: String, address: Address):
 ```
 
 ${snippet{
+// 8<--
+import Model.*
+// 8<--
 class CustomerSpecification extends Specification with Forms:
   def is = s2"""
   The customer must be retrieved from the database with a proper name and address ${
@@ -324,7 +335,9 @@ As you also see above, named arguments can bring more readability to the expecte
 #### Lazy cells
 
 Fields, Props and Forms are added right away to a row when building a Form with the `tr` method. If it is necessary to add them with a "call-by-name" behavior, the `lazify` method can be used: ${snippet{
-
+// 8<--
+import Model.*
+// 8<--
 def address = Address() // build an Address
 def customer = Customer()
 
@@ -337,6 +350,11 @@ Form("Customer").
 #### Xml cells
 
 Any xml can be "injected" on a row by using an `XmlCell`: ${snippet{
+// 8<--
+import Model.*
+// 8<--
+
+def actualAddress(i: Int) = addresses(0)
 Form("Customer").
   tr(prop("name", Customer().name)("name")).
   tr(XmlCell(<div><b>this is a bold statement</b></div>))
@@ -549,8 +567,6 @@ Note that the Calculator class is not, in itself an Example. But there is an imp
 so that an explicit call to `.form` is not necessary in order to include the Form in the specification.
 """
 
-  import Form.*
-
   case class Order(orderId: Int) {
     lazy val actualLines = // those should be extracted from the actual order entity retrieved by id
       OrderLine("PIS", 1) ::
@@ -599,7 +615,7 @@ so that an explicit call to `.form` is not necessary in order to include the For
     def th(title1: String, titles: String*) = WrongCalculator(Form.th(title1, titles*))
   }
 
-  lazy val addresses = Seq(Address("Rose Crescent", 3), Address("Oxfort St", 4))
+  lazy val addresses = Seq(ComponentsDefinitions.Address("Rose Crescent", 3), ComponentsDefinitions.Address("Oxfort St", 4))
 
   val address = Form("Address").
     tr(field("street", "Rose Crescent")).
@@ -629,13 +645,27 @@ so that an explicit call to `.form` is not necessary in order to include the For
   def enter(s: String, s2: String): Unit ={}
   def submit(): Unit = {}
 
-  case class Customer(name: String = "", address: Address = Address()) {
-    def retrieve(customerId: Int) = {
+}
+
+object Model:
+  case class Address(street: String = "street", number: Int = 1):
+    def retrieve(addressId: Int) =
+      val address = Address()
+      Form("Address").
+        tr(prop("street", address.street, street)).
+        tr(prop("number", address.number, number))
+
+    def actualIs(address: Address) =
+      Form("Address").
+        tr(prop("street", address.street, street)).
+        tr(prop("number", address.number, number))
+
+
+  case class Customer(name: String = "", address: Address = Address()):
+    def retrieve(customerId: Int) =
       val customer = actualCustomer(customerId)
       Form("Customer").
         tr(prop("name", customer.name)(name)).
         tr(address.actualIs(customer.address))
-    }
-    def actualCustomer(customerId: Int) = Customer() // fetch from the database
-  }
-}
+
+    def actualCustomer(customerId: Int): Customer = this // fetch from the database

@@ -66,9 +66,10 @@ class ResourceExample(messages: ArrayBuffer[String]) extends Specification, Reso
     messages.append("acquired")
     Future.successful(Ref(0))
 
-  def release(ref: Ref[Int]) =
+  def release(ref: Ref[Int]) = Execution.result {
     messages.append("released with value "+ref.get)
     ok
+  }
 
 class AcquireErrorExample extends Specification, Resource[Ref[Int]]:
   def is = sequential ^ s2"""
