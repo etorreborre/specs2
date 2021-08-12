@@ -4,7 +4,7 @@ package mutable
 import matcher.*
 import main.ArgumentsShortcuts
 import execute.StandardResults
-import specification.*
+import specification.mutable.*
 import specification.create.FormattingFragments
 import specification.core.mutable.SpecificationStructure
 import specification.dsl.mutable.*

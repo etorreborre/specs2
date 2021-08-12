@@ -6,6 +6,7 @@ import execute.Snippet.*
 import core.*
 import control.Use
 
+// format: off
 class SnippetsSpec(val env: Env)
     extends Specification
     with Snippets
@@ -57,14 +58,15 @@ Robustness
 """
 
   def snippet1 =
-    s2""" code: ${snippet { got { 1 + 1 } }} """.trimmedTexts(1) === "`got {1 + 1}`"
+    s2""" code: ${snippet {got {1 + 1}}} """.trimmedTexts(1) === "`got {1 + 1}`"
 
-  def snippet2 = s2""" code: ${snippet {
-    got {
-      var n = 0
-      n = 1
-    }
-  }} """.trimmedTexts(1) ===
+  def snippet2 =
+    s2""" code: ${snippet {
+got {
+  var n = 0
+  n = 1
+}
+  }}""".trimmedTexts(1) ===
     """|```
        |got {
        |  var n = 0
@@ -74,11 +76,11 @@ Robustness
 
   def snippet3 = s2""" code: ${snippet {
 // 8<--
-    var n = 0
+var n = 0
 // 8<--
-    n = 1
+n = 1
 // 8<--
-    n = 0
+n = 0
   }}""".trimmedTexts(1).trim ===
     """|```
        |n = 1
@@ -86,14 +88,14 @@ Robustness
 
   def snippet4 = s2""" code: ${snippet {
 // 8<--
-    var n = 0
+var n = 0
 // 8<--
-    n = 1
+n = 1
 // 8<--
-    n = 0
+n = 0
 // 8<--
-    var i = 0
-    i = 1
+var i = 0
+i = 1
   }}""".trimmedTexts(1) ===
     """```
       |n = 1
@@ -102,15 +104,15 @@ Robustness
       |```""".stripMargin
 
   def snippet5 =
-    s2""" code ${snippet { "e1" ! { ok } /**/; 1 /**/ }}""".trimmedTexts(1) === """`"e1" ! { ok } /**/;1/**/`"""
+    s2""" code ${snippet { "e1" ! {ok} /**/; 1 /**/ }}""".trimmedTexts(1) === """`"e1" ! {ok} /**/; 1 /**/`"""
 
   def offset1 = s2""" code: ${snippet {
 // 8<--
-    var n = 0
+var n = 0
 // 8<--
-    n = 1
+n = 1
 // 8<--
-    n = 0
+n = 0
   }.offsetIs(2)}""".trimmedTexts(1) ===
     """|```
        |  n = 1
@@ -118,11 +120,11 @@ Robustness
 
   def offset2 = s2""" code: ${snippet {
     // 8<--
-    var n = 0
+  var n = 0
     // 8<--
-    n = 1
+  n = 1
     // 8<--
-    n = 0
+  n = 0
   }.offsetIs(-2)}""".trimmedTexts(1) ===
     """|```
        |n = 1
@@ -144,9 +146,9 @@ Robustness
       " snippet{ hello \n}.offsetIs(2) " !! "hello" | { (c, r) => trimApproximatedSnippet(c) === r }
 
   def results1 = s2""" code: ${snippet {
-    var n = 1
-    n = 1 + n
-    n
+  var n = 1
+  n = 1 + n
+  n
   }.eval.offsetIs(-2)}""".trimmedTexts.drop(1).take(3).mkString("\n") ===
     """|```
        |var n = 1

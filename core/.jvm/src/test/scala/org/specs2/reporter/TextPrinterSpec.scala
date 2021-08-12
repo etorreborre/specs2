@@ -342,15 +342,14 @@ table ${"a" | "b" |>
     s2"""
  example 1 $ok
  example 2 $ko
-
-""".stripMargin `contains`
+""" `contains`
       """|[info]_TextPrinterSpec
-            |[info]
-            |[info]__+_example_1
-            |[info]__x_example 2
-            |[error]__ko_(Result.scala:384)
-            |[info]
-            |[info]_Total_for_specification_TextPrinterSpec"""
+         |[info]
+         |[info]__+_example_1
+         |[info]__x_example 2
+         |[error]__ko_(Result.scala:365)
+         |[info]
+         |[info]_Total_for_specification_TextPrinterSpec""".stripMargin
 
   /** TEST METHODS
     */

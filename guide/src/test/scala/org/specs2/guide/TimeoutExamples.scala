@@ -2,6 +2,7 @@ package org.specs2
 package guide
 
 import concurrent.ExecutionEnv
+import scala.concurrent.duration.*
 
 object TimeoutExamples extends UserGuidePage {
   def is = s2"""
@@ -18,7 +19,7 @@ sbt> testOnly -- timeout 500
 
 It is also possible to specify a specification timeout overriding the global timeout by specifying the timeout argument: ${snippet {
     class MySpecification extends Specification:
-      def is = s2"""
+      def is = args.execute(timeout = 10.seconds) ^ s2"""
     this example should not take too long $e1
     this one too $e2
   """

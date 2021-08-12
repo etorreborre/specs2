@@ -143,11 +143,9 @@ object Fragment:
     case l: SpecificationRef => true
     case _                   => false
 
-  def specificationRef: PartialFunction[Fragment, SpecificationRef] =
-    case Fragment(l: SpecificationRef, _, _) => l
+  def specificationRef: PartialFunction[Fragment, SpecificationRef] = { case Fragment(l: SpecificationRef, _, _) => l }
 
-  def marker: PartialFunction[Fragment, Marker] =
-    case Fragment(m: Marker, _, _) => m
+  def marker: PartialFunction[Fragment, Marker] = { case Fragment(m: Marker, _, _) => m }
 
   def linkReference: PartialFunction[Fragment, SpecificationRef] =
     case f @ Fragment(l: SpecificationRef, _, _) if f.isExecutable => l
