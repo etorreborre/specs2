@@ -12,8 +12,8 @@ object depends {
   val sbt = libraryDependencies += "org.scala-sbt" % "test-interface" % "1.0"
 
   // used in specs2-scalacheck
-  val scalacheck = libraryDependencies += "org.scalacheck" %%% "scalacheck" % "1.15.3"
-  val scalacheckTest = libraryDependencies += "org.scalacheck" %%% "scalacheck" % "1.15.3" % Test
+  val scalacheck = libraryDependencies += "org.scalacheck" %%% "scalacheck" % "1.15.4"
+  val scalacheckTest = libraryDependencies += "org.scalacheck" %%% "scalacheck" % "1.15.4" % Test
 
   // used in specs2-matcher-extra
   val scalaParser = libraryDependencies += "org.scala-lang.modules" %%% "scala-parser-combinators" % "2.0.0"
