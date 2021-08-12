@@ -28,5 +28,3 @@ class RegexesSpec extends mutable.Spec:
       "a\rb" `matchesSafely` "a\rb"
     }
   }
-
-

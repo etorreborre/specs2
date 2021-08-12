@@ -3,7 +3,8 @@ package org.specs2.runner
 import org.specs2.Specification
 import sbt.testing.TaskDef
 
-class SbtRunnerSpec extends Specification { def is = s2"""
+class SbtRunnerSpec extends Specification {
+  def is = s2"""
 
   The sbt runner can extract the tags from the specification and provide them to sbt
   if the `sbt.tags` argument is passed on the command line     $sbtTags ${tag("one")}

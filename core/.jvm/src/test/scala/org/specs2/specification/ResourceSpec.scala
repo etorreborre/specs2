@@ -10,7 +10,7 @@ import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.*
 
 class ResourceSpec(using ec: ExecutionContext) extends Specification:
- def is = s2"""
+  def is = s2"""
 
  A resource can be:
 
@@ -49,7 +49,7 @@ class ResourceExample(messages: ArrayBuffer[String]) extends Specification, Reso
     """
 
   def e1 = { (ref: Ref[Int]) =>
-    messages.append("e1 "+ref.get)
+    messages.append("e1 " + ref.get)
     ref.update(v => v + 1)
     // the resource will be released even if there is an exception here
     throw Exception("boom")
@@ -57,7 +57,7 @@ class ResourceExample(messages: ArrayBuffer[String]) extends Specification, Reso
   }
 
   def e2 = { (ref: Ref[Int]) =>
-    messages.append("e2 "+ref.get)
+    messages.append("e2 " + ref.get)
     ref.update(v => v + 1)
     ok
   }
@@ -67,7 +67,7 @@ class ResourceExample(messages: ArrayBuffer[String]) extends Specification, Reso
     Future.successful(Ref(0))
 
   def release(ref: Ref[Int]) = Execution.result {
-    messages.append("released with value "+ref.get)
+    messages.append("released with value " + ref.get)
     ok
   }
 

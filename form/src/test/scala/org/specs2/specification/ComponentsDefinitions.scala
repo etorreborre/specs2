@@ -11,21 +11,18 @@ trait ComponentsDefinitions:
       fill(street, number)
 
     def fill(s: String, n: Int): Form =
-      Form("Address").
-          tr(prop("street", s)(street)).
-          tr(prop("number", n)(number))
+      Form("Address").tr(prop("street", s)(street)).tr(prop("number", n)(number))
 
   case class Customer(name: String = "", address: Address = Address()):
     def form =
       fill(name, address.form)
 
     def fill(na: String, a: Form): Form =
-      Form("Customer").
-          tr(prop("name", na)(name)).
-          tr(a)
+      Form("Customer").tr(prop("name", na)(name)).tr(a)
 
   case class initials(form: Form = Form.tr("First name", "Last name", "Initials")):
-    def computeInitials(f: String, l: String): String = f.charAt(0).toUpper.toString+"."+l.charAt(0).toUpper.toString+"."
+    def computeInitials(f: String, l: String): String =
+      f.charAt(0).toUpper.toString + "." + l.charAt(0).toUpper.toString + "."
 
     def tr(firstName: String, lastName: String, expected: String) = initials {
       form.tr(firstName, lastName, prop(computeInitials(firstName, lastName))(expected))

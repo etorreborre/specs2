@@ -5,6 +5,6 @@ trait NaturalTransformation[-F[_], +G[_]]:
 
 object NaturalTransformation:
 
-  given naturalId[M[_] : Monad]: NaturalTransformation[Id, M] with
+  given naturalId[M[_]: Monad]: NaturalTransformation[Id, M] with
     def apply[A](fa: Id[A]): M[A] =
       summon[Monad[M]].point(fa)

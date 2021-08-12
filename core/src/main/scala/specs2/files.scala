@@ -6,9 +6,8 @@ import org.specs2.runner.*
 import org.specs2.specification.core.*
 import org.specs2.specification.process.*
 
-/**
- * Run specification files from the command line with specs2.files <specification name> <arguments>
- */
+/** Run specification files from the command line with specs2.files <specification name> <arguments>
+  */
 object files:
   def main(args: Array[String]) =
     run(args, exit = true)

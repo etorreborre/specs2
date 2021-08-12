@@ -6,7 +6,8 @@ import StoreKeys.*
 import time.SimpleTimer
 import matcher.*
 
-class StoreKeysSpec extends Spec with TypedEqual { def is = s2"""
+class StoreKeysSpec extends Spec with TypedEqual {
+  def is = s2"""
 
  The StoreKeys object can
    resolve file names based on the key $e1

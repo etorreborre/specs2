@@ -6,7 +6,8 @@ import RegexExtractor.*
 import execute.{ErrorException, FailureException}
 import util.matching.Regex
 
-class RegexExtractorSpec extends Spec with TypedEqual { def is = s2"""
+class RegexExtractorSpec extends Spec with TypedEqual {
+  def is = s2"""
 
 RegexExtractors can extract up to 10 distinct parameters from a piece of text
  one parameter $extraction1
@@ -27,7 +28,7 @@ Exceptions are thrown when the extraction doesn't work
   def extraction2 = extract2("|{hello} |{world}!", group = REGEX) === (("hello", "world"))
   def extraction3 = extractAll("|{hello} |{world}, I'm |{Eric}!", group = REGEX) === Seq("hello", "world", "Eric")
   def extraction4 = extract2("|{hello} |{world}, I'm |{Eric}!", group = REGEX) === (("hello", "world"))
-  def extraction5 = extract1("hello world")=== "hello world"
+  def extraction5 = extract1("hello world") === "hello world"
   def extraction6 = extract1("hello |{world}", group = "^+?".r) === "hello |{world}"
 
   def exception1 = extract2("hello |{world}", group = REGEX) must throwA[FailureException]

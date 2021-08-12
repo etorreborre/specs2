@@ -3,18 +3,19 @@ package guide
 
 import org.specs2.main.FilesRunnerArguments.*
 
-object ArgumentsReference extends UserGuidePage { def is = "Arguments reference".title ^ s2"""
+object ArgumentsReference extends UserGuidePage {
+  def is = "Arguments reference".title ^ s2"""
 
 Arguments can be passed on the command line, or declared inside a specification, using the `args(name=value)` syntax:${snippet {
 
-class MySpec extends Specification:
-  def is = args(xonly=true) ^ s2"""
+    class MySpec extends Specification:
+      def is = args(xonly = true) ^ s2"""
 
   Clever spec title
   And some intro text
   brilliant expectation $success
   """
-}}
+  }}
 
 They can also be passed as system properties: `-Dspecs2.name=value` (`-Dname=value` also works but you might have collisions with other properties).
 
@@ -132,17 +133,17 @@ For ${"the HTML output" ~/ HtmlOutput} the following options can be used:
 
 From inside a specification, the `args` method provides the most frequent arguments as `args(argumentName = argumentValue)`. In the least frequent cases you will have to write:${snippet {
 // for selection arguments
-args.select(ex = "example \\d*")
+    args.select(ex = "example \\d*")
 
 // for reporting arguments
-args.execute(threadsNb = 4)
+    args.execute(threadsNb = 4)
 
 // for storing arguments
-args.store(reset = true)
+    args.store(reset = true)
 
 // for reporting arguments
-args.report(xonly = true)
-}}
+    args.report(xonly = true)
+  }}
 
 There are also a few shortcuts:
 

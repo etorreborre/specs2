@@ -8,7 +8,8 @@ import sys.error
 import matcher.*
 import Matcher.{given}
 
-class PropSpec extends Spec with TypedEqual {  def is = s2"""
+class PropSpec extends Spec with TypedEqual {
+  def is = s2"""
 
 A Prop is a Field defining an expected and an actual value.
 
@@ -65,31 +66,31 @@ Execution
   val actualOnly: Prop[Int, Int] = Prop(18)
   val expectedOnly: Prop[Int, Int] = Prop("", Property[Int](), Property(18))
   val constrained: Prop[String, String] = Prop("name", "eric", (s1: String, s2: String) => s1 must contain(s2))
-  val withMatcher: Prop[String, String] = Prop("name", "eric", contain(_:String))
+  val withMatcher: Prop[String, String] = Prop("name", "eric", contain(_: String))
 
-  def creation1 = noValues.label                       === "name"
-  def creation2 = actualOnly.actual.toOption           === Some(18)
-  def creation3 = nameProp.actual.toOption             === Some("eric")
-  def creation4 = constrained.label                    === "name"
-  def creation5 = withMatcher("f").execute             === Failure("eric doesn't contain 'f'")
-  def creation6 = Prop("", 1, be_>(0).mute).execute    === Success("")
+  def creation1 = noValues.label === "name"
+  def creation2 = actualOnly.actual.toOption === Some(18)
+  def creation3 = nameProp.actual.toOption === Some("eric")
+  def creation4 = constrained.label === "name"
+  def creation5 = withMatcher("f").execute === Failure("eric doesn't contain 'f'")
+  def creation6 = Prop("", 1, be_>(0).mute).execute === Success("")
   def creation7 = Prop("", 1, 2, be_>(0).mute).execute === Success("")
 
-  def display1 = Prop("name", expected = Property("fanny")).toString       === "name: _ (expected: fanny)"
-  def display2 = Prop("name", actual = Property("eric")).toString          === "name: eric"
+  def display1 = Prop("name", expected = Property("fanny")).toString === "name: _ (expected: fanny)"
+  def display2 = Prop("name", actual = Property("eric")).toString === "name: eric"
   def display3 = Prop("name", Property("eric"), Property("eric")).toString === "name: eric"
 
   def update1 = Prop("name", "eric")("paolo").expected.toOption must ===(Some("paolo"))
 
-  def execute1  = noValues.execute                             === Pending("No expected value")
-  def execute2  = actualOnly.execute                           === Pending("No expected value")
-  def execute3  = expectedOnly.execute                         === Pending("No actual value")
-  def execute4  = nameProp("eric").execute                     === Success("'eric' == 'eric'")
-  def execute5  = nameProp("eric2").execute.message            === "'eric' != 'eric2'"
-  def execute6  = nameProp.apply(error("bad")).execute.message === "java.lang.RuntimeException: bad"
-  def execute7  = constrained("e").execute.isSuccess           === true
-  def execute8  = constrained("a").execute.message             === "eric doesn't contain 'a'"
-  def execute9  = withMatcher("e").execute.isSuccess           === true
-  def execute10 = withMatcher("a").execute.message             === "eric doesn't contain 'a'"
+  def execute1 = noValues.execute === Pending("No expected value")
+  def execute2 = actualOnly.execute === Pending("No expected value")
+  def execute3 = expectedOnly.execute === Pending("No actual value")
+  def execute4 = nameProp("eric").execute === Success("'eric' == 'eric'")
+  def execute5 = nameProp("eric2").execute.message === "'eric' != 'eric2'"
+  def execute6 = nameProp.apply(error("bad")).execute.message === "java.lang.RuntimeException: bad"
+  def execute7 = constrained("e").execute.isSuccess === true
+  def execute8 = constrained("a").execute.message === "eric doesn't contain 'a'"
+  def execute9 = withMatcher("e").execute.isSuccess === true
+  def execute10 = withMatcher("a").execute.message === "eric doesn't contain 'a'"
 
 }

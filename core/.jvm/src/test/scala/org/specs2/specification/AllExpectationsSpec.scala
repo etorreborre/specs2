@@ -17,8 +17,8 @@ class AllExpectationsSpec(val env: Env) extends Spec with OwnEnv:
       executed.expectations === 8
       executed.examples === 3
       executed.failures === 3
-      executedIssues.head.message === "1 != 2 [AllExpectationsSpecification.scala:8]\n"+
-                                      "1 != 3 [AllExpectationsSpecification.scala:9]"
+      executedIssues.head.message === "1 != 2 [AllExpectationsSpecification.scala:8]\n" +
+        "1 != 3 [AllExpectationsSpecification.scala:9]"
     }
     "short-circuit the rest of the example if an expectation fails and uses 'orThrow'" >> {
       executedIssues.map(_.message) must containMatch("51 != 52")
@@ -67,8 +67,12 @@ class AllExpectationsSpec(val env: Env) extends Spec with OwnEnv:
   def results(spec: SpecificationStructure)(args: Arguments): List[Result] =
     // all the executions need to be sequential
     val env1 = ownEnv.setArguments(args <| sequential)
-    DefaultExecutor.executeSpec(spec.structure, env1).fragments.fragments.
-      flatMap(_.traverse(_.executionResult)).run(env1.executionEnv)
+    DefaultExecutor
+      .executeSpec(spec.structure, env1)
+      .fragments
+      .fragments
+      .flatMap(_.traverse(_.executionResult))
+      .run(env1.executionEnv)
 
   def issues(spec: SpecificationStructure)(args: Arguments): List[Result] =
     results(spec)(args).filter(r => r.isError || r.isFailure)

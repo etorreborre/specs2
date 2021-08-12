@@ -7,7 +7,8 @@ import reporter.PrinterLogger.*
 import specification.core.{SpecificationStructure, Env}
 import scala.collection.mutable.ArrayBuffer
 
-class BeforeAfterSpecSpec extends Specification { def is = s2"""
+class BeforeAfterSpecSpec extends Specification {
+  def is = s2"""
 
  Before and after all steps can be executed with the BeforeAfterSpec trait $beforeAfter
  Before and after all steps can be executed even if tags are included $withTags1
@@ -38,11 +39,11 @@ class BeforeAfterSpecSpec extends Specification { def is = s2"""
     val spec = new Spec with BeforeAfterSpec {
       def is =
         sequential ^ s2"""
-            | ${section("s")}
-            | e1 $e1
-            | ${section("s")}
-            | e2 $e2
-            | """.stripMargin
+                         | ${section("s")}
+                         | e1 $e1
+                         | ${section("s")}
+                         | e2 $e2
+                         | """.stripMargin
 
       def e1 = { messages.append("e1"); ok }
       def e2 = { messages.append("e2"); ok }
@@ -59,11 +60,11 @@ class BeforeAfterSpecSpec extends Specification { def is = s2"""
     val spec = new Spec with BeforeAfterSpec {
       def is =
         sequential ^ s2"""
-            | ${section("s")}
-            | e1 $e1
-            | ${section("s")}
-            | e2 $e2
-            | """.stripMargin
+                         | ${section("s")}
+                         | e1 $e1
+                         | ${section("s")}
+                         | e2 $e2
+                         | """.stripMargin
 
       def e1 = { messages.append("e1"); ok }
       def e2 = { messages.append("e2"); ok }
@@ -78,6 +79,5 @@ class BeforeAfterSpecSpec extends Specification { def is = s2"""
     val env = Env(arguments = arguments, printerLogger = NoPrinterLogger)
     try Reporter.create(Nil, env).report(s.structure).runVoid(env.executionEnv)
     finally env.shutdown()
-
 
 }

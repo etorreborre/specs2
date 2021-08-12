@@ -5,11 +5,10 @@ package core
 import text.CamelCase.*
 import reflect.ClassName
 
-/**
- * Header of a Specification
- *
- * It can hold a user-defined title for better presentation
- */
+/** Header of a Specification
+  *
+  * It can hold a user-defined title for better presentation
+  */
 case class SpecHeader(specClass: Class[?], title: Option[String] = None):
   def show = title.getOrElse(simpleName)
   def showWords = title.getOrElse(wordsTitle)

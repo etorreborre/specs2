@@ -1,7 +1,8 @@
 package org.specs2
 package specification
 
-class SpecSpec extends Specification { def is = s2"""
+class SpecSpec extends Specification {
+  def is = s2"""
 
  Many matchers can be used in a simple spec $e1
 

@@ -11,66 +11,71 @@ import text.MD5
 import scala.io.Codec
 import Paths.*
 
-/**
- * Methods to read files on the FileSystem
- */
+/** Methods to read files on the FileSystem
+  */
 trait FilePathReader:
 
-  /**
-   * @return the list of file paths accessible from dir
-   */
+  /** @return
+    *   the list of file paths accessible from dir
+    */
   def filePaths(dir: DirectoryPath, glob: String, verbose: Boolean): Operation[List[FilePath]] =
     filePathsProcess(dir).filter(filterWithPattern(globToPattern(glob))).runList
 
-  /**
-   * filter files according to a regex pattern
-   */
+  /** filter files according to a regex pattern
+    */
   def filterWithPattern(pattern: String): FilePath => Boolean = { (filePath: FilePath) =>
     // remove any letter drive on Windows
     filePath.path.replaceFirst(".:", "").unixize `matches` pattern
   }
 
-  /**
-   * @return the regular expression equivalent to a glob pattern (see the specs for Fragments)
-   */
+  /** @return
+    *   the regular expression equivalent to a glob pattern (see the specs for Fragments)
+    */
   def globToPattern(glob: String): String =
     val star = "<STAR>"
     val authorizedNamePattern = "[^\\/\\?<>\\|\\" + star + ":\"]" + star
-    glob.replace("\\", "/")
+    glob
+      .replace("\\", "/")
       .replace(".", "\\.")
       .replace("**/", "(" + authorizedNamePattern + "/)" + star)
       .replace("*", authorizedNamePattern)
       .replace(star, "*")
 
-  /**
-   * @return the files accessible recursively from a directory
-   */
+  /** @return
+    *   the files accessible recursively from a directory
+    */
   def listFilePaths(directory: DirectoryPath): Operation[List[FilePath]] =
     filePathsProcess(directory).runList
 
-  /**
-   * @return the files directly accessible from a directory
-   */
+  /** @return
+    *   the files directly accessible from a directory
+    */
   def listDirectFilePaths(directory: DirectoryPath): Operation[IndexedSeq[FilePath]] =
-    Operation.delayed(Option(directory.toFile.listFiles)
-      .map(_.toIndexedSeq).getOrElse(IndexedSeq())
-      .filter(_.isFile)
-      .map(FilePath.unsafe))
+    Operation.delayed(
+      Option(directory.toFile.listFiles)
+        .map(_.toIndexedSeq)
+        .getOrElse(IndexedSeq())
+        .filter(_.isFile)
+        .map(FilePath.unsafe)
+    )
 
-  /**
-   * @return the files directly accessible from a directory
-   */
+  /** @return
+    *   the files directly accessible from a directory
+    */
   def listDirectDirectoryPaths(directory: DirectoryPath): Operation[IndexedSeq[DirectoryPath]] =
-    Operation.delayed(Option(directory.toFile.listFiles)
-      .map(_.toIndexedSeq).getOrElse(IndexedSeq())
-      .filter(_.isDirectory)
-      .map(DirectoryPath.unsafe))
+    Operation.delayed(
+      Option(directory.toFile.listFiles)
+        .map(_.toIndexedSeq)
+        .getOrElse(IndexedSeq())
+        .filter(_.isDirectory)
+        .map(DirectoryPath.unsafe)
+    )
 
   private def filePathsProcess(directory: DirectoryPath): Producer[Operation, FilePath] =
     def go(dir: DirectoryPath): Producer[Operation, FilePath] =
       val (files, directories) = Option(dir.toFile.listFiles).map(_.toList).getOrElse(List()).partition(_.isFile)
       Producer.emitSync(files.map(FilePath.unsafe)) `append`
-       Producer.emitSync(directories.map(DirectoryPath.unsafe).map(go)).flatten
+        Producer.emitSync(directories.map(DirectoryPath.unsafe).map(go)).flatten
     go(directory)
 
   /** @return the content of a file encoded as UTF8 */
@@ -92,7 +97,7 @@ trait FilePathReader:
   /** read the content of a file as an Array of Bytes */
   def readBytes(filePath: FilePath): Operation[Array[Byte]] = exists(filePath).map { exists =>
     val stream = new BufferedInputStream(new FileInputStream(filePath.path))
-    try     LazyList.continually(stream.read).takeWhile(b => -1 != b).map(_.toByte).toArray
+    try LazyList.continually(stream.read).takeWhile(b => -1 != b).map(_.toByte).toArray
     finally stream.close()
   }
 
@@ -120,21 +125,21 @@ trait FilePathReader:
   def mustExist(file: File): Operation[Unit] =
     Operation.delayed(file.exists).flatMap { exists =>
       if exists then Operation.ok(())
-      else        Operation.fail(s"$file does not exist")
+      else Operation.fail(s"$file does not exist")
     }
 
   /** succeeds if the file is a directory */
   def mustBeADirectory(file: File): Operation[Unit] =
     Operation.delayed(file.isDirectory).flatMap { isDirectory =>
       if isDirectory then Operation.ok(())
-      else             Operation.fail(s"$file is a directory")
+      else Operation.fail(s"$file is a directory")
     }
 
   /** succeeds if the file is not a directory */
   def mustNotBeADirectory(file: File): Operation[Unit] =
     Operation.delayed(file.isDirectory).flatMap { isDirectory =>
       if isDirectory then Operation.fail(s"$file is a directory")
-      else             Operation.ok(())
+      else Operation.ok(())
     }
 
 object FilePathReader extends FilePathReader

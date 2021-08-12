@@ -1,6 +1,7 @@
 package org.specs2.guide
 
-object DetailedTopics extends UserGuidePage { def is = sortedLinks ^ s2"""
+object DetailedTopics extends UserGuidePage {
+  def is = sortedLinks ^ s2"""
 
  Topic                                                               | See
 ------------------------------------------------------               | ---------------
@@ -22,22 +23,21 @@ Matchers reference card                                              | ${link(ma
 Arguments reference card                                             | ${link(ArgumentsReference).mute}
 """
 
- def sortedLinks =
-  link(AsResultTypeclass).hide ^
-  link(ArgumentsReference).hide ^
-  link(AutoExamples).hide ^
-  link(UseDatatables).hide ^
-  link(UseForms).hide ^
-  link(CreateOnlineSpecifications).hide ^
-  link(Environment).hide ^
-  link(ExecutionEnvironments).hide ^
-  link(FragmentsApi).hide ^
-  link(GetAllExpectations).hide ^
-  link(OtherBuildTools).hide ^
-  link(matchers.OutsideSpecs2).hide ^
-  link(matchers.ReferenceCard).hide ^
-  link(SpecificationFormatting).hide ^
-  link(ReferenceOtherSpecifications).hide
-
+  def sortedLinks =
+    link(AsResultTypeclass).hide ^
+      link(ArgumentsReference).hide ^
+      link(AutoExamples).hide ^
+      link(UseDatatables).hide ^
+      link(UseForms).hide ^
+      link(CreateOnlineSpecifications).hide ^
+      link(Environment).hide ^
+      link(ExecutionEnvironments).hide ^
+      link(FragmentsApi).hide ^
+      link(GetAllExpectations).hide ^
+      link(OtherBuildTools).hide ^
+      link(matchers.OutsideSpecs2).hide ^
+      link(matchers.ReferenceCard).hide ^
+      link(SpecificationFormatting).hide ^
+      link(ReferenceOtherSpecifications).hide
 
 }

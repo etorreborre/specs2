@@ -9,7 +9,8 @@ import reporter.TextPrinterSpecification.*
 import control.*
 import producer.*, Producer.*
 
-class OnlineSpecificationSpec extends Specification { def is = s2"""
+class OnlineSpecificationSpec extends Specification {
+  def is = s2"""
 
  A specification can have examples returning a result and Fragments depending on the result value $e1
 
@@ -19,7 +20,7 @@ class OnlineSpecificationSpec extends Specification { def is = s2"""
   def e1 =
     def continue(n: Int): FragmentsContinuation = FragmentsContinuation { (r: Result) =>
       if n == 1 then None
-      else        Some(core.Fragments(oneAsync(break) `append` createExample(n - 1).contents))
+      else Some(core.Fragments(oneAsync(break) `append` createExample(n - 1).contents))
     }
 
     def online(n: Int) = Execution(success, continue(n))
@@ -33,14 +34,15 @@ class OnlineSpecificationSpec extends Specification { def is = s2"""
 
 }
 
-class WikipediaBddSpec extends Specification with Online { def is = s2"""
+class WikipediaBddSpec extends Specification with Online {
+  def is = s2"""
  All the pages mentioning the term BDD must contain a reference to specs2 $e1
 """
 
   def e1 =
     val pages = Wikipedia.getPages("BDD")
 
-    { pages must contain((_:Page) must mention("specs2")) } `continueWith`
+    { pages must contain((_: Page) must mention("specs2")) } `continueWith`
       pagesSpec(pages)
 
   def pagesSpec(pages: Seq[Page]): Fragments =
@@ -55,7 +57,7 @@ class WikipediaBddSpec extends Specification with Online { def is = s2"""
   def authorExample(link: HtmlLink) =
     s2"""
   The page at ${link.getName}
-    contains the name torreborre ${ link.getLinkedPage must mention("torreborre") }"""
+    contains the name torreborre ${link.getLinkedPage must mention("torreborre")}"""
 
   def mention(name: String): Matcher[Page] = (page: Page) => (true, "ok")
 
@@ -63,7 +65,8 @@ class WikipediaBddSpec extends Specification with Online { def is = s2"""
     def getPages(searchTerm: String): Seq[Page] = Seq(new Page {}, new Page {})
 
   trait Page:
-    def getLinks: Seq[HtmlLink] = Seq(new HtmlLink { def getName = "specs2-1" }, new HtmlLink { def getName = "specs2-2" })
+    def getLinks: Seq[HtmlLink] =
+      Seq(new HtmlLink { def getName = "specs2-1" }, new HtmlLink { def getName = "specs2-2" })
 
   trait HtmlLink:
     def getName: String

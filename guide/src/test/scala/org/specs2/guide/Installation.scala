@@ -1,7 +1,8 @@
 package org.specs2
 package guide
 
-object Installation extends UserGuidePage { def is = s2"""
+object Installation extends UserGuidePage {
+  def is = s2"""
 
 The recommended way to install $specs2 is via [sbt](http://scala-sbt.org).
 

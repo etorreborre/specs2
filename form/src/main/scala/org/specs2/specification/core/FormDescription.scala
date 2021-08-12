@@ -5,9 +5,8 @@ import form.*
 import main.Arguments
 import text.Indent.*
 
-/**
- * Description of a Form to be used in a Fragment
- */
+/** Description of a Form to be used in a Fragment
+  */
 case class FormDescription(form: () => Form) extends Description:
 
   lazy val cell = new FormCell(form())

@@ -3,22 +3,19 @@ package matcher
 
 import execute.*
 
-/**
- * This trait provides implicit definitions to transform any value into an Expectable
- */
+/** This trait provides implicit definitions to transform any value into an Expectable
+  */
 trait Expectations extends ExpectationsCreation with TypedEqual with ExpectationsDescription
 
 object Expectations extends Expectations
 
-/**
- * Base trait to create expectations.
- *
- * An expectation is a value which can have an optional description and which
- * can be matched to produce a result (for example against an expected value)
- *
- * When a result is produced it can possibly be thrown as an exception
- * based on the behaviour of the ResultChecks trait
- */
+/** Base trait to create expectations.
+  *
+  * An expectation is a value which can have an optional description and which can be matched to produce a result (for
+  * example against an expected value)
+  *
+  * When a result is produced it can possibly be thrown as an exception based on the behaviour of the ResultChecks trait
+  */
 trait ExpectationsCreation extends ResultChecks:
 
   /** @return an Expectable with a description function */
@@ -52,10 +49,9 @@ trait ResultChecks extends MatchResultStackTrace:
   /** this method can be overridden to throw exceptions when checking a result */
   protected def checkResultFailure(r: =>Result): Result = r
 
-  /** this method can be overridden to intercept a Result and modify it.
-   *  It is used for example to set a stacktrace providing the location of a
-   *  failure
-   */
+  /** this method can be overridden to intercept a Result and modify it. It is used for example to set a stacktrace
+    * providing the location of a failure
+    */
   protected def mapResult(r: Result): Result = r
 
   /** @return the result without any side-effects */
@@ -68,7 +64,7 @@ trait MatchResultStackTrace:
   protected def setStacktrace(m: Result): Result =
     m match
       case f: Failure if f.trace.isEmpty => f.copy(trace = (new Exception).getStackTrace.toList)
-      case other => other
+      case other                         => other
 
 /** this trait doesn't fill-in stack traces */
 trait NoMatchResultStackTrace extends MatchResultStackTrace:

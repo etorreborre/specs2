@@ -10,9 +10,8 @@ import execute.*
 import main.Arguments
 import specification.core.*
 
-/**
- * This trait is not a full fledged markdown printer yet
- */
+/** This trait is not a full fledged markdown printer yet
+  */
 case class MarkdownPrinter(env: Env) extends Printer:
 
   def prepare(specifications: List[SpecStructure]): Action[Unit] =
@@ -25,7 +24,7 @@ case class MarkdownPrinter(env: Env) extends Printer:
   def sink(spec: SpecStructure): AsyncSink[Fragment] =
     val env1 = env.setArguments(env.arguments.overrideWith(spec.arguments))
     val options = MarkdownOptions.create(env1.arguments)
-    val path = options.outDir / FilePath.unsafe(spec.header.className+"."+options.extension)
+    val path = options.outDir / FilePath.unsafe(spec.header.className + "." + options.extension)
     FoldIo.printToFilePath[Fragment](path)(f => fragmentToLine(options)(f))
 
   def fragmentToLine(options: MarkdownOptions)(fragment: Fragment): Action[String] =
@@ -40,36 +39,33 @@ case class MarkdownPrinter(env: Env) extends Printer:
           case r @ Failure(m, _, _, _) => showDescription(description, r) + "\n  " + m
           case r @ Error(_, e1)        => showDescription(description, r) + "\n  " + e1
           case r: Skipped              => showDescription(description, r) + "\n  " + r.message
-          case r: Pending              => showDescription(description, r) + " - "  + r.message
+          case r: Pending              => showDescription(description, r) + " - " + r.message
           case r                       => description + "\n" + r.message
         }
 
       case f if Fragment.isStepOrAction(f) =>
         f.executionResult map {
-          case Failure(m, _, _, _) => "Step failed "+m
-          case Error(_, e)         => "Step error "+e
+          case Failure(m, _, _, _) => "Step failed " + m
+          case Error(_, e)         => "Step error " + e
           case _                   => ""
         }
 
-      case Fragment(ref: SpecificationRef,_,_) => Action.protect(toMarkdown(ref, options))
-      case _                                   => Action.pure("")
+      case Fragment(ref: SpecificationRef, _, _) => Action.protect(toMarkdown(ref, options))
+      case _                                     => Action.pure("")
 
   def showDescription(description: String, result: Result): String =
-    if Seq("*", "-").exists(description.trim.startsWith) then
-      description
-    else
-      result.status+" "+description
+    if Seq("*", "-").exists(description.trim.startsWith) then description
+    else result.status + " " + description
 
   def toMarkdown(ref: SpecificationRef, options: MarkdownOptions) =
     s"[${ref.linkText}](${options.outDir / FilePath.unsafe(ref.url)})"
-
 
 object MarkdownPrinter:
   val default = MarkdownPrinter(Env())
 
 case class MarkdownOptions(
-  outDir: DirectoryPath,
-  extension: String
+    outDir: DirectoryPath,
+    extension: String
 )
 
 object MarkdownOptions:
@@ -77,7 +73,7 @@ object MarkdownOptions:
   /** create markdown options from arguments */
   def create(arguments: Arguments): MarkdownOptions =
     MarkdownOptions(
-      outDir    = arguments.commandLine.directoryOr("markdown.outdir", outDir),
+      outDir = arguments.commandLine.directoryOr("markdown.outdir", outDir),
       extension = arguments.commandLine.valueOr("markdown.ext", extension)
     )
 

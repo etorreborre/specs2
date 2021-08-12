@@ -4,7 +4,8 @@ package html
 import io.*
 import specification.core.SpecStructure
 
-class SpecHtmlPageSpec extends Spec { def is = s2"""
+class SpecHtmlPageSpec extends Spec {
+  def is = s2"""
 
  A toc that is added to a Spec html page must replace the <toc/> tag $toc
 
@@ -12,12 +13,11 @@ class SpecHtmlPageSpec extends Spec { def is = s2"""
 
   def toc =
     val specPage =
-      page(
-        """
-          |<html>
-          |<head></head>
-          |<body><toc/><h1>Title</h1></body>
-          |</html>
+      page("""
+             |<html>
+             |<head></head>
+             |<body><toc/><h1>Title</h1></body>
+             |</html>
         """.stripMargin).addToc(<ul><li>section 1</li></ul>)
 
     specPage.content must contain("li")

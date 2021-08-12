@@ -9,30 +9,28 @@ import text.Split.*
 import reflect.*
 import scala.reflect.{ClassTag}
 
-/**
- * Command-line arguments
- */
+/** Command-line arguments
+  */
 case class CommandLine(_arguments: Seq[String] = Seq()) extends ShowArgs:
 
   def arguments: Seq[String] = _arguments
   def contains(a: String) = arguments contains a
   def isDefined(name: String) = value(name).isDefined
 
-  /**
-   * @return true if a specific string is present in the list of arguments from the command line
-   *         or if an attribute with that name (and any value) has been defined
-   */
+  /** @return
+    *   true if a specific string is present in the list of arguments from the command line or if an attribute with that
+    *   name (and any value) has been defined
+    */
   def isSet(name: String) = contains(name) || isDefined(name)
 
-  /**
-   * @return the value for a given attribute
-   *         attribute names and values are defined in a positional way where an attribute name is always succeeded
-   *         with an attribute value. For example:
-   *
-   *         name1 value1 name2 value2
-   *
-   * values can also be retrieved from system properties set with the regular jvm syntax `-Dname=value`
-   */
+  /** @return
+    *   the value for a given attribute attribute names and values are defined in a positional way where an attribute
+    *   name is always succeeded with an attribute value. For example:
+    *
+    * name1 value1 name2 value2
+    *
+    * values can also be retrieved from system properties set with the regular jvm syntax `-Dname=value`
+    */
   def value(name: String): Option[String] =
     Arguments.value(name)(using _arguments, SystemProperties)
 
@@ -68,7 +66,8 @@ case class CommandLine(_arguments: Seq[String] = Seq()) extends ShowArgs:
 
   def filter(included: String*) = copy(_arguments = arguments.filter(included.toSet.contains))
   def filterNot(excluded: String*) = copy(_arguments = arguments.filterNot(excluded.toSet.contains))
-  def overrideWith(other: CommandLine) = copy(_arguments = if other.arguments.isEmpty then this._arguments else other.arguments)
+  def overrideWith(other: CommandLine) =
+    copy(_arguments = if other.arguments.isEmpty then this._arguments else other.arguments)
 
   override def toString = _arguments.mkString("CommandLine(", ", ", ")")
 
@@ -80,40 +79,41 @@ object CommandLine extends Extract:
     new CommandLine(_arguments = value("commandline").map(splitValues).getOrElse(Seq()) ++ arguments)
 
   val allArguments: Seq[ArgumentType] =
-        Select.allArguments ++
-        Store.allArguments ++
-        Execute.allArguments ++
-        Report.allArguments ++
-        FilesRunnerArguments.allArguments
+    Select.allArguments ++
+      Store.allArguments ++
+      Execute.allArguments ++
+      Report.allArguments ++
+      FilesRunnerArguments.allArguments
 
   // other arguments which are not mentioned in Arguments
   // this is a stop gap measure until a more modular solution is found
   val extraArguments: Seq[ArgumentType] = List(
-        BooleanArgument("verbose"),
-        BooleanArgument("console"),
-        BooleanArgument("all"),
-        BooleanArgument("silent"),
-        BooleanArgument("pandoc"),
-        ValuedArgument("scalacheck.mintestsok"),
-        ValuedArgument("scalacheck.minsize"),
-        ValuedArgument("scalacheck.maxdiscardratio"),
-        ValuedArgument("scalacheck.maxsize"),
-        ValuedArgument("scalacheck.workers"),
-        ValuedArgument("scalacheck.seed"),
-        ValuedArgument("scalacheck.verbosity"),
-        ValuedArgument("sbt.tags"),
-        ValuedArgument("stats.outdir"),
-        ValuedArgument("junit.outdir"),
-        ValuedArgument("markdown.outdir"),
-        ValuedArgument("markdown.ext"),
-        ValuedArgument("html.outdir"),
-        ValuedArgument("html.template"),
-        ValuedArgument("html.variables"),
-        ValuedArgument("html.nostats"),
-        ValuedArgument("html.search"),
-        ValuedArgument("html.toc"),
-        ValuedArgument("html.toc.entrymaxsize"),
-        ValuedArgument("html.warn.missingref"))
+    BooleanArgument("verbose"),
+    BooleanArgument("console"),
+    BooleanArgument("all"),
+    BooleanArgument("silent"),
+    BooleanArgument("pandoc"),
+    ValuedArgument("scalacheck.mintestsok"),
+    ValuedArgument("scalacheck.minsize"),
+    ValuedArgument("scalacheck.maxdiscardratio"),
+    ValuedArgument("scalacheck.maxsize"),
+    ValuedArgument("scalacheck.workers"),
+    ValuedArgument("scalacheck.seed"),
+    ValuedArgument("scalacheck.verbosity"),
+    ValuedArgument("sbt.tags"),
+    ValuedArgument("stats.outdir"),
+    ValuedArgument("junit.outdir"),
+    ValuedArgument("markdown.outdir"),
+    ValuedArgument("markdown.ext"),
+    ValuedArgument("html.outdir"),
+    ValuedArgument("html.template"),
+    ValuedArgument("html.variables"),
+    ValuedArgument("html.nostats"),
+    ValuedArgument("html.search"),
+    ValuedArgument("html.toc"),
+    ValuedArgument("html.toc.entrymaxsize"),
+    ValuedArgument("html.warn.missingref")
+  )
 
   val allArgumentNames = allArguments.map(_.name)
 
@@ -141,7 +141,7 @@ object CommandLine extends Extract:
       case name :: _ =>
         findArgument(name) match {
           case Some(_) => List()
-          case _ => List(name)
+          case _       => List(name)
         }
     }
   }
@@ -150,17 +150,16 @@ object CommandLine extends Extract:
     allArguments.find {
       case BooleanArgument(n) =>
         (name.startsWith("!") && n.toLowerCase == name.drop(1).toLowerCase) ||
-        (n.toLowerCase == name.toLowerCase)
+          (n.toLowerCase == name.toLowerCase)
       case ValuedArgument(n) =>
         n.toLowerCase == name.toLowerCase
     }
 
-
 case class FilesRunnerArguments(
-  verbose: Boolean,
-  basePath: String,
-  glob: String,
-  pattern: String
+    verbose: Boolean,
+    basePath: String,
+    glob: String,
+    pattern: String
 )
 
 object FilesRunnerArguments:
@@ -179,7 +178,8 @@ object FilesRunnerArguments:
   def extract(args: Arguments): FilesRunnerArguments =
     FilesRunnerArguments(
       verbose = args.isSet("filesrunner.verbose"),
-      basePath = args.commandLine.valueOr("filesrunner.basepath", new java.io.File(specificationsBasePath).getAbsolutePath),
+      basePath =
+        args.commandLine.valueOr("filesrunner.basepath", new java.io.File(specificationsBasePath).getAbsolutePath),
       glob = args.commandLine.valueOr("filesrunner.path", specificationsPath),
       pattern = args.commandLine.valueOr("filesrunner.pattern", specificationsPattern)
     )
@@ -189,4 +189,5 @@ object FilesRunnerArguments:
       BooleanArgument("filesrunner.verbose"),
       ValuedArgument("filesrunner.basepath"),
       ValuedArgument("filesrunner.path"),
-      ValuedArgument("filesrunner.pattern"))
+      ValuedArgument("filesrunner.pattern")
+    )

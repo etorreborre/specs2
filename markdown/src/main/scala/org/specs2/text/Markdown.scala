@@ -39,61 +39,55 @@ import java.util.Collections
 import java.util.HashSet
 import java.util.Set
 
-/**
- * This trait can process strings formatted using the Markdown syntax and output html
- */
-private[specs2]
-trait Markdown:
+/** This trait can process strings formatted using the Markdown syntax and output html
+  */
+private[specs2] trait Markdown:
 
   private val options: DataHolder =
     PegdownOptionsAdapter.flexmarkOptions(
       ~PegdownExtensions.QUOTES &
-      ~PegdownExtensions.SMARTS &
-      ~PegdownExtensions.EXTANCHORLINKS, new Specs2Extension)
+        ~PegdownExtensions.SMARTS &
+        ~PegdownExtensions.EXTANCHORLINKS,
+      new Specs2Extension
+    )
 
-  /**
-   * @return a Markdown parser
-   */
+  /** @return
+    *   a Markdown parser
+    */
   private lazy val parser: Parser =
     Parser.builder(options).build
 
-  /**
-   * @return an HTML renderer
-   * for now QUOTES and SMARTS are not rendered to avoid  <?> characters to appear on html pages
-   */
+  /** @return
+    *   an HTML renderer for now QUOTES and SMARTS are not rendered to avoid <?> characters to appear on html pages
+    */
   private lazy val renderer: HtmlRenderer =
     HtmlRenderer.builder(options).indentSize(2).build
 
-  /**
-   * parse the markdown string and return html.
-   * code tags are prettified and newlines in paragraphs are
-   * transformed to <br/> tags
-   */
+  /** parse the markdown string and return html. code tags are prettified and newlines in paragraphs are transformed to
+    * <br/> tags
+    */
   def toHtml(text: String): String =
     val document = parser.parse(text.replace("\\\\n", "\n"))
     renderer.render(document)
 
-  /**
-   * parse the markdown string and return html without the enclosing paragraph
-   */
+  /** parse the markdown string and return html without the enclosing paragraph
+    */
   def toHtmlNoPar(text: String): String =
     val html = toHtml(text)
     if !text.contains("\n") || text.trim.isEmpty then html.trimEnd("\n").removeEnclosingXmlTag("p") else html
 
-  /**
-   * parse the markdown string and return xml (unless the arguments deactivate the markdown rendering)
-   */
+  /** parse the markdown string and return xml (unless the arguments deactivate the markdown rendering)
+    */
   def toXhtml(text: String): NodeSeq =
     val html = toHtmlNoPar(text)
     parse(html) match
       case Some(f) => f
-      case _ => scala.xml.Text(text)
+      case _       => scala.xml.Text(text)
 
   private def parse(html: String) =
-    tryo(XhtmlParser(Source.fromString("<text>"+html+"</text>")).head.child)
+    tryo(XhtmlParser(Source.fromString("<text>" + html + "</text>")).head.child)
 
-private[specs2]
-object Markdown extends Markdown
+private[specs2] object Markdown extends Markdown
 
 class Specs2AttributeProvider extends AttributeProvider:
   override def setAttributes(node: Node, part: AttributablePart, attributes: MutableAttributes): Unit =

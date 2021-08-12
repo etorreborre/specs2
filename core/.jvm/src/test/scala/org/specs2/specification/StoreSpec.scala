@@ -8,7 +8,8 @@ import control.*
 import process.*
 import FileName.*
 
-class StoreSpec extends Specification { def is = sequential ^ s2"""
+class StoreSpec extends Specification {
+  def is = sequential ^ s2"""
  The file store stores values in files where the name of the file is
    defined by the key $e1
 

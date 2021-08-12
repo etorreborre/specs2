@@ -3,7 +3,8 @@ package form
 
 import FormsExamples.*
 
-class FormsSpec extends Spec with FormsBuilder { def is = s2"""
+class FormsSpec extends Spec with FormsBuilder {
+  def is = s2"""
 
 The Forms object provides several utility functions for creating forms
 
@@ -46,7 +47,7 @@ The Forms object provides several utility functions for creating forms
   def subset2 = FormDiffs.subset(set1, set2) must ===(set1 ++ ko(set2))
   def subset3 = FormDiffs.subset(set1, set1 ++ set2) must ===(ok(set1) ++ ko(set2))
   def subset4 = FormDiffs.subset(set1 ++ set2, set1).forall(_.isSuccess) must beTrue
-  def subset5 = FormDiffs.subset(set1, set2).forall(_.isSuccess)  must ===(false)
+  def subset5 = FormDiffs.subset(set1, set2).forall(_.isSuccess) must ===(false)
   def subset6 = FormDiffs.subset(set1, set1 ++ set2).exists(_.isSuccess) &&
     FormDiffs.subset(set1, set1 ++ set2).exists(!_.isSuccess) must beTrue
 
@@ -73,6 +74,11 @@ The Forms object provides several utility functions for creating forms
 }
 
 object FormsExamples extends FormsBuilder:
-  val (a, b, c, d)     = (List(Form.tr("a")), List(Form.tr("b")), List(Form.tr("c")), List(Form.tr("d")))
-  val (ab, ba, bc, cd) = (List(Form.tr("a"), Form.tr("b")), List(Form.tr("b"), Form.tr("a")), List(Form.tr("b"), Form.tr("c")), List(Form.tr("c"), Form.tr("d")))
-  val (abc, bac)       = (List(Form.tr("a"), Form.tr("b"), Form.tr("c")), List(Form.tr("b"), Form.tr("a"), Form.tr("c")))
+  val (a, b, c, d) = (List(Form.tr("a")), List(Form.tr("b")), List(Form.tr("c")), List(Form.tr("d")))
+  val (ab, ba, bc, cd) = (
+    List(Form.tr("a"), Form.tr("b")),
+    List(Form.tr("b"), Form.tr("a")),
+    List(Form.tr("b"), Form.tr("c")),
+    List(Form.tr("c"), Form.tr("d"))
+  )
+  val (abc, bac) = (List(Form.tr("a"), Form.tr("b"), Form.tr("c")), List(Form.tr("b"), Form.tr("a"), Form.tr("c")))

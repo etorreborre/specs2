@@ -5,27 +5,32 @@ import org.specs2.specification.create.*
 import runner.SpecificationsFinder
 import io.*
 
-/**
- * This is an example of running specifications module by module
- */
-class ModulesSpec extends Specification { def is =
- br ^
- Fragments.foreach(specs)(s => link(showOnly("x!") ^ s) ^ br)
+/** This is an example of running specifications module by module
+  */
+class ModulesSpec extends Specification {
+  def is =
+    br ^
+      Fragments.foreach(specs)(s => link(showOnly("x!") ^ s) ^ br)
 
- def specs =
-   List(Core, JUnit, Examples)
+    def specs =
+      List(Core, JUnit, Examples)
 }
 
-object Core     extends Specification { def is = Module.specifications(getClass) }
-object JUnit    extends Specification { def is = Module.specifications(getClass) }
+object Core extends Specification { def is = Module.specifications(getClass) }
+object JUnit extends Specification { def is = Module.specifications(getClass) }
 object Examples extends Specification { def is = Module.specifications(getClass) }
 
 object Module extends SpecificationCreation:
   def specifications(klass: Class[?], filter: String => Boolean = (s: String) => true) =
     val name = klass.getSimpleName.replace("$", "")
-    val base = DirectoryPath.unsafe(new java.io.File(".").getAbsolutePath) / FileName.unsafe(name.toLowerCase) / "src" / "test" / "scala"
-    val specs = SpecificationsFinder.default.findSpecifications(basePath = base, verbose = false, filter = filter).unsafeRun.take(3)
+    val base = DirectoryPath.unsafe(new java.io.File(".").getAbsolutePath) / FileName.unsafe(
+      name.toLowerCase
+    ) / "src" / "test" / "scala"
+    val specs = SpecificationsFinder.default
+      .findSpecifications(basePath = base, verbose = false, filter = filter)
+      .unsafeRun
+      .take(3)
 
     name.title.copy(specClass = klass) ^
-    br ^
-    Fragments.foreach(specs)(s => link(showOnly("!x") ^ s.is) ^ br)
+      br ^
+      Fragments.foreach(specs)(s => link(showOnly("!x") ^ s.is) ^ br)

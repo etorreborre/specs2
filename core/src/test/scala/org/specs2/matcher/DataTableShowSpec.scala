@@ -3,7 +3,8 @@ package matcher
 
 import text.*
 
-class DataTableShowSpec extends Specification with DataTables { def is = s2"""
+class DataTableShowSpec extends Specification with DataTables {
+  def is = s2"""
 
  Implicit Show definitions can be used to adjust the display of data tables $display
 
@@ -13,35 +14,29 @@ class DataTableShowSpec extends Specification with DataTables { def is = s2"""
 
   def display =
     given s3: Show3[Int, Double, String] = Show3[Int, Double, String](
-      (i: Int) => "x"*i,
-      (d: Double) => "y"*d.toInt,
+      (i: Int) => "x" * i,
+      (d: Double) => "y" * d.toInt,
       (s: String) => s"($s)"
     )
 
     val table =
-      "a" | "b" | "c"     |>
-       1  ! 2.0 ! "three" |
-       1  ! 2.0 ! "three" | { (a: Int, b: Double, c: String) => ok }
+      "a" | "b" | "c" |>
+        1 ! 2.0 ! "three" |
+        1 ! 2.0 ! "three" | { (a: Int, b: Double, c: String) => ok }
 
     table.message ===
-      List("  | a | b  | c       | ",
-           "+ | x | yy | (three) | ",
-           "+ | x | yy | (three) | ").mkString("\n")
+      List("  | a | b  | c       | ", "+ | x | yy | (three) | ", "+ | x | yy | (three) | ").mkString("\n")
 
   def oneOnly =
     given s3: Show3[Int, Double, String] =
-      Show3[Int, Double, String]().copy(show2 = (d: Double) => "y"*d.toInt)
+      Show3[Int, Double, String]().copy(show2 = (d: Double) => "y" * d.toInt)
 
     val table =
-      "a" | "b" | "c"     |>
-       1  ! 2.0 ! "three" |
-       1  ! 2.0 ! "three" | { (a: Int, b: Double, c: String) => ok }
+      "a" | "b" | "c" |>
+        1 ! 2.0 ! "three" |
+        1 ! 2.0 ! "three" | { (a: Int, b: Double, c: String) => ok }
 
     table.message ===
-      List("  | a | b  | c     | ",
-           "+ | 1 | yy | three | ",
-           "+ | 1 | yy | three | ").mkString("\n")
-
-
+      List("  | a | b  | c     | ", "+ | 1 | yy | three | ", "+ | 1 | yy | three | ").mkString("\n")
 
 }

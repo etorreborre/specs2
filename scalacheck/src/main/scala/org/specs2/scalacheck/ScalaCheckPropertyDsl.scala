@@ -9,7 +9,10 @@ import org.specs2.specification.create.FragmentsFactory
 
 trait ScalaCheckPropertyDsl extends FragmentsFactory with AsResultProp:
 
-  given propToScalaCheckProperty(using parameters: Parameters, prettyFreqMap: FreqMap[Set[Any]] => Pretty): Conversion[Prop, ScalaCheckProp] with
+  given propToScalaCheckProperty(using
+      parameters: Parameters,
+      prettyFreqMap: FreqMap[Set[Any]] => Pretty
+  ): Conversion[Prop, ScalaCheckProp] with
     def apply(prop: Prop): ScalaCheckProp =
       ScalaCheckProp(prop, parameters, prettyFreqMap)
 
@@ -19,7 +22,8 @@ trait ScalaCheckPropertyDsl extends FragmentsFactory with AsResultProp:
       Fragments(fragmentFactory.break, fragmentFactory.example(name, prop))
     }
 
-case class ScalaCheckProp(prop: Prop, parameters: Parameters, prettyFreqMap: FreqMap[Set[Any]] => Pretty) extends ScalaCheckProperty:
+case class ScalaCheckProp(prop: Prop, parameters: Parameters, prettyFreqMap: FreqMap[Set[Any]] => Pretty)
+    extends ScalaCheckProperty:
   type SelfType = ScalaCheckProp
 
   def setParameters(ps: Parameters): SelfType =

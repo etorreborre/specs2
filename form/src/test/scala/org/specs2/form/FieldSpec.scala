@@ -5,7 +5,8 @@ import sys.*
 import execute.*
 import matcher.*
 
-class FieldSpec extends Spec with TypedEqual { def is = s2"""
+class FieldSpec extends Spec with TypedEqual {
+  def is = s2"""
 
 A Field is a labelled property with can be embedded in a Form.
 
@@ -23,15 +24,15 @@ A Field is a labelled property with can be embedded in a Form.
 
 """
 
-  val name     = Field("name", "eric")
-  val age      = Field("age", 18)
+  val name = Field("name", "eric")
+  val age = Field("age", 18)
   val ageError = Field("age", { error("error"); 18 })
 
-  def creation1 = Field(18).label                     === ""
-  def creation2 = age.toOption                        === Some(18)
+  def creation1 = Field(18).label === ""
+  def creation2 = age.toOption === Some(18)
   def creation3 = Field("person", name, age).toString === "person: eric/18"
 
-  def execution1 = age.execute      must ===(skipped)
+  def execution1 = age.execute must ===(skipped)
   def execution2 = ageError.execute must beLike { case Error(_, _) => ok }
 
   def modification1 = age.toStringField.toOption must ===(Some("18"))

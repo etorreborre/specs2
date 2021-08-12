@@ -5,11 +5,10 @@ import java.io.*
 import java.net.URI
 import java.util.UUID
 
-/**
- * Representation of a file path, absolute or relative
- *
- * It has a parent directory and a name
- */
+/** Representation of a file path, absolute or relative
+  *
+  * It has a parent directory and a name
+  */
 case class FilePath(dir: DirectoryPath, name: FileName):
 
   /** @return the root directory containing this file */
@@ -50,11 +49,10 @@ case class FilePath(dir: DirectoryPath, name: FileName):
   /** @return true if this file path is relative */
   def isRelative = !isAbsolute
 
-
 object FilePath:
   def apply(n: FileName): FilePath = FilePath(DirectoryPath.Root, n)
   def apply(uuid: UUID): FilePath = apply(FileName(uuid))
 
   def unsafe(s: String): FilePath = DirectoryPath.unsafe(s).toFilePath
-  def unsafe(f: File): FilePath   = DirectoryPath.unsafe(f).toFilePath
-  def unsafe(uri: URI): FilePath  = DirectoryPath.unsafe(uri).toFilePath
+  def unsafe(f: File): FilePath = DirectoryPath.unsafe(f).toFilePath
+  def unsafe(uri: URI): FilePath = DirectoryPath.unsafe(uri).toFilePath

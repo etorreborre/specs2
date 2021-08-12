@@ -6,7 +6,8 @@ import process.DefaultExecutor
 import execute.*
 import org.specs2.matcher.ActionMatchers
 
-class FragmentsContinuationSpec(val env: Env) extends Specification with ActionMatchers with OwnEnv { def is = s2"""
+class FragmentsContinuationSpec(val env: Env) extends Specification with ActionMatchers with OwnEnv {
+  def is = s2"""
 
  A fragment continuation must
    return other fragments if the previous result is a success                $continuationAfterSuccess
@@ -21,13 +22,15 @@ class FragmentsContinuationSpec(val env: Env) extends Specification with ActionM
     runContinuation(ko, continuation = "continuation" ! ok) must haveSize(1)
 
   def continuationError =
-    val fragments = runContinuation(ok, continuation = {sys.error("boom"); "continuation" ! ok})
+    val fragments = runContinuation(ok, continuation = { sys.error("boom"); "continuation" ! ok })
     (fragments must haveSize(2)) and
-    (fragments(1).description.show must beMatching("Could not create fragments after the previous successful result"))
+      (fragments(1).description.show must beMatching("Could not create fragments after the previous successful result"))
 
   /** HELPERS */
-  def runContinuation[R : AsResult](r1: =>R, continuation: =>Fragments): List[Fragment] =
-    Fragments(DefaultExecutor(ownEnv).execute(ownEnv.arguments)(
-      Fragments("test" ! FragmentsContinuation.continueWith(r1, continuation)).contents)).
-      fragmentsList(ownEnv.executionEnv)
+  def runContinuation[R: AsResult](r1: =>R, continuation: =>Fragments): List[Fragment] =
+    Fragments(
+      DefaultExecutor(ownEnv).execute(ownEnv.arguments)(
+        Fragments("test" ! FragmentsContinuation.continueWith(r1, continuation)).contents
+      )
+    ).fragmentsList(ownEnv.executionEnv)
 }

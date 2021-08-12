@@ -8,7 +8,8 @@ import specification.core.{Env, OwnExecutionEnv, SpecStructure}
 import scala.xml.NodeSeq
 import matcher.XmlMatchers
 
-class TableOfContentsSpec(val env: Env) extends Specification with HtmlDocuments with XmlMatchers with OwnExecutionEnv { def is = s2"""
+class TableOfContentsSpec(val env: Env) extends Specification with HtmlDocuments with XmlMatchers with OwnExecutionEnv {
+  def is = s2"""
 
  The table of contents is created from the specifications and the generated html files
 
@@ -27,9 +28,9 @@ class TableOfContentsSpec(val env: Env) extends Specification with HtmlDocuments
   //      <ul><li><a href="http://specs2.org/#a+header_123456">a header</a></li>
   //      </ul>
   //    </li>
-  def toc2 = addToc(aBodyWithHeaders) must \\ ("li") \ ("a") \> "Table of conten..."
-  def toc3 = addToc(aBodyWithHeaders) must \\ ("li") \ ("a", "href" -> "UserGuide.html")
-  def toc4 = addToc(aBodyWithHeaders) must \\ ("li", "id")
+  def toc2 = addToc(aBodyWithHeaders) must \\("li") \ ("a") \> "Table of conten..."
+  def toc3 = addToc(aBodyWithHeaders) must \\("li") \ ("a", "href" -> "UserGuide.html")
+  def toc4 = addToc(aBodyWithHeaders) must \\("li", "id")
 
   def addToc(body: NodeSeq) =
     val page = SpecHtmlPage(SpecStructure.empty(getClass), outDir | "UserGuide.html", outDir, body.toString)

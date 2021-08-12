@@ -1,7 +1,8 @@
 package org.specs2
 package guide
 
-object LightweightSpecs extends UserGuidePage { def is = s2"""
+object LightweightSpecs extends UserGuidePage {
+  def is = s2"""
 
 The default `Specification` class mixes in most of $specs2 features in order to make it very easy to write your first specifications
 without worrying too much about where the feature resides.
@@ -13,9 +14,9 @@ There at least 2 downsides to this approach:
 
 It is thus possible to use another class, `org.specs2.Spec` (or `org.specs2.mutable.Spec`), which only provides the minimum number of implicits to create specifications.
 
-With the `Spec` class you can create examples and expectations with simple matchers. For example:${snippet{
-class HelloWorldSpec extends Spec:
-  def is = s2"""
+With the `Spec` class you can create examples and expectations with simple matchers. For example:${snippet {
+    class HelloWorldSpec extends Spec:
+      def is = s2"""
 
   This is a specification to check the 'Hello world' string
 
@@ -26,28 +27,28 @@ class HelloWorldSpec extends Spec:
 
   """
 
-  def e1 = "Hello world" must haveSize(11)
-  def e2 = "Hello world" must startWith("Hello")
-  def e3 = "Hello world" must endWith("world")
-}}
+      def e1 = "Hello world" must haveSize(11)
+      def e2 = "Hello world" must startWith("Hello")
+      def e3 = "Hello world" must endWith("world")
+  }}
 
-Or, for mutable specs:${snippet{
-class HelloWorldSpec extends mutable.Spec:
+Or, for mutable specs:${snippet {
+    class HelloWorldSpec extends mutable.Spec:
 
-  addParagraph("This is a specification to check the 'Hello world' string")
+      addParagraph("This is a specification to check the 'Hello world' string")
 
-  "The 'Hello world' string should" >> {
-    "contain 11 characters" >> {
-      "Hello world" must haveSize(11)
-    }
-    "start with 'Hello'" >> {
-      "Hello world" must startWith("Hello")
-    }
-    "end with 'world'" >> {
-      "Hello world" must endWith("world")
-    }
-  }
-}}
+      "The 'Hello world' string should" >> {
+        "contain 11 characters" >> {
+          "Hello world" must haveSize(11)
+        }
+        "start with 'Hello'" >> {
+          "Hello world" must startWith("Hello")
+        }
+        "end with 'world'" >> {
+          "Hello world" must endWith("world")
+        }
+      }
+  }}
 
 If you compare those 2 specifications with the "HelloWorldSpec" examples using `Specification` you will notice some differences:
 

@@ -11,9 +11,8 @@ import specification.process.*
 import reporter.*
 import scala.util.control.NonFatal
 
-/**
- * Runner for specs2 specifications
- */
+/** Runner for specs2 specifications
+  */
 class JUnitRunner(klass: Class[?]) extends org.junit.runner.Runner with Filterable { outer =>
 
   /** specification to execute */
@@ -45,7 +44,7 @@ class JUnitRunner(klass: Class[?]) extends org.junit.runner.Runner with Filterab
     try
       runWithEnv(n, env).runAction(env.specs2ExecutionEnv) match
         case Right(_) => ()
-        case Left(t) => n.fireTestFailure(new Failure(getDescription, new RuntimeException(t)))
+        case Left(t)  => n.fireTestFailure(new Failure(getDescription, new RuntimeException(t)))
     finally env.shutdown()
 
   /** run the specification with a Notifier and an environment */
@@ -58,22 +57,24 @@ class JUnitRunner(klass: Class[?]) extends org.junit.runner.Runner with Filterab
 
     for
       printers <- printerFactory.createPrinters.toAction
-      reporter <- Reporter.createCustomInstance(customInstances).map(_.getOrElse(Reporter.create(junitPrinter +: printers, env))).toAction
-      stats <- if arguments.isSet("all") then
-        for
-          ss     <- SpecFactory.default.createLinkedSpecs(specStructure).toAction
-          sorted <- Action.pure(SpecStructure.topologicalSort(ss)(env.specs2ExecutionEnv).getOrElse(ss))
-          stats  <- reporter.report(sorted.toList)
-        yield stats
-      else reporter.report(specStructure)
+      reporter <- Reporter
+        .createCustomInstance(customInstances)
+        .map(_.getOrElse(Reporter.create(junitPrinter +: printers, env)))
+        .toAction
+      stats <-
+        if arguments.isSet("all") then
+          for
+            ss <- SpecFactory.default.createLinkedSpecs(specStructure).toAction
+            sorted <- Action.pure(SpecStructure.topologicalSort(ss)(env.specs2ExecutionEnv).getOrElse(ss))
+            stats <- reporter.report(sorted.toList)
+          yield stats
+        else reporter.report(specStructure)
     yield stats
 
-  /**
-   * This is used to filter out the entire specification based
-   * on categories annotations
-   *
-   * if the more fine-grained filtering is needed tags must be used
-   */
+  /** This is used to filter out the entire specification based on categories annotations
+    *
+    * if the more fine-grained filtering is needed tags must be used
+    */
   def filter(filter: org.junit.runner.manipulation.Filter): Unit =
     if !filter.shouldRun(getDescription) then throw new NoTestsRemainException
 }

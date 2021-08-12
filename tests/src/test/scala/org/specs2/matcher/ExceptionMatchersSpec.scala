@@ -6,7 +6,8 @@ import sys.*
 import execute.AsResult
 import text.Regexes.*
 
-class ExceptionMatchersSpec extends Specification with ResultMatchers { def is = s2"""
+class ExceptionMatchersSpec extends Specification with ResultMatchers {
+  def is = s2"""
 
  Exception matchers allow to check that exceptions are thrown
 
@@ -78,34 +79,36 @@ class ExceptionMatchersSpec extends Specification with ResultMatchers { def is =
   def byType2 = theBlock(error("boom")) must throwA[RuntimeException]
 
   def byType3 = (theBlock(error("boom")) must throwAn[IAE]).message must startWith(
-    "Expected: java.lang.IllegalArgumentException. Got: java.lang.RuntimeException: boom instead")
+    "Expected: java.lang.IllegalArgumentException. Got: java.lang.RuntimeException: boom instead"
+  )
 
   def byType4 = (1 must not(throwA(new Exception))) must beSuccessful
 
-  def byType5 = ({sys.error("boom"); 1} must not(throwAn[Exception])) must beFailing
+  def byType5 = ({ sys.error("boom"); 1 } must not(throwAn[Exception])) must beFailing
 
   def byType6 = { throw new StackOverflowError("play again"); 1 } must throwAn[Error]
 
-  def byType7 = AsResult {{throw new NullPointerException; 1 } must not(throwAn[IAE]) } must beError
+  def byType7 = AsResult { { throw new NullPointerException; 1 } must not(throwAn[IAE]) } must beError
 
-  def byType8 = AsResult {{throw new IAE; 1 } must not(throwAn[IAE]) } must beFailing
+  def byType8 = AsResult { { throw new IAE; 1 } must not(throwAn[IAE]) } must beFailing
 
-  def byType9 = AsResult { 1  must not(throwAn[IAE]) } must beSuccessful
+  def byType9 = AsResult { 1 must not(throwAn[IAE]) } must beSuccessful
 
   def pf1 = (theBlock(error("boom")) must throwA[RuntimeException].like { case NonFatal(e) =>
     e.getMessage()(0) === 'b'
   })
 
-  def pf2 = (theBlock(error("boom")) must throwA[RuntimeException].like { case NonFatal(e) => e.getMessage()(0) === 'a' }).message must startWith(
-    "Expected: java.lang.RuntimeException. Got: java.lang.RuntimeException: boom and b != a")
+  def pf2 = (theBlock(error("boom")) must throwA[RuntimeException].like { case NonFatal(e) =>
+    e.getMessage()(0) === 'a'
+  }).message must startWith("Expected: java.lang.RuntimeException. Got: java.lang.RuntimeException: boom and b != a")
 
-  def pf3 = AsResult { {throw new NullPointerException; 1 } must not(throwAn[IAE].like { case _ => ok }) } must beError
+  def pf3 = AsResult { { throw new NullPointerException; 1 } must not(throwAn[IAE].like { case _ => ok }) } must beError
 
-  def pf4 = AsResult { {throw new IAE; 1 } must not(throwAn[IAE].like { case _ => ok }) } must beFailing
+  def pf4 = AsResult { { throw new IAE; 1 } must not(throwAn[IAE].like { case _ => ok }) } must beFailing
 
-  def pf5 = AsResult { {throw new IAE; 1 } must not(throwAn[IAE].like { case _ => ko }) } must beError
+  def pf5 = AsResult { { throw new IAE; 1 } must not(throwAn[IAE].like { case _ => ko }) } must beError
 
-  def pf6 = AsResult { 1  must not(throwAn[IAE].like { case _ => ok }) } must beSuccessful
+  def pf6 = AsResult { 1 must not(throwAn[IAE].like { case _ => ok }) } must beSuccessful
 
   def regex1 = (theBlock(error("boom")) must throwA[RuntimeException](message = "boo"))
 
@@ -114,27 +117,34 @@ class ExceptionMatchersSpec extends Specification with ResultMatchers { def is =
   def regex3 = (theBlock(error("bang\nboom\nbong")) must throwA[RuntimeException](message = "bang"))
 
   def specific1 = ("hello" must throwA(new RuntimeException("boom"))).message must ===(
-    "Expected: java.lang.RuntimeException: boom. Got nothing")
+    "Expected: java.lang.RuntimeException: boom. Got nothing"
+  )
 
   def specific2 = (theBlock(error("boom")) must throwAn(new RuntimeException("boom")))
 
   def specific3 = (theBlock(error("boom")) must throwAn(new IAE("boom"))).message must startWith(
-    "Expected: java.lang.IllegalArgumentException: boom. Got: java.lang.RuntimeException: boom instead")
+    "Expected: java.lang.IllegalArgumentException: boom. Got: java.lang.RuntimeException: boom instead"
+  )
 
   def specific4 = (theBlock(error("boom")) must throwAn(new RuntimeException("bang"))).message must startWith(
-    "Expected: java.lang.RuntimeException: bang. Got: java.lang.RuntimeException: boom instead")
+    "Expected: java.lang.RuntimeException: bang. Got: java.lang.RuntimeException: boom instead"
+  )
 
   case class UserError(name: String, message: String) extends RuntimeException(message)
 
-  def specific5 = (theBlock(throw UserError("me", "boom")) must throwAn(UserError("me2", "boom")).
-    like { case UserError(name, _) => name must endWith("2") }).message must startWith(
-    "Expected: org.specs2.matcher.ExceptionMatchersSpec$UserError: boom. Got: org.specs2.matcher.ExceptionMatchersSpec$UserError: boom and me doesn't end with '2'")
+  def specific5 = (theBlock(throw UserError("me", "boom")) must throwAn(UserError("me2", "boom")).like {
+    case UserError(name, _) => name must endWith("2")
+  }).message must startWith(
+    "Expected: org.specs2.matcher.ExceptionMatchersSpec$UserError: boom. Got: org.specs2.matcher.ExceptionMatchersSpec$UserError: boom and me doesn't end with '2'"
+  )
 
-  def specific6 = (theBlock(throw UserError("me", "boom")) must throwAn(UserError("me2", "boom")).
-    like { case UserError(name, _) => name must startWith("m") })
+  def specific6 = (theBlock(throw UserError("me", "boom")) must throwAn(UserError("me2", "boom")).like {
+    case UserError(name, _) => name must startWith("m")
+  })
 
   def combinators1 = (1 must not(throwAn[Exception])).message must ===("Expected: java.lang.Exception. Got nothing")
 
-  def stacktrace1= (theBlock(error("boom")) must throwAn[IllegalArgumentException]).message must contain(
-    "The  RuntimeException stacktrace is")
+  def stacktrace1 = (theBlock(error("boom")) must throwAn[IllegalArgumentException]).message must contain(
+    "The  RuntimeException stacktrace is"
+  )
 }

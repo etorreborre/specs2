@@ -8,24 +8,23 @@ import control.ImplicitParameters.{given, *}
 
 trait ExpectationsDescription extends ExpectationsCreation:
 
-  extension [T : AsResult](description: String)(using not: NotGiven[NoExpectationsDescription])
+  extension [T: AsResult](description: String)(using not: NotGiven[NoExpectationsDescription])
     def ==>(result: =>T): Result = <==>(result)
     def <==>(result: =>T): Result = checkResultFailure {
       val r = ResultExecution.execute(AsResult(result))
       r match
         case i if i.isError || i.isFailure =>
-          i.updateMessage(m => negateSentence(description)+" because "+m)
+          i.updateMessage(m => negateSentence(description) + " because " + m)
         case other =>
-          other.updateMessage(m => description+" <=> "+m)
+          other.updateMessage(m => description + " <=> " + m)
     }
 
   /** describe a value with the aka method */
   extension [T](value: =>T)(using not: NotGiven[NoValueDescription])
-    /**
-     * @return an expectable with its toString method as an alias description
-     *         this is useful to preserve the original value when the matcher using
-     *         it is adapting the value
-     */
+    /** @return
+      *   an expectable with its toString method as an alias description this is useful to preserve the original value
+      *   when the matcher using it is adapting the value
+      */
     infix def aka: Expectable[T] = aka(value.toString)
 
     /** @return an expectable with an alias description */
@@ -44,11 +43,9 @@ trait ExpectationsDescription extends ExpectationsCreation:
 
   /** describe a value with the aka method */
   extension [T](value: =>T)(using not: NotGiven[NoValueDescription], show: T => String)
-
     /** @return an expectable with a function to show the element T */
     infix def showAs: Expectable[T] =
       value.showAs(using not, show)
-
 
 object ExpectationsDescription extends ExpectationsDescription
 

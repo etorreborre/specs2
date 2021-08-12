@@ -5,7 +5,8 @@ import matcher.*
 import user.specification.*
 import execute.*
 
-class DefaultStackTraceFilterSpec extends Spec with ThrownExpectations { def is =  s2"""
+class DefaultStackTraceFilterSpec extends Spec with ThrownExpectations {
+  def is = s2"""
 
  the default stacktrace filter should
    remove specs2 traces if coming from user code                      $e1
@@ -19,7 +20,8 @@ class DefaultStackTraceFilterSpec extends Spec with ThrownExpectations { def is 
 
   def e1 = {
     val stacktrace = (new UserExpectations).failure1.exception.getStackTrace.toIndexedSeq
-    DefaultStackTraceFilter(stacktrace).map(_.toString) must not(containMatch(".*specs2.*")) }
+    DefaultStackTraceFilter(stacktrace).map(_.toString) must not(containMatch(".*specs2.*"))
+  }
 
   def e2 =
     val huge = new Exception
@@ -46,6 +48,5 @@ class DefaultStackTraceFilterSpec extends Spec with ThrownExpectations { def is 
       case f: Failure =>
         DefaultStackTraceFilter(f.stackTrace).map(_.toString) must containMatch("UserExpectations.scala:20")
       case _ => ok
-
 
 }

@@ -9,4 +9,3 @@ object StatisticsRepositoryCreation:
 
   def memory = DefaultStatisticsRepository(StatisticsMemoryStore())
   def file(dir: DirectoryPath) = DefaultStatisticsRepository(DirectoryStore(dir, FileSystem(ConsoleLogger())))
-

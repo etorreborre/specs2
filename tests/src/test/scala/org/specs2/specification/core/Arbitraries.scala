@@ -13,11 +13,11 @@ object Arbitraries:
   given FragmentArbitrary: Arbitrary[Fragment] =
     Arbitrary {
       Gen.oneOf(
-          genExample,
-          genText,
-          genStep,
-          genFormatting
-        )
+        genExample,
+        genText,
+        genStep,
+        genFormatting
+      )
     }
 
   given FragmentsArbitrary: Arbitrary[Fragments] =

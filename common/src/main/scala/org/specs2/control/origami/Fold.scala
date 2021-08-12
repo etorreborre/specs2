@@ -5,14 +5,13 @@ package origami
 import org.specs2.fp.*
 import org.specs2.fp.syntax.*
 
-/**
- * A Fold is a "left fold" over a data structure with:
- *  - a 'start' value
- *  - a 'fold' method to accumulate state
- *  - an 'end' method to finalize the result
- *
- * Both 'start' and 'end' have an effect which allows the whole folding to take place inside a context.
- */
+/** A Fold is a "left fold" over a data structure with:
+  *   - a 'start' value
+  *   - a 'fold' method to accumulate state
+  *   - an 'end' method to finalize the result
+  *
+  * Both 'start' and 'end' have an effect which allows the whole folding to take place inside a context.
+  */
 trait Fold[M[_], A, B]:
   self =>
 
@@ -127,7 +126,7 @@ trait Fold[M[_], A, B]:
       type S = (self.S, sink.S)
       val monad: Monad[M] = self.monad
 
-      def start = monad.tuple2(self.start , sink.start)
+      def start = monad.tuple2(self.start, sink.start)
       def fold = (s: S, a: A) => monad.tuple2(self.fold(s._1, a), sink.fold(s._2, (a, s._1)))
       def end(s: S) = monad.tuple2(self.end(s._1), sink.end(s._2)).map(_._1)
 
@@ -141,7 +140,7 @@ trait Fold[M[_], A, B]:
       type S = (self.S, sink.S)
       val monad: Monad[M] = self.monad
 
-      def start = monad.tuple2(self.start , sink.start)
+      def start = monad.tuple2(self.start, sink.start)
       def fold = (s: S, a: A) => monad.tuple2(self.fold(s._1, a), sink.fold(s._2, s._1))
       def end(s: S) = monad.tuple2(self.end(s._1), sink.end(s._2)).map(_._1)
 
@@ -155,7 +154,7 @@ trait Fold[M[_], A, B]:
       type S = (self.S, sink.S)
       val monad: Monad[M] = self.monad
 
-      def start = monad.tuple2(self.start , sink.start)
+      def start = monad.tuple2(self.start, sink.start)
       def fold = (s: S, a: A) => self.fold(s._1, a).flatMap(next => sink.fold(s._2, (a, next)).map((next, _)))
       def end(s: S) = monad.tuple2(self.end(s._1), sink.end(s._2)).map(_._1)
 
@@ -169,7 +168,7 @@ trait Fold[M[_], A, B]:
       type S = (self.S, sink.S)
       val monad: Monad[M] = self.monad
 
-      def start = monad.tuple2(self.start , sink.start)
+      def start = monad.tuple2(self.start, sink.start)
       def fold = (s: S, a: A) => self.fold(s._1, a).flatMap(next => sink.fold(s._2, next).map((next, _)))
       def end(s: S) = monad.tuple2(self.end(s._1), sink.end(s._2)).map(_._1)
 
@@ -177,18 +176,15 @@ trait Fold[M[_], A, B]:
   def <+*(sink: Sink[M, S]) =
     observeNextState(sink)
 
-  /**
-   * run a Fold with a Foldable instance
-   */
-  def run[F[_] : Foldable](foldable: F[A]): M[B] =
+  /** run a Fold with a Foldable instance
+    */
+  def run[F[_]: Foldable](foldable: F[A]): M[B] =
     foldable.toList.foldLeft(start) { (res, cur) => res.flatMap(r => fold(r, cur)) }.flatMap(end)
 
-  /**
-   * run over one element
-   */
+  /** run over one element
+    */
   def run1(a: A): M[B] =
     start.flatMap(s => fold(s, a).flatMap(end))
-
 
   /** pipe the output of this fold into another fold */
   def compose[C](f2: Fold[M, B, C]): Fold[M, A, C] =
@@ -212,8 +208,7 @@ trait Fold[M[_], A, B]:
 
       def start = monad.pure(monoid.zero)
 
-      def fold = (s: S, c: C) =>
-        self.run(f(c)).map((b: B) => monoid.append(s, b))
+      def fold = (s: S, c: C) => self.run(f(c)).map((b: B) => monoid.append(s, b))
 
       def end(s: S) = monad.pure(s)
 
@@ -274,17 +269,16 @@ object Fold:
       def end(s: S) = s1.end(s._1) >> s2_.end(s._2)
     }
 
-  /**
-   * Applicative instance
-   *
-   * This means that we can write:
-   *
-   *   val mean: Fold[Int, Int] = (sum |@| count)(_ / _)
-   *
-   * An Applicative instance is also a Functor instance so we can write:
-   *
-   *   val meanTimes2 = mean.map(_ * 2)
-   */
+  /** Applicative instance
+    *
+    * This means that we can write:
+    *
+    * val mean: Fold[Int, Int] = (sum |@| count)(_ / _)
+    *
+    * An Applicative instance is also a Functor instance so we can write:
+    *
+    * val meanTimes2 = mean.map(_ * 2)
+    */
   given A[M[_], T](using m: Monad[M]): Applicative[Fold[M, T, *]] with
     type F[U] = Fold[M, T, U]
 
@@ -304,13 +298,12 @@ object Fold:
     def ap[A, B](fa: =>F[A])(f: =>F[A => B]): F[B] =
       map(fa `zip` f) { case (a, b) => b(a) }
 
-/**
- * Typeclass instances and creation methods for folds
- */
+/** Typeclass instances and creation methods for folds
+  */
 trait Folds:
 
   /** @return a fold which uses a Monoid to accumulate elements */
-  def fromMonoidMap[M[_], A, O : Monoid](f: A => O)(using m: Monad[M]): Fold[M, A, O] { type S = O } =
+  def fromMonoidMap[M[_], A, O: Monoid](f: A => O)(using m: Monad[M]): Fold[M, A, O] { type S = O } =
     new Fold[M, A, O]:
       type S = O
       val monad: Monad[M] = m
@@ -358,7 +351,7 @@ trait Folds:
       def end(s: S) = monad.point(())
 
   /** @return a fold which uses a Monoid to accumulate elements */
-  def fromMonoidMapEval[M[_], A, O : Monoid](f: A => M[O])(using m: Monad[M]): Fold[M, A, O] { type S = O } =
+  def fromMonoidMapEval[M[_], A, O: Monoid](f: A => M[O])(using m: Monad[M]): Fold[M, A, O] { type S = O } =
     new Fold[M, A, O]:
       type S = O
       val monad: Monad[M] = m

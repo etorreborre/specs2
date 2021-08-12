@@ -7,7 +7,8 @@ import org.specs2.fp.*
 import Trees.*
 import org.specs2.matcher.ThrownExpectations
 
-class TreesSpec extends Specification with ScalaCheck with ThrownExpectations { def is = s2"""
+class TreesSpec extends Specification with ScalaCheck with ThrownExpectations {
+  def is = s2"""
 
   We can get all the paths from a tree $paths
 
@@ -44,5 +45,5 @@ class TreesSpec extends Specification with ScalaCheck with ThrownExpectations { 
   case class TreeAndPaths(tree: Tree[Int], paths: List[List[Int]]):
     override def toString =
       tree.drawTree + "\n" +
-      paths.mkString("\n")
+        paths.mkString("\n")
 }

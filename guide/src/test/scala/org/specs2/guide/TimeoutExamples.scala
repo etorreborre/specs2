@@ -3,7 +3,8 @@ package guide
 
 import concurrent.ExecutionEnv
 
-object TimeoutExamples extends UserGuidePage { def is = s2"""
+object TimeoutExamples extends UserGuidePage {
+  def is = s2"""
 
 ### Global timeout
 
@@ -16,15 +17,15 @@ sbt> testOnly -- timeout 500
 ### Specification timeout
 
 It is also possible to specify a specification timeout overriding the global timeout by specifying the timeout argument: ${snippet {
-class MySpecification extends Specification:
-  def is = s2"""
+    class MySpecification extends Specification:
+      def is = s2"""
     this example should not take too long $e1
     this one too $e2
   """
 
-  def e1 = { 1 + 1 === 2 }
-  def e2 = { 2 + 2 === 4 }
-}}
+      def e1 = { 1 + 1 === 2 }
+      def e2 = { 2 + 2 === 4 }
+  }}
 
 """
 

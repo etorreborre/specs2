@@ -23,6 +23,6 @@ object TypecheckResult:
       }
 
   def failureMessage(e: Error): String =
-    e.lineContent+"\n"+
-    " "*(e.column-1) + "^" + "\n" +
-    e.message
+    e.lineContent + "\n" +
+      " " * (e.column - 1) + "^" + "\n" +
+      e.message

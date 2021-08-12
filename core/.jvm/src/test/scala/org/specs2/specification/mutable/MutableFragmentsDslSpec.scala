@@ -9,7 +9,8 @@ import org.specs2.specification.create.DefaultFragmentFactory.*
 import org.specs2.specification.dsl.mutable.{ArgumentsCreation, MutableDsl, MutableFragmentBuilder}
 import org.specs2.matcher.Matcher.{given}
 
-class MutableFragmentsDslSpec(ee: ExecutionEnv) extends org.specs2.Spec with TypedEqual with TraversableMatchers { def is = s2"""
+class MutableFragmentsDslSpec(ee: ExecutionEnv) extends org.specs2.Spec with TypedEqual with TraversableMatchers {
+  def is = s2"""
 
   create examples
     with a string and a result   $$e1
@@ -41,22 +42,30 @@ class MutableFragmentsDslSpec(ee: ExecutionEnv) extends org.specs2.Spec with Typ
   def e3 =
     val expectedDescriptions: List[ValueCheck[Description]] = List(
       break,
-      start, fragmentFactory.section("this should"), break,
-      text("this should"), tab, break,
-      example("e1", ok), break,
+      start,
+      fragmentFactory.section("this should"),
+      break,
+      text("this should"),
+      tab,
+      break,
+      example("e1", ok),
+      break,
       example("e2", ok),
-      break, backtab, fragmentFactory.section("this should"), end).map(_.description)
+      break,
+      backtab,
+      fragmentFactory.section("this should"),
+      end
+    ).map(_.description)
 
     val actualDescriptions: List[Description] = fragments(new dsl {
-        "this" should {
-          "e1" in ok
-          "e2" in ok
-        }
-      }).map(_.description)
+      "this" should {
+        "e1" in ok
+        "e2" in ok
+      }
+    }).map(_.description)
 
     actualDescriptions must contain(exactly(expectedDescriptions*))
   end e3
-
 
   // def e4 = fragments(new dsl {
   //   "this" should {
@@ -103,17 +112,17 @@ class MutableFragmentsDslSpec(ee: ExecutionEnv) extends org.specs2.Spec with Typ
   //   contain(allOf(Seq(
   //     example("be ok", ok), break).map(_.description)*)).inOrder
 
-    def fragments(dsl1: dsl): List[Fragment] =
-      structure(dsl1).fragmentsList(ee)
+  def fragments(dsl1: dsl): List[Fragment] =
+    structure(dsl1).fragmentsList(ee)
 
-    def structure(dsl1: dsl): SpecStructure =
-      dsl1.is
+  def structure(dsl1: dsl): SpecStructure =
+    dsl1.is
 
-    trait dsl extends MutableFragmentBuilder with MutableDsl:
-      addSections()
+  trait dsl extends MutableFragmentBuilder with MutableDsl:
+    addSections()
 
-    // def beTheSameFragments(fs: Fragment*): Matcher[Seq[Fragment]] = { (actual: Seq[Fragment]) =>
-    //   val location = StacktraceLocation()
-    //   actual.map(_.setLocation(location)) must contain(exactly(fs.map(_.setLocation(location))*))
-    // }
+  // def beTheSameFragments(fs: Fragment*): Matcher[Seq[Fragment]] = { (actual: Seq[Fragment]) =>
+  //   val location = StacktraceLocation()
+  //   actual.map(_.setLocation(location)) must contain(exactly(fs.map(_.setLocation(location))*))
+  // }
 }

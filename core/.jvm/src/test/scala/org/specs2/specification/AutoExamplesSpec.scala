@@ -7,7 +7,12 @@ import org.specs2.specification.core.{Fragment, Fragments}
 import org.specs2.specification.create.AutoExamples, AutoExamples.*
 import org.specs2.specification.dsl.FragmentsDsl
 
-class AutoExamplesSpec(using ee: ExecutionEnv) extends org.specs2.Spec with DataTables with AutoExamples with FragmentsDsl { def is = s2"""
+class AutoExamplesSpec(using ee: ExecutionEnv)
+    extends org.specs2.Spec
+    with DataTables
+    with AutoExamples
+    with FragmentsDsl {
+  def is = s2"""
 
  The trimExpression function should
    remove backticks
@@ -26,9 +31,10 @@ class AutoExamplesSpec(using ee: ExecutionEnv) extends org.specs2.Spec with Data
   def e3 = trimExpression("`method`(p1, p2)") must ===("method")
 
   def dt1 = firstExampleDescription("text" ^ datatableOk) must contain(
-  """|"a"  | "b" | "c" |>
-     |2    ! 2   ! 4   |
-     |1    ! 1   ! 2   | { (a, b, c) =>  a + b must ===(c) }""".stripMargin)
+    """|"a"  | "b" | "c" |>
+       |2    ! 2   ! 4   |
+       |1    ! 1   ! 2   | { (a, b, c) =>  a + b must ===(c) }""".stripMargin
+  )
 
   def m1 =
     val spec = new org.specs2.mutable.Specification with DataTables {
@@ -39,9 +45,9 @@ class AutoExamplesSpec(using ee: ExecutionEnv) extends org.specs2.Spec with Data
       eg { success }
 
       eg {
-        "a"  | "b" | "c" |>
-        2    ! 2   ! 4   |
-        1    ! 1   ! 2   | { (a, b, c) =>  a + b must ===(c) }
+        "a" | "b" | "c" |>
+          2 ! 2 ! 4 |
+          1 ! 1 ! 2 | { (a, b, c) => a + b must ===(c) }
       }
     }
     spec.is.fragmentsList(ee).filter(Fragment.isExample) must haveSize(4)
@@ -50,9 +56,9 @@ class AutoExamplesSpec(using ee: ExecutionEnv) extends org.specs2.Spec with Data
     fs.fragmentsList(ee).filter(Fragment.isExample).head.description.show
 
   def datatableOk = eg {
-    "a"  | "b" | "c" |>
-    2    ! 2   ! 4   |
-    1    ! 1   ! 2   | { (a, b, c) =>  a + b must ===(c) }
+    "a" | "b" | "c" |>
+      2 ! 2 ! 4 |
+      1 ! 1 ! 2 | { (a, b, c) => a + b must ===(c) }
   }
 
 }

@@ -9,4 +9,3 @@ object ExecuteArguments:
   /** default threads number for the specs2 execution environment */
   lazy val specs2ThreadsNb: Int =
     math.max(Runtime.getRuntime.availableProcessors, 4)
-

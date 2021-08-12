@@ -5,12 +5,10 @@ package create
 import main.{ArgumentsShortcuts, ArgumentsArgs}
 import org.specs2.specification.dsl.*
 
-trait SpecificationCreation extends
-       AcceptanceDsl
-  with AutoExamples
-  with ArgumentsArgs
-  with ArgumentsShortcuts
-  with S2StringContext
-  with FormattingFragments
-
-
+trait SpecificationCreation
+    extends AcceptanceDsl
+    with AutoExamples
+    with ArgumentsArgs
+    with ArgumentsShortcuts
+    with S2StringContext
+    with FormattingFragments

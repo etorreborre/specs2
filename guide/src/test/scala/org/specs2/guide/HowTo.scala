@@ -1,7 +1,8 @@
 package org.specs2
 package guide
 
-object HowTo extends UserGuidePage { def is = sortedLinks ^ s2"""
+object HowTo extends UserGuidePage {
+  def is = sortedLinks ^ s2"""
 
  Question                                              | See
 ------------------------------------------------------ | ---------------
@@ -9,16 +10,22 @@ How to execute an action before all the examples?                               
 How to execute an action before each example?                                            | ${link(Contexts).mute}
 Can I create and reuse a Specification "template"?                                       | ${link(SpecificationTemplate).mute}
 How can I pass some data to each example?                                                | ${link(Contexts).mute}
-Can I add more information to my results for easier diagnostic?                          | ${link(ExpectationDescription).mute}
+Can I add more information to my results for easier diagnostic?                          | ${link(
+    ExpectationDescription
+  ).mute}
 Is it possible to execute a Specification sequentially?                                  | ${link(Execution).mute}
-How to mark an example as `pending` until it is fixed?                                   | ${link(PendingUntilFixedExamples).mute}
+How to mark an example as `pending` until it is fixed?                                   | ${link(
+    PendingUntilFixedExamples
+  ).mute}
 Can I simply mark a block of code as `pending`?                                          | ${link(StandardResults).mute}
 Is there a way to run only one example?                                                  | ${link(Selection).mute}
 I would like to display the execution time of each example                               | ${link(ConsoleOutput).mute}
 Can I use a for loop to create examples or results?                                      | ${link(ForLoops).mute}
 How can I tag examples?                                                                  | ${link(Selection).mute}
 Can I skip examples?                                                                     | ${link(SkipExamples).mute}
-Is it possible to modify the behaviour of a Specification with command-line arguments?   | ${link(UseCommandLineArguments).mute}
+Is it possible to modify the behaviour of a Specification with command-line arguments?   | ${link(
+    UseCommandLineArguments
+  ).mute}
 How to capture snippets of code and add them to my Specification?                        | ${link(CaptureSnippets).mute}
 Can I create an HTML index of all the specifications?                                    | ${link(HtmlOutput).mute}
 Is it possible to execute a Specification in a random order?                             | ${link(RandomExecution).mute}
@@ -36,27 +43,27 @@ How can I integrate my own IO type to specifications?                           
 
 """
 
- def sortedLinks =
+  def sortedLinks =
     link(CaptureSnippets).hide ^
-    link(Contexts).hide ^
-    link(ConsoleOutput).hide ^
-    link(DebugStatements).hide ^
-    link(Execution).hide ^
-    link(ExpectationDescription).hide ^
-    link(ExampleDescription).hide ^
-    link(ForLoops).hide ^
-    link(HtmlOutput).hide ^
-    link(JUnitXmlOutput).hide ^
-    link(LightweightSpecs).hide ^
-    link(MultilineDescriptions).hide ^
-    link(PendingUntilFixedExamples).hide ^
-    link(PrintExecutionData).hide
+      link(Contexts).hide ^
+      link(ConsoleOutput).hide ^
+      link(DebugStatements).hide ^
+      link(Execution).hide ^
+      link(ExpectationDescription).hide ^
+      link(ExampleDescription).hide ^
+      link(ForLoops).hide ^
+      link(HtmlOutput).hide ^
+      link(JUnitXmlOutput).hide ^
+      link(LightweightSpecs).hide ^
+      link(MultilineDescriptions).hide ^
+      link(PendingUntilFixedExamples).hide ^
+      link(PrintExecutionData).hide
     link(RandomExecution).hide ^
-    link(Selection).hide ^
-    link(SpecificationTemplate).hide ^
-    link(SkipExamples).hide ^
-    link(StandardResults).hide ^
-    link(TimeoutExamples).hide ^
-    link(Troubleshooting).hide ^
-    link(UseCommandLineArguments).hide
+      link(Selection).hide ^
+      link(SpecificationTemplate).hide ^
+      link(SkipExamples).hide ^
+      link(StandardResults).hide ^
+      link(TimeoutExamples).hide ^
+      link(Troubleshooting).hide ^
+      link(UseCommandLineArguments).hide
 }

@@ -7,19 +7,18 @@ import text.NotNullStrings.*
 import execute.Result
 import Expectable.*
 
-/**
- * The Expectable class models anything which can be checked by applying a Matcher
- *
- * It stores a value which is only evaluated when necessary and an optional additional description for that value.
- *
- * The Expectable object is responsible for creating its own description, based on the value toString method and
- * and an additional description.
- *
- */
-case class Expectable[+T] private[specs2](
-  actual: () => T,
-  checker: Checker = Checker.pass,
-  showValue: Option[String => String] = None) { outer =>
+/** The Expectable class models anything which can be checked by applying a Matcher
+  *
+  * It stores a value which is only evaluated when necessary and an optional additional description for that value.
+  *
+  * The Expectable object is responsible for creating its own description, based on the value toString method and and an
+  * additional description.
+  */
+case class Expectable[+T] private[specs2] (
+    actual: () => T,
+    checker: Checker = Checker.pass,
+    showValue: Option[String => String] = None
+) { outer =>
 
   /** the value is only evaluated if necessary */
   lazy val value =
@@ -28,22 +27,21 @@ case class Expectable[+T] private[specs2](
   /** definition of the value, possibly evaluating to different results each time it is invoked */
   def valueDefinition = actual()
 
-  /**
-   * @return a description of the value provided by the user
-   *         a combination of the value show by specs2 and an optional description
-   */
+  /** @return
+    *   a description of the value provided by the user a combination of the value show by specs2 and an optional
+    *   description
+    */
   def description: String =
     describe(value)
 
-  /**
-   * @return a description of any value with the custom description
-   */
+  /** @return
+    *   a description of any value with the custom description
+    */
   def describe(v: Any): String =
     describeValue(v, showValue)
 
-  /**
-   * apply a matcher on the value and return a Result
-   */
+  /** apply a matcher on the value and return a Result
+    */
   def applyMatcher[S >: T](m: =>Matcher[S]): Result =
     val matcher = m
     if matcher == null then throw new IllegalArgumentException(s"You cannot use a null matcher on '$description'")
@@ -56,24 +54,21 @@ case class Expectable[+T] private[specs2](
   def evaluateOnce: Expectable[T] =
     copy(actual = () => valueDefinition)
 
-  /**
-   * apply a function to the expectable value
-   */
+  /** apply a function to the expectable value
+    */
   def map[S](f: T => S): Expectable[S] =
     copy(actual = () => f(value))
 
-  /**
-   * change the expectable value
-   */
+  /** change the expectable value
+    */
   def map[S](other: S): Expectable[S] =
     Expectable[S](() => other, checker, showValue)
 
-  /**
-   * apply a function to the description function
-   */
+  /** apply a function to the description function
+    */
   def mapDescription(d: Option[String => String]): Expectable[T] = copy(showValue = d)
   def mapDescription(d: String => String): Expectable[T] = mapDescription(Some(d))
-  def mapDescription(d: String): Expectable[T] = mapDescription((_:String) => d)
+  def mapDescription(d: String): Expectable[T] = mapDescription((_: String) => d)
 
   /** update the description with another description */
   def updateDescription(d: String => String): Expectable[T] = mapDescription(d(description))
@@ -90,9 +85,8 @@ object Checker:
       def check[T](result: Result): Result =
         result
 
-/**
- * Factory methods for creating Expectables
- */
+/** Factory methods for creating Expectables
+  */
 object Expectable:
 
   /** @return an Expectable with t as a value, and a constant string for its description */
@@ -122,11 +116,13 @@ object Expectable:
           case b: Boolean => "the value"
           case _          => value.notNull
 
-  /** @return display a value plus its alias (unless the alias is redundant with the value itself for boolean values). */
+  /** @return
+    *   display a value plus its alias (unless the alias is redundant with the value itself for boolean values).
+    */
   private[specs2] def aliasDisplay(d1: =>String)(s: String): String =
     d1 + (if !s.isEmpty && !Seq("true", "false").contains(s) then " " + q(s) else "")
 
   /** @return the description of the matched value, unquoted. */
   private[specs2] def dUnquoted[T](value: T, desc: Option[String => String]) = desc match
     case Some(de) => de(unq(value))
-    case _ => unq(value)
+    case _        => unq(value)

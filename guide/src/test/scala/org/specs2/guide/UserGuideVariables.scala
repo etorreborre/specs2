@@ -17,9 +17,9 @@ trait UserGuideVariables extends Specs2Variables {
 
   def h3Ribbon(text: String) =
     s"""
-      |<h3 id="$text" class="ribbon both-ribbon">$text</h3>
-      |
-      |<div class="ribbon-content">
+       |<h3 id="$text" class="ribbon both-ribbon">$text</h3>
+       |
+       |<div class="ribbon-content">
     """.stripMargin
 
 }

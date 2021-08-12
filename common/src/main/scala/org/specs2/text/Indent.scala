@@ -1,9 +1,8 @@
 package org.specs2
 package text
 
-/**
- *  various functions for working out indentation
- */
+/** various functions for working out indentation
+  */
 object Indent:
 
   def indentAllButFirstLine(text: String, spaces: String): String =

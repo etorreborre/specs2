@@ -6,17 +6,15 @@ import java.net.URI
 import java.util.UUID
 import FileName.*
 
-
-/**
- * Representation of a directory path which can be relative or absolute
- *
- * It is a list of FileNames and we can append other DirectoryPaths or FilePaths to it
- * If the list is empty, this means we are at the root
- */
+/** Representation of a directory path which can be relative or absolute
+  *
+  * It is a list of FileNames and we can append other DirectoryPaths or FilePaths to it If the list is empty, this means
+  * we are at the root
+  */
 case class DirectoryPath(dirs: Vector[FileName], absolute: Boolean) derives CanEqual:
 
   /** @return either the parent directory or the root if we already are at the root */
-  def dir: DirectoryPath  = parent.getOrElse(this)
+  def dir: DirectoryPath = parent.getOrElse(this)
 
   /** @return the last file name of the list or . if the list is empty */
   def name: FileName = dirs.lastOption.getOrElse(FileName.unsafe("."))
@@ -39,44 +37,41 @@ case class DirectoryPath(dirs: Vector[FileName], absolute: Boolean) derives CanE
   /** @return a File for this path */
   def toFile: File = new File(path)
 
-  /**
-   * append another directory path
-   *
-   * DirectoryPath.Root plays the role an empty element for this operation
-   */
+  /** append another directory path
+    *
+    * DirectoryPath.Root plays the role an empty element for this operation
+    */
   def /(other: DirectoryPath): DirectoryPath =
     (this, other) match
       case (_, DirectoryPath.EMPTY) => this
       case (DirectoryPath.EMPTY, _) => other
       case _                        => copy(dirs = dirs ++ other.dirs)
 
-  /**
-   * append a FilePath to this directory
-   * @return another FilePath
-   */
+  /** append a FilePath to this directory
+    * @return
+    *   another FilePath
+    */
   def /(other: FilePath): FilePath =
     FilePath(DirectoryPath(dirs ++ other.dir.dirs, absolute), other.name)
 
-  /**
-   * append a new name to this directory
-   * @return a DirectoryPath
-   */
-  def /(name: FileName): DirectoryPath  = copy(dirs = dirs :+ name)
+  /** append a new name to this directory
+    * @return
+    *   a DirectoryPath
+    */
+  def /(name: FileName): DirectoryPath = copy(dirs = dirs :+ name)
 
-  /**
-   * append a new name to this directory but
-   * @return a FilePath
-   */
+  /** append a new name to this directory but
+    * @return
+    *   a FilePath
+    */
   def |(name: FileName): FilePath = FilePath(this, name)
 
-  /**
-   * @return the portion of a dir path that is relative to another
-   */
+  /** @return
+    *   the portion of a dir path that is relative to another
+    */
   def relativeTo(other: DirectoryPath): DirectoryPath =
-    if dirs.take(other.dirs.size) == other.dirs then
-      copy(dirs = dirs.drop(other.dirs.size), absolute = false)
-    else
-      this
+    if dirs.take(other.dirs.size) == other.dirs then copy(dirs = dirs.drop(other.dirs.size), absolute = false)
+    else this
 
   /** @return the DirectoryPath starting from the root */
   def fromRoot: DirectoryPath = relativeTo(root)

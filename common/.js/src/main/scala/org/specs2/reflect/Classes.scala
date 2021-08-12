@@ -11,8 +11,12 @@ trait Classes extends ClassOperations:
     org.portablescala.reflect.annotation.EnableReflectiveInstantiation
 
   def newInstance(name: String, defaultInstances: =>List[AnyRef] = Nil): Any =
-    newInstance(Reflect.lookupInstantiatableClass(name)
-      .getOrElse(throw new ClassNotFoundException(name)), defaultInstances)
+    newInstance(
+      Reflect
+        .lookupInstantiatableClass(name)
+        .getOrElse(throw new ClassNotFoundException(name)),
+      defaultInstances
+    )
 
   def newInstance(klass: InstantiatableClass, defaultInstances: =>List[AnyRef]): Any = {
     defaultInstances match {
@@ -20,7 +24,7 @@ trait Classes extends ClassOperations:
       case (h :: t) =>
         klass.getConstructor(h.getClass) match {
           case Some(c) => c.newInstance(h)
-          case None => newInstance(klass, t)
+          case None    => newInstance(klass, t)
         }
     }
   }
@@ -31,23 +35,35 @@ trait Classes extends ClassOperations:
       .getOrElse(throw new ClassNotFoundException(name))
       .loadModule
 
-  def createInstanceFromName[T <: AnyRef](className: String, defaultInstances: =>List[AnyRef] = Nil)(using m: ClassTag[T]): Operation[T] =
+  def createInstanceFromName[T <: AnyRef](className: String, defaultInstances: =>List[AnyRef] = Nil)(using
+      m: ClassTag[T]
+  ): Operation[T] =
     if (className.endsWith("$"))
       Operation.delayed(loadModule(className).asInstanceOf[T])
     else
       Operation.delayed(newInstance(className, defaultInstances).asInstanceOf[T])
 
-  def createInstance[T <: AnyRef](className: String, loader: ClassLoader, defaultInstances: =>List[AnyRef] = Nil)(using m: ClassTag[T]): Operation[T] =
+  def createInstance[T <: AnyRef](className: String, loader: ClassLoader, defaultInstances: =>List[AnyRef] = Nil)(using
+      m: ClassTag[T]
+  ): Operation[T] =
     createInstanceFromName[T](className, defaultInstances)
 
-  def createInstanceFromClass[T <: AnyRef](klass: Class[T], defaultInstances: =>List[AnyRef])(using m: ClassTag[T]): Operation[T] =
+  def createInstanceFromClass[T <: AnyRef](klass: Class[T], defaultInstances: =>List[AnyRef])(using
+      m: ClassTag[T]
+  ): Operation[T] =
     createInstanceFromName[T](klass.getName, defaultInstances)
 
-  def createInstanceFromClass[T <: AnyRef](klass: Class[T], loader: ClassLoader, defaultInstances: =>List[AnyRef] = Nil)(using m: ClassTag[T]): Operation[T] =
+  def createInstanceFromClass[T <: AnyRef](
+      klass: Class[T],
+      loader: ClassLoader,
+      defaultInstances: =>List[AnyRef] = Nil
+  )(using m: ClassTag[T]): Operation[T] =
     createInstance(klass.getName, loader, defaultInstances)
 
   /** try to create an instance but return an exception if this is not possible */
-  def createInstanceEither[T <: AnyRef](className: String, loader: ClassLoader, defaultInstances: =>List[AnyRef] = Nil)(using m: ClassTag[T]): Operation[Throwable Either T] =
+  def createInstanceEither[T <: AnyRef](className: String, loader: ClassLoader, defaultInstances: =>List[AnyRef] = Nil)(
+      using m: ClassTag[T]
+  ): Operation[Throwable Either T] =
     try {
       createInstanceFromName[T](className, defaultInstances).map(Right(_))
     } catch {
@@ -63,7 +79,7 @@ trait Classes extends ClassOperations:
   def existsClass(className: String, loader: ClassLoader): Operation[Boolean] =
     Operation.delayed(
       Reflect.lookupInstantiatableClass(className).nonEmpty ||
-      Reflect.lookupLoadableModuleClass(className).nonEmpty)
-
+        Reflect.lookupLoadableModuleClass(className).nonEmpty
+    )
 
 object Classes extends Classes

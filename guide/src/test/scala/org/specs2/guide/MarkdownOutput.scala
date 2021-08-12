@@ -1,7 +1,8 @@
 package org.specs2
 package guide
 
-object MarkdownOutput extends UserGuidePage { def is = s2"""
+object MarkdownOutput extends UserGuidePage {
+  def is = s2"""
 
 ### Markdown printer
 
@@ -18,4 +19,3 @@ The following arguments are available to fine-tune the generation of Markdown pa
 
 """
 }
-

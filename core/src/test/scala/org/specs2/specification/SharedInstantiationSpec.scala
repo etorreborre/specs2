@@ -5,9 +5,8 @@ import org.specs2.concurrent.ExecutionEnv
 import scala.concurrent.Future
 import org.specs2.main.*
 
-/**
- * the following specifications should be instantiable from both the JVM and ScalaJS
- */
+/** the following specifications should be instantiable from both the JVM and ScalaJS
+  */
 
 class Shared1Spec extends mutable.Spec:
   import scala.concurrent.ExecutionContext.Implicits.global
@@ -17,7 +16,7 @@ class Shared1Spec extends mutable.Spec:
   }
 
 class Shared2Spec(using ee: ExecutionEnv) extends mutable.Specification:
-  "This must work with an implicit execution env should" >>{
+  "This must work with an implicit execution env should" >> {
     "match a future using both jvm + scalajs" >>
       Future(ok)
   }

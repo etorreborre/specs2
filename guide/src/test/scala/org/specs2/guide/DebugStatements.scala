@@ -1,7 +1,8 @@
 package org.specs2
 package guide
 
-object DebugStatements extends UserGuidePage { def is = s2"""
+object DebugStatements extends UserGuidePage {
+  def is = s2"""
 
 When quick and hacky `println` statements are what you want, the `Debug` trait, mixed in every `Specification`, provides useful methods:
 

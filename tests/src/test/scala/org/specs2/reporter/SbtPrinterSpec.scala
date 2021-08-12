@@ -1,8 +1,7 @@
 package org.specs2
 package reporter
 
-import examples.{HelloWorldSpec, HelloWorldUnitSpec
-}
+import examples.{HelloWorldSpec, HelloWorldUnitSpec}
 import matcher.*
 import main.Arguments
 import io.StringOutput
@@ -14,7 +13,8 @@ import specification.process.DefaultExecutor
 import scala.collection.mutable.ListBuffer
 import language.adhocExtensions
 
-class SbtPrinterSpec(val env: Env) extends Specification with OwnEnv { def is = s2"""
+class SbtPrinterSpec(val env: Env) extends Specification with OwnEnv {
+  def is = s2"""
 
  A SbtPrinter should
    print the specification title if defined      ${printer1().e1}
@@ -31,8 +31,10 @@ class SbtPrinterSpec(val env: Env) extends Specification with OwnEnv { def is = 
   case class printer1() { outer =>
 
     def e1 =
-      printer.print((new HelloWorldSpec { override def is = "title".title ^ "\ntext" }).structure).runAction(ownEnv.specs2ExecutionEnv)
-      eventually(logger.messages must contain (beMatching("\\[INFO\\].*title.*")))
+      printer
+        .print((new HelloWorldSpec { override def is = "title".title ^ "\ntext" }).structure)
+        .runAction(ownEnv.specs2ExecutionEnv)
+      eventually(logger.messages must contain(beMatching("\\[INFO\\].*title.*")))
 
     def e2 =
       val executed = DefaultExecutor.executeSpec((new HelloWorldSpec).is, ownEnv)
@@ -62,11 +64,11 @@ class SbtPrinterSpec(val env: Env) extends Specification with OwnEnv { def is = 
 
     val stringOutputLogger = new Logger with StringOutput {
       def ansiCodesSupported = false
-      def warn(msg: String): Unit =  { append(msg) }
+      def warn(msg: String): Unit = { append(msg) }
       def error(msg: String): Unit = { append(msg) }
       def debug(msg: String): Unit = { append(msg) }
-      def trace(t: Throwable): Unit ={ append(t.getMessage) }
-      def info(msg: String): Unit =  { append(msg) }
+      def trace(t: Throwable): Unit = { append(t.getMessage) }
+      def info(msg: String): Unit = { append(msg) }
     }
 
     lazy val events = new SbtEvents {
@@ -118,12 +120,11 @@ class SbtPrinterSpec(val env: Env) extends Specification with OwnEnv { def is = 
 
   case class MyLogger() extends Logger with StringOutput:
     def ansiCodesSupported = false
-    def warn(msg: String): Unit =  { append("[WARN] "+msg) }
-    def error(msg: String): Unit = { append("[ERROR] "+msg) }
-    def debug(msg: String): Unit = { append("[DEBUG] "+msg) }
-    def trace(t: Throwable): Unit ={ append("[TRACE] "+t.getMessage) }
-    def info(msg: String): Unit =  { append("[INFO] "+msg) }
-
+    def warn(msg: String): Unit = { append("[WARN] " + msg) }
+    def error(msg: String): Unit = { append("[ERROR] " + msg) }
+    def debug(msg: String): Unit = { append("[DEBUG] " + msg) }
+    def trace(t: Throwable): Unit = { append("[TRACE] " + t.getMessage) }
+    def info(msg: String): Unit = { append("[INFO] " + msg) }
 
   def eventWithStatus(s: Status): Matcher[Event] =
     beEqualTo(s) ^^ ((_: Event).status())

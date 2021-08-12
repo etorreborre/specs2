@@ -14,7 +14,8 @@ import text.AnsiColors
 import time.SimpleTimer
 import scala.xml.NodeSeq
 
-class HtmlBodyPrinterSpec(ee: ExecutionEnv) extends Specification with Forms with XmlMatchers { def is = s2"""
+class HtmlBodyPrinterSpec(ee: ExecutionEnv) extends Specification with Forms with XmlMatchers {
+  def is = s2"""
 
  A hidden reference must not be printed $hidden
  A form must be printed $printForm
@@ -26,9 +27,11 @@ class HtmlBodyPrinterSpec(ee: ExecutionEnv) extends Specification with Forms wit
 """
 
   def hidden =
-    print(link(new nonmutableSpec { def is = s2"""
+    print(link(new nonmutableSpec {
+      def is = s2"""
         Explanation Text.
-       example no. one $ok"""}).hide) must beEmpty
+       example no. one $ok"""
+    }).hide) must beEmpty
 
   def printForm =
     val ns: NodeSeq = print(formFragmentFactory.FormFragment(form("hey").tr(prop("test", 1, 2))))
@@ -61,7 +64,7 @@ class HtmlBodyPrinterSpec(ee: ExecutionEnv) extends Specification with Forms wit
       }
     }.is.fragments
 
-    makeBody(fragments)(ee).map(_.trim.replaceAll("\\s+","")).runOption === Some(
+    makeBody(fragments)(ee).map(_.trim.replaceAll("\\s+", "")).runOption === Some(
       """<br/>
         |<br/>
         |<text class="ok">t1</text>
@@ -102,12 +105,14 @@ class HtmlBodyPrinterSpec(ee: ExecutionEnv) extends Specification with Forms wit
         |   <text>e6</text><br/>
         |   <message class="skipped"></message>
         |</li>
-        |<br/>""".stripMargin.trim.replaceAll("\\s+",""))
+        |<br/>""".stripMargin.trim.replaceAll("\\s+", "")
+    )
 
   trait nonmutableSpec extends org.specs2.Specification
 
   def nonmutableHtmlBody =
-    val fragments = new nonmutableSpec { def is = s2"""
+    val fragments = new nonmutableSpec {
+      def is = s2"""
         Explanation Text.
 
         First starting test line
@@ -121,7 +126,7 @@ class HtmlBodyPrinterSpec(ee: ExecutionEnv) extends Specification with Forms wit
           """
     }.is.fragments
 
-    makeBody(fragments)(ee).map(_.trim.replaceAll("\\s+","")).runOption === Some(
+    makeBody(fragments)(ee).map(_.trim.replaceAll("\\s+", "")).runOption === Some(
       """
         |<text class="ok">
         |   <br/>Explanation Text. First starting test line<br/>
@@ -172,18 +177,21 @@ class HtmlBodyPrinterSpec(ee: ExecutionEnv) extends Specification with Forms wit
         |   <message class="skipped"></message>
         |</li>
         |<br/>
-      """.stripMargin.trim.replaceAll("\\s+",""))
+      """.stripMargin.trim.replaceAll("\\s+", "")
+    )
 
   private def fragments1 = fragments("first")
   private def fragments2 = fragments("second")
 
   private def fragments(description: String) =
-    p^
-      s"example no. one from $description set"  ! success ^br^
-      s"example no. two from $description set"  ! success ^br
+    p ^
+      s"example no. one from $description set" ! success ^ br ^
+      s"example no. two from $description set" ! success ^ br
 
   private def makeBody(specStructure: SpecStructure)(executionEnv: ExecutionEnv) =
-    HtmlBodyPrinter.makeBody(specStructure, Stats(), new SimpleTimer(), options, Arguments(), pandoc = false)(executionEnv)
+    HtmlBodyPrinter.makeBody(specStructure, Stats(), new SimpleTimer(), options, Arguments(), pandoc = false)(
+      executionEnv
+    )
 
   def options = HtmlOptions(
     outDir = HtmlOptions.outDir,
@@ -194,5 +202,6 @@ class HtmlBodyPrinterSpec(ee: ExecutionEnv) extends Specification with Forms wit
     search = false,
     toc = false,
     tocEntryMaxSize = 18,
-    warnMissingSeeRefs = true)
+    warnMissingSeeRefs = true
+  )
 }

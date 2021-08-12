@@ -15,21 +15,22 @@ trait ClassRunner:
   def run(spec: SpecificationStructure): Action[Stats]
   def run(spec: SpecStructure): Action[Stats]
 
-/**
- * A runner for Specification classes based on their names
- */
+/** A runner for Specification classes based on their names
+  */
 
 case class DefaultClassRunner(env: Env, reporter: Reporter, specFactory: SpecFactory) extends ClassRunner:
 
   val arguments: Arguments =
     env.arguments
 
-  /** instantiate a Specification from its class name and use arguments to determine how to
-   * execute it and report results
-   */
+  /** instantiate a Specification from its class name and use arguments to determine how to execute it and report
+    * results
+    */
   def run(className: String): Action[Stats] =
     specFactory.createSpecification(className).toAction.flatMap(spec => run(spec.structure)) |||
-    Action.pure(println("cannot instantiate the specification: " + className + ". Please check your classpath")).as(Stats.empty)
+      Action
+        .pure(println("cannot instantiate the specification: " + className + ". Please check your classpath"))
+        .as(Stats.empty)
 
   def run(spec: SpecificationStructure): Action[Stats] =
     run(spec.structure)
@@ -38,26 +39,21 @@ case class DefaultClassRunner(env: Env, reporter: Reporter, specFactory: SpecFac
     val allSpecs = arguments.isSet("all")
     if allSpecs then
       for
-        ss     <- specFactory.createLinkedSpecs(specStructure).toAction
+        ss <- specFactory.createLinkedSpecs(specStructure).toAction
         sorted <- Action.pure(SpecStructure.topologicalSort(ss)(env.specs2ExecutionEnv).getOrElse(ss))
-        stats  <- reporter.report(sorted.toList)
+        stats <- reporter.report(sorted.toList)
       yield stats
-    else
-      reporter.report(specStructure)
-
+    else reporter.report(specStructure)
 
 trait ClassRunnerMain:
-  /**
-   * run a specification but don't exit with System.exit
-   */
+  /** run a specification but don't exit with System.exit
+    */
   def run(args: Array[String]): Unit =
     run(args, exit = false)
 
-  /**
-   * run the specification, the first argument is expected to be the specification name
-   * The class runner expects the first command-line argument to be the class name of
-   * a specification to execute
-   */
+  /** run the specification, the first argument is expected to be the specification name The class runner expects the
+    * first command-line argument to be the class name of a specification to execute
+    */
   def run(args: Array[String], exit: Boolean): Unit =
     val arguments = Arguments(args.drop(1)*)
     val env = EnvDefault.create(arguments)
@@ -65,10 +61,10 @@ trait ClassRunnerMain:
     val actions: Action[Stats] = args.toList match
       case List() =>
         Action.fail("there must be at least one argument, the fully qualified class name") >>
-        Action.pure(Stats.empty)
+          Action.pure(Stats.empty)
 
       case className :: rest =>
-          for
+        for
           classRunner <- createClassRunner(env).toAction
           stats <- classRunner.run(className)
         yield stats
@@ -76,9 +72,8 @@ trait ClassRunnerMain:
     try execute(actions, env, exit)
     finally env.shutdown()
 
-  /**
-   * Create a ClassRunner from the default environment containing the command line arguments
-   */
+  /** Create a ClassRunner from the default environment containing the command line arguments
+    */
   def createClassRunner(env: Env): Operation[ClassRunner] =
     val arguments = env.arguments
     val loader = Thread.currentThread.getContextClassLoader
@@ -91,16 +86,14 @@ trait ClassRunnerMain:
       reporter <- Reporter.createCustomInstance(customInstances).map(_.getOrElse(Reporter.create(printers, env)))
     yield DefaultClassRunner(env, reporter, specFactory)
 
-
 object ClassRunner extends ClassRunnerMain
 
 object consoleRunner extends ClassRunnerMain:
   def main(args: Array[String]) =
     run(args, exit = true)
 
-/**
- * Test runner to simulate a console run
- */
+/** Test runner to simulate a console run
+  */
 object TextRunner extends ClassRunnerMain:
 
   def run(spec: SpecificationStructure, arguments: Arguments = Arguments())(env: Env): PrinterLogger & StringOutput =
@@ -111,9 +104,14 @@ object TextRunner extends ClassRunnerMain:
 
     val action =
       for
-        reporter <- customInstances.createCustomInstance[Reporter]( "reporter",
-          (m: String) => "a custom reporter can not be instantiated " + m, "no custom reporter defined, using the default one")
-          .map(_.getOrElse(Reporter.create(List(TextPrinter(env1)), env1))).toAction
+        reporter <- customInstances
+          .createCustomInstance[Reporter](
+            "reporter",
+            (m: String) => "a custom reporter can not be instantiated " + m,
+            "no custom reporter defined, using the default one"
+          )
+          .map(_.getOrElse(Reporter.create(List(TextPrinter(env1)), env1)))
+          .toAction
         stats <- reporter.report(spec.structure)
       yield stats
 

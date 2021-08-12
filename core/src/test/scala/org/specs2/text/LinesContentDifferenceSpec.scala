@@ -3,7 +3,8 @@ package org.specs2.text
 import org.specs2.mutable.Specification
 import org.specs2.specification.AllExpectations
 
-class LinesContentDifferenceSpec extends Specification with AllExpectations { s2"""
+class LinesContentDifferenceSpec extends Specification with AllExpectations {
+  s2"""
 
  The LinesContentDifference class checks 2 sequences of lines
 
@@ -52,7 +53,6 @@ class LinesContentDifferenceSpec extends Specification with AllExpectations { s2
     diff(lines3, lines1).show === Seq(SameLine(line1), SameLine(line2), DeletedLine(line3), DeletedLine(line4))
     diff(lines3, lines4).show === Seq(AddedLine(line1), SameLine(line2), DeletedLine(line4))
   }
-
 
   "3. all = false, ordered = true" >> {
     def diff(ls1: Seq[String], ls2: Seq[String]): LinesContentDifference =

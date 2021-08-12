@@ -3,7 +3,8 @@ package guide
 
 import org.specs2.main.FilesRunnerArguments.*
 
-object RunInShell extends UserGuidePage { def is = s2"""
+object RunInShell extends UserGuidePage {
+  def is = s2"""
 It is not necessary to use a build tool to run a specification. You just need to have the right dependencies on the classpath and use one of the $specs2 runners.
 
 ### Dependencies

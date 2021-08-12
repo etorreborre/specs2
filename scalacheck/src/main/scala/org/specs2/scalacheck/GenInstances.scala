@@ -4,9 +4,8 @@ package scalacheck
 import org.scalacheck.Gen
 import org.specs2.fp.*
 
-/**
- * Scalaz instances for the Gen datatype
- */
+/** Scalaz instances for the Gen datatype
+  */
 trait GenInstances:
 
   given Monad[Gen] with

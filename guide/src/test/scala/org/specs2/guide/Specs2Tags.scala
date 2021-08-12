@@ -7,9 +7,8 @@ import Functions.*
 import org.specs2.fp.syntax.*
 import math.Ordering.Implicits.*
 
-/**
- * Functions for finding the most relevant specs2 tags to display on the website
- */
+/** Functions for finding the most relevant specs2 tags to display on the website
+  */
 trait Specs2Tags:
   def allTags: Operation[List[VersionTag]] =
     Executable.execute(FilePath("git"), Seq("tag")).map(_.trim.split("\n").toList.map(VersionTag.fromString).flatten)
@@ -23,22 +22,19 @@ trait Specs2Tags:
   def isGreaterThanVersion3: VersionTag => Boolean = (tag: VersionTag) =>
     Ordering[DotNumber].gteq(tag.number, DotNumber(List(3)))
 
-
 object Specs2Tags extends Specs2Tags
 
 import Specs2Tags.*
 
-class Specs2TagsSpec extends Specification { def is = s2"""
+class Specs2TagsSpec extends Specification {
+  def is = s2"""
 
- ${ filterPublished(
-      List("SPECS2-2.4.9",
-           "SPECS2-3.9.3",
-           "SPECS2-3.9.4",
-           "SPECS2-4.10.0",
-           "SPECS2-4.12.1").flatMap(VersionTag.fromString)) ===
-      List("SPECS2-3.9.4",
-           "SPECS2-4.12.1").flatMap(VersionTag.fromString)
-  }
+ ${filterPublished(
+    List("SPECS2-2.4.9", "SPECS2-3.9.3", "SPECS2-3.9.4", "SPECS2-4.10.0", "SPECS2-4.12.1").flatMap(
+      VersionTag.fromString
+    )
+  ) ===
+    List("SPECS2-3.9.4", "SPECS2-4.12.1").flatMap(VersionTag.fromString)}
 """
 }
 

@@ -4,19 +4,17 @@ package data
 import scala.collection.mutable
 import scala.util.control.NonLocalReturns.*
 
-/**
- * Hopcroft-Karp (https://en.wikipedia.org/wiki/Hopcroft%E2%80%93Karp_algorithm) algorithm for
- * finding the maximum matching in a bipartite graph
- *
- * This is used for "contain" matchers to find the best matches between actual and expected elements in 2 lists
- *
- */
+/** Hopcroft-Karp (https://en.wikipedia.org/wiki/Hopcroft%E2%80%93Karp_algorithm) algorithm for finding the maximum
+  * matching in a bipartite graph
+  *
+  * This is used for "contain" matchers to find the best matches between actual and expected elements in 2 lists
+  */
 object HopcroftKarp:
 
   def findMaximalMatching(vertex1: Seq[Int], vertex2: Seq[Int], edges: Map[Int, Seq[Int]]): List[(Int, Int)] =
     val nil = -1
     val queue: mutable.Queue[Int] = new mutable.Queue[Int]
-    val dist: mutable.Map[Int, Int] =  new mutable.HashMap[Int, Int]
+    val dist: mutable.Map[Int, Int] = new mutable.HashMap[Int, Int]
     val pair1: mutable.Map[Int, Int] = new mutable.HashMap[Int, Int]
     val pair2: mutable.Map[Int, Int] = new mutable.HashMap[Int, Int]
 
@@ -60,7 +58,6 @@ object HopcroftKarp:
     var matching = 0
     while bfs do
       vertex1.foreach { v =>
-        if pair1(v) == nil && dfs(v) then
-          matching = matching + 1
+        if pair1(v) == nil && dfs(v) then matching = matching + 1
       }
     pair1.toList.filterNot(_._2 == nil)

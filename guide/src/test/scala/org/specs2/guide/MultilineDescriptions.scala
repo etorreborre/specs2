@@ -1,10 +1,11 @@
 package org.specs2
 package guide
 
-object MultilineDescriptions extends UserGuidePage { def is = s2"""
+object MultilineDescriptions extends UserGuidePage {
+  def is = s2"""
 
 In a `s2` string the description of an example is taken as all the text having the same indentation before the example body:${snippet {
-s2"""
+    s2"""
   This is the introduction paragraph
   Which presents the examples
     the first example has one line $ok
@@ -12,7 +13,7 @@ s2"""
     the second example has
     more than one line $ok
 """
-}}
+  }}
 
 This prints
 ```
@@ -24,15 +25,15 @@ Which presents the examples
     more than one line
 ```
 
-If you want the example description to be unevenly aligned you can use a margin `|`:${snippet{
-s2"""
+If you want the example description to be unevenly aligned you can use a margin `|`:${snippet {
+    s2"""
   This is the introduction paragraph
   Which presents the examples
     |this example has a very
     | very very
     |   specific indentation $ok
 """
-}}
+  }}
 
 This prints
 ```

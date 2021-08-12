@@ -7,9 +7,8 @@ import form.{given, *}
 import text.Indent.*
 import scala.reflect.Selectable.reflectiveSelectable
 
-/**
- * Allow to use forms inside interpolated strings starting with s2 in order to build the specification content
- */
+/** Allow to use forms inside interpolated strings starting with s2 in order to build the specification content
+  */
 trait FormS2StringContext extends S2StringContext:
   this: FormFragmentsFactory =>
 
@@ -23,9 +22,9 @@ trait FormS2StringContext extends S2StringContext:
 
         Fragments(fragmentFactory.text(text)).append(formFragment.updateDescription {
           case fd: FormDescription => fd.indent(lastLineIndentation(text))
-          case _ => formFragment.description
+          case _                   => formFragment.description
         })
 
-  given [T : HasForm]: Conversion[T, Interpolated] with
+  given [T: HasForm]: Conversion[T, Interpolated] with
     def apply(f: T): Interpolated =
       formIsInterpolated(f.form)

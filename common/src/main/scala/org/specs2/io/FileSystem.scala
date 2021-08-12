@@ -11,9 +11,8 @@ import java.util.zip.*
 import java.util.regex.Pattern.compile
 import java.util.regex.Matcher.quoteReplacement
 
-/**
- * Interface for the FileSystem where effects are denoted with the "Operation" type
- */
+/** Interface for the FileSystem where effects are denoted with the "Operation" type
+  */
 case class FileSystem(logger: Logger) extends FilePathReader:
 
   /** delete a file */
@@ -31,19 +30,21 @@ case class FileSystem(logger: Logger) extends FilePathReader:
   /** write a string to a file as UTF-8 */
   def writeFile(filePath: FilePath, content: String): Operation[Unit] =
     mkdirs(filePath) >>
-    Operation.protect {
-      val writer = new PrintWriter(filePath.path, "UTF-8")
-      try Right(writer.write(content))
-      catch { case e: Exception => Left(e) }
-      finally writer.close
-    }.flatMap {
-      case Left(e) =>
-        logger.exception(e) >>
-        logger.warn("could not write file "+filePath.path)
+      Operation
+        .protect {
+          val writer = new PrintWriter(filePath.path, "UTF-8")
+          try Right(writer.write(content))
+          catch { case e: Exception => Left(e) }
+          finally writer.close
+        }
+        .flatMap {
+          case Left(e) =>
+            logger.exception(e) >>
+              logger.warn("could not write file " + filePath.path)
 
-      case Right(_) =>
-        Operation.unit
-    }
+          case Right(_) =>
+            Operation.unit
+        }
 
   /** execute an operation with a File, then delete it */
   def withEphemeralFile(path: FilePath)(operation: Operation[Unit]): Operation[Unit] =
@@ -57,16 +58,16 @@ case class FileSystem(logger: Logger) extends FilePathReader:
   def mkdirs(path: FilePath): Operation[Unit] =
     mkdirs(path.dir)
 
-  /**
-   * Unjar the jar (or zip file) specified by "path" to the "dest" directory.
-   * Filters files which shouldn't be extracted with a regular expression.
-   * @param jarUrl path of the jar file
-   * @param dest destination directory path
-   * @param regexFilter regular expression filtering files which shouldn't be
-   *                    extracted; the expression must capture the path of
-   *                    an entry as group 1 which will then be used relative
-   *                    to dirPath as target path for that entry
-   */
+  /** Unjar the jar (or zip file) specified by "path" to the "dest" directory. Filters files which shouldn't be
+    * extracted with a regular expression.
+    * @param jarUrl
+    *   path of the jar file
+    * @param dest
+    *   destination directory path
+    * @param regexFilter
+    *   regular expression filtering files which shouldn't be extracted; the expression must capture the path of an
+    *   entry as group 1 which will then be used relative to dirPath as target path for that entry
+    */
   def unjar(jarUrl: URL, dest: DirectoryPath, regexFilter: String): Operation[Unit] =
     val regex = compile(regexFilter)
     val uis = jarUrl.openStream()
@@ -91,15 +92,16 @@ case class FileSystem(logger: Logger) extends FilePathReader:
         extractEntry(zis.getNextEntry)
 
     Operation.delayed {
-      try     extractEntry(zis.getNextEntry)
+      try extractEntry(zis.getNextEntry)
       finally zis.close
     }
 
-  /**
-   * Copy an input stream to an output stream.
-   * @param input input stream
-   * @param output output stream
-   */
+  /** Copy an input stream to an output stream.
+    * @param input
+    *   input stream
+    * @param output
+    *   output stream
+    */
   private def copy(input: InputStream, output: OutputStream): Unit =
     val data = new Array[Byte](2048)
     def readData(count: Int): Unit =
@@ -109,11 +111,12 @@ case class FileSystem(logger: Logger) extends FilePathReader:
         readData(input.read(data, 0, 2048))
     readData(input.read(data, 0, 2048))
 
-  /**
-   * copy the content of a directory to another.
-   * @param src path of the directory to copy
-   * @param dest destination directory path
-   */
+  /** copy the content of a directory to another.
+    * @param src
+    *   path of the directory to copy
+    * @param dest
+    *   destination directory path
+    */
   def copyDir(src: DirectoryPath, dest: DirectoryPath): Operation[Unit] =
     mkdirs(dest) >>
       listDirectFilePaths(src).flatMap { files =>
@@ -123,31 +126,34 @@ case class FileSystem(logger: Logger) extends FilePathReader:
         directories.toList.map(dir => copyDir(dir, dest / dir.name)).sequence.void
       }
 
-  /**
-   * copy a file to a destination directory
-   * @param filePath path of the file to copy
-   * @param dest destination directory path
-   */
+  /** copy a file to a destination directory
+    * @param filePath
+    *   path of the file to copy
+    * @param dest
+    *   destination directory path
+    */
   def copyFile(dest: DirectoryPath)(filePath: FilePath): Operation[Unit] =
     mkdirs(dest) >>
-    Operation.delayed {
-      copyLock.synchronized {
-        import java.nio.file.*
-        Files.copy(Paths.get(filePath.path),
-          Paths.get(dest.path).resolve(Paths.get(filePath.name.name)), StandardCopyOption.REPLACE_EXISTING)
-      }
-    }.void
+      Operation.delayed {
+        copyLock.synchronized {
+          import java.nio.file.*
+          Files.copy(
+            Paths.get(filePath.path),
+            Paths.get(dest.path).resolve(Paths.get(filePath.name.name)),
+            StandardCopyOption.REPLACE_EXISTING
+          )
+        }
+      }.void
 
-  /**
-   * the Files.copy operation is being called concurrently, sometimes to copy the same files when
-   * running the Html printer for example. Without a lock a FileAlreadyException can be thrown
-   */
+  /** the Files.copy operation is being called concurrently, sometimes to copy the same files when running the Html
+    * printer for example. Without a lock a FileAlreadyException can be thrown
+    */
   private object copyLock
 
   /** create a new file */
   def createFile(filePath: FilePath): Operation[Boolean] =
     mkdirs(filePath.dir) >>
-    Operation.delayed(filePath.toFile.createNewFile)
+      Operation.delayed(filePath.toFile.createNewFile)
 
   /** delete files or directories */
   def delete(file: FilePath): Operation[Unit] =

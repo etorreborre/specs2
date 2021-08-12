@@ -7,14 +7,13 @@ import dsl.*
 
 import scala.concurrent.ExecutionContext
 
-/**
- * This trait provides an isolated Execution Env for a Specification and makes sure it is shutdown
- * when the specification finishes.
- *
- * The specification using this trait must require an Env:
- *
- * class MySpec(env: Env) extends Specification with OwnExecutionEnv
- */
+/** This trait provides an isolated Execution Env for a Specification and makes sure it is shutdown when the
+  * specification finishes.
+  *
+  * The specification using this trait must require an Env:
+  *
+  * class MySpec(env: Env) extends Specification with OwnExecutionEnv
+  */
 trait OwnExecutionEnv extends AfterSpec:
   self: FragmentsDsl =>
 
@@ -22,8 +21,9 @@ trait OwnExecutionEnv extends AfterSpec:
 
   private lazy val ownEnv: Env =
     env.copy(
-      executionEnv =       ExecutionEnv.create(env.arguments, env.systemLogger, tag = Some(getClass.getName)),
-      specs2ExecutionEnv = ExecutionEnv.createSpecs2(env.arguments, env.systemLogger, tag = Some(getClass.getName)))
+      executionEnv = ExecutionEnv.create(env.arguments, env.systemLogger, tag = Some(getClass.getName)),
+      specs2ExecutionEnv = ExecutionEnv.createSpecs2(env.arguments, env.systemLogger, tag = Some(getClass.getName))
+    )
 
   given ee: ExecutionEnv =
     ownEnv.executionEnv

@@ -3,14 +3,11 @@ package org.specs2.concurrent
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.FiniteDuration
 
-/**
- * Executor services for javascript
- *
- * The global execution context is used for both
- * executing tests and scheduling timeouts
- */
-case class ExecutorServices(executionContextEval: () => ExecutionContext,
-                            schedulerEval: () =>  Scheduler) {
+/** Executor services for javascript
+  *
+  * The global execution context is used for both executing tests and scheduling timeouts
+  */
+case class ExecutorServices(executionContextEval: () => ExecutionContext, schedulerEval: () => Scheduler) {
 
   given executionContext: ExecutionContext = executionContextEval()
 

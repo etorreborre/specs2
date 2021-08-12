@@ -6,16 +6,15 @@ package mutable
 import create.FragmentsFactory
 import org.specs2.specification.core.{Fragments, Fragment}
 
-/**
- * Dsl for creating text and formatting fragments in a mutable specification
- */
+/** Dsl for creating text and formatting fragments in a mutable specification
+  */
 trait TextDsl extends TextCreation:
   outer =>
 
   extension (s: String)
     def txt = outer.addText(s)
 
-    def br: Fragment  = s.txt.br(2)
+    def br: Fragment = s.txt.br(2)
     def br(n: Int): Fragment = s.txt.br(n)
 
     def p: Fragment = s.txt.p
@@ -25,7 +24,7 @@ trait TextDsl extends TextCreation:
     def br: Fragment =
       br(1)
 
-    def br(n: Int): Fragment  =
+    def br(n: Int): Fragment =
       val result = f
       (1 to n).map(_ => addFragment(fragmentFactory.break))
       result
@@ -49,8 +48,8 @@ trait TextDsl extends TextCreation:
       addFragment(fragmentFactory.backtab(n))
 
   extension (fs: =>Fragments)
-    def br: Fragments  = br(1)
-    def br(n: Int): Fragments  =
+    def br: Fragments = br(1)
+    def br(n: Int): Fragments =
       val result = fs
       (1 to n).map(_ => addFragment(fragmentFactory.break))
       result

@@ -3,7 +3,8 @@ package matcher
 
 import org.hamcrest.*
 
-class HamcrestSpec extends Spec with Hamcrest with TypedEqual { def is = s2"""
+class HamcrestSpec extends Spec with Hamcrest with TypedEqual {
+  def is = s2"""
 
   Hamcrest matchers can be used as specs2 matchers by mixing in the Hamcrest trait
     for example a beEven hamcrest matcher can be used in a 'must' expression $matcher1

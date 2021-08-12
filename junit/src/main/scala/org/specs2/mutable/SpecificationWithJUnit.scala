@@ -4,9 +4,8 @@ package mutable
 import org.junit.runner.*
 import runner.*
 
-/**
- * This class must be inherited to allow a Specification to be executed as a JUnit test
- */
+/** This class must be inherited to allow a Specification to be executed as a JUnit test
+  */
 @RunWith(classOf[JUnitRunner])
 abstract class SpecificationWithJUnit extends Specification
 

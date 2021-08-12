@@ -7,15 +7,14 @@ import data.*
 import execute.{Error, Result}
 import core.*
 
-/**
- * Dsl to create actions in a mutable spec
- */
+/** Dsl to create actions in a mutable spec
+  */
 trait ActionDsl extends FragmentBuilder with org.specs2.specification.dsl.ActionDsl:
 
-  override def action[T : AsExecution](a: =>T): Fragment =
+  override def action[T: AsExecution](a: =>T): Fragment =
     addFragment(super.action(a))
 
-  override def step[T : AsExecution](a: =>T): Fragment =
+  override def step[T: AsExecution](a: =>T): Fragment =
     addFragment(super.step(a))
 
   def stopWhen(r: Result): Fragment = addFragment(fragmentFactory.step(()).stopOn(r))
@@ -30,4 +29,5 @@ trait ActionDsl extends FragmentBuilder with org.specs2.specification.dsl.Action
     addFragment(fragmentFactory.step(()).stopWhen((r: Result) => mustStop(when).fold(_ => true, b => b && r.isFailure)))
 
   private def mustStop(when: =>Boolean) =
-    try Right(when) catch { case e: Throwable => Left(Error(e)) }
+    try Right(when)
+    catch { case e: Throwable => Left(Error(e)) }

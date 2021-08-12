@@ -6,7 +6,8 @@ import execute.Result
 import text.MappedColors
 import control.*
 
-class ArgumentsSpec extends Spec with DataTables with TypedEqual with ArgProperties { def is = s2"""
+class ArgumentsSpec extends Spec with DataTables with TypedEqual with ArgProperties {
+  def is = s2"""
 
 Arguments can be passed on the command line as an Array of Strings. There are 2 types of arguments:
 
@@ -98,8 +99,9 @@ Unknown arguments
   def values9 = Arguments("ex", "this test").select.ex must ===("this test")
 
   def values10 =
-    List("nocolor", "color", "nocolor true", "nocolor false", "color true", "color false").map(a => Arguments.split(a).color) must ===(
-    List(false, true, false, true, true, false))
+    List("nocolor", "color", "nocolor true", "nocolor false", "color true", "color false").map(a =>
+      Arguments.split(a).color
+    ) must ===(List(false, true, false, true, true, false))
 
   def overriding1 = (args(xonly = true) <| args(plan = false)).xonly must ===(true)
   def overriding2 = args(xonly = true).overrideWith(args(xonly = false)).xonly must ===(false)
@@ -108,56 +110,61 @@ Unknown arguments
   case class properties(properties: (String, String)*) extends SystemProperties:
     override def systemGetProperty(p: String) = Map(properties*).get(p)
 
-  def properties1 = Arguments.extract(using   Seq(""), properties("plan" -> "")).plan must ===(true)
-  def properties2 = Arguments.extract(using   Seq(""), properties("plan" -> "true")).plan must ===(true)
-  def properties3 = Arguments.extract(using   Seq(""), properties("plan" -> "false")).plan must ===(false)
-  def properties4 = Arguments.extract(using   Seq(""), properties("ex"   -> "spec")).ex must ===("spec")
-  def properties5 = Arguments.extract(using   Seq(""), properties("specs2.ex" -> "spec")).ex must ===("spec")
+  def properties1 = Arguments.extract(using Seq(""), properties("plan" -> "")).plan must ===(true)
+  def properties2 = Arguments.extract(using Seq(""), properties("plan" -> "true")).plan must ===(true)
+  def properties3 = Arguments.extract(using Seq(""), properties("plan" -> "false")).plan must ===(false)
+  def properties4 = Arguments.extract(using Seq(""), properties("ex" -> "spec")).ex must ===("spec")
+  def properties5 = Arguments.extract(using Seq(""), properties("specs2.ex" -> "spec")).ex must ===("spec")
 
   def properties6 =
-    List(("nocolor", ""), ("color", ""), ("nocolor", "true"), ("nocolor", "false"), ("color", "true"), ("color", "false")).map { case (k, v) =>
+    List(
+      ("nocolor", ""),
+      ("color", ""),
+      ("nocolor", "true"),
+      ("nocolor", "false"),
+      ("color", "true"),
+      ("color", "false")
+    ).map { case (k, v) =>
       Arguments.extract(using Seq(""), properties(k -> v)).color
     } must ===(List(false, true, false, true, true, false))
 
   def execution1 =
-    "args"                      | "status" | "canShow"    |>
-    xonly                       ! "x"      ! true         |
-    xonly                       ! "!"      ! true         |
-    xonly                       ! "o"      ! false        |
-    xonly                       ! "+"      ! false        |
-    xonly                       ! "-"      ! false        |
-    showOnly("x!")              ! "x"      ! true         |
-    showOnly("x!")              ! "!"      ! true         |
-    showOnly("x!")              ! "o"      ! false        |
-    showOnly("x!")              ! "+"      ! false        |
-    showOnly("x!")              ! "-"      ! false        |
-    showOnly("o")               ! "x"      ! false        |
-    showOnly("o")               ! "!"      ! false        |
-    showOnly("o")               ! "o"      ! true         |
-    showOnly("o")               ! "+"      ! false        |
-    showOnly("o")               ! "-"      ! false        |
-    Arguments("showonly","o")   ! "x"      ! false        |
-    Arguments("showonly","o")   ! "!"      ! false        |
-    Arguments("showonly","o")   ! "o"      ! true         |
-    Arguments("showonly","o")   ! "+"      ! false        |
-    Arguments("showonly","o")   ! "-"      ! false        |
-    { (a, s, r) =>  a.canShow(s) must ===(r) }
+    "args" | "status" | "canShow" |>
+      xonly ! "x" ! true |
+      xonly ! "!" ! true |
+      xonly ! "o" ! false |
+      xonly ! "+" ! false |
+      xonly ! "-" ! false |
+      showOnly("x!") ! "x" ! true |
+      showOnly("x!") ! "!" ! true |
+      showOnly("x!") ! "o" ! false |
+      showOnly("x!") ! "+" ! false |
+      showOnly("x!") ! "-" ! false |
+      showOnly("o") ! "x" ! false |
+      showOnly("o") ! "!" ! false |
+      showOnly("o") ! "o" ! true |
+      showOnly("o") ! "+" ! false |
+      showOnly("o") ! "-" ! false |
+      Arguments("showonly", "o") ! "x" ! false |
+      Arguments("showonly", "o") ! "!" ! false |
+      Arguments("showonly", "o") ! "o" ! true |
+      Arguments("showonly", "o") ! "+" ! false |
+      Arguments("showonly", "o") ! "-" ! false | { (a, s, r) => a.canShow(s) must ===(r) }
 
   def execution2 =
-    "args"                     | "status"            | "canShow"    |>
-    xonly                      ! (failure:Result)    ! true         |
-    xonly                      ! anError             ! true         |
-    xonly                      ! skipped             ! false        |
-    xonly                      ! success             ! false        |
-    showOnly("x!")             ! failure             ! true         |
-    showOnly("x!")             ! anError             ! true         |
-    showOnly("x!")             ! skipped             ! false        |
-    showOnly("x!")             ! success             ! false        |
-    showOnly("o")              ! failure             ! false        |
-    showOnly("o")              ! anError             ! false        |
-    showOnly("o")              ! skipped             ! true         |
-    showOnly("o")              ! success             ! false        |
-    { (a, s, r) =>  a.canShow(s.status) must ===(r) }
+    "args" | "status" | "canShow" |>
+      xonly ! (failure: Result) ! true |
+      xonly ! anError ! true |
+      xonly ! skipped ! false |
+      xonly ! success ! false |
+      showOnly("x!") ! failure ! true |
+      showOnly("x!") ! anError ! true |
+      showOnly("x!") ! skipped ! false |
+      showOnly("x!") ! success ! false |
+      showOnly("o") ! failure ! false |
+      showOnly("o") ! anError ! false |
+      showOnly("o") ! skipped ! true |
+      showOnly("o") ! success ! false | { (a, s, r) => a.canShow(s.status) must ===(r) }
 
   def execution3 =
     Arguments("this", "is", "cool").commandLineFilter("this", "cool").commandLine.arguments === Seq("this", "cool")
@@ -178,5 +185,7 @@ Unknown arguments
     CommandLine.unknownArguments(Seq("!xonly", "was", "x")) === List()
 
   def unknown4 =
-    CommandLine.unknownArguments(Seq("filesrunner.basepath", "examples/shared/src/test/scala", "verbose", "plan", "true", "boom")) === List("boom")
+    CommandLine.unknownArguments(
+      Seq("filesrunner.basepath", "examples/shared/src/test/scala", "verbose", "plan", "true", "boom")
+    ) === List("boom")
 }

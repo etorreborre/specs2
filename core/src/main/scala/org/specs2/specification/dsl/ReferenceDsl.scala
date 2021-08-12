@@ -5,9 +5,8 @@ package dsl
 import core.*
 import create.FragmentsFactory
 
-/**
- * Dsl for creating specification references
- */
+/** Dsl for creating specification references
+  */
 trait ReferenceDsl extends ReferenceCreation:
 
   extension (alias: String)
@@ -40,12 +39,11 @@ trait ReferenceDsl extends ReferenceCreation:
       lazy val spec = s.is
       fragmentFactory.see(SpecificationRef(spec.header, spec.arguments, alias = alias, tooltip = tooltip))
 
-/**
- * Create references without any implicits
- */
+/** Create references without any implicits
+  */
 trait ReferenceCreation extends FragmentsFactory:
-  def link(s: SpecStructure): Fragment            = fragmentFactory.link(SpecificationRef.create(s))
+  def link(s: SpecStructure): Fragment = fragmentFactory.link(SpecificationRef.create(s))
   def link(s: =>SpecificationStructure): Fragment = fragmentFactory.link(SpecificationRef.create(s.is))
 
-  def see(s: SpecStructure): Fragment            = fragmentFactory.see(SpecificationRef.create(s))
+  def see(s: SpecStructure): Fragment = fragmentFactory.see(SpecificationRef.create(s))
   def see(s: =>SpecificationStructure): Fragment = fragmentFactory.see(SpecificationRef.create(s))

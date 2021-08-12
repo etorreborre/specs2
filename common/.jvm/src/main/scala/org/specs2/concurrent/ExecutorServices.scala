@@ -8,11 +8,13 @@ import java.util.concurrent.atomic.AtomicBoolean
 import org.specs2.main.*
 import org.specs2.control.*
 
-case class ExecutorServices(executorServiceEval:          () => ExecutorService,
-                            executionContextEval:         () => ExecutionContext,
-                            scheduledExecutorServiceEval: () => ScheduledExecutorService,
-                            schedulerEval:                () => Scheduler,
-                            shutdown:                     () => Unit):
+case class ExecutorServices(
+    executorServiceEval: () => ExecutorService,
+    executionContextEval: () => ExecutionContext,
+    scheduledExecutorServiceEval: () => ScheduledExecutorService,
+    schedulerEval: () => Scheduler,
+    shutdown: () => Unit
+):
 
   private val started = new AtomicBoolean(false)
 
@@ -43,7 +45,6 @@ case class ExecutorServices(executorServiceEval:          () => ExecutorService,
   def schedule(action: =>Unit, duration: FiniteDuration): () => Unit =
     scheduler.schedule(action, duration)
 
-
 object ExecutorServices:
 
   def create(arguments: Arguments, systemLogger: Logger, tag: Option[String] = None): ExecutorServices =
@@ -52,16 +53,19 @@ object ExecutorServices:
   def createSpecs2(arguments: Arguments, systemLogger: Logger, tag: Option[String] = None): ExecutorServices =
     createExecutorServices(arguments, systemLogger, tag, isSpecs2 = true)
 
-  private def createExecutorServices(arguments: Arguments, systemLogger: Logger, tag: Option[String], isSpecs2: Boolean): ExecutorServices =
+  private def createExecutorServices(
+      arguments: Arguments,
+      systemLogger: Logger,
+      tag: Option[String],
+      isSpecs2: Boolean
+  ): ExecutorServices =
     val threadFactoryName: String =
-      if isSpecs2 then "specs2"+tag.map("-"+_).getOrElse("")
-      else          "specs2.user"+tag.map("-"+_).getOrElse("")
+      if isSpecs2 then "specs2" + tag.map("-" + _).getOrElse("")
+      else "specs2.user" + tag.map("-" + _).getOrElse("")
 
     lazy val executorService =
-      if isSpecs2 then
-        fixedExecutor(arguments.specs2ThreadsNb, threadFactoryName)
-      else
-        fixedExecutor(arguments.threadsNb, threadFactoryName)
+      if isSpecs2 then fixedExecutor(arguments.specs2ThreadsNb, threadFactoryName)
+      else fixedExecutor(arguments.threadsNb, threadFactoryName)
 
     lazy val scheduledExecutorService =
       scheduledExecutor(arguments.scheduledThreadsNb, threadFactoryName)
@@ -74,7 +78,10 @@ object ExecutorServices:
       () => executionContext,
       () => scheduledExecutorService,
       () => Schedulers.schedulerFromScheduledExecutorService(scheduledExecutorService),
-      () => { try executorService.shutdown finally scheduledExecutorService.shutdown }
+      () => {
+        try executorService.shutdown
+        finally scheduledExecutorService.shutdown
+      }
     )
 
   def fromExecutionContext(ec: ExecutionContext): ExecutorServices =
@@ -83,21 +90,26 @@ object ExecutorServices:
       () => ec,
       () => scheduledExecutor(1, "unused"),
       () => Schedulers.default,
-      () => ())
+      () => ()
+    )
 
   def fromGlobalExecutionContext: ExecutorServices =
     fromExecutionContext(scala.concurrent.ExecutionContext.global)
 
-  def createExecutionContext(executorService: ExecutorService, verbose: Boolean, systemLogger: Logger): ExecutionContext =
-    ExecutionContext.fromExecutorService(executorService,
-      (t: Throwable) => { systemLogger.exception(t, verbose).runVoid })
+  def createExecutionContext(
+      executorService: ExecutorService,
+      verbose: Boolean,
+      systemLogger: Logger
+  ): ExecutionContext =
+    ExecutionContext.fromExecutorService(
+      executorService,
+      (t: Throwable) => { systemLogger.exception(t, verbose).runVoid }
+    )
 
   def fixedExecutor(threadsNb: Int, name: String): ExecutorService =
     Executors.newFixedThreadPool(threadsNb, NamedThreadFactory(name))
 
-  /**
-   * the number of executors is set from the arguments.scheduledThreadsNb value which is
-   * 1 by default
-   */
+  /** the number of executors is set from the arguments.scheduledThreadsNb value which is 1 by default
+    */
   def scheduledExecutor(scheduledThreadsNb: Int, name: String): ScheduledExecutorService =
-    Executors.newScheduledThreadPool(scheduledThreadsNb, NamedThreadFactory("specs2.scheduled."+name))
+    Executors.newScheduledThreadPool(scheduledThreadsNb, NamedThreadFactory("specs2.scheduled." + name))

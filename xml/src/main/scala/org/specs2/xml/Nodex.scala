@@ -4,9 +4,8 @@ package xml
 import scala.xml.*
 import fp.*
 
-/**
- * Extension methods for NodeSeqs and Nodes
- */
+/** Extension methods for NodeSeqs and Nodes
+  */
 trait Nodex:
 
   extension (ns: NodeSeq)
@@ -22,30 +21,30 @@ trait Nodex:
     def filterNodes(condition: Node => Boolean, recurse: Node => Boolean = (e: Node) => true) =
       NodeFunctions.filter(ns, condition, recurse)
 
-  /**
-   * This class adds more methods to the Node class
-   */
+  /** This class adds more methods to the Node class
+    */
   extension (n: Node)
-    /**
-     * @return true if the Node represents some empty text (containing spaces or newlines)
-     */
+    /** @return
+      *   true if the Node represents some empty text (containing spaces or newlines)
+      */
     def isSpaceNode: Boolean =
       NodeFunctions.isSpaceNode(n)
 
-    def matchNode(other: Node,
-                  attributes: List[String] = Nil,
-                  attributeValues: Map[String, String] = Map(),
-                  exactMatch: Boolean = false,
-                  textTest: String => Boolean = (s:String) => true): Boolean =
+    def matchNode(
+        other: Node,
+        attributes: List[String] = Nil,
+        attributeValues: Map[String, String] = Map(),
+        exactMatch: Boolean = false,
+        textTest: String => Boolean = (s: String) => true
+    ): Boolean =
       NodeFunctions.matchNode(n, other, attributes, attributeValues, exactMatch, textTest)
 
   extension (ns: Seq[NodeSeq])
     def reduceNodes: NodeSeq =
       ns.flatMap(_.theSeq).reduceNodesWith(identity)
 
-  /**
-   * reduce a sequence of T's with a function transforming T's to NodeSeq
-   */
+  /** reduce a sequence of T's with a function transforming T's to NodeSeq
+    */
   extension [T](ns: Seq[T])
     def reduceNodesWith(f: T => NodeSeq): NodeSeq =
       ns.foldLeft(NodeSeq.Empty) { (res, cur) => res ++ f(cur) }
@@ -61,6 +60,5 @@ trait Nodex:
   given Conversion[(Any, Any), UnprefixedAttribute] with
     def apply(pair: (Any, Any)): UnprefixedAttribute =
       new UnprefixedAttribute(pair._1.toString, pair._2.toString, Null)
-
 
 object Nodex extends Nodex

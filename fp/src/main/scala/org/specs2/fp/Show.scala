@@ -1,8 +1,7 @@
 package org.specs2.fp
 
-/**
- * Inspired from the scalaz (https://github.com/scalaz/scalaz) project
- */
+/** Inspired from the scalaz (https://github.com/scalaz/scalaz) project
+  */
 trait Show[F]:
 
   def show(f: F): String
@@ -24,9 +23,8 @@ object Show:
   given Show[Int] =
     showFromToString[Int]
 
-
 trait ShowSyntax:
 
-  extension [A : Show](a: A)
+  extension [A: Show](a: A)
     def show: String =
       Show[A].show(a)

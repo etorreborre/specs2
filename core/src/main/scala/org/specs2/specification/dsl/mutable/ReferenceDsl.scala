@@ -5,9 +5,8 @@ package mutable
 
 import core.{SpecificationStructure, SpecStructure, Fragment}
 
-/**
- * Dsl for creating references in a mutable specification
- */
+/** Dsl for creating references in a mutable specification
+  */
 trait ReferenceDsl extends FragmentBuilder with dsl.ReferenceDsl:
 
   extension (alias: String)
@@ -22,7 +21,6 @@ trait ReferenceDsl extends FragmentBuilder with dsl.ReferenceDsl:
 
     override infix def ~(s: =>SpecificationStructure, tooltip: String): Fragment =
       addFragment(alias.~(s, tooltip))
-
 
   extension (alias: String)
     override infix def ~/(s: SpecStructure): Fragment =

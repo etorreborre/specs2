@@ -5,11 +5,9 @@ import NotNullStrings.*
 import scala.collection.Traversable
 import collection.canEqualAny
 
-/**
- * Quote and unquote strings
- */
-private[specs2]
-trait Quote:
+/** Quote and unquote strings
+  */
+private[specs2] trait Quote:
 
   /** quote a value, unless it is a collection of objects */
   def q(a: Any): String =
@@ -18,7 +16,7 @@ trait Quote:
       a.asInstanceOf[Matchable] match
         case option: Option[?]      => quote(option.notNull)
         case ar: Array[?]           => ar.notNull
-        case map: Map[?,?]          => map.notNull
+        case map: Map[?, ?]         => map.notNull
         case it: TraversableOnce[?] => it.notNull
         case _                      => quote(a.notNull)
 
@@ -29,14 +27,13 @@ trait Quote:
     else seq.mkString("\n", "\n  ", "\n")
 
   /** quote a string */
-  def quote(s: String, addQuotes: Boolean = true) = if addQuotes then "'"+s+"'" else s
+  def quote(s: String, addQuotes: Boolean = true) = if addQuotes then "'" + s + "'" else s
 
   /** @return an object.toString() without quotes (used in messages creation) */
-  def unq(a: Any)  = a.notNull
+  def unq(a: Any) = a.notNull
 
   extension (s: String)
     def prefix(separator: String, other: String): String =
       Seq(s, other).filter(_.nonEmpty).mkString(separator)
 
-private[specs2]
-object Quote extends Quote
+private[specs2] object Quote extends Quote

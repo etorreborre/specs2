@@ -3,9 +3,8 @@ package org.specs2.fp
 import Tree.*
 import syntax.*
 
-/**
- * Inspired from the scalaz (https://github.com/scalaz/scalaz) project
- */
+/** Inspired from the scalaz (https://github.com/scalaz/scalaz) project
+  */
 sealed abstract class Tree[A]:
 
   /** The label at the root of this tree. */
@@ -15,10 +14,10 @@ sealed abstract class Tree[A]:
   def subForest: LazyList[Tree[A]]
 
   /** Maps the elements of the Tree into a Monoid and folds the resulting Tree. */
-  def foldMap[B : Monoid](f: A => B): B =
+  def foldMap[B: Monoid](f: A => B): B =
     f(rootLabel) |+| subForest.map(_.foldMap(f)).sumAll
 
-  def foldRight[B](z: => B)(f: (A, => B) => B): B =
+  def foldRight[B](z: =>B)(f: (A, =>B) => B): B =
     Foldable[LazyList].foldRight(flatten, z)(f)
 
   /** A 2D String representation of this Tree. */
@@ -26,22 +25,23 @@ sealed abstract class Tree[A]:
     val reversedLines = draw
     val first = new StringBuilder(reversedLines.head.toString.reverse)
     val rest = reversedLines.tail
-    rest.foldLeft(first) { (acc, elem) =>
-      acc.append("\n").append(elem.toString.reverse)
-    }.append("\n").toString
+    rest
+      .foldLeft(first) { (acc, elem) =>
+        acc.append("\n").append(elem.toString.reverse)
+      }
+      .append("\n")
+      .toString
 
-  /** A histomorphic transform. Each element in the resulting tree
-   * is a function of the corresponding element in this tree
-   * and the histomorphic transform of its children.
-   **/
+  /** A histomorphic transform. Each element in the resulting tree is a function of the corresponding element in this
+    * tree and the histomorphic transform of its children.
+    */
   def scanr[B](g: (A, LazyList[Tree[B]]) => B): Tree[B] =
     val c = Need(subForest.map(_.scanr(g)))
     Node(g(rootLabel, c.value), c.value)
 
-  /** A 2D String representation of this Tree, separated into lines.
-   * Uses reversed StringBuilders for performance, because they are
-   * prepended to.
-   **/
+  /** A 2D String representation of this Tree, separated into lines. Uses reversed StringBuilders for performance,
+    * because they are prepended to.
+    */
   private def draw(using sh: Show[A]): Vector[StringBuilder] =
     val branch = " -+" // "+- ".reverse
     val stem = " -`" // "`- ".reverse
@@ -50,7 +50,7 @@ sealed abstract class Tree[A]:
     def drawSubTrees(s: LazyList[Tree[A]]): Vector[StringBuilder] = s match
       case ts if ts.isEmpty       => Vector.empty[StringBuilder]
       case t #:: ts if ts.isEmpty => new StringBuilder("|") +: shift(stem, "   ", t.draw)
-      case t #:: ts               =>
+      case t #:: ts =>
         new StringBuilder("|") +: (shift(branch, trunk, t.draw) ++ drawSubTrees(ts))
 
     def shift(first: String, other: String, s: Vector[StringBuilder]): Vector[StringBuilder] =
@@ -86,10 +86,7 @@ sealed abstract class Tree[A]:
 
   /** A TreeLoc zipper of this tree, focused on the root node. */
   def loc: TreeLoc[A] =
-    TreeLoc.loc(this,
-      LazyList.empty,
-      LazyList.empty,
-      LazyList.empty)
+    TreeLoc.loc(this, LazyList.empty, LazyList.empty, LazyList.empty)
 
   /** Turns a tree of pairs into a pair of trees. */
   def unzip[A1, A2](using p: A => (A1, A2)): (Tree[A1], Tree[A2]) =
@@ -109,12 +106,11 @@ sealed abstract class Tree[A]:
     val r: Tree[B] = f(rootLabel)
     Node(r.rootLabel, r.subForest #::: subForest.map(_.flatMap(f)))
 
-
 object Tree:
-  def apply[A](root: => A): Tree[A] = Leaf(root)
+  def apply[A](root: =>A): Tree[A] = Leaf(root)
 
   object Node:
-    def apply[A](root: => A, forest: => LazyList[Tree[A]]): Tree[A] =
+    def apply[A](root: =>A, forest: =>LazyList[Tree[A]]): Tree[A] =
       new Tree[A] {
         private val rootc = Need(root)
         private val forestc = Need(forest)
@@ -127,7 +123,7 @@ object Tree:
     def unapply[A](t: Tree[A]): Option[(A, LazyList[Tree[A]])] = Some((t.rootLabel, t.subForest))
 
   object Leaf:
-    def apply[A](root: => A): Tree[A] =
+    def apply[A](root: =>A): Tree[A] =
       Node(root, LazyList.empty)
 
     def unapply[A](t: Tree[A]): Option[A] =

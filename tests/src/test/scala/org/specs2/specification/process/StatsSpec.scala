@@ -9,7 +9,8 @@ import control.*
 import producer.*, Producer.*
 import specification.core.{Env, OwnEnv}
 
-class StatsSpec(val env: Env) extends Specification with OwnEnv { def is = s2"""
+class StatsSpec(val env: Env) extends Specification with OwnEnv {
+  def is = s2"""
 
  Statistics can be computed for a stream of fragments
   1 success            $e1
@@ -29,9 +30,8 @@ class StatsSpec(val env: Env) extends Specification with OwnEnv { def is = s2"""
     val p = emitAllAsync("ex1" ! ok, "ex2" ! ko) |> executeFragments1(ownEnv) |> statsProcess
     runLast(p) must beSome(Stats(examples = 2, expectations = 2, successes = 1, failures = 1))
 
-  /**
-   * HELPERS
-   */
+  /** HELPERS
+    */
 
   def runLast[A](p: AsyncStream[A]): Option[A] =
     p.runList.runOption(ownEnv.specs2ExecutionEnv).map(_.lastOption).flatten

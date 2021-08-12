@@ -30,75 +30,110 @@ trait SpecificationStructure:
 
 object SpecificationStructure:
 
-  /**
-   * create a SpecificationStructure from a class name
-   */
-  def create(className: String, classLoader: ClassLoader = Thread.currentThread.getContextClassLoader, env: Option[Env] = None): Operation[SpecificationStructure] =
+  /** create a SpecificationStructure from a class name
+    */
+  def create(
+      className: String,
+      classLoader: ClassLoader = Thread.currentThread.getContextClassLoader,
+      env: Option[Env] = None
+  ): Operation[SpecificationStructure] =
     lazy val defaultInstances = env.toList.flatMap(_.defaultInstances)
 
     // make sure the instantiated class is a Specification Structure (see #477)
     def asSpecificationStructure(i: Any): Operation[SpecificationStructure] =
       Operation.delayed(classOf[SpecificationStructure].cast(i))
 
-    existsClass(className+"$", classLoader) flatMap { e =>
+    existsClass(className + "$", classLoader) flatMap { e =>
       if e then
         // try to create the specification from the object name
-        createInstance[SpecificationStructure](className+"$", classLoader, defaultInstances).flatMap(asSpecificationStructure).orElse(
-          // fallback to the class if this is just a companion object
-          createInstance[SpecificationStructure](className, classLoader, defaultInstances).flatMap(asSpecificationStructure)
-        )
+        createInstance[SpecificationStructure](className + "$", classLoader, defaultInstances)
+          .flatMap(asSpecificationStructure)
+          .orElse(
+            // fallback to the class if this is just a companion object
+            createInstance[SpecificationStructure](className, classLoader, defaultInstances)
+              .flatMap(asSpecificationStructure)
+          )
       else
         // try to create the specification from a class name
-        createInstance[SpecificationStructure](className, classLoader, defaultInstances).flatMap(asSpecificationStructure)
+        createInstance[SpecificationStructure](className, classLoader, defaultInstances).flatMap(
+          asSpecificationStructure
+        )
     }
 
-  /**
-   * sort the specifications in topological order where specification i doesn't depend on specification j if i > j
-   *
-   * means "dependents first"!
-   */
+  /** sort the specifications in topological order where specification i doesn't depend on specification j if i > j
+    *
+    * means "dependents first"!
+    */
   def topologicalSort(env: Env) = (specifications: Seq[SpecificationStructure]) =>
-    TopologicalSort.sort(specifications, (s1: SpecificationStructure, s2: SpecificationStructure) =>
-      SpecStructure.dependsOn(env.specs2ExecutionEnv)(s2.structure, s1.structure))
+    TopologicalSort.sort(
+      specifications,
+      (s1: SpecificationStructure, s2: SpecificationStructure) =>
+        SpecStructure.dependsOn(env.specs2ExecutionEnv)(s2.structure, s1.structure)
+    )
 
-  /**
-   * sort the specifications in topological order where specification i doesn't depend on specification j if i < j
-   *
-   *  means "dependents last"!
-   */
+  /** sort the specifications in topological order where specification i doesn't depend on specification j if i < j
+    *
+    * means "dependents last"!
+    */
   def reverseTopologicalSort(env: Env) = (specifications: Seq[SpecificationStructure]) =>
-    TopologicalSort.sort(specifications, (s1: SpecificationStructure, s2: SpecificationStructure) =>
-        SpecStructure.dependsOn(env.specs2ExecutionEnv)(s1.structure, s2.structure))
+    TopologicalSort.sort(
+      specifications,
+      (s1: SpecificationStructure, s2: SpecificationStructure) =>
+        SpecStructure.dependsOn(env.specs2ExecutionEnv)(s1.structure, s2.structure)
+    )
 
   /** @return all the referenced specifications */
-  def referencedSpecifications(spec: SpecificationStructure, env: Env, classLoader: ClassLoader): Operation[Seq[SpecificationStructure]] =
+  def referencedSpecifications(
+      spec: SpecificationStructure,
+      env: Env,
+      classLoader: ClassLoader
+  ): Operation[Seq[SpecificationStructure]] =
     specificationsRefs(spec, env, classLoader)(referencedSpecificationsRefs)
 
   /** @return all the linked specifications */
-  def linkedSpecifications(spec: SpecificationStructure, env: Env, classLoader: ClassLoader): Operation[Seq[SpecificationStructure]] =
+  def linkedSpecifications(
+      spec: SpecificationStructure,
+      env: Env,
+      classLoader: ClassLoader
+  ): Operation[Seq[SpecificationStructure]] =
     specificationsRefs(spec, env, classLoader)(linkedSpecificationsRefs)
 
   /** @return all the see specifications */
-  def seeSpecifications(spec: SpecificationStructure, env: Env, classLoader: ClassLoader): Operation[Seq[SpecificationStructure]] =
+  def seeSpecifications(
+      spec: SpecificationStructure,
+      env: Env,
+      classLoader: ClassLoader
+  ): Operation[Seq[SpecificationStructure]] =
     specificationsRefs(spec, env, classLoader)(seeSpecificationsRefs)
 
   /** @return all the referenced specifications */
-  def specificationsRefs(spec: SpecificationStructure,
-                         env: Env,
-                         classLoader: ClassLoader)(refs: (SpecificationStructure, Env) => List[SpecificationRef]): Operation[Seq[SpecificationStructure]] =
+  def specificationsRefs(spec: SpecificationStructure, env: Env, classLoader: ClassLoader)(
+      refs: (SpecificationStructure, Env) => List[SpecificationRef]
+  ): Operation[Seq[SpecificationStructure]] =
 
-    val byName = (ss: List[SpecificationStructure]) => ss.foldLeft(Vector[(String, SpecificationStructure)]()) { (res, cur) =>
-      val name = cur.structure.specClassName
-      if res.map(_._1).contains(name) then res
-      else (name, cur) +: res
-    }
+    val byName = (ss: List[SpecificationStructure]) =>
+      ss.foldLeft(Vector[(String, SpecificationStructure)]()) { (res, cur) =>
+        val name = cur.structure.specClassName
+        if res.map(_._1).contains(name) then res
+        else (name, cur) +: res
+      }
 
-    def getRefs(s: SpecificationStructure, visited: Vector[(String, SpecificationStructure)]): Vector[(String, SpecificationStructure)] =
-      refs(s, env).map(ref => create(ref.header.specClass.getName, classLoader, Some(env))).sequence.map(byName).runMonoid
+    def getRefs(
+        s: SpecificationStructure,
+        visited: Vector[(String, SpecificationStructure)]
+    ): Vector[(String, SpecificationStructure)] =
+      refs(s, env)
+        .map(ref => create(ref.header.specClass.getName, classLoader, Some(env)))
+        .sequence
+        .map(byName)
+        .runMonoid
         .filterNot { case (n, _) => visited.map(_._1).contains(n) }
 
     Operation.delayed {
-      def getAll(seed: Vector[SpecificationStructure], visited: Vector[(String, SpecificationStructure)]): Vector[SpecificationStructure] =
+      def getAll(
+          seed: Vector[SpecificationStructure],
+          visited: Vector[(String, SpecificationStructure)]
+      ): Vector[SpecificationStructure] =
         if seed.isEmpty then visited.map(_._2)
         else
           val toVisit: Vector[(String, SpecificationStructure)] = seed.flatMap(s => getRefs(s, visited))

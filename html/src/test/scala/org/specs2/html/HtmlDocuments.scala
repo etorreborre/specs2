@@ -12,14 +12,14 @@ trait HtmlDocuments {
     </body>
 
   val aBodyWithTwoH3HeadersAndOneH4Each: NodeSeq =
-    <h1>title</h1>             ++
-      <h3>a h3 header</h3>     ++
-      <h4>first h4</h4>        ++
+    <h1>title</h1> ++
+      <h3>a h3 header</h3> ++
+      <h4>first h4</h4> ++
       <h3>another h3 header</h3> ++
       <h4>second h4</h4>
 
   val aBodyWithAH3ThenAH2Header: NodeSeq =
-    <h3>a h3 header</h3>     ++
+    <h3>a h3 header</h3> ++
       <h2>a h2 header</h2>
 
 }

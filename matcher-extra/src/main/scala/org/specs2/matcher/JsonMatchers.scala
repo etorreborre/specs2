@@ -13,22 +13,21 @@ import Result.*
 import Results.negateWhen
 import JsonMatchers.*
 
-/**
- * Matchers for Json expressions (entered as strings)
- */
+/** Matchers for Json expressions (entered as strings)
+  */
 trait JsonMatchers extends Expectations with JsonMatchersImplicits:
   outer =>
 
   def have(m: Matcher[JsonType]): JsonMatcher = JsonMatcher.create(check = m)
-  def /(selector: JsonSelector) : JsonSelectorMatcher = JsonMatcher.create(JsonQuery(First, selector))
+  def /(selector: JsonSelector): JsonSelectorMatcher = JsonMatcher.create(JsonQuery(First, selector))
   def */(selector: JsonSelector): JsonSelectorMatcher = JsonMatcher.create(JsonQuery(Deep, selector))
-  def /#(n: Int)                : JsonSelectorMatcher = JsonMatcher.create(JsonQuery(First, JsonIndexSelector(n)))
+  def /#(n: Int): JsonSelectorMatcher = JsonMatcher.create(JsonQuery(First, JsonIndexSelector(n)))
 
   abstract class JsonMatcher extends Matcher[String]:
     def apply[S <: String](s: Expectable[S]) =
       parse(s.value.notNull) match
         case Some(json) => negateWhen(negated)(find(Some(json), queries.toList))
-        case _       => result(negated, "Could not parse\n" + s.value.notNull)
+        case _          => result(negated, "Could not parse\n" + s.value.notNull)
 
     def negate: JsonMatcher
     def negated: Boolean
@@ -41,37 +40,33 @@ trait JsonMatchers extends Expectations with JsonMatchersImplicits:
       case s: String      => JsonString(s)
       case d: Double      => JsonNumber(d)
       case b: Boolean     => JsonBoolean(b)
-      case (k, v) => JsonMap(Map(k.toString -> v))
+      case (k, v)         => JsonMap(Map(k.toString -> v))
 
     private def find(json: Option[JSONType], queries: List[JsonQuery]): Result =
       def checkRest(value: Any, rest: List[JsonQuery]) =
         (value.asInstanceOf[Matchable], rest.asInstanceOf[Matchable]) match
-          case (_, Nil)         => check(createExpectable(anyValueToJsonType(value)))
+          case (_, Nil) => check(createExpectable(anyValueToJsonType(value)))
           case ((k, v), q :: _) =>
-            if rest(0).selector.select(Map((k.notNull, v))).isDefined then
-              Success()
-            else
-              Failure(s"found '${value.notNull}' but no value to select for ${rest(0).name}")
+            if rest(0).selector.select(Map((k.notNull, v))).isDefined then Success()
+            else Failure(s"found '${value.notNull}' but no value to select for ${rest(0).name}")
 
           case (v, q :: _) =>
-            if rest(0).selector.select(List(v)).isDefined then
-              Success()
-            else
-              Failure(s"found '${value.notNull}' but no value to select for ${rest(0).name}")
+            if rest(0).selector.select(List(v)).isDefined then Success()
+            else Failure(s"found '${value.notNull}' but no value to select for ${rest(0).name}")
 
       (json, queries) match
-        case (None,    Nil)             => Success("ok")
+        case (None, Nil)                => Success("ok")
         case (Some(JSONArray(a)), Nil)  => check(createExpectable(JsonType.array(a)))
         case (Some(JSONObject(o)), Nil) => check(createExpectable(JsonType.map(o)))
-        case (None,    q :: _)          => Failure(q.selector.name + " not found")
+        case (None, q :: _)             => Failure(q.selector.name + " not found")
 
         // FIRST
         case (Some(JSONArray(list)), JsonQuery(First, selector) :: rest) =>
           selector.select(list) match
             case Some(v) =>
               v.asInstanceOf[Matchable] match
-                case j:JSONType => find(Some(j), rest)
-                case _ => checkRest(v, rest)
+                case j: JSONType => find(Some(j), rest)
+                case _           => checkRest(v, rest)
             case _ => selectorNotFound(selector, list)
 
         case (Some(JSONObject(map)), JsonQuery(First, selector) :: rest) =>
@@ -79,7 +74,7 @@ trait JsonMatchers extends Expectations with JsonMatchersImplicits:
             case Some((k, v)) =>
               v.asInstanceOf[Matchable] match
                 case j: JSONType => find(Some(j), rest)
-                case _ => val r = checkRest((k, v), rest); if r.isSuccess then r else checkRest(v, rest)
+                case _           => val r = checkRest((k, v), rest); if r.isSuccess then r else checkRest(v, rest)
             case _ =>
               selectorNotFound(selector, map)
 
@@ -89,13 +84,16 @@ trait JsonMatchers extends Expectations with JsonMatchersImplicits:
             case Some(v) =>
               v.asInstanceOf[Matchable] match
                 case j: JSONType => find(Some(j), rest)
-                case _ => checkRest(v, rest)
+                case _           => checkRest(v, rest)
             case _ =>
-              list.to(LazyList).map { v =>
-                v.asInstanceOf[Matchable] match
-                  case j: JSONType => find(Some(j), queries)
-                  case _=> checkRest(v, queries)
-              }.find(_.isSuccess)
+              list
+                .to(LazyList)
+                .map { v =>
+                  v.asInstanceOf[Matchable] match
+                    case j: JSONType => find(Some(j), queries)
+                    case _           => checkRest(v, queries)
+                }
+                .find(_.isSuccess)
                 .getOrElse(selectorNotFound(selector, list))
 
         case (Some(JSONObject(map)), JsonQuery(Deep, selector) :: rest) =>
@@ -103,13 +101,15 @@ trait JsonMatchers extends Expectations with JsonMatchersImplicits:
             case Some((k, v)) =>
               v.asInstanceOf[Matchable] match
                 case j: JSONType => find(Some(j), rest)
-                case _ => checkRest(v, rest)
+                case _           => checkRest(v, rest)
             case _ =>
-              map.values.map { v =>
-                v.asInstanceOf[Matchable] match
-                  case j: JSONType => find(Some(j), queries)
-                  case _ => checkRest(v, queries)
-              }.find(_.isSuccess)
+              map.values
+                .map { v =>
+                  v.asInstanceOf[Matchable] match
+                    case j: JSONType => find(Some(j), queries)
+                    case _           => checkRest(v, queries)
+                }
+                .find(_.isSuccess)
                 .getOrElse(selectorNotFound(selector, map))
 
     private def selectorNotFound[K, V](selector: JsonSelector, map: Map[K, V]) =
@@ -118,30 +118,31 @@ trait JsonMatchers extends Expectations with JsonMatchersImplicits:
           Failure(s"the object\n${showMap(map)}\ndoesn't contain the ${selector.description}")
 
         case _ =>
-          Failure(s"the object\n${showMap(map)}\ndoesn't contain the ${selector.description}\nThis selector can " +
-            s"only be used with an array. Use /(k -> anyValue) if you just want to find the key 'k'")
+          Failure(
+            s"the object\n${showMap(map)}\ndoesn't contain the ${selector.description}\nThis selector can " +
+              s"only be used with an array. Use /(k -> anyValue) if you just want to find the key 'k'"
+          )
 
     private def selectorNotFound[T](selector: JsonSelector, list: List[T]) =
       Failure(s"the array\n${showList(list)}\ndoesn't contain the ${selector.description}")
 
     private def showMap[K, V](map: Map[K, V]) =
-      map.map { case (k,v) => s"$k:$v" }.mkString("{",", ","}")
+      map.map { case (k, v) => s"$k:$v" }.mkString("{", ", ", "}")
 
     private def showList[T](list: List[T]) =
-      list.mkString("[",", ","]")
+      list.mkString("[", ", ", "]")
 
-  /**
-   * This matcher can be chained to select further elements in the Json object
-   */
+  /** This matcher can be chained to select further elements in the Json object
+    */
   case class JsonSelectorMatcher(queries: Seq[JsonQuery], negated: Boolean = false) extends JsonMatcher:
     parent =>
     val check: Matcher[JsonType] = JsonType.anyMatch
 
-    def /(selector: JsonSelector) : JsonSelectorMatcher = append(JsonQuery(First, selector))
+    def /(selector: JsonSelector): JsonSelectorMatcher = append(JsonQuery(First, selector))
     def */(selector: JsonSelector): JsonSelectorMatcher = append(JsonQuery(Deep, selector))
-    def /#(n: Int)                : JsonSelectorMatcher = append(JsonQuery(First, JsonIndexSelector(n)))
+    def /#(n: Int): JsonSelectorMatcher = append(JsonQuery(First, JsonIndexSelector(n)))
 
-    def /(kv: JsonPairSelector) : JsonSelectorMatcher = parent./(kv._1)./(kv._2)
+    def /(kv: JsonPairSelector): JsonSelectorMatcher = parent./(kv._1)./(kv._2)
     def */(kv: JsonPairSelector): JsonSelectorMatcher = parent.*/(kv._1)./(kv._2)
 
     def andHave(m: Matcher[JsonType]): JsonFinalMatcher = JsonFinalMatcher(selectAnyValueLast(queries), m)
@@ -153,28 +154,26 @@ trait JsonMatchers extends Expectations with JsonMatchersImplicits:
     private def append(other: JsonQuery*) =
       copy(queries = other.foldLeft(queries)((res, cur) => appendQuery(res, cur)))
 
-    /**
-     * add a new query
-     *
-     * If the last query selects a value, allow it to select a pair as well
-     */
+    /** add a new query
+      *
+      * If the last query selects a value, allow it to select a pair as well
+      */
     private def appendQuery(previous: Seq[JsonQuery], other: JsonQuery) =
       previous match
         case start :+ JsonQuery(qt, s: JsonValueSelector) => start :+ JsonQuery(qt, s.toValueOrKey) :+ other
-        case _ => previous :+ other
+        case _                                            => previous :+ other
 
-    /**
-     * allow the last query to select a value or a key
-     */
+    /** allow the last query to select a value or a key
+      */
     private def selectAnyValueLast(queries: Seq[JsonQuery]) =
       queries match
         case start :+ JsonQuery(qt, s) => start :+ JsonQuery(qt, s.toValueOrKey)
-        case _ => queries
+        case _                         => queries
 
-  /**
-   * This matcher can not be chained anymore with selections
-   */
-  case class JsonFinalMatcher(queries: Seq[JsonQuery], check: Matcher[JsonType], negated: Boolean = false) extends JsonMatcher { parent =>
+  /** This matcher can not be chained anymore with selections
+    */
+  case class JsonFinalMatcher(queries: Seq[JsonQuery], check: Matcher[JsonType], negated: Boolean = false)
+      extends JsonMatcher { parent =>
     def negate = copy(negated = !negated)
   }
 
@@ -189,9 +188,8 @@ trait JsonMatchers extends Expectations with JsonMatchersImplicits:
           case JsonNull => result(true, s"the value is not null")
           case other    => result(false, s"$other is not a null value")
 
-/**
- * abstract JSON types for specs2
- */
+/** abstract JSON types for specs2
+  */
 sealed trait JsonType
 case class JsonArray(list: List[Any]) extends JsonType
 case class JsonMap(map: Map[String, Any]) extends JsonType
@@ -204,7 +202,7 @@ object JsonType:
   def array(array: List[Any]) = JsonArray(array)
   def map(map: Map[String, Any]) = JsonMap(map)
 
-  val anyMatch = new  Matcher[JsonType] {
+  val anyMatch = new Matcher[JsonType] {
     def apply[S <: JsonType](s: Expectable[S]) = result(true, "ko")
   }
 
@@ -219,52 +217,57 @@ object JsonType:
 
   given Conversion[ContainWithResultSeq[String], Matcher[JsonType]] with
     def apply(m: ContainWithResultSeq[String]): Matcher[JsonType] =
-      (actual: JsonType) => actual match
-        case JsonArray(list) => m(createExpectable(list.map(showJson)))
-        case JsonMap(map)    => m(createExpectable(map.toList.map(showJson)))
-        case other           => result(false, s"$other is not an array")
+      (actual: JsonType) =>
+        actual match
+          case JsonArray(list) => m(createExpectable(list.map(showJson)))
+          case JsonMap(map)    => m(createExpectable(map.toList.map(showJson)))
+          case other           => result(false, s"$other is not an array")
 
   given Conversion[ContainWithResult[String], Matcher[JsonType]] with
     def apply(m: ContainWithResult[String]): Matcher[JsonType] =
-     (actual: JsonType) => actual match
-       case JsonArray(list) => m(createExpectable(list.map(showJson)))
-       case JsonMap(map)    => m(createExpectable(map.toList.map(showJson)))
-       case other           => result(false, s"$other is not an array")
+      (actual: JsonType) =>
+        actual match
+          case JsonArray(list) => m(createExpectable(list.map(showJson)))
+          case JsonMap(map)    => m(createExpectable(map.toList.map(showJson)))
+          case other           => result(false, s"$other is not an array")
 
   given Conversion[Int, Matcher[JsonType]] with
     def apply(expected: Int): Matcher[JsonType] =
-      (actual: JsonType) => actual match
-        case JsonNumber(n) => (n.toDouble == expected.toDouble, s"$n is not equal to $expected")
-        case other         => (false, s"not a Number: $other")
+      (actual: JsonType) =>
+        actual match
+          case JsonNumber(n) => (n.toDouble == expected.toDouble, s"$n is not equal to $expected")
+          case other         => (false, s"not a Number: $other")
 
   given Conversion[Double, Matcher[JsonType]] with
     def apply(expected: Double): Matcher[JsonType] =
-      (actual: JsonType) => actual match
-        case JsonNumber(n) => (n.toDouble == expected.toDouble, s"$n is not equal to $expected")
-        case other         => (false, s"not a Number: $other")
+      (actual: JsonType) =>
+        actual match
+          case JsonNumber(n) => (n.toDouble == expected.toDouble, s"$n is not equal to $expected")
+          case other         => (false, s"not a Number: $other")
 
   given Conversion[BigDecimal, Matcher[JsonType]] with
     def apply(expected: BigDecimal): Matcher[JsonType] =
-      (actual: JsonType) => actual match
-        case JsonNumber(n) => (n.toDouble == expected.toDouble, s"$n is not equal to $expected")
-        case other         => (false, s"not a Number: $other")
+      (actual: JsonType) =>
+        actual match
+          case JsonNumber(n) => (n.toDouble == expected.toDouble, s"$n is not equal to $expected")
+          case other         => (false, s"not a Number: $other")
 
   given Conversion[Boolean, Matcher[JsonType]] with
     def apply(expected: Boolean): Matcher[JsonType] =
-      (actual: JsonType) => actual match
-        case JsonBoolean(b) => (b == expected, s"$b is not equal to $expected")
-        case other          => (false, s"$other is not a Boolean")
+      (actual: JsonType) =>
+        actual match
+          case JsonBoolean(b) => (b == expected, s"$b is not equal to $expected")
+          case other          => (false, s"$other is not a Boolean")
 
   given Conversion[String, Matcher[JsonType]] with
     def apply(expected: String): Matcher[JsonType] =
-      (actual: JsonType) => actual match
-        case JsonString(a) => (a == expected, s"$a is not equal to $expected")
-        case other         => (false, s"not a String: $other")
+      (actual: JsonType) =>
+        actual match
+          case JsonString(a) => (a == expected, s"$a is not equal to $expected")
+          case other         => (false, s"not a String: $other")
 
-
-/**
- * Different ways of selecting elements in a Json object
- */
+/** Different ways of selecting elements in a Json object
+  */
 trait JsonSelectors:
   sealed trait JsonSelector:
     def select(list: List[Any]): Option[Any]
@@ -300,7 +303,7 @@ trait JsonSelectors:
         v.asInstanceOf[Matchable] match
           case db: Double => db == d
           case i: Int     => i == d
-          case other     => false
+          case other      => false
       }
 
     def select(map: Map[String, Any]) = None
@@ -328,7 +331,8 @@ trait JsonSelectors:
   case class JsonPairSelector(_1: JsonSelector, _2: JsonSelector) extends JsonSelector:
     def select(list: List[Any]): Option[Any] = None
     def select(map: Map[String, Any]): Option[(String, Any)] =
-      _1.select(map.keys.toList).flatMap(k => map.find { case (k1, v) => k.notNull == k1 && _2.select(List(v)).isDefined })
+      _1.select(map.keys.toList)
+        .flatMap(k => map.find { case (k1, v) => k.notNull == k1 && _2.select(List(v)).isDefined })
     def name = s"${_1.name}:${_2.description}"
     def description: String = s"pair $name"
 
@@ -350,8 +354,7 @@ trait JsonSelectors:
   val anyValue: Matcher[Any] =
     new AlwaysMatcher[Any]
 
-private[specs2]
-trait JsonMatchersImplicits extends JsonMatchersLowImplicits:
+private[specs2] trait JsonMatchersImplicits extends JsonMatchersLowImplicits:
 
   /** datatype to specify how json values must be checked */
   given [M <: Matcher[String]]: Conversion[M, JsonSelector] with
@@ -388,14 +391,13 @@ trait JsonMatchersImplicits extends JsonMatchersLowImplicits:
     def toJsonSelector(m: Matcher[String]): JsonSelector = m
 
   object ToJsonSelector:
-    def apply[T : ToJsonSelector](t: T) = summon[ToJsonSelector[T]].toJsonSelector(t)
+    def apply[T: ToJsonSelector](t: T) = summon[ToJsonSelector[T]].toJsonSelector(t)
 
-  given [K : ToJsonSelector, V : ToJsonSelector]: Conversion[(K, V), JsonPairSelector] with
+  given [K: ToJsonSelector, V: ToJsonSelector]: Conversion[(K, V), JsonPairSelector] with
     def apply(kv: (K, V)): JsonPairSelector =
       JsonPairSelector(summon[ToJsonSelector[K]].toJsonSelector(kv._1), summon[ToJsonSelector[V]].toJsonSelector(kv._2))
 
-private[specs2]
-trait JsonMatchersLowImplicits extends JsonSelectors:
+private[specs2] trait JsonMatchersLowImplicits extends JsonSelectors:
   trait ToJsonSelector[T]:
     def toJsonSelector(t: T): JsonSelector
 

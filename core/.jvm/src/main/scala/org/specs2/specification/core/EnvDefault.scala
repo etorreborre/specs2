@@ -22,20 +22,24 @@ object EnvDefault:
 
   def create(arguments: Arguments): Env =
     Env(
-      arguments            = arguments,
-      resources            = MutableMap(),
-      systemLogger         = ConsoleLogger(),
-      printerLogger        = consolePrinterLogger,
-      statisticsRepository = StatisticsRepositoryCreation.file(arguments.commandLine.directoryOr("stats.outdir", statsDirectoryPath)),
-      random               = new scala.util.Random,
-      fileSystem           = FileSystem(ConsoleLogger()),
-      customClassLoader    = None,
-      classLoading         = ClassLoading())
+      arguments = arguments,
+      resources = MutableMap(),
+      systemLogger = ConsoleLogger(),
+      printerLogger = consolePrinterLogger,
+      statisticsRepository =
+        StatisticsRepositoryCreation.file(arguments.commandLine.directoryOr("stats.outdir", statsDirectoryPath)),
+      random = new scala.util.Random,
+      fileSystem = FileSystem(ConsoleLogger()),
+      customClassLoader = None,
+      classLoading = ClassLoading()
+    )
 
   def defaultInstances(env: Env) =
-    List[AnyRef](env.arguments.commandLine,
-         env.executionEnv,
-         env.executionEnv.executorServices,
-         env.executionContext,
-         env.arguments,
-         env)
+    List[AnyRef](
+      env.arguments.commandLine,
+      env.executionEnv,
+      env.executionEnv.executorServices,
+      env.executionContext,
+      env.arguments,
+      env
+    )

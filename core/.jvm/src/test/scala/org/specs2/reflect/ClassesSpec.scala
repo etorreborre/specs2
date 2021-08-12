@@ -4,7 +4,8 @@ package reflect
 import Classes.*
 import matcher.OperationMatchers.*
 
-class ClassesSpec extends Spec { def is = s2"""
+class ClassesSpec extends Spec {
+  def is = s2"""
 
   it is possible to instantiate a Specification
     from a class name $fromClass1
@@ -16,7 +17,6 @@ class ClassesSpec extends Spec { def is = s2"""
 
 """
 
-
   def fromClass1 =
     createInstance[Specification]("org.specs2.reflect.FromClassName", getClass.getClassLoader, Nil) must beOk
 
@@ -24,7 +24,11 @@ class ClassesSpec extends Spec { def is = s2"""
     createInstance[Specification]("org.specs2.reflect.FromClassNameWithArg", getClass.getClassLoader, Nil) must beOk
 
   def fromNestedClass =
-    createInstance[Specification]("org.specs2.reflect.ClassesSpec$FromNestedClass", getClass.getClassLoader, Nil) must beOk
+    createInstance[Specification](
+      "org.specs2.reflect.ClassesSpec$FromNestedClass",
+      getClass.getClassLoader,
+      Nil
+    ) must beOk
 
   def fromObject =
     createInstance[Specification]("org.specs2.reflect.FromObjectName$", getClass.getClassLoader, Nil) must beOk
@@ -33,7 +37,7 @@ class ClassesSpec extends Spec { def is = s2"""
     createInstance[Specification]("org.specs2.reflect.UserErrorSpecification", getClass.getClassLoader, Nil) must
       beKo("cannot create an instance for class org.specs2.reflect.UserErrorSpecification")
 
-  class FromNestedClass extends Specification  { def is = ok }
+  class FromNestedClass extends Specification { def is = ok }
 }
 
 class FromClassName extends Specification { def is = ok }

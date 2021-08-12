@@ -1,28 +1,26 @@
 package org.specs2.fp
 
-/**
- * Inspired from the scalaz (https://github.com/scalaz/scalaz) project
- */
+/** Inspired from the scalaz (https://github.com/scalaz/scalaz) project
+  */
 trait Semigroup[F]:
 
-  def append(f1: F, f2: => F): F
+  def append(f1: F, f2: =>F): F
 
   def multiply1(value: F, n: Int): F =
     @scala.annotation.tailrec
     def go(x: F, y: Int, z: F): F = y match
       case y if (y & 1) == 0 => go(append(x, x), y >>> 1, z)
       case y if (y == 1)     => append(x, z)
-      case _                 => go(append(x, x), (y - 1) >>>  1, append(x, z))
+      case _                 => go(append(x, x), (y - 1) >>> 1, append(x, z))
     if n <= 0 then value else go(value, n, value)
-
 
 object Semigroup:
   @inline def apply[F](using F: Semigroup[F]): Semigroup[F] = F
 
   /** Make an associative binary function into an instance. */
-  def instance[A](f: (A, => A) => A): Semigroup[A] =
+  def instance[A](f: (A, =>A) => A): Semigroup[A] =
     new Semigroup[A] {
-      def append(f1: A, f2: => A): A = f(f1,f2)
+      def append(f1: A, f2: =>A): A = f(f1, f2)
     }
 
   /** A purely left-biased semigroup. */
@@ -34,10 +32,9 @@ object Semigroup:
   def iterate[F[_], A](a: A)(f: A => A)(using F: Applicative[F], m: Semigroup[F[A]]): F[A] =
     m.append(F.point(a), iterate[F, A](f(a))(f))
 
-
 trait SemigroupSyntax:
 
-  extension [M : Semigroup](a: M)
+  extension [M: Semigroup](a: M)
     def append(b: =>M): M =
       Semigroup.apply[M].append(a, b)
 

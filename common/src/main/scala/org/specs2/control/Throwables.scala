@@ -3,9 +3,9 @@ package control
 
 object Throwables:
   def render(t: Throwable): String =
-  s"${t.getClass.getName}" + (Option(t.getMessage) match {
+    s"${t.getClass.getName}" + (Option(t.getMessage) match {
       case Some(message) => s": $message"
-      case _ => ""
+      case _             => ""
     })
 
   def renderWithStack(t: Throwable): String =

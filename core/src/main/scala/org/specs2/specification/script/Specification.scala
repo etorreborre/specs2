@@ -4,10 +4,9 @@ package script
 
 import core.*
 
-/**
- * These classes and traits enrich regular specifications with the possibility to include "scripts" in their definition.
- * (see Scripts.scala)
- */
+/** These classes and traits enrich regular specifications with the possibility to include "scripts" in their
+  * definition. (see Scripts.scala)
+  */
 
 abstract class Specification extends SpecificationLike
 
@@ -17,10 +16,9 @@ abstract class Spec extends SpecLike
 
 trait SpecLike extends org.specs2.Spec with Scripts
 
-/**
- * List of fragments with utility functions to manipulate it
- * @param fs
- */
+/** List of fragments with utility functions to manipulate it
+  * @param fs
+  */
 case class FragmentsSeq(fs: Vector[Fragment]):
 
   def toFragments: Fragments =

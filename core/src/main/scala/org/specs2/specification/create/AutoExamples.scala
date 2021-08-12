@@ -7,13 +7,11 @@ import text.Trim.*
 import core.{Description, Fragment, Fragments}
 import scala.quoted.*
 
-/**
- * This trait allows to create examples where the description is the code itself
- * and the code returns an AsResult value
- */
+/** This trait allows to create examples where the description is the code itself and the code returns an AsResult value
+  */
 trait AutoExamples extends FragmentsFactory:
   inline def eg[T](inline code: =>T)(using asResult: AsResult[T]): Fragments =
-    ${ AutoExamples.create[T]('{() => code}, 'asResult, 'postProcessAutoExample) }
+    ${ AutoExamples.create[T]('{ () => code }, 'asResult, 'postProcessAutoExample) }
 
   /** this function is introduced just to allow the mutable specification to register the newly created fragments */
   def postProcessAutoExample(fs: Fragments): Fragments =
@@ -21,12 +19,13 @@ trait AutoExamples extends FragmentsFactory:
 
 object AutoExamples extends AutoExamples:
 
-  def create[T](code: Expr[() => T], asResult: Expr[AsResult[T]], postProcess: Expr[Fragments => Fragments])(
-    using qctx: Quotes)(using t: Type[T], t1: Type[() => T]): Expr[Fragments] =
+  def create[T](code: Expr[() => T], asResult: Expr[AsResult[T]], postProcess: Expr[Fragments => Fragments])(using
+      qctx: Quotes
+  )(using t: Type[T], t1: Type[() => T]): Expr[Fragments] =
 
     import qctx.reflect.*
     val expression = Expr(Position.ofMacroExpansion.sourceCode.getOrElse("no source code found for an auto-example"))
-    Expr.betaReduce('{$postProcess(createExample[t.Underlying]($expression, $code, $asResult))})
+    Expr.betaReduce('{ $postProcess(createExample[t.Underlying]($expression, $code, $asResult)) })
 
   def createExample[T](expression: String, code: () => T, asResult: AsResult[T]): Fragments =
     Fragments(AutoExamples.makeExample(expression, code(), asResult))
@@ -35,9 +34,13 @@ object AutoExamples extends AutoExamples:
     fragmentFactory.example(Description.code(trimExpression(expression)), code)(using asResult)
 
   private[specs2] def trimExpression(call: String) =
-    call.
-      trimEnclosing("${", "}").
-      trimStart("eg").
-      trimEnclosing("{", "}").
-      trimEnclosing("`", "`").
-      removeFirst("`\\(.*\\)").trimFirst("`").split("\n", -1).map(_.trim).mkString("\n")
+    call
+      .trimEnclosing("${", "}")
+      .trimStart("eg")
+      .trimEnclosing("{", "}")
+      .trimEnclosing("`", "`")
+      .removeFirst("`\\(.*\\)")
+      .trimFirst("`")
+      .split("\n", -1)
+      .map(_.trim)
+      .mkString("\n")

@@ -17,6 +17,6 @@ class ListxSpec extends Spec:
       (Nil: List[List[Int]]).safeTranspose must ===((Nil: List[List[Int]]))
     }
     "work when the input list contains an empty list" >> {
-      List(Nil:List[Int], List(1)).safeTranspose must ===(List(List(1)))
+      List(Nil: List[Int], List(1)).safeTranspose must ===(List(List(1)))
     }
   }

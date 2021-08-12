@@ -5,26 +5,26 @@ import scala.collection.JavaConverters.*
 import text.NotNullStrings.*
 import text.FromString
 
-/**
- * Get systems properties prefixed with specs2
- */
+/** Get systems properties prefixed with specs2
+  */
 trait SystemProperties:
   val specs2Prefix = "specs2."
 
   /** copy system properties on first access to avoid possible concurrent modification exceptions later */
   private lazy val systemProperties =
     synchronized(System.getProperties.stringPropertyNames.asScala.toList.foldLeft(Map[String, String]()) { (res, key) =>
-      res.updated(key,System.getProperty(key))
+      res.updated(key, System.getProperty(key))
     })
 
   /** @return a system property if it exists */
   protected def systemGetProperty(p: String): Option[String] = systemProperties.get(p.notNull)
-    
-  /** @return the value of the system property p */  
-  def getProperty(p: String): Option[String] =        systemGetProperty(specs2Prefix + p).
-                                               orElse(systemGetProperty(specs2Prefix + p.toLowerCase)).
-                                               orElse(systemGetProperty(p)).
-                                               orElse(systemGetProperty(p.toLowerCase)).map(_.notNull)
+
+  /** @return the value of the system property p */
+  def getProperty(p: String): Option[String] = systemGetProperty(specs2Prefix + p)
+    .orElse(systemGetProperty(specs2Prefix + p.toLowerCase))
+    .orElse(systemGetProperty(p))
+    .orElse(systemGetProperty(p.toLowerCase))
+    .map(_.notNull)
 
   /** @return the value of the system property p as a given type */
   def getPropertyAs[T: FromString](p: String): Option[T] = getProperty(p) flatMap implicitly[FromString[T]].fromString

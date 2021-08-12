@@ -3,7 +3,8 @@ package matcher
 
 import execute.*
 
-class StandardMatchResultsSpec extends Specification { def is = s2"""
+class StandardMatchResultsSpec extends Specification {
+  def is = s2"""
 
  Some match results are predefined: ok and ko
    ok can be created with a message $ok1
@@ -13,10 +14,10 @@ class StandardMatchResultsSpec extends Specification { def is = s2"""
 """
 
   def ok1 =
-    ok("this is ok").message     === "this is ok"
+    ok("this is ok").message === "this is ok"
 
   def ko1 =
-    ko("this is ko").message     === "this is ko"
+    ko("this is ko").message === "this is ko"
 
   def ko2 =
     ko must beLike { case f: Failure => f.stackTrace must not(beEmpty) }

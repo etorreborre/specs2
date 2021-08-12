@@ -3,10 +3,8 @@ package io
 
 import java.io.*
 
-/**
- * The FileReader trait provides most of the File API methods as an interface
- * in order to be able to mock them
- */
+/** The FileReader trait provides most of the File API methods as an interface in order to be able to mock them
+  */
 trait FileReader:
 
   /** @return true if the file exists */
@@ -46,5 +44,3 @@ trait FileReader:
   def listFiles(path: String): List[String] = if new File(path).list == null then List() else new File(path).list.toList
 
 object FileReader extends FileReader
-
-

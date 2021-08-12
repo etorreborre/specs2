@@ -8,7 +8,8 @@ import org.specs2.specification.process.DefaultExecutor
 import _root_.org.specs2.mutable.{Specification as Spec}
 import fp.syntax.*
 
-class BeforeAfterAroundSpec extends Specification { def is = s2"""
+class BeforeAfterAroundSpec extends Specification {
+  def is = s2"""
 
  The `Before/After/Around Example` traits are used to automatically insert contexts around examples bodies
 
@@ -25,26 +26,33 @@ class BeforeAfterAroundSpec extends Specification { def is = s2"""
     new Spec with BeforeEach with StringOutput {
       def before = step(println("before"))
       "ex1" ! success
-    }, "before")
+    },
+    "before"
+  )
 
   def acceptanceBefore = executeContains(
     new Specification with BeforeEach with StringOutput {
       def before = step(println("before"))
       def is = "ex1" ! success
-    }, "before")
+    },
+    "before"
+  )
 
   def afterContext = executeContains(
     new Spec with AfterEach with StringOutput {
       def after = step(println("after"))
       "ex1" ! success
-    },"after")
+    },
+    "after"
+  )
 
   def aroundContext = executeContains(
     new Spec with StringOutput {
       override def flatMap(f: Fragment) = { step(println("around")) ^ f }
       "ex1" ! success
-    },"around")
-
+    },
+    "around"
+  )
 
   def executeContains(s: SpecificationStructure & StringOutput, messages: String*) =
     val env = Env()

@@ -7,8 +7,12 @@ import org.specs2.concurrent.ExecutionEnv
 import scala.concurrent.*
 import scala.concurrent.duration.*
 
-class EventuallyMatchersSpec(using ee: ExecutionEnv) extends Specification with FutureMatchers with ExpectationsDescription { section("ci")
-addParagraph("""
+class EventuallyMatchersSpec(using ee: ExecutionEnv)
+    extends Specification
+    with FutureMatchers
+    with ExpectationsDescription {
+  section("ci")
+  addParagraph("""
 `eventually` can be used to retry any matcher until a maximum number of times is reached
 or until it succeeds.
 """)
@@ -17,7 +21,7 @@ or until it succeeds.
     1 must eventually(be_==(1))
   }
   "A matcher can match right away with eventually, even if negated" >> {
-    "1" must not (beNull.eventually)
+    "1" must not(beNull.eventually)
   }
   "A matcher will be retried automatically until it matches" >> {
     val iterator = List(1, 2, 3).iterator
@@ -38,7 +42,8 @@ or until it succeeds.
   }
   "It is possible to use await + eventually" >> {
     var i = 0
-    def op = if i == 0 then { i += 1; Future(0) } else Future(1)
+    def op = if i == 0 then { i += 1; Future(0) }
+    else Future(1)
 
     op must be_==(1).await(retries = 0, timeout = 200.millis).eventually(retries = 2, sleep = 100.millis)
   }

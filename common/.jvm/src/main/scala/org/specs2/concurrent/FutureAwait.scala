@@ -6,10 +6,8 @@ import scala.concurrent.{Await, Future}
 import scala.concurrent.*, duration.*
 import collection.canEqualAny
 
-/**
- * implicit methods to await a future values with a given timeout and
- * number of retries
- */
+/** implicit methods to await a future values with a given timeout and number of retries
+  */
 trait FutureAwait:
   extension [T](f: =>Future[T])(using ee: ExecutionEnv)
     def await: TimeoutFailure Either T =
@@ -30,11 +28,10 @@ trait FutureAwait:
         catch
           case e if e.getClass == classOf[TimeoutException] =>
             if remainingRetries <= 0 then Left(TimeoutFailure(appliedTimeout, totalDuration, tf))
-            else                       awaitFuture(remainingRetries - 1, totalDuration + appliedTimeout)
+            else awaitFuture(remainingRetries - 1, totalDuration + appliedTimeout)
 
-          case other: Throwable  => throw other
+          case other: Throwable => throw other
       awaitFuture(retries, 0.second)
-
 
 case class TimeoutFailure(appliedTimeout: FiniteDuration, totalDuration: FiniteDuration, timeFactor: Int)
 

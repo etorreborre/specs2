@@ -1,7 +1,8 @@
 package org.specs2
 package guide
 
-object Runners extends UserGuidePage { def is = s2"""
+object Runners extends UserGuidePage {
+  def is = s2"""
 
 In this section we present the most important options for running specifications.
 

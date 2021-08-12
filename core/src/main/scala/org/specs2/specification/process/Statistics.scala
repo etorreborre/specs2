@@ -11,22 +11,18 @@ import producer.*
 import Producer.*
 import main.Arguments
 
-/**
- * Compute the statistics for executed fragments
- */
+/** Compute the statistics for executed fragments
+  */
 trait Statistics:
 
-  /**
-   * read the stats for each Fragment of the specifications if
-   * the 'was' argument is passed on the command line to query the previous status of a Fragments
-   */
+  /** read the stats for each Fragment of the specifications if the 'was' argument is passed on the command line to
+    * query the previous status of a Fragments
+    */
   def readStats(spec: SpecStructure): SpecStructure
 
-  /**
-   * read the stats for one Fragment
-   */
+  /** read the stats for one Fragment
+    */
   def readStats(className: String)(fragment: Fragment): Operation[Fragment]
-
 
 case class DefaultStatistics(arguments: Arguments, statisticsRepository: StatisticsRepository) extends Statistics:
 
@@ -34,18 +30,13 @@ case class DefaultStatistics(arguments: Arguments, statisticsRepository: Statist
     // we need to use the arguments passed on the command line and override them with the spec arguments
     val args = arguments.overrideWith(spec.arguments)
 
-    if args.wasIsDefined then
-      spec.flatMap(f => eval[Action, Fragment](readStats(spec.specClassName)(f).toAction))
-    else
-      spec
+    if args.wasIsDefined then spec.flatMap(f => eval[Action, Fragment](readStats(spec.specClassName)(f).toAction))
+    else spec
 
-  /**
-   * read the stats for one Fragment from the statistics repository
-   */
+  /** read the stats for one Fragment from the statistics repository
+    */
   def readStats(className: String)(fragment: Fragment): Operation[Fragment] =
-    statisticsRepository.previousResult(className, fragment.description).
-      map(fragment.setPreviousResult)
-
+    statisticsRepository.previousResult(className, fragment.description).map(fragment.setPreviousResult)
 
 object Statistics:
 
@@ -64,7 +55,7 @@ object Statistics:
   /** create an empty Stats object for a given fragment, counting 1 for an example */
   def emptyStats(fragment: Fragment): Stats =
     if Fragment.isExample(fragment) then Stats(examples = 1)
-    else                              Stats.empty
+    else Stats.empty
 
   def fromFragment(fragment: Fragment): Action[Stats] =
     if fragment.isExecutable then

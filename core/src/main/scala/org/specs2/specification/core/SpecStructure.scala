@@ -10,24 +10,23 @@ import main.Arguments
 import data.{NamedTag, TopologicalSort}
 import concurrent.ExecutionEnv
 
-/**
- * Structure of a Specification:
- *
- *  - a header
- *  - some arguments
- *  - specification fragments
- *
- * Note that the fragments have to be lazy in order to avoid cycles when 2 specifications are referencing
- * each other with links
- */
+/** Structure of a Specification:
+  *
+  *   - a header
+  *   - some arguments
+  *   - specification fragments
+  *
+  * Note that the fragments have to be lazy in order to avoid cycles when 2 specifications are referencing each other
+  * with links
+  */
 case class SpecStructure(header: SpecHeader, arguments: Arguments, lazyFragments: () => Fragments):
   lazy val fragments = lazyFragments()
 
-  def contents: AsyncStream[Fragment]                               = fragments.contents
-  def map(f: Fragments => Fragments): SpecStructure                 = copy(lazyFragments = () => f(fragments))
-  def |>(p: AsyncTransducer[Fragment, Fragment]): SpecStructure     = copy(lazyFragments = () => fragments |> p)
+  def contents: AsyncStream[Fragment] = fragments.contents
+  def map(f: Fragments => Fragments): SpecStructure = copy(lazyFragments = () => f(fragments))
+  def |>(p: AsyncTransducer[Fragment, Fragment]): SpecStructure = copy(lazyFragments = () => fragments |> p)
   def update(f: AsyncTransducer[Fragment, Fragment]): SpecStructure = copy(lazyFragments = () => fragments `update` f)
-  def flatMap(f: Fragment => AsyncStream[Fragment]): SpecStructure  = |>(_.flatMap(f))
+  def flatMap(f: Fragment => AsyncStream[Fragment]): SpecStructure = |>(_.flatMap(f))
 
   def setHeader(h: SpecHeader) = copy(header = h)
   def setArguments(args: Arguments) = copy(arguments = args)
@@ -64,9 +63,8 @@ case class SpecStructure(header: SpecHeader, arguments: Arguments, lazyFragments
   def dependsOn(spec2: SpecStructure)(ee: ExecutionEnv): Boolean =
     SpecStructure.dependsOn(ee)(this, spec2)
 
-/**
- * Create SpecStructures from header, arguments, fragments
- */
+/** Create SpecStructures from header, arguments, fragments
+  */
 object SpecStructure:
   def apply(header: SpecHeader): SpecStructure =
     new SpecStructure(header, Arguments(), () => Fragments())
@@ -80,19 +78,17 @@ object SpecStructure:
   def create(header: SpecHeader, arguments: Arguments, fragments: =>Fragments): SpecStructure =
     new SpecStructure(header, arguments, () => fragments)
 
-  /**
-   * sort the specifications in topological order where specification i doesn't depend on specification j if i > j
-   *
-   * means "dependents first"!
-   */
+  /** sort the specifications in topological order where specification i doesn't depend on specification j if i > j
+    *
+    * means "dependents first"!
+    */
   def topologicalSort(specifications: Seq[SpecStructure])(ee: ExecutionEnv): Option[Vector[SpecStructure]] =
     TopologicalSort.sort(specifications, (s1: SpecStructure, s2: SpecStructure) => dependsOn(ee)(s2, s1))
 
-  /**
-   * sort the specifications in topological order where specification i doesn't depend on specification j if i > j
-   *
-   * means "dependents last"!
-   */
+  /** sort the specifications in topological order where specification i doesn't depend on specification j if i > j
+    *
+    * means "dependents last"!
+    */
   def reverseTopologicalSort(specifications: Seq[SpecStructure])(ee: ExecutionEnv): Option[Vector[SpecStructure]] =
     TopologicalSort.sort(specifications, dependsOn(ee))
 
@@ -118,21 +114,28 @@ object SpecStructure:
     specStructuresRefs(spec, env, classLoader)(seeSpecStructuresRefs(env))
 
   /** @return all the referenced spec structures */
-  def specStructuresRefs(spec: SpecStructure, env: Env,
-                         classLoader: ClassLoader)(refs: SpecStructure => List[SpecificationRef]): Operation[Seq[SpecStructure]] =
+  def specStructuresRefs(spec: SpecStructure, env: Env, classLoader: ClassLoader)(
+      refs: SpecStructure => List[SpecificationRef]
+  ): Operation[Seq[SpecStructure]] =
 
-    val byName = (ss: List[SpecStructure]) => ss.foldLeft(Vector[(String, SpecStructure)]()) { (res, cur) =>
-      val name = cur.specClassName
-      if res.map(_._1).contains(name) then res
-      else (name, cur) +: res
-    }
+    val byName = (ss: List[SpecStructure]) =>
+      ss.foldLeft(Vector[(String, SpecStructure)]()) { (res, cur) =>
+        val name = cur.specClassName
+        if res.map(_._1).contains(name) then res
+        else (name, cur) +: res
+      }
 
     def getRefs(s: SpecStructure, visited: Vector[(String, SpecStructure)]): Vector[(String, SpecStructure)] =
-      refs(s).map { ref =>
-        SpecificationStructure.create(ref.header.specClass.getName, classLoader, Some(env)).map(_.structure.setArguments(ref.arguments))
-      }.sequence.map(byName)
-       .runMonoid
-       .filterNot { case (n, _) => visited.map(_._1).contains(n) }
+      refs(s)
+        .map { ref =>
+          SpecificationStructure
+            .create(ref.header.specClass.getName, classLoader, Some(env))
+            .map(_.structure.setArguments(ref.arguments))
+        }
+        .sequence
+        .map(byName)
+        .runMonoid
+        .filterNot { case (n, _) => visited.map(_._1).contains(n) }
 
     Operation.delayed {
       def getAll(seed: Vector[SpecStructure], visited: Vector[(String, SpecStructure)]): Vector[SpecStructure] =

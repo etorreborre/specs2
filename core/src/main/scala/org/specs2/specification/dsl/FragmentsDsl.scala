@@ -6,9 +6,8 @@ import core.*
 import create.*
 import org.specs2.collection.Vectorx.*
 
-/**
- * Creation of Fragments with the ^ syntax
- */
+/** Creation of Fragments with the ^ syntax
+  */
 trait FragmentsDsl extends FragmentsFactory with AcceptanceDsl1:
 
   trait ToFragments[T]:
@@ -30,7 +29,7 @@ trait FragmentsDsl extends FragmentsFactory with AcceptanceDsl1:
     def toFragments(fs: Seq[Fragment]): Fragments =
       Fragments(fs*)
 
-  implicit class appendFragments[T1 : ToFragments, T2 : ToFragments](t1: T1):
+  implicit class appendFragments[T1: ToFragments, T2: ToFragments](t1: T1):
     def ^(t2: T2): Fragments =
       summon[ToFragments[T1]].toFragments(t1).append(summon[ToFragments[T2]].toFragments(t2))
 
@@ -46,16 +45,14 @@ trait FragmentsDsl extends FragmentsFactory with AcceptanceDsl1:
         case r: SpecificationRef => fragment.copy(description = r.mute)
         case other               => fragment.copy(description = NoText)
 
-  /**
-   * create a block of new fragments where each of them is separated
-   * by a newline and there is a specific offset from the left margin
-   */
+  /** create a block of new fragments where each of them is separated by a newline and there is a specific offset from
+    * the left margin
+    */
   def fragmentsBlock(fragments: Seq[Fragment], offset: Int = 2): Fragments =
-    val newLine = Vector(fragmentFactory.break, fragmentFactory.text(" "*offset))
+    val newLine = Vector(fragmentFactory.break, fragmentFactory.text(" " * offset))
     (newLine ++ fragments.toList)
       .map(Fragments(_))
       .intersperse(Fragments(newLine*))
       .reduce(_ `append` _)
-
 
 object FragmentsDsl extends FragmentsDsl

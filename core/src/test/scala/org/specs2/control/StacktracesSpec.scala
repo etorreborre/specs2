@@ -3,7 +3,8 @@ package control
 
 import Stacktraces.*
 
-class StacktracesSpec extends Specification { def is = s2"""
+class StacktracesSpec extends Specification {
+  def is = s2"""
 
   it is possible to if a piece of code is executed from a given library by inspecting the stacktrace $fromLibrary
 

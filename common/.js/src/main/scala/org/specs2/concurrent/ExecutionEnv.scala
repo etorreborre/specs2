@@ -6,11 +6,9 @@ import org.specs2.main.Arguments
 
 import scala.concurrent.ExecutionContext
 
-/**
- * Execution environment for javascript
- */
-case class ExecutionEnv(executorServices: ExecutorServices,
-                        timeFactor: Int):
+/** Execution environment for javascript
+  */
+case class ExecutionEnv(executorServices: ExecutorServices, timeFactor: Int):
 
   def shutdown(): Unit = ()
 
@@ -23,9 +21,7 @@ object ExecutionEnv:
 
   /** create an ExecutionEnv from an execution context only */
   def fromExecutionContext(ec: =>ExecutionContext): ExecutionEnv =
-    ExecutionEnv(
-      ExecutorServices.fromExecutionContext(ec),
-      timeFactor = 1)
+    ExecutionEnv(ExecutorServices.fromExecutionContext(ec), timeFactor = 1)
 
   def create(arguments: Arguments, systemLogger: Logger, tag: Option[String] = None): ExecutionEnv =
     createSpecs2(arguments, systemLogger, tag)

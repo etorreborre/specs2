@@ -10,9 +10,8 @@ import core.{AsExecution, Execution}
 import AsResultProp.{given, *}
 import ScalaCheckProperty.{given, *}
 
-/**
- * A ScalaCheckProperty encapsulates a ScalaCheck Prop and its parameters
- */
+/** A ScalaCheckProperty encapsulates a ScalaCheck Prop and its parameters
+  */
 trait ScalaCheckProperty:
   type SelfType <: ScalaCheckProperty
 
@@ -31,14 +30,15 @@ trait ScalaCheckProperty:
   def setVerbosity(v: Int): SelfType =
     setParameters(parameters.setVerbosity(v))
 
-  def set(minTestsOk: Int             = parameters.minTestsOk,
-          minSize: Int                = parameters.minSize,
-          maxDiscardRatio: Float      = parameters.maxDiscardRatio,
-          maxSize: Int                = parameters.maxSize,
-          workers: Int                = parameters.workers,
-          callback: Test.TestCallback = parameters.testCallback,
-          loader: Option[ClassLoader] = parameters.loader
-           ): SelfType =
+  def set(
+      minTestsOk: Int = parameters.minTestsOk,
+      minSize: Int = parameters.minSize,
+      maxDiscardRatio: Float = parameters.maxDiscardRatio,
+      maxSize: Int = parameters.maxSize,
+      workers: Int = parameters.workers,
+      callback: Test.TestCallback = parameters.testCallback,
+      loader: Option[ClassLoader] = parameters.loader
+  ): SelfType =
     setParameters(
       parameters.copy(
         minTestsOk = minTestsOk,
@@ -48,26 +48,31 @@ trait ScalaCheckProperty:
         workers = workers,
         testCallback = callback,
         loader = loader
-      ))
+      )
+    )
 
-  def display(minTestsOk: Int             = parameters.minTestsOk,
-               minSize: Int                = parameters.minSize,
-               maxDiscardRatio: Float      = parameters.maxDiscardRatio,
-               maxSize: Int                = parameters.maxSize,
-               workers: Int                = parameters.workers,
-               callback: Test.TestCallback = parameters.testCallback,
-               loader: Option[ClassLoader] = parameters.loader
-                ): SelfType =
+  def display(
+      minTestsOk: Int = parameters.minTestsOk,
+      minSize: Int = parameters.minSize,
+      maxDiscardRatio: Float = parameters.maxDiscardRatio,
+      maxSize: Int = parameters.maxSize,
+      workers: Int = parameters.workers,
+      callback: Test.TestCallback = parameters.testCallback,
+      loader: Option[ClassLoader] = parameters.loader
+  ): SelfType =
     setParameters(
-      parameters.copy(
-        minTestsOk = minTestsOk,
-        minSize = minSize,
-        maxDiscardRatio = maxDiscardRatio,
-        maxSize = maxSize,
-        workers = workers,
-        testCallback = callback,
-        loader = loader
-      ).setVerbosity(1))
+      parameters
+        .copy(
+          minTestsOk = minTestsOk,
+          minSize = minSize,
+          maxDiscardRatio = maxDiscardRatio,
+          maxSize = maxSize,
+          workers = workers,
+          testCallback = callback,
+          loader = loader
+        )
+        .setVerbosity(1)
+    )
 
   def verbose: SelfType =
     setVerbosity(1)
@@ -77,14 +82,13 @@ trait ScalaCheckProperty:
   def prettyFreqMap(f: FreqMap[Set[Any]] => String): SelfType =
     setPrettyFreqMap((fq: FreqMap[Set[Any]]) => Pretty(_ => f(fq)))
 
-/**
- * A ScalaCheckFunction adds the possibility to select various typeclass instances for a given property:
- *
- *  - Arbitrary to generate values
- *  - Shrink to shrink counter-examples
- *  - Show to display arguments in case of a counter-example
- *  - Collector to collect values and provide a summary as string (to show frequencies for example)
- */
+/** A ScalaCheckFunction adds the possibility to select various typeclass instances for a given property:
+  *
+  *   - Arbitrary to generate values
+  *   - Shrink to shrink counter-examples
+  *   - Show to display arguments in case of a counter-example
+  *   - Collector to collect values and provide a summary as string (to show frequencies for example)
+  */
 trait ScalaCheckFunction extends ScalaCheckProperty:
   def noShrink: SelfType
 
@@ -104,7 +108,7 @@ trait ScalaCheckFunction extends ScalaCheckProperty:
   def around(action: Result => Result): SelfType =
     setContext(Around.create(action))
 
-  protected def executeInContext[R : AsResult](result: =>R) = {
+  protected def executeInContext[R: AsResult](result: =>R) = {
     lazy val executed = result
     context.foreach(_(executed))
     executed.asInstanceOf[Matchable] match {
@@ -113,21 +117,21 @@ trait ScalaCheckFunction extends ScalaCheckProperty:
     }
   }
 
-
 case class ScalaCheckFunction1[T, R](
-  execute:       T => R,
-  arbitrary:     Arbitrary[T],
-  shrink:        Option[Shrink[T]],
-  collectors:    List[T => Any],
-  pretty:        T => Pretty,
-  prettyFreqMap: FreqMap[Set[Any]] => Pretty,
-  asResult:      AsResult[R],
-  context:       Option[Context],
-  parameters:    Parameters) extends ScalaCheckFunction:
+    execute: T => R,
+    arbitrary: Arbitrary[T],
+    shrink: Option[Shrink[T]],
+    collectors: List[T => Any],
+    pretty: T => Pretty,
+    prettyFreqMap: FreqMap[Set[Any]] => Pretty,
+    asResult: AsResult[R],
+    context: Option[Context],
+    parameters: Parameters
+) extends ScalaCheckFunction:
 
   type SelfType = ScalaCheckFunction1[T, R]
 
-  private given asResult1: AsResult[R]  = asResult
+  private given asResult1: AsResult[R] = asResult
   private given arbitrary1: Arbitrary[T] = arbitrary
   private given pretty1: (T => Pretty) = pretty
 
@@ -181,12 +185,14 @@ case class ScalaCheckFunction1[T, R](
     copy(parameters = parameters.copy(seed = Parameters.makeSeed(seed)), pretty = pretty1)
 
 case class ScalaCheckFunction2[T1, T2, R](
-  execute: (T1, T2) => R,
-  argInstances1: ScalaCheckArgInstances[T1], argInstances2: ScalaCheckArgInstances[T2],
-  prettyFreqMap: FreqMap[Set[Any]] => Pretty,
-  asResult: AsResult[R],
-  context: Option[Context],
-  parameters: Parameters) extends ScalaCheckFunction {
+    execute: (T1, T2) => R,
+    argInstances1: ScalaCheckArgInstances[T1],
+    argInstances2: ScalaCheckArgInstances[T2],
+    prettyFreqMap: FreqMap[Set[Any]] => Pretty,
+    asResult: AsResult[R],
+    context: Option[Context],
+    parameters: Parameters
+) extends ScalaCheckFunction {
 
   type SelfType = ScalaCheckFunction2[T1, T2, R]
 
@@ -202,9 +208,14 @@ case class ScalaCheckFunction2[T1, T2, R](
   }
 
   lazy val prop: Prop =
-    makeProp((t1: T1) => makeProp((t2: T2) => propFunction(t1, t2), argInstances2.shrink, parameters), argInstances1.shrink, parameters)
+    makeProp(
+      (t1: T1) => makeProp((t2: T2) => propFunction(t1, t2), argInstances2.shrink, parameters),
+      argInstances1.shrink,
+      parameters
+    )
 
-  def noShrink: SelfType = copy(argInstances1 = argInstances1.copy(shrink = None), argInstances2 = argInstances2.copy(shrink = None))
+  def noShrink: SelfType =
+    copy(argInstances1 = argInstances1.copy(shrink = None), argInstances2 = argInstances2.copy(shrink = None))
 
   def setArbitrary1(a1: Arbitrary[T1]): SelfType = copy(argInstances1 = argInstances1.copy(arbitrary = a1))
   def setArbitrary2(a2: Arbitrary[T2]): SelfType = copy(argInstances2 = argInstances2.copy(arbitrary = a2))
@@ -234,11 +245,13 @@ case class ScalaCheckFunction2[T1, T2, R](
   def setPrettyFreqMap(f: FreqMap[Set[Any]] => Pretty): SelfType =
     copy(prettyFreqMap = f)
 
-  def collectArg1(f: T1 => Any): SelfType = copy(argInstances1 = argInstances1.copy(collectors = argInstances1.collectors :+ f))
-  def collectArg2(f: T2 => Any): SelfType = copy(argInstances2 = argInstances2.copy(collectors = argInstances2.collectors :+ f))
+  def collectArg1(f: T1 => Any): SelfType =
+    copy(argInstances1 = argInstances1.copy(collectors = argInstances1.collectors :+ f))
+  def collectArg2(f: T2 => Any): SelfType =
+    copy(argInstances2 = argInstances2.copy(collectors = argInstances2.collectors :+ f))
   def collect1: SelfType = collectArg1(_.toString)
   def collect2: SelfType = collectArg2(_.toString)
-  def collectAllArgs(f1: T1 => Any,f2: T2 => Any): SelfType =
+  def collectAllArgs(f1: T1 => Any, f2: T2 => Any): SelfType =
     collectArg1(f1).collectArg2(f2)
 
   def collectAll: SelfType =
@@ -260,14 +273,16 @@ case class ScalaCheckFunction2[T1, T2, R](
     copy(parameters = parameters.copy(seed = Parameters.makeSeed(seed)))
 }
 
-
 case class ScalaCheckFunction3[T1, T2, T3, R](
-  execute: (T1, T2, T3) => R,
-  argInstances1: ScalaCheckArgInstances[T1], argInstances2: ScalaCheckArgInstances[T2], argInstances3: ScalaCheckArgInstances[T3],
-  prettyFreqMap: FreqMap[Set[Any]] => Pretty,
-  asResult: AsResult[R],
-  context: Option[Context],
-  parameters: Parameters) extends ScalaCheckFunction {
+    execute: (T1, T2, T3) => R,
+    argInstances1: ScalaCheckArgInstances[T1],
+    argInstances2: ScalaCheckArgInstances[T2],
+    argInstances3: ScalaCheckArgInstances[T3],
+    prettyFreqMap: FreqMap[Set[Any]] => Pretty,
+    asResult: AsResult[R],
+    context: Option[Context],
+    parameters: Parameters
+) extends ScalaCheckFunction {
 
   type SelfType = ScalaCheckFunction3[T1, T2, T3, R]
 
@@ -285,9 +300,22 @@ case class ScalaCheckFunction3[T1, T2, T3, R](
   }
 
   lazy val prop: Prop =
-    makeProp((t1: T1) => makeProp((t2: T2) => makeProp((t3: T3) => propFunction(t1, t2, t3), argInstances3.shrink, parameters), argInstances2.shrink, parameters), argInstances1.shrink, parameters)
+    makeProp(
+      (t1: T1) =>
+        makeProp(
+          (t2: T2) => makeProp((t3: T3) => propFunction(t1, t2, t3), argInstances3.shrink, parameters),
+          argInstances2.shrink,
+          parameters
+        ),
+      argInstances1.shrink,
+      parameters
+    )
 
-  def noShrink: SelfType = copy(argInstances1 = argInstances1.copy(shrink = None), argInstances2 = argInstances2.copy(shrink = None), argInstances3 = argInstances3.copy(shrink = None))
+  def noShrink: SelfType = copy(
+    argInstances1 = argInstances1.copy(shrink = None),
+    argInstances2 = argInstances2.copy(shrink = None),
+    argInstances3 = argInstances3.copy(shrink = None)
+  )
 
   def setArbitrary1(a1: Arbitrary[T1]): SelfType = copy(argInstances1 = argInstances1.copy(arbitrary = a1))
   def setArbitrary2(a2: Arbitrary[T2]): SelfType = copy(argInstances2 = argInstances2.copy(arbitrary = a2))
@@ -322,13 +350,16 @@ case class ScalaCheckFunction3[T1, T2, T3, R](
   def setPrettyFreqMap(f: FreqMap[Set[Any]] => Pretty): SelfType =
     copy(prettyFreqMap = f)
 
-  def collectArg1(f: T1 => Any): SelfType = copy(argInstances1 = argInstances1.copy(collectors = argInstances1.collectors :+ f))
-  def collectArg2(f: T2 => Any): SelfType = copy(argInstances2 = argInstances2.copy(collectors = argInstances2.collectors :+ f))
-  def collectArg3(f: T3 => Any): SelfType = copy(argInstances3 = argInstances3.copy(collectors = argInstances3.collectors :+ f))
+  def collectArg1(f: T1 => Any): SelfType =
+    copy(argInstances1 = argInstances1.copy(collectors = argInstances1.collectors :+ f))
+  def collectArg2(f: T2 => Any): SelfType =
+    copy(argInstances2 = argInstances2.copy(collectors = argInstances2.collectors :+ f))
+  def collectArg3(f: T3 => Any): SelfType =
+    copy(argInstances3 = argInstances3.copy(collectors = argInstances3.collectors :+ f))
   def collect1: SelfType = collectArg1(_.toString)
   def collect2: SelfType = collectArg2(_.toString)
   def collect3: SelfType = collectArg3(_.toString)
-  def collectAllArgs(f1: T1 => Any,f2: T2 => Any,f3: T3 => Any): SelfType =
+  def collectAllArgs(f1: T1 => Any, f2: T2 => Any, f3: T3 => Any): SelfType =
     collectArg1(f1).collectArg2(f2).collectArg3(f3)
 
   def collectAll: SelfType =
@@ -349,14 +380,17 @@ case class ScalaCheckFunction3[T1, T2, T3, R](
     copy(parameters = parameters.copy(seed = Parameters.makeSeed(seed)))
 }
 
-
 case class ScalaCheckFunction4[T1, T2, T3, T4, R](
-  execute: (T1, T2, T3, T4) => R,
-  argInstances1: ScalaCheckArgInstances[T1], argInstances2: ScalaCheckArgInstances[T2], argInstances3: ScalaCheckArgInstances[T3], argInstances4: ScalaCheckArgInstances[T4],
-  prettyFreqMap: FreqMap[Set[Any]] => Pretty,
-  asResult: AsResult[R],
-  context: Option[Context],
-  parameters: Parameters) extends ScalaCheckFunction {
+    execute: (T1, T2, T3, T4) => R,
+    argInstances1: ScalaCheckArgInstances[T1],
+    argInstances2: ScalaCheckArgInstances[T2],
+    argInstances3: ScalaCheckArgInstances[T3],
+    argInstances4: ScalaCheckArgInstances[T4],
+    prettyFreqMap: FreqMap[Set[Any]] => Pretty,
+    asResult: AsResult[R],
+    context: Option[Context],
+    parameters: Parameters
+) extends ScalaCheckFunction {
 
   type SelfType = ScalaCheckFunction4[T1, T2, T3, T4, R]
 
@@ -376,9 +410,28 @@ case class ScalaCheckFunction4[T1, T2, T3, T4, R](
   }
 
   lazy val prop: Prop =
-    makeProp((t1: T1) => makeProp((t2: T2) => makeProp((t3: T3) => makeProp((t4: T4) => propFunction(t1, t2, t3, t4), argInstances4.shrink, parameters), argInstances3.shrink, parameters), argInstances2.shrink, parameters), argInstances1.shrink, parameters)
+    makeProp(
+      (t1: T1) =>
+        makeProp(
+          (t2: T2) =>
+            makeProp(
+              (t3: T3) => makeProp((t4: T4) => propFunction(t1, t2, t3, t4), argInstances4.shrink, parameters),
+              argInstances3.shrink,
+              parameters
+            ),
+          argInstances2.shrink,
+          parameters
+        ),
+      argInstances1.shrink,
+      parameters
+    )
 
-  def noShrink: SelfType = copy(argInstances1 = argInstances1.copy(shrink = None), argInstances2 = argInstances2.copy(shrink = None), argInstances3 = argInstances3.copy(shrink = None), argInstances4 = argInstances4.copy(shrink = None))
+  def noShrink: SelfType = copy(
+    argInstances1 = argInstances1.copy(shrink = None),
+    argInstances2 = argInstances2.copy(shrink = None),
+    argInstances3 = argInstances3.copy(shrink = None),
+    argInstances4 = argInstances4.copy(shrink = None)
+  )
 
   def setArbitrary1(a1: Arbitrary[T1]): SelfType = copy(argInstances1 = argInstances1.copy(arbitrary = a1))
   def setArbitrary2(a2: Arbitrary[T2]): SelfType = copy(argInstances2 = argInstances2.copy(arbitrary = a2))
@@ -418,15 +471,19 @@ case class ScalaCheckFunction4[T1, T2, T3, T4, R](
   def setPrettyFreqMap(f: FreqMap[Set[Any]] => Pretty): SelfType =
     copy(prettyFreqMap = f)
 
-  def collectArg1(f: T1 => Any): SelfType = copy(argInstances1 = argInstances1.copy(collectors = argInstances1.collectors :+ f))
-  def collectArg2(f: T2 => Any): SelfType = copy(argInstances2 = argInstances2.copy(collectors = argInstances2.collectors :+ f))
-  def collectArg3(f: T3 => Any): SelfType = copy(argInstances3 = argInstances3.copy(collectors = argInstances3.collectors :+ f))
-  def collectArg4(f: T4 => Any): SelfType = copy(argInstances4 = argInstances4.copy(collectors = argInstances4.collectors :+ f))
+  def collectArg1(f: T1 => Any): SelfType =
+    copy(argInstances1 = argInstances1.copy(collectors = argInstances1.collectors :+ f))
+  def collectArg2(f: T2 => Any): SelfType =
+    copy(argInstances2 = argInstances2.copy(collectors = argInstances2.collectors :+ f))
+  def collectArg3(f: T3 => Any): SelfType =
+    copy(argInstances3 = argInstances3.copy(collectors = argInstances3.collectors :+ f))
+  def collectArg4(f: T4 => Any): SelfType =
+    copy(argInstances4 = argInstances4.copy(collectors = argInstances4.collectors :+ f))
   def collect1: SelfType = collectArg1(_.toString)
   def collect2: SelfType = collectArg2(_.toString)
   def collect3: SelfType = collectArg3(_.toString)
   def collect4: SelfType = collectArg4(_.toString)
-  def collectAllArgs(f1: T1 => Any,f2: T2 => Any,f3: T3 => Any,f4: T4 => Any): SelfType =
+  def collectAllArgs(f1: T1 => Any, f2: T2 => Any, f3: T3 => Any, f4: T4 => Any): SelfType =
     collectArg1(f1).collectArg2(f2).collectArg3(f3).collectArg4(f4)
 
   def collectAll: SelfType =
@@ -448,14 +505,18 @@ case class ScalaCheckFunction4[T1, T2, T3, T4, R](
     copy(parameters = parameters.copy(seed = Parameters.makeSeed(seed)))
 }
 
-
 case class ScalaCheckFunction5[T1, T2, T3, T4, T5, R](
-  execute: (T1, T2, T3, T4, T5) => R,
-  argInstances1: ScalaCheckArgInstances[T1], argInstances2: ScalaCheckArgInstances[T2], argInstances3: ScalaCheckArgInstances[T3], argInstances4: ScalaCheckArgInstances[T4], argInstances5: ScalaCheckArgInstances[T5],
-  prettyFreqMap: FreqMap[Set[Any]] => Pretty,
-  asResult: AsResult[R],
-  context: Option[Context],
-  parameters: Parameters) extends ScalaCheckFunction {
+    execute: (T1, T2, T3, T4, T5) => R,
+    argInstances1: ScalaCheckArgInstances[T1],
+    argInstances2: ScalaCheckArgInstances[T2],
+    argInstances3: ScalaCheckArgInstances[T3],
+    argInstances4: ScalaCheckArgInstances[T4],
+    argInstances5: ScalaCheckArgInstances[T5],
+    prettyFreqMap: FreqMap[Set[Any]] => Pretty,
+    asResult: AsResult[R],
+    context: Option[Context],
+    parameters: Parameters
+) extends ScalaCheckFunction {
 
   type SelfType = ScalaCheckFunction5[T1, T2, T3, T4, T5, R]
 
@@ -473,20 +534,57 @@ case class ScalaCheckFunction5[T1, T2, T3, T4, T5, R](
 
   lazy val propFunction = (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5) => {
     lazy val executed = execute(t1, t2, t3, t4, t5)
-    argInstances1.collect(t1, argInstances2.collect(t2, argInstances3.collect(t3, argInstances4.collect(t4, argInstances5.collect(t5, executed)))))
+    argInstances1.collect(
+      t1,
+      argInstances2.collect(
+        t2,
+        argInstances3.collect(t3, argInstances4.collect(t4, argInstances5.collect(t5, executed)))
+      )
+    )
   }
 
   lazy val prop: Prop =
-    makeProp((t1: T1) => makeProp((t2: T2) => makeProp((t3: T3) => makeProp((t4: T4) => makeProp((t5: T5) => propFunction(t1, t2, t3, t4, t5), argInstances5.shrink, parameters), argInstances4.shrink, parameters), argInstances3.shrink, parameters), argInstances2.shrink, parameters), argInstances1.shrink, parameters)
+    makeProp(
+      (t1: T1) =>
+        makeProp(
+          (t2: T2) =>
+            makeProp(
+              (t3: T3) =>
+                makeProp(
+                  (t4: T4) => makeProp((t5: T5) => propFunction(t1, t2, t3, t4, t5), argInstances5.shrink, parameters),
+                  argInstances4.shrink,
+                  parameters
+                ),
+              argInstances3.shrink,
+              parameters
+            ),
+          argInstances2.shrink,
+          parameters
+        ),
+      argInstances1.shrink,
+      parameters
+    )
 
-  def noShrink: SelfType = copy(argInstances1 = argInstances1.copy(shrink = None), argInstances2 = argInstances2.copy(shrink = None), argInstances3 = argInstances3.copy(shrink = None), argInstances4 = argInstances4.copy(shrink = None), argInstances5 = argInstances5.copy(shrink = None))
+  def noShrink: SelfType = copy(
+    argInstances1 = argInstances1.copy(shrink = None),
+    argInstances2 = argInstances2.copy(shrink = None),
+    argInstances3 = argInstances3.copy(shrink = None),
+    argInstances4 = argInstances4.copy(shrink = None),
+    argInstances5 = argInstances5.copy(shrink = None)
+  )
 
   def setArbitrary1(a1: Arbitrary[T1]): SelfType = copy(argInstances1 = argInstances1.copy(arbitrary = a1))
   def setArbitrary2(a2: Arbitrary[T2]): SelfType = copy(argInstances2 = argInstances2.copy(arbitrary = a2))
   def setArbitrary3(a3: Arbitrary[T3]): SelfType = copy(argInstances3 = argInstances3.copy(arbitrary = a3))
   def setArbitrary4(a4: Arbitrary[T4]): SelfType = copy(argInstances4 = argInstances4.copy(arbitrary = a4))
   def setArbitrary5(a5: Arbitrary[T5]): SelfType = copy(argInstances5 = argInstances5.copy(arbitrary = a5))
-  def setArbitraries(a1: Arbitrary[T1], a2: Arbitrary[T2], a3: Arbitrary[T3], a4: Arbitrary[T4], a5: Arbitrary[T5]): SelfType =
+  def setArbitraries(
+      a1: Arbitrary[T1],
+      a2: Arbitrary[T2],
+      a3: Arbitrary[T3],
+      a4: Arbitrary[T4],
+      a5: Arbitrary[T5]
+  ): SelfType =
     setArbitrary1(a1).setArbitrary2(a2).setArbitrary3(a3).setArbitrary4(a4).setArbitrary5(a5)
 
   def setGen1(g1: Gen[T1]): SelfType = setArbitrary1(Arbitrary(g1))
@@ -524,17 +622,22 @@ case class ScalaCheckFunction5[T1, T2, T3, T4, T5, R](
   def setPrettyFreqMap(f: FreqMap[Set[Any]] => Pretty): SelfType =
     copy(prettyFreqMap = f)
 
-  def collectArg1(f: T1 => Any): SelfType = copy(argInstances1 = argInstances1.copy(collectors = argInstances1.collectors :+ f))
-  def collectArg2(f: T2 => Any): SelfType = copy(argInstances2 = argInstances2.copy(collectors = argInstances2.collectors :+ f))
-  def collectArg3(f: T3 => Any): SelfType = copy(argInstances3 = argInstances3.copy(collectors = argInstances3.collectors :+ f))
-  def collectArg4(f: T4 => Any): SelfType = copy(argInstances4 = argInstances4.copy(collectors = argInstances4.collectors :+ f))
-  def collectArg5(f: T5 => Any): SelfType = copy(argInstances5 = argInstances5.copy(collectors = argInstances5.collectors :+ f))
+  def collectArg1(f: T1 => Any): SelfType =
+    copy(argInstances1 = argInstances1.copy(collectors = argInstances1.collectors :+ f))
+  def collectArg2(f: T2 => Any): SelfType =
+    copy(argInstances2 = argInstances2.copy(collectors = argInstances2.collectors :+ f))
+  def collectArg3(f: T3 => Any): SelfType =
+    copy(argInstances3 = argInstances3.copy(collectors = argInstances3.collectors :+ f))
+  def collectArg4(f: T4 => Any): SelfType =
+    copy(argInstances4 = argInstances4.copy(collectors = argInstances4.collectors :+ f))
+  def collectArg5(f: T5 => Any): SelfType =
+    copy(argInstances5 = argInstances5.copy(collectors = argInstances5.collectors :+ f))
   def collect1: SelfType = collectArg1(_.toString)
   def collect2: SelfType = collectArg2(_.toString)
   def collect3: SelfType = collectArg3(_.toString)
   def collect4: SelfType = collectArg4(_.toString)
   def collect5: SelfType = collectArg5(_.toString)
-  def collectAllArgs(f1: T1 => Any,f2: T2 => Any,f3: T3 => Any,f4: T4 => Any,f5: T5 => Any): SelfType =
+  def collectAllArgs(f1: T1 => Any, f2: T2 => Any, f3: T3 => Any, f4: T4 => Any, f5: T5 => Any): SelfType =
     collectArg1(f1).collectArg2(f2).collectArg3(f3).collectArg4(f4).collectArg5(f5)
 
   def collectAll: SelfType =
@@ -556,14 +659,19 @@ case class ScalaCheckFunction5[T1, T2, T3, T4, T5, R](
     copy(parameters = parameters.copy(seed = Parameters.makeSeed(seed)))
 }
 
-
 case class ScalaCheckFunction6[T1, T2, T3, T4, T5, T6, R](
-  execute: (T1, T2, T3, T4, T5, T6) => R,
-  argInstances1: ScalaCheckArgInstances[T1], argInstances2: ScalaCheckArgInstances[T2], argInstances3: ScalaCheckArgInstances[T3], argInstances4: ScalaCheckArgInstances[T4], argInstances5: ScalaCheckArgInstances[T5], argInstances6: ScalaCheckArgInstances[T6],
-  prettyFreqMap: FreqMap[Set[Any]] => Pretty,
-  asResult: AsResult[R],
-  context: Option[Context],
-  parameters: Parameters) extends ScalaCheckFunction {
+    execute: (T1, T2, T3, T4, T5, T6) => R,
+    argInstances1: ScalaCheckArgInstances[T1],
+    argInstances2: ScalaCheckArgInstances[T2],
+    argInstances3: ScalaCheckArgInstances[T3],
+    argInstances4: ScalaCheckArgInstances[T4],
+    argInstances5: ScalaCheckArgInstances[T5],
+    argInstances6: ScalaCheckArgInstances[T6],
+    prettyFreqMap: FreqMap[Set[Any]] => Pretty,
+    asResult: AsResult[R],
+    context: Option[Context],
+    parameters: Parameters
+) extends ScalaCheckFunction {
 
   type SelfType = ScalaCheckFunction6[T1, T2, T3, T4, T5, T6, R]
 
@@ -583,13 +691,54 @@ case class ScalaCheckFunction6[T1, T2, T3, T4, T5, T6, R](
 
   lazy val propFunction = (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6) => {
     lazy val executed = execute(t1, t2, t3, t4, t5, t6)
-    argInstances1.collect(t1, argInstances2.collect(t2, argInstances3.collect(t3, argInstances4.collect(t4, argInstances5.collect(t5, argInstances6.collect(t6, executed))))))
+    argInstances1.collect(
+      t1,
+      argInstances2.collect(
+        t2,
+        argInstances3.collect(
+          t3,
+          argInstances4.collect(t4, argInstances5.collect(t5, argInstances6.collect(t6, executed)))
+        )
+      )
+    )
   }
 
   lazy val prop: Prop =
-    makeProp((t1: T1) => makeProp((t2: T2) => makeProp((t3: T3) => makeProp((t4: T4) => makeProp((t5: T5) => makeProp((t6: T6) => propFunction(t1, t2, t3, t4, t5, t6), argInstances6.shrink, parameters), argInstances5.shrink, parameters), argInstances4.shrink, parameters), argInstances3.shrink, parameters), argInstances2.shrink, parameters), argInstances1.shrink, parameters)
+    makeProp(
+      (t1: T1) =>
+        makeProp(
+          (t2: T2) =>
+            makeProp(
+              (t3: T3) =>
+                makeProp(
+                  (t4: T4) =>
+                    makeProp(
+                      (t5: T5) =>
+                        makeProp((t6: T6) => propFunction(t1, t2, t3, t4, t5, t6), argInstances6.shrink, parameters),
+                      argInstances5.shrink,
+                      parameters
+                    ),
+                  argInstances4.shrink,
+                  parameters
+                ),
+              argInstances3.shrink,
+              parameters
+            ),
+          argInstances2.shrink,
+          parameters
+        ),
+      argInstances1.shrink,
+      parameters
+    )
 
-  def noShrink: SelfType = copy(argInstances1 = argInstances1.copy(shrink = None), argInstances2 = argInstances2.copy(shrink = None), argInstances3 = argInstances3.copy(shrink = None), argInstances4 = argInstances4.copy(shrink = None), argInstances5 = argInstances5.copy(shrink = None), argInstances6 = argInstances6.copy(shrink = None))
+  def noShrink: SelfType = copy(
+    argInstances1 = argInstances1.copy(shrink = None),
+    argInstances2 = argInstances2.copy(shrink = None),
+    argInstances3 = argInstances3.copy(shrink = None),
+    argInstances4 = argInstances4.copy(shrink = None),
+    argInstances5 = argInstances5.copy(shrink = None),
+    argInstances6 = argInstances6.copy(shrink = None)
+  )
 
   def setArbitrary1(a1: Arbitrary[T1]): SelfType = copy(argInstances1 = argInstances1.copy(arbitrary = a1))
   def setArbitrary2(a2: Arbitrary[T2]): SelfType = copy(argInstances2 = argInstances2.copy(arbitrary = a2))
@@ -597,7 +746,14 @@ case class ScalaCheckFunction6[T1, T2, T3, T4, T5, T6, R](
   def setArbitrary4(a4: Arbitrary[T4]): SelfType = copy(argInstances4 = argInstances4.copy(arbitrary = a4))
   def setArbitrary5(a5: Arbitrary[T5]): SelfType = copy(argInstances5 = argInstances5.copy(arbitrary = a5))
   def setArbitrary6(a6: Arbitrary[T6]): SelfType = copy(argInstances6 = argInstances6.copy(arbitrary = a6))
-  def setArbitraries(a1: Arbitrary[T1], a2: Arbitrary[T2], a3: Arbitrary[T3], a4: Arbitrary[T4], a5: Arbitrary[T5], a6: Arbitrary[T6]): SelfType =
+  def setArbitraries(
+      a1: Arbitrary[T1],
+      a2: Arbitrary[T2],
+      a3: Arbitrary[T3],
+      a4: Arbitrary[T4],
+      a5: Arbitrary[T5],
+      a6: Arbitrary[T6]
+  ): SelfType =
     setArbitrary1(a1).setArbitrary2(a2).setArbitrary3(a3).setArbitrary4(a4).setArbitrary5(a5).setArbitrary6(a6)
 
   def setGen1(g1: Gen[T1]): SelfType = setArbitrary1(Arbitrary(g1))
@@ -615,7 +771,14 @@ case class ScalaCheckFunction6[T1, T2, T3, T4, T5, T6, R](
   def setShrink4(s4: Shrink[T4]): SelfType = copy(argInstances4 = argInstances4.copy(shrink = Some(s4)))
   def setShrink5(s5: Shrink[T5]): SelfType = copy(argInstances5 = argInstances5.copy(shrink = Some(s5)))
   def setShrink6(s6: Shrink[T6]): SelfType = copy(argInstances6 = argInstances6.copy(shrink = Some(s6)))
-  def setShrinks(s1: Shrink[T1], s2: Shrink[T2], s3: Shrink[T3], s4: Shrink[T4], s5: Shrink[T5], s6: Shrink[T6]): SelfType =
+  def setShrinks(
+      s1: Shrink[T1],
+      s2: Shrink[T2],
+      s3: Shrink[T3],
+      s4: Shrink[T4],
+      s5: Shrink[T5],
+      s6: Shrink[T6]
+  ): SelfType =
     setShrink1(s1).setShrink2(s2).setShrink3(s3).setShrink4(s4).setShrink5(s5).setShrink6(s6)
 
   def setPretty1(p1: T1 => Pretty): SelfType = copy(argInstances1 = argInstances1.copy(pretty = p1))
@@ -631,27 +794,54 @@ case class ScalaCheckFunction6[T1, T2, T3, T4, T5, T6, R](
   def pretty5(p5: T5 => String): SelfType = setPretty5((t5: T5) => Pretty(_ => p5(t5)))
   def pretty6(p6: T6 => String): SelfType = setPretty6((t6: T6) => Pretty(_ => p6(t6)))
 
-  def setPretties(p1: T1 => Pretty, p2: T2 => Pretty, p3: T3 => Pretty, p4: T4 => Pretty, p5: T5 => Pretty, p6: T6 => Pretty): SelfType =
+  def setPretties(
+      p1: T1 => Pretty,
+      p2: T2 => Pretty,
+      p3: T3 => Pretty,
+      p4: T4 => Pretty,
+      p5: T5 => Pretty,
+      p6: T6 => Pretty
+  ): SelfType =
     setPretty1(p1).setPretty2(p2).setPretty3(p3).setPretty4(p4).setPretty5(p5).setPretty6(p6)
-  def pretties(p1: T1 => String, p2: T2 => String, p3: T3 => String, p4: T4 => String, p5: T5 => String, p6: T6 => String): SelfType =
+  def pretties(
+      p1: T1 => String,
+      p2: T2 => String,
+      p3: T3 => String,
+      p4: T4 => String,
+      p5: T5 => String,
+      p6: T6 => String
+  ): SelfType =
     pretty1(p1).pretty2(p2).pretty3(p3).pretty4(p4).pretty5(p5).pretty6(p6)
 
   def setPrettyFreqMap(f: FreqMap[Set[Any]] => Pretty): SelfType =
     copy(prettyFreqMap = f)
 
-  def collectArg1(f: T1 => Any): SelfType = copy(argInstances1 = argInstances1.copy(collectors = argInstances1.collectors :+ f))
-  def collectArg2(f: T2 => Any): SelfType = copy(argInstances2 = argInstances2.copy(collectors = argInstances2.collectors :+ f))
-  def collectArg3(f: T3 => Any): SelfType = copy(argInstances3 = argInstances3.copy(collectors = argInstances3.collectors :+ f))
-  def collectArg4(f: T4 => Any): SelfType = copy(argInstances4 = argInstances4.copy(collectors = argInstances4.collectors :+ f))
-  def collectArg5(f: T5 => Any): SelfType = copy(argInstances5 = argInstances5.copy(collectors = argInstances5.collectors :+ f))
-  def collectArg6(f: T6 => Any): SelfType = copy(argInstances6 = argInstances6.copy(collectors = argInstances6.collectors :+ f))
+  def collectArg1(f: T1 => Any): SelfType =
+    copy(argInstances1 = argInstances1.copy(collectors = argInstances1.collectors :+ f))
+  def collectArg2(f: T2 => Any): SelfType =
+    copy(argInstances2 = argInstances2.copy(collectors = argInstances2.collectors :+ f))
+  def collectArg3(f: T3 => Any): SelfType =
+    copy(argInstances3 = argInstances3.copy(collectors = argInstances3.collectors :+ f))
+  def collectArg4(f: T4 => Any): SelfType =
+    copy(argInstances4 = argInstances4.copy(collectors = argInstances4.collectors :+ f))
+  def collectArg5(f: T5 => Any): SelfType =
+    copy(argInstances5 = argInstances5.copy(collectors = argInstances5.collectors :+ f))
+  def collectArg6(f: T6 => Any): SelfType =
+    copy(argInstances6 = argInstances6.copy(collectors = argInstances6.collectors :+ f))
   def collect1: SelfType = collectArg1(_.toString)
   def collect2: SelfType = collectArg2(_.toString)
   def collect3: SelfType = collectArg3(_.toString)
   def collect4: SelfType = collectArg4(_.toString)
   def collect5: SelfType = collectArg5(_.toString)
   def collect6: SelfType = collectArg6(_.toString)
-  def collectAllArgs(f1: T1 => Any,f2: T2 => Any,f3: T3 => Any,f4: T4 => Any,f5: T5 => Any,f6: T6 => Any): SelfType =
+  def collectAllArgs(
+      f1: T1 => Any,
+      f2: T2 => Any,
+      f3: T3 => Any,
+      f4: T4 => Any,
+      f5: T5 => Any,
+      f6: T6 => Any
+  ): SelfType =
     collectArg1(f1).collectArg2(f2).collectArg3(f3).collectArg4(f4).collectArg5(f5).collectArg6(f6)
 
   def collectAll: SelfType =
@@ -673,14 +863,20 @@ case class ScalaCheckFunction6[T1, T2, T3, T4, T5, T6, R](
     copy(parameters = parameters.copy(seed = Parameters.makeSeed(seed)))
 }
 
-
 case class ScalaCheckFunction7[T1, T2, T3, T4, T5, T6, T7, R](
-  execute: (T1, T2, T3, T4, T5, T6, T7) => R,
-  argInstances1: ScalaCheckArgInstances[T1], argInstances2: ScalaCheckArgInstances[T2], argInstances3: ScalaCheckArgInstances[T3], argInstances4: ScalaCheckArgInstances[T4], argInstances5: ScalaCheckArgInstances[T5], argInstances6: ScalaCheckArgInstances[T6], argInstances7: ScalaCheckArgInstances[T7],
-  prettyFreqMap: FreqMap[Set[Any]] => Pretty,
-  asResult: AsResult[R],
-  context: Option[Context],
-  parameters: Parameters) extends ScalaCheckFunction {
+    execute: (T1, T2, T3, T4, T5, T6, T7) => R,
+    argInstances1: ScalaCheckArgInstances[T1],
+    argInstances2: ScalaCheckArgInstances[T2],
+    argInstances3: ScalaCheckArgInstances[T3],
+    argInstances4: ScalaCheckArgInstances[T4],
+    argInstances5: ScalaCheckArgInstances[T5],
+    argInstances6: ScalaCheckArgInstances[T6],
+    argInstances7: ScalaCheckArgInstances[T7],
+    prettyFreqMap: FreqMap[Set[Any]] => Pretty,
+    asResult: AsResult[R],
+    context: Option[Context],
+    parameters: Parameters
+) extends ScalaCheckFunction {
 
   type SelfType = ScalaCheckFunction7[T1, T2, T3, T4, T5, T6, T7, R]
 
@@ -702,13 +898,67 @@ case class ScalaCheckFunction7[T1, T2, T3, T4, T5, T6, T7, R](
 
   lazy val propFunction = (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7) => {
     lazy val executed = execute(t1, t2, t3, t4, t5, t6, t7)
-    argInstances1.collect(t1, argInstances2.collect(t2, argInstances3.collect(t3, argInstances4.collect(t4, argInstances5.collect(t5, argInstances6.collect(t6, argInstances7.collect(t7, executed)))))))
+    argInstances1.collect(
+      t1,
+      argInstances2.collect(
+        t2,
+        argInstances3.collect(
+          t3,
+          argInstances4.collect(
+            t4,
+            argInstances5.collect(t5, argInstances6.collect(t6, argInstances7.collect(t7, executed)))
+          )
+        )
+      )
+    )
   }
 
   lazy val prop: Prop =
-    makeProp((t1: T1) => makeProp((t2: T2) => makeProp((t3: T3) => makeProp((t4: T4) => makeProp((t5: T5) => makeProp((t6: T6) => makeProp((t7: T7) => propFunction(t1, t2, t3, t4, t5, t6, t7), argInstances7.shrink, parameters), argInstances6.shrink, parameters), argInstances5.shrink, parameters), argInstances4.shrink, parameters), argInstances3.shrink, parameters), argInstances2.shrink, parameters), argInstances1.shrink, parameters)
+    makeProp(
+      (t1: T1) =>
+        makeProp(
+          (t2: T2) =>
+            makeProp(
+              (t3: T3) =>
+                makeProp(
+                  (t4: T4) =>
+                    makeProp(
+                      (t5: T5) =>
+                        makeProp(
+                          (t6: T6) =>
+                            makeProp(
+                              (t7: T7) => propFunction(t1, t2, t3, t4, t5, t6, t7),
+                              argInstances7.shrink,
+                              parameters
+                            ),
+                          argInstances6.shrink,
+                          parameters
+                        ),
+                      argInstances5.shrink,
+                      parameters
+                    ),
+                  argInstances4.shrink,
+                  parameters
+                ),
+              argInstances3.shrink,
+              parameters
+            ),
+          argInstances2.shrink,
+          parameters
+        ),
+      argInstances1.shrink,
+      parameters
+    )
 
-  def noShrink: SelfType = copy(argInstances1 = argInstances1.copy(shrink = None), argInstances2 = argInstances2.copy(shrink = None), argInstances3 = argInstances3.copy(shrink = None), argInstances4 = argInstances4.copy(shrink = None), argInstances5 = argInstances5.copy(shrink = None), argInstances6 = argInstances6.copy(shrink = None), argInstances7 = argInstances7.copy(shrink = None))
+  def noShrink: SelfType = copy(
+    argInstances1 = argInstances1.copy(shrink = None),
+    argInstances2 = argInstances2.copy(shrink = None),
+    argInstances3 = argInstances3.copy(shrink = None),
+    argInstances4 = argInstances4.copy(shrink = None),
+    argInstances5 = argInstances5.copy(shrink = None),
+    argInstances6 = argInstances6.copy(shrink = None),
+    argInstances7 = argInstances7.copy(shrink = None)
+  )
 
   def setArbitrary1(a1: Arbitrary[T1]): SelfType = copy(argInstances1 = argInstances1.copy(arbitrary = a1))
   def setArbitrary2(a2: Arbitrary[T2]): SelfType = copy(argInstances2 = argInstances2.copy(arbitrary = a2))
@@ -717,8 +967,22 @@ case class ScalaCheckFunction7[T1, T2, T3, T4, T5, T6, T7, R](
   def setArbitrary5(a5: Arbitrary[T5]): SelfType = copy(argInstances5 = argInstances5.copy(arbitrary = a5))
   def setArbitrary6(a6: Arbitrary[T6]): SelfType = copy(argInstances6 = argInstances6.copy(arbitrary = a6))
   def setArbitrary7(a7: Arbitrary[T7]): SelfType = copy(argInstances7 = argInstances7.copy(arbitrary = a7))
-  def setArbitraries(a1: Arbitrary[T1], a2: Arbitrary[T2], a3: Arbitrary[T3], a4: Arbitrary[T4], a5: Arbitrary[T5], a6: Arbitrary[T6], a7: Arbitrary[T7]): SelfType =
-    setArbitrary1(a1).setArbitrary2(a2).setArbitrary3(a3).setArbitrary4(a4).setArbitrary5(a5).setArbitrary6(a6).setArbitrary7(a7)
+  def setArbitraries(
+      a1: Arbitrary[T1],
+      a2: Arbitrary[T2],
+      a3: Arbitrary[T3],
+      a4: Arbitrary[T4],
+      a5: Arbitrary[T5],
+      a6: Arbitrary[T6],
+      a7: Arbitrary[T7]
+  ): SelfType =
+    setArbitrary1(a1)
+      .setArbitrary2(a2)
+      .setArbitrary3(a3)
+      .setArbitrary4(a4)
+      .setArbitrary5(a5)
+      .setArbitrary6(a6)
+      .setArbitrary7(a7)
 
   def setGen1(g1: Gen[T1]): SelfType = setArbitrary1(Arbitrary(g1))
   def setGen2(g2: Gen[T2]): SelfType = setArbitrary2(Arbitrary(g2))
@@ -737,7 +1001,15 @@ case class ScalaCheckFunction7[T1, T2, T3, T4, T5, T6, T7, R](
   def setShrink5(s5: Shrink[T5]): SelfType = copy(argInstances5 = argInstances5.copy(shrink = Some(s5)))
   def setShrink6(s6: Shrink[T6]): SelfType = copy(argInstances6 = argInstances6.copy(shrink = Some(s6)))
   def setShrink7(s7: Shrink[T7]): SelfType = copy(argInstances7 = argInstances7.copy(shrink = Some(s7)))
-  def setShrinks(s1: Shrink[T1], s2: Shrink[T2], s3: Shrink[T3], s4: Shrink[T4], s5: Shrink[T5], s6: Shrink[T6], s7: Shrink[T7]): SelfType =
+  def setShrinks(
+      s1: Shrink[T1],
+      s2: Shrink[T2],
+      s3: Shrink[T3],
+      s4: Shrink[T4],
+      s5: Shrink[T5],
+      s6: Shrink[T6],
+      s7: Shrink[T7]
+  ): SelfType =
     setShrink1(s1).setShrink2(s2).setShrink3(s3).setShrink4(s4).setShrink5(s5).setShrink6(s6).setShrink7(s7)
 
   def setPretty1(p1: T1 => Pretty): SelfType = copy(argInstances1 = argInstances1.copy(pretty = p1))
@@ -755,21 +1027,44 @@ case class ScalaCheckFunction7[T1, T2, T3, T4, T5, T6, T7, R](
   def pretty6(p6: T6 => String): SelfType = setPretty6((t6: T6) => Pretty(_ => p6(t6)))
   def pretty7(p7: T7 => String): SelfType = setPretty7((t7: T7) => Pretty(_ => p7(t7)))
 
-  def setPretties(p1: T1 => Pretty, p2: T2 => Pretty, p3: T3 => Pretty, p4: T4 => Pretty, p5: T5 => Pretty, p6: T6 => Pretty, p7: T7 => Pretty): SelfType =
+  def setPretties(
+      p1: T1 => Pretty,
+      p2: T2 => Pretty,
+      p3: T3 => Pretty,
+      p4: T4 => Pretty,
+      p5: T5 => Pretty,
+      p6: T6 => Pretty,
+      p7: T7 => Pretty
+  ): SelfType =
     setPretty1(p1).setPretty2(p2).setPretty3(p3).setPretty4(p4).setPretty5(p5).setPretty6(p6).setPretty7(p7)
-  def pretties(p1: T1 => String, p2: T2 => String, p3: T3 => String, p4: T4 => String, p5: T5 => String, p6: T6 => String, p7: T7 => String): SelfType =
+  def pretties(
+      p1: T1 => String,
+      p2: T2 => String,
+      p3: T3 => String,
+      p4: T4 => String,
+      p5: T5 => String,
+      p6: T6 => String,
+      p7: T7 => String
+  ): SelfType =
     pretty1(p1).pretty2(p2).pretty3(p3).pretty4(p4).pretty5(p5).pretty6(p6).pretty7(p7)
 
   def setPrettyFreqMap(f: FreqMap[Set[Any]] => Pretty): SelfType =
     copy(prettyFreqMap = f)
 
-  def collectArg1(f: T1 => Any): SelfType = copy(argInstances1 = argInstances1.copy(collectors = argInstances1.collectors :+ f))
-  def collectArg2(f: T2 => Any): SelfType = copy(argInstances2 = argInstances2.copy(collectors = argInstances2.collectors :+ f))
-  def collectArg3(f: T3 => Any): SelfType = copy(argInstances3 = argInstances3.copy(collectors = argInstances3.collectors :+ f))
-  def collectArg4(f: T4 => Any): SelfType = copy(argInstances4 = argInstances4.copy(collectors = argInstances4.collectors :+ f))
-  def collectArg5(f: T5 => Any): SelfType = copy(argInstances5 = argInstances5.copy(collectors = argInstances5.collectors :+ f))
-  def collectArg6(f: T6 => Any): SelfType = copy(argInstances6 = argInstances6.copy(collectors = argInstances6.collectors :+ f))
-  def collectArg7(f: T7 => Any): SelfType = copy(argInstances7 = argInstances7.copy(collectors = argInstances7.collectors :+ f))
+  def collectArg1(f: T1 => Any): SelfType =
+    copy(argInstances1 = argInstances1.copy(collectors = argInstances1.collectors :+ f))
+  def collectArg2(f: T2 => Any): SelfType =
+    copy(argInstances2 = argInstances2.copy(collectors = argInstances2.collectors :+ f))
+  def collectArg3(f: T3 => Any): SelfType =
+    copy(argInstances3 = argInstances3.copy(collectors = argInstances3.collectors :+ f))
+  def collectArg4(f: T4 => Any): SelfType =
+    copy(argInstances4 = argInstances4.copy(collectors = argInstances4.collectors :+ f))
+  def collectArg5(f: T5 => Any): SelfType =
+    copy(argInstances5 = argInstances5.copy(collectors = argInstances5.collectors :+ f))
+  def collectArg6(f: T6 => Any): SelfType =
+    copy(argInstances6 = argInstances6.copy(collectors = argInstances6.collectors :+ f))
+  def collectArg7(f: T7 => Any): SelfType =
+    copy(argInstances7 = argInstances7.copy(collectors = argInstances7.collectors :+ f))
   def collect1: SelfType = collectArg1(_.toString)
   def collect2: SelfType = collectArg2(_.toString)
   def collect3: SelfType = collectArg3(_.toString)
@@ -777,14 +1072,24 @@ case class ScalaCheckFunction7[T1, T2, T3, T4, T5, T6, T7, R](
   def collect5: SelfType = collectArg5(_.toString)
   def collect6: SelfType = collectArg6(_.toString)
   def collect7: SelfType = collectArg7(_.toString)
-  def collectAllArgs(f1: T1 => Any,f2: T2 => Any,f3: T3 => Any,f4: T4 => Any,f5: T5 => Any,f6: T6 => Any,f7: T7 => Any): SelfType =
+  def collectAllArgs(
+      f1: T1 => Any,
+      f2: T2 => Any,
+      f3: T3 => Any,
+      f4: T4 => Any,
+      f5: T5 => Any,
+      f6: T6 => Any,
+      f7: T7 => Any
+  ): SelfType =
     collectArg1(f1).collectArg2(f2).collectArg3(f3).collectArg4(f4).collectArg5(f5).collectArg6(f6).collectArg7(f7)
 
   def collectAll: SelfType =
     collect1.collect2.collect3.collect4.collect5.collect6.collect7
 
   def prepare(action: (T1, T2, T3, T4, T5, T6, T7) => (T1, T2, T3, T4, T5, T6, T7)): SelfType =
-    copy(execute = (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7) => execute.tupled(action(t1, t2, t3, t4, t5, t6, t7)))
+    copy(execute =
+      (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7) => execute.tupled(action(t1, t2, t3, t4, t5, t6, t7))
+    )
 
   def setContext(context: Context): SelfType =
     copy(context = Some(context))
@@ -799,14 +1104,21 @@ case class ScalaCheckFunction7[T1, T2, T3, T4, T5, T6, T7, R](
     copy(parameters = parameters.copy(seed = Parameters.makeSeed(seed)))
 }
 
-
 case class ScalaCheckFunction8[T1, T2, T3, T4, T5, T6, T7, T8, R](
-  execute: (T1, T2, T3, T4, T5, T6, T7, T8) => R,
-  argInstances1: ScalaCheckArgInstances[T1], argInstances2: ScalaCheckArgInstances[T2], argInstances3: ScalaCheckArgInstances[T3], argInstances4: ScalaCheckArgInstances[T4], argInstances5: ScalaCheckArgInstances[T5], argInstances6: ScalaCheckArgInstances[T6], argInstances7: ScalaCheckArgInstances[T7], argInstances8: ScalaCheckArgInstances[T8],
-  prettyFreqMap: FreqMap[Set[Any]] => Pretty,
-  asResult: AsResult[R],
-  context: Option[Context],
-  parameters: Parameters) extends ScalaCheckFunction {
+    execute: (T1, T2, T3, T4, T5, T6, T7, T8) => R,
+    argInstances1: ScalaCheckArgInstances[T1],
+    argInstances2: ScalaCheckArgInstances[T2],
+    argInstances3: ScalaCheckArgInstances[T3],
+    argInstances4: ScalaCheckArgInstances[T4],
+    argInstances5: ScalaCheckArgInstances[T5],
+    argInstances6: ScalaCheckArgInstances[T6],
+    argInstances7: ScalaCheckArgInstances[T7],
+    argInstances8: ScalaCheckArgInstances[T8],
+    prettyFreqMap: FreqMap[Set[Any]] => Pretty,
+    asResult: AsResult[R],
+    context: Option[Context],
+    parameters: Parameters
+) extends ScalaCheckFunction {
 
   type SelfType = ScalaCheckFunction8[T1, T2, T3, T4, T5, T6, T7, T8, R]
 
@@ -830,13 +1142,76 @@ case class ScalaCheckFunction8[T1, T2, T3, T4, T5, T6, T7, T8, R](
 
   lazy val propFunction = (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8) => {
     lazy val executed = execute(t1, t2, t3, t4, t5, t6, t7, t8)
-    argInstances1.collect(t1, argInstances2.collect(t2, argInstances3.collect(t3, argInstances4.collect(t4, argInstances5.collect(t5, argInstances6.collect(t6, argInstances7.collect(t7, argInstances8.collect(t8, executed))))))))
+    argInstances1.collect(
+      t1,
+      argInstances2.collect(
+        t2,
+        argInstances3.collect(
+          t3,
+          argInstances4.collect(
+            t4,
+            argInstances5.collect(
+              t5,
+              argInstances6.collect(t6, argInstances7.collect(t7, argInstances8.collect(t8, executed)))
+            )
+          )
+        )
+      )
+    )
   }
 
   lazy val prop: Prop =
-    makeProp((t1: T1) => makeProp((t2: T2) => makeProp((t3: T3) => makeProp((t4: T4) => makeProp((t5: T5) => makeProp((t6: T6) => makeProp((t7: T7) => makeProp((t8: T8) => propFunction(t1, t2, t3, t4, t5, t6, t7, t8), argInstances8.shrink, parameters), argInstances7.shrink, parameters), argInstances6.shrink, parameters), argInstances5.shrink, parameters), argInstances4.shrink, parameters), argInstances3.shrink, parameters), argInstances2.shrink, parameters), argInstances1.shrink, parameters)
+    makeProp(
+      (t1: T1) =>
+        makeProp(
+          (t2: T2) =>
+            makeProp(
+              (t3: T3) =>
+                makeProp(
+                  (t4: T4) =>
+                    makeProp(
+                      (t5: T5) =>
+                        makeProp(
+                          (t6: T6) =>
+                            makeProp(
+                              (t7: T7) =>
+                                makeProp(
+                                  (t8: T8) => propFunction(t1, t2, t3, t4, t5, t6, t7, t8),
+                                  argInstances8.shrink,
+                                  parameters
+                                ),
+                              argInstances7.shrink,
+                              parameters
+                            ),
+                          argInstances6.shrink,
+                          parameters
+                        ),
+                      argInstances5.shrink,
+                      parameters
+                    ),
+                  argInstances4.shrink,
+                  parameters
+                ),
+              argInstances3.shrink,
+              parameters
+            ),
+          argInstances2.shrink,
+          parameters
+        ),
+      argInstances1.shrink,
+      parameters
+    )
 
-  def noShrink: SelfType = copy(argInstances1 = argInstances1.copy(shrink = None), argInstances2 = argInstances2.copy(shrink = None), argInstances3 = argInstances3.copy(shrink = None), argInstances4 = argInstances4.copy(shrink = None), argInstances5 = argInstances5.copy(shrink = None), argInstances6 = argInstances6.copy(shrink = None), argInstances7 = argInstances7.copy(shrink = None), argInstances8 = argInstances8.copy(shrink = None))
+  def noShrink: SelfType = copy(
+    argInstances1 = argInstances1.copy(shrink = None),
+    argInstances2 = argInstances2.copy(shrink = None),
+    argInstances3 = argInstances3.copy(shrink = None),
+    argInstances4 = argInstances4.copy(shrink = None),
+    argInstances5 = argInstances5.copy(shrink = None),
+    argInstances6 = argInstances6.copy(shrink = None),
+    argInstances7 = argInstances7.copy(shrink = None),
+    argInstances8 = argInstances8.copy(shrink = None)
+  )
 
   def setArbitrary1(a1: Arbitrary[T1]): SelfType = copy(argInstances1 = argInstances1.copy(arbitrary = a1))
   def setArbitrary2(a2: Arbitrary[T2]): SelfType = copy(argInstances2 = argInstances2.copy(arbitrary = a2))
@@ -846,8 +1221,24 @@ case class ScalaCheckFunction8[T1, T2, T3, T4, T5, T6, T7, T8, R](
   def setArbitrary6(a6: Arbitrary[T6]): SelfType = copy(argInstances6 = argInstances6.copy(arbitrary = a6))
   def setArbitrary7(a7: Arbitrary[T7]): SelfType = copy(argInstances7 = argInstances7.copy(arbitrary = a7))
   def setArbitrary8(a8: Arbitrary[T8]): SelfType = copy(argInstances8 = argInstances8.copy(arbitrary = a8))
-  def setArbitraries(a1: Arbitrary[T1], a2: Arbitrary[T2], a3: Arbitrary[T3], a4: Arbitrary[T4], a5: Arbitrary[T5], a6: Arbitrary[T6], a7: Arbitrary[T7], a8: Arbitrary[T8]): SelfType =
-    setArbitrary1(a1).setArbitrary2(a2).setArbitrary3(a3).setArbitrary4(a4).setArbitrary5(a5).setArbitrary6(a6).setArbitrary7(a7).setArbitrary8(a8)
+  def setArbitraries(
+      a1: Arbitrary[T1],
+      a2: Arbitrary[T2],
+      a3: Arbitrary[T3],
+      a4: Arbitrary[T4],
+      a5: Arbitrary[T5],
+      a6: Arbitrary[T6],
+      a7: Arbitrary[T7],
+      a8: Arbitrary[T8]
+  ): SelfType =
+    setArbitrary1(a1)
+      .setArbitrary2(a2)
+      .setArbitrary3(a3)
+      .setArbitrary4(a4)
+      .setArbitrary5(a5)
+      .setArbitrary6(a6)
+      .setArbitrary7(a7)
+      .setArbitrary8(a8)
 
   def setGen1(g1: Gen[T1]): SelfType = setArbitrary1(Arbitrary(g1))
   def setGen2(g2: Gen[T2]): SelfType = setArbitrary2(Arbitrary(g2))
@@ -857,7 +1248,8 @@ case class ScalaCheckFunction8[T1, T2, T3, T4, T5, T6, T7, T8, R](
   def setGen6(g6: Gen[T6]): SelfType = setArbitrary6(Arbitrary(g6))
   def setGen7(g7: Gen[T7]): SelfType = setArbitrary7(Arbitrary(g7))
   def setGen8(g8: Gen[T8]): SelfType = setArbitrary8(Arbitrary(g8))
-  def setGens(g1: Gen[T1], g2: Gen[T2], g3: Gen[T3], g4: Gen[T4], g5: Gen[T5], g6: Gen[T6], g7: Gen[T7], g8: Gen[T8]): SelfType =
+  def setGens(g1: Gen[T1], g2: Gen[T2], g3: Gen[T3], g4: Gen[T4], g5: Gen[T5], g6: Gen[T6], g7: Gen[T7], g8: Gen[T8])
+      : SelfType =
     setGen1(g1).setGen2(g2).setGen3(g3).setGen4(g4).setGen5(g5).setGen6(g6).setGen7(g7).setGen8(g8)
 
   def setShrink1(s1: Shrink[T1]): SelfType = copy(argInstances1 = argInstances1.copy(shrink = Some(s1)))
@@ -868,8 +1260,24 @@ case class ScalaCheckFunction8[T1, T2, T3, T4, T5, T6, T7, T8, R](
   def setShrink6(s6: Shrink[T6]): SelfType = copy(argInstances6 = argInstances6.copy(shrink = Some(s6)))
   def setShrink7(s7: Shrink[T7]): SelfType = copy(argInstances7 = argInstances7.copy(shrink = Some(s7)))
   def setShrink8(s8: Shrink[T8]): SelfType = copy(argInstances8 = argInstances8.copy(shrink = Some(s8)))
-  def setShrinks(s1: Shrink[T1], s2: Shrink[T2], s3: Shrink[T3], s4: Shrink[T4], s5: Shrink[T5], s6: Shrink[T6], s7: Shrink[T7], s8: Shrink[T8]): SelfType =
-    setShrink1(s1).setShrink2(s2).setShrink3(s3).setShrink4(s4).setShrink5(s5).setShrink6(s6).setShrink7(s7).setShrink8(s8)
+  def setShrinks(
+      s1: Shrink[T1],
+      s2: Shrink[T2],
+      s3: Shrink[T3],
+      s4: Shrink[T4],
+      s5: Shrink[T5],
+      s6: Shrink[T6],
+      s7: Shrink[T7],
+      s8: Shrink[T8]
+  ): SelfType =
+    setShrink1(s1)
+      .setShrink2(s2)
+      .setShrink3(s3)
+      .setShrink4(s4)
+      .setShrink5(s5)
+      .setShrink6(s6)
+      .setShrink7(s7)
+      .setShrink8(s8)
 
   def setPretty1(p1: T1 => Pretty): SelfType = copy(argInstances1 = argInstances1.copy(pretty = p1))
   def setPretty2(p2: T2 => Pretty): SelfType = copy(argInstances2 = argInstances2.copy(pretty = p2))
@@ -888,22 +1296,55 @@ case class ScalaCheckFunction8[T1, T2, T3, T4, T5, T6, T7, T8, R](
   def pretty7(p7: T7 => String): SelfType = setPretty7((t7: T7) => Pretty(_ => p7(t7)))
   def pretty8(p8: T8 => String): SelfType = setPretty8((t8: T8) => Pretty(_ => p8(t8)))
 
-  def setPretties(p1: T1 => Pretty, p2: T2 => Pretty, p3: T3 => Pretty, p4: T4 => Pretty, p5: T5 => Pretty, p6: T6 => Pretty, p7: T7 => Pretty, p8: T8 => Pretty): SelfType =
-    setPretty1(p1).setPretty2(p2).setPretty3(p3).setPretty4(p4).setPretty5(p5).setPretty6(p6).setPretty7(p7).setPretty8(p8)
-  def pretties(p1: T1 => String, p2: T2 => String, p3: T3 => String, p4: T4 => String, p5: T5 => String, p6: T6 => String, p7: T7 => String, p8: T8 => String): SelfType =
+  def setPretties(
+      p1: T1 => Pretty,
+      p2: T2 => Pretty,
+      p3: T3 => Pretty,
+      p4: T4 => Pretty,
+      p5: T5 => Pretty,
+      p6: T6 => Pretty,
+      p7: T7 => Pretty,
+      p8: T8 => Pretty
+  ): SelfType =
+    setPretty1(p1)
+      .setPretty2(p2)
+      .setPretty3(p3)
+      .setPretty4(p4)
+      .setPretty5(p5)
+      .setPretty6(p6)
+      .setPretty7(p7)
+      .setPretty8(p8)
+  def pretties(
+      p1: T1 => String,
+      p2: T2 => String,
+      p3: T3 => String,
+      p4: T4 => String,
+      p5: T5 => String,
+      p6: T6 => String,
+      p7: T7 => String,
+      p8: T8 => String
+  ): SelfType =
     pretty1(p1).pretty2(p2).pretty3(p3).pretty4(p4).pretty5(p5).pretty6(p6).pretty7(p7).pretty8(p8)
 
   def setPrettyFreqMap(f: FreqMap[Set[Any]] => Pretty): SelfType =
     copy(prettyFreqMap = f)
 
-  def collectArg1(f: T1 => Any): SelfType = copy(argInstances1 = argInstances1.copy(collectors = argInstances1.collectors :+ f))
-  def collectArg2(f: T2 => Any): SelfType = copy(argInstances2 = argInstances2.copy(collectors = argInstances2.collectors :+ f))
-  def collectArg3(f: T3 => Any): SelfType = copy(argInstances3 = argInstances3.copy(collectors = argInstances3.collectors :+ f))
-  def collectArg4(f: T4 => Any): SelfType = copy(argInstances4 = argInstances4.copy(collectors = argInstances4.collectors :+ f))
-  def collectArg5(f: T5 => Any): SelfType = copy(argInstances5 = argInstances5.copy(collectors = argInstances5.collectors :+ f))
-  def collectArg6(f: T6 => Any): SelfType = copy(argInstances6 = argInstances6.copy(collectors = argInstances6.collectors :+ f))
-  def collectArg7(f: T7 => Any): SelfType = copy(argInstances7 = argInstances7.copy(collectors = argInstances7.collectors :+ f))
-  def collectArg8(f: T8 => Any): SelfType = copy(argInstances8 = argInstances8.copy(collectors = argInstances8.collectors :+ f))
+  def collectArg1(f: T1 => Any): SelfType =
+    copy(argInstances1 = argInstances1.copy(collectors = argInstances1.collectors :+ f))
+  def collectArg2(f: T2 => Any): SelfType =
+    copy(argInstances2 = argInstances2.copy(collectors = argInstances2.collectors :+ f))
+  def collectArg3(f: T3 => Any): SelfType =
+    copy(argInstances3 = argInstances3.copy(collectors = argInstances3.collectors :+ f))
+  def collectArg4(f: T4 => Any): SelfType =
+    copy(argInstances4 = argInstances4.copy(collectors = argInstances4.collectors :+ f))
+  def collectArg5(f: T5 => Any): SelfType =
+    copy(argInstances5 = argInstances5.copy(collectors = argInstances5.collectors :+ f))
+  def collectArg6(f: T6 => Any): SelfType =
+    copy(argInstances6 = argInstances6.copy(collectors = argInstances6.collectors :+ f))
+  def collectArg7(f: T7 => Any): SelfType =
+    copy(argInstances7 = argInstances7.copy(collectors = argInstances7.collectors :+ f))
+  def collectArg8(f: T8 => Any): SelfType =
+    copy(argInstances8 = argInstances8.copy(collectors = argInstances8.collectors :+ f))
   def collect1: SelfType = collectArg1(_.toString)
   def collect2: SelfType = collectArg2(_.toString)
   def collect3: SelfType = collectArg3(_.toString)
@@ -912,14 +1353,33 @@ case class ScalaCheckFunction8[T1, T2, T3, T4, T5, T6, T7, T8, R](
   def collect6: SelfType = collectArg6(_.toString)
   def collect7: SelfType = collectArg7(_.toString)
   def collect8: SelfType = collectArg8(_.toString)
-  def collectAllArgs(f1: T1 => Any,f2: T2 => Any,f3: T3 => Any,f4: T4 => Any,f5: T5 => Any,f6: T6 => Any,f7: T7 => Any,f8: T8 => Any): SelfType =
-    collectArg1(f1).collectArg2(f2).collectArg3(f3).collectArg4(f4).collectArg5(f5).collectArg6(f6).collectArg7(f7).collectArg8(f8)
+  def collectAllArgs(
+      f1: T1 => Any,
+      f2: T2 => Any,
+      f3: T3 => Any,
+      f4: T4 => Any,
+      f5: T5 => Any,
+      f6: T6 => Any,
+      f7: T7 => Any,
+      f8: T8 => Any
+  ): SelfType =
+    collectArg1(f1)
+      .collectArg2(f2)
+      .collectArg3(f3)
+      .collectArg4(f4)
+      .collectArg5(f5)
+      .collectArg6(f6)
+      .collectArg7(f7)
+      .collectArg8(f8)
 
   def collectAll: SelfType =
     collect1.collect2.collect3.collect4.collect5.collect6.collect7.collect8
 
   def prepare(action: (T1, T2, T3, T4, T5, T6, T7, T8) => (T1, T2, T3, T4, T5, T6, T7, T8)): SelfType =
-    copy(execute = (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8) => execute.tupled(action(t1, t2, t3, t4, t5, t6, t7, t8)))
+    copy(execute =
+      (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8) =>
+        execute.tupled(action(t1, t2, t3, t4, t5, t6, t7, t8))
+    )
 
   def setContext(context: Context): SelfType =
     copy(context = Some(context))
@@ -934,38 +1394,43 @@ case class ScalaCheckFunction8[T1, T2, T3, T4, T5, T6, T7, T8, R](
     copy(parameters = parameters.copy(seed = Parameters.makeSeed(seed)))
 }
 
-case class ScalaCheckArgInstances[T](arbitrary: Arbitrary[T], shrink: Option[Shrink[T]], collectors: List[T => Any], pretty: T => Pretty):
+case class ScalaCheckArgInstances[T](
+    arbitrary: Arbitrary[T],
+    shrink: Option[Shrink[T]],
+    collectors: List[T => Any],
+    pretty: T => Pretty
+):
   def collect(t: T, p: Prop) =
     collectors.foldLeft(p)((res, cur) => Prop.collect(t)(p))
 
 object ScalaCheckProperty:
 
   given ScalaCheckPropertyAsExecution[S <: ScalaCheckProperty]: AsExecution[S] with
-    def execute(s: => S): Execution =
+    def execute(s: =>S): Execution =
       Execution.withEnv { env =>
         AsResultProp.check(s.prop, s.parameters.overrideWith(env.commandLine), s.prettyFreqMap)
       }
 
-  def makeProp[T](f: T => Prop, shrink: Option[Shrink[T]], parameters: Parameters)(
-    implicit a: Arbitrary[T], p: T => Pretty): Prop =
+  def makeProp[T](f: T => Prop, shrink: Option[Shrink[T]], parameters: Parameters)(implicit
+      a: Arbitrary[T],
+      p: T => Pretty
+  ): Prop =
     shrink match
       case Some(s) => Prop.forAll(f)(identity, a, s, p)
-      case _ => Prop.forAllNoShrink(f)
+      case _       => Prop.forAllNoShrink(f)
 
-
-  def TNList(n: Int) = (1 to n).map("T"+_).mkString(", ")
+  def TNList(n: Int) = (1 to n).map("T" + _).mkString(", ")
   def TNParamList(n: Int) = (1 to n).map(i => s"t$i: T$i").mkString(", ")
   def NParamList(n: Int) = (1 to n).map(i => s"t$i").mkString(", ")
 
   def allScalaCheckFunctionN(n: Int): String =
     (2 to n).map(scalaCheckFunctionN).mkString("\n\n")
 
-
   def scalaCheckFunctionN(n: Int): String =
-  s"""
+    s"""
 case class ScalaCheckFunction$n[${TNList(n)}, R](
   execute: (${TNList(n)}) => R,
-  ${(1 to n).map(i => s"argInstances$i: ScalaCheckArgInstances[T$i]").mkString(", ") },
+  ${(1 to n).map(i => s"argInstances$i: ScalaCheckArgInstances[T$i]").mkString(", ")},
   prettyFreqMap: FreqMap[Set[Any]] => Pretty,
   asResult: AsResult[R],
   parameters: Parameters) extends ScalaCheckFunction {
@@ -973,22 +1438,28 @@ case class ScalaCheckFunction$n[${TNList(n)}, R](
   type SelfType = ScalaCheckFunction$n[${TNList(n)}, R]
 
   private given AsResult[R] = asResult
-  ${ (1 to n).map(i => s"private given Arbitrary[T$i] = argInstances$i.arbitrary").mkString("\n  ") }
-  ${ (1 to n).map(i => s"private given (T$i => Pretty) = argInstances$i.pretty").mkString("\n  ") }
+  ${(1 to n).map(i => s"private given Arbitrary[T$i] = argInstances$i.arbitrary").mkString("\n  ")}
+  ${(1 to n).map(i => s"private given (T$i => Pretty) = argInstances$i.pretty").mkString("\n  ")}
 
   lazy val propFunction = (${TNParamList(n)}) => {
     lazy val executed = execute(${NParamList(n)})
-    ${(1 to n).reverse.foldLeft("executed"){ (res, i) => s"argInstances$i.collect(t$i, $res)"}}
+    ${(1 to n).reverse.foldLeft("executed") { (res, i) => s"argInstances$i.collect(t$i, $res)" }}
   }
 
   lazy val prop: Prop =
     ${(1 to n).reverse.foldLeft(s"propFunction(${NParamList(n)})") { (res, i) =>
-       s"makeProp((t$i: T$i) => $res, argInstances$i.shrink, parameters)"
+      s"makeProp((t$i: T$i) => $res, argInstances$i.shrink, parameters)"
     }}
 
-  def noShrink: SelfType = copy(${(1 to n).map(i => s"argInstances$i = argInstances$i.copy(shrink = None)").mkString(", ")})
+  def noShrink: SelfType = copy(${(1 to n)
+      .map(i => s"argInstances$i = argInstances$i.copy(shrink = None)")
+      .mkString(", ")})
 
-  ${(1 to n).map(i => s"def setArbitrary$i(a$i: Arbitrary[T$i]): SelfType = copy(argInstances$i = argInstances$i.copy(arbitrary = a$i))").mkString("\n  ")}
+  ${(1 to n)
+      .map(i =>
+        s"def setArbitrary$i(a$i: Arbitrary[T$i]): SelfType = copy(argInstances$i = argInstances$i.copy(arbitrary = a$i))"
+      )
+      .mkString("\n  ")}
   def setArbitraries(${(1 to n).map(i => s"a$i: Arbitrary[T$i]").mkString(", ")}): SelfType =
     ${(1 to n).map(i => s"setArbitrary$i(a$i)").mkString(".")}
 
@@ -996,12 +1467,22 @@ case class ScalaCheckFunction$n[${TNList(n)}, R](
   def setGens(${(1 to n).map(i => s"g$i: Gen[T$i]").mkString(", ")}): SelfType =
     ${(1 to n).map(i => s"setGen$i(g$i)").mkString(".")}
 
-  ${(1 to n).map(i => s"def setShrink$i(s$i: Shrink[T$i]): SelfType = copy(argInstances$i = argInstances$i.copy(shrink = Some(s$i)))").mkString("\n  ")}
+  ${(1 to n)
+      .map(i =>
+        s"def setShrink$i(s$i: Shrink[T$i]): SelfType = copy(argInstances$i = argInstances$i.copy(shrink = Some(s$i)))"
+      )
+      .mkString("\n  ")}
   def setShrinks(${(1 to n).map(i => s"s$i: Shrink[T$i]").mkString(", ")}): SelfType =
     ${(1 to n).map(i => s"setShrink$i(s$i)").mkString(".")}
 
-  ${(1 to n).map(i => s"def setPretty$i(p$i: T$i => Pretty): SelfType = copy(argInstances$i = argInstances$i.copy(pretty = p$i))").mkString("\n  ")}
-  ${(1 to n).map(i => s"def pretty$i(p$i: T$i => String): SelfType = setPretty$i((t$i: T$i) => Pretty(_ => p$i(t$i)))").mkString("\n  ")}
+  ${(1 to n)
+      .map(i =>
+        s"def setPretty$i(p$i: T$i => Pretty): SelfType = copy(argInstances$i = argInstances$i.copy(pretty = p$i))"
+      )
+      .mkString("\n  ")}
+  ${(1 to n)
+      .map(i => s"def pretty$i(p$i: T$i => String): SelfType = setPretty$i((t$i: T$i) => Pretty(_ => p$i(t$i)))")
+      .mkString("\n  ")}
 
   def setPretties(${(1 to n).map(i => s"p$i: T$i => Pretty").mkString(", ")}): SelfType =
     ${(1 to n).map(i => s"setPretty$i(p$i)").mkString(".")}
@@ -1011,7 +1492,11 @@ case class ScalaCheckFunction$n[${TNList(n)}, R](
   def setPrettyFreqMap(f: FreqMap[Set[Any]] => Pretty): SelfType =
     copy(prettyFreqMap = f)
 
-  ${(1 to n).map(i => s"def collectArg$i(f: T$i => Any): SelfType = copy(argInstances$i = argInstances$i.copy(collectors = argInstances$i.collectors :+ f))").mkString("\n  ")}
+  ${(1 to n)
+      .map(i =>
+        s"def collectArg$i(f: T$i => Any): SelfType = copy(argInstances$i = argInstances$i.copy(collectors = argInstances$i.collectors :+ f))"
+      )
+      .mkString("\n  ")}
   ${(1 to n).map(i => s"def collect$i: SelfType = collectArg$i(_.toString)").mkString("\n  ")}
   def collectAllArgs(${(1 to n).map(i => s"f$i: T$i => Any").mkString(",")}): SelfType =
     ${(1 to n).map(i => s"collectArg$i(f$i)").mkString(".")}

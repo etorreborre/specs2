@@ -3,7 +3,8 @@ package specification
 
 import form.given
 
-class FormComponentsSpec extends Specification with Forms { def is = s2"""
+class FormComponentsSpec extends Specification with Forms {
+  def is = s2"""
 
 Forms can be used to represent domain objects or service, relating expected values to actual ones. Forms are also
 thought as being reusable components which can be reused between specifications. In the following examples, we'll see
@@ -104,67 +105,82 @@ Fourth example: 1-n relationship
     val address = Address(street = "Rose Crescent", number = 2)
     val customer = Customer(name = "Eric", address = Address(street = "Rose Crescent", number = 2))
 
-    val initialsTable = initials().
-      tr("eric",  "torreborre", "E.T.").
-      tr("hello", "world",      "H.Wo.")
+    val initialsTable = initials().tr("eric", "torreborre", "E.T.").tr("hello", "world", "H.Wo.")
 
-    val order = Order().
-      line(OrderLine("PIS", 1)).
-      line(OrderLine("PS", 2)).
-      line(OrderLine("Beginning Scala", 3))
+    val order = Order().line(OrderLine("PIS", 1)).line(OrderLine("PS", 2)).line(OrderLine("Beginning Scala", 3))
 
     def e1 =
       address.fill("Rose Crescent", 5).form.execute.message must ===("5 != 2")
 
     def e2 =
-      customer.fill(
-        "Eric",
-        customer.address.fill("Rose Crescent", 5)).execute.message must ===("5 != 2")
+      customer.fill("Eric", customer.address.fill("Rose Crescent", 5)).execute.message must ===("5 != 2")
 
     def e3 = initialsTable.form.execute.message must ===("'H.W.' != 'H.Wo.'")
 
     def e4 =
-      order.hasSubset(
-        OrderLine("PIS", 1),
-        OrderLine("PS", 2)
-      ).execute must ===(success)
+      order
+        .hasSubset(
+          OrderLine("PIS", 1),
+          OrderLine("PS", 2)
+        )
+        .execute must ===(success)
 
     def e5 =
-      order.hasSubset(
-        OrderLine("PS", 2),
-        OrderLine("BS", 3)
-      ).execute.isSuccess must beFalse
+      order
+        .hasSubset(
+          OrderLine("PS", 2),
+          OrderLine("BS", 3)
+        )
+        .execute
+        .isSuccess must beFalse
 
-    def e6 = order.hasSubsequence(
+    def e6 = order
+      .hasSubsequence(
         OrderLine("PS", 2),
         OrderLine("Beginning Scala", 3)
-      ).execute must ===(success)
+      )
+      .execute must ===(success)
 
-    def e7 = order.hasSubsequence(
+    def e7 = order
+      .hasSubsequence(
         OrderLine("Beginning Scala", 3),
         OrderLine("PIS", 1),
         OrderLine("PS", 2)
-      ).execute.isSuccess must beFalse
+      )
+      .execute
+      .isSuccess must beFalse
 
-    def e8 = order.hasSet(
+    def e8 = order
+      .hasSet(
         OrderLine("Beginning Scala", 3),
         OrderLine("PS", 2),
         OrderLine("PIS", 1)
-      ).execute.isSuccess must beTrue
+      )
+      .execute
+      .isSuccess must beTrue
 
-    def e9 = order.hasSet(
+    def e9 = order
+      .hasSet(
         OrderLine("Beginning Scala", 3),
         OrderLine("PS", 2)
-      ).execute.isSuccess must beFalse
+      )
+      .execute
+      .isSuccess must beFalse
 
-    def e10 = order.hasSequence(
+    def e10 = order
+      .hasSequence(
         OrderLine("Beginning Scala", 3),
         OrderLine("PIS", 1)
-      ).execute.isSuccess must beFalse
+      )
+      .execute
+      .isSuccess must beFalse
 
-    def e11 = order.hasSequence(
+    def e11 = order
+      .hasSequence(
         OrderLine("Beginning Scala", 3),
         OrderLine("PS", 2)
-      ).execute.isSuccess must beFalse
+      )
+      .execute
+      .isSuccess must beFalse
 
 }

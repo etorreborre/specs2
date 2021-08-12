@@ -24,7 +24,7 @@ class ThrownExpectationsSpec extends Spec with ResultMatchers:
     }
   }
   "If a DataTable fails it must throw a DecoratedResultException containing the table data" >> {
-    execute(body5) must beLike { case DecoratedResult(_, Failure(_,_,_,_)) => ok }
+    execute(body5) must beLike { case DecoratedResult(_, Failure(_, _, _, _)) => ok }
   }
 
   "Results must only be checked once" >> {
@@ -50,8 +50,8 @@ object ThrownExpectationsSpecData:
   }
   def body5 = new MustThrownExpectations with DataTables with Debug {
     "a" | "b" | "c" |>
-    1   ! 1   ! 2   |
-    1   ! 1   ! 3   | { (a, b, c) => (a+b) must beEqualTo(c) }
+      1 ! 1 ! 2 |
+      1 ! 1 ! 3 | { (a, b, c) => (a + b) must beEqualTo(c) }
   }
 
   def body6 = new Body6 {}

@@ -3,7 +3,8 @@ package control
 
 import sys.*
 
-class ExceptionsSpec extends Spec with Exceptions {  def is = s2"""
+class ExceptionsSpec extends Spec with Exceptions {
+  def is = s2"""
 
 The Exceptions trait provides functional ways to catch exceptions and deal with them:
 
@@ -73,10 +74,10 @@ The Exceptions trait provides functional ways to catch exceptions and deal with 
   def trye2 = trye(boom)(_.getMessage) must ===(Left("boom"))
 
   def catchAll1 = catchAll("a")(_.getMessage) must ===(Right("a"))
-  def catchAll2 = catchAll({throw new Error("boom"); "a"})(_.getMessage) must ===(Left("boom"))
+  def catchAll2 = catchAll({ throw new Error("boom"); "a" })(_.getMessage) must ===(Left("boom"))
 
   def catchAllOr1 = catchAllOr("a")(_.getMessage) must ===("a")
-  def catchAllOr2 = catchAllOr({throw new Error("boom"); "a"})(_ => "bang") must ===("bang")
+  def catchAllOr2 = catchAllOr({ throw new Error("boom"); "a" })(_ => "bang") must ===("bang")
 
   def tryCollect1 = tryCollect("a") { case x => x == "a" }
   def tryCollect2 = tryCollectOr("x", 100) { case x => x.toInt } must ===(100)

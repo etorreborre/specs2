@@ -4,7 +4,8 @@ package fp
 import org.specs2.control.*
 import org.specs2.control.producer.*
 
-class ProducerSpec extends Specification { def is = s2"""
+class ProducerSpec extends Specification {
+  def is = s2"""
 
  emitting a large sequence of elements with emitSeq must not stack overflow $stackOverflow
 

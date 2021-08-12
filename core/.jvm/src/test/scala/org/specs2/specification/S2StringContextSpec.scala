@@ -9,7 +9,8 @@ import org.specs2.specification.create.*
 import org.specs2.specification.core.*
 import org.specs2.specification.dsl.FragmentsDsl
 
-class S2StringContextSpec extends Spec { def is = s2"""
+class S2StringContextSpec extends Spec {
+  def is = s2"""
 
  Fragments can be interpolated from a s2 string
   a simple string as Text, aggregating it to the previous Text                    ${exs.e1}
@@ -87,31 +88,26 @@ Intro
       def is = SpecStructure.create(SpecHeader(outer.getClass), Arguments(), Fragments(text("the"), text(" world")))
     }
 
-
   object desc extends MustMatchers with StandardResults with ExpectedResults with S2StringContext:
 
     def e1 =
-      getDescription(
-        s2"""this is
+      getDescription(s2"""this is
            an example $ok""") must ===(Description.text("an example"))
 
     def e2 =
-      getDescription(
-        s2"""
+      getDescription(s2"""
   this is
     a multi-line
     example $ok""") must ===(Description.text("a multi-line\n    example"))
 
     def e3 =
-      getDescription(
-s2"""
+      getDescription(s2"""
   this is
     |a multi-line
     |  margin example $ok""") must ===(Description.text("a multi-line\n      margin example"))
 
     def e4 =
-      getDescription(
-        s2"""this is an auto-example
+      getDescription(s2"""this is an auto-example
              $ok""") must ===(Description.code("ok"))
 
     def getDescription(fs: Fragments): Description =

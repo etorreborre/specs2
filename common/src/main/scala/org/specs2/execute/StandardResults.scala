@@ -1,9 +1,8 @@
 package org.specs2
 package execute
 
-/**
- * This trait provides standard results which can be used in Fragments bodies
- */
+/** This trait provides standard results which can be used in Fragments bodies
+  */
 trait StandardResults:
   def done = Success("DONE")
   def wontdo = Success("WONT DO")
@@ -18,10 +17,10 @@ trait StandardResults:
 
   def pending: Pending = pending("PENDING")
   def pending(message: String): Pending = Pending(message)
-  def pending[R : AsResult](r: =>R): Pending = pending
+  def pending[R: AsResult](r: =>R): Pending = pending
 
   def skipped: Skipped = skipped("skipped")
   def skipped(message: String): Skipped = Skipped(message)
-  def skipped[R : AsResult](r: =>R): Skipped = skipped
+  def skipped[R: AsResult](r: =>R): Skipped = skipped
 
 object StandardResults extends StandardResults

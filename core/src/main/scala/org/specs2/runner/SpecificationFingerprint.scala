@@ -18,4 +18,3 @@ object Fingerprints:
 
     override def isModule = false
   }
-

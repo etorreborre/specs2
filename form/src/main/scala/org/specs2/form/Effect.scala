@@ -7,18 +7,19 @@ import execute.*
 import DecoratedProperties.*
 import StandardResults.*
 
-/**
- * An Effect is a property which is used to display names corresponding to side-effects.
- *
- * If the side effect throws an exception, the Effect will display it alongside to the label. Otherwise only the label
- * is displayed.
- *
- * The apply method can be used to execute the Effect effect and possibly get a value out of it (but usually not displayed):
- *   `Effect(label, 1).apply() must ===(1`)
- *
- * The value is stored in a Property object so it will not be evaluated until explicitly queried.
- */
-case class Effect[T](label: String, value: Property[T], decorator: Decorator = Decorator()) extends Executable with DecoratedProperty[Effect[T]]:
+/** An Effect is a property which is used to display names corresponding to side-effects.
+  *
+  * If the side effect throws an exception, the Effect will display it alongside to the label. Otherwise only the label
+  * is displayed.
+  *
+  * The apply method can be used to execute the Effect effect and possibly get a value out of it (but usually not
+  * displayed): `Effect(label, 1).apply() must ===(1`)
+  *
+  * The value is stored in a Property object so it will not be evaluated until explicitly queried.
+  */
+case class Effect[T](label: String, value: Property[T], decorator: Decorator = Decorator())
+    extends Executable
+    with DecoratedProperty[Effect[T]]:
   /** executing an effect executes the value and returns success unless there is an Error */
   override def execute =
     valueOrResult match
@@ -48,18 +49,14 @@ case class Effect[T](label: String, value: Property[T], decorator: Decorator = D
     case other           => false
 
   override def hashCode = label.hashCode + value.hashCode
-/**
- * Factory methods for creating Effects. Effects values can also be concatenated to produce
- * "summary" effects.
- *
- * val e1 = Effect("hello", print("hello"))
- * val e2 = Effect("world", print("world"))
- * val concatenatedEffects = Effect(e1, e2)
- * concatenatedEffects.toString == hello/world
- *
- * val concatenatedEffect = Effect(", ", e1, e2)
- * concatenatedEffects2.toString == hello, world
- */
+
+/** Factory methods for creating Effects. Effects values can also be concatenated to produce "summary" effects.
+  *
+  * val e1 = Effect("hello", print("hello")) val e2 = Effect("world", print("world")) val concatenatedEffects =
+  * Effect(e1, e2) concatenatedEffects.toString == hello/world
+  *
+  * val concatenatedEffect = Effect(", ", e1, e2) concatenatedEffects2.toString == hello, world
+  */
 case object Effect:
   /** create an Effect from a value */
   def apply[T](value: =>T): Effect[T] = new Effect("", Property(value))

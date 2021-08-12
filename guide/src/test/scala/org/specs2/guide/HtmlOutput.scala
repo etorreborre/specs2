@@ -1,7 +1,8 @@
 package org.specs2
 package guide
 
-object HtmlOutput extends UserGuidePage { def is = s2"""
+object HtmlOutput extends UserGuidePage {
+  def is = s2"""
 
 $specs2 can be used to produce HTML documentation to either:
 
@@ -77,21 +78,21 @@ Custom CSS and JavaScript files can be used without changing the template. In or
 
 ## Create an index
 
-Here is something you can do to automatically create an index page for your specifications: ${snippet{
+Here is something you can do to automatically create an index page for your specifications: ${snippet {
 
-import org.specs2.*
-import specification.core.*
-import runner.SpecificationsFinder.default.*
+    import org.specs2.*
+    import specification.core.*
+    import runner.SpecificationsFinder.default.*
 
-class index extends Specification:
-  def is =
-    examplesLinks("Example specifications")
+    class index extends Specification:
+      def is =
+        examplesLinks("Example specifications")
 
-  // see the SpecificationsFinder trait for the parameters of the 'specifications' method
-  def examplesLinks(t: String) =
-    t.title ^
-    Fragments.foreach(specifications())(s => link(s) ^ br)
-}}
+      // see the SpecificationsFinder trait for the parameters of the 'specifications' method
+      def examplesLinks(t: String) =
+        t.title ^
+          Fragments.foreach(specifications())(s => link(s) ^ br)
+  }}
 
 The specification above creates an index.html file in the `target/specs2-reports` directory. The specifications method creates specifications using the following parameters:
 
@@ -108,7 +109,8 @@ The specification above creates an index.html file in the `target/specs2-reports
  """
 }
 
-class HtmlExampleSpec extends Specification { def is = s2"""
+class HtmlExampleSpec extends Specification {
+  def is = s2"""
 
  This is a specification to check the 'Hello world' string
 

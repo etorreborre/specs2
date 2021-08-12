@@ -1,12 +1,13 @@
 package org.specs2
 package main
 
-class SmartDiffsSpec extends Spec { def is = s2"""
+class SmartDiffsSpec extends Spec {
+  def is = s2"""
 
  The differences between two strings must only be shown if there aren't too many of them
- ${ smart.showDiffs(a_to_z, z_to_a)._1 must not(contain("[")) }
- ${ smart.showDiffs(a_to_z, a_to_z)._1 must not(contain("[")) }
- ${ smart.showDiffs(a_to_j + m_to_z, a_to_z)._1 must contain("[") }
+ ${smart.showDiffs(a_to_z, z_to_a)._1 must not(contain("["))}
+ ${smart.showDiffs(a_to_z, a_to_z)._1 must not(contain("["))}
+ ${smart.showDiffs(a_to_j + m_to_z, a_to_z)._1 must contain("[")}
 
  The difference between two sequences must be show
    with added and missing elements in a set  $set1
@@ -24,7 +25,9 @@ class SmartDiffsSpec extends Spec { def is = s2"""
 
   def map1 =
     val diff = "  x key = 2\n    actual value\n    3\n    expected value\n    4"
-    smart.showMapDiffs(Map(1 -> 2, 2 -> 3, 3 -> 4), Map(1 -> 2, 2 -> 4, 5 -> 6)) must ===(((Seq("3 -> 4")), Seq("5 -> 6"), Seq(diff)))
+    smart.showMapDiffs(Map(1 -> 2, 2 -> 3, 3 -> 4), Map(1 -> 2, 2 -> 4, 5 -> 6)) must ===(
+      ((Seq("3 -> 4")), Seq("5 -> 6"), Seq(diff))
+    )
 
   def null1 =
     List(true, true) must equalTo(List(true, null))

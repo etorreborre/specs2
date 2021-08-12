@@ -19,4 +19,3 @@ package object origami:
 
   /** alias for a Sink with async actions */
   type AsyncSink[A] = Fold[Action, A, Unit]
-

@@ -8,31 +8,33 @@ import org.scalacheck.Prop
 class SeqxSpec extends mutable.Specification with DataTables with ScalaCheckResult:
 
   "updateLast modifies the last element".p
-    eg { Seq(1).updateLast(i => i+1) must ===(Seq(2)) }
-    eg { Seq(1, 2).updateLast(i => i+1) must ===(Seq(1, 3)) }
-    eg { Seq[Int]().updateLast(i => i+1) must ===(Seq[Int]()) }
+  eg { Seq(1).updateLast(i => i + 1) must ===(Seq(2)) }
+  eg { Seq(1, 2).updateLast(i => i + 1) must ===(Seq(1, 3)) }
+  eg { Seq[Int]().updateLast(i => i + 1) must ===(Seq[Int]()) }
 
   "updateLastOr modifies the last element or starts a new sequence".p
-    eg { Seq(1).updateLastOr { case i => i+1 }(0) must ===(Seq(2)) }
-    eg { Seq(1, 2).updateLastOr { case i => i+1 }(0) must ===(Seq(1, 3)) }
-    eg { Seq[Int]().updateLastOr { case i => i+1 }(0) must ===(Seq[Int](0)) }
+  eg { Seq(1).updateLastOr { case i => i + 1 }(0) must ===(Seq(2)) }
+  eg { Seq(1, 2).updateLastOr { case i => i + 1 }(0) must ===(Seq(1, 3)) }
+  eg { Seq[Int]().updateLastOr { case i => i + 1 }(0) must ===(Seq[Int](0)) }
 
   "delta removes elements, leaving duplicates, and using a custom comparison function".p
-    "for example, comparing only the second element of a pair" >> {
-      val compare = (p: (Int, String), o: String) => p._2 == o
-      Seq((1, "a"), (2, "b"), (3, "c"), (4, "b"), (5, "e")).delta(Seq("c", "b", "a"), compare) must ===(Seq((4, "b"), (5, "e")))
-    }
+  "for example, comparing only the second element of a pair" >> {
+    val compare = (p: (Int, String), o: String) => p._2 == o
+    Seq((1, "a"), (2, "b"), (3, "c"), (4, "b"), (5, "e")).delta(Seq("c", "b", "a"), compare) must ===(
+      Seq((4, "b"), (5, "e"))
+    )
+  }
 
   "A removeFirst function should" >> {
     "remove the first element satisfying a predicate" >> {
 
-      "Seq"           | "Element to remove"  | "Result"        |>
-      (Nil:Seq[Int])  ! 2                    ! (Nil:Seq[Int])  |
-       Seq(2, 3, 4)   ! 2                    ! Seq(3, 4)       |
-       Seq(1, 2, 2)   ! 2                    ! Seq(1, 2)       |
-       Seq(1, 2, 3)   ! 2                    ! Seq(1, 3)       | { (l, a, r) =>
-        l.removeFirst(_ == a) must ===(r)
-      }
+      "Seq" | "Element to remove" | "Result" |>
+        (Nil: Seq[Int]) ! 2 ! (Nil: Seq[Int]) |
+        Seq(2, 3, 4) ! 2 ! Seq(3, 4) |
+        Seq(1, 2, 2) ! 2 ! Seq(1, 2) |
+        Seq(1, 2, 3) ! 2 ! Seq(1, 3) | { (l, a, r) =>
+          l.removeFirst(_ == a) must ===(r)
+        }
     }
     "this should work for any Seq and any element" in Prop.forAll { (l: List[Int], a: Int) =>
       val removed = l `removeFirst` (_ == a)
@@ -49,7 +51,6 @@ class SeqxSpec extends mutable.Specification with DataTables with ScalaCheckResu
     Seq(A(i = 1), A(i = 2)).difference(Seq(A(i = 2, j = 2)), equality) === Seq(A(i = 1))
   }
 
-
 import org.scalacheck.*
 import Test.*
 import execute.*
@@ -59,7 +60,11 @@ trait ScalaCheckResult:
   given AsResult[Prop] with
     def asResult(prop: =>Prop) =
       Test.check(Parameters.default, prop).status match
-        case `Passed` | Proved(_)           => Success()
-        case Failed(args, labels)           => Failure("Property failed with args: "+args.mkString(", ")+" and labels "+labels.mkString(", "))
-        case PropException(args, e, labels) => Error(e).setMessage("Property failed with args: "+args.mkString(", ")+" and labels "+labels.mkString(", "))
-        case `Exhausted`                    => Error("exhausted")
+        case `Passed` | Proved(_) => Success()
+        case Failed(args, labels) =>
+          Failure("Property failed with args: " + args.mkString(", ") + " and labels " + labels.mkString(", "))
+        case PropException(args, e, labels) =>
+          Error(e).setMessage(
+            "Property failed with args: " + args.mkString(", ") + " and labels " + labels.mkString(", ")
+          )
+        case `Exhausted` => Error("exhausted")

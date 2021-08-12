@@ -4,14 +4,12 @@ package control
 import io.ConsoleOutput
 import scala.util.NotGiven
 
-/**
- * This trait provides simple a way to print out any object to the console:
- *
- *  "this string".pp must ===("this string")
- *
- *  will print 'this string' and pass it to the rest of the expectation
- *
- */
+/** This trait provides simple a way to print out any object to the console:
+  *
+  * "this string".pp must ===("this string")
+  *
+  * will print 'this string' and pass it to the rest of the expectation
+  */
 trait Debug extends ImplicitParameters:
 
   given DebugConsoleOutput: ConsoleOutput = ConsoleOutput
@@ -42,12 +40,11 @@ trait Debug extends ImplicitParameters:
     /** print the object to the console with a small message before */
     def pp(pre: String): T =
       lazy val value = t
-      output.println(pre+" "+value)
+      output.println(pre + " " + value)
       value
 
-/**
- * Use this trait to disable the `pp` method on objects
- */
+/** Use this trait to disable the `pp` method on objects
+  */
 trait NoDebug extends Debug:
   given NoDebug = ???
 

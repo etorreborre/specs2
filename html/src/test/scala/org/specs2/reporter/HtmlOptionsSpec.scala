@@ -1,7 +1,8 @@
 package org.specs2
 package reporter
 
-class HtmlOptionsSpec extends Specification { def is = s2"""
+class HtmlOptionsSpec extends Specification {
+  def is = s2"""
 
  The html options can be passed to the html template for rendering
 
@@ -11,17 +12,17 @@ class HtmlOptionsSpec extends Specification { def is = s2"""
 
   def boolean =
     (options.templateVariables must haveKey("nostats")) and
-    (options.templateVariables must not(haveKey("search")))
+      (options.templateVariables must not(haveKey("search")))
 
   def options = HtmlOptions(
-      outDir = HtmlOptions.outDir
-    , baseDir = HtmlOptions.baseDir
-    , template = HtmlOptions.outDir.toFilePath
-    , variables = Map()
-    , noStats = true
-    , search = false
-    , toc = false
-    , tocEntryMaxSize    = 18
-    , warnMissingSeeRefs = true
+    outDir = HtmlOptions.outDir,
+    baseDir = HtmlOptions.baseDir,
+    template = HtmlOptions.outDir.toFilePath,
+    variables = Map(),
+    noStats = true,
+    search = false,
+    toc = false,
+    tocEntryMaxSize = 18,
+    warnMissingSeeRefs = true
   )
 }

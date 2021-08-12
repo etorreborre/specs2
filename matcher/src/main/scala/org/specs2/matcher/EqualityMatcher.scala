@@ -5,7 +5,7 @@ import org.specs2.matcher.describe.*
 import org.specs2.text.NotNullStrings.*
 import Result.*
 
-class EqualityMatcher[T : Diffable](t: =>T) extends AdaptableMatcher[T]:
+class EqualityMatcher[T: Diffable](t: =>T) extends AdaptableMatcher[T]:
   outer =>
 
   protected val ko: String => String = identity
@@ -26,7 +26,7 @@ class EqualityMatcher[T : Diffable](t: =>T) extends AdaptableMatcher[T]:
     val universalMessage = universalDiff.render
     val specificMessage = specificDiff.render
     val message =
-          universalDiff.render + (if universalMessage != specificMessage then "\n"+specificDiff.render else "")
+      universalDiff.render + (if universalMessage != specificMessage then "\n" + specificDiff.render else "")
 
     val failureMessage = ko(b.describe(message))
     result(specificDiff.identical, failureMessage, expected.notNull, actual.notNull)

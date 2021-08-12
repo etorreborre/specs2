@@ -3,7 +3,8 @@ package guide
 
 import org.specs2.execute.{Success, ResultExecution, AsResult}
 
-object IoIntegration extends UserGuidePage { def is = "IO Integration".title ^ s2"""
+object IoIntegration extends UserGuidePage {
+  def is = "IO Integration".title ^ s2"""
 
 Any IO-like data type which can be executed as a `Future` can be integrated in specifications.
 Here is such a data type:

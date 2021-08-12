@@ -32,20 +32,29 @@ object depends {
 
   val Scala213 = "2.13.6"
 
-  val isScala3 = Def.setting(CrossVersion.partialVersion(scalaVersion.value).exists(_._1 ==3))
+  val isScala3 = Def.setting(CrossVersion.partialVersion(scalaVersion.value).exists(_._1 == 3))
 
   def sharedTest =
-    Seq(libraryDependencies ++= Seq(
-      "org.scala-lang" % "scala-reflect" % (if (isScala3.value) Scala213 else scalaVersion.value) % Provided))
+    Seq(
+      libraryDependencies ++= Seq(
+        "org.scala-lang" % "scala-reflect" % (if (isScala3.value) Scala213 else scalaVersion.value) % Provided
+      )
+    )
 
   def jvmTest =
-    Seq(libraryDependencies ++= Seq(
-      ("org.portable-scala" %%% "portable-scala-reflect" % "1.1.1").cross(CrossVersion.for3Use2_13),
-      "org.scala-sbt" % "test-interface" % "1.0"))
+    Seq(
+      libraryDependencies ++= Seq(
+        ("org.portable-scala" %%% "portable-scala-reflect" % "1.1.1").cross(CrossVersion.for3Use2_13),
+        "org.scala-sbt" % "test-interface" % "1.0"
+      )
+    )
 
   def jsTest =
-    Seq(libraryDependencies ++=
-      Seq(
-        ("org.portable-scala" %%% "portable-scala-reflect" % "1.1.1").cross(CrossVersion.for3Use2_13),
-        ("org.scala-js" %% "scalajs-test-interface" % scalaJSVersion).cross(CrossVersion.for3Use2_13)))
+    Seq(
+      libraryDependencies ++=
+        Seq(
+          ("org.portable-scala" %%% "portable-scala-reflect" % "1.1.1").cross(CrossVersion.for3Use2_13),
+          ("org.scala-js" %% "scalajs-test-interface" % scalaJSVersion).cross(CrossVersion.for3Use2_13)
+        )
+    )
 }

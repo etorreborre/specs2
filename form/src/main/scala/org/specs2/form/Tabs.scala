@@ -7,10 +7,10 @@ import execute.*
 import StandardResults.*
 import ResultLogicalCombinators.*
 
-/**
- * This class allows the creation of tabs to embed several forms at once on a limited html space
- * @see org.specs2.examples.FormSpec
- */
+/** This class allows the creation of tabs to embed several forms at once on a limited html space
+  * @see
+  *   org.specs2.examples.FormSpec
+  */
 case class Tabs(tabs: Seq[Tab] = Vector(), result: Option[Result] = None) extends Cell:
   def tab(t: String, form: Form) = Tabs(tabs :+ Tab(t, form))
   def tabs(ts: Tabs): Tabs = Tabs(tabs ++ ts.tabs)
@@ -23,11 +23,10 @@ case class Tabs(tabs: Seq[Tab] = Vector(), result: Option[Result] = None) extend
 
   def xml(using args: Arguments) = <td class="info"><div class="tabber">{tabs.map(_.xml).reduceNodes}</div></td>
 
-  def executeTabs = tabs.foldLeft(success: Result){ (res, cur) => res and cur.execute }
+  def executeTabs = tabs.foldLeft(success: Result) { (res, cur) => res and cur.execute }
 
-/**
- * Class representing an individual tab
- */
+/** Class representing an individual tab
+  */
 case class Tab(title: String, form: Form, result: Option[Result] = None) extends Cell {
   def setResult(r: Result) = copy(result = Some(r))
   def execute = result.getOrElse(form.execute)

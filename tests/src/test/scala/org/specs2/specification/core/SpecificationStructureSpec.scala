@@ -13,7 +13,8 @@ import fp.syntax.*
 import matcher.*
 import OperationMatchers.*
 
-class SpecificationStructureSpec(val env: Env) extends Specification with ScalaCheck with OwnEnv { def is = s2"""
+class SpecificationStructureSpec(val env: Env) extends Specification with ScalaCheck with OwnEnv {
+  def is = s2"""
 
  There can be links between specifications and it is possible to sort all the dependent specifications
  so that
@@ -39,27 +40,36 @@ class SpecificationStructureSpec(val env: Env) extends Specification with ScalaC
   }.set(maxSize = 5)
 
   def linksOrder = prop { (links: List[Fragment]) =>
-    val specification = new SpecificationStructure { def is = SpecStructure.create(SpecHeader.create(getClass), Fragments(links*)) }
+    val specification = new SpecificationStructure {
+      def is = SpecStructure.create(SpecHeader.create(getClass), Fragments(links*))
+    }
     val linked = SpecificationStructure.linkedSpecifications(specification, env, getClass.getClassLoader).runMonoid
     val sorted = SpecificationStructure.topologicalSort(env)(linked).get.map(_.structure)
 
-    sorted.dropRight(1).map(_.specClassName) must ===(specification.structure.linkReferencesList.map(_.specClassName).distinct)
+    sorted.dropRight(1).map(_.specClassName) must ===(
+      specification.structure.linkReferencesList.map(_.specClassName).distinct
+    )
 
   }.setArbitrary(ArbitraryLinks).set(maxSize = 5)
 
   def report =
-    SpecificationStructure.create("org.specs2.specification.core.BrokenSpecification").runOperation must beLeft((t: Throwable) =>
-       t.getCause.getCause.getMessage === "boom")
+    SpecificationStructure.create("org.specs2.specification.core.BrokenSpecification").runOperation must beLeft(
+      (t: Throwable) => t.getCause.getCause.getMessage === "boom"
+    )
 
   def companion =
-    SpecificationStructure.create("org.specs2.specification.core.SpecWithCompanion", getClass.getClassLoader, None).
+    SpecificationStructure
+      .create("org.specs2.specification.core.SpecWithCompanion", getClass.getClassLoader, None)
+      .
       // the cast is necessary to really show that the right instance has been built
       // see #477
       map(_.asInstanceOf[SpecificationStructure]) must
       beOk
 
   def companionSpec =
-    SpecificationStructure.create("org.specs2.specification.core.SpecObject", getClass.getClassLoader, None).
+    SpecificationStructure
+      .create("org.specs2.specification.core.SpecObject", getClass.getClassLoader, None)
+      .
       // the cast is necessary to really show that the right instance has been built
       // see #477
       map(_.asInstanceOf[SpecificationStructure]) must
@@ -97,7 +107,8 @@ object SS3 extends Specification { def is = "" }
 object SS4 extends Specification { def is = "" }
 object SS5 extends Specification { def is = "" }
 
-class BrokenSpecification extends Specification { def is = s2"""
+class BrokenSpecification extends Specification {
+  def is = s2"""
   test$ok
 """
 

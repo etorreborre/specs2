@@ -4,9 +4,8 @@ package control
 import io.*
 import fp.*, syntax.*
 
-/**
- * specs2 logger support
- */
+/** specs2 logger support
+  */
 trait Logger:
   def warn(message: String, doIt: Boolean = true): Operation[Unit]
   def info(message: String, doIt: Boolean = true): Operation[Unit]
@@ -16,23 +15,21 @@ trait Logger:
   def warnAndFail[A](warnMessage: String, failureMessage: String, doIt: Boolean = true): Operation[A] =
     warn(warnMessage, doIt) >> Operation.fail[A](failureMessage)
 
-/**
- * Logger implementation directing messages to the console
- */
+/** Logger implementation directing messages to the console
+  */
 case class ConsoleLogger() extends Logger:
 
   def exception(t: Throwable, verbose: Boolean = false): Operation[Unit] =
-    Operation.delayed(println("[ERROR] "+t.getMessage)) >>
-    (if verbose then Operation.delayed(t.printStackTrace) else Operation.unit)
+    Operation.delayed(println("[ERROR] " + t.getMessage)) >>
+      (if verbose then Operation.delayed(t.printStackTrace) else Operation.unit)
 
   def warn(message: String, doIt: Boolean = true): Operation[Unit] =
-    if doIt then Operation.delayed((println("[WARN] "+message)))
+    if doIt then Operation.delayed((println("[WARN] " + message)))
     else Operation.unit
 
   def info(message: String, doIt: Boolean = true): Operation[Unit] =
-    if doIt then Operation.delayed((println("[INFO] "+message)))
+    if doIt then Operation.delayed((println("[INFO] " + message)))
     else Operation.unit
-
 
 object NoLogger extends Logger:
   def warn(message: String, doIt: Boolean = true): Operation[Unit] = Operation.unit

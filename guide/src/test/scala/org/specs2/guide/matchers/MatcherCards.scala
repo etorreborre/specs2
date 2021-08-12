@@ -15,5 +15,6 @@ object MatcherCards extends Cards {
     FutureMatchers,
     ExceptionMatchers,
     MapMatchers,
-    AnyMatchers)
+    AnyMatchers
+  )
 }

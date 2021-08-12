@@ -9,31 +9,30 @@ import control.*
 import org.specs2.concurrent.ExecutionEnv
 import origami.*, Folds.*
 
-/**
- * Fold functions to create index files
- */
+/** Fold functions to create index files
+  */
 object Indexing:
 
   given ExecutionEnv =
     ExecutionEnv.fromGlobalExecutionContext
 
-  /**
-   * An Index fold creates an Index page based on all pages to index and
-   * saves it to a given file path
-   */
+  /** An Index fold creates an Index page based on all pages to index and saves it to a given file path
+    */
   def indexFold(path: FilePath): Fold[Operation, IndexedPage, Index] =
     fromMonoidMap[Operation, IndexedPage, Index](Index.createIndex).mapFlatten((index: Index) =>
-      FileSystem(ConsoleLogger()).writeFile(path, Index.toJson(index)).as(index))
+      FileSystem(ConsoleLogger()).writeFile(path, Index.toJson(index)).as(index)
+    )
 
   def createIndexedPages(env: Env, specifications: List[SpecStructure], outDir: DirectoryPath): List[IndexedPage] =
     specifications.map(createIndexedPage(env, outDir))
 
   def createIndexedPage(env: Env, outDir: DirectoryPath) = (spec: SpecStructure) => {
     IndexedPage(
-      path     = SpecHtmlPage.outputPath(outDir, spec).relativeTo(outDir),
-      title    = spec.header.showWords,
+      path = SpecHtmlPage.outputPath(outDir, spec).relativeTo(outDir),
+      title = spec.header.showWords,
       contents = spec.textsList.foldLeft(new StringBuilder)((res, cur) => res.append(cur.description.show)).toString,
-      tags     = spec.tagsList.flatMap(_.names).map(sanitize).toIndexedSeq)
+      tags = spec.tagsList.flatMap(_.names).map(sanitize).toIndexedSeq
+    )
   }
 
   def createEntries(page: IndexedPage): Vector[IndexEntry] =
@@ -62,16 +61,20 @@ object Index:
     index.entries.map(page)
 
   def page(entry: IndexEntry): String =
-    s"""{"title":"${entry.title}", "text":"${sanitizeEntry(entry)}", "tags":${entry.tags.mkString("\""," ", "\"")}, "loc":"${entry.path.path}"}"""
+    s"""{"title":"${entry.title}", "text":"${sanitizeEntry(entry)}", "tags":${entry.tags.mkString(
+      "\"",
+      " ",
+      "\""
+    )}, "loc":"${entry.path.path}"}"""
 
-  /**
-   * the text that is used for indexing must be sanitized:
-   * - no newlines
-   * - ^ (because tipue search doesn't like it)
-   * - no markdown characters
-   */
+  /** the text that is used for indexing must be sanitized:
+    *   - no newlines
+    *   - ^ (because tipue search doesn't like it)
+    *   - no markdown characters
+    */
   def sanitizeEntry(entry: IndexEntry): String =
-    entry.text.replace("\"", "\\\"")
+    entry.text
+      .replace("\"", "\\\"")
       .replace("\n", "")
       .replace("^", "")
       .replace("#####", "")

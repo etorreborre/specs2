@@ -6,7 +6,8 @@ import specification.core.{Env, OwnEnv, OwnExecutionEnv}
 import io.*
 import control.*
 
-object Environment extends UserGuidePage { def is = "Environment".title ^ s2"""
+object Environment extends UserGuidePage {
+  def is = "Environment".title ^ s2"""
 
 The execution of a Specification depends on various parts, among which:
 
@@ -31,33 +32,36 @@ The following objects can be injected in your specification if you declare a 1-p
   - the `ExecutionEnv` object (can be implicit)
   - the `ExecutionContext` object (can be implicit)
 
-<p/>For example: ${snippet{
-class MySpec(env: Env) extends Specification { def is = s2"""
+<p/>For example: ${snippet {
+    class MySpec(env: Env) extends Specification {
+      def is = s2"""
   Use the environment fileSystem
   ${ env.fileSystem.mkdirs("tmp" / "test").runOption; ok }
 """
-}
-}}
+    }
+  }}
 
-Or if you want to access an `ExecutionContext`:${snippet{
-class MySpec(using ec: ExecutionContext) extends Specification { def is = s2"""
+Or if you want to access an `ExecutionContext`:${snippet {
+    class MySpec(using ec: ExecutionContext) extends Specification {
+      def is = s2"""
   Use a future
-  ${ Await.result(Future(1), 1.seconds) must ===(1) })
+  ${Await.result(Future(1), 1.seconds) must ===(1)})
 """
-  }
-}}
+    }
+  }}
 
 ### Own Env / ExecutionEnvironment
 
 The `ExecutionEnv` which is injected in a specification will be shared with all specifications. If you want to provide
 some isolation between your specifications and get a specific thread pool being dedicated to your specification you use
-the `org.specs2.specification.core.OwnEnv` or `org.specs2.specification.core.OwnExecutionEnv` traits:${snippet{
-class MySpec(val env: Env) extends Specification with OwnExecutionEnv { def is = s2"""
+the `org.specs2.specification.core.OwnEnv` or `org.specs2.specification.core.OwnExecutionEnv` traits:${snippet {
+    class MySpec(val env: Env) extends Specification with OwnExecutionEnv {
+      def is = s2"""
   Use a future
-  ${ Await.result(Future(1), 1.seconds) must ===(1) })
+  ${Await.result(Future(1), 1.seconds) must ===(1)})
 """
-  }
-}}
+    }
+  }}
 
 You need to inject a public `env` which will be duplicated to create an implicit `ExecutionEnv` for the sole use of your
 specification (and shutdown when your specification has been executed). Doing so ensures that command line arguments

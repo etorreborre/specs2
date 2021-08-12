@@ -8,7 +8,8 @@ import org.specs2.specification.core.{Env, OwnEnv, SpecStructure}
 import org.specs2.specification.process.DefaultExecutor
 import ActionMatchers.*
 
-class FormsFragmentsSpec(val env: Env) extends Specification with Forms with ThrownExpectations with OwnEnv { def is = s2"""
+class FormsFragmentsSpec(val env: Env) extends Specification with Forms with ThrownExpectations with OwnEnv {
+  def is = s2"""
 
  A form can be added as a Fragment in a specification
    creating a new Text Fragment                                                      ${frags.e1_1}
@@ -45,18 +46,17 @@ class FormsFragmentsSpec(val env: Env) extends Specification with Forms with Thr
     trait Customer:
       val name: String
       val age: Int
-      def form = Form("Customer").
-        tr(prop("name", "eric")(name), prop("age", 20)(age))
+      def form = Form("Customer").tr(prop("name", "eric")(name), prop("age", 20)(age))
 
     val eric = new Customer { val name = "eric"; val age = 20 }
 
     val formText =
-     "| Customer             |\n"+
-     "| name: eric | age: 20 |"
+      "| Customer             |\n" +
+        "| name: eric | age: 20 |"
 
     def form = eric.form
 
-    def failedForm =  new Customer {
+    def failedForm = new Customer {
       val name = "eric"
       val age = 18
     }.form

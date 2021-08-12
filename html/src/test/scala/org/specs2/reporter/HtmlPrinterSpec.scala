@@ -9,7 +9,8 @@ import specification.core.{OwnEnv, Env, SpecificationStructure}
 import matcher.*
 import control.*
 
-class HtmlPrinterSpec(val env: Env) extends Specification with ActionMatchers with ThrownExpectations with OwnEnv { def is = sequential ^ s2"""
+class HtmlPrinterSpec(val env: Env) extends Specification with ActionMatchers with ThrownExpectations with OwnEnv {
+  def is = sequential ^ s2"""
 
  The Html printer outputs html files for a specification and its linked specification
 
@@ -19,7 +20,7 @@ class HtmlPrinterSpec(val env: Env) extends Specification with ActionMatchers wi
 """
 
   def index =
-    val spec = new Specification { def is = s2""" one example $ok """}
+    val spec = new Specification { def is = s2""" one example $ok """ }
     val env1 = env.setArguments(searchArguments)
 
     printer(env1).getHtmlOptions(env1.arguments).map(_.search).runOption must beSome(true)
@@ -27,9 +28,8 @@ class HtmlPrinterSpec(val env: Env) extends Specification with ActionMatchers wi
     finalize(env1, spec) must beOk
     FilePathReader.exists(outDir / "javascript" / "tipuesearch" | "tipuesearch_contents.js").runOption must beSome(true)
 
-
   def searchPage =
-    val spec = new Specification { def is = s2""" one example $ok """}
+    val spec = new Specification { def is = s2""" one example $ok """ }
     val env1 = env.setArguments(searchArguments)
 
     finalize(env1, spec) must beOk
@@ -39,10 +39,9 @@ class HtmlPrinterSpec(val env: Env) extends Specification with ActionMatchers wi
     val htmlPrinter = printer(env)
     for
       options <- htmlPrinter.getHtmlOptions(env.arguments).toAction
-      _       <- htmlPrinter.copyResources(env, options).toAction
-      _       <- htmlPrinter.finalize(List(spec.structure))
+      _ <- htmlPrinter.copyResources(env, options).toAction
+      _ <- htmlPrinter.finalize(List(spec.structure))
     yield ()
-
 
   def printer(env: Env) = HtmlPrinter(env, SearchPage())
 

@@ -4,10 +4,9 @@ import FileName.ToFileName
 
 class DirectoryPathSpec:
 
- val description: String =
-   """
+  val description: String =
+    """
      examples of paths which should be accepted at compile time
    """
 
- val fileName1: FileName = "fileName1"
-
+  val fileName1: FileName = "fileName1"

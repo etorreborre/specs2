@@ -4,7 +4,8 @@ package mutable
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class FutureExpectationsImmutableSpec extends org.specs2.Specification { def is = s2"""
+class FutureExpectationsImmutableSpec extends org.specs2.Specification {
+  def is = s2"""
 
  A specification can return future results
    For example here $example1

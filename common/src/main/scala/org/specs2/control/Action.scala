@@ -9,19 +9,15 @@ import scala.util.control.NonFatal
 import scala.util.*
 import execute.*
 
-/**
- * Asynchronous action with:
- *
- * - an optional list of "finalization" actions to be executed when this action is done
- *   whether it has timed-out or thrown an exception. This allows resources to be safely disposed of
- *
- */
+/** Asynchronous action with:
+  *
+  *   - an optional list of "finalization" actions to be executed when this action is done whether it has timed-out or
+  *     thrown an exception. This allows resources to be safely disposed of
+  */
 case class Action[A](private[control] runNow: ExecutionEnv => Future[A], last: Vector[Finalizer] = Vector.empty):
 
   def map[B](f: A => B): Action[B] =
-    Action[B](
-      runNow = ee => this.runNow(ee).map(f)(using ee.executionContext),
-      last = last)
+    Action[B](runNow = ee => this.runNow(ee).map(f)(using ee.executionContext), last = last)
 
   def flatMap[B](f: A => Action[B]): Action[B] =
     var otherTimeout: Option[FiniteDuration] = None
@@ -34,8 +30,10 @@ case class Action[A](private[control] runNow: ExecutionEnv => Future[A], last: V
           val otherAction = f(a)
           otherLast = otherAction.last
           otherAction.runNow(ee)
-        }},
-      last = last ++ otherLast)
+        }
+      },
+      last = last ++ otherLast
+    )
 
   /** add a finalizer */
   def addLast(finalizer: Finalizer): Action[A] =
@@ -52,7 +50,7 @@ case class Action[A](private[control] runNow: ExecutionEnv => Future[A], last: V
   /** run another action if this one fails */
   def orElse(other: Action[A]): Action[A] =
     attempt.flatMap {
-      case Left(_) => other.copy(last = other.last ++ this.last)
+      case Left(_)  => other.copy(last = other.last ++ this.last)
       case Right(a) => Action.pure(a).copy(last = last)
     }
 
@@ -60,17 +58,13 @@ case class Action[A](private[control] runNow: ExecutionEnv => Future[A], last: V
   def |||(other: Action[A]): Action[A] =
     orElse(other)
 
-  /**
-   * run as a Future and raise a timeout exception if necessary
-   * NOTE: this does not execute the finalizers!!!
-   */
+  /** run as a Future and raise a timeout exception if necessary NOTE: this does not execute the finalizers!!!
+    */
   def runFuture(ee: ExecutionEnv, timeout: Option[FiniteDuration] = None): Future[A] =
     runActionToFuture(runNow, timeout, ee)
 
-  /**
-   * Run the action and return an exception if it fails
-   * Whatever happens run the finalizers
-   */
+  /** Run the action and return an exception if it fails Whatever happens run the finalizers
+    */
   def runAction(ee: ExecutionEnv, timeout: Option[FiniteDuration] = None): Throwable `Either` A =
     awaitAction(runNow, timeout, Finalizer.runFinalizers(last), ee)
 
@@ -94,7 +88,6 @@ case class Action[A](private[control] runNow: ExecutionEnv => Future[A], last: V
   def run(ee: ExecutionEnv): A =
     unsafeRunAction(ee)
 
-
 object Action:
 
   def pure[A](a: =>A): Action[A] =
@@ -111,10 +104,10 @@ object Action:
 
   def either[A](ta: =>Throwable `Either` A): Action[A] =
     try
-        ta match {
-          case Left(t) => Action.exception(t)
-          case Right(a) => Action.pure(a)
-        }
+      ta match {
+        case Left(t)  => Action.exception(t)
+        case Right(a) => Action.pure(a)
+      }
     catch {
       case NonFatal(t) => Action.exception(t)
     }
@@ -128,7 +121,7 @@ object Action:
   def checkThat[A](a: =>A, condition: Boolean, failureMessage: String): Action[A] =
     pure(a).flatMap { value =>
       if condition then pure(value)
-      else           fail(failureMessage)
+      else fail(failureMessage)
     }
 
   given ActionMonad: Monad[Action[*]] with
@@ -163,13 +156,13 @@ object Action:
   given NaturalTransformation[Id, Action] =
     NaturalTransformation.naturalId[Action]
 
-  given FinalizedAction: Safe[Action]with
+  given FinalizedAction: Safe[Action] with
     def finalizeWith[A](fa: Action[A], f: Finalizer): Action[A] =
       fa.addLast(f)
 
     def attempt[A](action: Action[A]): Action[Throwable `Either` A] =
       action.attempt
 
-  given actionAsResult[T : AsResult]: AsResult[Action[T]] with
+  given actionAsResult[T: AsResult]: AsResult[Action[T]] with
     def asResult(action: =>Action[T]): Result =
-      action.runAction(ExecutionEnv.fromGlobalExecutionContext).fold(err => Error(err),  ok => AsResult(ok))
+      action.runAction(ExecutionEnv.fromGlobalExecutionContext).fold(err => Error(err), ok => AsResult(ok))

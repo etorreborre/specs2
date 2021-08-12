@@ -3,7 +3,8 @@ package guide
 
 import main.*
 
-object ConsoleOutput extends UserGuidePage { def is = "Console output".title ^ s2"""
+object ConsoleOutput extends UserGuidePage {
+  def is = "Console output".title ^ s2"""
 
 You will get a "console" output whenever you run a specification from ${"sbt" ~/ Runners} or a ${"shell session" ~/ RunInShell}.
 There are arguments you can use to change the output:
@@ -77,7 +78,9 @@ sbt> testOnly -- smartdiffs true,[],20,5,30,false,0,1000000
  `seqMaxSize`       | the maximum size to compute differences on Seq, Set and Maps (default = 1000000)
 
 
-You can also specify your own enhanced algorithm for displaying the difference by providing an instance of the `${fullName[Diffs]}` trait:
+You can also specify your own enhanced algorithm for displaying the difference by providing an instance of the `${fullName[
+    Diffs
+  ]}` trait:
 ```
 trait Diffs {
   /** @return true if the differences must be shown */

@@ -5,14 +5,12 @@ import org.specs2.runner.*
 import org.specs2.fp.syntax.*
 import org.specs2.specification.core.*
 
-/**
- * Run a specification from the command-line with specs2.run <specification name> <arguments>
- */
+/** Run a specification from the command-line with specs2.run <specification name> <arguments>
+  */
 object run extends ClassRunnerMain:
 
-  /**
-   * Run one or more specifications with `specs2.run(spec1, spec2)` from a terminal
-   */
+  /** Run one or more specifications with `specs2.run(spec1, spec2)` from a terminal
+    */
   def apply(specifications: SpecificationStructure*)(using arguments: Arguments = Arguments()) =
     val env = EnvDefault.create(arguments)
 

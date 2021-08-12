@@ -3,9 +3,8 @@ package examples
 import org.specs2.*
 import org.specs2.main.*
 
-/**
- * This specification shows how to create examples using the "acceptance" style
- */
+/** This specification shows how to create examples using the "acceptance" style
+  */
 class HelloWorldSpec extends Specification:
   def is = s2"""
 
@@ -16,7 +15,6 @@ class HelloWorldSpec extends Specification:
    start with 'Hello' $e2
    end with 'world' $e3
 """
-
 
   def e1 = "Hello world" must haveSize(11)
   def e2 = "Hello world" must startWith("Hello")

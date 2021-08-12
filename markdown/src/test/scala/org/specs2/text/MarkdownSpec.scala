@@ -7,32 +7,29 @@ import org.specs2.mutable.*
 class MarkdownSpec extends Spec:
   given Arguments = Arguments()
 
-  "emphasized text" >>
-  { toHtmlNoPar("_hello_") must ===("<em>hello</em>") }
+  "emphasized text" >> { toHtmlNoPar("_hello_") must ===("<em>hello</em>") }
 
-  "mold-italics text" >>
-  { toHtmlNoPar("***hello***") must ===("<strong><em>hello</em></strong>") }
+  "mold-italics text" >> { toHtmlNoPar("***hello***") must ===("<strong><em>hello</em></strong>") }
 
-  "multi-line text must preserve newlines" >>
-  { toHtmlNoPar("hello\nworld") must contain("hello<br />\nworld") }
+  "multi-line text must preserve newlines" >> { toHtmlNoPar("hello\nworld") must contain("hello<br />\nworld") }
 
-  "title and line break" >>
-  { toXhtml("### Title\nline1\n\nline2").toString must not(contain("### Title")) }
+  "title and line break" >> { toXhtml("### Title\nline1\n\nline2").toString must not(contain("### Title")) }
 
-  "embedded code" >>
-  { toHtmlNoPar(someCode) must contain("""<code class="prettyprint">""") }
+  "embedded code" >> { toHtmlNoPar(someCode) must contain("""<code class="prettyprint">""") }
 
-  "code with newlines must be enclosed in one code tag only" >>
-  { toHtmlNoPar(someCode).split(" ").filter(_.trim.contains("</code>")) must haveSize(1) }
+  "code with newlines must be enclosed in one code tag only" >> {
+    toHtmlNoPar(someCode).split(" ").filter(_.trim.contains("</code>")) must haveSize(1)
+  }
 
-  "inlined code must not have <pre> tags" >>
-  { toHtmlNoPar("this is some `inlined` code") must contain("""this is some <code class="prettyprint">inlined</code> code""") }
+  "inlined code must not have <pre> tags" >> {
+    toHtmlNoPar("this is some `inlined` code") must contain(
+      """this is some <code class="prettyprint">inlined</code> code"""
+    )
+  }
 
-  "the encoding must be ok with utf-8 characters" >>
-  { toXhtml("⊛").toString must contain("⊛") }
+  "the encoding must be ok with utf-8 characters" >> { toXhtml("⊛").toString must contain("⊛") }
 
-  "the encoding must be ok with utf-8 characters" >>
-  { toXhtml("⊛").toString must contain("⊛") }
+  "the encoding must be ok with utf-8 characters" >> { toXhtml("⊛").toString must contain("⊛") }
 
   "a markdown table must be rendered as a html table" >> {
     val table = """| | Title1 | Title2 |

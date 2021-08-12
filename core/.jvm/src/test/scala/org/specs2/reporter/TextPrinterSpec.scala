@@ -17,7 +17,8 @@ import process.{Stats, DefaultExecutor, StatisticsRepositoryCreation}
 import io.StringOutput
 import text.AnsiColors
 
-class TextPrinterSpec(val env: Env) extends Specification with OwnEnv { def is = s2"""
+class TextPrinterSpec(val env: Env) extends Specification with OwnEnv {
+  def is = s2"""
 
  The results of a specification can be printed as lines
 
@@ -93,7 +94,7 @@ class TextPrinterSpec(val env: Env) extends Specification with OwnEnv { def is =
 
   def a2 =
     showOnly(Report.allFlags.filterNot(_ == '#')) ^ "title".title ^ "" `doesntContain`
-    """|[info] title"""
+      """|[info] title"""
 
   def a3 = "title".title ^ s2"""
 presentation
@@ -126,8 +127,8 @@ presentation
   def b5 = s2"""e1 ${pending("for now")}""" `contains` """[info] * e1"""
 
   def b6 = "t".title ^ "e1\nexample1" ! ok `contains`
-  """|[info] + e1
-     |[info]   example1""".stripMargin
+    """|[info] + e1
+       |[info]   example1""".stripMargin
 
   def b7 =
     def ex1 = AsResult { Thread.sleep(30); ok }
@@ -135,16 +136,18 @@ presentation
 
   def c1 =
     contains(s2"""e1 $ok
-    |e2 $ko
-    |e3 $ko
-    |""".stripMargin)(
-        """|[info] Total for specification TextPrinterSpec
+                 |e2 $ko
+                 |e3 $ko
+                 |""".stripMargin)(
+      """|[info] Total for specification TextPrinterSpec
            |[info] Finished in x ms
-           |[info] x examples, x failures, x error""", (_:String).replaceAll("\\d+", "x"))
+           |[info] x examples, x failures, x error""",
+      (_: String).replaceAll("\\d+", "x")
+    )
 
   def d1 =
     s2"""e1 ${1 must ===(2)}""" `contains`
-         """|[info] x e1
+      """|[info] x e1
             |[error]  1 != 2"""
 
   def d2 =
@@ -154,18 +157,18 @@ presentation
 
   def d3 =
     s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must ===("adcdeadcdeadcdeadcdeadcde")}""" `contains`
-        """|[error] Actual:   a[b]cdea[b]cdea[b]cdea[b]cdea[b]cde
+      """|[error] Actual:   a[b]cdea[b]cdea[b]cdea[b]cdea[b]cde
            |[error] Expected: a[d]cdea[d]cdea[d]cdea[d]cdea[d]cde"""
 
   case class A(s: String) { override def equals(a: Any) = false }
 
   def d4 =
-    s2"""e1 ${A("a"*100) must ===(A("a"*100))}""" `doesntContain`
+    s2"""e1 ${A("a" * 100) must ===(A("a" * 100))}""" `doesntContain`
       """|[error] Actual"""
 
   def e1 = Arguments("fullstacktrace") ^
     s2"""e1 $error1""" `contains`
-      """|[info] ! e1
+    """|[info] ! e1
          |[error]  java.lang.RuntimeException: boom"""
 
   def e2 = Arguments("fullstacktrace") ^
@@ -215,13 +218,20 @@ presentation
     repository.storeStatistics(classOf[String].getName, Stats(examples = 1, failures = 1)).runOption
     val env1 = ownEnv.setArguments(Arguments()).setStatisticRepository(repository)
     (s2"""the ${SpecificationRef(SpecHeader(classOf[String], Some("STRING")), Arguments())} spec""", env1) `contains`
-    """|[info] the x STRING spec"""
+      """|[info] the x STRING spec"""
 
-
-  def j4 = s2"""the ${SpecificationRef(SpecHeader(classOf[String], Some("STRING")), Arguments(), hidden = true)} spec""" `contains`
+  def j4 = s2"""the ${SpecificationRef(
+    SpecHeader(classOf[String], Some("STRING")),
+    Arguments(),
+    hidden = true
+  )} spec""" `contains`
     """|[info] the  spec"""
 
-  def j5 = s2"""the ${SpecificationRef(SpecHeader(classOf[String], Some("STRING")), Arguments(), alias = "beautiful")} spec""" `contains`
+  def j5 = s2"""the ${SpecificationRef(
+    SpecHeader(classOf[String], Some("STRING")),
+    Arguments(),
+    alias = "beautiful"
+  )} spec""" `contains`
     """|[info] the * beautiful spec"""
 
   def k1 = Arguments("xonly") ^ "title".title ^
@@ -239,12 +249,13 @@ presentation
     val logger = new TestLogger
 
     val fragments = Fragments.foreach(1 to 100)(i =>
-      "ex"+i+"\n " ! {
+      "ex" + i + "\n " ! {
         val s = scala.util.Random.nextInt(100).toLong
         Thread.sleep(s)
-        logger.infoLine("executed "+i)
+        logger.infoLine("executed " + i)
         ok
-      } ^ p)
+      } ^ p
+    )
 
     val spec = SpecStructure.create(SpecHeader(getClass, Some("title\n")), Arguments(), fragments)
     val env1 = ownEnv.copy(printerLogger = logger, arguments = Arguments("batchsize", "3"))
@@ -257,23 +268,25 @@ presentation
     "printed is sorted" ==> {
       printed must ===(printed.sorted)
     } and
-    "executed is unsorted" ==> {
-      executed must not(be_==(executed.sorted))
-    } and
-    "the execution is mixed with the printing" ==> {
-      val (l1, l2) = logger.messages.filter(s => s.contains("executed") || s.contains("+")).span(_.contains("executed"))
-      l1.size `aka` (l1, l2).toString must not(be_==(l2.size))
-    }
+      "executed is unsorted" ==> {
+        executed must not(be_==(executed.sorted))
+      } and
+      "the execution is mixed with the printing" ==> {
+        val (l1, l2) =
+          logger.messages.filter(s => s.contains("executed") || s.contains("+")).span(_.contains("executed"))
+        l1.size `aka` (l1, l2).toString must not(be_==(l2.size))
+      }
 
   def l2 =
     val logger = new TestLogger
 
     val fragments = Fragments.foreach(1 to 100)(i =>
-      "ex"+i+"\n " ! {
+      "ex" + i + "\n " ! {
         Thread.sleep(scala.util.Random.nextInt(100).toLong)
-        logger.infoLine("executed "+i)
+        logger.infoLine("executed " + i)
         ok
-      } ^ p)
+      } ^ p
+    )
 
     val spec = SpecStructure.create(SpecHeader(getClass, Some("title\n")), sequential, fragments)
     val env1 = ownEnv.copy(printerLogger = logger).setArguments(sequential)
@@ -286,25 +299,24 @@ presentation
     "printed is sorted" ==> {
       printed must ===(printed.sorted)
     } and
-    "executed is sorted too" ==> {
-      executed must be_==(executed.sorted)
-    } and
-    "the execution is mixed with the printing" ==> {
-      val (l1, l2) = logger.messages.filter(s => s.contains("executed") || s.contains("+")).span(_.contains("executed"))
-      l1.size `aka` (l1, l2).toString must not(be_==(l2.size))
-    }
+      "executed is sorted too" ==> {
+        executed must be_==(executed.sorted)
+      } and
+      "the execution is mixed with the printing" ==> {
+        val (l1, l2) =
+          logger.messages.filter(s => s.contains("executed") || s.contains("+")).span(_.contains("executed"))
+        l1.size `aka` (l1, l2).toString must not(be_==(l2.size))
+      }
 
   import specification.Tables.{given}
 
   def m1 =
     s2"""
-table ${
- "a" | "b" |>
-   1 ! 1   |
-   1 ! 2   |
-   1 ! 1   | { (i, j) => i === j}
-  }""".stripMargin `contains`
-    """|[info]_x_table
+table ${"a" | "b" |>
+      1 ! 1 |
+      1 ! 2 |
+      1 ! 1 | { (i, j) => i === j }}""".stripMargin `contains`
+      """|[info]_x_table
        |[error]____|_a_|_b_|______
        |[error]__+_|_1_|_1_|______
        |[error]__x_|_1_|_2_|_1_!=_2
@@ -312,16 +324,14 @@ table ${
 
   def m2 =
     s2"""
-table ${
- "a" | "b" |>
-   1 ! 1   |
-   1 ! 2   |
-   1 ! 1   | { (i, j) =>
-   "c" | "d" |>
-     i ! j   | { (k, l) => k === l }
-   }
-  }""".stripMargin `contains`
-    """|[info]_x_table
+table ${"a" | "b" |>
+      1 ! 1 |
+      1 ! 2 |
+      1 ! 1 | { (i, j) =>
+        "c" | "d" |>
+          i ! j | { (k, l) => k === l }
+      }}""".stripMargin `contains`
+      """|[info]_x_table
        |[error]____|_a_|_b_|__________________
        |[error]__+_|_1_|_1_|__________________
        |[error]__x_|_1_|_2_|___|_c_|_d_|______
@@ -334,7 +344,7 @@ table ${
  example 2 $ko
 
 """.stripMargin `contains`
-         """|[info]_TextPrinterSpec
+      """|[info]_TextPrinterSpec
             |[info]
             |[info]__+_example_1
             |[info]__x_example 2
@@ -342,9 +352,8 @@ table ${
             |[info]
             |[info]_Total_for_specification_TextPrinterSpec"""
 
-  /**
-   * TEST METHODS
-   */
+  /** TEST METHODS
+    */
   def error1 = { sys.error("boom"); ok }
   def error2 = { throw new Exception("wrong", new IllegalArgumentException("boom")); ok }
 }
@@ -381,19 +390,19 @@ object TextPrinterSpecification extends MustMatchers with FragmentsDsl with Debu
     def checkContained(asPrinted: String, contained: String): Result =
       asPrinted must contain(contained.stripMargin.replace(" ", "_")).updateMessage(m =>
         val messages = m.split(" doesn't contain '")
-        "\n"+messages(0)+"\n doesn't contain\n"+messages(1)
+        "\n" + messages(0) + "\n doesn't contain\n" + messages(1)
       )
 
     def contains(contained: String, f: String => String): Result =
       checkContained(f(printed(spec)), contained)
 
-    def containsOnly(contained: String): Result  =
+    def containsOnly(contained: String): Result =
       printed(spec) must be_==(contained.stripMargin.replace(" ", "_"))
 
-    def startsWith(start: String): Result  =
+    def startsWith(start: String): Result =
       printed(spec) must startWith(start.stripMargin.replace(" ", "_"))
 
-    def matches(pattern: String): Result  =
+    def matches(pattern: String): Result =
       printed(spec) must beMatching(pattern.stripMargin.replace(" ", "_"))
 
   private def printed(s: SpecStructure, optionalEnv: Option[Env] = None) =
@@ -403,15 +412,20 @@ object TextPrinterSpecification extends MustMatchers with FragmentsDsl with Debu
         case Some(ownEnv) =>
           ownEnv.copy(printerLogger = logger)
         case _ =>
-          Env(printerLogger = logger,
-            arguments = s.arguments.overrideWith(Arguments.split("sequential fullstacktrace")))
+          Env(
+            printerLogger = logger,
+            arguments = s.arguments.overrideWith(Arguments.split("sequential fullstacktrace"))
+          )
     try
       val printer = TextPrinter(env1)
-      printer.run(s.setFragments(s.fragments
-        .prepend(DefaultFragmentFactory.break) // add a newline after the title
-        .update(DefaultExecutor(env1).execute(s.arguments))))
-    finally
-      if optionalEnv.isEmpty then env1.shutdown()
+      printer.run(
+        s.setFragments(
+          s.fragments
+            .prepend(DefaultFragmentFactory.break) // add a newline after the title
+            .update(DefaultExecutor(env1).execute(s.arguments))
+        )
+      )
+    finally if optionalEnv.isEmpty then env1.shutdown()
 
     val messages = logger.messages
     messages.map(_.removeEnd(" ")).mkString("\n").replace(" ", "_")
@@ -420,11 +434,11 @@ object TextPrinterSpecification extends MustMatchers with FragmentsDsl with Debu
     def contains(contained: String): Result =
       printed(spec._1, Some(spec._2)) must contain(contained.stripMargin.replace(" ", "_"))
 
-    def contains(contained: String, f: String => String): Result  =
+    def contains(contained: String, f: String => String): Result =
       f(printed(spec._1, Some(spec._2))) must contain(contained.stripMargin.replace(" ", "_"))
 
 class TestLogger extends BufferedPrinterLogger with StringOutput:
-  def infoLine(msg: String)    = super.append(AnsiColors.removeColors(msg))
-  def errorLine(msg: String)   = ()
+  def infoLine(msg: String) = super.append(AnsiColors.removeColors(msg))
+  def errorLine(msg: String) = ()
   def failureLine(msg: String) = ()
   def warnLine(msg: String) = ()

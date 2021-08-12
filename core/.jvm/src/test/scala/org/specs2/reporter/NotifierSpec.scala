@@ -8,7 +8,8 @@ import org.specs2.specification.{AfterSpec, Tables}
 import specification.core.{Env, SpecificationStructure}
 import runner.*
 
-class NotifierSpec extends Specification { def is = s2"""
+class NotifierSpec extends Specification {
+  def is = s2"""
 
  Run a mutable spec with a Notifier                     $a1
  Run an acceptance spec with a Notifier                 $a2
@@ -20,23 +21,25 @@ class NotifierSpec extends Specification { def is = s2"""
 
   def a1 =
     report(new NotifierSpec1).messages.mkString("\n") must ===(
-    List(
-      "[start  ] NotifierSpec1",
-      "[step   ]",
-      "[success]",
-      "[open   ] group1",
-      "[example] ex1",
-      "[success] ex1",
-      "[example] ex2",
-      "[success] ex2",
-      "[close  ] group1",
-      "[open   ] group2",
-      "[example] ex3",
-      "[success] ex3",
-      "[example] ex4",
-      "[failure] ex4 ko",
-      "[close  ] group2",
-      "[end    ] NotifierSpec1").mkString("\n"))
+      List(
+        "[start  ] NotifierSpec1",
+        "[step   ]",
+        "[success]",
+        "[open   ] group1",
+        "[example] ex1",
+        "[success] ex1",
+        "[example] ex2",
+        "[success] ex2",
+        "[close  ] group1",
+        "[open   ] group2",
+        "[example] ex3",
+        "[success] ex3",
+        "[example] ex4",
+        "[failure] ex4 ko",
+        "[close  ] group2",
+        "[end    ] NotifierSpec1"
+      ).mkString("\n")
+    )
 
   def a2 =
     val spec = new NotifierSpec1
@@ -61,7 +64,9 @@ class NotifierSpec extends Specification { def is = s2"""
         "[example] ex2",
         "[success] ex2",
         "[close  ] group2",
-        "[end    ] NotifierSpec2").mkString("\n"))
+        "[end    ] NotifierSpec2"
+      ).mkString("\n")
+    )
 
   def a5 =
     report(new NotifierSpec3).messages.mkString("\n") must ===(
@@ -73,8 +78,9 @@ class NotifierSpec extends Specification { def is = s2"""
         "[close  ] group1",
         "[step   ]",
         "[error  ] org.specs2.specification.core.FatalExecution: boom",
-        "[end    ] NotifierSpec3").mkString("\n"))
-
+        "[end    ] NotifierSpec3"
+      ).mkString("\n")
+    )
 
   def report(spec: SpecificationStructure): TestNotifier =
     val arguments = Arguments("notifier")
@@ -82,18 +88,17 @@ class NotifierSpec extends Specification { def is = s2"""
     val notifier = new TestNotifier
     val reporter = Reporter.create(List(NotifierPrinter(arguments).printer(notifier)), env1)
 
-    try     reporter.report(spec.structure).runOption(env1.executionEnv)
+    try reporter.report(spec.structure).runOption(env1.executionEnv)
     finally env1.shutdown()
 
     notifier
 
 }
 
-class NotifierSpecWithTables extends Specification with Tables {def is = s2"""
-  a table ${
-    "a" | "b" | "e"  |>
-    "a" ! "b" ! "AB" | { (a, b, e) => a + b must ===(e) }
-  }
+class NotifierSpecWithTables extends Specification with Tables {
+  def is = s2"""
+  a table ${"a" | "b" | "e" |>
+    "a" ! "b" ! "AB" | { (a, b, e) => a + b must ===(e) }}
   """
 }
 class NotifierSpec1 extends org.specs2.mutable.Specification:
@@ -132,10 +137,17 @@ class TestNotifier extends Notifier with StringOutput:
   def text(text: String, location: String) = append(s"[text   ] $text")
   def exampleStarted(name: String, location: String) = append(s"[example] $name")
   def exampleSuccess(name: String, duration: Long) = append(s"[success] $name")
-  def exampleFailure(name: String, message: String, location: String, f: Throwable, details: Details, duration: Long) = append(s"[failure] $name $message")
-  def exampleError  (name: String, message: String, location: String, f: Throwable, duration: Long) = append(s"[error  ] $name $message")
-  def exampleSkipped(name: String, message: String, location: String, duration: Long) = append(s"[skipped] $name $message")
-  def examplePending(name: String, message: String, location: String, duration: Long) = append(s"[pending] $name $message")
+  def exampleFailure(name: String, message: String, location: String, f: Throwable, details: Details, duration: Long) =
+    append(s"[failure] $name $message")
+  def exampleError(name: String, message: String, location: String, f: Throwable, duration: Long) = append(
+    s"[error  ] $name $message"
+  )
+  def exampleSkipped(name: String, message: String, location: String, duration: Long) = append(
+    s"[skipped] $name $message"
+  )
+  def examplePending(name: String, message: String, location: String, duration: Long) = append(
+    s"[pending] $name $message"
+  )
   def stepStarted(location: String) = append(s"[step   ]")
   def stepSuccess(duration: Long) = append(s"[success]")
   def stepError(message: String, location: String, f: Throwable, duration: Long) = append(s"[error  ] $message")

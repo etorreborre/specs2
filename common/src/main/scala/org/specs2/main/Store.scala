@@ -1,11 +1,9 @@
 package org.specs2
 package main
 
-/**
- * Storing arguments
- */
-case class Store(_reset:         Option[Boolean]          = None,
-                 _never:         Option[Boolean]          = None) extends ShowArgs:
+/** Storing arguments
+  */
+case class Store(_reset: Option[Boolean] = None, _never: Option[Boolean] = None) extends ShowArgs:
 
   def reset: Boolean = _reset.getOrElse(false)
   def never: Boolean = _never.getOrElse(false)
@@ -17,18 +15,14 @@ case class Store(_reset:         Option[Boolean]          = None,
     )
 
   override def toString =
-    List(
-      "reset" -> _reset,
-      "never" -> _never).flatMap(showArg).mkString("Store(", ", ", ")")
-
+    List("reset" -> _reset, "never" -> _never).flatMap(showArg).mkString("Store(", ", ", ")")
 
 object Store extends Extract:
   def extract(using arguments: Seq[String], systemProperties: SystemProperties): Store =
-    new Store (
+    new Store(
       _reset = bool("resetStore"),
       _never = bool("neverStore")
     )
 
   val allArguments: Seq[ArgumentType] =
-    Seq(BooleanArgument("resetStore"),
-        BooleanArgument("neverStore"))
+    Seq(BooleanArgument("resetStore"), BooleanArgument("neverStore"))

@@ -6,7 +6,13 @@ import execute.Snippet.*
 import core.*
 import control.Use
 
-class SnippetsSpec(val env: Env) extends Specification with Snippets with DataTables with TypedEqual with OwnExecutionEnv { def is = s2"""
+class SnippetsSpec(val env: Env)
+    extends Specification
+    with Snippets
+    with DataTables
+    with TypedEqual
+    with OwnExecutionEnv {
+  def is = s2"""
 
  These are examples on how to use the various snippet methods
 
@@ -51,14 +57,14 @@ Robustness
 """
 
   def snippet1 =
-    s2""" code: ${ snippet { got {1 + 1} } } """.trimmedTexts(1) === "`got {1 + 1}`"
+    s2""" code: ${snippet { got { 1 + 1 } }} """.trimmedTexts(1) === "`got {1 + 1}`"
 
-  def snippet2 = s2""" code: ${ snippet {
-got {
-  var n = 0
-  n = 1
-}
-} } """.trimmedTexts(1) ===
+  def snippet2 = s2""" code: ${snippet {
+    got {
+      var n = 0
+      n = 1
+    }
+  }} """.trimmedTexts(1) ===
     """|```
        |got {
        |  var n = 0
@@ -66,83 +72,82 @@ got {
        |}
        |```""".stripMargin
 
-  def snippet3 = s2""" code: ${ snippet {
+  def snippet3 = s2""" code: ${snippet {
 // 8<--
-var n = 0
+    var n = 0
 // 8<--
-n = 1
+    n = 1
 // 8<--
-n = 0
-} }""".trimmedTexts(1).trim ===
+    n = 0
+  }}""".trimmedTexts(1).trim ===
     """|```
        |n = 1
        |```""".stripMargin
 
-  def snippet4 = s2""" code: ${ snippet {
+  def snippet4 = s2""" code: ${snippet {
 // 8<--
-var n = 0
+    var n = 0
 // 8<--
-n = 1
+    n = 1
 // 8<--
-n = 0
+    n = 0
 // 8<--
-var i = 0
-i = 1
-  } }""".trimmedTexts(1) ===
+    var i = 0
+    i = 1
+  }}""".trimmedTexts(1) ===
     """```
       |n = 1
       |var i = 0
       |i = 1
       |```""".stripMargin
 
-  def snippet5 = s2""" code ${snippet { "e1" ! { ok } /**/;1/**/} }""".trimmedTexts(1) === """`"e1" ! { ok } /**/;1/**/`"""
+  def snippet5 =
+    s2""" code ${snippet { "e1" ! { ok } /**/; 1 /**/ }}""".trimmedTexts(1) === """`"e1" ! { ok } /**/;1/**/`"""
 
-  def offset1 = s2""" code: ${ snippet {
+  def offset1 = s2""" code: ${snippet {
 // 8<--
-var n = 0
+    var n = 0
 // 8<--
-n = 1
+    n = 1
 // 8<--
-n = 0
-  }.offsetIs(2) }""".trimmedTexts(1) ===
+    n = 0
+  }.offsetIs(2)}""".trimmedTexts(1) ===
     """|```
        |  n = 1
        |```""".stripMargin
 
-  def offset2 = s2""" code: ${ snippet {
-  // 8<--
-  var n = 0
-  // 8<--
-  n = 1
-  // 8<--
-  n = 0
-  }.offsetIs(-2) }""".trimmedTexts(1) ===
+  def offset2 = s2""" code: ${snippet {
+    // 8<--
+    var n = 0
+    // 8<--
+    n = 1
+    // 8<--
+    n = 0
+  }.offsetIs(-2)}""".trimmedTexts(1) ===
     """|```
        |n = 1
        |```""".stripMargin
 
   def offset3 =
-    "code"                   || "result" |>
-    "snippet{ hello }"       !! "hello"  |
-    " snippet{ hello }"      !! "hello"  |
-    " snippet { hello }"     !! "hello"  |
-    " snippet{ hello } "     !! "hello"  |
-    " snippet{\n hello \n} " !! "hello"  |
-    " snippet{ hello \n} "   !! "hello"  |
-    { (c, r) => trimApproximatedSnippet(c) === r }
+    "code" || "result" |>
+      "snippet{ hello }" !! "hello" |
+      " snippet{ hello }" !! "hello" |
+      " snippet { hello }" !! "hello" |
+      " snippet{ hello } " !! "hello" |
+      " snippet{\n hello \n} " !! "hello" |
+      " snippet{ hello \n} " !! "hello" | { (c, r) => trimApproximatedSnippet(c) === r }
 
   def offset4 =
-    "code"                                      || "result" |>
-    " snippet{ hello \n}.set(eval = true) "     !! "hello"  |
-    " snippet{ hello \n}.eval "                 !! "hello"  |
-    " snippet{ hello \n}.offsetIs(2) "          !! "hello"  |
-      { (c, r) => trimApproximatedSnippet(c) === r }
+    "code" || "result" |>
+      " snippet{ hello \n}.set(eval = true) " !! "hello" |
+      " snippet{ hello \n}.eval " !! "hello" |
+      " snippet{ hello \n}.offsetIs(2) " !! "hello" | { (c, r) => trimApproximatedSnippet(c) === r }
 
-  def results1 = s2""" code: ${ snippet {
-  var n = 1
-  n = 1 + n
-  n
-  }.eval.offsetIs(-2) }""".trimmedTexts.drop(1).take(3).mkString("\n") ===
+  def results1 = s2""" code: ${snippet {
+    var n = 1
+    n = 1 + n
+    n
+  }.eval.offsetIs(-2)}""".trimmedTexts.drop(1).take(3).mkString("\n") ===
     """|```
        |var n = 1
        |n = 1 + n
@@ -151,33 +156,34 @@ n = 0
        |`> 2`""".stripMargin
 
   def names1 =
-    "code"                                         || "markdown"             |>
-    s"""the trait `${simpleName[Snippets]}`"""     !! "the trait `Snippets`" |
-    { (code, markdown) => code === markdown}
+    "code" || "markdown" |>
+      s"""the trait `${simpleName[Snippets]}`""" !! "the trait `Snippets`" | { (code, markdown) => code === markdown }
 
   def names2 =
-    "code"                                   || "markdown"                                      |>
-    s"""the trait `${fullName[Snippets]}`""" !! "the trait `org.specs2.specification.Snippets`" |
-    { (code, markdown) => code === markdown}
+    "code" || "markdown" |>
+      s"""the trait `${fullName[Snippets]}`""" !! "the trait `org.specs2.specification.Snippets`" | {
+        (code, markdown) => code === markdown
+      }
 
   def names3 =
-    "code"                              || "markdown"        |>
-    s"""the method `${termName(is)}`""" !! "the method `is`" |
-      { (code, markdown) => code === markdown}
+    "code" || "markdown" |>
+      s"""the method `${termName(is)}`""" !! "the method `is`" | { (code, markdown) => code === markdown }
 
   def names4 =
     def function[T, S](t: T, s: S) = ""
     Use(function(1, 1))
 
-    "code"                                                        || "markdown"              |>
-    s"""the method `${termName(function(1, ""))}`"""              !! "the method `function`" |
-    s"""the method `${termName(function[Int, String](1, ""))}`""" !! "the method `function`" |
-    { (code, markdown) => code === markdown}
+    "code" || "markdown" |>
+      s"""the method `${termName(function(1, ""))}`""" !! "the method `function`" |
+      s"""the method `${termName(function[Int, String](1, ""))}`""" !! "the method `function`" | { (code, markdown) =>
+        code === markdown
+      }
 
   def names5 =
-    "code"                                         || "markdown"                   |>
-    s"""the attribute `${termName(attribute1)}`""" !! "the attribute `attribute1`" |
-      { (code, markdown) => code === markdown}
+    "code" || "markdown" |>
+      s"""the attribute `${termName(attribute1)}`""" !! "the attribute `attribute1`" | { (code, markdown) =>
+        code === markdown
+      }
 
   def effects1 =
     snippet[Unit](sys.error("boom")) must not(throwAn[Exception])
@@ -191,8 +197,7 @@ n = 0
 
   def got[T](t: T) = t
 
-  extension (fs: Fragments)
-    def trimmedTexts = fs.fragmentsList(ee).filter(Fragment.isText).map(_.description.show.trim)
+  extension (fs: Fragments) def trimmedTexts = fs.fragmentsList(ee).filter(Fragment.isText).map(_.description.show.trim)
 
   val attribute1 = 1
 }

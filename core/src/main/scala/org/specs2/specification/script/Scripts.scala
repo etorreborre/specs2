@@ -6,32 +6,32 @@ import scala.quoted.*
 import core.*
 import create.*
 
-/**
- * The Scripts trait builds fragments based on Script objects.
- *
- * When the script starts, a section tag is inserted and when it ends another one as well.
- * Also when the scripts ends, it is passed the previous text for analysis to extract new fragments
- *
- */
+/** The Scripts trait builds fragments based on Script objects.
+  *
+  * When the script starts, a section tag is inserted and when it ends another one as well. Also when the scripts ends,
+  * it is passed the previous text for analysis to extract new fragments
+  */
 trait Scripts { outer: FragmentsFactory =>
-  /**
-   * a sequence of GWT steps can be inserted in a specification to delimit
-   * pieces of text to interpret. The "given/when" steps create execute.Step objects while the "then" steps create Examples
-   *
-   * The whole sequence also creates one tagged section with the title of the sequence
-   */
+
+  /** a sequence of GWT steps can be inserted in a specification to delimit pieces of text to interpret. The
+    * "given/when" steps create execute.Step objects while the "then" steps create Examples
+    *
+    * The whole sequence also creates one tagged section with the title of the sequence
+    */
   implicit inline def scriptIsInterpolatedFragment(inline script: Script): Interpolated =
-    ${Scripts.createInterpolatedFragment('{script}, '{outer.fragmentFactory})}
+    ${ Scripts.createInterpolatedFragment('{ script }, '{ outer.fragmentFactory }) }
 }
 
 object Scripts:
 
-  def createInterpolatedFragment(script: Expr[Script], factory: Expr[FragmentFactory])(using qctx: Quotes): Expr[Interpolated] =
+  def createInterpolatedFragment(script: Expr[Script], factory: Expr[FragmentFactory])(using
+      qctx: Quotes
+  ): Expr[Interpolated] =
     import qctx.reflect.*
-    '{ new Interpolated {
-         def prepend(text: String): Fragments =
-           if $script.isStart then
-             Fragments(${factory}.section(${script}.title)).append(${factory}.text(text))
-           else
-             ${script}.fragments(text).toFragments.append(${factory}.asSection(${script}.title))
-       }}
+    '{
+      new Interpolated {
+        def prepend(text: String): Fragments =
+          if $script.isStart then Fragments(${ factory }.section(${ script }.title)).append(${ factory }.text(text))
+          else ${ script }.fragments(text).toFragments.append(${ factory }.asSection(${ script }.title))
+      }
+    }

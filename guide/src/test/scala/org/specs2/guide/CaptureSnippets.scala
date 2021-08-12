@@ -3,7 +3,8 @@ package guide
 
 import specification.Snippets
 
-object CaptureSnippets extends UserGuidePage { def is = "Capture snippets".title ^ s2"""
+object CaptureSnippets extends UserGuidePage {
+  def is = "Capture snippets".title ^ s2"""
 
 It is possible to include pieces of code in your documentation with the `${fullName[Snippets]}` trait using the `snippet` method to capture a block code with marker comments to delimit the parts you want to show.
 

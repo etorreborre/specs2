@@ -3,7 +3,8 @@ package execute
 
 import org.scalacheck.*
 
-class ResultImplicitsSpec extends Specification with ScalaCheck with ResultImplicits { def is = s2"""
+class ResultImplicitsSpec extends Specification with ScalaCheck with ResultImplicits {
+  def is = s2"""
 
  2 results are equivalent if they are both true or both false at the same time $equivalent
 

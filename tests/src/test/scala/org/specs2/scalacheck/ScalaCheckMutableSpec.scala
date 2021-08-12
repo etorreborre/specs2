@@ -21,8 +21,6 @@ class ScalaCheckMutableSpec(val env: Env) extends Specification with ScalaCheck 
     action must beOk((r: Result) => r must beFailing)
   }
 
-
   val failingProperties: Properties = new Properties("Hello") {
-    property("ints") =
-      forAll(Gen.choose(0, 10))((i: Int) => i === i + 1)
+    property("ints") = forAll(Gen.choose(0, 10))((i: Int) => i === i + 1)
   }

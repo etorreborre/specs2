@@ -1,7 +1,8 @@
 package org.specs2
 package matcher
 
-class JUnitMatchersSpec extends Spec { def is = s2"""
+class JUnitMatchersSpec extends Spec {
+  def is = s2"""
 
 The specs2 matchers can be reused in JUnit test cases
 
@@ -16,7 +17,7 @@ The specs2 matchers can be reused in JUnit test cases
     def failedExpectation = 1 must ===(2)
 
   object c extends expectations:
-    def e1 =  successExpectation
-    def e2 =  failedExpectation must throwAn[AssertionError]
+    def e1 = successExpectation
+    def e2 = failedExpectation must throwAn[AssertionError]
 
 }

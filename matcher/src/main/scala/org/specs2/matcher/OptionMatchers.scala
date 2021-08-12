@@ -7,15 +7,14 @@ import org.specs2.control.*, ImplicitParameters.*
 import org.specs2.matcher.describe.Diffable
 import Result.*
 
-/**
- * Matchers for Options
- */
+/** Matchers for Options
+  */
 trait OptionMatchers extends ValueChecks:
 
   def beSome[T](check: ValueCheck[T]): SomeCheckedMatcher[T] =
     SomeCheckedMatcher(check)
 
-  def some[T : Diffable](t: T): SomeCheckedMatcher[T] =
+  def some[T: Diffable](t: T): SomeCheckedMatcher[T] =
     beSome(ValueChecks.valueIsTypedValueCheck(t))
 
   def some[T](check: ValueCheck[T]): SomeCheckedMatcher[T] =
@@ -38,8 +37,10 @@ trait OptionMatchers extends ValueChecks:
     new Matcher[Option[T]]:
       def apply[S <: Option[T]](a: Expectable[S]) =
         val b = other
-        result(a.value == None && b == None || a.value != None && b != None,
-               if a.value == None then b.toString + " is not None" else a.description + " is not None")
+        result(
+          a.value == None && b == None || a.value != None && b != None,
+          if a.value == None then b.toString + " is not None" else a.description + " is not None"
+        )
 
   def asNoneAs[T](other: =>Option[T]): Matcher[Option[T]] =
     beAsNoneAs(other)
@@ -47,27 +48,29 @@ trait OptionMatchers extends ValueChecks:
 object OptionMatchers extends OptionMatchers
 
 case class SomeMatcher[T]() extends OptionLikeMatcher[Option[T], T]("Some", identity)
-case class SomeCheckedMatcher[T](check: ValueCheck[T]) extends OptionLikeCheckedMatcher[Option[T], T]("Some", identity, check)
+case class SomeCheckedMatcher[T](check: ValueCheck[T])
+    extends OptionLikeCheckedMatcher[Option[T], T]("Some", identity, check)
 
 class OptionLikeMatcher[T, U](typeName: String, toOption: T => Option[U]) extends Matcher[T]:
   def apply[S <: T](value: Expectable[S]) =
     result(toOption(value.value).isDefined, s"${value.description} is not $typeName")
 
-  def which[R : AsResult](f: U => R): OptionLikeCheckedMatcher[T, U] =
+  def which[R: AsResult](f: U => R): OptionLikeCheckedMatcher[T, U] =
     new OptionLikeCheckedMatcher(typeName, toOption, f)
 
-  def like[R : AsResult](f: PartialFunction[U, R]): OptionLikeCheckedMatcher[T, U] =
+  def like[R: AsResult](f: PartialFunction[U, R]): OptionLikeCheckedMatcher[T, U] =
     new OptionLikeCheckedMatcher(typeName, toOption, f)
 
-class OptionLikeCheckedMatcher[T, U](typeName: String, toOption: T => Option[U], check: ValueCheck[U]) extends Matcher[T]:
+class OptionLikeCheckedMatcher[T, U](typeName: String, toOption: T => Option[U], check: ValueCheck[U])
+    extends Matcher[T]:
   def apply[S <: T](value: Expectable[S]) =
     toOption(value.value) match
       case Some(v) =>
         val r = check.check(v)
         val koMessage = s"${value.description} is $typeName but ${r.message}"
         r match
-          case f @ Failure(_,_,_,details) => result(r.isSuccess, koMessage, details)
-          case _ =>                          result(r.isSuccess, koMessage)
+          case f @ Failure(_, _, _, details) => result(r.isSuccess, koMessage, details)
+          case _                             => result(r.isSuccess, koMessage)
 
       case _ =>
         result(false, s"${value.description} is not $typeName")

@@ -9,11 +9,10 @@ import io.*
 import specification.core.Description
 import scala.collection.mutable.HashMap
 
-/**
- * Store the execution statistics.
- *
- * The actual store might be on disk on in-memory
- */
+/** Store the execution statistics.
+  *
+  * The actual store might be on disk on in-memory
+  */
 trait StatisticsRepository:
   /** get the latest statistics for a given specification */
   def getStatistics(specClassName: String): Operation[Option[Stats]]
@@ -56,11 +55,12 @@ case class DefaultStatisticsRepository(store: Store) extends StatisticsRepositor
   def resetStatistics: Operation[Unit] =
     store.reset
 
-/**
- * In memory store for statistics
- */
-case class StatisticsMemoryStore(statistics: HashMap[String, Stats] = new HashMap[String, Stats],
-                       results: HashMap[(String, Long), Result] = new HashMap[(String, Long), Result]) extends Store:
+/** In memory store for statistics
+  */
+case class StatisticsMemoryStore(
+    statistics: HashMap[String, Stats] = new HashMap[String, Stats],
+    results: HashMap[(String, Long), Result] = new HashMap[(String, Long), Result]
+) extends Store:
   def get[A](key: Key[A]): Operation[Option[A]] = key match
     case SpecificationStatsKey(specClassName) =>
       Operation.ok(statistics.get(specClassName))
@@ -79,7 +79,6 @@ case class StatisticsMemoryStore(statistics: HashMap[String, Stats] = new HashMa
     statistics.clear
     results.clear
   }
-
 
 case class SpecificationStatsKey(specClassName: String) extends Key[Stats]
 case class SpecificationResultKey(specClassName: String, description: Description) extends Key[Result]

@@ -8,26 +8,28 @@ import io.*
 import specification.core.{Env, SpecStructure}
 import producer.*
 
-/**
- * Functions used to create an index and a search page for the generated html pages
- */
+/** Functions used to create an index and a search page for the generated html pages
+  */
 case class SearchPage(logger: Logger = ConsoleLogger()):
 
   /** create an index for all the specifications */
   def createIndex(env: Env, specifications: List[SpecStructure], options: HtmlOptions): Operation[Unit] =
     for
       htmlPages <- Operation.delayed(Indexing.createIndexedPages(env, specifications, options.outDir))
-      _         <- Producer.emitSync(htmlPages).fold(Indexing.indexFold(options.indexFile))
-      _         <- createSearchPage(env, options)
+      _ <- Producer.emitSync(htmlPages).fold(Indexing.indexFold(options.indexFile))
+      _ <- createSearchPage(env, options)
     yield ()
 
   /** create a search page, based on the specs2.html template */
   def createSearchPage(env: Env, options: HtmlOptions): Operation[Unit] =
     import env.{fileSystem as fs}
     for
-      template <- fs.readFile(options.template) ||| logger.warnAndFail("No template file found at "+options.template.path, HtmlPrinter.RunAborted)
-      content  <- makeSearchHtml(template, options)
-      _        <- fs.writeFile(searchFilePath(options), content)
+      template <- fs.readFile(options.template) ||| logger.warnAndFail(
+        "No template file found at " + options.template.path,
+        HtmlPrinter.RunAborted
+      )
+      content <- makeSearchHtml(template, options)
+      _ <- fs.writeFile(searchFilePath(options), content)
     yield ()
 
   /** create the html search page content */
@@ -42,4 +44,3 @@ case class SearchPage(logger: Logger = ConsoleLogger()):
   /** search page path */
   def searchFilePath(options: HtmlOptions): FilePath =
     options.outDir | "search.html"
-

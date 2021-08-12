@@ -13,7 +13,8 @@ import specification.process.*
 import OperationMatchers.*
 import org.specs2.control.origami.Folds
 
-class ReporterSpec(val env: Env) extends Specification with ThrownExpectations with OwnEnv { def is = s2"""
+class ReporterSpec(val env: Env) extends Specification with ThrownExpectations with OwnEnv {
+  def is = s2"""
 
  The reporter is responsible for:
    - filtering the specification fragments
@@ -53,10 +54,14 @@ class ReporterSpec(val env: Env) extends Specification with ThrownExpectations w
     val repository = StatisticsRepositoryCreation.memory
     reported(ownEnv.setArguments(Arguments()).setStatisticRepository(repository))
     val ex2 = spec().fragmentsList(env.executionEnv)(3)
-    repository.previousResult(spec().specClassName, ex2.description) must beOk(beSome((_: Result).isFailure must beTrue))
+    repository.previousResult(spec().specClassName, ex2.description) must beOk(
+      beSome((_: Result).isFailure must beTrue)
+    )
 
   def a4 =
-    reported(ownEnv).map(_.copy(timer = Stats.empty.timer)) must beSome(Stats(examples = 3, successes = 2, expectations = 3, failures= 1))
+    reported(ownEnv).map(_.copy(timer = Stats.empty.timer)) must beSome(
+      Stats(examples = 3, successes = 2, expectations = 3, failures = 1)
+    )
 
   def b1 =
     val logger = stringPrinterLogger
@@ -65,7 +70,10 @@ class ReporterSpec(val env: Env) extends Specification with ThrownExpectations w
 
   def b2 =
     val logger = stringPrinterLogger
-    reported(ownEnv.setPrinterLogger(logger).setArguments(Arguments("junit")), printers = List(new FakeJUnitPrinter(logger)))
+    reported(
+      ownEnv.setPrinterLogger(logger).setArguments(Arguments("junit")),
+      printers = List(new FakeJUnitPrinter(logger))
+    )
     logger.messages must not(contain[String]("ex1"))
     logger.messages must contain("[info] junit")
 
@@ -89,9 +97,8 @@ class FakeJUnitPrinter(logger: PrinterLogger) extends Printer:
     Folds.fromSink((f: Fragment) => Action.pure(logger.infoLog("junit\n")))
 
 object reporterSpecSupport extends MustMatchers with ExpectedResults with S2StringContext with FragmentsDsl:
-  /**
-   * TEST METHODS
-   */
+  /** TEST METHODS
+    */
 
   def spec(logger: PrinterLogger = NoPrinterLogger): SpecStructure = s2"""
  ex1 ${ex1(logger)}
@@ -99,7 +106,7 @@ object reporterSpecSupport extends MustMatchers with ExpectedResults with S2Stri
  ex3 ${ex3(logger)}
  """
 
-  def ex1(logger: PrinterLogger) = { Thread.sleep(200); logger.infoLog(" e1\n "); ok}
+  def ex1(logger: PrinterLogger) = { Thread.sleep(200); logger.infoLog(" e1\n "); ok }
   def ex2(logger: PrinterLogger) = { logger.infoLog("e2\n "); ko }
   def ex3(logger: PrinterLogger) = { logger.infoLog("e3\n "); ok }
 
@@ -109,7 +116,7 @@ object reporterSpecSupport extends MustMatchers with ExpectedResults with S2Stri
     reporter.report(spec(logger)).runOption(env.executionEnv)
 
   def indexOf(messages: Seq[String])(f: String => Boolean): Int =
-    messages.zipWithIndex.find { case (s, i) => f(s)}.fold(-1)(_._2)
+    messages.zipWithIndex.find { case (s, i) => f(s) }.fold(-1)(_._2)
 
   def indexOf(messages: Seq[String], element: String): Int =
     indexOf(messages)((_: String).contains(element))

@@ -1,8 +1,7 @@
 package org.specs2.fp
 
-/**
- * Inspired from the scalaz (https://github.com/scalaz/scalaz) project
- */
+/** Inspired from the scalaz (https://github.com/scalaz/scalaz) project
+  */
 trait Functor[F[_]]:
 
   def map[A, B](fa: F[A])(f: A => B): F[B]
@@ -26,14 +25,14 @@ object Functor:
       fa.map(f)
 
 trait FunctorSyntax:
-  extension [F[_] : Functor, A, B](fa: F[A])
+  extension [F[_]: Functor, A, B](fa: F[A])
     infix def map(f: A => B): F[B] =
       Functor.apply[F].map(fa)(f)
 
-    infix def as(b: => B): F[B] =
+    infix def as(b: =>B): F[B] =
       Functor.apply[F].as(fa)(b)
 
-  extension [F[_] : Functor, A](fa: F[A])
+  extension [F[_]: Functor, A](fa: F[A])
     def void: F[Unit] =
       Functor.apply[F].void(fa)
 

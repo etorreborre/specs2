@@ -6,11 +6,9 @@ import java.util.regex.Pattern
 import util.matching.Regex
 import util.matching.Regex.Match
 
-/**
- * Utility methods for trimming text
- */
-private[specs2]
-trait Trim:
+/** Utility methods for trimming text
+  */
+private[specs2] trait Trim:
   outer: Trim =>
 
   /** add trimming methods to a String */
@@ -20,7 +18,7 @@ trait Trim:
       if s.trim.startsWith(start) then s.trim.drop(start.length) else s.trim
 
     def trimEnd(end: String): String =
-      if s.trim.endsWith(end) then s.trim.dropRight(end.length)  else s.trim
+      if s.trim.endsWith(end) then s.trim.dropRight(end.length) else s.trim
 
     def trimEndSpace: String =
       s.takeWhile(_ == ' ') + s.trim
@@ -29,33 +27,28 @@ trait Trim:
       trimEnclosing(start, start)
 
     def trimEnclosing(start: String, end: String): String =
-      if s.trim.startsWith(start) && s.trim.endsWith(end) then
-        trimStart(start).trimEnd(end).trim
+      if s.trim.startsWith(start) && s.trim.endsWith(end) then trimStart(start).trimEnd(end).trim
       else s
 
     def trimEnclosingXmlTag(t: String): String =
-      trimFirst("<"+t+".*?>").trimEnd("</"+t+">")
+      trimFirst("<" + t + ".*?>").trimEnd("</" + t + ">")
 
     def removeStart(start: String): String =
       if s.startsWith(start) then s.drop(start.length) else s
 
     def removeEnd(end: String): String =
-      if s.endsWith(end) then s.dropRight(end.length)  else s
+      if s.endsWith(end) then s.dropRight(end.length) else s
 
     def removeEnclosing(toRemove: String): String =
       removeEnclosing(toRemove, toRemove)
 
     def removeEnclosing(start: String, end: String): String =
-      if s.isEnclosing(start, end) then
-        s.removeStart(start).removeEnd(end)
-      else
-        s
+      if s.isEnclosing(start, end) then s.removeStart(start).removeEnd(end)
+      else s
 
     def removeEnclosingXmlTag(t: String): String =
-      if s.isEnclosing("<"+t, "</"+t+">") then
-        removeFirst("<"+t+".*?>").trimEnd("</"+t+">")
-      else
-        s
+      if s.isEnclosing("<" + t, "</" + t + ">") then removeFirst("<" + t + ".*?>").trimEnd("</" + t + ">")
+      else s
 
     def isEnclosing(start: String, end: String): Boolean =
       s.startsWith(start) && s.endsWith(end)
@@ -125,7 +118,7 @@ trait Trim:
         res.replaceAll(tagPattern(tag), (s: String) => java.util.regex.Matcher.quoteReplacement(s.replaceAll(p*)))
       }
 
-    private def tagPattern(tag: String) = "<"+tag+">(.(.|\n)*?)</"+tag+">"
+    private def tagPattern(tag: String) = "<" + tag + ">(.(.|\n)*?)</" + tag + ">"
 
     /** replace each group with something else */
     def replaceAll(exp: String, f: String => String): String =
@@ -157,25 +150,20 @@ trait Trim:
 
     /** split and trim each, removing empty strings */
     def splitTrim(separator: String): Seq[String] =
-      s.split(separator).collect { case t if !t.trim.isEmpty => t.trim}.toSeq
+      s.split(separator).collect { case t if !t.trim.isEmpty => t.trim }.toSeq
 
     /** truncate a string to a given number of characters and ellide the missing characters with ... */
     def truncate(length: Int): String =
-      if s.length > length then s.take(length - 3)+"..."
+      if s.length > length then s.take(length - 3) + "..."
       else s
 
   extension (s: String)
     def offset(n: Int): String =
-      if n == 0 then
-        s
-      else
-        s.split("\n", -1).map(l => offsetLine(l, n)).mkString("\n")
+      if n == 0 then s
+      else s.split("\n", -1).map(l => offsetLine(l, n)).mkString("\n")
 
   private def offsetLine(l: String, n: Int) =
-    if n > 0  then
-      " " * n + l
-    else
-      l.takeWhile(_ == ' ').drop(-n).mkString + l.dropWhile(_ == ' ').mkString
+    if n > 0 then " " * n + l
+    else l.takeWhile(_ == ' ').drop(-n).mkString + l.dropWhile(_ == ' ').mkString
 
-private[specs2]
-object Trim extends Trim
+private[specs2] object Trim extends Trim

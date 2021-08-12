@@ -2,9 +2,8 @@ package org.specs2.fp
 
 import scala.util.{Failure, Success, Try}
 
-/**
- * Inspired from the cats (https://github.com/typelevel/cats project
- */
+/** Inspired from the cats (https://github.com/typelevel/cats project
+  */
 trait EitherSyntax:
 
   extension [A, B](eab: Either[A, B])
@@ -30,11 +29,11 @@ trait EitherSyntax:
       case Right(b) => List(b)
 
   extension [A, B, AA >: A, BB >: B, C](eab: Either[A, B])
-    def getOrElse(default: => BB): BB = eab match
+    def getOrElse(default: =>BB): BB = eab match
       case Left(_)  => default
       case Right(b) => b
 
-    def orElse(fallback: => Either[C, BB]): Either[C, BB] = eab match
+    def orElse(fallback: =>Either[C, BB]): Either[C, BB] = eab match
       case Left(_)      => fallback
       case r @ Right(_) => EitherUtil.leftCast(r)
 
@@ -50,7 +49,7 @@ trait EitherSyntax:
       case Left(a)  => f(a)
       case Right(b) => b
 
-    def ensure(onFailure: => AA)(f: B => Boolean): Either[AA, B] = eab match
+    def ensure(onFailure: =>AA)(f: B => Boolean): Either[AA, B] = eab match
       case Left(_)  => eab
       case Right(b) => if f(b) then eab else Left(onFailure)
 
@@ -71,9 +70,10 @@ trait EitherSyntax:
 
     def append(that: Either[AA, BB])(using BB: Semigroup[BB]): Either[AA, BB] = eab match
       case left @ Left(_) => left
-      case Right(b1) => that match
-        case left @ Left(_) => left
-        case Right(b2) => Right(BB.append(b1, b2))
+      case Right(b1) =>
+        that match
+          case left @ Left(_) => left
+          case Right(b2)      => Right(BB.append(b1, b2))
 
     def show(using AA: Show[AA], BB: Show[BB]): String = eab match
       case Left(a)  => s"Left(${AA.show(a)})"
@@ -108,17 +108,15 @@ private[fp] object EitherUtil:
   def rightCast[A, B, C](left: Left[A, B]): Either[A, C] =
     left.asInstanceOf[Either[A, C]]
 
-  def catchNonFatal[A](f: => A): Either[Throwable, A] =
-    try
-      Right(f)
-    catch
-      case scala.util.control.NonFatal(t) => Left(t)
+  def catchNonFatal[A](f: =>A): Either[Throwable, A] =
+    try Right(f)
+    catch case scala.util.control.NonFatal(t) => Left(t)
 
   def fromTry[A](t: Try[A]): Either[Throwable, A] =
     t match
       case Failure(e) => Left(e)
       case Success(v) => Right(v)
 
-  def fromOption[A, B](o: Option[B], ifNone: => A): Either[A, B] = o match
+  def fromOption[A, B](o: Option[B], ifNone: =>A): Either[A, B] = o match
     case Some(a) => Right(a)
-    case _ => Left[A, B](ifNone)
+    case _       => Left[A, B](ifNone)

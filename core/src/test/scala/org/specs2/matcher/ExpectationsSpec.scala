@@ -5,7 +5,8 @@ import execute.*
 import matcher.*
 import specification.*
 
-class ExpectationsSpec extends Specification { def is = s2"""
+class ExpectationsSpec extends Specification {
+  def is = s2"""
 
  StoredExpectations can be sandboxed $e1
  ThrownExpectations can be sandboxed $e2
@@ -32,6 +33,5 @@ class ExpectationsSpec extends Specification { def is = s2"""
   trait ThrownExpectations1 extends ThrownExpectations:
     def check(r: Result): Result =
       checkResultFailure(r)
-
 
 }

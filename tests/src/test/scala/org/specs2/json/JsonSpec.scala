@@ -12,25 +12,23 @@ class JsonSpec extends Specification with ScalaCheck:
     parse(showJson(json)) must beSome
   }.set(maxSize = 10)
 
-
 import Gen.*
 
-/**
- * Generator of JSONType objects with a given tree depth
- */
+/** Generator of JSONType objects with a given tree depth
+  */
 trait JsonGen:
   given Arbitrary[JSONType] = Arbitrary { sized(depth => jsonType(depth)) }
 
   def jsonType(depth: Int): Gen[JSONType] = oneOf(jsonArray(depth), jsonObject(depth))
 
   def jsonArray(depth: Int): Gen[JSONArray] = for
-    n    <- choose(1, 4)
+    n <- choose(1, 4)
     vals <- values(n, depth)
   yield JSONArray(vals)
 
   def jsonObject(depth: Int): Gen[JSONObject] = for
-    n    <- choose(1, 4)
-    ks   <- keys(n)
+    n <- choose(1, 4)
+    ks <- keys(n)
     vals <- values(n, depth)
   yield JSONObject(Map(ks zip vals*))
 

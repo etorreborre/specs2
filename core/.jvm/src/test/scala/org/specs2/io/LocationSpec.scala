@@ -11,28 +11,28 @@ import org.specs2.concurrent.ExecutionEnv
 class LocationSpec extends org.specs2.mutable.Spec with TypedEqual:
   given ee: ExecutionEnv = Env().executionEnv
 
-    "A unit specification must have correct locations for its fragments" >> {
-      given spec: LocationUnitSpecification = new LocationUnitSpecification(ee)
+  "A unit specification must have correct locations for its fragments" >> {
+    given spec: LocationUnitSpecification = new LocationUnitSpecification(ee)
 
-      "for the first piece of text, with 'should'" >> {
-        textAt(index = 0) === 17
-      }
-      "for the first example, with 'in'" >> {
-        exampleAt(index = 0) === 15
-      }
-      "for the second example, with 'in'" >> {
-        exampleAt(index = 1) === 16
-      }
-      "for the second piece of text, with '>>'" >> {
-        textAt(index = 1) === 24
-      }
-      "for the 3rd example, with '>>'" >> {
-        exampleAt(index = 2) === 21
-      }
-      "for the 4th example, with '>>'" >> {
-        exampleAt(index = 3) === 23
-      }
+    "for the first piece of text, with 'should'" >> {
+      textAt(index = 0) === 17
     }
+    "for the first example, with 'in'" >> {
+      exampleAt(index = 0) === 15
+    }
+    "for the second example, with 'in'" >> {
+      exampleAt(index = 1) === 16
+    }
+    "for the second piece of text, with '>>'" >> {
+      textAt(index = 1) === 24
+    }
+    "for the 3rd example, with '>>'" >> {
+      exampleAt(index = 2) === 21
+    }
+    "for the 4th example, with '>>'" >> {
+      exampleAt(index = 3) === 23
+    }
+  }
 
   "An acceptance specification must have correct locations for its fragments" >> {
     given LocationSpecification = new LocationSpecification(ee)
@@ -67,10 +67,10 @@ class LocationSpec extends org.specs2.mutable.Spec with TypedEqual:
   def fragmentLine(selector: Function[Fragment, Boolean], index: Int)(using spec: WithFragments) =
 
     val filter = StackTraceFilter(trace =>
-      !Seq("scala.",
-           "org.specs2.Specification",
-           "org.specs2.specification.",
-           "org.specs2.mutable.").exists(trace.getClassName.startsWith))
+      !Seq("scala.", "org.specs2.Specification", "org.specs2.specification.", "org.specs2.mutable.").exists(
+        trace.getClassName.startsWith
+      )
+    )
 
     val fragmentLocation = fragments(using spec).filter(selector).apply(index).location
 

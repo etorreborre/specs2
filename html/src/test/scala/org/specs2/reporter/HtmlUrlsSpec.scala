@@ -1,5 +1,3 @@
-
-
 /*
 package org.specs2
 package reporter
@@ -47,4 +45,4 @@ class HtmlUrlsSpecification extends Specification with ResultMatchers with HtmlU
     } must beFailing("http://www.etorreborre1.com is dead\nhttp://www.etorreborre2.com is dead")
   }
 }
-*/
+ */

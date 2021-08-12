@@ -11,4 +11,3 @@ package object producer:
 
   /** Transducer with async actions */
   type AsyncTransducer[A, B] = Transducer[Action, A, B]
-

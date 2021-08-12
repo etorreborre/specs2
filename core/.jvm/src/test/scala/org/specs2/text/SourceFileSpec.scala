@@ -6,7 +6,8 @@ import java.util.regex.Pattern
 import matcher.TypedEqual
 import control.*
 
-class SourceFileSpec extends Spec with TypedEqual { def is = sequential ^ s2"""
+class SourceFileSpec extends Spec with TypedEqual {
+  def is = sequential ^ s2"""
 
  the package name of a source file can be extracted
    for a simple name                                                     $packages1
@@ -70,7 +71,9 @@ class SourceFileSpec extends Spec with TypedEqual { def is = sequential ^ s2"""
   val content = "\nclass MySpec extends Spec\n"
 
   def classNames1 =
-    sourceFile.classNames("com.example", content, pattern, suffix = "", verbose = true).runOption must beSome(Seq("com.example.MySpec"))
+    sourceFile.classNames("com.example", content, pattern, suffix = "", verbose = true).runOption must beSome(
+      Seq("com.example.MySpec")
+    )
 
   def classNames2 =
     sourceFile.classNames("", content, pattern, suffix = "", verbose = true).runOption must beSome(Seq("MySpec"))

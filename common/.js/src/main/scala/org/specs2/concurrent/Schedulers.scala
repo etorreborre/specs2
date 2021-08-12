@@ -5,11 +5,10 @@ import scala.scalajs.js.timers.*
 
 trait Schedulers {
 
-  /**
-   * Default Scheduler for JavaScript
-   */
+  /** Default Scheduler for JavaScript
+    */
   def default: Scheduler = new Scheduler {
-    def schedule(action: =>Unit, duration: FiniteDuration): () => Unit  = {
+    def schedule(action: =>Unit, duration: FiniteDuration): () => Unit = {
       val handle = setTimeout(duration)(action)
       () => clearTimeout(handle)
     }

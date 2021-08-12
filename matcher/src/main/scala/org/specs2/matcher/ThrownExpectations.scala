@@ -9,26 +9,18 @@ import execute.PendingException
 import execute.SkipException
 import execute.FailureException
 
-/**
- * Thrown expectations will throw a FailureException if a match fails
- *
- * This trait can be extended to be used in another framework like ScalaTest:
- *
- *   trait ScalaTestExpectations extends ThrownExpectations {
- *     override protected def checkResultFailure(r: =>Result) = {
- *       r match {
- *         case f @ Failure(ko, _, _, _) => throw new TestFailedException(f.message, f.exception, 0)
- *         case _ => ()
- *       }
- *       m
- *     }
- *   }
- */
+/** Thrown expectations will throw a FailureException if a match fails
+  *
+  * This trait can be extended to be used in another framework like ScalaTest:
+  *
+  * trait ScalaTestExpectations extends ThrownExpectations { override protected def checkResultFailure(r: =>Result) = {
+  * r match { case f @ Failure(ko, _, _, _) => throw new TestFailedException(f.message, f.exception, 0) case _ => () } m
+  * } }
+  */
 trait ThrownExpectations extends ThrownExpectationsCreation with ThrownStandardResults with ThrownStandardMatchResults
 
-/**
- * Lightweight ThrownExpectations trait with less implicit methods
- */
+/** Lightweight ThrownExpectations trait with less implicit methods
+  */
 trait ThrownExpectationsCreation extends ThrownExpectables
 
 trait ThrownExpectables extends ExpectationsCreation:
@@ -44,16 +36,18 @@ trait ThrownExpectables extends ExpectationsCreation:
   override protected def checkResultFailure(result: =>Result) =
     lazy val r = result
     r match
-      case f@Failure(_, _, _, _) => throw new FailureException(f)
-      case s@Skipped(_, _) => throw new SkipException(s)
-      case s@Pending(_) => throw new PendingException(s)
-      case e@Error(_, _) => throw new ErrorException(e)
-      case d@DecoratedResult(_, r) => if !r.isSuccess then throw new DecoratedResultException(d) else ()
-      case _ => ()
+      case f @ Failure(_, _, _, _)   => throw new FailureException(f)
+      case s @ Skipped(_, _)         => throw new SkipException(s)
+      case s @ Pending(_)            => throw new PendingException(s)
+      case e @ Error(_, _)           => throw new ErrorException(e)
+      case d @ DecoratedResult(_, r) => if !r.isSuccess then throw new DecoratedResultException(d) else ()
+      case _                         => ()
     r
 
 trait ThrownStandardResults extends StandardResults with ExpectationsCreation:
-  override def failure: Failure = { checkResultFailure(throw new FailureException(StandardResults.failure)); StandardResults.failure }
+  override def failure: Failure = {
+    checkResultFailure(throw new FailureException(StandardResults.failure)); StandardResults.failure
+  }
   override def todo: Pending = { checkResultFailure(throw new PendingException(super.todo)); super.todo }
   override def anError: Error = { checkResultFailure(throw new ErrorException(super.anError)); super.anError }
 
@@ -85,20 +79,17 @@ trait ThrownStandardMatchResults extends ExpectedResults with ExpectationsCreati
       case PendingException(e) => e.asInstanceOf[Result]
       case other: Throwable    => throw other
 
-
 object ThrownExpectations extends ThrownExpectations
 
-/**
- * This trait can be used to cancel the effect of thrown expectations.
- *
- * For example it can be mixed-in a mutable.Specification so that no exception is thrown on failure
- */
+/** This trait can be used to cancel the effect of thrown expectations.
+  *
+  * For example it can be mixed-in a mutable.Specification so that no exception is thrown on failure
+  */
 trait NoThrownExpectations extends Expectations:
   override protected def checkResultFailure(r: =>Result) = r
 
-/**
- * This trait can be used to integrate failures and skip messages into specs2
- */
+/** This trait can be used to integrate failures and skip messages into specs2
+  */
 trait ThrownMessages:
   this: ThrownExpectations =>
 

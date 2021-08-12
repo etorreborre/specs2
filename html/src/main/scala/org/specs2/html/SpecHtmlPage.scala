@@ -32,14 +32,14 @@ case class SpecHtmlPage(specification: SpecStructure, path: FilePath, outDir: Di
     parse(content)
 
   private def parse(string: String): NodeSeq =
-    XML.withSAXParser((new org.ccil.cowan.tagsoup.jaxp.SAXFactoryImpl).newSAXParser)
+    XML
+      .withSAXParser((new org.ccil.cowan.tagsoup.jaxp.SAXFactoryImpl).newSAXParser)
       .load(new scala.xml.InputSource(new StringReader(string)))
 
 object SpecHtmlPage:
-  
+
   def outputPath(outDir: DirectoryPath, spec: SpecStructure): FilePath =
     outputPath(outDir, spec.specClassName)
 
   def outputPath(outDir: DirectoryPath, specClassName: String): FilePath =
-    outDir | FileName.unsafe(specClassName+".html")
-
+    outDir | FileName.unsafe(specClassName + ".html")

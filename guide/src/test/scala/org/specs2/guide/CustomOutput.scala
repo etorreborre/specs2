@@ -3,7 +3,8 @@ package guide
 
 import org.specs2.control.*
 
-object CustomOutput extends UserGuidePage { def is = s2"""
+object CustomOutput extends UserGuidePage {
+  def is = s2"""
 
 You can implement your own reporting of $specs2 specifications:
 

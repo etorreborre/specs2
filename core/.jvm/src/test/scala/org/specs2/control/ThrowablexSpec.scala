@@ -3,7 +3,8 @@ package control
 
 import ThrowableExamples.*
 
-class ThrowablexSpec extends Specification with Throwablex { def is = section("ci") ^ s2"""
+class ThrowablexSpec extends Specification with Throwablex {
+  def is = section("ci") ^ s2"""
 
 The Throwablex trait provides extensions to regular throwables:
 
@@ -28,17 +29,20 @@ It provides utility functions for stacktrace elements
 
 """
 
-  def chained1 = e.chainedExceptions      === List(e.getCause)
+  def chained1 = e.chainedExceptions === List(e.getCause)
   def chained2 = e.getFullStackTrace.size === e.getStackTrace.length + e.getCause.getStackTrace.length
-  def chained3 = e.messageAndCause        === "message. Cause: cause"
+  def chained3 = e.messageAndCause === "message. Cause: cause"
 
-  def location1 = e.location                === "ThrowableExamples.scala:8"
-  def location2 = e.classLocation           === "org.specs2.control.ThrowableExamples:8"
-  def location3 = e.fullLocation            === "org.specs2.control.ThrowableExamples (ThrowableExamples.scala:8)"
+  def location1 = e.location === "ThrowableExamples.scala:8"
+  def location2 = e.classLocation === "org.specs2.control.ThrowableExamples:8"
+  def location3 = e.fullLocation === "org.specs2.control.ThrowableExamples (ThrowableExamples.scala:8)"
   def location4 = TraceLocation(trace).path === "org/specs2/control/ThrowableExamples.scala"
 
-  def filter1 = e.filter("org.specs2.specification.core").getStackTrace.toList.map(_.toString) must containMatch("org.specs2.specification.core")
-  def filter2 = e.filterNot("org.specs2.control").getStackTrace.toList.map(_.toString) must not (containMatch("org.specs2.control"))
+  def filter1 = e.filter("org.specs2.specification.core").getStackTrace.toList.map(_.toString) must containMatch(
+    "org.specs2.specification.core"
+  )
+  def filter2 =
+    e.filterNot("org.specs2.control").getStackTrace.toList.map(_.toString) must not(containMatch("org.specs2.control"))
 
   def stack1 = e(0).toString must beMatching(".*org.specs2.control.ThrowableExamples\\$.e.*")
   def stack2 = e.headOption.map(_.toString).toIterable must containMatch("ThrowableExamples")

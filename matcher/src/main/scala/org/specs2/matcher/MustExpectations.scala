@@ -4,10 +4,8 @@ package matcher
 import execute.{Result, StandardResults}
 import scala.util.NotGiven
 
-/**
- * This trait provides implicit definitions to check values with matchers
- * by using a "must" syntax: value must matcher
- */
+/** This trait provides implicit definitions to check values with matchers by using a "must" syntax: value must matcher
+  */
 trait MustExpectations extends ExpectationsCreation with TypedEqual:
 
   extension [T](tm: =>T)(using not: NotGiven[NoMustExpectations])
@@ -23,10 +21,9 @@ object MustExpectations extends MustExpectations
 trait NoMustExpectations:
   given NoMustExpectations = ???
 
-/**
- * This trait provides implicit definitions to transform any value into an Expectable
- * which throws exceptions when a match fails
- */
+/** This trait provides implicit definitions to transform any value into an Expectable which throws exceptions when a
+  * match fails
+  */
 trait MustThrownExpectations extends MustExpectations with ThrownExpectations
 
 object MustThrownExpectations extends MustThrownExpectations

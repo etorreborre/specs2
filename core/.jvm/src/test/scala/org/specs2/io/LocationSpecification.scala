@@ -4,7 +4,8 @@ import org.specs2.concurrent.ExecutionEnv
 import org.specs2.io.WithFragments
 import org.specs2.specification.core.Fragment
 
-class LocationSpecification(ee: ExecutionEnv) extends Specification with WithFragments { def is = s2"""
+class LocationSpecification(ee: ExecutionEnv) extends Specification with WithFragments {
+  def is = s2"""
   presentation
   this block should
     have one example            $ok

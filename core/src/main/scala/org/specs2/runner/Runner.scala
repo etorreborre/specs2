@@ -9,14 +9,12 @@ import specification.core.*
 import specification.process.Stats
 import main.Arguments
 
-/**
- * reusable actions for Runners
- */
+/** reusable actions for Runners
+  */
 object Runner:
 
-  /**
-   * Execute some actions and exit with the proper code if 'exit' is true
-   */
+  /** Execute some actions and exit with the proper code if 'exit' is true
+    */
   def execute(action: Action[Stats], env: Env, exit: Boolean): Unit =
     val logger = env.systemLogger
 
@@ -29,19 +27,13 @@ object Runner:
         exitSystem(1, exit)
 
       case Right(Right(result)) =>
-        if result.isSuccess then
-           exitSystem(0, exit)
-        else
-          exitSystem(1, exit)
+        if result.isSuccess then exitSystem(0, exit)
+        else exitSystem(1, exit)
 
-
-
-  /**
-   * Exit the JVM with a given status
-   */
+  /** Exit the JVM with a given status
+    */
   def exitSystem(status: Int, exit: Boolean): Unit =
     if exit then System.exit(status)
-
 
 case class RunnerLogger(env: Env):
 
@@ -51,28 +43,29 @@ case class RunnerLogger(env: Env):
   val logger: PrinterLogger =
     env.printerLogger
 
-  /**
-   * Use the console logging to log exceptions
-   */
+  /** Use the console logging to log exceptions
+    */
   def logThrowable(t: Throwable): Operation[Unit] =
-
-    when (!arguments.commandLine.boolOr("silent", false)) {
+    when(!arguments.commandLine.boolOr("silent", false)) {
       t match
-      case UserException(m, throwable) => logException(m, throwable)
+        case UserException(m, throwable) => logException(m, throwable)
 
-      case ActionException(warnings, message, exception) =>
-        if warnings.nonEmpty then print("Warnings:\n") >> print(warnings.mkString("", "\n", "\n"))
-        else Operation.unit >>
-          message.traverse(print).void >>
-          exception.traverse(e => logException(e.getMessage, e)).void
+        case ActionException(warnings, message, exception) =>
+          if warnings.nonEmpty then print("Warnings:\n") >> print(warnings.mkString("", "\n", "\n"))
+          else
+            Operation.unit >>
+              message.traverse(print).void >>
+              exception.traverse(e => logException(e.getMessage, e)).void
 
-      case _: InterruptedException => print("User cancellation. Bye")
+        case _: InterruptedException => print("User cancellation. Bye")
 
-      case other =>
-        print("\n" + t.toString + "\n") >>
-          logStack(t) >>
-        print("\n\nThis looks like a specs2 exception...\nPlease report it with the preceding stacktrace at http://github.com/etorreborre/specs2/issues") >>
-          print(" ")
+        case other =>
+          print("\n" + t.toString + "\n") >>
+            logStack(t) >>
+            print(
+              "\n\nThis looks like a specs2 exception...\nPlease report it with the preceding stacktrace at http://github.com/etorreborre/specs2/issues"
+            ) >>
+            print(" ")
 
     }
 
@@ -89,12 +82,11 @@ case class RunnerLogger(env: Env):
       logStack(throwable) >>
       print(" ")
 
-  /**
-   * Log the issues which might have been caused by the user
-   */
+  /** Log the issues which might have been caused by the user
+    */
   def logUserWarnings(warnings: List[String]): Operation[Unit] =
     when(warnings.nonEmpty)(print("Warnings:\n")) >>
       warnings.traverse(print).void
 
   private def print(m: String): Operation[Unit] =
-    Operation.delayed(logger.errorLog(m+"\n"))
+    Operation.delayed(logger.errorLog(m + "\n"))

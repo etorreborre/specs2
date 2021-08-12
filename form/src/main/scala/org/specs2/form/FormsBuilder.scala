@@ -8,12 +8,9 @@ import matcher.*
 
 import scala.xml.NodeSeq
 
-/**
- * Utility methods to build Fields, Props and Forms and insert them in other Forms or
- * Fragments.
- */
-private[specs2]
-trait FormsBuilder extends FormsBuilderLowPriorityImplicits:
+/** Utility methods to build Fields, Props and Forms and insert them in other Forms or Fragments.
+  */
+private[specs2] trait FormsBuilder extends FormsBuilderLowPriorityImplicits:
 
   /** a Field can be added on a Form row as a FieldCell */
   given [T]: Conversion[Field[T], FieldCell] with
@@ -35,7 +32,7 @@ trait FormsBuilder extends FormsBuilderLowPriorityImplicits:
     def apply(f: Form): Result = f.execute
 
   /** any seq of object convertible to cells */
-  given [T : ToCell]: Conversion[Seq[T], Seq[Cell]] with
+  given [T: ToCell]: Conversion[Seq[T], Seq[Cell]] with
     def apply(seq: Seq[T]): Seq[Cell] =
       seq.map(summon[ToCell[T]].toCell)
 
@@ -76,7 +73,7 @@ trait FormsBuilder extends FormsBuilderLowPriorityImplicits:
     new Prop[T, S](label, new Property(() => Some(actual)), new Property(() => Some(exp)))
 
   /** @return a new Prop with a label, an actual value and a constraint to apply to values */
-  def prop[T, S, R : AsResult](label: String, actual: =>T, c: (T, S) => R): Prop[T, S] =
+  def prop[T, S, R: AsResult](label: String, actual: =>T, c: (T, S) => R): Prop[T, S] =
     Prop(label, actual, c)
 
   /** @return a new Prop with a label, an actual value and a matcher to apply to values */
@@ -107,8 +104,7 @@ trait FormsBuilder extends FormsBuilderLowPriorityImplicits:
   def tab(label: String, form: Form): Tabs =
     tabs.tab(label, form)
 
-private[specs2]
-object FormsBuilder extends FormsBuilder
+private[specs2] object FormsBuilder extends FormsBuilder
 
 trait FormsBuilderLowPriorityImplicits:
   /** anything can be added on a Form row as a Field */

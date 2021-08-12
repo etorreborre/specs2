@@ -14,7 +14,7 @@ object Whitespace:
   def showStringTabs(s: String): String =
     s.replace("\t", "\u2192")
 
-  extension [T] (t: T)
+  extension [T](t: T)
     def showWhitespaces: String =
       Whitespace.showStringWhitespaces(t.toString)
 

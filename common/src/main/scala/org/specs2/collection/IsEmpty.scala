@@ -10,7 +10,7 @@ object IsEmpty extends IsEmptyLowPriority1:
   def apply[T](using ev: IsEmpty[T]): IsEmpty[T] =
     ev
 
-  extension [T : IsEmpty](t: T)
+  extension [T: IsEmpty](t: T)
     def isEmpty: Boolean =
       IsEmpty[T].isEmpty(t)
 

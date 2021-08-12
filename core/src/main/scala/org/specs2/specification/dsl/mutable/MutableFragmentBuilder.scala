@@ -7,19 +7,17 @@ import main.Arguments
 import specification.create.FragmentsFactory
 import specification.core.*
 
-/**
- * Creation of fragments in a mutable specification
- *
- * This essentially works by keep a mutable ListBuffer of Fragments
- *
- * Arguments and title are also added with mutable variables
- *
- *
- */
-trait MutableFragmentBuilder extends FragmentBuilder
-  with FragmentsFactory
-  with MutableArgumentsBuilder
-  with MutableHeaderBuilder { outer =>
+/** Creation of fragments in a mutable specification
+  *
+  * This essentially works by keep a mutable ListBuffer of Fragments
+  *
+  * Arguments and title are also added with mutable variables
+  */
+trait MutableFragmentBuilder
+    extends FragmentBuilder
+    with FragmentsFactory
+    with MutableArgumentsBuilder
+    with MutableHeaderBuilder { outer =>
 
   private[specs2] var specFragments = Fragments.empty
 

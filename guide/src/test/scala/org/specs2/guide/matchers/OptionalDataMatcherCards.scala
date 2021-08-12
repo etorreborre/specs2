@@ -6,23 +6,15 @@ import form.*
 
 object OptionalDataMatcherCards extends Cards {
   def title = "Optional data matchers"
-  def cards = Seq(
-    ResultMatchers,
-    TerminationMatchers)
+  def cards = Seq(ResultMatchers, TerminationMatchers)
 }
 
 object OptionalContentMatcherCards extends Cards {
   def title = "Optional content matchers"
-  def cards = Seq(
-    XmlMatchers,
-    JsonMatchers,
-    FileMatchers,
-    ContentMatchers)
+  def cards = Seq(XmlMatchers, JsonMatchers, FileMatchers, ContentMatchers)
 }
 
 object OptionalLanguageMatcherCards extends Cards {
   def title = "Optional language matchers"
-  def cards = Seq(
-    TypecheckMatchers,
-    InterpreterMatchers)
+  def cards = Seq(TypecheckMatchers, InterpreterMatchers)
 }

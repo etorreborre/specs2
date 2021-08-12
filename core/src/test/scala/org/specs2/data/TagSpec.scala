@@ -3,10 +3,11 @@ package data
 
 import fp.syntax.*
 import main.Arguments
-import NamedTag.{given,*}
+import NamedTag.{given, *}
 import matcher.*
 
-class TagSpec extends Specification with DataTables { def is = s2"""
+class TagSpec extends Specification with DataTables {
+  def is = s2"""
 
   Tags (simple, named, section, custom) form a monoid so that:
 
@@ -23,10 +24,10 @@ class TagSpec extends Specification with DataTables { def is = s2"""
 
   def zeroTag = allTags must contain { (t: NamedTag) =>
     allNames must contain { (names: String) =>
-      val arguments = Arguments.split("include "+names)
+      val arguments = Arguments.split("include " + names)
 
       ((t |+| zero) === (zero |+| t)) and
-      ((t |+| zero).keep(arguments) === (zero |+| t).keep(arguments))
+        ((t |+| zero).keep(arguments) === (zero |+| t).keep(arguments))
     }.forall
   }.forall
 
@@ -34,25 +35,24 @@ class TagSpec extends Specification with DataTables { def is = s2"""
     allTags must contain { (t2: NamedTag) =>
       allTags must contain { (t3: NamedTag) =>
         allNames must contain { (names: String) =>
-          val arguments = Arguments.split("include "+names)
+          val arguments = Arguments.split("include " + names)
           val values = (t1, t2, t3, names).toString
 
-          (((t1 |+| t2) |+| t3)                             must ===((t1 |+| (t2 |+| t3)))) and
-          (((t1 |+| t2) |+| t3).keep(arguments).aka(values) must ===((t1 |+| (t2 |+| t3)).keep(arguments)))
+          (((t1 |+| t2) |+| t3) must ===((t1 |+| (t2 |+| t3)))) and
+            (((t1 |+| t2) |+| t3).keep(arguments).aka(values) must ===((t1 |+| (t2 |+| t3)).keep(arguments)))
         }.forall
       }.forall
     }.forall
   }.forall
 
   def add1 =
-    "t1"     | "t2"  | "args"           | "result" |>
-    tag1     ! tag2  ! "include 1"      ! true     |
-    tag1     ! tag2  ! "include 2"      ! true     |
-    tag1     ! tag1  ! "include 1&&2"   ! false    |
-    tag1     ! tag2  ! "include 1&&2"   ! true     |
-      { (t1: NamedTag, t2: NamedTag, args: String, result: Boolean) =>
-      (t1 |+| t2).keep(Arguments.split(args)) must ===(result)
-    }
+    "t1" | "t2" | "args" | "result" |>
+      tag1 ! tag2 ! "include 1" ! true |
+      tag1 ! tag2 ! "include 2" ! true |
+      tag1 ! tag1 ! "include 1&&2" ! false |
+      tag1 ! tag2 ! "include 1&&2" ! true | { (t1: NamedTag, t2: NamedTag, args: String, result: Boolean) =>
+        (t1 |+| t2).keep(Arguments.split(args)) must ===(result)
+      }
 
   def remove1 = data.Tag("1", "2", "3").removeNames(Seq("2")) must ===(data.Tag("1", "3"))
 

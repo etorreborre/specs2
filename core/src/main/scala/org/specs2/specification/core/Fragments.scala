@@ -9,22 +9,20 @@ import producer.*
 import Producer.*
 import concurrent.ExecutionEnv
 
-/**
- * Fragments of a specification
- *
- * It is implemented as an async Producer[Fragment] in order to produce fragments
- * dynamically if necessary
- */
+/** Fragments of a specification
+  *
+  * It is implemented as an async Producer[Fragment] in order to produce fragments dynamically if necessary
+  */
 case class Fragments(contents: AsyncStream[Fragment]):
   /** append one or several fragments */
-  def append(other: Fragment): Fragments       = append(oneAsync(other))
+  def append(other: Fragment): Fragments = append(oneAsync(other))
   def append(others: Seq[Fragment]): Fragments = append(Fragments(others*))
-  def append(others: Fragments): Fragments     = append(others.contents)
+  def append(others: Fragments): Fragments = append(others.contents)
   def appendLazy(other: =>Fragment): Fragments = append(oneDelayedAsync(other))
 
   /** prepend one or several fragments to this process */
-  def prepend(other: Fragment): Fragments       = prepend(oneAsync(other))
-  def prepend(others: Fragments): Fragments     = prepend(others.contents)
+  def prepend(other: Fragment): Fragments = prepend(oneAsync(other))
+  def prepend(others: Fragments): Fragments = prepend(others.contents)
   def prepend(others: Seq[Fragment]): Fragments = prepend(Fragments(others*))
   def prependLazy(other: =>Fragment): Fragments = prepend(oneDelayedAsync(other))
 
@@ -49,10 +47,10 @@ case class Fragments(contents: AsyncStream[Fragment]):
   def collect[A](predicate: PartialFunction[Fragment, A]): AsyncStream[A] =
     contents `collect` predicate
 
-  def update(f: AsyncTransducer[Fragment, Fragment])   = copy(contents = f(contents))
-  def flatMap(f: Fragment => AsyncStream[Fragment])    = copy(contents = contents `flatMap` f)
-  def |> (f: AsyncTransducer[Fragment, Fragment])  = copy(contents = f(contents))
-  def append(other: AsyncStream[Fragment]): Fragments  = copy(contents = contents `append` other)
+  def update(f: AsyncTransducer[Fragment, Fragment]) = copy(contents = f(contents))
+  def flatMap(f: Fragment => AsyncStream[Fragment]) = copy(contents = contents `flatMap` f)
+  def |>(f: AsyncTransducer[Fragment, Fragment]) = copy(contents = f(contents))
+  def append(other: AsyncStream[Fragment]): Fragments = copy(contents = contents `append` other)
   def prepend(other: AsyncStream[Fragment]): Fragments = copy(contents = other `append` contents)
   def updateFragments(update: List[Fragment] => Fragments): Fragments =
     copy(Producer.emitAction(contents.runList.flatMap(fs => update(fs).contents.runList)))
@@ -64,7 +62,7 @@ case class Fragments(contents: AsyncStream[Fragment]):
   /** run the process to get all fragments as a list */
   def fragmentsList(ee: ExecutionEnv): List[Fragment] =
     contents.runList.runAction(ee) match
-      case Left(e) => List(Fragment(Text("ERROR WHILE CREATING THE SPECIFICATION! "+e.getMessage)))
+      case Left(e)   => List(Fragment(Text("ERROR WHILE CREATING THE SPECIFICATION! " + e.getMessage)))
       case Right(fs) => fs
 
   /** run the process to filter all texts */
@@ -107,16 +105,15 @@ case class Fragments(contents: AsyncStream[Fragment]):
     contents.producerState[Fragment, S](None, Some(s => s.fold(done[Action, Fragment])(t => one(Fragment(Text(t)))))) {
       case (f, text) =>
         f match
-          case Fragment(Text(t),l, e) if isText(f) =>
-            (done, text.map(_+t).orElse(Some(t)))
+          case Fragment(Text(t), l, e) if isText(f) =>
+            (done, text.map(_ + t).orElse(Some(t)))
 
           case other =>
             text match
               case Some(t1) => (Producer.emit(List(Fragment(Text(t1)), other)), None)
-              case _ => (one(other), None)
+              case _        => (one(other), None)
     }
   }
-
 
 object Fragments:
 
@@ -128,7 +125,7 @@ object Fragments:
     new Fragments(emitSeq[Action, Fragment](fragments))
 
   given Monoid[Fragments] with
-    def zero : Fragments = Fragments.empty
+    def zero: Fragments = Fragments.empty
 
     def append(fs1: Fragments, fs2: =>Fragments): Fragments =
       fs1.append(fs2)

@@ -5,15 +5,13 @@ import execute.{Result, AsResult}
 import org.specs2.specification.*
 import java.io.{FileDescriptor, FileOutputStream, OutputStream, PrintStream}
 
-/**
- * This trait allows to remove any console display during the execution of an example
- *
- * Of course it needs to be understood that the output might be completely messed up when
- * executing specifications and examples concurrently
- *
- */
+/** This trait allows to remove any console display during the execution of an example
+  *
+  * Of course it needs to be understood that the output might be completely messed up when executing specifications and
+  * examples concurrently
+  */
 trait NoStdOut:
-  def around[T : AsResult](t: =>T): Result =
+  def around[T: AsResult](t: =>T): Result =
     try
       // both System.out and Console.out must be swapped because Console keeps
       // a variable containing System.out
@@ -21,9 +19,7 @@ trait NoStdOut:
       Console.withOut(noOut) {
         AsResult(t)
       }
-    finally
-      System.setOut(stdOut)
-
+    finally System.setOut(stdOut)
 
 object NoStdOut extends NoStdOut
 
@@ -35,10 +31,8 @@ object stdOut extends PrintStream(new FileOutputStream(FileDescriptor.out))
 object NullOutputStream extends OutputStream:
   def write(b: Int) = ()
 
-/**
- * This trait allows to remove any console display during the execution of the examples
- * of a Specification
- */
+/** This trait allows to remove any console display during the execution of the examples of a Specification
+  */
 trait NoStdOutAroundEach extends AroundEach:
-  def around[T : AsResult](t: =>T): Result =
+  def around[T: AsResult](t: =>T): Result =
     NoStdOut.around(t)

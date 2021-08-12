@@ -1,11 +1,9 @@
 package org.specs2.control
 
- import org.specs2.collection.canEqualAny
- 
-/**
- * Utility object to show a parameter as used
- * In particular this is useful to avoid warnings with ImplicitParameters
- */
+import org.specs2.collection.canEqualAny
+
+/** Utility object to show a parameter as used In particular this is useful to avoid warnings with ImplicitParameters
+  */
 object Use:
 
   def apply(t: Any, ts: Any*): Unit =

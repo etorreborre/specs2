@@ -4,7 +4,8 @@ package text
 import specification.Tables
 import AnsiColors.*
 
-class AnsiColorsSpec extends Spec with Tables { def is = s2"""
+class AnsiColorsSpec extends Spec with Tables {
+  def is = s2"""
 
  it is possible to remove the colors from a string $colors1
  coloring a string must keep newlines              $colors2
@@ -16,13 +17,14 @@ class AnsiColorsSpec extends Spec with Tables { def is = s2"""
 
   def colors2 =
     val ^ = reset.color
-    "string to color"        | "result"                                  |>
-    "\nhello\n"              ! s"*${^}\n*hello${^}\n*${^}"               |
-    "\nhello"                ! s"*${^}\n*hello${^}"                      |
-    "hello\n"                ! s"*hello${^}\n*${^}"                      |
-    "hello"                  ! s"*hello${^}"                             |
-    ""                       ! s"*${^}"                                  |
-    "\nhello\nworld\n"       ! s"*${^}\n*hello${^}\n*world${^}\n*${^}"   |
-    { (s, r) => color(s, AnsiColor("*")).replace("\n", "_").replace(^, "^") must ===(r.replace("\n", "_").replace(^, "^")) }
+    "string to color" | "result" |>
+      "\nhello\n" ! s"*${^}\n*hello${^}\n*${^}" |
+      "\nhello" ! s"*${^}\n*hello${^}" |
+      "hello\n" ! s"*hello${^}\n*${^}" |
+      "hello" ! s"*hello${^}" |
+      "" ! s"*${^}" |
+      "\nhello\nworld\n" ! s"*${^}\n*hello${^}\n*world${^}\n*${^}" | { (s, r) =>
+        color(s, AnsiColor("*")).replace("\n", "_").replace(^, "^") must ===(r.replace("\n", "_").replace(^, "^"))
+      }
 
 }

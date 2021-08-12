@@ -1,7 +1,8 @@
 package org.specs2
 package main
 
-class SystemPropertiesSpec extends Specification { def is = s2"""
+class SystemPropertiesSpec extends Specification {
+  def is = s2"""
 
 Set
 ===
@@ -63,8 +64,7 @@ Get as
     props("specs2.other" -> "false").getPropertyAs[Boolean]("color") must beNone
 }
 
-/**
-  * This class is used in specifications to mock the system properties
+/** This class is used in specifications to mock the system properties
   */
 case class sp(properties: Map[String, String]) extends SystemProperties:
   override def systemGetProperty(p: String) = properties.get(p)

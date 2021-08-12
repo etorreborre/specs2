@@ -1,20 +1,20 @@
 package org.specs2
 package matcher
 
-/**
- * Trait aggregating the most common specs2 matchers
- */
-trait Matchers extends AnyMatchers
-                  with TraversableMatchers
-                  with MapMatchers
-                  with StringMatchers
-                  with ExceptionMatchers
-                  with NumericMatchers
-                  with OptionMatchers
-                  with EitherMatchers
-                  with TryMatchers
-                  with EventuallyMatchers
-                  with ValueChecks
+/** Trait aggregating the most common specs2 matchers
+  */
+trait Matchers
+    extends AnyMatchers
+    with TraversableMatchers
+    with MapMatchers
+    with StringMatchers
+    with ExceptionMatchers
+    with NumericMatchers
+    with OptionMatchers
+    with EitherMatchers
+    with TryMatchers
+    with EventuallyMatchers
+    with ValueChecks
 
 object Matchers extends Matchers
 

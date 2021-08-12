@@ -7,9 +7,8 @@ import main.*
 import execute.AsResult
 import create.FragmentsFactory
 
-/**
- * Creation of SpecStructure with the ^ syntax
- */
+/** Creation of SpecStructure with the ^ syntax
+  */
 trait SpecStructureDsl extends FragmentsFactory:
   private val outer = this
 
@@ -189,6 +188,6 @@ trait SpecStructureDsl extends FragmentsFactory:
   implicit def fragmentsAsSpecStructure(fs: =>Fragments): SpecStructure =
     SpecStructure.create(SpecHeader(getClass), fs)
 
-    // allow writing: def is = ok
-  implicit def resultAsSpecStructure[R : AsResult](r: =>R): SpecStructure =
+  // allow writing: def is = ok
+  implicit def resultAsSpecStructure[R: AsResult](r: =>R): SpecStructure =
     SpecStructure.create(SpecHeader(getClass), Arguments(), Fragments(Fragment(NoText, Execution.result(r))))

@@ -1,7 +1,7 @@
 package org.specs2
 package matcher
 
-import org.scalacheck.{ Arbitrary, Shrink, Prop }
+import org.scalacheck.{Arbitrary, Shrink, Prop}
 
 import fp.*
 import fp.syntax.*
@@ -9,11 +9,9 @@ import execute.ResultImplicits.*
 import AnyMatchers.*
 import annotation.*
 
-/**
- * This trait provides matchers for some Scalaz (http://github/scalaz/scalaz) datatypes.
- */
-private[specs2]
-trait FpMatchers extends ScalaCheck:
+/** This trait provides matchers for some Scalaz (http://github/scalaz/scalaz) datatypes.
+  */
+private[specs2] trait FpMatchers extends ScalaCheck:
   private val outer = this
 
   extension [T](sg: Semigroup[T])(using nothing: Int = 0)

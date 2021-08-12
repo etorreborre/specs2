@@ -1,18 +1,17 @@
 package org.specs2
 package collection
 
-/**
- * A trait for anything that can be sized
- */
+/** A trait for anything that can be sized
+  */
 trait Sized[T]:
   /** @return the size of t */
-  def size(t: T) : Int
+  def size(t: T): Int
 
   /** alias for size */
-  def length(t: T) : Int = size(t)
+  def length(t: T): Int = size(t)
 
 object Sized extends SizedLowPriority1:
-    /** any scala collection has a size */
+  /** any scala collection has a size */
   given [I <: Traversable[?]]: Sized[I] with
     def size(t: I) = t.size
 

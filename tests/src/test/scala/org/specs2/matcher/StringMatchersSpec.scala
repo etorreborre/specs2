@@ -3,67 +3,73 @@ package matcher
 
 import java.util.regex.Pattern
 
-class StringMatchersSpec extends Spec with StringMatchers with MustExpectations with TraversableMatchers with AnyMatchers { def is = s2"""
+class StringMatchersSpec
+    extends Spec
+    with StringMatchers
+    with MustExpectations
+    with TraversableMatchers
+    with AnyMatchers {
+  def is = s2"""
 
   A string can be matched against a pattern using
     beMatching
-    ${ "eric" must beMatching("e.*") }
-    ${ "eric" must beMatching(Pattern.compile("e.*")) }
-    ${ "eric" must beMatching("e.*".r) }
-    ${ "eric\nme\nmyself" must =~("me") }
-    ${ "eric\nme\nmyself" must =~(Pattern.compile("me", Pattern.DOTALL)) }
+    ${"eric" must beMatching("e.*")}
+    ${"eric" must beMatching(Pattern.compile("e.*"))}
+    ${"eric" must beMatching("e.*".r)}
+    ${"eric\nme\nmyself" must =~("me")}
+    ${"eric\nme\nmyself" must =~(Pattern.compile("me", Pattern.DOTALL))}
 
     "or 'beMatching'
-    ${ "eric" `aka` "ETO" must beMatching("e.*") }
-    ${ "a" must not(beMatching("{\"a\":\"b\"}")) }
+    ${"eric" `aka` "ETO" must beMatching("e.*")}
+    ${"a" must not(beMatching("{\"a\":\"b\"}"))}
 
     find ... withGroups, to check for groups
-    ${ "erirec" must find("(e|i).").withGroups("e", "i", "e") }
-    ${ "abcd" must find("(a.)(c.)").withGroups("ab", "cd") }
-    ${ "abcd" must find("(a.)(c.)".r).withGroups("ab", "cd") }
+    ${"erirec" must find("(e|i).").withGroups("e", "i", "e")}
+    ${"abcd" must find("(a.)(c.)").withGroups("ab", "cd")}
+    ${"abcd" must find("(a.)(c.)".r).withGroups("ab", "cd")}
 
   The length of a string can be checked
     with have length
-    ${ "Eric" must haveLength(4) }
+    ${"Eric" must haveLength(4)}
 
     or with haveSize because a String is also an Iterable[Char]
-    ${ "Eric" must haveSize(4) }
+    ${"Eric" must haveSize(4)}
 
     or with beEmpty because a String is also an Iterable[Char]
-    ${ "" must beEmpty }
+    ${"" must beEmpty}
 
   2 strings can be checked for equality
     ignoring case
-    ${ "eric" must beEqualTo("Eric").ignoreCase }
+    ${"eric" must beEqualTo("Eric").ignoreCase}
     "the failure message must mention 'ignoring case' $e3
 
     ignoring space
-    ${ "eric" must beEqualTo(" eric ").ignoreSpace }
+    ${"eric" must beEqualTo(" eric ").ignoreSpace}
     the failure message must mention 'ignoring space' $e4
 
     trimmed
-    ${ "eric" must beEqualTo(" eric ").trimmed }
+    ${"eric" must beEqualTo(" eric ").trimmed}
     the failure message must mention 'trimmed' $e5
 
     ignoring space and case
-    ${ "  eric" must beEqualTo(" Eric ").ignoreSpace.ignoreCase }
-    ${ "  foo\n   bar\n" must beEqualTo(" foo\n   \n   bar\n ").ignoreSpace.ignoreCase }
+    ${"  eric" must beEqualTo(" Eric ").ignoreSpace.ignoreCase}
+    ${"  foo\n   bar\n" must beEqualTo(" foo\n   \n   bar\n ").ignoreSpace.ignoreCase}
     "the failure message must mention 'ignoring space, ignoring case' $e6
 
     alternatively, ignoring case and space
-    ${ "Eric".aka must beEqualTo(" eric ").ignoreCase.ignoreSpace }
+    ${"Eric".aka must beEqualTo(" eric ").ignoreCase.ignoreSpace}
 
   It is possible to check if one string is contained in another one
-  ${ "Eric" must contain("ri") }
-  ${ "Eric" must not(contain("ra")) }
+  ${"Eric" must contain("ri")}
+  ${"Eric" must not(contain("ra"))}
 
   It is possible to check if one string starts with another one
-  ${ "Eric" must startWith("Er") }
-  ${ "Eric" must not(startWith("Eu")) }
+  ${"Eric" must startWith("Er")}
+  ${"Eric" must not(startWith("Eu"))}
 
   It is possible to check if one string ends with another one
-  ${ "Eric" must endWith("ic") }
-  ${ "Eric" must not(endWith("rac")) }
+  ${"Eric" must endWith("ic")}
+  ${"Eric" must not(endWith("rac"))}
                                                                                                                         """
 
   def e3 = ("eric".aka must beEqualTo("Xric").ignoreCase) returns "ignoring case"

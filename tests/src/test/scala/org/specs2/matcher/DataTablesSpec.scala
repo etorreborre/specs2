@@ -7,7 +7,8 @@ import execute.*
 import specification.core.{Env, OwnExecutionEnv}
 import language.postfixOps
 
-class DataTablesSpec(val env: Env) extends Specification with DataTables with ResultMatchers with OwnExecutionEnv { def is = s2"""
+class DataTablesSpec(val env: Env) extends Specification with DataTables with ResultMatchers with OwnExecutionEnv {
+  def is = s2"""
 
  DataTables are useful to specify lots of examples varying just by a few values.
 
@@ -45,145 +46,146 @@ class DataTablesSpec(val env: Env) extends Specification with DataTables with Re
   def boom = error("boom")
 
   def e1 =
-    "a"   | "b" | "c" |>
-     2    !  2  !  4  |
-     1    !  1  !  2  | { (a, b, c) =>  a + b must ===(c) }
+    "a" | "b" | "c" |>
+      2 ! 2 ! 4 |
+      1 ! 1 ! 2 | { (a, b, c) => a + b must ===(c) }
 
   def e2 = // if the table was executed, it would go "boom"
-    "a"   | "b" | "c" |
-     2    !  2  !  4  |
-     1    !  1  !  2  | { (a, b, c) => boom; a + b must ===(c) }
+    "a" | "b" | "c" |
+      2 ! 2 ! 4 |
+      1 ! 1 ! 2 | { (a, b, c) =>
+        boom; a + b must ===(c)
+      }
 
   def e3 =
-   ("a"   | "b" | "c" |
-     2    !  2  !  4  |
-     1    !  1  !  3  |> { (a, b, c) => a + b must ===(c) }) must beFailing
+    ("a" | "b" | "c" |
+      2 ! 2 ! 4 |
+      1 ! 1 ! 3 |> { (a, b, c) => a + b must ===(c) }) must beFailing
 
   def e4 =
-   ("a"   | "b" | "c" |
-     2    !  2  !  4  |
-     1    !  1  !  3  |> { (a, b, c) => boom; a + b must ===(c) }) must beError
+    ("a" | "b" | "c" |
+      2 ! 2 ! 4 |
+      1 ! 1 ! 3 |> { (a, b, c) =>
+        boom; a + b must ===(c)
+      }) must beError
 
   def e5 =
-    "a"     |  "b"      | "c"             |
-    "Hello" !! "world"  !  "Hello world"  |> { (a, b, c) =>  a+" "+b must ===(c) }
+    "a" | "b" | "c" |
+      "Hello" !! "world" ! "Hello world" |> { (a, b, c) => a + " " + b must ===(c) }
 
   def e6 =
-    "a"     ||  "b"      | "c"            |
-    "Hello" !! "world"   !  "Hello world" |
-    1       !! "world"   !  "1 world"     |> { (a, b, c) =>  a.toString+" "+b must ===(c) }
+    "a" || "b" | "c" |
+      "Hello" !! "world" ! "Hello world" |
+      1 !! "world" ! "1 world" |> { (a, b, c) => a.toString + " " + b must ===(c) }
 
   def e7 =
-    "a"   |
-     2    |
-     1    |> { (a) =>  a must be_>=(0) }
-
+    "a" |
+      2 |
+      1 |> { (a) => a must be_>=(0) }
 
   def e8 =
-    "a"         | "b"       |>
-    0           ! "0"       |
-    List("a")   ! "List(a)" | { (a, b) =>  a.toString must ===(b) }
+    "a" | "b" |>
+      0 ! "0" |
+      List("a") ! "List(a)" | { (a, b) => a.toString must ===(b) }
 
   def e9 =
     "a successful table must not throw an exception" ==> {
-      (new InAMutableContext).resultOk must not (throwA[DecoratedResultException])
+      (new InAMutableContext).resultOk must not(throwA[DecoratedResultException])
     } and
-    "a failed table must throw an exception" ==> {
-      (new InAMutableContext).resultKo must throwA[DecoratedResultException]
-    }
+      "a failed table must throw an exception" ==> {
+        (new InAMutableContext).resultKo must throwA[DecoratedResultException]
+      }
 
   def e10 =
     val table =
-      "a"     || "b"     | "c"         |>
-      "hello" !! "you"   ! "hello you" |
-      "you"   !! "hello" ! "you hello" |
-      "y"     !! "h"     ! "y h"       | { (a, b, c) =>  a+" "+b must ===(c) }
+      "a" || "b" | "c" |>
+        "hello" !! "you" ! "hello you" |
+        "you" !! "hello" ! "you hello" |
+        "y" !! "h" ! "y h" | { (a, b, c) => a + " " + b must ===(c) }
 
     table.message ===
-      "  | a     | b     | c         | "+"\n"+
-      "+ | hello | you   | hello you | "+"\n"+
-      "+ | you   | hello | you hello | "+"\n"+
+      "  | a     | b     | c         | " + "\n" +
+      "+ | hello | you   | hello you | " + "\n" +
+      "+ | you   | hello | you hello | " + "\n" +
       "+ | y     | h     | y h       | "
 
   def e11 =
     val table =
-      "a"     || "b"     | "c"          |>
-      "hello" !! "you"   ! "hello you"  |
-      "you"   !! "hello" ! "you hello2" |
-      "y"     !! "h"     ! "y h"        | { (a, b, c) =>  a+" "+b must ===(c) }
+      "a" || "b" | "c" |>
+        "hello" !! "you" ! "hello you" |
+        "you" !! "hello" ! "you hello2" |
+        "y" !! "h" ! "y h" | { (a, b, c) => a + " " + b must ===(c) }
 
     table.message ===
-      "  | a     | b     | c          |                            "+"\n"+
-      "+ | hello | you   | hello you  |                            "+"\n"+
-      "x | you   | hello | you hello2 | 'you hello' != 'you hello2'"+"\n"+
+      "  | a     | b     | c          |                            " + "\n" +
+      "+ | hello | you   | hello you  |                            " + "\n" +
+      "x | you   | hello | you hello2 | 'you hello' != 'you hello2'" + "\n" +
       "+ | y     | h     | y h        |                            "
 
   def e12 =
     val t1 =
-      "a"   | "b" | "c" |>
-       2    !  2  !  4  |
-       1    !  1  !  2  | { (a, b, c) =>  a + b must ===(c) }
+      "a" | "b" | "c" |>
+        2 ! 2 ! 4 |
+        1 ! 1 ! 2 | { (a, b, c) => a + b must ===(c) }
 
     val t2 =
-      "a"   | "b" | "c" |>
-       2    !  2  !  5  | { (a, b, c) =>  a + b must ===(c) }
+      "a" | "b" | "c" |>
+        2 ! 2 ! 5 | { (a, b, c) => a + b must ===(c) }
 
     (t1 and t2).message ===
-      "  | a | b | c |       "+"\n"+
+      "  | a | b | c |       " + "\n" +
       "x | 2 | 2 | 5 | 4 != 5"
 
   def e13 =
-    "a"            || "b"    |>
-    "a"            !! "b"    |
-    (null: String) !! ""     | { (a, b) =>  ok }
+    "a" || "b" |>
+      "a" !! "b" |
+      (null: String) !! "" | { (a, b) => ok }
 
   def applicative1 =
     "a" | "b" |>
-    1   ! "1" |
-    2   ! "2" |* { (a: Int, b: String) => a === b.toInt }
+      1 ! "1" |
+      2 ! "2" |* { (a: Int, b: String) => a === b.toInt }
 
   def applicative2 =
     "a" | "b" |
-    1   ! "1" |
-    2   ! "2" |*> { (a: Int, b: String) => a === b.toInt }
-
+      1 ! "1" |
+      2 ! "2" |*> { (a: Int, b: String) => a === b.toInt }
 
   def applicative3 =
     "a" | "b" |>
-    1   ! "1" |
-    2   ! "2" |@ { (a: Int, b: String) => Future(a === b.toInt) } await
+      1 ! "1" |
+      2 ! "2" |@ { (a: Int, b: String) => Future(a === b.toInt) } await
 
   def applicative4 =
     "a" | "b" |
-    1   ! "1" |
-    2   ! "2" |@> { (a: Int, b: String) => Future(a === b.toInt) } await
+      1 ! "1" |
+      2 ! "2" |@> { (a: Int, b: String) => Future(a === b.toInt) } await
 
   def applicative5 =
     "a" | "b" |>
-    1   ! "1" |
-    2   ! "2" |* { (a: Int, b: String) => a === b.toInt }
+      1 ! "1" |
+      2 ! "2" |* { (a: Int, b: String) => a === b.toInt }
 
   def applicative6 =
     val table =
       "a" | "b" |>
-      1   ! "1" |
-      2   ! "0" |
-      3   ! "3" |* { (a: Int, b: String) => a === b.toInt }
+        1 ! "1" |
+        2 ! "0" |
+        3 ! "3" |* { (a: Int, b: String) => a === b.toInt }
 
     table.message ===
-      "  | a | b |       "+"\n"+
-      "+ | 1 | 1 |       "+"\n"+
-      "x | 2 | 0 | 2 != 0"+"\n"+
+      "  | a | b |       " + "\n" +
+      "+ | 1 | 1 |       " + "\n" +
+      "x | 2 | 0 | 2 != 0" + "\n" +
       "+ | 3 | 3 |       "
-
 
 }
 
 class InAMutableContext extends MustThrownMatchers with DataTables:
   lazy val resultOk =
-      "a" | "b"    |>
-       1  ! 1      | { (a, b) =>  a must ===(b) }
+    "a" | "b" |>
+      1 ! 1 | { (a, b) => a must ===(b) }
 
   lazy val resultKo =
-    "a" | "b"    |>
-     1  ! 2      | { (a, b) =>  a must ===(b) }
+    "a" | "b" |>
+      1 ! 2 | { (a, b) => a must ===(b) }

@@ -8,6 +8,7 @@ case class FailureException(f: Failure) extends ExecuteException:
   override def getMessage = f.message
   override def getCause = f.exception
   override def getStackTrace = f.exception.getStackTrace
+
 /** this class allows to throw a skipped result in an Exception */
 case class SkipException(f: Skipped) extends ExecuteException:
   /** create a SkipException from a Failure */
@@ -27,6 +28,5 @@ case class ErrorException(f: Error) extends ExecuteException:
 
 /** this class allows to throw a result that's decorated with additional information in an Exception */
 case class DecoratedResultException(result: DecoratedResult[?]) extends ExecuteException
-
 
 case class MyClass(list: List[?])

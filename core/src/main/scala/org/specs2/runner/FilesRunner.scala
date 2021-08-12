@@ -22,26 +22,32 @@ case class DefaultFilesRunner(env: Env, specificationsFinder: SpecificationsFind
   val arguments = env.arguments
 
   def run: Action[Stats] =
-    val base = arguments.commandLine.valueOr("filesrunner.basepath", new java.io.File(specificationsBasePath).getAbsolutePath)
+    val base =
+      arguments.commandLine.valueOr("filesrunner.basepath", new java.io.File(specificationsBasePath).getAbsolutePath)
 
     val specs = for
       basePath <- Action.checkThat(base, new java.io.File(base).isDirectory, s"$base must be a directory")
-      ss <- specificationsFinder.findSpecifications(
-        glob = arguments.commandLine.valueOr("filesrunner.path", specificationsPath),
-        pattern = arguments.commandLine.valueOr("filesrunner.pattern", specificationsPattern),
-        basePath = DirectoryPath.unsafe(basePath),
-        verbose = isVerbose).toAction
+      ss <- specificationsFinder
+        .findSpecifications(
+          glob = arguments.commandLine.valueOr("filesrunner.path", specificationsPath),
+          pattern = arguments.commandLine.valueOr("filesrunner.pattern", specificationsPattern),
+          basePath = DirectoryPath.unsafe(basePath),
+          verbose = isVerbose
+        )
+        .toAction
     yield ss
 
     for
-      _     <- beforeExecution.toAction
-      ss    <- specs.map(sort)
-      cr    <- ClassRunner.createClassRunner(env).toAction
+      _ <- beforeExecution.toAction
+      ss <- specs.map(sort)
+      cr <- ClassRunner.createClassRunner(env).toAction
       stats <- ss.toList.traverse(cr.run)
-      _     <- afterExecution(ss).toAction
+      _ <- afterExecution(ss).toAction
     yield stats.suml
 
-  /** sort the specifications in topological order where specification i doesn't depend on specification j if i > j == dependents first */
+  /** sort the specifications in topological order where specification i doesn't depend on specification j if i > j ==
+    * dependents first
+    */
   def sort = { (specifications: Seq[SpecificationStructure]) =>
     SpecificationStructure.topologicalSort(env)(specifications).getOrElse(specifications)
   }
@@ -52,27 +58,23 @@ case class DefaultFilesRunner(env: Env, specificationsFinder: SpecificationsFind
 
   /** print a message before the execution */
   protected def beforeExecution: Operation[Unit] = for
-    _        <- logger.info("\nExecuting specifications", isVerbose)
+    _ <- logger.info("\nExecuting specifications", isVerbose)
     printers <- PrinterFactory.create(env).createPrinters
-    _        <- logger.info("printers are " + printers.mkString(", "), isVerbose)
+    _ <- logger.info("printers are " + printers.mkString(", "), isVerbose)
   yield ()
-
 
   /** print a message after the execution based on the number of specifications */
   protected def afterExecution(specs: Seq[SpecificationStructure]): Operation[Unit] =
     if specs.isEmpty then logger.info("No specification found\n", isVerbose)
-    else               logger.info("Finished the execution of " + specs.size + " specifications\n", isVerbose)
+    else logger.info("Finished the execution of " + specs.size + " specifications\n", isVerbose)
 
-/**
- * This trait finds specifications in the source directory, instantiate them
- * and report them using various printers as specified on the command line
- *
- */
+/** This trait finds specifications in the source directory, instantiate them and report them using various printers as
+  * specified on the command line
+  */
 trait FilesRunnerMain:
 
-  /**
-   * Run the specifications found in files based on command-line arguments
-   */
+  /** Run the specifications found in files based on command-line arguments
+    */
   def run(args: Array[String], exit: Boolean = false): Unit =
     val env = EnvDefault.create(Arguments(args*))
     val specificationsFinder = DefaultSpecificationsFinder(env)

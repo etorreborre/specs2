@@ -23,15 +23,15 @@ class ExpectableSpec extends Spec with ResultMatchers with MustMatchers:
   }
 
   "An expectable can be described with a function taking its toString value" >> {
-    ("b" `as` ((s:String) => "a"+s+"c")).description must ===("abc")
+    ("b" `as` ((s: String) => "a" + s + "c")).description must ===("abc")
   }
 
   "An expectable can be described with a function describing its value" >> {
-    (List(1, 2) `showAs`((_:Seq[Int]).mkString("|")) must haveSize(3)) returns "'1|2' doesn't have size 3 but size 2"
+    (List(1, 2) `showAs` ((_: Seq[Int]).mkString("|")) must haveSize(3)) returns "'1|2' doesn't have size 3 but size 2"
   }
 
   "An expectable can be mapped to another value, keeping its ability to throw exceptions when not matching" >> {
-    val factory = new ThrownExpectations () {}
+    val factory = new ThrownExpectations() {}
     (factory.createExpectable("a").map(1) must ===(2)) must throwA[FailureException]
   }
 

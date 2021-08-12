@@ -6,7 +6,8 @@ import sys.*
 import io.StringOutput
 import Result.*
 
-class LogicalMatcherSpec extends Specification with ResultMatchers with StringMatchers { def is = s2"""
+class LogicalMatcherSpec extends Specification with ResultMatchers with StringMatchers {
+  def is = s2"""
 
 Not matches
 ===========
@@ -102,13 +103,15 @@ Custom
 
   def or1 = "eric" must (beMatching("e.*") or beMatching(".*c"))
   def or2 = "eric" must (beMatching("a.*") or beMatching(".*z")).not
-  def or3 = "eric" must (beMatching("e.*") or beMatching({error("boom");".*z"}))
+  def or3 = "eric" must (beMatching("e.*") or beMatching({ error("boom"); ".*z" }))
   def or4 = "eric" must not(beMatching("a.*") or beMatching(".*z"))
   def or5 = ("eric" must (beMatching("a.*") or beMatching("z.*"))) returns
-            "'eric' doesn't match 'a.*' and 'eric' doesn't match 'z.*'"
+    "'eric' doesn't match 'a.*' and 'eric' doesn't match 'z.*'"
 
   def or6 =
-    MustThrownMatchers.createExpectable("eric").must(MustThrownMatchers.beMatching("a.*") or MustThrownMatchers.beMatching("e.*"))
+    MustThrownMatchers
+      .createExpectable("eric")
+      .must(MustThrownMatchers.beMatching("a.*") or MustThrownMatchers.beMatching("e.*"))
 
   def or7 =
     ("eric" must beMatching("e.*")) or ("eric" must beMatching(".*d"))
@@ -122,8 +125,8 @@ Custom
 
   def or10 = { throw new Exception("ouch"); 1 } must (be_==(1) or throwAn[Exception])
   def or11 = { throw new Exception("ouch"); 1 } must (throwAn[Exception] or be_==(1))
-  def or12 = {                              1 } must (throwAn[Exception] or be_==(1))
-  def or13 = {                              1 } must (be_==(1) or throwAn[Exception])
+  def or12 = { 1 } must (throwAn[Exception] or be_==(1))
+  def or13 = { 1 } must (be_==(1) or throwAn[Exception])
   def or14 = { throw new Exception("ouch"); 1 } must (be_==(1) or throwAn[Exception] or throwAn[Exception])
 
   def and1 = "eric" must (beMatching("e.*") and beMatching(".*c"))
@@ -135,14 +138,14 @@ Custom
   def and4 = ((true === true) and (true === false) and (true === true)) must beFailing
 
   def skip1 = 1 must be_==(1).orSkip
-  def skip2 = (1 must be_==(2).orSkip)                                  must ===(Skipped("1 != 2"))
-  def skip3 = (1 must be_==({sys.error("boom");2}).orSkip("skip this")) must ===(Skipped("skip this: boom"))
-  def skip4 = (1 must be_==(2).orSkip("precondition failed"))           must ===(Skipped("precondition failed: 1 != 2"))
+  def skip2 = (1 must be_==(2).orSkip) must ===(Skipped("1 != 2"))
+  def skip3 = (1 must be_==({ sys.error("boom"); 2 }).orSkip("skip this")) must ===(Skipped("skip this: boom"))
+  def skip4 = (1 must be_==(2).orSkip("precondition failed")) must ===(Skipped("precondition failed: 1 != 2"))
 
   def pending1 = 1 must be_==(1).orPending
-  def pending2 = (1 must be_==(2).orPending)                             must ===(Pending("1 != 2"))
-  def pending3 = (1 must be_==({sys.error("boom");2}).orPending("todo")) must ===(Pending("todo: boom"))
-  def pending4 = (1 must be_==(2).orPending("precondition failed"))      must ===(Pending("precondition failed: 1 != 2"))
+  def pending2 = (1 must be_==(2).orPending) must ===(Pending("1 != 2"))
+  def pending3 = (1 must be_==({ sys.error("boom"); 2 }).orPending("todo")) must ===(Pending("todo: boom"))
+  def pending4 = (1 must be_==(2).orPending("precondition failed")) must ===(Pending("precondition failed: 1 != 2"))
 
   def conditions1 = (1 must be_==(1).when(true)) must beSuccessful
   def conditions2 = (1 must be_==(2).when(false)) must beSuccessful
@@ -154,19 +157,19 @@ Custom
   def conditions8 = (1 must be_==(1).iff(false)) must beFailing
 
   def custom1 = (12 must bePositive) and
-          (-12 must not(bePositive))
+    (-12 must not(bePositive))
 
   // HELPERS
-  case class CustomMatcher[T : Numeric]() extends Matcher[T]:
+  case class CustomMatcher[T: Numeric]() extends Matcher[T]:
     def apply[S <: T](e: Expectable[S]) =
       result(implicitly[Numeric[T]].abs(e.value) == e.value, s"${e.value} is negative")
 
   /** custom matcher */
-  def bePositive[T : Numeric]: Matcher[T] =
+  def bePositive[T: Numeric]: Matcher[T] =
     CustomMatcher[T]()
 
   /** this allows to write "a must not be positive" */
-  def positive[T : Numeric]: Matcher[T] =
+  def positive[T: Numeric]: Matcher[T] =
     bePositive[T]
 
 }

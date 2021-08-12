@@ -10,7 +10,8 @@ import java.io.File
 import org.specs2.fp.syntax.*
 import org.specs2.text.AnsiColors.*
 
-class ContentMatchersSpec extends Spec with LinesContentMatchers with BeforeAfterEach with TestFileNames { def is = sequential ^ s2"""
+class ContentMatchersSpec extends Spec with LinesContentMatchers with BeforeAfterEach with TestFileNames {
+  def is = sequential ^ s2"""
 
  haveSameLinesAs checks if a file has the same lines as another file                                     ${comp().e1}
    it is possible to write (f1, f2) must haveSameLines as well                                           ${comp().e2}
@@ -28,14 +29,14 @@ class ContentMatchersSpec extends Spec with LinesContentMatchers with BeforeAfte
 
   def before = step {
     val action =
-      fs.writeFile(dir | f1, "hello\nbeautiful\nworld")         >>
-      fs.writeFile(dir | f2, "hello\nbeautiful\nworld")         >>
-      fs.writeFile(dir | f3, "beautiful\nworld\nhello")         >>
-      fs.writeFile(dir | f4, "hello\nworld")                    >>
-      fs.writeFile(dir | f5, "world\nhello")                    >>
-      fs.writeFile(dir | f6, "good\nmorning\nbeautiful\nworld") >>
-      fs.writeFile(dir | f7, "good\nday\ncrazy\nworld")         >>
-      fs.writeFile(dir | f8, "good\nday\ncrazy\nworld\nworld")
+      fs.writeFile(dir | f1, "hello\nbeautiful\nworld") >>
+        fs.writeFile(dir | f2, "hello\nbeautiful\nworld") >>
+        fs.writeFile(dir | f3, "beautiful\nworld\nhello") >>
+        fs.writeFile(dir | f4, "hello\nworld") >>
+        fs.writeFile(dir | f5, "world\nhello") >>
+        fs.writeFile(dir | f6, "good\nmorning\nbeautiful\nworld") >>
+        fs.writeFile(dir | f7, "good\nday\ncrazy\nworld") >>
+        fs.writeFile(dir | f8, "good\nday\ncrazy\nworld\nworld")
 
     action.runVoid
   }
@@ -54,7 +55,7 @@ case class comp() extends MustMatchers with TestFileNames with ContentMatchers:
     def lines(f: File) = fs.readLines(FilePath.unsafe(f)).runOption.get
   }
 
-  def e1 =  (dir | f1).toFile must haveSameLinesAs((dir | f2).toFile)
+  def e1 = (dir | f1).toFile must haveSameLinesAs((dir | f2).toFile)
   def e2 = ((dir | f1).toFile, (dir | f2).toFile) must haveSameLines
   def e3 = ((dir | f1).toFile, (dir | f2).toFile) must haveSameLines.unordered
 
@@ -72,8 +73,8 @@ case class comp() extends MustMatchers with TestFileNames with ContentMatchers:
 
   def e8 = ((dir | f8).toFile, (dir | f8).toFile) must haveSameLines
 
-
 trait TestFileNames:
   import FileName.*
 
-  lazy val (f1, f2, f3, f4, f5, f6, f7, f8) = (unsafe("f1"), unsafe("f2"), unsafe("f3"), unsafe("f3"), unsafe("f5"), unsafe("f6"), unsafe("f7"), unsafe("f8"))
+  lazy val (f1, f2, f3, f4, f5, f6, f7, f8) =
+    (unsafe("f1"), unsafe("f2"), unsafe("f3"), unsafe("f3"), unsafe("f5"), unsafe("f6"), unsafe("f7"), unsafe("f8"))

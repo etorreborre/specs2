@@ -5,11 +5,10 @@ package core
 import control.*
 import quoted.*
 
-/**
- * Location of a Fragment
- *
- * This is currently implemented using stacktraces which is very brittle
- */
+/** Location of a Fragment
+  *
+  * This is currently implemented using stacktraces which is very brittle
+  */
 trait Location:
   /** the file path */
   def path: String
@@ -27,27 +26,26 @@ trait Location:
   /** display this location */
   def show: String
 
-
-/**
- * Location created from a Tasty position
- */
+/** Location created from a Tasty position
+  */
 case class PositionLocation(path: String, lineNumber: Int, columnNumber: Int) extends Location:
   def show: String =
     s"""$path (line: $lineNumber, column: $columnNumber)"""
 
 object PositionLocation:
 
-    given ToExpr[PositionLocation] with
-      def apply(location: PositionLocation)(using qctx: Quotes): Expr[PositionLocation] = {
-        location match
-          case PositionLocation(path, line, column) =>
-            val pathExpr: Expr[String] = Expr(path)
-            val lineExpr: Expr[Int] = Expr(line)
-            val columnExpr: Expr[Int] = Expr(column)
-            Expr.betaReduce('{PositionLocation($pathExpr, $lineExpr, $columnExpr)})
+  given ToExpr[PositionLocation] with
+    def apply(location: PositionLocation)(using qctx: Quotes): Expr[PositionLocation] = {
+      location match
+        case PositionLocation(path, line, column) =>
+          val pathExpr: Expr[String] = Expr(path)
+          val lineExpr: Expr[Int] = Expr(line)
+          val columnExpr: Expr[Int] = Expr(column)
+          Expr.betaReduce('{ PositionLocation($pathExpr, $lineExpr, $columnExpr) })
     }
 
-case class StacktraceLocation(trace: Seq[StackTraceElement] = (new Exception).getStackTrace.toIndexedSeq) extends Location:
+case class StacktraceLocation(trace: Seq[StackTraceElement] = (new Exception).getStackTrace.toIndexedSeq)
+    extends Location:
   def path: String =
     traceLocation(DefaultStackTraceFilter).map(_.path).getOrElse("no path")
 

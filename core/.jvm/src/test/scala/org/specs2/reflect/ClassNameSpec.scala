@@ -8,10 +8,10 @@ import matcher.TypedEqual
 class ClassNameSpec extends Spec with Tables with TypedEqual:
 
   "Class names must be decoded" >> {
-    "name"                   | "decoded"                |>
-    "org.specs2.name"        ! "org.specs2.name"        |
-    "org.specs2.name$2"      ! "org.specs2.name"        |
-    "org.specs2.name"        ! "org.specs2.name"        | { (name, decoded) => className(name) === decoded }
+    "name" | "decoded" |>
+      "org.specs2.name" ! "org.specs2.name" |
+      "org.specs2.name$2" ! "org.specs2.name" |
+      "org.specs2.name" ! "org.specs2.name" | { (name, decoded) => className(name) === decoded }
   }
   "The class name of a fully qualified class must return only the last part" >> {
     simpleName(classOf[ClassNameSpec]) === "ClassNameSpec"

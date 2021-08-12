@@ -11,11 +11,11 @@ import fp.syntax.*
 object FoldIo:
 
   /** create a fold sink to output lines to a file */
-  def showToFilePath[T : Show](path: FilePath): Sink[Action, T] =
+  def showToFilePath[T: Show](path: FilePath): Sink[Action, T] =
     printToFilePath(path)(t => Action.pure(Show[T].show(t)))
 
   /** create a fold sink to output lines to a file */
   def printToFilePath[T](path: FilePath)(print: T => Action[String]): Sink[Action, T] =
-    Folds.bracket(Action.pure(new PrintWriter(path.path)))(
-      (p: PrintWriter, t: T) => print(t).map(p.write).as(p))(
-      (p: PrintWriter) => Finalizer(() => p.close()))
+    Folds.bracket(Action.pure(new PrintWriter(path.path)))((p: PrintWriter, t: T) => print(t).map(p.write).as(p))(
+      (p: PrintWriter) => Finalizer(() => p.close())
+    )

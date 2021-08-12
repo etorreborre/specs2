@@ -14,9 +14,8 @@ import control.*, ExecutionOrigin.*
 import origami.*, Folds.*
 import fp.syntax.*
 
-/**
- * The JUnitPrinter sends notifications to JUnit's RunNotifier
- */
+/** The JUnitPrinter sends notifications to JUnit's RunNotifier
+  */
 case class JUnitPrinter(env: Env, notifier: RunNotifier) extends Printer:
   def prepare(specifications: List[SpecStructure]): Action[Unit] = Action.unit
   def finalize(specifications: List[SpecStructure]): Action[Unit] = Action.unit
@@ -32,31 +31,36 @@ case class JUnitPrinter(env: Env, notifier: RunNotifier) extends Printer:
     val description = descriptionsTree.description
 
     val shouldNotify = !excludeFromReporting
-    bracket[Fragment, RunNotifier](
-      open = Action.protect { if shouldNotify then notifier.fireTestRunStarted(description); notifier })(
-      step = (notifier: RunNotifier, fragment: Fragment) => notifyJUnit(env.arguments, descriptionsTree.descriptions)(fragment).as(notifier))(
-      close = (notifier: RunNotifier) => Finalizer.create(if shouldNotify then notifier.fireTestRunFinished(new org.junit.runner.Result) else ())
+    bracket[Fragment, RunNotifier](open = Action.protect {
+      if shouldNotify then notifier.fireTestRunStarted(description); notifier
+    })(
+      step = (notifier: RunNotifier, fragment: Fragment) =>
+        notifyJUnit(env.arguments, descriptionsTree.descriptions)(fragment).as(notifier)
+    )(
+      close = (notifier: RunNotifier) =>
+        Finalizer.create(if shouldNotify then notifier.fireTestRunFinished(new org.junit.runner.Result) else ())
     )
 
-  private def notifyJUnit(args: Arguments, descriptions: Map[Fragment, Description]): Fragment => Action[Unit] = { fragment =>
-    if Fragment.isExampleOrStep(fragment) then
-      val description = findDescription(descriptions, fragment)
-      fragment.executionResult.map { result =>
-        description.foreach { (description: Description) =>
-          if Fragment.isExample(fragment) then
-            notifyTestResult(description, result)(using args)
-          else
-            notifyStepError(description, result)(using args)
+  private def notifyJUnit(args: Arguments, descriptions: Map[Fragment, Description]): Fragment => Action[Unit] = {
+    fragment =>
+      if Fragment.isExampleOrStep(fragment) then
+        val description = findDescription(descriptions, fragment)
+        fragment.executionResult.map { result =>
+          description.foreach { (description: Description) =>
+            if Fragment.isExample(fragment) then notifyTestResult(description, result)(using args)
+            else notifyStepError(description, result)(using args)
+          }
         }
-      }
-    else Action.unit
+      else Action.unit
   }
 
   private def findDescription(descriptions: Map[Fragment, Description], fragment: Fragment) =
     // find the fragment with the same description and same location
-    descriptions.find { case (f, d) =>
-      f.description == fragment.description && f.location == fragment.location
-    }.map(_._2)
+    descriptions
+      .find { case (f, d) =>
+        f.description == fragment.description && f.location == fragment.location
+      }
+      .map(_._2)
 
   private def notifyTestResult(description: Description, result: Result)(using args: Arguments) =
     result match
@@ -106,25 +110,24 @@ case class JUnitPrinter(env: Env, notifier: RunNotifier) extends Printer:
 
     case Failure(m, e, st, FromTimeoutException) =>
       new SpecFailureAssertionFailedError(Throwablex.exception(AnsiColors.removeColors(m), args.traceFilter(st)))
-      
-    case Failure(m, e, st, FailureDetails(actual, expected)) => new ComparisonFailure(AnsiColors.removeColors(m), expected, actual) {
-      private val e = args.traceFilter(f.exception)
-      override def getStackTrace = e.getStackTrace
-      override def getCause = e.getCause
-      override def printStackTrace(): Unit = { e.printStackTrace() }
-      override def printStackTrace(w: java.io.PrintStream): Unit = { e.printStackTrace(w) }
-      override def printStackTrace(w: java.io.PrintWriter): Unit = { e.printStackTrace(w) }
-    }
+
+    case Failure(m, e, st, FailureDetails(actual, expected)) =>
+      new ComparisonFailure(AnsiColors.removeColors(m), expected, actual) {
+        private val e = args.traceFilter(f.exception)
+        override def getStackTrace = e.getStackTrace
+        override def getCause = e.getCause
+        override def printStackTrace(): Unit = { e.printStackTrace() }
+        override def printStackTrace(w: java.io.PrintStream): Unit = { e.printStackTrace(w) }
+        override def printStackTrace(w: java.io.PrintWriter): Unit = { e.printStackTrace(w) }
+      }
 
   /** show values as a string with a description */
   def showValues(description: String, values: Seq[Any]): String =
     if values.nonEmpty then s"$description ${values.map(notNullPair).mkString("\n", "\n", "\n\n")}" else ""
 
-
-/**
- * This class refines the `AssertionFailedError` from junit
- * and provides the stackTrace of an exception which occurred during the specification execution
- */
+/** This class refines the `AssertionFailedError` from junit and provides the stackTrace of an exception which occurred
+  * during the specification execution
+  */
 class SpecFailureAssertionFailedError(e: Exception) extends AssertionFailedError(e.getMessage.notNull):
   override def toString = e.toString
   override def getStackTrace = e.getStackTrace

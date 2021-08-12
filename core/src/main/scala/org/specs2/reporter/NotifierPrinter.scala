@@ -11,22 +11,22 @@ import specification.core.*
 import time.SimpleTimer
 import main.Arguments
 
-/**
- * A Printer can be created from a Notifier implementation
- */
+/** A Printer can be created from a Notifier implementation
+  */
 case class NotifierPrinter(commandLineArguments: Arguments):
 
-  /**
-   * create a printer from a notifier
-   */
+  /** create a printer from a notifier
+    */
   def printer(notifier: Notifier) = new Printer {
-    def prepare(specifications: List[SpecStructure]): Action[Unit]  = Action.unit
+    def prepare(specifications: List[SpecStructure]): Action[Unit] = Action.unit
     def finalize(specifications: List[SpecStructure]): Action[Unit] = Action.unit
 
     def sink(spec: SpecStructure): AsyncSink[Fragment] =
       val nf: Fold[Action, Fragment, Notified] { type S = Notified } =
-            notifyFold.into[Action].startWith(Action.pure(notifier.specStart(spec.name, ""))).
-              endWith(Action.pure(notifier.specEnd(spec.name, "")))
+        notifyFold
+          .into[Action]
+          .startWith(Action.pure(notifier.specStart(spec.name, "")))
+          .endWith(Action.pure(notifier.specEnd(spec.name, "")))
 
       nf.observeWithNextState(notifySink(spec, notifier)).void
   }
@@ -43,13 +43,13 @@ case class NotifierPrinter(commandLineArguments: Arguments):
       val s = if ps.close then ps.copy(close = false) else ps
       f match
         // a block start. The next text is the "context" name
-        case Fragment(Start,_,_) => s.copy(start = true, close = false, hide = true)
+        case Fragment(Start, _, _) => s.copy(start = true, close = false, hide = true)
         // a block start. The "context" name is the current block name
-        case Fragment(End,_ ,_) => s.copy(start = false, close = true, hide = true)
+        case Fragment(End, _, _) => s.copy(start = false, close = true, hide = true)
 
         case f1 if Fragment.isText(f1) =>
           if s.start then s.copy(context = f1.description.show, start = true, hide = false)
-          else         s.copy(context = f1.description.show, start = false, hide = false)
+          else s.copy(context = f1.description.show, start = false, hide = false)
 
         case f1 if Fragment.isExample(f1) => s.copy(start = false, hide = false)
         case f1 if Fragment.isStep(f1)    => s.copy(start = false, hide = false)
@@ -65,15 +65,14 @@ case class NotifierPrinter(commandLineArguments: Arguments):
 
   def printFragment(n: Notifier, f: Fragment, notified: Notified, args: Arguments): Action[Unit] =
     f.executedResult.map { er =>
-        val location = f.location.show
+      val location = f.location.show
 
-        if !notified.hide then
-          if notified.start then n.contextStart(notified.context.trim, location)
-          else
-            if Fragment.isExample(f) then   notifyExample(n, f, er, args)
-            else if Fragment.isStep(f) then notifyStep(n, f, er, args)
-            else if Fragment.isText(f) then notifyText(n, f, args)
-        else if notified.close then n.contextEnd(notified.context.trim, location)
+      if !notified.hide then
+        if notified.start then n.contextStart(notified.context.trim, location)
+        else if Fragment.isExample(f) then notifyExample(n, f, er, args)
+        else if Fragment.isStep(f) then notifyStep(n, f, er, args)
+        else if Fragment.isText(f) then notifyText(n, f, args)
+      else if notified.close then n.contextEnd(notified.context.trim, location)
     }
 
   private def notifyExample(n: Notifier, f: Fragment, executedResult: ExecutedResult, args: Arguments) =
@@ -114,10 +113,10 @@ case class NotifierPrinter(commandLineArguments: Arguments):
           case r: execute.Success => n.stepSuccess(timer.totalMillis)
           case r: execute.Failure => n.stepError(r.message, location, r.exception, timer.totalMillis)
           case r: execute.Error   => n.stepError(r.message, location, r.exception, timer.totalMillis)
-          case _ => ()
+          case _                  => ()
       notifyResult(executedResult.result, executedResult.timer)
-      // catch AbstractMethod errors coming from Intellij since
-      // calling new "step" methods on the Notifier interface is not supported yet
+    // catch AbstractMethod errors coming from Intellij since
+    // calling new "step" methods on the Notifier interface is not supported yet
     catch
       case e: AbstractMethodError if e.getMessage.notNull.contains("Specs2Notifier") =>
         // if steps are not supported print failures and errors as examples failures and errors

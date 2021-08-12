@@ -3,7 +3,8 @@ package runner
 
 import matcher.ActionMatchers
 
-class SpecFactorySpec extends Specification with ActionMatchers { def is = s2"""
+class SpecFactorySpec extends Specification with ActionMatchers {
+  def is = s2"""
 
  A spec factory instantiates specifications from names
    from object names            $objects1

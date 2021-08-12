@@ -6,33 +6,31 @@ import execute.*
 import scala.annotation.tailrec
 import scala.util.control.NonFatal
 
-/**
- *
- * Synchronous action with:
- *
- * - an optional list of "finalization" actions to be executed when this action is done
- *   if it throws an exception. This allows resources to be safely disposed of
- *
- * It is essentially the same as an Action without the asynchronicity
- */
+/** Synchronous action with:
+  *
+  *   - an optional list of "finalization" actions to be executed when this action is done if it throws an exception.
+  *     This allows resources to be safely disposed of
+  *
+  * It is essentially the same as an Action without the asynchronicity
+  */
 case class Operation[A](operation: () => Throwable Either A, last: Vector[Finalizer] = Vector.empty):
   private def run: Throwable Either A =
     operation()
 
   def map[B](f: A => B): Operation[B] =
-   Operation[B](() => run.map(f), last)
+    Operation[B](() => run.map(f), last)
 
   def flatMap[B](f: A => Operation[B]): Operation[B] =
     Operation.fromEither[B] {
       runOperation match {
         case Right(a) => f(a).runOperation
-        case Left(t) => Left(t)
+        case Left(t)  => Left(t)
       }
     }
 
-  /** run this operation, to get back a result (possibly an exception)
-   * and run the finalizers when the operation has been executed
-   */
+  /** run this operation, to get back a result (possibly an exception) and run the finalizers when the operation has
+    * been executed
+    */
   def runOperation: Throwable Either A =
     val Operation(op, last) = attempt
     val result = op().flatten
@@ -73,16 +71,19 @@ case class Operation[A](operation: () => Throwable Either A, last: Vector[Finali
 
   def recover(f: Throwable => Operation[A]): Operation[A] =
     attempt.flatMap {
-      case Left(t) => f(t)
+      case Left(t)  => f(t)
       case Right(a) => Operation.ok(a)
     }
 
   def attempt: Operation[Throwable Either A] =
-    Operation(() =>
-      try Right(run)
-      catch {
-        case NonFatal(t) => Right(Left(t))
-      }, last)
+    Operation(
+      () =>
+        try Right(run)
+        catch {
+          case NonFatal(t) => Right(Left(t))
+        },
+      last
+    )
 
   def toAction: Action[A] =
     Action.either(attempt.run.flatten).copy(last = last)
@@ -96,7 +97,7 @@ object Operation:
     pure(a)
 
   def fail[A](a: Any): Operation[A] =
-  exception[A](new Exception(a.toString))
+    exception[A](new Exception(a.toString))
 
   def exception[A](e: Throwable): Operation[A] =
     Operation[A](() => Left(e))
@@ -138,8 +139,8 @@ object Operation:
         def loop(va: A): Throwable Either B =
           f(va).run match
             case Right(Right(b)) => Right(b)
-            case Right(Left(a)) => loop(a)
-            case Left(t) => Left(t)
+            case Right(Left(a))  => loop(a)
+            case Left(t)         => Left(t)
         loop(a)
       }
 
@@ -167,6 +168,6 @@ object Operation:
     def attempt[A](fa: Operation[A]): Operation[Throwable Either A] =
       fa.attempt
 
-  given operationAsResult[T : AsResult]: AsResult[Operation[T]] with
+  given operationAsResult[T: AsResult]: AsResult[Operation[T]] with
     def asResult(operation: =>Operation[T]): Result =
-      operation.runOperation.fold(err => Error(err),  ok => AsResult(ok))
+      operation.runOperation.fold(err => Error(err), ok => AsResult(ok))

@@ -10,9 +10,8 @@ import org.specs2.specification.core.*
 import org.specs2.specification.script.StepParser
 import scala.util.NotGiven
 
-/**
- * Dsl for creating examples in a mutable specification
- */
+/** Dsl for creating examples in a mutable specification
+  */
 trait ExampleDsl extends dsl.ExampleDsl with BlockCreation:
 
   override def addExample(d: String, execution: =>Execution): Fragment =

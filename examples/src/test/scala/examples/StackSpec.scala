@@ -3,15 +3,14 @@ package examples
 import org.specs2.*
 import specification.core.*
 
-/**
- * This specification shows how to reuse examples and data.
- *
- * For example `nonEmptyStack` is a list of examples which are used to specify
- * - the case of a `normal` (non-empty) stack
- * - the case of a `full` stack
- *
- * Those examples are reused with different data in each case
- */
+/** This specification shows how to reuse examples and data.
+  *
+  * For example `nonEmptyStack` is a list of examples which are used to specify
+  *   - the case of a `normal` (non-empty) stack
+  *   - the case of a `full` stack
+  *
+  * Those examples are reused with different data in each case
+  */
 class StackSpec extends Specification:
   def is = "Specification for a Stack with a limited capacity".title ^ s2"""
 
@@ -46,7 +45,7 @@ class StackSpec extends Specification:
   """
 
   /** examples for a non-empty stack */
-  def nonEmptyStack(stack: =>SizedStack)= t ^ s2"""
+  def nonEmptyStack(stack: =>SizedStack) = t ^ s2"""
   have a size > 0 ${nonEmpty(stack).size}
   return the top item when sent #top ${nonEmpty(stack).top1}
   not remove the top item when sent #top ${nonEmpty(stack).top2}
@@ -55,9 +54,9 @@ class StackSpec extends Specification:
   """ ^ bt
 
   /** stacks creation */
-  def newEmptyStack  = SizedStack(maxCapacity = 10, size = 0)
+  def newEmptyStack = SizedStack(maxCapacity = 10, size = 0)
   def newNormalStack = SizedStack(maxCapacity = 10, size = 2)
-  def newFullStack   = SizedStack(maxCapacity = 10, size = 10)
+  def newFullStack = SizedStack(maxCapacity = 10, size = 10)
 
   /** stacks examples */
   case class empty():
@@ -98,9 +97,8 @@ class StackSpec extends Specification:
 
 end StackSpec
 
-/**
- * SizedStack definition
- */
+/** SizedStack definition
+  */
 object SizedStack:
   def apply(maxCapacity: Int, size: Int) = new SizedStack(maxCapacity).fill(1 to size)
 

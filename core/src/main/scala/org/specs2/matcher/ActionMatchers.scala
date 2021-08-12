@@ -6,9 +6,8 @@ import execute.*
 import text.Regexes.*
 import concurrent.*
 
-/**
- * Matchers for Action values
- */
+/** Matchers for Action values
+  */
 trait ActionMatchers extends ValueChecks:
 
   private val ee: ExecutionEnv =
@@ -19,7 +18,7 @@ trait ActionMatchers extends ValueChecks:
       AsResult(action.runAction(ee).fold(t => Error(t), _ => Success()))
     }
 
-  def beOk[T, R : AsResult](f: T => R): Matcher[Action[T]] =
+  def beOk[T, R: AsResult](f: T => R): Matcher[Action[T]] =
     Matcher { (action: Action[T]) =>
       AsResult(action.runAction(ee).fold(t => Error(t), t => AsResult(f(t))))
     }
@@ -34,18 +33,24 @@ trait ActionMatchers extends ValueChecks:
 
   def beKo[T]: Matcher[Action[T]] =
     Matcher { (action: Action[T]) =>
-      action.runAction(ee).fold(
-        e => Success(),
-        ok => Failure("a failure was expected")
-      )
+      action
+        .runAction(ee)
+        .fold(
+          e => Success(),
+          ok => Failure("a failure was expected")
+        )
     }
 
   def beKo[T](message: String): Matcher[Action[T]] =
     Matcher { (action: Action[T]) =>
-      action.runAction(ee).fold(
-        throwable => if throwable.getMessage `matchesSafely` message then Success() else Failure(s"the action failed with message ${throwable.getMessage}. Expected: $message"),
-        ok => Failure(s"a failure with message $message was expected")
-      )
+      action
+        .runAction(ee)
+        .fold(
+          throwable =>
+            if throwable.getMessage `matchesSafely` message then Success()
+            else Failure(s"the action failed with message ${throwable.getMessage}. Expected: $message"),
+          ok => Failure(s"a failure with message $message was expected")
+        )
     }
 
 object ActionMatchers extends ActionMatchers

@@ -4,9 +4,9 @@ package matcher
 import org.hamcrest.*
 import Matcher.{given}
 
-/**
- * This trait adds implicit conversions to be able to use [Hamcrest matchers](http://code.google.com/p/hamcrest) as specs2 matchers.
- */
+/** This trait adds implicit conversions to be able to use [Hamcrest matchers](http://code.google.com/p/hamcrest) as
+  * specs2 matchers.
+  */
 trait Hamcrest:
 
   /** convert a Hamcrest matcher to a specs2 matcher */
@@ -14,18 +14,17 @@ trait Hamcrest:
     def apply(hamcrest: org.hamcrest.Matcher[T]): matcher.Matcher[T] =
       (t: T) => (hamcrest.matches(t), createKoMessageFromHamcrest(t, hamcrest))
 
-  /**
-   * @return a string showing the matched value and the failure message from the Hamcrest matcher
-   */
+  /** @return
+    *   a string showing the matched value and the failure message from the Hamcrest matcher
+    */
   def createKoMessageFromHamcrest[T](t: =>T, hamcrest: org.hamcrest.Matcher[T]): String =
     val description = new StringDescription
 
     description
-       .appendText("\nExpected: ")
-       .appendDescriptionOf(hamcrest)
-       .appendText("\n     but: ")
+      .appendText("\nExpected: ")
+      .appendDescriptionOf(hamcrest)
+      .appendText("\n     but: ")
     hamcrest.describeMismatch(t, description)
     description.toString
-
 
 object Hamcrest extends Hamcrest

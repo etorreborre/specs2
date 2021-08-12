@@ -4,15 +4,16 @@ package control
 import java.util.concurrent.ThreadFactory
 import java.util.concurrent.atomic.AtomicInteger
 
-/**
- * This factory creates named threads which can be prefixed by "specs2" to track the threads used by
- * specs2 for the specification execution
- *
- * Contributed by @jedws
- */
-case class NamedThreadFactory(namePrefix: String,
-                              group: ThreadGroup = Thread.currentThread.getThreadGroup,
-                              priority: Int = Thread.currentThread.getPriority) extends ThreadFactory:
+/** This factory creates named threads which can be prefixed by "specs2" to track the threads used by specs2 for the
+  * specification execution
+  *
+  * Contributed by @jedws
+  */
+case class NamedThreadFactory(
+    namePrefix: String,
+    group: ThreadGroup = Thread.currentThread.getThreadGroup,
+    priority: Int = Thread.currentThread.getPriority
+) extends ThreadFactory:
 
   private val threadNumber = new AtomicInteger(1)
 
@@ -20,6 +21,6 @@ case class NamedThreadFactory(namePrefix: String,
   require(priority <= Thread.MAX_PRIORITY, "priority too high: " + priority)
 
   def newThread(r: Runnable) =
-    val t = new Thread(group, r, namePrefix+"-"+threadNumber.getAndIncrement, 0)
+    val t = new Thread(group, r, namePrefix + "-" + threadNumber.getAndIncrement, 0)
     t.setPriority(priority)
     t
