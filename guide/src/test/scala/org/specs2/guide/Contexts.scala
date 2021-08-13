@@ -227,16 +227,15 @@ override the `resourceKey` function to provide a unique key for the resource: ${
     import scala.concurrent.*
 // 8<---
 
-    trait GlobalRef(using ec: ExecutionContext) extends Resource[Ref[Int]]:
-      override def resourceKey: Option[String] =
-        Some("global reference")
+trait GlobalRef(using ec: ExecutionContext) extends Resource[Ref[Int]]:
+  override def resourceKey: Option[String] =
+    Some("global reference")
 
-      def acquire: Future[Ref[Int]] =
-        Future.successful(Ref(0))
+  def acquire: Future[Ref[Int]] =
+    Future.successful(Ref(0))
 
-      def release(ref: Ref[Int]): Execution =
-        Future { true }
-
+  def release(ref: Ref[Int]): Execution =
+    Future { true }
   }}
 
 Then `specs2` will release all global resources at the end of a run.
