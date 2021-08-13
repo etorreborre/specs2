@@ -109,4 +109,4 @@ jobs:
         with:
           branch: gh-pages
           clean: false
-          folder: guide/target/specs2-reports/site
+          folder: target/specs2-reports/site

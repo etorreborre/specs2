@@ -285,7 +285,7 @@ lazy val releaseSettings: Seq[Setting[_]] = Seq(
     WorkflowStep.Use(
       name = Some("Update the website 🚀"),
       ref = UseRef.Public("JamesIves", "github-pages-deploy-action", "4.1.4"),
-      params = Map("branch" -> "gh-pages", "clean" -> "false", "folder" -> "guide/target/specs2-reports/site")
+      params = Map("branch" -> "gh-pages", "clean" -> "false", "folder" -> "target/specs2-reports/site")
     )
   ),
   organization := "org.specs2",
