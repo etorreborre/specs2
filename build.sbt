@@ -63,7 +63,11 @@ lazy val commonSettings =
 lazy val commonJvmSettings =
   testJvmSettings
 
+
+import  org.scalajs.linker.interface.ESVersion
+
 lazy val commonJsSettings =
+  Seq(scalaJSLinkerConfig ~= { _.withESFeatures(_.withESVersion(ESVersion.ES2018)) }) ++
   testJsSettings
 
 /** MODULES (sorted in alphabetical order) */
