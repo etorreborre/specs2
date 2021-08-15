@@ -4,6 +4,9 @@ package describe
 import org.specs2.Specification
 
 import scala.util.{Failure, Try}
+import scala.deriving.*
+import scala.compiletime.*
+
 
 class DiffableSpec extends Specification {
   def is = s2"""
@@ -242,13 +245,13 @@ Compare result
   )}
 
   Similar Failure Try object will return TryIdentical           ${Diffable.diff(
-    Failure[RuntimeException](ex),
-    Failure[RuntimeException](ex)
+    Failure[String](ex),
+    Failure[String](ex)
   ) must ===(TryIdentical(ex, isSuccess = false))}
-  Different Failure Try object will return TryIdentical         ${Diffable.diff(
-    Failure[RuntimeException](ex),
-    Failure[RuntimeException](ex2)
-  ) must ===(TryDifferent(Diffable.diff(ex, ex2), isSuccess = false))}
+  two exceptions with a != stacktrace return ThrowableDifferentStackTrace         ${Diffable.diff(
+    Failure[String](ex),
+    Failure[String](ex2)
+  ) must ===(TryDifferent(Diffable.diff[Throwable](ex, ex2), isSuccess = false))}
 
   Comparing success with failure will return type difference    ${Diffable.diff(
     Try("abc"),
@@ -262,6 +265,7 @@ Compare result
     Try("abc"),
     Failure[String](ex2)
   ) must ===(TryTypeDifferent(isActualSuccess = true))}
+
 
 """
 
@@ -287,8 +291,8 @@ Compare result
       )
     )
 
-  def seqDiffable[T: Diffable]: SeqDiffable[T] =
-    new SeqDiffable[T]
+  def seqDiffable[T: Diffable, S <: Seq[T]]: SeqDiffable[T, S] =
+    new SeqDiffable[T, S]
 }
 
 sealed trait Animal

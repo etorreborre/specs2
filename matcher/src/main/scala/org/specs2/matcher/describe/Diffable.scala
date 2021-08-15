@@ -3,19 +3,34 @@ package matcher.describe
 
 import scala.util.{Failure, Try}
 import PrimitiveDiffable.primitive
+import scala.deriving.*
+import scala.compiletime.{erasedValue, error, constValue, summonInline}
 
 /** Typeclass for values which can be compared and return a comparison result
   */
-trait Diffable[-T]:
-
+trait Diffable[T]:
   def diff(actual: T, expected: T): ComparisonResult
 
-object Diffable extends DiffableLowPriority1:
+  def unsafeDiff(actual: Any, expected: Any): ComparisonResult =
+    diff(actual.asInstanceOf[T], expected.asInstanceOf[T])
+
+/** Note: variance is not managed by having a Diffable typeclass with a contravariant parameter Diffable[-T]
+ * In that the implicit for case classes (see `product`) can not be found.
+ *
+ * Instead we deal with variance at the level of each implicit.
+ *
+ * For example `given exceptionDiffable[T <: Throwable]: Diffable[T] = new ThrowableDiffable[T]`
+ * will be found for any custom exception extending Throwable. Similarly we can get a
+ * diff for Right[String, Int](1) and Right[String, Int](2) with
+ * `given eitherDiffable[L: Diffable, R: Diffable, T <: Either[L, R]]`
+ * because we unify both Rights with Either[String, Int]
+ *
+ */
+object Diffable extends DiffableLowImplicits:
 
   def diff[T](actual: T, expected: T)(using di: Diffable[T]): ComparisonResult =
     di.diff(actual, expected)
 
-trait DiffableLowPriority1 extends DiffableLowPriority2:
   // Needed to avoid ambiguous implicits with Dotty when looking for a Diffable
   // for `Either[Int, Nothing]` for example.
   given nothingDiffable: Diffable[Nothing] = NothingDiffable
@@ -30,27 +45,47 @@ trait DiffableLowPriority1 extends DiffableLowPriority2:
 
   // basic elements
   given stackTraceElementDiffable: Diffable[StackTraceElement] = new StackTraceElementDiffable
-  given exceptionDiffable: Diffable[Throwable] = new ThrowableDiffable
+  given exceptionDiffable[T <: Throwable]: Diffable[T] = new ThrowableDiffable[T]
 
-  //scala objects
-  given optionNoneDiffable: Diffable[Option[Nothing]] = OptionNoneDiffable
+  // None type
+  given optionNoneDiffable[T <: Option[Nothing]]: Diffable[T] = new OptionNoneDiffable[T]
 
   given eitherRightDiffable[R: Diffable]: Diffable[Right[Nothing, R]] = new EitherRightDiffable[R]
   given eitherLeftDiffable[L: Diffable]: Diffable[Left[L, Nothing]] = new EitherLeftDiffable[L]
 
-  given tryDiffable[T: Diffable]: Diffable[Try[T]] = new TryDiffable[T]
+  given tryDiffable[T: Diffable, S <: Try[T]]: Diffable[S] = new TryDiffable[T, S]
   given failureDiffable: Diffable[Failure[Nothing]] = new FailureDiffable
 
   // scala collections
-  given mapDiffable[K: Diffable, V: Diffable]: Diffable[Map[K, V]] = new MapDiffable[K, V]
-  given setDiffable[E: Diffable]: Diffable[Set[E]] = new SetDiffable
-  given seqDiffable[E: Diffable]: Diffable[Seq[E]] = new SeqLinesDiffable[E]
+  given mapDiffable[K: Diffable, V: Diffable, M <: Map[K, V]]: Diffable[M] = new MapDiffable[K, V, M]
+  given setDiffable[E: Diffable, S <: Set[E]]: Diffable[S] = new SetDiffable[E, S]
+  given seqDiffable[E: Diffable, S <: Seq[E]]: Diffable[S] = new SeqLinesDiffable[E, S]
   given arrayDiffable[E: Diffable]: Diffable[Array[E]] = new ArrayDiffable
 
-trait DiffableLowPriority2:
-  given optionDiffable[T: Diffable]: Diffable[Option[T]] = new OptionDiffable[T]
-  given eitherDiffable[L: Diffable, R: Diffable]: Diffable[Either[L, R]] = new EitherDiffable[L, R]
-  given fallbackDiffable[T]: Diffable[T] = new FallbackDiffable[T]
+trait DiffableLowImplicits extends DiffableLowImplicits2:
+  given optionDiffable[T: Diffable, S <: Option[T]]: Diffable[S] = new OptionDiffable[T, S]
+  given eitherDiffable[L: Diffable, R: Diffable, T <: Either[L, R]]: Diffable[T] = new EitherDiffable[L, R, T]
+
+trait DiffableLowImplicits2 extends DiffableLowImplicits3:
+
+  /** this Diff instance addresses case classes differences */
+  inline given product[T](using m: Mirror.ProductOf[T]): Diffable[T] =
+    derived[T]
+
+  inline def derived[T](using p: Mirror.ProductOf[T]): Diffable[T] =
+    lazy val diffables = summonAll[p.MirroredElemTypes]
+    lazy val typeName: String = constValue[product.MirroredLabel]
+    new ProductDiffable[T](typeName, product, diffables)
+
+  inline def summonAll[T <: Tuple]: List[Diffable[?]] =
+    inline erasedValue[T] match
+      case _: EmptyTuple => Nil
+      case _: (t *: ts) => summonInline[Diffable[t]] :: summonAll[ts]
+
+trait DiffableLowImplicits3:
+
+  given fallbackDiffable[T]: Diffable[T] =
+    new FallbackDiffable[T]
 
 trait Diffables:
   extension [T](diffable: Diffable[T])

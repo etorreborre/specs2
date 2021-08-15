@@ -275,3 +275,15 @@ object ComparisonResultOps:
   extension [T](s: Seq[T])
     def toOption: Option[Seq[T]] =
       if s.isEmpty then None else Some(s)
+
+class ProductComparisonResult(typeName: String, results: List[(String, ComparisonResult)]) extends ComparisonResult:
+  def identical: Boolean =
+    results.forall(_._2.identical)
+
+  override def render(indent: String): String =
+    typeName+"("+results.map { case (fieldName, fieldResult) =>
+      fieldName+": "+fieldResult.render }.
+      mkString("\n"+indent)+")"
+      
+  def render: String =
+    render(" " * (typeName.length + 1))

@@ -26,6 +26,19 @@ class DiffablePlusSpec extends Spec {
     TryDifferent(Diffable.diff(ex, ex2), isSuccess = false)
   )}
 
+  Case classes
+  ============
+  case classes without any members are identical ${Diffable.diff(EmptyCaseClass(), EmptyCaseClass()).identical}
+  two identical case classes return true ${Diffable.diff(Foo("a", 1), Foo("a", 1)).identical}
+  two different case classes render their diff ${
+    Diffable.diff(Foo("a", 1), Foo("b", 2)).render
+    ===
+    """|Foo(x: 'a' != 'b'
+       |    y: 1 != 2)""".stripMargin
+  }
+
+
+
 """
 
   val ex = new RuntimeException
@@ -34,5 +47,6 @@ class DiffablePlusSpec extends Spec {
 }
 
 case class EmptyCaseClass()
-case class Foo(a: String, b: String, goo: Goo)
-case class Goo(c: String, d: String)
+
+case class Foo(x: String, y: Int)
+case class Bar(foo: Foo)
