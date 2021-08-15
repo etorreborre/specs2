@@ -8,6 +8,7 @@ import org.specs2.specification.*
 import org.specs2.specification.core.*
 import execute.*
 
+// format: off
 object Contexts extends UserGuidePage with FileMatchers {
   def is = s2"""
 
@@ -219,12 +220,12 @@ be converted to a specs2 `Execution`: a `Result`, a `Future[Result]` or even a s
 Sometimes it is necessary to keep a resource open across several specifications invocations. In order to do this you need to
 override the `resourceKey` function to provide a unique key for the resource: ${snippet {
 // 8<---
-    import org.specs2.Specification
-    import org.specs2.specification.Resource
-    import org.specs2.specification.core.Execution
-    import org.specs2.control.Ref
-    import scala.collection.mutable.ArrayBuffer
-    import scala.concurrent.*
+import org.specs2.Specification
+import org.specs2.specification.Resource
+import org.specs2.specification.core.Execution
+import org.specs2.control.Ref
+import scala.collection.mutable.ArrayBuffer
+import scala.concurrent.*
 // 8<---
 
 trait GlobalRef(using ec: ExecutionContext) extends Resource[Ref[Int]]:
