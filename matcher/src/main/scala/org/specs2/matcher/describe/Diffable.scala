@@ -74,8 +74,8 @@ trait DiffableLowImplicits2 extends DiffableLowImplicits3:
 
   inline def derived[T](using p: Mirror.ProductOf[T]): Diffable[T] =
     lazy val diffables = summonAll[p.MirroredElemTypes]
-    lazy val typeName: String = constValue[product.MirroredLabel]
-    new ProductDiffable[T](typeName, product, diffables)
+    lazy val typeName: String = constValue[p.MirroredLabel]
+    new ProductDiffable[T](typeName, p, diffables)
 
   inline def summonAll[T <: Tuple]: List[Diffable[?]] =
     inline erasedValue[T] match
