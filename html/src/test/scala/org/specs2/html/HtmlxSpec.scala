@@ -30,21 +30,29 @@ class HtmlxSpec extends Spec with HtmlDocuments with TypedEqual {
 """
 
   def `headersToTree builds a Tree of headers from a html document` =
-    aBodyWithTwoH3HeadersAndOneH4Each.headersTree.drawTree.trim must ===(""".title
-                                                                            .|
-                                                                            .+- a h3 header
-                                                                            .|  |
-                                                                            .|  `- first h4
-                                                                            .|
-                                                                            .`- another h3 header
-                                                                            .   |
-                                                                            .   `- second h4""".stripMargin('.').replace("\r", ""))
+    aBodyWithTwoH3HeadersAndOneH4Each.headersTree.drawTree.trim must ===(
+      """.title
+         .|
+         .+- a h3 header
+         .|  |
+         .|  `- first h4
+         .|
+         .`- another h3 header
+         .   |
+         .   `- second h4"""
+        .stripMargin('.')
+        .replace("\r", "")
+    )
 
   def `headersToTree builds a Tree of headers - 2` =
-    aBodyWithAH3ThenAH2Header.headersTree.drawTree.trim must ===(""".|
-                                                                    .+- a h3 header
-                                                                    .|
-                                                                    .`- a h2 header""".stripMargin('.').replace("\r", ""))
+    aBodyWithAH3ThenAH2Header.headersTree.drawTree.trim must ===(
+      """.|
+         .+- a h3 header
+         .|
+         .`- a h2 header"""
+        .stripMargin('.')
+        .replace("\r", "")
+    )
 
   def headers1 =
     headers(<body><h1>title1</h1>Some text <h2>title2</h2>Some other text</body>).toList must ===(

@@ -4,9 +4,8 @@ import scala.concurrent.duration.FiniteDuration
 
 trait Schedulers {
 
-  /**
-   * Default Scheduler for Scala Native
-   */
+  /** Default Scheduler for Scala Native
+    */
   def default: Scheduler = new Scheduler {
     def schedule(action: =>Unit, duration: FiniteDuration): () => Unit =
       () => ()
