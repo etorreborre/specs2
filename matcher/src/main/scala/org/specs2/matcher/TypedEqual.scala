@@ -12,14 +12,14 @@ trait TypedEqual:
 
   /** A value can be tested against another with the === operator. It is equivalent to writing a must ==(b)
     */
-  extension [T](t: =>T)(using not: NotGiven[NoTypedEqual])
+  extension [T: Diffable](t: =>T)(using not: NotGiven[NoTypedEqual])
     /** equality matcher on Expectables */
     def ===(other: =>T): Result =
-      createExpectable(t).applyMatcher[T](new BeEqualTo(other))
+      createExpectable(t).applyMatcher[T](new EqualityMatcher(other))
 
     /** ! equality matcher on Expectables */
     def !==(other: =>T): Result =
-      createExpectable(t).applyMatcher[T](new BeEqualTo(other).not)
+      createExpectable(t).applyMatcher[T](new EqualityMatcher(other).not)
 
 object TypedEqual extends TypedEqual with ExpectationsCreation
 

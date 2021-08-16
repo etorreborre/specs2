@@ -5,6 +5,7 @@ import java.io.{PrintWriter, StringWriter}
 import org.specs2.matcher.describe.ComparisonResultOps.*
 import org.specs2.text.Quote.*
 import org.specs2.text.NotNullStrings.*
+import org.specs2.text.Indent.*
 
 /** Render the result of a comparison for different types: primitives, throwables, collections,...
   *
@@ -166,8 +167,10 @@ case class OtherIdentical(actual: Any, expected: Any) extends IdenticalCompariso
 
 case class OtherDifferent(actual: Any, expected: Any) extends DifferentComparisonResult:
   def render: String =
-    s"${actual.renderAny(showAll = comparingPrimitiveWithObject(actual, expected))} != " +
-      s"${expected.renderAny(showAll = comparingPrimitiveWithObject(actual, expected))}"
+    val actualRendered = s"${actual.renderAny(showAll = comparingPrimitiveWithObject(actual, expected))}"
+    val expectedRendered = s"${expected.renderAny(showAll = comparingPrimitiveWithObject(actual, expected))}"
+    if actualRendered.contains("\n") || actualRendered.contains("\n") then s"${actualRendered}\n !=\n$expectedRendered"
+    else s"$actualRendered != $expectedRendered"
 
 private[specs2] def comparingPrimitiveWithObject(a: Any, e: Any): Boolean =
   val (classA, classB) = classOf(a) -> classOf(e)
@@ -277,13 +280,21 @@ object ComparisonResultOps:
       if s.isEmpty then None else Some(s)
 
 class ProductComparisonResult(typeName: String, results: List[(String, ComparisonResult)]) extends ComparisonResult:
+  private val typeNameIndent = " " * (typeName.length + 1)
+
   def identical: Boolean =
     results.forall(_._2.identical)
 
   override def render(indent: String): String =
-    typeName+"("+results.map { case (fieldName, fieldResult) =>
-      fieldName+": "+fieldResult.render }.
-      mkString("\n"+indent)+")"
-      
+    typeName + "(" + results
+      .map { case (fieldName, fieldResult) =>
+        val fieldResultRendered = fieldResult.render
+        val indented =
+          if fieldResultRendered.contains("\n") then "\n" + fieldResultRendered.indentWith(indent + " " * 2)
+          else " "+fieldResultRendered
+        s"$fieldName:$indented"
+      }
+      .mkString("\n" + indent) + ")"
+
   def render: String =
-    render(" " * (typeName.length + 1))
+    render(typeNameIndent)

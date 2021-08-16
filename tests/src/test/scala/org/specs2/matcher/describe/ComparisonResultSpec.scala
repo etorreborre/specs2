@@ -241,7 +241,6 @@ class ComparisonResultSpec extends Spec {
   def th3 = {
     removeColors(ThrowableDifferentStackTrace(LinesComparisonResult(List("m1"), List("m2"))).render).trim must ===(
       """|the stacktrace is incorrect
-         |
          |- m1
          |+ m2""".stripMargin
     )

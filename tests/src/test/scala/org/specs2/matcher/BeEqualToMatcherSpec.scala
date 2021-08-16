@@ -68,7 +68,6 @@ class BeEqualToMatcherSpec extends Spec with ResultMatchers with ShouldMatchers 
   ${Seq(1, 2) must be_==(Seq(1, 2))}
   ${(Seq(1, 2) must be_==(Seq(2, 3))).normalized ===
     """|List(1, 2) != List(2, 3)
-       |
        |- 1
        |+ 2
        |- 2

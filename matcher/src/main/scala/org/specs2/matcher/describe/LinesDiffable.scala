@@ -42,4 +42,4 @@ case class LinesComparisonResult[T: Diffable](actual: List[T], expected: List[T]
       case Del(line)           => List(color("- " + line, red))
       case Subst(line1, line2) => List(color("- " + line1, red), color("+ " + line2, green))
     }
-    .mkString("\n", "\n", "\n")
+    .mkString("", "\n", "")

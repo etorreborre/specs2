@@ -157,8 +157,8 @@ presentation
 
   def d3 =
     s2"""e1 ${"abcdeabcdeabcdeabcdeabcde" must ===("adcdeadcdeadcdeadcdeadcde")}""" `contains`
-      """|[error] Actual:   a[b]cdea[b]cdea[b]cdea[b]cdea[b]cde
-           |[error] Expected: a[d]cdea[d]cdea[d]cdea[d]cdea[d]cde"""
+      """|[error]  Actual:   a[b]cdea[b]cdea[b]cdea[b]cdea[b]cde
+           |[error]  Expected: a[d]cdea[d]cdea[d]cdea[d]cdea[d]cde"""
 
   case class A(s: String) { override def equals(a: Any) = false }
 
@@ -348,6 +348,7 @@ table ${"a" | "b" |>
          |[info]__+_example_1
          |[info]__x_example 2
          |[error]__ko_(Result.scala:365)
+         |[error]
          |[info]
          |[info]_Total_for_specification_TextPrinterSpec""".stripMargin
 

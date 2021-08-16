@@ -98,11 +98,11 @@ case class TextPrinter(env: Env) extends Printer {
             else Nil
 
           case Fragment(Code(text), e, l) =>
-            if args.canShow("-") then List(indentText(text, indentation, indentationSize(args)).info)
+            if args.canShow("-") then List(indentText(text, indentation, args).info)
             else Nil
 
           case Fragment(d, e, l) =>
-            if args.canShow("-") then List(indentText(d.show, indentation, indentationSize(args)).info)
+            if args.canShow("-") then List(indentText(d.show, indentation, args).info)
             else Nil
         }
       }
@@ -120,7 +120,7 @@ case class TextPrinter(env: Env) extends Printer {
     if args.canShow(result.status) then {
       val text = description.show
       val show =
-        indentText(showTime(statusAndDescription(text, result)(args), timer, args), indentation, indentationSize(args))
+        indentText(showTime(statusAndDescription(text, result)(args), timer, args), indentation, args)
 
       def printResult(desc: String, r: Result): List[LogLine] =
         r match {
@@ -141,7 +141,7 @@ case class TextPrinter(env: Env) extends Printer {
             case d: DataTable =>
               // display the full table if it is an auto-example
               if Description.isCode(description) then
-                printResult(indentText(r.message, indentation, indentationSize(args)), r.setMessage(""))
+                printResult(indentText(r.message, indentation, args), r.setMessage(""))
               else printResult(show, r)
 
         case other => printResult(show, result)
@@ -161,7 +161,8 @@ case class TextPrinter(env: Env) extends Printer {
       List((show + "\n").failure) ++
       printMessage(show, failure, fragmentLocation, FailureLine.apply, args) ++
       printStacktrace(failure.stackTrace, print = args.failtrace, FailureLine.apply, args) ++
-      printFailureDetails(args)(failure.details)
+      printFailureDetails(args)(failure.details) ++
+      List("\n".failure)
 
   def printSuccess(show: String, success: execute.Success, args: Arguments): List[LogLine] = {
     val expected = if success.exp.nonEmpty then "\n" + success.exp else ""
@@ -238,19 +239,17 @@ case class TextPrinter(env: Env) extends Printer {
       val (actualDiff, expectedDiff) = args.diffs.showDiffs(actual, expected)
       val shortDiff =
         if actualDiff != expectedDiff then
-          List(s"Actual:   $actualDiff\n".failure, s"Expected: $expectedDiff\n".failure)
-        else List()
+          List("\n", s" Actual:   $actualDiff\n", s" Expected: $expectedDiff").map(_.failure)
+        else Nil
 
       val fullDiff =
         (if args.diffs.showFull then
-           List(s"Actual (full):   $actual\n".failure, s"Expected (full): $expected\n".failure)
+           List("\n", s" Actual (full):   $actual\n", s" Expected (full): $expected").map(_.failure)
          else Nil)
 
       List("\n".failure) ++
         shortDiff ++
-        List("\n".failure) ++
-        fullDiff ++
-        List("\n".info)
+        fullDiff
 
     case _ => Nil
   }
@@ -276,9 +275,9 @@ case class TextPrinter(env: Env) extends Printer {
       s"(${fragmentLocation.fileName}:${fragmentLocation.lineNumber})"
     else s"($resultLocation)"
 
-  def indentText(text: String, indentation: Int, indentationSize: Int) =
+  def indentText(text: String, indentation: Int, args: Arguments) =
     if text.isEmpty then text
-    else text.split("\n").toIndexedSeq.map((" " * (indentation * indentationSize)) + _).mkString("\n")
+    else text.split("\n").toIndexedSeq.map((" " * (indentation * indentationSize(args))) + _).mkString("\n")
 }
 
 object TextPrinter {
