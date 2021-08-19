@@ -198,13 +198,14 @@ class FallbackDiffable[T] extends Diffable[T]:
       case (a, e) =>
         OtherDifferent(actual, expected)
 
-class ProductDiffable[T](typeName: String, product: Mirror.ProductOf[T], diffables: =>List[Diffable[?]]) extends Diffable[T]:
+class ProductDiffable[T](typeName: String, product: Mirror.ProductOf[T], diffables: =>List[Diffable[?]])
+    extends Diffable[T]:
   def diff(actual: T, expected: T): ComparisonResult =
-    val actualFields = actual.asInstanceOf[Product].productElementNames.toList.zip(actual.asInstanceOf[Product].productIterator.toList)
+    val actualFields =
+      actual.asInstanceOf[Product].productElementNames.toList.zip(actual.asInstanceOf[Product].productIterator.toList)
     val expectedValues = expected.asInstanceOf[Product].productIterator.toList
     val all = actualFields.zip(expectedValues).zip(diffables)
-    val results: List[(String, ComparisonResult)] = all.map {
-      case (((actualName, actualValue), expectedValue), d) =>
-        (actualName, d.unsafeDiff(actualValue, expectedValue))
+    val results: List[(String, ComparisonResult)] = all.map { case (((actualName, actualValue), expectedValue), d) =>
+      (actualName, d.unsafeDiff(actualValue, expectedValue))
     }
     ProductComparisonResult(typeName, results)

@@ -15,7 +15,6 @@ object Indent:
   def lastLineIndentation(text: String): String =
     text.split("\n", -1).lastOption.map(_.takeWhile(_ == ' ')).getOrElse("")
 
-
   extension (s: String)
     def indentWith(indent: String): String =
       val lines = s.split("\n", -1)
