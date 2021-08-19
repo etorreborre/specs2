@@ -291,7 +291,7 @@ class ProductComparisonResult(typeName: String, results: List[(String, Compariso
         val fieldResultRendered = fieldResult.render
         val indented =
           if fieldResultRendered.contains("\n") then "\n" + fieldResultRendered.indentWith(indent + " " * 2)
-          else " "+fieldResultRendered
+          else " " + fieldResultRendered
         s"$fieldName:$indented"
       }
       .mkString("\n" + indent) + ")"

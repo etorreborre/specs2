@@ -7,7 +7,6 @@ import scala.util.{Failure, Try}
 import scala.deriving.*
 import scala.compiletime.*
 
-
 class DiffableSpec extends Specification {
   def is = s2"""
 

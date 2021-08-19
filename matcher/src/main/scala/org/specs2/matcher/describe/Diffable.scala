@@ -14,18 +14,16 @@ trait Diffable[T]:
   def unsafeDiff(actual: Any, expected: Any): ComparisonResult =
     diff(actual.asInstanceOf[T], expected.asInstanceOf[T])
 
-/** Note: variance is not managed by having a Diffable typeclass with a contravariant parameter Diffable[-T]
- * In that the implicit for case classes (see `product`) can not be found.
- *
- * Instead we deal with variance at the level of each implicit.
- *
- * For example `given exceptionDiffable[T <: Throwable]: Diffable[T] = new ThrowableDiffable[T]`
- * will be found for any custom exception extending Throwable. Similarly we can get a
- * diff for Right[String, Int](1) and Right[String, Int](2) with
- * `given eitherDiffable[L: Diffable, R: Diffable, T <: Either[L, R]]`
- * because we unify both Rights with Either[String, Int]
- *
- */
+/** Note: variance is not managed by having a Diffable typeclass with a contravariant parameter Diffable[-T] In that the
+  * implicit for case classes (see `product`) can not be found.
+  *
+  * Instead we deal with variance at the level of each implicit.
+  *
+  * For example `given exceptionDiffable[T <: Throwable]: Diffable[T] = new ThrowableDiffable[T]` will be found for any
+  * custom exception extending Throwable. Similarly we can get a diff for Right[String, Int](1) and Right[String,
+  * Int](2) with `given eitherDiffable[L: Diffable, R: Diffable, T <: Either[L, R]]` because we unify both Rights with
+  * Either[String, Int]
+  */
 object Diffable extends DiffableLowImplicits:
 
   def diff[T](actual: T, expected: T)(using di: Diffable[T]): ComparisonResult =
@@ -80,7 +78,7 @@ trait DiffableLowImplicits2 extends DiffableLowImplicits3:
   inline def summonAll[T <: Tuple]: List[Diffable[?]] =
     inline erasedValue[T] match
       case _: EmptyTuple => Nil
-      case _: (t *: ts) => summonInline[Diffable[t]] :: summonAll[ts]
+      case _: (t *: ts)  => summonInline[Diffable[t]] :: summonAll[ts]
 
 trait DiffableLowImplicits3:
 
