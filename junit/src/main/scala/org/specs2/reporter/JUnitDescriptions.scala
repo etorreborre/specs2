@@ -4,17 +4,16 @@ package reporter
 import java.lang.annotation.Annotation
 
 import org.junit.runner.Description
-import org.specs2.fp.*
+import fp.*
 import Tree.*
+import data.Trees
 import data.Trees.*
 import control.Exceptions.*
-import data.Trees
-import Trees.*
 import specification.*
 import core.*
 import process.*
 import control.*
-import org.specs2.concurrent.ExecutionEnv
+import concurrent.ExecutionEnv
 import specification.core.{Fragment, NoText}
 import specification.create.DefaultFragmentFactory
 
