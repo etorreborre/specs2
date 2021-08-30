@@ -12,7 +12,8 @@ import org.specs2.fp.syntax.*
 trait SpecificationStructure:
   def is: SpecStructure
 
-  def structure = decorate(is)
+  def structure: SpecStructure =
+    decorate(is)
 
   def decorate(is: SpecStructure): SpecStructure =
     map(is.map(fs => map(fs.flatMap(f => flatMap(f).contents))))

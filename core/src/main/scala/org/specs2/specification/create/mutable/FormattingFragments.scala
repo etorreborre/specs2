@@ -9,4 +9,3 @@ trait FormattingFragments extends org.specs2.specification.create.FormattingFrag
   override def t(n: Int) = addFragment(super.t(n))
   override def bt = addFragment(super.bt)
   override def bt(n: Int) = addFragment(super.bt(n))
-  override def end = addFragment(super.end)

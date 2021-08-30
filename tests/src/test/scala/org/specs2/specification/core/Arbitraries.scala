@@ -36,5 +36,5 @@ object Arbitraries:
 
   def genFormatting: Gen[Fragment] =
     Gen.oneOf(
-      Seq(br, t, t(2), bt, bt(2), FormattingFragments.end)
+      Seq(br, t, t(2), bt, bt(2), DefaultFragmentFactory.end)
     )
