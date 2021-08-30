@@ -69,6 +69,7 @@ Depending on the $specs2 features you want to use you will need to add more depe
  `specs2-html`           | to export specifications as html
  `specs2-form`           | to create html form-like specifications
  `specs2-junit`          | to run specifications as JUnit tests
+ `specs2-xml`            | to use xml matchers
 
 Note: the `specs2-core` jar depends on 2 other $specs2 jars:
 
