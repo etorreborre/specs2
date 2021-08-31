@@ -35,7 +35,7 @@ object depends {
     Seq(libraryDependencies += "org.scala-native" %%% "test-interface" % nativeVersion)
 
   def scalaParser = Def.setting {
-    Seq("org.scala-lang.modules" %%% "scala-parser-combinators" % "2.0.0")
+    Seq("org.scala-lang.modules" %%% "scala-parser-combinators" % "1.1.2")
   }
   def scalaParserNative = Def.setting {
     if(nativeVersion == "0.4.0")
