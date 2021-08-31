@@ -6,14 +6,14 @@ import org.junit.platform.engine.*
 import org.junit.platform.engine.discovery.*
 import org.junit.platform.engine.support.descriptor.*
 import org.junit.platform.engine.support.hierarchical.*
-
+import java.util.concurrent.atomic.AtomicInteger
 import java.lang.reflect.Modifier
 import java.util.Optional
 import java.util.stream.Collectors
 import scala.collection.JavaConverters.*
 import org.specs2.concurrent.*
 import org.specs2.control.*
-import ExecutionOrigin.*
+import org.specs2.execute.*
 import org.junit.platform.engine.TestDescriptor.Type
 import org.specs2.data.Trees.*
 import org.specs2.fp.*
@@ -51,7 +51,7 @@ class Specs2TestEngine extends TestEngine:
           SpecificationStructure.create(klass.getName, Thread.currentThread.getContextClassLoader, Some(env)).unsafeRun
         )
 
-    Specs2EngineDescriptor.create(uniqueId, "specs2")(specifications.toList)(env.executionEnv)
+    Specs2EngineDescriptor.create(uniqueId, "specs2")(specifications.toList)(env.specs2ExecutionEnv)
 
   def getId(): String =
     "org.specs2.runner.Specs2TestEngine"
@@ -63,14 +63,29 @@ class Specs2TestEngine extends TestEngine:
 
   def executeTest(descriptor: TestDescriptor, listener: EngineExecutionListener): Unit =
     listener.executionStarted(descriptor)
-    descriptor.getChildren.foreach(d => executeTest(d, listener))
-    listener.executionFinished(descriptor, TestExecutionResult.successful)
+    descriptor match
+      case Specs2EngineContainerDescriptor(_, _) =>
+        descriptor.getChildren.foreach(d => executeTest(d, listener))
+        listener.executionFinished(descriptor, TestExecutionResult.successful)
+      case Specs2EngineTestDescriptor(_, _, execution) =>
+        execution.startExecution(env).executionResult.runAction(env.executionEnv) match
+          case Right(e: Error) =>
+            listener.executionFinished(descriptor, TestExecutionResult.failed(ErrorException(e)))
+          case Right(f: Failure) =>
+            listener.executionFinished(descriptor, TestExecutionResult.failed(FailureException(f)))
+          case Right(_) =>
+            listener.executionFinished(descriptor, TestExecutionResult.successful)
+          case Left(e) =>
+            listener.executionFinished(descriptor, TestExecutionResult.failed(e))
+
+
 
 case class Specs2EngineContainerDescriptor(uniqueId: UniqueId, name: String) extends EngineDescriptor(uniqueId, name) {
   override def getType = Type.CONTAINER
 }
 
-case class Specs2EngineTestDescriptor(uniqueId: UniqueId, name: String) extends EngineDescriptor(uniqueId, name) {
+case class Specs2EngineTestDescriptor(uniqueId: UniqueId, name: String, execution: Execution) extends
+  EngineDescriptor(uniqueId, name) {
   override def getType = Type.TEST
 }
 
@@ -111,16 +126,16 @@ object Specs2EngineDescriptor:
             case f @ Fragment(d, e, _) if !e.isExecutable =>
               createContainerDescriptor(uniqueId, d.show)
             case f @ Fragment(NoText, e, _) if e.mustJoin =>
-              createTestDescriptor(uniqueId, "step")
+              createTestDescriptor(uniqueId, "step", e)
             case f @ Fragment(NoText, e, _) =>
-              createTestDescriptor(uniqueId, "action")
+              createTestDescriptor(uniqueId, "action", e)
             case f @ Fragment(d, e, _) =>
-              createTestDescriptor(uniqueId, d.show)
+              createTestDescriptor(uniqueId, d.show, e)
         (current.getLabel, descriptor)
       }
 
-  def createTestDescriptor(uniqueId: UniqueId, description: String): TestDescriptor =
-    Specs2EngineTestDescriptor(uniqueId.append("test", UniqueIds.get.toString), description)
+  def createTestDescriptor(uniqueId: UniqueId, description: String, execution: Execution): TestDescriptor =
+    Specs2EngineTestDescriptor(uniqueId.append("test", UniqueIds.get.toString), description, execution)
 
   def createContainerDescriptor(uniqueId: UniqueId, description: String): TestDescriptor =
     Specs2EngineContainerDescriptor(uniqueId.append("suite", UniqueIds.get.toString), description)
@@ -131,9 +146,9 @@ object Specs2EngineDescriptor:
     case f if Fragment.isFormatting(f)                 => None
     case f                                             => Some(f)
 
+// This object provides unique ids to number tests
 object UniqueIds:
-  private var current: Int = 0
+  private val current: AtomicInteger = new AtomicInteger(0)
 
   def get: Int =
-    current += 1
-    current
+    current.incrementAndGet()

@@ -7,13 +7,13 @@ class Specs2TestEngineMutableExample extends mutable.Specification:
   step(println("executing first step"))
 
   "this is a block" >> {
-    "test-1" >> {println("executing test 1"); ok}
-    "test-2" >> {println("executing test 2"); ko}
+    "test-1" >> ok
+    "test-2" >> ko
   }
 
   "this is another block" >> {
-    "test-1" >>{println("executing test 3"); ok}
-    "test-2" >> {println("executing test 4"); ko}
+    "test-1" >> ok
+    "test-2" >> ko
   }
 
   step(println("executing last step"))
@@ -23,12 +23,12 @@ class Specs2TestEngineExample extends Specification:
      ${step(println("executing first step"))}
 
      this is a block
-       test-1 ${println("executing test 1"); ok}
-       test-2 ${println("executing test 2"); ko}
+       test-1 $ok
+       test-2 $ko
 
      this is another block
-       test-1 ${println("executing test 3"); ok}
-       test-2 ${println("executing test 4"); ko}
+       test-1 $ok
+       test-2 ${anError("boom")}
 
      ${step(println("executing last step"))}
 
