@@ -69,28 +69,30 @@ trait Resource[T] extends BeforeAfterSpec with FragmentsFactory:
   def beforeSpec =
     fragmentFactory.step(Execution.withEnvAsync { env =>
       implicit val ec = env.executionContext
+      lazy val acquired: Future[T] = acquire.recoverWith { case e: Exception => Future.failed[T](new Exception("resource unavailable", e)) }
+
       resourceKey match
         // local resource
         case None =>
-          acquire.map(r => { env.resources.addOne(getResourceKey -> ResourceExecution(Local, r, release(r))); () })
+          acquired.map(r => { env.resources.addOne(getResourceKey -> ResourceExecution(Local, r, release(r))); () })
         // global resource, only acquire it if not acquired before
         case Some(key) =>
           env.resources.get(key) match
             case Some(r) =>
               Future.successful(())
             case None =>
-              acquire.map(r => { env.resources.addOne(key -> ResourceExecution(Global, r, release(r))); () })
+              acquired.map(r => { env.resources.addOne(key -> ResourceExecution(Global, r, release(r))); () })
     }.setErrorAsFatal)
 
   def afterSpec =
-    Fragments(fragmentFactory.step {
+    Fragments(fragmentFactory.break, fragmentFactory.step {
       Execution.withEnvFlatten { env =>
         implicit val ec = env.executionContext
         env.resources.get(getResourceKey) match
           case None =>
-            anError(
-              s"A resource should have been set for the resource key '$getResourceKey'. Please report an issue at https://github.com/etorreborre/specs2/issues"
-            )
+            // we can assume here that if no resource was available for the key, that's because
+            // it could not be acquired in the first place
+            success
           case Some(ResourceExecution(Local, _, finalization)) =>
             env.resources.remove(getResourceKey)
             finalization

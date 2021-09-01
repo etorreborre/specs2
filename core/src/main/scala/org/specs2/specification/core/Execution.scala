@@ -165,8 +165,8 @@ case class Execution(
       others.map(_.executionResult).sequence.flatMap { results =>
         results.find(FatalExecution.isFatalResult) match
           // if a previous fragment was fatal, we skip the current one
-          case Some(_) =>
-            Action.pure((Skipped(): Result, timer.stop))
+          case Some(r) =>
+            Action.pure((Skipped(r.message): Result, timer.stop))
 
           case _ =>
             // if a previous result indicates that we should stop
@@ -196,14 +196,9 @@ case class Execution(
     updateResult { r =>
       try
         r match
-          case Error(m, t) =>
-            Error(m, FatalExecution(t))
-          case other =>
-            other
-      catch {
-        case t: Throwable =>
-          Error(t.getMessage, FatalExecution(t))
-      }
+          case Error(m, t) => Error(m, FatalExecution(t))
+          case other       => other
+      catch case t: Throwable => Error(t.getMessage, FatalExecution(t))
     }
 
   /** run this execution after the previous executions are finished */
