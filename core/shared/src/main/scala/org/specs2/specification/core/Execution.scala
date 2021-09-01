@@ -426,7 +426,8 @@ object Execution {
   }
 
   implicit def executionAsExecution: AsExecution[Execution] = new AsExecution[Execution] {
-    def execute(r: =>Execution): Execution = r
+    def execute(r: =>Execution): Execution =
+      Execution.withEnvFlatten(_ => r)
   }
 
 }

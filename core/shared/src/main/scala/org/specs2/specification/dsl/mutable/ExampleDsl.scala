@@ -36,8 +36,8 @@ trait ExampleDsl1 extends BlockDsl with ExampleDsl0 {
     def >>[R](f: String => R)(implicit asExecution: AsExecution[R]): Fragment =
       >>(asExecution.execute(f(d)))
 
-   def >>(execution: Execution): Fragment = {
-      addFragment(fragmentFactory.example(Text(d), execution))
+   def >>(execution: =>Execution): Fragment = {
+      addFragment(fragmentFactory.example(Text(d), Execution.withEnvFlatten(_ => execution)))
       addFragment(fragmentFactory.break)
     }
 
