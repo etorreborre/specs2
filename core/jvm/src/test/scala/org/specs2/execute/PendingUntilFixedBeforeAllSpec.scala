@@ -13,6 +13,6 @@ class PendingUntilFixedBeforeAllSpec extends Specification with BeforeAll {
 
   "Pending until fixed can be used with BeforeAll" >> {
     setupFinished ==== true
-    (1 ==== 1).pendingUntilFixed("Will explode")
+    (1 ==== 2).pendingUntilFixed("Will explode")
   }
 }
