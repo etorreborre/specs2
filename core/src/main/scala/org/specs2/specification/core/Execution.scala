@@ -403,7 +403,7 @@ object Execution:
         case _                    => None
 
   given AsExecution[Execution] with
-    def execute(r: =>Execution): Execution = r
+    def execute(r: =>Execution): Execution = Execution.withEnvFlatten(_ => r)
 
   implicit def asExecutionToExecution[T: AsExecution](t: =>T): Execution =
     AsExecution[T].execute(t)
