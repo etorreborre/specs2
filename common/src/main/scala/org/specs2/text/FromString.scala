@@ -22,6 +22,6 @@ object FromString:
 
   given FromString[Boolean] with
     def fromString(s: String): Option[Boolean] =
-      if "false".equals(s) then Some(false)
-      else if "true".equals(s) then Some(true)
+      if "false" == s then Some(false)
+      else if "true" == s then Some(true)
       else None

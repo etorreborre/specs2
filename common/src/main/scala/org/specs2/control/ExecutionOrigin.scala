@@ -40,7 +40,7 @@ trait ExecutionOrigin extends Stacktraces:
         val className = fullClassName.takeWhile(_ != '$').mkString
         // this is a fix for #533 to properly recognize org.specs2.mutable.Spec
         // used by a normal user
-        !className.split("\\.").last.equals("Spec") &&
+        !className.endsWith(".Spec") &&
         className.endsWith("Spec") && fromSpecs2(className)
       },
       st.takeWhile(t => fromSpecs2(t.getClassName))
