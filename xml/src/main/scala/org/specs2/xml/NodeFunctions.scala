@@ -13,7 +13,7 @@ private[specs2] trait NodeFunctions:
     */
   def isSpaceNode(n1: Node): Boolean = n1 match
     case g: Group => false
-    case _        => n1.label.equals("#PCDATA") && n1.text.matches("\\s*")
+    case _        => n1.label == "#PCDATA" && n1.text.matches("\\s*")
 
   /** Alias for isEqualIgnoringSpace
     */
