@@ -14,3 +14,13 @@ class MutableSpec(val env: Env) extends Specification with OwnExecutionEnv {
   }
 
 }
+
+class NestedSpec extends Specification {
+  "This is a test for #981" >> {
+    // https://github.com/etorreborre/specs2/pull/981#issuecomment-911400717
+    // this used to throw a ClassCastException possibly to a scala bug
+    "Nested" >> {
+      1 ==== 1
+    }
+  }
+}

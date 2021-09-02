@@ -36,11 +36,6 @@ trait ExampleDsl1 extends BlockDsl with ExampleDsl0 {
     def >>[R](f: String => R)(implicit asExecution: AsExecution[R]): Fragment =
       >>(asExecution.execute(f(d)))
 
-   def >>(execution: =>Execution): Fragment = {
-      addFragment(fragmentFactory.example(Text(d), Execution.withEnvFlatten(_ => execution)))
-      addFragment(fragmentFactory.break)
-    }
-
     def >>[R: AsResult](parser: StepParser[R]): Fragment = {
       addFragment(
         fragmentFactory.example(Text(parser.strip(d)),
@@ -79,10 +74,13 @@ trait ExampleDsl0 extends BlockCreation {
     def >>(fs: =>Fragments)(implicit p1: ImplicitParam1): Fragments =
       Use.ignoring(p1) { addBlock(d, fs, addFragmentsBlock) }
 
-    def >>[R : AsExecution](r: =>R): Fragment = {
-      addFragment(fragmentFactory.example(Text(d), AsExecution.apply[R].execute(r)))
+    def >>(execution: =>Execution)(implicit p1: ImplicitParam1): Fragment = {
+      addFragment(fragmentFactory.example(Text(d), Execution.withEnvFlatten(_ => execution)))
       addFragment(fragmentFactory.break)
     }
+
+    def >>[R : AsExecution](r: =>R): Fragment =
+      d.>>(AsExecution.apply[R].execute(r))
 
     def should(f: => Fragment): Fragment =
       addBlock(s"$d should", f, addFragmentBlock)
