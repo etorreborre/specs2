@@ -1,7 +1,8 @@
 package org.specs2
 package mutable
 
-import org.specs2.specification.core.{Env, OwnExecutionEnv}
+import specification.core.{Env, OwnExecutionEnv}
+import execute.{AsResult, Result}
 
 class MutableSpec(val env: Env) extends Specification with OwnExecutionEnv {
 
@@ -15,12 +16,28 @@ class MutableSpec(val env: Env) extends Specification with OwnExecutionEnv {
 
 }
 
+// https://github.com/etorreborre/specs2/pull/981#issuecomment-911400717
+// this used to throw a ClassCastException possibly due to a scala bug with implicits
 class NestedSpec extends Specification {
   "This is a test for #981" >> {
-    // https://github.com/etorreborre/specs2/pull/981#issuecomment-911400717
-    // this used to throw a ClassCastException possibly to a scala bug
     "Nested" >> {
       1 ==== 1
     }
+  }
+}
+
+// #984 this again looks like a weird behaviour with implicits
+// Prior to the fix which shuffled implicits around the var
+// was being captured by the >> { ... } closure and never evaluated again
+class ImplicitClosureSpec extends Specification with specification.AroundEach {
+  private[this] var value: Int = 0
+
+  override def around[R: AsResult](r: =>R): Result = {
+    value = 1
+    AsResult(r)
+  }
+
+  "Around should use the same value" >> {
+    value === 1
   }
 }
