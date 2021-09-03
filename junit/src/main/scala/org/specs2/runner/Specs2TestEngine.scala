@@ -78,27 +78,26 @@ class Specs2TestEngine extends TestEngine:
           case Left(e) =>
             listener.executionFinished(descriptor, TestExecutionResult.failed(e))
 
-
-
 case class Specs2EngineContainerDescriptor(uniqueId: UniqueId, name: String) extends EngineDescriptor(uniqueId, name) {
   override def getType = Type.CONTAINER
 }
 
-case class Specs2EngineTestDescriptor(uniqueId: UniqueId, name: String, execution: Execution) extends
-  EngineDescriptor(uniqueId, name) {
+case class Specs2EngineTestDescriptor(uniqueId: UniqueId, name: String, execution: Execution)
+    extends EngineDescriptor(uniqueId, name) {
   override def getType = Type.TEST
 }
 
 object Specs2EngineDescriptor:
 
-  def create(engineId: UniqueId, name: String)(specificationStructures: List[SpecificationStructure])(ee: ExecutionEnv)
-  : EngineDescriptor =
+  def create(engineId: UniqueId, name: String)(specificationStructures: List[SpecificationStructure])(
+      ee: ExecutionEnv
+  ): EngineDescriptor =
     val descriptor = Specs2EngineContainerDescriptor(engineId, name)
     specificationStructures.map(s => createSpecDescriptor(engineId, s.structure)(ee)).foreach(descriptor.addChild)
     descriptor
 
   def createSpecDescriptor(engineId: UniqueId, spec: SpecStructure)(ee: ExecutionEnv): TestDescriptor =
-      createTestDescriptor(createTreeLoc(engineId, spec)(ee))
+    createTestDescriptor(createTreeLoc(engineId, spec)(ee))
 
   def createTestDescriptor(treeLoc: TreeLoc[TestDescriptor]): TestDescriptor =
     treeLoc.toTree.bottomUp { (descriptor: TestDescriptor, children: LazyList[TestDescriptor]) =>
@@ -109,8 +108,9 @@ object Specs2EngineDescriptor:
   def createTreeLoc(uniqueId: UniqueId, spec: SpecStructure)(ee: ExecutionEnv): TreeLoc[TestDescriptor] =
     createTestDescriptorTree(uniqueId, spec)(ee).map(_._2)
 
-  def createTestDescriptorTree(uniqueId: UniqueId,
-                               spec: SpecStructure)(ee: ExecutionEnv): TreeLoc[(Fragment, TestDescriptor)] =
+  def createTestDescriptorTree(uniqueId: UniqueId, spec: SpecStructure)(
+      ee: ExecutionEnv
+  ): TreeLoc[(Fragment, TestDescriptor)] =
     val className = spec.specClassName
     val rootFragment = DefaultFragmentFactory.text(spec.header.simpleName)
 

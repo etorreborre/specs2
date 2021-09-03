@@ -69,7 +69,9 @@ trait Resource[T] extends BeforeAfterSpec with FragmentsFactory:
   def beforeSpec =
     fragmentFactory.step(Execution.withEnvAsync { env =>
       implicit val ec = env.executionContext
-      lazy val acquired: Future[T] = acquire.recoverWith { case e: Exception => Future.failed[T](new Exception("resource unavailable", e)) }
+      lazy val acquired: Future[T] = acquire.recoverWith { case e: Exception =>
+        Future.failed[T](new Exception("resource unavailable", e))
+      }
 
       resourceKey match
         // local resource
@@ -85,21 +87,24 @@ trait Resource[T] extends BeforeAfterSpec with FragmentsFactory:
     }.setErrorAsFatal)
 
   def afterSpec =
-    Fragments(fragmentFactory.break, fragmentFactory.step {
-      Execution.withEnvFlatten { env =>
-        implicit val ec = env.executionContext
-        env.resources.get(getResourceKey) match
-          case None =>
-            // we can assume here that if no resource was available for the key, that's because
-            // it could not be acquired in the first place
-            success
-          case Some(ResourceExecution(Local, _, finalization)) =>
-            env.resources.remove(getResourceKey)
-            finalization
-          case Some(ResourceExecution(_, _, _)) =>
-            success
+    Fragments(
+      fragmentFactory.break,
+      fragmentFactory.step {
+        Execution.withEnvFlatten { env =>
+          implicit val ec = env.executionContext
+          env.resources.get(getResourceKey) match
+            case None =>
+              // we can assume here that if no resource was available for the key, that's because
+              // it could not be acquired in the first place
+              success
+            case Some(ResourceExecution(Local, _, finalization)) =>
+              env.resources.remove(getResourceKey)
+              finalization
+            case Some(ResourceExecution(_, _, _)) =>
+              success
+        }
       }
-    })
+    )
 
   given [R: AsExecution]: AsExecution[T => R] with
     def execute(f: => (T => R)): Execution =
