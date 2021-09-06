@@ -10,10 +10,9 @@ import specification.create.S2StringContext
  * ForEachWithCommandLine trait, adapted for mutable specifications
  */
 trait ForEachWithCommandLine[T] extends specification.ForEachWithCommandLineArguments[T] with ExampleDsl { outer: S2StringContext =>
-  override implicit def blockExample1(d: String): BlockExample =
-    new BlockExample(d)
+  override implicit def blockExample(d: String) = new BlockExample1(d)
 
-  class BlockExample(d: String) extends BlockExample1(d) {
+  class BlockExample1(d: String) extends BlockExample(d) {
     def >>[R : AsResult](f: T => R): Fragment =
       >>(foreachFunctionToExecution(f))
 

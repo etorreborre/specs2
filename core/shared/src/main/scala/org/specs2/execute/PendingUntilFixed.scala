@@ -2,7 +2,6 @@ package org.specs2
 package execute
 
 import text.Quote._
-import org.specs2.specification.core._
 
 /**
  * This function allows to mark the body of an example as pending until it is fixed.
@@ -12,26 +11,26 @@ import org.specs2.specification.core._
  */
 trait PendingUntilFixed { outer =>
 
-  /** @return Pending unless the result of the execution is a success */
-  def pendingUntilFixed[T : AsExecution](t: =>T): Execution =
+  /** @return Pending unless the result is a success */
+  def pendingUntilFixed[T : AsResult](t: =>T): Result =
     pendingUntilFixed("")(t)
 
-  /** @return Pending unless the result of the execution is a success */
-  def pendingUntilFixed[T : AsExecution](m: String = "")(t: =>T): Execution =
-    AsExecution[T].execute(t).mapFinalResult {
+  /** @return Pending unless the result is a success */
+  def pendingUntilFixed[T : AsResult](m: String = "")(t: =>T): Result =
+    AsResult[T](t) match {
       case s @ Success(_,_) => Failure(m.prefix(". ", "Fixed now, you should remove the 'pendingUntilFixed' marker"))
       case other            => Pending(m.prefix(". ", "Pending until fixed"))
     }
 
   // postfix methods
-  implicit def toPendingUntilFixed[T : AsExecution](t: =>T): PendingUntilFixed[T] =
+  implicit def toPendingUntilFixed[T : AsResult](t: =>T): PendingUntilFixed[T] =
     new PendingUntilFixed(t)
 
-  class PendingUntilFixed[T : AsExecution](t: =>T) {
-    def pendingUntilFixed: Execution =
+  class PendingUntilFixed[T : AsResult](t: =>T) {
+    def pendingUntilFixed: Result =
       outer.pendingUntilFixed("")(t)
 
-    def pendingUntilFixed(m: String = ""): Execution =
+    def pendingUntilFixed(m: String = ""): Result =
       outer.pendingUntilFixed(m)(t)
   }
 
@@ -41,7 +40,7 @@ trait PendingUntilFixed { outer =>
  * use this trait to remove the pending until fixed implicit conversion
  */
 trait NoPendingUntilFixed extends PendingUntilFixed {
-  override def toPendingUntilFixed[T : AsExecution](t: =>T) = super.toPendingUntilFixed(t)
+  override def toPendingUntilFixed[T : AsResult](t: =>T) = super.toPendingUntilFixed(t)
 }
 
 object PendingUntilFixed extends PendingUntilFixed

@@ -1,8 +1,9 @@
 package org.specs2
 package mutable
 
-import specification.core.{Env, OwnExecutionEnv}
+import specification.AroundEach
 import execute.{AsResult, Result}
+import specification.core.{Env, OwnExecutionEnv}
 
 class MutableSpec(val env: Env) extends Specification with OwnExecutionEnv {
 
@@ -29,8 +30,8 @@ class NestedSpec extends Specification {
 // #984 this again looks like a weird behaviour with implicits
 // Prior to the fix which shuffled implicits around the var
 // was being captured by the >> { ... } closure and never evaluated again
-class ImplicitClosureSpec extends Specification with specification.AroundEach {
-  private[this] var value: Int = 0
+class ImplicitClosureMutableSpec extends Specification with AroundEach {
+  private var value: Int = 0
 
   override def around[R: AsResult](r: =>R): Result = {
     value = 1
@@ -40,4 +41,20 @@ class ImplicitClosureSpec extends Specification with specification.AroundEach {
   "Around should use the same value" >> {
     value === 1
   }
+}
+
+class ImplicitClosureSpec extends org.specs2.Specification with AroundEach {
+  private var value: Int = 0
+
+  def is = s2"""
+    around should use the same value $checkValue
+  """
+
+  override def around[R: AsResult](r: =>R): Result = {
+    value = 1
+    AsResult(r)
+  }
+
+  def checkValue =
+    value === 1
 }
