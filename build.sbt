@@ -511,6 +511,7 @@ lazy val providedDependenciesInAggregate = Seq("shapeless")
  * PUBLICATION
  */
 lazy val publicationSettings = Seq(
+  mimaPreviousArtifacts := Set(organization.value %% moduleName.value % "4.12.10"),
   Global / publishTo := sonatypePublishToBundle.value,
   publishMavenStyle := true,
   Test / publishArtifact := false,
