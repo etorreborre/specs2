@@ -19,7 +19,7 @@ case class ExecutionEnv(executorServices: ExecutorServices, timeFactor: Int) {
 
 }
 
-object ExecutionEnv {
+object ExecutionEnv:
 
   /** create an ExecutionEnv from an execution context only */
   def fromExecutionContext(ec: =>ExecutionContext): ExecutionEnv =
@@ -34,5 +34,3 @@ object ExecutionEnv {
   /** create an ExecutionEnv from Scala global execution context */
   def fromGlobalExecutionContext: ExecutionEnv =
     fromExecutionContext(scala.concurrent.ExecutionContext.global)
-
-}

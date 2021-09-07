@@ -9,6 +9,7 @@ import reporter.*
 import main.Arguments
 import fp.syntax.*
 import Runner.*
+import scala.concurrent.*
 
 trait ClassRunner:
   def run(className: String): Action[Stats]
@@ -117,3 +118,11 @@ object TextRunner extends ClassRunnerMain:
 
     action.runAction(env1.specs2ExecutionEnv)
     logger
+
+  /** this method returns a Future and does not try to instantiate any class so it is suitable for ScalaJS */
+  def runFuture(spec: SpecificationStructure, arguments: Arguments = Arguments())(env: Env): Future[PrinterLogger & StringOutput] =
+    val logger = PrinterLogger.stringPrinterLogger
+    val env1 = env.setPrinterLogger(logger).setArguments(env.arguments.overrideWith(arguments))
+    given ExecutionContext = env1.executionContext
+    val reporter = Reporter.create(List(TextPrinter(env1)), env1)
+    reporter.report(spec.structure).runFuture(env1.specs2ExecutionEnv).map(_ => logger)

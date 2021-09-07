@@ -2,6 +2,7 @@ package org.specs2.concurrent
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.FiniteDuration
+import org.scalajs.macrotaskexecutor.*
 
 /** Executor services for javascript
   *
@@ -10,7 +11,6 @@ import scala.concurrent.duration.FiniteDuration
 case class ExecutorServices(executionContextEval: () => ExecutionContext, schedulerEval: () => Scheduler) {
 
   given executionContext: ExecutionContext = executionContextEval()
-
   given scheduler: Scheduler = schedulerEval()
 
   def shutdownNow(): Unit =
@@ -20,7 +20,9 @@ case class ExecutorServices(executionContextEval: () => ExecutionContext, schedu
   def shutdownOnComplete[A](future: scala.concurrent.Future[A]): ExecutorServices =
     this
 
-  def schedule(action: =>Unit, duration: FiniteDuration): () => Unit =
+  def schedule(action: =>Unit, duration: FiniteDuration): Unit =
+    // the timeout is started with a side effect
+    // the return value, which is a handler to clear the timeout is ignored
     scheduler.schedule(action, duration)
 
 }
@@ -31,12 +33,9 @@ object ExecutorServices {
   lazy val specs2ThreadsNb: Int = 1
 
   def fromExecutionContext(ec: =>ExecutionContext): ExecutorServices =
-    ExecutorServices(
-      () => ec,
-      () => Schedulers.default
-    )
+    ExecutorServices(() => ec, () => Schedulers.default)
 
   def fromGlobalExecutionContext: ExecutorServices =
-    fromExecutionContext(scala.concurrent.ExecutionContext.global)
+    fromExecutionContext(MacrotaskExecutor)
 
 }

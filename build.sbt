@@ -66,6 +66,7 @@ lazy val commonJvmSettings =
 import org.scalajs.linker.interface.ESVersion
 
 lazy val commonJsSettings =
+  depends.jsMacrotaskExecutor ++
   Seq(scalaJSLinkerConfig ~= { _.withESFeatures(_.withESVersion(ESVersion.ES2018)) }) ++
     testJsSettings
 
@@ -326,5 +327,4 @@ lazy val aggregateCompile = ScopeFilter(
     xml.jvm,
     examples.jvm
   ),
-  inConfigurations(Compile)
-)
+  inConfigurations(Compile))
