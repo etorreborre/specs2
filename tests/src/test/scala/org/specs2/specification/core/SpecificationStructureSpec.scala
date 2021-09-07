@@ -54,7 +54,7 @@ class SpecificationStructureSpec(val env: Env) extends Specification with ScalaC
 
   def report =
     SpecificationStructure.create("org.specs2.specification.core.BrokenSpecification").runOperation must beLeft(
-      (t: Throwable) => t.getCause.getCause.getMessage === "boom"
+          (t: Throwable) => (t.getCause.getMessage === "boom") or (t.getCause.getCause.getMessage === "boom")
     )
 
   def companion =
