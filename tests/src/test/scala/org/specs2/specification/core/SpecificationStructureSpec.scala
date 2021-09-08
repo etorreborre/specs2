@@ -13,7 +13,7 @@ import fp.syntax.*
 import matcher.*
 import OperationMatchers.*
 
-class SpecificationStructureSpec(val env: Env) extends Specification with ScalaCheck with OwnEnv {
+class mutabl(val env: Env) extends Specification with ScalaCheck with OwnEnv {
   def is = s2"""
 
  There can be links between specifications and it is possible to sort all the dependent specifications
@@ -54,7 +54,7 @@ class SpecificationStructureSpec(val env: Env) extends Specification with ScalaC
 
   def report =
     SpecificationStructure.create("org.specs2.specification.core.BrokenSpecification").runOperation must beLeft(
-          (t: Throwable) => (t.getCause.getMessage === "boom") or (t.getCause.getCause.getMessage === "boom")
+      (t: Throwable) => (t.getCause.getMessage === "boom") or (t.getCause.getCause.getMessage === "boom")
     )
 
   def companion =
