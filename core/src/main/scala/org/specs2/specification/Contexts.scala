@@ -148,29 +148,29 @@ trait BeforeAfterSpec extends SpecificationStructure with FragmentsFactory:
   */
 @deprecated(since="5.0.0")
 trait BeforeAll extends SpecificationStructure with FragmentsFactory:
-  def beforeAll: Unit
+  def beforeAll(): Unit
 
   override def map(fs: =>Fragments): Fragments =
-    super.map(fs).prepend(fragmentFactory.step(beforeAll)).append(fragmentFactory.markAs(AlwaysTag))
+    super.map(fs).prepend(fragmentFactory.step(beforeAll())).append(fragmentFactory.markAs(AlwaysTag))
 
 /** Execute a step after all other fragments
   */
 @deprecated(since="5.0.0")
 trait AfterAll extends SpecificationStructure with FragmentsFactory:
-  def afterAll: Unit
+  def afterAll(): Unit
 
   override def map(fs: =>Fragments): Fragments =
-    super.map(fs).append(fragmentFactory.step(afterAll)).append(fragmentFactory.markAs(AlwaysTag))
+    super.map(fs).append(fragmentFactory.step(afterAll())).append(fragmentFactory.markAs(AlwaysTag))
 
 /** Execute a step before and after all other fragments
   */
 @deprecated(since="5.0.0")
 trait BeforeAfterAll extends SpecificationStructure with FragmentsFactory:
-  def beforeAll: Unit
-  def afterAll: Unit
+  def beforeAll(): Unit
+  def afterAll(): Unit
 
   override def map(fs: =>Fragments): Fragments =
     super
       .map(fs)
-      .prepend(fragmentFactory.step(beforeAll)).append(fragmentFactory.markAs(AlwaysTag))
-      .append(fragmentFactory.step(afterAll)).append(fragmentFactory.markAs(AlwaysTag))
+      .prepend(fragmentFactory.step(beforeAll())).append(fragmentFactory.markAs(AlwaysTag))
+      .append(fragmentFactory.step(afterAll())).append(fragmentFactory.markAs(AlwaysTag))
