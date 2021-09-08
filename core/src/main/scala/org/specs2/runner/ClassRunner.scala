@@ -120,7 +120,9 @@ object TextRunner extends ClassRunnerMain:
     logger
 
   /** this method returns a Future and does not try to instantiate any class so it is suitable for ScalaJS */
-  def runFuture(spec: SpecificationStructure, arguments: Arguments = Arguments())(env: Env): Future[PrinterLogger & StringOutput] =
+  def runFuture(spec: SpecificationStructure, arguments: Arguments = Arguments())(
+      env: Env
+  ): Future[PrinterLogger & StringOutput] =
     val logger = PrinterLogger.stringPrinterLogger
     val env1 = env.setPrinterLogger(logger).setArguments(env.arguments.overrideWith(arguments))
     given ExecutionContext = env1.executionContext

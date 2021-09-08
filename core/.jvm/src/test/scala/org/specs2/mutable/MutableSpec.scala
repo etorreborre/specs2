@@ -15,7 +15,6 @@ class MutableSpec(val env: Env) extends Specification with OwnExecutionEnv:
     (1 === 1).pendingUntilFixed("to force the conversion of the block to an Execution")
   }
 
-
 // https://github.com/etorreborre/specs2/pull/981#issuecomment-911400717
 // this used to throw a ClassCastException possibly due to a scala bug with implicits
 class NestedSpec extends Specification {
@@ -48,7 +47,7 @@ class ImplicitClosureSpec extends org.specs2.Specification with AroundEach:
 
   private var value: Int = 0
 
-  override def around[R: AsResult](r: => R): Result =
+  override def around[R: AsResult](r: =>R): Result =
     value = 1
     AsResult(r)
 
