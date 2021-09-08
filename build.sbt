@@ -49,7 +49,7 @@ lazy val commonJsSettings = Seq(
     s"-P:scalajs:mapSourceURI:$a->$g/"
   },
   Test / parallelExecution := false
-)
+  ) ++ depends.jsMacrotaskExecutor
 
 lazy val commonNativeSettings = Seq(
   scalaVersion := "2.13",

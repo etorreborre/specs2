@@ -5,6 +5,7 @@ import org.specs2.control.Logger
 import org.specs2.main.Arguments
 
 import scala.concurrent.ExecutionContext
+import org.scalajs.macrotaskexecutor._
 
 /**
  * Execution environment for javascript
@@ -44,6 +45,6 @@ object ExecutionEnv {
 
   /** create an ExecutionEnv from Scala global execution context */
   def fromGlobalExecutionContext: ExecutionEnv =
-    fromExecutionContext(scala.concurrent.ExecutionContext.global)
+    fromExecutionContext(MacrotaskExecutor)
 
 }

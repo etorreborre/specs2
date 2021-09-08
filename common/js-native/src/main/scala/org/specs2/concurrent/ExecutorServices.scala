@@ -3,6 +3,7 @@ package org.specs2.concurrent
 import org.specs2.control.eff._
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.FiniteDuration
+import org.scalajs.macrotaskexecutor._
 
 /**
  * Executor services for javascript
@@ -43,6 +44,6 @@ object ExecutorServices {
     )
 
   def fromGlobalExecutionContext: ExecutorServices =
-    fromExecutionContext(scala.concurrent.ExecutionContext.global)
+    fromExecutionContext(MacrotaskExecutor)
 
 }

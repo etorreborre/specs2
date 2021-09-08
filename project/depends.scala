@@ -31,6 +31,9 @@ object depends {
       "org.portable-scala" %%% "portable-scala-reflect" % "1.1.1"),
         Test / scalaJSStage := FastOptStage)
 
+  def jsMacrotaskExecutor =
+    Seq(libraryDependencies += "org.scala-js" %%% "scala-js-macrotask-executor" % "0.1.0")
+
   def nativeTest =
     Seq(libraryDependencies += "org.scala-native" %%% "test-interface" % nativeVersion)
 
