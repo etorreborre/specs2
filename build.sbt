@@ -51,7 +51,8 @@ lazy val rootSettings =
     Seq(
       Compile / doc / sources := sources.all(aggregateCompile).value.flatten,
       packagedArtifacts := Map.empty,
-      test := {}
+      test := {},
+      mimaPreviousArtifacts := Set.empty
     )
 
 lazy val commonSettings =
@@ -59,17 +60,19 @@ lazy val commonSettings =
     compilationSettings ++
     releaseSettings ++
     testSettings ++
-    Seq(mimaPreviousArtifacts := Set(organization.value %% moduleName.value % "5.0.0-RC-07"))
+    Seq(mimaPreviousArtifacts := Set.empty)
 
 lazy val commonJvmSettings =
-  testJvmSettings
+  testJvmSettings ++
+    Seq(mimaPreviousArtifacts := Set(organization.value %% moduleName.value % "5.0.0-RC-07"))
 
 import org.scalajs.linker.interface.ESVersion
 
 lazy val commonJsSettings =
   depends.jsMacrotaskExecutor ++
-  Seq(scalaJSLinkerConfig ~= { _.withESFeatures(_.withESVersion(ESVersion.ES2018)) }) ++
-    testJsSettings
+    Seq(scalaJSLinkerConfig ~= { _.withESFeatures(_.withESVersion(ESVersion.ES2018)) }) ++
+    testJsSettings ++
+    Seq(mimaPreviousArtifacts := Set.empty)
 
 /** MODULES (sorted in alphabetical order) */
 
@@ -98,9 +101,10 @@ lazy val examples = crossProject(platforms: _*)
   .withoutSuffixFor(jvm)
   .crossType(CrossType.Pure)
   .in(file("examples"))
-  .settings(commonSettings, name := "specs2-examples")
   .jvmSettings(commonJvmSettings)
   .jsSettings(commonJsSettings)
+  // no mima check because that jar is not published
+  .settings(commonSettings, name := "specs2-examples", mimaPreviousArtifacts := Set.empty)
   .dependsOn(common, matcher, core, matcherExtra, junit, scalacheck)
 
 lazy val fp = crossProject(platforms: _*)
@@ -263,6 +267,10 @@ lazy val testJsSettings = Seq(
 lazy val releaseSettings: Seq[Setting[_]] = Seq(
   ThisBuild / versionScheme := Some("early-semver"),
   ThisBuild / githubWorkflowArtifactUpload := false,
+  ThisBuild / githubWorkflowBuildPreamble ++= List(
+    WorkflowStep.Sbt(List("mimaReportBinaryIssues"), name = Some("Check binary compatibility ✔")),
+    WorkflowStep.Sbt(List("scalafmtCheckAll"), name = Some("Check formatting ✔"))
+  ),
   ThisBuild / githubWorkflowBuild := Seq(
     WorkflowStep
       .Sbt(name = Some("Build and test 🔧"), commands = List("testOnly -- xonly exclude ci,website timefactor 3"))
@@ -328,4 +336,5 @@ lazy val aggregateCompile = ScopeFilter(
     xml.jvm,
     examples.jvm
   ),
-  inConfigurations(Compile))
+  inConfigurations(Compile)
+)
