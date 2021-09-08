@@ -58,7 +58,8 @@ lazy val commonSettings =
   specs2Settings ++
     compilationSettings ++
     releaseSettings ++
-    testSettings
+    testSettings ++
+    Seq(mimaPreviousArtifacts := Set(organization.value %% moduleName.value % "5.0.0-RC-07"))
 
 lazy val commonJvmSettings =
   testJvmSettings
