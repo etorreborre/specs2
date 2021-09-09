@@ -21,10 +21,10 @@ trait ActionMatchers extends ValueChecks:
     beOk[T, T](identity)
 
   def beOk[T, R](f: T => R): FutureMatcher[Action[T]] =
-    FutureMatcher((_:Action[T]).map(f).runFuture(executionEnv))
+    FutureMatcher((_: Action[T]).map(f).runFuture(executionEnv))
 
   def beOk[T](check: ValueCheck[T]): FutureMatcher[Action[T]] =
-    FutureMatcher((_:Action[T]).map(check.check).runFuture(executionEnv))
+    FutureMatcher((_: Action[T]).map(check.check).runFuture(executionEnv))
 
   def beOkWithValue[T](t: T): FutureMatcher[Action[T]] =
     beOk(new BeEqualTo(t))
@@ -36,10 +36,9 @@ trait ActionMatchers extends ValueChecks:
 
   def beKo[T](message: String): FutureMatcher[Action[T]] =
     FutureMatcher { (action: Action[T]) =>
-      action.runFuture(executionEnv).map(_ => Failure(s"a failure with message $message was expected")).
-        recover {
-          case t if t.getMessage `matchesSafely` message => Success("ok")
-          case t => Failure(s"the action failed with message ${t.getMessage}. Expected: $message"),
+      action.runFuture(executionEnv).map(_ => Failure(s"a failure with message $message was expected")).recover {
+        case t if t.getMessage `matchesSafely` message => Success("ok")
+        case t => Failure(s"the action failed with message ${t.getMessage}. Expected: $message"),
       }
     }
 

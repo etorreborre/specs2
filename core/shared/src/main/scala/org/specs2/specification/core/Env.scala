@@ -88,15 +88,18 @@ case class Env(
   def shutdown: Future[Map[String, Result]] =
     given ExecutionContext = specs2ExecutionContext
     val results: Action[List[(String, Result)]] = resources.toList
-          .traverse { case (key, resource) => resource.execution.startExecution(this).executionResult.map(r => (key, r)) }
+      .traverse { case (key, resource) => resource.execution.startExecution(this).executionResult.map(r => (key, r)) }
 
-    val failures = results.map { (rs: List[(String, Result)]) =>
-          rs
-            .filter(_._2.isIssue)
-            .map { case (resourceKey, result) =>
-              (resourceKey, result.updateMessage(m => s"The resource with key '$resourceKey' could not be finalized: $m"))
-            }.toMap
-          }.runFuture(specs2ExecutionEnv)
+    val failures = results
+      .map { (rs: List[(String, Result)]) =>
+        rs
+          .filter(_._2.isIssue)
+          .map { case (resourceKey, result) =>
+            (resourceKey, result.updateMessage(m => s"The resource with key '$resourceKey' could not be finalized: $m"))
+          }
+          .toMap
+      }
+      .runFuture(specs2ExecutionEnv)
 
     failures.onComplete { _ =>
       try specs2ExecutionEnv.shutdown()

@@ -40,8 +40,7 @@ abstract class BaseSbtRunner(args: Array[String], remoteArgs: Array[String], loa
     SbtTask(aTaskDef, env, loader, this)
 
   def done =
-    env
-      .shutdown
+    env.shutdown
       .onComplete {
         case Failure(e) =>
           loggers.foreach(_.error("error while finalizing resources: " + e.getMessage))
