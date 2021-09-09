@@ -2,21 +2,23 @@ package org.specs2.scalacheck
 
 import org.scalacheck.Prop.forAll
 import org.scalacheck.{Gen, Properties}
+import org.specs2.fp.syntax.*
 import org.specs2.ScalaCheck
 import org.specs2.control.Action
-import org.specs2.execute.Result
+import org.specs2.execute.{Result, Success}
+import org.specs2.matcher.ActionMatchers
+import org.specs2.specification.core.{Fragment, Env, OwnEnv}
 import org.specs2.matcher.ResultMatchers
 import org.specs2.mutable.Specification
-import org.specs2.specification.core.{Env, OwnEnv}
 import org.specs2.specification.process.DefaultExecutor
-import org.specs2.matcher.ActionMatchers.*
 import language.adhocExtensions
 
-class ScalaCheckMutableSpec(val env: Env) extends Specification with ScalaCheck with ResultMatchers with OwnEnv:
+class ScalaCheckMutableSpec(val env: Env) extends Specification with ScalaCheck with ResultMatchers with OwnEnv with ActionMatchers:
 
   "this property must fail (see #581)" >> {
     val action: Action[Result] =
-      DefaultExecutor.executeFragments(s2"fail here $failingProperties")(ownEnv).map(_.executionResult).head
+      DefaultExecutor.executeFragmentsAction(s2"fail here $failingProperties")(ownEnv).
+        flatMap(_.traverse(_.executionResult).map(_.headOption.getOrElse(ok)))
 
     action must beOk((r: Result) => r must beFailing)
   }
