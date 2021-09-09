@@ -197,6 +197,7 @@ lazy val tests = crossProject(platforms: _*)
     matcherExtra
   )
   .jvmConfigure(_.dependsOn(html))
+  .jsSettings(scalaJSLinkerConfig ~= { _.withESFeatures(_.withESVersion(ESVersion.ES2018)) })
 
 lazy val xml = crossProject(platforms: _*)
   .withoutSuffixFor(jvm)
