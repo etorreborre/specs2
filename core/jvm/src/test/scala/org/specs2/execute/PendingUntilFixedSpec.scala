@@ -13,6 +13,7 @@ class PendingUntilFixedSpec(val env: Env) extends Specification with OwnEnv {
   "it must change to failed when the example succeeds" in e3
   "with a specific message" in e4
   "An AssertionError must be interpreted as non-fixed" in e5
+  "An exception must be caught and returned as Pending" in e6
 
   def e1 = {
     val ex = "ex" ! { 1 must_== 2 }.pendingUntilFixed
@@ -36,6 +37,13 @@ class PendingUntilFixedSpec(val env: Env) extends Specification with OwnEnv {
 
   def e5 = {
     val ex = "ex" ! { assert(false); 1 must_== 2 }.pendingUntilFixed
+    execute(ex) must_== Pending("Pending until fixed")
+  }
+
+  def e6 = {
+    val ex = "ex" ! {
+      matcher.MustThrownMatchers.theValue(1).must(===(2))
+    }.pendingUntilFixed
     execute(ex) must_== Pending("Pending until fixed")
   }
 
