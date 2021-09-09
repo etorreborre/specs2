@@ -58,7 +58,6 @@ lazy val rootSettings =
 lazy val commonSettings =
   specs2Settings ++
     compilationSettings ++
-    releaseSettings ++
     testSettings ++
     Seq(mimaPreviousArtifacts := Set.empty)
 
