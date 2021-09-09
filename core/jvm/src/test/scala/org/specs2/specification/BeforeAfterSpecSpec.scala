@@ -78,6 +78,6 @@ class BeforeAfterSpecSpec extends Specification {
   def runSpec(s: SpecificationStructure, arguments: Arguments = Arguments()) =
     val env = Env(arguments = arguments, printerLogger = NoPrinterLogger)
     try Reporter.create(Nil, env).report(s.structure).runVoid(env.executionEnv)
-    finally env.shutdown()
+    finally env.awaitShutdown()
 
 }

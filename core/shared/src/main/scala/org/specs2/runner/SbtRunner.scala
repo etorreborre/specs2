@@ -41,7 +41,7 @@ abstract class BaseSbtRunner(args: Array[String], remoteArgs: Array[String], loa
 
   def done =
     env
-      .shutdownAllFuture()
+      .shutdown
       .onComplete {
         case Failure(e) =>
           loggers.foreach(_.error("error while finalizing resources: " + e.getMessage))
@@ -73,10 +73,10 @@ case class SlaveSbtRunner(args: Array[String], remoteArgs: Array[String], loader
 object sbtRun extends MasterSbtRunner(Array(), Array(), Thread.currentThread.getContextClassLoader):
   def main(arguments: Array[String]): Unit =
     val env = Env(Arguments(arguments*))
-    given ExecutionEnv = env.specs2ExecutionEnv
+    given ee: ExecutionEnv = env.specs2ExecutionEnv
 
     try exit(start(arguments*))
-    finally env.shutdown()
+    finally Action.future(env.shutdown).runVoid(ee)
 
   def exit(action: Action[Stats])(using ee: ExecutionEnv): Unit =
     action

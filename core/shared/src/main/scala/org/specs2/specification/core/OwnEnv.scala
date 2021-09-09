@@ -2,10 +2,11 @@ package org.specs2
 package specification
 package core
 
-import execute.StandardResults.*
-import concurrent.{ExecutorServices, ExecutionEnv}
-import specification.*
 import scala.concurrent.ExecutionContext
+import fp.*, syntax.*
+import concurrent.{ExecutorServices, ExecutionEnv}
+import execute.*, StandardResults.*
+import specification.*
 import dsl.*
 
 /** This trait copies the inherited env: Env for a Specification and makes sure it is shutdown when the specification
@@ -29,11 +30,11 @@ trait OwnEnv extends AfterSpec:
   given ee: ExecutionEnv =
     ownEnv.executionEnv
 
-  lazy val es: ExecutorServices =
+  given es: ExecutorServices =
     ownEnv.executorServices
 
-  lazy val ec: ExecutionContext =
+  given ec: ExecutionContext =
     ownEnv.executionContext
 
   def afterSpec: Fragments =
-    step(ownEnv.shutdown())
+    step(ownEnv.shutdownResult)

@@ -18,4 +18,4 @@ object files:
 
     val filesRunner = DefaultFilesRunner(env, SpecificationsFinder.default)
     try Runner.execute(filesRunner.run, env, exit)
-    finally env.shutdown()
+    finally env.awaitShutdown()

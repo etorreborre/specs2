@@ -6,9 +6,8 @@ import fp.syntax.*
 import matcher.*
 import org.specs2.specification.core.{Env, OwnEnv, SpecStructure}
 import org.specs2.specification.process.DefaultExecutor
-import ActionMatchers.*
 
-class FormsFragmentsSpec(val env: Env) extends Specification with Forms with ThrownExpectations with OwnEnv {
+class FormsFragmentsSpec(val env: Env) extends Specification with Forms with ThrownExpectations with OwnEnv with ActionMatchers {
   def is = s2"""
 
  A form can be added as a Fragment in a specification
@@ -35,6 +34,7 @@ class FormsFragmentsSpec(val env: Env) extends Specification with Forms with Thr
     def e2 =
       val example = "the customer must be as expected" ! form
       example.startExecution(ownEnv).executionResult.map(_.isSuccess) must beOkWithValue(true)
+
     def e3 =
       val example = DefaultExecutor.execute("the customer must be as expected" ! failedForm)(ownEnv)
       example.executionResult.map(_.message) must beOkWithValue("20 != 18")

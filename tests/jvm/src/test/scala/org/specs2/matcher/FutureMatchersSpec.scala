@@ -55,7 +55,7 @@ class FutureMatchersSpec extends Specification with ResultMatchers with specific
 
  A Future should be retried the specified number of times in case of a timeout $e4
  A Future should not be called more than the expected number of times $e5
-""" ^ step(env.shutdown())
+""" ^ step(env.shutdownResult)
 
   def e1 =
     case class Spec1() extends FutureMatchers with MustThrownExpectations:
