@@ -267,7 +267,6 @@ lazy val releaseSettings: Seq[Setting[_]] = Seq(
   ThisBuild / versionScheme := Some("early-semver"),
   ThisBuild / githubWorkflowArtifactUpload := false,
   ThisBuild / githubWorkflowBuildPreamble ++= List(
-    WorkflowStep.Sbt(List("mimaReportBinaryIssues"), name = Some("Check binary compatibility ✔")),
     WorkflowStep.Sbt(List("scalafmtCheckAll"), name = Some("Check formatting ✔"))
   ),
   ThisBuild / githubWorkflowBuild := Seq(
@@ -276,6 +275,9 @@ lazy val releaseSettings: Seq[Setting[_]] = Seq(
   ),
   ThisBuild / githubWorkflowTargetTags ++= Seq(SPECS2 + "*"),
   ThisBuild / githubWorkflowPublishTargetBranches := Seq(RefPredicate.StartsWith(Ref.Tag(SPECS2))),
+  ThisBuild / githubWorkflowPublishPreamble ++= List(
+    WorkflowStep.Sbt(List("mimaReportBinaryIssues"), name = Some("Check binary compatibility ✔"))
+  ),
   ThisBuild / githubWorkflowPublish := Seq(
     WorkflowStep.Sbt(
       name = Some("Release to Sonatype 📇"),
