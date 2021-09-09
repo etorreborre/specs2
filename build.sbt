@@ -81,7 +81,6 @@ val jvm = JVMPlatform
 
 lazy val common = crossProject(platforms: _*)
   .withoutSuffixFor(jvm)
-  .crossType(CrossType.Pure)
   .in(file("common"))
   .settings(name := "specs2-common", commonSettings, depends.scalacheckTest, depends.sbt)
   .jvmSettings(commonJvmSettings)
@@ -90,7 +89,6 @@ lazy val common = crossProject(platforms: _*)
 
 lazy val core = crossProject(platforms: _*)
   .withoutSuffixFor(jvm)
-  .crossType(CrossType.Pure)
   .in(file("core"))
   .settings(name := "specs2-core", commonSettings, depends.junitTest)
   .jvmSettings(commonJvmSettings)
@@ -153,7 +151,6 @@ lazy val markdown = project
 
 lazy val matcher = crossProject(platforms: _*)
   .withoutSuffixFor(jvm)
-  .crossType(CrossType.Pure)
   .in(file("matcher"))
   .settings(name := "specs2-matcher", commonSettings)
   .jvmSettings(commonJvmSettings)
@@ -162,7 +159,6 @@ lazy val matcher = crossProject(platforms: _*)
 
 lazy val matcherExtra = crossProject(platforms: _*)
   .withoutSuffixFor(jvm)
-  .crossType(CrossType.Pure)
   .in(file("matcher-extra"))
   .settings(name := "specs2-matcher-extra", commonSettings, depends.scalaParser)
   .jvmSettings(commonJvmSettings)
