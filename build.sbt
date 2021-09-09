@@ -28,7 +28,8 @@ lazy val specs2 = project
     markdown,
     form,
     html,
-    tests,
+    tests.jvm,
+    tests.js,
     guide
   )
 
@@ -182,19 +183,20 @@ lazy val scalacheck = crossProject(platforms: _*)
   .jsSettings(commonJsSettings)
   .dependsOn(core)
 
-lazy val tests = project
+lazy val tests = crossProject(platforms: _*)
+  .withoutSuffixFor(jvm)
   .in(file("tests"))
   .settings(
     commonSettings,
     name := "specs2-tests"
   )
   .dependsOn(
-    core.jvm % "compile->compile;test->test",
-    junit.jvm % "test->test",
-    examples.jvm % "test->test",
-    matcherExtra.jvm,
-    html
+    core % "compile->compile;test->test",
+    junit % "compile->compile;test->test",
+    examples % "test->test",
+    matcherExtra
   )
+  .jvmConfigure(_.dependsOn(html))
 
 lazy val xml = crossProject(platforms: _*)
   .withoutSuffixFor(jvm)

@@ -121,3 +121,5 @@ Details
     def normalized: String =
       r.message.removeColors.trim
 }
+
+case class Hello() { override def toString = "hello" }
