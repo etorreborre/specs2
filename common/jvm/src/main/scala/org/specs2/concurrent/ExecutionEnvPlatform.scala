@@ -6,20 +6,7 @@ import org.specs2.main.Arguments
 
 import scala.concurrent.ExecutionContext
 
-/** Execution environment for javascript
-  */
-case class ExecutionEnv(executorServices: ExecutorServices, timeFactor: Int) {
-
-  def shutdown(): Unit = ()
-
-  given executionContext: ExecutionContext = executorServices.executionContext
-  given ec: ExecutionContext = executorServices.executionContext
-
-  lazy val scheduler = executorServices.scheduler
-
-}
-
-object ExecutionEnv:
+private[concurrent] trait ExecutionEnvCompanionPlatform:
 
   /** create an ExecutionEnv from an execution context only */
   def fromExecutionContext(ec: =>ExecutionContext): ExecutionEnv =
