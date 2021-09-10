@@ -52,7 +52,6 @@ object depends {
       )
     )
 
-
   def jsMacrotaskExecutor =
     Seq(libraryDependencies += "org.scala-js" %%% "scala-js-macrotask-executor" % "0.1.0")
 
