@@ -35,10 +35,10 @@ Various sbt options can apply to [the execution of tests in sbt](http://www.scal
    `testOptions := Seq(Tests.Filter(s => Seq("Spec", "Unit").exists(s.endsWith)))`
 
  - execute specifications one after the other
-   `parallelExecution in Test := false`
+   `Test / parallelExecution := false`
 
  - pass $specs2 arguments to all specifications
-   `testOptions in Test += Tests.Argument("exclude", "integration")`
+   `Test / testOptions += Tests.Argument("exclude", "integration")`
 
  - display results as soon as they've been executed
    `logBuffered := false`
