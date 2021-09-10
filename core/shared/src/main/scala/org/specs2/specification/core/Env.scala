@@ -97,7 +97,7 @@ case class Env(
           .map { case (resourceKey, result) =>
             result.updateMessage(m => s"The resource with key '$resourceKey' could not be finalized: $m")
           }
-        }
+      }
       .runFuture(specs2ExecutionEnv)
 
     failures.onComplete { _ =>
