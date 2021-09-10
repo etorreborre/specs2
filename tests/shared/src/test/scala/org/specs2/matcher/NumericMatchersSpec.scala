@@ -63,7 +63,7 @@ types and more generally with Ordered types.
   ${900 must not(beCloseTo(1000 `within` 2.significantFigures))}
   ${900 must not(beCloseTo(1000 `within` 1.significantFigures))}
   ${0 must beCloseTo(0 `within` 1.significantFigure)}
-  ${0.0 must not(beCloseTo(0.1 `within` 1.significantFigure))}
+  ${0.1 must not(beCloseTo(0.2 `within` 1.significantFigure))}
   ${0.0 must beCloseTo(1e-300, 15.significantFigures)}
   ${1.0 must not(beCloseTo(1e-300, 15.significantFigures))}
 
