@@ -179,7 +179,7 @@ class ExecutorSpec(val env: Env) extends Specification with ThrownExpectations w
       }
     val e = Env()
     try execute(fragments, e) must contain(beSuccessful[Result]).forall
-    finally e.shutdown()
+    finally e.awaitShutdown()
 
   final lazy val factory = fragmentFactory
 

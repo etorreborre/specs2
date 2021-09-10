@@ -425,7 +425,7 @@ object TextPrinterSpecification extends MustMatchers with FragmentsDsl with Debu
             .update(DefaultExecutor(env1).execute(s.arguments))
         )
       )
-    finally if optionalEnv.isEmpty then env1.shutdown()
+    finally if optionalEnv.isEmpty then env1.awaitShutdown()
 
     val messages = logger.messages
     messages.map(_.removeEnd(" ")).mkString("\n").replace(" ", "_")

@@ -143,8 +143,15 @@ object DefaultExecutor:
   def executeFragments(fs: Fragments)(env: Env): List[Fragment] =
     fs.fragments.map(fs => executeAll(fs*)(env)).runMonoid(env.specs2ExecutionEnv)
 
+  def executeFragmentsAction(fs: Fragments)(env: Env): Action[List[Fragment]] =
+    fs.fragments.flatMap(fs => executeAllAction(fs*)(env))
+
+  /** only to be used in tests */
   def executeAll(seq: Fragment*)(env: Env): List[Fragment] =
     executeSeq(seq)(env)
+
+  def executeAllAction(seq: Fragment*)(env: Env): Action[List[Fragment]] =
+    executeSeqAction(seq)(env)
 
   def execute(f: Fragment)(env: Env): Fragment =
     executeAll(f)(env).headOption.getOrElse(f)
@@ -153,6 +160,9 @@ object DefaultExecutor:
   def executeSeq(seq: Seq[Fragment])(env: Env): List[Fragment] =
     (emitSeq[Action, Fragment](seq) |> DefaultExecutor(env).execute(Arguments())).runList
       .runMonoid(env.specs2ExecutionEnv)
+
+  def executeSeqAction(seq: Seq[Fragment])(env: Env): Action[List[Fragment]] =
+    (emitSeq[Action, Fragment](seq) |> DefaultExecutor(env).execute(Arguments())).runList
 
   /** synchronous execution with a specific environment */
   def executeFragments1(env: Env): AsyncTransducer[Fragment, Fragment] = (p: AsyncStream[Fragment]) =>

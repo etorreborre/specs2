@@ -37,7 +37,7 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
    The stacktrace of a Failure is accessible
    ${check(failureWithStacktraceProp) must beLike { case Failure(_, _, st, _) =>
     st.map(_.getClassName) must
-      contain((s: String) => s must contain("ScalaCheckMatchersResultsSpec"))
+      contain((s: String) => s must contain("org.specs2.execute.Failure"))
   }}
 
    A failure with a datatable must report the datatable

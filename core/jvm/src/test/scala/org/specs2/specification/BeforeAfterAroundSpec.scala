@@ -59,6 +59,6 @@ class BeforeAfterAroundSpec extends Specification {
     try
       DefaultExecutor.executeFragments(s.structure.fragments)(env).traverse(_.executionResult).run(env.executionEnv)
       s.messages must contain(allOf(messages*)).inOrder
-    finally env.shutdown()
+    finally env.awaitShutdown()
 
 }

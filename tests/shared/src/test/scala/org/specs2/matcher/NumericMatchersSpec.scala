@@ -3,7 +3,7 @@ package matcher
 
 import Matcher.{given}
 
-class NumericMatchersSpec extends Spec with NumericMatchers with MustExpectations {
+class NumericMatchersSpec extends Spec with MustExpectations {
   def is = s2"""
 
 The NumericMatchers trait provides matchers to do comparisons with Numeric
@@ -63,7 +63,7 @@ types and more generally with Ordered types.
   ${900 must not(beCloseTo(1000 `within` 2.significantFigures))}
   ${900 must not(beCloseTo(1000 `within` 1.significantFigures))}
   ${0 must beCloseTo(0 `within` 1.significantFigure)}
-  ${0.0 must not(beCloseTo(0.1 `within` 1.significantFigure))}
+  ${0.1 must not(beCloseTo(0.2 `within` 1.significantFigure))}
   ${0.0 must beCloseTo(1e-300, 15.significantFigures)}
   ${1.0 must not(beCloseTo(1e-300, 15.significantFigures))}
 
@@ -91,6 +91,9 @@ types and more generally with Ordered types.
   def e4 = (1 must be_>(2)) returns "1 is less than 2"
   def e4_1 = (1 `aka` "one" must be_>(2)) returns "one '1' is less than 2"
 
-  def e5 = (1.0 must beCloseTo(3.0, 0.5)) returns "1.0 is not close to 3.0 +/- 0.5"
-  def e5_1 = (1.0 `aka` "one" must beCloseTo(3.0, 0.5)) returns "one '1.0' is not close to 3.0 +/- 0.5"
+  def e5 =
+    (1.1 must beCloseTo(3.2, 0.5)) returns "1.1 is not close to 3.2 +/- 0.5"
+
+  def e5_1 =
+    (1.1 `aka` "one" must beCloseTo(3.2, 0.5)) returns "one '1.1' is not close to 3.2 +/- 0.5"
 }

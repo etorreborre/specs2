@@ -12,7 +12,7 @@ import control.*
 import process.{StatisticsRepository}
 import reflect.*
 import scala.collection.mutable.{Map as MutableMap}
-import scala.concurrent.*, duration.FiniteDuration
+import scala.concurrent.*, duration.*
 
 /** Whole creation / execution / reporting environment for a specification
   *
@@ -84,26 +84,35 @@ case class Env(
   def setTimeout(duration: FiniteDuration): Env =
     copy(arguments = arguments.setTimeout(duration))
 
-  def shutdownAll(): Map[String, Result] =
-    val results = resources.toList
+  /** @return a list of finalization failures by resource key if any */
+  def shutdown: Future[List[Result]] =
+    given ExecutionContext = specs2ExecutionContext
+    val results: Action[List[(String, Result)]] = resources.toList
       .traverse { case (key, resource) => resource.execution.startExecution(this).executionResult.map(r => (key, r)) }
-      .runOption(this.executionEnv)
-    val failures = results.toList.flatten
-      .filter(_._2.isIssue)
-      .map { case (resourceKey, result) =>
-        (resourceKey, result.updateMessage(m => s"The resource with key '$resourceKey' could not be finalized: $m"))
+
+    val failures = results
+      .map { (rs: List[(String, Result)]) =>
+        rs
+          .filter(_._2.isIssue)
+          .map { case (resourceKey, result) =>
+            result.updateMessage(m => s"The resource with key '$resourceKey' could not be finalized: $m")
+          }
       }
-      .toMap
-    try specs2ExecutionEnv.shutdown()
-    finally executionEnv.shutdown()
+      .runFuture(specs2ExecutionEnv)
+
+    failures.onComplete { _ =>
+      try specs2ExecutionEnv.shutdown()
+      finally executionEnv.shutdown()
+    }
     failures
 
-  def shutdownAllFuture(): Future[Map[String, Result]] =
-    Future(shutdownAll())(using specs2ExecutionContext)
+  def shutdownResult: Future[Result] =
+    given ExecutionContext = specs2ExecutionContext
+    shutdown.map(vs => AsResult(vs))
 
-  def shutdown(): Unit =
-    val failures = shutdownAll()
-    failures.foreach(f => println(s"[ERROR] ${f._2}"))
+  /** be sure to only call this method on the JVM! */
+  def awaitShutdown(): Unit =
+    Await.result(shutdown, Duration.Inf)
 
   /** set new PrinterLogger */
   def setPrinterLogger(logger: PrinterLogger) =

@@ -40,7 +40,7 @@ the execution of the specification
   def runSpec(s: SpecificationStructure, printer: Option[Printer] = None) =
     val env: Env = Env(arguments = Arguments(), printerLogger = NoPrinterLogger)
     try Reporter.create(printer.toList, env).report(s.structure).runVoid(env.executionEnv)
-    finally env.shutdown()
+    finally env.awaitShutdown()
 
 class ResourceExample(messages: ArrayBuffer[String]) extends Specification, Resource[Ref[Int]]:
   def is = sequential ^ s2"""
