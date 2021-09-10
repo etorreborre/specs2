@@ -45,7 +45,7 @@ abstract class BaseSbtRunner(args: Array[String], remoteArgs: Array[String], loa
         case Failure(e) =>
           loggers.foreach(_.error("error while finalizing resources: " + e.getMessage))
         case Success(failures) =>
-          failures.toList.foreach { (resourceKey, result) => loggers.foreach(_.error(result.message)) }
+          failures.toList.foreach { result => loggers.foreach(_.error(result.message)) }
       }(using env.specs2ExecutionContext)
     ""
 

@@ -85,7 +85,7 @@ case class Env(
     copy(arguments = arguments.setTimeout(duration))
 
   /** @return a list of finalization failures by resource key if any */
-  def shutdown: Future[Map[String, Result]] =
+  def shutdown: Future[List[Result]] =
     given ExecutionContext = specs2ExecutionContext
     val results: Action[List[(String, Result)]] = resources.toList
       .traverse { case (key, resource) => resource.execution.startExecution(this).executionResult.map(r => (key, r)) }
@@ -95,10 +95,9 @@ case class Env(
         rs
           .filter(_._2.isIssue)
           .map { case (resourceKey, result) =>
-            (resourceKey, result.updateMessage(m => s"The resource with key '$resourceKey' could not be finalized: $m"))
+            result.updateMessage(m => s"The resource with key '$resourceKey' could not be finalized: $m")
           }
-          .toMap
-      }
+        }
       .runFuture(specs2ExecutionEnv)
 
     failures.onComplete { _ =>
@@ -109,7 +108,7 @@ case class Env(
 
   def shutdownResult: Future[Result] =
     given ExecutionContext = specs2ExecutionContext
-    shutdown.map(vs => AsResult(vs.values.toList))
+    shutdown.map(vs => AsResult(vs))
 
   /** be sure to only call this method on the JVM! */
   def awaitShutdown(): Unit =
