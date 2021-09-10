@@ -63,8 +63,9 @@ lazy val commonSettings =
     Seq(mimaPreviousArtifacts := Set.empty)
 
 lazy val commonJvmSettings =
-  testJvmSettings ++
-    Seq(mimaPreviousArtifacts := Set(organization.value %% moduleName.value % "5.0.0-RC-07"))
+  testJvmSettings //++
+    // temporarily to publish "5.0.0-RC-10"
+    //Seq(mimaPreviousArtifacts := Set(organization.value %% moduleName.value % "5.0.0-RC-07"))
 
 import org.scalajs.linker.interface.ESVersion
 
