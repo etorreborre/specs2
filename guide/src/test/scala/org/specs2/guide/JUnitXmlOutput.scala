@@ -22,12 +22,12 @@ ${"Remember" ~/ ConsoleOutput} that using `junitxml` by itself will turn off the
 `sbt test` does not take parameters so the default behavior is to produce the JUnit XML files for all specifications in the default output directory.
 In order to change the default output directory of the junit xml files when running the tests with `test`, add the following to your sbt build file:
 
- `testOptions in Test += Tests.Argument("junitxml", "junit.outdir", "custom_xml_folder")`
+ `Test / testOptions += Tests.Argument("junitxml", "junit.outdir", "custom_xml_folder")`
 
 This will suppress the console output, which may be what you want if this is a configuration for a build machine. To re-enable console output, use instead:
 
  ```
- testOptions in Test ++= Seq(
+ Test / testOptions ++= Seq(
     Tests.Argument("junitxml", "junit.outdir", "custom_xml_folder"),
     Tests.Argument("console")
  )
