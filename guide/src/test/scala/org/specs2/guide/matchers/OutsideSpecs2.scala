@@ -21,22 +21,22 @@ The $specs2 matchers are a well-delimited piece of functionality that you should
 
 #### Without any dependency on specs2
 
-It is possible to add testing features to your library without depending on a specific testing library, like $specs2 or ScalaTest. You will let clients of your library decide which one they want with the following trait:${snippet {
-    trait TestInterface:
-      def fail(msg: String): Nothing
-      def skip(msg: String): Nothing
+It is possible to add testing features to your library without depending on a specific testing library, like $specs2 or ScalaTest.
+You will let clients of your library decide which one they want with the following trait:${snippet{
+trait TestInterface:
+  def fail(msg: String): Nothing
+  def skip(msg: String): Nothing
 
 // and use the trait in your library
-    trait TestKit extends TestInterface:
-      def runTest(call: =>Unit) =
-        // run the code and if there is an error
-        fail("error!")
+trait TestKit extends TestInterface:
+  def runTest(call: =>Unit) =
+    // run the code and if there is an error
+    fail("error!")
 
-  }}
+}}
 
-When there is a failure or an error the library will call the `TestKit` methods. Then the library client can use both the library and $specs2 by mixing in the `${fullName[
-    matcher.ThrownMessages
-  ]}` trait:
+When there is a failure or an error the library will call the `TestKit` methods. Then the library client can use both the library and $specs2 by mixing in the
+`${fullName[matcher.ThrownMessages]}` trait:
 ```
 trait ThrownMessages:
   this: ThrownExpectations =>

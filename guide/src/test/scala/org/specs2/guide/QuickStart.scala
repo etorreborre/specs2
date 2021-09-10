@@ -4,12 +4,12 @@ package guide
 object QuickStart extends UserGuidePage {
   def is = "Quick Start".title ^ s2"""
 
-Follow the ${"installation" ~/ Installation} instructions and create the following specification in a file named `HelloWorldSpec.scala`: ${snippet {
+Follow the ${"installation" ~/ Installation} instructions and create the following specification in a file named `HelloWorldSpec.scala`: ${snippet{
 
-    import org.specs2.*
+import org.specs2.*
 
-    class HelloWorldSpec extends Specification:
-      def is = s2"""
+class HelloWorldSpec extends Specification:
+  def is = s2"""
 
 This is a specification to check the 'Hello world' string
 
@@ -20,11 +20,11 @@ The 'Hello world' string should
 
   """
 
-      def e1 = "Hello world" must haveSize(11)
-      def e2 = "Hello world" must startWith("Hello")
-      def e3 = "Hello world" must endWith("world")
+  def e1 = "Hello world" must haveSize(11)
+  def e2 = "Hello world" must startWith("Hello")
+  def e3 = "Hello world" must endWith("world")
 
-  }}
+}}
 
 A $specs2 software specification is a Scala class extending `org.specs2.Specification` and declaring an `is` method.
 That method defines a `s2` interpolated string with some plain text describing what the system should do
@@ -33,29 +33,29 @@ and some code with executable examples.
 #### Unit specifications
 
 The style of writing specifications above, with most of the text first, then executable examples, is unconventional.
-You can, if you prefer, use an alternative style: ${snippet {
+You can, if you prefer, use an alternative style: ${snippet{
 
 // note the different import here
-    import org.specs2.mutable.*
+import org.specs2.mutable.*
 
-    class HelloWorldSpec extends Specification:
+class HelloWorldSpec extends Specification:
 
-      "This is a specification to check the 'Hello world' string".br
+  "This is a specification to check the 'Hello world' string".br
 
-      "The 'Hello world' string should" >> {
-        "contain 11 characters" >> {
-          "Hello world" must haveSize(11)
-        }
+  "The 'Hello world' string should" >> {
+    "contain 11 characters" >> {
+      "Hello world" must haveSize(11)
+    }
 
-        "start with 'Hello'" >> {
-          "Hello world" must startWith("Hello")
-        }
+    "start with 'Hello'" >> {
+      "Hello world" must startWith("Hello")
+    }
 
-        "end with 'world'" >> {
-          "Hello world" must endWith("world")
-        }
-      }
-  }}
+    "end with 'world'" >> {
+      "Hello world" must endWith("world")
+    }
+  }
+}}
 
 Both specifications will produce the same output.
 

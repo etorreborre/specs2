@@ -8,16 +8,16 @@ The $specs2 ${see(QuickStart)} guide introduces matchers to create expectations 
 ### Boolean results
 
 This is the simplest kind of result you can define for an expectation but also the least expressive!
-It can be useful for simple expectations but a failure will give few information on what went wrong: ${snippet {
-    new mutable.Specification:
-      "this example is ok" >> {
-        1 == 1
-      }
-      "this one is not" >> {
-        // fails with 'the value is false'...
-        1 == 2
-      }
-  }}
+It can be useful for simple expectations but a failure will give few information on what went wrong: ${snippet{
+new mutable.Specification:
+  "this example is ok" >> {
+    1 == 1
+  }
+  "this one is not" >> {
+    // fails with 'the value is false'...
+    1 == 2
+  }
+}}
 
 Not only that but in unit specification no exception will be thrown so you need to `&&` and `||` operators to connect your assertions if they span several lines.
 
@@ -45,27 +45,27 @@ If you already have some code for your example, adding `skipped` at the end to s
  - the code will be executed which will waste resources
 $p
 
-What you want in that case in to skip the whole block:${snippet {
-    s2" this example *must* be skipped $e1"
+What you want in that case in to skip the whole block:${snippet{
+s2" this example *must* be skipped $e1"
 
-    def e1 = skipped {
-      // whatever code is in there, it will not be executed and the result will be skipped
-      throw new Exception("uh-oh")
-      1 === 1
-    }
-  }}
+def e1 = skipped {
+  // whatever code is in there, it will not be executed and the result will be skipped
+  throw new Exception("uh-oh")
+  1 === 1
+}
+}}
 
 ### Setting an example as Pending
 
-Similarly you can mark the example as `Pending`:${snippet {
-    s2" this example is pending for now$e1"
+Similarly you can mark the example as `Pending`:${snippet{
+s2" this example is pending for now$e1"
 
-    def e1 = pending {
-      // whatever code is in there, it will not be executed and the result will be pending
-      throw new Exception("uh-oh")
-      1 === 1
-    }
-  }}
+def e1 = pending {
+  // whatever code is in there, it will not be executed and the result will be pending
+  throw new Exception("uh-oh")
+  1 === 1
+}
+}}
 
 ### Standard `MatchResults`
 

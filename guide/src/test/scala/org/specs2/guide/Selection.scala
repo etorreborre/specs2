@@ -23,21 +23,20 @@ sbt> testOnly *MySpecification* -- ex "contains hello" sequential
 ### Use tags
 
 Tags can be used in a Specification to include or exclude some examples or a complete section of fragments from the
-execution. Let's have a look at one example: ${snippet {
-    class TaggedSpecification extends Specification:
-      def is = s2"""
+execution. Let's have a look at one example: ${snippet{
+class TaggedSpecification extends Specification:
+  def is = s2"""
 
- this is some introductory text
-  and the first group of examples
-  example 1 $success ${tag("feature1", "unit")}
-  example 2 $success ${tag("integration")}
+  this is some introductory text
+    and the first group of examples
+    example 1 $success ${tag("feature1", "unit")}
+    example 2 $success ${tag("integration")}
 
-  and the second group of examples ${section("checkin")}
-  example 3 $success
-  example 4 $success ${section("checkin")}
-"""
-
-  }}
+    and the second group of examples ${section("checkin")}
+    example 3 $success
+    example 4 $success ${section("checkin")}
+  """
+}}
 
 In that specification we are defining several tags and sections:
 
@@ -55,30 +54,31 @@ Armed with this, it is now easy to include or exclude portions of the specificat
 
 #### In a unit specification
 
-A _unit_ specification will accept the same `tag` and `section` methods but the behavior will be slightly different: ${snippet {
+A _unit_ specification will accept the same `tag` and `section` methods but the behavior will be slightly different: ${snippet{
 
-    import org.specs2.mutable.*
+import org.specs2.mutable.*
 
-    class TaggedSpecification extends Specification:
-      "this is some introductory text" >> {
-        "and the first group of examples" >> {
-          tag("feature 1", "unit")
-          "example 1" in success
-          "example 2" in success
-        }
-      }
-      section("checkin")
-      "and the second group of examples" >> {
-        "example 3" in success
-        "example 4" in success
-      }
-      section("checkin")
+class TaggedSpecification extends Specification:
+  "this is some introductory text" >> {
+    "and the first group of examples" >> {
+      tag("feature 1", "unit")
+      "example 1" in success
+      "example 2" in success
+    }
+  }
 
-      "and the last group of examples" >> {
-        "example 5" in success tag "integration"
-        "example 6" in success
-      } section "slow"
-  }}
+  section("checkin")
+  "and the second group of examples" >> {
+    "example 3" in success
+    "example 4" in success
+  }
+
+  section("checkin")
+  "and the last group of examples" >> {
+    "example 5" in success tag "integration"
+    "example 6" in success
+  } section "slow"
+}}
 
 For that specification above, tags can be applied to fragments following them:
 
@@ -99,41 +99,40 @@ But they can also be applied to fragments preceding them:
 ##### Automatic sections
 
 If you call `addSections` from inside the specification, each "block" will be surrounded by section tags having the same
-name as the block text:${snippet {
-    import org.specs2.mutable.*
+name as the block text:${snippet{
+import org.specs2.mutable.*
 
-    class SectionsSpecification extends Specification:
-      addSections()
+class SectionsSpecification extends Specification:
+  addSections()
 
-      "first section" >> {
-        "and the first group of examples" >> {
-          "example 1" in success
-          "example 2" in success
-        }
-      }
-      "second section" >> {
-        "example 3" in success
-        "example 4" in success
-      }
+  "first section" >> {
+    "example 1" in success
+    "example 2" in success
+  }
 
-      "third section" >> {
-        "example 5" in success
-        "example 6" in success
-      }
-  }}
+  "second section" >> {
+    "example 3" in success
+    "example 4" in success
+  }
+
+  "third section" >> {
+    "example 5" in success
+    "example 6" in success
+  }
+}}
 
 If you want you can execute only example 3 and 4 by running `sbt> testOnly *SectionsSpecification -- include "second section"`.
 
 #### `Always` tag
 
 Some specifications need to have `Steps` which will always be included whatever tags are specified on the command line.
-This is the case when defining a ${""""template" specification""" ~/ SpecificationTemplate} with setup/teardown steps: ${snippet {
-    trait DatabaseSpec extends Specification:
-      override def map(fs: =>Fragments) =
-        step(success("startDb")) ^ tag(AlwaysTag) ^
-          fs ^
-          step(success("cleanDb")) ^ tag(AlwaysTag)
-  }}
+This is the case when defining a ${""""template" specification""" ~/ SpecificationTemplate} with setup/teardown steps: ${snippet{
+trait DatabaseSpec extends Specification:
+  override def map(fs: =>Fragments) =
+    step(success("startDb")) ^ tag(AlwaysTag) ^
+      fs ^
+      step(success("cleanDb")) ^ tag(AlwaysTag)
+}}
 
 ### Select failed examples
 

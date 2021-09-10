@@ -40,12 +40,11 @@ Please have a look at the ScalaDoc to see the exact API for the factory and look
 
 ### The `Fragments` API
 
-If you know how to create examples, texts and steps you will need to append them together as `Fragments`. You can create a `Fragments` object by using `Fragments.apply`:${snippet {
-    val ff = fragmentFactory
+If you know how to create examples, texts and steps you will need to append them together as `Fragments`. You can create a `Fragments` object by using `Fragments.apply`:${snippet{
+val ff = fragmentFactory
 
-    Fragments(ff.text("introduction"), ff.example("first example", success), ff.break)
-  }}
-
+Fragments(ff.text("introduction"), ff.example("first example", success), ff.break)
+}}
 
 Then you can use the methods of the `org.specs2.specification.core.Fragments` class to add more fragments or to modify existing ones:
 
@@ -61,19 +60,19 @@ Then you can use the methods of the `org.specs2.specification.core.Fragments` cl
 
 ### The `Fragments` DSL
 
-The `org.specs2.specification.dsl.FragmentsDsl` trait provides a very versatile `^` operator to append fragments together, so you can write:${snippet {
-    val ff = fragmentFactory
+The `org.specs2.specification.dsl.FragmentsDsl` trait provides a very versatile `^` operator to append fragments together, so you can write:${snippet{
+val ff = fragmentFactory
 
-    val fs = Fragments(ff.text("introduction"), ff.example("first example", success), ff.break)
-    val f1 = ff.text("f1")
+val fs = Fragments(ff.text("introduction"), ff.example("first example", success), ff.break)
+val f1 = ff.text("f1")
 
 // all those combinations are possible and return a `Fragment` object
-    fs ^ f1
-    f1 ^ fs
-    fs ^ fs
-    f1 ^ f1
+fs ^ f1
+f1 ^ fs
+fs ^ fs
+f1 ^ f1
 
-  }}
+}}
 
 """
 }

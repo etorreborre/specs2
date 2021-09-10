@@ -14,16 +14,16 @@ The common symptom here is a `NullPointerException` for some attributes of your 
 
 ### Lost expectations
 
-You might expect the following specification to fail:${snippet {
-    class ShouldItFail extends Specification:
-      def is = s2"""
+You might expect the following specification to fail:${snippet{
+class ShouldItFail extends Specification:
+  def is = s2"""
   Should this example fail? $e1
   """
 
-      def e1 =
-        1 must ===(100000) // do you expect this to fail
-        10 must ===(10)
-  }}
+  def e1 =
+    1 must ===(100000) // do you expect this to fail
+    10 must ===(10)
+}}
 
 However, as explained in ${see(Structure)} - Thrown expectations, the first expectation is lost because, by default, no exceptions are thrown in an acceptance specification.
 In that case you can either:

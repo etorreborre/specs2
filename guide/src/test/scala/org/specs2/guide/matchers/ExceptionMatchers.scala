@@ -16,7 +16,7 @@ object ExceptionMatchers extends UserGuideCard {
   `throwA(exception).like { case e => e must matchSomething }` checks that the thrown exception satisfies a property
   * `throwA[ExceptionType](me.like { case e => e must matchSomething }` or
   `throwA(exception).like { case e => e must matchSomething }` checks that the thrown exception satisfies a property
-$p
+----
 For all the above matchers you can use `throwAn` instead of `throwA` if the exception name starts with a vowel for better
 readability.
 """

@@ -12,30 +12,30 @@ import org.specs2.fp.syntax.*
 object UseDatatables extends UserGuidePage with Tables {
   def is = "Datatables".title ^ s2"""
 
-DataTables are used to pack several expectations inside one example using a tabular format: ${snippet {
+DataTables are used to pack several expectations inside one example using a tabular format: ${snippet{
 
-    class DataTableSpec extends Specification with org.specs2.specification.Tables:
-      def is = s2"""
+class DataTableSpec extends Specification with org.specs2.specification.Tables:
+  def is = s2"""
 
- adding integers should just work in scala ${// the header of the table, with `|` separated strings (`>` executes the table)
-      "a" | "b" | "c" |>
-        2 ! 2 ! 4 | // an example row
-        1 ! 1 ! 2 | // another example row
-        { (a, b, c) => a + b must ===(c) } // the expectation to check on each row)
-      }
-"""
-  }}
+  adding integers should just work in scala ${// the header of the table, with `|` separated strings (`>` executes the table)
+    "a" | "b" | "c" |>
+      2 ! 2 ! 4 | // an example row
+      1 ! 1 ! 2 | // another example row
+      { (a, b, c) => a + b must ===(c) } // the expectation to check on each row)
+  }
+  """
+}}
 
-A `DataTable` which is used as a `Result` in the body of an Example will only be displayed when failing. If you also want to display the table when successful, to document your examples, you can omit the example description and inline the DataTable directly in the specification:${snippet {
-    class DataTableSpec extends Specification with Tables:
-      def is = s2"""
+A `DataTable` which is used as a `Result` in the body of an Example will only be displayed when failing. If you also want to display the table when successful, to document your examples, you can omit the example description and inline the DataTable directly in the specification:${snippet{
+class DataTableSpec extends Specification with Tables:
+  def is = s2"""
 
- adding integers should just work in scala
+  adding integers should just work in scala
   ${"a" | "b" | "c" |>
-        2 ! 2 ! 4 |
-        1 ! 1 ! 2 | { (a, b, c) => a + b must ===(c) }}
-"""
-  }}
+     2 ! 2 ! 4 |
+     1 ! 1 ! 2 | { (a, b, c) => a + b must ===(c) }}
+  """
+}}
 
 This specification will be rendered as:
 ```
@@ -48,19 +48,19 @@ adding integers should just work in scala
 ### Format columns
 
 The display of elements can be modified by using an implicit `org.specs2.text.Showx` instance where `x` corresponds to
-the number of columns in the table. For example: ${snippet {
-    import org.specs2.text.*
+the number of columns in the table. For example: ${snippet{
+import org.specs2.text.*
 
-    given Show3[Int, Double, String] =
-      Show3[Int, Double, String]().copy(show2 = (d: Double) => "x" * d.toInt)
+given Show3[Int, Double, String] =
+  Show3[Int, Double, String]().copy(show2 = (d: Double) => "x" * d.toInt)
 
-    val table =
-      "a" | "b" | "c" |>
-        1 ! 2.0 ! "3" |
-        2 ! 4.0 ! "6" | { (a: Int, b: Double, c: String) => (a + b.toInt).toString === c }
+val table =
+  "a" | "b" | "c" |>
+    1 ! 2.0 ! "3" |
+    2 ! 4.0 ! "6" | { (a: Int, b: Double, c: String) => (a + b.toInt).toString === c }
 
-    "table result\n" + table.message
-  }.eval}
+"table result\n" + table.message
+}.eval}
 
 ### Implicit `!`
 
@@ -75,32 +75,30 @@ $p
 ### Concurrent execution
 
 By default the execution of a datatable is sequential, one row after another. This might not be very practical if you have long-running computations on each row.
-If this is the case you can use the `|*` operator (instead of just `|`) to define your execution function:${snippet {
+If this is the case you can use the `|*` operator (instead of just `|`) to define your execution function:${snippet{
 
-    given executionContext: ExecutionContext =
-      scala.concurrent.ExecutionContext.Implicits.global
+given executionContext: ExecutionContext =
+  scala.concurrent.ExecutionContext.Implicits.global
 
-    "a" | "b" | "c" |>
-      2 ! 2 ! 4 |
-      1 ! 1 ! 2 |* { (a, b, c) => (a + b) must ===(c) }
-  }}
+"a" | "b" | "c" |>
+  2 ! 2 ! 4 |
+  1 ! 1 ! 2 |* { (a, b, c) => (a + b) === c }
+}}
 
 This returns a function `ExecutorService => Result` which can be used directly as the body of an example. You can also pass it your own thread pool by creating, for example, `java.util.concurrent.Executors.newFixedThreadPool(4)`.
 
-More generally, you can use the "Applicative" operator `|@` to pass anything having a `org.specs2.fp.Applicative` instance, like a `scala.concurrent.Future`:${snippet {
-    // this table uses the global execution context implicitly to create futures
-    // scala.concurrent.ExecutionContext.Implicits.global
-    def result: scala.concurrent.Future[DecoratedResult[DataTable]] =
-      "a" | "b" | "c" |>
-        2 ! 2 ! 4 |
-        1 ! 1 ! 2 |@ { (a, b, c) => Future((a + b) must ===(c)) }
-
-    // then you need to get an implicit execution environment and
-    // await on the Future result
-    given ExecutionEnv = ???
-    result.await
-  }}
-
-
+More generally, you can use the "Applicative" operator `|@` to pass anything having a `org.specs2.fp.Applicative` instance, like a `scala.concurrent.Future`:${snippet{
+// this table uses the global execution context implicitly to create futures
+// scala.concurrent.ExecutionContext.Implicits.global
+def result: scala.concurrent.Future[DecoratedResult[DataTable]] =
+  "a" | "b" | "c" |>
+    2 ! 2 ! 4 |
+    1 ! 1 ! 2 |@ { (a, b, c) => Future((a + b) must ===(c)) }
+              
+// then you need to get an implicit execution environment and
+// await on the Future result
+given ExecutionEnv = ???
+result.await
+}}
 """
 }

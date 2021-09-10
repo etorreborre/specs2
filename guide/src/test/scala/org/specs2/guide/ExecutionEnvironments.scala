@@ -16,32 +16,30 @@ You can access this `ExecutorService` to execute futures (from Scala, Scalaz etc
 ### Scala Future
 
 A Scala `Future` needs an implicit `ExecutionContext` to be created. You can get an execution context, out of the box, shared across all
-specifications by declaring it as a class member: ${snippet {
-    class MyFutureSpec(using ec: ExecutionContext) extends Specification {
-      def is = s2"""
- Let's check this scala future ${Await.result(Future(1), Duration.Inf) must ===(1)}
-"""
-    }
+specifications by declaring it as a class member: ${snippet{
+class MyFutureSpec(using ec: ExecutionContext) extends Specification:
+  def is = s2"""
+    Let's check this scala future ${Await.result(Future(1), Duration.Inf) must ===(1)}
+  """
 
 // in a mutable specification
-    class MyMutableFutureSpec(using ec: ExecutionContext) extends mutable.Specification {
-      "Let's check this scala future" >> {
-        Await.result(Future(1), Duration.Inf) must ===(1)
-      }
-    }
-  }}
+class MyMutableFutureSpec(using ec: ExecutionContext) extends mutable.Specification:
+  "Let's check this scala future" >> {
+    Await.result(Future(1), Duration.Inf) must ===(1)
+  }
+}}
 
-You can also use an `ExecutionEnv` (from now on code examples are provided for immutable specifications only but are transposable to mutable ones): ${snippet {
-    class MyFutureSpec(using ee: ExecutionEnv) extends Specification {
-      def is = s2"""
- Let's check this scala future ${Await.result(Future(1), Duration.Inf) must ===(1)}
-"""
-    }
-  }}
+You can also use an `ExecutionEnv` (from now on code examples are provided for immutable specifications only but are transposable to mutable ones): ${snippet{
+class MyFutureSpec(using ee: ExecutionEnv) extends Specification:
+  def is = s2"""
+    Let's check this scala future ${Await.result(Future(1), Duration.Inf) must ===(1)}
+  """
+}}
 
 This works thanks to an implicit conversion between `ExecutionEnv` and `ExecutionContext` provided by the
 `org.specs2.execute.ImplicitExecutionContextFromExecutionEnv` trait
 (this can be deactivated by mixing-in the `NoImplicitExecutionContextFromExecutionEnv` trait).
+
 It is actually better to use an `ExecutionEnv` anyway because it is required when you want to ${"create `Future` matchers" ~/ Matchers} (see the "Future" tab).
 Indeed an `ExecutionEnv` contains a `timeFactor` which can be used to modify the timeout from the command line and
 wait longer for Futures executing on a continuous integration server for example.
@@ -50,14 +48,15 @@ wait longer for Futures executing on a continuous integration server for example
 
 Future $Matchers (see the "Future" tab) require an implicit `ExecutionEnv`. This environment is used to access the `timeFactor` when awaiting for Scala Futures.
 
-The `terminate` matcher (see the "Termination" tab in the optional $Matchers section) also needs an `ExecutionEnv` to run a piece of code and periodically check if it has terminated or not: ${snippet {
-    s2"""
+The `terminate` matcher (see the "Termination" tab in the optional $Matchers section) also needs an `ExecutionEnv` to run a piece of code and periodically
+check if it has terminated or not: ${snippet{
+s2"""
   this code must be fast enough ${
       given ExecutionEnv = ExecutionEnv.fromGlobalExecutionContext
       Thread.sleep(100) must terminate(retries = 1, sleep = 60.millis)
-    }
+  }
 """
-  }}
+}}
 
 ### One per specification
 

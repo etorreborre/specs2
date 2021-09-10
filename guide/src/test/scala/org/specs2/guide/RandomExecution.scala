@@ -19,9 +19,9 @@ dependencies to your examples so that they will force them to be executed in a r
 one after the other. This randomization is only being done for examples in between steps
 so if you have steps inside the specification guaranteeing some kind of checkpoints during the execution, they will be preserved.
 
-Let's see this on an example:${snippet {
-    class RandomSequentialSpec extends Specification:
-      def is = sequentialRandom ^ s2"""
+Let's see this on an example:${snippet{
+class RandomSequentialSpec extends Specification:
+  def is = sequentialRandom ^ s2"""
     example1 $e1
     example2 $e2
     example3 $e3
@@ -31,14 +31,14 @@ Let's see this on an example:${snippet {
     example6 $e6
   """
 
-      def e1 = { "e1".pp; ok }
-      def e2 = { "e2".pp; ok }
-      def e3 = { "e3".pp; ok }
+ def e1 = { "e1".pp; ok }
+ def e2 = { "e2".pp; ok }
+ def e3 = { "e3".pp; ok }
 
-      def e4 = { "e4".pp; ok }
-      def e5 = { "e5".pp; ok }
-      def e6 = { "e6".pp; ok }
-  }}
+ def e4 = { "e4".pp; ok }
+ def e5 = { "e5".pp; ok }
+ def e6 = { "e6".pp; ok }
+}}
 
 With such a specification you might see in the console:
 ```

@@ -58,10 +58,10 @@ Robustness
 """
 
   def snippet1 =
-    s2""" code: ${snippet {got {1 + 1}}} """.trimmedTexts(1) === "`got {1 + 1}`"
+    s2""" code: ${snippet{got {1 + 1}}} """.trimmedTexts(1) === "`got {1 + 1}`"
 
   def snippet2 =
-    s2""" code: ${snippet {
+    s2""" code: ${snippet{
 got {
   var n = 0
   n = 1
@@ -74,7 +74,7 @@ got {
        |}
        |```""".stripMargin
 
-  def snippet3 = s2""" code: ${snippet {
+  def snippet3 = s2""" code: ${snippet{
 // 8<--
 var n = 0
 // 8<--
@@ -86,7 +86,7 @@ n = 0
        |n = 1
        |```""".stripMargin
 
-  def snippet4 = s2""" code: ${snippet {
+  def snippet4 = s2""" code: ${snippet{
 // 8<--
 var n = 0
 // 8<--
@@ -104,9 +104,9 @@ i = 1
       |```""".stripMargin
 
   def snippet5 =
-    s2""" code ${snippet { "e1" ! {ok} /**/; 1 /**/ }}""".trimmedTexts(1) === """`"e1" ! {ok} /**/; 1 /**/`"""
+    s2""" code ${snippet{ "e1" ! {ok} /**/; 1 /**/ }}""".trimmedTexts(1) === """`"e1" ! {ok} /**/; 1 /**/`"""
 
-  def offset1 = s2""" code: ${snippet {
+  def offset1 = s2""" code: ${snippet{
 // 8<--
 var n = 0
 // 8<--
@@ -118,7 +118,7 @@ n = 0
        |  n = 1
        |```""".stripMargin
 
-  def offset2 = s2""" code: ${snippet {
+  def offset2 = s2""" code: ${snippet{
     // 8<--
   var n = 0
     // 8<--
@@ -145,7 +145,7 @@ n = 0
       " snippet{ hello \n}.eval " !! "hello" |
       " snippet{ hello \n}.offsetIs(2) " !! "hello" | { (c, r) => trimApproximatedSnippet(c) === r }
 
-  def results1 = s2""" code: ${snippet {
+  def results1 = s2""" code: ${snippet{
   var n = 1
   n = 1 + n
   n
@@ -192,7 +192,7 @@ n = 0
 
   def effects2 =
     var i = 0
-    s2""" start ${snippet { i = 1; i }} end """
+    s2""" start ${snippet{ i = 1; i }} end """
     i === 0
 
   // HELPERS

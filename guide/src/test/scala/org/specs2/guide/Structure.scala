@@ -30,18 +30,18 @@ Both ways of writing specifications have advantages and drawbacks:
 ### Acceptance specification
 
 An acceptance specification extends `org.specs2.Specification` and defines the `is` method. You can implement this method
-with an interpolated **`s2`** string: ${snippet {
-    class MySpecification extends org.specs2.Specification:
-      def is = s2"""
+with an interpolated **`s2`** string: ${snippet{
+class MySpecification extends org.specs2.Specification:
+  def is = s2"""
 
   this is my specification
     where example 1 must be true $e1
     where example 2 must be true $e2
 
   """
-      def e1 = 1 === 1
-      def e2 = 2 === 2
-  }}
+  def e1 = 1 === 1
+  def e2 = 2 === 2
+}}
 
 The `s2` string contains the text of your specification as well as some references to methods (`e1` and `e2`)
 defining some code eventually evaluating to a `Result` (this can take many forms, from a simple Boolean, to a `Future[Result]`, or some value
@@ -57,17 +57,17 @@ All the rest, `"this is my specification"`, is parsed as `Text` and is not execu
 
 ### Unit specification
 
-A unit specification extends `org.specs2.mutable.Specification` and uses the `>>` operator to create "blocks" containing `Texts` and `Examples`: ${snippet {
-    class MySpecification extends org.specs2.mutable.Specification:
-      "this is my specification" >> {
-        "where example 1 must be true" >> {
-          1 must ===(1)
-        }
-        "where example 2 must be true" >> {
-          2 must ===(2)
-        }
-      }
-  }}
+A unit specification extends `org.specs2.mutable.Specification` and uses the `>>` operator to create "blocks" containing `Texts` and `Examples`: ${snippet{
+class MySpecification extends org.specs2.mutable.Specification:
+  "this is my specification" >> {
+    "where example 1 must be true" >> {
+      1 must ===(1)
+    }
+    "where example 2 must be true" >> {
+      2 must ===(2)
+    }
+  }
+}}
 
 This specification creates one piece of `Text` and 2 `Examples` as before but:
 
@@ -92,37 +92,39 @@ The good news is that for each of the 2 main styles, acceptance and unit, you ca
 #### Functional expectations
 
 In an acceptance specification, by default, the `Result` of an `Example` is always given by the last statement of its body.
-For instance, this example will never fail because the first expectation is lost:${snippet {
+For instance, this example will never fail because the first expectation is lost:${snippet{
 // this will never fail!
-    s2"""
+s2"""
   my example on strings $e1
 """
-    def e1 =
-      // because this expectation will not be returned,...
-      "hello" must haveSize(10000)
-      "hello" must startWith("hell")
-  }}
 
-If you want to get both expectations you will need to use `and` between them: ${snippet {
-    s2"""
+def e1 =
+  // because this expectation will not be returned,...
+  "hello" must haveSize(10000)
+  "hello" must startWith("hell")
+}}
+
+If you want to get both expectations you will need to use `and` between them: ${snippet{
+s2"""
   my example on strings $e1
 """
-    def e1 = ("hello" must haveSize(10000)) and
-      ("hello" must startWith("hell"))
-  }}
+def e1 =
+  ("hello" must haveSize(10000)) and
+  ("hello" must startWith("hell"))
+}}
 
 This is a bit tedious and not very pleasing to read so you can see why this mode encourages one expectation per example only!
 If you want to declare several expectations per example, you can mix-in the `org.specs2.matcher.ThrownExpectations` trait to the specification.
 
 #### Thrown expectations
 
-With a unit specification you get "thrown expectations" by default. When an expectation fails, it throws an exception and the rest of the example is not executed: ${snippet {
-    class MySpecification extends org.specs2.mutable.Specification:
-      "This is my example" >> {
-        1 === 2 // this fails
-        1 === 1 // this is not executed
-      }
-  }}
+With a unit specification you get "thrown expectations" by default. When an expectation fails, it throws an exception and the rest of the example is not executed: ${snippet{
+class MySpecification extends org.specs2.mutable.Specification:
+  "This is my example" >> {
+    1 === 2 // this fails
+    1 === 1 // this is not executed
+  }
+}}
 
 It is also possible to use the "functional" expectation mode with a unit specification by mixing in the `org.specs2.matcher.NoThrownExpectations` trait.
 

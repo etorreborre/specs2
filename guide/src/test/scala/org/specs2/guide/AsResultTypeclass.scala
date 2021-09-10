@@ -15,29 +15,28 @@ There are many ways to define expectations in $specs2:
   * Forms
 $p
 
-All of these types implement the `org.specs2.execute.AsResult` typeclass, meaning that they can be transformed into a `Result`:${snippet {
-    trait AsResult[T] {
-      def asResult(t: =>T): Result
-    }
-  }}
+All of these types implement the `org.specs2.execute.AsResult` typeclass, meaning that they can be transformed into a `Result`:${snippet{
+trait AsResult[T]:
+  def asResult(t: =>T): Result
+}}
 
 This gives some flexibility in integrating any kind of custom definition of a "result" into $specs2 and this is why you find this typeclass as a requirement to build examples or to declare contexts.
-You can take advantage of this type class by defining your own kind of result and providing a typeclass instance for it:${snippet {
+You can take advantage of this type class by defining your own kind of result and providing a typeclass instance for it:${snippet{
 // A new type of results for cluster execution
-    trait ClusterExecution:
-      def succeeded: Boolean
-      def errorMessage: String
+trait ClusterExecution:
+  def succeeded: Boolean
+  def errorMessage: String
 
-    object ClusterExecution:
-      given AsResult[ClusterExecution] =
-        new AsResult[ClusterExecution]:
-          def asResult(t: =>ClusterExecution): Result =
-            try {
-              val result = t
-              if (result.succeeded) Success()
-              else Failure(t.errorMessage)
-            } catch { case e: Throwable => Error(e) }
-  }}
+object ClusterExecution:
+  given AsResult[ClusterExecution] =
+    new AsResult[ClusterExecution]:
+      def asResult(t: =>ClusterExecution): Result =
+        try {
+          val result = t
+          if (result.succeeded) Success()
+          else Failure(t.errorMessage)
+        } catch { case e: Throwable => Error(e) }
+}}
 
 #### Decorated results
 

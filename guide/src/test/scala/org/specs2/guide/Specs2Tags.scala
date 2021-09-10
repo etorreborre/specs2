@@ -17,26 +17,28 @@ trait Specs2Tags:
     allTags.map(filterPublished)
 
   def filterPublished(tags: List[VersionTag]): List[VersionTag] =
-    tags.filter(isGreaterThanVersion3).groupBy(_.major).map(_._2).map(_.sorted.last).toList.sorted
+    tags.filter(isGreaterThanVersion(4)).groupBy(_.major).map(_._2).map(_.sorted.last).toList.sorted
 
-  def isGreaterThanVersion3: VersionTag => Boolean = (tag: VersionTag) =>
-    Ordering[DotNumber].gteq(tag.number, DotNumber(List(3)))
+  def isGreaterThanVersion(n: Int): VersionTag => Boolean = (tag: VersionTag) =>
+    Ordering[DotNumber].gteq(tag.number, DotNumber(List(n)))
 
 object Specs2Tags extends Specs2Tags
 
 import Specs2Tags.*
 
-class Specs2TagsSpec extends Specification {
+class Specs2TagsSpec extends Specification:
   def is = s2"""
 
  ${filterPublished(
-    List("SPECS2-2.4.9", "SPECS2-3.9.3", "SPECS2-3.9.4", "SPECS2-4.10.0", "SPECS2-4.12.1").flatMap(
-      VersionTag.fromString
-    )
-  ) ===
-    List("SPECS2-3.9.4", "SPECS2-4.12.1").flatMap(VersionTag.fromString)}
+    List("SPECS2-3.9.4",
+         "SPECS2-4.10.0",
+         "SPECS2-4.12.1",
+         "SPECS2-5.0.0-RC-01",
+         "SPECS2-5.0.0-RC-10").flatMap(VersionTag.fromString)) ===
+    List("SPECS2-4.12.1",
+         "SPECS2-5.0.0-RC-10").flatMap(VersionTag.fromString)}
 """
-}
+
 
 case class VersionTag(number: DotNumber, timestamp: Option[String], commit: Option[String]):
   def major: Int =

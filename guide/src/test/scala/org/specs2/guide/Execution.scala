@@ -16,9 +16,9 @@ Starting from this default you can progressively add constraints to get more con
 
 ### Steps
 
-A `Step` is an action which can be executed anywhere in a specification. When you declare a `Step` like this:${snippet {
-    class StepSpec extends Specification:
-      def is = s2"""
+A `Step` is an action which can be executed anywhere in a specification. When you declare a `Step` like this:${snippet{
+class StepSpec extends Specification:
+  def is = s2"""
 
   this is example 1 $ok
   this is example 2 $ok
@@ -27,7 +27,7 @@ A `Step` is an action which can be executed anywhere in a specification. When yo
   this is example 3 $ok
   this is example 4 $ok
   """
-  }}
+}}
 
 Then the specification will:
 
@@ -40,9 +40,9 @@ There is no "result" for a step but if it throws an Exception an `Error` will be
 
 ### Stop the execution
 
-You can still control if the rest of the specification must be executed by adding some constraints on the step. For example:${snippet {
-    class StepWithStopOnErrorSpec extends Specification:
-      def is = s2"""
+You can still control if the rest of the specification must be executed by adding some constraints on the step. For example:${snippet{
+class StepWithStopOnErrorSpec extends Specification:
+  def is = s2"""
 
   this is example 1 $ok
   this is example 2 $ok
@@ -51,7 +51,7 @@ You can still control if the rest of the specification must be executed by addin
   this is example 3 $ok
   this is example 4 $ok
   """
-  }}
+}}
 
 When this specification is executed examples 3 and 4 will be skipped because the step returns an `Error`. An `Error` is likely to be a fatal condition but you can use other methods to stop the execution:
 
@@ -61,24 +61,24 @@ When this specification is executed examples 3 and 4 will be skipped because the
 
 ### Sequential
 
-If your specification is a list of well-ordered examples you can use the `sequential` argument to make sure that they are executed in order:${snippet {
-    class SequentialSpec extends Specification:
-      def is = sequential ^ s2"""
+If your specification is a list of well-ordered examples you can use the `sequential` argument to make sure that they are executed in order:${snippet{
+class SequentialSpec extends Specification:
+  def is = sequential ^ s2"""
 
   this is example 1 $ok
   this is example 2 $ok
   this is example 3 $ok
   this is example 4 $ok
   """
-  }}
+}}
 
 Thanks to the `sequential` argument the 4 examples above will execute one after the other.
 
 ### Action
 
-Finally if you want to execute "silent" actions, like steps, but with no impact on the sequencing of the specification, you can use an `Action`:${snippet {
-    class ActionSpec extends Specification:
-      def is = s2"""
+Finally if you want to execute "silent" actions, like steps, but with no impact on the sequencing of the specification, you can use an `Action`:${snippet{
+class ActionSpec extends Specification:
+  def is = s2"""
 
   this is example 1 $ok
   this is example 2 $ok
@@ -89,7 +89,7 @@ Finally if you want to execute "silent" actions, like steps, but with no impact 
   this is example 3 $ok
   this is example 4 $ok
   """
-  }}
+}}
 
 $NowLearnTo
 

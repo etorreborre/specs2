@@ -73,7 +73,7 @@ A `Prop` is like a `Field`, it has a label. But you can give it 2 values, an "ac
 
     If the matcher is `mute`d then no message will be displayed in case of a failure.
 
-If the expected value is not provided when building the property, it can be given with the `apply` method:${snippet {
+If the expected value is not provided when building the property, it can be given with the `apply` method:${snippet{
 // 8<--
     val prop1 = prop("actual") // 8<--
 // apply "sets" the expected value
@@ -154,7 +154,7 @@ Most of the time, the display of Fields and Properties can be left as it is but 
 
 ### Simple form
 
-Now that we know how to create Fields and Properties, creating a `Form` is as easy as putting them on separate lines: ${snippet {
+Now that we know how to create Fields and Properties, creating a `Form` is as easy as putting them on separate lines: ${snippet{
     Form("Address").tr(prop("street", actualStreet(123), "Oxford St")).tr(prop("number", actualNumber(123), 20))
   }}
 
@@ -167,15 +167,14 @@ In some cases (see the Calculator example below) you can create a header row usi
   * or `th("a", "b")` using an implicit conversion of Any => Field[Any]
 $p
 
-Inserting the form in a Specification is also very simple: ${snippet {
-    class SpecificationWithForms extends Specification with Forms {
-      def is = s2"""
+Inserting the form in a Specification is also very simple: ${snippet{
+class SpecificationWithForms extends Specification with Forms:
+  def is = s2"""
 
-The address must be retrieved from the database with the proper street and number
-  ${Form("Address").tr(prop("street", actualStreet(123), "Oxford St")).tr(prop("number", actualNumber(123), 20))}
-"""
-    }
-  }}
+  The address must be retrieved from the database with the proper street and number
+    ${Form("Address").tr(prop("street", actualStreet(123), "Oxford St")).tr(prop("number", actualNumber(123), 20))}
+  """
+}}
 
 One way to encapsulate and reuse this Form across specifications is to define a case class:
 ```
@@ -187,46 +186,45 @@ case class Address(street: String, number: Int):
       tr(prop("number", address.number, number))
 ```
 
-And then you can use it like this: ${snippet {
+And then you can use it like this: ${snippet{
 // 8<--
-    import Model.*
+import Model.*
 // 8<--
-    class AddressSpecification extends Specification with Forms:
-      def is = s2"""
+class AddressSpecification extends Specification with Forms:
+  def is = s2"""
 
- The address must be retrieved from the database with the proper street and number
-   ${Address("Oxford St", 20)
+   The address must be retrieved from the database with the proper street and number
+    ${Address("Oxford St", 20)
         .
           /** expected values */
         retrieve(123)
       /** actual address id
         */}
- """
-  }}
+  """
+}}
 
 ##### Adding several rows at once
 
-A very practical way to add rows programmatically is to start from a list of values and have a function creating a Row object for each value: ${snippet {
-    Form("a new Form").trs(addresses) { (a: ComponentsDefinitions.Address) => Row.tr(field(a.number), field(a.street)) }
-  }}
+A very practical way to add rows programmatically is to start from a list of values and have a function creating a Row object for each value: ${snippet{
+Form("a new Form").trs(addresses) { (a: ComponentsDefinitions.Address) => Row.tr(field(a.number), field(a.street)) }
+}}
 
 ${Form("a new Form").trs(addresses) { (a: ComponentsDefinitions.Address) => Row.tr(field(a.number), field(a.street)) }}
 
 #### Nesting into another Form
 
-Forms can be composed of other Forms to display composite information: ${snippet {
-    val address = Form("Address").tr(field("street", "Rose Crescent")).tr(field("number", 3))
+Forms can be composed of other Forms to display composite information: ${snippet{
+val address = Form("Address").tr(field("street", "Rose Crescent")).tr(field("number", 3))
 
-    val person = Form("Person").tr(field("name", "Eric")).tr(address)
-  }}
+val person = Form("Person").tr(field("name", "Eric")).tr(address)
+}}
 
 ${Form("Person").tr(field("name", "Eric"))}
 
 This will be displayed with the address as a nested table inside the main one on the last row. However in some case, it's preferable to have the rows of that Form to be included directly in the outer table. This can be done by *inlining* the
-nesting Form: ${snippet {
-
-    val person = Form("Person").tr(field("name", "Eric")).tr(address.inline) // address is inlined
-  }}
+nesting Form: ${snippet{
+val person = Form("Person").tr(field("name", "Eric")).tr(address.inline) // address is inlined
+}}
 
 And the result is:
 
@@ -234,18 +232,17 @@ ${Form("Person").tr(field("name", "Eric")).tr(address.inline)}
 
 #### Nesting into an Effect or a Prop
 
-When using Forms in specifications we can describe different levels of abstraction. If we consider the specification of a website for example, we want to be able to use a Form having 2 rows and describing the exact actions to do on the Login page: ${snippet {
-
-    val loginForm = Form("login")
-      .tr(effect("click on login", clickOn("login")))
-      .tr(effect("enter name", enter("name", "me")))
-      .tr(effect("enter password", enter("password", "pw")))
-      .tr(effect("submit", submit()))
-  }}
+When using Forms in specifications we can describe different levels of abstraction. If we consider the specification of a website for example, we want to be able to use a Form having 2 rows and describing the exact actions to do on the Login page: ${snippet{
+val loginForm = Form("login")
+  .tr(effect("click on login", clickOn("login")))
+  .tr(effect("enter name", enter("name", "me")))
+  .tr(effect("enter password", enter("password", "pw")))
+  .tr(effect("submit", submit()))
+}}
 $loginForm
 
 However in a "purchase" scenario we want all the steps above to represent the login actions as just one step. One way to
-do this is to transform the login Form to an Effect or a Prop: ${snippet {
+do this is to transform the login Form to an Effect or a Prop: ${snippet{
 
     Form("purchase")
       .tr(loginForm.toEffect("login"))
@@ -276,32 +273,31 @@ ${Form("purchase")
 
 #### Using tabs
 
-If there are too many fields to be displayed on a Form you can use tabs: ${snippet {
+If there are too many fields to be displayed on a Form you can use tabs: ${snippet{
 // 8<---
-    import ComponentsDefinitions.*
+import ComponentsDefinitions.*
 // 8<---
-    s2"""
+s2"""
 A person can have 2 addresses ${Form("Addresses").tr {
       tab("home", Address("Oxford St", 12).fill("Oxford St", 12))
         .tab("work", Address("Rose Cr.", 3).fill("Rose Cr.", 3))
-    }}
+}}
 """
-  }}
+}}
 
 The first `tab` call will create a `Tabs` object containing the a first tab with "home" as the title and an Address form as its content.
 Then every subsequent `tab` calls on the `Tabs` object will create new tabs:
 
 ${Form("Addresses").tr(
     tab("home", Form("Address").tr(prop("street", "Oxford St")("Oxford St")).tr(prop("number", 12)(12)))
-      .tab("work", Form("Address").tr(prop("street", "Rose Cr.")("Rose Cr.")).tr(prop("number", 2)(2)))
-  )}
+      .tab("work", Form("Address").tr(prop("street", "Rose Cr.")("Rose Cr.")).tr(prop("number", 2)(2))))}
 
-Tabs can also be created from a seq of values. Let's pretend we have a list of `Address` objects with a name and a Form displaying the `Address` values. You can write: ${snippet {
+Tabs can also be created from a seq of values. Let's pretend we have a list of `Address` objects with a name and a Form displaying the `Address` values. You can write: ${snippet{
 // 8<--
-    import ComponentsDefinitions.*
+import ComponentsDefinitions.*
 // 8<--
-    Form("Addresses").tabs(addresses) { (address: Address) => tab(address.street, address.form) }
-  }}
+Form("Addresses").tabs(addresses) { (address: Address) => tab(address.street, address.form) }
+}}
 
 ### Aggregating forms
 
@@ -330,47 +326,46 @@ case class Customer(name: String, address: Address):
   def actualCustomer(customerId: Int): Customer = this // fetch from the database
 ```
 
-${snippet {
+${snippet{
 // 8<--
-    import Model.*
+import Model.*
 // 8<--
-    class CustomerSpecification extends Specification with Forms:
-      def is = s2"""
+class CustomerSpecification extends Specification with Forms:
+  def is = s2"""
   The customer must be retrieved from the database with a proper name and address ${Customer(
         name = "Eric",
         address = Address(street = "Rose Crescent", number = 2)
       ).retrieve(123)}
   """
-  }}
+}}
 
 As you also see above, named arguments can bring more readability to the expected values.
 
 #### Lazy cells
 
-Fields, Props and Forms are added right away to a row when building a Form with the `tr` method. If it is necessary to add them with a "call-by-name" behavior, the `lazify` method can be used: ${snippet {
+Fields, Props and Forms are added right away to a row when building a Form with the `tr` method. If it is necessary to add them with a "call-by-name" behavior, the `lazify` method can be used: ${snippet{
 // 8<--
-    import Model.*
+import Model.*
 // 8<--
-    def address = Address() // build an Address
-    def customer = Customer()
+def address = Address() // build an Address
+def customer = Customer()
 
-    Form("Customer")
-      .tr(prop("name", customer.name)("name"))
-      .
-      // the address Form will be built only when the Customer Form is rendered
-      tr(lazify(address.actualIs(customer.address)))
-  }}
+Form("Customer")
+  .tr(prop("name", customer.name)("name"))
+  .
+  // the address Form will be built only when the Customer Form is rendered
+  tr(lazify(address.actualIs(customer.address)))
+}}
 
 #### Xml cells
 
-Any xml can be "injected" on a row by using an `XmlCell`: ${snippet {
+Any xml can be "injected" on a row by using an `XmlCell`: ${snippet{
 // 8<--
-    import Model.*
+import Model.*
 // 8<--
-
-    def actualAddress(i: Int) = addresses(0)
-    Form("Customer").tr(prop("name", Customer().name)("name")).tr(XmlCell(<div><b>this is a bold statement</b></div>))
-  }}
+def actualAddress(i: Int) = addresses(0)
+Form("Customer").tr(prop("name", Customer().name)("name")).tr(XmlCell(<div><b>this is a bold statement</b></div>))
+}}
 
 ### 1-n relationships
 
@@ -419,7 +414,7 @@ It also has several methods to build Forms depending on the kind of comparison t
  * lines existing in `b` and not `a` are marked as failures
 $p
 
-${snippet {
+${snippet{
     Order(123).hasSubset(OrderLine("BS", 3), OrderLine("PIS", 1), OrderLine("TDGL", 5))
   }}
 
@@ -430,10 +425,7 @@ ${Order(123)
       OrderLine("BS", 3),
       OrderLine("PIS", 1),
       OrderLine("TDGL", 5)
-    )
-    .executeForm
-    .toXml
-    .toString}
+    ).executeForm.toXml.toString}
 
 #### Subsequence
 
@@ -445,9 +437,9 @@ ${Order(123)
  * lines existing in `b` and `a` but out of order are marked as failures
 $p
 
-${snippet {
-    Order(123).hasSubsequence(OrderLine("PS", 2), OrderLine("BS", 3), OrderLine("PIS", 1), OrderLine("TDGL", 5))
-  }}
+${snippet{
+Order(123).hasSubsequence(OrderLine("PS", 2), OrderLine("BS", 3), OrderLine("PIS", 1), OrderLine("TDGL", 5))
+}}
 
 This form returns:
 
@@ -457,10 +449,7 @@ ${Order(123)
       OrderLine("BS", 3),
       OrderLine("PIS", 1),
       OrderLine("TDGL", 5)
-    )
-    .executeForm
-    .toXml
-    .toString}
+    ).executeForm.toXml.toString}
 
 #### Set
 
@@ -471,9 +460,9 @@ ${Order(123)
  * lines existing in `b` and not `a` are marked as failures
 $p
 
-${snippet {
-    Order(123).hasSet(OrderLine("BS", 3), OrderLine("PIS", 1), OrderLine("TDGL", 5))
-  }}
+${snippet{
+Order(123).hasSet(OrderLine("BS", 3), OrderLine("PIS", 1), OrderLine("TDGL", 5))
+}}
 
 This form returns:
 
@@ -482,10 +471,7 @@ ${Order(123)
       OrderLine("BS", 3),
       OrderLine("PIS", 1),
       OrderLine("TDGL", 5)
-    )
-    .executeForm
-    .toXml
-    .toString}
+    ).executeForm.toXml.toString}
 
 #### Sequence
 
@@ -495,9 +481,9 @@ ${Order(123)
  * lines existing in `a` and `b` in the right order are marked as success
  * lines existing in `b` and not `a` are marked as failures
 $p
-${snippet {
-    Order(123).hasSequence(OrderLine("PS", 2), OrderLine("BS", 3), OrderLine("PIS", 1), OrderLine("TDGL", 5))
-  }}
+${snippet{
+Order(123).hasSequence(OrderLine("PS", 2), OrderLine("BS", 3), OrderLine("PIS", 1), OrderLine("TDGL", 5))
+}}
 
 This form returns:
 
@@ -507,26 +493,23 @@ ${Order(123)
       OrderLine("BS", 3),
       OrderLine("PIS", 1),
       OrderLine("TDGL", 5)
-    )
-    .executeForm
-    .toXml
-    .toString}
+    ).executeForm.toXml.toString}
 
 ### Decision tables
 
 One very popular type of Forms are *decision tables*. A decision table is a Form where, on each row, several values are used for a computation and the result must be equal to other values on the same row.
-A very simple example of this is a calculator: ${snippet {
+A very simple example of this is a calculator: ${snippet{
 
-    case class Calculator(form: Form = Form()):
-      def tr(a: Int, b: Int, a_plus_b: Int, a_minus_b: Int) = Calculator {
-        def plus = prop(a + b)(a_plus_b)
-        def minus = prop(a - b)(a_minus_b)
-        form.tr(a, b, plus, minus)
-      }
+case class Calculator(form: Form = Form()):
+  def tr(a: Int, b: Int, a_plus_b: Int, a_minus_b: Int) = Calculator {
+    def plus = prop(a + b)(a_plus_b)
+    def minus = prop(a - b)(a_minus_b)
+    form.tr(a, b, plus, minus)
+  }
 
-    def th(title1: String, titles: String*) = Calculator(Form.th(title1, titles*))
-
-  }}
+def th(title1: String, titles: String*): Calculator =
+  Calculator(Form.th(title1, titles*))
+}}
 
 The `Calculator` object defines a `th` method to create the first `Calculator` Form, with the proper title. The `th` method:
 
@@ -543,13 +526,12 @@ The `Calculator` case class embeds a Form and defines a `tr` method which
  * returns a new Calculator containing this form
 $p
 
-And you use the `Calculator` Form like this: ${snippet {
-
-    class CalculatorSpecification extends Specification with Forms:
-      def is = s2"""
- A calculator must add and subtract Ints ${Calculator.th("a", "b", "a + b", "a - b").tr(1, 2, 3, -1).tr(2, 2, 4, 0)}
- """
-  }}
+And you use the `Calculator` Form like this: ${snippet{
+class CalculatorSpecification extends Specification with Forms:
+  def is = s2"""
+  A calculator must add and subtract Ints ${Calculator.th("a", "b", "a + b", "a - b").tr(1, 2, 3, -1).tr(2, 2, 4, 0)}
+  """
+}}
 
 Here is the output:
 

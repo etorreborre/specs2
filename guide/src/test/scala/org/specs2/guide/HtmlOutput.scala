@@ -78,21 +78,21 @@ Custom CSS and JavaScript files can be used without changing the template. In or
 
 ## Create an index
 
-Here is something you can do to automatically create an index page for your specifications: ${snippet {
+Here is something you can do to automatically create an index page for your specifications: ${snippet{
 
-    import org.specs2.*
-    import specification.core.*
-    import runner.SpecificationsFinder.default.*
+import org.specs2.*
+import specification.core.*
+import runner.SpecificationsFinder.default.*
 
-    class index extends Specification:
-      def is =
-        examplesLinks("Example specifications")
+class index extends Specification:
+  def is =
+    examplesLinks("Example specifications")
 
-      // see the SpecificationsFinder trait for the parameters of the 'specifications' method
-      def examplesLinks(t: String) =
-        t.title ^
-          Fragments.foreach(specifications())(s => link(s) ^ br)
-  }}
+  // see the SpecificationsFinder trait for the parameters of the 'specifications' method
+  def examplesLinks(t: String) =
+    t.title ^
+      Fragments.foreach(specifications())(s => link(s) ^ br)
+}}
 
 The specification above creates an index.html file in the `target/specs2-reports` directory. The specifications method creates specifications using the following parameters:
 
@@ -115,10 +115,11 @@ class HtmlExampleSpec extends Specification {
  This is a specification to check the 'Hello world' string
 
  The 'Hello world' string should
-   contain 11 characters                                         $e1
-   start with 'Hello'                                            $e2
-   end with 'world'                                              $e3
-                                                                 """
+   contain 11 characters $e1
+   start with 'Hello' $e2
+   end with 'world' $e3
+   
+ """
 
   def e1 = "Hello world" must haveSize(11)
   def e2 = "Hello world" must startWith("Hello")

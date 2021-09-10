@@ -16,7 +16,7 @@ Here is an example of using the `snippet` method:
 
 ```
 s2$triple
-This is a multi-line string with a code snippet: $${ snippet {
+This is a multi-line string with a code snippet: $${snippet{
 def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
 factorial(3) == 6
 }}
@@ -38,7 +38,7 @@ Since snippets are compiled code, you might have to include many declarations, l
 
 ```
 s2$triple
-This is a snippet of code with one relevant line: $${ snippet {
+This is a snippet of code with one relevant line: $${snippet{
 // 8<--
 def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
 // 8<--
@@ -52,7 +52,7 @@ The snippet above will only show `factorial(3) == 6`. You can repeat this patter
 
 ```
 s2$triple
-This is a snippet of code with 2 relevant lines: $${ snippet {
+This is a snippet of code with 2 relevant lines: $${snippet{
 // 8<--
 def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
 // 8<--
@@ -78,7 +78,7 @@ By default the last value of a Snippet is not shown but you can display it with 
 
 ```
 s2$triple
-This is a snippet of code with a result: $${ snippet {
+This is a snippet of code with a result: $${snippet{
 factorial(3)
 }.eval}
 $triple
@@ -99,7 +99,7 @@ It is possible to adjust the margin of captured source code by adding or removin
 
 ```
 s2$triple
-This is a snippet of code with a negative offset to align the code to the border of the screen: $${ snippet {
+This is a snippet of code with a negative offset to align the code to the border of the screen: $${snippet{
    def factorial(n: Int): Int = if (n == 1) n else (n * factorial(n - 1))
    factorial(3)
 }.offsetIs(-3)}

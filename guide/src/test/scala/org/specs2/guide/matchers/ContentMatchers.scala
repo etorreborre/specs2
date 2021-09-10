@@ -11,79 +11,69 @@ object ContentMatchers extends UserGuideCard with matcher.ContentMatchers {
 
 ##### File contents
 
-The matchers from the `org.specs2.matcher.ContentMatchers` trait can help us check the contents of files. For example we can check that 2 text files have the same lines: ${snippet {
-    (file1, file2) must haveSameLines
-    file1 must haveSameLinesAs(file2)
-  }}
+The matchers from the `org.specs2.matcher.ContentMatchers` trait can help us check the contents of files. For example we can check that 2 text files have the same lines: ${snippet{
+  (file1, file2) must haveSameLines
+  file1 must haveSameLinesAs(file2)
+}}
 
-We can check that the content of one file is contained in another one: ${snippet {
+We can check that the content of one file is contained in another one: ${snippet{
+  file1 must containLines(file2)
+}}
 
-    file1 must containLines(file2)
-
-  }}
-
-If the files are binary files we can also check that they have the same MD5 hash: ${snippet {
-
-    (file1, file2) must haveSameMD5
-    file1 must haveSameMD5As(file2)
-
-  }}
+If the files are binary files we can also check that they have the same MD5 hash: ${snippet{
+  (file1, file2) must haveSameMD5
+  file1 must haveSameMD5As(file2)
+}}
 
 ***Order***
 
-It is possible to relax the constraint by requiring the equality or containment to be true regardless of the order of lines: ${snippet {
-
-    (file1, file2) must haveSameLines.unordered
-    file1 must haveSameLinesAs(file2).unordered
-    file1 must containLines(file2).unordered
-  }}
+It is possible to relax the constraint by requiring the equality or containment to be true regardless of the order of lines: ${snippet{
+  (file1, file2) must haveSameLines.unordered
+  file1 must haveSameLinesAs(file2).unordered
+  file1 must containLines(file2).unordered
+}}
 
 ***Show differences***
 
 By default only the different lines are being shown with a bit of context (lines before and after the differences).
-You can however change this strategy. For example if there are too many differences, you can specify that you only want the first 10: ${snippet {
-
-    (file1, file2) must haveSameLines.showOnly(10.differences)
-
-  }}
+You can however change this strategy. For example if there are too many differences, you can specify that you only want the first 10: ${snippet{
+  (file1, file2) must haveSameLines.showOnly(10.differences)
+}}
 
 In the code above `10.differences` builds a `DifferenceFilter` which is merely a filtering function: `(lines: Seq[LineComparison]) => Seq[LineComparison])`
 keeping the first 10 differences. A `LineComparison` is the result of comparing a list of lines, either a line has been added, deleted, modified or is the same.
 
 ##### Directories contents
 
-We can compare the contents of 2 directories. We can for example check if no files are missing and none has been added: ${snippet {
+We can compare the contents of 2 directories. We can for example check if no files are missing and none has been added: ${snippet{
+  actualDir must haveSamePathsAs(expectedDir)
+  // with a file filter applied to both the actual and expected directories
+  actualDir must haveSamePathsAs(expectedDir).withFilter((file: File) => !file.isHidden)
+}}
 
-    actualDir must haveSamePathsAs(expectedDir)
-// with a file filter applied to both the actual and expected directories
-    actualDir must haveSamePathsAs(expectedDir).withFilter((file: File) => !file.isHidden)
-
-  }}
-
-Once we know that all files are present we can check their content: ${snippet {
+Once we know that all files are present we can check their content: ${snippet{
 
 // the default comparison expects that files are text files and that comparison must be done line by line
-    actualDir must haveSameFilesAs(expectedDir)
+actualDir must haveSameFilesAs(expectedDir)
 
 // with a file filter applied to both the actual and expected directories
-    actualDir must haveSameFilesAs(expectedDir).withFilter((file: File) => !file.isHidden)
+actualDir must haveSameFilesAs(expectedDir).withFilter((file: File) => !file.isHidden)
 
 // with a MD5 matcher for binary files
-    actualDir must haveSameFilesAs(expectedDir).withMatcher(haveSameMD5)
+actualDir must haveSameFilesAs(expectedDir).withMatcher(haveSameMD5)
 
 // it is also possible to only check the content of actual files when they exist in the expected directory
-    actualDir must haveSameFilesContentAs(expectedDir)
-
-  }}
+actualDir must haveSameFilesContentAs(expectedDir)
+}}
 
 
 ##### Lines contents
 
-Files are not the only possible source of lines and it is useful to be able to check the content of a `File` with a `Seq[String]`: ${snippet {
+Files are not the only possible source of lines and it is useful to be able to check the content of a `File` with a `Seq[String]`: ${snippet{
 
-    file1 must haveSameLinesAs(Seq(line1, line2, line3))
+  file1 must haveSameLinesAs(Seq(line1, line2, line3))
 
-  }}
+}}
 
 This is because those 2 types implement the `org.specs2.text.LinesContent` trait, defining:
 
