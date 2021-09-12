@@ -77,7 +77,7 @@ trait ClassRunnerMain:
     */
   def createClassRunner(env: Env): Operation[ClassRunner] =
     val arguments = env.arguments
-    val loader = Thread.currentThread.getContextClassLoader
+    val loader = env.getClass.getClassLoader
     val customInstances = CustomInstances(arguments, loader, env.systemLogger)
     val printerFactory = PrinterFactory(arguments, customInstances, env.systemLogger)
     val specFactory = DefaultSpecFactory(env, loader)
