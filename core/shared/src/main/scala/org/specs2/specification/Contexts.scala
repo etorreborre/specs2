@@ -146,7 +146,7 @@ trait BeforeAfterSpec extends SpecificationStructure with FragmentsFactory:
 
 /** Execute a step before all other fragments
   */
-@deprecated(since = "5.0.0")
+@deprecated(message = "Use the org.specs2.specification.BeforeSpec trait instead", since = "5.0.0")
 trait BeforeAll extends SpecificationStructure with FragmentsFactory:
   def beforeAll(): Unit
 
@@ -155,7 +155,7 @@ trait BeforeAll extends SpecificationStructure with FragmentsFactory:
 
 /** Execute a step after all other fragments
   */
-@deprecated(since = "5.0.0")
+@deprecated(message = "Use the org.specs2.specification.AfterSpec trait instead", since = "5.0.0")
 trait AfterAll extends SpecificationStructure with FragmentsFactory:
   def afterAll(): Unit
 
@@ -164,7 +164,7 @@ trait AfterAll extends SpecificationStructure with FragmentsFactory:
 
 /** Execute a step before and after all other fragments
   */
-@deprecated(since = "5.0.0")
+@deprecated(message = "Use the org.specs2.specification.BeforeAfterSpec trait instead", since = "5.0.0")
 trait BeforeAfterAll extends SpecificationStructure with FragmentsFactory:
   def beforeAll(): Unit
   def afterAll(): Unit
