@@ -64,7 +64,7 @@ lazy val commonSettings =
 
 lazy val commonJvmSettings =
   testJvmSettings //++
-    Seq(mimaPreviousArtifacts := Set(organization.value %% moduleName.value % "5.0.0-RC-10"))
+    //Seq(mimaPreviousArtifacts := Set(organization.value %% moduleName.value % "5.0.0-RC-10"))
 
 import org.scalajs.linker.interface.ESVersion
 
@@ -97,7 +97,6 @@ lazy val core = crossProject(platforms: _*)
 
 lazy val examples = crossProject(platforms: _*)
   .withoutSuffixFor(jvm)
-  .crossType(CrossType.Pure)
   .in(file("examples"))
   .jvmSettings(commonJvmSettings)
   .jsSettings(commonJsSettings)
@@ -107,7 +106,6 @@ lazy val examples = crossProject(platforms: _*)
 
 lazy val fp = crossProject(platforms: _*)
   .withoutSuffixFor(jvm)
-  .crossType(CrossType.Pure)
   .in(file("fp"))
   .settings(name := "specs2-fp", commonSettings)
   .jvmSettings(commonJvmSettings)
@@ -137,7 +135,6 @@ lazy val html = project
 
 lazy val junit = crossProject(platforms: _*)
   .withoutSuffixFor(jvm)
-  .crossType(CrossType.Pure)
   .in(file("junit"))
   .settings(name := "specs2-junit", commonSettings, depends.junit)
   .jvmSettings(commonJvmSettings)
@@ -172,7 +169,6 @@ lazy val pom = project
 
 lazy val scalacheck = crossProject(platforms: _*)
   .withoutSuffixFor(jvm)
-  .crossType(CrossType.Pure)
   .in(file("scalacheck"))
   .settings(
     commonSettings,
@@ -201,7 +197,6 @@ lazy val tests = crossProject(platforms: _*)
 
 lazy val xml = crossProject(platforms: _*)
   .withoutSuffixFor(jvm)
-  .crossType(CrossType.Pure)
   .in(file("xml"))
   .settings(
     name := "specs2-xml",
