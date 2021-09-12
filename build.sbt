@@ -39,6 +39,14 @@ val Scala3 = "3.0.2"
 
 lazy val specs2Settings = Seq(
   organization := "org.specs2",
+  homepage := Some(url("https://github.com/etorreborre/specs2")),
+  licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
+  developers := List(
+    Developer(
+      "etorreborre",
+      "Eric Torreborre",
+      "etorreborre@yahoo.com",
+      url("https://github.com/etorreborre"))),
   specs2ShellPrompt,
   ThisBuild / crossScalaVersions := Seq(Scala3),
   ThisBuild / scalaVersion := Scala3
@@ -296,17 +304,6 @@ lazy val releaseSettings: Seq[Setting[_]] = Seq(
       params = Map("branch" -> "gh-pages", "clean" -> "false", "folder" -> "target/specs2-reports/site")
     )
   ),
-  organization := "org.specs2",
-  homepage := Some(url("https://github.com/etorreborre/specs2")),
-  licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
-  developers := List(
-    Developer(
-      "etorreborre",
-      "Eric Torreborre",
-      "etorreborre@yahoo.com",
-      url("https://github.com/etorreborre")
-    )
-  ),
   ThisBuild / git.gitTagToVersionNumber := { tag: String =>
     if (tag matches SPECS2 + ".*") Some(tag.replace(SPECS2, "")) else None
   },
@@ -325,6 +322,7 @@ lazy val aggregateCompile = ScopeFilter(
     matcherExtra.jvm,
     html,
     form,
+    guide,
     markdown,
     junit.jvm,
     scalacheck.jvm,
