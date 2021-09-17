@@ -42,11 +42,8 @@ lazy val specs2Settings = Seq(
   homepage := Some(url("https://github.com/etorreborre/specs2")),
   licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
   developers := List(
-    Developer(
-      "etorreborre",
-      "Eric Torreborre",
-      "etorreborre@yahoo.com",
-      url("https://github.com/etorreborre"))),
+    Developer("etorreborre", "Eric Torreborre", "etorreborre@yahoo.com", url("https://github.com/etorreborre"))
+  ),
   specs2ShellPrompt,
   ThisBuild / crossScalaVersions := Seq(Scala3),
   ThisBuild / scalaVersion := Scala3
@@ -72,7 +69,7 @@ lazy val commonSettings =
 
 lazy val commonJvmSettings =
   testJvmSettings //++
-    //Seq(mimaPreviousArtifacts := Set(organization.value %% moduleName.value % "5.0.0-RC-10"))
+//Seq(mimaPreviousArtifacts := Set(organization.value %% moduleName.value % "5.0.0-RC-10"))
 
 import org.scalajs.linker.interface.ESVersion
 
