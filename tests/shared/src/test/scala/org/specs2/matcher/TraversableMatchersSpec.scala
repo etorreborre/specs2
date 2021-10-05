@@ -175,7 +175,7 @@ class TraversableMatchersSpec(val env: Env) extends Specification with ResultMat
     Seq(A(i = 1), A(i = 2)) must containTheSameElementsAs(Seq(A(i = 2, j = 2), A(i = 1, j = 2)), equality)
   }
 
-  type annotations might be necessary in some cases ${// otherwise "could not find implicit value for evidence parameter of type org.specs2.execute.AsResult[A]"
+  type annotations might be necessary in some cases ${ // otherwise "could not find implicit value for evidence parameter of type org.specs2.execute.AsResult[A]"
   Seq(Seq(A(1))) must contain(exactly[Seq[A]](Seq(A(1))))}
 
  With Java collections
