@@ -48,8 +48,7 @@
   def e1 = "Hello world" must haveSize(11)
   def e2 = "Hello world" must startWith("Hello")
   def e3 = "Hello world" must endWith("world")
-
-}</code></pre>
+</code></pre>
             </div>
           <div class="item">
               <div class="caption">Use different styles of specifications</div>
@@ -67,7 +66,7 @@ class HelloWorldSpec extends Specification:
     "end with 'world'" >> {
       "Hello world" must endWith("world")
     }
-}</code></pre>
+</code></pre>
           </div>
             <div class="item">
                 <div class="caption">Test your code with <a href="http://www.scalacheck.org">ScalaCheck</a></div>
@@ -94,8 +93,7 @@ class HelloWorldSpec extends Specification:
   def associativity = prop { (a: Int, b: Int, c: Int) =>
     ((a |+| b) |+| c) === (a |+| (b |+| c))
   }
-
-}</code></pre>
+</code></pre>
             </div>
             <div class="item">
                 <div class="caption">Document your APIs with compiler-checked examples</div>
@@ -111,7 +109,7 @@ class HelloWorldSpec extends Specification:
   $${ 2.qty("apple") === "2 apples" }
   $${ 2.qty("foot")  === "2 feet"   }
   """
-}</code></pre>
+</code></pre>
             </div>
             <div class="item">
                 <div class="caption">Manage contexts for integration testing</div>
@@ -139,8 +137,7 @@ class HelloWorldSpec extends Specification:
 
   // remove all data before running an example
   def before = cleanDatabase(databaseUrl)
-
-}</code></pre>
+</code></pre>
             </div>
 
     </div>
