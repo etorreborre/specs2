@@ -108,7 +108,7 @@ jobs:
           pandoc-version: 2.7.3
 
       - name: Generate the specs2 website 📚
-        run: sbt ++${{ matrix.scala }} 'guide/testOnly *Website -- xonly'
+        run: sbt ++${{ matrix.scala }} unidoc 'guide/testOnly *Website -- xonly'
 
       - name: Update the website 🚀
         uses: JamesIves/github-pages-deploy-action@4.1.4

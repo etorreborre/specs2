@@ -15,6 +15,7 @@ class Website(env: Env) extends Specification with Specs2Variables with Specs2Ta
 
  create the website    $createWebsite
  create the user guide $createUserGuide
+ copy unidoc           $copyUnidoc
 
 """
 
@@ -56,6 +57,12 @@ class Website(env: Env) extends Specification with Specs2Variables with Specs2Ta
       ClassRunner.createClassRunner(env1).toAction.flatMap(_.run(UserGuide).map(_ => true))
   }
 
+  def copyUnidoc: Action[Boolean] =
+    val apiOutputDir = outputDir / "api" / versionDirName
+    env.fileSystem.copyDir(DirectoryPath.unsafe("target/scala-"+BuildInfo.scalaVersion+"/unidoc"), apiOutputDir).toAction.map(_ => true)
+
+  // HELPERS
+
   def writeVersionsFile(
       fs: FileSystem,
       siteOutputDir: DirectoryPath,
@@ -72,12 +79,17 @@ class Website(env: Env) extends Specification with Specs2Variables with Specs2Ta
           | = [
           | ${tags
         .map(_.render)
-        .map(tag => s"""{id:"../../$name/$tag/$file", text:"${tag.replace("SPECS2-", "")}"}""")
+        .map { tag =>
+          val version = tag.replace("SPECS2-", "")
+          // starting from SPECS2 5 unidoc is used and puts file in an 'api' subdirectory
+          val startFile = if version.startsWith("4") then file.replace("api/" ,"") else file
+          s"""{id:"../../$name/$tag/$startFile", text:"$version"}"""
+        }
         .mkString(",\n")}
           |];""".stripMargin
 
     makeVersionVar("guide", "org.specs2.guide.UserGuide.html") + "\n " +
-      makeVersionVar("api", "index.html")
+    makeVersionVar("api", "api/index.html")
   }
 
   def variables(env: Env): Map[String, String] =
