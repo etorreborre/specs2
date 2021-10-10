@@ -16,8 +16,10 @@ trait Specs2Tags:
   def publishedTags: Operation[List[VersionTag]] =
     allTags.map(filterPublished)
 
+  // only keep 4.12.0 which is the latest version of 4.x published manually
   def filterPublished(tags: List[VersionTag]): List[VersionTag] =
-    tags.filter(isGreaterThanVersion(4)).groupBy(_.major).map(_._2).map(_.sorted.last).toList.sorted
+    VersionTag.fromString("SPECS2-4.12.0").toList ++
+    tags.filter(isGreaterThanVersion(5)).groupBy(_.major).map(_._2).map(_.sorted.last).toList.sorted
 
   def isGreaterThanVersion(n: Int): VersionTag => Boolean = (tag: VersionTag) =>
     Ordering[DotNumber].gteq(tag.number, DotNumber(List(n)))
@@ -32,10 +34,10 @@ class Specs2TagsSpec extends Specification:
  ${filterPublished(
     List("SPECS2-3.9.4",
          "SPECS2-4.10.0",
-         "SPECS2-4.12.1",
+         "SPECS2-4.12.0",
          "SPECS2-5.0.0-RC-01",
          "SPECS2-5.0.0-RC-10").flatMap(VersionTag.fromString)) ===
-    List("SPECS2-4.12.1",
+    List("SPECS2-4.12.0",
          "SPECS2-5.0.0-RC-10").flatMap(VersionTag.fromString)}
 """
 
