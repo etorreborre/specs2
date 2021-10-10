@@ -126,11 +126,11 @@ class HelloWorldSpec extends Specification:
 
   def create =
     val id = db.createUser("me")
-    db.getUser(id).name must_== "me"
+    db.getUser(id).name === "me"
 
   def list =
     List("me", "you").foreach(db.createUser)
-    db.listAllUsers.map(_.name).toSet must_== Set("me", "you")
+    db.listAllUsers.map(_.name).toSet === Set("me", "you")
 
   // create a database before running anything
   def beforeSpec = createDatabase(databaseUrl)

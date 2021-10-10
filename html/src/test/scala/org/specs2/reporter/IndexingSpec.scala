@@ -22,7 +22,14 @@ class IndexingSpec(val env: Env) extends Specification with OwnExecutionEnv {
 
   def index = html.Index.createIndex(pages(0)) must ===(
     html.Index(
-      Vector(IndexEntry(title = "page 1", text = """test 'hello world'""", tags = Vector("tag1", "tag2"), path = FilePath("page1")))
+      Vector(
+        IndexEntry(
+          title = "page 1",
+          text = """test 'hello world'""",
+          tags = Vector("tag1", "tag2"),
+          path = FilePath("page1")
+        )
+      )
     )
   )
 
