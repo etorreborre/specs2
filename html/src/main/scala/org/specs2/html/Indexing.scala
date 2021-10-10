@@ -31,16 +31,12 @@ object Indexing:
       path = SpecHtmlPage.outputPath(outDir, spec).relativeTo(outDir),
       title = spec.header.showWords,
       contents = spec.textsList.foldLeft(new StringBuilder)((res, cur) => res.append(cur.description.show)).toString,
-      tags = spec.tagsList.flatMap(_.names).map(sanitize).toIndexedSeq
+      tags = spec.tagsList.flatMap(_.names).toIndexedSeq
     )
   }
 
   def createEntries(page: IndexedPage): Vector[IndexEntry] =
     Vector(IndexEntry(page.title, page.contents, page.tags, page.path))
-
-  /** remove quotes from names in order to add as json values */
-  def sanitize(name: String): String =
-    name.replace("\"", "\\\"")
 
 case class IndexedPage(path: FilePath, title: String, contents: String, tags: IndexedSeq[String])
 
@@ -54,18 +50,18 @@ object Index:
 
   def toJson(index: Index): String =
     s"""
-       |var tipuesearch = {"pages": ${pages(index).mkString("[", ",\n", "]")}};
+       |var tipuesearch = {'pages': ${pages(index).mkString("[", ",\n", "]")}};
      """.stripMargin
 
   def pages(index: Index): Seq[String] =
     index.entries.map(page)
 
   def page(entry: IndexEntry): String =
-    s"""{"title":"${entry.title}", "text":"${sanitizeEntry(entry)}", "tags":${entry.tags.mkString(
-      "\"",
+    s"""{'title':'${entry.title}', 'text':'${sanitizeEntry(entry)}', 'tags':${entry.tags.mkString(
+      "'",
       " ",
-      "\""
-    )}, "loc":"${entry.path.path}"}"""
+      "'"
+    )}, 'loc':'${entry.path.path}'}"""
 
   /** the text that is used for indexing must be sanitized:
     *   - no newlines
@@ -74,7 +70,7 @@ object Index:
     */
   def sanitizeEntry(entry: IndexEntry): String =
     entry.text
-      .replace("\"", "\\\"")
+      .replace("'", "")
       .replace("\n", "")
       .replace("^", "")
       .replace("#####", "")
