@@ -167,7 +167,6 @@ trait HtmlBodyPrinter:
           <link class="ok"><a href={FilePath.unsafe(ref.url).relativeTo(baseDir).path} tooltip={
             ref.tooltip
           } class="ok">{ref.linkText}</a></link>
-        
         else
           val status = result.statusName(using arguments) + " ok"
           val image = if fragment.isExecutable then <span class={status}> </span> else NodeSeq.Empty

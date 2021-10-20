@@ -133,7 +133,6 @@ trait TableOfContents:
         <li><a href={page.relativePath.path + "#" + h.pandocName} title={h.name}>{h.name.truncate(entryMaxSize)}</a>
             {<ul>{s}</ul> `orEmptyWhen` s.isEmpty}
           </li>
-      
       else <ul>{s}</ul> `orEmptyWhen` s.isEmpty
     }.rootLabel
 

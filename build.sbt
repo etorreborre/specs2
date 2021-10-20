@@ -59,7 +59,8 @@ lazy val rootSettings =
       Compile / doc / sources := sources.all(aggregateCompile).value.flatten,
       packagedArtifacts := Map.empty,
       test := {},
-      mimaPreviousArtifacts := Set.empty)
+      mimaPreviousArtifacts := Set.empty
+    )
 
 lazy val commonSettings =
   specs2Settings ++
@@ -294,7 +295,10 @@ lazy val releaseSettings: Seq[Setting[_]] = Seq(
       params = Map("pandoc-version" -> "2.7.3")
     ),
     WorkflowStep
-      .Sbt(name = Some("Generate the specs2 website 📚"), commands = List("unidoc", "guide/testOnly *Website -- xonly")),
+      .Sbt(
+        name = Some("Generate the specs2 website 📚"),
+        commands = List("unidoc", "guide/testOnly *Website -- xonly")
+      ),
     WorkflowStep.Use(
       name = Some("Update the website 🚀"),
       ref = UseRef.Public("JamesIves", "github-pages-deploy-action", "4.1.4"),
@@ -303,19 +307,22 @@ lazy val releaseSettings: Seq[Setting[_]] = Seq(
   ),
   ThisBuild / git.useGitDescribe := true,
   ThisBuild / dynverTagPrefix := SPECS2,
-  ThisBuild / git.gitTagToVersionNumber := { tag: String => if (tag matches SPECS2 + ".*") Some(tag.replace(SPECS2, "")) else None },
+  ThisBuild / git.gitTagToVersionNumber := { tag: String =>
+    if (tag matches SPECS2 + ".*") Some(tag.replace(SPECS2, "")) else None
+  },
   ScalaUnidoc / unidoc / unidocProjectFilter := inAnyProject -- inProjects(
-        fp.js,
-        common.js,
-        matcher.js,
-        core.js,
-        matcherExtra.js,
-        junit.js,
-        scalacheck.js,
-        xml.js,
-        examples.js,
-        tests.js,
-        guide)
+    fp.js,
+    common.js,
+    matcher.js,
+    core.js,
+    matcherExtra.js,
+    junit.js,
+    scalacheck.js,
+    xml.js,
+    examples.js,
+    tests.js,
+    guide
+  )
 )
 
 val SPECS2 = "SPECS2-"
