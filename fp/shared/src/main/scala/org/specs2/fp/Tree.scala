@@ -98,7 +98,7 @@ sealed abstract class Tree[A] {
     val uz = Need(subForest.map(_.unzip))
     val fst = Need(uz.value map (_._1))
     val snd = Need(uz.value map (_._2))
-    (Node(rootLabel._1, fst.value), Node(rootLabel._2, snd.value))
+    (Node(p(rootLabel)._1, fst.value), Node(p(rootLabel)._2, snd.value))
   }
 
   def foldNode[Z](f: A => Stream[Tree[A]] => Z): Z =

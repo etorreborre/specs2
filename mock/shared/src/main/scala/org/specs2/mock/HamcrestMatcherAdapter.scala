@@ -4,13 +4,13 @@ package mock
 import org.hamcrest.{BaseMatcher, Description}
 import matcher._
 
-/** 
+/**
  * Adapter class to use specs2 matchers as Hamcrest matchers
  */
 case class HamcrestMatcherAdapter[T](m: Matcher[T]) extends BaseMatcher[T] {
-  /** this variable is necessary to store the result of a match */ 
+  /** this variable is necessary to store the result of a match */
   private var message = ""
-    
+
   def matches(item: Object): Boolean = matchesSafely(item: Any, m.asInstanceOf[Matcher[Any]])
 
   /** this method used to be called when extending TypeSafeMatcher. However the final `matches` method was bypassing 'null' values */
@@ -22,7 +22,7 @@ case class HamcrestMatcherAdapter[T](m: Matcher[T]) extends BaseMatcher[T] {
     val i = if (item != null && item.isInstanceOf[Function0[_]]) item.asInstanceOf[Function0[_]].apply().asInstanceOf[A] else item
     try {
       matcher.apply(Expectable(i)) match {
-        case f: MatchFailure[_] => message = f.koMessage; false
+        case f: MatchFailure[?] => message = f.koMessage; false
         case _ => true
       }
     // a class cast exception can happen if we tried: vet.treat(dog); there must be one(vet).treat(bird) (see issue #222)
@@ -41,6 +41,3 @@ case class HamcrestMatcherAdapter[T](m: Matcher[T]) extends BaseMatcher[T] {
     ()
   }
 }
-
-
-

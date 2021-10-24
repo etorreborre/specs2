@@ -4,7 +4,6 @@ package execute
 import control.Exceptions._
 import text.NotNullStrings._
 import text.Trim._
-import scala.reflect.runtime.universe._
 import reflect._
 import Snippet._
 
@@ -23,7 +22,7 @@ import Snippet._
  */
 trait Snippets {
   /** implicit parameters selected for the creation of Snippets */
-  implicit def defaultSnippetParameters[T] = Snippet.defaultParams[T]
+  implicit def defaultSnippetParameters[T]: SnippetParams[T] = Snippet.defaultParams[T]
 
   /** implicit function modify the Snippet parameters */
   implicit class SettableSnippet[T](s: Snippet[T]) {
@@ -47,28 +46,11 @@ trait Snippets {
     def checkOk = s.copy(params = s.params.copy(verify = Some((t: T) => AsResult(t))))
   }
 
-  def snippet[T](code: =>T)(implicit params: SnippetParams[T]): Snippet[T] = macro Snippets.create[T]
+  def snippet[T](code: =>T)(implicit params: SnippetParams[T]): Snippet[T] =
+    new Snippet[T](() => code, codeExpression = None, params)
 
-  def createSnippet[T](rangepos: Boolean, expression: String, code: =>T, params: SnippetParams[T]): Snippet[T] = {
-    if (rangepos) new Snippet[T](() => code, codeExpression = Some(expression), params.copy(trimExpression = trimRangePosSnippet))
-    else          new Snippet[T](() => code, codeExpression = None, params)
-  }
-
-  def simpleName[T : WeakTypeTag]: String = implicitly[WeakTypeTag[T]].tpe.typeSymbol.name.toString.trim
-  def fullName[T : WeakTypeTag]: String   = implicitly[WeakTypeTag[T]].tpe.typeSymbol.fullName.trim
-  def termName(m: Any): String            = macro Macros.termName
 }
 
-import reflect.MacroContext._
-
-object Snippets extends Snippets {
-  def create[T](c: Context)(code: c.Expr[T])(params: c.Expr[SnippetParams[T]]): c.Expr[Snippet[T]] = {
-    import c.{universe => u}; import u._
-    import Macros._
-    val result = c.Expr(methodCall(c)("createSnippet", q"${c.macroApplication.pos.isRange}", stringExprMacroPos(c)(code), code.tree.duplicate, params.tree))
-    c.Expr(atPos(c.prefix.tree.pos)(result.tree))
-  }
-}
 
 /**
  * Captured snippet of code with: a value of type T, a string representing the expression, captured by a macro,
@@ -118,7 +100,7 @@ case class Snippet[T](code: () => T,
  *  - the `eval` boolean indicating if a snippet must be evaluated
  *  - the `verify` function checking the result
  */
-case class SnippetParams[T]( 
+case class SnippetParams[T](
   trimExpression: String => String   = trimApproximatedSnippet,
   cutter: String => String           = ScissorsCutter(),
   asCode: (String, String) => String = markdownCode(offset = 0),
@@ -203,4 +185,3 @@ object Snippet {
   lazy val ls = "[ \t\\x0B\f]"
   lazy val parameters = "(\\([^\\)]+\\))*"
 }
-

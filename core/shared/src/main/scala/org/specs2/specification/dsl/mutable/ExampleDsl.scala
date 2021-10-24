@@ -31,12 +31,12 @@ trait ExampleDsl1 extends BlockDsl with ExampleDsl0 {
   // deactivate block0
   override def blockExample0(d: String) = super.blockExample0(d)
 
-  implicit def blockExample(d: String) = new BlockExample(d)
+  implicit def blockExample(d: String): BlockExample = new BlockExample(d)
 
   class BlockExample(d: String) extends BlockExample0(d) {
     def >>[R](f: String => R)(implicit asExecution: AsExecution[R]): Fragment =
       >>(asExecution.execute(f(d)))
-      
+
     def >>(execution: Execution): Fragment = {
       addFragment(fragmentFactory.example(Text(d), execution))
       addFragment(fragmentFactory.break)

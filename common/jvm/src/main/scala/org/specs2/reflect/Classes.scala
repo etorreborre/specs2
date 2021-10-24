@@ -14,8 +14,8 @@ import eff._
  */
 trait Classes extends ClassOperations {
 
-  type EnableReflectiveInstantiation =
-    org.portablescala.reflect.annotation.EnableReflectiveInstantiation
+  // type EnableReflectiveInstantiation =
+  //   org.portablescala.reflect.annotation.EnableReflectiveInstantiation
 
   /**
    * Try to create an instance of a given class by using whatever constructor is available
@@ -27,7 +27,7 @@ trait Classes extends ClassOperations {
     createInstance(className, getClass.getClassLoader)
 
   def createInstance[T <: AnyRef](className: String, loader: ClassLoader, defaultInstances: =>List[AnyRef] = Nil)(implicit m: ClassTag[T]): Operation[T] =
-    loadClass(className, loader) >>= { klass: Class[T] =>
+    loadClass(className, loader) >>= { (klass: Class[T]) =>
       createInstanceFromClass(klass, loader, defaultInstances)
     }
 
@@ -40,7 +40,7 @@ trait Classes extends ClassOperations {
 
   /** try to create an instance but return an exception if this is not possible */
   def createInstanceEither[T <: AnyRef](className: String, loader: ClassLoader, defaultInstances: =>List[AnyRef] = Nil)(implicit m: ClassTag[T]): Operation[Throwable Either T] =
-    loadClassEither(className, loader) >>= { tc: Throwable Either Class[T] =>
+    loadClassEither(className, loader) >>= { (tc: Throwable Either Class[T]) =>
       tc match {
         case Left(t) => Operations.ok(Left(t))
         case Right(klass) =>
@@ -49,7 +49,7 @@ trait Classes extends ClassOperations {
       }
     }
 
-  private def findInstance[T <: AnyRef : ClassTag](klass: Class[T], loader: ClassLoader, defaultInstances: =>List[AnyRef], cs: List[Constructor[_]], error: Option[ErrorEffect.Error] = None): Operation[T] =
+  private def findInstance[T <: AnyRef : ClassTag](klass: Class[T], loader: ClassLoader, defaultInstances: =>List[AnyRef], cs: List[Constructor[?]], error: Option[ErrorEffect.Error] = None): Operation[T] =
     cs match {
       case Nil =>
         error.map(Operations.fromError[T]).getOrElse(Operations.fail[T]("Can't find a suitable constructor with 0 or 1 parameter for class "+klass.getName))
@@ -64,8 +64,8 @@ trait Classes extends ClassOperations {
   /**
    * Given a class, a zero or one-parameter constructor, return an instance of that class
    */
-  private def createInstanceForConstructor[T <: AnyRef : ClassTag](klass: Class[_],
-                                                                   constructor: Constructor[_],
+  private def createInstanceForConstructor[T <: AnyRef : ClassTag](klass: Class[?],
+                                                                   constructor: Constructor[?],
                                                                    loader: ClassLoader,
                                                                    defaultInstances: =>List[AnyRef]): Operation[T] = {
 
@@ -96,7 +96,7 @@ trait Classes extends ClassOperations {
   }
 
   /** create a new instance for a given class and return a proper error if this fails */
-  private def newInstance[T](klass: Class[_], instance: =>Any): Operation[T] =
+  private def newInstance[T](klass: Class[?], instance: =>Any): Operation[T] =
     try Operations.ok(instance.asInstanceOf[T])
     catch { case NonFatal(t) =>
       Operations.exception(UserException("cannot create an instance for class " + klass.getName, t))

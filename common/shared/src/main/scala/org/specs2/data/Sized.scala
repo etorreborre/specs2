@@ -14,7 +14,7 @@ trait Sized[T] {
 
 object Sized {
   /** any scala collection has a size */
-  implicit def scalaTraversableIsSized[I <: Traversable[_]]: Sized[I] = new Sized[I] {
+  implicit def scalaTraversableIsSized[I <: Traversable[Any]]: Sized[I] = new Sized[I] {
     def size(t: I) = t.size
   }
   /** any scala array has a size */
@@ -22,7 +22,7 @@ object Sized {
     def size(t: Array[T]) = t.length
   }
   /** any java collection has a size */
-  implicit def javaCollectionIsSized[T <: java.util.Collection[_]]: Sized[T] = new Sized[T] {
+  implicit def javaCollectionIsSized[T <: java.util.Collection[Any]]: Sized[T] = new Sized[T] {
     def size(t: T) = t.size()
   }
   /** a regular string has a size, without having to be converted to an Traversable */

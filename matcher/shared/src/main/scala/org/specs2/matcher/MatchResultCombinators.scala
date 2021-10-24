@@ -22,12 +22,12 @@ trait MatchResultLogicalCombinators extends Expectations {
     lazy val result: Either[Exception, MatchResult[T]] =
       try Right(sandboxMatchResult(mr))
       catch {
-        case failure: MatchResultException[_] => Right[Exception, MatchResult[T]](failure.matchResult.asInstanceOf[MatchResult[T]])
+        case failure: MatchResultException[?] => Right[Exception, MatchResult[T]](failure.matchResult.asInstanceOf[MatchResult[T]])
         case other: Exception                 => Left[Exception, MatchResult[T]](other)
       }
 
     /** if there was an exception on evaluating the result, no expectable can be accessed */
-    lazy val expectable = 
+    lazy val expectable =
       result.fold(e => throw e, _.expectable)
 
     /** @return the logical or of two results */
@@ -71,7 +71,7 @@ trait MatchResultLogicalCombinators extends Expectations {
         m1 => expectable.check(new AndMatch(m1, expectable.applyMatcher(other)).evaluate))
 
     /** @return the negation of this result */
-    def not: MatchResult[T] = 
+    def not: MatchResult[T] =
       result.fold(
         e  => throw e, // error, rethrow it
         m1 => expectable.check(m1.negate))

@@ -345,7 +345,6 @@ trait MemberLower5 extends MemberLower6 {
         case UnionAppendR(Union3L(l)) => Right(l)
         case UnionAppendR(Union3M(m)) => Left(Union3M(m))
         case UnionAppendR(Union3R(r)) => Left(Union3R(r))
-        case UnionAppendR(_)          => sys.error("appeasing the compiler exhaustiveness checking for Member4RL")
       }
   }
 }
@@ -370,7 +369,6 @@ trait MemberLower6 extends MemberLower7 {
         case UnionAppendR(Union3L(l)) => Left(Union3M(l))
         case UnionAppendR(Union3M(m)) => Right(m)
         case UnionAppendR(Union3R(r)) => Left(Union3R(r))
-        case UnionAppendR(_)          => sys.error("appeasing the compiler exhaustiveness checking for Member4RM")
       }
   }
 }
@@ -395,7 +393,6 @@ trait MemberLower7 extends MemberLower8 {
         case UnionAppendR(Union3L(l)) => Left(Union3M(l))
         case UnionAppendR(Union3M(m)) => Left(Union3R(m))
         case UnionAppendR(Union3R(r)) => Right(r)
-        case UnionAppendR(_)          => sys.error("appeasing the compiler exhaustiveness checking for Member4RM")
       }
   }
 }

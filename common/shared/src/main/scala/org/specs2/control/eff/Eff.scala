@@ -179,22 +179,22 @@ trait EffImplicits {
         case Pure(a, last) =>
           ff match {
             case Pure(f, last1)        => Pure(f(a), last1).addLast(last)
-            case Impure(u, c, last1)   => ImpureAp(Unions(u, Nil), Arrs.singleton(ls => c(ls.head).map(_(a))), last1 *> last)
-            case ImpureAp(u, c, last1) => ImpureAp(u, Arrs.singleton(xs => c(xs).map(_(a))), last1 *> last)
+            case Impure(u, c, last1)   => ImpureAp(Unions(u, Nil), Arrs.singleton(ls => c.unsafeApply(ls.head).map(_(a))), last1 *> last): Eff[R, B]
+            case ImpureAp(u, c, last1) => ImpureAp(u, Arrs.singleton(ls => c.unsafeApply(ls).map(_(a))), last1 *> last)
           }
 
         case Impure(u, c, last) =>
           ff match {
-            case Pure(f, last1)          => ImpureAp(Unions(u, Nil), Arrs.singleton(ls => c(ls.head).map(f)), last1 *> last)
-            case Impure(u1, c1, last1)   => ImpureAp(Unions(u, List(u1)),  Arrs.singleton(ls => ap(c(ls.head))(c1(ls(1)))), last1 *> last)
-            case ImpureAp(u1, c1, last1) => ImpureAp(Unions(u, u1.unions), Arrs.singleton(ls => ap(c(ls.head))(c1(ls.drop(1)))), last1 *> last)
+            case Pure(f, last1)          => ImpureAp(Unions(u, Nil), Arrs.singleton(ls => c.unsafeApply(ls.head).map(f)), last1 *> last)
+            case Impure(u1, c1, last1)   => ImpureAp(Unions(u, List(u1.asInstanceOf[Union[R, Any]])),  Arrs.singleton(ls => ap(c.unsafeApply(ls.head))(c1.unsafeApply(ls(1)))), last1 *> last)
+            case ImpureAp(u1, c1, last1) => ImpureAp(Unions(u, u1.unions), Arrs.singleton((ls: List[Any]) => ap(c.unsafeApply(ls.head))(c1.unsafeApply(ls.drop(1)))), last1 *> last)
           }
 
         case ImpureAp(unions, c, last) =>
           ff match {
             case Pure(f, last1)         => ImpureAp(unions, c map f, last1 *> last)
-            case Impure(u, c1, last1)   => ImpureAp(Unions(unions.first, unions.rest :+ u), Arrs.singleton(ls => ap(c(ls.dropRight(1)))(c1(ls.last))), last1 *> last)
-            case ImpureAp(u, c1, last1) => ImpureAp(u append unions, Arrs.singleton(xs => ap(c(xs.drop(u.size)))(c1(xs.take(u.size)))), last1 *> last)
+            case Impure(u, c1, last1)   => ImpureAp(Unions(unions.first, unions.rest :+ (u.asInstanceOf[Union[R, Any]])), Arrs.singleton(ls => ap(c.unsafeApply(ls.dropRight(1)))(c1.unsafeApply(ls.last))), last1 *> last)
+            case ImpureAp(u, c1, last1) => ImpureAp(u append unions, Arrs.singleton(ls => ap(c.unsafeApply(ls.drop(u.size)))(c1.unsafeApply(ls.take(u.size)))), last1 *> last)
           }
 
       }
@@ -346,7 +346,7 @@ object EffInterpretation extends EffInterpretation
  *
  */
 case class Arrs[R, A, B](functions: Vector[Any => Eff[R, Any]]) extends (A => Eff[R, B]) {
-
+  type X = A
   /**
    * append a new monadic function to this list of functions such that
    *
@@ -366,6 +366,9 @@ case class Arrs[R, A, B](functions: Vector[Any => Eff[R, Any]]) extends (A => Ef
   /** map the last value */
   def map[C](f: B => C): Arrs[R, A, C] =
     Arrs(functions :+ ((x: Any) => pure[R, Any](f(x.asInstanceOf[B]).asInstanceOf[Any])))
+
+  def unsafeApply(a: Any): Eff[R, B] =
+    apply(a.asInstanceOf[A])
 
   /**
    * execute this monadic function
@@ -390,7 +393,7 @@ case class Arrs[R, A, B](functions: Vector[Any => Eff[R, Any]]) extends (A => Ef
             case ap @ ImpureAp(unions, q, l) =>
               ImpureAp[R, unions.X, B](unions, q.copy(q.functions ++ rest), last *> l)
           }
-          
+
         case _ =>
           Pure[R, B](v.asInstanceOf[B], last)
       }
@@ -410,9 +413,9 @@ object Arrs {
 
   /** create an Arrs function from a single monadic function */
   def singleton[R, A, B](f: A => Eff[R, B]): Arrs[R, A, B] =
-  Arrs(Vector(f.asInstanceOf[Any => Eff[R, Any]]))
+    Arrs(Vector(f.asInstanceOf[Any => Eff[R, Any]]))
 
   /** create an Arrs function with no effect, which is similar to using an identity a => EffMonad[R].pure(a) */
   def unit[R, A]: Arrs[R, A, A] =
-  Arrs(Vector())
+    Arrs(Vector())
 }

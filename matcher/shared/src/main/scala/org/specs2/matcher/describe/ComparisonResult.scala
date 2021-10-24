@@ -70,7 +70,7 @@ case class PrimitiveDifference(actual: Any, expected: Any) extends DifferentComp
     (actual, expected).renderDiff
 }
 
-case class SetIdentical(value: Set[_]) extends OrderedCollectionIdentical(value) with SetTypeProvider
+case class SetIdentical(value: Set[?]) extends OrderedCollectionIdentical(value) with SetTypeProvider
 
 case class SetDifference(same:    Seq[Any],
                          added:   Seq[Any],
@@ -108,7 +108,7 @@ trait ArrayTypeProvider {
   val className = "Array"
 }
 
-case class MapIdentical(m: Map[_, _]) extends OrderedCollectionIdentical(m) with MapTypeProvider
+case class MapIdentical(m: Map[?, ?]) extends OrderedCollectionIdentical(m) with MapTypeProvider
 
 trait MapTypeProvider {
   val className = "Map"

@@ -486,12 +486,12 @@ ${step(env)}                                                                    
     }
 
     eg := {
-      list.set(anyInt, anyString) answers { i: Any => "The parameters are " + (i.asInstanceOf[Array[_]].mkString("(",",",")")) }
+      list.set(anyInt, anyString) answers { i: Any => "The parameters are " + (i.asInstanceOf[Array[?]].mkString("(",",",")")) }
       list.set(1,"foo") must_== "The parameters are (1,foo)"
     }
 
     eg := {
-      list.get(anyInt) answers { (i, m) => "The parameters are " + (i.asInstanceOf[Array[_]].mkString -> m)}
+      list.get(anyInt) answers { (i, m) => "The parameters are " + (i.asInstanceOf[Array[?]].mkString -> m)}
       list.get(1) must_== "The parameters are (1,list)"
     }
 

@@ -584,7 +584,7 @@ trait Interpret {
           case Some(tx) =>
             val union = m.inject(nat(tx))
 
-            Impure(union, Arrs.singleton({ ex: F[u.X] =>
+            Impure(union, Arrs.singleton({ (ex: F[u.X]) =>
               Eff.flatTraverseA(ex)(x => interceptNatM[R, T, F, A](c(x), nat))
             }), last)
 
@@ -599,10 +599,10 @@ trait Interpret {
           }
 
         val materializedUnions =
-          Unions(materialize(unions.first), unions.rest.map(materialize))
+          Unions(materialize(unions.first.asInstanceOf[Union[R, Any]]), unions.rest.map(materialize))
 
         val collected = unions.extract(m)
-        val continuation1 = Arrs.singleton[R, List[Any], F[A]]({ ls: List[Any] =>
+        val continuation1 = Arrs.singleton[R, List[Any], F[A]]({ (ls: List[Any]) =>
           val xors =
             ls.zipWithIndex.collect { case (a, i) =>
               if (collected.indices.contains(i)) a.asInstanceOf[F[Any]]
@@ -721,4 +721,3 @@ trait Augment[T[_], O[_]] {
 trait Write[T[_], O] {
   def apply[X](tx: T[X]): O
 }
-

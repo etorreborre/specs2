@@ -56,7 +56,7 @@ trait WriterInterpretation {
 
       def applicative[X, T[_] : Traverse](xs: T[Writer[O, X]], s: S): (T[X], S) Either (Writer[O, T[X]], S) = {
         val os = new collection.mutable.ListBuffer[O]
-        val values = xs.map { w: Writer[O, X] =>
+        val values = xs.map { (w: Writer[O, X]) =>
           val (o, x) = w.run
           os.append(o)
           x
@@ -96,7 +96,7 @@ trait WriterInterpretation {
     type S = Unit
     val monad = Monad.idMonad
     val start = ()
-    def fold = (s: S, a: A) => f(a); ()
+    def fold = (s: S, a: A) => f(a)
     def end(s: S): Unit = ()
   }
 

@@ -21,7 +21,7 @@ object JUnit    extends Specification { def is = Module.specifications(getClass)
 object Examples extends Specification { def is = Module.specifications(getClass) }
 
 object Module extends SpecificationCreation {
-  def specifications(klass: Class[_], filter: String => Boolean = (s: String) => true) = {
+  def specifications(klass: Class[?], filter: String => Boolean = (s: String) => true) = {
     val name = klass.getSimpleName.replace("$", "")
     val base = DirectoryPath.unsafe(new java.io.File(".").getAbsolutePath) / FileName.unsafe(name.toLowerCase) / "src" / "test" / "scala"
     val specs = SpecificationsFinder.specifications(basePath = base, verbose = false, filter = filter).take(3)

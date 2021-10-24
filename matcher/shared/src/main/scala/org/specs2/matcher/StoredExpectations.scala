@@ -7,13 +7,13 @@ import execute._
  * This trait evaluates expectations and stores them in a local variable for further usage
  */
 trait StoredExpectations extends Expectations {
-  private[specs2] lazy val matchResults = new scala.collection.mutable.ListBuffer[MatchResult[_]]
+  private[specs2] lazy val matchResults = new scala.collection.mutable.ListBuffer[MatchResult[?]]
   private[specs2] lazy val results = new scala.collection.mutable.ListBuffer[Result]
 
   def storedResults: scala.collection.Seq[Result] = {
     val failures = matchResults.filterNot(_.isSuccess)
     val rs = matchResults.map {
-      case f: MatchFailure[_] if failures.size > 1 =>
+      case f: MatchFailure[?] if failures.size > 1 =>
         f.copy(ok = () => addLocation(f.okMessage, f.toResult.location), ko = () => addLocation(f.koMessage, f.toResult.location))
 
       case other => other
@@ -43,7 +43,7 @@ trait StoredExpectations extends Expectations {
   }
 
   override def sandboxMatchResult[T](mr: =>MatchResult[T]): MatchResult[T] = synchronized {
-    val matchResultsCopy = new scala.collection.mutable.ListBuffer[MatchResult[_]]
+    val matchResultsCopy = new scala.collection.mutable.ListBuffer[MatchResult[?]]
     matchResultsCopy ++= matchResults
     try mr
     finally {

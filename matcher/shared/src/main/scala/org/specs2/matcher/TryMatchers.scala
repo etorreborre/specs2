@@ -46,7 +46,7 @@ trait TryBaseMatchers {
 private[specs2]
 trait TryBeHaveMatchers extends BeHaveMatchers { outer: TryBaseMatchers =>
 
-  implicit def toTryResultMatcher[T](result: MatchResult[Try[T]]) = new TryResultMatcher(result)
+  implicit def toTryResultMatcher[T](result: MatchResult[Try[T]]): TryResultMatcher[T] = new TryResultMatcher(result)
   class TryResultMatcher[T](result: MatchResult[Try[T]]) {
     def beSuccessfulTry = result(outer.beSuccessfulTry)
     def beASuccessfulTry = result(outer.beSuccessfulTry)
@@ -67,11 +67,11 @@ case class TrySuccessCheckedMatcher[T](check: ValueCheck[T]) extends OptionLikeC
 case class TryFailureMatcher[T]() extends OptionLikeMatcher[Try, T, Throwable]("a Failure", (_:Try[T]).failed.toOption) {
   def withValue(t: ValueCheck[Throwable]) = TryFailureCheckedMatcher(t)
 
-  def withThrowable[E <: Throwable : ClassTag] = TryFailureCheckedMatcher[T](ValueChecks.functionIsValueCheck { t: Throwable =>
+  def withThrowable[E <: Throwable : ClassTag] = TryFailureCheckedMatcher[T](ValueChecks.functionIsValueCheck { (t: Throwable) =>
     createExpectable(t).applyMatcher(AnyMatchers.beAnInstanceOf[E]).toResult
   })
 
-  def withThrowable[E <: Throwable : ClassTag](pattern: String) = TryFailureCheckedMatcher[T](ValueChecks.functionIsValueCheck { t: Throwable =>
+  def withThrowable[E <: Throwable : ClassTag](pattern: String) = TryFailureCheckedMatcher[T](ValueChecks.functionIsValueCheck { (t: Throwable) =>
     (createExpectable(t).applyMatcher(AnyMatchers.beAnInstanceOf[E]) and
      createExpectable(t.getMessage.notNull).applyMatcher(StringMatchers.beMatching(pattern))).toResult
   })

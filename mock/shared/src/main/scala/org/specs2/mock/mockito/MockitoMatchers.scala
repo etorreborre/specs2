@@ -33,10 +33,10 @@ trait MockitoMatchers extends ArgThat {
   def anyJavaCollectionOf[T : ClassTag]        = ArgumentMatchers.anyCollectionOf(implicitly[ClassTag[T]].runtimeClass)
   def anyJavaMapOf[K : ClassTag, V : ClassTag] = ArgumentMatchers.anyMapOf(implicitly[ClassTag[K]].runtimeClass, implicitly[ClassTag[V]].runtimeClass)
 
-  def anyList        = ArgumentMatchers.any(classOf[List[_]])
-  def anySet         = ArgumentMatchers.any(classOf[Set[_]])
-  def anyTraversable = ArgumentMatchers.any(classOf[Traversable[_]])
-  def anyMap         = ArgumentMatchers.any(classOf[Map[_,_]])
+  def anyList        = ArgumentMatchers.any(classOf[List[?]])
+  def anySet         = ArgumentMatchers.any(classOf[Set[?]])
+  def anyTraversable = ArgumentMatchers.any(classOf[Traversable[?]])
+  def anyMap         = ArgumentMatchers.any(classOf[Map[?,?]])
 
   def anyListOf[T : ClassTag]              = ArgumentMatchers.any(implicitly[ClassTag[List[T]]].runtimeClass).asInstanceOf[List[T]]
   def anySetOf[T : ClassTag]               = ArgumentMatchers.any(implicitly[ClassTag[Set[T]]].runtimeClass).asInstanceOf[Set[T]]

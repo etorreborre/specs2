@@ -29,34 +29,34 @@ trait NumericMatchers extends NumericBaseMatchers with NumericBeHaveMatchers {
 private[specs2]
 trait NumericBaseMatchers {
   /** matches if x <= n */
-  def beLessThanOrEqualTo[S <% Ordered[S]](n: S) = new BeLessThanOrEqualTo(n)
+  def beLessThanOrEqualTo[S](n: S)(implicit convert: S => Ordered[S]) = new BeLessThanOrEqualTo(n)
   /** matches if x <= n */
-  def lessThanOrEqualTo[S <% Ordered[S]](n: S) = beLessThanOrEqualTo(n)
+  def lessThanOrEqualTo[S](n: S)(implicit convert: S => Ordered[S]) = beLessThanOrEqualTo(n)
   /** alias for beLessThanOrEqualTo */
-  def be_<=[S <% Ordered[S]](n: S) = beLessThanOrEqualTo(n)
+  def be_<=[S](n: S)(implicit convert: S => Ordered[S]) = beLessThanOrEqualTo(n)
   /** alias for beLessThanOrEqualTo */
-  def <=[S <% Ordered[S]](n: S) = beLessThanOrEqualTo(n)
+  def <=[S](n: S)(implicit convert: S => Ordered[S]) = beLessThanOrEqualTo(n)
   /** matches if x < n */
-  def beLessThan[S <% Ordered[S]](n: S) = new BeLessThan(n)
-  def lessThan[S <% Ordered[S]](n: S) = beLessThan(n)
+  def beLessThan[S](n: S)(implicit convert: S => Ordered[S]) = new BeLessThan(n)
+  def lessThan[S](n: S)(implicit convert: S => Ordered[S]) = beLessThan(n)
   /** alias for beLessThan */
-  def be_<[S <% Ordered[S]](n: S) = beLessThan(n)
+  def be_<[S](n: S)(implicit convert: S => Ordered[S]) = beLessThan(n)
   /** alias for beLessThan */
-  def <[S <% Ordered[S]](n: S) = beLessThan(n)
+  def <[S](n: S)(implicit convert: S => Ordered[S]) = beLessThan(n)
   /** matches if x >= n */
-  def beGreaterThanOrEqualTo[S <% Ordered[S]](n: S) = new BeLessThan(n).not
-  def greaterThanOrEqualTo[S <% Ordered[S]](n: S) = beGreaterThanOrEqualTo(n)
+  def beGreaterThanOrEqualTo[S](n: S)(implicit convert: S => Ordered[S]) = new BeLessThan(n).not
+  def greaterThanOrEqualTo[S](n: S)(implicit convert: S => Ordered[S]) = beGreaterThanOrEqualTo(n)
   /** alias for beGreaterThanOrEqualTo */
-  def be_>=[S <% Ordered[S]](n: S) = beGreaterThanOrEqualTo(n)
+  def be_>=[S](n: S)(implicit convert: S => Ordered[S]) = beGreaterThanOrEqualTo(n)
   /** alias for beGreaterThanOrEqualTo */
-  def >=[S <% Ordered[S]](n: S) = beGreaterThanOrEqualTo(n)
+  def >=[S](n: S)(implicit convert: S => Ordered[S]) = beGreaterThanOrEqualTo(n)
   /** matches if x > n */
-  def beGreaterThan[S <% Ordered[S]](n: S) = new BeLessThanOrEqualTo(n).not
-  def greaterThan[S <% Ordered[S]](n: S) = beGreaterThan(n)
+  def beGreaterThan[S](n: S)(implicit convert: S => Ordered[S]) = new BeLessThanOrEqualTo(n).not
+  def greaterThan[S](n: S)(implicit convert: S => Ordered[S]) = beGreaterThan(n)
   /** alias for beGreaterThan */
-  def be_>[S <% Ordered[S]](n: S) = beGreaterThan(n)
+  def be_>[S](n: S)(implicit convert: S => Ordered[S]) = beGreaterThan(n)
   /** alias for beGreaterThan */
-  def >[S <% Ordered[S]](n: S) = beGreaterThan(n)
+  def >[S](n: S)(implicit convert: S => Ordered[S]) = beGreaterThan(n)
 
   /** matches if actual = n +/- delta */
   def beCloseTo[S : Numeric](n: S, delta: S): Matcher[S] = new BeCloseTo(n, delta)
@@ -84,13 +84,13 @@ trait NumericBaseMatchers {
 
 
   /** matches if a value is between 2 others according to an Ordering */
-  def beBetween[T <% Ordered[T]](t1: T, t2: T): BetweenMatcher[T] = BetweenMatcher(t1, t2)
-  def between[T <% Ordered[T]](t1: T, t2: T): BetweenMatcher[T] = BetweenMatcher(t1, t2)
+  def beBetween[T](t1: T, t2: T)(implicit convert: T => Ordered[T]): BetweenMatcher[T] = BetweenMatcher(t1, t2)
+  def between[T](t1: T, t2: T)(implicit convert: T => Ordered[T]): BetweenMatcher[T] = BetweenMatcher(t1, t2)
 
   /** alias for the adventurous: 5 must (`be[(2, 7)`[`) */
-  def `be[`[T <% Ordered[T]](t1: T, t2: T): BetweenMatcher[T] = BetweenMatcher(t1, t2)
+  def `be[`[T](t1: T, t2: T)(implicit convert: T => Ordered[T]): BetweenMatcher[T] = BetweenMatcher(t1, t2)
   /** alias for the adventurous: 5 must (`be](2, 7)`[`) */
-  def `be]`[T <% Ordered[T]](t1: T, t2: T): BetweenMatcher[T] = BetweenMatcher(t1, t2).excludingStart
+  def `be]`[T](t1: T, t2: T)(implicit convert: T => Ordered[T]): BetweenMatcher[T] = BetweenMatcher(t1, t2).excludingStart
 }
 
 /** transient class allowing the creation of a delta */
@@ -106,8 +106,8 @@ trait NumericBeHaveMatchers extends BeHaveMatchers { outer: NumericBaseMatchers 
    * matcher aliases and implicits to use with be + matcher
    */
 
-  implicit def toOrderedResultMatcher[S <% Ordered[S]](result: MatchResult[S]): OrderedResultMatcher[S] = new OrderedResultMatcher(result)
-  class OrderedResultMatcher[S <% Ordered[S]](result: MatchResult[S]) {
+  implicit def toOrderedResultMatcher[S](result: MatchResult[S])(implicit convert: S => Ordered[S]): OrderedResultMatcher[S] = new OrderedResultMatcher(result)
+  class OrderedResultMatcher[S](result: MatchResult[S])(implicit convert: S => Ordered[S]) {
     def be_<=(n: S) = result(outer.beLessThanOrEqualTo(n))
     def <=(n: S) = result(outer.beLessThanOrEqualTo(n))
     def lessThanOrEqualTo(n: S) = result(outer.beLessThanOrEqualTo(n))
@@ -144,10 +144,10 @@ trait NumericBeHaveMatchers extends BeHaveMatchers { outer: NumericBaseMatchers 
   implicit def toNeutralMatcherOrdered(result: NeutralMatcher[Any]) : NeutralMatcherOrdered =
     new NeutralMatcherOrdered(result)
   class NeutralMatcherOrdered(result: NeutralMatcher[Any]) {
-    def <=[S <% Ordered[S]](n: S)    = outer.beLessThanOrEqualTo(n)
-    def <[S <% Ordered[S]](n: S)     = outer.beLessThan(n)
-    def >=[S <% Ordered[S]](n: S)    = outer.beGreaterThanOrEqualTo(n)
-    def >[S <% Ordered[S]](n: S)     = outer.beGreaterThan(n)
+    def <=[S](n: S)(implicit convert: S => Ordered[S])    = outer.beLessThanOrEqualTo(n)
+    def <[S](n: S)(implicit convert: S => Ordered[S])    = outer.beLessThan(n)
+    def >=[S](n: S)(implicit convert: S => Ordered[S])    = outer.beGreaterThanOrEqualTo(n)
+    def >[S](n: S)(implicit convert: S => Ordered[S])    = outer.beGreaterThan(n)
   }
 
   implicit def toNeutralMatcherNumeric(result: NeutralMatcher[Any]) : NeutralMatcherNumeric =
@@ -180,19 +180,21 @@ object NumericMatchersDescription {
   }
 }
 
-class BeLessThanOrEqualTo[T <% Ordered[T]](n: T) extends Matcher[T] {
+class BeLessThanOrEqualTo[T](n: T)(implicit convert: T => Ordered[T]) extends Matcher[T] {
   def apply[S <: T](a: Expectable[S]) = {
-    val r = a.value <= n
-    val isEqual = a.value == n
+    val t = convert(a.value)
+    val r = t <= n
+    val isEqual = t == n
     result(r,
            if (isEqual) description(a) + " is equal to " + n.toString else description(a) + " is less than " + n.toString,
            description(a) + " is greater than " + n.toString,
            a)
   }
 }
-class BeLessThan[T <% Ordered[T]](n: T) extends Matcher[T] {
+class BeLessThan[T](n: T)(implicit convert: T => Ordered[T]) extends Matcher[T] {
   def apply[S <: T](a: Expectable[S]) = {
-    val r = a.value < n
+    val t = convert(a.value)
+    val r = t < n
     result(r,
            description(a) + " is less than " + n.toString,
            description(a) + " is not less than " + n.toString,
@@ -226,17 +228,17 @@ class BeSignificantlyCloseTo[T : Numeric](target: T, sf: SignificantFigures) ext
 case class SignificantTarget[T : Numeric](target: T, significantFigures: SignificantFigures)
 case class SignificantFigures(number: Int)
 
-case class BetweenMatcher[T <% Ordered[T]](t1: T, t2: T, includeStart: Boolean = true, includeEnd: Boolean = true) extends Matcher[T] {
+case class BetweenMatcher[T](t1: T, t2: T, includeStart: Boolean = true, includeEnd: Boolean = true)(implicit convert: T => Ordered[T]) extends Matcher[T] {
   def apply[S <: T](s: Expectable[S]) = {
-    val value = s.value
+    val value = convert(s.value)
     val included = (includeStart && (value >= t1) || !includeStart && (value > t1)) &&
                    (includeEnd   && (value <= t2) || !includeEnd   && (value < t2))
 
     def bracket(b: Boolean) = if (b) "[" else "]"
     val (start, end) = (bracket(includeStart), bracket(!includeEnd))
 
-    val (ok, ko) = (s.value+" is in "+start+t1+", "+t2+end,
-      s.value+" is not in "+start+t1+", "+t2+end)
+    val (ok, ko) = (value.toString+" is in "+start+t1+", "+t2+end,
+      value.toString+" is not in "+start+t1+", "+t2+end)
     result(included, ok, ko, s)
   }
 

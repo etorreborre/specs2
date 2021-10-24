@@ -7,7 +7,7 @@ import org.specs2.fp._
 object FutureInstances {
 
   /** Applicative instance running futures in parallel for Scalaz */
-  implicit def parallelApplicative(implicit ec: ExecutionContext) = new Applicative[Future] {
+  implicit def parallelApplicative(implicit ec: ExecutionContext): Applicative[Future] = new Applicative[Future] {
     def point[A](a: => A): Future[A] = Future(a)
 
     def ap[A,B](ffa: => Future[A])(ff: => Future[A => B]): Future[B] =
@@ -18,4 +18,3 @@ object FutureInstances {
   }
 
 }
-

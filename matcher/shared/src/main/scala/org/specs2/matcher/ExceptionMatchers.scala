@@ -49,7 +49,7 @@ trait ExceptionBaseMatchers extends ExpectationsCreation {
   /**
    * Exception matcher checking the type of a thrown exception.
    */
-  class ExceptionClassMatcher(klass: Class[_]) extends Matcher[Any] { outer =>
+  class ExceptionClassMatcher(klass: Class[?]) extends Matcher[Any] { outer =>
 
     def apply[S <: Any](value: Expectable[S]) =
       checkBoolean(value, checkClassType, andFinally = dropException)
@@ -77,7 +77,7 @@ trait ExceptionBaseMatchers extends ExpectationsCreation {
 
     private def asString(exception: Any) =
       exception match {
-        case e: Class[_]   => e.getName
+        case e: Class[?]   => e.getName
         case ex: Throwable => ex.getClass.getName + ": " + ex.getMessage.notNull
         case other         => other.toString
       }
@@ -89,7 +89,7 @@ trait ExceptionBaseMatchers extends ExpectationsCreation {
   }
 
   /** re-throw an Error if an Exception was expected */
-  private def errorMustBeThrownIfExceptionIsExpected(e: Throwable, klass: Class[_]) =
+  private def errorMustBeThrownIfExceptionIsExpected(e: Throwable, klass: Class[?]) =
     if (classOf[Exception].isAssignableFrom(klass) && classOf[Error].isAssignableFrom(e.getClass)) throw e
 
   /**
@@ -216,7 +216,7 @@ trait ExceptionBaseMatchers extends ExpectationsCreation {
   private def getException[E <: Throwable](value: =>Any): Option[Throwable] = {
     catchAll {
       value match {
-        case e: Expectable[_] => e.value
+        case e: Expectable[?] => e.value
         case _ => value
       }
     }(identity).left.toOption

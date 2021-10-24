@@ -26,7 +26,7 @@ trait Json {
   /** show JSON objects with null values shown as 'null' */
 
   def showJson(a: Any): String = a match {
-    case map: Map[_, _]  => map.map { case (key, value) => s""""$key":${showJsonValue(value)}"""}.mkString("{", ",", "}")
+    case map: Map[?, ?]  => map.map { case (key, value) => s""""$key":${showJsonValue(value)}"""}.mkString("{", ",", "}")
     case (key, value)    => s"""{"$key":${showJsonValue(value)}}"""
     case JSONObject(map) => showJson(map)
     case JSONArray(list) => list.map(showJsonValue).mkString("[", ",", "]")
@@ -48,7 +48,7 @@ trait Json {
     case b: Boolean      => b.toString
     case other           => showJson(other)
   }
-  
+
 }
 private[specs2]
 object Json extends Json

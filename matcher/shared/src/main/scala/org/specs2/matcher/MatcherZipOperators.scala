@@ -12,7 +12,9 @@ trait MatcherZipOperators extends ExpectationsCreation { outer =>
   def contain[T, S](f: (=>(T)) => Matcher[S])(expected: =>Seq[T]) = (s: Seq[S]) =>
     expected.contain(f)(createExpectable(s))
 
-  implicit class ContainSeqMatcherFunction[T](seq: Seq[T]) {
+  implicit def toContainSeqMatcherFunction[T](seq: Seq[T]): ContainSeqMatcherFunction[T] = ContainSeqMatcherFunction[T](seq)
+
+  case class ContainSeqMatcherFunction[T](seq: Seq[T]) {
     def contain[S](f: (=>T) => Matcher[S]): ContainWithResultSeq[S] =
       new ContainWithResultSeq(seq.map(t => ValueChecks.matcherIsValueCheck(f(t)))).exactly
   }
@@ -389,35 +391,6 @@ trait MatcherZipOperatorsCodeGeneration { outer =>
 object MatcherZipOperators extends MatcherZipOperators
 
 /**
- * This trait can be mixed in to remove the implicit definitions for zipping matchers
- */
-trait NoMatcherZipOperatorsImplicits extends MatcherZipOperators {
-  override def ContainSeqMatcherFunction[T](seq: Seq[T]) = super.ContainSeqMatcherFunction(seq)
-
-  override def TupleMatcher2[T1,T2](t: (T1,T2)) = super.TupleMatcher2(t)
-  override def TupleMatcher3[T1,T2,T3](t: (T1,T2,T3)) = super.TupleMatcher3(t)
-  override def TupleMatcher4[T1,T2,T3,T4](t: (T1,T2,T3,T4)) = super.TupleMatcher4(t)
-  override def TupleMatcher5[T1,T2,T3,T4,T5](t: (T1,T2,T3,T4,T5)) = super.TupleMatcher5(t)
-  override def TupleMatcher6[T1,T2,T3,T4,T5,T6](t: (T1,T2,T3,T4,T5,T6)) = super.TupleMatcher6(t)
-  override def TupleMatcher7[T1,T2,T3,T4,T5,T6,T7](t: (T1,T2,T3,T4,T5,T6,T7)) = super.TupleMatcher7(t)
-  override def TupleMatcher8[T1,T2,T3,T4,T5,T6,T7,T8](t: (T1,T2,T3,T4,T5,T6,T7,T8)) = super.TupleMatcher8(t)
-  override def TupleMatcher9[T1,T2,T3,T4,T5,T6,T7,T8,T9](t: (T1,T2,T3,T4,T5,T6,T7,T8,T9)) = super.TupleMatcher9(t)
-  override def TupleMatcher10[T1,T2,T3,T4,T5,T6,T7,T8,T9,T10](t: (T1,T2,T3,T4,T5,T6,T7,T8,T9,T10)) = super.TupleMatcher10(t)
-  override def TupleMatcher11[T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11](t: (T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11)) = super.TupleMatcher11(t)
-  override def TupleMatcher12[T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12](t: (T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12)) = super.TupleMatcher12(t)
-  override def TupleMatcher13[T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13](t: (T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13)) = super.TupleMatcher13(t)
-  override def TupleMatcher14[T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14](t: (T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14)) = super.TupleMatcher14(t)
-  override def TupleMatcher15[T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15](t: (T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15)) = super.TupleMatcher15(t)
-  override def TupleMatcher16[T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16](t: (T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16)) = super.TupleMatcher16(t)
-  override def TupleMatcher17[T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17](t: (T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17)) = super.TupleMatcher17(t)
-  override def TupleMatcher18[T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18](t: (T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18)) = super.TupleMatcher18(t)
-  override def TupleMatcher19[T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19](t: (T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19)) = super.TupleMatcher19(t)
-  override def TupleMatcher20[T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19,T20](t: (T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19,T20)) = super.TupleMatcher20(t)
-  override def TupleMatcher21[T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19,T20,T21](t: (T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19,T20,T21)) = super.TupleMatcher21(t)
-  override def TupleMatcher22[T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19,T20,T21,T22](t: (T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19,T20,T21,T22)) = super.TupleMatcher22(t)
-}
-
-/**
  * code generation for the NoMatcherZipOperatorsImplicits trait
  */
 trait NoMatcherZipOperatorsImplicitsCodeGeneration {
@@ -428,4 +401,3 @@ trait NoMatcherZipOperatorsImplicitsCodeGeneration {
     s"""override def TupleMatcher$n[$Ts](t: ($Ts)) = super.TupleMatcher$n(t)"""
   }
 }
-

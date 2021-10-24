@@ -17,7 +17,7 @@ import scala.util.control.NonFatal
 /**
  * Runner for specs2 specifications
  */
-class JUnitRunner(klass: Class[_]) extends org.junit.runner.Runner with Filterable { outer =>
+class JUnitRunner(klass: Class[?]) extends org.junit.runner.Runner with Filterable { outer =>
 
   /** specification to execute */
   lazy val specification = {

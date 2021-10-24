@@ -45,9 +45,9 @@ object TopologicalSort {
     def visit(n: Node): Unit = {
       if (n.temp) throw new CycleException
       else if (!n.permanent) {
-        n.setTemp
+        n.setTemp()
         processed.filter(m => dependsOn(n.t, m.t)).foreach(visit)
-        n.setPermanent
+        n.setPermanent()
         result.prepend(n.t)
       }
     }

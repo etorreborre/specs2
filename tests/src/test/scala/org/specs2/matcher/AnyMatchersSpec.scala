@@ -80,8 +80,8 @@ class AnyMatchersSpec extends script.Specification with Groups with ResultMatche
   ${ BigInt(1) must not have superClass[String] }
 
   haveInterface checks if a value has a given interface in the list of its interfaces
-  ${ AsResult(new java.util.ArrayList() must haveInterface[java.util.List[_]]) }
-  ${ AsResult(BigInt(1) must not have interface[java.util.List[_]]) }
+  ${ AsResult(new java.util.ArrayList() must haveInterface[java.util.List[?]]) }
+  ${ AsResult(BigInt(1) must not have interface[java.util.List[?]]) }
 
   beAssignableFrom checks if a class is assignable from another
   ${ classOf[OutputStream] must beAssignableFrom[FileOutputStream] }

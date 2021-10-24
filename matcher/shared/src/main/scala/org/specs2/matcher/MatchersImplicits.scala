@@ -44,7 +44,7 @@ trait MatchResultImplicits { outer =>
    * implicit definition to accept any MatchResult as a Boolean value.
    * It is true if the MatchResult is not an Error or a Failure
    */
-  implicit def fromMatchResult(r: =>MatchResult[_]): Boolean = r.isSuccess || r.toResult.isSkipped || r.toResult.isPending
+  implicit def fromMatchResult(r: =>MatchResult[?]): Boolean = r.isSuccess || r.toResult.isSkipped || r.toResult.isPending
 
 }
 

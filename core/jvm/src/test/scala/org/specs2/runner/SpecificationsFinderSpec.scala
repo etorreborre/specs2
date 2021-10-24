@@ -37,7 +37,7 @@ class SpecificationsFinderSpec extends Spec { def is = s2"""
     SpecificationsFinder.findSpecifications(
       basePath = DirectoryPath.unsafe(base) / "src" / "test" / "scala",
       filter = filter
-    ).runOption must beSome((l: List[_]) => l must haveSize(1))
+    ).runOption must beSome((l: List[?]) => l must haveSize(1))
   }
 
   def findFiles: Matcher[Operation[List[FilePath]]] = (operation: Operation[List[FilePath]]) =>

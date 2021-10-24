@@ -55,8 +55,8 @@ trait MocksCreation extends TheMockitoMocker with ClassesOf {
                  verbose         : MockProperty[Boolean] = MockProperty[Boolean](),
                  defaultAnswer   : MockProperty[InvocationOnMock => Any] = MockProperty[InvocationOnMock => Any](),
                  defaultReturn   : MockProperty[Any] = MockProperty[Any](),
-                 extraInterface  : MockProperty[Class[_]] = MockProperty[Class[_]](),
-                 extraInterfaces : MockProperty[Seq[Class[_]]] = MockProperty[Seq[Class[_]]]()) = {
+                 extraInterface  : MockProperty[Class[?]] = MockProperty[Class[?]](),
+                 extraInterfaces : MockProperty[Seq[Class[?]]] = MockProperty[Seq[Class[?]]]()) = {
       update(name)(n => mockitoSettings.name(n)).
       update(smart)(s => if (s) mockitoSettings.defaultAnswer(org.mockito.Mockito.RETURNS_SMART_NULLS) else mockitoSettings).
       update(verbose)(v => if (v) mockitoSettings.invocationListeners(new VerboseMockInvocationLogger()) else mockitoSettings).
@@ -85,19 +85,19 @@ trait MocksCreation extends TheMockitoMocker with ClassesOf {
 
   /**
    * create a mock object with smart return values: val m = smartMock[java.util.List[String]]
-   * 
+   *
    * This is the equivalent of Mockito.mock(List.class, SMART_NULLVALUES) but testing shows that it is not working well with Scala.
    */
   def smartMock[T : ClassTag]: T = Mocked[T]().smart
   /**
-   * create a spy on an object. 
-   * 
-   * A spy is a real object but can still have some of its methods stubbed. However the syntax for stubbing a spy is a bit different than 
+   * create a spy on an object.
+   *
+   * A spy is a real object but can still have some of its methods stubbed. However the syntax for stubbing a spy is a bit different than
    * with a mock:
    * {{{
    * val s = spy(new LinkedList[String])
    * doReturn("one").when(s).get(0) // instead of s.get(0) returns "one" which would throw an exception
-   * 
+   *
    * }}}
    */
   def spy[T](m: T): T = mocker.spy(m)

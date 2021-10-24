@@ -220,10 +220,9 @@ class ArrayDiffable[E](implicit di: Diffable[E]) extends Diffable[Array[E]] {
 class FallbackDiffable[T] extends Diffable[T] {
   def diff(actual: T, expected: T) = {
     (actual, expected) match {
-      case (e1: Array[_], e2: Array[_]) =>  Diffable.diff(e1.map(a => a:Any), e2.map(a => a:Any))
+      case (e1: Array[?], e2: Array[?]) =>  Diffable.diff(e1.map(a => a:Any), e2.map(a => a:Any))
       case (a, e) if a == e =>              OtherIdentical(a)
       case (a, e) =>                        OtherDifferent(a, e)
     }
   }
 }
-

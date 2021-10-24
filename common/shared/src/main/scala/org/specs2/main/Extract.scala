@@ -7,6 +7,7 @@ import reflect.Classes
 
 import scala.reflect.ClassTag
 import org.specs2.fp.Memo._
+import org.specs2.control.ioOperationToOption
 
 /**
  * Extraction functions for command line parameters

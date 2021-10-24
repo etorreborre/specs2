@@ -54,7 +54,7 @@ trait MatchResultStackTrace {
   /** this method can be overridden to avoid filling-in a stacktrace indicating the location of the result */
   protected def setStacktrace[T](m: MatchResult[T]): MatchResult[T] = {
     m match {
-      case f: MatchFailure[_] if f.trace.isEmpty => f.copy(trace = (new Exception).getStackTrace.toList)
+      case f: MatchFailure[?] if f.trace.isEmpty => f.copy(trace = (new Exception).getStackTrace.toList)
       case other => other
     }
   }

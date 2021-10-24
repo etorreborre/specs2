@@ -88,7 +88,7 @@ object ArgumentsProcessor {
       }
       // special case for sequences and sets because they have an apply method making them instances of Function1
       // yet they define a useful equals method
-      else if (arg.isInstanceOf[Seq[_]] || arg.isInstanceOf[Set[_]]) {
+      else if (arg.isInstanceOf[Seq[?]] || arg.isInstanceOf[Set[?]]) {
         matchers.add(new Equals(arg))
       }
       else if (arg.isInstanceOf[scala.runtime.AbstractFunction1[_,_]]) {
@@ -116,4 +116,3 @@ object ArgumentsProcessor {
     }
   }
 }
-

@@ -30,9 +30,9 @@ lazy val specs2Settings = Seq(
   organization := "org.specs2",
   GlobalScope / scalazVersion := "7.2.32",
   specs2ShellPrompt,
-  scalaVersion := "2.13.6",
+  scalaVersion := "3.1.0",
   SettingKey[Boolean]("ide-skip-project").withRank(KeyRanks.Invisible) := platformDepsCrossVersion.value == ScalaNativeCrossVersion.binary,
-  crossScalaVersions := Seq(scalaVersion.value, "2.12.14"))
+  crossScalaVersions := Seq(scalaVersion.value, "2.12.14", "2.13.6"))
 
 lazy val tagName = Def.setting {
   s"specs2-${version.value}"
@@ -68,7 +68,7 @@ lazy val shapelessVersion = "2.3.7"
 lazy val catsVersion = "2.6.1"
 lazy val catsEffectVersion = "3.1.1"
 
-val commonSettings =
+val commonSettings: Seq[Def.Setting[_]] =
     coreDefaultSettings  ++
     depends.resolvers    ++
     specs2Settings       ++
@@ -114,22 +114,15 @@ lazy val catsJVM = cats.jvm
 
 lazy val common = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("common")).
   settings(
-    libraryDependencies ++=
-      depends.paradise(scalaVersion.value) ++
-      Seq(depends.reflect(scalaOrganization.value, scalaVersion.value),
-        depends.scalacheck.value % Test),
+    libraryDependencies += depends.scalacheck.value % Test,
     commonSettings,
     name := "specs2-common"
-  ).
-  platformsSettings(JVMPlatform, JSPlatform)(
-    libraryDependencies ++= depends.scalaParser.value,
   ).
   jsSettings(depends.jsTest, commonJsSettings).
   jvmSettings(depends.jvmTest, commonJvmSettings).
   nativeSettings(
     commonNativeSettings,
-    depends.nativeTest,
-    libraryDependencies ++= depends.scalaParserNative.value,
+    depends.nativeTest
   ).
   platformsSettings(JSPlatform, NativePlatform)(
     commonJsNativeSettings
@@ -409,48 +402,46 @@ lazy val specs2ShellPrompt = ThisBuild / shellPrompt := { state =>
 def scalaSourceVersion(scalaBinaryVersion: String) =
   scalaBinaryVersion.split('.').take(2).mkString(".")
 
-lazy val compilationSettings = Seq(
+lazy val compilationSettings: Seq[Def.Setting[_]] = Seq(
   // https://gist.github.com/djspiewak/976cd8ac65e20e136f05
   Compile / unmanagedSourceDirectories ++=
     Seq((Compile / sourceDirectory).value / s"scala-${scalaSourceVersion(scalaBinaryVersion.value)}",
       (Compile / sourceDirectory).value / s"scala-scalaz-7.1.x",
       (Test / test / sourceDirectory).value / s"scala-scalaz-7.1.x"),
   maxErrors := 20,
-  Compile / scalacOptions ++=
-    Seq(
-      "-Xlint",
-      "-Ywarn-numeric-widen",
-      "-Ywarn-value-discard",
-      "-deprecation:false", "-Xcheckinit", "-unchecked", "-feature", "-language:_"),
-  Compile / scalacOptions ++= {
-    CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, v)) if v <= 12 =>
-        Seq(
-          "-Ywarn-unused-import",
-          "-Yno-adapted-args"
-        )
-      case _ =>
-        Nil
-    }
-  },
   scalacOptions ++= {
     CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, v)) if v <= 12 =>
-        Seq(
-          "-Ypartial-unification"
-        )
-      case _ =>
-        Seq(
-          "-Wconf:cat=lint-multiarg-infix:s",
-          "-Xlint:-byname-implicit")
+      case Some((3, _)) => Seq(
+        "-old-syntax", "-rewrite",
+        "-language:implicitConversions",
+        "-language:_",
+        "-Ykind-projector:underscores")
+      case _ => Seq(
+        "-Ypartial-unification",
+        "-Xlint",
+        "-Ywarn-numeric-widen",
+        "-Ywarn-value-discard",
+        "-deprecation:false",
+        "-Xcheckinit",
+        "-unchecked",
+        "-feature",
+        "-language:_",
+        "-Xsource:3",
+        "-P:kind-projector:underscore-placeholders")
     }
   },
-  addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.13.0" cross CrossVersion.full),
+  libraryDependencies ++= {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+       case Some((3, _)) => Seq()
+       case _ => List(compilerPlugin("org.typelevel" % "kind-projector" % "0.13.2" cross CrossVersion.full))
+    }
+  },
   Test / scalacOptions += "-Yrangepos",
   Compile / doc / scalacOptions ++= Seq("-feature", "-language:_"),
   Compile / console / scalacOptions := Seq("-Yrangepos", "-feature", "-language:_"),
   Test / console / scalacOptions := Seq("-Yrangepos", "-feature", "-language:_")
 )
+
 
 lazy val testingSettings = Seq(
   test / console / initialCommands := "import org.specs2._",

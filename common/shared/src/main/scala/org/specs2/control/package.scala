@@ -30,7 +30,7 @@ package object control {
 
   type Action[A] = Eff[ActionStack, A]
   type Operation[A] = Eff[OperationStack, A]
-  
+
   type AsyncStream[A] = Producer[ActionStack, A]
   type AsyncTransducer[A, B] = Transducer[ActionStack, A, B]
 
@@ -177,7 +177,7 @@ package object control {
   }
 
   implicit class ioOperationToOption[T](operation: Operation[T]) {
-    def runOption = runOperation(operation).toOption
+    def runOption: Option[T] = runOperation(operation).toOption
 
     def toAction: Action[T] = operation
   }

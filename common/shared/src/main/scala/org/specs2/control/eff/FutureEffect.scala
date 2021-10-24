@@ -41,7 +41,7 @@ object TimedFuture {
     def point[A](x: =>A) = TimedFuture(_ => Future.successful(x))
 
     def ap[A, B](fa: =>TimedFuture[A])(ff: =>TimedFuture[(A) => B]): TimedFuture[B] = {
-      val newCallback = { es: ExecutorServices =>
+      val newCallback = { (es: ExecutorServices) =>
         implicit val ec: ExecutionContext = es.executionContext
 
         val ffRan = Future(ff.runNow(es)).flatMap(identity)
@@ -60,7 +60,7 @@ object TimedFuture {
       TimedFuture[B](es => fa.runNow(es).flatMap(f(_).runNow(es))(es.executionContext))
 
     override def ap[A, B](fa: =>TimedFuture[A])(ff: =>TimedFuture[(A) => B]): TimedFuture[B] = {
-      val newCallback = { es: ExecutorServices =>
+      val newCallback = { (es: ExecutorServices) =>
         implicit val ec: ExecutionContext = es.executionContext
 
         Future(ff.runNow(es)).flatMap(identity).flatMap { f =>
@@ -130,31 +130,10 @@ trait FutureInterpretation extends FutureTypes {
   import interpret.of
 
   final def futureAttempt[R, A](e: Eff[R, A])(implicit future: TimedFuture /= R): Eff[R, Throwable Either A] =
-    interpret.interceptNatM[R, TimedFuture, Throwable Either *, A](e,
-      new (TimedFuture ~> (TimedFuture of (Throwable Either *))#l) {
+    interpret.interceptNatM[R, TimedFuture, Either[Throwable, *], A](e,
+      new (TimedFuture ~> (TimedFuture of (Either[Throwable, *]))#l) {
         override def apply[X](fa: TimedFuture[X]): TimedFuture[Throwable Either X] = fa.attempt
       })
-
-  final def memoize[A](key: AnyRef, cache: Cache, future: TimedFuture[A]): TimedFuture[A] =
-    TimedFuture { es =>
-      val prom = Promise[A]()
-      cache.get[A](key).fold {
-        prom.completeWith(future.runNow(es).map { v => val _ = cache.put(key, v); v }(es.executionContext))
-      } { v => prom.success(v) }
-      prom.future
-    }
-
-  /**
-   * Memoize future values using a cache
-   *
-   * if this method is called with the same key the previous value will be returned
-   */
-  final def futureMemo[R, A](key: AnyRef, cache: Cache, e: Eff[R, A])(implicit future: TimedFuture /= R): Eff[R, A] =
-    interpret.interceptNat[R, TimedFuture, A](e)(
-      new (TimedFuture ~> TimedFuture) {
-        override def apply[X](fa: TimedFuture[X]): TimedFuture[X] = memoize(key, cache, fa)
-      }
-    )
 
 }
 

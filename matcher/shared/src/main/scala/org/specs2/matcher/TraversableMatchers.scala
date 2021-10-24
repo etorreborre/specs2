@@ -61,12 +61,13 @@ trait TraversableBaseMatchers { outer =>
     def apply[S <: Traversable[T]](t: Expectable[S]) = {
       val missing = seq.difference(t.value.toSeq, equality)
       val added   = t.value.toSeq.difference(seq, equality)
-      def message(diffs: scala.collection.Seq[_], msg: String) =
+      def message(diffs: scala.collection.Seq[?], msg: String) =
         if (diffs.isEmpty) "" else diffs.mkString("\n  "+msg+": ", ", ", "")
 
+      val value: S = t.value
       result(missing.isEmpty && added.isEmpty,
-             t.value + "\n  contains the same elements as\n"+ seq,
-             t.value + message(missing, "is missing") + message(added, "must not contain"),
+             value.toString + "\n  contains the same elements as\n"+ seq,
+             value.toString + message(missing, "is missing") + message(added, "must not contain"),
              t)
     }
   }

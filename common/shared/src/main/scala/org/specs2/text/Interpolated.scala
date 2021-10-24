@@ -7,7 +7,7 @@ import Trim._
  * This class extracts interpolated expressions from an interpolated string, given the string content and the text
  * pieces in between the interpolated expressions
  */
-class Interpolated(stringContent: String, texts: Seq[String]) extends InterpolatedParsers {
+class Interpolated(stringContent: String, texts: Seq[String]) {
 
   def expressions = {
     texts.zip(texts.drop(1)).foldLeft((stringContent, Seq[String]())) { case ((content, exps), (text, next)) =>
@@ -15,7 +15,7 @@ class Interpolated(stringContent: String, texts: Seq[String]) extends Interpolat
                         replace("$$", "$") // in next, this replacement has already been done
       val textToParse = new String(if (minusText.indexOf(next) > 0) minusText.substring(0, minusText.indexOf(next)) else minusText)
 
-      val expression = interpolate(textToParse)
+      val expression = textToParse
       (new String(minusText.drop(expression.length)), exps :+ trimVariableDeclaration(expression))
     }._2
   }

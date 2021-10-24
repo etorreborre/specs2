@@ -19,33 +19,35 @@ object depends {
   def scalazConcurrent(scalazVersion: String) =
     "org.scalaz" %% "scalaz-concurrent" % scalazVersion
 
-  def jvmTest =
-    libraryDependencies ++= Seq(
-      "org.scala-sbt" % "test-interface" % "1.0",
-      "org.portable-scala" %%% "portable-scala-reflect" % "1.1.1",
-      "org.scala-js" %% "scalajs-stubs" % "1.0.0" % "provided")
+  def jvmTest: Seq[Def.Setting[_]] =
+    Seq(libraryDependencies ++= {
+      CrossVersion.partialVersion(scalaVersion.value) match {
+         case Some((3, _)) =>
+           Seq("org.scala-sbt" % "test-interface" % "1.0")
+         case _ =>
+           Seq("org.scala-sbt" % "test-interface" % "1.0",
+               "org.scala-js" %% "scalajs-stubs" % "1.0.0" % "provided")
+      }
+    })
 
-  def jsTest =
-    Seq(libraryDependencies ++= Seq(
-      "org.scala-js" %% "scalajs-test-interface" % scalaJSVersion,
-      "org.portable-scala" %%% "portable-scala-reflect" % "1.1.1"),
-        Test / scalaJSStage := FastOptStage)
+  def jsTest: Seq[Def.Setting[_]] =
+    Seq(
+      libraryDependencies ++= {
+        CrossVersion.partialVersion(scalaVersion.value) match {
+           case Some((3, _)) =>
+             Seq("org.scala-js" %% "scalajs-test-interface" % scalaJSVersion)
+           case _ =>
+             Seq("org.scala-js" %% "scalajs-test-interface" % scalaJSVersion,
+               "org.portable-scala" %%% "portable-scala-reflect" % "1.1.1")
+        }
+      },
+      Test / scalaJSStage := FastOptStage)
 
   def jsMacrotaskExecutor =
     Seq(libraryDependencies += "org.scala-js" %%% "scala-js-macrotask-executor" % "1.0.0")
 
   def nativeTest =
     Seq(libraryDependencies += "org.scala-native" %%% "test-interface" % nativeVersion)
-
-  def scalaParser = Def.setting {
-    Seq("org.scala-lang.modules" %%% "scala-parser-combinators" % "1.1.2")
-  }
-  def scalaParserNative = Def.setting {
-    if(nativeVersion == "0.4.0")
-      Seq("com.github.lolgab" %%% "scala-parser-combinators" % "1.1.2")
-    else
-      scalaParser.value
-  }
 
   def scalaXml = "org.scala-lang.modules" %% "scala-xml" % "1.3.0"
 
@@ -66,8 +68,7 @@ object depends {
       Nil
     else
       Seq(compilerPlugin(
-          "org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.patch),
-          "org.scalamacros" %% "quasiquotes" % "2.1.0")
+          "org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.patch))
 
   lazy val resolvers =
     Seq(sbt.Keys.resolvers ++= Seq(

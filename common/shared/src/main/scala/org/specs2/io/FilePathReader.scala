@@ -28,7 +28,7 @@ trait FilePathReader {
   /**
    * filter files according to a regex pattern
    */
-  def filterWithPattern(pattern: String): FilePath => Boolean = { filePath: FilePath =>
+  def filterWithPattern(pattern: String): FilePath => Boolean = { (filePath: FilePath) =>
     // remove any letter drive on Windows
     filePath.path.replaceFirst(".:", "").unixize matches pattern
   }
@@ -97,7 +97,7 @@ trait FilePathReader {
   /** read the content of a file as an Array of Bytes */
   def readBytes(filePath: FilePath): Operation[Array[Byte]] = exists(filePath).map { exists =>
     val stream = new BufferedInputStream(new FileInputStream(filePath.path))
-    try     Stream.continually(stream.read).takeWhile(-1 !=).map(_.toByte).toArray
+    try     Stream.continually(stream.read).takeWhile(n => n != -1).map(_.toByte).toArray
     finally stream.close()
   }
 

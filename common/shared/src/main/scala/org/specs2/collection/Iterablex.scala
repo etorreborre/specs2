@@ -21,7 +21,7 @@ trait Iterablex {
   class ExtendedIterable[T](xs: GenIterable[T]) {
 
     /**
-     * @return true if the 2 iterables contain the same elements, in the same order, 
+     * @return true if the 2 iterables contain the same elements, in the same order,
      *         according to a function f
      */
     def isSimilar[S >: T](that: GenIterable[S], f: Function2[T, S, Boolean]): Boolean = {
@@ -48,10 +48,10 @@ trait Iterablex {
      * @return true if the 2 iterables contain the same elements (according to a comparison function f) recursively, in any order
      */
     def sameElementsAs(that: GenIterable[T], f: (T, T) => Boolean): Boolean = {
-      def isNotItsOwnIterable(a: GenIterable[_]) = a.isEmpty || a.iterator.next != a
+      def isNotItsOwnIterable(a: GenIterable[Any]) = a.isEmpty || a.iterator.next != a
       def matchTwo(x: T, y: T): Boolean = {
         (x, y) match {
-          case (a: GenIterable[_], b: GenIterable[_]) if isNotItsOwnIterable(a) =>
+          case (a: GenIterable[Any], b: GenIterable[Any]) if isNotItsOwnIterable(a) =>
             x.asInstanceOf[GenIterable[T]].sameElementsAs(y.asInstanceOf[GenIterable[T]], f)
           case _ => f(x, y)
         }
@@ -60,7 +60,7 @@ trait Iterablex {
       val itb = that.iterator.toList
       (ita, itb) match {
         case (Nil, Nil) => true
-        case (a: GenIterable[_], b: GenIterable[_]) =>
+        case (a: GenIterable[Any], b: GenIterable[Any]) =>
            (a.nonEmpty && b.nonEmpty) && {
             val (x, y, resta, restb) = (a.head, b.head, a.drop(1), b.drop(1))
             matchTwo(x, y) && resta.sameElementsAs(restb, f) ||
@@ -68,7 +68,7 @@ trait Iterablex {
               resta.removeFirst(matchTwo(_, y)).sameElementsAs(restb.removeFirst(matchTwo(x, _)), f)
           }
 
-        case _ => ita == itb
+        case null => ita == itb
       }
     }
     /**
@@ -97,7 +97,7 @@ trait Iterablex {
         xs.toString
       else
         "[" + xs.toList.map {
-          case i: GenIterable[_] => i.toDeepString
+          case i: GenIterable[Any] => i.toDeepString
           case x => x.toString
         }.mkString(", ") + "]"
     }

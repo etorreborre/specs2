@@ -5,6 +5,7 @@ import org.specs2.matcher.describe.Diffable
 import org.specs2.text.Quote._
 
 import scala.reflect.ClassTag
+import scala.reflect.Selectable.reflectiveSelectable
 
 /**
  * This trait provides matchers which are applicable to any type of value
@@ -59,17 +60,17 @@ trait AnyBaseMatchers {
   def not[T](m: Matcher[T]) = m.not
 
   /** matches if a.isEmpty */
-  def beEmpty[T <% Any { def isEmpty: Boolean }] = new Matcher[T] {
+  def beEmpty[T](implicit convert: T => Any { def isEmpty: Boolean }) = new Matcher[T] {
     def apply[S <: T](iterable: Expectable[S]) = {
       // we need to pattern match on arrays otherwise we get a reflection exception
       iterable.value match {
-        case a: Array[_] =>
-          result(a.isEmpty,
+        case a: Array[?] =>
+          result(convert(a).isEmpty,
             iterable.description + " is empty",
             iterable.description + " is not empty", iterable)
 
         case _ =>
-          result(iterable.value.isEmpty,
+          result(convert(iterable.value).isEmpty,
             iterable.description + " is empty",
             iterable.description + " is not empty", iterable)
       }
@@ -97,7 +98,7 @@ trait AnyBaseMatchers {
   def beAnyOf[T](t: T*): Matcher[T] = BeOneOf(t)
 
   /** matches if the value returns a successful result when applied to a PartialFunction */
-  def beLike[T](pattern: PartialFunction[T, MatchResult[_]]): Matcher[T] = new Matcher[T] {
+  def beLike[T](pattern: PartialFunction[T, MatchResult[?]]): Matcher[T] = new Matcher[T] {
     def apply[S <: T](a: Expectable[S]) = {
       val r = if (pattern.isDefinedAt(a.value)) pattern.apply(a.value) else MatchFailure("", "", a)
       result(r.isSuccess,
@@ -142,8 +143,8 @@ trait AnyBaseMatchers {
   }
 
   /** matches if v.isAssignableFrom(c) */
-  def beAssignableFrom[T : ClassTag]: Matcher[Class[_]] = new Matcher[Class[_]] {
-    def apply[S <: Class[_]](x: Expectable[S]) = {
+  def beAssignableFrom[T : ClassTag]: Matcher[Class[?]] = new Matcher[Class[?]] {
+    def apply[S <: Class[?]](x: Expectable[S]) = {
       val c = implicitly[ClassTag[T]].runtimeClass
       result(x.value.isAssignableFrom(c),
              x.description + " is assignable from " + q(c.getName),
@@ -178,7 +179,7 @@ class BeTrueMatcher extends Matcher[Boolean] {
 /**
  * Equality Matcher
  */
-class BeEqualTo(t: =>Any) extends EqualityMatcher(t)
+class BeEqualTo(t: =>Any) extends EqualityMatcher[Any](t)
 /**
  * This matcher always matches any value of type T
  */
@@ -224,27 +225,27 @@ trait AnyBeHaveMatchers extends BeHaveMatchers { outer: AnyMatchers =>
     def anInstanceOf[T : ClassTag] = result(beAnInstanceOf[T])
   }
 
-  implicit def toClassMatcherResult(result: MatchResult[Class[_]]): ClassMatcherResult = new ClassMatcherResult(result)
-  class ClassMatcherResult(result: MatchResult[Class[_]]) {
-    def assignableFrom = result(outer.beAssignableFrom)
+  implicit def toClassMatcherResult[T : ClassTag](result: MatchResult[Class[?]]): ClassMatcherResult[T] = new ClassMatcherResult[T](result)
+  class ClassMatcherResult[T : ClassTag](result: MatchResult[Class[?]]) {
+    def assignableFrom = result(outer.beAssignableFrom[T])
   }
-  
-  implicit def anyWithEmpty[T <% Any { def isEmpty: Boolean }](result: MatchResult[T]): AnyWithEmptyMatchers[T] =
+
+  implicit def anyWithEmpty[T](result: MatchResult[T])(implicit convert: T => Any { def isEmpty: Boolean }): AnyWithEmptyMatchers[T] =
     new AnyWithEmptyMatchers(result)
 
-  class AnyWithEmptyMatchers[T <% Any { def isEmpty: Boolean }](result: MatchResult[T]) {
+  class AnyWithEmptyMatchers[T](result: MatchResult[T])(implicit convert: T => Any { def isEmpty: Boolean }) {
     def empty = result(outer.beEmpty[T])
     def beEmpty = result(outer.beEmpty[T])
   }
   implicit def toBeLikeResultMatcher[T](result: MatchResult[T]): BeLikeResultMatcher[T] = new BeLikeResultMatcher(result)
   class BeLikeResultMatcher[T](result: MatchResult[T]) {
-    def like(pattern: =>PartialFunction[T, MatchResult[_]]) = result(outer.beLike(pattern))
-    def likeA(pattern: =>PartialFunction[T, MatchResult[_]]) = result(outer.beLike(pattern))
+    def like(pattern: =>PartialFunction[T, MatchResult[?]]) = result(outer.beLike(pattern))
+    def likeA(pattern: =>PartialFunction[T, MatchResult[?]]) = result(outer.beLike(pattern))
   }
   def asNullAs[T](a: =>T) = beAsNullAs(a)
-  def like[T](pattern: =>PartialFunction[T, MatchResult[_]]) = beLike(pattern)
-  def beLikeA[T](pattern: =>PartialFunction[T, MatchResult[_]]) = beLike(pattern)
-  def likeA[T](pattern: =>PartialFunction[T, MatchResult[_]]) = beLike(pattern)
+  def like[T](pattern: =>PartialFunction[T, MatchResult[?]]) = beLike(pattern)
+  def beLikeA[T](pattern: =>PartialFunction[T, MatchResult[?]]) = beLike(pattern)
+  def likeA[T](pattern: =>PartialFunction[T, MatchResult[?]]) = beLike(pattern)
   def empty[T <: Any { def isEmpty: Boolean }] = beEmpty[T]
   def oneOf[T](t: T*) = beOneOf(t:_*)
   def anyOf[T](t: T*) = beAnyOf(t:_*)

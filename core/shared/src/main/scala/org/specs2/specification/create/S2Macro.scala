@@ -32,11 +32,11 @@ object S2Macro {
       c.Expr(methodCall(c)("s2",
         q"$content",
         q"$Yrangepos",
-        toAST[List[_]](c)(texts:_*),
-        toAST[List[_]](c)(textStartPositions:_*),
-        toAST[List[_]](c)(textEndPositions:_*),
-        toAST[List[_]](c)(variables.map(_.tree):_*),
-        toAST[List[_]](c)(variables.map(stringExpr(c)(_)):_*)))
+        toAST[List[?]](c)(texts:_*),
+        toAST[List[?]](c)(textStartPositions:_*),
+        toAST[List[?]](c)(textEndPositions:_*),
+        toAST[List[?]](c)(variables.map(_.tree):_*),
+        toAST[List[?]](c)(variables.map(stringExpr(c)(_)):_*)))
 
     c.Expr(atPos(c.prefix.tree.pos)(result.tree))
 

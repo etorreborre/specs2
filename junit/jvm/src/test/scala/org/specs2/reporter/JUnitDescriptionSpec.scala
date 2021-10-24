@@ -10,13 +10,13 @@ import execute.{Result, StandardResults, Success}
 import ShowDescription._
 
 class JUnitDescriptionSpec(val env: Env) extends Specification with JUnitDescriptionSpecTest with OwnExecutionEnv { def is = s2"""
-                                                                                         
+
  A list of Fragments can be 'folded' into a tree of JUnit descriptions so that there is
  a root Description object (the top 'suite') and children objects representing either
  nested suites or Tests.
-                                                                                        
- The list must be properly folded to a Descriptions tree                                                             
-                                                                                                                       
+
+ The list must be properly folded to a Descriptions tree
+
    An example is folded into a root description for the spec class and a description of the example                 $a1
    Two examples are folded as 2 children descriptions                                                               $a2
    A text and two subordinates examples are folded as a node and 2 children descriptions                            $a3
@@ -242,7 +242,7 @@ object ReporterExamples extends ReporterExamples
 
 trait JUnitDescriptionSpecTest extends Specification {
 
-  def details(description: Description, className: String, methodName: String, testClass: Class[_], displayName: String, isTest: Boolean) = {
+  def details(description: Description, className: String, methodName: String, testClass: Class[?], displayName: String, isTest: Boolean) = {
       p^
       "the className must be filled"    ! desc(description).e1(className)   ^br^
       "the methodName must be correct"  ! desc(description).e2(methodName)  ^br^
@@ -254,7 +254,7 @@ trait JUnitDescriptionSpecTest extends Specification {
   case class desc(description: Description) {
     def e1(name: String)     = description.getClassName must_== name
     def e2(name: String)     = description.getMethodName must_== name
-    def e3(klass: Class[_])  = (description.getTestClass:Any) must_== klass
+    def e3(klass: Class[?])  = (description.getTestClass:Any) must_== klass
     def e4(name: String)     = description.getDisplayName must_== name
     def e5(isTest: Boolean)  = description.isTest must_== isTest
   }

@@ -12,8 +12,8 @@ object MapMatchers extends MapMatchers
 
 private[specs2]
 trait MapBaseMatchers {
-  
-  /** matches if map.contains(k) */   
+
+  /** matches if map.contains(k) */
   def haveKey[K](k: K) = haveKeys(k)
 
     /** matches if map.contains(k) forall key k */
@@ -38,7 +38,7 @@ trait MapBaseMatchers {
       }
   }
 
-  /** matches if map contains a pair (key, value) with value == v */   
+  /** matches if map contains a pair (key, value) with value == v */
   def haveValue[V](v: V) = haveValues(v)
 
   /** matches if map contains a pair (key, value) with value == v  for all value v*/
@@ -64,10 +64,10 @@ trait MapBaseMatchers {
     }
   }
 
-  /** matches if map contains a pair (key, value) == (k, v) */   
+  /** matches if map contains a pair (key, value) == (k, v) */
   def havePair[K, V](p: (K, V)) = havePairs(p)
-  
-  /** matches if map contains all the specified pairs */   
+
+  /** matches if map contains all the specified pairs */
   def havePairs[K, V](pairs: (K, V)*) = new Matcher[Iterable[(K, V)]] {
     def apply[S <: Iterable[(K, V)]](map: Expectable[S]) = {
       lazy val missing = pairs.filterNot(map.value.toSeq.contains)
@@ -87,28 +87,29 @@ trait MapBaseMatchers {
     }
   }
 
-  /** matches if the partial function is defined at those values */   
+  /** matches if the partial function is defined at those values */
   def beDefinedAt[K](values: K*) = new Matcher[PartialFunction[K, Any]] {
     def apply[S <: PartialFunction[K, Any]](f: Expectable[S]) = {
       val isDefined = values.map(v => (v, f.value.isDefinedAt(v)))
       val undefined = isDefined.filter(!_._2).map(_._1)
-      result(isDefined.map(_._2).forall(_ == true), 
-             f.optionalDescription.getOrElse("the function") + Noun(" is defined for the value").plural(values.size) +
+      val description = f.optionalDescription.map(_(f.value.toString)).getOrElse("the function")
+      result(isDefined.map(_._2).forall(_ == true),
+             description + Noun(" is defined for the value").plural(values.size) +
                                              " " + q(values.mkString(", ")),
-             f.optionalDescription.getOrElse("the function") +
-                                             Noun(" is not defined for the value").plural(undefined.size) + " " +
+             description + Noun(" is not defined for the value").plural(undefined.size) + " " +
                                              q(undefined.mkString(", ")), f)
     }
   }
-  
-  /** matches if the partial function is defined at those values and return expected values */   
+
+  /** matches if the partial function is defined at those values and return expected values */
   def beDefinedBy[K, V](values: (K, V)*) = new Matcher[PartialFunction[K, V]] {
     def apply[S <: PartialFunction[K, V]](f: Expectable[S]) = {
       val isDefined = values.map(v => (v, f.value.isDefinedAt(v._1) && f.value(v._1) == v._2))
       val undefined = isDefined.filter(!_._2).map(_._1)
-      result(isDefined.map(_._2).forall(_ == true), 
-             f.optionalDescription.getOrElse("the function") + Noun(" is defined by the value").plural(values.size) + " " + q(values.mkString(", ")),
-             f.optionalDescription.getOrElse("the function") + Noun(" is not defined by the value").plural(undefined.size) + " " + q(undefined.mkString(", ")),
+      val description = f.optionalDescription.map(_(f.value.toString)).getOrElse("the function")
+      result(isDefined.map(_._2).forall(_ == true),
+             description + Noun(" is defined by the value").plural(values.size) + " " + q(values.mkString(", ")),
+             description + Noun(" is not defined by the value").plural(undefined.size) + " " + q(undefined.mkString(", ")),
              f)
     }
   }
@@ -116,29 +117,29 @@ trait MapBaseMatchers {
 }
 private[specs2]
 trait MapBeHaveMatchers extends BeHaveMatchers { outer: MapBaseMatchers =>
-  implicit def toMapKeyResultMatcher[K](result: MatchResult[Iterable[(K, Any)]]) = new MapKeyResultMatcher(result)
+  implicit def toMapKeyResultMatcher[K](result: MatchResult[Iterable[(K, Any)]]): MapKeyResultMatcher[K] = new MapKeyResultMatcher(result)
   class MapKeyResultMatcher[K](result: MatchResult[Iterable[(K, Any)]]) {
     def key(k: K) = result(outer.haveKey(k))
     def keys(ks: K*) = result(outer.haveKeys(ks:_*))
     def haveKey(k: K) = result(outer.haveKey(k))
     def haveKeys(ks: K*) = result(outer.haveKeys(ks:_*))
   }
-  implicit def toMapValueResultMatcher[V](result: MatchResult[Iterable[(Any, V)]]) = new MapValueResultMatcher(result)
+  implicit def toMapValueResultMatcher[V](result: MatchResult[Iterable[(Any, V)]]): MapValueResultMatcher[V] = new MapValueResultMatcher(result)
   class MapValueResultMatcher[V](result: MatchResult[Iterable[(Any, V)]]) {
     def value(v: V) = result(outer.haveValue(v))
     def values(vs: V*) = result(outer.haveValues(vs:_*))
     def haveValue(v: V) = result(outer.haveValue(v))
     def haveValues(vs: V*) = result(outer.haveValues(vs:_*))
   }
-  implicit def toMapResultMatcher[K, V](result: MatchResult[Iterable[(K, V)]]) = new MapResultMatcher(result)
+  implicit def toMapResultMatcher[K, V](result: MatchResult[Iterable[(K, V)]]): MapResultMatcher[K, V] = new MapResultMatcher(result)
   class MapResultMatcher[K, V](result: MatchResult[Iterable[(K, V)]]) {
     def pair(p: (K, V)) = result(outer.havePair(p))
     def pairs(pairs: (K, V)*) = result(outer.havePairs(pairs:_*))
     def havePair(p: (K, V)) = result(outer.havePair(p))
     def havePairs(pairs: (K, V)*) = result(outer.havePairs(pairs:_*))
   }
-  implicit def toPartialFunctionResultMatcher[K, V](result: MatchResult[PartialFunction[K, V]]) = new PartialFunctionResultMatcher(result)
-  class PartialFunctionResultMatcher[K, V](result: MatchResult[PartialFunction[K, V]]) { 
+  implicit def toPartialFunctionResultMatcher[K, V](result: MatchResult[PartialFunction[K, V]]): PartialFunctionResultMatcher[K, V] = new PartialFunctionResultMatcher(result)
+  class PartialFunctionResultMatcher[K, V](result: MatchResult[PartialFunction[K, V]]) {
     def definedAt(values: K*) = result(outer.beDefinedAt(values:_*))
     def beDefinedAt(values: K*) = result(outer.beDefinedAt(values:_*))
     def definedBy(values: (K, V)*) = result(outer.beDefinedBy(values:_*))
@@ -153,4 +154,3 @@ trait MapBeHaveMatchers extends BeHaveMatchers { outer: MapBaseMatchers =>
   def definedAt[K](values: K*) = beDefinedAt(values:_*)
   def definedBy[K, V](values: (K, V)*) = beDefinedBy(values:_*)
 }
-

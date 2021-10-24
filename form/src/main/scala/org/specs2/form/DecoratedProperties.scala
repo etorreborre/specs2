@@ -6,7 +6,7 @@ package form
  */
 private[specs2]
 trait DecoratedProperties {
-  implicit def toDecorated[T <: DecoratedProperty[T]](d: T) = new Decorated(d)
+  implicit def toDecorated[T <: DecoratedProperty[T]](d: T): Decorated[T] = new Decorated(d)
   class Decorated[T <: DecoratedProperty[T]](d: T) {
 
     def code      = d.decoratorIs(d.decorator.code)

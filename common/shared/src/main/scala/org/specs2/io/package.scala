@@ -2,8 +2,6 @@ package org.specs2
 
 import java.io.File
 
-import reflect.MacroContext._
-
 package object io {
 
   /**
@@ -15,33 +13,11 @@ package object io {
   }
 
   /**
-   * It is possible to create a FileName from a string provided it is well-formed
-   */
-  implicit def ToFileName(s: String): FileName =
-    macro createFileName
-
-  /**
    * create a file name from a String
    */
   def fileNameFromString(s: String): Option[FileName] =
     if (s.contains(File.separator) || isWindows && s.contains("/")) None
     else Some(FileName.unsafe(s))
 
-  def createFileName(c: Context)(s: c.Expr[String]): c.Expr[FileName] = {
-    import c.universe._
-    s match {
-      case Expr(Literal(Constant(v: String))) => createFileNameFromString(c)(v)
-      case _ => c.abort(c.enclosingPosition, s"Not a literal ${showRaw(s)}")
-    }
-  }
-
   val isWindows = sys.props("os.name").startsWith("Windows")
-
-  private def createFileNameFromString(c: Context)(s: String): c.Expr[FileName] = {
-    import c.universe._
-    fileNameFromString(s) match {
-      case None     => c.abort(c.enclosingPosition, s"$s is not a valid fileName. It must not contain a /")
-      case Some(fn) => c.Expr(q"FileName.unsafe(${fn.name})")
-    }
-  }
 }

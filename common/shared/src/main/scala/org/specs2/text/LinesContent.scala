@@ -22,7 +22,7 @@ trait LinesContent[L1] {
 /**
  * Default implementation for reading lines out of a Seq
  */
-case class SeqLinesContent[A, CC[_] <: Traversable[_]]() extends LinesContent[CC[A]] {
-  def name(seq: CC[A]) = "sequence"
-  def lines(seq: CC[A]): Seq[String] = seq.toList.map(_.toString)
+case class SeqLinesContent[A]() extends LinesContent[Seq[A]] {
+  def name(seq: Seq[A]) = "sequence"
+  def lines(seq: Seq[A]): Seq[String] = seq.map(_.toString)
 }

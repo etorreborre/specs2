@@ -21,7 +21,7 @@ trait ClassName { outer =>
   /**
    * @return the outer class name for a given class
    */
-  def getOuterClassName(c: Class[_]): String = {
+  def getOuterClassName(c: Class[?]): String = {
     c.getDeclaredConstructors.head.getParameterTypes.head.getName
   }
 
@@ -49,12 +49,12 @@ trait ClassName { outer =>
   /**
    * @return the class name
    */
-  def className(klass: Class[_]): String = className(klass.getName)
+  def className(klass: Class[?]): String = className(klass.getName)
 
   /**
    * @return the class name without the package name
    */
-  def simpleName(klass: Class[_]): String = {
+  def simpleName(klass: Class[?]): String = {
     // klass.getSimpleName can throw an error in the REPL
     val result = catchAllOrElse {
       val name = className(klass.getSimpleName)
@@ -72,13 +72,13 @@ trait ClassName { outer =>
   /**
    * @return the uncamelcased name of the class (or its parent if it is an anonymous class)
    */
-  def humanName(c: Class[_]): String = {
+  def humanName(c: Class[?]): String = {
     val name = simpleName(c)
     if (name.contains("$") && c.getSuperclass != null) humanName(c.getSuperclass)
     else name.camelCaseToWords
   }
 
-  implicit class ClassOps(klass: Class[_]) {
+  implicit class ClassOps(klass: Class[?]) {
     def simpleName = outer.simpleName(klass)
     def humanName  = outer.humanName(klass)
   }
