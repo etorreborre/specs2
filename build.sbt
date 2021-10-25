@@ -138,7 +138,6 @@ lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("c
     commonSettings,
     name := "specs2-core",
     libraryDependencies ++=
-      depends.paradise(scalaVersion.value) ++
       Seq(
         depends.mockito % Test,
         depends.junit % Test)
@@ -278,8 +277,7 @@ lazy val matcherNative = matcher.native
 lazy val matcherExtra = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("matcher-extra")).
   settings(
     commonSettings,
-    name := "specs2-matcher-extra",
-    libraryDependencies ++= depends.paradise(scalaVersion.value)
+    name := "specs2-matcher-extra"
   ).
   jsSettings(depends.jsTest, commonJsSettings).
   jvmSettings(depends.jvmTest, commonJvmSettings).
@@ -301,7 +299,6 @@ lazy val shapeless = crossProject(JSPlatform, JVMPlatform, NativePlatform).
   settings(
     commonSettings,
     name := "specs2-shapeless",
-    libraryDependencies ++= depends.paradise(scalaVersion.value),
     libraryDependencies += "com.chuusai" %%% "shapeless" % shapelessVersion
   ).
   jsSettings(depends.jsTest, commonJsSettings).

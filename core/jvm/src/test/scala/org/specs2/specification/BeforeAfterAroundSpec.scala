@@ -11,8 +11,8 @@ import org.specs2.control.ExecuteActions._
 
 class BeforeAfterAroundSpec extends Specification with Grouped { def is = s2"""
 
- The `Before/After/Around Example` traits are used to automatically insert contexts around examples bodies            
- a spec can define a Before context that is used for each example                                                     
+ The `Before/After/Around Example` traits are used to automatically insert contexts around examples bodies
+ a spec can define a Before context that is used for each example
    in a mutable spec                                                                                          ${g1.e1}
    also in an acceptance spec                                                                                 ${g1.e2}
 
@@ -55,7 +55,7 @@ class BeforeAfterAroundSpec extends Specification with Grouped { def is = s2"""
     try {
       DefaultExecutor.executeFragments(s.is.fragments)(env).traverse(_.executionResult).run(env.executionEnv)
       s.messages must contain(allOf(messages:_*)).inOrder
-    } finally env.shutdown
+    } finally env.shutdown()
   }
 
 }

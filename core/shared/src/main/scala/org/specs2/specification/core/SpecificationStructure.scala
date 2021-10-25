@@ -7,7 +7,6 @@ import control._
 import reflect.Classes._
 import org.specs2.fp.syntax._
 
-@EnableReflectiveInstantiation
 trait ContextualSpecificationStructure {
   def structure: Env => SpecStructure
   def fragments = (env: Env) => structure(env).fragments
@@ -89,7 +88,7 @@ object SpecificationStructure {
     val byName = (ss: List[SpecificationStructure]) => ss.foldLeft(Vector[(String, SpecificationStructure)]()) { (res, cur) =>
       val name = cur.structure(env).specClassName
       if (res.map(_._1).contains(name)) res
-      (name, cur) +: res
+      else (name, cur) +: res
     }
 
     def getRefs(s: SpecificationStructure, visited: Vector[(String, SpecificationStructure)]): Vector[(String, SpecificationStructure)] =

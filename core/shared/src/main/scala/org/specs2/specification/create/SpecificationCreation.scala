@@ -7,10 +7,7 @@ import org.specs2.specification.dsl._
 
 trait SpecificationCreation extends
        AcceptanceDsl
-  with AutoExamples
   with ArgumentsArgs
   with ArgumentsShortcuts
   with S2StringContext
   with FormattingFragments
-
-

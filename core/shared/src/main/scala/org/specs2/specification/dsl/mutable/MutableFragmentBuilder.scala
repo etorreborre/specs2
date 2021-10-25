@@ -10,6 +10,7 @@ import reflect.Classes
 import specification.create.FragmentsFactory
 import specification.core._
 import ExecuteActions._
+import org.specs2.control.producer.ProducerOps
 
 /**
  * Creation of fragments in a mutable specification
@@ -106,7 +107,7 @@ trait MutableFragmentBuilder extends FragmentBuilder
           runOperation(Classes.createInstanceFromClass[MutableFragmentBuilder](klass, env.defaultInstances), env.systemLogger)
       }
 
-      instance match {
+    instance match {
         case Left(e) =>
           Execution.result(e.fold(t => org.specs2.execute.Error(t), m => org.specs2.execute.Error(m)))
 

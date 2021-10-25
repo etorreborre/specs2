@@ -50,7 +50,7 @@ trait ClassRunner {
         }
     }
     try execute(actions, arguments, exit)(env)
-    finally env.shutdown
+    finally env.shutdown()
   }
 
   /** create the specification from the class name */
@@ -58,7 +58,7 @@ trait ClassRunner {
     SpecificationStructure.create(className, classLoader, env)
 
   /** report the specification */
-  def report(env: Env): SpecificationStructure => Action[Stats] = { spec: SpecificationStructure =>
+  def report(env: Env): SpecificationStructure => Action[Stats] = { (spec: SpecificationStructure) =>
     val loader = Thread.currentThread.getContextClassLoader
     for {
       printers <- createPrinters(env.arguments, loader).toAction

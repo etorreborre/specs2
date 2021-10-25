@@ -19,7 +19,7 @@ class DatabaseSpecification1 extends Specification with DatabaseSetup { def is =
 How does this work? The `BeforeAll` trait overrides a method called `map` in the `SpecificationStructure` trait (a parent of `Specification`) and adds one `Step` before anything else in the specification:
 ```
 override def map(fs: =>Fragments): Fragments =
-  super.map(fs).prepend(fragmentFactory.step(beforeAll))
+  super.map(fs).prepend(fragmentFactory.step(beforeAll()))
 ```
 
 The `map` method is indeed called every time the specification returns the list of `Fragment`s defining it. You can leverage this method and define your own "Specification templates":
@@ -36,4 +36,3 @@ You will probably need to learn a bit more about $specs2  ${""""Fragments" API""
 $vid
 """
 }
-

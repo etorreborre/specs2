@@ -66,13 +66,13 @@ class ReporterSpec(val env: Env) extends Specification with ThrownExpectations w
   def b1 = {
     val logger = stringLogger
     reported(ownEnv.setLineLogger(logger), logger)
-    logger.messages must not(beEmpty)
+    logger.messages must not(beEmpty[List[String]])
   }
 
   def b2 = {
     val logger = stringLogger
     reported(ownEnv.setLineLogger(logger).setArguments(Arguments("junit")), printers = List(new FakeJUnitPrinter(logger)))
-    logger.messages must not(contain("ex1"))
+    logger.messages must not(contain[List[String]]("ex1"))
     logger.messages must contain("[info] junit")
   }
 

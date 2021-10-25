@@ -33,12 +33,12 @@ trait Statistics {
   /**
    * read the stats for one Fragment
    */
-  def readStats(className: String, env: Env): Fragment => AsyncStream[Fragment] = { f: Fragment =>
+  def readStats(className: String, env: Env): Fragment => AsyncStream[Fragment] = { (f: Fragment) =>
     producers.eval(env.statisticsRepository.previousResult(className, f.description).map(r => f.setPreviousResult(r)))
   }
 
   def fold: AsyncFold[Fragment, Stats] { type S = Stats } =
-    Folds.fromMonoidMapEval { fragment: Fragment =>
+    Folds.fromMonoidMapEval { (fragment: Fragment) =>
       if (fragment.isExecutable) {
         fragment.executedResult.map { case ExecutedResult(result, timer) =>
           defaultStats(fragment).withResult(result).copy(timer = timer)

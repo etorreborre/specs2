@@ -44,7 +44,7 @@ trait DefaultExecutor extends Executor {
    *  - filter the ones that the user wants to keep
    *  - sequence the execution so that only parts in between steps are executed concurrently
    */
-  def execute(env: Env): AsyncTransducer[Fragment, Fragment] = { contents: AsyncStream[Fragment] =>
+  def execute(env: Env): AsyncTransducer[Fragment, Fragment] = { (contents: AsyncStream[Fragment]) =>
     sequencedExecution(env)(contents).flatMap(executeOnline(env))
   }
 

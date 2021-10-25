@@ -8,19 +8,19 @@ import org.scalacheck.Prop
 class SeqxSpec extends mutable.Specification with DataTables with ScalaCheckResult {
 
   "updateLast modifies the last element".p
-    eg { Seq(1).updateLast(i => i+1) must_== Seq(2) }
-    eg { Seq(1, 2).updateLast(i => i+1) must_== Seq(1, 3) }
-    eg { Seq[Int]().updateLast(i => i+1) must_== Seq[Int]() }
+    "updateLast1" >> { Seq(1).updateLast(i => i+1) must_== Seq(2) }
+    "updateLast2" >> { Seq(1, 2).updateLast(i => i+1) must_== Seq(1, 3) }
+    "updateLast3" >> { Seq[Int]().updateLast(i => i+1) must_== Seq[Int]() }
 
   "updateLastOr modifies the last element or starts a new sequence".p
-    eg { Seq(1).updateLastOr { case i => i+1 }(0) must_== Seq(2) }
-    eg { Seq(1, 2).updateLastOr { case i => i+1 }(0) must_== Seq(1, 3) }
-    eg { Seq[Int]().updateLastOr { case i => i+1 }(0) must_== Seq[Int](0) }
+    "updateLastOr1" >> { Seq(1).updateLastOr { case i => i+1 }(0) must_== Seq(2) }
+    "updateLastOr2" >> { Seq(1, 2).updateLastOr { case i => i+1 }(0) must_== Seq(1, 3) }
+    "updateLastOr3" >> { Seq[Int]().updateLastOr { case i => i+1 }(0) must_== Seq[Int](0) }
 
   "delta removes elements, leaving duplicates, and using a custom comparison function".p
     "for example, comparing only the second element of a pair" >> {
-      val compare = (p: (Int, Symbol), o: Symbol) => p._2 == o
-      Seq((1, 'a), (2, 'b), (3, 'c), (4, 'b), (5, 'e)).delta(Seq('c, 'b, 'a), compare) must_==  Seq((4, 'b), (5, 'e))
+      val compare = (p: (Int, Char), o: Char) => p._2 == o
+      Seq((1, 'a'), (2, 'b'), (3, 'c'), (4, 'b'), (5, 'e')).delta(Seq('c', 'b', 'a'), compare) must_==  Seq((4, 'b'), (5, 'e'))
     }
 
   "A removeFirst function" should {

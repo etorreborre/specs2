@@ -261,14 +261,14 @@ class ExecutorSpec(val env: Env) extends script.Specification with Groups with T
 
   def userEnv = {
     val fragments =
-      Fragments.foreach(1 to 2) { i: Int =>
-        "test " + i ! Execution.withExecutionEnv { ee: ExecutionEnv =>
+      Fragments.foreach(1 to 2) { (i: Int) =>
+        "test " + i ! Execution.withExecutionEnv { (ee: ExecutionEnv) =>
           Await.result(scala.concurrent.Future(1)(ee.executionContext), 5.second) ==== 1
         }
       }
     val e = Env()
     try execute(fragments, e) must contain(beSuccessful[Result]).forall
-    finally e.shutdown
+    finally e.shutdown()
   }
 
   lazy val factory = fragmentFactory

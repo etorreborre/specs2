@@ -133,7 +133,6 @@ $AndIfYouWantToKnowMore
  - create example descriptions spanning ${"several lines" ~/ MultilineDescriptions}
  - add ${"new lines and tabs" ~/ SpecificationFormatting} in unit specifications
  - create a trait which will ${"decorate or transform other specifications" ~/ SpecificationTemplate} when mixed-in
- - create ${"*auto-examples*" ~/ AutoExamples} where the code *is* the description of the `Example`
  - integrate ${"snippets of code" ~/ CaptureSnippets} to your specification
  - use ${"named examples" ~/ NamedExamples} in acceptance specifications to get default example names
  - use ${"scripts and auto-numbered examples" ~/ AutoNumberedExamples} to completely separate the specification text from the code

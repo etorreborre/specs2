@@ -90,7 +90,7 @@ class ContextSpec extends script.Spec with ResultMatchers with Groups { def is =
    the around method must rethrow failed results as exceptions                                             ${g6().e4}
                                                                                                            """
 
-  implicit val arguments = main.Arguments()
+  implicit val arguments: main.Arguments = main.Arguments()
 
   "before" - new g1 with FragmentsExecution {
     e1  := executing(ex1Before).prints("before", "e1")
@@ -117,7 +117,7 @@ class ContextSpec extends script.Spec with ResultMatchers with Groups { def is =
   }
 
   "combination" - new g3 with FragmentsExecution {
-    e1  := { env: Env =>
+    e1  := { (env: Env) =>
       abstract class ParentSpecification extends Specification with BeforeAfterEach { def before = println("before"); def after = println("after") }
       abstract class ChildSpecification extends ParentSpecification with AroundEach { def around[R : AsResult](r: =>R) = { println("around"); AsResult(r) } }
       val child = new ChildSpecification { def is =
@@ -145,7 +145,7 @@ class ContextSpec extends script.Spec with ResultMatchers with Groups { def is =
     def executeBodies(exs: Fragments) = {
       val env = Env(arguments = Arguments("sequential"))
       try DefaultExecutor.executeFragments(exs)(env).traverse(_.executionResult).run(env.executionEnv)
-      finally env.shutdown
+      finally env.shutdown()
     }
 
     def executing(exs: Fragments): Executed = Executed(executeBodies(exs))

@@ -42,7 +42,7 @@ trait S2StringContext extends S2StringContext1 { outer =>
     stringAndEnvFunctionIsInterpolatedFragment((s: String) => (e: Env) => f(s))
 
   implicit def stepParserIsInterpolatedFragment[R : AsResult](f: StepParser[R]): InterpolatedFragment =
-    stringAndUpdatedDescriptionAndEnvFunctionIsInterpolatedFragment { s: String =>
+    stringAndUpdatedDescriptionAndEnvFunctionIsInterpolatedFragment { (s: String) =>
       val parsed: Either[Throwable, (String, R)] = f.parse(s)
       (parsed.fold(_ => None, sr => Some(sr._1)), (e: Env) => parsed.fold(t => Error(t), sr => AsResult(sr._2)))
     }
@@ -120,7 +120,7 @@ trait S2StringContextCreation extends FragmentsFactory { outer =>
 
       val result =
         implicitly[AsResult[R]] match {
-          case v : AnyValueAsResult[_] =>
+          case v : AnyValueAsResult[?] =>
             val (newDescription, executionFunction) = f(description.show)
             val (updatedDescription, r) = (newDescription.fold(description)(Text.apply), Env.executeResult(executionFunction))
             (r : @unchecked) match {
@@ -199,7 +199,7 @@ trait S2StringContextCreation extends FragmentsFactory { outer =>
 
   implicit class specificationInStringContext(sc: StringContext) {
     def s2(variables: InterpolatedFragment*): Fragments =
-      macro S2Macro.s2Implementation
+      outer.s2("", false, sc.parts, Seq(), Seq(), variables, Seq())
   }
 
 

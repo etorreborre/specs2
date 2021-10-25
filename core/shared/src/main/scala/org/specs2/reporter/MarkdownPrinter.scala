@@ -32,7 +32,7 @@ trait MarkdownPrinter extends Printer {
 
       case e if Fragment.isExample(e) =>
         val description = e.description.show
-        
+
         e.executionResult.map {
           case r: Success              => showDescription(description, r)
           case r @ Failure(m, _, _, _) => showDescription(description, r) + "\n  " + m
@@ -81,6 +81,6 @@ object MarkdownOptions {
       extension = arguments.commandLine.valueOr("markdown.ext", extension)
     )
 
-  val outDir    = "target" / "specs2-reports"
+  val outDir    = DirectoryPath.unsafe("target/specs2-reports")
   val extension = "md"
 }

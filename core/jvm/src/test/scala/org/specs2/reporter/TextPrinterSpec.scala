@@ -364,7 +364,7 @@ object TextPrinterSpecification extends MustMatchers with FragmentsDsl {
           .prepend(DefaultFragmentFactory.break) // add a newline after the title
           .update(DefaultExecutor.execute(env1))))
       } finally {
-        if (optionalEnv.isEmpty) env1.shutdown
+        if (optionalEnv.isEmpty) env1.shutdown()
       }
 
       val messages = logger.messages

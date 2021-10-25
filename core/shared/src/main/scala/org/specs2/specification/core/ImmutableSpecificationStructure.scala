@@ -4,6 +4,7 @@ package core
 
 import control._, Actions._
 import reflect.Classes
+import org.specs2.control.producer.ProducerTransducerOps
 
 /**
  * Structure of an immutable specification.

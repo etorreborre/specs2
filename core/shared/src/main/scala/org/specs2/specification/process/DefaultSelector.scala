@@ -179,7 +179,7 @@ trait DefaultSelector extends Selector {
     }
   }
 
-  def removeMarkers: AsyncTransducer[Fragment, Fragment] = { producer: Producer[ActionStack, Fragment] =>
+  def removeMarkers: AsyncTransducer[Fragment, Fragment] = { (producer: Producer[ActionStack, Fragment]) =>
     producer.filter(f => !Fragment.isMarker(f))
   }
 

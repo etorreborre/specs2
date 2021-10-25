@@ -9,6 +9,7 @@ import org.specs2.io._
 import org.specs2.matcher.Matcher
 import org.specs2.matcher.OperationMatchers.beOk
 import org.specs2.matcher.MatchersImplicits._
+import org.specs2.control.ioOperationToOption
 
 class SpecificationsFinderSpec extends Spec { def is = s2"""
   It is possible to find specifications in the local test directory           $e1
@@ -20,7 +21,7 @@ class SpecificationsFinderSpec extends Spec { def is = s2"""
   val base = new File(".").getAbsolutePath
 
   def e1 =
-    filePaths(DirectoryPath.unsafe(base) / "src" / "test" / "scala", "**/*.scala", verbose = false) must findFiles
+    filePaths(DirectoryPath.unsafe(base+ "/src/test/scala"), "**/*.scala", verbose = false) must findFiles
 
   def e2 =
     filePaths(DirectoryPath.unsafe(new File(base+"/src/test/scala")), "**/*.scala", verbose = false) must findFiles
@@ -35,7 +36,7 @@ class SpecificationsFinderSpec extends Spec { def is = s2"""
       s.contains("SpecificationsFinderSpec")
 
     SpecificationsFinder.findSpecifications(
-      basePath = DirectoryPath.unsafe(base) / "src" / "test" / "scala",
+      basePath = DirectoryPath.unsafe(base+ "/src/test/scala"),
       filter = filter
     ).runOption must beSome((l: List[?]) => l must haveSize(1))
   }

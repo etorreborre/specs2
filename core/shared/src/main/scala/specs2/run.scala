@@ -18,7 +18,7 @@ object run extends ClassRunner {
     val env = Env(arguments = arguments, lineLogger = consoleLogger)
 
     try     Runner.execute(specifications.toList.traverse(report(env)).map(_.suml), arguments, exit = false)(env)
-    finally env.shutdown
+    finally env.shutdown()
   }
 
   /** main method for the command line */

@@ -10,7 +10,7 @@ import org.specs2.specification.core.{Fragments, Fragment}
  * Dsl for creating text and formatting fragments in a mutable specification
  */
 trait TextDsl extends TextCreation { outer =>
-  
+
   implicit class textFragment(s: String) {
     def txt = outer.addText(s)
 
@@ -85,21 +85,6 @@ trait TextDsl extends TextCreation { outer =>
 
   }
 }
-
-/** deactivate the TextDsl implicits */
-trait NoTextDsl extends TextDsl {
-
-  override def textFragment(s: String) =
-    super.textFragment(s)
-
-  override def fragmentFormatting(f: =>Fragment) =
-    super.fragmentFormatting(f)
-
-  override def fragmentsFormatting(fs: =>Fragments) =
-    super.fragmentsFormatting(fs)
-}
-
-
 
 trait TextCreation extends FragmentBuilder with FragmentsFactory { outer =>
 

@@ -55,7 +55,7 @@ class JUnitRunner(klass: Class[?]) extends org.junit.runner.Runner with Filterab
         case Left(error) => n.fireTestFailure(new Failure(getDescription, error.fold(identity _, new RuntimeException(_))))
       }
     }
-    finally env.shutdown
+    finally env.shutdown()
   }
 
   /** run the specification with a Notifier and an environment */

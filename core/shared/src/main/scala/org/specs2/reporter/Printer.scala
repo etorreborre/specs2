@@ -21,7 +21,7 @@ trait Printer {
   def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment]
 
   /** convenience method to print a SpecStructure using the printer's Fold */
-  def print(env: Env): SpecStructure => Action[Unit] = { spec: SpecStructure =>
+  def print(env: Env): SpecStructure => Action[Unit] = { (spec: SpecStructure) =>
     val printSink = sink(env, spec)
     producers.fold(spec.contents.into[ActionStack])(printSink.start, printSink.fold, printSink.end)
   }
@@ -47,4 +47,3 @@ object Printer {
 
   case class PrinterName(name: String) extends AnyVal
 }
-

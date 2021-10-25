@@ -56,7 +56,7 @@ trait Reporter {
     val resetStore = env.arguments.store.reset
 
     lazy val sink: AsyncSink[Fragment] =
-      Folds.fromSink[Action, Fragment] { fragment: Fragment =>
+      Folds.fromSink[Action, Fragment] { (fragment: Fragment) =>
         if (neverStore)
           Actions.unit
         else
@@ -79,4 +79,3 @@ trait Reporter {
 }
 
 object Reporter extends Reporter
-

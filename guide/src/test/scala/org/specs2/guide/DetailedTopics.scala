@@ -4,7 +4,6 @@ object DetailedTopics extends UserGuidePage { def is = sortedLinks ^ s2"""
 
  Topic                                                               | See
 ------------------------------------------------------               | ---------------
-Create an example with just some code as the description             | ${link(AutoExamples).mute}
 Use the Given/When/Then style                                        | ${link(GivenWhenThenStyle).mute}
 Gather all expectations in an example                                | ${link(GetAllExpectations).mute}
 Reference another specification                                      | ${link(ReferenceOtherSpecifications).mute}
@@ -31,7 +30,6 @@ Arguments reference card                                             | ${link(Ar
  def sortedLinks =
   link(AsResultTypeclass).hide ^
   link(ArgumentsReference).hide ^
-  link(AutoExamples).hide ^
   link(AutoNumberedExamples).hide ^
   link(matchers.CaseClassMatchers).hide ^
   link(UseDatatables).hide ^

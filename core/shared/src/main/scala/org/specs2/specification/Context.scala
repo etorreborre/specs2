@@ -5,6 +5,7 @@ import org.specs2.execute.Result._
 import org.specs2.execute.{ResultExecution, Result, AsResult}
 import org.specs2.matcher.StoredExpectations
 import org.specs2.fp._
+import scala.reflect.Selectable.reflectiveSelectable
 
 /**
  * generic trait for Before, After, Around

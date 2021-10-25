@@ -127,7 +127,7 @@ object SpecStructure {
     val byName = (ss: List[SpecStructure]) => ss.foldLeft(Vector[(String, SpecStructure)]()) { (res, cur) =>
       val name = cur.specClassName
       if (res.map(_._1).contains(name)) res
-      (name, cur) +: res
+      else (name, cur) +: res
     }
 
     def getRefs(s: SpecStructure, visited: Vector[(String, SpecStructure)]): Vector[(String, SpecStructure)] =

@@ -17,13 +17,13 @@ class StoreSpec extends Specification { def is = sequential ^ s2"""
 """
 
   def e1 = {
-    val store = DirectoryStore("target" / "test")
+    val store = DirectoryStore(DirectoryPath.unsafe("target/test"))
     val key = SpecificationStatsKey("name")
     (store.set(key, Stats(1)) >> store.get(key)).map(_ must beSome(Stats(1)))
   }
 
   def e2 = {
-    val store = DirectoryStore("target" / "test")
+    val store = DirectoryStore(DirectoryPath.unsafe("target/test"))
     AsResult(e1)
 
     val key = SpecificationStatsKey("name")

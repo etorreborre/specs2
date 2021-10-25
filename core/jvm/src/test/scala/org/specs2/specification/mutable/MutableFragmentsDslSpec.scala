@@ -106,10 +106,10 @@ class MutableFragmentsDslSpec(ee: ExecutionEnv) extends org.specs2.Spec with Typ
     dsl1.is
 
   trait dsl extends MutableFragmentBuilder with MutableDsl {
-    addSections
+    addSections()
   }
 
-  def beTheSameFragments(fs: Fragment*): Matcher[Seq[Fragment]] = { actual: Seq[Fragment] =>
+  def beTheSameFragments(fs: Fragment*): Matcher[Seq[Fragment]] = { (actual: Seq[Fragment]) =>
     val location = StacktraceLocation()
     actual.map(_.setLocation(location)) must contain(exactly(fs.map(_.setLocation(location)):_*))
   }

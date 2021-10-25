@@ -22,7 +22,7 @@ class FutureExpectationsMutableSpec extends org.specs2.mutable.Specification {
     "For example here" in {
       Future.apply(1 === 1)
     }
-    "For example there" in { withTitle: String =>
+    "For example there" in { (withTitle: String) =>
       Future.apply(withTitle === "For example there")
     }
 

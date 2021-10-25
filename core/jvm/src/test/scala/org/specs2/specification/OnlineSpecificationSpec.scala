@@ -16,7 +16,7 @@ class OnlineSpecificationSpec extends Specification { def is = s2"""
   val factory = fragmentFactory; import factory._
 
   def e1 = {
-    def continue(n: Int): FragmentsContinuation = FragmentsContinuation { r: Result =>
+    def continue(n: Int): FragmentsContinuation = FragmentsContinuation { (r: Result) =>
       if (n == 1) None
       else        Some(core.Fragments(one[ActionStack, Fragment](break) append createExample(n - 1).contents))
     }

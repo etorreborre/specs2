@@ -29,6 +29,6 @@ trait OwnExecutionEnv extends AfterAll {
     ownEnv.executionContext
 
   def afterAll(): Unit =
-    ownEnv.shutdown
+    ownEnv.shutdown()
 
 }

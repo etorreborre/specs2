@@ -46,7 +46,7 @@ trait TextPrinter extends Printer {
   }
 
   /** run a specification */
-  def run(env: Env): SpecStructure => Unit = { spec: SpecStructure =>
+  def run(env: Env): SpecStructure => Unit = { (spec: SpecStructure) =>
     runAction(print(env)(spec))(env.specs2ExecutionEnv); ()
   }
 
@@ -59,10 +59,10 @@ trait TextPrinter extends Printer {
 
   def printFinalStats(spec: SpecStructure, args: Arguments, logger: LineLogger): (((Stats, Int), SimpleTimer)) => Action[Unit] = { case ((stats, _), timer) =>
     asyncDelayAction(printStats(spec.header, args, stats, timer).foreach(_.log(logger))) >>
-    asyncDelayAction(logger.close)
+    asyncDelayAction(logger.close())
   }
 
-  def printHeader(args: Arguments): SpecHeader => List[LogLine] = { header: SpecHeader =>
+  def printHeader(args: Arguments): SpecHeader => List[LogLine] = { (header: SpecHeader) =>
     if (args.canShow("#")) List(header.show.info)
     else Nil
   }
@@ -129,7 +129,6 @@ trait TextPrinter extends Printer {
           case pending: execute.Pending  => printPending(desc, pending, args)
           case skipped: execute.Skipped  => printSkipped(desc, skipped, args)
           case DecoratedResult(_, r)     => printResult(desc, r)
-          case other                     => printOther(desc, other, args)
         }
 
       result match {
@@ -208,12 +207,12 @@ trait TextPrinter extends Printer {
   def indentationSize(args: Arguments): Int =
     args.commandLine.int("indentation").getOrElse(2)
 
-  def printMessage(args: Arguments, description: String, as: String => LogLine): Result with ResultStackTrace => List[LogLine] = { result: Result with ResultStackTrace =>
+  def printMessage(args: Arguments, description: String, as: String => LogLine): Result with ResultStackTrace => List[LogLine] = { (result: Result with ResultStackTrace) =>
     val margin = description.takeWhile(_ == ' ')+" "
     List(as(result.message.split("\n").mkString(margin, "\n"+margin, "") + location(result, args)))
   }
 
-  def printStacktrace(args: Arguments, print: Boolean, as: String => LogLine): Result with ResultStackTrace => List[LogLine] = { result: Result with ResultStackTrace =>
+  def printStacktrace(args: Arguments, print: Boolean, as: String => LogLine): Result with ResultStackTrace => List[LogLine] = { (result: Result with ResultStackTrace) =>
     if (print) args.traceFilter(result.stackTrace).map(t => as(t.toString)).toList
     else Nil
   }

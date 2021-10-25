@@ -67,8 +67,8 @@ case class Env(
     copy(arguments = arguments.setTimeout(duration))
 
   def shutdown(): Unit =
-    try     specs2ExecutionEnv.shutdown
-    finally executionEnv.shutdown
+    try     specs2ExecutionEnv.shutdown()
+    finally executionEnv.shutdown()
 
   /** set new LineLogger */
   def setLineLogger(logger: LineLogger) =

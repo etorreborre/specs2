@@ -12,7 +12,7 @@ class LocationSpec extends org.specs2.mutable.Spec with TypedEqual {
   implicit lazy val ee: ExecutionEnv = Env().executionEnv
 
   "A unit specification must have correct locations for its fragments" >> {
-    implicit def spec = new LocationUnitSpecification(ee)
+    implicit def spec: LocationUnitSpecification = new LocationUnitSpecification(ee)
 
     "for the first piece of text, with 'should'" >> {
       textAt(index = 0)(spec) === Some(12)
@@ -35,7 +35,7 @@ class LocationSpec extends org.specs2.mutable.Spec with TypedEqual {
   }
 
   "An acceptance specification must have correct locations for its fragments" >> {
-    implicit def spec = new LocationSpecification(ee)
+    implicit def spec: LocationSpecification = new LocationSpecification(ee)
 
     "for the first piece of text, 'presentation''" >> {
       textAt(index = 0) === Some(7)
@@ -80,7 +80,7 @@ class LocationSpec extends org.specs2.mutable.Spec with TypedEqual {
   def fragments(implicit spec: WithFragments): List[Fragment] =
     spec.fragmentsList
 
-  step(ee.shutdown)
+  step(ee.shutdown())
 }
 
 trait WithFragments {

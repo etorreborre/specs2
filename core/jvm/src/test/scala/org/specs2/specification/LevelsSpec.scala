@@ -158,7 +158,7 @@ class LevelsSpec(ee: ExecutionEnv) extends Spec { def is = s2"""
       }
     }
     private def beDrawnAs(lines: String*) = be_==(lines.mkString("", "\n", "\n")) ^^ {
-      tree: Option[Tree[Fragment]] => tree.map(_.drawTree).getOrElse("no tree!")
+      (tree: Option[Tree[Fragment]]) => tree.map(_.drawTree).getOrElse("no tree!")
     }
   }
 }

@@ -19,7 +19,7 @@ import org.specs2.control.ExecuteActions._
 import org.specs2.data.NamedTag
 
 import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, Future}
+import scala.concurrent.{ExecutionContext, Await, Future}
 
 /**
  * Runner for Sbt
@@ -38,7 +38,7 @@ abstract class BaseSbtRunner(args: Array[String], remoteArgs: Array[String], loa
     SbtTask(aTaskDef, env, loader)
 
   def done() = {
-    env.shutdown
+    env.shutdown()
     ""
   }
 
@@ -74,7 +74,7 @@ object sbtRun extends MasterSbtRunner(Array(), Array(), Thread.currentThread.get
     val env = Env(Arguments(arguments:_*))
     implicit def ee: ExecutionEnv = env.specs2ExecutionEnv
     try exit(start(arguments: _*))
-    finally env.shutdown
+    finally env.shutdown()
   }
 
   def exit(action: Action[Stats])(implicit ee: ExecutionEnv): Unit = {
@@ -118,11 +118,11 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
 
   private val arguments = env.arguments
 
-  private implicit lazy val ec = env.specs2ExecutionContext
+  private implicit lazy val ec: ExecutionContext = env.specs2ExecutionContext
 
   /** @return the specification tags */
   def tags(): Array[String] = {
-    lazy val spec = runOperation(createSpecStructure(taskDef, loader, env)).toOption.flatten
+    lazy val spec: Option[SpecStructure] = runOperation(createSpecStructure(taskDef, loader, env)).toOption.flatten
     lazy val tags: List[NamedTag] =
       spec.flatMap(s => runAction(s.tags)(env.specs2ExecutionEnv).toOption).getOrElse(Nil)
 
@@ -240,10 +240,10 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
         logThrowable(t)
 
       case Right(m) =>
-        events.suiteError
+        events.suiteError()
         logger.errorLine(m)
     }
-    logger.close
+    logger.close()
   }
 
   /**
@@ -252,7 +252,7 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
   private def handleRunWarnings(warnings: List[String], loggers: Array[Logger]): Unit = {
     val logger = SbtLineLogger(loggers)
     Runner.logUserWarnings(warnings)(m => Name(logger.failureLine(m))).value
-    logger.close
+    logger.close()
   }
 
 }

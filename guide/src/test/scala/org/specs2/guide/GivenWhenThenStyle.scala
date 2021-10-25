@@ -228,7 +228,7 @@ class GWTSpec extends mutable.Specification with org.specs2.specification.dsl.mu
 
   "adding numbers".p
 
-  given("a first number {2}")(anInt) { i =>
+  givenA("first number {2}")(anInt) { i =>
     number = i
   }
 

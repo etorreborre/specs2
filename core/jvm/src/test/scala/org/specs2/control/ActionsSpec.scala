@@ -11,7 +11,7 @@ class ActionsSpec extends Specification { def is = s2"""
 """
 
   def guard = {
-    val operation = FileSystem.readFile(FilePath("missing")) orElse warnAndFail[OperationStack, String]("warning here", "failed")
+    val operation = FileSystem.readFile(FilePath.unsafe("missing")) orElse warnAndFail[OperationStack, String]("warning here", "failed")
     val (value, warnings) = executeOperation(operation)
     (value must beLeft) and (warnings must haveSize(1))
   }

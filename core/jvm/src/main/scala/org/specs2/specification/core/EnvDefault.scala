@@ -16,10 +16,10 @@ object EnvDefault {
     Env(
       arguments           = Arguments(),
       systemLogger        = consoleLogging,
-      selectorInstance    = (arguments: Arguments) => Arguments.instance(arguments.select.selector).getOrElse(DefaultSelector),
-      executorInstance    = (arguments: Arguments) => Arguments.instance(arguments.execute.executor).getOrElse(DefaultExecutor),
+      selectorInstance    = (arguments: Arguments) => Arguments.instance[Selector](arguments.select.selector).getOrElse(DefaultSelector),
+      executorInstance    = (arguments: Arguments) => Arguments.instance[Executor](arguments.execute.executor).getOrElse(DefaultExecutor),
       lineLogger          = NoLineLogger,
-      statsRepository     = (arguments: Arguments) => StatisticsRepositoryCreation.file(arguments.commandLine.directoryOr("stats.outdir", "target" / "specs2-reports" / "stats")),
+      statsRepository     = (arguments: Arguments) => StatisticsRepositoryCreation.file(arguments.commandLine.directoryOr("stats.outdir", DirectoryPath.unsafe("target/specs2-reports/stats"))),
       random              = new scala.util.Random,
       fileSystem          = FileSystem,
       executionParameters = ExecutionParameters(),

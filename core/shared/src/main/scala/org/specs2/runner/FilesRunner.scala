@@ -28,7 +28,7 @@ trait FilesRunner {
     val env = Env(arguments = arguments, lineLogger = consoleLogger)
 
     try     execute(run(env), env.arguments, exit)(env)
-    finally env.shutdown
+    finally env.shutdown()
   }
 
   def run(env: Env): Action[Stats] = {
@@ -54,7 +54,7 @@ trait FilesRunner {
   }
 
   /** sort the specifications in topological order where specification i doesn't depend on specification j if i > j == dependents first */
-  def sort(env: Env) = { specifications: Seq[SpecificationStructure] =>
+  def sort(env: Env) = { (specifications: Seq[SpecificationStructure]) =>
     SpecificationStructure.topologicalSort(env)(specifications).getOrElse(specifications)
   }
 

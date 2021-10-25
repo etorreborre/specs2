@@ -45,7 +45,7 @@ class AcceptanceDslSpec extends Spec with AcceptanceDsl { def is = s2"""
    "description" ! (s: String) => result $g2
    "description" ! (e: Env) => result    $g3
 
- ${step(ee.shutdown)}
+ ${step(ee.shutdown())}
 """
   implicit val ee: ExecutionEnv =
     Env().executionEnv

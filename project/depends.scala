@@ -63,13 +63,6 @@ object depends {
     "org.scalacheck" %%% "scalacheck" % "1.15.4"
   }
 
-  def paradise(scalaVersion: String) =
-    if (scalaMinorVersionAtLeast(scalaVersion, 11))
-      Nil
-    else
-      Seq(compilerPlugin(
-          "org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.patch))
-
   lazy val resolvers =
     Seq(sbt.Keys.resolvers ++= Seq(
       Resolver.sonatypeRepo("releases")))

@@ -13,7 +13,6 @@ import org.specs2.specification.create.mutable.FormattingFragments
  */
 trait SpecificationCreation extends specification.create.SpecificationCreation
   with FormattingFragments
-  with AutoExamples
   with MutableDsl
   with ArgumentsShortcuts
   with ArgumentsDsl {
@@ -30,4 +29,3 @@ trait SpecificationCreation extends specification.create.SpecificationCreation
 
 
 }
-
