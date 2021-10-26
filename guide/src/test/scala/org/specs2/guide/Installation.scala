@@ -14,6 +14,10 @@ libraryDependencies += "org.specs2" %% "specs2-core" % "$VERSION" % "test"
 
 // if you want to use ScalaJS you need to use %%%
 libraryDependencies += "org.specs2" %%% "specs2-core" % "$VERSION" % "test"
+
+// ScalaJS also requires the following setting which supports
+// the regular expressions used in many specs2 matchers using strings
+scalaJSLinkerConfig ~= { _.withESFeatures(_.withESVersion(ESVersion.ES2018)) }
 ```
 
 See [here](https://www.scala-sbt.org/release/docs/Library-Dependencies.html) to learn more about sbt dependencies.
