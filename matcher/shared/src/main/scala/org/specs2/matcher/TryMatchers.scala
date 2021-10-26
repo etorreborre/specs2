@@ -1,7 +1,6 @@
 package org.specs2
 package matcher
 
-import language.adhocExtensions
 import scala.reflect.ClassTag
 import util.*
 import execute.ResultImplicits.*

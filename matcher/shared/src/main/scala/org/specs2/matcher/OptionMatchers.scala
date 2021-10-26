@@ -51,7 +51,7 @@ case class SomeMatcher[T]() extends OptionLikeMatcher[Option[T], T]("Some", iden
 case class SomeCheckedMatcher[T](check: ValueCheck[T])
     extends OptionLikeCheckedMatcher[Option[T], T]("Some", identity, check)
 
-class OptionLikeMatcher[T, U](typeName: String, toOption: T => Option[U]) extends Matcher[T]:
+open class OptionLikeMatcher[T, U](typeName: String, toOption: T => Option[U]) extends Matcher[T]:
   def apply[S <: T](value: Expectable[S]) =
     result(toOption(value.value).isDefined, s"${value.description} is not $typeName")
 
@@ -61,7 +61,7 @@ class OptionLikeMatcher[T, U](typeName: String, toOption: T => Option[U]) extend
   def like[R: AsResult](f: PartialFunction[U, R]): OptionLikeCheckedMatcher[T, U] =
     new OptionLikeCheckedMatcher(typeName, toOption, f)
 
-class OptionLikeCheckedMatcher[T, U](typeName: String, toOption: T => Option[U], check: ValueCheck[U])
+open class OptionLikeCheckedMatcher[T, U](typeName: String, toOption: T => Option[U], check: ValueCheck[U])
     extends Matcher[T]:
   def apply[S <: T](value: Expectable[S]) =
     toOption(value.value) match
