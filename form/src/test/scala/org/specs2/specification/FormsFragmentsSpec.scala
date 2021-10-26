@@ -38,11 +38,11 @@ class FormsFragmentsSpec(val env: Env)
 
     def e2 =
       val example = "the customer must be as expected" ! form
-      example.startExecution(ownEnv).executionResult.map(_.isSuccess) must beOkWithValue(true)
+      example.startExecution(ownEnv).executionResult.map(_.isSuccess) must beOk(true)
 
     def e3 =
       val example = DefaultExecutor.execute("the customer must be as expected" ! failedForm)(ownEnv)
-      example.executionResult.map(_.message) must beOkWithValue("20 != 18")
+      example.executionResult.map(_.message) must beOk("20 != 18")
 
     def execute(spec: SpecStructure) =
       DefaultExecutor.executeFragments(spec.fragments)(ownEnv)

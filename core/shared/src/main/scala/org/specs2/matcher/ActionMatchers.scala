@@ -18,16 +18,10 @@ trait ActionMatchers extends ValueChecks:
     executionEnv.executionContext
 
   def beOk[T]: FutureMatcher[Action[T]] =
-    beOk[T, T](identity)
-
-  def beOk[T, R](f: T => R): FutureMatcher[Action[T]] =
-    FutureMatcher((_: Action[T]).map(f).runFuture(executionEnv))
+    FutureMatcher((_: Action[T]).runFuture(executionEnv))
 
   def beOk[T](check: ValueCheck[T]): FutureMatcher[Action[T]] =
     FutureMatcher((_: Action[T]).map(check.check).runFuture(executionEnv))
-
-  def beOkWithValue[T](t: T): FutureMatcher[Action[T]] =
-    beOk(new BeEqualTo(t))
 
   def beKo[T]: FutureMatcher[Action[T]] =
     FutureMatcher { (action: Action[T]) =>

@@ -10,21 +10,11 @@ import fp.*, syntax.*
   */
 trait OperationMatchers extends ValueChecks:
 
-  def beOk[T, R: AsResult](f: T => R): Matcher[Operation[T]] =
-    Matcher { (operation: Operation[T]) =>
-      operation.map(f).runOperation match
-        case Left(t)  => AsResult.safely[Result](throw t)
-        case Right(r) => AsResult(r)
-    }
-
   def beOk[T]: Matcher[Operation[T]] =
-    beOk[T, Result]((_: T) => Success())
+    beOkWith[T, Result]((_: T) => Success())
 
   def beOk[T](check: ValueCheck[T]): Matcher[Operation[T]] =
-    beOk(check.check)
-
-  def beOkWithValue[T](t: T): Matcher[Operation[T]] =
-    beOk(new BeEqualTo(t))
+    beOkWith(check.check)
 
   def beKo[T]: Matcher[Operation[T]] =
     Matcher { (operation: Operation[T]) =>
@@ -43,6 +33,13 @@ trait OperationMatchers extends ValueChecks:
         },
         ok => Failure(s"a failure with message $message was expected")
       )
+    }
+
+  private def beOkWith[T, R: AsResult](f: T => R): Matcher[Operation[T]] =
+    Matcher { (operation: Operation[T]) =>
+      operation.map(f).runOperation match
+        case Left(t)  => AsResult.safely[Result](throw t)
+        case Right(r) => AsResult(r)
     }
 
 object OperationMatchers extends OperationMatchers
