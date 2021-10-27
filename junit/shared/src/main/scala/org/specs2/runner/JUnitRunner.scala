@@ -41,10 +41,9 @@ class JUnitRunner(klass: Class[?]) extends org.junit.runner.Runner with Filterab
 
   /** run the specification with a Notifier */
   def run(n: RunNotifier): Unit =
-    try
-      runWithEnv(n, env).runAction(env.specs2ExecutionEnv) match
-        case Right(_) => ()
-        case Left(t)  => n.fireTestFailure(new Failure(getDescription, new RuntimeException(t)))
+    try runWithEnv(n, env).runAction(env.specs2ExecutionEnv) match
+      case Right(_) => ()
+      case Left(t)  => n.fireTestFailure(new Failure(getDescription, new RuntimeException(t)))
     finally env.awaitShutdown()
 
   /** run the specification with a Notifier and an environment */

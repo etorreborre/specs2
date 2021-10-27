@@ -42,9 +42,8 @@ object TopologicalSort:
         result.prepend(n.t)
 
     def run: Option[Vector[T]] =
-      try
-        processed.find(_.unmarked) match
-          case Some(e) => visit(e); run
-          case _       => Some(result.toVector)
+      try processed.find(_.unmarked) match
+        case Some(e) => visit(e); run
+        case _       => Some(result.toVector)
       catch { case e: CycleException => None }
     run
