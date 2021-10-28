@@ -18,7 +18,7 @@ trait ActionMatchers extends ValueChecks:
     executionEnv.executionContext
 
   def beOk[T]: FutureMatcher[Action[T]] =
-    FutureMatcher((_: Action[T]).runFuture(executionEnv))
+    FutureMatcher((_: Action[T]).map(_ => Success("ok")).runFuture(executionEnv))
 
   def beOk[T](check: ValueCheck[T]): FutureMatcher[Action[T]] =
     FutureMatcher((_: Action[T]).map(check.check).runFuture(executionEnv))
@@ -51,8 +51,8 @@ trait FutureMatcher[-T]:
   def apply[S <: T](s: S): Future[Result]
 
 object FutureMatcher:
-  def apply[T, R](f: T => Future[R])(using ee: ExecutionEnv): FutureMatcher[T] =
+  def apply[T, R : AsResult](f: T => Future[R])(using ee: ExecutionEnv): FutureMatcher[T] =
     new FutureMatcher[T]:
       def apply[S <: T](s: S): Future[Result] =
         given ExecutionContext = ee.executionContext
-        f(s).map(_ => Success("ok")).recover(t => Error(t))
+        f(s).map(AsResult.apply).recover(t => Error(t))
