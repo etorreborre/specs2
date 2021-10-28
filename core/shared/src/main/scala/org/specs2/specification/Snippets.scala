@@ -40,12 +40,12 @@ object Snippets:
         private val snippet: Snippet[?] = ${ snippetExpr }
         private val factory = ${ factoryExpr }
         private val start = PositionLocation(
-          ${ Expr(Position.ofMacroExpansion.sourceFile.jpath.toString) },
+          ${ Expr(Position.ofMacroExpansion.sourceFile.getJPath.toString) },
           ${ Expr(Position.ofMacroExpansion.startLine) },
           ${ Expr(Position.ofMacroExpansion.startColumn) }
         )
         private val end = PositionLocation(
-          ${ Expr(Position.ofMacroExpansion.sourceFile.jpath.toString) },
+          ${ Expr(Position.ofMacroExpansion.sourceFile.getJPath.toString) },
           ${ Expr(Position.ofMacroExpansion.endLine) },
           ${ Expr(Position.ofMacroExpansion.endColumn) }
         )

@@ -32,15 +32,16 @@ object FileName:
     else Right(FileName.unsafe(s))
 
   def createFileName(fileName: Expr[String])(using Quotes): Expr[FileName] =
+    import quotes.reflect.report.*
     fileName match
       case e @ Expr(s) =>
         FileName.fileNameFromString(s) match
           case Left(m) =>
-            quotes.reflect.report.throwError(m, fileName)
+            errorAndAbort(m, fileName)
           case Right(fn) =>
             '{ FileName.unsafe($e) }
 
       case other =>
-        quotes.reflect.report.throwError(s"Not a valid file name. It must be a literal string without any /", fileName)
+        errorAndAbort(s"Not a valid file name. It must be a literal string without any /", fileName)
 
   val isWindows = sys.props("os.name").startsWith("Windows")
