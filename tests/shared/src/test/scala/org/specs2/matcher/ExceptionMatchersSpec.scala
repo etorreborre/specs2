@@ -154,4 +154,6 @@ class ExceptionMatchersSpec extends Specification with ResultMatchers:
   )
 
   def throwable1 =
-    (new IllegalArgumentException("incorrect arguments"): Throwable) must beException[IllegalArgumentException](".*arguments.*")
+    (new IllegalArgumentException("incorrect arguments"): Throwable) must beException[IllegalArgumentException](
+      ".*arguments.*"
+    )
