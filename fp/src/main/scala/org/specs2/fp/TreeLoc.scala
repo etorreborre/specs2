@@ -22,23 +22,23 @@ final case class TreeLoc[A](tree: Tree[A], lefts: TreeForest[A], rights: TreeFor
 
   /** Select the left sibling of the current node. */
   def left: Option[TreeLoc[A]] = lefts match
-    case t #:: ts   => Some(loc(t, ts, tree #:: rights, parents))
-    case _ => None
+    case t #:: ts => Some(loc(t, ts, tree #:: rights, parents))
+    case _        => None
 
   /** Select the right sibling of the current node. */
   def right: Option[TreeLoc[A]] = rights match
-    case t #:: ts   => Some(loc(t, tree #:: lefts, ts, parents))
-    case _ => None
+    case t #:: ts => Some(loc(t, tree #:: lefts, ts, parents))
+    case _        => None
 
   /** Select the leftmost child of the current node. */
   def firstChild: Option[TreeLoc[A]] = tree.subForest match
-    case t #:: ts   => Some(loc(t, LazyList.empty, ts, downParents))
-    case _ => None
+    case t #:: ts => Some(loc(t, LazyList.empty, ts, downParents))
+    case _        => None
 
   /** Select the rightmost child of the current node. */
   def lastChild: Option[TreeLoc[A]] = tree.subForest.reverse match
-    case t #:: ts   => Some(loc(t, ts, LazyList.empty, downParents))
-    case _ => None
+    case t #:: ts => Some(loc(t, ts, LazyList.empty, downParents))
+    case _        => None
 
   /** Select the nth child of the current node. */
   def getChild(n: Int): Option[TreeLoc[A]] =

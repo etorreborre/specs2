@@ -51,7 +51,7 @@ trait FutureMatcher[-T]:
   def apply[S <: T](s: S): Future[Result]
 
 object FutureMatcher:
-  def apply[T, R : AsResult](f: T => Future[R])(using ee: ExecutionEnv): FutureMatcher[T] =
+  def apply[T, R: AsResult](f: T => Future[R])(using ee: ExecutionEnv): FutureMatcher[T] =
     new FutureMatcher[T]:
       def apply[S <: T](s: S): Future[Result] =
         given ExecutionContext = ee.executionContext
