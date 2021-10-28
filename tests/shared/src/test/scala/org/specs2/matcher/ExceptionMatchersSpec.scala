@@ -6,7 +6,7 @@ import sys.*
 import execute.AsResult
 import text.Regexes.*
 
-class ExceptionMatchersSpec extends Specification with ResultMatchers {
+class ExceptionMatchersSpec extends Specification with ResultMatchers:
   def is = s2"""
 
  Exception matchers allow to check that exceptions are thrown
@@ -69,6 +69,11 @@ class ExceptionMatchersSpec extends Specification with ResultMatchers {
  ==========
 
  the stacktrace of the caught exception must be displayed $stacktrace1
+
+ An exception value
+ ==================
+
+ A Throwable can be checked for its class and message $throwable1
 
 """
 
@@ -147,4 +152,6 @@ class ExceptionMatchersSpec extends Specification with ResultMatchers {
   def stacktrace1 = (theBlock(error("boom")) must throwAn[IllegalArgumentException]).message must contain(
     "The  RuntimeException stacktrace is"
   )
-}
+
+  def throwable1 =
+    (new IllegalArgumentException("incorrect arguments"): Throwable) must beException[IllegalArgumentException](".*arguments.*")

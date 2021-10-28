@@ -8,6 +8,8 @@ import text.NotNullStrings.*
 import BeMatching.{given, *}
 import execute.*, Result.*
 import ResultImplicits.*
+import AnyMatchers.{haveClass}
+import StringMatchers.{beMatching}
 
 /** These matchers can be used to check if exceptions are thrown or not
   */
@@ -42,6 +44,13 @@ trait ExceptionMatchers extends ExpectationsCreation:
   /** alias for throwA
     */
   def throwAn[E <: Throwable](e: E): ExceptionMatcher[E] = throwA(e)
+
+  /** check if a Throwable has a specific class and error message The message must be a regular expression, for example
+    * (new IllegalArgumentException("incorrect arguments"): Throwable) must
+    * beException[IllegalArgumentException](".*arguments.*")
+    */
+  def beException[T: ClassTag](message: String): Matcher[Throwable] =
+    haveClass[T] and beMatching(message) ^^ ((t: Throwable) => t.getMessage)
 
   /** Exception matcher checking the type of a thrown exception.
     */
@@ -139,7 +148,7 @@ trait ExceptionMatchers extends ExpectationsCreation:
 
   private val rethrowException = (e: Throwable) => throw e
 
-  /** use the andFinally continuation when a result is not succesfull in order to know what to do of unexpected
+  /** use the andFinally continuation when a result is not successful in order to know what to do of unexpected
     * exceptions for the case expr must not(throw[ExceptionX])
     */
   private def rethrowFinally(e: Throwable, andFinally: Throwable => Unit)(r: Result): Result =
