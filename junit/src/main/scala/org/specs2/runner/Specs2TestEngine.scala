@@ -42,7 +42,7 @@ class Specs2TestEngine extends TestEngine:
         .asScala
         .map(_.getJavaClass)
         .filter(klass =>
-          !(klass.getEnclosingMethod != null //only local or anonymous classes have an enclosing method
+          !(klass.getEnclosingMethod != null // only local or anonymous classes have an enclosing method
             || klass.isSynthetic
             || Modifier.isAbstract(klass.getModifiers))
             && classOf[SpecificationStructure].isAssignableFrom(klass)
