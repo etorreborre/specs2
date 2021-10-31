@@ -11,7 +11,7 @@ import fp.*, syntax.*
 import control.*
 import process.{StatisticsRepository}
 import reflect.*
-import scala.collection.mutable.{Map as MutableMap}
+import scala.collection.*
 import scala.concurrent.*, duration.*
 
 /** Whole creation / execution / reporting environment for a specification
@@ -145,7 +145,7 @@ case class Env(
     customClassLoader.foreach(classLoading.setContextClassLoader)
 
 // map of resources with a key possibly shared by several specifications
-type Resources = MutableMap[String, ResourceExecution]
+type Resources = concurrent.Map[String, ResourceExecution]
 
 enum ResourceType:
   case Local
