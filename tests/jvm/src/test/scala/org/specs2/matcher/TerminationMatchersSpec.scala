@@ -90,7 +90,7 @@ class TerminationMatchersSpec(val env: Env) extends Specification with Terminati
     )) returns "the action is blocking with retries=1 and sleep=100"
 
   def termination12 =
-    import scala.concurrent.duration.* //need to convert a Double to millis so that the test runs quickly
+    import scala.concurrent.duration.* // need to convert a Double to millis so that the test runs quickly
     // we sleep for 10 seconds
     // we retry 100,000 times with a sleep of 0.01 millis
     // thus we must terminate within (100,000 * 0.01) ms = 1 second

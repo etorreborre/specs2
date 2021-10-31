@@ -126,7 +126,7 @@ private[specs2] class Parser extends StdTokenParsers with ImplicitConversions:
 private[specs2] class Lexer extends StdLexical with ImplicitConversions:
 
   override def token: Parser[Token] =
-    //( '\"' ~ rep(charSeq | letter) ~ '\"' ^^ lift(StringLit)
+    // ( '\"' ~ rep(charSeq | letter) ~ '\"' ^^ lift(StringLit)
     (string ^^ StringLit.apply
       | number ~ letter ^^ { case n ~ l => ErrorToken("Invalid number format : " + n + l) }
       | '-' ~> whitespace ~ number ~ letter ^^ { case ws ~ num ~ l =>
