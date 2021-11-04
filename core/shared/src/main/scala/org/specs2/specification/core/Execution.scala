@@ -346,6 +346,21 @@ object Execution:
   def future[T: AsResult](f: =>Future[T]): Execution =
     withEnvAsync(_ => f)
 
+  /** create an execution with a future of an Execution */
+  def futureFlatten[T](f: =>Future[Execution]): Execution =
+    withEnvFlatten(env =>
+      implicit val ec = env.executionContext
+      Execution(run =
+        Some((env: Env) =>
+          f.flatMap { execution =>
+            execution.run match
+              case Some(f) => f(env)
+              case None    => Future.successful(() => Success())
+          }
+        )
+      )
+    )
+
   /** create an execution using the Env */
   def withEnvAsync[T: AsResult](f: Env => Future[T]): Execution =
     Execution(Some((env: Env) => f(env).map(r => () => AsResult.safely(r))(env.executionContext)))

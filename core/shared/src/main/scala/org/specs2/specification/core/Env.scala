@@ -87,8 +87,9 @@ case class Env(
   /** @return a list of finalization failures by resource key if any */
   def shutdown: Future[List[Result]] =
     given ExecutionContext = specs2ExecutionContext
-    val results: Action[List[(String, Result)]] = resources.toList
-      .traverse { case (key, resource) => resource.execution.startExecution(this).executionResult.map(r => (key, r)) }
+    val results: Action[List[(String, Result)]] = resources.toList.traverse { case (key, resource) =>
+      resource.finalizer.startExecution(this).executionResult.map(r => (key, r))
+    }
 
     val failures = results
       .map { (rs: List[(String, Result)]) =>
@@ -145,13 +146,17 @@ case class Env(
     customClassLoader.foreach(classLoading.setContextClassLoader)
 
 // map of resources with a key possibly shared by several specifications
-type Resources = mutable.Map[String, ResourceExecution]
+type Resources = mutable.Map[String, ResourceExecution[?]]
 
 enum ResourceType:
   case Local
   case Global
 
-case class ResourceExecution(resourceType: ResourceType, resource: Any, execution: Execution)
+case class ResourceExecution[T](resourceType: ResourceType, resource: Future[T], release: T => Execution):
+  def finalizer: Execution = Execution.withEnvFlatten { (env: Env) =>
+    given ExecutionContext = env.executionContext
+    Execution.futureFlatten(resource.map(release))
+  }
 
 object Env:
 

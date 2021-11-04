@@ -7,7 +7,9 @@ import reporter.PrinterLogger.*
 import specification.core.*
 import control.*
 import scala.collection.mutable.ArrayBuffer
-import scala.concurrent.*
+import scala.concurrent.*, duration.*
+import java.util.concurrent.atomic.{AtomicInteger, AtomicReference}
+import java.util.function.UnaryOperator
 
 class ResourceSpec(using ec: ExecutionContext) extends Specification:
   def is = s2"""
@@ -23,6 +25,10 @@ the execution of the specification
 
   acquire and release $demo
   if the resource cannot be acquired the examples are skipped $acquireError
+
+A global resource can be acquired across several specifications by overriding the `resourceKey`
+method. It can then be accessed concurrently by several specifications
+  global $concurrentGlobal
 
 """
 
@@ -41,6 +47,34 @@ the execution of the specification
     val env: Env = Env(arguments = Arguments(), printerLogger = NoPrinterLogger)
     try Reporter.create(printer.toList, env).report(s.structure).runVoid(env.executionEnv)
     finally env.awaitShutdown()
+
+  def concurrentGlobal =
+    val env: Env = Env(arguments = Arguments(), printerLogger = NoPrinterLogger)
+    val reporter = Reporter.create(List(), env)
+    val messages: AtomicReference[List[String]] = AtomicReference(List())
+    val specifications = (1 to 5).map(n => GlobalResourceExample(n, messages).structure)
+    try Await.result(
+      Future.sequence(specifications.map { s =>
+        reporter.report(s).runFuture(env.executionEnv)
+      }),
+      Duration.Inf
+    )
+    finally env.awaitShutdown()
+
+    (messages.get.headOption === Some("acquired")) and
+      (messages.get.lastOption === Some("released with value 5")) and
+      (messages.get.toSet ===
+        Set(
+          "acquired",
+          "ref is 1",
+          "ref is 2",
+          "ref is 3",
+          "ref is 4",
+          "ref is 5",
+          "released with value 5"
+        ))
+
+/** HELPERS */
 
 class ResourceExample(messages: ArrayBuffer[String]) extends Specification, Resource[Ref[Int]]:
   def is = sequential ^ s2"""
@@ -72,16 +106,45 @@ class ResourceExample(messages: ArrayBuffer[String]) extends Specification, Reso
   }
 
 class AcquireErrorExample extends Specification, Resource[Ref[Int]]:
-  def is = sequential ^ s2"""
-    e1 $e1
-    e2 $e2
-    """
+  def is = sequential ^
+    "e1" ! e1 ^
+    "e2" ! e2
 
-  def e1 = { (ref: Ref[Int]) => ok }
-  def e2 = { (ref: Ref[Int]) => ok }
+  def e1: Execution = { (ref: Ref[Int]) => ok }
+  def e2: Execution = { (ref: Ref[Int]) => ok }
 
   def acquire =
     Future.failed(Exception("boom"))
 
   def release(ref: Ref[Int]) =
     ok
+
+trait GlobalResource extends Resource[AtomicInteger]:
+
+  override def resourceKey: Option[String] =
+    Some("global")
+
+  val messages: AtomicReference[List[String]]
+  def append(m: String) =
+    messages.getAndUpdate(new UnaryOperator[List[String]] {
+      def apply(l: List[String]): List[String] = l :+ m
+    })
+
+  def acquire =
+    append("acquired")
+    Future.successful(new AtomicInteger(0))
+
+  def release(ref: AtomicInteger) = Execution.result {
+    append("released with value " + ref.get)
+    true
+  }
+
+case class GlobalResourceExample(number: Int, messages: AtomicReference[List[String]])
+    extends Specification,
+      GlobalResource:
+  def is = s2"""e1 $e1"""
+
+  def e1 = { (ref: AtomicInteger) =>
+    append("ref is " + ref.incrementAndGet.toString)
+    ok
+  }

@@ -69,21 +69,31 @@ trait Resource[T] extends BeforeAfterSpec with FragmentsFactory:
   def beforeSpec =
     fragmentFactory.step(Execution.withEnvAsync { env =>
       implicit val ec = env.executionContext
-      lazy val acquired: Future[T] = acquire.recoverWith { case e: Exception =>
+
+      lazy val acquireResource: Future[T] = acquire.recoverWith { case e: Exception =>
         Future.failed[T](new Exception("resource unavailable", e))
+      }
+      lazy val acquireResult: Future[Result] = acquireResource.transform {
+        case util.Success(_) => util.Success(Success())
+        case util.Failure(t) => util.Success(Error(t))
       }
 
       resourceKey match
         // local resource
         case None =>
-          acquired.map(r => { env.resources.addOne(getResourceKey -> ResourceExecution(Local, r, release(r))); () })
+          env.resources.addOne(getResourceKey -> ResourceExecution(Local, acquireResource, release))
+          acquireResult
+
         // global resource, only acquire it if not acquired before
         case Some(key) =>
-          env.resources.get(key) match
-            case Some(r) =>
-              Future.successful(())
-            case None =>
-              acquired.map(r => { env.resources.addOne(key -> ResourceExecution(Global, r, release(r))); () })
+          env.resources.synchronized {
+            env.resources.get(key) match
+              case Some(r) =>
+                Future.successful(Success())
+              case None =>
+                env.resources.addOne(key -> ResourceExecution(Global, acquireResource, release))
+                acquireResult
+          }
     }.setErrorAsFatal)
 
   def afterSpec =
@@ -92,16 +102,21 @@ trait Resource[T] extends BeforeAfterSpec with FragmentsFactory:
       fragmentFactory.step {
         Execution.withEnvFlatten { env =>
           implicit val ec = env.executionContext
-          env.resources.get(getResourceKey) match
-            case None =>
-              // we can assume here that if no resource was available for the key, that's because
-              // it could not be acquired in the first place
-              success
-            case Some(ResourceExecution(Local, _, finalization)) =>
-              env.resources.remove(getResourceKey)
-              finalization
-            case Some(ResourceExecution(_, _, _)) =>
-              success
+          // synchronize the retrieval of the resource and
+          // its acquisition on the resources map to avoid
+          // concurrency issues
+          env.resources.synchronized {
+            env.resources.get(getResourceKey) match
+              case None =>
+                // we can assume here that if no resource was available for the key, that's because
+                // it could not be acquired in the first place
+                success
+              case Some(ResourceExecution(Local, acquired, finalization)) =>
+                env.resources.remove(getResourceKey)
+                Execution.futureFlatten(acquired.map(finalization))
+              case Some(ResourceExecution(_, _, _)) =>
+                success
+          }
         }
       }
     )
@@ -111,7 +126,8 @@ trait Resource[T] extends BeforeAfterSpec with FragmentsFactory:
       Execution.withEnvFlatten { env =>
         env.resources.get(getResourceKey) match
           case Some(r) =>
-            AsExecution[R].execute(f(r.resource.asInstanceOf[T]))
+            given ExecutionContext = env.executionContext
+            Execution.futureFlatten(r.resource.asInstanceOf[Future[T]].map(t => AsExecution[R].execute(f(t))))
           case _ =>
             Execution.result(StandardResults.skipped("resource unavailable"))
       }
