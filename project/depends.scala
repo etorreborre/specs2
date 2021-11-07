@@ -33,7 +33,7 @@ object depends {
   // used in specs2-html
   val tagsoup = "org.ccil.cowan.tagsoup" % "tagsoup" % "1.2.1"
 
-  val Scala213 = "2.13.6"
+  val Scala213 = "2.13.7"
 
   val isScala3 = Def.setting(CrossVersion.partialVersion(scalaVersion.value).exists(_._1 == 3))
 
