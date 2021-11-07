@@ -256,11 +256,21 @@ lazy val testSettings = Seq(
 ) ++ depends.sharedTest
 
 lazy val testJvmSettings = Seq(
-  javaOptions ++= Seq("-Xmx3G", "-Xss4M"),
+  Test / javaOptions ++= Seq("-Xmx3G", "-Xss4M") ++ javaSpecs2Properties,
   Test / fork := true
 ) ++ depends.jvmTest
 
+// extract the specs2 properties as java options arguments
+// in order to pass them to a forked jvm for testing
+lazy val javaSpecs2Properties: List[String] = {
+  new sys.SystemProperties().names.toList.flatMap { case key =>
+    if (key.startsWith("specs2")) List(s"-D$key=${System.getProperty(key)}")
+    else Nil
+  }
+}
+
 lazy val testJsSettings = Seq(
+  Test / javaOptions :=  javaSpecs2Properties,
   Test / fork := false,
   Test / parallelExecution := false,
   Test / scalaJSStage := FastOptStage
