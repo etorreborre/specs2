@@ -13,7 +13,7 @@ class BufferedLineLoggerSpec extends Spec { def is = s2"""
     val logger = stringLogger
     logger.infoLog("Hello world\n")
     logger.infoLog("How are you?")
-    logger.close
+    logger.close()
 
     logger.messages must_== Seq("[info] Hello world", "[info] How are you?")
   }

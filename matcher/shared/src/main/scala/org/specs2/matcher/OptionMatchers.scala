@@ -16,6 +16,7 @@ object OptionMatchers extends OptionMatchers
 private[specs2]
 trait OptionBaseMatchers {
 
+  def beSome[T : Diffable](t: T): SomeCheckedMatcher[T] = SomeCheckedMatcher(ValueChecks.valueIsTypedValueCheck(t))
   def beSome[T](check: ValueCheck[T]): SomeCheckedMatcher[T] = SomeCheckedMatcher(check)
   def some[T : Diffable](t: T): SomeCheckedMatcher[T] = beSome(ValueChecks.valueIsTypedValueCheck(t))
   def some[T](check: ValueCheck[T]): SomeCheckedMatcher[T] = beSome(check)

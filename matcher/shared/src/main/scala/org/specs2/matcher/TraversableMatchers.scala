@@ -33,7 +33,8 @@ trait TraversableBaseMatchers { outer =>
   /**
    * ELEMENTS MATCHERS
    */
-  def contain[T](check: ValueCheck[T]): ContainWithResult[T] = new ContainWithResult(check)
+  def contain[T](check: ValueCheck[T]): ContainWithResult[T] =
+    new ContainWithResult(check)
 
   /**
    * COLLECTION MATCHERS

@@ -1,6 +1,8 @@
 package org.specs2
 package matcher
 
+import execute._
+
 class ExpectationsSpec extends Specification { def is = s2"""
 
  StoredExpectations can be sandboxed $e1
@@ -9,7 +11,7 @@ class ExpectationsSpec extends Specification { def is = s2"""
 """
 
   def e1 = {
-    val expectations = new StoredExpectations { def check[T](m: MatchResult[T]) = checkMatchResultFailure(m) }
+    val expectations: CheckedStoredExpectations = new CheckedStoredExpectations { def check[T](m: MatchResult[T]) = checkMatchResultFailure(m) }
     expectations.check(ok)
     expectations.sandboxMatchResult(ko)
     "ko has not been stored" ==> {
@@ -18,7 +20,11 @@ class ExpectationsSpec extends Specification { def is = s2"""
   }
 
   def e2 = {
-    val expectations = new ThrownExpectations { def check[T](m: MatchResult[T]) = checkMatchResultFailure(m) }
+    val expectations: CheckedStoredExpectations = new CheckedStoredExpectations with ThrownExpectations { def check[T](m: MatchResult[T]) = checkMatchResultFailure(m) }
     expectations.sandboxMatchResult(expectations.check(ko)) must_== ko
   }
+}
+
+trait CheckedStoredExpectations extends StoredExpectations {
+  def check[T](m: MatchResult[T]): MatchResult[Any]
 }

@@ -13,6 +13,7 @@ import specification.process._
 import OperationMatchers._
 import org.specs2.control.origami.Folds
 import org.specs2.control.ExecuteActions._
+import ValueChecks._
 
 class ReporterSpec(val env: Env) extends Specification with ThrownExpectations with OwnEnv { def is = s2"""
 
@@ -49,14 +50,14 @@ class ReporterSpec(val env: Env) extends Specification with ThrownExpectations w
   def a2 = {
     val repository = StatisticsRepositoryCreation.memory
     reported(ownEnv.setArguments(Arguments()).setStatisticRepository(repository))
-    repository.getStatistics(spec().specClassName) must beOk(beSome((_: Stats).examples must_== 3))
+    repository.getStatistics(spec().specClassName) must beOk(beSome[Stats]((_: Stats).examples must_== 3))
   }
 
   def a3 = {
     val repository = StatisticsRepositoryCreation.memory
     reported(ownEnv.setArguments(Arguments()).setStatisticRepository(repository))
     val ex2 = spec().fragmentsList(env.executionEnv)(3)
-    repository.previousResult(spec().specClassName, ex2.description) must beOk(beSome((_: Result).isFailure must beTrue))
+    repository.previousResult(spec().specClassName, ex2.description) must beOk(beSome[Result]((_: Result).isFailure must beTrue))
   }
 
   def a4 = {
@@ -72,7 +73,7 @@ class ReporterSpec(val env: Env) extends Specification with ThrownExpectations w
   def b2 = {
     val logger = stringLogger
     reported(ownEnv.setLineLogger(logger).setArguments(Arguments("junit")), printers = List(new FakeJUnitPrinter(logger)))
-    logger.messages must not(contain[List[String]]("ex1"))
+    logger.messages must not(contain[String]("ex1"))
     logger.messages must contain("[info] junit")
   }
 

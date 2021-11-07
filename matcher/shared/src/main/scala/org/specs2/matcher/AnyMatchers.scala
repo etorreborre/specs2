@@ -2,10 +2,10 @@ package org.specs2
 package matcher
 
 import org.specs2.matcher.describe.Diffable
+import org.specs2.data._, Sized._
 import org.specs2.text.Quote._
 
 import scala.reflect.ClassTag
-import scala.reflect.Selectable.reflectiveSelectable
 
 /**
  * This trait provides matchers which are applicable to any type of value
@@ -43,11 +43,11 @@ trait AnyBaseMatchers {
   /** matches if a == b */
   def equalTo[T](t: =>T) = beEqualTo(t)
   /** matches if a == b */
-  def beTypedEqualTo[T : Diffable](t: =>T) =
+  def beTypedEqualTo[T : Diffable](t: =>T): EqualityMatcher[T] =
     new EqualityMatcher(t)
 
   /** matches if a == b */
-  def typedEqualTo[T](t: =>T) =
+  def typedEqualTo[T](t: =>T): EqualityMatcher[T] =
     beTypedEqualTo(t)
 
   /** matches if a == b after an implicit conversion */
@@ -57,23 +57,14 @@ trait AnyBaseMatchers {
   def ==~[T : Diffable, S](s: =>S)(implicit convert: S => T): Matcher[T] = be_==~(s)
 
   /** negate a matcher */
-  def not[T](m: Matcher[T]) = m.not
+  def not[T](m: Matcher[T]): Matcher[T] = m.not
 
   /** matches if a.isEmpty */
-  def beEmpty[T](implicit convert: T => Any { def isEmpty: Boolean }) = new Matcher[T] {
-    def apply[S <: T](iterable: Expectable[S]) = {
-      // we need to pattern match on arrays otherwise we get a reflection exception
-      iterable.value match {
-        case a: Array[?] =>
-          result(convert(a).isEmpty,
-            iterable.description + " is empty",
-            iterable.description + " is not empty", iterable)
-
-        case _ =>
-          result(convert(iterable.value).isEmpty,
-            iterable.description + " is empty",
-            iterable.description + " is not empty", iterable)
-      }
+  def beEmpty[T : Sized]: Matcher[T] = new Matcher[T] {
+    def apply[S <: T](t: Expectable[S]) = {
+      result(Sized[T].isEmpty(t.value),
+        t.description + " is empty",
+        t.description + " is not empty", t)
     }
   }
 
@@ -230,10 +221,10 @@ trait AnyBeHaveMatchers extends BeHaveMatchers { outer: AnyMatchers =>
     def assignableFrom = result(outer.beAssignableFrom[T])
   }
 
-  implicit def anyWithEmpty[T](result: MatchResult[T])(implicit convert: T => Any { def isEmpty: Boolean }): AnyWithEmptyMatchers[T] =
+  implicit def anyWithEmpty[T : Sized](result: MatchResult[T]): AnyWithEmptyMatchers[T] =
     new AnyWithEmptyMatchers(result)
 
-  class AnyWithEmptyMatchers[T](result: MatchResult[T])(implicit convert: T => Any { def isEmpty: Boolean }) {
+  class AnyWithEmptyMatchers[T : Sized](result: MatchResult[T]) {
     def empty = result(outer.beEmpty[T])
     def beEmpty = result(outer.beEmpty[T])
   }
@@ -246,7 +237,7 @@ trait AnyBeHaveMatchers extends BeHaveMatchers { outer: AnyMatchers =>
   def like[T](pattern: =>PartialFunction[T, MatchResult[?]]) = beLike(pattern)
   def beLikeA[T](pattern: =>PartialFunction[T, MatchResult[?]]) = beLike(pattern)
   def likeA[T](pattern: =>PartialFunction[T, MatchResult[?]]) = beLike(pattern)
-  def empty[T <: Any { def isEmpty: Boolean }] = beEmpty[T]
+  def empty[T : Sized] = beEmpty[T]
   def oneOf[T](t: T*) = beOneOf(t:_*)
   def anyOf[T](t: T*) = beAnyOf(t:_*)
   def klass[T : ClassTag]: Matcher[AnyRef] = outer.haveClass[T]

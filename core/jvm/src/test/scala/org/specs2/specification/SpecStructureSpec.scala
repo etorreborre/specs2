@@ -4,6 +4,7 @@ package specification
 import core._
 import control._
 import main._
+import matcher._
 import org.specs2.concurrent.ExecutionEnv
 
 class SpecStructureSpec extends Specification { def is = s2"""
@@ -34,7 +35,7 @@ ${step(env.shutdown())}
 
   def b1 =
     SpecStructure.linkedSpecifications(s1, env.setArguments(Arguments.split("exclude s2")),getClass.getClassLoader).
-      runOption.toList.flatten must not(contain((s: SpecStructure) => s.name === "S2"))
+      runOption.getOrElse(Nil) must not(contain((s: SpecStructure) => s.name === "S2"))
 }
 
 object S1 extends Specification { def is = link(xonly ^ S2.is) ^ tag("s2") }

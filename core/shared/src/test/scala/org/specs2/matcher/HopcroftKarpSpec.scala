@@ -5,6 +5,7 @@ import data.HopcroftKarp._
 import execute.BestMatching
 import BestMatching._
 import MatchResult._
+import execute._
 
 class HopcroftKarpSpec extends Spec { def is = s2"""
 
@@ -53,15 +54,15 @@ class HopcroftKarpSpec extends Spec { def is = s2"""
     // 2 matches with List(1, 2, 3)
     // 4 matches with List(4)
     // 5 matches with List(1, 5)
-    val (matches, remaining) =
-    findBestMatch[Int, List[Int], MatchResult[_]](
-      1 to 5, List(
-                   List(1, 2, 3),
-                   List[Int](),
-                   List(1),
-                   List(4),
-                   List(1, 5)),
-                  (i: Int, list: List[Int]) => if (list.contains(i)) ok(s"$list contains $i") else ko(s"$list does not contain $i"))
+    val (matches, remaining): (Seq[(Int, List[Int], Result)], Seq[List[Int]]) =
+          findBestMatch[Int, List[Int], MatchResult[?]](
+            1 to 5, List(
+                         List(1, 2, 3),
+                         List[Int](),
+                         List(1),
+                         List(4),
+                         List(1, 5)),
+                        (i: Int, list: List[Int]) => if (list.contains(i)) ok(s"$list contains $i") else ko(s"$list does not contain $i"))
 
     matches.map { case (i, j, r) => r.message } must contain(exactly(
       "List(1) contains 1",
@@ -72,4 +73,3 @@ class HopcroftKarpSpec extends Spec { def is = s2"""
   }
 
 }
-

@@ -14,6 +14,7 @@ import specification.process.DefaultExecutor
 import control._
 import control.producer._
 import fp.syntax._
+import fp._
 import ResultMatchers._
 
 import scala.concurrent._
@@ -271,19 +272,19 @@ class ExecutorSpec(val env: Env) extends script.Specification with Groups with T
     finally e.shutdown()
   }
 
-  lazy val factory = fragmentFactory
+  final val factory = fragmentFactory
 
   def execute(fragments: Fragments, env: Env): List[Result] =
     DefaultExecutor.execute(env)(fragments.contents).runList.
-      runOption(env.executionEnv).toList.flatten.traverse(_.executionResult).run(env.executionEnv)
+      runOption(env.executionEnv).getOrElse(Nil).traverse(_.executionResult).run(env.executionEnv)
 
   def executionTimes(fragments: Fragments, env: Env): List[String] =
     DefaultExecutor.execute(env)(fragments.contents).runList.
-      runOption(env.executionEnv).toList.flatten.traverse(_.executedResult.map(_.timer.time)).run(env.executionEnv)
+      runOption(env.executionEnv).getOrElse(Nil).traverse(_.executedResult.map(_.timer.time)).run(env.executionEnv)
 
   def executions(fragments: Fragments, env: Env): List[Execution] =
     DefaultExecutor.execute(env)(fragments.contents).runList.
-      runOption(env.executionEnv).toList.flatten.map(_.execution)
+      runOption(env.executionEnv).getOrElse(Nil).map(_.execution)
 
   trait results {
     val messages = new ListBuffer[String]

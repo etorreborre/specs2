@@ -73,9 +73,9 @@ class SourceFileSpec extends Spec with Grouped with SourceFile with TypedEqual {
   "class names" - new g2 {
     val pattern = Pattern.compile("\\s*class\\s*(.*Spec)\\s*extends\\s*.*")
     val content = "\nclass MySpec extends Spec\n"
-    e1 := classNames("com.example", content, pattern, suffix = "", verbose = true).runOption must beSome(Seq("com.example.MySpec"))
+    e1 := classNames("com.example", content, pattern, suffix = "", verbose = true).runOption must beSome(List("com.example.MySpec"))
 
-    e2 := classNames("", content, pattern, suffix = "", verbose = true).runOption must beSome(Seq("MySpec"))
+    e2 := classNames("", content, pattern, suffix = "", verbose = true).runOption must beSome(List("MySpec"))
 
   }
 }

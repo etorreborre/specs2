@@ -6,7 +6,7 @@ import execute._
 /**
  * This trait evaluates expectations and stores them in a local variable for further usage
  */
-trait StoredExpectations extends Expectations {
+trait StoredExpectations extends Expectations with StoredResults {
   private[specs2] lazy val matchResults = new scala.collection.mutable.ListBuffer[MatchResult[?]]
   private[specs2] lazy val results = new scala.collection.mutable.ListBuffer[Result]
 
@@ -53,4 +53,8 @@ trait StoredExpectations extends Expectations {
     }
   }
 
+}
+
+trait StoredResults {
+  def storedResults: scala.collection.Seq[Result]
 }

@@ -3,9 +3,8 @@ package specification
 
 import org.specs2.execute.Result._
 import org.specs2.execute.{ResultExecution, Result, AsResult}
-import org.specs2.matcher.StoredExpectations
+import org.specs2.matcher._
 import org.specs2.fp._
-import scala.reflect.Selectable.reflectiveSelectable
 
 /**
  * generic trait for Before, After, Around
@@ -189,7 +188,7 @@ trait Scope extends matcher.Scope
  *
  * @see the AllExpectations trait for its use
  */
-class ResultsContext(results: => scala.collection.Seq[Result]) extends StoredResultsContext {
+class ResultsContext(results: => scala.collection.Seq[Result]) extends StoredResultsContext with StoredResults {
   def storedResults = results
 }
 
@@ -206,7 +205,7 @@ trait StoredExpectationsContext extends StoredExpectations with StoredResultsCon
  * It evaluates the result of an example, which is supposed to create side-effects
  * and returns the 'storedResults' as the summary of all results
  */
-trait StoredResultsContext extends Context { this: { def storedResults: scala.collection.Seq[Result]} =>
+trait StoredResultsContext extends Context { this: StoredResults =>
   def apply[T : AsResult](r: =>T): Result = {
     // evaluate r, triggering side effects
     val asResult = AsResult(r)

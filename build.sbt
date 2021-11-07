@@ -32,7 +32,7 @@ lazy val specs2Settings = Seq(
   specs2ShellPrompt,
   scalaVersion := "3.1.0",
   SettingKey[Boolean]("ide-skip-project").withRank(KeyRanks.Invisible) := platformDepsCrossVersion.value == ScalaNativeCrossVersion.binary,
-  crossScalaVersions := Seq(scalaVersion.value, "2.12.14", "2.13.6"))
+  crossScalaVersions := Seq(scalaVersion.value, "2.13.7"))
 
 lazy val tagName = Def.setting {
   s"specs2-${version.value}"
@@ -414,7 +414,6 @@ lazy val compilationSettings: Seq[Def.Setting[_]] = Seq(
         "-language:_",
         "-Ykind-projector:underscores")
       case _ => Seq(
-        "-Ypartial-unification",
         "-Xlint",
         "-Ywarn-numeric-widen",
         "-Ywarn-value-discard",
@@ -427,16 +426,21 @@ lazy val compilationSettings: Seq[Def.Setting[_]] = Seq(
         "-P:kind-projector:underscore-placeholders")
     }
   },
+  Test / scalacOptions ++= {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((3, _)) => Seq()
+      case _ => Seq("-Yrangepos")
+    }
+  },
+  Compile / doc / scalacOptions ++= Seq("-feature", "-language:_"),
+  Compile / console / scalacOptions := Seq("-Yrangepos", "-feature", "-language:_"),
+  Test / console / scalacOptions := Seq("-Yrangepos", "-feature", "-language:_"),
   libraryDependencies ++= {
     CrossVersion.partialVersion(scalaVersion.value) match {
        case Some((3, _)) => Seq()
        case _ => List(compilerPlugin("org.typelevel" % "kind-projector" % "0.13.2" cross CrossVersion.full))
     }
-  },
-  Test / scalacOptions += "-Yrangepos",
-  Compile / doc / scalacOptions ++= Seq("-feature", "-language:_"),
-  Compile / console / scalacOptions := Seq("-Yrangepos", "-feature", "-language:_"),
-  Test / console / scalacOptions := Seq("-Yrangepos", "-feature", "-language:_")
+  }
 )
 
 

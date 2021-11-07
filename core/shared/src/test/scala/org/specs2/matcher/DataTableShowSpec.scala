@@ -12,8 +12,8 @@ class DataTableShowSpec extends Specification with DataTables { def is = s2"""
 """
 
   def display = {
-    implicit val s3 = Show3[Int, Double, String](
-      (i: Int) => "x"*i,
+    implicit val s3: Show3[Int, Double, String] = Show3[Int, Double, String](
+      (i: Int) => augmentString("x").*(i),
       (d: Double) => "y"*d.toInt,
       (s: String) => s"($s)"
     )
@@ -30,7 +30,7 @@ class DataTableShowSpec extends Specification with DataTables { def is = s2"""
   }
 
   def oneOnly = {
-    implicit val s3 =
+    implicit val s3: Show3[Int, Double, String] =
       Show3[Int, Double, String]().copy(show2 = (d: Double) => "y"*d.toInt)
 
     val table =

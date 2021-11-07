@@ -9,6 +9,7 @@ import control._
 import main.Arguments
 import org.specs2.concurrent.ExecutionEnv
 import ExecuteActions._
+import org.specs2.control.producer._
 
 class SelectorSpec(ee: ExecutionEnv) extends script.Specification with Groups with ResultMatchers { def is = sequential ^ s2"""
 

@@ -29,10 +29,10 @@ class ThrownExpectationsSpec extends Spec with ResultMatchers {
   "Results must only be checked once" in {
     val body = body6
     execute(body)
-    body.i must be_==(1)
+    body.value must be_==(1)
   }
 
-  def execute[T](t: =>T) = ResultExecution.execute(t)(_ => Success())
+  def execute[T](t: =>T): Result = ResultExecution.execute(t)(_ => Success())
 }
 object ThrownExpectationsSpecData {
   def body1 = new MustThrownExpectations with matcher.Scope {
@@ -52,7 +52,10 @@ object ThrownExpectationsSpecData {
     1   ! 1   ! 2   |
     1   ! 1   ! 3   | { (a, b, c) => (a+b) must_== c }
   }
-  def body6 = new MustThrownExpectations with matcher.Scope {
+  def body6 = new Body6
+
+  class Body6 extends MustThrownExpectations with matcher.Scope {
+    def value: Int = i
     var i = 0
     checkResultFailure { i += 1; success }
   }

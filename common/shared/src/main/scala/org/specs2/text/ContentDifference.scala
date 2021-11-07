@@ -8,6 +8,7 @@ import org.specs2.control.producer._, Producer._
 import org.specs2.control.eff._
 import org.specs2.control.eff.syntax.safe._
 import org.specs2.control.eff.syntax.eff._
+import org.specs2.data.Sized
 
 /**
  * This trait represents the difference between 2 "contents"
@@ -41,7 +42,6 @@ case class LinesContentDifference(
 
   def isEmpty =
     show.forall { case SameLine(_) => true; case _ => false }
-
   lazy val show: Diffs = {
     if      (all  && ordered)  showNotEqual
     else if (all  && !ordered) showNotOrdered
@@ -80,6 +80,15 @@ case class LinesContentDifference(
     LinesContentDifference(lines1 filter lines2.contains, lines2, all = true, ordered).show
 
 }
+
+object LinesContentDifference {
+  implicit def sizedLinesContentDifference: Sized[LinesContentDifference] =
+    new Sized[LinesContentDifference] {
+      def size(ls: LinesContentDifference): Int =
+        ls.show.size
+    }
+}
+
 
 /**
  * case classes for the representation of lines which are different: not found, missing, misplaced

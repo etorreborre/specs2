@@ -4,44 +4,41 @@ import Trim._
 
 class TrimSpec extends Specification { def is = s2"""
 ### Trait for trimming strings
- 
+
   The *Trim* trait can be used to trim all sorts of strings.
 
   Trim lines and replace characters
-  ${eg{ " hello\rworld\n  ".trimNewLines === "hello\rworld" }}
-  ${eg{ " hello (world)  ".trimReplace("(" -> "[", ")" -> "]") === "hello [world]" }}
-  ${eg{ " hello \\world  ".trimReplaceAll("h" -> "H", "w" -> "W") === "Hello \\World" }}
+  ${" hello\rworld\n  ".trimNewLines === "hello\rworld" }
+  ${" hello (world)  ".trimReplace("(" -> "[", ")" -> "]") === "hello [world]" }
+  ${" hello \\world  ".trimReplaceAll("h" -> "H", "w" -> "W") === "Hello \\World" }
 
   Trim the end of a line
-  ${eg{ " hello world   ".trimEndSpace === " hello world"}}
+  ${" hello world   ".trimEndSpace === " hello world"}
 
   Trim enclosing symbols
-  ${eg{ " (hello world)  ".trimEnclosing("(", ")") === "hello world" }}
-  ${eg{ " ( (hello world) )  ".trimEnclosing("(", ")") === "(hello world)" }}
+  ${" (hello world)  ".trimEnclosing("(", ")") === "hello world" }
+  ${" ( (hello world) )  ".trimEnclosing("(", ")") === "(hello world)" }
   "but not if they're not enclosing
-  ${eg{ "hello world)".trimEnclosing("(", ")") === "hello world)" }}
+  ${"hello world)".trimEnclosing("(", ")") === "hello world)" }
 
   Trim enclosing xml tags
-  ${eg{"<p>hello</p>".trimEnclosingXmlTag("p") === "hello" }}
-  ${eg{"<p a=\"2\">hello</p>".trimEnclosingXmlTag("p") === "hello" }}
+  ${"<p>hello</p>".trimEnclosingXmlTag("p") === "hello" }
+  ${"<p a=\"2\">hello</p>".trimEnclosingXmlTag("p") === "hello" }
 
   ${"Remove some groups" ! e1}
 
   Remove empty lines
-  ${eg{ "hello\n    \nworld".removeEmptyLines === "hello\nworld" }}
+  ${"hello\n    \nworld".removeEmptyLines === "hello\nworld" }
 
-  Remove the first match
-  ${eg{ "hello world".removeFirst("(l)*o") === "he world" }}
-  Remove the last match
-  ${eg{ "hello world".removeLast("o.ld") === "hello w" }}
+  Remove the first match ${"hello world".removeFirst("(l)*o") === "he world"}
+  Remove the last match ${"hello world".removeLast("o.ld") === "hello w"}
 
-  Remove new lines
-  ${eg{ "hello\n\r world".removeNewLines === "hello world" }}
+  Remove new lines ${"hello\n\r world".removeNewLines === "hello world"}
 
   Split and trim
-  ${eg{ "a,b,c".splitTrim(",") === Seq("a", "b", "c") }}
-  ${eg{ "a, b , c".splitTrim(",") === Seq("a", "b", "c") }}
-  ${eg{ "a,  ,c".splitTrim(",") === Seq("a", "c") }}
+  example 1 ${"a,b,c".splitTrim(",") === Seq("a", "b", "c") }
+  example 2 ${"a, b , c".splitTrim(",") === Seq("a", "b", "c") }
+  example 3 ${"a,  ,c".splitTrim(",") === Seq("a", "c") }
 
   Start from trims the string of everything that is before the start substring
     if the string starts with the specified substring
@@ -50,10 +47,8 @@ class TrimSpec extends Specification { def is = s2"""
     ${ "hello world".startFrom(" x") === "hello world" }
 
   string unless condition
-    returns the string if the condition is false
-    ${eg{ "hello" unless false must_== "hello" }}
-    returns an empty string if the condition is true
-    ${eg{ "hello" unless true must_== "" }}
+    returns the string if the condition is false ${ "hello" unless false must_== "hello"}
+    returns an empty string if the condition is true ${"hello" unless true must_== ""}
 
   ${"Last block returns the last block when lines are separated by empty lines"  ! e2}
 

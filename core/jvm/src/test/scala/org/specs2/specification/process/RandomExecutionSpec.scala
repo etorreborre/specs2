@@ -30,7 +30,7 @@ class RandomExecutionSpec(val env: Env) extends script.Specification with Groups
         def ex(i: =>Int) = { print("ex"+i); ok }
       }
 
-      runAction(DefaultExecutor.runSpecificationAction(spec, ownEnv) as {
+      runAction(DefaultExecutor.runSpecificationAction(spec, ownEnv).map { _ =>
         val allExamples = allOf((1 to n).map("ex"+_):_*)
 
         messages must haveSize(10)
@@ -53,7 +53,7 @@ class RandomExecutionSpec(val env: Env) extends script.Specification with Groups
         s2"""${fs_1_to_5.append(step("stop")).append(fs_6_to_10)}"""
       }
 
-      runAction(DefaultExecutor.runSpecificationAction(spec, ownEnv) as {
+      runAction(DefaultExecutor.runSpecificationAction(spec, ownEnv).map { _ =>
 
         val allExamples = allOf((1 to n).map("ex"+_):_*)
 
