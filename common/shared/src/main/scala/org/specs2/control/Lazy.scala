@@ -54,16 +54,24 @@ class Lazy[+T](private val v: () => T)(using CanEqual[T, T]):
 
 /** class holding an optional mutable value */
 class Ref[T](var toOption: Option[T] = None):
-  def get: T =
+  def get: T = Ref.synchronized {
     toOption.get
+  }
 
-  def set(t: T): Unit =
+  def set(t: T): Unit = Ref.synchronized {
     toOption = Some(t)
     ()
+  }
 
-  def update(f: T => T): Ref[T] =
+  def update(f: T => T): Ref[T] = Ref.synchronized {
     toOption = toOption.map(f)
     this
+  }
+
+  def updateAndGet(f: T => T): Option[T] = Ref.synchronized {
+    toOption = toOption.map(f)
+    toOption
+  }
 
 object Ref:
 

@@ -6,12 +6,14 @@ import reporter.*
 import reporter.PrinterLogger.*
 import specification.core.*
 import control.*
+import execute.*
 import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.*, duration.*
-import java.util.concurrent.atomic.{AtomicInteger, AtomicReference}
 import java.util.function.UnaryOperator
 
-class ResourceSpec(using ec: ExecutionContext) extends Specification:
+class ResourceSpec() extends Specification:
+  given ExecutionContext = scala.concurrent.ExecutionContext.global
+
   def is = s2"""
 
  A resource can be:
@@ -34,37 +36,29 @@ method. It can then be accessed concurrently by several specifications
 
   def demo =
     val messages = new ArrayBuffer[String]
-    runSpec(ResourceExample(messages))
-    messages.toList === List("acquired", "e1 0", "e2 1", "released with value 2")
+    for {
+      _ <- runSpec(ResourceExample(messages))
+    } yield messages.toList === List("acquired", "e1 0", "e2 1", "released with value 2")
 
   def acquireError =
     val logger = stringPrinterLogger
     val env = Env(printerLogger = logger)
-    runSpec(AcquireErrorExample(), printer = Some(TextPrinter(env)))
-    logger.messages must contain(allOf(=~("resource unavailable"), =~("o e1"), =~("o e2")))
-
-  def runSpec(s: SpecificationStructure, printer: Option[Printer] = None) =
-    val env: Env = Env(arguments = Arguments(), printerLogger = NoPrinterLogger)
-    try Reporter.create(printer.toList, env).report(s.structure).runVoid(env.executionEnv)
-    finally env.awaitShutdown()
+    for {
+      _ <- runSpec(AcquireErrorExample(), printer = Some(TextPrinter(env)))
+    } yield logger.messages must contain(allOf(=~("resource unavailable"), =~("o e1"), =~("o e2")))
 
   def concurrentGlobal =
     val env: Env = Env(arguments = Arguments(), printerLogger = NoPrinterLogger)
     val reporter = Reporter.create(List(), env)
-    val messages: AtomicReference[List[String]] = AtomicReference(List())
+    val messages: ArrayBuffer[String] = ArrayBuffer()
     val specifications = (1 to 5).map(n => GlobalResourceExample(n, messages).structure)
-    try Await.result(
-      Future.sequence(specifications.map { s =>
-        reporter.report(s).runFuture(env.executionEnv)
-      }),
-      Duration.Inf
-    )
-    finally env.awaitShutdown()
-
-    (messages.get.headOption === Some("acquired")) and
-      (messages.get.lastOption === Some("released with value 5")) and
-      (messages.get.toSet ===
-        Set(
+    for {
+      r <- Future.sequence(specifications.map(s => reporter.report(s).runFuture(env.executionEnv)))
+      _ <- env.shutdownResult
+    } yield (messages.headOption === Some("acquired")) and
+      (messages.lastOption === Some("released with value 5")) and
+      (messages.toList must contain(
+        allOf(
           "acquired",
           "ref is 1",
           "ref is 2",
@@ -72,9 +66,18 @@ method. It can then be accessed concurrently by several specifications
           "ref is 4",
           "ref is 5",
           "released with value 5"
-        ))
+        )
+      ))
 
-/** HELPERS */
+  /** HELPERS */
+
+  def runSpec(s: SpecificationStructure, printer: Option[Printer] = None): Future[Result] =
+    val env: Env = Env(arguments = Arguments(), printerLogger = NoPrinterLogger)
+    Reporter
+      .create(printer.toList, env)
+      .report(s.structure)
+      .runFuture(env.executionEnv)
+      .flatMap(_ => env.shutdownResult)
 
 class ResourceExample(messages: ArrayBuffer[String]) extends Specification, Resource[Ref[Int]]:
   def is = sequential ^ s2"""
@@ -119,32 +122,37 @@ class AcquireErrorExample extends Specification, Resource[Ref[Int]]:
   def release(ref: Ref[Int]) =
     ok
 
-trait GlobalResource extends Resource[AtomicInteger]:
+trait GlobalResource extends Resource[Ref[Int]]:
+  given ExecutionContext = scala.concurrent.ExecutionContext.global
 
   override def resourceKey: Option[String] =
     Some("global")
 
-  val messages: AtomicReference[List[String]]
-  def append(m: String) =
-    messages.getAndUpdate(new UnaryOperator[List[String]] {
-      def apply(l: List[String]): List[String] = l :+ m
-    })
+  val messages: ArrayBuffer[String]
 
-  def acquire =
-    append("acquired")
-    Future.successful(new AtomicInteger(0))
-
-  def release(ref: AtomicInteger) = Execution.result {
-    append("released with value " + ref.get)
-    true
+  def append(m: String) = synchronized {
+    messages.append(m)
   }
 
-case class GlobalResourceExample(number: Int, messages: AtomicReference[List[String]])
-    extends Specification,
-      GlobalResource:
+  def acquire = Future {
+    append("acquired")
+    Ref(0)
+  }
+
+  def release(ref: Ref[Int]) = Execution.future {
+    Future {
+      append("released with value " + ref.get)
+      true
+    }
+  }
+
+case class GlobalResourceExample(number: Int, messages: ArrayBuffer[String]) extends Specification, GlobalResource:
+
   def is = s2"""e1 $e1"""
 
-  def e1 = { (ref: AtomicInteger) =>
-    append("ref is " + ref.incrementAndGet.toString)
-    ok
+  def e1 = { (ref: Ref[Int]) =>
+    Future {
+      append("ref is " + ref.updateAndGet(_ + 1).getOrElse("undefined").toString)
+      ok
+    }
   }
