@@ -270,7 +270,7 @@ lazy val javaSpecs2Properties: List[String] = {
 }
 
 lazy val testJsSettings = Seq(
-  Test / javaOptions :=  javaSpecs2Properties,
+  Test / javaOptions := javaSpecs2Properties,
   Test / fork := false,
   Test / parallelExecution := false,
   Test / scalaJSStage := FastOptStage
