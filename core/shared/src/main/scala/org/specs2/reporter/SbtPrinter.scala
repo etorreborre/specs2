@@ -16,7 +16,7 @@ import SbtPrinter.*
   * It delegates the console printing to a normal text printer but using the Sbt loggers It also publishes events
   * (success, error, skipped, pending) to Sbt
   */
-case class SbtPrinter(env: Env, loggers: Array[Logger], events: SbtEvents) extends Printer:
+case class SbtPrinter(env: Env, loggers: Array[Logger], events: SbtEvents, eventsOnly: Boolean = false) extends Printer:
   def prepare(specifications: List[SpecStructure]): Action[Unit] = Action.unit
   def finalize(specifications: List[SpecStructure]): Action[Unit] = Action.unit
 
@@ -30,7 +30,8 @@ case class SbtPrinter(env: Env, loggers: Array[Logger], events: SbtEvents) exten
     *   - one for registering sbt events
     */
   def sink(spec: SpecStructure): AsyncSink[Fragment] =
-    textSink(spec) <* eventSink(spec)
+    if eventsOnly then eventSink(spec)
+    else textSink(spec) <* eventSink(spec)
 
   def textSink(spec: SpecStructure): AsyncSink[Fragment] =
     textPrinter.sink(spec)

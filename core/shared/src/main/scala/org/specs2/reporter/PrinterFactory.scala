@@ -31,7 +31,7 @@ case class PrinterFactory(arguments: Arguments, customInstances: CustomInstances
   def createJUnitXmlPrinter: Operation[Option[Printer]] =
     customInstances.createPrinterInstance(
       JUNITXML,
-      "org.specs2.reporter.JUnitXmlPrinter$",
+      "org.specs2.reporter.JUnitXmlPrinter",
       "cannot create a JUnit XML printer. Please check that specs2-junit.jar is on the classpath",
       "no JUnit XML printer defined"
     )
@@ -47,7 +47,7 @@ case class PrinterFactory(arguments: Arguments, customInstances: CustomInstances
   def createMarkdownPrinter: Operation[Option[Printer]] =
     customInstances.createPrinterInstance(
       MARKDOWN,
-      "org.specs2.reporter.MarkdownPrinter$",
+      "org.specs2.reporter.MarkdownPrinter",
       "cannot create a Markdown printer. Please check that specs2-markdown is on the classpath",
       "no Markdown printer defined"
     )

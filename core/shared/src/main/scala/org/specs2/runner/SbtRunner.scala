@@ -226,10 +226,20 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader, base: BaseS
       printerFactory.createNotifierPrinter
     ).map(_.map(_.toList)).sequence.map(_.flatten)
 
-  private def createSbtPrinter(loggers: Array[Logger], sbtEvents: SbtEvents, customInstances: CustomInstances) =
-    if !printerNames.map(_.name).exists(arguments.isSet) || arguments.isSet(CONSOLE.name) then
-      Operation.ok(Some(SbtPrinter(env, loggers, sbtEvents)))
-    else customInstances.noInstance("no console printer defined")
+  /** create a SbtPrinter If printer names are passed on the command line we don't want to show the output of the spec
+    * by default (unless `console` is specified as well to force the display of the spec). In that case we only dispatch
+    * sbt events in order to report on the specification status
+    */
+  private def createSbtPrinter(
+      loggers: Array[Logger],
+      sbtEvents: SbtEvents,
+      customInstances: CustomInstances
+  ): Operation[Option[Printer]] =
+    Operation.ok(Some {
+      if printerNames.map(_.name).exists(arguments.isSet) && !arguments.isSet(CONSOLE.name) then
+        SbtPrinter(env, loggers, sbtEvents, eventsOnly = true)
+      else SbtPrinter(env, loggers, sbtEvents)
+    })
 
   private def sbtEvents(t: TaskDef, h: EventHandler) = new SbtEvents {
     lazy val taskDef = t
