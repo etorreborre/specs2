@@ -87,7 +87,6 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
    Status is reported when parameters are set with display
    ${check(prop((i: Int) => true).display(minTestsOk = 10)).expected must haveMessage("OK, passed 10 tests")}
 
-
    Parameters can be passed from the command line
    ${check(
     prop { (i: Int, j: Int) => i === i }
@@ -96,7 +95,6 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
 
    PrettyProduct better render case classes to replay examples
    ${check(prop((i: MyInt) => false)) returns """MyInt(1, "hey")"""}
-
 """
 
   def check(prop: ScalaCheckProperty): Result =
@@ -172,3 +170,19 @@ class TSpec extends mutable.Specification with ScalaCheck:
   "a prop" >> prop { (i: Int) =>
     true
   }
+
+class SeedSpec extends Specification with ScalaCheck:
+  def is = sequential ^ s2"""
+  A seed can be set on a property $runProperty
+  The generated values must be different $checkValues
+  """
+
+  var generated: List[(Int, Int)] = List()
+
+  def runProperty = prop { (x: Int, y: Int) =>
+    generated = (x, y) +: generated
+  }.setSeed("5dHu0rwf1jZ22C-BHl3poKhOY8iXY19a9jdB0JL6ZIJ=")
+
+  def checkValues =
+    // we expected at least 50 different generated values
+    generated.distinct.size.pp must be_>=(50)

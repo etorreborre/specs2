@@ -27,7 +27,10 @@ trait ScalaCheckPropertyCheck extends ExpectationsCreation:
   /** checks if the property is true for each generated value, and with the specified parameters
     */
   def check(prop: Prop, parameters: Parameters, prettyFreqMap: FreqMap[Set[Any]] => Pretty): Result =
-    // this should not happen but the impossible is known to happen
+    /** SEED CAPTURE We capture the first seed used to run the property in order to be able to display it. This seed is
+      * either the first random seed used by ScalaCheck, which we capture with a mutable variable, or the seed set by
+      * the user
+      */
     var capturedSeed: Seed = null
 
     lazy val initialSeed = Option(capturedSeed)
@@ -39,22 +42,18 @@ trait ScalaCheckPropertyCheck extends ExpectationsCreation:
         )
       )
 
-    val prop1 = parameters.seed match
-      case Some(s) =>
-        prop.useSeed("specs2", s)
+    // make a new property which will capture the first seed used by the property
+    def propWithCapturedSeed = Prop { prms0 =>
+      val (prms, seed) = prms0.initialSeed match
+        case Some(sd) => (prms0.withNoInitialSeed, sd)
+        case _        => (prms0, Seed.random())
+      capturedSeed = seed
+      prop(prms)
+    }
 
-      case _ =>
-        Prop { prms0 =>
-          val (prms, seed) = prms0.initialSeed match
-            case Some(sd) =>
-              (prms0, sd)
-            case _ =>
-              val sd = Seed.random()
-              (prms0.withInitialSeed(sd), sd)
-          val res = prop(prms)
-          capturedSeed = seed
-          res
-        }
+    val prop1 = parameters.seed match
+      case Some(s) => propWithCapturedSeed.useSeed("specs2", s)
+      case _       => propWithCapturedSeed
 
     val result = Test.check(parameters.testParameters, prop1)
 
