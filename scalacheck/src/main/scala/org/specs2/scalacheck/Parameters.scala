@@ -37,6 +37,7 @@ case class Parameters(
       .withWorkers(outer.workers)
       .withTestCallback(outer.testCallback)
       .withCustomClassLoader(outer.loader)
+      .withInitialSeed(outer.seed)
 
   def overrideWith(commandLine: CommandLine): Parameters =
     val updated =

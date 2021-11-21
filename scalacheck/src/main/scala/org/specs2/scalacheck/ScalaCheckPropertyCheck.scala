@@ -45,17 +45,15 @@ trait ScalaCheckPropertyCheck extends ExpectationsCreation:
     // make a new property which will capture the first seed used by the property
     def propWithCapturedSeed = Prop { prms0 =>
       val (prms, seed) = prms0.initialSeed match
-        case Some(sd) => (prms0.withNoInitialSeed, sd)
-        case _        => (prms0, Seed.random())
+        case Some(sd) => (prms0, sd)
+        case _ =>
+          val sd = Seed.random()
+          (prms0.withInitialSeed(sd), sd)
       capturedSeed = seed
       prop(prms)
     }
 
-    val prop1 = parameters.seed match
-      case Some(s) => propWithCapturedSeed.useSeed("specs2", s)
-      case _       => propWithCapturedSeed
-
-    val result = Test.check(parameters.testParameters, prop1)
+    val result = Test.check(parameters.testParameters, propWithCapturedSeed)
 
     val prettyTestResult = prettyResult(result, parameters, initialSeed, prettyFreqMap)(parameters.prettyParams)
     val testResult = if parameters.prettyParams.verbosity == 0 then "" else prettyTestResult

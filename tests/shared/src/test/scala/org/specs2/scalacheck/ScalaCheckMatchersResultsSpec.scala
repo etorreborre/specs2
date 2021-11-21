@@ -180,9 +180,11 @@ class SeedSpec extends Specification with ScalaCheck:
   var generated: List[(Int, Int)] = List()
 
   def runProperty = prop { (x: Int, y: Int) =>
-    generated = (x, y) +: generated
+    generated = generated :+ (x, y)
   }.setSeed("5dHu0rwf1jZ22C-BHl3poKhOY8iXY19a9jdB0JL6ZIJ=")
 
   def checkValues =
     // we expected at least 50 different generated values
-    generated.distinct.size.pp must be_>=(50)
+    (generated.distinct.size must be_>=(50)) and
+      // the first result depends on the initial seed
+      (generated.head === (1, 2147483647))
