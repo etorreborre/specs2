@@ -159,3 +159,24 @@ class TSpec extends mutable.Specification with ScalaCheck {
     true
   }
 }
+
+class SeedSpec extends Specification with ScalaCheck {
+  def is = sequential ^ s2"""
+  A seed can be set on a property $runProperty
+  The generated values must be different $checkValues
+  """
+
+  var generated: List[(Int, Int)] = List()
+
+  def runProperty = prop { (x: Int, y: Int) =>
+    generated = generated :+ ((x, y))
+    ok
+  }.setSeed("5dHu0rwf1jZ22C-BHl3poKhOY8iXY19a9jdB0JL6ZIJ=")
+
+  def checkValues = {
+    // we expected at least 50 different generated values
+    (generated.distinct.size must be_>=(50)) and
+      // the first result depends on the initial seed
+      (generated.head must (===((1, 2147483647))))
+  }
+}
