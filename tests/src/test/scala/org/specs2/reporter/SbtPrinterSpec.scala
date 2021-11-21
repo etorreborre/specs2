@@ -76,6 +76,7 @@ class SbtPrinterSpec(val env: Env) extends Spec with OwnEnv { def is = s2"""
         lazy val handler = outer.handler
         lazy val taskDef = new TaskDef("", Fingerprints.fp1, true, Array())
       }
+      lazy val eventsOnly = false
     }
 
   }
@@ -83,13 +84,13 @@ class SbtPrinterSpec(val env: Env) extends Spec with OwnEnv { def is = s2"""
   case class printer2() extends Mockito { outer =>
     val logger =  mock[Logger]
     val handler = mock[EventHandler]
-
     val printer = new SbtPrinter {
       lazy val loggers = Array(logger)
       lazy val events = new SbtEvents {
         lazy val handler = outer.handler
         lazy val taskDef = new TaskDef("", Fingerprints.fp1, true, Array())
       }
+      val eventsOnly = false
     }
 
     def e1 = {

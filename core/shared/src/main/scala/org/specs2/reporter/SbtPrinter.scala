@@ -25,6 +25,9 @@ trait SbtPrinter extends Printer {
   /** events handler to notify Sbt of successes/failures */
   def events: SbtEvents
 
+  /** specifies if only sbt events must be emitted */
+  def eventsOnly: Boolean
+
   lazy val textPrinter = TextPrinter
 
   def sbtNotifierPrinter(args: Arguments): Printer =
@@ -36,7 +39,7 @@ trait SbtPrinter extends Printer {
    * - one for registering sbt events
    */
   def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment] =
-    textSink(env, spec) <* eventSink(env, spec)
+    if (eventsOnly) eventSink(env, spec) else textSink(env, spec) <* eventSink(env, spec)
 
   def textSink(env: Env, spec: SpecStructure): AsyncSink[Fragment] =
     textPrinter.sink(env.setLineLogger(SbtLineLogger(loggers)), spec)
@@ -46,6 +49,12 @@ trait SbtPrinter extends Printer {
 }
 
 object SbtPrinter {
+
+  def makeSbtPrinter(_loggers: Array[Logger], _events: SbtEvents, _eventsOnly: Boolean): SbtPrinter = new SbtPrinter {
+    lazy val loggers = _loggers
+    lazy val events = _events
+    lazy val eventsOnly = _eventsOnly
+  }
 
   @annotation.nowarn
   def sbtNotifier(events: SbtEvents, args: Arguments) = new Notifier {
