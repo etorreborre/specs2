@@ -12,7 +12,7 @@ class MacrotaskExecutorSpec(env: Env) extends Specification:
   This specification is a copy of the coreJS/MacrotaskExecutorSpec to check
   if timeouts work ok on the JVM
 
-  An example can be timed-out when using Scala on the  $timeoutExample
+  An example can be timed-out when using Scala on the JVM $timeoutExample
 
   """
 
