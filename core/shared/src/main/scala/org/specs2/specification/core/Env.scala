@@ -80,7 +80,9 @@ case class Env(
 
   /** set new arguments */
   def setArguments(args: Arguments) =
-    copy(arguments = args)
+    copy(arguments = args,
+         executionEnv = ExecutionEnv.create(args, systemLogger),
+         specs2ExecutionEnv = ExecutionEnv.createSpecs2(args, systemLogger))
 
   /** @return an isolated env */
   def setWithIsolation =
