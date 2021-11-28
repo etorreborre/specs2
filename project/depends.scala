@@ -24,7 +24,7 @@ object depends {
   // used in specs2-junit
   val junitVintage = "org.junit.vintage" % "junit-vintage-engine" % "5.8.1"
   val junit = libraryDependencies ++=
-    Seq(junitVintage, "org.junit.platform" % "junit-platform-engine" % "1.8.1")
+    Seq(junitVintage, "org.junit.platform" % "junit-platform-engine" % "1.8.2")
   val junitTest = libraryDependencies += junitVintage % Test
 
   // used in specs2-markdown for the markdown parser
