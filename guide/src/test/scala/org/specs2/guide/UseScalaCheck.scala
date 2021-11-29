@@ -125,42 +125,6 @@ Note that it is also possible to _remove_ shrinking by appending `noShrink` to y
 prop((s1: String, s2: String) => s1.nonEmpty or s2.nonEmpty).noShrink
 }}
 
-### Contexts
-
-ScalaCheck properties are sometimes used to test stateful applications rather than pure functions. For example you want to test that a function is writing files somewhere and you would like those files to be deleted after each property execution: ${snippet{
-// 8<---
-given Arbitrary[File] = ???
-// 8<---
-def createFile(f: File): Unit = ???
-def deleteTmpDir(): Unit = ???
-
-prop { (f: File) =>
-  createFile(f)
-  f.exists
-}.after(deleteTmpDir()) // before and beforeAfter can also be used there
-
-}}
-
-You can also "prepare" the property to be tested based on the generated arguments: ${snippet{
-// 8<---
-given Arbitrary[File] = ???
-// 8<---
-
-def createFile(directory: File, f: File): Unit = ???
-// this method will keep the arguments intact but can
-// have a side-effect to prepare the system
-def setupDirectoryAndFile = (directory: File, file: File) => (directory, file)
-
-prop { (directory: File, f: File) =>
-  createFile(directory, f)
-  f.exists
-}.prepare(setupDirectoryAndFile)
-
-}}
-
-Note that there is a way to [model stateful systems](https://github.com/rickynils/scalacheck/wiki/User-Guide#stateful-testing)
-with ScalaCheck which goes beyond the simple setup/teardown testing done here.
-
 ### Test properties
 
 #### Default values

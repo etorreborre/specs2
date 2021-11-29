@@ -25,7 +25,6 @@ trait ScalaCheckPropertyCreation:
       pretty,
       prettyFreqMap,
       asResult,
-      context = None,
       parameters
     )
 
@@ -47,7 +46,6 @@ trait ScalaCheckPropertyCreation:
       ScalaCheckArgInstances(arbitrary2, Some(shrink2), collectors = Nil, pretty = pretty2),
       prettyFreqMap = prettyFreqMap,
       asResult,
-      context = None,
       parameters
     )
 
@@ -73,7 +71,6 @@ trait ScalaCheckPropertyCreation:
       ScalaCheckArgInstances(arbitrary3, Some(shrink3), collectors = Nil, pretty = pretty3),
       prettyFreqMap = prettyFreqMap,
       asResult,
-      context = None,
       parameters
     )
 
@@ -103,7 +100,6 @@ trait ScalaCheckPropertyCreation:
       ScalaCheckArgInstances(arbitrary4, Some(shrink4), collectors = Nil, pretty = pretty4),
       prettyFreqMap = prettyFreqMap,
       asResult,
-      context = None,
       parameters
     )
 
@@ -137,7 +133,6 @@ trait ScalaCheckPropertyCreation:
       ScalaCheckArgInstances(arbitrary5, Some(shrink5), collectors = Nil, pretty = pretty5),
       prettyFreqMap = prettyFreqMap,
       asResult,
-      context = None,
       parameters
     )
 
@@ -175,7 +170,6 @@ trait ScalaCheckPropertyCreation:
       ScalaCheckArgInstances(arbitrary6, Some(shrink6), collectors = Nil, pretty = pretty6),
       prettyFreqMap = prettyFreqMap,
       asResult,
-      context = None,
       parameters
     )
 
@@ -217,7 +211,6 @@ trait ScalaCheckPropertyCreation:
       ScalaCheckArgInstances(arbitrary7, Some(shrink7), collectors = Nil, pretty = pretty7),
       prettyFreqMap = prettyFreqMap,
       asResult,
-      context = None,
       parameters
     )
 
@@ -263,7 +256,6 @@ trait ScalaCheckPropertyCreation:
       ScalaCheckArgInstances(arbitrary8, Some(shrink8), collectors = Nil, pretty = pretty8),
       prettyFreqMap = prettyFreqMap,
       asResult,
-      context = None,
       parameters
     )
 
