@@ -18,7 +18,7 @@ class MacrotaskExecutorSpec(env: Env) extends Specification:
   def timeoutExample =
     given ExecutionContext = env.executionContext
     TextRunner.runFuture(MacrotaskExecutorSpecification())(env).map { output =>
-      output.messages must contain(contain("timeout after 500 milliseconds"))
+      output.messages must contain(contain("timeout after"))
     }
 
 class MacrotaskExecutorSpecification extends Specification:
