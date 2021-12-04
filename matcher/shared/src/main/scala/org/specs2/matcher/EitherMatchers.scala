@@ -2,26 +2,45 @@ package org.specs2
 package matcher
 
 import control.*
-import ImplicitParameters.{given, *}
 import describe.Diffable
+import scala.annotation.*
 
 /** Matchers for the Either datatype
   */
 trait EitherMatchers:
 
-  def beRight[T](t: ValueCheck[T]) = RightCheckedMatcher(t)
-  def beRight[T](using p: ImplicitParam = implicitParameter) = use(p)(new RightMatcher[T])
+  @targetName("beRightWithValueCheck")
+  def beRight[T](t: ValueCheck[T]): RightCheckedMatcher[T] =
+    RightCheckedMatcher(t)
 
-  def right[T: Diffable](t: T) = beRight(ValueChecks.valueIsTypedValueCheck(t))
-  def right[T](t: ValueCheck[T]) = beRight(t)
-  def right[T](using p: ImplicitParam = implicitParameter) = beRight(p)
+  def beRight[T]: RightMatcher[T] =
+    new RightMatcher[T]
 
-  def beLeft[T](t: ValueCheck[T]): LeftCheckedMatcher[T] = LeftCheckedMatcher(t)
-  def beLeft[T](using p: ImplicitParam = implicitParameter): LeftMatcher[T] = use(p)(LeftMatcher[T]())
+  def right[T: Diffable](t: T): RightCheckedMatcher[T] =
+    beRight(ValueChecks.valueIsTypedValueCheck(t))
 
-  def left[T: Diffable](t: T) = beLeft(ValueChecks.valueIsTypedValueCheck(t))
-  def left[T](t: ValueCheck[T]) = beLeft(t)
-  def left[T](using p: ImplicitParam = implicitParameter) = beLeft(p)
+  @targetName("rightWithValueCheck")
+  def right[T](t: ValueCheck[T]): RightCheckedMatcher[T] =
+    beRight(t)
+
+  def right[T] = beRight
+
+  @targetName("beLeftWithValueCheck")
+  def beLeft[T](t: ValueCheck[T]): LeftCheckedMatcher[T] =
+    LeftCheckedMatcher(t)
+
+  def beLeft[T]: LeftMatcher[T] =
+    LeftMatcher[T]()
+
+  def left[T: Diffable](t: T): LeftCheckedMatcher[T] =
+    beLeft(ValueChecks.valueIsTypedValueCheck(t))
+
+  @targetName("leftWithValueCheck")
+  def left[T](t: ValueCheck[T]): LeftCheckedMatcher[T] =
+    beLeft(t)
+
+  def left[T]: LeftMatcher[T] =
+    beLeft
 
 object EitherMatchers extends EitherMatchers
 

@@ -4,7 +4,7 @@ package text
 import Trim.*
 import collection.Seqx.*
 import util.matching.Regex
-import annotation.*
+import scala.annotation.*
 
 private[specs2] trait Split:
   outer: Split =>

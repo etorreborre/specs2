@@ -3,14 +3,14 @@ package specification
 package script
 
 import util.matching.Regex
-import control.{ImplicitParameters, Use}
 import control.Exceptions.*
 import text.RegexExtractor
+import scala.annotation.*
 
 /** StepParsers are using delimiters or regular expressions with groups to extract values from a piece of text and
   * possibly strip it from delimiters if necessary
   */
-trait StepParsers extends ImplicitParameters:
+trait StepParsers:
   given stepParserRegex: Regex = """\{([^}]+)\}""".r
 
   def apply[T](f: String => T)(using fpr: Regex = stepParserRegex): DelimitedStepParser[T] =
@@ -62,7 +62,8 @@ trait StepParsers extends ImplicitParameters:
     def apply(f: (String, String, String, String, String, String, String, String, String) => Unit) = and[Unit](f)
     def apply(f: (String, String, String, String, String, String, String, String, String, String) => Unit) =
       and[Unit](f)
-    def apply(f: Seq[String] => Unit)(using p: ImplicitParam) = and[Unit](f)
+    @targetName("applySeq")
+    def apply(f: Seq[String] => Unit) = and[Unit](f)
 
     trait ReadAsParser[T] extends StepParser[T]:
       def parse(text: String) = trye((text, parse1(text)))(identity)
@@ -101,8 +102,9 @@ trait StepParsers extends ImplicitParameters:
       new ReadAsParser[T] {
         def parse1(text: String) = f.tupled(extract10(text, regex, groups))
       }
-    def and[T](f: Seq[String] => T)(using p1: ImplicitParam, p2: ImplicitParam) = new ReadAsParser[T] {
-      Use(p1, p2)
+
+    @targetName("andSeq")
+    def and[T](f: Seq[String] => T) = new ReadAsParser[T] {
       def parse1(text: String) = f(extractAll(text, regex, groups))
     }
 

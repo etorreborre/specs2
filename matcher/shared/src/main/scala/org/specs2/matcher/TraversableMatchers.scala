@@ -18,11 +18,7 @@ import Result.*
 
 /** Matchers for traversables
   */
-trait TraversableMatchers
-    extends TraversableBaseMatchers
-    with TraversableBaseMatchersLowImplicits
-    with ImplicitParameters
-    with NumberOfTimes
+trait TraversableMatchers extends TraversableBaseMatchers with TraversableBaseMatchersLowImplicits with NumberOfTimes
 
 object TraversableMatchers extends TraversableMatchers
 

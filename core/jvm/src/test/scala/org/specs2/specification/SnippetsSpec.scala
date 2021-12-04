@@ -4,7 +4,6 @@ package specification
 import matcher.*
 import execute.Snippet.*
 import core.*
-import control.Use
 
 // format: off
 class SnippetsSpec(val env: Env)
@@ -173,7 +172,6 @@ n = 0
 
   def names4 =
     def function[T, S](t: T, s: S) = ""
-    Use(function(1, 1))
 
     "code" || "markdown" |>
       s"""the method `${termName(function(1, ""))}`""" !! "the method `function`" |

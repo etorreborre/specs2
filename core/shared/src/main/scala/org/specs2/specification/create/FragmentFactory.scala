@@ -6,8 +6,8 @@ import org.specs2.execute.{AsResult, Result}
 import org.specs2.data.NamedTag
 import specification.core.*
 import Execution.*
-import control.ImplicitParameters.*
 import specification.core.Text
+import scala.annotation.*
 
 /** Interface for creating specification fragments
   */
@@ -18,7 +18,9 @@ trait FragmentFactory:
   def example[T: AsResult](description: Description, result: =>T): Fragment
   def example[T: AsResult](text: String, withDescription: String => T): Fragment
   def example[T: AsResult](text: String, withDescriptionAndEnv: (String, Env) => T): Fragment
-  def example[T](text: String, withEnv: Env => T)(using as: AsResult[T], p: ImplicitParam): Fragment
+
+  @targetName("exampleWithEnv")
+  def example[T](text: String, withEnv: Env => T)(using as: AsResult[T]): Fragment
 
   def tag(names: String*): Fragment
   def taggedAs(names: String*): Fragment
@@ -59,7 +61,9 @@ trait DefaultFragmentFactory extends FragmentFactory:
   def example[T: AsResult](text: String, withText: String => T): Fragment = example(text, withText(text))
   def example[T: AsResult](text: String, withDescriptionAndEnv: (String, Env) => T): Fragment =
     example(text, Execution.withEnv((env: Env) => withDescriptionAndEnv(text, env)))
-  def example[T](text: String, withEnv: Env => T)(using as: AsResult[T], p: ImplicitParam): Fragment =
+
+  @targetName("exampleWithEnv")
+  def example[T](text: String, withEnv: Env => T)(using as: AsResult[T]): Fragment =
     example(text, Execution.withEnv(withEnv))
 
   def tag(names: String*): Fragment = Fragment(Description.tag(names*), Execution.NoExecution)

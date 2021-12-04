@@ -7,7 +7,7 @@ import fp.*
 import fp.syntax.*
 import execute.ResultImplicits.*
 import AnyMatchers.*
-import annotation.*
+import scala.annotation.*
 
 /** This trait provides matchers for some Scalaz (http://github/scalaz/scalaz) datatypes.
   */

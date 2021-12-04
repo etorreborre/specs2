@@ -3,14 +3,15 @@ package matcher
 
 import execute.*
 import ValueChecks.{given, *}
-import org.specs2.control.*, ImplicitParameters.*
 import org.specs2.matcher.describe.Diffable
 import Result.*
+import scala.annotation.*
 
 /** Matchers for Options
   */
 trait OptionMatchers extends ValueChecks:
 
+  @targetName("beSomeWithValueCheck")
   def beSome[T](check: ValueCheck[T]): SomeCheckedMatcher[T] =
     SomeCheckedMatcher(check)
 
@@ -20,8 +21,8 @@ trait OptionMatchers extends ValueChecks:
   def some[T](check: ValueCheck[T]): SomeCheckedMatcher[T] =
     beSome(check)
 
-  def beSome[T](using p: ImplicitParam = ImplicitParameters.implicitParameter): SomeMatcher[T] =
-    use(p)(new SomeMatcher[T])
+  def beSome[T]: SomeMatcher[T] =
+    SomeMatcher[T]()
 
   def some[T]: SomeMatcher[T] = beSome[T]
 

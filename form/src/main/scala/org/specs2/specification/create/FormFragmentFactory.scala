@@ -2,7 +2,6 @@ package org.specs2
 package specification
 package create
 
-import control.ImplicitParameters.ImplicitParam
 import core.*
 import form.*
 import text.NotNullStrings.*
@@ -10,6 +9,7 @@ import execute.*
 import control.Exceptions.*
 import scala.reflect.Selectable.reflectiveSelectable
 import FormsBuilder.{given, *}
+import scala.annotation.*
 
 /** Factory for creating Form fragments
   */

@@ -1,5 +1,7 @@
 package org.specs2.guide
 
+import scala.annotation.*
+
 object AddKeywords extends UserGuidePage {
   def is = s2"""
 
@@ -30,7 +32,6 @@ However one size does not fit all and you might want to add your own predefined 
 import org.specs2.*
 import org.specs2.specification.core.{Fragment, Fragments}
 import org.specs2.specification.dsl.mutable.*
-import org.specs2.control.ImplicitParameters
 
 trait ToKeyword extends ExtendedBlockDsl:
   extension (description: String)
@@ -39,7 +40,8 @@ trait ToKeyword extends ExtendedBlockDsl:
 
     // this implementation of `to` uses an implicit parameter. This is used to overload
     // the method for different arguments: Fragment and Fragments
-    infix def to(fs: =>Fragments)(using p1: ImplicitParameters.ImplicitParam1): Fragments =
+    @targetName("toFs")
+    infix def to(fs: =>Fragments): Fragments =
       (description + " to") >> fs
 
 class MySpecification extends org.specs2.mutable.Specification with ToKeyword:

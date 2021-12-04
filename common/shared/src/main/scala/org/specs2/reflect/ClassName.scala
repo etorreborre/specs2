@@ -4,7 +4,7 @@ package reflect
 import scala.reflect.NameTransformer
 import control.Exceptions.*
 import text.CamelCase.*
-import annotation.*
+import scala.annotation.*
 
 /** Reflection methods for Class names
   */

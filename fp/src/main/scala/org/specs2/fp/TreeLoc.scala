@@ -2,7 +2,7 @@ package org.specs2.fp
 
 import TreeLoc.*
 import Tree.*
-import annotation.tailrec
+import scala.annotation.tailrec
 
 /** Inspired from the scalaz (https://github.com/scalaz/scalaz) project
   */

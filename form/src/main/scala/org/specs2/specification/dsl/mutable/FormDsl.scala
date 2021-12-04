@@ -3,11 +3,9 @@ package specification
 package dsl
 package mutable
 
-import control.ImplicitParameters.*
 import core.Fragment
 import form.{given, *}
 import create.*
-import org.specs2.control.Use
 import scala.reflect.Selectable.reflectiveSelectable
 
 /** Dsl for creating Forms in a mutable specification

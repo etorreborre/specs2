@@ -3,7 +3,7 @@ package data
 
 import fp.*
 import Tree.*
-import annotation.*
+import scala.annotation.*
 import collection.*
 
 /** Utility methods for Trees

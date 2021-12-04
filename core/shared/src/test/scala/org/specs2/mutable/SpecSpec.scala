@@ -2,7 +2,6 @@ package org.specs2
 package mutable
 
 import specification.dsl.mutable.{ExampleDsl, TagDsl}
-import control.Use
 
 class SpecSpec extends Spec with TagDsl:
   sequential
@@ -11,6 +10,5 @@ class SpecSpec extends Spec with TagDsl:
     val s = new Spec with ExampleDsl {
       "hello" >> ok
     }
-    Use(s)
     ok
   }

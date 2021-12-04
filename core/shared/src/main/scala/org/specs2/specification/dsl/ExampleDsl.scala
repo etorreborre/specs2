@@ -5,8 +5,8 @@ package dsl
 import specification.create.FragmentsFactory
 import execute.AsResult
 import org.specs2.specification.core.{Text, Execution, Env, Fragment}
-import control.ImplicitParameters.ImplicitParam
 import scala.util.NotGiven
+import scala.annotation.*
 
 /** Example Dsl for mutable specifications
   */
@@ -24,7 +24,8 @@ trait ExampleDsl extends FragmentsFactory:
       fragmentFactory.example(d, r)
 
   extension [R: AsResult](d: String)(using not: NotGiven[NoBangExamples])
-    def !(r: Env => R)(using p: ImplicitParam): Fragment =
+    @targetName("bangWithEnv")
+    def !(r: Env => R): Fragment =
       fragmentFactory.example(d, r)
 
   def addExample(d: String, execution: =>Execution): Fragment =

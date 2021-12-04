@@ -6,9 +6,8 @@ import java.net.URI
 
 import matcher.*
 import Matcher.{given}
-import control.ImplicitParameters.*
-import control.Use
 import FileName.*
+import scala.annotation.*
 
 class DirectoryPathSpec extends Spec with TypedEqual {
   def is = s2"""
@@ -101,14 +100,19 @@ class DirectoryPathSpec extends Spec with TypedEqual {
   def beRelative: Matcher[DirectoryPath] = { (dirPath: DirectoryPath) =>
     (dirPath.isRelative, s"$dirPath is not relative")
   }
+
   def beAbsolute: Matcher[DirectoryPath] = { (dirPath: DirectoryPath) =>
     (dirPath.isAbsolute, s"$dirPath is not absolute")
   }
-  def beRelative(using p1: ImplicitParam1): Matcher[FilePath] = Use.ignoring(p1)({ (filePath: FilePath) =>
+
+  @targetName("beRelativeFilePath")
+  def beRelative: Matcher[FilePath] = { (filePath: FilePath) =>
     (filePath.isRelative, s"$filePath is not relative")
-  })
-  def beAbsolute(using p1: ImplicitParam1): Matcher[FilePath] = Use.ignoring(p1)({ (filePath: FilePath) =>
+  }
+
+  @targetName("beAbsoluteFilePath")
+  def beAbsolute: Matcher[FilePath] = { (filePath: FilePath) =>
     (filePath.isAbsolute, s"$filePath is not absolute")
-  })
+  }
 
 }

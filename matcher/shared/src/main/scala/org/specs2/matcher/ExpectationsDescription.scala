@@ -4,7 +4,7 @@ package matcher
 import text.Sentences.*
 import execute.{ResultExecution, AsResult, Result}
 import scala.util.NotGiven
-import control.ImplicitParameters.{given, *}
+import scala.annotation.*
 
 trait ExpectationsDescription extends ExpectationsCreation:
 
@@ -37,7 +37,8 @@ trait ExpectationsDescription extends ExpectationsCreation:
     infix def as(alias: String => String): Expectable[T] = createExpectable(value, alias)
 
     /** @return an expectable with a function to show the element T */
-    infix def showAs(show: T => String, p: ImplicitParam = implicitParameter): Expectable[T] =
+    @targetName("showAsFunction")
+    infix def showAs(show: T => String): Expectable[T] =
       lazy val v = value
       createExpectableWithShowAs(v, show(v))
 

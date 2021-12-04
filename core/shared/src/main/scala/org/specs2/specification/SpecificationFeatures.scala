@@ -4,7 +4,6 @@ package specification
 import matcher.*
 import execute.*
 import control.Debug
-import control.ImplicitParameters
 import concurrent.ImplicitExecutionContexts
 
 /** List of all the features which are being included the default Specification class:
@@ -24,6 +23,5 @@ trait SpecificationFeatures
     with MatcherImplicits
     with ResultLogicalCombinators
     with PendingUntilFixed
-    with ImplicitParameters
     with Debug
     with ImplicitExecutionContexts

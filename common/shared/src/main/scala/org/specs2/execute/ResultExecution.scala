@@ -8,7 +8,7 @@ import text.NotNullStrings.*
 import java.util.regex.Pattern
 import java.util.concurrent.TimeoutException
 import scala.util.control.NonFatal
-import annotation.*
+import scala.annotation.*
 
 /** This trait executes a Result and returns an appropriate value when a specs2 exception is thrown
   */

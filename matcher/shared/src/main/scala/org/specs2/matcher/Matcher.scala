@@ -11,7 +11,7 @@ import org.specs2.text.Sentences.*
 
 import scala.concurrent.duration.*
 import org.specs2.fp.syntax.*
-import annotation.*
+import scala.annotation.*
 
 /** The `Matcher` trait is the base trait for any Matcher.
   *

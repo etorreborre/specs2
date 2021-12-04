@@ -6,8 +6,6 @@ import main.Arguments
 import core.*
 import form.{given, *}
 import create.*
-import control.ImplicitParameters.*
-import org.specs2.control.Use
 
 /** Dsl for creating Forms in an acceptance specification
   */

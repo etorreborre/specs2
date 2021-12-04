@@ -10,9 +10,8 @@ import org.specs2.matcher.*
 import DecoratedProperties.*
 import ResultLogicalCombinators.*
 import org.specs2.control.Properties.{given, *}
-import org.specs2.control.ImplicitParameters.*
-import org.specs2.control.Use
 import reflect.Selectable.reflectiveSelectable
+import scala.annotation.*
 
 /** A Form is a container for Rows (@see Row) where each row contain some Cell (@see Cell). It has an optional title and
   * possibly no rows.
@@ -57,7 +56,8 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(), val 
   )
 
   /** add a new Header */
-  def th(hs: Seq[String])(using p: ImplicitParam): Form = Use.ignoring(p)(th(hs.map(Field(_))))
+  @targetName("thSeq")
+  def th(hs: Seq[String]): Form = th(hs.map(Field(_)))
 
   /** add a new Header, with at least one Field */
   def th(h1: String, hs: String*): Form = th(Field(h1), hs.map(Field(_))*)

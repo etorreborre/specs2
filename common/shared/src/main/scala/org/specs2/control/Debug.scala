@@ -3,6 +3,7 @@ package control
 
 import io.ConsoleOutput
 import scala.util.NotGiven
+import scala.annotation.*
 
 /** This trait provides simple a way to print out any object to the console:
   *
@@ -10,7 +11,7 @@ import scala.util.NotGiven
   *
   * will print 'this string' and pass it to the rest of the expectation
   */
-trait Debug extends ImplicitParameters:
+trait Debug:
 
   given DebugConsoleOutput: ConsoleOutput = ConsoleOutput
 
@@ -31,9 +32,9 @@ trait Debug extends ImplicitParameters:
       if condition(value) then value.pp else value
 
     /** print the object to the console with a specific function and return it */
-    def pp(show: T => String)(using p: ImplicitParam): T =
+    @targetName("ppFunction")
+    def pp(show: T => String): T =
       lazy val value = t
-      Use(p)
       output.println(show(value))
       value
 
