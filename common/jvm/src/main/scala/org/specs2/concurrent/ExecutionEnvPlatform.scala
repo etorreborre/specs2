@@ -13,8 +13,7 @@ private[concurrent] trait ExecutionEnvCompanionPlatform:
     ExecutionEnv(ExecutorServices.fromExecutionContext(ec), timeFactor = 1)
 
   def create(arguments: Arguments, systemLogger: Logger, tag: Option[String] = None): ExecutionEnv =
-//    ExecutionEnv(ExecutorServices.create(arguments, systemLogger, tag), arguments.execute.timeFactor)
-    fromGlobalExecutionContext
+    ExecutionEnv(ExecutorServices.create(arguments, systemLogger, tag), arguments.execute.timeFactor)
 
   def createSpecs2(arguments: Arguments, systemLogger: Logger, tag: Option[String] = None): ExecutionEnv =
     ExecutionEnv(ExecutorServices.createSpecs2(arguments, systemLogger, tag), arguments.execute.timeFactor)
