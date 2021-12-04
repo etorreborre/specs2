@@ -10,6 +10,7 @@ import org.specs2.main.Arguments
 import org.specs2.reflect.ClassLoading
 import org.specs2.reporter.PrinterLogger.consolePrinterLogger
 import org.specs2.specification.process.*
+import org.specs2.concurrent.*
 import scala.collection.*
 
 object EnvDefault:
@@ -21,17 +22,20 @@ object EnvDefault:
     create(Arguments())
 
   def create(arguments: Arguments): Env =
+    val systemLogger = ConsoleLogger()
     Env(
       arguments = arguments,
       resources = concurrent.TrieMap(),
-      systemLogger = ConsoleLogger(),
+      systemLogger = systemLogger,
       printerLogger = consolePrinterLogger,
       statisticsRepository =
         StatisticsRepositoryCreation.file(arguments.commandLine.directoryOr("stats.outdir", statsDirectoryPath)),
       random = new scala.util.Random,
-      fileSystem = FileSystem(ConsoleLogger()),
+      fileSystem = FileSystem(systemLogger),
       customClassLoader = None,
-      classLoading = ClassLoading()
+      classLoading = ClassLoading(),
+      executionEnv = ExecutionEnv.create(arguments, systemLogger),
+      specs2ExecutionEnv = ExecutionEnv.createSpecs2(arguments, systemLogger)
     )
 
   def defaultInstances(env: Env) =

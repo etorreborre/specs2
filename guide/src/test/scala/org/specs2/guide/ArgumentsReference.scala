@@ -79,8 +79,8 @@ $p
  `sequential`            | `false`                                          | don't execute examples concurrently
  `asap`                  | `false`                                          | execute all the examples before reporting them
  `useCustomClassLoader`  | `false`                                          | use a custom class loader set on the `Env` to execute each example. By default sbt's classloader for running tests is attached to the `Env`
- `threadsNb`             | `min(Runtime.getRuntime.availableProcessors, 4)` | number of threads to use for concurrent execution inside the user examples
- `specs2ThreadsNb`       | `min(Runtime.getRuntime.availableProcessors, 4)` | number of threads to use for the concurrent execution of specs2 actions
+ `threadsNb`             | `min(Runtime.getRuntime.availableProcessors, 4)` | number of threads to use for concurrent execution inside the user examples (this cannot be set on a specification, it has to be set globally)
+ `specs2ThreadsNb`       | `min(Runtime.getRuntime.availableProcessors, 4)` | number of threads to use for the concurrent execution of specs2 actions (this cannot be set on a specification, it has to be set globally)
  `scheduledThreadsNb`    | `1`                                              | number of threads to use for timing out execution
  `batchSize`             | `min(Runtime.getRuntime.availableProcessors, 4)` | number of examples which start executing concurrently at the time
  `timeFactor`            | `1`                                              | multiply all durations by this factor when waiting for futures
