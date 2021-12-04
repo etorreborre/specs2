@@ -16,7 +16,8 @@ private[concurrent] trait ExecutionEnvCompanionPlatform:
     ExecutionEnv(ExecutorServices.create(arguments, systemLogger, tag), arguments.execute.timeFactor)
 
   def createSpecs2(arguments: Arguments, systemLogger: Logger, tag: Option[String] = None): ExecutionEnv =
-    ExecutionEnv(ExecutorServices.createSpecs2(arguments, systemLogger, tag), arguments.execute.timeFactor)
+    // ExecutionEnv(ExecutorServices.createSpecs2(arguments, systemLogger, tag), arguments.execute.timeFactor)
+    fromGlobalExecutionContext
 
   /** create an ExecutionEnv from Scala global execution context */
   def fromGlobalExecutionContext: ExecutionEnv =
