@@ -1,3 +1,5 @@
+import com.typesafe.tools.mima.core._
+
 /** ROOT PROJECT */
 
 lazy val specs2 = project
@@ -59,26 +61,39 @@ lazy val rootSettings =
       Compile / doc / sources := sources.all(aggregateCompile).value.flatten,
       packagedArtifacts := Map.empty,
       test := {},
-      mimaPreviousArtifacts := Set.empty
-    )
+      mimaFailOnNoPrevious := false)
 
 lazy val commonSettings =
   specs2Settings ++
     compilationSettings ++
     testSettings ++
-    Seq(mimaPreviousArtifacts := Set.empty)
+    mimaSettings
+
+lazy val mimaSettings =
+    Seq(
+      // mimaPreviousArtifacts := Set(organization.value %% moduleName.value % "5.0.0-RC-22"),
+      mimaFailOnNoPrevious := false,
+      mimaBinaryIssueFilters ++= Seq(
+        "collection.*",
+        "concurrent.*",
+        "control.*",
+        "data.*",
+        "fp.*",
+        "io.*",
+        "reflect.*",
+        "text.*",
+        "time.*",
+      ).map(p => ProblemFilters.exclude[Problem]("org.specs2."+p)))
 
 lazy val commonJvmSettings =
-  testJvmSettings // ++
-//Seq(mimaPreviousArtifacts := Set(organization.value %% moduleName.value % "5.0.0-RC-10"))
+  testJvmSettings
 
 import org.scalajs.linker.interface.ESVersion
 
 lazy val commonJsSettings =
   depends.jsMacrotaskExecutor ++
     Seq(scalaJSLinkerConfig ~= { _.withESFeatures(_.withESVersion(ESVersion.ES2018)) }) ++
-    testJsSettings ++
-    Seq(mimaPreviousArtifacts := Set.empty)
+    testJsSettings
 
 /** MODULES (sorted in alphabetical order) */
 
@@ -108,7 +123,10 @@ lazy val examples = crossProject(platforms: _*)
   .jvmSettings(commonJvmSettings)
   .jsSettings(commonJsSettings)
   // no mima check because that jar is not published
-  .settings(commonSettings, name := "specs2-examples", mimaPreviousArtifacts := Set.empty)
+  .settings(commonSettings,
+    name := "specs2-examples",
+    mimaPreviousArtifacts := Set.empty,
+    mimaFailOnNoPrevious := false)
   .dependsOn(common, matcher, core, matcherExtra, junit, scalacheck)
 
 lazy val fp = crossProject(platforms: _*)
@@ -194,7 +212,9 @@ lazy val tests = crossProject(platforms: _*)
   .in(file("tests"))
   .settings(
     commonSettings,
-    name := "specs2-tests"
+    name := "specs2-tests",
+    mimaPreviousArtifacts := Set.empty,
+    mimaFailOnNoPrevious := false
   )
   .dependsOn(
     core % "compile->compile;test->test",
