@@ -14,6 +14,9 @@ import scala.collection.*
 
 object EnvDefault:
 
+  val statsDirectoryPath: DirectoryPath =
+    "target" / "specs2-reports" / "stats"
+
   def default: Env =
     create(Arguments())
 

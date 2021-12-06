@@ -61,7 +61,8 @@ lazy val rootSettings =
       Compile / doc / sources := sources.all(aggregateCompile).value.flatten,
       packagedArtifacts := Map.empty,
       test := {},
-      mimaFailOnNoPrevious := false)
+      mimaFailOnNoPrevious := false
+    )
 
 lazy val commonSettings =
   specs2Settings ++
@@ -70,20 +71,21 @@ lazy val commonSettings =
     mimaSettings
 
 lazy val mimaSettings =
-    Seq(
-      // mimaPreviousArtifacts := Set(organization.value %% moduleName.value % "5.0.0-RC-22"),
-      mimaFailOnNoPrevious := false,
-      mimaBinaryIssueFilters ++= Seq(
-        "collection.*",
-        "concurrent.*",
-        "control.*",
-        "data.*",
-        "fp.*",
-        "io.*",
-        "reflect.*",
-        "text.*",
-        "time.*",
-      ).map(p => ProblemFilters.exclude[Problem]("org.specs2."+p)))
+  Seq(
+    mimaPreviousArtifacts := Set(organization.value %% moduleName.value % "5.0.0-RC-22"),
+    mimaFailOnNoPrevious := false,
+    mimaBinaryIssueFilters ++= Seq(
+      "collection.*",
+      "concurrent.*",
+      "control.*",
+      "data.*",
+      "fp.*",
+      "io.*",
+      "reflect.*",
+      "text.*",
+      "time.*"
+    ).map(p => ProblemFilters.exclude[Problem]("org.specs2." + p))
+  )
 
 lazy val commonJvmSettings =
   testJvmSettings
@@ -111,7 +113,14 @@ lazy val common = crossProject(platforms: _*)
 lazy val core = crossProject(platforms: _*)
   .withoutSuffixFor(jvm)
   .in(file("core"))
-  .settings(name := "specs2-core", commonSettings, depends.junitTest)
+  .settings(
+    name := "specs2-core",
+    commonSettings,
+    depends.junitTest,
+    // until 5.0.0-RC-23 is published
+    mimaPreviousArtifacts := Set.empty,
+    mimaFailOnNoPrevious := false
+  )
   .jvmSettings(commonJvmSettings)
   .jsSettings(commonJsSettings)
   .dependsOn(matcher, common, common % "test->test")
@@ -123,10 +132,12 @@ lazy val examples = crossProject(platforms: _*)
   .jvmSettings(commonJvmSettings)
   .jsSettings(commonJsSettings)
   // no mima check because that jar is not published
-  .settings(commonSettings,
+  .settings(
+    commonSettings,
     name := "specs2-examples",
     mimaPreviousArtifacts := Set.empty,
-    mimaFailOnNoPrevious := false)
+    mimaFailOnNoPrevious := false
+  )
   .dependsOn(common, matcher, core, matcherExtra, junit, scalacheck)
 
 lazy val fp = crossProject(platforms: _*)
