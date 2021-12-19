@@ -11,8 +11,13 @@ class Specs2Framework extends Framework:
 
   def fingerprints = Array[Fingerprint](fp1, fp1m)
 
-  def runner(args: Array[String], remoteArgs: Array[String], loader: ClassLoader) =
+  def runner(args: Array[String], remoteArgs: Array[String], loader: ClassLoader): sbt.testing.Runner =
     new MasterSbtRunner(args, remoteArgs, loader)
 
-  def slaveRunner(args: Array[String], remoteArgs: Array[String], loader: ClassLoader, send: String => Unit) =
+  def slaveRunner(
+      args: Array[String],
+      remoteArgs: Array[String],
+      loader: ClassLoader,
+      send: String => Unit
+  ): sbt.testing.Runner =
     new SlaveSbtRunner(args, remoteArgs, loader, send)
