@@ -5,26 +5,31 @@ package core
 import control._
 import io.FileSystem
 import main.Arguments
-import reporter.LineLogger.NoLineLogger
+import reporter._, LineLogger._
 import specification.process._
+import concurrent._
 import reflect._
 
 object EnvDefault {
 
   def default: Env =
+    create(Arguments(), consoleLogger)
+
+  def create(arguments: Arguments, lineLogger: LineLogger): Env =
     Env(
-      arguments           = Arguments(),
+      arguments           = arguments,
       systemLogger        = consoleLogging,
       selectorInstance    = (arguments: Arguments) => DefaultSelector,
       executorInstance    = (arguments: Arguments) => DefaultExecutor,
-      lineLogger          = NoLineLogger,
+      lineLogger          = lineLogger,
       statsRepository     = (arguments: Arguments) => StatisticsRepositoryCreation.memory,
       random              = new scala.util.Random,
       fileSystem          = new FileSystem {},
       executionParameters = ExecutionParameters(),
       customClassLoader   = None,
-      classLoading        = new ClassLoading {}
-    )
+      classLoading        = new ClassLoading {},
+      executionEnv        = ExecutionEnv.create(arguments, consoleLogging),
+      specs2ExecutionEnv  = ExecutionEnv.createSpecs2(arguments, consoleLogging))
 
   def defaultInstances(env: Env) =
     List[AnyRef](
