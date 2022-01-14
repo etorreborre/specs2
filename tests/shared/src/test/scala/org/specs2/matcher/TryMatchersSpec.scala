@@ -20,7 +20,9 @@ class TryMatchersSpec extends Spec with TryMatchers with ResultMatchers {
   ${(Failed[I](e) must beASuccessfulTry.which(_ > 0)) returns "Failure(boom) is not a Success"}
 
   ${Succeeded(1) must beASuccessfulTry[Int].like { case a if a > 0 => ok }}
-  ${(Succeeded(1) must not(beASuccessfulTry[Int].like { case a => a must be_>=(0) })) returns "Expectation failed: 'Success(1) is a Success but 1 is strictly less than 0'"}
+  ${(Succeeded(1) must not(
+    beASuccessfulTry[Int].like { case a => a must be_>=(0) }
+  )) returns "Expectation failed: 'Success(1) is a Success but 1 is strictly less than 0'"}
   ${Succeeded(1) must not(beASuccessfulTry.withValue(2))}
   ${Failed[I](e) must not(beASuccessfulTry)}
   ${Failed[I](e) must not(beASuccessfulTry.withValue(2))}

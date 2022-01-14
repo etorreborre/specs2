@@ -107,7 +107,8 @@ object Action:
       ta match {
         case Left(t)  => Action.exception(t)
         case Right(a) => Action.pure(a)
-      } catch {
+      }
+    catch {
       case NonFatal(t) => Action.exception(t)
     }
 

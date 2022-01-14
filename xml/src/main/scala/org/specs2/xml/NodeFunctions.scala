@@ -49,7 +49,7 @@ private[specs2] trait NodeFunctions:
         case (Nil, _) => iterableComparison(NodeSeq.fromSeq(n1), NodeSeq.fromSeq(n2))
         case (atoms, (n2: Text) :: rest2) =>
           atoms.mkString.trim == n2.toString.trim &&
-            iterableComparison(NodeSeq.fromSeq(n1.dropWhile(isAtom)), NodeSeq.fromSeq(rest2))
+          iterableComparison(NodeSeq.fromSeq(n1.dropWhile(isAtom)), NodeSeq.fromSeq(rest2))
 
         case _ => iterableComparison(NodeSeq.fromSeq(n1), NodeSeq.fromSeq(n2))
     (node, n) match
@@ -70,10 +70,10 @@ private[specs2] trait NodeFunctions:
       // general case
       case (n1: Node, n2: Node) =>
         (isSpaceNode(n1) && isSpaceNode(n2)) ||
-          n1.prefix == n2.prefix &&
-          attributesSet(n1) == attributesSet(n2) &&
-          n1.label == n2.label &&
-          compareChildren(n1.child.toList.filter(!isSpaceNode(_)), n2.child.toList.filter(!isSpaceNode(_)))
+        n1.prefix == n2.prefix &&
+        attributesSet(n1) == attributesSet(n2) &&
+        n1.label == n2.label &&
+        compareChildren(n1.child.toList.filter(!isSpaceNode(_)), n2.child.toList.filter(!isSpaceNode(_)))
       case (n1: NodeSeq, n2: NodeSeq) => iterableComparison(n1.filter(!isSpaceNode(_)), n2.filter(!isSpaceNode(_)))
 
   /** @return the set of attributes as a set of key/value */

@@ -192,7 +192,12 @@ trait HtmlBodyPrinter:
 
   def showStacktrace(id: String, st: List[StackTraceElement], klass: String, arguments: Arguments) =
     <stacktrace id={id} style="display:none" class={klass}>
-      {arguments.traceFilter(st).map(t => <stacktrace-elt>{t.toString.replace("$", ".")}<br/></stacktrace-elt>).foldLeft(NodeSeq.Empty)(_ ++ _)}
+      {
+      arguments
+        .traceFilter(st)
+        .map(t => <stacktrace-elt>{t.toString.replace("$", ".")}<br/></stacktrace-elt>)
+        .foldLeft(NodeSeq.Empty)(_ ++ _)
+    }
     </stacktrace>
 
   def failureElement(
