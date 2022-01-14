@@ -103,10 +103,11 @@ object Action:
     exception(new UserException(message, new Exception))
 
   def either[A](ta: =>Throwable `Either` A): Action[A] =
-    try ta match {
-      case Left(t)  => Action.exception(t)
-      case Right(a) => Action.pure(a)
-    } catch {
+    try
+      ta match {
+        case Left(t)  => Action.exception(t)
+        case Right(a) => Action.pure(a)
+      } catch {
       case NonFatal(t) => Action.exception(t)
     }
 
