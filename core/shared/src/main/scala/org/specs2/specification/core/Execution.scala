@@ -283,8 +283,8 @@ case class Execution(
   override def equals(a: Any) = a.asInstanceOf[Matchable] match
     case other: Execution =>
       other.run.isDefined == run.isDefined &&
-        other.timeout == timeout &&
-        other.mustJoin == mustJoin
+      other.timeout == timeout &&
+      other.mustJoin == mustJoin
 
     case _ => false
 

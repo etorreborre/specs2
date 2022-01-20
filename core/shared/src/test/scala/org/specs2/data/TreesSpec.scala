@@ -50,15 +50,13 @@ class TreesSpec extends Specification with DataTables with Expectations {
   /** the tree is:
     *
     * 0
-    * |
-    * +- 2
-    * | |
-    * | `- 1
-    * |
-    * +- 3
-    * | |
-    * | `- 4
-    * | `- 5
+    * \| +- 2
+    * \| |
+    * \| `- 1
+    * \| +- 3
+    * \| |
+    * \| `- 4
+    * \| `- 5
     */
   def tree = Node(0, Node(2, Leaf(1)) :: Node(3, Leaf(4)) :: Leaf(5) :: Nil)
 
