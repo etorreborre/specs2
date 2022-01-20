@@ -3,6 +3,7 @@ package matcher
 
 import execute.*
 
+// format: off
 class OptionMatchersSpec extends Specification with ResultMatchers {
   def is = s2"""
 

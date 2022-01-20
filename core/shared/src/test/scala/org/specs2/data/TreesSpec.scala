@@ -47,6 +47,7 @@ class TreesSpec extends Specification with DataTables with Expectations {
     val tree = tree3.loc.addChild(4).tree
     tree.flattenLeft `aka` "flattenLeft" must ===(tree.flatten)
 
+  // format: off
   /** the tree is:
     *
     * 0
@@ -61,6 +62,7 @@ class TreesSpec extends Specification with DataTables with Expectations {
     * | `- 5
     */
   def tree = Node(0, Node(2, Leaf(1)) :: Node(3, Leaf(4)) :: Leaf(5) :: Nil)
+  // format: on
 
   def tree1 = Node(0, Node(2, Leaf(2)))
   def tree2 = Node(0, Node(2, Leaf(1)))

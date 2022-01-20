@@ -150,7 +150,7 @@ object CommandLine extends Extract:
     allArguments.find {
       case BooleanArgument(n) =>
         (name.startsWith("!") && n.toLowerCase == name.drop(1).toLowerCase) ||
-          (n.toLowerCase == name.toLowerCase)
+        (n.toLowerCase == name.toLowerCase)
       case ValuedArgument(n) =>
         n.toLowerCase == name.toLowerCase
     }

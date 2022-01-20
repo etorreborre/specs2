@@ -5,6 +5,7 @@ import java.util.Arrays.*
 import scala.collection.JavaConverters.*
 import org.specs2.specification.core.{Env, OwnEnv}
 
+// format: off
 class TraversableMatchersSpec(val env: Env) extends Specification with ResultMatchers with MustMatchers with OwnEnv {
   def is = s2"""
 
@@ -75,7 +76,9 @@ class TraversableMatchersSpec(val env: Env) extends Specification with ResultMat
    Failure messages
    ${(Seq[Int]() must contain(2, 3)) returns "List() does not contain 2, 3"}
    ${(Seq[Int]() must contain(allOf(2, 3))) returns "List() does not contain 2, 3"}
-   ${(Seq[Int](1, 2, 3) must contain(allOf(2, 5))) returns "List(1, 2, 3) does not contain 5\nFailures:\n  3: 3 != 5\n  1: 1 != 5"}
+   ${(Seq[Int](1, 2, 3) must contain(
+    allOf(2, 5)
+  )) returns "List(1, 2, 3) does not contain 5\nFailures:\n  3: 3 != 5\n  1: 1 != 5"}
    ${(Seq[Int]() must contain(exactly(1))) returns "List() does not contain 1"}
    ${(Seq(1, 2, 3) must contain(exactly(1, 2))) returns "List(1, 2, 3) contains 3"}
    ${(Seq(1, 2, 3) must contain(exactly(be_>=(0), be_>=(1), be_>=(5)))) returns
@@ -110,13 +113,17 @@ class TraversableMatchersSpec(val env: Env) extends Specification with ResultMat
    ${Seq(1, 2) must not(contain(atMost(1, 3)))}
    ${Seq(1, 2) must not(contain(atMost(1)))}
 
-   ${(Seq(1, 2) must not(contain(exactly(1, 2)))) returnsResult "failure: Expectation failed:\nList(1, 2) contains all expected values"}
+   ${(Seq(1, 2) must not(
+    contain(exactly(1, 2))
+  )) returnsResult "failure: Expectation failed:\nList(1, 2) contains all expected values"}
    ${(Seq[Int]() must not(contain(exactly(1))))}
    ${(Seq(1, 2, 3) must not(contain(exactly(1, 2))))}
    ${(Seq(1, 2) must not(contain(atLeast(4, 1))))}
    ${(Seq(1, 2) must not(contain(atMost(1, 3))))}
    ${(Seq(1, 2) must not(contain(atMost(1))))}
-   ${(Seq(1, 2) must not(contain(allOf(1, 2)))) returnsResult "failure: Expectation failed:\nList(1, 2) contains all expected values"}
+   ${(Seq(1, 2) must not(
+    contain(allOf(1, 2))
+  )) returnsResult "failure: Expectation failed:\nList(1, 2) contains all expected values"}
    ${(Seq(1, 2, 3) must not(contain(exactly(1, 2, 3, 4))))}
 
    ${(Seq(1, 2, 3) must not(contain(exactly(1, 4))))}

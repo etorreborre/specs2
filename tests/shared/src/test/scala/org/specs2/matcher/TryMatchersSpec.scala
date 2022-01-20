@@ -3,6 +3,7 @@ package matcher
 
 import util.{Success as Succeeded, Failure as Failed}
 
+// format: off
 class TryMatchersSpec extends Spec with TryMatchers with ResultMatchers {
   def is = s2"""
 
