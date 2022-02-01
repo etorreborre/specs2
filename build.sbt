@@ -38,7 +38,7 @@ lazy val specs2 = project
 
 /** COMMON SETTINGS */
 
-val Scala3 = "3.1.0"
+val Scala3 = "3.1.1"
 
 lazy val specs2Settings = Seq(
   organization := "org.specs2",
