@@ -14,7 +14,7 @@ object ScalaCheckExamplesSpec extends Specification with ScalaCheck {
   endsWith   ${prop { (a: String, b: String) => (a + b) must endWith(b) }}
   substring  ${prop { (a: String, b: String) => (a + b).substring(a.length) === b }}
   substring  ${prop { (a: String, b: String, c: String) =>
-    (a + b + c).substring(a.length, a.length + b.length) === b
-  }}
+      (a + b + c).substring(a.length, a.length + b.length) === b
+    }}
                                                                                                                         """
 }

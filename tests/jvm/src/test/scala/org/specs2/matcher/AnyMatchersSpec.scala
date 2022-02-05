@@ -61,7 +61,7 @@ class AnyMatchersSpec
   ${atLeastOnceWhen(Seq((2, 1), (3, 4))) { case (a, b) if a > 2 => a must be_<(b) }}
   ${atLeastOnce(Seq(Some(1), None)) { _ must beSome(1) }}
   ${(new org.specs2.mutable.Specification { Seq(1).atLeastOnce(_ must be_<(0)) }: Any) must
-    throwA[FailureException]} ${tag("issue #169")}
+      throwA[FailureException]} ${tag("issue #169")}
 
   beNull matches null values
   ${(null: String) must beNull}
@@ -96,8 +96,8 @@ class AnyMatchersSpec
   ${type1 must beAnInstanceOf[Type1]}
   ${type1 must not(beAnInstanceOf[Type2])}
   ${(type1 must beAnInstanceOf[Type2]).message must ===(
-    s"'type1: ${type1.getClass.getName}' is not an instance of 'org.specs2.matcher.Type2'"
-  )}
+      s"'type1: ${type1.getClass.getName}' is not an instance of 'org.specs2.matcher.Type2'"
+    )}
 
 Implicits
 =========

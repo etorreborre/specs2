@@ -91,27 +91,27 @@ class ComparisonResultSpec extends Spec {
   ===========
 
   identical success will return Success(...)                              ${TryIdentical(
-    1,
-    isSuccess = true
-  ).render must ===("Success(1)")}
+      1,
+      isSuccess = true
+    ).render must ===("Success(1)")}
   identical failure will return Failure(...)                              ${TryIdentical(
-    1,
-    isSuccess = false
-  ).render must ===("Failure(1)")}
+      1,
+      isSuccess = false
+    ).render must ===("Failure(1)")}
   different success will return Success(...)                              ${TryDifferent(
-    PrimitiveDifference(1, 2),
-    isSuccess = true
-  ).render must ===("Success(1 != 2)")}
+      PrimitiveDifference(1, 2),
+      isSuccess = true
+    ).render must ===("Success(1 != 2)")}
   different failure will return Failure(...)                              ${TryDifferent(
-    PrimitiveDifference(1, 2),
-    isSuccess = false
-  ).render must ===("Failure(1 != 2)")}
+      PrimitiveDifference(1, 2),
+      isSuccess = false
+    ).render must ===("Failure(1 != 2)")}
   different success failure type will be Success(...) ==> Failure(...)    ${TryTypeDifferent(isActualSuccess =
-    true
-  ).render must ===("Success(...) ==> Failure(...)")}
+      true
+    ).render must ===("Success(...) ==> Failure(...)")}
   different failure success type will be Success(...) ==> Failure(...)    ${TryTypeDifferent(isActualSuccess =
-    false
-  ).render must ===("Failure(...) ==> Success(...)")}
+      false
+    ).render must ===("Failure(...) ==> Success(...)")}
 
   Other Render:
   =============

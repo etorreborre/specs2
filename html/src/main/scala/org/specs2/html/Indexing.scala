@@ -58,10 +58,10 @@ object Index:
 
   def page(entry: IndexEntry): String =
     s"""{'title':'${entry.title}', 'text':'${sanitizeEntry(entry)}', 'tags':${entry.tags.mkString(
-      "'",
-      " ",
-      "'"
-    )}, 'loc':'${entry.path.path}'}"""
+        "'",
+        " ",
+        "'"
+      )}, 'loc':'${entry.path.path}'}"""
 
   /** the text that is used for indexing must be sanitized:
     *   - no newlines

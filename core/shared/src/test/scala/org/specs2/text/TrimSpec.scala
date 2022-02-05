@@ -63,22 +63,22 @@ class TrimSpec extends Specification {
   With the Trim trait it is also possible to offset a multi-line string
     with a positive offset ${"""hello
                                |world""".stripMargin.offset(n = 2) ===
-    """  hello
-      |  world""".stripMargin}
+      """  hello
+        |  world""".stripMargin}
     with a positive offset and a trailing newline ${"""hello
                                                       |world
                                                       |""".stripMargin.offset(n = 2) ===
-    """  hello
-      |  world
-      |  """.stripMargin}
+      """  hello
+        |  world
+        |  """.stripMargin}
     with a negative offset ${"""   hello
                                |   world""".stripMargin.offset(n = -2) ===
-    """ hello
-      | world""".stripMargin}
+      """ hello
+        | world""".stripMargin}
     with a negative offset which is more than existing${"""   hello
                                                           |   world""".stripMargin.offset(n = -20) ===
-    """hello
-      |world""".stripMargin}
+      """hello
+        |world""".stripMargin}
 
   Truncate a string
   ${"abcd".truncate(15) === "abcd"}

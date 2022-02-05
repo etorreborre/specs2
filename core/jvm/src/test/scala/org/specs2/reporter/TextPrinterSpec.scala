@@ -221,17 +221,17 @@ presentation
       """|[info] the x STRING spec"""
 
   def j4 = s2"""the ${SpecificationRef(
-    SpecHeader(classOf[String], Some("STRING")),
-    Arguments(),
-    hidden = true
-  )} spec""" `contains`
+      SpecHeader(classOf[String], Some("STRING")),
+      Arguments(),
+      hidden = true
+    )} spec""" `contains`
     """|[info] the  spec"""
 
   def j5 = s2"""the ${SpecificationRef(
-    SpecHeader(classOf[String], Some("STRING")),
-    Arguments(),
-    alias = "beautiful"
-  )} spec""" `contains`
+      SpecHeader(classOf[String], Some("STRING")),
+      Arguments(),
+      alias = "beautiful"
+    )} spec""" `contains`
     """|[info] the * beautiful spec"""
 
   def k1 = Arguments("xonly") ^ "title".title ^
@@ -313,9 +313,9 @@ presentation
   def m1 =
     s2"""
 table ${"a" | "b" |>
-      1 ! 1 |
-      1 ! 2 |
-      1 ! 1 | { (i, j) => i === j }}""".stripMargin `contains`
+         1 ! 1 |
+         1 ! 2 |
+         1 ! 1 | { (i, j) => i === j }}""".stripMargin `contains`
       """|[info]_x_table
        |[error]____|_a_|_b_|______
        |[error]__+_|_1_|_1_|______
@@ -325,12 +325,12 @@ table ${"a" | "b" |>
   def m2 =
     s2"""
 table ${"a" | "b" |>
-      1 ! 1 |
-      1 ! 2 |
-      1 ! 1 | { (i, j) =>
-        "c" | "d" |>
-          i ! j | { (k, l) => k === l }
-      }}""".stripMargin `contains`
+         1 ! 1 |
+         1 ! 2 |
+         1 ! 1 | { (i, j) =>
+           "c" | "d" |>
+             i ! j | { (k, l) => k === l }
+         }}""".stripMargin `contains`
       """|[info]_x_table
        |[error]____|_a_|_b_|__________________
        |[error]__+_|_1_|_1_|__________________

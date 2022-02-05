@@ -93,32 +93,32 @@ case class JUnitXmlPrinter(env: Env) extends Printer:
     def properties =
       s"""<properties>
             ${System.getProperties.entrySet.asScala.toSeq
-        .map(p =>
-          s"""<property name="${escape(p.getKey.toString)}" value="${escape(p.getValue.toString)}" ></property>"""
-        )
-        .mkString("\n")}
+          .map(p =>
+            s"""<property name="${escape(p.getKey.toString)}" value="${escape(p.getValue.toString)}" ></property>"""
+          )
+          .mkString("\n")}
           </properties>"""
 
   case class TestCase(desc: Description, result: Result, time: Long)(using args: Arguments):
     def xml =
       s"""<testcase name="${escape(desc.getMethodName)}" classname="${escape(desc.getClassName)}" time="${escape(
-        formatTime(time)
-      )}">
+          formatTime(time)
+        )}">
             $testError$testFailure$testSkipped$testPending
           </testcase>"""
 
     def testError = result match
       case er @ Error(m, e) =>
         s"""<error message="${escape(m)}" type="${escape(e.getClass.getName)}">${escape(
-          args.traceFilter(er.stackTrace).mkString("\n")
-        )}</error>"""
+            args.traceFilter(er.stackTrace).mkString("\n")
+          )}</error>"""
       case _ => ""
 
     def testFailure = result match
       case f @ Failure(m, e, st, d) =>
         s"""<failure message="${escape(m)}" type="${escape(f.exception.getClass.getName)}">${escape(
-          args.traceFilter(st).mkString("\n")
-        )}</failure>"""
+            args.traceFilter(st).mkString("\n")
+          )}</failure>"""
       case _ => ""
 
     def testPending = result match

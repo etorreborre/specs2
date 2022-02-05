@@ -222,7 +222,7 @@ Support Functions
     val descriptions = executed.map(_.description.toString)
 
     s"${descriptions.mkString(",")} contains ${expected
-      .mkString(",")} but not ${unexpected.mkString(",")} for tags ${tags.mkString(",")}" ==> {
+        .mkString(",")} but not ${unexpected.mkString(",")} for tags ${tags.mkString(",")}" ==> {
       Result.foreach(expected)(e =>
         descriptions `aka` "expected for include" must contain(beMatching(".*" + e + ".*"))
       ) and
@@ -236,7 +236,7 @@ Support Functions
     val descriptions = executed.fragmentsList(ee).map(_.description.show)
 
     s"${descriptions.mkString(",")} does not contain ${unexpected
-      .mkString(",")} but contains ${expected.mkString(",")} for tags ${tags.mkString(",")}" ==> {
+        .mkString(",")} but contains ${expected.mkString(",")} for tags ${tags.mkString(",")}" ==> {
       Result.foreach(expected)(e =>
         descriptions `aka` "expected for exclude" must contain(beMatching(".*" + e + ".*"))
       ) and
