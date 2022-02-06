@@ -72,7 +72,7 @@ lazy val commonSettings =
 
 lazy val mimaSettings =
   Seq(
-    mimaPreviousArtifacts := Set(organization.value %% moduleName.value % "5.0.0-RC-22"),
+    mimaPreviousArtifacts := Set(organization.value %% moduleName.value % "5.0.0-RC-23"),
     mimaFailOnNoPrevious := false
   )
 
