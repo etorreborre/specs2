@@ -15,10 +15,10 @@ class JsonMatchersSpec extends Specification with JsonMatchers {
  ${"{'name' : 5}" must /("name" -> 5)}
  ${"{'name' : 'Joe'}" must not(/("name2" -> "Joe"))}
  ${("['name', 'Joe']" must /("name" -> "initial")) returns "the array\n[name, Joe]\ndoesn't contain " +
-    "the pair 'name':value 'initial'"}
+      "the pair 'name':value 'initial'"}
  ${"{'name' : 'Joe'}" must /("n.*".r -> "j.*".r) returns "the object\n{name:Joe}\ndoesn't contain the pair 'n" +
-    ".*':regex 'j" +
-    ".*'"}
+      ".*':regex 'j" +
+      ".*'"}
  ${("garbage" must /("name" -> "Joe")) returns "Could not parse\ngarbage"}
  with regexes as well
  ${"{'name' : 'Joe'}" must /("n.*".r -> "J.*".r)}
@@ -28,7 +28,7 @@ class JsonMatchersSpec extends Specification with JsonMatchers {
  ${"[1.0, 2.0]" must /(1.0)}
  ${"{'name' : 'Joe'}" must not(/("name"))}
  ${("{'name' : 'Joe'}" must /("name")) returns "the object\n{name:Joe}\ndoesn't contain the value 'name'" +
-    "\nThis selector can only be used with an array. Use /(k -> anyValue) if you just want to find the key 'k'"}
+      "\nThis selector can only be used with an array. Use /(k -> anyValue) if you just want to find the key 'k'"}
  ${("garbage" must /("name")) returns "Could not parse\ngarbage"}
  with regexes as well
  ${"['name', 'Joe']" must /("J.*".r)}
@@ -38,9 +38,9 @@ class JsonMatchersSpec extends Specification with JsonMatchers {
  ${"{'person' : {'name': 'Joe'}}" must /("person") / ("name" -> "Joe")}
  ${"{'person' : ['name']}" must /("person") / ("name")}
  ${"{'person' : { 'name': 'Joe', 'address' : {'street': 'here' }}}" must
-    /("person") / ("address") / ("street" -> "here")}
+      /("person") / ("address") / ("street" -> "here")}
  ${"{'person' : {'name': 'Joe', 'address': ['street']}}" must
-    /("person") / ("address") / ("street")}
+      /("person") / ("address") / ("street")}
 
  The */ matcher matches a name and a value inside any Map
  ${"{'name' : 'Joe' }" must */("name" -> "Joe")}
@@ -49,7 +49,7 @@ class JsonMatchersSpec extends Specification with JsonMatchers {
  ${"{'person' : {'name': 'Joe'}}" must */("name" -> ".*".r)}
  ${("{'person' : ['name', 'Joe']}" must not(*/("name" -> "Joe")))}
  ${("{'person' : ['name', 'Joe']}" must */("name" -> "Joe")) returns
-    s"""the object\n{person:["name", "Joe"]}\ndoesn't contain the pair 'name':value 'Joe'"""}
+      s"""the object\n{person:["name", "Joe"]}\ndoesn't contain the pair 'name':value 'Joe'"""}
  ${("garbage" must */("name" -> "Joe")) returns "Could not parse\ngarbage"}
 
  The */ matcher can be chained with /
@@ -85,9 +85,9 @@ class JsonMatchersSpec extends Specification with JsonMatchers {
  have / andHave can be used to check the elements in an object
  ${"{'person' : {'name':'Joe', 'age':'18' } }" must /("person").andHave(exactly(/("name" -> "Joe"), /("age" -> "18")))}
  ${"{'person' : {'name':'Joe', 'age':'19' } }" must /("person").andHave(
-    exactly(/("name" -> "Joe"), /("age" -> "18"))
-  ) returns
-    s"""the object\n{age:19}\ndoesn't contain the pair 'age':value '18'"""}
+      exactly(/("name" -> "Joe"), /("age" -> "18"))
+    ) returns
+      s"""the object\n{age:19}\ndoesn't contain the pair 'age':value '18'"""}
 
  String, Int, Boolean, Double and Traversable matchers can be used with the andHave method $andHave
 

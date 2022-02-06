@@ -1363,18 +1363,18 @@ case class ScalaCheckFunction$n[${TNList(n)}, R](
 
   lazy val prop: Prop =
     ${(1 to n).reverse.foldLeft(s"propFunction(${NParamList(n)})") { (res, i) =>
-      s"makeProp((t$i: T$i) => $res, argInstances$i.shrink, parameters)"
-    }}
+        s"makeProp((t$i: T$i) => $res, argInstances$i.shrink, parameters)"
+      }}
 
   def noShrink: SelfType = copy(${(1 to n)
-      .map(i => s"argInstances$i = argInstances$i.copy(shrink = None)")
-      .mkString(", ")})
+        .map(i => s"argInstances$i = argInstances$i.copy(shrink = None)")
+        .mkString(", ")})
 
   ${(1 to n)
-      .map(i =>
-        s"def setArbitrary$i(a$i: Arbitrary[T$i]): SelfType = copy(argInstances$i = argInstances$i.copy(arbitrary = a$i))"
-      )
-      .mkString("\n  ")}
+        .map(i =>
+          s"def setArbitrary$i(a$i: Arbitrary[T$i]): SelfType = copy(argInstances$i = argInstances$i.copy(arbitrary = a$i))"
+        )
+        .mkString("\n  ")}
   def setArbitraries(${(1 to n).map(i => s"a$i: Arbitrary[T$i]").mkString(", ")}): SelfType =
     ${(1 to n).map(i => s"setArbitrary$i(a$i)").mkString(".")}
 
@@ -1383,21 +1383,21 @@ case class ScalaCheckFunction$n[${TNList(n)}, R](
     ${(1 to n).map(i => s"setGen$i(g$i)").mkString(".")}
 
   ${(1 to n)
-      .map(i =>
-        s"def setShrink$i(s$i: Shrink[T$i]): SelfType = copy(argInstances$i = argInstances$i.copy(shrink = Some(s$i)))"
-      )
-      .mkString("\n  ")}
+        .map(i =>
+          s"def setShrink$i(s$i: Shrink[T$i]): SelfType = copy(argInstances$i = argInstances$i.copy(shrink = Some(s$i)))"
+        )
+        .mkString("\n  ")}
   def setShrinks(${(1 to n).map(i => s"s$i: Shrink[T$i]").mkString(", ")}): SelfType =
     ${(1 to n).map(i => s"setShrink$i(s$i)").mkString(".")}
 
   ${(1 to n)
-      .map(i =>
-        s"def setPretty$i(p$i: T$i => Pretty): SelfType = copy(argInstances$i = argInstances$i.copy(pretty = p$i))"
-      )
-      .mkString("\n  ")}
+        .map(i =>
+          s"def setPretty$i(p$i: T$i => Pretty): SelfType = copy(argInstances$i = argInstances$i.copy(pretty = p$i))"
+        )
+        .mkString("\n  ")}
   ${(1 to n)
-      .map(i => s"def pretty$i(p$i: T$i => String): SelfType = setPretty$i((t$i: T$i) => Pretty(_ => p$i(t$i)))")
-      .mkString("\n  ")}
+        .map(i => s"def pretty$i(p$i: T$i => String): SelfType = setPretty$i((t$i: T$i) => Pretty(_ => p$i(t$i)))")
+        .mkString("\n  ")}
 
   def setPretties(${(1 to n).map(i => s"p$i: T$i => Pretty").mkString(", ")}): SelfType =
     ${(1 to n).map(i => s"setPretty$i(p$i)").mkString(".")}
@@ -1408,10 +1408,10 @@ case class ScalaCheckFunction$n[${TNList(n)}, R](
     copy(prettyFreqMap = f)
 
   ${(1 to n)
-      .map(i =>
-        s"def collectArg$i(f: T$i => Any): SelfType = copy(argInstances$i = argInstances$i.copy(collectors = argInstances$i.collectors :+ f))"
-      )
-      .mkString("\n  ")}
+        .map(i =>
+          s"def collectArg$i(f: T$i => Any): SelfType = copy(argInstances$i = argInstances$i.copy(collectors = argInstances$i.collectors :+ f))"
+        )
+        .mkString("\n  ")}
   ${(1 to n).map(i => s"def collect$i: SelfType = collectArg$i(_.toString)").mkString("\n  ")}
   def collectAllArgs(${(1 to n).map(i => s"f$i: T$i => Any").mkString(",")}): SelfType =
     ${(1 to n).map(i => s"collectArg$i(f$i)").mkString(".")}

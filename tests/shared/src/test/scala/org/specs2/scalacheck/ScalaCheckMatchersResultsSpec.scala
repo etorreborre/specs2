@@ -28,29 +28,29 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
    A FailureException makes a Failure
    ${check(failureExceptionProp) must beFailing(withMessage("failure"))}
    ${check(propFailureExceptionProp) must beFailing(
-    withMessage("Falsified after 1 passed tests.> ARG_0: true> failure")
-  )}
+      withMessage("Falsified after 1 passed tests.> ARG_0: true> failure")
+    )}
 
    An AssertionError makes a Failure
    ${check(assertionErrorProp) must beFailing(withMessage("assertion failed"))}
 
    The stacktrace of a Failure is accessible
    ${check(failureWithStacktraceProp) must beLike { case Failure(_, _, st, _) =>
-    st.map(_.getClassName) must
-      contain((s: String) => s must contain("org.specs2.execute.Failure"))
-  }}
+      st.map(_.getClassName) must
+        contain((s: String) => s must contain("org.specs2.execute.Failure"))
+    }}
 
    A failure with a datatable must report the datatable
    ${check(datatableFailureProp) must beFailing(withMessage("x \\| 1 \\| 2 \\| 1 != 2"))}
 
    A thrown datatable must report the datatable
    ${check(datatableThrownProp).message.trimLinesSpaceEnd ===
-    """|Falsified after 0 passed tests.
-       |> ARG_0: true
-       |>
-       |  | a | b |
-       |x | 1 | 2 | ko
-       |x | 1 | 2 | ko""".stripMargin}
+      """|Falsified after 0 passed tests.
+         |> ARG_0: true
+         |>
+         |  | a | b |
+         |x | 1 | 2 | ko
+         |x | 1 | 2 | ko""".stripMargin}
 
  Other exceptions are reported as errors
 
@@ -77,21 +77,21 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
 
    Failing arguments are reported
    ${check(prop((i: Int, s: String) => i.toString == s).setGens(Gen.const(0), Gen.const("1"))).message must
-    (contain("ARG_0: 0") and contain("ARG_1_ORIGINAL: \"1\""))}
+      (contain("ARG_0: 0") and contain("ARG_1_ORIGINAL: \"1\""))}
 
    The freqmap instance is used to  report frequencies
    ${check(prop((i: Int) => true).prettyFreqMap(_ => "histogram").collect.verbose).expected must haveMessage(
-    "histogram"
-  )}
+      "histogram"
+    )}
 
    Status is reported when parameters are set with display
    ${check(prop((i: Int) => true).display(minTestsOk = 10)).expected must haveMessage("OK, passed 10 tests")}
 
    Parameters can be passed from the command line
    ${check(
-    prop { (i: Int, j: Int) => i === i }
-      .setParameters(defaultParameters.overrideWith(CommandLine.create("scalacheck.mintestsok", "10")))
-  ) returns "OK, passed 10 tests"}
+      prop { (i: Int, j: Int) => i === i }
+        .setParameters(defaultParameters.overrideWith(CommandLine.create("scalacheck.mintestsok", "10")))
+    ) returns "OK, passed 10 tests"}
 
    PrettyProduct better render case classes to replay examples
    ${check(prop((i: MyInt) => false)) returns """MyInt(1, "hey")"""}

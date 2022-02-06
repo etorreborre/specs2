@@ -166,7 +166,7 @@ trait ExceptionMatchers extends ExpectationsCreation:
       f,
       (e: Throwable) =>
         s"Expected: $expectedAsString. Got: $e instead \n\n The  ${e.getClass.simpleName} stacktrace is\n\n${e.getStackTrace
-          .mkString("\n")}",
+            .mkString("\n")}",
       "Expected: " + expectedAsString + ". Got nothing",
       andFinally
     )
@@ -221,8 +221,8 @@ trait ExceptionMatchers extends ExpectationsCreation:
             Result.result(
               ef(e) && likeResult.isSuccess,
               s"""${someKo(e)} and ${likeResult.message}\n\n The ${e.getClass.simpleName} stacktrace is\n\n${stacktrace(
-                e
-              ).mkString("\n")}"""
+                  e
+                ).mkString("\n")}"""
             )
           else Result.result(false, someKo(e))
         }

@@ -272,8 +272,8 @@ object ScalaCheckPropertyCreation:
     asResult: AsResult[R], parameters: Parameters): ScalaCheckFunction$n[${TNList(n)}, R] =
     ScalaCheckFunction$n(result,
       ${(1 to n)
-      .map(i => s"ScalaCheckArgInstances(arbitrary$i, Some(shrink$i), collectors = Nil, pretty = pretty$i)")
-      .mkString(",")},
+        .map(i => s"ScalaCheckArgInstances(arbitrary$i, Some(shrink$i), collectors = Nil, pretty = pretty$i)")
+        .mkString(",")},
       prettyFreqMap = prettyFreqMap,
       asResult, context = None, parameters)
      """

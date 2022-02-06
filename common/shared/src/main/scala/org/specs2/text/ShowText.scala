@@ -392,8 +392,8 @@ object ShowTextGenerator:
     (1 to n)
       .map { i =>
         s"""|case class Show$i${types(i)}(${(1 to i)
-          .map(j => s"show$j: T$j => String = (_:T$j).notNull")
-          .mkString(", ")}) {
+             .map(j => s"show$j: T$j => String = (_:T$j).notNull")
+             .mkString(", ")}) {
             |  ${showMethods(i, n)}
             |  ${showMethod(i)}
             |  ${showListMethod(i)}
@@ -407,8 +407,8 @@ object ShowTextGenerator:
       .map { j =>
         s"""|  def show$j[${((i + 1) to j).map(k => s"T$k").mkString(", ")}](show$j: T$j => String): Show$j${types(j)} =
             |    Show$j(${((1 to i).map(k => s"show$k") ++ ((i + 1) until j).map(k => s"(_:T$k).notNull") ++ Seq(
-          s"show$j"
-        )).mkString(", ")})
+             s"show$j"
+           )).mkString(", ")})
             |""".stripMargin
       }
       .mkString("\n")

@@ -98,7 +98,7 @@ class NotifierSpec extends Specification {
 class NotifierSpecWithTables extends Specification with Tables {
   def is = s2"""
   a table ${"a" | "b" | "e" |>
-    "a" ! "b" ! "AB" | { (a, b, e) => a + b must ===(e) }}
+      "a" ! "b" ! "AB" | { (a, b, e) => a + b must ===(e) }}
   """
 }
 class NotifierSpec1 extends org.specs2.mutable.Specification:

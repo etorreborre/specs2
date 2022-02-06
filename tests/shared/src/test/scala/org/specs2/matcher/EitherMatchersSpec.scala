@@ -24,9 +24,9 @@ class EitherMatchersSpec extends Spec with EitherMatchers with ResultMatchers {
 
   beRight / beLeft must typecheck when composed with other matchers
   ${
-    val boomException: Throwable = new Exception("boom")
-    Some(Left(boomException)) must beSome(beLeft(boomException))
-  }
+      val boomException: Throwable = new Exception("boom")
+      Some(Left(boomException)) must beSome(beLeft(boomException))
+    }
 
 """
 

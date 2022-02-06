@@ -580,7 +580,7 @@ case class ContainWithResultSeq[T](
           Result.result(
             success,
             s"${t.description} does not contain ${missingValues
-              .mkString(", ")}\nFailures:\n  ${failures.map((v, ms) => s"$v: ${ms.mkString(", ")}").mkString("\n  ")}"
+                .mkString(", ")}\nFailures:\n  ${failures.map((v, ms) => s"$v: ${ms.mkString(", ")}").mkString("\n  ")}"
           )
         else
           val verb = if missingValues.size > 1 then "are" else "is"

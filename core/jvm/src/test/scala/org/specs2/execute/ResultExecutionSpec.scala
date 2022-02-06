@@ -13,8 +13,8 @@ Executing a Result
 
  a decorated result exception must return a DecoratedResult
  ${execute { throw new DecoratedResultException(DecoratedResult("", Failure("failed"))); success } must ===(
-    DecoratedResult("", Failure("failed"))
-  )}
+      DecoratedResult("", Failure("failed"))
+    )}
 
  an exception must return an Error
  ${execute { throw new IllegalArgumentException("exception"); success } must ===(Error("exception"))}
