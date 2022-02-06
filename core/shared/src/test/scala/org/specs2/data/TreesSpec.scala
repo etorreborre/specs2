@@ -47,7 +47,7 @@ class TreesSpec extends script.Specification with DataTables with Grouped with E
       tree   ! 6      |
       tree1  ! 3      |
       tree2  ! 3      |
-      tree3  ! 3      | { (tree, size) => tree.loc.size must_== size }
+      tree3  ! 3      | { (tree, size) => tree.size must_== size }
     }
     // note that the TreeLoc stays at the root after the addition of the child Node
     eg := tree1.loc.addChild(3).tree.drawTree must beTree(

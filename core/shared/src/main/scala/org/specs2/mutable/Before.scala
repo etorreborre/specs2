@@ -1,15 +1,15 @@
 package org.specs2
 package mutable
 
-import matcher.Scope
+import control._
+import org.specs2.specification.core.Fragments
+import org.specs2.specification.core.mutable._
+import org.specs2.specification.create._
 
 /**
  * This trait adds the possibility to execute the before behavior before the body of the context.
- *
- * Since the delayedInit method doesn't return a Result, this only works with mutable specifications where results are
- * thrown as exceptions
  */
-@annotation.nowarn
-trait Before extends org.specs2.specification.Before with DelayedInit with Scope {
-  override def delayedInit(x: => Unit): Unit = { before; x }
+trait Before extends SpecificationStructure with org.specs2.specification.Before with FragmentsFactory {
+  override def map(fs: =>Fragments) =
+    super.map(fs.flatMap(f => emitAsync(fragmentFactory.step(before), f)))
 }

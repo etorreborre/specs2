@@ -15,7 +15,7 @@ class LocationSpec extends org.specs2.mutable.Spec with TypedEqual {
     implicit def spec: LocationUnitSpecification = new LocationUnitSpecification(ee)
 
     "for the first piece of text, with 'should'" >> {
-      textAt(index = 0)(spec) === Some(12)
+      textAt(index = 0)(spec) === Some(15)
     }
     "for the first example, with 'in'" >> {
       exampleAt(index = 0) === Some(13)
@@ -24,13 +24,13 @@ class LocationSpec extends org.specs2.mutable.Spec with TypedEqual {
       exampleAt(index = 1) === Some(14)
     }
     "for the second piece of text, with '>>'" >> {
-      textAt(index = 1) === Some(17)
+      textAt(index = 1) === Some(22)
     }
     "for the 3rd example, with '>>'" >> {
-      exampleAt(index = 2) === Some(18)
+      exampleAt(index = 2) === Some(19)
     }
     "for the 4th example, with '>>'" >> {
-      exampleAt(index = 3) === Some(20)
+      exampleAt(index = 3) === Some(21)
     }
   }
 
@@ -38,25 +38,25 @@ class LocationSpec extends org.specs2.mutable.Spec with TypedEqual {
     implicit def spec: LocationSpecification = new LocationSpecification(ee)
 
     "for the first piece of text, 'presentation''" >> {
-      textAt(index = 0) === Some(7)
+      textAt(index = 0) === Some(0)
     }
     "for the second piece of text, with 'should'" >> {
-      textAt(index = 1) === Some(10)
+      textAt(index = 1) === Some(0)
     }
     "for the first example" >> {
-      exampleAt(index = 0) === Some(10)
+      exampleAt(index = 0) === Some(0)
     }
     "for the second example" >> {
-      exampleAt(index = 1) === Some(11)
+      exampleAt(index = 1) === Some(0)
     }
     "for the third piece of text" >> {
-      textAt(index = 2) === Some(11)
+      textAt(index = 2) === Some(0)
     }
     "for the 3rd example" >> {
-      exampleAt(index = 2) === Some(14)
+      exampleAt(index = 2) === Some(0)
     }
     "for the 4th example" >> {
-      exampleAt(index = 3) === Some(15)
+      exampleAt(index = 3) === Some(0)
     }
   }
 

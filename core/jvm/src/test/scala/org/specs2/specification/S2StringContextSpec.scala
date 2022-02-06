@@ -10,7 +10,8 @@ import org.specs2.specification.core._
 import org.specs2.specification.dsl.FragmentsDsl
 import org.specs2.control.ExecuteActions._
 
-class S2StringContextSpec extends Spec { def is = s2"""
+class S2StringContextSpec extends Spec { def is =
+  s2"""
 
  Fragments can be interpolated from a s2 string
   a simple string as Text, aggregating it to the previous Text                    ${exs.e1}
@@ -49,7 +50,7 @@ ${step(ee.shutdown())}
         s2"""this is
             $ok""".fragmentsList(ee)
       fragments must haveSize(2)
-      fragments(1).description.show must_== "`ok`"
+      fragments(1).description.show must_== "``"
     }
 
     def e4 = s2"""this is ${new Function0Result(() => Success())}""".fragmentsList(ee) must haveSize(1)
@@ -67,7 +68,7 @@ ${step(ee.shutdown())}
     def e8 = {
       val fragments = s2""" ${`a method call`}""".fragmentsList(ee)
       fragments must haveSize(1)
-      fragments.head.description.show must_== "`a method call`"
+      fragments.head.description.show must_== "``"
     }
 
     def e9 = s2"""this is ${"some text"} $ok""".fragmentsList(ee) must haveSize(2)
@@ -117,7 +118,7 @@ s2"""
   def e4 =
     getDescription(
       s2"""this is an auto-example
-           $ok""") must_== Description.code("ok")
+           $ok""") must_== Description.code("")
 
   def getDescription(fs: Fragments): Description =
     fs.examples.runOption(ee).getOrElse(Nil)(0).

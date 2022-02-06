@@ -198,8 +198,10 @@ trait S2StringContextCreation extends FragmentsFactory { outer =>
   }
 
   implicit class specificationInStringContext(sc: StringContext) {
-    def s2(variables: InterpolatedFragment*): Fragments =
-      outer.s2("", false, sc.parts, Seq(), Seq(), variables, Seq())
+    def s2(variables: InterpolatedFragment*): Fragments = {
+      val locations = List.fill(sc.parts.length)("no-location")
+      outer.s2("", false, sc.parts, locations, locations, variables, locations)
+    }
   }
 
 

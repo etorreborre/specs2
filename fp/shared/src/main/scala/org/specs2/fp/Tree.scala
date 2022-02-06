@@ -75,6 +75,9 @@ sealed abstract class Tree[A] {
   def flatten: Stream[A] =
     squishLeft(this, Stream.Empty)
 
+  def size: Int =
+    flatten.toList.size
+
   /** reimplementation of squish from scalaz, using a foldLeft */
   private def squishLeft(tree: Tree[A], xs: Stream[A]): Stream[A] =
     Stream.cons(tree.rootLabel, tree.subForest.reverse.foldLeft(xs)((s, t) => squishLeft(t, s)))

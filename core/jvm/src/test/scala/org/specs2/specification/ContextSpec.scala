@@ -83,11 +83,6 @@ class ContextSpec extends script.Spec with ResultMatchers with Groups { def is =
    if it executes ok, nothing is printed, it is a silent Success                                           ${g4().e2}
    otherwise, it is reported as an Error                                                                   ${g4().e3}
 
- In a mutable spec
-   the before code must be called before the body code                                                     ${g6().e1}
-   the after code must be called after the body code                                                       ${g6().e2}
-   the around code must be called around the body code                                                     ${g6().e3}
-   the around method must rethrow failed results as exceptions                                             ${g6().e4}
                                                                                                            """
 
   implicit val arguments: main.Arguments = main.Arguments()
@@ -132,13 +127,6 @@ class ContextSpec extends script.Spec with ResultMatchers with Groups { def is =
     e1 := executing(firstThenEx1).prints("first", "e1")
     e2 := executeBodies(silentFirstThenEx1).map(_.message) must_== List("", "success")
     e3 := executeBodies(failingFirstThenEx1).map(_.message) must_== List("org.specs2.specification.core.FatalExecution: error", "")
-  }
-
-  "mutable contexts" - new g6 with FragmentsExecution with MustThrownExpectations {
-    e1 := executing("e1" ! new beforeMutableContext { println("body"); 1 must_== 1 }).prints("before", "body")
-    e2 := executing("e1" ! new afterMutableContext { println("body"); 1 must_== 1 }).prints("body", "after")
-    e3 := executing("e1" ! new aroundMutableContext { println("body"); 1 must_== 1 }).prints("before", "body", "after")
-    e4 := executing("e1" ! new aroundMutableContext { 1 must_== 2 }).results.head must beFailing
   }
 
   trait FragmentsExecution extends StringOutput with ContextData {

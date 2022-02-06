@@ -85,7 +85,7 @@ object LinesContentDifference {
   implicit def sizedLinesContentDifference: Sized[LinesContentDifference] =
     new Sized[LinesContentDifference] {
       def size(ls: LinesContentDifference): Int =
-        ls.show.size
+        if (ls.isEmpty) 0 else ls.show.size
     }
 }
 

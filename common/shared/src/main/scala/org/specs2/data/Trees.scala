@@ -17,7 +17,6 @@ trait Trees { outer =>
     def prune[B](f: A => Option[B]): Option[Tree[B]] = outer.prune(t, f)
     def prune(f: Tree[A] => Option[A])(implicit initial: A): Tree[A] = outer.prune(t, f)(initial)
     def flattenSubForests = outer.flattenSubForests(t)
-    def size              = t.flatten.size
     def allPaths          = outer.allPaths(t)
   }
 
@@ -79,7 +78,7 @@ trait Trees { outer =>
   /**
    * @return the number of nodes in a TreeLoc
    */
-  def size[A](t: TreeLoc[A]): Int = t.root.toTree.size
+  def size[A](t: TreeLoc[A]): Int = t.toTree.size
 
   /**
    * @return all the paths from root to leaves

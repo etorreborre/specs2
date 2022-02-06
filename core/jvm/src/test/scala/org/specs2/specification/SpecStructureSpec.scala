@@ -31,7 +31,7 @@ ${step(env.shutdown())}
     SpecStructure.dependsOn(ee)(s1, s2) and SpecStructure.dependsOn(ee)(s2, s1).not
 
   def a2 =
-    SpecStructure.linkedSpecifications(s1, env, getClass.getClassLoader).runOption.flatMap(_.lastOption) must beSome((_: SpecStructure).arguments must_== s2.arguments)
+    SpecStructure.linkedSpecifications(s1, env, getClass.getClassLoader).runOption.flatMap(_.lastOption) must beSome[SpecStructure]((_: SpecStructure).arguments must_== s2.arguments)
 
   def b1 =
     SpecStructure.linkedSpecifications(s1, env.setArguments(Arguments.split("exclude s2")),getClass.getClassLoader).
