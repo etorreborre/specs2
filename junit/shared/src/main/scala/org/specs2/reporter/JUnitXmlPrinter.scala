@@ -52,7 +52,7 @@ trait JUnitXmlPrinter extends Printer {
     JUnitDescriptions.fragmentDescriptions(spec.setFragments(Fragments(fragments:_*)))(ee)
 
   def outputDirectory(arguments: Arguments): DirectoryPath =
-    arguments.commandLine.directoryOr("junit.outdir", "target" / "test-reports")
+    arguments.commandLine.directoryOr("junit.outdir", DirectoryPath.unsafe("target/test-reports"))
 
   case class TestSuite(description: Description, className: String, errors: Int, failures: Int, skipped: Int, time: Long = 0, tests: Seq[TestCase] = Seq()) {
     def addTest(t: TestCase) = copy(tests = tests :+ t)

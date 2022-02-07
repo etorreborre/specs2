@@ -11,7 +11,7 @@ package org.mockito.internal.matchers
 case class EqualsFunction1(wanted: scala.Any) extends Equals(wanted) {
 
   override def matches(actual: Object): Boolean = {
-    actual.isInstanceOf[Function1[_,_]]
+    actual.isInstanceOf[Function1[?, ?]]
   }
 
 }

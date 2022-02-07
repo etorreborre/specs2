@@ -19,7 +19,7 @@ case class HamcrestMatcherAdapter[T](m: Matcher[T]) extends BaseMatcher[T] {
   private def matchesSafely[A](item: A, matcher: Matcher[A]): Boolean = {
     // special case for by-name arguments
     // in that case we apply the Function0 to get the value
-    val i = if (item != null && item.isInstanceOf[Function0[_]]) item.asInstanceOf[Function0[_]].apply().asInstanceOf[A] else item
+    val i = if (item != null && item.isInstanceOf[Function0[?]]) item.asInstanceOf[Function0[?]].apply().asInstanceOf[A] else item
     try {
       matcher.apply(Expectable(i)) match {
         case f: MatchFailure[?] => message = f.koMessage; false

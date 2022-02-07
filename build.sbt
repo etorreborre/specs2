@@ -20,15 +20,15 @@ lazy val specs2 = project.in(file(".")).
     test := {}
   ).aggregate(
     fpJVM, catsJVM, commonJVM, matcherJVM, coreJVM, matcherExtraJVM, scalazJVM, html,
-    analysisJVM, shapelessJVM, formJVM, markdownJVM, gwtJVM, junitJVM, scalacheckJVM, mockJVM, xmlJVM,
-    tests, fpJS, catsJS, commonJS, matcherJS, coreJS, matcherExtraJS, scalazJS, analysisJS,
-    shapelessJS, junitJS, scalacheckJS, mockJS
+    formJVM, markdownJVM, junitJVM, scalacheckJVM, mockJVM, xmlJVM,
+    tests, fpJS, catsJS, commonJS, matcherJS, coreJS, matcherExtraJS, scalazJS,
+    junitJS, scalacheckJS, mockJS
   )
 
 /** COMMON SETTINGS */
 lazy val specs2Settings = Seq(
   organization := "org.specs2",
-  GlobalScope / scalazVersion := "7.2.32",
+  GlobalScope / scalazVersion := "7.2.34",
   specs2ShellPrompt,
   scalaVersion := "3.1.1",
   SettingKey[Boolean]("ide-skip-project").withRank(KeyRanks.Invisible) := platformDepsCrossVersion.value == ScalaNativeCrossVersion.binary,
@@ -64,7 +64,6 @@ lazy val commonJsNativeSettings = Seq(
 
 lazy val specs2Version = settingKey[String]("defines the current specs2 version")
 lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
-lazy val shapelessVersion = "2.3.7"
 lazy val catsVersion = "2.6.1"
 lazy val catsEffectVersion = "3.1.1"
 
@@ -80,22 +79,6 @@ def commonJvmSettings =
   testingJvmSettings
 
 /** MODULES (sorted in alphabetical order) */
-lazy val analysis = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("analysis")).
-  settings(
-    libraryDependencies ++= depends.classycle ++ depends.compiler(scalaOrganization.value, scalaVersion.value),
-    commonSettings,
-    name := "specs2-analysis").
-  jvmSettings(
-    depends.jvmTest,
-    commonJvmSettings).
-  jsSettings(commonJsSettings).
-  nativeSettings(commonNativeSettings).
-  dependsOn(common % "test->test", core, matcher, scalacheck % Test)
-
-lazy val analysisJVM = analysis.jvm
-lazy val analysisJS = analysis.js
-lazy val analysisNative = analysis.native
-
 lazy val cats = crossProject(JSPlatform, JVMPlatform).in(file("cats")).
   settings(
     commonSettings,
@@ -165,7 +148,7 @@ lazy val examples = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(fil
   nativeSettings(commonNativeSettings).
   dependsOn(common, matcher, core, matcherExtra, junit, scalacheck, mock)
 
-lazy val examplesJVM = examples.jvm.dependsOn(analysisJVM, formJVM, gwtJVM, html, markdownJVM)
+lazy val examplesJVM = examples.jvm.dependsOn(formJVM, html, markdownJVM)
 lazy val examplesJS = examples.js
 lazy val examplesNative = examples.native
 
@@ -201,23 +184,7 @@ lazy val guide = project.in(file("guide")).
     commonSettings,
     name := "specs2-guide",
     Compile / scalacOptions --= Seq("-Xlint", "-Ywarn-unused-import")).
-  dependsOn(examplesJVM % "compile->compile;test->test", scalazJVM, shapelessJVM)
-
-lazy val gwt = crossProject(JSPlatform, JVMPlatform, NativePlatform).
-  crossType(CrossType.Pure).
-  in(file("gwt")).
-  settings(
-    commonSettings,
-    libraryDependencies += "com.chuusai" %%% "shapeless" % shapelessVersion,
-    name := "specs2-gwt").
-  jvmSettings(depends.jvmTest, commonJvmSettings).
-  jsSettings(depends.jsTest, commonJsSettings).
-  nativeSettings(depends.nativeTest, commonNativeSettings).
-  dependsOn(core, matcherExtra, scalacheck)
-
-lazy val gwtJVM = gwt.jvm
-lazy val gwtJS = gwt.js
-lazy val gwtNative = gwt.native
+  dependsOn(examplesJVM % "compile->compile;test->test", scalazJVM)
 
 lazy val html = project.in(file("html")).
   settings(
@@ -277,12 +244,13 @@ lazy val matcherNative = matcher.native
 lazy val matcherExtra = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("matcher-extra")).
   settings(
     commonSettings,
+    depends.scalaParser,
     name := "specs2-matcher-extra"
   ).
   jsSettings(depends.jsTest, commonJsSettings).
   jvmSettings(depends.jvmTest, commonJvmSettings).
   nativeSettings(depends.nativeTest, commonNativeSettings).
-  dependsOn(analysis, matcher, xml, core % "test->test")
+  dependsOn(matcher, xml, core % "test->test")
 
 lazy val matcherExtraJS = matcherExtra.js
 lazy val matcherExtraJVM = matcherExtra.jvm
@@ -290,25 +258,8 @@ lazy val matcherExtraNative = matcherExtra.native
 
 lazy val pom = Project(id = "pom", base = file("pom")).
   settings(commonSettings).
-  dependsOn(catsJVM, commonJVM, matcherJVM, matcherExtraJVM, coreJVM, scalazJVM, html, analysisJVM,
-    shapelessJVM, formJVM, markdownJVM, gwtJVM, junitJVM, scalacheckJVM, mockJVM)
-
-lazy val shapeless = crossProject(JSPlatform, JVMPlatform, NativePlatform).
-  crossType(CrossType.Pure).
-  in(file("shapeless")).
-  settings(
-    commonSettings,
-    name := "specs2-shapeless",
-    libraryDependencies += "com.chuusai" %%% "shapeless" % shapelessVersion
-  ).
-  jsSettings(depends.jsTest, commonJsSettings).
-  jvmSettings(depends.jvmTest, commonJvmSettings).
-  nativeSettings(depends.nativeTest, commonNativeSettings).
-  dependsOn(matcher, matcherExtra % "test->test")
-
-lazy val shapelessJS = shapeless.js
-lazy val shapelessJVM = shapeless.jvm
-lazy val shapelessNative = shapeless.native
+  dependsOn(catsJVM, commonJVM, matcherJVM, matcherExtraJVM, coreJVM, scalazJVM, html,
+  formJVM, markdownJVM, junitJVM, scalacheckJVM, mockJVM)
 
 lazy val scalaz = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("scalaz")).
   settings(
@@ -369,7 +320,6 @@ lazy val tests = Project(id = "tests", base = file("tests")).
     commonJvmSettings
   ).dependsOn(
   coreJVM      % "compile->compile;test->test",
-  shapelessJVM % "compile->compile;test->test",
   junitJVM     % "test->test",
   examplesJVM  % "test->test",
   matcherExtraJVM,
@@ -480,24 +430,16 @@ lazy val siteSettings = GhpagesPlugin.projectSettings ++ SitePlugin.projectSetti
 lazy val apiSettings = Seq(
   Compile / doc / sources := sources.all(aggregateCompile).value.flatten,
   Compile / doc / unmanagedSources := unmanagedSources.all(aggregateCompile).value.flatten,
-  libraryDependencies := libraryDependencies.all(aggregateTest).value.flatten.map(maybeMarkProvided)) ++
+  libraryDependencies := libraryDependencies.all(aggregateTest).value.flatten) ++
   Seq(Compile / doc / scalacOptions += "-Ymacro-expand:none")
 
 lazy val aggregateCompile = ScopeFilter(
-  inProjects(fpJVM, commonJVM, matcherJVM, matcherExtraJVM, coreJVM, html, analysisJVM, formJVM, shapelessJVM, markdownJVM, gwtJVM, junitJVM, scalacheckJVM, mockJVM),
+  inProjects(fpJVM, commonJVM, matcherJVM, matcherExtraJVM, coreJVM, html, formJVM, markdownJVM, junitJVM, scalacheckJVM, mockJVM),
   inConfigurations(Compile))
 
 lazy val aggregateTest = ScopeFilter(
-  inProjects(fpJVM, commonJVM, matcherJVM, matcherExtraJVM, coreJVM, html, analysisJVM, formJVM, shapelessJVM, markdownJVM, gwtJVM, junitJVM, scalacheckJVM, mockJVM),
+  inProjects(fpJVM, commonJVM, matcherJVM, matcherExtraJVM, coreJVM, html, formJVM, markdownJVM, junitJVM, scalacheckJVM, mockJVM),
   inConfigurations(Test))
-
-def maybeMarkProvided(dep: ModuleID): ModuleID =
-  if (providedDependenciesInAggregate.exists(dep.name.startsWith)) dep.withConfigurations(configurations = Some("provided"))
-  else dep
-
-/* A list of dependency module names that should be marked as "provided" for the aggregate artifact */
-lazy val providedDependenciesInAggregate = Seq("shapeless")
-
 
 /**
  * PUBLICATION

@@ -35,7 +35,7 @@ trait MocksCreation extends TheMockitoMocker with ClassesOf {
    *                  defaultReturn = 10,
    *                  extraInterfaces = classesOf[Cloneable, Serializable])
    */
-  implicit def mocked[T : ClassTag](t: =>T) = Mocked[T]()
+  implicit def mocked[T : ClassTag](t: =>T): Mocked[T] = Mocked[T]()
 
   /** support class to create a mock object with specific settings */
   private[specs2]

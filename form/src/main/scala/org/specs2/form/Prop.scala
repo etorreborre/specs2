@@ -11,25 +11,25 @@ import text.NotNullStrings._
  *   - an actual value
  *   - an expected value
  *   - a constraint to check if the actual value conforms to the expected one
- * 
+ *
  * This property can be executed and can be inserted in a Form.
  *
  * A Prop is meant to be declared as "bound" to an actual value:
  *
  *   `val customerName = Prop("Customer name", person.name)`
- * 
+ *
  * [the actual value is not evaluated until the Prop is executed]
- * 
+ *
  * Then it can be associated an expected value with the apply method (usually in a Form declaration):
- * 
+ *
  *   `customerName("Bill")`
- * 
- * The actual and the expected values can have different types and the constraint which is 
+ *
+ * The actual and the expected values can have different types and the constraint which is
  * applied to them can be anything returning a result.
- * 
+ *
  * However the Prop companion object provides a method to create a Property with a constraint
  * using a beEqualTo matcher:
- * 
+ *
  * `Prop("Name", "Eric")("Eric") must_== Success("'Eric' is equal to 'Eric'")`
  *
  */
@@ -39,7 +39,7 @@ case class Prop[T, S](
               expected: Property[S] = Property[S](),
               constraint: (T, S) => Result = Prop.checkProp,
               decorator: Decorator = Decorator().bkGreyLabel) extends Executable with DecoratedProperty[Prop[T, S]] {
-  
+
   /**
    * The apply method sets the expected value and returns the Prop
    */
@@ -74,7 +74,7 @@ case class Prop[T, S](
 
   /**
    * Display the property:
-   * 
+   *
    * label: "this" (actual: "that")
    */
   override def toString = {
@@ -87,7 +87,7 @@ case class Prop[T, S](
   /**
    * @return the string for the expected/actual value depending on its existence and execution result
    */
-  private def valueToString(executed: Either[Result, _]) = {
+  private def valueToString(executed: Either[Result, ?]) = {
     executed match {
       case Right(r)          => r.notNull
       case Left(Pending(_))  => "_"

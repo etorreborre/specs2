@@ -83,7 +83,7 @@ trait TableOfContents {
     }.loc.map(_._1)
 
   /** @return the index of a linked specification in 'main' */
-  def linkIndexIn(s1Refs: Seq[SpecificationRef]): SpecHtmlPage => Int = { s2: SpecHtmlPage =>
+  def linkIndexIn(s1Refs: Seq[SpecificationRef]): SpecHtmlPage => Int = { (s2: SpecHtmlPage) =>
     s1Refs.map(_.specClassName).indexOf(s2.className)
   }
 

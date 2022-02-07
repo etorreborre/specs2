@@ -26,7 +26,8 @@ sealed abstract class JSONType {
    * Returns a String representation of this JSON value
    * using the JSONFormat.defaultFormatter.
    */
-  override def toString = toString(JSONFormat.defaultFormatter)
+  override def toString: String =
+    toString(JSONFormat.defaultFormatter)
 }
 
 /**
@@ -146,11 +147,11 @@ class Lexer extends StdLexical with ImplicitConversions {
 
   override def token: Parser[Token] =
   //( '\"' ~ rep(charSeq | letter) ~ '\"' ^^ lift(StringLit)
-    ( string ^^ StringLit
+    ( string ^^ StringLit.apply
       | number ~ letter ^^ { case n ~ l => ErrorToken("Invalid number format : " + n + l) }
       | '-' ~> whitespace ~ number ~ letter ^^ { case ws ~ num ~ l => ErrorToken("Invalid number format : -" + num + l) }
       | '-' ~> whitespace ~ number ^^ { case ws ~ num => NumericLit("-" + num) }
-      | number ^^ NumericLit
+      | number ^^ NumericLit.apply
       | EofCh ^^^ EOF
       | delim
       | '\"' ~> failure("Unterminated string")

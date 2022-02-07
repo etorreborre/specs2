@@ -33,7 +33,7 @@ trait HtmlPrinter extends Printer {
 
   /** create an index for all the specifications, if required */
   def finalize(env: Env, specifications: List[SpecStructure]): Action[Unit] =
-    getHtmlOptions(env.arguments) >>= { options: HtmlOptions =>
+    getHtmlOptions(env.arguments) >>= { (options: HtmlOptions) =>
       createIndex(env, specifications, options).when(options.search) >>
       createToc(env, specifications, options.outDir, options.tocEntryMaxSize, env.fileSystem).when(options.toc) >>
       reportMissingSeeRefs(specifications, options.outDir)(env.specs2ExecutionEnv).when(options.warnMissingSeeRefs)
@@ -165,7 +165,7 @@ trait HtmlPrinter extends Printer {
            DirectoryPath("templates")).
            map(copySpecResourcesDir(env, "org" / "specs2" / "reporter", options.outDir, classOf[HtmlPrinter].getClassLoader))
         .sequence
-        .whenFailed { e: Error =>
+        .whenFailed { (e: Error) =>
           val message = "Cannot copy resources to "+options.outDir.path+"\n"+e.fullMessage
           warnAndFail(message, RunAborted + message)
         }

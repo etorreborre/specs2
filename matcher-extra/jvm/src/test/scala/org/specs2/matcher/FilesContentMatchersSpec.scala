@@ -45,7 +45,7 @@ class FilesContentMatchersSpec extends Spec
 
     action.runOption
 
-    matcherMessage((targetDir / actual).toFile must haveSamePathsAs((targetDir / "expected2").toFile)) ====
+    matcherMessage((targetDir / actual).toFile must haveSamePathsAs((targetDir / FileName.unsafe("expected2")).toFile)) ====
      s"""|${(targetDir / actual).path} is not the same as ${(targetDir / expected2).path}
          |      1. f1
          |    + 2. sub/f2
@@ -115,13 +115,12 @@ class FilesContentMatchersSpec extends Spec
           |""".stripMargin.replace(" ", "")
   }
 
-  val targetDir = "target" / "test" / FileName.unsafe("fcm-"+hashCode)
+  val targetDir: DirectoryPath = DirectoryPath.unsafe("target/test/fcm-"+hashCode)
 
   def before = FileSystem.mkdirs(targetDir).runOption
   def after  = FileSystem.delete(targetDir).runOption
 
-  def matcherMessage(m: MatchResult[_]): String =
+  def matcherMessage(m: MatchResult[?]): String =
     removeColors(m.message.trim)
 
 }
-

@@ -3,6 +3,9 @@ package matcher
 
 import text.Quote._
 import io._
+import java.io.File
+import org.specs2.matcher.HasPath.HasPathOps
+
 /**
  * The PathMatchers trait provides matchers which are applicable to strings representing paths
  */
@@ -95,30 +98,47 @@ object FileMatchers extends FileMatchers
 private[specs2]
 trait FileBaseMatchers extends PathMatchers {
   /** matches if file.exists */
-  def exist[T <: { def getPath(): String }] = (beAnExistingPath) ^^ ((_:T).getPath)
+  def exist[T : HasPath] = (beAnExistingPath) ^^ ((_:T).getPath())
   /** matches if file.canRead */
-  def beReadable[T <: { def getPath(): String }] = (beAReadablePath) ^^ ((_:T).getPath)
+  def beReadable[T : HasPath] = (beAReadablePath) ^^ ((_:T).getPath())
   /** matches if file.canWrite */
-  def beWritable[T <: { def getPath(): String }] = (beAWritablePath) ^^ ((_:T).getPath)
+  def beWritable[T : HasPath] = (beAWritablePath) ^^ ((_:T).getPath())
   /** matches if file.isAbsolute */
-  def beAbsolute[T <: { def getPath(): String }] = (beAnAbsolutePath) ^^ ((_:T).getPath)
+  def beAbsolute[T : HasPath] = (beAnAbsolutePath) ^^ ((_:T).getPath())
   /** matches if file.isHidden */
-  def beHidden[T <: { def getPath(): String }] = (beAHiddenPath) ^^ ((_:T).getPath)
+  def beHidden[T : HasPath] = (beAHiddenPath) ^^ ((_:T).getPath())
   /** matches if file.isFile */
-  def beAFile[T <: { def getPath(): String }] = (beAFilePath) ^^ ((_:T).getPath)
+  def beAFile[T : HasPath] = (beAFilePath) ^^ ((_:T).getPath())
   /** matches if file.isDirectory */
-  def beADirectory[T <: { def getPath(): String }] = (beADirectoryPath) ^^ ((_:T).getPath)
+  def beADirectory[T : HasPath] = (beADirectoryPath) ^^ ((_:T).getPath())
   /** matches if file.getName == name */
-  def haveName[T <: { def getPath(): String }](name: String) = (havePathName(name)) ^^ ((_:T).getPath)
+  def haveName[T : HasPath](name: String) = (havePathName(name)) ^^ ((_:T).getPath())
   /** matches if file.getAbsolutePath == path  */
-  def haveAbsolutePath[T <: { def getPath(): String }](path: String) = (haveAsAbsolutePath(path)) ^^ ((_:T).getPath)
+  def haveAbsolutePath[T : HasPath](path: String) = (haveAsAbsolutePath(path)) ^^ ((_:T).getPath())
   /** matches if file.getCanonicalPath == path */
-  def haveCanonicalPath[T <: { def getPath(): String }](path: String) = (haveAsCanonicalPath(path)) ^^ ((_:T).getPath)
+  def haveCanonicalPath[T : HasPath](path: String) = (haveAsCanonicalPath(path)) ^^ ((_:T).getPath())
   /** matches if file.getParent == path */
-  def haveParent[T <: { def getPath(): String }](path: String) = (haveParentPath(path)) ^^ ((_:T).getPath)
+  def haveParent[T : HasPath](path: String) = (haveParentPath(path)) ^^ ((_:T).getPath())
   /** matches if file.list == list */
-  def haveList[T <: { def getPath(): String }](list: String) = (listPaths(list)) ^^ ((_:T).getPath)
+  def haveList[T : HasPath](list: String) = (listPaths(list)) ^^ ((_:T).getPath())
 }
+
+trait HasPath[T] {
+  def getPath(t: T): String
+}
+
+object HasPath {
+  implicit class HasPathOps[T : HasPath](t: T) {
+    def getPath(): String =
+      implicitly[HasPath[T]].getPath(t)
+  }
+
+  implicit val fileHasPath: HasPath[File] = new HasPath[File] {
+    def getPath(f: File): String =
+      f.getPath()
+  }
+}
+
 /**
  * This case class is used to provide the getPath() method,
  * so that all FileMatchers can be used on Strings.
@@ -134,8 +154,10 @@ trait FileBeHaveMatchers extends BeHaveMatchers { outer: FileBaseMatchers =>
   /**
    * matcher aliases and implicits to use with BeVerb and HaveVerb
    */
-  implicit def toFileResultMatcher[T <: { def getPath(): String }](result: MatchResult[T]): FileResultMatcher = new FileResultMatcher(result)
-  class FileResultMatcher[T <: { def getPath(): String }](result: MatchResult[T]) {
+  implicit def toFileResultMatcher[T : HasPath](result: MatchResult[T]): FileResultMatcher[T] =
+    new FileResultMatcher(result)
+
+  class FileResultMatcher[T : HasPath](result: MatchResult[T]) {
     def hidden = result(beHidden)
     def readable = result(beReadable)
     def writable = result(beWritable)
@@ -149,17 +171,17 @@ trait FileBeHaveMatchers extends BeHaveMatchers { outer: FileBaseMatchers =>
     def canonicalPath(path: String) = result(haveCanonicalPath(path))
     def parent(path: String) = result(haveParent(path))
   }
-  def hidden[T <: { def getPath(): String }] = beHidden
-  def readable[T <: { def getPath(): String }] = beReadable
-  def writable[T <: { def getPath(): String }] = beWritable
-  def absolute[T <: { def getPath(): String }] = beAbsolute
-  def aFile[T <: { def getPath(): String }] = beAFile
-  def aDirectory[T <: { def getPath(): String }] = beADirectory
-  def name[T <: { def getPath(): String }](name: String) = haveName(name)
-  def paths[T <: { def getPath(): String }](list: String) = haveList(list)
-  def absolutePath[T <: { def getPath(): String }](path: String) = haveAbsolutePath(path)
-  def canonicalPath[T <: { def getPath(): String }](path: String) = haveCanonicalPath(path)
-  def parent[T <: { def getPath(): String }](path: String) = haveParent(path)
+  def hidden[T : HasPath] = beHidden
+  def readable[T : HasPath] = beReadable
+  def writable[T : HasPath] = beWritable
+  def absolute[T : HasPath] = beAbsolute
+  def aFile[T : HasPath] = beAFile
+  def aDirectory[T : HasPath] = beADirectory
+  def name[T : HasPath](name: String) = haveName(name)
+  def paths[T : HasPath](list: String) = haveList(list)
+  def absolutePath[T : HasPath](path: String) = haveAbsolutePath(path)
+  def canonicalPath[T : HasPath](path: String) = haveCanonicalPath(path)
+  def parent[T : HasPath](path: String) = haveParent(path)
 }
 private[specs2]
 class PathMatcher(test: String => Boolean, ok: String, ko: String) extends Matcher[String] {

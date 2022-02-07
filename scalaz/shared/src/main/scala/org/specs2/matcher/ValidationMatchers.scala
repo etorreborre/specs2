@@ -17,8 +17,8 @@ trait ValidationMatchers {
 
 object ValidationMatchers extends ValidationMatchers
 
-case class SuccessValidationMatcher[T]() extends OptionLikeMatcher[({type l[a]=Validation[_, a]})#l, T, T]("Success", _.toOption)
-case class SuccessValidationCheckedMatcher[T](check: ValueCheck[T]) extends OptionLikeCheckedMatcher[({type l[a]=Validation[_, a]})#l, T, T]("Success", _.toEither.right.toOption, check)
+case class SuccessValidationMatcher[T]() extends OptionLikeMatcher[({type l[a]=Validation[?, a]})#l, T, T]("Success", _.toOption)
+case class SuccessValidationCheckedMatcher[T](check: ValueCheck[T]) extends OptionLikeCheckedMatcher[({type l[a]=Validation[?, a]})#l, T, T]("Success", _.toEither.right.toOption, check)
 
-case class FailureValidationMatcher[T]() extends OptionLikeMatcher[({type l[a]=Validation[a, _]})#l, T, T]("Failure", _.toEither.left.toOption)
-case class FailureValidationCheckedMatcher[T](check: ValueCheck[T]) extends OptionLikeCheckedMatcher[({type l[a]=Validation[a, _]})#l, T, T]("Failure", _.toEither.left.toOption, check)
+case class FailureValidationMatcher[T]() extends OptionLikeMatcher[({type l[a]=Validation[a, ?]})#l, T, T]("Failure", _.toEither.left.toOption)
+case class FailureValidationCheckedMatcher[T](check: ValueCheck[T]) extends OptionLikeCheckedMatcher[({type l[a]=Validation[a, ?]})#l, T, T]("Failure", _.toEither.left.toOption, check)

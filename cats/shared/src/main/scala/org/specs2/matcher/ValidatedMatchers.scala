@@ -15,9 +15,8 @@ trait ValidatedMatchers {
 
 object ValidatedMatchers extends ValidatedMatchers
 
-case class ValidValidatedMatcher[T]() extends OptionLikeMatcher[({type l[a]=Validated[_, a]})#l, T, T]("Valid", _.toOption)
-case class ValidValidatedCheckedMatcher[T](check: ValueCheck[T]) extends OptionLikeCheckedMatcher[({type l[a]=Validated[_, a]})#l, T, T]("Valid", _.toEither.right.toOption, check)
+case class ValidValidatedMatcher[T]() extends OptionLikeMatcher[({type l[a]=Validated[?, a]})#l, T, T]("Valid", _.toOption)
+case class ValidValidatedCheckedMatcher[T](check: ValueCheck[T]) extends OptionLikeCheckedMatcher[({type l[a]=Validated[?, a]})#l, T, T]("Valid", _.toEither.right.toOption, check)
 
-case class InvalidValidatedMatcher[T]() extends OptionLikeMatcher[({type l[a]=Validated[a, _]})#l, T, T]("Invalid", _.toEither.left.toOption)
-case class InvalidValidatedCheckedMatcher[T](check: ValueCheck[T]) extends OptionLikeCheckedMatcher[({type l[a]=Validated[a, _]})#l, T, T]("Invalid", _.toEither.left.toOption, check)
-
+case class InvalidValidatedMatcher[T]() extends OptionLikeMatcher[({type l[a]=Validated[a, ?]})#l, T, T]("Invalid", _.toEither.left.toOption)
+case class InvalidValidatedCheckedMatcher[T](check: ValueCheck[T]) extends OptionLikeCheckedMatcher[({type l[a]=Validated[a, ?]})#l, T, T]("Invalid", _.toEither.left.toOption, check)

@@ -131,9 +131,9 @@ case class ScalaCheckFunction1[T, R](
 
   type SelfType = ScalaCheckFunction1[T, R]
 
-  private implicit val asResult1  = asResult
-  private implicit val arbitrary1 = arbitrary
-  private implicit val pretty1    = pretty
+  private implicit val asResult1: AsResult[R]  = asResult
+  private implicit val arbitrary1: Arbitrary[T] = arbitrary
+  private implicit val pretty1: T => Pretty = pretty
 
   lazy val propFunction = (t: T) => {
     lazy val executed = execute(t)
@@ -144,16 +144,17 @@ case class ScalaCheckFunction1[T, R](
   lazy val prop: Prop =
     makeProp(propFunction, shrink, parameters)
 
-  def noShrink: SelfType = copy(shrink = None)
+  def noShrink: SelfType =
+    copy(shrink = None, pretty = pretty)
 
   def setArbitrary(arbitrary: Arbitrary[T]): SelfType =
-    copy(arbitrary = arbitrary)
+    copy(arbitrary = arbitrary, pretty = pretty)
 
   def setGen(gen: Gen[T]): SelfType =
     setArbitrary(Arbitrary(gen))
 
   def setShrink(shrink: Shrink[T]): SelfType =
-    copy(shrink = Some(shrink))
+    copy(shrink = Some(shrink), pretty = pretty)
 
   def setPretty(pretty: T => Pretty): SelfType =
     copy(pretty = pretty)
@@ -162,28 +163,28 @@ case class ScalaCheckFunction1[T, R](
     setPretty((t: T) => Pretty(_ => pretty(t)))
 
   def setPrettyFreqMap(f: FreqMap[Set[Any]] => Pretty): SelfType =
-    copy(prettyFreqMap = f)
+    copy(prettyFreqMap = f, pretty = pretty)
 
   def setParameters(ps: Parameters): SelfType =
-    copy(parameters = ps)
+    copy(parameters = ps, pretty = pretty)
 
   def collect: SelfType =
     collectArg(_.toString)
 
   def collectArg(f: T => Any): SelfType =
-    copy(collectors = collectors :+ f)
+    copy(collectors = collectors :+ f, pretty = pretty)
 
   def prepare(action: T => T): SelfType =
-    copy(execute = (t: T) => execute(action(t)))
+    copy(execute = (t: T) => execute(action(t)), pretty = pretty)
 
   def setContext(context: Context): SelfType =
-    copy(context = Some(context))
+    copy(context = Some(context), pretty = pretty)
 
   def setSeed(seed: Seed): SelfType =
-    copy(parameters = parameters.copy(seed = Some(seed)))
+    copy(parameters = parameters.copy(seed = Some(seed)), pretty = pretty)
 
   def setSeed(seed: String): SelfType =
-    copy(parameters = parameters.copy(seed = Parameters.makeSeed(seed)))
+    copy(parameters = parameters.copy(seed = Parameters.makeSeed(seed)), pretty = pretty)
 
 }
 
@@ -197,9 +198,9 @@ case class ScalaCheckFunction2[T1, T2, R]( execute: (T1, T2) => R,
 
   type SelfType = ScalaCheckFunction2[T1, T2, R]
 
-  private implicit val asResult1  = asResult
-  private implicit val (arb1,arb2) = (argInstances1.arbitrary,argInstances2.arbitrary)
-  private implicit val (pr1,pr2) = (argInstances1.pretty,argInstances2.pretty)
+  private implicit val asResult1: AsResult[R]  = asResult
+  private implicit val (arb1: Arbitrary[T1],arb2: Arbitrary[T2]) = (argInstances1.arbitrary,argInstances2.arbitrary)
+  private implicit val (pr1: (T1 => Pretty), pr2: (T2 => Pretty)) = (argInstances1.pretty,argInstances2.pretty)
 
   lazy val propFunction = (t1: T1, t2: T2) => {
     lazy val executed = execute(t1, t2)
@@ -276,9 +277,9 @@ case class ScalaCheckFunction3[T1, T2, T3, R](
 
   type SelfType = ScalaCheckFunction3[T1, T2, T3, R]
 
-  private implicit val asResult1  = asResult
-  private implicit val (arb1,arb2,arb3) = (argInstances1.arbitrary,argInstances2.arbitrary,argInstances3.arbitrary)
-  private implicit val (pr1,pr2,pr3) = (argInstances1.pretty,argInstances2.pretty,argInstances3.pretty)
+  private implicit val asResult1: AsResult[R] = asResult
+  private implicit val (arb1: Arbitrary[T1], arb2: Arbitrary[T2], arb3: Arbitrary[T3]) = (argInstances1.arbitrary,argInstances2.arbitrary,argInstances3.arbitrary)
+  private implicit val (pr1: (T1 => Pretty), pr2: (T2 => Pretty), pr3: (T3 => Pretty)) = (argInstances1.pretty,argInstances2.pretty,argInstances3.pretty)
 
   lazy val propFunction = (t1: T1, t2: T2, t3: T3) => {
     lazy val executed = execute(t1, t2, t3)
@@ -362,9 +363,9 @@ case class ScalaCheckFunction4[T1, T2, T3, T4, R](
 
   type SelfType = ScalaCheckFunction4[T1, T2, T3, T4, R]
 
-  private implicit val asResult1  = asResult
-  private implicit val (arb1,arb2,arb3,arb4) = (argInstances1.arbitrary,argInstances2.arbitrary,argInstances3.arbitrary,argInstances4.arbitrary)
-  private implicit val (pr1,pr2,pr3,pr4) = (argInstances1.pretty,argInstances2.pretty,argInstances3.pretty,argInstances4.pretty)
+  private implicit val asResult1: AsResult[R] = asResult
+  private implicit val (arb1: Arbitrary[T1],arb2: Arbitrary[T2],arb3: Arbitrary[T3],arb4: Arbitrary[T4]) = (argInstances1.arbitrary,argInstances2.arbitrary,argInstances3.arbitrary,argInstances4.arbitrary)
+  private implicit val (pr1: (T1 => Pretty),pr2: (T2 => Pretty),pr3: (T3 => Pretty),pr4: (T4 => Pretty)) = (argInstances1.pretty,argInstances2.pretty,argInstances3.pretty,argInstances4.pretty)
 
   lazy val propFunction = (t1: T1, t2: T2, t3: T3, t4: T4) => {
     lazy val executed = execute(t1, t2, t3, t4)
@@ -454,9 +455,9 @@ case class ScalaCheckFunction5[T1, T2, T3, T4, T5, R](
 
   type SelfType = ScalaCheckFunction5[T1, T2, T3, T4, T5, R]
 
-  private implicit val asResult1  = asResult
-  private implicit val (arb1,arb2,arb3,arb4,arb5) = (argInstances1.arbitrary,argInstances2.arbitrary,argInstances3.arbitrary,argInstances4.arbitrary,argInstances5.arbitrary)
-  private implicit val (pr1,pr2,pr3,pr4,pr5) = (argInstances1.pretty,argInstances2.pretty,argInstances3.pretty,argInstances4.pretty,argInstances5.pretty)
+  private implicit val asResult1: AsResult[R] = asResult
+  private implicit val (arb1: Arbitrary[T1],arb2: Arbitrary[T2],arb3: Arbitrary[T3],arb4: Arbitrary[T4], arb5: Arbitrary[T5]) = (argInstances1.arbitrary,argInstances2.arbitrary,argInstances3.arbitrary,argInstances4.arbitrary,argInstances5.arbitrary)
+  private implicit val (pr1: (T1 => Pretty),pr2: (T2 => Pretty),pr3: (T3 => Pretty),pr4: (T4 => Pretty),pr5: (T5 => Pretty)) = (argInstances1.pretty,argInstances2.pretty,argInstances3.pretty,argInstances4.pretty,argInstances5.pretty)
 
   lazy val propFunction = (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5) => {
     lazy val executed = execute(t1, t2, t3, t4, t5)
@@ -553,9 +554,9 @@ case class ScalaCheckFunction6[T1, T2, T3, T4, T5, T6, R](
 
   type SelfType = ScalaCheckFunction6[T1, T2, T3, T4, T5, T6, R]
 
-  private implicit val asResult1  = asResult
-  private implicit val (arb1,arb2,arb3,arb4,arb5,arb6) = (argInstances1.arbitrary,argInstances2.arbitrary,argInstances3.arbitrary,argInstances4.arbitrary,argInstances5.arbitrary,argInstances6.arbitrary)
-  private implicit val (pr1,pr2,pr3,pr4,pr5,pr6) = (argInstances1.pretty,argInstances2.pretty,argInstances3.pretty,argInstances4.pretty,argInstances5.pretty,argInstances6.pretty)
+  private implicit val asResult1: AsResult[R] = asResult
+  private implicit val (arb1: Arbitrary[T1],arb2: Arbitrary[T2],arb3: Arbitrary[T3],arb4: Arbitrary[T4],arb5: Arbitrary[T5],arb6: Arbitrary[T6]) = (argInstances1.arbitrary,argInstances2.arbitrary,argInstances3.arbitrary,argInstances4.arbitrary,argInstances5.arbitrary,argInstances6.arbitrary)
+  private implicit val (pr1: (T1 => Pretty),pr2: (T2 => Pretty),pr3: (T3 => Pretty),pr4: (T4 => Pretty),pr5: (T5 => Pretty),pr6: (T6 => Pretty)) = (argInstances1.pretty,argInstances2.pretty,argInstances3.pretty,argInstances4.pretty,argInstances5.pretty,argInstances6.pretty)
 
   lazy val propFunction = (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6) => {
     lazy val executed = execute(t1, t2, t3, t4, t5, t6)
@@ -660,9 +661,9 @@ case class ScalaCheckFunction7[T1, T2, T3, T4, T5, T6, T7, R](
 
   type SelfType = ScalaCheckFunction7[T1, T2, T3, T4, T5, T6, T7, R]
 
-  private implicit val asResult1  = asResult
-  private implicit val (arb1,arb2,arb3,arb4,arb5,arb6,arb7) = (argInstances1.arbitrary,argInstances2.arbitrary,argInstances3.arbitrary,argInstances4.arbitrary,argInstances5.arbitrary,argInstances6.arbitrary,argInstances7.arbitrary)
-  private implicit val (pr1,pr2,pr3,pr4,pr5,pr6,pr7) = (argInstances1.pretty,argInstances2.pretty,argInstances3.pretty,argInstances4.pretty,argInstances5.pretty,argInstances6.pretty,argInstances7.pretty)
+  private implicit val asResult1: AsResult[R] = asResult
+  private implicit val (arb1: Arbitrary[T1],arb2: Arbitrary[T2],arb3: Arbitrary[T3],arb4: Arbitrary[T4],arb5: Arbitrary[T5],arb6: Arbitrary[T6],arb7: Arbitrary[T7]) = (argInstances1.arbitrary,argInstances2.arbitrary,argInstances3.arbitrary,argInstances4.arbitrary,argInstances5.arbitrary,argInstances6.arbitrary,argInstances7.arbitrary)
+  private implicit val (pr1: (T1 => Pretty),pr2: (T2 => Pretty),pr3: (T3 => Pretty),pr4: (T4 => Pretty),pr5: (T5 => Pretty),pr6: (T6 => Pretty),pr7: (T7 => Pretty)) = (argInstances1.pretty,argInstances2.pretty,argInstances3.pretty,argInstances4.pretty,argInstances5.pretty,argInstances6.pretty,argInstances7.pretty)
 
   lazy val propFunction = (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7) => {
     lazy val executed = execute(t1, t2, t3, t4, t5, t6, t7)
@@ -773,9 +774,9 @@ case class ScalaCheckFunction8[T1, T2, T3, T4, T5, T6, T7, T8, R](
 
   type SelfType = ScalaCheckFunction8[T1, T2, T3, T4, T5, T6, T7, T8, R]
 
-  private implicit val asResult1  = asResult
-  private implicit val (arb1,arb2,arb3,arb4,arb5,arb6,arb7,arb8) = (argInstances1.arbitrary,argInstances2.arbitrary,argInstances3.arbitrary,argInstances4.arbitrary,argInstances5.arbitrary,argInstances6.arbitrary,argInstances7.arbitrary,argInstances8.arbitrary)
-  private implicit val (pr1,pr2,pr3,pr4,pr5,pr6,pr7,pr8) = (argInstances1.pretty,argInstances2.pretty,argInstances3.pretty,argInstances4.pretty,argInstances5.pretty,argInstances6.pretty,argInstances7.pretty,argInstances8.pretty)
+  private implicit val asResult1: AsResult[R] = asResult
+  private implicit val (arb1: Arbitrary[T1],arb2: Arbitrary[T2],arb3: Arbitrary[T3],arb4: Arbitrary[T4],arb5: Arbitrary[T5],arb6: Arbitrary[T6],arb7: Arbitrary[T7],arb8: Arbitrary[T8]) = (argInstances1.arbitrary,argInstances2.arbitrary,argInstances3.arbitrary,argInstances4.arbitrary,argInstances5.arbitrary,argInstances6.arbitrary,argInstances7.arbitrary,argInstances8.arbitrary)
+  private implicit val (pr1: (T1 => Pretty),pr2: (T2 => Pretty),pr3: (T3 => Pretty),pr4: (T4 => Pretty),pr5: (T5 => Pretty),pr6: (T6 => Pretty),pr7: (T7 => Pretty),pr8: (T8 => Pretty)) = (argInstances1.pretty,argInstances2.pretty,argInstances3.pretty,argInstances4.pretty,argInstances5.pretty,argInstances6.pretty,argInstances7.pretty,argInstances8.pretty)
 
   lazy val propFunction = (t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8) => {
     lazy val executed = execute(t1, t2, t3, t4, t5, t6, t7, t8)
@@ -927,7 +928,7 @@ case class ScalaCheckFunction$n[${TNList(n)}, R](
 
   type SelfType = ScalaCheckFunction$n[${TNList(n)}, R]
 
-  private implicit val asResult1  = asResult
+  private implicit val asResult1: AsResult[R] = asResult
   private implicit val ${ (1 to n).map(i => s"arb$i").mkString("(", ",", ")") } = ${ (1 to n).map(i => s"argInstances$i.arbitrary").mkString("(", ",", ")") }
   private implicit val ${ (1 to n).map(i => s"pr$i").mkString("(", ",", ")") } = ${ (1 to n).map(i => s"argInstances$i.pretty").mkString("(", ",", ")") }
 

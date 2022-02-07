@@ -11,11 +11,12 @@ import DecoratedProperties._
 import ResultLogicalCombinators._
 import org.specs2.control.ImplicitParameters._
 import org.specs2.control.Use
+import HasForm._
 
 /**
  * A Form is a container for Rows (@see Row) where each row contain some Cell (@see Cell).
  * It has an optional title and possibly no rows.
- * 
+ *
  * A Form can be executed by executing each row and collecting the results.
  */
 class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val result: Option[Result] = None) extends Executable with Text {
@@ -42,9 +43,9 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
 
 
   /** add a new Header with some fields */
-  def th(hs: Seq[Field[_]]): Form = tr(Row.tr(hs.map((f: Field[_]) => FieldCell(f.header))))
+  def th(hs: Seq[Field[?]]): Form = tr(Row.tr(hs.map((f: Field[?]) => FieldCell(f.header))))
   /** add a new Header, with at least one Field */
-  def th(h1: Field[_], hs: Field[_]*): Form = tr(Row.tr(FieldCell(h1.header), hs.map((f: Field[_]) => FieldCell(f.header)):_*))
+  def th(h1: Field[?], hs: Field[?]*): Form = tr(Row.tr(FieldCell(h1.header), hs.map((f: Field[?]) => FieldCell(f.header)):_*))
   /** add a new Header */
   def th(hs: Seq[String])(implicit p: ImplicitParam): Form = Use.ignoring(p)(th(hs.map(Field(_))))
   /** add a new Header, with at least one Field */
@@ -66,7 +67,7 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
 
   /**
    * execute all rows
-   * @return a logical and on all results 
+   * @return a logical and on all results
    */
   def execute = result getOrElse (executeForm.result getOrElse success)
   def executeRows = rows.map(_.executeRow)
@@ -102,16 +103,16 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
   def sequence(f1: Traversable[Form], f2: Traversable[Form]): Form = {
     addLines(FormDiffs.sequence(f1.toSeq, f2.toSeq))
   }
-  def subset[T <: Any { def form: Form }](f1: Seq[T], f2: Seq[T]): Form = {
+  def subset[T : HasForm](f1: Seq[T], f2: Seq[T]): Form = {
     addLines(FormDiffs.subset(f1.map(_.form), f2.map(_.form)))
   }
-  def subsequence[T <: Any { def form: Form }](f1: Seq[T], f2: Seq[T]): Form = {
+  def subsequence[T : HasForm](f1: Seq[T], f2: Seq[T]): Form = {
     addLines(FormDiffs.subsequence(f1.map(_.form), f2.map(_.form)))
   }
-  def set[T <: Any { def form: Form }](f1: Seq[T], f2: Seq[T]): Form = {
+  def set[T : HasForm](f1: Seq[T], f2: Seq[T]): Form = {
     addLines(FormDiffs.set(f1.map(_.form), f2.map(_.form)))
   }
-  def sequence[T <: Any { def form: Form }](f1: Seq[T], f2: Seq[T]): Form = {
+  def sequence[T : HasForm](f1: Seq[T], f2: Seq[T]): Form = {
     addLines(FormDiffs.sequence(f1.map(_.form), f2.map(_.form)))
   }
 
@@ -155,6 +156,21 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
     title.hashCode
 }
 
+trait HasForm[T] {
+  def getForm(t: T): Form
+}
+
+object HasForm {
+  implicit class HasFormOps[T : HasForm](t: T) {
+    def form: Form =
+      implicitly[HasForm[T]].getForm(t)
+  }
+  implicit val formHasForm: HasForm[Form] = new HasForm[Form] {
+    def getForm(f: Form): Form = f
+  }
+
+}
+
 /**
  *  Companion object of a Form to create:
  *   - an empty Form
@@ -172,7 +188,7 @@ case object Form {
     def firstField[A](as: Seq[A]) = Field(as.headOption.getOrElse(""))
     def otherFields[A](as: Seq[A]) = as.drop(1).map(Field(_))
 
-    val headerRest = otherFields(table.titles) ++ (if (table.isSuccess) Seq[Field[_]]() else Seq(Field("message")))
+    val headerRest = otherFields(table.titles) ++ (if (table.isSuccess) Seq[Field[?]]() else Seq(Field("message")))
     table.rows.foldLeft(th(firstField(table.titles), headerRest:_*)) { (res, cur) =>
       val values = Row.tr(FieldCell(firstField(cur.cells)), otherFields(cur.cells).map(FieldCell(_)):_*)
       res.tr {
@@ -187,7 +203,7 @@ case object Form {
   /** @return a Form with one row */
   def tr(row: Row): Form = new Form().tr(row)
   /** @return a Form with one row and cells formatted as header cells */
-  def th(h1: Field[_], hs: Field[_]*): Form = new Form().th(h1, hs:_*)
+  def th(h1: Field[?], hs: Field[?]*): Form = new Form().th(h1, hs:_*)
   /** @return a Form with one row and cells formatted as header cells */
   def th(h1: String, hs: String*): Form = new Form().th(h1, hs:_*)
   /** create new tabs in the Form */
@@ -254,4 +270,3 @@ case object Form {
   }
 
 }
-

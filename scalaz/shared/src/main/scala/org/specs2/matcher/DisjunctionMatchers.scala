@@ -18,8 +18,8 @@ trait DisjunctionMatchers {
 
 object DisjunctionMatchers extends DisjunctionMatchers
 
-case class RightDisjunctionMatcher[T]() extends OptionLikeMatcher[({type l[a]= _ \/ a})#l, T, T]("\\/-", (_:Any \/ T).toEither.right.toOption)
-case class RightDisjunctionCheckedMatcher[T](check: ValueCheck[T]) extends OptionLikeCheckedMatcher[({type l[a]= _ \/ a})#l, T, T]("\\/-", (_:Any \/ T).toEither.right.toOption, check)
+case class RightDisjunctionMatcher[T]() extends OptionLikeMatcher[({type l[a]= ? \/ a})#l, T, T]("\\/-", (_:Any \/ T).toEither.right.toOption)
+case class RightDisjunctionCheckedMatcher[T](check: ValueCheck[T]) extends OptionLikeCheckedMatcher[({type l[a]= ? \/ a})#l, T, T]("\\/-", (_:Any \/ T).toEither.right.toOption, check)
 
-case class LeftDisjunctionMatcher[T]() extends OptionLikeMatcher[({type l[a]= a \/ _})#l, T, T]("-\\/", (_:T \/ Any).toEither.left.toOption)
-case class LeftDisjunctionCheckedMatcher[T](check: ValueCheck[T]) extends OptionLikeCheckedMatcher[({type l[a]=a \/ _})#l, T, T]("-\\/", (_: T \/Any).toEither.left.toOption, check)
+case class LeftDisjunctionMatcher[T]() extends OptionLikeMatcher[({type l[a]= a \/ ?})#l, T, T]("-\\/", (_:T \/ Any).toEither.left.toOption)
+case class LeftDisjunctionCheckedMatcher[T](check: ValueCheck[T]) extends OptionLikeCheckedMatcher[({type l[a]=a \/ ?})#l, T, T]("-\\/", (_: T \/Any).toEither.left.toOption, check)

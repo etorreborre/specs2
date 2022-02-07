@@ -107,14 +107,16 @@ is formatted for JUnit reporting tools.
   }
 
   def printString(env1: Env)(fs: Fragments): String = {
-    val mockFs = new FileSystem {
+    val mockFs = new Fs with FileSystem {}
+    trait Fs extends FileSystem {
       var out: String = ""
+      def getOut = out
       override def writeFile(filePath: FilePath, content: String): Operation[Unit] =
         Operations.ok(this.out = content)
     }
     val env = env1.copy(fileSystem = mockFs)
     Reporter.report(env, List(JUnitXmlPrinter))(SpecStructure(SpecHeader(getClass)).setFragments(fs)).runOption(env1.specs2ExecutionEnv)
-    mockFs.out
+    mockFs.getOut
   }
 
   def print(env: Env)(fs: Fragments): NodeSeq =

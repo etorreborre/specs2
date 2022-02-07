@@ -8,7 +8,7 @@ import matcher._
 import scala.xml.NodeSeq
 
 /**
- * Utility methods to build Fields, Props and Forms and insert them in other Forms or 
+ * Utility methods to build Fields, Props and Forms and insert them in other Forms or
  * Fragments.
  */
 private[specs2]
@@ -19,19 +19,46 @@ trait FormsBuilder {
   /** anything can be added on a Form row as a TextCell */
   implicit def anyIsFieldCell(t: =>Any): FieldCell = fieldIsTextCell(Field(t))
   /** any seq of object convertible to cells */
-  implicit def anyCellableSeq[T <% Cell](seq: Seq[T]): Seq[Cell] = seq.map(s => implicitly[T=>Cell].apply(s))
+  implicit def anyCellableSeq[T : ToCell](seq: Seq[T]): Seq[Cell] = seq.map(s => implicitly[ToCell[T]].apply(s))
   /** any xml can be injected as a cell */
   implicit def xmlIsACell[T](xml: =>NodeSeq): XmlCell = new XmlCell(xml)
   /** a Field can be added on a Form row as a FieldCell */
-  implicit def fieldIsTextCell(t: Field[_]): FieldCell = new FieldCell(t)
+  implicit def fieldIsTextCell(t: Field[?]): FieldCell = new FieldCell(t)
   /** a Effect can be added on a Form row as a EffectCell */
-  implicit def effectIsTextCell(t: Effect[_]): EffectCell = new EffectCell(t)
+  implicit def effectIsTextCell(t: Effect[?]): EffectCell = new EffectCell(t)
   /** a Prop can be added on a Form row as a PropCell */
-  implicit def propIsCell(t: Prop[_, _]): PropCell = new PropCell(t)
+  implicit def propIsCell(t: Prop[?, ?]): PropCell = new PropCell(t)
   /** a Form can be added on a Form row as a FormCell */
   implicit def formIsCell(t: =>Form): FormCell = new FormCell(t)
   /** a Form can be implicitly executed if necessary */
   implicit def formIsExecutable(f: Form): Result = f.execute
+
+  trait ToCell[T] {
+    def toCell(t: =>T): Cell
+  }
+
+  object ToCell {
+    implicit def toCellField[T]: ToCell[Field[T]] = new ToCell[Field[T]] {
+      def toCell(t: =>Field[T]): Cell =
+        fieldIsTextCell(t)
+    }
+    implicit def toCellXml: ToCell[NodeSeq] = new ToCell[NodeSeq] {
+      def toCell(t: =>NodeSeq): Cell =
+        xmlIsACell(t)
+    }
+    implicit def toCellEffect[T]: ToCell[Effect[T]] = new ToCell[Effect[T]] {
+      def toCell(t: =>Effect[T]): Cell =
+        effectIsTextCell(t)
+    }
+    implicit def toCellProp[T, S]: ToCell[Prop[T, S]] = new ToCell[Prop[T, S]] {
+      def toCell(t: =>Prop[T, S]): Cell =
+        propIsCell(t)
+    }
+    implicit def toCellForm: ToCell[Form] = new ToCell[Form] {
+      def toCell(t: =>Form): Cell =
+        formIsCell(t)
+    }
+  }
 
   /** a cell can be added lazily to a row. It will only be evaluated when necessary */
   def lazify(c: =>Cell) = new LazyCell(c)
@@ -49,8 +76,8 @@ trait FormsBuilder {
   def effect[T](label: String, value: =>T): Effect[T] = Effect(label, value)
 
   /** @return a new Field with a label and several values */
-  def field(label: String, value1: Field[_], values: Field[_]*): Field[String] = Field(label, value1, values:_*)
-  
+  def field(label: String, value1: Field[?], values: Field[?]*): Field[String] = Field(label, value1, values:_*)
+
   /** @return a new Prop with an actual value only */
   def prop[T](act: =>T) = new Prop[T, T](actual = Property(act))
 

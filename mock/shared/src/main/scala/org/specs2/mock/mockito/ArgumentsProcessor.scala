@@ -54,13 +54,13 @@ object ArgumentsProcessor {
     }
   }
 
-  def argumentsToMatchers(arguments: Array[Object]): List[ArgumentMatcher[_]] = {
-    val matchers: List[ArgumentMatcher[_]] = new ArrayList[ArgumentMatcher[_]](arguments.length)
+  def argumentsToMatchers(arguments: Array[Object]): List[ArgumentMatcher[?]] = {
+    val matchers: List[ArgumentMatcher[?]] = new ArrayList[ArgumentMatcher[?]](arguments.length)
     for (arg <- arguments) {
       if (arg != null && arg.getClass.isArray) matchers.add(new ArrayEquals(arg))
       else if (arg != null && arg.getClass.getName.startsWith("scala.collection.mutable.WrappedArray")) matchers.add(new Equals(arg))
-      else if (arg.isInstanceOf[Function0[_]]) {
-        val function0 = arg.asInstanceOf[Function0[_]]
+      else if (arg.isInstanceOf[Function0[?]]) {
+        val function0 = arg.asInstanceOf[Function0[?]]
         // matchers evaluation should not be done during a real call, which happens on spies
         // because they might trigger additional mocks evaluations
         // see #428
@@ -83,15 +83,15 @@ object ArgumentsProcessor {
           }
         }
       }
-      else if (arg.isInstanceOf[org.specs2.matcher.Matcher[_]]) {
-        matchers.add(new org.specs2.mock.ArgumentMatcherAdapter(arg.asInstanceOf[org.specs2.matcher.Matcher[_]]))
+      else if (arg.isInstanceOf[org.specs2.matcher.Matcher[?]]) {
+        matchers.add(new org.specs2.mock.ArgumentMatcherAdapter(arg.asInstanceOf[org.specs2.matcher.Matcher[?]]))
       }
       // special case for sequences and sets because they have an apply method making them instances of Function1
       // yet they define a useful equals method
       else if (arg.isInstanceOf[Seq[?]] || arg.isInstanceOf[Set[?]]) {
         matchers.add(new Equals(arg))
       }
-      else if (arg.isInstanceOf[scala.runtime.AbstractFunction1[_,_]]) {
+      else if (arg.isInstanceOf[scala.runtime.AbstractFunction1[?,?]]) {
         matchers.add(new EqualsFunction1(arg))
       }
       else matchers.add(new Equals(arg))
@@ -105,10 +105,10 @@ object ArgumentsProcessor {
         t.getClassName == "org.mockito.internal.invocation.InterceptedInvocation" &&
         t.getMethodName == "callRealMethod")
 
-  def adaptFunction0(m: ArgumentMatcher[_]): ArgumentMatcher[_] = new ArgumentMatcher[Object] {
+  def adaptFunction0(m: ArgumentMatcher[?]): ArgumentMatcher[?] = new ArgumentMatcher[Object] {
     def matches(a: Object): Boolean = {
-      if (a.isInstanceOf[Function0[_]]) {
-        val value = a.asInstanceOf[Function0[_]].apply().asInstanceOf[Object]
+      if (a.isInstanceOf[Function0[?]]) {
+        val value = a.asInstanceOf[Function0[?]].apply().asInstanceOf[Object]
         m.asInstanceOf[ArgumentMatcher[Object]].matches(value)
       }
       else

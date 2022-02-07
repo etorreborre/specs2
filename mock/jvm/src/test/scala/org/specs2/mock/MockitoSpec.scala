@@ -163,11 +163,11 @@ ${step(env)}                                                                    
     }
     eg := {
       val list = mock[ListOf[String]].settings(defaultReturn = 10)
-      list.size must_== 10
+      list.size() must_== 10
     }
     eg := {
       val list = mock[ListOf[String]].settings(name = "list1", defaultReturn = 10, extraInterfaces = classesOf[Cloneable, Serializable])
-      (list.size must_== 10) and
+      (list.size() must_== 10) and
       ((there was one(list).add("one")).message must contain("list1.add(\"one\")"))
     }
     eg := {
@@ -458,7 +458,7 @@ ${step(env)}                                                                    
     }
 
     eg := {
-      list1.get(0); list1.size; list1.get(0); list1.size
+      list1.get(0); list1.size(); list1.get(0); list1.size()
 
       implicit val order = inOrder(list1)
       val result = there was one(list1).get(0) andThen
@@ -475,7 +475,7 @@ ${step(env)}                                                                    
     val list = mockAs[ListOf[String]]("list")
 
     eg := {
-      list.get(anyInt) answers { i: Any => "The parameter is " + i.toString}
+      list.get(anyInt) answers { (i: Any) => "The parameter is " + i.toString}
       list.get(2) must_== "The parameter is 2"
     }
 
@@ -486,7 +486,7 @@ ${step(env)}                                                                    
     }
 
     eg := {
-      list.set(anyInt, anyString) answers { i: Any => "The parameters are " + (i.asInstanceOf[Array[?]].mkString("(",",",")")) }
+      list.set(anyInt, anyString) answers { (i: Any) => "The parameters are " + (i.asInstanceOf[Array[?]].mkString("(",",",")")) }
       list.set(1,"foo") must_== "The parameters are (1,foo)"
     }
 
@@ -496,12 +496,12 @@ ${step(env)}                                                                    
     }
 
     eg := {
-      list.size answers { m: Any => m.toString.length}
-      list.size must_== 4
+      list.size() answers { (m: Any) => m.toString.length}
+      list.size() must_== 4
     }
 
     eg := {
-      list.get(anyInt) answers { is: Array[AnyRef] => "The parameters are "+is.mkString("[", ",", "]") }
+      list.get(anyInt).answers { (is: Array[AnyRef]) => "The parameters are "+is.mkString("[", ",", "]") }
       list.get(2) must_== "The parameters are [2]"
     }
 

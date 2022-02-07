@@ -34,8 +34,8 @@ trait JUnitPrinter extends Printer { outer =>
   // test run start and finish must not be notified if we execute the test from
   // the JUnitCore runner because it is already doing that.
   // Otherwise this could lead to double reporting see #440
-  // 
-  // The value should be evaluated once in the outer scope, because the 
+  //
+  // The value should be evaluated once in the outer scope, because the
   // original stack trace is lost inside the callbacks.
   def sink(env: Env, spec: SpecStructure): AsyncSink[Fragment] = {
     val shouldNotify = !excludeFromReporting
@@ -50,7 +50,7 @@ trait JUnitPrinter extends Printer { outer =>
     if (Fragment.isExampleOrStep(fragment)) {
       val description = findDescription(fragment)
       fragment.executionResult.map { result =>
-        description.foreach { description: Description =>
+        description.foreach { (description: Description) =>
           if (Fragment.isExample(fragment))
             notifyTestResult(description, result)(args)
           else
@@ -190,4 +190,3 @@ class SpecFailureAssertionFailedError(e: Exception) extends AssertionFailedError
   override def printStackTrace(w: java.io.PrintStream): Unit = { e.printStackTrace(w) }
   override def printStackTrace(w: java.io.PrintWriter): Unit = { e.printStackTrace(w) }
 }
-

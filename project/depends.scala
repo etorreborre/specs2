@@ -8,7 +8,7 @@ object depends {
 
   lazy val classycle = Seq("org.specs2" % "classycle" % "1.4.3")
 
-  def compiler(scalaOrganization: String, scalaVersion: String) = Seq(scalaOrganization % "scala-compiler" % scalaVersion)
+  def compiler(scalaOrganization: String, scalaVersion: String) = Seq(scalaOrganization % "scala3-compiler_3" % scalaVersion)
 
   def reflect(scalaOrganization: String, scalaVersion: String) = scalaOrganization % "scala-reflect" % scalaVersion
 
@@ -49,7 +49,10 @@ object depends {
   def nativeTest =
     Seq(libraryDependencies += "org.scala-native" %%% "test-interface" % nativeVersion)
 
-  def scalaXml = "org.scala-lang.modules" %% "scala-xml" % "1.3.0"
+  // used in specs2-matcher-extra
+  def scalaParser = libraryDependencies += "org.scala-lang.modules" %%% "scala-parser-combinators" % "2.1.0"
+
+  def scalaXml = "org.scala-lang.modules" %% "scala-xml" % "2.0.1"
 
   lazy val mockito  = "org.mockito"  % "mockito-core"  % "3.11.2"
   lazy val junit    = "junit"        % "junit"         % "4.13.2"

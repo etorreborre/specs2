@@ -76,8 +76,8 @@ trait IOMatchers extends RunTimedMatchers[IO] {
 
   import cats.effect.unsafe.implicits.global
 
-  protected def runWithTimeout[A](fa: IO[A], d: FiniteDuration): A = fa.timeout(d).unsafeRunSync
-  protected def runAwait[A](fa: IO[A]) : A = fa.unsafeRunSync
+  protected def runWithTimeout[A](fa: IO[A], d: FiniteDuration): A = fa.timeout(d).unsafeRunSync()
+  protected def runAwait[A](fa: IO[A]) : A = fa.unsafeRunSync()
 
   protected[specs2] override def attemptRun[T](check: ValueCheck[T], duration: Option[FiniteDuration]): IOMatcher[T] =
     IOMatcher(check, duration)

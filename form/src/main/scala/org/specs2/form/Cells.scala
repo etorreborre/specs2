@@ -12,7 +12,7 @@ import text.Markdown
 /**
  * A Cell is the Textual or Xml representation of a Form element: Field, Prop or Form.
  * A more general XmlCell is also available to be able to input any kind of Xml inside a Form
- * 
+ *
  * A Cell can be executed by executing the underlying element but also by setting the cell to a specific result (success or failure).
  * This feature is used to display rows of values with were expected and found ok in Forms.
  *
@@ -113,7 +113,7 @@ object TextCell {
 /**
  * Cell embedding a Field
  */
-case class FieldCell(f: Field[_], result: Option[Result] = None) extends Cell {
+case class FieldCell(f: Field[?], result: Option[Result] = None) extends Cell {
   def text = f.toString
 
   def xml(implicit args: Arguments) = {
@@ -141,7 +141,7 @@ case class FieldCell(f: Field[_], result: Option[Result] = None) extends Cell {
 /**
  * Cell embedding a Eff
  */
-case class EffectCell(e: Effect[_], result: Option[Result] = None) extends Cell {
+case class EffectCell(e: Effect[?], result: Option[Result] = None) extends Cell {
   def text = e.toString
 
   def xml(implicit args: Arguments) = {
@@ -159,7 +159,7 @@ case class EffectCell(e: Effect[_], result: Option[Result] = None) extends Cell 
 /**
  * Cell embedding a Prop
  */
-case class PropCell(p: Prop[_,_], result: Option[Result] = None) extends Cell {
+case class PropCell(p: Prop[?,?], result: Option[Result] = None) extends Cell {
   def text = p.toString
 
   def execute = result.getOrElse(p.execute)
@@ -224,4 +224,3 @@ object XmlCell {
   def unapply(cell: XmlCell): Option[NodeSeq] = Some(cell.theXml)
   def apply(xml: =>NodeSeq) = new XmlCell(xml)
 }
-

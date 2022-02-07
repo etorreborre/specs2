@@ -56,7 +56,7 @@ trait MockitoStubs extends MocksCreation with MockitoStubsLowerImplicits {
     }
   }
   /** @return an object allowing the chaining of returned values on doNothing calls. */
-  implicit def aStubber(stub: =>Stubber): AStubber = new AStubber(stub)
+  implicit def aStubber(stub: =>Stubber): AStubber[Stubber] = new AStubber(stub)
   /** provide stub chain methods. */
   class AStubber[T](stub: =>Stubber) {
     def thenReturn(t: T) = stub.doReturn(t, List():_*)
@@ -93,8 +93,8 @@ trait MockitoStubs extends MocksCreation with MockitoStubsLowerImplicits {
        val args = invocation.getArguments
 
        if (args.size == 0) function match {
-                             case f: Function0[_]   => f().asInstanceOf[T]
-                             case f: Function1[_,_] => f(invocation.getMock).asInstanceOf[T]
+                             case f: Function0[?]   => f().asInstanceOf[T]
+                             case f: Function1[?,?] => f(invocation.getMock).asInstanceOf[T]
                            }
        else if (args.size == 1) function(args(0)).asInstanceOf[T]
        else                     function(args).asInstanceOf[T]
@@ -120,5 +120,5 @@ trait MockitoStubs extends MocksCreation with MockitoStubsLowerImplicits {
 object MockitoStubs extends MockitoStubs
 
 trait MockitoStubsLowerImplicits {
-  implicit def ongoingStubbing[M](stubbing: =>OngoingStubbing[_]): M = stubbing.getMock[M]
+  implicit def ongoingStubbing[M](stubbing: =>OngoingStubbing[?]): M = stubbing.getMock[M]
 }

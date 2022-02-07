@@ -12,8 +12,8 @@ case class EqualsFunction0(wanted: scala.Any) extends Equals(wanted) {
 
   override def matches(actual: Object): Boolean = {
     val value =
-      if (actual.isInstanceOf[Function0[_]])
-        try { actual.asInstanceOf[Function0[_]].apply() } catch { case e: Throwable => e }
+      if (actual.isInstanceOf[Function0[?]])
+        try { actual.asInstanceOf[Function0[?]].apply() } catch { case e: Throwable => e }
       else
         actual
 

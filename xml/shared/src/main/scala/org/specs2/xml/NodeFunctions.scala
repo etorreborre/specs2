@@ -43,7 +43,7 @@ trait NodeFunctions {
    *               to apply recursively to compare children nodes
    */
   def isEqualIgnoringSpace(node: NodeSeq, n: NodeSeq, iterableComparison: Function2[NodeSeq, NodeSeq, Boolean]): Boolean = {
-    def isAtom: Function[Node, Boolean] = { case (n: Atom[_]) => true; case _ => false }
+    def isAtom: Function[Node, Boolean] = { case (n: Atom[?]) => true; case _ => false }
 
     def compareChildren(n1: List[Node], n2: List[Node]) = {
       (n1.takeWhile(isAtom), n2) match {
@@ -66,9 +66,9 @@ trait NodeFunctions {
 
       // checks for 'leaf' types
       case (n1: Text, n2:Text)       => n1.text.trim == n2.text.trim
-      case (n1: Text, n2:Atom[_])    => n1.text.trim == n2.text.trim
-      case (n1: Atom[_], n2:Text)    => n1.text.trim == n2.text.trim
-      case (n1: Atom[_], n2:Atom[_]) => n1.text.trim == n2.text.trim
+      case (n1: Text, n2:Atom[?])    => n1.text.trim == n2.text.trim
+      case (n1: Atom[?], n2:Text)    => n1.text.trim == n2.text.trim
+      case (n1: Atom[?], n2:Atom[?]) => n1.text.trim == n2.text.trim
 
       // general case
       case (n1: Node, n2:Node) => (isSpaceNode(n1) && isSpaceNode(n2)) ||

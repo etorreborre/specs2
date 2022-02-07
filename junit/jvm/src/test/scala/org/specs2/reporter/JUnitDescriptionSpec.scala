@@ -141,7 +141,7 @@ class JUnitDescriptionSpec(val env: Env) extends Specification with JUnitDescrip
 
   def a11 = {
     val fs =
-      Fragments.foreach(Seq("ex1", "ex2", "ex3")) { _ => success }
+      Fragments.foreach(Seq("ex1", "ex2", "ex3")) { _ => Fragment(specification.core.Description.text("ok")) }
 
     val ds =
       ShowDescription.toTree(descriptions(false).

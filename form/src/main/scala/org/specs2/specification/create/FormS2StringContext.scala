@@ -3,7 +3,7 @@ package specification
 package create
 
 import core._
-import form._
+import form._, HasForm._
 import text.Indent._
 
 /**
@@ -26,7 +26,6 @@ trait FormS2StringContext extends S2StringContext { this: FormFragmentsFactory =
     }
   }
 
-  implicit def toFormIsInterpolatedFragment(f: { def form: Form}): InterpolatedFragment = formIsInterpolatedFragment(f.form)
+  implicit def toFormIsInterpolatedFragment[T : HasForm](f: T): InterpolatedFragment = formIsInterpolatedFragment(f.form)
 
 }
-

@@ -113,8 +113,8 @@ trait LinesContentBaseMatchers extends DifferenceFilters with Expectations with 
 private[specs2]
 trait SeqsContents {
   // default implementation for reading seq lines
-  implicit protected def seqContentForMatchers[T, CC[_] <: Traversable[?]]: LinesContent[CC[T]] =
-    SeqLinesContent[T, CC]()
+  implicit protected def seqContentForMatchers[T]: LinesContent[Seq[T]] =
+    SeqLinesContent[T]()
 
 }
 

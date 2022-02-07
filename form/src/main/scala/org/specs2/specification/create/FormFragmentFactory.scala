@@ -5,6 +5,7 @@ package create
 import control.ImplicitParameters.ImplicitParam
 import core._
 import form._
+import HasForm._
 import text.NotNullStrings._
 import execute._
 import control.Exceptions._
@@ -14,14 +15,14 @@ import control.Exceptions._
  */
 trait FormFragmentFactory {
   def FormFragment(form: =>Form): Fragment
-  def FormFragment(aForm: =>{ def form: Form })(implicit p: ImplicitParam): Fragment
+  def FormFragment[T : HasForm](aForm: =>T)(implicit p: ImplicitParam): Fragment
 }
 
 /**
  * Default implementation for the FormFragment Factory
  */
 trait DefaultFormFragmentFactory extends FormFragmentFactory {
-  def FormFragment(aForm: =>{ def form: Form })(implicit p: ImplicitParam): Fragment = addForm(aForm.form)
+  def FormFragment[T : HasForm](aForm: =>T)(implicit p: ImplicitParam): Fragment = addForm(aForm.form)
 
   def FormFragment(aForm: =>Form): Fragment = addForm(aForm)
 

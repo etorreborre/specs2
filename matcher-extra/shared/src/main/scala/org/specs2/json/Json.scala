@@ -12,15 +12,18 @@ trait Json {
    * @return Some(json) if the string is parsable as a JSON document
    */
   def parse(s: String): Option[JSONType] = {
-    val parser = new Parser {
-      def parseRaw(input : String) : Option[JSONType] =
-        phrase(root)(new lexical.Scanner(input)) match {
-          case Success(result, _) => Some(result)
-          case _ => None
-      }
-    }
+    val parser = new JsonParser {}
+    
     // give the parser a chance to parse singly-quoted json
     parser.parseRaw(s).orElse(if (s.contains("'")) parser.parseRaw(s.replace("'", "\"")) else None)
+  }
+
+  trait JsonParser extends Parser {
+    def parseRaw(input : String) : Option[JSONType] =
+      phrase(root)(new lexical.Scanner(input)) match {
+        case Success(result, _) => Some(result)
+        case _ => None
+    }
   }
 
   /** show JSON objects with null values shown as 'null' */
