@@ -32,7 +32,7 @@ lazy val specs2Settings = Seq(
   specs2ShellPrompt,
   scalaVersion := "2.13.6",
   SettingKey[Boolean]("ide-skip-project").withRank(KeyRanks.Invisible) := platformDepsCrossVersion.value == ScalaNativeCrossVersion.binary,
-  crossScalaVersions := Seq(scalaVersion.value, "2.12.14"))
+  crossScalaVersions := Seq(scalaVersion.value, "2.12.15"))
 
 lazy val tagName = Def.setting {
   s"specs2-${version.value}"
@@ -445,7 +445,7 @@ lazy val compilationSettings = Seq(
           "-Xlint:-byname-implicit")
     }
   },
-  addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.13.0" cross CrossVersion.full),
+  addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.13.2" cross CrossVersion.full),
   Test / scalacOptions += "-Yrangepos",
   Compile / doc / scalacOptions ++= Seq("-feature", "-language:_"),
   Compile / console / scalacOptions := Seq("-Yrangepos", "-feature", "-language:_"),
