@@ -14,6 +14,8 @@ lazy val specs2 = project.in(file(".")).
     apiSettings,
     name := "specs2",
     packagedArtifacts := Map.empty,
+    ThisBuild / crossScalaVersions := Seq("2.13.8", "2.12.15"),
+    ThisBuild / scalaVersion := (ThisBuild / crossScalaVersions).value.head,
     ThisBuild / githubWorkflowJavaVersions :=
       // no 17 because parboiled2 doesn't work, causing markdown stuff to fail
       Seq(JavaSpec.temurin("8"), JavaSpec.temurin("11")),
@@ -33,9 +35,8 @@ lazy val specs2Settings = Seq(
   organization := "org.specs2",
   GlobalScope / scalazVersion := "7.2.32",
   specs2ShellPrompt,
-  scalaVersion := "2.13.8",
   SettingKey[Boolean]("ide-skip-project").withRank(KeyRanks.Invisible) := platformDepsCrossVersion.value == ScalaNativeCrossVersion.binary,
-  crossScalaVersions := Seq(scalaVersion.value, "2.12.15"))
+)
 
 lazy val tagName = Def.setting {
   s"specs2-${version.value}"
@@ -55,8 +56,7 @@ lazy val commonJsSettings = Seq(
   ) ++ depends.jsMacrotaskExecutor
 
 lazy val commonNativeSettings = Seq(
-  scalaVersion := "2.13",
-  crossScalaVersions := Seq("2.13"),
+  crossScalaVersions := Seq("2.13.8"),
   nativeLinkStubs := true
 )
 
