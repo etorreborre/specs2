@@ -63,7 +63,7 @@ Execution
   val noValues = new Prop("name")
   val actualOnly = Prop(18)
   val expectedOnly = new Prop("", Property(), Property(18))
-  val constrained: Prop[String, String] = Prop("name", "eric", (s1: String, s2: String) => s1 must contain[String](s2))
+  val constrained: Prop[String, String] = Prop("name", "eric", (s1: String, s2: String) => s1 must contain(s2))
   val withMatcher = Prop("name", "eric", contain(_:String))
 
   "creation" - new g1 {

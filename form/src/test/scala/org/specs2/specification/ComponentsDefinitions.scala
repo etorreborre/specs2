@@ -7,22 +7,22 @@ import Forms._
 trait ComponentsDefinitions {
   case class Address(street: String = "", number: Int = 0) {
     def form = fill(street, number)
-    def fill(s: String, n: Int) = 
+    def fill(s: String, n: Int) =
       Form("Address").
           tr(prop("street", s)(street)).
           tr(prop("number", n)(number))
   }
   case class Customer(name: String = "", address: Address = Address()) {
-    def form = fill(name, address.form) 
+    def form = fill(name, address.form)
     def fill(na: String, a: Form) =
       Form("Customer").
           tr(prop("name", na)(name)).
           tr(a)
-         
+
   }
   case class initials(form: Form = Form.tr("First name", "Last name", "Initials")) {
-    def computeInitials(f: String, l: String) = f(0).toUpper+"."+l(0).toUpper+"."
-    
+    def computeInitials(f: String, l: String) = f.substring(0, 1).capitalize+"."+l.substring(0, 1).capitalize+"."
+
     def tr(firstName: String, lastName: String, expected: String) = initials {
       form.tr(firstName, lastName, prop(computeInitials(firstName, lastName))(expected))
     }
@@ -36,7 +36,19 @@ trait ComponentsDefinitions {
     def hasSet(ls: OrderLine*) = Form("Order").set(lines, ls.toList)
     def hasSequence(ls: OrderLine*) = Form("Order").sequence(lines, ls.toList)
   }
+
+  object Order {
+    implicit val hasForm: HasForm[Order] = new HasForm[Order] {
+      def getForm(o: Order) = o.form
+    }
+  }
   case class OrderLine(name: String, quantity: Int) {
     def form = Form.tr(field("name", name), field("qty", quantity))
   }
+    object OrderLine {
+    implicit val hasForm: HasForm[OrderLine] = new HasForm[OrderLine] {
+      def getForm(o: OrderLine) = o.form
+    }
+  }
+
 }

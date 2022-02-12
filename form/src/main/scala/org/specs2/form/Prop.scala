@@ -114,6 +114,10 @@ object Prop {
     new Prop(label, Property(actual), Property[T](), checkProp)
 
   /** create a Prop with a label, an actual value, and a constraint */
+  def apply[T, S, R: AsResult](label: String, act: =>T, c: (T, S) => R): Prop[T, S] =
+    new Prop[T, S](label, actual = Property(act), constraint = (t, s) => AsResult(c(t, s)))
+
+  /** create a Prop with a label, an actual value, and a constraint */
   def apply[T, S](label: String, act: =>T, c: (T, S) => Result) =
     new Prop[T, S](label, actual = Property(act), constraint = c)
 

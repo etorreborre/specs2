@@ -8,7 +8,7 @@ import org.specs2.specification.process.DefaultExecutor
 import ActionMatchers._
 
 class FormsFragmentsSpec(val env: Env) extends Specification with Forms with ThrownExpectations with OwnEnv { def is = s2"""
-  
+
  A form can be added as a Fragment in a specification
    creating a new Text Fragment                                                      ${frags.e1_1}
    showing all expected values                                                       ${frags.e1_2}
@@ -19,14 +19,14 @@ class FormsFragmentsSpec(val env: Env) extends Specification with Forms with Thr
    returning success if the form is a success                                        ${frags.e2}
    returning a failure if one property in the form fails                             ${frags.e3}
                                                                                      """
-                                                                               
+
   object frags extends Customers {
     def e1_1 = execute("This is the expected customer" ^ form).size must_== 2
     def e1_2 = execute("This is the expected customer" ^ form).map(_.description.show).apply(1) must_== s"$formText"
     def e1_3 = execute(s2"This is the expected customer $form").map(_.description.show).apply(1) must_== s"$formText"
 
     def e1_4 = {
-      val spec = execute(s2"This is the expected customer $eric").map(_.description.show)
+      val spec = execute(s2"This is the expected customer ${eric.form}").map(_.description.show)
       spec(0).toString must_== "This is the expected customer "
       spec(1).toString must_== s"$formText"
     }
