@@ -14,6 +14,9 @@ lazy val specs2 = project.in(file(".")).
     apiSettings,
     name := "specs2",
     packagedArtifacts := Map.empty,
+    ThisBuild / githubWorkflowJavaVersions :=
+      // no 17 because parboiled2 doesn't work, causing markdown stuff to fail
+      Seq(JavaSpec.temurin("8"), JavaSpec.temurin("11")),
     ThisBuild / githubWorkflowArtifactUpload := false,
     ThisBuild / githubWorkflowBuild := Seq(WorkflowStep.Sbt(List("testOnly -- xonly exclude ci"), name = Some("Build project"))),
     Global / onChangedBuildSource := ReloadOnSourceChanges,
