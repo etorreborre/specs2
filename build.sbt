@@ -30,7 +30,7 @@ lazy val specs2Settings = Seq(
   organization := "org.specs2",
   GlobalScope / scalazVersion := "7.2.32",
   specs2ShellPrompt,
-  scalaVersion := "2.13.6",
+  scalaVersion := "2.13.8",
   SettingKey[Boolean]("ide-skip-project").withRank(KeyRanks.Invisible) := platformDepsCrossVersion.value == ScalaNativeCrossVersion.binary,
   crossScalaVersions := Seq(scalaVersion.value, "2.12.15"))
 
