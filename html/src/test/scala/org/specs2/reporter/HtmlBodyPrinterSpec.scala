@@ -6,14 +6,16 @@ import org.specs2.io.DirectoryPath
 import org.specs2.main.Arguments
 import org.specs2.matcher.XmlMatchers
 import org.specs2.specification.Forms
-import org.specs2.specification.core.{Fragment, SpecStructure}
+import org.specs2.specification.create._
+import org.specs2.specification.core.{Fragment, Fragments, SpecStructure}
 import org.specs2.specification.process.{Level, Stats}
 import org.specs2.text.AnsiColors
 import org.specs2.time.SimpleTimer
+import org.specs2.control.ioOperationToOption
 
 import scala.xml.NodeSeq
 
-class HtmlBodyPrinterSpec(ee: ExecutionEnv) extends Specification with Forms with XmlMatchers { def is = s2"""
+class HtmlBodyPrinterSpec(ee: ExecutionEnv) extends Specification with XmlMatchers { def is = s2"""
 
  A hidden reference must not be printed $hidden
  A form must be printed $printForm
@@ -31,7 +33,9 @@ class HtmlBodyPrinterSpec(ee: ExecutionEnv) extends Specification with Forms wit
   }
 
   def printForm = {
-    val ns: NodeSeq = print(formFragmentFactory.FormFragment(form("hey").tr(prop("test", 1, 2))))
+    import DefaultFormFragmentFactory._
+    import Forms._
+    val ns: NodeSeq = print(FormFragment(form("hey").tr(prop("test", 1, 2))))
     ns must \\(<form></form>)
   }
 
@@ -181,7 +185,7 @@ class HtmlBodyPrinterSpec(ee: ExecutionEnv) extends Specification with Forms wit
   private def fragments1 = fragments("first")
   private def fragments2 = fragments("second")
 
-  private def fragments(description: String) = {
+  private def fragments(description: String): Fragments = {
     p^
       s"example no. one from $description set"  ! success ^br^
       s"example no. two from $description set"  ! success ^br

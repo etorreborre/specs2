@@ -189,6 +189,7 @@ lazy val guide = project.in(file("guide")).
 lazy val html = project.in(file("html")).
   settings(
     libraryDependencies += depends.tagsoup,
+    depends.scalaParser,
     commonSettings,
     name := "specs2-html").
   settings(depends.jvmTest, commonJvmSettings).

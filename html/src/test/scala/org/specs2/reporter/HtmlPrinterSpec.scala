@@ -23,7 +23,7 @@ class HtmlPrinterSpec(val env: Env) extends Specification with ActionMatchers wi
     printer.getHtmlOptions(env1.arguments).map(_.search).runOption must beSome(true)
 
     finalize(env1, spec) must beOk
-    FilePathReader.exists(outDir / "javascript" / "tipuesearch" | "tipuesearch_contents.js")
+    FilePathReader.exists(outDir / FilePath.unsafe("javascript/tipuesearch/tipuesearch_contents.js"))
   }
 
 
@@ -32,7 +32,7 @@ class HtmlPrinterSpec(val env: Env) extends Specification with ActionMatchers wi
     val env1 = env.setArguments(searchArguments)
 
     finalize(env1, spec) must beOk
-    FilePathReader.exists(outDir | "search.html")
+    FilePathReader.exists(outDir | FileName.unsafe("search.html"))
   }
 
   def finalize(env: Env, spec: SpecificationStructure): Action[Unit] =
@@ -45,6 +45,6 @@ class HtmlPrinterSpec(val env: Env) extends Specification with ActionMatchers wi
 
   val printer = HtmlPrinter
 
-  val outDir = "target" / "test" / "HtmlPrinterSpec"
+  val outDir = DirectoryPath.unsafe("target/test/HtmlPrinterSpec")
   val searchArguments = Arguments.split(s"html.search html.outdir ${outDir.path}")
 }

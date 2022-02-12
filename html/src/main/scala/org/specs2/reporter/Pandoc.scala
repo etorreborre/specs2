@@ -13,7 +13,7 @@ case class Pandoc(verbose: Boolean, executable: FilePath, inputFormat: String, o
 }
 
 object Pandoc {
-  val executable   = FilePath("pandoc")
+  val executable   = FilePath.unsafe("pandoc")
   val inputFormat  = "markdown+pipe_tables+auto_identifiers+header_attributes+inline_code_attributes+markdown_attribute"
   val outputFormat = "html"
 
@@ -50,5 +50,3 @@ object Pandoc {
   }
 
 }
-
-

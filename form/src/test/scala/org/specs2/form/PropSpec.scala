@@ -9,7 +9,7 @@ import matcher._
 import MatchersImplicits._
 
 class PropSpec extends script.Spec with Grouped with TypedEqual {  def is = s2"""
-                                                                    
+
 A Prop is a Field defining an expected and an actual value.
 
 It embeds an optional constraint which allows to execute the Prop and see (by default) if
@@ -63,9 +63,9 @@ Execution
   val noValues = new Prop("name")
   val actualOnly = Prop(18)
   val expectedOnly = new Prop("", Property(), Property(18))
-  val constrained: Prop[String, String] = Prop("name", "eric", (s1: String, s2: String) => s1 must contain(s2))
+  val constrained: Prop[String, String] = Prop("name", "eric", (s1: String, s2: String) => s1 must contain[String](s2))
   val withMatcher = Prop("name", "eric", contain(_:String))
-  
+
   "creation" - new g1 {
     e1 := noValues.label                       === "name"
     e2 := actualOnly.actual.toOption           === Some(18)
@@ -75,7 +75,7 @@ Execution
     e6 := Prop("", 1, be_>(0).mute).execute    === Success("")
     e7 := Prop("", 1, 2, be_>(0).mute).execute === Success("")
   }
-                                              
+
   "display" - new g2 {
     e1 := new Prop("name", expected = Property("fanny")).toString       === "name: _ (expected: fanny)"
     e2 := new Prop("name", actual = Property("eric")).toString          === "name: eric"
@@ -98,4 +98,4 @@ Execution
     e9  := withMatcher("e").execute.isSuccess           === true
     e10 := withMatcher("a").execute.message             === "eric doesn't contain 'a'"
   }
-}    
+}

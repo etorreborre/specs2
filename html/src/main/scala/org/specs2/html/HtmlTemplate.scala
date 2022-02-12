@@ -22,7 +22,10 @@ object HtmlTemplate {
   /**
    * Variables replacement parser for Pandoc-like templates
    */
-  def pandocParser(variables: Map[String, String]) = new RegexParsers {
+  def pandocParser(variables: Map[String, String]) =
+    new PandocParser(variables)
+
+  class PandocParser(variables: Map[String, String]) extends RegexParsers {
     override def skipWhitespace = false
 
     lazy val template: Parser[String] =
@@ -31,7 +34,7 @@ object HtmlTemplate {
     lazy val block: Parser[String] = rep1(dollar | variable | text) ^^ { _.mkString }
 
     lazy val dollar: Parser[String] = "$$" ^^ { s => "$" }
-    
+
     lazy val variable: Parser[String] =
       ("$" ~> "[^\\$]+".r <~ "$").filter(v => !Seq("if(", "endif", "else").exists(v.startsWith)) ^^ { (v: String) => variables.getOrElse(v, "") }
 
@@ -40,12 +43,12 @@ object HtmlTemplate {
     lazy val if1: Parser[String]   = "$if(" ~> "[^\\$\\)]+".r <~ ")$"
     lazy val else1: Parser[String] = "$else$"
     lazy val endif: Parser[String] = "$endif$"
-    
+
     lazy val conditional = if1.flatMap { variable =>
       if (variables.contains(variable)) block <~ (else1 ~> block <~ endif)
       else                              (block ~ else1) ~> block <~ endif
     }
-    
+
     def parse(string: String) = parseAll(template, string)
   }
 

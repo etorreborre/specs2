@@ -7,6 +7,7 @@ import org.specs2.html._
 import Indexing._
 import control._
 import ExecuteActions._
+import org.specs2.control.producer.ProducerOps
 import org.specs2.specification.core.{Env, OwnExecutionEnv}
 
 class IndexingSpec(val env: Env) extends Specification with OwnExecutionEnv { def is = s2"""
@@ -19,10 +20,10 @@ class IndexingSpec(val env: Env) extends Specification with OwnExecutionEnv { de
 """
 
   def index = html.Index.createIndex(pages(0)) must_==
-           html.Index(Vector(IndexEntry(title = "page 1", text = "content1", tags = Vector("tag1", "tag2"), path = FilePath("page1"))))
+           html.Index(Vector(IndexEntry(title = "page 1", text = "content1", tags = Vector("tag1", "tag2"), path = FilePath.unsafe("page1"))))
 
   def save = {
-    val path = "target" / "test" / "IndexingSpec" | "index.js"
+    val path = FilePath.unsafe("target/test/IndexingSpec/index.js")
     runAction(emitAsync(pages:_*).fold(indexFold(path).into[Action]))(ee)
 
     val expected =
@@ -33,10 +34,9 @@ class IndexingSpec(val env: Env) extends Specification with OwnExecutionEnv { de
   }
 
   def quoted =
-    html.Index.page(IndexEntry("title", "text \"here\"", Vector(), FilePath("path"))) must contain("text \\\"here\\\"")
+    html.Index.page(IndexEntry("title", "text \"here\"", Vector(), FilePath.unsafe("path"))) must contain("text \\\"here\\\"")
 
-  val pages = Vector(IndexedPage(FilePath("page1"), "page 1", "content1", Vector("tag1", "tag2")),
-                     IndexedPage(FilePath("page2"), "page 2", "content2", Vector("tag3")))
+  val pages = Vector(IndexedPage(FilePath.unsafe("page1"), "page 1", "content1", Vector("tag1", "tag2")),
+                     IndexedPage(FilePath.unsafe("page2"), "page 2", "content2", Vector("tag3")))
 
 }
-

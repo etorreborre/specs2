@@ -17,6 +17,7 @@ import org.specs2.concurrent.ExecutionEnv
 import org.specs2.control.producer.{Transducer, Transducers}
 import org.specs2.text.AnsiColors
 import origami._
+import org.specs2.control.producer.ProducerOps
 import org.specs2.time.SimpleTimer
 
 /**

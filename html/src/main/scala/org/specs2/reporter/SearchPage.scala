@@ -42,7 +42,7 @@ trait SearchPage {
 
   /** search page path */
   def searchFilePath(options: HtmlOptions): FilePath =
-    options.outDir | "search.html"
+    options.outDir | FileName.unsafe("search.html")
 
 }
 

@@ -159,11 +159,11 @@ trait HtmlPrinter extends Printer {
 
   def copyResources(env: Env, options: HtmlOptions): Operation[List[Unit]] =
     env.fileSystem.mkdirs(options.outDir) >> {
-      List(DirectoryPath("css"),
-           DirectoryPath("javascript"),
-           DirectoryPath("images"),
-           DirectoryPath("templates")).
-           map(copySpecResourcesDir(env, "org" / "specs2" / "reporter", options.outDir, classOf[HtmlPrinter].getClassLoader))
+      List(DirectoryPath.unsafe("css"),
+           DirectoryPath.unsafe("javascript"),
+           DirectoryPath.unsafe("images"),
+           DirectoryPath.unsafe("templates")).
+           map(copySpecResourcesDir(env, DirectoryPath.unsafe("org/specs2/reporter"), options.outDir, classOf[HtmlPrinter].getClassLoader))
         .sequence
         .whenFailed { (e: Error) =>
           val message = "Cannot copy resources to "+options.outDir.path+"\n"+e.fullMessage

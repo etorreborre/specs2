@@ -16,9 +16,9 @@ case class HtmlOptions(
   tocEntryMaxSize:    Int,
   toc:                Boolean) {
 
-  def javascriptDir = outDir / "javascript"
-  def indexDir      = javascriptDir / "tipuesearch"
-  def indexFile     = indexDir | "tipuesearch_contents.js"
+  def javascriptDir = outDir / DirectoryPath.unsafe("javascript")
+  def indexDir      = javascriptDir / DirectoryPath.unsafe("tipuesearch")
+  def indexFile     = indexDir | FileName.unsafe("tipuesearch_contents.js")
   def sidebar       = toc || search
 
   def templateVariables =
@@ -54,6 +54,5 @@ object HtmlOptions {
 
 
   def template(outDir: DirectoryPath): FilePath =
-    outDir / "templates" | "specs2.html"
+    outDir / DirectoryPath.unsafe("templates") | FileName.unsafe("specs2.html")
 }
-

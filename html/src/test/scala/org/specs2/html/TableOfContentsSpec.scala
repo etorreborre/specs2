@@ -14,7 +14,7 @@ class TableOfContentsSpec(val env: Env) extends script.Specification with HtmlDo
  The table of contents is created from the specifications and the generated html files
 
  Creating a table of content for a html document
-    creates an unordered list from the html headers                                             
+    creates an unordered list from the html headers
       + as nested <li/> lists corresponding to the hierarchy of the document headers
       each <li/> element has
         + the header text as text
@@ -36,7 +36,7 @@ class TableOfContentsSpec(val env: Env) extends script.Specification with HtmlDo
   }
 
   def addToc(body: NodeSeq) = {
-    val page = SpecHtmlPage(SpecStructure.empty(getClass), outDir | "UserGuide.html", outDir, body.toString)
+    val page = SpecHtmlPage(SpecStructure.empty(getClass), outDir | FileName.unsafe("UserGuide.html"), outDir, body.toString)
     createToc(List(page), outDir, entryMaxSize = 18).apply(page)
   }
 
