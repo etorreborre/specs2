@@ -301,6 +301,7 @@ lazy val testJsSettings = Seq(
   */
 lazy val releaseSettings: Seq[Setting[_]] = Seq(
   ThisBuild / versionScheme := Some("early-semver"),
+  ThisBuild / githubWorkflowJavaVersions := Seq(JavaSpec.temurin("11"), JavaSpec.temurin("17")),
   ThisBuild / githubWorkflowArtifactUpload := false,
   ThisBuild / githubWorkflowBuildPreamble ++= List(
     WorkflowStep.Sbt(List("scalafmtCheckAll"), name = Some("Check formatting ✔"))
