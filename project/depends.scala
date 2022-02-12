@@ -30,18 +30,14 @@ object depends {
       }
     })
 
-  def jsTest: Seq[Def.Setting[_]] =
+  def jsTest =
     Seq(
-      libraryDependencies ++= {
-        CrossVersion.partialVersion(scalaVersion.value) match {
-           case Some((3, _)) =>
-             Seq("org.scala-js" %% "scalajs-test-interface" % scalaJSVersion)
-           case _ =>
-             Seq("org.scala-js" %% "scalajs-test-interface" % scalaJSVersion,
-               "org.portable-scala" %%% "portable-scala-reflect" % "1.1.1")
-        }
-      },
-      Test / scalaJSStage := FastOptStage)
+      libraryDependencies ++=
+        Seq(
+          ("org.portable-scala" %%% "portable-scala-reflect" % "1.1.1").cross(CrossVersion.for3Use2_13),
+          ("org.scala-js" %% "scalajs-test-interface" % scalaJSVersion).cross(CrossVersion.for3Use2_13)
+        )
+    )
 
   def jsMacrotaskExecutor =
     Seq(libraryDependencies += "org.scala-js" %%% "scala-js-macrotask-executor" % "1.0.0")
@@ -54,7 +50,6 @@ object depends {
 
   def scalaXml = "org.scala-lang.modules" %% "scala-xml" % "2.0.1"
 
-  lazy val mockito  = "org.mockito"  % "mockito-core"  % "3.11.2"
   lazy val junit    = "junit"        % "junit"         % "4.13.2"
   lazy val hamcrest = "org.hamcrest" % "hamcrest" % "2.2"
 
