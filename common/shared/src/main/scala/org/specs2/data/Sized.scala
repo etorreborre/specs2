@@ -15,7 +15,7 @@ trait Sized[T] {
     size(t) == 0
 }
 
-object Sized {
+object Sized extends SizedLowImplicits {
 
   def apply[T](implicit sized: Sized[T]): Sized[T] =
     sized
@@ -25,18 +25,6 @@ object Sized {
     def size(t: I) = t.size
   }
   /** any scala array has a size */
-  implicit def scalaArrayIsSized[T]: Sized[Array[T]] = new Sized[Array[T]] {
-    def size(t: Array[T]) = t.length
-  }
-  /** any java collection has a size */
-  implicit def javaCollectionIsSized[T <: java.util.Collection[?]]: Sized[T] = new Sized[T] {
-    def size(t: T) = t.size()
-  }
-  /** a regular string has a size, without having to be converted to an Traversable */
-  implicit def stringIsSized: Sized[String] = new Sized[String] {
-    def size(t: String) = t.length
-  }
-
   implicit class SizedOps[T](t: T)(implicit sized: Sized[T]) {
     def size: Int =
       sized.size(t)
@@ -46,6 +34,24 @@ object Sized {
 
     def isEmpty: Boolean =
       sized.isEmpty(t)
+  }
+
+}
+
+trait SizedLowImplicits {
+  implicit def scalaArrayIsSized[T]: Sized[Array[T]] = new Sized[Array[T]] {
+    def size(t: Array[T]) = t.length
+  }
+
+    /** a regular string has a size, without having to be converted to an Traversable */
+  implicit def stringIsSized: Sized[String] = new Sized[String] {
+    def size(t: String) = t.length
+  }
+
+
+  /** any java collection has a size */
+  implicit def javaCollectionIsSized[T <: java.util.Collection[?]]: Sized[T] = new Sized[T] {
+    def size(t: T) = t.size()
   }
 
 }

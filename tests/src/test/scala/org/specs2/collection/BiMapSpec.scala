@@ -35,7 +35,7 @@ class BiMapSpec extends script.Specification with Groups with ScalaCheck { def i
       val zipped = keys.distinct.zip(values.distinct)
       val bimap: BiMap[String, Int] = zipped.map { case (k, v) => k <-> v }
 
-      zipped must contain { kv: (String, Int) => kv match {
+      zipped must contain { (kv: (String, Int)) => kv match {
         case (k, v) =>
           (bimap.fromKey(k) must beSome(v)) and
           (bimap.fromValue(v) must beSome(k))

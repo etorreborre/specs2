@@ -35,7 +35,7 @@ class MatchResultCombinatorsSpec extends mutable.Spec with ResultMatchers with M
       def beKo: Matcher[Int] = (i: Int) => ({printMsg("ko"); false}, "ko")
       def beOk: Matcher[Int] = (i: Int) => ({printMsg("ok"); true}, "ok")
 
-      (1 must beOk and beKo) must throwA[MatchFailureException[_]]
+      (1 must beOk and beKo) must throwA[MatchFailureException[?]]
       messages === Seq("ok", "ko")
     }
   }

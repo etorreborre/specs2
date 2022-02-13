@@ -6,6 +6,7 @@ import io._
 import execute.StandardResults
 import org.specs2.specification._
 import control._
+import scala.language.postfixOps
 
 class FileMatchersSpec extends Spec with TestFiles with FileMatchers {  def is = sequential ^ s2"""
 
@@ -115,9 +116,9 @@ case class fs() extends MustMatchers with TestFiles with FileMatchers with Stand
 
 
 trait TestFiles extends FileSystem with BeforeAfterEach {
-  lazy val directoryPath = "target" / "test" / "fs"
+  lazy val directoryPath = DirectoryPath.unsafe("target/test/fs")
   lazy val dirPath = directoryPath.path
-  lazy val okFilePath = directoryPath | "file.txt"
+  lazy val okFilePath = directoryPath | FileName.unsafe("file.txt")
   lazy val okPath = okFilePath.path
   lazy val missingPath = "absent"
 

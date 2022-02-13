@@ -5,6 +5,7 @@ import java.io.File
 import specification._
 import user.specification._
 import execute._
+import scala.language.postfixOps
 
 class MatcherSpec extends script.Spec with ResultMatchers with Groups with MustMatchers { def is = s2"""
 
@@ -164,7 +165,8 @@ Messages
       (3 must beEven.setMessage("is not even")).message === "is not even"
     }
     eg := {
-      val spec = new org.specs2.mutable.Specification {
+      val spec = new SpecTest {}
+      trait SpecTest extends  org.specs2.mutable.Specification {
         def test: Result =
           true must beFalse.setMessage("is not ok")
       }

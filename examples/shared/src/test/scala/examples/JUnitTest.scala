@@ -28,7 +28,7 @@ class JUnitTest extends JUnitMustMatchers {
   }
 
   // custom matchers can be created by coercing a function T => (Boolean, String, String) to Matcher[T]
-  def endWithWorld: Matcher[String] = { s: String =>
+  def endWithWorld: Matcher[String] = { (s: String) =>
     (s.endsWith("world"), s+" ends with world", s+" doesn't end with world")
   }
 }

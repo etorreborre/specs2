@@ -12,6 +12,7 @@ import ActionMatchers._
 import fp.syntax._
 import execute.Result
 import org.specs2.specification.core.{Env, OwnEnv}
+import scala.language.postfixOps
 
 class TraversableMatchersSpec(val env: Env) extends Spec with ResultMatchers with Grouped with NumberOfTimes with MustMatchers with OwnEnv { def is = s2"""
 
@@ -146,7 +147,7 @@ class TraversableMatchersSpec(val env: Env) extends Spec with ResultMatchers wit
  We can check the size of an traversable
     ${ Seq() must beEmpty }
     ${ Seq() must be empty }
-    ${ (Seq() must not be empty) must beFailing }
+    ${ (Seq() must not be(empty)) must beFailing }
     ${ Seq(1, 2) must haveSize(2) }
     ${ Seq(1, 2) must haveSize(be_>=(1)) }
     ${ Seq(1, 2) must not(haveSize(be_<=(0))) }
@@ -196,7 +197,7 @@ class TraversableMatchersSpec(val env: Env) extends Spec with ResultMatchers wit
   type annotations might be necessary in some cases ${
     case class A(i: Int = 0, j: Int = 1)
     // otherwise "could not find implicit value for evidence parameter of type org.specs2.execute.AsResult[A]"
-    Seq(Seq(A(1))) must contain(exactly[Seq[A]](Seq(A(1))))
+    Seq(Seq(A(1))) must contain(exactly(===(Seq(A(1)))))
   }
 
  With Java collections

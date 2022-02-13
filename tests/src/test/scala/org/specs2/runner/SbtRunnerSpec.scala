@@ -18,7 +18,7 @@ class SbtRunnerSpec extends Specification { def is = s2"""
 
   def noSbtTags = {
     val runner = new MasterSbtRunner(Array(""), Array(""), getClass.getClassLoader)
-    taskTags(runner) must not(contain("one"))
+    taskTags(runner) must not(contain[String]("one"))
   }
 
   def taskTags(runner: MasterSbtRunner): List[String] = {

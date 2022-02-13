@@ -62,7 +62,9 @@ class StackSpec extends Specification { def is =  "Specification for a Stack wit
     def e3 = stack.pop must throwA[NoSuchElementException]
   }
 
-  def nonEmpty(createStack: =>SizedStack) = new {
+  def nonEmpty(createStack: =>SizedStack) = new NonEmptyStack(createStack)
+
+  class NonEmptyStack(createStack: =>SizedStack) {
     val stack = createStack
 
     def size = stack.size > 0

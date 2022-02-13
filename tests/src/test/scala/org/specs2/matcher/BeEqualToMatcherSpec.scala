@@ -121,7 +121,7 @@ Details
     map
   }
 
-  implicit class NormalizeOps(m: MatchResult[_]) {
+  implicit class NormalizeOps(m: MatchResult[?]) {
     def normalized: String =
       m.message.removeColors.trim
   }

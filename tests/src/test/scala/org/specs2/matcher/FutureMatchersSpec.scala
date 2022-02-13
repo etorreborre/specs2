@@ -3,7 +3,7 @@ package matcher
 
 import execute._
 import specification.core.Env
-
+import concurrent._
 import scala.concurrent._
 import duration._
 import runner._
@@ -15,8 +15,8 @@ class FutureMatchersSpec extends Specification with ResultMatchers with specific
   lazy val env = Env(Arguments("threadsnb 4"))
   lazy val timeFactor = env.arguments.execute.timeFactor
   lazy val sleepTime = 50 * timeFactor.toLong
-  implicit lazy val ee = env.executionEnv
-  implicit lazy val ec = env.executionContext
+  implicit lazy val ee: ExecutionEnv = env.executionEnv
+  implicit lazy val ec: ExecutionContext = env.executionContext
   class MyTimeout extends TimeoutException
 
  def is = section("ci") ^ sequential ^ s2"""
@@ -67,21 +67,24 @@ class FutureMatchersSpec extends Specification with ResultMatchers with specific
 """ ^ step(env.shutdown())
 
   def e1 = {
-    val thrown = new FutureMatchers with MustThrownExpectations {
-      def result = Future(true) must beFalse.awaitFor(1 second)
+    val thrown = new FutureThrown {}
+    trait FutureThrown extends FutureMatchers with MustThrownExpectations {
+      def result = Future(true) must beFalse.awaitFor(1.second)
     }
-   thrown.result must throwA[FailureException]
+    thrown.result must throwA[FailureException]
   }
 
   def e2 = {
-    val thrown = new FutureMatchers with MustThrownExpectations {
-      def result = Future { Thread.sleep(2000); 10} must beGreaterThan(100).awaitFor(1 second)
+    val thrown = new FutureThrown {}
+    trait FutureThrown extends FutureMatchers with MustThrownExpectations {
+      def result = Future { Thread.sleep(2000); 10} must beGreaterThan(100).awaitFor(1.second)
     }
     thrown.result must throwA[FailureException]
   }
 
   def e3 = {
-    val thrown = new mutable.Specification with FutureMatchers {
+    val thrown = new MutableFuture {}
+    trait MutableFuture extends mutable.Specification with FutureMatchers {
       "timeout ko" in new Scope {
         Future {
           try sleep(100) catch { case _: InterruptedException => () }
@@ -100,7 +103,7 @@ class FutureMatchersSpec extends Specification with ResultMatchers with specific
     def future = Future {
       times += 1
       if (retries != times)
-        try Thread.sleep(duration * 4) catch { case _: Throwable => 0 }
+        try Thread.sleep(duration * 4) catch { case _: Throwable => () }
       0
     }
     future must be_==(0).await(retries, duration.millis)

@@ -106,7 +106,7 @@ class EffectBlocksSpec extends org.specs2.Specification with ThrownExpectations 
       )
   }
 
-  def e3 = prop { actions: Actions =>
+  def e3 = prop { (actions: Actions) =>
 
     val effectBlocks = EffectBlocks()
     val results = new collection.mutable.ListBuffer[String]
@@ -156,4 +156,3 @@ object Actions {
     Gen.const(Actions(name = ""))
   }
 }
-

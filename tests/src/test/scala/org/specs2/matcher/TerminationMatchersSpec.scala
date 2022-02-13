@@ -6,8 +6,8 @@ import java.util.concurrent._
 
 import org.specs2.specification.core.{Env, OwnExecutionEnv}
 import specification._
-
 import scala.concurrent.duration._
+import scala.language.postfixOps
 
 class TerminationMatchersSpec(val env: Env) extends script.Specification with TerminationMatchers with Grouped with OwnExecutionEnv { def is = section("ci") ^ sequential ^ s2"""
 

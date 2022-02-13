@@ -8,6 +8,7 @@ import scala.concurrent._
 import sys._
 import execute._
 import org.specs2.specification.core.{Env, OwnExecutionEnv}
+import scala.language.postfixOps
 
 class DataTablesSpec(val env: Env) extends Specification with DataTables with ResultMatchers with OwnExecutionEnv { def is = s2"""
 
@@ -68,12 +69,12 @@ class DataTablesSpec(val env: Env) extends Specification with DataTables with Re
 
   def e5 =
     "a"     |  "b"      | "c"             |
-    "Hello" !! "world"  !  "Hello world"  |> { (a, b, c) =>  a +" "+b must_== c }
+    "Hello" !! "world"  !  "Hello world"  |> { (a: String, b: String, c: String) =>  a +" "+b must_== c }
 
   def e6 =
     "a"     ||  "b"      | "c"            |
     "Hello" !! "world"   !  "Hello world" |
-    1       !! "world"   !  "1 world"     |> { (a, b, c) =>  a +" "+b must_== c }
+    1       !! "world"   !  "1 world"     |> { (a: Any, b: String, c: String) =>  a.toString+" "+b must_== c }
 
   def e7 =
     "a"   |

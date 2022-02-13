@@ -7,7 +7,8 @@ import scala.util.control.NonFatal
 import sys._
 import specification._
 import text.Regexes._
- 
+import scala.language.postfixOps
+
 class ExceptionMatchersSpec extends script.Specification with ResultMatchers with Groups { def is = s2"""
 
  Exception matchers allow to check that exceptions are thrown
@@ -84,7 +85,7 @@ class ExceptionMatchersSpec extends script.Specification with ResultMatchers wit
 
     eg := (1 must not throwA(new Exception)).toResult must beSuccessful
 
-    eg := ({sys.error("boom"); 1} must not throwA).toResult must beFailing
+    eg := ({sys.error("boom"); 1} must not(throwAn[Exception]())).toResult must beFailing
 
     eg := { throw new StackOverflowError("play again"); 1 } must throwAn[Error]
 

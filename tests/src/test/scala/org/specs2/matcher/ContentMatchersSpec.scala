@@ -22,7 +22,7 @@ class ContentMatchersSpec extends Spec with LinesContentMatchers with BeforeAfte
    it works with duplicated lines                                                                        ${comp().e8}
 """
 
-  lazy val dir = "target" / "test" / "contents"
+  lazy val dir = DirectoryPath.unsafe("target/test/contents")
 
   def before = {
     val action =
@@ -43,7 +43,7 @@ class ContentMatchersSpec extends Spec with LinesContentMatchers with BeforeAfte
 }
 
 case class comp() extends MustMatchers with TestFileNames with ContentMatchers with FileSystem {
-  lazy val dir = "target" / "test" / "contents"
+  lazy val dir = DirectoryPath.unsafe("target/test/contents")
 
   override implicit protected val fileContentForMatchers = new LinesContent[File] {
     def name(f: File) = f.getPath

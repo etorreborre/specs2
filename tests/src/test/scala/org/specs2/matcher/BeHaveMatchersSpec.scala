@@ -1,6 +1,8 @@
 package org.specs2
 package matcher
 
+import scala.language.postfixOps
+
 class BeHaveMatchersSpec extends Specification { def is = s2"""
 
  The following ways of using matchers are allowed
@@ -19,9 +21,9 @@ class BeHaveMatchersSpec extends Specification { def is = s2"""
    ${ !(List(1) must be empty).isSuccess }
 
    using not and be in combination
-   ${ List(1) must not be empty }
-   ${ !((Nil:List[Int]) must not be empty).isSuccess }
-   ${ !((Array.empty[Int]) must not be empty).isSuccess }
+   ${ List(1) must not be(empty[List[Int]]) }
+   ${ !((Nil:List[Int]) must not be(empty[List[Int]])).isSuccess }
+   ${ !((Array.empty[Int]) must not be(empty[Array[Int]])).isSuccess }
 
    using and and be in combination
    ${ (1 must be equalTo(1) and be equalTo(1)).isSuccess }

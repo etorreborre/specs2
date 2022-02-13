@@ -19,10 +19,22 @@ trait LinesContent[L1] {
     LinesContentDifference(lines(ls1), implicitly[LinesContent[L2]].lines(ls2), all, ordered)
 }
 
+object LinesContent {
+  implicit def seqLinesContent[T]: LinesContent[Seq[T]] =
+    SeqLinesContent()
+  implicit def listLinesContent[T]: LinesContent[List[T]] =
+    ListLinesContent()
+}
+
 /**
  * Default implementation for reading lines out of a Seq
  */
 case class SeqLinesContent[A]() extends LinesContent[Seq[A]] {
   def name(seq: Seq[A]) = "sequence"
   def lines(seq: Seq[A]): Seq[String] = seq.map(_.toString)
+}
+
+case class ListLinesContent[A]() extends LinesContent[List[A]] {
+  def name(seq: List[A]) = "list"
+  def lines(seq: List[A]): List[String] = seq.map(_.toString)
 }

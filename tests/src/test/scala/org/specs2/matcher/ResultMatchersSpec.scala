@@ -2,6 +2,7 @@ package org.specs2
 package matcher
 
 import execute._
+import scala.language.postfixOps
 
 class ResultMatchersSpec extends Spec with ResultMatchers with TypedEqual { def is = s2"""
 

@@ -23,7 +23,7 @@ object Examples extends Specification { def is = Module.specifications(getClass)
 object Module extends SpecificationCreation {
   def specifications(klass: Class[?], filter: String => Boolean = (s: String) => true) = {
     val name = klass.getSimpleName.replace("$", "")
-    val base = DirectoryPath.unsafe(new java.io.File(".").getAbsolutePath) / FileName.unsafe(name.toLowerCase) / "src" / "test" / "scala"
+    val base = DirectoryPath.unsafe(new java.io.File(".").getAbsolutePath) / DirectoryPath.unsafe(name.toLowerCase) / DirectoryPath.unsafe("src/test/scala")
     val specs = SpecificationsFinder.specifications(basePath = base, verbose = false, filter = filter).take(3)
 
     name.title.copy(specClass = klass) ^

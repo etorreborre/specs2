@@ -2,6 +2,7 @@ package org.specs2
 package matcher
 
 import execute._
+import scala.language.postfixOps
 
 class StandardMatchResultsSpec extends Specification { def is = s2"""
 
@@ -20,7 +21,5 @@ class StandardMatchResultsSpec extends Specification { def is = s2"""
 
   def ko2 =
     ko.toResult must beLike { case f: Failure => f.stackTrace must not beEmpty }
-  
+
 }
-
-

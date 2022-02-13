@@ -1,6 +1,7 @@
 package org.specs2
 package matcher
 
+import scala.language.postfixOps
 class NumericMatchersSpec extends Spec with NumericMatchers with MustExpectations with MatchersImplicits {  def is = s2"""
 
 The NumericMatchers trait provides matchers to do comparisons with Numeric
@@ -55,7 +56,7 @@ types and more generally with Ordered types.
   ${ 2.0 must be >=(1.0) }
 
   beCloseTo tests if 2 Numerics are close to each other
-  ${ 1.0 must beCloseTo(1, 0.5) }
+  ${ 1.0 must beCloseTo[Double](1, 0.5) }
   ${ 4 must be ~(5 +/- 2) }
   ${ 2 must not be closeTo(4 +/- 1) }
   ${ 2 must not beCloseTo(4 +/- 1) }
@@ -89,7 +90,6 @@ types and more generally with Ordered types.
   ${ 5 must not be between(3, 5).excludingEnd }
   ${ 5 must not be between(5, 7).excludingStart }
   ${ 5 must not be between(5, 5).excludingBounds }
-  ${ 5 must (`be[`(4, 7)`]`) }
                                                                                                                         """
 
   def e1   = (2 must be_<=(1)) returns "2 is greater than 1"
@@ -104,6 +104,6 @@ types and more generally with Ordered types.
   def e4   = (1 must be_>(2))  returns "1 is less than 2"
   def e4_1 = (1 aka "one" must be_>(2))  returns "one '1' is less than 2"
 
-  def e5   = (1.0 must beCloseTo(3, 0.5)) returns "1.0 is not close to 3.0 +/- 0.5"
-  def e5_1 = (1.0 aka "one" must beCloseTo(3, 0.5)) returns "one '1.0' is not close to 3.0 +/- 0.5"
+  def e5   = (1.0 must beCloseTo[Double](3, 0.5)) returns "1.0 is not close to 3.0 +/- 0.5"
+  def e5_1 = (1.0 aka "one" must beCloseTo[Double](3, 0.5)) returns "one '1.0' is not close to 3.0 +/- 0.5"
 }

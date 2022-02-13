@@ -5,7 +5,7 @@ import java.io._
 import execute._
 import specification._
 
-class AnyMatchersSpec extends script.Specification with Groups with ResultMatchers with AnyMatchers with ValueChecks with TypecheckMatchers { def is = s2"""
+class AnyMatchersSpec extends script.Specification with Groups with ResultMatchers with AnyMatchers with ValueChecks { def is = s2"""
 
   beTheSameAs checks if a value is eq to another one
   ${ aValue must beTheSameAs(aValue) }
@@ -58,7 +58,7 @@ class AnyMatchersSpec extends script.Specification with Groups with ResultMatche
   beNull matches null values
   ${ (null:String) must beNull }
   ${ (null:String) must be(null) }
-  ${ "" must not beNull }
+  ${ "" must not(beNull) }
   ${ "" must not be null }
 
   beAsNullAs checks if two values are null at the same time
@@ -90,46 +90,10 @@ class AnyMatchersSpec extends script.Specification with Groups with ResultMatche
   ${ type1 must beAnInstanceOf[Type1] }
   ${ type1 must not be anInstanceOf[Type2] }
   ${ (type1 must beAnInstanceOf[Type2]).message must_== s"'type1: ${type1.getClass.getName}' is not an instance of 'org.specs2.matcher.Type2'" }
-  // doesn't typecheck with AnyVals
-  ${ Typecheck.typecheck("false must beAnInstanceOf[Boolean]") must not succeed }
 
-Implicits
-=========
-
-  + the === implicits can be deactivated with the NoCanBeEqual trait
-  + the must implicits can be deactivated with the NoMustExpectations trait
                                                                                                                         """
   "be like" - new group {
     eg := { (List(1, 2) must beLike { case List(a, b) => (a + b) must_== 2 }) returns "3 != 2" }
-  }
-
-  "must implicits" - new group {
-
-    eg := {
-      // if this specification compiles and if result is ok, this means that the === implicit could be redefined
-      // thanks to the NoCanBeEqual trait
-      val spec = new Specification with NoTypedEqual {
-        implicit def otherTripleEqualUse[T](t: =>T) = new {
-          def ===[S](other: S) = other
-        }
-        val result = (1 === 2) must_== 2
-        def is = result
-      }
-      spec.result
-    }
-
-    eg := {
-      // if this specification compiles and if result is ok, this means that the must implicit could be redefined
-      // thanks to the NoMustExpectations trait
-      val spec = new org.specs2.mutable.Specification with NoMustExpectations {
-        implicit def aValue[T](t: =>T) = new {
-          def must(other: Int) = other
-        }
-        val result = (1 must 2) === 2
-        "an example" >> result
-      }
-      spec.result
-    }
   }
 
   val aValue: String = "a value"

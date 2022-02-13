@@ -6,6 +6,7 @@ import specification._
 import sys._
 import io.StringOutput
 import MatchResultCombinators._
+import scala.language.postfixOps
 
 class LogicalMatcherSpec extends script.Spec with ResultMatchers with Grouped with StringMatchers with TraversableMatchers with TypedEqual { def is = s2"""
 
@@ -172,16 +173,16 @@ Custom
     eg := (12 must bePositive) and
           (12 must be positive) and
           (-12 must not bePositive) and
-          (-12 must not be positive)
+          (-12 must not be(positive[Int]))
   }
 
   case class CustomMatcher[T : Numeric]() extends Matcher[T] {
     def apply[S <: T](e: Expectable[S]) =
-      result(implicitly[Numeric[T]].abs(e.value) == e.value, e.value+" is positive", e.value+" is negative", e)
+      result(implicitly[Numeric[T]].abs(e.value) == e.value, e.value.toString+" is positive", e.value.toString+" is negative", e)
   }
   /** this allows to write "a must not bePositive" or "a must be positive" */
   lazy val outer = this
-  implicit def anyBePositive[T : Numeric](result: MatchResult[T]) = new AnyBePositive(result)
+  implicit def anyBePositive[T : Numeric](result: MatchResult[T]): AnyBePositive[T] = new AnyBePositive(result)
   class AnyBePositive[T : Numeric](result: MatchResult[T]) {
     def bePositive = result(outer.bePositive)
     def positive = result(outer.bePositive)

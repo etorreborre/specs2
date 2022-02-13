@@ -19,7 +19,7 @@ class TopologicalSortSpec extends Spec with ScalaCheck{ def is = s2"""
     sort[Int](Seq(2, 3, 5, 7, 8, 9, 10, 11), edges) must_== Some(Vector(7, 5, 11, 3, 10, 8, 9, 2))
   }
 
-  def a3 = prop { map: Map[Int, Int] =>
+  def a3 = prop { (map: Map[Int, Int]) =>
     val edges = map.filterNot { case (k, j) => k == j }
     val list = (edges.keys ++ edges.values).toSeq.distinct
 

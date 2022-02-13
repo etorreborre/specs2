@@ -160,7 +160,8 @@ case class MatchFailure[T] private[specs2](ok: () => String, ko: () => String, e
   def setExpectable[S >: T](e: Expectable[S]): MatchResult[S] =
     copy(expectable = e)
 
-  override def mute                               = copy(ok = () => "", ko = () => "", details = NoDetails)
+  override def mute: MatchFailure[T] =
+    copy(ok = () => "", ko = () => "", details = NoDetails)
   override def updateMessage(f: String => String) = copy(ok = () => f(okMessage), ko = () => f(koMessage))
   override def orThrow: MatchFailure[T]           = throw new FailureException(toResult)
   override def orSkip: MatchFailure[T]            = throw new SkipException(toResult)
