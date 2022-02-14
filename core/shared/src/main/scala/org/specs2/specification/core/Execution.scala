@@ -142,6 +142,11 @@ case class Execution(
               else
                 Future.failed(FatalExecution(e.getCause))
 
+            // we catch timeout exceptions here when they are caused by the timeout argument
+            // and the skip the corresponding example
+            case e: TimeoutException =>
+              Future.successful((Skipped(e.getMessage), timer.stop))
+
             case NonFatal(e) =>
               // Future execution could still throw FailureExceptions or TimeoutExceptions
               // which can only be recovered here

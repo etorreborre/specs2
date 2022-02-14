@@ -7,6 +7,7 @@ import scala.scalajs.*
 import org.scalajs.macrotaskexecutor.MacrotaskExecutor
 import specification.core.*
 import runner.*
+import main.*
 
 class MacrotaskExecutorSpec(env: Env) extends Specification:
   def is = s2"""
@@ -17,7 +18,7 @@ class MacrotaskExecutorSpec(env: Env) extends Specification:
 
   def timeoutExample =
     given ExecutionContext = env.executionContext
-    TextRunner.runFuture(MacrotaskExecutorSpecification())(env).map { output =>
+    TextRunner.runFuture(MacrotaskExecutorSpecification())(env.setArguments(Arguments())).map { output =>
       output.messages must contain(contain("timeout after"))
     }
 

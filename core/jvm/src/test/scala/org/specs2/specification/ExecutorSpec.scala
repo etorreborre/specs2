@@ -168,7 +168,7 @@ class ExecutorSpec(val env: Env) extends Specification with ThrownExpectations w
     val fragments = Fragments(example("very slow", verySlow))
     val env1 = ownEnv.setTimeout(100.millis * timeFactor.toLong)
 
-    execute(fragments, env1) must contain(beFailing[Result]("timeout after " + 100 * timeFactor + " milliseconds"))
+    execute(fragments, env1) must contain(beSkipped[Result]("timeout after " + 100 * timeFactor + " milliseconds"))
 
   def userEnv =
     val fragments =

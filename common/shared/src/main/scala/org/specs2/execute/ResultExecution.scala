@@ -47,8 +47,7 @@ trait ResultExecution:
       Failure(e.getMessage.notNull, "", e.getStackTrace.toList, details = FromJUnitAssertionError)
     case e: java.lang.Error if simpleClassName(e) == "ExpectationError" =>
       Failure(e.toString, "", e.getStackTrace.toList, details = FromExpectationError)
-    case e: TimeoutException => Skipped(e.getMessage)
-    case NonFatal(t)         => Error(t)
+    case NonFatal(t) => Error(t)
 
   /** execute a Result and rethrow any exception or throws an exception if it is not a success */
   def effectively(result: =>Result): Result =

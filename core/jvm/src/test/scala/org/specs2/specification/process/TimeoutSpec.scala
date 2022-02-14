@@ -6,6 +6,7 @@ import execute.*
 import concurrent.*
 import matcher.*
 import specification.core.*
+import main.*
 
 class TimeoutSpec(env: Env) extends Specification with ResultMatchers:
   def is = section("ci") ^ s2"""
@@ -17,12 +18,15 @@ class TimeoutSpec(env: Env) extends Specification with ResultMatchers:
 
   def executionTimeout =
     val execution = Execution.result { Thread.sleep(1000); ok }.setTimeout(100.millis)
-    execution.startExecution(env).executionResult.runOption(env.executionEnv) must beSome(beFailing[Result])
+    execution.startExecution(env).executionResult.runOption(env.executionEnv) must beSome(beSkipped[Result])
 
   def timeout =
-    val messages = TextRunner.run(TimeoutSpecExample)(env).messages
+    val messages = TextRunner.run(TimeoutSpecExample)(env.setArguments(Arguments())).messages
     messages must contain(
-      "[error]  timeout after 100 milliseconds (TimeoutSpec.scala:31)"
+      allOf(
+        "[info]   o timeout this example",
+        "[info] timeout after 100 milliseconds"
+      )
     )
 
 object TimeoutSpecExample extends Specification:

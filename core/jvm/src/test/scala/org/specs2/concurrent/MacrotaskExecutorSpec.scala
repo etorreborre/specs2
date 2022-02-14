@@ -5,6 +5,7 @@ import scala.concurrent.*, duration.*
 import LoopingCode.*
 import specification.core.*
 import runner.*
+import main.*
 
 class MacrotaskExecutorSpec(env: Env) extends Specification:
   def is = s2"""
@@ -18,14 +19,14 @@ class MacrotaskExecutorSpec(env: Env) extends Specification:
 
   def timeoutExample =
     given ExecutionContext = env.executionContext
-    TextRunner.runFuture(MacrotaskExecutorSpecification())(env).map { output =>
+    TextRunner.runFuture(MacrotaskExecutorSpecification())(env.setArguments(Arguments())).map { output =>
       output.messages must contain(contain("timeout after"))
     }
 
 class MacrotaskExecutorSpecification extends Specification:
   def is = args.execute(timeout = 500.millis) ^ s2"""
 
-  An example can be timed-out when using ScalaJS $timeoutExample
+  An example can be timed-out $timeoutExample
 
   """
 
