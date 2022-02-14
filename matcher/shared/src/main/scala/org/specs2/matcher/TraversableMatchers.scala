@@ -50,7 +50,7 @@ trait TraversableBaseMatchers { outer =>
   /** match if a traversable contains all the elements of seq (and maybe more) */
   def containAllOf[T : Diffable](seq: Seq[T]) = contain(atLeast(seq.map(v => valueIsTypedValueCheck(v)):_*))
   /** match if a traversable contains one of (t1, t2) */
-  def containAnyOf[T](seq: Seq[T]) = contain(new BeOneOf(seq))
+  def containAnyOf[T](seq: Seq[T]) = contain[Seq[T]](new BeOneOf(seq))
   /** match if traversable contains (x matches .*+t+.*) */
   def containMatch[T](t: =>String) = containPattern[T](t.regexPart)
   /** match if traversable contains (x matches p) */
@@ -78,22 +78,22 @@ trait TraversableBaseMatchers { outer =>
    */
 
   /** match if there is a way to size T */
-  def haveSize[T : Sized](n: Int) = new SizedMatcher[T](n, "size")
+  def haveSize[T : Sized](n: Int): SizedMatcher[T] = new SizedMatcher[T](n, "size")
   /** alias for haveSize */
-  def size[T : Sized](n: Int) = haveSize[T](n)
+  def size[T : Sized](n: Int): SizedMatcher[T] = haveSize[T](n)
   /** alias for haveSize */
-  def haveLength[T : Sized](n: Int) = new SizedMatcher[T](n, "length")
+  def haveLength[T : Sized](n: Int): SizedMatcher[T] = new SizedMatcher[T](n, "length")
   /** alias for haveSize */
-  def length[T : Sized](n: Int) = haveLength[T](n)
+  def length[T : Sized](n: Int): SizedMatcher[T] = haveLength[T](n)
 
   /** match if there is a way to size T */
-  def haveSize[T : Sized](check: ValueCheck[Int]) = new SizedCheckedMatcher[T](check, "size")
+  def haveSize[T : Sized](check: ValueCheck[Int]): SizedCheckedMatcher[T] = new SizedCheckedMatcher[T](check, "size")
   /** alias for haveSize */
-  def size[T : Sized](check: ValueCheck[Int]) = haveSize[T](check)
+  def size[T : Sized](check: ValueCheck[Int]): SizedCheckedMatcher[T] = haveSize[T](check)
   /** alias for haveSize */
-  def haveLength[T : Sized](check: ValueCheck[Int]) = new SizedCheckedMatcher[T](check, "length")
+  def haveLength[T : Sized](check: ValueCheck[Int]): SizedCheckedMatcher[T] = new SizedCheckedMatcher[T](check, "length")
   /** alias for haveSize */
-  def length[T : Sized](check: ValueCheck[Int]) = haveLength[T](check)
+  def length[T : Sized](check: ValueCheck[Int]): SizedCheckedMatcher[T] = haveLength[T](check)
 
   /** @return a matcher checking if the elements are ordered */
   def beSorted[T : Ordering] = new OrderingMatcher[T]

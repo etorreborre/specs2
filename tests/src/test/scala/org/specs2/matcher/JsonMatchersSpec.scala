@@ -74,7 +74,7 @@ class JsonMatchersSpec extends Specification with JsonMatchers { def is = s2"""
  ${ "{'house' : {'person' : {'name': 'Joe', 'name2' : 'Moe'}}}" must */("person") /#(1) /("name2" -> "Moe") }
 
  have / andHave can be used to check the elements in an array
- ${ "['name', 'Joe']" must haveSize(2) }
+ ${ "['name', 'Joe']" must have(size(2)) }
  ${ "[{'name': 'Joe'}]" must /#(0).andHave(size(1)) }
  ${ "{'name' : ['Joe']}" must /("name").andHave(size(1)) }
  ${ "{'person' : [{'names':['e', 't']}]}" must /("person")./#(0)./("names").andHave(size(2)) }

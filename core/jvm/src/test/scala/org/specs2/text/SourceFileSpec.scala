@@ -7,7 +7,7 @@ import matcher.TypedEqual
 import specification.Grouped
 import control._
 
-class SourceFileSpec extends Spec with Grouped with SourceFile with TypedEqual { def is = sequential ^ s2"""
+class SourceFileSpec extends Specification with Grouped with SourceFile with TypedEqual { def is = sequential ^ s2"""
 
  the package name of a source file can be extracted
    for a simple name                                                     ${g1.e1}
@@ -73,6 +73,7 @@ class SourceFileSpec extends Spec with Grouped with SourceFile with TypedEqual {
   "class names" - new g2 {
     val pattern = Pattern.compile("\\s*class\\s*(.*Spec)\\s*extends\\s*.*")
     val content = "\nclass MySpec extends Spec\n"
+    import matcher.ValueCheck.typedValueCheck
     e1 := classNames("com.example", content, pattern, suffix = "", verbose = true).runOption must beSome(List("com.example.MySpec"))
 
     e2 := classNames("", content, pattern, suffix = "", verbose = true).runOption must beSome(List("MySpec"))

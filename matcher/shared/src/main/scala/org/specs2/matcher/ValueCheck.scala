@@ -22,8 +22,8 @@ trait ValueCheck[T] { outer =>
   }
 }
 
-object ValueCheck {
-  implicit def typedValueCheck[T : Diffable](expected: T): BeEqualTypedValueCheck[T] =
+object ValueCheck extends ValueChecks {
+  implicit def typedValueCheck[T : Diffable](expected: T): ValueCheck[T] =
     new BeEqualTypedValueCheck[T](expected)
 
   def alwaysOk[T] = new ValueCheck[T] {
@@ -43,6 +43,7 @@ object ValueCheck {
  * implicit conversions used to create ValueChecks
  */
 trait ValueChecks extends ValueChecksBase {
+
   /** a partial function returning an object having an AsResult instance can check a value */
   implicit def partialfunctionIsValueCheck[T, R : AsResult](f: PartialFunction[T, R]): ValueCheck[T] = new ValueCheck[T] {
     def check    = (t: T) => {
@@ -65,7 +66,7 @@ trait ValueChecksBase extends ValueChecksLowImplicits {
   }
 
   /** an expected value can be used to check another value */
-  def valueIsTypedValueCheck[T](expected: T)(implicit di: Diffable[T]): BeEqualTypedValueCheck[T] =
+  def valueIsTypedValueCheck[T](expected: T)(implicit di: Diffable[T]): ValueCheck[T] =
     ValueCheck.typedValueCheck(expected)
 }
 
@@ -100,6 +101,3 @@ case class BeEqualValueCheck[T](expected: Any) extends ValueCheck[T] {
   def check    = (t: T) => AsResult.safely(matcher(Expectable(t)))
   def checkNot = (t: T) => AsResult.safely(matcher.not(Expectable(t)))
 }
-
-
-

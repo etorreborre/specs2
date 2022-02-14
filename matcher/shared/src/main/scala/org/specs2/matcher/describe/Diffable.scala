@@ -1,5 +1,6 @@
 package org.specs2
-package matcher.describe
+package matcher
+package describe
 
 import scala.util.{Failure, Try}
 import PrimitiveDiffable.primitive
