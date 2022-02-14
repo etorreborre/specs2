@@ -146,15 +146,20 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
           }, to)
 
           val future = timedFuture.runNow(env.executorServices).recoverWith {
-            // // this exception is thrown if the `action()` code above throws an exception
+            // this exception is thrown if the `action()` code above throws an exception
             case e: ExecutionException =>
               if (NonFatal(e.getCause))
                 Future.successful((ResultExecution.handleExceptionsPurely(e.getCause), timer.stop))
               else
                 Future.failed(FatalExecution(e.getCause))
 
+            // we catch timeout exceptions here when they are caused by the timeout argument
+            // and the skip the corresponding example
+            case e: TimeoutException =>
+              Future.successful((Skipped(e.getMessage), timer.stop))
+
             case NonFatal(e) =>
-              // Future execution could still throw FailureExceptions or TimeoutExceptions
+              // Future execution could still throw FailureExceptions
               // which can only be recovered here
               Future.successful((ResultExecution.handleExceptionsPurely(e), timer.stop))
           }
