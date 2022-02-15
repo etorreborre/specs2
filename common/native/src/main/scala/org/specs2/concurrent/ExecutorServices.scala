@@ -43,6 +43,6 @@ object ExecutorServices {
     )
 
   def fromGlobalExecutionContext: ExecutorServices =
-    fromExecutionContext(scala.concurrent.ExecutionContext.global)
+    fromExecutionContext(parasitic)
 
 }

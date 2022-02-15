@@ -7,7 +7,7 @@ import org.specs2.main.Arguments
 import scala.concurrent.ExecutionContext
 
 /**
- * Execution environment for javascript
+ * Execution environment for native
  */
 case class ExecutionEnv(executorServices: ExecutorServices,
                         timeFactor: Int,
@@ -44,6 +44,6 @@ object ExecutionEnv {
 
   /** create an ExecutionEnv from Scala global execution context */
   def fromGlobalExecutionContext: ExecutionEnv =
-    fromExecutionContext(scala.concurrent.ExecutionContext.global)
+    fromExecutionContext(parasitic)
 
 }
