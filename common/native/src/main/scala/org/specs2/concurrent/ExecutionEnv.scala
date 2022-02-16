@@ -44,6 +44,6 @@ object ExecutionEnv {
 
   /** create an ExecutionEnv from Scala global execution context */
   def fromGlobalExecutionContext: ExecutionEnv =
-    fromExecutionContext(parasitic)
+    fromExecutionContext(scala.concurrent.ExecutionContext.global)
 
 }

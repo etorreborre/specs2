@@ -5,7 +5,7 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.FiniteDuration
 
 /**
- * Executor services for javascript
+ * Executor services for native
  *
  * The global execution context is used for both
  * executing tests and scheduling timeouts
@@ -43,6 +43,6 @@ object ExecutorServices {
     )
 
   def fromGlobalExecutionContext: ExecutorServices =
-    fromExecutionContext(parasitic)
+    fromExecutionContext(scala.concurrent.ExecutionContext.global)
 
 }
