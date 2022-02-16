@@ -119,18 +119,22 @@ trait SbtEvents {
   def ignored  (name: String, durationInMillis: Long)                       = handler.handle(SpecTestEvent(name, Status.Ignored , Some(durationInMillis)))
   def canceled (name: String)                                               = handler.handle(SpecTestEvent(name, Status.Canceled, None))
 
-  case class SpecTestEvent(name: String, status: Status, durationInMillis: Option[Long], throwable: OptionalThrowable = new OptionalThrowable) extends Event {
-    val fullyQualifiedName = taskDef.fullyQualifiedName
-    val fingerprint        = taskDef.fingerprint
-    val selector           = new TestSelector(name)
-    val duration           = durationInMillis.getOrElse(-1L)
+  case class SpecTestEvent(name: String, _status: Status, durationInMillis: Option[Long], _throwable: OptionalThrowable = new OptionalThrowable) extends Event {
+    def status() = _status
+    def throwable() = _throwable
+    def fullyQualifiedName() = taskDef.fullyQualifiedName()
+    def fingerprint()        = taskDef.fingerprint()
+    def selector()           = new TestSelector(name)
+    def duration()           = durationInMillis.getOrElse(-1L)
   }
 
-  case class SpecSuiteEvent(status: Status, throwable: OptionalThrowable = new OptionalThrowable) extends Event {
-    val fullyQualifiedName = taskDef.fullyQualifiedName
-    val fingerprint        = taskDef.fingerprint
-    val selector           = new SuiteSelector
-    val duration           = -1L
+  case class SpecSuiteEvent(_status: Status, _throwable: OptionalThrowable = new OptionalThrowable) extends Event {
+    def status() = _status
+    def throwable() = _throwable
+    def fullyQualifiedName() = taskDef.fullyQualifiedName()
+    def fingerprint()        = taskDef.fingerprint()
+    def selector()           = new SuiteSelector
+    def duration()           = -1L
   }
 }
 
@@ -139,18 +143,18 @@ trait SbtEvents {
  */
 case class SbtLineLogger(loggers: Array[Logger]) extends BufferedLineLogger {
   def infoLine(msg: String) = loggers.foreach { logger =>
-    logger.info(removeColors(msg, !logger.ansiCodesSupported))
+    logger.info(removeColors(msg, !logger.ansiCodesSupported()))
   }
 
   /** failures are represented as errors in sbt */
   def failureLine(msg: String) = errorLine(msg)
 
   def errorLine(msg: String) = loggers.foreach { logger =>
-    val msg1 = removeColors(msg, !logger.ansiCodesSupported)
+    val msg1 = removeColors(msg, !logger.ansiCodesSupported())
     logger.error(msg1)
   }
 
   def warnLine(msg: String) =  loggers.foreach { logger =>
-    logger.warn(removeColors(msg, !logger.ansiCodesSupported))
+    logger.warn(removeColors(msg, !logger.ansiCodesSupported()))
   }
 }

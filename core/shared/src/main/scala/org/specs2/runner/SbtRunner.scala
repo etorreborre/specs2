@@ -47,7 +47,7 @@ abstract class BaseSbtRunner(args: Array[String], remoteArgs: Array[String], loa
     newTask(deserializer(task))
 
   def serializeTask(task: Task, serializer: TaskDef => String): String =
-    serializer(task.taskDef)
+    serializer(task.taskDef())
 
   def receiveMessage(msg: String): Option[String] =
     Some(msg)
@@ -57,14 +57,17 @@ abstract class BaseSbtRunner(args: Array[String], remoteArgs: Array[String], loa
 }
 
 case class MasterSbtRunner(args:       Array[String],
-                           remoteArgs: Array[String],
-                           loader:     ClassLoader) extends BaseSbtRunner(args, remoteArgs, loader)
+                           _remoteArgs: Array[String],
+                           loader:     ClassLoader) extends BaseSbtRunner(args, _remoteArgs, loader) {
+  def remoteArgs() = _remoteArgs
+}
 
 case class SlaveSbtRunner(args:       Array[String],
-                          remoteArgs: Array[String],
+                          _remoteArgs: Array[String],
                           loader:     ClassLoader,
-                          send:       String => Unit) extends BaseSbtRunner(args, remoteArgs, loader) {
+                          send:       String => Unit) extends BaseSbtRunner(args, _remoteArgs, loader) {
   override def isSlave: Boolean = true
+  def remoteArgs() = _remoteArgs
 }
 
 /**
@@ -123,7 +126,7 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
 
   /** @return the specification tags */
   def tags(): Array[String] = {
-    lazy val spec: Option[SpecStructure] = runOperation(createSpecStructure(taskDef, loader, env)).toOption.flatten
+    lazy val spec: Option[SpecStructure] = runOperation(createSpecStructure(taskDef(), loader, env)).toOption.flatten
     lazy val tags: List[NamedTag] =
       spec.flatMap(s => runAction(s.tags)(env.specs2ExecutionEnv).toOption).getOrElse(Nil)
 
@@ -140,7 +143,7 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
     val ee = env.specs2ExecutionEnv
     val printer = (s: String) => loggers.foreach(_.warn(s))
 
-    executeActionFuture(createSpecStructure(taskDef, loader, env), printer)(ee).flatMap { case (result, warnings) =>
+    executeActionFuture(createSpecStructure(taskDef(), loader, env), printer)(ee).flatMap { case (result, warnings) =>
       processResult(handler, loggers)(result, warnings)
       result.toOption.flatten match {
         case Some(structure) =>
@@ -152,7 +155,7 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
           Future(())
       }
     }.recover { case t =>
-      val events = sbtEvents(taskDef, handler)
+      val events = sbtEvents(taskDef(), handler)
       events.suiteError(t)
       loggers.foreach(_.trace(t))
     }
@@ -172,7 +175,7 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
     result match {
       case Left(e) =>
         if (warnings.nonEmpty) handleRunWarnings(warnings, loggers)
-        else handleRunError(e, loggers, sbtEvents(taskDef, handler))
+        else handleRunError(e, loggers, sbtEvents(taskDef(), handler))
 
       case _ => handleRunWarnings(warnings, loggers)
     }
@@ -186,10 +189,10 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
 
   /** create a spec structure from the task definition containing the class name */
   private def createSpecStructure(taskDef: TaskDef, loader: ClassLoader, env: Env): Operation[Option[SpecStructure]] =
-    taskDef.fingerprint match {
+    taskDef.fingerprint() match {
       case f: SubclassFingerprint =>
-        if (f.superclassName.endsWith("SpecificationStructure")) {
-          val className = taskDef.fullyQualifiedName + (if (f.isModule) "$" else "")
+        if (f.superclassName().endsWith("SpecificationStructure")) {
+          val className = taskDef.fullyQualifiedName() + (if (f.isModule()) "$" else "")
           Classes.createInstance[SpecificationStructure](className, loader, EnvDefault.defaultInstances(env)).
             map(ss => Option(ss.structure(env)))
         }
