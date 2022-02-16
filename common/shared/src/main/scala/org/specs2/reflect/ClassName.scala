@@ -65,7 +65,8 @@ trait ClassName { outer =>
       else              name
 
     }(klass.getName)
-    if (result.contains("anon") && klass.getSuperclass != null) simpleName(klass.getSuperclass)
+    if (Platform.isNative) result
+    else if (result.contains("anon") && klass.getSuperclass != null) simpleName(klass.getSuperclass)
     else result
   }
 
@@ -74,6 +75,7 @@ trait ClassName { outer =>
    */
   def humanName(c: Class[_]): String = {
     val name = simpleName(c)
+    if (Platform.isNative) name.camelCaseToWords
     if (name.contains("$") && c.getSuperclass != null) humanName(c.getSuperclass)
     else name.camelCaseToWords
   }

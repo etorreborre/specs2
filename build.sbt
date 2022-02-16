@@ -15,6 +15,7 @@ lazy val specs2 = project.in(file(".")).
     name := "specs2",
     packagedArtifacts := Map.empty,
     ThisBuild / githubWorkflowArtifactUpload := false,
+    ThisBuild / githubWorkflowUseSbtThinClient := false,
     ThisBuild / githubWorkflowBuild := Seq(WorkflowStep.Sbt(List("testOnly -- xonly exclude ci"), name = Some("Build project"))),
     Global / onChangedBuildSource := ReloadOnSourceChanges,
     test := {}
@@ -22,7 +23,9 @@ lazy val specs2 = project.in(file(".")).
     fpJVM, catsJVM, commonJVM, matcherJVM, coreJVM, matcherExtraJVM, scalazJVM, html,
     analysisJVM, shapelessJVM, formJVM, markdownJVM, gwtJVM, junitJVM, scalacheckJVM, mockJVM, xmlJVM,
     tests, fpJS, catsJS, commonJS, matcherJS, coreJS, matcherExtraJS, scalazJS, analysisJS,
-    shapelessJS, junitJS, scalacheckJS, mockJS
+    shapelessJS, junitJS, scalacheckJS, mockJS, fpNative, catsNative, commonNative, matcherNative,
+    coreNative, matcherExtraNative, scalazNative, analysisNative, shapelessNative, junitNative,
+    scalacheckNative, mockNative
   )
 
 /** COMMON SETTINGS */
@@ -30,9 +33,9 @@ lazy val specs2Settings = Seq(
   organization := "org.specs2",
   GlobalScope / scalazVersion := "7.2.32",
   specs2ShellPrompt,
-  scalaVersion := "2.13.6",
+  scalaVersion := "2.13.8",
   SettingKey[Boolean]("ide-skip-project").withRank(KeyRanks.Invisible) := platformDepsCrossVersion.value == ScalaNativeCrossVersion.binary,
-  crossScalaVersions := Seq(scalaVersion.value, "2.12.14"))
+  crossScalaVersions := Seq(scalaVersion.value, "2.12.15"))
 
 lazy val tagName = Def.setting {
   s"specs2-${version.value}"
@@ -52,8 +55,6 @@ lazy val commonJsSettings = Seq(
   ) ++ depends.jsMacrotaskExecutor
 
 lazy val commonNativeSettings = Seq(
-  scalaVersion := "2.13",
-  crossScalaVersions := Seq("2.13"),
   nativeLinkStubs := true
 )
 
@@ -96,7 +97,7 @@ lazy val analysisJVM = analysis.jvm
 lazy val analysisJS = analysis.js
 lazy val analysisNative = analysis.native
 
-lazy val cats = crossProject(JSPlatform, JVMPlatform).in(file("cats")).
+lazy val cats = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("cats")).
   settings(
     commonSettings,
     libraryDependencies ++= Seq(
@@ -111,6 +112,7 @@ lazy val cats = crossProject(JSPlatform, JVMPlatform).in(file("cats")).
 
 lazy val catsJS = cats.js
 lazy val catsJVM = cats.jvm
+lazy val catsNative = cats.native
 
 lazy val common = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("common")).
   settings(
@@ -445,7 +447,7 @@ lazy val compilationSettings = Seq(
           "-Xlint:-byname-implicit")
     }
   },
-  addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.13.0" cross CrossVersion.full),
+  addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.13.2" cross CrossVersion.full),
   Test / scalacOptions += "-Yrangepos",
   Compile / doc / scalacOptions ++= Seq("-feature", "-language:_"),
   Compile / console / scalacOptions := Seq("-Yrangepos", "-feature", "-language:_"),

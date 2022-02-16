@@ -35,16 +35,16 @@ object depends {
     Seq(libraryDependencies += "org.scala-js" %%% "scala-js-macrotask-executor" % "1.0.0")
 
   def nativeTest =
-    Seq(libraryDependencies += "org.scala-native" %%% "test-interface" % nativeVersion)
+    Seq(libraryDependencies ++= Seq(
+    "org.scala-native" %%% "test-interface" % nativeVersion,
+    "org.portable-scala" %%% "portable-scala-reflect" % "1.1.1"
+    ))
 
   def scalaParser = Def.setting {
     Seq("org.scala-lang.modules" %%% "scala-parser-combinators" % "1.1.2")
   }
   def scalaParserNative = Def.setting {
-    if(nativeVersion == "0.4.0")
-      Seq("com.github.lolgab" %%% "scala-parser-combinators" % "1.1.2")
-    else
-      scalaParser.value
+    Seq("org.scala-lang.modules" %%% "scala-parser-combinators" % "2.1.0")
   }
 
   def scalaXml = "org.scala-lang.modules" %% "scala-xml" % "1.3.0"

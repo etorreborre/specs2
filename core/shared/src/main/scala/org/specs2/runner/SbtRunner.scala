@@ -15,6 +15,7 @@ import Actions._
 import org.specs2.reflect._
 import org.specs2.control.eff.ErrorEffect._
 import org.specs2.concurrent.ExecutionEnv
+import org.specs2.concurrent.awaitResult
 import org.specs2.control.ExecuteActions._
 import org.specs2.data.NamedTag
 
@@ -159,7 +160,7 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
   }
 
   def execute(handler: EventHandler, loggers: Array[Logger]): Array[Task] = {
-    Await.result(executeFuture(handler, loggers), Duration.Inf)
+    awaitResult(executeFuture(handler, loggers), Duration.Inf)
     Array()
   }
 
