@@ -1,6 +1,7 @@
 package org.specs2
 
-import scala.concurrent.{ Await, Awaitable, Duration }
+import scala.concurrent.{ Await, Awaitable }
+import scala.concurrent.duration.Duration
 
 package object concurrent {
 
