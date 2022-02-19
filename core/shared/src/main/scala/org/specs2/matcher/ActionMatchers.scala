@@ -32,7 +32,7 @@ trait ActionMatchers extends ValueChecks:
     FutureMatcher { (action: Action[T]) =>
       action.runFuture(executionEnv).map(_ => Failure(s"a failure with message $message was expected")).recover {
         case t if t.getMessage `matchesSafely` message => Success("ok")
-        case t => Failure(s"the action failed with message ${t.getMessage}. Expected: $message"),
+        case t => Failure(s"the action failed with message ${t.getMessage}. Expected: $message")
       }
     }
 
