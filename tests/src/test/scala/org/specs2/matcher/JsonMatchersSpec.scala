@@ -60,15 +60,15 @@ class JsonMatchersSpec extends Specification with JsonMatchers { def is = s2"""
 
  The / matcher can be chained with */
  ${ "{'person' : {'address' : {'street' : 'here'}}}" must /("person") */("street") /("here") }
-                                                                                                                        
- The /#(i) matcher matches the i-th element in an Array                                                               
+
+ The /#(i) matcher matches the i-th element in an Array
  ${ "['name', 'Joe']" must /#(1) /("Joe") }
  ${ "['name', 'Joe']" must not /#(1) /("M.*.r") }
  ${ "{'person' : ['name', 'Joe'] }" must /("person") /#(1) /("Joe") }
  ${ "{'person' : ['name', ['Joe', 'Moe']] }" must /("person") /#(1) /#(1) /("Moe") }
  ${ "{'house' : {'person' : ['name', 'Joe']}}" must */("person") /#(1) /("Joe") }
-                                                                                                                        
- The /#(i) matcher matches the i-th element in a Map                                                                  
+
+ The /#(i) matcher matches the i-th element in a Map
  ${ "{'name' : 'Joe', 'name2' : 'Moe'}" must /#(1) /("name2" -> "Moe") }
  ${ "{'person' : {'name': 'Joe', 'name2' : 'Moe'} }" must /("person") /#(1) /("name2" -> "Moe") }
  ${ "{'house' : {'person' : {'name': 'Joe', 'name2' : 'Moe'}}}" must */("person") /#(1) /("name2" -> "Moe") }
@@ -91,6 +91,19 @@ class JsonMatchersSpec extends Specification with JsonMatchers { def is = s2"""
 
  Matchers must be resilient when there are null values
  ${ """{ "b" : { "a" : 2, "c" : null } }""" must /("b" -> /("a" -> 2)) }
+
+ Parsing double quotes
+   in a value ${raw"""{"a": "hello\"world"}""" must /("a" -> """hello"world""")}
+
+   in a value in an array ${raw"""[{"a": "hello\"world"}]""" must */("a" -> """hello"world""")}
+
+   in a nested key ${raw"""{"values": [{"hello\"world" : "a"}]}""" must /("values").andHave(
+      contain(/("""hello"world""" -> "a"))
+    )}
+
+   in a nested value ${raw"""{"values": [{"a": "hello\"world"}]}""" must /("values").andHave(
+      contain(/("a" -> """hello"world"""))
+    )}
 
 """
 
