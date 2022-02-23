@@ -9,19 +9,29 @@ private[specs2] trait Json:
     *   Some(json) if the string is parsable as a JSON document
     */
   def parse(s: String): Option[JSONType] =
-    def parseRaw(p: Parser, input: String): Option[JSONType] =
-      p.phrase(p.root)(new p.lexical.Scanner(input)) match
-        case p.Success(result, _) => Some(result)
-        case _                    => None
+    parseEither(s).toOption
+
+  def parseEither(s: String): Either[String, JSONType] =
+    def parseRaw(p: Parser, input: String): Either[String, JSONType] =
+      (p.phrase(p.root)(new p.lexical.Scanner(input)): @unchecked) match
+        case p.Success(result, _) => Right(result)
+        case p.NoSuccess(e, _)    => Left(e)
+
     val parser = new Parser
     // give the parser a chance to parse singly-quoted json
-    parseRaw(parser, s).orElse(if s.contains("'") then parseRaw(parser, s.replace("'", "\"")) else None)
+    parseRaw(parser, s) match
+      case Right(r) =>
+        Right(r)
+      case Left(e) =>
+        if s.contains("'") then parseRaw(parser, s.replace("'", "\""))
+        else Left(e)
 
   /** show JSON objects with null values shown as 'null' */
-
   def showJson(a: Any): String = a.asInstanceOf[Matchable] match
     case map: Map[?, ?] =>
-      map.map { case (key, value) => s""""$key":${showJsonValue(value)}""" }.mkString("{", ",", "}")
+      map
+        .map { case (key, value) => s""""${quoteDoubleQuote(key.toString)}":${showJsonValue(value)}""" }
+        .mkString("{", ",", "}")
     case (key, value)    => s"""{"$key":${showJsonValue(value)}}"""
     case JSONObject(map) => showJson(map)
     case JSONArray(list) => list.map(showJsonValue).mkString("[", ",", "]")
@@ -35,9 +45,12 @@ private[specs2] trait Json:
     */
   def showJsonValue(a: Any): String = a.asInstanceOf[Matchable] match
     case null       => "null"
-    case s: String  => "\"" + s + "\""
+    case s: String  => "\"" + quoteDoubleQuote(s) + "\""
     case d: Double  => d.toString
     case b: Boolean => b.toString
     case other      => showJson(other)
+
+  def quoteDoubleQuote(s: String): String =
+    s.replace("\"", "\\\"")
 
 private[specs2] object Json extends Json

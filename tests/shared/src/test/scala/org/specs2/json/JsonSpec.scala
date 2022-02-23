@@ -9,8 +9,12 @@ import Json.*
 class JsonSpec extends Specification with ScalaCheck:
 
   "showJson must be robust against null values" >> prop { (json: JSONType) =>
-    parse(showJson(json)) must beSome
-  }.set(maxSize = 10)
+    parseEither(showJson(json)) must beRight
+  }.set(maxSize = 10); br
+
+  "double quotes can be parsed" >> {
+    parseEither(raw"""{"a": "hello\"world"}""") must beRight
+  }
 
 import Gen.*
 

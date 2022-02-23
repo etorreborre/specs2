@@ -94,6 +94,19 @@ class JsonMatchersSpec extends Specification with JsonMatchers {
  Matchers must be resilient when there are null values
  ${"""{ "b" : { "a" : 2, "c" : null } }""" must /("b" -> /("a" -> 2))}
 
+ Parsing double quotes
+   in a value ${raw"""{"a": "hello\"world"}""" must /("a" -> """hello"world""")}
+
+   in a value in an array ${raw"""[{"a": "hello\"world"}]""" must */("a" -> """hello"world""")}
+
+   in a nested key ${raw"""{"values": [{"hello\"world" : "a"}]}""" must /("values").andHave(
+      contain(/("""hello"world""" -> "a"))
+    )}
+
+   in a nested value ${raw"""{"values": [{"a": "hello\"world"}]}""" must /("values").andHave(
+      contain(/("a" -> """hello"world"""))
+    )}
+
 """
 
   def andHave =

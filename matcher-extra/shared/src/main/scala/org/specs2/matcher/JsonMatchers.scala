@@ -25,9 +25,9 @@ trait JsonMatchers extends Expectations with JsonMatchersImplicits:
 
   abstract class JsonMatcher extends Matcher[String]:
     def apply[S <: String](s: Expectable[S]) =
-      parse(s.value.notNull) match
-        case Some(json) => negateWhen(negated)(find(Some(json), queries.toList))
-        case _          => result(negated, "Could not parse\n" + s.value.notNull)
+      parseEither(s.value.notNull) match
+        case Right(json) => negateWhen(negated)(find(Some(json), queries.toList))
+        case Left(e)     => result(negated, "Could not parse\n" + s.value.notNull + s"\n$e")
 
     def negate: JsonMatcher
     def negated: Boolean
