@@ -55,8 +55,9 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
    ${ check(exceptionProp()) must beError(withMessage("java.lang.IllegalArgumentException")) }
    if the message is null the exception cause must be displayed
    ${ check(exceptionProp("null")) must beError(withMessage("caused by java.lang.Exception: cause")) }
-   the stacktrace must be displayed
-   ${ check(exceptionProp()) must beLike { case Error(m, ex) => ex.getStackTrace must not be empty } }
+   the stacktrace must be displayed ${
+     check(exceptionProp()) must beLike { case Error(m, ex) => ex.getStackTrace must not(beEmpty[Array[StackTraceElement]]) }
+   }
 
  Additional data
 
@@ -78,7 +79,6 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
 
    Status is reported when parameters are set with display
    ${ check(prop((i: Int) => true).display(minTestsOk = 10)).expected must haveMessage("OK, passed 10 tests") }
-
 
    Parameters can be passed from the command line
    ${ check(prop { (i: Int, j: Int) =>  i === i }.setParameters(defaultParameters.overrideWith(CommandLine.create("scalacheck.mintestsok", "10")))) returns "OK, passed 10 tests" }

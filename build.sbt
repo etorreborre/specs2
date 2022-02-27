@@ -112,8 +112,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("c
     commonSettings,
     name := "specs2-core",
     libraryDependencies ++=
-      Seq(
-        depends.junit % Test)
+      Seq(depends.junit % Test)
   ).
   jsSettings(depends.jsTest, commonJsSettings).
   jvmSettings(

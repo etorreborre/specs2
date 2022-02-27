@@ -12,6 +12,7 @@ trait ContextualSpecificationStructure {
   def fragments = (env: Env) => structure(env).fragments
 }
 
+@org.portablescala.reflect.annotation.EnableReflectiveInstantiation
 trait SpecificationStructure extends ContextualSpecificationStructure {
   def is: SpecStructure
   def structure = (env: Env) => decorate(is, env)

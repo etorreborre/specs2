@@ -8,9 +8,6 @@ import org.portablescala.reflect._
 
 trait Classes extends ClassOperations {
 
-  type EnableReflectiveInstantiation =
-    org.portablescala.reflect.annotation.EnableReflectiveInstantiation
-
   def newInstance(name: String, defaultInstances: =>List[AnyRef] = Nil): Any =
     newInstance(Reflect
       .lookupInstantiatableClass(name)

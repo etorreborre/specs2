@@ -43,7 +43,7 @@ class LineComparisonSpec extends Specification with ContentMatchers { def is = s
     )
 
     removeColors((list1 must haveSameLinesAs(list2)).message) ====
-    s"""|the first sequence is not the same as the second sequence
+    s"""|sequence is not the same as list
         |      3. hello
         |      4. hello
         |      5. hello

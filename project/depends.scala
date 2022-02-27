@@ -23,15 +23,19 @@ object depends {
     Seq(libraryDependencies ++= {
       CrossVersion.partialVersion(scalaVersion.value) match {
          case Some((3, _)) =>
-           Seq("org.scala-sbt" % "test-interface" % "1.0")
+           Seq(
+             ("org.portable-scala" %%% "portable-scala-reflect" % "1.1.1").cross(CrossVersion.for3Use2_13),
+             "org.scala-sbt" % "test-interface" % "1.0")
          case _ =>
-           Seq("org.scala-sbt" % "test-interface" % "1.0",
-               "org.scala-js" %% "scalajs-stubs" % "1.0.0" % "provided")
+           Seq(("org.portable-scala" %%% "portable-scala-reflect" % "1.1.1").cross(CrossVersion.for3Use2_13),
+                "org.scala-sbt" % "test-interface" % "1.0",
+                "org.scala-js" %% "scalajs-stubs" % "1.0.0" % "provided")
       }
     })
 
   def jsTest =
     Seq(
+      jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv(),
       libraryDependencies ++=
         Seq(
           ("org.portable-scala" %%% "portable-scala-reflect" % "1.1.1").cross(CrossVersion.for3Use2_13),
