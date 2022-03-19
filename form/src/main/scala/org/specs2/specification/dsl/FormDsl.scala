@@ -17,24 +17,24 @@ trait FormDsl extends FragmentsDsl with SpecStructureDsl with FormFragmentsFacto
 
   implicit class appendFormToString(s: String) extends appendToString(s) {
     def ^(form: =>Form)                                          : Fragments = appendToString(s) ^ factory.FormFragment(form)
-    def ^[T : HasForm](aForm: =>T)(implicit p: ImplicitParam): Fragments = appendToString(s) ^ factory.FormFragment(aForm)
+    def ^[T : HasForm](aForm: =>T): Fragments = appendToString(s) ^ factory.FormFragment(aForm)
   }
 
   implicit class appendFormToFragment(f: Fragment) extends appendToFragment(f) {
     def ^(form: =>Form)                                          : Fragments = appendToFragment(f) ^ factory.FormFragment(form)
-    def ^[T : HasForm](aForm: =>T)(implicit p: ImplicitParam): Fragments = appendToFragment(f) ^ factory.FormFragment(aForm)
+    def ^[T : HasForm](aForm: =>T): Fragments = appendToFragment(f) ^ factory.FormFragment(aForm)
   }
 
   implicit class appendFormToFragments(fs: Fragments) extends appendToFragments(fs) {
     def ^(form: =>Form)                                          : Fragments = appendToFragments(fs) ^ factory.FormFragment(form)
-    def ^[T : HasForm](aForm: =>T)(implicit p: ImplicitParam): Fragments = appendToFragments(fs) ^ factory.FormFragment(aForm)
+    def ^[T : HasForm](aForm: =>T): Fragments = appendToFragments(fs) ^ factory.FormFragment(aForm)
   }
 
   implicit class appendFormToArguments(args: Arguments) extends appendToArguments(args) {
     def ^(form: =>Form)(implicit p1: ImplicitParam1) : SpecStructure =
       Use.ignoring(p1)(appendToArguments(args) ^ factory.FormFragment(form))
 
-    def ^[T : HasForm](aForm: =>T)(implicit p: ImplicitParam): SpecStructure =
+    def ^[T : HasForm](aForm: =>T): SpecStructure =
       appendToArguments(args) ^ factory.FormFragment(aForm)
   }
 
@@ -42,7 +42,7 @@ trait FormDsl extends FragmentsDsl with SpecStructureDsl with FormFragmentsFacto
     def ^(form: =>Form)(implicit p1: ImplicitParam1) : SpecStructure =
       Use.ignoring(p1)(appendSpecStructureToSpecHeader(header) ^ factory.FormFragment(form))
 
-    def ^[T : HasForm](aForm: =>T)(implicit p: ImplicitParam): SpecStructure =
+    def ^[T : HasForm](aForm: =>T): SpecStructure =
       appendSpecStructureToSpecHeader(header) ^ factory.FormFragment(aForm)
   }
 
@@ -50,7 +50,7 @@ trait FormDsl extends FragmentsDsl with SpecStructureDsl with FormFragmentsFacto
     def ^(form: =>Form)(implicit p1: ImplicitParam1): SpecStructure =
       Use.ignoring(p1)(appendSpecStructureToSpecStructure(structure) ^ factory.FormFragment(form))
 
-    def ^[T : HasForm](aForm: =>T)(implicit p: ImplicitParam): SpecStructure =
+    def ^[T : HasForm](aForm: =>T): SpecStructure =
       appendSpecStructureToSpecStructure(structure) ^ factory.FormFragment(aForm)
   }
 }

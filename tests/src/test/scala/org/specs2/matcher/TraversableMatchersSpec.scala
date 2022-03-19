@@ -34,7 +34,7 @@ class TraversableMatchersSpec(val env: Env) extends Spec with ResultMatchers wit
    ${ Seq("hello", "world") must contain((s: String) => s.length > 2) }
    ${ Seq("1", "2", "3") must contain("3") and contain("2":Any) }
    ${ Seq("foobar").must(contain("foo")).not } see #416
-   ${ Seq[Food](Pizza(), new Fruit()) must contain(Pizza()) }
+   ${ Seq[Food](Pizza(), new Fruit()) must contain[Food](Pizza()) }
    `not contain(1)` must work in a mutable Scope ${g1.e1}
    a string inclusion must work as well  ${ "abc" must contain('b') }
 
@@ -147,7 +147,7 @@ class TraversableMatchersSpec(val env: Env) extends Spec with ResultMatchers wit
  We can check the size of an traversable
     ${ Seq() must beEmpty }
     ${ Seq() must be empty }
-    ${ (Seq() must not be(empty)) must beFailing }
+    ${(Seq() must not(beEmpty)) must beFailing}
     ${ Seq(1, 2) must haveSize(2) }
     ${ Seq(1, 2) must haveSize(be_>=(1)) }
     ${ Seq(1, 2) must not(haveSize(be_<=(0))) }

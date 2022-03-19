@@ -50,7 +50,7 @@ trait TraversableBaseMatchers { outer =>
   /** match if a traversable contains all the elements of seq (and maybe more) */
   def containAllOf[T : Diffable](seq: Seq[T]) = contain(atLeast(seq.map(v => valueIsTypedValueCheck(v)):_*))
   /** match if a traversable contains one of (t1, t2) */
-  def containAnyOf[T](seq: Seq[T]) = contain[Seq[T]](new BeOneOf(seq))
+  def containAnyOf[T](seq: Seq[T]): ContainWithResult[T] = contain(matcherIsValueCheck(new BeOneOf[T](seq)))
   /** match if traversable contains (x matches .*+t+.*) */
   def containMatch[T](t: =>String) = containPattern[T](t.regexPart)
   /** match if traversable contains (x matches p) */

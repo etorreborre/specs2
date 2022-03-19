@@ -2,7 +2,6 @@ package org.specs2
 package specification
 package create
 
-import control.ImplicitParameters.ImplicitParam
 import core._
 import form._
 import HasForm._
@@ -15,14 +14,14 @@ import control.Exceptions._
  */
 trait FormFragmentFactory {
   def FormFragment(form: =>Form): Fragment
-  def FormFragment[T : HasForm](aForm: =>T)(implicit p: ImplicitParam): Fragment
+  def FormFragment[T : HasForm](aForm: =>T): Fragment
 }
 
 /**
  * Default implementation for the FormFragment Factory
  */
 trait DefaultFormFragmentFactory extends FormFragmentFactory {
-  def FormFragment[T : HasForm](aForm: =>T)(implicit p: ImplicitParam): Fragment = addForm(aForm.form)
+  def FormFragment[T : HasForm](aForm: =>T): Fragment = addForm(aForm.form)
 
   def FormFragment(aForm: =>Form): Fragment = addForm(aForm)
 

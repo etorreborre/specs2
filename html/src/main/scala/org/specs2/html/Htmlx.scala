@@ -128,7 +128,7 @@ trait Htmlx { outer =>
 
   /** @return a rewrite rule that will rewrite recursively each node based on a partial function */
   def rewriteRule(pf: PartialFunction[Node, Seq[Node]]) =
-    HtmlRewriteRule(pf)
+    new HtmlRewriteRule(pf)
 
   class HtmlRewriteRule(pf: PartialFunction[Node, Seq[Node]]) extends RewriteRule {
     def applyTransformation(ns: Seq[Node]): Seq[Node] =

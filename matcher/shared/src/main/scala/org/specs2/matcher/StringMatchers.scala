@@ -42,7 +42,7 @@ trait StringBaseMatchers { outer =>
   /** matches if a.toLowerCase.trim != b.toLowerCase.trim */
   def !=/(s: String) = be_!=/(s)
   /** matches if (b contains a) */
-  def contain(t: String) = new Matcher[String] {
+  def contain(t: String): Matcher[String] = new Matcher[String] {
     def apply[S <: String](b: Expectable[S]) = {
       val a = t
       result(a != null && b.value != null && b.value.contains(a),

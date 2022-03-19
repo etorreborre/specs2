@@ -15,6 +15,8 @@ import Results.negateWhen
  */
 trait JsonMatchers extends JsonBaseMatchers with JsonBaseBeHaveMatchers
 
+object JsonMatchers extends JsonMatchers
+
 private[specs2]
 trait JsonBaseMatchers extends Expectations with JsonMatchersImplicits { outer =>
 
@@ -347,8 +349,8 @@ trait JsonSelectors {
     def name = selector.name
   }
 
-  val anyValue: Matcher[Any] =
-    new NeutralMatcher[Any]
+  def anyValue: Matcher[String] =
+    new NeutralMatcher[String]
 
 }
 
@@ -365,14 +367,12 @@ trait JsonMatchersImplicits extends JsonMatchersLowImplicits { this: JsonBaseMat
   implicit def regexToJsonSelector: ToJsonSelector[Regex] = new ToJsonSelector[Regex] {
     def toJsonSelector(r: Regex): JsonSelector = r
   }
-  implicit def matcherToJsonSelector[M <: Matcher[String]]: ToJsonSelector[M] = new ToJsonSelector[M] {
-    def toJsonSelector(m: M): JsonSelector = m
-  }
-  implicit def stringMatcherToJsonSelector: ToJsonSelector[Matcher[String]] = new ToJsonSelector[Matcher[String]] {
-    def toJsonSelector(m: Matcher[String]): JsonSelector = m
-  }
   object ToJsonSelector {
     def apply[T : ToJsonSelector](t: T) = implicitly[ToJsonSelector[T]].toJsonSelector(t)
+  }
+
+  implicit def matcherToJsonSelector[M <: Matcher[String]]: ToJsonSelector[M] = new ToJsonSelector[M] {
+    def toJsonSelector(m: M): JsonSelector = m
   }
 
   implicit def toJsonSelectorPair[K : ToJsonSelector, V : ToJsonSelector](kv: (K, V)): JsonPairSelector =

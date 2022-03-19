@@ -1,6 +1,7 @@
 package org.specs2
 package matcher
-import json._
+// import json._
+
 class JsonMatchersSpec extends Specification with JsonMatchers { def is = s2"""
 
  The / matcher matches a name and a value if the input is a Map
@@ -13,11 +14,8 @@ class JsonMatchersSpec extends Specification with JsonMatchers { def is = s2"""
  ${ "{'name' : 5.0}"   must /("name" -> 5) }
  ${ "{'name' : 5}"     must /("name" -> 5) }
  ${ "{'name' : 'Joe'}" must not /("name2" -> "Joe") }
- ${ ("['name', 'Joe']" must /("name" -> "initial")) returns "the array\n[name, Joe]\ndoesn't contain " +
-  "the pair 'name':value 'initial'" }
- ${ "{'name' : 'Joe'}" must /("n.*".r -> "j.*".r) returns "the object\n{name:Joe}\ndoesn't contain the pair 'n" +
-  ".*':regex 'j" +
-  ".*'" }
+ ${ ("['name', 'Joe']" must /("name" -> "initial")) returns "the array\n[name, Joe]\ndoesn't contain " + "the pair 'name':value 'initial'" }
+ ${ "{'name' : 'Joe'}" must /("n.*".r -> "j.*".r) returns "the object\n{name:Joe}\ndoesn't contain the pair 'n" + ".*':regex 'j" + ".*'" }
  ${ ("garbage" must /("name" -> "Joe")) returns "Could not parse\ngarbage" }
  with regexes as well
  ${ "{'name' : 'Joe'}" must /("n.*".r -> "J.*".r) }
@@ -26,8 +24,7 @@ class JsonMatchersSpec extends Specification with JsonMatchers { def is = s2"""
  ${ "['name', 'Joe' ]" must /("name") }
  ${ "[1.0, 2.0]" must /(1.0) }
  ${ "{'name' : 'Joe'}" must not /("name") }
- ${ ("{'name' : 'Joe'}" must /("name")) returns "the object\n{name:Joe}\ndoesn't contain the value 'name'" +
-        "\nThis selector can only be used with an array. Use /(k -> anyValue) if you just want to find the key 'k'" }
+ ${ ("{'name' : 'Joe'}" must /("name")) returns "the object\n{name:Joe}\ndoesn't contain the value 'name'" + "\nThis selector can only be used with an array. Use /(k -> anyValue) if you just want to find the key 'k'" }
  ${ ("garbage" must /("name")) returns "Could not parse\ngarbage" }
  with regexes as well
  ${ "['name', 'Joe']" must /("J.*".r) }
@@ -36,10 +33,8 @@ class JsonMatchersSpec extends Specification with JsonMatchers { def is = s2"""
  The / matcher can be chained with another /
  ${ "{'person' : {'name': 'Joe'}}" must /("person") /("name" -> "Joe") }
  ${ "{'person' : ['name']}" must /("person") /("name") }
- ${ "{'person' : { 'name': 'Joe', 'address' : {'street': 'here' }}}" must
-  /("person") /("address") /("street" -> "here") }
- ${ "{'person' : {'name': 'Joe', 'address': ['street']}}" must
-  /("person") /("address") /("street") }
+ ${ "{'person' : { 'name': 'Joe', 'address' : {'street': 'here' }}}" must /("person") /("address") /("street" -> "here") }
+ ${ "{'person' : {'name': 'Joe', 'address': ['street']}}" must /("person") /("address") /("street") }
 
  The */ matcher matches a name and a value inside any Map
  ${ "{'name' : 'Joe' }" must */("name" -> "Joe") }
@@ -47,8 +42,7 @@ class JsonMatchersSpec extends Specification with JsonMatchers { def is = s2"""
  ${ "{'person' : {'name': 'Joe'}}" must */("person" -> ".*".r) }
  ${ "{'person' : {'name': 'Joe'}}" must */("name" -> ".*".r) }
  ${ ("{'person' : ['name', 'Joe']}" must not */("name" -> "Joe")) }
- ${ ("{'person' : ['name', 'Joe']}" must */("name" -> "Joe")) returns
-  s"""the object\n{person:["name", "Joe"]}\ndoesn't contain the pair 'name':value 'Joe'""" }
+ ${ ("{'person' : ['name', 'Joe']}" must */("name" -> "Joe")) returns s"""the object\n{person:["name", "Joe"]}\ndoesn't contain the pair 'name':value 'Joe'""" }
  ${ ("garbage" must */("name" -> "Joe")) returns "Could not parse\ngarbage" }
 
  The */ matcher can be chained with /

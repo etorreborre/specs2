@@ -19,7 +19,7 @@ trait FormsBuilder {
   /** anything can be added on a Form row as a TextCell */
   implicit def anyIsFieldCell(t: =>Any): FieldCell = fieldIsTextCell(Field(t))
   /** any seq of object convertible to cells */
-  implicit def anyCellableSeq[T : ToCell](seq: Seq[T]): Seq[Cell] = seq.map(s => implicitly[ToCell[T]].apply(s))
+  implicit def anyCellableSeq[T : ToCell](seq: Seq[T]): Seq[Cell] = seq.map(t => ToCell[T](t))
   /** any xml can be injected as a cell */
   implicit def xmlIsACell[T](xml: =>NodeSeq): XmlCell = new XmlCell(xml)
   /** a Field can be added on a Form row as a FieldCell */
@@ -38,6 +38,10 @@ trait FormsBuilder {
   }
 
   object ToCell {
+
+    def apply[T : ToCell](t: => T): Cell =
+      implicitly[ToCell[T]].toCell(t)
+
     implicit def toCellField[T]: ToCell[Field[T]] = new ToCell[Field[T]] {
       def toCell(t: =>Field[T]): Cell =
         fieldIsTextCell(t)
