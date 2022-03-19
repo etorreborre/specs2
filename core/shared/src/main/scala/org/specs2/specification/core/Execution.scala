@@ -159,7 +159,7 @@ case class Execution(run:            Option[Env => Future[() => Result]] = None,
               Future.successful((Skipped(e.getMessage), timer.stop))
 
             case NonFatal(e) =>
-              // Future execution could still throw FailureExceptions or TimeoutExceptions
+              // Future execution could still throw FailureExceptions
               // which can only be recovered here
               Future.successful((ResultExecution.handleExceptionsPurely(e), timer.stop))
           }

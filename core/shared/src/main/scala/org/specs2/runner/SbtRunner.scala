@@ -15,6 +15,7 @@ import Actions._
 import org.specs2.reflect._
 import org.specs2.control.eff.ErrorEffect._
 import org.specs2.concurrent.ExecutionEnv
+import org.specs2.concurrent.awaitResult
 import org.specs2.control.ExecuteActions._
 import org.specs2.data.NamedTag
 
@@ -159,7 +160,7 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
   }
 
   def execute(handler: EventHandler, loggers: Array[Logger]): Array[Task] = {
-    Await.result(executeFuture(handler, loggers), Duration.Inf)
+    awaitResult(executeFuture(handler, loggers), Duration.Inf)
     Array()
   }
 
@@ -200,24 +201,18 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
   /** accepted printers */
   private def createPrinters(taskDef: TaskDef, handler: EventHandler, loggers: Array[Logger], args: Arguments): Operation[List[Printer]] =
     List(
-      createSbtPrinter(handler, loggers, sbtEvents(taskDef, handler)),
+      createSbtPrinter(loggers, sbtEvents(taskDef, handler)),
       createJUnitXmlPrinter(args, loader),
       createHtmlPrinter(args, loader),
       createMarkdownPrinter(args, loader),
       createPrinter(args, loader),
       createNotifierPrinter(args, loader)).map(_.map(_.toList)).sequence.map(_.flatten)
 
-  private def createSbtPrinter(h: EventHandler, ls: Array[Logger], e: SbtEvents) = {
-    if (!printerNames.map(_.name).exists(arguments.isSet) || arguments.isSet(CONSOLE.name))
-      Operations.ok(Some {
-        new SbtPrinter {
-          lazy val handler = h
-          lazy val loggers = ls
-          lazy val events = e
-        }
-      })
-    else noInstance("no console printer defined", arguments.verbose)
-  }
+  private def createSbtPrinter(ls: Array[Logger], e: SbtEvents) =
+    Operations.ok(Some {
+      SbtPrinter.makeSbtPrinter(ls, e,
+        _eventsOnly = printerNames.map(_.name).exists(arguments.isSet) && !arguments.isSet(CONSOLE.name))
+    })
 
   private def sbtEvents(t: TaskDef, h: EventHandler) = new SbtEvents {
     lazy val taskDef = t

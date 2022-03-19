@@ -47,7 +47,10 @@ object depends {
     Seq(libraryDependencies += "org.scala-js" %%% "scala-js-macrotask-executor" % "1.0.0")
 
   def nativeTest =
-    Seq(libraryDependencies += "org.scala-native" %%% "test-interface" % nativeVersion)
+    Seq(libraryDependencies ++= Seq(
+    "org.scala-native" %%% "test-interface" % nativeVersion,
+    "org.portable-scala" %%% "portable-scala-reflect" % "1.1.1"
+    ))
 
   // used in specs2-matcher-extra
   def scalaParser = libraryDependencies += "org.scala-lang.modules" %%% "scala-parser-combinators" % "2.1.0"

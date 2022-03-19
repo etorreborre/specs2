@@ -32,7 +32,7 @@ trait ClassRunner {
     val arguments = Arguments(args.drop(1): _*)
     arguments.reportUnknown()
 
-    val env = Env(arguments = arguments, lineLogger = consoleLogger)
+    val env = EnvDefault.create(arguments, consoleLogger)
 
     val actions: Action[Stats] = args.toList match {
       case Nil =>

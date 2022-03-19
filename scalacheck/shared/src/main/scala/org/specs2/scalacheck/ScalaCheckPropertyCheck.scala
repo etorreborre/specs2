@@ -25,33 +25,35 @@ trait ScalaCheckPropertyCheck extends ExpectationsCreation {
    * parameters
    */
   def check(prop: Prop, parameters: Parameters, prettyFreqMap: FreqMap[Set[Any]] => Pretty): Result = {
-    // this should not happen but the impossible is known to happen
+    /** SEED CAPTURE We capture the first seed used to run the property in order to be able to display it. This seed is
+      * either the first random seed used by ScalaCheck, which we capture with a mutable variable, or the seed set by
+      * the user
+      */
     var capturedSeed: Seed = null
 
-    lazy val initialSeed = Option(capturedSeed).orElse(parameters.seed).getOrElse(
-      throw new Exception("A seed could not be captured for a ScalaCheck property and no seed was set on the prop or " +
-        "set on the command line. Please report this issue to http://github.com/etorreborre/specs2/issues"))
+    lazy val initialSeed = Option(capturedSeed)
+      .orElse(parameters.seed)
+      .getOrElse(
+        throw new Exception(
+          "A seed could not be captured for a ScalaCheck property and no seed was set on the prop or " +
+            "set on the command line. Please report this issue to http://github.com/etorreborre/specs2/issues"
+        )
+      )
 
-    val prop1 = parameters.seed match {
-      case None =>
-        Prop { prms0 =>
-          val (prms, seed) = prms0.initialSeed match {
-            case Some(sd) =>
-              (prms0, sd)
-            case None =>
-              val sd = Seed.random()
-              (prms0.withInitialSeed(sd), sd)
-          }
-          val res = prop(prms)
-          capturedSeed = seed
-          res
+    // make a new property which will capture the first seed used by the property
+    def propWithCapturedSeed = Prop { prms0 =>
+      val (prms, seed) = prms0.initialSeed match {
+        case Some(sd) => (prms0, sd)
+        case _ => {
+          val sd = Seed.random()
+          (prms0.withInitialSeed(sd), sd)
         }
-
-      case Some(s) =>
-        prop.useSeed("specs2", s)
+      }
+      capturedSeed = seed
+      prop(prms)
     }
 
-    val result = Test.check(parameters.testParameters, prop1)
+    val result = Test.check(parameters.testParameters, propWithCapturedSeed)
 
     val prettyTestResult = prettyResult(result, parameters, initialSeed, prettyFreqMap)(parameters.prettyParams)
     val testResult = if (parameters.prettyParams.verbosity == 0) "" else prettyTestResult

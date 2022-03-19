@@ -35,7 +35,8 @@ case class Parameters(minTestsOk: Int                 = Test.Parameters.default.
       withMinSize(outer.minSize).
       withWorkers(outer.workers).
       withTestCallback(outer.testCallback).
-      withCustomClassLoader(outer.loader)
+      withCustomClassLoader(outer.loader).
+      withInitialSeed(outer.seed)
   }
 
   def overrideWith(commandLine: CommandLine): Parameters = {

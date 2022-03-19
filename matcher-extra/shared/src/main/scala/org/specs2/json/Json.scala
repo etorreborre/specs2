@@ -13,9 +13,15 @@ trait Json {
    */
   def parse(s: String): Option[JSONType] = {
     val parser = new JsonParser {}
-    
+
     // give the parser a chance to parse singly-quoted json
-    parser.parseRaw(s).orElse(if (s.contains("'")) parser.parseRaw(s.replace("'", "\"")) else None)
+    parser.parseRaw(s) match {
+      case Some(r) =>
+        Some(r)
+      case None =>
+        if (s.contains("'")) parser.parseRaw(s.replace("'", "\""))
+        else None
+    }
   }
 
   trait JsonParser extends Parser {
@@ -27,9 +33,8 @@ trait Json {
   }
 
   /** show JSON objects with null values shown as 'null' */
-
   def showJson(a: Any): String = a match {
-    case map: Map[?, ?]  => map.map { case (key, value) => s""""$key":${showJsonValue(value)}"""}.mkString("{", ",", "}")
+    case map: Map[?, ?]  => map.map { case (key, value) => s""""${quoteDoubleQuote(key.toString)}":${showJsonValue(value)}"""}.mkString("{", ",", "}")
     case (key, value)    => s"""{"$key":${showJsonValue(value)}}"""
     case JSONObject(map) => showJson(map)
     case JSONArray(list) => list.map(showJsonValue).mkString("[", ",", "]")
@@ -46,12 +51,14 @@ trait Json {
    */
   def showJsonValue(a: Any): String = a match {
     case null            => "null"
-    case s: String       => "\""+s+"\""
+    case s: String       => "\""+quoteDoubleQuote(s)+"\""
     case d: Double       => d.toString
     case b: Boolean      => b.toString
     case other           => showJson(other)
   }
 
+  def quoteDoubleQuote(s: String): String =
+    s.replace("\"", "\\\"")
 }
 private[specs2]
 object Json extends Json
