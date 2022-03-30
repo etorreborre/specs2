@@ -343,6 +343,7 @@ lazy val releaseSettings: Seq[Setting[_]] = Seq(
     )
   ),
   ThisBuild / git.useGitDescribe := true,
+  ThisBuild / dynverTagPrefix := SPECS2,
   ThisBuild / git.gitTagToVersionNumber := { tag: String =>
     if (tag matches SPECS2 + ".*") Some(tag.replace(SPECS2, "")) else None
   },
