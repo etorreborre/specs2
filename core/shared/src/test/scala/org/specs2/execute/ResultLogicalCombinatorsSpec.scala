@@ -41,11 +41,13 @@ class ResultLogicalCombinatorsSpec extends Spec with ResultMatchers with TypedEq
 
  A result can be evaluated only when a condition is true
  ${failure.when(false) must beSuccessful}
- ${ var r = success; { r = failure1; r }.when(false); r must beSuccessful }
+ ${var r = success; { r = failure1; r }.when(false); r must beSuccessful
+    }
 
  A result can be evaluated only when a condition is false
  ${failure.unless(true) must beSuccessful}
- ${ var r = success; { r = failure1; r }.unless(true); r must beSuccessful }
+ ${var r = success; { r = failure1; r }.unless(true); r must beSuccessful
+    }
 
 """
 
