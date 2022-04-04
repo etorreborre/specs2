@@ -19,7 +19,7 @@ object depends {
   val scalaParser = libraryDependencies += "org.scala-lang.modules" %%% "scala-parser-combinators" % "2.1.1"
 
   // used in specs2-xml, and transitively by specs2-junit, specs2-matcher-extra, specs2-markdown
-  val scalaXml = libraryDependencies += "org.scala-lang.modules" %%% "scala-xml" % "2.0.1"
+  val scalaXml = libraryDependencies += "org.scala-lang.modules" %%% "scala-xml" % "2.1.0"
 
   // used in specs2-junit
   val junitVintage = "org.junit.vintage" % "junit-vintage-engine" % "5.8.2"
