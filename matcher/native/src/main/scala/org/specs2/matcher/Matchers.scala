@@ -1,8 +1,6 @@
 package org.specs2
 package matcher
 
-import control.LanguageFeatures
-
 /**
  * Trait aggregating the most common specs2 matchers
  */
@@ -19,7 +17,6 @@ trait Matchers extends AnyMatchers
                   with EventuallyMatchers
                   with MatchersImplicits
                   with ValueChecks
-                  with LanguageFeatures
 
 trait Matchers1 extends
        AnyBaseMatchers

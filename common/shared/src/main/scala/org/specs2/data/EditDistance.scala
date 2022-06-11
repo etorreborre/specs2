@@ -20,7 +20,7 @@ trait EditDistance {
     private lazy val matrix = createDistanceMatrix(s1, s2)
 
     private def createDistanceMatrix(s1: IndexedSeq[T], s2: IndexedSeq[T]): DistanceMatrix = {
-      val matrix = Array.ofDim[EditDistanceOp](s1.length + 1, s2.length + 1)
+      val matrix = Array.tabulate(s1.length + 1)(_ => new Array[EditDistanceOp](s2.length + 1))
 
       for (i <- 0 to s1.length;
            j <- 0 to s2.length) {

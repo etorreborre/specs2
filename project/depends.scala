@@ -49,11 +49,11 @@ object depends {
   def nativeTest =
     Seq(libraryDependencies ++= Seq(
     "org.scala-native" %%% "test-interface" % nativeVersion,
-    "org.portable-scala" %%% "portable-scala-reflect" % "1.1.1"
+    ("org.portable-scala" %%% "portable-scala-reflect" % "1.1.1").cross(CrossVersion.for3Use2_13)
     ))
 
   // used in specs2-matcher-extra
-  def scalaParser = libraryDependencies += "org.scala-lang.modules" %%% "scala-parser-combinators" % "2.1.0"
+  def scalaParser = libraryDependencies += "org.scala-lang.modules" %%% "scala-parser-combinators" % "2.1.1"
 
   def scalaXml = "org.scala-lang.modules" %% "scala-xml" % "2.0.1"
 
@@ -65,7 +65,7 @@ object depends {
   lazy val tagsoup = "org.ccil.cowan.tagsoup" % "tagsoup" % "1.2.1"
 
   lazy val scalacheck = Def.setting {
-    "org.scalacheck" %%% "scalacheck" % "1.15.4"
+    "org.scalacheck" %%% "scalacheck" % "1.16.0"
   }
 
   lazy val resolvers =
