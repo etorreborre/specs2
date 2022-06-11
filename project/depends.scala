@@ -46,7 +46,7 @@ object depends {
   def jvmTest =
     Seq(
       libraryDependencies ++= Seq(
-        ("org.portable-scala" %%% "portable-scala-reflect" % "1.1.1").cross(CrossVersion.for3Use2_13),
+        ("org.portable-scala" %%% "portable-scala-reflect" % "1.1.2").cross(CrossVersion.for3Use2_13),
         "org.scala-sbt" % "test-interface" % "1.0"
       )
     )
@@ -58,7 +58,7 @@ object depends {
     Seq(
       libraryDependencies ++=
         Seq(
-          ("org.portable-scala" %%% "portable-scala-reflect" % "1.1.1").cross(CrossVersion.for3Use2_13),
+          ("org.portable-scala" %%% "portable-scala-reflect" % "1.1.2").cross(CrossVersion.for3Use2_13),
           ("org.scala-js" %% "scalajs-test-interface" % scalaJSVersion).cross(CrossVersion.for3Use2_13)
         )
     )
