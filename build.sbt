@@ -23,8 +23,8 @@ lazy val specs2 = project.in(file(".")).
     fpJVM, catsJVM, commonJVM, matcherJVM, coreJVM, matcherExtraJVM, scalazJVM, html,
     formJVM, markdownJVM, junitJVM, scalacheckJVM, xmlJVM,
     tests, fpJS, catsJS, commonJS, matcherJS, coreJS, matcherExtraJS, scalazJS,
-    junitJS, scalacheckJS, fpNative, commonNative, matcherNative, coreNative, matcherExtraNative, scalazNative,
-    junitNative, scalacheckNative
+    junitJS, scalacheckJS, xmlJS, fpNative, commonNative, matcherNative, coreNative, matcherExtraNative, scalazNative,
+    junitNative, scalacheckNative, xmlNative
   )
 
 /** COMMON SETTINGS */
@@ -169,8 +169,8 @@ lazy val html = project.in(file("html")).
 lazy val junit = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("junit")).
   settings(
     libraryDependencies ++= Seq(
-      depends.junit,
-      depends.scalaXml),
+      depends.junit),
+    depends.scalaXml,
     commonSettings,
     name := "specs2-junit").
   jvmSettings(depends.jvmTest, commonJvmSettings).
@@ -185,8 +185,8 @@ lazy val markdown = crossProject(JSPlatform, JVMPlatform).
   in(file("markdown")).
   settings(
     libraryDependencies ++= Seq(
-      depends.pegdown,
-      depends.scalaXml),
+      depends.pegdown),
+    depends.scalaXml,
     commonSettings,
     name := "specs2-markdown").
   jvmSettings(depends.jvmTest, commonJvmSettings).
@@ -275,7 +275,7 @@ lazy val tests = Project(id = "tests", base = file("tests")).
 
 lazy val xml = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("xml")).
   settings(
-    libraryDependencies += depends.scalaXml,
+    depends.scalaXml,
     commonSettings,
     name := "xml"
   ).
@@ -284,6 +284,8 @@ lazy val xml = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("xm
   dependsOn(core)
 
 lazy val xmlJVM = xml.jvm
+lazy val xmlJS = xml.js
+lazy val xmlNative = xml.native
 
 lazy val specs2ShellPrompt = ThisBuild / shellPrompt := { state =>
   val name = Project.extract(state).currentRef.project
