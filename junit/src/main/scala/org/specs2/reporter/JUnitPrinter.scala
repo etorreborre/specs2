@@ -31,7 +31,7 @@ case class JUnitPrinter(env: Env, notifier: RunNotifier) extends Printer:
     val description = descriptionsTree.description
 
     val shouldNotify = !excludeFromReporting
-    bracket[Fragment, RunNotifier](open = Action.protect {
+    bracket[Fragment, RunNotifier](init = Action.protect {
       if shouldNotify then notifier.fireTestRunStarted(description); notifier
     })(
       step = (notifier: RunNotifier, fragment: Fragment) =>

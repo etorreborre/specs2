@@ -332,12 +332,12 @@ trait Folds:
       def fold = (s: S, a: A) => monad.point(s)
       def end(s: S) = monad.point(s)
 
-  def bracket[A, C](open: Action[C])(step: (C, A) => Action[C])(close: C => Finalizer): Fold[Action, A, Unit] =
+  def bracket[A, C](init: Action[C])(step: (C, A) => Action[C])(close: C => Finalizer): Fold[Action, A, Unit] =
     new Fold[Action, A, Unit]:
       type S = C
       val monad: Monad[Action] = Action.ActionMonad
 
-      def start = open
+      def start: Action[C] = init
       def fold = (s: S, a: A) => step(s, a).addLast(close(s))
       def end(s: S) = monad.point(close(s).run())
 
