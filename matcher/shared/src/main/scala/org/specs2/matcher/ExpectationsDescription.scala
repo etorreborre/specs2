@@ -46,7 +46,8 @@ trait ExpectationsDescription extends ExpectationsCreation:
   extension [T](value: =>T)(using not: NotGiven[NoValueDescription], show: T => String)
     /** @return an expectable with a function to show the element T */
     infix def showAs: Expectable[T] =
-      value.showAs(using not, show)
+      lazy val v = value
+      Expectable(actual = () => v, checker = Checker.pass, showValue = Some(_ => show(v)))
 
 object ExpectationsDescription extends ExpectationsDescription
 

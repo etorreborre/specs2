@@ -31,13 +31,13 @@ trait Htmlx:
 
   extension (ns: Seq[Node])(using nothing: Int = 0)
     def updateHead(f: PartialFunction[Node, Node]): NodeSeq =
-      outer.updateHead(ns)(f)
+      outer.updateHeadNode(ns)(f)
 
     def updateHeadAttribute(name: String, value: String): NodeSeq =
       outer.updateHeadAttribute(ns, name, value)
 
   /** @return a NodeSeq where the first Node is updated with a partial function */
-  def updateHead(ns: NodeSeq)(f: PartialFunction[Node, Node]): NodeSeq =
+  def updateHeadNode(ns: NodeSeq)(f: PartialFunction[Node, Node]): NodeSeq =
     (ns.toList match {
       case (e: Node) :: rest if f.isDefinedAt(e) => f(e) :: rest
       case other                                 => other
@@ -45,7 +45,7 @@ trait Htmlx:
 
   /** @return a NodeSeq where the first Node attribute named 'named' has a new value */
   def updateHeadAttribute(ns: NodeSeq, name: String, value: String): NodeSeq =
-    updateHead(ns) { case (e: Elem) => e % (name -> value) }
+    updateHeadNode(ns) { case (e: Elem) => e % (name -> value) }
 
   /** @return a NodeSeq where the first Node attribute named 'named' has a new value, from an Int */
   def updateHeadAttribute(ns: NodeSeq, name: String, value: Int): NodeSeq =

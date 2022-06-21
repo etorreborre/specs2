@@ -45,5 +45,5 @@ It provides utility functions for stacktrace elements
     e.filterNot("org.specs2.control").getStackTrace.toList.map(_.toString) must not(containMatch("org.specs2.control"))
 
   def stack1 = e(0).toString must beMatching(".*org.specs2.control.ThrowableExamples\\$.e.*")
-  def stack2 = e.headOption.map(_.toString).toIterable must containMatch("ThrowableExamples")
+  def stack2 = e.headOption.map(_.toString).toList must containMatch("ThrowableExamples")
 }
