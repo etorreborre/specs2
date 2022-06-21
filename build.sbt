@@ -61,6 +61,7 @@ lazy val rootSettings =
       Compile / doc / sources := sources.all(aggregateCompile).value.flatten,
       packagedArtifacts := Map.empty,
       test := {},
+      mimaPreviousArtifacts := Set(),
       mimaFailOnNoPrevious := false
     )
 
@@ -72,8 +73,9 @@ lazy val commonSettings =
 
 lazy val mimaSettings =
   Seq(
-    mimaPreviousArtifacts := Set(organization.value %% moduleName.value % "5.0.0-RC-23"),
-    mimaFailOnNoPrevious := false
+    mimaPreviousArtifacts := Set(organization.value %% moduleName.value % "5.0.0"),
+    mimaFailOnNoPrevious := false,
+    mimaBinaryIssueFilters := Mima.excluded
   )
 
 lazy val commonJvmSettings =

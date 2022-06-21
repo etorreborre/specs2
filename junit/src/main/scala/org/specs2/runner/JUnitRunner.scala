@@ -28,7 +28,7 @@ class JUnitRunner(klass: Class[?]) extends org.junit.runner.Runner with Filterab
   lazy val env: Env =
     EnvDefault.create(arguments)
 
-  lazy val getDescription: org.junit.runner.Description =
+  def getDescription(): org.junit.runner.Description =
     getDescription(env)
 
   def getDescription(env: Env): org.junit.runner.Description =
