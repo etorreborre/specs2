@@ -145,7 +145,8 @@ case class Execution(
             // we catch timeout exceptions here when they are caused by the timeout argument
             // and the skip the corresponding example
             case e: TimeoutException =>
-              Future.successful((Skipped(e.getMessage), timer.stop))
+              val message = if e.getMessage == null then "timeout exception" else e.getMessage
+              Future.successful((Skipped(message), timer.stop))
 
             case NonFatal(e) =>
               // Future execution could still throw FailureExceptions or TimeoutExceptions
@@ -203,7 +204,7 @@ case class Execution(
         r match
           case Error(m, t) => Error(m, FatalExecution(t))
           case other       => other
-      catch case t: Throwable => Error(t.getMessage, FatalExecution(t))
+      catch case t: Throwable => Error(t.getMessage.notNull, FatalExecution(t))
     }
 
   /** run this execution after the previous executions are finished */
