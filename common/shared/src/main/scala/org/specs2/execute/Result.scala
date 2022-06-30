@@ -28,6 +28,7 @@ import text.NotNullStrings._
  *
  */
 sealed abstract class Result(val message: String = "", val expected: String = "", val expectationsNb: Int = 1) {
+
   type SelfType <: Result
   /**
    * @return the colored textual status of the result
