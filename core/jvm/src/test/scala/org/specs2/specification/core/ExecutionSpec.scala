@@ -19,6 +19,9 @@ class ExecutionSpec(val env: Env) extends Specification with OwnEnv { def is = s
  An execution can be created from a result throwing a fatal exception
    it will then throw an ExecutionException exception $withFatalException
 
+ An execution can be created from a result throwing a timeout exception
+   it will then throw an ExecutionException exception $withTimeoutException
+
 """
 
   def linkExecution = {
@@ -42,6 +45,14 @@ class ExecutionSpec(val env: Env) extends Specification with OwnEnv { def is = s
 
   def withFatalException = {
     Execution.withEnv(_ => {throw new java.lang.NoSuchMethodError("boom"); success}).result(env) must beError(".*NoSuchMethodError.*")
+  }
+
+  def withTimeoutException = {
+    Execution.withEnvAsync{_ =>
+      val p = Promise[Boolean]()
+      p.tryFailure(new TimeoutException)
+      p.future
+    }.result(env) must beSkipped("timeout exception")
   }
 
   /**
