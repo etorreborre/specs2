@@ -186,9 +186,10 @@ trait BeforeAfterAll extends SpecificationStructure with FragmentsFactory:
   def afterAll(): Unit
 
   override def map(fs: =>Fragments): Fragments =
+    // the end result is beforeAll / AlwaysTag / fs / afterAll / AlwaysTag
     super
       .map(fs)
+      .prepend(fragmentFactory.markAs(AlwaysTag))
       .prepend(fragmentFactory.step(beforeAll()))
-      .append(fragmentFactory.markAs(AlwaysTag))
       .append(fragmentFactory.step(afterAll()))
       .append(fragmentFactory.markAs(AlwaysTag))
