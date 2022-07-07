@@ -46,8 +46,9 @@ case class DefaultReporter(
   def prepare(specs: List[SpecStructure]): Action[Unit] =
     printers.traverse(_.prepare(specs)).void
 
-  def finalize(specs: List[SpecStructure]): Action[Unit] = for _ <- printers.traverse(_.finalize(specs)).void
-  yield ()
+  def finalize(specs: List[SpecStructure]): Action[Unit] =
+    for _ <- printers.traverse(_.finalize(specs)).void
+    yield ()
 
   /** report 1 spec structure with the given printers first find and sort the referenced specifications and report them
     */
