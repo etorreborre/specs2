@@ -1,6 +1,8 @@
 package org.specs2
 package guide
 
+import BuildInfo.*
+
 object Installation extends UserGuidePage {
   def is = s2"""
 
@@ -10,10 +12,10 @@ The recommended way to install $specs2 is via [sbt](http://scala-sbt.org).
 
 First you need to [install sbt itself](https://www.scala-sbt.org/release/docs/Setup.html) then you need to add the specs2 dependency:
 ```
-libraryDependencies += "org.specs2" %% "specs2-core" % "$VERSION" % "test"
+libraryDependencies += "org.specs2" %% "specs2-core" % "${BuildInfo.version}" % "test"
 
 // if you want to use ScalaJS you need to use %%%
-libraryDependencies += "org.specs2" %%% "specs2-core" % "$VERSION" % "test"
+libraryDependencies += "org.specs2" %%% "specs2-core" % "${BuildInfo.version}" % "test"
 
 // ScalaJS also requires the following setting which supports
 // the regular expressions used in many specs2 matchers using strings
