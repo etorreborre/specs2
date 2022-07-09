@@ -18,6 +18,7 @@ import control.*
 import scala.util.control.NonFatal
 import ResultLogicalCombinators.{given, *}
 import Execution.{given, *}
+import control.Exceptions.*
 
 /** Execution of a Fragment
   *
@@ -77,6 +78,17 @@ case class Execution(
         Some(Future.successful((Success(), new SimpleTimer)))
 
   /** methods to set the execution */
+
+  def setContinuation(fs: =>Fragments) =
+    def fragmentsCreationError(e: Throwable): Fragments =
+      Fragments(
+        Fragment(Text("Could not create fragments after the previous successful result"), Execution.result(Error(e)))
+      )
+
+    copy(continuation = Some(FragmentsContinuation { (r: Result) =>
+      if r.isSuccess then Some(tryOr(fs)(fragmentsCreationError))
+      else None
+    }))
 
   def join = copy(mustJoin = true)
 
