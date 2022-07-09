@@ -419,7 +419,9 @@ object Execution:
         case _                    => None
 
   given AsExecution[Execution] with
-    def execute(r: =>Execution): Execution = Execution.withEnvFlatten(_ => r)
+    def execute(r: =>Execution): Execution =
+      try r
+      catch { case e => Execution.executed(Error(e)) }
 
   implicit def asExecutionToExecution[T: AsExecution](t: =>T): Execution =
     AsExecution[T].execute(t)

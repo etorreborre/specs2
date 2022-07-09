@@ -2,14 +2,14 @@ package org.specs2
 package specification
 
 import execute.*
-import core.*
+import core.*, Execution.*
 import matcher.Matcher
 import specification.dsl.Online
 import reporter.TextPrinterSpecification.*
 import control.*
 import producer.*, Producer.*
 
-class OnlineSpecificationSpec extends Specification {
+class OnlineSpecificationSpec extends Specification with Online {
   def is = s2"""
 
  A specification can have examples returning a result and Fragments depending on the result value $e1
@@ -17,16 +17,14 @@ class OnlineSpecificationSpec extends Specification {
 """
   val factory = fragmentFactory; import factory.*
 
+  def online(n: Int): Execution =
+    if n == 0 then NoExecution
+    else success.continueWith(core.Fragments(oneAsync(break) `append` createExample(n - 1).contents))
+
+  def createExample(n: Int): Fragments =
+    "an online example" ! online(n)
+
   def e1 =
-    def continue(n: Int): FragmentsContinuation = FragmentsContinuation { (r: Result) =>
-      if n == 1 then None
-      else Some(core.Fragments(oneAsync(break) `append` createExample(n - 1).contents))
-    }
-
-    def online(n: Int) = Execution(success, continue(n))
-
-    def createExample(n: Int) = core.Fragments(fragmentFactory.example(Text("an online example"), online(n)))
-
     createExample(3) `contains`
       """|[info] + an online example
          |[info] + an online example

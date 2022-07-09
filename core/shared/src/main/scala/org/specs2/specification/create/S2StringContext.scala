@@ -224,7 +224,6 @@ object S2StringContext:
           if lastLine.trim.startsWith("|") then descriptionLines.reverse.map(_.removeFirst("\\|")).mkString("\n")
           else descriptionLines.reverse.mkString("\n")
         else descriptionLines.map(_.dropWhile(_ == ' ')).reverse.mkString("\n")
-
       val example =
         ff.example(Description.text(description.removeStart(lastIndent).trimEndSpace), execution).setLocation(start)
 
