@@ -27,8 +27,6 @@ trait HtmlLink:
   def getName: String = ???
   def getLinkedPage: Page = ???
 
-// 8<----
-
 class WikipediaBddSpec extends Specification with Online:
   def is = s2"""
     All the pages mentioning the term BDD must contain a reference to specs2 $e1
