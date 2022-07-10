@@ -12,7 +12,7 @@ object files:
   def main(args: Array[String]) =
     run(args, exit = true)
 
-  def run(args: Array[String], exit: Boolean): Unit =
+  def run(args: Array[String], exit: Boolean = false): Unit =
     val arguments = Arguments(args.drop(1)*)
     val env = EnvDefault.create(arguments)
 
