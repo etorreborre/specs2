@@ -37,6 +37,8 @@ trait Monad[F[_]] extends Applicative[F]:
 
 object Monad:
 
+  @inline def apply[F[_]](using F: Monad[F]): Monad[F] = F
+
   given idMonad: Monad[Id] with
     def point[A](a: =>A): Id[A] = a
 
