@@ -22,7 +22,7 @@ object depends {
   val scalaXml = libraryDependencies += "org.scala-lang.modules" %%% "scala-xml" % "2.1.0"
 
   // used in specs2-junit
-  val junitVintage = "org.junit.vintage" % "junit-vintage-engine" % "5.8.2"
+  val junitVintage = "org.junit.vintage" % "junit-vintage-engine" % "5.9.0"
   val junit = libraryDependencies ++= Seq(junitVintage, "org.junit.platform" % "junit-platform-engine" % "1.9.0")
   val junitTest = libraryDependencies += junitVintage % Test
 
@@ -52,7 +52,7 @@ object depends {
     )
 
   def jsMacrotaskExecutor =
-    Seq(libraryDependencies += "org.scala-js" %%% "scala-js-macrotask-executor" % "1.0.0")
+    Seq(libraryDependencies += "org.scala-js" %%% "scala-js-macrotask-executor" % "1.1.0")
 
   def jsTest =
     Seq(
