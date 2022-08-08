@@ -8,7 +8,7 @@ object TryMatchers extends UserGuideCard {
   There are several matchers to check `Try` instances:
 
  * `beSuccessfulTry` checks if an element is `Success(_)`
- * `beSuccessfulTry.withValue(exp)` checks if an element is `Success(_)`
+ * `beSuccessfulTry.withValue(exp)` checks if an element is `Success(exp)`
  * `beSuccessfulTry.withValue(matcher)` checks if an element is `Success(a)` where `a` satisfies the matcher
  * `beSuccessfulTry.withValue(function: A => AsResult[B])` checks if an element is `Success(a)` where `function(a)` returns a successful `Result`
     (note that a `Seq[A]` is also a function `Int => A` so if you want to check that a sequence is contained in `Success` you need to use a matcher: `beSuccessfulTry.withValue(===(Seq(1))`)
