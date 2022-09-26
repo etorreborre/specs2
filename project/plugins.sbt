@@ -1,5 +1,5 @@
 val scalaJSVersion =
-Option(System.getenv("SCALAJS_VERSION")).getOrElse("1.7.0")
+Option(System.getenv("SCALAJS_VERSION")).getOrElse("1.7.1")
 val scalaNativeVersion =
 Option(System.getenv("SCALANATIVE_VERSION")).getOrElse("0.4.3")
 
