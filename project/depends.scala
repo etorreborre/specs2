@@ -47,7 +47,7 @@ object depends {
     Seq("org.scala-lang.modules" %%% "scala-parser-combinators" % "2.1.0")
   }
 
-  def scalaXml = "org.scala-lang.modules" %% "scala-xml" % "1.3.0"
+  def scalaXml = "org.scala-lang.modules" %% "scala-xml" % "2.1.0"
 
   lazy val mockito  = "org.mockito"  % "mockito-core"  % "3.11.2"
   lazy val junit    = "junit"        % "junit"         % "4.13.2"
