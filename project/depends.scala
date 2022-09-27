@@ -70,8 +70,7 @@ object depends {
           "org.scalamacros" %% "quasiquotes" % "2.1.0")
 
   lazy val resolvers =
-    Seq(sbt.Keys.resolvers ++= Seq(
-      Resolver.sonatypeRepo("releases")))
+    Seq(sbt.Keys.resolvers ++= Resolver.sonatypeOssRepos("releases"))
 
   def scalaMinorVersionAtLeast(scalaVersion: String, n: Int): Boolean =
     CrossVersion.partialVersion(scalaVersion) match {
