@@ -176,7 +176,7 @@ class BeFalseMatcher extends Matcher[Boolean]:
 
 /** Equality Matcher
   */
-class BeEqualTo(t: =>Any) extends EqualityMatcher(t)
+class BeEqualTo[T](t: =>T) extends EqualityMatcher(t)
 
 /** This matcher always matches any value of type T
   */
