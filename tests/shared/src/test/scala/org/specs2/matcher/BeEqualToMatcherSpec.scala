@@ -6,6 +6,9 @@ import org.specs2.text.AnsiColors.*
 
 class BeEqualToMatcherSpec extends Spec with ResultMatchers with ShouldMatchers {
   def is = s2"""
+  object A {
+    override def equals(that: Any) = that == "a"
+  }
 
   be_== checks the equality of 2 objects
   ${"a" must ===("a")}
@@ -34,8 +37,7 @@ class BeEqualToMatcherSpec extends Spec with ResultMatchers with ShouldMatchers 
   ${"a" must not(be_==("b"))}
   ${"a" must be_!=("b")}
   ${"a" must not(be_!=("a"))}
-  ${object A {override def equals(that: Any) = that == "a"}
-    A must be_==("a")}
+  ${A must be_==("a")}
 
   Array equality uses deep array comparison, with or without typed equality
   ${Array(1, 2) must be_==(Array(1, 2))}
