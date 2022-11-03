@@ -37,7 +37,7 @@ class BeEqualToMatcherSpec extends Spec with ResultMatchers with ShouldMatchers 
 
   Distinguish between typed and non typed equality matchers
   ${A must be_==("a")}
-  ${A must not be_===("a")}
+  Will not compile: {A must not be_===("a")}
 
   Array equality uses deep array comparison, with or without typed equality
   ${Array(1, 2) must be_==(Array(1, 2))}
