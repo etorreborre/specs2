@@ -35,6 +35,10 @@ class BeEqualToMatcherSpec extends Spec with ResultMatchers with ShouldMatchers 
   ${"a" must be_!=("b")}
   ${"a" must not(be_!=("a"))}
 
+  Distinguish between typed and non typed equality matchers
+  ${A must be_==("a")}
+  Will not compile: {A must not be_===("a")}
+
   Array equality uses deep array comparison, with or without typed equality
   ${Array(1, 2) must be_==(Array(1, 2))}
   ${Array(1, 2) must be_==(Array(1, 2))}
@@ -122,3 +126,7 @@ Details
 }
 
 case class Hello() { override def toString = "hello" }
+
+object A {
+  override def equals(that: Any) = that == "a"
+}
