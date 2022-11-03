@@ -5,10 +5,10 @@ import execute.*
 import org.specs2.text.AnsiColors.*
 
 class BeEqualToMatcherSpec extends Spec with ResultMatchers with ShouldMatchers {
-  def is = s2"""
   object A {
     override def equals(that: Any) = that == "a"
   }
+  def is = s2"""
 
   be_== checks the equality of 2 objects
   ${"a" must ===("a")}
