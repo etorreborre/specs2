@@ -127,6 +127,6 @@ Details
 
 case class Hello() { override def toString = "hello" }
 
-  object A {
-    override def equals(that: Any) = that == "a"
-  }
+object A {
+  override def equals(that: Any) = that == "a"
+}
