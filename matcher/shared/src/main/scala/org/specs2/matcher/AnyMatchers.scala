@@ -178,8 +178,7 @@ class BeTrueMatcher extends Matcher[Boolean] {
 /**
  * Equality Matcher
  */
-class BeEqualTo[T](t: =>T) extends EqualityMatcher(t)
-
+class BeEqualTo(t: =>Any) extends EqualityMatcher(t)
 /**
  * This matcher always matches any value of type T
  */
@@ -229,7 +228,7 @@ trait AnyBeHaveMatchers extends BeHaveMatchers { outer: AnyMatchers =>
   class ClassMatcherResult(result: MatchResult[Class[_]]) {
     def assignableFrom = result(outer.beAssignableFrom)
   }
-
+  
   implicit def anyWithEmpty[T <% Any { def isEmpty: Boolean }](result: MatchResult[T]): AnyWithEmptyMatchers[T] =
     new AnyWithEmptyMatchers(result)
 
