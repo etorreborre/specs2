@@ -22,7 +22,7 @@ class BeEqualToMatcherSpec extends Spec with ResultMatchers with ShouldMatchers 
 
   This comparison works because === is implemented with ==
   It wouldn't work if === was implemented with equals()
-  ${ (1:Long) === 1 }
+  ${ (1:Long) === (1:Any) }
 
   Typed equality
   ${ "a" must be_===("a") }
@@ -102,7 +102,7 @@ Details
 """
 
   def r1 = ((null: String) must_== "1") must not(throwAn[Exception])
-  def r11 = (null: String) must be_===("1") must not(throwAn[Exception])
+  def r11 = (null: String) must be_===("1") must not[Any](throwAn[Exception])
 
   def d1 = List(1, 2) must be_===( List("1", "2") ) must beFailing
 

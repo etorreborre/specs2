@@ -62,9 +62,9 @@ class AnyMatchersSpec extends script.Specification with Groups with ResultMatche
   ${ "" must not be null }
 
   beAsNullAs checks if two values are null at the same time
-  ${ (null:String) must beAsNullAs(null) }
-  ${ 1 must not be asNullAs(null) }
-  ${ (null:String) must not be asNullAs(1) }
+  ${ (null:String) must beAsNullAs[Any](null) }
+  ${ 1 must not be asNullAs[Any](null) }
+  ${ (null:Any) must not be asNullAs(1) }
   ${ 1 must be asNullAs(1) }
 
   beOneOf checks if a value is amongst others

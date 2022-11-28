@@ -11,22 +11,22 @@ The ParserMatchers trait provides matchers for Parser and ParseResult instances.
   succeedOn tests if the parser succeeds on the given input
   ${ number("1") must beASuccess }
   ${ number("1") must be aSuccess }
-  ${ number("i") must not be aSuccess }
+  ${ number("i") must not be[Object] aSuccess }
   ${ number must succeedOn("12ab").partially }
   ${ number must succeedOn("12").withResult(12) }
   ${ anyNumber must succeedOn("12").withResult(12) }
   ${ number must succeedOn("12ab").partially.withResult(12) }
-  ${ number must succeedOn("12").withResult(equalTo(12)) }
+  ${ number must succeedOn("12").withResult(===(12)) }
   ${ numbers must succeedOn("12,13").withResult((l: List[Int]) => l must contain(12)) }
   ${ number must not succeedOn("abc") }
-  ${ number must not(succeedOn("abc").withResult(equalTo(13))) }
+  ${ number must not(succeedOn("abc").withResult(===(13))) }
 
   haveSuccessResult tests if the parser returns a given result when succeeding
   ${ number("1") must haveSuccessResult("1") }
-  ${ number("1") must haveSuccessResult(equalTo(1)) }
-  ${ number("1") must not haveSuccessResult(equalTo(2)) }
+  ${ number("1") must haveSuccessResult(===(1)) }
+  ${ number("1") must not haveSuccessResult(===(2)) }
   ${ number("x") must haveSuccessResult("1") }
-  ${ number("x") must haveSuccessResult(equalTo(1)) }
+  ${ number("x") must haveSuccessResult(===(1)) }
 
   failOn tests if the parser fails on the given input
   ${ number must failOn("abc").withMsg(matching(".*")) }
@@ -36,7 +36,7 @@ The ParserMatchers trait provides matchers for Parser and ParseResult instances.
   ${ (number must failOn("12a ")) returns
     "'[1.3] parsed: 12' is a Success and the input was not completely parsed. 2 characters remaining: 'a '" }
   ${ number("i") must beAFailure }
-  ${ number("1") must not be aFailure }
+  ${ number("1") must not be[Object] aFailure }
   ${ number("i") must be aFailure }
   ${ number("i2") must be aFailure }
   ${ number("1i") must beAPartialSuccess }

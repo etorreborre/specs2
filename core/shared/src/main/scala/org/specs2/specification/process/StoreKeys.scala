@@ -6,7 +6,11 @@ import execute.Result
 import org.specs2.io.Key
 import time.SimpleTimer
 import org.specs2.fp.syntax._
+import scala.annotation._
 
+// nowarn on incomplete pattern matches
+// this is fixed in specs2 5.x
+@nowarn
 object StoreKeys {
   def resolve[A](key: Key[A]): String =
     (key match {
@@ -37,9 +41,7 @@ object StoreKeys {
 
       case SpecificationResultKey(_, _) =>
         statsFromString(data).map(_.result)
-
     }
-
 
   private def statsToString(s: Stats) = {
     import s._

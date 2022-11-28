@@ -42,7 +42,7 @@ case class TextTable(header: Seq[String], lines: Seq[Seq[String]], separator: St
    * @return a line where each cell is right-padded with the maximum size of the corresponding column
    */
   private def formatLineWithMaxSize(line: Seq[String], maximums: Seq[Int]): String =
-    line.zip(maximums).map { case (cell, max) => cell.padTo(max, " ").mkString }.mkString(" "+separator+" ")
+    line.zip(maximums).map { case (cell, max) => cell.padTo(max, ' ').mkString }.mkString(" "+separator+" ")
 
   /** @return the seq of maximum size of each column */
   private def maximumsByColumn(lines: Seq[Seq[String]]): Seq[Int] =

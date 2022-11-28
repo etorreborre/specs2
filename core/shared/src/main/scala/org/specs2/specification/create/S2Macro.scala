@@ -19,7 +19,7 @@ object S2Macro {
     val Yrangepos = macroPos.isRange
 
     def traceLocation(pos: c.universe.Position): String =
-      Seq(pos.source.path, pos.source.file.name, pos.line).mkString("|")
+      Seq[Any](pos.source.path, pos.source.file.name, pos.line).mkString("|")
 
     val textStartPositions = texts.map(t => q"${traceLocation(t.pos)}")
 

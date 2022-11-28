@@ -3,10 +3,12 @@ package matcher
 
 import MatchResultCombinators._
 import MatchersCreation._
+import scala.annotation._
 
 /**
  * This trait provides 'zip' operators to create matchers on tuples based on "zipped" matchers on fields
  */
+@nowarn
 trait MatcherZipOperators extends ExpectationsCreation { outer =>
 
   def contain[T, S](f: (=>(T)) => Matcher[S])(expected: =>Seq[T]) = (s: Seq[S]) =>
@@ -428,4 +430,3 @@ trait NoMatcherZipOperatorsImplicitsCodeGeneration {
     s"""override def TupleMatcher$n[$Ts](t: ($Ts)) = super.TupleMatcher$n(t)"""
   }
 }
-

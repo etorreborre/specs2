@@ -175,7 +175,7 @@ class SeedSpec extends Specification with ScalaCheck {
 
   def checkValues = {
     // we expected at least 50 different generated values
-    (generated.distinct.size must be_>=(50)) and
+    (generated.distinct.size must be_>=(50)) and[Any]
       // the first result depends on the initial seed
       (generated.head must (===((1, 2147483647))))
   }

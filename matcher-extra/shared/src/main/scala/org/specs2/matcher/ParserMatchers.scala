@@ -44,7 +44,7 @@ trait ParserBaseMatchers extends TraversableMatchers {
     ParseSuccessMatcher[T, ParseResult[T]](identity _).andThenWithResult(m)
   /** match if the parse successful => string match ok */
   def haveSuccessResult[T](result: String): Matcher[ParseResult[T]] =
-    haveSuccessResult(BeMatching.withPart(result) ^^ ((_:Any).toString))
+    haveSuccessResult[Any](BeMatching.withPart(result) ^^ ((_:Any).toString))
   /** match if the parse fails => matcher ok */
   def haveFailureMsg[T](m: Matcher[String]): Matcher[ParseResult[T]] =
     ParseNoSuccessMatcher[T, ParseResult[T], PFailure](identity _).andThenWithMsg(m)
@@ -82,9 +82,9 @@ trait ParserBaseMatchers extends TraversableMatchers {
     }
 
     /** check if the parsed value is as expected as a regexp*/
-    def withResult(result: String): Matcher[TMatchee] = withResult(BeMatching.withPart(result) ^^ ((_:Any).toString))
+    def withResult(result: String): Matcher[TMatchee] = withResult[Any](BeMatching.withPart(result) ^^ ((_:Any).toString))
     /** check if the parsed value is as expected */
-    def withResult(result: ExpectedParsedResult[T]): Matcher[TMatchee] = withResult(new BeEqualTo(result.t))
+    def withResult(result: ExpectedParsedResult[T]): Matcher[TMatchee] = withResult[Any](new BeEqualTo(result.t))
 
     /** check if the parsed value is as expected, using a matcher */
     def withResult(check: T => MatchResult[_]): Matcher[TMatchee] = new Matcher[TMatchee] {

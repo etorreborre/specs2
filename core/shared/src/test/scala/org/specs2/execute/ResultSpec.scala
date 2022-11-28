@@ -150,7 +150,7 @@ more precisely:
         else        Success()
       }
 
-    (result must beFailing("boom")) and
+    (result must beFailing("boom")) and[Any]
     (count === 5)
   }
 
@@ -164,12 +164,12 @@ more precisely:
         else        Success()
       }
 
-    (result must beFailing("boom")) and
+    (result must beFailing("boom")) and[Any]
       (count === 10)
   }
 
   val success1: Result = Success("s1")
-  val success2 = Success("s2")                                                                                          
+  val success2 = Success("s2")
   val failure1 = Failure("f1")
   def thrownFailure1: Result = { throw new FailureException(failure1); success }
 

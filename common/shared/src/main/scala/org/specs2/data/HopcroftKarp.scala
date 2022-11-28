@@ -1,6 +1,7 @@
 package org.specs2
 package data
 
+import scala.annotation._
 import scala.collection.mutable
 
 /**
@@ -43,6 +44,7 @@ object HopcroftKarp {
       dist(nil) != Int.MaxValue
     }
 
+    @nowarn
     def dfs(v: Int): Boolean = {
       if (v != -1) {
         edges.get(v).toSeq.flatten.foreach { u =>
@@ -71,4 +73,3 @@ object HopcroftKarp {
     pair1.toList.filterNot(_._2 == nil)
   }
 }
-

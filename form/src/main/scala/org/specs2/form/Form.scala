@@ -15,7 +15,7 @@ import org.specs2.control.Use
 /**
  * A Form is a container for Rows (@see Row) where each row contain some Cell (@see Cell).
  * It has an optional title and possibly no rows.
- * 
+ *
  * A Form can be executed by executing each row and collecting the results.
  */
 class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val result: Option[Result] = None) extends Executable with Text {
@@ -66,7 +66,7 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(),  val
 
   /**
    * execute all rows
-   * @return a logical and on all results 
+   * @return a logical and on all results
    */
   def execute = result getOrElse (executeForm.result getOrElse success)
   def executeRows = rows.map(_.executeRow)
@@ -169,7 +169,7 @@ case object Form {
   def apply(title: String): Form = new Form(Some(title))
   /** create a Form from a DataTable */
   def apply(table: DataTable): Form = {
-    def firstField[A](as: Seq[A]) = Field(as.headOption.getOrElse(""))
+    def firstField(as: Seq[String]) = Field(as.headOption.getOrElse(""))
     def otherFields[A](as: Seq[A]) = as.drop(1).map(Field(_))
 
     val headerRest = otherFields(table.titles) ++ (if (table.isSuccess) Seq[Field[_]]() else Seq(Field("message")))
@@ -254,4 +254,3 @@ case object Form {
   }
 
 }
-

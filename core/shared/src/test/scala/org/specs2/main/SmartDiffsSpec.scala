@@ -28,7 +28,7 @@ class SmartDiffsSpec extends Spec { def is = s2"""
   }
 
   def null1 = {
-    List(true, true) must equalTo(List(true, null))
+    List(true, true) must equalTo(List[Any](true, null))
   }
 
   def nullValues = {

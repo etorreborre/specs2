@@ -49,7 +49,7 @@ class NotNullStringsSpec extends script.Specification with Groups { def is = s2"
     eg := Map(1 -> "2", 2 -> "3").notNullWithClass === "Map('1' -> '2', '2' -> '3'): scala.collection.immutable.Map$Map2[scala.Tuple2]"
 
     // depending on Scala version, the exact class might be Vector1 (2.13.2+) or just Vector
-    eg := Vector(1, "2").notNullWithClass.reverse.dropWhile(_.isDigit).reverse === "Vector(1: java.lang.Integer, 2: java.lang.String): scala.collection.immutable.Vector"
-    eg := Map(1 -> "2", 2 -> 3).notNullWithClass === "Map(1: java.lang.Integer -> 2: java.lang.String, 2: java.lang.Integer -> 3: java.lang.Integer): scala.collection.immutable.Map$Map2"
+    eg := Vector[Any](1, "2").notNullWithClass.reverse.dropWhile(_.isDigit).reverse === "Vector(1: java.lang.Integer, 2: java.lang.String): scala.collection.immutable.Vector"
+    eg := Map[Int, Any](1 -> "2", 2 -> 3).notNullWithClass === "Map(1: java.lang.Integer -> 2: java.lang.String, 2: java.lang.Integer -> 3: java.lang.Integer): scala.collection.immutable.Map$Map2"
   }
 }

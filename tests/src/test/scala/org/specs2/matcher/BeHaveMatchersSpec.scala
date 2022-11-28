@@ -21,7 +21,7 @@ class BeHaveMatchersSpec extends Specification { def is = s2"""
    using not and be in combination
    ${ List(1) must not be empty }
    ${ !((Nil:List[Int]) must not be empty).isSuccess }
-   ${ !((Array.empty[Int]) must not be empty).isSuccess }
+   ${ !((Array.empty[Int]) must not be[Object] empty).isSuccess }
 
    using and and be in combination
    ${ (1 must be equalTo(1) and be equalTo(1)).isSuccess }

@@ -33,7 +33,7 @@ lazy val specs2Settings = Seq(
   organization := "org.specs2",
   GlobalScope / scalazVersion := "7.2.32",
   specs2ShellPrompt,
-  ThisBuild / scalaVersion := "2.13.8",
+  ThisBuild / scalaVersion := "2.13.10",
   SettingKey[Boolean]("ide-skip-project").withRank(KeyRanks.Invisible) := platformDepsCrossVersion.value == ScalaNativeCrossVersion.binary,
   ThisBuild / crossScalaVersions := Seq("2.13.8", "2.12.17"))
 
@@ -429,7 +429,8 @@ lazy val compilationSettings = Seq(
       case Some((2, v)) if v <= 12 =>
         Seq(
           "-Ywarn-unused-import",
-          "-Yno-adapted-args"
+          "-Yno-adapted-args",
+          "-Ywarn-unused:-nowarn"
         )
       case _ =>
         Nil

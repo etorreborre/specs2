@@ -15,7 +15,7 @@ class IterablexSpec extends Specification with IterableData with ScalaCheckResul
       List(List(1), List(2, 3)).sameElementsAs(List(List(3, 2), List(1)))
     }
     "if deeply nested lists have the same elements but in a different order" >> {
-      List(1, List(2, 3, List(4)), 5).sameElementsAs(List(5, List(List(4), 2, 3), 1))
+      List(1, List[Any](2, 3, List(4)), 5).sameElementsAs(List(5, List(List(4), 2, 3), 1))
     }
     "for 2 iterables created with same elements in a different order" >> {
       implicit val iterables = arbitraryIterable
@@ -41,7 +41,7 @@ class IterablexSpec extends Specification with IterableData with ScalaCheckResul
   }
 
   "toDeepString uses recursively the toString method to display iterables in brackets" in
-  { List(List(1, 2), 3, List(4, 5)).toDeepString must_== "[[1, 2], 3, [4, 5]]" }
+  { List[Any](List(1, 2), 3, List(4, 5)).toDeepString must_== "[[1, 2], 3, [4, 5]]" }
 
   "mapFirst maps the first element with a function if it exists" in
   { Seq(1, 2).mapFirst(_ + 1) must_== Seq(2, 2) }
@@ -67,7 +67,7 @@ trait IterableData {
   val sameIterablesOfDifferentTypes: Arbitrary[(Iterable[Any], Iterable[Any])] = Arbitrary {
     for {
       i0 <- listOfN(3, oneOf(1, 2, 3))
-      i1 <- listOfN(3, oneOf(1, 2, 3, i0))
+      i1 <- listOfN[Any](3, oneOf(1, 2, 3, i0))
     } yield (i1.toStream, i1.scramble)
   }
 }

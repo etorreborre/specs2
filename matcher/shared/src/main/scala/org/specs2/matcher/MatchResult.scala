@@ -6,7 +6,7 @@ import org.specs2.fp.syntax._
 import execute._
 import MatchResultLogicalCombinators._
 import ResultLogicalCombinators._
-
+import scala.annotation._
 /**
  * Result of a Match.
  *
@@ -85,6 +85,7 @@ sealed trait MatchResult[+T] extends ResultLike {
     if (m == null) apply(new BeNull)
     else apply(m)
   }
+  @nowarn
   def be[S >: T <: AnyRef](s: S): MatchResult[S] = {
     // we need to distinguish the cases of
     // "xxx must not be matcher"

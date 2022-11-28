@@ -76,8 +76,13 @@ object RegexExtractor {
    * Apparently, the expression to replace can have any regex special character except '\'
    */
   def strip(text: String, full: =>Regex, group: =>Regex): String = tryWithRegex(text, regexToUse(full, group)) {
-    if (full.toString.isEmpty) group.replaceAllIn(text, (_:Regex.Match) match { case Regex.Groups(v) => v.replace("\\", "\\\\") })
-    else                       text
+    if (full.toString.isEmpty) group.replaceAllIn(text, { _ match {
+      case Regex.Groups(v) => v.replace("\\", "\\\\")
+      case Regex.Match(other) => other
+    }
+    })
+    else
+      text
   }
   def extract1(t: String , full: =>Regex = "".r, group: =>Regex = DEFAULT_REGEX.r) = check(1, t, (extractAll(t, full, group): @unchecked) match { case s1::_ => s1 }                                                                   )
   def extract2(t: String , full: =>Regex = "".r, group: =>Regex = DEFAULT_REGEX.r) = check(2, t, (extractAll(t, full, group): @unchecked) match { case s1::s2::_ => (s1,s2) }                                                          )

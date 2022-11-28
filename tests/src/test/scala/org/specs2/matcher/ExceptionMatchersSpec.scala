@@ -7,7 +7,7 @@ import scala.util.control.NonFatal
 import sys._
 import specification._
 import text.Regexes._
- 
+
 class ExceptionMatchersSpec extends script.Specification with ResultMatchers with Groups { def is = s2"""
 
  Exception matchers allow to check that exceptions are thrown
@@ -88,11 +88,11 @@ class ExceptionMatchersSpec extends script.Specification with ResultMatchers wit
 
     eg := { throw new StackOverflowError("play again"); 1 } must throwAn[Error]
 
-    eg := AsResult {{throw new NullPointerException; 1 } must not(throwAn[IAE]) } must beError
+    eg := AsResult {{throw new NullPointerException; 1 } must not[Any](throwAn[IAE]) } must beError
 
-    eg := AsResult {{throw new IAE; 1 } must not(throwAn[IAE]) } must beFailing
+    eg := AsResult {{throw new IAE; 1 } must not[Any](throwAn[IAE]) } must beFailing
 
-    eg := AsResult { 1  must not(throwAn[IAE]) } must beSuccessful
+    eg := AsResult { 1  must not[Any](throwAn[IAE]) } must beSuccessful
   }
 
   "Partial function" - new group {
@@ -154,7 +154,7 @@ class ExceptionMatchersSpec extends script.Specification with ResultMatchers wit
   }
 
   "combinators" - new group {
-    eg := (1 must not(throwAn[Exception])).toResult.message must_== "Expected: java.lang.Exception. Got nothing"
+    eg := (1 must not[Any](throwAn[Exception])).toResult.message must_== "Expected: java.lang.Exception. Got nothing"
   }
 
   "stacktrace" - new group {

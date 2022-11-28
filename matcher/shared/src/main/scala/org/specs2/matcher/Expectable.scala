@@ -9,9 +9,9 @@ import Expectable._
 
 /**
  * The Expectable class models anything which can be checked by applying a Matcher
- * 
+ *
  * It stores a value which is only evaluated when necessary and an optional additional description for that value.
- * 
+ *
  * The Expectable object is responsible for creating its own description, based on the value toString method and
  * and an additional description.
  *
@@ -35,7 +35,7 @@ class Expectable[+T] private[specs2] (t: () => T) { outer =>
    * @return a description of the value provided by the user
    *         a combination of the value show by specs2 and an optional description
    */
-  def description = describe(value)
+  def description: String = describe(value)
   /**
    * @return a description of any value with the custom description
    */

@@ -20,7 +20,7 @@ import org.specs2.control.ExecuteActions._
 import org.specs2.data.NamedTag
 
 import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, Future}
+import scala.concurrent.{Future}
 
 /**
  * Runner for Sbt

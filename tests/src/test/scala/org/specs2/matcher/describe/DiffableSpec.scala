@@ -67,7 +67,7 @@ Compare result
     different Seqs should show which elements were added         ${ Diffable.diff(Seq("a"), Seq("a", "b"))(seqDiffable) must_=== SeqDifference(Seq(PrimitiveIdentical("a")), Seq("b"), Seq.empty) }
     different Seqs should show which elements were removed       ${ Diffable.diff(Seq("a", "b"), Seq("a"))(seqDiffable) must_=== SeqDifference(Seq(PrimitiveIdentical("a")), Seq.empty, Seq("b")) }
     different Seqs should show changed and added with null       ${ Diffable.diff(Seq("a"), Seq(null))(seqDiffable) must_=== SeqDifference(Seq(PrimitiveDifference("a", null)), Seq.empty, Seq.empty) }
-    be able to compare Seq[Any]                                  ${ Diffable.diff(Seq("a", 1, 2l, 3.3d, 4.4f), Seq("b", 2, 3l, 4.4d, 5.5f))(seqDiffable) must_===
+    be able to compare Seq[Any]                                  ${ Diffable.diff(Seq[Any]("a", 1, 2l, 3.3d, 4.4f), Seq[Any]("b", 2, 3l, 4.4d, 5.5f))(seqDiffable) must_===
   SeqDifference(Seq(OtherDifferent("a", "b"), OtherDifferent(1, 2), OtherDifferent(2l, 3l), OtherDifferent(3.3d, 4.4d), OtherDifferent(4.4f, 5.5f)), Seq.empty, Seq.empty) }
 
   Arrays

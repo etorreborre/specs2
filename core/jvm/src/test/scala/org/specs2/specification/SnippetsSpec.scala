@@ -197,7 +197,7 @@ n = 0
     }
   }
   "effects" - new group {
-    eg := snippet[Unit](sys.error("boom")) must not(throwAn[Exception])
+    eg := snippet[Unit](sys.error("boom")) must not[Any](throwAn[Exception])
 
     eg := {
       var i = 0
@@ -211,4 +211,3 @@ n = 0
   }
   val attribute1 = 1
 }
-

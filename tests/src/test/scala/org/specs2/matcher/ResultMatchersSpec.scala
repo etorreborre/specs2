@@ -25,12 +25,12 @@ The ResultMatchers trait provides matchers to check Result instances.
   ${ (1 === 1) must  beSuccessful }
   ${ (1 === 1) must be successful }
   ${ (1 !== 1) must not beSuccessful }
-  ${ (1 !== 1) must not be successful }
+  ${ (1 !== 1) must not be[Object] successful }
 
   beFailing checks if a MatchResult is a Failure
   ${ (1 !== 1) must beFailing }
   ${ (1 !== 1) must beFailing(message = "1 == '1'") }
-  ${ (1 === 1) must not be failing }
+  ${ (1 === 1) must not be[Object] failing }
   ${ (1 === 1) must not beFailing }
   ${ (1 !== 1) must be failing }
                                                                                                                         """

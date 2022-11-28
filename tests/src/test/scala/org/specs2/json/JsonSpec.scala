@@ -38,6 +38,6 @@ trait JsonGen {
   def keys(n: Int) = listOfN(n, oneOf("a", "b", "c"))
   def values(n: Int, depth: Int) = listOfN(n, value(depth))
   def value(depth: Int) = if (depth <= 0) terminalType else oneOf(jsonType(depth - 1), terminalType)
-  def terminalType = oneOf(1, 2, "m", "n", "o", null)
+  def terminalType = oneOf[Any](1, 2, "m", "n", "o", null)
 }
 object JsonGen extends JsonGen
