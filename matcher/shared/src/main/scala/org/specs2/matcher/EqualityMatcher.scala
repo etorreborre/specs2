@@ -29,7 +29,7 @@ class EqualityMatcher[T: Diffable](t: =>T) extends AdaptableMatcher[T]:
       universalDiff.render + (if universalMessage != specificMessage then "\n" + specificDiff.render else "")
 
     val failureMessage = ko(b.describe(message))
-    result(specificDiff.identical, failureMessage, expected.notNull, actual.notNull)
+    result(universalDiff.identical, failureMessage, expected.notNull, actual.notNull)
 
   def expected: T =
     t
