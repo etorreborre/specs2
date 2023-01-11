@@ -1,7 +1,7 @@
 package org.specs2
 package main
 
-import scala.collection.JavaConverters.*
+import scala.jdk.CollectionConverters.*
 import text.NotNullStrings.*
 import text.FromString
 

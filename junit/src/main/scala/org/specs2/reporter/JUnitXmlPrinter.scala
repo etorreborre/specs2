@@ -12,7 +12,7 @@ import io.FileName.ToFileName
 import control.*
 import io.*
 
-import scala.collection.JavaConverters.*
+import scala.jdk.CollectionConverters.*
 import Exceptions.*
 import concurrent.ExecutionEnv
 import specification.core.*

@@ -2,7 +2,7 @@ package org.specs2
 package matcher
 
 import java.util.Arrays.*
-import scala.collection.JavaConverters.*
+import scala.jdk.CollectionConverters.*
 import org.specs2.specification.core.{Env, OwnEnv}
 
 // format: off

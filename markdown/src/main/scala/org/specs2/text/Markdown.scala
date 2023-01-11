@@ -7,7 +7,7 @@ import scala.io.Source
 import scala.xml.NodeSeq
 import scala.xml.parsing.XhtmlParser
 import scala.collection.mutable.*
-import scala.collection.JavaConverters.iterableAsScalaIterableConverter
+import scala.jdk.CollectionConverters.*
 
 import com.vladsch.flexmark.ast.*
 import com.vladsch.flexmark.ast.util.*

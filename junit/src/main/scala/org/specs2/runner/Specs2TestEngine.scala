@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import java.lang.reflect.Modifier
 import java.util.Optional
 import java.util.stream.Collectors
-import scala.collection.JavaConverters.*
+import scala.jdk.CollectionConverters.*
 import org.specs2.concurrent.*
 import org.specs2.control.*
 import org.specs2.execute.*
