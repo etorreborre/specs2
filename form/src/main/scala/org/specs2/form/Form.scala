@@ -181,7 +181,7 @@ case object Form:
 
   /** create a Form from a DataTable */
   def apply(table: DataTable): Form =
-    def firstField[A](as: Seq[A]) = Field(as.headOption.getOrElse(""))
+    def firstField(as: Seq[String]) = Field(as.headOption.getOrElse(""))
     def otherFields[A](as: Seq[A]) = as.drop(1).map(Field(_))
 
     val headerRest = otherFields(table.titles) ++ (if table.isSuccess then Seq[Field[?]]() else Seq(Field("message")))

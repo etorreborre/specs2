@@ -2,13 +2,13 @@ import scala.io.*
 import java.io.*
 
 def scalaFiles(file: File): List[File] = {
-	println("checking "+file.getName)
-	if (file.isDirectory)
-		file.listFiles.toList.flatMap(scalaFiles(_))
-	else if (file.getName.endsWith(".scala"))
-		List(file)
-	else
-  	Nil
+  println("checking " + file.getName)
+  if (file.isDirectory)
+    file.listFiles.toList.flatMap(scalaFiles(_))
+  else if (file.getName.endsWith(".scala"))
+    List(file)
+  else
+    Nil
 }
 
 println("starting wordle")
