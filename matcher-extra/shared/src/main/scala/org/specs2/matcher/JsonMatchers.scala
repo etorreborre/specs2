@@ -15,6 +15,8 @@ import Results.negateWhen
  */
 trait JsonMatchers extends JsonBaseMatchers with JsonBaseBeHaveMatchers
 
+object JsonMatchers extends JsonMatchers
+
 private[specs2]
 trait JsonBaseMatchers extends Expectations with JsonMatchersImplicits { outer =>
 
