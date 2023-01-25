@@ -187,6 +187,8 @@ object BeMatching extends StringMatchers:
   def withPart[T: MatchingExpression](t: =>T): BeMatching[T] =
     lazy val pattern = summon[MatchingExpression[T]].toPattern(t)
     lazy val part = Pattern.compile(pattern.toString.regexPart, pattern.flags())
-    new BeMatching(t)(using new MatchingExpression[T] {
-      def toPattern(t1: =>T) = part
-    })
+    new BeMatching(t)(using
+      new MatchingExpression[T] {
+        def toPattern(t1: =>T) = part
+      }
+    )
