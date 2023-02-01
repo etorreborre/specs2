@@ -41,16 +41,9 @@ private[specs2] trait Seqx:
       *   remove all the elements of other from seq with a user-defined equality function
       */
     def difference(other: Seq[T], equality: (T, T) => Boolean = (_: T) == (_: T)): scala.collection.Seq[T] =
-      case class D(t: T, equality: (T, T) => Boolean):
-        override def equals(o: Any) = o.asInstanceOf[Matchable] match
-          case other: D => equality(t, other.t)
-          case _        => false
-        // always return the same hashcode because we can't guarantee that if equality(t1, t2) == true then t1.hashCode == t2.hashCode
-        // this however makes the search much less efficient
-        override def hashCode = 1
 
-      def occurrenceCounts(sq: Seq[T], equality: (T, T) => Boolean): scala.collection.mutable.Map[D, Int] =
-        val occurrences = new scala.collection.mutable.HashMap[D, Int] { override def default(k: D) = 0 }
+      def occurrenceCounts(sq: Seq[T], equality: (T, T) => Boolean): scala.collection.mutable.Map[D[T], Int] =
+        val occurrences = new scala.collection.mutable.HashMap[D[T], Int] { override def default(k: D[T]) = 0 }
         for y <- sq do occurrences(D(y, equality)) += 1
         occurrences
 
@@ -96,3 +89,13 @@ private[specs2] trait Seqx:
       summon[Foldable[List]].foldMap(fa.toList)(f)
 
 private[specs2] object Seqx extends Seqx
+
+// Helper class for counting occurrences
+private case class D[T](t: T, equality: (T, T) => Boolean):
+  override def equals(o: Any) = o.asInstanceOf[Matchable] match
+    // it's ok to remove the warning here since we are always going compare values of the same type
+    case other: D[T] @unchecked => equality(t, other.t)
+    case _                      => false
+  // always return the same hashcode because we can't guarantee that if equality(t1, t2) == true then t1.hashCode == t2.hashCode
+  // this however makes the search much less efficient
+  override def hashCode = 1

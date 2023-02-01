@@ -350,12 +350,11 @@ case class Success(m: String = "", exp: String = "") extends Result(m, exp):
 /** Companion object to the Success class providing a method to set the expectations number
   */
 object Success:
-  def apply(m: String, exp: String, expNb: Int) = new Success(m, exp) {
-    override val expectationsNb = expNb
-  }
-  def apply(m: String, expNb: Int) = new Success(m) {
-    override val expectationsNb = expNb
-  }
+  def apply(m: String, exp: String, expNb: Int) =
+    new Success(m, exp).setExpectationsNb(expNb)
+
+  def apply(m: String, expNb: Int) =
+    new Success(m).setExpectationsNb(expNb)
 
 /** This class represents the failure of an execution. It has a message and a stacktrace
   */
@@ -377,8 +376,7 @@ case class Failure(
   def exception = Throwablex.exception(m, trace)
 
   def setExpectationsNb(n: Int): Failure =
-    new Failure(m, e, trace, details):
-      override val expectationsNb = n
+    new Failure(m, e, trace, details).setExpectationsNb(n)
 
   def mute: Failure =
     copy(m = "", e = "")
@@ -425,9 +423,9 @@ case class Error(m: String, t: Throwable) extends Result(s"${t.getClass.getName}
       case Error(m2, t2) => m == m2 && t.getMessage.notNull == t2.getMessage.notNull
       case _             => false
 
-  def setExpectationsNb(n: Int) = new Error(m, t) {
-    override val expectationsNb = n
-  }
+  def setExpectationsNb(n: Int) =
+    new Error(m, t).setExpectationsNb(n)
+
   def mute = copy(m = "")
 
   override def hashCode = m.hashCode
@@ -448,9 +446,8 @@ case class Pending(m: String = "") extends Result(m) { outer =>
   type SelfType = Pending
 
   def mute = Pending()
-  def setExpectationsNb(n: Int) = new Pending(m) {
-    override val expectationsNb = n
-  }
+  def setExpectationsNb(n: Int) =
+    new Pending(m).setExpectationsNb(n)
 
   override def isPending: Boolean = true
 }
@@ -463,9 +460,8 @@ case class Skipped(m: String = "", e: String = "") extends Result(m, e) { outer 
   type SelfType = Skipped
 
   def mute = Skipped()
-  def setExpectationsNb(n: Int) = new Skipped(m) {
-    override val expectationsNb = n
-  }
+  def setExpectationsNb(n: Int) =
+    new Skipped(m).setExpectationsNb(n)
 
   override def isSkipped: Boolean = true
 }
@@ -478,9 +474,8 @@ case class DecoratedResult[+T](decorator: T, result: Result) extends Result(resu
   type SelfType = Result
 
   def mute = DecoratedResult(decorator, result.mute)
-  def setExpectationsNb(n: Int) = new DecoratedResult(decorator, result) {
-    override val expectationsNb = n
-  }
+  def setExpectationsNb(n: Int) =
+    new DecoratedResult(decorator, result).setExpectationsNb(n)
 
   override def isSuccess: Boolean = result.isSuccess
   override def isError: Boolean = result.isError
