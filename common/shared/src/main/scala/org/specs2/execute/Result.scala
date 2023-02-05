@@ -25,9 +25,13 @@ import text.NotNullStrings.*
   *   - possibly a number of expectations when it is the outcome of several checks (this is used for the reporting of
   *     ScalaCheck properties).
   */
-sealed abstract class Result(val message: String = "", val expected: String = "", val expectationsNb: Int = 1)
-    derives CanEqual:
+sealed abstract class Result(val message: String = "", val expected: String = "") derives CanEqual:
   type SelfType <: Result
+
+  /** number of expectations for a Result The default number is 1 but this could be higher if this result represents the
+    * execution of a ScalaCheck property
+    */
+  def expectationsNb: Int = 1
 
   /** @return
     *   the colored textual status of the result
@@ -332,7 +336,10 @@ case class Success(m: String = "", exp: String = "") extends Result(m, exp):
 
   override def isSuccess = true
 
-  def setExpectationsNb(n: Int) = Success(m, expected, n)
+  def setExpectationsNb(n: Int) =
+    new Success(m, expected) {
+      override def expectationsNb: Int = n
+    }
 
   def mute = Success()
 
@@ -376,7 +383,9 @@ case class Failure(
   def exception = Throwablex.exception(m, trace)
 
   def setExpectationsNb(n: Int): Failure =
-    new Failure(m, e, trace, details).setExpectationsNb(n)
+    new Failure(m, e, trace, details) {
+      override def expectationsNb: Int = n
+    }
 
   def mute: Failure =
     copy(m = "", e = "")
@@ -424,7 +433,9 @@ case class Error(m: String, t: Throwable) extends Result(s"${t.getClass.getName}
       case _             => false
 
   def setExpectationsNb(n: Int) =
-    new Error(m, t).setExpectationsNb(n)
+    new Error(m, t) {
+      override def expectationsNb: Int = n
+    }
 
   def mute = copy(m = "")
 
@@ -447,7 +458,9 @@ case class Pending(m: String = "") extends Result(m) { outer =>
 
   def mute = Pending()
   def setExpectationsNb(n: Int) =
-    new Pending(m).setExpectationsNb(n)
+    new Pending(m) {
+      override def expectationsNb: Int = n
+    }
 
   override def isPending: Boolean = true
 }
@@ -461,7 +474,9 @@ case class Skipped(m: String = "", e: String = "") extends Result(m, e) { outer 
 
   def mute = Skipped()
   def setExpectationsNb(n: Int) =
-    new Skipped(m).setExpectationsNb(n)
+    new Skipped(m) {
+      override def expectationsNb: Int = n
+    }
 
   override def isSkipped: Boolean = true
 }
@@ -475,7 +490,9 @@ case class DecoratedResult[+T](decorator: T, result: Result) extends Result(resu
 
   def mute = DecoratedResult(decorator, result.mute)
   def setExpectationsNb(n: Int) =
-    new DecoratedResult(decorator, result).setExpectationsNb(n)
+    new DecoratedResult(decorator, result) {
+      override def expectationsNb: Int = n
+    }
 
   override def isSuccess: Boolean = result.isSuccess
   override def isError: Boolean = result.isError

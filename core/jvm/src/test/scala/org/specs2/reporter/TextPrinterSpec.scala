@@ -347,7 +347,7 @@ table ${"a" | "b" |>
          |[info]
          |[info]__+_example_1
          |[info]__x_example 2
-         |[error]__ko_(Result.scala:365)
+         |[error]__ko_(Result.scala:371)
          |[error]
          |[info]
          |[info]_Total_for_specification_TextPrinterSpec""".stripMargin
