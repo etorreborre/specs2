@@ -15,13 +15,12 @@ import scala.reflect.ClassTag
 */
 trait MockitoMocker {
   def verify(mode: VerificationMode) = org.mockito.Mockito.verify(org.mockito.Mockito.mock(classOf[List[Int]]), mode)
-  def verifyZeroInteractions[T <: AnyRef](mocks: T*) = org.mockito.Mockito.verifyZeroInteractions(mocks:_*)
   def verifyNoMoreInteractions[T <: AnyRef](mocks: T*) = org.mockito.Mockito.verifyNoMoreInteractions(mocks:_*)
 
   def mock[T : ClassTag]: T = org.mockito.Mockito.mock(implicitly[ClassTag[T]].runtimeClass).asInstanceOf[T]
   def mock[T : ClassTag](settings: MockSettings): T = org.mockito.Mockito.mock(implicitly[ClassTag[T]].runtimeClass, settings).asInstanceOf[T]
 
-  def spy[T](m: T): T = org.mockito.Mockito.spy(m)
+  def spy[T](m: T): T = org.mockito.Mockito.spy[T](m)
   def when[V](v: V) = org.mockito.Mockito.when(v)
   def times(i: Int): org.mockito.internal.verification.Times = org.mockito.Mockito.times(i).asInstanceOf[org.mockito.internal.verification.Times]
   def any[T](implicit m: ClassTag[T]): T = org.mockito.ArgumentMatchers.any(m.runtimeClass).asInstanceOf[T]
