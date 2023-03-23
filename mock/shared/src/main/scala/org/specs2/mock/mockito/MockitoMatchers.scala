@@ -22,16 +22,11 @@ trait MockitoMatchers extends ArgThat {
   def anyDouble  = ArgumentMatchers.anyDouble
   def anyFloat   = ArgumentMatchers.anyFloat
 
-  def anyVarArg[T]      = ArgumentMatchers.anyVararg[T]()
+  def anyVarArg[T]      = ArgumentMatchers.any[T]()
   def anyJavaList       = ArgumentMatchers.anyList
   def anyJavaSet        = ArgumentMatchers.anySet
   def anyJavaCollection = ArgumentMatchers.anyCollection()
   def anyJavaMap        = ArgumentMatchers.anyMap()
-
-  def anyJavaListOf[T : ClassTag]              = ArgumentMatchers.anyListOf(implicitly[ClassTag[T]].runtimeClass)
-  def anyJavaSetOf[T : ClassTag]               = ArgumentMatchers.anySetOf(implicitly[ClassTag[T]].runtimeClass)
-  def anyJavaCollectionOf[T : ClassTag]        = ArgumentMatchers.anyCollectionOf(implicitly[ClassTag[T]].runtimeClass)
-  def anyJavaMapOf[K : ClassTag, V : ClassTag] = ArgumentMatchers.anyMapOf(implicitly[ClassTag[K]].runtimeClass, implicitly[ClassTag[V]].runtimeClass)
 
   def anyList        = ArgumentMatchers.any(classOf[List[?]])
   def anySet         = ArgumentMatchers.any(classOf[Set[?]])

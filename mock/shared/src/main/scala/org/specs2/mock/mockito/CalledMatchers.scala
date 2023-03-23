@@ -91,7 +91,7 @@ trait CalledMatchers extends NumberOfTimes with FunctionArguments with TheMockit
   def inOrder(stubbed: IgnoreStubs): Option[InOrder] = inOrder(stubbed.mocks:_*)
 
   /** no calls made to the mock */
-  def noCallsTo[T <: AnyRef](mocks: T*) = mocker.verifyZeroInteractions(mocks:_*)
+  def noCallsTo[T <: AnyRef](mocks: T*) = mocker.verifyNoMoreInteractions(mocks:_*)
   /** no call made to the mock */
   def no[T <: AnyRef](mock: T)(implicit anOrder: Option[InOrder] = inOrder()): T = verify(mock, org.mockito.Mockito.never())(anOrder)
   /** one call only made to the mock */

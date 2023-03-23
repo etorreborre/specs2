@@ -584,22 +584,11 @@ ${step(env)}                                                                    
       m.varargs(1, 2)
 
       there was one(m).javaList(anyJavaList)
-      there was one(m).javaList(anyJavaListOf[Int])
-
       there was one(m).javaSet(anyJavaSet)
-      there was one(m).javaSet(anyJavaSetOf[Int])
-
       there was one(m).javaCollection(anyJavaCollection)
-      there was one(m).javaCollection(anyJavaCollectionOf[Int])
-
       there was one(m).javaMap(anyJavaMap)
-      there was one(m).javaMap(anyJavaMapOf[Int, String])
-
       there was one(m).List(anyList)
-      there was one(m).List(anyListOf[Int])
-
       there was one(m).Set(anySet)
-      there was one(m).Set(anySetOf[Int])
 
       there was one(m).Traversable(anyTraversable)
       there was one(m).Traversable(anyTraversableOf[Int])
