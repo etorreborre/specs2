@@ -14,7 +14,7 @@ import execute.*
   *   - an optional list of "finalization" actions to be executed when this action is done whether it has timed-out or
   *     thrown an exception. This allows resources to be safely disposed of
   */
-case class Action[A](private[control] runNow: ExecutionEnv => Future[A], last: Vector[Finalizer] = Vector.empty):
+case class Action[A](private[control] val runNow: ExecutionEnv => Future[A], last: Vector[Finalizer] = Vector.empty):
 
   def map[B](f: A => B): Action[B] =
     Action[B](runNow = ee => this.runNow(ee).map(f)(using ee.executionContext), last = last)
