@@ -69,8 +69,8 @@ object depends {
   }
 
   lazy val resolvers =
-    Seq(sbt.Keys.resolvers ++= Seq(
-      Resolver.sonatypeRepo("releases")))
+    Seq(sbt.Keys.resolvers ++=
+      Resolver.sonatypeOssRepos("release"))
 
   def scalaMinorVersionAtLeast(scalaVersion: String, n: Int): Boolean =
     CrossVersion.partialVersion(scalaVersion) match {
