@@ -27,7 +27,7 @@ object depends {
   val junitTest = libraryDependencies += junitVintage % Test
 
   // used in specs2-markdown for the markdown parser
-  val flexmark = "com.vladsch.flexmark" % "flexmark-all" % "0.64.2"
+  val flexmark = "com.vladsch.flexmark" % "flexmark-all" % "0.64.4"
 
   // used in specs2-html
   val tagsoup = "org.ccil.cowan.tagsoup" % "tagsoup" % "1.2.1"
