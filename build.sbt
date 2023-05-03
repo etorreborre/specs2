@@ -119,7 +119,6 @@ lazy val core = crossProject(platforms: _*)
 
 lazy val examples = crossProject(platforms: _*)
   .withoutSuffixFor(jvm)
-  .crossType(CrossType.Pure)
   .in(file("examples"))
   .jvmSettings(commonJvmSettings)
   .jsSettings(commonJsSettings)

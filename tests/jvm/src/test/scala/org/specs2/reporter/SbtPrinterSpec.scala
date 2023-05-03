@@ -1,7 +1,6 @@
 package org.specs2
 package reporter
 
-import examples.{HelloWorldSpec, HelloWorldUnitSpec}
 import matcher.*
 import main.Arguments
 import io.StringOutput
@@ -136,3 +135,33 @@ class SbtPrinterSpec(val env: Env) extends Specification with OwnEnv {
     beLike[Selector] { case ts: TestSelector => ts.testName must beMatching(n) } ^^ ((_: Event).selector())
 
 }
+
+class HelloWorldSpec extends Specification:
+  def is = s2"""
+
+ This is a specification to check the 'Hello world' string
+
+ The 'Hello world' string should
+   contain 11 characters $e1
+   start with 'Hello' $e2
+   end with 'world' $e3
+"""
+
+  def e1 = "Hello world" must haveSize(11)
+  def e2 = "Hello world" must startWith("Hello")
+  def e3 = "Hello world" must endWith("world")
+
+class HelloWorldUnitSpec extends org.specs2.mutable.Specification:
+  "HW" >> {
+    "The 'Hello world' string" should {
+      "contain 11 characters" in {
+        "Hello world" must haveSize(11)
+      }
+      "start with 'Hello'" in {
+        "Hello world" must startWith("Hello")
+      }
+      "end with 'world'" in {
+        "Hello world" must endWith("world")
+      }
+    }
+  }

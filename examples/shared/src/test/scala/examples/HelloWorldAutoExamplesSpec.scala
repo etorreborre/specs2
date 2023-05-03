@@ -1,5 +1,3 @@
-package examples
-
 import org.specs2.*
 
 /** This specification shows that it is possible to use the example code directly in the specification

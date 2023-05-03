@@ -1,5 +1,3 @@
-package examples
-
 import org.specs2.*
 
 /** This specification shows how to implement the examples presented in the ScalaCheck UserGuide:

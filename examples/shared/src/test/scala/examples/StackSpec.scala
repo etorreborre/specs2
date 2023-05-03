@@ -1,5 +1,3 @@
-package examples
-
 import org.specs2.*
 import specification.core.*
 
