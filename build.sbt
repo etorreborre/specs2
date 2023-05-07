@@ -105,13 +105,16 @@ lazy val common = crossProject(platforms: _*)
 lazy val core = crossProject(platforms: _*)
   .withoutSuffixFor(jvm)
   .in(file("core"))
+  .enablePlugins(BuildInfoPlugin)
   .settings(
     name := "specs2-core",
     commonSettings,
     depends.junitTest,
     // until 5.0.0-RC-23 is published
     // mimaPreviousArtifacts := Set.empty,
-    mimaFailOnNoPrevious := false
+    mimaFailOnNoPrevious := false,
+    buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
+    buildInfoPackage := "org.specs2"
   )
   .jvmSettings(commonJvmSettings)
   .jsSettings(commonJsSettings)
