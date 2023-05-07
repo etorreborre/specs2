@@ -15,7 +15,7 @@ class LocationSpec extends org.specs2.mutable.Spec with TypedEqual:
     given spec: LocationUnitSpecification = new LocationUnitSpecification(ee)
 
     "for the first piece of text, with 'should'" >> {
-      textAt(index = 0) === 16
+      textAt(index = 0) === 13
     }
     "for the first example, with 'in'" >> {
       exampleAt(index = 0) === 14
@@ -24,13 +24,13 @@ class LocationSpec extends org.specs2.mutable.Spec with TypedEqual:
       exampleAt(index = 1) === 15
     }
     "for the second piece of text, with '>>'" >> {
-      textAt(index = 1) === 23
+      textAt(index = 1) === 18
     }
     "for the 3rd example, with '>>'" >> {
-      exampleAt(index = 2) === 20
+      exampleAt(index = 2) === 19
     }
     "for the 4th example, with '>>'" >> {
-      exampleAt(index = 3) === 22
+      exampleAt(index = 3) === 21
     }
   }
 
