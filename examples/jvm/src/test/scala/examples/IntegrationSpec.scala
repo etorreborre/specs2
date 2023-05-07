@@ -33,6 +33,6 @@ class IntegrationSpec(using ec: ExecutionContext) extends Specification, StartDa
       // in this setup we need to skip the current run directory which is .jvm
       basePath = DirectoryPath.unsafe(new java.io.File("../src/test/scala/examples/integration").getAbsolutePath),
       // change the verbosity to better understand how the search is
-      verbose = true
+      verbose = false
     )
     .unsafeRun
