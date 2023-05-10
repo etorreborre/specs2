@@ -24,4 +24,4 @@ object run extends ClassRunnerMain:
 
   /** main method for the command line */
   def main(args: Array[String]) =
-    run(args, exit = true)
+    this.run(args, exit = true)
