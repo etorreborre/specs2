@@ -6,5 +6,5 @@ var guideVersions
  var apiVersions
  = [
  {id:"../../api/SPECS2-4.12.0/index.html", text:"4.12.0"},
-{id:"../../api/SPECS2-5.2.0/api/index.html", text:"5.2.0"}
+{id:"../../api/SPECS2-5.2.0/index.html", text:"5.2.0"}
 ];
