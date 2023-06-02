@@ -81,15 +81,13 @@ class Website(env: Env) extends Specification with Specs2Variables with Specs2Ta
         .map(_.render)
         .map { tag =>
           val version = tag.replace("SPECS2-", "")
-          // starting from SPECS2 5 unidoc is used and puts file in an 'api' subdirectory
-          val startFile = if version.startsWith("4") then file.replace("api/" ,"") else file
-          s"""{id:"../../$name/$tag/$startFile", text:"$version"}"""
+          s"""{id:"../../$name/$tag/$file", text:"$version"}"""
         }
         .mkString(",\n")}
           |];""".stripMargin
 
     makeVersionVar("guide", "org.specs2.guide.UserGuide.html") + "\n " +
-    makeVersionVar("api", "api/index.html")
+    makeVersionVar("api", "index.html")
   }
 
   def variables(env: Env): Map[String, String] =
