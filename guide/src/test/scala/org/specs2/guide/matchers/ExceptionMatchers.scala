@@ -19,6 +19,9 @@ object ExceptionMatchers extends UserGuideCard {
   * `throwA[ExceptionType](me.like { case e => e must matchSomething }` or
   `throwA(exception).like { case e => e must matchSomething }` checks that the thrown exception satisfies a property
 
+### for expressions that shouldn't throw an exception
+  * `notThrow` checks that an expression doesn't throw any exceptions
+
 ### for exception values
 
   * `beException[ExceptionType]("message")` checks that a `Throwable` has an expected type and that its message satisfies

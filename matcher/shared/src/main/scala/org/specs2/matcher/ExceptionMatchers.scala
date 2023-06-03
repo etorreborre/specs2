@@ -52,6 +52,10 @@ trait ExceptionMatchers extends ExpectationsCreation:
   def beException[T: ClassTag](message: String): Matcher[Throwable] =
     haveClass[T] and beMatching(message) ^^ ((t: Throwable) => t.getMessage)
 
+  /** A matcher that checks that nothing was thrown.
+    */
+  def notThrow: NotThrowMatcher = new NotThrowMatcher
+
   /** Exception matcher checking the type of a thrown exception.
     */
   class ExceptionClassMatcher(klass: Class[?]) extends Matcher[Any]:
@@ -143,6 +147,16 @@ trait ExceptionMatchers extends ExpectationsCreation:
           checkBoolean(value, checkClassTypeAndMessage, rethrowException).not
 
   end ExceptionMatcher
+
+  class NotThrowMatcher extends Matcher[Any]:
+    outer =>
+
+    def apply[S <: Any](value: Expectable[S]): Result = getException(value.value) match
+      case Some(e) =>
+        Failure(
+          s"Unexpected ${e.getClass} thrown: ${e.getMessage}\n\nThe stacktrace is\n\n${e.getStackTrace.mkString("\n")}"
+        )
+      case None => Success("No exceptions thrown")
 
   private val dropException = (e: Throwable) => ()
 

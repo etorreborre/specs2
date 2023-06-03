@@ -75,6 +75,14 @@ class ExceptionMatchersSpec extends Specification with ResultMatchers:
 
  A Throwable can be checked for its class and message $throwable1
 
+ Or not thrown
+ =============
+
+ by using the notThrow matcher: 'value must notThrow'
+  it must succeed if no error is thrown $notThrow1
+  it must fail if any exception is thrown $notThrow2
+  it must include the original stack trace if an exception is thrown $notThrow3
+
 """
 
   type IAE = IllegalArgumentException
@@ -157,3 +165,9 @@ class ExceptionMatchersSpec extends Specification with ResultMatchers:
     (new IllegalArgumentException("incorrect arguments"): Throwable) must beException[IllegalArgumentException](
       ".*arguments.*"
     )
+
+  def notThrow1 = 1 must notThrow
+
+  def notThrow2 = (theBlock(error("boom")) must notThrow) must beFailing
+
+  def notThrow3 = (theBlock(error("boom")) must notThrow).message must contain("The stacktrace is")
