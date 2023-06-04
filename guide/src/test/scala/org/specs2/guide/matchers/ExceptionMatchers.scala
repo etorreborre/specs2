@@ -16,8 +16,11 @@ object ExceptionMatchers extends UserGuideCard {
   same message
   * `throwA[ExceptionType].like { case e => e must matchSomething }` or
   `throwA(exception).like { case e => e must matchSomething }` checks that the thrown exception satisfies a property
-  * `throwA[ExceptionType](me.like { case e => e must matchSomething }` or
-  `throwA(exception).like { case e => e must matchSomething }` checks that the thrown exception satisfies a property
+
+### for expressions that shouldn't throw an exception
+  * `not(throwAn[Exception])` checks that an expression doesn't throw any exceptions
+  * `not(throwAn[Exception].like { case e => e.message must startWith("FAIL") })` checks that an expression doesn't an exception with the specified message (another message is allowed)
+  * `not(throwAn[IllegalArgumentException])` checks that an expression doesn't throw any `IllegalArgumentException` (but exceptions of other types are permitted)
 
 ### for exception values
 
