@@ -28,37 +28,26 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (full)
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
       - name: Setup Java (temurin@18)
         if: matrix.java == 'temurin@18'
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           distribution: temurin
           java-version: 18
-
-      - name: Cache sbt
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.sbt
-            ~/.ivy2/cache
-            ~/.coursier/cache/v1
-            ~/.cache/coursier/v1
-            ~/AppData/Local/Coursier/Cache/v1
-            ~/Library/Caches/Coursier/v1
-          key: ${{ runner.os }}-sbt-cache-v2-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
+          cache: sbt
 
       - name: Check formatting ✔
-        run: sbt ++${{ matrix.scala }} scalafmtCheckAll
+        run: sbt '++ ${{ matrix.scala }}' scalafmtCheckAll
 
       - name: Check that workflows are up to date
-        run: sbt ++${{ matrix.scala }} githubWorkflowCheck
+        run: sbt '++ ${{ matrix.scala }}' githubWorkflowCheck
 
       - name: Build and test 🔧
-        run: sbt ++${{ matrix.scala }} 'testOnly -- xonly exclude ci,website timefactor 3'
+        run: sbt '++ ${{ matrix.scala }}' 'testOnly -- xonly exclude ci,website timefactor 3'
 
   publish:
     name: Publish Artifacts
@@ -72,31 +61,20 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (full)
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
       - name: Setup Java (temurin@18)
         if: matrix.java == 'temurin@18'
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           distribution: temurin
           java-version: 18
-
-      - name: Cache sbt
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.sbt
-            ~/.ivy2/cache
-            ~/.coursier/cache/v1
-            ~/.cache/coursier/v1
-            ~/AppData/Local/Coursier/Cache/v1
-            ~/Library/Caches/Coursier/v1
-          key: ${{ runner.os }}-sbt-cache-v2-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
+          cache: sbt
 
       - name: Check binary compatibility ✔
-        run: sbt ++${{ matrix.scala }} mimaReportBinaryIssues
+        run: sbt mimaReportBinaryIssues
 
       - name: Release to Sonatype 📇
         env:
@@ -104,7 +82,7 @@ jobs:
           PGP_SECRET: ${{ secrets.PGP_SECRET }}
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-        run: sbt ++${{ matrix.scala }} ci-release
+        run: sbt ci-release
 
       - name: Install Pandoc 🏁
         uses: r-lib/actions/setup-pandoc@v1
@@ -112,7 +90,7 @@ jobs:
           pandoc-version: 2.7.3
 
       - name: Generate the specs2 website 📚
-        run: sbt ++${{ matrix.scala }} unidoc 'guide/testOnly *Website -- xonly'
+        run: sbt unidoc 'guide/testOnly *Website -- xonly'
 
       - name: Update the website 🚀
         uses: JamesIves/github-pages-deploy-action@4.1.4
