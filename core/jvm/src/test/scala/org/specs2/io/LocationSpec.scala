@@ -60,9 +60,9 @@ class LocationSpec extends org.specs2.mutable.Spec with TypedEqual:
     }
   }
 
-  def lineNumber(on322: Int, onLater: Int): Int =
+  def lineNumber(on330: Int, onLater: Int): Int =
     val scalaVersion = org.specs2.BuildInfo.scalaVersion
-    if scalaVersion == "3.2.2" then on322 else onLater
+    if scalaVersion == "3.3.0" then on330 else onLater
 
   def textAt(index: Int)(using spec: WithFragments) = fragmentLine(isText, index)
   def exampleAt(index: Int)(using spec: WithFragments) = fragmentLine(isExample, index)
