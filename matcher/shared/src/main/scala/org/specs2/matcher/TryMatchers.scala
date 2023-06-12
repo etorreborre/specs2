@@ -3,6 +3,7 @@ package matcher
 
 import scala.reflect.ClassTag
 import util.*
+import execute.{Result, AsResult}
 import execute.ResultImplicits.*
 import org.specs2.matcher.describe.Diffable
 import text.NotNullStrings.*
@@ -45,11 +46,17 @@ trait TryMatchers:
 
 object TryeMatchers extends TryMatchers
 
-case class TrySuccessMatcher[T]() extends OptionLikeMatcher[Try[T], T]("a Success", (_: Try[T]).toOption):
-  def withValue(t: ValueCheck[T]) = TrySuccessCheckedMatcher(t)
+case class TrySuccessMatcher[T]() extends Matcher[Try[T]]:
+  def apply[S <: Try[T]](value: Expectable[S]): Result = checkSuccess(value, ValueCheck.alwaysOk)
 
-case class TrySuccessCheckedMatcher[T](check: ValueCheck[T])
-    extends OptionLikeCheckedMatcher[Try[T], T]("a Success", (_: Try[T]).toOption, check)
+  def withValue(t: ValueCheck[T]): Matcher[Try[T]] = TrySuccessCheckedMatcher(t)
+
+  def which[R: AsResult](f: T => R): Matcher[Try[T]] = new TrySuccessCheckedMatcher(f)
+
+  def like[R: AsResult](f: PartialFunction[T, R]): Matcher[Try[T]] = new TrySuccessCheckedMatcher(f)
+
+case class TrySuccessCheckedMatcher[T](check: ValueCheck[T]) extends Matcher[Try[T]]:
+  def apply[S <: Try[T]](value: Expectable[S]): Result = checkSuccess(value, check)
 
 case class TryFailureMatcher[T]()
     extends OptionLikeMatcher[Try[T], Throwable]("a Failure", (_: Try[T]).failed.toOption):
@@ -65,3 +72,15 @@ case class TryFailureMatcher[T]()
   })
 case class TryFailureCheckedMatcher[T](check: ValueCheck[Throwable])
     extends OptionLikeCheckedMatcher[Try[T], Throwable]("a Failure", (_: Try[T]).failed.toOption, check)
+
+private def checkSuccess[T](value: Expectable[Try[T]], check: ValueCheck[T]): Result = value.value match
+  case Success(v) =>
+    val r = check.check(v)
+    val koMessage = s"${value.description} is a Success but ${r.message}"
+    r match
+      case execute.Failure(_, _, _, details) => Result.result(false, koMessage, details)
+      case _                                 => Result.result(r.isSuccess, koMessage)
+  case Failure(e) =>
+    execute.Failure(
+      s"${value.description} is not a Success\n\nFailed with ${e.getMessage}:\n\n${e.getStackTrace.mkString("\n")}"
+    )

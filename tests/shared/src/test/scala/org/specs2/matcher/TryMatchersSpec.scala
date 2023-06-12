@@ -18,14 +18,14 @@ class TryMatchersSpec extends Spec with TryMatchers with ResultMatchers {
   ${(Succeeded(1) must beASuccessfulTry.which(_ > 0))}
   ${(Succeeded(1) must beASuccessfulTry
     .which(_ < 0)) returns "Success(1) is a Success but the function returns 'false' on '1'"}
-  ${(Failed[I](e) must beASuccessfulTry.which(_ > 0)) returns "Failure(boom) is not a Success"}
+  ${(Failed[I](e) must beASuccessfulTry.which(_ > 0)) returns "Failure(boom) is not a Success\n\nFailed with boom:\n\n"}
 
   ${Succeeded(1) must beASuccessfulTry[Int].like { case a if a > 0 => ok }}
   ${(Succeeded(1) must not(beASuccessfulTry[Int].like { case a => a must be_>=(0) })) returns "Expectation failed: 'Success(1) is a Success but 1 is strictly less than 0'"}
   ${Succeeded(1) must not(beASuccessfulTry.withValue(2))}
   ${Failed[I](e) must not(beASuccessfulTry)}
   ${Failed[I](e) must not(beASuccessfulTry.withValue(2))}
-  ${(Failed[I](e) must beSuccessfulTry) returns "Failure(boom) is not a Success"}
+  ${(Failed[I](e) must beSuccessfulTry) returns "Failure(boom) is not a Success\n\nFailed with boom:\n\n"}
   ${(Succeeded(1) must beSuccessfulTry.withValue(2)) returns "Success(1) is a Success but 1 != 2"}
 
   beAFailure checks if an element is Failure(_)
