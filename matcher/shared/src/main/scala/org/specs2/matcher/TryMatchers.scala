@@ -47,16 +47,16 @@ trait TryMatchers:
 object TryeMatchers extends TryMatchers
 
 case class TrySuccessMatcher[T]() extends Matcher[Try[T]]:
-  def apply[S <: Try[T]](value: Expectable[S]) = checkSuccess(value, ValueCheck.alwaysOk)
+  def apply[S <: Try[T]](value: Expectable[S]): Result = checkSuccess(value, ValueCheck.alwaysOk)
 
-  def withValue(t: ValueCheck[T]) = TrySuccessCheckedMatcher(t)
+  def withValue(t: ValueCheck[T]): Matcher[Try[T]] = TrySuccessCheckedMatcher(t)
 
-  def which[R: AsResult](f: T => R) = new TrySuccessCheckedMatcher(f)
+  def which[R: AsResult](f: T => R): Matcher[Try[T]] = new TrySuccessCheckedMatcher(f)
 
-  def like[R: AsResult](f: PartialFunction[T, R]) = new TrySuccessCheckedMatcher(f)
+  def like[R: AsResult](f: PartialFunction[T, R]): Matcher[Try[T]] = new TrySuccessCheckedMatcher(f)
 
 case class TrySuccessCheckedMatcher[T](check: ValueCheck[T]) extends Matcher[Try[T]]:
-  def apply[S <: Try[T]](value: Expectable[S]) = checkSuccess(value, check)
+  def apply[S <: Try[T]](value: Expectable[S]): Result = checkSuccess(value, check)
 
 case class TryFailureMatcher[T]()
     extends OptionLikeMatcher[Try[T], Throwable]("a Failure", (_: Try[T]).failed.toOption):
