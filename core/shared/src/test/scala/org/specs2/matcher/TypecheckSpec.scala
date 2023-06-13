@@ -34,8 +34,7 @@ class TypecheckSpec extends Specification:
     result must beFailing(startWith("""|val n: Int = 0;  val s: Int = n + "hello"
                                        |                             ^
                                        |Found:    String
-                                       |Required: Int
-                                       |""".stripMargin))
+                                       |Required: Int""".stripMargin))
 
   def e3 =
     def code1 = """val n: Int = "x";  """
@@ -47,15 +46,13 @@ class TypecheckSpec extends Specification:
     result must beFailing(startWith("""|val n: Int = "x";  val s: Int = "y"
                                        |            ^
                                        |Found:    ("x" : String)
-                                       |Required: Int
-                                       |""".stripMargin))
+                                       |Required: Int""".stripMargin))
 
     result match
       case Failure(_, _, _, FailureDetailsMessages(messages)) =>
         messages(0) must startWith("""|val n: Int = "x";  val s: Int = "y"
                                       |                               ^
                                       |Found:    ("y" : String)
-                                      |Required: Int
-                                      |""".stripMargin)
+                                      |Required: Int""".stripMargin)
       case other =>
         failure(s"unexpected $other")
