@@ -15,7 +15,7 @@ class LocationSpec extends org.specs2.mutable.Spec with TypedEqual:
     given spec: LocationUnitSpecification = new LocationUnitSpecification(ee)
 
     "for the first piece of text, with 'should'" >> {
-      textAt(index = 0) === lineNumber(16, 13)
+      textAt(index = 0) === 16
     }
     "for the first example, with 'in'" >> {
       exampleAt(index = 0) === 14
@@ -24,13 +24,13 @@ class LocationSpec extends org.specs2.mutable.Spec with TypedEqual:
       exampleAt(index = 1) === 15
     }
     "for the second piece of text, with '>>'" >> {
-      textAt(index = 1) === lineNumber(23, 18)
+      textAt(index = 1) === 23
     }
     "for the 3rd example, with '>>'" >> {
-      exampleAt(index = 2) === lineNumber(20, 19)
+      exampleAt(index = 2) === 20
     }
     "for the 4th example, with '>>'" >> {
-      exampleAt(index = 3) === lineNumber(22, 21)
+      exampleAt(index = 3) === 22
     }
   }
 
@@ -59,10 +59,6 @@ class LocationSpec extends org.specs2.mutable.Spec with TypedEqual:
       exampleAt(index = 3) === 16
     }
   }
-
-  def lineNumber(on330: Int, onLater: Int): Int =
-    val scalaVersion = org.specs2.BuildInfo.scalaVersion
-    if scalaVersion == "3.3.0" then on330 else onLater
 
   def textAt(index: Int)(using spec: WithFragments) = fragmentLine(isText, index)
   def exampleAt(index: Int)(using spec: WithFragments) = fragmentLine(isExample, index)
