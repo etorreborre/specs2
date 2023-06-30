@@ -7,26 +7,25 @@ import scala.util.{Failure, Success, Try}
 trait EitherSyntax:
 
   extension [A, B](eab: Either[A, B])
-
     def foreach(f: B => Unit): Unit = eab match
       case Left(_)  => ()
       case Right(b) => f(b)
 
-    def forall(f: B => Boolean): Boolean = eab match
-      case Left(_)  => true
-      case Right(b) => f(b)
+  def forall(f: B => Boolean): Boolean = eab match
+    case Left(_)  => true
+    case Right(b) => f(b)
 
-    def exists(f: B => Boolean): Boolean = eab match
-      case Left(_)  => false
-      case Right(b) => f(b)
+  def exists(f: B => Boolean): Boolean = eab match
+    case Left(_)  => false
+    case Right(b) => f(b)
 
-    def toOption: Option[B] = eab match
-      case Left(_)  => None
-      case Right(b) => Some(b)
+  def toOption: Option[B] = eab match
+    case Left(_)  => None
+    case Right(b) => Some(b)
 
-    def toList: List[B] = eab match
-      case Left(_)  => Nil
-      case Right(b) => List(b)
+  def toList: List[B] = eab match
+    case Left(_)  => Nil
+    case Right(b) => List(b)
 
   extension [A, B, AA >: A, BB >: B, C](eab: Either[A, B])
     def getOrElse(default: =>BB): BB = eab match

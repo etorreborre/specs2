@@ -14,13 +14,13 @@ private[specs2] trait Split:
     def splitDashed(names: Seq[String]): Seq[String] =
       outer.splitDashed(s.split("\\s").toIndexedSeq, names)
 
-    @targetName("stringSplitQuoted")
-    def splitQuoted: Seq[String] =
-      quoted.findAllIn(s).toSeq.map(_.trimEnclosing("\""))
+  @targetName("stringSplitQuoted")
+  def splitQuoted: Seq[String] =
+    quoted.findAllIn(s).toSeq.map(_.trimEnclosing("\""))
 
-    @targetName("stringSplitToSize")
-    def splitToSize(n: Int): List[String] =
-      outer.splitToSize(s, n, Nil)
+  @targetName("stringSplitToSize")
+  def splitToSize(n: Int): List[String] =
+    outer.splitToSize(s, n, Nil)
 
   private val quoted: Regex =
     "\"[^\"]*\"|[^\\s]+".r

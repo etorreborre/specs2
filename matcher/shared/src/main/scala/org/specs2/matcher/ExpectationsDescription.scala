@@ -10,14 +10,14 @@ trait ExpectationsDescription extends ExpectationsCreation:
 
   extension [T: AsResult](description: String)(using not: NotGiven[NoExpectationsDescription])
     def ==>(result: =>T): Result = <==>(result)
-    def <==>(result: =>T): Result = checkResultFailure {
-      val r = ResultExecution.execute(AsResult(result))
-      r match
-        case i if i.isError || i.isFailure =>
-          i.updateMessage(m => negateSentence(description) + " because " + m)
-        case other =>
-          other.updateMessage(m => description + " <=> " + m)
-    }
+  def <==>(result: =>T): Result = checkResultFailure {
+    val r = ResultExecution.execute(AsResult(result))
+    r match
+      case i if i.isError || i.isFailure =>
+        i.updateMessage(m => negateSentence(description) + " because " + m)
+      case other =>
+        other.updateMessage(m => description + " <=> " + m)
+  }
 
   /** describe a value with the aka method */
   extension [T](value: =>T)(using not: NotGiven[NoValueDescription])

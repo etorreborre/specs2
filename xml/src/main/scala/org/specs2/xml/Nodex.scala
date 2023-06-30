@@ -12,14 +12,14 @@ trait Nodex:
     def ==/(n: NodeSeq): Boolean =
       NodeFunctions.isEqualIgnoringSpace(ns, n)
 
-    def isEqualIgnoringSpace(n: NodeSeq): Boolean =
-      NodeFunctions.isEqualIgnoringSpace(ns, n)
+  def isEqualIgnoringSpace(n: NodeSeq): Boolean =
+    NodeFunctions.isEqualIgnoringSpace(ns, n)
 
-    def isEqualIgnoringSpaceOrdered(n: NodeSeq): Boolean =
-      NodeFunctions.isEqualIgnoringSpaceOrdered(ns, n)
+  def isEqualIgnoringSpaceOrdered(n: NodeSeq): Boolean =
+    NodeFunctions.isEqualIgnoringSpaceOrdered(ns, n)
 
-    def filterNodes(condition: Node => Boolean, recurse: Node => Boolean = (e: Node) => true) =
-      NodeFunctions.filter(ns, condition, recurse)
+  def filterNodes(condition: Node => Boolean, recurse: Node => Boolean = (e: Node) => true) =
+    NodeFunctions.filter(ns, condition, recurse)
 
   /** This class adds more methods to the Node class
     */

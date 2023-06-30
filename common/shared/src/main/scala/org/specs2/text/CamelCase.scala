@@ -15,7 +15,7 @@ private[specs2] trait CamelCase:
         }
         .toString
 
-    def camelCaseToWordsCapitalized: String =
-      s.camelCaseToWords.capitalize
+  def camelCaseToWordsCapitalized: String =
+    s.camelCaseToWords.capitalize
 
 private[specs2] object CamelCase extends CamelCase

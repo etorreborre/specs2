@@ -37,56 +37,56 @@ private[specs2] trait NotNullStrings:
           case _ =>
             evaluate(a)
 
-    /** @return
-      *   the string evaluation of an object + its class name
-      *
-      *   - if it is null => null
-      *   - if this is an Array or an Iterable => it prints the class name of the full collection if each element has
-      *     the same type: List[Int] for example other it prints each element with its class name (with a special case
-      *     for maps)
-      *   - if this is another type of object => calls the toString method + getClass.getName
-      *
-      * The classes of nested values are not shown unless `showAll` is true
-      */
-    def notNullWithClass(showAll: Boolean): String =
-      if a == null then "null"
-      else
-        def sameElementTypes(ts: Iterable[?]) =
-          ts.nonEmpty && (ts.toSeq.collect { case t if t != null => t.getClass.getName }.distinct.size == 1)
+  /** @return
+    *   the string evaluation of an object + its class name
+    *
+    *   - if it is null => null
+    *   - if this is an Array or an Iterable => it prints the class name of the full collection if each element has the
+    *     same type: List[Int] for example other it prints each element with its class name (with a special case for
+    *     maps)
+    *   - if this is another type of object => calls the toString method + getClass.getName
+    *
+    * The classes of nested values are not shown unless `showAll` is true
+    */
+  def notNullWithClass(showAll: Boolean): String =
+    if a == null then "null"
+    else
+      def sameElementTypes(ts: Iterable[?]) =
+        ts.nonEmpty && (ts.toSeq.collect { case t if t != null => t.getClass.getName }.distinct.size == 1)
 
-        def sameKeyValueTypes(map: Map[?, ?]) = sameElementTypes(map.keys) && sameElementTypes(map.values)
+      def sameKeyValueTypes(map: Map[?, ?]) = sameElementTypes(map.keys) && sameElementTypes(map.values)
 
-        tryOrElse {
-          a.asInstanceOf[Matchable] match
-            case ar: Array[?] =>
-              if !showAll && sameElementTypes(ar) then
-                ar.map(a => quote(a.notNull)).mkString("Array(", ", ", "): Array[" + ar(0).getClass.getName + "]")
-              else ar.map(_.notNullWithClass(showAll)).mkString("Array(", ", ", ")")
+      tryOrElse {
+        a.asInstanceOf[Matchable] match
+          case ar: Array[?] =>
+            if !showAll && sameElementTypes(ar) then
+              ar.map(a => quote(a.notNull)).mkString("Array(", ", ", "): Array[" + ar(0).getClass.getName + "]")
+            else ar.map(_.notNullWithClass(showAll)).mkString("Array(", ", ", ")")
 
-            case map: Map[?, ?] =>
-              if !showAll && sameKeyValueTypes(map) then
-                mapNotNullMkStringWith(
-                  map,
-                  addQuotes = true
-                ) + ": " + map.getClass.getName + "[" + map.head.getClass.getName + "]"
-              else
-                map
-                  .map { case (k, v) => (k.notNullWithClass(showAll), v.notNullWithClass(showAll)) }
-                  .mkString("Map(", ", ", ")") +
-                  ": " + map.getClass.getName
+          case map: Map[?, ?] =>
+            if !showAll && sameKeyValueTypes(map) then
+              mapNotNullMkStringWith(
+                map,
+                addQuotes = true
+              ) + ": " + map.getClass.getName + "[" + map.head.getClass.getName + "]"
+            else
+              map
+                .map { case (k, v) => (k.notNullWithClass(showAll), v.notNullWithClass(showAll)) }
+                .mkString("Map(", ", ", ")") +
+                ": " + map.getClass.getName
 
-            case it: Iterable[?] =>
-              if !showAll && sameElementTypes(it) then
-                iterableNotNullMkStringWith(
-                  it,
-                  addQuotes = true
-                ) + ": " + it.getClass.getName + "[" + it.head.getClass.getName + "]"
-              else it.map(_.notNullWithClass(showAll)).toString + ": " + it.getClass.getName
+          case it: Iterable[?] =>
+            if !showAll && sameElementTypes(it) then
+              iterableNotNullMkStringWith(
+                it,
+                addQuotes = true
+              ) + ": " + it.getClass.getName + "[" + it.head.getClass.getName + "]"
+            else it.map(_.notNullWithClass(showAll)).toString + ": " + it.getClass.getName
 
-            case _ => evaluate(a) + ": " + a.getClass.getName
-        }(evaluate(a) + ": " + a.getClass.getName) // in case the collection throws an exception during its traversal
-    /** default case for the notNullWithClass method */
-    def notNullWithClass: String = notNullWithClass(showAll = false)
+          case _ => evaluate(a) + ": " + a.getClass.getName
+      }(evaluate(a) + ": " + a.getClass.getName) // in case the collection throws an exception during its traversal
+  /** default case for the notNullWithClass method */
+  def notNullWithClass: String = notNullWithClass(showAll = false)
 
   private def evaluate(value: =>Any, msg: String = "Exception when evaluating toString: ") =
     val string = catchAllOr(value.toString) { (t: Throwable) => msg + t.getMessage }

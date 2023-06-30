@@ -11,85 +11,84 @@ trait Throwablex:
   /** Extension methods for Throwables
     */
   extension [T <: Throwable](t: T)
-
     private def topTrace: TraceLocation =
       TraceLocation(if t.getStackTrace.isEmpty then stackTraceElement("specs2") else t.getStackTrace()(0))
 
-    /** @return the file name and the line number where the Throwable was created */
-    def location: String =
-      topTrace.location
+  /** @return the file name and the line number where the Throwable was created */
+  def location: String =
+    topTrace.location
 
-    /** @return the class name and the line number where the Throwable was created */
-    def classLocation: String =
-      topTrace.classLocation
+  /** @return the class name and the line number where the Throwable was created */
+  def classLocation: String =
+    topTrace.classLocation
 
-    /** @return the class name, file Name and the line number where the Throwable was created */
-    def fullLocation: String =
-      topTrace.fullLocation
+  /** @return the class name, file Name and the line number where the Throwable was created */
+  def fullLocation: String =
+    topTrace.fullLocation
 
-    /** @return the ith stacktrace element */
-    def apply(i: Int): StackTraceElement =
-      t.getStackTrace.apply(i)
+  /** @return the ith stacktrace element */
+  def apply(i: Int): StackTraceElement =
+    t.getStackTrace.apply(i)
 
-    /** @return the first stacktrace element as an option */
-    def headOption: Option[StackTraceElement] =
-      t.getStackTrace.toList.headOption
+  /** @return the first stacktrace element as an option */
+  def headOption: Option[StackTraceElement] =
+    t.getStackTrace.toList.headOption
 
-    /** Select all traces of this exception matching a given pattern
-      */
-    def filter(pattern: String): T =
-      t.setStackTrace(t.getStackTrace.toList.filter(patternMatches(pattern)))
+  /** Select all traces of this exception matching a given pattern
+    */
+  def filter(pattern: String): T =
+    t.setStackTrace(t.getStackTrace.toList.filter(patternMatches(pattern)))
 
-    /** Select all traces of this exception according to filtering function WARNING: this mutates the exception to be
-      * able to retain its type!
-      */
-    def filter(f: Seq[StackTraceElement] => Seq[StackTraceElement]): T =
-      chainedExceptions.foreach(_.filter(f))
-      t.setStackTrace(f(t.getStackTrace.toList))
+  /** Select all traces of this exception according to filtering function WARNING: this mutates the exception to be able
+    * to retain its type!
+    */
+  def filter(f: Seq[StackTraceElement] => Seq[StackTraceElement]): T =
+    chainedExceptions.foreach(_.filter(f))
+    t.setStackTrace(f(t.getStackTrace.toList))
 
-    /** match a stacktrace element with a pattern */
-    private def patternMatches(p: String): StackTraceElement => Boolean =
-      (_: StackTraceElement).toString.matchesSafely(p, enclosing = ".*")
+  /** match a stacktrace element with a pattern */
+  private def patternMatches(p: String): StackTraceElement => Boolean =
+    (_: StackTraceElement).toString.matchesSafely(p, enclosing = ".*")
 
-    /** Select all traces of this exception not matching a given pattern
-      */
-    def filterNot(pattern: String): T =
-      t.setStackTrace(t.getStackTrace.toList.filterNot(patternMatches(pattern)))
+  /** Select all traces of this exception not matching a given pattern
+    */
+  def filterNot(pattern: String): T =
+    t.setStackTrace(t.getStackTrace.toList.filterNot(patternMatches(pattern)))
 
-    /** @return true if the pattern exists in one of the traces */
-    def exists(pattern: String): Boolean =
-      t.getStackTrace.toList.exists(patternMatches(pattern))
+  /** @return true if the pattern exists in one of the traces */
+  def exists(pattern: String): Boolean =
+    t.getStackTrace.toList.exists(patternMatches(pattern))
 
-    /** @return the list of chained exceptions */
-    def chainedExceptions: List[Throwable] =
-      if t.getCause == null then List()
-      else t.getCause :: t.getCause.chainedExceptions
+  /** @return the list of chained exceptions */
+  def chainedExceptions: List[Throwable] =
+    if t.getCause == null then List()
+    else t.getCause :: t.getCause.chainedExceptions
 
-    /** @return the list of all stacktrace elements */
-    def getFullStackTrace: List[java.lang.StackTraceElement] =
-      (t :: chainedExceptions).flatMap(_.getStackTrace)
+  /** @return the list of all stacktrace elements */
+  def getFullStackTrace: List[java.lang.StackTraceElement] =
+    (t :: chainedExceptions).flatMap(_.getStackTrace)
 
-    /** @return
-      *   the full stack trace as a string
-      */
-    def getFullStackTraceAsString: String =
-      val stringWriter = new java.io.StringWriter
-      val pr = new PrintWriter(stringWriter)
-      try { t.printStackTrace(pr) }
-      finally { pr.close }
-      stringWriter.toString
+  /** @return
+    *   the full stack trace as a string
+    */
+  def getFullStackTraceAsString: String =
+    val stringWriter = new java.io.StringWriter
+    val pr = new PrintWriter(stringWriter)
+    try { t.printStackTrace(pr) }
+    finally { pr.close }
+    stringWriter.toString
 
-    /** print all the stacktrace for t, including the traces from its causes */
-    def printFullStackTrace() = t.getFullStackTrace.foreach(println(_))
+  /** print all the stacktrace for t, including the traces from its causes */
+  def printFullStackTrace() = t.getFullStackTrace.foreach(println(_))
 
-    /** set a new stacktrace */
-    def setStackTrace(st: Seq[StackTraceElement]): T =
-      t.setStackTrace(st.toArray)
-      t
+  /** set a new stacktrace */
+  def setStackTrace(st: Seq[StackTraceElement]): T =
+    t.setStackTrace(st.toArray)
+    t
 
-    /** @return the exception message and its cause if any */
-    def messageAndCause =
-      t.getMessage.notNull + (if t.getCause != null then ". Cause: " + t.getCause.getMessage.notNull else "")
+  /** @return the exception message and its cause if any */
+  def messageAndCause =
+    t.getMessage.notNull + (if t.getCause != null then ". Cause: " + t.getCause.getMessage.notNull else "")
 
   /** utility method to create a default stacktrace element */
   def stackTraceElement(m: String, className: String = "internals", fileName: String = "file", lineNumber: Int = 1) =

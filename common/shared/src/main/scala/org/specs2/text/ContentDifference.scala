@@ -148,9 +148,8 @@ trait DifferenceFilter extends Function1[Seq[LineComparison], Seq[LineComparison
   * 10.differences == FirstNDifferencesFilter(10)
   */
 trait DifferenceFilters:
-  extension (n: Int)(using not: NotGiven[NoDifferenceFilters])
-    def difference = FirstDifferences(n: Int)
-    def differences = FirstDifferences(n: Int)
+  extension (n: Int)(using not: NotGiven[NoDifferenceFilters]) def difference = FirstDifferences(n: Int)
+  def differences = FirstDifferences(n: Int)
 
 /** mix-in this trait to remove the implicit provided by the DifferenceFilters trait
   */

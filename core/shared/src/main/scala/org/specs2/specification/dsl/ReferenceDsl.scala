@@ -13,16 +13,16 @@ trait ReferenceDsl extends ReferenceCreation:
     infix def ~(s: SpecStructure): Fragment =
       fragmentFactory.link(SpecificationRef(s.header, s.arguments, alias = alias))
 
-    infix def ~(s: SpecStructure, tooltip: String): Fragment =
-      fragmentFactory.link(SpecificationRef(s.header, s.arguments, alias = alias, tooltip = tooltip))
+  infix def ~(s: SpecStructure, tooltip: String): Fragment =
+    fragmentFactory.link(SpecificationRef(s.header, s.arguments, alias = alias, tooltip = tooltip))
 
-    infix def ~(s: =>SpecificationStructure): Fragment =
-      lazy val spec = s.is
-      fragmentFactory.link(SpecificationRef(spec.header, spec.arguments, alias = alias))
+  infix def ~(s: =>SpecificationStructure): Fragment =
+    lazy val spec = s.is
+    fragmentFactory.link(SpecificationRef(spec.header, spec.arguments, alias = alias))
 
-    infix def ~(s: =>SpecificationStructure, tooltip: String): Fragment =
-      lazy val spec = s.is
-      fragmentFactory.link(SpecificationRef(spec.header, spec.arguments, alias = alias, tooltip = tooltip))
+  infix def ~(s: =>SpecificationStructure, tooltip: String): Fragment =
+    lazy val spec = s.is
+    fragmentFactory.link(SpecificationRef(spec.header, spec.arguments, alias = alias, tooltip = tooltip))
 
   extension (alias: String)
     infix def ~/(s: SpecStructure): Fragment =

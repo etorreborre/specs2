@@ -17,9 +17,9 @@ trait TypedEqual:
     def ===(other: =>T): Result =
       createExpectable(t).applyMatcher[T](new EqualityMatcher(other))
 
-    /** ! equality matcher on Expectables */
-    def !==(other: =>T): Result =
-      createExpectable(t).applyMatcher[T](new EqualityMatcher(other).not)
+  /** ! equality matcher on Expectables */
+  def !==(other: =>T): Result =
+    createExpectable(t).applyMatcher[T](new EqualityMatcher(other).not)
 
 object TypedEqual extends TypedEqual with ExpectationsCreation
 

@@ -18,9 +18,9 @@ trait Trees:
     def bottomUp(f: ((A, LazyList[B]) => B)): Tree[B] =
       outer.bottomUp(t, f)
 
-    @targetName("prunePostfix")
-    def prune(f: A => Option[B]): Option[Tree[B]] =
-      outer.prune(t, f)
+  @targetName("prunePostfix")
+  def prune(f: A => Option[B]): Option[Tree[B]] =
+    outer.prune(t, f)
 
   extension [A](t: Tree[A])
     @targetName("prunePostfix")

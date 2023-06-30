@@ -364,8 +364,8 @@ object TextPrinterSpecification extends MustMatchers with FragmentsDsl with Debu
     def contains(contained: String): Result =
       Fragments(fragment).contains(contained, identity)
 
-    def contains(contained: String, f: String => String): Result =
-      Fragments(fragment).contains(contained, f)
+  def contains(contained: String, f: String => String): Result =
+    Fragments(fragment).contains(contained, f)
 
   extension (fragments: Fragments)
     def contains(contained: String): Result =

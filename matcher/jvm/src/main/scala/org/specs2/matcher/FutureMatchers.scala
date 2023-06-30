@@ -18,14 +18,14 @@ trait FutureMatchers extends ExpectationsCreation:
     def await: Matcher[Future[T]] =
       awaitMatcher(m)(retries = 0, timeout = 1.second)
 
-    def await(retries: Int, timeout: FiniteDuration): Matcher[Future[T]] =
-      awaitMatcher(m)(retries, timeout)
+  def await(retries: Int, timeout: FiniteDuration): Matcher[Future[T]] =
+    awaitMatcher(m)(retries, timeout)
 
-    def retryAwait(retries: Int): Matcher[Future[T]] =
-      awaitMatcher(m)(retries, timeout = 1.second)
+  def retryAwait(retries: Int): Matcher[Future[T]] =
+    awaitMatcher(m)(retries, timeout = 1.second)
 
-    def awaitFor(timeout: FiniteDuration): Matcher[Future[T]] =
-      awaitMatcher(m)(retries = 0, timeout)
+  def awaitFor(timeout: FiniteDuration): Matcher[Future[T]] =
+    awaitMatcher(m)(retries = 0, timeout)
 
   /** when a Future contains a result, it can be awaited to return this result
     */

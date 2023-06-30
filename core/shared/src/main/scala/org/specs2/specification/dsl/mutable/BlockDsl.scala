@@ -45,11 +45,11 @@ trait ExtendedBlockDsl extends BlockDsl:
     infix def should(s: =>S)(using t: ToBlock[S, R]): R =
       summon[ToBlock[S, R]].toBlock(s"$d should", s)
 
-    infix def can(s: =>S)(using t: ToBlock[S, R]): R =
-      summon[ToBlock[S, R]].toBlock(s"$d can", s)
+  infix def can(s: =>S)(using t: ToBlock[S, R]): R =
+    summon[ToBlock[S, R]].toBlock(s"$d can", s)
 
-    infix def in(s: =>S)(using t: ToBlock[S, R]): R =
-      summon[ToBlock[S, R]].toBlock(d, s)
+  infix def in(s: =>S)(using t: ToBlock[S, R]): R =
+    summon[ToBlock[S, R]].toBlock(d, s)
 
   /** adding a conflicting implicit to warn the user when a `>>` was forgotten
     */

@@ -38,5 +38,5 @@ trait SemigroupSyntax:
     def append(b: =>M): M =
       Semigroup.apply[M].append(a, b)
 
-    def |+|(b: =>M): M =
-      append(b)
+  def |+|(b: =>M): M =
+    append(b)

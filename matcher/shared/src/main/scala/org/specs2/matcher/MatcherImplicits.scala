@@ -16,36 +16,35 @@ trait MatcherImplicits extends ExpectationsCreation:
   /** Extend collections to check all their elements
     */
   extension [T, R: AsResult](values: Traversable[T])
-
     def atLeastOnce(f: T => R): Result =
       createExpectable(values).applyMatcher(ContainWithResult(f).atLeastOnce)
 
-    def atMostOnce(f: T => R): Result =
-      createExpectable(values).applyMatcher(ContainWithResult(f).atMostOnce)
+  def atMostOnce(f: T => R): Result =
+    createExpectable(values).applyMatcher(ContainWithResult(f).atMostOnce)
 
-    def atLeast(n: Times)(f: T => R): Result =
-      createExpectable(values).applyMatcher(ContainWithResult(f).atLeast(n))
+  def atLeast(n: Times)(f: T => R): Result =
+    createExpectable(values).applyMatcher(ContainWithResult(f).atLeast(n))
 
-    def atLeast(n: Int)(f: T => R): Result =
-      createExpectable(values).applyMatcher(ContainWithResult(f).atLeast(n))
+  def atLeast(n: Int)(f: T => R): Result =
+    createExpectable(values).applyMatcher(ContainWithResult(f).atLeast(n))
 
-    def atMost(n: Times)(f: T => R): Result =
-      createExpectable(values).applyMatcher(ContainWithResult(f).atMost(n))
+  def atMost(n: Times)(f: T => R): Result =
+    createExpectable(values).applyMatcher(ContainWithResult(f).atMost(n))
 
-    def atMost(n: Int)(f: T => R): Result =
-      createExpectable(values).applyMatcher(ContainWithResult(f).atMost(n))
+  def atMost(n: Int)(f: T => R): Result =
+    createExpectable(values).applyMatcher(ContainWithResult(f).atMost(n))
 
-    def between(min: Times, max: Times)(f: T => R): Result =
-      createExpectable(values).applyMatcher(ContainWithResult(f).between(min, max))
+  def between(min: Times, max: Times)(f: T => R): Result =
+    createExpectable(values).applyMatcher(ContainWithResult(f).between(min, max))
 
-    def between(min: Int, max: Int)(f: T => R): Result =
-      createExpectable(values).applyMatcher(ContainWithResult(f).between(min, max))
+  def between(min: Int, max: Int)(f: T => R): Result =
+    createExpectable(values).applyMatcher(ContainWithResult(f).between(min, max))
 
-    def exactly(n: Times)(f: T => R): Result =
-      createExpectable(values).applyMatcher(ContainWithResult(f).exactly(n))
+  def exactly(n: Times)(f: T => R): Result =
+    createExpectable(values).applyMatcher(ContainWithResult(f).exactly(n))
 
-    def exactly(n: Int)(f: T => R): Result =
-      createExpectable(values).applyMatcher(ContainWithResult(f).exactly(n))
+  def exactly(n: Int)(f: T => R): Result =
+    createExpectable(values).applyMatcher(ContainWithResult(f).exactly(n))
 
   /** verify the function f for all the values, stopping after the first failure, where the PartialFunction is defined
     */

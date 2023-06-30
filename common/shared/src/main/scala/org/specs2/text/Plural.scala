@@ -6,13 +6,12 @@ package text
 private[specs2] trait Plural:
 
   /** @return a Noun object which can be pluralized */
-  extension (s: String)
-    def plural(vs: Iterable[Any]): String = s.plural(vs.size)
-    def plural(v: Int): String = if v > 1 then s + "s" else s
-    def plural(v: Long): String = if v > 1 then s + "s" else s
+  extension (s: String) def plural(vs: Iterable[Any]): String = s.plural(vs.size)
+  def plural(v: Int): String = if v > 1 then s + "s" else s
+  def plural(v: Long): String = if v > 1 then s + "s" else s
 
-    def bePlural(v: Int): String = s.plural(v) + " " + beVerbPlural(v)
-    def bePlural(v: Long): String = s.plural(v) + " " + beVerbPlural(v)
+  def bePlural(v: Int): String = s.plural(v) + " " + beVerbPlural(v)
+  def bePlural(v: Long): String = s.plural(v) + " " + beVerbPlural(v)
 
   def beVerbPlural(v: Int): String = if v > 1 then "are" else "is"
   def beVerbPlural(v: Long): String = if v > 1 then "are" else "is"

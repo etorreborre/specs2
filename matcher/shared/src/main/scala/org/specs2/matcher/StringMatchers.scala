@@ -15,15 +15,14 @@ trait StringMatchers:
 
   /** adapt the BeEqualTo matcher to provide ignoreCase and ignoreSpace matcher */
   extension (m: AdaptableMatcher[String])
-
     def ignoreCase: AdaptableMatcher[String] =
       m.^^^((s: String) => s.toString.toLowerCase, ignoringCase, ignoringCase)
 
-    def ignoreSpace: AdaptableMatcher[String] =
-      m.^^^((s: String) => s.toString.replaceAll("\\s", ""), ignoringSpace, ignoringSpace)
+  def ignoreSpace: AdaptableMatcher[String] =
+    m.^^^((s: String) => s.toString.replaceAll("\\s", ""), ignoringSpace, ignoringSpace)
 
-    def trimmed: AdaptableMatcher[String] =
-      m.^^^((s: String) => s.toString.trim, isTrimmed, isTrimmed)
+  def trimmed: AdaptableMatcher[String] =
+    m.^^^((s: String) => s.toString.trim, isTrimmed, isTrimmed)
 
   private[specs2] def ignoringCase(s: String): String = s"$s, ignoring case"
   private[specs2] def ignoringSpace(s: String): String = s"$s, ignoring space"

@@ -11,7 +11,6 @@ import Trim.*
 trait Regexes:
 
   extension (s: String)
-
     /** matchesSafely a pattern p. If p cannot be compiled, then it is quoted if the string s is enclosed with
       * characters, they can be excluded before the quotation is done
       */
@@ -21,9 +20,9 @@ trait Regexes:
       )
       pattern.matcher(s).matches
 
-    /** @return a regular expression String matching 's' inside another string, possibly multi-string */
-    def regexPart: String =
-      s"(?s).*$s.*"
+  /** @return a regular expression String matching 's' inside another string, possibly multi-string */
+  def regexPart: String =
+    s"(?s).*$s.*"
 
   extension (r: Regex) def matches(s: String): Boolean = r.pattern.matcher(s).matches
 

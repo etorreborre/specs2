@@ -13,14 +13,14 @@ trait ReferenceDsl extends FragmentBuilder with dsl.ReferenceDsl:
     override infix def ~(s: SpecStructure): Fragment =
       addFragment(super.~(alias)(s))
 
-    override infix def ~(s: SpecStructure, tooltip: String): Fragment =
-      addFragment(super.~(alias)(s, tooltip))
+  override infix def ~(s: SpecStructure, tooltip: String): Fragment =
+    addFragment(super.~(alias)(s, tooltip))
 
-    override infix def ~(s: =>SpecificationStructure): Fragment =
-      addFragment(super.~(alias)(s))
+  override infix def ~(s: =>SpecificationStructure): Fragment =
+    addFragment(super.~(alias)(s))
 
-    override infix def ~(s: =>SpecificationStructure, tooltip: String): Fragment =
-      addFragment(super.~(alias)(s, tooltip))
+  override infix def ~(s: =>SpecificationStructure, tooltip: String): Fragment =
+    addFragment(super.~(alias)(s, tooltip))
 
   extension (alias: String)
     override infix def ~/(s: SpecStructure): Fragment =
