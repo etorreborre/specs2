@@ -11,14 +11,13 @@ import org.specs2.specification.core.{Fragments, Fragment}
 trait TextDsl extends TextCreation:
   outer =>
 
-  extension (s: String)
-    def txt = outer.addText(s)
+  extension (s: String) def txt = outer.addText(s)
 
-    def br: Fragment = s.txt.br(2)
-    def br(n: Int): Fragment = s.txt.br(n)
+  def br: Fragment = s.txt.br(2)
+  def br(n: Int): Fragment = s.txt.br(n)
 
-    def p: Fragment = s.txt.p
-    def p(n: Int): Fragment = s.txt.p(n)
+  def p: Fragment = s.txt.p
+  def p(n: Int): Fragment = s.txt.p(n)
 
   extension (f: =>Fragment)
     def br: Fragment =

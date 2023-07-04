@@ -19,11 +19,11 @@ trait Htmlx:
     def headers: NodeSeq =
       outer.headers(ns)
 
-    def headersTree: Tree[Header] =
-      outer.headersToTree(ns.headers).toTree
+  def headersTree: Tree[Header] =
+    outer.headersToTree(ns.headers).toTree
 
-    def addHeadersAnchors: NodeSeq =
-      outer.headersAnchors.rewrite(ns).reduceNodes
+  def addHeadersAnchors: NodeSeq =
+    outer.headersAnchors.rewrite(ns).reduceNodes
 
   extension (n: Node)
     def addHeadersAnchors: NodeSeq =
