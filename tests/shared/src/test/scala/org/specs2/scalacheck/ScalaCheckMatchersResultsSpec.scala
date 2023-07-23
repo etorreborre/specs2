@@ -2,10 +2,11 @@ package org.specs2
 package scalacheck
 
 import org.scalacheck.util.Pretty
+import org.scalacheck.rng.Seed
+import org.scalacheck.Prop.forAll
 import org.scalacheck.*
 import matcher.*
 import execute.*
-import org.scalacheck.Prop.{forAll}
 import org.specs2.main.CommandLine
 import org.specs2.text.Trim.*
 
@@ -15,9 +16,11 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
  Reporting for Props
 
    ${check(Prop.passed) returns "OK, passed 100 tests."}
-   ${checkVerbose0(Prop.falsified) returns "The seed is"}
    ${check(Prop.falsified) must beFailing(withMessage("Falsified after 0 passed tests."))}
    ${check(Prop.undecided) must beFailing(withMessage("Gave up after only 0 passed tests. 501 tests were discarded"))}
+   ${checkVerbose0(Prop.falsified) returns "The seed is"}
+   the reported seed must be the initial one $stableSeed
+
    when there is a conversion exception
    ${check(exceptionPropOnConversion) must beFailing(withMessage("failure"))}
 
@@ -105,6 +108,19 @@ class ScalaCheckMatchersResultsSpec extends Specification with ScalaCheck with R
 
   def check(prop: Prop): Result =
     check(prop, defaultParameters.setVerbosity(-1), defaultFreqMapPretty)
+
+  def stableSeed = {
+    var count = 0
+    def p1: Prop = org.scalacheck.Prop.forAllNoShrink { (_: Int) =>
+      val result = count must be_<(5)
+      count += 1
+      result
+    }
+    val parameters = defaultParameters.copy(
+      seed = Seed.fromBase64("cgiY790v4OsAR1_cWqWMGVY-uOIiYEGGnk8piLYlZUP=").toOption
+    )
+    check(p1, parameters, defaultFreqMapPretty) returns "cgiY790v4OsAR1_cWqWMGVY-uOIiYEGGnk8piLYlZUP="
+  }
 
   def exceptionWithCause(msg: String = "boom") =
     new java.lang.IllegalArgumentException(msg, new java.lang.Exception("cause"))
