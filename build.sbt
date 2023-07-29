@@ -75,7 +75,22 @@ lazy val mimaSettings =
   Seq(
     mimaPreviousArtifacts := Set(organization.value %% moduleName.value % "5.0.0"),
     mimaFailOnNoPrevious := false,
-    mimaBinaryIssueFilters := Mima.excluded
+    mimaBinaryIssueFilters ++= Seq(
+      // This was needed to fix a warning (see https://github.com/etorreborre/specs2/commit/343bf6d5425733f89c5a3f1e237b39e37a3205a8)
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.execute.Result.*"),
+      // changed the implementation and return types for a better API
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.matcher.ExceptionMatchers*"),
+      ProblemFilters.exclude[MissingClassProblem]("org.specs2.matcher.ExceptionMatchers*"),
+      // changed the implementation and return types for a better API
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.matcher.Try*"),
+      ProblemFilters.exclude[MissingClassProblem]("org.specs2.matcher.Try*"),
+      ProblemFilters.exclude[MissingTypesProblem]("org.specs2.matcher.Try*"),
+      ProblemFilters.exclude[IncompatibleResultTypeProblem]("org.specs2.matcher.Try*"),
+      // made the signature more specific but also more correct
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.reporter.HtmlBodyPrinter.printStatistics"),
+      // fixed warnings when upgrading to Scala 3.1.3: https://github.com/etorreborre/specs2/commit/763891e99b8ab74cfeb58b557968f17c84b2b3b2
+      ProblemFilters.exclude[ReversedMissingMethodProblem]("org.specs2.specification.dsl.mutable.ReferenceDsl.*"),
+    )
   )
 
 lazy val commonJvmSettings =
