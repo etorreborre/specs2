@@ -47,11 +47,11 @@ trait JsonMatchers extends Expectations with JsonMatchersImplicits:
         (value.asInstanceOf[Matchable], rest.asInstanceOf[Matchable]) match
           case (_, Nil) => check(createExpectable(anyValueToJsonType(value)))
           case ((k, v), q :: _) =>
-            if rest(0).selector.select(Map((k.notNull, v))).isDefined then Success()
+            if rest(0).selector.select((k,v)).isDefined then Success()
             else Failure(s"found '${value.notNull}' but no value to select for ${rest(0).name}")
 
           case (v, q :: _) =>
-            if rest(0).selector.select(List(v)).isDefined then Success()
+            if rest(0).selector.select(v).isDefined then Success()
             else Failure(s"found '${value.notNull}' but no value to select for ${rest(0).name}")
 
       (json, queries) match
@@ -272,6 +272,7 @@ trait JsonSelectors:
   sealed trait JsonSelector:
     def select(list: List[Any]): Option[Any]
     def select(map: Map[String, Any]): Option[(String, Any)]
+    def select(value: Any): Option[Any]
     def name: String
     def description: String
 
@@ -282,6 +283,7 @@ trait JsonSelectors:
   case class JsonEqualValueSelector(v: Any) extends JsonValueSelector:
     def select(names: List[Any]) = names.find(_.notNull == v.notNull)
     def select(map: Map[String, Any]) = None
+    def select(value: Any) = if value == v then Some(v) else None
     def name = s"'${v.notNull}'"
     def description: String = s"value $name"
 
@@ -294,6 +296,7 @@ trait JsonSelectors:
           case other     => false
       }
     def select(map: Map[String, Any]) = None
+    def select(value: Any) = if value == n then Some(n) else None
     def name = n.toString
     def description: String = s"value $name"
 
@@ -305,26 +308,39 @@ trait JsonSelectors:
           case i: Int     => i == d
           case other      => false
       }
-
     def select(map: Map[String, Any]) = None
+    def select(value: Any) = if value == d then Some(d) else None
     def name = d.toString
     def description: String = s"value $name"
 
   case class JsonIndexSelector(n: Int) extends JsonSelector:
     def select(names: List[Any]) = names.zipWithIndex.find { case (_, i) => i == n }.map(_._1)
     def select(map: Map[String, Any]) = map.zipWithIndex.find { case (_, i) => i == n }.map(_._1)
+    def select(value: Any) =
+      value.asInstanceOf[Matchable] match
+        case l: List[_] => this.select(l)
+        case m: Map[_, _] => this.select(m)
+        case _ => None
     def name = s"index $n'"
     def description: String = s"value $name"
 
   case class JsonRegexSelector(r: Regex) extends JsonValueSelector:
     def select(names: List[Any]) = names.find(_.notNull `matches` r.toString).map(_.notNull)
     def select(map: Map[String, Any]) = None
+    def select(value: Any) =
+      value.asInstanceOf[Matchable] match
+        case s: String => if s.notNull `matches` r.toString then Some(s) else None
+        case _ => None
     def name = s"'$r'"
     def description: String = s"regex $name"
 
   case class JsonMatcherSelector(m: Matcher[String]) extends JsonValueSelector:
     def select(names: List[Any]) = names.find(n => m(createExpectable(n.notNull)).isSuccess)
     def select(map: Map[String, Any]) = None
+    def select(value: Any) =
+      value.asInstanceOf[Matchable] match
+         case s: String => if m(createExpectable(s.notNull)).isSuccess then Some(s) else None
+         case _ => None
     def name = "matcher"
     def description: String = s"specified $name"
 
@@ -333,6 +349,11 @@ trait JsonSelectors:
     def select(map: Map[String, Any]): Option[(String, Any)] =
       _1.select(map.keys.toList)
         .flatMap(k => map.find { case (k1, v) => k.notNull == k1 && _2.select(List(v)).isDefined })
+    def select(value: Any) =
+      value.asInstanceOf[Matchable] match
+        case m: Map[_, _] => this.select(m)
+        case kv: (_, _) => if _1.select(kv._1).isDefined && _2.select(kv._2).isDefined then Some(kv) else None
+        case _ => None
     def name = s"${_1.name}:${_2.description}"
     def description: String = s"pair $name"
 
@@ -340,7 +361,12 @@ trait JsonSelectors:
     def select(list: List[Any]): Option[Any] = selector.select(list)
     def select(map: Map[String, Any]): Option[(String, Any)] =
       selector.select(map.keys.toList).flatMap(k => map.find { case (k1, v) => k.notNull == k1 })
-
+    def select(value: Any) =
+      value.asInstanceOf[Matchable] match
+        case l: List[_] => this.select(l)
+        case m: Map[_, _] => this.select(m)
+        case kv: (_,_) => selector.select(kv._1).orElse(selector.select(kv._2))
+        case _ => None
     def name = selector.name
     def description: String = s"selector ${selector.description}"
 

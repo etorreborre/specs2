@@ -1,6 +1,8 @@
 package org.specs2
 package matcher
 
+import ResultMatchers.*
+
 class JsonMatchersSpec extends Specification with JsonMatchers {
   def is = s2"""
 
@@ -106,6 +108,11 @@ class JsonMatchersSpec extends Specification with JsonMatchers {
    in a nested value ${raw"""{"values": [{"a": "hello\"world"}]}""" must /("values").andHave(
       contain(/("a" -> """hello"world"""))
     )}
+
+ Non regression tests
+
+ # issue 1183
+ ${("{'items':null}" must (/("items") /# 0 / ("id" -> "test"))) must beFailing}
 
 """
 
