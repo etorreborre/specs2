@@ -2,7 +2,8 @@ package org.specs2
 package data
 
 import scala.collection.mutable
-import scala.util.control.NonLocalReturns.*
+import scala.util.boundary
+import scala.util.boundary.*
 
 /** Hopcroft-Karp (https://en.wikipedia.org/wiki/Hopcroft%E2%80%93Karp_algorithm) algorithm for finding the maximum
   * matching in a bipartite graph
@@ -38,13 +39,13 @@ object HopcroftKarp:
           }
       dist(nil) != Int.MaxValue
 
-    def dfs(v: Int): Boolean = returning {
+    def dfs(v: Int): Boolean = boundary {
       if v != -1 then
         edges.get(v).toSeq.flatten.foreach { u =>
           if dist(pair2(u)) == dist(v) + 1 && dfs(pair2(u)) then
             pair2.put(u, v)
             pair1.put(v, u)
-            throwReturn(true)
+            break(true)
         }
         dist.put(v, Int.MaxValue)
         false

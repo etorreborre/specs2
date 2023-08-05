@@ -1,6 +1,6 @@
 package org.specs2.runner
 
-import collection.convert.ImplicitConversions.*
+import scala.jdk.CollectionConverters.*
 
 import org.junit.platform.engine.*
 import org.junit.platform.engine.discovery.*
@@ -65,7 +65,7 @@ class Specs2TestEngine extends TestEngine:
     listener.executionStarted(descriptor)
     descriptor match
       case Specs2EngineContainerDescriptor(_, _) =>
-        descriptor.getChildren.foreach(d => executeTest(d, listener))
+        descriptor.getChildren.asScala.foreach(d => executeTest(d, listener))
         listener.executionFinished(descriptor, TestExecutionResult.successful)
       case Specs2EngineTestDescriptor(_, _, execution) =>
         execution.startExecution(env).executionResult.runAction(env.executionEnv) match

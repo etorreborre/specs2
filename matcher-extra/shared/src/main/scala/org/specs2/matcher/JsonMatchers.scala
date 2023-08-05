@@ -366,8 +366,8 @@ trait JsonSelectors:
 
     def select(value: Any): Option[Any] =
       value.asInstanceOf[Matchable] match
-        case l: List[_]   => this.select(l)
-        case m: Map[_, _] => this.select(m)
+        case l: List[?]   => this.select(l)
+        case m: Map[?, ?] => this.select(m)
         case _            => None
 
     def name: String =
@@ -431,8 +431,8 @@ trait JsonSelectors:
 
     def select(value: Any): Option[Any] =
       value.asInstanceOf[Matchable] match
-        case m: Map[_, _] => this.select(m)
-        case kv: (_, _)   => this.select(kv)
+        case m: Map[?, ?] => this.select(m)
+        case kv: (?, ?)   => this.select(kv)
         case _            => None
 
     def name: String =
@@ -453,9 +453,9 @@ trait JsonSelectors:
 
     def select(value: Any): Option[Any] =
       value.asInstanceOf[Matchable] match
-        case l: List[_]   => this.select(l)
-        case m: Map[_, _] => this.select(m)
-        case kv: (_, _)   => this.select(kv.asInstanceOf[(String, Any)])
+        case l: List[?]   => this.select(l)
+        case m: Map[?, ?] => this.select(m)
+        case kv: (?, ?)   => this.select(kv.asInstanceOf[(String, Any)])
         case _            => None
 
     def name: String =

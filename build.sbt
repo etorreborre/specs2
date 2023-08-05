@@ -278,7 +278,7 @@ lazy val compilationOptions = Seq(
   "-language:implicitConversions,postfixOps",
   "-Ykind-projector",
   "-Xcheck-macros",
-  "-deprecation:false",
+  "-deprecation:true",
   "-unchecked",
   "-feature"
 )
