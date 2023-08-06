@@ -89,7 +89,13 @@ lazy val mimaSettings =
       // made the signature more specific but also more correct
       ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.reporter.HtmlBodyPrinter.printStatistics"),
       // fixed warnings when upgrading to Scala 3.1.3: https://github.com/etorreborre/specs2/commit/763891e99b8ab74cfeb58b557968f17c84b2b3b2
-      ProblemFilters.exclude[ReversedMissingMethodProblem]("org.specs2.specification.dsl.mutable.ReferenceDsl.*")
+      ProblemFilters.exclude[ReversedMissingMethodProblem]("org.specs2.specification.dsl.mutable.ReferenceDsl.*"),
+      // reworked the internals of the json matchers
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.matcher.JsonMatchers#JsonMatcher.anyValueToJsonType"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.matcher.JsonSelectors*"),
+      ProblemFilters.exclude[MissingClassProblem]("org.specs2.matcher.JsonSelectors*"),
+      ProblemFilters.exclude[ReversedMissingMethodProblem]("org.specs2.matcher.JsonSelectors*"),
+      ProblemFilters.exclude[MissingTypesProblem]("org.specs2.matcher.JsonSelectors*")
     )
   )
 
