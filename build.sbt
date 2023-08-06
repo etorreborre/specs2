@@ -32,8 +32,8 @@ lazy val specs2Settings = Seq(
   organization := "org.specs2",
   GlobalScope / scalazVersion := "7.2.34",
   specs2ShellPrompt,
-  ThisBuild / scalaVersion := "3.1.2",
-  ThisBuild / crossScalaVersions := Seq("3.1.2"))
+  ThisBuild / scalaVersion := "3.3.0",
+  ThisBuild / crossScalaVersions := Seq("3.3.0"))
 
 lazy val tagName = Def.setting {
   s"specs2-${version.value}"
@@ -341,10 +341,9 @@ lazy val compilationSettings: Seq[Def.Setting[_]] = Seq(
        case _ => List(compilerPlugin("org.typelevel" % "kind-projector" % "0.13.2" cross CrossVersion.full))
     }
   },
-  Test / scalacOptions += "-Yrangepos",
   Compile / doc / scalacOptions ++= Seq("-feature", "-language:_"),
-  Compile / console / scalacOptions := Seq("-Yrangepos", "-feature", "-language:_"),
-  Test / console / scalacOptions := Seq("-Yrangepos", "-feature", "-language:_"),
+  Compile / console / scalacOptions := Seq("-feature", "-language:_"),
+  Test / console / scalacOptions := Seq("-feature", "-language:_"),
   libraryDependencies ++= {
     CrossVersion.partialVersion(scalaVersion.value) match {
        case Some((3, _)) => Seq()
