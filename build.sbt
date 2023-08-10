@@ -354,7 +354,7 @@ lazy val compilationSettings: Seq[Def.Setting[_]] = Seq(
 
 
 lazy val testingSettings = Seq(
-  test / console / initialCommands := "import org.specs2._",
+  test / console / initialCommands := "import org.specs2.*",
   logBuffered := false,
   Global / cancelable := true,
   testFrameworks := Seq(TestFramework("org.specs2.runner.Specs2Framework")),
