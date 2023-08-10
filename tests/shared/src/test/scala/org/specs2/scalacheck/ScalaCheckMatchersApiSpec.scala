@@ -18,7 +18,8 @@ class ScalaCheckMatchersApiSpec extends Specification with ScalaCheck {
     returning a result
     ${prop { (i: Int) => success }}
     returning a match result
-    ${prop { (i: Int) => i must (be_>(0) or be_<=(0)) }}
+    $${prop { (i: Int) => i must (be_>(0) or be_<=(0)) }}
+    ${0 must (be_>(0) or be_<=(0))}
     returning a boolean value
     ${prop { (i: Int) => i > 0 || i <= 0 }}
     using  an implication and a match result

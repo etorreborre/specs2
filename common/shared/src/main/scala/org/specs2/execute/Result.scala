@@ -165,7 +165,13 @@ sealed abstract class Result(val message: String = "", val expected: String = ""
 object Result:
 
   /** @return a Success or a Failure */
-  def result(test: Boolean, successMessage: =>String, failureMessage: =>String, expected: =>String, details: Details): Result =
+  def result(
+      test: Boolean,
+      successMessage: =>String,
+      failureMessage: =>String,
+      expected: =>String,
+      details: Details
+  ): Result =
     if test then Success(successMessage.notNull)
     else Failure(m = failureMessage.notNull, e = expected, details = details)
 

@@ -79,8 +79,8 @@ Execution
   def creation6 = Prop("", 1, be_>(0).mute).execute === Success("")
   def creation7 = Prop("", 1, 2, be_>(0).mute).execute === Success("")
   def creation8 = {
-      (Prop[Int]("value", 1, be_>[Int](0)).execute === Success("1 is strictly greater than 0")) and
-      (Prop[Int]("value", 1, be_<(0)).execute === Failure("1 is greater or equal than 0")) and 
+    (Prop[Int]("value", 1, be_>[Int](0)).execute === Success("1 is strictly greater than 0")) and
+      (Prop[Int]("value", 1, be_<(0)).execute === Failure("1 is greater or equal than 0")) and
       (Prop[Int]("value", 1).must(be_>[Int](0)).execute === Success("1 is strictly greater than 0")) and
       (Prop[Int]("value", 1).must(be_<(0)).execute === Failure("1 is greater or equal than 0"))
   }

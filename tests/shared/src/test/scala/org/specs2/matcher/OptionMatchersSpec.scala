@@ -21,7 +21,7 @@ class OptionMatchersSpec extends Specification with ResultMatchers {
   ${(Some(1) must beSome.which(_ > 0))}
   ${(Some(1) must beSome.which(_ < 0)) returns "Some(1) is Some but the function returns 'false' on '1'"}
   ${Some(1) must beSome.like { case a if a > 0 => ok }}
-  ${(Some(1) must not(beSome[Int].like { case a => a must be_>=(0) })) returns "Expectation failed: 'Some(1) is Some but 1 is strictly less than 0'"}
+  ${(Some(1) must not(beSome[Int].like { case a => a must be_>=(0) })) returns "Expectation failed: 'Some(1) is Some but 1 is greater or equal than 0'"}
   ${Some(1) must not(beSome(2))}
   ${None must not(beSome)}
   ${None must not(beSome(2))}

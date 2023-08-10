@@ -59,7 +59,7 @@ Messages
   def adapt4 =
     val result =
       new Exception("message") must be_<(2) ^^ ((e: Exception) => e.getMessage.length `aka` "the message size")
-    result.message must ===("the message size '7' is greater than 2")
+    result.message must ===("the message size '7' is greater or equal than 2")
 
   def adapt5 =
     val result =

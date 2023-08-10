@@ -80,7 +80,7 @@ trait ResultLogicalCombinators extends Results:
         case f @ Failure(_, _, _, _) =>
           o match
             case s @ Success(m, exp) =>
-              if r.message == m then r.addExpectationsNb(s.expectationsNb)
+              if r.message == m then Success(m, exp, r.expectationsNb + s.expectationsNb)
               else Success(r.message + " and " + m, exp, r.expectationsNb + s.expectationsNb)
             case Failure(m, e, st, d) =>
               Failure(r.message + " and " + m, e, f.stackTrace ::: st, d).addExpectationsNb(r.expectationsNb)

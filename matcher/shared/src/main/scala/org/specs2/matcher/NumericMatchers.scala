@@ -121,27 +121,49 @@ class BeLessThanOrEqualTo[T: Ordering](n: T) extends Matcher[T]:
   def apply[S <: T](a: Expectable[S]) =
     val value: T = a.value
     val r = value <= n
-    val isEqual = value == n
-    result(r, a.description + " is strictly greater than " + n.toString)
+    result(
+      r,
+      a.description + " is less or equal than " + n.toString,
+      a.description + " is strictly greater than " + n.toString,
+      "",
+      NoDetails
+    )
 
 class BeLessThan[T: Ordering](n: T) extends Matcher[T]:
   def apply[S <: T](a: Expectable[S]) =
     val value: T = a.value
     val r = value < n
-    result(r, a.description + " is greater than " + n.toString)
+    result(
+      r,
+      a.description + " is strictly less than " + n.toString,
+      a.description + " is greater or equal than " + n.toString,
+      "",
+      NoDetails
+    )
 
 class BeGreaterThanOrEqualTo[T: Ordering](n: T) extends Matcher[T]:
   def apply[S <: T](a: Expectable[S]) =
     val value: T = a.value
     val r = value >= n
-    val isEqual = value == n
-    result(r, a.description + " is strictly less than " + n.toString)
+    result(
+      r,
+      a.description + " is greater or equal than " + n.toString,
+      a.description + " is strictly less than " + n.toString,
+      "",
+      NoDetails
+    )
 
 class BeGreaterThan[T: Ordering](n: T) extends Matcher[T]:
   def apply[S <: T](a: Expectable[S]) =
     val value: T = a.value
     val r = value > n
-    result(r, a.description + " is less than " + n.toString)
+    result(
+      r,
+      a.description + " is strictly greater than " + n.toString,
+      a.description + " is less or equal than " + n.toString,
+      "",
+      NoDetails
+    )
 
 class BeCloseTo[T: Numeric](n: T, delta: T) extends Matcher[T]:
   def apply[S <: T](x: Expectable[S]) =
