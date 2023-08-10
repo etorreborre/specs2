@@ -466,7 +466,7 @@ lazy val testingSettings = Seq(
 )
 
 lazy val testingJvmSettings = Seq(
-  javaOptions ++= Seq("-Xmx3G", "-Xss4M", "--add-opens=java.base/java.lang=ALL-UNNAMED"),
+  javaOptions ++= Seq("-Xmx3G", "-Xss4M"),
   Test / fork := true
 )
 
