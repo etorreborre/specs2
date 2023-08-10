@@ -150,7 +150,8 @@ trait PropSyntax:
     /** check the actual value with a matcher
       */
     infix def must(m: Matcher[T]): Prop[T, T] =
-      p.matchWith((t, _) => m.apply(createExpectable(t)))
+      // We set expected to actual since the expected value is not used in the constraint
+      p.copy(expected = p.actual).matchWith((t, _) => m.apply(createExpectable(t)))
 
 /** generic trait for anything having a label, to unify Props and Forms
   */

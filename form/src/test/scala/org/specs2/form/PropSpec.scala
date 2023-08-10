@@ -4,11 +4,13 @@ package form
 import control.Property
 import control.Properties.*
 import execute.*
+
 import sys.error
 import matcher.*
-import Matcher.{given}
+import Matcher.given
+import org.specs2.execute.ResultImplicits.combineResult
 
-class PropSpec extends Spec with TypedEqual {
+class PropSpec extends Spec with TypedEqual with PropSyntax {
   def is = s2"""
 
 A Prop is a Field defining an expected and an actual value.
@@ -27,6 +29,7 @@ Creation
    with a label, the actual value and a matcher                            $creation5
    with the actual value and a muted matcher                               $creation6
    with the actual value, the expected value and a muted matcher           $creation7
+   with a label, the actual value and a matcher for the actual value       $creation8
 
 Display
 =======
@@ -75,6 +78,12 @@ Execution
   def creation5 = withMatcher("f").execute === Failure("eric doesn't contain 'f'")
   def creation6 = Prop("", 1, be_>(0).mute).execute === Success("")
   def creation7 = Prop("", 1, 2, be_>(0).mute).execute === Success("")
+  def creation8 = {
+      (Prop[Int]("value", 1, be_>[Int](0)).execute === Success("1 is strictly greater than 0")) and
+      (Prop[Int]("value", 1, be_<(0)).execute === Failure("1 is greater or equal than 0")) and 
+      (Prop[Int]("value", 1).must(be_>[Int](0)).execute === Success("1 is strictly greater than 0")) and
+      (Prop[Int]("value", 1).must(be_<(0)).execute === Failure("1 is greater or equal than 0"))
+  }
 
   def display1 = Prop("name", expected = Property("fanny")).toString === "name: _ (expected: fanny)"
   def display2 = Prop("name", actual = Property("eric")).toString === "name: eric"
