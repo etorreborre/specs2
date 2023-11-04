@@ -6,7 +6,11 @@ import syntax.writer._
 
 object ConsoleEffect {
 
-  case class ConsoleMessage(value: String) extends AnyVal
+  case class ConsoleMessage(value: String) extends AnyVal {
+    // this is necessary to avoid a weird ClassCastException
+    // class org.specs2.control.eff.ConsoleEffect$ConsoleMessage cannot be cast to class java.lang.String (org.specs2.control.eff.ConsoleEffect$ConsoleMessage is in unnamed module of loader 'app'; java.lang.String is in module java.base of loader 'bootstrap') (JProcedure1.java:15)
+    override def toString(): String = value
+  }
 
   type _console[R] = Console |= R
   type Console[A] = Writer[ConsoleMessage, A]
@@ -36,12 +40,10 @@ object ConsoleEffect {
    * This interpreter prints messages to a printing function
    */
   def runConsoleToPrinter[R, U, A](printer: String => Unit)(w: Eff[R, A])(implicit m : Member.Aux[Console, R, U]): Eff[U, A] =
-    w.runWriterUnsafe((message: ConsoleMessage) => printer(message.value))
+    w.runWriterUnsafe((message: ConsoleMessage) => printer(message.toString()))
 }
 
 case class Writer[O, A](value: O, a: A) {
   val run: (O, A) =
     (value, a)
 }
-
-
