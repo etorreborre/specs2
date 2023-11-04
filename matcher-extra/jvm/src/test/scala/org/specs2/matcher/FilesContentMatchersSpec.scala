@@ -119,8 +119,7 @@ class FilesContentMatchersSpec extends Spec with FilesContentMatchers with Befor
           |MD5 mismatch:
           |file                        | MD5
           |${(targetDir / actual / sub | f2).path}    | 4392ebd49e53e2cfe36abb22e39601db
-          |${(targetDir / expected2 / sub | f2).path} | 1b7b2f1969fee054225ad6bbf7f6bdd7
-          |""".stripMargin.replace(" ", "")
+          |${(targetDir / expected2 / sub | f2).path} | 1b7b2f1969fee054225ad6bbf7f6bdd7""".stripMargin.replace(" ", "")
 
   val targetDir: DirectoryPath = "target" / "test" / FileName.unsafe("fcm-" + hashCode)
 

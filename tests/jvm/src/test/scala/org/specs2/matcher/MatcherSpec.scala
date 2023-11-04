@@ -112,7 +112,7 @@ Messages
 
   def collection2 =
     def beEven: Matcher[Int] = (i: Int) => (i % 2 == 0, i.toString + " is odd")
-    foreach(Seq(1, 2, 3))((i: Int) => i must beEven) returns "There are 2 failures\n1 is odd\n3 is odd\n"
+    foreach(Seq(1, 2, 3))((i: Int) => i must beEven) returns "There are 2 failures\n1 is odd\n3 is odd"
 
   def messages1 =
     def beEven: Matcher[Int] = (i: Int) => (i % 2 == 0, i.toString + " is odd")
