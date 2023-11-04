@@ -225,10 +225,21 @@ case class ContainWithResult[T](check: ValueCheck[T], timesMin: Option[Times] = 
       val details: Details = failures.collect { case Failure(_,_,_,d) if d != NoDetails => d }.headOption.getOrElse(NoDetails)
 
       (timesMin, timesMax) match {
-        case (None,             None)             => Matcher.result(successes.size == seq.size,                     okMessage, koMessage, t, details)
-        case (Some(Times(min)), None)             => Matcher.result(successes.size >= min,                          okMessage, koMessage, t, details)
-        case (None,             Some(Times(max))) => Matcher.result(successes.size <= max,                          okMessage, koMessage, t, details)
-        case (Some(Times(min)), Some(Times(max))) => Matcher.result(successes.size >= min && successes.size <= max, okMessage, koMessage, t, details)
+        case (None,  None) =>
+          Matcher.result(successes.size == seq.size, okMessage, koMessage, t, details)
+        case (Some(Times(min)), None) => {
+          val message = koMessage + s"""\nNumber of successful matches: ${successes.size}. Expected: at least $min"""
+          Matcher.result(successes.size >= min, okMessage, message, t, details)
+        }
+        case (None, Some(Times(max))) => {
+          val message = koMessage + s"""\nNumber of successful matches: ${successes.size}. Expected: at most $max"""
+          Matcher.result(successes.size <= max, okMessage, message, t, details)
+        }
+        case (Some(Times(min)), Some(Times(max))) => {
+          val expected = if (min == max) s"exactly $min" else if (min == 1) s"at most $max" else s"between $min and $max"
+          val message = koMessage + s"""\nNumber of successful matches: ${successes.size}. Expected: $expected"""
+          Matcher.result(successes.size >= min && successes.size <= max, okMessage, message, t, details)
+        }
       }
     }
   }
@@ -251,21 +262,29 @@ case class ContainWithResult[T](check: ValueCheck[T], timesMin: Option[Times] = 
   def foreach = copy(timesMin = None, timesMax = None)
 
   private
-  def messages[S <: Traversable[T]](expectable: String, successes: Seq[Result], failures: Seq[Result]) = check match {
-    case BeEqualTypedValueCheck(expected) => (s"$expectable contains $expected", s"$expectable does not contain $expected")
-    case BeEqualValueCheck(expected)      => (s"$expectable contains $expected", s"$expectable does not contain $expected")
-    case _                                => genericMessages(expectable, successes, failures)
+  def messages[S <: Traversable[T]](expectable: String, successes: Seq[Result], failures: Seq[Result]) = {
+      def equalValueCheckMessages(expected: Any) = {
+        val containsMessage = s"$expectable contains $expected"
+        val doesNotContainMessage = s"$expectable does not contain $expected"
+        (containsMessage, if (successes.isEmpty) doesNotContainMessage else containsMessage)
+      }
+
+    check match {
+      case BeEqualTypedValueCheck(expected) => equalValueCheckMessages(expected)
+      case BeEqualValueCheck(expected)      => equalValueCheckMessages(expected)
+      case _                                => genericMessages(expectable, successes, failures)
+    }
   }
 
   private
   def genericMessages(expectable: String, successes: scala.collection.Seq[Result], failures: scala.collection.Seq[Result]) = {
     def elementsAre(results: scala.collection.Seq[Result], success: Boolean) =
-      if   (results.isEmpty)      s"There are no matches"
+      if   (results.isEmpty)      (if (success) "There are no matches" else "There are no failures")
       else if (results.size <= 1) s"There is ${results.size} ${if (success) "success" else "failure"}"
       else                        s"There are ${results.size} ${if (success) "successes" else "failures"}"
 
     def messages(results: scala.collection.Seq[Result]) =
-      if (results.isEmpty) ""
+      if (results.isEmpty) "\n"
       else                 results.map(_.message).mkString("\n", "\n", "\n")
 
     (elementsAre(successes, success = true) + messages(successes),

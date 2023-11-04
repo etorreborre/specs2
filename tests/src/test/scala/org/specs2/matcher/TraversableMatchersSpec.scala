@@ -42,7 +42,11 @@ class TraversableMatchersSpec(val env: Env) extends Spec with ResultMatchers wit
    ${ (Seq(1, 2, 3) must contain(4)                        ) returns "List(1, 2, 3) does not contain 4"}
    ${ (Seq(1, 2, 3) must contain(be_>=(4))                 ) returns "There are 3 failures\n1 is less than 4\n2 is less than 4\n3 is less than 4\n" }
    ${ (Seq(1, 2, 3) must not contain(be_>=(2))             ) returns "There are 2 successes\n2 is not less than 2\n3 is not less than 2\n" }
-   ${ (Seq(1, 2, 3) must contain(be_>=(3)).atLeast(2.times)) returns "There are 2 failures\n1 is less than 3\n2 is less than 3\n" }
+   ${(Seq(1, 2, 3) must contain(be_>=(3)).atLeast(2.times)) returns "There are 2 failures\n1 is less than 3\n2 is less than 3\n\nNumber of successful matches: 1. Expected: at least 2"}
+   ${(Seq(1, 2, 3) must contain(be_>=(1)).atMost(2.times)) returns "There are no failures\n\nNumber of successful matches: 3. Expected: at most 2"}
+   ${(Seq(1, 2, 3) must contain(be_>=(3)).exactly(2.times)) returns "There are 2 failures\n1 is less than 3\n2 is less than 3\n\nNumber of successful matches: 1. Expected: exactly 2"}
+   ${(Seq(1, 2, 3, 4) must contain(be_>=(2)).atMost(2.times)) returns "There is 1 failure\n1 is less than 2\n\nNumber of successful matches: 3. Expected: at most 2"}
+   ${(Seq(1, 1, 2, 3) must contain(===(1)).exactly(1.times)) returns "There are 2 failures\n2 != 1\n3 != 1\n\nNumber of successful matches: 2. Expected: exactly 1"}
 
  We can compare a collection to another by using matchers
 
