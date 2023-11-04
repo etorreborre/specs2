@@ -528,8 +528,8 @@ case class ContainWithResult[T](
       else s"There are ${results.size} ${if success then "successes" else "failures"}"
 
     def messages(results: scala.collection.Seq[Result]) =
-      if results.isEmpty then ""
-      else results.map(_.message).mkString("\n", "\n", "")
+      if results.isEmpty then "\n"
+      else results.map(_.message).mkString("\n", "\n", "\n")
 
     (
       elementsAre(successes, success = true) + messages(successes),
