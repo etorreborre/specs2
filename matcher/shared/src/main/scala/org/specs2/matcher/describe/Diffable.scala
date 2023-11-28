@@ -78,7 +78,12 @@ trait DiffableLowImplicits2 extends DiffableLowImplicits3:
   inline def summonAll[T <: Tuple]: List[Diffable[?]] =
     inline erasedValue[T] match
       case _: EmptyTuple => Nil
-      case _: (t *: ts)  => summonInline[Diffable[t]] :: summonAll[ts]
+      // in the case of a large number of fields we summon the diffables 5 by 5 in order
+      // to avoid hitting the max inlining limit of 32 by default
+      case _: (t1 *: t2 *: t3 *: t4 *: t5 *: ts) =>
+        summonInline[Diffable[t1]] :: summonInline[Diffable[t2]] :: summonInline[Diffable[t3]] ::
+          summonInline[Diffable[t4]] :: summonInline[Diffable[t5]] :: summonAll[ts]
+      case _: (t *: ts) => summonInline[Diffable[t]] :: summonAll[ts]
 
 trait DiffableLowImplicits3:
 

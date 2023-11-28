@@ -265,6 +265,15 @@ Compare result
       Failure[String](ex2)
     ) must ===(TryTypeDifferent(isActualSuccess = true))}
 
+ Inlining limit
+ ==============
+
+  Taking the diff of a large case class must not reach the inlining limit ${
+    val largeCase =
+        LargeClass("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", Nested("", "", "", "", "", ""))
+
+      largeCase must beEqualTo(largeCase)
+  }
 
 """
 
@@ -297,3 +306,37 @@ Compare result
 sealed trait Animal
 case class Cat() extends Animal
 case class Dog() extends Animal
+
+case class LargeClass(
+    a1: String,
+    a2: String,
+    a3: String,
+    a4: String,
+    a5: String,
+    a6: String,
+    a7: String,
+    a8: String,
+    a9: String,
+    a10: String,
+    a11: String,
+    a12: String,
+    a13: String,
+    a14: String,
+    a15: String,
+    a16: String,
+    a17: String,
+    a18: String,
+    a19: String,
+    a20: String,
+    a21: String,
+    a22: Nested
+)
+
+case class Nested(
+    a23: String,
+    a24: String,
+    a25: String,
+    a26: String,
+    a27: String,
+    a28: String
+)
