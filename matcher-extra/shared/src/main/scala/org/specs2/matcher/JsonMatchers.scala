@@ -294,22 +294,6 @@ trait JsonSelectors:
     def toValueOrKey: JsonSelector =
       JsonValueOrKeySelector(this)
 
-  case class JsonEqualValueSelector(v: Any) extends JsonSelector:
-    def select(names: List[Any]): Option[Any] =
-      names.find(_.notNull == v.notNull)
-
-    def select(map: Map[String, Any]): Option[(String, Any)] =
-      None
-
-    def select(keyValue: (String, Any)): Option[Any] =
-      None
-
-    def select(value: Any): Option[Any] =
-      if value == v then Some(v) else None
-
-    def name = s"'${v.notNull}'"
-    def description: String = s"value $name"
-
   case class JsonIntSelector(n: Int) extends JsonSelector:
     def select(values: List[Any]): Option[Any] =
       values.find { v => this.select(v).isDefined }
@@ -353,6 +337,48 @@ trait JsonSelectors:
 
     def description: String =
       s"value $name"
+
+  case class JsonStringSelector(s: String) extends JsonSelector:
+    def select(values: List[Any]): Option[Any] =
+      values.find { v => this.select(v).isDefined }
+
+    def select(map: Map[String, Any]): Option[(String, Any)] =
+      None
+
+    def select(keyValue: (String, Any)): Option[Any] =
+      this.select(keyValue._2)
+
+    def select(value: Any): Option[Any] =
+      value.asInstanceOf[Matchable] match
+        case s1: String => if s == s1 then Some(value) else None
+        case _          => None
+
+    def name: String =
+      s"'${s.notNull}'"
+
+    def description: String =
+      s"value '$s'"
+
+  case class JsonBooleanSelector(b: Boolean) extends JsonSelector:
+    def select(values: List[Any]): Option[Any] =
+      values.find { v => this.select(v).isDefined }
+
+    def select(map: Map[String, Any]): Option[(String, Any)] =
+      None
+
+    def select(keyValue: (String, Any)): Option[Any] =
+      this.select(keyValue._2)
+
+    def select(value: Any): Option[Any] =
+      value.asInstanceOf[Matchable] match
+        case b1: Boolean => if b == b1 then Some(value) else None
+        case _           => None
+
+    def name: String =
+      b.toString
+
+    def description: String =
+      s"value $b"
 
   case class JsonIndexSelector(n: Int) extends JsonSelector:
     def select(names: List[Any]): Option[Any] =
@@ -484,7 +510,7 @@ private[specs2] trait JsonMatchersImplicits extends JsonMatchersLowImplicits:
 
   given Conversion[String, JsonSelector] with
     def apply(s: String): JsonSelector =
-      JsonEqualValueSelector(s)
+      JsonStringSelector(s)
 
   given Conversion[Regex, JsonSelector] with
     def apply(r: Regex): JsonSelector =
@@ -500,7 +526,7 @@ private[specs2] trait JsonMatchersImplicits extends JsonMatchersLowImplicits:
 
   given Conversion[Boolean, JsonSelector] with
     def apply(b: Boolean): JsonSelector =
-      JsonEqualValueSelector(b.toString)
+      JsonBooleanSelector(b)
 
   given ToJsonSelector[Regex] with
     def toJsonSelector(r: Regex): JsonSelector = r
@@ -524,7 +550,7 @@ private[specs2] trait JsonMatchersLowImplicits extends JsonSelectors:
 
   given ToJsonSelector[String] with
     def toJsonSelector(a: String): JsonSelector =
-      JsonEqualValueSelector(a)
+      JsonStringSelector(a)
 
   given ToJsonSelector[Double] with
     def toJsonSelector(a: Double): JsonSelector =
@@ -535,7 +561,7 @@ private[specs2] trait JsonMatchersLowImplicits extends JsonSelectors:
       JsonIntSelector(a)
 
   given ToJsonSelector[Boolean] with
-    def toJsonSelector(a: Boolean): JsonSelector =
-      JsonEqualValueSelector(a.toString)
+    def toJsonSelector(b: Boolean): JsonSelector =
+      JsonBooleanSelector(b)
 
 object JsonMatchers extends JsonMatchers

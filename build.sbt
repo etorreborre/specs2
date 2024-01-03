@@ -97,7 +97,8 @@ lazy val mimaSettings =
       ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.matcher.JsonSelectors*"),
       ProblemFilters.exclude[MissingClassProblem]("org.specs2.matcher.JsonSelectors*"),
       ProblemFilters.exclude[ReversedMissingMethodProblem]("org.specs2.matcher.JsonSelectors*"),
-      ProblemFilters.exclude[MissingTypesProblem]("org.specs2.matcher.JsonSelectors*")
+      ProblemFilters.exclude[MissingTypesProblem]("org.specs2.matcher.JsonSelectors*"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.matcher.JsonMatchers.JsonEqualValueSelector")
     )
   )
 

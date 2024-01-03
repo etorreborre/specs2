@@ -114,6 +114,10 @@ class JsonMatchersSpec extends Specification with JsonMatchers {
  # issue 1183
  ${("{'items':null}" must (/("items") /# 0 / ("id" -> "test"))) must beFailing}
 
+ # issue #1209
+ ${"{'name' : 5}" must not(/("name" -> "5"))}
+ ${"{'name' : true}" must not(/("name" -> "true"))}
+
 """
 
   def andHave =
