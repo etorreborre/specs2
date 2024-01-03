@@ -52,11 +52,11 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersImplicits { outer =
         (value, rest) match {
           case (_, Nil)         => check(Expectable(anyValueToJsonType(value))).toResult
           case ((k, v), q :: _) =>
-            if (q.selector.select(Map((k.notNull, v))).isDefined) Success()
-            else                                                  Failure(s"found '${value.notNull}' but no value to select for ${q.name}")
+            if (q.selector.select((k.notNull, v)).isDefined) Success()
+            else Failure(s"found '${value.notNull}' but no value to select for ${q.name}")
           case (v, q :: _) =>
-            if (q.selector.select(List(v)).isDefined) Success()
-            else                                      Failure(s"found '${value.notNull}' but no value to select for ${q.name}")
+            if (q.selector.select(v).isDefined) Success()
+            else Failure(s"found '${value.notNull}' but no value to select for ${q.name}")
         }
 
       (json, queries) match {
@@ -276,22 +276,28 @@ trait JsonSelectors {
 
     def toValueOrKey = JsonValueOrKeySelector(this)
   }
-  
-  case class JsonEqualValueSelector(v: Any) extends JsonSelector {
-    def select(names: List[Any]): Option[Any] =
-      names.find(_.notNull == v.notNull)
+
+  case class JsonStringSelector(s: String) extends JsonSelector {
+    def select(values: List[Any]): Option[Any] =
+      values.find { v => this.select(v).isDefined }
 
     def select(map: Map[String, Any]): Option[(String, Any)] =
       None
 
     def select(keyValue: (String, Any)): Option[Any] =
-      None
+      this.select(keyValue._2)
 
     def select(value: Any): Option[Any] =
-      if (value == v) Some(v) else None
+      value match {
+        case s1: String => if (s == s1) Some(value) else None
+        case _          => None
+      }
 
-    def name = s"'${v.notNull}'"
-    def description: String = s"value $name"
+    def name: String =
+      s"'${s.notNull}'"
+
+    def description: String =
+      s"value '$s'"
   }
 
   case class JsonIntSelector(n: Int) extends JsonSelector {
@@ -310,14 +316,37 @@ trait JsonSelectors {
         case i: Int => if (i == n) Some(value) else None
         case _ => None
       }
-      
+
     def name: String =
       n.toString
 
     def description: String =
       s"value $name"
   }
-  
+
+  case class JsonBooleanSelector(b: Boolean) extends JsonSelector {
+    def select(values: List[Any]): Option[Any] =
+      values.find { v => this.select(v).isDefined }
+
+    def select(map: Map[String, Any]): Option[(String, Any)] =
+      None
+
+    def select(keyValue: (String, Any)): Option[Any] =
+      this.select(keyValue._2)
+
+    def select(value: Any): Option[Any] =
+      value match {
+        case b1: Boolean => if (b == b1) Some(value) else None
+        case _ => None
+      }
+
+    def name: String =
+      b.toString
+
+    def description: String =
+      s"value $b"
+  }
+
   case class JsonDoubleSelector(d: Double) extends JsonSelector {
     def select(values: List[Any]): Option[Any] =
       values.find { v => this.select(v).isDefined }
@@ -334,14 +363,14 @@ trait JsonSelectors {
         case i: Int => if (i == d) Some(value) else None
         case _ => None
       }
-      
+
     def name: String =
       d.toString
 
     def description: String =
       s"value $name"
   }
-  
+
   case class JsonIndexSelector(n: Int) extends JsonSelector {
     def select(names: List[Any]): Option[Any] =
       names.zipWithIndex.find { case (_, i) => i == n }.map(_._1)
@@ -358,13 +387,14 @@ trait JsonSelectors {
         case m: Map[_, _] => this.select(m)
         case _ => None
       }
+
     def name: String =
       s"index $n"
 
     def description: String =
       s"value $name"
   }
-  
+
   case class JsonRegexSelector(r: Regex) extends JsonSelector {
     def select(names: List[Any]): Option[Any] =
       names.find(_.notNull `matches` r.toString).map(_.notNull)
@@ -387,7 +417,7 @@ trait JsonSelectors {
     def description: String =
       s"regex $name"
   }
-  
+
   case class JsonMatcherSelector(m: Matcher[String]) extends JsonSelector {
     def select(names: List[Any]): Option[Any] =
       names.find(n => m(createExpectable(n.notNull)).isSuccess)
@@ -409,7 +439,7 @@ trait JsonSelectors {
     def description: String =
       s"specified $name"
   }
-  
+
   case class JsonPairSelector(_1: JsonSelector, _2: JsonSelector) extends JsonSelector {
     def select(list: List[Any]): Option[Any] =
       None
@@ -421,14 +451,14 @@ trait JsonSelectors {
     def select(keyValue: (String, Any)): Option[Any] =
       if (_1.select(keyValue._1).isDefined && _2.select(keyValue._2).isDefined)
          Some(keyValue)
-      else 
+      else
         None
 
     def select(value: Any): Option[Any] =
       value match {
         case m: Map[_, _] => this.select(m)
         case kv: (_, _)   => this.select(kv)
-        case _            => None 
+        case _            => None
       }
 
     def name: String =
@@ -437,7 +467,7 @@ trait JsonSelectors {
     def description: String =
       s"pair $name"
   }
-  
+
   case class JsonValueOrKeySelector(selector: JsonSelector) extends JsonSelector {
     def select(list: List[Any]): Option[Any] =
       selector.select(list)
@@ -460,7 +490,7 @@ trait JsonSelectors {
       selector.name
 
     def description: String =
-      s"selector ${selector.description}"  
+      s"selector ${selector.description}"
   }
 
   sealed trait JsonQueryType
@@ -480,11 +510,11 @@ private[specs2]
 trait JsonMatchersImplicits extends JsonMatchersLowImplicits { this: JsonBaseMatchers =>
   /** datatype to specify how json values must be checked */
   implicit def toJsonValueSelectorStringMatcher[M <: Matcher[String]](m: M): JsonSelector = JsonMatcherSelector(m)
-  implicit def toJsonValueSelectorStringValue(s: String): JsonSelector                    = JsonEqualValueSelector(s)
+  implicit def toJsonValueSelectorStringValue(s: String): JsonSelector                    = JsonStringSelector(s)
   implicit def toJsonValueSelectorRegex(r: Regex): JsonSelector                           = JsonRegexSelector(r)
   implicit def toJsonValueSelectorDoubleValue(d: Double): JsonSelector                    = JsonDoubleSelector(d)
   implicit def toJsonValueSelectorIntValue(i: Int): JsonSelector                          = JsonIntSelector(i)
-  implicit def toJsonValueSelectorBooleanValue(b: Boolean): JsonSelector                  = JsonEqualValueSelector(b.toString)
+  implicit def toJsonValueSelectorBooleanValue(b: Boolean): JsonSelector                  = JsonBooleanSelector(b)
 
   implicit def regexToJsonSelector: ToJsonSelector[Regex] = new ToJsonSelector[Regex] {
     def toJsonSelector(r: Regex): JsonSelector = r
@@ -510,7 +540,7 @@ trait JsonMatchersLowImplicits extends JsonSelectors { this: JsonBaseMatchers =>
   }
 
   implicit def stringToJsonSelector: ToJsonSelector[String] = new ToJsonSelector[String] {
-    def toJsonSelector(a: String): JsonSelector = JsonEqualValueSelector(a)
+    def toJsonSelector(a: String): JsonSelector = JsonStringSelector(a)
   }
   implicit def doubleToJsonSelector: ToJsonSelector[Double] = new ToJsonSelector[Double] {
     def toJsonSelector(a: Double): JsonSelector = JsonDoubleSelector(a)
@@ -519,7 +549,7 @@ trait JsonMatchersLowImplicits extends JsonSelectors { this: JsonBaseMatchers =>
     def toJsonSelector(a: Int): JsonSelector = JsonIntSelector(a)
   }
   implicit def booleanToJsonSelector: ToJsonSelector[Boolean] = new ToJsonSelector[Boolean] {
-    def toJsonSelector(a: Boolean): JsonSelector = JsonEqualValueSelector(a.toString)
+    def toJsonSelector(a: Boolean): JsonSelector = JsonBooleanSelector(a)
   }
 }
 
