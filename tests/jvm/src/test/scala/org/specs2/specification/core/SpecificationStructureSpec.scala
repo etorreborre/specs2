@@ -78,12 +78,12 @@ class mutabl(val env: Env) extends Specification with ScalaCheck with OwnEnv {
   def dependOn(s2: SpecStructure): Matcher[SpecStructure] = (s1: SpecStructure) =>
     (s1.dependsOn(s2)(ee), s"${s1.specClassName} doesn't depend on ${s2.specClassName}")
 
-  given Arbitrary[SpecificationStructure] =
-    Arbitrary(arbitrary[SpecStructure].map(spec => new SpecificationStructure { def is = spec }))
-
   given Arbitrary[SpecStructure] = Arbitrary {
     (ArbitrarySpecHeader.arbitrary |@| ArbitraryFragments.arbitrary)((sh, fs) => SpecStructure.create(sh, fs))
   }
+
+  given Arbitrary[SpecificationStructure] =
+    Arbitrary(arbitrary[SpecStructure].map(spec => new SpecificationStructure { def is = spec }))
 
   given ArbitraryFragments: Arbitrary[Fragments] =
     Arbitrary(listOf(ArbitraryFragment.arbitrary).map(fs => Fragments.apply(fs*)))
@@ -94,11 +94,11 @@ class mutabl(val env: Env) extends Specification with ScalaCheck with OwnEnv {
   given ArbitraryLinks: Arbitrary[List[Fragment]] =
     Arbitrary(Gen.nonEmptyListOf(ArbitraryLink.arbitrary))
 
-  given ArbitraryLink: Arbitrary[Fragment] =
-    Arbitrary(arbitrary[SpecHeader].map(ss => link(SpecStructure(ss))))
-
   given ArbitrarySpecHeader: Arbitrary[SpecHeader] =
     Arbitrary(Gen.oneOf(Seq(SS1, SS2, SS3, SS4, SS4).map(s => SpecHeader.create(s.getClass))))
+
+  given ArbitraryLink: Arbitrary[Fragment] =
+    Arbitrary(arbitrary[SpecHeader].map(ss => link(SpecStructure(ss))))
 }
 
 object SS1 extends Specification { def is = "" }
