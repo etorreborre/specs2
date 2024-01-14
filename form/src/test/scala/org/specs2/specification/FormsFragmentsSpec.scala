@@ -7,13 +7,14 @@ import matcher.*
 import org.specs2.specification.core.{Env, OwnEnv, SpecStructure}
 import org.specs2.specification.process.DefaultExecutor
 
-class FormsFragmentsSpec(val env: Env)
+case class FormsFragmentsSpec(env: Env)
     extends Specification
     with Forms
     with ThrownExpectations
     with OwnEnv
     with ActionMatchers {
-  def is = s2"""
+  def is =
+    s2"""
 
  A form can be added as a Fragment in a specification
    creating a new Text Fragment                                                      ${frags.e1_1}

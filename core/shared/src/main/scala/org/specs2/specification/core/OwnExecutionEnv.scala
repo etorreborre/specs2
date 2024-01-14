@@ -32,4 +32,4 @@ trait OwnExecutionEnv extends AfterSpec:
     ownEnv.executionContext
 
   def afterSpec: Fragments =
-    step(ownEnv.shutdownResult)
+    step(ownEnv.shutdown())

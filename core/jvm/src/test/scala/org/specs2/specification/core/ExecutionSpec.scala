@@ -29,6 +29,7 @@ class ExecutionSpec(val env: Env) extends Specification with OwnEnv with ResultM
     val env1 = ownEnv.setStatisticRepository(store)
     val stats = Stats(specs = 2, failures = 1, examples = 1)
     store.storeStatistics(getClass.getName, stats).runOption
+    Thread.sleep(2000)
 
     Execution.specificationStats(getClass.getName).result(env1) must beLike { case DecoratedResult(t, r) =>
       t.asInstanceOf[Matchable] match
@@ -61,5 +62,5 @@ class ExecutionSpec(val env: Env) extends Specification with OwnEnv with ResultM
 
   extension (e: Execution)
     def result(env: Env): Result =
-      Await.result(e.startExecution(env).executedResult.runFuture(env.executionEnv), 10.seconds).result
+      Await.result(e.startExecution(env).executedResult.runFuture(env.specs2ExecutionEnv), 10.seconds).result
 }

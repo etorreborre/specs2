@@ -41,13 +41,8 @@ abstract class BaseSbtRunner(args: Array[String], remoteArgs: Array[String], loa
     SbtTask(aTaskDef, env, loader, this)
 
   def done =
-    env.shutdown
-      .onComplete {
-        case Failure(e) =>
-          loggers.foreach(_.error("error while finalizing resources: " + e.getMessage))
-        case Success(failures) =>
-          failures.toList.foreach { result => loggers.foreach(_.error(result.message)) }
-      }(using env.specs2ExecutionContext)
+    val result = env.shutdown()
+    if !result.isSuccess then loggers.foreach(_.error(result.message))
     ""
 
   def deserializeTask(task: String, deserializer: String => TaskDef): Task =
@@ -76,7 +71,7 @@ object sbtRun extends MasterSbtRunner(Array(), Array(), Thread.currentThread.get
     given ee: ExecutionEnv = env.specs2ExecutionEnv
 
     try exit(start(arguments*))
-    finally Action.future(env.shutdown).runVoid(ee)
+    finally env.shutdown()
 
   def exit(action: Action[Stats])(using ee: ExecutionEnv): Unit =
     action

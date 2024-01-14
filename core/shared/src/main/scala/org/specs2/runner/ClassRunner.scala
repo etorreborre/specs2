@@ -71,7 +71,7 @@ trait ClassRunnerMain:
         yield stats
 
     try execute(actions, env, exit)
-    finally env.awaitShutdown()
+    finally env.shutdown()
 
   /** Create a ClassRunner from the default environment containing the command line arguments
     */

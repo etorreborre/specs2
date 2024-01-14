@@ -7,8 +7,9 @@ import io.StringOutput
 import org.specs2.specification.{AfterSpec, Tables}
 import specification.core.{Env, SpecificationStructure}
 import runner.*
+import org.specs2.specification.core.OwnEnv
 
-class NotifierSpec extends Specification {
+class NotifierSpec(val env: Env) extends Specification with OwnEnv {
   def is = s2"""
 
  Run a mutable spec with a Notifier                     $a1
@@ -84,13 +85,11 @@ class NotifierSpec extends Specification {
 
   def report(spec: SpecificationStructure): TestNotifier =
     val arguments = Arguments("notifier")
-    val env1 = Env(arguments = arguments)
+    val env1 = ownEnv.copy(arguments = arguments)
     val notifier = new TestNotifier
     val reporter = Reporter.create(List(NotifierPrinter(arguments).printer(notifier)), env1)
 
-    try reporter.report(spec.structure).runOption(env1.executionEnv)
-    finally env1.awaitShutdown()
-
+    reporter.report(spec.structure).runOption(env1.executionEnv)
     notifier
 
 }

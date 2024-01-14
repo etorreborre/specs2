@@ -79,4 +79,4 @@ trait FilesRunnerMain:
     val env = EnvDefault.create(Arguments(args*))
     val specificationsFinder = DefaultSpecificationsFinder(env)
     try execute(DefaultFilesRunner(env, specificationsFinder).run, env, exit)
-    finally env.awaitShutdown()
+    finally env.shutdown()

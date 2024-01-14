@@ -14,7 +14,7 @@ import java.util.function.UnaryOperator
 class ResourceSpec() extends Specification:
   given ExecutionContext = scala.concurrent.ExecutionContext.global
 
-  def is = s2"""
+  def is = sequential ^ s2"""
 
  A resource can be:
 
@@ -54,7 +54,7 @@ method. It can then be accessed concurrently by several specifications
     val specifications = (1 to 5).map(n => GlobalResourceExample(n, messages).structure)
     for {
       r <- Future.sequence(specifications.map(s => reporter.report(s).runFuture(env.executionEnv)))
-      _ <- env.shutdownResult
+      _ = env.shutdown()
     } yield (messages.headOption === Some("acquired")) and
       (messages.lastOption === Some("released with value 5")) and
       (messages.toList must contain(
@@ -77,7 +77,7 @@ method. It can then be accessed concurrently by several specifications
       .create(printer.toList, env)
       .report(s.structure)
       .runFuture(env.executionEnv)
-      .flatMap(_ => env.shutdownResult)
+      .map(_ => env.shutdown())
 
 class ResourceExample(messages: ArrayBuffer[String]) extends Specification, Resource[Ref[Int]]:
   def is = sequential ^ s2"""
