@@ -78,7 +78,7 @@ trait ClassRunnerMain:
   def createClassRunner(env: Env): Operation[ClassRunner] =
     val arguments = env.arguments
     val loader = env.getClass.getClassLoader
-    val customInstances = CustomInstances(arguments, loader, env.systemLogger)
+    val customInstances = CustomInstances(env, loader, env.systemLogger)
     val printerFactory = PrinterFactory(arguments, customInstances, env.systemLogger)
     val specFactory = DefaultSpecFactory(env, loader)
 
@@ -101,7 +101,7 @@ object TextRunner extends ClassRunnerMain:
     val logger = PrinterLogger.stringPrinterLogger
     val env1 = env.setPrinterLogger(logger).setArguments(env.arguments.overrideWith(arguments))
     val loader = Thread.currentThread.getContextClassLoader
-    val customInstances = CustomInstances(arguments, loader, StringOutputLogger(logger))
+    val customInstances = CustomInstances(env1, loader, StringOutputLogger(logger))
 
     val action =
       for

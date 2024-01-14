@@ -51,7 +51,7 @@ class JUnitRunner(klass: Class[?]) extends org.junit.runner.Runner with Filterab
   def runWithEnv(runNotifier: RunNotifier, env: Env): Action[Stats] =
     val loader = Thread.currentThread.getContextClassLoader
     val arguments = env.arguments
-    val customInstances = CustomInstances(arguments, loader, env.systemLogger)
+    val customInstances = CustomInstances(env, loader, env.systemLogger)
     val printerFactory = PrinterFactory(arguments, customInstances, env.systemLogger)
     val junitPrinter = JUnitPrinter(env, runNotifier)
 

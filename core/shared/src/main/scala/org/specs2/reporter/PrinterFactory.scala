@@ -76,4 +76,4 @@ object PrinterFactory:
     create(EnvDefault.default)
 
   def create(env: Env): PrinterFactory =
-    PrinterFactory(env.arguments, CustomInstances.create(env.arguments, env.systemLogger), env.systemLogger)
+    PrinterFactory(env.arguments, CustomInstances.create(env, env.systemLogger), env.systemLogger)

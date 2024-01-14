@@ -177,7 +177,7 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader, base: BaseS
       loggers: Array[Logger]
   ): Action[Stats] =
 
-    val customInstances = CustomInstances(arguments, loader, env.systemLogger)
+    val customInstances = CustomInstances(env, loader, env.systemLogger)
     val specFactory = DefaultSpecFactory(env, loader)
     val makeSpecs =
       if arguments.isSet("all") then
