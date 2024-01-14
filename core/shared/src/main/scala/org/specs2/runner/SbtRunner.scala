@@ -30,7 +30,8 @@ abstract class BaseSbtRunner(args: Array[String], remoteArgs: Array[String], loa
 
   lazy val commandLineArguments = Arguments(args ++ remoteArgs*)
 
-  lazy val env = EnvDefault.create(commandLineArguments).setCustomClassLoader(loader)
+  lazy val env: Env =
+    EnvDefault.create(commandLineArguments).setCustomClassLoader(loader)
 
   def tasks(taskDefs: Array[TaskDef]): Array[Task] =
     taskDefs.toList.map(newTask).toArray

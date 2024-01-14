@@ -72,7 +72,7 @@ case class PrinterFactory(arguments: Arguments, customInstances: CustomInstances
 
 object PrinterFactory:
 
-  def default: PrinterFactory =
+  lazy val default: PrinterFactory =
     create(EnvDefault.default)
 
   def create(env: Env): PrinterFactory =

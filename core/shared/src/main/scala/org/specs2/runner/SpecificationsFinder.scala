@@ -202,5 +202,5 @@ case class DefaultSpecificationsFinder(env: Env) extends SpecificationsFinder:
 
 object SpecificationsFinder:
 
-  val default: SpecificationsFinder =
+  lazy val default: SpecificationsFinder =
     DefaultSpecificationsFinder(EnvDefault.default)
