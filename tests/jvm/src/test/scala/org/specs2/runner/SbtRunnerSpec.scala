@@ -1,6 +1,7 @@
 package org.specs2.runner
 
 import org.specs2.Specification
+import org.specs2.execute.Result
 import sbt.testing.TaskDef
 
 class SbtRunnerSpec extends Specification {
@@ -13,15 +14,19 @@ class SbtRunnerSpec extends Specification {
 """
 
   def sbtTags =
-    val runner = new MasterSbtRunner(Array("sbt.tags"), Array(""), getClass.getClassLoader)
-    taskTags(runner) must contain("one")
+    withRunnerArgs(Array("sbt.tags")) { tags => tags must contain("one") }
 
   def noSbtTags =
-    val runner = new MasterSbtRunner(Array(""), Array(""), getClass.getClassLoader)
-    taskTags(runner) must not(contain("one"))
+    withRunnerArgs(Array()) { tags => tags must not(contain("one")) }
 
+  // HELPERS
   def taskTags(runner: MasterSbtRunner): List[String] =
     val task = runner.newTask(new TaskDef("org.specs2.runner.SbtRunnerSpec", Fingerprints.fp1m, true, Array()))
     task.tags.toList
 
+  def withRunnerArgs(args: Array[String])(check: List[String] => Result): Result =
+    val runner = new MasterSbtRunner(args, Array(""), getClass.getClassLoader)
+    val result = check(taskTags(runner))
+    runner.done
+    result
 }
