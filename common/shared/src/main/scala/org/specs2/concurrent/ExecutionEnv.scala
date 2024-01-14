@@ -10,7 +10,8 @@ import scala.concurrent.*, duration.*
   */
 case class ExecutionEnv(executorServices: ExecutorServices, timeFactor: Int):
 
-  def shutdown(): Unit = ()
+  def shutdown(): Unit =
+    executorServices.shutdownNow()
 
   given executionContext: ExecutionContext = executorServices.executionContext
   given ec: ExecutionContext = executorServices.executionContext
