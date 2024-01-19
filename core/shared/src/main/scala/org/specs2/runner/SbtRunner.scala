@@ -16,6 +16,9 @@ import org.specs2.fp.*, syntax.*
 import org.specs2.concurrent.ExecutionEnv
 import org.specs2.data.NamedTag
 import scala.util.*
+
+import java.util.regex.Pattern
+
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future, ExecutionContext}
 
@@ -37,7 +40,14 @@ abstract class BaseSbtRunner(args: Array[String], remoteArgs: Array[String], loa
 
   /** create a new test task */
   def newTask(aTaskDef: TaskDef): Task =
-    SbtTask(aTaskDef, env, loader, this)
+    val fullEnv =
+      if (env.arguments.select._ex.isDefined || aTaskDef.selectors().exists(!_.isInstanceOf[TestSelector])) env
+      else
+        val names = aTaskDef.selectors().toList.collect { case ts: TestSelector => Pattern.quote(ts.testName()) }
+        val select = env.arguments.select.copy(_ex = Some(names.mkString("|")))
+        env.setArguments(env.arguments.copy(select = select))
+
+    SbtTask(aTaskDef, fullEnv, loader, this)
 
   def done =
     env.shutdown
