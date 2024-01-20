@@ -46,7 +46,8 @@ class SpecificationsFinderSpec(env: Env) extends Spec with ThrownExpectations {
     val output = new StringOutput {}
     val logger = StringOutputLogger(output)
     val env1 = env.setSystemLogger(logger)
-    SpecificationsFinder.create(env1)
+    SpecificationsFinder
+      .create(env1)
       .findSpecifications(
         basePath = DirectoryPath.unsafe(base) / "src" / "test" / "scala",
         filter = filter

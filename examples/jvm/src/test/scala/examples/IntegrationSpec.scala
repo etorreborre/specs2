@@ -21,7 +21,8 @@ class IntegrationSpec(env: Env) extends Specification, StartDatabase(env):
 
     }
 
-  val specifications = SpecificationsFinder.create(env)
+  val specifications = SpecificationsFinder
+    .create(env)
     .findSpecifications(
       // change this pattern if the specifications must be found in specific directories, or with specific names
       glob = "**/*.scala",

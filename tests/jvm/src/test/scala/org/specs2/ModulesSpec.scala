@@ -30,9 +30,10 @@ object Module extends SpecificationCreation:
     val env = EnvDefault.default
     val finder = SpecificationsFinder.create(env)
     val specs =
-      finder.findSpecifications(basePath = base, verbose = false, filter = filter)
-      .unsafeRun
-      .take(3)
+      finder
+        .findSpecifications(basePath = base, verbose = false, filter = filter)
+        .unsafeRun
+        .take(3)
 
     env.shutdown()
 

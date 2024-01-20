@@ -336,7 +336,7 @@ lazy val releaseSettings: Seq[Setting[_]] = Seq(
   ),
   ThisBuild / githubWorkflowBuild := Seq(
     WorkflowStep
-      .Sbt(name = Some("Build and test 🔧"), commands = List("testOnly -- xonly exclude ci,website timefactor 3"))
+      .Sbt(name = Some("Build and test 🔧"), commands = List("core/testOnly -- xonly exclude ci,website timefactor 3"))
   ),
   ThisBuild / githubWorkflowTargetTags ++= Seq(SPECS2 + "*"),
   ThisBuild / githubWorkflowPublishTargetBranches := Seq(RefPredicate.StartsWith(Ref.Tag(SPECS2))),

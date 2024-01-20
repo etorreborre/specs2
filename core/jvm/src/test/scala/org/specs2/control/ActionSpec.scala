@@ -31,7 +31,6 @@ class ActionSpec(using ee: ExecutionEnv) extends Specification {
     // all effects are executed, including finalizers
     result.sorted === List("a1-1", "a2-1", "a1-2", "a2-2", "final1", "final2").sorted
 
-
   def finalizers2 =
     val messages = ListBuffer[String]();
     def add(m: String) = messages.addOne(m)

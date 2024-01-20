@@ -16,7 +16,7 @@ class FutureMatchersSpec(val env: Env) extends Specification with ResultMatchers
   lazy val env1 = ownEnv.copy(arguments = Arguments("threadsnb 4"))
   lazy val timeFactor = env1.arguments.execute.timeFactor
   lazy val sleepTime = 50 * timeFactor.toLong
-  
+
   class MyTimeout extends TimeoutException
 
   def is = section("ci") ^ sequential ^ s2"""
