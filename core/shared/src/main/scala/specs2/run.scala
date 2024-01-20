@@ -20,7 +20,7 @@ object run extends ClassRunnerMain:
     yield result
 
     try Runner.execute(action, env, exit = false)
-    finally env.awaitShutdown()
+    finally env.shutdown()
 
   /** main method for the command line */
   def main(args: Array[String]) =

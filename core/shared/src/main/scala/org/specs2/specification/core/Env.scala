@@ -85,13 +85,13 @@ case class Env(
     copy(arguments = arguments.setTimeout(duration))
 
   /** @return a list of finalization failures by resource key if any */
-  def shutdown: Future[List[Result]] =
+  private def startShutdown: Future[List[Result]] =
     given ExecutionContext = specs2ExecutionContext
     val results: Action[List[(String, Result)]] = resources.toList.traverse { case (key, resource) =>
       resource.finalizer.startExecution(this).executionResult.map(r => (key, r))
     }
 
-    val failures = results
+    results
       .map { (rs: List[(String, Result)]) =>
         rs
           .filter(_._2.isIssue)
@@ -101,19 +101,16 @@ case class Env(
       }
       .runFuture(specs2ExecutionEnv)
 
-    failures.onComplete { _ =>
-      try specs2ExecutionEnv.shutdown()
-      finally executionEnv.shutdown()
-    }
-    failures
-
-  def shutdownResult: Future[Result] =
+  private def startShutdownResult: Future[Result] =
     given ExecutionContext = specs2ExecutionContext
-    shutdown.map(vs => AsResult(vs))
+    startShutdown.map(vs => AsResult(vs))
 
   /** be sure to only call this method on the JVM! */
-  def awaitShutdown(): Unit =
-    Await.result(shutdown, Duration.Inf)
+  def shutdown(timeout: Duration = Duration.Inf): Result =
+    val result = specs2ExecutionEnv.await(startShutdownResult, timeout)
+    try executionEnv.shutdown()
+    finally specs2ExecutionEnv.shutdown()
+    result
 
   /** set new PrinterLogger */
   def setPrinterLogger(logger: PrinterLogger) =

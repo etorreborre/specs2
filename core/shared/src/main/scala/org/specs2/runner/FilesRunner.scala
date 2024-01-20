@@ -9,12 +9,16 @@ import specification.core.*
 import reporter.*
 import runner.Runner.*
 import org.specs2.fp.syntax.*
-import SpecificationsFinder.*
 import main.FilesRunnerArguments.*
 
 trait FilesRunner:
   /** run any specifications found via arguments */
   def run: Action[Stats]
+
+object FilesRunner:
+
+  def create(env: Env, finder: SpecificationsFinder): FilesRunner =
+    DefaultFilesRunner(env, finder)
 
 case class DefaultFilesRunner(env: Env, specificationsFinder: SpecificationsFinder) extends FilesRunner:
 
@@ -79,4 +83,4 @@ trait FilesRunnerMain:
     val env = EnvDefault.create(Arguments(args*))
     val specificationsFinder = DefaultSpecificationsFinder(env)
     try execute(DefaultFilesRunner(env, specificationsFinder).run, env, exit)
-    finally env.awaitShutdown()
+    finally env.shutdown()

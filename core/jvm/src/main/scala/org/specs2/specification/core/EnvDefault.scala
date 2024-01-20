@@ -18,7 +18,7 @@ object EnvDefault:
   val statsDirectoryPath: DirectoryPath =
     "target" / "specs2-reports" / "stats"
 
-  def default: Env =
+  lazy val default: Env =
     create(Arguments())
 
   def create(arguments: Arguments): Env =
