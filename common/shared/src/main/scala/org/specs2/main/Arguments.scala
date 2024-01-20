@@ -45,6 +45,7 @@ case class Arguments(
   def sequentialRandom: Boolean = execute.sequentialRandom
   def threadsNb: Int = execute.threadsNb
   def specs2ThreadsNb: Int = execute.specs2ThreadsNb
+  def discardRejectedFutures: Boolean = execute.discardRejectedFutures
   def timeFactor: Int = execute.timeFactor
   def timeout: Option[FiniteDuration] = execute.timeout
   def setTimeout(t: FiniteDuration) = copy(execute = execute.setTimeout(t))
