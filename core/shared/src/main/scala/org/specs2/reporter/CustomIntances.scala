@@ -9,7 +9,7 @@ import reflect.Classes
 import scala.reflect.ClassTag
 import Printer.*
 
-case class CustomInstances(arguments: Arguments, loader: ClassLoader, logger: Logger):
+case class CustomInstances(env: Env, loader: ClassLoader, logger: Logger):
 
   /** create a built-in specs2 printer */
   def createPrinterInstance(
@@ -18,7 +18,7 @@ case class CustomInstances(arguments: Arguments, loader: ClassLoader, logger: Lo
       failureMessage: String,
       noRequiredMessage: String
   ): Operation[Option[Printer]] =
-    if arguments.isSet(name.name) then
+    if env.arguments.isSet(name.name) then
       createInstance[Printer](name.name, className, _ => failureMessage, noRequiredMessage)
     else noInstance(noRequiredMessage)
 
@@ -26,7 +26,7 @@ case class CustomInstances(arguments: Arguments, loader: ClassLoader, logger: Lo
   def createCustomInstance[T <: AnyRef](name: String, failureMessage: String => String, noRequiredMessage: String)(using
       m: ClassTag[T]
   ): Operation[Option[T]] =
-    arguments.commandLine.value(name) match
+    env.arguments.commandLine.value(name) match
       case Some(className) => createInstance[T](name, className, failureMessage, noRequiredMessage)
       case _               => noInstance(noRequiredMessage)
 
@@ -37,7 +37,7 @@ case class CustomInstances(arguments: Arguments, loader: ClassLoader, logger: Lo
       noRequiredMessage: String
   )(using m: ClassTag[T]): Operation[Option[T]] =
     for
-      instance <- Classes.createInstanceEither[T](className, loader, EnvDefault.create(arguments).defaultInstances)
+      instance <- Classes.createInstanceEither[T](className, loader, env.defaultInstances)
       result <-
         instance match
           case Right(i) => Operation.ok(Option(i))
@@ -50,7 +50,7 @@ case class CustomInstances(arguments: Arguments, loader: ClassLoader, logger: Lo
       t: Throwable,
       forceVerbose: Option[Boolean] = None
   ): Operation[Option[T]] =
-    val verbose = forceVerbose.getOrElse(arguments.verbose)
+    val verbose = forceVerbose.getOrElse(env.arguments.verbose)
     logger.info("", verbose) >>
       logger.info(message, verbose) >>
       logger.info("", verbose) >>
@@ -59,13 +59,13 @@ case class CustomInstances(arguments: Arguments, loader: ClassLoader, logger: Lo
 
   /** print a message if a class can not be instantiated */
   def noInstance[T](message: String): Operation[Option[T]] =
-    logger.info(message, arguments.verbose) >> Operation.ok(None)
+    logger.info(message, env.arguments.verbose) >> Operation.ok(None)
 
 object CustomInstances:
 
   def default: CustomInstances =
-    create(Arguments())
+    create(EnvDefault.default)
 
-  def create(args: Arguments, logger: Logger = NoLogger): CustomInstances =
+  def create(env: Env, logger: Logger = NoLogger): CustomInstances =
     val loader = Thread.currentThread.getContextClassLoader
-    CustomInstances(args, loader, logger)
+    CustomInstances(env, loader, logger)

@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 import org.specs2.main.*
 import org.specs2.control.*
+import scala.compiletime.ops.boolean
 
 case class ExecutorServices(
     executorServiceEval: () => ExecutorService,
@@ -64,8 +65,8 @@ object ExecutorServices:
       else "specs2.user" + tag.map("-" + _).getOrElse("")
 
     lazy val executorService =
-      if isSpecs2 then fixedExecutor(arguments.specs2ThreadsNb, threadFactoryName)
-      else fixedExecutor(arguments.threadsNb, threadFactoryName)
+      if isSpecs2 then fixedExecutor(threadFactoryName, arguments.specs2ThreadsNb, arguments.discardRejectedFutures)
+      else fixedExecutor(threadFactoryName, arguments.threadsNb, arguments.discardRejectedFutures)
 
     lazy val scheduledExecutorService =
       scheduledExecutor(arguments.scheduledThreadsNb, threadFactoryName)
@@ -86,7 +87,7 @@ object ExecutorServices:
 
   def fromExecutionContext(ec: ExecutionContext): ExecutorServices =
     ExecutorServices(
-      () => fixedExecutor(1, "unused"),
+      () => fixedExecutor("unused", 1, true),
       () => ec,
       () => scheduledExecutor(1, "unused"),
       () => Schedulers.default,
@@ -106,8 +107,19 @@ object ExecutorServices:
       (t: Throwable) => { systemLogger.exception(t, verbose).runVoid }
     )
 
-  def fixedExecutor(threadsNb: Int, name: String): ExecutorService =
-    Executors.newFixedThreadPool(threadsNb, NamedThreadFactory(name))
+  def fixedExecutor(name: String, threadsNb: Int, discardRejected: Boolean): ExecutorService = {
+    val threadPool = new ThreadPoolExecutor(
+      threadsNb,
+      threadsNb,
+      0L,
+      TimeUnit.MILLISECONDS,
+      new LinkedBlockingQueue[Runnable](),
+      NamedThreadFactory(name)
+    );
+
+    if discardRejected then threadPool.setRejectedExecutionHandler(new ThreadPoolExecutor.DiscardPolicy)
+    threadPool
+  }
 
   /** the number of executors is set from the arguments.scheduledThreadsNb value which is 1 by default
     */

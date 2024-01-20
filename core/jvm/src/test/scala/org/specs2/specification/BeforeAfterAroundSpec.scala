@@ -7,8 +7,9 @@ import org.specs2.specification.core.{Env, SpecificationStructure, Fragment}
 import org.specs2.specification.process.DefaultExecutor
 import _root_.org.specs2.mutable.{Specification as Spec}
 import fp.syntax.*
+import org.specs2.specification.core.OwnEnv
 
-class BeforeAfterAroundSpec extends Specification {
+class BeforeAfterAroundSpec(val env: Env) extends Specification with OwnEnv {
   def is = s2"""
 
  The `Before/After/Around Example` traits are used to automatically insert contexts around examples bodies
@@ -55,10 +56,7 @@ class BeforeAfterAroundSpec extends Specification {
   )
 
   def executeContains(s: SpecificationStructure & StringOutput, messages: String*) =
-    val env = Env()
-    try
-      DefaultExecutor.executeFragments(s.structure.fragments)(env).traverse(_.executionResult).run(env.executionEnv)
-      s.messages must contain(allOf(messages*)).inOrder
-    finally env.awaitShutdown()
+    DefaultExecutor.executeFragments(s.structure.fragments)(env).traverse(_.executionResult).run(ownEnv.executionEnv)
+    s.messages must contain(allOf(messages*)).inOrder
 
 }

@@ -1,6 +1,8 @@
 package org.specs2
 package guide
 
+import org.specs2.runner.SpecificationsFinder
+
 object HtmlOutput extends UserGuidePage {
   def is = s2"""
 
@@ -82,16 +84,17 @@ Here is something you can do to automatically create an index page for your spec
 
 import org.specs2.*
 import specification.core.*
-import runner.SpecificationsFinder.default.*
 
-class index extends Specification:
+class index(env: Env) extends Specification:
   def is =
     examplesLinks("Example specifications")
 
   // see the SpecificationsFinder trait for the parameters of the 'specifications' method
-  def examplesLinks(t: String) =
+  def examplesLinks(t: String) = {
+    val finder = SpecificationsFinder.create(env)
     t.title ^
-      Fragments.foreach(specifications())(s => link(s) ^ br)
+      Fragments.foreach(finder.specifications())(s => link(s) ^ br)
+  }
 }}
 
 The specification above creates an index.html file in the `target/specs2-reports` directory. The specifications method creates specifications using the following parameters:
@@ -118,7 +121,7 @@ class HtmlExampleSpec extends Specification {
    contain 11 characters $e1
    start with 'Hello' $e2
    end with 'world' $e3
-   
+
  """
 
   def e1 = "Hello world" must haveSize(11)

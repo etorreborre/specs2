@@ -281,6 +281,6 @@ case class TextPrinter(env: Env) extends Printer {
 }
 
 object TextPrinter {
-  val default: TextPrinter =
+  lazy val default: TextPrinter =
     TextPrinter(Env())
 }

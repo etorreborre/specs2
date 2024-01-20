@@ -6,9 +6,9 @@ import org.specs2.control.*
 import org.specs2.io.*
 import org.specs2.runner.*
 import integration.*
-import scala.concurrent.ExecutionContext
 
-class IntegrationSpec(using ec: ExecutionContext) extends Specification, StartDatabase:
+class IntegrationSpec(env: Env) extends Specification, StartDatabase(env):
+
   def is = sequential ^ s2"""
 
   Integration specifications
@@ -21,7 +21,7 @@ class IntegrationSpec(using ec: ExecutionContext) extends Specification, StartDa
 
     }
 
-  val specifications = SpecificationsFinder.default
+  val specifications = SpecificationsFinder.create(env)
     .findSpecifications(
       // change this pattern if the specifications must be found in specific directories, or with specific names
       glob = "**/*.scala",

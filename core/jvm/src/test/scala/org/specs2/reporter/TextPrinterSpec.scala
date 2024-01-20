@@ -85,7 +85,8 @@ class TextPrinterSpec(val env: Env) extends Specification with OwnEnv {
  Whitespaces are respected $n1
 
 """
-  import TextPrinterSpecification.*
+  val textPrinterSpecification = TextPrinterSpecification(ownEnv)
+  import textPrinterSpecification.*
   val factory = fragmentFactory; import factory.*
 
   def a1 =
@@ -356,9 +357,10 @@ table ${"a" | "b" |>
     */
   def error1 = { sys.error("boom"); ok }
   def error2 = { throw new Exception("wrong", new IllegalArgumentException("boom")); ok }
+
 }
 
-object TextPrinterSpecification extends MustMatchers with FragmentsDsl with Debug:
+class TextPrinterSpecification(ownEnv: Env) extends MustMatchers with FragmentsDsl with Debug:
 
   extension (fragment: Fragment)
     def contains(contained: String): Result =
@@ -412,20 +414,18 @@ object TextPrinterSpecification extends MustMatchers with FragmentsDsl with Debu
         case Some(ownEnv) =>
           ownEnv.copy(printerLogger = logger)
         case _ =>
-          Env(
+          ownEnv.copy(
             printerLogger = logger,
             arguments = s.arguments.overrideWith(Arguments.split("sequential fullstacktrace"))
           )
-    try
-      val printer = TextPrinter(env1)
-      printer.run(
-        s.setFragments(
-          s.fragments
-            .prepend(DefaultFragmentFactory.break) // add a newline after the title
-            .update(DefaultExecutor(env1).execute(s.arguments))
-        )
+    val printer = TextPrinter(env1)
+    printer.run(
+      s.setFragments(
+        s.fragments
+          .prepend(DefaultFragmentFactory.break) // add a newline after the title
+          .update(DefaultExecutor(env1).execute(s.arguments))
       )
-    finally if optionalEnv.isEmpty then env1.awaitShutdown()
+    )
 
     val messages = logger.messages
     messages.map(_.removeEnd(" ")).mkString("\n").replace(" ", "_")

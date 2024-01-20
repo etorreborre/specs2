@@ -1,9 +1,9 @@
 package examples.integration
 
 import org.specs2.*
-import scala.concurrent.ExecutionContext
+import org.specs2.specification.core.*
 
-class DatabaseIntegrationSpec(implicit ec: ExecutionContext) extends Specification, StartDatabase:
+class DatabaseIntegrationSpec(env: Env) extends Specification, StartDatabase(env):
   def is = s2"""
 
   First database integration test $e1

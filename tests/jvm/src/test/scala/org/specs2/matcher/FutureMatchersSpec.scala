@@ -9,14 +9,14 @@ import scala.concurrent.*
 import duration.*
 import runner.*
 import main.Arguments
+import org.specs2.specification.core.OwnEnv
 
-class FutureMatchersSpec extends Specification with ResultMatchers with specification.Retries:
+class FutureMatchersSpec(val env: Env) extends Specification with ResultMatchers with specification.Retries with OwnEnv:
 
-  lazy val env = Env(Arguments("threadsnb 4"))
-  lazy val timeFactor = env.arguments.execute.timeFactor
+  lazy val env1 = ownEnv.copy(arguments = Arguments("threadsnb 4"))
+  lazy val timeFactor = env1.arguments.execute.timeFactor
   lazy val sleepTime = 50 * timeFactor.toLong
-  given ee: ExecutionEnv = env.executionEnv
-
+  
   class MyTimeout extends TimeoutException
 
   def is = section("ci") ^ sequential ^ s2"""
@@ -55,7 +55,7 @@ class FutureMatchersSpec extends Specification with ResultMatchers with specific
 
  A Future should be retried the specified number of times in case of a timeout $e4
  A Future should not be called more than the expected number of times $e5
-""" ^ step(env.shutdownResult)
+"""
 
   def e1 =
     case class Spec1() extends FutureMatchers with MustThrownExpectations:

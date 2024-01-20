@@ -2,8 +2,9 @@ package org.specs2
 package runner
 
 import matcher.ActionMatchers
+import specification.core.*
 
-class SpecFactorySpec extends Specification with ActionMatchers {
+class SpecFactorySpec(env: Env) extends Specification with ActionMatchers {
   def is = s2"""
 
  A spec factory instantiates specifications from names
@@ -13,13 +14,13 @@ class SpecFactorySpec extends Specification with ActionMatchers {
 """
 
   def objects1 =
-    SpecFactory.default.createSpecification("org.specs2.runner.RunnerSpecification$").runOption must beSome
+    SpecFactory.create(env).createSpecification("org.specs2.runner.RunnerSpecification$").runOption must beSome
 
   def objects2 =
-    SpecFactory.default.createSpecification("org.specs2.runner.RunnerSpecification").runOption must beSome
+    SpecFactory.create(env).createSpecification("org.specs2.runner.RunnerSpecification").runOption must beSome
 
   def classes =
-    SpecFactory.default.createSpecification("org.specs2.runner.SpecFactorySpec").runOption must beSome
+    SpecFactory.create(env).createSpecification("org.specs2.runner.SpecFactorySpec").runOption must beSome
 
 }
 

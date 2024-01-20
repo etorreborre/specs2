@@ -5,16 +5,19 @@ import execute.*
 import core.*, Execution.*
 import matcher.Matcher
 import specification.dsl.Online
-import reporter.TextPrinterSpecification.*
+import reporter.TextPrinterSpecification
 import control.*
 import producer.*, Producer.*
 
-class OnlineSpecificationSpec extends Specification with Online {
+class OnlineSpecificationSpec(val env: Env) extends Specification with Online with OwnEnv {
   def is = s2"""
 
  A specification can have examples returning a result and Fragments depending on the result value $e1
 
 """
+  val specification = TextPrinterSpecification(ownEnv)
+  import specification.*
+
   val factory = fragmentFactory; import factory.*
 
   def online(n: Int): Execution =

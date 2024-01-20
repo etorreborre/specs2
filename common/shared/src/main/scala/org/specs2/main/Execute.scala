@@ -20,6 +20,7 @@ case class Execute(
     _threadsNb: Option[Int] = None,
     _specs2ThreadsNb: Option[Int] = None,
     _scheduledThreadsNb: Option[Int] = None,
+    _discardRejectedFutures: Option[Boolean] = None,
     _batchSize: Option[Int] = None,
     _timeFactor: Option[Int] = None,
     _timeout: Option[FiniteDuration] = None,
@@ -39,6 +40,7 @@ case class Execute(
   def threadsNb: Int = _threadsNb.getOrElse(ExecuteArguments.threadsNb)
   def specs2ThreadsNb: Int = _specs2ThreadsNb.getOrElse(ExecuteArguments.specs2ThreadsNb)
   def scheduledThreadsNb: Int = _scheduledThreadsNb.getOrElse(1)
+  def discardRejectedFutures: Boolean = _discardRejectedFutures.getOrElse(true)
   def batchSize: Int = _batchSize.getOrElse(ExecuteArguments.threadsNb)
   def timeFactor: Int = _timeFactor.getOrElse(1)
   def timeout: Option[FiniteDuration] = _timeout
@@ -60,6 +62,7 @@ case class Execute(
       other._threadsNb.orElse(_threadsNb),
       other._specs2ThreadsNb.orElse(_specs2ThreadsNb),
       other._scheduledThreadsNb.orElse(_scheduledThreadsNb),
+      other._discardRejectedFutures.orElse(_discardRejectedFutures),
       other._batchSize.orElse(_batchSize),
       other._timeFactor.orElse(_timeFactor),
       other._timeout.orElse(_timeout),
@@ -81,6 +84,7 @@ case class Execute(
       "threadsNb" -> _threadsNb,
       "specs2ThreadsNb" -> _specs2ThreadsNb,
       "scheduledThreadsNb" -> _scheduledThreadsNb,
+      "discardRejectedFutures" -> _discardRejectedFutures,
       "batchSize" -> _batchSize,
       "timeFactor" -> _timeFactor,
       "timeout" -> _timeout,
@@ -103,6 +107,7 @@ object Execute extends Extract:
       _threadsNb = int("threadsNb"),
       _specs2ThreadsNb = int("specs2ThreadsNb"),
       _scheduledThreadsNb = int("scheduledThreadsNb"),
+      _discardRejectedFutures = bool("discardRejectedFutures"),
       _batchSize = bool("unbatched").map(_ => Int.MaxValue).orElse(int("batchSize")),
       _timeFactor = int("timeFactor"),
       _timeout = int("timeout").map(_.millis),
@@ -123,6 +128,7 @@ object Execute extends Extract:
       BooleanArgument("useCustomClassLoader"),
       ValuedArgument("threadsNb"),
       ValuedArgument("specs2ThreadsNb"),
+      ValuedArgument("discardRejectedFutures"),
       BooleanArgument("unbatched"),
       ValuedArgument("batchSize"),
       ValuedArgument("timeFactor"),

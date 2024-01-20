@@ -16,6 +16,6 @@ object files:
     val arguments = Arguments(args.drop(1)*)
     val env = EnvDefault.create(arguments)
 
-    val filesRunner = DefaultFilesRunner(env, SpecificationsFinder.default)
+    val filesRunner = FilesRunner.create(env, SpecificationsFinder.create(env))
     try Runner.execute(filesRunner.run, env, exit)
-    finally env.awaitShutdown()
+    finally env.shutdown()

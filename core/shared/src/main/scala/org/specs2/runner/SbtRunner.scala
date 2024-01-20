@@ -30,7 +30,8 @@ abstract class BaseSbtRunner(args: Array[String], remoteArgs: Array[String], loa
 
   lazy val commandLineArguments = Arguments(args ++ remoteArgs*)
 
-  lazy val env = EnvDefault.create(commandLineArguments).setCustomClassLoader(loader)
+  lazy val env: Env =
+    EnvDefault.create(commandLineArguments).setCustomClassLoader(loader)
 
   def tasks(taskDefs: Array[TaskDef]): Array[Task] =
     taskDefs.toList.map(newTask).toArray
@@ -40,13 +41,8 @@ abstract class BaseSbtRunner(args: Array[String], remoteArgs: Array[String], loa
     SbtTask(aTaskDef, env, loader, this)
 
   def done =
-    env.shutdown
-      .onComplete {
-        case Failure(e) =>
-          loggers.foreach(_.error("error while finalizing resources: " + e.getMessage))
-        case Success(failures) =>
-          failures.toList.foreach { result => loggers.foreach(_.error(result.message)) }
-      }(using env.specs2ExecutionContext)
+    val result = env.shutdown()
+    if !result.isSuccess then loggers.foreach(_.error(result.message))
     ""
 
   def deserializeTask(task: String, deserializer: String => TaskDef): Task =
@@ -75,7 +71,7 @@ object sbtRun extends MasterSbtRunner(Array(), Array(), Thread.currentThread.get
     given ee: ExecutionEnv = env.specs2ExecutionEnv
 
     try exit(start(arguments*))
-    finally Action.future(env.shutdown).runVoid(ee)
+    finally env.shutdown()
 
   def exit(action: Action[Stats])(using ee: ExecutionEnv): Unit =
     action
@@ -176,7 +172,7 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader, base: BaseS
       loggers: Array[Logger]
   ): Action[Stats] =
 
-    val customInstances = CustomInstances(arguments, loader, env.systemLogger)
+    val customInstances = CustomInstances(env, loader, env.systemLogger)
     val specFactory = DefaultSpecFactory(env, loader)
     val makeSpecs =
       if arguments.isSet("all") then

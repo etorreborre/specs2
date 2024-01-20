@@ -5,7 +5,7 @@ import core.*
 import main.*
 import org.specs2.concurrent.ExecutionEnv
 
-class SpecStructureSpec extends Specification:
+class SpecStructureSpec(val env: Env) extends Specification with OwnEnv:
   def is = s2"""
 
  A spec structure depends on another if it has links to it $a1
@@ -15,13 +15,7 @@ class SpecStructureSpec extends Specification:
 
  We can get all the linked specifications according to tags $b1
 
-${step(env.awaitShutdown())}
 """
-
-  val env = Env()
-
-  given ee: ExecutionEnv =
-    env.executionEnv
 
   lazy val spec1 = S1.is
   lazy val spec2 = S2.is

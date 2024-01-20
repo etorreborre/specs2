@@ -11,8 +11,8 @@ trait SpecFactory:
 
 object SpecFactory:
 
-  def default: SpecFactory =
-    DefaultSpecFactory(Env(), Thread.currentThread.getContextClassLoader)
+  def create(env: Env): SpecFactory =
+    DefaultSpecFactory(env, Thread.currentThread.getContextClassLoader)
 
 case class DefaultSpecFactory(env: Env, classLoader: ClassLoader) extends SpecFactory:
 

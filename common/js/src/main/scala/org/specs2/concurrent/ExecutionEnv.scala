@@ -2,6 +2,7 @@ package org.specs2
 package concurrent
 
 import org.specs2.control.Logger
+import org.specs2.execute.*
 import org.specs2.main.Arguments
 
 import scala.concurrent.*, duration.*
@@ -10,7 +11,11 @@ import scala.concurrent.*, duration.*
   */
 case class ExecutionEnv(executorServices: ExecutorServices, timeFactor: Int):
 
-  def shutdown(): Unit = ()
+  def shutdown(): Unit =
+    ()
+
+  def await(future: Future[Result], timeout: Duration = Duration.Inf): Result =
+    Success()
 
   given executionContext: ExecutionContext = executorServices.executionContext
   given ec: ExecutionContext = executorServices.executionContext

@@ -9,7 +9,7 @@ import org.specs2.specification.create.*
 import org.specs2.specification.core.*
 import org.specs2.specification.dsl.FragmentsDsl
 
-class S2StringContextSpec extends Spec {
+class S2StringContextSpec(using ee: ExecutionEnv) extends Spec {
   def is = s2"""
 
  Fragments can be interpolated from a s2 string
@@ -29,12 +29,7 @@ class S2StringContextSpec extends Spec {
     when more than one lines are indented they are taken as the description       ${desc.e2}
     when more than one lines have a | margin they are taken as the description    ${desc.e3}
     for an auto-example (no text on the last line)                                ${desc.e4}
-
-${step(ee.shutdown())}
 """
-
-  given ee: ExecutionEnv =
-    Env().executionEnv
 
   object exs extends MustMatchers with StandardResults with S2StringContext with ThrownExpectations:
 

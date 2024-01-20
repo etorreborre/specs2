@@ -82,6 +82,7 @@ $p
  `threadsNb`             | `min(Runtime.getRuntime.availableProcessors, 4)` | number of threads to use for concurrent execution inside the user examples (this cannot be set on a specification, it has to be set globally)
  `specs2ThreadsNb`       | `min(Runtime.getRuntime.availableProcessors, 4)` | number of threads to use for the concurrent execution of specs2 actions (this cannot be set on a specification, it has to be set globally)
  `scheduledThreadsNb`    | `1`                                              | number of threads to use for timing out execution
+ `discardRejected`       | `true`                                           | do not print warning messages when non terminated future are discarded from the thread pool
  `batchSize`             | `min(Runtime.getRuntime.availableProcessors, 4)` | number of examples which start executing concurrently at the time
  `timeFactor`            | `1`                                              | multiply all durations by this factor when waiting for futures
  `executor`              | `""`                                             | implementation of the `org.specs2.specification.process.Executor` trait
