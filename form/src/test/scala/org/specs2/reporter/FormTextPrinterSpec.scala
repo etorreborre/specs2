@@ -5,7 +5,7 @@ import specification.core.{Env, OwnEnv}
 import main.*
 import form.*
 
-class FormTextPrinterSpec(val env: Env) extends Specification with specification.Forms with OwnEnv {
+case class FormTextPrinterSpec(env: Env) extends Specification with specification.Forms with OwnEnv {
   def is = s2"""
 
   A form must be properly displayed in an interpolated spec $printed

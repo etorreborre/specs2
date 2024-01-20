@@ -5,7 +5,7 @@ import core.Env
 import dsl.*
 import org.specs2.concurrent.ExecutionEnv
 
-class AcceptanceDslSpec extends Spec with AcceptanceDsl {
+class AcceptanceDslSpec(using ee: ExecutionEnv) extends Spec with AcceptanceDsl {
   def is = s2"""
 
  The caret ^ operator can be used to join fragments and build a Fragments object
@@ -45,11 +45,7 @@ class AcceptanceDslSpec extends Spec with AcceptanceDsl {
    "description" ! result                $g1
    "description" ! (s: String) => result $g2
    "description" ! (e: Env) => result    $g3
-
- ${step(ee.shutdown())}
 """
-  given ee: ExecutionEnv =
-    Env().executionEnv
 
   val factory = fragmentFactory; import factory.*
 

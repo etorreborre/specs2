@@ -8,8 +8,7 @@ import user.io.{LocationSpecification, LocationUnitSpecification}
 import Fragment.*
 import org.specs2.concurrent.ExecutionEnv
 
-class LocationSpec extends org.specs2.mutable.Spec with TypedEqual:
-  given ee: ExecutionEnv = Env().executionEnv
+class LocationSpec(using ee: ExecutionEnv) extends org.specs2.mutable.Spec with TypedEqual:
 
   "A unit specification must have correct locations for its fragments" >> {
     given spec: LocationUnitSpecification = new LocationUnitSpecification(ee)
@@ -78,8 +77,6 @@ class LocationSpec extends org.specs2.mutable.Spec with TypedEqual:
 
   def fragments(using spec: WithFragments): List[Fragment] =
     spec.fragmentsList
-
-  step(ee.shutdown())
 
 trait WithFragments:
   def fragmentsList: List[Fragment]

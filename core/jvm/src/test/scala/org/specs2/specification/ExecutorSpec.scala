@@ -39,7 +39,7 @@ class ExecutorSpec(val env: Env) extends Specification with ThrownExpectations w
   with examples using an execution context $userEnv
 
  Time
- ===
+ ====
 
   the timer must be started for each execution $e12
   the timer must be started for each sequential execution $e13
@@ -177,9 +177,7 @@ class ExecutorSpec(val env: Env) extends Specification with ThrownExpectations w
           Await.result(scala.concurrent.Future(1)(ee.executionContext), 5.second) === 1
         }
       }
-    val e = Env()
-    try execute(fragments, e) must contain(beSuccessful[Result]).forall
-    finally e.awaitShutdown()
+    execute(fragments, ownEnv) must contain(beSuccessful[Result]).forall
 
   final lazy val factory = fragmentFactory
 

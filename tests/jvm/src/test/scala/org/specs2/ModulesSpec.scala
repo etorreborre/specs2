@@ -26,10 +26,15 @@ object Module extends SpecificationCreation:
     val base = DirectoryPath.unsafe(new java.io.File(".").getAbsolutePath) / FileName.unsafe(
       name.toLowerCase
     ) / "src" / "test" / "scala"
-    val specs = SpecificationsFinder.default
-      .findSpecifications(basePath = base, verbose = false, filter = filter)
+
+    val env = EnvDefault.default
+    val finder = SpecificationsFinder.create(env)
+    val specs =
+      finder.findSpecifications(basePath = base, verbose = false, filter = filter)
       .unsafeRun
       .take(3)
+
+    env.shutdown()
 
     name.title.copy(specClass = klass) ^
       br ^
