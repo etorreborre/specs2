@@ -21,12 +21,18 @@ case class Operation[A](operation: () => Throwable Either A, last: Vector[Finali
     Operation[B](() => run.map(f), last)
 
   def flatMap[B](f: A => Operation[B]): Operation[B] =
-    Operation.fromEither[B] {
-      runOperation match {
-        case Right(a) => f(a).runOperation
-        case Left(t)  => Left(t)
-      }
-    }
+    var otherLast: Vector[Finalizer] = Vector.empty
+
+    Operation[B](
+      operation = () => {
+        operation().flatMap { a =>
+          val otherOperation = f(a)
+          otherLast = otherOperation.last
+          otherOperation.operation()
+        }
+      },
+      last = last :+ Finalizer.create(Finalizer.runFinalizers(otherLast))
+    )
 
   /** run this operation, to get back a result (possibly an exception) and run the finalizers when the operation has
     * been executed
@@ -131,7 +137,7 @@ object Operation:
       fa.flatMap(f)
 
     override def ap[A, B](fa: =>Operation[A])(ff: =>Operation[A => B]): Operation[B] =
-      Operation(() => ff.run.flatMap(fa.run.map))
+      ff.flatMap(f => fa.map(f))
 
     override def tailrecM[A, B](a: A)(f: A => Operation[Either[A, B]]): Operation[B] =
       Operation[B] { () =>
@@ -152,7 +158,7 @@ object Operation:
       Operation(() => Right(a))
 
     def ap[A, B](fa: =>Operation[A])(ff: =>Operation[A => B]): Operation[B] =
-      Operation(() => ff.run.flatMap(f => fa.run.map(f)))
+      ff.flatMap(f => fa.map(f))
 
     override def toString: String =
       "Applicative[Operation]"
