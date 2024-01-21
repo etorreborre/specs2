@@ -61,7 +61,7 @@ s2"""
 ### One per specification
 
 If you want to have exactly one `Env` or one `ExecutionEnv` per `Specification` you can mix-in the `org.specs2.specicication.core.OwnEnv`
-or the `org.specs2.specicication.core.OwnExecutionEnv` traits. You will then get a specific threadpool instantiated and
+or the `org.specs2.specicication.core.OwnExecutionEnv` traits. You will then get a specific thread pool instantiated and
 shutdown just for the execution of one specification. See the ${"environment" ~/ Environment} page for more information.
 
 $AndIfYouWantToKnowMore

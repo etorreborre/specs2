@@ -4,7 +4,7 @@ package reporter
 import main.Arguments
 import org.specs2.specification.core.*
 
-class TextPrinterIndentationSpec(val env: Env) extends Specification with OwnEnv {
+class TextPrinterIndentationSpec extends Specification with OwnEnv {
   def is = s2"""
 
  The default indentation for the text printer is 2
@@ -24,8 +24,8 @@ class TextPrinterIndentationSpec(val env: Env) extends Specification with OwnEnv
           |other text
           |""".stripMargin
 
-    val printer = TextPrinter(ownEnv.setArguments(Arguments("indentation", "4")).setPrinterLogger(logger))
-    printer.print(spec).runOption(ownEnv.executionEnv)
+    val printer = TextPrinter(env.setArguments(Arguments("indentation", "4")).setPrinterLogger(logger))
+    printer.print(spec).runOption(env.executionEnv)
     (logger.messages(1), logger.messages(2)) must ===(("[info] text    ", "[info]     other text"))
 
 }

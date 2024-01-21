@@ -9,7 +9,7 @@ import specification.core.{Env, SpecificationStructure}
 import runner.*
 import org.specs2.specification.core.OwnEnv
 
-class NotifierSpec(val env: Env) extends Specification with OwnEnv {
+class NotifierSpec extends Specification with OwnEnv {
   def is = s2"""
 
  Run a mutable spec with a Notifier                     $a1
@@ -85,7 +85,7 @@ class NotifierSpec(val env: Env) extends Specification with OwnEnv {
 
   def report(spec: SpecificationStructure): TestNotifier =
     val arguments = Arguments("notifier")
-    val env1 = ownEnv.copy(arguments = arguments)
+    val env1 = env.copy(arguments = arguments)
     val notifier = new TestNotifier
     val reporter = Reporter.create(List(NotifierPrinter(arguments).printer(notifier)), env1)
 

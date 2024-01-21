@@ -4,10 +4,11 @@ package matcher
 import scala.concurrent.*
 import sys.*
 import execute.*
-import specification.core.{Env, OwnExecutionEnv}
+import specification.core.Env
 import language.postfixOps
+import org.specs2.concurrent.ExecutionEnv
 
-class DataTablesSpec(val env: Env) extends Specification with DataTables with ResultMatchers with OwnExecutionEnv {
+class DataTablesSpec(using ee: ExecutionEnv) extends Specification with DataTables with ResultMatchers {
   def is = s2"""
 
  DataTables are useful to specify lots of examples varying just by a few values.

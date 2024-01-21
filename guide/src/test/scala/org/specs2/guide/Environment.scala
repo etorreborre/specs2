@@ -53,7 +53,7 @@ class MySpec(using ec: ExecutionContext) extends Specification:
 The `ExecutionEnv` which is injected in a specification will be shared with all specifications. If you want to provide
 some isolation between your specifications and get a specific thread pool being dedicated to your specification you use
 the `org.specs2.specification.core.OwnEnv` or `org.specs2.specification.core.OwnExecutionEnv` traits:${snippet{
-class MySpec(val env: Env) extends Specification with OwnExecutionEnv:
+class MySpec extends Specification with OwnExecutionEnv:
   def is = s2"""
     Use a future
     ${Await.result(Future(1), 1.seconds) must ===(1)})

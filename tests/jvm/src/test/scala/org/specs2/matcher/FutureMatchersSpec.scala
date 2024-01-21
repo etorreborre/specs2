@@ -11,9 +11,9 @@ import runner.*
 import main.Arguments
 import org.specs2.specification.core.OwnEnv
 
-class FutureMatchersSpec(val env: Env) extends Specification with ResultMatchers with specification.Retries with OwnEnv:
+class FutureMatchersSpec extends Specification with ResultMatchers with specification.Retries with OwnEnv:
 
-  lazy val env1 = ownEnv.copy(arguments = Arguments("threadsnb 4"))
+  lazy val env1 = env.copy(arguments = Arguments("threadsnb 4"))
   lazy val timeFactor = env1.arguments.execute.timeFactor
   lazy val sleepTime = 50 * timeFactor.toLong
 

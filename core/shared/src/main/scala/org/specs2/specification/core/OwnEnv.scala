@@ -19,22 +19,34 @@ import dsl.*
 trait OwnEnv extends AfterSpec:
   self: FragmentsDsl =>
 
-  def env: Env
-
-  lazy val ownEnv: Env =
-    env.copy(
-      executionEnv = ExecutionEnv.create(env.arguments, env.systemLogger, tag = Some(getClass.getName)),
-      specs2ExecutionEnv = ExecutionEnv.createSpecs2(env.arguments, env.systemLogger, tag = Some(getClass.getName))
+  // start an environment for this class
+  lazy val env: Env =
+    Env(
+      EnvDefault.default.arguments,
+      EnvDefault.default.resources,
+      EnvDefault.default.systemLogger,
+      EnvDefault.default.printerLogger,
+      EnvDefault.default.statisticsRepository,
+      EnvDefault.default.random,
+      EnvDefault.default.fileSystem,
+      EnvDefault.default.customClassLoader,
+      EnvDefault.default.classLoading,
+      ExecutionEnv.create(EnvDefault.default.arguments, EnvDefault.default.systemLogger, tag = Some(getClass.getName)),
+      ExecutionEnv.createSpecs2(
+        EnvDefault.default.arguments,
+        EnvDefault.default.systemLogger,
+        tag = Some(getClass.getName)
+      )
     )
 
   given ee: ExecutionEnv =
-    ownEnv.executionEnv
+    env.executionEnv
 
   given es: ExecutorServices =
-    ownEnv.executorServices
+    env.executorServices
 
   given ec: ExecutionContext =
-    ownEnv.executionContext
+    env.executionContext
 
   def afterSpec: Fragments =
-    step(ownEnv.shutdown())
+    step(env.shutdown())

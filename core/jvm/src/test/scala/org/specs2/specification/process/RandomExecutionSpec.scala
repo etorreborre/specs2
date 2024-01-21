@@ -10,7 +10,7 @@ import specification.dsl.ExampleDsl
 import specification.core.*
 import org.specs2.text.Trim.*
 
-class RandomExecutionSpec(val env: Env) extends Specification with ThrownExpectations with ExampleDsl with OwnEnv {
+class RandomExecutionSpec extends Specification with ThrownExpectations with ExampleDsl with OwnEnv {
   def is = section("ci") ^ s2"""
 
  It is possible to force the order of execution of a specification so that
@@ -38,8 +38,8 @@ class RandomExecutionSpec(val env: Env) extends Specification with ThrownExpecta
     }
 
     DefaultExecutor
-      .runSpecificationAction(spec, ownEnv)
-      .runAction(ownEnv.executionEnv)
+      .runSpecificationAction(spec, env)
+      .runAction(env.executionEnv)
       .map { _ =>
         val allExamples = allOf((0 until n).flatMap(i => List(">>> ex" + i, "<<< ex" + i))*)
 
@@ -68,8 +68,8 @@ class RandomExecutionSpec(val env: Env) extends Specification with ThrownExpecta
         s2"""${fs_1_to_5.append(step(ok)).append(fs_6_to_10)}"""
     }
     DefaultExecutor
-      .runSpecificationAction(spec, ownEnv)
-      .runAction(ownEnv.executionEnv)
+      .runSpecificationAction(spec, env)
+      .runAction(env.executionEnv)
       .map { _ =>
         val allExamples = allOf[String]((1 to n).map("ex" + _)*)
 

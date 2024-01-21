@@ -8,7 +8,7 @@ import specification.core.{SpecificationStructure, Env}
 import scala.collection.mutable.ArrayBuffer
 import org.specs2.specification.core.OwnEnv
 
-class BeforeAfterSpecSpec(val env: Env) extends Specification with OwnEnv {
+class BeforeAfterSpecSpec extends Specification with OwnEnv {
   def is = s2"""
 
  Before and after all steps can be executed with the BeforeAfterSpec trait $beforeAfter
@@ -77,7 +77,7 @@ class BeforeAfterSpecSpec(val env: Env) extends Specification with OwnEnv {
     messages.toList === List("before all", "e2", "after all")
 
   def runSpec(s: SpecificationStructure, arguments: Arguments = Arguments()) =
-    val env1 = ownEnv.copy(arguments = arguments, printerLogger = NoPrinterLogger)
+    val env1 = env.copy(arguments = arguments, printerLogger = NoPrinterLogger)
     Reporter.create(Nil, env1).report(s.structure).runVoid(env1.executionEnv)
 
 }

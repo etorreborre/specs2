@@ -6,7 +6,7 @@ import process.DefaultExecutor
 import execute.*
 import org.specs2.matcher.ActionMatchers
 
-class FragmentsContinuationSpec(val env: Env) extends Specification with ActionMatchers with OwnEnv {
+class FragmentsContinuationSpec extends Specification with ActionMatchers with OwnEnv {
   def is = s2"""
 
  A fragment continuation must
@@ -29,8 +29,8 @@ class FragmentsContinuationSpec(val env: Env) extends Specification with ActionM
   /** HELPERS */
   def runContinuation[R: AsResult](r1: =>R, continuation: =>Fragments): List[Fragment] =
     Fragments(
-      DefaultExecutor(ownEnv).execute(ownEnv.arguments)(
+      DefaultExecutor(env).execute(env.arguments)(
         Fragments("test" ! FragmentsContinuation.continueWith(r1, continuation)).contents
       )
-    ).fragmentsList(ownEnv.executionEnv)
+    ).fragmentsList(env.executionEnv)
 }

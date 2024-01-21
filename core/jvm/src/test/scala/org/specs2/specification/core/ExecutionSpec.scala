@@ -7,7 +7,7 @@ import process.*
 import matcher.*
 import scala.concurrent.*, duration.*
 
-class ExecutionSpec(val env: Env) extends Specification with OwnEnv with ResultMatchers {
+class ExecutionSpec extends Specification with OwnEnv with ResultMatchers {
   def is = section("ci") ^ s2"""
 
  A link is executed by getting the corresponding specification ref status in the Statistics store
@@ -26,7 +26,7 @@ class ExecutionSpec(val env: Env) extends Specification with OwnEnv with ResultM
 
   def linkExecution =
     val store = StatisticsRepositoryCreation.memory
-    val env1 = ownEnv.setStatisticRepository(store)
+    val env1 = env.setStatisticRepository(store)
     val stats = Stats(specs = 2, failures = 1, examples = 1)
     store.storeStatistics(getClass.getName, stats).runOption
     Thread.sleep(2000)

@@ -6,7 +6,7 @@ import org.specs2.specification.core.{Env, Execution, Fragment, OwnEnv}
 import org.specs2.specification.process.DefaultExecutor
 import scala.concurrent.duration.*
 
-class PendingUntilFixedSpec(val env: Env) extends Specification with OwnEnv:
+class PendingUntilFixedSpec extends Specification with OwnEnv:
 
   "An example can be marked as pending until fixed" in e1
   "with a specific message" in e2
@@ -56,4 +56,4 @@ class PendingUntilFixedSpec(val env: Env) extends Specification with OwnEnv:
   }
 
   def execute(f: Fragment) =
-    DefaultExecutor.executeAll(f)(ownEnv).head.executionResult.run(ownEnv.executionEnv)
+    DefaultExecutor.executeAll(f)(env).head.executionResult.run(env.executionEnv)

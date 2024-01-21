@@ -15,7 +15,7 @@ import fp.*, syntax.*
 import ResultMatchers.*
 import scala.concurrent.*
 
-class ExecutorSpec(val env: Env) extends Specification with ThrownExpectations with OwnEnv {
+class ExecutorSpec extends Specification with ThrownExpectations with OwnEnv {
   def is = sequential ^ section("ci") ^ s2"""
 
  Steps
@@ -51,94 +51,94 @@ class ExecutorSpec(val env: Env) extends Specification with ThrownExpectations w
 
   def e1 =
     val results = Results(); import results.*
-    val tf = ownEnv.arguments.execute.timeFactor
+    val tf = env.arguments.execute.timeFactor
     val fragments =
       Fragments(example("slow", slow(tf)), example("medium", medium(tf)), step(step1), example("fast", fast(tf)))
-    execute(fragments, ownEnv) must not(contain(beSkipped[Result]))
+    execute(fragments, env) must not(contain(beSkipped[Result]))
     messages.toList must ===(Seq("medium", "slow", "step", "fast"))
 
   def e2 =
     val results = Results(); import results.*
-    val tf = ownEnv.arguments.execute.timeFactor
+    val tf = env.arguments.execute.timeFactor
     val fragments = Fragments(
       example("slow", slow(tf)),
       example("medium", mediumFail(tf)),
       step(step1).stopOnFail,
       example("fast", fast(tf))
     )
-    execute(fragments, ownEnv) must contain(beSkipped[Result])
+    execute(fragments, env) must contain(beSkipped[Result])
     messages.toList must ===(Seq("medium", "slow", "step"))
 
   def e3 =
     val results = Results(); import results.*
-    val tf = ownEnv.arguments.execute.timeFactor
+    val tf = env.arguments.execute.timeFactor
     val fragments = Fragments(
       example("slow", slow(tf)),
       example("medium", mediumError(tf)),
       step(step1).stopOnError,
       example("fast", fast(tf))
     )
-    execute(fragments, ownEnv) must contain(beSkipped[Result])
+    execute(fragments, env) must contain(beSkipped[Result])
     messages.toList must ===(Seq("medium", "slow", "step"))
 
   def e4 =
     val results = Results(); import results.*
-    val tf = ownEnv.arguments.execute.timeFactor
+    val tf = env.arguments.execute.timeFactor
     val fragments =
       Fragments(example("slow", slow(tf)), example("medium", mediumSkipped(tf)), step(step1), example("fast", fast(tf)))
-    execute(fragments, ownEnv.setArguments(Arguments("stopOnSkip"))) must contain(beSkipped[Result])
+    execute(fragments, env.setArguments(Arguments("stopOnSkip"))) must contain(beSkipped[Result])
     messages.toList must ===(Seq("medium", "slow", "step"))
 
   def e5 =
     val results = Results(); import results.*
-    val tf = ownEnv.arguments.execute.timeFactor
+    val tf = env.arguments.execute.timeFactor
     val fragments = Fragments(example("slow", slow(tf)), example("medium", mediumFail(tf)), example("fast", fast(tf)))
-    execute(fragments, ownEnv.setArguments(Arguments("stopOnFail", "sequential"))) must contain(beFailing[Result])
+    execute(fragments, env.setArguments(Arguments("stopOnFail", "sequential"))) must contain(beFailing[Result])
     messages.toList must ===(Seq("slow", "medium"))
 
   def e6 =
     val results = Results(); import results.*
-    val tf = ownEnv.arguments.execute.timeFactor
+    val tf = env.arguments.execute.timeFactor
     val fragments = Fragments(example("ex1", fast(tf)), example("ex2", fast(tf)))
-    execute(fragments, ownEnv.setArguments(Arguments("skipAll"))) must contain(beSkipped[Result])
+    execute(fragments, env.setArguments(Arguments("skipAll"))) must contain(beSkipped[Result])
     messages.toList must beEmpty
 
   def e7 =
     val results = Results(); import results.*
-    val tf = ownEnv.arguments.execute.timeFactor
+    val tf = env.arguments.execute.timeFactor
     val fragments =
       Fragments(example("slow", slow(tf)), example("medium", medium(tf)), step(step1), example("fast", fast(tf)))
-    execute(fragments, ownEnv.setArguments(Arguments("sequential"))) must not(contain(beSkipped[Result]))
+    execute(fragments, env.setArguments(Arguments("sequential"))) must not(contain(beSkipped[Result]))
     messages.toList must ===(Seq("slow", "medium", "step", "fast"))
 
   def e8 =
     val results = Results(); import results.*
-    val tf = ownEnv.arguments.execute.timeFactor
+    val tf = env.arguments.execute.timeFactor
     val fragments =
       Fragments(example("slow", slow(tf)), example("medium", medium(tf)), step(step1), example("fast", fast(tf)))
-    execute(fragments, ownEnv.setArguments(Arguments("sequential")))
+    execute(fragments, env.setArguments(Arguments("sequential")))
     messages.toList must ===(Seq("slow", "medium", "step", "fast"))
 
   def e9 =
     val results = Results()
     val fragments =
       Fragments(example("fast1", results.ok("ok1")), step(results.fatalStep), example("fast2", results.ok("ok2")))
-    execute(fragments, ownEnv)
+    execute(fragments, env)
     results.messages.toList must ===(Seq("ok1", "fatal"))
 
   def e10 =
     val fragments =
       Fragments(step(throw new Exception("fatal")), example("e1", ok("ok")), step(throw new Exception("fatal")))
-    val rs = execute(fragments, ownEnv).map(_.status)
+    val rs = execute(fragments, env).map(_.status)
     rs must contain("!", "o", "!")
 
   def e11 =
     val fragments = Fragments(example("e1", ko("ko1")), example("e2", ok("ok2")))
-    val env1 = ownEnv.setArguments(Arguments.split("sequential stopOnFail"))
+    val env1 = env.setArguments(Arguments.split("sequential stopOnFail"))
     val rs = execute(fragments, env1).map(_.status)
     rs must contain("x", "o")
 
-  def tf = ownEnv.arguments.execute.timeFactor
+  def tf = env.arguments.execute.timeFactor
 
   def fragments(results: Results) =
     import results.*
@@ -146,27 +146,27 @@ class ExecutorSpec(val env: Env) extends Specification with ThrownExpectations w
 
   def e12 =
     val results = Results()
-    val times = executionTimes(fragments(results), ownEnv)
+    val times = executionTimes(fragments(results), env)
     times must containMatch("(\\d)+ ms")
 
   def e13 =
     val results = Results()
-    val times = executionTimes(fragments(results), ownEnv.setArguments(Arguments("sequential")))
+    val times = executionTimes(fragments(results), env.setArguments(Arguments("sequential")))
     times must containMatch("(\\d)+ ms")
 
   def e14 =
     val results = Results()
-    val times = executionTimes(fragments(results), ownEnv.setArguments(Arguments("skipAll")))
+    val times = executionTimes(fragments(results), env.setArguments(Arguments("skipAll")))
     times must containMatch("(\\d)+ ms")
 
   def timeout =
-    val timeFactor = ownEnv.arguments.execute.timeFactor
+    val timeFactor = env.arguments.execute.timeFactor
 
     val messages = new ListBuffer[String]
     def verySlow: Result = { Thread.sleep(600 * timeFactor.toLong); messages.append("very slow"); success }
 
     val fragments = Fragments(example("very slow", verySlow))
-    val env1 = ownEnv.setTimeout(100.millis * timeFactor.toLong)
+    val env1 = env.setTimeout(100.millis * timeFactor.toLong)
 
     execute(fragments, env1) must contain(beSkipped[Result]("timeout after " + 100 * timeFactor + " milliseconds"))
 
@@ -177,7 +177,7 @@ class ExecutorSpec(val env: Env) extends Specification with ThrownExpectations w
           Await.result(scala.concurrent.Future(1)(ee.executionContext), 5.second) === 1
         }
       }
-    execute(fragments, ownEnv) must contain(beSuccessful[Result]).forall
+    execute(fragments, env) must contain(beSuccessful[Result]).forall
 
   final lazy val factory = fragmentFactory
 

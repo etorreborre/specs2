@@ -9,7 +9,7 @@ import org.specs2.specification.process.*
 import user.specification.*
 import fp.syntax.*
 
-class AllExpectationsSpec(val env: Env) extends Spec with OwnEnv:
+class AllExpectationsSpec extends Spec with OwnEnv:
 
   "A specification with the AllExpectations trait should" >> {
     "evaluate all its expectations" >> {
@@ -61,12 +61,12 @@ class AllExpectationsSpec(val env: Env) extends Spec with OwnEnv:
 
   def stats(spec: SpecificationStructure)(args: Arguments): Stats =
     // all the executions need to be sequential
-    val executed = DefaultExecutor.executeSpec(spec.structure |> DefaultSelector(Arguments()).select(args), ownEnv)
-    Statistics.runStats(executed)(ownEnv.executionEnv)
+    val executed = DefaultExecutor.executeSpec(spec.structure |> DefaultSelector(Arguments()).select(args), env)
+    Statistics.runStats(executed)(env.executionEnv)
 
   def results(spec: SpecificationStructure)(args: Arguments): List[Result] =
     // all the executions need to be sequential
-    val env1 = ownEnv.setArguments(args <| sequential)
+    val env1 = env.setArguments(args <| sequential)
     DefaultExecutor
       .executeSpec(spec.structure, env1)
       .fragments

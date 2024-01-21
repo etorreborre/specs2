@@ -6,7 +6,7 @@ import scala.jdk.CollectionConverters.*
 import org.specs2.specification.core.{Env, OwnEnv}
 
 // format: off
-class TraversableMatchersSpec(val env: Env) extends Specification with ResultMatchers with MustMatchers with OwnEnv {
+class TraversableMatchersSpec extends Specification with ResultMatchers with MustMatchers with OwnEnv {
   def is = s2"""
 
  We can check the elements of a collection by using matchers

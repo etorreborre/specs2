@@ -5,9 +5,10 @@ import java.util.concurrent.ArrayBlockingQueue
 import scala.concurrent.*, duration.*
 
 import io.StringOutput
-import specification.core.{Env, OwnExecutionEnv}
+import specification.core.Env
+import org.specs2.concurrent.ExecutionEnv
 
-class TerminationMatchersSpec(val env: Env) extends Specification with TerminationMatchers with OwnExecutionEnv {
+class TerminationMatchersSpec(using ee: ExecutionEnv) extends Specification with TerminationMatchers {
   def is = section("ci") ^ sequential ^ s2"""
 
  It is possible to check if a block of code terminates

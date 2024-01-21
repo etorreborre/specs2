@@ -13,17 +13,12 @@ import org.specs2.mutable.Specification
 import org.specs2.specification.process.DefaultExecutor
 import language.adhocExtensions
 
-class ScalaCheckMutableSpec(val env: Env)
-    extends Specification
-    with ScalaCheck
-    with ResultMatchers
-    with OwnEnv
-    with ActionMatchers:
+class ScalaCheckMutableSpec extends Specification with ScalaCheck with ResultMatchers with OwnEnv with ActionMatchers:
 
   "this property must fail (see #581)" >> {
     val action: Action[Result] =
       DefaultExecutor
-        .executeFragmentsAction(s2"fail here $failingProperties")(ownEnv)
+        .executeFragmentsAction(s2"fail here $failingProperties")(env)
         .flatMap(_.traverse(_.executionResult).map(_.headOption.getOrElse(ok)))
 
     action must beOk((r: Result) => r must beFailing)

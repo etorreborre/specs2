@@ -6,7 +6,7 @@ import execute.Snippet.*
 import core.*
 
 // format: off
-class SnippetsSpec(val env: Env)
+class SnippetsSpec
     extends Specification
     with Snippets
     with DataTables
@@ -197,7 +197,7 @@ n = 0
 
   def got[T](t: T) = t
 
-  extension (fs: Fragments) def trimmedTexts = fs.fragmentsList(ee).filter(Fragment.isText).map(_.description.show.trim)
+  extension (fs: Fragments) def trimmedTexts = fs.fragmentsList(executionEnv).filter(Fragment.isText).map(_.description.show.trim)
 
   val attribute1 = 1
 }

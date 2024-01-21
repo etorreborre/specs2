@@ -13,7 +13,7 @@ import specification.process.*
 import OperationMatchers.*
 import org.specs2.control.origami.Folds
 
-class ReporterSpec(val env: Env) extends Specification with ThrownExpectations with OwnEnv {
+class ReporterSpec extends Specification with ThrownExpectations with OwnEnv {
   def is = s2"""
 
  The reporter is responsible for:
@@ -41,37 +41,37 @@ class ReporterSpec(val env: Env) extends Specification with ThrownExpectations w
 
   def a1 =
     val logger = stringPrinterLogger
-    reported(ownEnv.setArguments(Arguments.split("ex ex3")), logger)
+    reported(env.setArguments(Arguments.split("ex ex3")), logger)
     logger.messages.mkString("\n") must contain("ex3")
     logger.messages.mkString("\n") must not(contain("ex1"))
 
   def a2 =
     val repository = StatisticsRepositoryCreation.memory
-    reported(ownEnv.setArguments(Arguments()).setStatisticRepository(repository))
+    reported(env.setArguments(Arguments()).setStatisticRepository(repository))
     repository.getStatistics(spec().specClassName) must beOk(beSome((_: Stats).examples must ===(3)))
 
   def a3 =
     val repository = StatisticsRepositoryCreation.memory
-    reported(ownEnv.setArguments(Arguments()).setStatisticRepository(repository))
+    reported(env.setArguments(Arguments()).setStatisticRepository(repository))
     val ex2 = spec().fragmentsList(env.executionEnv)(3)
     repository.previousResult(spec().specClassName, ex2.description) must beOk(
       beSome((_: Result).isFailure must beTrue)
     )
 
   def a4 =
-    reported(ownEnv).map(_.copy(timer = Stats.empty.timer)) must beSome(
+    reported(env).map(_.copy(timer = Stats.empty.timer)) must beSome(
       Stats(examples = 3, successes = 2, expectations = 3, failures = 1)
     )
 
   def b1 =
     val logger = stringPrinterLogger
-    reported(ownEnv.setPrinterLogger(logger), logger)
+    reported(env.setPrinterLogger(logger), logger)
     logger.messages must not(beEmpty)
 
   def b2 =
     val logger = stringPrinterLogger
     reported(
-      ownEnv.setPrinterLogger(logger).setArguments(Arguments("junit")),
+      env.setPrinterLogger(logger).setArguments(Arguments("junit")),
       printers = List(new FakeJUnitPrinter(logger))
     )
     logger.messages must not(contain[String]("ex1"))
@@ -79,9 +79,9 @@ class ReporterSpec(val env: Env) extends Specification with ThrownExpectations w
 
   def b3 =
     val logger = stringPrinterLogger
-    val env = ownEnv.setPrinterLogger(logger).setArguments(Arguments.split("console junit"))
+    val env1 = env.setPrinterLogger(logger).setArguments(Arguments.split("console junit"))
 
-    reported(env, printers = List(TextPrinter(env), new FakeJUnitPrinter(logger)))
+    reported(env1, printers = List(TextPrinter(env1), new FakeJUnitPrinter(logger)))
 
     val messages = logger.messages
     messages must contain(beMatching(".*ex1.*"))

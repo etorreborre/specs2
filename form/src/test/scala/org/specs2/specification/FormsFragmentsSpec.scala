@@ -7,12 +7,7 @@ import matcher.*
 import org.specs2.specification.core.{Env, OwnEnv, SpecStructure}
 import org.specs2.specification.process.DefaultExecutor
 
-case class FormsFragmentsSpec(env: Env)
-    extends Specification
-    with Forms
-    with ThrownExpectations
-    with OwnEnv
-    with ActionMatchers {
+class FormsFragmentsSpec extends Specification with Forms with ThrownExpectations with OwnEnv with ActionMatchers {
   def is =
     s2"""
 
@@ -39,14 +34,14 @@ case class FormsFragmentsSpec(env: Env)
 
     def e2 =
       val example = "the customer must be as expected" ! form
-      example.startExecution(ownEnv).executionResult.map(_.isSuccess) must beOk(true)
+      example.startExecution(env).executionResult.map(_.isSuccess) must beOk(true)
 
     def e3 =
-      val example = DefaultExecutor.execute("the customer must be as expected" ! failedForm)(ownEnv)
+      val example = DefaultExecutor.execute("the customer must be as expected" ! failedForm)(env)
       example.executionResult.map(_.message) must beOk("20 != 18")
 
     def execute(spec: SpecStructure) =
-      DefaultExecutor.executeFragments(spec.fragments)(ownEnv)
+      DefaultExecutor.executeFragments(spec.fragments)(env)
 
   trait Customers:
     trait Customer:

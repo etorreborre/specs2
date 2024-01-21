@@ -3,12 +3,13 @@ package html
 
 import TableOfContents.*
 import io.*
-import specification.core.{Env, OwnExecutionEnv, SpecStructure}
+import specification.core.{Env, SpecStructure}
 
 import scala.xml.NodeSeq
 import matcher.XmlMatchers
+import org.specs2.concurrent.ExecutionEnv
 
-class TableOfContentsSpec(val env: Env) extends Specification with HtmlDocuments with XmlMatchers with OwnExecutionEnv {
+class TableOfContentsSpec(using ee: ExecutionEnv) extends Specification with HtmlDocuments with XmlMatchers {
   def is = s2"""
 
  The table of contents is created from the specifications and the generated html files

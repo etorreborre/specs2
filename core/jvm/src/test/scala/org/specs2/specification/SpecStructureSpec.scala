@@ -5,7 +5,7 @@ import core.*
 import main.*
 import org.specs2.concurrent.ExecutionEnv
 
-class SpecStructureSpec(val env: Env) extends Specification with OwnEnv:
+class SpecStructureSpec extends Specification with OwnEnv:
   def is = s2"""
 
  A spec structure depends on another if it has links to it $a1
@@ -25,7 +25,7 @@ class SpecStructureSpec(val env: Env) extends Specification with OwnEnv:
 
   def a2 =
     SpecStructure
-      .linkedSpecifications(spec1, ownEnv, getClass.getClassLoader)
+      .linkedSpecifications(spec1, env, getClass.getClassLoader)
       .runOption
       .flatMap(_.lastOption) must beSome(
       (_: SpecStructure).arguments
@@ -34,7 +34,7 @@ class SpecStructureSpec(val env: Env) extends Specification with OwnEnv:
 
   def b1 =
     SpecStructure
-      .linkedSpecifications(spec1, ownEnv.setArguments(Arguments.split("exclude spec2")), getClass.getClassLoader)
+      .linkedSpecifications(spec1, env.setArguments(Arguments.split("exclude spec2")), getClass.getClassLoader)
       .runOption
       .toList
       .flatten must not(contain((s: SpecStructure) => s.name === "S2"))

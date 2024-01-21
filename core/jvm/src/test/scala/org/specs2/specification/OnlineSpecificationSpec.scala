@@ -9,13 +9,13 @@ import reporter.TextPrinterSpecification
 import control.*
 import producer.*, Producer.*
 
-class OnlineSpecificationSpec(val env: Env) extends Specification with Online with OwnEnv {
+class OnlineSpecificationSpec extends Specification with Online with OwnEnv {
   def is = s2"""
 
  A specification can have examples returning a result and Fragments depending on the result value $e1
 
 """
-  val specification = TextPrinterSpecification(ownEnv)
+  val specification = TextPrinterSpecification(env)
   import specification.*
 
   val factory = fragmentFactory; import factory.*

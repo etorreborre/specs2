@@ -5,7 +5,7 @@ import org.specs2.specification.core.{Env, OwnExecutionEnv}
 import org.specs2.execute.{AsResult, Result}
 import org.specs2.specification.AroundEach
 
-class MutableSpec(val env: Env) extends Specification with OwnExecutionEnv:
+class MutableSpec extends Specification with OwnExecutionEnv:
 
   "s2 strings must create examples".p
   s2"""${this.is.examplesList must haveSize(2)}"""

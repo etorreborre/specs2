@@ -9,9 +9,10 @@ import html.*
 import Indexing.*
 import control.*
 import producer.*, Producer.*
-import specification.core.{Env, OwnExecutionEnv}
+import specification.core.Env
+import org.specs2.concurrent.ExecutionEnv
 
-class IndexingSpec(val env: Env) extends Specification with OwnExecutionEnv {
+class IndexingSpec(using ee: ExecutionEnv) extends Specification {
   def is = s2"""
  From the set of all the generated html pages we can generate an index and convert it to the tipue search format.
 

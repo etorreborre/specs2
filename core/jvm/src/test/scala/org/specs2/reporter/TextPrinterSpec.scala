@@ -17,7 +17,7 @@ import process.{Stats, DefaultExecutor, StatisticsRepositoryCreation}
 import io.StringOutput
 import text.AnsiColors
 
-class TextPrinterSpec(val env: Env) extends Specification with OwnEnv {
+class TextPrinterSpec extends Specification with OwnEnv {
   def is = s2"""
 
  The results of a specification can be printed as lines
@@ -85,7 +85,7 @@ class TextPrinterSpec(val env: Env) extends Specification with OwnEnv {
  Whitespaces are respected $n1
 
 """
-  val textPrinterSpecification = TextPrinterSpecification(ownEnv)
+  val textPrinterSpecification = TextPrinterSpecification(env)
   import textPrinterSpecification.*
   val factory = fragmentFactory; import factory.*
 
@@ -217,7 +217,7 @@ presentation
   def j3 =
     val repository = StatisticsRepositoryCreation.memory
     repository.storeStatistics(classOf[String].getName, Stats(examples = 1, failures = 1)).runOption
-    val env1 = ownEnv.setArguments(Arguments()).setStatisticRepository(repository)
+    val env1 = env.setArguments(Arguments()).setStatisticRepository(repository)
     (s2"""the ${SpecificationRef(SpecHeader(classOf[String], Some("STRING")), Arguments())} spec""", env1) `contains`
       """|[info] the x STRING spec"""
 
@@ -259,7 +259,7 @@ presentation
     )
 
     val spec = SpecStructure.create(SpecHeader(getClass, Some("title\n")), Arguments(), fragments)
-    val env1 = ownEnv.copy(printerLogger = logger, arguments = Arguments("batchsize", "3"))
+    val env1 = env.copy(printerLogger = logger, arguments = Arguments("batchsize", "3"))
     val printer = TextPrinter(env1)
     printer.run(DefaultExecutor.executeSpec(spec, env1))
 
@@ -290,7 +290,7 @@ presentation
     )
 
     val spec = SpecStructure.create(SpecHeader(getClass, Some("title\n")), sequential, fragments)
-    val env1 = ownEnv.copy(printerLogger = logger).setArguments(sequential)
+    val env1 = env.copy(printerLogger = logger).setArguments(sequential)
     val printer = TextPrinter(env1)
     printer.run(DefaultExecutor.executeSpec(spec, env1))
 
@@ -360,7 +360,7 @@ table ${"a" | "b" |>
 
 }
 
-class TextPrinterSpecification(ownEnv: Env) extends MustMatchers with FragmentsDsl with Debug:
+class TextPrinterSpecification(env: Env) extends MustMatchers with FragmentsDsl with Debug:
 
   extension (fragment: Fragment)
     def contains(contained: String): Result =
@@ -411,10 +411,10 @@ class TextPrinterSpecification(ownEnv: Env) extends MustMatchers with FragmentsD
     val logger = stringPrinterLogger
     lazy val env1 =
       optionalEnv match
-        case Some(ownEnv) =>
-          ownEnv.copy(printerLogger = logger)
+        case Some(env) =>
+          env.copy(printerLogger = logger)
         case _ =>
-          ownEnv.copy(
+          env.copy(
             printerLogger = logger,
             arguments = s.arguments.overrideWith(Arguments.split("sequential fullstacktrace"))
           )
