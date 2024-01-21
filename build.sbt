@@ -98,7 +98,23 @@ lazy val mimaSettings =
       ProblemFilters.exclude[MissingClassProblem]("org.specs2.matcher.JsonSelectors*"),
       ProblemFilters.exclude[ReversedMissingMethodProblem]("org.specs2.matcher.JsonSelectors*"),
       ProblemFilters.exclude[MissingTypesProblem]("org.specs2.matcher.JsonSelectors*"),
-      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.matcher.JsonMatchers.JsonEqualValueSelector")
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.matcher.JsonMatchers.JsonEqualValueSelector"),
+
+      // the fixed executor has a new argument in order to remove warnings when some futures cannot be completed
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.concurrent.ExecutorServices.fixedExecutor"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.main.Execute.*"),
+
+      // CustomInstances, PrinterFactory, SpecFactory, SpecificationFinder cannot have a default Env
+      // because there a risk that the default env not be shutdown. Moreover the Env.shutdown functions
+      // have been fixed
+      ProblemFilters.exclude[Problem]("org.specs2.reporter.CustomInstances.*"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.reporter.PrinterFactory.default"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.runner.SpecFactory.default"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.runner.SpecificationsFinder.default"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.specification.core.Env.shutdown"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.specification.core.Env.shutdownResult"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.specification.core.Env.awaitShutdown"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.specification.core.EnvDefault.<clinit>")
     )
   )
 
