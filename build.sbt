@@ -114,7 +114,13 @@ lazy val mimaSettings =
       ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.specification.core.Env.shutdown"),
       ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.specification.core.Env.shutdownResult"),
       ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.specification.core.Env.awaitShutdown"),
-      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.specification.core.EnvDefault.<clinit>")
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.specification.core.EnvDefault.<clinit>"),
+
+      // The OwnEnv and OwnExecutionEnv traits should not expect to have a val env defined when mixed with a specification
+      // Because, in that case, it is very possible to confuse the ownEnv with the env and shutdown the env
+      // which breaks the execution of the whole specification
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.specification.core.OwnEnv.ownEnv"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.specification.core.OwnExecutionEnv.env")
     )
   )
 
