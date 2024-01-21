@@ -32,7 +32,7 @@ class SbtPrinterSpec(val env: Env) extends Specification with OwnEnv {
     def e1 =
       printer
         .print((new HelloWorldSpec { override def is = "title".title ^ "\ntext" }).structure)
-        .runAction(ownEnv.specs2ExecutionEnv)
+        .runAction(ownEnv.executionEnv)
       eventually(logger.messages must contain(beMatching("\\[INFO\\].*title.*")))
 
     def e2 =
@@ -54,7 +54,7 @@ class SbtPrinterSpec(val env: Env) extends Specification with OwnEnv {
            | """.stripMargin.showSpaces
 
     def print(spec: SpecStructure) =
-      printer.print(spec).runAction(ownEnv.specs2ExecutionEnv)
+      printer.print(spec).runAction(ownEnv.executionEnv)
       stringOutputLogger.flush()
       stringOutputLogger.messages.mkString("\n")
 
@@ -74,8 +74,8 @@ class SbtPrinterSpec(val env: Env) extends Specification with OwnEnv {
       lazy val handler = outer.handler
       lazy val taskDef = new TaskDef("", Fingerprints.fp1, true, Array())
     }
-    val env = Env(arguments = Arguments("nocolor"))
-    val printer = SbtPrinter(env, Array(logger, stringOutputLogger), events)
+    val env1 = ownEnv.copy(arguments = Arguments("nocolor"))
+    val printer = SbtPrinter(env1, Array(logger, stringOutputLogger), events)
 
   }
 
@@ -103,8 +103,8 @@ class SbtPrinterSpec(val env: Env) extends Specification with OwnEnv {
       handler.events must contain(eventWithNameMatching("HW::The 'Hello world' string should::contain 11 characters"))
 
     def executeAndPrintHelloWorldUnitSpec =
-      val executed = DefaultExecutor.executeSpec((new HelloWorldUnitSpec).is.fragments, env)
-      printer.print(executed).runAction(env.specs2ExecutionEnv)
+      val executed = DefaultExecutor.executeSpec((new HelloWorldUnitSpec).is.fragments, ownEnv)
+      printer.print(executed).runAction(ownEnv.executionEnv)
 
   }
 

@@ -54,7 +54,7 @@ method. It can then be accessed concurrently by several specifications
     val specifications = (1 to 5).map(n => GlobalResourceExample(n, messages).structure)
     for {
       r <- Future.sequence(specifications.map(s => reporter.report(s).runFuture(env.executionEnv)))
-      _ = env.shutdown()
+      rs <- env.startShutdown
     } yield (messages.headOption === Some("acquired")) and
       (messages.lastOption === Some("released with value 5")) and
       (messages.toList must contain(

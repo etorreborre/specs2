@@ -21,18 +21,18 @@ class HtmlPrinterSpec(val env: Env) extends Specification with ActionMatchers wi
 
   def index =
     val spec = new Specification { def is = s2""" one example $ok """ }
-    val env1 = env.setArguments(searchArguments)
+    val env1 = ownEnv.setArguments(searchArguments)
 
     printer(env1).getHtmlOptions(env1.arguments).map(_.search).runOption must beSome(true)
 
-    finalize(env1, spec).runOption(env.executionEnv) must beSome
+    finalize(env1, spec).runOption(ownEnv.executionEnv) must beSome
     FilePathReader.exists(outDir / "javascript" / "tipuesearch" | "tipuesearch_contents.js").runOption must beSome(true)
 
   def searchPage =
     val spec = new Specification { def is = s2""" one example $ok """ }
-    val env1 = env.setArguments(searchArguments)
+    val env1 = ownEnv.setArguments(searchArguments)
 
-    finalize(env1, spec).runOption(env.executionEnv) must beSome
+    finalize(env1, spec).runOption(ownEnv.executionEnv) must beSome
     FilePathReader.exists(outDir | "search.html").runOption must beSome(true)
 
   def finalize(env: Env, spec: SpecificationStructure): Action[Unit] =

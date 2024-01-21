@@ -24,14 +24,17 @@ class SpecStructureSpec(val env: Env) extends Specification with OwnEnv:
     SpecStructure.dependsOn(ee)(spec1, spec2) and SpecStructure.dependsOn(ee)(spec2, spec1).not
 
   def a2 =
-    SpecStructure.linkedSpecifications(spec1, env, getClass.getClassLoader).runOption.flatMap(_.lastOption) must beSome(
+    SpecStructure
+      .linkedSpecifications(spec1, ownEnv, getClass.getClassLoader)
+      .runOption
+      .flatMap(_.lastOption) must beSome(
       (_: SpecStructure).arguments
         must ===(spec2.arguments)
     )
 
   def b1 =
     SpecStructure
-      .linkedSpecifications(spec1, env.setArguments(Arguments.split("exclude spec2")), getClass.getClassLoader)
+      .linkedSpecifications(spec1, ownEnv.setArguments(Arguments.split("exclude spec2")), getClass.getClassLoader)
       .runOption
       .toList
       .flatten must not(contain((s: SpecStructure) => s.name === "S2"))

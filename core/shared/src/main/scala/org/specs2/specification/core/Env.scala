@@ -85,10 +85,14 @@ case class Env(
     copy(arguments = arguments.setTimeout(duration))
 
   /** @return a list of finalization failures by resource key if any */
-  private def startShutdown: Future[List[Result]] =
+  def startShutdown: Future[List[Result]] =
     given ExecutionContext = specs2ExecutionContext
     val results: Action[List[(String, Result)]] = resources.toList.traverse { case (key, resource) =>
-      resource.finalizer.startExecution(this).executionResult.map(r => (key, r))
+      resource.finalizer
+        .startExecution(this)
+        .executionResult
+        .map(r => (key, r))
+        .addLast(Finalizer.create(resources.remove(key)))
     }
 
     results

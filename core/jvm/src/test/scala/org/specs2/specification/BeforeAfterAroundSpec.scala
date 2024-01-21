@@ -56,7 +56,7 @@ class BeforeAfterAroundSpec(val env: Env) extends Specification with OwnEnv {
   )
 
   def executeContains(s: SpecificationStructure & StringOutput, messages: String*) =
-    DefaultExecutor.executeFragments(s.structure.fragments)(env).traverse(_.executionResult).run(ownEnv.executionEnv)
+    DefaultExecutor.executeFragments(s.structure.fragments)(ownEnv).traverse(_.executionResult).run(ownEnv.executionEnv)
     s.messages must contain(allOf(messages*)).inOrder
 
 }
