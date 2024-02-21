@@ -68,8 +68,7 @@ case class DefaultSelector(commandLineArguments: Arguments) extends Selector:
 
         case (fragment, sections) if !Fragment.isFormatting(fragment) && !Fragment.isEmptyText(fragment) =>
           val apply = sections.sumAll
-          val keep = apply.keep(arguments, apply.names)
-          (List(newLine, fragment).filter(_ => keep), sections)
+          val keep = apply.keep(arguments, apply.names)(List(newLine, fragment).filter(_ => keep), sections)
 
         case (fragment, sections) =>
           (List(), sections)

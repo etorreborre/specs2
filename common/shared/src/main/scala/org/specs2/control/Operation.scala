@@ -87,8 +87,7 @@ case class Operation[A](operation: () => Throwable Either A, last: Vector[Finali
         try Right(run)
         catch {
           case NonFatal(t) => Right(Left(t))
-        },
-      last
+        }, last
     )
 
   def toAction: Action[A] =
