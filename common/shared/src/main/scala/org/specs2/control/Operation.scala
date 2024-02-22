@@ -83,11 +83,10 @@ case class Operation[A](operation: () => Throwable Either A, last: Vector[Finali
 
   def attempt: Operation[Throwable Either A] =
     Operation(
-      () =>
+      () => {
         try Right(run)
-        catch {
-          case NonFatal(t) => Right(Left(t))
-        },
+        catch { case NonFatal(t) => Right(Left(t)) }
+      },
       last
     )
 

@@ -307,7 +307,7 @@ case class Producer[F[_]: Monad: Safe, A](run: F[LazyList[F, A]]):
             case One(a) => onLastState(s) >> one[F, A](a).run
             case More(as, next) =>
               val newS = as.foldLeft(s)(f)
-              (emit[F, A](as) `append` go(next, newS)).run
+              emit[F, A](as).append(go(next, newS)).run
           }
         }
 
@@ -365,7 +365,7 @@ case class Producer[F[_]: Monad: Safe, A](run: F[LazyList[F, A]]):
       Producer(p.peek flatMap {
         case (Some(a), as) =>
           val ps = if previous.size < n then previous else previous.drop(1)
-          (one[F, (List[A], A)]((previous.take(n).toList, a)) `append` go(as, ps :+ a)).run
+          one[F, (List[A], A)]((previous.take(n).toList, a)).append(go(as, ps :+ a)).run
         case (_, _) =>
           done[F, (List[A], A)].run
       })
@@ -446,7 +446,7 @@ case class Producer[F[_]: Monad: Safe, A](run: F[LazyList[F, A]]):
         case One(a) => one[F, B](f(previous, a)).run
         case More(as, next) =>
           val scanned = as.scanLeft(previous)(f).drop(1)
-          (emit[F, B](scanned) `append` go(next, scanned.lastOption.getOrElse(previous))).run
+          emit[F, B](scanned).append(go(next, scanned.lastOption.getOrElse(previous))).run
       })
 
     one[F, B](start) `append` go(this, start)
@@ -462,7 +462,7 @@ case class Producer[F[_]: Monad: Safe, A](run: F[LazyList[F, A]]):
             val (b, s2) = f(a, s1)
             (bs1 :+ b, s2)
           }
-          (emit[F, B](bs) `append` go(next, news)).run
+          emit[F, B](bs).append(go(next, news)).run
       })
     go(this, start)
 
@@ -501,7 +501,7 @@ case class Producer[F[_]: Monad: Safe, A](run: F[LazyList[F, A]]):
             case List() => go(next, s).run
             case a :: rest =>
               val (b, s1) = f(a, s)
-              (one[F, F[B]](b) `append` go(emit[F, A](rest) `append` next, s1)).run
+              one[F, F[B]](b).append(go(emit[F, A](rest) `append` next, s1)).run
           }
       })
 
@@ -565,7 +565,7 @@ case class Producer[F[_]: Monad: Safe, A](run: F[LazyList[F, A]]):
             val (pb1, s2) = f(a, s1)
             (pb `append` pb1, s2)
           }
-          (bs `append` go(next, news)).run
+          bs.append(go(next, news)).run
       })
     go(this, start)
 
