@@ -81,9 +81,10 @@ class BeEqualToMatcherSpec extends Spec with ResultMatchers with ShouldMatchers 
   ${(1 must ===(2)) must beLike { case Failure(_, _, _, FailureDetails(a, e)) => e must ===("2") }}
 
   the actual value must be evaluated before the expected one
-  ${var result = "";
-    { { result = result + "a" }; 1 } must ===({ { result = result + "b" }; 1 })
-    result must ===("ab")
+  ${
+      var result = "";
+      { { result = result + "a" }; 1 } must ===({ { result = result + "b" }; 1 })
+      result must ===("ab")
     }
 
 Robustness
