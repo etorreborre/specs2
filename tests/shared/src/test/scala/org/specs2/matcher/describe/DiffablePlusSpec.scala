@@ -36,17 +36,17 @@ class DiffablePlusSpec extends Spec {
       ===
         """|Foo(x: 'a' != 'b'
            |    y: 1 != 2)""".stripMargin}
-  additional test case ${val actual = Book("Programming in Scala", Seq("Odersky", "me", "Venners"), 2008)
-    val expected = Book("Programming in Scala", Seq("Odersky", "Spoon", "Venners"), 2009)
-    Diffable.diff(actual, expected).render.removeColors.showSpaces ===
-      """|Book(title: 'Programming in Scala'
-         |     authors:
-         |       Odersky
-         |       - me
-         |       + Spoon
-         |       Venners
-         |     pubYear: 2008 != 2009)""".stripMargin.showSpaces
-
+  additional test case ${
+      val actual = Book("Programming in Scala", Seq("Odersky", "me", "Venners"), 2008)
+      val expected = Book("Programming in Scala", Seq("Odersky", "Spoon", "Venners"), 2009)
+      Diffable.diff(actual, expected).render.removeColors.showSpaces ===
+        """|Book(title: 'Programming in Scala'
+           |     authors:
+           |       Odersky
+           |       - me
+           |       + Spoon
+           |       Venners
+           |     pubYear: 2008 != 2009)""".stripMargin.showSpaces
     }
 
 
