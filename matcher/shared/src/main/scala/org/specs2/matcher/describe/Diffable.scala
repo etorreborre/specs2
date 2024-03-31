@@ -60,7 +60,6 @@ object Diffable extends DiffableLowImplicits:
   given tryDiffable[T: Diffable, S <: Try[T]]: Diffable[S] = new TryDiffable[T, S]
   given failureDiffable: Diffable[Failure[Nothing]] = new FailureDiffable
 
-
 trait DiffableLowImplicits extends DiffableLowImplicits2:
   given optionDiffable[T: Diffable, S <: Option[T]]: Diffable[S] = new OptionDiffable[T, S]
   given eitherDiffable[L: Diffable, R: Diffable, T <: Either[L, R]]: Diffable[T] = new EitherDiffable[L, R, T]
