@@ -29,6 +29,12 @@ object Diffable extends DiffableLowImplicits:
   def diff[T](actual: T, expected: T)(using di: Diffable[T]): ComparisonResult =
     di.diff(actual, expected)
 
+  // scala collections
+  given mapDiffable[K: Diffable, V: Diffable, M <: Map[K, V]]: Diffable[M] = new MapDiffable[K, V, M]
+  given seqDiffable[E: Diffable, S <: Seq[E]]: Diffable[S] = new SeqLinesDiffable[E, S]
+  given setDiffable[E: Diffable, S <: Set[E]]: Diffable[S] = new SetDiffable[E, S]
+  given arrayDiffable[E: Diffable]: Diffable[Array[E]] = new ArrayDiffable
+
   // Needed to avoid ambiguous implicits with Dotty when looking for a Diffable
   // for `Either[Int, Nothing]` for example.
   given nothingDiffable: Diffable[Nothing] = NothingDiffable
@@ -54,11 +60,6 @@ object Diffable extends DiffableLowImplicits:
   given tryDiffable[T: Diffable, S <: Try[T]]: Diffable[S] = new TryDiffable[T, S]
   given failureDiffable: Diffable[Failure[Nothing]] = new FailureDiffable
 
-  // scala collections
-  given mapDiffable[K: Diffable, V: Diffable, M <: Map[K, V]]: Diffable[M] = new MapDiffable[K, V, M]
-  given setDiffable[E: Diffable, S <: Set[E]]: Diffable[S] = new SetDiffable[E, S]
-  given seqDiffable[E: Diffable, S <: Seq[E]]: Diffable[S] = new SeqLinesDiffable[E, S]
-  given arrayDiffable[E: Diffable]: Diffable[Array[E]] = new ArrayDiffable
 
 trait DiffableLowImplicits extends DiffableLowImplicits2:
   given optionDiffable[T: Diffable, S <: Option[T]]: Diffable[S] = new OptionDiffable[T, S]
