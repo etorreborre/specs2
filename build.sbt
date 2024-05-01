@@ -24,7 +24,7 @@ lazy val specs2 = project.in(file(".")).
     analysisJVM, shapelessJVM, formJVM, markdownJVM, gwtJVM, junitJVM, scalacheckJVM, mockJVM, xmlJVM,
     tests, fpJS, catsJS, commonJS, matcherJS, coreJS, matcherExtraJS, scalazJS, analysisJS,
     shapelessJS, junitJS, scalacheckJS, mockJS, fpNative, catsNative, commonNative, matcherNative,
-    coreNative, matcherExtraNative, scalazNative, analysisNative, shapelessNative, junitNative,
+    coreNative, matcherExtraNative, scalazNative, analysisNative, junitNative,
     scalacheckNative, mockNative
   )
 
@@ -55,7 +55,6 @@ lazy val commonJsSettings = Seq(
   ) ++ depends.jsMacrotaskExecutor
 
 lazy val commonNativeSettings = Seq(
-  nativeLinkStubs := true
 )
 
 lazy val commonJsNativeSettings = Seq(
@@ -304,7 +303,7 @@ lazy val pom = Project(id = "pom", base = file("pom")).
   dependsOn(catsJVM, commonJVM, matcherJVM, matcherExtraJVM, coreJVM, scalazJVM, html, analysisJVM,
     shapelessJVM, formJVM, markdownJVM, gwtJVM, junitJVM, scalacheckJVM, mockJVM)
 
-lazy val shapeless = crossProject(JSPlatform, JVMPlatform, NativePlatform).
+lazy val shapeless = crossProject(JSPlatform, JVMPlatform).
   crossType(CrossType.Pure).
   in(file("shapeless")).
   settings(
@@ -315,12 +314,14 @@ lazy val shapeless = crossProject(JSPlatform, JVMPlatform, NativePlatform).
   ).
   jsSettings(depends.jsTest, commonJsSettings).
   jvmSettings(depends.jvmTest, commonJvmSettings).
-  nativeSettings(depends.nativeTest, commonNativeSettings).
+  //nativeSettings(depends.nativeTest, commonNativeSettings).
   dependsOn(matcher, matcherExtra % "test->test")
 
 lazy val shapelessJS = shapeless.js
 lazy val shapelessJVM = shapeless.jvm
-lazy val shapelessNative = shapeless.native
+
+// TODO https://github.com/milessabin/shapeless/issues/1355
+// lazy val shapelessNative = shapeless.native
 
 lazy val scalaz = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("scalaz")).
   settings(

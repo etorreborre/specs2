@@ -37,14 +37,13 @@ object depends {
   def nativeTest =
     Seq(libraryDependencies ++= Seq(
     "org.scala-native" %%% "test-interface" % nativeVersion,
-    "org.portable-scala" %%% "portable-scala-reflect" % "1.1.1"
     ))
 
   def scalaParser = Def.setting {
     Seq("org.scala-lang.modules" %%% "scala-parser-combinators" % "1.1.2")
   }
   def scalaParserNative = Def.setting {
-    Seq("org.scala-lang.modules" %%% "scala-parser-combinators" % "2.1.0")
+    Seq("org.scala-lang.modules" %%% "scala-parser-combinators" % "2.4.0")
   }
 
   def scalaXml = "org.scala-lang.modules" %% "scala-xml" % "2.1.0"
@@ -58,7 +57,7 @@ object depends {
   lazy val tagsoup = "org.ccil.cowan.tagsoup" % "tagsoup" % "1.2.1"
 
   lazy val scalacheck = Def.setting {
-    "org.scalacheck" %%% "scalacheck" % "1.15.4"
+    "org.scalacheck" %%% "scalacheck" % "1.18.0"
   }
 
   def paradise(scalaVersion: String) =
