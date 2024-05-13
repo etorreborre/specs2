@@ -46,7 +46,7 @@ trait TryBaseMatchers {
 private[specs2]
 trait TryBeHaveMatchers extends BeHaveMatchers { outer: TryBaseMatchers =>
 
-  implicit def toTryResultMatcher[T](result: MatchResult[Try[T]]) = new TryResultMatcher(result)
+  implicit def toTryResultMatcher[T](result: MatchResult[Try[T]]): TryResultMatcher[T] = new TryResultMatcher(result)
   class TryResultMatcher[T](result: MatchResult[Try[T]]) {
     def beSuccessfulTry = result(outer.beSuccessfulTry)
     def beASuccessfulTry = result(outer.beSuccessfulTry)

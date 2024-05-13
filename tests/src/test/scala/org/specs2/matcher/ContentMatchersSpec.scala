@@ -45,7 +45,7 @@ class ContentMatchersSpec extends Spec with LinesContentMatchers with BeforeAfte
 case class comp() extends MustMatchers with TestFileNames with ContentMatchers with FileSystem {
   lazy val dir = "target" / "test" / "contents"
 
-  override implicit protected val fileContentForMatchers = new LinesContent[File] {
+  override implicit protected val fileContentForMatchers: LinesContent[java.io.File]{def lines(f: java.io.File): IndexedSeq[String]} = new LinesContent[File] {
     def name(f: File) = f.getPath
     def lines(f: File) = readLines(FilePath.unsafe(f)).runOption.get
   }

@@ -49,7 +49,7 @@ trait DependencyBaseMatchers extends LayersAnalysis {
 
 trait DependencyBeHaveMatchers extends BeHaveMatchers { outer: DependencyBaseMatchers =>
 
-  implicit def toLayersResultMatcher(result: MatchResult[Layers]) = new LayersResultMatcher(result)
+  implicit def toLayersResultMatcher(result: MatchResult[Layers]): DependencyBeHaveMatchers.this.LayersResultMatcher = new LayersResultMatcher(result)
   class LayersResultMatcher(result: MatchResult[Layers]) {
     def beRespected = result(outer.beRespected)
   }

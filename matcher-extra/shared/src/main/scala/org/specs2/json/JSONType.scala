@@ -136,7 +136,7 @@ class Parser extends StdTokenParsers with ImplicitConversions {
   def jsonObj    = "{" ~> repsep(objEntry, ",") <~ "}" ^^ { case vals : List[_] => JSONObject(Map(vals : _*)) }
   def jsonArray  = "[" ~> repsep(value, ",") <~ "]" ^^ { case vals : List[_] => JSONArray(vals) }
   def objEntry   = stringVal ~ (":" ~> value) ^^ { case x ~ y => (x, y) }
-  def value: Parser[Any] = (jsonObj | jsonArray | number | "true" ^^^ true | "false" ^^^ false | "null" ^^^ null | stringVal)
+  def value: this.Parser[Any] = (jsonObj | jsonArray | number | "true" ^^^ true | "false" ^^^ false | "null" ^^^ null | stringVal)
   def stringVal  = accept("string", { case lexical.StringLit(n) => n} )
   def number     = accept("number", { case lexical.NumericLit(n) => numberParser.get.apply(n)} )
 }
@@ -144,7 +144,7 @@ class Parser extends StdTokenParsers with ImplicitConversions {
 private[specs2]
 class Lexer extends StdLexical with ImplicitConversions {
 
-  override def token: Parser[Token] =
+  override def token: this.Parser[Token] =
   //( '\"' ~ rep(charSeq | letter) ~ '\"' ^^ lift(StringLit)
     ( string ^^ StringLit
       | number ~ letter ^^ { case n ~ l => ErrorToken("Invalid number format : " + n + l) }
@@ -185,12 +185,12 @@ class Lexer extends StdLexical with ImplicitConversions {
     case None => ""
   }
 
-  def zero: Parser[String] = '0' ^^^ "0"
+  def zero: this.Parser[String] = '0' ^^^ "0"
   def nonzero = elem("nonzero digit", d => d.isDigit && d != '0')
   def exponent = elem("exponent character", d => d == 'e' || d == 'E')
   def sign = elem("sign character", d => d == '-' || d == '+')
 
-  def charSeq: Parser[String] =
+  def charSeq: this.Parser[String] =
     ('\\' ~ '\"' ^^^ "\""
       |'\\' ~ '\\' ^^^ "\\"
       |'\\' ~ '/'  ^^^ "/"

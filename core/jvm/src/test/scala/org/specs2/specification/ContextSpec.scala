@@ -90,7 +90,7 @@ class ContextSpec extends script.Spec with ResultMatchers with Groups { def is =
    the around method must rethrow failed results as exceptions                                             ${g6().e4}
                                                                                                            """
 
-  implicit val arguments = main.Arguments()
+  implicit val arguments: main.Arguments = main.Arguments()
 
   "before" - new g1 with FragmentsExecution {
     e1  := executing(ex1Before).prints("before", "e1")

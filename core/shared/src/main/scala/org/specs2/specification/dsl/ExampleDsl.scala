@@ -12,7 +12,7 @@ import control.ImplicitParameters.ImplicitParam
  */
 trait ExampleDsl extends FragmentsFactory { outer =>
 
-  implicit def bangExample(d: String) = new BangExample(d)
+  implicit def bangExample(d: String): BangExample = new BangExample(d)
 
   class BangExample(d: String) {
     def !(execution: Execution): Fragment                                       = fragmentFactory.example(Text(d), execution)

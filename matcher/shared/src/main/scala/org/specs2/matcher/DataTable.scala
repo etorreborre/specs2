@@ -13,35 +13,35 @@ import scala.concurrent._, duration._
 
 /**
  * This trait provides implicit definitions and types to create DataTables.
- * 
+ *
  * A DataTable has a header defining column names and rows holding values.
  * It is possible to apply a function taking the row values and returning a MatchResult.
- * 
+ *
  * A TableHeader is defined by separating the column names with '|':
- * ` "a" | "b" | "c"`  
- * 
+ * ` "a" | "b" | "c"`
+ *
  * A DataRow is defined by separating the row values with '!':
- * ` 1 ! 2 ! 3`  
- * 
- * Note that the '!' method can conflict with the creation of Examples when the value is a 
+ * ` 1 ! 2 ! 3`
+ *
+ * Note that the '!' method can conflict with the creation of Examples when the value is a
  * string. In that case it is possible to use the '!!! method to disambiguate:
- * 
+ *
  * `"1" !! "2" ! "3"`
- * 
+ *
  * In that case the first column of the header can also be defined with '||' for pure
  * symmetry reasons:
- *  
- * `"a" || "b" | "c"`  
+ *
+ * `"a" || "b" | "c"`
  * `"1" !! "2" ! "3"`
- * 
+ *
  * @see org.specs2.matcher.DataTablesSpec for examples
  */
 trait DataTables extends ExpectationsCreation {
-  
+
   /** @return a TableHeader with one heading only */
-  implicit def toTableHeader(a: String) = new TableHeader(List(a))
+  implicit def toTableHeader(a: String): TableHeader = new TableHeader(List(a))
   /** @return a DataRow with one value only */
-  implicit def toDataRow[T](a: T) = DataRow1(a)
+  implicit def toDataRow[T](a: T): DataRow1[T] = DataRow1(a)
 
   /**
    * A DataTable with its header
@@ -504,4 +504,3 @@ object DataTablesGenerator {
   def dataRow(i: Int, letter: String = "T") = "DataRow"+i+typesAsList(i, letter).mkString("[",", ", "]")
   def table(i: Int) = "Table"+i
 }
-

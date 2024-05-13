@@ -2,6 +2,8 @@ package org.specs2
 package specification
 package script
 
+import scala.util.matching.Regex
+
 import util.matching.Regex
 import control.{ImplicitParameters, Use}
 import control.Exceptions._
@@ -12,7 +14,7 @@ import text.RegexExtractor
  * and possibly strip it from delimiters if necessary
  */
 trait StepParsers extends ImplicitParameters {
-  implicit lazy val stepParserRegex = """\{([^}]+)\}""".r
+  implicit lazy val stepParserRegex: Regex = """\{([^}]+)\}""".r
 
   def apply[T](f: String => T)(implicit fpr: Regex = stepParserRegex): DelimitedStepParser[T] = new DelimitedStepParser1[T](f).withRegex(fpr)
   def apply[T](f: (String, String) => T)(implicit fpr: Regex): DelimitedStepParser[T] = new DelimitedStepParser2[T](f).withRegex(fpr)
@@ -139,5 +141,3 @@ trait StandardRegexStepParsers {
   def threeStrings = groupAs(string).and((s1:String, s2: String, s3: String) => (s1, s2, s3))
 }
 object StandardRegexStepParsers extends StandardRegexStepParsers
-
-

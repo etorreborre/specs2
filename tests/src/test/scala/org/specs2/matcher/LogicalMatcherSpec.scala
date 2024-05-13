@@ -181,7 +181,7 @@ Custom
   }
   /** this allows to write "a must not bePositive" or "a must be positive" */
   lazy val outer = this
-  implicit def anyBePositive[T : Numeric](result: MatchResult[T]) = new AnyBePositive(result)
+  implicit def anyBePositive[T : Numeric](result: MatchResult[T]): AnyBePositive[T] = new AnyBePositive(result)
   class AnyBePositive[T : Numeric](result: MatchResult[T]) {
     def bePositive = result(outer.bePositive)
     def positive = result(outer.bePositive)

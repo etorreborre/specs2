@@ -8,6 +8,7 @@ import scala.concurrent._
 import duration._
 import runner._
 import control.ExecuteActions._
+import org.specs2.concurrent._
 import org.specs2.main.Arguments
 
 class FutureMatchersSpec extends Specification with ResultMatchers with specification.Retries {
@@ -15,8 +16,8 @@ class FutureMatchersSpec extends Specification with ResultMatchers with specific
   lazy val env = Env(Arguments("threadsnb 4"))
   lazy val timeFactor = env.arguments.execute.timeFactor
   lazy val sleepTime = 50 * timeFactor.toLong
-  implicit lazy val ee = env.executionEnv
-  implicit lazy val ec = env.executionContext
+  implicit lazy val ee: ExecutionEnv = env.executionEnv
+  implicit lazy val ec: ExecutionContext = env.executionContext
   class MyTimeout extends TimeoutException
 
  def is = section("ci") ^ sequential ^ s2"""

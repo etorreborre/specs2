@@ -15,7 +15,7 @@ object ResultMatchers extends ResultMatchers
 
 private[specs2]
 trait ResultBaseMatchers {
-  
+
   def beSuccessful[T : AsResult] = new Matcher[T] {
     def apply[S <: T](value: Expectable[S]) = {
       result(ResultExecution.execute(AsResult[T](value.value)).isSuccess,
@@ -83,7 +83,7 @@ trait ResultBaseMatchers {
 }
 private[specs2]
 trait ResultBeHaveMatchers extends BeHaveMatchers { outer: ResultBaseMatchers =>
-  implicit def toResultMatcher[T : AsResult](result: MatchResult[T]) = new ResultMatcher(result)
+  implicit def toResultMatcher[T : AsResult](result: MatchResult[T]): ResultMatcher[T] = new ResultMatcher(result)
   class ResultMatcher[T : AsResult](result: MatchResult[T]) {
     def successful = result(outer.beSuccessful[T])
     def beSuccessful = result(outer.beSuccessful[T])

@@ -25,21 +25,21 @@ case class StringMatcher(m: AdaptableMatcher[Any]) {
 
 object StringMatchers extends StringMatchers
 
-/** 
+/**
  * This trait provides base matchers for strings.
- * 
- * IgnoreCase and ignoreSpace matchers are created by adapting the BeEqualTo matcher.  
+ *
+ * IgnoreCase and ignoreSpace matchers are created by adapting the BeEqualTo matcher.
  */
 private[specs2]
 trait StringBaseMatchers { outer =>
 
-  /** matches if a.toLowerCase.trim = b.toLowerCase.trim */   
+  /** matches if a.toLowerCase.trim = b.toLowerCase.trim */
   def ==/(s: String) = be_==/(s)
-  /** matches if a.toLowerCase.trim = b.toLowerCase.trim */   
+  /** matches if a.toLowerCase.trim = b.toLowerCase.trim */
   def be_==/(a: String) = StringMatcher(StringMatcher(new BeEqualTo(a)).ignoreCase).ignoreSpace
-  /** matches if a.toLowerCase.trim != b.toLowerCase.trim */   
+  /** matches if a.toLowerCase.trim != b.toLowerCase.trim */
   def be_!=/(a: String) = be_==/(a).not
-  /** matches if a.toLowerCase.trim != b.toLowerCase.trim */   
+  /** matches if a.toLowerCase.trim != b.toLowerCase.trim */
   def !=/(s: String) = be_!=/(s)
   /** matches if (b contains a) */
   def contain(t: String) = new Matcher[String] {
@@ -78,26 +78,26 @@ trait StringBaseMatchers { outer =>
              s"${b.description} starts with ${q(a)}",
              s"${b.description} doesn't start with ${q(a)}", b)
   }
-  /** matches if b.endsWith(a) */   
-  def endWith(t: =>String) = new Matcher[String] { 
+  /** matches if b.endsWith(a) */
+  def endWith(t: =>String) = new Matcher[String] {
     def apply[S <: String](b: Expectable[S]) = {
       val a = t
       result(b.value!= null && a!= null && b.value.endsWith(a),
-             b.description  + " ends with " + q(a), 
+             b.description  + " ends with " + q(a),
              b.description  + " doesn't end with " + q(a), b)
     }
   }
-  /** matches if the regexp a is found inside b */   
+  /** matches if the regexp a is found inside b */
   def find(a: =>String) = new FindMatcher(a)
   /** matches if the pattern p is found inside b */
   def find(p: Pattern) = new FindMatcherPattern(p)
   /** matches if the regexp r is found inside b */
   def find(r: Regex) = new FindMatcherRegex(r)
 
-  /** 
+  /**
    * Matcher to find if the regexp a is found inside b.
    * This matcher can be specialized to a FindMatcherWithGroups which will also check the found groups
-   */   
+   */
   class FindMatcher(t: =>String) extends Matcher[String] {
     lazy val pattern = Pattern.compile(t)
 
@@ -106,9 +106,9 @@ trait StringBaseMatchers { outer =>
     def apply[S <: String](b: Expectable[S]) = {
       val a = t
       result(a != null && b.value != null && pattern.matcher(b.value).find,
-             q(a) + " is found in " + b.description, 
+             q(a) + " is found in " + b.description,
              q(a) + " isn't found in " + b.description, b)
-      } 
+      }
   }
 
   /**
@@ -125,9 +125,9 @@ trait StringBaseMatchers { outer =>
   class FindMatcherRegex(r: Regex) extends FindMatcherPattern(r.pattern)
 
   /**
-   * Matcher to find if the regexp a is found inside b. 
+   * Matcher to find if the regexp a is found inside b.
    * This matcher checks if the found groups are really the ones expected
-   */   
+   */
   class FindMatcherWithGroups(t: =>String, groups: String*) extends Matcher[String] {
     lazy val pattern = Pattern.compile(t)
 
@@ -145,16 +145,16 @@ trait StringBaseMatchers { outer =>
       val groupsFound = found(b.value)
       val withGroups = if (groups.size > 1) " with groups " else " with group "
       def foundText = {
-        if (groupsFound.isEmpty) 
-          ". Found nothing" 
-        else 
+        if (groupsFound.isEmpty)
+          ". Found nothing"
+        else
            ". Found: " + q(groupsFound.mkString(", "))
       }
       val groupsToFind = if (groups == null) Nil else groups.toList
-      result(a != null && b.value != null && groupsFound == groupsToFind, 
-             q(a) + " is found in " + b.description  + withGroups + q(groupsToFind.mkString(", ")), 
+      result(a != null && b.value != null && groupsFound == groupsToFind,
+             q(a) + " is found in " + b.description  + withGroups + q(groupsToFind.mkString(", ")),
              q(a) + " isn't found in " + b.description  + withGroups + q(groupsToFind.mkString(", ")) + foundText, b)
-    } 
+    }
   }
   /**
    * Matcher to find if the pattern p is found inside b.
@@ -167,7 +167,7 @@ trait StringBaseMatchers { outer =>
 
 private[specs2]
 trait StringBeHaveMatchers extends BeHaveMatchers { outer: StringBaseMatchers =>
-  implicit def toStringResultMatcher(result: MatchResult[String]) = new StringResultMatcher(result)
+  implicit def toStringResultMatcher(result: MatchResult[String]): StringResultMatcher = new StringResultMatcher(result)
   class StringResultMatcher(result: MatchResult[String]) {
     def matching(s: =>String) = result(beMatching(s))
     def matching(s: Pattern) = result(beMatching(s))
@@ -226,4 +226,3 @@ class BeMatchingPattern(p: Pattern) extends BeMatching(p.toString) {
 class BeMatchingRegex(r: Regex) extends BeMatching(r.toString) {
     override lazy val pattern = r.pattern
 }
-

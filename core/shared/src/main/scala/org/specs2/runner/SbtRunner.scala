@@ -22,7 +22,7 @@ import org.specs2.data.NamedTag
 import java.util.regex.Pattern
 
 import scala.concurrent.duration.Duration
-import scala.concurrent.{Future}
+import scala.concurrent.{Future, ExecutionContext}
 
 /**
  * Runner for Sbt
@@ -130,7 +130,7 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader) extends sbt
 
   private val arguments = env.arguments
 
-  private implicit lazy val ec = env.specs2ExecutionContext
+  private implicit lazy val ec: ExecutionContext = env.specs2ExecutionContext
 
   /** @return the specification tags */
   def tags(): Array[String] = {

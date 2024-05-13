@@ -1,10 +1,12 @@
 package org.specs2
 package concurrent
 
+import java.util.concurrent._
+import scala.concurrent._
+
 import org.specs2.control.Logger
 import org.specs2.main.Arguments
 
-import scala.concurrent.ExecutionContext
 
 case class ExecutionEnv(executorServices: ExecutorServices,
                         timeFactor: Int,
@@ -18,9 +20,9 @@ case class ExecutionEnv(executorServices: ExecutorServices,
   lazy val scheduledExecutorService = executorServices.scheduledExecutorService
   lazy val scheduler                = executorServices.scheduler
 
-  implicit lazy val es  = executorService
-  implicit lazy val ses = scheduledExecutorService
-  implicit lazy val ec  = executionContext
+  implicit lazy val es: ExecutorService  = executorService
+  implicit lazy val ses: ScheduledExecutorService = scheduledExecutorService
+  implicit lazy val ec: ExecutionContext  = executionContext
 
   def setTimeFactor(tf: Int): ExecutionEnv =
     copy(timeFactor = tf)

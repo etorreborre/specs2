@@ -178,7 +178,7 @@ trait ParserBeHaveMatchers extends BeHaveMatchers { outer: ParserBaseMatchers =>
   val parsers: Parsers
   import parsers._
 
-  implicit def toParsedResultMatcher[T](result: MatchResult[ParseResult[T]]) = new ParsedResultMatcher(result)
+  implicit def toParsedResultMatcher[T](result: MatchResult[ParseResult[T]]): ParsedResultMatcher[T] = new ParsedResultMatcher(result)
   class ParsedResultMatcher[T](result: MatchResult[ParseResult[T]]) {
     def aSuccess                           = result(beASuccess)
     def aPartialSuccess                    = result(beAPartialSuccess)
@@ -195,7 +195,7 @@ trait ParserBeHaveMatchers extends BeHaveMatchers { outer: ParserBaseMatchers =>
   def aFailure        = beAFailure
   def aParseError     = beAnError
 
-  implicit def toParserResultMatcherResult[T](result: MatchResult[Parser[T]]) = new ParserResultMatcherResult(result)
+  implicit def toParserResultMatcherResult[T](result: MatchResult[Parser[T]]): ParserResultMatcherResult[T] = new ParserResultMatcherResult(result)
   class ParserResultMatcherResult[T](result: MatchResult[Parser[T]]) {
     def succeedOn(input: Input) = result(outer.succeedOn(input))
     def failOn(input: Input) = result(outer.failOn(input))

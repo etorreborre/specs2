@@ -109,7 +109,7 @@ Implicits
       // if this specification compiles and if result is ok, this means that the === implicit could be redefined
       // thanks to the NoCanBeEqual trait
       val spec = new Specification with NoTypedEqual {
-        implicit def otherTripleEqualUse[T](t: =>T) = new {
+        implicit def otherTripleEqualUse[T](t: =>T): AnyRef{def ===[S](other: S): S} = new {
           def ===[S](other: S) = other
         }
         val result = (1 === 2) must_== 2
@@ -122,7 +122,7 @@ Implicits
       // if this specification compiles and if result is ok, this means that the must implicit could be redefined
       // thanks to the NoMustExpectations trait
       val spec = new org.specs2.mutable.Specification with NoMustExpectations {
-        implicit def aValue[T](t: =>T) = new {
+        implicit def aValue[T](t: =>T): AnyRef{def must(other: Int): Int} = new {
           def must(other: Int) = other
         }
         val result = (1 must 2) === 2

@@ -35,7 +35,7 @@ trait MocksCreation extends TheMockitoMocker with ClassesOf {
    *                  defaultReturn = 10,
    *                  extraInterfaces = classesOf[Cloneable, Serializable])
    */
-  implicit def mocked[T : ClassTag](t: =>T) = Mocked[T]()
+  implicit def mocked[T : ClassTag](t: =>T): Mocked[T] = Mocked[T]()
 
   /** support class to create a mock object with specific settings */
   private[specs2]
@@ -85,19 +85,19 @@ trait MocksCreation extends TheMockitoMocker with ClassesOf {
 
   /**
    * create a mock object with smart return values: val m = smartMock[java.util.List[String]]
-   * 
+   *
    * This is the equivalent of Mockito.mock(List.class, SMART_NULLVALUES) but testing shows that it is not working well with Scala.
    */
   def smartMock[T : ClassTag]: T = Mocked[T]().smart
   /**
-   * create a spy on an object. 
-   * 
-   * A spy is a real object but can still have some of its methods stubbed. However the syntax for stubbing a spy is a bit different than 
+   * create a spy on an object.
+   *
+   * A spy is a real object but can still have some of its methods stubbed. However the syntax for stubbing a spy is a bit different than
    * with a mock:
    * {{{
    * val s = spy(new LinkedList[String])
    * doReturn("one").when(s).get(0) // instead of s.get(0) returns "one" which would throw an exception
-   * 
+   *
    * }}}
    */
   def spy[T](m: T): T = mocker.spy(m)

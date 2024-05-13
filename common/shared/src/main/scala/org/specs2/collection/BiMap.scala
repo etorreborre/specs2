@@ -27,7 +27,7 @@ object BiMap {
     def k = key
   }
 
-  implicit def fromSeq[K, V](s: Seq[BiMapEntry[K, V]]) = new BiMap[K, V] {
+  implicit def fromSeq[K, V](s: Seq[BiMapEntry[K, V]]): BiMap[K,V] = new BiMap[K, V] {
     lazy val keys: Seq[K]   = s.map(_.key)
     lazy val values: Seq[V] = s.map(_.value)
 
@@ -45,4 +45,3 @@ trait SemiEntry[K] {
   def k: K
   def <->[V](v: V): BiMapEntry[K, V] = new BiMapEntry[K,  V]() { val key = k; val value = v}
 }
-

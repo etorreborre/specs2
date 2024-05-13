@@ -29,7 +29,7 @@ object CaseClassIntrospection {
   implicit def caseClassFieldsInspector[Key <: Symbol, Value, Tail <: HList](
     implicit key:      Witness.Aux[Key],
              di:       Diffable[Value],
-             diffTail: Lazy[CaseClassIntrospection[Tail]]) =
+             diffTail: Lazy[CaseClassIntrospection[Tail]]): ClassFieldsDifferenceInspectable[Key,Value,Tail] =
 
     new ClassFieldsDifferenceInspectable[Key, Value, Tail]
 
@@ -73,4 +73,3 @@ class ClassFieldsDifferenceInspectable[Key <: Symbol, Value, Tail <: HList](
       identical = compResult.identical)
   }
 }
-

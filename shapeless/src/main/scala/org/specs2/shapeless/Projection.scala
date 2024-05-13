@@ -14,7 +14,7 @@ trait Projection {
     }
 
   // This allows us to obtain an implicit evidence parameter when A cannot be projected onto B.
-  implicit def notProjectsOn[A, B] = new DoesNotProjectOn[A, B] {}
+  implicit def notProjectsOn[A, B]: DoesNotProjectOn[A,B] = new DoesNotProjectOn[A, B] {}
   implicit def notProjectsOn1[A, B](implicit ev: A ProjectsOn B): DoesNotProjectOn[A, B] = { Use(ev); unexpected }
   implicit def notProjectsOn2[A, B](implicit ev: A ProjectsOn B): DoesNotProjectOn[A, B] = { Use(ev); unexpected }
 

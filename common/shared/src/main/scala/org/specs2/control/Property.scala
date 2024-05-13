@@ -5,7 +5,7 @@ import Exceptions._
 
 /**
  * This class represents values which are evaluated lazily and which may even be missing.
- * 
+ *
  * It has Option-like function and can be also converted to an Either object
  */
 case class Property[T](value: () => Option[T], evaluated: Boolean = false, evaluatedValue: Option[T] = None) {
@@ -45,7 +45,7 @@ case class Property[T](value: () => Option[T], evaluated: Boolean = false, evalu
   def toRight[L](left: L): Either[L, T] = optionalValue.toRight(left)
   /** to a list */
   def toList = optionalValue.toList
-  
+
   /** @return execute the property */
   private def execute: Property[T] =
     if (!evaluated) copy(value, evaluated = true, evaluatedValue = value())
@@ -69,7 +69,7 @@ object Property {
 }
 
 trait Properties {
-  implicit def aProperty[T](t: T) = Property(t)
+  implicit def aProperty[T](t: T): Property[T] = Property(t)
 }
 
 object Properties extends Properties

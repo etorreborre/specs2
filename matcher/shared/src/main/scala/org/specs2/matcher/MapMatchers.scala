@@ -119,28 +119,28 @@ trait MapBaseMatchers {
 }
 private[specs2]
 trait MapBeHaveMatchers extends BeHaveMatchers { outer: MapBaseMatchers =>
-  implicit def toMapKeyResultMatcher[K](result: MatchResult[Iterable[(K, Any)]]) = new MapKeyResultMatcher(result)
+  implicit def toMapKeyResultMatcher[K](result: MatchResult[Iterable[(K, Any)]]): MapKeyResultMatcher[K] = new MapKeyResultMatcher(result)
   class MapKeyResultMatcher[K](result: MatchResult[Iterable[(K, Any)]]) {
     def key(k: K) = result(outer.haveKey(k))
     def keys(ks: K*) = result(outer.haveKeys(ks:_*))
     def haveKey(k: K) = result(outer.haveKey(k))
     def haveKeys(ks: K*) = result(outer.haveKeys(ks:_*))
   }
-  implicit def toMapValueResultMatcher[V](result: MatchResult[Iterable[(Any, V)]]) = new MapValueResultMatcher(result)
+  implicit def toMapValueResultMatcher[V](result: MatchResult[Iterable[(Any, V)]]): MapValueResultMatcher[V] = new MapValueResultMatcher(result)
   class MapValueResultMatcher[V](result: MatchResult[Iterable[(Any, V)]]) {
     def value(v: V) = result(outer.haveValue(v))
     def values(vs: V*) = result(outer.haveValues(vs:_*))
     def haveValue(v: V) = result(outer.haveValue(v))
     def haveValues(vs: V*) = result(outer.haveValues(vs:_*))
   }
-  implicit def toMapResultMatcher[K, V](result: MatchResult[Iterable[(K, V)]]) = new MapResultMatcher(result)
+  implicit def toMapResultMatcher[K, V](result: MatchResult[Iterable[(K, V)]]): MapResultMatcher[K,V] = new MapResultMatcher(result)
   class MapResultMatcher[K, V](result: MatchResult[Iterable[(K, V)]]) {
     def pair(p: (K, V)) = result(outer.havePair(p))
     def pairs(pairs: (K, V)*) = result(outer.havePairs(pairs:_*))
     def havePair(p: (K, V)) = result(outer.havePair(p))
     def havePairs(pairs: (K, V)*) = result(outer.havePairs(pairs:_*))
   }
-  implicit def toPartialFunctionResultMatcher[K, V](result: MatchResult[PartialFunction[K, V]]) = new PartialFunctionResultMatcher(result)
+  implicit def toPartialFunctionResultMatcher[K, V](result: MatchResult[PartialFunction[K, V]]): PartialFunctionResultMatcher[K,V] = new PartialFunctionResultMatcher(result)
   class PartialFunctionResultMatcher[K, V](result: MatchResult[PartialFunction[K, V]]) {
     def definedAt(values: K*) = result(outer.beDefinedAt(values:_*))
     def beDefinedAt(values: K*) = result(outer.beDefinedAt(values:_*))

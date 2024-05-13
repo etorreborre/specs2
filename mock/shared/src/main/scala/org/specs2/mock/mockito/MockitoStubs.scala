@@ -10,7 +10,7 @@ import org.specs2.control.Use
 
 /**
  * This trait provides functionalities to declare stub values on method calls.
- * 
+ *
  * Usage:
  * {{{
  * mockedList.get(0) returns "one"
@@ -19,7 +19,7 @@ import org.specs2.control.Use
  * mockedList.get(0) answers ( i => "value " + i.toString )
  * mockedList.get(any) responds { case i: Int => (i + 1).toString }
  * }}}
- * 
+ *
  * It is also possible to chain stubs like this:
  * {{{
  * mockedList.get(0) returns "one" thenReturns "two"
@@ -29,17 +29,17 @@ import org.specs2.control.Use
 trait MockitoStubs extends MocksCreation with MockitoStubsLowerImplicits {
   /** delegate to MockitoMocker doAnswer with a MockAnswer object using the function f. */
   def doAnswer[T](f: Any => T) = mocker.doAnswer(new MockAnswer(f))
-  
-  /** @return an object supporting the stub methods. */
-  implicit def theStubbed[T](c: T) = new Stubbed(c)
 
-  /** 
+  /** @return an object supporting the stub methods. */
+  implicit def theStubbed[T](c: T): Stubbed[T] = new Stubbed(c)
+
+  /**
    * This class provide stub methods like returns, throws and answers.
    * Internally it calls Mockito.when(mock call).thenReturn(returnValue)
    */
   class Stubbed[T](c: T) {
     def returns(t: T, t2: T*): OngoingStubbing[T] = {
-      if (t2.isEmpty) 
+      if (t2.isEmpty)
         mocker.when(c).thenReturn(t)
       else
         t2.foldLeft (mocker.when(c).thenReturn(t)) { (res, cur) => res.thenReturn(cur) }
@@ -56,7 +56,7 @@ trait MockitoStubs extends MocksCreation with MockitoStubsLowerImplicits {
     }
   }
   /** @return an object allowing the chaining of returned values on doNothing calls. */
-  implicit def aStubber(stub: =>Stubber) = new AStubber(stub)
+  implicit def aStubber(stub: =>Stubber): AStubber[Nothing] = new AStubber(stub)
   /** provide stub chain methods. */
   class AStubber[T](stub: =>Stubber) {
     def thenReturn(t: T) = stub.doReturn(t, List():_*)
@@ -70,7 +70,7 @@ trait MockitoStubs extends MocksCreation with MockitoStubsLowerImplicits {
     def thenThrows[E <: Throwable](e: E) = stub.thenThrow(e)
   }
 
-  /** 
+  /**
    * This class is an implementation of the Answer interface allowing to pass functions as an answer.
    *
    * It does a bit of work for the client:
