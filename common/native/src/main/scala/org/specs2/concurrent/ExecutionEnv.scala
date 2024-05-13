@@ -24,7 +24,7 @@ case class ExecutionEnv(executorServices: ExecutorServices,
   lazy val executionContext = executorServices.executionContext
   lazy val scheduler = executorServices.scheduler
 
-  implicit lazy val ec = executorServices.executionContext
+  implicit lazy val ec: ExecutionContext = executorServices.executionContext
 }
 
 object ExecutionEnv {

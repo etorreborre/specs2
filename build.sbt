@@ -33,9 +33,9 @@ lazy val specs2Settings = Seq(
   organization := "org.specs2",
   GlobalScope / scalazVersion := "7.2.32",
   specs2ShellPrompt,
-  ThisBuild / scalaVersion := "2.13.10",
+  ThisBuild / scalaVersion := "2.13.14",
   SettingKey[Boolean]("ide-skip-project").withRank(KeyRanks.Invisible) := platformDepsCrossVersion.value == ScalaNativeCrossVersion.binary,
-  ThisBuild / crossScalaVersions := Seq("2.13.8", "2.12.17"))
+  ThisBuild / crossScalaVersions := Seq("2.13.14", "2.12.17"))
 
 lazy val tagName = Def.setting {
   s"specs2-${version.value}"
@@ -424,7 +424,13 @@ lazy val compilationSettings = Seq(
       "-Xlint",
       "-Ywarn-numeric-widen",
       "-Ywarn-value-discard",
-      "-deprecation:false", "-Xcheckinit", "-unchecked", "-feature", "-language:_"),
+      "-deprecation:false",
+      "-Xcheckinit",
+      "-unchecked",
+      "-feature",
+      "-language:_",
+      "-Wunused:-nowarn",
+      ),
   Compile / scalacOptions ++= {
     CrossVersion.partialVersion(scalaVersion.value) match {
       case Some((2, v)) if v <= 12 =>
@@ -449,7 +455,7 @@ lazy val compilationSettings = Seq(
           "-Xlint:-byname-implicit")
     }
   },
-  addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.13.2" cross CrossVersion.full),
+  addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.13.3" cross CrossVersion.full),
   Test / scalacOptions += "-Yrangepos",
   Compile / doc / scalacOptions ++= Seq("-feature", "-language:_"),
   Compile / console / scalacOptions := Seq("-Yrangepos", "-feature", "-language:_"),

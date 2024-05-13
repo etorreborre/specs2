@@ -9,6 +9,7 @@ import org.specs2.main._
  * the following specifications should be instantiable from both the JVM and ScalaJS
  */
 
+@annotation.nowarn
 class Shared1Spec extends mutable.Specification {
   import scala.concurrent.ExecutionContext.Implicits.global
   "This must work with the global Execution Context" should {

@@ -36,7 +36,7 @@ class TryMatchersSpec extends Spec with TryMatchers with ResultMatchers { def is
   ${ (Failed[I](e) must beFailedTry.withThrowable[OtherException]) returns
      s"Failure(boom) is a Failure but '$e: ${classOf[MyException].getName}' is not an instance of '${classOf[OtherException].getName}'" }
   ${ Failed[I](e) must beAFailedTry.withThrowable[MyException](".*oo.*") }
-  ${ Failed[I](e) must beFailedTry.like { case e: MyException => e.getMessage must startWith("b") }}
+  ${ Failed[I](e) must beFailedTry.like { case ex: MyException => ex.getMessage must startWith("b") }}
   ${ Failed[I](e) must not be aFailedTry.withThrowable[MyException]("bang") }
   ${ (Failed[I](e) must beAFailedTry.withThrowable[MyException]("bang")) returns "Failure(boom) is a Failure but 'boom' doesn't match 'bang'" }
   ${ Failed[I](e) must not be aFailedTry.withThrowable[OtherException] }
@@ -48,7 +48,7 @@ class TryMatchersSpec extends Spec with TryMatchers with ResultMatchers { def is
   class MyException(m: String) extends Exception(m) {
     override def toString = m
     override def equals(o: Any) = o match {
-      case e: MyException => e.getMessage == getMessage
+      case ex: MyException => ex.getMessage == getMessage
       case _ => false
     }
   }

@@ -72,6 +72,7 @@ class SbtSelectorSpec extends Specification {
   private def testName(event: Event): String = {
     event.selector() match {
       case ts: TestSelector => ts.testName()
+      case other => s"no test selector found. Got: ${other}"
     }
   }
 

@@ -5,6 +5,7 @@ import org.specs2.fp._
 import org.specs2.fp.syntax._
 import eff._
 import interpret._
+import SafeInterpretation._
 
 import scala.reflect.ClassTag
 
@@ -122,16 +123,16 @@ trait SafeInterpretation extends SafeCreation { outer =>
         var error: Option[Throwable] = None
 
         val traversed: T[X] = xs.map {
-          case FailedFinalizer(t) => failedFinalizers.append(t); ().asInstanceOf[X]
-          case FailedValue(t)     => error = Some(t); ().asInstanceOf[X]
+          case FailedFinalizer(t) => failedFinalizers.append(t); unitCastTo[X]
+          case FailedValue(t)     => error = Some(t); unitCastTo[X]
           case EvaluateValue(v)   =>
             error match {
               case None =>
                 Either.catchNonFatal(v.value) match {
                   case Right(a) => a
-                  case Left(t) => error = Some(t); ().asInstanceOf[X]
+                  case Left(t) => error = Some(t); unitCastTo[X]
                 }
-              case Some(_) => ().asInstanceOf[X]
+              case Some(_) => unitCastTo[X]
             }
         }
 
@@ -147,16 +148,16 @@ trait SafeInterpretation extends SafeCreation { outer =>
         var error: Option[Throwable] = None
 
         val traversed: T[X] = xs.map {
-          case FailedFinalizer(t) => { failedFinalizers.append(t); ().asInstanceOf[X] }
-          case FailedValue(t)     => { error = Some(t); ().asInstanceOf[X] }
+          case FailedFinalizer(t) => { failedFinalizers.append(t); unitCastTo[X] }
+          case FailedValue(t)     => { error = Some(t); unitCastTo[X] }
           case EvaluateValue(v)   =>
             error match {
               case None =>
                 Either.catchNonFatal(v.value) match {
                   case Right(a) => a
-                  case Left(t) => error = Some(t); ().asInstanceOf[X]
+                  case Left(t) => error = Some(t); unitCastTo[X]
                 }
-              case Some(_) => ().asInstanceOf[X]
+              case Some(_) => unitCastTo[X]
             }
         }
 
@@ -167,6 +168,7 @@ trait SafeInterpretation extends SafeCreation { outer =>
       }
 
     }
+
   }
 
 
@@ -235,12 +237,12 @@ trait SafeInterpretation extends SafeCreation { outer =>
         val failedValues = new collection.mutable.ListBuffer[FailedValue[X]]
 
         val traversed: T[X] = xs.map {
-          case FailedFinalizer(t) => ().asInstanceOf[X]
-          case FailedValue(t)     => ().asInstanceOf[X]
+          case FailedFinalizer(t) => unitCastTo[X]
+          case FailedValue(t)     => unitCastTo[X]
           case EvaluateValue(v)   =>
             Either.catchNonFatal(v.value) match {
               case Right(a) => a
-              case Left(t) => failedValues.append(FailedValue[X](t)); ().asInstanceOf[X]
+              case Left(t) => failedValues.append(FailedValue[X](t)); unitCastTo[X]
             }
         }
 
@@ -262,12 +264,12 @@ trait SafeInterpretation extends SafeCreation { outer =>
         val failedValues = new collection.mutable.ListBuffer[FailedValue[X]]
 
         val traversed: T[X] = xs.map {
-          case FailedFinalizer(t) => ().asInstanceOf[X]
-          case FailedValue(t)     => ().asInstanceOf[X]
+          case FailedFinalizer(t) => unitCastTo[X]
+          case FailedValue(t)     => unitCastTo[X]
           case EvaluateValue(v)   =>
             Either.catchNonFatal(v.value) match {
               case Right(a) => a
-              case Left(t) => failedValues.append(FailedValue[X](t)); ().asInstanceOf[X]
+              case Left(t) => failedValues.append(FailedValue[X](t)); unitCastTo[X]
             }
         }
 
@@ -341,7 +343,11 @@ trait SafeInterpretation extends SafeCreation { outer =>
 
 }
 
-object SafeInterpretation extends SafeInterpretation
+
+object SafeInterpretation extends SafeInterpretation {
+  @annotation.nowarn
+  private def unitCastTo[X]: X = ().asInstanceOf[X]
+}
 
 /**
  * The Safe type is a mix of a ThrowableEither / Eval effect

@@ -2,7 +2,6 @@ package org.specs2.control
 
 import org.specs2._
 import io._
-import eff._, syntax.all._
 
 class ActionsSpec extends Specification { def is = s2"""
 

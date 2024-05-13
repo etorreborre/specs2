@@ -2,8 +2,6 @@ package org.specs2
 package specification
 package script
 
-import scala.util.matching.Regex
-
 import util.matching.Regex
 import control.{ImplicitParameters, Use}
 import control.Exceptions._

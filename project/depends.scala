@@ -29,10 +29,10 @@ object depends {
     Seq(libraryDependencies ++= Seq(
       "org.scala-js" %% "scalajs-test-interface" % scalaJSVersion,
       "org.portable-scala" %%% "portable-scala-reflect" % "1.1.1"),
-        Test / scalaJSStage := FastOptStage)
+        Test / scalaJSStage := FastOptStage) ++ jsMacrotaskExecutor
 
   def jsMacrotaskExecutor =
-    Seq(libraryDependencies += "org.scala-js" %%% "scala-js-macrotask-executor" % "1.0.0")
+    Seq(libraryDependencies += "org.scala-js" %%% "scala-js-macrotask-executor" % "1.1.1")
 
   def nativeTest =
     Seq(libraryDependencies ++= Seq(

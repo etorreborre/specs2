@@ -328,7 +328,7 @@ ${step(env)}                                                                    
       vet.treat(Cat())
       def isDog: Matcher[Dog] = (d: Dog) => (true, "ok", "ko")
 
-      (there was one(vet).treat(isDog)) must not(throwA[ClassCastException])
+      (there was one(vet).treat(isDog)) must throwA[ClassCastException].not
     }
     eg := {
       list.contains(Set(1)) returns true
@@ -537,9 +537,9 @@ ${step(env)}                                                                    
     eg := {
       val s = new org.specs2.mutable.Specification with Mockito {
         "ex1" in new specification.Scope {
-          val (list1, list2) = (mock[ListOf[String]], mock[ListOf[String]])
+          val (list1: ListOf[String], list2: ListOf[String]) = (mock[ListOf[String]], mock[ListOf[String]])
           list1.add("two"); list2.add("one")
-          implicit val order = inOrder(list1, list2)
+          implicit val order: Option[org.mockito.InOrder] = inOrder(list1, list2)
           there was one(list2).add("two") andThen one(list1).add("one")
         }
       }

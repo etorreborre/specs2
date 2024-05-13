@@ -16,7 +16,7 @@ class NodexSpec extends Spec { def is = s2"""
       <a>
       </a>.child.last.isSpaceNode
     }
-    ${ Group(<a/><b/>).isSpaceNode must not(throwAn[UnsupportedOperationException]) }
+    ${ Group(<a/><b/>).isSpaceNode must throwAn[UnsupportedOperationException].not }
 
   isEqualIgnoringSpace returns true if 2 NodeSeq are without spaces nodes are equal
     ${ <a/> ==/ <a/> }

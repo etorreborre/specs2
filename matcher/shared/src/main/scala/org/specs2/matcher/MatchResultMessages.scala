@@ -29,8 +29,8 @@ trait MatchResultMessages {
 
     def append(m2: MatchResultMessage) = {
       m2 match {
-        case s: MatchSuccess[_] => SuccessMessage.create(okMessage+"; "+s.okMessage, koMessage+"; "+s.koMessage)
-        case f: MatchFailure[_] => FailureMessage.create(okMessage+"; "+f.okMessage, koMessage+"; "+f.koMessage)
+        case s: SuccessMessage => SuccessMessage.create(okMessage+"; "+s.ok(), koMessage+"; "+s.ko())
+        case f: FailureMessage => FailureMessage.create(okMessage+"; "+f.ok(), koMessage+"; "+f.ko())
         case NeutralMessage(m)  => SuccessMessage.create(okMessage+"; "+m, koMessage+"; "+m)
         case _                  => this
       }
@@ -45,8 +45,8 @@ trait MatchResultMessages {
 
     def append(m2: MatchResultMessage) = {
       m2 match {
-        case s: MatchSuccess[_] => FailureMessage.create(okMessage+"; "+s.okMessage, koMessage+"; "+s.koMessage)
-        case f: MatchFailure[_] => FailureMessage.create(okMessage+"; "+f.okMessage, koMessage+"; "+f.koMessage)
+        case s: SuccessMessage => FailureMessage.create(okMessage+"; "+s.ok(), koMessage+"; "+s.ko())
+        case f: FailureMessage => FailureMessage.create(okMessage+"; "+f.ok(), koMessage+"; "+f.ko())
         case NeutralMessage(m)  => FailureMessage.create(okMessage+"; "+m, koMessage+"; "+m)
         case _                  => this
       }
@@ -59,8 +59,8 @@ trait MatchResultMessages {
   case class NeutralMessage(message: String) extends MatchResultMessage {
     def append(m2: MatchResultMessage) = {
       m2 match {
-        case s: MatchSuccess[_] => SuccessMessage.create(message+"; "+s.okMessage, message+"; "+s.koMessage)
-        case f: MatchFailure[_] => FailureMessage.create(message+"; "+f.okMessage, message+"; "+f.koMessage)
+        case s: SuccessMessage => SuccessMessage.create(message+"; "+s.ok(), message+"; "+s.ko())
+        case f: FailureMessage => FailureMessage.create(message+"; "+f.ok(), message+"; "+f.ko())
         case NeutralMessage(m)  => NeutralMessage(message+"; "+m)
         case _                  => this
       }

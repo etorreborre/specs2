@@ -2,7 +2,6 @@ package org.specs2
 package reporter
 
 import main._
-import control._
 import execute._
 import io.StringOutput
 import org.specs2.specification.{AfterAll, Tables}
