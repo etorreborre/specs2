@@ -429,7 +429,6 @@ lazy val compilationSettings = Seq(
       "-unchecked",
       "-feature",
       "-language:_",
-      "-Wunused:-nowarn",
       ),
   Compile / scalacOptions ++= {
     CrossVersion.partialVersion(scalaVersion.value) match {
@@ -440,7 +439,9 @@ lazy val compilationSettings = Seq(
           "-Ywarn-unused:-nowarn"
         )
       case _ =>
-        Nil
+        Seq(
+          "-Wunused:-nowarn",
+        )
     }
   },
   scalacOptions ++= {
