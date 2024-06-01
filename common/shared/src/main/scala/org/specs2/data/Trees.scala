@@ -1,8 +1,8 @@
 package org.specs2
 package data
 
-import fp.*
-import Tree.*
+import org.specs2.fp.{Tree, TreeLoc}
+import org.specs2.fp.Tree.*
 import scala.annotation.*
 import collection.*
 

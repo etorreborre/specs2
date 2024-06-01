@@ -1,8 +1,9 @@
 package org.specs2.control
 package producer
 
-import org.specs2.*
-import fp.*, syntax.*
+import org.specs2.control.Action.{given}
+import org.specs2.fp.{Foldable, Monad, Monoid, FunctorSyntax}
+import org.specs2.fp.syntax.{MonadOps, MonadFlattenOps, suml, as}
 import origami.*
 import Producer.*
 

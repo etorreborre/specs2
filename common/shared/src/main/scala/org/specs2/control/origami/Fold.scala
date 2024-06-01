@@ -2,8 +2,8 @@ package org.specs2
 package control
 package origami
 
-import org.specs2.fp.*
-import org.specs2.fp.syntax.*
+import org.specs2.fp.{Foldable, Monoid, Monad, ~>, Applicative, Id, FunctorSyntax}
+import org.specs2.fp.syntax.{map, toList, MonadOps, as}
 
 /** A Fold is a "left fold" over a data structure with:
   *   - a 'start' value
@@ -53,7 +53,7 @@ trait Fold[M[_], A, B]:
 
       def start = self.start
       def fold = self.fold
-      def end(s: S) = self.end(s).flatMap(f.run1)
+      def end(s: S) = monad.bind(self.end(s))(f.run1)
 
   /** parallel composition */
   def ***[V, W](f: Fold[M, V, W]): Fold[M, (A, V), (B, W)] =
@@ -155,7 +155,7 @@ trait Fold[M[_], A, B]:
       val monad: Monad[M] = self.monad
 
       def start = monad.tuple2(self.start, sink.start)
-      def fold = (s: S, a: A) => self.fold(s._1, a).flatMap(next => sink.fold(s._2, (a, next)).map((next, _)))
+      def fold = (s: S, a: A) => monad.bind(self.fold(s._1, a))(next => sink.fold(s._2, (a, next)).map((next, _)))
       def end(s: S) = monad.tuple2(self.end(s._1), sink.end(s._2)).map(_._1)
 
   /** alias for observeWithNextState */
@@ -169,7 +169,7 @@ trait Fold[M[_], A, B]:
       val monad: Monad[M] = self.monad
 
       def start = monad.tuple2(self.start, sink.start)
-      def fold = (s: S, a: A) => self.fold(s._1, a).flatMap(next => sink.fold(s._2, next).map((next, _)))
+      def fold = (s: S, a: A) => monad.bind(self.fold(s._1, a))(next => sink.fold(s._2, next).map((next, _)))
       def end(s: S) = monad.tuple2(self.end(s._1), sink.end(s._2)).map(_._1)
 
   /** alias for observeNextState */
@@ -184,7 +184,7 @@ trait Fold[M[_], A, B]:
   /** run over one element
     */
   def run1(a: A): M[B] =
-    start.flatMap(s => fold(s, a).flatMap(end))
+    monad.bind(start)(s => fold(s, a).flatMap(end))
 
   /** pipe the output of this fold into another fold */
   def compose[C](f2: Fold[M, B, C]): Fold[M, A, C] =
@@ -195,7 +195,7 @@ trait Fold[M[_], A, B]:
       def start = monad.tuple2(self.start, f2.start)
 
       def fold = (s, a) =>
-        self.fold(s._1, a).flatMap(self.end).flatMap((u: B) => monad.tuple2(self.fold(s._1, a), f2.fold(s._2, u)))
+        monad.bind(self.fold(s._1, a))(self.end).flatMap((u: B) => monad.tuple2(self.fold(s._1, a), f2.fold(s._2, u)))
 
       def end(s: S) =
         f2.end(s._2)
@@ -225,7 +225,7 @@ trait Fold[M[_], A, B]:
       type S = self.S
       val monad: Monad[M] = self.monad
 
-      def start = action >> self.start
+      def start = monad.bind(action)(_ => self.start)
       def fold = (s, a) => self.fold(s, a)
       def end(s: S) = self.end(s)
 
@@ -236,7 +236,7 @@ trait Fold[M[_], A, B]:
 
       def start = self.start
       def fold = (s, a) => self.fold(s, a)
-      def end(s: S) = self.end(s).flatMap(b => action.as(b))
+      def end(s: S) = monad.bind(self.end(s))(b => action.as(b))
 
   def into[M1[_]](using nat: M ~> M1, m: Monad[M1]) =
     monadic[M1](using nat, m)
@@ -264,9 +264,9 @@ object Fold:
       lazy val s2_ = s2
       type S = (s1.S, s2_.S)
 
-      def start = s1.start.flatMap(s1s => s2_.start.map(s2s => (s1s, s2s)))
-      def fold = (s: S, a: A) => s1.fold(s._1, a).flatMap(s11 => s2_.fold(s._2, a).map(s22 => (s11, s22)))
-      def end(s: S) = s1.end(s._1) >> s2_.end(s._2)
+      def start = monad.bind(s1.start)(s1s => s2_.start.map(s2s => (s1s, s2s)))
+      def fold = (s: S, a: A) => monad.bind(s1.fold(s._1, a))(s11 => s2_.fold(s._2, a).map(s22 => (s11, s22)))
+      def end(s: S) = monad.bind(s1.end(s._1))(_ => s2_.end(s._2))
     }
 
   /** Applicative instance

@@ -1,7 +1,7 @@
 package org.specs2
 package control
 
-import fp.*, syntax.*
+import org.specs2.fp.{Monoid, Monad}
 import execute.*
 import scala.annotation.tailrec
 import scala.util.control.NonFatal
@@ -152,7 +152,7 @@ object Operation:
     override def toString: String =
       "Monad[Operation]"
 
-  given OperationApplicative: Applicative[Operation[*]] with
+  given OperationApplicative: org.specs2.fp.Applicative[Operation[*]] with
     def point[A](a: =>A): Operation[A] =
       Operation(() => Right(a))
 
@@ -162,7 +162,7 @@ object Operation:
     override def toString: String =
       "Applicative[Operation]"
 
-  given operationToAction: NaturalTransformation[Operation, Action] with
+  given operationToAction: org.specs2.fp.NaturalTransformation[Operation, Action] with
     def apply[A](operation: Operation[A]): Action[A] =
       operation.toAction
 

@@ -3,7 +3,8 @@ package execute
 
 import ResultExecution.*
 import Results.{given}
-import fp.*, syntax.{given, *}
+import org.specs2.fp.Monoid
+import org.specs2.fp.syntax.foldMap
 
 /** Typeclass trait for anything that can be transformed to a Result
   */

@@ -6,7 +6,7 @@ import org.specs2.text.FromString
 import reflect.Classes
 
 import scala.reflect.ClassTag
-import org.specs2.fp.Memo.*
+import org.specs2.fp.Memo.immutableHashMapMemo
 
 /** Extraction functions for command line parameters
   */

@@ -2,7 +2,6 @@ package org.specs2
 package control
 
 import io.*
-import fp.*, syntax.*
 
 /** specs2 logger support
   */
@@ -13,15 +12,16 @@ trait Logger:
 
   // derived operations
   def warnAndFail[A](warnMessage: String, failureMessage: String, doIt: Boolean = true): Operation[A] =
-    warn(warnMessage, doIt) >> Operation.fail[A](failureMessage)
+    warn(warnMessage, doIt).flatMap { _ => Operation.fail[A](failureMessage) }
 
 /** Logger implementation directing messages to the console
   */
 case class ConsoleLogger() extends Logger:
 
   def exception(t: Throwable, verbose: Boolean = false): Operation[Unit] =
-    Operation.delayed(println("[ERROR] " + t.getMessage)) >>
+    Operation.delayed(println("[ERROR] " + t.getMessage)).flatMap { _ =>
       (if verbose then Operation.delayed(t.printStackTrace) else Operation.unit)
+    }
 
   def warn(message: String, doIt: Boolean = true): Operation[Unit] =
     if doIt then Operation.delayed((println("[WARN] " + message)))

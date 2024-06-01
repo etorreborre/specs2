@@ -4,8 +4,6 @@ package execute
 import Result.ResultFailureMonoid
 import text.Quote.*
 import text.Plural.*
-import org.specs2.fp.syntax.*
-import control.*
 
 /** This trait adds some implicits to easily fold sequences of results
   */
@@ -39,7 +37,7 @@ trait ResultImplicits extends ResultLogicalCombinators:
       */
     def foreach(seq: Traversable[T]): Result =
       if seq.isEmpty then StandardResults.success
-      else seq.drop(1).foldLeft(t.applied(seq.head)) { (res, cur) => AsResult(res) |+| t.applied(cur) }
+      else seq.drop(1).foldLeft(t.applied(seq.head)) { (res, cur) => ResultFailureMonoid.append(AsResult(res), t.applied(cur)) }
 
     /** @return
       *   success if at least one result is a success

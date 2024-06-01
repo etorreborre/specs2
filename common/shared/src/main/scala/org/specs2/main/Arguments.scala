@@ -2,10 +2,9 @@ package org.specs2
 package main
 
 import main.{SystemProperties as sysProperties}
-import org.specs2.fp.*
-import control.*
-import text.*
-import scala.Predef.*
+import org.specs2.fp.Monoid
+import control.StackTraceFilter
+import text.Colors
 import scala.concurrent.duration.FiniteDuration
 
 /** This class holds all the options that are relevant for specs2 execution and reporting.

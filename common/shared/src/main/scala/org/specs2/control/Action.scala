@@ -1,7 +1,10 @@
 package org.specs2
 package control
 
-import fp.*, syntax.*
+import org.specs2.fp.{Monoid, FunctorSyntax, Id}
+import org.specs2.fp.{Monad}
+import org.specs2.fp.{Applicative}
+import org.specs2.fp.syntax.void
 import concurrent.{ExecutionEnv, *}
 import scala.concurrent.*
 import scala.concurrent.duration.*
@@ -145,13 +148,7 @@ object Action:
       fa.flatMap(f)
 
     override def ap[A, B](fa: =>Action[A])(ff: =>Action[A => B]): Action[B] =
-      Action(
-        runNow = { ee =>
-          given ExecutionContext = ee.executionContext
-          ff.runNow(ee).zip(fa.runNow(ee)).map { case (f, a) => f(a) }
-        },
-        last = fa.last ++ ff.last
-      )
+      ActionApplicative.ap(fa)(ff)
 
     override def toString: String =
       "Monad[Action]"
@@ -172,8 +169,8 @@ object Action:
     override def toString: String =
       "Applicative[Action]"
 
-  given NaturalTransformation[Id, Action] =
-    NaturalTransformation.naturalId[Action]
+  given org.specs2.fp.NaturalTransformation[Id, Action] =
+    org.specs2.fp.NaturalTransformation.naturalId[Action]
 
   given FinalizedAction: Safe[Action] with
     def finalizeWith[A](fa: Action[A], f: Finalizer): Action[A] =

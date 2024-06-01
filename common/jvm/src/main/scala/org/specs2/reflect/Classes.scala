@@ -4,8 +4,7 @@ package reflect
 import scala.reflect.{ClassTag, NameTransformer}
 import scala.util.control.NonFatal
 import java.lang.reflect.Constructor
-import control.*
-import fp.syntax.*
+import org.specs2.control.*
 import ClassName.*
 
 /** This trait provides functions to instantiate classes
@@ -25,7 +24,7 @@ trait Classes extends ClassOperations:
   def createInstance[T <: AnyRef](className: String, loader: ClassLoader, defaultInstances: =>List[AnyRef] = Nil)(using
       m: ClassTag[T]
   ): Operation[T] =
-    loadClass(className, loader) >>= { (klass: Class[T]) =>
+    loadClass(className, loader).flatMap { (klass: Class[T]) =>
       createInstanceFromClass(klass, loader, defaultInstances)
     }
 
@@ -52,7 +51,7 @@ trait Classes extends ClassOperations:
       loader: ClassLoader,
       defaultInstances: =>List[AnyRef] = Nil
   )(using m: ClassTag[T]): Operation[Throwable Either T] =
-    loadClassEither(className, loader) >>= { (tc: Throwable Either Class[T]) =>
+    loadClassEither(className, loader).flatMap { (tc: Throwable Either Class[T]) =>
       tc match
         case Left(t) =>
           Operation.ok(Left(t))

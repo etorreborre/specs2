@@ -49,7 +49,8 @@ lazy val specs2Settings = Seq(
   ),
   specs2ShellPrompt,
   ThisBuild / crossScalaVersions := Seq(Scala3),
-  ThisBuild / scalaVersion := Scala3
+  ThisBuild / scalaVersion := Scala3,
+  ThisBuild / usePipelining := true
 )
 
 lazy val rootSettings =
@@ -311,7 +312,9 @@ lazy val compilationOptions = Seq(
   "-Xcheck-macros",
   "-deprecation:true",
   "-unchecked",
-  "-feature"
+  "-feature",
+  "-explain-cyclic",
+  "-explain",
 )
 
 lazy val testSettings = Seq(

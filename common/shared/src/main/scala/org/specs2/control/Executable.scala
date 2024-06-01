@@ -4,7 +4,7 @@ package control
 import io.FilePath
 import scala.sys.process.ProcessLogger
 import Operation.*
-import fp.syntax.*
+import org.specs2.fp.FunctorSyntax.void
 
 /** Execute external commands
   */

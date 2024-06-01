@@ -3,7 +3,6 @@ package io
 
 import java.io.{BufferedInputStream, File, FileInputStream}
 
-import fp.*, syntax.*
 import control.*
 import producer.*
 import text.MD5

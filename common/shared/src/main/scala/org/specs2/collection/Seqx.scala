@@ -1,7 +1,7 @@
 package org.specs2
 package collection
 
-import org.specs2.fp.*
+import org.specs2.fp.{Foldable, Monoid}
 import scala.collection.mutable.ListBuffer
 
 /** This trait provides additional methods on Seqs and nested Seqs

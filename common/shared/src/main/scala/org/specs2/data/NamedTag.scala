@@ -2,7 +2,7 @@ package org.specs2
 package data
 
 import main.Arguments
-import org.specs2.fp.*
+import org.specs2.fp.Monoid
 import org.specs2.collection.canEqualAny
 
 /** A tag with names.

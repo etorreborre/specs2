@@ -4,11 +4,11 @@ package execute
 import control.Throwablex
 import control.Throwablex.*
 import main.Arguments
-import org.specs2.fp.*
-import org.specs2.fp.syntax.*
+import org.specs2.fp.Monoid
+import org.specs2.fp.syntax.{suml, foldMap}
 import text.Message.concat
-import text.Sentences.*
-import text.NotNullStrings.*
+import text.Sentences.negateSentence
+import text.NotNullStrings.notNull
 
 /** The result of an execution, either:
   *
