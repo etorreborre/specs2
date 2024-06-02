@@ -44,7 +44,6 @@ lazy val commonJsSettings = Seq(
   ) ++ depends.jsMacrotaskExecutor
 
 lazy val commonNativeSettings = Seq(
-  nativeLinkStubs := true
 )
 
 lazy val specs2Version = settingKey[String]("defines the current specs2 version")

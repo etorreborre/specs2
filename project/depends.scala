@@ -24,10 +24,10 @@ object depends {
       CrossVersion.partialVersion(scalaVersion.value) match {
          case Some((3, _)) =>
            Seq(
-             ("org.portable-scala" %%% "portable-scala-reflect" % "1.1.1").cross(CrossVersion.for3Use2_13),
+             ("org.portable-scala" %%% "portable-scala-reflect" % "1.1.3").cross(CrossVersion.for3Use2_13),
              "org.scala-sbt" % "test-interface" % "1.0")
          case _ =>
-           Seq(("org.portable-scala" %%% "portable-scala-reflect" % "1.1.1").cross(CrossVersion.for3Use2_13),
+           Seq(("org.portable-scala" %%% "portable-scala-reflect" % "1.1.3").cross(CrossVersion.for3Use2_13),
                 "org.scala-sbt" % "test-interface" % "1.0",
                 "org.scala-js" %% "scalajs-stubs" % "1.0.0" % "provided")
       }
@@ -38,7 +38,7 @@ object depends {
       jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv(),
       libraryDependencies ++=
         Seq(
-          ("org.portable-scala" %%% "portable-scala-reflect" % "1.1.1").cross(CrossVersion.for3Use2_13),
+          ("org.portable-scala" %%% "portable-scala-reflect" % "1.1.3").cross(CrossVersion.for3Use2_13),
           ("org.scala-js" %% "scalajs-test-interface" % scalaJSVersion).cross(CrossVersion.for3Use2_13)
         )
     )
@@ -49,13 +49,13 @@ object depends {
   def nativeTest =
     Seq(libraryDependencies ++= Seq(
     "org.scala-native" %%% "test-interface" % nativeVersion,
-    ("org.portable-scala" %%% "portable-scala-reflect" % "1.1.1").cross(CrossVersion.for3Use2_13)
+    ("org.portable-scala" %%% "portable-scala-reflect" % "1.1.3").cross(CrossVersion.for3Use2_13)
     ))
 
   // used in specs2-matcher-extra
-  def scalaParser = libraryDependencies += "org.scala-lang.modules" %%% "scala-parser-combinators" % "2.1.1"
+  def scalaParser = libraryDependencies += "org.scala-lang.modules" %%% "scala-parser-combinators" % "2.4.0"
 
-  def scalaXml = libraryDependencies += "org.scala-lang.modules" %%% "scala-xml" % "2.1.0"
+  def scalaXml = libraryDependencies += "org.scala-lang.modules" %%% "scala-xml" % "2.3.0"
 
   lazy val mockito  = "org.mockito"  % "mockito-core"  % "4.11.0"
   lazy val junit    = "junit"        % "junit"         % "4.13.2"
@@ -66,7 +66,7 @@ object depends {
   lazy val tagsoup = "org.ccil.cowan.tagsoup" % "tagsoup" % "1.2.1"
 
   lazy val scalacheck = Def.setting {
-    "org.scalacheck" %%% "scalacheck" % "1.16.0"
+    "org.scalacheck" %%% "scalacheck" % "1.18.0"
   }
 
   lazy val resolvers =
