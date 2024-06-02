@@ -24,7 +24,7 @@ lazy val specs2 = project.in(file(".")).
     analysisJVM, shapelessJVM, formJVM, markdownJVM, gwtJVM, junitJVM, scalacheckJVM, mockJVM, xmlJVM,
     tests, fpJS, catsJS, commonJS, matcherJS, coreJS, matcherExtraJS, scalazJS, analysisJS,
     shapelessJS, junitJS, scalacheckJS, mockJS, fpNative, catsNative, commonNative, matcherNative,
-    coreNative, matcherExtraNative, scalazNative, analysisNative, junitNative,
+    coreNative, matcherExtraNative, scalazNative, analysisNative, shapelessNative, junitNative,
     scalacheckNative, mockNative
   )
 
@@ -64,7 +64,7 @@ lazy val commonJsNativeSettings = Seq(
 
 lazy val specs2Version = settingKey[String]("defines the current specs2 version")
 lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
-lazy val shapelessVersion = "2.3.7"
+lazy val shapelessVersion = "2.3.12"
 lazy val catsVersion = "2.6.1"
 lazy val catsEffectVersion = "3.1.1"
 
@@ -303,7 +303,7 @@ lazy val pom = Project(id = "pom", base = file("pom")).
   dependsOn(catsJVM, commonJVM, matcherJVM, matcherExtraJVM, coreJVM, scalazJVM, html, analysisJVM,
     shapelessJVM, formJVM, markdownJVM, gwtJVM, junitJVM, scalacheckJVM, mockJVM)
 
-lazy val shapeless = crossProject(JSPlatform, JVMPlatform).
+lazy val shapeless = crossProject(JSPlatform, JVMPlatform, NativePlatform).
   crossType(CrossType.Pure).
   in(file("shapeless")).
   settings(
@@ -319,9 +319,7 @@ lazy val shapeless = crossProject(JSPlatform, JVMPlatform).
 
 lazy val shapelessJS = shapeless.js
 lazy val shapelessJVM = shapeless.jvm
-
-// TODO https://github.com/milessabin/shapeless/issues/1355
-// lazy val shapelessNative = shapeless.native
+lazy val shapelessNative = shapeless.native
 
 lazy val scalaz = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("scalaz")).
   settings(
