@@ -32,8 +32,8 @@ lazy val specs2Settings = Seq(
   organization := "org.specs2",
   GlobalScope / scalazVersion := "7.2.34",
   specs2ShellPrompt,
-  ThisBuild / scalaVersion := "3.3.1",
-  ThisBuild / crossScalaVersions := Seq("3.3.1"))
+  ThisBuild / scalaVersion := "3.3.3",
+  ThisBuild / crossScalaVersions := Seq("3.3.3"))
 
 lazy val tagName = Def.setting {
   s"specs2-${version.value}"
