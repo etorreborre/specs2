@@ -61,23 +61,7 @@ object depends {
     "org.scalacheck" %%% "scalacheck" % "1.18.0"
   }
 
-  def paradise(scalaVersion: String) =
-    if (scalaMinorVersionAtLeast(scalaVersion, 11))
-      Nil
-    else
-      Seq(compilerPlugin(
-          "org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.patch),
-          "org.scalamacros" %% "quasiquotes" % "2.1.0")
-
   lazy val resolvers =
     Seq(sbt.Keys.resolvers ++= Resolver.sonatypeOssRepos("releases"))
-
-  def scalaMinorVersionAtLeast(scalaVersion: String, n: Int): Boolean =
-    CrossVersion.partialVersion(scalaVersion) match {
-      case Some((2, minor)) if minor >= n =>
-        true
-      case _ =>
-        false
-    }
 
 }

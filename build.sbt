@@ -1,7 +1,5 @@
 import sbt._
 import Defaults._
-import java.util.{Date, TimeZone}
-import java.text.SimpleDateFormat
 // shadow sbt-scalajs' crossProject and CrossType until Scala.js 1.0.0 is released
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
@@ -116,7 +114,6 @@ lazy val catsNative = cats.native
 lazy val common = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("common")).
   settings(
     libraryDependencies ++=
-      depends.paradise(scalaVersion.value) ++
       Seq(depends.reflect(scalaOrganization.value, scalaVersion.value),
         depends.scalacheck.value % Test),
     commonSettings,
@@ -146,7 +143,6 @@ lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("c
     commonSettings,
     name := "specs2-core",
     libraryDependencies ++=
-      depends.paradise(scalaVersion.value) ++
       Seq(
         depends.mockito % Test,
         depends.junit % Test)
@@ -286,9 +282,7 @@ lazy val matcherNative = matcher.native
 lazy val matcherExtra = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("matcher-extra")).
   settings(
     commonSettings,
-    name := "specs2-matcher-extra",
-    libraryDependencies ++= depends.paradise(scalaVersion.value)
-  ).
+    name := "specs2-matcher-extra").
   jsSettings(depends.jsTest, commonJsSettings).
   jvmSettings(depends.jvmTest, commonJvmSettings).
   nativeSettings(depends.nativeTest, commonNativeSettings).
@@ -309,7 +303,6 @@ lazy val shapeless = crossProject(JSPlatform, JVMPlatform, NativePlatform).
   settings(
     commonSettings,
     name := "specs2-shapeless",
-    libraryDependencies ++= depends.paradise(scalaVersion.value),
     libraryDependencies += "com.chuusai" %%% "shapeless" % shapelessVersion
   ).
   jsSettings(depends.jsTest, commonJsSettings).
