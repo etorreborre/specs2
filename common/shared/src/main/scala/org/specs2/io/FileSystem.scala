@@ -58,6 +58,40 @@ case class FileSystem(logger: Logger) extends FilePathReader:
   def mkdirs(path: FilePath): Operation[Unit] =
     mkdirs(path.dir)
 
+  /** Unjaring the same thing over and over is inefficient. LRU cache to keep track of what was already done. */
+  private object UnjarLRUCache:
+    private var unjarLRUCache: Map[(URL, DirectoryPath, String), Long] = Map.empty
+    private val maxSize = 1000
+
+    /** Checks if the given parameters were already processed; if not immediately adds them to the cache. */
+    def alreadyUnjared(params: (URL, DirectoryPath, String)): Boolean =
+      UnjarLRUCache.synchronized:
+        val alreadyUnjared = unjarLRUCache.contains(params)
+        unjarLRUCache += params -> System.nanoTime
+        if !alreadyUnjared then clean()
+        alreadyUnjared
+
+    /** Clean up LRU entries until cache is at most max size. */
+    private def clean(): Unit = while unjarLRUCache.size > maxSize do unjarLRUCache -= unjarLRUCache.minBy(_._2)._1
+
+  /** Unjar the jar (or zip file) specified by "path" to the "dest" directory. Filters files which shouldn't be
+    * extracted with a regular expression. This is only done once per argument list (unless eventually evicted from LRU
+    * cache).
+    * @param jarUrl
+    *   path of the jar file
+    * @param dest
+    *   destination directory path
+    * @param regexFilter
+    *   regular expression filtering files which shouldn't be extracted; the expression must capture the path of an
+    *   entry as group 1 which will then be used relative to dirPath as target path for that entry
+    *
+    * @see
+    *   [[unjar]]
+    */
+  def unjarOnce(jarUrl: URL, dest: DirectoryPath, regexFilter: String): Operation[Unit] =
+    if UnjarLRUCache.alreadyUnjared((jarUrl, dest, regexFilter)) then Operation.ok(())
+    else unjar(jarUrl, dest, regexFilter)
+
   /** Unjar the jar (or zip file) specified by "path" to the "dest" directory. Filters files which shouldn't be
     * extracted with a regular expression.
     * @param jarUrl
@@ -67,6 +101,9 @@ case class FileSystem(logger: Logger) extends FilePathReader:
     * @param regexFilter
     *   regular expression filtering files which shouldn't be extracted; the expression must capture the path of an
     *   entry as group 1 which will then be used relative to dirPath as target path for that entry
+    *
+    * @see
+    *   [[unjarOnce]]
     */
   def unjar(jarUrl: URL, dest: DirectoryPath, regexFilter: String): Operation[Unit] =
     val regex = compile(regexFilter)
