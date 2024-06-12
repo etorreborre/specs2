@@ -3,6 +3,8 @@ package io
 
 import control.*
 import fp.syntax.*
+import data.LruCache
+import data.ProcessedStatus.*
 import java.io.*
 import java.util.regex.Pattern.*
 import java.util.regex.Matcher.*
@@ -59,20 +61,7 @@ case class FileSystem(logger: Logger) extends FilePathReader:
     mkdirs(path.dir)
 
   /** Unjaring the same thing over and over is inefficient. LRU cache to keep track of what was already done. */
-  private object UnjarLRUCache:
-    private var unjarLRUCache: Map[(URL, DirectoryPath, String), Long] = Map.empty
-    private val maxSize = 1000
-
-    /** Checks if the given parameters were already processed; if not immediately adds them to the cache. */
-    def alreadyUnjared(params: (URL, DirectoryPath, String)): Boolean =
-      UnjarLRUCache.synchronized:
-        val alreadyUnjared = unjarLRUCache.contains(params)
-        unjarLRUCache += params -> System.nanoTime
-        if !alreadyUnjared then clean()
-        alreadyUnjared
-
-    /** Clean up LRU entries until cache is at most max size. */
-    private def clean(): Unit = while unjarLRUCache.size > maxSize do unjarLRUCache -= unjarLRUCache.minBy(_._2)._1
+  private val UnjarLRUCache = new LruCache[(URL, DirectoryPath, String)](maxSize = 1000)
 
   /** Unjar the jar (or zip file) specified by "path" to the "dest" directory. Filters files which shouldn't be
     * extracted with a regular expression. This is only done once per argument list (unless eventually evicted from LRU
@@ -84,13 +73,14 @@ case class FileSystem(logger: Logger) extends FilePathReader:
     * @param regexFilter
     *   regular expression filtering files which shouldn't be extracted; the expression must capture the path of an
     *   entry as group 1 which will then be used relative to dirPath as target path for that entry
-    *
     * @see
     *   [[unjar]]
     */
   def unjarOnce(jarUrl: URL, dest: DirectoryPath, regexFilter: String): Operation[Unit] =
-    if UnjarLRUCache.alreadyUnjared((jarUrl, dest, regexFilter)) then Operation.ok(())
-    else unjar(jarUrl, dest, regexFilter)
+    for
+      status <- UnjarLRUCache.register((jarUrl, dest, regexFilter))
+      _ <- unjar(jarUrl, dest, regexFilter).when(status == ToProcess)
+    yield ()
 
   /** Unjar the jar (or zip file) specified by "path" to the "dest" directory. Filters files which shouldn't be
     * extracted with a regular expression.
