@@ -3,6 +3,8 @@ package io
 
 import control.*
 import fp.syntax.*
+import data.LruCache
+import data.ProcessedStatus.*
 import java.io.*
 import java.util.regex.Pattern.*
 import java.util.regex.Matcher.*
@@ -58,6 +60,28 @@ case class FileSystem(logger: Logger) extends FilePathReader:
   def mkdirs(path: FilePath): Operation[Unit] =
     mkdirs(path.dir)
 
+  /** Unjaring the same thing over and over is inefficient. LRU cache to keep track of what was already done. */
+  private val UnjarLRUCache = new LruCache[(URL, DirectoryPath, String)](maxSize = 1000)
+
+  /** Unjar the jar (or zip file) specified by "path" to the "dest" directory. Filters files which shouldn't be
+    * extracted with a regular expression. This is only done once per argument list (unless eventually evicted from LRU
+    * cache).
+    * @param jarUrl
+    *   path of the jar file
+    * @param dest
+    *   destination directory path
+    * @param regexFilter
+    *   regular expression filtering files which shouldn't be extracted; the expression must capture the path of an
+    *   entry as group 1 which will then be used relative to dirPath as target path for that entry
+    * @see
+    *   [[unjar]]
+    */
+  def unjarOnce(jarUrl: URL, dest: DirectoryPath, regexFilter: String): Operation[Unit] =
+    for
+      status <- UnjarLRUCache.register((jarUrl, dest, regexFilter))
+      _ <- unjar(jarUrl, dest, regexFilter).when(status == ToProcess)
+    yield ()
+
   /** Unjar the jar (or zip file) specified by "path" to the "dest" directory. Filters files which shouldn't be
     * extracted with a regular expression.
     * @param jarUrl
@@ -67,6 +91,9 @@ case class FileSystem(logger: Logger) extends FilePathReader:
     * @param regexFilter
     *   regular expression filtering files which shouldn't be extracted; the expression must capture the path of an
     *   entry as group 1 which will then be used relative to dirPath as target path for that entry
+    *
+    * @see
+    *   [[unjarOnce]]
     */
   def unjar(jarUrl: URL, dest: DirectoryPath, regexFilter: String): Operation[Unit] =
     val regex = compile(regexFilter)

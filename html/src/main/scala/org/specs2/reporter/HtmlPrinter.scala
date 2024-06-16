@@ -187,7 +187,7 @@ case class HtmlPrinter(env: Env, searchPage: SearchPage, logger: Logger = Consol
       case Some(url) =>
         val fs = env.fileSystem
         if url.getProtocol.equalsIgnoreCase("jar") then
-          fs.unjar(jarOf(url), outputDir, s"^${quote(base.path)}(/${quote(src.path)}/.*)$$")
+          fs.unjarOnce(jarOf(url), outputDir, s"^${quote(base.path)}(/${quote(src.path)}/.*)$$")
         else fs.copyDir(DirectoryPath.unsafe(url.toURI), outputDir / src)
       case _ =>
         val message = s"no resource found for path ${(base / src).path}"
