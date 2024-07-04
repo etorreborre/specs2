@@ -38,6 +38,7 @@ trait ThrownExpectables extends ExpectationsCreation {
       // overriding this method is necessary to include the ThrownExpectation trait into the stacktrace of the created match result
       override def applyMatcher[S >: T](m: =>Matcher[S]): MatchResult[S] = super.applyMatcher(m)
       override def check[S >: T](r: MatchResult[S]): MatchResult[S] = checkFailure(r)
+      override def checkResult(r: Result): Result = checkResultFailure(r)
       override val desc = alias
       override def map[S](f: T => S): Expectable[S] = createExpectable(f(value), desc)
       override def mapDescription(d: Option[String => String]): Expectable[T] = createExpectable(value, d)
@@ -77,7 +78,7 @@ trait ThrownExpectables extends ExpectationsCreation {
     r
   }
 
-  /** this method can be overriden to throw exceptions when checking the match result */
+  /** this method can be overridden to throw exceptions when checking the match result */
   override protected def checkMatchResultFailure[T](m: MatchResult[T]) = {
     m match {
       case f@MatchFailure(_, _, _, _, _) => throw new MatchFailureException(f)

@@ -85,4 +85,9 @@ class MatchResultCombinatorsSpec extends mutable.Spec with ResultMatchers with M
     "there is only one stored expectation (see #320)" ==> { stored must haveSize(1) }
     stored.map(_.message).head must_== "'hello world' doesn't have size 10 but size 11"
   }
+  "issue #1255 ok and failure must throw an exception" >> {
+    new MustThrownExpectations {
+      ok and failure
+    } must throwA[execute.FailureException]
+  }
 }
