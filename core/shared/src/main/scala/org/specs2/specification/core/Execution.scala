@@ -367,7 +367,7 @@ object Execution:
   /** create an execution with a future of an Execution */
   def futureFlatten[T](f: =>Future[Execution]): Execution =
     withEnvFlatten(env =>
-      implicit val ec = env.executionContext
+      given ec: ExecutionContext = env.executionContext
       Execution(run =
         Some((env: Env) =>
           f.flatMap { execution =>

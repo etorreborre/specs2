@@ -1326,7 +1326,7 @@ object ScalaCheckProperty:
         AsResultProp.check(s.prop, s.parameters.overrideWith(env.commandLine), s.prettyFreqMap)
       }
 
-  def makeProp[T](f: T => Prop, shrink: Option[Shrink[T]], parameters: Parameters)(implicit
+  def makeProp[T](f: T => Prop, shrink: Option[Shrink[T]], parameters: Parameters)(using
       a: Arbitrary[T],
       p: T => Pretty
   ): Prop =

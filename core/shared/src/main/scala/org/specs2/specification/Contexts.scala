@@ -68,7 +68,7 @@ trait Resource[T] extends BeforeAfterSpec with FragmentsFactory:
 
   def beforeSpec =
     fragmentFactory.step(Execution.withEnvAsync { env =>
-      implicit val ec = env.executionContext
+      given ec: ExecutionContext = env.executionContext
 
       lazy val acquireResource: Future[T] = acquire.recoverWith { case e: Exception =>
         Future.failed[T](new Exception("resource unavailable", e))
@@ -101,7 +101,7 @@ trait Resource[T] extends BeforeAfterSpec with FragmentsFactory:
       fragmentFactory.break,
       fragmentFactory.step {
         Execution.withEnvFlatten { env =>
-          implicit val ec = env.executionContext
+          given ec: ExecutionContext = env.executionContext
           // synchronize the retrieval of the resource and
           // its acquisition on the resources map to avoid
           // concurrency issues

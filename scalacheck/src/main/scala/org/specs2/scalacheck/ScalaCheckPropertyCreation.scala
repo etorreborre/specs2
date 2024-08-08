@@ -9,7 +9,7 @@ import ScalaCheckProperty.*
 trait ScalaCheckPropertyCreation:
 
   /** create a ScalaCheck property from a function */
-  def prop[T, R](result: T => R)(implicit
+  def prop[T, R](result: T => R)(using
       arbitrary: Arbitrary[T],
       shrink: Shrink[T],
       pretty: T => Pretty,
