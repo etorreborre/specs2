@@ -23,7 +23,7 @@ object depends {
 
   // used in specs2-junit
   val junitVintage = "org.junit.vintage" % "junit-vintage-engine" % "5.11.1"
-  val junit = libraryDependencies ++= Seq(junitVintage, "org.junit.platform" % "junit-platform-engine" % "1.11.0")
+  val junit = libraryDependencies ++= Seq(junitVintage, "org.junit.platform" % "junit-platform-engine" % "1.11.1")
   val junitTest = libraryDependencies += junitVintage % Test
 
   // used in specs2-markdown for the markdown parser
@@ -32,7 +32,7 @@ object depends {
   // used in specs2-html
   val tagsoup = "org.ccil.cowan.tagsoup" % "tagsoup" % "1.2.1"
 
-  val Scala213 = "2.13.14"
+  val Scala213 = "2.13.15"
 
   val isScala3 = Def.setting(CrossVersion.partialVersion(scalaVersion.value).exists(_._1 == 3))
 
