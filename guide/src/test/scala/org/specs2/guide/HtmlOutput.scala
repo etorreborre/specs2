@@ -83,6 +83,7 @@ Custom CSS and JavaScript files can be used without changing the template. In or
 Here is something you can do to automatically create an index page for your specifications: ${snippet{
 
 import org.specs2.*
+import org.specs2.runner.*
 import specification.core.*
 
 class index(env: Env) extends Specification:
