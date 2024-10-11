@@ -1,0 +1,750 @@
+
+
+["Don't repeat yourself"](http://en.wikipedia.org/wiki/Don%27t_repeat_yourself) mandates that the same information is not repeated twice.
+However this situation happens when part of an example description is reused in the example body: 
+
+```
+s2"""
+  1971-01-01 is a correct date $correct
+"""
+def correct = { "1971-01-01" must beCorrect }
+```
+
+
+### Use the example description
+
+You can avoid this by creating the example body as a function using the description string: 
+
+```
+s2"""
+  1971-01-01 is a correct date $correct
+"""
+def correct = { (date: String) =>
+  date.split(" ")(0) must beCorrect
+}
+```
+
+
+### Parse the example description
+
+#### Delimited values
+
+We can reuse the `StepParsers` to extract the values we wish to use: 
+
+```
+s2"""
+  {1971-01-01} is a correct date $correct
+  {1} plus {1} is {2} $addition
+"""
+
+import org.specs2.specification.script.StepParsers.*
+import org.specs2.specification.script.StepParsers.given
+
+def correct = extract { (date: String) =>
+  date must beCorrect
+}
+
+def addition = extract { (a: String, b: String, c: String) =>
+  a.toInt + b.toInt must ===(c.toInt)
+}
+```
+
+
+The values to be extracted are delimited by `{}` and those curly braces will not be displayed when the specification is reported.
+
+#### Standard delimited parsers
+
+When you parse values with `extract` you get only Strings which you have to transform into `Int` for example. <s2>specs2</s2> comes up with a few predefined parsers to help you with that: 
+
+```
+s2"""
+  {1} plus {1} is {2} $addition
+"""
+
+import org.specs2.specification.script.StandardDelimitedStepParsers.*
+
+def addition = threeInts.map { case (a, b, c) =>
+  a + b must ===(c)
+}
+```
+
+
+The other parsers are:
+
+ parser        | description
+ ------------- | -----------
+ `anInt`       | return a `Int`
+ `twoInts`     | return a pair `(Int, Int)`
+ `threeInts`   | return a triple `(Int, Int, Int)`
+ `aDouble`     | return a `Double`
+ `twoDoubles`  | return a pair `(Double, Double)`
+ `threeDoubles`| return a triple `(Double, Double, Double)`
+ `aString`     | return a `String`
+ `twoStrings`  | return a pair `(String, String)`
+ `threeStrings`| return a triple `(String, String, String)`
+
+
+#### Regular expressions
+
+Another way to extract values is to use regular expressions to extract similar groups of values. In that case no delimiters are required. For example: 
+
+```
+s2"""
+  1971-01-01 is a correct date $correct
+  1 plus 1 is 2 $addition
+"""
+
+import org.specs2.specification.script.StepParsers.*
+
+// groupAs is equivalent to running 'regexp findAllIn text'
+// and getting one argument per match group found
+def correct = groupAs("[^ ]+").and { (date: String) =>
+  date must beCorrect
+}
+
+def addition = groupAs("\\d+").and { (a: String, b: String, c: String) =>
+  a.toInt + b.toInt must ===(c.toInt)
+}
+```
+
+
+#### Standard regexp parsers
+
+Similarly to delimited parsers, there are some predefined regexp parsers: 
+
+```
+s2"""
+  1 plus 1 is 2 $addition
+"""
+
+import org.specs2.specification.script.StandardRegexStepParsers.*
+
+def addition = threeInts.map { case (a, b, c) =>
+  a + b must ===(c)
+}
+```
+
+
+["Don't repeat yourself"](http://en.wikipedia.org/wiki/Don%27t_repeat_yourself) mandates that the same information is not repeated twice.
+However this situation happens when part of an example description is reused in the example body: 
+
+```
+s2"""
+  1971-01-01 is a correct date $correct
+"""
+def correct = { "1971-01-01" must beCorrect }
+```
+
+
+### Use the example description
+
+You can avoid this by creating the example body as a function using the description string: 
+
+```
+s2"""
+  1971-01-01 is a correct date $correct
+"""
+def correct = { (date: String) =>
+  date.split(" ")(0) must beCorrect
+}
+```
+
+
+### Parse the example description
+
+#### Delimited values
+
+We can reuse the `StepParsers` to extract the values we wish to use: 
+
+```
+s2"""
+  {1971-01-01} is a correct date $correct
+  {1} plus {1} is {2} $addition
+"""
+
+import org.specs2.specification.script.StepParsers.*
+import org.specs2.specification.script.StepParsers.given
+
+def correct = extract { (date: String) =>
+  date must beCorrect
+}
+
+def addition = extract { (a: String, b: String, c: String) =>
+  a.toInt + b.toInt must ===(c.toInt)
+}
+```
+
+
+The values to be extracted are delimited by `{}` and those curly braces will not be displayed when the specification is reported.
+
+#### Standard delimited parsers
+
+When you parse values with `extract` you get only Strings which you have to transform into `Int` for example. <s2>specs2</s2> comes up with a few predefined parsers to help you with that: 
+
+```
+s2"""
+  {1} plus {1} is {2} $addition
+"""
+
+import org.specs2.specification.script.StandardDelimitedStepParsers.*
+
+def addition = threeInts.map { case (a, b, c) =>
+  a + b must ===(c)
+}
+```
+
+
+The other parsers are:
+
+ parser        | description
+ ------------- | -----------
+ `anInt`       | return a `Int`
+ `twoInts`     | return a pair `(Int, Int)`
+ `threeInts`   | return a triple `(Int, Int, Int)`
+ `aDouble`     | return a `Double`
+ `twoDoubles`  | return a pair `(Double, Double)`
+ `threeDoubles`| return a triple `(Double, Double, Double)`
+ `aString`     | return a `String`
+ `twoStrings`  | return a pair `(String, String)`
+ `threeStrings`| return a triple `(String, String, String)`
+
+
+#### Regular expressions
+
+Another way to extract values is to use regular expressions to extract similar groups of values. In that case no delimiters are required. For example: 
+
+```
+s2"""
+  1971-01-01 is a correct date $correct
+  1 plus 1 is 2 $addition
+"""
+
+import org.specs2.specification.script.StepParsers.*
+
+// groupAs is equivalent to running 'regexp findAllIn text'
+// and getting one argument per match group found
+def correct = groupAs("[^ ]+").and { (date: String) =>
+  date must beCorrect
+}
+
+def addition = groupAs("\\d+").and { (a: String, b: String, c: String) =>
+  a.toInt + b.toInt must ===(c.toInt)
+}
+```
+
+
+#### Standard regexp parsers
+
+Similarly to delimited parsers, there are some predefined regexp parsers: 
+
+```
+s2"""
+  1 plus 1 is 2 $addition
+"""
+
+import org.specs2.specification.script.StandardRegexStepParsers.*
+
+def addition = threeInts.map { case (a, b, c) =>
+  a + b must ===(c)
+}
+```
+
+
+["Don't repeat yourself"](http://en.wikipedia.org/wiki/Don%27t_repeat_yourself) mandates that the same information is not repeated twice.
+However this situation happens when part of an example description is reused in the example body: 
+
+```
+s2"""
+  1971-01-01 is a correct date $correct
+"""
+def correct = { "1971-01-01" must beCorrect }
+```
+
+
+### Use the example description
+
+You can avoid this by creating the example body as a function using the description string: 
+
+```
+s2"""
+  1971-01-01 is a correct date $correct
+"""
+def correct = { (date: String) =>
+  date.split(" ")(0) must beCorrect
+}
+```
+
+
+### Parse the example description
+
+#### Delimited values
+
+We can reuse the `StepParsers` to extract the values we wish to use: 
+
+```
+s2"""
+  {1971-01-01} is a correct date $correct
+  {1} plus {1} is {2} $addition
+"""
+
+import org.specs2.specification.script.StepParsers.*
+import org.specs2.specification.script.StepParsers.given
+
+def correct = extract { (date: String) =>
+  date must beCorrect
+}
+
+def addition = extract { (a: String, b: String, c: String) =>
+  a.toInt + b.toInt must ===(c.toInt)
+}
+```
+
+
+The values to be extracted are delimited by `{}` and those curly braces will not be displayed when the specification is reported.
+
+#### Standard delimited parsers
+
+When you parse values with `extract` you get only Strings which you have to transform into `Int` for example. <s2>specs2</s2> comes up with a few predefined parsers to help you with that: 
+
+```
+s2"""
+  {1} plus {1} is {2} $addition
+"""
+
+import org.specs2.specification.script.StandardDelimitedStepParsers.*
+
+def addition = threeInts.map { case (a, b, c) =>
+  a + b must ===(c)
+}
+```
+
+
+The other parsers are:
+
+ parser        | description
+ ------------- | -----------
+ `anInt`       | return a `Int`
+ `twoInts`     | return a pair `(Int, Int)`
+ `threeInts`   | return a triple `(Int, Int, Int)`
+ `aDouble`     | return a `Double`
+ `twoDoubles`  | return a pair `(Double, Double)`
+ `threeDoubles`| return a triple `(Double, Double, Double)`
+ `aString`     | return a `String`
+ `twoStrings`  | return a pair `(String, String)`
+ `threeStrings`| return a triple `(String, String, String)`
+
+
+#### Regular expressions
+
+Another way to extract values is to use regular expressions to extract similar groups of values. In that case no delimiters are required. For example: 
+
+```
+s2"""
+  1971-01-01 is a correct date $correct
+  1 plus 1 is 2 $addition
+"""
+
+import org.specs2.specification.script.StepParsers.*
+
+// groupAs is equivalent to running 'regexp findAllIn text'
+// and getting one argument per match group found
+def correct = groupAs("[^ ]+").and { (date: String) =>
+  date must beCorrect
+}
+
+def addition = groupAs("\\d+").and { (a: String, b: String, c: String) =>
+  a.toInt + b.toInt must ===(c.toInt)
+}
+```
+
+
+#### Standard regexp parsers
+
+Similarly to delimited parsers, there are some predefined regexp parsers: 
+
+```
+s2"""
+  1 plus 1 is 2 $addition
+"""
+
+import org.specs2.specification.script.StandardRegexStepParsers.*
+
+def addition = threeInts.map { case (a, b, c) =>
+  a + b must ===(c)
+}
+```
+
+
+["Don't repeat yourself"](http://en.wikipedia.org/wiki/Don%27t_repeat_yourself) mandates that the same information is not repeated twice.
+However this situation happens when part of an example description is reused in the example body: 
+
+```
+s2"""
+  1971-01-01 is a correct date $correct
+"""
+def correct = { "1971-01-01" must beCorrect }
+```
+
+
+### Use the example description
+
+You can avoid this by creating the example body as a function using the description string: 
+
+```
+s2"""
+  1971-01-01 is a correct date $correct
+"""
+def correct = { (date: String) =>
+  date.split(" ")(0) must beCorrect
+}
+```
+
+
+### Parse the example description
+
+#### Delimited values
+
+We can reuse the `StepParsers` to extract the values we wish to use: 
+
+```
+s2"""
+  {1971-01-01} is a correct date $correct
+  {1} plus {1} is {2} $addition
+"""
+
+import org.specs2.specification.script.StepParsers.*
+import org.specs2.specification.script.StepParsers.given
+
+def correct = extract { (date: String) =>
+  date must beCorrect
+}
+
+def addition = extract { (a: String, b: String, c: String) =>
+  a.toInt + b.toInt must ===(c.toInt)
+}
+```
+
+
+The values to be extracted are delimited by `{}` and those curly braces will not be displayed when the specification is reported.
+
+#### Standard delimited parsers
+
+When you parse values with `extract` you get only Strings which you have to transform into `Int` for example. <s2>specs2</s2> comes up with a few predefined parsers to help you with that: 
+
+```
+s2"""
+  {1} plus {1} is {2} $addition
+"""
+
+import org.specs2.specification.script.StandardDelimitedStepParsers.*
+
+def addition = threeInts.map { case (a, b, c) =>
+  a + b must ===(c)
+}
+```
+
+
+The other parsers are:
+
+ parser        | description
+ ------------- | -----------
+ `anInt`       | return a `Int`
+ `twoInts`     | return a pair `(Int, Int)`
+ `threeInts`   | return a triple `(Int, Int, Int)`
+ `aDouble`     | return a `Double`
+ `twoDoubles`  | return a pair `(Double, Double)`
+ `threeDoubles`| return a triple `(Double, Double, Double)`
+ `aString`     | return a `String`
+ `twoStrings`  | return a pair `(String, String)`
+ `threeStrings`| return a triple `(String, String, String)`
+
+
+#### Regular expressions
+
+Another way to extract values is to use regular expressions to extract similar groups of values. In that case no delimiters are required. For example: 
+
+```
+s2"""
+  1971-01-01 is a correct date $correct
+  1 plus 1 is 2 $addition
+"""
+
+import org.specs2.specification.script.StepParsers.*
+
+// groupAs is equivalent to running 'regexp findAllIn text'
+// and getting one argument per match group found
+def correct = groupAs("[^ ]+").and { (date: String) =>
+  date must beCorrect
+}
+
+def addition = groupAs("\\d+").and { (a: String, b: String, c: String) =>
+  a.toInt + b.toInt must ===(c.toInt)
+}
+```
+
+
+#### Standard regexp parsers
+
+Similarly to delimited parsers, there are some predefined regexp parsers: 
+
+```
+s2"""
+  1 plus 1 is 2 $addition
+"""
+
+import org.specs2.specification.script.StandardRegexStepParsers.*
+
+def addition = threeInts.map { case (a, b, c) =>
+  a + b must ===(c)
+}
+```
+
+
+["Don't repeat yourself"](http://en.wikipedia.org/wiki/Don%27t_repeat_yourself) mandates that the same information is not repeated twice.
+However this situation happens when part of an example description is reused in the example body: 
+
+```
+s2"""
+  1971-01-01 is a correct date $correct
+"""
+def correct = { "1971-01-01" must beCorrect }
+```
+
+
+### Use the example description
+
+You can avoid this by creating the example body as a function using the description string: 
+
+```
+s2"""
+  1971-01-01 is a correct date $correct
+"""
+def correct = { (date: String) =>
+  date.split(" ")(0) must beCorrect
+}
+```
+
+
+### Parse the example description
+
+#### Delimited values
+
+We can reuse the `StepParsers` to extract the values we wish to use: 
+
+```
+s2"""
+  {1971-01-01} is a correct date $correct
+  {1} plus {1} is {2} $addition
+"""
+
+import org.specs2.specification.script.StepParsers.*
+import org.specs2.specification.script.StepParsers.given
+
+def correct = extract { (date: String) =>
+  date must beCorrect
+}
+
+def addition = extract { (a: String, b: String, c: String) =>
+  a.toInt + b.toInt must ===(c.toInt)
+}
+```
+
+
+The values to be extracted are delimited by `{}` and those curly braces will not be displayed when the specification is reported.
+
+#### Standard delimited parsers
+
+When you parse values with `extract` you get only Strings which you have to transform into `Int` for example. <s2>specs2</s2> comes up with a few predefined parsers to help you with that: 
+
+```
+s2"""
+  {1} plus {1} is {2} $addition
+"""
+
+import org.specs2.specification.script.StandardDelimitedStepParsers.*
+
+def addition = threeInts.map { case (a, b, c) =>
+  a + b must ===(c)
+}
+```
+
+
+The other parsers are:
+
+ parser        | description
+ ------------- | -----------
+ `anInt`       | return a `Int`
+ `twoInts`     | return a pair `(Int, Int)`
+ `threeInts`   | return a triple `(Int, Int, Int)`
+ `aDouble`     | return a `Double`
+ `twoDoubles`  | return a pair `(Double, Double)`
+ `threeDoubles`| return a triple `(Double, Double, Double)`
+ `aString`     | return a `String`
+ `twoStrings`  | return a pair `(String, String)`
+ `threeStrings`| return a triple `(String, String, String)`
+
+
+#### Regular expressions
+
+Another way to extract values is to use regular expressions to extract similar groups of values. In that case no delimiters are required. For example: 
+
+```
+s2"""
+  1971-01-01 is a correct date $correct
+  1 plus 1 is 2 $addition
+"""
+
+import org.specs2.specification.script.StepParsers.*
+
+// groupAs is equivalent to running 'regexp findAllIn text'
+// and getting one argument per match group found
+def correct = groupAs("[^ ]+").and { (date: String) =>
+  date must beCorrect
+}
+
+def addition = groupAs("\\d+").and { (a: String, b: String, c: String) =>
+  a.toInt + b.toInt must ===(c.toInt)
+}
+```
+
+
+#### Standard regexp parsers
+
+Similarly to delimited parsers, there are some predefined regexp parsers: 
+
+```
+s2"""
+  1 plus 1 is 2 $addition
+"""
+
+import org.specs2.specification.script.StandardRegexStepParsers.*
+
+def addition = threeInts.map { case (a, b, c) =>
+  a + b must ===(c)
+}
+```
+
+
+["Don't repeat yourself"](http://en.wikipedia.org/wiki/Don%27t_repeat_yourself) mandates that the same information is not repeated twice.
+However this situation happens when part of an example description is reused in the example body: 
+
+```
+s2"""
+  1971-01-01 is a correct date $correct
+"""
+def correct = { "1971-01-01" must beCorrect }
+```
+
+
+### Use the example description
+
+You can avoid this by creating the example body as a function using the description string: 
+
+```
+s2"""
+  1971-01-01 is a correct date $correct
+"""
+def correct = { (date: String) =>
+  date.split(" ")(0) must beCorrect
+}
+```
+
+
+### Parse the example description
+
+#### Delimited values
+
+We can reuse the `StepParsers` to extract the values we wish to use: 
+
+```
+s2"""
+  {1971-01-01} is a correct date $correct
+  {1} plus {1} is {2} $addition
+"""
+
+import org.specs2.specification.script.StepParsers.*
+import org.specs2.specification.script.StepParsers.given
+
+def correct = extract { (date: String) =>
+  date must beCorrect
+}
+
+def addition = extract { (a: String, b: String, c: String) =>
+  a.toInt + b.toInt must ===(c.toInt)
+}
+```
+
+
+The values to be extracted are delimited by `{}` and those curly braces will not be displayed when the specification is reported.
+
+#### Standard delimited parsers
+
+When you parse values with `extract` you get only Strings which you have to transform into `Int` for example. <s2>specs2</s2> comes up with a few predefined parsers to help you with that: 
+
+```
+s2"""
+  {1} plus {1} is {2} $addition
+"""
+
+import org.specs2.specification.script.StandardDelimitedStepParsers.*
+
+def addition = threeInts.map { case (a, b, c) =>
+  a + b must ===(c)
+}
+```
+
+
+The other parsers are:
+
+ parser        | description
+ ------------- | -----------
+ `anInt`       | return a `Int`
+ `twoInts`     | return a pair `(Int, Int)`
+ `threeInts`   | return a triple `(Int, Int, Int)`
+ `aDouble`     | return a `Double`
+ `twoDoubles`  | return a pair `(Double, Double)`
+ `threeDoubles`| return a triple `(Double, Double, Double)`
+ `aString`     | return a `String`
+ `twoStrings`  | return a pair `(String, String)`
+ `threeStrings`| return a triple `(String, String, String)`
+
+
+#### Regular expressions
+
+Another way to extract values is to use regular expressions to extract similar groups of values. In that case no delimiters are required. For example: 
+
+```
+s2"""
+  1971-01-01 is a correct date $correct
+  1 plus 1 is 2 $addition
+"""
+
+import org.specs2.specification.script.StepParsers.*
+
+// groupAs is equivalent to running 'regexp findAllIn text'
+// and getting one argument per match group found
+def correct = groupAs("[^ ]+").and { (date: String) =>
+  date must beCorrect
+}
+
+def addition = groupAs("\\d+").and { (a: String, b: String, c: String) =>
+  a.toInt + b.toInt must ===(c.toInt)
+}
+```
+
+
+#### Standard regexp parsers
+
+Similarly to delimited parsers, there are some predefined regexp parsers: 
+
+```
+s2"""
+  1 plus 1 is 2 $addition
+"""
+
+import org.specs2.specification.script.StandardRegexStepParsers.*
+
+def addition = threeInts.map { case (a, b, c) =>
+  a + b must ===(c)
+}
+```
