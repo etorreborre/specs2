@@ -26,7 +26,7 @@ class Website(env: Env) extends Specification with Specs2Variables with Specs2Ta
 
   def createWebsite = {
     val fs = env.fileSystem
-    val pages = List("index", "quickstart", "learn", "project", "nav").map(_ + ".html").map(resource)
+    val pages = List("index", "quickstart", "learn", "project", "nav").map(_ + ".html").map(resource) :+ resource("_config.yml")
     val directories = List("css", "fonts", "images", "javascript").map(resourceDir)
     val vars = variables(env)
     val siteOutputDir = outputDir / "website" / versionDirName
