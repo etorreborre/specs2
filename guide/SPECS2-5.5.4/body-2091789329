@@ -1,0 +1,721 @@
+
+
+### Parallel by default
+
+<s2>specs2</s2> examples are executed concurrently by default:
+
+ - this makes the execution faster
+
+ - it encourages to write independent examples when the result of a given example should not be influenced by others
+
+Starting from this default you can progressively add constraints to get more control over the execution.
+
+### Steps
+
+A `Step` is an action which can be executed anywhere in a specification. When you declare a `Step` like this:
+
+```
+class StepSpec extends Specification:
+  def is = s2"""
+
+  this is example 1 $ok
+  this is example 2 $ok
+  ${step(success("stop here for a second"))}
+
+  this is example 3 $ok
+  this is example 4 $ok
+  """
+```
+
+
+Then the specification will:
+
+  1. execute examples 1 and 2 in parallel
+  2. execute the step
+  3. execute examples 3 and 4 in parallel
+
+
+### Parallel by default
+
+<s2>specs2</s2> examples are executed concurrently by default:
+
+ - this makes the execution faster
+
+ - it encourages to write independent examples when the result of a given example should not be influenced by others
+
+Starting from this default you can progressively add constraints to get more control over the execution.
+
+### Steps
+
+A `Step` is an action which can be executed anywhere in a specification. When you declare a `Step` like this:
+
+```
+class StepSpec extends Specification:
+  def is = s2"""
+
+  this is example 1 $ok
+  this is example 2 $ok
+  ${step(success("stop here for a second"))}
+
+  this is example 3 $ok
+  this is example 4 $ok
+  """
+```
+
+
+Then the specification will:
+
+  1. execute examples 1 and 2 in parallel
+  2. execute the step
+  3. execute examples 3 and 4 in parallel
+
+
+### Parallel by default
+
+<s2>specs2</s2> examples are executed concurrently by default:
+
+ - this makes the execution faster
+
+ - it encourages to write independent examples when the result of a given example should not be influenced by others
+
+Starting from this default you can progressively add constraints to get more control over the execution.
+
+### Steps
+
+A `Step` is an action which can be executed anywhere in a specification. When you declare a `Step` like this:
+
+```
+class StepSpec extends Specification:
+  def is = s2"""
+
+  this is example 1 $ok
+  this is example 2 $ok
+  ${step(success("stop here for a second"))}
+
+  this is example 3 $ok
+  this is example 4 $ok
+  """
+```
+
+
+Then the specification will:
+
+  1. execute examples 1 and 2 in parallel
+  2. execute the step
+  3. execute examples 3 and 4 in parallel
+
+
+### Parallel by default
+
+<s2>specs2</s2> examples are executed concurrently by default:
+
+ - this makes the execution faster
+
+ - it encourages to write independent examples when the result of a given example should not be influenced by others
+
+Starting from this default you can progressively add constraints to get more control over the execution.
+
+### Steps
+
+A `Step` is an action which can be executed anywhere in a specification. When you declare a `Step` like this:
+
+```
+class StepSpec extends Specification:
+  def is = s2"""
+
+  this is example 1 $ok
+  this is example 2 $ok
+  ${step(success("stop here for a second"))}
+
+  this is example 3 $ok
+  this is example 4 $ok
+  """
+```
+
+
+Then the specification will:
+
+  1. execute examples 1 and 2 in parallel
+  2. execute the step
+  3. execute examples 3 and 4 in parallel
+
+
+### Parallel by default
+
+<s2>specs2</s2> examples are executed concurrently by default:
+
+ - this makes the execution faster
+
+ - it encourages to write independent examples when the result of a given example should not be influenced by others
+
+Starting from this default you can progressively add constraints to get more control over the execution.
+
+### Steps
+
+A `Step` is an action which can be executed anywhere in a specification. When you declare a `Step` like this:
+
+```
+class StepSpec extends Specification:
+  def is = s2"""
+
+  this is example 1 $ok
+  this is example 2 $ok
+  ${step(success("stop here for a second"))}
+
+  this is example 3 $ok
+  this is example 4 $ok
+  """
+```
+
+
+Then the specification will:
+
+  1. execute examples 1 and 2 in parallel
+  2. execute the step
+  3. execute examples 3 and 4 in parallel
+
+
+### Parallel by default
+
+<s2>specs2</s2> examples are executed concurrently by default:
+
+ - this makes the execution faster
+
+ - it encourages to write independent examples when the result of a given example should not be influenced by others
+
+Starting from this default you can progressively add constraints to get more control over the execution.
+
+### Steps
+
+A `Step` is an action which can be executed anywhere in a specification. When you declare a `Step` like this:
+
+```
+class StepSpec extends Specification:
+  def is = s2"""
+
+  this is example 1 $ok
+  this is example 2 $ok
+  ${step(success("stop here for a second"))}
+
+  this is example 3 $ok
+  this is example 4 $ok
+  """
+```
+
+
+Then the specification will:
+
+  1. execute examples 1 and 2 in parallel
+  2. execute the step
+  3. execute examples 3 and 4 in parallel
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+
+There is no "result" for a step but if it throws an Exception an `Error` will be reported. This will not however stop the execution of the rest of the specification.
+
+### Stop the execution
+
+You can still control if the rest of the specification must be executed by adding some constraints on the step. For example:
+
+```
+class StepWithStopOnErrorSpec extends Specification:
+  def is = s2"""
+
+  this is example 1 $ok
+  this is example 2 $ok
+  ${step { sys.error("sorry!"); ko("stop here for a second") }.stopOnError}
+
+  this is example 3 $ok
+  this is example 4 $ok
+  """
+```
+
+
+When this specification is executed examples 3 and 4 will be skipped because the step returns an `Error`. An `Error` is likely to be a fatal condition but you can use other methods to stop the execution:
+
+ - `stopOnFail` stop if there is a failure in the previous examples or in the step
+ - `stopOnSkipped` stop if there is a skipped result in the previous examples or in the step
+ - `stopWhen(Result => Boolean)` stop if the and-ed result of the previous examples and the step verifies a given condition
+
+### Sequential
+
+If your specification is a list of well-ordered examples you can use the `sequential` argument to make sure that they are executed in order:
+
+```
+class SequentialSpec extends Specification:
+  def is = sequential ^ s2"""
+
+  this is example 1 $ok
+  this is example 2 $ok
+  this is example 3 $ok
+  this is example 4 $ok
+  """
+```
+
+
+Thanks to the `sequential` argument the 4 examples above will execute one after the other.
+
+### Action
+
+Finally if you want to execute "silent" actions, like steps, but with no impact on the sequencing of the specification, you can use an `Action`:
+
+```
+class ActionSpec extends Specification:
+  def is = s2"""
+
+  this is example 1 $ok
+  this is example 2 $ok
+
+  // this will only be reported if there is a failure
+  ${action(ok("do something here"))}
+
+  this is example 3 $ok
+  this is example 4 $ok
+  """
+```
+
+
+
+<h3 id="Now learn how to..." class="ribbon both-ribbon">Now learn how to...</h3>
+
+<div class="ribbon-content">
+    
+
+ - use 
+
+There is no "result" for a step but if it throws an Exception an `Error` will be reported. This will not however stop the execution of the rest of the specification.
+
+### Stop the execution
+
+You can still control if the rest of the specification must be executed by adding some constraints on the step. For example:
+
+```
+class StepWithStopOnErrorSpec extends Specification:
+  def is = s2"""
+
+  this is example 1 $ok
+  this is example 2 $ok
+  ${step { sys.error("sorry!"); ko("stop here for a second") }.stopOnError}
+
+  this is example 3 $ok
+  this is example 4 $ok
+  """
+```
+
+
+When this specification is executed examples 3 and 4 will be skipped because the step returns an `Error`. An `Error` is likely to be a fatal condition but you can use other methods to stop the execution:
+
+ - `stopOnFail` stop if there is a failure in the previous examples or in the step
+ - `stopOnSkipped` stop if there is a skipped result in the previous examples or in the step
+ - `stopWhen(Result => Boolean)` stop if the and-ed result of the previous examples and the step verifies a given condition
+
+### Sequential
+
+If your specification is a list of well-ordered examples you can use the `sequential` argument to make sure that they are executed in order:
+
+```
+class SequentialSpec extends Specification:
+  def is = sequential ^ s2"""
+
+  this is example 1 $ok
+  this is example 2 $ok
+  this is example 3 $ok
+  this is example 4 $ok
+  """
+```
+
+
+Thanks to the `sequential` argument the 4 examples above will execute one after the other.
+
+### Action
+
+Finally if you want to execute "silent" actions, like steps, but with no impact on the sequencing of the specification, you can use an `Action`:
+
+```
+class ActionSpec extends Specification:
+  def is = s2"""
+
+  this is example 1 $ok
+  this is example 2 $ok
+
+  // this will only be reported if there is a failure
+  ${action(ok("do something here"))}
+
+  this is example 3 $ok
+  this is example 4 $ok
+  """
+```
+
+
+
+<h3 id="Now learn how to..." class="ribbon both-ribbon">Now learn how to...</h3>
+
+<div class="ribbon-content">
+    
+
+ - use 
+
+There is no "result" for a step but if it throws an Exception an `Error` will be reported. This will not however stop the execution of the rest of the specification.
+
+### Stop the execution
+
+You can still control if the rest of the specification must be executed by adding some constraints on the step. For example:
+
+```
+class StepWithStopOnErrorSpec extends Specification:
+  def is = s2"""
+
+  this is example 1 $ok
+  this is example 2 $ok
+  ${step { sys.error("sorry!"); ko("stop here for a second") }.stopOnError}
+
+  this is example 3 $ok
+  this is example 4 $ok
+  """
+```
+
+
+When this specification is executed examples 3 and 4 will be skipped because the step returns an `Error`. An `Error` is likely to be a fatal condition but you can use other methods to stop the execution:
+
+ - `stopOnFail` stop if there is a failure in the previous examples or in the step
+ - `stopOnSkipped` stop if there is a skipped result in the previous examples or in the step
+ - `stopWhen(Result => Boolean)` stop if the and-ed result of the previous examples and the step verifies a given condition
+
+### Sequential
+
+If your specification is a list of well-ordered examples you can use the `sequential` argument to make sure that they are executed in order:
+
+```
+class SequentialSpec extends Specification:
+  def is = sequential ^ s2"""
+
+  this is example 1 $ok
+  this is example 2 $ok
+  this is example 3 $ok
+  this is example 4 $ok
+  """
+```
+
+
+Thanks to the `sequential` argument the 4 examples above will execute one after the other.
+
+### Action
+
+Finally if you want to execute "silent" actions, like steps, but with no impact on the sequencing of the specification, you can use an `Action`:
+
+```
+class ActionSpec extends Specification:
+  def is = s2"""
+
+  this is example 1 $ok
+  this is example 2 $ok
+
+  // this will only be reported if there is a failure
+  ${action(ok("do something here"))}
+
+  this is example 3 $ok
+  this is example 4 $ok
+  """
+```
+
+
+
+<h3 id="Now learn how to..." class="ribbon both-ribbon">Now learn how to...</h3>
+
+<div class="ribbon-content">
+    
+
+ - use 
+
+There is no "result" for a step but if it throws an Exception an `Error` will be reported. This will not however stop the execution of the rest of the specification.
+
+### Stop the execution
+
+You can still control if the rest of the specification must be executed by adding some constraints on the step. For example:
+
+```
+class StepWithStopOnErrorSpec extends Specification:
+  def is = s2"""
+
+  this is example 1 $ok
+  this is example 2 $ok
+  ${step { sys.error("sorry!"); ko("stop here for a second") }.stopOnError}
+
+  this is example 3 $ok
+  this is example 4 $ok
+  """
+```
+
+
+When this specification is executed examples 3 and 4 will be skipped because the step returns an `Error`. An `Error` is likely to be a fatal condition but you can use other methods to stop the execution:
+
+ - `stopOnFail` stop if there is a failure in the previous examples or in the step
+ - `stopOnSkipped` stop if there is a skipped result in the previous examples or in the step
+ - `stopWhen(Result => Boolean)` stop if the and-ed result of the previous examples and the step verifies a given condition
+
+### Sequential
+
+If your specification is a list of well-ordered examples you can use the `sequential` argument to make sure that they are executed in order:
+
+```
+class SequentialSpec extends Specification:
+  def is = sequential ^ s2"""
+
+  this is example 1 $ok
+  this is example 2 $ok
+  this is example 3 $ok
+  this is example 4 $ok
+  """
+```
+
+
+Thanks to the `sequential` argument the 4 examples above will execute one after the other.
+
+### Action
+
+Finally if you want to execute "silent" actions, like steps, but with no impact on the sequencing of the specification, you can use an `Action`:
+
+```
+class ActionSpec extends Specification:
+  def is = s2"""
+
+  this is example 1 $ok
+  this is example 2 $ok
+
+  // this will only be reported if there is a failure
+  ${action(ok("do something here"))}
+
+  this is example 3 $ok
+  this is example 4 $ok
+  """
+```
+
+
+
+<h3 id="Now learn how to..." class="ribbon both-ribbon">Now learn how to...</h3>
+
+<div class="ribbon-content">
+    
+
+ - use 
+
+There is no "result" for a step but if it throws an Exception an `Error` will be reported. This will not however stop the execution of the rest of the specification.
+
+### Stop the execution
+
+You can still control if the rest of the specification must be executed by adding some constraints on the step. For example:
+
+```
+class StepWithStopOnErrorSpec extends Specification:
+  def is = s2"""
+
+  this is example 1 $ok
+  this is example 2 $ok
+  ${step { sys.error("sorry!"); ko("stop here for a second") }.stopOnError}
+
+  this is example 3 $ok
+  this is example 4 $ok
+  """
+```
+
+
+When this specification is executed examples 3 and 4 will be skipped because the step returns an `Error`. An `Error` is likely to be a fatal condition but you can use other methods to stop the execution:
+
+ - `stopOnFail` stop if there is a failure in the previous examples or in the step
+ - `stopOnSkipped` stop if there is a skipped result in the previous examples or in the step
+ - `stopWhen(Result => Boolean)` stop if the and-ed result of the previous examples and the step verifies a given condition
+
+### Sequential
+
+If your specification is a list of well-ordered examples you can use the `sequential` argument to make sure that they are executed in order:
+
+```
+class SequentialSpec extends Specification:
+  def is = sequential ^ s2"""
+
+  this is example 1 $ok
+  this is example 2 $ok
+  this is example 3 $ok
+  this is example 4 $ok
+  """
+```
+
+
+Thanks to the `sequential` argument the 4 examples above will execute one after the other.
+
+### Action
+
+Finally if you want to execute "silent" actions, like steps, but with no impact on the sequencing of the specification, you can use an `Action`:
+
+```
+class ActionSpec extends Specification:
+  def is = s2"""
+
+  this is example 1 $ok
+  this is example 2 $ok
+
+  // this will only be reported if there is a failure
+  ${action(ok("do something here"))}
+
+  this is example 3 $ok
+  this is example 4 $ok
+  """
+```
+
+
+
+<h3 id="Now learn how to..." class="ribbon both-ribbon">Now learn how to...</h3>
+
+<div class="ribbon-content">
+    
+
+ - use 
+
+There is no "result" for a step but if it throws an Exception an `Error` will be reported. This will not however stop the execution of the rest of the specification.
+
+### Stop the execution
+
+You can still control if the rest of the specification must be executed by adding some constraints on the step. For example:
+
+```
+class StepWithStopOnErrorSpec extends Specification:
+  def is = s2"""
+
+  this is example 1 $ok
+  this is example 2 $ok
+  ${step { sys.error("sorry!"); ko("stop here for a second") }.stopOnError}
+
+  this is example 3 $ok
+  this is example 4 $ok
+  """
+```
+
+
+When this specification is executed examples 3 and 4 will be skipped because the step returns an `Error`. An `Error` is likely to be a fatal condition but you can use other methods to stop the execution:
+
+ - `stopOnFail` stop if there is a failure in the previous examples or in the step
+ - `stopOnSkipped` stop if there is a skipped result in the previous examples or in the step
+ - `stopWhen(Result => Boolean)` stop if the and-ed result of the previous examples and the step verifies a given condition
+
+### Sequential
+
+If your specification is a list of well-ordered examples you can use the `sequential` argument to make sure that they are executed in order:
+
+```
+class SequentialSpec extends Specification:
+  def is = sequential ^ s2"""
+
+  this is example 1 $ok
+  this is example 2 $ok
+  this is example 3 $ok
+  this is example 4 $ok
+  """
+```
+
+
+Thanks to the `sequential` argument the 4 examples above will execute one after the other.
+
+### Action
+
+Finally if you want to execute "silent" actions, like steps, but with no impact on the sequencing of the specification, you can use an `Action`:
+
+```
+class ActionSpec extends Specification:
+  def is = s2"""
+
+  this is example 1 $ok
+  this is example 2 $ok
+
+  // this will only be reported if there is a failure
+  ${action(ok("do something here"))}
+
+  this is example 3 $ok
+  this is example 4 $ok
+  """
+```
+
+
+
+<h3 id="Now learn how to..." class="ribbon both-ribbon">Now learn how to...</h3>
+
+<div class="ribbon-content">
+    
+
+ - use <link class="ok">  <a href="org.specs2.guide.Selection.html" tooltip="" class="ok">arguments and tags</a></link><link class="ok">  <a href="org.specs2.guide.Selection.html" tooltip="" class="ok">arguments and tags</a></link><link class="ok">  <a href="org.specs2.guide.Selection.html" tooltip="" class="ok">arguments and tags</a></link><link class="ok">  <a href="org.specs2.guide.Selection.html" tooltip="" class="ok">arguments and tags</a></link><link class="ok">  <a href="org.specs2.guide.Selection.html" tooltip="" class="ok">arguments and tags</a></link><link class="ok">  <a href="org.specs2.guide.Selection.html" tooltip="" class="ok">arguments and tags</a></link> to select the examples to execute
+
+</div>
+
+
+<h3 id="And if you want to know more" class="ribbon both-ribbon">And if you want to know more</h3>
+
+<div class="ribbon-content">
+    
+
+ - add  to select the examples to execute
+
+</div>
+
+
+<h3 id="And if you want to know more" class="ribbon both-ribbon">And if you want to know more</h3>
+
+<div class="ribbon-content">
+    
+
+ - add  to select the examples to execute
+
+</div>
+
+
+<h3 id="And if you want to know more" class="ribbon both-ribbon">And if you want to know more</h3>
+
+<div class="ribbon-content">
+    
+
+ - add  to select the examples to execute
+
+</div>
+
+
+<h3 id="And if you want to know more" class="ribbon both-ribbon">And if you want to know more</h3>
+
+<div class="ribbon-content">
+    
+
+ - add  to select the examples to execute
+
+</div>
+
+
+<h3 id="And if you want to know more" class="ribbon both-ribbon">And if you want to know more</h3>
+
+<div class="ribbon-content">
+    
+
+ - add  to select the examples to execute
+
+</div>
+
+
+<h3 id="And if you want to know more" class="ribbon both-ribbon">And if you want to know more</h3>
+
+<div class="ribbon-content">
+    
+
+ - add <link class="ok">  <a href="org.specs2.guide.RandomExecution.html" tooltip="" class="ok">random sequencing</a></link><link class="ok">  <a href="org.specs2.guide.RandomExecution.html" tooltip="" class="ok">random sequencing</a></link><link class="ok">  <a href="org.specs2.guide.RandomExecution.html" tooltip="" class="ok">random sequencing</a></link><link class="ok">  <a href="org.specs2.guide.RandomExecution.html" tooltip="" class="ok">random sequencing</a></link><link class="ok">  <a href="org.specs2.guide.RandomExecution.html" tooltip="" class="ok">random sequencing</a></link><link class="ok">  <a href="org.specs2.guide.RandomExecution.html" tooltip="" class="ok">random sequencing</a></link> to your specification
+ - consult the  to your specification
+ - consult the  to your specification
+ - consult the  to your specification
+ - consult the  to your specification
+ - consult the  to your specification
+ - consult the <link class="ok">  <a href="org.specs2.guide.ArgumentsReference.html" tooltip="" class="ok">arguments reference guide</a></link><link class="ok">  <a href="org.specs2.guide.ArgumentsReference.html" tooltip="" class="ok">arguments reference guide</a></link><link class="ok">  <a href="org.specs2.guide.ArgumentsReference.html" tooltip="" class="ok">arguments reference guide</a></link><link class="ok">  <a href="org.specs2.guide.ArgumentsReference.html" tooltip="" class="ok">arguments reference guide</a></link><link class="ok">  <a href="org.specs2.guide.ArgumentsReference.html" tooltip="" class="ok">arguments reference guide</a></link><link class="ok">  <a href="org.specs2.guide.ArgumentsReference.html" tooltip="" class="ok">arguments reference guide</a></link> for a list of all arguments
+
+</div> for a list of all arguments
+
+</div> for a list of all arguments
+
+</div> for a list of all arguments
+
+</div> for a list of all arguments
+
+</div> for a list of all arguments
+
+</div>
