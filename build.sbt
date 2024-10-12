@@ -120,7 +120,13 @@ lazy val mimaSettings =
       // Because, in that case, it is very possible to confuse the ownEnv with the env and shutdown the env
       // which breaks the execution of the whole specification
       ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.specification.core.OwnEnv.ownEnv"),
-      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.specification.core.OwnExecutionEnv.env")
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.specification.core.OwnExecutionEnv.env"),
+
+      // issue #1277 NaturalTransformation needs to be made lazier
+      ProblemFilters.exclude[IncompatibleMethTypeProblem]("org.specs2.fp.NaturalTransformation.apply"),
+      ProblemFilters.exclude[ReversedMissingMethodProblem]("org.specs2.fp.NaturalTransformation.apply"),
+      ProblemFilters.exclude[IncompatibleMethTypeProblem]("org.specs2.fp.NaturalTransformation#naturalId.apply"),
+      ProblemFilters.exclude[IncompatibleMethTypeProblem]("org.specs2.control.Operation#operationToAction.apply")
     )
   )
 

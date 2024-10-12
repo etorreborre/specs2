@@ -163,7 +163,7 @@ object Operation:
       "Applicative[Operation]"
 
   given operationToAction: NaturalTransformation[Operation, Action] with
-    def apply[A](operation: Operation[A]): Action[A] =
+    def apply[A](operation: =>Operation[A]): Action[A] =
       operation.toAction
 
   given SafeOperation: Safe[Operation] with

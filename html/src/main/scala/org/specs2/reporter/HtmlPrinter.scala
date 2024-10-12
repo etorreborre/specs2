@@ -40,8 +40,8 @@ case class HtmlPrinter(env: Env, searchPage: SearchPage, logger: Logger = Consol
 
   /** @return a SinkTask for the Html output */
   def sink(spec: SpecStructure): AsyncSink[Fragment] =
-    ((Statistics.fold `zip` list[Fragment].into[Action] `zip` SimpleTimer.timerFold.into[Action]) <*
-      fromStart((getHtmlOptions(env.arguments) >>= (options => copyResources(env, options))).void.toAction))
+    val copyHtmlResources = (getHtmlOptions(env.arguments) >>= (options => copyResources(env, options))).void.toAction
+    val htmlSink = (Statistics.fold `zip` list[Fragment].into[Action] `zip` SimpleTimer.timerFold.into[Action])
       .mapFlatten { case ((stats, fragments), timer) =>
         val executedSpec = spec.copy(lazyFragments = () => Fragments(fragments*))
         getPandoc(env).flatMap {
@@ -49,6 +49,7 @@ case class HtmlPrinter(env: Env, searchPage: SearchPage, logger: Logger = Consol
           case _            => printHtml(env, executedSpec, stats, timer).toAction
         }
       }
+    htmlSink.startWith(copyHtmlResources)
 
   /** WITHOUT PANDOC
     */
