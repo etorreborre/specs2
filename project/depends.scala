@@ -58,7 +58,7 @@ object depends {
   lazy val tagsoup = "org.ccil.cowan.tagsoup" % "tagsoup" % "1.2.1"
 
   lazy val scalacheck = Def.setting {
-    "org.scalacheck" %%% "scalacheck" % "1.18.0"
+    "org.scalacheck" %%% "scalacheck" % "1.18.1"
   }
 
   lazy val resolvers =
