@@ -40,12 +40,14 @@ trait EventuallyResults:
     else retry(0)
 
   /** @return
-    *   a matcher that will retry the nested matcher a given number of times
+    *   a matcher that will retry the nested matcher a given number of times with given duration of sleep in between
     */
   def eventually[T: AsResult](retries: Int, sleep: Duration)(result: =>T): T =
     eventually[T](retries, (_: Int) => sleep)(result)
 
-  /** @return a result that is retried at least 40 times until it's ok */
+  /** @return
+    *   a matcher that will retry the nested matcher 40 times until it's ok with 100ms sleep in between
+    */
   def eventually[T: AsResult](result: =>T): T =
     eventually(40, (_: Int) => 100.millis)(result)
 
