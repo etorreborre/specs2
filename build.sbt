@@ -384,8 +384,8 @@ lazy val releaseSettings: Seq[Setting[_]] = Seq(
     ),
     WorkflowStep.Use(
       name = Some("Install Pandoc 🏁"),
-      ref = UseRef.Public("r-lib/actions", "setup-pandoc", "v1"),
-      params = Map("pandoc-version" -> "2.7.3")
+      ref = UseRef.Public("r-lib/actions", "setup-pandoc", "v2"),
+      params = Map("pandoc-version" -> "latest")
     ),
     WorkflowStep
       .Sbt(

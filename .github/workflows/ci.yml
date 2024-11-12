@@ -91,9 +91,9 @@ jobs:
         run: sbt ci-release
 
       - name: Install Pandoc 🏁
-        uses: r-lib/actions/setup-pandoc@v1
+        uses: r-lib/actions/setup-pandoc@v2
         with:
-          pandoc-version: 2.7.3
+          pandoc-version: latest
 
       - name: Generate the specs2 website 📚
         run: sbt unidoc 'guide/testOnly *Website -- xonly'
