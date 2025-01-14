@@ -141,7 +141,8 @@ trait HtmlBodyPrinter:
                     <message class="info">{r.message}</message>
                   </li>
 
-        if level.incrementNext then <ul>{example}</ul>
+        if level.incrementNext then
+          <ul>{example}</ul>
         else example
 
       case f if Fragment.isStepOrAction(f) =>
@@ -218,7 +219,8 @@ trait HtmlBodyPrinter:
       case _ => NodeSeq.Empty
 
     val fullMessage =
-      if showTrace then <li class ="failure toggle" onclick={toggleElement(f)}>{message}{detailedFailure}</li>
+      if showTrace then
+        <li class ="failure toggle" onclick={toggleElement(f)}>{message}{detailedFailure}</li>
       else <li class ="failure notoggle">{message}{detailedFailure}</li>
 
     val trace =

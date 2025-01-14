@@ -176,9 +176,7 @@ object Snippet:
     * 3 things need to be trimmed:
     *
     *   - the "snippet" method call
-    *
     *   - the expression from start and end accolades if it is a multiline expression
-    *
     *   - in some case it is necessary to add a dummy expression so that the range position of the captured snippet is
     *     correct. /**/;1/**/ is the smallest such expression
     */

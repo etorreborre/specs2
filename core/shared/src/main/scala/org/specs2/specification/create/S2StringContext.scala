@@ -180,7 +180,7 @@ object S2StringContext:
     *
     *   1. if there is a piece of text on 1 line then the text is the execution description
     *
-    * 2. if there is some text on more than one line then
+    *   2. if there is some text on more than one line then
     *
     * 2.1 if the last line contains only spaces (followed by the execution line) then this is an auto-example which uses
     * its own 'sourceCode' as a Description

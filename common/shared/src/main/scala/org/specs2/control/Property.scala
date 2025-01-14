@@ -59,9 +59,8 @@ case class Property[T](value: () => Option[T], evaluated: Boolean = false, evalu
   def map[U](f: T => U)(using CanEqual[U, U]): Property[U] = new Property(() => optionalValue.map(f))
 
   /** option-like orElse */
-  def orElse[U >: T](other: =>Property[U])(using CanEqual[U, U]): Property[U] = new Property(() =>
-    optionalValue.orElse(other.optionalValue)
-  )
+  def orElse[U >: T](other: =>Property[U])(using CanEqual[U, U]): Property[U] =
+    new Property(() => optionalValue.orElse(other.optionalValue))
 
   /** option-like toLeft */
   def toLeft[R](right: R): Either[T, R] = optionalValue.toLeft(right)

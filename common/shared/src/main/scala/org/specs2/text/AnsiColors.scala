@@ -26,8 +26,7 @@ trait AnsiColors:
 
   /** @return a string with no color codes */
   def removeColors(s: String, doIt: Boolean = true): String =
-    if doIt then all.foldLeft(s.notNull) { (res, cur) => res.replace(cur.color, "") }
-    else s.notNull
+    if doIt then all.foldLeft(s.notNull) { (res, cur) => res.replace(cur.color, "") } else s.notNull
 
   /** @return
     *   a colored string (if args.color == true) color markers are inserted at the beginning and end of each line so

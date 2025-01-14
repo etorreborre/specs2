@@ -328,8 +328,16 @@ open case class Show8[T1, T2, T3, T4, T5, T6, T7, T8](
   def show10[T9, T10](show10: T10 => String): Show10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10] =
     Show10(show1, show2, show3, show4, show5, show6, show7, show8, (_: T9).notNull, show10)
 
-  def show(t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8)
-      : (String, String, String, String, String, String, String, String) =
+  def show(
+      t1: T1,
+      t2: T2,
+      t3: T3,
+      t4: T4,
+      t5: T5,
+      t6: T6,
+      t7: T7,
+      t8: T8
+  ): (String, String, String, String, String, String, String, String) =
     (show1(t1), show2(t2), show3(t3), show4(t4), show5(t5), show6(t6), show7(t7), show8(t8))
 
   def showList(t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8): List[String] =
@@ -349,8 +357,17 @@ open case class Show9[T1, T2, T3, T4, T5, T6, T7, T8, T9](
   def show10[T10](show10: T10 => String): Show10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10] =
     Show10(show1, show2, show3, show4, show5, show6, show7, show8, show9, show10)
 
-  def show(t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8, t9: T9)
-      : (String, String, String, String, String, String, String, String, String) =
+  def show(
+      t1: T1,
+      t2: T2,
+      t3: T3,
+      t4: T4,
+      t5: T5,
+      t6: T6,
+      t7: T7,
+      t8: T8,
+      t9: T9
+  ): (String, String, String, String, String, String, String, String, String) =
     (show1(t1), show2(t2), show3(t3), show4(t4), show5(t5), show6(t6), show7(t7), show8(t8), show9(t9))
 
   def showList(t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8, t9: T9): List[String] =
@@ -369,8 +386,18 @@ case class Show10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10](
     show10: T10 => String = (_: T10).notNull
 ):
 
-  def show(t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8, t9: T9, t10: T10)
-      : (String, String, String, String, String, String, String, String, String, String) =
+  def show(
+      t1: T1,
+      t2: T2,
+      t3: T3,
+      t4: T4,
+      t5: T5,
+      t6: T6,
+      t7: T7,
+      t8: T8,
+      t9: T9,
+      t10: T10
+  ): (String, String, String, String, String, String, String, String, String, String) =
     (show1(t1), show2(t2), show3(t3), show4(t4), show5(t5), show6(t6), show7(t7), show8(t8), show9(t9), show10(t10))
 
   def showList(t1: T1, t2: T2, t3: T3, t4: T4, t5: T5, t6: T6, t7: T7, t8: T8, t9: T9, t10: T10): List[String] =

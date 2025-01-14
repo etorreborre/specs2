@@ -14,7 +14,7 @@ import scala.annotation.implicitNotFound
 /** An `ExecutionContext` can execute program logic asynchronously, typically but not necessarily on a thread pool.
   *
   * A general purpose `ExecutionContext` must be asynchronous in executing any `Runnable` that is passed into its
-  * `execute`-method. A special purpose `ExecutionContext` may be synchronous but must only be passed to code that is
+  * `execute` -method. A special purpose `ExecutionContext` may be synchronous but must only be passed to code that is
   * explicitly safe to be run using a synchronously executing `ExecutionContext`.
   *
   * APIs such as `Future.onComplete` require you to provide a callback and an implicit `ExecutionContext`. The implicit
@@ -64,8 +64,8 @@ trait ExecutionContext {
     * `prepare` should be called at the site where an `ExecutionContext` is received (for example, through an implicit
     * method parameter). The returned execution context may then be used to execute tasks. The role of `prepare` is to
     * save any context relevant to an execution's ''call site'', so that this context may be restored at the ''execution
-    * site''. (These are often different: for example, execution may be suspended through a `Promise`'s future until the
-    * `Promise` is completed, which may be done in another thread, on another stack.)
+    * site''. (These are often different: for example, execution may be suspended through a `Promise` 's future until
+    * the `Promise` is completed, which may be done in another thread, on another stack.)
     *
     * Note: a valid implementation of `prepare` is one that simply returns `this`.
     *
