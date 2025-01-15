@@ -610,8 +610,7 @@ case class ContainWithResultSeq[T](
              else
                failures
                  .map { case (value, rs) => "- " + value + "\n" + rs.map(" * " + _).mkString("\n") }
-                 .mkString("\n", "\n", "\n")
-            )
+                 .mkString("\n", "\n", "\n"))
         )
 
     val r =

@@ -1172,8 +1172,16 @@ case class ScalaCheckFunction8[T1, T2, T3, T4, T5, T6, T7, T8, R](
   def setGen6(g6: Gen[T6]): SelfType = setArbitrary6(Arbitrary(g6))
   def setGen7(g7: Gen[T7]): SelfType = setArbitrary7(Arbitrary(g7))
   def setGen8(g8: Gen[T8]): SelfType = setArbitrary8(Arbitrary(g8))
-  def setGens(g1: Gen[T1], g2: Gen[T2], g3: Gen[T3], g4: Gen[T4], g5: Gen[T5], g6: Gen[T6], g7: Gen[T7], g8: Gen[T8])
-      : SelfType =
+  def setGens(
+      g1: Gen[T1],
+      g2: Gen[T2],
+      g3: Gen[T3],
+      g4: Gen[T4],
+      g5: Gen[T5],
+      g6: Gen[T6],
+      g7: Gen[T7],
+      g8: Gen[T8]
+  ): SelfType =
     setGen1(g1).setGen2(g2).setGen3(g3).setGen4(g4).setGen5(g5).setGen6(g6).setGen7(g7).setGen8(g8)
 
   def setShrink1(s1: Shrink[T1]): SelfType = copy(argInstances1 = argInstances1.copy(shrink = Some(s1)))
