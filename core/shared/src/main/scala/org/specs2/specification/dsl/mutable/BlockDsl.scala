@@ -30,7 +30,7 @@ trait BlockDsl extends BlockCreation:
       addExample(s, r)
 
   given [R: AsExecution]: ToBlock[String => R, Fragment] with
-    def toBlock(s: String, f: => (String => R)): Fragment =
+    def toBlock(s: String, f: =>(String => R)): Fragment =
       addExample(s, f(s))
 
   extension [S, R](d: String)
