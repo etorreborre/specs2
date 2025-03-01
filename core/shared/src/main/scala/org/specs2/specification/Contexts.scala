@@ -49,7 +49,7 @@ trait ForEach[T]:
   protected def foreach[R: AsExecution](f: T => R): R
 
   given [R: AsExecution]: AsExecution[T => R] with
-    def execute(f: => (T => R)): Execution =
+    def execute(f: =>(T => R)): Execution =
       AsExecution[R].execute(foreach(f))
 
 /** Acquire a resource for the whole spec and release it at the end
@@ -122,7 +122,7 @@ trait Resource[T] extends BeforeAfterSpec with FragmentsFactory:
     )
 
   given [R: AsExecution]: AsExecution[T => R] with
-    def execute(f: => (T => R)): Execution =
+    def execute(f: =>(T => R)): Execution =
       Execution.withEnvFlatten { env =>
         env.resources.get(getResourceKey) match
           case Some(r) =>
