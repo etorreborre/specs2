@@ -9,7 +9,7 @@ addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "1.3.2")
 
 // release management
 addSbtPlugin("com.github.sbt" % "sbt-github-actions" % "0.24.0")
-addSbtPlugin("com.github.sbt" % "sbt-ci-release" % "1.9.2")
+addSbtPlugin("com.github.sbt" % "sbt-ci-release" % "1.9.3")
 addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.13.1")
 addSbtPlugin("com.typesafe" % "sbt-mima-plugin" % "1.1.2")
 addSbtPlugin("com.github.sbt" % "sbt-git" % "2.1.0")
