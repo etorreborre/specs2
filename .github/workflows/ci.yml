@@ -27,34 +27,26 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (full)
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Setup Java (temurin@11)
         if: matrix.java == 'temurin@11'
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 11
+          cache: sbt
 
-      - name: Cache sbt
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.sbt
-            ~/.ivy2/cache
-            ~/.coursier/cache/v1
-            ~/.cache/coursier/v1
-            ~/AppData/Local/Coursier/Cache/v1
-            ~/Library/Caches/Coursier/v1
-          key: ${{ runner.os }}-sbt-cache-v2-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
+      - name: Setup sbt
+        uses: sbt/setup-sbt@v1
 
       - name: Check that workflows are up to date
-        run: sbt ++${{ matrix.scala }} githubWorkflowCheck
+        run: sbt '++ ${{ matrix.scala }}' githubWorkflowCheck
 
       - name: Build project
-        run: sbt ++${{ matrix.scala }} 'testOnly -- xonly exclude ci'
+        run: sbt '++ ${{ matrix.scala }}' 'testOnly -- xonly exclude ci'
 
   publish:
     name: Publish Artifacts
@@ -68,28 +60,20 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (full)
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Setup Java (temurin@11)
         if: matrix.java == 'temurin@11'
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 11
+          cache: sbt
 
-      - name: Cache sbt
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.sbt
-            ~/.ivy2/cache
-            ~/.coursier/cache/v1
-            ~/.cache/coursier/v1
-            ~/AppData/Local/Coursier/Cache/v1
-            ~/Library/Caches/Coursier/v1
-          key: ${{ runner.os }}-sbt-cache-v2-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
+      - name: Setup sbt
+        uses: sbt/setup-sbt@v1
 
       - name: Publish project
-        run: sbt ++${{ matrix.scala }} +publish
+        run: sbt +publish
