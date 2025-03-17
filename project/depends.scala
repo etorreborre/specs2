@@ -41,7 +41,12 @@ object depends {
     ))
 
   def scalaParser = Def.setting {
-    Seq("org.scala-lang.modules" %%% "scala-parser-combinators" % "1.1.2")
+    Seq("org.scala-lang.modules" %%% "scala-parser-combinators" % {
+      CrossVersion.partialVersion(scalaVersion.value) match {
+        case Some((2, 12)) => "1.1.2"
+        case _             => "2.4.0"
+      }
+    })
   }
   def scalaParserNative = Def.setting {
     Seq("org.scala-lang.modules" %%% "scala-parser-combinators" % "2.4.0")
