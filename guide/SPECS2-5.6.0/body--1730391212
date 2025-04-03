@@ -1,0 +1,42 @@
+
+
+The recommended way to install <s2>specs2</s2> is via [sbt](http://scala-sbt.org).
+
+### SBT
+
+First you need to [install sbt itself](https://www.scala-sbt.org/release/docs/Setup.html) then you need to add the specs2 dependency:
+```
+libraryDependencies += "org.specs2" %% "specs2-core" % "5.6.0" % "test"
+
+// if you want to use ScalaJS you need to use %%%
+libraryDependencies += "org.specs2" %%% "specs2-core" % "5.6.0" % "test"
+
+// ScalaJS also requires the following setting which supports
+// the regular expressions used in many specs2 matchers using strings
+scalaJSLinkerConfig ~= { _.withESFeatures(_.withESVersion(ESVersion.ES2018)) }
+```
+
+See [here](https://www.scala-sbt.org/release/docs/Library-Dependencies.html) to learn more about sbt dependencies.
+
+### Other dependencies
+
+Depending on the <s2>specs2</s2> features you want to use you will need to add more dependencies to your build:
+
+ Name                    | Functionality
+ ----------------------- | ----------------------------
+ `specs2-matcher-extra`  | for the optional <s2>specs2</s2> matchers
+ `specs2-html`           | to export specifications as html
+ `specs2-form`           | to create html form-like specifications (experimental)
+ `specs2-junit`          | to run specifications as JUnit tests
+ `scalamock`             | to use mocks in specifications (see the [ScalaMock project](https://scalamock.org))
+ `specs2-scalacheck`     | to use ScalaCheck properties in specifications (see the [ScalaCheck project](https://github.com/typelevel/scalacheck))
+ `specs2-cats`           | for the [cats](https://github.com/typelevel/cats) matchers (see [specs2-cats](https://github.com/etorreborre/specs2-cats))
+ `specs2-scalaz`         | for the [scalaz](https://github.com/scalaz/scalaz) matchers (see [specs2-scalaz](https://github.com/etorreborre/specs2-scalaz))
+
+Note: the `specs2-core` jar depends on 3 other <s2>specs2</s2> jars:
+
+ Name                    | Functionality
+ ----------------------- | ----------------------------
+ `specs2-fp`             | utility classes for functional programming
+ `specs2-common`         | utility classes for text, collections, xml,...
+ `specs2-matcher`        | common <s2>specs2</s2> matchers. They can be used as a stand-alone library with [JUnit](http://junit.org)

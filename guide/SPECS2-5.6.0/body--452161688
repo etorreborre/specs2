@@ -1,0 +1,17 @@
+
+
+### Intellij IDEA
+
+[IntelliJ IDEA](https://github.com/jetbrains/intellij-scala) is the IDE with the best <s2>specs2</s2> integration for now. You can:
+
+ * execute a specification by selecting its name and pressing `CTRL+SHIFT+F10`
+ * execute a single example by selecting its description and pressing `CTRL+SHIFT+F10`
+
+ ![specs2 in Intellij](https://etorreborre.github.io/specs2/guide/SPECS2-5.6.0/images/intellij.png)
+
+However passing arguments needs to be done through system properties for now. So if you need to use the `xonly` argument you need to pass `-Dspecs2.xonly`.
+
+### VSCode
+
+<s2>specs2</s2> is integrated to the [`metals` language server](https://scalameta.org/metals), which means that any compiling specification in VSCode should be
+adorned with a small `test` button to run it.
