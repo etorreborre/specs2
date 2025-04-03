@@ -12,7 +12,7 @@ trait TypedEqual:
 
   /** A value can be tested against another with the === operator. It is equivalent to writing a must ==(b)
     */
-  extension [T: Diffable](t: =>T)(using not: NotGiven[NoTypedEqual])
+  extension [T: Diffable](t: =>T)(using NotGiven[NoTypedEqual], NotGiven[T =:= Any], NotGiven[T =:= AnyRef])
     /** equality matcher on Expectables */
     def ===(other: =>T): Result =
       createExpectable(t).applyMatcher[T](new EqualityMatcher(other))

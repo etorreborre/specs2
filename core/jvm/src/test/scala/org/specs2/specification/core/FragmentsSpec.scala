@@ -32,7 +32,7 @@ class FragmentsSpec(ee: ExecutionEnv) extends Spec with Tables with TypedEqual {
       "e(e1), t(a1), t(a2)" ! Seq("e1", "a1a2") |
       "e(e1), t(a1), t(a2), e(e2)" ! Seq("e1", "a1a2", "e2") |
       "e(e1), t(a1), e(e2), t(a2)" ! Seq("e1", "a1", "e2", "a2") | { (fs, r) =>
-        Fragments(fs.split(",").toSeq.map(toFragment)*).compact.fragmentsList(ee).map(_.description.show) === r
+        Fragments(fs.split(",").toSeq.map(toFragment)*).compact.fragmentsList(ee).map(_.description.show) === r.toList
       }
 
   def a2 =

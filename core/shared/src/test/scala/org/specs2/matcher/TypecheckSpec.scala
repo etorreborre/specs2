@@ -12,6 +12,7 @@ class TypecheckSpec extends Specification:
   An expression can be successfully typechecked $e1
   An expression can be typechecked and report errors $e2
   Additional errors are reported in details $e3
+  A TypecheckedEqual must fail on different types $e4
 
   """
 
@@ -56,3 +57,12 @@ class TypecheckSpec extends Specification:
                                       |Required: Int""".stripMargin)
       case other =>
         failure(s"unexpected $other")
+
+  def e4 =
+    def code = """val r = 1 === ""  """
+
+    val result = AsResult(typecheck(code))
+    result must beFailing(startWith("""|val r = 1 === ""
+                                       |             ^
+                                       |Found:    ("" : String)
+                                       |Required: Int""".stripMargin))

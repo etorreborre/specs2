@@ -49,7 +49,7 @@ class RandomExecutionSpec extends Specification with ThrownExpectations with Exa
           messages must not(contain(allExamples).inOrder)
         }
         "the examples are executed sequentially" ==> {
-          messages.map(_.take(6)) === (0 until n).flatMap(_ => List(">>> ex", "<<< ex"))
+          messages.map(_.take(6)) === (0 until n).flatMap(_ => List(">>> ex", "<<< ex")).toList
         }
       }
       .fold(execute.Error(_), identity)

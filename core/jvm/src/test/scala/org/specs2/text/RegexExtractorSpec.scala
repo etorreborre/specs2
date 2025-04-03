@@ -26,7 +26,7 @@ Exceptions are thrown when the extraction doesn't work
 
   def extraction1 = extract1("hello |{world}!", group = REGEX) === "world"
   def extraction2 = extract2("|{hello} |{world}!", group = REGEX) === (("hello", "world"))
-  def extraction3 = extractAll("|{hello} |{world}, I'm |{Eric}!", group = REGEX) === Seq("hello", "world", "Eric")
+  def extraction3 = extractAll("|{hello} |{world}, I'm |{Eric}!", group = REGEX) === List("hello", "world", "Eric")
   def extraction4 = extract2("|{hello} |{world}, I'm |{Eric}!", group = REGEX) === (("hello", "world"))
   def extraction5 = extract1("hello world") === "hello world"
   def extraction6 = extract1("hello |{world}", group = "^+?".r) === "hello |{world}"

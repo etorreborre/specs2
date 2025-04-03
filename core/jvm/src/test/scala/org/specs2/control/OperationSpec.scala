@@ -10,7 +10,7 @@ class OperationSpec extends Specification {
   def is = s2"""
 
   Guarding an operation throwing an exception $guard
-  
+
   The finalizers of an operation must be executed when the operation is executed
     with a flatmap $finalizers1
     with a simple applicative $finalizers2
@@ -30,7 +30,7 @@ class OperationSpec extends Specification {
       .flatMap(_ => Operation.delayed(add("action2")))
       .thenFinally(Operation.delayed(add("final")))
     val result = operation.runOption
-    result === Some(List("action1", "action2", "final"))
+    result.map(_.toList) === Some(List("action1", "action2", "final"))
 
   def finalizers2 =
     val messages = ListBuffer[String]();
