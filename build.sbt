@@ -126,7 +126,15 @@ lazy val mimaSettings =
       ProblemFilters.exclude[IncompatibleMethTypeProblem]("org.specs2.fp.NaturalTransformation.apply"),
       ProblemFilters.exclude[ReversedMissingMethodProblem]("org.specs2.fp.NaturalTransformation.apply"),
       ProblemFilters.exclude[IncompatibleMethTypeProblem]("org.specs2.fp.NaturalTransformation#naturalId.apply"),
-      ProblemFilters.exclude[IncompatibleMethTypeProblem]("org.specs2.control.Operation#operationToAction.apply")
+      ProblemFilters.exclude[IncompatibleMethTypeProblem]("org.specs2.control.Operation#operationToAction.apply"),
+
+      // issue #1322 Typecheck equality is now stricter. Breaks are potential issues that should be fixed
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.matcher.ReturnsSyntax.!=="),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.matcher.ReturnsSyntax.==="),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.matcher.TypedEqual.==="),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.matcher.TypedEqual.!=="),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.specification.Tables.!=="),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.specification.Tables.===")
     )
   )
 
