@@ -33,6 +33,9 @@ class DirectoryPathSpec extends Spec with TypedEqual {
  The DirectoryPath loses its scheme if created from a string/file/uri
    ${DirectoryPath.unsafe(new URI("file://hello/world")).path === "/hello/world"}
 
+ A DirectoryPath can be used with a Windows path
+   ${DirectoryPath.unsafe("C:\\hello\\world", windows = true).path === "C:\\hello\\world"}
+
  An absolute dir path can be built from
    a string starting with a /
    ${DirectoryPath.unsafe("/hello/world").isAbsolute}

@@ -134,7 +134,13 @@ lazy val mimaSettings =
       ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.matcher.TypedEqual.==="),
       ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.matcher.TypedEqual.!=="),
       ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.specification.Tables.!=="),
-      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.specification.Tables.===")
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.specification.Tables.==="),
+
+      // Failing path on windows, an additional argument with a default value was added
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.io.DirectoryPath.apply"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.io.DirectoryPath.unsafe"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.io.DirectoryPath.this"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.io.DirectoryPath.copy")
     )
   )
 

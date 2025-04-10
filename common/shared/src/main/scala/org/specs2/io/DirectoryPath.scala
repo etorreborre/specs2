@@ -2,6 +2,7 @@ package org.specs2
 package io
 
 import java.io.*
+import java.io.File.separator
 import java.net.URI
 import java.util.UUID
 import FileName.*
@@ -11,7 +12,8 @@ import FileName.*
   * It is a list of FileNames and we can append other DirectoryPaths or FilePaths to it If the list is empty, this means
   * we are at the root
   */
-case class DirectoryPath(dirs: Vector[FileName], absolute: Boolean) derives CanEqual:
+case class DirectoryPath(dirs: Vector[FileName], absolute: Boolean, separator: String = File.separator)
+    derives CanEqual:
 
   /** @return either the parent directory or the root if we already are at the root */
   def dir: DirectoryPath = parent.getOrElse(this)
@@ -29,10 +31,10 @@ case class DirectoryPath(dirs: Vector[FileName], absolute: Boolean) derives CanE
       case _         => None
 
   /** @return the path for this file as a / separated string */
-  def path: String = (if absolute then "/" else "") + dirs.map(_.name).toList.mkString("/")
+  def path: String = (if absolute then separator else "") + dirs.map(_.name).toList.mkString(separator)
 
   /** @return the path for this file as a / separated string, with a final / */
-  def dirPath: String = if isRoot then path else path + "/"
+  def dirPath: String = if isRoot then path else path + separator
 
   /** @return a File for this path */
   def toFile: File = new File(path)
@@ -101,10 +103,15 @@ object DirectoryPath:
 
   def apply(uuid: UUID): DirectoryPath = apply(FileName(uuid))
 
-  def unsafe(s: String): DirectoryPath =
-    val withoutScheme = removeScheme(if isWindows then s.replaceAll("\\\\", "/") else s)
-    val isAbsolute = withoutScheme.startsWith("/") || isWindows && new File(withoutScheme).isAbsolute
-    DirectoryPath(withoutScheme.split("/").filter(_.nonEmpty).map(FileName.unsafe).toVector, isAbsolute)
+  /** The windows parameter is there to support tests */
+  def unsafe(s: String, windows: Boolean = isWindows): DirectoryPath =
+    val withoutScheme = removeScheme(if windows then s.replaceAll("\\\\", "/") else s)
+    val isAbsolute = withoutScheme.startsWith("/") || windows && new File(withoutScheme).isAbsolute
+    DirectoryPath(
+      withoutScheme.split("/").filter(_.nonEmpty).map(FileName.unsafe).toVector,
+      isAbsolute,
+      if windows then "\\" else "/"
+    )
 
   def unsafe(f: File): DirectoryPath = unsafe(f.getPath)
   def unsafe(uri: URI): DirectoryPath = unsafe(uri.toString)
