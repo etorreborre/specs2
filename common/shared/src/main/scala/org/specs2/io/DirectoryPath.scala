@@ -11,7 +11,7 @@ import java.util.UUID
  * It is a list of FileNames and we can append other DirectoryPaths or FilePaths to it
  * If the list is empty, this means we are at the root
  */
-case class DirectoryPath(dirs: Vector[FileName], absolute: Boolean) {
+case class DirectoryPath(dirs: Vector[FileName], absolute: Boolean, separator: String = File.separator) {
 
   /** @return either the parent directory or the root if we already are at the root */
   def dir: DirectoryPath  = parent.getOrElse(this)
@@ -30,10 +30,10 @@ case class DirectoryPath(dirs: Vector[FileName], absolute: Boolean) {
     }
 
   /** @return the path for this file as a / separated string */
-  def path: String = (if (absolute) "/" else "") + dirs.map(_.name).toList.mkString("/")
+  def path: String = (if (absolute) separator else "") + dirs.map(_.name).toList.mkString(separator)
 
   /** @return the path for this file as a / separated string, with a final / */
-  def dirPath: String = if (isRoot) path else path + "/"
+  def dirPath: String = if (isRoot) path else path + separator
 
   /** @return a File for this path */
   def toFile: File = new File(path)
@@ -107,10 +107,11 @@ object DirectoryPath {
 
   def apply(uuid: UUID): DirectoryPath = apply(FileName(uuid))
 
-  def unsafe(s: String): DirectoryPath = {
-    val withoutScheme = removeScheme(if (isWindows) s.replaceAll("\\\\", "/") else s)
-    val isAbsolute = withoutScheme.startsWith("/") || isWindows && new File(withoutScheme).isAbsolute
-    DirectoryPath(withoutScheme.split("/").filter(_.nonEmpty).map(FileName.unsafe).toVector, isAbsolute)
+  /** The windows parameter is there to support tests */
+  def unsafe(s: String, windows: Boolean = isWindows): DirectoryPath = {
+    val withoutScheme = removeScheme(if (windows) s.replaceAll("\\\\", "/") else s)
+    val isAbsolute = withoutScheme.startsWith("/") || windows && new File(withoutScheme).isAbsolute
+    DirectoryPath(withoutScheme.split("/").filter(_.nonEmpty).map(FileName.unsafe).toVector, isAbsolute, if (windows) "\\" else "/")
   }
 
   def unsafe(f: File): DirectoryPath = unsafe(f.getPath)
@@ -193,6 +194,3 @@ object FileName {
   def unsafe(s: String) = new FileName(s)
   def apply(uuid: UUID) = new FileName(uuid.toString)
 }
-
-
-

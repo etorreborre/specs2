@@ -32,6 +32,9 @@ class DirectoryPathSpec extends Spec with TypedEqual { def is = s2"""
  The DirectoryPath loses its scheme if created from a string/file/uri
    ${ DirectoryPath.unsafe(new URI("file://hello/world")).path === "/hello/world"  }
 
+ A DirectoryPath can be used with a Windows path
+   ${DirectoryPath.unsafe("C:\\hello\\world", windows = true).path === "C:\\hello\\world"}
+
  An absolute dir path can be built from
    a string starting with a /
    ${ DirectoryPath.unsafe("/hello/world").isAbsolute }
@@ -102,4 +105,3 @@ class DirectoryPathSpec extends Spec with TypedEqual { def is = s2"""
   def beAbsolute(implicit p1: ImplicitParam1): Matcher[FilePath] = Use.ignoring(p1)({ filePath: FilePath => (filePath.isAbsolute, s"$filePath is not absolute") })
 
 }
-
