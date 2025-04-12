@@ -22,7 +22,7 @@ object depends {
   val scalaXml = libraryDependencies += "org.scala-lang.modules" %%% "scala-xml" % "2.3.0"
 
   // used in specs2-junit
-  val junitVintage = "org.junit.vintage" % "junit-vintage-engine" % "5.12.1"
+  val junitVintage = "org.junit.vintage" % "junit-vintage-engine" % "5.12.2"
   val junit = libraryDependencies ++= Seq(junitVintage, "org.junit.platform" % "junit-platform-engine" % "1.12.1")
   val junitTest = libraryDependencies += junitVintage % Test
 
