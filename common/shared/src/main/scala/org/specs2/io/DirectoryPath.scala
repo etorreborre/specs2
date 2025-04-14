@@ -103,14 +103,14 @@ object DirectoryPath:
 
   def apply(uuid: UUID): DirectoryPath = apply(FileName(uuid))
 
-  /** The windows parameter is there to support tests */
-  def unsafe(s: String, windows: Boolean = isWindows): DirectoryPath =
-    val withoutScheme = removeScheme(if windows then s.replaceAll("\\\\", "/") else s)
-    val isAbsolute = withoutScheme.startsWith("/") || windows && new File(withoutScheme).isAbsolute
+  /** The separator parameter is there to support tests */
+  def unsafe(s: String, separator: String = File.separator): DirectoryPath =
+    val withoutScheme = removeScheme(if separator == "\\" then s.replaceAll("\\\\", "/") else s)
+    val isAbsolute = withoutScheme.startsWith("/") || isWindows && new File(withoutScheme).isAbsolute
     DirectoryPath(
       withoutScheme.split("/").filter(_.nonEmpty).map(FileName.unsafe).toVector,
       isAbsolute,
-      if windows then "\\" else "/"
+      separator
     )
 
   def unsafe(f: File): DirectoryPath = unsafe(f.getPath)
