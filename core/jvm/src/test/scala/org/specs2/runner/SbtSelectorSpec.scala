@@ -1,16 +1,27 @@
 package org.specs2
 package runner
 
-import sbt.testing.{Event, EventHandler, Logger, Selector, Status, SuiteSelector, TaskDef, TestSelector}
+import sbt.testing.{
+  Event,
+  EventHandler,
+  Logger,
+  Selector,
+  Status,
+  SuiteSelector,
+  TaskDef,
+  TestSelector,
+  TestWildcardSelector
+}
 
 import scala.collection.mutable.ArrayBuffer
 
 class SbtSelectorSpec extends Specification:
   def is = s2"""
 
- An sbt runner executes the examples passed in the `TestSelector`s
+ An sbt runner executes the examples passed in the `TestSelector`s and `TestWildcardSelector`s
    when there is a single `TestSelector`       $singleTestSelector
    when there are 2 `TestSelector`s            $twoTestSelectors
+   when there is a `TestWildcardSelector`      $testWildcardSelector
    run everything if there are other selectors $otherSelectors
    run nothing if there are no matches         $noMatches
    regexes in test selectors are escaped       $regexesAreEscaped
@@ -34,13 +45,20 @@ class SbtSelectorSpec extends Specification:
     (events must haveSize(2)) and
       (events.map(testName) must contain("has a successful test", "has a failing test"))
 
+  private def testWildcardSelector =
+    val events = runWithSelectors(new TestWildcardSelector("as a") :: Nil)
+    (events must haveSize(2)) and
+      (events.map(testName) must contain("has a successful test", "has a failing test"))
+
   private def otherSelectors =
     val events = runWithSelectors(List(new SuiteSelector, new TestSelector("hello")))
     (events must haveSize(3)) and
       (events.map(testName) must contain("has a successful test", "has a failing test", ".*"))
 
   private def noMatches =
-    val events = runWithSelectors(List(new TestSelector("won't match anything")))
+    val events = runWithSelectors(
+      List(new TestSelector("won't match anything"), new TestWildcardSelector("won't match anything either"))
+    )
     events must beEmpty
 
   private def regexesAreEscaped =
