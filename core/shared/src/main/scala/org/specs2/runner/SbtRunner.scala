@@ -42,9 +42,16 @@ abstract class BaseSbtRunner(args: Array[String], remoteArgs: Array[String], loa
   /** create a new test task */
   def newTask(aTaskDef: TaskDef): Task =
     val fullEnv =
-      if (env.arguments.select._ex.isDefined || aTaskDef.selectors().exists(!_.isInstanceOf[TestSelector])) env
+      if (
+        env.arguments.select._ex.isDefined || !aTaskDef
+          .selectors()
+          .forall(selector => selector.isInstanceOf[TestSelector] || selector.isInstanceOf[TestWildcardSelector])
+      ) env
       else
-        val names = aTaskDef.selectors().toList.collect { case ts: TestSelector => Pattern.quote(ts.testName()) }
+        val names = aTaskDef.selectors().toList.collect {
+          case ts: TestSelector         => Pattern.quote(ts.testName())
+          case ts: TestWildcardSelector => ".*" + Pattern.quote(ts.testWildcard()) + ".*"
+        }
         val select = env.arguments.select.copy(_ex = Some(names.mkString("|")))
         env.setArguments(env.arguments.copy(select = select))
 
