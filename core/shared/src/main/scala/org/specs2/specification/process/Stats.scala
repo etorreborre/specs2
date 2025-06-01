@@ -80,7 +80,7 @@ case class Stats(
       case e @ Error(_, _)         => copy(expectations = result.expectationsNb, errors = 1)
       case Pending(_)              => copy(expectations = result.expectationsNb, pending = 1)
       case Skipped(_, _)           => copy(expectations = result.expectationsNb, skipped = 1)
-      case DecoratedResult(t, r) =>
+      case DecoratedResult(t, r)   =>
         t.asInstanceOf[Matchable] match
           case s: Stats => s
           case _        => withResult(r)
@@ -207,7 +207,7 @@ case object Stats:
       case e @ Error(_, _)         => Stats(examples = 1).withResult(result)
       case Pending(_)              => Stats(examples = 1).withResult(result)
       case Skipped(_, _)           => Stats(examples = 1).withResult(result)
-      case DecoratedResult(t, r) =>
+      case DecoratedResult(t, r)   =>
         t.asInstanceOf[Matchable] match
           case s: Stats => s
           case other    => Stats(r)

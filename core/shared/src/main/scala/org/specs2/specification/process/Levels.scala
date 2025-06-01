@@ -42,7 +42,7 @@ trait Levels:
     case f @ Fragment(Start, _, _) => level.copy(start = true, incrementNext = false)
     case f if Fragment.isText(f)   => level.copy(start = true, incrementNext = true)
     case f @ Fragment(End, _, _)   => level.copy(start = false, incrementNext = false, max(0, level.l - 1))
-    case f =>
+    case f                         =>
       if level.incrementNext then level.copy(start = false, incrementNext = false, l = level.l + 1)
       else level
 

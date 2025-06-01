@@ -34,7 +34,7 @@ class TreesSpec extends Specification with ScalaCheck with ThrownExpectations {
 
   def genTreeList(nodes: List[Int]): Gen[List[TreeAndPaths]] =
     nodes match
-      case List() => Gen.const(Nil)
+      case List()    => Gen.const(Nil)
       case n :: rest =>
         for
           i <- Gen.choose(0, nodes.size - 1)

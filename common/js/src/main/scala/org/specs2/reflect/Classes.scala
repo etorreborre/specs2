@@ -17,7 +17,7 @@ trait Classes extends ClassOperations:
 
   def newInstance(klass: InstantiatableClass, defaultInstances: =>List[AnyRef]): Any = {
     defaultInstances match {
-      case Nil => klass.newInstance
+      case Nil      => klass.newInstance
       case (h :: t) =>
         klass.getConstructor(h.getClass) match {
           case Some(c) => c.newInstance(h)

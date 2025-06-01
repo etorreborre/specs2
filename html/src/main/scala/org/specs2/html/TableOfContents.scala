@@ -62,7 +62,7 @@ trait TableOfContents:
       ee: ExecutionEnv
   ): SpecHtmlPage => NodeSeq =
     pages match
-      case List() => (page: SpecHtmlPage) => NodeSeq.Empty
+      case List()       => (page: SpecHtmlPage) => NodeSeq.Empty
       case main :: rest =>
         val treeLoc = pagesTree(main, pages)
         val tocNodes: NodeSeq =

@@ -46,7 +46,7 @@ private[specs2] trait NodeFunctions:
 
     def compareChildren(n1: List[Node], n2: List[Node]) =
       (n1.takeWhile(isAtom), n2) match
-        case (Nil, _) => iterableComparison(NodeSeq.fromSeq(n1), NodeSeq.fromSeq(n2))
+        case (Nil, _)                     => iterableComparison(NodeSeq.fromSeq(n1), NodeSeq.fromSeq(n2))
         case (atoms, (n2: Text) :: rest2) =>
           atoms.mkString.trim == n2.toString.trim &&
           iterableComparison(NodeSeq.fromSeq(n1.dropWhile(isAtom)), NodeSeq.fromSeq(rest2))
@@ -128,7 +128,7 @@ private[specs2] trait NodeFunctions:
       // Groups must be removed from comparisons because they throw exception when getting 'attributes' or 'children'
       case (Group(node1), _) => false
       case (_, Group(n1))    => false
-      case _ =>
+      case _                 =>
         attributesNamesMatch(node.attributes) && attributesValuesMatch(node.attributes) && childrenMatch(
           node
         ) && textMatch(node)

@@ -46,8 +46,8 @@ case class Row(private val cellList: List[Cell]) extends Executable:
   def text(maxSizes: Seq[Int]): String =
     def pad(cells: List[Cell], sizes: List[Int], result: List[String]): List[String] =
       cells match
-        case List()  => result
-        case List(c) => result :+ c.text.padTo(sizes.sum + (sizes.size - 1) * 3, ' ')
+        case List()    => result
+        case List(c)   => result :+ c.text.padTo(sizes.sum + (sizes.size - 1) * 3, ' ')
         case c :: rest =>
           sizes match
             case List()  => result :+ c.text

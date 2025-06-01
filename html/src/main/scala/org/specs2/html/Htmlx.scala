@@ -137,7 +137,7 @@ trait Htmlx:
     def applyTransformation(n: Node): Seq[Node] = n match
       case e: Node if pf.isDefinedAt(e) => pf(e)
       case Group(xs)                    => Group(applyTransformation(xs))
-      case other =>
+      case other                        =>
         val ch = n.child
         val nch = applyTransformation(ch)
         if ch eq nch then n

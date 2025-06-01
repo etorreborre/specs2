@@ -58,7 +58,7 @@ object Parameters:
   def makeSeed(seed: String): Option[Seed] =
     Seed.fromBase64(seed).toOption match
       case ok @ Some(_) => ok
-      case _ =>
+      case _            =>
         throw new Exception(
           s"incorrect seed passed from the command-line $seed, this should be a Base64 " +
             s"encoded string"

@@ -148,6 +148,6 @@ object RegexExtractor:
     Exceptions.tryOr(code) {
       case f: FailureException => throw f
       case e: MatchError       => throw e
-      case other =>
+      case other               =>
         throw new ErrorException(new Error(s"could not extract the regex from $text: ${other.getMessage}", other))
     }
