@@ -76,7 +76,7 @@ trait ResultLogicalCombinators extends Results:
       lazy val o = ResultExecution.execute(other)
 
       r match
-        case Success(_, _) => r.addExpectationsNb(1)
+        case Success(_, _)           => r.addExpectationsNb(1)
         case f @ Failure(_, _, _, _) =>
           o match
             case s @ Success(m, exp) =>

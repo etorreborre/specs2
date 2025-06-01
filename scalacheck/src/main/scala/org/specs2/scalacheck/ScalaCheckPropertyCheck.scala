@@ -46,7 +46,7 @@ trait ScalaCheckPropertyCheck extends ExpectationsCreation:
     def propWithCapturedSeed = Prop { prms0 =>
       val (prms, seed) = prms0.initialSeed match
         case Some(sd) => (prms0, sd)
-        case _ =>
+        case _        =>
           val sd = Seed.random()
           (prms0.withInitialSeed(sd), sd)
       capturedSeed = Option(capturedSeed).getOrElse(seed)

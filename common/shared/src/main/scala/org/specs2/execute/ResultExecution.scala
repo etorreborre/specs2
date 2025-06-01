@@ -33,14 +33,14 @@ trait ResultExecution:
 
   /** handle result exceptions and do not rethrow them */
   def handleExceptionsPurely: PartialFunction[Throwable, Result] =
-    case FailureException(f)         => f
-    case SkipException(f)            => f
-    case PendingException(f)         => f
-    case ErrorException(f)           => f
-    case DecoratedResultException(f) => f
+    case FailureException(f)               => f
+    case SkipException(f)                  => f
+    case PendingException(f)               => f
+    case ErrorException(f)                 => f
+    case DecoratedResultException(f)       => f
     case e: AssertionError if fromJUnit(e) =>
       Failure(e.getMessage.notNull, "", e.getStackTrace.toList, details = FromNotImplementedError)
-    case e: AssertionError => Error(e)
+    case e: AssertionError   => Error(e)
     case e: TimeoutException =>
       Failure(e.getMessage.notNull, "", e.getStackTrace.toList, details = FromTimeoutException)
     case e: java.lang.Error if simpleClassName(e) == "NotImplementedError" =>
@@ -63,16 +63,16 @@ trait ResultExecution:
         case r @ DecoratedResult(_, e: Skipped) => throw new DecoratedResultException(r)
         case other                              => other
     catch
-      case e: FailureException         => throw e
-      case e: SkipException            => throw e
-      case e: PendingException         => throw e
-      case e: ErrorException           => throw e
-      case e: DecoratedResultException => throw e
+      case e: FailureException               => throw e
+      case e: SkipException                  => throw e
+      case e: PendingException               => throw e
+      case e: ErrorException                 => throw e
+      case e: DecoratedResultException       => throw e
       case e: AssertionError if fromJUnit(e) =>
         throw FailureException(
           Failure(e.getMessage.notNull, "", e.getStackTrace.toList, details = FromNotImplementedError)
         )
-      case e: AssertionError => throw ErrorException(Error(e))
+      case e: AssertionError                                                 => throw ErrorException(Error(e))
       case e: java.lang.Error if simpleClassName(e) == "NotImplementedError" =>
         throw FailureException(
           Failure(e.getMessage.notNull, "", e.getStackTrace.toList, details = FromJUnitAssertionError)

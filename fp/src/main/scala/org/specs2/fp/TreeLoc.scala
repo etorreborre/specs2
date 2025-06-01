@@ -121,7 +121,7 @@ final case class TreeLoc[A](tree: Tree[A], lefts: TreeForest[A], rights: TreeFor
   /** Delete the current node and all its children. */
   def delete: Option[TreeLoc[A]] = rights match
     case LazyList.cons(t, ts) => Some(loc(t, lefts, ts, parents))
-    case _ =>
+    case _                    =>
       lefts match
         case LazyList.cons(t, ts) => Some(loc(t, ts, rights, parents))
         case _ => for loc1 <- parent yield loc1.modifyTree((t: Tree[A]) => Node(t.rootLabel, LazyList.empty))

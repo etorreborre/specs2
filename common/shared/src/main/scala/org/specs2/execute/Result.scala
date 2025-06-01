@@ -217,7 +217,7 @@ object Result:
         case (Pending(msg1), Success(msg2, e2))     => Success(msg1 + "; " + msg2, e2)
         case (Success(msg1, e1), Pending(msg2))     => Success(msg1 + "; " + msg2, e1)
 
-        case (Success(msg1, e1), Failure(msg2, e2, st1, d2)) => m2.setMessage(msg1 + "; " + msg2)
+        case (Success(msg1, e1), Failure(msg2, e2, st1, d2))          => m2.setMessage(msg1 + "; " + msg2)
         case (Failure(msg1, e1, st1, d1), Failure(msg2, e2, st2, d2)) =>
           Failure(msg1 + "; " + msg2, concat(e1, e2), st1, NoDetails)
 
@@ -250,9 +250,9 @@ object Result:
     def append(mr1: Result, mr2: =>Result) =
       val (m1, m2) = (mr1, mr2)
       ((m1, m2) match {
-        case (Success(msg1, e1), Success(msg2, e2)) => Success("", concat(e1, e2))
-        case (Success(msg1, e1), other)             => other
-        case (other, Success(msg2, e2))             => other
+        case (Success(msg1, e1), Success(msg2, e2))                          => Success("", concat(e1, e2))
+        case (Success(msg1, e1), other)                                      => other
+        case (other, Success(msg2, e2))                                      => other
         case (Failure(msg1, e1, st1, d1), Failure(msg2, e2, st2, NoDetails)) =>
           Failure(concat(msg1, msg2, separator), e1 + separator + e2, st1, d1)
         case (Failure(msg1, e1, st1, NoDetails), Failure(msg2, e2, st2, d2)) =>

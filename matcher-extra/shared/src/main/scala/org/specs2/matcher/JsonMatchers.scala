@@ -45,7 +45,7 @@ trait JsonMatchers extends Expectations with JsonMatchersImplicits:
     private def find(json: Option[JSONType], queries: List[JsonQuery]): Result =
       def checkRest(value: Any, rest: List[JsonQuery]) =
         (value.asInstanceOf[Matchable], rest.asInstanceOf[Matchable]) match
-          case (_, Nil) => check(createExpectable(anyValueToJsonType(value)))
+          case (_, Nil)         => check(createExpectable(anyValueToJsonType(value)))
           case ((k, v), q :: _) =>
             if rest.head.selector.select((k, v)).isDefined then Success()
             else Failure(s"found '${value.notNull}' but no value to select for ${rest.head.name}")

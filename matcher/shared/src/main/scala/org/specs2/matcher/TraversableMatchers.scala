@@ -472,7 +472,7 @@ case class ContainWithResult[T](
         failures.collect { case Failure(_, _, _, d) if d != NoDetails => d }.headOption.getOrElse(NoDetails)
 
       (timesMin, timesMax) match
-        case (None, None) => Result.result(successes.size == seq.size, koMessage, details)
+        case (None, None)             => Result.result(successes.size == seq.size, koMessage, details)
         case (Some(Times(min)), None) =>
           val message = koMessage + s"""\nNumber of successful matches: ${successes.size}. Expected: at least $min"""
           Result.result(successes.size >= min, message, details)

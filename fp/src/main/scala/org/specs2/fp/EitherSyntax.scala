@@ -70,7 +70,7 @@ trait EitherSyntax:
 
     def append(that: Either[AA, BB])(using BB: Semigroup[BB]): Either[AA, BB] = eab match
       case left @ Left(_) => left
-      case Right(b1) =>
+      case Right(b1)      =>
         that match
           case left @ Left(_) => left
           case Right(b2)      => Right(BB.append(b1, b2))

@@ -261,6 +261,6 @@ extension (f: Fragment)
   def fragmentType: String =
     f match
       case Fragment(Br, _, _) => "Br"
-      case Fragment(_, e, _) =>
+      case Fragment(_, e, _)  =>
         if e.run == None then "Other"
         else "Example"

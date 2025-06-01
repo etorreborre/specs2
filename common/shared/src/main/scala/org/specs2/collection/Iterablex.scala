@@ -55,7 +55,7 @@ trait Iterablex:
       val itb = that.iterator.toList
 
       (ita, itb) match
-        case (List(), List()) => true
+        case (List(), List())                       => true
         case (a: GenIterable[?], b: GenIterable[?]) =>
           (a.nonEmpty && b.nonEmpty) && {
             val (x, y, resta, restb) = (a.head, b.head, a.drop(1), b.drop(1))
@@ -71,9 +71,9 @@ trait Iterablex:
       val firstList = xs.toList
       val secondList = l.toList
       (firstList, secondList) match
-        case (_, Nil)             => true
-        case (Nil, _)             => false
-        case (a :: Nil, b :: Nil) => a == b
+        case (_, Nil)                          => true
+        case (Nil, _)                          => false
+        case (a :: Nil, b :: Nil)              => a == b
         case (a :: firstRest, b :: secondRest) => {
           if a != b then firstRest.containsInOrder(secondList*)
           else firstRest.containsInOrder(secondRest*)

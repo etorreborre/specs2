@@ -187,7 +187,7 @@ trait HtmlBodyPrinter:
   def show(f: Fragment) =
     f.description match
       case Code(text) => <code class="prettyprint">{text}</code>
-      case other =>
+      case other      =>
         val d = f.description.show
         <text>{if Seq("*", "-").exists(d.trim.startsWith) then d.trim.drop(1) else d}</text>
 
