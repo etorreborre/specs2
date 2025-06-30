@@ -14,22 +14,15 @@ object IsEmpty extends IsEmptyLowPriority1:
     def isEmpty: Boolean =
       IsEmpty[T].isEmpty(t)
 
-  given seqIsEmpty[T]: IsEmpty[Seq[T]] with
-    def isEmpty(t: Seq[T]): Boolean =
-      t.isEmpty
-
   given arrayIsEmpty[T]: IsEmpty[Array[T]] with
     def isEmpty(t: Array[T]): Boolean =
       t.isEmpty
 
 trait IsEmptyLowPriority1 extends IsEmptyLowPriority2:
 
-  given listIsEmpty[T]: IsEmpty[List[T]] with
-    def isEmpty(t: List[T]): Boolean =
-      t.isEmpty
-  given optionIsEmpty[T]: IsEmpty[Option[T]] with
-    def isEmpty(t: Option[T]): Boolean =
-      !t.isDefined
+  given iterableOnceIsEmpty: IsEmpty[IterableOnce[?]] with
+    def isEmpty(t: IterableOnce[?]): Boolean =
+      t.iterator.isEmpty
 
   given eitherIsEmpty[E, T]: IsEmpty[Either[E, T]] with
     def isEmpty(t: Either[E, T]): Boolean =
