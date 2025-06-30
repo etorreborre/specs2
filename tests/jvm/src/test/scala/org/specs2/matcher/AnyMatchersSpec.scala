@@ -35,6 +35,18 @@ class AnyMatchersSpec
   ${false must beFalse}
   ${(true must beFalse).message must ===("the value is true")}
 
+  beEmpty matches empty values
+  ${"" must beEmpty}
+  ${"x" must not(beEmpty)}
+  ${None must beEmpty}
+  ${Some(1) must not(beEmpty)}
+  ${Seq() must beEmpty}
+  ${Seq(1) must not(beEmpty)}
+  ${Map() must beEmpty}
+  ${Map(1 -> 2) must not(beEmpty)}
+  ${Set() must beEmpty}
+  ${Set(1) must not(beEmpty)}
+
   beLike matches objects against a pattern
   ${List(1, 2) must beLike { case List(a, b) => ok }}
   ${List(1, 2) must beLike { case List(a, b) => (a + b) must ===(3) }}
