@@ -1,20 +1,31 @@
 package org.specs2.concurrent
 
+import java.util.concurrent.{Executors, ScheduledExecutorService, TimeUnit}
+
 import scala.concurrent.duration.FiniteDuration
 
-trait Schedulers {
+object Schedulers:
 
-  /** Default Scheduler for Scala Native
-    */
-  def default: Scheduler = new Scheduler {
-    def schedule(action: =>Unit, duration: FiniteDuration): () => Unit =
-      () => ()
+  lazy val threadsNb = Runtime.getRuntime.availableProcessors
 
-    def shutdown() = ()
+  def scheduledExecutor(scheduledThreadsNb: Int): ScheduledExecutorService =
+    Executors.newScheduledThreadPool(scheduledThreadsNb)
 
-    override def toString = "Scheduler"
-  }
+  def default: Scheduler =
+    schedulerFromScheduledExecutorService(scheduledExecutor(threadsNb))
 
-}
+  /** create a Scheduler from the Scala global execution context */
+  def schedulerFromGlobalExecutionContext: Scheduler =
+    schedulerFromScheduledExecutorService(scheduledExecutor(threadsNb))
 
-object Schedulers extends Schedulers
+  def schedulerFromScheduledExecutorService(s: ScheduledExecutorService): Scheduler =
+    new Scheduler {
+      def schedule(action: =>Unit, duration: FiniteDuration): () => Unit =
+        val scheduled = s.schedule(new Runnable { def run(): Unit = action }, duration.toNanos, TimeUnit.NANOSECONDS)
+        () => { scheduled.cancel(false); () }
+
+      def shutdown(): Unit =
+        s.shutdown
+
+      override def toString = "Scheduler"
+    }

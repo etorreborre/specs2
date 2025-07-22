@@ -38,7 +38,7 @@ lazy val specs2 = project
 
 /** COMMON SETTINGS */
 
-val Scala3 = "3.3.6"
+val Scala3 = "3.3.1"
 
 lazy val specs2Settings = Seq(
   organization := "org.specs2",
@@ -155,9 +155,13 @@ lazy val commonJsSettings =
     testJsSettings ++
     Seq(mimaPreviousArtifacts := Set.empty)
 
+lazy val commonNativeSettings = Seq(
+  nativeConfig ~= { _.withMultithreading(true) }
+) ++ depends.nativeTest
+
 /** MODULES (sorted in alphabetical order) */
 
-val platforms = List(JVMPlatform, JSPlatform)
+val platforms = List(JVMPlatform, JSPlatform, NativePlatform)
 val jvm = JVMPlatform
 
 lazy val common = crossProject(platforms: _*)
@@ -166,6 +170,7 @@ lazy val common = crossProject(platforms: _*)
   .settings(name := "specs2-common", commonSettings, depends.scalacheckTest, depends.sbt)
   .jvmSettings(commonJvmSettings)
   .jsSettings(commonJsSettings)
+  .nativeSettings(commonNativeSettings)
   .dependsOn(fp)
 
 lazy val core = crossProject(platforms: _*)
@@ -184,6 +189,7 @@ lazy val core = crossProject(platforms: _*)
   )
   .jvmSettings(commonJvmSettings)
   .jsSettings(commonJsSettings)
+  .nativeSettings(commonNativeSettings)
   .dependsOn(matcher, common, common % "test->test")
 
 lazy val examples = crossProject(platforms: _*)
@@ -191,6 +197,7 @@ lazy val examples = crossProject(platforms: _*)
   .in(file("examples"))
   .jvmSettings(commonJvmSettings)
   .jsSettings(commonJsSettings)
+  .nativeSettings(commonNativeSettings)
   // no mima check because that jar is not published
   .settings(
     commonSettings,
@@ -207,6 +214,7 @@ lazy val fp = crossProject(platforms: _*)
   .settings(name := "specs2-fp", commonSettings)
   .jvmSettings(commonJvmSettings)
   .jsSettings(commonJsSettings)
+  .nativeSettings(commonNativeSettings)
 
 lazy val form = project
   .in(file("form"))
@@ -237,6 +245,7 @@ lazy val junit = crossProject(platforms: _*)
   .settings(name := "specs2-junit", commonSettings, depends.junit)
   .jvmSettings(commonJvmSettings)
   .jsSettings(commonJsSettings)
+  .nativeSettings(commonNativeSettings)
   .dependsOn(common, core, matcherExtra % Test, xml)
 
 lazy val markdown = project
@@ -250,6 +259,7 @@ lazy val matcher = crossProject(platforms: _*)
   .settings(name := "specs2-matcher", commonSettings)
   .jvmSettings(commonJvmSettings)
   .jsSettings(commonJsSettings)
+  .nativeSettings(commonNativeSettings)
   .dependsOn(common)
 
 lazy val matcherExtra = crossProject(platforms: _*)
@@ -258,6 +268,7 @@ lazy val matcherExtra = crossProject(platforms: _*)
   .settings(name := "specs2-matcher-extra", commonSettings, depends.scalaParser)
   .jvmSettings(commonJvmSettings)
   .jsSettings(commonJsSettings)
+  .nativeSettings(commonNativeSettings)
   .dependsOn(matcher, core, core % "test->test", xml)
 
 lazy val pom = project
@@ -276,6 +287,7 @@ lazy val scalacheck = crossProject(platforms: _*)
   )
   .jvmSettings(commonJvmSettings)
   .jsSettings(commonJsSettings)
+  .nativeSettings(commonNativeSettings)
   .dependsOn(core)
 
 lazy val tests = crossProject(platforms: _*)
@@ -307,6 +319,7 @@ lazy val xml = crossProject(platforms: _*)
   )
   .jvmSettings(commonJvmSettings)
   .jsSettings(commonJsSettings)
+  .nativeSettings(commonNativeSettings)
   .dependsOn(core)
 
 lazy val specs2ShellPrompt = ThisBuild / shellPrompt := { state =>

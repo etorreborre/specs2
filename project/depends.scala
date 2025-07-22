@@ -62,4 +62,11 @@ object depends {
           ("org.scala-js" %% "scalajs-test-interface" % scalaJSVersion).cross(CrossVersion.for3Use2_13)
         )
     )
+
+  def nativeTest =
+    Seq(
+      libraryDependencies ++=
+        Seq(
+        )
+    )
 }
