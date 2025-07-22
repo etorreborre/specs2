@@ -3,11 +3,11 @@ body {
   font-family: 'Open Sans', sans-serif;
   font-size: 16px;
   font-weight: normal;
-  color: #3D3B3B;	
+  color: #3D3B3B;
 }
 pre.prettyprint.prettyprinted {
   margin-bottom: 10px;
-  padding: 2px; 
+  padding: 2px;
   border: 0px;
 }
 
@@ -236,4 +236,22 @@ nav {
 
 .lower-row {
   margin-top: 50px;
+}
+
+.icon-link {
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+}
+
+.icon-img {
+  height: 100px; /* or whatever consistent height works for your layout */
+  display: block;
+  margin: 0 auto;
+}
+
+.icon-label {
+  margin-top: 10px;
+  font-size: 1.2em;
+  color: #337ab7; /* Bootstrap link color */
 }

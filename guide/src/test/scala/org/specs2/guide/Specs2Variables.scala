@@ -13,14 +13,15 @@ trait Specs2Variables:
   lazy val SITE_DIR = s"https://etorreborre.github.io/specs2/website/$VERSION"
   lazy val API_DIR = s"https://etorreborre.github.io/specs2/api/$VERSION"
   lazy val PROJECT_DIR = s"https://github.com/etorreborre/specs2/tree/$VERSION"
-  lazy val EXAMPLES_DIR = s"$PROJECT_DIR/examples/src/test/scala/examples"
+  lazy val EXAMPLES_DIR = s"$PROJECT_DIR/examples/shared/src/test/scala/examples"
 
   lazy val specs2Variables: Map[String, String] =
     Map(
+      "BUILD_VERSION" -> BUILD_VERSION,
       "VERSION" -> VERSION,
-      "SITE_DIR" -> SITE_DIR,
-      "PROJECT_DIR" -> PROJECT_DIR,
       "GUIDE_DIR" -> GUIDE_DIR,
-      "EXAMPLES_DIR" -> EXAMPLES_DIR,
-      "API_DIR" -> API_DIR
+      "SITE_DIR" -> SITE_DIR,
+      "API_DIR" -> API_DIR,
+      "PROJECT_DIR" -> PROJECT_DIR,
+      "EXAMPLES_DIR" -> EXAMPLES_DIR
     )
