@@ -38,8 +38,8 @@ trait IsEmptyLowPriority1 extends IsEmptyLowPriority2:
 
 trait IsEmptyLowPriority2:
 
-  given iterableOnceIsEmpty: IsEmpty[IterableOnce[?]] with
-    def isEmpty(t: IterableOnce[?]): Boolean =
+  given iterableOnceIsEmpty[T <: IterableOnce[?]]: IsEmpty[T] with
+    def isEmpty(t: T): Boolean =
       t.iterator.isEmpty
 
   given stringIsEmpty: IsEmpty[String] with
