@@ -46,6 +46,10 @@ class AnyMatchersSpec
   ${Map(1 -> 2) must not(beEmpty)}
   ${Set() must beEmpty}
   ${Set(1) must not(beEmpty)}
+  ${Option.empty[String] must beEmpty[Option[String]]}
+  ${Seq.empty[String] must beEmpty[Seq[String]]}
+  ${Map.empty[String, Int] must beEmpty[Map[String, Int]]}
+  ${Set.empty[String] must beEmpty[Set[String]]}
 
   beLike matches objects against a pattern
   ${List(1, 2) must beLike { case List(a, b) => ok }}
