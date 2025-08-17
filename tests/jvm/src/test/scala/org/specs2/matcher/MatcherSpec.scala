@@ -112,8 +112,8 @@ Messages
     case class Bar1(i: Int) extends Bar
     case class Bar2(s: String) extends Bar
     val beOk: Matcher[Bar] = beEqualTo(Bar2("ok")).when(true)
-    (Bar2("ok"): Bar) must beOk
-    ((Bar1(0): Bar) must beOk).message === "Bar1(0) is not a Bar2"
+    ((Bar2("ok"): Bar) must beOk) and ((Bar2("nok"): Bar) must not(beOk)) and
+      (((Bar1(0): Bar) must beOk).message === "Bar1(0) is not a Bar2")
 
   def collection1 =
     def beEven: Matcher[Int] = (i: Int) => (i % 2 == 0, i.toString + " is odd")

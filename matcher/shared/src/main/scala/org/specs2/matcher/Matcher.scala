@@ -285,6 +285,8 @@ trait MatcherCreation:
       def f1(t: =>T) = f(t)
       f1
 
+  /** this allows a matcher of a subtype to be used where a matcher of the supertype is expected
+    */
   given widenToSuperMatcher[T: ClassTag, U >: T]: Conversion[Matcher[T], Matcher[U]] with
     def apply(outer: Matcher[T]): Matcher[U] =
       new Matcher[U]:
