@@ -111,9 +111,9 @@ Messages
     sealed trait Bar
     case class Bar1(i: Int) extends Bar
     case class Bar2(s: String) extends Bar
-    val bar2Matcher: Matcher[Bar2] = beEqualTo(Bar2("ok"))
-    (Bar2("ok"): Bar) must bar2Matcher
-    (Bar1(0): Bar) must not(bar2Matcher)
+    val beOk: Matcher[Bar] = beEqualTo(Bar2("ok")).when(true)
+    (Bar2("ok"): Bar) must beOk
+    ((Bar1(0): Bar) must beOk).message === "Bar1(0) is not a Bar2"
 
   def collection1 =
     def beEven: Matcher[Int] = (i: Int) => (i % 2 == 0, i.toString + " is odd")

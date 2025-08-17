@@ -12,6 +12,8 @@ import org.specs2.text.Sentences.*
 import scala.concurrent.duration.*
 import org.specs2.fp.syntax.*
 import scala.annotation.*
+import scala.util.NotGiven
+import scala.reflect.ClassTag
 
 /** The `Matcher` trait is the base trait for any Matcher.
   *
@@ -282,5 +284,14 @@ trait MatcherCreation:
     def apply(f: T => Matcher[R]): (=>T) => Matcher[R] =
       def f1(t: =>T) = f(t)
       f1
+
+  given widenToSuperMatcher[T: ClassTag, U >: T]: Conversion[Matcher[T], Matcher[U]] with
+    def apply(outer: Matcher[T]): Matcher[U] =
+      new Matcher[U]:
+        def apply[S <: U](x: Expectable[S]): Result =
+          val c = summon[ClassTag[T]].runtimeClass
+          val xClass = x.value.getClass
+          if (c.isAssignableFrom(xClass)) then x.asInstanceOf[Expectable[T]].applyMatcher(outer)
+          else Failure(s"${x.value} is not a ${c.getSimpleName}")
 
 object MatcherCreation extends MatcherCreation
