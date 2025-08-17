@@ -293,7 +293,7 @@ trait MatcherCreation:
         def apply[S <: U](x: Expectable[S]): Result =
           val c = summon[ClassTag[T]].runtimeClass
           val xClass = x.value.getClass
-          if (c.isAssignableFrom(xClass)) then x.asInstanceOf[Expectable[T]].applyMatcher(outer)
+          if c.isAssignableFrom(xClass) then x.asInstanceOf[Expectable[T]].applyMatcher(outer)
           else Failure(s"${x.value} is not a ${c.getSimpleName}")
 
 object MatcherCreation extends MatcherCreation
