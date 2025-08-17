@@ -29,6 +29,7 @@ Implicit conversions
 
   a matcher can be defined by a function with 1 message $convert1
   a matcher can be muted and will output no message $convert2
+  a matcher can be widen $convert3
 
 Collections
 ===========
@@ -105,6 +106,14 @@ Messages
 
   def convert2 =
     (1 must be_==(1).mute) returns ""
+
+  def convert3 =
+    sealed trait Bar
+    case class Bar1(i: Int) extends Bar
+    case class Bar2(s: String) extends Bar
+    val bar2Matcher: Matcher[Bar2] = beEqualTo(Bar2("ok"))
+    (Bar2("ok"): Bar) must bar2Matcher
+    (Bar1(0): Bar) must not(bar2Matcher)
 
   def collection1 =
     def beEven: Matcher[Int] = (i: Int) => (i % 2 == 0, i.toString + " is odd")
