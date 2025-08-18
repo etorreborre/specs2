@@ -69,7 +69,7 @@ When creating expectations:
  Describe expectations with `aka` and must        | `org.specs2.matcher.MustExpectations`           |
  Use `list must have size(3)`                     | `org.specs2.matcher.TraversableMatchers`        |
  Use matchers in `contain` or `beSome` matchers   | `org.specs2.matcher.ValueChecks`                |
- Use `===`, `====` to check for equality          | `org.specs2.matcher.TypedEqual`                 |
+ Use `===` to check for equality                  | `org.specs2.matcher.TypedEqual`                 |
  Create matchers from functions                   | `org.specs2.matcher.MatcherCreation`            |
  Set failed expectations as Pending               | `org.specs2.execute.PendingUntilFixed`          |
 
