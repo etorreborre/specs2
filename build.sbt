@@ -14,7 +14,7 @@ lazy val specs2 = project.in(file(".")).
     packagedArtifacts := Map.empty,
     ThisBuild / githubWorkflowArtifactUpload := false,
     ThisBuild / githubWorkflowUseSbtThinClient := false,
-    ThisBuild / githubWorkflowJavaVersions := Seq(JavaSpec.temurin("8")),
+    ThisBuild / githubWorkflowJavaVersions := Seq(JavaSpec.temurin("11")),
     ThisBuild / githubWorkflowBuild := Seq(WorkflowStep.Sbt(List("testOnly -- xonly exclude ci"), name = Some("Build project"))),
     Global / onChangedBuildSource := ReloadOnSourceChanges,
     test := {}
