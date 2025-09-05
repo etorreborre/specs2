@@ -5,7 +5,7 @@ addSbtPlugin("org.scala-js"       % "sbt-scalajs"                   % scalaJSVer
 addSbtPlugin("org.scala-native"   % "sbt-scala-native"              % scalaNativeVersion)
 addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject"      % "1.3.2")
 addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "1.3.2")
-addSbtPlugin("com.github.sbt"     % "sbt-pgp"                       % "2.1.2")
+addSbtPlugin("com.github.sbt"     % "sbt-pgp"                       % "2.3.1")
 addSbtPlugin("com.typesafe.sbt"   % "sbt-ghpages"                   % "0.6.3")
 addSbtPlugin("com.typesafe.sbt"   % "sbt-site"                      % "1.4.1")
 addSbtPlugin("org.scoverage"      % "sbt-scoverage"                 % "1.9.0")
