@@ -444,7 +444,7 @@ lazy val compilationSettings = Seq(
         )
       case _ =>
         Seq(
-          "-Wconf:cat=lint-multiarg-infix:s",
+          "-Wmultiarg-infix",
           "-Xlint:-byname-implicit")
     }
   },
