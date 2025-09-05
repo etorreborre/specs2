@@ -44,7 +44,7 @@ object depends {
     )
 
   def jsMacrotaskExecutor =
-    Seq(libraryDependencies += "org.scala-js" %%% "scala-js-macrotask-executor" % "1.0.0")
+    Seq(libraryDependencies += "org.scala-js" %%% "scala-js-macrotask-executor" % "1.1.1")
 
   def nativeTest =
     Seq(libraryDependencies ++= Seq(
