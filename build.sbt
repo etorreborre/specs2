@@ -31,7 +31,7 @@ lazy val specs2 = project.in(file(".")).
 /** COMMON SETTINGS */
 lazy val specs2Settings = Seq(
   organization := "org.specs2",
-  GlobalScope / scalazVersion := "7.2.34",
+  GlobalScope / scalazVersion := "7.2.36",
   specs2ShellPrompt,
   ThisBuild / scalaVersion := "3.3.3",
   ThisBuild / crossScalaVersions := Seq("3.3.3"))
