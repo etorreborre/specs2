@@ -23,7 +23,7 @@ object depends {
     libraryDependencies ++= Seq(
       "org.scala-sbt" % "test-interface" % "1.0",
       "org.portable-scala" %%% "portable-scala-reflect" % "1.1.3",
-      "org.scala-js" %% "scalajs-stubs" % "1.0.0" % "provided")
+      "org.scala-js" %% "scalajs-stubs" % "1.1.0" % "provided")
 
   def jsTest =
     Seq(libraryDependencies ++= Seq(
@@ -56,7 +56,7 @@ object depends {
 
   lazy val mockito  = "org.mockito"  % "mockito-core"  % "5.19.0"
   lazy val junit    = "junit"        % "junit"         % "4.13.2"
-  lazy val hamcrest = "org.hamcrest" % "hamcrest" % "2.2"
+  lazy val hamcrest = "org.hamcrest" % "hamcrest" % "3.0"
 
   lazy val pegdown = "org.pegdown" % "pegdown" % "1.6.0"
 
