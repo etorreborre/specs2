@@ -50,7 +50,7 @@ lazy val commonNativeSettings = Seq(
 lazy val specs2Version = settingKey[String]("defines the current specs2 version")
 lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
 lazy val catsVersion = "2.13.0"
-lazy val catsEffectVersion = "3.1.1"
+lazy val catsEffectVersion = "3.6.3"
 
 val commonSettings: Seq[Def.Setting[_]] =
     coreDefaultSettings  ++
