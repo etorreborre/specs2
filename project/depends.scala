@@ -55,7 +55,7 @@ object depends {
   // used in specs2-matcher-extra
   def scalaParser = libraryDependencies += "org.scala-lang.modules" %%% "scala-parser-combinators" % "2.4.0"
 
-  def scalaXml = libraryDependencies += "org.scala-lang.modules" %%% "scala-xml" % "2.3.0"
+  def scalaXml = libraryDependencies += "org.scala-lang.modules" %%% "scala-xml" % "2.4.0"
 
   lazy val mockito  = "org.mockito"  % "mockito-core"  % "5.19.0"
   lazy val junit    = "junit"        % "junit"         % "4.13.2"
