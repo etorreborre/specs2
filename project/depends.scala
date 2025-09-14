@@ -54,7 +54,7 @@ object depends {
 
   def scalaXml = "org.scala-lang.modules" %% "scala-xml" % "2.4.0"
 
-  lazy val mockito  = "org.mockito"  % "mockito-core"  % "5.19.0"
+  lazy val mockito  = "org.mockito"  % "mockito-core"  % "5.20.0"
   lazy val junit    = "junit"        % "junit"         % "4.13.2"
   lazy val hamcrest = "org.hamcrest" % "hamcrest" % "3.0"
 
@@ -63,7 +63,7 @@ object depends {
   lazy val tagsoup = "org.ccil.cowan.tagsoup" % "tagsoup" % "1.2.1"
 
   lazy val scalacheck = Def.setting {
-    "org.scalacheck" %%% "scalacheck" % "1.18.1"
+    "org.scalacheck" %%% "scalacheck" % "1.19.0"
   }
 
 }
