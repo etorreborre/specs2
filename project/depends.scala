@@ -66,7 +66,4 @@ object depends {
     "org.scalacheck" %%% "scalacheck" % "1.18.1"
   }
 
-  lazy val resolvers =
-    Seq(sbt.Keys.resolvers ++= Resolver.sonatypeOssRepos("releases"))
-
 }

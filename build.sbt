@@ -69,7 +69,6 @@ lazy val catsEffectVersion = "3.1.1"
 
 val commonSettings =
     coreDefaultSettings  ++
-    depends.resolvers    ++
     specs2Settings       ++
     compilationSettings  ++
     testingSettings      ++
