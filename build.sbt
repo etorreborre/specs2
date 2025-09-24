@@ -33,8 +33,8 @@ lazy val specs2Settings = Seq(
   organization := "org.specs2",
   GlobalScope / scalazVersion := "7.2.36",
   specs2ShellPrompt,
-  ThisBuild / scalaVersion := "3.3.3",
-  ThisBuild / crossScalaVersions := Seq("3.3.3"))
+  ThisBuild / scalaVersion := "3.3.6",
+  ThisBuild / crossScalaVersions := Seq("3.3.6"))
 
 lazy val tagName = Def.setting {
   s"specs2-${version.value}"
@@ -50,11 +50,10 @@ lazy val commonNativeSettings = Seq(
 lazy val specs2Version = settingKey[String]("defines the current specs2 version")
 lazy val scalazVersion = settingKey[String]("defines the current scalaz version")
 lazy val catsVersion = "2.13.0"
-lazy val catsEffectVersion = "3.1.1"
+lazy val catsEffectVersion = "3.6.3"
 
 val commonSettings: Seq[Def.Setting[_]] =
     coreDefaultSettings  ++
-    depends.resolvers    ++
     specs2Settings       ++
     compilationSettings  ++
     testingSettings      ++
