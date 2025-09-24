@@ -3,8 +3,8 @@ package matcher
 
 import cats.effect.IO
 import org.specs2.specification.Retries
-
 import scala.concurrent.duration._
+
 
 class IOMatchersSpec extends mutable.Specification with IOMatchers with ResultMatchers with Retries {
   sequential
@@ -17,7 +17,9 @@ class IOMatchersSpec extends mutable.Specification with IOMatchers with ResultMa
 
     "check that the task finishes before a given time" >> {
       { IO(1) must returnBefore(10.millis) }
-      { (IO { Thread.sleep(50); 1 } must returnBefore(10.millis)) returns "Timeout after 10 milliseconds" }
+      {
+        (IO.sleep(500.millis) must returnBefore(10.millis)) returns "Timeout after 10 milliseconds"
+      }
     }
 
     "check the return value with a timeout" >> {
