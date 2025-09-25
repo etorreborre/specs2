@@ -56,8 +56,7 @@ val commonSettings: Seq[Def.Setting[_]] =
     coreDefaultSettings  ++
     specs2Settings       ++
     compilationSettings  ++
-    testingSettings      ++
-    publicationSettings
+    testingSettings
 
 def commonJvmSettings =
   testingJvmSettings
@@ -402,28 +401,39 @@ lazy val aggregateTest = ScopeFilter(
 /**
  * PUBLICATION
  */
-lazy val publicationSettings = Seq(
-  Global / publishTo := sonatypePublishToBundle.value,
-  publishMavenStyle := true,
-  Test / publishArtifact := false,
-  pomIncludeRepository := { x => false },
-  pomExtra := (
-    <url>http://specs2.org/</url>
-      <licenses>
-        <license>
-          <name>MIT-style</name>
-          <url>http://www.opensource.org/licenses/mit-license.php</url>
-          <distribution>repo</distribution>
-        </license>
-      </licenses>
-      <developers>
-        <developer>
-          <id>etorreborre</id>
-          <name>Eric Torreborre</name>
-          <url>http://etorreborre.blogspot.com/</url>
-        </developer>
-      </developers>
-    ),
-  credentials := Seq(Credentials(Path.userHome / ".sbt" / "specs2.credentials"))
-) ++
-  Sonatype.projectSettings
+
+ThisBuild / credentials := Seq(Credentials(Path.userHome / ".sbt" / "specs2.credentials"))
+ThisBuild / organizationName := "specs2"
+ThisBuild / organizationHomepage := Some(url("http://specs2.org/"))
+
+ThisBuild / scmInfo := Some(
+  ScmInfo(
+    url("https://github.com/etorreborre/specs2"),
+    "scm:git@github.com:etorreborre/specs2.git"
+  )
+)
+ThisBuild / developers := List(
+  Developer(
+    id = "etorreborre",
+    name = "Eric Torreborre",
+    email = "etorreborre@yahoo.com",
+    url = url("http://github.com/etorreborre")
+  )
+)
+
+ThisBuild / description := "software specifications for Scala"
+ThisBuild / licenses := List(
+  "MIT" -> java.net.URI.create("https://opensource.org/license/mit").toURL()
+)
+ThisBuild / homepage := Some(url("https://github.com/etorreborre/specs2"))
+
+// Remove all additional repository other than Maven Central from POM
+ThisBuild / pomIncludeRepository := { _ => false }
+ThisBuild / publishMavenStyle := true
+
+// new setting for the Central Portal
+ThisBuild / publishTo := {
+  val centralSnapshots = "https://central.sonatype.com/repository/maven-snapshots/"
+  if (isSnapshot.value) Some("central-snapshots" at centralSnapshots)
+  else localStaging.value
+}
