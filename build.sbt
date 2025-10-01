@@ -446,7 +446,7 @@ lazy val compilationSettings = Seq(
           "-Xlint:-byname-implicit")
     }
   },
-  addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.13.3" cross CrossVersion.full),
+  addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.13.4" cross CrossVersion.full),
   Test / scalacOptions += "-Yrangepos",
   Compile / doc / scalacOptions ++= Seq("-feature", "-language:_"),
   Compile / console / scalacOptions := Seq("-Yrangepos", "-feature", "-language:_"),
