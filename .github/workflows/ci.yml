@@ -22,7 +22,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [2.13.16, 2.12.20]
+        scala: [2.13.17, 2.12.20]
         java: [temurin@11]
     runs-on: ${{ matrix.os }}
     steps:
@@ -55,7 +55,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [2.13.16]
+        scala: [2.13.17]
         java: [temurin@11]
     runs-on: ${{ matrix.os }}
     steps:
