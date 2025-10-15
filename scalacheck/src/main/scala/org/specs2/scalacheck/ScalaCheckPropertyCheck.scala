@@ -122,7 +122,6 @@ trait ScalaCheckPropertyCheck extends ExpectationsCreation:
       initialSeed: =>Seed,
       freqMapPretty: FreqMap[Set[Any]] => Pretty
   ) = Pretty { prms =>
-
     def displaySeed: String =
       if prms.verbosity >= 0 then s"\nThe seed is ${initialSeed.toBase64}\n"
       else ""
