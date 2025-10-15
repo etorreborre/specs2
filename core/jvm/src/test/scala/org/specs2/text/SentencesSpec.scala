@@ -39,7 +39,6 @@ class SentencesSpec extends Spec with Tables with Sentences:
       "it shouldn't do" ! "it should do" ! false |
       "it hasn't a" ! "it has a" ! false |
       "they haven't a" ! "they have a" ! false | { (sentence, negated, isReversible) =>
-
         "the sentence is negated" ==> (negateSentence(sentence) === negated)
         "the sentence can be double-negated" ==> (negateSentence(negateSentence(sentence)) === sentence)
           .when(isReversible)
