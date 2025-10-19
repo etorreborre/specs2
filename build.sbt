@@ -147,12 +147,22 @@ lazy val mimaSettings =
 
       // JsonMatchers #1419
       ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.matcher.JsonMatchers.*"),
-      ProblemFilters.exclude[IncompatibleMethTypeProblem]("org.specs2.matcher.JsonMatchersImplicits#given_Conversion_K_V_JsonPairSelector.this"),
+      ProblemFilters.exclude[IncompatibleMethTypeProblem](
+        "org.specs2.matcher.JsonMatchersImplicits#given_Conversion_K_V_JsonPairSelector.this"
+      ),
       ProblemFilters.exclude[MissingClassProblem]("org.specs2.matcher.JsonMatchersImplicits*"),
-       ProblemFilters.exclude[MissingClassProblem]("org.specs2.matcher.JsonMatchersLowImplicits$given_ToJsonSelector_Boolean$"),
-      ProblemFilters.exclude[MissingClassProblem]("org.specs2.matcher.JsonMatchersLowImplicits$given_ToJsonSelector_Double$"),
-      ProblemFilters.exclude[MissingClassProblem]("org.specs2.matcher.JsonMatchersLowImplicits$given_ToJsonSelector_String$"),
-      ProblemFilters.exclude[MissingClassProblem]("org.specs2.matcher.JsonMatchersLowImplicits$given_ToJsonSelector_Int$"),
+      ProblemFilters.exclude[MissingClassProblem](
+        "org.specs2.matcher.JsonMatchersLowImplicits$given_ToJsonSelector_Boolean$"
+      ),
+      ProblemFilters.exclude[MissingClassProblem](
+        "org.specs2.matcher.JsonMatchersLowImplicits$given_ToJsonSelector_Double$"
+      ),
+      ProblemFilters.exclude[MissingClassProblem](
+        "org.specs2.matcher.JsonMatchersLowImplicits$given_ToJsonSelector_String$"
+      ),
+      ProblemFilters.exclude[MissingClassProblem](
+        "org.specs2.matcher.JsonMatchersLowImplicits$given_ToJsonSelector_Int$"
+      )
     )
   )
 
