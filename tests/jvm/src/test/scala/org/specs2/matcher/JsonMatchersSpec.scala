@@ -19,12 +19,10 @@ class JsonMatchersSpec extends Specification with JsonMatchers {
  ${"{'name' : 'Joe'}" must not(/("name2" -> "Joe"))}
  ${("['name', 'Joe']" must /("name" -> "initial")) returns """the array
 ["name", "Joe"]
-doesn't contain the pair "name": "initial""""
- }
+doesn't contain the pair "name": "initial""""}
  ${"{'name' : 'Joe'}" must /("n.*".r -> "j.*".r) returns """the object
 {"name": "Joe"}
-doesn't contain the pair "n.*": "j.*""""
-}
+doesn't contain the pair "n.*": "j.*""""}
  ${("garbage" must /("name" -> "Joe")) returns "Could not parse\ngarbage"}
  with regexes as well
  ${"{'name' : 'Joe'}" must /("n.*".r -> "J.*".r)}
@@ -34,18 +32,16 @@ doesn't contain the pair "n.*": "j.*""""
  ${"[1.0, 2.0]" must /(1.0)}
  ${"{'name' : 'Joe'}" must not(/("name"))}
  ${("{'name' : 'Joe'}" must /("name")) returns
-"""the object
+      """the object
 {"name": "Joe"}
 doesn't contain the value "name"
-This selector can only be used with an array. Use /(k -> anyValue) if you just want to find the key 'k'"""
-}
+This selector can only be used with an array. Use /(k -> anyValue) if you just want to find the key 'k'"""}
  ${("garbage" must /("name")) returns "Could not parse\ngarbage"}
  with regexes as well
  ${"['name', 'Joe']" must /("J.*".r)}
  ${"['name', 'Joe']" must /("j.*".r) returns """the array
 ["name", "Joe"]
-doesn't contain the regex "j.*""""
-}
+doesn't contain the regex "j.*""""}
 
  The / matcher can be chained with another /
  ${"{'person' : {'name': 'Joe'}}" must /("person") / ("name" -> "Joe")}
@@ -62,7 +58,7 @@ doesn't contain the regex "j.*""""
  ${"{'person' : {'name': 'Joe'}}" must */("name" -> ".*".r)}
  ${("{'person' : ['name', 'Joe']}" must not(*/("name" -> "Joe")))}
  ${("{'person' : ['name', 'Joe']}" must */("name" -> "Joe")) returns
-"""the object
+      """the object
 {"person": ["name", "Joe"]}
 doesn't contain the pair "name": "Joe""""}
  ${("garbage" must */("name" -> "Joe")) returns "Could not parse\ngarbage"}
@@ -133,17 +129,17 @@ doesn't contain the pair "age": "18""""}
  ${"{'name' : 5}" must not(/("name" -> "5"))}
  ${"{'name' : true}" must not(/("name" -> "true"))}
 
- # issue #1439 ${
-    """|{
-       |  "metrics": {
-       |   "IO": 42
-       | }
-       |}""".stripMargin must /("metrics")./("IO" -> be_>(0.0))
-    }
- ${ ("""{ "a": { "b": 1 } }""" must /("a")./("b" -> be_==("1"))) returns "found '1.0' but no value to select for matcher" }
- ${ ("""{ "a": { "b": 1 } }""" must /("a")./("c" -> be_>(0.0))) returns """the object
+ # issue #1439 ${"""|{
+                    |  "metrics": {
+                    |   "IO": 42
+                    | }
+                    |}""".stripMargin must /("metrics")./("IO" -> be_>(0.0))}
+ ${("""{ "a": { "b": 1 } }""" must /("a")./(
+      "b" -> be_==("1")
+    )) returns "found '1.0' but no value to select for matcher"}
+ ${("""{ "a": { "b": 1 } }""" must /("a")./("c" -> be_>(0.0))) returns """the object
 {"b": 1.0}
-doesn't contain the value "c"""" }
+doesn't contain the value "c""""}
 
 """
 
