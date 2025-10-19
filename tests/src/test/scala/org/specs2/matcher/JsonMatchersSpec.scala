@@ -15,11 +15,9 @@ class JsonMatchersSpec extends Specification with JsonMatchers { def is = s2"""
  ${ "{'name' : 5.0}"   must /("name" -> 5) }
  ${ "{'name' : 5}"     must /("name" -> 5) }
  ${ "{'name' : 'Joe'}" must not /("name2" -> "Joe") }
- ${ ("['name', 'Joe']" must /("name" -> "initial")) returns "the array\n[name, Joe]\ndoesn't contain " +
-  "the pair 'name':value 'initial'" }
- ${ "{'name' : 'Joe'}" must /("n.*".r -> "j.*".r) returns "the object\n{name:Joe}\ndoesn't contain the pair 'n" +
-  ".*':regex 'j" +
-  ".*'" }
+ ${ ("['name', 'Joe']" must /("name" -> "initial")) returns "the array\n[\"name\", \"Joe\"]\ndoesn't contain " +
+  "the pair \"name\": \"initial\"" }
+ ${ "{'name' : 'Joe'}" must /("n.*".r -> "j.*".r) returns "the object\n{\"name\": \"Joe\""}\ndoesn't contain the pair \"n.*\": \"j.*\"" }
  ${ ("garbage" must /("name" -> "Joe")) returns "Could not parse\ngarbage" }
  with regexes as well
  ${ "{'name' : 'Joe'}" must /("n.*".r -> "J.*".r) }
@@ -28,12 +26,12 @@ class JsonMatchersSpec extends Specification with JsonMatchers { def is = s2"""
  ${ "['name', 'Joe' ]" must /("name") }
  ${ "[1.0, 2.0]" must /(1.0) }
  ${ "{'name' : 'Joe'}" must not /("name") }
- ${ ("{'name' : 'Joe'}" must /("name")) returns "the object\n{name:Joe}\ndoesn't contain the value 'name'" +
+ ${ ("{'name' : 'Joe'}" must /("name")) returns "the object\n{\"name\": \"Joe\""}\ndoesn't contain the value \"name\"" +
         "\nThis selector can only be used with an array. Use /(k -> anyValue) if you just want to find the key 'k'" }
  ${ ("garbage" must /("name")) returns "Could not parse\ngarbage" }
  with regexes as well
  ${ "['name', 'Joe']" must /("J.*".r) }
- ${ "['name', 'Joe']" must /("j.*".r) returns "the array\n[name, Joe]\ndoesn't contain the regex 'j.*'" }
+ ${ "['name', 'Joe']" must /("j.*".r) returns "the array\n[\"name\", \"Joe\"]\ndoesn't contain the regex \"j.*\"" }
 
  The / matcher can be chained with another /
  ${ "{'person' : {'name': 'Joe'}}" must /("person") /("name" -> "Joe") }
@@ -50,7 +48,7 @@ class JsonMatchersSpec extends Specification with JsonMatchers { def is = s2"""
  ${ "{'person' : {'name': 'Joe'}}" must */("name" -> ".*".r) }
  ${ ("{'person' : ['name', 'Joe']}" must not */("name" -> "Joe")) }
  ${ ("{'person' : ['name', 'Joe']}" must */("name" -> "Joe")) returns
-  s"""the object\n{person:["name", "Joe"]}\ndoesn't contain the pair 'name':value 'Joe'""" }
+  s"""the object\n{"person": ["name", "Joe"]}\ndoesn't contain the pair "name": "Joe"""" }
  ${ ("garbage" must */("name" -> "Joe")) returns "Could not parse\ngarbage" }
 
  The */ matcher can be chained with /
@@ -86,7 +84,7 @@ class JsonMatchersSpec extends Specification with JsonMatchers { def is = s2"""
  have / andHave can be used to check the elements in an object
  ${ "{'person' : {'name':'Joe', 'age':'18' } }" must /("person").andHave(exactly(/("name" -> "Joe"), /("age" -> "18"))) }
  ${ "{'person' : {'name':'Joe', 'age':'19' } }" must /("person").andHave(exactly(/("name" -> "Joe"), /("age" -> "18"))) returns
-     s"""the object\n{age:19}\ndoesn't contain the pair 'age':value '18'"""
+     s"""the object\n{"age": "19"}\ndoesn't contain the pair \"age\": \"18\""""
   }
 
  String, Int, Boolean, Double and Traversable matchers can be used with the andHave method $andHave
@@ -115,6 +113,21 @@ class JsonMatchersSpec extends Specification with JsonMatchers { def is = s2"""
  # issue #1209
  ${"{'name' : 5}" must not(/("name" -> "5"))}
  ${"{'name' : true}" must not(/("name" -> "true"))}
+
+
+ # issue #1439 ${
+    """|{
+       |  "metrics": {
+       |   "IO": 42
+       | }
+       |}""".stripMargin must /("metrics")./("IO" -> be_>(0.0))
+    }
+ ${ ("""{ "a": { "b": 1 } }""" must /("a")./("b" -> be_==("1"))) returns "the string matcher cannot process '1.0'" }
+ ${ ("""{ "a": { "b": 1 } }""" must /("a")./("c" -> be_>(0.0))) returns "the object\n{\"b\": 1.0}\ndoesn't contain the value \"c\"" }
+
+ ${ ("""{ "a": { "b": 1 } }""" must /("a")./("b" -> be_==("1"))) returns "the string matcher cannot process '1.0'" }
+ ${ ("""{ "a": { "b": 1 } }""" must /("a")./("c" -> be_>(0.0))) returns "the object\n{\"b\": 1.0}\ndoesn't contain the value \"c\"" }
+
 """
 
  def andHave = {
