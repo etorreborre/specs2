@@ -127,16 +127,22 @@ trait JsonMatchers extends Expectations with JsonMatchersImplicits:
       Failure(s"the array\n${showList(list)}\ndoesn't contain the ${selector.description}")
 
     private def showMap[K, V](map: Map[K, V]) =
-      map.asInstanceOf[Map[K, Matchable]].map {
-        case (k,v: String) => s"\"$k\": \"$v\""
-        case (k,v) => s"\"$k\": $v"
-      }.mkString("{",", ","}")
+      map
+        .asInstanceOf[Map[K, Matchable]]
+        .map {
+          case (k, v: String) => s"\"$k\": \"$v\""
+          case (k, v)         => s"\"$k\": $v"
+        }
+        .mkString("{", ", ", "}")
 
     private def showList(list: List[Any]) =
-      list.asInstanceOf[List[Matchable]].map {
-        case t: String => s"\"$t\""
-        case t         => t.toString
-      }.mkString("[",", ","]")
+      list
+        .asInstanceOf[List[Matchable]]
+        .map {
+          case t: String => s"\"$t\""
+          case t         => t.toString
+        }
+        .mkString("[", ", ", "]")
 
   /** This matcher can be chained to select further elements in the Json object
     */
@@ -469,7 +475,6 @@ trait JsonSelectors:
     def description: String =
       s"specified $name"
 
-
   case class JsonBooleanMatcherSelector(m: Matcher[Boolean]) extends JsonSelector:
     def select(names: List[Any]): Option[Any] =
       None
@@ -482,8 +487,7 @@ trait JsonSelectors:
     def select(value: Any): Option[Any] =
       value.asInstanceOf[Matchable] match
         case b: Boolean => if (m(createExpectable(b)).isSuccess) Some(b) else None
-        case _         => None
-
+        case _          => None
 
     def name: String =
       "boolean matcher"
@@ -577,15 +581,15 @@ private[specs2] trait JsonMatchersImplicits extends JsonMatchersLowImplicits:
     def apply(m: M): JsonSelector =
       JsonStringMatcherSelector(m)
 
-  given doubleMatcherSelector : Conversion[Matcher[Double], JsonSelector] with
+  given doubleMatcherSelector: Conversion[Matcher[Double], JsonSelector] with
     def apply(m: Matcher[Double]): JsonSelector =
       JsonDoubleMatcherSelector(m)
 
-  given booleanMatcherSelector : Conversion[Matcher[Boolean], JsonSelector] with
+  given booleanMatcherSelector: Conversion[Matcher[Boolean], JsonSelector] with
     def apply(m: Matcher[Boolean]): JsonSelector =
       JsonBooleanMatcherSelector(m)
 
-  given anyMatcherSelector : Conversion[Matcher[Unit], JsonSelector] with
+  given anyMatcherSelector: Conversion[Matcher[Unit], JsonSelector] with
     def apply(m: Matcher[Unit]): JsonSelector =
       JsonAnyMatcherSelector(m)
 
@@ -609,7 +613,10 @@ private[specs2] trait JsonMatchersImplicits extends JsonMatchersLowImplicits:
     def apply(b: Boolean): JsonSelector =
       JsonBooleanSelector(b)
 
-  given [K, V](using k: Conversion[K, JsonSelector], v: Conversion[V, JsonSelector]): Conversion[(K, V), JsonPairSelector] with
+  given [K, V](using k: Conversion[K, JsonSelector], v: Conversion[V, JsonSelector]): Conversion[
+    (K, V),
+    JsonPairSelector
+  ] with
     def apply(kv: (K, V)): JsonPairSelector =
       JsonPairSelector(k(kv._1), v(kv._2))
 
