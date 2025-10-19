@@ -136,7 +136,7 @@ doesn't contain the pair "age": "18""""}
                     |}""".stripMargin must /("metrics")./("IO" -> be_>(0.0))}
  ${("""{ "a": { "b": 1 } }""" must /("a")./(
       "b" -> be_==("1")
-    )) returns "found '1.0' but no value to select for matcher"}
+    )) returns "found '1.0' but no value to select for string matcher"}
  ${("""{ "a": { "b": 1 } }""" must /("a")./("c" -> be_>(0.0))) returns """the object
 {"b": 1.0}
 doesn't contain the value "c""""}
