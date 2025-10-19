@@ -140,7 +140,19 @@ lazy val mimaSettings =
       ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.io.DirectoryPath.apply"),
       ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.io.DirectoryPath.unsafe"),
       ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.io.DirectoryPath.this"),
-      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.io.DirectoryPath.copy")
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.io.DirectoryPath.copy"),
+
+      // Remove an irrelevant method
+      ProblemFilters.exclude[MissingClassProblem]("org.specs2.matcher.ShouldExpectable*"),
+
+      // JsonMatchers #1419
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.matcher.JsonMatchers.*"),
+      ProblemFilters.exclude[IncompatibleMethTypeProblem]("org.specs2.matcher.JsonMatchersImplicits#given_Conversion_K_V_JsonPairSelector.this"),
+      ProblemFilters.exclude[MissingClassProblem]("org.specs2.matcher.JsonMatchersImplicits*"),
+       ProblemFilters.exclude[MissingClassProblem]("org.specs2.matcher.JsonMatchersLowImplicits$given_ToJsonSelector_Boolean$"),
+      ProblemFilters.exclude[MissingClassProblem]("org.specs2.matcher.JsonMatchersLowImplicits$given_ToJsonSelector_Double$"),
+      ProblemFilters.exclude[MissingClassProblem]("org.specs2.matcher.JsonMatchersLowImplicits$given_ToJsonSelector_String$"),
+      ProblemFilters.exclude[MissingClassProblem]("org.specs2.matcher.JsonMatchersLowImplicits$given_ToJsonSelector_Int$"),
     )
   )
 
