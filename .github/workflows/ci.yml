@@ -82,12 +82,27 @@ jobs:
       - name: Check binary compatibility ✔
         run: sbt mimaReportBinaryIssues
 
+      - name: Import GPG key 🔑
+        env:
+          PGP_KEY_ID: ${{ secrets.PGP_KEY_ID }}
+          PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
+          PGP_SECRET: ${{ secrets.PGP_SECRET }}
+        run: |
+          echo "$PGP_SECRET" | base64 --decode | gpg --batch --yes --import
+          printf "pinentry-mode loopback\n" >> ~/.gnupg/gpg.conf
+          printf "allow-loopback-pinentry\n" >> ~/.gnupg/gpg-agent.conf
+          gpgconf --kill gpg-agent
+          gpg --list-secret-keys --keyid-format LONG
+          gpg --batch --yes -u "$PGP_KEY_ID" --dry-run --pinentry-mode loopback --passphrase "$PGP_PASSPHRASE" --sign <<<"test"
+
+      
       - name: Release to Sonatype 📇
         env:
           PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
-          PGP_SECRET: ${{ secrets.PGP_SECRET }}
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          PGP_KEY_ID: ${{ secrets.PGP_KEY_ID }}
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          PGP_SECRET: ${{ secrets.PGP_SECRET }}
         run: sbt ci-release
 
       - name: Install Pandoc 🏁

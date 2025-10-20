@@ -149,7 +149,7 @@ lazy val mimaSettings =
       ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.matcher.JsonMatchers.*"),
       ProblemFilters.exclude[IncompatibleMethTypeProblem]("org.specs2.matcher.JsonMatchersImplicits#given_Conversion_K_V_JsonPairSelector.this"),
       ProblemFilters.exclude[MissingClassProblem]("org.specs2.matcher.JsonMatchersImplicits*"),
-       ProblemFilters.exclude[MissingClassProblem]("org.specs2.matcher.JsonMatchersLowImplicits$given_ToJsonSelector_Boolean$"),
+      ProblemFilters.exclude[MissingClassProblem]("org.specs2.matcher.JsonMatchersLowImplicits$given_ToJsonSelector_Boolean$"),
       ProblemFilters.exclude[MissingClassProblem]("org.specs2.matcher.JsonMatchersLowImplicits$given_ToJsonSelector_Double$"),
       ProblemFilters.exclude[MissingClassProblem]("org.specs2.matcher.JsonMatchersLowImplicits$given_ToJsonSelector_String$"),
       ProblemFilters.exclude[MissingClassProblem]("org.specs2.matcher.JsonMatchersLowImplicits$given_ToJsonSelector_Int$"),
@@ -398,10 +398,20 @@ lazy val releaseSettings: Seq[Setting[_]] = Seq(
     WorkflowStep.Sbt(List("mimaReportBinaryIssues"), name = Some("Check binary compatibility ✔"))
   ),
   ThisBuild / githubWorkflowPublish := Seq(
+    WorkflowStep.Run(
+      name = Some("Import GPG key 🔑"),
+      commands = List(importGpgCommand),
+      env = Map(
+        "PGP_KEY_ID" -> "${{ secrets.PGP_KEY_ID }}",
+        "PGP_PASSPHRASE" -> "${{ secrets.PGP_PASSPHRASE }}",
+        "PGP_SECRET" -> "${{ secrets.PGP_SECRET }}",
+      )
+    ),
     WorkflowStep.Sbt(
       name = Some("Release to Sonatype 📇"),
       commands = List("ci-release"),
       env = Map(
+        "PGP_KEY_ID" -> "${{ secrets.PGP_KEY_ID }}",
         "PGP_PASSPHRASE" -> "${{ secrets.PGP_PASSPHRASE }}",
         "PGP_SECRET" -> "${{ secrets.PGP_SECRET }}",
         "SONATYPE_PASSWORD" -> "${{ secrets.SONATYPE_PASSWORD }}",
@@ -443,6 +453,14 @@ lazy val releaseSettings: Seq[Setting[_]] = Seq(
     guide
   )
 )
+
+val importGpgCommand = """echo "$PGP_SECRET" | base64 --decode | gpg --batch --yes --import
+printf "pinentry-mode loopback\n" >> ~/.gnupg/gpg.conf
+printf "allow-loopback-pinentry\n" >> ~/.gnupg/gpg-agent.conf
+gpgconf --kill gpg-agent
+gpg --list-secret-keys --keyid-format LONG
+gpg --batch --yes -u "$PGP_KEY_ID" --dry-run --pinentry-mode loopback --passphrase "$PGP_PASSPHRASE" --sign <<<"test"
+"""
 
 val SPECS2 = "SPECS2-"
 
