@@ -412,14 +412,16 @@ lazy val releaseSettings: Seq[Setting[_]] = Seq(
       name = Some("Import GPG key 🔑"),
       commands = List(importGpgCommand),
       env = Map(
+        "PGP_KEY_ID" -> "${{ secrets.PGP_KEY_ID }}",
         "PGP_PASSPHRASE" -> "${{ secrets.PGP_PASSPHRASE }}",
-        "PGP_SECRET" -> "${{ secrets.PGP_SECRET }}"
+        "PGP_SECRET" -> "${{ secrets.PGP_SECRET }}",
       )
     ),
     WorkflowStep.Sbt(
       name = Some("Release to Sonatype 📇"),
       commands = List("ci-release"),
       env = Map(
+        "PGP_KEY_ID" -> "${{ secrets.PGP_KEY_ID }}",
         "PGP_PASSPHRASE" -> "${{ secrets.PGP_PASSPHRASE }}",
         "PGP_SECRET" -> "${{ secrets.PGP_SECRET }}",
         "SONATYPE_PASSWORD" -> "${{ secrets.SONATYPE_PASSWORD }}",

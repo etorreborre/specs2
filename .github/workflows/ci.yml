@@ -84,6 +84,7 @@ jobs:
 
       - name: Import GPG key 🔑
         env:
+          PGP_KEY_ID: ${{ secrets.PGP_KEY_ID }}
           PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
           PGP_SECRET: ${{ secrets.PGP_SECRET }}
         run: |
@@ -94,13 +95,14 @@ jobs:
           gpg --list-secret-keys --keyid-format LONG
           gpg --batch --yes -u "$PGP_KEY_ID" --dry-run --pinentry-mode loopback --passphrase "$PGP_PASSPHRASE" --sign <<<"test"
 
-      
+
       - name: Release to Sonatype 📇
         env:
           PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
-          PGP_SECRET: ${{ secrets.PGP_SECRET }}
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          PGP_KEY_ID: ${{ secrets.PGP_KEY_ID }}
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          PGP_SECRET: ${{ secrets.PGP_SECRET }}
         run: sbt ci-release
 
       - name: Install Pandoc 🏁
