@@ -1,0 +1,177 @@
+
+
+### Styles
+
+In a Specification you generally want to include 2 things:
+
+ - some informal text describing what the system/application/function should do
+ - some Scala code specifying exactly inputs and expected outputs
+
+<p/>
+With <s2>specs2</s2> you have 2 main ways to do this:
+
+ - you can create an **Acceptance** specification where all the informal text is written in one place and the code is written somewhere else.
+   The name "acceptance" comes from the fact that it might be easier for a non-developer to just read some text to validate your specification
+
+ - you can create a **Unit** specification where the code is interleaved with the text.
+   The name "unit" comes from the fact that unit specifications have a structure which is close to unit tests in classical frameworks such as JUnit
+
+Both ways of writing specifications have advantages and drawbacks:
+
+ - Acceptance specifications are easier to read as a narrative but require navigation between the text and the code. You also need to define an `is`
+   method holding the body of the specification
+
+ - Unit specifications are easier to navigate but the text tends to be lost in a sea of code
+
+### Acceptance specification
+
+An acceptance specification extends `org.specs2.Specification` and defines the `is` method. You can implement this method
+with an interpolated **`s2`** string: 
+
+```
+class MySpecification extends org.specs2.Specification:
+  def is = s2"""
+
+  this is my specification
+    where example 1 must be true $e1
+    where example 2 must be true $e2
+
+  """
+  def e1 = 1 === 1
+  def e2 = 2 === 2
+```
+
+
+The `s2` string contains the text of your specification as well as some references to methods (`e1` and `e2`)
+defining some code eventually evaluating to a `Result` (this can take many forms, from a simple Boolean, to a `Future[Result]`, or some value
+with an `AsExecution` instance).
+
+When the Specification is executed, the `s2` string is analysed and 2 `Examples` are created then executed:
+
+ - one `Example` with the description "where example 1 must be true" and the code `1 === 1`
+ - another `Example` with the description "where example 2 must be true" and the code `2 === 2`
+
+<p/>
+All the rest, `"this is my specification"`, is parsed as `Text` and is not executed.
+
+### Unit specification
+
+A unit specification extends `org.specs2.mutable.Specification` and uses the `>>` operator to create "blocks" containing `Texts` and `Examples`: 
+
+```
+class MySpecification extends org.specs2.mutable.Specification:
+  "this is my specification" >> {
+    "where example 1 must be true" >> {
+      1 must ===(1)
+    }
+    "where example 2 must be true" >> {
+      2 must ===(2)
+    }
+  }
+```
+
+
+This specification creates one piece of `Text` and 2 `Examples` as before but:
+
+ - there is no need to define an `is` method (this means that a mutable variable is used to collect the `Texts` and `Examples` hence the `mutable` package name)
+ - the code is close to each piece of text it specifies
+
+<p/>
+However once a specification is created with all its `Texts` and `Examples`, the execution will be the same, whether it is an Acceptance one or a Unit one.
+
+The `>>` blocks can be nested and this allows you to structure your specification so that the outermost blocks describe a general context
+while the innermost ones describe more specific contexts. A similar effect can be achieved by simply indenting text in an acceptance specification.
+
+### Expectations
+
+There is another major difference between the acceptance specifications and unit specifications.
+The first style encourages you to write [one expectation per example](http://bit.ly/one_assertion_per_test) while the second allows to use several.
+One expectation per example is useful because when a specification fails, you know immediately what is wrong.
+However it is sometimes expensive to setup data for an example. In that case, having several expectations sharing the same setup might be preferable.
+
+The good news is that for each of the 2 main styles, acceptance and unit, you can choose exactly which "Expectation mode" you prefer if the default mode is not convenient.
+
+#### Functional expectations
+
+In an acceptance specification, by default, the `Result` of an `Example` is always given by the last statement of its body.
+For instance, this example will never fail because the first expectation is lost:
+
+```
+// this will never fail!
+s2"""
+  my example on strings $e1
+"""
+
+def e1 =
+  // because this expectation will not be returned,...
+  "hello" must haveSize(10000)
+  "hello" must startWith("hell")
+```
+
+
+If you want to get both expectations you will need to use `and` between them: 
+
+```
+s2"""
+  my example on strings $e1
+"""
+def e1 =
+  ("hello" must haveSize(10000)) and
+  ("hello" must startWith("hell"))
+```
+
+
+This is a bit tedious and not very pleasing to read so you can see why this mode encourages one expectation per example only!
+If you want to declare several expectations per example, you can mix-in the `org.specs2.matcher.ThrownExpectations` trait to the specification.
+
+#### Thrown expectations
+
+With a unit specification you get "thrown expectations" by default. When an expectation fails, it throws an exception and the rest of the example is not executed: 
+
+```
+class MySpecification extends org.specs2.mutable.Specification:
+  "This is my example" >> {
+    1 === 2 // this fails
+    1 === 1 // this is not executed
+  }
+```
+
+
+It is also possible to use the "functional" expectation mode with a unit specification by mixing in the `org.specs2.matcher.NoThrownExpectations` trait.
+
+
+<h3 id="Now learn how to..." class="ribbon both-ribbon">Now learn how to...</h3>
+
+<div class="ribbon-content">
+    
+ - use <link class="ok">  <a href="org.specs2.guide.Matchers.html" tooltip="" class="ok">matchers</a></link> to specify the body of your examples
+ - set up <link class="ok">  <a href="org.specs2.guide.Contexts.html" tooltip="" class="ok">contexts</a></link> for the examples
+ - control the <link class="ok">  <a href="org.specs2.guide.Execution.html" tooltip="" class="ok">execution</a></link> of a specification
+ - <link class="ok">  <a href="org.specs2.guide.Runners.html" tooltip="" class="ok">run</a></link> a specification
+
+</div>
+
+
+<h3 id="And if you want to know more" class="ribbon both-ribbon">And if you want to know more</h3>
+
+<div class="ribbon-content">
+    
+
+ - <link class="ok">  <a href="org.specs2.guide.SkipExamples.html" tooltip="" class="ok">skip</a></link> examples
+ - use a <link class="ok"><a href="org.specs2.guide.MutableSpecSyntax.html" tooltip="" class="ok">different syntax</a></link> for mutable specifications
+ - collect <link class="ok">  <a href="org.specs2.guide.GetAllExpectations.html" tooltip="" class="ok">*all* expectations</a></link>
+ - mark examples as <link class="ok">  <a href="org.specs2.guide.PendingUntilFixedExamples.html" tooltip="" class="ok">pending until they are fixed</a></link>
+ - add <link class="ok">  <a href="org.specs2.guide.ReferenceOtherSpecifications.html" tooltip="" class="ok">references to other specifications</a></link>
+ - create example descriptions spanning <link class="ok">  <a href="org.specs2.guide.MultilineDescriptions.html" tooltip="" class="ok">several lines</a></link>
+ - add <link class="ok">  <a href="org.specs2.guide.SpecificationFormatting.html" tooltip="" class="ok">new lines and tabs</a></link> in unit specifications
+ - create a trait which will <link class="ok">  <a href="org.specs2.guide.SpecificationTemplate.html" tooltip="" class="ok">decorate or transform other specifications</a></link> when mixed-in
+ - create <link class="ok">  <a href="org.specs2.guide.AutoExamples.html" tooltip="" class="ok">*auto-examples*</a></link> where the code *is* the description of the `Example`
+ - integrate <link class="ok">  <a href="org.specs2.guide.CaptureSnippets.html" tooltip="" class="ok">snippets of code</a></link> to your specification
+ - use <link class="ok">  <a href="org.specs2.guide.LightweightSpecs.html" tooltip="" class="ok">lightweight specifications</a></link> to reduce the number of implicits in scope
+ - use <link class="ok">  <a href="org.specs2.guide.UseForms.html" tooltip="" class="ok">Forms</a></link> to create executable HTML tables in your specification
+ - use the <link class="ok">  <a href="org.specs2.guide.UseCommandLineArguments.html" tooltip="" class="ok">command line arguments</a></link> to define the body of an example
+ - add <link class="ok">  <a href="org.specs2.guide.DebugStatements.html" tooltip="" class="ok">debug statements</a></link>
+ - print <link class="ok">  <a href="org.specs2.guide.PrintExecutionData.html" tooltip="" class="ok">execution data</a></link>
+ - extend the specification by creating examples <link class="ok">  <a href="org.specs2.guide.CreateOnlineSpecifications.html" tooltip="" class="ok">_while it is executing_</a></link>
+
+</div>
