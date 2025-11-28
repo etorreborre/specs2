@@ -13,7 +13,7 @@ addSbtPlugin("com.github.sbt"     % "sbt-site"                      % "1.7.0")
 addSbtPlugin("org.scoverage"      % "sbt-scoverage"                 % "2.4.2")
 addSbtPlugin("com.github.sbt"     % "sbt-git"                       % "2.1.0")
 addSbtPlugin("com.eed3si9n"       % "sbt-buildinfo"                 % "0.13.1")
-addSbtPlugin("com.github.sbt"     % "sbt-github-actions"            % "0.28.0")
+addSbtPlugin("com.github.sbt"     % "sbt-github-actions"            % "0.29.0")
 
 resolvers += Resolver.url("sonatype", new URL("https://oss.sonatype.org/content/repositories/releases"))(Resolver.ivyStylePatterns)
 
