@@ -2,10 +2,10 @@ package org.specs2
 package guide
 package matchers
 
-object TraversableMatchers extends UserGuideCard {
-  def title = "Traversable"
+object IterableMatchers extends UserGuideCard {
+  def title = "Iterable"
   def text = s2"""
-Traversables can be checked with several matchers. If you want to check the size of a `Traversable`
+Iterables can be checked with several matchers. If you want to check the size of a `Iterable`
 
  * check if it is empty
  ${snippet{ Seq() must beEmpty }}
@@ -21,7 +21,7 @@ Traversables can be checked with several matchers. If you want to check the size
 
 #### Check each element individually
 
-Then you can check the elements which are contained in the Traversable
+Then you can check the elements which are contained in the Iterable
 
  * if a simple value is contained
  ${snippet{ Seq(1, 2, 3) must contain(2) }}
@@ -52,7 +52,7 @@ For each of the check above you can indicate how many times the check should be 
 
 #### Check all elements
 
-The other types of checks involve comparing the Traversable elements to other elements (values, matchers, function returning a `Result`)
+The other types of checks involve comparing the Iterable elements to other elements (values, matchers, function returning a `Result`)
 
  * with a set of values
  ${snippet{ Seq(1, 2, 3, 4) must contain(2, 4) }}
@@ -71,20 +71,20 @@ ${snippet{ Seq(1) must contain(allOf(1, 1)).onDistinctValues }}
 The `eachOf` method does the same thing (and this example will fail as well):
 ${snippet{ Seq(1) must contain(eachOf(1, 1)) }}
 
-Another frequent use of Traversable matchers is to check if the Traversable have the right number of elements. For this you can use:
+Another frequent use of iterable matchers is to check if the iterable have the right number of elements. For this you can use:
 
- * `atLeast`, which is actually another name for `allOf`, where the traversable can contain more elements than required
+ * `atLeast`, which is actually another name for `allOf`, where the iterable can contain more elements than required
  ${snippet{ Seq(1, 2, 3, 4) must contain(atLeast(2, 4)) }}
 
- * `atMost` where the traversable can not contain more elements than required
+ * `atMost` where the iterable can not contain more elements than required
  ${snippet{ Seq(2, 3) must contain(atMost(2, 3, 4)) }}
 
- * `exactly` where the traversable must contain exactly the specified number of elements
+ * `exactly` where the iterable must contain exactly the specified number of elements
  ${snippet{ Seq(1, 2) must contain(exactly(2, 1)) }}
 
 The `atLeast/atMost/exactly` operators work on distinct values by default (because this is easier for counting the correspondence between actual values and expected ones). However you can use `onDistinctValues(false)` if you don't care.
 
-Finally, if you want to get the differences between 2 traversables:
+Finally, if you want to get the differences between 2 iterables:
 
  ${snippet{ Seq(2, 4, 1) must containTheSameElementsAs(Seq(1, 4, 2)) }}
 

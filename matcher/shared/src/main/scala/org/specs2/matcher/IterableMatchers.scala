@@ -8,7 +8,7 @@ import text.Regexes.*
 import text.Plural.*
 import text.NotNullStrings.*
 
-import scala.collection.Traversable
+import scala.collection.Iterable
 import scala.annotation.tailrec
 import execute.*
 import ValueChecks.{given, *}
@@ -16,13 +16,19 @@ import StringMatchers.{given, *}
 import describe.Diffable
 import Result.*
 
-/** Matchers for traversables
+/** Matchers for iterables
   */
-trait TraversableMatchers extends TraversableBaseMatchers with TraversableBaseMatchersLowImplicits with NumberOfTimes
+trait IterableMatchers extends IterableBaseMatchers with IterableBaseMatchersLowImplicits with NumberOfTimes
 
-object TraversableMatchers extends TraversableMatchers
+@deprecated(message = "Use the org.specs2.matcher.IterableMatchers trait instead", since = "5.7.0")
+trait TraversableMatchers extends IterableMatchers
 
-trait TraversableBaseMatchers:
+object IterableMatchers extends IterableMatchers
+
+@deprecated(message = "Use the org.specs2.matcher.IterableMatchers object instead", since = "5.7.0")
+object TraversableMatchers extends IterableMatchers
+
+trait IterableBaseMatchers:
   outer =>
 
   /** ELEMENTS MATCHERS
@@ -41,30 +47,30 @@ trait TraversableBaseMatchers:
   def atLeast[T](checks: ValueCheck[T]*): ContainWithResultSeq[T] = new ContainWithResultSeq(checks).atLeast
   def atMost[T](checks: ValueCheck[T]*): ContainWithResultSeq[T] = new ContainWithResultSeq(checks).atMost
 
-  /** match if a traversable contains all the elements of seq (and maybe more) */
+  /** match if a iterable contains all the elements of seq (and maybe more) */
   def containAllOf[T: Diffable](seq: Seq[T]) =
     contain(atLeast(seq.map(v => valueIsTypedValueCheck(v))*))
 
-  /** match if a traversable contains one of (t1, t2) */
+  /** match if a iterable contains one of (t1, t2) */
   def containAnyOf[T](seq: Seq[T]): ContainWithResult[T] =
     contain(new BeOneOf(seq))
 
-  /** match if traversable contains (x matches .*+t+.*) */
-  def containMatch[T](s: =>String): Matcher[Traversable[T]] =
+  /** match if iterable contains (x matches .*+t+.*) */
+  def containMatch[T](s: =>String): Matcher[Iterable[T]] =
     containPattern(s.regexPart)
 
-  /** match if traversable contains (x matches p) */
-  def containPattern[T, S: MatchingExpression](s: S): Matcher[Traversable[T]] =
+  /** match if iterable contains (x matches p) */
+  def containPattern[T, S: MatchingExpression](s: S): Matcher[Iterable[T]] =
     contain(atLeast(ValueChecks.matcherIsValueCheck(beMatching(s)))) ^^ (_.map(_.toString))
 
   /** does a containAll comparison in both ways */
   def containTheSameElementsAs[T](
       seq: Seq[T],
       equality: (T, T) => Boolean = (_: T) == (_: T)
-  ): Matcher[Traversable[T]] =
-    new Matcher[Traversable[T]]:
+  ): Matcher[Iterable[T]] =
+    new Matcher[Iterable[T]]:
 
-      def apply[S <: Traversable[T]](t: Expectable[S]) =
+      def apply[S <: Iterable[T]](t: Expectable[S]) =
         val missing = seq.difference(t.value.toSeq, equality)
         val added = t.value.toSeq.difference(seq, equality)
         def message(diffs: scala.collection.Seq[?], msg: String) =
@@ -414,7 +420,10 @@ trait TraversableBaseMatchers:
     allOf(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18, t19, t21, t22)
   )
 
-private[specs2] trait TraversableBaseMatchersLowImplicits extends ValueChecksLowImplicits:
+@deprecated(message = "Use the org.specs2.matcher.IterableBaseMatchers trait instead", since = "5.7.0")
+trait TraversableBaseMatchers extends IterableBaseMatchers
+
+private[specs2] trait IterableBaseMatchersLowImplicits extends ValueChecksLowImplicits:
 
   given seqToValueChecks[T](using to: T => ValueCheck[T]): Conversion[Seq[T], Seq[ValueCheck[T]]] with
     def apply(seq: Seq[T]): Seq[ValueCheck[T]] =
@@ -425,21 +434,21 @@ private[specs2] trait TraversableBaseMatchersLowImplicits extends ValueChecksLow
       seq.map(matcherIsValueCheck[T])
 
 class SizedMatcher[T: Sized](n: Int, sizeWord: String) extends Matcher[T]:
-  def apply[S <: T](traversable: Expectable[S]) =
+  def apply[S <: T](iterable: Expectable[S]) =
     val s = implicitly[Sized[T]]
-    val valueSize = s.size(traversable.value)
-    result(valueSize == n, s"'${traversable.description}' doesn't have $sizeWord $n but $sizeWord $valueSize")
+    val valueSize = s.size(iterable.value)
+    result(valueSize == n, s"'${iterable.description}' doesn't have $sizeWord $n but $sizeWord $valueSize")
 
 class SizedCheckedMatcher[T: Sized](check: ValueCheck[Int], sizeWord: String) extends Matcher[T]:
-  def apply[S <: T](traversable: Expectable[S]) =
+  def apply[S <: T](iterable: Expectable[S]) =
     val s = implicitly[Sized[T]]
-    val valueSize = s.size(traversable.value)
+    val valueSize = s.size(iterable.value)
     val checked = check.check(valueSize)
-    result(checked.isSuccess, traversable.description + " doesn't have the right " + sizeWord + ": " + checked.message)
+    result(checked.isSuccess, iterable.description + " doesn't have the right " + sizeWord + ": " + checked.message)
 
 class OrderingMatcher[T: Ordering] extends Matcher[Seq[T]]:
-  def apply[S <: Seq[T]](traversable: Expectable[S]) =
-    result(traversable.value == traversable.value.sorted, traversable.description + " is not sorted")
+  def apply[S <: Seq[T]](iterable: Expectable[S]) =
+    result(iterable.value == iterable.value.sorted, iterable.description + " is not sorted")
 
 import control.NumberOfTimes.*
 import text.Plural.*
@@ -450,9 +459,9 @@ case class ContainWithResult[T](
     timesMax: Option[Times] = None,
     checkAll: Boolean = true,
     negate: Boolean = false
-) extends Matcher[Traversable[T]]:
+) extends Matcher[Iterable[T]]:
 
-  def apply[S <: Traversable[T]](t: Expectable[S]) =
+  def apply[S <: Iterable[T]](t: Expectable[S]) =
     val seq = Vector(t.value.toSeq*)
 
     // stop after the first failure if !checkAll
@@ -506,7 +515,7 @@ case class ContainWithResult[T](
   def forall = copy(timesMin = None, timesMax = None, checkAll = false)
   def foreach = copy(timesMin = None, timesMax = None)
 
-  private def messages[S <: Traversable[T]](expectable: String, successes: Seq[Result], failures: Seq[Result]) =
+  private def messages[S <: Iterable[T]](expectable: String, successes: Seq[Result], failures: Seq[Result]) =
     def equalValueCheckMessages(expected: Any) =
       val containsMessage = s"$expectable contains $expected"
       val doesNotContainMessage = s"$expectable does not contain $expected"
@@ -546,9 +555,9 @@ case class ContainWithResultSeq[T](
     eachCheck: Boolean = false,
     checkOrder: Boolean = false,
     negate: Boolean = false
-) extends Matcher[Traversable[T]]:
+) extends Matcher[Iterable[T]]:
 
-  def apply[S <: Traversable[T]](t: Expectable[S]) =
+  def apply[S <: Iterable[T]](t: Expectable[S]) =
     val seq = t.value.toSeq
 
     // results for each element, either checked in order or

@@ -111,16 +111,16 @@ class Form(val title: Option[String] = None, val rows: Seq[Row] = Vector(), val 
   def toCellXml(using args: Arguments = Arguments()): NodeSeq =
     <td class="info">{Form.toXml(this)(using args)}</td>
 
-  def subset(f1: Traversable[Form], f2: Traversable[Form]): Form =
+  def subset(f1: Iterable[Form], f2: Iterable[Form]): Form =
     addLines(FormDiffs.subset(f1.toSeq, f2.toSeq))
 
-  def subsequence(f1: Traversable[Form], f2: Traversable[Form]): Form =
+  def subsequence(f1: Iterable[Form], f2: Iterable[Form]): Form =
     addLines(FormDiffs.subsequence(f1.toSeq, f2.toSeq))
 
-  def set(f1: Traversable[Form], f2: Traversable[Form]): Form =
+  def set(f1: Iterable[Form], f2: Iterable[Form]): Form =
     addLines(FormDiffs.set(f1.toSeq, f2.toSeq))
 
-  def sequence(f1: Traversable[Form], f2: Traversable[Form]): Form =
+  def sequence(f1: Iterable[Form], f2: Iterable[Form]): Form =
     addLines(FormDiffs.sequence(f1.toSeq, f2.toSeq))
 
   def subset[T1: HasForm, T2: HasForm](f1: Seq[T1], f2: Seq[T2]): Form =

@@ -15,7 +15,7 @@ import execute.ResultImplicits.*
 trait FilesContentMatchers
     extends FileMatchers
     with LinesContentMatchers
-    with TraversableMatchers
+    with IterableMatchers
     with ExpectationsCreation:
   /** check that all the paths in `expectedDir` are the same as the ones in `actualDir`
     */

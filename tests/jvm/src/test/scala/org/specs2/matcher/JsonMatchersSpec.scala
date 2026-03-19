@@ -91,7 +91,7 @@ class JsonMatchersSpec extends Specification with JsonMatchers {
     ) returns
       s"""the object\n{age:19}\ndoesn't contain the pair 'age':value '18'"""}
 
- String, Int, Boolean, Double and Traversable matchers can be used with the andHave method $andHave
+ String, Int, Boolean, Double and Iterable matchers can be used with the andHave method $andHave
 
  Matchers must be resilient when there are null values
  ${"""{ "b" : { "a" : 2, "c" : null } }""" must /("b" -> /("a" -> 2))}

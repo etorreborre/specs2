@@ -30,7 +30,7 @@ private[specs2] trait Listx:
         case h :: t  => intersperse0(a :: h :: accum, t)
       intersperse0(Nil, list).reverse
 
-  /** This methods works like the transpose method defined on Traversable but it doesn't fail when the input is not
+  /** This methods works like the transpose method defined on Iterable but it doesn't fail when the input is not
     * formatted like a regular matrix
     *
     * List(List("a", "bb", "ccc"), List("dd", "e", "fff")) => List(List("a", "dd"), List("e", "bb") List("ccc", "fff"))

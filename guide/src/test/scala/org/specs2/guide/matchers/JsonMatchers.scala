@@ -71,7 +71,7 @@ json must haveProducts(
 )
 }}
 
-The `andHave` method accepts any `Matcher[JsonType]` where `JsonType` is either `JsonArray`, `JsonMap`, `JsonNumber`, `JsonString`, `JsonNull`. In the example above we pass directly `shirt` and `10` as `Matcher[JsonType]` because there are implicit conversions from `Int`, `Boolean`, `Double`, `String` and `Traversable[String]` matchers (like `allOf`) to a `Matcher[JsonType]`.
+The `andHave` method accepts any `Matcher[JsonType]` where `JsonType` is either `JsonArray`, `JsonMap`, `JsonNumber`, `JsonString`, `JsonNull`. In the example above we pass directly `shirt` and `10` as `Matcher[JsonType]` because there are implicit conversions from `Int`, `Boolean`, `Double`, `String` and `Iterable[String]` matchers (like `allOf`) to a `Matcher[JsonType]`.
 
 """
   lazy val person = ""
