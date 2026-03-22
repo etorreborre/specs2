@@ -68,7 +68,7 @@ private[specs2] trait Seqx:
             else notFound(rest, ls2, result :+ head)
       notFound(seq, other)
 
-  /** This methods works like the transpose method defined on Traversable but it doesn't fail when the input is not
+  /** This methods works like the transpose method defined on Iterable but it doesn't fail when the input is not
     * formatted like a regular matrix
     *
     * List(List("a", "bb", "ccc"), List("dd", "e", "fff")) => List(List("a", "dd"), List("e", "bb") List("ccc", "fff"))

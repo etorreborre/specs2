@@ -6,7 +6,7 @@ import scala.jdk.CollectionConverters.*
 import org.specs2.specification.core.{Env, OwnEnv}
 
 // format: off
-class TraversableMatchersSpec extends Specification with ResultMatchers with MustMatchers with OwnEnv {
+class IterableMatchersSpec extends Specification with ResultMatchers with MustMatchers with OwnEnv {
   def is = s2"""
 
  We can check the elements of a collection by using matchers
@@ -137,15 +137,70 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Mus
    ${(Seq(1, 2, 3) must not(contain(atLeast(1, 2, 3, 4, 5))))}
    ${(Seq(1, 2, 3) must not(contain(atMost(1, 2))))}
 
-   we can check if a traversable contains elements following a given pattern
+   we can check if an iterable contains elements following a given pattern
    ${Seq("Hello", "World") must containMatch("ll")}
    ${Seq("Hello", "World") must containPattern(".*llo")}
+
+   we can check all provided values with 21 arguments
+   ${
+    Seq.range(1, 22) must contain(
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21
+    )
+   }
+
+   we can check all provided values with 22 arguments
+   ${
+    Seq.range(1, 23) must contain(
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22
+    )
+   }
 
 
  Size
  ===
 
- We can check the size of an traversable
+ We can check the size of an iterable
    ${Seq() must beEmpty}
    ${(Seq() must not(beEmpty)) must beFailing}
    ${Seq(1, 2) must haveSize(2)}
@@ -167,10 +222,10 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Mus
     //{ Seq(2, 1, 3) must not(beSorted) }
     ${(Seq(2, 1, 3) must beSorted) returns "List(2, 1, 3) is not sorted"}
 
- Compare to another traversable
+ Compare to another iterable
  ==============================
 
-  We can check if 2 traversables are contained in each other
+  We can check if two iterables contain the same elements
    ${List("1", "2") must containTheSameElementsAs(Seq("2", "1"))}
    ${{ List("1", "2", "3") must containTheSameElementsAs(Seq("2", "4", "1")) } returns Seq(
     "List(1, 2, 3)",
@@ -193,7 +248,7 @@ class TraversableMatchersSpec extends Specification with ResultMatchers with Mus
  With Java collections
  =====================
 
- Java collections can also be used with Traversable matchers but generally require explicit conversion
+ Java collections can also be used with Iterable matchers but generally require explicit conversion
    ${asList("Hello", "World") must haveSize(2)}
    ${asList("Hello", "World").asScala must containMatch("ll")}
 

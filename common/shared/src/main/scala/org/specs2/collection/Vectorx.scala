@@ -28,7 +28,7 @@ private[specs2] trait Vectorx:
         case v         => intersperse0(a +: v.head +: accum, v.tail)
       intersperse0(Vector(), vector).reverse
 
-  /** This methods works like the transpose method defined on Traversable but it doesn't fail when the input is not
+  /** This methods works like the transpose method defined on Iterable but it doesn't fail when the input is not
     * formatted like a regular matrix
     *
     * Vector(Vector("a", "bb", "ccc"), Vector("dd", "e", "fff")) => Vector(Vector("a", "dd"), Vector("e", "bb")

@@ -12,7 +12,7 @@ trait Sized[T]:
 
 object Sized extends SizedLowPriority1:
   /** any scala collection has a size */
-  given [I <: Traversable[?]]: Sized[I] with
+  given [I <: Iterable[?]]: Sized[I] with
     def size(t: I) = t.size
 
 trait SizedLowPriority1 extends SizedLowPriority2:
@@ -26,6 +26,6 @@ trait SizedLowPriority1 extends SizedLowPriority2:
 
 trait SizedLowPriority2:
 
-  /** a regular string has a size, without having to be converted to an Traversable */
+  /** a regular string has a size, without having to be converted to an Iterable */
   given Sized[String] with
     def size(t: String) = t.length

@@ -18,7 +18,7 @@ class HopcroftKarpSpec extends Spec {
     and return the least number of failures              $g3
 
 
-  traversable test $t1
+  iterable test $t1
 
 """
 

@@ -2,7 +2,7 @@ package org.specs2
 package text
 
 import NotNullStrings.*
-import scala.collection.Traversable
+import scala.collection.Iterable
 import collection.canEqualAny
 
 /** Quote and unquote strings
@@ -14,14 +14,14 @@ private[specs2] trait Quote:
     if a == null then quote("null")
     else
       a.asInstanceOf[Matchable] match
-        case option: Option[?]      => quote(option.notNull)
-        case ar: Array[?]           => ar.notNull
-        case map: Map[?, ?]         => map.notNull
-        case it: TraversableOnce[?] => it.notNull
-        case _                      => quote(a.notNull)
+        case option: Option[?]   => quote(option.notNull)
+        case ar: Array[?]        => ar.notNull
+        case map: Map[?, ?]      => map.notNull
+        case it: IterableOnce[?] => it.notNull
+        case _                   => quote(a.notNull)
 
   /** quote a sequence, with commas if short, with newlines otherwise */
-  def qseq(seq: Traversable[?]): String =
+  def qseq(seq: Iterable[?]): String =
     val withCommas = q(seq.mkString(", "))
     if withCommas.length < 30 then withCommas
     else seq.mkString("\n", "\n  ", "\n")

@@ -3,13 +3,13 @@ package org.specs2.specification.mutable
 import org.specs2.concurrent.ExecutionEnv
 import org.specs2.execute.Result
 import org.specs2.main.ArgumentsShortcuts
-import org.specs2.matcher.{Matcher, TraversableMatchers, TypedEqual, ValueCheck}
+import org.specs2.matcher.{Matcher, IterableMatchers, TypedEqual, ValueCheck}
 import org.specs2.specification.core.{Description, Fragment, SpecStructure, StacktraceLocation}
 import org.specs2.specification.create.DefaultFragmentFactory.*
 import org.specs2.specification.dsl.mutable.{ArgumentsCreation, MutableDsl, MutableFragmentBuilder}
 import org.specs2.matcher.Matcher.{given}
 
-class MutableFragmentsDslSpec(ee: ExecutionEnv) extends org.specs2.Spec with TypedEqual with TraversableMatchers {
+class MutableFragmentsDslSpec(ee: ExecutionEnv) extends org.specs2.Spec with TypedEqual with IterableMatchers {
   def is = s2"""
 
   create examples

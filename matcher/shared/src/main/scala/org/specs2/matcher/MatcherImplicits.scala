@@ -15,7 +15,7 @@ trait MatcherImplicits extends ExpectationsCreation:
 
   /** Extend collections to check all their elements
     */
-  extension [T, R: AsResult](values: Traversable[T])
+  extension [T, R: AsResult](values: Iterable[T])
 
     def atLeastOnce(f: T => R): Result =
       createExpectable(values).applyMatcher(ContainWithResult(f).atLeastOnce)
@@ -49,26 +49,26 @@ trait MatcherImplicits extends ExpectationsCreation:
 
   /** verify the function f for all the values, stopping after the first failure, where the PartialFunction is defined
     */
-  def forall[T, R: AsResult](values: Traversable[T])(f: T => R): Result =
+  def forall[T, R: AsResult](values: Iterable[T])(f: T => R): Result =
     createExpectable(values).applyMatcher(ContainWithResult(f).forall)
 
-  def forallWhen[T, R: AsResult](values: Traversable[T])(f: PartialFunction[T, R]): Result =
+  def forallWhen[T, R: AsResult](values: Iterable[T])(f: PartialFunction[T, R]): Result =
     forall(values.filter(f.isDefinedAt))(f)
 
   /** verify the function f for all the values, and collect all failures */
-  def foreach[T, R: AsResult](values: Traversable[T])(f: T => R): Result =
+  def foreach[T, R: AsResult](values: Iterable[T])(f: T => R): Result =
     createExpectable(values).applyMatcher(ContainWithResult(f).foreach)
 
   /** verify the function f for all the values, and collect all failures, where the PartialFunction is defined */
-  def foreachWhen[T, R: AsResult](values: Traversable[T])(f: PartialFunction[T, R]): Result =
+  def foreachWhen[T, R: AsResult](values: Iterable[T])(f: PartialFunction[T, R]): Result =
     foreach(values.filter(f.isDefinedAt))(f)
 
   /** verify the function f for at least one value, where the PartialFunction is defined */
-  def atLeastOnceWhen[T, R: AsResult](values: Traversable[T])(f: PartialFunction[T, R]): Result =
+  def atLeastOnceWhen[T, R: AsResult](values: Iterable[T])(f: PartialFunction[T, R]): Result =
     atLeastOnce(values.filter(f.isDefinedAt))(f)
 
   /** verify the function f for at least one value, where the PartialFunction is defined */
-  def atMostOnceWhen[T, R: AsResult](values: Traversable[T])(f: PartialFunction[T, R]): Result =
+  def atMostOnceWhen[T, R: AsResult](values: Iterable[T])(f: PartialFunction[T, R]): Result =
     atMostOnce(values.filter(f.isDefinedAt))(f)
 
   /** this extension provides an inverted syntax to adapt matchers to make the adaptation more readable in some cases:

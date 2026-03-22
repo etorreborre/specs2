@@ -5,7 +5,7 @@ package matcher
   */
 trait Matchers
     extends AnyMatchers
-    with TraversableMatchers
+    with IterableMatchers
     with MapMatchers
     with StringMatchers
     with ExceptionMatchers

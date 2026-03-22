@@ -8,7 +8,7 @@ object MatcherCards extends Cards {
   def title = "Specification matchers"
   def cards = Seq(
     StringMatchers,
-    TraversableMatchers,
+    IterableMatchers,
     NumericMatchers,
     OptionEitherMatchers,
     TryMatchers,

@@ -102,7 +102,7 @@ doesn't contain the pair "name": "Joe""""}
 {"age": "19"}
 doesn't contain the pair "age": "18""""}
 
- String, Int, Boolean, Double and Traversable matchers can be used with the andHave method $andHave
+ String, Int, Boolean, Double and Iterable matchers can be used with the andHave method $andHave
 
  Matchers must be resilient when there are null values
  ${"""{ "b" : { "a" : 2, "c" : null } }""" must /("b" -> /("a" -> 2))}
