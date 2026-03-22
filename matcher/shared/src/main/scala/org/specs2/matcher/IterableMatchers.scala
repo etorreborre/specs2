@@ -51,7 +51,7 @@ trait IterableBaseMatchers:
   def containAllOf[T: Diffable](seq: Seq[T]) =
     contain(atLeast(seq.map(v => valueIsTypedValueCheck(v))*))
 
-  /** match if a iterable contains one of (t1, t2) */
+  /** match if an iterable contains one of (t1, t2) */
   def containAnyOf[T](seq: Seq[T]): ContainWithResult[T] =
     contain(new BeOneOf(seq))
 
