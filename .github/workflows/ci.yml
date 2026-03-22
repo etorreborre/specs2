@@ -95,7 +95,7 @@ jobs:
           gpg --list-secret-keys --keyid-format LONG
           gpg --batch --yes -u "$PGP_KEY_ID" --dry-run --pinentry-mode loopback --passphrase "$PGP_PASSPHRASE" --sign <<<"test"
 
-
+      
       - name: Release to Sonatype 📇
         env:
           PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
