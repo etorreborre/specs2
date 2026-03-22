@@ -137,9 +137,64 @@ class IterableMatchersSpec extends Specification with ResultMatchers with MustMa
    ${(Seq(1, 2, 3) must not(contain(atLeast(1, 2, 3, 4, 5))))}
    ${(Seq(1, 2, 3) must not(contain(atMost(1, 2))))}
 
-   we can check if a iterable contains elements following a given pattern
+   we can check if an iterable contains elements following a given pattern
    ${Seq("Hello", "World") must containMatch("ll")}
    ${Seq("Hello", "World") must containPattern(".*llo")}
+
+   we can check all provided values with 21 arguments
+   ${
+    Seq.range(1, 22) must contain(
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21
+    )
+   }
+
+   we can check all provided values with 22 arguments
+   ${
+    Seq.range(1, 23) must contain(
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22
+    )
+   }
 
 
  Size
@@ -170,7 +225,7 @@ class IterableMatchersSpec extends Specification with ResultMatchers with MustMa
  Compare to another iterable
  ==============================
 
-  We can check if 2 traversables are contained in each other
+  We can check if two iterables contain the same elements
    ${List("1", "2") must containTheSameElementsAs(Seq("2", "1"))}
    ${{ List("1", "2", "3") must containTheSameElementsAs(Seq("2", "4", "1")) } returns Seq(
     "List(1, 2, 3)",

@@ -26,7 +26,7 @@ trait TraversableMatchers extends IterableMatchers
 object IterableMatchers extends IterableMatchers
 
 @deprecated(message = "Use the org.specs2.matcher.IterableMatchers object instead", since = "5.7.0")
-object TraversableMatchers extends IterableMatchers
+object TraversableMatchers extends TraversableMatchers
 
 trait IterableBaseMatchers:
   outer =>
@@ -47,7 +47,7 @@ trait IterableBaseMatchers:
   def atLeast[T](checks: ValueCheck[T]*): ContainWithResultSeq[T] = new ContainWithResultSeq(checks).atLeast
   def atMost[T](checks: ValueCheck[T]*): ContainWithResultSeq[T] = new ContainWithResultSeq(checks).atMost
 
-  /** match if a iterable contains all the elements of seq (and maybe more) */
+  /** match if an iterable contains all the elements of seq (and maybe more) */
   def containAllOf[T: Diffable](seq: Seq[T]) =
     contain(atLeast(seq.map(v => valueIsTypedValueCheck(v))*))
 
@@ -391,7 +391,7 @@ trait IterableBaseMatchers:
       t20: ValueCheck[T],
       t21: ValueCheck[T]
   ): ContainWithResultSeq[T] = contain(
-    allOf(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18, t19, t21, t21)
+    allOf(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18, t19, t20, t21)
   )
   def contain[T](
       t1: ValueCheck[T],
@@ -417,7 +417,7 @@ trait IterableBaseMatchers:
       t21: ValueCheck[T],
       t22: ValueCheck[T]
   ): ContainWithResultSeq[T] = contain(
-    allOf(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18, t19, t21, t22)
+    allOf(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18, t19, t20, t21, t22)
   )
 
 @deprecated(message = "Use the org.specs2.matcher.IterableBaseMatchers trait instead", since = "5.7.0")
@@ -515,7 +515,7 @@ case class ContainWithResult[T](
   def forall = copy(timesMin = None, timesMax = None, checkAll = false)
   def foreach = copy(timesMin = None, timesMax = None)
 
-  private def messages[S <: Iterable[T]](expectable: String, successes: Seq[Result], failures: Seq[Result]) =
+  private def messages(expectable: String, successes: Seq[Result], failures: Seq[Result]) =
     def equalValueCheckMessages(expected: Any) =
       val containsMessage = s"$expectable contains $expected"
       val doesNotContainMessage = s"$expectable does not contain $expected"

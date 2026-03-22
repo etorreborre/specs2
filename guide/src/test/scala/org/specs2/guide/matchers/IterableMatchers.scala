@@ -5,7 +5,7 @@ package matchers
 object IterableMatchers extends UserGuideCard {
   def title = "Iterable"
   def text = s2"""
-Iterables can be checked with several matchers. If you want to check the size of a `Iterable`
+Iterables can be checked with several matchers. If you want to check the size of an `Iterable`
 
  * check if it is empty
  ${snippet{ Seq() must beEmpty }}
@@ -21,7 +21,7 @@ Iterables can be checked with several matchers. If you want to check the size of
 
 #### Check each element individually
 
-Then you can check the elements which are contained in the Iterable
+Then you can check the elements which are contained in an `Iterable`
 
  * if a simple value is contained
  ${snippet{ Seq(1, 2, 3) must contain(2) }}
@@ -71,12 +71,12 @@ ${snippet{ Seq(1) must contain(allOf(1, 1)).onDistinctValues }}
 The `eachOf` method does the same thing (and this example will fail as well):
 ${snippet{ Seq(1) must contain(eachOf(1, 1)) }}
 
-Another frequent use of iterable matchers is to check if the iterable have the right number of elements. For this you can use:
+Another frequent use of iterable matchers is to check whether an iterable has the right number of elements. For this you can use:
 
- * `atLeast`, which is actually another name for `allOf`, where the iterable can contain more elements than required
+ * `atLeast`, which is another name for `allOf`, where the iterable can contain more elements than required
  ${snippet{ Seq(1, 2, 3, 4) must contain(atLeast(2, 4)) }}
 
- * `atMost` where the iterable can not contain more elements than required
+ * `atMost` where the iterable cannot contain more elements than required
  ${snippet{ Seq(2, 3) must contain(atMost(2, 3, 4)) }}
 
  * `exactly` where the iterable must contain exactly the specified number of elements
