@@ -162,6 +162,37 @@ lazy val mimaSettings =
       ),
       ProblemFilters.exclude[MissingClassProblem](
         "org.specs2.matcher.JsonMatchersLowImplicits$given_ToJsonSelector_Int$"
+      ),
+
+      // Traversable -> Iterable rename in matcher traits and inherited mixins
+      ProblemFilters.exclude[MissingTypesProblem]("org.specs2.matcher.Matchers"),
+      ProblemFilters.exclude[MissingTypesProblem]("org.specs2.matcher.Matchers$"),
+      ProblemFilters.exclude[MissingTypesProblem]("org.specs2.matcher.MustMatchers"),
+      ProblemFilters.exclude[MissingTypesProblem]("org.specs2.matcher.MustMatchers$"),
+      ProblemFilters.exclude[MissingTypesProblem]("org.specs2.matcher.MustThrownMatchers"),
+      ProblemFilters.exclude[MissingTypesProblem]("org.specs2.matcher.MustThrownMatchers$"),
+      ProblemFilters.exclude[MissingTypesProblem]("org.specs2.matcher.ShouldMatchers"),
+      ProblemFilters.exclude[MissingTypesProblem]("org.specs2.matcher.ShouldMatchers$"),
+      ProblemFilters.exclude[MissingTypesProblem]("org.specs2.matcher.ShouldThrownMatchers"),
+      ProblemFilters.exclude[MissingTypesProblem]("org.specs2.matcher.ShouldThrownMatchers$"),
+      ProblemFilters.exclude[MissingTypesProblem]("org.specs2.matcher.ContentMatchers"),
+      ProblemFilters.exclude[MissingTypesProblem]("org.specs2.matcher.ContentMatchers$"),
+      ProblemFilters.exclude[MissingTypesProblem]("org.specs2.matcher.FilesContentMatchers"),
+      ProblemFilters.exclude[MissingTypesProblem]("org.specs2.matcher.JUnitMustMatchers$"),
+      ProblemFilters.exclude[MissingTypesProblem]("org.specs2.matcher.JUnitShouldMatchers$"),
+      ProblemFilters.exclude[MissingTypesProblem]("org.specs2.matcher.TraversableMatchers"),
+      ProblemFilters.exclude[MissingTypesProblem]("org.specs2.matcher.TraversableMatchers$"),
+      ProblemFilters.exclude[MissingTypesProblem]("org.specs2.Spec"),
+      ProblemFilters.exclude[MissingTypesProblem]("org.specs2.Specification"),
+      ProblemFilters.exclude[MissingTypesProblem]("org.specs2.mutable.Spec"),
+      ProblemFilters.exclude[MissingTypesProblem]("org.specs2.mutable.Specification"),
+      ProblemFilters.exclude[MissingTypesProblem]("org.specs2.mutable.script.Specification"),
+      ProblemFilters.exclude[MissingTypesProblem]("org.specs2.specification.script.Spec"),
+      ProblemFilters.exclude[MissingTypesProblem]("org.specs2.specification.script.Specification"),
+      ProblemFilters.exclude[MissingClassProblem]("org.specs2.matcher.TraversableBaseMatchersLowImplicits*"),
+      ProblemFilters.exclude[NewMixinForwarderProblem]("org.specs2.matcher.TraversableBaseMatchers.*"),
+      ProblemFilters.exclude[DirectMissingMethodProblem](
+        "org.specs2.matcher.TraversableBaseMatchers.containTheSameElementsAs$default$2$"
       )
     )
   )
