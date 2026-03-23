@@ -1,0 +1,32 @@
+
+
+ Question                                              | See
+------------------------------------------------------ | ---------------
+How to execute an action before all the examples?                                        | <link class="ok"><a href="org.specs2.guide.Contexts.html" tooltip="" class="ok">Contexts</a></link>
+How to execute an action before each example?                                            | <link class="ok"><a href="org.specs2.guide.Contexts.html" tooltip="" class="ok">Contexts</a></link>
+Can I create and reuse a Specification "template"?                                       | <link class="ok"><a href="org.specs2.guide.SpecificationTemplate.html" tooltip="" class="ok">Specification template</a></link>
+How can I pass some data to each example?                                                | <link class="ok"><a href="org.specs2.guide.Contexts.html" tooltip="" class="ok">Contexts</a></link>
+Can I add more information to my results for easier diagnostic?                          | <link class="ok"><a href="org.specs2.guide.ExpectationDescription.html" tooltip="" class="ok">Expectation description</a></link>
+Is it possible to execute a Specification sequentially?                                  | <link class="ok"><a href="org.specs2.guide.Execution.html" tooltip="" class="ok">Execution</a></link>
+How to mark an example as `pending` until it is fixed?                                   | <link class="ok"><a href="org.specs2.guide.PendingUntilFixedExamples.html" tooltip="" class="ok">Pending until fixed</a></link>
+Can I simply mark a block of code as `pending`?                                          | <link class="ok"><a href="org.specs2.guide.StandardResults.html" tooltip="" class="ok">Standard results</a></link>
+Is there a way to run only one example?                                                  | <link class="ok"><a href="org.specs2.guide.Selection.html" tooltip="" class="ok">Selection</a></link>
+I would like to display the execution time of each example                               | <link class="ok"><a href="org.specs2.guide.ConsoleOutput.html" tooltip="" class="ok">Console output</a></link>
+Can I use a for loop to create examples or results?                                      | <link class="ok"><a href="org.specs2.guide.ForLoops.html" tooltip="" class="ok">For loops</a></link>
+How can I tag examples?                                                                  | <link class="ok"><a href="org.specs2.guide.Selection.html" tooltip="" class="ok">Selection</a></link>
+Can I skip examples?                                                                     | <link class="ok"><a href="org.specs2.guide.SkipExamples.html" tooltip="" class="ok">Skip examples</a></link>
+Is it possible to modify the behaviour of a Specification with command-line arguments?   | <link class="ok"><a href="org.specs2.guide.UseCommandLineArguments.html" tooltip="" class="ok">Use command-line arguments</a></link>
+How to capture snippets of code and add them to my Specification?                        | <link class="ok"><a href="org.specs2.guide.CaptureSnippets.html" tooltip="" class="ok">Capture snippets</a></link>
+Can I create an HTML index of all the specifications?                                    | <link class="ok"><a href="org.specs2.guide.HtmlOutput.html" tooltip="" class="ok">Html output</a></link>
+Is it possible to execute a Specification in a random order?                             | <link class="ok"><a href="org.specs2.guide.RandomExecution.html" tooltip="" class="ok">Random execution</a></link>
+How can I easily print expressions to the console?                                       | <link class="ok"><a href="org.specs2.guide.DebugStatements.html" tooltip="" class="ok">Debug statements</a></link>
+Can <s2>specs2</s2> create a JUnit xml file for a continuous integration server?                 | <link class="ok"><a href="org.specs2.guide.JUnitXmlOutput.html" tooltip="" class="ok">JUnit XML output</a></link>
+Is it possible to reduce the number of implicits in scope and improve compilation times? | <link class="ok"><a href="org.specs2.guide.LightweightSpecs.html" tooltip="" class="ok">Lightweight specs</a></link>
+How can I collect execution data?                                                        | <link class="ok"><a href="org.specs2.guide.PrintExecutionData.html" tooltip="" class="ok">Print execution data</a></link>
+Can I display some data when an example succeeds?                                        | <link class="ok"><a href="org.specs2.guide.PrintExecutionData.html" tooltip="" class="ok">Print execution data</a></link>
+Can I create an example description spanning several lines?                              | <link class="ok"><a href="org.specs2.guide.MultilineDescriptions.html" tooltip="" class="ok">Multiline descriptions</a></link>
+How to timeout examples?                                                                 | <link class="ok"><a href="org.specs2.guide.TimeoutExamples.html" tooltip="" class="ok">Timeout examples</a></link>
+Can I use parts of an example description in the example itself?                         | <link class="ok"><a href="org.specs2.guide.ExampleDescription.html" tooltip="" class="ok">Example description</a></link>
+Add my own keywords (other than '>>', 'should', 'can') to a mutable specification        | <link class="ok"><a href="org.specs2.guide.AddKeywords.html" tooltip="" class="ok">Add keywords</a></link>
+Help, I need to troubleshoot my issues!                                                  | <link class="ok"><a href="org.specs2.guide.Troubleshooting.html" tooltip="" class="ok">Troubleshooting</a></link>
+How can I integrate my own IO type to specifications?                                    | <link class="ok"><a href="org.specs2.guide.IoIntegration.html" tooltip="" class="ok">IO Integration</a></link>
