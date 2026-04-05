@@ -24,6 +24,28 @@ scalaJSLinkerConfig ~= { _.withESFeatures(_.withESVersion(ESVersion.ES2018)) }
 
 See [here](https://www.scala-sbt.org/release/docs/Library-Dependencies.html) to learn more about sbt dependencies.
 
+### Gradle
+
+Go to this [page](https://gradle.org/install) to install Gradle. You then need to install the [Scala plugin](https://docs.gradle.org/current/userguide/scala_plugin.html)
+and add the following to your `build.gradle` file:
+```
+dependencies {
+  testImplementation "org.specs2:specs2-core_3:$BUILD_VERSION"
+}
+```
+
+Alternatively, the [scalajs-gradle](https://github.com/dubinsky/scalajs-gradle) plugin wraps the Scala plugin and additionally supports
+[Scala.js](https://www.scala-js.org) and [Scala Native](https://scala-native.org) backends:
+```
+plugins {
+  id 'org.podval.tools.scalajs' version '1.0.0'
+}
+
+dependencies {
+  testImplementation "org.specs2:specs2-core_3:$BUILD_VERSION"
+}
+```
+
 ### Other dependencies
 
 Depending on the $specs2 features you want to use you will need to add more dependencies to your build:
