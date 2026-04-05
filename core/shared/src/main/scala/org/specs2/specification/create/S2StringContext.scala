@@ -70,19 +70,28 @@ trait S2StringContext extends S2StringContext1:
 private[specs2] trait S2StringContext1 extends S2StringContextCreation:
 
   implicit inline def fragmentIsInterpolated(inline f: =>Fragment): Interpolated =
+    fragmentIsInterpolatedImpl(() => f)
+
+  private def fragmentIsInterpolatedImpl(f: () => Fragment): Interpolated =
     new Interpolated:
       def prepend(text: String): Fragments =
-        Fragments(fragmentFactory.text(text)).appendLazy(f)
+        Fragments(fragmentFactory.text(text)).appendLazy(f())
 
   implicit inline def stringResultIsInterpolated[R: AsResult](inline f: String => R): Interpolated =
+    stringResultIsInterpolatedImpl(text => AsExecution[R].execute(f(text)))
+
+  private def stringResultIsInterpolatedImpl(f: String => Execution): Interpolated =
     new Interpolated:
       def prepend(text: String): Fragments =
-        Fragments(fragmentFactory.example(text, AsExecution[R].execute(f(text))))
+        Fragments(fragmentFactory.example(text, f(text)))
 
   implicit inline def asResultIsInterpolated[R: AsResult](inline r: =>R): Interpolated =
     ${ executionInterpolated('{ Execution.result(r) }, 'fragmentFactory) }
 
   implicit inline def stepParserIsInterpolatedFragment[R: AsResult](f: StepParser[R]): Interpolated =
+    stepParserIsInterpolatedFragmentImpl(f)
+
+  private def stepParserIsInterpolatedFragmentImpl[R: AsResult](f: StepParser[R]): Interpolated =
     new Interpolated:
       def prepend(text: String): Fragments =
         f.parse(text) match

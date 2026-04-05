@@ -43,7 +43,7 @@ private[specs2] trait Seqx:
     def difference(other: Seq[T], equality: (T, T) => Boolean = (_: T) == (_: T)): scala.collection.Seq[T] =
 
       def occurrenceCounts(sq: Seq[T], equality: (T, T) => Boolean): scala.collection.mutable.Map[D[T], Int] =
-        val occurrences = new scala.collection.mutable.HashMap[D[T], Int] { override def default(k: D[T]) = 0 }
+        val occurrences = scala.collection.mutable.HashMap[D[T], Int]().withDefaultValue(0)
         for y <- sq do occurrences(D(y, equality)) += 1
         occurrences
 

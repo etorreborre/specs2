@@ -1,7 +1,6 @@
 package org.specs2
 package collection
 
-import scala.collection.{GenSeq, GenIterable}
 import Seqx.*
 
 given canEqualAny[L, R]: CanEqual[L, R] = CanEqual.derived
@@ -13,23 +12,23 @@ given canEqualAny[L, R]: CanEqual[L, R] = CanEqual.derived
 trait Iterablex:
   /** Extension methods for Iterables
     */
-  extension [T, S >: T](xs: GenIterable[T])
+  extension [T, S >: T](xs: Iterable[T])
     /** @return
       *   true if the 2 iterables contain the same elements, in the same order, according to a function f
       */
-    def isSimilar(that: GenIterable[S], f: Function2[T, S, Boolean]): Boolean =
+    def isSimilar(that: Iterable[S], f: Function2[T, S, Boolean]): Boolean =
       val it1 = xs.iterator
       val it2 = that.iterator
       var res = true
       while res && it1.hasNext && it2.hasNext do res = f(it1.next, it2.next)
       !it1.hasNext && !it2.hasNext && res
 
-  extension [T](xs: GenIterable[T])
+  extension [T](xs: Iterable[T])
 
     /** @return
       *   true if the 2 iterables contain the same elements recursively, in any order
       */
-    def sameElementsAs(that: GenIterable[T]): Boolean = sameElementsAs(that, (x, y) => x == y)
+    def sameElementsAs(that: Iterable[T]): Boolean = sameElementsAs(that, (x, y) => x == y)
 
     /** This recursive function is not really well-formed (the `asInstanceOf` should be ample proof). It only works if T
       * <===> Seq[T]
@@ -41,22 +40,22 @@ trait Iterablex:
       *   true if the 2 iterables contain the same elements (according to a comparison function f) recursively, in any
       *   order
       */
-    def sameElementsAs(that: GenIterable[T], f: (T, T) => Boolean): Boolean =
-      def isNotItsOwnIterable(a: GenIterable[Any]): Boolean =
+    def sameElementsAs(that: Iterable[T], f: (T, T) => Boolean): Boolean =
+      def isNotItsOwnIterable(a: Iterable[Any]): Boolean =
         a.isEmpty || (a.iterator.next: Any) != (a: Any)
 
       def matchTwo(x: T, y: T): Boolean =
         (x.asInstanceOf[Matchable], y.asInstanceOf[Matchable]) match
-          case (a: GenIterable[?], b: GenIterable[?]) if isNotItsOwnIterable(a) =>
-            x.asInstanceOf[GenIterable[T]].sameElementsAs(y.asInstanceOf[GenIterable[T]], f)
+          case (a: Iterable[?], b: Iterable[?]) if isNotItsOwnIterable(a) =>
+            x.asInstanceOf[Iterable[T]].sameElementsAs(y.asInstanceOf[Iterable[T]], f)
           case _ => f(x, y)
 
       val ita = xs.iterator.toList
       val itb = that.iterator.toList
 
       (ita, itb) match
-        case (List(), List())                       => true
-        case (a: GenIterable[?], b: GenIterable[?]) =>
+        case (List(), List())                 => true
+        case (a: Iterable[?], b: Iterable[?]) =>
           (a.nonEmpty && b.nonEmpty) && {
             val (x, y, resta, restb) = (a.head, b.head, a.drop(1), b.drop(1))
             matchTwo(x, y) && resta.sameElementsAs(restb, f) ||
@@ -88,14 +87,14 @@ trait Iterablex:
         "[" + xs.toList
           .map { i =>
             i.asInstanceOf[Matchable] match {
-              case x: GenIterable[?] => x.toDeepString
-              case x                 => x.toString
+              case x: Iterable[?] => x.toDeepString
+              case x              => x.toString
             }
           }
           .mkString(", ") + "]"
 
     /** map the first element with a function */
-    def mapFirst(f: T => T): GenSeq[T] = (xs.take(1).map(f) ++ xs.drop(1)).toSeq
+    def mapFirst(f: T => T): Seq[T] = (xs.take(1).map(f) ++ xs.drop(1)).toSeq
 
     /** map the last element with a function */
     def mapLast(f: T => T): Seq[T] = (xs.dropRight(1) ++ xs.takeRight(1).map(f)).toSeq
