@@ -35,6 +35,14 @@ class DirectoryPathSpec extends Spec with TypedEqual {
 
  A DirectoryPath can be used with a Windows path
    ${DirectoryPath.unsafe("C:\\hello\\world", separator = "\\").path === "C:\\hello\\world"}
+   a Windows file URI (file:///C:/...) produces the correct path without a leading slash
+   ${DirectoryPath.unsafe(new URI("file:///C:/hello/world")).path === "C:/hello/world"}
+   a Windows file URI produces the correct dirPath (with trailing separator)
+   ${DirectoryPath.unsafe(new URI("file:///C:/hello/world")).dirPath === "C:/hello/world/"}
+   a Windows file URI can be extended with subdirectories
+   ${(DirectoryPath.unsafe(new URI("file:///C:/hello")) / DirectoryPath.unsafe("world")).path === "C:/hello/world"}
+   a FilePath can be created from a Windows file URI
+   ${FilePath.unsafe(new URI("file:///C:/hello/world.txt")).path === "C:/hello/world.txt"}
 
  An absolute dir path can be built from
    a string starting with a /

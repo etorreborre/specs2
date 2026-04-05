@@ -184,14 +184,17 @@ case class HtmlPrinter(env: Env, searchPage: SearchPage, logger: Logger = Consol
   def copySpecResourcesDir(env: Env, base: DirectoryPath, outputDir: DirectoryPath, loader: ClassLoader)(
       src: DirectoryPath
   ): Operation[Unit] =
-    Option(loader.getResource((base / src).path)) match
+    // ClassLoader and JAR entry paths always use '/' regardless of OS
+    val basePath = base.path.replace('\\', '/')
+    val srcPath = src.path.replace('\\', '/')
+    Option(loader.getResource(s"$basePath/$srcPath")) match
       case Some(url) =>
         val fs = env.fileSystem
         if url.getProtocol.equalsIgnoreCase("jar") then
-          fs.unjarOnce(jarOf(url), outputDir, s"^${quote(base.path)}(/${quote(src.path)}/.*)$$")
+          fs.unjarOnce(jarOf(url), outputDir, s"^${quote(basePath)}(/${quote(srcPath)}/.*)$$")
         else fs.copyDir(DirectoryPath.unsafe(url.toURI), outputDir / src)
       case _ =>
-        val message = s"no resource found for path ${(base / src).path}"
+        val message = s"no resource found for path $basePath/$srcPath"
         logger.warnAndFail(message, message)
 
   def reportMissingSeeRefs(specs: List[SpecStructure], outDir: DirectoryPath)(using ee: ExecutionEnv): Operation[Unit] =

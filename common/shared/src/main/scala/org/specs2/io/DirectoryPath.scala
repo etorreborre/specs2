@@ -31,7 +31,10 @@ case class DirectoryPath(dirs: Vector[FileName], absolute: Boolean, separator: S
       case _         => None
 
   /** @return the path for this file as a / separated string */
-  def path: String = (if absolute then separator else "") + dirs.map(_.name).toList.mkString(separator)
+  def path: String =
+    // Windows drive-letter paths (e.g. C:\...) must not get a leading separator prepended
+    val isWinDrivePath = dirs.headOption.exists(d => d.name.length == 2 && d.name.charAt(1) == ':')
+    (if absolute && !isWinDrivePath then separator else "") + dirs.map(_.name).toList.mkString(separator)
 
   /** @return the path for this file as a / separated string, with a final / */
   def dirPath: String = if isRoot then path else path + separator
@@ -114,7 +117,16 @@ object DirectoryPath:
     )
 
   def unsafe(f: File): DirectoryPath = unsafe(f.getPath)
-  def unsafe(uri: URI): DirectoryPath = unsafe(uri.toString)
+  def unsafe(uri: URI): DirectoryPath =
+    // Include authority (host) in the path if present, as the string form "file://host/path" does
+    val authority = Option(uri.getAuthority).filter(_.nonEmpty)
+    val uriPath = authority.map("/" + _ + uri.getPath).getOrElse(uri.getPath)
+    // Strip leading slash before a Windows drive letter: /C:/... -> C:/...
+    val normalizedPath =
+      if uriPath.length >= 3 && uriPath.charAt(0) == '/' && uriPath.charAt(2) == ':'
+      then uriPath.substring(1)
+      else uriPath
+    unsafe(normalizedPath)
 
   private def removeScheme(s: String): String = Seq("file:").foldLeft(s) { (res, cur) => res.replace(cur, "") }
 
