@@ -16,6 +16,8 @@ lazy val specs2 = project.in(file(".")).
     ThisBuild / githubWorkflowUseSbtThinClient := false,
     ThisBuild / githubWorkflowJavaVersions := Seq(JavaSpec.temurin("11")),
     ThisBuild / githubWorkflowBuild := Seq(WorkflowStep.Sbt(List("testOnly -- xonly exclude ci"), name = Some("Build project"))),
+    // scalacheck 1.19.0 was built against scala-native 0.5.8; allow eviction to 0.5.10
+    ThisBuild / libraryDependencySchemes += "org.scala-native" % "test-interface_native0.5_2.13" % "always",
     Global / onChangedBuildSource := ReloadOnSourceChanges,
     test := {}
   ).aggregate(
