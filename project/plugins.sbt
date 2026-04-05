@@ -1,4 +1,5 @@
 val scalaJSVersion = Option(System.getenv("SCALAJS_VERSION")).getOrElse("1.21.0")
+val scalaNativeVersion = Option(System.getenv("SCALANATIVE_VERSION")).getOrElse("0.5.10")
 
 // dev
 addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.5.6")
@@ -6,6 +7,10 @@ addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.5.6")
 // ScalaJS
 addSbtPlugin("org.scala-js" % "sbt-scalajs" % scalaJSVersion)
 addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "1.3.2")
+
+// ScalaNative
+addSbtPlugin("org.scala-native" % "sbt-scala-native" % scalaNativeVersion)
+addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "1.3.2")
 
 // release management
 addSbtPlugin("com.github.sbt" % "sbt-github-actions" % "0.29.0")

@@ -24,14 +24,17 @@ import scala.concurrent.{Await, Future, ExecutionContext}
 
 /** Runner for Sbt
   */
-abstract class BaseSbtRunner(args: Array[String], remoteArgs: Array[String], loader: ClassLoader)
+abstract class BaseSbtRunner(_args: Array[String], _remoteArgs: Array[String], loader: ClassLoader)
     extends _root_.sbt.testing.Runner:
   // loggers are populated when a task is executed
   // We need the loggers there to be able to report failures
   // when the environment is shutdown
   var loggers: Array[Logger] = Array()
 
-  lazy val commandLineArguments = Arguments(args ++ remoteArgs*)
+  def args: Array[String] = _args
+  def remoteArgs(): Array[String] = _remoteArgs
+
+  lazy val commandLineArguments = Arguments(_args ++ _remoteArgs*)
 
   lazy val env: Env =
     EnvDefault.create(commandLineArguments).setCustomClassLoader(loader)
@@ -57,7 +60,7 @@ abstract class BaseSbtRunner(args: Array[String], remoteArgs: Array[String], loa
 
     SbtTask(aTaskDef, fullEnv, loader, this)
 
-  def done =
+  def done(): String =
     val result = env.shutdown()
     if !result.isSuccess then loggers.foreach(_.error(result.message))
     ""
@@ -66,18 +69,18 @@ abstract class BaseSbtRunner(args: Array[String], remoteArgs: Array[String], loa
     newTask(deserializer(task))
 
   def serializeTask(task: Task, serializer: TaskDef => String): String =
-    serializer(task.taskDef)
+    serializer(task.taskDef())
 
   def receiveMessage(msg: String): Option[String] =
     Some(msg)
 
   def isSlave: Boolean = false
 
-case class MasterSbtRunner(args: Array[String], remoteArgs: Array[String], loader: ClassLoader)
-    extends BaseSbtRunner(args, remoteArgs, loader)
+class MasterSbtRunner(_args: Array[String], _remoteArgs: Array[String], loader: ClassLoader)
+    extends BaseSbtRunner(_args, _remoteArgs, loader)
 
-case class SlaveSbtRunner(args: Array[String], remoteArgs: Array[String], loader: ClassLoader, send: String => Unit)
-    extends BaseSbtRunner(args, remoteArgs, loader):
+class SlaveSbtRunner(_args: Array[String], _remoteArgs: Array[String], loader: ClassLoader, send: String => Unit)
+    extends BaseSbtRunner(_args, _remoteArgs, loader):
   override def isSlave: Boolean = true
 
 /** This object can be used to debug the behavior of the SbtRunner
@@ -112,7 +115,7 @@ object NoEventHandler extends EventHandler:
   def handle(event: Event): Unit = {}
 
 object ConsoleTestingLogger extends Logger:
-  def ansiCodesSupported = false
+  def ansiCodesSupported() = false
 
   def error(message: String) = println("error: " + message)
 
@@ -132,8 +135,8 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader, base: BaseS
     env.specs2ExecutionContext
 
   /** @return the specification tags */
-  def tags: Array[String] =
-    lazy val spec = createSpecStructure(taskDef, loader, env).runOption.flatten
+  def tags(): Array[String] =
+    lazy val spec = createSpecStructure(taskDef(), loader, env).runOption.flatten
     lazy val tags: List[NamedTag] =
       spec.flatMap(s => s.tags.runOption(env.specs2ExecutionEnv)).getOrElse(Nil)
 
@@ -152,7 +155,7 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader, base: BaseS
     // pass the loggers back to the base runner for the final reporting
     base.loggers = loggers
 
-    createSpecStructure(taskDef, loader, env).toAction.attempt
+    createSpecStructure(taskDef(), loader, env).toAction.attempt
       .runFuture(ee)
       .flatMap {
         case Left(t) =>
@@ -168,17 +171,17 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader, base: BaseS
           }
       }
       .recover { case t =>
-        val events = sbtEvents(taskDef, handler)
+        val events = sbtEvents(taskDef(), handler)
         events.suiteError(t)
         loggers.foreach(_.trace(t))
       }
 
   /** @return the corresponding task definition */
-  def taskDef = aTaskDef
+  def taskDef(): TaskDef = aTaskDef
 
   /** display errors and warnings */
   private def processResult[A](handler: EventHandler, loggers: Array[Logger])(t: Throwable): Unit =
-    handleRunError(t, loggers, sbtEvents(taskDef, handler))
+    handleRunError(t, loggers, sbtEvents(taskDef(), handler))
 
   /** run a given spec structure */
   private def specificationRun(
@@ -210,10 +213,10 @@ case class SbtTask(aTaskDef: TaskDef, env: Env, loader: ClassLoader, base: BaseS
 
   /** create a spec structure from the task definition containing the class name */
   private def createSpecStructure(taskDef: TaskDef, loader: ClassLoader, env: Env): Operation[Option[SpecStructure]] =
-    taskDef.fingerprint match
+    taskDef.fingerprint() match
       case f: SubclassFingerprint =>
-        if f.superclassName.endsWith("SpecificationStructure") then
-          val className = taskDef.fullyQualifiedName + (if f.isModule then "$" else "")
+        if f.superclassName().endsWith("SpecificationStructure") then
+          val className = taskDef.fullyQualifiedName() + (if f.isModule() then "$" else "")
           Classes
             .createInstance[SpecificationStructure](className, loader, EnvDefault.defaultInstances(env))
             .map(ss => Option(ss.structure))

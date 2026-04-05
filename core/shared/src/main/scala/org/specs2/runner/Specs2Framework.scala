@@ -7,9 +7,9 @@ import sbt.testing.{Fingerprint, Framework}
   * specs2 library.
   */
 class Specs2Framework extends Framework:
-  def name = "specs2"
+  def name() = "specs2"
 
-  def fingerprints = Array[Fingerprint](fp1, fp1m)
+  def fingerprints() = Array[Fingerprint](fp1, fp1m)
 
   def runner(args: Array[String], remoteArgs: Array[String], loader: ClassLoader): sbt.testing.Runner =
     new MasterSbtRunner(args, remoteArgs, loader)

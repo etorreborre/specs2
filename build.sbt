@@ -28,6 +28,13 @@ lazy val specs2 = project
     scalacheck.js,
     xml.js,
     examples.js,
+    fp.native,
+    common.native,
+    matcher.native,
+    core.native,
+    matcherExtra.native,
+    scalacheck.native,
+    xml.native,
     markdown,
     form,
     html,
@@ -208,17 +215,32 @@ lazy val commonJsSettings =
     testJsSettings ++
     Seq(mimaPreviousArtifacts := Set.empty)
 
+lazy val testNativeSettings = Seq(
+  Test / fork := false,
+  Test / parallelExecution := false
+)
+
+lazy val commonNativeSettings =
+  depends.nativeTest ++
+    testNativeSettings ++
+    Seq(
+      mimaPreviousArtifacts := Set.empty,
+      libraryDependencySchemes += "org.scala-native" % "test-interface_native0.5_3" % VersionScheme.Always
+    )
+
 /** MODULES (sorted in alphabetical order) */
 
-val platforms = List(JVMPlatform, JSPlatform)
+val platforms = List(JVMPlatform, JSPlatform, NativePlatform)
+val jvmJsPlatforms = List(JVMPlatform, JSPlatform)
 val jvm = JVMPlatform
 
 lazy val common = crossProject(platforms: _*)
   .withoutSuffixFor(jvm)
   .in(file("common"))
-  .settings(name := "specs2-common", commonSettings, depends.scalacheckTest, depends.sbt)
-  .jvmSettings(commonJvmSettings)
+  .settings(name := "specs2-common", commonSettings, depends.scalacheckTest)
+  .jvmSettings(commonJvmSettings, depends.sbt)
   .jsSettings(commonJsSettings)
+  .nativeSettings(commonNativeSettings)
   .dependsOn(fp)
 
 lazy val core = crossProject(platforms: _*)
@@ -228,18 +250,18 @@ lazy val core = crossProject(platforms: _*)
   .settings(
     name := "specs2-core",
     commonSettings,
-    depends.junitTest,
     // until 5.0.0-RC-23 is published
     // mimaPreviousArtifacts := Set.empty,
     mimaFailOnNoPrevious := false,
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
     buildInfoPackage := "org.specs2"
   )
-  .jvmSettings(commonJvmSettings)
+  .jvmSettings(commonJvmSettings, depends.junitTest)
   .jsSettings(commonJsSettings)
+  .nativeSettings(commonNativeSettings)
   .dependsOn(matcher, common, common % "test->test")
 
-lazy val examples = crossProject(platforms: _*)
+lazy val examples = crossProject(jvmJsPlatforms: _*)
   .withoutSuffixFor(jvm)
   .in(file("examples"))
   .jvmSettings(commonJvmSettings)
@@ -260,6 +282,7 @@ lazy val fp = crossProject(platforms: _*)
   .settings(name := "specs2-fp", commonSettings)
   .jvmSettings(commonJvmSettings)
   .jsSettings(commonJsSettings)
+  .nativeSettings(commonNativeSettings)
 
 lazy val form = project
   .in(file("form"))
@@ -283,7 +306,7 @@ lazy val html = project
   .settings(name := "specs2-html", commonSettings, libraryDependencies += depends.tagsoup)
   .dependsOn(form, matcherExtra.jvm % Test, scalacheck.jvm % Test)
 
-lazy val junit = crossProject(platforms: _*)
+lazy val junit = crossProject(jvmJsPlatforms: _*)
   .withoutSuffixFor(jvm)
   .crossType(CrossType.Pure)
   .in(file("junit"))
@@ -303,6 +326,7 @@ lazy val matcher = crossProject(platforms: _*)
   .settings(name := "specs2-matcher", commonSettings)
   .jvmSettings(commonJvmSettings)
   .jsSettings(commonJsSettings)
+  .nativeSettings(commonNativeSettings)
   .dependsOn(common)
 
 lazy val matcherExtra = crossProject(platforms: _*)
@@ -311,6 +335,7 @@ lazy val matcherExtra = crossProject(platforms: _*)
   .settings(name := "specs2-matcher-extra", commonSettings, depends.scalaParser)
   .jvmSettings(commonJvmSettings)
   .jsSettings(commonJsSettings)
+  .nativeSettings(commonNativeSettings)
   .dependsOn(matcher, core, core % "test->test", xml)
 
 lazy val pom = project
@@ -329,9 +354,10 @@ lazy val scalacheck = crossProject(platforms: _*)
   )
   .jvmSettings(commonJvmSettings)
   .jsSettings(commonJsSettings)
+  .nativeSettings(commonNativeSettings)
   .dependsOn(core)
 
-lazy val tests = crossProject(platforms: _*)
+lazy val tests = crossProject(jvmJsPlatforms: _*)
   .withoutSuffixFor(jvm)
   .in(file("tests"))
   .settings(
@@ -360,6 +386,7 @@ lazy val xml = crossProject(platforms: _*)
   )
   .jvmSettings(commonJvmSettings)
   .jsSettings(commonJsSettings)
+  .nativeSettings(commonNativeSettings)
   .dependsOn(core)
 
 lazy val specs2ShellPrompt = ThisBuild / shellPrompt := { state =>
@@ -433,6 +460,36 @@ lazy val releaseSettings: Seq[Setting[_]] = Seq(
     WorkflowStep
       .Sbt(name = Some("Build and test 🔧"), commands = List("testOnly -- xonly exclude ci,website timefactor 3"))
   ),
+  ThisBuild / githubWorkflowAddedJobs ++= Seq(
+    WorkflowJob(
+      id = "native",
+      name = "Test Scala Native",
+      scalas = List(Scala3),
+      javas = List(JavaSpec.temurin("25")),
+      steps =
+        List(WorkflowStep.Checkout) ++
+          WorkflowStep.SetupJava(List(JavaSpec.temurin("25"))) ++
+          List(
+            WorkflowStep.SetupSbt(),
+            WorkflowStep.Run(
+              name = Some("Install native dependencies"),
+              commands = List("sudo apt-get update && sudo apt-get install -y clang zlib1g-dev libstdc++-12-dev")
+            ),
+            WorkflowStep.Sbt(
+              name = Some("Test Scala Native 🔧"),
+              commands = List(
+                "fpNative/test",
+                "commonNative/test",
+                "matcherNative/test",
+                "coreNative/test",
+                "matcherExtraNative/test",
+                "scalacheckNative/test",
+                "xmlNative/test"
+              )
+            )
+          )
+    )
+  ),
   ThisBuild / githubWorkflowTargetTags ++= Seq(SPECS2 + "*"),
   ThisBuild / githubWorkflowPublishTargetBranches := Seq(RefPredicate.StartsWith(Ref.Tag(SPECS2))),
   ThisBuild / githubWorkflowPublishPreamble ++= List(
@@ -491,6 +548,13 @@ lazy val releaseSettings: Seq[Setting[_]] = Seq(
     xml.js,
     examples.js,
     tests.js,
+    fp.native,
+    common.native,
+    matcher.native,
+    core.native,
+    matcherExtra.native,
+    scalacheck.native,
+    xml.native,
     guide
   )
 )

@@ -112,22 +112,27 @@ trait SbtEvents:
     handler.handle(SpecTestEvent(name, Status.Ignored, Some(durationInMillis)))
   def canceled(name: String) = handler.handle(SpecTestEvent(name, Status.Canceled, None))
 
-  case class SpecTestEvent(
+  class SpecTestEvent(
       name: String,
-      status: Status,
+      private val _status: Status,
       durationInMillis: Option[Long],
-      throwable: OptionalThrowable = new OptionalThrowable
+      private val _throwable: OptionalThrowable = new OptionalThrowable
   ) extends Event:
-    val fullyQualifiedName = taskDef.fullyQualifiedName
-    val fingerprint = taskDef.fingerprint
-    val selector = new TestSelector(name)
-    val duration = durationInMillis.getOrElse(-1L)
+    def fullyQualifiedName() = taskDef.fullyQualifiedName()
+    def fingerprint() = taskDef.fingerprint()
+    def selector(): Selector = new TestSelector(name)
+    def status() = _status
+    def throwable() = _throwable
+    def duration() = durationInMillis.getOrElse(-1L)
 
-  case class SpecSuiteEvent(status: Status, throwable: OptionalThrowable = new OptionalThrowable) extends Event:
-    val fullyQualifiedName = taskDef.fullyQualifiedName
-    val fingerprint = taskDef.fingerprint
-    val selector = new SuiteSelector
-    val duration = -1L
+  class SpecSuiteEvent(private val _status: Status, private val _throwable: OptionalThrowable = new OptionalThrowable)
+      extends Event:
+    def fullyQualifiedName() = taskDef.fullyQualifiedName()
+    def fingerprint() = taskDef.fingerprint()
+    def selector(): Selector = new SuiteSelector
+    def status() = _status
+    def throwable() = _throwable
+    def duration() = -1L
 
 /** Line logger using sbt's loggers
   */
@@ -136,7 +141,7 @@ case class SbtPrinterLogger(loggers: Array[Logger]) extends BufferedPrinterLogge
     // use a non-empty character when the message is empty otherwise
     // nothing is printed out
     if msg.isEmpty then logger.info(" ")
-    else logger.info(removeColors(msg, !logger.ansiCodesSupported))
+    else logger.info(removeColors(msg, !logger.ansiCodesSupported()))
   }
 
   /** failures are represented as errors in sbt */
@@ -154,4 +159,4 @@ case class SbtPrinterLogger(loggers: Array[Logger]) extends BufferedPrinterLogge
     // use a non-empty character when the message is empty otherwise
     // nothing is printed out
     if msg == null || msg.isEmpty then " "
-    else removeColors(msg.notNull, !logger.ansiCodesSupported)
+    else removeColors(msg.notNull, !logger.ansiCodesSupported())

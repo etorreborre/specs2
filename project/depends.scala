@@ -5,6 +5,8 @@ import Defaults._
 import org.portablescala.sbtplatformdeps.PlatformDepsPlugin.autoImport._
 // necessary for accessing the scalaJSVersion property
 import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
+// necessary for accessing the nativeVersion property
+import scala.scalanative.sbtplugin.ScalaNativePlugin.autoImport._
 
 object depends {
 
@@ -62,5 +64,13 @@ object depends {
           ("org.portable-scala" %%% "portable-scala-reflect" % "1.1.3").cross(CrossVersion.for3Use2_13),
           ("org.scala-js" %% "scalajs-test-interface" % scalaJSVersion).cross(CrossVersion.for3Use2_13)
         )
+    )
+
+  def nativeTest =
+    Seq(
+      libraryDependencies ++= Seq(
+        "org.scala-native" %%% "test-interface" % nativeVersion,
+        ("org.portable-scala" %%% "portable-scala-reflect" % "1.1.3").cross(CrossVersion.for3Use2_13)
+      )
     )
 }
