@@ -20,10 +20,6 @@ trait EitherSyntax:
       case Left(_)  => false
       case Right(b) => f(b)
 
-    def toOption: Option[B] = eab match
-      case Left(_)  => None
-      case Right(b) => Some(b)
-
     def toList: List[B] = eab match
       case Left(_)  => Nil
       case Right(b) => List(b)
