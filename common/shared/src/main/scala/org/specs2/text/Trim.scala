@@ -125,7 +125,7 @@ private[specs2] trait Trim:
       new Regex(exp).replaceAllIn(s, (m: Match) => f(m.group(0).replace("\\", "\\\\")))
 
     /** @return a sequence of lines by splitting on newlines */
-    def lines: Seq[String] =
+    def splitLines: Seq[String] =
       s.removeAll("\r").split("\n").toIndexedSeq
 
     /** remove empty lines in a block of lines */
@@ -133,7 +133,7 @@ private[specs2] trait Trim:
 
     /** @return split on newlines and remove empty ones */
     def nonEmptyLines: Seq[String] =
-      outer.lines(s).filter(l => !l.isTrimEmpty).toList
+      outer.splitLines(s).filter(l => !l.isTrimEmpty).toList
 
     /** @return only the last block of lines when there's separated by a newline */
     def lastBlock: String =

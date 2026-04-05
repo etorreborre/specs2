@@ -33,9 +33,6 @@ trait Trees:
     def flattenLeft(using nothing: Int = 0): LazyList[A] =
       outer.flattenLeft(t)
 
-    def size: Int =
-      t.flatten.size
-
     def allPaths(using nothing: Int = 0): List[List[A]] =
       outer.allPaths(t)
 
@@ -88,9 +85,6 @@ trait Trees:
     @targetName("parentLocsPostfix")
     def parentLocs: Seq[TreeLoc[T]] =
       outer.parentLocs(t, Vector.empty)
-
-    def size(using nothing: Int = 0): Int =
-      outer.size(t)
 
     @targetName("getParentPostfix")
     def getParent: TreeLoc[T] =
