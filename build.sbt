@@ -200,7 +200,44 @@ lazy val mimaSettings =
       ProblemFilters.exclude[NewMixinForwarderProblem]("org.specs2.matcher.TraversableBaseMatchers.*"),
       ProblemFilters.exclude[DirectMissingMethodProblem](
         "org.specs2.matcher.TraversableBaseMatchers.containTheSameElementsAs$default$2$"
-      )
+      ),
+
+      // removed deprecated EitherSyntax.toOption
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.fp.EitherSyntax.toOption"),
+
+      // removed deprecated collection/data/io/text utilities
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.collection.Iterablex.mapFirst"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.data.Trees.size"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.data.Trees.size$default$2"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.io.package./"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.io.package.|"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.text.Regexes.matches"),
+
+      // removed deprecated data utilities (static synthetic default arg method has trailing $)
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.data.Trees.size$default$2$"),
+
+      // SbtEvents and SbtRunners converted from case class to regular class
+      // instance methods use # notation; companion object types use $ notation
+      ProblemFilters.exclude[MissingTypesProblem]("org.specs2.reporter.SbtEvents$SpecSuiteEvent"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.reporter.SbtEvents#SpecSuiteEvent.*"),
+      ProblemFilters.exclude[MissingTypesProblem]("org.specs2.reporter.SbtEvents$SpecSuiteEvent$"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.reporter.SbtEvents#SpecSuiteEvent$.apply"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.reporter.SbtEvents#SpecSuiteEvent$.unapply"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.reporter.SbtEvents#SpecSuiteEvent$.fromProduct"),
+      ProblemFilters.exclude[MissingTypesProblem]("org.specs2.reporter.SbtEvents$SpecTestEvent"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.reporter.SbtEvents#SpecTestEvent.*"),
+      ProblemFilters.exclude[MissingTypesProblem]("org.specs2.reporter.SbtEvents$SpecTestEvent$"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.reporter.SbtEvents#SpecTestEvent$.apply"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.reporter.SbtEvents#SpecTestEvent$.unapply"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.reporter.SbtEvents#SpecTestEvent$.fromProduct"),
+      ProblemFilters.exclude[MissingClassProblem]("org.specs2.runner.MasterSbtRunner$"),
+      ProblemFilters.exclude[MissingTypesProblem]("org.specs2.runner.MasterSbtRunner"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.runner.MasterSbtRunner.*"),
+      ProblemFilters.exclude[MissingClassProblem]("org.specs2.runner.SlaveSbtRunner$"),
+      ProblemFilters.exclude[MissingTypesProblem]("org.specs2.runner.SlaveSbtRunner"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.runner.SlaveSbtRunner.*"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.runner.sbtRun.*"),
+      ProblemFilters.exclude[MissingTypesProblem]("org.specs2.runner.sbtRun$")
     )
   )
 
