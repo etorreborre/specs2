@@ -488,7 +488,7 @@ lazy val testJsSettings = Seq(
   */
 lazy val releaseSettings: Seq[Setting[_]] = Seq(
   ThisBuild / versionScheme := Some("early-semver"),
-  ThisBuild / githubWorkflowJavaVersions := Seq(JavaSpec.temurin("25")),
+  ThisBuild / githubWorkflowJavaVersions := Seq(JavaSpec.temurin("21")),
   ThisBuild / githubWorkflowArtifactUpload := false,
   ThisBuild / githubWorkflowBuildPreamble ++= List(
     WorkflowStep.Sbt(List("scalafmtCheckAll"), name = Some("Check formatting ✔"))
@@ -542,9 +542,9 @@ lazy val releaseSettings: Seq[Setting[_]] = Seq(
         "PGP_SECRET" -> "${{ secrets.PGP_SECRET }}",
       )
     ),
-    WorkflowStep.Sbt(
+    WorkflowStep.Run(
       name = Some("Release to Sonatype 📇"),
-      commands = List("ci-release"),
+      commands = List(ciReleaseCommand),
       env = Map(
         "PGP_KEY_ID" -> "${{ secrets.PGP_KEY_ID }}",
         "PGP_PASSPHRASE" -> "${{ secrets.PGP_PASSPHRASE }}",
@@ -558,11 +558,10 @@ lazy val releaseSettings: Seq[Setting[_]] = Seq(
       ref = UseRef.Public("r-lib/actions", "setup-pandoc", "v2"),
       params = Map("pandoc-version" -> "latest")
     ),
-    WorkflowStep
-      .Sbt(
-        name = Some("Generate the specs2 website 📚"),
-        commands = List("unidoc", "guide/testOnly *Website -- xonly")
-      ),
+    WorkflowStep.Sbt(
+      name = Some("Generate the specs2 website 📚"),
+      commands = List("unidoc", "guide/testOnly *Website -- xonly")
+    ),
     WorkflowStep.Use(
       name = Some("Update the website 🚀"),
       ref = UseRef.Public("JamesIves", "github-pages-deploy-action", "4.1.4"),
@@ -602,6 +601,18 @@ printf "allow-loopback-pinentry\n" >> ~/.gnupg/gpg-agent.conf
 gpgconf --kill gpg-agent
 gpg --list-secret-keys --keyid-format LONG
 gpg --batch --yes -u "$PGP_KEY_ID" --dry-run --pinentry-mode loopback --passphrase "$PGP_PASSPHRASE" --sign <<<"test"
+"""
+
+val ciReleaseCommand = """sbt ci-release 2>&1 | tee /tmp/sonatype-output.txt
+EXIT_CODE=${PIPESTATUS[0]}
+if [ "$EXIT_CODE" -ne 0 ]; then
+  if grep -qiE "already (been )?published|already.*exists|409 Conflict|cannot redeploy|redeployment" /tmp/sonatype-output.txt; then
+    echo "Artifact already published to Sonatype, continuing..."
+    exit 0
+  else
+    exit "$EXIT_CODE"
+  fi
+fi
 """
 
 val SPECS2 = "SPECS2-"
