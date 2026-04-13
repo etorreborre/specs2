@@ -503,28 +503,27 @@ lazy val releaseSettings: Seq[Setting[_]] = Seq(
       name = "Test Scala Native",
       scalas = List(Scala3),
       javas = List(JavaSpec.temurin("25")),
-      steps =
-        List(WorkflowStep.Checkout) ++
-          WorkflowStep.SetupJava(List(JavaSpec.temurin("25"))) ++
-          List(
-            WorkflowStep.SetupSbt(),
-            WorkflowStep.Run(
-              name = Some("Install native dependencies"),
-              commands = List("sudo apt-get update && sudo apt-get install -y clang zlib1g-dev libstdc++-12-dev")
-            ),
-            WorkflowStep.Sbt(
-              name = Some("Test Scala Native 🔧"),
-              commands = List(
-                "fpNative/test",
-                "commonNative/test",
-                "matcherNative/test",
-                "coreNative/test",
-                "matcherExtraNative/test",
-                "scalacheckNative/test",
-                "xmlNative/test"
-              )
+      steps = List(WorkflowStep.Checkout) ++
+        WorkflowStep.SetupJava(List(JavaSpec.temurin("25"))) ++
+        List(
+          WorkflowStep.SetupSbt(),
+          WorkflowStep.Run(
+            name = Some("Install native dependencies"),
+            commands = List("sudo apt-get update && sudo apt-get install -y clang zlib1g-dev libstdc++-12-dev")
+          ),
+          WorkflowStep.Sbt(
+            name = Some("Test Scala Native 🔧"),
+            commands = List(
+              "fpNative/test",
+              "commonNative/test",
+              "matcherNative/test",
+              "coreNative/test",
+              "matcherExtraNative/test",
+              "scalacheckNative/test",
+              "xmlNative/test"
             )
           )
+        )
     )
   ),
   ThisBuild / githubWorkflowTargetTags ++= Seq(SPECS2 + "*"),
@@ -539,7 +538,7 @@ lazy val releaseSettings: Seq[Setting[_]] = Seq(
       env = Map(
         "PGP_KEY_ID" -> "${{ secrets.PGP_KEY_ID }}",
         "PGP_PASSPHRASE" -> "${{ secrets.PGP_PASSPHRASE }}",
-        "PGP_SECRET" -> "${{ secrets.PGP_SECRET }}",
+        "PGP_SECRET" -> "${{ secrets.PGP_SECRET }}"
       )
     ),
     WorkflowStep.Run(
