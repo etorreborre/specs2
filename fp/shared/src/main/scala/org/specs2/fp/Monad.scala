@@ -21,7 +21,7 @@ trait Monad[F[_]] extends Applicative[F] {
   override def map[A,B](fa: F[A])(f: A => B): F[B] =
     bind(fa)(a => point(f(a)))
 
-  def tailrecM[A, B](f: A => F[A Either B])(a: A): F[B] =
+  def tailrecM[A, B](a: A)(f: A => F[A Either B]): F[B] =
     bind(f(a)) {
       case Left(a1) => tailrecM(f)(a1)
       case Right(b) => point(b)
@@ -59,7 +59,7 @@ object Monad {
         case Some(a) => f(a)
       }
 
-    override def tailrecM[A, B](f: A => Option[A Either B])(a: A): Option[B] =
+    override def tailrecM[A, B](a: A)(f: A => Option[A Either B]): Option[B] =
       f(a) match {
         case None => None
         case Some(Left(a1)) => tailrecM(f)(a1)
@@ -76,7 +76,7 @@ object Monad {
         case Right(a) => f(a)
       }
 
-    override def tailrecM[A, B](f: A => Either[L, A Either B])(a: A): Either[L, B] =
+    override def tailrecM[A, B](a: A)(f: A => Either[L, A Either B]): Either[L, B] =
       f(a) match {
         case Left(l) => Left(l)
         case Right(Left(a1)) => tailrecM(f)(a1)
