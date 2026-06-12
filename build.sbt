@@ -321,7 +321,12 @@ lazy val scalaz = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file(
     commonSettings,
     libraryDependencies ++=
       depends.scalaz(scalazVersion.value) :+
-      depends.scalazConcurrent(scalazVersion.value),
+      depends.scalazConcurrent(
+        CrossVersion.partialVersion(scalaVersion.value) match {
+          case Some((2, 12)) if scalazVersion.value.startsWith("7.3.") => "7.2.36"
+          case _                                                        => scalazVersion.value
+        }
+      ),
     name := "specs2-scalaz").
   jsSettings(depends.jsTest, commonJsSettings).
   jvmSettings(depends.jvmTest, commonJvmSettings).
