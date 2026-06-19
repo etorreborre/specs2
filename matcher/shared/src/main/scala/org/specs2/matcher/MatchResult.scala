@@ -306,16 +306,16 @@ object MatchResult {
 
   implicit val MatchResultFunctor: Functor[MatchResult] = new Functor[MatchResult] {
     def map[A, B](m: MatchResult[A])(f: A => B) = m match {
-      case success: MatchSuccess[?] => success.map(f)
-      case failure: MatchFailure[?] => failure.map(f)
-      case skip: MatchSkip[?]       => skip.map(f)
-      case pending: MatchPending[?] => pending.map(f)
-      case neg: NotMatch[?]         => neg.map(f)
-      case neutral: NeutralMatch[?] => neutral.map(f)
-      case and: AndMatch[?]         => and.map(f)
-      case andnot: AndNotMatch[?]   => andnot.map(f)
-      case or: OrMatch[?]           => or.map(f)
-      case ornot: OrNotMatch[?]     => ornot.map(f)
+      case success: MatchSuccess[?] => success.asInstanceOf[MatchSuccess[A]].map(f)
+      case failure: MatchFailure[?] => failure.asInstanceOf[MatchFailure[A]].map(f)
+      case skip: MatchSkip[?]       => skip.asInstanceOf[MatchSkip[A]].map(f)
+      case pending: MatchPending[?] => pending.asInstanceOf[MatchPending[A]].map(f)
+      case neg: NotMatch[?]         => neg.asInstanceOf[NotMatch[A]].map(f)
+      case neutral: NeutralMatch[?] => neutral.asInstanceOf[NeutralMatch[A]].map(f)
+      case and: AndMatch[?]         => and.asInstanceOf[AndMatch[A]].map(f)
+      case andnot: AndNotMatch[?]   => andnot.asInstanceOf[AndNotMatch[A]].map(f)
+      case or: OrMatch[?]           => or.asInstanceOf[OrMatch[A]].map(f)
+      case ornot: OrNotMatch[?]     => ornot.asInstanceOf[OrNotMatch[A]].map(f)
     }
   }
   implicit val MatchSuccessFunctor: Functor[MatchSuccess] = new Functor[MatchSuccess] {
