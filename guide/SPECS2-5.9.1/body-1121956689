@@ -1,0 +1,20 @@
+
+
+ Topic                                                               | See
+------------------------------------------------------               | ---------------
+Create an example with just some code as the description             | <link class="ok"><a href="org.specs2.guide.AutoExamples.html" tooltip="" class="ok">Auto-examples</a></link>
+Gather all expectations in an example                                | <link class="ok"><a href="org.specs2.guide.GetAllExpectations.html" tooltip="" class="ok">Get all expectations</a></link>
+Reference another specification                                      | <link class="ok"><a href="org.specs2.guide.ReferenceOtherSpecifications.html" tooltip="" class="ok">Reference other specifications</a></link>
+Add formatting to a specification                                    | <link class="ok"><a href="org.specs2.guide.SpecificationFormatting.html" tooltip="" class="ok">Specification formatting</a></link>
+Create HTML tables to specify examples                               | <link class="ok"><a href="org.specs2.guide.UseForms.html" tooltip="" class="ok">Forms</a></link>
+Create examples "on the fly" as the specification executes           | <link class="ok"><a href="org.specs2.guide.CreateOnlineSpecifications.html" tooltip="" class="ok">Create online specifications</a></link>
+Create an example with different data displayed in a table           | <link class="ok"><a href="org.specs2.guide.UseDatatables.html" tooltip="" class="ok">Datatables</a></link>
+Fragments API                                                        | <link class="ok"><a href="org.specs2.guide.FragmentsApi.html" tooltip="" class="ok">Fragments API</a></link>
+Create an example with different data displayed in a table           | <link class="ok"><a href="org.specs2.guide.UseDatatables.html" tooltip="" class="ok">Datatables</a></link>
+Use <s2>specs2</s2> environment (command-line args, file system...)          | <link class="ok"><a href="org.specs2.guide.Environment.html" tooltip="" class="ok">Environment</a></link>
+Execution environment for Futures                                    | <link class="ok"><a href="org.specs2.guide.ExecutionEnvironments.html" tooltip="" class="ok">Execution environment</a></link>
+Create a new type of Result                                          | <link class="ok"><a href="org.specs2.guide.AsResultTypeclass.html" tooltip="" class="ok">`AsResult` typeclass</a></link>
+Other build tools                                                    | <link class="ok"><a href="org.specs2.guide.OtherBuildTools.html" tooltip="" class="ok">Other build tools</a></link>
+Use <s2>specs2</s2> matchers outside of <s2>specs2</s2>                              | <link class="ok"><a href="org.specs2.guide.matchers.OutsideSpecs2.html" tooltip="" class="ok">Outside specs2</a></link>
+Matchers reference card                                              | <link class="ok"><a href="org.specs2.guide.matchers.ReferenceCard.html" tooltip="" class="ok">Reference card</a></link>
+Arguments reference card                                             | <link class="ok"><a href="org.specs2.guide.ArgumentsReference.html" tooltip="" class="ok">Arguments reference</a></link>

@@ -1,0 +1,108 @@
+
+
+In this section we present the most important options for running specifications.
+
+### Via sbt
+
+The most common way to run <s2>specs2</s2> specifications is to use [sbt](http://scala-sbt.org).
+
+[Sbt](www.scala-sbt.org) recognizes <s2>specs2</s2> as a ["test framework"](http://www.scala-sbt.org/release/docs/Testing.html).
+This means that any class or object extending the `Specification` class can be executed by sbt.
+The `test` command will run all the specifications in your project provided you put them in the `src/test/scala` directory:
+```
+sbt> test
+```
+
+Most of the time however you will use the `testOnly` command, either because you want to run one specification only or because you want to pass arguments:
+```
+sbt> testOnly org.acme.secret.KillerAppSpec
+```
+
+Only show failed tests:
+```
+sbt> testOnly org.acme.secret.KillerAppSpec -- xonly
+```
+
+#### sbt options
+
+Various sbt options can apply to [the execution of tests in sbt](http://www.scala-sbt.org/release/docs/Testing.html) but here are the ones which you are most likely to use:
+
+ - exclude some specifications:
+   `testOptions := Seq(Tests.Filter(s => Seq("Spec", "Unit").exists(s.endsWith)))`
+
+ - execute specifications one after the other
+   `Test / parallelExecution := false`
+
+ - pass <s2>specs2</s2> arguments to all specifications
+   `Test / testOptions += Tests.Argument("exclude", "integration")`
+
+ - display results as soon as they've been executed
+   `logBuffered := false`
+
+ - restrict the parallel execution of specifications with [custom tags](https://www.scala-sbt.org/1.x/docs/Parallel-Execution.html#Tagging+Tasks).
+     ***if you want to use sbt tags you will also need to pass the `sbt.tags` argument on the command-line***
+
+### In a shell
+
+A specification can be executed directly with the `scala` interpreter in a shell, provided that you can produce a classpath containing all the dependencies for your project.
+One way to do this is to use sbt:
+```
+sbt> export runtime:fullClasspath
+```
+Then, if you store the output of this command in an environment variable, `$SCALA_PATH`, you can run a specification with:
+```
+sh> scala -classpath $SCALA_PATH specs2.run org.acme.secret.KillerAppSpec
+```
+
+### Output
+
+When you run a specification, whatever environment you are in: sbt, shell, IDE,... you can specify different outputs for the results. For example, when you execute a specification with sbt, the results appear in the console. If you want JUnit XML files to be produced instead you need to pass the `junitxml` argument. Adding any "output" argument will deactivate the console (you will see no output in the console) but you can enable it again by passing the `console` argument. You can of course specify several outputs like `html junitxml console`.
+
+Here is a list of all the existing `Printers` in <s2>specs2</s2> with links to the corresponding section in the User Guide for more information.
+
+<div markdown='1'>
+ Argument   | Section
+ ---------- | -----------------------
+ `console`  | <link class="ok"><a href="org.specs2.guide.ConsoleOutput.html" tooltip="" class="ok">Console output</a></link>
+ `junitxml` | <link class="ok"><a href="org.specs2.guide.JUnitXmlOutput.html" tooltip="" class="ok">JUnit XML output</a></link>
+ `html`     | <link class="ok"><a href="org.specs2.guide.HtmlOutput.html" tooltip="" class="ok">Html output</a></link>
+ `markdown` | <link class="ok"><a href="org.specs2.guide.MarkdownOutput.html" tooltip="" class="ok">Markdown output</a></link>
+ `notifier` | <link class="ok"><a href="org.specs2.guide.CustomOutput.html" tooltip="" class="ok">Custom output</a></link>
+ `printer`  | <link class="ok"><a href="org.specs2.guide.CustomOutput.html" tooltip="" class="ok">Custom output</a></link>
+</div>
+
+### Arguments
+
+With the `testOnly` command arguments can be passed on the command line for selecting, executing or reporting a specification. Please consult the following sections for more information:
+
+ - <link class="ok"><a href="org.specs2.guide.Selection.html" tooltip="" class="ok">Filtering</a></link> to select only some example to run
+ - <link class="ok"><a href="org.specs2.guide.Execution.html" tooltip="" class="ok">Execution</a></link> to modify the execution parameters
+ - <link class="ok">  <a href="org.specs2.guide.ConsoleOutput.html" tooltip="" class="ok">Console output</a></link>, <link class="ok">  <a href="org.specs2.guide.HtmlOutput.html" tooltip="" class="ok">Html output</a></link>, <link class="ok">  <a href="org.specs2.guide.CustomOutput.html" tooltip="" class="ok">Custom output</a></link>... for "reporting" arguments
+ - the <link class="ok">  <a href="org.specs2.guide.ArgumentsReference.html" tooltip="" class="ok">arguments reference guide</a></link> for a list of all arguments
+
+
+
+<h3 id="Now learn how to..." class="ribbon both-ribbon">Now learn how to...</h3>
+
+<div class="ribbon-content">
+    
+
+ * run specifications <link class="ok"><a href="org.specs2.guide.RunInIDE.html" tooltip="" class="ok">in an IDE</a></link>: [IntelliJ IDEA](http://www.jetbrains.com/idea/features/scala.html), [ScalaIDE](http://scala-ide.org)
+ * output <link class="ok">  <a href="org.specs2.guide.JUnitXmlOutput.html" tooltip="" class="ok">JUnit XML files</a></link> to run in a continuous integration server like [Jenkins](http://jenkins-ci.org)
+ * <link class="ok">  <a href="org.specs2.guide.HtmlOutput.html" tooltip="" class="ok">output HTML files</a></link>
+
+</div>
+
+
+<h3 id="And if you want to know more" class="ribbon both-ribbon">And if you want to know more</h3>
+
+<div class="ribbon-content">
+    
+
+ * run specifications with <link class="ok">  <a href="org.specs2.guide.OtherBuildTools.html" tooltip="" class="ok">another build tool</a></link>: maven, gradle
+ * run specifications <link class="ok"><a href="org.specs2.guide.RunInShell.html" tooltip="" class="ok">without a build tool</a></link>
+ * output <link class="ok">  <a href="org.specs2.guide.MarkdownOutput.html" tooltip="" class="ok">Markdown files</a></link>
+ * use your <link class="ok">  <a href="org.specs2.guide.CustomOutput.html" tooltip="" class="ok">own reporting tool</a></link> by implementing the `Notifier` interface (simple) or the `Printer` interface
+ * execute <link class="ok">  <a href="org.specs2.guide.ReferenceOtherSpecifications.html" tooltip="" class="ok">referenced specifications</a></link> with the `all` argument
+
+</div>
