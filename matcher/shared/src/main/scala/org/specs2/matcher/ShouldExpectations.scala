@@ -13,9 +13,10 @@ trait ShouldExpectations extends ExpectationsCreation with TypedEqual:
     infix def should(m: =>Matcher[T]) =
       createExpectable(tm).applyMatcher(m)
 
-  /** This extension is necessary to disambiguate the `should` used to check a String value (`"a" should beEqualTo("a")`)
-    * from the `should` used to create a block of examples in a mutable specification (`"a" should { ... }`). Without it
-    * the block DSL `should` extension method defined on `String` shadows the `expectShould` implicit class above.
+  /** This extension is necessary to disambiguate the `should` used to check a String value (`"a" should
+    * beEqualTo("a")`) from the `should` used to create a block of examples in a mutable specification (`"a" should {
+    * ... }`). Without it the block DSL `should` extension method defined on `String` shadows the `expectShould`
+    * implicit class above.
     */
   extension (s: =>String)(using not: NotGiven[NoShouldExpectations])
     infix def should(m: =>Matcher[String]) =
