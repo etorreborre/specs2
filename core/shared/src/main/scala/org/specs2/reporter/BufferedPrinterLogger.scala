@@ -39,11 +39,11 @@ trait BufferedPrinterLogger extends PrinterLogger:
   private def flushText(force: Boolean = false): Unit =
     if force then
       val lines = buffer.toString.split("\n", -1)
-      buffer.clear
+      buffer.clear()
       lines.foreach(log)
     else
       val lines = buffer.toString.split("\n", -1)
-      buffer.clear
+      buffer.clear()
       lines.dropRight(1).foreach(log)
       lines.lastOption match
         case Some("")    => ()

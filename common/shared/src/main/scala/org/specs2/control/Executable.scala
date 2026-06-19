@@ -41,7 +41,7 @@ object Executable:
     def lines = messages.toString
 
     def buffer[T](f: =>T): T =
-      messages.clear
+      messages.clear()
       f
     def err(s: =>String): Unit = { messages.append(s + "\n"); () }
     def out(s: =>String): Unit = { messages.append(s + "\n"); () }

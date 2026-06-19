@@ -20,7 +20,7 @@ trait Iterablex:
       val it1 = xs.iterator
       val it2 = that.iterator
       var res = true
-      while res && it1.hasNext && it2.hasNext do res = f(it1.next, it2.next)
+      while res && it1.hasNext && it2.hasNext do res = f(it1.next(), it2.next())
       !it1.hasNext && !it2.hasNext && res
 
   extension [T](xs: Iterable[T])
@@ -42,7 +42,7 @@ trait Iterablex:
       */
     def sameElementsAs(that: Iterable[T], f: (T, T) => Boolean): Boolean =
       def isNotItsOwnIterable(a: Iterable[Any]): Boolean =
-        a.isEmpty || (a.iterator.next: Any) != (a: Any)
+        a.isEmpty || (a.iterator.next(): Any) != (a: Any)
 
       def matchTwo(x: T, y: T): Boolean =
         (x.asInstanceOf[Matchable], y.asInstanceOf[Matchable]) match
@@ -82,7 +82,7 @@ trait Iterablex:
       *   the representation of the elements of the iterable using the toString method recursively
       */
     def toDeepString: String =
-      if xs.nonEmpty && (xs: Any) == (xs.iterator.next: Any) then xs.toString
+      if xs.nonEmpty && (xs: Any) == (xs.iterator.next(): Any) then xs.toString
       else
         "[" + xs.toList
           .map { i =>

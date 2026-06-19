@@ -95,7 +95,7 @@ trait StoredExpectations extends Expectations with StandardResults:
     resultsCopy ++= results
     try r
     finally
-      results.clear
+      results.clear()
       results ++= resultsCopy
       ()
   }

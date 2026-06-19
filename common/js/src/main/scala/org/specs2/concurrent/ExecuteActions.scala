@@ -16,7 +16,7 @@ def runActionToFuture[A](
       runNow(ee)
     case Some(to) =>
       given ExecutionContext = ee.executionContext
-      val promise = Promise[A]
+      val promise = Promise[A]()
       ee.schedule({ promise.tryFailure(new TimeoutException("timeout after " + to)); () }, to)
       promise.completeWith(runNow(ee))
       promise.future

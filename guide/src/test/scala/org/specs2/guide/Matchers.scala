@@ -95,7 +95,7 @@ Human(age = 20, wealth = 1000) must beMostlyEqualTo(Human(age = 20, wealth = 1))
 val iterator = List(1, 2, 3).iterator
 
 // Use eventually(retries, n.millis) to specify the number of tries and waiting time
-iterator.next must be_==(3).eventually
+iterator.next() must be_==(3).eventually
 }}
 
  * use `await` to create a matcher that will match on `Matcher[Future[T]]` (this requires an ${"execution environment" ~/ ExecutionEnvironments}): ${snippet{

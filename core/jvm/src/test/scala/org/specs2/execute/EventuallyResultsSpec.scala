@@ -22,17 +22,17 @@ class EventuallyResultsSpec extends Spec with ResultMatchers:
 
   "A result will be retried automatically until it succeeds" >> {
     val iterator = List(Failure(), Failure(), Success()).iterator
-    eventually(iterator.next)
+    eventually(iterator.next())
   }
 
   "If all retries fail, the result will eventually fail" >> {
     val iterator = Iterator.continually(Failure())
-    eventually(iterator.next).not
+    eventually(iterator.next()).not
   }
 
   "Any object convertible to a result can be used with eventually" >> {
     val iterator = List(false, false, true).iterator
-    eventually(iterator.next) must beSuccessful
+    eventually(iterator.next()) must beSuccessful
   }
 
   "Even if a result throws an exception it must be evaluated 'retries' times only" >> {

@@ -52,7 +52,9 @@ trait FutureMatchers extends ExpectationsCreation:
         val syncFailCapture = a.value
         try
           val futures = Iterator(syncFailCapture) ++ Iterator.continually(a.valueDefinition)
-          new FutureAsResult(futures.next.map(v => AsResult(createExpectable(v).applyMatcher(m)))(ee.executionContext))
+          new FutureAsResult(
+            futures.next().map(v => AsResult(createExpectable(v).applyMatcher(m)))(ee.executionContext)
+          )
             .await(retries, timeout)
 
         catch

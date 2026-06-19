@@ -92,7 +92,7 @@ trait FilePathReader:
 
   /** @return the content of a file with a specific codec */
   def readLinesWithCodec(filePath: FilePath, codec: Codec): Operation[IndexedSeq[String]] =
-    Operation.delayed(scala.io.Source.fromFile(filePath.path)(codec).getLines.toIndexedSeq)
+    Operation.delayed(scala.io.Source.fromFile(filePath.path)(codec).getLines().toIndexedSeq)
 
   /** read the content of a file as an Array of Bytes */
   def readBytes(filePath: FilePath): Operation[Array[Byte]] = exists(filePath).map { exists =>

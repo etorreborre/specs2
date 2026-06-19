@@ -76,8 +76,8 @@ case class StatisticsMemoryStore(
       Operation.ok(results.put((specClassName, description.hashCode.toLong), a)).map(_ => ())
 
   def reset: Operation[Unit] = Operation.ok {
-    statistics.clear
-    results.clear
+    statistics.clear()
+    results.clear()
   }
 
 case class SpecificationStatsKey(specClassName: String) extends Key[Stats]

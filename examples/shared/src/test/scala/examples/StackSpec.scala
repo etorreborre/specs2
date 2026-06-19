@@ -62,7 +62,7 @@ class StackSpec extends Specification:
 
     def e1 = stack.size must ===(0)
     def e2 = stack.top must throwA[NoSuchElementException]
-    def e3 = stack.pop must throwA[NoSuchElementException]
+    def e3 = stack.pop() must throwA[NoSuchElementException]
 
   case class nonEmpty(createStack: SizedStack):
     val stack = createStack
@@ -76,10 +76,10 @@ class StackSpec extends Specification:
 
     def pop1 =
       val topElement = stack.size
-      stack.pop must ===(topElement)
+      stack.pop() must ===(topElement)
 
     def pop2 =
-      stack.pop
+      stack.pop()
       stack.top must ===(stack.size)
 
   case class nonFullStack():

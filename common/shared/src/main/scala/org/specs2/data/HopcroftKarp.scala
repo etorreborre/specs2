@@ -29,7 +29,7 @@ object HopcroftKarp:
       dist.put(nil, Int.MaxValue)
 
       while queue.nonEmpty do
-        val v = queue.dequeue
+        val v = queue.dequeue()
 
         if dist(v) < dist(nil) then
           edges.get(v).toSeq.flatten.foreach { u =>

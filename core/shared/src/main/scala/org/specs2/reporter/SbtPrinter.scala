@@ -52,7 +52,7 @@ object SbtPrinter:
 
     def contextStart(text: String, location: String): Unit = { context.push(text); () }
 
-    def contextEnd(text: String, location: String): Unit = { if !context.isEmpty then context.pop; () }
+    def contextEnd(text: String, location: String): Unit = { if !context.isEmpty then context.pop(); () }
 
     def text(text: String, location: String): Unit = ()
     def exampleStarted(name: String, location: String): Unit = ()

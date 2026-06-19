@@ -25,7 +25,7 @@ or until it succeeds.
   }
   "A matcher will be retried automatically until it matches" >> {
     val iterator = List(1, 2, 3).iterator
-    iterator.next must be_==(3).eventually
+    iterator.next() must be_==(3).eventually
   }
   "A matcher can work with eventually and be_== but a type annotation is necessary or a be_== matcher" >> {
     val option: Option[Int] = Some(3)
@@ -33,7 +33,7 @@ or until it succeeds.
   }
   "If all retries fail, the matcher will eventually fail" >> {
     val iterator = LazyList.from(1).iterator
-    (iterator.next must be_==(-1).eventually) must throwA[FailureException]
+    (iterator.next() must be_==(-1).eventually) must throwA[FailureException]
   }
   "It is possible to use aka with eventually (issue #231)" >> {
     var i = 0

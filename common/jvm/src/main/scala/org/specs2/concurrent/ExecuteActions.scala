@@ -12,7 +12,7 @@ def runActionToFuture[A](
     ee: ExecutionEnv
 ): Future[A] =
   timeout.fold(runNow(ee)) { t =>
-    val promise = Promise[A]
+    val promise = Promise[A]()
     val maxTime = t * ee.timeFactor.toLong
     ee.executorServices.schedule({ promise.tryFailure(new TimeoutException(s"timeout after $maxTime")); () }, maxTime)
     promise.completeWith(runNow(ee))
