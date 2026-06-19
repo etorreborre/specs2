@@ -19,3 +19,11 @@ class MutableDslSpec extends org.specs2.mutable.Specification:
   "A block" >> {
     "with some examples" >> ok
   }
+
+  // see issue #1552: the `should` used to check a String value must not be shadowed
+  // by the block DSL `should` used to create a block of examples
+  "Checking a String value" >> {
+    "with should" >> {
+      "actual" should beEqualTo("actual")
+    }
+  }
