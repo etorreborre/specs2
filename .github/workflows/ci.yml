@@ -28,7 +28,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (full)
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -44,13 +44,13 @@ jobs:
         uses: sbt/setup-sbt@v1
 
       - name: Check formatting ✔
-        run: sbt '++ ${{ matrix.scala }}' scalafmtCheckAll
+        run: sbt '++ ${{ matrix.scala }}; scalafmtCheckAll'
 
       - name: Check that workflows are up to date
-        run: sbt '++ ${{ matrix.scala }}' githubWorkflowCheck
+        run: sbt '++ ${{ matrix.scala }}; githubWorkflowCheck'
 
       - name: Build and test 🔧
-        run: sbt '++ ${{ matrix.scala }}' 'testOnly -- xonly exclude ci,website timefactor 3'
+        run: sbt '++ ${{ matrix.scala }}; testOnly -- xonly exclude ci,website timefactor 3'
 
   publish:
     name: Publish Artifacts
@@ -64,7 +64,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (full)
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -122,7 +122,7 @@ jobs:
           pandoc-version: latest
 
       - name: Generate the specs2 website 📚
-        run: sbt unidoc 'guide/testOnly *Website -- xonly'
+        run: sbt 'unidoc; guide/testOnly *Website -- xonly'
 
       - name: Update the website 🚀
         uses: JamesIves/github-pages-deploy-action@4.1.4
@@ -141,7 +141,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout current branch (fast)
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Java (temurin@25)
         if: matrix.java == 'temurin@25'
@@ -158,4 +158,4 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y clang zlib1g-dev libstdc++-12-dev
 
       - name: Test Scala Native 🔧
-        run: sbt fpNative/test commonNative/test matcherNative/test coreNative/test matcherExtraNative/test scalacheckNative/test xmlNative/test
+        run: sbt 'fpNative/test; commonNative/test; matcherNative/test; coreNative/test; matcherExtraNative/test; scalacheckNative/test; xmlNative/test'
