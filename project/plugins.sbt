@@ -6,11 +6,11 @@ addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.6.2")
 
 // ScalaJS
 addSbtPlugin("org.scala-js" % "sbt-scalajs" % scalaJSVersion)
-addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "1.3.2")
+addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "1.4.0")
 
 // ScalaNative
 addSbtPlugin("org.scala-native" % "sbt-scala-native" % scalaNativeVersion)
-addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "1.3.2")
+addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "1.4.0")
 
 // release management
 addSbtPlugin("com.github.sbt" % "sbt-github-actions" % "0.31.0")
