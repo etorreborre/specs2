@@ -414,6 +414,9 @@ lazy val compilationSettings = Seq(
       (Compile / sourceDirectory).value / s"scala-scalaz-7.1.x",
       (Test / test / sourceDirectory).value / s"scala-scalaz-7.1.x"),
   maxErrors := 20,
+  // the build runs on JDK 17 but the artifacts stay usable on JDK 11
+  Compile / scalacOptions ++=
+    (if (platform.value == "jvm") Seq("-release", "11") else Nil),
   Compile / scalacOptions ++=
     Seq(
       "-Xlint",
