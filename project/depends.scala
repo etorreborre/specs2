@@ -1,8 +1,6 @@
 import sbt._
 import Keys._
 import Defaults._
-// necessary for the %%% syntax
-import org.portablescala.sbtplatformdeps.PlatformDepsPlugin.autoImport._
 // necessary for accessing the scalaJSVersion property
 import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
 // necessary for accessing the nativeVersion property
@@ -14,14 +12,14 @@ object depends {
   val sbt = libraryDependencies += "org.scala-sbt" % "test-interface" % "1.0"
 
   // used in specs2-scalacheck
-  val scalacheck = libraryDependencies += "org.scalacheck" %%% "scalacheck" % "1.19.0"
-  val scalacheckTest = libraryDependencies += "org.scalacheck" %%% "scalacheck" % "1.19.0" % Test
+  val scalacheck = libraryDependencies += "org.scalacheck" %% "scalacheck" % "1.19.0"
+  val scalacheckTest = libraryDependencies += "org.scalacheck" %% "scalacheck" % "1.19.0" % Test
 
   // used in specs2-matcher-extra
-  val scalaParser = libraryDependencies += "org.scala-lang.modules" %%% "scala-parser-combinators" % "2.4.0"
+  val scalaParser = libraryDependencies += "org.scala-lang.modules" %% "scala-parser-combinators" % "2.4.0"
 
   // used in specs2-xml, and transitively by specs2-junit, specs2-matcher-extra, specs2-markdown
-  val scalaXml = libraryDependencies += "org.scala-lang.modules" %%% "scala-xml" % "2.4.0"
+  val scalaXml = libraryDependencies += "org.scala-lang.modules" %% "scala-xml" % "2.4.0"
 
   // used in specs2-junit
   val junitVersion = "6.1.3"
@@ -49,28 +47,31 @@ object depends {
   def jvmTest =
     Seq(
       libraryDependencies ++= Seq(
-        ("org.portable-scala" %%% "portable-scala-reflect" % "1.1.3").cross(CrossVersion.for3Use2_13),
+        ("org.portable-scala" %% "portable-scala-reflect" % "1.1.3").cross(CrossVersion.for3Use2_13),
         "org.scala-sbt" % "test-interface" % "1.0"
       )
     )
 
   def jsMacrotaskExecutor =
-    Seq(libraryDependencies += "org.scala-js" %%% "scala-js-macrotask-executor" % "1.1.1")
+    Seq(libraryDependencies += "org.scala-js" %% "scala-js-macrotask-executor" % "1.1.1")
 
   def jsTest =
     Seq(
       libraryDependencies ++=
         Seq(
-          ("org.portable-scala" %%% "portable-scala-reflect" % "1.1.3").cross(CrossVersion.for3Use2_13),
-          ("org.scala-js" %% "scalajs-test-interface" % scalaJSVersion).cross(CrossVersion.for3Use2_13)
+          ("org.portable-scala" %% "portable-scala-reflect" % "1.1.3").cross(CrossVersion.for3Use2_13),
+          // scalajs-test-interface is published without a platform suffix
+          ("org.scala-js" %% "scalajs-test-interface" % scalaJSVersion)
+            .cross(CrossVersion.for3Use2_13)
+            .withPlatformOpt(Some("jvm"))
         )
     )
 
   def nativeTest =
     Seq(
       libraryDependencies ++= Seq(
-        "org.scala-native" %%% "test-interface" % nativeVersion,
-        ("org.portable-scala" %%% "portable-scala-reflect" % "1.1.3").cross(CrossVersion.for3Use2_13)
+        "org.scala-native" %% "test-interface" % nativeVersion,
+        ("org.portable-scala" %% "portable-scala-reflect" % "1.1.3").cross(CrossVersion.for3Use2_13)
       )
     )
 }

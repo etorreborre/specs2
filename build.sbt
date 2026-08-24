@@ -1,4 +1,5 @@
 import com.typesafe.tools.mima.core._
+import sbt.protocol.testing.TestResult
 
 /** ROOT PROJECT */
 
@@ -66,8 +67,9 @@ lazy val rootSettings =
     releaseSettings ++
     Seq(
       Compile / doc / sources := sources.all(aggregateCompile).value.flatten,
-      packagedArtifacts := Map.empty,
-      test := {},
+      packagedArtifacts := Def.uncached(Map.empty),
+      // the root project only aggregates the modules, it has no tests of its own
+      test := TestResult.Passed,
       mimaPreviousArtifacts := Set(),
       mimaFailOnNoPrevious := false
     )
@@ -486,7 +488,7 @@ lazy val testJsSettings = Seq(
 
 /** RELEASE
   */
-lazy val releaseSettings: Seq[Setting[_]] = Seq(
+lazy val releaseSettings: Seq[Setting[?]] = Seq(
   ThisBuild / versionScheme := Some("early-semver"),
   ThisBuild / githubWorkflowJavaVersions := Seq(JavaSpec.temurin("21")),
   ThisBuild / githubWorkflowArtifactUpload := false,
@@ -495,7 +497,7 @@ lazy val releaseSettings: Seq[Setting[_]] = Seq(
   ),
   ThisBuild / githubWorkflowBuild := Seq(
     WorkflowStep
-      .Sbt(name = Some("Build and test 🔧"), commands = List("testOnly -- xonly exclude ci,website timefactor 3"))
+      .Sbt(name = Some("Build and test 🔧"), commands = List("testOnly * -- xonly exclude ci,website timefactor 3"))
   ),
   ThisBuild / githubWorkflowAddedJobs ++= Seq(
     WorkflowJob(
@@ -514,13 +516,13 @@ lazy val releaseSettings: Seq[Setting[_]] = Seq(
           WorkflowStep.Sbt(
             name = Some("Test Scala Native 🔧"),
             commands = List(
-              "fpNative/test",
-              "commonNative/test",
-              "matcherNative/test",
-              "coreNative/test",
-              "matcherExtraNative/test",
-              "scalacheckNative/test",
-              "xmlNative/test"
+              "fpNative/testFull",
+              "commonNative/testFull",
+              "matcherNative/testFull",
+              "coreNative/testFull",
+              "matcherExtraNative/testFull",
+              "scalacheckNative/testFull",
+              "xmlNative/testFull"
             )
           )
         )
@@ -569,8 +571,8 @@ lazy val releaseSettings: Seq[Setting[_]] = Seq(
   ),
   ThisBuild / git.useGitDescribe := true,
   ThisBuild / dynverTagPrefix := SPECS2,
-  ThisBuild / git.gitTagToVersionNumber := { tag: String =>
-    if (tag matches SPECS2 + ".*") Some(tag.replace(SPECS2, "")) else None
+  ThisBuild / git.gitTagToVersionNumber := { (tag: String) =>
+    if (tag.matches(SPECS2 + ".*")) Some(tag.replace(SPECS2, "")) else None
   },
   ScalaUnidoc / unidoc / unidocProjectFilter := inAnyProject -- inProjects(
     fp.js,
