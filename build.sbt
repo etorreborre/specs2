@@ -16,6 +16,16 @@ lazy val specs2 = project.in(file(".")).
     ThisBuild / githubWorkflowArtifactUpload := false,
     ThisBuild / githubWorkflowUseSbtThinClient := false,
     ThisBuild / githubWorkflowJavaVersions := Seq(JavaSpec.temurin("17")),
+    // do not let the jobs inherit whatever the repository defaults happen to be
+    ThisBuild / githubWorkflowPermissions := Some(Permissions.ReadAll),
+    // the publish job pushes the generated website to the gh-pages branch
+    ThisBuild / githubWorkflowGeneratedCI ~= {
+      _.map {
+        case job if job.id == "publish" =>
+          job.copy(permissions = Some(Permissions.Specify(Map(PermissionScope.Contents -> PermissionValue.Write))))
+        case job => job
+      }
+    },
     ThisBuild / githubWorkflowBuild := Seq(WorkflowStep.Sbt(List("testOnly * -- xonly exclude ci"), name = Some("Build project"))),
     // scalacheck 1.19.0 was built against scala-native 0.5.8; allow eviction to 0.5.12
     ThisBuild / libraryDependencySchemes += "org.scala-native" % "test-interface_native0.5_2.13" % "always",
