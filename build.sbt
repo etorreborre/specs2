@@ -1,4 +1,5 @@
 import sbt._
+import sbt.protocol.testing.TestResult
 import Defaults._
 import java.util.{Date, TimeZone}
 import java.text.SimpleDateFormat
@@ -13,15 +14,16 @@ lazy val specs2 = project.in(file(".")).
     siteSettings,
     apiSettings,
     name := "specs2",
-    packagedArtifacts := Map.empty,
+    packagedArtifacts := Def.uncached(Map.empty),
     ThisBuild / githubWorkflowArtifactUpload := false,
     ThisBuild / githubWorkflowUseSbtThinClient := false,
-    ThisBuild / githubWorkflowJavaVersions := Seq(JavaSpec.temurin("11")),
-    ThisBuild / githubWorkflowBuild := Seq(WorkflowStep.Sbt(List("testOnly -- xonly exclude ci"), name = Some("Build project"))),
+    ThisBuild / githubWorkflowJavaVersions := Seq(JavaSpec.temurin("17")),
+    ThisBuild / githubWorkflowBuild := Seq(WorkflowStep.Sbt(List("testOnly * -- xonly exclude ci"), name = Some("Build project"))),
     // scalacheck 1.19.0 was built against scala-native 0.5.8; allow eviction to 0.5.12
     ThisBuild / libraryDependencySchemes += "org.scala-native" % "test-interface_native0.5_3" % "always",
     Global / onChangedBuildSource := ReloadOnSourceChanges,
-    test := {}
+    // the root project only aggregates the modules, it has no tests of its own
+    test := TestResult.Passed
   ).aggregate(
     fpJVM, catsJVM, commonJVM, matcherJVM, coreJVM, matcherExtraJVM, scalazJVM, html,
     formJVM, markdownJVM, junitJVM, scalacheckJVM, xmlJVM,
@@ -54,8 +56,7 @@ lazy val scalazVersion = settingKey[String]("defines the current scalaz version"
 lazy val catsVersion = "2.13.0"
 lazy val catsEffectVersion = "3.7.0"
 
-val commonSettings: Seq[Def.Setting[_]] =
-    coreDefaultSettings  ++
+val commonSettings: Seq[Def.Setting[?]] =
     specs2Settings       ++
     compilationSettings  ++
     testingSettings
@@ -67,9 +68,12 @@ def commonJvmSettings =
 lazy val cats = crossProject(JSPlatform, JVMPlatform).in(file("cats")).
   settings(
     commonSettings,
+    // the JVM artifacts are used on every platform, as they were with sbt 1:
+    // the JS and Native builds of cats-effect do not expose unsafeRunSync,
+    // which IOMatchers needs
     libraryDependencies ++= Seq(
-      "org.typelevel" %% "cats-core" % catsVersion,
-      "org.typelevel" %% "cats-effect" % catsEffectVersion
+      ("org.typelevel" %% "cats-core" % catsVersion).withPlatformOpt(Some("jvm")),
+      ("org.typelevel" %% "cats-effect" % catsEffectVersion).withPlatformOpt(Some("jvm"))
     ),
     name := "specs2-cats"
   ).
@@ -295,7 +299,7 @@ lazy val specs2ShellPrompt = ThisBuild / shellPrompt := { state =>
 def scalaSourceVersion(scalaBinaryVersion: String) =
   scalaBinaryVersion.split('.').take(2).mkString(".")
 
-lazy val compilationSettings: Seq[Def.Setting[_]] = Seq(
+lazy val compilationSettings: Seq[Def.Setting[?]] = Seq(
   // https://gist.github.com/djspiewak/976cd8ac65e20e136f05
   Compile / unmanagedSourceDirectories ++=
     Seq((Compile / sourceDirectory).value / s"scala-${scalaSourceVersion(scalaBinaryVersion.value)}",
@@ -379,9 +383,13 @@ lazy val siteSettings = GhpagesPlugin.projectSettings ++ SitePlugin.projectSetti
     makeSite / includeFilter := AllPassFilter,
     // override the synchLocal task to avoid removing the existing files
     ghpagesSynchLocal := {
-      val betterMappings = ghpagesPrivateMappings.value map { case (file, target) => (file, ghpagesUpdatedRepository.value / target) }
+      val converter = fileConverter.value
+      val repository = ghpagesUpdatedRepository.value
+      val betterMappings = ghpagesPrivateMappings.value.map { case (file, target) =>
+        (converter.toPath(file).toFile, repository / target)
+      }
       IO.copy(betterMappings)
-      ghpagesUpdatedRepository.value
+      repository
     },
     git.remoteRepo := "git@github.com:etorreborre/specs2.git"
   )
@@ -425,7 +433,7 @@ ThisBuild / developers := List(
 
 ThisBuild / description := "software specifications for Scala"
 ThisBuild / licenses := List(
-  "MIT" -> java.net.URI.create("https://opensource.org/license/mit").toURL()
+  License("MIT", java.net.URI.create("https://opensource.org/license/mit"))
 )
 ThisBuild / homepage := Some(url("https://github.com/etorreborre/specs2"))
 
