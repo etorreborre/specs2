@@ -50,7 +50,7 @@ jobs:
         run: sbt '++ ${{ matrix.scala }}; githubWorkflowCheck'
 
       - name: Build and test 🔧
-        run: sbt '++ ${{ matrix.scala }}; testOnly -- xonly exclude ci,website timefactor 3'
+        run: sbt '++ ${{ matrix.scala }}; testOnly * -- xonly exclude ci,website timefactor 3'
 
   publish:
     name: Publish Artifacts
@@ -98,11 +98,11 @@ jobs:
       
       - name: Release to Sonatype 📇
         env:
-          PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
-          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
           PGP_KEY_ID: ${{ secrets.PGP_KEY_ID }}
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
           PGP_SECRET: ${{ secrets.PGP_SECRET }}
+          PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
         run: |
           sbt ci-release 2>&1 | tee /tmp/sonatype-output.txt
           EXIT_CODE=${PIPESTATUS[0]}
@@ -158,4 +158,4 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y clang zlib1g-dev libstdc++-12-dev
 
       - name: Test Scala Native 🔧
-        run: sbt 'fpNative/test; commonNative/test; matcherNative/test; coreNative/test; matcherExtraNative/test; scalacheckNative/test; xmlNative/test'
+        run: sbt 'fpNative/testFull; commonNative/testFull; matcherNative/testFull; coreNative/testFull; matcherExtraNative/testFull; scalacheckNative/testFull; xmlNative/testFull'
