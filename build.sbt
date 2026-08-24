@@ -68,12 +68,9 @@ def commonJvmSettings =
 lazy val cats = crossProject(JSPlatform, JVMPlatform).in(file("cats")).
   settings(
     commonSettings,
-    // the JVM artifacts are used on every platform, as they were with sbt 1:
-    // the JS and Native builds of cats-effect do not expose unsafeRunSync,
-    // which IOMatchers needs
     libraryDependencies ++= Seq(
-      ("org.typelevel" %% "cats-core" % catsVersion).withPlatformOpt(Some("jvm")),
-      ("org.typelevel" %% "cats-effect" % catsEffectVersion).withPlatformOpt(Some("jvm"))
+      "org.typelevel" %% "cats-core" % catsVersion,
+      "org.typelevel" %% "cats-effect" % catsEffectVersion
     ),
     name := "specs2-cats"
   ).
