@@ -1,4 +1,5 @@
 import sbt._
+import sbt.protocol.testing.TestResult
 import Defaults._
 // shadow sbt-scalajs' crossProject and CrossType until Scala.js 1.0.0 is released
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
@@ -11,16 +12,17 @@ lazy val specs2 = project.in(file(".")).
     siteSettings,
     apiSettings,
     name := "specs2",
-    packagedArtifacts := Map.empty,
+    packagedArtifacts := Def.uncached(Map.empty),
     ThisBuild / githubWorkflowArtifactUpload := false,
     ThisBuild / githubWorkflowUseSbtThinClient := false,
-    ThisBuild / githubWorkflowJavaVersions := Seq(JavaSpec.temurin("11")),
-    ThisBuild / githubWorkflowBuild := Seq(WorkflowStep.Sbt(List("testOnly -- xonly exclude ci"), name = Some("Build project"))),
+    ThisBuild / githubWorkflowJavaVersions := Seq(JavaSpec.temurin("17")),
+    ThisBuild / githubWorkflowBuild := Seq(WorkflowStep.Sbt(List("testOnly * -- xonly exclude ci"), name = Some("Build project"))),
     // scalacheck 1.19.0 was built against scala-native 0.5.8; allow eviction to 0.5.12
     ThisBuild / libraryDependencySchemes += "org.scala-native" % "test-interface_native0.5_2.13" % "always",
     ThisBuild / libraryDependencySchemes += "org.scala-native" % "test-interface_native0.5_2.12" % "always",
     Global / onChangedBuildSource := ReloadOnSourceChanges,
-    test := {}
+    // the root project only aggregates the modules, it has no tests of its own
+    test := TestResult.Passed
   ).aggregate(
     fpJVM, catsJVM, commonJVM, matcherJVM, coreJVM, matcherExtraJVM, scalazJVM, html,
     analysisJVM, shapelessJVM, formJVM, markdownJVM, gwtJVM, junitJVM, scalacheckJVM, mockJVM, xmlJVM,
@@ -36,7 +38,8 @@ lazy val specs2Settings = Seq(
   GlobalScope / scalazVersion := "7.2.36",
   specs2ShellPrompt,
   ThisBuild / scalaVersion := "2.13.18",
-  SettingKey[Boolean]("ide-skip-project").withRank(KeyRanks.Invisible) := platformDepsCrossVersion.value == ScalaNativeCrossVersion.binary,
+  // the IDE does not need the Scala Native projects
+  SettingKey[Boolean]("ide-skip-project").withRank(KeyRanks.Invisible) := platform.value.startsWith("native"),
   ThisBuild / crossScalaVersions := Seq("2.13.18", "2.12.21"))
 
 lazy val tagName = Def.setting {
@@ -71,7 +74,6 @@ lazy val catsVersion = "2.13.0"
 lazy val catsEffectVersion = "3.7.0"
 
 val commonSettings =
-    coreDefaultSettings  ++
     specs2Settings       ++
     compilationSettings  ++
     testingSettings
@@ -99,9 +101,10 @@ lazy val analysisNative = analysis.native
 lazy val cats = crossProject(JSPlatform, JVMPlatform, NativePlatform).in(file("cats")).
   settings(
     commonSettings,
+    // the JVM artifacts are used on every platform, as they were with sbt 1
     libraryDependencies ++= Seq(
-      "org.typelevel" %% "cats-core" % catsVersion,
-      "org.typelevel" %% "cats-effect" % catsEffectVersion
+      ("org.typelevel" %% "cats-core" % catsVersion).withPlatformOpt(Some("jvm")),
+      ("org.typelevel" %% "cats-effect" % catsEffectVersion).withPlatformOpt(Some("jvm"))
     ),
     name := "specs2-cats"
   ).
@@ -215,7 +218,7 @@ lazy val gwt = crossProject(JSPlatform, JVMPlatform, NativePlatform).
   in(file("gwt")).
   settings(
     commonSettings,
-    libraryDependencies += "com.chuusai" %%% "shapeless" % shapelessVersion,
+    libraryDependencies += "com.chuusai" %% "shapeless" % shapelessVersion,
     name := "specs2-gwt").
   jvmSettings(depends.jvmTest, commonJvmSettings).
   jsSettings(depends.jsTest, commonJsSettings).
@@ -305,7 +308,7 @@ lazy val shapeless = crossProject(JSPlatform, JVMPlatform, NativePlatform).
   settings(
     commonSettings,
     name := "specs2-shapeless",
-    libraryDependencies += "com.chuusai" %%% "shapeless" % shapelessVersion
+    libraryDependencies += "com.chuusai" %% "shapeless" % shapelessVersion
   ).
   jsSettings(depends.jsTest, commonJsSettings).
   jvmSettings(depends.jvmTest, commonJvmSettings).
@@ -467,7 +470,8 @@ lazy val testingSettings = Seq(
 )
 
 lazy val testingJvmSettings = Seq(
-  javaOptions ++= Seq("-Xmx3G", "-Xss4M"),
+  // pegdown/parboiled reflects into ClassLoader internals, which JDK 17 encapsulates
+  javaOptions ++= Seq("-Xmx3G", "-Xss4M", "--add-opens", "java.base/java.lang=ALL-UNNAMED"),
   Test / fork := true
 )
 
@@ -482,7 +486,10 @@ lazy val siteSettings = GhpagesPlugin.projectSettings ++ SitePlugin.projectSetti
     makeSite / includeFilter := AllPassFilter,
     // override the synchLocal task to avoid removing the existing files
     ghpagesSynchLocal := {
-      val betterMappings = ghpagesPrivateMappings.value map { case (file, target) => (file, ghpagesUpdatedRepository.value / target) }
+      val converter = fileConverter.value
+      val betterMappings = ghpagesPrivateMappings.value.map { case (file, target) =>
+        (converter.toPath(file).toFile, ghpagesUpdatedRepository.value / target)
+      }
       IO.copy(betterMappings)
       ghpagesUpdatedRepository.value
     },
@@ -535,7 +542,7 @@ ThisBuild / developers := List(
 
 ThisBuild / description := "software specifications for Scala"
 ThisBuild / licenses := List(
-  "MIT" -> java.net.URI.create("https://opensource.org/license/mit").toURL()
+  License("MIT", java.net.URI.create("https://opensource.org/license/mit"))
 )
 ThisBuild / homepage := Some(url("https://github.com/etorreborre/specs2"))
 

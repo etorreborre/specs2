@@ -1,6 +1,5 @@
 import sbt._
 import Keys._
-import org.portablescala.sbtplatformdeps.PlatformDepsPlugin.autoImport._
 import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
 import scala.scalanative.sbtplugin.ScalaNativePlugin.autoImport._
 
@@ -16,32 +15,35 @@ object depends {
     Seq("org.scalaz" %% "scalaz-core",
         "org.scalaz" %% "scalaz-effect").map(_ % scalazVersion)
 
+  // scalaz-concurrent is only published for the JVM, so the JS and Native
+  // projects keep using the JVM artifact as they did with sbt 1
   def scalazConcurrent(scalazVersion: String) =
-    "org.scalaz" %% "scalaz-concurrent" % scalazVersion
+    ("org.scalaz" %% "scalaz-concurrent" % scalazVersion).withPlatformOpt(Some("jvm"))
 
   def jvmTest =
     libraryDependencies ++= Seq(
       "org.scala-sbt" % "test-interface" % "1.0",
-      "org.portable-scala" %%% "portable-scala-reflect" % "1.1.3",
+      "org.portable-scala" %% "portable-scala-reflect" % "1.1.3",
       "org.scala-js" %% "scalajs-stubs" % "1.1.0" % "provided")
 
   def jsTest =
     Seq(libraryDependencies ++= Seq(
-      "org.scala-js" %% "scalajs-test-interface" % scalaJSVersion,
-      "org.portable-scala" %%% "portable-scala-reflect" % "1.1.3"),
+      // scalajs-test-interface is published without a platform suffix
+      ("org.scala-js" %% "scalajs-test-interface" % scalaJSVersion).withPlatformOpt(Some("jvm")),
+      "org.portable-scala" %% "portable-scala-reflect" % "1.1.3"),
         Test / scalaJSStage := FastOptStage) ++ jsMacrotaskExecutor
 
   def jsMacrotaskExecutor =
-    Seq(libraryDependencies += "org.scala-js" %%% "scala-js-macrotask-executor" % "1.1.1")
+    Seq(libraryDependencies += "org.scala-js" %% "scala-js-macrotask-executor" % "1.1.1")
 
   def nativeTest =
     Seq(libraryDependencies ++= Seq(
-    "org.scala-native" %%% "test-interface" % nativeVersion,
-    "org.portable-scala" %%% "portable-scala-reflect" % "1.1.3"
+    "org.scala-native" %% "test-interface" % nativeVersion,
+    "org.portable-scala" %% "portable-scala-reflect" % "1.1.3"
     ))
 
   def scalaParser = Def.setting {
-    Seq("org.scala-lang.modules" %%% "scala-parser-combinators" % {
+    Seq("org.scala-lang.modules" %% "scala-parser-combinators" % {
       CrossVersion.partialVersion(scalaVersion.value) match {
         case Some((2, 12)) => "1.1.2"
         case _             => "2.4.0"
@@ -49,7 +51,7 @@ object depends {
     })
   }
   def scalaParserNative = Def.setting {
-    Seq("org.scala-lang.modules" %%% "scala-parser-combinators" % "2.4.0")
+    Seq("org.scala-lang.modules" %% "scala-parser-combinators" % "2.4.0")
   }
 
   def scalaXml = "org.scala-lang.modules" %% "scala-xml" % "2.4.0"
@@ -63,7 +65,7 @@ object depends {
   lazy val tagsoup = "org.ccil.cowan.tagsoup" % "tagsoup" % "1.2.1"
 
   lazy val scalacheck = Def.setting {
-    "org.scalacheck" %%% "scalacheck" % "1.19.0"
+    "org.scalacheck" %% "scalacheck" % "1.19.0"
   }
 
 }
