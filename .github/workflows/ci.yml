@@ -13,6 +13,8 @@ on:
   push:
     branches: ['**']
 
+permissions: read-all
+
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -58,6 +60,8 @@ jobs:
         scala: [3.3.8]
         java: [temurin@17]
     runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write
     steps:
       - name: Checkout current branch (full)
         uses: actions/checkout@v7
