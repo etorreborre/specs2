@@ -491,6 +491,16 @@ lazy val testJsSettings = Seq(
 lazy val releaseSettings: Seq[Setting[?]] = Seq(
   ThisBuild / versionScheme := Some("early-semver"),
   ThisBuild / githubWorkflowJavaVersions := Seq(JavaSpec.temurin("21")),
+  // do not let the jobs inherit whatever the repository defaults happen to be
+  ThisBuild / githubWorkflowPermissions := Some(Permissions.ReadAll),
+  // the publish job pushes the generated website to the gh-pages branch
+  ThisBuild / githubWorkflowGeneratedCI ~= {
+    _.map {
+      case job if job.id == "publish" =>
+        job.copy(permissions = Some(Permissions.Specify(Map(PermissionScope.Contents -> PermissionValue.Write))))
+      case job => job
+    }
+  },
   ThisBuild / githubWorkflowArtifactUpload := false,
   ThisBuild / githubWorkflowBuildPreamble ++= List(
     WorkflowStep.Sbt(List("scalafmtCheckAll"), name = Some("Check formatting ✔"))
