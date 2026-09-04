@@ -13,26 +13,26 @@ import scala.xml.NodeSeq
 private[specs2] trait FormsBuilder extends FormsBuilderLowPriorityImplicits:
 
   /** a Field can be added on a Form row as a FieldCell */
-  given [T]: Conversion[Field[T], FieldCell] with
+  given [T] => Conversion[Field[T], FieldCell]:
     def apply(t: Field[T]): FieldCell =
       new FieldCell(t)
 
   /** a Effect can be added on a Form row as a EffectCell */
-  given Conversion[Effect[?], EffectCell] with
+  given Conversion[Effect[?], EffectCell]:
     def apply(t: Effect[?]): EffectCell =
       new EffectCell(t)
 
   /** a Prop can be added on a Form row as a PropCell */
-  given [T, S]: Conversion[Prop[T, S], PropCell] with
+  given [T, S] => Conversion[Prop[T, S], PropCell]:
     def apply(t: Prop[T, S]): PropCell =
       new PropCell(t)
 
   /** a Form can be implicitly executed if necessary */
-  given Conversion[Form, Result] with
+  given Conversion[Form, Result]:
     def apply(f: Form): Result = f.execute
 
   /** any seq of object convertible to cells */
-  given [T: ToCell]: Conversion[Seq[T], Seq[Cell]] with
+  given [T: ToCell] => Conversion[Seq[T], Seq[Cell]]:
     def apply(seq: Seq[T]): Seq[Cell] =
       seq.map(summon[ToCell[T]].toCell)
 

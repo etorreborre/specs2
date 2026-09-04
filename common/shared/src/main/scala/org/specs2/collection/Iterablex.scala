@@ -3,7 +3,7 @@ package collection
 
 import Seqx.*
 
-given canEqualAny[L, R]: CanEqual[L, R] = CanEqual.derived
+given canEqualAny: [L, R] => CanEqual[L, R] = CanEqual.derived
 
 /** This trait provides additional methods on Iterable.
   *

@@ -127,11 +127,11 @@ trait Trees:
       case Some(p) => parentLocs(p, p +: ps)
       case _       => ps
 
-  given treeLocIsSized[T]: Sized[TreeLoc[T]] with
+  given treeLocIsSized: [T] => Sized[TreeLoc[T]]:
     def size(t: TreeLoc[T]): Int =
       t.size
 
-  given treeIsSized[T]: Sized[Tree[T]] with
+  given treeIsSized: [T] => Sized[Tree[T]]:
     def size(t: Tree[T]): Int =
       t.size
 

@@ -425,11 +425,11 @@ trait TraversableBaseMatchers extends IterableBaseMatchers
 
 private[specs2] trait IterableBaseMatchersLowImplicits extends ValueChecksLowImplicits:
 
-  given seqToValueChecks[T](using to: T => ValueCheck[T]): Conversion[Seq[T], Seq[ValueCheck[T]]] with
+  given seqToValueChecks: [T] => (to: T => ValueCheck[T]) => Conversion[Seq[T], Seq[ValueCheck[T]]]:
     def apply(seq: Seq[T]): Seq[ValueCheck[T]] =
       seq.map(to)
 
-  given matchersToValueChecks[T]: Conversion[Seq[Matcher[T]], Seq[ValueCheck[T]]] with
+  given matchersToValueChecks: [T] => Conversion[Seq[Matcher[T]], Seq[ValueCheck[T]]]:
     def apply(seq: Seq[Matcher[T]]): Seq[ValueCheck[T]] =
       seq.map(matcherIsValueCheck[T])
 
@@ -563,7 +563,7 @@ case class ContainWithResultSeq[T](
     // results for each element, either checked in order or
     // trying to find the best matching from the list of checks
     // return the matched values + the list of checks which were not performed
-    val (results, remainingChecks): (Seq[(T, Seq[Result])], Seq[ValueCheck[T]]) =
+    val (results, remainingChecks) =
       if checkOrder then checkValuesInOrder(seq, checks, eachCheck)
       else checkValues(seq, checks, eachCheck)
 

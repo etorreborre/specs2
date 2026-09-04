@@ -49,7 +49,7 @@ trait Nodex:
     def reduceNodesWith(f: T => NodeSeq): NodeSeq =
       ns.foldLeft(NodeSeq.Empty) { (res, cur) => res ++ f(cur) }
 
-  given Monoid[NodeSeq] with
+  given Monoid[NodeSeq]:
     val zero: NodeSeq =
       NodeSeq.Empty
 
@@ -57,7 +57,7 @@ trait Nodex:
       ns1 ++ ns2
 
   /** @return an unprefixed attribute from pair */
-  given Conversion[(Any, Any), UnprefixedAttribute] with
+  given Conversion[(Any, Any), UnprefixedAttribute]:
     def apply(pair: (Any, Any)): UnprefixedAttribute =
       new UnprefixedAttribute(pair._1.toString, pair._2.toString, Null)
 

@@ -1328,7 +1328,7 @@ case class ScalaCheckArgInstances[T](
 
 object ScalaCheckProperty:
 
-  given ScalaCheckPropertyAsExecution[S <: ScalaCheckProperty]: AsExecution[S] with
+  given ScalaCheckPropertyAsExecution: [S <: ScalaCheckProperty] => AsExecution[S]:
     def execute(s: =>S): Execution =
       Execution.withEnv { env =>
         AsResultProp.check(s.prop, s.parameters.overrideWith(env.commandLine), s.prettyFreqMap)

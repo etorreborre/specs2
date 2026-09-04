@@ -99,7 +99,7 @@ trait Foldable[F[_]]:
 object Foldable:
   @inline def apply[F[_]](using F: Foldable[F]): Foldable[F] = F
 
-  given Foldable[List] with
+  given Foldable[List]:
     def foldMap[A, B](fa: List[A])(f: A => B)(using F: Monoid[B]): B =
       fa.foldLeft(F.zero) { (res, cur) => F.append(res, f(cur)) }
 
@@ -109,7 +109,7 @@ object Foldable:
     def foldLeft[A, B](fa: List[A], z: B)(f: (B, A) => B): B =
       fa.foldLeft(z)(f)
 
-  given Foldable[Vector] with
+  given Foldable[Vector]:
     def foldMap[A, B](fa: Vector[A])(f: A => B)(using F: Monoid[B]): B =
       fa.foldLeft(F.zero) { (res, cur) => F.append(res, f(cur)) }
 
@@ -119,7 +119,7 @@ object Foldable:
     def foldLeft[A, B](fa: Vector[A], z: B)(f: (B, A) => B): B =
       fa.foldLeft(z)(f)
 
-  given Foldable[LazyList] with
+  given Foldable[LazyList]:
     def foldMap[A, B](fa: LazyList[A])(f: A => B)(using F: Monoid[B]): B =
       fa.foldLeft(F.zero) { (res, cur) => F.append(res, f(cur)) }
 

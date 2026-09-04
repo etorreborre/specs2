@@ -14,7 +14,7 @@ object Name:
 
   def unapply[A](v: Name[A]): Option[A] = Some(v.value)
 
-  given name: Monad[Name] with
+  given name: Monad[Name]:
     def point[A](a: =>A): Name[A] = Name(a)
 
     def bind[A, B](fa: Name[A])(f: A => Name[B]): Name[B] =

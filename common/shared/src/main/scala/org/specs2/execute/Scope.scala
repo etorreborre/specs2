@@ -13,5 +13,5 @@ trait Scope
 
 object Scope:
   /** This Given transforms a Scope to a Result */
-  given scopeAsResult[S <: Scope]: AsResult[S] = new AsResult[S]:
+  given scopeAsResult: [S <: Scope] => AsResult[S] = new AsResult[S]:
     def asResult(t: =>S): Result = AsResult.safely { Result.resultOrSuccess(t) }

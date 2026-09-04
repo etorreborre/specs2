@@ -96,7 +96,7 @@ object Property:
   def apply[T]()(using CanEqual[T, T]) = new Property[T](() => None)
 
 trait Properties:
-  given [T](using CanEqual[T, T]): Conversion[T, Property[T]] with
+  given [T] => CanEqual[T, T] => Conversion[T, Property[T]]:
     def apply(t: T): Property[T] = Property(t)
 
 object Properties extends Properties

@@ -155,5 +155,5 @@ trait Type1
 trait Type2
 
 trait Conversions:
-  given Conversion[Int, Long] with
+  given Conversion[Int, Long]:
     def apply(n: Int): Long = n.toLong

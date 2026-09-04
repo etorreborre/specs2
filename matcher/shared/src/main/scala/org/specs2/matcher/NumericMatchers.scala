@@ -11,7 +11,7 @@ import execute.*, Result.*
   */
 trait NumericMatchers:
   /** implicit definition to create delta for the beCloseTo matcher */
-  given [S: Numeric]: Conversion[S, CanHaveDelta[S]] with
+  given [S: Numeric] => Conversion[S, CanHaveDelta[S]]:
     def apply(n: S): CanHaveDelta[S] =
       CanHaveDelta(n)
 

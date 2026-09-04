@@ -39,13 +39,13 @@ object Monad:
 
   @inline def apply[F[_]](using F: Monad[F]): Monad[F] = F
 
-  given idMonad: Monad[Id] with
+  given idMonad: Monad[Id]:
     def point[A](a: =>A): Id[A] = a
 
     def bind[A, B](fa: Id[A])(f: A => Id[B]): Id[B] =
       f(fa)
 
-  given optionMonad: Monad[Option] with
+  given optionMonad: Monad[Option]:
     def point[A](a: =>A): Option[A] = Some(a)
 
     def bind[A, B](fa: Option[A])(f: A => Option[B]): Option[B] =
@@ -59,7 +59,7 @@ object Monad:
         case Some(Right(b)) => Some(b)
         case _              => None
 
-  given eitherMonad[L]: Monad[Either[L, *]] with
+  given eitherMonad: [L] => Monad[Either[L, *]]:
     def point[A](a: =>A): Either[L, A] = Right(a)
 
     def bind[A, B](fa: Either[L, A])(f: A => Either[L, B]): Either[L, B] =
@@ -73,7 +73,7 @@ object Monad:
         case Right(Left(a1)) => tailrecM(a1)(f)
         case Right(Right(b)) => Right(b)
 
-  given futureMonad(using ec: ExecutionContext): Monad[Future] with
+  given futureMonad: (ec: ExecutionContext) => Monad[Future]:
     def point[A](a: =>A): Future[A] = Future.successful(a)
 
     def bind[A, B](fa: Future[A])(f: A => Future[B]): Future[B] =
@@ -81,6 +81,8 @@ object Monad:
 
 trait MonadSyntax:
 
+  // kept as implicit classes: turning them into extensions would drop MonadOps and
+  // MonadFlattenOps from the published API and break binary compatibility
   implicit class MonadOps[F[_]: Monad, A, B](fa: F[A]):
 
     def flatMap(f: A => F[B]): F[B] =

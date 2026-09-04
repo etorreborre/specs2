@@ -257,7 +257,7 @@ case object Form:
     else c.xml(using args).toList
 
   /** a Form can be implicitly transformed to results */
-  given AsResult[Form] with
+  given AsResult[Form]:
     def asResult(f: =>Form): Result =
       f.execute
 
@@ -268,10 +268,10 @@ trait HasForm[T]:
     def form: Form =
       getForm(t)
 
-given HasForm[Form] with
+given HasForm[Form]:
   def getForm(f: Form): Form =
     f
 
-given [T <: { def form: Form }]: HasForm[T] with
+given [T <: { def form: Form }] => HasForm[T]:
   def getForm(t: T): Form =
     t.form

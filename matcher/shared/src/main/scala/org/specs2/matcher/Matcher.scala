@@ -252,7 +252,7 @@ trait MatcherCreation:
 
   /** This method transforms a function returning a pair (condition, message) to a Matcher
     */
-  given pairFunctionToMatcher[T]: Conversion[T => (Boolean, String), Matcher[T]] with
+  given pairFunctionToMatcher: [T] => Conversion[T => (Boolean, String), Matcher[T]]:
     def apply(f: T => (Boolean, String)): Matcher[T] =
       new Matcher[T]:
         def apply[S <: T](s: Expectable[S]) =
@@ -261,7 +261,7 @@ trait MatcherCreation:
 
   /** This method transforms a function returning a triplet (condition, message, actual, expected) to a Matcher
     */
-  given [T]: Conversion[T => (Boolean, String, String, String), Matcher[T]] with
+  given [T] => Conversion[T => (Boolean, String, String, String), Matcher[T]]:
     def apply(f: T => (Boolean, String, String, String)): Matcher[T] =
       new Matcher[T]:
         def apply[S <: T](s: Expectable[S]) =
@@ -270,7 +270,7 @@ trait MatcherCreation:
 
   /** This method transforms a function returning a Result to a Matcher
     */
-  given resultFunctionToMatcher[T, R: AsResult]: Conversion[T => R, Matcher[T]] with
+  given resultFunctionToMatcher: [T, R: AsResult] => Conversion[T => R, Matcher[T]]:
     def apply(f: T => R): Matcher[T] =
       new Matcher[T]:
         def apply[S <: T](s: Expectable[S]) =
@@ -278,7 +278,7 @@ trait MatcherCreation:
 
   /** this allows a function returning a matcher to be used where the same function with a byname parameter is expected
     */
-  given matcherFunctionToMatcher[T, R]: Conversion[T => Matcher[R], (=>T) => Matcher[R]] with
+  given matcherFunctionToMatcher: [T, R] => Conversion[T => Matcher[R], (=>T) => Matcher[R]]:
     def apply(f: T => Matcher[R]): (=>T) => Matcher[R] =
       def f1(t: =>T) = f(t)
       f1

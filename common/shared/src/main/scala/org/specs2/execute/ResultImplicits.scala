@@ -22,7 +22,7 @@ trait ResultImplicits extends ResultLogicalCombinators:
     def forall(seq: Iterable[T]): Result =
       if seq.isEmpty then StandardResults.success
       else
-        val (index, r): (Int, Result) = seq.drop(1).foldLeft((0, t.applied(seq.head))) { case ((i, res), cur) =>
+        val (index, r) = seq.drop(1).foldLeft((0, t.applied(seq.head))) { case ((i, res), cur) =>
           if AsResult(res).isSuccess then (i + 1, t.applied(cur))
           else (i, res)
         }

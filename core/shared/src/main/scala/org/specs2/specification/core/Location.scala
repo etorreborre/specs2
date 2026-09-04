@@ -34,7 +34,7 @@ case class PositionLocation(path: String, lineNumber: Int, columnNumber: Int) ex
 
 object PositionLocation:
 
-  given ToExpr[PositionLocation] with
+  given ToExpr[PositionLocation]:
     def apply(location: PositionLocation)(using qctx: Quotes): Expr[PositionLocation] = {
       location match
         case PositionLocation(path, line, column) =>

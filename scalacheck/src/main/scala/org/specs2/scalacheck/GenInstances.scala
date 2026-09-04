@@ -8,7 +8,7 @@ import org.specs2.fp.*
   */
 trait GenInstances:
 
-  given Monad[Gen] with
+  given Monad[Gen]:
     def point[A](a: =>A): Gen[A] =
       Gen.const(a)
 

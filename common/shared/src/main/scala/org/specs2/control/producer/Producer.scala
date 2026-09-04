@@ -19,7 +19,7 @@ case class More[F[_], A](as: List[A], next: Producer[F, A]) extends LazyList[F, 
 
 /** Simple streaming data structure for elements of type A and effects F
   */
-case class Producer[F[_]: Monad: Safe, A](run: F[LazyList[F, A]]):
+case class Producer[F[_]: {Monad, Safe}, A](run: F[LazyList[F, A]]):
 
   /** Catamorphism on the LazyList data type to produce another stream
     */
@@ -573,19 +573,19 @@ case class Producer[F[_]: Monad: Safe, A](run: F[LazyList[F, A]]):
   */
 object Producer extends Producers:
 
-  given [F[_]: Monad: Safe, A]: Monoid[Producer[F, A]] with
+  given [F[_]: {Monad, Safe}, A] => Monoid[Producer[F, A]]:
     def zero: Producer[F, A] = done[F, A]
     def append(p1: Producer[F, A], p2: =>Producer[F, A]): Producer[F, A] =
       p1 `append` p2
 
-  given [F[_]: Monad: Safe]: Monad[Producer[F, *]] with
+  given [F[_]: {Monad, Safe}] => Monad[Producer[F, *]]:
     def bind[A, B](fa: Producer[F, A])(f: A => Producer[F, B]): Producer[F, B] =
       fa.flatMap(f)
 
     def point[A](a: =>A): Producer[F, A] =
       one[F, A](a)
 
-  def flattenProducers[F[_]: Monad: Safe, A](producers: List[Producer[F, A]]): Producer[F, A] =
+  def flattenProducers[F[_]: {Monad, Safe}, A](producers: List[Producer[F, A]]): Producer[F, A] =
     producers match
       case List()    => done
       case p :: rest => p `append` flattenProducers(rest)
@@ -594,10 +594,10 @@ object Producer extends Producers:
   */
 trait Producers:
 
-  def done[F[_]: Monad: Safe, A]: Producer[F, A] =
+  def done[F[_]: {Monad, Safe}, A]: Producer[F, A] =
     Producer[F, A](summon[Monad[F]].pure(Done()))
 
-  def one[F[_]: Monad: Safe, A](a: A): Producer[F, A] =
+  def one[F[_]: {Monad, Safe}, A](a: A): Producer[F, A] =
     Producer[F, A](summon[Monad[F]].pure(One(a)))
 
   def oneAsync[A](a: A): Producer[Action, A] =
@@ -606,7 +606,7 @@ trait Producers:
   def oneSync[A](a: A): Producer[Operation, A] =
     one[Operation, A](a)
 
-  def oneDelayed[F[_]: Monad: Safe, A](e: =>A): Producer[F, A] =
+  def oneDelayed[F[_]: {Monad, Safe}, A](e: =>A): Producer[F, A] =
     oneEval(summon[Monad[F]].pure(e))
 
   def oneDelayedAsync[A](e: =>A): Producer[Action, A] =
@@ -615,19 +615,19 @@ trait Producers:
   def oneDelayedSync[A](e: =>A): Producer[Operation, A] =
     oneDelayed[Operation, A](e)
 
-  def oneEval[F[_]: Monad: Safe, A](e: F[A]): Producer[F, A] =
+  def oneEval[F[_]: {Monad, Safe}, A](e: F[A]): Producer[F, A] =
     Producer[F, A](e.flatMap(a => one[F, A](a).run))
 
-  def oneOrMore[F[_]: Monad: Safe, A](a: A, as: List[A]): Producer[F, A] =
+  def oneOrMore[F[_]: {Monad, Safe}, A](a: A, as: List[A]): Producer[F, A] =
     Producer[F, A](summon[Monad[F]].pure(More(a +: as, done[F, A])))
 
-  def repeatValue[F[_]: Monad: Safe, A](a: A): Producer[F, A] =
+  def repeatValue[F[_]: {Monad, Safe}, A](a: A): Producer[F, A] =
     Producer(summon[Monad[F]].pure(More(List(a), repeatValue[F, A](a))))
 
-  def repeatEval[F[_]: Monad: Safe, A](e: F[A]): Producer[F, A] =
+  def repeatEval[F[_]: {Monad, Safe}, A](e: F[A]): Producer[F, A] =
     Producer(e.map(a => More(List(a), repeatEval(e))))
 
-  def emit[F[_]: Monad: Safe, A](elements: List[A]): Producer[F, A] =
+  def emit[F[_]: {Monad, Safe}, A](elements: List[A]): Producer[F, A] =
     elements match
       case List()  => done[F, A]
       case List(a) => one[F, A](a)
@@ -639,7 +639,7 @@ trait Producers:
   def emitSync[A](elements: List[A]): Producer[Operation, A] =
     emit[Operation, A](elements)
 
-  def emitSeq[F[_]: Monad: Safe, A](elements: Seq[A]): Producer[F, A] =
+  def emitSeq[F[_]: {Monad, Safe}, A](elements: Seq[A]): Producer[F, A] =
     elements.headOption match
       case Some(a) => Producer(summon[Monad[F]].pure(More[F, A](elements.headOption.toList, emitSeq(elements.tail))))
       case _       => done[F, A]
@@ -650,7 +650,7 @@ trait Producers:
   def emitSeqSync[A](elements: Seq[A]): Producer[Operation, A] =
     emitSeq[Operation, A](elements)
 
-  def emitAll[F[_]: Monad: Safe, A](elements: A*): Producer[F, A] =
+  def emitAll[F[_]: {Monad, Safe}, A](elements: A*): Producer[F, A] =
     emitSeq(elements)
 
   def emitAllAsync[A](elements: A*): Producer[Action, A] =
@@ -659,23 +659,23 @@ trait Producers:
   def emitAllSync[A](elements: A*): Producer[Operation, A] =
     emitSeq[Operation, A](elements)
 
-  def eval[F[_]: Monad: Safe, A](a: F[A]): Producer[F, A] =
+  def eval[F[_]: {Monad, Safe}, A](a: F[A]): Producer[F, A] =
     Producer(a.map(One(_)))
 
-  def evalProducer[F[_]: Monad: Safe, A](a: F[Producer[F, A]]): Producer[F, A] =
+  def evalProducer[F[_]: {Monad, Safe}, A](a: F[Producer[F, A]]): Producer[F, A] =
     Producer(a.flatMap(_.run))
 
-  def emitAction[F[_]: Monad: Safe, A](elements: F[List[A]]): Producer[F, A] =
+  def emitAction[F[_]: {Monad, Safe}, A](elements: F[List[A]]): Producer[F, A] =
     Producer(elements flatMap {
       case List()  => done[F, A].run
       case List(a) => one[F, A](a).run
       case a :: as => oneOrMore[F, A](a, as).run
     })
 
-  def empty[F[_]: Monad: Safe, A]: Producer[F, A] =
+  def empty[F[_]: {Monad, Safe}, A]: Producer[F, A] =
     done
 
-  def bracket1[F[_]: Monad: Safe, A, B, C](
+  def bracket1[F[_]: {Monad, Safe}, A, B, C](
       open: F[A]
   )(step: A => Producer[F, B])(close: A => Finalizer): Producer[F, B] =
     Producer[F, B] {

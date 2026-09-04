@@ -96,7 +96,7 @@ trait FilesContentMatchers
     def withFilter(filter: File => Boolean) = copy(filter = filter)
     def withMatcher(m: Matcher[(File, File)]) = copy(filesMatcher = m)
 
-  private given LinesContent[LocalPaths] with
+  private given LinesContent[LocalPaths]:
     def name(lp: LocalPaths) = lp.base.path
     def lines(lp: LocalPaths) = lp.localPaths
 

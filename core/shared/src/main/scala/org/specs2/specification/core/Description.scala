@@ -125,7 +125,7 @@ object Description:
       case Code(_) => true
       case _       => false
 
-  given Show[Description] with
+  given Show[Description]:
     def show(d: Description): String =
       d match
         case Text(t) => t

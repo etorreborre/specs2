@@ -10,7 +10,7 @@ import scala.jdk.CollectionConverters.*
   */
 trait ShowDescription:
 
-  given Show[Description] with
+  given Show[Description]:
     def show(d: Description): String =
       d.getDisplayName
 

@@ -14,13 +14,13 @@ object FromString:
 
   def apply[T](using fs: FromString[T]): FromString[T] = fs
 
-  given FromString[String] with
+  given FromString[String]:
     def fromString(s: String): Option[String] = Option(s)
 
-  given FromString[Int] with
+  given FromString[Int]:
     def fromString(s: String): Option[Int] = tryo(s.toInt)
 
-  given FromString[Boolean] with
+  given FromString[Boolean]:
     def fromString(s: String): Option[Boolean] =
       if "false" == s then Some(false)
       else if "true" == s then Some(true)

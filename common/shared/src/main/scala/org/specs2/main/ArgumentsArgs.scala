@@ -161,7 +161,7 @@ trait ArgProperties:
 /** This trait can be used to deactivate the conversion of any value to an ArgsProperty
   */
 trait NoArgProperties extends ArgProperties:
-  given [T]: DontConvertTo[ArgProperty[T]] = ???
+  given [T] => DontConvertTo[ArgProperty[T]] = ???
 
 object ArgProperties extends ArgProperties
 

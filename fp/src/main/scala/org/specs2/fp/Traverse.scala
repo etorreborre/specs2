@@ -25,7 +25,7 @@ trait Traverse[F[_]] extends Functor[F]:
 
 object Traverse:
 
-  given listInstance: Traverse[List] with
+  given listInstance: Traverse[List]:
     def traverseImpl[G[_]: Applicative, A, B](fa: List[A])(f: A => G[B]): G[List[B]] =
       val g = Applicative.apply[G]
       fa match
@@ -35,7 +35,7 @@ object Traverse:
     def map[A, B](fa: List[A])(f: A => B): List[B] =
       fa.map(f)
 
-  given optionInstance[L]: Traverse[Option] with
+  given optionInstance: [L] => Traverse[Option]:
     def traverseImpl[G[_]: Applicative, A, B](fa: Option[A])(f: A => G[B]): G[Option[B]] =
       val g = Applicative.apply[G]
       fa match
@@ -45,7 +45,7 @@ object Traverse:
     def map[A, B](fa: Option[A])(f: A => B): Option[B] =
       fa.map(f)
 
-  given eitherInstance[L]: Traverse[Either[L, *]] with
+  given eitherInstance: [L] => Traverse[Either[L, *]]:
     def traverseImpl[G[_]: Applicative, A, B](fa: Either[L, A])(f: A => G[B]): G[Either[L, B]] =
       val g = Applicative.apply[G]
       fa match

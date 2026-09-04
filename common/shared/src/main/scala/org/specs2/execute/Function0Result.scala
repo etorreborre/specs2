@@ -12,7 +12,7 @@ class Function0Result(var t: () => Result):
 
 object Function0Result:
 
-  given anyResultAsResult[T]: AsResult[Function0Result] with
+  given anyResultAsResult: [T] => AsResult[Function0Result]:
     def asResult(code: =>Function0Result): Result =
       code.t()
 

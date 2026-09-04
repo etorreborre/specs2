@@ -12,20 +12,20 @@ trait Sized[T]:
 
 object Sized extends SizedLowPriority1:
   /** any scala collection has a size */
-  given [I <: Iterable[?]]: Sized[I] with
+  given [I <: Iterable[?]] => Sized[I]:
     def size(t: I) = t.size
 
 trait SizedLowPriority1 extends SizedLowPriority2:
   /** any java collection has a size */
-  given [T <: java.util.Collection[?]]: Sized[T] with
+  given [T <: java.util.Collection[?]] => Sized[T]:
     def size(t: T) = t.size()
 
   /** any scala array has a size */
-  given [T]: Sized[Array[T]] with
+  given [T] => Sized[Array[T]]:
     def size(t: Array[T]) = t.length
 
 trait SizedLowPriority2:
 
   /** a regular string has a size, without having to be converted to an Iterable */
-  given Sized[String] with
+  given Sized[String]:
     def size(t: String) = t.length

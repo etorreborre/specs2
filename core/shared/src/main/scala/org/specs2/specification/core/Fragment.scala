@@ -93,7 +93,7 @@ object Fragment:
   def apply(d: Description): Fragment =
     Fragment(d, Execution.NoExecution)
 
-  given showInstance: Show[Fragment] with
+  given showInstance: Show[Fragment]:
     def show(f: Fragment): String =
       s"Fragment(${f.description.show})"
 

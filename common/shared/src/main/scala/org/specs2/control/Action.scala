@@ -137,7 +137,7 @@ object Action:
       else fail(failureMessage)
     }
 
-  given ActionMonad: Monad[Action[*]] with
+  given ActionMonad: Monad[Action[*]]:
     def point[A](a: =>A): Action[A] =
       Action(_ => Future.successful(a))
 
@@ -156,7 +156,7 @@ object Action:
     override def toString: String =
       "Monad[Action]"
 
-  given ActionApplicative: Applicative[Action[*]] with
+  given ActionApplicative: Applicative[Action[*]]:
     def point[A](a: =>A): Action[A] =
       Action(_ => Future.successful(a))
 
@@ -175,13 +175,13 @@ object Action:
   given NaturalTransformation[Id, Action] =
     NaturalTransformation.naturalId[Action]
 
-  given FinalizedAction: Safe[Action] with
+  given FinalizedAction: Safe[Action]:
     def finalizeWith[A](fa: Action[A], f: Finalizer): Action[A] =
       fa.addLast(f)
 
     def attempt[A](action: Action[A]): Action[Throwable `Either` A] =
       action.attempt
 
-  given actionAsResult[T: AsResult]: AsResult[Action[T]] with
+  given actionAsResult: [T: AsResult] => AsResult[Action[T]]:
     def asResult(action: =>Action[T]): Result =
       action.runAction(ExecutionEnv.fromGlobalExecutionContext).fold(err => Error(err), ok => AsResult(ok))

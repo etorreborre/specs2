@@ -5,7 +5,7 @@ package org.specs2.matcher.describe
   */
 object LinesDiffable:
 
-  given largeStringDiffable: Diffable[String] with
+  given largeStringDiffable: Diffable[String]:
     def diff(actual: String, expected: String): ComparisonResult =
       val (actualLines, expectedLines) =
         (actual.toString.split("\n").toList, expected.toString.split("\n").toList)
@@ -13,7 +13,7 @@ object LinesDiffable:
       if actualLines.size + expectedLines.size > 2 then linesDiffable[String].diff(actualLines, expectedLines)
       else Diffable.stringDiffable.diff(actual, expected)
 
-  given linesDiffable[T: Diffable]: Diffable[List[T]] with
+  given linesDiffable: [T: Diffable] => Diffable[List[T]]:
     def diff(actual: List[T], expected: List[T]): ComparisonResult =
       LinesComparisonResult(actual, expected)
 

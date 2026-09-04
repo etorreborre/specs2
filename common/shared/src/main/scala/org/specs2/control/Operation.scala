@@ -128,7 +128,7 @@ object Operation:
   def thenFinally[A](operation: Operation[A], last: Finalizer): Operation[A] =
     operation.addLast(last)
 
-  given OperationMonad: Monad[Operation[*]] with
+  given OperationMonad: Monad[Operation[*]]:
     def point[A](a: =>A): Operation[A] =
       Operation(() => Right(a))
 
@@ -152,7 +152,7 @@ object Operation:
     override def toString: String =
       "Monad[Operation]"
 
-  given OperationApplicative: Applicative[Operation[*]] with
+  given OperationApplicative: Applicative[Operation[*]]:
     def point[A](a: =>A): Operation[A] =
       Operation(() => Right(a))
 
@@ -162,17 +162,17 @@ object Operation:
     override def toString: String =
       "Applicative[Operation]"
 
-  given operationToAction: NaturalTransformation[Operation, Action] with
+  given operationToAction: NaturalTransformation[Operation, Action]:
     def apply[A](operation: =>Operation[A]): Action[A] =
       operation.toAction
 
-  given SafeOperation: Safe[Operation] with
+  given SafeOperation: Safe[Operation]:
     def finalizeWith[A](fa: Operation[A], f: Finalizer): Operation[A] =
       fa.addLast(f)
 
     def attempt[A](fa: Operation[A]): Operation[Throwable Either A] =
       fa.attempt
 
-  given operationAsResult[T: AsResult]: AsResult[Operation[T]] with
+  given operationAsResult: [T: AsResult] => AsResult[Operation[T]]:
     def asResult(operation: =>Operation[T]): Result =
       operation.runOperation.fold(err => Error(err), ok => AsResult(ok))

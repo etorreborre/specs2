@@ -302,6 +302,6 @@ private[specs2] object StringToElem:
 
   extension (s: String) def toElem: Elem = Elem(null, s, Null, TopScope, true)
 
-  given Conversion[String, Elem] with
+  given Conversion[String, Elem]:
     def apply(s: String): Elem =
       Elem(null, s, Null, TopScope, true)

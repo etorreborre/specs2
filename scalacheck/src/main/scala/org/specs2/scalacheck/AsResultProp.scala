@@ -10,7 +10,7 @@ import scala.annotation.tailrec
   */
 trait AsResultProp extends ScalaCheckPropertyCheck with AsResultPropLowImplicits:
 
-  given asResultToProp[R: AsResult]: Conversion[R, Prop] with
+  given asResultToProp: [R: AsResult] => Conversion[R, Prop]:
     def apply(r: R): Prop =
       r.asInstanceOf[Matchable] match
         case p: Prop => p
@@ -43,17 +43,17 @@ trait AsResultProp extends ScalaCheckPropertyCheck with AsResultPropLowImplicits
           }
 
   /** implicit typeclass instance to create examples from a Prop */
-  given propAsResult(using p: Parameters, pfq: FreqMap[Set[Any]] => Pretty): AsResult[Prop] with
+  given propAsResult: (p: Parameters, pfq: FreqMap[Set[Any]] => Pretty) => AsResult[Prop]:
     def asResult(prop: =>Prop): Result =
       check(prop, p, pfq)
 
 trait AsResultPropLowImplicits extends ScalaCheckPropertyCheck with ScalaCheckParameters:
   /** implicit typeclass instance to create examples from Properties */
-  given propertiesAsResult(using p: Parameters, pfq: FreqMap[Set[Any]] => Pretty): AsResult[Properties] with
+  given propertiesAsResult: (p: Parameters, pfq: FreqMap[Set[Any]] => Pretty) => AsResult[Properties]:
     def asResult(properties: =>Properties): Result =
       checkProperties(properties, p, pfq)
 
-  given scalaCheckPropertyAsResult[S <: ScalaCheckProperty]: AsResult[S] with
+  given scalaCheckPropertyAsResult: [S <: ScalaCheckProperty] => AsResult[S]:
     def asResult(prop: =>S): Result =
       try
         lazy val p = prop

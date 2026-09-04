@@ -78,7 +78,7 @@ private[specs2] trait Seqx:
     if filtered.isEmpty then Seq()
     else filtered.map(_.head) +: transpose(filtered.map(_.tail))
 
-  given Foldable[Seq] with
+  given Foldable[Seq]:
     def foldLeft[A, B](fa: Seq[A], z: B)(f: (B, A) => B) =
       summon[Foldable[List]].foldLeft(fa.toList, z)(f)
 

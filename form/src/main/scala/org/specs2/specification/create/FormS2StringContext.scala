@@ -25,6 +25,6 @@ trait FormS2StringContext extends S2StringContext:
           case _                   => formFragment.description
         })
 
-  given [T: HasForm]: Conversion[T, Interpolated] with
+  given [T: HasForm] => Conversion[T, Interpolated]:
     def apply(f: T): Interpolated =
       formIsInterpolated(f.form)

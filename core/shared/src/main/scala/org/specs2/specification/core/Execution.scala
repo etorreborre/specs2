@@ -398,7 +398,7 @@ object Execution:
       executing = Started(f)
     )
 
-  given Show[Execution] with
+  given Show[Execution]:
     def show(e: Execution): String =
       e.executing match
         case NotExecuting => "no execution"
@@ -418,7 +418,7 @@ object Execution:
       else DecoratedResult(s.copy(specs = s.specs + 1), s.result): Result
     })
 
-  given Monoid[Option[FiniteDuration]] with
+  given Monoid[Option[FiniteDuration]]:
     val zero: Option[FiniteDuration] =
       None
 
@@ -429,7 +429,7 @@ object Execution:
         case (None, Some(t2))     => Some(t2)
         case _                    => None
 
-  given AsExecution[Execution] with
+  given AsExecution[Execution]:
     def execute(r: =>Execution): Execution =
       try r
       catch { case e => Execution.executed(Error(e)) }

@@ -78,7 +78,7 @@ case class LinesContentDifference(
 
 object LinesContentDifference:
 
-  given LinesContentDifferenceIsEmpty: IsEmpty[LinesContentDifference] with
+  given LinesContentDifferenceIsEmpty: IsEmpty[LinesContentDifference]:
     def isEmpty(diff: LinesContentDifference): Boolean =
       diff.isEmpty
 
@@ -97,7 +97,7 @@ case class DifferentLine(line1: NumberedLine, line2: NumberedLine) extends LineC
 
 object LineComparison:
 
-  given lineComparisonOrdering: Ordering[LineComparison] with
+  given lineComparisonOrdering: Ordering[LineComparison]:
     def compare(x: LineComparison, y: LineComparison): Int =
       NumberedLine.numberedLineOrdering.compare(x.line, y.line)
 
@@ -135,7 +135,7 @@ case class NumberedLine(lineNumber: Int, line: String):
 
 object NumberedLine:
 
-  given numberedLineOrdering: Ordering[NumberedLine] with
+  given numberedLineOrdering: Ordering[NumberedLine]:
     def compare(x: NumberedLine, y: NumberedLine): Int =
       x.lineNumber.compare(y.lineNumber)
 

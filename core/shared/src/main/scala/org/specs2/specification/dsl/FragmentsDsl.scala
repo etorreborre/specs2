@@ -13,22 +13,24 @@ trait FragmentsDsl extends FragmentsFactory with AcceptanceDsl1:
   trait ToFragments[T]:
     def toFragments(t: T): Fragments
 
-  given ToFragments[Fragment] with
+  given ToFragments[Fragment]:
     def toFragments(f: Fragment): Fragments =
       f
 
-  given ToFragments[Fragments] with
+  given ToFragments[Fragments]:
     def toFragments(fs: Fragments): Fragments =
       fs
 
-  given ToFragments[String] with
+  given ToFragments[String]:
     def toFragments(s: String): Fragments =
       fragmentFactory.text(s)
 
-  given ToFragments[Seq[Fragment]] with
+  given ToFragments[Seq[Fragment]]:
     def toFragments(fs: Seq[Fragment]): Fragments =
       Fragments(fs*)
 
+  // deliberately an implicit class and not an extension: as an extension this `^` would shadow the
+  // one in SpecStructureDsl, and the lower priority is what lets the two coexist
   implicit class appendFragments[T1: ToFragments, T2: ToFragments](t1: T1):
     def ^(t2: T2): Fragments =
       summon[ToFragments[T1]].toFragments(t1).append(summon[ToFragments[T2]].toFragments(t2))

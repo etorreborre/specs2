@@ -32,8 +32,10 @@ private[specs2] trait LinesContentBaseMatchers extends DifferenceFilters with Ex
     LinesComparisonMatcher[L1, L2](ls2, all = false)
 
   // default implementation for reading file lines
-  implicit protected val fileContentForMatchers: LinesContent[File] =
+  protected def fileContentForMatchers: LinesContent[File] =
     FileLinesContent
+
+  protected given LinesContent[File] = fileContentForMatchers
 
   /** Matcher to compare the contents of line contents
     */
@@ -103,5 +105,5 @@ private[specs2] trait LinesContentBaseMatchers extends DifferenceFilters with Ex
   */
 private[specs2] trait SeqsContents:
   // default implementation for reading seq lines
-  implicit protected def seqContentForMatchers[T, CC[_] <: Iterable[?]]: LinesContent[CC[T]] =
+  protected given seqContentForMatchers: [T, CC[_] <: Iterable[?]] => LinesContent[CC[T]] =
     SeqLinesContent[T, CC]()

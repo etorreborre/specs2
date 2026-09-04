@@ -78,7 +78,7 @@ case class Tag(names: String*) extends IncludeExcludeTag
 object NamedTag:
   /** define a very coarse Monoid for NamedTags where appending 2 NamedTags returns a Tag object with both list of tags
     */
-  given NamedTagsAreMonoid: Monoid[NamedTag] with
+  given NamedTagsAreMonoid: Monoid[NamedTag]:
     val zero: NamedTag =
       AlwaysWhenNoIncludeTag
 

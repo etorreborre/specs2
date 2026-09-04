@@ -50,7 +50,7 @@ case class comp() extends MustMatchers with TestFileNames with ContentMatchers:
 
   lazy val dir = "target" / "test" / "contents"
 
-  override implicit protected val fileContentForMatchers = new LinesContent[File] {
+  override protected def fileContentForMatchers = new LinesContent[File] {
     def name(f: File) = f.getPath
     def lines(f: File) = fs.readLines(FilePath.unsafe(f)).runOption.get
   }

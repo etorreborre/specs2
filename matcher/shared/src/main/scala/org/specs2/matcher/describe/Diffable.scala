@@ -30,10 +30,10 @@ object Diffable extends DiffableLowImplicits:
     di.diff(actual, expected)
 
   // scala collections
-  given mapDiffable[K: Diffable, V: Diffable, M <: Map[K, V]]: Diffable[M] = new MapDiffable[K, V, M]
-  given seqDiffable[E: Diffable, S <: Seq[E]]: Diffable[S] = new SeqLinesDiffable[E, S]
-  given setDiffable[E: Diffable, S <: Set[E]]: Diffable[S] = new SetDiffable[E, S]
-  given arrayDiffable[E: Diffable]: Diffable[Array[E]] = new ArrayDiffable
+  given mapDiffable: [K: Diffable, V: Diffable, M <: Map[K, V]] => Diffable[M] = new MapDiffable[K, V, M]
+  given seqDiffable: [E: Diffable, S <: Seq[E]] => Diffable[S] = new SeqLinesDiffable[E, S]
+  given setDiffable: [E: Diffable, S <: Set[E]] => Diffable[S] = new SetDiffable[E, S]
+  given arrayDiffable: [E: Diffable] => Diffable[Array[E]] = new ArrayDiffable
 
   // Needed to avoid ambiguous implicits with Dotty when looking for a Diffable
   // for `Either[Int, Nothing]` for example.
@@ -49,25 +49,25 @@ object Diffable extends DiffableLowImplicits:
 
   // basic elements
   given stackTraceElementDiffable: Diffable[StackTraceElement] = new StackTraceElementDiffable
-  given exceptionDiffable[T <: Throwable]: Diffable[T] = new ThrowableDiffable[T]
+  given exceptionDiffable: [T <: Throwable] => Diffable[T] = new ThrowableDiffable[T]
 
   // None type
-  given optionNoneDiffable[T <: Option[Nothing]]: Diffable[T] = new OptionNoneDiffable[T]
+  given optionNoneDiffable: [T <: Option[Nothing]] => Diffable[T] = new OptionNoneDiffable[T]
 
-  given eitherRightDiffable[R: Diffable]: Diffable[Right[Nothing, R]] = new EitherRightDiffable[R]
-  given eitherLeftDiffable[L: Diffable]: Diffable[Left[L, Nothing]] = new EitherLeftDiffable[L]
+  given eitherRightDiffable: [R: Diffable] => Diffable[Right[Nothing, R]] = new EitherRightDiffable[R]
+  given eitherLeftDiffable: [L: Diffable] => Diffable[Left[L, Nothing]] = new EitherLeftDiffable[L]
 
-  given tryDiffable[T: Diffable, S <: Try[T]]: Diffable[S] = new TryDiffable[T, S]
+  given tryDiffable: [T: Diffable, S <: Try[T]] => Diffable[S] = new TryDiffable[T, S]
   given failureDiffable: Diffable[Failure[Nothing]] = new FailureDiffable
 
 trait DiffableLowImplicits extends DiffableLowImplicits2:
-  given optionDiffable[T: Diffable, S <: Option[T]]: Diffable[S] = new OptionDiffable[T, S]
-  given eitherDiffable[L: Diffable, R: Diffable, T <: Either[L, R]]: Diffable[T] = new EitherDiffable[L, R, T]
+  given optionDiffable: [T: Diffable, S <: Option[T]] => Diffable[S] = new OptionDiffable[T, S]
+  given eitherDiffable: [L: Diffable, R: Diffable, T <: Either[L, R]] => Diffable[T] = new EitherDiffable[L, R, T]
 
 trait DiffableLowImplicits2 extends DiffableLowImplicits3:
 
   /** this Diff instance addresses case classes differences */
-  inline given product[T](using m: Mirror.ProductOf[T]): Diffable[T] =
+  inline given product: [T] => (m: Mirror.ProductOf[T]) => Diffable[T] =
     derived[T]
 
   inline def derived[T](using p: Mirror.ProductOf[T]): Diffable[T] =
@@ -87,7 +87,7 @@ trait DiffableLowImplicits2 extends DiffableLowImplicits3:
 
 trait DiffableLowImplicits3:
 
-  given fallbackDiffable[T]: Diffable[T] =
+  given fallbackDiffable: [T] => Diffable[T] =
     new FallbackDiffable[T]
 
 trait Diffables:

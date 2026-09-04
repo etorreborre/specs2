@@ -20,7 +20,7 @@ import scala.quoted.*
   */
 trait Snippets:
   /** implicit parameters selected for the creation of Snippets */
-  given defaultSnippetParameters[T]: SnippetParams[T] =
+  given defaultSnippetParameters: [T] => SnippetParams[T] =
     Snippet.defaultParams[T]
 
   /** implicit function modify the Snippet parameters */

@@ -69,7 +69,7 @@ case class Text(s: String)
 
 object Text:
 
-  given Monoid[Text] with
+  given Monoid[Text]:
     def zero = Text("")
     def append(t1: Text, t2: =>Text) = Text(t1.s + t2.s)
 

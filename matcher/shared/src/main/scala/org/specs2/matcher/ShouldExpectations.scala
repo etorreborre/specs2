@@ -9,6 +9,8 @@ import scala.util.NotGiven
   */
 trait ShouldExpectations extends ExpectationsCreation with TypedEqual:
 
+  // deliberately an implicit class and not an extension: the `should` extension on String below must
+  // take priority so that `"a" should beEqualTo("a")` is not shadowed by the mutable block DSL
   implicit class expectShould[T](tm: =>T)(using not: NotGiven[NoShouldExpectations]):
     infix def should(m: =>Matcher[T]) =
       createExpectable(tm).applyMatcher(m)

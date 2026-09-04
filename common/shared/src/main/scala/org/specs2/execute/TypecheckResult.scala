@@ -13,7 +13,7 @@ case class TypecheckErrors(errors: List[Error]) extends TypecheckResult
 
 object TypecheckResult:
 
-  given TypecheckResultAsResult: AsResult[TypecheckResult] with
+  given TypecheckResultAsResult: AsResult[TypecheckResult]:
     def asResult(t: =>TypecheckResult): Result =
       t match {
         case TypecheckErrors(errors) =>

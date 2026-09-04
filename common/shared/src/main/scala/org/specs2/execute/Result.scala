@@ -289,7 +289,7 @@ object Result:
   def unit(u: =>Unit) = ResultExecution.effectively { u; Success() }
 
   /** implicit typeclass instance to create examples from Results */
-  given resultAsResult[R <: Result]: AsResult[R] with
+  given resultAsResult: [R <: Result] => AsResult[R]:
     def asResult(t: =>R): Result =
       ResultExecution.execute(t)
 
@@ -322,7 +322,7 @@ object Result:
 trait Results:
   /** implicit definition to accept any boolean value as a Result This avoids writing b must beTrue
     */
-  given Conversion[Boolean, Result] with
+  given Conversion[Boolean, Result]:
     def apply(b: Boolean): Result =
       toResult(b)
 

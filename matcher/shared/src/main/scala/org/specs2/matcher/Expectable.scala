@@ -102,7 +102,7 @@ object Expectable:
     Expectable(() => t).mapDescription(show)
 
   /** Expectable is a Functor and can use the fmap function to modify its value */
-  given ExpectableFunctor: Functor[Expectable] with
+  given ExpectableFunctor: Functor[Expectable]:
     def map[A, B](r: Expectable[A])(f: A => B): Expectable[B] = r.map(f)
 
   /** @return the description of the matched value, quoted. */

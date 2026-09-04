@@ -162,17 +162,17 @@ trait MatchingExpression[T]:
   def toPattern(t: =>T): Pattern
 
 object MatchingExpression:
-  given MatchingExpression[String] with
+  given MatchingExpression[String]:
     def toPattern(s: =>String): Pattern =
       tryOrElse(Pattern.compile(s, Pattern.DOTALL | Pattern.MULTILINE))(
         Pattern.compile(Pattern.quote(s), Pattern.DOTALL | Pattern.MULTILINE)
       )
 
-  given MatchingExpression[Pattern] with
+  given MatchingExpression[Pattern]:
     def toPattern(p: =>Pattern): Pattern =
       p
 
-  given MatchingExpression[Regex] with
+  given MatchingExpression[Regex]:
     def toPattern(r: =>Regex): Pattern =
       r.pattern
 

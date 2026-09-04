@@ -30,13 +30,13 @@ trait S2StringContext extends S2StringContext1:
   ): Interpolated =
     ${ executionInterpolated('{ AsExecution[R].execute(r) }, 'factory) }
 
-  given Conversion[SpecificationRef, Interpolated] with
+  given Conversion[SpecificationRef, Interpolated]:
     def apply(ref: SpecificationRef): Interpolated =
       new Interpolated:
         def prepend(text: String): Fragments =
           Fragments(fragmentFactory.text(text), fragmentFactory.link(ref))
 
-  given Conversion[SpecificationStructure, Interpolated] with
+  given Conversion[SpecificationStructure, Interpolated]:
     def apply(s: SpecificationStructure): Interpolated =
       new Interpolated:
         val specStructure = s.is
@@ -45,7 +45,7 @@ trait S2StringContext extends S2StringContext1:
         def prepend(text: String): Fragments =
           Fragments(fragmentFactory.text(text), fragmentFactory.see(ref))
 
-  given Conversion[SpecStructure, Interpolated] with
+  given Conversion[SpecStructure, Interpolated]:
     def apply(s: SpecStructure): Interpolated =
       new Interpolated:
         def prepend(text: String): Fragments =
@@ -59,7 +59,7 @@ trait S2StringContext extends S2StringContext1:
           catch { case e: Throwable => s"[${e.getMessage.notNull}]" }
         Fragments(fragmentFactory.text(text + s1))
 
-  given Conversion[Fragments, Interpolated] with
+  given Conversion[Fragments, Interpolated]:
     def apply(fragments: Fragments): Interpolated =
       new Interpolated:
         def prepend(text: String): Fragments =

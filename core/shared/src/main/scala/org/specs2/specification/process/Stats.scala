@@ -183,7 +183,9 @@ case object Stats:
 
   def empty = Stats()
 
-  implicit object StatsMonoid extends Monoid[Stats]:
+  given Monoid[Stats] = StatsMonoid
+
+  object StatsMonoid extends Monoid[Stats]:
     def append(s1: Stats, s2: =>Stats) =
       s1.copy(
         specs = s1.specs + s2.specs,

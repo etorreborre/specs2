@@ -62,7 +62,7 @@ object VersionTag:
       case _ => None
     }
 
-  given Ordering[VersionTag] with
+  given Ordering[VersionTag]:
     def compare(x: VersionTag, y: VersionTag): Int =
       Ordering[(DotNumber, Option[String])].compare((x.number, x.timestamp), (y.number, y.timestamp))
 
@@ -79,6 +79,6 @@ object DotNumber:
   def fromString(s: String): Option[DotNumber] =
     tryo(DotNumber(s.split("\\.").toList.map(_.toInt)))
 
-  given Ordering[DotNumber] with
+  given Ordering[DotNumber]:
     def compare(x: DotNumber, y: DotNumber): Int =
       Ordering[List[Int]].compare(x.values, y.values)

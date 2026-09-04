@@ -450,6 +450,16 @@ lazy val compilationSettings = Seq(
 lazy val compilationOptions = Seq(
   "-source:future-migration",
   "-language:implicitConversions,postfixOps",
+  // XML literals have no replacement yet: scala-xml does not ship an `xml"..."` interpolator,
+  // and spelling the trees out by hand would make the html and form modules unreadable
+  "-Wconf:msg=XML literals are no longer supported:s",
+  // a `Conversion` instance cannot take a by-name argument, so the DSL conversions that must not
+  // evaluate their argument eagerly (`s2` interpolation, `Field`, `AsResult`) have to stay implicit defs
+  "-Wconf:msg=`implicit` conversion methods are no longer supported:s",
+  // the remaining implicit classes are deliberate: as extensions they would either shadow the `^`
+  // and `should` extensions they are meant to sit below, or drop published classes from the binary
+  // API (see the comments at each definition)
+  "-Wconf:msg=`implicit` classes are no longer supported:s",
   "-Xkind-projector",
   "-Xcheck-macros",
   "-deprecation:true",

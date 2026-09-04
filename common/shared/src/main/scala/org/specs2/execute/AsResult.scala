@@ -12,24 +12,24 @@ trait AsResult[T]:
 
 object AsResult extends AsResultLowImplicits:
   /** implicit typeclass instance to create results from Booleans */
-  given booleanAsResult: AsResult[Boolean] with
+  given booleanAsResult: AsResult[Boolean]:
     def asResult(t: =>Boolean): Result =
       summon[Conversion[Boolean, Result]](t)
 
   /** typeclass instance for types which are convertible to Result */
-  given asResult[R](using convert: R => Result): AsResult[R] with
+  given asResult: [R] => (convert: R => Result) => AsResult[R]:
     def asResult(r: =>R): Result =
       ResultExecution.execute(convert(r))
 
   /** typeclass instance for lists of results */
-  given resultSeq[R: AsResult]: AsResult[List[R]] with
+  given resultSeq: [R: AsResult] => AsResult[List[R]]:
     def asResult(rs: =>List[R]): Result =
       given Monoid[Result] = Result.ResultFailureMonoid
       rs.foldMap(r => AsResult[R](r))
 
 trait AsResultLowImplicits:
   /** typeclass instance for types which are convertible to Result */
-  given AsResult[Unit] with
+  given AsResult[Unit]:
     def asResult(r: =>Unit): Result =
       Result.resultOrSuccess(r)
 

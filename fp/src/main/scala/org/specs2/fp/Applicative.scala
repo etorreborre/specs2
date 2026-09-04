@@ -225,13 +225,13 @@ trait Applicative[F[_]] extends Functor[F] { self =>
 object Applicative:
   @inline def apply[F[_]](using F: Applicative[F]): Applicative[F] = F
 
-  given optionApplicative[L]: Applicative[Option] =
+  given optionApplicative: [L] => Applicative[Option] =
     Monad.optionMonad
 
-  given eitherApplicative[L]: Applicative[Either[L, *]] =
+  given eitherApplicative: [L] => Applicative[Either[L, *]] =
     Monad.eitherMonad[L]
 
-  given futureApplicative(using ec: ExecutionContext): Applicative[Future] with
+  given futureApplicative: (ec: ExecutionContext) => Applicative[Future]:
     def point[A](a: =>A): Future[A] =
       Future(a)
 

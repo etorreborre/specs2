@@ -13,23 +13,23 @@ import scala.util.NotGiven
   */
 trait BlockDsl extends BlockCreation:
 
-  given ToBlock[Fragment, Fragment] with
+  given ToBlock[Fragment, Fragment]:
     def toBlock(s: String, f: =>Fragment): Fragment =
       addBlock(s, f)
 
-  given ToBlock[Fragments, Fragments] with
+  given ToBlock[Fragments, Fragments]:
     def toBlock(s: String, fs: =>Fragments): Fragments =
       addBlock(s, fs)
 
-  given [R: AsResult]: ToBlock[StepParser[R], Fragment] with
+  given [R: AsResult] => ToBlock[StepParser[R], Fragment]:
     def toBlock(s: String, parser: =>StepParser[R]): Fragment =
       addExample(parser.strip(s), Execution.executed(parser.run(s).fold(execute.Error.apply, AsResult(_))))
 
-  given [R: AsExecution]: ToBlock[R, Fragment] with
+  given [R: AsExecution] => ToBlock[R, Fragment]:
     def toBlock(s: String, r: =>R): Fragment =
       addExample(s, r)
 
-  given [R: AsExecution]: ToBlock[String => R, Fragment] with
+  given [R: AsExecution] => ToBlock[String => R, Fragment]:
     def toBlock(s: String, f: =>(String => R)): Fragment =
       addExample(s, f(s))
 

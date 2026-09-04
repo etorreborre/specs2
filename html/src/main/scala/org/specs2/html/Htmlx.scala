@@ -106,8 +106,10 @@ trait Htmlx:
     def anchorName: String = name.anchorName
     def anchorName(baseUrl: String): String = createAnchorNameForNode(baseUrl + anchorName, namer)
 
-  implicit object HeaderShow extends Show[Header]:
+  object HeaderShow extends Show[Header]:
     override def show(h: Header) = h.name
+
+  given Show[Header] = HeaderShow
 
   /** @return the text of the first child of a Node */
   def nodeText(n: Node) = <a>{n.child}</a>.text
