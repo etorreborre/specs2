@@ -462,6 +462,7 @@ lazy val compilationOptions = Seq(
   "-Wconf:msg=`implicit` classes are no longer supported:s",
   "-Xkind-projector",
   "-Xcheck-macros",
+  "-Werror",
   "-deprecation:true",
   "-unchecked",
   "-feature"
