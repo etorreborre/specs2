@@ -37,10 +37,10 @@ lazy val specs2Settings = Seq(
   organization := "org.specs2",
   GlobalScope / scalazVersion := "7.2.36",
   specs2ShellPrompt,
-  ThisBuild / scalaVersion := "2.13.18",
+  ThisBuild / scalaVersion := "3.9.0",
   // the IDE does not need the Scala Native projects
   SettingKey[Boolean]("ide-skip-project").withRank(KeyRanks.Invisible) := platform.value.startsWith("native"),
-  ThisBuild / crossScalaVersions := Seq("2.13.18", "2.12.21"))
+  ThisBuild / crossScalaVersions := Seq("3.9.0", "2.12.21"))
 
 lazy val tagName = Def.setting {
   s"specs2-${version.value}"
