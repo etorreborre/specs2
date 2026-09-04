@@ -4,7 +4,7 @@ package reporter
 import io.*
 import FilePathReader.*
 import scala.xml.NodeSeq
-import java.net.{HttpURLConnection, URL}
+import java.net.{HttpURLConnection, URI}
 import control.*
 import org.specs2.fp.syntax.*
 import Exceptions.*
@@ -80,7 +80,7 @@ trait HtmlUrls:
     */
   protected def isAliveHttp(url: String) =
     tryo {
-      val huc = new URL(url).openConnection.asInstanceOf[HttpURLConnection]
+      val huc = URI.create(url).toURL.openConnection.asInstanceOf[HttpURLConnection]
       huc.connect()
       Seq(HttpURLConnection.HTTP_OK, HttpURLConnection.HTTP_MOVED_TEMP).contains(huc.getResponseCode)
     } getOrElse false
