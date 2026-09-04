@@ -174,7 +174,7 @@ class ExecutorSpec extends Specification with ThrownExpectations with OwnEnv {
     val fragments =
       Fragments.foreach(1 to 2) { (i: Int) =>
         "test " + i ! Execution.withExecutionEnv { (ee: ExecutionEnv) =>
-          Await.result(scala.concurrent.Future(1)(ee.executionContext), 5.second) === 1
+          Await.result(scala.concurrent.Future(1)(using ee.executionContext), 5.second) === 1
         }
       }
     execute(fragments, env) must contain(beSuccessful[Result]).forall

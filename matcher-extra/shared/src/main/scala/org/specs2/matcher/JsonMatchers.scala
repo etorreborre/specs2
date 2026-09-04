@@ -466,7 +466,7 @@ trait JsonSelectors:
 
     def select(value: Any): Option[Any] =
       value.asInstanceOf[Matchable] match
-        case d: Double => if (m(createExpectable(d)).isSuccess) Some(d) else None
+        case d: Double => if m(createExpectable(d)).isSuccess then Some(d) else None
         case _         => None
 
     def name: String =
@@ -486,7 +486,7 @@ trait JsonSelectors:
 
     def select(value: Any): Option[Any] =
       value.asInstanceOf[Matchable] match
-        case b: Boolean => if (m(createExpectable(b)).isSuccess) Some(b) else None
+        case b: Boolean => if m(createExpectable(b)).isSuccess then Some(b) else None
         case _          => None
 
     def name: String =

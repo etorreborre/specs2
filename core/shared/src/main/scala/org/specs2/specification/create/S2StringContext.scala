@@ -162,7 +162,7 @@ object S2StringContext:
             ${
               Expr(
                 PositionLocation(
-                  Option(Position.ofMacroExpansion.sourceFile.getJPath).map(_.toString).getOrElse("no source file"),
+                  Position.ofMacroExpansion.sourceFile.path,
                   Position.ofMacroExpansion.startLine + 1,
                   Position.ofMacroExpansion.startColumn
                 )

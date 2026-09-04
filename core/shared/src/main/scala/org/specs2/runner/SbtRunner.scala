@@ -45,11 +45,10 @@ abstract class BaseSbtRunner(_args: Array[String], _remoteArgs: Array[String], l
   /** create a new test task */
   def newTask(aTaskDef: TaskDef): Task =
     val fullEnv =
-      if (
-        env.arguments.select._ex.isDefined || !aTaskDef
+      if env.arguments.select._ex.isDefined || !aTaskDef
           .selectors()
           .forall(selector => selector.isInstanceOf[TestSelector] || selector.isInstanceOf[TestWildcardSelector])
-      ) env
+      then env
       else
         val names = aTaskDef.selectors().toList.collect {
           case ts: TestSelector         => Pattern.quote(ts.testName())
@@ -99,7 +98,7 @@ object sbtRun extends MasterSbtRunner(Array(), Array(), Thread.currentThread.get
       .onComplete {
         case scala.util.Failure(_)     => System.exit(100)
         case scala.util.Success(stats) => if stats.isSuccess then System.exit(0) else System.exit(1)
-      }(ee.executionContext)
+      }(using ee.executionContext)
 
   def start(arguments: String*): Action[Stats] = {
     val logger = ConsoleLogger()

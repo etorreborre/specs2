@@ -33,7 +33,7 @@ object ClusterExecution:
       def asResult(t: =>ClusterExecution): Result =
         try {
           val result = t
-          if (result.succeeded) Success()
+          if result.succeeded then Success()
           else Failure(t.errorMessage)
         } catch { case e: Throwable => Error(e) }
 }}

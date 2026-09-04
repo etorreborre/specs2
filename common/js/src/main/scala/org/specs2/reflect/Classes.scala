@@ -35,10 +35,8 @@ trait Classes extends ClassOperations:
   def createInstanceFromName[T <: AnyRef](className: String, defaultInstances: =>List[AnyRef] = Nil)(using
       m: ClassTag[T]
   ): Operation[T] =
-    if (className.endsWith("$"))
-      Operation.delayed(loadModule(className).asInstanceOf[T])
-    else
-      Operation.delayed(newInstance(className, defaultInstances).asInstanceOf[T])
+    if className.endsWith("$") then Operation.delayed(loadModule(className).asInstanceOf[T])
+    else Operation.delayed(newInstance(className, defaultInstances).asInstanceOf[T])
 
   def createInstance[T <: AnyRef](className: String, loader: ClassLoader, defaultInstances: =>List[AnyRef] = Nil)(using
       m: ClassTag[T]

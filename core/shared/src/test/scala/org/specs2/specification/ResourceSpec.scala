@@ -36,26 +36,24 @@ method. It can then be accessed concurrently by several specifications
 
   def demo =
     val messages = new ArrayBuffer[String]
-    for {
-      _ <- runSpec(ResourceExample(messages))
-    } yield messages.toList === List("acquired", "e1 0", "e2 1", "released with value 2")
+    for _ <- runSpec(ResourceExample(messages))
+    yield messages.toList === List("acquired", "e1 0", "e2 1", "released with value 2")
 
   def acquireError =
     val logger = stringPrinterLogger
     val env = Env(printerLogger = logger)
-    for {
-      _ <- runSpec(AcquireErrorExample(), printer = Some(TextPrinter(env)))
-    } yield logger.messages must contain(allOf(=~("resource unavailable"), =~("o e1"), =~("o e2")))
+    for _ <- runSpec(AcquireErrorExample(), printer = Some(TextPrinter(env)))
+    yield logger.messages must contain(allOf(=~("resource unavailable"), =~("o e1"), =~("o e2")))
 
   def concurrentGlobal =
     val env: Env = Env(arguments = Arguments(), printerLogger = NoPrinterLogger)
     val reporter = Reporter.create(List(), env)
     val messages: ArrayBuffer[String] = ArrayBuffer()
     val specifications = (1 to 5).map(n => GlobalResourceExample(n, messages).structure)
-    for {
+    for
       r <- Future.sequence(specifications.map(s => reporter.report(s).runFuture(env.executionEnv)))
       rs <- env.startShutdown
-    } yield (messages.headOption === Some("acquired")) and
+    yield (messages.headOption === Some("acquired")) and
       (messages.lastOption === Some("released with value 5")) and
       (messages.toList must contain(
         allOf(

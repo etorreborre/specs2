@@ -137,7 +137,7 @@ trait ArgumentsCreation:
         printer: ArgProperty[String] = ArgProperty[String]()
     ) = new Arguments(
       report = Report(
-        xonly.toOption.map(v => if (v) Report.xonlyFlags else Report.allFlags).orElse(showOnly.toOption),
+        xonly.toOption.map(v => if v then Report.xonlyFlags else Report.allFlags).orElse(showOnly.toOption),
         failtrace.toOption,
         color.toOption,
         colors.toOption,

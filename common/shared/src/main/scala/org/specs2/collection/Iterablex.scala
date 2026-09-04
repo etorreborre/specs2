@@ -54,8 +54,9 @@ trait Iterablex:
       val itb = that.iterator.toList
 
       (ita, itb) match
-        case (List(), List())                 => true
-        case (a: Iterable[?], b: Iterable[?]) =>
+        case (List(), List()) => true
+        // the elements must stay typed as T here, a type test would erase it to a wildcard
+        case (a, b) =>
           (a.nonEmpty && b.nonEmpty) && {
             val (x, y, resta, restb) = (a.head, b.head, a.drop(1), b.drop(1))
             matchTwo(x, y) && resta.sameElementsAs(restb, f) ||

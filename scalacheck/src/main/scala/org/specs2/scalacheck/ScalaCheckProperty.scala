@@ -1339,7 +1339,7 @@ object ScalaCheckProperty:
       p: T => Pretty
   ): Prop =
     shrink match
-      case Some(s) => Prop.forAll(f)(identity, a, s, p)
+      case Some(s) => Prop.forAll(f)(using identity, a, s, p)
       case _       => Prop.forAllNoShrink(f)
 
   def TNList(n: Int) = (1 to n).map("T" + _).mkString(", ")

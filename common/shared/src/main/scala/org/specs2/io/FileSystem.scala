@@ -188,8 +188,8 @@ case class FileSystem(logger: Logger) extends FilePathReader:
 
   /** delete a directory */
   def delete(dir: DirectoryPath): Operation[Unit] =
-    for {
+    for
       files <- listFilePaths(dir)
       _ <- files.traverse_(delete)
       _ <- delete(dir.toFilePath) // delete the directory once it is empty
-    } yield ()
+    yield ()

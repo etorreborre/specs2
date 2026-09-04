@@ -45,7 +45,7 @@ case class Action[A](private[control] val runNow: ExecutionEnv => Future[A], las
 
   /** catch any exception resulting from running the action later */
   def attempt: Action[Throwable `Either` A] =
-    Action(ee => unsafeRunFuture(ee).transform(r => scala.util.Success(r.toEither))(ee.executionContext), last)
+    Action(ee => unsafeRunFuture(ee).transform(r => scala.util.Success(r.toEither))(using ee.executionContext), last)
 
   /** run another action if this one fails */
   def orElse(other: Action[A]): Action[A] =
@@ -69,7 +69,7 @@ case class Action[A](private[control] val runNow: ExecutionEnv => Future[A], las
     runActionToFuture(
       executionEnv => {
         val f = runNow(executionEnv)
-        f.onComplete(_ => Try(Finalizer.runFinalizers(last)))(executionEnv.executionContext)
+        f.onComplete(_ => Try(Finalizer.runFinalizers(last)))(using executionEnv.executionContext)
         f
       },
       timeout,

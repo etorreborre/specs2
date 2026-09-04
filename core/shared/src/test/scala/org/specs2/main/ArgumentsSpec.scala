@@ -176,16 +176,16 @@ Unknown arguments
     Arguments("MySpec", "notifier", "IntelliJNotifier").report.notifier === "IntelliJNotifier"
 
   def unknown1 =
-    CommandLine.unknownArguments(Seq("xonly", "was", "x", "flag", "xonly")) === List("flag")
+    CommandLine.unknownArguments(using Seq("xonly", "was", "x", "flag", "xonly")) === List("flag")
 
   def unknown2 =
-    CommandLine.unknownArguments(Seq("xonly", "was", "x", "option", "value", "xonly")) === List("option", "value")
+    CommandLine.unknownArguments(using Seq("xonly", "was", "x", "option", "value", "xonly")) === List("option", "value")
 
   def unknown3 =
-    CommandLine.unknownArguments(Seq("!xonly", "was", "x")) === List()
+    CommandLine.unknownArguments(using Seq("!xonly", "was", "x")) === List()
 
   def unknown4 =
-    CommandLine.unknownArguments(
+    CommandLine.unknownArguments(using
       Seq("filesrunner.basepath", "examples/shared/src/test/scala", "verbose", "plan", "true", "boom")
     ) === List("boom")
 }

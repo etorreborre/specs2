@@ -115,7 +115,7 @@ prop((s1: String, s2: String) => s1.nonEmpty or s2.nonEmpty).setShrink2(shrinkSt
 
 // set a specific pretty instance
 prop((s: String) => s must (contain("a") or contain("b"))).setPretty((s: String) =>
-  Pretty((prms: Pretty.Params) => if (prms.verbosity >= 1) s.toUpperCase else s))
+  Pretty((prms: Pretty.Params) => if prms.verbosity >= 1 then s.toUpperCase else s))
 
 // or simply if you don't use the Pretty parameters
 prop((s: String) => s must (contain("a") or contain("b"))).pretty((_: String).toUpperCase)

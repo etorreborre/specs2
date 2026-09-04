@@ -32,7 +32,7 @@ class Website(env: Env) extends Specification with Specs2Variables with Specs2Ta
     val siteOutputDir = outputDir / "website" / versionDirName
 
     pages.map { page =>
-      for {
+      for
         _ <- directories.map(d => fs.copyDir(d, siteOutputDir / d.name)).sequence
         template <- fs.readFile(page)
         replacedVersion <- HtmlTemplate.runTemplate(template, vars)
@@ -40,10 +40,10 @@ class Website(env: Env) extends Specification with Specs2Variables with Specs2Ta
           fs.writeFile(siteOutputDir | page.name, replacedVersion) >> {
             // copy the index page at the root of the site
             // it will then re-direct to a specific version
-            if (page.path.contains("index.html")) fs.writeFile(outputDir | page.name, replacedVersion)
+            if page.path.contains("index.html") then fs.writeFile(outputDir | page.name, replacedVersion)
             else Operation.unit
           }
-      } yield ()
+      yield ()
     }.sequence >> writeVersionsFile(fs, siteOutputDir, vars("GUIDE_DIR"), vars("API_DIR")).map(_ => true)
   }
 

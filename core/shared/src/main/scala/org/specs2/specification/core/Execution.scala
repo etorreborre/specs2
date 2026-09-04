@@ -107,7 +107,7 @@ case class Execution(
     copy(run = run.map(r => newRun(r)))
 
   def updateResult(newResult: (=>Result) => Result): Execution =
-    updateRun(f => e => f(e).map(r => () => newResult(r()))(e.executionContext))
+    updateRun(f => e => f(e).map(r => () => newResult(r()))(using e.executionContext))
 
   /** map a result - the passed function can potentially throw an exception */
   def mapResult(f: Result => Result): Execution =
@@ -149,10 +149,9 @@ case class Execution(
           val future = timedFuture.runFuture(env.executionEnv, to).recoverWith {
             // this exception is thrown if the `action()` code above throws an exception
             case e: ExecutionException =>
-              if (NonFatal(e.getCause))
+              if NonFatal(e.getCause) then
                 Future.successful((ResultExecution.handleExceptionsPurely(e.getCause), timer.stop))
-              else
-                Future.failed(FatalExecution(e.getCause))
+              else Future.failed(FatalExecution(e.getCause))
 
             // we catch timeout exceptions here when they are caused by the timeout argument
             // and the skip the corresponding example
@@ -381,7 +380,7 @@ object Execution:
 
   /** create an execution using the Env */
   def withEnvAsync[T: AsResult](f: Env => Future[T]): Execution =
-    Execution(Some((env: Env) => f(env).map(r => () => AsResult.safely(r))(env.executionContext)))
+    Execution(Some((env: Env) => f(env).map(r => () => AsResult.safely(r))(using env.executionContext)))
 
   /** create an execution using the execution environment */
   def withExecutionEnv[T: AsResult](f: ExecutionEnv => T) =
@@ -395,7 +394,7 @@ object Execution:
   def executed[T: AsResult](r: T): Execution =
     lazy val f = Future.successful((AsResult.safely(r), new SimpleTimer))
     Execution(
-      run = Some((e: Env) => f.map(res => () => res._1)(e.executionContext)),
+      run = Some((e: Env) => f.map(res => () => res._1)(using e.executionContext)),
       executing = Started(f)
     )
 

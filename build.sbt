@@ -46,7 +46,7 @@ lazy val specs2 = project
 
 /** COMMON SETTINGS */
 
-val Scala3 = "3.3.8"
+val Scala3 = "3.9.0"
 
 lazy val specs2Settings = Seq(
   organization := "org.specs2",
@@ -84,6 +84,11 @@ lazy val mimaSettings =
   Seq(
     mimaPreviousArtifacts := Set(organization.value %% moduleName.value % "5.0.0"),
     mimaFailOnNoPrevious := false,
+    // objects holding only givens no longer get a static initializer since Scala 3.9,
+    // and `<clinit>` is never called from user code, so its absence breaks nothing
+    mimaBinaryIssueFilters += { (problem: Problem) =>
+      problem.matchName.forall(name => !name.endsWith(".<clinit>"))
+    },
     mimaBinaryIssueFilters ++= Seq(
       // This was needed to fix a warning (see https://github.com/etorreborre/specs2/commit/343bf6d5425733f89c5a3f1e237b39e37a3205a8)
       ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.execute.Result.*"),
@@ -123,7 +128,6 @@ lazy val mimaSettings =
       ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.specification.core.Env.shutdown"),
       ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.specification.core.Env.shutdownResult"),
       ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.specification.core.Env.awaitShutdown"),
-      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.specification.core.EnvDefault.<clinit>"),
 
       // The OwnEnv and OwnExecutionEnv traits should not expect to have a val env defined when mixed with a specification
       // Because, in that case, it is very possible to confuse the ownEnv with the env and shutdown the env
@@ -446,7 +450,7 @@ lazy val compilationSettings = Seq(
 lazy val compilationOptions = Seq(
   "-source:future-migration",
   "-language:implicitConversions,postfixOps",
-  "-Ykind-projector",
+  "-Xkind-projector",
   "-Xcheck-macros",
   "-deprecation:true",
   "-unchecked",

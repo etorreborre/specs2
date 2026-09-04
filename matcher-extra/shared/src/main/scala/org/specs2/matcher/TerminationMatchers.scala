@@ -96,11 +96,11 @@ class TerminationMatcher[-T](
   private val cancelled = new AtomicBoolean(false)
 
   private def createFuture[A](a: =>A)(using ee: ExecutionEnv): Future[A] =
-    val future = Future(a)(ee.executionContext)
+    val future = Future(a)(using ee.executionContext)
     future.onComplete {
       case scala.util.Success(_) => terminated.set(true)
       case scala.util.Failure(_) => terminated.set(true)
-    }(ee.executionContext)
+    }(using ee.executionContext)
     future
 
   private def withAWhenAction[S](whenAction: Option[() => S], whenDesc: =>Option[String], onlyWhen: Boolean) =

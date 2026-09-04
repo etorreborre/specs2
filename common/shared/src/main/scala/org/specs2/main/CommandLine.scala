@@ -124,19 +124,19 @@ object CommandLine extends Extract:
     arguments.splitDashed(allArgumentNames)
 
   // try to find if incorrect arguments have been passed on the command line
-  def unknownArguments(implicit arguments: Seq[String]): List[String] = {
+  def unknownArguments(using arguments: Seq[String]): List[String] = {
     arguments.toList match {
       case List() =>
         List()
       case name :: value :: rest =>
         findArgument(name) match {
           case Some(BooleanArgument(_)) =>
-            if (FromString[Boolean].fromString(value).isDefined) unknownArguments(rest)
-            else unknownArguments(value :: rest)
+            if FromString[Boolean].fromString(value).isDefined then unknownArguments(using rest)
+            else unknownArguments(using value :: rest)
           case Some(ValuedArgument(_)) =>
-            unknownArguments(rest)
+            unknownArguments(using rest)
           case _ =>
-            name :: unknownArguments(value :: rest)
+            name :: unknownArguments(using value :: rest)
         }
       case name :: _ =>
         findArgument(name) match {

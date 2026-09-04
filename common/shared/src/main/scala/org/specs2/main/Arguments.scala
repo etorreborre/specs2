@@ -108,8 +108,7 @@ case class Arguments(
   override def toString = Seq(select, execute, report, commandLine).mkString("Arguments(", ", ", ")")
 
   def reportUnknown(): Unit =
-    if (verbose && unknown.nonEmpty)
-      println("Unknown argument values: " + unknown.mkString(", "))
+    if verbose && unknown.nonEmpty then println("Unknown argument values: " + unknown.mkString(", "))
 }
 
 object Arguments extends Extract:

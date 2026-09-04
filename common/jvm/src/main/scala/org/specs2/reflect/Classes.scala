@@ -94,13 +94,13 @@ trait Classes extends ClassOperations:
   ): Operation[T] = {
 
     constructor.setAccessible(true)
-    if (constructor.getParameterTypes.isEmpty) {
-      if (klass.getName.endsWith("$")) {
+    if constructor.getParameterTypes.isEmpty then {
+      if klass.getName.endsWith("$") then {
         newInstance(klass, klass.getDeclaredField(NameTransformer.MODULE_INSTANCE_NAME).get(null))
       } else {
         newInstance(klass, constructor.newInstance())
       }
-    } else if (constructor.getParameterTypes.size == 1) {
+    } else if constructor.getParameterTypes.size == 1 then {
       defaultInstances.find(i => constructor.getParameterTypes.apply(0).isAssignableFrom(i.getClass)) match {
         case None =>
           // if the specification has a constructor with one parameter, it is either because

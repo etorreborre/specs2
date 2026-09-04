@@ -53,26 +53,26 @@ class DependencyInjectionSpec(environment: Env) extends Specification {
 
   case class Spec1(env: Env) extends Specification { def is = "test" ! ok }
   case class Spec2()(using ee: ExecutionEnv) extends Specification {
-    def is = "test" ! { Await.result(Future(ok)(ee.executionContext), 1 second) }
+    def is = "test" ! { Await.result(Future(ok)(using ee.executionContext), 1 second) }
   }
   case class Spec3()(using ec: ExecutionContext) extends Specification {
     def is = "test" ! Await.result(Future(ok), 1 second)
   }
   case class Spec4()(using es: ExecutorService) extends Specification {
-    def is = "test" ! Await.result(Future(ok)(ExecutionContext.fromExecutor(es)), 1 second)
+    def is = "test" ! Await.result(Future(ok)(using ExecutionContext.fromExecutor(es)), 1 second)
   }
   case class Spec5(arguments: Arguments) extends Specification { def is = "test" ! ok }
   case class Spec6(cl: CommandLine) extends Specification { def is = "test" ! ok }
 
   case class SpecM1(env1: Env) extends org.specs2.mutable.Specification { "test" >> ok }
   case class SpecM2()(using ee: ExecutionEnv) extends org.specs2.mutable.Specification {
-    "test" >> Await.result(Future(ok)(ee.executionContext), 1 second)
+    "test" >> Await.result(Future(ok)(using ee.executionContext), 1 second)
   }
   case class SpecM3()(using ec: ExecutionContext) extends org.specs2.mutable.Specification {
     "test" >> Await.result(Future(ok), 1 second)
   }
   case class SpecM4()(using es: ExecutorService) extends org.specs2.mutable.Specification {
-    "test" >> Await.result(Future(ok)(ExecutionContext.fromExecutor(es)), 1 second)
+    "test" >> Await.result(Future(ok)(using ExecutionContext.fromExecutor(es)), 1 second)
   }
   case class SpecM5(args1: Arguments) extends org.specs2.mutable.Specification { "test" >> ok }
   case class SpecM6(cl: CommandLine) extends org.specs2.mutable.Specification { "test" >> ok }

@@ -587,7 +587,7 @@ so that an explicit call to `.form` is not necessary in order to include the For
   case class WrongCalculator(form: Form = Form()) {
     def tr(a: Int, b: Int, a_plus_b: Int, a_minus_b: Int) = WrongCalculator {
       def plus = prop(a + b)(a_plus_b)
-      def minus = if (a_minus_b != 2) prop(a - b)(a_minus_b) else prop({ error("very wrong"); 0 })(a_minus_b)
+      def minus = if a_minus_b != 2 then prop(a - b)(a_minus_b) else prop({ error("very wrong"); 0 })(a_minus_b)
       form.tr(a, b, plus, minus)
     }
   }
