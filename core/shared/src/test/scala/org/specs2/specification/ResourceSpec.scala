@@ -53,19 +53,21 @@ method. It can then be accessed concurrently by several specifications
     for
       r <- Future.sequence(specifications.map(s => reporter.report(s).runFuture(env.executionEnv)))
       rs <- env.startShutdown
-    yield (messages.headOption === Some("acquired")) and
-      (messages.lastOption === Some("released with value 5")) and
-      (messages.toList must contain(
-        allOf(
-          "acquired",
-          "ref is 1",
-          "ref is 2",
-          "ref is 3",
-          "ref is 4",
-          "ref is 5",
-          "released with value 5"
-        )
-      ))
+    yield
+      val recorded = messages.synchronized(messages.toList)
+      (recorded.headOption === Some("acquired")) and
+        (recorded.lastOption === Some("released with value 5")) and
+        (recorded must contain(
+          allOf(
+            "acquired",
+            "ref is 1",
+            "ref is 2",
+            "ref is 3",
+            "ref is 4",
+            "ref is 5",
+            "released with value 5"
+          )
+        ))
 
   /** HELPERS */
 
@@ -128,7 +130,9 @@ trait GlobalResource extends Resource[Ref[Int]]:
 
   val messages: ArrayBuffer[String]
 
-  def append(m: String) = synchronized {
+  // lock on the buffer itself: the specifications sharing it are distinct instances,
+  // so `this` would give each of them its own monitor and no mutual exclusion at all
+  def append(m: String) = messages.synchronized {
     messages.append(m)
   }
 
