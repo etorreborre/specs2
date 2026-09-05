@@ -128,7 +128,7 @@ object Operation:
   def thenFinally[A](operation: Operation[A], last: Finalizer): Operation[A] =
     operation.addLast(last)
 
-  given OperationMonad: Monad[Operation[*]]:
+  given OperationMonad: Monad[Operation]:
     def point[A](a: =>A): Operation[A] =
       Operation(() => Right(a))
 
@@ -152,7 +152,7 @@ object Operation:
     override def toString: String =
       "Monad[Operation]"
 
-  given OperationApplicative: Applicative[Operation[*]]:
+  given OperationApplicative: Applicative[Operation]:
     def point[A](a: =>A): Operation[A] =
       Operation(() => Right(a))
 

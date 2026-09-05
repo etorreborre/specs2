@@ -59,7 +59,7 @@ object Monad:
         case Some(Right(b)) => Some(b)
         case _              => None
 
-  given eitherMonad: [L] => Monad[Either[L, *]]:
+  given eitherMonad: [L] => Monad[[R] =>> Either[L, R]]:
     def point[A](a: =>A): Either[L, A] = Right(a)
 
     def bind[A, B](fa: Either[L, A])(f: A => Either[L, B]): Either[L, B] =

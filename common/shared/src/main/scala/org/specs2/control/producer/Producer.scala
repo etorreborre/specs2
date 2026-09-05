@@ -578,7 +578,7 @@ object Producer extends Producers:
     def append(p1: Producer[F, A], p2: =>Producer[F, A]): Producer[F, A] =
       p1 `append` p2
 
-  given [F[_]: {Monad, Safe}] => Monad[Producer[F, *]]:
+  given [F[_]: {Monad, Safe}] => Monad[[A] =>> Producer[F, A]]:
     def bind[A, B](fa: Producer[F, A])(f: A => Producer[F, B]): Producer[F, B] =
       fa.flatMap(f)
 

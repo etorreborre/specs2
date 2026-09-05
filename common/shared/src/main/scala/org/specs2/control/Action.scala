@@ -137,7 +137,7 @@ object Action:
       else fail(failureMessage)
     }
 
-  given ActionMonad: Monad[Action[*]]:
+  given ActionMonad: Monad[Action]:
     def point[A](a: =>A): Action[A] =
       Action(_ => Future.successful(a))
 
@@ -156,7 +156,7 @@ object Action:
     override def toString: String =
       "Monad[Action]"
 
-  given ActionApplicative: Applicative[Action[*]]:
+  given ActionApplicative: Applicative[Action]:
     def point[A](a: =>A): Action[A] =
       Action(_ => Future.successful(a))
 

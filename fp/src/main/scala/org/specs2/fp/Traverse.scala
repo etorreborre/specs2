@@ -45,7 +45,7 @@ object Traverse:
     def map[A, B](fa: Option[A])(f: A => B): Option[B] =
       fa.map(f)
 
-  given eitherInstance: [L] => Traverse[Either[L, *]]:
+  given eitherInstance: [L] => Traverse[[R] =>> Either[L, R]]:
     def traverseImpl[G[_]: Applicative, A, B](fa: Either[L, A])(f: A => G[B]): G[Either[L, B]] =
       val g = Applicative.apply[G]
       fa match

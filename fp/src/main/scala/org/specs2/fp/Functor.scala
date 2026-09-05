@@ -16,11 +16,11 @@ trait Functor[F[_]]:
 object Functor:
   @inline def apply[F[_]](using F: Functor[F]): Functor[F] = F
 
-  given OptionFunctor: Functor[Option[*]]:
+  given OptionFunctor: Functor[Option]:
     def map[A, B](fa: Option[A])(f: A => B): Option[B] =
       fa.map(f)
 
-  given EitherFunctor: [E] => Functor[Either[E, *]]:
+  given EitherFunctor: [E] => Functor[[R] =>> Either[E, R]]:
     def map[A, B](fa: Either[E, A])(f: A => B): Either[E, B] =
       fa.map(f)
 

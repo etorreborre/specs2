@@ -459,7 +459,6 @@ lazy val compilationOptions = Seq(
   // and `should` extensions they are meant to sit below, or drop published classes from the binary
   // API (see the comments at each definition)
   "-Wconf:msg=`implicit` classes are no longer supported:s",
-  "-Xkind-projector",
   "-Xcheck-macros",
   "-Werror",
   "-deprecation",

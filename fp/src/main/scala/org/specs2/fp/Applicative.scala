@@ -228,7 +228,7 @@ object Applicative:
   given optionApplicative: [L] => Applicative[Option] =
     Monad.optionMonad
 
-  given eitherApplicative: [L] => Applicative[Either[L, *]] =
+  given eitherApplicative: [L] => Applicative[[R] =>> Either[L, R]] =
     Monad.eitherMonad[L]
 
   given futureApplicative: (ec: ExecutionContext) => Applicative[Future]:
