@@ -145,12 +145,16 @@ object Action:
       fa.flatMap(f)
 
     override def ap[A, B](fa: =>Action[A])(ff: =>Action[A => B]): Action[B] =
+      // force the by-name arguments once: building an action can have side effects and both
+      // `runNow` and `last` below refer to them
+      val action = fa
+      val function = ff
       Action(
         runNow = { ee =>
           given ExecutionContext = ee.executionContext
-          ff.runNow(ee).zip(fa.runNow(ee)).map { case (f, a) => f(a) }
+          function.runNow(ee).zip(action.runNow(ee)).map { case (f, a) => f(a) }
         },
-        last = fa.last ++ ff.last
+        last = action.last ++ function.last
       )
 
     override def toString: String =
@@ -161,12 +165,16 @@ object Action:
       Action(_ => Future.successful(a))
 
     def ap[A, B](fa: =>Action[A])(ff: =>Action[A => B]): Action[B] =
+      // force the by-name arguments once: building an action can have side effects and both
+      // `runNow` and `last` below refer to them
+      val action = fa
+      val function = ff
       Action(
         runNow = { ee =>
           given ExecutionContext = ee.executionContext
-          ff.runNow(ee).zip(fa.runNow(ee)).map { case (f, a) => f(a) }
+          function.runNow(ee).zip(action.runNow(ee)).map { case (f, a) => f(a) }
         },
-        last = fa.last ++ ff.last
+        last = action.last ++ function.last
       )
 
     override def toString: String =

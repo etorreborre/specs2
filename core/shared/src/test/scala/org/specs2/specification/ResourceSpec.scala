@@ -57,6 +57,10 @@ method. It can then be accessed concurrently by several specifications
       val recorded = messages.synchronized(messages.toList)
       (recorded.headOption === Some("acquired")) and
         (recorded.lastOption === Some("released with value 5")) and
+        // a global resource is acquired and released exactly once, however many
+        // specifications share it
+        (recorded.count(_ == "acquired") === 1) and
+        (recorded.count(_.startsWith("released")) === 1) and
         (recorded must contain(
           allOf(
             "acquired",
