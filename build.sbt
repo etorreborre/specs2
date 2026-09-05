@@ -338,7 +338,6 @@ lazy val guide = project
   .settings(
     name := "specs2-guide",
     commonSettings,
-    Compile / scalacOptions --= Seq("-Xlint", "-Ywarn-unused-import"),
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
     buildInfoPackage := "org.specs2"
   )
@@ -463,7 +462,7 @@ lazy val compilationOptions = Seq(
   "-Xkind-projector",
   "-Xcheck-macros",
   "-Werror",
-  "-deprecation:true",
+  "-deprecation",
   "-unchecked",
   "-feature"
 )
