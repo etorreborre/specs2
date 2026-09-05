@@ -243,7 +243,12 @@ lazy val mimaSettings =
       ProblemFilters.exclude[MissingTypesProblem]("org.specs2.runner.SlaveSbtRunner"),
       ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.runner.SlaveSbtRunner.*"),
       ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.runner.sbtRun.*"),
-      ProblemFilters.exclude[MissingTypesProblem]("org.specs2.runner.sbtRun$")
+      ProblemFilters.exclude[MissingTypesProblem]("org.specs2.runner.sbtRun$"),
+
+      // the applicative instance for Fold was called `A`, which its own methods shadowed with a
+      // type parameter of the same name; it is summoned implicitly, never written out by name
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.control.origami.Fold.A"),
+      ProblemFilters.exclude[MissingClassProblem]("org.specs2.control.origami.Fold$A")
     )
   )
 
