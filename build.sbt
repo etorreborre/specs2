@@ -54,10 +54,10 @@ val Scala3 = "3.9.0"
 
 lazy val specs2Settings = Seq(
   organization := "org.specs2",
-  homepage := Some(url("https://github.com/etorreborre/specs2")),
-  licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
+  homepage := Some(uri("https://github.com/etorreborre/specs2")),
+  licenses := List("Apache-2.0" -> uri("http://www.apache.org/licenses/LICENSE-2.0")),
   developers := List(
-    Developer("etorreborre", "Eric Torreborre", "etorreborre@yahoo.com", url("https://github.com/etorreborre"))
+    Developer("etorreborre", "Eric Torreborre", "etorreborre@yahoo.com", uri("https://github.com/etorreborre"))
   ),
   specs2ShellPrompt,
   ThisBuild / crossScalaVersions := Seq(Scala3),

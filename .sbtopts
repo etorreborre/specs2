@@ -1,3 +1,5 @@
 -J-Xms1536m
 -J-Xmx4G
 -J-XX:ReservedCodeCacheSize=192m
+-Dsbt.color=always
+-Dsbt.log.noformat=false
