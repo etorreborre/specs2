@@ -9,6 +9,9 @@ import runner.*
 import main.*
 import concurrent.ExecutionEnv
 import org.specs2.fp.syntax.*
+import java.net.{JarURLConnection, URI}
+import java.nio.file.{Files, StandardCopyOption}
+import scala.jdk.CollectionConverters.*
 
 class Website(env: Env) extends Specification with Specs2Variables with Specs2Tags {
   def is = section("website") ^ sequential ^ s2"""
@@ -96,8 +99,33 @@ class Website(env: Env) extends Specification with Specs2Variables with Specs2Ta
     }
 
   def resource(name: String): FilePath =
-    FilePath.unsafe(getClass.getClassLoader.getResource(name).toURI)
+    FilePath.unsafe(resourceUri(name))
 
   def resourceDir(name: String): DirectoryPath =
-    DirectoryPath.unsafe(getClass.getClassLoader.getResource(name).toURI)
+    DirectoryPath.unsafe(resourceUri(name))
+
+  private def resourceUri(name: String): URI =
+    val url = Option(getClass.getClassLoader.getResource(name))
+      .getOrElse(throw new IllegalArgumentException(s"Missing website resource: $name"))
+    if url.getProtocol != "jar" then url.toURI
+    else
+      val connection = url.openConnection().asInstanceOf[JarURLConnection]
+      connection.setUseCaches(false)
+      val jar = connection.getJarFile
+      val destination = (outputDir / "resources").toFile.toPath.toAbsolutePath.normalize()
+      try
+        jar.entries().asScala
+          .filter(entry => entry.getName == name || entry.getName.startsWith(name + "/"))
+          .foreach { entry =>
+            val path = destination.resolve(entry.getName).normalize()
+            require(path.startsWith(destination), s"Invalid website resource: ${entry.getName}")
+            if entry.isDirectory then Files.createDirectories(path)
+            else
+              Files.createDirectories(path.getParent)
+              val input = jar.getInputStream(entry)
+              try Files.copy(input, path, StandardCopyOption.REPLACE_EXISTING)
+              finally input.close()
+          }
+        destination.resolve(name).toUri
+      finally jar.close()
 }
