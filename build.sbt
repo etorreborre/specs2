@@ -1,11 +1,15 @@
 import com.typesafe.tools.mima.core._
 import sbt.protocol.testing.TestResult
+import scala.sys.process.{Process, ProcessLogger}
+import scala.util.Try
+
+Global / excludeLintKeys ++= Set(git.gitDescribedVersion, git.useGitDescribe)
 
 /** ROOT PROJECT */
 
 lazy val specs2 = project
   .in(file("."))
-  .enablePlugins(GitBranchPrompt, GitVersioning, ScalaUnidocPlugin)
+  .enablePlugins(GitVersioning, ScalaUnidocPlugin)
   .settings(
     name := "specs2",
     rootSettings
@@ -439,9 +443,32 @@ lazy val xml = crossProject(platforms *)
   .nativeSettings(commonNativeSettings)
   .dependsOn(core)
 
-lazy val specs2ShellPrompt = ThisBuild / shellPrompt := { state =>
-  val name = Project.extract(state).currentRef.project
-  (if (name == "specs2") "" else name) + "> "
+lazy val specs2ShellPrompt = shellPrompt := { state =>
+  val extracted = Project.extract(state)
+  val name = extracted.currentRef.project
+  val repository = extracted.get(ThisBuild / baseDirectory)
+  val quiet = ProcessLogger(_ => (), _ => ())
+  def commandOutput(command: Seq[String]) =
+    Try(Process(command, repository).!!(quiet)).toOption
+      .map(_.linesIterator.map(_.trim).filter(_.nonEmpty).mkString(","))
+      .filter(_.nonEmpty)
+
+  val jjBookmark = commandOutput(
+    Seq(
+      "jj",
+      "--ignore-working-copy",
+      "log",
+      "-r",
+      "heads(::@ & bookmarks())",
+      "--no-graph",
+      "-T",
+      "self.local_bookmarks().map(|bookmark| bookmark.name()).join(\",\") ++ \"\\n\""
+    )
+  )
+  val gitBranch = commandOutput(Seq("git", "symbolic-ref", "--short", "HEAD"))
+  val branch = jjBookmark.orElse(gitBranch)
+
+  s"$name${branch.fold("")(value => s"($value)")}> "
 }
 
 def scalaSourceVersion(scalaBinaryVersion: String) =
