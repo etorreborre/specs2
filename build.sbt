@@ -301,6 +301,9 @@ lazy val core = crossProject(platforms *)
     // until 5.0.0-RC-23 is published
     // mimaPreviousArtifacts := Set.empty,
     mimaFailOnNoPrevious := false,
+    // specs2-core ships four runnable entry points: name the one to use so that sbt does
+    // not warn about having to choose, and `run` keeps working
+    Compile / mainClass := Some("specs2.run"),
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
     buildInfoPackage := "org.specs2"
   )
