@@ -21,11 +21,14 @@ object EnvDefault:
   lazy val default: Env =
     create(Arguments())
 
+  /** an empty map for a new Env's resources: specifications can be reported concurrently */
+  def newResources: Resources = concurrent.TrieMap()
+
   def create(arguments: Arguments): Env =
     val systemLogger = ConsoleLogger()
     Env(
       arguments = arguments,
-      resources = concurrent.TrieMap(),
+      resources = newResources,
       systemLogger = systemLogger,
       printerLogger = consolePrinterLogger,
       statisticsRepository =

@@ -23,7 +23,7 @@ trait OwnEnv extends AfterSpec:
   lazy val env: Env =
     Env(
       EnvDefault.default.arguments,
-      EnvDefault.default.resources,
+      EnvDefault.newResources,
       EnvDefault.default.systemLogger,
       EnvDefault.default.printerLogger,
       EnvDefault.default.statisticsRepository,

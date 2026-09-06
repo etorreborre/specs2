@@ -17,10 +17,13 @@ object EnvDefault:
   def default: Env =
     create(Arguments())
 
+  /** an empty map for a new Env's resources: specifications can be reported concurrently */
+  def newResources: Resources = concurrent.TrieMap()
+
   def create(arguments: Arguments): Env =
     Env(
       arguments = arguments,
-      resources = mutable.Map(),
+      resources = newResources,
       systemLogger = ConsoleLogger(),
       printerLogger = consolePrinterLogger,
       statisticsRepository = StatisticsRepositoryCreation.memory,

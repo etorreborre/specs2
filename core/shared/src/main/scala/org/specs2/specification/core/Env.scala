@@ -159,7 +159,9 @@ object Env:
 
   def apply(
       arguments: Arguments = EnvDefault.default.arguments,
-      resources: Resources = EnvDefault.default.resources,
+      // A fresh map: specifications share resources by sharing an Env.
+      // Calling newResources ensures that each Env has its own map of resources.
+      resources: Resources = EnvDefault.newResources,
       systemLogger: Logger = EnvDefault.default.systemLogger,
       printerLogger: PrinterLogger = EnvDefault.default.printerLogger,
       statisticsRepository: StatisticsRepository = EnvDefault.default.statisticsRepository,

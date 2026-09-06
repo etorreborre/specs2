@@ -17,10 +17,13 @@ object EnvDefault:
   def default: Env =
     create(Arguments())
 
+  /** an empty map for a new Env's resources: javascript is single threaded, and TrieMap does not link */
+  def newResources: Resources = mutable.Map()
+
   def create(arguments: Arguments): Env =
     Env(
       arguments = arguments,
-      resources = mutable.Map(),
+      resources = newResources,
       systemLogger = ConsoleLogger(),
       printerLogger = consolePrinterLogger,
       statisticsRepository = StatisticsRepositoryCreation.memory,
