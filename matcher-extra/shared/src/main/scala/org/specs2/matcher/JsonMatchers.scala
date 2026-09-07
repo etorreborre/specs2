@@ -149,7 +149,7 @@ trait JsonBaseMatchers extends Expectations with JsonMatchersImplicits { outer =
     def andHave(m: Matcher[JsonType]): JsonFinalMatcher = JsonFinalMatcher(selectAnyValueLast(queries), m)
 
     override def not = negate
-    def negate = copy(negated = !negated)
+    def negate: JsonSelectorMatcher = copy(negated = !negated)
 
     /** add queries one by one */
     private def append(other: JsonQuery*) =
