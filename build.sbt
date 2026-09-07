@@ -412,7 +412,10 @@ lazy val aggregateTest = ScopeFilter(
  * PUBLICATION
  */
 
-ThisBuild / credentials := Seq(Credentials(Path.userHome / ".sbt" / "specs2.credentials"))
+ThisBuild / credentials ++= {
+  val credentialsFile = Path.userHome / ".sbt" / "specs2.credentials"
+  if (credentialsFile.isFile) Seq(Credentials(credentialsFile)) else Seq.empty
+}
 ThisBuild / organizationName := "specs2"
 ThisBuild / organizationHomepage := Some(url("http://specs2.org/"))
 
