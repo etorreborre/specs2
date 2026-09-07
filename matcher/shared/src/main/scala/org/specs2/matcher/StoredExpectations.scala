@@ -18,11 +18,11 @@ trait StoredExpectations extends Expectations with StoredResults {
 
       case other => other
     }.map(_.toResult)
-    matchResults.clear
+    matchResults.clear()
 
     val resultsCopy = new scala.collection.mutable.ListBuffer[Result]
     resultsCopy ++= results
-    results.clear
+    results.clear()
 
     rs.toSeq ++ resultsCopy
   }
@@ -47,7 +47,7 @@ trait StoredExpectations extends Expectations with StoredResults {
     matchResultsCopy ++= matchResults
     try mr
     finally {
-      matchResults.clear
+      matchResults.clear()
       matchResults ++= matchResultsCopy
       ()
     }

@@ -66,8 +66,8 @@ case class StatisticsMemoryStore(statistics: HashMap[String, Stats] = new HashMa
     }
 
   def reset: Operation[Unit] = Operations.ok {
-    statistics.clear
-    results.clear
+    statistics.clear()
+    results.clear()
   }
 
 }

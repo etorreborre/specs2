@@ -14,7 +14,7 @@ final case class TimedFuture[A](callback: ExecutorServices => Future[A], timeout
     timeout.fold {
       callback(es)
     } { t =>
-      val promise = Promise[A]
+      val promise = Promise[A]()
       es.schedule( { promise.tryFailure(new TimeoutException("timeout after "+t)); () }, t)
       promise.tryCompleteWith(callback(es))
       promise.future

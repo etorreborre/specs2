@@ -59,7 +59,7 @@ class StackSpec extends Specification { def is =  "Specification for a Stack wit
 
     def e1 = stack.size must_== 0
     def e2 = stack.top must throwA[RuntimeException]  // 2.11: NoSuchElementException; 2.12/13: IndexOutOfBoundsException
-    def e3 = stack.pop must throwA[NoSuchElementException]
+    def e3 = stack.pop() must throwA[NoSuchElementException]
   }
 
   def nonEmpty(createStack: =>SizedStack) = new NonEmptyStack(createStack)
@@ -77,11 +77,11 @@ class StackSpec extends Specification { def is =  "Specification for a Stack wit
 
     def pop1 = {
       val topElement = stack.size
-      stack.pop must_== topElement
+      stack.pop() must_== topElement
     }
 
     def pop2 = {
-      stack.pop
+      stack.pop()
       stack.top must_== stack.size
     }
   }

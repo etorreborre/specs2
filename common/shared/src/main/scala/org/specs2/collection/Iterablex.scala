@@ -29,7 +29,7 @@ trait Iterablex {
       val it2 = that.iterator
       var res = true
       while (res && it1.hasNext && it2.hasNext) {
-        res = f(it1.next, it2.next)
+        res = f(it1.next(), it2.next())
       }
       !it1.hasNext && !it2.hasNext && res
     }
@@ -48,7 +48,7 @@ trait Iterablex {
      * @return true if the 2 iterables contain the same elements (according to a comparison function f) recursively, in any order
      */
     def sameElementsAs(that: GenIterable[T], f: (T, T) => Boolean): Boolean = {
-      def isNotItsOwnIterable(a: GenIterable[Any]) = a.isEmpty || a.iterator.next != a
+      def isNotItsOwnIterable(a: GenIterable[Any]) = a.isEmpty || a.iterator.next() != a
       def matchTwo(x: T, y: T): Boolean = {
         (x, y) match {
           case (a: GenIterable[Any], b: GenIterable[Any]) if isNotItsOwnIterable(a) =>
@@ -93,7 +93,7 @@ trait Iterablex {
      * @return the representation of the elements of the iterable using the toString method recursively
      */
     def toDeepString: String = {
-      if (xs.nonEmpty && xs == xs.iterator.next)
+      if (xs.nonEmpty && xs == xs.iterator.next())
         xs.toString
       else
         "[" + xs.toList.map {

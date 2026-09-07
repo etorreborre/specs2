@@ -45,7 +45,7 @@ case class EffectBlocks(var mode: EffectBlocksMode = Record) {
   private def nextNodeNumber = blocksTree.lastChild.map(_.getLabel + 1).getOrElse(0)
 
   def clear = {
-    effects.clear
+    effects.clear()
     blocksTree = Leaf(0).loc
     this
   }
@@ -56,7 +56,7 @@ case class EffectBlocks(var mode: EffectBlocksMode = Record) {
 
     while (effects.nonEmpty) {
       val (effect, rest) = (effects.head, effects.tail)
-      effects.clear
+      effects.clear()
 
       effect.run()
       effects ++= rest
@@ -80,7 +80,7 @@ case class EffectBlocks(var mode: EffectBlocksMode = Record) {
       path.toList match {
         case n :: remainingPath =>
           val effect = effects.filter(_.replay).drop(n).headOption
-          effects.clear
+          effects.clear()
           effect.foreach(_.run())
           runPath(remainingPath)
 

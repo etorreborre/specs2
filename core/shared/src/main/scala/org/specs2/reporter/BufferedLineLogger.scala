@@ -16,7 +16,7 @@ trait BufferedLineLogger extends LineLogger {
   def errorLog(msg: String)  : Unit = { val rest = flushText(); errorLine(rest+msg)  }
   def failureLog(msg: String): Unit = { val rest = flushText(); failureLine(rest+msg) }
   def warnLog(msg: String)   : Unit = { val rest = flushText(); warnLine(rest+msg) }
-  def newline()              : Unit = { infoLine(buffer.toString); buffer.clear }
+  def newline()              : Unit = { infoLine(buffer.toString); buffer.clear() }
   def close()                : Unit = { flushText(force = true); () }
 
   protected def infoLine(msg: String): Unit
@@ -30,11 +30,11 @@ trait BufferedLineLogger extends LineLogger {
   private def flushText(force: Boolean = false): String = {
     if (force) {
       if (!buffer.isEmpty) infoLine(buffer.toString)
-      buffer.clear
+      buffer.clear()
       ""
     } else if (endsWith(buffer.toString, "\n")) {
       val lines = buffer.toString.split("\n")
-      buffer.clear
+      buffer.clear()
       if (lines.size == 1) {
         infoLine(lines.mkString)
         ""

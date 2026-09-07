@@ -71,7 +71,7 @@ object SbtPrinter {
     { context.push(text); () }
 
     def contextEnd(text: String, location: String): Unit =
-    { if (!context.isEmpty) context.pop; () }
+    { if (!context.isEmpty) context.pop(); () }
 
     def text(text: String, location: String): Unit = ()
     def exampleStarted(name: String, location: String): Unit = ()
