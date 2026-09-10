@@ -121,6 +121,13 @@ lazy val mimaSettings =
       // the fixed executor has a new argument in order to remove warnings when some futures cannot be completed
       ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.concurrent.ExecutorServices.fixedExecutor"),
       ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.main.Execute.*"),
+      // The argument namespaces also gained the discardRejectedFutures parameter.
+      ProblemFilters.exclude[DirectMissingMethodProblem](
+        "org.specs2.main.ArgumentsCreation#ArgumentsNamespace.execute"
+      ),
+      ProblemFilters.exclude[DirectMissingMethodProblem](
+        "org.specs2.specification.dsl.mutable.ArgumentsCreation#ArgumentsNamespaceMutable.execute"
+      ),
 
       // CustomInstances, PrinterFactory, SpecFactory, SpecificationFinder cannot have a default Env
       // because there a risk that the default env not be shutdown. Moreover the Env.shutdown functions
@@ -168,6 +175,33 @@ lazy val mimaSettings =
         "org.specs2.matcher.JsonMatchersImplicits#given_Conversion_K_V_JsonPairSelector.this"
       ),
       ProblemFilters.exclude[MissingClassProblem]("org.specs2.matcher.JsonMatchersImplicits*"),
+      // The JSON rewrite replaced ToJsonSelector givens with Conversion givens.
+      ProblemFilters.exclude[DirectMissingMethodProblem](
+        "org.specs2.matcher.JsonMatchersImplicits.given_ToJsonSelector_Regex"
+      ),
+      ProblemFilters.exclude[DirectMissingMethodProblem](
+        "org.specs2.matcher.JsonMatchersImplicits.given_ToJsonSelector_M"
+      ),
+      ProblemFilters.exclude[DirectMissingMethodProblem](
+        "org.specs2.matcher.JsonMatchersImplicits.given_ToJsonSelector_Matcher"
+      ),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.matcher.JsonMatchersImplicits.ToJsonSelector"),
+      ProblemFilters.exclude[DirectMissingMethodProblem](
+        "org.specs2.matcher.JsonMatchersImplicits.given_Conversion_K_V_JsonPairSelector"
+      ),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.matcher.JsonMatchersLowImplicits.$init$"),
+      ProblemFilters.exclude[DirectMissingMethodProblem](
+        "org.specs2.matcher.JsonMatchersLowImplicits.given_ToJsonSelector_String"
+      ),
+      ProblemFilters.exclude[DirectMissingMethodProblem](
+        "org.specs2.matcher.JsonMatchersLowImplicits.given_ToJsonSelector_Double"
+      ),
+      ProblemFilters.exclude[DirectMissingMethodProblem](
+        "org.specs2.matcher.JsonMatchersLowImplicits.given_ToJsonSelector_Int"
+      ),
+      ProblemFilters.exclude[DirectMissingMethodProblem](
+        "org.specs2.matcher.JsonMatchersLowImplicits.given_ToJsonSelector_Boolean"
+      ),
       ProblemFilters.exclude[MissingClassProblem](
         "org.specs2.matcher.JsonMatchersLowImplicits$given_ToJsonSelector_Boolean$"
       ),
