@@ -579,6 +579,12 @@ lazy val releaseSettings: Seq[Setting[?]] = Seq(
   ThisBuild / githubWorkflowTargetTags ++= Seq(SPECS2 + "*"),
   ThisBuild / githubWorkflowPublishTargetBranches := Seq(RefPredicate.StartsWith(Ref.Tag(SPECS2))),
   ThisBuild / githubWorkflowPublishPreamble ++= List(
+    // Install Pandoc before the sbt server starts so its PATH includes the executable.
+    WorkflowStep.Use(
+      name = Some("Install Pandoc 🏁"),
+      ref = UseRef.Public("r-lib/actions", "setup-pandoc", "v2"),
+      params = Map("pandoc-version" -> "latest")
+    ),
     WorkflowStep.Sbt(List("mimaReportBinaryIssues"), name = Some("Check binary compatibility ✔"))
   ),
   ThisBuild / githubWorkflowPublish := Seq(
@@ -601,11 +607,6 @@ lazy val releaseSettings: Seq[Setting[?]] = Seq(
         "SONATYPE_PASSWORD" -> "${{ secrets.SONATYPE_PASSWORD }}",
         "SONATYPE_USERNAME" -> "${{ secrets.SONATYPE_USERNAME }}"
       )
-    ),
-    WorkflowStep.Use(
-      name = Some("Install Pandoc 🏁"),
-      ref = UseRef.Public("r-lib/actions", "setup-pandoc", "v2"),
-      params = Map("pandoc-version" -> "latest")
     ),
     WorkflowStep.Sbt(
       name = Some("Generate the specs2 website 📚"),

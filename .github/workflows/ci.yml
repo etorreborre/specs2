@@ -79,6 +79,11 @@ jobs:
       - name: Setup sbt
         uses: sbt/setup-sbt@v1
 
+      - name: Install Pandoc 🏁
+        uses: r-lib/actions/setup-pandoc@v2
+        with:
+          pandoc-version: latest
+
       - name: Check binary compatibility ✔
         run: sbt mimaReportBinaryIssues
 
@@ -116,11 +121,6 @@ jobs:
           fi
 
       
-      - name: Install Pandoc 🏁
-        uses: r-lib/actions/setup-pandoc@v2
-        with:
-          pandoc-version: latest
-
       - name: Generate the specs2 website 📚
         run: sbt 'unidoc; guide/testOnly *Website -- xonly'
 
