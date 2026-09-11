@@ -43,10 +43,10 @@ jobs:
         uses: sbt/setup-sbt@v1
 
       - name: Check that workflows are up to date
-        run: sbt '++ ${{ matrix.scala }}; githubWorkflowCheck'
+        run: sbt --server --batch '++ ${{ matrix.scala }}; githubWorkflowCheck'
 
       - name: Build project
-        run: sbt '++ ${{ matrix.scala }}; testOnly * -- xonly exclude ci'
+        run: sbt --server --batch '++ ${{ matrix.scala }}; testOnly * -- xonly exclude ci'
 
   publish:
     name: Publish Artifacts
@@ -76,4 +76,4 @@ jobs:
         uses: sbt/setup-sbt@v1
 
       - name: Publish project
-        run: sbt +publish
+        run: sbt --server --batch +publish

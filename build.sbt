@@ -17,6 +17,8 @@ lazy val specs2 = project.in(file(".")).
     packagedArtifacts := Def.uncached(Map.empty),
     ThisBuild / githubWorkflowArtifactUpload := false,
     ThisBuild / githubWorkflowUseSbtThinClient := false,
+    // sbt 2 uses the thin client by default. Run CI commands in the foreground.
+    ThisBuild / githubWorkflowSbtCommand := "sbt --server --batch",
     ThisBuild / githubWorkflowJavaVersions := Seq(JavaSpec.temurin("17")),
     ThisBuild / githubWorkflowBuild := Seq(WorkflowStep.Sbt(List("testOnly * -- xonly exclude ci"), name = Some("Build project"))),
     // scalacheck 1.19.0 was built against scala-native 0.5.8; allow eviction to 0.5.12
