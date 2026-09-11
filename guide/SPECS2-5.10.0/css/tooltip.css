@@ -1,0 +1,29 @@
+
+#toolTip {
+   border:1px solid #CCC;
+   background-color:#F9F9F9;
+   width:150px;
+   position:absolute;
+   visibility: hidden;
+   overflow: hidden;
+   font-family: Geneva, Arial, Helvetica, sans-serif;
+   font-size: 11px;
+   font-weight: normal;
+   color:#333;
+}
+
+#toolTip h1{
+   display:block;
+  	font-family: Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+   background-color:#F1F1F1;
+   border-bottom:1px solid #CCC;  
+   margin:0px;
+   padding:0px 2px;   
+}
+
+#toolTip p {
+   margin:0px;
+   padding:4px 2px;   
+}
