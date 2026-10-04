@@ -426,11 +426,6 @@ lazy val matcherExtra = crossProject(platforms *)
   .nativeSettings(commonNativeSettings)
   .dependsOn(matcher, core, core % "test->test", xml)
 
-lazy val pom = project
-  .in(file("pom"))
-  .settings(commonSettings)
-  .dependsOn(common.jvm, matcher.jvm, matcherExtra.jvm, core.jvm, form, markdown, junit.jvm, scalacheck.jvm, html)
-
 lazy val scalacheck = crossProject(platforms *)
   .withoutSuffixFor(jvm)
   .crossType(CrossType.Pure)
