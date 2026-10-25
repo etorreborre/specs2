@@ -15,8 +15,11 @@ import fp.syntax.*
   *
   * A Cell can be executed by executing the underlying element but also by setting the cell to a specific result
   * (success or failure). This feature is used to display rows of values with were expected and found ok in Forms.
+  *
+  * It is an `into` trait so that user code can add fields, props and effects to a Form row without enabling
+  * `scala.language.implicitConversions`.
   */
-trait Cell extends Text with Xml with Executable:
+into trait Cell extends Text with Xml with Executable:
   def setSuccess: Cell = setResult(success)
   def setFailure: Cell = setResult(failure)
   def setSkipped: Cell = setResult(skipped)
