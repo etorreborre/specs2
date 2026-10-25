@@ -9,10 +9,14 @@ trait ScalaInterpreterMatchers extends Expectations:
   /** use your own interpreter implementation to interpret a Scala script */
   def interpret(s: String): String
 
-  given Conversion[String, InterpretedScript]:
-    def apply(s: String): InterpretedScript =
+  /** This is an extension method and not a conversion from String to InterpretedScript, because a conversion used to
+    * select a method needs `scala.language.implicitConversions` in user code
+    */
+  extension (s: String)
+    def >|(result: String) =
       new InterpretedScript(s):
         def interpret = outer.interpret(s)
+      .>|(result)
 
   abstract class InterpretedScript(s: String):
     protected def interpret: String

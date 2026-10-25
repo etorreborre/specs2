@@ -7,8 +7,11 @@ import org.specs2.collection.canEqualAny
 /** This class represents values which are evaluated lazily and which may even be missing.
   *
   * It has Option-like function and can be also converted to an Either object
+  *
+  * It is an `into` class so that user code can use a value where a Property is expected without enabling
+  * `scala.language.implicitConversions`
   */
-case class Property[T](value: () => Option[T], evaluated: Boolean = false, evaluatedValue: Option[T] = None)(using
+into case class Property[T](value: () => Option[T], evaluated: Boolean = false, evaluatedValue: Option[T] = None)(using
     CanEqual[T, T]
 ):
   /** change the value */
