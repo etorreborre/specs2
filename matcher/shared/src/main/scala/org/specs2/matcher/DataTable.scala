@@ -32,15 +32,47 @@ import scala.concurrent.*, duration.*
   */
 trait DataTables extends ExpectationsCreation:
 
-  /** @return a TableHeader with one heading only */
-  given Conversion[String, TableHeader]:
-    def apply(a: String): TableHeader =
-      new TableHeader(List(a))
+  /** Extension methods to start a TableHeader from its first title, and a DataRow from its first value.
+    *
+    * They replace conversions from String to TableHeader and from T to DataRow1 because a conversion used to select a
+    * method needs `scala.language.implicitConversions` in user code. They are members of a given instance so that
+    * `import DataTables.{given}` still makes them available
+    */
+  given tableSyntax: TableSyntax = TableSyntax()
 
-  /** @return a DataRow with one value only */
-  given [T] => Conversion[T, DataRow1[T]]:
-    def apply(a: T): DataRow1[T] =
-      DataRow1(a)
+  class TableSyntax:
+    extension (title: String)
+      /** `|` is not overloaded for titles and rows: an overloaded extension method does not apply the conversion of a
+        * value to a DataRow1, so `"a" | 1` would not compile. NextColumn selects the result instead
+        */
+      def |[A](a: A)(using next: NextColumn[A]): next.Out = next(title, a)
+      def ||(other: String): TableHeader = TableHeader(List(title, other))
+      def |>[T1](row: DataRow1[T1]): Table1[T1] = TableHeader(List(title)) |> row
+
+    extension [T1](t1: T1)
+      def ![T2](t2: T2): DataRow2[T1, T2] = DataRow2(t1, t2)
+      def !![T2](t2: T2): DataRow2[T1, T2] = DataRow2(t1, t2)
+
+  /** What `title | a` creates: a TableHeader when a is another title, otherwise a one-column table where a is the first
+    * row
+    */
+  trait NextColumn[A]:
+    type Out
+    def apply(title: String, a: A): Out
+
+  object NextColumn extends NextColumnLowPriority:
+    given title: NextColumn[String]:
+      type Out = TableHeader
+      def apply(title: String, other: String): TableHeader = TableHeader(List(title, other))
+
+    given row: [T1] => NextColumn[DataRow1[T1]]:
+      type Out = Table1[T1]
+      def apply(title: String, row: DataRow1[T1]): Table1[T1] = TableHeader(List(title)) | row
+
+  trait NextColumnLowPriority:
+    given value: [T1] => NextColumn[T1]:
+      type Out = Table1[T1]
+      def apply(title: String, t1: T1): Table1[T1] = TableHeader(List(title)) | DataRow1(t1)
 
   /** A DataTable with its header
     *
@@ -590,9 +622,20 @@ trait DataTables extends ExpectationsCreation:
     def show = productIterator.mkString("|", "|", "|")
     def showCells = productIterator.map(_.notNull).toSeq
 
-  case class DataRow1[+T1](t1: T1) extends DataRow[T1, Any, Any, Any, Any, Any, Any, Any, Any, Any]:
+  into case class DataRow1[+T1](t1: T1) extends DataRow[T1, Any, Any, Any, Any, Any, Any, Any, Any, Any]:
     def ![S2](t2: S2) = DataRow2(t1, t2)
     def !![S2](t2: S2) = DataRow2(t1, t2)
+
+  object DataRow1:
+    /** @return a DataRow with one value only, for tables with one column.
+      *
+      * It is defined here so that it is only used where a DataRow1 is expected, and does not conflict with the `!`
+      * extension method of TableSyntax
+      */
+    given [T] => Conversion[T, DataRow1[T]]:
+      def apply(a: T): DataRow1[T] =
+        DataRow1(a)
+
   case class DataRow2[+T1, +T2](t1: T1, t2: T2) extends DataRow[T1, T2, Any, Any, Any, Any, Any, Any, Any, Any]:
     def ![S3](t3: S3) = DataRow3(t1, t2, t3)
     def !![S3](t3: S3) = DataRow3(t1, t2, t3)

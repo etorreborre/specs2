@@ -10,10 +10,14 @@ import execute.*, Result.*
 /** Matchers for Numerical values
   */
 trait NumericMatchers:
-  /** implicit definition to create delta for the beCloseTo matcher */
-  given [S: Numeric] => Conversion[S, CanHaveDelta[S]]:
-    def apply(n: S): CanHaveDelta[S] =
-      CanHaveDelta(n)
+  /** create a delta for the beCloseTo matcher.
+    *
+    * This extension method is a member of a given instance so that `import NumericMatchers.{given}` makes it available
+    */
+  given plusOrMinusSyntax: PlusOrMinusSyntax = PlusOrMinusSyntax()
+
+  class PlusOrMinusSyntax:
+    extension [S: Numeric](n: S) def +/-(delta: S): PlusOrMinus[S] = PlusOrMinus(n, delta)
 
   /** implicit definition to create significant figures for the beCloseTo matcher */
   extension (value: Int)
