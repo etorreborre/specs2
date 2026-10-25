@@ -12,8 +12,11 @@ import concurrent.ExecutionEnv
 /** Fragments of a specification
   *
   * It is implemented as an async Producer[Fragment] in order to produce fragments dynamically if necessary
+  *
+  * It is an `into` class so that user code can use a Fragment where Fragments are expected without enabling
+  * `scala.language.implicitConversions`
   */
-case class Fragments(contents: AsyncStream[Fragment]):
+into case class Fragments(contents: AsyncStream[Fragment]):
   /** append one or several fragments */
   def append(other: Fragment): Fragments = append(oneAsync(other))
   def append(others: Seq[Fragment]): Fragments = append(Fragments(others*))

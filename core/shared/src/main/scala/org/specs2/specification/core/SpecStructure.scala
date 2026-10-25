@@ -18,8 +18,11 @@ import concurrent.ExecutionEnv
   *
   * Note that the fragments have to be lazy in order to avoid cycles when 2 specifications are referencing each other
   * with links
+  *
+  * It is an `into` class so that user code can use a String, a SpecHeader or Fragments where a SpecStructure is
+  * expected without enabling `scala.language.implicitConversions`
   */
-case class SpecStructure(header: SpecHeader, arguments: Arguments, lazyFragments: () => Fragments):
+into case class SpecStructure(header: SpecHeader, arguments: Arguments, lazyFragments: () => Fragments):
   lazy val fragments = lazyFragments()
 
   def contents: AsyncStream[Fragment] = fragments.contents
