@@ -24,8 +24,11 @@ import text.NotNullStrings.*
   *   - a message describing the expectation
   *   - possibly a number of expectations when it is the outcome of several checks (this is used for the reporting of
   *     ScalaCheck properties).
+  *
+  * It is an `into` class so that user code can use a Boolean where a Result is expected without enabling
+  * `scala.language.implicitConversions`.
   */
-sealed abstract class Result(val message: String = "", val expected: String = "") derives CanEqual:
+sealed into abstract class Result(val message: String = "", val expected: String = "") derives CanEqual:
   type SelfType <: Result
 
   /** number of expectations for a Result The default number is 1 but this could be higher if this result represents the
