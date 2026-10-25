@@ -7,6 +7,9 @@ import org.specs2.specification.core.*
   * It takes the current piece of text preceding it to create Fragments to be appended to the already created Fragments
   *
   * For example if the interpolated element is an execution then prepend will take the text to create an Example
+  *
+  * It is an `into` trait so that user code can interpolate specifications and fragments without enabling
+  * `scala.language.implicitConversions`
   */
-trait Interpolated:
+into trait Interpolated:
   def prepend(text: String): Fragments

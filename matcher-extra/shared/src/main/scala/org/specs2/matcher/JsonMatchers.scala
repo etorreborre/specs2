@@ -281,7 +281,10 @@ object JsonType:
 /** Different ways of selecting elements in a Json object
   */
 trait JsonSelectors:
-  sealed trait JsonSelector:
+  /** It is an `into` trait so that user code can pass strings, numbers, regexes or matchers as selectors without
+    * enabling `scala.language.implicitConversions`
+    */
+  sealed into trait JsonSelector:
     // select a value amongst a list of values
     def select(list: List[Any]): Option[Any]
 
@@ -513,7 +516,7 @@ trait JsonSelectors:
     def description: String =
       s"specified $name"
 
-  case class JsonPairSelector(_1: JsonSelector, _2: JsonSelector) extends JsonSelector:
+  into case class JsonPairSelector(_1: JsonSelector, _2: JsonSelector) extends JsonSelector:
     def select(list: List[Any]): Option[Any] =
       None
 
