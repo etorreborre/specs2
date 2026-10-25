@@ -14,8 +14,11 @@ import ResultLogicalCombinators.{given, *}
   *   - a expected single value of type T
   *   - a Matcher[T]
   *   - a function returning a type R having an AsResult instance
+  *
+  * It is an `into` trait so that user code can pass a value, a matcher or a function where a ValueCheck is expected
+  * without enabling `scala.language.implicitConversions`.
   */
-trait ValueCheck[T]:
+into trait ValueCheck[T]:
   outer =>
 
   def check: T => Result
