@@ -694,7 +694,10 @@ gpg --list-secret-keys --keyid-format LONG
 gpg --batch --yes -u "$PGP_KEY_ID" --dry-run --pinentry-mode loopback --passphrase "$PGP_PASSPHRASE" --sign <<<"test"
 """
 
-val ciReleaseCommand = """sbt ci-release 2>&1 | tee /tmp/sonatype-output.txt
+// sbt 2 runs commands in a background server, and the server started by an earlier step does not
+// have the secrets of this step. Without PGP_SECRET, ci-release logs "doing nothing" and succeeds
+val ciReleaseCommand = """sbt shutdown
+sbt ci-release 2>&1 | tee /tmp/sonatype-output.txt
 EXIT_CODE=${PIPESTATUS[0]}
 if [ "$EXIT_CODE" -ne 0 ]; then
   if grep -qiE "already (been )?published|already.*exists|409 Conflict|cannot redeploy|redeployment" /tmp/sonatype-output.txt; then
