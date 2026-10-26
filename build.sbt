@@ -118,6 +118,18 @@ lazy val mimaSettings =
       ProblemFilters.exclude[MissingTypesProblem]("org.specs2.matcher.JsonSelectors*"),
       ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.matcher.JsonMatchers.JsonEqualValueSelector"),
 
+      // the table, +/- and >| syntaxes use extension methods instead of conversions,
+      // so that user code does not need scala.language.implicitConversions
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.matcher.DataTables.given_Conversion_*"),
+      ProblemFilters.exclude[MissingClassProblem]("org.specs2.matcher.DataTables$given_Conversion_*"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.specification.Tables.given_Conversion_*"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.matcher.NumericMatchers.given_Conversion_*"),
+      ProblemFilters.exclude[MissingClassProblem]("org.specs2.matcher.NumericMatchers$given_Conversion_*"),
+      ProblemFilters.exclude[DirectMissingMethodProblem](
+        "org.specs2.matcher.ScalaInterpreterMatchers.given_Conversion_*"
+      ),
+      ProblemFilters.exclude[MissingClassProblem]("org.specs2.matcher.ScalaInterpreterMatchers$given_Conversion_*"),
+
       // the fixed executor has a new argument in order to remove warnings when some futures cannot be completed
       ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.concurrent.ExecutorServices.fixedExecutor"),
       ProblemFilters.exclude[DirectMissingMethodProblem]("org.specs2.main.Execute.*"),
