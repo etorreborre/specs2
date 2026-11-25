@@ -21,7 +21,7 @@ lazy val specs2 = project.in(file(".")).
     ThisBuild / githubWorkflowSbtCommand := "sbt --server --batch",
     ThisBuild / githubWorkflowJavaVersions := Seq(JavaSpec.temurin("17")),
     ThisBuild / githubWorkflowBuild := Seq(WorkflowStep.Sbt(List("testOnly * -- xonly exclude ci"), name = Some("Build project"))),
-    // scalacheck 1.19.0 was built against scala-native 0.5.8; allow eviction to 0.5.12
+    // scalacheck 1.19.0 was built against scala-native 0.5.8; allow eviction to 0.5.13
     ThisBuild / libraryDependencySchemes += "org.scala-native" % "test-interface_native0.5_3" % "always",
     Global / onChangedBuildSource := ReloadOnSourceChanges,
     // the root project only aggregates the modules, it has no tests of its own
